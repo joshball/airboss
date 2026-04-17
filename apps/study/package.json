@@ -1,0 +1,10 @@
+{
+	"name": "@ab/study",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"dev": "vite dev --port 9600",
+		"build": "vite build",
+		"preview": "vite preview"
+	}
+}

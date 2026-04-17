@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en" data-app-id="study">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Air Boss - Study</title>
+		%sveltekit.head%
+		<style>
+			html {
+				-webkit-font-smoothing: antialiased;
+				-moz-osx-font-smoothing: grayscale;
+				text-rendering: optimizeLegibility;
+			}
+
+			body {
+				margin: 0;
+				font-family: system-ui, -apple-system, sans-serif;
+				font-size: 1rem;
+				line-height: 1.5;
+				min-height: 100vh;
+				background: #f8f9fa;
+				color: #1a1a2e;
+			}
+
+			h1, h2, h3, h4 {
+				line-height: 1.2;
+			}
+
+			:focus-visible {
+				outline: 2px solid #3b82f6;
+				outline-offset: 2px;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="app">%sveltekit.body%</div>
+	</body>
+</html>

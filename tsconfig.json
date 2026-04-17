@@ -1,0 +1,43 @@
+{
+	"compilerOptions": {
+		"target": "ES2022",
+		"module": "ESNext",
+		"moduleResolution": "Bundler",
+		"strict": true,
+		"noImplicitAny": true,
+		"strictNullChecks": true,
+		"strictFunctionTypes": true,
+		"strictBindCallApply": true,
+		"noImplicitThis": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"noImplicitReturns": true,
+		"noFallthroughCasesInSwitch": true,
+		"forceConsistentCasingInFileNames": true,
+		"isolatedModules": true,
+		"skipLibCheck": true,
+		"resolveJsonModule": true,
+		"noEmit": true,
+		"baseUrl": ".",
+		"paths": {
+			"@ab/constants": ["libs/constants/src/index.ts"],
+			"@ab/constants/*": ["libs/constants/src/*"],
+			"@ab/types": ["libs/types/src/index.ts"],
+			"@ab/types/*": ["libs/types/src/*"],
+			"@ab/db": ["libs/db/src/index.ts"],
+			"@ab/db/*": ["libs/db/src/*"],
+			"@ab/auth": ["libs/auth/src/index.ts"],
+			"@ab/auth/*": ["libs/auth/src/*"],
+			"@ab/themes": ["libs/themes/index.ts"],
+			"@ab/themes/*": ["libs/themes/*"],
+			"@ab/ui": ["libs/ui/src/index.ts"],
+			"@ab/ui/*": ["libs/ui/src/*"],
+			"@ab/utils": ["libs/utils/src/index.ts"],
+			"@ab/utils/*": ["libs/utils/src/*"],
+			"@ab/bc/study": ["libs/bc/study/src/index.ts"],
+			"@ab/bc/study/*": ["libs/bc/study/src/*"]
+		}
+	},
+	"include": ["libs/*/src/**/*.ts", "libs/bc/*/src/**/*.ts", "libs/themes/**/*.ts", "apps/*/src/**/*.ts", "scripts/**/*.ts"],
+	"exclude": ["node_modules", "dist", "build", ".svelte-kit"]
+}
