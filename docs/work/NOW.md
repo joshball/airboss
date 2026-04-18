@@ -1,66 +1,60 @@
 # Now
 
-Single entry point for "what should I work on?" across both tracks.
+Single entry point for "what should I work on?" in airboss.
 
-## Platform Track
+## Current State
 
-**Completed:** Phase 0 (Platform), Phase 1 (Hangar), Phase 2 (Sim Core), Phase 3 (Ops Foundation), Phase 4a (Runway Foundation), Phase 5 (Hangar Compliance + Versioning)
+**Repo scaffolding:** complete. Monorepo with `apps/study/`, `libs/` (auth, bc/study, constants, db, themes, types, ui, utils). Bun workspaces, `@ab/*` path aliases.
 
-**Recently shipped:**
+**Migration from airboss-firc:** complete. Platform docs, vision, decisions, agent patterns, business docs, and course material all copied over.
 
-- Aviation glossary system (74 entries, sidebar page, search, tooltips, `GlossaryText` runtime processor)
-- FAA ingest pipeline (`bun run faa all` -- fetch, extract, glossary, index, pcg, pages, seed-glossary)
-- FAA search API + UI (`/faa-reference` in sim, `/api/faa-search`)
-- FAA reference pages (Parts 1, 61, 91, 141 browsable in hangar docs)
+**Work packages written:** 6 PRDs + 3 specs in `docs/work-packages/`:
 
-**In progress:**
+- `spaced-memory-items/` -- spec, tasks, test-plan, design, user-stories, PRD
+- `decision-reps/` -- spec, tasks, test-plan, design, PRD
+- `calibration-tracker/` -- spec, tasks, test-plan, PRD
+- `knowledge-graph/` -- PRD only (specs deferred until after tool MVPs)
+- `study-plan-and-session-engine/` -- PRD only (specs deferred)
+- `learning-dashboard/` -- PRD only (specs deferred)
 
-- Glossary seed review -- 292 draft entries from FAA Part 1 need agent review and integration
-- Remaining glossary tasks -- Vite plugin (`[[id]]` build-time), scanner CLI, other app routes
+## Build Order
 
-**Next:** Pick one:
+Per [MULTI_PRODUCT_ARCHITECTURE.md](../platform/MULTI_PRODUCT_ARCHITECTURE.md) and [ADR 011](../decisions/011-knowledge-graph-learning-system/decision.md):
 
-- Phase 4b -- Payment Integration (Stripe, webhooks, receipts) -- [runway ROADMAP](../products/runway/ROADMAP.md#phase-4b----payment-integration-future)
-- Phase 6 -- Polish, Analytics, Advanced Features -- [platform ROADMAP](../platform/ROADMAP.md)
+| Step | Work | Status |
+| ---- | ---- | ------ |
+| 1 | Spaced Memory Items MVP | Next -- has spec, tasks, test-plan |
+| 2 | Decision Reps MVP | After step 1 -- has spec, tasks, test-plan |
+| 3 | Calibration Tracker MVP | After step 2 -- has spec, tasks, test-plan |
+| 4 | Knowledge Graph skeleton (30 nodes) | After tool MVP proven |
+| 5 | Study Plan + Session Engine | After graph |
+| 6 | Learning Dashboard | After graph |
+| 7 | Scale graph to ~500 nodes | Gradual |
+| -- | FIRC migration as `apps/firc/` | After study MVP -- separate track |
 
-## Curriculum Track
+## Next
 
-**Completed:** C0 (Course Design), C1 (43+ Scenario Scripts), C2 (Question Bank), C3 (Content Entry -- all seeded)
-**Deferred:** C4 -- FAA Package (deferred per [platform pivot](../platform/PIVOT.md))
-**Active phase:** C1.5 -- Module Design Docs
+**Start with Spaced Memory Items.** Read the PRD first (product context), then the spec (implementation contract), then tasks (concrete plan).
 
-**Module 1 design complete:**
+- [PRD](../work-packages/spaced-memory-items/PRD.md) -- what this product is and why
+- [spec](../work-packages/spaced-memory-items/spec.md) -- data model, behavior, validation
+- [design](../work-packages/spaced-memory-items/design.md) -- FSRS rationale, Drizzle schema, API surface
+- [tasks](../work-packages/spaced-memory-items/tasks.md) -- ordered implementation plan
+- [test-plan](../work-packages/spaced-memory-items/test-plan.md) -- 17 manual test scenarios
 
-- L03 objectives (21 learning objectives with scenario traceability)
-- L04 lesson flow (3 lessons, 165 min, adaptive scenario selection)
-- L04 landscape (territory map, 13 candidate scenarios, coverage analysis)
-
-**Module 1 design complete. Modules 2-6 need the same treatment:**
-
-- Cross-module design philosophy written -- [COURSE_DESIGN.md](../../course/L04-Design/COURSE_DESIGN.md)
-- Per-module task specs with research pointers in COURSE_DESIGN.md and [ROADMAP.md](../../course/L04-Design/ROADMAP.md)
-- Each module needs: objectives, lesson flow, landscape (15 documents total)
-
-**Roadmap:** [course/L04-Design/ROADMAP.md](../../course/L04-Design/ROADMAP.md)
-
-## Business
-
-- [Market Research](../business/MARKET_RESEARCH.md) -- CFI population, competitor pricing, revenue scenarios, chief instructor requirements
-- **Blocker:** Need a chief instructor meeting 14 CFR SS 141.35(d) before FAA submission. See [MARKET_RESEARCH.md](../business/MARKET_RESEARCH.md#chief-instructor-requirement).
-- **Recommended:** Pre-submission inquiry to FAA (`9-AWA-AVS-AFS-FIRC@faa.gov`) before writing all content. See AC 61-83K SS 12.1.
-
-## Open Plans
-
-- [DOC-CLEANUP-PLAN.md](plans/20260325-DOC-CLEANUP-PLAN.md) -- Phases 1-3 done, Phase 4 partially done (D6 decision blocking), Phases 5-6 open
-- [APP-THEME-PLAN.md](plans/20260327-APP-THEME-PLAN.md) -- theme family rollout, not started
-- [PDF-GENERATION.md](plans/20260328-PDF-GENERATION.md) -- certificate PDF generation, deferred from Phase 3
+When ready to build: `/ball-wp-build spaced-memory-items` runs the phased implementation skill.
 
 ## Links
 
-- Platform roadmap: [docs/platform/ROADMAP.md](../platform/ROADMAP.md)
-- Curriculum roadmap: [course/L04-Design/ROADMAP.md](../../course/L04-Design/ROADMAP.md)
-- Business docs: [docs/business/](../business/README.md)
-- Hangar tasks: [docs/products/hangar/TASKS.md](../products/hangar/TASKS.md)
-- Sim tasks: [docs/products/sim/TASKS.md](../products/sim/TASKS.md)
-- Ops tasks: [docs/products/ops/TASKS.md](../products/ops/TASKS.md)
-- Runway tasks: [docs/products/runway/TASKS.md](../products/runway/TASKS.md)
+- [MULTI_PRODUCT_ARCHITECTURE.md](../platform/MULTI_PRODUCT_ARCHITECTURE.md) -- surface-typed app architecture
+- [PIVOT.md](../platform/PIVOT.md) -- why airboss exists
+- [DESIGN_PRINCIPLES.md](../platform/DESIGN_PRINCIPLES.md) -- how we evaluate features
+- [IDEAS.md](../platform/IDEAS.md) -- idea intake (last review: 2026-04-07)
+- [VOCABULARY.md](../platform/VOCABULARY.md) -- naming standards
+- [Product INDEX](../vision/INDEX.md) -- all 53 product ideas
+- [Learning INDEX](../vision/learning/INDEX.md) -- the 14 aviation domains
+- [Study app plan](plans/20260415-study-app-plan.md) -- Phase 1-5 implementation plan (pre-ADR-011)
+
+## Relationship to airboss-firc
+
+FIRC-specific code, content, and work stays in [airboss-firc](/Users/joshua/src/_me/aviation/airboss-firc) until the FIRC migration step. That repo has the 4 SvelteKit apps (sim, hangar, ops, runway), the FAA compliance pipeline, the 503 questions, and ongoing FIRC-specific work. Nothing new should be built in airboss-firc going forward.
