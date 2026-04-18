@@ -214,7 +214,7 @@ docs/
 The course itself lives in `course/` off the project root -- separate from app docs.
 
 ```text
-firc-boss/
+airboss-firc/                        -- (previously firc-boss)
   apps/                              -- platform code
   libs/                              -- shared code libraries
 

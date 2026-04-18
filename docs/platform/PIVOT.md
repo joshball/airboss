@@ -124,7 +124,7 @@ The user is leaning open-source or partially open-source. Worth deciding early b
 - `docs/platform/ROADMAP.md` is FIRC-phased. Needs rewrite.
 - `course/L04-Design/ROADMAP.md` is FIRC-curriculum-phased (C0-C4). Most content work still has value but the C4 "FAA submission" phase is deferred indefinitely.
 - Product PRDs under `docs/products/*/PRD.md` need re-scoping.
-- Project name -- "FIRC Boss" no longer fits. "firc-boss" repo name is fine as a historical artifact; product name needs a new choice.
+- Project name -- "FIRC Boss" no longer fits. The repo has since been renamed to `airboss-firc`; the pilot performance platform lives in `airboss`. Product name needs a new choice.
 - CLAUDE.md FAA-specific rules -- downgrade from "critical rules" to "rules that apply when authoring FIRC-adjacent content."
 
 ## Risks & counter-arguments

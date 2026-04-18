@@ -183,7 +183,7 @@ libs/
 - `audio/` -- narrative, drills, TTS
 - `reflect/` -- journals, heatmaps, tracking
 - `avionics/` -- glass cockpit trainer
-- `firc/` -- FIRC course (migrated from firc-boss after study MVP proven)
+- `firc/` -- FIRC course (migrated from airboss-firc after study MVP proven)
 - `hangar/` -- content authoring + admin
 - `runway/` -- public site
 
@@ -249,16 +249,16 @@ See [docs/platform/MULTI_PRODUCT_ARCHITECTURE.md](docs/platform/MULTI_PRODUCT_AR
 - Never stage files you didn't edit.
 - Never commit directly to main. Always work on feature branches.
 
-## Relationship to firc-boss
+## Relationship to airboss-firc
 
-This repo was originally created from patterns in `firc-boss` (the FIRC course platform). **As of 2026-04-17, airboss is the primary repo for all ongoing work** -- planning docs, vision, course material, and implementation have migrated here.
+This repo was originally created from patterns in the FIRC course platform (previously `firc-boss`, now `airboss-firc` at `/Users/joshua/src/_me/aviation/airboss-firc`). **As of 2026-04-17, airboss is the primary repo for all ongoing work** -- planning docs, vision, course material, and implementation have migrated here.
 
 Per [MULTI_PRODUCT_ARCHITECTURE.md](docs/platform/MULTI_PRODUCT_ARCHITECTURE.md), **FIRC will migrate into airboss as `apps/firc/`** after the study app MVP is proven. The migration brings:
 
-- `libs/engine/`, `libs/audit/`, and the FIRC bounded contexts (`course`, `enrollment`, `evidence`, `compliance`) from firc-boss
+- `libs/engine/`, `libs/audit/`, and the FIRC bounded contexts (`course`, `enrollment`, `evidence`, `compliance`) from airboss-firc
 - `apps/sim/` -> `apps/firc/` (renamed -- it's the FIRC course surface)
 - `apps/hangar/` -- content authoring for all products
 
-Once migration is complete, firc-boss becomes archived. Nothing stays there long-term.
+Once migration is complete, airboss-firc becomes archived. Nothing stays there long-term.
 
 The FIRC question bank, scenario library, and aviation knowledge research already copied into `course/` serve two purposes: reference material for current work, and candidate content for the knowledge graph (see [ADR 011](docs/decisions/011-knowledge-graph-learning-system/decision.md)).

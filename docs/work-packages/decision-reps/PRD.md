@@ -292,7 +292,7 @@ Decision Reps scenarios that prove valuable may graduate to full multi-step scen
 
 - **Not a flight simulator.** No tick loop. No continuous state. No student behavior model.
 - **Not a quiz game.** Scoring is a byproduct, not the point. A 60% accuracy rep that teaches you something valuable beats a 100% accuracy rep where you already knew the answer.
-- **Not the FIRC scenario player.** That's a separate product in a separate surface (the `firc/` surface app, migrated from firc-boss).
+- **Not the FIRC scenario player.** That's a separate product in a separate surface (the `firc/` surface app, migrated from airboss-firc).
 - **Not a replacement for actual instruction.** Reps build patterns. Real cockpit work tests patterns. Both are necessary.
 
 ## Open Questions

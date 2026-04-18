@@ -14,7 +14,7 @@ decided_from: ./MULTI_PRODUCT_ARCHITECTURE_OPTIONS.md
 
 Products are grouped by rendering surface -- what they need from the platform technically -- not by content theme. A weather quiz and a regulation quiz both live in `study/` because they share card UI and spaced rep infrastructure. A route map and an airport card both live in `spatial/` because they share map rendering and aeronautical data.
 
-**Separate repo.** The pilot performance platform lives in `joshball/airboss`. FIRC stays in `joshball/firc-boss`. They share no code dependencies -- patterns were copied, not linked.
+**Separate repo.** The pilot performance platform lives in `joshball/airboss`. FIRC stays in `joshball/airboss-firc`. They share no code dependencies -- patterns were copied, not linked.
 
 See [MULTI_PRODUCT_ARCHITECTURE_OPTIONS.md](MULTI_PRODUCT_ARCHITECTURE_OPTIONS.md) for the full options analysis.
 
@@ -30,7 +30,7 @@ See [MULTI_PRODUCT_ARCHITECTURE_OPTIONS.md](MULTI_PRODUCT_ARCHITECTURE_OPTIONS.m
 
 FIRC and the pilot performance platform are different products:
 
-| | FIRC (firc-boss) | Pilot Performance (airboss) |
+| | FIRC (airboss-firc) | Pilot Performance (airboss) |
 | --- | --- | --- |
 | What it is | A structured course | A toolkit of products |
 | Regulatory | FAA-approved (eventually) | None |
@@ -71,7 +71,7 @@ airboss/
     avionics/           Glass cockpit trainer
     audio/              NTSB stories, daily decision, ATC comms, memory audio
     reflect/            Journals, heatmaps, currency tracking, decision diary
-    firc/               FIRC course (migrated from firc-boss -- see below)
+    firc/               FIRC course (migrated from airboss-firc -- see below)
     hangar/             Content authoring + admin
     runway/             Public site
   libs/
@@ -80,7 +80,7 @@ airboss/
     db/                 Shared Drizzle connection
     auth/               Identity, sessions, permissions
     audit/              Action logging, content version history
-    engine/             Scenario tick engine, scoring (migrated from firc-boss)
+    engine/             Scenario tick engine, scoring (migrated from airboss-firc)
     learning/           Spaced rep algorithm (FSRS-5), progress, streaks
     spatial/            Airport/airspace/terrain data layer
     audio/              TTS, audio generation utils
@@ -89,10 +89,10 @@ airboss/
     utils/              ID generators, helpers
     bc/
       study/            Cards, reviews, scenarios, calibration
-      course/           Curriculum + content authoring (migrated from firc-boss)
-      enrollment/       Learner progress + completion (migrated from firc-boss)
-      evidence/         Scenario runs, scores (migrated from firc-boss)
-      compliance/       FAA traceability (migrated from firc-boss, dormant unless needed)
+      course/           Curriculum + content authoring (migrated from airboss-firc)
+      enrollment/       Learner progress + completion (migrated from airboss-firc)
+      evidence/         Scenario runs, scores (migrated from airboss-firc)
+      compliance/       FAA traceability (migrated from airboss-firc, dormant unless needed)
 ```
 
 ## FIRC migration plan
@@ -113,7 +113,7 @@ FIRC will eventually migrate into `airboss` as a surface app. Not now -- the pla
 - `apps/hangar/` -> `airboss/apps/hangar/` (content authoring for all products)
 - `course/` -> `airboss/course/` (curriculum content layers L01-L05)
 
-**What stays in firc-boss:** nothing, eventually. Once migration is complete, firc-boss becomes an archived repo. The 503 questions, AC 61-83K research, compliance pipeline, and all FIRC content live in airboss under the `firc/` surface app and `course/` content directory.
+**What stays in airboss-firc:** nothing, eventually. Once migration is complete, airboss-firc becomes an archived repo. The 503 questions, AC 61-83K research, compliance pipeline, and all FIRC content live in airboss under the `firc/` surface app and `course/` content directory.
 
 **What does NOT migrate prematurely:** everything. Don't move code until airboss is ready to receive it. The study app needs to prove the new repo's patterns work before we start porting FIRC infrastructure.
 

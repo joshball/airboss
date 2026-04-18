@@ -242,7 +242,7 @@ Joshua's "everything course" is the unfiltered graph -- all certs, all prioritie
 
 **FIRC as a future course consumer.** Per [MULTI_PRODUCT_ARCHITECTURE.md](../../platform/MULTI_PRODUCT_ARCHITECTURE.md), FIRC migrates into airboss as `apps/firc/` after the study app MVP is proven. When that migration happens:
 
-- `libs/bc/course/` (from firc-boss) provides curriculum and content authoring
+- `libs/bc/course/` (from airboss-firc) provides curriculum and content authoring
 - The FIRC course becomes a filter on the knowledge graph: CFI-level nodes matching AC 61-83K's 13 topic areas, with FAA-mandated time tracking and assessment requirements from `libs/bc/compliance/`
 - Existing FIRC content (503 questions, 43 scenarios) slots in as content attached to specific nodes
 - `apps/firc/` renders the structured course experience; `apps/study/` renders the free-form study experience; both read from the same graph

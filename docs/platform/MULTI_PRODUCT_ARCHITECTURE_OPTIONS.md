@@ -13,7 +13,7 @@ Six options for organizing ~10 pilot performance products that share auth, conte
 ## Current state
 
 ```text
-firc-boss/
+airboss-firc/              (previously firc-boss)
   apps/       4 SvelteKit apps (sim, hangar, ops, runway)
   libs/       11 shared libs (engine, constants, types, db, auth, audit, themes, ui, utils, payment, bc/*)
   course/     Curriculum content (L01-L05 layers)

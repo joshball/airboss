@@ -1,7 +1,7 @@
 # Reference: SvelteKit + Monorepo Patterns
 
 Implementation patterns for constants, database, auth, scripts, testing, and monorepo organization.
-Originally extracted from legion-overwatch (2026-03-24). Adapted for firc-boss (PostgreSQL, 4 SvelteKit apps).
+Originally extracted from legion-overwatch (2026-03-24). Adapted for airboss-firc (PostgreSQL, 4 SvelteKit apps).
 
 ---
 
@@ -39,7 +39,7 @@ tests/
 - Business logic in libs. Apps are thin SvelteKit shells.
 - One `node_modules` root (symlink).
 
-**For firc-boss:** Same structure. `@firc/*` aliases. Shared `libs/ui/` for components used across sim/hangar/ops.
+**For airboss-firc:** Same structure. `@firc/*` aliases. Shared `libs/ui/` for components used across sim/hangar/ops.
 
 ---
 
@@ -78,7 +78,7 @@ export const ROUTES = {
 - Dynamic routes: `ROUTES.ORG_HOME(slug)` not template literals.
 - Tests import via relative path: `import { ROUTES } from '../../libs/constants/src/routes'`.
 
-**For firc-boss:** Create matching files:
+**For airboss-firc:** Create matching files:
 
 - `routes.ts` -- sim: `/course/`, `/scenario/`; hangar: `/dashboard/`; ops: `/admin/`
 - `ports.ts` -- one port per app + test ports
@@ -92,7 +92,7 @@ export const ROUTES = {
 
 ### Schema organization
 
-Schema split by domain across files (legion uses `libs/database/src/schema/`; firc-boss uses `libs/bc/*/` with PostgreSQL schema namespaces):
+Schema split by domain across files (legion uses `libs/database/src/schema/`; airboss-firc uses `libs/bc/*/` with PostgreSQL schema namespaces):
 
 - `control.ts` -- auth tables, system tables (sequences)
 - `org.ts` -- orgs, members, workspaces
@@ -114,7 +114,7 @@ export function getDb(): AppDb {
 }
 ```
 
-**For firc-boss (PostgreSQL):** Use `drizzle-orm/postgres-js` with connection pooling. Same lazy singleton pattern.
+**For airboss-firc (PostgreSQL):** Use `drizzle-orm/postgres-js` with connection pooling. Same lazy singleton pattern.
 
 ### ID generation (Sqids)
 
@@ -137,7 +137,7 @@ export function generateId(domain: string): string {
 
 Short, unique, domain-scoped IDs. Transaction-wrapped to prevent duplicates.
 
-**For firc-boss:** Two-tier ID system per [ADR 010](../../decisions/010-ID_STRATEGY.md). Tier A: `prefix-NNN` catalog IDs (Postgres SEQUENCE, deferred). Tier B: `prefix_ULID` event IDs via `@firc/utils`. Never call `nanoid()` directly -- always use typed generators from `libs/utils/src/ids.ts`.
+**For airboss-firc:** Two-tier ID system per [ADR 010](../../decisions/010-ID_STRATEGY.md). Tier A: `prefix-NNN` catalog IDs (Postgres SEQUENCE, deferred). Tier B: `prefix_ULID` event IDs via `@firc/utils`. Never call `nanoid()` directly -- always use typed generators from `libs/utils/src/ids.ts`.
 
 ### Table prefixing
 
@@ -203,7 +203,7 @@ requireOrgAdmin(locals, orgId); // Ensures org admin role
 
 **Key:** Call `requireAuth()` first to capture the non-null user. Never use `locals.user!.id`.
 
-**For firc-boss:**
+**For airboss-firc:**
 
 - `requireAuth(locals)` -- verify logged in
 - `requireInstructor(locals)` -- CFI check
@@ -312,7 +312,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 };
 ```
 
-**For firc-boss:** Same flow per app. Each app (sim, hangar, ops) has its own hooks with appropriate auth checks.
+**For airboss-firc:** Same flow per app. Each app (sim, hangar, ops) has its own hooks with appropriate auth checks.
 
 ---
 
@@ -334,7 +334,7 @@ routes/
 - Nested layouts verify org/workspace access and pass context down.
 - Group routes by auth requirement using SvelteKit route groups `(public)` vs `(app)`.
 
-**For firc-boss sim app:**
+**For airboss-firc sim app:**
 
 ```
 routes/
@@ -396,7 +396,7 @@ export type CreateAccount = z.infer<typeof createAccountSchema>;
 - Export both schema and inferred type.
 - Use `.safeParse()` in form actions, `.flatten()` for field errors.
 
-**For firc-boss:** Create schemas for course, scenario, learner, enrollment, scoring.
+**For airboss-firc:** Create schemas for course, scenario, learner, enrollment, scoring.
 
 ---
 
@@ -441,7 +441,7 @@ effects: { transition, boxShadow, focusRing }
 
 Themes set CSS custom properties on `:root` scoped by `[data-mode="dark"]` / `[data-mode="light"]`. Theme mode read from cookie in hooks, applied via `transformPageChunk`.
 
-**For firc-boss:** Same approach. Token prefix `--t-*` (decided in ADR 003). Shared across all 4 apps.
+**For airboss-firc:** Same approach. Token prefix `--t-*` (decided in ADR 003). Shared across all 4 apps.
 
 ---
 
@@ -496,7 +496,7 @@ program.parse();
 }
 ```
 
-**For firc-boss:** Adapt for multi-app:
+**For airboss-firc:** Adapt for multi-app:
 
 ```bash
 bun dev sim          # Start sim app
@@ -555,7 +555,7 @@ export default defineConfig({
 });
 ```
 
-**For firc-boss:** Fixtures for `instructorPage`, `studentPage`, `authorPage`, `opsPage`. Separate webServer entries per app if testing multiple apps.
+**For airboss-firc:** Fixtures for `instructorPage`, `studentPage`, `authorPage`, `opsPage`. Separate webServer entries per app if testing multiple apps.
 
 ---
 
@@ -582,7 +582,7 @@ auditLog({
 });
 ```
 
-**For firc-boss:** Essential for FAA compliance. Audit actions: `course.create`, `scenario.update`, `learner.enroll`, `scenario.complete`, `content.publish`, `content.version`.
+**For airboss-firc:** Essential for FAA compliance. Audit actions: `course.create`, `scenario.update`, `learner.enroll`, `scenario.complete`, `content.publish`, `content.version`.
 
 ---
 
@@ -660,13 +660,13 @@ const config = {
 }
 ```
 
-**For firc-boss:** Copy and adjust aliases to `@firc/**`.
+**For airboss-firc:** Copy and adjust aliases to `@firc/**`.
 
 ---
 
-## 16. Key Differences: legion-overwatch vs firc-boss
+## 16. Key Differences: legion-overwatch vs airboss-firc
 
-| Aspect        | Legion-Overwatch                    | firc-boss                                                   |
+| Aspect        | Legion-Overwatch                    | airboss-firc                                                   |
 | ------------- | ----------------------------------- | ----------------------------------------------------------- |
 | Database      | SQLite (single file, no migrations) | PostgreSQL (migrations)                                     |
 | Apps          | 1 (`overwatch-app`)                 | 4 (sim, hangar, ops, runway)                                |

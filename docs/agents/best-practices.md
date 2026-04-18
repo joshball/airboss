@@ -1,6 +1,6 @@
 # Best Practices
 
-Battle-tested rules from production SvelteKit + Svelte 5 + Drizzle + Biome projects. Adapted for firc-boss.
+Battle-tested rules from production SvelteKit + Svelte 5 + Drizzle + Biome projects. Adapted for airboss-firc.
 Originally extracted from legion-overwatch (2026-03-24).
 
 ---
@@ -50,7 +50,7 @@ Originally extracted from legion-overwatch (2026-03-24).
 ### Styling
 
 - CSS custom properties only. No Tailwind. No hardcoded values.
-- All visual values from token vars (legion uses `--ds-*`; firc-boss uses `--t-*`).
+- All visual values from token vars (legion uses `--ds-*`; airboss-firc uses `--t-*`).
 - CSS in component `<style>` blocks only.
 
 ### Theme System
@@ -77,7 +77,7 @@ Originally extracted from legion-overwatch (2026-03-24).
 ## Database (adapted for PostgreSQL)
 
 - Drizzle ORM only. No raw SQL.
-- ALL tables organized by domain (legion uses `bauth_`/`app_` prefixes; firc-boss uses PostgreSQL schema namespaces: `course`, `published`, `enrollment`, `evidence`, `compliance`, `identity`, `audit`, `platform`).
+- ALL tables organized by domain (legion uses `bauth_`/`app_` prefixes; airboss-firc uses PostgreSQL schema namespaces: `course`, `published`, `enrollment`, `evidence`, `compliance`, `identity`, `audit`, `platform`).
 - No CASCADE DELETE. Cleanup in application logic.
 - Soft delete for core entities, hard delete for junctions/memberships.
 - IDs via a `generateId(domain)` function -- deterministic, short, unique per domain.

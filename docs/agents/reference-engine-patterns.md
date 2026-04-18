@@ -1,7 +1,7 @@
 # Reference: Scenario Engine Patterns
 
 Implementation patterns for the tick-based scenario engine, command system, scoring, replay, and game definitions.
-Originally extracted from airboss-game (2026-03-24). firc-boss's `libs/engine/` is directly inspired by this architecture.
+Originally extracted from airboss-game (2026-03-24). airboss-firc's `libs/engine/` is directly inspired by this architecture.
 
 ---
 
@@ -24,7 +24,7 @@ games/
   [game-id]/        Scenario sets, players, campaigns, definition.ts
 ```
 
-**For firc-boss:** Our `libs/` maps to their `packages/`. Our `libs/engine/` maps to their `packages/core/`. Games as content packages is a pattern we should adopt -- scenarios live in a content directory, not in the engine.
+**For airboss-firc:** Our `libs/` maps to their `packages/`. Our `libs/engine/` maps to their `packages/core/`. Games as content packages is a pattern we should adopt -- scenarios live in a content directory, not in the engine.
 
 ### Path Aliases
 
@@ -34,7 +34,7 @@ games/
 "@airboss/core": ["packages/core/src/index.ts"]
 ```
 
-**For firc-boss:** Use `@firc/constants`, `@firc/types`, `@firc/engine`, `@firc/bc/*`, `@firc/auth`.
+**For airboss-firc:** Use `@firc/constants`, `@firc/types`, `@firc/engine`, `@firc/bc/*`, `@firc/auth`.
 
 ### Subpath Exports
 
@@ -48,7 +48,7 @@ Each package declares selective exports for browser vs server:
 }
 ```
 
-Enables `@airboss/core/campaign` (Node-only, filesystem) vs `@airboss/core` (browser-safe). **Critical for firc-boss** where engine types need to be importable by the sim app (browser) but DB access stays server-only.
+Enables `@airboss/core/campaign` (Node-only, filesystem) vs `@airboss/core` (browser-safe). **Critical for airboss-firc** where engine types need to be importable by the sim app (browser) but DB access stays server-only.
 
 ---
 
@@ -63,7 +63,7 @@ The engine is the primary API. WebSocket/HTTP are transport layers wrapping it. 
 - No side effects
 - Deterministic: same scenario + commands = identical result
 
-**For firc-boss:** `libs/engine/` should be pure TypeScript. SvelteKit apps import it directly. No network calls inside the engine.
+**For airboss-firc:** `libs/engine/` should be pure TypeScript. SvelteKit apps import it directly. No network calls inside the engine.
 
 ### Tick Loop
 
@@ -96,7 +96,7 @@ function buildPublicWorldState(internal): WorldState; // firewall
 
 **WorldState** (player-facing) -- projected view via `buildPublicWorldState()`. Type-branded IDs. This is the firewall preventing internal types from leaking.
 
-**For firc-boss:** The student model, adaptive algorithm, and scoring internals are `InternalWorld`. The learner sees a projected view: scenario briefing, current situation, available choices, feedback. The FAA-facing layer sees an even more restricted view: time, topics, pass/fail.
+**For airboss-firc:** The student model, adaptive algorithm, and scoring internals are `InternalWorld`. The learner sees a projected view: scenario briefing, current situation, available choices, feedback. The FAA-facing layer sees an even more restricted view: time, topics, pass/fail.
 
 ### Run Scenario
 
@@ -132,7 +132,7 @@ Commands express intent, not mechanics:
 - Engine figures out path finding, energy, multi-hop
 - Easier to reason about, validate, and audit
 
-**For firc-boss:** Student choices should be declarative: "diagnose engine vibration", "check weather briefing", "recommend go-around" -- not state mutations.
+**For airboss-firc:** Student choices should be declarative: "diagnose engine vibration", "check weather briefing", "recommend go-around" -- not state mutations.
 
 ### Command Types
 
@@ -176,7 +176,7 @@ ERR_NO_ROUTE_TO_TARGET;
 ERR_INSUFFICIENT_BATTERY;
 ```
 
-**For firc-boss:** Define error codes for scenario engine: `ERR_CHOICE_NOT_AVAILABLE`, `ERR_TIME_EXPIRED`, `ERR_PREREQUISITE_NOT_MET`, etc.
+**For airboss-firc:** Define error codes for scenario engine: `ERR_CHOICE_NOT_AVAILABLE`, `ERR_TIME_EXPIRED`, `ERR_PREREQUISITE_NOT_MET`, etc.
 
 ---
 
@@ -210,7 +210,7 @@ export const DEFAULT_CHARGE_RATE_PER_TICK = 2;
 export const DEFAULT_TURN_TIMEOUT_MS = 30_000;
 ```
 
-**For firc-boss:** Same pattern for `libs/constants/`:
+**For airboss-firc:** Same pattern for `libs/constants/`:
 
 - `faa-topics.ts` -- topic codes from AC 61-83K
 - `competencies.ts` -- 8 domains, 22 competencies
@@ -255,7 +255,7 @@ export const DEFAULT_TURN_TIMEOUT_MS = 30_000;
 - **Challenges** -- boolean conditions evaluated post-run (achievements)
 - **Scenario defaults** -- per-game config that scenarios can override
 
-**For firc-boss:** Adapt for training scenarios:
+**For airboss-firc:** Adapt for training scenarios:
 
 ```json
 {
@@ -303,7 +303,7 @@ GameDefinition
       unlockRequirement?
 ```
 
-**For firc-boss:** Maps to course structure:
+**For airboss-firc:** Maps to course structure:
 
 ```
 CourseDefinition (the FIRC)
@@ -344,7 +344,7 @@ function computeGrade(score: number, thresholds: GradeThresholds): Grade;
 
 Per-scenario thresholds. Par score is optional but recommended.
 
-**For firc-boss:** Rich metrics become competency evidence. Grade thresholds map to pass/fail for FAA requirements. The scoring formula stays internal (never exposed to FAA).
+**For airboss-firc:** Rich metrics become competency evidence. Grade thresholds map to pass/fail for FAA requirements. The scoring formula stays internal (never exposed to FAA).
 
 ---
 
@@ -370,7 +370,7 @@ function deserializeReplay(content: string): ReplayData;
 
 Replays can be re-simulated for verification (deterministic). Same commands + same scenario = same result.
 
-**For firc-boss:** Every student scenario attempt becomes a replay. Compliance audits require: who, when, what score, which topics, pass/fail. The replay JSONL is the raw evidence. Analysis is computed post-run and stored in the database.
+**For airboss-firc:** Every student scenario attempt becomes a replay. Compliance audits require: who, when, what score, which topics, pass/fail. The replay JSONL is the raw evidence. Analysis is computed post-run and stored in the database.
 
 ---
 
@@ -415,7 +415,7 @@ libs/themes/src/
   theme.ts      useTheme composable
 ```
 
-**For firc-boss:** Use same OKLCH approach. Define training-specific tokens:
+**For airboss-firc:** Use same OKLCH approach. Define training-specific tokens:
 
 ```css
 --t-competency-met: oklch(...);
@@ -469,7 +469,7 @@ bun game review         # Run all scenarios
 bun game score-check    # Quick playtest
 ```
 
-**For firc-boss:** Adapt for our needs:
+**For airboss-firc:** Adapt for our needs:
 
 ```bash
 bun start sim           # Sim app dev server
@@ -510,7 +510,7 @@ describe("engine", () => {
 - Test validation independently from application.
 - Test state building independently from tick processing.
 
-**For firc-boss:** Same approach. Test `libs/engine/` with pure function calls. No DB, no HTTP, no mocking.
+**For airboss-firc:** Same approach. Test `libs/engine/` with pure function calls. No DB, no HTTP, no mocking.
 
 ---
 
@@ -540,7 +540,7 @@ Used for O(1) lookup tables. Invalidated automatically when the key object is ga
 
 ---
 
-## 13. Key Adaptations for firc-boss
+## 13. Key Adaptations for airboss-firc
 
 ### FAA Compliance = Data Modeling
 
@@ -570,7 +570,7 @@ Both are true. The engine doesn't lie. But FAA doesn't see adaptive logic -- the
 
 ### Content Authoring
 
-Unlike airboss where scenarios are engineer-designed, firc-boss scenarios are authored by CFIs. Hangar app needs:
+Unlike airboss where scenarios are engineer-designed, airboss-firc scenarios are authored by CFIs. Hangar app needs:
 
 - Simple JSON format (no TypeScript needed)
 - Drag-drop authoring UI

@@ -1,6 +1,6 @@
 # Test Patterns
 
-Concrete patterns for writing tests in firc-boss. Read [../TESTING.md](../TESTING.md) first.
+Concrete patterns for writing tests in airboss-firc. Read [../TESTING.md](../TESTING.md) first.
 
 ---
 

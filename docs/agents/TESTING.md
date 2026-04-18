@@ -1,6 +1,6 @@
 # Testing Strategy
 
-Testing index for firc-boss. Read this before writing any tests.
+Testing index for airboss-firc. Read this before writing any tests.
 
 **Current state (2026-03-28):** 196 tests passing. Vitest configured with path aliases and serial execution. Playwright installed (E2E stubs written, not yet runnable).
 
