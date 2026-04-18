@@ -125,13 +125,13 @@ Feature lifecycle is driven by shared skills:
 - **Automated tests** alongside implementation: unit (Vitest) for BC/lib logic, e2e (Playwright) for user flows.
 - **Review docs have two status fields.** `status` (unread/reading/done) is controlled by the user. `review_status` (pending/done) is controlled by the agent. A feature can't be "done" until both are satisfied.
 
-**Tracking: three levels**
+### Tracking: three levels
 
-| Level            | Location                                          | Scope                                | Lifespan                 |
-| ---------------- | ------------------------------------------------- | ------------------------------------ | ------------------------ |
-| Session todos    | `docs/work/todos/YYYYMMDD-NN-TODO.md`             | What I'm doing right now             | One session              |
-| Product tasks    | `docs/products/{app}/TASKS.md`                    | What needs building next for this app | Ongoing backlog          |
-| Feature tasks    | `docs/work-packages/{name}/tasks.md`              | What's left to finish this feature    | Until feature ships      |
+| Level         | Location                              | Scope                                 | Lifespan            |
+| ------------- | ------------------------------------- | ------------------------------------- | ------------------- |
+| Session todos | `docs/work/todos/YYYYMMDD-NN-TODO.md` | What I'm doing right now              | One session         |
+| Product tasks | `docs/products/{app}/TASKS.md`        | What needs building next for this app | Ongoing backlog     |
+| Feature tasks | `docs/work-packages/{name}/tasks.md`  | What's left to finish this feature    | Until feature ships |
 
 ## Doc Style
 
@@ -183,11 +183,11 @@ libs/
 - `audio/` -- narrative, drills, TTS
 - `reflect/` -- journals, heatmaps, tracking
 - `avionics/` -- glass cockpit trainer
-- `course/` -- structured courses (FIRC, PPL, IR, CPL), sequencing, compliance
+- `firc/` -- FIRC course (migrated from firc-boss after study MVP proven)
 - `hangar/` -- content authoring + admin
 - `runway/` -- public site
 
-See [docs/platform/MULTI_PRODUCT_ARCHITECTURE.md](docs/platform/MULTI_PRODUCT_ARCHITECTURE.md) for the full surface taxonomy.
+See [docs/platform/MULTI_PRODUCT_ARCHITECTURE.md](docs/platform/MULTI_PRODUCT_ARCHITECTURE.md) for the full surface taxonomy and build order.
 
 ## Import Rules
 
@@ -251,6 +251,14 @@ See [docs/platform/MULTI_PRODUCT_ARCHITECTURE.md](docs/platform/MULTI_PRODUCT_AR
 
 ## Relationship to firc-boss
 
-This repo was originally created from patterns in `firc-boss` (the FIRC course platform). **As of 2026-04-17, airboss is now the primary repo for all ongoing work** -- planning docs, vision, course material, and implementation have migrated here. FIRC-specific content (compliance, submission workflows) remains in firc-boss until/unless we decide to migrate it as a future course surface.
+This repo was originally created from patterns in `firc-boss` (the FIRC course platform). **As of 2026-04-17, airboss is the primary repo for all ongoing work** -- planning docs, vision, course material, and implementation have migrated here.
 
-The FIRC question bank, scenario library, and aviation knowledge research in `course/` are preserved as reference material and as content for the knowledge graph (see [ADR 011](docs/decisions/011-knowledge-graph-learning-system/decision.md)).
+Per [MULTI_PRODUCT_ARCHITECTURE.md](docs/platform/MULTI_PRODUCT_ARCHITECTURE.md), **FIRC will migrate into airboss as `apps/firc/`** after the study app MVP is proven. The migration brings:
+
+- `libs/engine/`, `libs/audit/`, and the FIRC bounded contexts (`course`, `enrollment`, `evidence`, `compliance`) from firc-boss
+- `apps/sim/` -> `apps/firc/` (renamed -- it's the FIRC course surface)
+- `apps/hangar/` -- content authoring for all products
+
+Once migration is complete, firc-boss becomes archived. Nothing stays there long-term.
+
+The FIRC question bank, scenario library, and aviation knowledge research already copied into `course/` serve two purposes: reference material for current work, and candidate content for the knowledge graph (see [ADR 011](docs/decisions/011-knowledge-graph-learning-system/decision.md)).

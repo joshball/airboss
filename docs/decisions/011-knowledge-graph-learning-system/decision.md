@@ -240,7 +240,12 @@ time_requirement: null          # no FAA time requirement for ground
 
 Joshua's "everything course" is the unfiltered graph -- all certs, all priorities, learner-directed sequence.
 
-The FIRC content slots in as a course that filters to CFI-level nodes matching AC 61-83K's 13 topic areas, with FAA-mandated time and assessment requirements.
+**FIRC as a future course consumer.** Per [MULTI_PRODUCT_ARCHITECTURE.md](../../platform/MULTI_PRODUCT_ARCHITECTURE.md), FIRC migrates into airboss as `apps/firc/` after the study app MVP is proven. When that migration happens:
+
+- `libs/bc/course/` (from firc-boss) provides curriculum and content authoring
+- The FIRC course becomes a filter on the knowledge graph: CFI-level nodes matching AC 61-83K's 13 topic areas, with FAA-mandated time tracking and assessment requirements from `libs/bc/compliance/`
+- Existing FIRC content (503 questions, 43 scenarios) slots in as content attached to specific nodes
+- `apps/firc/` renders the structured course experience; `apps/study/` renders the free-form study experience; both read from the same graph
 
 ## Study Plan (Per-User)
 
@@ -298,13 +303,32 @@ Start with 30 well-developed nodes to test the model before scaling to 500.
 - `proc-engine-failure-after-takeoff` -- judgment + scenario-rich
 - `teach-common-student-errors-stalls` -- the pedagogical axis
 
+## Build Order
+
+Per [MULTI_PRODUCT_ARCHITECTURE.md](../../platform/MULTI_PRODUCT_ARCHITECTURE.md), products are built in order of need. This ADR's knowledge graph work fits in as follows:
+
+| Order | Work | Why this order |
+| ----- | ---- | -------------- |
+| 1 | Spaced Memory Items MVP | Prove the three-tool mechanism layer works with personal cards before introducing graph-managed content |
+| 2 | Decision Reps MVP | Same -- prove the scenarios schema and rep flow independently |
+| 3 | Calibration Tracker MVP | Same -- needs data from 1 and 2 |
+| 4 | **Knowledge graph skeleton** | The 30-node experiment. 3-5 nodes fully built, 25 skeleton. Validates the model. |
+| 5 | Study Plan + Session Engine | Once the graph exists, build the "I want to study" recommender |
+| 6 | Learning Dashboard | Bird's-eye view of mastery across the graph |
+| 7 | Scale to ~500 nodes | Gradual content fill as Joshua studies |
+| -- | FIRC migration into airboss | After study MVP proven -- separate from knowledge graph work |
+
+**Why the tools come first:** The tools need to work with simple personal content before we complicate them with graph-linked content. The `node_id` field on cards/scenarios gets added during step 4, not prematurely during steps 1-3.
+
 ## Dependencies on Existing Work Packages
 
-The three tool-level work packages already written (`spaced-memory-items`, `decision-reps`, `calibration-tracker` in `airboss/docs/work-packages/`) remain valid as the mechanism layer. They need updates:
+The three tool-level work packages already written (`spaced-memory-items`, `decision-reps`, `calibration-tracker` in `airboss/docs/work-packages/`) remain valid as the mechanism layer. When the knowledge graph ships (step 4+), they need small updates:
 
-1. **Cards and scenarios reference knowledge nodes.** Add `node_id` field to `study.card` and `study.scenario` schemas -- links content to the graph.
-2. **Domain values come from the graph.** The `DOMAINS` constant in the spec should align with the graph's domain taxonomy.
+1. **Cards and scenarios reference knowledge nodes.** Add `node_id` field to `study.card` and `study.scenario` schemas -- links content to the graph. Backward-compatible: NULL = personal, non-NULL = graph-linked.
+2. **Domain values come from the graph.** The `DOMAINS` constant in the spec should align with the graph's domain taxonomy. The graph is the source of truth; the constant mirrors it.
 3. **Mastery data flows back to nodes.** The study BC's read interfaces (`getCardMastery`, `getRepAccuracy`, `getCalibration`) are already designed for this -- they aggregate by domain. Extend to aggregate by node_id.
+
+These updates are additive -- they don't block shipping the tools first.
 
 ## Open Questions
 
