@@ -14,6 +14,8 @@ See [docs/platform/PIVOT.md](docs/platform/PIVOT.md) for why we're here. See [do
 - When porting from airboss-firc: take the code, schema, and patterns. Do **not** take the UI/UX -- that's being redesigned here.
 - Zero tolerance for known issues. A stub is a known issue. Fix it before moving on.
 
+**Never use the word "honest" or any variant.** "Honestly", "to be honest", "the honest answer", "the honest read", "honest-to-god" -- all banned in every line of text: chat replies, code comments, commit messages, docs, PR descriptions. The word implies prior dishonesty. State claims directly ("I didn't switch back -- sloppy"); acknowledge uncertainty directly ("I'm not sure"); never frame either as a confession.
+
 ## SESSION START
 
 **Do this at the start of every conversation, before any work:**
