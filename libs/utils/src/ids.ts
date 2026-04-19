@@ -14,3 +14,6 @@ export const generateAuthId = (): string => ulid().toLowerCase();
 // Study BC
 export const generateCardId = (): string => createId('crd');
 export const generateReviewId = (): string => createId('rev');
+// Decision reps (study BC) -- scenarios + attempts per spec prefix.
+export const generateScenarioId = (): string => createId('rep');
+export const generateRepAttemptId = (): string => createId('rat');
