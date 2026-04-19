@@ -34,8 +34,8 @@
 			"@ab/ui/*": ["libs/ui/src/*"],
 			"@ab/utils": ["libs/utils/src/index.ts"],
 			"@ab/utils/*": ["libs/utils/src/*"],
-			"@ab/bc/study": ["libs/bc/study/src/index.ts"],
-			"@ab/bc/study/*": ["libs/bc/study/src/*"]
+			"@ab/bc-study": ["libs/bc/study/src/index.ts"],
+			"@ab/bc-study/*": ["libs/bc/study/src/*"]
 		}
 	},
 	"include": ["libs/*/src/**/*.ts", "libs/bc/*/src/**/*.ts", "libs/themes/**/*.ts", "apps/*/src/**/*.ts", "scripts/**/*.ts"],

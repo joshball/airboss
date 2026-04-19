@@ -3,22 +3,24 @@ import {
 	DB_IDLE_TIMEOUT_MS,
 	DB_MAX_LIFETIME_MS,
 	DB_POOL_SIZE,
+	ENV_VARS,
+	getEnvInt,
+	requireEnv,
 	SHUTDOWN_TIMEOUT_MS,
 } from '@ab/constants';
-import { getEnvInt, requireEnv } from '@ab/constants/env';
 import { createLogger } from '@ab/utils';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 
 const log = createLogger('db');
 
-const connectionString = requireEnv('DATABASE_URL');
+const connectionString = requireEnv(ENV_VARS.DATABASE_URL);
 
 export const client = postgres(connectionString, {
-	max: getEnvInt('DB_POOL_SIZE', DB_POOL_SIZE),
-	connect_timeout: Math.floor(DB_CONNECT_TIMEOUT_MS / 1000),
-	idle_timeout: Math.floor(DB_IDLE_TIMEOUT_MS / 1000),
-	max_lifetime: Math.floor(DB_MAX_LIFETIME_MS / 1000),
+	max: getEnvInt(ENV_VARS.DB_POOL_SIZE, DB_POOL_SIZE),
+	connect_timeout: Math.floor(getEnvInt(ENV_VARS.DB_CONNECT_TIMEOUT_MS, DB_CONNECT_TIMEOUT_MS) / 1000),
+	idle_timeout: Math.floor(getEnvInt(ENV_VARS.DB_IDLE_TIMEOUT_MS, DB_IDLE_TIMEOUT_MS) / 1000),
+	max_lifetime: Math.floor(getEnvInt(ENV_VARS.DB_MAX_LIFETIME_MS, DB_MAX_LIFETIME_MS) / 1000),
 });
 
 export const db = drizzle(client);

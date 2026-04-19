@@ -213,7 +213,7 @@ Review Flow:
     -> return next card (or session complete)
 
 Cross-product reads:
-  other BC -> import { getCardMastery } from '@ab/bc/study' -> SELECT aggregates from card_state
+  other BC -> import { getCardMastery } from '@ab/bc-study' -> SELECT aggregates from card_state
 ```
 
 ## Key Decisions

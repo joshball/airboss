@@ -5,11 +5,8 @@
  * so all auth flows use consistent, secure settings.
  */
 
-import { COOKIE_DOMAIN_DEV, COOKIE_DOMAIN_PROD } from '@ab/constants';
+import { COOKIE_DOMAIN_DEV, COOKIE_DOMAIN_PROD, SESSION_MAX_AGE_SECONDS } from '@ab/constants';
 import type { Cookies } from '@sveltejs/kit';
-
-/** Session cookie max age: 7 days. */
-const SESSION_MAX_AGE_SECONDS = 60 * 60 * 24 * 7;
 
 /** Default cookie options shared across all auth cookie forwarding. */
 function authCookieOptions(isDev: boolean, maxAgeSeconds?: number) {
@@ -21,6 +18,15 @@ function authCookieOptions(isDev: boolean, maxAgeSeconds?: number) {
 		secure: !isDev,
 		maxAge: maxAgeSeconds ?? SESSION_MAX_AGE_SECONDS,
 	};
+}
+
+/** Decode a cookie value, falling back to the raw string if the encoding is malformed. */
+function decodeCookieValue(raw: string): string {
+	try {
+		return decodeURIComponent(raw);
+	} catch {
+		return raw;
+	}
 }
 
 /**
@@ -46,8 +52,7 @@ export function forwardAuthCookies(
 		const name = nameVal.substring(0, eqIndex).trim();
 		if (!name) continue;
 
-		// Decode URL-encoded cookie value (better-auth encodes / and + chars)
-		const value = decodeURIComponent(nameVal.substring(eqIndex + 1).trim());
+		const value = decodeCookieValue(nameVal.substring(eqIndex + 1).trim());
 
 		// Check if the response is clearing this cookie (sign-out)
 		const rawLower = raw.toLowerCase();

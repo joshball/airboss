@@ -1,11 +1,14 @@
-<script>
-let { children } = $props();
+<script lang="ts">
+import { ROUTES } from '@ab/constants';
+import type { Snippet } from 'svelte';
+
+let { children }: { children: Snippet } = $props();
 </script>
 
 <nav>
-	<a href="/memory">Memory</a>
-	<a href="/reps">Reps</a>
-	<a href="/calibration">Calibration</a>
+	<a href={ROUTES.MEMORY}>Memory</a>
+	<a href={ROUTES.REPS}>Reps</a>
+	<a href={ROUTES.CALIBRATION}>Calibration</a>
 </nav>
 
 <main>

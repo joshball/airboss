@@ -1,4 +1,13 @@
 export {
+	BETTER_AUTH_COOKIES,
+	BETTER_AUTH_ENDPOINTS,
+	BETTER_AUTH_PROVIDERS,
+	type BetterAuthCookie,
+	type BetterAuthEndpoint,
+	type BetterAuthProvider,
+	DB_ADAPTER_PROVIDER,
+} from './auth';
+export {
 	DB_CONNECT_TIMEOUT_MS,
 	DB_IDLE_TIMEOUT_MS,
 	DB_MAX_LIFETIME_MS,
@@ -9,11 +18,19 @@ export {
 	LOG_LEVEL_ORDER,
 	LOG_LEVELS,
 	type LogLevel,
+	SESSION_MAX_AGE_SECONDS,
 	SHUTDOWN_TIMEOUT_MS,
 } from './deployment';
-export { DEV_ACCOUNTS, DEV_PASSWORD } from './dev';
-export { getEnv, getEnvBool, getEnvInt, requireEnv } from './env';
-export { AUTH_INTERNAL_ORIGIN, COOKIE_DOMAIN_DEV, COOKIE_DOMAIN_PROD, HOSTS } from './hosts';
+export { DEV_ACCOUNTS, DEV_DB, DEV_DB_HOST_PATTERN, DEV_DB_URL, DEV_PASSWORD } from './dev';
+export { ENV_VARS, type EnvVarName, getEnv, getEnvBool, getEnvInt, isProd, requireEnv } from './env';
+export {
+	AUTH_INTERNAL_ORIGIN,
+	COOKIE_DOMAIN_DEV,
+	COOKIE_DOMAIN_PROD,
+	HOSTS,
+	MAIL_DOMAIN_PROD,
+	MAIL_FROM_NOREPLY,
+} from './hosts';
 export { MIN_PASSWORD_LENGTH, USER_STATUS, type UserStatus } from './identity';
 export { PORTS } from './ports';
 export { ROLES, type Role } from './roles';

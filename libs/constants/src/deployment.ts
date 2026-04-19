@@ -7,6 +7,9 @@ export const HEALTH_CHECK_DB_TIMEOUT_MS = 5_000;
 export const DISK_WARN_BYTES = 1_073_741_824; // 1 GB
 export const DISK_ERROR_BYTES = 104_857_600; // 100 MB
 
+/** Session cookie max age: 7 days (expressed in seconds). */
+export const SESSION_MAX_AGE_SECONDS = 7 * 24 * 60 * 60;
+
 export const LOG_LEVELS = {
 	DEBUG: 'debug',
 	INFO: 'info',

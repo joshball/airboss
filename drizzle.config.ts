@@ -1,12 +1,14 @@
 import { defineConfig } from 'drizzle-kit';
-import { PORTS } from './libs/constants/src/ports';
+import { DEV_DB_URL, ENV_VARS, SCHEMAS } from './libs/constants/src/index';
 
 export default defineConfig({
 	dialect: 'postgresql',
 	schema: ['./libs/auth/src/schema.ts'],
-	schemaFilter: ['public', 'identity', 'audit', 'study'],
+	// 'public' is the Postgres default (home for better-auth's bauth_* tables);
+	// the rest come from the SCHEMAS constant so additions stay in one place.
+	schemaFilter: ['public', SCHEMAS.IDENTITY, SCHEMAS.AUDIT, SCHEMAS.STUDY],
 	out: './drizzle',
 	dbCredentials: {
-		url: process.env.DATABASE_URL ?? `postgresql://airboss:airboss@localhost:${PORTS.DB}/airboss`,
+		url: process.env[ENV_VARS.DATABASE_URL] ?? DEV_DB_URL,
 	},
 });

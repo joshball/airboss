@@ -1,4 +1,4 @@
-import { LOG_LEVEL_ORDER, type LogLevel } from '@ab/constants';
+import { ENV_VARS, isProd, LOG_LEVEL_ORDER, type LogLevel } from '@ab/constants';
 
 interface LogContext extends Record<string, unknown> {
 	requestId?: string;
@@ -29,13 +29,9 @@ export interface Logger {
 }
 
 function getMinLevel(): LogLevel {
-	const raw = process.env.LOG_LEVEL ?? 'info';
+	const raw = process.env[ENV_VARS.LOG_LEVEL] ?? 'info';
 	if (raw in LOG_LEVEL_ORDER) return raw as LogLevel;
 	return 'info';
-}
-
-function isProd(): boolean {
-	return process.env.NODE_ENV === 'production';
 }
 
 function formatPretty(app: string, level: string, msg: string, ctx?: LogContext): string {
@@ -58,6 +54,7 @@ export function createLogger(app: string): Logger {
 				timestamp: new Date().toISOString(),
 				app,
 				requestId: ctx?.requestId,
+				// null -> undefined: omit the field rather than log null
 				userId: ctx?.userId ?? undefined,
 				error: err ? { name: err.name, message: err.message, stack: err.stack } : undefined,
 				metadata: ctx?.metadata,

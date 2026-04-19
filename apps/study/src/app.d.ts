@@ -7,9 +7,11 @@ declare global {
 		interface Locals {
 			session: AuthSession | null;
 			user: AuthUser | null;
+			requestId: string;
 		}
 		interface Error {
 			message: string;
+			requestId?: string;
 		}
 	}
 }

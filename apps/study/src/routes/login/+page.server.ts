@@ -1,8 +1,22 @@
-import { AUTH_INTERNAL_ORIGIN, ROUTES } from '@ab/constants';
+import { AUTH_INTERNAL_ORIGIN, BETTER_AUTH_ENDPOINTS, ROUTES } from '@ab/constants';
+import { createLogger } from '@ab/utils';
 import { fail, redirect } from '@sveltejs/kit';
 import { auth } from '$lib/server/auth';
 import { forwardAuthCookies } from '$lib/server/cookies';
 import type { Actions, PageServerLoad } from './$types';
+
+const log = createLogger('study:login');
+
+/** True when the path is a safe local redirect target (no open-redirect bypasses). */
+function isSafeRedirect(path: string): boolean {
+	if (!path.startsWith('/')) return false;
+	if (path.startsWith('//')) return false;
+	// Block backslashes (some browsers normalize /\evil.com -> //evil.com)
+	if (path.includes('\\')) return false;
+	// Block CR/LF header injection
+	if (path.includes('\r') || path.includes('\n')) return false;
+	return true;
+}
 
 export const load: PageServerLoad = async ({ locals }) => {
 	if (locals.session) {
@@ -12,7 +26,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 };
 
 export const actions: Actions = {
-	default: async ({ request, cookies, url }) => {
+	default: async ({ request, cookies, url, locals }) => {
 		const formData = await request.formData();
 		const email = formData.get('email');
 		const password = formData.get('password');
@@ -22,15 +36,18 @@ export const actions: Actions = {
 		}
 
 		try {
-			const authRequest = new Request(`${AUTH_INTERNAL_ORIGIN}${ROUTES.API_AUTH}/sign-in/email`, {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ email, password }),
-			});
+			const authRequest = new Request(
+				`${AUTH_INTERNAL_ORIGIN}${ROUTES.API_AUTH}${BETTER_AUTH_ENDPOINTS.SIGN_IN_EMAIL}`,
+				{
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ email, password }),
+				},
+			);
 			const authResponse = await auth.handler(authRequest);
 
 			if (!authResponse.ok) {
-				const data = await authResponse.json().catch(() => null);
+				const data = (await authResponse.json().catch(() => null)) as { message?: string } | null;
 				return fail(401, {
 					error: data?.message ?? 'Invalid email or password',
 					email,
@@ -39,12 +56,16 @@ export const actions: Actions = {
 
 			forwardAuthCookies(authResponse, cookies);
 		} catch (err) {
-			const message = err instanceof Error ? err.message : 'Invalid email or password';
-			return fail(401, { error: message, email });
+			// Never leak internal error text to the client -- log server-side instead.
+			log.error(
+				'login handler threw',
+				{ requestId: locals.requestId, metadata: { email } },
+				err instanceof Error ? err : undefined,
+			);
+			return fail(500, { error: 'Sign-in failed, please try again', email });
 		}
 
 		const rawRedirect = url.searchParams.get('redirectTo') ?? '';
-		const safe = rawRedirect.startsWith('/') && !rawRedirect.startsWith('//');
-		redirect(303, safe ? rawRedirect : ROUTES.HOME);
+		redirect(303, isSafeRedirect(rawRedirect) ? rawRedirect : ROUTES.HOME);
 	},
 };

@@ -1,4 +1,4 @@
-import { COOKIE_DOMAIN_DEV, COOKIE_DOMAIN_PROD, PORTS, ROLES } from '@ab/constants';
+import { COOKIE_DOMAIN_DEV, COOKIE_DOMAIN_PROD, DB_ADAPTER_PROVIDER, PORTS, ROLES } from '@ab/constants';
 import { db } from '@ab/db';
 import { generateAuthId } from '@ab/utils';
 import { betterAuth } from 'better-auth';
@@ -28,7 +28,7 @@ const authSchema = {
  */
 export function createAuth(options: { secret: string; baseURL?: string; isDev?: boolean }) {
 	return betterAuth({
-		database: drizzleAdapter(db, { provider: 'pg', schema: authSchema }),
+		database: drizzleAdapter(db, { provider: DB_ADAPTER_PROVIDER, schema: authSchema }),
 		baseURL: options.baseURL ?? `http://localhost:${PORTS.STUDY}`,
 		secret: options.secret,
 
@@ -70,19 +70,22 @@ export function createAuth(options: { secret: string; baseURL?: string; isDev?: 
 
 		emailAndPassword: {
 			enabled: true,
-			requireEmailVerification: false, // Enable later when email is fully tested
+			requireEmailVerification: false,
 			sendResetPassword: async ({ user, url }) => {
 				const { subject, html } = resetPasswordEmail(url, user.name);
-				void sendEmail({ to: user.email, subject, html });
+				await sendEmail({ to: user.email, subject, html });
 			},
 		},
 
+		// Verification gating stays disabled until the email transport is
+		// production-ready. We also skip sendOnSignUp so users don't receive a
+		// verification email that has no effect -- re-enable both together.
 		emailVerification: {
-			sendOnSignUp: true,
+			sendOnSignUp: false,
 			autoSignInAfterVerification: true,
 			sendVerificationEmail: async ({ user, url }) => {
 				const { subject, html } = verificationEmail(url, user.name);
-				void sendEmail({ to: user.email, subject, html });
+				await sendEmail({ to: user.email, subject, html });
 			},
 		},
 
@@ -94,7 +97,7 @@ export function createAuth(options: { secret: string; baseURL?: string; isDev?: 
 			magicLink({
 				sendMagicLink: async ({ email, url }) => {
 					const { subject, html } = magicLinkEmail(url);
-					void sendEmail({ to: email, subject, html });
+					await sendEmail({ to: email, subject, html });
 				},
 			}),
 		],

@@ -203,7 +203,7 @@ See [docs/platform/MULTI_PRODUCT_ARCHITECTURE.md](docs/platform/MULTI_PRODUCT_AR
 
 - **Always use `@ab/*` path aliases for cross-lib imports.** Never relative paths across lib boundaries.
 - **Intra-lib relative imports are fine.**
-- Path aliases: `@ab/constants`, `@ab/types`, `@ab/db`, `@ab/auth`, `@ab/themes`, `@ab/ui`, `@ab/utils`, `@ab/bc/study`.
+- Path aliases: `@ab/constants`, `@ab/types`, `@ab/db`, `@ab/auth`, `@ab/themes`, `@ab/ui`, `@ab/utils`, `@ab/bc-study`.
 
 ## Svelte 5
 

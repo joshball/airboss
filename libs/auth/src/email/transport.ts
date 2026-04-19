@@ -1,14 +1,14 @@
+import { ENV_VARS, MAIL_FROM_NOREPLY } from '@ab/constants';
 import { createLogger } from '@ab/utils';
 import { Resend } from 'resend';
 
 const log = createLogger('email');
-const DEFAULT_FROM = 'airboss <noreply@air-boss.org>';
 
 let resendClient: Resend | null = null;
 
 function getResend(): Resend | null {
 	if (resendClient) return resendClient;
-	const key = process.env.RESEND_API_KEY;
+	const key = process.env[ENV_VARS.RESEND_API_KEY];
 	if (!key) return null;
 	resendClient = new Resend(key);
 	return resendClient;
@@ -26,15 +26,12 @@ export interface EmailMessage {
  * Does not throw -- logs errors and returns false.
  */
 export async function sendEmail(message: EmailMessage): Promise<boolean> {
-	const from = message.from ?? DEFAULT_FROM;
+	const from = message.from ?? MAIL_FROM_NOREPLY;
 	const client = getResend();
 
 	if (!client) {
-		// Dev fallback: log to console
 		log.info('no RESEND_API_KEY -- email logged', {
-			to: message.to,
-			from,
-			subject: message.subject,
+			metadata: { to: message.to, from, subject: message.subject },
 		});
 		return true;
 	}
@@ -48,13 +45,13 @@ export async function sendEmail(message: EmailMessage): Promise<boolean> {
 		});
 
 		if (result.error) {
-			log.error('resend error', { error: result.error.message });
+			log.error('resend error', { metadata: { error: result.error.message } });
 			return false;
 		}
 
 		return true;
 	} catch (err) {
-		log.error('email send failed', { error: err instanceof Error ? err.message : 'unknown' });
+		log.error('email send failed', { metadata: { error: err instanceof Error ? err.message : 'unknown' } });
 		return false;
 	}
 }

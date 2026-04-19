@@ -4,17 +4,36 @@
  * Uses DEV_ACCOUNTS from @ab/constants with DEV_PASSWORD, hashed via
  * better-auth's scrypt implementation. Idempotent -- safe to re-run.
  *
+ * Refuses to run unless DATABASE_URL points at a local dev database, to prevent
+ * accidentally planting the hard-coded admin account into a production DB.
+ *
  * Run: bun scripts/db/seed-dev-users.ts
  */
 
-import { eq } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 import { bauthAccount, bauthUser } from '../../libs/auth/src/schema';
-import { DEV_ACCOUNTS, DEV_PASSWORD, PORTS } from '../../libs/constants/src/index';
+import {
+	BETTER_AUTH_PROVIDERS,
+	DEV_ACCOUNTS,
+	DEV_DB_HOST_PATTERN,
+	DEV_DB_URL,
+	DEV_PASSWORD,
+	ENV_VARS,
+	isProd,
+} from '../../libs/constants/src/index';
 import { generateAuthId } from '../../libs/utils/src/ids';
 
-const connectionString = process.env.DATABASE_URL ?? `postgresql://airboss:airboss@localhost:${PORTS.DB}/airboss`;
+const connectionString = process.env[ENV_VARS.DATABASE_URL] ?? DEV_DB_URL;
+
+// Guard: refuse to seed anything that isn't clearly a local dev database.
+if (isProd() || !DEV_DB_HOST_PATTERN.test(connectionString)) {
+	console.error('Refusing to seed dev users: DATABASE_URL does not point at a local dev database');
+	console.error('  (expected localhost/127.0.0.1/airboss-db host, and NODE_ENV !== production)');
+	process.exit(1);
+}
+
 const client = postgres(connectionString);
 const db = drizzle(client);
 
@@ -22,19 +41,18 @@ async function seedDevUsers(): Promise<void> {
 	console.log('Seeding dev users...');
 
 	const { hashPassword } = await import('better-auth/crypto');
-	const hashedPassword = await hashPassword(DEV_PASSWORD);
 	const now = new Date();
 
 	for (const account of DEV_ACCOUNTS) {
-		const existing = await db
+		const existingUser = await db
 			.select({ id: bauthUser.id })
 			.from(bauthUser)
 			.where(eq(bauthUser.email, account.email))
 			.limit(1);
 
-		const userId = existing[0]?.id ?? generateAuthId();
+		const userId = existingUser[0]?.id ?? generateAuthId();
 
-		if (!existing[0]) {
+		if (!existingUser[0]) {
 			await db.insert(bauthUser).values({
 				id: userId,
 				email: account.email,
@@ -46,21 +64,33 @@ async function seedDevUsers(): Promise<void> {
 				createdAt: now,
 				updatedAt: now,
 			});
+		}
 
+		const existingAccount = await db
+			.select({ id: bauthAccount.id })
+			.from(bauthAccount)
+			.where(and(eq(bauthAccount.userId, userId), eq(bauthAccount.providerId, BETTER_AUTH_PROVIDERS.CREDENTIAL)))
+			.limit(1);
+
+		if (!existingAccount[0]) {
+			// better-auth's scrypt uses a per-call random salt, so hash per user
+			// rather than sharing a single hash string across rows.
+			const hashedPassword = await hashPassword(DEV_PASSWORD);
 			await db.insert(bauthAccount).values({
 				id: generateAuthId(),
 				userId,
 				accountId: userId,
-				providerId: 'credential',
+				providerId: BETTER_AUTH_PROVIDERS.CREDENTIAL,
 				password: hashedPassword,
 				createdAt: now,
 				updatedAt: now,
 			});
-
-			console.log(`  created: ${account.email} (${account.role})`);
-		} else {
-			console.log(`  exists:  ${account.email} (${account.role})`);
 		}
+
+		const created = !existingUser[0];
+		const repaired = existingUser[0] && !existingAccount[0];
+		const status = created ? 'created' : repaired ? 'repaired' : 'exists';
+		console.log(`  ${status.padEnd(8)} ${account.email} (${account.role})`);
 	}
 }
 

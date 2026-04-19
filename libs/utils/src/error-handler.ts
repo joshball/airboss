@@ -9,12 +9,19 @@ interface HandleErrorParams {
 	status: number;
 	message: string;
 	requestId?: string;
-	userId?: string;
+	userId?: string | null;
 }
 
 interface ErrorResponse {
 	message: string;
 	requestId: string;
+}
+
+function safeMessageForStatus(status: number): string {
+	if (status === 404) return 'Page not found';
+	if (status === 401) return 'Please sign in';
+	if (status === 403) return 'You do not have permission to view this page';
+	return 'An unexpected error occurred';
 }
 
 /**
@@ -35,10 +42,8 @@ export function createErrorHandler({ logger }: ErrorHandlerOptions) {
 			});
 		}
 
-		const safeMessage = params.status === 404 ? 'Page not found' : 'An unexpected error occurred';
-
 		return {
-			message: safeMessage,
+			message: safeMessageForStatus(params.status),
 			requestId,
 		};
 	};
