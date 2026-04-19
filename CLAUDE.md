@@ -4,6 +4,16 @@ Pilot performance and rehearsal platform. Post-pivot from FIRC-specific to broad
 
 See [docs/platform/PIVOT.md](docs/platform/PIVOT.md) for why we're here. See [docs/platform/MULTI_PRODUCT_ARCHITECTURE.md](docs/platform/MULTI_PRODUCT_ARCHITECTURE.md) for the Option 7 surface architecture.
 
+## PRIME DIRECTIVE
+
+**Do the right thing. Always.**
+
+- Never propose stubs, hardcoded values, or "MVP shortcuts" when a real implementation exists -- especially in the `airboss-firc` sibling repo, which has years of battle-tested auth, schema, engine, and BC code.
+- "For now" and "as a stub" are red flags. If you're tempted to say either, stop. Check whether porting the real thing is within reach. It usually is.
+- Longer scope to do it right is always acceptable. Quality shortcuts are not.
+- When porting from airboss-firc: take the code, schema, and patterns. Do **not** take the UI/UX -- that's being redesigned here.
+- Zero tolerance for known issues. A stub is a known issue. Fix it before moving on.
+
 ## SESSION START
 
 **Do this at the start of every conversation, before any work:**
