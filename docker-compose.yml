@@ -1,0 +1,29 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: airboss-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: airboss
+      POSTGRES_PASSWORD: airboss
+      POSTGRES_DB: airboss
+    ports:
+      - '5435:5432'
+    volumes:
+      - airboss-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U airboss']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  mailpit:
+    image: axllent/mailpit:latest
+    container_name: airboss-mailpit
+    restart: unless-stopped
+    ports:
+      - '1027:1025'
+      - '8027:8025'
+
+volumes:
+  airboss-pgdata:
