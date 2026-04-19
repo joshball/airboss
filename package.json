@@ -10,7 +10,12 @@
 		"test:watch": "vitest",
 		"db:push": "bunx drizzle-kit push",
 		"db:studio": "bunx drizzle-kit studio",
-		"db:seed": "bun scripts/db/seed-dev-users.ts"
+		"db:seed": "bun scripts/db/seed-dev-users.ts",
+		"db:reset": "bun scripts/db/reset-study.ts",
+		"db:up": "docker compose up -d db",
+		"db:down": "docker compose down",
+		"setup": "bun scripts/setup.ts",
+		"smoke": "bun scripts/smoke/study-bc.ts"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.4.7",

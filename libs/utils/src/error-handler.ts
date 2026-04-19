@@ -27,13 +27,23 @@ function safeMessageForStatus(status: number): string {
 /**
  * Creates a SvelteKit-compatible handleError function.
  * Logs the error with structured context and returns a safe response.
+ *
+ * 4xx statuses (client errors, typically "not found" for SPA fall-through
+ * requests like favicon.ico) are logged at warn; 5xx at error.
  */
 export function createErrorHandler({ logger }: ErrorHandlerOptions) {
 	return function handleError(params: HandleErrorParams): ErrorResponse {
 		const requestId = params.requestId ?? crypto.randomUUID();
+		const isClientError = params.status >= 400 && params.status < 500;
 
 		if (params.error instanceof Error) {
-			logger.error(params.message, { requestId, userId: params.userId }, params.error);
+			if (isClientError) {
+				logger.warn(params.message, { requestId, userId: params.userId });
+			} else {
+				logger.error(params.message, { requestId, userId: params.userId }, params.error);
+			}
+		} else if (isClientError) {
+			logger.warn(params.message, { requestId, userId: params.userId, metadata: { error: String(params.error) } });
 		} else {
 			logger.error(params.message, {
 				requestId,
