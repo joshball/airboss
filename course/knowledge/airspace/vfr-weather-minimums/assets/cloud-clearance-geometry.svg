@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" font-family="system-ui, -apple-system, sans-serif" font-size="14">
+  <title>VFR cloud-clearance geometry (3 SM and 500/1000/2000)</title>
+  <desc>
+    Diagram illustrating the standard VFR cloud clearance requirements in Class
+    C, D, and E (below 10,000 MSL): 500 ft below the cloud, 1,000 ft above, and
+    2,000 ft horizontal, with a 3 SM flight visibility floor. The asymmetry
+    between "500 below" and "1,000 above" is shown visually; the larger
+    horizontal distance relative to vertical is also apparent.
+  </desc>
+
+  <!-- Sky background -->
+  <rect x="0" y="0" width="800" height="500" fill="#f5f9ff"/>
+
+  <!-- Cloud (a rounded blob) -->
+  <g>
+    <ellipse cx="400" cy="230" rx="140" ry="55" fill="#d8e4f0" stroke="#6b7f92" stroke-width="1.5"/>
+    <ellipse cx="340" cy="210" rx="70" ry="40" fill="#d8e4f0" stroke="#6b7f92" stroke-width="1.5"/>
+    <ellipse cx="460" cy="210" rx="70" ry="40" fill="#d8e4f0" stroke="#6b7f92" stroke-width="1.5"/>
+    <text x="400" y="235" text-anchor="middle" fill="#445566" font-weight="600">CLOUD</text>
+  </g>
+
+  <!-- Cloud bounding rectangle for clearance measurement (dashed) -->
+  <rect x="260" y="175" width="280" height="110" fill="none" stroke="#6b7f92" stroke-width="1" stroke-dasharray="4,4" opacity="0.6"/>
+
+  <!-- Top clearance line (1000 ft above) -->
+  <line x1="260" y1="95" x2="540" y2="95" stroke="#c0392b" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <line x1="400" y1="175" x2="400" y2="95" stroke="#c0392b" stroke-width="1.5"/>
+  <text x="410" y="135" fill="#c0392b" font-weight="600">1,000 ft above</text>
+  <polygon points="400,95 395,105 405,105" fill="#c0392b"/>
+  <polygon points="400,175 395,165 405,165" fill="#c0392b"/>
+
+  <!-- Bottom clearance line (500 ft below) -->
+  <line x1="260" y1="325" x2="540" y2="325" stroke="#c0392b" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <line x1="400" y1="285" x2="400" y2="325" stroke="#c0392b" stroke-width="1.5"/>
+  <text x="410" y="312" fill="#c0392b" font-weight="600">500 ft below</text>
+  <polygon points="400,285 395,295 405,295" fill="#c0392b"/>
+  <polygon points="400,325 395,315 405,315" fill="#c0392b"/>
+
+  <!-- Horizontal clearance line (2000 ft horizontal, left side shown) -->
+  <line x1="60" y1="230" x2="260" y2="230" stroke="#c0392b" stroke-width="1.5"/>
+  <line x1="60" y1="210" x2="60" y2="250" stroke="#c0392b" stroke-width="1.5"/>
+  <line x1="260" y1="210" x2="260" y2="250" stroke="#c0392b" stroke-width="1.5"/>
+  <text x="160" y="222" text-anchor="middle" fill="#c0392b" font-weight="600">2,000 ft horizontal</text>
+
+  <!-- VFR aircraft positions (three) -->
+  <!-- Aircraft above (red zone: need 1000 ft) -->
+  <g transform="translate(400,75)">
+    <path d="M-12 0 L12 0 M0 -8 L0 8 M-6 6 L6 6" stroke="#1f6feb" stroke-width="2" fill="none"/>
+    <text x="25" y="4" fill="#1f6feb" font-weight="600">VFR above</text>
+  </g>
+
+  <!-- Aircraft below (red zone: need 500 ft) -->
+  <g transform="translate(400,345)">
+    <path d="M-12 0 L12 0 M0 -8 L0 8 M-6 6 L6 6" stroke="#1f6feb" stroke-width="2" fill="none"/>
+    <text x="25" y="4" fill="#1f6feb" font-weight="600">VFR below</text>
+  </g>
+
+  <!-- Aircraft to the side (need 2000 ft horizontal) -->
+  <g transform="translate(50,230)">
+    <path d="M-12 0 L12 0 M0 -8 L0 8 M-6 6 L6 6" stroke="#1f6feb" stroke-width="2" fill="none"/>
+    <text x="0" y="-14" text-anchor="middle" fill="#1f6feb" font-weight="600">VFR beside</text>
+  </g>
+
+  <!-- Why the asymmetry annotation -->
+  <g font-size="12" fill="#333">
+    <text x="600" y="100" font-weight="600">Above: IFR climbs toward you.</text>
+    <text x="600" y="118">You cannot descend without</text>
+    <text x="600" y="134">entering the cloud. -> 1,000 ft.</text>
+
+    <text x="600" y="310" font-weight="600">Below: IFR descends toward you.</text>
+    <text x="600" y="328">You have open airspace below</text>
+    <text x="600" y="344">to maneuver into. -> 500 ft.</text>
+
+    <text x="40" y="275" font-weight="600">Horizontal: closure rate</text>
+    <text x="40" y="291">times reaction window.</text>
+    <text x="40" y="307">Largest number in the set.</text>
+  </g>
+
+  <!-- Flight visibility band at bottom -->
+  <g transform="translate(0,420)">
+    <rect x="40" y="0" width="720" height="40" fill="#eef4fb" stroke="#7a93ae" stroke-width="1"/>
+    <text x="400" y="18" text-anchor="middle" font-weight="700" fill="#2c3e50">Flight visibility floor</text>
+    <text x="400" y="35" text-anchor="middle" fill="#2c3e50">3 SM in Class C/D/E &lt; 10,000 MSL   |   5 SM at 10,000 MSL and above   |   1 SM in Class G day &lt;= 1,200 AGL</text>
+  </g>
+
+  <!-- Title -->
+  <text x="400" y="30" text-anchor="middle" font-size="18" font-weight="700" fill="#2c3e50">
+    VFR Cloud Clearance: 500 / 1,000 / 2,000 geometry
+  </text>
+  <text x="400" y="50" text-anchor="middle" font-size="12" fill="#55606b">
+    Class C, D, E (&lt; 10,000 MSL) and Class G (night, or day &gt; 1,200 AGL)
+  </text>
+</svg>
