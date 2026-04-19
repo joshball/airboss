@@ -254,7 +254,7 @@ New file `libs/bc/study/src/knowledge.ts`:
 | `getPrerequisiteChain`         | `(db, nodeId: string, maxDepth?: number) -> KnowledgeNode[]`                            | Transitive closure over `requires`; default depth 5        |
 | `getNodesByDomain`             | `(db, domain: Domain, filters?: { cert?; priority?; lifecycle? }) -> KnowledgeNode[]`   | Powers browse page                                         |
 | `getNodesByCert`               | `(db, cert: Cert) -> KnowledgeNode[]`                                                   | Filters by relevance entries                               |
-| `getNodeMastery`               | `(db, userId: string, nodeId: string) -> NodeMasteryStats`                              | Aggregates cards + reps by `node_id`                       |
+| `getNodeMastery`               | `(db, userId: string, nodeId: string) -> NodeMasteryStats`                              | Dual-gate mastery. See "Mastery computation" below.        |
 | `listNodes`                    | `(db, filters?) -> KnowledgeNode[]`                                                     | Generic list with filter chain                             |
 | `getCoverageReport`            | `(db) -> { totalNodes, byLifecycle, byDomain, phaseGaps }`                              | For the auto-generated `graph-index.md`                    |
 
@@ -280,6 +280,70 @@ Errors (throwing classes, match existing BC style):
 - `KnowledgeBuildValidationError` (aggregates violations)
 - `KnowledgeCycleError` (carries the offending node slugs)
 - `InvalidContentPhaseError`
+
+### Mastery computation (dual gate)
+
+Mastery is a **dual gate**: card stability AND rep accuracy must each independently clear their threshold. Aviation culture rejects "good enough" composites -- you either know stalls or you don't. A weighted average can hide a weak pillar (e.g., 90% card recall + 50% rep accuracy == 0.74 weighted, but the pilot doesn't know how to apply the knowledge). Dual-gate forces both pillars to mature before a node is called "mastered".
+
+`NodeMasteryStats` returned by `getNodeMastery`:
+
+```typescript
+type NodeMasteryStats = {
+  cardsTotal: number;
+  cardsMastered: number;            // FSRS stability > STABILITY_MASTERED_DAYS
+  cardsDue: number;
+  cardsMasteredRatio: number;       // cardsMastered / cardsTotal, 0 if no cards
+  repsTotal: number;
+  repsCorrect: number;
+  repAccuracy: number;              // repsCorrect / repsTotal, 0 if no reps
+  mastered: boolean;                // dual-gate output
+  displayScore: number;             // 0..1 for progress bars
+  cardGate: 'pass' | 'fail' | 'insufficient_data';
+  repGate:  'pass' | 'fail' | 'insufficient_data' | 'not_applicable';
+};
+```
+
+**Gate rules:**
+
+- `cardGate = pass` iff `cardsTotal >= CARD_MIN && cardsMasteredRatio >= CARD_MASTERY_RATIO_THRESHOLD`
+- `cardGate = insufficient_data` iff `cardsTotal < CARD_MIN` (and `cardsTotal > 0`)
+- `cardGate = fail` otherwise
+- `repGate = pass` iff `repsTotal >= REP_MIN && repAccuracy >= REP_ACCURACY_THRESHOLD`
+- `repGate = insufficient_data` iff `0 < repsTotal < REP_MIN`
+- `repGate = not_applicable` iff `repsTotal == 0` AND no scenarios are attached to this node (graph-checked)
+- `repGate = fail` otherwise
+
+**Mastered rule:**
+
+- If `cardGate == pass` AND (`repGate == pass` OR `repGate == not_applicable`): `mastered = true`
+- Else: `mastered = false`
+
+Knowledge-only nodes (no scenarios exist) pass the rep gate automatically via `not_applicable`. Judgment-only nodes (no cards exist) require `repGate == pass` and treat `cardGate == not_applicable` symmetrically. Nodes with no attached content are never mastered.
+
+**Display score** (for progress bars, never for the mastered boolean):
+
+- Both pillars present: `(cardsMasteredRatio + repAccuracy) / 2`
+- Cards only: `cardsMasteredRatio`
+- Reps only: `repAccuracy`
+- Neither: `0`
+
+**Platform constants** (`libs/constants/src/study.ts`):
+
+| Constant                       | Value | Rationale                                                                            |
+| ------------------------------ | ----- | ------------------------------------------------------------------------------------ |
+| `CARD_MASTERY_RATIO_THRESHOLD` | 0.80  | 4-of-5 attached cards mature -- enough to trust stability                            |
+| `REP_ACCURACY_THRESHOLD`       | 0.70  | Judgment tolerates one miss in three; lower than card recall because reps are harder |
+| `CARD_MIN`                     | 3     | Floor before the card gate can pass; prevents "mastered with 1 card"                 |
+| `REP_MIN`                      | 3     | Floor before the rep gate can pass                                                   |
+| `STABILITY_MASTERED_DAYS`      | 30    | FSRS stability threshold for a single card being "mastered"                          |
+
+Per-node `mastery_criteria` stays a markdown note in v1 -- a human-readable caveat ("this node is hard to assess discretely; focus on scenario judgment"). Not an executable override. v2 can promote the constants to per-node YAML once the defaults have been lived with.
+
+**Reconciliation notes:**
+
+- Study Plan + Session Engine's `isNodeMastered(userId, nodeId)` is a boolean projection of `getNodeMastery(...).mastered`.
+- Study Plan's `getNodeMastery(...) -> { score, trend }` resolves: `score = displayScore`, `trend` is the 14-day delta of `displayScore` computed from the review + rep history.
+- Dashboard's `getDomainCertMatrix` and `getCertProgress` aggregate the boolean `mastered` across nodes in scope.
 
 ## Constants (`libs/constants/src/knowledge.ts`)
 
@@ -378,7 +442,7 @@ Decisions Joshua must confirm before sign-off. These are tracked here rather tha
 5. **Domain authority: `DOMAINS` constant vs `course/knowledge/domains.md`.** ADR 011 says the graph is the source of truth and the constant should mirror it. For v1 the constant stays authoritative (it already drives `study.card`, `study.scenario`, and the browse filter); `domains.md` is human prose. Revisit once the graph scales and domain changes become common.
 6. **`assessable: boolean` at node level.** Some factual nodes are assessable (question-answer). Some nodes (like `teach-the-learning-process`) are harder to assess discretely. Proposed: default `true`, author can flip to `false` with a rationale in `mastery_criteria`. Confirm vs removing the field entirely in v1.
 7. **"Related" bidirectional mirror.** Proposed: the build inserts both directions for a `related` edge even if only one side lists it. This simplifies queries but means one-sided author intent turns into two-sided data. Alternative: store as-authored and let queries UNION. Confirm.
-8. **Mastery model in v1.** Proposed: `getNodeMastery` returns raw aggregates (cards mastered / due / total, rep accuracy) and the dashboard computes a % using a platform default (`cards_mastered_ratio * 0.6 + rep_accuracy * 0.4` with thresholds per bloom level). Per-node `mastery_criteria` is a markdown note only in v1, not an executable formula. Confirm that deferring executable mastery criteria is fine.
+8. **[RESOLVED 2026-04-19]** Mastery is a **dual gate**: card stability AND rep accuracy must each independently clear their threshold. Not a weighted average -- aviation culture rejects "good enough" composites. See "Mastery computation" section below. Per-node `mastery_criteria` stays a markdown note in v1; the dual-gate thresholds are platform constants in `libs/constants/study.ts`, authored once.
 9. **Interactive activity location for v1.** `libs/activities/` is called out in ADR 011 but doesn't exist yet. Proposed: create `libs/activities/wind-triangle/` alongside this feature for the one deep-dive node (`perf-crosswind-component`). Confirm vs embedding the activity inline in the study app routes.
 10. **Which 3-5 nodes are "deep dives."** ADR 011 proposes five candidates. Proposed: deep-build exactly three for v1 -- `airspace-vfr-weather-minimums` (discovery example), `perf-crosswind-component` (interactive widget), `proc-engine-failure-after-takeoff` (judgment-rich). The remaining two from the ADR list become stretch. Confirm.
 

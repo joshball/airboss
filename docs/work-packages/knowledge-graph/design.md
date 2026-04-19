@@ -118,6 +118,26 @@ A card can be `source_type='personal'` and `node_id='kn_...'` (author-linked a p
 
 **Decision Reps `scenario`:** mirror treatment. `node_id` + `content_phase` (usually `verify` for assessment scenarios, `practice` for drill reps). `getRepAccuracy` gains the node filter. No schema surprises.
 
+## Mastery computation
+
+**Dual gate, not weighted average.** A node is `mastered` iff its card pillar AND its rep pillar both independently clear their thresholds. A weighted score (`cards * 0.6 + reps * 0.4`) can hide a weak pillar -- 90% recall with 50% judgment reads as 0.74, but the pilot doesn't know how to apply the knowledge. Aviation culture rejects "good enough" composites: you either know stalls or you don't. The dual gate forces both pillars to mature.
+
+**Asymmetric thresholds.** Card ratio is held to 0.80 (4-of-5 attached cards mature); rep accuracy is held to 0.70 (one miss in three tolerated). Reps are harder than cards -- they embed scenario ambiguity -- so the rep bar is set lower on purpose. Platform constants live in `libs/constants/study.ts`; authored once, lived with, promoted to per-node overrides in v2 if the defaults mismatch real use.
+
+**Minimum-data gates.** A node needs `>= 3` attached cards (or `>= 3` rep attempts) before its pillar can resolve to `pass`. Below that, the pillar reports `insufficient_data`. This prevents "mastered after 1 correct card" artifacts.
+
+**Asymmetric fallback for single-pillar nodes.** Nodes with no attached scenarios (pure knowledge nodes like definitions) see `repGate = not_applicable` and are judged on cards alone. The symmetric case (rep-only judgment nodes) is possible but rare in v1. Nodes with nothing attached are never mastered.
+
+**Display score separate from gate.** Progress bars render `(cardsMasteredRatio + repAccuracy) / 2` (or the single-pillar value when only one applies). The displayed percentage can be high while `mastered == false` -- intentional. Seeing "78%, not yet mastered" communicates the gap.
+
+**Why not bloom-indexed thresholds in v1?** ADR 011 notes higher bloom levels need stricter rules. Punted -- the constants above are a single set until scale. A bloom-indexed table can be introduced without changing the gate shape.
+
+**Reconciliation with study-plan + dashboard.**
+
+- Study Plan's `isNodeMastered(userId, nodeId) -> boolean` returns `getNodeMastery(...).mastered`.
+- Study Plan's `getNodeMastery(...) -> { score, trend }` maps to `{ score: displayScore, trend: 14-day delta of displayScore }`.
+- Dashboard's cert-progress and domain-cert-matrix aggregate the boolean `mastered` across nodes in scope.
+
 ## Seed-node authoring workflow
 
 **Problem:** 30 nodes, most of which are skeletons, authored by one person (Joshua) over an extended period. Needs:
