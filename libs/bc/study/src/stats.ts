@@ -16,9 +16,9 @@ import {
 	type ReviewRating,
 } from '@ab/constants';
 import { db as defaultDb } from '@ab/db';
-import { and, count, eq, gt, gte, lte, sql } from 'drizzle-orm';
+import { and, count, desc, eq, gt, gte, lte, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
-import { card, cardState, review } from './schema';
+import { card, cardState, type ReviewRow, review } from './schema';
 
 type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;
 
@@ -266,6 +266,41 @@ export async function getDueCardCount(userId: string, db: Db = defaultDb, now: D
 		.innerJoin(card, and(eq(card.id, cardState.cardId), eq(card.userId, cardState.userId)))
 		.where(and(eq(cardState.userId, userId), lte(cardState.dueAt, now), eq(card.status, CARD_STATUSES.ACTIVE)));
 	return Number(row?.c ?? 0);
+}
+
+/** Summary row for the card-detail recent-reviews panel. */
+export type RecentReviewRow = Pick<
+	ReviewRow,
+	'id' | 'rating' | 'confidence' | 'stability' | 'difficulty' | 'state' | 'reviewedAt' | 'dueAt' | 'scheduledDays'
+>;
+
+/**
+ * Load the most recent reviews for a card. Scoped to the caller's user so
+ * route handlers can't accidentally leak another learner's history through a
+ * URL guess. Returns empty array when the card has no reviews yet.
+ */
+export async function getRecentReviewsForCard(
+	cardId: string,
+	userId: string,
+	limit = 10,
+	db: Db = defaultDb,
+): Promise<RecentReviewRow[]> {
+	return await db
+		.select({
+			id: review.id,
+			rating: review.rating,
+			confidence: review.confidence,
+			stability: review.stability,
+			difficulty: review.difficulty,
+			state: review.state,
+			reviewedAt: review.reviewedAt,
+			dueAt: review.dueAt,
+			scheduledDays: review.scheduledDays,
+		})
+		.from(review)
+		.where(and(eq(review.cardId, cardId), eq(review.userId, userId)))
+		.orderBy(desc(review.reviewedAt))
+		.limit(limit);
 }
 
 /** Count of cards considered mastered (stability > MASTERY_STABILITY_DAYS). */

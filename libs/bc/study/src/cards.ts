@@ -18,7 +18,7 @@ import {
 	type Domain,
 	REVIEW_BATCH_SIZE,
 } from '@ab/constants';
-import { db as defaultDb } from '@ab/db';
+import { db as defaultDb, escapeLikePattern } from '@ab/db';
 import { generateCardId } from '@ab/utils';
 import { and, asc, desc, eq, ilike, inArray, lte, or, type SQL } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
@@ -27,6 +27,33 @@ import { fsrsInitialState } from './srs';
 import { newCardSchema, updateCardSchema } from './validation';
 
 type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;
+
+/** Raised when a card can't be found for the given user. */
+export class CardNotFoundError extends Error {
+	constructor(
+		public readonly cardId: string,
+		public readonly userId: string,
+	) {
+		super(`Card ${cardId} not found for user ${userId}`);
+		this.name = 'CardNotFoundError';
+	}
+}
+
+/** Raised when caller tries to edit a card that is not editable (course/product cards). */
+export class CardNotEditableError extends Error {
+	constructor(public readonly cardId: string) {
+		super(`Card ${cardId} is not editable`);
+		this.name = 'CardNotEditableError';
+	}
+}
+
+/** Raised when sourceType requires sourceRef but none was supplied. */
+export class SourceRefRequiredError extends Error {
+	constructor() {
+		super('source_ref is required when source_type is not personal');
+		this.name = 'SourceRefRequiredError';
+	}
+}
 
 /** Full card view that pairs static card data with per-user scheduler state. */
 export interface CardWithState {
@@ -64,11 +91,6 @@ export interface CardFilters {
 	offset?: number;
 }
 
-/** Escape user input for use inside a LIKE/ILIKE pattern. */
-function escapeLikePattern(s: string): string {
-	return s.replace(/[\\%_]/g, (ch) => `\\${ch}`);
-}
-
 /** Create a new card and its initial card_state row. Runs inside a transaction. */
 export async function createCard(input: CreateCardInput, db: Db = defaultDb): Promise<CardRow> {
 	const parsed = newCardSchema.parse({
@@ -83,7 +105,7 @@ export async function createCard(input: CreateCardInput, db: Db = defaultDb): Pr
 	});
 	const sourceType = (parsed.sourceType ?? CONTENT_SOURCES.PERSONAL) as ContentSource;
 	if (sourceType !== CONTENT_SOURCES.PERSONAL && !parsed.sourceRef) {
-		throw new Error('source_ref is required when source_type is not personal');
+		throw new SourceRefRequiredError();
 	}
 
 	return await db.transaction(async (tx) => {
@@ -146,8 +168,8 @@ export async function updateCard(
 		.from(card)
 		.where(and(eq(card.id, cardId), eq(card.userId, userId)))
 		.limit(1);
-	if (!existing) throw new Error(`Card ${cardId} not found for user ${userId}`);
-	if (!existing.isEditable) throw new Error(`Card ${cardId} is not editable`);
+	if (!existing) throw new CardNotFoundError(cardId, userId);
+	if (!existing.isEditable) throw new CardNotEditableError(cardId);
 
 	// Whitelist explicitly so Drizzle can't accept extra keys slipped in by a
 	// caller that bypasses TypeScript.
@@ -252,6 +274,6 @@ export async function setCardStatus(
 		.set({ status, updatedAt: new Date() })
 		.where(and(eq(card.id, cardId), eq(card.userId, userId)))
 		.returning();
-	if (!updated) throw new Error(`Card ${cardId} not found for user ${userId}`);
+	if (!updated) throw new CardNotFoundError(cardId, userId);
 	return updated;
 }

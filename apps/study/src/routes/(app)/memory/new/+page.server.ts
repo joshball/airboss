@@ -1,4 +1,5 @@
-import { createCard, newCardSchema } from '@ab/bc-study';
+import { requireAuth } from '@ab/auth';
+import { type CardRow, createCard, newCardSchema, SourceRefRequiredError } from '@ab/bc-study';
 import { type CARD_TYPE_VALUES, type DOMAIN_VALUES, ROUTES } from '@ab/constants';
 import { createLogger } from '@ab/utils';
 import { fail, redirect } from '@sveltejs/kit';
@@ -27,9 +28,9 @@ export const load: PageServerLoad = async ({ url }) => {
 };
 
 export const actions: Actions = {
-	default: async ({ request, locals }) => {
-		const user = locals.user;
-		if (!user) redirect(302, ROUTES.LOGIN);
+	default: async (event) => {
+		const user = requireAuth(event);
+		const { request, locals } = event;
 
 		const form = await request.formData();
 		const rawFront = String(form.get('front') ?? '');
@@ -57,9 +58,9 @@ export const actions: Actions = {
 		}
 
 		const saveAndAdd = form.get('intent') === 'save-and-add';
-
+		let created: CardRow;
 		try {
-			const created = await createCard({
+			created = await createCard({
 				userId: user.id,
 				front: parsed.data.front,
 				back: parsed.data.back,
@@ -68,28 +69,10 @@ export const actions: Actions = {
 				cardType: parsed.data.cardType as (typeof CARD_TYPE_VALUES)[number],
 				tags: parsed.data.tags,
 			});
-
-			if (saveAndAdd) {
-				// Preserve the domain + tags so the next card stays in context.
-				const next = new URLSearchParams({
-					created: created.id,
-					domain: parsed.data.domain,
-					cardType: parsed.data.cardType,
-				});
-				if (parsed.data.tags && parsed.data.tags.length > 0) {
-					next.set('tags', parsed.data.tags.join(','));
-				}
-				redirect(303, `${ROUTES.MEMORY_NEW}?${next.toString()}`);
-			}
-			redirect(303, ROUTES.MEMORY_CARD(created.id));
 		} catch (err) {
-			if (err instanceof Response) throw err;
-			if (err instanceof Error && err.message.startsWith('source_ref')) {
+			if (err instanceof SourceRefRequiredError) {
 				return fail(400, { values: input, fieldErrors: { _: err.message } });
 			}
-			// SvelteKit's redirect() throws -- let those propagate.
-			if (typeof err === 'object' && err !== null && 'status' in err && 'location' in err) throw err;
-
 			log.error(
 				'createCard threw',
 				{ requestId: locals.requestId, userId: user.id },
@@ -97,6 +80,20 @@ export const actions: Actions = {
 			);
 			return fail(500, { values: input, fieldErrors: { _: 'Could not save the card. Please try again.' } });
 		}
+
+		if (saveAndAdd) {
+			// Preserve the domain + tags so the next card stays in context.
+			const next = new URLSearchParams({
+				created: created.id,
+				domain: parsed.data.domain,
+				cardType: parsed.data.cardType,
+			});
+			if (parsed.data.tags && parsed.data.tags.length > 0) {
+				next.set('tags', parsed.data.tags.join(','));
+			}
+			redirect(303, `${ROUTES.MEMORY_NEW}?${next.toString()}`);
+		}
+		redirect(303, ROUTES.MEMORY_CARD(created.id));
 	},
 } satisfies Actions;
 

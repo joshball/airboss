@@ -140,5 +140,8 @@ export const CONFIDENCE_SAMPLE_RATE = 0.5;
 /** Default review-session batch size. */
 export const REVIEW_BATCH_SIZE = 20;
 
+/** Default browse page size. */
+export const BROWSE_PAGE_SIZE = 25;
+
 /** Idempotency window for duplicate review submission protection. */
 export const REVIEW_DEDUPE_WINDOW_MS = 5_000;

@@ -3,6 +3,7 @@ import {
 	CARD_STATUSES,
 	CARD_TYPE_LABELS,
 	CARD_TYPES,
+	CONTENT_SOURCES,
 	DOMAIN_LABELS,
 	DOMAINS,
 	REVIEW_RATINGS,
@@ -109,7 +110,7 @@ const tagsString = $derived((card.tags ?? []).join(', '));
 			{#if card.status !== CARD_STATUSES.ACTIVE}
 				<span class="badge status-{card.status}">{humanize(card.status)}</span>
 			{/if}
-			{#if card.sourceType !== 'personal'}
+			{#if card.sourceType !== CONTENT_SOURCES.PERSONAL}
 				<span class="badge source" title={card.sourceRef ?? ''}>{humanize(card.sourceType)}</span>
 			{/if}
 		</div>

@@ -8,7 +8,11 @@ function getAuth() {
 		throw new Error(`${ENV_VARS.BETTER_AUTH_SECRET} environment variable is required`);
 	}
 
-	return createAuth({ secret, isDev: dev });
+	// BETTER_AUTH_URL drives trustedOrigins (CSRF) and email-embedded links.
+	// Required in prod; the lib falls back to localhost:STUDY in dev.
+	const baseURL = process.env[ENV_VARS.BETTER_AUTH_URL];
+
+	return createAuth({ secret, baseURL, isDev: dev });
 }
 
 // Lazy init: skip during SvelteKit build analysis

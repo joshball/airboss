@@ -1,5 +1,7 @@
+import { requireAuth } from '@ab/auth';
 import { getCards } from '@ab/bc-study';
 import {
+	BROWSE_PAGE_SIZE,
 	CARD_STATUS_VALUES,
 	CARD_STATUSES,
 	CARD_TYPE_VALUES,
@@ -9,12 +11,8 @@ import {
 	type ContentSource,
 	DOMAIN_VALUES,
 	type Domain,
-	ROUTES,
 } from '@ab/constants';
-import { redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
-
-const PAGE_SIZE = 25;
 
 function narrowDomain(value: string | null): Domain | undefined {
 	if (!value) return undefined;
@@ -36,9 +34,9 @@ function narrowStatus(value: string | null): CardStatus | undefined {
 	return (CARD_STATUS_VALUES as readonly string[]).includes(value) ? (value as CardStatus) : undefined;
 }
 
-export const load: PageServerLoad = async ({ url, locals }) => {
-	const user = locals.user;
-	if (!user) redirect(302, ROUTES.LOGIN);
+export const load: PageServerLoad = async (event) => {
+	const user = requireAuth(event);
+	const { url } = event;
 
 	const domain = narrowDomain(url.searchParams.get('domain'));
 	const cardType = narrowCardType(url.searchParams.get('type'));
@@ -56,18 +54,18 @@ export const load: PageServerLoad = async ({ url, locals }) => {
 		sourceType,
 		status,
 		search: search || undefined,
-		limit: PAGE_SIZE + 1,
-		offset: (pageNum - 1) * PAGE_SIZE,
+		limit: BROWSE_PAGE_SIZE + 1,
+		offset: (pageNum - 1) * BROWSE_PAGE_SIZE,
 	});
 
-	const hasMore = cards.length > PAGE_SIZE;
-	const visible = hasMore ? cards.slice(0, PAGE_SIZE) : cards;
+	const hasMore = cards.length > BROWSE_PAGE_SIZE;
+	const visible = hasMore ? cards.slice(0, BROWSE_PAGE_SIZE) : cards;
 
 	return {
 		cards: visible,
 		filters: { domain, cardType, sourceType, status, search },
 		page: pageNum,
 		hasMore,
-		pageSize: PAGE_SIZE,
+		pageSize: BROWSE_PAGE_SIZE,
 	};
 };

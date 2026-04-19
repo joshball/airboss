@@ -26,6 +26,7 @@ let phase = $state<Phase>(batch.length === 0 ? 'complete' : 'front');
 let revealedAt = $state<number | null>(null);
 let confidence = $state<number | null>(null);
 let tally = $state<RatingTally>({ again: 0, hard: 0, good: 0, easy: 0 });
+let submitError = $state<string | null>(null);
 
 const current = $derived(batch[index]);
 const total = $derived(batch.length);
@@ -87,6 +88,7 @@ function advance() {
 	const next = index + 1;
 	confidence = null;
 	revealedAt = null;
+	submitError = null;
 	if (next >= batch.length) {
 		phase = 'complete';
 		index = next;
@@ -208,18 +210,25 @@ function clickRating(value: number) {
 				method="POST"
 				action="?/submit"
 				use:enhance={({ formData }) => {
+					// Snapshot the submitted card + rating BEFORE phase flips so a
+					// late result still knows what was intended.
+					const submittedCardId = current.id;
+					const rating = Number(formData.get('rating') ?? 0);
 					phase = 'submitting';
-					formData.set('cardId', current.id);
+					formData.set('cardId', submittedCardId);
 					const answerMs = revealedAt !== null ? Date.now() - revealedAt : '';
 					formData.set('answerMs', String(answerMs));
 					if (confidence !== null) formData.set('confidence', String(confidence));
 					return async ({ result, update }) => {
 						await update({ reset: false });
-						if (result.type === 'success' || result.type === 'failure') {
-							const rating = Number(formData.get('rating') ?? 0);
+						// Only advance on a successful review. On failure/redirect/error the
+						// server rejected the write -- leave the learner on the same card
+						// with the error surfaced rather than silently dropping the rating.
+						if (result.type === 'success') {
 							onRatingResult(rating);
 						} else {
 							phase = 'answer';
+							submitError = result.type === 'failure' ? 'Could not save that review. Try again.' : 'Network error. Try again.';
 						}
 					};
 				}}
@@ -232,6 +241,7 @@ function clickRating(value: number) {
 							value={r}
 							data-rating={r}
 							class="rating rating-{r}"
+							disabled={phase !== 'answer'}
 						>
 							<span class="rating-label">{ratingLabels[r].label}</span>
 							<span class="rating-hint">{ratingLabels[r].hint}</span>
@@ -239,6 +249,9 @@ function clickRating(value: number) {
 						</button>
 					{/each}
 				</div>
+				{#if submitError}
+					<p class="submit-error" role="alert">{submitError}</p>
+				{/if}
 			</form>
 		{:else if phase === 'submitting'}
 			<p class="rate-q subdued">Saving...</p>

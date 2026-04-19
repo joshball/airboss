@@ -1,16 +1,19 @@
 <script lang="ts">
 import { ROUTES } from '@ab/constants';
 import type { Snippet } from 'svelte';
+import { page } from '$app/state';
 
 let { children }: { children: Snippet } = $props();
+
+const memoryActive = $derived(page.url.pathname.startsWith(ROUTES.MEMORY));
 </script>
 
 <a class="skip" href="#main">Skip to main content</a>
 
 <nav aria-label="Primary">
-	<a href={ROUTES.MEMORY}>Memory</a>
-	<a href={ROUTES.REPS}>Reps</a>
-	<a href={ROUTES.CALIBRATION}>Calibration</a>
+	<a href={ROUTES.MEMORY} aria-current={memoryActive ? 'page' : undefined}>Memory</a>
+	<!-- Reps and Calibration land in subsequent work packages; leaving them
+	     out of the nav until those routes exist. -->
 </nav>
 
 <main id="main" tabindex="-1">
@@ -45,10 +48,18 @@ let { children }: { children: Snippet } = $props();
 		color: #475569;
 		text-decoration: none;
 		font-weight: 500;
+		padding: 0.25rem 0.5rem;
+		border-radius: 6px;
 	}
 
 	nav a:hover {
 		color: #1a1a2e;
+		background: #f1f5f9;
+	}
+
+	nav a[aria-current='page'] {
+		color: #1d4ed8;
+		background: #eff6ff;
 	}
 
 	main {

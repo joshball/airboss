@@ -37,6 +37,7 @@ export { ROLES, type Role } from './roles';
 export { ROUTES } from './routes';
 export { SCHEMAS, type SchemaName } from './schemas';
 export {
+	BROWSE_PAGE_SIZE,
 	CARD_STATE_VALUES,
 	CARD_STATES,
 	CARD_STATUS_VALUES,

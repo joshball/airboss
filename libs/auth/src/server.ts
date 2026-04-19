@@ -50,6 +50,13 @@ export function createAuth(options: { secret: string; baseURL?: string; isDev?: 
 		},
 		session: {
 			modelName: 'bauth_session',
+			// Enable cookie-cache so getSession doesn't hit the DB on every request.
+			// 5-min TTL: short enough that ban / revoke propagates quickly, long
+			// enough to absorb the typical review-session burst.
+			cookieCache: {
+				enabled: true,
+				maxAge: 5 * 60,
+			},
 		},
 		account: {
 			modelName: 'bauth_account',

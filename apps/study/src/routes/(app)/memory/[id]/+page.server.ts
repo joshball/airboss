@@ -1,4 +1,13 @@
-import { getCard, review, setCardStatus, updateCard, updateCardSchema } from '@ab/bc-study';
+import { requireAuth } from '@ab/auth';
+import {
+	CardNotEditableError,
+	CardNotFoundError,
+	getCard,
+	getRecentReviewsForCard,
+	setCardStatus,
+	updateCard,
+	updateCardSchema,
+} from '@ab/bc-study';
 import {
 	CARD_STATUS_VALUES,
 	CARD_STATUSES,
@@ -7,10 +16,8 @@ import {
 	type DOMAIN_VALUES,
 	ROUTES,
 } from '@ab/constants';
-import { db } from '@ab/db';
 import { createLogger } from '@ab/utils';
 import { error, fail, redirect } from '@sveltejs/kit';
-import { desc, eq } from 'drizzle-orm';
 import type { Actions, PageServerLoad } from './$types';
 
 const log = createLogger('study:memory-card');
@@ -22,29 +29,16 @@ function parseTags(raw: string): string[] {
 		.filter((t) => t.length > 0);
 }
 
-export const load: PageServerLoad = async ({ params, locals }) => {
-	const user = locals.user;
-	if (!user) redirect(302, ROUTES.LOGIN);
+export const load: PageServerLoad = async (event) => {
+	const user = requireAuth(event);
+	const { params } = event;
 
-	const found = await getCard(params.id, user.id);
+	// Both queries are keyed on params.id; no dependency between them.
+	const [found, recentReviews] = await Promise.all([
+		getCard(params.id, user.id),
+		getRecentReviewsForCard(params.id, user.id, 10),
+	]);
 	if (!found) error(404, { message: 'Card not found' });
-
-	const recentReviews = await db
-		.select({
-			id: review.id,
-			rating: review.rating,
-			confidence: review.confidence,
-			stability: review.stability,
-			difficulty: review.difficulty,
-			state: review.state,
-			reviewedAt: review.reviewedAt,
-			dueAt: review.dueAt,
-			scheduledDays: review.scheduledDays,
-		})
-		.from(review)
-		.where(eq(review.cardId, params.id))
-		.orderBy(desc(review.reviewedAt))
-		.limit(10);
 
 	return {
 		card: found.card,
@@ -54,9 +48,9 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 };
 
 export const actions: Actions = {
-	update: async ({ params, request, locals }) => {
-		const user = locals.user;
-		if (!user) redirect(302, ROUTES.LOGIN);
+	update: async (event) => {
+		const user = requireAuth(event);
+		const { params, request, locals } = event;
 
 		const form = await request.formData();
 		const input = {
@@ -86,10 +80,10 @@ export const actions: Actions = {
 				tags: parsed.data.tags,
 			});
 		} catch (err) {
-			if (err instanceof Error && err.message.includes('not editable')) {
+			if (err instanceof CardNotEditableError) {
 				return fail(403, { values: input, fieldErrors: { _: 'This card is not editable.' }, intent: 'update' });
 			}
-			if (err instanceof Error && err.message.includes('not found')) {
+			if (err instanceof CardNotFoundError) {
 				error(404, { message: 'Card not found' });
 			}
 			log.error(
@@ -103,9 +97,9 @@ export const actions: Actions = {
 		redirect(303, ROUTES.MEMORY_CARD(params.id));
 	},
 
-	setStatus: async ({ params, request, locals }) => {
-		const user = locals.user;
-		if (!user) redirect(302, ROUTES.LOGIN);
+	setStatus: async (event) => {
+		const user = requireAuth(event);
+		const { params, request, locals } = event;
 
 		const form = await request.formData();
 		const target = String(form.get('status') ?? '');
@@ -116,7 +110,7 @@ export const actions: Actions = {
 		try {
 			await setCardStatus(params.id, user.id, target as CardStatus);
 		} catch (err) {
-			if (err instanceof Error && err.message.includes('not found')) {
+			if (err instanceof CardNotFoundError) {
 				error(404, { message: 'Card not found' });
 			}
 			log.error(

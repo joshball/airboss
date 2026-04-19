@@ -1,13 +1,8 @@
-import { CardNotFoundError, getDueCards, submitReview, submitReviewSchema } from '@ab/bc-study';
-import {
-	CONFIDENCE_SAMPLE_RATE,
-	type ConfidenceLevel,
-	REVIEW_BATCH_SIZE,
-	type ReviewRating,
-	ROUTES,
-} from '@ab/constants';
+import { requireAuth } from '@ab/auth';
+import { CardNotFoundError, CardNotReviewableError, getDueCards, submitReview, submitReviewSchema } from '@ab/bc-study';
+import { CONFIDENCE_SAMPLE_RATE, type ConfidenceLevel, REVIEW_BATCH_SIZE, type ReviewRating } from '@ab/constants';
 import { createLogger } from '@ab/utils';
-import { error, fail, redirect } from '@sveltejs/kit';
+import { error, fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 
 const log = createLogger('study:memory-review');
@@ -33,9 +28,8 @@ function shouldPromptConfidence(cardId: string, reviewDate: Date): boolean {
 	return deterministicUnit(`${cardId}:${dayKey}`) < CONFIDENCE_SAMPLE_RATE;
 }
 
-export const load: PageServerLoad = async ({ locals }) => {
-	const user = locals.user;
-	if (!user) redirect(302, ROUTES.LOGIN);
+export const load: PageServerLoad = async (event) => {
+	const user = requireAuth(event);
 
 	const now = new Date();
 	const due = await getDueCards(user.id, REVIEW_BATCH_SIZE);
@@ -61,9 +55,9 @@ export const load: PageServerLoad = async ({ locals }) => {
 };
 
 export const actions: Actions = {
-	submit: async ({ request, locals }) => {
-		const user = locals.user;
-		if (!user) redirect(302, ROUTES.LOGIN);
+	submit: async (event) => {
+		const user = requireAuth(event);
+		const { request, locals } = event;
 
 		const form = await request.formData();
 		const cardId = String(form.get('cardId') ?? '');
@@ -92,16 +86,19 @@ export const actions: Actions = {
 				answerMs: parsed.data.answerMs,
 			});
 			return {
-				success: true,
+				success: true as const,
 				cardId,
+				skipped: false as const,
 				nextState: rev.state,
 				dueAt: rev.dueAt.toISOString(),
 				scheduledDays: rev.scheduledDays,
 			};
 		} catch (err) {
-			if (err instanceof CardNotFoundError) {
+			if (err instanceof CardNotFoundError || err instanceof CardNotReviewableError) {
 				// Spec edge case: "Card deleted during review session -- skip, advance."
-				return { success: true, cardId, skipped: true } as const;
+				// Also covers: card was suspended/archived in another tab between
+				// batch load and submit.
+				return { success: true as const, cardId, skipped: true as const };
 			}
 			log.error(
 				'submitReview threw',

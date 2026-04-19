@@ -19,6 +19,7 @@
 
 import {
 	CARD_STATES,
+	CARD_STATUSES,
 	type CardState,
 	type ConfidenceLevel,
 	REVIEW_DEDUPE_WINDOW_MS,
@@ -28,10 +29,22 @@ import { db as defaultDb } from '@ab/db';
 import { generateReviewId } from '@ab/utils';
 import { and, desc, eq, gte } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
+import { CardNotFoundError } from './cards';
 import { card, cardState, type ReviewRow, review } from './schema';
 import { fsrsSchedule } from './srs';
 
 type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;
+
+/** Raised when trying to review a card whose status is not active. */
+export class CardNotReviewableError extends Error {
+	constructor(
+		public readonly cardId: string,
+		public readonly status: string,
+	) {
+		super(`Card ${cardId} is ${status} and cannot be reviewed`);
+		this.name = 'CardNotReviewableError';
+	}
+}
 
 export interface SubmitReviewInput {
 	cardId: string;
@@ -39,20 +52,6 @@ export interface SubmitReviewInput {
 	rating: ReviewRating;
 	confidence?: ConfidenceLevel | null;
 	answerMs?: number | null;
-}
-
-/**
- * Raised when the card can't be found for this user. Callers (e.g. the review
- * route) can catch by constructor and skip the card instead of 500-ing.
- */
-export class CardNotFoundError extends Error {
-	constructor(
-		public readonly cardId: string,
-		public readonly userId: string,
-	) {
-		super(`Card ${cardId} not found for user ${userId}`);
-		this.name = 'CardNotFoundError';
-	}
 }
 
 export async function submitReview(input: SubmitReviewInput, db: Db = defaultDb): Promise<ReviewRow> {
@@ -72,9 +71,18 @@ export async function submitReview(input: SubmitReviewInput, db: Db = defaultDb)
 		const row = stateRows[0];
 		if (!row) throw new CardNotFoundError(input.cardId, input.userId);
 
+		// Refuse reviews for cards whose lifecycle status blocks review. The
+		// server trusts the DB, not a stale client state that may still show
+		// the card in its queue.
+		if (row.card.status !== CARD_STATUSES.ACTIVE) {
+			throw new CardNotReviewableError(input.cardId, row.card.status);
+		}
+
 		// Idempotency: another submit within the window returns that row.
 		// The row lock above guarantees this check sees any committed insert
-		// from a concurrent transaction on the same (card, user).
+		// from a concurrent transaction on the same (card, user). The review
+		// insert and card_state update share this tx, so a return here leaves
+		// the scheduler in a consistent state.
 		const [recent] = await tx
 			.select()
 			.from(review)
