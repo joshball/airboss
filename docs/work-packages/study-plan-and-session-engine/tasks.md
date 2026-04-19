@@ -36,7 +36,7 @@ Depends on: Spaced Memory Items (schema + BC), Decision Reps (schema + BC), Know
 - [ ] Add `DEPTH_PREFERENCES` + values array.
 - [ ] Add `SESSION_REASON_CODES` + values array.
 - [ ] Add `MODE_WEIGHTS` map (SessionMode -> Record<SessionSlice, number>).
-- [ ] Add `DEFAULT_SESSION_LENGTH`, `MIN_SESSION_LENGTH`, `MAX_SESSION_LENGTH`, `RESUME_WINDOW_MS`, `MASTERY_THRESHOLD`.
+- [ ] Add `DEFAULT_SESSION_LENGTH`, `MIN_SESSION_LENGTH`, `MAX_SESSION_LENGTH`, `RESUME_WINDOW_MS`. (No mastery threshold here -- `isNodeMastered` lives in the knowledge-graph BC; study-plan is a consumer.)
 - [ ] Export all new constants from `libs/constants/src/index.ts`.
 - [ ] Assert in a unit (or inline `as const` check) that `Object.values(MODE_WEIGHTS[mode])` sums to 1.0 for every mode.
 - [ ] Run `bun run check` -- 0 errors.

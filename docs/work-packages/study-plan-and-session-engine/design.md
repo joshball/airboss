@@ -346,7 +346,8 @@ export const DEFAULT_SESSION_LENGTH = 10;
 export const MIN_SESSION_LENGTH = 3;
 export const MAX_SESSION_LENGTH = 50;
 export const RESUME_WINDOW_MS = 2 * 60 * 60 * 1000;
-export const MASTERY_THRESHOLD = 0.7;
+// No mastery threshold -- study-plan does not own the mastery formula.
+// See libs/bc/study/src/knowledge.ts#isNodeMastered (dual-gate boolean).
 ```
 
 ## API Surface

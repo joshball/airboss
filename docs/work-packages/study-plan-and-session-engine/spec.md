@@ -15,7 +15,7 @@ v1 is MVP: single-user (Joshua is user zero), one active plan per user, rule-bas
 
 Depends on: Spaced Memory Items (`study.card`, `study.card_state`, `study.review`), Decision Reps (`study.scenario`, `study.rep_attempt`), Knowledge Graph (node metadata, edges, mastery aggregation).
 
-> **Depends on knowledge-graph spec.** This document assumes the graph exposes a queryable table of nodes with `id`, `domain`, `relevance[]` (cert/bloom/priority), `requires[]` node IDs, and a derivable per-user mastery score per node. The exact column names, mastery-computation rule, and query surface are being decided in parallel in `docs/work-packages/knowledge-graph/spec.md`. All integration points below that touch the graph are flagged for reconciliation once that spec lands.
+> **Depends on knowledge-graph spec.** This document assumes the graph exposes a queryable table of nodes with `id`, `domain`, `relevance[]` (cert/bloom/priority), `requires[]` node IDs, and a derivable per-user mastery score per node. The graph spec resolved the mastery rule on 2026-04-19 to a dual gate (card stability AND rep accuracy must each pass independently -- see `knowledge-graph/spec.md` "Mastery computation" section). The signatures below reference that resolution directly.
 
 ## Data Model
 
@@ -159,7 +159,7 @@ Each slice produces a scored candidate list. Scoring rules are explicit; no blac
 - Score: `strengthenScore = masteryDropMagnitude + calibrationOverconfidence * 0.3` where `calibrationOverconfidence` is a tiebreaker boost when the user is overconfident in the item's domain (from Calibration read interfaces, when present).
 - `reasonCode`: `strengthen_relearning` | `strengthen_rated_again` | `strengthen_overdue` | `strengthen_low_rep_accuracy` | `strengthen_mastery_drop`
 
-> **Depends on knowledge-graph spec.** Per-node and per-domain mastery history are functions the graph spec will expose. This doc assumes `getNodeMastery(userId, nodeId) -> { score, trend }` and `getDomainMasteryTrend(userId, domain) -> { score, delta }`. If the graph spec names these differently, reconcile.
+> **Graph integration (resolved 2026-04-19).** `getNodeMastery(userId, nodeId)` returns `NodeMasteryStats` per the graph spec; this engine uses `{ score: displayScore, trend: 14-day delta of displayScore }` for mastery-drop scoring. `getDomainMasteryTrend(userId, domain) -> { score, delta }` is aggregated by the graph BC over nodes in the domain.
 
 **Expand pool.** Nodes unstarted, prerequisites met, within cert filter.
 
@@ -172,7 +172,7 @@ Each slice produces a scored candidate list. Scoring rules are explicit; no blac
 - Score: `expandScore = priorityWeight + focusMatch + bloomMatch` where `priorityWeight` is 1.0 / 0.6 / 0.2 for core / supporting / elective, `focusMatch` is +0.4 if the node's domain is in `focus_filter`, `bloomMatch` is +0.2 if a relevant bloom level matches `depth_preference`.
 - `reasonCode`: `expand_unstarted_ready` | `expand_unstarted_priority` | `expand_focus_match`
 
-> **Depends on knowledge-graph spec.** "User has mastered X" is the mastery predicate. The graph spec owns the definition. v1 assumes a boolean `isNodeMastered(userId, nodeId) -> boolean` exists; if the graph uses a threshold-based score, adapt this to `score >= MASTERY_THRESHOLD`.
+> **Graph mastery predicate (resolved 2026-04-19).** "User has mastered X" is `isNodeMastered(userId, nodeId) -> boolean`, which returns the dual-gate boolean from `getNodeMastery(...).mastered`. Not a threshold on a single score -- the graph spec owns the gate definition (see `knowledge-graph/spec.md` "Mastery computation"). No `MASTERY_THRESHOLD` constant in study-plan; the engine never evaluates the formula itself.
 
 **Diversify pool.** Items outside the current week's domain activity.
 
@@ -364,7 +364,7 @@ New constants added to `libs/constants/src/study.ts`:
 - `MODE_WEIGHTS` -- the weight tuples from the table above.
 - `DEFAULT_SESSION_LENGTH = 10`, `MIN_SESSION_LENGTH = 3`, `MAX_SESSION_LENGTH = 50`.
 - `RESUME_WINDOW_MS = 2 * 60 * 60 * 1000`.
-- `MASTERY_THRESHOLD` (provisional 0.7) -- flagged for graph spec alignment.
+- No mastery threshold in study-plan constants. Mastery is the dual-gate boolean from `knowledge-graph` BC (`isNodeMastered`); study-plan is a pure consumer.
 
 Value arrays (`CERT_VALUES`, `PLAN_STATUS_VALUES`, etc.) follow the existing pattern for DB CHECK constraints.
 
@@ -403,7 +403,7 @@ Value arrays (`CERT_VALUES`, `PLAN_STATUS_VALUES`, etc.) follow the existing pat
 
 ## Open Questions
 
-1. **Mastery predicate for Expand prerequisites.** Boolean (mastered/not) or threshold score? Provisional `MASTERY_THRESHOLD = 0.7`. Reconcile with knowledge-graph spec.
+1. **[RESOLVED 2026-04-19]** Mastery predicate is the dual-gate boolean from `isNodeMastered` in the knowledge-graph BC (card stability AND rep accuracy gates, both must pass). No threshold constant lives in study-plan. See `knowledge-graph/spec.md` "Mastery computation".
 2. **Session resume window.** 2 hours is a guess. Longer might frustrate with stale items; shorter might lose data. Observe in real use.
 3. **Shuffle diff guarantee.** Should Shuffle guarantee a minimum diff from the prior batch? Currently no -- deterministic with a new seed. If the pool is small this can feel like a no-op.
 4. **Session-level "undo".** User misclicks "skip permanently" -- is there an undo path on the summary page? Proposed: yes, within the same session; beyond that, browse-page reactivation.
