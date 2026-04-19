@@ -1,9 +1,12 @@
+import { getDashboardStats } from '@ab/bc-study';
 import { ROUTES } from '@ab/constants';
 import { redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
-// Phase 4 will replace this with the memory dashboard. For now, land people
-// on the browse page so nav hits always resolve to something real.
-export const load: PageServerLoad = async () => {
-	redirect(302, ROUTES.MEMORY_BROWSE);
+export const load: PageServerLoad = async ({ locals }) => {
+	const user = locals.user;
+	if (!user) redirect(302, ROUTES.LOGIN);
+
+	const stats = await getDashboardStats(user.id);
+	return { stats };
 };
