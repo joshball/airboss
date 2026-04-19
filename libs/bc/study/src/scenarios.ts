@@ -253,10 +253,16 @@ export async function getNextScenarios(
 	// Correlated aggregate is cheaper than a full LATERAL for the expected
 	// data volume (tens of scenarios, not thousands). The per-user index on
 	// rep_attempt keeps the subquery bounded to the caller's attempts.
+	//
+	// Both tables expose `id` and `user_id` columns, so the outer scenario
+	// column reference inside the subquery MUST be fully qualified -- the
+	// drizzle tagged-template serializer emits `${scenario.id}` as a bare
+	// `"id"`, which Postgres then binds to rep_attempt.id. Hand-rolled
+	// sql.raw fragment keeps the outer reference unambiguous.
 	const lastAttempt = sql<Date | null>`(
 		SELECT max(${repAttempt.attemptedAt})
 		FROM ${repAttempt}
-		WHERE ${repAttempt.scenarioId} = ${scenario.id}
+		WHERE ${repAttempt.scenarioId} = ${sql.raw(`"study"."scenario"."id"`)}
 		  AND ${repAttempt.userId} = ${userId}
 	)`.as('last_attempted_at');
 
@@ -448,9 +454,12 @@ export async function getRepDashboard(
 				and(
 					eq(scenario.userId, userId),
 					eq(scenario.status, SCENARIO_STATUSES.ACTIVE),
+					// Same "bare id binds to rep_attempt.id" hazard as the session
+					// ordering query -- force the outer reference to be fully
+					// qualified so the correlated NOT EXISTS actually correlates.
 					sql`NOT EXISTS (
 						SELECT 1 FROM ${repAttempt}
-						WHERE ${repAttempt.scenarioId} = ${scenario.id}
+						WHERE ${repAttempt.scenarioId} = ${sql.raw(`"study"."scenario"."id"`)}
 						  AND ${repAttempt.userId} = ${userId}
 					)`,
 				),
