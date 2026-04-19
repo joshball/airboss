@@ -16,6 +16,7 @@ import {
 	type FSRS,
 	type FSRSParameters,
 	fsrs,
+	type Grade,
 	Rating,
 	State,
 } from 'ts-fsrs';
@@ -41,11 +42,11 @@ export interface ScheduleResult {
 	scheduledDays: number;
 }
 
-const RATING_TO_TS: Record<ReviewRating, Rating> = {
-	[REVIEW_RATINGS.AGAIN]: Rating.Again,
-	[REVIEW_RATINGS.HARD]: Rating.Hard,
-	[REVIEW_RATINGS.GOOD]: Rating.Good,
-	[REVIEW_RATINGS.EASY]: Rating.Easy,
+const RATING_TO_TS: Record<ReviewRating, Grade> = {
+	[REVIEW_RATINGS.AGAIN]: Rating.Again as Grade,
+	[REVIEW_RATINGS.HARD]: Rating.Hard as Grade,
+	[REVIEW_RATINGS.GOOD]: Rating.Good as Grade,
+	[REVIEW_RATINGS.EASY]: Rating.Easy as Grade,
 };
 
 const STATE_TO_TS: Record<CardState, State> = {
