@@ -1,4 +1,4 @@
-import { COOKIE_DOMAIN_PROD, DB_ADAPTER_PROVIDER, PORTS, ROLES } from '@ab/constants';
+import { COOKIE_DOMAIN_DEV, COOKIE_DOMAIN_PROD, DB_ADAPTER_PROVIDER, PORTS, ROLES } from '@ab/constants';
 import { db } from '@ab/db';
 import { generateAuthId } from '@ab/utils';
 import { betterAuth } from 'better-auth';
@@ -69,10 +69,14 @@ export function createAuth(options: { secret: string; baseURL?: string; isDev?: 
 			database: {
 				generateId: () => generateAuthId(),
 			},
-			// In dev, let the browser scope cookies to the current host so
-			// http://localhost:9600 just works without an /etc/hosts entry.
-			// In prod, share sessions across the airboss subdomains.
-			crossSubDomainCookies: options.isDev ? { enabled: false } : { enabled: true, domain: COOKIE_DOMAIN_PROD },
+			// Cross-subdomain cookies let sessions flow across the airboss
+			// surface apps (study, hangar, spatial, ...) in both dev and prod.
+			// Dev requires /etc/hosts entries mapping the subdomains to
+			// 127.0.0.1; `bun run setup` verifies them.
+			crossSubDomainCookies: {
+				enabled: true,
+				domain: options.isDev ? COOKIE_DOMAIN_DEV : COOKIE_DOMAIN_PROD,
+			},
 		},
 
 		emailAndPassword: {

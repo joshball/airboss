@@ -219,6 +219,28 @@ that refreshes via `invalidateAll()`.
 
 ## Operator notes
 
+### URLs
+
+The dev server lives at the same cross-subdomain shape as production, so
+sessions, cookies, and deep-linking work the same locally as deployed.
+`study.airboss.test` must resolve to `127.0.0.1` (step 1 of setup below
+verifies this; OrbStack's `*.test` wildcard handles it on macOS).
+
+| Area            | URL                                                          |
+| --------------- | ------------------------------------------------------------ |
+| Login           | `http://study.airboss.test:9600/login`                       |
+| Dashboard       | `http://study.airboss.test:9600/memory`                      |
+| Browse          | `http://study.airboss.test:9600/memory/browse`               |
+| New card        | `http://study.airboss.test:9600/memory/new`                  |
+| Card detail     | `http://study.airboss.test:9600/memory/{id}`                 |
+| Review session  | `http://study.airboss.test:9600/memory/review`               |
+| Logout (POST)   | `http://study.airboss.test:9600/logout`                      |
+| Auth API        | `http://study.airboss.test:9600/api/auth/*`                  |
+| DB Studio       | `http://localhost:4983/` (drizzle-kit studio)                |
+
+Future surface apps claim `hangar.airboss.test`, `spatial.airboss.test`,
+etc. on the same cookie domain so one sign-in unlocks the whole suite.
+
 ### First-time setup (one command)
 
 ```bash
@@ -226,13 +248,21 @@ bun run setup
 ```
 
 This runs [scripts/setup.ts](../../scripts/setup.ts) which is idempotent:
-it installs deps, copies `.env.example` -> `.env` with a freshly-generated
-`BETTER_AUTH_SECRET`, brings up the `airboss-db` Postgres container via
-docker compose, waits for `pg_isready`, pushes the Drizzle schema, and
-seeds the dev users. Safe to re-run after a pull.
 
-Prerequisites: [Docker](https://www.docker.com/) / [OrbStack](https://orbstack.dev/)
-and [Bun](https://bun.sh/). Everything else is bootstrapped by `setup`.
+1. Verify `/etc/hosts` maps `study.airboss.test` (and any future surface
+   hosts from `@ab/constants` `HOSTS`) to `127.0.0.1`. If missing, the
+   script prints the `sudo tee -a /etc/hosts` line to run and exits.
+2. Install dependencies (`bun install`).
+3. Write `.env` from `.env.example` with a freshly-generated
+   `BETTER_AUTH_SECRET` (via `openssl rand -base64 32`).
+4. Start the `airboss-db` Postgres container (`docker compose up -d db`).
+5. Wait for `pg_isready`.
+6. Push the Drizzle schema (`bunx drizzle-kit push`).
+7. Seed the dev users.
+
+Prerequisites: [Docker](https://www.docker.com/) or
+[OrbStack](https://orbstack.dev/), plus [Bun](https://bun.sh/).
+Everything else is bootstrapped by `setup`.
 
 ### Day-to-day
 
@@ -243,9 +273,9 @@ bun run test             # vitest (20 specs at time of writing)
 bun run smoke            # end-to-end BC smoke against local DB
 ```
 
-Open `http://localhost:9600`, sign in as `joshua@ball.dev` / `Pa33word!`.
-(In dev, cookies are scoped to the current host, so `/etc/hosts` entries
-aren't required; in prod the cross-subdomain cookie domain kicks back in.)
+Open [`http://study.airboss.test:9600/login`](http://study.airboss.test:9600/login),
+sign in as `joshua@ball.dev` / `Pa33word!`. The session cookie is set on
+`.airboss.test` so it'll flow to every surface app once they exist.
 
 ### Database ops
 
@@ -277,16 +307,24 @@ without risk of wiping a staging DB.
 
 ### Troubleshooting
 
-- **Login succeeds but `/` still redirects to `/login`.** Your cookie
-  domain mismatched your host. As of the dev-cookie fix, `localhost`
-  Just Works; pull and re-run.
-- **`favicon.ico 404` in the logs.** Fixed -- the app now ships an SVG
+- **`ECONNREFUSED` hitting `study.airboss.test:9600`.** Vite binds to
+  IPv4 loopback explicitly (`server.host = '127.0.0.1'` in
+  [apps/study/vite.config.ts](../../apps/study/vite.config.ts)). If it
+  still refuses, check `dscacheutil -q host -a name study.airboss.test`
+  (macOS) returns `127.0.0.1`.
+- **Login POST returns 200 but `/memory` redirects to `/login`.**
+  Browser rejected the session cookie because the URL host didn't match
+  `.airboss.test`. Visit via `http://study.airboss.test:9600`, not
+  `localhost` -- cookies are intentionally cross-subdomain scoped.
+- **`Missing /etc/hosts entries for: study.airboss.test`.** `bun run
+  setup` prints the exact `sudo tee -a /etc/hosts` line to run.
+- **`favicon.ico 404` in the logs.** Fixed -- the app serves an SVG
   favicon at [apps/study/static/favicon.svg](../../apps/study/static/favicon.svg).
 - **`DATABASE_URL is not set`.** Run `bun run setup` or copy `.env.example`
   to `.env` manually.
 - **`Refusing to seed/reset: DATABASE_URL does not point at a local dev
-  database`.** The safety guard is doing its job. Unset `DATABASE_URL` or
-  point it at localhost.
+  database`.** The safety guard is doing its job. Unset `DATABASE_URL`
+  or point it at a local host.
 
 ## Related docs
 

@@ -4,20 +4,21 @@
  * Centralizes cookie parsing, URL decoding, and security options
  * so all auth flows use consistent, secure settings.
  *
- * In dev, cookies are scoped to the current request host (localhost) so
- * the app works without an /etc/hosts entry. In prod, they're scoped to
- * the cross-subdomain cookie domain so all airboss surface apps share a
- * session.
+ * Cookies are scoped to the cross-subdomain cookie domain
+ * (`.airboss.test` in dev, `.air-boss.org` in prod) so sessions flow
+ * across every surface app. Dev requires /etc/hosts to map the
+ * subdomains to 127.0.0.1; `bun run setup` checks and prints the
+ * command to add them.
  */
 
-import { COOKIE_DOMAIN_PROD, SESSION_MAX_AGE_SECONDS } from '@ab/constants';
+import { COOKIE_DOMAIN_DEV, COOKIE_DOMAIN_PROD, SESSION_MAX_AGE_SECONDS } from '@ab/constants';
 import type { Cookies } from '@sveltejs/kit';
 
 /** Default cookie options shared across all auth cookie forwarding. */
 function authCookieOptions(isDev: boolean, maxAgeSeconds?: number) {
 	return {
 		path: '/',
-		domain: isDev ? undefined : COOKIE_DOMAIN_PROD,
+		domain: isDev ? COOKIE_DOMAIN_DEV : COOKIE_DOMAIN_PROD,
 		httpOnly: true,
 		sameSite: 'lax' as const,
 		secure: !isDev,

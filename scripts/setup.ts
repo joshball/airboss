@@ -1,12 +1,13 @@
 /**
  * One-shot local setup:
- *   1. install deps
- *   2. ensure .env exists (copy from .env.example, generate a
+ *   1. verify /etc/hosts maps the airboss.test subdomains to 127.0.0.1
+ *   2. install deps
+ *   3. ensure .env exists (copy from .env.example, generate a
  *      BETTER_AUTH_SECRET)
- *   3. start the DB container
- *   4. wait for DB ready
- *   5. push the schema
- *   6. seed the dev users
+ *   4. start the DB container
+ *   5. wait for DB ready
+ *   6. push the schema
+ *   7. seed the dev users
  *
  * Safe to re-run: each step is idempotent.
  *
@@ -15,10 +16,16 @@
 
 import { $ } from 'bun';
 import { randomBytes } from 'node:crypto';
+import dns from 'node:dns/promises';
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
+import { HOSTS } from '../libs/constants/src/hosts';
 
 const ENV_PATH = '.env';
 const ENV_EXAMPLE_PATH = '.env.example';
+const HOSTS_PATH = '/etc/hosts';
+
+/** Hosts the dev environment expects to resolve to 127.0.0.1. */
+const DEV_HOSTS = Object.values(HOSTS) as readonly string[];
 
 async function step(name: string, fn: () => Promise<void>): Promise<void> {
 	const start = Date.now();
@@ -31,6 +38,41 @@ async function step(name: string, fn: () => Promise<void>): Promise<void> {
 		process.stdout.write('\x1b[31mfailed\x1b[0m\n');
 		throw err;
 	}
+}
+
+async function resolvesToLocalhost(host: string): Promise<boolean> {
+	try {
+		const addrs = await dns.lookup(host, { all: true });
+		return addrs.some((a) => a.address === '127.0.0.1' || a.address === '::1');
+	} catch {
+		return false;
+	}
+}
+
+async function checkHostsEntries(): Promise<void> {
+	const missing: string[] = [];
+	for (const host of DEV_HOSTS) {
+		const ok = await resolvesToLocalhost(host);
+		if (!ok) missing.push(host);
+	}
+	if (missing.length === 0) return;
+
+	const lines = missing.map((h) => `127.0.0.1 ${h}`).join('\n');
+	const cmd = `printf '%s\\n' ${missing.map((h) => `"127.0.0.1 ${h}"`).join(' ')} | sudo tee -a ${HOSTS_PATH}`;
+	throw new Error(
+		[
+			'',
+			`Missing /etc/hosts entries for: ${missing.join(', ')}`,
+			'',
+			`Add this line${missing.length > 1 ? 's' : ''} to ${HOSTS_PATH}:`,
+			lines,
+			'',
+			'Copy-paste:',
+			`  ${cmd}`,
+			'',
+			'Then re-run: bun run setup',
+		].join('\n'),
+	);
 }
 
 async function ensureEnv(): Promise<void> {
@@ -57,6 +99,8 @@ async function waitForDb(): Promise<void> {
 async function main(): Promise<void> {
 	console.log('airboss setup\n-----');
 
+	await step('verify /etc/hosts', checkHostsEntries);
+
 	await step('install deps', async () => {
 		await $`bun install`.quiet();
 	});
@@ -78,10 +122,10 @@ async function main(): Promise<void> {
 	});
 
 	console.log('-----\nReady. Start the app with: \x1b[1mbun run dev\x1b[0m');
-	console.log('Then open \x1b[1mhttp://localhost:9600\x1b[0m and sign in as joshua@ball.dev / Pa33word!');
+	console.log(`Then open \x1b[1mhttp://${HOSTS.STUDY}:9600\x1b[0m and sign in as joshua@ball.dev / Pa33word!`);
 }
 
 main().catch((err) => {
-	console.error('\nSetup failed:', err);
+	console.error(err instanceof Error ? err.message : err);
 	process.exit(1);
 });
