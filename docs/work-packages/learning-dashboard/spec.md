@@ -89,7 +89,7 @@ Panels are listed in render order. Each panel has a render rule (when to show), 
 - **When the graph lands** -- renders one row per cert in the user's study plan: progress bar, `N / M nodes mastered`, percent. Cert filter comes from the plan; denominator (core + supporting nodes in that cert) comes from the graph.
 - **BC surface (future):** `getCertProgress(userId)` -> `{ cert: 'PPL' | 'IR' | 'CPL' | 'CFI', total: number, mastered: number, inProgress: number }[]`. Owned by the graph BC; dashboard is a consumer.
 
-> **Depends on knowledge-graph spec.** Needs `node.relevance`, `node_id` on cards/reps, and a node-mastery formula. Also needs the study plan for cert filter.
+> **Depends on knowledge-graph spec.** Needs `node.relevance`, `node_id` on cards/reps, and `getNodeMastery` (dual-gate resolved 2026-04-19 -- see `knowledge-graph/spec.md` "Mastery computation"). Dashboard aggregates the boolean `mastered` across nodes; it does not evaluate the gate itself. Also needs the study plan for cert filter.
 
 > **Depends on study-plan-and-session-engine spec.** Cert selection lives on the plan.
 
@@ -208,7 +208,7 @@ Denormalized snapshot table (e.g., `study.learner_state`) is explicitly **out of
 
 ## Open Questions
 
-1. **Mastery formula.** The graph PRD leaves per-node mastery open. Dashboard v1 does not need it (domain-scoped signals only), but the map and cert-progress panels will. Resolution expected to come from the graph spec.
+1. **[RESOLVED 2026-04-19]** Graph spec resolved mastery to a dual gate (card stability AND rep accuracy). Dashboard consumes `isNodeMastered` (boolean) for panels that count "mastered" nodes, and `getNodeMastery(...).displayScore` for progress bars. Display score can be high while `mastered == false` -- panels surface both when relevant (e.g., "78% -- not yet mastered").
 2. **`Biggest gap` direction.** Calibration summary can lead with overconfidence (higher stakes) or the absolute largest gap. v1 picks absolute largest gap with a label (`overconfident` / `underconfident`); revisit once Joshua has lived with it.
 3. **Activity window length.** 7 days on dashboard, 30-day trend lives on the calibration page. Does 7 feel too short? Alternative: render 14 days compact or a two-week grid. Revisit with real usage.
 4. **Panel load failure UX.** Does per-panel `unable to load` feel right, or would a blanket `dashboard unavailable` be less alarming? v1 ships per-panel; monitor how often it happens.
