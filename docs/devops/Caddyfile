@@ -1,0 +1,39 @@
+# FIRC Boss - Local Development
+#
+# Caddy reverse-proxies subdomains to SvelteKit dev servers.
+# Mirrors production layout: Caddy terminates TLS, proxies to app processes.
+#
+# Requires local DNS resolving *.firc.test to 127.0.0.1.
+#
+# Usage:
+#   caddy run --config docs/devops/Caddyfile       (foreground)
+#   caddy start --config docs/devops/Caddyfile     (background)
+#   caddy stop
+#   caddy reload --config docs/devops/Caddyfile    (after editing this file)
+#
+# Trust Caddy's local CA (one-time):
+#   caddy trust
+
+# -- runway (public site) --
+
+runway.firc.test {
+	reverse_proxy localhost:7640
+}
+
+# -- sim (learner-facing) --
+
+sim.firc.test {
+	reverse_proxy localhost:7600
+}
+
+# -- hangar (content authoring) --
+
+hangar.firc.test {
+	reverse_proxy localhost:7610
+}
+
+# -- ops (operations) --
+
+ops.firc.test {
+	reverse_proxy localhost:7620
+}

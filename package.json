@@ -2,12 +2,20 @@
 	"name": "airboss",
 	"private": true,
 	"type": "module",
-	"workspaces": ["apps/*", "libs/*"],
+	"workspaces": ["apps/*", "libs/*", "libs/bc/*"],
 	"scripts": {
 		"dev": "bun scripts/dev.ts",
 		"check": "bun scripts/check.ts",
 		"test": "vitest run",
-		"test:watch": "vitest"
+		"test:watch": "vitest",
+		"db:push": "bunx drizzle-kit push",
+		"db:studio": "bunx drizzle-kit studio",
+		"db:seed": "bun scripts/db/seed-dev-users.ts",
+		"db:reset": "bun scripts/db/reset-study.ts",
+		"db:up": "docker compose up -d db",
+		"db:down": "docker compose down",
+		"setup": "bun scripts/setup.ts",
+		"smoke": "bun scripts/smoke/study-bc.ts"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.4.7",
@@ -29,7 +37,8 @@
 	"dependencies": {
 		"@better-auth/drizzle-adapter": "^1.5.6",
 		"better-auth": "^1.5.6",
-		"nanoid": "^5.1.7",
+		"resend": "^6.9.4",
+		"ts-fsrs": "^5.3.2",
 		"ulidx": "^2.4.1"
 	}
 }

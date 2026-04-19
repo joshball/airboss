@@ -1,20 +1,17 @@
-// Auth lib -- better-auth setup
-// Will be populated when auth is wired up
+// Auth lib -- identity, sessions, permissions.
+// Infrastructure: same interface for all apps.
 
-export interface AuthSession {
-	id: string;
-	userId: string;
-	expiresAt: Date;
-}
-
-export interface AuthUser {
-	id: string;
-	email: string;
-	name: string;
-	emailVerified: boolean;
-	role: string | null;
-	image: string | null;
-	banned: boolean | null;
-	createdAt: Date;
-	updatedAt: Date;
-}
+// Guards and types
+export { type AuthSession, type AuthUser, requireAuth, requireRole } from './auth';
+// Client-side auth (Svelte)
+export { authClient } from './client';
+// Cookie forwarding
+export { forwardAuthCookies } from './cookies';
+// Email transport and templates
+export { type EmailMessage, magicLinkEmail, resetPasswordEmail, sendEmail, verificationEmail } from './email';
+// Logout
+export { clearSessionCookies } from './logout';
+// Read-only Drizzle schemas for better-auth tables
+export { bauthAccount, bauthSession, bauthUser, bauthVerification } from './schema';
+// Server-side auth factory
+export { type Auth, createAuth } from './server';

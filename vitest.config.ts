@@ -1,0 +1,28 @@
+import { resolve } from 'node:path';
+import { defineConfig } from 'vitest/config';
+
+export default defineConfig({
+	resolve: {
+		alias: {
+			'@ab/constants/env': resolve('./libs/constants/src/env.ts'),
+			'@ab/constants': resolve('./libs/constants/src/index.ts'),
+			'@ab/types': resolve('./libs/types/src/index.ts'),
+			'@ab/db': resolve('./libs/db/src/index.ts'),
+			'@ab/auth/schema': resolve('./libs/auth/src/schema.ts'),
+			'@ab/auth': resolve('./libs/auth/src/index.ts'),
+			'@ab/ui': resolve('./libs/ui/src/index.ts'),
+			'@ab/utils': resolve('./libs/utils/src/index.ts'),
+			'@ab/bc-study': resolve('./libs/bc/study/src/index.ts'),
+		},
+	},
+	test: {
+		environment: 'node',
+		include: ['libs/**/*.test.ts'],
+		coverage: {
+			provider: 'v8',
+			include: ['libs/**/*.ts'],
+			exclude: ['libs/**/*.test.ts', 'libs/**/*.d.ts', 'libs/db/src/**', 'libs/constants/src/**'],
+			reporter: ['text', 'html', 'json-summary'],
+		},
+	},
+});

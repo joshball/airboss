@@ -21,8 +21,8 @@ const config = {
 			'@ab/themes/*': '../../libs/themes/*',
 			'@ab/ui': '../../libs/ui/src/index.ts',
 			'@ab/ui/*': '../../libs/ui/src/*',
-			'@ab/bc/study': '../../libs/bc/study/src/index.ts',
-			'@ab/bc/study/*': '../../libs/bc/study/src/*',
+			'@ab/bc-study': '../../libs/bc/study/src/index.ts',
+			'@ab/bc-study/*': '../../libs/bc/study/src/*',
 		},
 		env: {
 			dir: '../../',

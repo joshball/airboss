@@ -1,18 +1,41 @@
-<script>
-	let { children } = $props();
+<script lang="ts">
+import { ROUTES } from '@ab/constants';
+import type { Snippet } from 'svelte';
+import { page } from '$app/state';
+
+let { children }: { children: Snippet } = $props();
+
+const memoryActive = $derived(page.url.pathname.startsWith(ROUTES.MEMORY));
 </script>
 
-<nav>
-	<a href="/memory">Memory</a>
-	<a href="/reps">Reps</a>
-	<a href="/calibration">Calibration</a>
+<a class="skip" href="#main">Skip to main content</a>
+
+<nav aria-label="Primary">
+	<a href={ROUTES.MEMORY} aria-current={memoryActive ? 'page' : undefined}>Memory</a>
+	<!-- Reps and Calibration land in subsequent work packages; leaving them
+	     out of the nav until those routes exist. -->
 </nav>
 
-<main>
+<main id="main" tabindex="-1">
 	{@render children()}
 </main>
 
 <style>
+	.skip {
+		position: absolute;
+		top: -3rem;
+		left: 0.5rem;
+		background: #1a1a2e;
+		color: white;
+		padding: 0.5rem 0.75rem;
+		border-radius: 6px;
+		z-index: 100;
+	}
+
+	.skip:focus {
+		top: 0.5rem;
+	}
+
 	nav {
 		display: flex;
 		gap: 1.5rem;
@@ -25,15 +48,27 @@
 		color: #475569;
 		text-decoration: none;
 		font-weight: 500;
+		padding: 0.25rem 0.5rem;
+		border-radius: 6px;
 	}
 
 	nav a:hover {
 		color: #1a1a2e;
+		background: #f1f5f9;
+	}
+
+	nav a[aria-current='page'] {
+		color: #1d4ed8;
+		background: #eff6ff;
 	}
 
 	main {
 		padding: 1.5rem;
 		max-width: 48rem;
 		margin: 0 auto;
+	}
+
+	main:focus {
+		outline: none;
 	}
 </style>
