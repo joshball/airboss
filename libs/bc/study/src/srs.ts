@@ -8,7 +8,17 @@
  */
 
 import { CARD_STATES, type CardState, REVIEW_RATINGS, type ReviewRating } from '@ab/constants';
-import { type Card, type CardInput, createEmptyCard, default_w, fsrs, Rating, State } from 'ts-fsrs';
+import {
+	type Card,
+	type CardInput,
+	createEmptyCard,
+	default_w,
+	type FSRS,
+	type FSRSParameters,
+	fsrs,
+	Rating,
+	State,
+} from 'ts-fsrs';
 
 /** Scheduler inputs needed to schedule the next review. */
 export interface CardSchedulerState {
@@ -16,7 +26,7 @@ export interface CardSchedulerState {
 	difficulty: number;
 	state: CardState;
 	dueAt: Date;
-	lastReview?: Date | null;
+	lastReview: Date | null;
 	reviewCount: number;
 	lapseCount: number;
 }
@@ -53,10 +63,15 @@ const STATE_FROM_TS: Record<State, CardState> = {
 };
 
 /**
- * Shared FSRS instance. FSRS parameters are immutable at runtime today;
- * if we ever let users tune their params, construct a per-user instance instead.
+ * Shared default FSRS instance. Stateless; safe for concurrent use.
+ * Pass custom params to fsrsSchedule / fsrsInitialState to override (e.g.
+ * per-user optimized weights).
  */
-const scheduler = fsrs();
+const defaultScheduler = fsrs();
+
+function getScheduler(params?: Partial<FSRSParameters>): FSRS {
+	return params ? fsrs(params) : defaultScheduler;
+}
 
 /** Initial scheduler state for a brand-new card (no prior reviews). */
 export function fsrsInitialState(now: Date = new Date()): CardSchedulerState {
@@ -72,7 +87,11 @@ export function fsrsInitialState(now: Date = new Date()): CardSchedulerState {
 	};
 }
 
-/** FSRS-5 default weight parameters (19 values). */
+/**
+ * FSRS default weight parameters. Length is 19 under FSRS-5; ts-fsrs 5.x
+ * extends to 21 for FSRS-6 compatibility. Returned array is frozen by ts-fsrs
+ * and should not be mutated -- copy before tuning.
+ */
 export function fsrsDefaultParams(): readonly number[] {
 	return default_w;
 }
@@ -84,7 +103,12 @@ export function fsrsDefaultParams(): readonly number[] {
  * persisting the resulting stability/difficulty/state/dueAt onto card_state
  * and inserting a review row.
  */
-export function fsrsSchedule(state: CardSchedulerState, rating: ReviewRating, now: Date = new Date()): ScheduleResult {
+export function fsrsSchedule(
+	state: CardSchedulerState,
+	rating: ReviewRating,
+	now: Date = new Date(),
+	params?: Partial<FSRSParameters>,
+): ScheduleResult {
 	const cardInput: CardInput = {
 		due: state.dueAt,
 		stability: state.stability,
@@ -99,7 +123,7 @@ export function fsrsSchedule(state: CardSchedulerState, rating: ReviewRating, no
 	};
 
 	const grade = RATING_TO_TS[rating];
-	const result = scheduler.next(cardInput, now, grade);
+	const result = getScheduler(params).next(cardInput, now, grade);
 	const nextCard: Card = result.card;
 
 	return {

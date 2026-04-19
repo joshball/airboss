@@ -52,12 +52,40 @@ describe('fsrsSchedule -- new card', () => {
 		const good = fsrsSchedule(fsrsInitialState(NOW), REVIEW_RATINGS.GOOD, NOW);
 		expect(easy.dueAt.getTime()).toBeGreaterThan(good.dueAt.getTime());
 	});
+
+	it('Rating ordering: Again <= Hard <= Good <= Easy by scheduled interval', () => {
+		// Pin-down test: guards against Hard/Good being swapped in RATING_TO_TS.
+		// Compare against a card already in Review state so all four ratings
+		// schedule real intervals (Again on a new card goes to Learning with a
+		// sub-day interval that reorders the comparison).
+		const dueIn5 = new Date(NOW.getTime() + 5 * 24 * 60 * 60 * 1000);
+		const state: Parameters<typeof fsrsSchedule>[0] = {
+			stability: 5,
+			difficulty: 5,
+			state: CARD_STATES.REVIEW,
+			dueAt: dueIn5,
+			lastReview: new Date(NOW.getTime() - 5 * 24 * 60 * 60 * 1000),
+			reviewCount: 2,
+			lapseCount: 0,
+		};
+		const at = dueIn5;
+
+		const again = fsrsSchedule(state, REVIEW_RATINGS.AGAIN, at).dueAt.getTime();
+		const hard = fsrsSchedule(state, REVIEW_RATINGS.HARD, at).dueAt.getTime();
+		const good = fsrsSchedule(state, REVIEW_RATINGS.GOOD, at).dueAt.getTime();
+		const easy = fsrsSchedule(state, REVIEW_RATINGS.EASY, at).dueAt.getTime();
+
+		expect(again).toBeLessThanOrEqual(hard);
+		expect(hard).toBeLessThan(good);
+		expect(good).toBeLessThan(easy);
+	});
 });
 
 describe('fsrsSchedule -- review cards', () => {
-	// Construct a card that is already in the Review state with a multi-day
-	// interval. We do this directly rather than stepping through the learning
-	// phases so the test is isolated from FSRS's graduation heuristics.
+	// Construct a card that is already in the Review state: last reviewed 10
+	// days before NOW, next due 10 days after NOW, and we re-rate at the due
+	// time. We build the state directly so the test is isolated from FSRS's
+	// graduation heuristics.
 	function makeMatureCard() {
 		const dueInTenDays = new Date(NOW.getTime() + 10 * 24 * 60 * 60 * 1000);
 		const lastReview = new Date(NOW.getTime() - 10 * 24 * 60 * 60 * 1000);
