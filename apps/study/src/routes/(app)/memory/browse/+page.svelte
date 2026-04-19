@@ -2,8 +2,10 @@
 import {
 	CARD_STATUS_VALUES,
 	CARD_STATUSES,
+	CARD_TYPE_LABELS,
 	CARD_TYPE_VALUES,
 	CONTENT_SOURCE_VALUES,
+	DOMAIN_LABELS,
 	DOMAIN_VALUES,
 	ROUTES,
 } from '@ab/constants';
@@ -11,13 +13,30 @@ import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
 
-const { cards, filters, page: currentPage, hasMore } = $derived(data);
+const cards = $derived(data.cards);
+const filters = $derived(data.filters);
+const currentPage = $derived(data.page);
+const hasMore = $derived(data.hasMore);
+
+// True when no filters are active -- a blank deck vs over-filtered.
+const hasActiveFilters = $derived(
+	Boolean(filters.domain || filters.cardType || filters.sourceType || filters.search) ||
+		filters.status !== CARD_STATUSES.ACTIVE,
+);
 
 function humanize(slug: string): string {
 	return slug
 		.split(/[-_]/)
 		.map((w) => w.charAt(0).toUpperCase() + w.slice(1))
 		.join(' ');
+}
+
+function domainLabel(slug: string): string {
+	return (DOMAIN_LABELS as Record<string, string>)[slug] ?? humanize(slug);
+}
+
+function cardTypeLabel(slug: string): string {
+	return (CARD_TYPE_LABELS as Record<string, string>)[slug] ?? humanize(slug);
 }
 
 function shorten(text: string, max = 120): string {
@@ -60,7 +79,7 @@ function pageHref(n: number): string {
 		<a class="btn primary" href={ROUTES.MEMORY_NEW}>New card</a>
 	</header>
 
-	<form class="filters" method="GET">
+	<form class="filters" method="GET" role="search" aria-label="Filter cards">
 		<input type="hidden" name="page" value="1" />
 		<div class="filter">
 			<label for="f-q">Search</label>
@@ -71,7 +90,7 @@ function pageHref(n: number): string {
 			<select id="f-domain" name="domain" value={filters.domain ?? ''}>
 				<option value="">All</option>
 				{#each DOMAIN_VALUES as d (d)}
-					<option value={d}>{humanize(d)}</option>
+					<option value={d}>{domainLabel(d)}</option>
 				{/each}
 			</select>
 		</div>
@@ -80,7 +99,7 @@ function pageHref(n: number): string {
 			<select id="f-type" name="type" value={filters.cardType ?? ''}>
 				<option value="">All</option>
 				{#each CARD_TYPE_VALUES as t (t)}
-					<option value={t}>{humanize(t)}</option>
+					<option value={t}>{cardTypeLabel(t)}</option>
 				{/each}
 			</select>
 		</div>
@@ -109,8 +128,13 @@ function pageHref(n: number): string {
 
 	{#if cards.length === 0}
 		<div class="empty">
-			<p>No cards match these filters.</p>
-			<a class="btn primary" href={ROUTES.MEMORY_NEW}>Create your first card</a>
+			{#if hasActiveFilters}
+				<p>No cards match these filters.</p>
+				<a class="btn ghost" href={ROUTES.MEMORY_BROWSE}>Clear filters</a>
+			{:else}
+				<p>Your deck is empty. Capture your first card while you study.</p>
+				<a class="btn primary" href={ROUTES.MEMORY_NEW}>Create your first card</a>
+			{/if}
 		</div>
 	{:else}
 		<ul class="list">
@@ -119,8 +143,8 @@ function pageHref(n: number): string {
 					<a class="card-link" href={ROUTES.MEMORY_CARD(c.id)}>
 						<div class="card-front">{shorten(c.front)}</div>
 						<div class="card-meta">
-							<span class="badge domain">{humanize(c.domain)}</span>
-							<span class="badge type">{humanize(c.cardType)}</span>
+							<span class="badge domain">{domainLabel(c.domain)}</span>
+							<span class="badge type">{cardTypeLabel(c.cardType)}</span>
 							{#if c.status !== CARD_STATUSES.ACTIVE}
 								<span class="badge status-{c.status}">{humanize(c.status)}</span>
 							{/if}

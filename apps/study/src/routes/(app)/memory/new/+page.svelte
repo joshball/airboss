@@ -1,13 +1,15 @@
 <script lang="ts">
-import { CARD_TYPES, DOMAINS, ROUTES } from '@ab/constants';
+import { CARD_TYPE_LABELS, CARD_TYPES, DOMAIN_LABELS, DOMAIN_VALUES, ROUTES } from '@ab/constants';
+import { tick } from 'svelte';
 import { enhance } from '$app/forms';
 import { page } from '$app/state';
-import type { ActionData } from './$types';
+import type { ActionData, PageData } from './$types';
 
-let { form }: { form: ActionData } = $props();
+let { data, form }: { data: PageData; form: ActionData } = $props();
 let loading = $state(false);
+let frontInput = $state<HTMLTextAreaElement | null>(null);
+let formEl = $state<HTMLFormElement | null>(null);
 
-const domainOptions = Object.values(DOMAINS);
 const cardTypeOptions = Object.values(CARD_TYPES);
 
 interface FieldValues {
@@ -22,11 +24,37 @@ const createdId = $derived(page.url.searchParams.get('created'));
 const fieldErrors = $derived<Record<string, string>>(form?.fieldErrors ?? {});
 const values = $derived<FieldValues>(form?.values ?? {});
 
+// When the URL carries forward a domain/tags (after "Save and add another"),
+// pre-fill the next card so the rhythm of capture keeps moving.
+const seededDomain = $derived(values.domain ?? data.seed.domain ?? '');
+const seededCardType = $derived(values.cardType ?? data.seed.cardType ?? CARD_TYPES.BASIC);
+const seededTags = $derived(values.tags?.join?.(', ') ?? data.seed.tags ?? '');
+
+// After a redirect back from a successful save, put focus on Front so the
+// user can keep typing.
+$effect(() => {
+	void createdId;
+	void tick().then(() => frontInput?.focus());
+});
+
 function humanize(slug: string): string {
 	return slug
 		.split(/[-_]/)
 		.map((w) => w.charAt(0).toUpperCase() + w.slice(1))
 		.join(' ');
+}
+
+function domainLabel(slug: string): string {
+	const known = (DOMAIN_LABELS as Record<string, string>)[slug];
+	return known ?? humanize(slug);
+}
+
+function onKeydown(e: KeyboardEvent) {
+	// Cmd/Ctrl + Enter submits from any field.
+	if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+		e.preventDefault();
+		formEl?.requestSubmit();
+	}
 }
 </script>
 
@@ -53,8 +81,13 @@ function humanize(slug: string): string {
 		<div class="error" role="alert">{fieldErrors._}</div>
 	{/if}
 
+	<!-- Forms bubble keydown from their inputs; Cmd+Enter-to-submit is an
+	     intentional shortcut. -->
+	<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 	<form
 		method="POST"
+		bind:this={formEl}
+		onkeydown={onKeydown}
 		use:enhance={() => {
 			loading = true;
 			return async ({ update }) => {
@@ -73,8 +106,11 @@ function humanize(slug: string): string {
 				placeholder="What are the VFR weather minimums in Class C airspace below 10,000 MSL?"
 				disabled={loading}
 				value={values.front ?? ''}
+				bind:this={frontInput}
+				aria-invalid={fieldErrors.front ? 'true' : undefined}
+				aria-describedby={fieldErrors.front ? 'front-err' : undefined}
 			></textarea>
-			{#if fieldErrors.front}<span class="err">{fieldErrors.front}</span>{/if}
+			{#if fieldErrors.front}<span id="front-err" class="err">{fieldErrors.front}</span>{/if}
 		</label>
 
 		<label class="field">
@@ -87,17 +123,19 @@ function humanize(slug: string): string {
 				placeholder="3 SM, 500 below / 1,000 above / 2,000 horizontal from clouds. 14 CFR 91.155."
 				disabled={loading}
 				value={values.back ?? ''}
+				aria-invalid={fieldErrors.back ? 'true' : undefined}
+				aria-describedby={fieldErrors.back ? 'back-err' : undefined}
 			></textarea>
-			{#if fieldErrors.back}<span class="err">{fieldErrors.back}</span>{/if}
+			{#if fieldErrors.back}<span id="back-err" class="err">{fieldErrors.back}</span>{/if}
 		</label>
 
 		<div class="row">
 			<label class="field">
 				<span class="label">Domain</span>
-				<select name="domain" required disabled={loading} value={values.domain ?? ''}>
+				<select name="domain" required disabled={loading} value={seededDomain}>
 					<option value="" disabled>Pick a domain</option>
-					{#each domainOptions as opt (opt)}
-						<option value={opt}>{humanize(opt)}</option>
+					{#each DOMAIN_VALUES as opt (opt)}
+						<option value={opt}>{domainLabel(opt)}</option>
 					{/each}
 				</select>
 				{#if fieldErrors.domain}<span class="err">{fieldErrors.domain}</span>{/if}
@@ -105,9 +143,9 @@ function humanize(slug: string): string {
 
 			<label class="field">
 				<span class="label">Type</span>
-				<select name="cardType" required disabled={loading} value={values.cardType ?? CARD_TYPES.BASIC}>
+				<select name="cardType" required disabled={loading} value={seededCardType}>
 					{#each cardTypeOptions as opt (opt)}
-						<option value={opt}>{humanize(opt)}</option>
+						<option value={opt}>{CARD_TYPE_LABELS[opt]}</option>
 					{/each}
 				</select>
 				{#if fieldErrors.cardType}<span class="err">{fieldErrors.cardType}</span>{/if}
@@ -115,13 +153,14 @@ function humanize(slug: string): string {
 		</div>
 
 		<label class="field">
-			<span class="label">Tags <span class="hint">(comma-separated, optional)</span></span>
+			<span class="label">Tags <span class="hint" id="tags-hint">(comma-separated, optional)</span></span>
 			<input
 				type="text"
 				name="tags"
 				placeholder="far-91, airspace-class-c"
 				disabled={loading}
-				value={values.tags?.join?.(', ') ?? ''}
+				value={seededTags}
+				aria-describedby="tags-hint"
 			/>
 			{#if fieldErrors.tags}<span class="err">{fieldErrors.tags}</span>{/if}
 		</label>

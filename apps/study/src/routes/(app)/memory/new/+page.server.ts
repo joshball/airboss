@@ -15,8 +15,15 @@ function parseTags(raw: string): string[] {
 		.filter((t) => t.length > 0);
 }
 
-export const load: PageServerLoad = async () => {
-	return {};
+export const load: PageServerLoad = async ({ url }) => {
+	// Carry-over values from "Save and add another" redirect.
+	return {
+		seed: {
+			domain: url.searchParams.get('domain') ?? '',
+			cardType: url.searchParams.get('cardType') ?? '',
+			tags: url.searchParams.get('tags') ?? '',
+		},
+	};
 };
 
 export const actions: Actions = {
@@ -63,7 +70,16 @@ export const actions: Actions = {
 			});
 
 			if (saveAndAdd) {
-				redirect(303, `${ROUTES.MEMORY_NEW}?created=${encodeURIComponent(created.id)}`);
+				// Preserve the domain + tags so the next card stays in context.
+				const next = new URLSearchParams({
+					created: created.id,
+					domain: parsed.data.domain,
+					cardType: parsed.data.cardType,
+				});
+				if (parsed.data.tags && parsed.data.tags.length > 0) {
+					next.set('tags', parsed.data.tags.join(','));
+				}
+				redirect(303, `${ROUTES.MEMORY_NEW}?${next.toString()}`);
 			}
 			redirect(303, ROUTES.MEMORY_CARD(created.id));
 		} catch (err) {

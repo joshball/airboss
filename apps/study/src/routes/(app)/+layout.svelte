@@ -5,17 +5,34 @@ import type { Snippet } from 'svelte';
 let { children }: { children: Snippet } = $props();
 </script>
 
-<nav>
+<a class="skip" href="#main">Skip to main content</a>
+
+<nav aria-label="Primary">
 	<a href={ROUTES.MEMORY}>Memory</a>
 	<a href={ROUTES.REPS}>Reps</a>
 	<a href={ROUTES.CALIBRATION}>Calibration</a>
 </nav>
 
-<main>
+<main id="main" tabindex="-1">
 	{@render children()}
 </main>
 
 <style>
+	.skip {
+		position: absolute;
+		top: -3rem;
+		left: 0.5rem;
+		background: #1a1a2e;
+		color: white;
+		padding: 0.5rem 0.75rem;
+		border-radius: 6px;
+		z-index: 100;
+	}
+
+	.skip:focus {
+		top: 0.5rem;
+	}
+
 	nav {
 		display: flex;
 		gap: 1.5rem;
@@ -38,5 +55,9 @@ let { children }: { children: Snippet } = $props();
 		padding: 1.5rem;
 		max-width: 48rem;
 		margin: 0 auto;
+	}
+
+	main:focus {
+		outline: none;
 	}
 </style>

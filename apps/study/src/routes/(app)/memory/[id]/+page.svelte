@@ -1,5 +1,14 @@
 <script lang="ts">
-import { CARD_STATUSES, CARD_TYPES, DOMAINS, REVIEW_RATINGS, ROUTES } from '@ab/constants';
+import {
+	CARD_STATUSES,
+	CARD_TYPE_LABELS,
+	CARD_TYPES,
+	DOMAIN_LABELS,
+	DOMAINS,
+	REVIEW_RATINGS,
+	ROUTES,
+} from '@ab/constants';
+import { tick } from 'svelte';
 import { enhance } from '$app/forms';
 import type { ActionData, PageData } from './$types';
 
@@ -15,6 +24,8 @@ interface FieldValues {
 
 let editing = $state(false);
 let saving = $state(false);
+let statusUpdating = $state(false);
+let editFrontInput = $state<HTMLTextAreaElement | null>(null);
 
 const card = $derived(data.card);
 const schedule = $derived(data.state);
@@ -33,11 +44,29 @@ const ratingLabels: Record<number, string> = {
 	[REVIEW_RATINGS.EASY]: 'Easy',
 };
 
+async function startEdit() {
+	editing = true;
+	await tick();
+	editFrontInput?.focus();
+}
+
+function confirmDiscardEdit() {
+	editing = false;
+}
+
 function humanize(slug: string): string {
 	return slug
 		.split(/[-_]/)
 		.map((w) => w.charAt(0).toUpperCase() + w.slice(1))
 		.join(' ');
+}
+
+function domainLabel(slug: string): string {
+	return (DOMAIN_LABELS as Record<string, string>)[slug] ?? humanize(slug);
+}
+
+function cardTypeLabel(slug: string): string {
+	return (CARD_TYPE_LABELS as Record<string, string>)[slug] ?? humanize(slug);
 }
 
 function formatInterval(ms: number): string {
@@ -75,8 +104,8 @@ const tagsString = $derived((card.tags ?? []).join(', '));
 			<h1>Card detail</h1>
 		</div>
 		<div class="badges">
-			<span class="badge domain">{humanize(card.domain)}</span>
-			<span class="badge type">{humanize(card.cardType)}</span>
+			<span class="badge domain">{domainLabel(card.domain)}</span>
+			<span class="badge type">{cardTypeLabel(card.cardType)}</span>
 			{#if card.status !== CARD_STATUSES.ACTIVE}
 				<span class="badge status-{card.status}">{humanize(card.status)}</span>
 			{/if}
@@ -104,20 +133,39 @@ const tagsString = $derived((card.tags ?? []).join(', '));
 		>
 			<label class="field">
 				<span class="label">Front</span>
-				<textarea name="front" rows="3" required maxlength="10000" disabled={saving} value={editValues.front ?? card.front}></textarea>
-				{#if fieldErrors.front}<span class="err">{fieldErrors.front}</span>{/if}
+				<textarea
+					name="front"
+					rows="3"
+					required
+					maxlength="10000"
+					disabled={saving}
+					value={editValues.front ?? card.front}
+					bind:this={editFrontInput}
+					aria-invalid={fieldErrors.front ? 'true' : undefined}
+					aria-describedby={fieldErrors.front ? 'edit-front-err' : undefined}
+				></textarea>
+				{#if fieldErrors.front}<span id="edit-front-err" class="err">{fieldErrors.front}</span>{/if}
 			</label>
 			<label class="field">
 				<span class="label">Back</span>
-				<textarea name="back" rows="4" required maxlength="10000" disabled={saving} value={editValues.back ?? card.back}></textarea>
-				{#if fieldErrors.back}<span class="err">{fieldErrors.back}</span>{/if}
+				<textarea
+					name="back"
+					rows="4"
+					required
+					maxlength="10000"
+					disabled={saving}
+					value={editValues.back ?? card.back}
+					aria-invalid={fieldErrors.back ? 'true' : undefined}
+					aria-describedby={fieldErrors.back ? 'edit-back-err' : undefined}
+				></textarea>
+				{#if fieldErrors.back}<span id="edit-back-err" class="err">{fieldErrors.back}</span>{/if}
 			</label>
 			<div class="row">
 				<label class="field">
 					<span class="label">Domain</span>
 					<select name="domain" required disabled={saving} value={editValues.domain ?? card.domain}>
 						{#each domainOptions as d (d)}
-							<option value={d}>{humanize(d)}</option>
+							<option value={d}>{domainLabel(d)}</option>
 						{/each}
 					</select>
 				</label>
@@ -125,7 +173,7 @@ const tagsString = $derived((card.tags ?? []).join(', '));
 					<span class="label">Type</span>
 					<select name="cardType" required disabled={saving} value={editValues.cardType ?? card.cardType}>
 						{#each cardTypeOptions as t (t)}
-							<option value={t}>{humanize(t)}</option>
+							<option value={t}>{cardTypeLabel(t)}</option>
 						{/each}
 					</select>
 				</label>
@@ -135,7 +183,7 @@ const tagsString = $derived((card.tags ?? []).join(', '));
 				<input type="text" name="tags" disabled={saving} value={editValues.tags?.join?.(', ') ?? tagsString} />
 			</label>
 			<div class="actions">
-				<button type="button" class="btn ghost" onclick={() => (editing = false)} disabled={saving}>Cancel</button>
+				<button type="button" class="btn ghost" onclick={confirmDiscardEdit} disabled={saving}>Cancel</button>
 				<button type="submit" class="btn primary" disabled={saving}>
 					{saving ? 'Saving...' : 'Save changes'}
 				</button>
@@ -164,18 +212,45 @@ const tagsString = $derived((card.tags ?? []).join(', '));
 
 			<div class="row action-row">
 				{#if card.isEditable}
-					<button type="button" class="btn secondary" onclick={() => (editing = true)}>Edit</button>
+					<button type="button" class="btn secondary" onclick={startEdit}>Edit</button>
 				{:else}
 					<span class="note">This card is read-only (source: {humanize(card.sourceType)}).</span>
 				{/if}
-				<form method="POST" action="?/setStatus" use:enhance class="inline-form">
+				<form
+					method="POST"
+					action="?/setStatus"
+					class="inline-form"
+					use:enhance={({ formData, cancel }) => {
+						if (formData.get('status') === CARD_STATUSES.ARCHIVED) {
+							// Archive is effectively delete (cards are never hard-removed);
+							// require an explicit confirm.
+							if (!confirm('Archive this card? It will disappear from your deck. You can reactivate it from Browse later.')) {
+								cancel();
+								return;
+							}
+						}
+						statusUpdating = true;
+						return async ({ update }) => {
+							statusUpdating = false;
+							await update();
+						};
+					}}
+				>
 					{#if card.status === CARD_STATUSES.ACTIVE}
-						<button type="submit" class="btn secondary" name="status" value={CARD_STATUSES.SUSPENDED}>Suspend</button>
-						<button type="submit" class="btn secondary" name="status" value={CARD_STATUSES.ARCHIVED}>Archive</button>
+						<button type="submit" class="btn secondary" name="status" value={CARD_STATUSES.SUSPENDED} disabled={statusUpdating}>
+							{statusUpdating ? '...' : 'Suspend'}
+						</button>
+						<button type="submit" class="btn danger" name="status" value={CARD_STATUSES.ARCHIVED} disabled={statusUpdating}>
+							{statusUpdating ? '...' : 'Archive'}
+						</button>
 					{:else}
-						<button type="submit" class="btn secondary" name="status" value={CARD_STATUSES.ACTIVE}>Reactivate</button>
+						<button type="submit" class="btn secondary" name="status" value={CARD_STATUSES.ACTIVE} disabled={statusUpdating}>
+							{statusUpdating ? '...' : 'Reactivate'}
+						</button>
 						{#if card.status === CARD_STATUSES.SUSPENDED}
-							<button type="submit" class="btn ghost" name="status" value={CARD_STATUSES.ARCHIVED}>Archive</button>
+							<button type="submit" class="btn danger" name="status" value={CARD_STATUSES.ARCHIVED} disabled={statusUpdating}>
+								{statusUpdating ? '...' : 'Archive'}
+							</button>
 						{/if}
 					{/if}
 				</form>
@@ -554,6 +629,17 @@ const tagsString = $derived((card.tags ?? []).join(', '));
 
 	.btn.ghost:hover {
 		background: #f1f5f9;
+	}
+
+	.btn.danger {
+		background: white;
+		color: #b91c1c;
+		border-color: #fecaca;
+	}
+
+	.btn.danger:hover:not(:disabled) {
+		background: #fef2f2;
+		border-color: #fca5a5;
 	}
 
 	.btn:disabled {

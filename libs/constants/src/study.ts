@@ -27,6 +27,27 @@ export type Domain = (typeof DOMAINS)[keyof typeof DOMAINS];
 
 export const DOMAIN_VALUES = Object.values(DOMAINS);
 
+/**
+ * Human-readable labels for domains. Preferred over auto-humanized slug
+ * values because it preserves aviation acronyms (FAA, ADM, IFR, VFR, CFR).
+ */
+export const DOMAIN_LABELS: Record<Domain, string> = {
+	[DOMAINS.REGULATIONS]: 'Regulations',
+	[DOMAINS.WEATHER]: 'Weather',
+	[DOMAINS.AIRSPACE]: 'Airspace',
+	[DOMAINS.GLASS_COCKPITS]: 'Glass Cockpits',
+	[DOMAINS.IFR_PROCEDURES]: 'IFR Procedures',
+	[DOMAINS.VFR_OPERATIONS]: 'VFR Operations',
+	[DOMAINS.AERODYNAMICS]: 'Aerodynamics',
+	[DOMAINS.TEACHING_METHODOLOGY]: 'Teaching Methodology',
+	[DOMAINS.ADM_HUMAN_FACTORS]: 'ADM / Human Factors',
+	[DOMAINS.SAFETY_ACCIDENT_ANALYSIS]: 'Safety / Accident Analysis',
+	[DOMAINS.AIRCRAFT_SYSTEMS]: 'Aircraft Systems',
+	[DOMAINS.FLIGHT_PLANNING]: 'Flight Planning',
+	[DOMAINS.EMERGENCY_PROCEDURES]: 'Emergency Procedures',
+	[DOMAINS.FAA_PRACTICAL_STANDARDS]: 'FAA Practical Standards',
+};
+
 export const CARD_TYPES = {
 	BASIC: 'basic',
 	CLOZE: 'cloze',
@@ -37,6 +58,13 @@ export const CARD_TYPES = {
 export type CardType = (typeof CARD_TYPES)[keyof typeof CARD_TYPES];
 
 export const CARD_TYPE_VALUES = Object.values(CARD_TYPES);
+
+export const CARD_TYPE_LABELS: Record<CardType, string> = {
+	[CARD_TYPES.BASIC]: 'Basic',
+	[CARD_TYPES.CLOZE]: 'Cloze',
+	[CARD_TYPES.REGULATION]: 'Regulation',
+	[CARD_TYPES.MEMORY_ITEM]: 'Memory item',
+};
 
 export const CONTENT_SOURCES = {
 	PERSONAL: 'personal',
