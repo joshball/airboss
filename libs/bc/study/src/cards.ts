@@ -4,6 +4,9 @@
  * Own the card lifecycle: create, read, update status, and read-back with
  * per-user scheduler state. FSRS math lives in srs.ts; these functions only
  * persist the pre/post-scheduling state.
+ *
+ * Inputs are validated here (in addition to the route layer) so cross-BC
+ * callers and scripts can't inject invalid values.
  */
 
 import {
@@ -17,10 +20,11 @@ import {
 } from '@ab/constants';
 import { db as defaultDb } from '@ab/db';
 import { generateCardId } from '@ab/utils';
-import { and, asc, desc, eq, ilike, inArray, lte, or } from 'drizzle-orm';
+import { and, asc, desc, eq, ilike, inArray, lte, or, type SQL } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import { type CardRow, type CardStateRow, card, cardState } from './schema';
 import { fsrsInitialState } from './srs';
+import { newCardSchema, updateCardSchema } from './validation';
 
 type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;
 
@@ -60,10 +64,25 @@ export interface CardFilters {
 	offset?: number;
 }
 
+/** Escape user input for use inside a LIKE/ILIKE pattern. */
+function escapeLikePattern(s: string): string {
+	return s.replace(/[\\%_]/g, (ch) => `\\${ch}`);
+}
+
 /** Create a new card and its initial card_state row. Runs inside a transaction. */
 export async function createCard(input: CreateCardInput, db: Db = defaultDb): Promise<CardRow> {
-	const sourceType = input.sourceType ?? CONTENT_SOURCES.PERSONAL;
-	if (sourceType !== CONTENT_SOURCES.PERSONAL && !input.sourceRef) {
+	const parsed = newCardSchema.parse({
+		front: input.front,
+		back: input.back,
+		domain: input.domain,
+		cardType: input.cardType,
+		tags: input.tags,
+		sourceType: input.sourceType,
+		sourceRef: input.sourceRef,
+		isEditable: input.isEditable,
+	});
+	const sourceType = (parsed.sourceType ?? CONTENT_SOURCES.PERSONAL) as ContentSource;
+	if (sourceType !== CONTENT_SOURCES.PERSONAL && !parsed.sourceRef) {
 		throw new Error('source_ref is required when source_type is not personal');
 	}
 
@@ -77,14 +96,14 @@ export async function createCard(input: CreateCardInput, db: Db = defaultDb): Pr
 			.values({
 				id,
 				userId: input.userId,
-				front: input.front,
-				back: input.back,
-				domain: input.domain,
-				tags: input.tags ?? [],
-				cardType: input.cardType,
+				front: parsed.front,
+				back: parsed.back,
+				domain: parsed.domain as Domain,
+				tags: parsed.tags ?? [],
+				cardType: parsed.cardType as CardType,
 				sourceType,
-				sourceRef: input.sourceRef ?? null,
-				isEditable: input.isEditable ?? sourceType === CONTENT_SOURCES.PERSONAL,
+				sourceRef: parsed.sourceRef ?? null,
+				isEditable: parsed.isEditable ?? sourceType === CONTENT_SOURCES.PERSONAL,
 				status: CARD_STATUSES.ACTIVE,
 				createdAt: now,
 				updatedAt: now,
@@ -99,6 +118,7 @@ export async function createCard(input: CreateCardInput, db: Db = defaultDb): Pr
 			state: initial.state,
 			dueAt: initial.dueAt,
 			lastReviewId: null,
+			lastReviewedAt: null,
 			reviewCount: 0,
 			lapseCount: 0,
 		});
@@ -109,7 +129,9 @@ export async function createCard(input: CreateCardInput, db: Db = defaultDb): Pr
 
 /**
  * Update a card's editable fields. Refuses to update non-editable cards
- * (course/product-provided content). Updates updatedAt.
+ * (course/product-provided content). Only the fields declared in
+ * UpdateCardInput are copied -- status, sourceType, userId, and isEditable
+ * cannot be changed via this path.
  */
 export async function updateCard(
 	cardId: string,
@@ -117,6 +139,8 @@ export async function updateCard(
 	patch: UpdateCardInput,
 	db: Db = defaultDb,
 ): Promise<CardRow> {
+	const parsed = updateCardSchema.parse(patch);
+
 	const [existing] = await db
 		.select()
 		.from(card)
@@ -125,12 +149,18 @@ export async function updateCard(
 	if (!existing) throw new Error(`Card ${cardId} not found for user ${userId}`);
 	if (!existing.isEditable) throw new Error(`Card ${cardId} is not editable`);
 
+	// Whitelist explicitly so Drizzle can't accept extra keys slipped in by a
+	// caller that bypasses TypeScript.
+	const update: Partial<CardRow> = { updatedAt: new Date() };
+	if (parsed.front !== undefined) update.front = parsed.front;
+	if (parsed.back !== undefined) update.back = parsed.back;
+	if (parsed.domain !== undefined) update.domain = parsed.domain as Domain;
+	if (parsed.cardType !== undefined) update.cardType = parsed.cardType as CardType;
+	if (parsed.tags !== undefined) update.tags = parsed.tags;
+
 	const [updated] = await db
 		.update(card)
-		.set({
-			...patch,
-			updatedAt: new Date(),
-		})
+		.set(update)
 		.where(and(eq(card.id, cardId), eq(card.userId, userId)))
 		.returning();
 
@@ -174,36 +204,38 @@ export async function getDueCards(
 
 /**
  * Browse cards for a user with optional filters. Default order: most recently
- * updated first. Default status filter: everything except archived.
+ * updated first. Default status filter: active only. Pass an explicit status
+ * filter to include suspended or archived cards.
  */
 export async function getCards(userId: string, filters: CardFilters = {}, db: Db = defaultDb): Promise<CardRow[]> {
 	const statusFilter = filters.status
 		? Array.isArray(filters.status)
 			? filters.status
 			: [filters.status]
-		: [CARD_STATUSES.ACTIVE, CARD_STATUSES.SUSPENDED];
+		: [CARD_STATUSES.ACTIVE];
 
-	const clauses = [eq(card.userId, userId), inArray(card.status, statusFilter)];
+	const clauses: SQL[] = [eq(card.userId, userId), inArray(card.status, statusFilter)];
 
 	if (filters.domain) clauses.push(eq(card.domain, filters.domain));
 	if (filters.cardType) clauses.push(eq(card.cardType, filters.cardType));
 	if (filters.sourceType) clauses.push(eq(card.sourceType, filters.sourceType));
 	if (filters.search && filters.search.trim().length > 0) {
-		const pattern = `%${filters.search.trim().replace(/[\\%_]/g, (ch) => `\\${ch}`)}%`;
-		const front = ilike(card.front, pattern);
-		const back = ilike(card.back, pattern);
-		const cond = or(front, back);
+		const pattern = `%${escapeLikePattern(filters.search.trim())}%`;
+		const cond = or(ilike(card.front, pattern), ilike(card.back, pattern));
 		if (cond) clauses.push(cond);
 	}
 
-	const q = db
+	// Drizzle's query builder returns a new object per chained call; reassign
+	// rather than mutate so limit/offset are actually applied.
+	let q = db
 		.select()
 		.from(card)
 		.where(and(...clauses))
-		.orderBy(desc(card.updatedAt));
+		.orderBy(desc(card.updatedAt))
+		.$dynamic();
 
-	if (filters.limit !== undefined) q.limit(filters.limit);
-	if (filters.offset !== undefined) q.offset(filters.offset);
+	if (filters.limit !== undefined && filters.limit > 0) q = q.limit(filters.limit);
+	if (filters.offset !== undefined && filters.offset > 0) q = q.offset(filters.offset);
 
 	return await q;
 }

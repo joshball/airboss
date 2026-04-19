@@ -3,7 +3,7 @@
 export type { CardFilters, CardWithState, CreateCardInput, UpdateCardInput } from './cards';
 export { createCard, getCard, getCards, getDueCards, setCardStatus, updateCard } from './cards';
 export type { SubmitReviewInput } from './reviews';
-export { submitReview } from './reviews';
+export { CardNotFoundError, submitReview } from './reviews';
 export type { CardRow, CardStateRow, NewCardRow, NewCardStateRow, NewReviewRow, ReviewRow } from './schema';
 export { card, cardState, review, studySchema } from './schema';
 export type { CardSchedulerState, ScheduleResult } from './srs';
@@ -17,3 +17,12 @@ export {
 	getMasteredCount,
 	getReviewStats,
 } from './stats';
+export {
+	cardTagsSchema,
+	cardTextSchema,
+	confidenceSchema,
+	newCardSchema,
+	reviewRatingSchema,
+	submitReviewSchema,
+	updateCardSchema,
+} from './validation';

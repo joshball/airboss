@@ -119,6 +119,11 @@ export const cardState = studySchema.table(
 		state: text('state').notNull(),
 		dueAt: timestamp('due_at', { withTimezone: true }).notNull(),
 		lastReviewId: text('last_review_id').references(() => review.id, { onDelete: 'set null' }),
+		// Denormalized copy of the last review's reviewedAt. Null until the first
+		// review. ts-fsrs uses (now - lastReviewedAt) as the elapsed_days input;
+		// passing null sends elapsed_days=0 through the scheduler, which breaks
+		// stability growth on subsequent reviews.
+		lastReviewedAt: timestamp('last_reviewed_at', { withTimezone: true }),
 		reviewCount: integer('review_count').notNull().default(0),
 		lapseCount: integer('lapse_count').notNull().default(0),
 	},

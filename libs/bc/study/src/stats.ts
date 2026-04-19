@@ -101,23 +101,29 @@ export async function getDashboardStats(
 ): Promise<DashboardStats> {
 	const todayStart = utcStartOfDay(now);
 
-	const [dueNowRow] = await db
-		.select({ c: count() })
-		.from(cardState)
-		.innerJoin(card, and(eq(card.id, cardState.cardId), eq(card.userId, cardState.userId)))
-		.where(and(eq(cardState.userId, userId), lte(cardState.dueAt, now), eq(card.status, CARD_STATUSES.ACTIVE)));
-
-	const [reviewedTodayRow] = await db
-		.select({ c: count() })
-		.from(review)
-		.where(and(eq(review.userId, userId), gte(review.reviewedAt, todayStart)));
-
-	const stateRows = await db
-		.select({ state: cardState.state, c: count() })
-		.from(cardState)
-		.innerJoin(card, and(eq(card.id, cardState.cardId), eq(card.userId, cardState.userId)))
-		.where(and(eq(cardState.userId, userId), eq(card.status, CARD_STATUSES.ACTIVE)))
-		.groupBy(cardState.state);
+	// Fan out: every query below is independent. Parallel round-trips keep
+	// the dashboard under the 200ms target even at moderate scale.
+	const [dueNowRow, reviewedTodayRow, stateRows, domains, streakDays] = await Promise.all([
+		db
+			.select({ c: count() })
+			.from(cardState)
+			.innerJoin(card, and(eq(card.id, cardState.cardId), eq(card.userId, cardState.userId)))
+			.where(and(eq(cardState.userId, userId), lte(cardState.dueAt, now), eq(card.status, CARD_STATUSES.ACTIVE)))
+			.then((r) => r[0]),
+		db
+			.select({ c: count() })
+			.from(review)
+			.where(and(eq(review.userId, userId), gte(review.reviewedAt, todayStart)))
+			.then((r) => r[0]),
+		db
+			.select({ state: cardState.state, c: count() })
+			.from(cardState)
+			.innerJoin(card, and(eq(card.id, cardState.cardId), eq(card.userId, cardState.userId)))
+			.where(and(eq(cardState.userId, userId), eq(card.status, CARD_STATUSES.ACTIVE)))
+			.groupBy(cardState.state),
+		getDomainBreakdown(userId, db, now),
+		computeStreakDays(userId, db, now),
+	]);
 
 	const stateCounts: Record<CardState, number> = {
 		[CARD_STATES.NEW]: 0,
@@ -129,9 +135,6 @@ export async function getDashboardStats(
 		const s = row.state as CardState;
 		if (s in stateCounts) stateCounts[s] = Number(row.c);
 	}
-
-	const domains = await getDomainBreakdown(userId, db, now);
-	const streakDays = await computeStreakDays(userId, db, now);
 
 	return {
 		dueNow: Number(dueNowRow?.c ?? 0),
@@ -179,32 +182,36 @@ export async function getCardMastery(
 	const clauses = [eq(card.userId, userId), eq(card.status, CARD_STATUSES.ACTIVE)];
 	if (domain) clauses.push(eq(card.domain, domain));
 
-	const [totalsRow] = await db
-		.select({
-			total: count(),
-			due: sql<number>`sum(case when ${cardState.dueAt} <= ${now.toISOString()} then 1 else 0 end)`,
-			mastered: sql<number>`sum(case when ${cardState.stability} > ${MASTERY_STABILITY_DAYS} then 1 else 0 end)`,
-		})
-		.from(card)
-		.innerJoin(cardState, and(eq(cardState.cardId, card.id), eq(cardState.userId, card.userId)))
-		.where(and(...clauses));
+	// Accuracy and totals share the same "active card" scope so we don't mix
+	// lifecycle states (e.g. counting reviews of archived cards as accuracy
+	// while excluding them from totals).
+	const accuracyClauses = [eq(review.userId, userId), eq(card.status, CARD_STATUSES.ACTIVE)];
+	if (domain) accuracyClauses.push(eq(card.domain, domain));
 
-	const accuracyClauses = [eq(review.userId, userId)];
-	if (domain) {
-		accuracyClauses.push(eq(card.domain, domain));
-	}
+	const [totalsRow, accuracyRow] = await Promise.all([
+		db
+			.select({
+				total: count(),
+				due: sql<number>`sum(case when ${cardState.dueAt} <= ${now.toISOString()} then 1 else 0 end)`,
+				mastered: sql<number>`sum(case when ${cardState.stability} > ${MASTERY_STABILITY_DAYS} then 1 else 0 end)`,
+			})
+			.from(card)
+			.innerJoin(cardState, and(eq(cardState.cardId, card.id), eq(cardState.userId, card.userId)))
+			.where(and(...clauses))
+			.then((r) => r[0]),
+		db
+			.select({
+				total: count(),
+				correct: sql<number>`sum(case when ${review.rating} > ${REVIEW_RATINGS.AGAIN} then 1 else 0 end)`,
+			})
+			.from(review)
+			.innerJoin(card, and(eq(card.id, review.cardId), eq(card.userId, review.userId)))
+			.where(and(...accuracyClauses))
+			.then((r) => r[0]),
+	]);
 
-	const accuracyRows = await db
-		.select({
-			total: count(),
-			correct: sql<number>`sum(case when ${review.rating} > ${REVIEW_RATINGS.AGAIN} then 1 else 0 end)`,
-		})
-		.from(review)
-		.innerJoin(card, and(eq(card.id, review.cardId), eq(card.userId, review.userId)))
-		.where(and(...accuracyClauses));
-
-	const totalReviews = Number(accuracyRows[0]?.total ?? 0);
-	const correctReviews = Number(accuracyRows[0]?.correct ?? 0);
+	const totalReviews = Number(accuracyRow?.total ?? 0);
+	const correctReviews = Number(accuracyRow?.correct ?? 0);
 	const accuracy = totalReviews === 0 ? 0 : correctReviews / totalReviews;
 
 	return {
