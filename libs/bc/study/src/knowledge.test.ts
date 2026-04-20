@@ -34,8 +34,8 @@ import {
 	isMastered,
 	isNodeMastered,
 } from './knowledge';
-import { card, cardState, knowledgeNode, repAttempt, scenario } from './schema';
 import { createScenario, submitAttempt } from './scenarios';
+import { card, cardState, knowledgeNode, repAttempt, scenario } from './schema';
 
 describe('computeCardGate', () => {
 	it('not_applicable when no cards are attached', () => {
@@ -203,10 +203,7 @@ afterAll(async () => {
  * without waiting real calendar days for FSRS to promote them.
  */
 async function seedCardStability(cardId: string, stability: number): Promise<void> {
-	await db
-		.update(cardState)
-		.set({ stability })
-		.where(eq(cardState.cardId, cardId));
+	await db.update(cardState).set({ stability }).where(eq(cardState.cardId, cardId));
 }
 
 async function seedAttachedCards(nodeId: string, count: number, masteredCount: number): Promise<string[]> {
