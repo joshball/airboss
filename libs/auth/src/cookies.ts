@@ -99,6 +99,12 @@ export function forwardAuthCookies(
  * 127.0.0.1 / localhost so the cookie isn't silently dropped.
  *
  * Returns a new Response; the body stream is re-used (not consumed).
+ *
+ * Trust note: `host` is derived from `event.url.host` at the call site,
+ * which is OK without a reverse proxy in front of the app. Once a proxy
+ * lands, the caller should prefer the `Forwarded:` / `X-Forwarded-Host`
+ * value (after CSRF validation) so the cookie Domain matches what the
+ * browser actually sent the request to.
  */
 export function rewriteSetCookieDomain(response: Response, host: string | null | undefined, isDev: boolean): Response {
 	const setCookies = response.headers.getSetCookie?.() ?? [];

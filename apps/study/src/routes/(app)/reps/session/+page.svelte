@@ -7,7 +7,8 @@ import {
 	ROUTES,
 } from '@ab/constants';
 import { enhance } from '$app/forms';
-import { invalidateAll } from '$app/navigation';
+import { invalidateAll, replaceState } from '$app/navigation';
+import { page } from '$app/state';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
@@ -44,6 +45,18 @@ let submitError = $state<string | null>(null);
 // See: `phase` transitions run after the browser already dispatched the
 // click, so a `phase`-only guard raced the second click.
 let loading = $state(false);
+
+// Pin the shuffle seed into the URL on first mount so a hard-refresh or
+// SvelteKit `invalidate` rerun reuses the same `sessionId` (and thus the
+// same option order) instead of reshuffling the queue behind the user.
+// `replaceState` keeps the URL out of the browser back-button stack.
+$effect(() => {
+	if (page.url.searchParams.get('s') !== data.sessionId) {
+		const next = new URL(page.url);
+		next.searchParams.set('s', data.sessionId);
+		replaceState(next, page.state);
+	}
+});
 
 const current = $derived(batch[index]);
 const total = $derived(batch.length);

@@ -367,6 +367,26 @@ describe('submitAttempt -- correctness resolution', () => {
 			.orderBy(repAttempt.attemptedAt);
 		expect(attempts.length).toBeGreaterThanOrEqual(2);
 	});
+
+	it('folds a duplicate submit on the same option inside the dedupe window', async () => {
+		// A double-click or back-button replay sends two submits for the same
+		// (user, scenario, chosenOption) back-to-back. Only the first lands;
+		// the second returns the existing row so the rep is counted once.
+		const sc = await createScenario(makeInput());
+		const a1 = await submitAttempt({ scenarioId: sc.id, userId: TEST_USER_ID, chosenOption: 'b' });
+		const a2 = await submitAttempt({ scenarioId: sc.id, userId: TEST_USER_ID, chosenOption: 'b' });
+		expect(a2.id).toBe(a1.id);
+		expect(a2.isCorrect).toBe(a1.isCorrect);
+	});
+
+	it('records a new attempt when the option differs, even within the window', async () => {
+		// A genuine change of mind is not a duplicate -- different chosenOption
+		// means different judgment rep, so the dedupe key misses.
+		const sc = await createScenario(makeInput());
+		const a1 = await submitAttempt({ scenarioId: sc.id, userId: TEST_USER_ID, chosenOption: 'b' });
+		const a2 = await submitAttempt({ scenarioId: sc.id, userId: TEST_USER_ID, chosenOption: 'a' });
+		expect(a2.id).not.toBe(a1.id);
+	});
 });
 
 describe('getRepAccuracy / getRepStats -- aggregation', () => {
@@ -388,10 +408,19 @@ describe('getRepAccuracy / getRepStats -- aggregation', () => {
 			const s1 = await createScenario({ ...makeInput(), userId: freshUser, domain: DOMAINS.EMERGENCY_PROCEDURES });
 			const s2 = await createScenario({ ...makeInput(), userId: freshUser, domain: DOMAINS.WEATHER });
 
-			// s1: 2 correct, 1 incorrect; s2: 1 correct.
-			await submitAttempt({ scenarioId: s1.id, userId: freshUser, chosenOption: 'b' });
+			// s1: 2 correct, 1 incorrect on three distinct option choices
+			// (b correct, a wrong, c wrong -> but only b is correct, so we need
+			// 2 correct). Keep distinct options across consecutive submits so
+			// the submit-side idempotency window (same user + same scenario +
+			// same chosenOption within REP_DEDUPE_WINDOW_MS) never folds a
+			// genuine second attempt. We use a third scenario to keep the
+			// correct-count at 3 without needing wall-clock delays between
+			// identical submits.
+			const s3 = await createScenario({ ...makeInput(), userId: freshUser, domain: DOMAINS.EMERGENCY_PROCEDURES });
+
 			await submitAttempt({ scenarioId: s1.id, userId: freshUser, chosenOption: 'b' });
 			await submitAttempt({ scenarioId: s1.id, userId: freshUser, chosenOption: 'a' });
+			await submitAttempt({ scenarioId: s3.id, userId: freshUser, chosenOption: 'b' });
 			await submitAttempt({ scenarioId: s2.id, userId: freshUser, chosenOption: 'b' });
 
 			const lifetime = await getRepAccuracy(freshUser);

@@ -8,3 +8,4 @@ export {
 	generateScenarioId,
 } from './ids';
 export { createLogger, type Logger } from './logger';
+export { userStartOfDay } from './time';

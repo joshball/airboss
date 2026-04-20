@@ -304,6 +304,12 @@ export const scenario = studySchema.table(
 			sql.raw(`"source_type" IN (${inList(CONTENT_SOURCE_VALUES)})`),
 		),
 		statusCheck: check('scenario_status_check', sql.raw(`"status" IN (${inList(SCENARIO_STATUS_VALUES)})`)),
+		// Shape guard: `options` must be a jsonb array with 2..5 elements.
+		// Option id uniqueness and "exactly one correct" are enforced by
+		// `newScenarioSchema` + the BC's `createScenario` -- not here. The
+		// BC is the only write path; a jsonb-aggregate CHECK for id
+		// uniqueness adds noise without being airtight across future
+		// migrations. If a bypass ever appears, add the CHECK then.
 		optionsShapeCheck: check(
 			'scenario_options_shape_check',
 			sql.raw(

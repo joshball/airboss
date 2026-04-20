@@ -11,7 +11,6 @@
 
 import {
 	CONTENT_SOURCES,
-	type ConfidenceLevel,
 	type ContentSource,
 	DEFAULT_USER_TIMEZONE,
 	type Difficulty,
@@ -19,12 +18,13 @@ import {
 	type PhaseOfFlight,
 	REP_BATCH_SIZE,
 	REP_DASHBOARD_WINDOW_DAYS,
+	REP_DEDUPE_WINDOW_MS,
 	SCENARIO_STATUSES,
 	type ScenarioStatus,
 } from '@ab/constants';
 import { db as defaultDb } from '@ab/db';
-import { generateRepAttemptId, generateScenarioId } from '@ab/utils';
-import { and, count, desc, eq, gte, inArray, type SQL, sql } from 'drizzle-orm';
+import { generateRepAttemptId, generateScenarioId, userStartOfDay } from '@ab/utils';
+import { aliasedTable, and, asc, count, desc, eq, gte, inArray, type SQL, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import { type RepAttemptRow, repAttempt, type ScenarioOption, type ScenarioRow, scenario } from './schema';
 import { newScenarioSchema, submitAttemptSchema } from './validation';
@@ -105,7 +105,12 @@ export interface SubmitAttemptInput {
 	scenarioId: string;
 	userId: string;
 	chosenOption: string;
-	confidence?: ConfidenceLevel | null;
+	/**
+	 * Accepts a raw `number | null` rather than `ConfidenceLevel` so callers
+	 * can pass zod's widened return type without a cast; the BC narrows via
+	 * `submitAttemptSchema` below which refines against CONFIDENCE_LEVEL_VALUES.
+	 */
+	confidence?: number | null;
 	answerMs?: number | null;
 }
 
@@ -136,26 +141,6 @@ export interface RepStats {
 	attemptCount: number;
 	accuracy: number;
 	domainBreakdown: DomainAccuracyStats[];
-}
-
-/**
- * UTC instant representing midnight at the start of the local day in `tz`
- * that contains `d`. For a user in America/Denver, `userStartOfDay(now)`
- * returns the UTC timestamp that reads as 00:00 on that learner's calendar.
- *
- * Approach: format `d` in the target timezone twice -- once as an ISO date
- * (`YYYY-MM-DD`) and once as `YYYY-MM-DD HH:mm:ss`. The difference between
- * the second reading parsed as UTC and the original UTC instant is the
- * timezone offset. Subtracting that offset from local-midnight-parsed-as-UTC
- * yields the true UTC instant of local midnight. Survives DST transitions.
- */
-function userStartOfDay(d: Date, tz: string = DEFAULT_USER_TIMEZONE): Date {
-	const localDate = d.toLocaleDateString('en-CA', { timeZone: tz });
-	const localClock = d.toLocaleString('sv-SE', { timeZone: tz });
-	const localClockAsUtc = new Date(`${localClock.replace(' ', 'T')}Z`);
-	const offsetMs = localClockAsUtc.getTime() - d.getTime();
-	const midnightAsUtc = new Date(`${localDate}T00:00:00Z`);
-	return new Date(midnightAsUtc.getTime() - offsetMs);
 }
 
 /**
@@ -201,6 +186,9 @@ export async function createScenario(input: CreateScenarioInput, db: Db = defaul
 			phaseOfFlight: (parsed.phaseOfFlight ?? null) as PhaseOfFlight | null,
 			sourceType,
 			sourceRef: parsed.sourceRef ?? null,
+			// Defaults to true for personal content, false for non-personal,
+			// matching the cards BC. Non-personal content is either imported
+			// or course-authored and should not be edited downstream.
 			isEditable: parsed.isEditable ?? sourceType === CONTENT_SOURCES.PERSONAL,
 			regReferences: parsed.regReferences ?? [],
 			status: SCENARIO_STATUSES.ACTIVE,
@@ -266,40 +254,56 @@ export async function getScenario(scenarioId: string, userId: string, db: Db = d
  * Deterministic for a given user + scenario set -- the route layer handles
  * per-display shuffling of options.
  */
+/** Alias used for the outer scenario table wherever a correlated subquery
+ * needs an unambiguous reference to `scenario.id`. Using a constant alias
+ * plus `sql.identifier(OUTER_SCENARIO_ALIAS, 'id')` ensures the reference
+ * never binds to a column on the inner subquery's table. No schema name
+ * hardcoded -- the coupling is on the alias constant, not the string. */
+const OUTER_SCENARIO_ALIAS = 'outer_scenario';
+
+/**
+ * `"outer_scenario"."id"` as a drizzle sql fragment. Emits qualified
+ * identifiers that match the alias drizzle adds via `aliasedTable(
+ * scenario, OUTER_SCENARIO_ALIAS)` in the FROM clause, so the correlated
+ * subquery's outer reference is stable across schema renames.
+ */
+const outerScenarioId = sql`${sql.identifier(OUTER_SCENARIO_ALIAS)}.${sql.identifier('id')}`;
+
 export async function getNextScenarios(
 	userId: string,
 	filters: Omit<ScenarioFilters, 'limit' | 'offset'> = {},
 	limit: number = REP_BATCH_SIZE,
 	db: Db = defaultDb,
 ): Promise<ScenarioRow[]> {
-	const clauses: SQL[] = [eq(scenario.userId, userId), eq(scenario.status, SCENARIO_STATUSES.ACTIVE)];
-	if (filters.domain) clauses.push(eq(scenario.domain, filters.domain));
-	if (filters.difficulty) clauses.push(eq(scenario.difficulty, filters.difficulty));
-	if (filters.phaseOfFlight) clauses.push(eq(scenario.phaseOfFlight, filters.phaseOfFlight));
-	if (filters.sourceType) clauses.push(eq(scenario.sourceType, filters.sourceType));
+	// Alias the FROM so the correlated subquery below can reference
+	// `"outer_scenario"."id"` unambiguously -- a bare `"id"` would bind to
+	// rep_attempt.id under Postgres's name-resolution rules. The outer
+	// column reference is emitted via `outerScenarioId` above.
+	const outerScenario = aliasedTable(scenario, OUTER_SCENARIO_ALIAS);
+	const clauses: SQL[] = [eq(outerScenario.userId, userId), eq(outerScenario.status, SCENARIO_STATUSES.ACTIVE)];
+	if (filters.domain) clauses.push(eq(outerScenario.domain, filters.domain));
+	if (filters.difficulty) clauses.push(eq(outerScenario.difficulty, filters.difficulty));
+	if (filters.phaseOfFlight) clauses.push(eq(outerScenario.phaseOfFlight, filters.phaseOfFlight));
+	if (filters.sourceType) clauses.push(eq(outerScenario.sourceType, filters.sourceType));
 
 	// Correlated aggregate is cheaper than a full LATERAL for the expected
 	// data volume (tens of scenarios, not thousands). The per-user index on
 	// rep_attempt keeps the subquery bounded to the caller's attempts.
-	//
-	// Both tables expose `id` and `user_id` columns, so the outer scenario
-	// column reference inside the subquery MUST be fully qualified -- the
-	// drizzle tagged-template serializer emits `${scenario.id}` as a bare
-	// `"id"`, which Postgres then binds to rep_attempt.id. Hand-rolled
-	// sql.raw fragment keeps the outer reference unambiguous.
 	const lastAttempt = sql<Date | null>`(
 		SELECT max(${repAttempt.attemptedAt})
 		FROM ${repAttempt}
-		WHERE ${repAttempt.scenarioId} = ${sql.raw(`"study"."scenario"."id"`)}
+		WHERE ${repAttempt.scenarioId} = ${outerScenarioId}
 		  AND ${repAttempt.userId} = ${userId}
 	)`.as('last_attempted_at');
 
 	const rows = await db
-		.select({ scenario, lastAttemptedAt: lastAttempt })
-		.from(scenario)
+		.select({ scenario: outerScenario, lastAttemptedAt: lastAttempt })
+		.from(outerScenario)
 		.where(and(...clauses))
-		// NULLS FIRST puts unattempted scenarios at the top.
-		.orderBy(sql`last_attempted_at ASC NULLS FIRST`, desc(scenario.createdAt))
+		// NULLS FIRST puts unattempted scenarios at the top. `scenario.id` is
+		// the final tiebreaker so scenarios created in the same millisecond
+		// (seeders, batch imports) appear in a fully deterministic order.
+		.orderBy(sql`last_attempted_at ASC NULLS FIRST`, desc(outerScenario.createdAt), asc(outerScenario.id))
 		.limit(limit);
 
 	return rows.map((r) => r.scenario);
@@ -307,9 +311,14 @@ export async function getNextScenarios(
 
 /**
  * Record a rep attempt. Resolves correctness from the scenario's options
- * (never trusts the client) and writes one row. No idempotency window like
- * reviews have -- re-attempts of the same scenario are spec-allowed and
- * each is a separate row.
+ * (never trusts the client) and writes one row.
+ *
+ * Idempotency: a duplicate submit for the same (user, scenario, chosenOption)
+ * inside `REP_DEDUPE_WINDOW_MS` returns the existing row instead of writing
+ * a second attempt -- a double-click or back-button replay should fold into
+ * one rep. A deliberate re-attempt after the window elapses (or with a
+ * different option) still records a new row; repeated reps over time are
+ * spec-allowed and part of the judgment-practice model.
  */
 export async function submitAttempt(input: SubmitAttemptInput, db: Db = defaultDb): Promise<RepAttemptRow> {
 	const parsed = submitAttemptSchema.parse({
@@ -334,6 +343,28 @@ export async function submitAttempt(input: SubmitAttemptInput, db: Db = defaultD
 	if (!chosen) throw new InvalidOptionError(parsed.scenarioId, parsed.chosenOption);
 
 	const now = new Date();
+	const windowStart = new Date(now.getTime() - REP_DEDUPE_WINDOW_MS);
+
+	// Dedupe before insert: an identical submit inside the window folds into
+	// the existing row. The scenario -> rep_attempt index (scenarioId,
+	// attemptedAt) keeps this lookup bounded. No row lock: a race would at
+	// worst write a second row within the window, which is the same outcome
+	// as the pre-idempotency behavior, so cost/benefit doesn't justify a tx.
+	const [recent] = await db
+		.select()
+		.from(repAttempt)
+		.where(
+			and(
+				eq(repAttempt.scenarioId, parsed.scenarioId),
+				eq(repAttempt.userId, input.userId),
+				eq(repAttempt.chosenOption, parsed.chosenOption),
+				gte(repAttempt.attemptedAt, windowStart),
+			),
+		)
+		.orderBy(desc(repAttempt.attemptedAt))
+		.limit(1);
+	if (recent) return recent;
+
 	const [inserted] = await db
 		.insert(repAttempt)
 		.values({
@@ -375,7 +406,8 @@ export async function getRepAccuracy(userId: string, domain?: Domain, db: Db = d
 	const [row] = await db
 		.select({
 			attempted: count(),
-			correct: sql<number>`sum(case when ${repAttempt.isCorrect} then 1 else 0 end)`,
+			// Postgres `FILTER (WHERE ...)` is faster than a portable sum(case when ...).
+			correct: sql<number>`count(*) filter (where ${repAttempt.isCorrect})`,
 		})
 		.from(repAttempt)
 		.innerJoin(scenario, and(eq(scenario.id, repAttempt.scenarioId), eq(scenario.userId, repAttempt.userId)))
@@ -401,7 +433,8 @@ export async function getDomainAccuracy(
 		.select({
 			domain: scenario.domain,
 			attempted: count(),
-			correct: sql<number>`sum(case when ${repAttempt.isCorrect} then 1 else 0 end)`,
+			// Postgres `FILTER (WHERE ...)` is faster than a portable sum(case when ...).
+			correct: sql<number>`count(*) filter (where ${repAttempt.isCorrect})`,
 		})
 		.from(repAttempt)
 		.innerJoin(scenario, and(eq(scenario.id, repAttempt.scenarioId), eq(scenario.userId, repAttempt.userId)))
@@ -434,7 +467,8 @@ export async function getRepStats(
 	const [totalsRow] = await db
 		.select({
 			attempted: count(),
-			correct: sql<number>`sum(case when ${repAttempt.isCorrect} then 1 else 0 end)`,
+			// Postgres `FILTER (WHERE ...)` is faster than a portable sum(case when ...).
+			correct: sql<number>`count(*) filter (where ${repAttempt.isCorrect})`,
 		})
 		.from(repAttempt)
 		.where(and(...clauses));
@@ -452,14 +486,33 @@ export async function getRepStats(
 /**
  * Dashboard view: scenario counts, attempts today, accuracy over the last
  * 30 days (per spec), and per-domain breakdown over the same window.
+ *
+ * Note on windows: `windowStart` (30-day rolling) feeds `accuracyLast30d`
+ * and `domainBreakdown`. `todayStart` (learner's local midnight, computed
+ * via `userStartOfDay`) feeds `attemptedToday`. These are intentionally
+ * different scopes -- the spec separates "how much work did I do today?"
+ * from "how accurate have I been over the last month?".
+ *
+ * Note on archived scenarios: `unattemptedCount` is "active scenarios with
+ * zero attempts in history". If a learner attempts a scenario and later
+ * archives it, the archived row disappears from `scenarioCount` but does
+ * not affect `unattemptedCount` (the archived row was never in the
+ * subquery). Accepted for MVP; future UX can surface archived-but-
+ * unattempted rows as a separate count.
  */
 export async function getRepDashboard(
 	userId: string,
 	db: Db = defaultDb,
 	now: Date = new Date(),
+	tz: string = DEFAULT_USER_TIMEZONE,
 ): Promise<RepDashboardStats> {
 	const windowStart = new Date(now.getTime() - REP_DASHBOARD_WINDOW_DAYS * 24 * 60 * 60 * 1000);
-	const todayStart = userStartOfDay(now);
+	const todayStart = userStartOfDay(now, tz);
+
+	// Alias the scenario table used in the NOT EXISTS subquery so the
+	// outer reference is `"outer_scenario"."id"` (never ambiguous with
+	// rep_attempt.id) without touching the schema name as a string.
+	const outerScenario = aliasedTable(scenario, OUTER_SCENARIO_ALIAS);
 
 	// Fan out: every query below is independent. Parallel round-trips keep
 	// the dashboard responsive even as the scenario library grows.
@@ -477,17 +530,14 @@ export async function getRepDashboard(
 			.orderBy(scenario.domain),
 		db
 			.select({ c: count() })
-			.from(scenario)
+			.from(outerScenario)
 			.where(
 				and(
-					eq(scenario.userId, userId),
-					eq(scenario.status, SCENARIO_STATUSES.ACTIVE),
-					// Same "bare id binds to rep_attempt.id" hazard as the session
-					// ordering query -- force the outer reference to be fully
-					// qualified so the correlated NOT EXISTS actually correlates.
+					eq(outerScenario.userId, userId),
+					eq(outerScenario.status, SCENARIO_STATUSES.ACTIVE),
 					sql`NOT EXISTS (
 						SELECT 1 FROM ${repAttempt}
-						WHERE ${repAttempt.scenarioId} = ${sql.raw(`"study"."scenario"."id"`)}
+						WHERE ${repAttempt.scenarioId} = ${outerScenarioId}
 						  AND ${repAttempt.userId} = ${userId}
 					)`,
 				),

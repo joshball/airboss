@@ -49,8 +49,18 @@ export const load: PageServerLoad = async (event) => {
 	const hasMore = scenarios.length > BROWSE_PAGE_SIZE;
 	const visible = hasMore ? scenarios.slice(0, BROWSE_PAGE_SIZE) : scenarios;
 
+	// Project scenarios for the browse card. The full `options` array (with
+	// `isCorrect`, `outcome`, `whyNot`) and the `teachingPoint` body never
+	// need to reach the client here -- a learner peeking at the page data
+	// payload could otherwise see the answer before attempting. Only the
+	// option count is surfaced on the card.
+	const visibleForClient = visible.map((s) => {
+		const { options, teachingPoint: _teachingPoint, ...rest } = s;
+		return { ...rest, optionsCount: options.length };
+	});
+
 	return {
-		scenarios: visible,
+		scenarios: visibleForClient,
 		filters: { domain, difficulty, phaseOfFlight, sourceType, status },
 		page: pageNum,
 		hasMore,

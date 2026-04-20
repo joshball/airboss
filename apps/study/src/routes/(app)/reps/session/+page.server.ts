@@ -7,7 +7,7 @@ import {
 	submitAttempt,
 	submitAttemptSchema,
 } from '@ab/bc-study';
-import { CONFIDENCE_SAMPLE_RATE, type ConfidenceLevel, REP_BATCH_SIZE } from '@ab/constants';
+import { CONFIDENCE_SAMPLE_RATE, REP_BATCH_SIZE } from '@ab/constants';
 import { createLogger } from '@ab/utils';
 import { error, fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
@@ -61,11 +61,25 @@ function shuffleOptions<T extends { id: string }>(options: T[], seed: string): T
 	return arr;
 }
 
+/**
+ * Validate a client-supplied session id. The id only seeds the shuffle
+ * hash; it doesn't grant access to anything, but we still bound it to a
+ * short alphanumeric token so a malformed URL can't poison downstream
+ * logging or the seed function.
+ */
+const SESSION_ID_PATTERN = /^[a-zA-Z0-9_-]{1,64}$/;
+
 export const load: PageServerLoad = async (event) => {
 	const user = requireAuth(event);
 
 	const now = new Date();
-	const sessionId = now.getTime().toString();
+	// Persisting the seed in the URL means a mid-session hard-refresh (or
+	// a SvelteKit load rerun from invalidation) reuses the same shuffle
+	// order instead of reshuffling the options behind the user. The page
+	// replaces the URL client-side on first mount so `now.getTime()` is
+	// only the fallback for a cold load without `?s=`.
+	const urlSession = event.url.searchParams.get('s');
+	const sessionId = urlSession && SESSION_ID_PATTERN.test(urlSession) ? urlSession : now.getTime().toString();
 	const queue = await getNextScenarios(user.id, {}, REP_BATCH_SIZE);
 
 	const batch = queue.map((sc) => ({
@@ -117,7 +131,8 @@ export const actions: Actions = {
 				scenarioId,
 				userId: user.id,
 				chosenOption: parsed.data.chosenOption,
-				confidence: parsed.data.confidence as ConfidenceLevel | null | undefined,
+				// BC narrows via submitAttemptSchema; no cast needed.
+				confidence: parsed.data.confidence,
 				answerMs: parsed.data.answerMs,
 			});
 			return {
