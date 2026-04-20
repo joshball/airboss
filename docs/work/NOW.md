@@ -40,7 +40,7 @@ Original roadmap from [MULTI_PRODUCT_ARCHITECTURE.md](../platform/MULTI_PRODUCT_
 | 4d   | KG CLI scaffolder + build script                             | Bundled with 4c                                            |
 | 4e   | KG mastery BC (`isNodeMastered`, `getNodeMastery`)           | Not on main; Study Plan agent implements as step 1         |
 | 5    | Study Plan + Session Engine                                  | **Next -- parallel queue** (includes 4e as prereq)         |
-| 6    | Learning Dashboard                                           | **Next -- parallel queue** (v1 ships gated panels stubbed) |
+| 6    | Learning Dashboard                                           | In flight (PR open; awaiting siblings for gated panels)    |
 | 7    | Scale graph to ~500 nodes                                    | Gradual; happens alongside other work as Joshua studies    |
 | --   | FIRC migration as `apps/firc/`                               | Deferred until study MVP proven                            |
 
