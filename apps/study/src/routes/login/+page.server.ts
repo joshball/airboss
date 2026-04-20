@@ -54,7 +54,7 @@ export const actions: Actions = {
 				});
 			}
 
-			forwardAuthCookies(authResponse, cookies);
+			forwardAuthCookies(authResponse, cookies, url.host);
 		} catch (err) {
 			// Never leak internal error text to the client -- log server-side instead.
 			log.error(

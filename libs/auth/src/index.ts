@@ -6,7 +6,7 @@ export { type AuthSession, type AuthUser, requireAuth, requireRole } from './aut
 // Client-side auth (Svelte)
 export { authClient } from './client';
 // Cookie forwarding
-export { forwardAuthCookies } from './cookies';
+export { forwardAuthCookies, resolveCookieDomain, rewriteSetCookieDomain } from './cookies';
 // Email transport and templates
 export { type EmailMessage, magicLinkEmail, resetPasswordEmail, sendEmail, verificationEmail } from './email';
 // Logout

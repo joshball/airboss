@@ -3,6 +3,7 @@ import { createErrorHandler, createLogger } from '@ab/utils';
 import type { Handle, HandleServerError } from '@sveltejs/kit';
 import { building } from '$app/environment';
 import { auth } from '$lib/server/auth';
+import { rewriteSetCookieDomain } from '$lib/server/cookies';
 
 const log = createLogger('study');
 const errorHandler = createErrorHandler({ logger: log });
@@ -39,7 +40,11 @@ export const handle: Handle = async ({ event, resolve }) => {
 		// better-auth already rejects banned users at session-creation time and
 		// sign-out must remain callable for stale/banned cookie states.
 		try {
-			response = await auth.handler(event.request);
+			const authResponse = await auth.handler(event.request);
+			// better-auth bakes the configured cross-subdomain Domain into every
+			// Set-Cookie. Rewrite per-request so cookies land on 127.0.0.1/localhost
+			// (host-only) as well as *.airboss.test (cross-subdomain).
+			response = rewriteSetCookieDomain(authResponse, event.url.host);
 		} catch (err) {
 			log.error(
 				'auth handler failed',
