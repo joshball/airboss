@@ -6,14 +6,16 @@ import { page } from '$app/state';
 let { children }: { children: Snippet } = $props();
 
 const memoryActive = $derived(page.url.pathname.startsWith(ROUTES.MEMORY));
+const repsActive = $derived(page.url.pathname.startsWith(ROUTES.REPS));
 </script>
 
 <a class="skip" href="#main">Skip to main content</a>
 
 <nav aria-label="Primary">
 	<a href={ROUTES.MEMORY} aria-current={memoryActive ? 'page' : undefined}>Memory</a>
-	<!-- Reps and Calibration land in subsequent work packages; leaving them
-	     out of the nav until those routes exist. -->
+	<a href={ROUTES.REPS} aria-current={repsActive ? 'page' : undefined}>Reps</a>
+	<!-- Calibration lands in a subsequent work package; leaving it out of
+	     the nav until that route exists. -->
 </nav>
 
 <main id="main" tabindex="-1">

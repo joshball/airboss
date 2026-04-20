@@ -12,14 +12,14 @@ export const load: PageServerLoad = async () => {
 };
 
 export const actions: Actions = {
-	default: async ({ request, cookies, locals }) => {
+	default: async ({ request, cookies, locals, url }) => {
 		try {
 			const authRequest = new Request(`${AUTH_INTERNAL_ORIGIN}${ROUTES.API_AUTH}${BETTER_AUTH_ENDPOINTS.SIGN_OUT}`, {
 				method: 'POST',
 				headers: { cookie: request.headers.get('cookie') ?? '' },
 			});
 			const authResponse = await auth.handler(authRequest);
-			forwardAuthCookies(authResponse, cookies);
+			forwardAuthCookies(authResponse, cookies, url.host);
 		} catch (err) {
 			log.error('sign-out handler failed', { requestId: locals.requestId }, err instanceof Error ? err : undefined);
 		}
@@ -27,7 +27,7 @@ export const actions: Actions = {
 		// Forward any Set-Cookie headers from better-auth's sign-out, then explicitly
 		// clear known cookie names as a backstop (better-auth sometimes omits the
 		// Set-Cookie on sign-out). Idempotent -- safe to run both.
-		clearSessionCookies(cookies);
+		clearSessionCookies(cookies, url.host);
 
 		redirect(303, ROUTES.LOGIN);
 	},

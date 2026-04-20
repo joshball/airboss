@@ -14,11 +14,47 @@ export {
 } from './cards';
 export type { SubmitReviewInput } from './reviews';
 export { CardNotReviewableError, submitReview } from './reviews';
+export type {
+	CreateScenarioInput,
+	DomainAccuracyStats,
+	RepAccuracyStats,
+	RepDashboardStats,
+	RepStats,
+	ScenarioFilters,
+	SubmitAttemptInput,
+} from './scenarios';
+export {
+	createScenario,
+	getDomainAccuracy,
+	getNextScenarios,
+	getRepAccuracy,
+	getRepDashboard,
+	getRepStats,
+	getScenario,
+	getScenarios,
+	InvalidOptionError,
+	ScenarioNotAttemptableError,
+	ScenarioNotFoundError,
+	setScenarioStatus,
+	submitAttempt,
+} from './scenarios';
 // Drizzle table objects + row types. Table objects are exported for scripts
 // and seed code; route handlers should prefer BC functions and never issue
 // raw db.insert/select on these tables.
-export type { CardRow, CardStateRow, NewCardRow, NewCardStateRow, NewReviewRow, ReviewRow } from './schema';
-export { card, cardState, review, studySchema } from './schema';
+export type {
+	CardRow,
+	CardStateRow,
+	NewCardRow,
+	NewCardStateRow,
+	NewRepAttemptRow,
+	NewReviewRow,
+	NewScenarioRow,
+	RepAttemptRow,
+	ReviewRow,
+	ScenarioOption,
+	ScenarioRow,
+} from './schema';
+export { card, cardState, repAttempt, review, scenario, studySchema } from './schema';
 export type { CardSchedulerState, ScheduleResult } from './srs';
 export { fsrsDefaultParams, fsrsInitialState, fsrsSchedule } from './srs';
 export type { DashboardStats, DomainStats, MasteryStats, RecentReviewRow, ReviewStats } from './stats';
@@ -36,7 +72,12 @@ export {
 	cardTextSchema,
 	confidenceSchema,
 	newCardSchema,
+	newScenarioSchema,
+	regReferencesSchema,
 	reviewRatingSchema,
+	scenarioOptionSchema,
+	scenarioOptionsSchema,
+	submitAttemptSchema,
 	submitReviewSchema,
 	updateCardSchema,
 } from './validation';

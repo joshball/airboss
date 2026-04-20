@@ -6,6 +6,15 @@
  * graph's domain taxonomy rather than an authoritative constant.
  */
 
+/**
+ * Platform default for "what timezone is the user in?" Used for day-boundary
+ * aggregations (streaks, attemptedToday). User-zero is in America/Denver;
+ * until per-user tz is plumbed through auth this is the source of truth for
+ * calendar-aware reads. Matches the value the study-plan + session-engine
+ * spec committed to.
+ */
+export const DEFAULT_USER_TIMEZONE = 'America/Denver';
+
 export const DOMAINS = {
 	REGULATIONS: 'regulations',
 	WEATHER: 'weather',
@@ -47,6 +56,78 @@ export const DOMAIN_LABELS: Record<Domain, string> = {
 	[DOMAINS.EMERGENCY_PROCEDURES]: 'Emergency Procedures',
 	[DOMAINS.FAA_PRACTICAL_STANDARDS]: 'FAA Practical Standards',
 };
+
+/**
+ * Difficulty levels for decision-rep scenarios. Authoring signal -- not
+ * enforced by scheduling logic today, but used for filtering and surfaced in
+ * the browse/new forms.
+ */
+export const DIFFICULTIES = {
+	BEGINNER: 'beginner',
+	INTERMEDIATE: 'intermediate',
+	ADVANCED: 'advanced',
+} as const;
+
+export type Difficulty = (typeof DIFFICULTIES)[keyof typeof DIFFICULTIES];
+
+export const DIFFICULTY_VALUES = Object.values(DIFFICULTIES);
+
+export const DIFFICULTY_LABELS: Record<Difficulty, string> = {
+	[DIFFICULTIES.BEGINNER]: 'Beginner',
+	[DIFFICULTIES.INTERMEDIATE]: 'Intermediate',
+	[DIFFICULTIES.ADVANCED]: 'Advanced',
+};
+
+/**
+ * Phase-of-flight taxonomy for scenarios. Optional on a scenario; used for
+ * filtering in the browse page and grouping for future review patterns.
+ */
+export const PHASES_OF_FLIGHT = {
+	PREFLIGHT: 'preflight',
+	TAKEOFF: 'takeoff',
+	CLIMB: 'climb',
+	CRUISE: 'cruise',
+	DESCENT: 'descent',
+	APPROACH: 'approach',
+	LANDING: 'landing',
+	GROUND: 'ground',
+} as const;
+
+export type PhaseOfFlight = (typeof PHASES_OF_FLIGHT)[keyof typeof PHASES_OF_FLIGHT];
+
+export const PHASE_OF_FLIGHT_VALUES = Object.values(PHASES_OF_FLIGHT);
+
+export const PHASE_OF_FLIGHT_LABELS: Record<PhaseOfFlight, string> = {
+	[PHASES_OF_FLIGHT.PREFLIGHT]: 'Preflight',
+	[PHASES_OF_FLIGHT.TAKEOFF]: 'Takeoff',
+	[PHASES_OF_FLIGHT.CLIMB]: 'Climb',
+	[PHASES_OF_FLIGHT.CRUISE]: 'Cruise',
+	[PHASES_OF_FLIGHT.DESCENT]: 'Descent',
+	[PHASES_OF_FLIGHT.APPROACH]: 'Approach',
+	[PHASES_OF_FLIGHT.LANDING]: 'Landing',
+	[PHASES_OF_FLIGHT.GROUND]: 'Ground',
+};
+
+/** Lifecycle status for decision-rep scenarios. Parallels card status. */
+export const SCENARIO_STATUSES = {
+	ACTIVE: 'active',
+	SUSPENDED: 'suspended',
+	ARCHIVED: 'archived',
+} as const;
+
+export type ScenarioStatus = (typeof SCENARIO_STATUSES)[keyof typeof SCENARIO_STATUSES];
+
+export const SCENARIO_STATUS_VALUES = Object.values(SCENARIO_STATUSES);
+
+/** Allowed number of options per scenario (spec: 2-5). */
+export const SCENARIO_OPTIONS_MIN = 2;
+export const SCENARIO_OPTIONS_MAX = 5;
+
+/** Default rep-session batch size. */
+export const REP_BATCH_SIZE = 10;
+
+/** Number of days back for rep dashboard accuracy window. */
+export const REP_DASHBOARD_WINDOW_DAYS = 30;
 
 export const CARD_TYPES = {
 	BASIC: 'basic',
