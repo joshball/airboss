@@ -1,237 +1,230 @@
 <script lang="ts">
-	interface Props {
-		/** Runway heading in magnetic degrees (0-359). Default 010. */
-		runwayHeading?: number;
-		/** Initial wind direction in magnetic degrees (0-359). Default 030. */
-		initialWindDirection?: number;
-		/** Initial wind speed in knots. Default 15. */
-		initialWindSpeed?: number;
-		/** Optional max demonstrated crosswind threshold in knots. */
-		maxDemoCrosswind?: number;
+interface Props {
+	/** Runway heading in magnetic degrees (0-359). Default 010. */
+	runwayHeading?: number;
+	/** Initial wind direction in magnetic degrees (0-359). Default 030. */
+	initialWindDirection?: number;
+	/** Initial wind speed in knots. Default 15. */
+	initialWindSpeed?: number;
+	/** Optional max demonstrated crosswind threshold in knots. */
+	maxDemoCrosswind?: number;
+}
+
+const { runwayHeading = 10, initialWindDirection = 30, initialWindSpeed = 15, maxDemoCrosswind }: Props = $props();
+
+// === Local state ===
+let windDirection: number = $state(initialWindDirection);
+let windSpeed: number = $state(initialWindSpeed);
+let showMaxDemoThreshold: boolean = $state(maxDemoCrosswind !== undefined);
+let isDraggingWind: boolean = $state(false);
+
+// === Geometry ===
+// Canvas is 400x400 with origin at center. Compass 0 (North) is up, angles increase clockwise.
+const SIZE = 400;
+const CENTER = SIZE / 2;
+const COMPASS_RADIUS = 160;
+const RUNWAY_LENGTH = 220;
+const RUNWAY_WIDTH = 32;
+const WIND_ARROW_LENGTH = 130;
+
+// Convert compass heading (0 = North, clockwise) to SVG radians (0 = East, counter-clockwise).
+// Compass N (0 deg) should point up, which in SVG is -y. SVG 0 rad is +x (East).
+// So compass angle a -> SVG angle = -90 + a (in degrees), converted to radians.
+function compassToRadians(compassDeg: number): number {
+	return ((compassDeg - 90) * Math.PI) / 180;
+}
+
+function degToRad(deg: number): number {
+	return (deg * Math.PI) / 180;
+}
+
+// === Derived values ===
+
+/** Signed angle from runway heading to wind direction, normalized to (-180, 180]. */
+const signedAngle: number = $derived(normalizeSigned(windDirection - runwayHeading));
+
+/** Absolute angle between wind and runway, 0 to 180. */
+const absAngle: number = $derived(Math.abs(signedAngle));
+
+/** Crosswind component (always positive, kt). */
+const crosswindComponent: number = $derived(Math.abs(windSpeed * Math.sin(degToRad(signedAngle))));
+
+/** Headwind component. Positive = headwind, negative = tailwind (kt). */
+const headwindComponent: number = $derived(windSpeed * Math.cos(degToRad(signedAngle)));
+
+/** True if crosswind exceeds the (active) max demo threshold. */
+const overThreshold: boolean = $derived(
+	showMaxDemoThreshold && maxDemoCrosswind !== undefined && crosswindComponent > maxDemoCrosswind,
+);
+
+/** Is the wind blowing toward the back (tailwind)? */
+const isTailwind: boolean = $derived(headwindComponent < 0);
+
+function normalizeSigned(deg: number): number {
+	let d = (((deg % 360) + 540) % 360) - 180;
+	// Edge: -180 -> 180 for stability on the display.
+	if (d === -180) d = 180;
+	return d;
+}
+
+// === Wind vector (tail of arrow sits outside circle, tip points toward center) ===
+// "Wind FROM 030" means wind is coming from 030, blowing toward 210. Arrow points in the
+// direction of travel (210 side).
+const windTail: { x: number; y: number } = $derived.by(() => {
+	const r = compassToRadians(windDirection);
+	return {
+		x: CENTER + Math.cos(r) * WIND_ARROW_LENGTH,
+		y: CENTER + Math.sin(r) * WIND_ARROW_LENGTH,
+	};
+});
+
+const windTip: { x: number; y: number } = $derived.by(() => {
+	const r = compassToRadians(windDirection + 180);
+	return {
+		x: CENTER + Math.cos(r) * 30,
+		y: CENTER + Math.sin(r) * 30,
+	};
+});
+
+// === Decomposition vectors (drawn from center) ===
+// Headwind/tailwind along runway, crosswind perpendicular to runway.
+// Scale the kt values to pixel lengths for visualization.
+const DECOMP_SCALE = 4; // pixels per knot
+const MAX_DECOMP_PX = 130;
+
+function clampDecomp(kt: number): number {
+	return Math.max(-MAX_DECOMP_PX, Math.min(MAX_DECOMP_PX, kt * DECOMP_SCALE));
+}
+
+/** Crosswind vector from center, perpendicular to runway, pointing in the direction the wind pushes the airplane. */
+const crosswindVectorEnd: { x: number; y: number } = $derived.by(() => {
+	// Wind FROM positive-signed angle (wind to the RIGHT of runway heading, e.g., runway 010, wind 030)
+	// pushes the airplane to the LEFT of the pilot. So the crosswind-push vector points runway-heading - 90.
+	// If signedAngle is negative (wind from left), push is to the right: runway-heading + 90.
+	const side = signedAngle >= 0 ? -1 : 1;
+	const dir = runwayHeading + 90 * side;
+	const r = compassToRadians(dir);
+	const len = clampDecomp(crosswindComponent);
+	return {
+		x: CENTER + Math.cos(r) * len,
+		y: CENTER + Math.sin(r) * len,
+	};
+});
+
+/** Headwind vector from center, along runway axis. Positive -> along runway heading (toward approach direction). */
+const headwindVectorEnd: { x: number; y: number } = $derived.by(() => {
+	// The airplane flies into the wind -- headwind vector points opposite the wind direction, i.e., along runwayHeading when there's a headwind.
+	// Visually we show "component of wind along the runway": if headwindComponent >= 0 it points from center toward runwayStart (down-runway), which is where the wind is going.
+	const along = headwindComponent;
+	const dir = along >= 0 ? runwayHeading + 180 : runwayHeading;
+	const r = compassToRadians(dir);
+	const len = clampDecomp(Math.abs(along));
+	return {
+		x: CENTER + Math.cos(r) * len,
+		y: CENTER + Math.sin(r) * len,
+	};
+});
+
+// === Interaction: drag wind arrow around the compass ===
+
+function getSvgPoint(evt: PointerEvent, svg: SVGSVGElement): { x: number; y: number } {
+	const rect = svg.getBoundingClientRect();
+	const scaleX = SIZE / rect.width;
+	const scaleY = SIZE / rect.height;
+	return {
+		x: (evt.clientX - rect.left) * scaleX,
+		y: (evt.clientY - rect.top) * scaleY,
+	};
+}
+
+function pointToCompass(p: { x: number; y: number }): number {
+	const dx = p.x - CENTER;
+	const dy = p.y - CENTER;
+	// SVG 0 rad is +x (East). Compass 0 is North (up, -y). Compass = atan2(y, x) in SVG, +90.
+	const rad = Math.atan2(dy, dx);
+	let deg = (rad * 180) / Math.PI + 90;
+	deg = ((deg % 360) + 360) % 360;
+	return Math.round(deg);
+}
+
+function onPointerDown(evt: PointerEvent): void {
+	const svg = evt.currentTarget as SVGSVGElement;
+	svg.setPointerCapture(evt.pointerId);
+	isDraggingWind = true;
+	windDirection = pointToCompass(getSvgPoint(evt, svg));
+}
+
+function onPointerMove(evt: PointerEvent): void {
+	if (!isDraggingWind) return;
+	const svg = evt.currentTarget as SVGSVGElement;
+	windDirection = pointToCompass(getSvgPoint(evt, svg));
+}
+
+function onPointerUp(evt: PointerEvent): void {
+	const svg = evt.currentTarget as SVGSVGElement;
+	if (svg.hasPointerCapture(evt.pointerId)) {
+		svg.releasePointerCapture(evt.pointerId);
 	}
+	isDraggingWind = false;
+}
 
-	const {
-		runwayHeading = 10,
-		initialWindDirection = 30,
-		initialWindSpeed = 15,
-		maxDemoCrosswind,
-	}: Props = $props();
-
-	// === Local state ===
-	let windDirection: number = $state(initialWindDirection);
-	let windSpeed: number = $state(initialWindSpeed);
-	let showMaxDemoThreshold: boolean = $state(maxDemoCrosswind !== undefined);
-	let isDraggingWind: boolean = $state(false);
-
-	// === Geometry ===
-	// Canvas is 400x400 with origin at center. Compass 0 (North) is up, angles increase clockwise.
-	const SIZE = 400;
-	const CENTER = SIZE / 2;
-	const COMPASS_RADIUS = 160;
-	const RUNWAY_LENGTH = 220;
-	const RUNWAY_WIDTH = 32;
-	const WIND_ARROW_LENGTH = 130;
-
-	// Convert compass heading (0 = North, clockwise) to SVG radians (0 = East, counter-clockwise).
-	// Compass N (0 deg) should point up, which in SVG is -y. SVG 0 rad is +x (East).
-	// So compass angle a -> SVG angle = -90 + a (in degrees), converted to radians.
-	function compassToRadians(compassDeg: number): number {
-		return ((compassDeg - 90) * Math.PI) / 180;
+function onKeyDown(evt: KeyboardEvent): void {
+	// Keyboard control: arrow keys rotate wind by 5 degrees, shift for 1 degree.
+	const step = evt.shiftKey ? 1 : 5;
+	if (evt.key === 'ArrowLeft' || evt.key === 'ArrowDown') {
+		evt.preventDefault();
+		windDirection = (((windDirection - step) % 360) + 360) % 360;
+	} else if (evt.key === 'ArrowRight' || evt.key === 'ArrowUp') {
+		evt.preventDefault();
+		windDirection = (windDirection + step) % 360;
 	}
+}
 
-	function degToRad(deg: number): number {
-		return (deg * Math.PI) / 180;
-	}
+function formatHeading(deg: number): string {
+	const normalized = ((Math.round(deg) % 360) + 360) % 360;
+	return normalized.toString().padStart(3, '0');
+}
 
-	// === Derived values ===
+function formatSigned(val: number, digits = 0): string {
+	const rounded = Number(val.toFixed(digits));
+	const sign = rounded > 0 ? '+' : rounded < 0 ? '' : ' ';
+	return `${sign}${rounded.toFixed(digits)}`;
+}
 
-	/** Signed angle from runway heading to wind direction, normalized to (-180, 180]. */
-	const signedAngle: number = $derived(normalizeSigned(windDirection - runwayHeading));
+// Compass cardinal tick labels
+const cardinalLabels: { label: string; angle: number }[] = [
+	{ label: 'N', angle: 0 },
+	{ label: 'E', angle: 90 },
+	{ label: 'S', angle: 180 },
+	{ label: 'W', angle: 270 },
+];
 
-	/** Absolute angle between wind and runway, 0 to 180. */
-	const absAngle: number = $derived(Math.abs(signedAngle));
+function cardinalPos(angleDeg: number): { x: number; y: number } {
+	const r = compassToRadians(angleDeg);
+	return {
+		x: CENTER + Math.cos(r) * (COMPASS_RADIUS + 18),
+		y: CENTER + Math.sin(r) * (COMPASS_RADIUS + 18),
+	};
+}
 
-	/** Crosswind component (always positive, kt). */
-	const crosswindComponent: number = $derived(Math.abs(windSpeed * Math.sin(degToRad(signedAngle))));
+// Minor tick marks every 30 degrees on the compass
+const compassTicks: number[] = [0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330];
 
-	/** Headwind component. Positive = headwind, negative = tailwind (kt). */
-	const headwindComponent: number = $derived(windSpeed * Math.cos(degToRad(signedAngle)));
+function tickStart(angleDeg: number): { x: number; y: number } {
+	const r = compassToRadians(angleDeg);
+	return {
+		x: CENTER + Math.cos(r) * (COMPASS_RADIUS - 8),
+		y: CENTER + Math.sin(r) * (COMPASS_RADIUS - 8),
+	};
+}
 
-	/** True if crosswind exceeds the (active) max demo threshold. */
-	const overThreshold: boolean = $derived(
-		showMaxDemoThreshold && maxDemoCrosswind !== undefined && crosswindComponent > maxDemoCrosswind,
-	);
-
-	/** Is the wind blowing toward the back (tailwind)? */
-	const isTailwind: boolean = $derived(headwindComponent < 0);
-
-	function normalizeSigned(deg: number): number {
-		let d = ((deg % 360) + 540) % 360 - 180;
-		// Edge: -180 -> 180 for stability on the display.
-		if (d === -180) d = 180;
-		return d;
-	}
-
-	// === Wind vector (tail of arrow sits outside circle, tip points toward center) ===
-	// "Wind FROM 030" means wind is coming from 030, blowing toward 210. Arrow points in the
-	// direction of travel (210 side).
-	const windTail: { x: number; y: number } = $derived.by(() => {
-		const r = compassToRadians(windDirection);
-		return {
-			x: CENTER + Math.cos(r) * WIND_ARROW_LENGTH,
-			y: CENTER + Math.sin(r) * WIND_ARROW_LENGTH,
-		};
-	});
-
-	const windTip: { x: number; y: number } = $derived.by(() => {
-		const r = compassToRadians(windDirection + 180);
-		return {
-			x: CENTER + Math.cos(r) * 30,
-			y: CENTER + Math.sin(r) * 30,
-		};
-	});
-
-	// === Decomposition vectors (drawn from center) ===
-	// Headwind/tailwind along runway, crosswind perpendicular to runway.
-	// Scale the kt values to pixel lengths for visualization.
-	const DECOMP_SCALE = 4; // pixels per knot
-	const MAX_DECOMP_PX = 130;
-
-	function clampDecomp(kt: number): number {
-		return Math.max(-MAX_DECOMP_PX, Math.min(MAX_DECOMP_PX, kt * DECOMP_SCALE));
-	}
-
-	/** Crosswind vector from center, perpendicular to runway, pointing in the direction the wind pushes the airplane. */
-	const crosswindVectorEnd: { x: number; y: number } = $derived.by(() => {
-		// Wind FROM positive-signed angle (wind to the RIGHT of runway heading, e.g., runway 010, wind 030)
-		// pushes the airplane to the LEFT of the pilot. So the crosswind-push vector points runway-heading - 90.
-		// If signedAngle is negative (wind from left), push is to the right: runway-heading + 90.
-		const side = signedAngle >= 0 ? -1 : 1;
-		const dir = runwayHeading + 90 * side;
-		const r = compassToRadians(dir);
-		const len = clampDecomp(crosswindComponent);
-		return {
-			x: CENTER + Math.cos(r) * len,
-			y: CENTER + Math.sin(r) * len,
-		};
-	});
-
-	/** Headwind vector from center, along runway axis. Positive -> along runway heading (toward approach direction). */
-	const headwindVectorEnd: { x: number; y: number } = $derived.by(() => {
-		// The airplane flies into the wind -- headwind vector points opposite the wind direction, i.e., along runwayHeading when there's a headwind.
-		// Visually we show "component of wind along the runway": if headwindComponent >= 0 it points from center toward runwayStart (down-runway), which is where the wind is going.
-		const along = headwindComponent;
-		const dir = along >= 0 ? runwayHeading + 180 : runwayHeading;
-		const r = compassToRadians(dir);
-		const len = clampDecomp(Math.abs(along));
-		return {
-			x: CENTER + Math.cos(r) * len,
-			y: CENTER + Math.sin(r) * len,
-		};
-	});
-
-	// === Interaction: drag wind arrow around the compass ===
-
-	function getSvgPoint(evt: PointerEvent, svg: SVGSVGElement): { x: number; y: number } {
-		const rect = svg.getBoundingClientRect();
-		const scaleX = SIZE / rect.width;
-		const scaleY = SIZE / rect.height;
-		return {
-			x: (evt.clientX - rect.left) * scaleX,
-			y: (evt.clientY - rect.top) * scaleY,
-		};
-	}
-
-	function pointToCompass(p: { x: number; y: number }): number {
-		const dx = p.x - CENTER;
-		const dy = p.y - CENTER;
-		// SVG 0 rad is +x (East). Compass 0 is North (up, -y). Compass = atan2(y, x) in SVG, +90.
-		const rad = Math.atan2(dy, dx);
-		let deg = (rad * 180) / Math.PI + 90;
-		deg = ((deg % 360) + 360) % 360;
-		return Math.round(deg);
-	}
-
-	function onPointerDown(evt: PointerEvent): void {
-		const svg = evt.currentTarget as SVGSVGElement;
-		svg.setPointerCapture(evt.pointerId);
-		isDraggingWind = true;
-		windDirection = pointToCompass(getSvgPoint(evt, svg));
-	}
-
-	function onPointerMove(evt: PointerEvent): void {
-		if (!isDraggingWind) return;
-		const svg = evt.currentTarget as SVGSVGElement;
-		windDirection = pointToCompass(getSvgPoint(evt, svg));
-	}
-
-	function onPointerUp(evt: PointerEvent): void {
-		const svg = evt.currentTarget as SVGSVGElement;
-		if (svg.hasPointerCapture(evt.pointerId)) {
-			svg.releasePointerCapture(evt.pointerId);
-		}
-		isDraggingWind = false;
-	}
-
-	function onKeyDown(evt: KeyboardEvent): void {
-		// Keyboard control: arrow keys rotate wind by 5 degrees, shift for 1 degree.
-		const step = evt.shiftKey ? 1 : 5;
-		if (evt.key === 'ArrowLeft' || evt.key === 'ArrowDown') {
-			evt.preventDefault();
-			windDirection = ((windDirection - step) % 360 + 360) % 360;
-		} else if (evt.key === 'ArrowRight' || evt.key === 'ArrowUp') {
-			evt.preventDefault();
-			windDirection = (windDirection + step) % 360;
-		}
-	}
-
-	function formatHeading(deg: number): string {
-		const normalized = ((Math.round(deg) % 360) + 360) % 360;
-		return normalized.toString().padStart(3, '0');
-	}
-
-	function formatSigned(val: number, digits = 0): string {
-		const rounded = Number(val.toFixed(digits));
-		const sign = rounded > 0 ? '+' : rounded < 0 ? '' : ' ';
-		return `${sign}${rounded.toFixed(digits)}`;
-	}
-
-	// Compass cardinal tick labels
-	const cardinalLabels: { label: string; angle: number }[] = [
-		{ label: 'N', angle: 0 },
-		{ label: 'E', angle: 90 },
-		{ label: 'S', angle: 180 },
-		{ label: 'W', angle: 270 },
-	];
-
-	function cardinalPos(angleDeg: number): { x: number; y: number } {
-		const r = compassToRadians(angleDeg);
-		return {
-			x: CENTER + Math.cos(r) * (COMPASS_RADIUS + 18),
-			y: CENTER + Math.sin(r) * (COMPASS_RADIUS + 18),
-		};
-	}
-
-	// Minor tick marks every 30 degrees on the compass
-	const compassTicks: number[] = [
-		0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330,
-	];
-
-	function tickStart(angleDeg: number): { x: number; y: number } {
-		const r = compassToRadians(angleDeg);
-		return {
-			x: CENTER + Math.cos(r) * (COMPASS_RADIUS - 8),
-			y: CENTER + Math.sin(r) * (COMPASS_RADIUS - 8),
-		};
-	}
-
-	function tickEnd(angleDeg: number): { x: number; y: number } {
-		const r = compassToRadians(angleDeg);
-		return {
-			x: CENTER + Math.cos(r) * COMPASS_RADIUS,
-			y: CENTER + Math.sin(r) * COMPASS_RADIUS,
-		};
-	}
+function tickEnd(angleDeg: number): { x: number; y: number } {
+	const r = compassToRadians(angleDeg);
+	return {
+		x: CENTER + Math.cos(r) * COMPASS_RADIUS,
+		y: CENTER + Math.sin(r) * COMPASS_RADIUS,
+	};
+}
 </script>
 
 <div class="activity">
