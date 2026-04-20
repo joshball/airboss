@@ -13,6 +13,7 @@ import {
 	CONTENT_SOURCES,
 	type ConfidenceLevel,
 	type ContentSource,
+	DEFAULT_USER_TIMEZONE,
 	type Difficulty,
 	type Domain,
 	type PhaseOfFlight,
@@ -60,6 +61,18 @@ export class InvalidOptionError extends Error {
 	) {
 		super(`Option ${chosenOption} is not valid for scenario ${scenarioId}`);
 		this.name = 'InvalidOptionError';
+	}
+}
+
+/**
+ * Raised when `sourceType !== 'personal'` but `sourceRef` is missing. Mirrors
+ * the identically-named typed error in `cards.ts` so non-personal scenarios
+ * and cards produce the same discriminable failure mode for callers.
+ */
+export class SourceRefRequiredError extends Error {
+	constructor() {
+		super('source_ref is required when source_type is not personal');
+		this.name = 'SourceRefRequiredError';
 	}
 }
 
@@ -125,9 +138,24 @@ export interface RepStats {
 	domainBreakdown: DomainAccuracyStats[];
 }
 
-/** UTC midnight at the start of the day containing `d`. */
-function utcStartOfDay(d: Date): Date {
-	return new Date(`${d.toISOString().slice(0, 10)}T00:00:00.000Z`);
+/**
+ * UTC instant representing midnight at the start of the local day in `tz`
+ * that contains `d`. For a user in America/Denver, `userStartOfDay(now)`
+ * returns the UTC timestamp that reads as 00:00 on that learner's calendar.
+ *
+ * Approach: format `d` in the target timezone twice -- once as an ISO date
+ * (`YYYY-MM-DD`) and once as `YYYY-MM-DD HH:mm:ss`. The difference between
+ * the second reading parsed as UTC and the original UTC instant is the
+ * timezone offset. Subtracting that offset from local-midnight-parsed-as-UTC
+ * yields the true UTC instant of local midnight. Survives DST transitions.
+ */
+function userStartOfDay(d: Date, tz: string = DEFAULT_USER_TIMEZONE): Date {
+	const localDate = d.toLocaleDateString('en-CA', { timeZone: tz });
+	const localClock = d.toLocaleString('sv-SE', { timeZone: tz });
+	const localClockAsUtc = new Date(`${localClock.replace(' ', 'T')}Z`);
+	const offsetMs = localClockAsUtc.getTime() - d.getTime();
+	const midnightAsUtc = new Date(`${localDate}T00:00:00Z`);
+	return new Date(midnightAsUtc.getTime() - offsetMs);
 }
 
 /**
@@ -152,7 +180,7 @@ export async function createScenario(input: CreateScenarioInput, db: Db = defaul
 	if (sourceType !== CONTENT_SOURCES.PERSONAL && !parsed.sourceRef) {
 		// Same guard the card BC enforces. Keeps non-personal content
 		// traceable back to its origin (course, product, import).
-		throw new Error('source_ref is required when source_type is not personal');
+		throw new SourceRefRequiredError();
 	}
 
 	const now = new Date();
@@ -431,7 +459,7 @@ export async function getRepDashboard(
 	now: Date = new Date(),
 ): Promise<RepDashboardStats> {
 	const windowStart = new Date(now.getTime() - REP_DASHBOARD_WINDOW_DAYS * 24 * 60 * 60 * 1000);
-	const todayStart = utcStartOfDay(now);
+	const todayStart = userStartOfDay(now);
 
 	// Fan out: every query below is independent. Parallel round-trips keep
 	// the dashboard responsive even as the scenario library grows.

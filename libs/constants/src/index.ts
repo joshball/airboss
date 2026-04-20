@@ -55,6 +55,7 @@ export {
 	CONTENT_SOURCES,
 	type ConfidenceLevel,
 	type ContentSource,
+	DEFAULT_USER_TIMEZONE,
 	DIFFICULTIES,
 	DIFFICULTY_LABELS,
 	DIFFICULTY_VALUES,

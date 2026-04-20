@@ -6,6 +6,15 @@
  * graph's domain taxonomy rather than an authoritative constant.
  */
 
+/**
+ * Platform default for "what timezone is the user in?" Used for day-boundary
+ * aggregations (streaks, attemptedToday). User-zero is in America/Denver;
+ * until per-user tz is plumbed through auth this is the source of truth for
+ * calendar-aware reads. Matches the value the study-plan + session-engine
+ * spec committed to.
+ */
+export const DEFAULT_USER_TIMEZONE = 'America/Denver';
+
 export const DOMAINS = {
 	REGULATIONS: 'regulations',
 	WEATHER: 'weather',

@@ -30,6 +30,7 @@ import {
 	InvalidOptionError,
 	ScenarioNotAttemptableError,
 	ScenarioNotFoundError,
+	SourceRefRequiredError,
 	setScenarioStatus,
 	submitAttempt,
 } from './scenarios';
@@ -178,6 +179,12 @@ describe('createScenario -- validation', () => {
 		expect(created.status).toBe(SCENARIO_STATUSES.ACTIVE);
 		expect(created.sourceType).toBe(CONTENT_SOURCES.PERSONAL);
 		expect(created.isEditable).toBe(true);
+	});
+
+	it('raises SourceRefRequiredError when non-personal source has no sourceRef', async () => {
+		await expect(
+			createScenario(makeInput({ sourceType: CONTENT_SOURCES.COURSE, sourceRef: null })),
+		).rejects.toBeInstanceOf(SourceRefRequiredError);
 	});
 });
 
