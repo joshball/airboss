@@ -34,7 +34,7 @@ export {
 export { MIN_PASSWORD_LENGTH, USER_STATUS, type UserStatus } from './identity';
 export { PORTS } from './ports';
 export { ROLES, type Role } from './roles';
-export { ROUTES } from './routes';
+export { QUERY_PARAMS, ROUTES } from './routes';
 export { SCHEMAS, type SchemaName } from './schemas';
 export {
 	BROWSE_PAGE_SIZE,
@@ -63,6 +63,17 @@ export {
 	DOMAIN_VALUES,
 	DOMAINS,
 	type Domain,
+	KNOWLEDGE_EDGE_TYPE_VALUES,
+	KNOWLEDGE_EDGE_TYPES,
+	KNOWLEDGE_EDGE_YAML_KEY_VALUES,
+	KNOWLEDGE_EDGE_YAML_KEYS,
+	KNOWLEDGE_PHASE_LABELS,
+	KNOWLEDGE_PHASE_ORDER,
+	KNOWLEDGE_PHASE_VALUES,
+	KNOWLEDGE_PHASES,
+	type KnowledgeEdgeType,
+	type KnowledgeEdgeYamlKey,
+	type KnowledgePhase,
 	MASTERY_STABILITY_DAYS,
 	PHASE_OF_FLIGHT_LABELS,
 	PHASE_OF_FLIGHT_VALUES,

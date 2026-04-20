@@ -217,3 +217,79 @@ export const BROWSE_PAGE_SIZE = 25;
 
 /** Idempotency window for duplicate review submission protection. */
 export const REVIEW_DEDUPE_WINDOW_MS = 5_000;
+
+/**
+ * Knowledge-graph edge types (see ADR 011). `requires` is the only edge type
+ * that must form a DAG; the rest are structural or navigational. Author-facing
+ * YAML uses the passive-voice collection keys (`applied_by`, `taught_by`); the
+ * build script inverts those into the active-voice edges stored here.
+ */
+export const KNOWLEDGE_EDGE_TYPES = {
+	/** Must understand X before Y. DAG; no cycles. */
+	REQUIRES: 'requires',
+	/** More advanced treatment of the same concept. Same domain, different depth. */
+	DEEPENS: 'deepens',
+	/** Uses this knowledge in practice. Cross-domain. */
+	APPLIES: 'applies',
+	/** CFI/pedagogical node teaching the target technical topic. */
+	TEACHES: 'teaches',
+	/** Loose connection, useful for cross-reference; not load-bearing. */
+	RELATED: 'related',
+} as const;
+
+export type KnowledgeEdgeType = (typeof KNOWLEDGE_EDGE_TYPES)[keyof typeof KNOWLEDGE_EDGE_TYPES];
+
+export const KNOWLEDGE_EDGE_TYPE_VALUES = Object.values(KNOWLEDGE_EDGE_TYPES);
+
+/** Map YAML collection keys (author-facing) to how we store them. */
+export const KNOWLEDGE_EDGE_YAML_KEYS = {
+	REQUIRES: 'requires',
+	DEEPENS: 'deepens',
+	APPLIED_BY: 'applied_by',
+	TAUGHT_BY: 'taught_by',
+	RELATED: 'related',
+} as const;
+
+export type KnowledgeEdgeYamlKey = (typeof KNOWLEDGE_EDGE_YAML_KEYS)[keyof typeof KNOWLEDGE_EDGE_YAML_KEYS];
+
+export const KNOWLEDGE_EDGE_YAML_KEY_VALUES = Object.values(KNOWLEDGE_EDGE_YAML_KEYS);
+
+/**
+ * Seven-phase content model headings (ADR 011). Lowercase kebab-case is the
+ * canonical form used in the DB and UI.
+ */
+export const KNOWLEDGE_PHASES = {
+	CONTEXT: 'context',
+	PROBLEM: 'problem',
+	DISCOVER: 'discover',
+	REVEAL: 'reveal',
+	PRACTICE: 'practice',
+	CONNECT: 'connect',
+	VERIFY: 'verify',
+} as const;
+
+export type KnowledgePhase = (typeof KNOWLEDGE_PHASES)[keyof typeof KNOWLEDGE_PHASES];
+
+export const KNOWLEDGE_PHASE_VALUES = Object.values(KNOWLEDGE_PHASES);
+
+/** Ordered list of phases as they appear in the content model. */
+export const KNOWLEDGE_PHASE_ORDER: readonly KnowledgePhase[] = [
+	KNOWLEDGE_PHASES.CONTEXT,
+	KNOWLEDGE_PHASES.PROBLEM,
+	KNOWLEDGE_PHASES.DISCOVER,
+	KNOWLEDGE_PHASES.REVEAL,
+	KNOWLEDGE_PHASES.PRACTICE,
+	KNOWLEDGE_PHASES.CONNECT,
+	KNOWLEDGE_PHASES.VERIFY,
+];
+
+/** Human-readable labels for knowledge phases. */
+export const KNOWLEDGE_PHASE_LABELS: Record<KnowledgePhase, string> = {
+	[KNOWLEDGE_PHASES.CONTEXT]: 'Context',
+	[KNOWLEDGE_PHASES.PROBLEM]: 'Problem',
+	[KNOWLEDGE_PHASES.DISCOVER]: 'Discover',
+	[KNOWLEDGE_PHASES.REVEAL]: 'Reveal',
+	[KNOWLEDGE_PHASES.PRACTICE]: 'Practice',
+	[KNOWLEDGE_PHASES.CONNECT]: 'Connect',
+	[KNOWLEDGE_PHASES.VERIFY]: 'Verify',
+};

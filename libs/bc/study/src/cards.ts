@@ -71,6 +71,11 @@ export interface CreateCardInput {
 	sourceType?: ContentSource;
 	sourceRef?: string | null;
 	isEditable?: boolean;
+	/**
+	 * Optional knowledge-graph node id. When set, the card is linked to the
+	 * graph and picks up node-scoped review and mastery aggregation.
+	 */
+	nodeId?: string | null;
 }
 
 export interface UpdateCardInput {
@@ -87,6 +92,8 @@ export interface CardFilters {
 	sourceType?: ContentSource;
 	status?: CardStatus | CardStatus[];
 	search?: string;
+	/** Scope results to cards attached to a knowledge-graph node. */
+	nodeId?: string;
 	limit?: number;
 	offset?: number;
 }
@@ -125,6 +132,7 @@ export async function createCard(input: CreateCardInput, db: Db = defaultDb): Pr
 				cardType: parsed.cardType as CardType,
 				sourceType,
 				sourceRef: parsed.sourceRef ?? null,
+				nodeId: input.nodeId ?? null,
 				isEditable: parsed.isEditable ?? sourceType === CONTENT_SOURCES.PERSONAL,
 				status: CARD_STATUSES.ACTIVE,
 				createdAt: now,
@@ -202,22 +210,48 @@ export async function getCard(cardId: string, userId: string, db: Db = defaultDb
 	return { card: row.card, state: row.state };
 }
 
+/** Options accepted by `getDueCards` alongside the batch limit. */
+export interface DueCardsOptions {
+	limit?: number;
+	/**
+	 * When set, narrow the queue to cards attached to this knowledge node.
+	 * Cards without a node are excluded even if due; the caller asked for
+	 * a node-scoped session.
+	 */
+	nodeId?: string;
+}
+
 /**
  * Load cards that are due now for a user. Batch-limited, ordered by due-time
  * ascending. Skips suspended/archived cards. Suitable for driving the review
  * queue.
+ *
+ * The second positional parameter accepts either a plain number (legacy
+ * callers that only supply a batch limit) or an options bag that can also
+ * carry a `nodeId` filter. Passing no second argument uses the default batch
+ * size and no node filter.
  */
 export async function getDueCards(
 	userId: string,
-	limit: number = REVIEW_BATCH_SIZE,
+	limitOrOptions: number | DueCardsOptions = REVIEW_BATCH_SIZE,
 	db: Db = defaultDb,
 	now: Date = new Date(),
 ): Promise<CardWithState[]> {
+	const options: DueCardsOptions = typeof limitOrOptions === 'number' ? { limit: limitOrOptions } : limitOrOptions;
+	const limit = options.limit ?? REVIEW_BATCH_SIZE;
+
+	const clauses: SQL[] = [
+		eq(cardState.userId, userId),
+		lte(cardState.dueAt, now),
+		eq(card.status, CARD_STATUSES.ACTIVE),
+	];
+	if (options.nodeId) clauses.push(eq(card.nodeId, options.nodeId));
+
 	const rows = await db
 		.select({ card, state: cardState })
 		.from(cardState)
 		.innerJoin(card, and(eq(card.id, cardState.cardId), eq(card.userId, cardState.userId)))
-		.where(and(eq(cardState.userId, userId), lte(cardState.dueAt, now), eq(card.status, CARD_STATUSES.ACTIVE)))
+		.where(and(...clauses))
 		.orderBy(asc(cardState.dueAt))
 		.limit(limit);
 
@@ -241,6 +275,7 @@ export async function getCards(userId: string, filters: CardFilters = {}, db: Db
 	if (filters.domain) clauses.push(eq(card.domain, filters.domain));
 	if (filters.cardType) clauses.push(eq(card.cardType, filters.cardType));
 	if (filters.sourceType) clauses.push(eq(card.sourceType, filters.sourceType));
+	if (filters.nodeId) clauses.push(eq(card.nodeId, filters.nodeId));
 	if (filters.search && filters.search.trim().length > 0) {
 		const pattern = `%${escapeLikePattern(filters.search.trim())}%`;
 		const cond = or(ilike(card.front, pattern), ilike(card.back, pattern));
