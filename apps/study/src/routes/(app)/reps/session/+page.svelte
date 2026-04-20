@@ -6,6 +6,7 @@ import {
 	PHASE_OF_FLIGHT_LABELS,
 	ROUTES,
 } from '@ab/constants';
+import { humanize } from '@ab/utils';
 import { enhance } from '$app/forms';
 import { invalidateAll, replaceState } from '$app/navigation';
 import { page } from '$app/state';
@@ -64,13 +65,6 @@ const needsConfidence = $derived(Boolean(current?.promptConfidence));
 const chosenOpt = $derived(current?.options.find((o) => o.id === selectedOption));
 const accuracy = $derived(attemptedTotal === 0 ? 0 : Math.round((correctTotal / attemptedTotal) * 100));
 const confidenceLabels = ['Wild guess', 'Uncertain', 'Maybe', 'Probably', 'Certain'];
-
-function humanize(slug: string): string {
-	return slug
-		.split(/[-_]/)
-		.map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-		.join(' ');
-}
 
 function domainLabel(slug: string): string {
 	return (DOMAIN_LABELS as Record<string, string>)[slug] ?? humanize(slug);

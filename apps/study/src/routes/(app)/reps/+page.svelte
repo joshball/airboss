@@ -1,18 +1,12 @@
 <script lang="ts">
 import { DOMAIN_LABELS, REP_DASHBOARD_WINDOW_DAYS, ROUTES } from '@ab/constants';
+import { humanize } from '@ab/utils';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
 
 const stats = $derived(data.stats);
 const hasScenarios = $derived(stats.scenarioCount > 0);
-
-function humanize(slug: string): string {
-	return slug
-		.split(/[-_]/)
-		.map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-		.join(' ');
-}
 
 function domainLabel(slug: string): string {
 	return (DOMAIN_LABELS as Record<string, string>)[slug] ?? humanize(slug);
@@ -40,7 +34,11 @@ function bar(value: number): number {
 		<nav class="quick" aria-label="Quick actions">
 			<a class="btn ghost" href={ROUTES.REPS_BROWSE}>Browse</a>
 			<a class="btn secondary" href={ROUTES.REPS_NEW}>New scenario</a>
-			<a class="btn primary" href={ROUTES.REPS_SESSION} aria-disabled={!hasScenarios}>Start session</a>
+			{#if hasScenarios}
+				<a class="btn primary" href={ROUTES.REPS_SESSION}>Start session</a>
+			{:else}
+				<button class="btn primary" type="button" disabled>Start session</button>
+			{/if}
 		</nav>
 	</header>
 
@@ -338,9 +336,8 @@ function bar(value: number): number {
 		background: #1d4ed8;
 	}
 
-	.btn.primary[aria-disabled='true'] {
+	.btn.primary:disabled {
 		background: #94a3b8;
-		pointer-events: none;
 		cursor: not-allowed;
 	}
 
