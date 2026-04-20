@@ -172,21 +172,30 @@ export async function getDomainBreakdown(
 	}));
 }
 
-/** Mastery summary for a user, optionally filtered to one domain. */
+/**
+ * Mastery summary for a user, optionally filtered to one domain or one
+ * knowledge-graph node (or both). Accepts the legacy `Domain` positional form
+ * for backward compatibility; new callers should pass the options object.
+ */
 export async function getCardMastery(
 	userId: string,
-	domain?: Domain,
+	filterOrDomain?: Domain | { domain?: Domain; nodeId?: string },
 	db: Db = defaultDb,
 	now: Date = new Date(),
 ): Promise<MasteryStats> {
+	const filter =
+		typeof filterOrDomain === 'string' || filterOrDomain === undefined ? { domain: filterOrDomain } : filterOrDomain;
+
 	const clauses = [eq(card.userId, userId), eq(card.status, CARD_STATUSES.ACTIVE)];
-	if (domain) clauses.push(eq(card.domain, domain));
+	if (filter.domain) clauses.push(eq(card.domain, filter.domain));
+	if (filter.nodeId) clauses.push(eq(card.nodeId, filter.nodeId));
 
 	// Accuracy and totals share the same "active card" scope so we don't mix
 	// lifecycle states (e.g. counting reviews of archived cards as accuracy
 	// while excluding them from totals).
 	const accuracyClauses = [eq(review.userId, userId), eq(card.status, CARD_STATUSES.ACTIVE)];
-	if (domain) accuracyClauses.push(eq(card.domain, domain));
+	if (filter.domain) accuracyClauses.push(eq(card.domain, filter.domain));
+	if (filter.nodeId) accuracyClauses.push(eq(card.nodeId, filter.nodeId));
 
 	const [totalsRow, accuracyRow] = await Promise.all([
 		db

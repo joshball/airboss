@@ -27,6 +27,15 @@ export const ROUTES = {
 	// Study -- Knowledge nodes
 	NODES: '/nodes',
 	NODE: (id: string) => `/nodes/${id}` as const,
+
+	/**
+	 * Knowledge-graph browse / detail / guided-learn surface. Separate from
+	 * the legacy `NODES` prefix -- `/knowledge` is the spec-named path in the
+	 * knowledge-graph work package and maps to slug-keyed URLs.
+	 */
+	KNOWLEDGE: '/knowledge',
+	KNOWLEDGE_SLUG: (slug: string) => `/knowledge/${slug}` as const,
+	KNOWLEDGE_LEARN: (slug: string) => `/knowledge/${slug}/learn` as const,
 	/**
 	 * Node-filtered review: appends `?node=...` to the existing review flow
 	 * so the server load can narrow the due-cards query without introducing

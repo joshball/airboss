@@ -9,9 +9,18 @@
  * and the build script share a single implementation.
  */
 
-import { KNOWLEDGE_EDGE_TYPES, type KnowledgeEdgeType } from '@ab/constants';
+import {
+	CARD_MASTERY_RATIO_THRESHOLD,
+	CARD_MIN,
+	CARD_STATUSES,
+	KNOWLEDGE_EDGE_TYPES,
+	type KnowledgeEdgeType,
+	REP_ACCURACY_THRESHOLD,
+	REP_MIN,
+	STABILITY_MASTERED_DAYS,
+} from '@ab/constants';
 import { db as defaultDb } from '@ab/db';
-import { and, asc, eq, inArray, sql } from 'drizzle-orm';
+import { and, asc, count, eq, inArray, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import {
 	type CardRow,
@@ -24,6 +33,8 @@ import {
 	knowledgeNode,
 	type NewKnowledgeEdgeRow,
 	type NewKnowledgeNodeRow,
+	repAttempt,
+	scenario,
 } from './schema';
 
 type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;
@@ -300,3 +311,193 @@ export async function getNodesByIds(ids: readonly string[], db: Db = defaultDb):
 
 /** Export the edge-type enum for callers that don't already depend on @ab/constants. */
 export { KNOWLEDGE_EDGE_TYPES };
+
+/** Raised when a knowledge node can't be found. */
+export class KnowledgeNodeNotFoundError extends Error {
+	constructor(public readonly nodeId: string) {
+		super(`Knowledge node not found: ${nodeId}`);
+		this.name = 'KnowledgeNodeNotFoundError';
+	}
+}
+
+/** Dual-gate mastery gate outcome per pillar. See spec "Mastery computation". */
+export type NodeMasteryGate = 'pass' | 'fail' | 'insufficient_data' | 'not_applicable';
+
+/**
+ * Dual-gate node mastery stats.
+ *
+ * Mastery is the dual-gate result: both the card pillar and rep pillar must
+ * independently clear their threshold. `displayScore` is a progress-bar number
+ * only -- never conflate it with `mastered`. See spec "Mastery computation"
+ * for why a weighted average is wrong here.
+ */
+export interface NodeMasteryStats {
+	cardsTotal: number;
+	/** Cards with FSRS stability > STABILITY_MASTERED_DAYS. */
+	cardsMastered: number;
+	cardsDue: number;
+	/** cardsMastered / cardsTotal, or 0 if no cards. */
+	cardsMasteredRatio: number;
+	repsTotal: number;
+	repsCorrect: number;
+	/** repsCorrect / repsTotal, or 0 if no reps. */
+	repAccuracy: number;
+	/** Dual-gate output. True iff both applicable gates pass. */
+	mastered: boolean;
+	/** 0..1 progress-bar score. Never use for mastered decisions. */
+	displayScore: number;
+	cardGate: NodeMasteryGate;
+	repGate: NodeMasteryGate;
+}
+
+/**
+ * Compute dual-gate mastery for a single node for a single user.
+ *
+ * Card gate passes when >= CARD_MIN active cards are attached AND the ratio
+ * of mastered cards (stability > STABILITY_MASTERED_DAYS) clears
+ * CARD_MASTERY_RATIO_THRESHOLD. Rep gate passes when >= REP_MIN attempts on
+ * scenarios attached to this node exist AND accuracy clears
+ * REP_ACCURACY_THRESHOLD. Knowledge-only nodes (no scenarios attached at all)
+ * see `repGate = not_applicable` and can be mastered on cards alone; judgment-
+ * only nodes see `cardGate = not_applicable` symmetrically. Nodes with
+ * nothing attached are never mastered.
+ */
+export async function getNodeMastery(
+	userId: string,
+	nodeId: string,
+	db: Db = defaultDb,
+	now: Date = new Date(),
+): Promise<NodeMasteryStats> {
+	// One round-trip per pillar plus one round-trip to detect whether any
+	// scenarios exist at all (drives the `not_applicable` fallback for
+	// knowledge-only nodes). All three are independent so we fan them out.
+	const [cardTotals, repTotals, scenarioExistsRow] = await Promise.all([
+		db
+			.select({
+				cardsTotal: count(),
+				cardsMastered: sql<number>`sum(case when ${cardState.stability} > ${STABILITY_MASTERED_DAYS} then 1 else 0 end)`,
+				cardsDue: sql<number>`sum(case when ${cardState.dueAt} <= ${now.toISOString()} then 1 else 0 end)`,
+			})
+			.from(card)
+			.innerJoin(cardState, and(eq(cardState.cardId, card.id), eq(cardState.userId, card.userId)))
+			.where(and(eq(card.userId, userId), eq(card.nodeId, nodeId), eq(card.status, CARD_STATUSES.ACTIVE)))
+			.then((r) => r[0]),
+		db
+			.select({
+				repsTotal: count(),
+				repsCorrect: sql<number>`sum(case when ${repAttempt.isCorrect} then 1 else 0 end)`,
+			})
+			.from(repAttempt)
+			.innerJoin(scenario, and(eq(scenario.id, repAttempt.scenarioId), eq(scenario.userId, repAttempt.userId)))
+			.where(and(eq(repAttempt.userId, userId), eq(scenario.nodeId, nodeId)))
+			.then((r) => r[0]),
+		db
+			.select({ c: count() })
+			.from(scenario)
+			.where(eq(scenario.nodeId, nodeId))
+			.then((r) => r[0]),
+	]);
+
+	const cardsTotal = Number(cardTotals?.cardsTotal ?? 0);
+	const cardsMastered = Number(cardTotals?.cardsMastered ?? 0);
+	const cardsDue = Number(cardTotals?.cardsDue ?? 0);
+	const cardsMasteredRatio = cardsTotal === 0 ? 0 : cardsMastered / cardsTotal;
+
+	const repsTotal = Number(repTotals?.repsTotal ?? 0);
+	const repsCorrect = Number(repTotals?.repsCorrect ?? 0);
+	const repAccuracy = repsTotal === 0 ? 0 : repsCorrect / repsTotal;
+
+	const scenariosAttached = Number(scenarioExistsRow?.c ?? 0);
+
+	const cardGate = computeCardGate(cardsTotal, cardsMasteredRatio);
+	const repGate = computeRepGate(repsTotal, repAccuracy, scenariosAttached);
+
+	const mastered = isMastered(cardGate, repGate);
+	const displayScore = computeDisplayScore(cardsTotal, cardsMasteredRatio, repsTotal, repAccuracy);
+
+	return {
+		cardsTotal,
+		cardsMastered,
+		cardsDue,
+		cardsMasteredRatio,
+		repsTotal,
+		repsCorrect,
+		repAccuracy,
+		mastered,
+		displayScore,
+		cardGate,
+		repGate,
+	};
+}
+
+/**
+ * Boolean projection of `getNodeMastery(...).mastered`. Provided as the
+ * canonical entry point for the Study Plan + Session Engine per spec
+ * "Reconciliation notes".
+ */
+export async function isNodeMastered(
+	userId: string,
+	nodeId: string,
+	db: Db = defaultDb,
+	now: Date = new Date(),
+): Promise<boolean> {
+	const stats = await getNodeMastery(userId, nodeId, db, now);
+	return stats.mastered;
+}
+
+/**
+ * Gate computation for cards. Pure -- extracted so the unit tests can drive
+ * it without a DB round-trip.
+ */
+export function computeCardGate(cardsTotal: number, cardsMasteredRatio: number): NodeMasteryGate {
+	if (cardsTotal === 0) return 'not_applicable';
+	if (cardsTotal < CARD_MIN) return 'insufficient_data';
+	return cardsMasteredRatio >= CARD_MASTERY_RATIO_THRESHOLD ? 'pass' : 'fail';
+}
+
+/**
+ * Gate computation for reps. Pure. `scenariosAttached` is the count of
+ * scenarios carrying this nodeId -- zero means the rep pillar simply doesn't
+ * apply to this node (knowledge-only).
+ */
+export function computeRepGate(repsTotal: number, repAccuracy: number, scenariosAttached: number): NodeMasteryGate {
+	if (scenariosAttached === 0) return 'not_applicable';
+	if (repsTotal === 0) return 'insufficient_data';
+	if (repsTotal < REP_MIN) return 'insufficient_data';
+	return repAccuracy >= REP_ACCURACY_THRESHOLD ? 'pass' : 'fail';
+}
+
+/**
+ * Dual-gate mastery combination. Pure. A node is mastered iff every gate that
+ * applies to it is `pass`. `not_applicable` is treated as "this pillar doesn't
+ * constrain the decision"; `insufficient_data` and `fail` both block.
+ *
+ * Edge case: a node with nothing attached resolves to (not_applicable,
+ * not_applicable) -- never mastered by design. The PRD's "Nodes with no
+ * attached content are never mastered" rule surfaces here.
+ */
+export function isMastered(cardGate: NodeMasteryGate, repGate: NodeMasteryGate): boolean {
+	if (cardGate === 'not_applicable' && repGate === 'not_applicable') return false;
+	const cardOk = cardGate === 'pass' || cardGate === 'not_applicable';
+	const repOk = repGate === 'pass' || repGate === 'not_applicable';
+	return cardOk && repOk;
+}
+
+/**
+ * Display score for progress bars. Averages the two pillars when both apply,
+ * falls back to the single pillar otherwise. Returns 0 when nothing is
+ * attached. This is UI eye-candy -- `mastered` is the decision-maker.
+ */
+export function computeDisplayScore(
+	cardsTotal: number,
+	cardsMasteredRatio: number,
+	repsTotal: number,
+	repAccuracy: number,
+): number {
+	if (cardsTotal > 0 && repsTotal > 0) {
+		return (cardsMasteredRatio + repAccuracy) / 2;
+	}
+	if (cardsTotal > 0) return cardsMasteredRatio;
+	if (repsTotal > 0) return repAccuracy;
+	return 0;
+}

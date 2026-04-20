@@ -285,6 +285,13 @@ export const scenario = studySchema.table(
 		phaseOfFlight: text('phase_of_flight'),
 		sourceType: text('source_type').notNull().default(CONTENT_SOURCES.PERSONAL),
 		sourceRef: text('source_ref'),
+		/**
+		 * Optional knowledge-graph node id. Mirrors `card.nodeId`: NULL for
+		 * personal scenarios, non-NULL for scenarios attached to a graph node.
+		 * `set null` on delete keeps rep-attempt history attached to the
+		 * scenario even if the graph node is later removed or renamed.
+		 */
+		nodeId: text('node_id').references(() => knowledgeNode.id, { onDelete: 'set null' }),
 		isEditable: boolean('is_editable').notNull().default(true),
 		regReferences: jsonb('reg_references').$type<string[]>().notNull().default([]),
 		status: text('status').notNull().default(SCENARIO_STATUSES.ACTIVE),
@@ -294,6 +301,7 @@ export const scenario = studySchema.table(
 		scenarioUserStatusIdx: index('scenario_user_status_idx').on(t.userId, t.status),
 		scenarioUserDomainIdx: index('scenario_user_domain_idx').on(t.userId, t.domain),
 		scenarioUserCreatedIdx: index('scenario_user_created_idx').on(t.userId, t.createdAt),
+		scenarioUserNodeIdx: index('scenario_user_node_idx').on(t.userId, t.nodeId),
 		difficultyCheck: check('scenario_difficulty_check', sql.raw(`"difficulty" IN (${inList(DIFFICULTY_VALUES)})`)),
 		phaseOfFlightCheck: check(
 			'scenario_phase_check',

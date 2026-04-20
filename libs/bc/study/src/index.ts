@@ -32,6 +32,26 @@ export {
 	getWeakAreas,
 	overdueCutoff,
 } from './dashboard';
+export type { NodeMasteryGate, NodeMasteryStats, NodeSummary, NodeView } from './knowledge';
+export {
+	computeCardGate,
+	computeDisplayScore,
+	computeRepGate,
+	findRequiresCycle,
+	getCardsForNode,
+	getNodeMastery,
+	getNodesByIds,
+	getNodeView,
+	isMastered,
+	isNodeMastered,
+	KnowledgeGraphCycleError,
+	KnowledgeNodeNotFoundError,
+	listNodeIds,
+	listNodeSummaries,
+	refreshEdgeTargetExists,
+	replaceNodeEdges,
+	upsertKnowledgeNode,
+} from './knowledge';
 export type { SubmitReviewInput } from './reviews';
 export { CardNotReviewableError, submitReview } from './reviews';
 export type {
@@ -64,8 +84,12 @@ export {
 export type {
 	CardRow,
 	CardStateRow,
+	KnowledgeEdgeRow,
+	KnowledgeNodeRow,
 	NewCardRow,
 	NewCardStateRow,
+	NewKnowledgeEdgeRow,
+	NewKnowledgeNodeRow,
 	NewRepAttemptRow,
 	NewReviewRow,
 	NewScenarioRow,
@@ -74,7 +98,7 @@ export type {
 	ScenarioOption,
 	ScenarioRow,
 } from './schema';
-export { card, cardState, repAttempt, review, scenario, studySchema } from './schema';
+export { card, cardState, knowledgeEdge, knowledgeNode, repAttempt, review, scenario, studySchema } from './schema';
 export type { CardSchedulerState, ScheduleResult } from './srs';
 export { fsrsDefaultParams, fsrsInitialState, fsrsSchedule } from './srs';
 export type { DashboardStats, DomainStats, MasteryStats, RecentReviewRow, ReviewStats } from './stats';
