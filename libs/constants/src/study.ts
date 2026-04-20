@@ -129,6 +129,37 @@ export const REP_BATCH_SIZE = 10;
 /** Number of days back for rep dashboard accuracy window. */
 export const REP_DASHBOARD_WINDOW_DAYS = 30;
 
+/**
+ * Learning Dashboard tuning constants.
+ *
+ * See `docs/work-packages/learning-dashboard/design.md` for the ranking
+ * rationale. All three live here so tuning a signal is a single-file change
+ * and so the BC aggregates share the same thresholds as the panels that
+ * render them.
+ */
+
+/** Accuracy floor (0-1) below which a domain contributes weakness signal. */
+export const WEAK_AREA_ACCURACY_THRESHOLD = 0.7;
+
+/** Minimum reviews + attempts in the analysis window before a domain can rank. */
+export const WEAK_AREA_MIN_DATA_POINTS = 10;
+
+/** Analysis window (days) for the weak-areas query. */
+export const WEAK_AREA_WINDOW_DAYS = 30;
+
+/** Default number of weak areas surfaced on the dashboard. */
+export const WEAK_AREA_LIMIT = 5;
+
+/** Sparkline window (days) for the activity panel. */
+export const ACTIVITY_WINDOW_DAYS = 7;
+
+/**
+ * Overdue grace period (ms) -- a due card only counts as "overdue" once it has
+ * been past its `dueAt` longer than this. 2 days matches the spec's "missed
+ * review" threshold for weak-areas ranking.
+ */
+export const OVERDUE_GRACE_MS = 2 * 24 * 60 * 60 * 1000;
+
 export const CARD_TYPES = {
 	BASIC: 'basic',
 	CLOZE: 'cloze',
