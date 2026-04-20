@@ -5,6 +5,7 @@ import { page } from '$app/state';
 
 let { children }: { children: Snippet } = $props();
 
+const dashboardActive = $derived(page.url.pathname === ROUTES.DASHBOARD);
 const memoryActive = $derived(page.url.pathname.startsWith(ROUTES.MEMORY));
 const repsActive = $derived(page.url.pathname.startsWith(ROUTES.REPS));
 </script>
@@ -12,6 +13,7 @@ const repsActive = $derived(page.url.pathname.startsWith(ROUTES.REPS));
 <a class="skip" href="#main">Skip to main content</a>
 
 <nav aria-label="Primary">
+	<a href={ROUTES.DASHBOARD} aria-current={dashboardActive ? 'page' : undefined}>Dashboard</a>
 	<a href={ROUTES.MEMORY} aria-current={memoryActive ? 'page' : undefined}>Memory</a>
 	<a href={ROUTES.REPS} aria-current={repsActive ? 'page' : undefined}>Reps</a>
 	<!-- Calibration lands in a subsequent work package; leaving it out of
