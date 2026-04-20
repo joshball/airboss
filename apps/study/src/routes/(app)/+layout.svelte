@@ -8,6 +8,7 @@ let { children }: { children: Snippet } = $props();
 const dashboardActive = $derived(page.url.pathname === ROUTES.DASHBOARD);
 const memoryActive = $derived(page.url.pathname.startsWith(ROUTES.MEMORY));
 const repsActive = $derived(page.url.pathname.startsWith(ROUTES.REPS));
+const calibrationActive = $derived(page.url.pathname.startsWith(ROUTES.CALIBRATION));
 </script>
 
 <a class="skip" href="#main">Skip to main content</a>
@@ -16,8 +17,7 @@ const repsActive = $derived(page.url.pathname.startsWith(ROUTES.REPS));
 	<a href={ROUTES.DASHBOARD} aria-current={dashboardActive ? 'page' : undefined}>Dashboard</a>
 	<a href={ROUTES.MEMORY} aria-current={memoryActive ? 'page' : undefined}>Memory</a>
 	<a href={ROUTES.REPS} aria-current={repsActive ? 'page' : undefined}>Reps</a>
-	<!-- Calibration lands in a subsequent work package; leaving it out of
-	     the nav until that route exists. -->
+	<a href={ROUTES.CALIBRATION} aria-current={calibrationActive ? 'page' : undefined}>Calibration</a>
 </nav>
 
 <main id="main" tabindex="-1">
