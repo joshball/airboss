@@ -257,19 +257,58 @@ Default muscle memory: AIM first for the table, CFR second for the fine print.
 
 ### Cards (spaced repetition)
 
-These card IDs are linkage pointers. Cards may not yet exist; the build script will flag unresolved references.
+Authored inline. `bun run knowledge seed --user <email>` materializes these as `study.card` rows linked to this node, and they flow through the normal `/memory/review` FSRS queue. The numeric table is the factual pillar; the `-why` cards exist to keep the reasoning resident in memory, not just the values.
 
-- `card:vfr-mins-class-b-basic`
-- `card:vfr-mins-class-c-d-basic`
-- `card:vfr-mins-class-e-below-10k`
-- `card:vfr-mins-class-e-above-10k`
-- `card:vfr-mins-class-g-day-low`
-- `card:vfr-mins-class-g-day-high-below-10k`
-- `card:vfr-mins-class-g-night`
-- `card:vfr-mins-class-g-night-pattern-exception`
-- `card:vfr-mins-transition-10k-msl-reasoning`
-- `card:vfr-mins-horizontal-vs-vertical-why`
-- `card:vfr-mins-clear-of-clouds-class-b-why`
+```yaml-cards
+- front: "VFR weather minimums in Class B: visibility and cloud clearance?"
+  back: "3 SM visibility, clear of clouds. (No 500/1000/2000 buffer -- ATC separates all traffic inside Class B, so the surprise-emergence geometry the buffer protects against has already been handled.)"
+  cardType: basic
+  tags: [vfr-mins, class-b, 91.155]
+- front: "VFR weather minimums in Class C or D: visibility and cloud clearance?"
+  back: "3 SM, 500 below / 1000 above / 2000 horizontal."
+  cardType: basic
+  tags: [vfr-mins, class-c, class-d, 91.155]
+- front: "VFR weather minimums in Class E below 10,000 MSL: visibility and cloud clearance?"
+  back: "3 SM, 500 below / 1000 above / 2000 horizontal."
+  cardType: basic
+  tags: [vfr-mins, class-e, 91.155]
+- front: "VFR weather minimums in Class E at or above 10,000 MSL: visibility and cloud clearance?"
+  back: "5 SM, 1000 below / 1000 above / 1 SM horizontal. (Higher numbers because above 10,000 MSL the 250 kt speed limit of 91.117 no longer applies, so closure rates can push past 500 kt.)"
+  cardType: basic
+  tags: [vfr-mins, class-e, high-altitude, 91.155]
+- front: "VFR weather minimums in Class G, day, 1,200 AGL or less: visibility and cloud clearance?"
+  back: "1 SM, clear of clouds."
+  cardType: basic
+  tags: [vfr-mins, class-g, day, 91.155]
+- front: "VFR weather minimums in Class G, day, more than 1,200 AGL but less than 10,000 MSL: visibility and cloud clearance?"
+  back: "1 SM, 500 below / 1000 above / 2000 horizontal."
+  cardType: basic
+  tags: [vfr-mins, class-g, day, 91.155]
+- front: "VFR weather minimums in Class G at night (below 10,000 MSL): visibility and cloud clearance?"
+  back: "3 SM, 500 below / 1000 above / 2000 horizontal. (Tighter than Class G day because the pilot's visual acquisition degrades at night, not because the traffic mix changed.)"
+  cardType: basic
+  tags: [vfr-mins, class-g, night, 91.155]
+- front: "91.155(b)(2) traffic-pattern exception: what does it allow and where?"
+  back: "At an airport in Class G at night, within 1/2 mile of the runway and operating within the traffic pattern, you may operate at 1 SM visibility and clear of clouds. Narrow in scope and easy to misquote -- memorize as an exception, not a rule."
+  cardType: regulation
+  tags: [vfr-mins, class-g, night, pattern, 91.155]
+- front: "Why does the 10,000 MSL altitude boundary change the VFR minimums?"
+  back: "Below 10,000 MSL, 91.117 caps indicated airspeed at 250 kt. Above 10,000 MSL, that cap is lifted (with specific exceptions near Class B/C and below FL180). Closure rates can approach 500 kt. Reaction-window math (closure x 10 sec) puts the required horizontal separation near 1 SM, so the reg jumps to 5 SM vis and 1 SM horizontal. The aircraft mix above 10k also flattens the above/below cloud asymmetry, so vertical clearances become symmetric at 1000/1000."
+  cardType: basic
+  tags: [vfr-mins, reasoning, 91.117, 91.155]
+- front: "Why is horizontal cloud clearance (2000 ft) larger than vertical (500/1000)?"
+  back: "An IFR aircraft emerges from a cloud almost always horizontally (flying a route, not climbing/descending through a sidewall). A VFR aircraft beside a cloud gets zero vertical separation and must rely entirely on horizontal buffer. Closure x reaction-time math puts the needed horizontal buffer in the 2000-4000 ft band; the reg picks 2000 ft as the floor."
+  cardType: basic
+  tags: [vfr-mins, reasoning, geometry]
+- front: "Why is vertical cloud clearance asymmetric -- 500 below vs. 1000 above -- at low altitude?"
+  back: "Below the cloud, IFR traffic emerges downward through the base at approach descent rates (~500 fpm); you can escape by descending further. Above the cloud, IFR traffic climbs up through the top at climb rates (~1000 fpm) and you cannot escape by climbing (you'd enter the cloud you're clearing). The 1000 ft above requirement gives the climbing IFR aircraft level-off room before intrusion."
+  cardType: basic
+  tags: [vfr-mins, reasoning, geometry]
+- front: "Why is Class B 'clear of clouds' rather than 500/1000/2000?"
+  back: "Inside Class B, ATC provides separation between ALL IFR and ALL VFR traffic. The geometric buffer exists to protect against surprise emergence from IMC; if ATC has already separated you from IFR traffic, that threat model is eliminated. The 3 SM visibility still stands because you still need to see outside for VFR-vs-VFR see-and-avoid and for runway identification."
+  cardType: basic
+  tags: [vfr-mins, class-b, reasoning]
+```
 
 ### Reps (scenario-based decision practice)
 
