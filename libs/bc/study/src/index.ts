@@ -103,12 +103,31 @@ export type {
 	NewRepAttemptRow,
 	NewReviewRow,
 	NewScenarioRow,
+	NewSessionItemResultRow,
+	NewSessionRow,
+	NewStudyPlanRow,
 	RepAttemptRow,
 	ReviewRow,
 	ScenarioOption,
 	ScenarioRow,
+	SessionItem,
+	SessionItemResultRow,
+	SessionRow,
+	StudyPlanRow,
 } from './schema';
-export { card, cardState, knowledgeEdge, knowledgeNode, repAttempt, review, scenario, studySchema } from './schema';
+export {
+	card,
+	cardState,
+	knowledgeEdge,
+	knowledgeNode,
+	repAttempt,
+	review,
+	scenario,
+	session,
+	sessionItemResult,
+	studyPlan,
+	studySchema,
+} from './schema';
 export type { CardSchedulerState, ScheduleResult } from './srs';
 export { fsrsDefaultParams, fsrsInitialState, fsrsSchedule } from './srs';
 export type { DashboardStats, DomainStats, MasteryStats, RecentReviewRow, ReviewStats } from './stats';

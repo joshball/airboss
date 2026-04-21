@@ -21,16 +21,33 @@ import {
 	CARD_STATUS_VALUES,
 	CARD_STATUSES,
 	CARD_TYPE_VALUES,
+	type Cert,
 	CONTENT_SOURCE_VALUES,
 	CONTENT_SOURCES,
+	DEFAULT_SESSION_LENGTH,
+	DEPTH_PREFERENCE_VALUES,
+	DEPTH_PREFERENCES,
 	DIFFICULTY_VALUES,
+	type Domain,
 	KNOWLEDGE_EDGE_TYPE_VALUES,
+	MAX_SESSION_LENGTH,
+	MIN_SESSION_LENGTH,
 	PHASE_OF_FLIGHT_VALUES,
+	PLAN_STATUS_VALUES,
+	PLAN_STATUSES,
 	SCENARIO_OPTIONS_MAX,
 	SCENARIO_OPTIONS_MIN,
 	SCENARIO_STATUS_VALUES,
 	SCENARIO_STATUSES,
 	SCHEMAS,
+	SESSION_ITEM_KIND_VALUES,
+	SESSION_MODE_VALUES,
+	SESSION_MODES,
+	SESSION_REASON_CODE_VALUES,
+	SESSION_SKIP_KIND_VALUES,
+	SESSION_SLICE_VALUES,
+	type SessionReasonCode,
+	type SessionSlice,
 } from '@ab/constants';
 import { sql } from 'drizzle-orm';
 import {
@@ -370,3 +387,157 @@ export type KnowledgeNodeRow = typeof knowledgeNode.$inferSelect;
 export type NewKnowledgeNodeRow = typeof knowledgeNode.$inferInsert;
 export type KnowledgeEdgeRow = typeof knowledgeEdge.$inferSelect;
 export type NewKnowledgeEdgeRow = typeof knowledgeEdge.$inferInsert;
+
+/**
+ * A single presented slot in a session. Stored inline on `study.session.items`
+ * as an ordered jsonb array so the whole batch commits atomically. See spec
+ * "SessionItem shape" for the rationale.
+ */
+export type SessionItem =
+	| {
+			kind: 'card';
+			cardId: string;
+			slice: SessionSlice;
+			reasonCode: SessionReasonCode;
+			reasonDetail?: string;
+	  }
+	| {
+			kind: 'rep';
+			scenarioId: string;
+			slice: SessionSlice;
+			reasonCode: SessionReasonCode;
+			reasonDetail?: string;
+	  }
+	| {
+			kind: 'node_start';
+			nodeId: string;
+			slice: SessionSlice;
+			reasonCode: SessionReasonCode;
+			reasonDetail?: string;
+	  };
+
+/**
+ * Study plan -- per-user configuration that shapes the session engine.
+ *
+ * Editable in place: this is a mutable config aggregate, not an audit record.
+ * The one-active-plan invariant is enforced by a Postgres partial UNIQUE index
+ * defined in the companion migration (see scripts/db/plan-active-unique.sql),
+ * because Drizzle's table DSL does not express partial UNIQUE cleanly.
+ */
+export const studyPlan = studySchema.table(
+	'study_plan',
+	{
+		id: text('id').primaryKey(),
+		userId: text('user_id')
+			.notNull()
+			.references(() => bauthUser.id, { onDelete: 'cascade' }),
+		title: text('title').notNull(),
+		status: text('status').notNull().default(PLAN_STATUSES.ACTIVE),
+		certGoals: jsonb('cert_goals').$type<Cert[]>().notNull().default([]),
+		focusDomains: jsonb('focus_domains').$type<Domain[]>().notNull().default([]),
+		skipDomains: jsonb('skip_domains').$type<Domain[]>().notNull().default([]),
+		skipNodes: jsonb('skip_nodes').$type<string[]>().notNull().default([]),
+		depthPreference: text('depth_preference').notNull().default(DEPTH_PREFERENCES.WORKING),
+		sessionLength: smallint('session_length').notNull().default(DEFAULT_SESSION_LENGTH),
+		defaultMode: text('default_mode').notNull().default(SESSION_MODES.MIXED),
+		createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+		updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+	},
+	(t) => ({
+		planUserStatusIdx: index('plan_user_status_idx').on(t.userId, t.status),
+		statusCheck: check('plan_status_check', sql.raw(`"status" IN (${inList(PLAN_STATUS_VALUES)})`)),
+		depthCheck: check('plan_depth_check', sql.raw(`"depth_preference" IN (${inList(DEPTH_PREFERENCE_VALUES)})`)),
+		modeCheck: check('plan_mode_check', sql.raw(`"default_mode" IN (${inList(SESSION_MODE_VALUES)})`)),
+		sessionLengthCheck: check(
+			'plan_session_length_check',
+			sql.raw(`"session_length" BETWEEN ${MIN_SESSION_LENGTH} AND ${MAX_SESSION_LENGTH}`),
+		),
+	}),
+);
+
+/**
+ * One row per session start. A session carries a committed, ordered batch of
+ * items in `items` jsonb (the engine output snapshot) and a `completed_at`
+ * timestamp that stays NULL while in progress. The plan FK uses `restrict` so
+ * historical sessions always have a plan to attribute to; archiving a plan
+ * does not delete its sessions.
+ */
+export const session = studySchema.table(
+	'session',
+	{
+		id: text('id').primaryKey(),
+		userId: text('user_id')
+			.notNull()
+			.references(() => bauthUser.id, { onDelete: 'cascade' }),
+		planId: text('plan_id')
+			.notNull()
+			.references(() => studyPlan.id, { onDelete: 'restrict' }),
+		mode: text('mode').notNull(),
+		focusOverride: text('focus_override'),
+		certOverride: text('cert_override'),
+		sessionLength: smallint('session_length').notNull(),
+		items: jsonb('items').$type<SessionItem[]>().notNull(),
+		/** Seed used by the engine; preserved so Shuffle can regenerate deterministically. */
+		seed: text('seed').notNull(),
+		startedAt: timestamp('started_at', { withTimezone: true }).notNull().defaultNow(),
+		completedAt: timestamp('completed_at', { withTimezone: true }),
+	},
+	(t) => ({
+		sessionUserStartedIdx: index('session_user_started_idx').on(t.userId, t.startedAt),
+		sessionPlanStartedIdx: index('session_plan_started_idx').on(t.planId, t.startedAt),
+		modeCheck: check('session_mode_check', sql.raw(`"mode" IN (${inList(SESSION_MODE_VALUES)})`)),
+	}),
+);
+
+/**
+ * Append-only attempt log per session slot. Every item result -- whether the
+ * user reviewed, attempted, started a node, or skipped -- writes exactly one
+ * row. The FK to review / rep_attempt uses `set null` so the trail survives
+ * hard deletes of the underlying content.
+ */
+export const sessionItemResult = studySchema.table(
+	'session_item_result',
+	{
+		id: text('id').primaryKey(),
+		sessionId: text('session_id')
+			.notNull()
+			.references(() => session.id, { onDelete: 'cascade' }),
+		/** Denormalized for per-user aggregate queries (streak). */
+		userId: text('user_id').notNull(),
+		slotIndex: smallint('slot_index').notNull(),
+		itemKind: text('item_kind').notNull(),
+		slice: text('slice').notNull(),
+		reasonCode: text('reason_code').notNull(),
+		cardId: text('card_id').references(() => card.id, { onDelete: 'set null' }),
+		scenarioId: text('scenario_id').references(() => scenario.id, { onDelete: 'set null' }),
+		nodeId: text('node_id'),
+		reviewId: text('review_id').references(() => review.id, { onDelete: 'set null' }),
+		repAttemptId: text('rep_attempt_id').references(() => repAttempt.id, { onDelete: 'set null' }),
+		skipKind: text('skip_kind'),
+		/** Free-text detail when an item is skipped because its source was deleted etc. */
+		reasonDetail: text('reason_detail'),
+		presentedAt: timestamp('presented_at', { withTimezone: true }).notNull().defaultNow(),
+		completedAt: timestamp('completed_at', { withTimezone: true }),
+	},
+	(t) => ({
+		sirSessionSlotIdx: index('sir_session_slot_idx').on(t.sessionId, t.slotIndex),
+		sirUserCompletedIdx: index('sir_user_completed_idx').on(t.userId, t.completedAt),
+		itemKindCheck: check('sir_item_kind_check', sql.raw(`"item_kind" IN (${inList(SESSION_ITEM_KIND_VALUES)})`)),
+		sliceCheck: check('sir_slice_check', sql.raw(`"slice" IN (${inList(SESSION_SLICE_VALUES)})`)),
+		reasonCodeCheck: check(
+			'sir_reason_code_check',
+			sql.raw(`"reason_code" IN (${inList(SESSION_REASON_CODE_VALUES)})`),
+		),
+		skipKindCheck: check(
+			'sir_skip_kind_check',
+			sql.raw(`"skip_kind" IS NULL OR "skip_kind" IN (${inList(SESSION_SKIP_KIND_VALUES)})`),
+		),
+	}),
+);
+
+export type StudyPlanRow = typeof studyPlan.$inferSelect;
+export type NewStudyPlanRow = typeof studyPlan.$inferInsert;
+export type SessionRow = typeof session.$inferSelect;
+export type NewSessionRow = typeof session.$inferInsert;
+export type SessionItemResultRow = typeof sessionItemResult.$inferSelect;
+export type NewSessionItemResultRow = typeof sessionItemResult.$inferInsert;
