@@ -11,6 +11,7 @@ import {
 	SCENARIO_STATUS_VALUES,
 	SCENARIO_STATUSES,
 } from '@ab/constants';
+import { humanize } from '@ab/utils';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
@@ -24,13 +25,6 @@ const hasActiveFilters = $derived(
 	Boolean(filters.domain || filters.difficulty || filters.phaseOfFlight || filters.sourceType) ||
 		filters.status !== SCENARIO_STATUSES.ACTIVE,
 );
-
-function humanize(slug: string): string {
-	return slug
-		.split(/[-_]/)
-		.map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-		.join(' ');
-}
 
 function domainLabel(slug: string): string {
 	return (DOMAIN_LABELS as Record<string, string>)[slug] ?? humanize(slug);
@@ -153,7 +147,7 @@ function pageHref(n: number): string {
 				<li class="card">
 					<div class="card-head">
 						<h2 class="card-title">{s.title}</h2>
-						<span class="count">{s.options.length} options</span>
+						<span class="count">{s.optionsCount} options</span>
 					</div>
 					<p class="card-situation">{shorten(s.situation)}</p>
 					<div class="card-meta">

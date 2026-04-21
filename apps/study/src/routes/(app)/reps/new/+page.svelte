@@ -35,7 +35,7 @@ function blankOption(index: number): OptionDraft {
 // state-initializer time, so we stage these as local `untrack`-style seeds
 // -- the initial submit is the authoritative source; subsequent reactive
 // changes are driven by user typing, not `form` replacing itself.
-// svelte-ignore state_referenced_locally
+// svelte-ignore state_referenced_locally -- seeding initial state from form; treat as independent thereafter
 const seed = form?.values;
 let loading = $state(false);
 
@@ -157,9 +157,6 @@ function difficultyLabel(slug: string): string {
 			</legend>
 			{#if fieldErrors.options}
 				<p class="err" role="alert">{fieldErrors.options}</p>
-			{/if}
-			{#if fieldErrors[''] && !fieldErrors.options}
-				<p class="err" role="alert">{fieldErrors['']}</p>
 			{/if}
 
 			<input type="hidden" name="options[correct]" value={correctIndex} />

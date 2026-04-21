@@ -14,20 +14,24 @@ export const load: PageServerLoad = async () => {
 export const actions: Actions = {
 	default: async ({ request, cookies, locals, url }) => {
 		try {
-			const authRequest = new Request(`${AUTH_INTERNAL_ORIGIN}${ROUTES.API_AUTH}${BETTER_AUTH_ENDPOINTS.SIGN_OUT}`, {
-				method: 'POST',
-				headers: { cookie: request.headers.get('cookie') ?? '' },
-			});
-			const authResponse = await auth.handler(authRequest);
-			forwardAuthCookies(authResponse, cookies, url.host);
-		} catch (err) {
-			log.error('sign-out handler failed', { requestId: locals.requestId }, err instanceof Error ? err : undefined);
+			try {
+				const authRequest = new Request(`${AUTH_INTERNAL_ORIGIN}${ROUTES.API_AUTH}${BETTER_AUTH_ENDPOINTS.SIGN_OUT}`, {
+					method: 'POST',
+					headers: { cookie: request.headers.get('cookie') ?? '' },
+				});
+				const authResponse = await auth.handler(authRequest);
+				forwardAuthCookies(authResponse, cookies, url.host);
+			} catch (err) {
+				log.error('sign-out handler failed', { requestId: locals.requestId }, err instanceof Error ? err : undefined);
+			}
+		} finally {
+			// Clear session cookies unconditionally. Forwarding from better-auth
+			// above is best-effort (it may 5xx, the response may omit Set-Cookie,
+			// or the caller may be in a banned/expired state). Running the
+			// cookie-clear in finally guarantees the server-side response always
+			// ends in a signed-out state. Idempotent -- safe alongside forward.
+			clearSessionCookies(cookies, url.host);
 		}
-
-		// Forward any Set-Cookie headers from better-auth's sign-out, then explicitly
-		// clear known cookie names as a backstop (better-auth sometimes omits the
-		// Set-Cookie on sign-out). Idempotent -- safe to run both.
-		clearSessionCookies(cookies, url.host);
 
 		redirect(303, ROUTES.LOGIN);
 	},

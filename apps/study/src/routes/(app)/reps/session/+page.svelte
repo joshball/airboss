@@ -6,8 +6,10 @@ import {
 	PHASE_OF_FLIGHT_LABELS,
 	ROUTES,
 } from '@ab/constants';
+import { humanize } from '@ab/utils';
 import { enhance } from '$app/forms';
-import { invalidateAll } from '$app/navigation';
+import { invalidateAll, replaceState } from '$app/navigation';
+import { page } from '$app/state';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
@@ -24,10 +26,10 @@ interface DomainTally {
 // stable even as `data` refreshes (e.g. after a submit returns a
 // success result and triggers SvelteKit's reload of load data).
 // `startNewSession()` is the only place we re-pull from data.
-// svelte-ignore state_referenced_locally
+// svelte-ignore state_referenced_locally -- seeding initial state from data; treat as independent thereafter
 let batch = $state(data.batch);
 let index = $state(0);
-// svelte-ignore state_referenced_locally
+// svelte-ignore state_referenced_locally -- seeding initial state from data; treat as independent thereafter
 let phase = $state<Phase>(data.batch.length === 0 ? 'complete' : 'read');
 let revealedAt = $state<number | null>(null);
 let confidence = $state<number | null>(null);
@@ -35,8 +37,27 @@ let selectedOption = $state<string | null>(null);
 let lastResultCorrect = $state<boolean | null>(null);
 let attemptedTotal = $state(0);
 let correctTotal = $state(0);
+let skippedTotal = $state(0);
+let lastSkipped = $state(false);
 let domainTallies = $state<Record<string, DomainTally>>({});
 let submitError = $state<string | null>(null);
+// `loading` guards the form from double-submit. Set synchronously in
+// the enhance callback before the fetch, cleared in the result handler.
+// See: `phase` transitions run after the browser already dispatched the
+// click, so a `phase`-only guard raced the second click.
+let loading = $state(false);
+
+// Pin the shuffle seed into the URL on first mount so a hard-refresh or
+// SvelteKit `invalidate` rerun reuses the same `sessionId` (and thus the
+// same option order) instead of reshuffling the queue behind the user.
+// `replaceState` keeps the URL out of the browser back-button stack.
+$effect(() => {
+	if (page.url.searchParams.get('s') !== data.sessionId) {
+		const next = new URL(page.url);
+		next.searchParams.set('s', data.sessionId);
+		replaceState(next, page.state);
+	}
+});
 
 const current = $derived(batch[index]);
 const total = $derived(batch.length);
@@ -44,13 +65,6 @@ const needsConfidence = $derived(Boolean(current?.promptConfidence));
 const chosenOpt = $derived(current?.options.find((o) => o.id === selectedOption));
 const accuracy = $derived(attemptedTotal === 0 ? 0 : Math.round((correctTotal / attemptedTotal) * 100));
 const confidenceLabels = ['Wild guess', 'Uncertain', 'Maybe', 'Probably', 'Certain'];
-
-function humanize(slug: string): string {
-	return slug
-		.split(/[-_]/)
-		.map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-		.join(' ');
-}
 
 function domainLabel(slug: string): string {
 	return (DOMAIN_LABELS as Record<string, string>)[slug] ?? humanize(slug);
@@ -106,6 +120,7 @@ function advance() {
 	confidence = null;
 	revealedAt = null;
 	lastResultCorrect = null;
+	lastSkipped = false;
 	submitError = null;
 	if (next >= batch.length) {
 		phase = 'complete';
@@ -124,14 +139,20 @@ async function startNewSession() {
 	confidence = null;
 	revealedAt = null;
 	lastResultCorrect = null;
+	lastSkipped = false;
 	attemptedTotal = 0;
 	correctTotal = 0;
+	skippedTotal = 0;
 	domainTallies = {};
 	submitError = null;
+	loading = false;
 	phase = batch.length === 0 ? 'complete' : 'read';
 }
 
 function onKeydown(e: KeyboardEvent) {
+	// Drop composition events so a live IME (e.g. CJK input) typing a number
+	// during confidence capture doesn't accidentally pick a level.
+	if (e.isComposing) return;
 	if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
 	if (phase === 'read') {
 		if (e.key === ' ' || e.key === 'Enter') {
@@ -169,6 +190,12 @@ function onKeydown(e: KeyboardEvent) {
 					<strong>{correctTotal}</strong> / <strong>{attemptedTotal}</strong> correct
 					<span class="acc">({accuracy}% accuracy)</span>
 				</p>
+				{#if skippedTotal > 0}
+					<p class="skipped-note">
+						{skippedTotal}
+						{skippedTotal === 1 ? 'scenario was' : 'scenarios were'} skipped because it was archived mid-session.
+					</p>
+				{/if}
 				<dl class="by-domain">
 					{#each Object.values(domainTallies) as t (t.domain)}
 						<div>
@@ -177,6 +204,10 @@ function onKeydown(e: KeyboardEvent) {
 						</div>
 					{/each}
 				</dl>
+			{:else if skippedTotal > 0}
+				<p class="headline">
+					Every scenario in this batch was archived before it could be attempted.
+				</p>
 			{:else}
 				<p class="headline">
 					No scenarios available. Create one to get going, or check back after archiving fewer of them.
@@ -206,46 +237,60 @@ function onKeydown(e: KeyboardEvent) {
 			<p class="situation">{current.situation}</p>
 
 			{#if phase === 'reveal'}
-				<hr />
-				<div class="section-label">Your choice</div>
-				<p class="chosen">
-					{#if chosenOpt}
-						{chosenOpt.text}
-					{/if}
-					<span class="indicator" class:correct={lastResultCorrect === true} class:incorrect={lastResultCorrect === false}>
-						{lastResultCorrect === true ? 'Correct' : 'Incorrect'}
-					</span>
-				</p>
-
-				<div class="section-label">Outcomes</div>
-				<ol class="outcomes">
-					{#each current.options as opt (opt.id)}
-						<li class:correct={opt.isCorrect} class:chosen={opt.id === selectedOption}>
-							<div class="outcome-head">
-								<span class="outcome-text">{opt.text}</span>
-								<span class="outcome-tag">
-									{#if opt.isCorrect}Correct{:else if opt.id === selectedOption}Your choice{/if}
-								</span>
-							</div>
-							<p class="outcome-body">{opt.outcome}</p>
-							{#if !opt.isCorrect && opt.whyNot}
-								<p class="outcome-whynot"><strong>Why not:</strong> {opt.whyNot}</p>
+				<div class="reveal" aria-live="polite">
+					<div role="separator" class="sep"></div>
+					{#if lastSkipped}
+						<div class="section-label">Skipped</div>
+						<p class="chosen">
+							This scenario was archived before your attempt could be saved.
+							<span class="indicator skipped">Skipped</span>
+						</p>
+					{:else}
+						<div class="section-label">Your choice</div>
+						<p class="chosen">
+							{#if chosenOpt}
+								{chosenOpt.text}
 							{/if}
-						</li>
-					{/each}
-				</ol>
+							<span
+								class="indicator"
+								class:correct={lastResultCorrect === true}
+								class:incorrect={lastResultCorrect === false}
+							>
+								{lastResultCorrect === true ? 'Correct' : 'Incorrect'}
+							</span>
+						</p>
 
-				<div class="section-label">Teaching point</div>
-				<p class="teaching">{current.teachingPoint}</p>
+						<div class="section-label">Outcomes</div>
+						<ol class="outcomes">
+							{#each current.options as opt (opt.id)}
+								<li class:correct={opt.isCorrect} class:chosen={opt.id === selectedOption}>
+									<div class="outcome-head">
+										<span class="outcome-text">{opt.text}</span>
+										<span class="outcome-tag">
+											{#if opt.isCorrect}Correct{:else if opt.id === selectedOption}Your choice{/if}
+										</span>
+									</div>
+									<p class="outcome-body">{opt.outcome}</p>
+									{#if !opt.isCorrect && opt.whyNot}
+										<p class="outcome-whynot"><strong>Why not:</strong> {opt.whyNot}</p>
+									{/if}
+								</li>
+							{/each}
+						</ol>
 
-				{#if current.regReferences.length > 0}
-					<div class="section-label">References</div>
-					<ul class="refs">
-						{#each current.regReferences as ref (ref)}
-							<li>{ref}</li>
-						{/each}
-					</ul>
-				{/if}
+						<div class="section-label">Teaching point</div>
+						<p class="teaching">{current.teachingPoint}</p>
+
+						{#if current.regReferences.length > 0}
+							<div class="section-label">References</div>
+							<ul class="refs">
+								{#each current.regReferences as ref (ref)}
+									<li>{ref}</li>
+								{/each}
+							</ul>
+						{/if}
+					{/if}
+				</div>
 			{/if}
 		</article>
 
@@ -256,10 +301,17 @@ function onKeydown(e: KeyboardEvent) {
 			</button>
 		{:else if phase === 'confidence'}
 			<article class="prompt">
-				<p class="prompt-q">Before you pick -- how confident are you?</p>
-				<div class="confidence-row">
+				<p class="prompt-q" id="confidence-prompt">Before you pick -- how confident are you?</p>
+				<div class="confidence-row" role="radiogroup" aria-labelledby="confidence-prompt">
 					{#each CONFIDENCE_LEVEL_VALUES as level, i (level)}
-						<button type="button" class="conf" onclick={() => pickConfidence(level)}>
+						<button
+							type="button"
+							role="radio"
+							aria-checked={confidence === level}
+							aria-label={`${level} -- ${confidenceLabels[i]}`}
+							class="conf"
+							onclick={() => pickConfidence(level)}
+						>
 							<span class="conf-num">{level}</span>
 							<span class="conf-label">{confidenceLabels[i]}</span>
 						</button>
@@ -272,6 +324,13 @@ function onKeydown(e: KeyboardEvent) {
 				method="POST"
 				action="?/submit"
 				use:enhance={({ formData }) => {
+					// `loading` is set synchronously inside this callback, before the
+					// browser dispatches the next click event. The option buttons
+					// below switch to `disabled={loading}` so a rapid second click
+					// on a different option cannot fire a second submit before the
+					// first one lands.
+					if (loading) return () => Promise.resolve();
+					loading = true;
 					const clickedOption = String(formData.get('chosenOption') ?? '');
 					selectedOption = clickedOption;
 					phase = 'submitting';
@@ -286,9 +345,16 @@ function onKeydown(e: KeyboardEvent) {
 								| undefined;
 							if (data?.skipped) {
 								// Server signalled the scenario went away mid-session.
-								advance();
+								// Surface the skip in the reveal phase so the user knows
+								// the attempt wasn't silently dropped.
+								skippedTotal++;
+								lastSkipped = true;
+								lastResultCorrect = null;
+								phase = 'reveal';
+								loading = false;
 								return;
 							}
+							lastSkipped = false;
 							lastResultCorrect = data?.isCorrect === true;
 							tallyResult(current.domain, lastResultCorrect);
 							phase = 'reveal';
@@ -297,25 +363,28 @@ function onKeydown(e: KeyboardEvent) {
 							submitError =
 								result.type === 'failure' ? 'Could not save that attempt. Try again.' : 'Network error. Try again.';
 						}
+						loading = false;
 					};
 				}}
 			>
 				<input type="hidden" name="scenarioId" value={current.id} />
-				<p class="rate-q">What do you do?</p>
-				<div class="options">
-					{#each current.options as opt, i (opt.id)}
-						<button
-							type="submit"
-							name="chosenOption"
-							value={opt.id}
-							class="option-btn"
-							disabled={phase !== 'choose'}
-						>
-							<span class="option-index">{i + 1}</span>
-							<span class="option-text">{opt.text}</span>
-						</button>
-					{/each}
-				</div>
+				<fieldset class="options-fs" disabled={loading}>
+					<legend class="rate-q">What do you do?</legend>
+					<div class="options">
+						{#each current.options as opt, i (opt.id)}
+							<button
+								type="submit"
+								name="chosenOption"
+								value={opt.id}
+								class="option-btn"
+								disabled={loading}
+							>
+								<span class="option-index">{i + 1}</span>
+								<span class="option-text">{opt.text}</span>
+							</button>
+						{/each}
+					</div>
+				</fieldset>
 				{#if submitError}
 					<p class="submit-error" role="alert">{submitError}</p>
 				{/if}
@@ -439,8 +508,13 @@ function onKeydown(e: KeyboardEvent) {
 		white-space: pre-wrap;
 	}
 
-	hr {
-		border: none;
+	.reveal {
+		display: flex;
+		flex-direction: column;
+		gap: 0.875rem;
+	}
+
+	.sep {
 		border-top: 1px dashed #e2e8f0;
 		margin: 0.25rem 0;
 	}
@@ -473,6 +547,22 @@ function onKeydown(e: KeyboardEvent) {
 		color: #b91c1c;
 		background: #fee2e2;
 		border: 1px solid #fecaca;
+	}
+
+	.indicator.skipped {
+		color: #92400e;
+		background: #fffbeb;
+		border: 1px solid #fde68a;
+	}
+
+	.skipped-note {
+		margin: 0;
+		color: #92400e;
+		font-size: 0.875rem;
+		background: #fffbeb;
+		border: 1px solid #fde68a;
+		border-radius: 8px;
+		padding: 0.5rem 0.75rem;
 	}
 
 	.outcomes {
@@ -610,12 +700,25 @@ function onKeydown(e: KeyboardEvent) {
 		align-self: center;
 	}
 
+	.options-fs {
+		border: none;
+		padding: 0;
+		margin: 0;
+		min-width: 0;
+	}
+
+	.options-fs:disabled {
+		opacity: 0.9;
+	}
+
 	.rate-q {
 		margin: 0.5rem 0 0;
 		text-align: center;
 		color: #475569;
 		font-size: 0.9375rem;
 		font-weight: 500;
+		width: 100%;
+		padding: 0;
 	}
 
 	.options {
