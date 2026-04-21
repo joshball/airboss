@@ -9,15 +9,9 @@
 		"test": "bun scripts/test.ts",
 		"db": "bun scripts/db.ts",
 		"setup": "bun scripts/setup.ts",
-<<<<<<< HEAD
-		"smoke": "bun scripts/smoke.ts"
-||||||| parent of 74a74c1 (feat(knowledge-graph): CLI scaffolder + build script + yaml parse)
-		"smoke": "bun scripts/smoke/study-bc.ts"
-=======
-		"smoke": "bun scripts/smoke/study-bc.ts",
+		"smoke": "bun scripts/smoke.ts",
 		"knowledge:new": "bun scripts/knowledge-new.ts",
 		"build-knowledge": "bun scripts/build-knowledge-index.ts"
->>>>>>> 74a74c1 (feat(knowledge-graph): CLI scaffolder + build script + yaml parse)
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.4.7",

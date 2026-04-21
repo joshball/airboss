@@ -22,7 +22,7 @@ import {
 	STABILITY_MASTERED_DAYS,
 } from '@ab/constants';
 import { db } from '@ab/db';
-import { createId, generateAuthId } from '@ab/utils';
+import { createId, generateAuthId, generateRepAttemptId } from '@ab/utils';
 import { eq } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { createCard } from './cards';
@@ -242,11 +242,21 @@ async function seedAttachedRepsAndAttempts(nodeId: string, attemptCount: number,
 		nodeId,
 	});
 
+	// Insert directly, sidestepping submitAttempt's idempotency window.
+	// The test spaces attempts by 1ms so each is a distinct row; the BC
+	// dedupe fold is a production safeguard, not a model constraint for
+	// mastery math.
+	const now = Date.now();
 	for (let i = 0; i < attemptCount; i++) {
-		await submitAttempt({
+		await db.insert(repAttempt).values({
+			id: generateRepAttemptId(),
 			scenarioId: sc.id,
 			userId: TEST_USER_ID,
 			chosenOption: i < correctCount ? 'a' : 'b',
+			isCorrect: i < correctCount,
+			confidence: null,
+			answerMs: null,
+			attemptedAt: new Date(now + i),
 		});
 	}
 }

@@ -192,14 +192,10 @@ export async function createScenario(input: CreateScenarioInput, db: Db = defaul
 			phaseOfFlight: (parsed.phaseOfFlight ?? null) as PhaseOfFlight | null,
 			sourceType,
 			sourceRef: parsed.sourceRef ?? null,
-<<<<<<< HEAD
+			nodeId: input.nodeId ?? null,
 			// Defaults to true for personal content, false for non-personal,
 			// matching the cards BC. Non-personal content is either imported
 			// or course-authored and should not be edited downstream.
-||||||| parent of 55785e5 (feat(knowledge-graph): dual-gate mastery BC + constants + KG routes)
-=======
-			nodeId: input.nodeId ?? null,
->>>>>>> 55785e5 (feat(knowledge-graph): dual-gate mastery BC + constants + KG routes)
 			isEditable: parsed.isEditable ?? sourceType === CONTENT_SOURCES.PERSONAL,
 			regReferences: parsed.regReferences ?? [],
 			status: SCENARIO_STATUSES.ACTIVE,
