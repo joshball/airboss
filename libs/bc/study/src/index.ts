@@ -32,6 +32,7 @@ export {
 	getWeakAreas,
 	overdueCutoff,
 } from './dashboard';
+export { runEngine } from './engine';
 export type {
 	KnowledgeNodeListRow,
 	ListNodesFilters,
@@ -62,6 +63,23 @@ export {
 	splitContentPhases,
 	upsertKnowledgeNode,
 } from './knowledge';
+export type { CreatePlanInput, UpdatePlanInput } from './plans';
+export {
+	activatePlan,
+	addSkipDomain,
+	addSkipNode,
+	archivePlan,
+	createPlan,
+	DuplicateActivePlanError,
+	getActivePlan,
+	getPlan,
+	getPlans,
+	NoActivePlanError,
+	PlanNotFoundError,
+	removeSkipDomain,
+	removeSkipNode,
+	updatePlan,
+} from './plans';
 export type { SubmitReviewInput } from './reviews';
 export { CardNotReviewableError, submitReview } from './reviews';
 export type {

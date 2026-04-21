@@ -34,7 +34,7 @@ import {
 	isMastered,
 	isNodeMastered,
 } from './knowledge';
-import { createScenario, submitAttempt } from './scenarios';
+import { createScenario } from './scenarios';
 import { card, cardState, knowledgeNode, repAttempt, scenario } from './schema';
 
 describe('computeCardGate', () => {

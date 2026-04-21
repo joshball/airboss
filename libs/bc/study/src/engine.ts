@@ -352,14 +352,14 @@ function toSessionItem<T extends { cardId?: string; scenarioId?: string; nodeId?
 ): SessionItem {
 	const { slice, reasonCode, reasonDetail } = scored;
 	if (scored.kind === 'card') {
-		const cardId = (scored.candidate as EngineCardCandidate).cardId;
+		const cardId = (scored.candidate as unknown as EngineCardCandidate).cardId;
 		return { kind: 'card', cardId, slice, reasonCode, reasonDetail };
 	}
 	if (scored.kind === 'rep') {
-		const scenarioId = (scored.candidate as EngineRepCandidate).scenarioId;
+		const scenarioId = (scored.candidate as unknown as EngineRepCandidate).scenarioId;
 		return { kind: 'rep', scenarioId, slice, reasonCode, reasonDetail };
 	}
-	const nodeId = (scored.candidate as EngineNodeCandidate).nodeId;
+	const nodeId = (scored.candidate as unknown as EngineNodeCandidate).nodeId;
 	return { kind: 'node_start', nodeId, slice, reasonCode, reasonDetail };
 }
 
@@ -616,7 +616,11 @@ export async function runEngine(inputs: EngineInputs, now: Date = new Date()): P
 		[SESSION_SLICES.DIVERSIFY]: [],
 	};
 	for (const p of picked) {
-		bySlice[p.slice].push(toSessionItem(p.scored));
+		// Generic variance: picked.scored is Scored<unknown>, toSessionItem narrows
+		// via scored.kind. Cast is type-safe at runtime.
+		bySlice[p.slice].push(
+			toSessionItem(p.scored as unknown as Scored<{ cardId?: string; scenarioId?: string; nodeId?: string }>),
+		);
 	}
 	const items: SessionItem[] = [];
 	const playOrder: readonly SessionSlice[] = [
