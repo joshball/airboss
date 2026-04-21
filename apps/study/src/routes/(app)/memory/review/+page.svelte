@@ -160,7 +160,7 @@ function clickRating(value: number) {
 				<p class="summary">No cards due right now. Come back later or write more cards.</p>
 			{/if}
 			<div class="actions">
-				<a class="btn ghost" href={ROUTES.MEMORY}>Back to dashboard</a>
+				<a class="btn ghost" href={ROUTES.DASHBOARD}>Back to dashboard</a>
 				<a class="btn secondary" href={ROUTES.MEMORY_NEW}>New card</a>
 				<button type="button" class="btn primary" onclick={startNewSession}>Reload queue</button>
 			</div>

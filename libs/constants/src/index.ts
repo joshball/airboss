@@ -37,6 +37,7 @@ export { ROLES, type Role } from './roles';
 export { QUERY_PARAMS, ROUTES } from './routes';
 export { SCHEMAS, type SchemaName } from './schemas';
 export {
+	ACTIVITY_WINDOW_DAYS,
 	BROWSE_PAGE_SIZE,
 	CARD_STATE_VALUES,
 	CARD_STATES,
@@ -76,6 +77,7 @@ export {
 	type KnowledgeEdgeYamlKey,
 	type KnowledgePhase,
 	MASTERY_STABILITY_DAYS,
+	OVERDUE_GRACE_MS,
 	PHASE_OF_FLIGHT_LABELS,
 	PHASE_OF_FLIGHT_VALUES,
 	PHASES_OF_FLIGHT,
@@ -93,4 +95,8 @@ export {
 	SCENARIO_STATUS_VALUES,
 	SCENARIO_STATUSES,
 	type ScenarioStatus,
+	WEAK_AREA_ACCURACY_THRESHOLD,
+	WEAK_AREA_LIMIT,
+	WEAK_AREA_MIN_DATA_POINTS,
+	WEAK_AREA_WINDOW_DAYS,
 } from './study';

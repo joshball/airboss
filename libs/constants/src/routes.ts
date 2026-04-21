@@ -5,6 +5,9 @@ export const ROUTES = {
 	LOGOUT: '/logout',
 	API_AUTH: '/api/auth',
 
+	// Study -- Dashboard (launchpad; `/` redirects here)
+	DASHBOARD: '/dashboard',
+
 	// Study -- Memory
 	MEMORY: '/memory',
 	MEMORY_REVIEW: '/memory/review',

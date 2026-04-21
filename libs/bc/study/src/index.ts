@@ -12,6 +12,24 @@ export {
 	setCardStatus,
 	updateCard,
 } from './cards';
+export type {
+	ActivityDay,
+	DashboardFetchers,
+	DashboardPayload,
+	PanelResult,
+	RecentActivity,
+	RepBacklog,
+	RepBacklogDomain,
+	WeakArea,
+	WeakAreaReason,
+} from './dashboard';
+export {
+	getDashboardPayload,
+	getRecentActivity,
+	getRepBacklog,
+	getWeakAreas,
+	overdueCutoff,
+} from './dashboard';
 export type { SubmitReviewInput } from './reviews';
 export { CardNotReviewableError, submitReview } from './reviews';
 export type {
