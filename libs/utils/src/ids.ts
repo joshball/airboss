@@ -17,3 +17,7 @@ export const generateReviewId = (): string => createId('rev');
 // Decision reps (study BC) -- scenarios + attempts per spec prefix.
 export const generateScenarioId = (): string => createId('rep');
 export const generateRepAttemptId = (): string => createId('rat');
+// Study plan + session engine.
+export const generateStudyPlanId = (): string => createId('plan');
+export const generateSessionId = (): string => createId('ses');
+export const generateSessionItemResultId = (): string => createId('sir');

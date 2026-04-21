@@ -32,6 +32,7 @@ export {
 	getWeakAreas,
 	overdueCutoff,
 } from './dashboard';
+export { runEngine } from './engine';
 export type {
 	KnowledgeNodeListRow,
 	ListNodesFilters,
@@ -62,6 +63,23 @@ export {
 	splitContentPhases,
 	upsertKnowledgeNode,
 } from './knowledge';
+export type { CreatePlanInput, UpdatePlanInput } from './plans';
+export {
+	activatePlan,
+	addSkipDomain,
+	addSkipNode,
+	archivePlan,
+	createPlan,
+	DuplicateActivePlanError,
+	getActivePlan,
+	getPlan,
+	getPlans,
+	NoActivePlanError,
+	PlanNotFoundError,
+	removeSkipDomain,
+	removeSkipNode,
+	updatePlan,
+} from './plans';
 export type { SubmitReviewInput } from './reviews';
 export { CardNotReviewableError, submitReview } from './reviews';
 export type {
@@ -103,12 +121,31 @@ export type {
 	NewRepAttemptRow,
 	NewReviewRow,
 	NewScenarioRow,
+	NewSessionItemResultRow,
+	NewSessionRow,
+	NewStudyPlanRow,
 	RepAttemptRow,
 	ReviewRow,
 	ScenarioOption,
 	ScenarioRow,
+	SessionItem,
+	SessionItemResultRow,
+	SessionRow,
+	StudyPlanRow,
 } from './schema';
-export { card, cardState, knowledgeEdge, knowledgeNode, repAttempt, review, scenario, studySchema } from './schema';
+export {
+	card,
+	cardState,
+	knowledgeEdge,
+	knowledgeNode,
+	repAttempt,
+	review,
+	scenario,
+	session,
+	sessionItemResult,
+	studyPlan,
+	studySchema,
+} from './schema';
 export type { CardSchedulerState, ScheduleResult } from './srs';
 export { fsrsDefaultParams, fsrsInitialState, fsrsSchedule } from './srs';
 export type { DashboardStats, DomainStats, MasteryStats, RecentReviewRow, ReviewStats } from './stats';

@@ -6,6 +6,9 @@ export {
 	generateRepAttemptId,
 	generateReviewId,
 	generateScenarioId,
+	generateSessionId,
+	generateSessionItemResultId,
+	generateStudyPlanId,
 } from './ids';
 export { createLogger, type Logger } from './logger';
 export { humanize } from './strings';
