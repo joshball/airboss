@@ -309,6 +309,138 @@ export async function getNodesByIds(ids: readonly string[], db: Db = defaultDb):
 		.where(inArray(knowledgeNode.id, ids as string[]));
 }
 
+/** Lifecycle derivation from a node's markdown body. Counts unique H2 phase
+ * headings ("## Context", "## Problem", ...) and maps to the skeleton /
+ * started / complete lifecycle. Kept in the BC so UI, build script, and tests
+ * all resolve lifecycle the same way.
+ */
+export function lifecycleFromContent(contentMd: string): 'skeleton' | 'started' | 'complete' {
+	const phaseLabels = new Set(['context', 'problem', 'discover', 'reveal', 'practice', 'connect', 'verify']);
+	const found = new Set<string>();
+	for (const line of contentMd.split(/\r?\n/)) {
+		const m = line.match(/^##\s+(.+?)\s*$/);
+		if (!m) continue;
+		const label = m[1].trim().toLowerCase();
+		if (phaseLabels.has(label)) found.add(label);
+	}
+	if (found.size === 0) return 'skeleton';
+	if (found.size >= phaseLabels.size) return 'complete';
+	return 'started';
+}
+
+/**
+ * Parse the content_md body into seven phase buckets keyed by canonical
+ * phase slug. Missing phases are represented as `null` so the UI can render
+ * "Not yet authored" placeholders without a secondary lookup.
+ */
+export function splitContentPhases(contentMd: string): Record<string, string | null> {
+	const canonical: Record<string, string> = {
+		context: 'context',
+		problem: 'problem',
+		discover: 'discover',
+		reveal: 'reveal',
+		practice: 'practice',
+		connect: 'connect',
+		verify: 'verify',
+	};
+	const buckets: Record<string, string | null> = {
+		context: null,
+		problem: null,
+		discover: null,
+		reveal: null,
+		practice: null,
+		connect: null,
+		verify: null,
+	};
+	const lines = contentMd.split(/\r?\n/);
+	let currentPhase: string | null = null;
+	let accum: string[] = [];
+	const flush = () => {
+		if (currentPhase !== null) {
+			const text = accum.join('\n').trim();
+			if (text.length > 0) buckets[currentPhase] = text;
+			accum = [];
+		}
+	};
+	for (const line of lines) {
+		const m = line.match(/^##\s+(.+?)\s*$/);
+		if (m) {
+			flush();
+			const label = m[1].trim().toLowerCase();
+			const phase = canonical[label] ?? null;
+			currentPhase = phase;
+			continue;
+		}
+		if (currentPhase !== null) accum.push(line);
+	}
+	flush();
+	return buckets;
+}
+
+/**
+ * Filterable list for the browse page. `cert` filters to nodes whose
+ * `relevance` array contains at least one entry for that cert; `priority`
+ * filters similarly on priority. Lifecycle filter is applied in-memory
+ * (derived from content) since lifecycle isn't a stored column yet.
+ */
+export interface ListNodesFilters {
+	cert?: string;
+	priority?: string;
+	lifecycle?: 'skeleton' | 'started' | 'complete';
+	domain?: string;
+}
+
+export interface KnowledgeNodeListRow {
+	id: string;
+	title: string;
+	domain: string;
+	estimatedTimeMinutes: number | null;
+	lifecycle: 'skeleton' | 'started' | 'complete';
+	certs: string[];
+	priorities: string[];
+}
+
+export async function listNodesForBrowse(
+	filters: ListNodesFilters = {},
+	db: Db = defaultDb,
+): Promise<KnowledgeNodeListRow[]> {
+	const rows = await db
+		.select({
+			id: knowledgeNode.id,
+			title: knowledgeNode.title,
+			domain: knowledgeNode.domain,
+			estimatedTimeMinutes: knowledgeNode.estimatedTimeMinutes,
+			contentMd: knowledgeNode.contentMd,
+			relevance: knowledgeNode.relevance,
+		})
+		.from(knowledgeNode)
+		.orderBy(asc(knowledgeNode.domain), asc(knowledgeNode.title));
+
+	const result: KnowledgeNodeListRow[] = [];
+	for (const row of rows) {
+		const rels = Array.isArray(row.relevance) ? row.relevance : [];
+		const certs = Array.from(new Set(rels.map((r) => r.cert).filter((c) => typeof c === 'string')));
+		const priorities = Array.from(new Set(rels.map((r) => r.priority).filter((p) => typeof p === 'string')));
+		const lifecycle = lifecycleFromContent(row.contentMd ?? '');
+
+		if (filters.domain && row.domain !== filters.domain) continue;
+		if (filters.cert && !certs.includes(filters.cert)) continue;
+		if (filters.priority && !priorities.includes(filters.priority)) continue;
+		if (filters.lifecycle && lifecycle !== filters.lifecycle) continue;
+
+		result.push({
+			id: row.id,
+			title: row.title,
+			domain: row.domain,
+			estimatedTimeMinutes: row.estimatedTimeMinutes ?? null,
+			lifecycle,
+			certs,
+			priorities,
+		});
+	}
+	return result;
+}
+
 /** Export the edge-type enum for callers that don't already depend on @ab/constants. */
 export { KNOWLEDGE_EDGE_TYPES };
 

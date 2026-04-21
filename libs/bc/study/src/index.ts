@@ -32,7 +32,14 @@ export {
 	getWeakAreas,
 	overdueCutoff,
 } from './dashboard';
-export type { NodeMasteryGate, NodeMasteryStats, NodeSummary, NodeView } from './knowledge';
+export type {
+	KnowledgeNodeListRow,
+	ListNodesFilters,
+	NodeMasteryGate,
+	NodeMasteryStats,
+	NodeSummary,
+	NodeView,
+} from './knowledge';
 export {
 	computeCardGate,
 	computeDisplayScore,
@@ -46,10 +53,13 @@ export {
 	isNodeMastered,
 	KnowledgeGraphCycleError,
 	KnowledgeNodeNotFoundError,
+	lifecycleFromContent,
 	listNodeIds,
 	listNodeSummaries,
+	listNodesForBrowse,
 	refreshEdgeTargetExists,
 	replaceNodeEdges,
+	splitContentPhases,
 	upsertKnowledgeNode,
 } from './knowledge';
 export type { SubmitReviewInput } from './reviews';
