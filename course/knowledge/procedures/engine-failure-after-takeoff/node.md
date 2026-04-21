@@ -107,7 +107,7 @@ references:
       low-altitude turnback is a recurring subtype. TODO(verify) cite a
       specific NTSB safety alert number once confirmed.
   - source: Rogers, D. F.
-    detail: "The Possible 'Impossible' Turn" (AIAA / Journal of Aircraft paper)
+    detail: 'The Possible ''Impossible'' Turn (AIAA / Journal of Aircraft paper)'
     note: >-
       Rogers modeled the turnback analytically and showed that with an
       optimum bank (around 45 degrees) and a teardrop rather than a 180,

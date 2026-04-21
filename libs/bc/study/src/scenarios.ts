@@ -89,6 +89,12 @@ export interface CreateScenarioInput {
 	sourceRef?: string | null;
 	regReferences?: string[];
 	isEditable?: boolean;
+	/**
+	 * Optional knowledge-graph node id. When set, the scenario is attached to
+	 * the graph and `getRepAccuracy({ nodeId })` picks it up for node-level
+	 * mastery aggregation.
+	 */
+	nodeId?: string | null;
 }
 
 export interface ScenarioFilters {
@@ -186,6 +192,7 @@ export async function createScenario(input: CreateScenarioInput, db: Db = defaul
 			phaseOfFlight: (parsed.phaseOfFlight ?? null) as PhaseOfFlight | null,
 			sourceType,
 			sourceRef: parsed.sourceRef ?? null,
+			nodeId: input.nodeId ?? null,
 			// Defaults to true for personal content, false for non-personal,
 			// matching the cards BC. Non-personal content is either imported
 			// or course-authored and should not be edited downstream.
@@ -398,10 +405,23 @@ export async function setScenarioStatus(
 	return updated;
 }
 
-/** Accuracy for all attempts (or a single domain) in the user's history. */
-export async function getRepAccuracy(userId: string, domain?: Domain, db: Db = defaultDb): Promise<RepAccuracyStats> {
+/**
+ * Accuracy for all attempts in a user's history. Optional filter narrows to a
+ * single domain or a single knowledge-graph node (or both). Accepts the legacy
+ * `Domain` positional form for backward compatibility with decision-reps
+ * callers; new callers should pass the options object.
+ */
+export async function getRepAccuracy(
+	userId: string,
+	filterOrDomain?: Domain | { domain?: Domain; nodeId?: string },
+	db: Db = defaultDb,
+): Promise<RepAccuracyStats> {
+	const filter =
+		typeof filterOrDomain === 'string' || filterOrDomain === undefined ? { domain: filterOrDomain } : filterOrDomain;
+
 	const clauses: SQL[] = [eq(repAttempt.userId, userId)];
-	if (domain) clauses.push(eq(scenario.domain, domain));
+	if (filter.domain) clauses.push(eq(scenario.domain, filter.domain));
+	if (filter.nodeId) clauses.push(eq(scenario.nodeId, filter.nodeId));
 
 	const [row] = await db
 		.select({
