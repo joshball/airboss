@@ -11,7 +11,7 @@ status: done
 ## Setup
 
 - Hangar app running (`bun dev` from `apps/hangar/`)
-- Database seeded with competencies and modules (`bun run db:seed`)
+- Database seeded with competencies and modules (`bun run db seed`)
 - At least 2-3 scenarios created with different FAA topics
 - Logged in as admin or author role
 

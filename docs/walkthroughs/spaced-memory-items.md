@@ -280,16 +280,21 @@ sign in as `joshua@ball.dev` / `Pa33word!`. The session cookie is set on
 ### Database ops
 
 ```bash
-bun run db:up        # start the Postgres container
-bun run db:down      # stop it
-bun run db:push      # sync Drizzle schema to the DB (dev workflow)
-bun run db:studio    # open drizzle-kit Studio in a browser
-bun run db:seed      # (re)seed dev users (idempotent -- safe to re-run)
-bun run db:reset     # TRUNCATE study.card / card_state / review
-                     # preserves auth tables so you stay signed in
+bun run db              # status: container, schemas, table counts (default)
+bun run db up           # start the Postgres container
+bun run db down         # stop it
+bun run db push         # sync Drizzle schema to the DB (dev workflow)
+bun run db studio       # open drizzle-kit Studio in a browser
+bun run db seed         # (re)seed dev users (idempotent -- safe to re-run)
+bun run db reset        # DROP + recreate DB, push schema, seed dev users
+bun run db reset-study  # TRUNCATE study.card / card_state / review
+                        # preserves auth tables so you stay signed in
+bun run db psql         # open a psql shell in the DB container
 ```
 
-`db:reset` and `db:seed` both refuse to run unless `DATABASE_URL` points
+Add `--force` / `-f` to skip the confirmation prompt on `reset` and `reset-study`.
+
+`reset`, `reset-study`, and `seed` all refuse to run unless `DATABASE_URL` points
 at a local-dev host (`localhost`, `127.0.0.1`, or `airboss-db`) and
 `NODE_ENV` is not `production`. That lets you wire shared CI secrets
 without risk of wiping a staging DB.
@@ -343,7 +348,7 @@ Full list with reasons lives in [review.md](../work-packages/spaced-memory-items
 The highest-signal items:
 
 - **Production deploy prerequisites:** Drizzle migration artifacts (currently
-  `db:push` only) and `BETTER_AUTH_URL` set. Blocker before any shared DB.
+  `db push` only) and `BETTER_AUTH_URL` set. Blocker before any shared DB.
 - **A11y:** focus management on card advance, character-key-shortcut
   modifier, disabled-button contrast, `prefers-reduced-motion`.
 - **Perf (at scale):** `(user_id, updated_at)` index on card, `pg_trgm` GIN

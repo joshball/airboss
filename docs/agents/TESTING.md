@@ -101,12 +101,10 @@ export default defineConfig({
 ### 4. `package.json` scripts
 
 ```json
-"test": "vitest run",
-"test:watch": "vitest",
-"test:coverage": "vitest run --coverage",
-"test:e2e": "playwright test",
-"test:e2e:ui": "playwright test --ui"
+"test": "bun scripts/test.ts"
 ```
+
+`scripts/test.ts` is a dispatcher. Subcommands: `bun run test` (full run), `bun run test watch`, `bun run test coverage`. E2E (playwright) will be a separate `bun run e2e` dispatcher once added.
 
 ---
 

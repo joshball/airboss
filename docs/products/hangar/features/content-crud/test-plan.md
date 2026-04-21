@@ -12,8 +12,8 @@ Manual test plan for retroactive validation. Run with hangar dev server and seed
 
 ## Setup
 
-1. Start DB: `bun run db:start`
-2. Seed DB: `bun run db:seed`
+1. Start DB: `bun run db up`
+2. Seed DB: `bun run db seed`
 3. Start hangar: `cd apps/hangar && bun run dev`
 4. Open `http://localhost:5174`
 

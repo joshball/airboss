@@ -44,8 +44,8 @@ How to run, seed, reset, test, debug this feature locally.
 # Dev
 bun run dev
 # DB setup
-bunx drizzle-kit push
-bun db:seed
+bun run db push
+bun run db seed
 # Smoke
 bun scripts/smoke/{feature}.ts
 ```

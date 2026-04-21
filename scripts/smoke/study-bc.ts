@@ -37,7 +37,7 @@ function log(step: string, detail?: unknown): void {
 async function main(): Promise<void> {
 	const [user] = await db.select().from(bauthUser).where(eq(bauthUser.email, DEV_ACCOUNTS[0].email)).limit(1);
 	if (!user) {
-		console.error(`Dev user ${DEV_ACCOUNTS[0].email} not found. Run: bun run db:seed`);
+		console.error(`Dev user ${DEV_ACCOUNTS[0].email} not found. Run: bun run db seed`);
 		process.exit(1);
 	}
 	const userId = user.id;

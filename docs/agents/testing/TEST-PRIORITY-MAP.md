@@ -18,8 +18,8 @@ Code test coverage priorities -- what to test and in what order. Each row is a t
 **To run:**
 
 - Unit/integration: `bun test` (requires live DB)
-- E2E: `bun run test:e2e` (requires hangar running on :7610, env vars set)
-- Coverage: `bun run test:coverage`
+- E2E: `bun run e2e` (requires hangar running on :7610, env vars set) -- once the e2e dispatcher exists
+- Coverage: `bun run test coverage`
 
 ---
 
