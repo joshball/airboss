@@ -1,11 +1,6 @@
 <script lang="ts">
-import {
-	CONFIDENCE_LEVEL_VALUES,
-	DIFFICULTY_LABELS,
-	DOMAIN_LABELS,
-	PHASE_OF_FLIGHT_LABELS,
-	ROUTES,
-} from '@ab/constants';
+import { type ConfidenceLevel, DIFFICULTY_LABELS, DOMAIN_LABELS, PHASE_OF_FLIGHT_LABELS, ROUTES } from '@ab/constants';
+import ConfidenceSlider from '@ab/ui/components/ConfidenceSlider.svelte';
 import { humanize } from '@ab/utils';
 import { enhance } from '$app/forms';
 import { invalidateAll, replaceState } from '$app/navigation';
@@ -64,7 +59,6 @@ const total = $derived(batch.length);
 const needsConfidence = $derived(Boolean(current?.promptConfidence));
 const chosenOpt = $derived(current?.options.find((o) => o.id === selectedOption));
 const accuracy = $derived(attemptedTotal === 0 ? 0 : Math.round((correctTotal / attemptedTotal) * 100));
-const confidenceLabels = ['Wild guess', 'Uncertain', 'Maybe', 'Probably', 'Certain'];
 
 function domainLabel(slug: string): string {
 	return (DOMAIN_LABELS as Record<string, string>)[slug] ?? humanize(slug);
@@ -88,7 +82,7 @@ function proceedToChoose() {
 	revealedAt = Date.now();
 }
 
-function pickConfidence(value: number) {
+function pickConfidence(value: ConfidenceLevel) {
 	confidence = value;
 	phase = 'choose';
 	revealedAt = Date.now();
@@ -163,7 +157,7 @@ function onKeydown(e: KeyboardEvent) {
 		const n = Number(e.key);
 		if (Number.isInteger(n) && n >= 1 && n <= 5) {
 			e.preventDefault();
-			pickConfidence(n);
+			pickConfidence(n as ConfidenceLevel);
 		} else if (e.key === 'Escape') {
 			e.preventDefault();
 			skipConfidence();
@@ -300,25 +294,12 @@ function onKeydown(e: KeyboardEvent) {
 				<span class="kbd">Space</span>
 			</button>
 		{:else if phase === 'confidence'}
-			<article class="prompt">
-				<p class="prompt-q" id="confidence-prompt">Before you pick -- how confident are you?</p>
-				<div class="confidence-row" role="radiogroup" aria-labelledby="confidence-prompt">
-					{#each CONFIDENCE_LEVEL_VALUES as level, i (level)}
-						<button
-							type="button"
-							role="radio"
-							aria-checked={confidence === level}
-							aria-label={`${level} -- ${confidenceLabels[i]}`}
-							class="conf"
-							onclick={() => pickConfidence(level)}
-						>
-							<span class="conf-num">{level}</span>
-							<span class="conf-label">{confidenceLabels[i]}</span>
-						</button>
-					{/each}
-				</div>
-				<button type="button" class="btn ghost skip" onclick={skipConfidence}>Skip confidence</button>
-			</article>
+			<ConfidenceSlider
+				onSelect={pickConfidence}
+				onSkip={skipConfidence}
+				prompt="Before you pick -- how confident are you?"
+				selected={confidence as ConfidenceLevel | null}
+			/>
 		{:else if phase === 'choose' || phase === 'submitting'}
 			<form
 				method="POST"
@@ -642,64 +623,6 @@ function onKeydown(e: KeyboardEvent) {
 		font-size: 0.9375rem;
 	}
 
-	.prompt {
-		background: white;
-		border: 1px solid #e2e8f0;
-		border-radius: 12px;
-		padding: 1.25rem;
-		display: flex;
-		flex-direction: column;
-		gap: 0.75rem;
-		align-items: center;
-	}
-
-	.prompt-q {
-		margin: 0;
-		color: #334155;
-		font-size: 0.9375rem;
-	}
-
-	.confidence-row {
-		display: flex;
-		gap: 0.5rem;
-		flex-wrap: wrap;
-		justify-content: center;
-	}
-
-	.conf {
-		background: #f8fafc;
-		border: 1px solid #cbd5e1;
-		border-radius: 10px;
-		padding: 0.75rem;
-		min-width: 5rem;
-		display: flex;
-		flex-direction: column;
-		gap: 0.25rem;
-		align-items: center;
-		cursor: pointer;
-		transition: background 120ms, border-color 120ms;
-	}
-
-	.conf:hover {
-		background: #eff6ff;
-		border-color: #bfdbfe;
-	}
-
-	.conf-num {
-		font-weight: 700;
-		font-size: 1.125rem;
-		color: #1d4ed8;
-	}
-
-	.conf-label {
-		font-size: 0.75rem;
-		color: #64748b;
-	}
-
-	.skip {
-		align-self: center;
-	}
-
 	.options-fs {
 		border: none;
 		padding: 0;
@@ -710,6 +633,7 @@ function onKeydown(e: KeyboardEvent) {
 	.options-fs:disabled {
 		opacity: 0.9;
 	}
+
 
 	.rate-q {
 		margin: 0.5rem 0 0;

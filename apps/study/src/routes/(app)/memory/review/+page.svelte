@@ -1,5 +1,6 @@
 <script lang="ts">
-import { CONFIDENCE_LEVEL_VALUES, DOMAIN_LABELS, REVIEW_RATINGS, ROUTES } from '@ab/constants';
+import { type ConfidenceLevel, DOMAIN_LABELS, REVIEW_RATINGS, ROUTES } from '@ab/constants';
+import ConfidenceSlider from '@ab/ui/components/ConfidenceSlider.svelte';
 import { enhance } from '$app/forms';
 import { invalidateAll } from '$app/navigation';
 import type { PageData } from './$types';
@@ -40,8 +41,6 @@ const ratingLabels = {
 	[REVIEW_RATINGS.EASY]: { label: 'Easy', hint: '~ week+', key: '4' },
 } as const;
 
-const confidenceLabels = ['Wild guess', 'Uncertain', 'Maybe', 'Probably', 'Certain'];
-
 function humanize(slug: string): string {
 	return slug
 		.split(/[-_]/)
@@ -66,7 +65,7 @@ function reveal() {
 	phase = 'answer';
 }
 
-function pickConfidence(value: number) {
+function pickConfidence(value: ConfidenceLevel) {
 	confidence = value;
 	reveal();
 }
@@ -119,7 +118,7 @@ function onKeydown(e: KeyboardEvent) {
 		const n = Number(e.key);
 		if (Number.isInteger(n) && n >= 1 && n <= 5) {
 			e.preventDefault();
-			pickConfidence(n);
+			pickConfidence(n as ConfidenceLevel);
 		} else if (e.key === 'Escape') {
 			e.preventDefault();
 			skipConfidence();
@@ -187,18 +186,7 @@ function clickRating(value: number) {
 		</article>
 
 		{#if showConfidencePrompt}
-			<article class="prompt">
-				<p class="prompt-q">Before revealing -- how confident are you?</p>
-				<div class="confidence-row">
-					{#each CONFIDENCE_LEVEL_VALUES as level, i (level)}
-						<button type="button" class="conf" onclick={() => pickConfidence(level)}>
-							<span class="conf-num">{level}</span>
-							<span class="conf-label">{confidenceLabels[i]}</span>
-						</button>
-					{/each}
-				</div>
-				<button type="button" class="btn ghost skip" onclick={skipConfidence}>Skip confidence</button>
-			</article>
+			<ConfidenceSlider onSelect={pickConfidence} onSkip={skipConfidence} />
 		{:else if phase === 'front'}
 			<button type="button" class="btn primary wide" onclick={goToConfidenceOrReveal}>
 				Show answer
@@ -327,64 +315,6 @@ function clickRating(value: number) {
 		border: none;
 		border-top: 1px dashed #e2e8f0;
 		margin: 0;
-	}
-
-	.prompt {
-		background: white;
-		border: 1px solid #e2e8f0;
-		border-radius: 12px;
-		padding: 1.25rem;
-		display: flex;
-		flex-direction: column;
-		gap: 0.75rem;
-		align-items: center;
-	}
-
-	.prompt-q {
-		margin: 0;
-		color: #334155;
-		font-size: 0.9375rem;
-	}
-
-	.confidence-row {
-		display: flex;
-		gap: 0.5rem;
-		flex-wrap: wrap;
-		justify-content: center;
-	}
-
-	.conf {
-		background: #f8fafc;
-		border: 1px solid #cbd5e1;
-		border-radius: 10px;
-		padding: 0.75rem 0.75rem;
-		min-width: 5rem;
-		display: flex;
-		flex-direction: column;
-		gap: 0.25rem;
-		align-items: center;
-		cursor: pointer;
-		transition: background 120ms, border-color 120ms;
-	}
-
-	.conf:hover {
-		background: #eff6ff;
-		border-color: #bfdbfe;
-	}
-
-	.conf-num {
-		font-weight: 700;
-		font-size: 1.125rem;
-		color: #1d4ed8;
-	}
-
-	.conf-label {
-		font-size: 0.75rem;
-		color: #64748b;
-	}
-
-	.skip {
-		align-self: center;
 	}
 
 	.rate-q {

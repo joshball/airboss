@@ -237,6 +237,47 @@ export type ConfidenceLevel = (typeof CONFIDENCE_LEVELS)[keyof typeof CONFIDENCE
 export const CONFIDENCE_LEVEL_VALUES = Object.values(CONFIDENCE_LEVELS);
 
 /**
+ * Human-readable labels for confidence levels. Used by the shared
+ * ConfidenceSlider component and the calibration page bucket chart.
+ */
+export const CONFIDENCE_LEVEL_LABELS: Record<ConfidenceLevel, string> = {
+	[CONFIDENCE_LEVELS.WILD_GUESS]: 'Wild guess',
+	[CONFIDENCE_LEVELS.UNCERTAIN]: 'Uncertain',
+	[CONFIDENCE_LEVELS.MAYBE]: 'Maybe',
+	[CONFIDENCE_LEVELS.PROBABLY]: 'Probably',
+	[CONFIDENCE_LEVELS.CERTAIN]: 'Certain',
+};
+
+/**
+ * Implicit probability each confidence level maps to. A well-calibrated
+ * learner who rates confidence=4 ("Probably") should get ~75% of those items
+ * correct. Expressed as 0..1; the calibration score is the complement of the
+ * mean absolute deviation between this mapping and actual accuracy.
+ *
+ * Formula: (level - 1) / 4 -> 0%, 25%, 50%, 75%, 100%.
+ */
+export const CONFIDENCE_LEVEL_EXPECTED_ACCURACY: Record<ConfidenceLevel, number> = {
+	[CONFIDENCE_LEVELS.WILD_GUESS]: 0,
+	[CONFIDENCE_LEVELS.UNCERTAIN]: 0.25,
+	[CONFIDENCE_LEVELS.MAYBE]: 0.5,
+	[CONFIDENCE_LEVELS.PROBABLY]: 0.75,
+	[CONFIDENCE_LEVELS.CERTAIN]: 1,
+};
+
+/**
+ * Minimum number of data points a confidence bucket needs before it's
+ * included in the calibration score. Buckets below this threshold are shown
+ * as "need more data" on the calibration page. Low samples produce wild
+ * percentages that falsely boost or punish the score.
+ */
+export const CALIBRATION_MIN_BUCKET_COUNT = 5;
+
+/**
+ * Window (days) for the calibration trend sparkline. One point per day.
+ */
+export const CALIBRATION_TREND_WINDOW_DAYS = 30;
+
+/**
  * Mastery threshold (days of FSRS stability) at which a card is considered
  * mastered for dashboard metrics. Matches spec SMI success criteria.
  */
