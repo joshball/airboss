@@ -12,8 +12,8 @@ Manual test plan. Run with ops dev server, seeded DB, and at least two user acco
 
 ## Setup
 
-1. Start DB: `bun run db:start`
-2. Seed DB: `bun run db:seed` (ensure admin + operator + learner accounts exist)
+1. Start DB: `bun run db up`
+2. Seed DB: `bun run db seed` (ensure admin + operator + learner accounts exist)
 3. Start ops: `cd apps/ops && bun run dev`
 4. Log in as admin
 

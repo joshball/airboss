@@ -6,16 +6,10 @@
 	"scripts": {
 		"dev": "bun scripts/dev.ts",
 		"check": "bun scripts/check.ts",
-		"test": "vitest run",
-		"test:watch": "vitest",
-		"db:push": "bunx drizzle-kit push",
-		"db:studio": "bunx drizzle-kit studio",
-		"db:seed": "bun scripts/db/seed-dev-users.ts",
-		"db:reset": "bun scripts/db/reset-study.ts",
-		"db:up": "docker compose up -d db",
-		"db:down": "docker compose down",
+		"test": "bun scripts/test.ts",
+		"db": "bun scripts/db.ts",
 		"setup": "bun scripts/setup.ts",
-		"smoke": "bun scripts/smoke/study-bc.ts"
+		"smoke": "bun scripts/smoke.ts"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.4.7",

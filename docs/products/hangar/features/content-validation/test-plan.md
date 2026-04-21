@@ -11,7 +11,7 @@ status: done
 ## Setup
 
 - Hangar app running (`bun dev` from `apps/hangar/`)
-- Database seeded with competencies and modules (`bun run db:seed`)
+- Database seeded with competencies and modules (`bun run db seed`)
 - Logged in as admin or author role
 
 ---
