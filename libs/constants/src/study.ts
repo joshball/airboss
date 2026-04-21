@@ -567,3 +567,200 @@ export const REP_MIN = 3;
  * 60 days) without disturbing the dashboard metric.
  */
 export const STABILITY_MASTERED_DAYS = 30;
+
+// -------- Study plan lifecycle --------
+
+/** Study plan lifecycle states. One active plan per user at a time. */
+export const PLAN_STATUSES = {
+	DRAFT: 'draft',
+	ACTIVE: 'active',
+	ARCHIVED: 'archived',
+} as const;
+
+export type PlanStatus = (typeof PLAN_STATUSES)[keyof typeof PLAN_STATUSES];
+
+export const PLAN_STATUS_VALUES = Object.values(PLAN_STATUSES);
+
+export const PLAN_STATUS_LABELS: Record<PlanStatus, string> = {
+	[PLAN_STATUSES.DRAFT]: 'Draft',
+	[PLAN_STATUSES.ACTIVE]: 'Active',
+	[PLAN_STATUSES.ARCHIVED]: 'Archived',
+};
+
+// -------- Session engine modes + slices --------
+
+export const SESSION_MODES = {
+	CONTINUE: 'continue',
+	STRENGTHEN: 'strengthen',
+	MIXED: 'mixed',
+	EXPAND: 'expand',
+} as const;
+
+export type SessionMode = (typeof SESSION_MODES)[keyof typeof SESSION_MODES];
+
+export const SESSION_MODE_VALUES = Object.values(SESSION_MODES);
+
+export const SESSION_MODE_LABELS: Record<SessionMode, string> = {
+	[SESSION_MODES.CONTINUE]: 'Continue where I left off',
+	[SESSION_MODES.STRENGTHEN]: 'Hit my weak spots',
+	[SESSION_MODES.MIXED]: 'Mixed (default)',
+	[SESSION_MODES.EXPAND]: 'Try something new',
+};
+
+export const SESSION_SLICES = {
+	CONTINUE: 'continue',
+	STRENGTHEN: 'strengthen',
+	EXPAND: 'expand',
+	DIVERSIFY: 'diversify',
+} as const;
+
+export type SessionSlice = (typeof SESSION_SLICES)[keyof typeof SESSION_SLICES];
+
+export const SESSION_SLICE_VALUES = Object.values(SESSION_SLICES);
+
+export const SESSION_ITEM_KINDS = {
+	CARD: 'card',
+	REP: 'rep',
+	NODE_START: 'node_start',
+} as const;
+
+export type SessionItemKind = (typeof SESSION_ITEM_KINDS)[keyof typeof SESSION_ITEM_KINDS];
+
+export const SESSION_ITEM_KIND_VALUES = Object.values(SESSION_ITEM_KINDS);
+
+/**
+ * Three-way skip semantics (PRD-mandated).
+ * - today: session-scoped; no plan mutation
+ * - topic: mutates plan.skip_domains or plan.skip_nodes
+ * - permanent: mutates plan.skip_nodes AND suspends card/scenario
+ */
+export const SESSION_SKIP_KINDS = {
+	TODAY: 'today',
+	TOPIC: 'topic',
+	PERMANENT: 'permanent',
+} as const;
+
+export type SessionSkipKind = (typeof SESSION_SKIP_KINDS)[keyof typeof SESSION_SKIP_KINDS];
+
+export const SESSION_SKIP_KIND_VALUES = Object.values(SESSION_SKIP_KINDS);
+
+export const SESSION_SKIP_KIND_LABELS: Record<SessionSkipKind, string> = {
+	[SESSION_SKIP_KINDS.TODAY]: 'Skip for today',
+	[SESSION_SKIP_KINDS.TOPIC]: 'Skip topic',
+	[SESSION_SKIP_KINDS.PERMANENT]: 'Skip permanently',
+};
+
+/** Depth preference for expand-slice scoring (matches bloom authoring). */
+export const DEPTH_PREFERENCES = {
+	SURFACE: 'surface',
+	WORKING: 'working',
+	DEEP: 'deep',
+} as const;
+
+export type DepthPreference = (typeof DEPTH_PREFERENCES)[keyof typeof DEPTH_PREFERENCES];
+
+export const DEPTH_PREFERENCE_VALUES = Object.values(DEPTH_PREFERENCES);
+
+export const DEPTH_PREFERENCE_LABELS: Record<DepthPreference, string> = {
+	[DEPTH_PREFERENCES.SURFACE]: 'Surface -- overview, key facts',
+	[DEPTH_PREFERENCES.WORKING]: 'Working -- operational fluency',
+	[DEPTH_PREFERENCES.DEEP]: 'Deep -- teach it to someone else',
+};
+
+export const SESSION_REASON_CODES = {
+	CONTINUE_RECENT_DOMAIN: 'continue_recent_domain',
+	CONTINUE_DUE_IN_DOMAIN: 'continue_due_in_domain',
+	CONTINUE_UNFINISHED_NODE: 'continue_unfinished_node',
+	STRENGTHEN_RELEARNING: 'strengthen_relearning',
+	STRENGTHEN_RATED_AGAIN: 'strengthen_rated_again',
+	STRENGTHEN_OVERDUE: 'strengthen_overdue',
+	STRENGTHEN_LOW_REP_ACCURACY: 'strengthen_low_rep_accuracy',
+	STRENGTHEN_MASTERY_DROP: 'strengthen_mastery_drop',
+	EXPAND_UNSTARTED_READY: 'expand_unstarted_ready',
+	EXPAND_UNSTARTED_PRIORITY: 'expand_unstarted_priority',
+	EXPAND_FOCUS_MATCH: 'expand_focus_match',
+	DIVERSIFY_UNUSED_DOMAIN: 'diversify_unused_domain',
+	DIVERSIFY_CROSS_DOMAIN_APPLY: 'diversify_cross_domain_apply',
+} as const;
+
+export type SessionReasonCode = (typeof SESSION_REASON_CODES)[keyof typeof SESSION_REASON_CODES];
+
+export const SESSION_REASON_CODE_VALUES = Object.values(SESSION_REASON_CODES);
+
+export const SESSION_REASON_CODE_LABELS: Record<SessionReasonCode, string> = {
+	[SESSION_REASON_CODES.CONTINUE_RECENT_DOMAIN]: 'Recent domain',
+	[SESSION_REASON_CODES.CONTINUE_DUE_IN_DOMAIN]: 'Due in recent domain',
+	[SESSION_REASON_CODES.CONTINUE_UNFINISHED_NODE]: 'Unfinished node',
+	[SESSION_REASON_CODES.STRENGTHEN_RELEARNING]: 'Relearning',
+	[SESSION_REASON_CODES.STRENGTHEN_RATED_AGAIN]: 'Rated Again recently',
+	[SESSION_REASON_CODES.STRENGTHEN_OVERDUE]: 'Overdue',
+	[SESSION_REASON_CODES.STRENGTHEN_LOW_REP_ACCURACY]: 'Low rep accuracy',
+	[SESSION_REASON_CODES.STRENGTHEN_MASTERY_DROP]: 'Mastery dropping',
+	[SESSION_REASON_CODES.EXPAND_UNSTARTED_READY]: 'Prerequisites met',
+	[SESSION_REASON_CODES.EXPAND_UNSTARTED_PRIORITY]: 'Core topic, unstarted',
+	[SESSION_REASON_CODES.EXPAND_FOCUS_MATCH]: 'Matches focus',
+	[SESSION_REASON_CODES.DIVERSIFY_UNUSED_DOMAIN]: 'Unused domain',
+	[SESSION_REASON_CODES.DIVERSIFY_CROSS_DOMAIN_APPLY]: 'Cross-domain application',
+};
+
+/**
+ * Mode weight tuples. Each row sums to exactly 1.0. The engine multiplies
+ * these by session_length and uses largest-remainder rounding.
+ */
+export const MODE_WEIGHTS: Record<SessionMode, Record<SessionSlice, number>> = {
+	[SESSION_MODES.MIXED]: {
+		[SESSION_SLICES.CONTINUE]: 0.3,
+		[SESSION_SLICES.STRENGTHEN]: 0.3,
+		[SESSION_SLICES.EXPAND]: 0.2,
+		[SESSION_SLICES.DIVERSIFY]: 0.2,
+	},
+	[SESSION_MODES.CONTINUE]: {
+		[SESSION_SLICES.CONTINUE]: 0.7,
+		[SESSION_SLICES.STRENGTHEN]: 0.2,
+		[SESSION_SLICES.EXPAND]: 0.0,
+		[SESSION_SLICES.DIVERSIFY]: 0.1,
+	},
+	[SESSION_MODES.STRENGTHEN]: {
+		[SESSION_SLICES.CONTINUE]: 0.1,
+		[SESSION_SLICES.STRENGTHEN]: 0.7,
+		[SESSION_SLICES.EXPAND]: 0.0,
+		[SESSION_SLICES.DIVERSIFY]: 0.2,
+	},
+	[SESSION_MODES.EXPAND]: {
+		[SESSION_SLICES.CONTINUE]: 0.1,
+		[SESSION_SLICES.STRENGTHEN]: 0.1,
+		[SESSION_SLICES.EXPAND]: 0.7,
+		[SESSION_SLICES.DIVERSIFY]: 0.1,
+	},
+};
+
+/**
+ * Tiebreaker priority for slot-allocator ties and pool-redistribution fills.
+ * Earlier in the array == higher priority. Spec: strengthen > continue > expand > diversify.
+ */
+export const SLICE_PRIORITY: readonly SessionSlice[] = [
+	SESSION_SLICES.STRENGTHEN,
+	SESSION_SLICES.CONTINUE,
+	SESSION_SLICES.EXPAND,
+	SESSION_SLICES.DIVERSIFY,
+];
+
+/** Default items per session from the PRD ("10 minutes, 10 items"). */
+export const DEFAULT_SESSION_LENGTH = 10;
+
+/** Session length CHECK bounds. */
+export const MIN_SESSION_LENGTH = 3;
+export const MAX_SESSION_LENGTH = 50;
+
+/**
+ * How long an abandoned in-progress session remains resumable before the
+ * `/session/start` flow offers a fresh preview instead. 2h from the spec.
+ */
+export const RESUME_WINDOW_MS = 2 * 60 * 60 * 1000;
+
+export const SESSION_SLICE_LABELS: Record<SessionSlice, string> = {
+	[SESSION_SLICES.CONTINUE]: 'Continue where you left off',
+	[SESSION_SLICES.STRENGTHEN]: 'Strengthen',
+	[SESSION_SLICES.EXPAND]: 'Expand',
+	[SESSION_SLICES.DIVERSIFY]: 'Diversify',
+};

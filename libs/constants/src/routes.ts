@@ -42,10 +42,27 @@ export const ROUTES = {
 	 * a parallel route.
 	 */
 	MEMORY_REVIEW_FOR_NODE: (nodeId: string) => `/memory/review?node=${encodeURIComponent(nodeId)}` as const,
+
+	// Study -- Plans + Sessions
+	PLANS: '/plans',
+	PLANS_NEW: '/plans/new',
+	PLAN: (id: string) => `/plans/${id}` as const,
+	SESSION_START: '/session/start',
+	SESSIONS: '/sessions',
+	SESSION: (id: string) => `/sessions/${id}` as const,
+	SESSION_SUMMARY: (id: string) => `/sessions/${id}/summary` as const,
 } as const;
 
 /** Query-string parameter names used across study routes. */
 export const QUERY_PARAMS = {
 	/** Filters the due-cards queue to a single knowledge node. */
 	NODE_ID: 'node',
+	/** Session mode override for /session/start. */
+	SESSION_MODE: 'mode',
+	/** Focus domain override for /session/start. */
+	SESSION_FOCUS: 'focus',
+	/** Cert override for /session/start. */
+	SESSION_CERT: 'cert',
+	/** Deterministic seed for engine shuffles. */
+	SESSION_SEED: 'seed',
 } as const;
