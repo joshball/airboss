@@ -211,11 +211,11 @@ function domainLabel(slug: string): string {
 		display: flex;
 		gap: 0.5rem;
 		font-size: 0.875rem;
-		color: #64748b;
+		color: var(--ab-color-fg-subtle);
 	}
 
 	.crumb a {
-		color: #1d4ed8;
+		color: var(--ab-color-primary-hover);
 		text-decoration: none;
 	}
 
@@ -227,18 +227,18 @@ function domainLabel(slug: string): string {
 		margin: 0;
 		font-size: 1.5rem;
 		letter-spacing: -0.02em;
-		color: #0f172a;
+		color: var(--ab-color-fg);
 	}
 
 	.sub {
 		margin: 0.25rem 0 0;
-		color: #64748b;
+		color: var(--ab-color-fg-subtle);
 		font-size: 0.9375rem;
 	}
 
 	.progress {
 		background: white;
-		border: 1px solid #e2e8f0;
+		border: 1px solid var(--ab-color-border);
 		border-radius: 12px;
 		padding: 1rem 1.125rem;
 		display: flex;
@@ -255,18 +255,18 @@ function domainLabel(slug: string): string {
 	.progress-step {
 		font-size: 0.9375rem;
 		font-weight: 600;
-		color: #0f172a;
+		color: var(--ab-color-fg);
 	}
 
 	.progress-pct {
 		font-size: 0.8125rem;
-		color: #64748b;
+		color: var(--ab-color-fg-subtle);
 	}
 
 	.progress-bar {
 		width: 100%;
 		height: 6px;
-		background: #e2e8f0;
+		background: var(--ab-color-border);
 		border-radius: 999px;
 		overflow: hidden;
 	}
@@ -274,7 +274,7 @@ function domainLabel(slug: string): string {
 	.progress-fill {
 		display: block;
 		height: 100%;
-		background: #2563eb;
+		background: var(--ab-color-primary);
 	}
 
 	.steps {
@@ -298,7 +298,7 @@ function domainLabel(slug: string): string {
 		border-radius: 8px;
 		cursor: pointer;
 		font: inherit;
-		color: #94a3b8;
+		color: var(--ab-color-fg-faint);
 		transition:
 			background var(--ab-transition-fast),
 			color var(--ab-transition-fast),
@@ -306,8 +306,8 @@ function domainLabel(slug: string): string {
 	}
 
 	.step:hover {
-		background: #f1f5f9;
-		color: #475569;
+		background: var(--ab-color-surface-sunken);
+		color: var(--ab-color-fg-muted);
 	}
 
 	.step:focus-visible {
@@ -316,24 +316,24 @@ function domainLabel(slug: string): string {
 	}
 
 	.step.authored {
-		color: #475569;
+		color: var(--ab-color-fg-muted);
 	}
 
 	.step.visited:not(.active) {
-		background: #f8fafc;
-		color: #334155;
+		background: var(--ab-color-surface-muted);
+		color: var(--ab-color-fg-strong);
 	}
 
 	.step.completed:not(.active) {
-		background: #f0fdf4;
-		color: #166534;
-		border-color: #bbf7d0;
+		background: var(--ab-color-success-subtle);
+		color: var(--ab-color-success-active);
+		border-color: var(--ab-color-success-subtle-border);
 	}
 
 	.step.active {
-		background: #eff6ff;
-		color: #1d4ed8;
-		border-color: #bfdbfe;
+		background: var(--ab-color-primary-subtle);
+		color: var(--ab-color-primary-hover);
+		border-color: var(--ab-color-primary-subtle-border);
 	}
 
 	.got-it-row {
@@ -341,11 +341,11 @@ function domainLabel(slug: string): string {
 		justify-content: flex-end;
 		margin-top: 1rem;
 		padding-top: 1rem;
-		border-top: 1px dashed #e2e8f0;
+		border-top: 1px dashed var(--ab-color-border);
 	}
 
 	.got-it-done {
-		color: #166534;
+		color: var(--ab-color-success-active);
 		font-size: 0.875rem;
 		font-weight: 500;
 	}
@@ -364,7 +364,7 @@ function domainLabel(slug: string): string {
 
 	.phase {
 		background: white;
-		border: 1px solid #e2e8f0;
+		border: 1px solid var(--ab-color-border);
 		border-radius: 12px;
 		padding: 1.25rem 1.5rem;
 	}
@@ -372,12 +372,12 @@ function domainLabel(slug: string): string {
 	.phase h2 {
 		margin: 0 0 0.75rem;
 		font-size: 1.25rem;
-		color: #0f172a;
+		color: var(--ab-color-fg);
 	}
 
 	.gap-body {
 		margin: 0;
-		color: #94a3b8;
+		color: var(--ab-color-fg-faint);
 		font-style: italic;
 	}
 
@@ -385,20 +385,20 @@ function domainLabel(slug: string): string {
 	.prose :global(h4),
 	.prose :global(h5) {
 		margin: 1rem 0 0.5rem;
-		color: #0f172a;
+		color: var(--ab-color-fg);
 	}
 
 	.prose :global(p) {
 		margin: 0 0 0.75rem;
 		line-height: 1.6;
-		color: #1e293b;
+		color: var(--ab-color-fg);
 	}
 
 	.prose :global(ul),
 	.prose :global(ol) {
 		margin: 0 0 0.75rem 1.25rem;
 		line-height: 1.6;
-		color: #1e293b;
+		color: var(--ab-color-fg);
 	}
 
 	.prose :global(li) {
@@ -408,14 +408,14 @@ function domainLabel(slug: string): string {
 	.prose :global(code) {
 		font-family: ui-monospace, 'SF Mono', Menlo, monospace;
 		font-size: 0.875em;
-		background: #f1f5f9;
+		background: var(--ab-color-surface-sunken);
 		padding: 0.05em 0.35em;
 		border-radius: 4px;
 	}
 
 	.prose :global(pre) {
-		background: #0f172a;
-		color: #e2e8f0;
+		background: var(--ab-color-fg);
+		color: var(--ab-color-border);
 		padding: 0.75rem 1rem;
 		border-radius: 8px;
 		overflow-x: auto;
@@ -429,11 +429,11 @@ function domainLabel(slug: string): string {
 	}
 
 	.prose :global(a) {
-		color: #1d4ed8;
+		color: var(--ab-color-primary-hover);
 	}
 
 	.prose :global(strong) {
-		color: #0f172a;
+		color: var(--ab-color-fg);
 	}
 
 	.controls {
@@ -463,22 +463,22 @@ function domainLabel(slug: string): string {
 	}
 
 	.btn.primary {
-		background: #2563eb;
+		background: var(--ab-color-primary);
 		color: white;
 	}
 
 	.btn.primary:hover:not(:disabled) {
-		background: #1d4ed8;
+		background: var(--ab-color-primary-hover);
 	}
 
 	.btn.secondary {
-		background: #f1f5f9;
-		color: #1a1a2e;
-		border-color: #cbd5e1;
+		background: var(--ab-color-surface-sunken);
+		color: var(--ab-color-fg);
+		border-color: var(--ab-color-border-strong);
 	}
 
 	.btn.secondary:hover:not(:disabled) {
-		background: #e2e8f0;
+		background: var(--ab-color-border);
 	}
 
 	.btn:disabled {

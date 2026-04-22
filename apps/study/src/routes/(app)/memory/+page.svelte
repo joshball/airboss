@@ -142,12 +142,12 @@ function percent(n: number, total: number): number {
 		margin: 0;
 		font-size: 1.75rem;
 		letter-spacing: -0.02em;
-		color: #0f172a;
+		color: var(--ab-color-fg);
 	}
 
 	.sub {
 		margin: 0.25rem 0 0;
-		color: #64748b;
+		color: var(--ab-color-fg-subtle);
 		font-size: 0.9375rem;
 	}
 
@@ -167,7 +167,7 @@ function percent(n: number, total: number): number {
 
 	.card-list {
 		background: white;
-		border: 1px solid #e2e8f0;
+		border: 1px solid var(--ab-color-border);
 		border-radius: 12px;
 		padding: 1.25rem 1.5rem;
 		display: flex;
@@ -178,7 +178,7 @@ function percent(n: number, total: number): number {
 	.card-list h2 {
 		margin: 0;
 		font-size: 0.8125rem;
-		color: #64748b;
+		color: var(--ab-color-fg-subtle);
 		text-transform: uppercase;
 		letter-spacing: 0.08em;
 		font-weight: 600;
@@ -198,18 +198,18 @@ function percent(n: number, total: number): number {
 		justify-content: space-between;
 		align-items: center;
 		padding: 0.5rem 0.75rem;
-		background: #f8fafc;
-		border: 1px solid #e2e8f0;
+		background: var(--ab-color-surface-muted);
+		border: 1px solid var(--ab-color-border);
 		border-radius: 8px;
 	}
 
 	.state-label {
-		color: #475569;
+		color: var(--ab-color-fg-muted);
 		font-size: 0.875rem;
 	}
 
 	.state-count {
-		color: #0f172a;
+		color: var(--ab-color-fg);
 		font-weight: 600;
 	}
 
@@ -236,13 +236,13 @@ function percent(n: number, total: number): number {
 	}
 
 	.dm-name {
-		color: #0f172a;
+		color: var(--ab-color-fg);
 		text-decoration: none;
 		font-weight: 500;
 	}
 
 	.dm-name:hover {
-		color: #1d4ed8;
+		color: var(--ab-color-primary-hover);
 	}
 
 	.dm-counts {
@@ -252,16 +252,16 @@ function percent(n: number, total: number): number {
 	}
 
 	.dm-total {
-		color: #64748b;
+		color: var(--ab-color-fg-subtle);
 	}
 
 	.dm-due {
-		color: #1d4ed8;
+		color: var(--ab-color-primary-hover);
 		font-weight: 600;
 	}
 
 	.bar {
-		background: #e2e8f0;
+		background: var(--ab-color-border);
 		height: 0.375rem;
 		border-radius: 999px;
 		overflow: hidden;
@@ -270,23 +270,23 @@ function percent(n: number, total: number): number {
 	.bar-fill {
 		display: block;
 		height: 100%;
-		background: #2563eb;
+		background: var(--ab-color-primary);
 		transition: width 250ms;
 	}
 
 	.dm-sub {
 		font-size: 0.75rem;
-		color: #94a3b8;
+		color: var(--ab-color-fg-faint);
 	}
 
 	.empty-note {
-		color: #64748b;
+		color: var(--ab-color-fg-subtle);
 		font-size: 0.875rem;
 		margin: 0;
 	}
 
 	.empty-note a {
-		color: #1d4ed8;
+		color: var(--ab-color-primary-hover);
 		font-weight: 500;
 	}
 
@@ -305,30 +305,30 @@ function percent(n: number, total: number): number {
 	}
 
 	.btn.primary {
-		background: #2563eb;
+		background: var(--ab-color-primary);
 		color: white;
 	}
 
 	.btn.primary:hover {
-		background: #1d4ed8;
+		background: var(--ab-color-primary-hover);
 	}
 
 	.btn.secondary {
-		background: #f1f5f9;
-		color: #1a1a2e;
-		border-color: #cbd5e1;
+		background: var(--ab-color-surface-sunken);
+		color: var(--ab-color-fg);
+		border-color: var(--ab-color-border-strong);
 	}
 
 	.btn.secondary:hover {
-		background: #e2e8f0;
+		background: var(--ab-color-border);
 	}
 
 	.btn.ghost {
 		background: transparent;
-		color: #475569;
+		color: var(--ab-color-fg-muted);
 	}
 
 	.btn.ghost:hover {
-		background: #f1f5f9;
+		background: var(--ab-color-surface-sunken);
 	}
 </style>

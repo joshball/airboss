@@ -381,11 +381,11 @@ function clickRating(value: number) {
 		align-items: center;
 		gap: 0.75rem;
 		padding: 0.625rem 0.875rem;
-		background: #eff6ff;
-		border: 1px solid #bfdbfe;
+		background: var(--ab-color-primary-subtle);
+		border: 1px solid var(--ab-color-primary-subtle-border);
 		border-radius: 10px;
 		font-size: 0.875rem;
-		color: #1e40af;
+		color: var(--ab-color-primary-active);
 		animation: undo-fade var(--ab-transition-normal) ease-out;
 	}
 
@@ -394,7 +394,7 @@ function clickRating(value: number) {
 	}
 
 	.undo-domain {
-		color: #475569;
+		color: var(--ab-color-fg-muted);
 		font-size: 0.75rem;
 		margin-left: 0.25rem;
 	}
@@ -404,8 +404,8 @@ function clickRating(value: number) {
 		align-items: center;
 		gap: 0.375rem;
 		background: white;
-		border: 1px solid #bfdbfe;
-		color: #1d4ed8;
+		border: 1px solid var(--ab-color-primary-subtle-border);
+		color: var(--ab-color-primary-hover);
 		font-weight: 600;
 		border-radius: 6px;
 		padding: 0.3125rem 0.625rem;
@@ -414,7 +414,7 @@ function clickRating(value: number) {
 	}
 
 	.undo-btn:hover:not(:disabled) {
-		background: #dbeafe;
+		background: var(--ab-color-primary-subtle);
 	}
 
 	.undo-btn:focus-visible {
@@ -430,7 +430,7 @@ function clickRating(value: number) {
 	.undo-dismiss {
 		background: transparent;
 		border: none;
-		color: #475569;
+		color: var(--ab-color-fg-muted);
 		cursor: pointer;
 		font-size: 1.125rem;
 		line-height: 1;
@@ -461,7 +461,7 @@ function clickRating(value: number) {
 
 	.counter {
 		font-size: 0.8125rem;
-		color: #64748b;
+		color: var(--ab-color-fg-subtle);
 		font-weight: 600;
 		letter-spacing: 0.04em;
 		text-transform: uppercase;
@@ -473,16 +473,16 @@ function clickRating(value: number) {
 		font-size: 0.6875rem;
 		font-weight: 600;
 		border-radius: 999px;
-		color: #1d4ed8;
-		background: #eff6ff;
-		border: 1px solid #bfdbfe;
+		color: var(--ab-color-primary-hover);
+		background: var(--ab-color-primary-subtle);
+		border: 1px solid var(--ab-color-primary-subtle-border);
 		text-transform: uppercase;
 		letter-spacing: 0.04em;
 	}
 
 	.card {
 		background: white;
-		border: 1px solid #e2e8f0;
+		border: 1px solid var(--ab-color-border);
 		border-radius: 16px;
 		padding: 2rem;
 		min-height: 14rem;
@@ -491,13 +491,13 @@ function clickRating(value: number) {
 		gap: 1.25rem;
 		font-size: 1.0625rem;
 		line-height: 1.55;
-		color: #0f172a;
+		color: var(--ab-color-fg);
 	}
 
 	.section-label {
 		font-size: 0.75rem;
 		font-weight: 600;
-		color: #94a3b8;
+		color: var(--ab-color-fg-faint);
 		text-transform: uppercase;
 		letter-spacing: 0.08em;
 		margin-bottom: 0.5rem;
@@ -509,19 +509,19 @@ function clickRating(value: number) {
 
 	hr {
 		border: none;
-		border-top: 1px dashed #e2e8f0;
+		border-top: 1px dashed var(--ab-color-border);
 		margin: 0;
 	}
 
 	.rate-q {
 		margin: 0.5rem 0 0;
 		text-align: center;
-		color: #475569;
+		color: var(--ab-color-fg-muted);
 		font-size: 0.9375rem;
 	}
 
 	.rate-q.subdued {
-		color: #94a3b8;
+		color: var(--ab-color-fg-faint);
 	}
 
 	.ratings {
@@ -532,7 +532,7 @@ function clickRating(value: number) {
 
 	.rating {
 		background: white;
-		border: 1px solid #cbd5e1;
+		border: 1px solid var(--ab-color-border-strong);
 		border-radius: 10px;
 		padding: 0.875rem 0.5rem;
 		display: flex;
@@ -547,8 +547,8 @@ function clickRating(value: number) {
 	}
 
 	.rating:hover:not(:disabled) {
-		background: #eff6ff;
-		border-color: #bfdbfe;
+		background: var(--ab-color-primary-subtle);
+		border-color: var(--ab-color-primary-subtle-border);
 	}
 
 	.rating:active:not(:disabled) {
@@ -563,28 +563,28 @@ function clickRating(value: number) {
 	.rating-label {
 		font-weight: 600;
 		font-size: 0.9375rem;
-		color: #0f172a;
+		color: var(--ab-color-fg);
 	}
 
 	.rating-hint {
 		font-size: 0.75rem;
-		color: #64748b;
+		color: var(--ab-color-fg-subtle);
 	}
 
 	.rating-1 .rating-label {
-		color: #b91c1c;
+		color: var(--ab-color-danger-hover);
 	}
 
 	.rating-2 .rating-label {
-		color: #c2410c;
+		color: var(--ab-color-warning-hover);
 	}
 
 	.rating-3 .rating-label {
-		color: #15803d;
+		color: var(--ab-color-success-hover);
 	}
 
 	.rating-4 .rating-label {
-		color: #1d4ed8;
+		color: var(--ab-color-primary-hover);
 	}
 
 	.btn {
@@ -610,31 +610,31 @@ function clickRating(value: number) {
 	}
 
 	.btn.primary {
-		background: #2563eb;
+		background: var(--ab-color-primary);
 		color: white;
 	}
 
 	.btn.primary:hover {
-		background: #1d4ed8;
+		background: var(--ab-color-primary-hover);
 	}
 
 	.btn.secondary {
-		background: #f1f5f9;
-		color: #1a1a2e;
-		border-color: #cbd5e1;
+		background: var(--ab-color-surface-sunken);
+		color: var(--ab-color-fg);
+		border-color: var(--ab-color-border-strong);
 	}
 
 	.btn.secondary:hover {
-		background: #e2e8f0;
+		background: var(--ab-color-border);
 	}
 
 	.btn.ghost {
 		background: transparent;
-		color: #475569;
+		color: var(--ab-color-fg-muted);
 	}
 
 	.btn.ghost:hover {
-		background: #f1f5f9;
+		background: var(--ab-color-surface-sunken);
 	}
 
 	.btn.wide {
@@ -648,16 +648,16 @@ function clickRating(value: number) {
 		align-items: center;
 		padding: 0.0625rem 0.375rem;
 		font-size: 0.6875rem;
-		background: #f1f5f9;
-		color: #64748b;
-		border: 1px solid #cbd5e1;
+		background: var(--ab-color-surface-sunken);
+		color: var(--ab-color-fg-subtle);
+		border: 1px solid var(--ab-color-border-strong);
 		border-radius: 4px;
 		font-family: ui-monospace, monospace;
 	}
 
 	.caught-up {
 		background: white;
-		border: 1px solid #e2e8f0;
+		border: 1px solid var(--ab-color-border);
 		border-radius: 16px;
 		padding: 2.5rem 2rem;
 		text-align: center;
@@ -671,11 +671,11 @@ function clickRating(value: number) {
 		margin: 0;
 		font-size: 1.75rem;
 		letter-spacing: -0.02em;
-		color: #0f172a;
+		color: var(--ab-color-fg);
 	}
 
 	.summary {
-		color: #475569;
+		color: var(--ab-color-fg-muted);
 		font-size: 1rem;
 		margin: 0;
 	}
@@ -690,15 +690,15 @@ function clickRating(value: number) {
 	}
 
 	.tally > div {
-		background: #f8fafc;
-		border: 1px solid #e2e8f0;
+		background: var(--ab-color-surface-muted);
+		border: 1px solid var(--ab-color-border);
 		border-radius: 8px;
 		padding: 0.5rem;
 	}
 
 	.tally dt {
 		font-size: 0.6875rem;
-		color: #64748b;
+		color: var(--ab-color-fg-subtle);
 		text-transform: uppercase;
 		letter-spacing: 0.06em;
 	}
@@ -707,7 +707,7 @@ function clickRating(value: number) {
 		margin: 0.125rem 0 0;
 		font-size: 1.25rem;
 		font-weight: 700;
-		color: #0f172a;
+		color: var(--ab-color-fg);
 	}
 
 	.actions {

@@ -147,12 +147,12 @@ function bar(value: number): number {
 		margin: 0;
 		font-size: 1.75rem;
 		letter-spacing: -0.02em;
-		color: #0f172a;
+		color: var(--ab-color-fg);
 	}
 
 	.sub {
 		margin: 0.25rem 0 0;
-		color: #64748b;
+		color: var(--ab-color-fg-subtle);
 		font-size: 0.9375rem;
 	}
 
@@ -164,7 +164,7 @@ function bar(value: number): number {
 
 	.empty {
 		background: white;
-		border: 1px dashed #cbd5e1;
+		border: 1px dashed var(--ab-color-border-strong);
 		border-radius: 12px;
 		padding: 2.5rem 1.5rem;
 		text-align: center;
@@ -176,13 +176,13 @@ function bar(value: number): number {
 
 	.empty h2 {
 		margin: 0;
-		color: #0f172a;
+		color: var(--ab-color-fg);
 		font-size: 1.25rem;
 	}
 
 	.empty p {
 		margin: 0;
-		color: #64748b;
+		color: var(--ab-color-fg-subtle);
 		max-width: 28rem;
 	}
 
@@ -208,7 +208,7 @@ function bar(value: number): number {
 
 	.card-list {
 		background: white;
-		border: 1px solid #e2e8f0;
+		border: 1px solid var(--ab-color-border);
 		border-radius: 12px;
 		padding: 1.25rem 1.5rem;
 		display: flex;
@@ -219,7 +219,7 @@ function bar(value: number): number {
 	.card-list h2 {
 		margin: 0;
 		font-size: 0.8125rem;
-		color: #64748b;
+		color: var(--ab-color-fg-subtle);
 		text-transform: uppercase;
 		letter-spacing: 0.08em;
 		font-weight: 600;
@@ -248,13 +248,13 @@ function bar(value: number): number {
 	}
 
 	.dm-name {
-		color: #0f172a;
+		color: var(--ab-color-fg);
 		text-decoration: none;
 		font-weight: 500;
 	}
 
 	a.dm-name:hover {
-		color: #1d4ed8;
+		color: var(--ab-color-primary-hover);
 	}
 
 	.dm-counts {
@@ -264,16 +264,16 @@ function bar(value: number): number {
 	}
 
 	.dm-pct {
-		color: #1d4ed8;
+		color: var(--ab-color-primary-hover);
 		font-weight: 600;
 	}
 
 	.dm-total {
-		color: #64748b;
+		color: var(--ab-color-fg-subtle);
 	}
 
 	.bar {
-		background: #e2e8f0;
+		background: var(--ab-color-border);
 		height: 0.375rem;
 		border-radius: 999px;
 		overflow: hidden;
@@ -282,12 +282,12 @@ function bar(value: number): number {
 	.bar-fill {
 		display: block;
 		height: 100%;
-		background: #2563eb;
+		background: var(--ab-color-primary);
 		transition: width 250ms;
 	}
 
 	.empty-note {
-		color: #64748b;
+		color: var(--ab-color-fg-subtle);
 		font-size: 0.875rem;
 		margin: 0;
 	}
@@ -307,35 +307,35 @@ function bar(value: number): number {
 	}
 
 	.btn.primary {
-		background: #2563eb;
+		background: var(--ab-color-primary);
 		color: white;
 	}
 
 	.btn.primary:hover {
-		background: #1d4ed8;
+		background: var(--ab-color-primary-hover);
 	}
 
 	.btn.primary:disabled {
-		background: #94a3b8;
+		background: var(--ab-color-fg-faint);
 		cursor: not-allowed;
 	}
 
 	.btn.secondary {
-		background: #f1f5f9;
-		color: #1a1a2e;
-		border-color: #cbd5e1;
+		background: var(--ab-color-surface-sunken);
+		color: var(--ab-color-fg);
+		border-color: var(--ab-color-border-strong);
 	}
 
 	.btn.secondary:hover {
-		background: #e2e8f0;
+		background: var(--ab-color-border);
 	}
 
 	.btn.ghost {
 		background: transparent;
-		color: #475569;
+		color: var(--ab-color-fg-muted);
 	}
 
 	.btn.ghost:hover {
-		background: #f1f5f9;
+		background: var(--ab-color-surface-sunken);
 	}
 </style>

@@ -278,6 +278,18 @@ function sliceLabel(slice: SessionSlice): string {
 				</form>
 				<ConfirmAction
 					formAction="?/skip"
+					confirmVariant="secondary"
+					triggerVariant="ghost"
+					size="sm"
+					label="Skip topic"
+					confirmLabel="Skip this topic (adds to plan)"
+					hiddenFields={{
+						slotIndex: String(current.slotIndex),
+						skipKind: SESSION_SKIP_KINDS.TOPIC,
+					}}
+				/>
+				<ConfirmAction
+					formAction="?/skip"
 					confirmVariant="danger"
 					triggerVariant="ghost"
 					size="sm"
@@ -289,7 +301,7 @@ function sliceLabel(slice: SessionSlice): string {
 					}}
 				/>
 			</footer>
-			<p class="skip-hint">Permanent skip can be reactivated from the plan detail page.</p>
+			<p class="skip-hint">Topic + permanent skips can be reactivated from the plan detail page.</p>
 		</article>
 	{:else if current}
 		<article class="empty">
@@ -325,17 +337,17 @@ function sliceLabel(slice: SessionSlice): string {
 	h1 {
 		margin: 0;
 		font-size: 1.5rem;
-		color: #0f172a;
+		color: var(--ab-color-fg);
 	}
 
 	.sub {
 		margin: 0.25rem 0 0;
-		color: #64748b;
+		color: var(--ab-color-fg-subtle);
 		font-size: 0.875rem;
 	}
 
 	.progress {
-		background: #e2e8f0;
+		background: var(--ab-color-border);
 		height: 0.375rem;
 		border-radius: 999px;
 		overflow: hidden;
@@ -344,22 +356,22 @@ function sliceLabel(slice: SessionSlice): string {
 	.progress-fill {
 		display: block;
 		height: 100%;
-		background: #2563eb;
+		background: var(--ab-color-primary);
 		transition: width var(--ab-transition-normal);
 	}
 
 	.error {
-		background: #fef2f2;
-		color: #b91c1c;
+		background: var(--ab-color-danger-subtle);
+		color: var(--ab-color-danger-hover);
 		padding: 0.625rem 0.875rem;
 		border-radius: 8px;
-		border: 1px solid #fecaca;
+		border: 1px solid var(--ab-color-danger-subtle-border);
 		font-size: 0.875rem;
 	}
 
 	.item-card {
 		background: white;
-		border: 1px solid #e2e8f0;
+		border: 1px solid var(--ab-color-border);
 		border-radius: 12px;
 		padding: 1.5rem;
 		display: flex;
@@ -383,17 +395,17 @@ function sliceLabel(slice: SessionSlice): string {
 		letter-spacing: 0.06em;
 		padding: 0.125rem 0.5rem;
 		border-radius: 999px;
-		background: #eff6ff;
-		color: #1d4ed8;
+		background: var(--ab-color-primary-subtle);
+		color: var(--ab-color-primary-hover);
 	}
 
 	.reason {
-		color: #0f172a;
+		color: var(--ab-color-fg);
 		font-weight: 500;
 	}
 
 	.reason-detail {
-		color: #64748b;
+		color: var(--ab-color-fg-subtle);
 	}
 
 	.domain {
@@ -401,7 +413,7 @@ function sliceLabel(slice: SessionSlice): string {
 		font-weight: 600;
 		text-transform: uppercase;
 		letter-spacing: 0.06em;
-		color: #64748b;
+		color: var(--ab-color-fg-subtle);
 	}
 
 	.card-body,
@@ -414,16 +426,16 @@ function sliceLabel(slice: SessionSlice): string {
 
 	.card-front {
 		font-size: 1.25rem;
-		color: #0f172a;
+		color: var(--ab-color-fg);
 		line-height: 1.4;
 	}
 
 	.card-back {
-		background: #f8fafc;
-		border: 1px solid #e2e8f0;
+		background: var(--ab-color-surface-muted);
+		border: 1px solid var(--ab-color-border);
 		border-radius: 10px;
 		padding: 1rem;
-		color: #0f172a;
+		color: var(--ab-color-fg);
 	}
 
 	.rep-title,
@@ -433,7 +445,7 @@ function sliceLabel(slice: SessionSlice): string {
 	}
 
 	.situation {
-		color: #0f172a;
+		color: var(--ab-color-fg);
 		line-height: 1.5;
 		margin: 0;
 	}
@@ -477,37 +489,37 @@ function sliceLabel(slice: SessionSlice): string {
 	}
 
 	.option {
-		background: #f8fafc;
-		border: 1px solid #cbd5e1;
-		color: #0f172a;
+		background: var(--ab-color-surface-muted);
+		border: 1px solid var(--ab-color-border-strong);
+		color: var(--ab-color-fg);
 		justify-content: flex-start;
 		text-align: left;
 		padding: 0.75rem 1rem;
 	}
 
 	.option:hover:not(:disabled) {
-		background: #eff6ff;
-		border-color: #bfdbfe;
+		background: var(--ab-color-primary-subtle);
+		border-color: var(--ab-color-primary-subtle-border);
 	}
 
 	.rating.again {
-		background: #fee2e2;
-		color: #991b1b;
+		background: var(--ab-color-danger-subtle);
+		color: var(--ab-color-danger-active);
 	}
 
 	.rating.hard {
-		background: #fef3c7;
-		color: #92400e;
+		background: var(--ab-color-warning-subtle);
+		color: var(--ab-color-warning-active);
 	}
 
 	.rating.good {
-		background: #dcfce7;
-		color: #166534;
+		background: var(--ab-color-success-subtle);
+		color: var(--ab-color-success-active);
 	}
 
 	.rating.easy {
-		background: #dbeafe;
-		color: #1e40af;
+		background: var(--ab-color-primary-subtle);
+		color: var(--ab-color-primary-active);
 	}
 
 	.skip-row {
@@ -515,13 +527,13 @@ function sliceLabel(slice: SessionSlice): string {
 		justify-content: flex-end;
 		gap: 0.75rem;
 		padding-top: 0.5rem;
-		border-top: 1px solid #f1f5f9;
+		border-top: 1px solid var(--ab-color-surface-sunken);
 	}
 
 	.link-btn {
 		background: transparent;
 		border: none;
-		color: #64748b;
+		color: var(--ab-color-fg-subtle);
 		cursor: pointer;
 		font-size: 0.8125rem;
 	}
@@ -539,13 +551,13 @@ function sliceLabel(slice: SessionSlice): string {
 	.skip-hint {
 		margin: 0.25rem 0 0;
 		font-size: 0.75rem;
-		color: #64748b;
+		color: var(--ab-color-fg-subtle);
 		text-align: right;
 	}
 
 	.empty {
 		background: white;
-		border: 1px solid #e2e8f0;
+		border: 1px solid var(--ab-color-border);
 		border-radius: 12px;
 		padding: 2rem;
 		text-align: center;
@@ -561,7 +573,7 @@ function sliceLabel(slice: SessionSlice): string {
 	}
 
 	.muted {
-		color: #94a3b8;
+		color: var(--ab-color-fg-faint);
 		margin: 0;
 		font-size: 0.875rem;
 	}
@@ -594,12 +606,12 @@ function sliceLabel(slice: SessionSlice): string {
 	}
 
 	.btn.primary {
-		background: #2563eb;
+		background: var(--ab-color-primary);
 		color: white;
 	}
 
 	.btn.primary:hover:not(:disabled) {
-		background: #1d4ed8;
+		background: var(--ab-color-primary-hover);
 	}
 
 	.btn.primary:disabled {
@@ -608,13 +620,13 @@ function sliceLabel(slice: SessionSlice): string {
 	}
 
 	.btn.secondary {
-		background: #f1f5f9;
-		color: #1a1a2e;
-		border-color: #cbd5e1;
+		background: var(--ab-color-surface-sunken);
+		color: var(--ab-color-fg);
+		border-color: var(--ab-color-border-strong);
 	}
 
 	.btn.ghost {
 		background: transparent;
-		color: #475569;
+		color: var(--ab-color-fg-muted);
 	}
 </style>

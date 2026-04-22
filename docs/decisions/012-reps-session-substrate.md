@@ -52,67 +52,38 @@ Rejected alternatives:
 - **Backfill to `session_item_result`**: would create synthetic session rows for historical attempts. Correct for a production system with real users, but the cost is real and the benefit is zero for pre-alpha data.
 - **Keep `repAttempt` read-only**: would split audit trail forever. Every aggregator would read both tables. Explicitly the problem this ADR exists to solve.
 
-## Impact on existing code
+## Code that moved
 
-The following currently read `repAttempt` and will need to move onto `session_item_result`:
+The following files read or wrote `repAttempt` before this ADR and now read/write `session_item_result`:
 
-- `libs/bc/study/src/calibration.ts` -- reads `repAttempt.confidence` / `repAttempt.isCorrect` for calibration-by-rep-attempt buckets.
-- `libs/bc/study/src/dashboard.ts` -- reads `repAttempt` for scheduled-reps panel and activity panel aggregates.
-- `libs/bc/study/src/scenarios.ts` -- `getRepAttemptsForSession` (added in PR #24 for the resume fix) will be deleted.
-- `libs/bc/study/src/knowledge.ts` -- uses `repAttempt` for knowledge-node mastery aggregation.
-- `libs/bc/study/src/sessions.ts` -- `submitAttempt` writes to `repAttempt`.
-- `apps/study/src/routes/(app)/reps/session/+page.server.ts` + `+page.svelte` -- entire runner replaced by a redirect.
-- `apps/study/src/routes/(app)/sessions/[id]/+page.server.ts` -- already writes `repAttempt`-linked rows via `repAttemptId` foreign key; simplifies once the FK is gone.
+- `libs/bc/study/src/calibration.ts` -- `confidence` / `isCorrect` buckets now read `session_item_result` filtered by `itemKind='rep'`.
+- `libs/bc/study/src/dashboard.ts` -- scheduled-reps panel + activity panel aggregates now read the same substrate.
+- `libs/bc/study/src/scenarios.ts` -- `getRepAttemptsForSession` deleted in phase 6. `submitAttempt` is a pure validator; persistence moved to `recordItemResult`.
+- `libs/bc/study/src/knowledge.ts` -- knowledge-node mastery reads rep contribution from `session_item_result`.
+- `libs/bc/study/src/sessions.ts` -- `recordItemResult` is now the single writer (with UPSERT guarded by UNIQUE(session_id, slot_index)).
+- `apps/study/src/routes/(app)/reps/session/*` -- deleted in phase 6.
+- `apps/study/src/routes/(app)/sessions/[id]/+page.server.ts` -- no longer sets `repAttemptId` on slot rows.
 
-## Execution plan
+## Execution outcome
 
-The work splits into phases with hard dependencies. Do them in order; later phases cannot run in parallel with earlier ones.
+Shipped 2026-04-22 in the order described below. Phases were sequenced, not parallelized, because each phase's data-flow depended on the prior phase being on main. The one order deviation from the original draft (5 before 3) reflects the real constraint: BC callers had to move off `repAttempt` before the `/reps/session` redirect could land or the redirected traffic would write to an orphan table.
 
-### Phase 1 -- Content and contracts
+| Phase | Content                                                                                                                                                                                                                | Delivered in |
+|-------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------|
+| 1+2   | `libs/constants/src/presets.ts` catalogue (6 tiles: Quick reps, PPL overview, Safety, BFR prep, FIRC, Custom). Preset gallery on `/session/start`. New `?/startFromPreset` action: validate -> archive existing -> `createPlan` -> `startSession` -> 303 to `/sessions/[id]`. | PR #33       |
+| 5     | `libs/bc/study/*` refactored off `repAttempt` onto `session_item_result`. `submitAttempt` became a pure validator; `recordItemResult` writes outcomes. `sessionItemResult` schema gained `chosen_option`, `is_correct`, `confidence`, `answer_ms` plus two indexes.           | PR #38       |
+| 3     | `/reps/session` reduced to a 308 redirect to `/session/start`. `ROUTES.REPS_SESSION` constant removed. Four first-party callers (dashboard CtaPanel, ScheduledRepsPanel, `/reps` index, `/calibration`) switched to `ROUTES.SESSION_START`. | PR #39       |
+| 4     | `rep_attempt` table dropped. `session_item_result.rep_attempt_id` column dropped. `RepAttemptRow`, `NewRepAttemptRow`, `REP_DEDUPE_WINDOW_MS`, `ItemResultInput.repAttemptId` removed. Grep-clean.                                          | PR #41       |
+| 6     | `apps/study/src/routes/(app)/reps/session/*` deleted. `getRepAttemptsForSession` + `getScenariosByIds` helpers removed from `scenarios.ts` along with their tests.                                                                                 | PR #42       |
+| 7     | Verification: `bun run check` clean, 177 tests green, grep returns zero hits for all removed symbols, `/knowledge`/dashboard/calibration render correctly, one permitted comment reference in `libs/constants/src/routes.ts` documents the retirement. | on main      |
 
-- Author the preset catalogue (`libs/constants/src/presets.ts` or similar). Typed records, one per preset. Initial set above.
-- Define the `Preset` type + `PRESET_VALUES` const.
+One follow-up correctness fix landed later: the preset gallery 500'd on "Quick reps" and "Safety procedures" because `createPlanSchema.certGoals` still required `min(1)`. That contradicted the presets' cert-agnostic intent. Resolved in PR #51 by relaxing the schema to allow empty arrays and handling the empty case in every cert-aware aggregator. The "empty certGoals is first-class" appendix below records the decision.
 
-### Phase 2 -- Preset gallery UI
+A backend correctness fix landed in the same PR: `session_item_result` had no UNIQUE constraint on `(session_id, slot_index)` and `recordItemResult` used SELECT-then-INSERT, so concurrent submits could double-insert. The "session-slot idempotency enforced at the DB" appendix below records the DB-level fix.
 
-- `/session/start` empty-state (no active plan) renders the preset gallery instead of redirecting to `/plans/new`.
-- Picking a preset posts to a new action that creates a plan from the preset and starts a session. Lands on `/sessions/[id]`.
-- "Create your own study plan" preset is a link to `/plans/new`.
-- First-time experience from any rep entry point is one click to first scenario.
+## Rollback posture
 
-### Phase 3 -- Redirect the rep runner
-
-- `/reps/session` page stays as a redirect to `/session/start`.
-- `ROUTES.REPS_SESSION` either points to `/session/start` directly (cleaner) or the redirect page handles it.
-- All callers of `ROUTES.REPS_SESSION` keep working because the redirect is transparent.
-
-### Phase 4 -- Schema migration: drop repAttempt
-
-- Drizzle migration: drop `rep_attempt` table.
-- Drizzle migration: drop `session_item_result.rep_attempt_id` column.
-- Update `libs/bc/study/src/schema.ts` to remove the table + type exports.
-
-### Phase 5 -- BC refactor: callers move off repAttempt
-
-Six files listed above. Each one's queries re-target `session_item_result` (joined to `session` for user-scoping, joined to `scenario` for metadata). Confidence / correctness / timing live on `session_item_result` now.
-
-### Phase 6 -- Delete the legacy runner
-
-- Delete `apps/study/src/routes/(app)/reps/session/+page.svelte` and `+page.server.ts`.
-- Delete `getRepAttemptsForSession` and `getScenariosByIds` from `libs/bc/study/src/scenarios.ts` (the functions added in PR #24 specifically for the legacy runner's resume).
-
-### Phase 7 -- Verify
-
-- E2E tests run through the preset-gallery flow.
-- Dashboard renders correctly (scheduled reps panel, activity panel, calibration panel all read from `session_item_result`).
-- Calibration page renders correctly.
-- `bun run check` + `bun run test` clean.
-
-## Rollback plan
-
-None. Pre-alpha data is disposable, and the substrate unification is a terminal decision -- rolling back would require re-introducing `repAttempt` and every caller branching on two tables, which is the problem this ADR exists to solve.
-
-If execution goes wrong, the remedy is to fix forward, not to revert.
+Not reversible. Pre-alpha data is disposable, and the substrate unification is a terminal decision -- rolling back would require re-introducing `repAttempt` and every caller branching on two tables, which is the problem this ADR exists to solve. If execution goes wrong, the remedy is to fix forward.
 
 ## Followups captured elsewhere
 
@@ -123,7 +94,7 @@ If execution goes wrong, the remedy is to fix forward, not to revert.
 
 The "Quick reps" and "Safety procedures" presets ship `certGoals: []` intentionally: the engine's `fetchNodeCandidates` treats an empty `certFilter` as "no cert restriction," producing a session that spans every domain the user can touch. This is the direct replacement for the old one-click rep flow.
 
-When the preset gallery landed we carried over a stricter `createPlanSchema.certGoals.min(1)` rule from an earlier plan-builder design. That rule forced every plan -- including preset-derived ones -- to declare a cert, which collapsed the cert-agnostic plan shape the presets depend on. The fix: relax the schema to `max(4).default([])` and surface the "General practice, no specific cert" option in the manual plan builder so authors can deliberately opt into a cert-agnostic plan. Every downstream consumer already handled the empty-array case (dashboard StudyPlanPanel renders "none," plan detail page renders "none," engine filters skip the cert predicate), so only the schema and the validator forms needed to move.
+When the preset gallery landed we carried over a stricter `createPlanSchema.certGoals.min(1)` rule from an earlier plan-builder design. That rule forced every plan -- including preset-derived ones -- to declare a cert, which collapsed the cert-agnostic plan shape the presets depend on. The fix that landed in PR #51: relaxed the schema to `max(4).default([])` and surfaced the "General practice, no specific cert" option in the manual plan builder so authors can deliberately opt into a cert-agnostic plan. Every downstream consumer already handled the empty-array case (dashboard StudyPlanPanel renders "none," plan detail page renders "none," engine filters skip the cert predicate), so only the schema and the validator forms needed to move.
 
 Takeaway: a plan with no cert goals is a valid plan, not an invalid one. Presets are the proof: they are the ship-it product shape for cert-agnostic study.
 
