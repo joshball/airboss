@@ -423,7 +423,7 @@ describe('getCalibrationTrend', () => {
 });
 
 describe('getCalibrationPointCount', () => {
-	it('counts both review and rep_attempt confidence-rated rows', async () => {
+	it('counts both review and rep-slot confidence-rated rows', async () => {
 		await withFreshUser(async (userId) => {
 			const cardId = await seedCard(userId, DOMAINS.WEATHER);
 			const scenarioId = await seedScenario(userId, DOMAINS.WEATHER);
