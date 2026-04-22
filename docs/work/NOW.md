@@ -27,7 +27,7 @@ The entire Steps 1-6 roadmap is on main. Feature code, specs, tests, docs — al
 
 ## In flight
 
-Nothing. All parallel-build worktrees drained; PRs merged; stale branches pruned.
+Nothing active. PRs from Steps 1-6 are all merged. **Six agent worktrees from prior parallel-build sessions are still on disk** (all `locked`, under `.claude/worktrees/agent-*`). Per user direction 2026-04-22, leaving them in place for now; audit before any future cleanup pass.
 
 ## Build Order
 
