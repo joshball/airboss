@@ -33,6 +33,19 @@ export {
 } from './hosts';
 export { MIN_PASSWORD_LENGTH, USER_STATUS, type UserStatus } from './identity';
 export { PORTS } from './ports';
+export {
+	CUSTOM_TILE,
+	CUSTOM_TILE_ID,
+	type CustomTileId,
+	getPreset,
+	isPresetId,
+	PRESET_ID_VALUES,
+	PRESET_IDS,
+	PRESET_VALUES,
+	PRESETS,
+	type Preset,
+	type PresetId,
+} from './presets';
 export { ROLES, type Role } from './roles';
 export { QUERY_PARAMS, ROUTES } from './routes';
 export { SCHEMAS, type SchemaName } from './schemas';
