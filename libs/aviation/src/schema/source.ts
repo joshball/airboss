@@ -31,7 +31,7 @@ export interface Source {
 	downloadedAt: string;
 
 	/** Format of the downloaded file. */
-	format: 'xml' | 'pdf' | 'html' | 'txt' | 'json';
+	format: 'xml' | 'pdf' | 'html' | 'txt' | 'json' | 'csv';
 
 	/** Repo-relative path to the downloaded file under `data/sources/`. */
 	path: string;

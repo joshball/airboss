@@ -34,7 +34,8 @@ export {
 	isSourceType,
 	type ReferenceTags,
 } from './schema/tags';
-export { SOURCES } from './sources/registry';
+export { isSourceMeta, metaPathFor, type SourceMeta } from './sources/meta';
+export { getSource, getSourcesByType, isSourceDownloaded, PENDING_DOWNLOAD, SOURCES } from './sources/registry';
 export {
 	type ContentScan,
 	type ContentValidationSummary,
