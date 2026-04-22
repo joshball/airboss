@@ -136,6 +136,10 @@ Feature lifecycle is driven by shared skills:
 - **Update docs with the work.** Feature spec, TASKS.md, PRD.md, ROADMAP.md -- all updated as part of shipping, not after.
 - **Automated tests** alongside implementation: unit (Vitest) for BC/lib logic, e2e (Playwright) for user flows.
 - **Review docs have two status fields.** `status` (unread/reading/done) is controlled by the user. `review_status` (pending/done) is controlled by the agent. A feature can't be "done" until both are satisfied.
+- **ALWAYS FIX EVERYTHING from a review, unless explicitly told not to.** Critical, major, minor, nit -- all of it. A review is a punch list to close, not a menu to pick from. Default action after any `/ball-review-*` finishes is to launch the fixer, or fix inline if the scope is small. Don't present fix options and wait; just do the work.
+- **Convergent findings get fixed at the root, once.** When multiple reviewers flag the same cause (e.g., token migration stopped at primitives so every page still ships hex), fix the root cause in one pass, not N times.
+- **No undecided "considerations for future work."** Anything the agent or reviewer flags as "worth considering later" must be resolved in the same turn: do it now, write a work package and schedule it, defer with a specific trigger, or explicitly drop. "Maybe someday" is not allowed to survive a session.
+- **After fixes land, re-verify.** `bun run check` clean, relevant tests pass, and grep for the symptom returns empty. A finding is closed when the evidence says so, not when the diff looks plausible.
 
 ### Tracking: three levels
 
