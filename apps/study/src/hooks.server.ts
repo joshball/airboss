@@ -1,7 +1,7 @@
 import { ROUTES, type Role } from '@ab/constants';
 import { createErrorHandler, createLogger } from '@ab/utils';
 import type { Handle, HandleServerError } from '@sveltejs/kit';
-import { building } from '$app/environment';
+import { building, dev } from '$app/environment';
 import { auth } from '$lib/server/auth';
 import { rewriteSetCookieDomain } from '$lib/server/cookies';
 
@@ -18,6 +18,27 @@ function resolveRequestId(req: Request): string {
 
 function isAuthPath(pathname: string): boolean {
 	return pathname === ROUTES.API_AUTH || pathname.startsWith(`${ROUTES.API_AUTH}/`);
+}
+
+/**
+ * Defense-in-depth security headers. CSP + form-action + frame-ancestors are
+ * emitted by SvelteKit's `kit.csp` (in `svelte.config.js`) so nonces can be
+ * injected into auto-generated inline scripts. The remaining hardening headers
+ * are set here because they're static strings with no framework dependency.
+ */
+function applySecurityHeaders(response: Response): void {
+	try {
+		response.headers.set('X-Content-Type-Options', 'nosniff');
+		response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+		response.headers.set('X-Frame-Options', 'DENY');
+		response.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=(), payment=()');
+		if (!dev) {
+			// HSTS only in prod; dev uses http on 127.0.0.1/localhost.
+			response.headers.set('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
+		}
+	} catch {
+		// Some response types (streaming/binary) have frozen headers; skip silently.
+	}
 }
 
 export const handleError: HandleServerError = ({ error, event, status, message }) => {
@@ -109,6 +130,8 @@ export const handle: Handle = async ({ event, resolve }) => {
 	} catch {
 		// Response headers may be frozen on certain response types; ignore.
 	}
+
+	applySecurityHeaders(response);
 
 	const ms = Math.round(performance.now() - start);
 	log.info(`${event.request.method} ${event.url.pathname} ${response.status}`, {

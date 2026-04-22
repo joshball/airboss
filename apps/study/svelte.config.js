@@ -6,6 +6,27 @@ const config = {
 	preprocess: vitePreprocess(),
 	kit: {
 		adapter: adapter(),
+		// Content-Security-Policy as defense-in-depth. `renderMarkdown` (used in
+		// knowledge pages and learn flow) already escapes HTML before re-emitting
+		// a narrow tag set, but CSP protects against future renderer regressions
+		// and third-party components. SvelteKit auto-generates nonces for inline
+		// scripts it emits; 'self' covers the rest. better-auth OAuth is same-origin
+		// (all requests proxied through /api/auth) so no external connect-src is needed.
+		csp: {
+			mode: 'auto',
+			directives: {
+				'default-src': ['self'],
+				'script-src': ['self'],
+				'style-src': ['self', 'unsafe-inline'],
+				'img-src': ['self', 'data:'],
+				'font-src': ['self', 'data:'],
+				'connect-src': ['self'],
+				'frame-ancestors': ['none'],
+				'base-uri': ['self'],
+				'form-action': ['self'],
+				'object-src': ['none'],
+			},
+		},
 		alias: {
 			'@ab/constants': '../../libs/constants/src/index.ts',
 			'@ab/constants/*': '../../libs/constants/src/*',
