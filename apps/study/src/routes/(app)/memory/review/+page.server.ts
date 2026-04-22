@@ -1,5 +1,13 @@
 import { requireAuth } from '@ab/auth';
-import { CardNotFoundError, CardNotReviewableError, getDueCards, submitReview, submitReviewSchema } from '@ab/bc-study';
+import {
+	CardNotFoundError,
+	CardNotReviewableError,
+	getDueCards,
+	NoReviewToUndoError,
+	submitReview,
+	submitReviewSchema,
+	undoReview,
+} from '@ab/bc-study';
 import {
 	CONFIDENCE_SAMPLE_RATE,
 	type ConfidenceLevel,
@@ -126,6 +134,37 @@ export const actions: Actions = {
 				err instanceof Error ? err : undefined,
 			);
 			error(500, { message: 'Could not save review' });
+		}
+	},
+	undoReview: async (event) => {
+		const user = requireAuth(event);
+		const { request, locals } = event;
+
+		const form = await request.formData();
+		const cardId = String(form.get('cardId') ?? '');
+		if (!cardId) return fail(400, { error: 'cardId is required' });
+
+		try {
+			const undone = await undoReview(cardId, user.id);
+			return {
+				success: true as const,
+				intent: 'undoReview' as const,
+				cardId,
+				undoneReviewId: undone.id,
+			};
+		} catch (err) {
+			if (err instanceof CardNotFoundError) {
+				return fail(404, { error: 'Card not found' });
+			}
+			if (err instanceof NoReviewToUndoError) {
+				return fail(409, { error: 'Nothing to undo' });
+			}
+			log.error(
+				'undoReview threw',
+				{ requestId: locals.requestId, userId: user.id, metadata: { cardId } },
+				err instanceof Error ? err : undefined,
+			);
+			error(500, { message: 'Could not undo review' });
 		}
 	},
 } satisfies Actions;

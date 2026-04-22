@@ -1,8 +1,14 @@
 import { requireAuth } from '@ab/auth';
-import { getNodeView, splitContentPhases } from '@ab/bc-study';
+import {
+	getNodeProgress,
+	getNodeView,
+	recordPhaseCompleted,
+	recordPhaseVisited,
+	splitContentPhases,
+} from '@ab/bc-study';
 import { KNOWLEDGE_PHASE_ORDER, KNOWLEDGE_PHASE_VALUES, type KnowledgePhase, QUERY_PARAMS } from '@ab/constants';
-import { error } from '@sveltejs/kit';
-import type { PageServerLoad } from './$types';
+import { error, fail } from '@sveltejs/kit';
+import type { Actions, PageServerLoad } from './$types';
 
 /**
  * Extract activity ids from a phase body. Authoring convention (see
@@ -41,15 +47,17 @@ export const load: PageServerLoad = async (event) => {
 			activityIds: extractActivityIds(phaseBodies[phase] ?? null),
 		}));
 
+	const progress = await getNodeProgress(user.id, view.node.id);
+
 	// Deep-link support: `?step=<named-slug>`. Narrow against the known phase
-	// set; an unknown or missing value falls back to the first phase in the
-	// canonical order (Context). Index lookups happen in the client from the
-	// named slug, so phase reordering in constants does not break bookmarks.
+	// set; an unknown or missing value falls back to the learner's last phase
+	// (resume), else the first phase in the canonical order (Context).
 	const stepParam = event.url.searchParams.get(QUERY_PARAMS.STEP);
-	const initialPhase: KnowledgePhase =
-		stepParam && (KNOWLEDGE_PHASE_VALUES as readonly string[]).includes(stepParam)
-			? (stepParam as KnowledgePhase)
-			: KNOWLEDGE_PHASE_ORDER[0];
+	const isKnownPhase = (v: string | null): v is KnowledgePhase =>
+		v !== null && (KNOWLEDGE_PHASE_VALUES as readonly string[]).includes(v);
+
+	const resumePhase = isKnownPhase(progress.lastPhase) ? progress.lastPhase : null;
+	const initialPhase: KnowledgePhase = isKnownPhase(stepParam) ? stepParam : (resumePhase ?? KNOWLEDGE_PHASE_ORDER[0]);
 
 	return {
 		node: {
@@ -59,5 +67,30 @@ export const load: PageServerLoad = async (event) => {
 		},
 		phases,
 		initialPhase,
+		progress,
 	};
+};
+
+function parsePhase(raw: FormDataEntryValue | null): KnowledgePhase | null {
+	if (typeof raw !== 'string') return null;
+	return (KNOWLEDGE_PHASE_VALUES as readonly string[]).includes(raw) ? (raw as KnowledgePhase) : null;
+}
+
+export const actions: Actions = {
+	visitPhase: async (event) => {
+		const user = requireAuth(event);
+		const form = await event.request.formData();
+		const phase = parsePhase(form.get('phase'));
+		if (!phase) return fail(400, { error: 'invalid phase' });
+		await recordPhaseVisited(user.id, event.params.slug, phase);
+		return { success: true as const, intent: 'visitPhase' as const, phase };
+	},
+	completePhase: async (event) => {
+		const user = requireAuth(event);
+		const form = await event.request.formData();
+		const phase = parsePhase(form.get('phase'));
+		if (!phase) return fail(400, { error: 'invalid phase' });
+		await recordPhaseCompleted(user.id, event.params.slug, phase);
+		return { success: true as const, intent: 'completePhase' as const, phase };
+	},
 };

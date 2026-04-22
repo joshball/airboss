@@ -21,3 +21,5 @@ export const generateRepAttemptId = (): string => createId('rat');
 export const generateStudyPlanId = (): string => createId('plan');
 export const generateSessionId = (): string => createId('ses');
 export const generateSessionItemResultId = (): string => createId('sir');
+/** Knowledge-node phase-progress row (per-user per-node). */
+export const generateKnowledgeNodeProgressId = (): string => createId('knp');

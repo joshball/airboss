@@ -41,6 +41,7 @@ export type {
 	ListNodesFilters,
 	NodeMasteryGate,
 	NodeMasteryStats,
+	NodePhaseProgress,
 	NodeSummary,
 	NodeView,
 } from './knowledge';
@@ -53,6 +54,7 @@ export {
 	getCertProgress,
 	getDomainCertMatrix,
 	getNodeMastery,
+	getNodeProgress,
 	getNodesByIds,
 	getNodeView,
 	isMastered,
@@ -63,6 +65,8 @@ export {
 	listNodeIds,
 	listNodeSummaries,
 	listNodesForBrowse,
+	recordPhaseCompleted,
+	recordPhaseVisited,
 	refreshEdgeTargetExists,
 	replaceNodeEdges,
 	splitContentPhases,
@@ -86,7 +90,7 @@ export {
 	updatePlan,
 } from './plans';
 export type { SubmitReviewInput } from './reviews';
-export { CardNotReviewableError, submitReview } from './reviews';
+export { CardNotReviewableError, NoReviewToUndoError, submitReview, undoReview } from './reviews';
 export type {
 	CreateScenarioInput,
 	DomainAccuracyStats,
@@ -119,10 +123,12 @@ export type {
 	CardRow,
 	CardStateRow,
 	KnowledgeEdgeRow,
+	KnowledgeNodeProgressRow,
 	KnowledgeNodeRow,
 	NewCardRow,
 	NewCardStateRow,
 	NewKnowledgeEdgeRow,
+	NewKnowledgeNodeProgressRow,
 	NewKnowledgeNodeRow,
 	NewReviewRow,
 	NewScenarioRow,
@@ -142,6 +148,7 @@ export {
 	cardState,
 	knowledgeEdge,
 	knowledgeNode,
+	knowledgeNodeProgress,
 	review,
 	scenario,
 	session,

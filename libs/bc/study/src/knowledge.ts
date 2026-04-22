@@ -26,6 +26,7 @@ import {
 	STABILITY_MASTERED_DAYS,
 } from '@ab/constants';
 import { db as defaultDb } from '@ab/db';
+import { generateKnowledgeNodeProgressId } from '@ab/utils';
 import { and, asc, count, eq, inArray, isNotNull, isNull, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import {
@@ -34,9 +35,11 @@ import {
 	card,
 	cardState,
 	type KnowledgeEdgeRow,
+	type KnowledgeNodeProgressRow,
 	type KnowledgeNodeRow,
 	knowledgeEdge,
 	knowledgeNode,
+	knowledgeNodeProgress,
 	type NewKnowledgeEdgeRow,
 	type NewKnowledgeNodeRow,
 	scenario,
@@ -905,4 +908,136 @@ export async function getDomainCertMatrix(userId: string, db: Db = defaultDb): P
 		result.push({ domain, cells });
 	}
 	return result;
+}
+
+// ---------------------------------------------------------------------------
+// Per-node phase progress (knowledge /learn stepper)
+// ---------------------------------------------------------------------------
+
+/** Per-user per-node phase progress snapshot. */
+export interface NodePhaseProgress {
+	visitedPhases: string[];
+	completedPhases: string[];
+	lastPhase: string | null;
+}
+
+const EMPTY_PROGRESS: NodePhaseProgress = {
+	visitedPhases: [],
+	completedPhases: [],
+	lastPhase: null,
+};
+
+/**
+ * Read a user's phase progress for a single node. Returns an empty snapshot
+ * (no rows) when the learner has never visited the node -- never null so the
+ * stepper can render uniformly.
+ */
+export async function getNodeProgress(userId: string, nodeId: string, db: Db = defaultDb): Promise<NodePhaseProgress> {
+	const [row] = await db
+		.select()
+		.from(knowledgeNodeProgress)
+		.where(and(eq(knowledgeNodeProgress.userId, userId), eq(knowledgeNodeProgress.nodeId, nodeId)))
+		.limit(1);
+	if (!row) return { ...EMPTY_PROGRESS };
+	return {
+		visitedPhases: [...row.visitedPhases],
+		completedPhases: [...row.completedPhases],
+		lastPhase: row.lastPhase,
+	};
+}
+
+/** Idempotent upsert: ensure `phaseId` is in `visitedPhases`; set as `lastPhase`. */
+export async function recordPhaseVisited(
+	userId: string,
+	nodeId: string,
+	phaseId: string,
+	db: Db = defaultDb,
+): Promise<KnowledgeNodeProgressRow> {
+	return await db.transaction(async (tx) => {
+		const [existing] = await tx
+			.select()
+			.from(knowledgeNodeProgress)
+			.where(and(eq(knowledgeNodeProgress.userId, userId), eq(knowledgeNodeProgress.nodeId, nodeId)))
+			.for('update')
+			.limit(1);
+
+		if (!existing) {
+			const [inserted] = await tx
+				.insert(knowledgeNodeProgress)
+				.values({
+					id: generateKnowledgeNodeProgressId(),
+					userId,
+					nodeId,
+					visitedPhases: [phaseId],
+					completedPhases: [],
+					lastPhase: phaseId,
+				})
+				.returning();
+			return inserted;
+		}
+
+		const visited = existing.visitedPhases.includes(phaseId)
+			? existing.visitedPhases
+			: [...existing.visitedPhases, phaseId];
+		const [updated] = await tx
+			.update(knowledgeNodeProgress)
+			.set({
+				visitedPhases: visited,
+				lastPhase: phaseId,
+				updatedAt: new Date(),
+			})
+			.where(eq(knowledgeNodeProgress.id, existing.id))
+			.returning();
+		return updated;
+	});
+}
+
+/** Idempotent upsert: ensure `phaseId` is in both `visitedPhases` + `completedPhases`. */
+export async function recordPhaseCompleted(
+	userId: string,
+	nodeId: string,
+	phaseId: string,
+	db: Db = defaultDb,
+): Promise<KnowledgeNodeProgressRow> {
+	return await db.transaction(async (tx) => {
+		const [existing] = await tx
+			.select()
+			.from(knowledgeNodeProgress)
+			.where(and(eq(knowledgeNodeProgress.userId, userId), eq(knowledgeNodeProgress.nodeId, nodeId)))
+			.for('update')
+			.limit(1);
+
+		if (!existing) {
+			const [inserted] = await tx
+				.insert(knowledgeNodeProgress)
+				.values({
+					id: generateKnowledgeNodeProgressId(),
+					userId,
+					nodeId,
+					visitedPhases: [phaseId],
+					completedPhases: [phaseId],
+					lastPhase: phaseId,
+				})
+				.returning();
+			return inserted;
+		}
+
+		const visited = existing.visitedPhases.includes(phaseId)
+			? existing.visitedPhases
+			: [...existing.visitedPhases, phaseId];
+		const completed = existing.completedPhases.includes(phaseId)
+			? existing.completedPhases
+			: [...existing.completedPhases, phaseId];
+		const [updated] = await tx
+			.update(knowledgeNodeProgress)
+			.set({
+				visitedPhases: visited,
+				completedPhases: completed,
+				lastPhase: phaseId,
+				updatedAt: new Date(),
+			})
+			.where(eq(knowledgeNodeProgress.id, existing.id))
+			.returning();
+		return updated;
+	});
 }

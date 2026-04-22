@@ -361,7 +361,16 @@ const interpretation = $derived(
 			{#if lastScore === null}
 				<p class="empty-note">No complete day yet. Keep going -- the trend appears once any day has enough data.</p>
 			{:else}
-				<svg class="sparkline" viewBox="0 0 600 120" role="img" aria-label="Calibration trend sparkline">
+				<svg
+					class="sparkline"
+					viewBox="0 0 600 120"
+					role="img"
+					aria-label={`Calibration trend over ${CALIBRATION_TREND_WINDOW_DAYS} days: ${
+						firstScore === null ? 'start unknown' : firstScore.score.toFixed(2)
+					} to ${lastScore.score.toFixed(2)}${
+						trendDelta === null ? ' (no change)' : `, change ${signedPct(trendDelta)}`
+					}`}
+				>
 					<line x1="0" y1="4" x2="600" y2="4" class="sparkline-axis" />
 					<line x1="0" y1="116" x2="600" y2="116" class="sparkline-axis" />
 					<path d={trendPath()} class="sparkline-path" fill="none" />

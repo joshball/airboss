@@ -1,5 +1,6 @@
 <script lang="ts">
-import { CARD_STATES, DOMAIN_LABELS, MASTERY_STABILITY_DAYS, ROUTES } from '@ab/constants';
+import { CARD_STATES, DOMAIN_LABELS, MASTERY_STABILITY_DAYS, QUERY_PARAMS, ROUTES } from '@ab/constants';
+import StatTile from '@ab/ui/components/StatTile.svelte';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
@@ -42,26 +43,34 @@ function percent(n: number, total: number): number {
 	</header>
 
 	<div class="grid">
-		<article class="tile due">
-			<div class="tile-label">Due now</div>
-			<div class="tile-value">{stats.dueNow}</div>
-			<div class="tile-sub">{stats.dueNow === 1 ? 'card' : 'cards'} to review</div>
-		</article>
-		<article class="tile">
-			<div class="tile-label">Reviewed today</div>
-			<div class="tile-value">{stats.reviewedToday}</div>
-			<div class="tile-sub">{stats.reviewedToday === 1 ? 'review' : 'reviews'}</div>
-		</article>
-		<article class="tile">
-			<div class="tile-label">Streak</div>
-			<div class="tile-value">{stats.streakDays}</div>
-			<div class="tile-sub">{stats.streakDays === 1 ? 'day' : 'days'}</div>
-		</article>
-		<article class="tile">
-			<div class="tile-label">Active cards</div>
-			<div class="tile-value">{totalActive}</div>
-			<div class="tile-sub">across {stats.domains.length} {stats.domains.length === 1 ? 'domain' : 'domains'}</div>
-		</article>
+		<StatTile
+			label="Due now"
+			value={stats.dueNow}
+			sub="{stats.dueNow === 1 ? 'card' : 'cards'} to review"
+			href={stats.dueNow > 0 ? ROUTES.MEMORY_REVIEW : undefined}
+			tone="primary"
+			ariaLabel="Due now: {stats.dueNow} cards to review"
+		/>
+		<StatTile
+			label="Reviewed today"
+			value={stats.reviewedToday}
+			sub={stats.reviewedToday === 1 ? 'review' : 'reviews'}
+			href={`${ROUTES.MEMORY_BROWSE}?${QUERY_PARAMS.STATUS}=active`}
+			ariaLabel="Reviewed today: {stats.reviewedToday}, browse active cards"
+		/>
+		<StatTile
+			label="Streak"
+			value={stats.streakDays}
+			sub={stats.streakDays === 1 ? 'day' : 'days'}
+			href={ROUTES.CALIBRATION}
+			ariaLabel="Streak: {stats.streakDays} days, open calibration"
+		/>
+		<StatTile
+			label="Active cards"
+			value={totalActive}
+			sub="across {stats.domains.length} {stats.domains.length === 1 ? 'domain' : 'domains'}"
+			href={ROUTES.MEMORY_BROWSE}
+		/>
 	</div>
 
 	<article class="card-list">
@@ -154,48 +163,7 @@ function percent(n: number, total: number): number {
 		gap: 0.75rem;
 	}
 
-	.tile {
-		background: white;
-		border: 1px solid #e2e8f0;
-		border-radius: 12px;
-		padding: 1rem 1.25rem;
-		display: flex;
-		flex-direction: column;
-		gap: 0.25rem;
-	}
-
-	.tile.due {
-		border-color: #bfdbfe;
-		background: #eff6ff;
-	}
-
-	.tile-label {
-		font-size: 0.75rem;
-		font-weight: 600;
-		color: #64748b;
-		text-transform: uppercase;
-		letter-spacing: 0.06em;
-	}
-
-	.tile.due .tile-label {
-		color: #1d4ed8;
-	}
-
-	.tile-value {
-		font-size: 2rem;
-		font-weight: 700;
-		color: #0f172a;
-		line-height: 1;
-	}
-
-	.tile.due .tile-value {
-		color: #1d4ed8;
-	}
-
-	.tile-sub {
-		font-size: 0.8125rem;
-		color: #64748b;
-	}
+	/* StatTile provides its own styling; the grid just lays them out. */
 
 	.card-list {
 		background: white;
