@@ -23,8 +23,10 @@ import {
 	DEFAULT_USER_TIMEZONE,
 	DOMAIN_VALUES,
 	type Domain,
+	QUERY_PARAMS,
 	RELEVANCE_PRIORITIES,
 	RESUME_WINDOW_MS,
+	ROUTES,
 	SCENARIO_STATUSES,
 	SESSION_ITEM_KINDS,
 	SESSION_MODES,
@@ -128,6 +130,20 @@ export interface SessionSummarySliceRow {
 	skipped: number;
 }
 
+/**
+ * One "do this next" action rendered at the bottom of the summary page.
+ *
+ * `href` is the concrete URL the UI should link to (server-rendered so the
+ * client doesn't need to duplicate route shaping). `variant` lets the UI pick
+ * the button treatment -- `primary` for the single highest-priority follow-up,
+ * `secondary` for the rest.
+ */
+export interface SessionSuggestedAction {
+	label: string;
+	href: string;
+	variant: 'primary' | 'secondary';
+}
+
 export interface SessionSummary {
 	session: SessionRow;
 	totalItems: number;
@@ -139,8 +155,13 @@ export interface SessionSummary {
 	nodesStarted: number;
 	bySlice: SessionSummarySliceRow[];
 	streakDays: number;
-	/** Human-readable hints computed from just-finished state. */
-	suggestedNext: string[];
+	/**
+	 * Clickable follow-up actions computed from just-finished state. Rendered
+	 * as links/buttons by the summary page -- each one takes the learner to a
+	 * specific filtered review / session / node instead of a hint they have to
+	 * parse and navigate by hand.
+	 */
+	suggestedNext: SessionSuggestedAction[];
 }
 
 // ---------- Helpers ----------
@@ -930,8 +951,11 @@ export async function getSessionSummary(
 
 	const streakDays = await getStreakDays(userId, DEFAULT_USER_TIMEZONE, db, now);
 
-	// Suggested next -- up to 3 non-binding hints.
-	const suggestedNext: string[] = [];
+	// Suggested next -- up to 3 structured, clickable actions. Each hint maps
+	// to a concrete route so the UI can render a button/link rather than prose
+	// the learner has to parse and navigate by hand.
+	const suggestedNext: SessionSuggestedAction[] = [];
+
 	const tomorrow = new Date(now.getTime() + 24 * 60 * 60 * 1000);
 	const [dueTomorrowRow] = await db
 		.select({ c: sql<number>`count(*)::int` })
@@ -947,7 +971,11 @@ export async function getSessionSummary(
 		);
 	const dueTomorrow = Number(dueTomorrowRow?.c ?? 0);
 	if (dueTomorrow > 0) {
-		suggestedNext.push(`${dueTomorrow} ${dueTomorrow === 1 ? 'card' : 'cards'} due in the next 24 hours`);
+		suggestedNext.push({
+			label: `Review ${dueTomorrow} ${dueTomorrow === 1 ? 'card' : 'cards'} due in the next 24 hours`,
+			href: ROUTES.MEMORY_REVIEW,
+			variant: 'primary',
+		});
 	}
 
 	if (sess.mode === SESSION_MODES.CONTINUE || sess.mode === SESSION_MODES.EXPAND) {
@@ -963,13 +991,30 @@ export async function getSessionSummary(
 				),
 			);
 		if (Number(relearningRow?.c ?? 0) > 5) {
-			suggestedNext.push('Try a Strengthen session to hit relearning cards');
+			suggestedNext.push({
+				label: 'Start a Strengthen session to hit relearning cards',
+				href: `${ROUTES.SESSION_START}?${QUERY_PARAMS.SESSION_MODE}=${SESSION_MODES.STRENGTHEN}`,
+				variant: suggestedNext.length === 0 ? 'primary' : 'secondary',
+			});
 		}
 	}
 
 	const nodeStarts = sirRows.filter((r) => r.itemKind === SESSION_ITEM_KINDS.NODE_START && r.nodeId && r.completedAt);
-	if (nodeStarts.length > 0 && nodeStarts[0].nodeId) {
-		suggestedNext.push(`Continue working through ${nodeStarts[0].nodeId}`);
+	const firstNodeId = nodeStarts[0]?.nodeId ?? null;
+	if (firstNodeId) {
+		// Resolve the node title so the button label reads naturally instead
+		// of showing a raw kebab-case slug.
+		const [nodeRow] = await db
+			.select({ title: knowledgeNode.title })
+			.from(knowledgeNode)
+			.where(eq(knowledgeNode.id, firstNodeId))
+			.limit(1);
+		const title = nodeRow?.title ?? firstNodeId;
+		suggestedNext.push({
+			label: `Continue: ${title}`,
+			href: ROUTES.KNOWLEDGE_LEARN(firstNodeId),
+			variant: suggestedNext.length === 0 ? 'primary' : 'secondary',
+		});
 	}
 
 	return {

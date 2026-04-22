@@ -1,12 +1,14 @@
 <script lang="ts">
-import type { CalibrationBucket } from '@ab/bc-study';
+import type { CalibrationBucket, DomainCalibration } from '@ab/bc-study';
 import {
 	CALIBRATION_MIN_BUCKET_COUNT,
 	CALIBRATION_TREND_WINDOW_DAYS,
 	CONFIDENCE_LEVEL_LABELS,
 	type ConfidenceLevel,
 	DOMAIN_LABELS,
+	QUERY_PARAMS,
 	ROUTES,
+	SESSION_MODES,
 } from '@ab/constants';
 import type { PageData } from './$types';
 
@@ -131,6 +133,77 @@ const firstScore = $derived(
 const trendDelta = $derived(
 	firstScore && lastScore && firstScore.date !== lastScore.date ? lastScore.score - firstScore.score : null,
 );
+
+/**
+ * Buckets with a gap large enough to meaningfully steer practice. Below the
+ * data threshold is excluded (noise) and near-zero gaps are "well calibrated"
+ * and don't produce a CTA. Returned in absolute-gap-descending order so the
+ * interpretation block talks about the most lopsided bucket first.
+ */
+const bucketsWithGap = $derived<CalibrationBucket[]>(
+	hasData
+		? [...calibration.buckets]
+				.filter((b: CalibrationBucket) => !b.needsMoreData && Math.abs(b.gap) >= 0.05)
+				.sort((a: CalibrationBucket, b: CalibrationBucket) => Math.abs(b.gap) - Math.abs(a.gap))
+		: [],
+);
+
+/**
+ * Confidence-level CTA -- a Strengthen session hits relearning + rated-Again +
+ * overdue cards, which is what "recalibrate at this confidence level" actually
+ * needs in practice. Cards don't store per-card confidence; feeding the
+ * calibration signal more data is what moves the score, and Strengthen is the
+ * engine slice tuned for that.
+ */
+function practiceHrefForBucket(_bucket: CalibrationBucket): string {
+	return `${ROUTES.SESSION_START}?${QUERY_PARAMS.SESSION_MODE}=${SESSION_MODES.STRENGTHEN}`;
+}
+
+/**
+ * Domain CTA -- link to the review queue pre-filtered to this domain. The
+ * memory/review server load narrows the due-cards query by `?domain=`, so the
+ * learner lands in a scoped review without any extra clicks.
+ */
+function practiceHrefForDomain(d: DomainCalibration): string {
+	return `${ROUTES.MEMORY_REVIEW}?domain=${encodeURIComponent(d.domain)}`;
+}
+
+/**
+ * Synthesize a 1-2 sentence interpretation from the user's bucket gaps.
+ * Generic copy when everything is flat; specific copy (with the worst bucket
+ * and its direction) when there's a real pattern to describe. The point isn't
+ * to diagnose mood, it's to give the learner a one-glance read on what their
+ * calibration data actually says.
+ */
+const interpretation = $derived(
+	(() => {
+		if (!hasData) return '';
+		const ready: CalibrationBucket[] = calibration.buckets.filter((b: CalibrationBucket) => !b.needsMoreData);
+		if (ready.length === 0) return 'Keep rating confidence so the page has enough data to interpret.';
+
+		const wellCalibrated = ready.filter((b: CalibrationBucket) => Math.abs(b.gap) < 0.05);
+		const hasGap = ready.some((b: CalibrationBucket) => Math.abs(b.gap) >= 0.05);
+
+		if (!hasGap) {
+			return 'Your confidence matches your accuracy across every bucket with enough data -- you read your own gut well.';
+		}
+
+		const worst = [...ready].sort((a: CalibrationBucket, b: CalibrationBucket) => Math.abs(b.gap) - Math.abs(a.gap))[0];
+		const worstLabel = confidenceLabel(worst.level).toLowerCase();
+		const worstLevel = worst.level;
+		const worstPct = Math.abs(pct(worst.gap));
+
+		const strong = wellCalibrated.find((b: CalibrationBucket) => b.level >= 4) ?? wellCalibrated[0];
+		const strongClause = strong
+			? `You're reliable when ${confidenceLabel(strong.level).toLowerCase()} (level ${strong.level} is well-calibrated), but `
+			: '';
+
+		if (worst.gap < 0) {
+			return `${strongClause}level-${worstLevel} ("${worstLabel}") guesses go wrong ${worstPct}% more often than you expect -- trust your gut less when it's only that sure.`;
+		}
+		return `${strongClause}level-${worstLevel} ("${worstLabel}") answers come out right ${worstPct}% more often than you predict -- your actual recall is better than your confidence is admitting.`;
+	})(),
+);
 </script>
 
 <svelte:head>
@@ -185,11 +258,23 @@ const trendDelta = $derived(
 			</dl>
 		</article>
 
+		{#if interpretation}
+			<article class="interpretation-card" aria-label="Calibration interpretation">
+				<p>{interpretation}</p>
+				{#if bucketsWithGap.length > 0}
+					<a class="btn primary" href={`${ROUTES.SESSION_START}?${QUERY_PARAMS.SESSION_MODE}=${SESSION_MODES.STRENGTHEN}`}>
+						Start a Strengthen session
+					</a>
+				{/if}
+			</article>
+		{/if}
+
 		<article class="chart-card">
 			<h2>By confidence level</h2>
 			<p class="hint">How often you were correct, compared to what that confidence level predicts.</p>
 			<ul class="buckets">
 				{#each calibration.buckets as bucket (bucket.level)}
+					{@const hasActionableGap = !bucket.needsMoreData && Math.abs(bucket.gap) >= 0.05}
 					<li class="bucket {gapClass(bucket)}">
 						<div class="bucket-head">
 							<span class="bucket-num">{bucket.level}</span>
@@ -216,7 +301,14 @@ const trendDelta = $derived(
 								</div>
 							</div>
 						</div>
-						<div class="bucket-gap">{gapLabel(bucket)}</div>
+						<div class="bucket-footer">
+							<div class="bucket-gap">{gapLabel(bucket)}</div>
+							{#if hasActionableGap}
+								<a class="bucket-cta" href={practiceHrefForBucket(bucket)}>
+									Practice level {bucket.level}
+								</a>
+							{/if}
+						</div>
 					</li>
 				{/each}
 			</ul>
@@ -234,6 +326,7 @@ const trendDelta = $derived(
 							<th scope="col" class="num">Score</th>
 							<th scope="col" class="num">Data points</th>
 							<th scope="col">Largest gap</th>
+							<th scope="col" class="action-col"><span class="visually-hidden">Action</span></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -250,6 +343,11 @@ const trendDelta = $derived(
 											{confidenceLabel(d.largestGap.level)} {signedPct(d.largestGap.gap)}
 										</span>
 									{/if}
+								</td>
+								<td class="action-col">
+									<a class="domain-cta" href={practiceHrefForDomain(d)}>
+										Practice {domainLabel(d.domain)}
+									</a>
 								</td>
 							</tr>
 						{/each}
@@ -401,6 +499,27 @@ const trendDelta = $derived(
 		display: flex;
 		flex-direction: column;
 		gap: 0.75rem;
+	}
+
+	.interpretation-card {
+		background: #eff6ff;
+		border: 1px solid #bfdbfe;
+		border-radius: 16px;
+		padding: 1.25rem 1.5rem;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 1rem;
+		align-items: center;
+		justify-content: space-between;
+	}
+
+	.interpretation-card p {
+		margin: 0;
+		color: #0f172a;
+		font-size: 0.9375rem;
+		line-height: 1.5;
+		flex: 1 1 24rem;
+		min-width: 0;
 	}
 
 	.chart-card h2,
@@ -558,10 +677,57 @@ const trendDelta = $derived(
 		color: #64748b;
 	}
 
+	.bucket-footer {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: 0.75rem;
+		flex-wrap: wrap;
+	}
+
 	.bucket-gap {
 		font-size: 0.8125rem;
 		font-weight: 600;
 		color: #334155;
+	}
+
+	.bucket-cta {
+		display: inline-flex;
+		align-items: center;
+		padding: 0.25rem 0.625rem;
+		font-size: 0.8125rem;
+		font-weight: 600;
+		color: #1d4ed8;
+		background: white;
+		border: 1px solid #bfdbfe;
+		border-radius: 8px;
+		text-decoration: none;
+		transition: background 120ms, border-color 120ms;
+	}
+
+	.bucket-cta:hover {
+		background: #eff6ff;
+		border-color: #93c5fd;
+	}
+
+	.gap-over .bucket-cta {
+		color: #b91c1c;
+		border-color: #fecaca;
+	}
+
+	.gap-over .bucket-cta:hover {
+		background: #fef2f2;
+		border-color: #fca5a5;
+	}
+
+	.gap-under .bucket-cta {
+		color: #a16207;
+		border-color: #fde68a;
+	}
+
+	.gap-under .bucket-cta:hover {
+		background: #fefce8;
+		border-color: #fcd34d;
 	}
 
 	.gap-over .bucket-gap {
@@ -626,6 +792,43 @@ const trendDelta = $derived(
 		color: #a16207;
 		background: #fefce8;
 		border-color: #fde68a;
+	}
+
+	.domain-table .action-col {
+		width: 1%;
+		white-space: nowrap;
+		text-align: right;
+	}
+
+	.domain-cta {
+		display: inline-flex;
+		align-items: center;
+		padding: 0.25rem 0.625rem;
+		font-size: 0.8125rem;
+		font-weight: 600;
+		color: #1d4ed8;
+		background: #eff6ff;
+		border: 1px solid #bfdbfe;
+		border-radius: 8px;
+		text-decoration: none;
+		transition: background 120ms, border-color 120ms;
+	}
+
+	.domain-cta:hover {
+		background: #dbeafe;
+		border-color: #93c5fd;
+	}
+
+	.visually-hidden {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		white-space: nowrap;
+		border: 0;
 	}
 
 	.sparkline {

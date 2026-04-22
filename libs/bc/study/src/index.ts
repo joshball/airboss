@@ -150,6 +150,7 @@ export type {
 	ItemResultInput,
 	PreviewOptions,
 	SessionPreview,
+	SessionSuggestedAction,
 	SessionSummary,
 	SessionSummarySliceRow,
 } from './sessions';
