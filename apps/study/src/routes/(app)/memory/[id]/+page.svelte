@@ -6,11 +6,14 @@ import {
 	CONTENT_SOURCES,
 	DOMAIN_LABELS,
 	DOMAINS,
+	QUERY_PARAMS,
 	REVIEW_RATINGS,
 	ROUTES,
 } from '@ab/constants';
 import { tick } from 'svelte';
 import { enhance } from '$app/forms';
+import { replaceState } from '$app/navigation';
+import { page } from '$app/state';
 import type { ActionData, PageData } from './$types';
 
 let { data, form }: { data: PageData; form: ActionData } = $props();
@@ -23,10 +26,27 @@ interface FieldValues {
 	tags?: string[];
 }
 
-let editing = $state(false);
+// svelte-ignore state_referenced_locally -- seed once from URL; $effect keeps URL + state in sync
+let editing = $state(page.url.searchParams.get(QUERY_PARAMS.EDIT) === '1');
 let saving = $state(false);
 let statusUpdating = $state(false);
 let editFrontInput = $state<HTMLTextAreaElement | null>(null);
+
+// Mirror the edit-mode flag to the URL so ?edit=1 is shareable and a
+// refresh keeps the user in edit mode. When editing is false we drop the
+// flag entirely instead of writing ?edit=0, keeping URLs clean.
+$effect(() => {
+	const on = editing;
+	const url = new URL(page.url);
+	const already = url.searchParams.get(QUERY_PARAMS.EDIT) === '1';
+	if (on && !already) {
+		url.searchParams.set(QUERY_PARAMS.EDIT, '1');
+		replaceState(url, page.state);
+	} else if (!on && url.searchParams.has(QUERY_PARAMS.EDIT)) {
+		url.searchParams.delete(QUERY_PARAMS.EDIT);
+		replaceState(url, page.state);
+	}
+});
 
 const card = $derived(data.card);
 const schedule = $derived(data.state);
