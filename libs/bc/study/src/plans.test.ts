@@ -10,7 +10,6 @@ import { generateAuthId } from '@ab/utils';
 import { eq } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { KnowledgeNodeNotFoundError } from './knowledge';
-import { knowledgeNode } from './schema';
 import {
 	activatePlan,
 	addSkipDomain,
@@ -25,6 +24,7 @@ import {
 	removeSkipNode,
 	updatePlan,
 } from './plans';
+import { knowledgeNode } from './schema';
 
 const TEST_USER_ID = generateAuthId();
 const TEST_EMAIL = `plans-test-${TEST_USER_ID}@airboss.test`;
