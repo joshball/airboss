@@ -378,6 +378,9 @@ export async function getWeakAreas(
 					eq(sessionItemResult.itemKind, SESSION_ITEM_KINDS.REP),
 					isNotNull(sessionItemResult.completedAt),
 					isNull(sessionItemResult.skipKind),
+					// Guard against completed, non-skipped reps with is_correct=NULL so the
+					// per-domain rep accuracy does not silently deflate on partially populated rows.
+					isNotNull(sessionItemResult.isCorrect),
 					gte(sessionItemResult.completedAt, windowStart),
 				),
 			)

@@ -54,7 +54,7 @@ export const load: PageServerLoad = async (event) => {
 	const seed = event.url.searchParams.get(QUERY_PARAMS.SESSION_SEED) ?? undefined;
 
 	try {
-		const preview = await previewSession(user.id, { mode, focus, cert, seed });
+		const preview = await previewSession(user.id, { mode, focus, cert, seed }, new Date());
 		return { needsPlan: false as const, preview };
 	} catch (err) {
 		if (err instanceof NoActivePlanError) return { needsPlan: true as const, presets: PRESET_VALUES };

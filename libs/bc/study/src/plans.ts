@@ -262,6 +262,9 @@ export async function activatePlan(planId: string, userId: string, db: Db = defa
 /**
  * Append a node id to `plan.skip_nodes`. Idempotent -- calling twice with
  * the same node id does not create duplicates.
+ *
+ * Wrapped in a transaction so the read-modify-write can't be clobbered by a
+ * concurrent `updatePlan` between the get and the set.
  */
 export async function addSkipNode(
 	planId: string,
@@ -269,31 +272,42 @@ export async function addSkipNode(
 	nodeId: string,
 	db: Db = defaultDb,
 ): Promise<StudyPlanRow> {
-	const existing = await getPlan(planId, userId, db);
-	if (!existing) throw new PlanNotFoundError(planId, userId);
-	if (existing.skipNodes.includes(nodeId)) return existing;
-	return await updatePlan(planId, userId, { skipNodes: [...existing.skipNodes, nodeId] }, db);
+	return await db.transaction(async (tx) => {
+		const existing = await getPlan(planId, userId, tx);
+		if (!existing) throw new PlanNotFoundError(planId, userId);
+		if (existing.skipNodes.includes(nodeId)) return existing;
+		return await updatePlan(planId, userId, { skipNodes: [...existing.skipNodes, nodeId] }, tx);
+	});
 }
 
-/** Append a domain to `plan.skip_domains`. Idempotent. */
+/**
+ * Append a domain to `plan.skip_domains`. Idempotent.
+ *
+ * Wrapped in a transaction so the read-modify-write (which also drops the
+ * domain from focus_domains to preserve the disjoint invariant) is atomic.
+ */
 export async function addSkipDomain(
 	planId: string,
 	userId: string,
 	domain: Domain,
 	db: Db = defaultDb,
 ): Promise<StudyPlanRow> {
-	const existing = await getPlan(planId, userId, db);
-	if (!existing) throw new PlanNotFoundError(planId, userId);
-	if (existing.skipDomains.includes(domain)) return existing;
-	// If the user has this domain in focus_domains, also drop it so the
-	// disjoint invariant holds.
-	const focusDomains = existing.focusDomains.filter((d) => d !== domain);
-	return await updatePlan(planId, userId, { skipDomains: [...existing.skipDomains, domain], focusDomains }, db);
+	return await db.transaction(async (tx) => {
+		const existing = await getPlan(planId, userId, tx);
+		if (!existing) throw new PlanNotFoundError(planId, userId);
+		if (existing.skipDomains.includes(domain)) return existing;
+		// If the user has this domain in focus_domains, also drop it so the
+		// disjoint invariant holds.
+		const focusDomains = existing.focusDomains.filter((d) => d !== domain);
+		return await updatePlan(planId, userId, { skipDomains: [...existing.skipDomains, domain], focusDomains }, tx);
+	});
 }
 
 /**
  * Remove a node from plan.skip_nodes. Used by the plan detail page to let
  * the user reactivate a skipped topic without losing other skip entries.
+ *
+ * Transaction-wrapped for the same reason as addSkipNode.
  */
 export async function removeSkipNode(
 	planId: string,
@@ -301,23 +315,27 @@ export async function removeSkipNode(
 	nodeId: string,
 	db: Db = defaultDb,
 ): Promise<StudyPlanRow> {
-	const existing = await getPlan(planId, userId, db);
-	if (!existing) throw new PlanNotFoundError(planId, userId);
-	const next = existing.skipNodes.filter((n) => n !== nodeId);
-	if (next.length === existing.skipNodes.length) return existing;
-	return await updatePlan(planId, userId, { skipNodes: next }, db);
+	return await db.transaction(async (tx) => {
+		const existing = await getPlan(planId, userId, tx);
+		if (!existing) throw new PlanNotFoundError(planId, userId);
+		const next = existing.skipNodes.filter((n) => n !== nodeId);
+		if (next.length === existing.skipNodes.length) return existing;
+		return await updatePlan(planId, userId, { skipNodes: next }, tx);
+	});
 }
 
-/** Remove a domain from plan.skip_domains. */
+/** Remove a domain from plan.skip_domains. Transaction-wrapped. */
 export async function removeSkipDomain(
 	planId: string,
 	userId: string,
 	domain: Domain,
 	db: Db = defaultDb,
 ): Promise<StudyPlanRow> {
-	const existing = await getPlan(planId, userId, db);
-	if (!existing) throw new PlanNotFoundError(planId, userId);
-	const next = existing.skipDomains.filter((d) => d !== domain);
-	if (next.length === existing.skipDomains.length) return existing;
-	return await updatePlan(planId, userId, { skipDomains: next as Domain[] }, db);
+	return await db.transaction(async (tx) => {
+		const existing = await getPlan(planId, userId, tx);
+		if (!existing) throw new PlanNotFoundError(planId, userId);
+		const next = existing.skipDomains.filter((d) => d !== domain);
+		if (next.length === existing.skipDomains.length) return existing;
+		return await updatePlan(planId, userId, { skipDomains: next as Domain[] }, tx);
+	});
 }
