@@ -261,6 +261,37 @@ See [docs/platform/MULTI_PRODUCT_ARCHITECTURE.md](docs/platform/MULTI_PRODUCT_AR
 - Never stage files you didn't edit.
 - Never commit directly to main. Always work on feature branches.
 
+## Worktree + branch cleanup
+
+Clean up your own worktrees and branches as part of the work, not as a separate task. Never accumulate cruft across sessions.
+
+**Rules:**
+
+- **PR merged → clean up immediately.** No confirmation needed; it's expected housekeeping. Remove the worktree, delete the local branch, prune the remote branch if it survived `--delete-branch`. The commit history is preserved on main via the squash commit and reachable via `git reflog` for ~30 days.
+
+  ```bash
+  git worktree remove --force .claude/worktrees/<id>
+  git branch -D <branch>
+  git push origin --delete <branch>  # only if ls-remote shows it still exists
+  ```
+
+- **PR pushed but NOT merged, and the user's next request is unrelated to that PR:** STOP. Do not begin the new work. Report the in-flight PR URL, branch name, and worktree path, and ask: merge it now (then clean up), abandon it (clean up without merging), or park it (leave worktree/branch in place, proceed with new work on a fresh branch)? Only continue after the user answers.
+
+- **Local branches or stashes without a corresponding PR** (speculative or abandoned work): never silently delete. Audit the content (`git status --porcelain --ignored`, `git stash show --patch`, diff vs main), surface what's in them, and ask before destroying.
+
+- **Stashes are shared across worktrees** (stored in the parent repo's `.git`). One `stash list` result shows up in every worktree; dropping a stash affects everyone.
+
+**Session start:** survey `git worktree list`, `git branch`, `git stash list`. Any leftovers from prior sessions → flag as part of orientation before starting new work. If the user requests new work and cruft exists, ask about cleanup first.
+
+**Before any destructive op (triple-check):**
+
+- `git status --porcelain --ignored` → zero non-ignored output
+- `git stash list` → empty, OR each stash verified content-on-main
+- `git diff <branch> origin/main --stat` for the branch → content-unique-to-branch empty after accounting for subsequent merges
+- `git cherry -v origin/main <branch>` → all `+` lines accounted for by the squash merge commit (cherry can't detect squash equivalence, so verify via file diffs)
+
+"Safe to delete" requires verified content-on-main, NOT just "the PR merged." The squash commit is the proof; the individual pre-squash commits become unreachable after cleanup.
+
 ## Relationship to airboss-firc
 
 This repo was originally created from patterns in the FIRC course platform (previously `firc-boss`, now `airboss-firc` at `/Users/joshua/src/_me/aviation/airboss-firc`). **As of 2026-04-17, airboss is the primary repo for all ongoing work** -- planning docs, vision, course material, and implementation have migrated here.
