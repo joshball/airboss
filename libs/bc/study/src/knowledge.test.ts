@@ -22,7 +22,7 @@ import {
 	STABILITY_MASTERED_DAYS,
 } from '@ab/constants';
 import { db } from '@ab/db';
-import { createId, generateAuthId, generateRepAttemptId } from '@ab/utils';
+import { createId, generateAuthId } from '@ab/utils';
 import { eq } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { createCard } from './cards';
@@ -35,7 +35,8 @@ import {
 	isNodeMastered,
 } from './knowledge';
 import { createScenario } from './scenarios';
-import { card, cardState, knowledgeNode, repAttempt, scenario } from './schema';
+import { card, cardState, knowledgeNode, scenario, session, sessionItemResult, studyPlan } from './schema';
+import { seedRepAttempt } from './test-support';
 
 describe('computeCardGate', () => {
 	it('not_applicable when no cards are attached', () => {
@@ -183,11 +184,12 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-	// Restrict delete orders: attempts -> scenarios, reviews (none created)
-	// -> cards -> cardState auto-cascade, then nodes, then user. bauthUser
-	// cascades to card/scenario on userId so the node removal is safe once
-	// those are gone.
-	await db.delete(repAttempt).where(eq(repAttempt.userId, TEST_USER_ID));
+	// Order: session_item_result rows first (they reference scenario SET NULL
+	// and session CASCADE), then sessions, plans, scenarios (restrict), cards,
+	// nodes, user. bauthUser cascades to card/scenario on userId.
+	await db.delete(sessionItemResult).where(eq(sessionItemResult.userId, TEST_USER_ID));
+	await db.delete(session).where(eq(session.userId, TEST_USER_ID));
+	await db.delete(studyPlan).where(eq(studyPlan.userId, TEST_USER_ID));
 	await db.delete(scenario).where(eq(scenario.userId, TEST_USER_ID));
 	await db.delete(cardState).where(eq(cardState.userId, TEST_USER_ID));
 	await db.delete(card).where(eq(card.userId, TEST_USER_ID));
@@ -248,15 +250,12 @@ async function seedAttachedRepsAndAttempts(nodeId: string, attemptCount: number,
 	// mastery math.
 	const now = Date.now();
 	for (let i = 0; i < attemptCount; i++) {
-		await db.insert(repAttempt).values({
-			id: generateRepAttemptId(),
-			scenarioId: sc.id,
+		await seedRepAttempt({
 			userId: TEST_USER_ID,
-			chosenOption: i < correctCount ? 'a' : 'b',
+			scenarioId: sc.id,
 			isCorrect: i < correctCount,
-			confidence: null,
-			answerMs: null,
-			attemptedAt: new Date(now + i),
+			chosenOption: i < correctCount ? 'a' : 'b',
+			completedAt: new Date(now + i),
 		});
 	}
 }
