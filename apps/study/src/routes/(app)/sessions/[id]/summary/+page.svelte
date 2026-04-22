@@ -58,9 +58,20 @@ function domainLabel(slug: string): string {
 		<article class="tile">
 			<div class="tile-label">Skipped</div>
 			<div class="tile-value">{skipTotal}</div>
-			<div class="tile-sub">
-				{summary.skippedByKind.today} today · {summary.skippedByKind.topic} topic · {summary.skippedByKind.permanent} permanent
-			</div>
+			<dl class="tile-sub-list">
+				<div>
+					<dt>Today</dt>
+					<dd>{summary.skippedByKind.today}</dd>
+				</div>
+				<div>
+					<dt>Topic</dt>
+					<dd>{summary.skippedByKind.topic}</dd>
+				</div>
+				<div>
+					<dt>Permanent</dt>
+					<dd>{summary.skippedByKind.permanent}</dd>
+				</div>
+			</dl>
 		</article>
 		<article class="tile">
 			<div class="tile-label">Streak</div>
@@ -193,6 +204,29 @@ function domainLabel(slug: string): string {
 	.tile-sub {
 		font-size: var(--ab-font-size-sm);
 		color: var(--ab-color-fg-subtle);
+	}
+
+	.tile-sub-list {
+		margin: 0.25rem 0 0;
+		display: grid;
+		grid-template-columns: max-content 1fr;
+		gap: 0.125rem 0.5rem;
+		font-size: var(--ab-font-size-sm);
+		color: var(--ab-color-fg-subtle);
+	}
+
+	.tile-sub-list > div {
+		display: contents;
+	}
+
+	.tile-sub-list dt {
+		color: var(--ab-color-fg-subtle);
+	}
+
+	.tile-sub-list dd {
+		margin: 0;
+		color: var(--ab-color-fg);
+		font-variant-numeric: tabular-nums;
 	}
 
 	.card {
