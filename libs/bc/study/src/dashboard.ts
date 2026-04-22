@@ -28,7 +28,9 @@ import {
 import { db as defaultDb } from '@ab/db';
 import { and, count, eq, gte, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
-import { card, cardState, repAttempt, review, scenario } from './schema';
+import { type CalibrationResult, getCalibration } from './calibration';
+import { getActivePlan } from './plans';
+import { card, cardState, repAttempt, review, type StudyPlanRow, scenario } from './schema';
 import { type DashboardStats, getDashboardStats } from './stats';
 
 type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;
@@ -87,6 +89,10 @@ export interface DashboardPayload {
 	repBacklog: PanelResult<RepBacklog>;
 	weakAreas: PanelResult<WeakArea[]>;
 	activity: PanelResult<RecentActivity>;
+	/** Active study plan (null when the user has none). Drives the CTA + plan panels. */
+	activePlan: PanelResult<StudyPlanRow | null>;
+	/** Calibration aggregate for the dashboard summary panel. */
+	calibration: PanelResult<CalibrationResult>;
 }
 
 /** UTC day key in YYYY-MM-DD form. */
@@ -439,6 +445,8 @@ export interface DashboardFetchers {
 	repBacklog(userId: string, db: Db): Promise<RepBacklog>;
 	weakAreas(userId: string, db: Db, now: Date): Promise<WeakArea[]>;
 	activity(userId: string, db: Db, now: Date): Promise<RecentActivity>;
+	activePlan(userId: string, db: Db): Promise<StudyPlanRow | null>;
+	calibration(userId: string, db: Db): Promise<CalibrationResult>;
 }
 
 const defaultFetchers: DashboardFetchers = {
@@ -446,6 +454,8 @@ const defaultFetchers: DashboardFetchers = {
 	repBacklog: (userId, db) => getRepBacklog(userId, db),
 	weakAreas: (userId, db, now) => getWeakAreas(userId, WEAK_AREA_LIMIT, db, now),
 	activity: (userId, db, now) => getRecentActivity(userId, ACTIVITY_WINDOW_DAYS, db, now),
+	activePlan: (userId, db) => getActivePlan(userId, db),
+	calibration: (userId, db) => getCalibration(userId, {}, db),
 };
 
 /**
@@ -461,11 +471,13 @@ export async function getDashboardPayload(
 	now: Date = new Date(),
 	fetchers: DashboardFetchers = defaultFetchers,
 ): Promise<DashboardPayload> {
-	const [stats, repBacklog, weakAreas, activity] = await Promise.allSettled([
+	const [stats, repBacklog, weakAreas, activity, activePlan, calibration] = await Promise.allSettled([
 		fetchers.stats(userId, db, now),
 		fetchers.repBacklog(userId, db),
 		fetchers.weakAreas(userId, db, now),
 		fetchers.activity(userId, db, now),
+		fetchers.activePlan(userId, db),
+		fetchers.calibration(userId, db),
 	]);
 
 	function toResult<T>(r: PromiseSettledResult<T>): PanelResult<T> {
@@ -480,6 +492,8 @@ export async function getDashboardPayload(
 		repBacklog: toResult(repBacklog),
 		weakAreas: toResult(weakAreas),
 		activity: toResult(activity),
+		activePlan: toResult(activePlan),
+		calibration: toResult(calibration),
 	};
 }
 
