@@ -34,6 +34,9 @@ export {
 } from './dashboard';
 export { runEngine } from './engine';
 export type {
+	CertProgress,
+	DomainCertCell,
+	DomainCertRow,
 	KnowledgeNodeListRow,
 	ListNodesFilters,
 	NodeMasteryGate,
@@ -47,6 +50,8 @@ export {
 	computeRepGate,
 	findRequiresCycle,
 	getCardsForNode,
+	getCertProgress,
+	getDomainCertMatrix,
 	getNodeMastery,
 	getNodesByIds,
 	getNodeView,
