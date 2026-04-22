@@ -4,7 +4,7 @@ An interactive compass-rose activity that lets a learner decompose a wind vector
 
 ## What it teaches
 
-Attached to knowledge node [`perf-crosswind-component`](../../../course/knowledge/performance/crosswind-component/node.md).
+Attached to knowledge node [`perf-crosswind-component`](../../../../course/knowledge/performance/crosswind-component/node.md).
 
 Goals:
 
@@ -32,7 +32,7 @@ All props are read-only. Internal state (current wind direction, current wind sp
 
 ```svelte
 <script lang="ts">
-	import CrosswindComponent from '@ab/activities-crosswind-component/CrosswindComponent.svelte';
+	import CrosswindComponent from '@ab/activities/crosswind-component/CrosswindComponent.svelte';
 </script>
 
 <CrosswindComponent

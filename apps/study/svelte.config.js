@@ -27,7 +27,8 @@ const config = {
 			'@ab/aviation/*': '../../libs/aviation/src/*',
 			'@ab/help': '../../libs/help/src/index.ts',
 			'@ab/help/*': '../../libs/help/src/*',
-			'@ab/activities/*': '../../libs/activities/*',
+			'@ab/activities': '../../libs/activities/src/index.ts',
+			'@ab/activities/*': '../../libs/activities/src/*',
 		},
 		env: {
 			dir: '../../',
