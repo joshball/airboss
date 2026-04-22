@@ -22,7 +22,14 @@ const scenarios = $derived(data.scenarios);
 const filters = $derived(data.filters);
 const currentPage = $derived(data.page);
 const hasMore = $derived(data.hasMore);
+const total = $derived(data.total);
+const totalPages = $derived(data.totalPages);
+const pageSize = $derived(data.pageSize);
 const createdScenario = $derived(data.createdScenario);
+
+// Range "Showing 21-40 of 137" -- computed client-side so list + pager align.
+const rangeStart = $derived(scenarios.length === 0 ? 0 : (currentPage - 1) * pageSize + 1);
+const rangeEnd = $derived(scenarios.length === 0 ? 0 : (currentPage - 1) * pageSize + scenarios.length);
 
 const hasActiveFilters = $derived(
 	Boolean(filters.domain || filters.difficulty || filters.phaseOfFlight || filters.sourceType) ||
@@ -197,9 +204,15 @@ function pageHref(n: number): string {
 		</div>
 	{/if}
 
-	{#if hasActiveFilters && scenarios.length > 0}
+	{#if total > 0}
 		<p class="result-summary">
-			Showing {scenarios.length} scenario{scenarios.length === 1 ? '' : 's'}{hasMore ? '+' : ''} matching your filters.
+			{#if total > pageSize}
+				Showing {rangeStart}&ndash;{rangeEnd} of {total} scenario{total === 1 ? '' : 's'}{hasActiveFilters
+					? ' matching your filters'
+					: ''}.
+			{:else}
+				Showing {total} scenario{total === 1 ? '' : 's'}{hasActiveFilters ? ' matching your filters' : ''}.
+			{/if}
 		</p>
 	{/if}
 
@@ -245,7 +258,7 @@ function pageHref(n: number): string {
 			{:else}
 				<span></span>
 			{/if}
-			<span class="page-num">Page {currentPage}</span>
+			<span class="page-num">Page {currentPage} of {totalPages}</span>
 			{#if hasMore}
 				<a class="btn ghost" href={pageHref(currentPage + 1)}>Next</a>
 			{:else}

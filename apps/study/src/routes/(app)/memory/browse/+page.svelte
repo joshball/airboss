@@ -20,7 +20,15 @@ const cards = $derived(data.cards);
 const filters = $derived(data.filters);
 const currentPage = $derived(data.page);
 const hasMore = $derived(data.hasMore);
+const total = $derived(data.total);
+const totalPages = $derived(data.totalPages);
+const pageSize = $derived(data.pageSize);
 const createdCard = $derived(data.createdCard);
+
+// Range "Showing 21-40 of 137" -- computed client-side so the list and pager
+// agree even if `total` and `cards.length` drift (e.g., a concurrent delete).
+const rangeStart = $derived(cards.length === 0 ? 0 : (currentPage - 1) * pageSize + 1);
+const rangeEnd = $derived(cards.length === 0 ? 0 : (currentPage - 1) * pageSize + cards.length);
 
 // True when no filters are active -- a blank deck vs over-filtered.
 const hasActiveFilters = $derived(
@@ -205,9 +213,15 @@ function pageHref(n: number): string {
 		</div>
 	{/if}
 
-	{#if hasActiveFilters && cards.length > 0}
+	{#if total > 0}
 		<p class="result-summary">
-			Showing {cards.length} card{cards.length === 1 ? '' : 's'}{hasMore ? '+' : ''} matching your filters.
+			{#if total > pageSize}
+				Showing {rangeStart}&ndash;{rangeEnd} of {total} card{total === 1 ? '' : 's'}{hasActiveFilters
+					? ' matching your filters'
+					: ''}.
+			{:else}
+				Showing {total} card{total === 1 ? '' : 's'}{hasActiveFilters ? ' matching your filters' : ''}.
+			{/if}
 		</p>
 	{/if}
 
@@ -248,7 +262,7 @@ function pageHref(n: number): string {
 			{:else}
 				<span></span>
 			{/if}
-			<span class="page-num">Page {currentPage}</span>
+			<span class="page-num">Page {currentPage} of {totalPages}</span>
 			{#if hasMore}
 				<a class="btn ghost" href={pageHref(currentPage + 1)}>Next</a>
 			{:else}

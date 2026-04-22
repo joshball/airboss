@@ -305,7 +305,7 @@ const interpretation = $derived(
 							<div class="bucket-gap">{gapLabel(bucket)}</div>
 							{#if hasActionableGap}
 								<a class="bucket-cta" href={practiceHrefForBucket(bucket)}>
-									Practice level {bucket.level}
+									Strengthen at this level
 								</a>
 							{/if}
 						</div>

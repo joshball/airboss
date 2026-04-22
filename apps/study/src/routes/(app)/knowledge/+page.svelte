@@ -12,7 +12,17 @@ import {
 	ROUTES,
 } from '@ab/constants';
 import { humanize } from '@ab/utils';
+import { page } from '$app/state';
 import type { PageData } from './$types';
+
+// Filter params this page owns. Reset strips only these so any unrelated future
+// query params (sort, view, etc.) that happen to be on the URL survive.
+const FILTER_PARAM_KEYS = [
+	QUERY_PARAMS.DOMAIN,
+	QUERY_PARAMS.CERT,
+	QUERY_PARAMS.PRIORITY,
+	QUERY_PARAMS.LIFECYCLE,
+] as const;
 
 let { data }: { data: PageData } = $props();
 
@@ -41,6 +51,15 @@ function priorityLabel(slug: string): string {
 function masteryPct(score: number): number {
 	return Math.round(score * 100);
 }
+
+// Reset href: drops only filter params, keeps anything unrelated currently on
+// the URL. Uses the page's current URL so SSR and client paths stay consistent.
+const resetHref = $derived.by(() => {
+	const params = new URLSearchParams(page.url.searchParams);
+	for (const key of FILTER_PARAM_KEYS) params.delete(key);
+	const qs = params.toString();
+	return qs.length > 0 ? `${ROUTES.KNOWLEDGE}?${qs}` : ROUTES.KNOWLEDGE;
+});
 </script>
 
 <svelte:head>
@@ -96,7 +115,7 @@ function masteryPct(score: number): number {
 		</div>
 		<div class="filter-actions">
 			<button type="submit" class="btn secondary">Apply</button>
-			<a class="btn ghost" href={ROUTES.KNOWLEDGE}>Reset</a>
+			<a class="btn ghost" href={resetHref}>Reset</a>
 		</div>
 	</form>
 
@@ -104,7 +123,7 @@ function masteryPct(score: number): number {
 		<div class="empty">
 			{#if hasActiveFilters}
 				<p>No knowledge nodes match these filters.</p>
-				<a class="btn ghost" href={ROUTES.KNOWLEDGE}>Clear filters</a>
+				<a class="btn ghost" href={resetHref}>Clear filters</a>
 			{:else}
 				<p>No knowledge nodes yet. Author one with <code>bun run knowledge:new</code>, then build.</p>
 			{/if}
