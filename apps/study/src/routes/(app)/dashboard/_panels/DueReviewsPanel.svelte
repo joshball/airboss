@@ -1,7 +1,7 @@
 <script lang="ts">
 import type { DashboardStats, PanelResult } from '@ab/bc-study';
 import { DOMAIN_LABELS, ROUTES } from '@ab/constants';
-import PanelShell from './PanelShell.svelte';
+import PanelShell from '@ab/ui/components/PanelShell.svelte';
 
 /**
  * Reviews-due-today panel. Shows the due-now count, top 3 domains, and a
@@ -80,63 +80,63 @@ function domainHref(slug: string): string {
 		display: flex;
 		justify-content: space-between;
 		align-items: baseline;
-		gap: 0.5rem;
-		padding: 0.25rem 0.375rem;
-		border-radius: 2px;
+		gap: var(--ab-space-sm);
+		padding: var(--ab-space-2xs) var(--ab-space-xs);
+		border-radius: var(--ab-radius-sm);
 		text-decoration: none;
-		color: #0f172a;
-		font-size: 0.8125rem;
+		color: var(--ab-color-fg);
+		font-size: var(--ab-font-size-sm);
 	}
 
 	.dm:hover {
-		background: #f1f5f9;
+		background: var(--ab-color-surface-sunken);
 	}
 
 	.dm-name {
-		font-weight: 500;
+		font-weight: var(--ab-font-weight-medium);
 	}
 
 	.dm-count {
-		color: #1d4ed8;
-		font-weight: 600;
+		color: var(--ab-color-primary-hover);
+		font-weight: var(--ab-font-weight-semibold);
 		font-variant-numeric: tabular-nums;
-		font-family: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
+		font-family: var(--ab-font-family-mono);
 	}
 
 	.more {
-		color: #94a3b8;
-		font-size: 0.75rem;
-		padding: 0.125rem 0.375rem;
+		color: var(--ab-color-fg-faint);
+		font-size: var(--ab-font-size-xs);
+		padding: 0.125rem var(--ab-space-xs);
 	}
 
 	.muted {
 		margin: 0;
-		color: #64748b;
-		font-size: 0.75rem;
+		color: var(--ab-color-fg-subtle);
+		font-size: var(--ab-font-size-xs);
 	}
 
 	.action-btn {
-		padding: 0.25rem 0.5rem;
-		font-size: 0.75rem;
-		font-weight: 600;
-		border-radius: 2px;
-		border: 1px solid #2563eb;
-		background: #2563eb;
-		color: white;
+		padding: var(--ab-space-2xs) var(--ab-space-sm);
+		font-size: var(--ab-font-size-xs);
+		font-weight: var(--ab-font-weight-semibold);
+		border-radius: var(--ab-radius-sm);
+		border: 1px solid var(--ab-color-primary);
+		background: var(--ab-color-primary);
+		color: var(--ab-color-primary-fg);
 		text-decoration: none;
 	}
 
 	.action-btn:hover {
-		background: #1d4ed8;
+		background: var(--ab-color-primary-hover);
 	}
 
 	.action-btn.ghost {
 		background: transparent;
-		color: #475569;
-		border-color: #cbd5e1;
+		color: var(--ab-color-fg-muted);
+		border-color: var(--ab-color-border-strong);
 	}
 
 	.action-btn.ghost:hover {
-		background: #f1f5f9;
+		background: var(--ab-color-surface-sunken);
 	}
 </style>

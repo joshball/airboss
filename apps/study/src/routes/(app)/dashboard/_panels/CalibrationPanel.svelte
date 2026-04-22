@@ -1,7 +1,7 @@
 <script lang="ts">
 import type { CalibrationResult, PanelResult } from '@ab/bc-study';
 import { CONFIDENCE_LEVEL_LABELS, type ConfidenceLevel, ROUTES } from '@ab/constants';
-import PanelShell from './PanelShell.svelte';
+import PanelShell from '@ab/ui/components/PanelShell.svelte';
 
 /**
  * Calibration summary. One-line read: overall score as 0-100, plus the
@@ -84,67 +84,67 @@ const gapLabel = $derived(
 
 <style>
 	.action-btn {
-		padding: 0.25rem 0.5rem;
-		font-size: 0.75rem;
-		font-weight: 600;
-		border-radius: 2px;
-		border: 1px solid #cbd5e1;
-		background: white;
-		color: #475569;
+		padding: var(--ab-space-2xs) var(--ab-space-sm);
+		font-size: var(--ab-font-size-xs);
+		font-weight: var(--ab-font-weight-semibold);
+		border-radius: var(--ab-radius-sm);
+		border: 1px solid var(--ab-color-border-strong);
+		background: var(--ab-color-surface);
+		color: var(--ab-color-fg-muted);
 		text-decoration: none;
 	}
 
 	.action-btn:hover {
-		background: #f1f5f9;
+		background: var(--ab-color-surface-sunken);
 	}
 
 	.score-row {
 		display: flex;
 		align-items: baseline;
-		gap: 0.25rem;
-		font-family: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
+		gap: var(--ab-space-2xs);
+		font-family: var(--ab-font-family-mono);
 		font-variant-numeric: tabular-nums;
 	}
 
 	.score {
-		font-size: 1.5rem;
-		font-weight: 700;
-		color: #0f172a;
+		font-size: var(--ab-font-size-2xl);
+		font-weight: var(--ab-font-weight-bold);
+		color: var(--ab-color-fg);
 		line-height: 1;
 	}
 
 	.score-unit {
-		font-size: 0.75rem;
-		color: #94a3b8;
+		font-size: var(--ab-font-size-xs);
+		color: var(--ab-color-fg-faint);
 	}
 
 	.gap {
 		margin: 0;
-		font-size: 0.75rem;
-		color: #475569;
+		font-size: var(--ab-font-size-xs);
+		color: var(--ab-color-fg-muted);
 	}
 
 	.gap .over {
-		color: #b91c1c;
-		font-weight: 600;
+		color: var(--ab-color-danger);
+		font-weight: var(--ab-font-weight-semibold);
 	}
 
 	.gap .under {
-		color: #1d4ed8;
-		font-weight: 600;
+		color: var(--ab-color-primary-hover);
+		font-weight: var(--ab-font-weight-semibold);
 	}
 
 	.gap-pct,
 	.gap-level {
-		font-family: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
+		font-family: var(--ab-font-family-mono);
 		font-variant-numeric: tabular-nums;
-		color: #0f172a;
-		font-weight: 600;
+		color: var(--ab-color-fg);
+		font-weight: var(--ab-font-weight-semibold);
 	}
 
 	.muted {
 		margin: 0;
-		color: #64748b;
-		font-size: 0.75rem;
+		color: var(--ab-color-fg-subtle);
+		font-size: var(--ab-font-size-xs);
 	}
 </style>

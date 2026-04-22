@@ -11,7 +11,7 @@ import {
 	SESSION_MODE_LABELS,
 	type SessionMode,
 } from '@ab/constants';
-import PanelShell from './PanelShell.svelte';
+import PanelShell from '@ab/ui/components/PanelShell.svelte';
 
 /**
  * Active study plan summary. Renders the plan title, cert goals, focus
@@ -100,37 +100,37 @@ function domainLabel(d: Domain): string {
 
 <style>
 	.action-btn {
-		padding: 0.25rem 0.5rem;
-		font-size: 0.75rem;
-		font-weight: 600;
-		border-radius: 2px;
-		border: 1px solid #cbd5e1;
-		background: white;
-		color: #475569;
+		padding: var(--ab-space-2xs) var(--ab-space-sm);
+		font-size: var(--ab-font-size-xs);
+		font-weight: var(--ab-font-weight-semibold);
+		border-radius: var(--ab-radius-sm);
+		border: 1px solid var(--ab-color-border-strong);
+		background: var(--ab-color-surface);
+		color: var(--ab-color-fg-muted);
 		text-decoration: none;
 	}
 
 	.action-btn:hover {
-		background: #f1f5f9;
+		background: var(--ab-color-surface-sunken);
 	}
 
 	.action-btn.primary {
-		background: #2563eb;
-		color: white;
-		border-color: #2563eb;
+		background: var(--ab-color-primary);
+		color: var(--ab-color-primary-fg);
+		border-color: var(--ab-color-primary);
 	}
 
 	.action-btn.primary:hover {
-		background: #1d4ed8;
+		background: var(--ab-color-primary-hover);
 	}
 
 	.meta {
 		margin: 0;
 		display: grid;
 		grid-template-columns: auto 1fr;
-		column-gap: 0.5rem;
+		column-gap: var(--ab-space-sm);
 		row-gap: 0.125rem;
-		font-size: 0.75rem;
+		font-size: var(--ab-font-size-xs);
 	}
 
 	.row {
@@ -138,60 +138,60 @@ function domainLabel(d: Domain): string {
 	}
 
 	.row dt {
-		color: #94a3b8;
+		color: var(--ab-color-fg-faint);
 		text-transform: uppercase;
 		letter-spacing: 0.06em;
 		font-size: 0.625rem;
-		font-family: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
+		font-family: var(--ab-font-family-mono);
 		padding-top: 0.125rem;
 	}
 
 	.row dd {
 		margin: 0;
-		color: #0f172a;
+		color: var(--ab-color-fg);
 		display: flex;
 		flex-wrap: wrap;
 		align-items: baseline;
-		gap: 0.25rem;
+		gap: var(--ab-space-2xs);
 		min-width: 0;
 	}
 
 	.chip {
 		padding: 0.0625rem 0.3125rem;
-		border: 1px solid #cbd5e1;
-		border-radius: 2px;
-		background: #f8fafc;
-		font-family: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
+		border: 1px solid var(--ab-color-border-strong);
+		border-radius: var(--ab-radius-sm);
+		background: var(--ab-color-surface-sunken);
+		font-family: var(--ab-font-family-mono);
 		font-size: 0.6875rem;
-		font-weight: 600;
-		color: #1a1a2e;
+		font-weight: var(--ab-font-weight-semibold);
+		color: var(--ab-color-fg);
 	}
 
 	.num {
-		font-family: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
+		font-family: var(--ab-font-family-mono);
 		font-variant-numeric: tabular-nums;
-		font-weight: 600;
+		font-weight: var(--ab-font-weight-semibold);
 	}
 
 	.unit {
-		color: #64748b;
+		color: var(--ab-color-fg-subtle);
 	}
 
 	.sep {
-		color: #cbd5e1;
-		font-family: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
+		color: var(--ab-color-border-strong);
+		font-family: var(--ab-font-family-mono);
 	}
 
 	.muted {
-		color: #64748b;
+		color: var(--ab-color-fg-subtle);
 	}
 
 	p.muted {
 		margin: 0;
-		font-size: 0.75rem;
+		font-size: var(--ab-font-size-xs);
 	}
 
 	p.muted a {
-		color: #1d4ed8;
+		color: var(--ab-color-primary-hover);
 	}
 </style>
