@@ -6,9 +6,11 @@ import {
 	REVIEW_RATINGS,
 	ROUTES,
 	SESSION_ITEM_KINDS,
+	SESSION_ITEM_PHASES,
 	SESSION_REASON_CODE_LABELS,
 	SESSION_SKIP_KINDS,
 	SESSION_SLICE_LABELS,
+	type SessionItemPhase,
 	type SessionReasonCode,
 	type SessionSlice,
 } from '@ab/constants';
@@ -28,10 +30,9 @@ const currentNum = $derived(current ? current.slotIndex + 1 : total);
 
 // URL-persisted phases are the 3 meaningful states; `submitting` is a
 // transient in-flight flag tracked by `loading` instead.
-type Phase = 'read' | 'confidence' | 'answer';
 
 // svelte-ignore state_referenced_locally -- seed from server-narrowed deep link; URL syncs thereafter
-let phase = $state<Phase>(data.initialStep);
+let phase = $state<SessionItemPhase>(data.initialStep);
 let confidence = $state<ConfidenceLevel | null>(null);
 let skippedConfidence = $state(false);
 let selectedOption = $state<string | null>(null);
@@ -43,7 +44,7 @@ $effect(() => {
 	const key = current ? `${data.session.id}:${current.slotIndex}` : null;
 	if (key !== lastSlotKey) {
 		lastSlotKey = key;
-		phase = 'read';
+		phase = SESSION_ITEM_PHASES.READ;
 		confidence = null;
 		skippedConfidence = false;
 		selectedOption = null;
@@ -133,22 +134,22 @@ function sliceLabel(slice: SessionSlice): string {
 					<div class="domain">{domainLabel(cardView.domain)}</div>
 					<div class="card-front">{cardView.front}</div>
 
-					{#if phase === 'read'}
+					{#if phase === SESSION_ITEM_PHASES.READ}
 						{#if current.itemKind === SESSION_ITEM_KINDS.CARD}
 							<div class="actions">
-								<button type="button" class="btn primary" onclick={() => (phase = 'confidence')}>Reveal</button>
+								<button type="button" class="btn primary" onclick={() => (phase = SESSION_ITEM_PHASES.CONFIDENCE)}>Reveal</button>
 							</div>
 						{/if}
-					{:else if phase === 'confidence'}
+					{:else if phase === SESSION_ITEM_PHASES.CONFIDENCE}
 						<ConfidenceSlider
 							onSelect={(v) => {
 								confidence = v;
-								phase = 'answer';
+								phase = SESSION_ITEM_PHASES.ANSWER;
 							}}
 							onSkip={() => {
 								confidence = null;
 								skippedConfidence = true;
-								phase = 'answer';
+								phase = SESSION_ITEM_PHASES.ANSWER;
 							}}
 						/>
 					{:else}
@@ -182,20 +183,20 @@ function sliceLabel(slice: SessionSlice): string {
 					<div class="domain">{domainLabel(repView.domain)}</div>
 					<p class="situation">{repView.situation}</p>
 
-					{#if phase === 'read'}
+					{#if phase === SESSION_ITEM_PHASES.READ}
 						<div class="actions">
-							<button type="button" class="btn primary" onclick={() => (phase = 'confidence')}>Pick an option</button>
+							<button type="button" class="btn primary" onclick={() => (phase = SESSION_ITEM_PHASES.CONFIDENCE)}>Pick an option</button>
 						</div>
-					{:else if phase === 'confidence'}
+					{:else if phase === SESSION_ITEM_PHASES.CONFIDENCE}
 						<ConfidenceSlider
 							onSelect={(v) => {
 								confidence = v;
-								phase = 'answer';
+								phase = SESSION_ITEM_PHASES.ANSWER;
 							}}
 							onSkip={() => {
 								confidence = null;
 								skippedConfidence = true;
-								phase = 'answer';
+								phase = SESSION_ITEM_PHASES.ANSWER;
 							}}
 						/>
 					{:else}

@@ -24,8 +24,11 @@ import {
 	type ReviewRating,
 	ROUTES,
 	SESSION_ITEM_KINDS,
+	SESSION_ITEM_PHASE_VALUES,
+	SESSION_ITEM_PHASES,
 	SESSION_SKIP_KIND_VALUES,
 	type SessionItemKind,
+	type SessionItemPhase,
 	type SessionReasonCode,
 	type SessionSkipKind,
 	type SessionSlice,
@@ -62,12 +65,10 @@ export const load: PageServerLoad = async (event) => {
 	// committing; `confidence` optionally captures a self-rating; `answer`
 	// reveals the answer / picks an option. Narrow against the valid set so a
 	// bogus `?step=foo` falls back cleanly to `read`.
-	const SESSION_ITEM_PHASES = ['read', 'confidence', 'answer'] as const;
-	type SessionItemPhase = (typeof SESSION_ITEM_PHASES)[number];
 	const stepParam = event.url.searchParams.get(QUERY_PARAMS.STEP);
-	const initialStep: SessionItemPhase = (SESSION_ITEM_PHASES as readonly string[]).includes(stepParam ?? '')
+	const initialStep: SessionItemPhase = (SESSION_ITEM_PHASE_VALUES as readonly string[]).includes(stepParam ?? '')
 		? (stepParam as SessionItemPhase)
-		: 'read';
+		: SESSION_ITEM_PHASES.READ;
 
 	// Hydrate the current item's content if it's a card or rep so the UI can
 	// render front/back / situation / options without a second fetch.
