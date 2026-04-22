@@ -84,6 +84,10 @@ export const ROUTES = {
 	GLOSSARY: '/glossary',
 	GLOSSARY_ID: (id: string) => `/glossary/${encodeURIComponent(id)}` as const,
 
+	// Study -- Help (per-app help content; primitives shared via @ab/help)
+	HELP: '/help',
+	HELP_ID: (id: string) => `/help/${encodeURIComponent(id)}` as const,
+
 	// Study -- Knowledge nodes
 	NODES: '/nodes',
 	NODE: (id: string) => `/nodes/${id}` as const,
