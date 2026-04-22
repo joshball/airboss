@@ -88,17 +88,17 @@ function handleMenuKeydown(event: KeyboardEvent) {
 		</div>
 
 		<details class="identity" bind:this={menu}>
-			<summary aria-label="Account menu for {identityLabel}" aria-haspopup="menu">
+			<summary aria-label="Account menu for {identityLabel}">
 				<span class="identity-label-full">{identityLabel}</span>
 				<span class="identity-label-compact" aria-hidden="true">{initials}</span>
 				<span class="chevron" aria-hidden="true">▾</span>
 			</summary>
-			<div class="identity-panel" role="menu">
+			<div class="identity-panel">
 				{#if showEmailRow}
-					<div class="identity-email" role="none">{data.user.email}</div>
+					<div class="identity-email">{data.user.email}</div>
 				{/if}
 				<form method="POST" action={ROUTES.LOGOUT} class="identity-signout">
-					<button type="submit" role="menuitem">Sign out</button>
+					<button type="submit">Sign out</button>
 				</form>
 			</div>
 		</details>

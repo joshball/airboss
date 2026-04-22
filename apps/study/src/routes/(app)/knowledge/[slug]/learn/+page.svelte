@@ -14,6 +14,11 @@ const totalPhases = $derived(phases.length);
 
 // svelte-ignore state_referenced_locally -- seed from server-validated deep link; URL syncs thereafter
 let currentPhase = $state<KnowledgePhase>(data.initialPhase);
+// svelte-ignore state_referenced_locally -- server-seeded; client optimistic-updates on visit/complete
+let visitedPhases = $state<Set<string>>(new Set(data.progress.visitedPhases));
+// svelte-ignore state_referenced_locally
+let completedPhases = $state<Set<string>>(new Set(data.progress.completedPhases));
+let completing = $state(false);
 
 const stepIndex = $derived(
 	Math.max(
@@ -23,6 +28,7 @@ const stepIndex = $derived(
 );
 const currentPhaseNode = $derived(phases[stepIndex]);
 const progressPct = $derived(Math.round(((stepIndex + 1) / totalPhases) * 100));
+const currentCompleted = $derived(completedPhases.has(currentPhase));
 
 // Keep the URL in sync with the active phase. `replaceState` avoids piling up
 // history entries for each click (back button still goes up a level, not
@@ -34,6 +40,42 @@ $effect(() => {
 	url.searchParams.set(QUERY_PARAMS.STEP, phase);
 	replaceState(url, page.state);
 });
+
+// Persist phase visits. Fires whenever `currentPhase` changes, including the
+// initial load. Optimistic client update + server write; failures are quiet
+// (progress is a UX signal, not a decision-maker).
+$effect(() => {
+	const phase = currentPhase;
+	if (visitedPhases.has(phase)) return;
+	visitedPhases = new Set([...visitedPhases, phase]);
+	void recordVisit(phase);
+});
+
+async function recordVisit(phase: KnowledgePhase): Promise<void> {
+	try {
+		const formData = new FormData();
+		formData.set('phase', phase);
+		await fetch('?/visitPhase', { method: 'POST', body: formData });
+	} catch {
+		// Silently ignore; local visited-set is already updated.
+	}
+}
+
+async function markGotIt(): Promise<void> {
+	if (completing) return;
+	const phase = currentPhase;
+	completing = true;
+	completedPhases = new Set([...completedPhases, phase]);
+	try {
+		const formData = new FormData();
+		formData.set('phase', phase);
+		await fetch('?/completePhase', { method: 'POST', body: formData });
+	} catch {
+		// Silently ignore; local completed-set is already updated.
+	} finally {
+		completing = false;
+	}
+}
 
 function prev(): void {
 	if (stepIndex > 0) currentPhase = phases[stepIndex - 1].phase;
@@ -90,16 +132,31 @@ function domainLabel(slug: string): string {
 		</div>
 		<ol class="steps" aria-label="Phases">
 			{#each phases as p, i (p.phase)}
+				{@const isVisited = visitedPhases.has(p.phase)}
+				{@const isCompleted = completedPhases.has(p.phase)}
 				<li>
 					<button
 						type="button"
 						class="step"
 						class:active={p.phase === currentPhase}
 						class:authored={p.body !== null}
+						class:visited={isVisited}
+						class:completed={isCompleted}
 						aria-current={p.phase === currentPhase ? 'step' : undefined}
+						aria-label="Phase {i + 1}: {phaseLabel(p.phase)}{isCompleted
+							? ' (completed)'
+							: isVisited
+								? ' (visited)'
+								: ''}"
 						onclick={() => selectPhase(p.phase)}
 					>
-						<span class="step-num">{i + 1}</span>
+						<span class="step-num" aria-hidden="true">
+							{#if isCompleted}
+								&#10003;
+							{:else}
+								{i + 1}
+							{/if}
+						</span>
 						<span class="step-name">{phaseLabel(p.phase)}</span>
 					</button>
 				</li>
@@ -117,10 +174,24 @@ function domainLabel(slug: string): string {
 		{#each currentPhaseNode?.activityIds ?? [] as activityId (activityId)}
 			<ActivityHost {activityId} />
 		{/each}
+
+		<div class="got-it-row">
+			{#if currentCompleted}
+				<span class="got-it-done" aria-live="polite">&#10003; Marked as understood</span>
+			{:else}
+				<button type="button" class="btn secondary" onclick={markGotIt} disabled={completing}>
+					{completing ? 'Saving...' : 'Got it'}
+				</button>
+			{/if}
+		</div>
 	</article>
 
 	<nav class="controls" aria-label="Phase navigation">
-		<button type="button" class="btn secondary" onclick={prev} disabled={stepIndex === 0}>Previous</button>
+		{#if stepIndex === 0}
+			<a class="btn secondary" href={ROUTES.KNOWLEDGE_SLUG(node.id)}>Back to node</a>
+		{:else}
+			<button type="button" class="btn secondary" onclick={prev}>Previous</button>
+		{/if}
 		{#if stepIndex === totalPhases - 1}
 			<a class="btn primary" href={ROUTES.MEMORY_REVIEW_FOR_NODE(node.id)}>Review cards for this node</a>
 		{:else}
@@ -228,7 +299,10 @@ function domainLabel(slug: string): string {
 		cursor: pointer;
 		font: inherit;
 		color: #94a3b8;
-		transition: background 120ms, color 120ms, border-color 120ms;
+		transition:
+			background var(--ab-transition-fast),
+			color var(--ab-transition-fast),
+			border-color var(--ab-transition-fast);
 	}
 
 	.step:hover {
@@ -236,14 +310,44 @@ function domainLabel(slug: string): string {
 		color: #475569;
 	}
 
+	.step:focus-visible {
+		outline: none;
+		box-shadow: 0 0 0 3px var(--ab-color-focus-ring);
+	}
+
 	.step.authored {
 		color: #475569;
+	}
+
+	.step.visited:not(.active) {
+		background: #f8fafc;
+		color: #334155;
+	}
+
+	.step.completed:not(.active) {
+		background: #f0fdf4;
+		color: #166534;
+		border-color: #bbf7d0;
 	}
 
 	.step.active {
 		background: #eff6ff;
 		color: #1d4ed8;
 		border-color: #bfdbfe;
+	}
+
+	.got-it-row {
+		display: flex;
+		justify-content: flex-end;
+		margin-top: 1rem;
+		padding-top: 1rem;
+		border-top: 1px dashed #e2e8f0;
+	}
+
+	.got-it-done {
+		color: #166534;
+		font-size: 0.875rem;
+		font-weight: 500;
 	}
 
 	.step-num {
@@ -348,7 +452,14 @@ function domainLabel(slug: string): string {
 		cursor: pointer;
 		display: inline-flex;
 		align-items: center;
-		transition: background 120ms, border-color 120ms;
+		transition:
+			background var(--ab-transition-fast),
+			border-color var(--ab-transition-fast);
+	}
+
+	.btn:focus-visible {
+		outline: none;
+		box-shadow: 0 0 0 3px var(--ab-color-focus-ring);
 	}
 
 	.btn.primary {

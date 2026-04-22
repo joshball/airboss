@@ -13,6 +13,7 @@ import {
 	type SessionSlice,
 } from '@ab/constants';
 import ConfidenceSlider from '@ab/ui/components/ConfidenceSlider.svelte';
+import ConfirmAction from '@ab/ui/components/ConfirmAction.svelte';
 import { enhance } from '$app/forms';
 import { replaceState } from '$app/navigation';
 import { page } from '$app/state';
@@ -107,6 +108,14 @@ function sliceLabel(slice: SessionSlice): string {
 		<span class="progress-fill" style="width: {total === 0 ? 0 : Math.round((completedCount / total) * 100)}%"></span>
 	</div>
 
+	<div class="visually-hidden" aria-live="polite" aria-atomic="true">
+		{#if current}
+			Item {currentNum} of {total}. Phase {phase}.
+		{:else}
+			All items resolved.
+		{/if}
+	</div>
+
 	{#if form && 'error' in form && form.error}
 		<div class="error" role="alert">{form.error}</div>
 	{/if}
@@ -166,12 +175,15 @@ function sliceLabel(slice: SessionSlice): string {
 								};
 							}}
 						>
-							<input type="hidden" name="slotIndex" value={current.slotIndex} />
-							{#if confidence !== null}<input type="hidden" name="confidence" value={confidence} />{/if}
-							<button type="submit" name="rating" value={REVIEW_RATINGS.AGAIN} class="btn rating again" disabled={loading}>Again</button>
-							<button type="submit" name="rating" value={REVIEW_RATINGS.HARD} class="btn rating hard" disabled={loading}>Hard</button>
-							<button type="submit" name="rating" value={REVIEW_RATINGS.GOOD} class="btn rating good" disabled={loading}>Good</button>
-							<button type="submit" name="rating" value={REVIEW_RATINGS.EASY} class="btn rating easy" disabled={loading}>Easy</button>
+							<fieldset class="rating-fieldset">
+								<legend class="visually-hidden">Rate this card</legend>
+								<input type="hidden" name="slotIndex" value={current.slotIndex} />
+								{#if confidence !== null}<input type="hidden" name="confidence" value={confidence} />{/if}
+								<button type="submit" name="rating" value={REVIEW_RATINGS.AGAIN} class="btn rating again" disabled={loading}>Again</button>
+								<button type="submit" name="rating" value={REVIEW_RATINGS.HARD} class="btn rating hard" disabled={loading}>Hard</button>
+								<button type="submit" name="rating" value={REVIEW_RATINGS.GOOD} class="btn rating good" disabled={loading}>Good</button>
+								<button type="submit" name="rating" value={REVIEW_RATINGS.EASY} class="btn rating easy" disabled={loading}>Easy</button>
+							</fieldset>
 						</form>
 					{/if}
 				</div>
@@ -264,12 +276,20 @@ function sliceLabel(slice: SessionSlice): string {
 					<input type="hidden" name="skipKind" value={SESSION_SKIP_KINDS.TODAY} />
 					<button type="submit" class="link-btn">Skip today</button>
 				</form>
-				<form method="post" action="?/skip" use:enhance>
-					<input type="hidden" name="slotIndex" value={current.slotIndex} />
-					<input type="hidden" name="skipKind" value={SESSION_SKIP_KINDS.PERMANENT} />
-					<button type="submit" class="link-btn danger">Skip permanently</button>
-				</form>
+				<ConfirmAction
+					formAction="?/skip"
+					confirmVariant="danger"
+					triggerVariant="ghost"
+					size="sm"
+					label="Skip permanently"
+					confirmLabel="Skip permanently (undo from plan)"
+					hiddenFields={{
+						slotIndex: String(current.slotIndex),
+						skipKind: SESSION_SKIP_KINDS.PERMANENT,
+					}}
+				/>
 			</footer>
+			<p class="skip-hint">Permanent skip can be reactivated from the plan detail page.</p>
 		</article>
 	{:else if current}
 		<article class="empty">
@@ -325,7 +345,7 @@ function sliceLabel(slice: SessionSlice): string {
 		display: block;
 		height: 100%;
 		background: #2563eb;
-		transition: width 200ms;
+		transition: width var(--ab-transition-normal);
 	}
 
 	.error {
@@ -429,6 +449,27 @@ function sliceLabel(slice: SessionSlice): string {
 		gap: 0.5rem;
 	}
 
+	.rating-fieldset {
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		gap: 0.5rem;
+		border: 0;
+		margin: 0;
+		padding: 0;
+	}
+
+	.visually-hidden {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		white-space: nowrap;
+		border: 0;
+	}
+
 	.options {
 		display: flex;
 		flex-direction: column;
@@ -489,8 +530,17 @@ function sliceLabel(slice: SessionSlice): string {
 		text-decoration: underline;
 	}
 
-	.link-btn.danger {
-		color: #b91c1c;
+	.link-btn:focus-visible {
+		outline: none;
+		box-shadow: 0 0 0 3px var(--ab-color-focus-ring);
+		border-radius: 4px;
+	}
+
+	.skip-hint {
+		margin: 0.25rem 0 0;
+		font-size: 0.75rem;
+		color: #64748b;
+		text-align: right;
 	}
 
 	.empty {
@@ -531,6 +581,16 @@ function sliceLabel(slice: SessionSlice): string {
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
+		transition:
+			background var(--ab-transition-fast),
+			border-color var(--ab-transition-fast);
+	}
+
+	.btn:focus-visible,
+	.option:focus-visible,
+	.rating:focus-visible {
+		outline: none;
+		box-shadow: 0 0 0 3px var(--ab-color-focus-ring);
 	}
 
 	.btn.primary {

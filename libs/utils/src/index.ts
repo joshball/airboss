@@ -3,6 +3,7 @@ export {
 	createId,
 	generateAuthId,
 	generateCardId,
+	generateKnowledgeNodeProgressId,
 	generateRepAttemptId,
 	generateReviewId,
 	generateScenarioId,

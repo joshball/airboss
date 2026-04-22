@@ -406,6 +406,11 @@ function pageHref(n: number): string {
 		border-color: #93c5fd;
 	}
 
+	.chip:focus-visible {
+		outline: none;
+		box-shadow: 0 0 0 3px var(--ab-color-focus-ring);
+	}
+
 	.chip-name {
 		color: #1e40af;
 		font-weight: 600;

@@ -26,7 +26,7 @@ const stamp = `${loadedAt.getFullYear()}-${String(loadedAt.getMonth() + 1).padSt
 
 <section class="page">
 	<header class="hd">
-		<h1>Learning Dashboard</h1>
+		<h1>Dashboard</h1>
 		<p class="sub">Where you are. What slipped. What's next.</p>
 	</header>
 
