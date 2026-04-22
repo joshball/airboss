@@ -13,8 +13,10 @@ import {
 	CARD_STATES,
 	CARD_STATUSES,
 	CARD_TYPES,
+	CERT_VALUES,
 	CONTENT_SOURCES,
 	DIFFICULTIES,
+	DOMAIN_VALUES,
 	DOMAINS,
 	REVIEW_RATINGS,
 	SCENARIO_STATUSES,
@@ -469,12 +471,31 @@ describe('getDashboardPayload', () => {
 			expect('value' in payload.activity).toBe(true);
 			expect('value' in payload.activePlan).toBe(true);
 			expect('value' in payload.calibration).toBe(true);
+			expect('value' in payload.certProgress).toBe(true);
+			expect('value' in payload.domainCertMatrix).toBe(true);
 			expect(val(payload.repBacklog).totalActive).toBe(0);
 			expect(val(payload.activity).days).toHaveLength(ACTIVITY_WINDOW_DAYS);
 			expect(val(payload.weakAreas)).toEqual([]);
 			// Zero-state user has no active plan and no calibration data.
 			expect(val(payload.activePlan)).toBeNull();
 			expect(val(payload.calibration).totalCount).toBe(0);
+			// Cert progress returns one row per cert in CERT_VALUES order;
+			// a zero-state user has 0 mastered across the board.
+			const certProgress = val(payload.certProgress);
+			expect(certProgress).toHaveLength(CERT_VALUES.length);
+			for (const row of certProgress) {
+				expect(row.mastered).toBe(0);
+				expect(row.inProgress).toBe(0);
+			}
+			// Domain x cert matrix returns DOMAIN_VALUES x CERT_VALUES grid.
+			const matrix = val(payload.domainCertMatrix);
+			expect(matrix).toHaveLength(DOMAIN_VALUES.length);
+			for (const row of matrix) {
+				expect(row.cells).toHaveLength(CERT_VALUES.length);
+				for (const cell of row.cells) {
+					expect(cell.mastered).toBe(0);
+				}
+			}
 		} finally {
 			await cleanup();
 		}
@@ -510,14 +531,34 @@ describe('getDashboardPayload', () => {
 						score: null,
 						domains: [],
 					}),
+				// certProgress succeeds with an empty row per cert so the
+				// isolation check can see the good panels alongside the failed one.
+				certProgress: () =>
+					Promise.resolve(
+						CERT_VALUES.map((cert) => ({
+							cert,
+							total: 0,
+							mastered: 0,
+							inProgress: 0,
+							percent: 0,
+						})),
+					),
+				// domainCertMatrix throws so we get a second failure isolated
+				// from the rest -- verifies the per-panel error containment.
+				domainCertMatrix: () => Promise.reject(new Error('boom from domain matrix')),
 			};
 			const payload = await getDashboardPayload(userId, db, new Date(), sabotaged);
 			expect('value' in payload.stats).toBe(true);
 			expect('value' in payload.repBacklog).toBe(true);
 			expect('value' in payload.activity).toBe(true);
+			expect('value' in payload.certProgress).toBe(true);
 			expect('error' in payload.weakAreas).toBe(true);
 			if ('error' in payload.weakAreas) {
 				expect(payload.weakAreas.error).toContain('boom from weak areas');
+			}
+			expect('error' in payload.domainCertMatrix).toBe(true);
+			if ('error' in payload.domainCertMatrix) {
+				expect(payload.domainCertMatrix.error).toContain('boom from domain matrix');
 			}
 		} finally {
 			await cleanup();

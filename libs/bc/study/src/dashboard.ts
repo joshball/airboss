@@ -29,6 +29,7 @@ import { db as defaultDb } from '@ab/db';
 import { and, count, eq, gte, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import { type CalibrationResult, getCalibration } from './calibration';
+import { type CertProgress, type DomainCertRow, getCertProgress, getDomainCertMatrix } from './knowledge';
 import { getActivePlan } from './plans';
 import { card, cardState, repAttempt, review, type StudyPlanRow, scenario } from './schema';
 import { type DashboardStats, getDashboardStats } from './stats';
@@ -93,6 +94,10 @@ export interface DashboardPayload {
 	activePlan: PanelResult<StudyPlanRow | null>;
 	/** Calibration aggregate for the dashboard summary panel. */
 	calibration: PanelResult<CalibrationResult>;
+	/** Per-cert node counts + mastery for the cert-progress panel. */
+	certProgress: PanelResult<CertProgress[]>;
+	/** Domain x cert mastery grid for the map panel. */
+	domainCertMatrix: PanelResult<DomainCertRow[]>;
 }
 
 /** UTC day key in YYYY-MM-DD form. */
@@ -447,6 +452,8 @@ export interface DashboardFetchers {
 	activity(userId: string, db: Db, now: Date): Promise<RecentActivity>;
 	activePlan(userId: string, db: Db): Promise<StudyPlanRow | null>;
 	calibration(userId: string, db: Db): Promise<CalibrationResult>;
+	certProgress(userId: string, db: Db): Promise<CertProgress[]>;
+	domainCertMatrix(userId: string, db: Db): Promise<DomainCertRow[]>;
 }
 
 const defaultFetchers: DashboardFetchers = {
@@ -456,6 +463,8 @@ const defaultFetchers: DashboardFetchers = {
 	activity: (userId, db, now) => getRecentActivity(userId, ACTIVITY_WINDOW_DAYS, db, now),
 	activePlan: (userId, db) => getActivePlan(userId, db),
 	calibration: (userId, db) => getCalibration(userId, {}, db),
+	certProgress: (userId, db) => getCertProgress(userId, db),
+	domainCertMatrix: (userId, db) => getDomainCertMatrix(userId, db),
 };
 
 /**
@@ -471,14 +480,17 @@ export async function getDashboardPayload(
 	now: Date = new Date(),
 	fetchers: DashboardFetchers = defaultFetchers,
 ): Promise<DashboardPayload> {
-	const [stats, repBacklog, weakAreas, activity, activePlan, calibration] = await Promise.allSettled([
-		fetchers.stats(userId, db, now),
-		fetchers.repBacklog(userId, db),
-		fetchers.weakAreas(userId, db, now),
-		fetchers.activity(userId, db, now),
-		fetchers.activePlan(userId, db),
-		fetchers.calibration(userId, db),
-	]);
+	const [stats, repBacklog, weakAreas, activity, activePlan, calibration, certProgress, domainCertMatrix] =
+		await Promise.allSettled([
+			fetchers.stats(userId, db, now),
+			fetchers.repBacklog(userId, db),
+			fetchers.weakAreas(userId, db, now),
+			fetchers.activity(userId, db, now),
+			fetchers.activePlan(userId, db),
+			fetchers.calibration(userId, db),
+			fetchers.certProgress(userId, db),
+			fetchers.domainCertMatrix(userId, db),
+		]);
 
 	function toResult<T>(r: PromiseSettledResult<T>): PanelResult<T> {
 		if (r.status === 'fulfilled') return { value: r.value };
@@ -494,6 +506,8 @@ export async function getDashboardPayload(
 		activity: toResult(activity),
 		activePlan: toResult(activePlan),
 		calibration: toResult(calibration),
+		certProgress: toResult(certProgress),
+		domainCertMatrix: toResult(domainCertMatrix),
 	};
 }
 
