@@ -71,10 +71,8 @@ export const ROUTES = {
 	MEMORY_CARD_EDIT: (id: string) => `/memory/${encodeURIComponent(id)}?${QUERY_PARAMS.EDIT}=1` as const,
 
 	// Study -- Reps
-	// `REPS_SESSION` retired by ADR 012 phase 3. Every caller now links
-	// `SESSION_START` directly; `/reps/session` remains a server-side 308
-	// redirect for bookmarked / external links until phase 6 deletes the
-	// route file entirely.
+	// `REPS_SESSION` retired by ADR 012 phase 3; the `/reps/session` route
+	// was deleted in phase 6. All rep entry points link `SESSION_START`.
 	REPS: '/reps',
 	REPS_BROWSE: '/reps/browse',
 	REPS_NEW: '/reps/new',
