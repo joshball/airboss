@@ -11,6 +11,7 @@
 		"setup": "bun scripts/setup.ts",
 		"smoke": "bun scripts/smoke.ts",
 		"knowledge:new": "bun scripts/knowledge-new.ts",
+		"knowledge:seed": "bun scripts/knowledge-seed.ts",
 		"build-knowledge": "bun scripts/build-knowledge-index.ts"
 	},
 	"devDependencies": {

@@ -13,6 +13,35 @@ A directed graph of aviation knowledge units with rich metadata, typed edges, an
 
 Depends on: Spaced Memory Items (schema, BC structure, domain constants), Decision Reps (scenario schema -- ships before this feature per ADR 011 build order).
 
+## v1 scope reconciliation (2026-04-20)
+
+The **shipped schema** on main (PR #6) is a deliberate simplification of the full spec below. The two agree on the data model; the spec's extra tables and columns are deferred to v2 without loss of functionality for the canary and session-engine use cases.
+
+| Spec item                                                          | v1 on main                                                                 | v2 deferred reason                                                                                               |
+| ------------------------------------------------------------------ | -------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `knowledge_node.id` + `slug`                                       | Single `id` column doubles as slug (kebab-case)                            | Split to ULID `id` + `slug` once a non-slug rename use case appears. Slug renames are rare at 30 nodes.          |
+| `content_path`                                                     | Not stored; derived from domain + id at read time                          | Add once multi-author workflows need a canonical authoring-file pointer back from DB rows.                       |
+| `lifecycle` column                                                 | Derived at query time from phase presence in `content_md`                  | Persist once query cost matters -- currently trivial.                                                            |
+| `content_hash` + `source_build_id` + `knowledge_build` audit table | Not present                                                                | Add when authoring-at-scale benefits from "who / when / what build wrote this node" audit trail.                 |
+| `knowledge_content_phase` table (per-phase rows)                   | All phases packed into `content_md`; render-time H2 splitter extracts them | Denormalize per phase once per-phase queries (coverage reports, dashboards) outgrow render-time parsing.         |
+| `study.card.content_phase`                                         | Not added in v1                                                            | Add when UI grouping by phase (vs. grouping by node_id alone) delivers authoring or learning signal.             |
+| `study.scenario.node_id` + `content_phase`                         | Not added in v1 (scenarios stay decoupled)                                 | Add when scenarios need to aggregate into node mastery via the `repGate`. Stub `repGate = not_applicable` in v1. |
+
+The **build script on main** (`bun run build-knowledge`, `scripts/build-knowledge-index.ts`) follows the spec's pipeline but writes into the v1 shape: parse `course/knowledge/**/node.md`, split the body into H2-keyed phases in memory, upsert `knowledge_node` with full metadata + raw `content_md`, replace outbound `knowledge_edge` rows, refresh `target_exists`. Validation (required fields, DAG on `requires`, duplicate id detection, unknown H2 detection) matches the spec. Coverage (`byLifecycle`, `byDomain`, `phaseGaps`) is computed per-build and written to `course/knowledge/graph-index.md` for authors but is not persisted in a DB audit table.
+
+**Card authoring workflow (inline YAML):** Practice-phase cards are authored inline inside each `node.md` as a fenced block with the info string `yaml-cards`:
+
+```yaml-cards
+- front: "..."
+  back: "..."
+  cardType: basic
+  tags: []
+```
+
+`bun run knowledge:seed --user <email>` (`scripts/knowledge-seed.ts`) materializes these as `study.card` rows with `node_id` set, `source_type = 'course'`, `is_editable = false`. Wholesale-replaces any existing course cards for the (user, node) pair so re-running is idempotent. Personal cards (`source_type = 'personal'`) are never touched. When a node's authored card count exceeds ~15 this will be split into a separate `cards/*.yaml` file per node; that split is a v2 concern.
+
+The `bun run knowledge:new <domain> <slug>` scaffolder (`scripts/knowledge-new.ts`) emits a skeleton node.md with TODO-commented frontmatter fields and the seven H2 phase stubs -- the canonical starting point when authoring a new node.
+
 ## Data Model
 
 All tables in the `study` Postgres schema namespace. IDs use `prefix_ULID` via `@ab/utils` `createId()`. The graph's human-authored identifier (the kebab-case YAML `id` field like `airspace-vfr-weather-minimums`) is carried alongside the internal ULID on a `slug` column so existing markdown, edges, and references remain stable across rebuilds.

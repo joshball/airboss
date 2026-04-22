@@ -706,38 +706,20 @@ async function main(): Promise<void> {
 // ---------------------------------------------------------------------------
 
 async function writeToDb(nodes: readonly ParsedNode[]): Promise<void> {
-	const [{ db }, { knowledgeNode, knowledgeEdge }, { sql, inArray }] = await Promise.all([
+	const [{ client, db }, { knowledgeNode, knowledgeEdge }, { sql, inArray }] = await Promise.all([
 		import('../libs/db/src/index'),
 		import('../libs/bc/study/src/schema'),
 		import('drizzle-orm'),
 	]);
 
-	await db.transaction(async (tx) => {
-		// Upsert every node.
-		for (const node of nodes) {
-			await tx
-				.insert(knowledgeNode)
-				.values({
-					id: node.frontmatter.id,
-					title: node.frontmatter.title,
-					domain: node.frontmatter.domain,
-					crossDomains: node.frontmatter.crossDomains,
-					knowledgeTypes: node.frontmatter.knowledgeTypes,
-					technicalDepth: node.frontmatter.technicalDepth,
-					stability: node.frontmatter.stability,
-					relevance: node.frontmatter.relevance,
-					modalities: node.frontmatter.modalities,
-					estimatedTimeMinutes: node.frontmatter.estimatedTimeMinutes,
-					reviewTimeMinutes: node.frontmatter.reviewTimeMinutes,
-					references: node.frontmatter.references,
-					assessable: node.frontmatter.assessable,
-					assessmentMethods: node.frontmatter.assessmentMethods,
-					masteryCriteria: node.frontmatter.masteryCriteria,
-					contentMd: node.body,
-				})
-				.onConflictDoUpdate({
-					target: knowledgeNode.id,
-					set: {
+	try {
+		await db.transaction(async (tx) => {
+			// Upsert every node.
+			for (const node of nodes) {
+				await tx
+					.insert(knowledgeNode)
+					.values({
+						id: node.frontmatter.id,
 						title: node.frontmatter.title,
 						domain: node.frontmatter.domain,
 						crossDomains: node.frontmatter.crossDomains,
@@ -753,60 +735,85 @@ async function writeToDb(nodes: readonly ParsedNode[]): Promise<void> {
 						assessmentMethods: node.frontmatter.assessmentMethods,
 						masteryCriteria: node.frontmatter.masteryCriteria,
 						contentMd: node.body,
-						updatedAt: new Date(),
-					},
-				});
-		}
-
-		// Replace edges wholesale for every authored node. Cascading from the
-		// delete would remove edges pointing *at* these nodes; we only want to
-		// clear what the node itself emits, so filter on from_node_id.
-		const authoredIds = nodes.map((n) => n.frontmatter.id);
-		const authoredSet = new Set(authoredIds);
-		if (authoredIds.length > 0) {
-			// Clear every edge whose `from_node_id` is one of the authored
-			// nodes *or* one of the reversed-edge sources (applied_by /
-			// taught_by). The reversed form means the listed node becomes the
-			// emitter; if that listed node happens to also be an authored
-			// node, its outgoing edges from a previous build may collide
-			// with the freshly-computed ones. Rebuilding the full edge set
-			// per authored scope is simpler than diffing.
-			await tx.delete(knowledgeEdge).where(inArray(knowledgeEdge.fromNodeId, authoredIds));
-			const edgeRows = nodes.flatMap(edgesFor);
-			// Drop any edge whose `from` isn't an authored node. The FK on
-			// `knowledge_edge.from_node_id` would refuse the insert; the
-			// `applied_by` / `taught_by` frontmatter shapes let authors name
-			// future nodes that don't exist yet, and those edges stay
-			// implicit until the target is authored (at which point its own
-			// `requires` or `applies` will re-materialize them).
-			const insertable = edgeRows.filter((e) => authoredSet.has(e.fromNodeId));
-			// Deduplicate (same from, to, type) -- `related` mirror may
-			// conflict with a legitimate two-sided author intent.
-			const seen = new Set<string>();
-			const unique = insertable.filter((e) => {
-				const key = `${e.fromNodeId}|${e.toNodeId}|${e.edgeType}`;
-				if (seen.has(key)) return false;
-				seen.add(key);
-				return true;
-			});
-			if (unique.length > 0) {
-				await tx
-					.insert(knowledgeEdge)
-					.values(unique.map((e) => ({ ...e, targetExists: false })))
-					.onConflictDoNothing();
+					})
+					.onConflictDoUpdate({
+						target: knowledgeNode.id,
+						set: {
+							title: node.frontmatter.title,
+							domain: node.frontmatter.domain,
+							crossDomains: node.frontmatter.crossDomains,
+							knowledgeTypes: node.frontmatter.knowledgeTypes,
+							technicalDepth: node.frontmatter.technicalDepth,
+							stability: node.frontmatter.stability,
+							relevance: node.frontmatter.relevance,
+							modalities: node.frontmatter.modalities,
+							estimatedTimeMinutes: node.frontmatter.estimatedTimeMinutes,
+							reviewTimeMinutes: node.frontmatter.reviewTimeMinutes,
+							references: node.frontmatter.references,
+							assessable: node.frontmatter.assessable,
+							assessmentMethods: node.frontmatter.assessmentMethods,
+							masteryCriteria: node.frontmatter.masteryCriteria,
+							contentMd: node.body,
+							updatedAt: new Date(),
+						},
+					});
 			}
-		}
 
-		// Refresh target_exists on every edge in one pass. The SQL uses the
-		// study schema qualifier explicitly so the statement remains valid
-		// regardless of search_path.
-		await tx.execute(sql`
+			// Replace edges wholesale for every authored node. Cascading from the
+			// delete would remove edges pointing *at* these nodes; we only want to
+			// clear what the node itself emits, so filter on from_node_id.
+			const authoredIds = nodes.map((n) => n.frontmatter.id);
+			const authoredSet = new Set(authoredIds);
+			if (authoredIds.length > 0) {
+				// Clear every edge whose `from_node_id` is one of the authored
+				// nodes *or* one of the reversed-edge sources (applied_by /
+				// taught_by). The reversed form means the listed node becomes the
+				// emitter; if that listed node happens to also be an authored
+				// node, its outgoing edges from a previous build may collide
+				// with the freshly-computed ones. Rebuilding the full edge set
+				// per authored scope is simpler than diffing.
+				await tx.delete(knowledgeEdge).where(inArray(knowledgeEdge.fromNodeId, authoredIds));
+				const edgeRows = nodes.flatMap(edgesFor);
+				// Drop any edge whose `from` isn't an authored node. The FK on
+				// `knowledge_edge.from_node_id` would refuse the insert; the
+				// `applied_by` / `taught_by` frontmatter shapes let authors name
+				// future nodes that don't exist yet, and those edges stay
+				// implicit until the target is authored (at which point its own
+				// `requires` or `applies` will re-materialize them).
+				const insertable = edgeRows.filter((e) => authoredSet.has(e.fromNodeId));
+				// Deduplicate (same from, to, type) -- `related` mirror may
+				// conflict with a legitimate two-sided author intent.
+				const seen = new Set<string>();
+				const unique = insertable.filter((e) => {
+					const key = `${e.fromNodeId}|${e.toNodeId}|${e.edgeType}`;
+					if (seen.has(key)) return false;
+					seen.add(key);
+					return true;
+				});
+				if (unique.length > 0) {
+					await tx
+						.insert(knowledgeEdge)
+						.values(unique.map((e) => ({ ...e, targetExists: false })))
+						.onConflictDoNothing();
+				}
+			}
+
+			// Refresh target_exists on every edge in one pass. The SQL uses the
+			// study schema qualifier explicitly so the statement remains valid
+			// regardless of search_path.
+			await tx.execute(sql`
 			UPDATE study.knowledge_edge e
 			SET target_exists = EXISTS (
 				SELECT 1 FROM study.knowledge_node n WHERE n.id = e.to_node_id
 			)
 		`);
-	});
+		});
+	} finally {
+		// Close the postgres pool so the process can exit immediately on
+		// success; without this the script hangs until the pool's idle
+		// timeout fires (~20s).
+		await client.end();
+	}
 }
 
 // ---------------------------------------------------------------------------
