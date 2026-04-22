@@ -3,13 +3,12 @@ import { type ConfidenceLevel, DIFFICULTY_LABELS, DOMAIN_LABELS, PHASE_OF_FLIGHT
 import ConfidenceSlider from '@ab/ui/components/ConfidenceSlider.svelte';
 import { humanize } from '@ab/utils';
 import { enhance } from '$app/forms';
-import { invalidateAll, replaceState } from '$app/navigation';
-import { page } from '$app/state';
+import { goto, invalidateAll } from '$app/navigation';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
 
-type Phase = 'read' | 'confidence' | 'choose' | 'submitting' | 'reveal' | 'complete';
+type Phase = 'read' | 'confidence' | 'choose' | 'submitting' | 'reveal';
 
 interface DomainTally {
 	domain: string;
@@ -17,48 +16,80 @@ interface DomainTally {
 	correct: number;
 }
 
-// The session owns a local copy of the batch so the UI queue stays
-// stable even as `data` refreshes (e.g. after a submit returns a
-// success result and triggers SvelteKit's reload of load data).
-// `startNewSession()` is the only place we re-pull from data.
-// svelte-ignore state_referenced_locally -- seeding initial state from data; treat as independent thereafter
-let batch = $state(data.batch);
-let index = $state(0);
-// svelte-ignore state_referenced_locally -- seeding initial state from data; treat as independent thereafter
-let phase = $state<Phase>(data.batch.length === 0 ? 'complete' : 'read');
+// All authoritative batch state lives on `data` (server-derived). Client
+// state is only the transient per-slot UI phase: is the user currently
+// reading, picking confidence, choosing an option, or looking at the reveal?
+//
+// A mid-session hard refresh reruns the server load, which re-derives
+// currentIndex from rep_attempt rows and hands the user back at the first
+// unanswered scenario with the previous attempts already counted.
+let phase = $state<Phase>('read');
 let revealedAt = $state<number | null>(null);
-let confidence = $state<number | null>(null);
+let confidence = $state<ConfidenceLevel | null>(null);
 let selectedOption = $state<string | null>(null);
 let lastResultCorrect = $state<boolean | null>(null);
-let attemptedTotal = $state(0);
-let correctTotal = $state(0);
-let skippedTotal = $state(0);
-let lastSkipped = $state(false);
-let domainTallies = $state<Record<string, DomainTally>>({});
+let lastSkippedSubmit = $state(false);
 let submitError = $state<string | null>(null);
-// `loading` guards the form from double-submit. Set synchronously in
-// the enhance callback before the fetch, cleared in the result handler.
-// See: `phase` transitions run after the browser already dispatched the
-// click, so a `phase`-only guard raced the second click.
+// `loading` guards the form from double-submit. Set synchronously in the
+// enhance callback before the fetch, cleared in the result handler. See:
+// `phase` transitions run after the browser already dispatched the click,
+// so a `phase`-only guard races the second click.
 let loading = $state(false);
+// Tracks which slot the transient UI state (phase, confidence, etc.)
+// belongs to. When the server advances `currentIndex` after a successful
+// submit, this key differs from the current slot's key and the effect
+// below wipes the transient state so the next scenario renders fresh.
+let lastSlotKey = $state<string | null>(null);
 
-// Pin the shuffle seed into the URL on first mount so a hard-refresh or
-// SvelteKit `invalidate` rerun reuses the same `sessionId` (and thus the
-// same option order) instead of reshuffling the queue behind the user.
-// `replaceState` keeps the URL out of the browser back-button stack.
-$effect(() => {
-	if (page.url.searchParams.get('s') !== data.sessionId) {
-		const next = new URL(page.url);
-		next.searchParams.set('s', data.sessionId);
-		replaceState(next, page.state);
+// Read-through tallies derived from the server-authoritative slots array.
+// Every slot with an attempt contributes one to `attemptedTotal` (unless
+// it's a "skipped" slot, which contributes to `skippedTotal` instead).
+const total = $derived(data.total);
+const slots = $derived(data.slots);
+const currentIndex = $derived(data.currentIndex);
+const currentSlot = $derived(currentIndex < slots.length ? slots[currentIndex] : null);
+const current = $derived(currentSlot?.kind === 'resolvable' ? currentSlot.scenario : null);
+const isComplete = $derived(currentIndex >= slots.length);
+
+const attemptedTotal = $derived(slots.filter((s) => s.kind === 'resolvable' && s.attempt !== null).length);
+const correctTotal = $derived(slots.filter((s) => s.kind === 'resolvable' && s.attempt?.isCorrect === true).length);
+const skippedTotal = $derived(slots.filter((s) => s.kind === 'skipped').length);
+const accuracy = $derived(attemptedTotal === 0 ? 0 : Math.round((correctTotal / attemptedTotal) * 100));
+
+// Domain tallies aggregated from resolved attempts. Rebuilds whenever
+// `slots` changes -- cheap for REP_BATCH_SIZE (10).
+const domainTallies = $derived.by<Record<string, DomainTally>>(() => {
+	const out: Record<string, DomainTally> = {};
+	for (const slot of slots) {
+		if (slot.kind !== 'resolvable' || !slot.attempt) continue;
+		const entry = out[slot.scenario.domain] ?? { domain: slot.scenario.domain, attempted: 0, correct: 0 };
+		entry.attempted += 1;
+		if (slot.attempt.isCorrect) entry.correct += 1;
+		out[slot.scenario.domain] = entry;
 	}
+	return out;
 });
 
-const current = $derived(batch[index]);
-const total = $derived(batch.length);
 const needsConfidence = $derived(Boolean(current?.promptConfidence));
 const chosenOpt = $derived(current?.options.find((o) => o.id === selectedOption));
-const accuracy = $derived(attemptedTotal === 0 ? 0 : Math.round((correctTotal / attemptedTotal) * 100));
+
+// When the server advances to a new slot (after a submit reloads data via
+// invalidateAll), wipe the transient UI state so the next scenario starts
+// in the `read` phase with no carryover confidence / selection / reveal.
+$effect(() => {
+	const key = isComplete ? '__complete__' : (current?.id ?? `skip:${currentIndex}`);
+	if (key !== lastSlotKey) {
+		lastSlotKey = key;
+		phase = currentSlot?.kind === 'skipped' ? 'reveal' : 'read';
+		revealedAt = null;
+		confidence = null;
+		selectedOption = null;
+		lastResultCorrect = null;
+		lastSkippedSubmit = currentSlot?.kind === 'skipped';
+		submitError = null;
+		loading = false;
+	}
+});
 
 function domainLabel(slug: string): string {
 	return (DOMAIN_LABELS as Record<string, string>)[slug] ?? humanize(slug);
@@ -94,53 +125,18 @@ function skipConfidence() {
 	revealedAt = Date.now();
 }
 
-function tallyResult(domain: string, wasCorrect: boolean) {
-	const existing = domainTallies[domain] ?? { domain, attempted: 0, correct: 0 };
-	domainTallies = {
-		...domainTallies,
-		[domain]: {
-			domain,
-			attempted: existing.attempted + 1,
-			correct: existing.correct + (wasCorrect ? 1 : 0),
-		},
-	};
-	attemptedTotal++;
-	if (wasCorrect) correctTotal++;
-}
-
-function advance() {
-	const next = index + 1;
-	selectedOption = null;
-	confidence = null;
-	revealedAt = null;
-	lastResultCorrect = null;
-	lastSkipped = false;
-	submitError = null;
-	if (next >= batch.length) {
-		phase = 'complete';
-		index = next;
-	} else {
-		index = next;
-		phase = 'read';
-	}
+async function advance() {
+	// Server holds the queue. We've already recorded the attempt (or the
+	// slot is flagged skipped on the server); `invalidateAll` reruns the
+	// load fn, which bumps currentIndex to the next unanswered slot. The
+	// $effect above wipes the transient UI state once the slot key flips.
+	await invalidateAll();
 }
 
 async function startNewSession() {
-	await invalidateAll();
-	batch = data.batch;
-	index = 0;
-	selectedOption = null;
-	confidence = null;
-	revealedAt = null;
-	lastResultCorrect = null;
-	lastSkipped = false;
-	attemptedTotal = 0;
-	correctTotal = 0;
-	skippedTotal = 0;
-	domainTallies = {};
-	submitError = null;
-	loading = false;
-	phase = batch.length === 0 ? 'complete' : 'read';
+	// A bare REPS_SESSION URL bounces through the first-load redirect,
+	// which pulls a fresh batch from getNextScenarios and repins the URL.
+	await goto(ROUTES.REPS_SESSION, { invalidateAll: true });
 }
 
 function onKeydown(e: KeyboardEvent) {
@@ -164,7 +160,7 @@ function onKeydown(e: KeyboardEvent) {
 		}
 	} else if (phase === 'reveal' && (e.key === ' ' || e.key === 'Enter')) {
 		e.preventDefault();
-		advance();
+		void advance();
 	}
 }
 </script>
@@ -176,7 +172,7 @@ function onKeydown(e: KeyboardEvent) {
 </svelte:head>
 
 <section class="page">
-	{#if phase === 'complete'}
+	{#if isComplete}
 		<article class="summary" role="status">
 			<h1>Session complete</h1>
 			{#if attemptedTotal > 0}
@@ -213,9 +209,26 @@ function onKeydown(e: KeyboardEvent) {
 				<button type="button" class="btn primary" onclick={startNewSession}>Another session</button>
 			</div>
 		</article>
+	{:else if currentSlot?.kind === 'skipped'}
+		<header class="hd">
+			<span class="counter">Rep {currentIndex + 1} of {total}</span>
+		</header>
+		<article class="card">
+			<h2 class="title">Scenario unavailable</h2>
+			<p class="situation">
+				This scenario was archived before you reached it. Skipping to the next one.
+			</p>
+		</article>
+		<button type="button" class="btn primary wide" onclick={advance}>
+			Continue
+			<span class="kbd">Space</span>
+		</button>
+		<div class="progress" aria-hidden="true">
+			<div class="progress-fill" style="width: {total === 0 ? 0 : ((currentIndex + 1) / total) * 100}%"></div>
+		</div>
 	{:else if current}
 		<header class="hd">
-			<span class="counter">Rep {index + 1} of {total}</span>
+			<span class="counter">Rep {currentIndex + 1} of {total}</span>
 			<div class="tags">
 				<span class="badge domain">{domainLabel(current.domain)}</span>
 				<span class="badge difficulty difficulty-{current.difficulty}">{difficultyLabel(current.difficulty)}</span>
@@ -233,7 +246,7 @@ function onKeydown(e: KeyboardEvent) {
 			{#if phase === 'reveal'}
 				<div class="reveal" aria-live="polite">
 					<div role="separator" class="sep"></div>
-					{#if lastSkipped}
+					{#if lastSkippedSubmit}
 						<div class="section-label">Skipped</div>
 						<p class="chosen">
 							This scenario was archived before your attempt could be saved.
@@ -319,6 +332,9 @@ function onKeydown(e: KeyboardEvent) {
 					formData.set('answerMs', String(answerMs));
 					if (confidence !== null) formData.set('confidence', String(confidence));
 					return async ({ result, update }) => {
+						// Don't let SvelteKit rerun load on this branch -- we handle
+						// the result manually. Previously this page relied on client
+						// state carrying across, which is the exact bug being fixed.
 						await update({ reset: false });
 						if (result.type === 'success') {
 							const data = result.data as
@@ -327,18 +343,15 @@ function onKeydown(e: KeyboardEvent) {
 							if (data?.skipped) {
 								// Server signalled the scenario went away mid-session.
 								// Surface the skip in the reveal phase so the user knows
-								// the attempt wasn't silently dropped.
-								skippedTotal++;
-								lastSkipped = true;
+								// the attempt wasn't silently dropped, then re-derive.
+								lastSkippedSubmit = true;
 								lastResultCorrect = null;
 								phase = 'reveal';
-								loading = false;
-								return;
+							} else {
+								lastSkippedSubmit = false;
+								lastResultCorrect = data?.isCorrect === true;
+								phase = 'reveal';
 							}
-							lastSkipped = false;
-							lastResultCorrect = data?.isCorrect === true;
-							tallyResult(current.domain, lastResultCorrect);
-							phase = 'reveal';
 						} else {
 							phase = 'choose';
 							submitError =
@@ -372,13 +385,13 @@ function onKeydown(e: KeyboardEvent) {
 			</form>
 		{:else if phase === 'reveal'}
 			<button type="button" class="btn primary wide" onclick={advance}>
-				{index + 1 === total ? 'Finish session' : 'Next rep'}
+				{currentIndex + 1 === total ? 'Finish session' : 'Next rep'}
 				<span class="kbd">Space</span>
 			</button>
 		{/if}
 
 		<div class="progress" aria-hidden="true">
-			<div class="progress-fill" style="width: {total === 0 ? 0 : ((index + (phase === 'reveal' ? 1 : 0)) / total) * 100}%"></div>
+			<div class="progress-fill" style="width: {total === 0 ? 0 : ((currentIndex + (phase === 'reveal' ? 1 : 0)) / total) * 100}%"></div>
 		</div>
 	{/if}
 </section>
