@@ -16,6 +16,7 @@
 import {
 	DEFAULT_SESSION_LENGTH,
 	DEPTH_PREFERENCES,
+	MIN_SESSION_LENGTH,
 	PLAN_STATUSES,
 	SESSION_ITEM_KINDS,
 	SESSION_MODES,
@@ -91,7 +92,7 @@ export async function seedRepAttempt(opts: {
 		mode: SESSION_MODES.MIXED,
 		focusOverride: null,
 		certOverride: null,
-		sessionLength: 1,
+		sessionLength: MIN_SESSION_LENGTH,
 		items: [
 			{
 				kind: 'rep',

@@ -50,7 +50,10 @@ describe('SOURCES registry', () => {
 
 	it('getSourcesByType() filters the registry', () => {
 		const cfrSources = getSourcesByType('cfr');
-		expect(cfrSources.length).toBe(1);
-		expect(cfrSources[0]?.id).toBe('cfr-14');
+		expect(cfrSources.length).toBeGreaterThanOrEqual(1);
+		for (const source of cfrSources) {
+			expect(source.type).toBe('cfr');
+		}
+		expect(cfrSources.map((s) => s.id)).toContain('cfr-14');
 	});
 });
