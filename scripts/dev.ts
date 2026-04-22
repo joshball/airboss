@@ -122,15 +122,83 @@ async function maybeBuildKnowledge(): Promise<void> {
 	}
 }
 
-const app = process.argv[2] ?? 'study';
+const APPS = Object.keys(DEV_URLS);
+const PREFIX_COLORS = ['\x1b[36m', '\x1b[35m', '\x1b[33m', '\x1b[32m', '\x1b[34m']; // cyan, magenta, yellow, green, blue
+const RESET = '\x1b[0m';
+
+async function runOne(app: string): Promise<void> {
+	const url = DEV_URLS[app];
+	console.log(`Starting ${app} dev server...`);
+	if (url) console.log(`  ${url}`);
+	await $`cd apps/${app} && bun run dev`;
+}
+
+async function pipeWithPrefix(
+	stream: ReadableStream<Uint8Array>,
+	prefix: string,
+	out: NodeJS.WriteStream,
+): Promise<void> {
+	const reader = stream.getReader();
+	const decoder = new TextDecoder();
+	let buf = '';
+	for (;;) {
+		const { value, done } = await reader.read();
+		if (done) break;
+		buf += decoder.decode(value, { stream: true });
+		const lines = buf.split('\n');
+		buf = lines.pop() ?? '';
+		for (const line of lines) out.write(`${prefix}${line}\n`);
+	}
+	if (buf.length > 0) out.write(`${prefix}${buf}\n`);
+}
+
+async function runAll(): Promise<void> {
+	console.log(`Starting dev servers: ${APPS.join(', ')}`);
+	for (const app of APPS) {
+		const url = DEV_URLS[app];
+		if (url) console.log(`  [${app}] ${url}`);
+	}
+
+	const children = APPS.map((app, i) => {
+		const color = PREFIX_COLORS[i % PREFIX_COLORS.length];
+		const prefix = `${color}[${app}]${RESET} `;
+		const proc = Bun.spawn(['bun', 'run', 'dev'], {
+			cwd: join(REPO_ROOT, 'apps', app),
+			stdout: 'pipe',
+			stderr: 'pipe',
+			env: process.env,
+		});
+		pipeWithPrefix(proc.stdout, prefix, process.stdout);
+		pipeWithPrefix(proc.stderr, prefix, process.stderr);
+		return { app, proc };
+	});
+
+	const shutdown = (signal: NodeJS.Signals) => {
+		for (const { proc } of children) {
+			try {
+				proc.kill(signal);
+			} catch {
+				/* ignore */
+			}
+		}
+	};
+	process.on('SIGINT', () => shutdown('SIGINT'));
+	process.on('SIGTERM', () => shutdown('SIGTERM'));
+
+	const exits = await Promise.all(children.map(({ proc }) => proc.exited));
+	const failed = exits.some((code) => code !== 0 && code !== 143 && code !== 130);
+	process.exit(failed ? 1 : 0);
+}
 
 await maybeBuildKnowledge();
 
-console.log(`Starting ${app} dev server...`);
-const url = DEV_URLS[app];
-if (url) {
-	console.log(`  ${url}`);
+const app = process.argv[2];
+
+if (app === undefined) {
+	await runAll();
+} else if (DEV_URLS[app]) {
+	await runOne(app);
 } else {
-	console.log(`  (no dev URL mapping for '${app}' in scripts/dev.ts DEV_URLS)`);
+	console.error(`Unknown app: '${app}'. Valid apps: ${APPS.join(', ')}`);
+	process.exit(1);
 }
-await $`cd apps/${app} && bun run dev`;
