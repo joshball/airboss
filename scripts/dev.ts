@@ -23,6 +23,7 @@ import { DEV_DB_URL, ENV_VARS, HOSTS } from '../libs/constants/src/index';
 // actually visits the app.
 const DEV_URLS: Record<string, string> = {
 	study: `https://${HOSTS.STUDY}`,
+	sim: `https://${HOSTS.SIM}`,
 };
 
 const REPO_ROOT = resolve(import.meta.dir, '..');

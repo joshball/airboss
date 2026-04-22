@@ -5,6 +5,8 @@
 	"workspaces": ["apps/*", "libs/*", "libs/bc/*"],
 	"scripts": {
 		"dev": "bun scripts/dev.ts",
+		"dev:study": "bun scripts/dev.ts study",
+		"dev:sim": "bun scripts/dev.ts sim",
 		"check": "bun scripts/check.ts",
 		"test": "bun scripts/test.ts",
 		"db": "bun scripts/db.ts",
