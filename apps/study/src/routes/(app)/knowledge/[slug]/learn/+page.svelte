@@ -1,6 +1,8 @@
 <script lang="ts">
-import { DOMAIN_LABELS, KNOWLEDGE_PHASE_LABELS, ROUTES } from '@ab/constants';
+import { DOMAIN_LABELS, KNOWLEDGE_PHASE_LABELS, type KnowledgePhase, QUERY_PARAMS, ROUTES } from '@ab/constants';
 import { humanize, renderMarkdown } from '@ab/utils';
+import { replaceState } from '$app/navigation';
+import { page } from '$app/state';
 import type { PageData } from './$types';
 import ActivityHost from './ActivityHost.svelte';
 
@@ -10,17 +12,39 @@ const node = $derived(data.node);
 const phases = $derived(data.phases);
 const totalPhases = $derived(phases.length);
 
-let stepIndex: number = $state(0);
+// svelte-ignore state_referenced_locally -- seed from server-validated deep link; URL syncs thereafter
+let currentPhase = $state<KnowledgePhase>(data.initialPhase);
 
-const currentPhase = $derived(phases[stepIndex]);
+const stepIndex = $derived(
+	Math.max(
+		0,
+		phases.findIndex((p) => p.phase === currentPhase),
+	),
+);
+const currentPhaseNode = $derived(phases[stepIndex]);
 const progressPct = $derived(Math.round(((stepIndex + 1) / totalPhases) * 100));
 
+// Keep the URL in sync with the active phase. `replaceState` avoids piling up
+// history entries for each click (back button still goes up a level, not
+// back through the stepper).
+$effect(() => {
+	const phase = currentPhase;
+	const url = new URL(page.url);
+	if (url.searchParams.get(QUERY_PARAMS.STEP) === phase) return;
+	url.searchParams.set(QUERY_PARAMS.STEP, phase);
+	replaceState(url, page.state);
+});
+
 function prev(): void {
-	if (stepIndex > 0) stepIndex -= 1;
+	if (stepIndex > 0) currentPhase = phases[stepIndex - 1].phase;
 }
 
 function next(): void {
-	if (stepIndex < totalPhases - 1) stepIndex += 1;
+	if (stepIndex < totalPhases - 1) currentPhase = phases[stepIndex + 1].phase;
+}
+
+function selectPhase(phase: KnowledgePhase): void {
+	currentPhase = phase;
 }
 
 function phaseLabel(phase: string): string {
@@ -52,10 +76,16 @@ function domainLabel(slug: string): string {
 
 	<section class="progress" aria-label="Progress">
 		<div class="progress-head">
-			<span class="progress-step">Phase {stepIndex + 1} of {totalPhases}: {phaseLabel(currentPhase.phase)}</span>
+			<span class="progress-step">Phase {stepIndex + 1} of {totalPhases}: {phaseLabel(currentPhase)}</span>
 			<span class="progress-pct">{progressPct}%</span>
 		</div>
-		<div class="progress-bar" role="progressbar" aria-valuemin="1" aria-valuemax={totalPhases} aria-valuenow={stepIndex + 1}>
+		<div
+			class="progress-bar"
+			role="progressbar"
+			aria-valuemin="1"
+			aria-valuemax={totalPhases}
+			aria-valuenow={stepIndex + 1}
+		>
 			<span class="progress-fill" style:width="{progressPct}%"></span>
 		</div>
 		<ol class="steps" aria-label="Phases">
@@ -64,10 +94,10 @@ function domainLabel(slug: string): string {
 					<button
 						type="button"
 						class="step"
-						class:active={i === stepIndex}
+						class:active={p.phase === currentPhase}
 						class:authored={p.body !== null}
-						aria-current={i === stepIndex ? 'step' : undefined}
-						onclick={() => (stepIndex = i)}
+						aria-current={p.phase === currentPhase ? 'step' : undefined}
+						onclick={() => selectPhase(p.phase)}
 					>
 						<span class="step-num">{i + 1}</span>
 						<span class="step-name">{phaseLabel(p.phase)}</span>
@@ -78,13 +108,13 @@ function domainLabel(slug: string): string {
 	</section>
 
 	<article class="phase" aria-labelledby="phase-heading">
-		<h2 id="phase-heading">{phaseLabel(currentPhase.phase)}</h2>
-		{#if currentPhase.body}
-			<div class="prose">{@html renderMarkdown(currentPhase.body)}</div>
+		<h2 id="phase-heading">{phaseLabel(currentPhase)}</h2>
+		{#if currentPhaseNode?.body}
+			<div class="prose">{@html renderMarkdown(currentPhaseNode.body)}</div>
 		{:else}
 			<p class="gap-body">Not yet authored. This phase is part of the skeleton -- feel free to skip ahead.</p>
 		{/if}
-		{#each currentPhase.activityIds as activityId (activityId)}
+		{#each currentPhaseNode?.activityIds ?? [] as activityId (activityId)}
 			<ActivityHost {activityId} />
 		{/each}
 	</article>
