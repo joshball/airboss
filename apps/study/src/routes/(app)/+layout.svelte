@@ -10,6 +10,10 @@ const memoryActive = $derived(page.url.pathname.startsWith(ROUTES.MEMORY));
 const repsActive = $derived(page.url.pathname.startsWith(ROUTES.REPS));
 const knowledgeActive = $derived(page.url.pathname.startsWith(ROUTES.KNOWLEDGE));
 const calibrationActive = $derived(page.url.pathname.startsWith(ROUTES.CALIBRATION));
+
+// Dashboard renders as a full-bleed TUI grid; every other surface keeps the
+// centered reading-column layout.
+const fullBleed = $derived(dashboardActive);
 </script>
 
 <a class="skip" href="#main">Skip to main content</a>
@@ -22,7 +26,7 @@ const calibrationActive = $derived(page.url.pathname.startsWith(ROUTES.CALIBRATI
 	<a href={ROUTES.CALIBRATION} aria-current={calibrationActive ? 'page' : undefined}>Calibration</a>
 </nav>
 
-<main id="main" tabindex="-1">
+<main id="main" tabindex="-1" class:full-bleed={fullBleed}>
 	{@render children()}
 </main>
 
@@ -72,6 +76,12 @@ const calibrationActive = $derived(page.url.pathname.startsWith(ROUTES.CALIBRATI
 		padding: 1.5rem;
 		max-width: 48rem;
 		margin: 0 auto;
+	}
+
+	main.full-bleed {
+		padding: 0.75rem;
+		max-width: none;
+		margin: 0;
 	}
 
 	main:focus {
