@@ -61,6 +61,23 @@ function gapLabel(bucket: CalibrationBucket): string {
 	return `Underconfident by ${pct(g)}%`;
 }
 
+/**
+ * Non-color glyph for the bucket gap state. Paired with {gapLabel} so that
+ * the signal survives high-contrast / forced-colors modes and monochrome
+ * printing where the color-coded background tint collapses.
+ *   - well-calibrated: check mark
+ *   - overconfident: up arrow (expected <= actual, needs downward adjustment)
+ *   - underconfident: down arrow (expected >= actual, needs upward adjustment)
+ *   - unknown: em-dash-equivalent
+ */
+function gapIcon(bucket: CalibrationBucket): string {
+	if (bucket.needsMoreData) return '·';
+	const g = bucket.gap;
+	if (Math.abs(g) < 0.05) return '✓'; // check mark
+	if (g < 0) return '↑'; // up arrow = overconfident
+	return '↓'; // down arrow = underconfident
+}
+
 function gapClass(bucket: CalibrationBucket): string {
 	if (bucket.needsMoreData) return 'gap-unknown';
 	if (Math.abs(bucket.gap) < 0.05) return 'gap-good';
@@ -302,7 +319,10 @@ const interpretation = $derived(
 							</div>
 						</div>
 						<div class="bucket-footer">
-							<div class="bucket-gap">{gapLabel(bucket)}</div>
+							<div class="bucket-gap">
+								<span class="bucket-gap-icon" aria-hidden="true">{gapIcon(bucket)}</span>
+								<span>{gapLabel(bucket)}</span>
+							</div>
 							{#if hasActionableGap}
 								<a class="bucket-cta" href={practiceHrefForBucket(bucket)}>
 									Strengthen at this level
@@ -340,6 +360,7 @@ const interpretation = $derived(
 										--
 									{:else}
 										<span class="gap-pill {d.largestGap.gap < 0 ? 'gap-over' : 'gap-under'}">
+											<span class="gap-pill-icon" aria-hidden="true">{d.largestGap.gap < 0 ? '↑' : '↓'}</span>
 											{confidenceLabel(d.largestGap.level)} {signedPct(d.largestGap.gap)}
 										</span>
 									{/if}
@@ -698,6 +719,21 @@ const interpretation = $derived(
 		font-size: var(--ab-font-size-sm);
 		font-weight: 600;
 		color: var(--ab-color-fg-strong);
+		display: inline-flex;
+		align-items: baseline;
+		gap: 0.35rem;
+	}
+
+	.bucket-gap-icon {
+		/*
+		 * Non-color glyph (✓ / ↑ / ↓ / ·) that pairs with the text label.
+		 * Ensures bucket state is still legible in high-contrast / forced-colors
+		 * modes and monochrome prints where the background tint collapses.
+		 * aria-hidden because the label text carries the signal for AT.
+		 */
+		font-size: 1rem;
+		line-height: 1;
+		font-weight: 700;
 	}
 
 	.bucket-cta {
@@ -784,11 +820,17 @@ const interpretation = $derived(
 	.gap-pill {
 		display: inline-flex;
 		align-items: center;
+		gap: 0.25rem;
 		padding: 0.0625rem 0.5rem;
 		border-radius: var(--ab-radius-pill);
 		font-size: var(--ab-font-size-xs);
 		font-weight: 600;
 		border: 1px solid transparent;
+	}
+
+	.gap-pill-icon {
+		/* Non-color glyph paired with the pill color so forced-colors keeps the signal. */
+		font-weight: 700;
 	}
 
 	.gap-pill.gap-over {

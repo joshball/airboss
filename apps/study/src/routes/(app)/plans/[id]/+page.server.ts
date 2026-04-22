@@ -6,6 +6,7 @@ import {
 	archivePlan,
 	DomainOverlapError,
 	getPlan,
+	KnowledgeNodeNotFoundError,
 	PlanNotFoundError,
 	removeSkipDomain,
 	removeSkipNode,
@@ -165,6 +166,7 @@ export const actions: Actions = {
 			await addSkipNode(event.params.id, user.id, nodeId);
 		} catch (err) {
 			if (err instanceof PlanNotFoundError) throw error(404, { message: 'Plan not found' });
+			if (err instanceof KnowledgeNodeNotFoundError) return fail(400, { error: 'Unknown knowledge node' });
 			throw err;
 		}
 		return { success: true as const };

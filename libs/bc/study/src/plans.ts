@@ -24,6 +24,7 @@ import { db as defaultDb } from '@ab/db';
 import { generateStudyPlanId } from '@ab/utils';
 import { and, desc, eq } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
+import { getNodesByIds, KnowledgeNodeNotFoundError } from './knowledge';
 import { createPlanSchema, updatePlanSchema } from './plans.validation';
 import { type StudyPlanRow, studyPlan } from './schema';
 
@@ -272,6 +273,13 @@ export async function addSkipNode(
 	nodeId: string,
 	db: Db = defaultDb,
 ): Promise<StudyPlanRow> {
+	// Validate nodeId against the knowledge graph so callers can't poison
+	// plan.skip_nodes with arbitrary strings. Own-account-only data-integrity
+	// bug today; guarding at the BC level keeps the form-action layer thin.
+	// Validation runs BEFORE the transaction so we don't hold a transaction
+	// open while reading knowledge_node (separate schema, different write path).
+	const resolved = await getNodesByIds([nodeId], db);
+	if (resolved.length === 0) throw new KnowledgeNodeNotFoundError(nodeId);
 	return await db.transaction(async (tx) => {
 		const existing = await getPlan(planId, userId, tx);
 		if (!existing) throw new PlanNotFoundError(planId, userId);

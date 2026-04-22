@@ -37,7 +37,13 @@ function authCookieOptions(isDev: boolean, host: string | null | undefined, maxA
 		path: '/',
 		...(domain ? { domain } : {}),
 		httpOnly: true,
-		sameSite: 'lax' as const,
+		// sameSite=strict: there are no cross-origin entry points (no OAuth,
+		// no magic-link email sign-in, no public content). All mutation is
+		// POST form actions, and SameSite never relaxes POST. Tightening from
+		// `lax` closes the residual gap where a future `+server.ts` GET handler
+		// could be triggered by a cross-origin top-level navigation.
+		// If magic-link or OAuth lands later, downgrade to `lax` at that point.
+		sameSite: 'strict' as const,
 		secure: !isDev,
 		maxAge: maxAgeSeconds ?? SESSION_MAX_AGE_SECONDS,
 	};
@@ -127,7 +133,16 @@ function replaceCookieDomain(cookie: string, domain: string | undefined): string
 	const parts = cookie
 		.split(';')
 		.map((p) => p.trim())
-		.filter((p) => p.length > 0 && !/^domain\s*=/i.test(p));
+		.filter(
+			(p) =>
+				p.length > 0 &&
+				!/^domain\s*=/i.test(p) &&
+				// Strip any SameSite= better-auth emits so we can normalize to strict below.
+				!/^samesite\s*=/i.test(p),
+		);
 	if (domain) parts.push(`Domain=${domain}`);
+	// Match the SameSite policy used by authCookieOptions so first-party cookies
+	// emitted by better-auth directly (not via forwardAuthCookies) stay consistent.
+	parts.push('SameSite=Strict');
 	return parts.join('; ');
 }

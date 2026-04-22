@@ -57,11 +57,9 @@ export const actions: Actions = {
 			forwardAuthCookies(authResponse, cookies, url.host);
 		} catch (err) {
 			// Never leak internal error text to the client -- log server-side instead.
-			log.error(
-				'login handler threw',
-				{ requestId: locals.requestId, metadata: { email } },
-				err instanceof Error ? err : undefined,
-			);
+			// Redact the raw email: logs are a potential identity-enumeration signal
+			// if an attacker can trigger 5xx paths. requestId is enough to correlate.
+			log.error('login handler threw', { requestId: locals.requestId }, err instanceof Error ? err : undefined);
 			return fail(500, { error: 'Sign-in failed, please try again', email });
 		}
 

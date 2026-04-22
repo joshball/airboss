@@ -707,8 +707,8 @@ async function main(): Promise<void> {
 
 async function writeToDb(nodes: readonly ParsedNode[]): Promise<void> {
 	const [{ client, db }, { knowledgeNode, knowledgeEdge }, { sql, inArray }] = await Promise.all([
-		import('../libs/db/src/index'),
-		import('../libs/bc/study/src/schema'),
+		import('@ab/db'),
+		import('@ab/bc-study/schema'),
 		import('drizzle-orm'),
 	]);
 

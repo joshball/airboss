@@ -353,20 +353,34 @@ const trimBias = $derived(inputs.trim);
 		</aside>
 	</div>
 
-	<section class="status">
-		<div>
-			<strong>Status:</strong>
-			{#if outcome}
-				<span class={outcomeIsSuccess ? 'ok' : 'fail'}>
+	<section
+		class="status status-{outcome ? (outcomeIsSuccess ? 'success' : 'failure') : !ready ? 'connecting' : running ? 'flying' : 'paused'}"
+		role="status"
+		aria-live="polite"
+	>
+		<div class="status-body">
+			<span class="status-badge" aria-hidden="true">
+				{#if outcome}
+					{outcomeIsSuccess ? '✓' : '✗'}
+				{:else if !ready}
+					…
+				{:else if running}
+					▶
+				{:else}
+					⏸
+				{/if}
+			</span>
+			<span class="status-label">
+				{#if outcome}
 					{outcomeIsSuccess ? 'SUCCESS' : 'FAILURE'} -- {outcome.reason}
-				</span>
-			{:else if !ready}
-				Connecting to FDM...
-			{:else if running}
-				Flying
-			{:else}
-				Paused -- press Space to fly
-			{/if}
+				{:else if !ready}
+					Connecting to FDM...
+				{:else if running}
+					Flying
+				{:else}
+					Paused -- press Space to fly
+				{/if}
+			</span>
 		</div>
 		{#if outcome}
 			<button type="button" class="reset-button" onclick={performReset}>Reset (Shift+R)</button>
@@ -534,17 +548,76 @@ const trimBias = $derived(inputs.trim);
 		background: var(--ab-color-surface, #f6f6f6);
 		border-radius: 6px;
 		border: 1px solid var(--ab-color-border, #ddd);
+		border-left-width: 4px;
 		font-size: 0.9rem;
+		transition: background 120ms ease, border-color 120ms ease;
 	}
 
-	.status .ok {
-		color: #2fb856;
-		font-weight: bold;
+	.status-body {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.55rem;
 	}
 
-	.status .fail {
-		color: #e0443e;
+	.status-badge {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-width: 1.5rem;
+		height: 1.5rem;
+		padding: 0 0.4rem;
+		border-radius: 999px;
+		font-size: 0.9rem;
 		font-weight: bold;
+		background: #fff;
+		border: 1px solid currentColor;
+	}
+
+	.status-label {
+		font-weight: 600;
+	}
+
+	/*
+	 * Visual lanes -- each lifecycle state gets a distinct border-left color,
+	 * background tint, and badge glyph so Connecting / Flying / Paused /
+	 * SUCCESS / FAILURE read as separate states without relying on color alone.
+	 * Hex used deliberately here; see apps/sim/README.md for the Phase 0
+	 * accepted-residual rationale.
+	 */
+	.status-connecting {
+		border-left-color: #6b7280;
+		background: #f1f5f9;
+		color: #334155;
+	}
+
+	.status-flying {
+		border-left-color: #2563eb;
+		background: #eff6ff;
+		color: #1e40af;
+	}
+
+	.status-paused {
+		border-left-color: #d97706;
+		background: #fffbeb;
+		color: #92400e;
+	}
+
+	.status-success {
+		border-left-color: #059669;
+		background: #ecfdf5;
+		color: #065f46;
+	}
+
+	.status-failure {
+		border-left-color: #dc2626;
+		background: #fef2f2;
+		color: #991b1b;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.status {
+			transition: none;
+		}
 	}
 
 	.reset-button {
