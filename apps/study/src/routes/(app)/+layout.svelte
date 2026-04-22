@@ -8,6 +8,7 @@ let { children }: { children: Snippet } = $props();
 const dashboardActive = $derived(page.url.pathname === ROUTES.DASHBOARD);
 const memoryActive = $derived(page.url.pathname.startsWith(ROUTES.MEMORY));
 const repsActive = $derived(page.url.pathname.startsWith(ROUTES.REPS));
+const knowledgeActive = $derived(page.url.pathname.startsWith(ROUTES.KNOWLEDGE));
 const calibrationActive = $derived(page.url.pathname.startsWith(ROUTES.CALIBRATION));
 </script>
 
@@ -17,6 +18,7 @@ const calibrationActive = $derived(page.url.pathname.startsWith(ROUTES.CALIBRATI
 	<a href={ROUTES.DASHBOARD} aria-current={dashboardActive ? 'page' : undefined}>Dashboard</a>
 	<a href={ROUTES.MEMORY} aria-current={memoryActive ? 'page' : undefined}>Memory</a>
 	<a href={ROUTES.REPS} aria-current={repsActive ? 'page' : undefined}>Reps</a>
+	<a href={ROUTES.KNOWLEDGE} aria-current={knowledgeActive ? 'page' : undefined}>Knowledge</a>
 	<a href={ROUTES.CALIBRATION} aria-current={calibrationActive ? 'page' : undefined}>Calibration</a>
 </nav>
 
