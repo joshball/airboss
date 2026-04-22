@@ -1,3 +1,4 @@
+import type { SimScenarioId } from './sim';
 import type { KnowledgePhase } from './study';
 
 /** Query-string parameter names used across study routes. */
@@ -112,4 +113,9 @@ export const ROUTES = {
 	SESSION_AT: (id: string, itemIndex: number) =>
 		`/sessions/${encodeURIComponent(id)}?${QUERY_PARAMS.ITEM}=${itemIndex}` as const,
 	SESSION_SUMMARY: (id: string) => `/sessions/${id}/summary` as const,
+
+	// Sim (apps/sim) -- flight dynamics prototype. Sim is served from its own
+	// host (sim.airboss.test), so these paths are relative to that origin.
+	SIM_HOME: '/',
+	SIM_SCENARIO: (id: SimScenarioId) => `/${id}` as const,
 } as const;
