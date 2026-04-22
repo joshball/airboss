@@ -1,5 +1,5 @@
 import { requireAuth } from '@ab/auth';
-import { getScenario, getScenarios } from '@ab/bc-study';
+import { getScenario, getScenarios, scenario } from '@ab/bc-study';
 import {
 	BROWSE_PAGE_SIZE,
 	CONTENT_SOURCE_VALUES,
@@ -15,7 +15,9 @@ import {
 	SCENARIO_STATUSES,
 	type ScenarioStatus,
 } from '@ab/constants';
+import { db } from '@ab/db';
 import { createLogger } from '@ab/utils';
+import { and, eq, inArray, type SQL, sql } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
 
 const log = createLogger('study:reps-browse');
@@ -76,6 +78,20 @@ export const load: PageServerLoad = async (event) => {
 	const hasMore = scenarios.length > BROWSE_PAGE_SIZE;
 	const visible = hasMore ? scenarios.slice(0, BROWSE_PAGE_SIZE) : scenarios;
 
+	// Total count for pagination "Page X of Y" / "Showing N-M of T". Mirrors
+	// the filter shape of `getScenarios` so the count matches what's listed.
+	// Inline rather than promoted to BC -- single consumer at the moment.
+	const countClauses: SQL[] = [eq(scenario.userId, user.id), inArray(scenario.status, [status])];
+	if (domain) countClauses.push(eq(scenario.domain, domain));
+	if (difficulty) countClauses.push(eq(scenario.difficulty, difficulty));
+	if (phaseOfFlight) countClauses.push(eq(scenario.phaseOfFlight, phaseOfFlight));
+	if (sourceType) countClauses.push(eq(scenario.sourceType, sourceType));
+	const [{ total }] = await db
+		.select({ total: sql<number>`count(*)::int` })
+		.from(scenario)
+		.where(and(...countClauses));
+	const totalPages = Math.max(1, Math.ceil(total / BROWSE_PAGE_SIZE));
+
 	// If the user was redirected here from /reps/new, surface the created
 	// scenario's title for a confirmation banner. Only the title leaks to the
 	// client -- the full scenario (with `options` + `teachingPoint`) stays
@@ -104,6 +120,8 @@ export const load: PageServerLoad = async (event) => {
 		page: pageNum,
 		hasMore,
 		pageSize: BROWSE_PAGE_SIZE,
+		total,
+		totalPages,
 		createdScenario,
 	};
 };
