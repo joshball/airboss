@@ -288,30 +288,37 @@ function printCommandHelp(name: string): void {
 	console.log('');
 }
 
+interface CommandGroup {
+	label: string;
+	commands: readonly string[];
+}
+
+// Ordered so day-to-day dev flow reads top-down: inspect what's there,
+// start/stop the container, sync the schema, seed/reset the data, then
+// the meta help. Commands within a group are ordered by frequency of use.
+const COMMAND_GROUPS: readonly CommandGroup[] = [
+	{ label: 'Inspection', commands: ['status', 'psql', 'studio'] },
+	{ label: 'Container lifecycle', commands: ['up', 'down'] },
+	{ label: 'Schema', commands: ['push', 'generate', 'migrate'] },
+	{ label: 'Data + content', commands: ['seed', 'reset', 'reset-study'] },
+	{ label: 'Utility', commands: ['help'] },
+];
+
 function printIndex(): void {
 	console.log('Usage: bun run db <command> [flags]');
 	console.log('       bun run db <command> --help   # detailed help for one command');
 	console.log('');
 	console.log('Commands:');
-	const order = [
-		'status',
-		'up',
-		'down',
-		'push',
-		'generate',
-		'migrate',
-		'studio',
-		'seed',
-		'reset',
-		'reset-study',
-		'psql',
-		'help',
-	];
-	const width = order.reduce((m, n) => Math.max(m, n.length), 0);
-	for (const name of order) {
-		const entry = COMMAND_HELP[name];
-		if (!entry) continue;
-		console.log(`  ${name.padEnd(width)}  ${entry.summary}`);
+	const allNames = COMMAND_GROUPS.flatMap((g) => g.commands);
+	const width = allNames.reduce((m, n) => Math.max(m, n.length), 0);
+	for (const group of COMMAND_GROUPS) {
+		console.log('');
+		console.log(`  ${group.label}`);
+		for (const name of group.commands) {
+			const entry = COMMAND_HELP[name];
+			if (!entry) continue;
+			console.log(`    ${name.padEnd(width)}  ${entry.summary}`);
+		}
 	}
 	console.log('');
 	console.log('Flags:');

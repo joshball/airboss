@@ -13,7 +13,14 @@
 import { $ } from 'bun';
 import { readdirSync, statSync } from 'node:fs';
 import { basename, join, resolve } from 'node:path';
-import { DEV_DB_URL, ENV_VARS } from '../libs/constants/src/index';
+import { DEV_DB_URL, ENV_VARS, HOSTS, PORTS } from '../libs/constants/src/index';
+
+// Map app name -> dev URL. Keep in step with apps/* and the HOSTS/PORTS
+// constants. Dev serves HTTPS via the SvelteKit/vite TLS setup; the
+// /etc/hosts entry for study.airboss.test is added by `bun run setup`.
+const DEV_URLS: Record<string, string> = {
+	study: `https://${HOSTS.STUDY}:${PORTS.STUDY}`,
+};
 
 const REPO_ROOT = resolve(import.meta.dir, '..');
 const KNOWLEDGE_ROOT = join(REPO_ROOT, 'course', 'knowledge');
@@ -116,4 +123,10 @@ const app = process.argv[2] ?? 'study';
 await maybeBuildKnowledge();
 
 console.log(`Starting ${app} dev server...`);
+const url = DEV_URLS[app];
+if (url) {
+	console.log(`  ${url}`);
+} else {
+	console.log(`  (no dev URL mapping for '${app}' in scripts/dev.ts DEV_URLS)`);
+}
 await $`cd apps/${app} && bun run dev`;
