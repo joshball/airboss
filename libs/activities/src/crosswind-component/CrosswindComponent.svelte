@@ -13,8 +13,11 @@ interface Props {
 const { runwayHeading = 10, initialWindDirection = 30, initialWindSpeed = 15, maxDemoCrosswind }: Props = $props();
 
 // === Local state ===
+// svelte-ignore state_referenced_locally -- initial-value only; parent cannot re-seed
 let windDirection: number = $state(initialWindDirection);
+// svelte-ignore state_referenced_locally -- initial-value only; parent cannot re-seed
 let windSpeed: number = $state(initialWindSpeed);
+// svelte-ignore state_referenced_locally -- initial-value only; parent cannot re-seed
 let showMaxDemoThreshold: boolean = $state(maxDemoCrosswind !== undefined);
 let isDraggingWind: boolean = $state(false);
 
@@ -229,6 +232,8 @@ function tickEnd(angleDeg: number): { x: number; y: number } {
 
 <div class="activity">
 	<div class="stage">
+		<!-- svelte-ignore a11y_no_noninteractive_tabindex -- compass is an interactive widget via role="application" -->
+		<!-- svelte-ignore a11y_no_noninteractive_element_interactions -- same: role=application makes pointer/key handlers valid -->
 		<svg
 			viewBox="0 0 {SIZE} {SIZE}"
 			class="compass"

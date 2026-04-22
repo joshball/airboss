@@ -31,7 +31,10 @@ const seededCardType = $derived(values.cardType ?? data.seed.cardType ?? CARD_TY
 const seededTags = $derived(values.tags?.join?.(', ') ?? data.seed.tags ?? '');
 
 // After a redirect back from a successful save, put focus on Front so the
-// user can keep typing.
+// user can keep typing. The `void createdId` read is intentional: it
+// registers `createdId` as a dependency so the effect re-fires after each
+// "Save and add another" round-trip (a new query param rewrites
+// `createdId`). Null on first mount is fine -- focus applies anyway.
 $effect(() => {
 	void createdId;
 	void tick().then(() => frontInput?.focus());

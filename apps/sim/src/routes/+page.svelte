@@ -1,8 +1,9 @@
 <script lang="ts">
-import { listScenarios } from '@ab/bc-sim';
 import { ROUTES } from '@ab/constants';
+import type { PageData } from './$types';
 
-const scenarios = listScenarios();
+let { data }: { data: PageData } = $props();
+const scenarios = $derived(data.scenarios);
 </script>
 
 <svelte:head>
