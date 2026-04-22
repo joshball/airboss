@@ -7,6 +7,14 @@
 		<title>airboss study</title>
 		%sveltekit.head%
 		<style>
+			/*
+			 * Base document styles. All colors / fonts / sizes resolve from
+			 * the token layer defined at `:root` in `@ab/themes/tokens.css`.
+			 * `:root` carries the `web` theme defaults so the body paints
+			 * correctly before SvelteKit hydrates the `ThemeProvider`; the
+			 * `[data-theme='tui']` subtree inside `<div id="app">` still
+			 * overrides tokens for its descendants.
+			 */
 			html {
 				-webkit-font-smoothing: antialiased;
 				-moz-osx-font-smoothing: grayscale;
@@ -15,20 +23,20 @@
 
 			body {
 				margin: 0;
-				font-family: system-ui, -apple-system, sans-serif;
-				font-size: 1rem;
-				line-height: 1.5;
+				font-family: var(--ab-font-family-base);
+				font-size: var(--ab-font-size-base);
+				line-height: var(--ab-line-height-normal);
 				min-height: 100vh;
-				background: #f8f9fa;
-				color: #1a1a2e;
+				background: var(--ab-color-bg);
+				color: var(--ab-color-fg);
 			}
 
 			h1, h2, h3, h4 {
-				line-height: 1.2;
+				line-height: var(--ab-line-height-tight);
 			}
 
 			:focus-visible {
-				outline: 2px solid #3b82f6;
+				outline: 2px solid var(--ab-color-primary);
 				outline-offset: 2px;
 			}
 		</style>
