@@ -2,9 +2,10 @@
 import PanelShell from './PanelShell.svelte';
 
 /**
- * Cert-progress placeholder. Swaps to real cert bars once the Knowledge
- * Graph work package's `getCertProgress(userId)` is available and the Study
- * Plan work package supplies the cert filter.
+ * Cert-progress placeholder. The Knowledge Graph BC does not yet export
+ * getCertProgress(userId); once it does, this panel renders one progress
+ * bar per cert on the active plan with "N of M nodes mastered" readouts.
+ * Tracked as a follow-up BC task in the activation PR.
  */
 </script>
 
@@ -14,9 +15,9 @@ import PanelShell from './PanelShell.svelte';
 	variant="gated"
 >
 	<p class="placeholder">
-		Unlocks when the <strong>knowledge graph</strong> lands. The dashboard will
-		then render one progress bar per cert on your study plan, sourced from
-		<code>getCertProgress(userId)</code>.
+		Requires <code>getCertProgress(userId)</code> in the knowledge BC (not yet
+		implemented). When the function lands, each cert on the active plan gets
+		one bar: nodes mastered over nodes tagged for that cert.
 	</p>
 </PanelShell>
 
