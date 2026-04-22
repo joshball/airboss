@@ -1,45 +1,67 @@
 /**
- * Departure Stall -- the Phase 0 seed scenario.
+ * Departure Stall -- pilot gets distracted after rotation.
  *
- * Puts the pilot at ~50 ft AGL, full throttle, in a nose-high climbing
- * attitude typical of a short-field departure. Too much back-pressure =
- * stall near the ground; too little = lose the climb. Success = reach
- * 500 ft AGL without holding a stall longer than a second.
+ * Teaches the learner to notice a creeping pitch-up trim and counter it
+ * with forward pressure before the wing gives up. Through 200 ft AGL a
+ * slow nose-up trim bias creeps in (simulating an out-of-trim takeoff or
+ * the pilot's hand on the yoke drifting upward); the learner must hold
+ * forward elevator and retrim to keep airspeed in the safe band all the
+ * way to 1500 ft AGL.
  */
 
-import { SIM_AIRCRAFT_IDS, SIM_METERS_PER_FOOT, SIM_SCENARIO_IDS } from '@ab/constants';
+import { SIM_AIRCRAFT_IDS, SIM_FLAP_NOTCHES, SIM_METERS_PER_FOOT, SIM_SCENARIO_IDS } from '@ab/constants';
 import type { ScenarioDefinition } from '../types';
 
 const FIELD_ELEVATION_FT = 1000;
-const START_AGL_FT = 50;
-const SUCCESS_AGL_FT = 500;
-
+const SUCCESS_AGL_FT = 1500;
+const RUNWAY_HEADING_DEG = 90;
 const DEG_TO_RAD = Math.PI / 180;
 
 export const DEPARTURE_STALL_SCENARIO: ScenarioDefinition = {
 	id: SIM_SCENARIO_IDS.DEPARTURE_STALL,
 	title: 'Departure Stall',
-	objective: 'Maintain flying airspeed. Do not stall.',
+	tagline: 'Trim drifts on the climbout. Catch it before airspeed decays.',
+	objective: 'Full-throttle takeoff. Climb out. Do not let airspeed decay into a stall.',
 	briefing:
-		'Short-field takeoff from a 1000 ft MSL runway. You just lifted off at Vr with full throttle and a nose-high attitude. Climb to 500 ft AGL without stalling -- keep the elevator honest.',
+		'Runway 09 at a 1000 ft field, light quartering wind. Release the brake, push the throttle to the firewall, and climb to 1500 ft AGL. Through 200 ft the airplane will want to pitch up on you -- stay ahead of it with forward pressure, and retrim as needed. Airspeed below 55 KIAS with the nose high near the ground is a stall you will not recover from.',
+	recommendedOrder: 3,
+	recommendationLabel: 'After First Flight',
 	aircraft: SIM_AIRCRAFT_IDS.C172,
+	runwayHeadingDegrees: RUNWAY_HEADING_DEG,
 	initial: {
-		altitude: (FIELD_ELEVATION_FT + START_AGL_FT) * SIM_METERS_PER_FOOT,
+		altitude: FIELD_ELEVATION_FT * SIM_METERS_PER_FOOT,
 		groundElevation: FIELD_ELEVATION_FT * SIM_METERS_PER_FOOT,
-		// ~55 KIAS horizontal, small positive vertical component -- climbing
-		// out of rotation.
-		u: 28,
-		w: 2.5,
-		pitch: 10 * DEG_TO_RAD,
+		u: 0,
+		w: 0,
+		pitch: 0,
 		pitchRate: 0,
-		throttle: 1.0,
-		elevator: 0.0,
-		onGround: false,
+		roll: 0,
+		rollRate: 0,
+		yawRate: 0,
+		heading: RUNWAY_HEADING_DEG * DEG_TO_RAD,
+		throttle: 0.0,
+		elevator: 0,
+		trim: 0,
+		aileron: 0,
+		rudder: 0,
+		brake: true,
+		autoCoordinate: true,
+		flaps: SIM_FLAP_NOTCHES[0],
+		onGround: true,
+	},
+	wind: {
+		directionDegrees: 100,
+		speedKnots: 7,
 	},
 	criteria: {
 		successAltitudeAglMeters: SUCCESS_AGL_FT * SIM_METERS_PER_FOOT,
 		failureSustainedStallSeconds: 1.0,
 		failureMinimumAltitudeAglMeters: 0,
-		timeoutSeconds: 60,
+		timeoutSeconds: 240,
+	},
+	scriptedInput: {
+		minAltitudeAglMeters: 200 * SIM_METERS_PER_FOOT,
+		trimBiasRatePerSecond: 0.03,
+		trimBiasMax: 0.6,
 	},
 };

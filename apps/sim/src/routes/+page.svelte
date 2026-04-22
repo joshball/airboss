@@ -13,7 +13,9 @@ const scenarios = $derived(data.scenarios);
 <main>
 	<header>
 		<h1>Flight Dynamics Sim</h1>
-		<p class="subtitle">Phase 0 prototype -- hand-rolled C172 FDM, three instruments, one scenario.</p>
+		<p class="subtitle">
+			Hand-rolled C172 FDM. Feel the controls, practice the stall recovery, learn by flying.
+		</p>
 	</header>
 
 	<section class="scenarios">
@@ -25,8 +27,12 @@ const scenarios = $derived(data.scenarios);
 				{#each scenarios as scenario (scenario.id)}
 					<li>
 						<a href={ROUTES.SIM_SCENARIO(scenario.id)}>
-							<strong>{scenario.title}</strong>
-							<span class="objective">{scenario.objective}</span>
+							<div class="card-head">
+								<strong>{scenario.title}</strong>
+								<span class="label">{scenario.recommendationLabel}</span>
+							</div>
+							<p class="tagline">{scenario.tagline}</p>
+							<p class="objective">{scenario.objective}</p>
 						</a>
 					</li>
 				{/each}
@@ -43,7 +49,7 @@ const scenarios = $derived(data.scenarios);
 
 <style>
 	main {
-		max-width: 640px;
+		max-width: 720px;
 		margin: 0 auto;
 		padding: 2rem 1.5rem;
 	}
@@ -72,12 +78,12 @@ const scenarios = $derived(data.scenarios);
 		padding: 0;
 		margin: 0;
 		display: grid;
-		gap: 0.5rem;
+		gap: 0.75rem;
 	}
 
 	.scenarios li a {
 		display: block;
-		padding: 0.75rem 1rem;
+		padding: 1rem 1.25rem;
 		border: 1px solid var(--ab-color-border, #ccc);
 		border-radius: 6px;
 		text-decoration: none;
@@ -90,14 +96,35 @@ const scenarios = $derived(data.scenarios);
 		border-color: var(--ab-color-primary, #2563eb);
 	}
 
-	.scenarios li a strong {
-		display: block;
+	.card-head {
+		display: flex;
+		justify-content: space-between;
+		align-items: baseline;
+		gap: 1rem;
 		margin-bottom: 0.25rem;
 	}
 
+	.scenarios li a strong {
+		font-size: 1.05rem;
+	}
+
+	.scenarios li a .label {
+		font-size: 0.75rem;
+		color: var(--ab-color-primary, #2563eb);
+		text-transform: uppercase;
+		letter-spacing: 0.04em;
+	}
+
+	.scenarios li a .tagline {
+		margin: 0;
+		color: var(--ab-color-fg, #111);
+		font-size: 0.95rem;
+	}
+
 	.scenarios li a .objective {
+		margin: 0.25rem 0 0;
 		color: var(--ab-color-fg-muted, #666);
-		font-size: 0.9rem;
+		font-size: 0.85rem;
 	}
 
 	.empty {

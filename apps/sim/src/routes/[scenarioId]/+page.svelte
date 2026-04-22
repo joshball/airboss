@@ -1,60 +1,79 @@
 <script lang="ts">
-import type { FdmInputs, FdmTruthState, ScenarioRunResult } from '@ab/bc-sim';
+/**
+ * Cockpit page. Full six-pack + tach, control input panel, V-speeds, WX,
+ * stall horn, scenario banner, keybindings help, reset-confirm overlay.
+ *
+ * Control model: tap-based. Each keypress adjusts a surface by a fixed
+ * increment (5% for primary surfaces, 1% for trim). OS key autorepeat
+ * drives continued nudges; the `event.repeat` flag is still honored so
+ * that the first press registers deterministically.
+ */
+
+import type { FdmInputs, FdmTruthState, ScenarioRunResult, ScenarioStepState } from '@ab/bc-sim';
 import {
 	ROUTES,
 	SIM_FEET_PER_METER,
+	SIM_KEYBINDING_ACTIONS,
 	SIM_KNOTS_PER_METER_PER_SECOND,
 	SIM_SCENARIO_OUTCOMES,
+	SIM_STORAGE_KEYS,
 	SIM_WORKER_MESSAGES,
 } from '@ab/constants';
-import { onDestroy, onMount } from 'svelte';
+import { onDestroy, onMount, untrack } from 'svelte';
 import { browser } from '$app/environment';
+import { resolveKey } from '$lib/control-handler';
 import FdmWorker from '$lib/fdm-worker.ts?worker';
 import Altimeter from '$lib/instruments/Altimeter.svelte';
 import Asi from '$lib/instruments/Asi.svelte';
 import AttitudeIndicator from '$lib/instruments/AttitudeIndicator.svelte';
+import HeadingIndicator from '$lib/instruments/HeadingIndicator.svelte';
+import Tachometer from '$lib/instruments/Tachometer.svelte';
+import TurnCoordinator from '$lib/instruments/TurnCoordinator.svelte';
+import Vsi from '$lib/instruments/Vsi.svelte';
+import ControlInputs from '$lib/panels/ControlInputs.svelte';
+import KeybindingsHelp from '$lib/panels/KeybindingsHelp.svelte';
+import ResetConfirm from '$lib/panels/ResetConfirm.svelte';
+import ScenarioStepBanner from '$lib/panels/ScenarioStepBanner.svelte';
+import VSpeeds from '$lib/panels/VSpeeds.svelte';
+import WxPanel from '$lib/panels/WxPanel.svelte';
+import { StallHorn } from '$lib/stall-horn.svelte';
 import type { MainToWorker, WorkerToMain } from '$lib/worker-protocol';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
 
+function initialInputsFrom(init: PageData['scenario']['initial']): FdmInputs {
+	return {
+		throttle: init.throttle,
+		elevator: init.elevator,
+		trim: init.trim,
+		aileron: init.aileron,
+		rudder: init.rudder,
+		brake: init.brake,
+		autoCoordinate: init.autoCoordinate,
+		flaps: init.flaps,
+	};
+}
+
 let worker = $state<Worker | null>(null);
 let truth = $state<FdmTruthState | null>(null);
-let inputs = $state<FdmInputs>({ throttle: 0, elevator: 0 });
+let inputs = $state<FdmInputs>(untrack(() => initialInputsFrom(data.scenario.initial)));
 let running = $state(false);
 let ready = $state(false);
 let outcome = $state<ScenarioRunResult | null>(null);
+let stepState = $state<ScenarioStepState | null>(null);
+let helpOpen = $state(false);
+let resetConfirmOpen = $state(false);
+let muted = $state(false);
 let bootError = $state<string | null>(null);
 let readyTimer: ReturnType<typeof setTimeout> | null = null;
 const WORKER_READY_TIMEOUT_MS = 5_000;
 
-// Keyboard-control toggle -- Shift + Ctrl are hijacked for throttle, which
-// collides with screen-reader modifier chords (NVDA/JAWS + Shift, VoiceOver
-// + Ctrl). Let users turn it off so AT isn't trapped. WCAG 2.1.4 requires a
-// mechanism to disable character-key shortcuts.
+// WCAG 2.1.4: users on screen readers need to disable character-key
+// shortcuts so Shift/Ctrl (throttle) do not collide with AT modifier chords.
 let keyboardControlEnabled = $state(true);
 
-// Keyboard-latched command state. We translate these into `inputs` and push
-// to the worker at ~30 Hz, so holding a key ramps the input smoothly.
-// Mutated directly by `onKeyDown`/`onKeyUp` (e.g. `keyState.pitchUp = true`)
-// rather than via proxy-assignment idioms used elsewhere in the codebase,
-// because this is a hot path at ~30 Hz and avoiding a 4-field object
-// allocation per keypress matters. Svelte 5 `$state` uses a proxy so deep
-// mutation is reactive; if you refactor this to a plain `let`, input
-// latching will break.
-let keyState = $state({
-	throttleUp: false,
-	throttleDown: false,
-	pitchUp: false,
-	pitchDown: false,
-});
-
-const THROTTLE_RATE_PER_SECOND = 0.6;
-const ELEVATOR_RATE_PER_SECOND = 2.0;
-const ELEVATOR_CENTER_RATE = 1.5;
-
-let inputTimer: ReturnType<typeof setInterval> | null = null;
-let lastInputTick = 0;
+const horn = new StallHorn();
 
 function post(msg: MainToWorker): void {
 	worker?.postMessage(msg);
@@ -65,109 +84,119 @@ function handleWorkerMessage(event: MessageEvent<WorkerToMain>): void {
 	switch (msg.type) {
 		case SIM_WORKER_MESSAGES.READY: {
 			ready = true;
-			bootError = null;
-			if (readyTimer !== null) {
-				clearTimeout(readyTimer);
-				readyTimer = null;
-			}
 			break;
 		}
 		case SIM_WORKER_MESSAGES.SNAPSHOT: {
 			truth = msg.truth;
 			inputs = msg.inputs;
 			running = msg.running;
+			stepState = msg.stepState ?? null;
+			// Drive the stall horn off truth AoA, not airspeed.
+			horn.setActive(msg.truth.stallWarning || msg.truth.stalled);
 			break;
 		}
 		case SIM_WORKER_MESSAGES.OUTCOME: {
 			outcome = msg.result;
 			running = false;
+			horn.setActive(false);
 			break;
 		}
 	}
 }
 
-function clamp(v: number, lo: number, hi: number): number {
-	return v < lo ? lo : v > hi ? hi : v;
+function firstGesture(): void {
+	horn.ensureStarted();
 }
 
-function tickInputs(): void {
-	const now = performance.now();
-	const dt = lastInputTick === 0 ? 0 : (now - lastInputTick) / 1000;
-	lastInputTick = now;
-	if (dt <= 0) return;
-
-	let throttle = inputs.throttle;
-	let elevator = inputs.elevator;
-	let changed = false;
-
-	if (keyState.throttleUp) {
-		throttle = clamp(throttle + THROTTLE_RATE_PER_SECOND * dt, 0, 1);
-		changed = true;
-	}
-	if (keyState.throttleDown) {
-		throttle = clamp(throttle - THROTTLE_RATE_PER_SECOND * dt, 0, 1);
-		changed = true;
-	}
-	if (keyState.pitchUp) {
-		elevator = clamp(elevator + ELEVATOR_RATE_PER_SECOND * dt, -1, 1);
-		changed = true;
-	}
-	if (keyState.pitchDown) {
-		elevator = clamp(elevator - ELEVATOR_RATE_PER_SECOND * dt, -1, 1);
-		changed = true;
-	} else if (!keyState.pitchUp) {
-		// Spring-back toward neutral when no pitch key is held.
-		if (elevator > 0) {
-			elevator = Math.max(0, elevator - ELEVATOR_CENTER_RATE * dt);
-			changed = true;
-		} else if (elevator < 0) {
-			elevator = Math.min(0, elevator + ELEVATOR_CENTER_RATE * dt);
-			changed = true;
+function handleSpecial(special: string): void {
+	horn.ensureStarted();
+	switch (special) {
+		case SIM_KEYBINDING_ACTIONS.BRAKE_TOGGLE: {
+			post({ type: SIM_WORKER_MESSAGES.TOGGLE_BRAKE });
+			break;
+		}
+		case SIM_KEYBINDING_ACTIONS.PAUSE: {
+			if (!ready || outcome) return;
+			if (running) post({ type: SIM_WORKER_MESSAGES.PAUSE });
+			else post({ type: SIM_WORKER_MESSAGES.RESUME });
+			break;
+		}
+		case SIM_KEYBINDING_ACTIONS.RESET: {
+			resetConfirmOpen = true;
+			break;
+		}
+		case SIM_KEYBINDING_ACTIONS.RESET_IMMEDIATE: {
+			performReset();
+			break;
+		}
+		case SIM_KEYBINDING_ACTIONS.HELP_TOGGLE: {
+			helpOpen = !helpOpen;
+			if (!helpOpen && browser) {
+				localStorage.setItem(SIM_STORAGE_KEYS.HELP_DISMISSED, 'true');
+			}
+			break;
+		}
+		case SIM_KEYBINDING_ACTIONS.MUTE_TOGGLE: {
+			muted = !muted;
+			horn.setMuted(muted);
+			if (browser) localStorage.setItem(SIM_STORAGE_KEYS.MUTE, muted ? 'true' : 'false');
+			break;
 		}
 	}
+}
 
-	if (changed) {
-		inputs = { throttle, elevator };
-		post({ type: SIM_WORKER_MESSAGES.INPUT, inputs });
-	}
+function performReset(): void {
+	resetConfirmOpen = false;
+	outcome = null;
+	horn.setActive(false);
+	post({ type: SIM_WORKER_MESSAGES.RESET });
+	post({ type: SIM_WORKER_MESSAGES.START });
+}
+
+function toggleAutoCoordinate(): void {
+	post({ type: SIM_WORKER_MESSAGES.TOGGLE_AUTO_COORDINATE });
 }
 
 function onKeyDown(event: KeyboardEvent): void {
-	if (event.repeat) return;
 	if (!keyboardControlEnabled) return;
-	const key = event.key;
-	if (key === 'w' || key === 'W' || key === 'ArrowUp') {
-		keyState.pitchUp = true;
+	if (resetConfirmOpen) {
+		if (event.key === 'y' || event.key === 'Y') {
+			event.preventDefault();
+			performReset();
+		} else if (event.key === 'Escape') {
+			event.preventDefault();
+			resetConfirmOpen = false;
+		}
+		return;
+	}
+	if (helpOpen && event.key === 'Escape') {
 		event.preventDefault();
-	} else if (key === 's' || key === 'S' || key === 'ArrowDown') {
-		keyState.pitchDown = true;
-		event.preventDefault();
-	} else if (key === 'Shift') {
-		keyState.throttleUp = true;
-		event.preventDefault();
-	} else if (key === 'Control') {
-		keyState.throttleDown = true;
-		event.preventDefault();
-	} else if (key === ' ') {
-		event.preventDefault();
-		if (!ready || outcome) return;
-		if (running) post({ type: SIM_WORKER_MESSAGES.PAUSE });
-		else post({ type: SIM_WORKER_MESSAGES.RESUME });
-	} else if (key === 'r' || key === 'R') {
-		event.preventDefault();
-		outcome = null;
-		post({ type: SIM_WORKER_MESSAGES.RESET });
-		post({ type: SIM_WORKER_MESSAGES.START });
+		helpOpen = false;
+		if (browser) localStorage.setItem(SIM_STORAGE_KEYS.HELP_DISMISSED, 'true');
+		return;
+	}
+
+	const resolution = resolveKey(event, inputs);
+	if (!resolution) return;
+	event.preventDefault();
+	firstGesture();
+
+	if (resolution.patch) {
+		const next = { ...inputs, ...resolution.patch };
+		inputs = next;
+		post({ type: SIM_WORKER_MESSAGES.INPUT, inputs: resolution.patch });
+	}
+	if (resolution.toggleAutoCoordinate) {
+		toggleAutoCoordinate();
+	}
+	if (resolution.special) {
+		handleSpecial(resolution.special);
 	}
 }
 
-function onKeyUp(event: KeyboardEvent): void {
-	if (!keyboardControlEnabled) return;
-	const key = event.key;
-	if (key === 'w' || key === 'W' || key === 'ArrowUp') keyState.pitchUp = false;
-	else if (key === 's' || key === 'S' || key === 'ArrowDown') keyState.pitchDown = false;
-	else if (key === 'Shift') keyState.throttleUp = false;
-	else if (key === 'Control') keyState.throttleDown = false;
+function onAutoCoordClick(): void {
+	firstGesture();
+	toggleAutoCoordinate();
 }
 
 function startWorker(): void {
@@ -200,17 +229,25 @@ onMount(() => {
 	startWorker();
 
 	window.addEventListener('keydown', onKeyDown);
-	window.addEventListener('keyup', onKeyUp);
+	window.addEventListener('pointerdown', firstGesture);
 
-	inputTimer = setInterval(tickInputs, 33);
+	// Mute state
+	muted = localStorage.getItem(SIM_STORAGE_KEYS.MUTE) === 'true';
+	horn.setMuted(muted);
+
+	// First-visit help overlay
+	const dismissed = localStorage.getItem(SIM_STORAGE_KEYS.HELP_DISMISSED) === 'true';
+	if (!dismissed) {
+		helpOpen = true;
+	}
 });
 
 onDestroy(() => {
 	if (!browser) return;
 	window.removeEventListener('keydown', onKeyDown);
-	window.removeEventListener('keyup', onKeyUp);
-	if (inputTimer) clearInterval(inputTimer);
+	window.removeEventListener('pointerdown', firstGesture);
 	if (readyTimer !== null) clearTimeout(readyTimer);
+	horn.destroy();
 	worker?.terminate();
 	worker = null;
 });
@@ -219,10 +256,18 @@ const kias = $derived(truth ? truth.indicatedAirspeed * SIM_KNOTS_PER_METER_PER_
 const altitudeFeet = $derived(truth ? truth.altitude * SIM_FEET_PER_METER : 0);
 const altitudeAglFeet = $derived(truth ? (truth.altitude - truth.groundElevation) * SIM_FEET_PER_METER : 0);
 const vsiFpm = $derived(truth ? truth.verticalSpeed * SIM_FEET_PER_METER * 60 : 0);
-const aoaDeg = $derived(truth ? (truth.alpha * 180) / Math.PI : 0);
 const pitchRad = $derived(truth ? truth.pitch : 0);
-const stalled = $derived(truth ? truth.stalled : false);
+const rollRad = $derived(truth ? truth.roll : 0);
+const headingDeg = $derived(truth ? (truth.heading * 180) / Math.PI : 0);
+const yawRateDegPerSec = $derived(truth ? (truth.yawRate * 180) / Math.PI : 0);
+const slipBallValue = $derived(truth?.slipBall ?? 0);
+const rpm = $derived(truth?.engineRpm ?? 0);
+const stallWarning = $derived(truth?.stallWarning ?? false);
+const stalled = $derived(truth?.stalled ?? false);
 const outcomeIsSuccess = $derived(outcome?.outcome === SIM_SCENARIO_OUTCOMES.SUCCESS);
+
+// Trim bias rendered on the control panel.
+const trimBias = $derived(inputs.trim);
 </script>
 
 <svelte:head>
@@ -232,14 +277,30 @@ const outcomeIsSuccess = $derived(outcome?.outcome === SIM_SCENARIO_OUTCOMES.SUC
 <main>
 	<header>
 		<a class="back" href={ROUTES.SIM_HOME}>&larr; Scenarios</a>
-		<h1>{data.scenario.title}</h1>
-		<p class="objective">{data.scenario.objective}</p>
+		<div>
+			<h1>{data.scenario.title}</h1>
+			<p class="objective">{data.scenario.objective}</p>
+		</div>
+		<div class="header-actions">
+			<label class="auto-coord-toggle">
+				<input type="checkbox" checked={inputs.autoCoordinate} onchange={onAutoCoordClick} />
+				Auto-coordinate
+			</label>
+			<button type="button" class="mute-button" onclick={() => handleSpecial(SIM_KEYBINDING_ACTIONS.MUTE_TOGGLE)}>
+				{muted ? 'Muted' : 'Sound on'}
+			</button>
+			<button type="button" class="help-button" onclick={() => { helpOpen = true; }}>? Help</button>
+		</div>
 	</header>
 
-	<section class="briefing">
-		<h2>Briefing</h2>
-		<p>{data.scenario.briefing}</p>
-	</section>
+	{#if stepState}
+		<ScenarioStepBanner {stepState} />
+	{:else}
+		<section class="objective-banner">
+			<strong>Objective:</strong>
+			{data.scenario.objective}
+		</section>
+	{/if}
 
 	{#if bootError}
 		<section class="boot-error" role="alert" aria-live="assertive">
@@ -247,56 +308,50 @@ const outcomeIsSuccess = $derived(outcome?.outcome === SIM_SCENARIO_OUTCOMES.SUC
 			<p>{bootError}</p>
 			<button type="button" class="retry" onclick={retryWorker}>Retry</button>
 		</section>
-	{:else if !ready}
-		<section class="boot-loading" role="status" aria-live="polite">
-			<p class="boot-loading-msg">Initializing flight dynamics...</p>
-		</section>
 	{/if}
 
-	<section class="panel" class:pending={!ready} aria-hidden={!ready && !bootError ? 'true' : undefined}>
-		<Asi {kias} />
-		<AttitudeIndicator pitchRadians={pitchRad} />
-		<Altimeter {altitudeFeet} />
-	</section>
-
-	<section class="readouts">
-		<div class="readout">
-			<span class="label">AGL</span>
-			<span class="value">{altitudeAglFeet.toFixed(0)} ft</span>
-		</div>
-		<div class="readout">
-			<span class="label">VSI</span>
-			<span class="value">{vsiFpm.toFixed(0)} fpm</span>
-		</div>
-		<div class="readout" class:warning={aoaDeg > 14}>
-			<span class="label">AoA</span>
-			<span class="value">{aoaDeg.toFixed(1)}°</span>
-		</div>
-		<div class="readout" class:warning={stalled}>
-			<span class="label">Stall</span>
-			<span class="value">{stalled ? 'STALL' : 'ok'}</span>
-		</div>
-	</section>
-
-	<section class="controls">
-		<div class="control">
-			<span class="label">Throttle</span>
-			<div class="bar"><div class="fill" style:width={`${(inputs.throttle * 100).toFixed(0)}%`}></div></div>
-			<span class="value">{(inputs.throttle * 100).toFixed(0)}%</span>
-		</div>
-		<div class="control">
-			<span class="label">Elevator</span>
-			<div class="bar elevator">
-				<div
-					class="fill elevator"
-					style:width={`${(Math.abs(inputs.elevator) * 50).toFixed(0)}%`}
-					style:left={inputs.elevator < 0 ? `${50 - Math.abs(inputs.elevator) * 50}%` : '50%'}
-				></div>
-				<div class="center-line"></div>
+	<div class="layout">
+		<section class="six-pack">
+			<div class="row">
+				<Asi {kias} />
+				<AttitudeIndicator pitchRadians={pitchRad} rollRadians={rollRad} />
+				<Altimeter {altitudeFeet} />
 			</div>
-			<span class="value">{(inputs.elevator * 100).toFixed(0)}%</span>
-		</div>
-	</section>
+			<div class="row">
+				<TurnCoordinator {yawRateDegPerSec} slipBall={slipBallValue} />
+				<HeadingIndicator {headingDeg} />
+				<Vsi fpm={vsiFpm} />
+			</div>
+			<div class="engine-row">
+				<Tachometer {rpm} />
+				<div class="readouts">
+					<div class="readout">
+						<span class="label">AGL</span>
+						<span class="value">{altitudeAglFeet.toFixed(0)} ft</span>
+					</div>
+					<div class="readout" class:warning={stalled}>
+						<span class="label">Alpha</span>
+						<span class="value">{truth ? ((truth.alpha * 180) / Math.PI).toFixed(1) : '0.0'}°</span>
+					</div>
+					<div class="readout">
+						<span class="label">Time</span>
+						<span class="value">{truth ? truth.t.toFixed(1) : '0.0'}s</span>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<aside class="sidebar">
+			<ControlInputs {inputs} {trimBias} brakeOn={truth?.brakeOn ?? false} {stallWarning} {stalled} />
+			<VSpeeds />
+			<WxPanel wind={data.scenario.wind} aircraftHeadingDeg={headingDeg} />
+			<label class="kb-toggle">
+				<input type="checkbox" bind:checked={keyboardControlEnabled} />
+				<span>Keyboard controls active</span>
+				<small>Uncheck if using a screen reader; Shift/Ctrl collide with AT modifier chords.</small>
+			</label>
+		</aside>
+	</div>
 
 	<section class="status">
 		<div>
@@ -313,53 +368,42 @@ const outcomeIsSuccess = $derived(outcome?.outcome === SIM_SCENARIO_OUTCOMES.SUC
 				Paused -- press Space to fly
 			{/if}
 		</div>
-		{#if truth}
-			<div class="clock">t = {truth.t.toFixed(1)} s</div>
+		{#if outcome}
+			<button type="button" class="reset-button" onclick={performReset}>Reset (Shift+R)</button>
 		{/if}
-	</section>
-
-	<section class="help">
-		<h3>Controls</h3>
-		<p class="help-note">Keyboard required -- desktop only for Phase 0.</p>
-		<dl>
-			<dt>W / &uarr;</dt>
-			<dd>Pitch up (elevator back)</dd>
-			<dt>S / &darr;</dt>
-			<dd>Pitch down (elevator forward)</dd>
-			<dt>Shift</dt>
-			<dd>Throttle up</dd>
-			<dt>Ctrl</dt>
-			<dd>Throttle down</dd>
-			<dt>Space</dt>
-			<dd>Pause / resume</dd>
-			<dt>R</dt>
-			<dd>Reset scenario</dd>
-		</dl>
-		<label class="kb-toggle">
-			<input type="checkbox" bind:checked={keyboardControlEnabled} />
-			Keyboard controls active
-			<span class="kb-toggle-hint">
-				Uncheck when using a screen reader; Shift/Ctrl collide with AT modifier chords.
-			</span>
-		</label>
 	</section>
 </main>
 
+<KeybindingsHelp
+	open={helpOpen}
+	onClose={() => {
+		helpOpen = false;
+		if (browser) localStorage.setItem(SIM_STORAGE_KEYS.HELP_DISMISSED, 'true');
+	}}
+/>
+
+<ResetConfirm open={resetConfirmOpen} onConfirm={performReset} onCancel={() => { resetConfirmOpen = false; }} />
+
 <style>
 	main {
-		max-width: 880px;
+		max-width: 1280px;
 		margin: 0 auto;
-		padding: 1.5rem;
+		padding: 1rem 1.5rem 2rem;
 	}
 
 	header {
-		margin-bottom: 1rem;
+		display: grid;
+		grid-template-columns: auto 1fr auto;
+		gap: 1rem;
+		align-items: center;
+		margin-bottom: 0.75rem;
 	}
 
 	.back {
 		color: var(--ab-color-fg-muted, #666);
 		text-decoration: none;
 		font-size: 0.9rem;
+		white-space: nowrap;
 	}
 
 	.back:hover {
@@ -367,104 +411,86 @@ const outcomeIsSuccess = $derived(outcome?.outcome === SIM_SCENARIO_OUTCOMES.SUC
 	}
 
 	h1 {
-		margin: 0.25rem 0;
-		font-size: 1.5rem;
+		margin: 0 0 0.1rem;
+		font-size: 1.35rem;
 	}
 
 	.objective {
 		margin: 0;
 		color: var(--ab-color-fg-muted, #666);
-	}
-
-	.briefing {
-		margin: 1rem 0 1.5rem;
-		padding: 0.75rem 1rem;
-		background: var(--ab-color-surface, #f6f6f6);
-		border-radius: 6px;
-	}
-
-	.briefing h2 {
-		margin: 0 0 0.25rem 0;
-		font-size: 0.95rem;
-	}
-
-	.briefing p {
-		margin: 0;
 		font-size: 0.9rem;
 	}
 
-	.panel {
+	.header-actions {
 		display: flex;
-		gap: 1rem;
-		justify-content: center;
-		flex-wrap: wrap;
-		margin-bottom: 1rem;
-		transition: opacity var(--ab-transition-normal, 200ms);
+		gap: 0.5rem;
+		align-items: center;
 	}
 
-	.panel.pending {
-		opacity: 0.4;
-	}
-
-	.boot-loading {
-		margin: 1rem 0;
-		padding: 1rem;
-		background: var(--ab-color-surface-sunken, #f6f6f6);
-		border: 1px solid var(--ab-color-border, #ddd);
-		border-radius: 6px;
-		text-align: center;
-		font-size: 0.9rem;
-		color: var(--ab-color-fg-muted, #666);
-	}
-
-	.boot-loading-msg {
-		margin: 0;
-	}
-
-	.boot-error {
-		margin: 1rem 0;
-		padding: 1rem;
-		background: rgba(224, 68, 62, 0.08);
-		border: 1px solid #e0443e;
-		border-radius: 6px;
-	}
-
-	.boot-error h2 {
-		margin: 0 0 0.25rem 0;
-		font-size: 1rem;
-		color: #b91c1c;
-	}
-
-	.boot-error p {
-		margin: 0 0 0.625rem 0;
-		font-size: 0.875rem;
-		color: #7f1d1d;
-	}
-
-	.retry {
-		background: #dc2626;
-		color: white;
-		border: 1px solid transparent;
-		font-weight: 600;
-		padding: 0.375rem 0.75rem;
-		border-radius: 4px;
+	.auto-coord-toggle {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.35rem;
+		font-size: 0.85rem;
+		color: var(--ab-color-fg, #111);
 		cursor: pointer;
 	}
 
-	.retry:hover {
-		background: #b91c1c;
+	.mute-button,
+	.help-button {
+		background: var(--ab-color-surface, #f6f6f6);
+		border: 1px solid var(--ab-color-border, #ccc);
+		border-radius: 4px;
+		padding: 0.3rem 0.65rem;
+		cursor: pointer;
+		font-size: 0.85rem;
 	}
 
-	.retry:focus-visible {
-		outline: none;
-		box-shadow: 0 0 0 3px var(--ab-color-focus-ring, rgba(37, 99, 235, 0.5));
+	.mute-button:hover,
+	.help-button:hover {
+		background: var(--ab-color-border, #eee);
+	}
+
+	.objective-banner {
+		padding: 0.6rem 0.9rem;
+		background: var(--ab-color-surface, #f6f6f6);
+		border: 1px solid var(--ab-color-border, #ddd);
+		border-radius: 6px;
+		font-size: 0.9rem;
+		margin-bottom: 0.75rem;
+	}
+
+	.layout {
+		display: grid;
+		grid-template-columns: minmax(640px, 1fr) 280px;
+		gap: 1rem;
+		margin-bottom: 1rem;
+	}
+
+	.six-pack {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+
+	.row {
+		display: grid;
+		grid-template-columns: repeat(3, 200px);
+		gap: 0.5rem;
+		justify-content: center;
+	}
+
+	.engine-row {
+		display: grid;
+		grid-template-columns: 200px 1fr;
+		gap: 0.5rem;
+		align-items: start;
 	}
 
 	.readouts {
 		display: grid;
-		grid-template-columns: repeat(4, minmax(0, 1fr));
-		gap: 0.5rem;
-		margin-bottom: 1rem;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 0.35rem;
 	}
 
 	.readout {
@@ -483,7 +509,7 @@ const outcomeIsSuccess = $derived(outcome?.outcome === SIM_SCENARIO_OUTCOMES.SUC
 	}
 
 	.readout .label {
-		font-size: 0.75rem;
+		font-size: 0.72rem;
 		color: var(--ab-color-fg-muted, #666);
 		text-transform: uppercase;
 		letter-spacing: 0.04em;
@@ -491,71 +517,23 @@ const outcomeIsSuccess = $derived(outcome?.outcome === SIM_SCENARIO_OUTCOMES.SUC
 
 	.readout .value {
 		font-family: ui-monospace, monospace;
-		font-size: 1.1rem;
+		font-size: 1rem;
 	}
 
-	.controls {
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		gap: 1rem;
-		margin-bottom: 1rem;
-	}
-
-	.control {
-		display: grid;
-		grid-template-columns: 80px 1fr 60px;
+	.sidebar {
+		display: flex;
+		flex-direction: column;
 		gap: 0.5rem;
-		align-items: center;
-	}
-
-	.control .label {
-		font-size: 0.85rem;
-		color: var(--ab-color-fg-muted, #666);
-	}
-
-	.control .value {
-		font-family: ui-monospace, monospace;
-		text-align: right;
-		font-size: 0.9rem;
-	}
-
-	.bar {
-		position: relative;
-		height: 10px;
-		background: var(--ab-color-surface, #eee);
-		border-radius: 4px;
-		overflow: hidden;
-	}
-
-	.bar .fill {
-		position: absolute;
-		top: 0;
-		bottom: 0;
-		left: 0;
-		background: var(--ab-color-primary, #2563eb);
-	}
-
-	.bar.elevator .fill.elevator {
-		background: #ffa62b;
-	}
-
-	.bar.elevator .center-line {
-		position: absolute;
-		top: 0;
-		bottom: 0;
-		left: 50%;
-		width: 2px;
-		background: rgba(0, 0, 0, 0.3);
 	}
 
 	.status {
 		display: flex;
 		justify-content: space-between;
+		align-items: center;
 		padding: 0.6rem 0.8rem;
 		background: var(--ab-color-surface, #f6f6f6);
 		border-radius: 6px;
 		border: 1px solid var(--ab-color-border, #ddd);
-		margin-bottom: 1rem;
 		font-size: 0.9rem;
 	}
 
@@ -569,58 +547,62 @@ const outcomeIsSuccess = $derived(outcome?.outcome === SIM_SCENARIO_OUTCOMES.SUC
 		font-weight: bold;
 	}
 
-	.status .clock {
-		font-family: ui-monospace, monospace;
-		color: var(--ab-color-fg-muted, #666);
-	}
-
-	.help {
-		margin-top: 1.5rem;
+	.reset-button {
+		background: #e0443e;
+		color: #fff;
+		border: none;
+		padding: 0.35rem 0.8rem;
+		border-radius: 4px;
 		font-size: 0.85rem;
-		color: var(--ab-color-fg-muted, #666);
+		cursor: pointer;
 	}
 
-	.help h3 {
-		margin: 0 0 0.4rem 0;
-		font-size: 0.9rem;
+	.reset-button:hover {
+		background: #c23530;
 	}
 
-	.help dl {
-		display: grid;
-		grid-template-columns: 120px 1fr;
-		gap: 0.2rem 0.8rem;
-		margin: 0;
+	@media (max-width: 960px) {
+		.layout {
+			grid-template-columns: 1fr;
+		}
 	}
-
-	.help dt {
-		font-family: ui-monospace, monospace;
+	.boot-error {
+		background: var(--ab-color-danger-surface, #fee);
+		border: 1px solid var(--ab-color-danger, #c00);
+		color: var(--ab-color-danger-strong, #900);
+		border-radius: 0.5rem;
+		padding: 0.75rem 1rem;
+		margin-bottom: 0.75rem;
 	}
-
-	.help dd {
-		margin: 0;
+	.boot-error h2 {
+		margin: 0 0 0.25rem;
+		font-size: 1rem;
 	}
-
-	.help-note {
-		margin: 0 0 0.5rem 0;
-		font-size: 0.8125rem;
-		color: var(--ab-color-fg-muted, #666);
+	.boot-error p {
+		margin: 0 0 0.5rem;
+		font-size: 0.875rem;
 	}
-
+	.boot-error .retry {
+		background: var(--ab-color-danger, #c00);
+		color: white;
+		border: none;
+		border-radius: 0.25rem;
+		padding: 0.25rem 0.75rem;
+		cursor: pointer;
+	}
 	.kb-toggle {
-		margin-top: 0.75rem;
-		display: flex;
-		flex-direction: column;
-		gap: 0.125rem;
+		display: grid;
+		grid-template-columns: auto 1fr;
+		gap: 0.25rem 0.5rem;
+		padding: 0.5rem 0.75rem;
 		font-size: 0.8125rem;
+		border: 1px solid var(--ab-color-border, #ccc);
+		border-radius: 0.375rem;
+		background: var(--ab-color-surface, #fff);
 	}
-
-	.kb-toggle input {
-		margin-right: 0.5rem;
-	}
-
-	.kb-toggle-hint {
-		font-size: 0.75rem;
+	.kb-toggle small {
+		grid-column: 1 / -1;
 		color: var(--ab-color-fg-muted, #666);
-		margin-left: 1.5rem;
+		font-size: 0.75rem;
 	}
 </style>

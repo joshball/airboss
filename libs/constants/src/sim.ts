@@ -7,8 +7,10 @@
  * from BC code, the worker, or the UI lives here.
  */
 
-/** Identifiers for Phase 0 scenarios. Extend as scenarios are added. */
+/** Identifiers for sim scenarios. Extend as scenarios are added. */
 export const SIM_SCENARIO_IDS = {
+	PLAYGROUND: 'playground',
+	FIRST_FLIGHT: 'first-flight',
 	DEPARTURE_STALL: 'departure-stall',
 } as const;
 
@@ -68,9 +70,253 @@ export const SIM_WORKER_MESSAGES = {
 	RESUME: 'resume',
 	RESET: 'reset',
 	INPUT: 'input',
+	TOGGLE_BRAKE: 'toggle-brake',
+	TOGGLE_AUTO_COORDINATE: 'toggle-auto-coordinate',
 	SNAPSHOT: 'snapshot',
 	OUTCOME: 'outcome',
 	READY: 'ready',
 } as const;
 
 export type SimWorkerMessage = (typeof SIM_WORKER_MESSAGES)[keyof typeof SIM_WORKER_MESSAGES];
+
+/**
+ * Control input increments for tap-based flight controls. Each key event
+ * applies one of these deltas; holding a key is OS-level autorepeat.
+ */
+export const SIM_CONTROL_INCREMENTS = {
+	/** Primary control surface tap step (elevator, aileron, rudder, throttle). */
+	PRIMARY: 0.05,
+	/** Trim tap step. */
+	TRIM: 0.01,
+} as const;
+
+/** Flap detent positions (0 = up, last = full). C172 ships 0/10/20/30. */
+export const SIM_FLAP_NOTCHES = [0, 10, 20, 30] as const;
+export type SimFlapDegrees = (typeof SIM_FLAP_NOTCHES)[number];
+
+/** Stall horn tone frequency (Hz) and pulse cadence (Hz). */
+export const SIM_STALL_HORN = {
+	CARRIER_HZ: 400,
+	PULSE_HZ: 5,
+	GAIN: 0.12,
+} as const;
+
+/** Localstorage keys used by the cockpit UI. */
+export const SIM_STORAGE_KEYS = {
+	MUTE: 'airboss.sim.mute',
+	HELP_DISMISSED: 'airboss.sim.helpDismissed',
+} as const;
+
+/**
+ * Keybinding definitions for the cockpit. Single source of truth rendered
+ * in the help overlay and consumed by the keydown handler.
+ */
+export const SIM_KEYBINDING_ACTIONS = {
+	ELEVATOR_UP: 'elevator-up',
+	ELEVATOR_DOWN: 'elevator-down',
+	ELEVATOR_CENTER: 'elevator-center',
+	TRIM_DOWN: 'trim-down',
+	TRIM_UP: 'trim-up',
+	AILERON_LEFT: 'aileron-left',
+	AILERON_RIGHT: 'aileron-right',
+	AILERON_CENTER: 'aileron-center',
+	RUDDER_LEFT: 'rudder-left',
+	RUDDER_RIGHT: 'rudder-right',
+	RUDDER_CENTER: 'rudder-center',
+	THROTTLE_UP: 'throttle-up',
+	THROTTLE_DOWN: 'throttle-down',
+	THROTTLE_IDLE: 'throttle-idle',
+	THROTTLE_FULL: 'throttle-full',
+	BRAKE_TOGGLE: 'brake-toggle',
+	FLAPS_DOWN: 'flaps-down',
+	FLAPS_UP: 'flaps-up',
+	PAUSE: 'pause',
+	RESET: 'reset',
+	RESET_IMMEDIATE: 'reset-immediate',
+	HELP_TOGGLE: 'help-toggle',
+	MUTE_TOGGLE: 'mute-toggle',
+} as const;
+
+export type SimKeybindingAction = (typeof SIM_KEYBINDING_ACTIONS)[keyof typeof SIM_KEYBINDING_ACTIONS];
+
+export interface SimKeybinding {
+	action: SimKeybindingAction;
+	/** KeyboardEvent.key values that fire this action. */
+	keys: readonly string[];
+	/** Modifier flags. undefined = don't care. true = must be held. false = must NOT be held. */
+	shift?: boolean;
+	/** Human-readable key label for the help overlay. */
+	label: string;
+	/** Human-readable description. */
+	description: string;
+	/** Grouping for the help overlay. */
+	group: 'elevator' | 'aileron' | 'rudder' | 'throttle' | 'trim' | 'configuration' | 'system';
+}
+
+export const SIM_KEYBINDINGS: readonly SimKeybinding[] = [
+	{
+		action: SIM_KEYBINDING_ACTIONS.ELEVATOR_UP,
+		keys: ['w', 'W'],
+		shift: false,
+		label: 'W',
+		description: 'Elevator up (nose up) +5%',
+		group: 'elevator',
+	},
+	{
+		action: SIM_KEYBINDING_ACTIONS.ELEVATOR_DOWN,
+		keys: ['s', 'S'],
+		label: 'S',
+		description: 'Elevator down (nose down) -5%',
+		group: 'elevator',
+	},
+	{
+		action: SIM_KEYBINDING_ACTIONS.ELEVATOR_CENTER,
+		keys: ['x', 'X'],
+		label: 'X',
+		description: 'Center elevator',
+		group: 'elevator',
+	},
+	{
+		action: SIM_KEYBINDING_ACTIONS.TRIM_DOWN,
+		keys: ['['],
+		label: '[',
+		description: 'Trim nose-down -1%',
+		group: 'trim',
+	},
+	{
+		action: SIM_KEYBINDING_ACTIONS.TRIM_UP,
+		keys: [']'],
+		label: ']',
+		description: 'Trim nose-up +1%',
+		group: 'trim',
+	},
+	{
+		action: SIM_KEYBINDING_ACTIONS.AILERON_LEFT,
+		keys: ['a', 'A'],
+		label: 'A',
+		description: 'Aileron left -5%',
+		group: 'aileron',
+	},
+	{
+		action: SIM_KEYBINDING_ACTIONS.AILERON_RIGHT,
+		keys: ['d', 'D'],
+		label: 'D',
+		description: 'Aileron right +5%',
+		group: 'aileron',
+	},
+	{
+		action: SIM_KEYBINDING_ACTIONS.AILERON_CENTER,
+		keys: ['c', 'C'],
+		label: 'C',
+		description: 'Center aileron',
+		group: 'aileron',
+	},
+	{
+		action: SIM_KEYBINDING_ACTIONS.RUDDER_LEFT,
+		keys: [','],
+		label: ',',
+		description: 'Rudder left -5%',
+		group: 'rudder',
+	},
+	{
+		action: SIM_KEYBINDING_ACTIONS.RUDDER_RIGHT,
+		keys: ['/'],
+		label: '/',
+		description: 'Rudder right +5%',
+		group: 'rudder',
+	},
+	{
+		action: SIM_KEYBINDING_ACTIONS.RUDDER_CENTER,
+		keys: ['z', 'Z'],
+		label: 'Z',
+		description: 'Center rudder',
+		group: 'rudder',
+	},
+	{
+		action: SIM_KEYBINDING_ACTIONS.THROTTLE_UP,
+		keys: ['Shift'],
+		label: 'Shift',
+		description: 'Throttle up +5%',
+		group: 'throttle',
+	},
+	{
+		action: SIM_KEYBINDING_ACTIONS.THROTTLE_DOWN,
+		keys: ['Control'],
+		label: 'Ctrl',
+		description: 'Throttle down -5%',
+		group: 'throttle',
+	},
+	{
+		action: SIM_KEYBINDING_ACTIONS.THROTTLE_IDLE,
+		keys: ['0'],
+		label: '0',
+		description: 'Throttle idle',
+		group: 'throttle',
+	},
+	{
+		action: SIM_KEYBINDING_ACTIONS.THROTTLE_FULL,
+		keys: ['9'],
+		label: '9',
+		description: 'Throttle full',
+		group: 'throttle',
+	},
+	{
+		action: SIM_KEYBINDING_ACTIONS.BRAKE_TOGGLE,
+		keys: ['.'],
+		label: '.',
+		description: 'Toggle parking brake',
+		group: 'configuration',
+	},
+	{
+		action: SIM_KEYBINDING_ACTIONS.FLAPS_DOWN,
+		keys: ['f', 'F'],
+		label: 'F',
+		description: 'Flaps one notch down',
+		group: 'configuration',
+	},
+	{
+		action: SIM_KEYBINDING_ACTIONS.FLAPS_UP,
+		keys: ['v', 'V'],
+		label: 'V',
+		description: 'Flaps one notch up',
+		group: 'configuration',
+	},
+	{
+		action: SIM_KEYBINDING_ACTIONS.PAUSE,
+		keys: [' '],
+		label: 'Space',
+		description: 'Pause / resume',
+		group: 'system',
+	},
+	{
+		action: SIM_KEYBINDING_ACTIONS.RESET,
+		keys: ['r', 'R'],
+		shift: false,
+		label: 'R',
+		description: 'Reset scenario (confirm)',
+		group: 'system',
+	},
+	{
+		action: SIM_KEYBINDING_ACTIONS.RESET_IMMEDIATE,
+		keys: ['R'],
+		shift: true,
+		label: 'Shift+R',
+		description: 'Reset immediately',
+		group: 'system',
+	},
+	{
+		action: SIM_KEYBINDING_ACTIONS.HELP_TOGGLE,
+		keys: ['?', '/'],
+		shift: true,
+		label: '?',
+		description: 'Toggle this help overlay',
+		group: 'system',
+	},
+	{
+		action: SIM_KEYBINDING_ACTIONS.MUTE_TOGGLE,
+		keys: ['m', 'M'],
+		label: 'M',
+		description: 'Toggle stall horn mute',
+		group: 'system',
+	},
+];

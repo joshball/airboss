@@ -99,6 +99,16 @@ Key screens:
 
 MVP ships with 3-5 of these; remainder follow.
 
+### Phase 0.5 shipped
+
+Three scenarios live in `apps/sim/` today:
+
+- **Playground** -- free-fly from runway 09, parking brake set, no objective.
+- **First Flight** -- 9-step guided tutorial (release brake, Vr takeoff, climb, level off, turn, descend, flare).
+- **Departure Stall** -- takeoff scenario with a scripted trim-drift failure at 200 ft AGL to teach stall recognition before the horn.
+
+Shipped with the hand-rolled C172 FDM: lateral axis (roll / yaw / coordinated turn), trim, parking brake, flaps, wind, stall warning on AoA, auto-coordinate autopilot. Cockpit: full six-pack (ASI, AI, altimeter, turn coord, HI, VSI) plus tachometer, V-speeds sidebar, WX panel, control-input panel with trim-ghost and STALL annunciator, keybindings help, reset confirm, stall horn via Web Audio.
+
 ## Technical challenges
 
 - **FDM port quality.** The decision to port JSBSim to WASM ourselves (vs depend on someone's port) is the critical path. See [research doc](../../../../work/todos/20260422-flight-dynamics-sim-research.md) for the plan.
