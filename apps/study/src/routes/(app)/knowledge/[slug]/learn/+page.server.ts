@@ -1,6 +1,6 @@
 import { requireAuth } from '@ab/auth';
 import { getNodeView, splitContentPhases } from '@ab/bc-study';
-import { KNOWLEDGE_PHASE_ORDER, type KnowledgePhase } from '@ab/constants';
+import { KNOWLEDGE_PHASE_ORDER, KNOWLEDGE_PHASE_VALUES, type KnowledgePhase, QUERY_PARAMS } from '@ab/constants';
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
@@ -41,6 +41,16 @@ export const load: PageServerLoad = async (event) => {
 			activityIds: extractActivityIds(phaseBodies[phase] ?? null),
 		}));
 
+	// Deep-link support: `?step=<named-slug>`. Narrow against the known phase
+	// set; an unknown or missing value falls back to the first phase in the
+	// canonical order (Context). Index lookups happen in the client from the
+	// named slug, so phase reordering in constants does not break bookmarks.
+	const stepParam = event.url.searchParams.get(QUERY_PARAMS.STEP);
+	const initialPhase: KnowledgePhase =
+		stepParam && (KNOWLEDGE_PHASE_VALUES as readonly string[]).includes(stepParam)
+			? (stepParam as KnowledgePhase)
+			: KNOWLEDGE_PHASE_ORDER[0];
+
 	return {
 		node: {
 			id: view.node.id,
@@ -48,5 +58,6 @@ export const load: PageServerLoad = async (event) => {
 			domain: view.node.domain,
 		},
 		phases,
+		initialPhase,
 	};
 };
