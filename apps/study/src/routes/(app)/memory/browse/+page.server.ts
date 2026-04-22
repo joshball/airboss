@@ -1,5 +1,5 @@
 import { requireAuth } from '@ab/auth';
-import { getCards } from '@ab/bc-study';
+import { getCard, getCards } from '@ab/bc-study';
 import {
 	BROWSE_PAGE_SIZE,
 	CARD_STATUS_VALUES,
@@ -61,11 +61,22 @@ export const load: PageServerLoad = async (event) => {
 	const hasMore = cards.length > BROWSE_PAGE_SIZE;
 	const visible = hasMore ? cards.slice(0, BROWSE_PAGE_SIZE) : cards;
 
+	// Read `?created=<id>` -- set when the user lands here straight from a
+	// successful create. The banner + row highlight read this.
+	// See DESIGN_PRINCIPLES.md #7.
+	const createdId = url.searchParams.get('created') ?? null;
+	let createdCard: { id: string; front: string } | null = null;
+	if (createdId) {
+		const found = await getCard(createdId, user.id);
+		if (found) createdCard = { id: found.card.id, front: found.card.front };
+	}
+
 	return {
 		cards: visible,
 		filters: { domain, cardType, sourceType, status, search },
 		page: pageNum,
 		hasMore,
 		pageSize: BROWSE_PAGE_SIZE,
+		createdCard,
 	};
 };

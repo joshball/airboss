@@ -1,5 +1,5 @@
 import { requireAuth } from '@ab/auth';
-import { getScenarios } from '@ab/bc-study';
+import { getScenario, getScenarios } from '@ab/bc-study';
 import {
 	BROWSE_PAGE_SIZE,
 	CONTENT_SOURCE_VALUES,
@@ -49,6 +49,18 @@ export const load: PageServerLoad = async (event) => {
 	const hasMore = scenarios.length > BROWSE_PAGE_SIZE;
 	const visible = hasMore ? scenarios.slice(0, BROWSE_PAGE_SIZE) : scenarios;
 
+	// If the user was redirected here from /reps/new, surface the created
+	// scenario's title for a confirmation banner. Only the title leaks to the
+	// client -- the full scenario (with `options` + `teachingPoint`) stays
+	// server-side so users can't spoil their own answers via view-source.
+	// See DESIGN_PRINCIPLES.md #7.
+	const createdId = url.searchParams.get('created') ?? null;
+	let createdScenario: { id: string; title: string } | null = null;
+	if (createdId) {
+		const found = await getScenario(createdId, user.id);
+		if (found) createdScenario = { id: found.id, title: found.title };
+	}
+
 	// Project scenarios for the browse card. The full `options` array (with
 	// `isCorrect`, `outcome`, `whyNot`) and the `teachingPoint` body never
 	// need to reach the client here -- a learner peeking at the page data
@@ -65,5 +77,6 @@ export const load: PageServerLoad = async (event) => {
 		page: pageNum,
 		hasMore,
 		pageSize: BROWSE_PAGE_SIZE,
+		createdScenario,
 	};
 };

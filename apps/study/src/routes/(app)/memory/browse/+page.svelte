@@ -9,6 +9,7 @@ import {
 	DOMAIN_VALUES,
 	ROUTES,
 } from '@ab/constants';
+import { tick } from 'svelte';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
@@ -17,12 +18,39 @@ const cards = $derived(data.cards);
 const filters = $derived(data.filters);
 const currentPage = $derived(data.page);
 const hasMore = $derived(data.hasMore);
+const createdCard = $derived(data.createdCard);
 
 // True when no filters are active -- a blank deck vs over-filtered.
 const hasActiveFilters = $derived(
 	Boolean(filters.domain || filters.cardType || filters.sourceType || filters.search) ||
 		filters.status !== CARD_STATUSES.ACTIVE,
 );
+
+// Success banner + row highlight when redirected from a create.
+let bannerDismissed = $state(false);
+const bannerVisible = $derived(createdCard !== null && !bannerDismissed);
+
+$effect(() => {
+	const current = createdCard;
+	if (!current) return;
+	void tick().then(() => {
+		const el = document.getElementById(`card-${current.id}`);
+		if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+	});
+});
+
+type ChipFilterKey = 'domain' | 'type' | 'source' | 'status' | 'q';
+
+interface FilterChip {
+	key: ChipFilterKey;
+	label: string;
+	value: string;
+}
+
+function shortenFront(text: string, max = 60): string {
+	if (text.length <= max) return text;
+	return `${text.slice(0, max).trimEnd()}...`;
+}
 
 function humanize(slug: string): string {
 	return slug
@@ -42,6 +70,21 @@ function cardTypeLabel(slug: string): string {
 function shorten(text: string, max = 120): string {
 	if (text.length <= max) return text;
 	return `${text.slice(0, max).trimEnd()}...`;
+}
+
+const chips = $derived.by<FilterChip[]>(() => {
+	const out: FilterChip[] = [];
+	if (filters.search) out.push({ key: 'q', label: 'Search', value: `"${shortenFront(filters.search, 40)}"` });
+	if (filters.domain) out.push({ key: 'domain', label: 'Domain', value: domainLabel(filters.domain) });
+	if (filters.cardType) out.push({ key: 'type', label: 'Type', value: cardTypeLabel(filters.cardType) });
+	if (filters.sourceType) out.push({ key: 'source', label: 'Source', value: humanize(filters.sourceType) });
+	if (filters.status !== CARD_STATUSES.ACTIVE)
+		out.push({ key: 'status', label: 'Status', value: humanize(filters.status) });
+	return out;
+});
+
+function removeChipHref(key: ChipFilterKey): string {
+	return buildHref({ [key]: undefined });
 }
 
 function buildHref(next: Record<string, string | undefined>): string {
@@ -78,6 +121,18 @@ function pageHref(n: number): string {
 		</div>
 		<a class="btn primary" href={ROUTES.MEMORY_NEW}>New card</a>
 	</header>
+
+	{#if bannerVisible && createdCard}
+		<div class="banner" role="status">
+			<span>
+				Card saved.
+				<a class="banner-link" href={ROUTES.MEMORY_CARD(createdCard.id)}>View &ldquo;{shortenFront(createdCard.front)}&rdquo;</a>
+			</span>
+			<button type="button" class="banner-dismiss" onclick={() => (bannerDismissed = true)} aria-label="Dismiss">
+				×
+			</button>
+		</div>
+	{/if}
 
 	<form class="filters" method="GET" role="search" aria-label="Filter cards">
 		<input type="hidden" name="page" value="1" />
@@ -126,6 +181,26 @@ function pageHref(n: number): string {
 		</div>
 	</form>
 
+	{#if chips.length > 0}
+		<div class="chip-row" aria-label="Active filters">
+			<span class="chip-label">Filtering:</span>
+			{#each chips as chip (chip.key)}
+				<a class="chip" href={removeChipHref(chip.key)} aria-label={`Remove ${chip.label} filter`}>
+					<span class="chip-name">{chip.label}:</span>
+					<span class="chip-value">{chip.value}</span>
+					<span class="chip-x" aria-hidden="true">×</span>
+				</a>
+			{/each}
+			<a class="chip-clear" href={ROUTES.MEMORY_BROWSE}>Clear all</a>
+		</div>
+	{/if}
+
+	{#if hasActiveFilters && cards.length > 0}
+		<p class="result-summary">
+			Showing {cards.length} card{cards.length === 1 ? '' : 's'}{hasMore ? '+' : ''} matching your filters.
+		</p>
+	{/if}
+
 	{#if cards.length === 0}
 		<div class="empty">
 			{#if hasActiveFilters}
@@ -139,7 +214,7 @@ function pageHref(n: number): string {
 	{:else}
 		<ul class="list">
 			{#each cards as c (c.id)}
-				<li class="card">
+				<li id={`card-${c.id}`} class="card" class:just-created={createdCard?.id === c.id}>
 					<a class="card-link" href={ROUTES.MEMORY_CARD(c.id)}>
 						<div class="card-front">{shorten(c.front)}</div>
 						<div class="card-meta">
@@ -245,6 +320,117 @@ function pageHref(n: number): string {
 	.filter-actions {
 		display: flex;
 		gap: 0.375rem;
+	}
+
+	.banner {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		background: #eff6ff;
+		border: 1px solid #bfdbfe;
+		color: #1e3a8a;
+		padding: 0.625rem 0.875rem;
+		border-radius: 8px;
+		font-size: 0.875rem;
+	}
+
+	.banner-link {
+		color: #1d4ed8;
+		font-weight: 600;
+		text-decoration: none;
+		margin-left: 0.25rem;
+	}
+
+	.banner-link:hover {
+		text-decoration: underline;
+	}
+
+	.banner-dismiss {
+		margin-left: auto;
+		background: transparent;
+		border: none;
+		color: #1e3a8a;
+		font-size: 1.25rem;
+		line-height: 1;
+		cursor: pointer;
+		padding: 0 0.25rem;
+	}
+
+	.banner-dismiss:hover {
+		color: #1d4ed8;
+	}
+
+	.chip-row {
+		display: flex;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: 0.375rem;
+		padding: 0 0.125rem;
+	}
+
+	.chip-label {
+		font-size: 0.75rem;
+		text-transform: uppercase;
+		letter-spacing: 0.06em;
+		color: #64748b;
+		font-weight: 600;
+		margin-right: 0.25rem;
+	}
+
+	.chip {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.375rem;
+		padding: 0.25rem 0.625rem;
+		background: #eff6ff;
+		border: 1px solid #bfdbfe;
+		border-radius: 999px;
+		color: #1d4ed8;
+		font-size: 0.8125rem;
+		text-decoration: none;
+		transition: background 120ms, border-color 120ms;
+	}
+
+	.chip:hover {
+		background: #dbeafe;
+		border-color: #93c5fd;
+	}
+
+	.chip-name {
+		color: #1e40af;
+		font-weight: 600;
+	}
+
+	.chip-value {
+		color: #0f172a;
+	}
+
+	.chip-x {
+		color: #2563eb;
+		font-size: 1rem;
+		line-height: 1;
+	}
+
+	.chip-clear {
+		font-size: 0.75rem;
+		color: #475569;
+		text-decoration: underline;
+		margin-left: 0.25rem;
+	}
+
+	.chip-clear:hover {
+		color: #1a1a2e;
+	}
+
+	.result-summary {
+		margin: 0;
+		color: #64748b;
+		font-size: 0.8125rem;
+	}
+
+	.card.just-created {
+		border-color: #86efac;
+		box-shadow: 0 0 0 3px rgba(134, 239, 172, 0.35);
 	}
 
 	.empty {

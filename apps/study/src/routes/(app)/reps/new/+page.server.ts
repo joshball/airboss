@@ -1,5 +1,5 @@
 import { requireAuth } from '@ab/auth';
-import { createScenario, newScenarioSchema, type ScenarioOption } from '@ab/bc-study';
+import { createScenario, newScenarioSchema, type ScenarioOption, type ScenarioRow } from '@ab/bc-study';
 import {
 	type DIFFICULTY_VALUES,
 	type Difficulty,
@@ -99,8 +99,9 @@ export const actions: Actions = {
 			return fail(400, { values: input, fieldErrors });
 		}
 
+		let created: ScenarioRow;
 		try {
-			await createScenario({
+			created = await createScenario({
 				userId: user.id,
 				title: parsed.data.title,
 				situation: parsed.data.situation,
@@ -120,7 +121,10 @@ export const actions: Actions = {
 			return fail(500, { values: input, fieldErrors: { _: 'Could not save the scenario. Please try again.' } });
 		}
 
-		redirect(303, ROUTES.REPS_BROWSE);
+		// Land the user on browse with `?created=<id>` so the page can surface
+		// a success banner and highlight the new row. Confirmation, not guesswork --
+		// see DESIGN_PRINCIPLES.md #7.
+		redirect(303, `${ROUTES.REPS_BROWSE}?created=${encodeURIComponent(created.id)}`);
 	},
 } satisfies Actions;
 
