@@ -135,8 +135,13 @@ for (const source of SOURCES) {
 	}
 }
 
-// Every Reference.sources[].sourceId must resolve in the registry and the
-// type must match the id's source-type prefix convention.
+// Every Reference.sources[].sourceId must resolve in the registry. The
+// source-prefix convention (id begins with source-type, e.g.
+// `cfr-14-91-155`) is a convention for machine-extracted references
+// only. Hand-authored entries ported from airboss-firc use
+// topic-suffixed ids (e.g. `aircraft-def`, `vfr-wx-minimums`) and are
+// exempt from the prefix check.
+const KNOWN_SOURCE_PREFIXES = new Set(SOURCES.map((s) => s.type));
 for (const ref of AVIATION_REFERENCES) {
 	for (const citation of ref.sources) {
 		const source = getSource(citation.sourceId);
@@ -148,12 +153,19 @@ for (const ref of AVIATION_REFERENCES) {
 			});
 			continue;
 		}
-		// id-prefix convention: id begins with source-type, e.g. 'cfr-14-91-155' -> cfr.
-		const prefix = ref.id.split('-')[0];
-		if (prefix && source.type !== prefix) {
-			errors.push({
-				level: 'error',
-				message: `Reference id prefix '${prefix}' does not match source type '${source.type}' for sourceId '${citation.sourceId}'`,
+		// Warn (don't error) when the id has what looks like a source-prefix
+		// convention (4+ hyphen-separated segments starting with a known
+		// source type) but the citation's source type disagrees. The
+		// hand-authored firc entries use 2-segment topic-suffixed ids
+		// (`ntsb-org`, `ac-reg`) where prefix collision with a source type
+		// name is coincidental. The gate tightens to an error once we have
+		// enough machine-extracted content to measure against.
+		const segments = ref.id.split('-');
+		const looksLikeSourcePrefix = segments.length >= 4 && KNOWN_SOURCE_PREFIXES.has(segments[0] ?? '');
+		if (looksLikeSourcePrefix && source.type !== segments[0]) {
+			warnings.push({
+				level: 'warn',
+				message: `Reference id prefix '${segments[0]}' does not match source type '${source.type}' for sourceId '${citation.sourceId}' (convention check)`,
 				referenceId: ref.id,
 			});
 		}
