@@ -105,7 +105,9 @@ const PRIVATE_PILOT_OVERVIEW: Preset = {
 	skipDomains: [],
 	depthPreference: DEPTH_PREFERENCES.WORKING,
 	defaultMode: SESSION_MODES.MIXED,
-	sessionLength: DEFAULT_SESSION_LENGTH,
+	// Overview presets use a longer default so the engine can cover more
+	// domains in one session. Quick reps stays at the terse default.
+	sessionLength: 15,
 };
 
 /** Cert-agnostic high-stakes refresher. "Teach it to someone else" posture. */
@@ -138,7 +140,8 @@ const BFR_PREP: Preset = {
 	skipDomains: [],
 	depthPreference: DEPTH_PREFERENCES.WORKING,
 	defaultMode: SESSION_MODES.MIXED,
-	sessionLength: DEFAULT_SESSION_LENGTH,
+	// Longer default to probe breadth across the six BFR-relevant domains.
+	sessionLength: 15,
 };
 
 /** CFI renewal focus -- depth=deep because teach-it-to-someone-else is the cert standard. */
@@ -157,7 +160,9 @@ const FIRC: Preset = {
 	skipDomains: [],
 	depthPreference: DEPTH_PREFERENCES.DEEP,
 	defaultMode: SESSION_MODES.STRENGTHEN,
-	sessionLength: DEFAULT_SESSION_LENGTH,
+	// Longer default -- FIRC benefits from breadth across the cert-relevant
+	// domains, and depth=deep makes each slot substantive.
+	sessionLength: 15,
 };
 
 /**

@@ -79,7 +79,10 @@ export const actions: Actions = {
 				throw err;
 			}
 			if (err instanceof NoActivePlanError) {
-				throw redirect(303, ROUTES.PLANS_NEW);
+				// Plan was archived between load and submit. Send the user back
+				// to the gallery rather than the full plan builder -- the preset
+				// flow is the right empty-state now.
+				throw redirect(303, ROUTES.SESSION_START);
 			}
 			log.error(
 				'startSession threw',
