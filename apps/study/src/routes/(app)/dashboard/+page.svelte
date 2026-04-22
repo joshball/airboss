@@ -49,8 +49,8 @@ const stamp = `${loadedAt.getFullYear()}-${String(loadedAt.getMonth() + 1).padSt
 		<div class="cell c7"><ActivityPanel activity={payload.activity} /></div>
 		<div class="cell c5"><StudyPlanPanel activePlan={payload.activePlan} /></div>
 
-		<div class="cell c5"><CertProgressPanel /></div>
-		<div class="cell c7"><MapPanel /></div>
+		<div class="cell c5"><CertProgressPanel certProgress={payload.certProgress} /></div>
+		<div class="cell c7"><MapPanel domainCertMatrix={payload.domainCertMatrix} /></div>
 	</div>
 
 	<footer class="status" aria-hidden="true">
