@@ -24,6 +24,7 @@ import { db as defaultDb } from '@ab/db';
 import { generateStudyPlanId } from '@ab/utils';
 import { and, desc, eq } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
+import { getNodesByIds, KnowledgeNodeNotFoundError } from './knowledge';
 import { createPlanSchema, updatePlanSchema } from './plans.validation';
 import { type StudyPlanRow, studyPlan } from './schema';
 
@@ -272,6 +273,11 @@ export async function addSkipNode(
 	const existing = await getPlan(planId, userId, db);
 	if (!existing) throw new PlanNotFoundError(planId, userId);
 	if (existing.skipNodes.includes(nodeId)) return existing;
+	// Validate nodeId against the knowledge graph so callers can't poison
+	// plan.skip_nodes with arbitrary strings. Own-account-only data-integrity
+	// bug today; guarding at the BC level keeps the form-action layer thin.
+	const resolved = await getNodesByIds([nodeId], db);
+	if (resolved.length === 0) throw new KnowledgeNodeNotFoundError(nodeId);
 	return await updatePlan(planId, userId, { skipNodes: [...existing.skipNodes, nodeId] }, db);
 }
 

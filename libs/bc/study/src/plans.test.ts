@@ -9,6 +9,8 @@ import { db } from '@ab/db';
 import { generateAuthId } from '@ab/utils';
 import { eq } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { KnowledgeNodeNotFoundError } from './knowledge';
+import { knowledgeNode } from './schema';
 import {
 	activatePlan,
 	addSkipDomain,
@@ -27,6 +29,12 @@ import {
 const TEST_USER_ID = generateAuthId();
 const TEST_EMAIL = `plans-test-${TEST_USER_ID}@airboss.test`;
 
+// Test-only knowledge node used by the skip-list mutation suite. addSkipNode
+// now validates the id against the graph, so the test must seed a real row.
+// Slug is unique to this test run so it cleans up cleanly without colliding
+// with any authored node.
+const TEST_NODE_ID = `plans-test-node-${TEST_USER_ID}`;
+
 beforeAll(async () => {
 	const now = new Date();
 	await db.insert(bauthUser).values({
@@ -40,9 +48,16 @@ beforeAll(async () => {
 		createdAt: now,
 		updatedAt: now,
 	});
+	await db.insert(knowledgeNode).values({
+		id: TEST_NODE_ID,
+		title: 'Plans Test Node',
+		domain: 'airspace',
+		contentMd: '# plans test node',
+	});
 });
 
 afterAll(async () => {
+	await db.delete(knowledgeNode).where(eq(knowledgeNode.id, TEST_NODE_ID));
 	await db.delete(bauthUser).where(eq(bauthUser.id, TEST_USER_ID));
 });
 
@@ -121,10 +136,18 @@ describe('updatePlan', () => {
 describe('skip-list mutations', () => {
 	it('addSkipNode is idempotent', async () => {
 		const p = await createPlan({ userId: TEST_USER_ID, certGoals: [CERTS.PPL] });
-		const a = await addSkipNode(p.id, TEST_USER_ID, 'airspace-vfr');
-		const b = await addSkipNode(p.id, TEST_USER_ID, 'airspace-vfr');
-		expect(a.skipNodes).toEqual(['airspace-vfr']);
-		expect(b.skipNodes).toEqual(['airspace-vfr']);
+		const a = await addSkipNode(p.id, TEST_USER_ID, TEST_NODE_ID);
+		const b = await addSkipNode(p.id, TEST_USER_ID, TEST_NODE_ID);
+		expect(a.skipNodes).toEqual([TEST_NODE_ID]);
+		expect(b.skipNodes).toEqual([TEST_NODE_ID]);
+		await archivePlan(p.id, TEST_USER_ID);
+	});
+
+	it('addSkipNode rejects unknown node ids', async () => {
+		const p = await createPlan({ userId: TEST_USER_ID, certGoals: [CERTS.PPL] });
+		await expect(addSkipNode(p.id, TEST_USER_ID, 'does-not-exist-in-graph')).rejects.toBeInstanceOf(
+			KnowledgeNodeNotFoundError,
+		);
 		await archivePlan(p.id, TEST_USER_ID);
 	});
 
