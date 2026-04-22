@@ -8,10 +8,7 @@
  * Run: bun scripts/smoke/study-bc.ts
  */
 
-import { eq } from 'drizzle-orm';
-import { drizzle } from 'drizzle-orm/postgres-js';
-import postgres from 'postgres';
-import { bauthUser } from '../../libs/auth/src/schema';
+import { bauthUser } from '@ab/auth/schema';
 import {
 	createCard,
 	getCard,
@@ -20,10 +17,13 @@ import {
 	getDueCards,
 	setCardStatus,
 	submitReview,
-} from '../../libs/bc/study/src/index';
-import { cardState, card as cardTable, review as reviewTable } from '../../libs/bc/study/src/schema';
-import { CARD_TYPES, CONFIDENCE_LEVELS, DEV_ACCOUNTS, DOMAINS, REVIEW_RATINGS } from '../../libs/constants/src/index';
-import { CARD_STATUSES } from '../../libs/constants/src/study';
+} from '@ab/bc-study';
+import { cardState, card as cardTable, review as reviewTable } from '@ab/bc-study/schema';
+import { CARD_TYPES, CONFIDENCE_LEVELS, DEV_ACCOUNTS, DOMAINS, REVIEW_RATINGS } from '@ab/constants';
+import { CARD_STATUSES } from '@ab/constants/study';
+import { eq } from 'drizzle-orm';
+import { drizzle } from 'drizzle-orm/postgres-js';
+import postgres from 'postgres';
 
 const url = process.env.DATABASE_URL ?? 'postgresql://airboss:airboss@localhost:5435/airboss';
 const client = postgres(url);
