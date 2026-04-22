@@ -2,6 +2,7 @@
 import {
 	type ConfidenceLevel,
 	DOMAIN_LABELS,
+	QUERY_PARAMS,
 	REVIEW_RATINGS,
 	ROUTES,
 	SESSION_ITEM_KINDS,
@@ -13,6 +14,8 @@ import {
 } from '@ab/constants';
 import ConfidenceSlider from '@ab/ui/components/ConfidenceSlider.svelte';
 import { enhance } from '$app/forms';
+import { replaceState } from '$app/navigation';
+import { page } from '$app/state';
 import type { ActionData, PageData } from './$types';
 
 let { data, form }: { data: PageData; form: ActionData } = $props();
@@ -23,9 +26,12 @@ const total = $derived(data.results.length);
 const completedCount = $derived(data.results.filter((r) => r.completedAt !== null).length);
 const currentNum = $derived(current ? current.slotIndex + 1 : total);
 
-type Phase = 'read' | 'confidence' | 'answer' | 'reveal' | 'submitting';
+// URL-persisted phases are the 3 meaningful states; `submitting` is a
+// transient in-flight flag tracked by `loading` instead.
+type Phase = 'read' | 'confidence' | 'answer';
 
-let phase = $state<Phase>('read');
+// svelte-ignore state_referenced_locally -- seed from server-narrowed deep link; URL syncs thereafter
+let phase = $state<Phase>(data.initialStep);
 let confidence = $state<ConfidenceLevel | null>(null);
 let skippedConfidence = $state(false);
 let selectedOption = $state<string | null>(null);
@@ -43,6 +49,21 @@ $effect(() => {
 		selectedOption = null;
 		loading = false;
 	}
+});
+
+// Mirror phase + item index to the URL so a refresh mid-flow lands back in
+// the same place (e.g. reopened the tab at the confidence slider, not all
+// the way back to read). Uses replaceState to avoid polluting history.
+$effect(() => {
+	const step = phase;
+	const item = current?.slotIndex ?? data.initialItem;
+	const url = new URL(page.url);
+	const needsUpdate =
+		url.searchParams.get(QUERY_PARAMS.STEP) !== step || url.searchParams.get(QUERY_PARAMS.ITEM) !== String(item);
+	if (!needsUpdate) return;
+	url.searchParams.set(QUERY_PARAMS.STEP, step);
+	url.searchParams.set(QUERY_PARAMS.ITEM, String(item));
+	replaceState(url, page.state);
 });
 
 function humanize(slug: string): string {

@@ -9,7 +9,7 @@ import {
 	submitAttempt,
 	submitAttemptSchema,
 } from '@ab/bc-study';
-import { CONFIDENCE_SAMPLE_RATE, REP_BATCH_SIZE } from '@ab/constants';
+import { CONFIDENCE_SAMPLE_RATE, QUERY_PARAMS, REP_BATCH_SIZE } from '@ab/constants';
 import { createLogger } from '@ab/utils';
 import { error, fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
@@ -123,12 +123,18 @@ function buildPinnedUrl(pathname: string, sessionId: string, scenarioIds: string
 	return `${pathname}?${params.toString()}`;
 }
 
+/** URL-persisted per-item flow phase. */
+const REP_ITEM_PHASES = ['read', 'confidence', 'answer'] as const;
+type RepItemPhase = (typeof REP_ITEM_PHASES)[number];
+
 interface LoadResult {
 	sessionId: string;
 	startedAt: string;
 	slots: Slot[];
 	currentIndex: number;
 	total: number;
+	initialItem: number;
+	initialStep: RepItemPhase;
 }
 
 export const load: PageServerLoad = async (event): Promise<LoadResult> => {
@@ -157,6 +163,8 @@ export const load: PageServerLoad = async (event): Promise<LoadResult> => {
 				slots: [],
 				currentIndex: 0,
 				total: 0,
+				initialItem: 0,
+				initialStep: 'read',
 			};
 		}
 		const pinned = queue.map((s) => s.id);
@@ -185,6 +193,8 @@ export const load: PageServerLoad = async (event): Promise<LoadResult> => {
 			slots: [],
 			currentIndex: 0,
 			total: 0,
+			initialItem: 0,
+			initialStep: 'read',
 		};
 	}
 
@@ -236,12 +246,28 @@ export const load: PageServerLoad = async (event): Promise<LoadResult> => {
 	const currentIndex = slots.findIndex((s) => s.kind === 'resolvable' && s.attempt === null);
 	const resolvedIndex = currentIndex === -1 ? slots.length : currentIndex;
 
+	// Deep-link inputs: `?item=<0-based-index>` + `?step=<read|confidence|answer>`.
+	// These are display pointers that the client mirrors via replaceState so a
+	// mid-flow refresh resumes at the same slot + phase. Server-derived
+	// resolvedIndex still bounds what's submittable.
+	const itemMax = Math.max(0, slots.length - 1);
+	const itemParam = Number.parseInt(event.url.searchParams.get(QUERY_PARAMS.ITEM) ?? '', 10);
+	const initialItem = Number.isFinite(itemParam)
+		? Math.max(0, Math.min(itemMax, itemParam))
+		: Math.min(itemMax, resolvedIndex);
+	const stepParam = event.url.searchParams.get(QUERY_PARAMS.STEP);
+	const initialStep: RepItemPhase = (REP_ITEM_PHASES as readonly string[]).includes(stepParam ?? '')
+		? (stepParam as RepItemPhase)
+		: 'read';
+
 	return {
 		sessionId,
 		startedAt: startedAt.toISOString(),
 		slots,
 		currentIndex: resolvedIndex,
 		total: slots.length,
+		initialItem,
+		initialStep,
 	};
 };
 
