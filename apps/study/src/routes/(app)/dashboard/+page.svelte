@@ -39,7 +39,7 @@ const stamp = `${loadedAt.getFullYear()}-${String(loadedAt.getMonth() + 1).padSt
 		  row 4: Cert progress (reflect) | The map (orient)
 	-->
 	<div class="grid">
-		<div class="cell c6"><CtaPanel stats={payload.stats} repBacklog={payload.repBacklog} /></div>
+		<div class="cell c6"><CtaPanel stats={payload.stats} repBacklog={payload.repBacklog} activePlan={payload.activePlan} /></div>
 		<div class="cell c3"><DueReviewsPanel stats={payload.stats} /></div>
 		<div class="cell c3"><ScheduledRepsPanel repBacklog={payload.repBacklog} /></div>
 
