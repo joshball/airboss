@@ -278,6 +278,18 @@ function sliceLabel(slice: SessionSlice): string {
 				</form>
 				<ConfirmAction
 					formAction="?/skip"
+					confirmVariant="secondary"
+					triggerVariant="ghost"
+					size="sm"
+					label="Skip topic"
+					confirmLabel="Skip this topic (adds to plan)"
+					hiddenFields={{
+						slotIndex: String(current.slotIndex),
+						skipKind: SESSION_SKIP_KINDS.TOPIC,
+					}}
+				/>
+				<ConfirmAction
+					formAction="?/skip"
 					confirmVariant="danger"
 					triggerVariant="ghost"
 					size="sm"
@@ -289,7 +301,7 @@ function sliceLabel(slice: SessionSlice): string {
 					}}
 				/>
 			</footer>
-			<p class="skip-hint">Permanent skip can be reactivated from the plan detail page.</p>
+			<p class="skip-hint">Topic + permanent skips can be reactivated from the plan detail page.</p>
 		</article>
 	{:else if current}
 		<article class="empty">
