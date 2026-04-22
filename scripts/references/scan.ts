@@ -31,7 +31,7 @@ import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, relative, resolve } from 'node:path';
 import { type ContentScan, extractWikilinks, listReferences } from '@ab/aviation';
 
-const REPO_ROOT = resolve(import.meta.dir, '..', '..');
+const REPO_ROOT = resolve(import.meta.dirname ?? import.meta.dir, '..', '..');
 
 export interface ManifestEntry {
 	id: string;
