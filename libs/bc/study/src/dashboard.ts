@@ -32,7 +32,7 @@ import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import { type CalibrationResult, getCalibration } from './calibration';
 import { type CertProgress, type DomainCertRow, getCertProgress, getDomainCertMatrix } from './knowledge';
 import { getActivePlan } from './plans';
-import { card, cardState, review, scenario, sessionItemResult, type StudyPlanRow } from './schema';
+import { card, cardState, review, type StudyPlanRow, scenario, sessionItemResult } from './schema';
 import { type DashboardStats, getDashboardStats } from './stats';
 
 type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;

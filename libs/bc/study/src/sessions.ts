@@ -956,10 +956,7 @@ export async function getSessionSummary(
 	// the previous rep_attempt join, rebased onto session_item_result.
 	const repSlots = sirRows.filter(
 		(r) =>
-			r.itemKind === SESSION_ITEM_KINDS.REP &&
-			r.completedAt !== null &&
-			r.skipKind === null &&
-			r.isCorrect !== null,
+			r.itemKind === SESSION_ITEM_KINDS.REP && r.completedAt !== null && r.skipKind === null && r.isCorrect !== null,
 	);
 
 	const reviewCorrect = reviews.filter((r) => Number(r.rating) >= 3).length;

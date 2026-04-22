@@ -553,10 +553,7 @@ export const sessionItemResult = studySchema.table(
 			'sir_skip_kind_check',
 			sql.raw(`"skip_kind" IS NULL OR "skip_kind" IN (${inList(SESSION_SKIP_KIND_VALUES)})`),
 		),
-		confidenceCheck: check(
-			'sir_confidence_check',
-			sql`"confidence" IS NULL OR "confidence" BETWEEN 1 AND 5`,
-		),
+		confidenceCheck: check('sir_confidence_check', sql`"confidence" IS NULL OR "confidence" BETWEEN 1 AND 5`),
 		answerMsCheck: check('sir_answer_ms_check', sql`"answer_ms" IS NULL OR "answer_ms" >= 0`),
 	}),
 );

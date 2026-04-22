@@ -338,12 +338,7 @@ export async function getRepAttemptsForSession(
 		.orderBy(desc(sessionItemResult.completedAt));
 	const latest = new Map<string, ResolvedAttempt>();
 	for (const row of rows) {
-		if (
-			row.scenarioId === null ||
-			row.chosenOption === null ||
-			row.isCorrect === null ||
-			row.completedAt === null
-		) {
+		if (row.scenarioId === null || row.chosenOption === null || row.isCorrect === null || row.completedAt === null) {
 			continue;
 		}
 		if (!latest.has(row.scenarioId)) {

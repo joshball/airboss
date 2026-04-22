@@ -234,13 +234,18 @@ export const actions: Actions = {
 				confidence: confidenceValue,
 				answerMs: parsed.data.answerMs,
 			});
+			// Rep outcome persists on the slot row itself post-ADR 012 -- no
+			// separate rep_attempt row, no repAttemptId to forward.
 			await recordItemResult(event.params.id, user.id, {
 				slotIndex: slot.slotIndex,
 				itemKind: slot.itemKind,
 				slice: slot.slice,
 				reasonCode: slot.reasonCode,
 				scenarioId: slot.scenarioId,
-				repAttemptId: att.id,
+				chosenOption: att.chosenOption,
+				isCorrect: att.isCorrect,
+				confidence: att.confidence as ConfidenceLevel | null,
+				answerMs: att.answerMs,
 				reasonDetail: slot.reasonDetail,
 			});
 			return { success: true as const, isCorrect: att.isCorrect, chosenOption: att.chosenOption };

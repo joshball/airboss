@@ -277,10 +277,15 @@ export const actions: Actions = {
 				confidence: parsed.data.confidence,
 				answerMs: parsed.data.answerMs,
 			});
+			// Post-ADR 012 phase 5: submitAttempt resolves correctness but
+			// doesn't persist. This legacy route returns the outcome for the
+			// client to render; the canonical session runner at
+			// /sessions/[id] writes to session_item_result via recordItemResult.
+			// Phase 3 replaces this route with a redirect to /session/start;
+			// phase 6 deletes it outright.
 			return {
 				success: true as const,
 				scenarioId,
-				attemptId: attempt.id,
 				chosenOption: attempt.chosenOption,
 				isCorrect: attempt.isCorrect,
 				skipped: false as const,
