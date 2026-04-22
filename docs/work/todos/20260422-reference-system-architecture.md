@@ -2,7 +2,7 @@
 
 Design doc. Covers the platform substrate for every piece of authoritative content the apps surface: aviation terms, CFR regulations, POH excerpts, AIM entries, NTSB accident summaries, AOPA articles, and the help pages of each individual app.
 
-Research date: 2026-04-22. Status: draft, awaits user sign-off. Work packages to be authored after the architecture is agreed.
+Research date: 2026-04-22. Status: **decisions locked 2026-04-22**, work packages to follow.
 
 Companion documents:
 
@@ -11,23 +11,37 @@ Companion documents:
 
 ## TL;DR
 
-Treat every authoritative chunk the app shows as a typed **Reference** stored in one of two library tiers: `libs/aviation/` (shared across all apps, cross-product aviation knowledge) and `libs/app-help/` (re-usable help primitives that each app composes into its own surface). Content authors write prose with `[[DISPLAY::id]]` wiki-links; a build-time parser collects every referenced id into an **extraction manifest**, and per-source parsers (CFR, POH, AIM, NTSB, PDF articles, …) materialize the cited chunks into the reference library from the downloaded source corpus. When next year's regs drop, re-run the extractors, diff the output, ship the review as a PR. Every Reference carries structured tags (taxonomy pending) that `bun run check` enforces on new entries, and the `/glossary` route renders category-faceted views off the same data apps can search inline.
+Treat every authoritative chunk the app shows as a typed **Reference** stored in one of two library tiers: `libs/aviation/` (shared across all apps, cross-product aviation knowledge) and `libs/help/` (re-usable help primitives + content registry; per-app content lives in `apps/<app>/src/lib/help/content/` and registers with the library). Content authors write prose with `[[DISPLAY::id]]` wiki-links; a build-time scanner collects every referenced id into an **extraction manifest**, and per-source parsers (CFR, POH, AIM, NTSB, PDF articles, …) materialize the cited chunks into the reference library from the downloaded source corpus. When next year's regs drop, re-run the extractors, diff the output, ship the review as a PR. Every Reference carries structured tags (five required axes) that `bun run check` enforces on new entries, and the `/glossary` route renders category-faceted views off the same data apps can search inline.
 
 ## Goals
 
 1. **One system, many sources.** CFR, POH, AIM, PCG, AC, NTSB, AOPA, hand-authored — same pipeline, pluggable parsers.
-2. **Separation of concerns.** Aviation content is shared. App-specific help is not. Both are libraries apps mount.
+2. **Separation of concerns.** Aviation content is shared. App-specific help is per-app content, but sharable primitives live in a library. Both are libraries apps mount.
 3. **Verbatim and paraphrase.** CFR language is cryptic and hard; teaching requires both "what the reg literally says" and "what it means in plain English."
 4. **Regs change every year.** Refresh must be mechanical: drop the new source file in, re-run parsers, review the diff, merge.
 5. **Every mention is a link.** Authors never hard-code text referring to a term; they use `[[DISPLAY::id]]` so the rendered version becomes a tooltip / popover / link to the canonical definition.
 6. **Tags that are not worthless.** Required axes, validated at commit. Better small and disciplined than large and speculative.
-7. **Search finds across aviation + app help** from any app, with filters to separate or combine.
+7. **Search finds across aviation + help** from any app, faceted, with filters to separate or combine.
 
 ## Non-goals
 
 - Replacing the knowledge-graph. Knowledge-graph nodes are composed FROM references. Nodes are teaching units; references are atomic authoritative chunks.
 - Being a full-text search engine. References are keyed by id + tags; the lookup is deterministic, not semantic.
 - Being a wiki. Wiki-links reference pre-defined ids, they do not auto-create pages.
+
+## Decisions locked (2026-04-22)
+
+Captured from the 2026-04-22 design round so the work packages don't relitigate:
+
+| #   | Decision                                                                                               | Rationale                                                                                                                                 |
+| --- | ------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | **Drop the legacy `domain` field.** Use the new tag system (`aviationTopic` etc.) only.                | `domain` is not FIRC-specific; it is airboss-firc's pre-redesign single-valued taxonomy. Keeping it duplicates `aviationTopic[0]` and invites authors to disagree with themselves. |
+| 2   | **`data/sources/` gitignored for now.** Per-source decision at the end of phase 5 (first extractions). | Report back then with actual file sizes; move small files into git, crossing-5MB into LFS, heavyweight binaries into external storage (S3 / artifact bucket). |
+| 3   | **Scanner runs synchronously pre-dev, fast-fail on broken links.**                                     | The SCANNER is fast (regex over content files). Only the EXTRACTION pipeline is slow, and that is a manual command authors invoke deliberately. If the scanner ever crosses a perceptible threshold at scale, fall back to async-with-banner. |
+| 4   | **Cross-library search is faceted, explicitly labeled, no hidden cross-library ranking.**              | Results clearly labeled (`aviation` / `help`, with source-type subtags). Filters narrow by library / source / tag. Power users get `tag:weather rules:ifr` query syntax. Implicit ranking hides decisions from the user; faceting gives them control. |
+| 5   | **Help library is named `libs/help/` (not `libs/app-help/`).**                                         | Symmetric with `libs/aviation/`. Apps register per-app content with the library; the library provides primitives + the cross-app search facade. |
+
+Open questions that remain are in the section at the bottom; these five are closed.
 
 ## Library structure
 
@@ -66,6 +80,8 @@ libs/aviation/
       poh-generated.ts          machine-extracted POH
     registry.ts                 Merged lookup: by-id, by-term, by-tag
     validation.ts               Build-time gates
+    wikilink/
+      parser.ts                 [[DISPLAY::id]] lexer + AST
     ui/
       ReferencePage.svelte      The /glossary index
       ReferenceCard.svelte
@@ -79,40 +95,42 @@ libs/aviation/
 
 Every app that surfaces aviation content depends on `@ab/aviation`. `apps/study/` mounts `ReferencePage.svelte` at `/glossary`. Future `apps/firc/`, `apps/spatial/`, etc. do the same, or render inline on detail pages.
 
-### `libs/app-help/` — help primitives, cross-app
+### `libs/help/` — help primitives + cross-app search facade
 
-Generic primitives for an app's own help content. Not aviation. Not app-specific content either. The **substrate** for an app's help pages.
+Generic primitives for app help content (schema + UI components), plus a registry/search facade that knows how to aggregate per-app content when the app hands it over.
 
 ```text
-libs/app-help/
+libs/help/
   src/
     schema/
       help-section.ts           Typed HelpSection (id, title, body, tags, related)
       help-page.ts              Typed HelpPage (id, title, sections[], route)
+      help-registry.ts          Registry type: apps register their content here at boot
     ui/
       HelpLayout.svelte         Page shell
       HelpSection.svelte        Collapsible section
       HelpTOC.svelte            Table of contents
-      HelpSearch.svelte         In-app help search
+      HelpSearch.svelte         Cross-library search widget (aviation + help combined)
       HelpCard.svelte           Pull-out card for how-to snippets
-    validation.ts               Tag gates for app-specific help
+    validation.ts               Tag gates for help content
+    search.ts                   Faceted search that joins @ab/aviation + registered help
     index.ts
-  package.json                  @ab/app-help
+  package.json                  @ab/help
 ```
 
-Apps import `@ab/app-help` and author their own content against these primitives. The components don't know whether they're rendering "how FSRS works" or "what the calibration page is for" — that's the app's content.
+Apps import `@ab/help` and call its registry to hand over their `HelpPage[]` at boot. The components don't know whether they're rendering "how FSRS works" or "what the calibration page is for" — that's app content.
 
-### `apps/<app>/help/` — per-app content
+### `apps/<app>/src/lib/help/content/` — per-app content
 
-Study app's content lives here. Future apps get their own folders.
+Study app's content lives here. Future apps get their own folders. Content registers with `@ab/help` at app boot.
 
 ```text
 apps/study/
   src/
     routes/(app)/
       help/
-        +page.ts                Load data -> pass to HelpLayout
-        +page.svelte            Renders @ab/app-help components over study content
+        +page.ts                Load registered content -> pass to HelpLayout
+        +page.svelte            Renders @ab/help components over study content
     lib/help/
       content/                  Authored help pages + sections
         dashboard.ts
@@ -121,14 +139,22 @@ apps/study/
         calibration.ts
         knowledge-graph.ts
         getting-started.ts
-      index.ts                  Aggregated registry
+      register.ts               Calls @ab/help's registerPages() at boot
+      index.ts                  Aggregated per-app registry
 ```
 
-The content in `apps/study/src/lib/help/content/` is study-app-specific. When `apps/spatial/` lands, it gets its own `apps/spatial/src/lib/help/` without touching study's content.
+The content in `apps/study/src/lib/help/content/` is study-app-specific. When `apps/spatial/` lands, it gets its own `apps/spatial/src/lib/help/` without touching study's content. Each app's `register.ts` runs once at app boot, handing the per-app `HelpPage[]` to `@ab/help`'s `registerPages()`. The search widget in `libs/help/` then queries across aviation + all registered per-app content.
 
 ### How an app searches across both
 
-The `/glossary` route in study renders `@ab/aviation`. The `/help` route renders `@ab/app-help` with study's content. A top-nav search box can query both simultaneously by importing both registries and running a faceted search — results clearly labeled "aviation" or "help" and filterable. One search UX, separated data.
+Per decision #4, the `HelpSearch.svelte` widget renders **faceted results** — aviation and help entries appear in the same list, each labeled with its library + source-type, and filterable by axis:
+
+- Top filters: `Library: aviation | help | both` (multi-select), `Source-type: cfr / aim / poh / …`, each tag axis.
+- Power-user query syntax: type `tag:weather rules:ifr` to AND-filter.
+- Within each category: results ranked by exact-match → alias-match → keyword-match. **No cross-category implicit ranking.**
+- Keyboard shortcuts: `[` / `]` jump between library sections; `/` focuses search.
+
+The widget is a primitive in `libs/help/` so future apps reuse the same UX without reinventing.
 
 ## The Reference schema
 
@@ -234,6 +260,8 @@ export interface Source {
   path: string;
   /** Canonical URL where the user can cross-check. */
   url: string;
+  /** SHA-256 of the downloaded file. Lets us detect unintended overwrites. */
+  checksum: string;
 }
 ```
 
@@ -243,7 +271,7 @@ Downloaded source files live in a structured tree:
 data/sources/
   cfr/
     14cfr-2026-01.xml                 The full corpus
-    14cfr-2026-01.meta.json           Download metadata, checksums
+    14cfr-2026-01.meta.json           Download metadata, checksums, URL
   aim/
     aim-2026-01.pdf
     aim-2026-01.meta.json
@@ -260,7 +288,7 @@ data/sources/
     ac-61-83k.pdf
 ```
 
-`data/sources/` may be gitignored (multi-GB files), with checksums + download URLs committed so the user can re-download. The parsers operate on the local files; parsed output is committed.
+Per decision #2: `data/sources/` is gitignored during initial build-out. `*.meta.json` files (small — checksums, URLs, version, `downloadedAt`) stay committed so a fresh clone can re-download and verify. At the end of the first extraction phase, tally actual file sizes and revisit: commit small files, LFS medium files (~5-100 MB), external storage for anything larger. Source files the parsers have already consumed do not need to be re-downloaded on every dev machine — the extracted `*-generated.ts` reference files carry the verbatim text.
 
 ## The extraction pipeline
 
@@ -289,6 +317,8 @@ scanner: bun run references:scan         per-source parsers
 
 `scripts/references/scan.ts` walks every content location (`course/knowledge/**/*.md`, `apps/*/src/lib/help/content/**/*.ts`, hand-authored references' `paraphrase` fields) and extracts every id from every wiki-link. Deduped. Output: `data/references/manifest.json`.
 
+Per decision #3: the scanner runs **synchronously before `bun run dev`** and on `bun run check`. Sub-second on today's content; regex-based. Fails fast on broken wiki-links so authors catch them before the dev server starts. The slow thing in the pipeline is extraction (step 2), not the scan.
+
 Shape:
 
 ```json
@@ -308,7 +338,7 @@ Shape:
 
 ### Step 2: extract per source
 
-For each id in the manifest, look up its source from the id prefix + the in-reference `sources[]` field. Route to the right parser.
+For each id in the manifest, look up its source from the id prefix + the in-reference `sources[]` field. Route to the right parser. Run on demand — `bun run references:extract` — not on every dev start.
 
 Per-parser contract in `libs/aviation/src/sources/<type>/extract.ts`:
 
@@ -336,8 +366,8 @@ These files are committed. Regenerable, but committed so the data is reviewable 
 ### Step 4: yearly refresh
 
 1. Download new source file (e.g. `14cfr-2027-01.xml`).
-2. Update `sources/registry.ts` with the new version + path.
-3. Re-run `bun run references:build`.
+2. Update `sources/registry.ts` with the new version + path + checksum.
+3. Re-run `bun run references:extract`.
 4. `git diff libs/aviation/src/references/cfr-generated.ts` shows exactly which CFR sections changed their text.
 5. Hand-review the diff. Update `paraphrase` text where the reg's meaning shifted. Ship as a PR.
 
@@ -433,10 +463,11 @@ Migration of the existing 175 entries:
 
 Open questions specific to tagging, per the research doc:
 
-- Drop the original `domain` field entirely vs keep alongside as `aviationTopic[0]`?
 - Add `governance` to `aviationTopic` for organization entries (FAA, ICAO), or tag them `knowledgeKind: reference` with `sourceType: authored`?
 - Single vs multi-valued `knowledgeKind`? (Research recommends single; flags the "definition + regulation" dual-case as an edge.)
 - Where do ACS task codes live? Separate axis, or freeform keywords?
+
+(The "drop legacy `domain`" question is now closed — decision #1 above.)
 
 ## Routes
 
@@ -454,14 +485,16 @@ Two routes per app that surfaces these.
 
 Category views (e.g. "all weather" or "all CFR") are tag-filter permalinks, not separate routes.
 
-### `/help` (per-app, via `@ab/app-help` components)
+### `/help` (per-app, via `@ab/help` components + per-app registered content)
 
 ```text
 /help                          App help index. Study has its own content; other apps have theirs.
 /help/[slug]                   A specific help section (getting-started, calibration, …).
 ```
 
-Cross-surface search at the app top-nav queries both registries, segments results by source.
+The `/help` route exists in each app that has content to show. The app's `lib/help/register.ts` calls `@ab/help`'s `registerPages()` at boot so the library knows what content is available for search.
+
+Cross-surface search at the top nav queries both registries (aviation + registered per-app help), returning faceted results per decision #4. The search widget is `HelpSearch.svelte` in `@ab/help`.
 
 ## Quality gates
 
@@ -488,10 +521,64 @@ Warns (reports but doesn't fail) on:
 3. Commit.
 4. Gate reports: "3 TBD-id wiki-links, 0 broken links, all tag axes present."
 5. Resolve TBDs when convenient: author the reference if new, or look up an existing id.
-6. For machine-extracted content: add the id to a reference with the right `sources[]` citation, then run `bun run references:build` to materialize the `verbatim`.
+6. For machine-extracted content: add the id to a reference with the right `sources[]` citation, then run `bun run references:extract` to materialize the `verbatim`.
 
 ## Migration phases
 
 Numbered to match the glossary port plan's step numbers where possible.
 
-| Phase                                                                  
+| Phase                                                                           | What lands                                                                                                            | Gates when it lands                              |
+| ------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ |
+| 1. Schema + infra + 175 aviation entries                                        | `libs/aviation/` with types, registry, validation, 175 hand-authored references (paraphrase-only), retagged under the new 5-axis system | Ids unique, tags filled                          |
+| 2. `[[::]]` parser + `ReferenceText` + `ReferenceTerm`                          | Renders wiki-links in any prose                                                                                       | Parser fails on malformed                        |
+| 3. `/glossary` route mounted in study                                           | User can browse + filter + search                                                                                     | Category views work                              |
+| 4. Scanner + manifest + scanner wired into `bun run dev` and `bun run check`    | Fails fast on broken wiki-links; prints TBD-id count                                                                  | Sync, sub-second                                 |
+| 5. CFR source parser + 10 most-cited CFR sections extracted                     | Verbatim present for highest-value regs                                                                               | Version-stamped, diffable                        |
+| 6. AIM / POH / PCG / AC parsers                                                 | Incremental, one source at a time                                                                                     | Same contract as CFR parser                      |
+| 7. `libs/help/` + study `/help` route + cross-library search widget             | App-specific help separated from aviation reference; search spans both                                                | Faceted search works                             |
+| 8. NTSB + AOPA + hand-authored articles                                         | Longer-tail sources                                                                                                   |                                                  |
+| 9. Yearly refresh tooling + diff-first review mode + `data/sources/` size report | Makes the refresh trivial; user decides per-source storage (commit / LFS / external) from actual sizes               |                                                  |
+
+Phases 1 and 2 are the minimum viable. Everything after is incremental and parallelizable.
+
+## Extensibility
+
+- **New source type** = new folder under `libs/aviation/src/sources/`, implement `SourceExtractor`, register parser.
+- **New app** = new `apps/<app>/src/lib/help/content/`, mount `/help` + `/glossary` routes, register content with `@ab/help` at boot.
+- **New tag axis** = extend the tags schema, write the migration pass, update gates.
+- **Wiki-link target types beyond Reference** (e.g. linking to a knowledge-graph node) = add kinds to the parser output, route to different UI components.
+
+## Remaining open questions for user
+
+Closed: #1 (domain dropped), #2 (gitignore for now), #3 (scanner sync + fast), #4 (faceted search), #5 (help library named `libs/help/`). See "Decisions locked" above.
+
+Still open (lower-stakes — can be answered during work-package authoring):
+
+1. **Tooltip render**: inline popover on hover, or just "highlight + click-to-navigate"? Firc used hover-popover. Recommendation: hover-popover for desktop, tap-to-open for touch, keyboard-focus-shows-tooltip for a11y.
+
+2. **Wiki-link behavior on resolved-but-no-verbatim-yet references?** If a user clicks on `[[cfr-14-91-167::]]` and the reference exists with paraphrase but verbatim is still "extraction pending," how do we render the detail page? Recommendation: show paraphrase + sources, render a "verbatim pending extraction" badge, provide a deep link to the CFR URL so the user can still read the source.
+
+3. **`apps/<app>/help/` content shape** — is it TypeScript data files (like glossary entries) or markdown? TypeScript lets the gates run; markdown is easier to author. Recommendation: TypeScript with a `body` field carrying markdown (gates on the TS wrapper; the prose is whatever the author wants).
+
+4. **ACS task codes**: separate axis, or freeform keywords? Tagging research flagged but didn't resolve.
+
+5. **`governance` as an `aviationTopic` value** for organization entries (FAA, ICAO, EASA)? Or keep them in `knowledgeKind: reference` + `sourceType: authored` per the tagging research's suggestion?
+
+6. **Single vs multi-valued `knowledgeKind`?** Research recommends single-valued; the "definition + regulation" dual case (e.g. `cfr-14-1-1` definitions) is the edge. Could be solved by spawning `cfr-14-1-1-def` as a separate id.
+
+## What happens after sign-off
+
+With decisions #1-5 locked, three work packages land next:
+
+- **wp-reference-system-core** — schema, registry, validation, parser, `ReferenceText`/`ReferenceTerm`, 175-entry port under the new 5-axis taxonomy, tag gates, wiki-link scanner wired into `bun run check` + `bun run dev`. Covers phases 1-4.
+- **wp-reference-extraction-pipeline** — source registry (with `data/sources/` gitignored + meta.json committed), CFR parser, scan/build/validate scripts, 10 CFR extractions, yearly-refresh tooling. Covers phases 5 + 9.
+- **wp-help-library** — `libs/help/` with schema + UI + faceted search widget, `/help` route in study, first authored help content, content registration at app boot. Covers phase 7.
+
+Phases 6 + 8 are content work that fits in their own smaller packages per source.
+
+## Related
+
+- [20260422-glossary-port-plan.md](./20260422-glossary-port-plan.md) — the port mechanics from airboss-firc
+- [20260422-tagging-architecture-research.md](./20260422-tagging-architecture-research.md) — the tagging taxonomy landed
+- [ADR 011 — Knowledge Graph Learning System](../../decisions/011-knowledge-graph-learning-system/decision.md) — downstream consumer
+- [docs/work-packages/knowledge-graph/spec.md](../../work-packages/knowledge-graph/spec.md) — the graph that will link into references
