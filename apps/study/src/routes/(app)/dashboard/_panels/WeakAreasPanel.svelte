@@ -67,15 +67,15 @@ function reasonLabel(reason: WeakAreaReason): string {
 		padding: 0;
 		display: flex;
 		flex-direction: column;
-		gap: 0.25rem;
+		gap: 0.125rem;
 	}
 
 	.row {
 		display: flex;
 		flex-direction: column;
 		gap: 0.125rem;
-		padding: 0.5rem 0.625rem;
-		border-radius: 6px;
+		padding: 0.3125rem 0.5rem;
+		border-radius: 2px;
 		text-decoration: none;
 		color: #0f172a;
 		border: 1px solid transparent;
@@ -88,7 +88,7 @@ function reasonLabel(reason: WeakAreaReason): string {
 
 	.dm-name {
 		font-weight: 600;
-		font-size: 0.9375rem;
+		font-size: 0.8125rem;
 	}
 
 	.reasons {
@@ -98,14 +98,15 @@ function reasonLabel(reason: WeakAreaReason): string {
 	}
 
 	.reason {
-		font-size: 0.8125rem;
+		font-size: 0.6875rem;
 		color: #b45309;
 		font-variant-numeric: tabular-nums;
+		font-family: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
 	}
 
 	.muted {
 		margin: 0;
 		color: #64748b;
-		font-size: 0.875rem;
+		font-size: 0.75rem;
 	}
 </style>

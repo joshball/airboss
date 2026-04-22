@@ -37,7 +37,8 @@ import PanelShell from './PanelShell.svelte';
 	.placeholder {
 		margin: 0;
 		color: #64748b;
-		font-size: 0.875rem;
+		font-size: 0.75rem;
+		line-height: 1.5;
 	}
 
 	.placeholder a {
@@ -45,10 +46,10 @@ import PanelShell from './PanelShell.svelte';
 	}
 
 	.action-btn {
-		padding: 0.375rem 0.75rem;
-		font-size: 0.8125rem;
+		padding: 0.25rem 0.5rem;
+		font-size: 0.75rem;
 		font-weight: 600;
-		border-radius: 6px;
+		border-radius: 2px;
 		border: 1px solid #cbd5e1;
 		background: white;
 		color: #475569;

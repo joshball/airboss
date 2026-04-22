@@ -73,7 +73,7 @@ function domainHref(slug: string): string {
 		padding: 0;
 		display: flex;
 		flex-direction: column;
-		gap: 0.25rem;
+		gap: 0.125rem;
 	}
 
 	.dm {
@@ -81,10 +81,11 @@ function domainHref(slug: string): string {
 		justify-content: space-between;
 		align-items: baseline;
 		gap: 0.5rem;
-		padding: 0.375rem 0.5rem;
-		border-radius: 6px;
+		padding: 0.25rem 0.375rem;
+		border-radius: 2px;
 		text-decoration: none;
 		color: #0f172a;
+		font-size: 0.8125rem;
 	}
 
 	.dm:hover {
@@ -99,25 +100,26 @@ function domainHref(slug: string): string {
 		color: #1d4ed8;
 		font-weight: 600;
 		font-variant-numeric: tabular-nums;
+		font-family: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
 	}
 
 	.more {
 		color: #94a3b8;
-		font-size: 0.8125rem;
-		padding: 0.25rem 0.5rem;
+		font-size: 0.75rem;
+		padding: 0.125rem 0.375rem;
 	}
 
 	.muted {
 		margin: 0;
 		color: #64748b;
-		font-size: 0.875rem;
+		font-size: 0.75rem;
 	}
 
 	.action-btn {
-		padding: 0.375rem 0.75rem;
-		font-size: 0.8125rem;
+		padding: 0.25rem 0.5rem;
+		font-size: 0.75rem;
 		font-weight: 600;
-		border-radius: 6px;
+		border-radius: 2px;
 		border: 1px solid #2563eb;
 		background: #2563eb;
 		color: white;
