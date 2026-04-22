@@ -82,6 +82,10 @@ export const ROUTES = {
 	// Study -- Calibration
 	CALIBRATION: '/calibration',
 
+	// Study -- Glossary (aviation reference library; shared via @ab/aviation)
+	GLOSSARY: '/glossary',
+	GLOSSARY_ID: (id: string) => `/glossary/${encodeURIComponent(id)}` as const,
+
 	// Study -- Knowledge nodes
 	NODES: '/nodes',
 	NODE: (id: string) => `/nodes/${id}` as const,
