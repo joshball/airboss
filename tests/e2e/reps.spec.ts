@@ -79,9 +79,9 @@ test.describe('reps', () => {
 		const startLink = page.getByRole('link', { name: /start session/i });
 		if (await startLink.isVisible().catch(() => false)) {
 			await startLink.click();
-			// Phase 3 (ADR 012): rep entry points land on the preset gallery /
-			// session preview at `/session/start` instead of the retired
-			// `/reps/session` runner.
+			// ADR 012: rep entry points land on the preset gallery /
+			// session preview at `/session/start`. The legacy rep-session
+			// runner was deleted in phase 6.
 			await expect(page).toHaveURL((url) => url.pathname === ROUTES.SESSION_START);
 			// The session-start page renders either the preset gallery heading
 			// (no active plan) or the in-plan preview heading; either is a
