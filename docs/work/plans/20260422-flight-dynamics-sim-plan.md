@@ -71,6 +71,37 @@ pitch + power + rudder + trim.
 land the Playground; stall horn triggers on AoA not airspeed; all 38
 FDM tests green. Shipped.
 
+### Phase 0.6 -- Cockpit polish (shipped 2026-04-22)
+
+**Goal:** resolve user-zero feedback from flying Phase 0.5. Small UX fixes,
+not a new capability wave.
+
+- Procedural engine sound (two-osc additive + band-passed noise) driven by
+  FDM snapshots. Fundamental tracks RPM; throttle scales gain; AoA +
+  throttle add a climb-strain detune; dynamic pressure drives wind noise.
+  Shares the `SIM_STORAGE_KEYS.MUTE` toggle with the stall horn and stops
+  on scenario outcome.
+- W / S swapped to match stick-forward semantics: W = yoke forward =
+  elevator down = nose drops; S = yoke back = elevator up = nose rises.
+  ArrowDown / ArrowUp bound to the same actions so the physical arrow
+  direction matches the commanded pitch.
+- Mute and pause buttons replaced with state icons (speaker, speaker +
+  slash, play, pause). `aria-label` and `title` are state-first ("Sound
+  is on. Click to mute."). Auto-coordinate stays a labelled checkbox.
+- Always-visible keyboard cheatsheet along the bottom of the cockpit.
+  Derives labels from `SIM_KEYBINDINGS`; collapsible; persisted per-user
+  in localStorage under `SIM_STORAGE_KEYS.CHEATSHEET_COLLAPSED`.
+- Cockpit layout tightened to fit 1280x800 without a scrollbar: smaller
+  main padding, 180 px instruments (was 200), compressed banner/status
+  padding and gaps.
+
+**Exit criteria:** engine sound audible and physics-responsive; W pushes
+nose down; mute + pause icons are unambiguous; cheatsheet present and
+collapsible; no scrollbar at 1280x800; 55 BC tests green (38 FDM + 17
+audio mapping).
+
+Configurable keybindings are deferred to the next PR.
+
 ### Phase 1 -- Spec and work package
 
 **Goal:** turn the prototype's lessons + the PRD into a proper work package.
