@@ -307,7 +307,7 @@ async function fetchNodeCandidates(
 	userId: string,
 	certFilter: readonly Cert[],
 	db: Db,
-	now: Date,
+	_now: Date,
 ): Promise<EngineNodeCandidate[]> {
 	const nodes = await db
 		.select({
@@ -568,14 +568,17 @@ export function buildEnginePools(userId: string, now: Date, db: Db = defaultDb):
  * Callers show this on `/session/start`; Shuffle reruns with a new seed.
  *
  * Note on `now`: `startSession` threads a single `now` through preview and
- * commit so slot `presentedAt` matches the engine's view of `dueAt`. Callers
- * that run preview standalone can omit `now` and accept the default.
+ * commit so slot `presentedAt` matches the engine's view of `dueAt`. `now` is
+ * required so callers have to pick a timestamp explicitly -- otherwise a
+ * standalone preview would use `new Date()` and a follow-up `commitSession`
+ * with a different `now` could produce slot rows whose `presentedAt` predates
+ * the engine's view of `dueAt`.
  */
 export async function previewSession(
 	userId: string,
-	options: PreviewOptions = {},
+	options: PreviewOptions,
+	now: Date,
 	db: Db = defaultDb,
-	now: Date = new Date(),
 ): Promise<SessionPreview> {
 	const plan = await getActivePlan(userId, db);
 	if (!plan) throw new NoActivePlanError(userId);
@@ -639,8 +642,8 @@ export async function previewSession(
 export async function commitSession(
 	userId: string,
 	preview: SessionPreview,
+	now: Date,
 	db: Db = defaultDb,
-	now: Date = new Date(),
 ): Promise<SessionRow> {
 	const sessionId = generateSessionId();
 	return await db.transaction(async (tx) => {
@@ -689,15 +692,15 @@ export async function commitSession(
 	});
 }
 
-/** Preview + commit in one call. */
+/** Preview + commit in one call. Threads a single `now` through both legs. */
 export async function startSession(
 	userId: string,
 	options: PreviewOptions = {},
 	db: Db = defaultDb,
 	now: Date = new Date(),
 ): Promise<{ session: SessionRow; preview: SessionPreview }> {
-	const preview = await previewSession(userId, options, db, now);
-	const row = await commitSession(userId, preview, db, now);
+	const preview = await previewSession(userId, options, now, db);
+	const row = await commitSession(userId, preview, now, db);
 	return { session: row, preview };
 }
 
@@ -1065,23 +1068,48 @@ export async function getSessionSummary(
 
 	// Suggested next -- up to 3 structured, clickable actions. Each hint maps
 	// to a concrete route so the UI can render a button/link rather than prose
-	// the learner has to parse and navigate by hand.
+	// the learner has to parse and navigate by hand. The three lookups
+	// (due-tomorrow count, relearning count, node title) are independent of
+	// each other, so batch them in a single Promise.all to cut the load-path
+	// round-trips from three sequential hits to one parallel fan-out.
 	const suggestedNext: SessionSuggestedAction[] = [];
-
 	const tomorrow = new Date(now.getTime() + 24 * 60 * 60 * 1000);
-	const [dueTomorrowRow] = await db
-		.select({ c: sql<number>`count(*)::int` })
-		.from(cardState)
-		.innerJoin(card, and(eq(card.id, cardState.cardId), eq(card.userId, cardState.userId)))
-		.where(
-			and(
-				eq(cardState.userId, userId),
-				eq(card.status, CARD_STATUSES.ACTIVE),
-				gte(cardState.dueAt, now),
-				lt(cardState.dueAt, tomorrow),
+	const nodeStarts = sirRows.filter((r) => r.itemKind === SESSION_ITEM_KINDS.NODE_START && r.nodeId && r.completedAt);
+	const firstNodeId = nodeStarts[0]?.nodeId ?? null;
+	const wantRelearning = sess.mode === SESSION_MODES.CONTINUE || sess.mode === SESSION_MODES.EXPAND;
+
+	const [dueTomorrowRows, relearningRows, nodeTitleRow] = await Promise.all([
+		db
+			.select({ c: sql<number>`count(*)::int` })
+			.from(cardState)
+			.innerJoin(card, and(eq(card.id, cardState.cardId), eq(card.userId, cardState.userId)))
+			.where(
+				and(
+					eq(cardState.userId, userId),
+					eq(card.status, CARD_STATUSES.ACTIVE),
+					gte(cardState.dueAt, now),
+					lt(cardState.dueAt, tomorrow),
+				),
 			),
-		);
-	const dueTomorrow = Number(dueTomorrowRow?.c ?? 0);
+		wantRelearning
+			? db
+					.select({ c: sql<number>`count(*)::int` })
+					.from(cardState)
+					.innerJoin(card, and(eq(card.id, cardState.cardId), eq(card.userId, cardState.userId)))
+					.where(
+						and(
+							eq(cardState.userId, userId),
+							eq(cardState.state, CARD_STATES.RELEARNING),
+							eq(card.status, CARD_STATUSES.ACTIVE),
+						),
+					)
+			: Promise.resolve([] as Array<{ c: number }>),
+		firstNodeId
+			? db.select({ title: knowledgeNode.title }).from(knowledgeNode).where(eq(knowledgeNode.id, firstNodeId)).limit(1)
+			: Promise.resolve([] as Array<{ title: string }>),
+	]);
+
+	const dueTomorrow = Number(dueTomorrowRows[0]?.c ?? 0);
 	if (dueTomorrow > 0) {
 		suggestedNext.push({
 			label: `Review ${dueTomorrow} ${dueTomorrow === 1 ? 'card' : 'cards'} due in the next 24 hours`,
@@ -1090,38 +1118,18 @@ export async function getSessionSummary(
 		});
 	}
 
-	if (sess.mode === SESSION_MODES.CONTINUE || sess.mode === SESSION_MODES.EXPAND) {
-		const [relearningRow] = await db
-			.select({ c: sql<number>`count(*)::int` })
-			.from(cardState)
-			.innerJoin(card, and(eq(card.id, cardState.cardId), eq(card.userId, cardState.userId)))
-			.where(
-				and(
-					eq(cardState.userId, userId),
-					eq(cardState.state, CARD_STATES.RELEARNING),
-					eq(card.status, CARD_STATUSES.ACTIVE),
-				),
-			);
-		if (Number(relearningRow?.c ?? 0) > 5) {
-			suggestedNext.push({
-				label: 'Start a Strengthen session to hit relearning cards',
-				href: `${ROUTES.SESSION_START}?${QUERY_PARAMS.SESSION_MODE}=${SESSION_MODES.STRENGTHEN}`,
-				variant: suggestedNext.length === 0 ? 'primary' : 'secondary',
-			});
-		}
+	if (wantRelearning && Number(relearningRows[0]?.c ?? 0) > 5) {
+		suggestedNext.push({
+			label: 'Start a Strengthen session to hit relearning cards',
+			href: `${ROUTES.SESSION_START}?${QUERY_PARAMS.SESSION_MODE}=${SESSION_MODES.STRENGTHEN}`,
+			variant: suggestedNext.length === 0 ? 'primary' : 'secondary',
+		});
 	}
 
-	const nodeStarts = sirRows.filter((r) => r.itemKind === SESSION_ITEM_KINDS.NODE_START && r.nodeId && r.completedAt);
-	const firstNodeId = nodeStarts[0]?.nodeId ?? null;
 	if (firstNodeId) {
 		// Resolve the node title so the button label reads naturally instead
 		// of showing a raw kebab-case slug.
-		const [nodeRow] = await db
-			.select({ title: knowledgeNode.title })
-			.from(knowledgeNode)
-			.where(eq(knowledgeNode.id, firstNodeId))
-			.limit(1);
-		const title = nodeRow?.title ?? firstNodeId;
+		const title = nodeTitleRow[0]?.title ?? firstNodeId;
 		suggestedNext.push({
 			label: `Continue: ${title}`,
 			href: ROUTES.KNOWLEDGE_LEARN(firstNodeId),

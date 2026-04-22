@@ -1,5 +1,5 @@
 import { requireAuth } from '@ab/auth';
-import { getCard, getCards } from '@ab/bc-study';
+import { card, getCard, getCards } from '@ab/bc-study';
 import {
 	BROWSE_PAGE_SIZE,
 	CARD_STATUS_VALUES,
@@ -13,6 +13,8 @@ import {
 	type Domain,
 	QUERY_PARAMS,
 } from '@ab/constants';
+import { db, escapeLikePattern } from '@ab/db';
+import { and, eq, ilike, inArray, or, type SQL, sql } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
 
 function narrowDomain(value: string | null): Domain | undefined {
@@ -62,6 +64,26 @@ export const load: PageServerLoad = async (event) => {
 	const hasMore = cards.length > BROWSE_PAGE_SIZE;
 	const visible = hasMore ? cards.slice(0, BROWSE_PAGE_SIZE) : cards;
 
+	// Total count for pagination "Page X of Y" / "Showing N-M of T". Mirrors
+	// the filter shape of `getCards` above so the count matches what's listed.
+	// Implemented inline with Drizzle rather than extending the study BC -- the
+	// BC deliberately stays narrow; the app may need a count in exactly this
+	// shape once (per browse page), so a BC-level helper isn't justified yet.
+	const countClauses: SQL[] = [eq(card.userId, user.id), inArray(card.status, [status])];
+	if (domain) countClauses.push(eq(card.domain, domain));
+	if (cardType) countClauses.push(eq(card.cardType, cardType));
+	if (sourceType) countClauses.push(eq(card.sourceType, sourceType));
+	if (search && search.trim().length > 0) {
+		const pattern = `%${escapeLikePattern(search.trim())}%`;
+		const cond = or(ilike(card.front, pattern), ilike(card.back, pattern));
+		if (cond) countClauses.push(cond);
+	}
+	const [{ total }] = await db
+		.select({ total: sql<number>`count(*)::int` })
+		.from(card)
+		.where(and(...countClauses));
+	const totalPages = Math.max(1, Math.ceil(total / BROWSE_PAGE_SIZE));
+
 	// Read `?created=<id>` -- set when the user lands here straight from a
 	// successful create. The banner + row highlight read this.
 	// See DESIGN_PRINCIPLES.md #7.
@@ -78,6 +100,8 @@ export const load: PageServerLoad = async (event) => {
 		page: pageNum,
 		hasMore,
 		pageSize: BROWSE_PAGE_SIZE,
+		total,
+		totalPages,
 		createdCard,
 	};
 };

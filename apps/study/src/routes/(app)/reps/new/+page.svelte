@@ -314,7 +314,21 @@ function difficultyLabel(slug: string): string {
 		</label>
 
 		<div class="actions">
-			<a class="btn ghost" href={ROUTES.REPS}>Cancel</a>
+			<!-- Progressive enhancement: with JS, history.back() returns to the referring page
+			     (/reps, /reps/browse, or wherever the user clicked "New scenario"). Without JS,
+			     the href fallback routes to /reps. -->
+			<a
+				class="btn ghost"
+				href={ROUTES.REPS}
+				onclick={(e: MouseEvent) => {
+					if (typeof window !== 'undefined' && window.history.length > 1) {
+						e.preventDefault();
+						window.history.back();
+					}
+				}}
+			>
+				Cancel
+			</a>
 			<button type="submit" class="btn primary" disabled={loading}>
 				{loading ? 'Saving...' : 'Save scenario'}
 			</button>

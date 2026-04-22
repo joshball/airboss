@@ -25,9 +25,51 @@ let { form }: { form: ActionData } = $props();
 let sessionLength = $state<number>(DEFAULT_SESSION_LENGTH);
 let submitting = $state(false);
 
-const seedCerts = $derived(new Set((form?.values?.certGoals ?? []) as string[]));
-const seedFocus = $derived(new Set((form?.values?.focusDomains ?? []) as string[]));
-const seedSkip = $derived(new Set((form?.values?.skipDomains ?? []) as string[]));
+// Live state mirrors of the form so the preview can reflect what the user sees.
+// Seeded from `form.values` when a prior submit failed; otherwise defaults.
+// svelte-ignore state_referenced_locally -- initial seed is the authoritative source; subsequent updates via bindings
+const seedFormValues = form?.values;
+
+let title = $state<string>((seedFormValues?.title as string | undefined) ?? '');
+let selectedCerts = $state<Set<string>>(new Set((seedFormValues?.certGoals ?? []) as string[]));
+let selectedFocus = $state<Set<string>>(new Set((seedFormValues?.focusDomains ?? []) as string[]));
+let selectedSkip = $state<Set<string>>(new Set((seedFormValues?.skipDomains ?? []) as string[]));
+let depthPreference = $state<DepthPreference>('working');
+let defaultMode = $state<SessionMode>('mixed');
+
+function toggleCert(cert: string, checked: boolean) {
+	const next = new Set(selectedCerts);
+	if (checked) next.add(cert);
+	else next.delete(cert);
+	selectedCerts = next;
+}
+
+function toggleFocus(d: string, checked: boolean) {
+	const next = new Set(selectedFocus);
+	if (checked) next.add(d);
+	else next.delete(d);
+	selectedFocus = next;
+}
+
+function toggleSkip(d: string, checked: boolean) {
+	const next = new Set(selectedSkip);
+	if (checked) next.add(d);
+	else next.delete(d);
+	selectedSkip = next;
+}
+
+function domainLabel(slug: string): string {
+	return (DOMAIN_LABELS as Record<string, string>)[slug] ?? slug;
+}
+
+function certLabel(slug: string): string {
+	return (CERT_LABELS as Record<string, string>)[slug] ?? slug;
+}
+
+// Preview: sorted labels so the summary is stable regardless of click order.
+const certPreview = $derived([...selectedCerts].sort().map((c) => certLabel(c)));
+const focusPreview = $derived([...selectedFocus].sort().map((d) => domainLabel(d)));
+const skipPreview = $derived([...selectedSkip].sort().map((d) => domainLabel(d)));
 </script>
 
 <svelte:head>
@@ -59,13 +101,7 @@ const seedSkip = $derived(new Set((form?.values?.skipDomains ?? []) as string[])
 
 		<fieldset>
 			<legend>Plan name (optional)</legend>
-			<input
-				type="text"
-				name="title"
-				placeholder="Default Plan"
-				maxlength="200"
-				value={form?.values?.title ?? ''}
-			/>
+			<input type="text" name="title" placeholder="Default Plan" maxlength="200" bind:value={title} />
 		</fieldset>
 
 		<fieldset>
@@ -77,7 +113,13 @@ const seedSkip = $derived(new Set((form?.values?.skipDomains ?? []) as string[])
 			<div class="choice-row">
 				{#each CERT_VALUES as cert (cert)}
 					<label class="choice">
-						<input type="checkbox" name="certGoals" value={cert} checked={seedCerts.has(cert)} />
+						<input
+							type="checkbox"
+							name="certGoals"
+							value={cert}
+							checked={selectedCerts.has(cert)}
+							onchange={(e) => toggleCert(cert, (e.currentTarget as HTMLInputElement).checked)}
+						/>
 						<span>{CERT_LABELS[cert as Cert]}</span>
 					</label>
 				{/each}
@@ -93,7 +135,13 @@ const seedSkip = $derived(new Set((form?.values?.skipDomains ?? []) as string[])
 			<div class="choice-grid">
 				{#each DOMAIN_VALUES as d (d)}
 					<label class="choice">
-						<input type="checkbox" name="focusDomains" value={d} checked={seedFocus.has(d)} />
+						<input
+							type="checkbox"
+							name="focusDomains"
+							value={d}
+							checked={selectedFocus.has(d)}
+							onchange={(e) => toggleFocus(d, (e.currentTarget as HTMLInputElement).checked)}
+						/>
 						<span>{DOMAIN_LABELS[d as Domain]}</span>
 					</label>
 				{/each}
@@ -106,7 +154,13 @@ const seedSkip = $derived(new Set((form?.values?.skipDomains ?? []) as string[])
 			<div class="choice-grid">
 				{#each DOMAIN_VALUES as d (d)}
 					<label class="choice">
-						<input type="checkbox" name="skipDomains" value={d} checked={seedSkip.has(d)} />
+						<input
+							type="checkbox"
+							name="skipDomains"
+							value={d}
+							checked={selectedSkip.has(d)}
+							onchange={(e) => toggleSkip(d, (e.currentTarget as HTMLInputElement).checked)}
+						/>
 						<span>{DOMAIN_LABELS[d as Domain]}</span>
 					</label>
 				{/each}
@@ -118,7 +172,7 @@ const seedSkip = $derived(new Set((form?.values?.skipDomains ?? []) as string[])
 			<div class="choice-row">
 				{#each DEPTH_PREFERENCE_VALUES as d (d)}
 					<label class="choice radio">
-						<input type="radio" name="depthPreference" value={d} checked={d === 'working'} />
+						<input type="radio" name="depthPreference" value={d} bind:group={depthPreference} />
 						<span>{DEPTH_PREFERENCE_LABELS[d as DepthPreference]}</span>
 					</label>
 				{/each}
@@ -130,7 +184,7 @@ const seedSkip = $derived(new Set((form?.values?.skipDomains ?? []) as string[])
 			<div class="choice-row">
 				{#each SESSION_MODE_VALUES as m (m)}
 					<label class="choice radio">
-						<input type="radio" name="defaultMode" value={m} checked={m === 'mixed'} />
+						<input type="radio" name="defaultMode" value={m} bind:group={defaultMode} />
 						<span>{SESSION_MODE_LABELS[m as SessionMode]}</span>
 					</label>
 				{/each}
@@ -151,6 +205,41 @@ const seedSkip = $derived(new Set((form?.values?.skipDomains ?? []) as string[])
 				<span>{MAX_SESSION_LENGTH}</span>
 			</div>
 		</fieldset>
+
+		<aside class="preview" aria-label="Plan preview">
+			<h2 class="preview-h">Plan preview</h2>
+			<p class="preview-help">Review before you create. Activating this plan archives any existing one.</p>
+			<dl class="preview-meta">
+				<div>
+					<dt>Name</dt>
+					<dd>{title.trim().length > 0 ? title : 'Default Plan'}</dd>
+				</div>
+				<div>
+					<dt>Cert goals</dt>
+					<dd>{certPreview.length > 0 ? certPreview.join(', ') : 'General practice (no cert filter)'}</dd>
+				</div>
+				<div>
+					<dt>Focus domains</dt>
+					<dd>{focusPreview.length > 0 ? focusPreview.join(', ') : 'Balanced (all domains)'}</dd>
+				</div>
+				<div>
+					<dt>Skip domains</dt>
+					<dd>{skipPreview.length > 0 ? skipPreview.join(', ') : 'None'}</dd>
+				</div>
+				<div>
+					<dt>Depth</dt>
+					<dd>{DEPTH_PREFERENCE_LABELS[depthPreference]}</dd>
+				</div>
+				<div>
+					<dt>Mode</dt>
+					<dd>{SESSION_MODE_LABELS[defaultMode]}</dd>
+				</div>
+				<div>
+					<dt>Session length</dt>
+					<dd>{sessionLength} items</dd>
+				</div>
+			</dl>
+		</aside>
 
 		<div class="actions">
 			<a class="btn ghost" href={ROUTES.PLANS}>Cancel</a>
@@ -212,9 +301,59 @@ const seedSkip = $derived(new Set((form?.values?.skipDomains ?? []) as string[])
 	}
 
 	.help.subtle {
-		color: #94a3b8;
+		color: var(--ab-color-fg-faint);
 		font-size: 0.75rem;
 		font-style: italic;
+	}
+
+	.preview {
+		background: var(--ab-color-surface-muted);
+		border: 1px solid var(--ab-color-border);
+		border-radius: var(--ab-radius-md);
+		padding: 1rem 1.25rem;
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+	}
+
+	.preview-h {
+		margin: 0;
+		font-size: var(--ab-font-size-sm);
+		color: var(--ab-color-fg-subtle);
+		text-transform: uppercase;
+		letter-spacing: 0.08em;
+		font-weight: 600;
+	}
+
+	.preview-help {
+		margin: 0;
+		color: var(--ab-color-fg-subtle);
+		font-size: var(--ab-font-size-sm);
+	}
+
+	.preview-meta {
+		margin: 0;
+		display: grid;
+		grid-template-columns: max-content 1fr;
+		gap: 0.25rem 0.875rem;
+		font-size: var(--ab-font-size-sm);
+	}
+
+	.preview-meta > div {
+		display: contents;
+	}
+
+	.preview-meta dt {
+		font-weight: 600;
+		color: var(--ab-color-fg-subtle);
+		text-transform: uppercase;
+		letter-spacing: 0.04em;
+		font-size: var(--ab-font-size-xs);
+	}
+
+	.preview-meta dd {
+		margin: 0;
+		color: var(--ab-color-fg);
 	}
 
 	input[type='text'] {
