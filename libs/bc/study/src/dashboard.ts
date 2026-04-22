@@ -258,7 +258,7 @@ export async function getRecentActivity(
 	}
 
 	// When the streak might extend before the sparkline window, fall back to
-	// a full 1-year lookup so the number is honest. Single DISTINCT query.
+	// a full 1-year lookup so the number is accurate. Single DISTINCT query.
 	if (streakDays === days && days > 0) {
 		streakDays = await extendedStreak(userId, db, now);
 	}

@@ -10,10 +10,13 @@ import { DEFAULT_THEME, type ThemeName } from './resolve';
  * its subtree. The (app) layout uses this to keep most routes on `web`
  * while wrapping `/dashboard` in a `tui` provider.
  *
- * The wrapper is a plain block-level div so token-scoped styles
- * (background, color, font-family applied to `[data-theme]` in tokens.css)
- * actually paint. The wrapper inherits sizing from its parent via `width:
- * 100%` so it doesn't accidentally collapse.
+ * The wrapper uses `display: contents` so it does not participate in
+ * layout; only `data-theme` is meaningful. Token values cascade to
+ * descendants via CSS custom-property inheritance and via
+ * `[data-theme='x'] *` selectors in `tokens.css`. If you need a paint
+ * surface (background, border, padding), wrap children in a `Card` or
+ * `PanelShell` primitive -- do not style this wrapper; `display: contents`
+ * drops it from the box tree.
  */
 
 let {
