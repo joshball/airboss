@@ -1,8 +1,11 @@
 import { requireAuth } from '@ab/auth';
 import {
+	addSkipDomain,
+	addSkipNode,
 	CardNotFoundError,
 	CardNotReviewableError,
 	completeSession,
+	getActivePlan,
 	getCard,
 	getScenario,
 	getSession,
@@ -12,19 +15,26 @@ import {
 	ScenarioNotAttemptableError,
 	ScenarioNotFoundError,
 	SessionNotFoundError,
+	setCardStatus,
+	setScenarioStatus,
 	submitAttempt,
 	submitAttemptSchema,
 	submitReview,
 	submitReviewSchema,
 } from '@ab/bc-study';
 import {
+	CARD_STATUSES,
 	CONFIDENCE_LEVEL_VALUES,
 	type ConfidenceLevel,
+	DOMAIN_VALUES,
+	type Domain,
 	QUERY_PARAMS,
 	type ReviewRating,
 	ROUTES,
+	SCENARIO_STATUSES,
 	SESSION_ITEM_KINDS,
 	SESSION_SKIP_KIND_VALUES,
+	SESSION_SKIP_KINDS,
 	type SessionItemKind,
 	type SessionReasonCode,
 	type SessionSkipKind,
@@ -156,9 +166,49 @@ async function loadSlot(sessionId: string, userId: string, slotIndex: number): P
 	};
 }
 
+/**
+ * Guard for every mutating action: a completed session is read-only. A stale
+ * form (back button, duplicate tab) landing on this route could otherwise write
+ * a slot result after the summary was already computed, silently invalidating
+ * it. Returns the session row on success so callers can skip a re-fetch.
+ */
+async function requireOpenSession(sessionId: string, userId: string): Promise<SessionRowLike> {
+	const sess = await getSession(sessionId, userId);
+	if (!sess) throw error(404, { message: 'Session not found' });
+	if (sess.completedAt !== null) {
+		throw redirect(303, ROUTES.SESSION_SUMMARY(sess.id));
+	}
+	return { id: sess.id, userId: sess.userId };
+}
+
+interface SessionRowLike {
+	id: string;
+	userId: string;
+}
+
+/**
+ * Resolve the domain of a slot's attached card/scenario -- used when the user
+ * picks SKIP_KINDS.TOPIC to add the right entry to plan.skip_domains. Reads
+ * from the BC so the route doesn't need to poke at the schema directly.
+ */
+async function resolveSlotDomain(userId: string, slot: SlotRefs): Promise<Domain | null> {
+	if (slot.itemKind === SESSION_ITEM_KINDS.CARD && slot.cardId) {
+		const row = await getCard(slot.cardId, userId);
+		const d = row?.card.domain;
+		return d && (DOMAIN_VALUES as readonly string[]).includes(d) ? (d as Domain) : null;
+	}
+	if (slot.itemKind === SESSION_ITEM_KINDS.REP && slot.scenarioId) {
+		const row = await getScenario(slot.scenarioId, userId);
+		const d = row?.domain;
+		return d && (DOMAIN_VALUES as readonly string[]).includes(d) ? (d as Domain) : null;
+	}
+	return null;
+}
+
 export const actions: Actions = {
 	submitReview: async (event) => {
 		const user = requireAuth(event);
+		await requireOpenSession(event.params.id, user.id);
 		const form = await event.request.formData();
 		const slotIndex = Number(form.get('slotIndex'));
 		const ratingRaw = form.get('rating');
@@ -222,6 +272,7 @@ export const actions: Actions = {
 
 	submitRep: async (event) => {
 		const user = requireAuth(event);
+		await requireOpenSession(event.params.id, user.id);
 		const form = await event.request.formData();
 		const slotIndex = Number(form.get('slotIndex'));
 		const chosenOption = String(form.get('chosenOption') ?? '');
@@ -297,6 +348,7 @@ export const actions: Actions = {
 
 	completeNode: async (event) => {
 		const user = requireAuth(event);
+		await requireOpenSession(event.params.id, user.id);
 		const form = await event.request.formData();
 		const slotIndex = Number(form.get('slotIndex'));
 		if (!Number.isInteger(slotIndex)) return fail(400, { error: 'slotIndex required' });
@@ -314,8 +366,24 @@ export const actions: Actions = {
 		return { success: true as const };
 	},
 
+	/**
+	 * Three-way skip semantics per SESSION_SKIP_KINDS docstring:
+	 *   - `today`: session-scoped; no plan mutation, no content mutation.
+	 *   - `topic`: adds the slot's node (when present) to plan.skip_nodes,
+	 *     falling back to the slot's domain -> plan.skip_domains otherwise.
+	 *   - `permanent`: does the `topic` mutation PLUS suspends the underlying
+	 *     card / scenario. Node slots add the node id to plan.skip_nodes
+	 *     exactly as `topic` does -- there is no "suspend a node" concept.
+	 *
+	 * The session_item_result row is written first; plan/content mutations are
+	 * best-effort after that. A failure on the side-effect path is logged but
+	 * does not reverse the slot result -- the user already consumed the slot
+	 * and the engine's next run will reconcile via the plan/content state it
+	 * can read.
+	 */
 	skip: async (event) => {
 		const user = requireAuth(event);
+		await requireOpenSession(event.params.id, user.id);
 		const form = await event.request.formData();
 		const slotIndex = Number(form.get('slotIndex'));
 		const skipKindRaw = String(form.get('skipKind') ?? 'today');
@@ -323,6 +391,7 @@ export const actions: Actions = {
 		if (!(SESSION_SKIP_KIND_VALUES as readonly string[]).includes(skipKindRaw)) {
 			return fail(400, { error: 'Invalid skip kind' });
 		}
+		const skipKind = skipKindRaw as SessionSkipKind;
 		const slot = await loadSlot(event.params.id, user.id, slotIndex);
 
 		await recordItemResult(event.params.id, user.id, {
@@ -333,9 +402,56 @@ export const actions: Actions = {
 			cardId: slot.cardId,
 			scenarioId: slot.scenarioId,
 			nodeId: slot.nodeId,
-			skipKind: skipKindRaw as SessionSkipKind,
+			skipKind,
 			reasonDetail: slot.reasonDetail,
 		});
+
+		if (skipKind === SESSION_SKIP_KINDS.TODAY) {
+			return { success: true as const };
+		}
+
+		// Both `topic` and `permanent` mutate the plan; `permanent` additionally
+		// suspends the underlying content row. Fetch the active plan once; bail
+		// gracefully if the user has no active plan (shouldn't happen in a
+		// running session, but the BC contract tolerates it).
+		const plan = await getActivePlan(user.id);
+
+		try {
+			if (plan) {
+				if (slot.nodeId) {
+					await addSkipNode(plan.id, user.id, slot.nodeId);
+				} else {
+					const domain = await resolveSlotDomain(user.id, slot);
+					if (domain) {
+						await addSkipDomain(plan.id, user.id, domain);
+					}
+				}
+			}
+
+			if (skipKind === SESSION_SKIP_KINDS.PERMANENT) {
+				if (slot.itemKind === SESSION_ITEM_KINDS.CARD && slot.cardId) {
+					await setCardStatus(slot.cardId, user.id, CARD_STATUSES.SUSPENDED);
+				} else if (slot.itemKind === SESSION_ITEM_KINDS.REP && slot.scenarioId) {
+					await setScenarioStatus(slot.scenarioId, user.id, SCENARIO_STATUSES.SUSPENDED);
+				}
+				// Node-start slots have no content row to suspend; the skipNode
+				// mutation above is the full persistence.
+			}
+		} catch (err) {
+			log.error(
+				'skip action side-effects threw',
+				{
+					requestId: event.locals.requestId,
+					userId: user.id,
+					metadata: { sessionId: event.params.id, slotIndex, skipKind },
+				},
+				err instanceof Error ? err : undefined,
+			);
+			// Don't fail the whole request; the slot is already recorded. The
+			// engine will reconcile from whatever plan/content state actually
+			// persisted on the next run.
+		}
+
 		return { success: true as const };
 	},
 

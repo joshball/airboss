@@ -3,10 +3,13 @@
  *
  * Study plans are mutable config aggregates (spec "Plan lifecycle"): one
  * active plan per user, enforced by a partial UNIQUE index on
- * study.study_plan(user_id) WHERE status='active' (see
- * scripts/db/plan-active-unique.sql). Creating or activating a plan archives
- * any other active plan for the user inside the same transaction so the
- * invariant holds even when the DB index is missing in test environments.
+ * study.study_plan(user_id) WHERE status='active'. The index is declared in
+ * the Drizzle schema (`planUserActiveUniq`) so `bun run db push` creates it;
+ * `scripts/db/plan-active-unique.sql` is kept as a backward-compatible
+ * one-shot for databases provisioned before the DSL expression landed.
+ * Creating or activating a plan archives any other active plan for the user
+ * inside the same transaction so the invariant holds even when the DB index
+ * is missing in ancient environments.
  */
 
 import {
@@ -53,6 +56,19 @@ export class DuplicateActivePlanError extends Error {
 	constructor(public readonly userId: string) {
 		super(`User ${userId} already has an active plan`);
 		this.name = 'DuplicateActivePlanError';
+	}
+}
+
+/**
+ * Raised when a plan patch would leave `focus_domains` and `skip_domains`
+ * overlapping -- the PRD invariant ("focus and skip are disjoint"). Typed so
+ * route code can surface a fixed user-facing message rather than leaking
+ * `Error.message` text directly.
+ */
+export class DomainOverlapError extends Error {
+	constructor(public readonly domain: string) {
+		super(`"${domain}" is in focus_domains; focus and skip must be disjoint`);
+		this.name = 'DomainOverlapError';
 	}
 }
 
@@ -180,7 +196,7 @@ export async function updatePlan(
 	const mergedSkip = (parsed.skipDomains ?? existing.skipDomains) as Domain[];
 	for (const d of mergedSkip) {
 		if (mergedFocus.has(d)) {
-			throw new Error(`"${d}" is in focus_domains; focus and skip must be disjoint`);
+			throw new DomainOverlapError(d);
 		}
 	}
 

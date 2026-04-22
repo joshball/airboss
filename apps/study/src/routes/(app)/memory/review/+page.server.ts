@@ -1,7 +1,6 @@
 import { requireAuth } from '@ab/auth';
 import { CardNotFoundError, CardNotReviewableError, getDueCards, submitReview, submitReviewSchema } from '@ab/bc-study';
 import {
-	CONFIDENCE_SAMPLE_RATE,
 	type ConfidenceLevel,
 	DOMAIN_VALUES,
 	type Domain,
@@ -10,31 +9,10 @@ import {
 	type ReviewRating,
 } from '@ab/constants';
 import { createLogger } from '@ab/utils';
-import { error, fail } from '@sveltejs/kit';
+import { fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 
 const log = createLogger('study:memory-review');
-
-/**
- * Deterministic 0..1 score for (cardId, dayKey). Used to sample the
- * confidence prompt on ~50% of reviews with the property that the same
- * card on the same day is always prompted or never prompted.
- *
- * djb2 variant; good enough for sampling, not security-sensitive.
- */
-function deterministicUnit(key: string): number {
-	let h = 5381;
-	for (let i = 0; i < key.length; i++) {
-		h = ((h << 5) + h + key.charCodeAt(i)) | 0;
-	}
-	const u = ((h >>> 0) % 10_000) / 10_000;
-	return u;
-}
-
-function shouldPromptConfidence(cardId: string, reviewDate: Date): boolean {
-	const dayKey = reviewDate.toISOString().slice(0, 10);
-	return deterministicUnit(`${cardId}:${dayKey}`) < CONFIDENCE_SAMPLE_RATE;
-}
 
 /**
  * Narrow an arbitrary `?domain=` query value into the `Domain` union, or
@@ -53,6 +31,9 @@ export const load: PageServerLoad = async (event) => {
 	const domain = parseDomain(event.url.searchParams.get(QUERY_PARAMS.DOMAIN));
 	const due = await getDueCards(user.id, { limit: REVIEW_BATCH_SIZE, domain });
 
+	// Prompt confidence on every card (no sampling). The session runner does
+	// the same; keeping the two flows in lockstep avoids calibration-bucket
+	// bias based on which review surface the learner uses more.
 	const batch = due.map((row) => ({
 		id: row.card.id,
 		front: row.card.front,
@@ -64,7 +45,7 @@ export const load: PageServerLoad = async (event) => {
 		stability: row.state.stability,
 		difficulty: row.state.difficulty,
 		dueAt: row.state.dueAt,
-		promptConfidence: shouldPromptConfidence(row.card.id, now),
+		promptConfidence: true,
 	}));
 
 	return {
@@ -125,7 +106,12 @@ export const actions: Actions = {
 				{ requestId: locals.requestId, userId: user.id, metadata: { cardId } },
 				err instanceof Error ? err : undefined,
 			);
-			error(500, { message: 'Could not save review' });
+			// `fail` (not `error`) so the learner stays on the review page with
+			// the batch intact and can retry. Consistent with session/[id] runner
+			// and plans/* / memory/new / memory/[id] actions. `skipped` and
+			// `nextState`/`dueAt`/`scheduledDays` are omitted on the error branch
+			// so the template can widen its success-only consumers with `'error' in form`.
+			return fail(500, { success: false as const, cardId, error: 'Could not save review' });
 		}
 	},
 } satisfies Actions;

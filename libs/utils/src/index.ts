@@ -1,9 +1,9 @@
 export { createErrorHandler } from './error-handler';
 export {
 	createId,
+	generateAuditLogId,
 	generateAuthId,
 	generateCardId,
-	generateRepAttemptId,
 	generateReviewId,
 	generateScenarioId,
 	generateSessionId,

@@ -71,8 +71,22 @@ describe('createPlan', () => {
 		await archivePlan(second.id, TEST_USER_ID);
 	});
 
-	it('rejects an empty cert_goals array', async () => {
-		await expect(createPlan({ userId: TEST_USER_ID, certGoals: [] })).rejects.toThrow();
+	it('accepts an empty cert_goals array (cert-agnostic plan)', async () => {
+		const p = await createPlan({ userId: TEST_USER_ID, certGoals: [] });
+		expect(p.status).toBe(PLAN_STATUSES.ACTIVE);
+		expect(p.certGoals).toEqual([]);
+		await archivePlan(p.id, TEST_USER_ID);
+	});
+
+	it('creates a cert-agnostic plan with focus domains', async () => {
+		const p = await createPlan({
+			userId: TEST_USER_ID,
+			certGoals: [],
+			focusDomains: [DOMAINS.WEATHER],
+		});
+		expect(p.certGoals).toEqual([]);
+		expect(p.focusDomains).toEqual([DOMAINS.WEATHER]);
+		await archivePlan(p.id, TEST_USER_ID);
 	});
 });
 

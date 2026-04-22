@@ -581,8 +581,14 @@ export async function runEngine(inputs: EngineInputs, now: Date = new Date()): P
 	// break further ties).
 	const allocation = redistribute(requestedAllocation, available);
 
-	// 5. Take top-N per slice, de-duplicating across slices (an item may
-	// appear in multiple pools; keep the highest-scoring slice).
+	// 5. Take top-N per slice, de-duplicating across slices. An item may
+	// appear in multiple pools; the loop below visits slices in descending
+	// SLICE_PRIORITY order, so a duplicate lands in the highest-priority
+	// slice that wants it. Within a slice, sorted-by-score decides. This is
+	// priority-first, not score-first, on purpose -- the slice taxonomy is
+	// the product-level shape (Continue before Strengthen before Expand
+	// before Diversify) and a 0.95-scoring Diversify candidate should still
+	// go to Continue if Continue wants it.
 	const picked: Array<{ slice: SessionSlice; scored: Scored<unknown> }> = [];
 	const seen = new Set<string>();
 

@@ -714,8 +714,12 @@ async function writeToDb(nodes: readonly ParsedNode[]): Promise<void> {
 
 	try {
 		await db.transaction(async (tx) => {
-			// Upsert every node.
+			// Upsert every node. `contentHash` is stored so future reads can
+			// detect content changes; the ON CONFLICT set below bumps
+			// `version` only when the hash differs from whatever's on disk
+			// (SQL-side CASE), keeping re-seeds idempotent.
 			for (const node of nodes) {
+				const nextHash = node.contentHash;
 				await tx
 					.insert(knowledgeNode)
 					.values({
@@ -735,6 +739,8 @@ async function writeToDb(nodes: readonly ParsedNode[]): Promise<void> {
 						assessmentMethods: node.frontmatter.assessmentMethods,
 						masteryCriteria: node.frontmatter.masteryCriteria,
 						contentMd: node.body,
+						contentHash: nextHash,
+						version: 1,
 					})
 					.onConflictDoUpdate({
 						target: knowledgeNode.id,
@@ -754,6 +760,11 @@ async function writeToDb(nodes: readonly ParsedNode[]): Promise<void> {
 							assessmentMethods: node.frontmatter.assessmentMethods,
 							masteryCriteria: node.frontmatter.masteryCriteria,
 							contentMd: node.body,
+							contentHash: nextHash,
+							version: sql<number>`CASE
+								WHEN coalesce(${knowledgeNode.contentHash}, '') = ${nextHash} THEN ${knowledgeNode.version}
+								ELSE ${knowledgeNode.version} + 1
+							END`,
 							updatedAt: new Date(),
 						},
 					});

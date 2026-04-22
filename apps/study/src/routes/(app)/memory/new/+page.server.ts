@@ -21,8 +21,8 @@ export const load: PageServerLoad = async ({ url }) => {
 	return {
 		seed: {
 			domain: url.searchParams.get(QUERY_PARAMS.DOMAIN) ?? '',
-			cardType: url.searchParams.get('cardType') ?? '',
-			tags: url.searchParams.get('tags') ?? '',
+			cardType: url.searchParams.get(QUERY_PARAMS.CARD_TYPE) ?? '',
+			tags: url.searchParams.get(QUERY_PARAMS.TAGS) ?? '',
 		},
 	};
 };
@@ -85,11 +85,11 @@ export const actions: Actions = {
 			// Preserve the domain + tags so the next card stays in context.
 			const next = new URLSearchParams({
 				created: created.id,
-				domain: parsed.data.domain,
-				cardType: parsed.data.cardType,
+				[QUERY_PARAMS.DOMAIN]: parsed.data.domain,
+				[QUERY_PARAMS.CARD_TYPE]: parsed.data.cardType,
 			});
 			if (parsed.data.tags && parsed.data.tags.length > 0) {
-				next.set('tags', parsed.data.tags.join(','));
+				next.set(QUERY_PARAMS.TAGS, parsed.data.tags.join(','));
 			}
 			redirect(303, `${ROUTES.MEMORY_NEW}?${next.toString()}`);
 		}

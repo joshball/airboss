@@ -40,6 +40,7 @@ export type {
 	KnowledgeNodeListRow,
 	ListNodesFilters,
 	NodeMasteryGate,
+	NodeMasterySnapshot,
 	NodeMasteryStats,
 	NodeSummary,
 	NodeView,
@@ -53,6 +54,7 @@ export {
 	getCertProgress,
 	getDomainCertMatrix,
 	getNodeMastery,
+	getNodeMasteryMap,
 	getNodesByIds,
 	getNodeView,
 	isMastered,
@@ -75,6 +77,7 @@ export {
 	addSkipNode,
 	archivePlan,
 	createPlan,
+	DomainOverlapError,
 	DuplicateActivePlanError,
 	getActivePlan,
 	getPlan,
@@ -170,6 +173,7 @@ export {
 	previewSession,
 	recordItemResult,
 	SessionNotFoundError,
+	SessionSlotNotFoundError,
 	startSession,
 } from './sessions';
 export type { CardSchedulerState, ScheduleResult } from './srs';

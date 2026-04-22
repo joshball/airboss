@@ -417,6 +417,10 @@ export async function getRepAccuracy(
 		eq(sessionItemResult.itemKind, SESSION_ITEM_KINDS.REP),
 		isNotNull(sessionItemResult.completedAt),
 		isNull(sessionItemResult.skipKind),
+		// A completed, non-skipped rep without is_correct shouldn't be counted
+		// as "attempted" -- that would deflate accuracy. This is belt-and-braces
+		// over the BC write path, which always sets isCorrect for real attempts.
+		isNotNull(sessionItemResult.isCorrect),
 	];
 	if (filter.domain) clauses.push(eq(scenario.domain, filter.domain));
 	if (filter.nodeId) clauses.push(eq(scenario.nodeId, filter.nodeId));
@@ -451,6 +455,8 @@ export async function getDomainAccuracy(
 		eq(sessionItemResult.itemKind, SESSION_ITEM_KINDS.REP),
 		isNotNull(sessionItemResult.completedAt),
 		isNull(sessionItemResult.skipKind),
+		// Same "real attempt" invariant as getRepAccuracy above.
+		isNotNull(sessionItemResult.isCorrect),
 	];
 	if (range?.start) clauses.push(gte(sessionItemResult.completedAt, range.start));
 	if (range?.end) clauses.push(sql`${sessionItemResult.completedAt} <= ${range.end.toISOString()}`);
@@ -494,6 +500,8 @@ export async function getRepStats(
 		eq(sessionItemResult.itemKind, SESSION_ITEM_KINDS.REP),
 		isNotNull(sessionItemResult.completedAt),
 		isNull(sessionItemResult.skipKind),
+		// Same "real attempt" invariant as getRepAccuracy above.
+		isNotNull(sessionItemResult.isCorrect),
 	];
 	if (range?.start) clauses.push(gte(sessionItemResult.completedAt, range.start));
 	if (range?.end) clauses.push(sql`${sessionItemResult.completedAt} <= ${range.end.toISOString()}`);
