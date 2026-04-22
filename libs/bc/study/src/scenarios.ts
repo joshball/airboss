@@ -252,6 +252,65 @@ export async function getScenario(scenarioId: string, userId: string, db: Db = d
 }
 
 /**
+ * Batch-fetch scenarios by id scoped to the caller. Preserves the caller's
+ * id ordering in the returned array so the route layer can render a pinned
+ * session batch without reshuffling on reload. Ids that don't resolve (the
+ * scenario was archived or hard-deleted between batch-pin and reload) are
+ * dropped silently; callers detect the gap by comparing input/output lengths
+ * per-id and render a "skipped" slot.
+ */
+export async function getScenariosByIds(
+	scenarioIds: readonly string[],
+	userId: string,
+	db: Db = defaultDb,
+): Promise<ScenarioRow[]> {
+	if (scenarioIds.length === 0) return [];
+	const rows = await db
+		.select()
+		.from(scenario)
+		.where(and(eq(scenario.userId, userId), inArray(scenario.id, scenarioIds as string[])));
+	const byId = new Map(rows.map((r) => [r.id, r]));
+	// Caller-ordered result -- missing ids collapse the array; the route layer
+	// reconciles length gaps against the original pin list.
+	return scenarioIds.map((id) => byId.get(id)).filter((r): r is ScenarioRow => r !== undefined);
+}
+
+/**
+ * Attempts for a specific (user, scenarioIds) set made at/after `since`.
+ * Powers server-derived resume on `/reps/session`: the page pins `startedAt`
+ * into the URL on first load and, on every subsequent load, asks which of
+ * the pinned scenarios the user has already answered since that timestamp.
+ *
+ * Returns only the most-recent attempt per scenario inside the window --
+ * repeated submits on the same scenario (dedupe races, content edits mid
+ * session) collapse to the final recorded attempt.
+ */
+export async function getRepAttemptsForSession(
+	userId: string,
+	scenarioIds: readonly string[],
+	since: Date,
+	db: Db = defaultDb,
+): Promise<Map<string, RepAttemptRow>> {
+	if (scenarioIds.length === 0) return new Map();
+	const rows = await db
+		.select()
+		.from(repAttempt)
+		.where(
+			and(
+				eq(repAttempt.userId, userId),
+				inArray(repAttempt.scenarioId, scenarioIds as string[]),
+				gte(repAttempt.attemptedAt, since),
+			),
+		)
+		.orderBy(desc(repAttempt.attemptedAt));
+	const latest = new Map<string, RepAttemptRow>();
+	for (const row of rows) {
+		if (!latest.has(row.scenarioId)) latest.set(row.scenarioId, row);
+	}
+	return latest;
+}
+
+/**
  * Session-builder query: prioritizes scenarios the user has never attempted,
  * then falls back to least-recently-attempted. Applies scenario filters the
  * same way `getScenarios` does.

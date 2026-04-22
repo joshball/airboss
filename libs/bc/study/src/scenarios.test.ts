@@ -24,9 +24,11 @@ import {
 	createScenario,
 	getNextScenarios,
 	getRepAccuracy,
+	getRepAttemptsForSession,
 	getRepDashboard,
 	getRepStats,
 	getScenarios,
+	getScenariosByIds,
 	InvalidOptionError,
 	ScenarioNotAttemptableError,
 	ScenarioNotFoundError,
@@ -507,6 +509,171 @@ describe('getRepDashboard', () => {
 			expect(dash.accuracyLast30d.accuracy).toBeCloseTo(1);
 		} finally {
 			// scenario FK is restrict -- remove attempts, scenarios, then user.
+			await db.delete(repAttempt).where(eq(repAttempt.userId, freshUser));
+			await db.delete(scenario).where(eq(scenario.userId, freshUser));
+			await db.delete(bauthUser).where(eq(bauthUser.id, freshUser));
+		}
+	});
+});
+
+describe('getScenariosByIds -- pinned batch lookup', () => {
+	it('returns rows in the caller-supplied order', async () => {
+		const a = await createScenario(makeInput({ title: `batch-a ${createId('t')}` }));
+		const b = await createScenario(makeInput({ title: `batch-b ${createId('t')}` }));
+		const c = await createScenario(makeInput({ title: `batch-c ${createId('t')}` }));
+		const rows = await getScenariosByIds([c.id, a.id, b.id], TEST_USER_ID);
+		expect(rows.map((r) => r.id)).toEqual([c.id, a.id, b.id]);
+	});
+
+	it('drops unknown / other-user ids silently', async () => {
+		const a = await createScenario(makeInput({ title: `drop-a ${createId('t')}` }));
+		// Create a scenario owned by a different fresh user.
+		const otherUser = generateAuthId();
+		const now = new Date();
+		await db.insert(bauthUser).values({
+			id: otherUser,
+			email: `other-${otherUser}@airboss.test`,
+			name: 'Other',
+			firstName: 'O',
+			lastName: 'O',
+			emailVerified: true,
+			role: 'learner',
+			createdAt: now,
+			updatedAt: now,
+		});
+		const theirs = await createScenario(makeInput({ userId: otherUser, title: `their-${createId('t')}` }));
+		try {
+			const rows = await getScenariosByIds([a.id, theirs.id, 'sc_does_not_exist'], TEST_USER_ID);
+			expect(rows.map((r) => r.id)).toEqual([a.id]);
+		} finally {
+			await db.delete(scenario).where(eq(scenario.userId, otherUser));
+			await db.delete(bauthUser).where(eq(bauthUser.id, otherUser));
+		}
+	});
+
+	it('empty input yields empty result without a DB round-trip error', async () => {
+		const rows = await getScenariosByIds([], TEST_USER_ID);
+		expect(rows).toEqual([]);
+	});
+});
+
+describe('getRepAttemptsForSession -- resume-on-refresh', () => {
+	it('returns only the most recent attempt per scenario at/after `since`', async () => {
+		const freshUser = generateAuthId();
+		const now = new Date();
+		await db.insert(bauthUser).values({
+			id: freshUser,
+			email: `resume-${freshUser}@airboss.test`,
+			name: 'Resume',
+			firstName: 'R',
+			lastName: 'R',
+			emailVerified: true,
+			role: 'learner',
+			createdAt: now,
+			updatedAt: now,
+		});
+		try {
+			const s1 = await createScenario({ ...makeInput(), userId: freshUser });
+			const s2 = await createScenario({ ...makeInput(), userId: freshUser });
+			const s3 = await createScenario({ ...makeInput(), userId: freshUser });
+
+			// Pre-session attempt on s1 -- MUST NOT show up with a `since` after it.
+			const pre = await submitAttempt({ scenarioId: s1.id, userId: freshUser, chosenOption: 'a' });
+			// Move the pre-session attempt back in time so `since` clearly
+			// post-dates it. submitAttempt stamps attemptedAt=now, so we patch.
+			await db
+				.update(repAttempt)
+				.set({ attemptedAt: new Date(now.getTime() - 60_000) })
+				.where(eq(repAttempt.id, pre.id));
+
+			const sessionStart = new Date();
+
+			// In-session attempts: two on s2 (only the latest should surface), one on s3.
+			await submitAttempt({ scenarioId: s2.id, userId: freshUser, chosenOption: 'a' });
+			// Second attempt on s2 with a different option so dedupe doesn't fold.
+			const s2Latest = await submitAttempt({ scenarioId: s2.id, userId: freshUser, chosenOption: 'b' });
+			const s3Att = await submitAttempt({ scenarioId: s3.id, userId: freshUser, chosenOption: 'b' });
+
+			const attempts = await getRepAttemptsForSession(freshUser, [s1.id, s2.id, s3.id], sessionStart);
+			expect(attempts.size).toBe(2);
+			expect(attempts.get(s1.id)).toBeUndefined();
+			expect(attempts.get(s2.id)?.id).toBe(s2Latest.id);
+			expect(attempts.get(s3.id)?.id).toBe(s3Att.id);
+			expect(attempts.get(s3.id)?.isCorrect).toBe(true);
+		} finally {
+			await db.delete(repAttempt).where(eq(repAttempt.userId, freshUser));
+			await db.delete(scenario).where(eq(scenario.userId, freshUser));
+			await db.delete(bauthUser).where(eq(bauthUser.id, freshUser));
+		}
+	});
+
+	it('empty scenarioIds short-circuits to empty map', async () => {
+		const out = await getRepAttemptsForSession(TEST_USER_ID, [], new Date());
+		expect(out.size).toBe(0);
+	});
+});
+
+/**
+ * End-to-end server-side acceptance: simulates the refresh-mid-session flow
+ * using only the BC functions the route calls. This is the canonical proof
+ * that the fix works -- start with a pinned batch of 3, attempt 2, and the
+ * "what is the first unanswered slot" derivation resumes at index 2.
+ */
+describe('reps session resume -- acceptance', () => {
+	it('derives currentIndex=2 after the user answers the first 2 of a pinned batch of 3', async () => {
+		const freshUser = generateAuthId();
+		const now = new Date();
+		await db.insert(bauthUser).values({
+			id: freshUser,
+			email: `accept-${freshUser}@airboss.test`,
+			name: 'Accept',
+			firstName: 'A',
+			lastName: 'A',
+			emailVerified: true,
+			role: 'learner',
+			createdAt: now,
+			updatedAt: now,
+		});
+		try {
+			const s1 = await createScenario({ ...makeInput(), userId: freshUser });
+			const s2 = await createScenario({ ...makeInput(), userId: freshUser });
+			const s3 = await createScenario({ ...makeInput(), userId: freshUser });
+			const pinnedIds = [s1.id, s2.id, s3.id];
+			const sessionStart = new Date();
+
+			// Answer first two scenarios.
+			await submitAttempt({ scenarioId: s1.id, userId: freshUser, chosenOption: 'b' });
+			await submitAttempt({ scenarioId: s2.id, userId: freshUser, chosenOption: 'a' });
+
+			// ---- simulated refresh: run the same queries the +page.server.ts does ----
+			const [scenarios, attemptsByScenarioId] = await Promise.all([
+				getScenariosByIds(pinnedIds, freshUser),
+				getRepAttemptsForSession(freshUser, pinnedIds, sessionStart),
+			]);
+			const scenarioById = new Map(scenarios.map((s) => [s.id, s]));
+			const slots = pinnedIds.map((id) => {
+				const sc = scenarioById.get(id);
+				if (!sc) return { kind: 'skipped' as const };
+				return { kind: 'resolvable' as const, attempt: attemptsByScenarioId.get(id) ?? null };
+			});
+			const currentIndex = slots.findIndex((s) => s.kind === 'resolvable' && s.attempt === null);
+			const resolved = currentIndex === -1 ? slots.length : currentIndex;
+
+			expect(resolved).toBe(2);
+			expect(slots[0]).toMatchObject({ kind: 'resolvable' });
+			if (slots[0].kind === 'resolvable') {
+				expect(slots[0].attempt?.chosenOption).toBe('b');
+				expect(slots[0].attempt?.isCorrect).toBe(true);
+			}
+			expect(slots[1]).toMatchObject({ kind: 'resolvable' });
+			if (slots[1].kind === 'resolvable') {
+				expect(slots[1].attempt?.chosenOption).toBe('a');
+				expect(slots[1].attempt?.isCorrect).toBe(false);
+			}
+			if (slots[2].kind === 'resolvable') {
+				expect(slots[2].attempt).toBeNull();
+			}
+		} finally {
 			await db.delete(repAttempt).where(eq(repAttempt.userId, freshUser));
 			await db.delete(scenario).where(eq(scenario.userId, freshUser));
 			await db.delete(bauthUser).where(eq(bauthUser.id, freshUser));

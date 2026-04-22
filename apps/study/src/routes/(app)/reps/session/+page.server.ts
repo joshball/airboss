@@ -1,6 +1,8 @@
 import { requireAuth } from '@ab/auth';
 import {
 	getNextScenarios,
+	getRepAttemptsForSession,
+	getScenariosByIds,
 	InvalidOptionError,
 	ScenarioNotAttemptableError,
 	ScenarioNotFoundError,
@@ -9,7 +11,7 @@ import {
 } from '@ab/bc-study';
 import { CONFIDENCE_SAMPLE_RATE, REP_BATCH_SIZE } from '@ab/constants';
 import { createLogger } from '@ab/utils';
-import { error, fail } from '@sveltejs/kit';
+import { error, fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 
 const log = createLogger('study:reps-session');
@@ -62,44 +64,184 @@ function shuffleOptions<T extends { id: string }>(options: T[], seed: string): T
 }
 
 /**
- * Validate a client-supplied session id. The id only seeds the shuffle
- * hash; it doesn't grant access to anything, but we still bound it to a
- * short alphanumeric token so a malformed URL can't poison downstream
- * logging or the seed function.
+ * Validate a client-supplied session id / scenario id / timestamp. The id only
+ * seeds the shuffle hash and the `ids` list bounds the batch lookup; nothing
+ * on the server trusts them for authorization (scenarios are refetched scoped
+ * to the authenticated user). The patterns still bound the values so a
+ * malformed URL can't poison downstream logging or the seed function.
  */
 const SESSION_ID_PATTERN = /^[a-zA-Z0-9_-]{1,64}$/;
+const SCENARIO_ID_PATTERN = /^[a-zA-Z0-9_-]{1,64}$/;
 
-export const load: PageServerLoad = async (event) => {
+/**
+ * Server-derived slot shape. Each pinned scenario is either:
+ *   - `resolvable` -- scenario still active; may or may not carry an
+ *     `attempt` (the user's in-session answer),
+ *   - `skipped` -- scenario was archived / hard-deleted between the pin and
+ *     this load. The UI renders a "skipped" slot and advances past it.
+ */
+export interface ResolvedSlot {
+	kind: 'resolvable';
+	scenario: {
+		id: string;
+		title: string;
+		situation: string;
+		teachingPoint: string;
+		domain: string;
+		difficulty: string;
+		phaseOfFlight: string | null;
+		regReferences: string[];
+		options: Array<{ id: string; text: string; outcome: string; whyNot: string | null; isCorrect: boolean }>;
+		promptConfidence: boolean;
+	};
+	attempt: {
+		id: string;
+		chosenOption: string;
+		isCorrect: boolean;
+		confidence: number | null;
+		attemptedAt: string;
+	} | null;
+}
+
+export interface SkippedSlot {
+	kind: 'skipped';
+	scenarioId: string;
+}
+
+export type Slot = ResolvedSlot | SkippedSlot;
+
+/**
+ * Build the pinned-URL shape. Called on first load (no `ids` in query) to
+ * compute a fresh batch, persist the scenario ids + startedAt into the URL
+ * via redirect, and return the user to the same route with stable state.
+ */
+function buildPinnedUrl(pathname: string, sessionId: string, scenarioIds: string[], startedAt: Date): string {
+	const params = new URLSearchParams();
+	params.set('s', sessionId);
+	params.set('startedAt', startedAt.toISOString());
+	params.set('ids', scenarioIds.join(','));
+	return `${pathname}?${params.toString()}`;
+}
+
+interface LoadResult {
+	sessionId: string;
+	startedAt: string;
+	slots: Slot[];
+	currentIndex: number;
+	total: number;
+}
+
+export const load: PageServerLoad = async (event): Promise<LoadResult> => {
 	const user = requireAuth(event);
-
 	const now = new Date();
-	// Persisting the seed in the URL means a mid-session hard-refresh (or
-	// a SvelteKit load rerun from invalidation) reuses the same shuffle
-	// order instead of reshuffling the options behind the user. The page
-	// replaces the URL client-side on first mount so `now.getTime()` is
-	// only the fallback for a cold load without `?s=`.
-	const urlSession = event.url.searchParams.get('s');
-	const sessionId = urlSession && SESSION_ID_PATTERN.test(urlSession) ? urlSession : now.getTime().toString();
-	const queue = await getNextScenarios(user.id, {}, REP_BATCH_SIZE);
 
-	const batch = queue.map((sc) => ({
-		id: sc.id,
-		title: sc.title,
-		situation: sc.situation,
-		teachingPoint: sc.teachingPoint,
-		domain: sc.domain,
-		difficulty: sc.difficulty,
-		phaseOfFlight: sc.phaseOfFlight,
-		regReferences: sc.regReferences ?? [],
-		// Options shuffled per scenario so position doesn't leak the answer.
-		options: shuffleOptions(sc.options, `${sessionId}:${sc.id}`),
-		promptConfidence: shouldPromptConfidence(sc.id, now),
-	}));
+	const urlSession = event.url.searchParams.get('s');
+	const urlIds = event.url.searchParams.get('ids');
+	const urlStartedAt = event.url.searchParams.get('startedAt');
+
+	const sessionId = urlSession && SESSION_ID_PATTERN.test(urlSession) ? urlSession : now.getTime().toString();
+
+	// First load: no pinned batch. Pull a fresh queue from the BC, persist
+	// the (ordered) scenario ids + start timestamp into the URL, and bounce
+	// the user back in. Every subsequent load reads the pinned ids and
+	// derives progress from rep_attempt rows -- refresh-mid-session resumes
+	// the user at the first unanswered scenario automatically.
+	if (!urlIds) {
+		const queue = await getNextScenarios(user.id, {}, REP_BATCH_SIZE);
+		if (queue.length === 0) {
+			// Empty-batch path: no scenarios to pin. Return a stable shape
+			// the UI renders as "Session complete".
+			return {
+				sessionId,
+				startedAt: now.toISOString(),
+				slots: [],
+				currentIndex: 0,
+				total: 0,
+			};
+		}
+		const pinned = queue.map((s) => s.id);
+		throw redirect(303, buildPinnedUrl(event.url.pathname, sessionId, pinned, now));
+	}
+
+	// Parse + bound the pinned id list. Each id validated against the same
+	// pattern scenario ids are generated with; out-of-pattern entries drop.
+	const pinnedIds = urlIds
+		.split(',')
+		.map((s) => s.trim())
+		.filter((s) => s.length > 0 && SCENARIO_ID_PATTERN.test(s))
+		.slice(0, REP_BATCH_SIZE);
+
+	// Parse startedAt; fall back to `now` if malformed so the page still
+	// loads. Worst case of a bad startedAt: previously-recorded attempts
+	// inside the window don't resolve against this session, so the user
+	// re-answers. Correctness-neutral, never silently corrupts data.
+	const parsedStartedAt = urlStartedAt ? new Date(urlStartedAt) : now;
+	const startedAt = Number.isNaN(parsedStartedAt.getTime()) ? now : parsedStartedAt;
+
+	if (pinnedIds.length === 0) {
+		return {
+			sessionId,
+			startedAt: startedAt.toISOString(),
+			slots: [],
+			currentIndex: 0,
+			total: 0,
+		};
+	}
+
+	// Fetch the pinned scenarios + user's in-session attempts in parallel.
+	// `getScenariosByIds` may return fewer rows than requested (archived,
+	// hard-deleted); we reconcile by iterating `pinnedIds` below.
+	const [scenarios, attemptsByScenarioId] = await Promise.all([
+		getScenariosByIds(pinnedIds, user.id),
+		getRepAttemptsForSession(user.id, pinnedIds, startedAt),
+	]);
+	const scenarioById = new Map(scenarios.map((s) => [s.id, s]));
+
+	const slots: Slot[] = pinnedIds.map((id) => {
+		const sc = scenarioById.get(id);
+		if (!sc) return { kind: 'skipped', scenarioId: id };
+		const attempt = attemptsByScenarioId.get(id) ?? null;
+		return {
+			kind: 'resolvable',
+			scenario: {
+				id: sc.id,
+				title: sc.title,
+				situation: sc.situation,
+				teachingPoint: sc.teachingPoint,
+				domain: sc.domain,
+				difficulty: sc.difficulty,
+				phaseOfFlight: sc.phaseOfFlight,
+				regReferences: sc.regReferences ?? [],
+				// Shuffle seeded from the session id so option order stays
+				// stable across reloads and form submits.
+				options: shuffleOptions(sc.options, `${sessionId}:${sc.id}`),
+				promptConfidence: shouldPromptConfidence(sc.id, startedAt),
+			},
+			attempt: attempt
+				? {
+						id: attempt.id,
+						chosenOption: attempt.chosenOption,
+						isCorrect: attempt.isCorrect,
+						confidence: attempt.confidence,
+						attemptedAt: attempt.attemptedAt.toISOString(),
+					}
+				: null,
+		};
+	});
+
+	// First slot that is still attemptable and not yet answered. A `skipped`
+	// slot is always "past"; a `resolvable` slot with a non-null attempt is
+	// done. Returns slots.length when the batch is fully resolved -- the UI
+	// renders the summary in that case.
+	const currentIndex = slots.findIndex((s) => s.kind === 'resolvable' && s.attempt === null);
+	const resolvedIndex = currentIndex === -1 ? slots.length : currentIndex;
 
 	return {
-		batch,
 		sessionId,
-		startedAt: now.toISOString(),
+		startedAt: startedAt.toISOString(),
+		slots,
+		currentIndex: resolvedIndex,
+		total: slots.length,
 	};
 };
 
