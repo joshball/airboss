@@ -23,19 +23,25 @@ function showHelp(): void {
 	console.log(`Usage: bun run test [subcommand] [filters...]
 
 Subcommands:
-  (none)            Run the full test suite once (bunx vitest run)
-  watch             Run tests in watch mode (bunx vitest)
-  coverage          Run the full test suite with coverage (bunx vitest run --coverage)
+  (none)            Run the full unit test suite once (bunx vitest run)
+  watch             Run unit tests in watch mode (bunx vitest)
+  coverage          Run unit tests with coverage (bunx vitest run --coverage)
+  e2e               Run Playwright e2e suite (bunx playwright test)
+  e2e:ui            Run Playwright in interactive UI mode
+  e2e:install       Install Playwright browsers (one-time)
   help              Show this help
 
-Any trailing arguments are passed through to vitest as filters.
+Any trailing arguments are passed through to the underlying runner.
 
 Examples:
-  bun run test                         Full run
+  bun run test                         Full unit run
   bun run test watch                   Watch mode
-  bun run test libs/bc/study           Run matching files once
-  bun run test watch libs/bc/study     Watch matching files
-  bun run test coverage                Full run with coverage`);
+  bun run test libs/bc/study           Vitest filter
+  bun run test coverage                Unit coverage
+  bun run test e2e                     Run all e2e tests
+  bun run test e2e auth                Run e2e specs matching "auth"
+  bun run test e2e:ui                  Open Playwright UI mode
+  bun run test e2e:install             Install Playwright browsers`);
 }
 
 if (first && helpFlags.has(first)) {
@@ -49,6 +55,12 @@ if (first === 'watch') {
 	await run(['bunx', 'vitest', ...rest]);
 } else if (first === 'coverage') {
 	await run(['bunx', 'vitest', 'run', '--coverage', ...rest]);
+} else if (first === 'e2e') {
+	await run(['bunx', 'playwright', 'test', ...rest]);
+} else if (first === 'e2e:ui') {
+	await run(['bunx', 'playwright', 'test', '--ui', ...rest]);
+} else if (first === 'e2e:install') {
+	await run(['bunx', 'playwright', 'install', ...(rest.length ? rest : ['chromium'])]);
 } else {
 	await run(['bunx', 'vitest', 'run', ...args]);
 }

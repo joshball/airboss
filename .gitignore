@@ -9,3 +9,9 @@ build/
 coverage/
 .tmp/
 .claude/
+
+# Playwright
+/tests/e2e/.auth/
+/tests/e2e/.out/
+/playwright-report/
+/test-results/
