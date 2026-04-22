@@ -173,6 +173,22 @@ describe('validateReferences - verbatim / sources / ids', () => {
 		const { errors } = validateReferences([bad]);
 		expect(errors.some((e) => /sourceId/i.test(e.message))).toBe(true);
 	});
+
+	it('errors when sources[].sourceId is not registered in SOURCES', () => {
+		const bad = makeRef({
+			sources: [{ sourceId: 'not-a-real-source-id', locator: { title: 14, part: 91, section: '155' } }],
+		});
+		const { errors } = validateReferences([bad]);
+		expect(errors.some((e) => /unregistered sourceId/i.test(e.message))).toBe(true);
+	});
+
+	it('passes when sources[].sourceId resolves against SOURCES', () => {
+		const good = makeRef({
+			sources: [{ sourceId: 'cfr-14', locator: { title: 14, part: 91, section: '155' } }],
+		});
+		const result = validateReferences([good]);
+		expect(result.errors).toEqual([]);
+	});
 });
 
 describe('validateReferences - related[] symmetry', () => {

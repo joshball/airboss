@@ -6,7 +6,8 @@
  *   1) `validateReferences(refs)` -- audits the reference data itself:
  *      tag completeness, enum membership, symmetric `related[]`, keyword
  *      shape, `verbatim`/`sources` coherence, duplicate ids, reviewedAt
- *      staleness. Pure function.
+ *      staleness, and every `sources[].sourceId` resolving against the
+ *      `SOURCES` registry. Pure function.
  *
  *   2) `validateContentWikilinks(scans, registry)` -- audits content
  *      (knowledge markdown, help content TS, paraphrase text) against the
@@ -17,11 +18,6 @@
  * Either layer returns `{ errors, warnings }` the caller aggregates.
  * Callers (`scripts/references/validate.ts`, `scripts/check.ts`, the dev
  * launcher) decide whether `errors.length > 0` fails the build.
- *
- * NOTE (deferred): the "citing an unregistered `sourceId`" gate is
- * shape-only in Phase 1. The full registry check lands with the extraction
- * pipeline package (`wp-reference-extraction-pipeline`), which owns the
- * populated `Source[]` table. See TODO below.
  */
 
 import {
@@ -41,6 +37,7 @@ import {
 	SOURCE_TYPE_VALUES,
 } from '@ab/constants';
 import type { Reference } from './schema/reference';
+import { SOURCES } from './sources/registry';
 import { extractWikilinks, type WikilinkParseError } from './wikilink/parser';
 
 export interface ValidationIssue {
@@ -64,9 +61,11 @@ export function validateReferences(refs: readonly Reference[]): ValidationResult
 	const errors: ValidationIssue[] = [];
 	const warnings: ValidationIssue[] = [];
 
+	const knownSourceIds = new Set<string>(SOURCES.map((s) => s.id));
+
 	const seenIds = new Map<string, Reference>();
 	for (const ref of refs) {
-		validateOneReference(ref, errors);
+		validateOneReference(ref, errors, knownSourceIds);
 
 		const existing = seenIds.get(ref.id);
 		if (existing && existing !== ref) {
@@ -125,7 +124,7 @@ export function validateReferences(refs: readonly Reference[]): ValidationResult
 	return { errors, warnings };
 }
 
-function validateOneReference(ref: Reference, errors: ValidationIssue[]): void {
+function validateOneReference(ref: Reference, errors: ValidationIssue[], knownSourceIds: ReadonlySet<string>): void {
 	const { id, tags } = ref;
 
 	if (!id || id.trim() === '') {
@@ -283,14 +282,17 @@ function validateOneReference(ref: Reference, errors: ValidationIssue[]): void {
 		});
 	}
 
-	// TODO(wp-reference-extraction-pipeline): once the Source registry is
-	// populated, validate each sources[].sourceId exists in SOURCES. For now
-	// we shape-check only (sourceId must be a non-empty string, locator must
-	// be an object).
+	// Shape check + registry gate: sourceId must be non-empty and resolve
+	// against the populated `SOURCES` registry; locator must be an object.
 	for (const citation of ref.sources) {
 		if (!citation.sourceId || citation.sourceId.trim() === '') {
 			errors.push({
 				message: `Reference '${id}' has a sources[] entry with empty sourceId.`,
+				referenceId: id,
+			});
+		} else if (!knownSourceIds.has(citation.sourceId)) {
+			errors.push({
+				message: `Reference '${id}' cites unregistered sourceId '${citation.sourceId}'. Add the source to SOURCES in libs/aviation/src/sources/registry.ts.`,
 				referenceId: id,
 			});
 		}
