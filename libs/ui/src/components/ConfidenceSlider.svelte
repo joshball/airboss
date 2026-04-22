@@ -28,6 +28,7 @@ let {
 				aria-checked={selected === level}
 				aria-label={`${level} -- ${CONFIDENCE_LEVEL_LABELS[level]}`}
 				class="conf"
+				class:is-selected={selected === level}
 				onclick={() => onSelect(level)}
 			>
 				<span class="conf-num">{level}</span>
@@ -35,93 +36,119 @@ let {
 			</button>
 		{/each}
 	</div>
-	<button type="button" class="btn ghost skip" onclick={onSkip}>{skipLabel}</button>
+	<button
+		type="button"
+		class="skip"
+		onclick={onSkip}
+		aria-describedby="skip-hint"
+	>
+		{skipLabel}
+	</button>
+	<span id="skip-hint" class="skip-hint">Skipping stops calibration tracking for this card.</span>
 </article>
 
 <style>
 	.prompt {
-		background: white;
-		border: 1px solid #e2e8f0;
-		border-radius: 12px;
-		padding: 1.25rem;
+		background: var(--ab-color-surface);
+		border: 1px solid var(--ab-color-border);
+		border-radius: var(--ab-radius-lg);
+		padding: var(--ab-layout-panel-padding);
 		display: flex;
 		flex-direction: column;
-		gap: 0.75rem;
+		gap: var(--ab-space-md);
 		align-items: center;
 	}
 
 	.prompt-q {
 		margin: 0;
-		color: #334155;
-		font-size: 0.9375rem;
+		color: var(--ab-color-fg);
+		font-size: var(--ab-font-size-sm);
 	}
 
 	.confidence-row {
 		display: flex;
-		gap: 0.5rem;
+		gap: var(--ab-space-sm);
 		flex-wrap: wrap;
 		justify-content: center;
 	}
 
 	.conf {
-		background: #f8fafc;
-		border: 1px solid #cbd5e1;
-		border-radius: 10px;
-		padding: 0.75rem 0.75rem;
+		background: var(--ab-color-surface-sunken);
+		border: 1px solid var(--ab-color-border-strong);
+		border-radius: var(--ab-control-radius);
+		padding: var(--ab-control-padding-y-lg) var(--ab-control-padding-x-md);
 		min-width: 5rem;
 		display: flex;
 		flex-direction: column;
-		gap: 0.25rem;
+		gap: var(--ab-space-2xs);
 		align-items: center;
 		cursor: pointer;
+		font-family: inherit;
 		transition:
-			background 120ms,
-			border-color 120ms;
+			background var(--ab-transition-fast),
+			border-color var(--ab-transition-fast);
 	}
 
 	.conf:hover {
-		background: #eff6ff;
-		border-color: #bfdbfe;
+		background: var(--ab-color-primary-subtle);
+		border-color: var(--ab-color-primary-subtle-border);
+	}
+
+	.conf:focus-visible {
+		outline: none;
+		box-shadow: 0 0 0 3px var(--ab-color-focus-ring);
+	}
+
+	.conf.is-selected {
+		background: var(--ab-color-primary-subtle);
+		border-color: var(--ab-color-primary);
 	}
 
 	.conf-num {
-		font-weight: 700;
-		font-size: 1.125rem;
-		color: #1d4ed8;
+		font-weight: var(--ab-font-weight-bold);
+		font-size: var(--ab-font-size-lg);
+		color: var(--ab-color-primary-hover);
 	}
 
 	.conf-label {
-		font-size: 0.75rem;
-		color: #64748b;
+		font-size: var(--ab-font-size-xs);
+		color: var(--ab-color-fg-subtle);
 	}
 
+	/*
+	 * Skip: text-only escape hatch, deliberately not a peer of the confidence
+	 * buttons. Underlined link affordance makes it scannable as "opt out"
+	 * rather than another option to pick.
+	 */
 	.skip {
 		align-self: center;
-	}
-
-	.btn {
-		padding: 0.625rem 1.25rem;
-		font-size: 0.9375rem;
-		font-weight: 600;
-		border-radius: 10px;
-		border: 1px solid transparent;
-		cursor: pointer;
-		text-decoration: none;
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		gap: 0.5rem;
-		transition:
-			background 120ms,
-			border-color 120ms;
-	}
-
-	.btn.ghost {
 		background: transparent;
-		color: #475569;
+		border: none;
+		padding: var(--ab-space-2xs) var(--ab-space-sm);
+		color: var(--ab-color-fg-subtle);
+		font-family: inherit;
+		font-size: var(--ab-font-size-xs);
+		font-weight: var(--ab-font-weight-regular);
+		text-decoration: underline;
+		text-underline-offset: 2px;
+		cursor: pointer;
+		transition: color var(--ab-transition-fast);
 	}
 
-	.btn.ghost:hover {
-		background: #f1f5f9;
+	.skip:hover {
+		color: var(--ab-color-fg);
+	}
+
+	.skip:focus-visible {
+		outline: none;
+		box-shadow: 0 0 0 3px var(--ab-color-focus-ring);
+		border-radius: var(--ab-radius-sm);
+	}
+
+	.skip-hint {
+		margin-top: calc(-1 * var(--ab-space-sm));
+		color: var(--ab-color-fg-faint);
+		font-size: var(--ab-font-size-xs);
+		text-align: center;
 	}
 </style>
