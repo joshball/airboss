@@ -47,6 +47,30 @@ This plan is **not yet sequenced against the rest of the roadmap.** Study MVP us
 
 **Scope:** ~3-5 days. Throwaway; its purpose is learning, not shipping.
 
+### Phase 0.5 -- Expanded prototype (shipped 2026-04-22)
+
+**Goal:** take the Phase 0 three-instrument stub to a prototype that a
+returning pilot can actually fly for 10 minutes and learn the feel of
+pitch + power + rudder + trim.
+
+- Hand-rolled FDM gets a lateral axis: roll, yaw, coordinated turn,
+  adverse yaw, auto-coordinate autopilot, slip ball.
+- Trim (+/- 20% elevator bias), parking brake, flaps with drag + CL
+  shift, wind vector per scenario, stall warning on AoA.
+- Full six-pack + tach: Turn Coordinator, Heading Indicator, VSI, Tach
+  alongside the existing ASI, AI, Altimeter.
+- Panels: V-speeds sidebar, WX panel, control-input strip with trim
+  ghost + STALL annunciator, keybindings help, reset confirm.
+- Tap-based keyboard controls (discrete increments, OS autorepeat),
+  centering keys, trim keys, parking brake toggle.
+- Stall horn via Web Audio API, gesture-started, mute in localStorage.
+- Scenarios: Playground (free-fly), First Flight (9-step tutorial),
+  Departure Stall (rewritten with scripted trim drift).
+
+**Exit criteria:** user-zero can take off, turn, climb, level off, and
+land the Playground; stall horn triggers on AoA not airspeed; all 38
+FDM tests green. Shipped.
+
 ### Phase 1 -- Spec and work package
 
 **Goal:** turn the prototype's lessons + the PRD into a proper work package.
