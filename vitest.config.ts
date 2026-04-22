@@ -14,6 +14,7 @@ export default defineConfig({
 			'@ab/utils': resolve('./libs/utils/src/index.ts'),
 			'@ab/bc-study': resolve('./libs/bc/study/src/index.ts'),
 			'@ab/bc-sim': resolve('./libs/bc/sim/src/index.ts'),
+			'@ab/aviation': resolve('./libs/aviation/src/index.ts'),
 		},
 	},
 	test: {
