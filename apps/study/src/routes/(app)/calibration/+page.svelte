@@ -228,7 +228,7 @@ const interpretation = $derived(
 			<p class="fine">Minimum for useful data: ~25 confidence-rated answers spanning at least 3 of the 5 confidence buckets.</p>
 			<div class="actions">
 				<a class="btn primary" href={ROUTES.MEMORY_REVIEW}>Start a review</a>
-				<a class="btn secondary" href={ROUTES.REPS_SESSION}>Start a rep session</a>
+				<a class="btn secondary" href={ROUTES.SESSION_START}>Start a rep session</a>
 			</div>
 		</article>
 	{:else}
