@@ -31,7 +31,16 @@
 
 /* --------------------------------------------------------------------------
  * WEB theme
+ *
+ * The `web` theme is also the document default. Applying it at `:root` means
+ * elements that sit outside a `ThemeProvider` wrapper (notably `<body>`, which
+ * paints before SvelteKit hydrates and wraps content in `[data-theme]`) still
+ * resolve `var(--ab-*)` correctly from first paint. `[data-theme='web']` is
+ * kept alongside `:root` so nested providers that explicitly re-assert `web`
+ * (e.g. a `web` island inside a `tui` surface) still pick up the same values.
+ * `[data-theme='tui']` overrides both via higher specificity on its subtree.
  * -------------------------------------------------------------------------- */
+:root,
 [data-theme='web'] {
 	/* Color -- foreground / background / surface */
 	--ab-color-fg: #0f172a;
@@ -324,6 +333,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+	:root,
 	[data-theme='web'],
 	[data-theme='tui'] {
 		--ab-transition-fast: 0ms;
