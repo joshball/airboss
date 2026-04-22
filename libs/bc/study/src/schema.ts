@@ -32,8 +32,11 @@ import {
 	DOMAIN_VALUES,
 	type Domain,
 	KNOWLEDGE_EDGE_TYPE_VALUES,
+	MASTERY_STABILITY_DAYS,
 	MAX_SESSION_LENGTH,
 	MIN_SESSION_LENGTH,
+	NODE_LIFECYCLE_VALUES,
+	NODE_LIFECYCLES,
 	PHASE_OF_FLIGHT_VALUES,
 	PLAN_STATUS_VALUES,
 	PLAN_STATUSES,
@@ -72,6 +75,20 @@ export const studySchema = pgSchema(SCHEMAS.STUDY);
 /** Serialize a list of text values into a SQL `IN (...)` fragment for CHECK. */
 function inList(values: readonly string[]): string {
 	return values.map((v) => `'${v.replace(/'/g, "''")}'`).join(', ');
+}
+
+/**
+ * Shared CHECK-expression helpers so tables that carry the same semantic
+ * column (confidence 1..5, non-negative duration in ms) stay in lockstep.
+ * The raw SQL lives here, CHECK constraint names stay on the caller so grep
+ * for `sir_confidence_check` / `review_confidence_check` still hits.
+ */
+function confidenceRangeCheckSql(column: string): string {
+	return `"${column}" IS NULL OR "${column}" BETWEEN 1 AND 5`;
+}
+
+function nonNegativeDurationCheckSql(column: string): string {
+	return `"${column}" IS NULL OR "${column}" >= 0`;
 }
 
 /**
@@ -129,11 +146,30 @@ export const knowledgeNode = studySchema.table(
 		 * hash unblock change-aware UX in the meantime.
 		 */
 		version: integer('version').notNull().default(1),
+		/**
+		 * Authoring user when the node was imported / edited through tooling.
+		 * NULL for nodes seeded from the repo markdown (their provenance lives
+		 * in git history). `set null` so author removal doesn't orphan the
+		 * content; nodes outlive their authors in the graph's point of view.
+		 */
+		authorId: text('author_id').references(() => bauthUser.id, { onDelete: 'set null', onUpdate: 'cascade' }),
+		/**
+		 * Authoring lifecycle -- skeleton / started / complete. Derived from
+		 * phase coverage by `build-knowledge-index.ts` and persisted so read
+		 * paths can filter on it without recomputing. Nullable for existing
+		 * rows during the migration window; the seed back-fills on next run.
+		 */
+		lifecycle: text('lifecycle').default(NODE_LIFECYCLES.SKELETON),
 		createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
 		updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
 	},
 	(t) => ({
 		knowledgeNodeDomainIdx: index('knowledge_node_domain_idx').on(t.domain),
+		knowledgeNodeLifecycleIdx: index('knowledge_node_lifecycle_idx').on(t.lifecycle),
+		lifecycleCheck: check(
+			'knowledge_node_lifecycle_check',
+			sql.raw(`"lifecycle" IS NULL OR "lifecycle" IN (${inList(NODE_LIFECYCLE_VALUES)})`),
+		),
 	}),
 );
 
@@ -213,6 +249,13 @@ export const card = studySchema.table(
 		// ~30 authored) so the index probes fewer rows when the leading filter
 		// is node_id. The user-first prefix was not actually used by any query.
 		cardNodeUserIdx: index('card_node_user_idx').on(t.nodeId, t.userId),
+		// Trigram GIN indexes for `memory/browse` ILIKE '%pattern%' search.
+		// pg_trgm's `gin_trgm_ops` opclass makes leading-wildcard matches
+		// index-backed instead of triggering a per-user card scan. The
+		// extension is created by the companion apply-sql (pg_trgm is a
+		// contrib extension available in the airboss dev container).
+		cardFrontTrgmIdx: index('card_front_trgm_idx').using('gin', sql`"front" gin_trgm_ops`),
+		cardBackTrgmIdx: index('card_back_trgm_idx').using('gin', sql`"back" gin_trgm_ops`),
 		cardTypeCheck: check('card_type_check', sql.raw(`"card_type" IN (${inList(CARD_TYPE_VALUES)})`)),
 		sourceTypeCheck: check('card_source_type_check', sql.raw(`"source_type" IN (${inList(CONTENT_SOURCE_VALUES)})`)),
 		statusCheck: check('card_status_check', sql.raw(`"status" IN (${inList(CARD_STATUS_VALUES)})`)),
@@ -234,8 +277,10 @@ export const review = studySchema.table(
 			.references(() => bauthUser.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
 		// ts-fsrs AGAIN/HARD/GOOD/EASY = 1/2/3/4. Stored as smallint so
 		// Drizzle + pg bindings pass the raw enum value through ts-fsrs
-		// unchanged. The CHECK below enforces the range; label-to-number
-		// mapping lives in `REVIEW_RATINGS` in @ab/constants.
+		// unchanged. The CHECK below enumerates the meaningful values rather
+		// than leaving a silent BETWEEN; label-to-number mapping lives in
+		// `REVIEW_RATINGS` in @ab/constants.
+		// 1 = AGAIN, 2 = HARD, 3 = GOOD, 4 = EASY.
 		rating: smallint('rating').notNull(),
 		confidence: smallint('confidence'),
 		stability: real('stability').notNull(),
@@ -250,8 +295,11 @@ export const review = studySchema.table(
 	(t) => ({
 		reviewCardReviewedIdx: index('review_card_reviewed_idx').on(t.cardId, t.reviewedAt),
 		reviewUserReviewedIdx: index('review_user_reviewed_idx').on(t.userId, t.reviewedAt),
-		ratingCheck: check('review_rating_check', sql`"rating" BETWEEN 1 AND 4`),
-		confidenceCheck: check('review_confidence_check', sql`"confidence" IS NULL OR "confidence" BETWEEN 1 AND 5`),
+		// IN (1,2,3,4) rather than BETWEEN so the CHECK documents the
+		// discrete ts-fsrs labels (AGAIN/HARD/GOOD/EASY) a reader of
+		// `\d study.review` sees at the psql prompt.
+		ratingCheck: check('review_rating_check', sql.raw(`"rating" IN (1, 2, 3, 4)`)),
+		confidenceCheck: check('review_confidence_check', sql.raw(confidenceRangeCheckSql('confidence'))),
 		stateCheck: check('review_state_check', sql.raw(`"state" IN (${inList(CARD_STATE_VALUES)})`)),
 	}),
 );
@@ -293,6 +341,18 @@ export const cardState = studySchema.table(
 	(t) => ({
 		pk: primaryKey({ columns: [t.cardId, t.userId] }),
 		cardStateUserDueIdx: index('card_state_user_due_idx').on(t.userId, t.dueAt),
+		// Partial index on mastered rows only. `getMasteredCount`, `getDomainBreakdown`,
+		// `getNodeMastery`, and `getNodeMasteryMap` all filter on
+		// `stability > MASTERY_STABILITY_DAYS`. A partial index keeps the write
+		// cost negligible (only mastered rows hit the index) while eliminating
+		// the scan over every active card at scale.
+		cardStateUserMasteredIdx: index('card_state_user_mastered_idx')
+			.on(t.userId)
+			.where(sql.raw(`"stability" > ${MASTERY_STABILITY_DAYS}`)),
+		// Supports `fetchCardCandidates`'s join back to the most recent review
+		// via `card_state.last_review_id`. Without this, the BC fix (perf major
+		// item 9) falls back to a sequential scan of card_state.
+		cardStateLastReviewIdx: index('card_state_last_review_idx').on(t.lastReviewId),
 		stateCheck: check('card_state_state_check', sql.raw(`"state" IN (${inList(CARD_STATE_VALUES)})`)),
 	}),
 );
@@ -588,8 +648,8 @@ export const sessionItemResult = studySchema.table(
 			'sir_skip_kind_check',
 			sql.raw(`"skip_kind" IS NULL OR "skip_kind" IN (${inList(SESSION_SKIP_KIND_VALUES)})`),
 		),
-		confidenceCheck: check('sir_confidence_check', sql`"confidence" IS NULL OR "confidence" BETWEEN 1 AND 5`),
-		answerMsCheck: check('sir_answer_ms_check', sql`"answer_ms" IS NULL OR "answer_ms" >= 0`),
+		confidenceCheck: check('sir_confidence_check', sql.raw(confidenceRangeCheckSql('confidence'))),
+		answerMsCheck: check('sir_answer_ms_check', sql.raw(nonNegativeDurationCheckSql('answer_ms'))),
 	}),
 );
 
@@ -617,7 +677,7 @@ export const knowledgeNodeProgress = studySchema.table(
 		id: text('id').primaryKey(),
 		userId: text('user_id')
 			.notNull()
-			.references(() => bauthUser.id, { onDelete: 'cascade' }),
+			.references(() => bauthUser.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
 		/** Knowledge-graph node slug; no FK because seeded nodes may be rebuilt independently. */
 		nodeId: text('node_id').notNull(),
 		visitedPhases: text('visited_phases').array().notNull().default(sql`'{}'::text[]`),
