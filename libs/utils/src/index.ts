@@ -14,3 +14,4 @@ export { createLogger, type Logger } from './logger';
 export { escapeHtml, renderMarkdown } from './markdown';
 export { humanize } from './strings';
 export { userStartOfDay } from './time';
+export { buildQuery } from './url';
