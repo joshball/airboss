@@ -345,44 +345,8 @@ export const scenario = studySchema.table(
 	}),
 );
 
-/**
- * A single attempt at a scenario. Each attempt is its own row (no
- * materialized state), which matches the "judgment reps repeat over time"
- * framing and sidesteps the SRS scheduling machinery cards carry.
- *
- * `confidence` stays NULL when the user wasn't prompted -- the rep flow
- * samples on ~50% of reps via the same deterministic hash cards use.
- */
-export const repAttempt = studySchema.table(
-	'rep_attempt',
-	{
-		id: text('id').primaryKey(),
-		// restrict: attempts are the audit trail of a learner's judgment
-		// practice; a scenario with history must be archived, not hard-deleted.
-		scenarioId: text('scenario_id')
-			.notNull()
-			.references(() => scenario.id, { onDelete: 'restrict' }),
-		userId: text('user_id')
-			.notNull()
-			.references(() => bauthUser.id, { onDelete: 'cascade' }),
-		chosenOption: text('chosen_option').notNull(),
-		isCorrect: boolean('is_correct').notNull(),
-		confidence: smallint('confidence'),
-		answerMs: integer('answer_ms'),
-		attemptedAt: timestamp('attempted_at', { withTimezone: true }).notNull().defaultNow(),
-	},
-	(t) => ({
-		repAttemptScenarioAttemptedIdx: index('rep_attempt_scenario_attempted_idx').on(t.scenarioId, t.attemptedAt),
-		repAttemptUserAttemptedIdx: index('rep_attempt_user_attempted_idx').on(t.userId, t.attemptedAt),
-		confidenceCheck: check('rep_attempt_confidence_check', sql`"confidence" IS NULL OR "confidence" BETWEEN 1 AND 5`),
-		answerMsCheck: check('rep_attempt_answer_ms_check', sql`"answer_ms" IS NULL OR "answer_ms" >= 0`),
-	}),
-);
-
 export type ScenarioRow = typeof scenario.$inferSelect;
 export type NewScenarioRow = typeof scenario.$inferInsert;
-export type RepAttemptRow = typeof repAttempt.$inferSelect;
-export type NewRepAttemptRow = typeof repAttempt.$inferInsert;
 export type KnowledgeNodeRow = typeof knowledgeNode.$inferSelect;
 export type NewKnowledgeNodeRow = typeof knowledgeNode.$inferInsert;
 export type KnowledgeEdgeRow = typeof knowledgeEdge.$inferSelect;
@@ -492,8 +456,8 @@ export const session = studySchema.table(
 /**
  * Append-only attempt log per session slot. Every item result -- whether the
  * user reviewed, attempted, started a node, or skipped -- writes exactly one
- * row. The FK to review / rep_attempt uses `set null` so the trail survives
- * hard deletes of the underlying content.
+ * row. The FK to review uses `set null` so the trail survives hard deletes of
+ * the underlying content.
  */
 export const sessionItemResult = studySchema.table(
 	'session_item_result',
@@ -512,16 +476,15 @@ export const sessionItemResult = studySchema.table(
 		scenarioId: text('scenario_id').references(() => scenario.id, { onDelete: 'set null' }),
 		nodeId: text('node_id'),
 		reviewId: text('review_id').references(() => review.id, { onDelete: 'set null' }),
-		repAttemptId: text('rep_attempt_id').references(() => repAttempt.id, { onDelete: 'set null' }),
 		skipKind: text('skip_kind'),
 		/** Free-text detail when an item is skipped because its source was deleted etc. */
 		reasonDetail: text('reason_detail'),
 		/**
 		 * Rep-specific outcome fields. Populated when `item_kind = 'rep'` and the
-		 * slot is completed with a real answer (skipKind IS NULL). Moved here
-		 * from `rep_attempt` as part of the ADR 012 unification: the session_
-		 * item_result row is now the single source of truth for rep outcomes,
-		 * same way reviews carry their rating/confidence on the session slot.
+		 * slot is completed with a real answer (skipKind IS NULL). Per ADR 012,
+		 * the session_item_result row is the single source of truth for rep
+		 * outcomes, same way reviews carry their rating/confidence on the
+		 * session slot.
 		 *
 		 * Stay NULL for non-rep kinds (cards, node_starts), skipped reps, and
 		 * slots that haven't been completed yet. Not NOT NULL on the table

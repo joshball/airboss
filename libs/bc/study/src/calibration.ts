@@ -7,8 +7,8 @@
  * kind rows of session_item_result (confidence + is_correct). Cards are
  * "correct" when rating >= GOOD (ts-fsrs treats Again/Hard as failures that
  * schedule a short interval); rep attempts are "correct" when is_correct is
- * true. Per ADR 012, rep_attempt is gone -- session_item_result is the single
- * source of truth for rep outcomes.
+ * true. Per ADR 012, session_item_result is the single source of truth for
+ * rep outcomes.
  *
  * Buckets with fewer than CALIBRATION_MIN_BUCKET_COUNT data points are excluded
  * from the calibration score but still reported (with a needsMoreData flag)

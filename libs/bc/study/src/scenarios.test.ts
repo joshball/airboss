@@ -410,12 +410,10 @@ describe('getRepAccuracy / getRepStats -- aggregation', () => {
 
 			// s1: 2 correct, 1 incorrect on three distinct option choices
 			// (b correct, a wrong, c wrong -> but only b is correct, so we need
-			// 2 correct). Keep distinct options across consecutive submits so
-			// the submit-side idempotency window (same user + same scenario +
-			// same chosenOption within REP_DEDUPE_WINDOW_MS) never folds a
-			// genuine second attempt. We use a third scenario to keep the
-			// correct-count at 3 without needing wall-clock delays between
-			// identical submits.
+			// 2 correct). We use a third scenario to keep the correct-count at
+			// 3; idempotency now folds at the slot level (same session +
+			// slotIndex), not via a time-based submit window, so these seed
+			// calls stay independent regardless of timing.
 			const s3 = await createScenario({ ...makeInput(), userId: freshUser, domain: DOMAINS.EMERGENCY_PROCEDURES });
 
 			await seedRepAttempt({ userId: freshUser, scenarioId: s1.id, isCorrect: true });

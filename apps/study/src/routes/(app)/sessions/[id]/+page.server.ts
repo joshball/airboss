@@ -257,8 +257,8 @@ export const actions: Actions = {
 				confidence: confidenceValue,
 				answerMs: parsed.data.answerMs,
 			});
-			// Rep outcome persists on the slot row itself post-ADR 012 -- no
-			// separate rep_attempt row, no repAttemptId to forward.
+			// Rep outcome persists on the slot row itself (ADR 012) -- no
+			// separate attempt row.
 			await recordItemResult(event.params.id, user.id, {
 				slotIndex: slot.slotIndex,
 				itemKind: slot.itemKind,

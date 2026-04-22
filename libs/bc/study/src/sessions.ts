@@ -118,20 +118,13 @@ export interface ItemResultInput {
 	scenarioId?: string | null;
 	nodeId?: string | null;
 	reviewId?: string | null;
-	/**
-	 * Legacy handle left in place while the rep_attempt table still exists
-	 * (ADR 012 phase 5). After phase 4 drops the table this field + the
-	 * underlying column go with it. Callers should no longer set it -- rep
-	 * outcomes live on the fields below.
-	 */
-	repAttemptId?: string | null;
 	skipKind?: SessionSkipKind | null;
 	reasonDetail?: string | null;
 	/**
 	 * Rep outcome fields. Populated when itemKind='rep' and the learner
-	 * submits a real answer (skipKind stays null). Session runners now write
-	 * these directly to session_item_result instead of going through the
-	 * deprecated rep_attempt row.
+	 * submits a real answer (skipKind stays null). Per ADR 012, rep outcomes
+	 * live on session_item_result directly -- there is no separate attempt
+	 * row.
 	 */
 	chosenOption?: string | null;
 	isCorrect?: boolean | null;
@@ -259,10 +252,9 @@ async function fetchRepCandidates(userId: string, now: Date, db: Db): Promise<En
 	if (scenarios.length === 0) return [];
 
 	const scenarioIds = scenarios.map((s) => s.id);
-	// Attempt history now lives on session_item_result -- one row per completed
+	// Attempt history lives on session_item_result -- one row per completed
 	// rep slot. Non-null scenarioId + itemKind='rep' + completedAt IS NOT NULL +
-	// skipKind IS NULL is the "real attempt" predicate the rep_attempt table
-	// used to carry implicitly.
+	// skipKind IS NULL is the "real attempt" predicate (ADR 012).
 	const attempts = await db
 		.select({
 			scenarioId: sessionItemResult.scenarioId,
@@ -681,11 +673,6 @@ export async function commitSession(
 				scenarioId: item.kind === 'rep' ? item.scenarioId : null,
 				nodeId: item.kind === 'node_start' ? item.nodeId : null,
 				reviewId: null,
-				// repAttemptId stays null by default. The column survives through
-				// ADR 012 phase 5 because phase 4 is what drops it; no new writes
-				// target it, so historic rows point at ids that no longer exist
-				// after the drop.
-				repAttemptId: null,
 				skipKind: null,
 				reasonDetail: item.reasonDetail ?? null,
 				chosenOption: null,
@@ -799,10 +786,6 @@ export async function recordItemResult(
 				scenarioId: result.scenarioId ?? existing.scenarioId,
 				nodeId: result.nodeId ?? existing.nodeId,
 				reviewId: result.reviewId ?? existing.reviewId,
-				// repAttemptId is never written fresh post-ADR 012 phase 5; keep
-				// the existing value only so pre-migration rows retain their
-				// breadcrumb until phase 4 drops the column.
-				repAttemptId: result.repAttemptId ?? existing.repAttemptId,
 				skipKind: result.skipKind ?? existing.skipKind,
 				reasonDetail: result.reasonDetail ?? existing.reasonDetail,
 				chosenOption: result.chosenOption ?? existing.chosenOption,
@@ -830,7 +813,6 @@ export async function recordItemResult(
 			scenarioId: result.scenarioId ?? null,
 			nodeId: result.nodeId ?? null,
 			reviewId: result.reviewId ?? null,
-			repAttemptId: result.repAttemptId ?? null,
 			skipKind: result.skipKind ?? null,
 			reasonDetail: result.reasonDetail ?? null,
 			chosenOption: result.chosenOption ?? null,
@@ -920,8 +902,8 @@ export async function getStreakDays(
 
 /**
  * Aggregate session summary. Reads the committed item-result rows and joins
- * against the underlying review / rep_attempt rows to compute correctness and
- * confidence.
+ * against the underlying review rows for card correctness; rep correctness
+ * lives on the slot row itself (ADR 012).
  */
 export async function getSessionSummary(
 	sessionId: string,
@@ -950,10 +932,9 @@ export async function getSessionSummary(
 					.from(review)
 					.where(inArray(review.id, reviewIds));
 
-	// Rep outcomes now come straight from the slot row. A rep is "counted"
-	// when it completed with a real answer (skipKind IS NULL) and carries a
-	// definite is_correct value. Same correctness + confidence semantics as
-	// the previous rep_attempt join, rebased onto session_item_result.
+	// Rep outcomes come straight from the slot row. A rep is "counted" when
+	// it completed with a real answer (skipKind IS NULL) and carries a
+	// definite is_correct value (ADR 012).
 	const repSlots = sirRows.filter(
 		(r) =>
 			r.itemKind === SESSION_ITEM_KINDS.REP && r.completedAt !== null && r.skipKind === null && r.isCorrect !== null,
@@ -991,9 +972,7 @@ export async function getSessionSummary(
 			const rev = reviewById.get(r.reviewId);
 			if (rev && Number(rev.rating) >= 3) entry.correct += 1;
 		} else if (r.itemKind === SESSION_ITEM_KINDS.REP) {
-			// Post-ADR 012: rep correctness is on the slot row itself, not on a
-			// related rep_attempt row. Same boolean the old attemptById lookup
-			// used to produce.
+			// Rep correctness is on the slot row itself (ADR 012).
 			if (r.isCorrect === true) entry.correct += 1;
 		}
 	}
