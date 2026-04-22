@@ -219,6 +219,11 @@ export interface DueCardsOptions {
 	 * a node-scoped session.
 	 */
 	nodeId?: string;
+	/**
+	 * When set, narrow the queue to cards in this domain. Used by calibration
+	 * CTAs that deep-link "Practice {domain}" into a domain-scoped review.
+	 */
+	domain?: Domain;
 }
 
 /**
@@ -246,6 +251,7 @@ export async function getDueCards(
 		eq(card.status, CARD_STATUSES.ACTIVE),
 	];
 	if (options.nodeId) clauses.push(eq(card.nodeId, options.nodeId));
+	if (options.domain) clauses.push(eq(card.domain, options.domain));
 
 	const rows = await db
 		.select({ card, state: cardState })

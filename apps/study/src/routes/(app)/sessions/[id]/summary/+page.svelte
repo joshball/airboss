@@ -115,9 +115,11 @@ function domainLabel(slug: string): string {
 	{#if summary.suggestedNext.length > 0}
 		<article class="card suggestions">
 			<h2>Suggested next</h2>
-			<ul>
-				{#each summary.suggestedNext as hint (hint)}
-					<li>{hint}</li>
+			<ul class="suggestion-actions">
+				{#each summary.suggestedNext as action (action.href + action.label)}
+					<li>
+						<a class="btn suggestion {action.variant}" href={action.href}>{action.label}</a>
+					</li>
 				{/each}
 			</ul>
 		</article>
@@ -269,18 +271,44 @@ function domainLabel(slug: string): string {
 		color: #0f172a;
 	}
 
-	.suggestions ul {
-		list-style: disc;
-		padding-left: 1.25rem;
+	.suggestion-actions {
+		list-style: none;
+		padding: 0;
 		margin: 0;
 		display: flex;
-		flex-direction: column;
-		gap: 0.25rem;
+		flex-wrap: wrap;
+		gap: 0.5rem;
 	}
 
-	.suggestions li {
-		color: #0f172a;
+	.suggestion-actions li {
+		display: contents;
+	}
+
+	.btn.suggestion {
+		padding: 0.625rem 1rem;
 		font-size: 0.9375rem;
+		text-align: left;
+		justify-content: flex-start;
+		border-radius: 10px;
+	}
+
+	.btn.suggestion.primary {
+		background: #2563eb;
+		color: white;
+	}
+
+	.btn.suggestion.primary:hover {
+		background: #1d4ed8;
+	}
+
+	.btn.suggestion.secondary {
+		background: #f1f5f9;
+		color: #0f172a;
+		border: 1px solid #cbd5e1;
+	}
+
+	.btn.suggestion.secondary:hover {
+		background: #e2e8f0;
 	}
 
 	.muted {

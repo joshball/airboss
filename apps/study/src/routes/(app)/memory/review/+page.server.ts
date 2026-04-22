@@ -1,6 +1,13 @@
 import { requireAuth } from '@ab/auth';
 import { CardNotFoundError, CardNotReviewableError, getDueCards, submitReview, submitReviewSchema } from '@ab/bc-study';
-import { CONFIDENCE_SAMPLE_RATE, type ConfidenceLevel, REVIEW_BATCH_SIZE, type ReviewRating } from '@ab/constants';
+import {
+	CONFIDENCE_SAMPLE_RATE,
+	type ConfidenceLevel,
+	DOMAIN_VALUES,
+	type Domain,
+	REVIEW_BATCH_SIZE,
+	type ReviewRating,
+} from '@ab/constants';
 import { createLogger } from '@ab/utils';
 import { error, fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
@@ -28,11 +35,22 @@ function shouldPromptConfidence(cardId: string, reviewDate: Date): boolean {
 	return deterministicUnit(`${cardId}:${dayKey}`) < CONFIDENCE_SAMPLE_RATE;
 }
 
+/**
+ * Narrow an arbitrary `?domain=` query value into the `Domain` union, or
+ * return `undefined` when the value is absent or unrecognized. Keeps the
+ * review page tolerant of stale deep links without returning an error.
+ */
+function parseDomain(raw: string | null): Domain | undefined {
+	if (!raw) return undefined;
+	return (DOMAIN_VALUES as readonly string[]).includes(raw) ? (raw as Domain) : undefined;
+}
+
 export const load: PageServerLoad = async (event) => {
 	const user = requireAuth(event);
 
 	const now = new Date();
-	const due = await getDueCards(user.id, REVIEW_BATCH_SIZE);
+	const domain = parseDomain(event.url.searchParams.get('domain'));
+	const due = await getDueCards(user.id, { limit: REVIEW_BATCH_SIZE, domain });
 
 	const batch = due.map((row) => ({
 		id: row.card.id,
@@ -51,6 +69,7 @@ export const load: PageServerLoad = async (event) => {
 	return {
 		batch,
 		startedAt: now.toISOString(),
+		domainFilter: domain ?? null,
 	};
 };
 
