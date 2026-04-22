@@ -146,6 +146,28 @@ export {
 	studyPlan,
 	studySchema,
 } from './schema';
+export type {
+	ItemResultInput,
+	PreviewOptions,
+	SessionPreview,
+	SessionSummary,
+	SessionSummarySliceRow,
+} from './sessions';
+export {
+	buildEnginePools,
+	commitSession,
+	completeSession,
+	getResumableSession,
+	getSession,
+	getSessionItemResults,
+	getSessionSummary,
+	getSessions,
+	getStreakDays,
+	previewSession,
+	recordItemResult,
+	SessionNotFoundError,
+	startSession,
+} from './sessions';
 export type { CardSchedulerState, ScheduleResult } from './srs';
 export { fsrsDefaultParams, fsrsInitialState, fsrsSchedule } from './srs';
 export type { DashboardStats, DomainStats, MasteryStats, RecentReviewRow, ReviewStats } from './stats';
