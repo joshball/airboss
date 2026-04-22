@@ -1,6 +1,6 @@
 <script lang="ts">
 import { CARD_TYPE_LABELS, CARD_TYPES, DOMAIN_LABELS, DOMAIN_VALUES, QUERY_PARAMS, ROUTES } from '@ab/constants';
-import { tick } from 'svelte';
+import { onMount, tick } from 'svelte';
 import { enhance } from '$app/forms';
 import { page } from '$app/state';
 import type { ActionData, PageData } from './$types';
@@ -31,12 +31,16 @@ const seededCardType = $derived(values.cardType ?? data.seed.cardType ?? CARD_TY
 const seededTags = $derived(values.tags?.join?.(', ') ?? data.seed.tags ?? '');
 
 // After a redirect back from a successful save, put focus on Front so the
-// user can keep typing. The `void createdId` read is intentional: it
-// registers `createdId` as a dependency so the effect re-fires after each
-// "Save and add another" round-trip (a new query param rewrites
-// `createdId`). Null on first mount is fine -- focus applies anyway.
+// user can keep typing. The `if (createdId)` read registers the dep and
+// also gates the focus call to post-save only; first mount is handled by
+// the dedicated onMount below so both entry paths land focus on Front.
 $effect(() => {
-	void createdId;
+	if (createdId) {
+		void tick().then(() => frontInput?.focus());
+	}
+});
+
+onMount(() => {
 	void tick().then(() => frontInput?.focus());
 });
 
