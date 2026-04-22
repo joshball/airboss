@@ -1,12 +1,11 @@
 /**
  * Scenario BC functions (Decision Reps).
  *
- * Owns the scenario lifecycle. Rep outcomes post-ADR 012 live on
- * session_item_result, not on a dedicated rep_attempt table; the aggregations
- * below now read the rep-kind slots from there. `submitAttempt` used to
- * write a rep_attempt row but no longer does -- it's a pure validator that
- * resolves the chosen option against the scenario and returns a shaped
- * outcome the caller persists via `recordItemResult` on the slot row.
+ * Owns the scenario lifecycle. Rep outcomes live on session_item_result
+ * (ADR 012); aggregations below read the rep-kind slots from there.
+ * `submitAttempt` is a pure validator: it resolves the chosen option against
+ * the scenario and returns a shaped outcome the caller persists via
+ * `recordItemResult` on the slot row.
  *
  * Inputs are validated here (in addition to the route layer) so cross-BC
  * callers and scripts can't inject invalid values.
@@ -388,9 +387,8 @@ export async function getNextScenarios(
 	db: Db = defaultDb,
 ): Promise<ScenarioRow[]> {
 	// Alias the FROM so the correlated subquery below can reference
-	// `"outer_scenario"."id"` unambiguously -- a bare `"id"` would bind to
-	// rep_attempt.id under Postgres's name-resolution rules. The outer
-	// column reference is emitted via `outerScenarioId` above.
+	// `"outer_scenario"."id"` unambiguously. The outer column reference is
+	// emitted via `outerScenarioId` above.
 	const outerScenario = aliasedTable(scenario, OUTER_SCENARIO_ALIAS);
 	const clauses: SQL[] = [eq(outerScenario.userId, userId), eq(outerScenario.status, SCENARIO_STATUSES.ACTIVE)];
 	if (filters.domain) clauses.push(eq(outerScenario.domain, filters.domain));
@@ -428,9 +426,8 @@ export async function getNextScenarios(
 /**
  * Resolved rep-attempt outcome. Carries exactly the fields the caller needs
  * to persist the result onto a session_item_result row (or to render a
- * response). Post-ADR 012 this replaces the `RepAttemptRow` the old
- * `rep_attempt` table returned -- the outcome is computed, never stored
- * independently of the slot.
+ * response). Per ADR 012 the outcome is computed, never stored independently
+ * of the slot.
  */
 export interface RepAttemptOutcome {
 	scenarioId: string;
@@ -450,12 +447,11 @@ export interface RepAttemptOutcome {
  * the scenario's options (never trusted from the wire), the scenario must
  * belong to the caller, and it must be in ACTIVE status.
  *
- * Idempotency: the old implementation folded double-submits via a
- * REP_DEDUPE_WINDOW_MS lookup against rep_attempt. That fold now happens at
- * the slot level -- `recordItemResult` updates the existing slot rather than
- * inserting a fresh one, so re-submits on the same (session, slotIndex)
- * collapse inherently. submitAttempt stays pure: it doesn't touch the DB
- * for writes, which means repeated calls are naturally safe.
+ * Idempotency: double-submits fold at the slot level -- `recordItemResult`
+ * updates the existing slot rather than inserting a fresh one, so re-submits
+ * on the same (session, slotIndex) collapse inherently. submitAttempt stays
+ * pure: it doesn't touch the DB for writes, which means repeated calls are
+ * naturally safe.
  */
 export async function submitAttempt(input: SubmitAttemptInput, db: Db = defaultDb): Promise<RepAttemptOutcome> {
 	const parsed = submitAttemptSchema.parse({
@@ -649,9 +645,9 @@ export async function getRepDashboard(
 	const windowStart = new Date(now.getTime() - REP_DASHBOARD_WINDOW_DAYS * 24 * 60 * 60 * 1000);
 	const todayStart = userStartOfDay(now, tz);
 
-	// Alias the scenario table used in the NOT EXISTS subquery so the
-	// outer reference is `"outer_scenario"."id"` (never ambiguous with
-	// rep_attempt.id) without touching the schema name as a string.
+	// Alias the scenario table used in the NOT EXISTS subquery so the outer
+	// reference is `"outer_scenario"."id"` without touching the schema name
+	// as a string.
 	const outerScenario = aliasedTable(scenario, OUTER_SCENARIO_ALIAS);
 
 	// Fan out: every query below is independent. Parallel round-trips keep
