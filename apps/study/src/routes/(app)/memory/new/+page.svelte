@@ -1,5 +1,5 @@
 <script lang="ts">
-import { CARD_TYPE_LABELS, CARD_TYPES, DOMAIN_LABELS, DOMAIN_VALUES, ROUTES } from '@ab/constants';
+import { CARD_TYPE_LABELS, CARD_TYPES, DOMAIN_LABELS, DOMAIN_VALUES, QUERY_PARAMS, ROUTES } from '@ab/constants';
 import { tick } from 'svelte';
 import { enhance } from '$app/forms';
 import { page } from '$app/state';
@@ -20,7 +20,7 @@ interface FieldValues {
 	tags?: string[];
 }
 
-const createdId = $derived(page.url.searchParams.get('created'));
+const createdId = $derived(page.url.searchParams.get(QUERY_PARAMS.CREATED));
 const fieldErrors = $derived<Record<string, string>>(form?.fieldErrors ?? {});
 const values = $derived<FieldValues>(form?.values ?? {});
 

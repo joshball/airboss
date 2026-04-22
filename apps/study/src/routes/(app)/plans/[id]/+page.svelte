@@ -12,6 +12,7 @@ import {
 	MAX_SESSION_LENGTH,
 	MIN_SESSION_LENGTH,
 	PLAN_STATUSES,
+	QUERY_PARAMS,
 	ROUTES,
 	SESSION_MODE_LABELS,
 	SESSION_MODE_VALUES,
@@ -29,7 +30,7 @@ const isActive = $derived(plan.status === PLAN_STATUSES.ACTIVE);
 // `?created=1` lands here straight from /plans/new. Show a one-shot creation
 // banner -- keep it dismissible so the user can clear it without navigating.
 // See DESIGN_PRINCIPLES.md #7.
-let createdBannerShown = $state(page.url.searchParams.get('created') === '1');
+let createdBannerShown = $state(page.url.searchParams.get(QUERY_PARAMS.CREATED) === '1');
 
 // Edit-success toast: auto-dismisses after ~3s so it never lingers into the
 // next interaction. The effect reruns whenever `form` changes; on each

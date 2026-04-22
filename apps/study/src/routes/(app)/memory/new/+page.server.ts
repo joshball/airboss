@@ -1,6 +1,6 @@
 import { requireAuth } from '@ab/auth';
 import { type CardRow, createCard, newCardSchema, SourceRefRequiredError } from '@ab/bc-study';
-import { type CARD_TYPE_VALUES, type DOMAIN_VALUES, ROUTES } from '@ab/constants';
+import { type CARD_TYPE_VALUES, type DOMAIN_VALUES, QUERY_PARAMS, ROUTES } from '@ab/constants';
 import { createLogger } from '@ab/utils';
 import { fail, redirect } from '@sveltejs/kit';
 import type { z } from 'zod';
@@ -20,7 +20,7 @@ export const load: PageServerLoad = async ({ url }) => {
 	// Carry-over values from "Save and add another" redirect.
 	return {
 		seed: {
-			domain: url.searchParams.get('domain') ?? '',
+			domain: url.searchParams.get(QUERY_PARAMS.DOMAIN) ?? '',
 			cardType: url.searchParams.get('cardType') ?? '',
 			tags: url.searchParams.get('tags') ?? '',
 		},

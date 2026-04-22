@@ -7,11 +7,12 @@ import {
 	DOMAIN_VALUES,
 	PHASE_OF_FLIGHT_LABELS,
 	PHASE_OF_FLIGHT_VALUES,
+	QUERY_PARAMS,
 	ROUTES,
 	SCENARIO_STATUS_VALUES,
 	SCENARIO_STATUSES,
 } from '@ab/constants';
-import { humanize } from '@ab/utils';
+import { buildQuery, humanize } from '@ab/utils';
 import { tick } from 'svelte';
 import type { PageData } from './$types';
 
@@ -42,7 +43,12 @@ $effect(() => {
 	});
 });
 
-type ChipFilterKey = 'domain' | 'difficulty' | 'phase' | 'source' | 'status';
+type ChipFilterKey =
+	| typeof QUERY_PARAMS.DOMAIN
+	| typeof QUERY_PARAMS.DIFFICULTY
+	| typeof QUERY_PARAMS.FLIGHT_PHASE
+	| typeof QUERY_PARAMS.SOURCE
+	| typeof QUERY_PARAMS.STATUS;
 
 interface FilterChip {
 	key: ChipFilterKey;
@@ -52,20 +58,20 @@ interface FilterChip {
 
 const chips = $derived.by<FilterChip[]>(() => {
 	const out: FilterChip[] = [];
-	if (filters.domain) out.push({ key: 'domain', label: 'Domain', value: domainLabel(filters.domain) });
+	if (filters.domain) out.push({ key: QUERY_PARAMS.DOMAIN, label: 'Domain', value: domainLabel(filters.domain) });
 	if (filters.difficulty)
-		out.push({ key: 'difficulty', label: 'Difficulty', value: difficultyLabel(filters.difficulty) });
-	if (filters.phaseOfFlight) out.push({ key: 'phase', label: 'Phase', value: phaseLabel(filters.phaseOfFlight) });
-	if (filters.sourceType) out.push({ key: 'source', label: 'Source', value: humanize(filters.sourceType) });
+		out.push({ key: QUERY_PARAMS.DIFFICULTY, label: 'Difficulty', value: difficultyLabel(filters.difficulty) });
+	if (filters.phaseOfFlight)
+		out.push({ key: QUERY_PARAMS.FLIGHT_PHASE, label: 'Phase', value: phaseLabel(filters.phaseOfFlight) });
+	if (filters.sourceType) out.push({ key: QUERY_PARAMS.SOURCE, label: 'Source', value: humanize(filters.sourceType) });
 	if (filters.status !== SCENARIO_STATUSES.ACTIVE)
-		out.push({ key: 'status', label: 'Status', value: humanize(filters.status) });
+		out.push({ key: QUERY_PARAMS.STATUS, label: 'Status', value: humanize(filters.status) });
 	return out;
 });
 
 function removeChipHref(key: ChipFilterKey): string {
 	// Build a fresh href that keeps every other active filter but drops `key`.
-	const next: Partial<Record<ChipFilterKey, undefined>> = { [key]: undefined };
-	return buildHref(next);
+	return buildHref({ [key]: undefined });
 }
 
 function domainLabel(slug: string): string {
@@ -87,24 +93,19 @@ function shorten(text: string, max = 160): string {
 }
 
 function buildHref(next: Record<string, string | undefined>): string {
-	const params = new URLSearchParams();
-	const full: Record<string, string | undefined> = {
-		domain: filters.domain,
-		difficulty: filters.difficulty,
-		phase: filters.phaseOfFlight,
-		source: filters.sourceType,
-		status: filters.status === SCENARIO_STATUSES.ACTIVE ? undefined : filters.status,
+	const full: Record<string, string | number | null | undefined> = {
+		[QUERY_PARAMS.DOMAIN]: filters.domain,
+		[QUERY_PARAMS.DIFFICULTY]: filters.difficulty,
+		[QUERY_PARAMS.FLIGHT_PHASE]: filters.phaseOfFlight,
+		[QUERY_PARAMS.SOURCE]: filters.sourceType,
+		[QUERY_PARAMS.STATUS]: filters.status === SCENARIO_STATUSES.ACTIVE ? undefined : filters.status,
 		...next,
 	};
-	for (const [k, v] of Object.entries(full)) {
-		if (v !== undefined && v !== '' && v !== null) params.set(k, String(v));
-	}
-	const qs = params.toString();
-	return qs ? `${ROUTES.REPS_BROWSE}?${qs}` : ROUTES.REPS_BROWSE;
+	return `${ROUTES.REPS_BROWSE}${buildQuery(full)}`;
 }
 
 function pageHref(n: number): string {
-	return buildHref({ page: n > 1 ? String(n) : undefined });
+	return buildHref({ [QUERY_PARAMS.PAGE]: n > 1 ? String(n) : undefined });
 }
 </script>
 
@@ -131,10 +132,10 @@ function pageHref(n: number): string {
 	{/if}
 
 	<form class="filters" method="GET" role="search" aria-label="Filter scenarios">
-		<input type="hidden" name="page" value="1" />
+		<input type="hidden" name={QUERY_PARAMS.PAGE} value="1" />
 		<div class="filter">
 			<label for="f-domain">Domain</label>
-			<select id="f-domain" name="domain" value={filters.domain ?? ''}>
+			<select id="f-domain" name={QUERY_PARAMS.DOMAIN} value={filters.domain ?? ''}>
 				<option value="">All</option>
 				{#each DOMAIN_VALUES as d (d)}
 					<option value={d}>{domainLabel(d)}</option>
@@ -143,7 +144,7 @@ function pageHref(n: number): string {
 		</div>
 		<div class="filter">
 			<label for="f-difficulty">Difficulty</label>
-			<select id="f-difficulty" name="difficulty" value={filters.difficulty ?? ''}>
+			<select id="f-difficulty" name={QUERY_PARAMS.DIFFICULTY} value={filters.difficulty ?? ''}>
 				<option value="">All</option>
 				{#each DIFFICULTY_VALUES as d (d)}
 					<option value={d}>{difficultyLabel(d)}</option>
@@ -152,7 +153,7 @@ function pageHref(n: number): string {
 		</div>
 		<div class="filter">
 			<label for="f-phase">Phase</label>
-			<select id="f-phase" name="phase" value={filters.phaseOfFlight ?? ''}>
+			<select id="f-phase" name={QUERY_PARAMS.FLIGHT_PHASE} value={filters.phaseOfFlight ?? ''}>
 				<option value="">All</option>
 				{#each PHASE_OF_FLIGHT_VALUES as p (p)}
 					<option value={p}>{phaseLabel(p)}</option>
@@ -161,7 +162,7 @@ function pageHref(n: number): string {
 		</div>
 		<div class="filter">
 			<label for="f-source">Source</label>
-			<select id="f-source" name="source" value={filters.sourceType ?? ''}>
+			<select id="f-source" name={QUERY_PARAMS.SOURCE} value={filters.sourceType ?? ''}>
 				<option value="">All</option>
 				{#each CONTENT_SOURCE_VALUES as s (s)}
 					<option value={s}>{humanize(s)}</option>
@@ -170,7 +171,7 @@ function pageHref(n: number): string {
 		</div>
 		<div class="filter">
 			<label for="f-status">Status</label>
-			<select id="f-status" name="status" value={filters.status ?? SCENARIO_STATUSES.ACTIVE}>
+			<select id="f-status" name={QUERY_PARAMS.STATUS} value={filters.status ?? SCENARIO_STATUSES.ACTIVE}>
 				{#each SCENARIO_STATUS_VALUES as s (s)}
 					<option value={s}>{humanize(s)}</option>
 				{/each}

@@ -5,6 +5,7 @@ import {
 	type ConfidenceLevel,
 	DOMAIN_VALUES,
 	type Domain,
+	QUERY_PARAMS,
 	REVIEW_BATCH_SIZE,
 	type ReviewRating,
 } from '@ab/constants';
@@ -49,7 +50,7 @@ export const load: PageServerLoad = async (event) => {
 	const user = requireAuth(event);
 
 	const now = new Date();
-	const domain = parseDomain(event.url.searchParams.get('domain'));
+	const domain = parseDomain(event.url.searchParams.get(QUERY_PARAMS.DOMAIN));
 	const due = await getDueCards(user.id, { limit: REVIEW_BATCH_SIZE, domain });
 
 	const batch = due.map((row) => ({

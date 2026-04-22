@@ -7,6 +7,7 @@ import {
 	type Domain,
 	NODE_LIFECYCLE_VALUES,
 	type NodeLifecycle,
+	QUERY_PARAMS,
 	RELEVANCE_PRIORITY_VALUES,
 	type RelevancePriority,
 } from '@ab/constants';
@@ -21,10 +22,10 @@ export const load: PageServerLoad = async (event) => {
 	const user = requireAuth(event);
 	const { url } = event;
 
-	const domain = narrow<Domain>(url.searchParams.get('domain'), DOMAIN_VALUES);
-	const cert = narrow<Cert>(url.searchParams.get('cert'), CERT_VALUES);
-	const priority = narrow<RelevancePriority>(url.searchParams.get('priority'), RELEVANCE_PRIORITY_VALUES);
-	const lifecycle = narrow<NodeLifecycle>(url.searchParams.get('lifecycle'), NODE_LIFECYCLE_VALUES);
+	const domain = narrow<Domain>(url.searchParams.get(QUERY_PARAMS.DOMAIN), DOMAIN_VALUES);
+	const cert = narrow<Cert>(url.searchParams.get(QUERY_PARAMS.CERT), CERT_VALUES);
+	const priority = narrow<RelevancePriority>(url.searchParams.get(QUERY_PARAMS.PRIORITY), RELEVANCE_PRIORITY_VALUES);
+	const lifecycle = narrow<NodeLifecycle>(url.searchParams.get(QUERY_PARAMS.LIFECYCLE), NODE_LIFECYCLE_VALUES);
 
 	const rows = await listNodesForBrowse({ domain, cert, priority, lifecycle });
 

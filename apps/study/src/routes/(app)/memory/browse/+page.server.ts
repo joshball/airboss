@@ -11,6 +11,7 @@ import {
 	type ContentSource,
 	DOMAIN_VALUES,
 	type Domain,
+	QUERY_PARAMS,
 } from '@ab/constants';
 import type { PageServerLoad } from './$types';
 
@@ -38,13 +39,13 @@ export const load: PageServerLoad = async (event) => {
 	const user = requireAuth(event);
 	const { url } = event;
 
-	const domain = narrowDomain(url.searchParams.get('domain'));
-	const cardType = narrowCardType(url.searchParams.get('type'));
-	const sourceType = narrowSourceType(url.searchParams.get('source'));
-	const status = narrowStatus(url.searchParams.get('status')) ?? CARD_STATUSES.ACTIVE;
-	const search = url.searchParams.get('q')?.trim() ?? '';
+	const domain = narrowDomain(url.searchParams.get(QUERY_PARAMS.DOMAIN));
+	const cardType = narrowCardType(url.searchParams.get(QUERY_PARAMS.CARD_TYPE));
+	const sourceType = narrowSourceType(url.searchParams.get(QUERY_PARAMS.SOURCE));
+	const status = narrowStatus(url.searchParams.get(QUERY_PARAMS.STATUS)) ?? CARD_STATUSES.ACTIVE;
+	const search = url.searchParams.get(QUERY_PARAMS.SEARCH)?.trim() ?? '';
 
-	const pageRaw = Number.parseInt(url.searchParams.get('page') ?? '1', 10);
+	const pageRaw = Number.parseInt(url.searchParams.get(QUERY_PARAMS.PAGE) ?? '1', 10);
 	const pageNum = Number.isFinite(pageRaw) && pageRaw >= 1 ? pageRaw : 1;
 
 	// Fetch one extra row to know whether another page exists.
@@ -64,7 +65,7 @@ export const load: PageServerLoad = async (event) => {
 	// Read `?created=<id>` -- set when the user lands here straight from a
 	// successful create. The banner + row highlight read this.
 	// See DESIGN_PRINCIPLES.md #7.
-	const createdId = url.searchParams.get('created') ?? null;
+	const createdId = url.searchParams.get(QUERY_PARAMS.CREATED) ?? null;
 	let createdCard: { id: string; front: string } | null = null;
 	if (createdId) {
 		const found = await getCard(createdId, user.id);

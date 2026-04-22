@@ -6,6 +6,7 @@ import {
 	DOMAIN_VALUES,
 	NODE_LIFECYCLE_LABELS,
 	NODE_LIFECYCLE_VALUES,
+	QUERY_PARAMS,
 	RELEVANCE_PRIORITY_LABELS,
 	RELEVANCE_PRIORITY_VALUES,
 	ROUTES,
@@ -59,7 +60,7 @@ function masteryPct(score: number): number {
 	<form class="filters" method="GET" role="search" aria-label="Filter nodes">
 		<div class="filter">
 			<label for="f-domain">Domain</label>
-			<select id="f-domain" name="domain" value={filters.domain ?? ''}>
+			<select id="f-domain" name={QUERY_PARAMS.DOMAIN} value={filters.domain ?? ''}>
 				<option value="">All</option>
 				{#each DOMAIN_VALUES as d (d)}
 					<option value={d}>{domainLabel(d)}</option>
@@ -68,7 +69,7 @@ function masteryPct(score: number): number {
 		</div>
 		<div class="filter">
 			<label for="f-cert">Cert</label>
-			<select id="f-cert" name="cert" value={filters.cert ?? ''}>
+			<select id="f-cert" name={QUERY_PARAMS.CERT} value={filters.cert ?? ''}>
 				<option value="">All</option>
 				{#each CERT_VALUES as c (c)}
 					<option value={c}>{certLabel(c)}</option>
@@ -77,7 +78,7 @@ function masteryPct(score: number): number {
 		</div>
 		<div class="filter">
 			<label for="f-priority">Priority</label>
-			<select id="f-priority" name="priority" value={filters.priority ?? ''}>
+			<select id="f-priority" name={QUERY_PARAMS.PRIORITY} value={filters.priority ?? ''}>
 				<option value="">All</option>
 				{#each RELEVANCE_PRIORITY_VALUES as p (p)}
 					<option value={p}>{priorityLabel(p)}</option>
@@ -86,7 +87,7 @@ function masteryPct(score: number): number {
 		</div>
 		<div class="filter">
 			<label for="f-lifecycle">Lifecycle</label>
-			<select id="f-lifecycle" name="lifecycle" value={filters.lifecycle ?? ''}>
+			<select id="f-lifecycle" name={QUERY_PARAMS.LIFECYCLE} value={filters.lifecycle ?? ''}>
 				<option value="">All</option>
 				{#each NODE_LIFECYCLE_VALUES as l (l)}
 					<option value={l}>{lifecycleLabel(l)}</option>
