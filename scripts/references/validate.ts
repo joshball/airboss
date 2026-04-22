@@ -1,17 +1,16 @@
 #!/usr/bin/env bun
 /**
- * Reference + content validator.
+ * Reference + content + help-pages validator.
  *
- * Combines the two validation layers from @ab/aviation:
- *
+ * Layers:
  *   1) validateReferences(AVIATION_REFERENCES) -- schema + tag + related
  *      symmetry + verbatim/sources coherence gates.
  *   2) validateContentWikilinks(scan, registry) -- every
  *      `[[display::id]]` id in content resolves; broken links error,
  *      TBD-id links warn.
- *
- * Plus the extraction-pipeline gates added here:
- *
+ *   2.5) validateHelpPages(registeredPages) -- required axes, section-id
+ *      uniqueness, route shape, wiki-link resolution against aviation +
+ *      help registries.
  *   3) Registry coherence -- every `Reference.sources[].sourceId` exists
  *      in SOURCES with a type matching the id prefix.
  *   4) Meta.json integrity -- for every source, if the binary is on disk,
@@ -42,8 +41,18 @@ import {
 	validateContentWikilinks,
 	validateReferences,
 } from '@ab/aviation';
+import { helpRegistry, validateHelpPages } from '@ab/help';
+// Register per-app help pages before the gate runs so the validator sees
+// exactly what each app will hand to `@ab/help` in production. The study
+// app's pages import from `@ab/help` via Vite aliases at runtime; under
+// Bun (which doesn't read Vite alias config), we re-import the content
+// list directly from its relative path here. Future apps add their
+// own call.
+import { studyHelpPages } from '../../apps/study/src/lib/help/pages';
 import { readExistingGenerated } from './extract';
 import { scanContent } from './scan';
+
+helpRegistry.registerPages('study', studyHelpPages);
 
 const REPO_ROOT = resolve(import.meta.dirname, '..', '..');
 
@@ -73,6 +82,11 @@ const contentResult = validateContentWikilinks(scans, {
 	knownIds: listReferences().map((r) => r.id),
 });
 
+// -------- layer 2.5: help pages from @ab/help --------
+
+const helpPages = helpRegistry.getAllPages();
+const helpResult = validateHelpPages(helpPages, { hasAviationReference: hasReference });
+
 const errors: Issue[] = [];
 const warnings: Issue[] = [];
 
@@ -87,6 +101,18 @@ for (const e of contentResult.errors) {
 }
 for (const w of contentResult.warnings) {
 	warnings.push({ level: 'warn', message: w.message, referenceId: w.referenceId, location: w.location });
+}
+for (const e of helpResult.errors) {
+	errors.push({ level: 'error', message: e.message, location: helpLocation(e) });
+}
+for (const w of helpResult.warnings) {
+	warnings.push({ level: 'warn', message: w.message, location: helpLocation(w) });
+}
+
+function helpLocation(issue: { pageId?: string; sectionId?: string }): string | undefined {
+	if (issue.sectionId && issue.pageId) return `help:${issue.pageId}#${issue.sectionId}`;
+	if (issue.pageId) return `help:${issue.pageId}`;
+	return undefined;
 }
 
 // -------- layer 3: registry coherence --------
@@ -272,5 +298,5 @@ if (errors.length > 0) {
 }
 
 console.log(
-	`references: 0 errors, ${warnings.length} warning(s); scanned ${scans.length} content location(s), ${contentResult.summary.linkCount} wiki-link(s); ${SOURCES.length} source(s) registered.`,
+	`references: 0 errors, ${warnings.length} warning(s); scanned ${scans.length} content location(s), ${contentResult.summary.linkCount} wiki-link(s); ${SOURCES.length} source(s) registered; ${helpPages.length} help page(s) validated.`,
 );
