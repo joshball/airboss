@@ -84,11 +84,11 @@ const screenReaderSummary = $derived(
 	.spark {
 		display: flex;
 		align-items: flex-end;
-		gap: 0.375rem;
-		height: 64px;
-		padding: 0.5rem 0.25rem 0.25rem;
+		gap: 0.25rem;
+		height: 48px;
+		padding: 0.375rem 0.25rem 0.25rem;
 		background: #f8fafc;
-		border-radius: 8px;
+		border-radius: 2px;
 	}
 
 	.col {
@@ -97,48 +97,51 @@ const screenReaderSummary = $derived(
 		flex-direction: column;
 		justify-content: flex-end;
 		align-items: center;
-		gap: 0.25rem;
+		gap: 0.1875rem;
 		min-width: 0;
 	}
 
 	.bar {
 		width: 100%;
-		max-width: 18px;
+		max-width: 14px;
 		height: var(--h, 8%);
-		min-height: 4px;
+		min-height: 3px;
 		background: #2563eb;
-		border-radius: 3px 3px 0 0;
+		border-radius: 2px 2px 0 0;
 		transition: height 200ms ease-out;
 	}
 
 	.bar.zero {
 		background: #cbd5e1;
-		height: 4px;
+		height: 3px;
 	}
 
 	.lbl {
-		font-size: 0.6875rem;
+		font-size: 0.625rem;
 		color: #94a3b8;
 		font-weight: 600;
 		line-height: 1;
+		font-family: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
 	}
 
 	.meta {
 		display: flex;
-		gap: 1rem;
+		gap: 0.75rem;
 		flex-wrap: wrap;
 		color: #475569;
-		font-size: 0.875rem;
+		font-size: 0.75rem;
+		font-family: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
 	}
 
 	.meta strong {
 		color: #0f172a;
 		font-variant-numeric: tabular-nums;
+		font-weight: 700;
 	}
 
 	.muted {
 		margin: 0;
 		color: #64748b;
-		font-size: 0.875rem;
+		font-size: 0.75rem;
 	}
 </style>

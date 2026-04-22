@@ -81,15 +81,15 @@ const panelError = $derived(
 <style>
 	.ctas {
 		display: flex;
-		gap: 0.5rem;
+		gap: 0.375rem;
 		flex-wrap: wrap;
 	}
 
 	.btn {
-		padding: 0.625rem 1.125rem;
-		font-size: 0.9375rem;
+		padding: 0.375rem 0.75rem;
+		font-size: 0.8125rem;
 		font-weight: 600;
-		border-radius: 8px;
+		border-radius: 2px;
 		border: 1px solid transparent;
 		text-decoration: none;
 		display: inline-flex;
@@ -98,6 +98,7 @@ const panelError = $derived(
 		transition:
 			background 120ms,
 			border-color 120ms;
+		font-variant-numeric: tabular-nums;
 	}
 
 	.btn.primary {
@@ -123,13 +124,13 @@ const panelError = $derived(
 		margin: 0;
 		color: #0f172a;
 		font-weight: 600;
-		font-size: 1rem;
+		font-size: 0.8125rem;
 	}
 
 	.muted {
 		margin: 0;
 		color: #64748b;
-		font-size: 0.875rem;
+		font-size: 0.75rem;
 	}
 
 	.muted a {
