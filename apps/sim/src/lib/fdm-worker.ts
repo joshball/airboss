@@ -12,6 +12,7 @@
 
 /// <reference lib="webworker" />
 
+import type { ScenarioStepState } from '@ab/bc-sim';
 import { C172_CONFIG, FdmEngine, getScenario, ScenarioRunner } from '@ab/bc-sim';
 import {
 	SIM_FDM_DT_SECONDS,
@@ -35,6 +36,7 @@ interface WorkerState {
 	snapshotClock: number;
 	tickHandle: number | null;
 	lastTickMs: number;
+	lastStepState?: ScenarioStepState;
 }
 
 let state: WorkerState | null = null;
@@ -45,11 +47,11 @@ function post(msg: WorkerToMain): void {
 
 function buildState(scenarioId: SimScenarioId): WorkerState {
 	const def = getScenario(scenarioId);
-	// Phase 0 only ships the C172. If future scenarios pin a different
+	// Phase 0.5 only ships the C172. If future scenarios pin a different
 	// aircraft, resolve it here. Using the id keyed lookup keeps the switch
 	// explicit rather than implicit string matching.
 	const cfg = C172_CONFIG;
-	const engine = new FdmEngine(cfg, def.initial);
+	const engine = new FdmEngine(cfg, def.initial, def.wind, def.scriptedInput);
 	const runner = new ScenarioRunner(def);
 	return {
 		scenarioId,
@@ -70,6 +72,7 @@ function postSnapshot(s: WorkerState): void {
 		truth: s.engine.snapshot(),
 		inputs: s.engine.getInputs(),
 		running: s.running,
+		stepState: s.lastStepState,
 	});
 }
 
@@ -88,7 +91,9 @@ function loop(): void {
 	while (state.accumulator >= SIM_FDM_DT_SECONDS && !state.terminated) {
 		state.engine.step(SIM_FDM_DT_SECONDS);
 		const truth = state.engine.snapshot();
-		const evalResult = state.runner.evaluate(truth);
+		const inputs = state.engine.getInputs();
+		const evalResult = state.runner.evaluate(truth, inputs);
+		state.lastStepState = evalResult.stepState;
 		state.accumulator -= SIM_FDM_DT_SECONDS;
 		state.snapshotClock += SIM_FDM_DT_SECONDS;
 
@@ -163,6 +168,20 @@ ctx.addEventListener('message', (event: MessageEvent<MainToWorker>) => {
 		}
 		case SIM_WORKER_MESSAGES.INPUT: {
 			if (state) state.engine.setInputs(msg.inputs);
+			break;
+		}
+		case SIM_WORKER_MESSAGES.TOGGLE_BRAKE: {
+			if (state) {
+				state.engine.toggleBrake();
+				postSnapshot(state);
+			}
+			break;
+		}
+		case SIM_WORKER_MESSAGES.TOGGLE_AUTO_COORDINATE: {
+			if (state) {
+				state.engine.toggleAutoCoordinate();
+				postSnapshot(state);
+			}
 			break;
 		}
 		default: {

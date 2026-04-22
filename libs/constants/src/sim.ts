@@ -70,6 +70,8 @@ export const SIM_WORKER_MESSAGES = {
 	RESUME: 'resume',
 	RESET: 'reset',
 	INPUT: 'input',
+	TOGGLE_BRAKE: 'toggle-brake',
+	TOGGLE_AUTO_COORDINATE: 'toggle-auto-coordinate',
 	SNAPSHOT: 'snapshot',
 	OUTCOME: 'outcome',
 	READY: 'ready',
