@@ -1,0 +1,404 @@
+/*
+ * airboss design tokens
+ *
+ * Two themes -- web and tui. Both export the same token names so consumers
+ * are theme-agnostic. Components read tokens via `var(--ab-*)`; switching
+ * the theme on an ancestor element re-skins every descendant without
+ * re-rendering.
+ *
+ * Scopes:
+ *   [data-theme='web']  -- default. Reading-column, generous padding, rounded.
+ *   [data-theme='tui']  -- dashboard / instrument surfaces. Dense, monospace,
+ *                          2px corners, full-bleed grid, flat chrome.
+ *
+ * Naming:
+ *   --ab-color-*        surface/text/border/state colors
+ *   --ab-font-*         typography family, size, weight, tracking, leading
+ *   --ab-space-*        2xs .. 2xl spacing scale (web is 0.25rem-based, tui
+ *                       is tighter)
+ *   --ab-radius-*       sharp / sm / md / lg (tui locks to sharp + sm)
+ *   --ab-shadow-*       none / sm / md / lg (tui locks to none)
+ *   --ab-layout-*       container max-width, grid gap, panel padding, panel
+ *                       header size, density flags
+ *
+ * Layout overrides also expose density-aware utility selectors:
+ *   .ab-container       theme-aware outer container (reading column vs full-bleed)
+ *   .ab-panel-header    theme-aware panel header treatment (h2 styling)
+ *
+ * All hex colors live here. Primitives must not hardcode hex; they read
+ * through `var(--ab-*)`.
+ */
+
+/* --------------------------------------------------------------------------
+ * WEB theme
+ * -------------------------------------------------------------------------- */
+[data-theme='web'] {
+	/* Color -- foreground / background / surface */
+	--ab-color-fg: #0f172a;
+	--ab-color-fg-muted: #475569;
+	--ab-color-fg-subtle: #64748b;
+	--ab-color-fg-faint: #94a3b8;
+	--ab-color-fg-inverse: #ffffff;
+
+	--ab-color-bg: #f8fafc;
+	--ab-color-surface: #ffffff;
+	--ab-color-surface-raised: #ffffff;
+	--ab-color-surface-sunken: #f1f5f9;
+	--ab-color-surface-muted: #f8fafc;
+
+	--ab-color-border: #e2e8f0;
+	--ab-color-border-strong: #cbd5e1;
+	--ab-color-border-subtle: #f1f5f9;
+
+	/* Color -- primary (blue) */
+	--ab-color-primary: #2563eb;
+	--ab-color-primary-hover: #1d4ed8;
+	--ab-color-primary-active: #1e40af;
+	--ab-color-primary-subtle: #eff6ff;
+	--ab-color-primary-subtle-border: #bfdbfe;
+	--ab-color-primary-fg: #ffffff;
+
+	/* Color -- danger */
+	--ab-color-danger: #dc2626;
+	--ab-color-danger-hover: #b91c1c;
+	--ab-color-danger-active: #991b1b;
+	--ab-color-danger-subtle: #fef2f2;
+	--ab-color-danger-subtle-border: #fecaca;
+	--ab-color-danger-fg: #ffffff;
+
+	/* Color -- success */
+	--ab-color-success: #16a34a;
+	--ab-color-success-hover: #15803d;
+	--ab-color-success-active: #166534;
+	--ab-color-success-subtle: #f0fdf4;
+	--ab-color-success-subtle-border: #bbf7d0;
+	--ab-color-success-fg: #ffffff;
+
+	/* Color -- warning */
+	--ab-color-warning: #d97706;
+	--ab-color-warning-hover: #b45309;
+	--ab-color-warning-active: #92400e;
+	--ab-color-warning-subtle: #fffbeb;
+	--ab-color-warning-subtle-border: #fde68a;
+	--ab-color-warning-fg: #ffffff;
+
+	/* Color -- info */
+	--ab-color-info: #0284c7;
+	--ab-color-info-hover: #0369a1;
+	--ab-color-info-active: #075985;
+	--ab-color-info-subtle: #f0f9ff;
+	--ab-color-info-subtle-border: #bae6fd;
+	--ab-color-info-fg: #ffffff;
+
+	/* Color -- muted (neutral chip) */
+	--ab-color-muted: #64748b;
+	--ab-color-muted-hover: #475569;
+	--ab-color-muted-subtle: #f1f5f9;
+	--ab-color-muted-subtle-border: #e2e8f0;
+	--ab-color-muted-fg: #ffffff;
+
+	/* Focus ring */
+	--ab-color-focus-ring: rgba(37, 99, 235, 0.35);
+
+	/* Typography */
+	--ab-font-family-sans: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+	--ab-font-family-mono: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
+	--ab-font-family-base: var(--ab-font-family-sans);
+
+	--ab-font-size-xs: 0.75rem;
+	--ab-font-size-sm: 0.875rem;
+	--ab-font-size-base: 1rem;
+	--ab-font-size-lg: 1.125rem;
+	--ab-font-size-xl: 1.375rem;
+	--ab-font-size-2xl: 1.75rem;
+
+	--ab-font-weight-regular: 400;
+	--ab-font-weight-medium: 500;
+	--ab-font-weight-semibold: 600;
+	--ab-font-weight-bold: 700;
+
+	--ab-line-height-tight: 1.2;
+	--ab-line-height-normal: 1.5;
+	--ab-line-height-relaxed: 1.65;
+
+	--ab-letter-spacing-tight: -0.01em;
+	--ab-letter-spacing-normal: 0;
+	--ab-letter-spacing-wide: 0.04em;
+	--ab-letter-spacing-caps: 0.08em;
+
+	/* Spacing -- 0.25rem base, 2xs .. 2xl */
+	--ab-space-2xs: 0.25rem;
+	--ab-space-xs: 0.375rem;
+	--ab-space-sm: 0.5rem;
+	--ab-space-md: 0.75rem;
+	--ab-space-lg: 1rem;
+	--ab-space-xl: 1.5rem;
+	--ab-space-2xl: 2rem;
+
+	/* Radii -- web gets rounded corners by default */
+	--ab-radius-sharp: 0;
+	--ab-radius-sm: 6px;
+	--ab-radius-md: 8px;
+	--ab-radius-lg: 12px;
+
+	/* Shadows -- subtle elevation */
+	--ab-shadow-none: none;
+	--ab-shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04);
+	--ab-shadow-md: 0 2px 6px rgba(15, 23, 42, 0.06);
+	--ab-shadow-lg: 0 6px 16px rgba(15, 23, 42, 0.08);
+
+	/* Layout */
+	--ab-layout-container-max: 48rem;
+	--ab-layout-container-padding: 1.5rem;
+	--ab-layout-grid-gap: 1rem;
+	--ab-layout-panel-padding: 1.25rem;
+	--ab-layout-panel-gap: 0.75rem;
+	--ab-layout-panel-header-size: 1.125rem;
+	--ab-layout-panel-header-weight: 600;
+	--ab-layout-panel-header-transform: none;
+	--ab-layout-panel-header-tracking: var(--ab-letter-spacing-normal);
+	--ab-layout-panel-header-family: var(--ab-font-family-sans);
+
+	/* Transitions */
+	--ab-transition-fast: 120ms ease-out;
+	--ab-transition-normal: 200ms ease-out;
+
+	/* Control sizing -- used by Button, TextField, Select */
+	--ab-control-radius: var(--ab-radius-md);
+	--ab-control-padding-x-sm: 0.5rem;
+	--ab-control-padding-y-sm: 0.375rem;
+	--ab-control-padding-x-md: 0.75rem;
+	--ab-control-padding-y-md: 0.5rem;
+	--ab-control-padding-x-lg: 1rem;
+	--ab-control-padding-y-lg: 0.625rem;
+	--ab-control-font-size-sm: var(--ab-font-size-sm);
+	--ab-control-font-size-md: var(--ab-font-size-base);
+	--ab-control-font-size-lg: var(--ab-font-size-lg);
+}
+
+/* --------------------------------------------------------------------------
+ * TUI theme
+ * -------------------------------------------------------------------------- */
+[data-theme='tui'] {
+	/* Color -- foreground / background / surface */
+	--ab-color-fg: #0f172a;
+	--ab-color-fg-muted: #475569;
+	--ab-color-fg-subtle: #64748b;
+	--ab-color-fg-faint: #94a3b8;
+	--ab-color-fg-inverse: #ffffff;
+
+	--ab-color-bg: #f1f5f9;
+	--ab-color-surface: #ffffff;
+	--ab-color-surface-raised: #ffffff;
+	--ab-color-surface-sunken: #f8fafc;
+	--ab-color-surface-muted: #f8fafc;
+
+	--ab-color-border: #e2e8f0;
+	--ab-color-border-strong: #cbd5e1;
+	--ab-color-border-subtle: #f1f5f9;
+
+	/* Color -- primary (blue) */
+	--ab-color-primary: #2563eb;
+	--ab-color-primary-hover: #1d4ed8;
+	--ab-color-primary-active: #1e40af;
+	--ab-color-primary-subtle: #eff6ff;
+	--ab-color-primary-subtle-border: #bfdbfe;
+	--ab-color-primary-fg: #ffffff;
+
+	/* Color -- danger */
+	--ab-color-danger: #b91c1c;
+	--ab-color-danger-hover: #991b1b;
+	--ab-color-danger-active: #7f1d1d;
+	--ab-color-danger-subtle: #fef2f2;
+	--ab-color-danger-subtle-border: #fecaca;
+	--ab-color-danger-fg: #ffffff;
+
+	/* Color -- success */
+	--ab-color-success: #15803d;
+	--ab-color-success-hover: #166534;
+	--ab-color-success-active: #14532d;
+	--ab-color-success-subtle: #f0fdf4;
+	--ab-color-success-subtle-border: #bbf7d0;
+	--ab-color-success-fg: #ffffff;
+
+	/* Color -- warning */
+	--ab-color-warning: #b45309;
+	--ab-color-warning-hover: #92400e;
+	--ab-color-warning-active: #78350f;
+	--ab-color-warning-subtle: #fffbeb;
+	--ab-color-warning-subtle-border: #fde68a;
+	--ab-color-warning-fg: #ffffff;
+
+	/* Color -- info */
+	--ab-color-info: #0369a1;
+	--ab-color-info-hover: #075985;
+	--ab-color-info-active: #0c4a6e;
+	--ab-color-info-subtle: #f0f9ff;
+	--ab-color-info-subtle-border: #bae6fd;
+	--ab-color-info-fg: #ffffff;
+
+	/* Color -- muted */
+	--ab-color-muted: #64748b;
+	--ab-color-muted-hover: #475569;
+	--ab-color-muted-subtle: #f1f5f9;
+	--ab-color-muted-subtle-border: #e2e8f0;
+	--ab-color-muted-fg: #ffffff;
+
+	/* Focus ring */
+	--ab-color-focus-ring: rgba(37, 99, 235, 0.35);
+
+	/* Typography -- mono everywhere */
+	--ab-font-family-sans: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
+	--ab-font-family-mono: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
+	--ab-font-family-base: var(--ab-font-family-mono);
+
+	--ab-font-size-xs: 0.6875rem;
+	--ab-font-size-sm: 0.75rem;
+	--ab-font-size-base: 0.8125rem;
+	--ab-font-size-lg: 0.9375rem;
+	--ab-font-size-xl: 1.0625rem;
+	--ab-font-size-2xl: 1.25rem;
+
+	--ab-font-weight-regular: 400;
+	--ab-font-weight-medium: 500;
+	--ab-font-weight-semibold: 600;
+	--ab-font-weight-bold: 700;
+
+	--ab-line-height-tight: 1.15;
+	--ab-line-height-normal: 1.4;
+	--ab-line-height-relaxed: 1.55;
+
+	--ab-letter-spacing-tight: 0;
+	--ab-letter-spacing-normal: 0;
+	--ab-letter-spacing-wide: 0.04em;
+	--ab-letter-spacing-caps: 0.08em;
+
+	/* Spacing -- tighter than web */
+	--ab-space-2xs: 0.125rem;
+	--ab-space-xs: 0.25rem;
+	--ab-space-sm: 0.375rem;
+	--ab-space-md: 0.5rem;
+	--ab-space-lg: 0.75rem;
+	--ab-space-xl: 1rem;
+	--ab-space-2xl: 1.5rem;
+
+	/* Radii -- tui locks to sharp + sm */
+	--ab-radius-sharp: 0;
+	--ab-radius-sm: 2px;
+	--ab-radius-md: 2px;
+	--ab-radius-lg: 2px;
+
+	/* Shadows -- tui locks to none (flat) */
+	--ab-shadow-none: none;
+	--ab-shadow-sm: none;
+	--ab-shadow-md: none;
+	--ab-shadow-lg: none;
+
+	/* Layout -- full-bleed grid */
+	--ab-layout-container-max: none;
+	--ab-layout-container-padding: 0.75rem;
+	--ab-layout-grid-gap: 0.5rem;
+	--ab-layout-panel-padding: 0.625rem;
+	--ab-layout-panel-gap: 0.5rem;
+	--ab-layout-panel-header-size: 0.6875rem;
+	--ab-layout-panel-header-weight: 600;
+	--ab-layout-panel-header-transform: uppercase;
+	--ab-layout-panel-header-tracking: var(--ab-letter-spacing-caps);
+	--ab-layout-panel-header-family: var(--ab-font-family-mono);
+
+	/* Transitions */
+	--ab-transition-fast: 80ms ease-out;
+	--ab-transition-normal: 120ms ease-out;
+
+	/* Control sizing -- tighter */
+	--ab-control-radius: var(--ab-radius-sm);
+	--ab-control-padding-x-sm: 0.375rem;
+	--ab-control-padding-y-sm: 0.25rem;
+	--ab-control-padding-x-md: 0.625rem;
+	--ab-control-padding-y-md: 0.3125rem;
+	--ab-control-padding-x-lg: 0.875rem;
+	--ab-control-padding-y-lg: 0.4375rem;
+	--ab-control-font-size-sm: var(--ab-font-size-xs);
+	--ab-control-font-size-md: var(--ab-font-size-sm);
+	--ab-control-font-size-lg: var(--ab-font-size-base);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	[data-theme='web'],
+	[data-theme='tui'] {
+		--ab-transition-fast: 0ms;
+		--ab-transition-normal: 0ms;
+	}
+}
+
+/* --------------------------------------------------------------------------
+ * Layout primitives -- theme-aware selectors
+ *
+ * The ThemeProvider wrapper uses `display: contents` so it doesn't break
+ * the host layout. That means setting background/color/font on the wrapper
+ * itself has no effect. Instead, consumers apply the token bg/color to
+ * their own container (the page root, the main element, etc.). Primitives
+ * always read tokens via `var(--ab-*)`, so descendants automatically pick
+ * up the right values through CSS custom property inheritance.
+ * -------------------------------------------------------------------------- */
+
+/*
+ * `.ab-container` -- theme-aware outer container. Web centers a reading
+ * column; tui goes full-bleed. Use wherever a page's content root lives.
+ */
+[data-theme='web'] .ab-container {
+	max-width: var(--ab-layout-container-max);
+	margin: 0 auto;
+	padding: var(--ab-layout-container-padding);
+}
+
+[data-theme='tui'] .ab-container {
+	max-width: none;
+	margin: 0;
+	padding: var(--ab-layout-container-padding);
+}
+
+/*
+ * `.ab-grid` -- 12-column grid, theme-aware gap. Cells use span utilities
+ * (`.ab-col-3`, etc.) to claim their share.
+ */
+.ab-grid {
+	display: grid;
+	grid-template-columns: repeat(12, minmax(0, 1fr));
+	gap: var(--ab-layout-grid-gap);
+}
+
+.ab-col-3 { grid-column: span 3; }
+.ab-col-4 { grid-column: span 4; }
+.ab-col-5 { grid-column: span 5; }
+.ab-col-6 { grid-column: span 6; }
+.ab-col-7 { grid-column: span 7; }
+.ab-col-8 { grid-column: span 8; }
+.ab-col-12 { grid-column: span 12; }
+
+@media (max-width: 1023px) {
+	.ab-grid {
+		grid-template-columns: repeat(6, minmax(0, 1fr));
+	}
+	.ab-col-3 { grid-column: span 3; }
+	.ab-col-4 { grid-column: span 3; }
+	.ab-col-5 { grid-column: span 3; }
+	.ab-col-6 { grid-column: span 6; }
+	.ab-col-7 { grid-column: span 6; }
+	.ab-col-8 { grid-column: span 6; }
+}
+
+@media (max-width: 639px) {
+	.ab-grid {
+		grid-template-columns: minmax(0, 1fr);
+	}
+	.ab-col-3,
+	.ab-col-4,
+	.ab-col-5,
+	.ab-col-6,
+	.ab-col-7,
+	.ab-col-8,
+	.ab-col-12 {
+		grid-column: span 1;
+	}
+}
