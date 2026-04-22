@@ -20,6 +20,23 @@ export const actions: Actions = {
 					headers: { cookie: request.headers.get('cookie') ?? '' },
 				});
 				const authResponse = await auth.handler(authRequest);
+				// Surface server-side sign-out trouble as a telemetry signal. 4xx
+				// responses (banned / expired session) are expected; 5xx means
+				// better-auth could not invalidate the server session row, which
+				// leaves a stolen-cookie attacker on a still-valid backing session.
+				// The local cookie clear in `finally` is defence in depth, not a
+				// substitute for the server-side invalidation succeeding.
+				if (authResponse.status >= 500) {
+					log.error('sign-out handler returned 5xx', {
+						requestId: locals.requestId,
+						status: authResponse.status,
+					});
+				} else if (authResponse.status >= 400) {
+					log.warn('sign-out handler returned non-2xx', {
+						requestId: locals.requestId,
+						status: authResponse.status,
+					});
+				}
 				forwardAuthCookies(authResponse, cookies, url.host);
 			} catch (err) {
 				log.error('sign-out handler failed', { requestId: locals.requestId }, err instanceof Error ? err : undefined);
