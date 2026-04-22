@@ -13,13 +13,16 @@
 import { $ } from 'bun';
 import { readdirSync, statSync } from 'node:fs';
 import { basename, join, resolve } from 'node:path';
-import { DEV_DB_URL, ENV_VARS, HOSTS, PORTS } from '../libs/constants/src/index';
+import { DEV_DB_URL, ENV_VARS, HOSTS } from '../libs/constants/src/index';
 
 // Map app name -> dev URL. Keep in step with apps/* and the HOSTS/PORTS
 // constants. Dev serves HTTPS via the SvelteKit/vite TLS setup; the
 // /etc/hosts entry for study.airboss.test is added by `bun run setup`.
+// The port is intentionally omitted -- reverse-proxied to the vite dev
+// server on PORTS.STUDY so the URL printed here matches how the user
+// actually visits the app.
 const DEV_URLS: Record<string, string> = {
-	study: `https://${HOSTS.STUDY}:${PORTS.STUDY}`,
+	study: `https://${HOSTS.STUDY}`,
 };
 
 const REPO_ROOT = resolve(import.meta.dir, '..');
