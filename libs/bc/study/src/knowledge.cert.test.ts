@@ -27,13 +27,14 @@ import {
 	STABILITY_MASTERED_DAYS,
 } from '@ab/constants';
 import { db } from '@ab/db';
-import { createId, generateAuthId, generateRepAttemptId } from '@ab/utils';
+import { createId, generateAuthId } from '@ab/utils';
 import { eq } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { createCard } from './cards';
 import { getCertProgress, getDomainCertMatrix } from './knowledge';
 import { createScenario } from './scenarios';
-import { card, cardState, knowledgeNode, repAttempt, scenario } from './schema';
+import { card, cardState, knowledgeNode, scenario, session, sessionItemResult, studyPlan } from './schema';
+import { seedRepAttempt } from './test-support';
 
 const TEST_USER_ID = generateAuthId();
 const TEST_EMAIL = `cert-test-${TEST_USER_ID}@airboss.test`;
@@ -134,15 +135,12 @@ async function seedRepsForNode(
 	});
 	const base = Date.now();
 	for (let i = 0; i < attemptCount; i++) {
-		await db.insert(repAttempt).values({
-			id: generateRepAttemptId(),
-			scenarioId: sc.id,
+		await seedRepAttempt({
 			userId: TEST_USER_ID,
-			chosenOption: i < correctCount ? 'a' : 'b',
+			scenarioId: sc.id,
 			isCorrect: i < correctCount,
-			confidence: null,
-			answerMs: null,
-			attemptedAt: new Date(base + i),
+			chosenOption: i < correctCount ? 'a' : 'b',
+			completedAt: new Date(base + i),
 		});
 	}
 }
@@ -206,7 +204,9 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-	await db.delete(repAttempt).where(eq(repAttempt.userId, TEST_USER_ID));
+	await db.delete(sessionItemResult).where(eq(sessionItemResult.userId, TEST_USER_ID));
+	await db.delete(session).where(eq(session.userId, TEST_USER_ID));
+	await db.delete(studyPlan).where(eq(studyPlan.userId, TEST_USER_ID));
 	await db.delete(scenario).where(eq(scenario.userId, TEST_USER_ID));
 	await db.delete(cardState).where(eq(cardState.userId, TEST_USER_ID));
 	await db.delete(card).where(eq(card.userId, TEST_USER_ID));

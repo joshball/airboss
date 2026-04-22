@@ -19,6 +19,7 @@ import {
 	CARD_STATES,
 	CARD_STATUSES,
 	type Cert,
+	type ConfidenceLevel,
 	DEFAULT_SESSION_LENGTH,
 	DEFAULT_USER_TIMEZONE,
 	DOMAIN_VALUES,
@@ -58,7 +59,6 @@ import {
 	cardState,
 	knowledgeEdge,
 	knowledgeNode,
-	repAttempt,
 	review,
 	type SessionItem,
 	type SessionItemResultRow,
@@ -118,9 +118,25 @@ export interface ItemResultInput {
 	scenarioId?: string | null;
 	nodeId?: string | null;
 	reviewId?: string | null;
+	/**
+	 * Legacy handle left in place while the rep_attempt table still exists
+	 * (ADR 012 phase 5). After phase 4 drops the table this field + the
+	 * underlying column go with it. Callers should no longer set it -- rep
+	 * outcomes live on the fields below.
+	 */
 	repAttemptId?: string | null;
 	skipKind?: SessionSkipKind | null;
 	reasonDetail?: string | null;
+	/**
+	 * Rep outcome fields. Populated when itemKind='rep' and the learner
+	 * submits a real answer (skipKind stays null). Session runners now write
+	 * these directly to session_item_result instead of going through the
+	 * deprecated rep_attempt row.
+	 */
+	chosenOption?: string | null;
+	isCorrect?: boolean | null;
+	confidence?: ConfidenceLevel | null;
+	answerMs?: number | null;
 }
 
 export interface SessionSummarySliceRow {
@@ -243,21 +259,35 @@ async function fetchRepCandidates(userId: string, now: Date, db: Db): Promise<En
 	if (scenarios.length === 0) return [];
 
 	const scenarioIds = scenarios.map((s) => s.id);
+	// Attempt history now lives on session_item_result -- one row per completed
+	// rep slot. Non-null scenarioId + itemKind='rep' + completedAt IS NOT NULL +
+	// skipKind IS NULL is the "real attempt" predicate the rep_attempt table
+	// used to carry implicitly.
 	const attempts = await db
 		.select({
-			scenarioId: repAttempt.scenarioId,
-			isCorrect: repAttempt.isCorrect,
-			attemptedAt: repAttempt.attemptedAt,
+			scenarioId: sessionItemResult.scenarioId,
+			isCorrect: sessionItemResult.isCorrect,
+			completedAt: sessionItemResult.completedAt,
 		})
-		.from(repAttempt)
-		.where(and(eq(repAttempt.userId, userId), inArray(repAttempt.scenarioId, scenarioIds)))
-		.orderBy(desc(repAttempt.attemptedAt));
+		.from(sessionItemResult)
+		.where(
+			and(
+				eq(sessionItemResult.userId, userId),
+				eq(sessionItemResult.itemKind, SESSION_ITEM_KINDS.REP),
+				isNotNull(sessionItemResult.completedAt),
+				isNotNull(sessionItemResult.scenarioId),
+				isNull(sessionItemResult.skipKind),
+				inArray(sessionItemResult.scenarioId, scenarioIds),
+			),
+		)
+		.orderBy(desc(sessionItemResult.completedAt));
 
 	const byScenario = new Map<string, Array<{ isCorrect: boolean; attemptedAt: Date }>>();
 	for (const att of attempts) {
+		if (att.scenarioId === null || att.isCorrect === null || att.completedAt === null) continue;
 		const list = byScenario.get(att.scenarioId);
-		if (list) list.push({ isCorrect: att.isCorrect, attemptedAt: att.attemptedAt });
-		else byScenario.set(att.scenarioId, [{ isCorrect: att.isCorrect, attemptedAt: att.attemptedAt }]);
+		if (list) list.push({ isCorrect: att.isCorrect, attemptedAt: att.completedAt });
+		else byScenario.set(att.scenarioId, [{ isCorrect: att.isCorrect, attemptedAt: att.completedAt }]);
 	}
 
 	return scenarios.map((s) => {
@@ -310,8 +340,17 @@ async function fetchNodeCandidates(
 		db
 			.selectDistinct({ nodeId: scenario.nodeId })
 			.from(scenario)
-			.innerJoin(repAttempt, eq(repAttempt.scenarioId, scenario.id))
-			.where(and(eq(repAttempt.userId, userId), isNotNull(scenario.nodeId), inArray(scenario.nodeId, nodeIds)))
+			.innerJoin(sessionItemResult, eq(sessionItemResult.scenarioId, scenario.id))
+			.where(
+				and(
+					eq(sessionItemResult.userId, userId),
+					eq(sessionItemResult.itemKind, SESSION_ITEM_KINDS.REP),
+					isNotNull(sessionItemResult.completedAt),
+					isNull(sessionItemResult.skipKind),
+					isNotNull(scenario.nodeId),
+					inArray(scenario.nodeId, nodeIds),
+				),
+			)
 			.then((rows) => new Set(rows.map((r) => r.nodeId).filter((id): id is string => id !== null))),
 		db
 			.selectDistinct({ nodeId: sessionItemResult.nodeId })
@@ -410,9 +449,17 @@ async function fetchDomainFrequency(userId: string, now: Date, db: Db): Promise<
 			.groupBy(card.domain),
 		db
 			.select({ domain: scenario.domain, n: sql<number>`count(*)::int` })
-			.from(repAttempt)
-			.innerJoin(scenario, eq(scenario.id, repAttempt.scenarioId))
-			.where(and(eq(repAttempt.userId, userId), gte(repAttempt.attemptedAt, thirtyAgo)))
+			.from(sessionItemResult)
+			.innerJoin(scenario, eq(scenario.id, sessionItemResult.scenarioId))
+			.where(
+				and(
+					eq(sessionItemResult.userId, userId),
+					eq(sessionItemResult.itemKind, SESSION_ITEM_KINDS.REP),
+					isNotNull(sessionItemResult.completedAt),
+					isNull(sessionItemResult.skipKind),
+					gte(sessionItemResult.completedAt, thirtyAgo),
+				),
+			)
 			.groupBy(scenario.domain),
 	]);
 
@@ -432,9 +479,17 @@ async function fetchActiveDomainsLast7(userId: string, now: Date, db: Db): Promi
 			.where(and(eq(review.userId, userId), gte(review.reviewedAt, sevenAgo))),
 		db
 			.selectDistinct({ domain: scenario.domain })
-			.from(repAttempt)
-			.innerJoin(scenario, eq(scenario.id, repAttempt.scenarioId))
-			.where(and(eq(repAttempt.userId, userId), gte(repAttempt.attemptedAt, sevenAgo))),
+			.from(sessionItemResult)
+			.innerJoin(scenario, eq(scenario.id, sessionItemResult.scenarioId))
+			.where(
+				and(
+					eq(sessionItemResult.userId, userId),
+					eq(sessionItemResult.itemKind, SESSION_ITEM_KINDS.REP),
+					isNotNull(sessionItemResult.completedAt),
+					isNull(sessionItemResult.skipKind),
+					gte(sessionItemResult.completedAt, sevenAgo),
+				),
+			),
 	]);
 	const set = new Set<string>();
 	for (const r of reviewRows) set.add(r.domain);
@@ -626,9 +681,17 @@ export async function commitSession(
 				scenarioId: item.kind === 'rep' ? item.scenarioId : null,
 				nodeId: item.kind === 'node_start' ? item.nodeId : null,
 				reviewId: null,
+				// repAttemptId stays null by default. The column survives through
+				// ADR 012 phase 5 because phase 4 is what drops it; no new writes
+				// target it, so historic rows point at ids that no longer exist
+				// after the drop.
 				repAttemptId: null,
 				skipKind: null,
 				reasonDetail: item.reasonDetail ?? null,
+				chosenOption: null,
+				isCorrect: null,
+				confidence: null,
+				answerMs: null,
 				presentedAt: now,
 				completedAt: null,
 			}));
@@ -736,9 +799,16 @@ export async function recordItemResult(
 				scenarioId: result.scenarioId ?? existing.scenarioId,
 				nodeId: result.nodeId ?? existing.nodeId,
 				reviewId: result.reviewId ?? existing.reviewId,
+				// repAttemptId is never written fresh post-ADR 012 phase 5; keep
+				// the existing value only so pre-migration rows retain their
+				// breadcrumb until phase 4 drops the column.
 				repAttemptId: result.repAttemptId ?? existing.repAttemptId,
 				skipKind: result.skipKind ?? existing.skipKind,
 				reasonDetail: result.reasonDetail ?? existing.reasonDetail,
+				chosenOption: result.chosenOption ?? existing.chosenOption,
+				isCorrect: result.isCorrect ?? existing.isCorrect,
+				confidence: result.confidence ?? existing.confidence,
+				answerMs: result.answerMs ?? existing.answerMs,
 				completedAt: now,
 			})
 			.where(eq(sessionItemResult.id, existing.id))
@@ -763,6 +833,10 @@ export async function recordItemResult(
 			repAttemptId: result.repAttemptId ?? null,
 			skipKind: result.skipKind ?? null,
 			reasonDetail: result.reasonDetail ?? null,
+			chosenOption: result.chosenOption ?? null,
+			isCorrect: result.isCorrect ?? null,
+			confidence: result.confidence ?? null,
+			answerMs: result.answerMs ?? null,
 			presentedAt: now,
 			completedAt: now,
 		})
@@ -867,7 +941,6 @@ export async function getSessionSummary(
 	}
 
 	const reviewIds = sirRows.map((r) => r.reviewId).filter((id): id is string => id !== null);
-	const repAttemptIds = sirRows.map((r) => r.repAttemptId).filter((id): id is string => id !== null);
 
 	const reviews =
 		reviewIds.length === 0
@@ -877,21 +950,22 @@ export async function getSessionSummary(
 					.from(review)
 					.where(inArray(review.id, reviewIds));
 
-	const attempts =
-		repAttemptIds.length === 0
-			? []
-			: await db
-					.select({ id: repAttempt.id, isCorrect: repAttempt.isCorrect, confidence: repAttempt.confidence })
-					.from(repAttempt)
-					.where(inArray(repAttempt.id, repAttemptIds));
+	// Rep outcomes now come straight from the slot row. A rep is "counted"
+	// when it completed with a real answer (skipKind IS NULL) and carries a
+	// definite is_correct value. Same correctness + confidence semantics as
+	// the previous rep_attempt join, rebased onto session_item_result.
+	const repSlots = sirRows.filter(
+		(r) =>
+			r.itemKind === SESSION_ITEM_KINDS.REP && r.completedAt !== null && r.skipKind === null && r.isCorrect !== null,
+	);
 
 	const reviewCorrect = reviews.filter((r) => Number(r.rating) >= 3).length;
-	const repCorrect = attempts.filter((a) => a.isCorrect).length;
+	const repCorrect = repSlots.filter((s) => s.isCorrect === true).length;
 	const correct = reviewCorrect + repCorrect;
 
 	const confidences = [
 		...reviews.map((r) => r.confidence).filter((c): c is number => c !== null),
-		...attempts.map((a) => a.confidence).filter((c): c is number => c !== null),
+		...repSlots.map((s) => s.confidence).filter((c): c is number => c !== null),
 	];
 	const avgConfidence = confidences.length === 0 ? null : confidences.reduce((s, n) => s + n, 0) / confidences.length;
 
@@ -908,7 +982,6 @@ export async function getSessionSummary(
 		bySliceMap.set(slice, entry);
 	}
 	const reviewById = new Map(reviews.map((r) => [r.id, r]));
-	const attemptById = new Map(attempts.map((a) => [a.id, a]));
 	for (const r of sirRows) {
 		if (!r.completedAt || r.skipKind) continue;
 		const slice = r.slice as SessionSlice;
@@ -917,9 +990,11 @@ export async function getSessionSummary(
 		if (r.reviewId) {
 			const rev = reviewById.get(r.reviewId);
 			if (rev && Number(rev.rating) >= 3) entry.correct += 1;
-		} else if (r.repAttemptId) {
-			const att = attemptById.get(r.repAttemptId);
-			if (att?.isCorrect) entry.correct += 1;
+		} else if (r.itemKind === SESSION_ITEM_KINDS.REP) {
+			// Post-ADR 012: rep correctness is on the slot row itself, not on a
+			// related rep_attempt row. Same boolean the old attemptById lookup
+			// used to produce.
+			if (r.isCorrect === true) entry.correct += 1;
 		}
 	}
 

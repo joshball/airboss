@@ -1,9 +1,12 @@
 /**
  * Scenario BC functions (Decision Reps).
  *
- * Own the scenario lifecycle + rep-attempt recording. No SRS math --
- * scenarios are "attempt, record, move on"; "what to show next" is a simple
- * unattempted-first / least-recent priority on rep_attempt.
+ * Owns the scenario lifecycle. Rep outcomes post-ADR 012 live on
+ * session_item_result, not on a dedicated rep_attempt table; the aggregations
+ * below now read the rep-kind slots from there. `submitAttempt` used to
+ * write a rep_attempt row but no longer does -- it's a pure validator that
+ * resolves the chosen option against the scenario and returns a shaped
+ * outcome the caller persists via `recordItemResult` on the slot row.
  *
  * Inputs are validated here (in addition to the route layer) so cross-BC
  * callers and scripts can't inject invalid values.
@@ -18,15 +21,15 @@ import {
 	type PhaseOfFlight,
 	REP_BATCH_SIZE,
 	REP_DASHBOARD_WINDOW_DAYS,
-	REP_DEDUPE_WINDOW_MS,
 	SCENARIO_STATUSES,
 	type ScenarioStatus,
+	SESSION_ITEM_KINDS,
 } from '@ab/constants';
 import { db as defaultDb } from '@ab/db';
-import { generateRepAttemptId, generateScenarioId, userStartOfDay } from '@ab/utils';
-import { aliasedTable, and, asc, count, desc, eq, gte, inArray, type SQL, sql } from 'drizzle-orm';
+import { generateScenarioId, userStartOfDay } from '@ab/utils';
+import { aliasedTable, and, asc, count, desc, eq, gte, inArray, isNotNull, isNull, type SQL, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
-import { type RepAttemptRow, repAttempt, type ScenarioOption, type ScenarioRow, scenario } from './schema';
+import { type ScenarioOption, type ScenarioRow, scenario, sessionItemResult } from './schema';
 import { newScenarioSchema, submitAttemptSchema } from './validation';
 
 type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;
@@ -276,36 +279,79 @@ export async function getScenariosByIds(
 }
 
 /**
+ * Shape the legacy `/reps/session` resume code expects for "the user already
+ * answered this scenario in the current session." Post-ADR 012 the source
+ * row is `session_item_result`; the id returned is the slot id (prefixed
+ * `sir_`). Callers only use the outcome fields + timestamp, so the rename
+ * is source-compatible.
+ */
+export interface ResolvedAttempt {
+	id: string;
+	scenarioId: string;
+	chosenOption: string;
+	isCorrect: boolean;
+	confidence: number | null;
+	answerMs: number | null;
+	attemptedAt: Date;
+}
+
+/**
  * Attempts for a specific (user, scenarioIds) set made at/after `since`.
- * Powers server-derived resume on `/reps/session`: the page pins `startedAt`
- * into the URL on first load and, on every subsequent load, asks which of
- * the pinned scenarios the user has already answered since that timestamp.
+ * Powers server-derived resume on `/reps/session`: the page pins
+ * `startedAt` into the URL on first load and, on every subsequent load,
+ * asks which of the pinned scenarios the user has already answered since
+ * that timestamp.
  *
  * Returns only the most-recent attempt per scenario inside the window --
- * repeated submits on the same scenario (dedupe races, content edits mid
- * session) collapse to the final recorded attempt.
+ * repeated submits on the same scenario (content edits mid-session)
+ * collapse to the final recorded attempt. Reads from session_item_result
+ * where item_kind='rep', completed_at IS NOT NULL, skip_kind IS NULL.
  */
 export async function getRepAttemptsForSession(
 	userId: string,
 	scenarioIds: readonly string[],
 	since: Date,
 	db: Db = defaultDb,
-): Promise<Map<string, RepAttemptRow>> {
+): Promise<Map<string, ResolvedAttempt>> {
 	if (scenarioIds.length === 0) return new Map();
 	const rows = await db
-		.select()
-		.from(repAttempt)
+		.select({
+			id: sessionItemResult.id,
+			scenarioId: sessionItemResult.scenarioId,
+			chosenOption: sessionItemResult.chosenOption,
+			isCorrect: sessionItemResult.isCorrect,
+			confidence: sessionItemResult.confidence,
+			answerMs: sessionItemResult.answerMs,
+			completedAt: sessionItemResult.completedAt,
+		})
+		.from(sessionItemResult)
 		.where(
 			and(
-				eq(repAttempt.userId, userId),
-				inArray(repAttempt.scenarioId, scenarioIds as string[]),
-				gte(repAttempt.attemptedAt, since),
+				eq(sessionItemResult.userId, userId),
+				eq(sessionItemResult.itemKind, SESSION_ITEM_KINDS.REP),
+				isNotNull(sessionItemResult.completedAt),
+				isNull(sessionItemResult.skipKind),
+				inArray(sessionItemResult.scenarioId, scenarioIds as string[]),
+				gte(sessionItemResult.completedAt, since),
 			),
 		)
-		.orderBy(desc(repAttempt.attemptedAt));
-	const latest = new Map<string, RepAttemptRow>();
+		.orderBy(desc(sessionItemResult.completedAt));
+	const latest = new Map<string, ResolvedAttempt>();
 	for (const row of rows) {
-		if (!latest.has(row.scenarioId)) latest.set(row.scenarioId, row);
+		if (row.scenarioId === null || row.chosenOption === null || row.isCorrect === null || row.completedAt === null) {
+			continue;
+		}
+		if (!latest.has(row.scenarioId)) {
+			latest.set(row.scenarioId, {
+				id: row.id,
+				scenarioId: row.scenarioId,
+				chosenOption: row.chosenOption,
+				isCorrect: row.isCorrect,
+				confidence: row.confidence,
+				answerMs: row.answerMs,
+				attemptedAt: row.completedAt,
+			});
+		}
 	}
 	return latest;
 }
@@ -353,13 +399,17 @@ export async function getNextScenarios(
 	if (filters.sourceType) clauses.push(eq(outerScenario.sourceType, filters.sourceType));
 
 	// Correlated aggregate is cheaper than a full LATERAL for the expected
-	// data volume (tens of scenarios, not thousands). The per-user index on
-	// rep_attempt keeps the subquery bounded to the caller's attempts.
+	// data volume (tens of scenarios, not thousands). The per-user
+	// (user_id, item_kind, completed_at) index on session_item_result keeps
+	// the subquery bounded to the caller's rep slots.
 	const lastAttempt = sql<Date | null>`(
-		SELECT max(${repAttempt.attemptedAt})
-		FROM ${repAttempt}
-		WHERE ${repAttempt.scenarioId} = ${outerScenarioId}
-		  AND ${repAttempt.userId} = ${userId}
+		SELECT max(${sessionItemResult.completedAt})
+		FROM ${sessionItemResult}
+		WHERE ${sessionItemResult.scenarioId} = ${outerScenarioId}
+		  AND ${sessionItemResult.userId} = ${userId}
+		  AND ${sessionItemResult.itemKind} = ${SESSION_ITEM_KINDS.REP}
+		  AND ${sessionItemResult.completedAt} IS NOT NULL
+		  AND ${sessionItemResult.skipKind} IS NULL
 	)`.as('last_attempted_at');
 
 	const rows = await db
@@ -376,17 +426,38 @@ export async function getNextScenarios(
 }
 
 /**
- * Record a rep attempt. Resolves correctness from the scenario's options
- * (never trusts the client) and writes one row.
- *
- * Idempotency: a duplicate submit for the same (user, scenario, chosenOption)
- * inside `REP_DEDUPE_WINDOW_MS` returns the existing row instead of writing
- * a second attempt -- a double-click or back-button replay should fold into
- * one rep. A deliberate re-attempt after the window elapses (or with a
- * different option) still records a new row; repeated reps over time are
- * spec-allowed and part of the judgment-practice model.
+ * Resolved rep-attempt outcome. Carries exactly the fields the caller needs
+ * to persist the result onto a session_item_result row (or to render a
+ * response). Post-ADR 012 this replaces the `RepAttemptRow` the old
+ * `rep_attempt` table returned -- the outcome is computed, never stored
+ * independently of the slot.
  */
-export async function submitAttempt(input: SubmitAttemptInput, db: Db = defaultDb): Promise<RepAttemptRow> {
+export interface RepAttemptOutcome {
+	scenarioId: string;
+	chosenOption: string;
+	isCorrect: boolean;
+	confidence: number | null;
+	answerMs: number | null;
+}
+
+/**
+ * Resolve a rep attempt against its scenario. Returns the server-validated
+ * outcome for the caller to persist via `recordItemResult`; no longer
+ * writes a standalone row. Post-ADR 012 the slot row on session_item_result
+ * is the single place the outcome lives.
+ *
+ * Validation rules unchanged: the caller's chosen_option must match one of
+ * the scenario's options (never trusted from the wire), the scenario must
+ * belong to the caller, and it must be in ACTIVE status.
+ *
+ * Idempotency: the old implementation folded double-submits via a
+ * REP_DEDUPE_WINDOW_MS lookup against rep_attempt. That fold now happens at
+ * the slot level -- `recordItemResult` updates the existing slot rather than
+ * inserting a fresh one, so re-submits on the same (session, slotIndex)
+ * collapse inherently. submitAttempt stays pure: it doesn't touch the DB
+ * for writes, which means repeated calls are naturally safe.
+ */
+export async function submitAttempt(input: SubmitAttemptInput, db: Db = defaultDb): Promise<RepAttemptOutcome> {
 	const parsed = submitAttemptSchema.parse({
 		scenarioId: input.scenarioId,
 		chosenOption: input.chosenOption,
@@ -408,44 +479,13 @@ export async function submitAttempt(input: SubmitAttemptInput, db: Db = defaultD
 	const chosen = options.find((o) => o.id === parsed.chosenOption);
 	if (!chosen) throw new InvalidOptionError(parsed.scenarioId, parsed.chosenOption);
 
-	const now = new Date();
-	const windowStart = new Date(now.getTime() - REP_DEDUPE_WINDOW_MS);
-
-	// Dedupe before insert: an identical submit inside the window folds into
-	// the existing row. The scenario -> rep_attempt index (scenarioId,
-	// attemptedAt) keeps this lookup bounded. No row lock: a race would at
-	// worst write a second row within the window, which is the same outcome
-	// as the pre-idempotency behavior, so cost/benefit doesn't justify a tx.
-	const [recent] = await db
-		.select()
-		.from(repAttempt)
-		.where(
-			and(
-				eq(repAttempt.scenarioId, parsed.scenarioId),
-				eq(repAttempt.userId, input.userId),
-				eq(repAttempt.chosenOption, parsed.chosenOption),
-				gte(repAttempt.attemptedAt, windowStart),
-			),
-		)
-		.orderBy(desc(repAttempt.attemptedAt))
-		.limit(1);
-	if (recent) return recent;
-
-	const [inserted] = await db
-		.insert(repAttempt)
-		.values({
-			id: generateRepAttemptId(),
-			scenarioId: parsed.scenarioId,
-			userId: input.userId,
-			chosenOption: parsed.chosenOption,
-			isCorrect: chosen.isCorrect,
-			confidence: parsed.confidence ?? null,
-			answerMs: parsed.answerMs ?? null,
-			attemptedAt: now,
-		})
-		.returning();
-
-	return inserted;
+	return {
+		scenarioId: parsed.scenarioId,
+		chosenOption: parsed.chosenOption,
+		isCorrect: chosen.isCorrect,
+		confidence: parsed.confidence ?? null,
+		answerMs: parsed.answerMs ?? null,
+	};
 }
 
 /** Set a scenario's lifecycle status (active/suspended/archived). */
@@ -478,7 +518,12 @@ export async function getRepAccuracy(
 	const filter =
 		typeof filterOrDomain === 'string' || filterOrDomain === undefined ? { domain: filterOrDomain } : filterOrDomain;
 
-	const clauses: SQL[] = [eq(repAttempt.userId, userId)];
+	const clauses: SQL[] = [
+		eq(sessionItemResult.userId, userId),
+		eq(sessionItemResult.itemKind, SESSION_ITEM_KINDS.REP),
+		isNotNull(sessionItemResult.completedAt),
+		isNull(sessionItemResult.skipKind),
+	];
 	if (filter.domain) clauses.push(eq(scenario.domain, filter.domain));
 	if (filter.nodeId) clauses.push(eq(scenario.nodeId, filter.nodeId));
 
@@ -486,10 +531,13 @@ export async function getRepAccuracy(
 		.select({
 			attempted: count(),
 			// Postgres `FILTER (WHERE ...)` is faster than a portable sum(case when ...).
-			correct: sql<number>`count(*) filter (where ${repAttempt.isCorrect})`,
+			correct: sql<number>`count(*) filter (where ${sessionItemResult.isCorrect})`,
 		})
-		.from(repAttempt)
-		.innerJoin(scenario, and(eq(scenario.id, repAttempt.scenarioId), eq(scenario.userId, repAttempt.userId)))
+		.from(sessionItemResult)
+		.innerJoin(
+			scenario,
+			and(eq(scenario.id, sessionItemResult.scenarioId), eq(scenario.userId, sessionItemResult.userId)),
+		)
 		.where(and(...clauses));
 
 	const attempted = Number(row?.attempted ?? 0);
@@ -504,19 +552,27 @@ export async function getDomainAccuracy(
 	range?: { start?: Date; end?: Date },
 	db: Db = defaultDb,
 ): Promise<DomainAccuracyStats[]> {
-	const clauses: SQL[] = [eq(repAttempt.userId, userId)];
-	if (range?.start) clauses.push(gte(repAttempt.attemptedAt, range.start));
-	if (range?.end) clauses.push(sql`${repAttempt.attemptedAt} <= ${range.end.toISOString()}`);
+	const clauses: SQL[] = [
+		eq(sessionItemResult.userId, userId),
+		eq(sessionItemResult.itemKind, SESSION_ITEM_KINDS.REP),
+		isNotNull(sessionItemResult.completedAt),
+		isNull(sessionItemResult.skipKind),
+	];
+	if (range?.start) clauses.push(gte(sessionItemResult.completedAt, range.start));
+	if (range?.end) clauses.push(sql`${sessionItemResult.completedAt} <= ${range.end.toISOString()}`);
 
 	const rows = await db
 		.select({
 			domain: scenario.domain,
 			attempted: count(),
 			// Postgres `FILTER (WHERE ...)` is faster than a portable sum(case when ...).
-			correct: sql<number>`count(*) filter (where ${repAttempt.isCorrect})`,
+			correct: sql<number>`count(*) filter (where ${sessionItemResult.isCorrect})`,
 		})
-		.from(repAttempt)
-		.innerJoin(scenario, and(eq(scenario.id, repAttempt.scenarioId), eq(scenario.userId, repAttempt.userId)))
+		.from(sessionItemResult)
+		.innerJoin(
+			scenario,
+			and(eq(scenario.id, sessionItemResult.scenarioId), eq(scenario.userId, sessionItemResult.userId)),
+		)
 		.where(and(...clauses))
 		.groupBy(scenario.domain)
 		.orderBy(scenario.domain);
@@ -539,17 +595,22 @@ export async function getRepStats(
 	range?: { start?: Date; end?: Date },
 	db: Db = defaultDb,
 ): Promise<RepStats> {
-	const clauses: SQL[] = [eq(repAttempt.userId, userId)];
-	if (range?.start) clauses.push(gte(repAttempt.attemptedAt, range.start));
-	if (range?.end) clauses.push(sql`${repAttempt.attemptedAt} <= ${range.end.toISOString()}`);
+	const clauses: SQL[] = [
+		eq(sessionItemResult.userId, userId),
+		eq(sessionItemResult.itemKind, SESSION_ITEM_KINDS.REP),
+		isNotNull(sessionItemResult.completedAt),
+		isNull(sessionItemResult.skipKind),
+	];
+	if (range?.start) clauses.push(gte(sessionItemResult.completedAt, range.start));
+	if (range?.end) clauses.push(sql`${sessionItemResult.completedAt} <= ${range.end.toISOString()}`);
 
 	const [totalsRow] = await db
 		.select({
 			attempted: count(),
 			// Postgres `FILTER (WHERE ...)` is faster than a portable sum(case when ...).
-			correct: sql<number>`count(*) filter (where ${repAttempt.isCorrect})`,
+			correct: sql<number>`count(*) filter (where ${sessionItemResult.isCorrect})`,
 		})
-		.from(repAttempt)
+		.from(sessionItemResult)
 		.where(and(...clauses));
 
 	const domainBreakdown = await getDomainAccuracy(userId, range, db);
@@ -615,17 +676,28 @@ export async function getRepDashboard(
 					eq(outerScenario.userId, userId),
 					eq(outerScenario.status, SCENARIO_STATUSES.ACTIVE),
 					sql`NOT EXISTS (
-						SELECT 1 FROM ${repAttempt}
-						WHERE ${repAttempt.scenarioId} = ${outerScenarioId}
-						  AND ${repAttempt.userId} = ${userId}
+						SELECT 1 FROM ${sessionItemResult}
+						WHERE ${sessionItemResult.scenarioId} = ${outerScenarioId}
+						  AND ${sessionItemResult.userId} = ${userId}
+						  AND ${sessionItemResult.itemKind} = ${SESSION_ITEM_KINDS.REP}
+						  AND ${sessionItemResult.completedAt} IS NOT NULL
+						  AND ${sessionItemResult.skipKind} IS NULL
 					)`,
 				),
 			)
 			.then((r) => r[0]),
 		db
 			.select({ c: count() })
-			.from(repAttempt)
-			.where(and(eq(repAttempt.userId, userId), gte(repAttempt.attemptedAt, todayStart)))
+			.from(sessionItemResult)
+			.where(
+				and(
+					eq(sessionItemResult.userId, userId),
+					eq(sessionItemResult.itemKind, SESSION_ITEM_KINDS.REP),
+					isNotNull(sessionItemResult.completedAt),
+					isNull(sessionItemResult.skipKind),
+					gte(sessionItemResult.completedAt, todayStart),
+				),
+			)
 			.then((r) => r[0]),
 		getDomainAccuracy(userId, { start: windowStart, end: now }, db),
 	]);

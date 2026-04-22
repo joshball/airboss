@@ -2,11 +2,11 @@
  * Calibration BC tests.
  *
  * Runs against the local dev Postgres -- the BC under test reads aggregates
- * over review + rep_attempt, so testing it without a DB would mean mocking
- * both tables plus the confidence column semantics. We insert the minimum
- * amount of row-level data directly (bypassing submitReview/submitAttempt)
- * because the calibration math is the thing under test, not the review
- * submission pipeline.
+ * over review + session_item_result (rep slots), so testing it without a DB
+ * would mean mocking both tables plus the confidence column semantics. We
+ * insert the minimum amount of row-level data directly (bypassing submitReview
+ * / recordItemResult) because the calibration math is the thing under test,
+ * not the review submission pipeline.
  */
 
 import { bauthUser } from '@ab/auth/schema';
@@ -22,11 +22,12 @@ import {
 	REVIEW_RATINGS,
 } from '@ab/constants';
 import { db } from '@ab/db';
-import { generateAuthId, generateCardId, generateRepAttemptId, generateReviewId, generateScenarioId } from '@ab/utils';
+import { generateAuthId, generateCardId, generateReviewId, generateScenarioId } from '@ab/utils';
 import { eq } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { getCalibration, getCalibrationPointCount, getCalibrationTrend } from './calibration';
-import { card, cardState, repAttempt, review, scenario } from './schema';
+import { card, cardState, review, scenario, session, sessionItemResult, studyPlan } from './schema';
+import { seedRepAttempt } from './test-support';
 
 const TEST_USER_ID = generateAuthId();
 const TEST_EMAIL = `calibration-test-${TEST_USER_ID}@airboss.test`;
@@ -47,10 +48,14 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-	// FK order: review references card (restrict), rep_attempt references
-	// scenario (restrict), so delete the child rows first.
+	// FK order: review references card (restrict), session_item_result references
+	// scenario (set null), session references plan (restrict). Wipe the slot
+	// log + sessions + plan first via the test-support helper so the scenario
+	// delete doesn't trip the FK from session_item_result.
 	await db.delete(review).where(eq(review.userId, TEST_USER_ID));
-	await db.delete(repAttempt).where(eq(repAttempt.userId, TEST_USER_ID));
+	await db.delete(sessionItemResult).where(eq(sessionItemResult.userId, TEST_USER_ID));
+	await db.delete(session).where(eq(session.userId, TEST_USER_ID));
+	await db.delete(studyPlan).where(eq(studyPlan.userId, TEST_USER_ID));
 	await db.delete(cardState).where(eq(cardState.userId, TEST_USER_ID));
 	await db.delete(card).where(eq(card.userId, TEST_USER_ID));
 	await db.delete(scenario).where(eq(scenario.userId, TEST_USER_ID));
@@ -79,7 +84,9 @@ async function withFreshUser<T>(fn: (userId: string) => Promise<T>): Promise<T> 
 		return await fn(userId);
 	} finally {
 		await db.delete(review).where(eq(review.userId, userId));
-		await db.delete(repAttempt).where(eq(repAttempt.userId, userId));
+		await db.delete(sessionItemResult).where(eq(sessionItemResult.userId, userId));
+		await db.delete(session).where(eq(session.userId, userId));
+		await db.delete(studyPlan).where(eq(studyPlan.userId, userId));
 		await db.delete(cardState).where(eq(cardState.userId, userId));
 		await db.delete(card).where(eq(card.userId, userId));
 		await db.delete(scenario).where(eq(scenario.userId, userId));
@@ -188,15 +195,12 @@ async function seedAttempt(
 	isCorrect: boolean,
 	attemptedAt: Date = new Date(),
 ): Promise<void> {
-	await db.insert(repAttempt).values({
-		id: generateRepAttemptId(),
-		scenarioId,
+	await seedRepAttempt({
 		userId,
-		chosenOption: isCorrect ? 'a' : 'b',
+		scenarioId,
 		isCorrect,
 		confidence,
-		answerMs: null,
-		attemptedAt,
+		completedAt: attemptedAt,
 	});
 }
 
@@ -419,7 +423,7 @@ describe('getCalibrationTrend', () => {
 });
 
 describe('getCalibrationPointCount', () => {
-	it('counts both review and rep_attempt confidence-rated rows', async () => {
+	it('counts both review and rep-slot confidence-rated rows', async () => {
 		await withFreshUser(async (userId) => {
 			const cardId = await seedCard(userId, DOMAINS.WEATHER);
 			const scenarioId = await seedScenario(userId, DOMAINS.WEATHER);

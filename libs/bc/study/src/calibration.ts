@@ -1,12 +1,14 @@
 /**
  * Calibration BC -- read-only aggregation over confidence-tagged data in
- * `study.review` and `study.rep_attempt`.
+ * `study.review` and `study.session_item_result` (rep slots).
  *
  * Owns no tables. Every number the calibration page shows is derived from
- * columns that already exist on review (confidence + rating) and rep_attempt
- * (confidence + is_correct). Cards are "correct" when rating >= GOOD (ts-fsrs
- * treats Again/Hard as failures that schedule a short interval); rep attempts
- * are "correct" when is_correct is true.
+ * columns that already exist on review (confidence + rating) and on the rep-
+ * kind rows of session_item_result (confidence + is_correct). Cards are
+ * "correct" when rating >= GOOD (ts-fsrs treats Again/Hard as failures that
+ * schedule a short interval); rep attempts are "correct" when is_correct is
+ * true. Per ADR 012, rep_attempt is gone -- session_item_result is the single
+ * source of truth for rep outcomes.
  *
  * Buckets with fewer than CALIBRATION_MIN_BUCKET_COUNT data points are excluded
  * from the calibration score but still reported (with a needsMoreData flag)
@@ -22,11 +24,12 @@ import {
 	type ConfidenceLevel,
 	type Domain,
 	REVIEW_RATINGS,
+	SESSION_ITEM_KINDS,
 } from '@ab/constants';
 import { db as defaultDb } from '@ab/db';
-import { and, eq, gte, isNotNull, lte, sql } from 'drizzle-orm';
+import { and, eq, gte, isNotNull, isNull, lte, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
-import { card, repAttempt, review, scenario } from './schema';
+import { card, review, scenario, sessionItemResult } from './schema';
 
 type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;
 
@@ -116,9 +119,20 @@ async function loadPoints(
 	if (range?.start) reviewClauses.push(gte(review.reviewedAt, range.start));
 	if (range?.end) reviewClauses.push(lte(review.reviewedAt, range.end));
 
-	const repClauses = [eq(repAttempt.userId, userId), isNotNull(repAttempt.confidence)];
-	if (range?.start) repClauses.push(gte(repAttempt.attemptedAt, range.start));
-	if (range?.end) repClauses.push(lte(repAttempt.attemptedAt, range.end));
+	// Rep points now live on session_item_result rows where item_kind = 'rep'.
+	// A row counts when it's completed with a real answer (skipKind IS NULL) and
+	// carries a confidence rating. The scenario join picks up the domain for
+	// per-domain bucketing -- scenarioId is the item target for rep slots.
+	const repClauses = [
+		eq(sessionItemResult.userId, userId),
+		eq(sessionItemResult.itemKind, SESSION_ITEM_KINDS.REP),
+		isNotNull(sessionItemResult.confidence),
+		isNotNull(sessionItemResult.isCorrect),
+		isNotNull(sessionItemResult.completedAt),
+		isNull(sessionItemResult.skipKind),
+	];
+	if (range?.start) repClauses.push(gte(sessionItemResult.completedAt, range.start));
+	if (range?.end) repClauses.push(lte(sessionItemResult.completedAt, range.end));
 
 	const [reviewRows, repRows] = await Promise.all([
 		db
@@ -133,13 +147,16 @@ async function loadPoints(
 			.where(and(...reviewClauses)),
 		db
 			.select({
-				confidence: repAttempt.confidence,
-				isCorrect: repAttempt.isCorrect,
+				confidence: sessionItemResult.confidence,
+				isCorrect: sessionItemResult.isCorrect,
 				domain: scenario.domain,
-				attemptedAt: repAttempt.attemptedAt,
+				completedAt: sessionItemResult.completedAt,
 			})
-			.from(repAttempt)
-			.innerJoin(scenario, and(eq(scenario.id, repAttempt.scenarioId), eq(scenario.userId, repAttempt.userId)))
+			.from(sessionItemResult)
+			.innerJoin(
+				scenario,
+				and(eq(scenario.id, sessionItemResult.scenarioId), eq(scenario.userId, sessionItemResult.userId)),
+			)
 			.where(and(...repClauses)),
 	]);
 
@@ -156,12 +173,12 @@ async function loadPoints(
 		});
 	}
 	for (const r of repRows) {
-		if (r.confidence === null) continue;
+		if (r.confidence === null || r.isCorrect === null || r.completedAt === null) continue;
 		points.push({
 			confidence: r.confidence,
 			isCorrect: r.isCorrect,
 			domain: r.domain,
-			occurredAt: r.attemptedAt,
+			occurredAt: r.completedAt,
 		});
 	}
 	return points;
@@ -339,8 +356,16 @@ export async function getCalibrationPointCount(userId: string, db: Db = defaultD
 			.then((r) => r[0]),
 		db
 			.select({ c: sql<number>`count(*)::int` })
-			.from(repAttempt)
-			.where(and(eq(repAttempt.userId, userId), isNotNull(repAttempt.confidence)))
+			.from(sessionItemResult)
+			.where(
+				and(
+					eq(sessionItemResult.userId, userId),
+					eq(sessionItemResult.itemKind, SESSION_ITEM_KINDS.REP),
+					isNotNull(sessionItemResult.confidence),
+					isNotNull(sessionItemResult.completedAt),
+					isNull(sessionItemResult.skipKind),
+				),
+			)
 			.then((r) => r[0]),
 	]);
 	return Number(reviewRow?.c ?? 0) + Number(repRow?.c ?? 0);

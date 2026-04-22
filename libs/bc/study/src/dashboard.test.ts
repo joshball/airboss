@@ -23,7 +23,7 @@ import {
 	WEAK_AREA_MIN_DATA_POINTS,
 } from '@ab/constants';
 import { db } from '@ab/db';
-import { generateAuthId, generateCardId, generateRepAttemptId, generateReviewId, generateScenarioId } from '@ab/utils';
+import { generateAuthId, generateCardId, generateReviewId, generateScenarioId } from '@ab/utils';
 import { eq } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import {
@@ -35,7 +35,8 @@ import {
 	type PanelResult,
 	type RecentActivity,
 } from './dashboard';
-import { card, cardState, repAttempt, review, scenario } from './schema';
+import { card, cardState, review, scenario, session, sessionItemResult, studyPlan } from './schema';
+import { seedRepAttempt } from './test-support';
 
 /** Shared user for tests that don't mutate shared state destructively. */
 const BASE_USER = generateAuthId();
@@ -56,9 +57,14 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-	// rep_attempt -> scenario is RESTRICT; review -> card is RESTRICT. Delete
-	// child rows first in both chains before the user cascade fires.
-	await db.delete(repAttempt).where(eq(repAttempt.userId, BASE_USER));
+	// session_item_result -> scenario is SET NULL but -> session is CASCADE;
+	// scenario delete also needs no dangling SIR rows because a rep slot is
+	// pinned to a scenario id (set null there too). review -> card is RESTRICT.
+	// Delete slot rows, sessions, plan, then scenario/card trees before the
+	// user cascade.
+	await db.delete(sessionItemResult).where(eq(sessionItemResult.userId, BASE_USER));
+	await db.delete(session).where(eq(session.userId, BASE_USER));
+	await db.delete(studyPlan).where(eq(studyPlan.userId, BASE_USER));
 	await db.delete(scenario).where(eq(scenario.userId, BASE_USER));
 	await db.delete(review).where(eq(review.userId, BASE_USER));
 	await db.delete(cardState).where(eq(cardState.userId, BASE_USER));
@@ -84,7 +90,9 @@ async function isolatedUser(label: string): Promise<{ userId: string; cleanup: (
 	return {
 		userId,
 		cleanup: async () => {
-			await db.delete(repAttempt).where(eq(repAttempt.userId, userId));
+			await db.delete(sessionItemResult).where(eq(sessionItemResult.userId, userId));
+			await db.delete(session).where(eq(session.userId, userId));
+			await db.delete(studyPlan).where(eq(studyPlan.userId, userId));
 			await db.delete(scenario).where(eq(scenario.userId, userId));
 			await db.delete(review).where(eq(review.userId, userId));
 			await db.delete(cardState).where(eq(cardState.userId, userId));
@@ -190,16 +198,7 @@ async function seedAttempt(
 	isCorrect: boolean,
 	attemptedAt: Date = new Date(),
 ): Promise<void> {
-	await db.insert(repAttempt).values({
-		id: generateRepAttemptId(),
-		scenarioId,
-		userId,
-		chosenOption: isCorrect ? 'a' : 'b',
-		isCorrect,
-		confidence: null,
-		answerMs: null,
-		attemptedAt,
-	});
+	await seedRepAttempt({ userId, scenarioId, isCorrect, completedAt: attemptedAt });
 }
 
 /** Convenience: unwrap PanelResult for happy-path test reads. */

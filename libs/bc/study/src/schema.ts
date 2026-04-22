@@ -516,12 +516,33 @@ export const sessionItemResult = studySchema.table(
 		skipKind: text('skip_kind'),
 		/** Free-text detail when an item is skipped because its source was deleted etc. */
 		reasonDetail: text('reason_detail'),
+		/**
+		 * Rep-specific outcome fields. Populated when `item_kind = 'rep'` and the
+		 * slot is completed with a real answer (skipKind IS NULL). Moved here
+		 * from `rep_attempt` as part of the ADR 012 unification: the session_
+		 * item_result row is now the single source of truth for rep outcomes,
+		 * same way reviews carry their rating/confidence on the session slot.
+		 *
+		 * Stay NULL for non-rep kinds (cards, node_starts), skipped reps, and
+		 * slots that haven't been completed yet. Not NOT NULL on the table
+		 * because a rep slot is inserted at session commit time before the user
+		 * answers it.
+		 */
+		chosenOption: text('chosen_option'),
+		isCorrect: boolean('is_correct'),
+		confidence: smallint('confidence'),
+		answerMs: integer('answer_ms'),
 		presentedAt: timestamp('presented_at', { withTimezone: true }).notNull().defaultNow(),
 		completedAt: timestamp('completed_at', { withTimezone: true }),
 	},
 	(t) => ({
 		sirSessionSlotIdx: index('sir_session_slot_idx').on(t.sessionId, t.slotIndex),
 		sirUserCompletedIdx: index('sir_user_completed_idx').on(t.userId, t.completedAt),
+		// Rep-attempt aggregations filter on (userId, itemKind='rep', completedAt IS NOT NULL).
+		// A dedicated index keeps calibration / mastery / activity reads bounded after the
+		// substrate unification (ADR 012).
+		sirUserKindCompletedIdx: index('sir_user_kind_completed_idx').on(t.userId, t.itemKind, t.completedAt),
+		sirScenarioCompletedIdx: index('sir_scenario_completed_idx').on(t.scenarioId, t.completedAt),
 		itemKindCheck: check('sir_item_kind_check', sql.raw(`"item_kind" IN (${inList(SESSION_ITEM_KIND_VALUES)})`)),
 		sliceCheck: check('sir_slice_check', sql.raw(`"slice" IN (${inList(SESSION_SLICE_VALUES)})`)),
 		reasonCodeCheck: check(
@@ -532,6 +553,8 @@ export const sessionItemResult = studySchema.table(
 			'sir_skip_kind_check',
 			sql.raw(`"skip_kind" IS NULL OR "skip_kind" IN (${inList(SESSION_SKIP_KIND_VALUES)})`),
 		),
+		confidenceCheck: check('sir_confidence_check', sql`"confidence" IS NULL OR "confidence" BETWEEN 1 AND 5`),
+		answerMsCheck: check('sir_answer_ms_check', sql`"answer_ms" IS NULL OR "answer_ms" >= 0`),
 	}),
 );
 

@@ -20,18 +20,19 @@ import {
 	OVERDUE_GRACE_MS,
 	REVIEW_RATINGS,
 	SCENARIO_STATUSES,
+	SESSION_ITEM_KINDS,
 	WEAK_AREA_ACCURACY_THRESHOLD,
 	WEAK_AREA_LIMIT,
 	WEAK_AREA_MIN_DATA_POINTS,
 	WEAK_AREA_WINDOW_DAYS,
 } from '@ab/constants';
 import { db as defaultDb } from '@ab/db';
-import { and, count, eq, gte, sql } from 'drizzle-orm';
+import { and, count, eq, gte, isNotNull, isNull, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import { type CalibrationResult, getCalibration } from './calibration';
 import { type CertProgress, type DomainCertRow, getCertProgress, getDomainCertMatrix } from './knowledge';
 import { getActivePlan } from './plans';
-import { card, cardState, repAttempt, review, type StudyPlanRow, scenario } from './schema';
+import { card, cardState, review, type StudyPlanRow, scenario, sessionItemResult } from './schema';
 import { type DashboardStats, getDashboardStats } from './stats';
 
 type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;
@@ -114,19 +115,29 @@ function utcStartOfDay(d: Date): Date {
  * Scheduled-reps backlog. Active scenarios split into attempted vs never-
  * attempted, grouped by domain. Empty for a user with no scenarios.
  *
- * Uses a single aggregation over scenario LEFT JOIN rep_attempt so each
- * scenario shows up exactly once, with its attempt count driving the
- * unattempted/attempted split. No second round-trip.
+ * Uses a single aggregation over scenario LEFT JOIN session_item_result
+ * (item_kind='rep', completed, not skipped) so each scenario shows up
+ * exactly once, with its attempt count driving the unattempted/attempted
+ * split. No second round-trip.
  */
 export async function getRepBacklog(userId: string, db: Db = defaultDb): Promise<RepBacklog> {
 	const rows = await db
 		.select({
 			domain: scenario.domain,
 			scenarioId: scenario.id,
-			attemptCount: count(repAttempt.id),
+			attemptCount: count(sessionItemResult.id),
 		})
 		.from(scenario)
-		.leftJoin(repAttempt, and(eq(repAttempt.scenarioId, scenario.id), eq(repAttempt.userId, scenario.userId)))
+		.leftJoin(
+			sessionItemResult,
+			and(
+				eq(sessionItemResult.scenarioId, scenario.id),
+				eq(sessionItemResult.userId, scenario.userId),
+				eq(sessionItemResult.itemKind, SESSION_ITEM_KINDS.REP),
+				isNotNull(sessionItemResult.completedAt),
+				isNull(sessionItemResult.skipKind),
+			),
+		)
 		.where(and(eq(scenario.userId, userId), eq(scenario.status, SCENARIO_STATUSES.ACTIVE)))
 		.groupBy(scenario.domain, scenario.id);
 
@@ -190,13 +201,21 @@ export async function getRecentActivity(
 			.groupBy(sql`day`),
 		db
 			.select({
-				day: sql<string>`to_char(date_trunc('day', ${repAttempt.attemptedAt} at time zone 'UTC'), 'YYYY-MM-DD')`.as(
+				day: sql<string>`to_char(date_trunc('day', ${sessionItemResult.completedAt} at time zone 'UTC'), 'YYYY-MM-DD')`.as(
 					'day',
 				),
 				c: count(),
 			})
-			.from(repAttempt)
-			.where(and(eq(repAttempt.userId, userId), gte(repAttempt.attemptedAt, windowStart)))
+			.from(sessionItemResult)
+			.where(
+				and(
+					eq(sessionItemResult.userId, userId),
+					eq(sessionItemResult.itemKind, SESSION_ITEM_KINDS.REP),
+					isNotNull(sessionItemResult.completedAt),
+					isNull(sessionItemResult.skipKind),
+					gte(sessionItemResult.completedAt, windowStart),
+				),
+			)
 			.groupBy(sql`day`),
 	]);
 
@@ -264,9 +283,13 @@ async function extendedStreak(userId: string, db: Db, now: Date): Promise<number
 				FROM ${review}
 				WHERE ${review.userId} = ${userId} AND ${review.reviewedAt} >= ${lookbackStart}
 				UNION
-				SELECT date_trunc('day', ${repAttempt.attemptedAt} at time zone 'UTC') AS dt
-				FROM ${repAttempt}
-				WHERE ${repAttempt.userId} = ${userId} AND ${repAttempt.attemptedAt} >= ${lookbackStart}
+				SELECT date_trunc('day', ${sessionItemResult.completedAt} at time zone 'UTC') AS dt
+				FROM ${sessionItemResult}
+				WHERE ${sessionItemResult.userId} = ${userId}
+				  AND ${sessionItemResult.itemKind} = ${SESSION_ITEM_KINDS.REP}
+				  AND ${sessionItemResult.completedAt} IS NOT NULL
+				  AND ${sessionItemResult.skipKind} IS NULL
+				  AND ${sessionItemResult.completedAt} >= ${lookbackStart}
 			) activity_days`,
 		)
 		.groupBy(sql`dt`)
@@ -326,16 +349,28 @@ export async function getWeakAreas(
 			.innerJoin(card, and(eq(card.id, review.cardId), eq(card.userId, review.userId)))
 			.where(and(eq(review.userId, userId), eq(card.status, CARD_STATUSES.ACTIVE), gte(review.reviewedAt, windowStart)))
 			.groupBy(card.domain),
-		// Rep accuracy by domain.
+		// Rep accuracy by domain. Reads from the rep-kind session_item_result
+		// slots (completed, not skipped) joined to scenario for the domain.
 		db
 			.select({
 				domain: scenario.domain,
 				total: count(),
-				correct: sql<number>`sum(case when ${repAttempt.isCorrect} then 1 else 0 end)`,
+				correct: sql<number>`sum(case when ${sessionItemResult.isCorrect} then 1 else 0 end)`,
 			})
-			.from(repAttempt)
-			.innerJoin(scenario, and(eq(scenario.id, repAttempt.scenarioId), eq(scenario.userId, repAttempt.userId)))
-			.where(and(eq(repAttempt.userId, userId), gte(repAttempt.attemptedAt, windowStart)))
+			.from(sessionItemResult)
+			.innerJoin(
+				scenario,
+				and(eq(scenario.id, sessionItemResult.scenarioId), eq(scenario.userId, sessionItemResult.userId)),
+			)
+			.where(
+				and(
+					eq(sessionItemResult.userId, userId),
+					eq(sessionItemResult.itemKind, SESSION_ITEM_KINDS.REP),
+					isNotNull(sessionItemResult.completedAt),
+					isNull(sessionItemResult.skipKind),
+					gte(sessionItemResult.completedAt, windowStart),
+				),
+			)
 			.groupBy(scenario.domain),
 		// Overdue card load per domain. Active only; only counts cards past
 		// the grace period so a single missed review doesn't ding a domain.

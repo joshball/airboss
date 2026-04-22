@@ -22,10 +22,11 @@ import {
 	RELEVANCE_PRIORITIES,
 	REP_ACCURACY_THRESHOLD,
 	REP_MIN,
+	SESSION_ITEM_KINDS,
 	STABILITY_MASTERED_DAYS,
 } from '@ab/constants';
 import { db as defaultDb } from '@ab/db';
-import { and, asc, count, eq, inArray, sql } from 'drizzle-orm';
+import { and, asc, count, eq, inArray, isNotNull, isNull, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import {
 	type CardRow,
@@ -38,8 +39,8 @@ import {
 	knowledgeNode,
 	type NewKnowledgeEdgeRow,
 	type NewKnowledgeNodeRow,
-	repAttempt,
 	scenario,
+	sessionItemResult,
 } from './schema';
 
 type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;
@@ -522,11 +523,22 @@ export async function getNodeMastery(
 		db
 			.select({
 				repsTotal: count(),
-				repsCorrect: sql<number>`sum(case when ${repAttempt.isCorrect} then 1 else 0 end)`,
+				repsCorrect: sql<number>`sum(case when ${sessionItemResult.isCorrect} then 1 else 0 end)`,
 			})
-			.from(repAttempt)
-			.innerJoin(scenario, and(eq(scenario.id, repAttempt.scenarioId), eq(scenario.userId, repAttempt.userId)))
-			.where(and(eq(repAttempt.userId, userId), eq(scenario.nodeId, nodeId)))
+			.from(sessionItemResult)
+			.innerJoin(
+				scenario,
+				and(eq(scenario.id, sessionItemResult.scenarioId), eq(scenario.userId, sessionItemResult.userId)),
+			)
+			.where(
+				and(
+					eq(sessionItemResult.userId, userId),
+					eq(sessionItemResult.itemKind, SESSION_ITEM_KINDS.REP),
+					isNotNull(sessionItemResult.completedAt),
+					isNull(sessionItemResult.skipKind),
+					eq(scenario.nodeId, nodeId),
+				),
+			)
 			.then((r) => r[0]),
 		db
 			.select({ c: count() })
@@ -693,11 +705,22 @@ async function getNodeMasteryMap(
 			.select({
 				nodeId: scenario.nodeId,
 				repsTotal: count(),
-				repsCorrect: sql<number>`sum(case when ${repAttempt.isCorrect} then 1 else 0 end)`,
+				repsCorrect: sql<number>`sum(case when ${sessionItemResult.isCorrect} then 1 else 0 end)`,
 			})
-			.from(repAttempt)
-			.innerJoin(scenario, and(eq(scenario.id, repAttempt.scenarioId), eq(scenario.userId, repAttempt.userId)))
-			.where(and(eq(repAttempt.userId, userId), inArray(scenario.nodeId, ids)))
+			.from(sessionItemResult)
+			.innerJoin(
+				scenario,
+				and(eq(scenario.id, sessionItemResult.scenarioId), eq(scenario.userId, sessionItemResult.userId)),
+			)
+			.where(
+				and(
+					eq(sessionItemResult.userId, userId),
+					eq(sessionItemResult.itemKind, SESSION_ITEM_KINDS.REP),
+					isNotNull(sessionItemResult.completedAt),
+					isNull(sessionItemResult.skipKind),
+					inArray(scenario.nodeId, ids),
+				),
+			)
 			.groupBy(scenario.nodeId),
 		db
 			.select({ nodeId: scenario.nodeId, c: count() })
