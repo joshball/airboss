@@ -467,9 +467,14 @@ describe('getDashboardPayload', () => {
 			expect('value' in payload.repBacklog).toBe(true);
 			expect('value' in payload.weakAreas).toBe(true);
 			expect('value' in payload.activity).toBe(true);
+			expect('value' in payload.activePlan).toBe(true);
+			expect('value' in payload.calibration).toBe(true);
 			expect(val(payload.repBacklog).totalActive).toBe(0);
 			expect(val(payload.activity).days).toHaveLength(ACTIVITY_WINDOW_DAYS);
 			expect(val(payload.weakAreas)).toEqual([]);
+			// Zero-state user has no active plan and no calibration data.
+			expect(val(payload.activePlan)).toBeNull();
+			expect(val(payload.calibration).totalCount).toBe(0);
 		} finally {
 			await cleanup();
 		}
@@ -497,6 +502,14 @@ describe('getDashboardPayload', () => {
 				repBacklog: (uid, database) => getRepBacklog(uid, database),
 				weakAreas: () => Promise.reject(new Error('boom from weak areas')),
 				activity: (uid, database, now) => getRecentActivity(uid, ACTIVITY_WINDOW_DAYS, database, now),
+				activePlan: () => Promise.resolve(null),
+				calibration: () =>
+					Promise.resolve({
+						buckets: [],
+						totalCount: 0,
+						score: null,
+						domains: [],
+					}),
 			};
 			const payload = await getDashboardPayload(userId, db, new Date(), sabotaged);
 			expect('value' in payload.stats).toBe(true);

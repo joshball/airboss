@@ -39,15 +39,15 @@ const stamp = `${loadedAt.getFullYear()}-${String(loadedAt.getMonth() + 1).padSt
 		  row 4: Cert progress (reflect) | The map (orient)
 	-->
 	<div class="grid">
-		<div class="cell c6"><CtaPanel stats={payload.stats} repBacklog={payload.repBacklog} /></div>
+		<div class="cell c6"><CtaPanel stats={payload.stats} repBacklog={payload.repBacklog} activePlan={payload.activePlan} /></div>
 		<div class="cell c3"><DueReviewsPanel stats={payload.stats} /></div>
 		<div class="cell c3"><ScheduledRepsPanel repBacklog={payload.repBacklog} /></div>
 
-		<div class="cell c4"><CalibrationPanel /></div>
+		<div class="cell c4"><CalibrationPanel calibration={payload.calibration} /></div>
 		<div class="cell c8"><WeakAreasPanel weakAreas={payload.weakAreas} /></div>
 
 		<div class="cell c7"><ActivityPanel activity={payload.activity} /></div>
-		<div class="cell c5"><StudyPlanPanel /></div>
+		<div class="cell c5"><StudyPlanPanel activePlan={payload.activePlan} /></div>
 
 		<div class="cell c5"><CertProgressPanel /></div>
 		<div class="cell c7"><MapPanel /></div>

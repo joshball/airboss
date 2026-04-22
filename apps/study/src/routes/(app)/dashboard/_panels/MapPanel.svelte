@@ -2,9 +2,10 @@
 import PanelShell from './PanelShell.svelte';
 
 /**
- * Domain x Cert map placeholder. Shows the 14 domains (rows) by 4 certs
- * (columns) with mastery percentages once the graph BC's
- * `getDomainCertMatrix(userId)` is available.
+ * Domain x Cert map placeholder. Requires getDomainCertMatrix(userId) on
+ * the knowledge BC, which is not yet implemented. Once it lands, the panel
+ * renders a 14 x 4 grid (14 domains, 4 certs) with per-cell mastery
+ * percentages. Tracked as a follow-up BC task in the activation PR.
  */
 </script>
 
@@ -14,10 +15,9 @@ import PanelShell from './PanelShell.svelte';
 	variant="gated"
 >
 	<p class="placeholder">
-		Populated when the <strong>knowledge graph</strong> BC exposes
-		<code>getDomainCertMatrix(userId)</code>. Each cell will show percent
-		mastery for that (domain, cert) pair or <code>-</code> when no graph nodes
-		apply.
+		Requires <code>getDomainCertMatrix(userId)</code> in the knowledge BC (not
+		yet implemented). Each cell will show percent mastery for that (domain,
+		cert) pair or <code>-</code> when no nodes apply.
 	</p>
 </PanelShell>
 

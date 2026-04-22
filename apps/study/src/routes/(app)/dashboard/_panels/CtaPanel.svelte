@@ -1,81 +1,76 @@
 <script lang="ts">
-import type { DashboardStats, PanelResult, RepBacklog } from '@ab/bc-study';
+import type { DashboardStats, PanelResult, RepBacklog, StudyPlanRow } from '@ab/bc-study';
 import { ROUTES } from '@ab/constants';
 import PanelShell from './PanelShell.svelte';
 
 /**
- * Primary action panel. Until Study Plan + Session Engine land, the CTA
- * forks between memory review (due > 0) and rep session (scheduled > 0).
- * Fresh users with neither signal get a "create your first card" nudge.
+ * Primary action panel. With the Study Plan + Session Engine BCs live, the
+ * primary CTA is plan-aware:
+ *   - no active plan -> "Create a study plan" (onboarding nudge)
+ *   - active plan    -> "Start session" (session engine picks the slices)
+ *
+ * Memory review and rep sessions stay accessible as secondary CTAs when the
+ * user has pressure on either queue -- the plan-driven session is the
+ * headline action, not the only action.
  */
 
 let {
 	stats,
 	repBacklog,
+	activePlan,
 }: {
 	stats: PanelResult<DashboardStats>;
 	repBacklog: PanelResult<RepBacklog>;
+	activePlan: PanelResult<StudyPlanRow | null>;
 } = $props();
 
 const statsValue = $derived('value' in stats ? stats.value : null);
 const backlogValue = $derived('value' in repBacklog ? repBacklog.value : null);
+const planValue = $derived('value' in activePlan ? activePlan.value : null);
 const dueCount = $derived(statsValue?.dueNow ?? 0);
 const scheduledCount = $derived(backlogValue?.totalActive ?? 0);
+const hasPlan = $derived(planValue !== null);
 
-type Cta = { href: string; label: string; tone: 'primary' | 'secondary' };
+type Cta = { href: string; label: string };
 
-const primary = $derived<Cta | null>(
-	dueCount > 0
-		? { href: ROUTES.MEMORY_REVIEW, label: `Start memory review (${dueCount} due)`, tone: 'primary' }
-		: scheduledCount > 0
-			? { href: ROUTES.REPS_SESSION, label: 'Start rep session', tone: 'primary' }
-			: statsValue && backlogValue
-				? { href: ROUTES.MEMORY_NEW, label: 'Create your first card', tone: 'primary' }
-				: null,
+// Primary CTA prefers a plan-driven session. Without a plan, the CTA
+// becomes the onboarding "create a plan" nudge so the user never lands on
+// a dead dashboard.
+const primary = $derived<Cta>(
+	hasPlan
+		? { href: ROUTES.SESSION_START, label: 'Start session' }
+		: { href: ROUTES.PLANS_NEW, label: 'Create a study plan' },
 );
 
-const secondary = $derived<Cta | null>(
-	// Show the "other" action as a secondary when both are available so the
-	// user always has both entry points visible. Stays null if the primary
-	// is the create-your-first-card fallback.
-	dueCount > 0 && scheduledCount > 0
-		? { href: ROUTES.REPS_SESSION, label: 'Start rep session', tone: 'secondary' }
-		: null,
-);
+// Secondary CTAs: surface real work pressure alongside the primary action so
+// the user can sidestep the plan-driven flow when a review queue or rep
+// backlog is waiting. Empty when neither queue has items.
+const secondaries = $derived<Cta[]>([
+	...(dueCount > 0 ? [{ href: ROUTES.MEMORY_REVIEW, label: `Review (${dueCount})` }] : []),
+	...(scheduledCount > 0 && hasPlan ? [] : scheduledCount > 0 ? [{ href: ROUTES.REPS_SESSION, label: 'Reps' }] : []),
+]);
 
-const caughtUp = $derived(dueCount === 0 && scheduledCount === 0 && statsValue !== null && backlogValue !== null);
-
-// Combine errors from both feeds into one message; the shell renders it in
-// the standard error slot. Either one failing still lets the other drive the
-// panel, but without both it's cleaner to show the inline error.
+// Combine errors from all three feeds; the shell renders it inline.
 const panelError = $derived(
-	'error' in stats && 'error' in repBacklog
-		? `${stats.error}; ${repBacklog.error}`
-		: 'error' in stats
-			? stats.error
-			: 'error' in repBacklog
-				? repBacklog.error
-				: undefined,
+	[
+		'error' in stats ? stats.error : null,
+		'error' in repBacklog ? repBacklog.error : null,
+		'error' in activePlan ? activePlan.error : null,
+	]
+		.filter((e): e is string => typeof e === 'string')
+		.join('; ') || undefined,
 );
+
+const subtitle = $derived(hasPlan ? 'What you should do next' : 'Set up your plan to unlock sessions');
 </script>
 
-<PanelShell title="Today" subtitle="What you should do next" error={panelError}>
-	{#if caughtUp}
-		<p class="caught-up">Caught up for today.</p>
-		<p class="muted">
-			Nothing due, nothing scheduled. Want to <a href={ROUTES.MEMORY_NEW}>write a card</a>
-			or <a href={ROUTES.REPS_NEW}>sketch a scenario</a>?
-		</p>
-	{:else}
-		<div class="ctas">
-			{#if primary}
-				<a class="btn primary" href={primary.href}>{primary.label}</a>
-			{/if}
-			{#if secondary}
-				<a class="btn secondary" href={secondary.href}>{secondary.label}</a>
-			{/if}
-		</div>
-	{/if}
+<PanelShell title="Today" {subtitle} error={panelError}>
+	<div class="ctas">
+		<a class="btn primary" href={primary.href}>{primary.label}</a>
+		{#each secondaries as cta (cta.href)}
+			<a class="btn secondary" href={cta.href}>{cta.label}</a>
+		{/each}
+	</div>
 </PanelShell>
 
 <style>
@@ -118,22 +113,5 @@ const panelError = $derived(
 
 	.btn.secondary:hover {
 		background: #e2e8f0;
-	}
-
-	.caught-up {
-		margin: 0;
-		color: #0f172a;
-		font-weight: 600;
-		font-size: 0.8125rem;
-	}
-
-	.muted {
-		margin: 0;
-		color: #64748b;
-		font-size: 0.75rem;
-	}
-
-	.muted a {
-		color: #1d4ed8;
 	}
 </style>
