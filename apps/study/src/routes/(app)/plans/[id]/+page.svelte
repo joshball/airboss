@@ -114,6 +114,7 @@ const skippableDomains = $derived(DOMAIN_VALUES.filter((d) => !focusSet.has(d)))
 
 		<fieldset>
 			<legend>Certifications</legend>
+			<p class="muted">Leave all unchecked for a cert-agnostic plan (general practice, no cert filter).</p>
 			<div class="choice-row">
 				{#each CERT_VALUES as cert (cert)}
 					<label class="choice">

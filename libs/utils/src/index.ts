@@ -1,10 +1,10 @@
 export { createErrorHandler } from './error-handler';
 export {
 	createId,
+	generateAuditLogId,
 	generateAuthId,
 	generateCardId,
 	generateKnowledgeNodeProgressId,
-	generateRepAttemptId,
 	generateReviewId,
 	generateScenarioId,
 	generateSessionId,

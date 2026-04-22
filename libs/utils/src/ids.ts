@@ -14,12 +14,17 @@ export const generateAuthId = (): string => ulid().toLowerCase();
 // Study BC
 export const generateCardId = (): string => createId('crd');
 export const generateReviewId = (): string => createId('rev');
-// Decision reps (study BC) -- scenarios + attempts per spec prefix.
+// Decision reps (study BC) -- scenarios only. `repAttempt` was deleted per
+// ADR 012; rep outcomes live on session_item_result rows now.
 export const generateScenarioId = (): string => createId('rep');
-export const generateRepAttemptId = (): string => createId('rat');
 // Study plan + session engine.
 export const generateStudyPlanId = (): string => createId('plan');
 export const generateSessionId = (): string => createId('ses');
 export const generateSessionItemResultId = (): string => createId('sir');
+
+// Audit BC -- generic change log, one row per mutation attempted through
+// `auditWrite()` in libs/db/src/audit.ts.
+export const generateAuditLogId = (): string => createId('aud');
+
 /** Knowledge-node phase-progress row (per-user per-node). */
 export const generateKnowledgeNodeProgressId = (): string => createId('knp');

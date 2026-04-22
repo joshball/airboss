@@ -118,3 +118,19 @@ If execution goes wrong, the remedy is to fix forward, not to revert.
 
 - Tokens the new preset UI will want: `--ab-color-fg-strong`, a body font-size token. Flagged in earlier agent reports.
 - Preset content is version-controlled; future presets (IFR prep, commercial prep, CFI prep, etc.) land as PRs that add preset records.
+
+## Appendix: empty certGoals is a first-class plan state
+
+The "Quick reps" and "Safety procedures" presets ship `certGoals: []` intentionally: the engine's `fetchNodeCandidates` treats an empty `certFilter` as "no cert restriction," producing a session that spans every domain the user can touch. This is the direct replacement for the old one-click rep flow.
+
+When the preset gallery landed we carried over a stricter `createPlanSchema.certGoals.min(1)` rule from an earlier plan-builder design. That rule forced every plan -- including preset-derived ones -- to declare a cert, which collapsed the cert-agnostic plan shape the presets depend on. The fix: relax the schema to `max(4).default([])` and surface the "General practice, no specific cert" option in the manual plan builder so authors can deliberately opt into a cert-agnostic plan. Every downstream consumer already handled the empty-array case (dashboard StudyPlanPanel renders "none," plan detail page renders "none," engine filters skip the cert predicate), so only the schema and the validator forms needed to move.
+
+Takeaway: a plan with no cert goals is a valid plan, not an invalid one. Presets are the proof: they are the ship-it product shape for cert-agnostic study.
+
+## Appendix: session-slot idempotency is enforced at the DB, not just in code
+
+The session runner writes rep/card/skip outcomes through `recordItemResult`, which looks up an existing `session_item_result` row by `(session_id, slot_index)` and either updates or inserts. Before phase-6 we had a non-unique index on those two columns and a SELECT-then-UPDATE-or-INSERT pattern in the BC. That combination is not atomic: two concurrent submits for the same slot (double-tap, SvelteKit enhance retry on a transient 5xx, duplicate tab) can both miss the SELECT and both INSERT, producing two rows for one slot and double-counting aggregates.
+
+ADR 012 is explicit that the substrate is the single audit trail -- duplicate rows defeat that promise. Load-bearing fix: add a `UNIQUE(session_id, slot_index)` constraint on `session_item_result`, then switch `recordItemResult` to an atomic UPSERT via `.onConflictDoUpdate({ target: [sessionId, slotIndex], ... })`. The DB guarantees single-row-per-slot regardless of how many concurrent writers show up. The UPSERT makes the "second submit updates the existing row" contract actual instead of aspirational.
+
+Don't remove the UNIQUE constraint. Without it the idempotency claim is a lie.

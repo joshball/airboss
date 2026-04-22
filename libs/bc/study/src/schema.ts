@@ -21,6 +21,7 @@ import {
 	CARD_STATUS_VALUES,
 	CARD_STATUSES,
 	CARD_TYPE_VALUES,
+	CERT_VALUES,
 	type Cert,
 	CONTENT_SOURCE_VALUES,
 	CONTENT_SOURCES,
@@ -28,6 +29,7 @@ import {
 	DEPTH_PREFERENCE_VALUES,
 	DEPTH_PREFERENCES,
 	DIFFICULTY_VALUES,
+	DOMAIN_VALUES,
 	type Domain,
 	KNOWLEDGE_EDGE_TYPE_VALUES,
 	MAX_SESSION_LENGTH,
@@ -113,6 +115,20 @@ export const knowledgeNode = studySchema.table(
 		masteryCriteria: text('mastery_criteria'),
 		/** Markdown body (everything after the frontmatter). Phase slicing happens at render-time. */
 		contentMd: text('content_md').notNull(),
+		/**
+		 * sha256 of `contentMd` + canonicalized frontmatter. Populated by the
+		 * seed script on every upsert. Lets a caller ask "did this node change
+		 * since the user last saw it?" without joining to a full version table.
+		 */
+		contentHash: text('content_hash'),
+		/**
+		 * Monotonically increasing content version. Bumped by the seed script
+		 * only when `contentHash` actually changes, so re-running the seed on
+		 * unchanged sources is a no-op. A future `knowledge_node_version`
+		 * table can hold full history when the need arrives; the counter +
+		 * hash unblock change-aware UX in the meantime.
+		 */
+		version: integer('version').notNull().default(1),
 		createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
 		updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
 	},
@@ -167,7 +183,7 @@ export const card = studySchema.table(
 		id: text('id').primaryKey(),
 		userId: text('user_id')
 			.notNull()
-			.references(() => bauthUser.id, { onDelete: 'cascade' }),
+			.references(() => bauthUser.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
 		front: text('front').notNull(),
 		back: text('back').notNull(),
 		domain: text('domain').notNull(),
@@ -191,7 +207,12 @@ export const card = studySchema.table(
 		cardUserStatusIdx: index('card_user_status_idx').on(t.userId, t.status),
 		cardUserDomainIdx: index('card_user_domain_idx').on(t.userId, t.domain),
 		cardUserCreatedIdx: index('card_user_created_idx').on(t.userId, t.createdAt),
-		cardUserNodeIdx: index('card_user_node_idx').on(t.userId, t.nodeId),
+		// node-first order: the read shapes in `knowledge.ts` (getCardsForNode,
+		// listNodeSummaries count-by-node) select on node_id primarily and
+		// user_id secondarily. Node is the more selective column (one node of
+		// ~30 authored) so the index probes fewer rows when the leading filter
+		// is node_id. The user-first prefix was not actually used by any query.
+		cardNodeUserIdx: index('card_node_user_idx').on(t.nodeId, t.userId),
 		cardTypeCheck: check('card_type_check', sql.raw(`"card_type" IN (${inList(CARD_TYPE_VALUES)})`)),
 		sourceTypeCheck: check('card_source_type_check', sql.raw(`"source_type" IN (${inList(CONTENT_SOURCE_VALUES)})`)),
 		statusCheck: check('card_status_check', sql.raw(`"status" IN (${inList(CARD_STATUS_VALUES)})`)),
@@ -207,10 +228,14 @@ export const review = studySchema.table(
 		// silently lost when someone hard-deletes a card.
 		cardId: text('card_id')
 			.notNull()
-			.references(() => card.id, { onDelete: 'restrict' }),
+			.references(() => card.id, { onDelete: 'restrict', onUpdate: 'cascade' }),
 		userId: text('user_id')
 			.notNull()
-			.references(() => bauthUser.id, { onDelete: 'cascade' }),
+			.references(() => bauthUser.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
+		// ts-fsrs AGAIN/HARD/GOOD/EASY = 1/2/3/4. Stored as smallint so
+		// Drizzle + pg bindings pass the raw enum value through ts-fsrs
+		// unchanged. The CHECK below enforces the range; label-to-number
+		// mapping lives in `REVIEW_RATINGS` in @ab/constants.
 		rating: smallint('rating').notNull(),
 		confidence: smallint('confidence'),
 		stability: real('stability').notNull(),
@@ -239,7 +264,7 @@ export const cardState = studySchema.table(
 			.references(() => card.id, { onDelete: 'cascade' }),
 		userId: text('user_id')
 			.notNull()
-			.references(() => bauthUser.id, { onDelete: 'cascade' }),
+			.references(() => bauthUser.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
 		stability: real('stability').notNull(),
 		difficulty: real('difficulty').notNull(),
 		state: text('state').notNull(),
@@ -252,6 +277,18 @@ export const cardState = studySchema.table(
 		lastReviewedAt: timestamp('last_reviewed_at', { withTimezone: true }),
 		reviewCount: integer('review_count').notNull().default(0),
 		lapseCount: integer('lapse_count').notNull().default(0),
+		/**
+		 * Last mutation timestamp for this projection row. `lastReviewedAt` is
+		 * "when the user last reviewed," not "when this row last changed" --
+		 * a migration that rewrites stability/difficulty, a lapse-count
+		 * backfill, or a manual correction changes the row without touching
+		 * `lastReviewedAt`. `updatedAt` answers "when did the projection last
+		 * change" so debugging state drift against the review log is tractable.
+		 */
+		updatedAt: timestamp('updated_at', { withTimezone: true })
+			.notNull()
+			.defaultNow()
+			.$onUpdate(() => new Date()),
 	},
 	(t) => ({
 		pk: primaryKey({ columns: [t.cardId, t.userId] }),
@@ -293,7 +330,7 @@ export const scenario = studySchema.table(
 		id: text('id').primaryKey(),
 		userId: text('user_id')
 			.notNull()
-			.references(() => bauthUser.id, { onDelete: 'cascade' }),
+			.references(() => bauthUser.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
 		title: text('title').notNull(),
 		situation: text('situation').notNull(),
 		options: jsonb('options').$type<ScenarioOption[]>().notNull(),
@@ -320,6 +357,9 @@ export const scenario = studySchema.table(
 		scenarioUserDomainIdx: index('scenario_user_domain_idx').on(t.userId, t.domain),
 		scenarioUserCreatedIdx: index('scenario_user_created_idx').on(t.userId, t.createdAt),
 		scenarioUserNodeIdx: index('scenario_user_node_idx').on(t.userId, t.nodeId),
+		// Difficulty is low-cardinality; useful on larger backlogs. `getScenarios`
+		// and `getRepBacklog` both accept a difficulty filter (scenarios.ts:229, 293).
+		scenarioUserDifficultyIdx: index('scenario_user_difficulty_idx').on(t.userId, t.difficulty),
 		difficultyCheck: check('scenario_difficulty_check', sql.raw(`"difficulty" IN (${inList(DIFFICULTY_VALUES)})`)),
 		phaseOfFlightCheck: check(
 			'scenario_phase_check',
@@ -395,7 +435,7 @@ export const studyPlan = studySchema.table(
 		id: text('id').primaryKey(),
 		userId: text('user_id')
 			.notNull()
-			.references(() => bauthUser.id, { onDelete: 'cascade' }),
+			.references(() => bauthUser.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
 		title: text('title').notNull(),
 		status: text('status').notNull().default(PLAN_STATUSES.ACTIVE),
 		certGoals: jsonb('cert_goals').$type<Cert[]>().notNull().default([]),
@@ -410,6 +450,12 @@ export const studyPlan = studySchema.table(
 	},
 	(t) => ({
 		planUserStatusIdx: index('plan_user_status_idx').on(t.userId, t.status),
+		// Partial UNIQUE: enforces "one active plan per user" at the DB level.
+		// Expressed in Drizzle so drizzle-kit tracks it like any other index;
+		// the old scripts/db/plan-active-unique.sql one-shot backfill is kept
+		// for existing environments but `bun run db push` now makes it
+		// redundant on fresh DBs.
+		planUserActiveUniq: uniqueIndex('plan_user_active_uniq').on(t.userId).where(sql`status = 'active'`),
 		statusCheck: check('plan_status_check', sql.raw(`"status" IN (${inList(PLAN_STATUS_VALUES)})`)),
 		depthCheck: check('plan_depth_check', sql.raw(`"depth_preference" IN (${inList(DEPTH_PREFERENCE_VALUES)})`)),
 		modeCheck: check('plan_mode_check', sql.raw(`"default_mode" IN (${inList(SESSION_MODE_VALUES)})`)),
@@ -433,10 +479,10 @@ export const session = studySchema.table(
 		id: text('id').primaryKey(),
 		userId: text('user_id')
 			.notNull()
-			.references(() => bauthUser.id, { onDelete: 'cascade' }),
+			.references(() => bauthUser.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
 		planId: text('plan_id')
 			.notNull()
-			.references(() => studyPlan.id, { onDelete: 'restrict' }),
+			.references(() => studyPlan.id, { onDelete: 'restrict', onUpdate: 'cascade' }),
 		mode: text('mode').notNull(),
 		focusOverride: text('focus_override'),
 		certOverride: text('cert_override'),
@@ -451,6 +497,20 @@ export const session = studySchema.table(
 		sessionUserStartedIdx: index('session_user_started_idx').on(t.userId, t.startedAt),
 		sessionPlanStartedIdx: index('session_plan_started_idx').on(t.planId, t.startedAt),
 		modeCheck: check('session_mode_check', sql.raw(`"mode" IN (${inList(SESSION_MODE_VALUES)})`)),
+		focusOverrideCheck: check(
+			'session_focus_override_check',
+			sql.raw(`"focus_override" IS NULL OR "focus_override" IN (${inList(DOMAIN_VALUES)})`),
+		),
+		certOverrideCheck: check(
+			'session_cert_override_check',
+			sql.raw(`"cert_override" IS NULL OR "cert_override" IN (${inList(CERT_VALUES)})`),
+		),
+		// Mirror study_plan.session_length range so a buggy override-assembly
+		// path can't insert out-of-range values on a session row.
+		sessionLengthCheck: check(
+			'session_session_length_check',
+			sql.raw(`"session_length" BETWEEN ${MIN_SESSION_LENGTH} AND ${MAX_SESSION_LENGTH}`),
+		),
 	}),
 );
 
@@ -467,8 +527,15 @@ export const sessionItemResult = studySchema.table(
 		sessionId: text('session_id')
 			.notNull()
 			.references(() => session.id, { onDelete: 'cascade' }),
-		/** Denormalized for per-user aggregate queries (streak). */
-		userId: text('user_id').notNull(),
+		/**
+		 * Denormalized for per-user aggregate queries (streak). FK is required
+		 * so the column cannot drift from `session.user_id`; the write path in
+		 * `sessions.ts` keeps the two consistent and the FK enforces it at the
+		 * storage layer. `cascade` matches every other user-scoped table.
+		 */
+		userId: text('user_id')
+			.notNull()
+			.references(() => bauthUser.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
 		slotIndex: smallint('slot_index').notNull(),
 		itemKind: text('item_kind').notNull(),
 		slice: text('slice').notNull(),
@@ -500,7 +567,11 @@ export const sessionItemResult = studySchema.table(
 		completedAt: timestamp('completed_at', { withTimezone: true }),
 	},
 	(t) => ({
-		sirSessionSlotIdx: index('sir_session_slot_idx').on(t.sessionId, t.slotIndex),
+		// UNIQUE on (session_id, slot_index) backs the atomic UPSERT in
+		// `recordItemResult` -- the enforcement for ADR 012's session-slot
+		// idempotency claim. Without this, two concurrent submits can both
+		// INSERT and produce a duplicate row. See ADR 012 appendix for context.
+		sirSessionSlotUnique: uniqueIndex('sir_session_slot_unique').on(t.sessionId, t.slotIndex),
 		sirUserCompletedIdx: index('sir_user_completed_idx').on(t.userId, t.completedAt),
 		// Rep-attempt aggregations filter on (userId, itemKind='rep', completedAt IS NOT NULL).
 		// A dedicated index keeps calibration / mastery / activity reads bounded after the

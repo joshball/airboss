@@ -1,5 +1,12 @@
 import { requireAuth } from '@ab/auth';
-import { archivePlan, createPlan, getActivePlan, NoActivePlanError, previewSession, startSession } from '@ab/bc-study';
+import {
+	createPlan,
+	DuplicateActivePlanError,
+	getActivePlan,
+	NoActivePlanError,
+	previewSession,
+	startSession,
+} from '@ab/bc-study';
 import {
 	CERT_VALUES,
 	type Cert,
@@ -14,7 +21,7 @@ import {
 	type SessionMode,
 } from '@ab/constants';
 import { createLogger } from '@ab/utils';
-import { fail, redirect } from '@sveltejs/kit';
+import { fail, isRedirect, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 
 const log = createLogger('study:session-start');
@@ -74,10 +81,7 @@ export const actions: Actions = {
 			const { session } = await startSession(user.id, { mode, focus, cert, seed });
 			throw redirect(303, ROUTES.SESSION(session.id));
 		} catch (err) {
-			// SvelteKit's `redirect` throw is itself captured here; rethrow.
-			if (err instanceof Response || (err && typeof err === 'object' && 'status' in err && 'location' in err)) {
-				throw err;
-			}
+			if (isRedirect(err)) throw err;
 			if (err instanceof NoActivePlanError) {
 				// Plan was archived between load and submit. Send the user back
 				// to the gallery rather than the full plan builder -- the preset
@@ -115,15 +119,13 @@ export const actions: Actions = {
 		}
 
 		try {
-			// Archive any active plan first so the preset-created plan is the
-			// one active plan. `createPlan` also archives inside its own tx;
-			// this is belt-and-braces for the case where the gallery was
-			// rendered stale (active plan created after the page loaded).
-			const existing = await getActivePlan(user.id);
-			if (existing) {
-				await archivePlan(existing.id, user.id);
-			}
-
+			// `createPlan` archives any existing active plan inside its own
+			// transaction, so there's no need for a pre-emptive archive here --
+			// that just widened the race window and duplicated work. The partial
+			// UNIQUE index on study_plan is the backstop; DuplicateActivePlanError
+			// surfaces only when a concurrent writer inserts between our archive
+			// and insert (another tab submitting a plan, back-to-back double
+			// submit). Handle it explicitly instead of collapsing to a 500.
 			await createPlan({
 				userId: user.id,
 				title: preset.label,
@@ -138,9 +140,17 @@ export const actions: Actions = {
 			const { session } = await startSession(user.id, { mode: preset.defaultMode });
 			throw redirect(303, ROUTES.SESSION(session.id));
 		} catch (err) {
-			// Rethrow SvelteKit redirects so the browser actually follows them.
-			if (err instanceof Response || (err && typeof err === 'object' && 'status' in err && 'location' in err)) {
-				throw err;
+			if (isRedirect(err)) throw err;
+			if (err instanceof DuplicateActivePlanError) {
+				return fail(409, {
+					error: 'Another active plan was set up in another tab. Refresh the page and try again.',
+				});
+			}
+			if (err instanceof NoActivePlanError) {
+				// Shouldn't happen on this path (we just created the plan), but
+				// guard for the window where the plan is archived by a concurrent
+				// writer between createPlan and startSession.
+				return fail(409, { error: 'Your active plan changed. Refresh the page and try again.' });
 			}
 			log.error(
 				'startFromPreset threw',

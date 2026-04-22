@@ -240,9 +240,14 @@ export async function getRecentActivity(
 	const averagePerDay = days === 0 ? 0 : total / days;
 
 	// Streak: walk backwards from today while both sources contribute zero.
-	// Reviews-only streak is also covered because attempts can be 0.
+	// Reviews-only streak is also covered because attempts can be 0. Grace:
+	// if nothing has happened yet today but yesterday had activity, start at
+	// yesterday so the streak doesn't flip to 0 overnight. Matches
+	// getStreakDays in sessions.ts + extendedStreak below.
+	const todayHasActivity = (reviewByDay.get(todayKey) ?? 0) + (attemptByDay.get(todayKey) ?? 0) > 0;
+	const yesterdayKey = utcDayKey(new Date(todayStart.getTime() - 24 * 60 * 60 * 1000));
 	let streakDays = 0;
-	let cursorKey = todayKey;
+	let cursorKey = todayHasActivity ? todayKey : yesterdayKey;
 	for (let i = 0; i < 366; i++) {
 		const inWindowDay = out.find((d) => d.day === cursorKey);
 		const reviewsHere = inWindowDay ? inWindowDay.reviews : (reviewByDay.get(cursorKey) ?? 0);
@@ -298,9 +303,14 @@ async function extendedStreak(userId: string, db: Db, now: Date): Promise<number
 	if (rows.length === 0) return 0;
 
 	const todayKey = utcDayKey(now);
-	let cursorKey = todayKey;
+	const yesterdayKey = utcDayKey(new Date(now.getTime() - 24 * 60 * 60 * 1000));
+	// Grace: if the first activity day is yesterday, start the walk there
+	// instead of today so a learner who hasn't yet opened the app this morning
+	// doesn't see their streak flip to 0. Matches getStreakDays in sessions.ts.
+	let cursorKey = rows[0]?.day === todayKey ? todayKey : yesterdayKey;
 	let streak = 0;
 	for (const row of rows) {
+		if (row.day > cursorKey) continue;
 		if (row.day === cursorKey) {
 			streak += 1;
 			const next = new Date(`${cursorKey}T00:00:00.000Z`);

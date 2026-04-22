@@ -15,7 +15,14 @@ import {
 	SCENARIO_STATUSES,
 	type ScenarioStatus,
 } from '@ab/constants';
+import { createLogger } from '@ab/utils';
 import type { PageServerLoad } from './$types';
+
+const log = createLogger('study:reps-browse');
+
+/** Legacy query-string name for `flight-phase`. Accepted for old bookmarks;
+ * TODO(retire): drop after 2026-07-01 once no logs show it being hit. */
+const LEGACY_PHASE_PARAM = 'phase';
 
 function narrow<T extends string>(value: string | null, allowed: readonly string[]): T | undefined {
 	if (!value) return undefined;
@@ -24,15 +31,29 @@ function narrow<T extends string>(value: string | null, allowed: readonly string
 
 export const load: PageServerLoad = async (event) => {
 	const user = requireAuth(event);
-	const { url } = event;
+	const { url, locals } = event;
 
 	const domain = narrow<Domain>(url.searchParams.get(QUERY_PARAMS.DOMAIN), DOMAIN_VALUES);
 	const difficulty = narrow<Difficulty>(url.searchParams.get(QUERY_PARAMS.DIFFICULTY), DIFFICULTY_VALUES);
 	// Accept both the new `flight-phase` param and the legacy `phase` form so
-	// old bookmarks keep working. New takes precedence when both are set.
-	const phaseOfFlight =
-		narrow<PhaseOfFlight>(url.searchParams.get(QUERY_PARAMS.FLIGHT_PHASE), PHASE_OF_FLIGHT_VALUES) ??
-		narrow<PhaseOfFlight>(url.searchParams.get('phase'), PHASE_OF_FLIGHT_VALUES);
+	// old bookmarks keep working. New takes precedence when both are set. Log
+	// any legacy usage so we have retirement signal; warn on mismatches.
+	const newPhase = narrow<PhaseOfFlight>(url.searchParams.get(QUERY_PARAMS.FLIGHT_PHASE), PHASE_OF_FLIGHT_VALUES);
+	const legacyPhase = narrow<PhaseOfFlight>(url.searchParams.get(LEGACY_PHASE_PARAM), PHASE_OF_FLIGHT_VALUES);
+	if (legacyPhase && !newPhase) {
+		log.info('legacy ?phase= used on /reps/browse', {
+			requestId: locals.requestId,
+			userId: user.id,
+			metadata: { legacyPhase },
+		});
+	} else if (legacyPhase && newPhase && legacyPhase !== newPhase) {
+		log.warn('legacy ?phase= disagrees with ?flight-phase= on /reps/browse; using flight-phase', {
+			requestId: locals.requestId,
+			userId: user.id,
+			metadata: { legacyPhase, newPhase },
+		});
+	}
+	const phaseOfFlight = newPhase ?? legacyPhase;
 	const sourceType = narrow<ContentSource>(url.searchParams.get(QUERY_PARAMS.SOURCE), CONTENT_SOURCE_VALUES);
 	const status =
 		narrow<ScenarioStatus>(url.searchParams.get(QUERY_PARAMS.STATUS), SCENARIO_STATUS_VALUES) ??

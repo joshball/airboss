@@ -45,6 +45,8 @@ export const QUERY_PARAMS = {
 	STATUS: 'status',
 	/** Memory-card type filter. */
 	CARD_TYPE: 'type',
+	/** Comma-separated tag carry-over ("save and add another" flow). */
+	TAGS: 'tags',
 	/** Free-text search query. */
 	SEARCH: 'q',
 	/** 1-based page number for paginated browse. */

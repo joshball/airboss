@@ -4,6 +4,7 @@ import {
 	addSkipDomain,
 	addSkipNode,
 	archivePlan,
+	DomainOverlapError,
 	getPlan,
 	PlanNotFoundError,
 	removeSkipDomain,
@@ -55,7 +56,8 @@ export const actions: Actions = {
 		const lengthRaw = String(form.get('sessionLength') ?? '10');
 
 		const certGoals: Cert[] = certGoalsRaw.filter((v): v is Cert => CERT_VALUES.includes(v as Cert));
-		if (certGoals.length === 0) return fail(400, { error: 'Pick at least one certification.' });
+		// Empty certGoals is a first-class plan state (ADR 012). Authors who want
+		// a cert-agnostic plan check the "General practice" option in the form.
 
 		const focusDomains: Domain[] = focusDomainsRaw.filter((v): v is Domain => DOMAIN_VALUES.includes(v as Domain));
 		const skipDomains: Domain[] = skipDomainsRaw.filter((v): v is Domain => DOMAIN_VALUES.includes(v as Domain));
@@ -77,12 +79,15 @@ export const actions: Actions = {
 			});
 		} catch (err) {
 			if (err instanceof PlanNotFoundError) throw error(404, { message: 'Plan not found' });
+			if (err instanceof DomainOverlapError) {
+				return fail(400, { error: 'A domain can be in focus or skip, not both.' });
+			}
 			log.error(
 				'updatePlan threw',
 				{ requestId: locals.requestId, userId: user.id, metadata: { planId: params.id } },
 				err instanceof Error ? err : undefined,
 			);
-			return fail(400, { error: err instanceof Error ? err.message : 'Could not save plan.' });
+			return fail(500, { error: 'Could not save plan. Try again.' });
 		}
 		return { success: true as const };
 	},

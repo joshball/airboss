@@ -27,7 +27,10 @@ export const planTitleSchema = z.string().trim().min(1).max(200);
 export const createPlanSchema = z
 	.object({
 		title: planTitleSchema.optional(),
-		certGoals: z.array(planEnum.cert).min(1, 'pick at least one certification').max(4),
+		// Empty certGoals is a first-class plan state (ADR 012): cert-agnostic
+		// plans produce sessions full of reps without any cert filter. Upper bound
+		// stays at 4 so authors can't list every cert.
+		certGoals: z.array(planEnum.cert).max(4).default([]),
 		focusDomains: z.array(planEnum.domain).max(5).default([]),
 		skipDomains: z.array(planEnum.domain).max(14).default([]),
 		skipNodes: z.array(z.string().trim().min(1).max(100)).max(200).default([]),
@@ -53,7 +56,7 @@ export const createPlanSchema = z
 export const updatePlanSchema = z
 	.object({
 		title: planTitleSchema.optional(),
-		certGoals: z.array(planEnum.cert).min(1).max(4).optional(),
+		certGoals: z.array(planEnum.cert).max(4).optional(),
 		focusDomains: z.array(planEnum.domain).max(5).optional(),
 		skipDomains: z.array(planEnum.domain).max(14).optional(),
 		skipNodes: z.array(z.string().trim().min(1).max(100)).max(200).optional(),

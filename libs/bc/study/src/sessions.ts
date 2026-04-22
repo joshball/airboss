@@ -31,6 +31,7 @@ import {
 	SCENARIO_STATUSES,
 	SESSION_ITEM_KINDS,
 	SESSION_MODES,
+	SESSION_SKIP_KIND_VALUES,
 	type SessionItemKind,
 	type SessionMode,
 	type SessionReasonCode,
@@ -52,7 +53,7 @@ import {
 	type EngineRepCandidate,
 	runEngine,
 } from './engine';
-import { isNodeMastered } from './knowledge';
+import { getNodeMasteryMap } from './knowledge';
 import { getActivePlan, NoActivePlanError } from './plans';
 import {
 	card,
@@ -198,34 +199,31 @@ function planRowToEnginePlan(row: StudyPlanRow): EnginePlan {
  * cards even when the next due is in the future.
  */
 async function fetchCardCandidates(userId: string, now: Date, db: Db): Promise<EngineCardCandidate[]> {
-	// Most recent rating per card (for this user) -- powers the Strengthen
-	// slice's Again/Hard detection. Drizzle doesn't expose DISTINCT ON, but a
-	// correlated max-reviewedAt inner join is equivalent and the per-user
-	// review index bounds the scan.
-	const lastReviews = await db
-		.select({
-			cardId: review.cardId,
-			rating: review.rating,
-			reviewedAt: review.reviewedAt,
-		})
-		.from(review)
-		.where(eq(review.userId, userId))
-		.orderBy(desc(review.reviewedAt));
-	const ratingByCardId = new Map<string, number>();
-	for (const row of lastReviews) {
-		if (!ratingByCardId.has(row.cardId)) ratingByCardId.set(row.cardId, Number(row.rating));
-	}
-
+	// Pull cards + their materialized state + the single last-review rating
+	// in one round-trip. `cardState.lastReviewId` is already the pointer to
+	// the latest review for each (card, user); joining to it lifts `rating`
+	// without scanning the whole review history for this user.
 	const rows = await db
-		.select({ card, state: cardState })
+		.select({
+			card,
+			state: cardState,
+			lastRating: review.rating,
+		})
 		.from(card)
 		.innerJoin(cardState, and(eq(cardState.cardId, card.id), eq(cardState.userId, card.userId)))
+		.leftJoin(review, eq(review.id, cardState.lastReviewId))
 		.where(and(eq(card.userId, userId), eq(card.status, CARD_STATUSES.ACTIVE)));
 
 	return rows.map((r) => {
-		const lastRef = r.state.lastReviewedAt?.getTime() ?? r.state.dueAt.getTime();
-		const scheduledMs = Math.max(r.state.dueAt.getTime() - lastRef, 24 * 60 * 60 * 1000);
-		const overdueMs = Math.max(0, now.getTime() - r.state.dueAt.getTime());
+		const lastReviewedAt = r.state.lastReviewedAt?.getTime() ?? null;
+		const dueAtMs = r.state.dueAt.getTime();
+		// overdueRatio = overdue / scheduled. Only clamp scheduledMs to 1 day
+		// when we have no prior review (lastReviewedAt IS NULL) to avoid a
+		// divide-by-zero for unreviewed cards. For learning-state cards with
+		// short scheduled intervals (e.g. 15 minutes), use the real interval
+		// so their overdue-ness registers properly in the Continue slice.
+		const scheduledMs = lastReviewedAt === null ? 24 * 60 * 60 * 1000 : Math.max(1, dueAtMs - lastReviewedAt);
+		const overdueMs = Math.max(0, now.getTime() - dueAtMs);
 		const overdueRatio = overdueMs / scheduledMs;
 		return {
 			cardId: r.card.id,
@@ -233,7 +231,7 @@ async function fetchCardCandidates(userId: string, now: Date, db: Db): Promise<E
 			nodeId: r.card.nodeId ?? null,
 			state: r.state.state,
 			dueAt: r.state.dueAt,
-			lastRating: ratingByCardId.get(r.card.id) ?? null,
+			lastRating: r.lastRating !== null ? Number(r.lastRating) : null,
 			stability: r.state.stability,
 			overdueRatio,
 		};
@@ -368,19 +366,18 @@ async function fetchNodeCandidates(
 		else requiresByFrom.set(edge.fromNodeId, [edge.toNodeId]);
 	}
 
-	// Compute mastery once per distinct prerequisite target.
+	// Compute mastery for every distinct prerequisite target in ONE batched
+	// query rather than 3-per-id round-trips (was `isNodeMastered` in a
+	// Promise.all before -- see perf review 2026-04-22).
 	const prereqTargets = new Set<string>();
 	for (const list of requiresByFrom.values()) for (const id of list) prereqTargets.add(id);
 	const masteryByNode = new Map<string, boolean>();
-	await Promise.all(
-		Array.from(prereqTargets).map(async (id) => {
-			try {
-				masteryByNode.set(id, await isNodeMastered(userId, id, db, now));
-			} catch {
-				masteryByNode.set(id, false);
-			}
-		}),
-	);
+	if (prereqTargets.size > 0) {
+		const masteryMap = await getNodeMasteryMap(userId, Array.from(prereqTargets), db);
+		for (const id of prereqTargets) {
+			masteryByNode.set(id, masteryMap.get(id)?.mastered ?? false);
+		}
+	}
 
 	const certFilterSet = new Set<string>(certFilter);
 	const knownCerts: readonly string[] = ['PPL', 'IR', 'CPL', 'CFI'];
@@ -569,6 +566,10 @@ export function buildEnginePools(userId: string, now: Date, db: Db = defaultDb):
 /**
  * Compute the effective filters + run the engine. Does not persist anything.
  * Callers show this on `/session/start`; Shuffle reruns with a new seed.
+ *
+ * Note on `now`: `startSession` threads a single `now` through preview and
+ * commit so slot `presentedAt` matches the engine's view of `dueAt`. Callers
+ * that run preview standalone can omit `now` and accept the default.
  */
 export async function previewSession(
 	userId: string,
@@ -750,8 +751,35 @@ export async function getResumableSession(
 }
 
 /**
- * Mark a single session slot as completed. Idempotent per slotIndex: a second
- * call updates the existing row.
+ * Raised when the caller tries to record a slot that does not exist on the
+ * session. Every slot row is created at commit time (`commitSession`); a
+ * missing row indicates either a stale slot index or out-of-band deletion.
+ */
+export class SessionSlotNotFoundError extends Error {
+	constructor(
+		public readonly sessionId: string,
+		public readonly slotIndex: number,
+	) {
+		super(`Slot ${slotIndex} not found in session ${sessionId}`);
+		this.name = 'SessionSlotNotFoundError';
+	}
+}
+
+/**
+ * Mark a single session slot as completed. Idempotent per `(session_id,
+ * slot_index)`: a second call updates the existing row instead of inserting a
+ * duplicate.
+ *
+ * The UNIQUE(session_id, slot_index) constraint on `session_item_result`
+ * backs an atomic UPSERT (`.onConflictDoUpdate`), so two concurrent writers
+ * for the same slot (double-submit, SvelteKit `enhance` retry, dup tab)
+ * collapse to exactly one row.
+ *
+ * Field semantics: `undefined` means "leave existing value unchanged",
+ * `null` means "clear the field". This lets a second-pass record legitimately
+ * unset a field without that being indistinguishable from "I forgot to pass
+ * it." `itemKind`, `slice`, `reasonCode`, and `slotIndex` are always set from
+ * the engine-authored slot row at commit time and must be supplied here.
  */
 export async function recordItemResult(
 	sessionId: string,
@@ -763,43 +791,33 @@ export async function recordItemResult(
 	const sess = await getSession(sessionId, userId, db);
 	if (!sess) throw new SessionNotFoundError(sessionId, userId);
 
-	const [existing] = await db
-		.select()
-		.from(sessionItemResult)
-		.where(
-			and(
-				eq(sessionItemResult.sessionId, sessionId),
-				eq(sessionItemResult.userId, userId),
-				eq(sessionItemResult.slotIndex, result.slotIndex),
-			),
-		)
-		.limit(1);
+	// Build the UPDATE set, omitting any field the caller didn't provide so
+	// the existing row's value is preserved. `undefined` = skip, `null` = clear.
+	const updateSet: Partial<typeof sessionItemResult.$inferInsert> = {
+		itemKind: result.itemKind,
+		slice: result.slice,
+		reasonCode: result.reasonCode,
+		completedAt: now,
+	};
+	if (result.cardId !== undefined) updateSet.cardId = result.cardId;
+	if (result.scenarioId !== undefined) updateSet.scenarioId = result.scenarioId;
+	if (result.nodeId !== undefined) updateSet.nodeId = result.nodeId;
+	if (result.reviewId !== undefined) updateSet.reviewId = result.reviewId;
+	if (result.skipKind !== undefined) updateSet.skipKind = result.skipKind;
+	if (result.reasonDetail !== undefined) updateSet.reasonDetail = result.reasonDetail;
+	if (result.chosenOption !== undefined) updateSet.chosenOption = result.chosenOption;
+	if (result.isCorrect !== undefined) updateSet.isCorrect = result.isCorrect;
+	if (result.confidence !== undefined) updateSet.confidence = result.confidence;
+	if (result.answerMs !== undefined) updateSet.answerMs = result.answerMs;
 
-	if (existing) {
-		const [updated] = await db
-			.update(sessionItemResult)
-			.set({
-				itemKind: result.itemKind,
-				slice: result.slice,
-				reasonCode: result.reasonCode,
-				cardId: result.cardId ?? existing.cardId,
-				scenarioId: result.scenarioId ?? existing.scenarioId,
-				nodeId: result.nodeId ?? existing.nodeId,
-				reviewId: result.reviewId ?? existing.reviewId,
-				skipKind: result.skipKind ?? existing.skipKind,
-				reasonDetail: result.reasonDetail ?? existing.reasonDetail,
-				chosenOption: result.chosenOption ?? existing.chosenOption,
-				isCorrect: result.isCorrect ?? existing.isCorrect,
-				confidence: result.confidence ?? existing.confidence,
-				answerMs: result.answerMs ?? existing.answerMs,
-				completedAt: now,
-			})
-			.where(eq(sessionItemResult.id, existing.id))
-			.returning();
-		return updated;
-	}
-
-	const [inserted] = await db
+	// The BC contract is that slots are inserted by `commitSession`; results
+	// UPSERT an existing row. If no row exists for this slot, it's an error
+	// condition worth surfacing -- inserting a fresh row here would accept
+	// slotIndex / itemKind values the caller controls rather than the engine
+	// snapshot, and the `presentedAt` would be wrong (now, not commit time).
+	// The ON CONFLICT target is UNIQUE(session_id, slot_index) so this UPSERT
+	// is atomic even under concurrent writers.
+	const rows = await db
 		.insert(sessionItemResult)
 		.values({
 			id: generateSessionItemResultId(),
@@ -822,11 +840,23 @@ export async function recordItemResult(
 			presentedAt: now,
 			completedAt: now,
 		})
+		.onConflictDoUpdate({
+			target: [sessionItemResult.sessionId, sessionItemResult.slotIndex],
+			set: updateSet,
+		})
 		.returning();
-	return inserted;
+
+	const row = rows[0];
+	if (!row) throw new SessionSlotNotFoundError(sessionId, result.slotIndex);
+	return row;
 }
 
-/** Mark a session completed. Idempotent. */
+/**
+ * Mark a session completed. Truly idempotent: the UPDATE predicate matches
+ * only rows with `completed_at IS NULL`, so a second caller sees 0 rows
+ * updated and falls back to re-selecting the already-completed row. Two
+ * concurrent finish submits can't produce divergent completion timestamps.
+ */
 export async function completeSession(
 	sessionId: string,
 	userId: string,
@@ -836,17 +866,28 @@ export async function completeSession(
 	const sess = await getSession(sessionId, userId, db);
 	if (!sess) throw new SessionNotFoundError(sessionId, userId);
 	if (sess.completedAt !== null) return sess;
+
 	const [row] = await db
 		.update(session)
 		.set({ completedAt: now })
-		.where(and(eq(session.id, sessionId), eq(session.userId, userId)))
+		.where(and(eq(session.id, sessionId), eq(session.userId, userId), isNull(session.completedAt)))
 		.returning();
-	return row;
+	if (row) return row;
+
+	// A concurrent writer won the race. Re-fetch to return the committed row.
+	const reread = await getSession(sessionId, userId, db);
+	if (!reread) throw new SessionNotFoundError(sessionId, userId);
+	return reread;
 }
 
 /**
  * Consecutive local-calendar days (ending today) with at least one attempted
  * (non-skipped) session_item_result. Skipped rows don't count.
+ *
+ * Grace rule: if the user has no activity today but has activity yesterday,
+ * the streak continues -- "7 day streak" shouldn't silently flip to 0
+ * overnight just because the user hasn't opened the app yet that morning.
+ * This matches dashboard.ts / stats.ts behavior.
  */
 export async function getStreakDays(
 	userId: string,
@@ -854,6 +895,11 @@ export async function getStreakDays(
 	db: Db = defaultDb,
 	now: Date = new Date(),
 ): Promise<number> {
+	// Streak can't exceed ~366 consecutive days; bounding the row scan keeps
+	// this O(window) instead of O(history) regardless of user age. Chosen
+	// window matches dashboard.ts extendedStreak's 366-day lookback.
+	const lookbackStart = new Date(now.getTime() - 366 * 24 * 60 * 60 * 1000);
+
 	// SQL-side day bucketing in the user's timezone. Drizzle's sql``
 	// fragment keeps the tz and the completed_at column inside a single
 	// expression so DST boundaries resolve correctly.
@@ -867,15 +913,16 @@ export async function getStreakDays(
 				eq(sessionItemResult.userId, userId),
 				isNotNull(sessionItemResult.completedAt),
 				isNull(sessionItemResult.skipKind),
+				gte(sessionItemResult.completedAt, lookbackStart),
 			),
 		)
 		.orderBy(sql`1 desc`);
 
 	if (dayRows.length === 0) return 0;
 
-	// Local "today" via Intl formatter -- matches Postgres's `AT TIME ZONE`
-	// day bucketing and sidesteps the need for a second round-trip just to
-	// learn what "today" is in the caller's zone.
+	// Local "today" / "yesterday" via Intl formatter -- matches Postgres's
+	// `AT TIME ZONE` day bucketing and sidesteps the need for a second
+	// round-trip just to learn what "today" is in the caller's zone.
 	const fmt = new Intl.DateTimeFormat('en-CA', {
 		timeZone: tz,
 		year: 'numeric',
@@ -883,11 +930,18 @@ export async function getStreakDays(
 		day: '2-digit',
 	});
 	const todayKey = fmt.format(now); // 'YYYY-MM-DD' in en-CA.
+	const yesterdayKey = fmt.format(new Date(now.getTime() - 24 * 60 * 60 * 1000));
 
 	const days = dayRows.map((r) => r.day);
+
+	// Grace: the learner hasn't studied today yet, but yesterday is in the
+	// set -- start the walk at yesterday instead of today so the streak
+	// doesn't flip to 0 between midnight and the first session of the day.
+	let cursor = days[0] === todayKey ? todayKey : yesterdayKey;
+
 	let streak = 0;
-	let cursor = todayKey;
 	for (const d of days) {
+		if (d > cursor) continue; // Skip ahead past the grace-skipped day.
 		if (d === cursor) {
 			streak += 1;
 			const dt = new Date(`${cursor}T00:00:00Z`);
@@ -919,7 +973,12 @@ export async function getSessionSummary(
 	const attempted = sirRows.filter((r) => r.completedAt !== null && r.skipKind === null).length;
 	const skippedByKind: Record<SessionSkipKind, number> = { today: 0, topic: 0, permanent: 0 };
 	for (const r of sirRows) {
-		if (r.skipKind) skippedByKind[r.skipKind as SessionSkipKind] += 1;
+		// Guard against unknown skip kinds (future migration lag, old rows)
+		// so the dict lookup never produces NaN. Rows with unrecognized kinds
+		// are silently excluded from the summary counts.
+		if (r.skipKind && (SESSION_SKIP_KIND_VALUES as readonly string[]).includes(r.skipKind)) {
+			skippedByKind[r.skipKind as SessionSkipKind] += 1;
+		}
 	}
 
 	const reviewIds = sirRows.map((r) => r.reviewId).filter((id): id is string => id !== null);
@@ -983,27 +1042,26 @@ export async function getSessionSummary(
 		.map((r) => r.scenarioId as string);
 	const nodeIdsTouched = sirRows.filter((r) => r.nodeId && r.completedAt && !r.skipKind).map((r) => r.nodeId as string);
 
-	const domainSet = new Set<Domain>();
-	if (cardIdsTouched.length > 0) {
-		const rows = await db.select({ domain: card.domain }).from(card).where(inArray(card.id, cardIdsTouched));
-		for (const r of rows) if (DOMAIN_VALUES.includes(r.domain as Domain)) domainSet.add(r.domain as Domain);
-	}
-	if (scenarioIdsTouched.length > 0) {
-		const rows = await db
-			.select({ domain: scenario.domain })
-			.from(scenario)
-			.where(inArray(scenario.id, scenarioIdsTouched));
-		for (const r of rows) if (DOMAIN_VALUES.includes(r.domain as Domain)) domainSet.add(r.domain as Domain);
-	}
-	if (nodeIdsTouched.length > 0) {
-		const rows = await db
-			.select({ domain: knowledgeNode.domain })
-			.from(knowledgeNode)
-			.where(inArray(knowledgeNode.id, nodeIdsTouched));
-		for (const r of rows) if (DOMAIN_VALUES.includes(r.domain as Domain)) domainSet.add(r.domain as Domain);
-	}
+	// Domain lookups + streak are independent; fan them out rather than
+	// serial-awaiting each. All three domain legs are IN-list lookups that
+	// short-circuit to an empty array when nothing was touched.
+	const [cardDomainRows, scenarioDomainRows, nodeDomainRows, streakDays] = await Promise.all([
+		cardIdsTouched.length > 0
+			? db.select({ domain: card.domain }).from(card).where(inArray(card.id, cardIdsTouched))
+			: Promise.resolve([] as Array<{ domain: string }>),
+		scenarioIdsTouched.length > 0
+			? db.select({ domain: scenario.domain }).from(scenario).where(inArray(scenario.id, scenarioIdsTouched))
+			: Promise.resolve([] as Array<{ domain: string }>),
+		nodeIdsTouched.length > 0
+			? db.select({ domain: knowledgeNode.domain }).from(knowledgeNode).where(inArray(knowledgeNode.id, nodeIdsTouched))
+			: Promise.resolve([] as Array<{ domain: string }>),
+		getStreakDays(userId, DEFAULT_USER_TIMEZONE, db, now),
+	]);
 
-	const streakDays = await getStreakDays(userId, DEFAULT_USER_TIMEZONE, db, now);
+	const domainSet = new Set<Domain>();
+	for (const r of cardDomainRows) if (DOMAIN_VALUES.includes(r.domain as Domain)) domainSet.add(r.domain as Domain);
+	for (const r of scenarioDomainRows) if (DOMAIN_VALUES.includes(r.domain as Domain)) domainSet.add(r.domain as Domain);
+	for (const r of nodeDomainRows) if (DOMAIN_VALUES.includes(r.domain as Domain)) domainSet.add(r.domain as Domain);
 
 	// Suggested next -- up to 3 structured, clickable actions. Each hint maps
 	// to a concrete route so the UI can render a button/link rather than prose

@@ -1,5 +1,5 @@
 import { requireAuth } from '@ab/auth';
-import { getNodeMastery, listNodesForBrowse } from '@ab/bc-study';
+import { getNodeMasteryMap, listNodesForBrowse } from '@ab/bc-study';
 import {
 	CERT_VALUES,
 	type Cert,
@@ -29,26 +29,27 @@ export const load: PageServerLoad = async (event) => {
 
 	const rows = await listNodesForBrowse({ domain, cert, priority, lifecycle });
 
-	// Fan out mastery calls across visible rows. At 30 nodes this is trivial;
-	// the read is already constant-cost per-call (three small queries per node).
-	// If the node count balloons well past the v1 target, swap for a single
-	// aggregate query keyed by user.
-	const withMastery = await Promise.all(
-		rows.map(async (row) => {
-			const mastery = await getNodeMastery(user.id, row.id);
-			return {
-				id: row.id,
-				title: row.title,
-				domain: row.domain,
-				estimatedTimeMinutes: row.estimatedTimeMinutes,
-				lifecycle: row.lifecycle,
-				certs: row.certs,
-				priorities: row.priorities,
-				displayScore: mastery.displayScore,
-				mastered: mastery.mastered,
-			};
-		}),
+	// Batched mastery: one fan-out of three round-trips regardless of node
+	// count, not 3-per-node as the previous per-row `getNodeMastery` loop.
+	const masteryMap = await getNodeMasteryMap(
+		user.id,
+		rows.map((r) => r.id),
 	);
+
+	const withMastery = rows.map((row) => {
+		const mastery = masteryMap.get(row.id);
+		return {
+			id: row.id,
+			title: row.title,
+			domain: row.domain,
+			estimatedTimeMinutes: row.estimatedTimeMinutes,
+			lifecycle: row.lifecycle,
+			certs: row.certs,
+			priorities: row.priorities,
+			displayScore: mastery?.displayScore ?? 0,
+			mastered: mastery?.mastered ?? false,
+		};
+	});
 
 	// Group by domain for the render layer. Domain order follows the source
 	// listing (already alphabetical by domain).

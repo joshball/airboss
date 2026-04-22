@@ -38,12 +38,10 @@ export const actions: Actions = {
 		const lengthRaw = String(form.get('sessionLength') ?? '10');
 
 		const certGoals: Cert[] = certGoalsRaw.filter((v): v is Cert => CERT_VALUES.includes(v as Cert));
-		if (certGoals.length === 0) {
-			return fail(400, {
-				error: 'Pick at least one certification.',
-				values: { title, certGoals: certGoalsRaw, focusDomains: focusDomainsRaw, skipDomains: skipDomainsRaw },
-			});
-		}
+		// Empty certGoals is a first-class plan state (ADR 012): a cert-agnostic
+		// plan just means the engine runs without a cert filter. The UI surfaces
+		// an explicit "General practice, no specific cert" option alongside the
+		// cert checkboxes so authors can opt into this deliberately.
 
 		const focusDomains: Domain[] = focusDomainsRaw.filter((v): v is Domain => DOMAIN_VALUES.includes(v as Domain));
 		const skipDomains: Domain[] = skipDomainsRaw.filter((v): v is Domain => DOMAIN_VALUES.includes(v as Domain));

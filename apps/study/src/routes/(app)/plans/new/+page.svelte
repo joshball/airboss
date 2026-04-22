@@ -70,7 +70,10 @@ const seedSkip = $derived(new Set((form?.values?.skipDomains ?? []) as string[])
 
 		<fieldset>
 			<legend>Certifications you're studying toward</legend>
-			<p class="help">Pick one or more. Items shown will be scoped to these certs.</p>
+			<p class="help">
+				Pick one or more, or leave all unchecked for general practice across every domain. Items shown will be scoped
+				to the selected certs.
+			</p>
 			<div class="choice-row">
 				{#each CERT_VALUES as cert (cert)}
 					<label class="choice">
@@ -79,6 +82,9 @@ const seedSkip = $derived(new Set((form?.values?.skipDomains ?? []) as string[])
 					</label>
 				{/each}
 			</div>
+			<p class="help subtle">
+				No cert selected = cert-agnostic plan (general practice, no filter). Matches the "Quick reps" preset shape.
+			</p>
 		</fieldset>
 
 		<fieldset>
@@ -203,6 +209,12 @@ const seedSkip = $derived(new Set((form?.values?.skipDomains ?? []) as string[])
 		margin: 0;
 		color: var(--ab-color-fg-subtle);
 		font-size: var(--ab-font-size-sm);
+	}
+
+	.help.subtle {
+		color: #94a3b8;
+		font-size: 0.75rem;
+		font-style: italic;
 	}
 
 	input[type='text'] {

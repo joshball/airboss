@@ -109,15 +109,21 @@ interface RawPoint {
  * Date filtering is applied in-memory after the union because Drizzle's
  * unionAll doesn't compose cleanly with a moving window on two different
  * timestamp columns -- the memory cost is bounded by the per-user indexes.
+ *
+ * When a domain is supplied, it's pushed down into each leg's WHERE so the
+ * per-domain calibration path doesn't pull every row into memory just to
+ * filter in-JS.
  */
 async function loadPoints(
 	userId: string,
 	range: { start?: Date; end?: Date } | undefined,
 	db: Db,
+	domain?: Domain,
 ): Promise<RawPoint[]> {
 	const reviewClauses = [eq(review.userId, userId), isNotNull(review.confidence)];
 	if (range?.start) reviewClauses.push(gte(review.reviewedAt, range.start));
 	if (range?.end) reviewClauses.push(lte(review.reviewedAt, range.end));
+	if (domain) reviewClauses.push(eq(card.domain, domain));
 
 	// Rep points now live on session_item_result rows where item_kind = 'rep'.
 	// A row counts when it's completed with a real answer (skipKind IS NULL) and
@@ -133,6 +139,7 @@ async function loadPoints(
 	];
 	if (range?.start) repClauses.push(gte(sessionItemResult.completedAt, range.start));
 	if (range?.end) repClauses.push(lte(sessionItemResult.completedAt, range.end));
+	if (domain) repClauses.push(eq(scenario.domain, domain));
 
 	const [reviewRows, repRows] = await Promise.all([
 		db
@@ -256,15 +263,17 @@ export async function getCalibration(
 	opts: { domain?: Domain; range?: { start?: Date; end?: Date } } = {},
 	db: Db = defaultDb,
 ): Promise<CalibrationResult> {
-	const points = await loadPoints(userId, opts.range, db);
-	const filtered = opts.domain ? points.filter((p) => p.domain === opts.domain) : points;
-
-	const overallBuckets = bucket(filtered);
-	const totalCount = filtered.length;
+	// When a domain filter is set, push it into the SQL predicates rather than
+	// re-walking the full union in JS. The byDomain breakdown below still runs
+	// across whatever points came back -- with a domain filter that's just the
+	// one domain, which is the right shape.
+	const points = await loadPoints(userId, opts.range, db, opts.domain);
+	const overallBuckets = bucket(points);
+	const totalCount = points.length;
 	const overallScore = score(overallBuckets);
 
 	const byDomain = new Map<string, RawPoint[]>();
-	for (const p of filtered) {
+	for (const p of points) {
 		const list = byDomain.get(p.domain);
 		if (list) list.push(p);
 		else byDomain.set(p.domain, [p]);

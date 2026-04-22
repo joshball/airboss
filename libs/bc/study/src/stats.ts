@@ -76,9 +76,15 @@ async function computeStreakDays(userId: string, db: Db, now: Date): Promise<num
 
 	if (rows.length === 0) return 0;
 
+	const todayKey = utcDayKey(now);
+	const yesterdayKey = utcDayKey(new Date(now.getTime() - 24 * 60 * 60 * 1000));
+	// Grace: no activity today yet but yesterday counts -- keep the streak
+	// intact. Matches getStreakDays in sessions.ts / extendedStreak in dashboard.ts.
+	let cursorKey = rows[0]?.day === todayKey ? todayKey : yesterdayKey;
+
 	let streak = 0;
-	let cursorKey = utcDayKey(now);
 	for (const row of rows) {
+		if (row.day > cursorKey) continue;
 		if (row.day === cursorKey) {
 			streak++;
 			const next = new Date(`${cursorKey}T00:00:00.000Z`);

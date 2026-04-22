@@ -153,8 +153,28 @@ export function findRequiresCycle(
 	return null;
 }
 
-/** Upsert a single knowledge_node row. Callers should batch in a transaction. */
+/**
+ * Upsert a single knowledge_node row. Callers should batch in a transaction.
+ *
+ * When `contentHash` is supplied and differs from the stored value, `version`
+ * is bumped by one; callers can then ask "did this user's last completion
+ * happen against the current version?" without a full diff of `contentMd`.
+ * Idempotent: re-running the seed on unchanged content leaves `version`
+ * alone. Callers who don't track content hash (migrations, back-compat) can
+ * leave `contentHash` undefined; nothing about the row changes besides
+ * `updatedAt`.
+ */
 export async function upsertKnowledgeNode(row: NewKnowledgeNodeRow, db: Db = defaultDb): Promise<KnowledgeNodeRow> {
+	const nextHash = row.contentHash ?? null;
+	// Only bump `version` when the caller supplied a hash AND it differs from
+	// whatever's stored. `coalesce` handles the case where the old row has no
+	// hash recorded yet (first seed after the column landed).
+	const nextVersion = sql<number>`CASE
+			WHEN ${nextHash}::text IS NULL THEN ${knowledgeNode.version}
+			WHEN coalesce(${knowledgeNode.contentHash}, '') = ${nextHash} THEN ${knowledgeNode.version}
+			ELSE ${knowledgeNode.version} + 1
+		END`;
+
 	const [inserted] = await db
 		.insert(knowledgeNode)
 		.values(row)
@@ -178,6 +198,8 @@ export async function upsertKnowledgeNode(row: NewKnowledgeNodeRow, db: Db = def
 				assessmentMethods: row.assessmentMethods ?? [],
 				masteryCriteria: row.masteryCriteria ?? null,
 				contentMd: row.contentMd,
+				contentHash: nextHash,
+				version: nextVersion,
 				updatedAt: new Date(),
 			},
 		})
@@ -200,11 +222,21 @@ export async function replaceNodeEdges(
 	await db.transaction(async (tx) => {
 		await tx.delete(knowledgeEdge).where(eq(knowledgeEdge.fromNodeId, fromNodeId));
 		if (edges.length === 0) return;
+		// Resolve `target_exists` at insert time using an EXISTS subselect so
+		// new edges don't have to wait for `refreshEdgeTargetExists` to flip
+		// -- a node authored between replaceNodeEdges and refresh otherwise
+		// shows a false "gap" banner until the next full build.
+		const targetIds = Array.from(new Set(edges.map((e) => e.toNodeId)));
+		const existingRows = await tx
+			.select({ id: knowledgeNode.id })
+			.from(knowledgeNode)
+			.where(inArray(knowledgeNode.id, targetIds));
+		const existing = new Set(existingRows.map((r) => r.id));
 		const values: NewKnowledgeEdgeRow[] = edges.map((e) => ({
 			fromNodeId,
 			toNodeId: e.toNodeId,
 			edgeType: e.edgeType,
-			targetExists: false,
+			targetExists: existing.has(e.toNodeId),
 		}));
 		await tx.insert(knowledgeEdge).values(values).onConflictDoNothing();
 	});
@@ -661,11 +693,16 @@ export function computeDisplayScore(
  * `mastered`, `inProgress` (has cards or rep attempts attached but gates fail),
  * or `untouched` (no attached signal at all). The label is already reduced for
  * the aggregators -- callers don't need to re-run the dual-gate rules.
+ *
+ * `displayScore` matches `computeDisplayScore(cards, reps)` exactly, included
+ * so callers who need the progress-bar number (e.g. `/knowledge` browse) don't
+ * have to call `getNodeMastery` per-row to get it.
  */
-interface NodeMasterySnapshot {
+export interface NodeMasterySnapshot {
 	nodeId: string;
 	mastered: boolean;
 	inProgress: boolean;
+	displayScore: number;
 }
 
 /**
@@ -685,7 +722,7 @@ interface NodeMasterySnapshot {
  *   - `mastered` iff both applicable gates pass AND at least one gate applied.
  *   - `inProgress` iff the node is not mastered AND (cardsTotal > 0 OR repsTotal > 0).
  */
-async function getNodeMasteryMap(
+export async function getNodeMasteryMap(
 	userId: string,
 	nodeIds: readonly string[],
 	db: Db = defaultDb,
@@ -760,7 +797,8 @@ async function getNodeMasteryMap(
 		const repGate = computeRepGate(repStats.total, repAccuracy, scenariosAttached);
 		const mastered = isMastered(cardGate, repGate);
 		const inProgress = !mastered && (cardStats.total > 0 || repStats.total > 0);
-		out.set(nodeId, { nodeId, mastered, inProgress });
+		const displayScore = computeDisplayScore(cardStats.total, cardsMasteredRatio, repStats.total, repAccuracy);
+		out.set(nodeId, { nodeId, mastered, inProgress, displayScore });
 	}
 
 	return out;
