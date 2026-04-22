@@ -8,14 +8,9 @@
 		"check": "bun scripts/check.ts",
 		"test": "bun scripts/test.ts",
 		"db": "bun scripts/db.ts",
+		"references": "bun scripts/references.ts",
 		"setup": "bun scripts/setup.ts",
-		"smoke": "bun scripts/smoke.ts",
-		"references:scan": "bun scripts/references/scan.ts",
-		"references:extract": "bun scripts/references/extract.ts",
-		"references:build": "bun scripts/references/build.ts",
-		"references:diff": "bun scripts/references/diff.ts",
-		"references:validate": "bun scripts/references/validate.ts",
-		"references:size-report": "bun scripts/references/size-report.ts"
+		"smoke": "bun scripts/smoke.ts"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.4.7",

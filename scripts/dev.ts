@@ -197,7 +197,7 @@ async function runAll(): Promise<void> {
  * server starts.
  */
 async function runReferenceScan(): Promise<void> {
-	const result = await $`bun scripts/references/validate.ts`.nothrow();
+	const result = await $`bun scripts/references.ts validate`.nothrow();
 	if (result.exitCode !== 0) {
 		console.error('references: broken wiki-links detected. Fix and retry.');
 		process.exit(result.exitCode);
