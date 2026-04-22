@@ -13,6 +13,7 @@ export default defineConfig({
 			'@ab/ui': resolve('./libs/ui/src/index.ts'),
 			'@ab/utils': resolve('./libs/utils/src/index.ts'),
 			'@ab/bc-study': resolve('./libs/bc/study/src/index.ts'),
+			'@ab/bc-sim': resolve('./libs/bc/sim/src/index.ts'),
 		},
 	},
 	test: {

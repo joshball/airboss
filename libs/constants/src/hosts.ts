@@ -1,5 +1,6 @@
 export const HOSTS = {
 	STUDY: 'study.airboss.test',
+	SIM: 'sim.airboss.test',
 } as const;
 
 export const COOKIE_DOMAIN_DEV = '.airboss.test' as const;

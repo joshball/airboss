@@ -50,6 +50,25 @@ export { ROLES, type Role } from './roles';
 export { QUERY_PARAMS, ROUTES } from './routes';
 export { SCHEMAS, type SchemaName } from './schemas';
 export {
+	SIM_AIRCRAFT_IDS,
+	SIM_FDM_DT_SECONDS,
+	SIM_FEET_PER_METER,
+	SIM_GRAVITY_M_S2,
+	SIM_KNOTS_PER_METER_PER_SECOND,
+	SIM_METERS_PER_FOOT,
+	SIM_SCENARIO_ID_VALUES,
+	SIM_SCENARIO_IDS,
+	SIM_SCENARIO_OUTCOMES,
+	SIM_SEA_LEVEL_DENSITY_KG_M3,
+	SIM_SNAPSHOT_INTERVAL_SECONDS,
+	SIM_TIMING,
+	SIM_WORKER_MESSAGES,
+	type SimAircraftId,
+	type SimScenarioId,
+	type SimScenarioOutcome,
+	type SimWorkerMessage,
+} from './sim';
+export {
 	ACTIVITY_WINDOW_DAYS,
 	ASSESSMENT_METHOD_VALUES,
 	ASSESSMENT_METHODS,

@@ -1,0 +1,10 @@
+{
+	"name": "@ab/sim",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"dev": "vite dev --port 9610",
+		"build": "vite build",
+		"preview": "vite preview"
+	}
+}
