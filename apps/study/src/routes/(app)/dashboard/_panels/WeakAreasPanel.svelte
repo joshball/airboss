@@ -1,7 +1,7 @@
 <script lang="ts">
 import type { PanelResult, WeakArea, WeakAreaReason } from '@ab/bc-study';
 import { DOMAIN_LABELS, ROUTES, WEAK_AREA_WINDOW_DAYS } from '@ab/constants';
-import PanelShell from './PanelShell.svelte';
+import PanelShell from '@ab/ui/components/PanelShell.svelte';
 
 /**
  * Weak-areas panel. Top N domains ranked by card accuracy + rep accuracy +
@@ -74,39 +74,39 @@ function reasonLabel(reason: WeakAreaReason): string {
 		display: flex;
 		flex-direction: column;
 		gap: 0.125rem;
-		padding: 0.3125rem 0.5rem;
-		border-radius: 2px;
+		padding: 0.3125rem var(--ab-space-sm);
+		border-radius: var(--ab-radius-sm);
 		text-decoration: none;
-		color: #0f172a;
+		color: var(--ab-color-fg);
 		border: 1px solid transparent;
 	}
 
 	.row:hover {
-		background: #fef2f2;
-		border-color: #fecaca;
+		background: var(--ab-color-danger-subtle);
+		border-color: var(--ab-color-danger-subtle-border);
 	}
 
 	.dm-name {
-		font-weight: 600;
-		font-size: 0.8125rem;
+		font-weight: var(--ab-font-weight-semibold);
+		font-size: var(--ab-font-size-sm);
 	}
 
 	.reasons {
 		display: flex;
-		gap: 0.5rem;
+		gap: var(--ab-space-sm);
 		flex-wrap: wrap;
 	}
 
 	.reason {
 		font-size: 0.6875rem;
-		color: #b45309;
+		color: var(--ab-color-warning);
 		font-variant-numeric: tabular-nums;
-		font-family: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
+		font-family: var(--ab-font-family-mono);
 	}
 
 	.muted {
 		margin: 0;
-		color: #64748b;
-		font-size: 0.75rem;
+		color: var(--ab-color-fg-subtle);
+		font-size: var(--ab-font-size-xs);
 	}
 </style>

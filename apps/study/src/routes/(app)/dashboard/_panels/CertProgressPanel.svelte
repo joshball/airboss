@@ -1,5 +1,5 @@
 <script lang="ts">
-import PanelShell from './PanelShell.svelte';
+import PanelShell from '@ab/ui/components/PanelShell.svelte';
 
 /**
  * Cert-progress placeholder. The Knowledge Graph BC does not yet export
@@ -24,16 +24,17 @@ import PanelShell from './PanelShell.svelte';
 <style>
 	.placeholder {
 		margin: 0;
-		color: #64748b;
-		font-size: 0.75rem;
-		line-height: 1.5;
+		color: var(--ab-color-fg-subtle);
+		font-size: var(--ab-font-size-xs);
+		line-height: var(--ab-line-height-normal);
 	}
 
 	.placeholder code {
+		/* indigo accent: no token match. Follow-up: add --ab-color-accent-* */
 		background: #eef2ff;
 		color: #3730a3;
 		padding: 0.125rem 0.3125rem;
-		border-radius: 2px;
+		border-radius: var(--ab-radius-sm);
 		font-size: 0.6875rem;
 	}
 </style>

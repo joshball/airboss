@@ -1,7 +1,7 @@
 <script lang="ts">
 import type { PanelResult, RecentActivity } from '@ab/bc-study';
 import { ACTIVITY_WINDOW_DAYS } from '@ab/constants';
-import PanelShell from './PanelShell.svelte';
+import PanelShell from '@ab/ui/components/PanelShell.svelte';
 
 /**
  * 7-day activity sparkline. CSS-only bars -- no chart library. Each bar
@@ -84,11 +84,11 @@ const screenReaderSummary = $derived(
 	.spark {
 		display: flex;
 		align-items: flex-end;
-		gap: 0.25rem;
+		gap: var(--ab-space-2xs);
 		height: 48px;
-		padding: 0.375rem 0.25rem 0.25rem;
-		background: #f8fafc;
-		border-radius: 2px;
+		padding: var(--ab-space-xs) var(--ab-space-2xs) var(--ab-space-2xs);
+		background: var(--ab-color-surface-sunken);
+		border-radius: var(--ab-radius-sm);
 	}
 
 	.col {
@@ -106,42 +106,42 @@ const screenReaderSummary = $derived(
 		max-width: 14px;
 		height: var(--h, 8%);
 		min-height: 3px;
-		background: #2563eb;
-		border-radius: 2px 2px 0 0;
-		transition: height 200ms ease-out;
+		background: var(--ab-color-primary);
+		border-radius: var(--ab-radius-sm) var(--ab-radius-sm) 0 0;
+		transition: height var(--ab-transition-normal);
 	}
 
 	.bar.zero {
-		background: #cbd5e1;
+		background: var(--ab-color-border-strong);
 		height: 3px;
 	}
 
 	.lbl {
 		font-size: 0.625rem;
-		color: #94a3b8;
-		font-weight: 600;
+		color: var(--ab-color-fg-faint);
+		font-weight: var(--ab-font-weight-semibold);
 		line-height: 1;
-		font-family: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
+		font-family: var(--ab-font-family-mono);
 	}
 
 	.meta {
 		display: flex;
-		gap: 0.75rem;
+		gap: var(--ab-space-md);
 		flex-wrap: wrap;
-		color: #475569;
-		font-size: 0.75rem;
-		font-family: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
+		color: var(--ab-color-fg-muted);
+		font-size: var(--ab-font-size-xs);
+		font-family: var(--ab-font-family-mono);
 	}
 
 	.meta strong {
-		color: #0f172a;
+		color: var(--ab-color-fg);
 		font-variant-numeric: tabular-nums;
-		font-weight: 700;
+		font-weight: var(--ab-font-weight-bold);
 	}
 
 	.muted {
 		margin: 0;
-		color: #64748b;
-		font-size: 0.75rem;
+		color: var(--ab-color-fg-subtle);
+		font-size: var(--ab-font-size-xs);
 	}
 </style>
