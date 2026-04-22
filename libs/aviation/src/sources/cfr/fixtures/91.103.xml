@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Fixture with nested paragraph structure (letter-numbered sub-paragraphs)
+  plus an explicit EXTRACT block for 91.103 preflight action.
+-->
+<CFRDOC>
+  <DIV1 N="14" TYPE="TITLE">
+    <DIV5 N="91" TYPE="PART">
+      <DIV8 N="Sec. 91.103" TYPE="SECTION">
+        <SECTNO>Sec. 91.103</SECTNO>
+        <SUBJECT>Preflight action.</SUBJECT>
+        <P>Each pilot in command shall, before beginning a flight, become familiar with all available information concerning that flight. This information must include -</P>
+        <P>(a) For a flight under IFR or a flight not in the vicinity of an airport, weather reports and forecasts, fuel requirements, alternatives available if the planned flight cannot be completed, and any known traffic delays of which the pilot in command has been advised by ATC;</P>
+        <P>(b) For any flight, runway lengths at airports of intended use, and the following takeoff and landing distance information:</P>
+        <P>(1) For civil aircraft for which an approved Airplane or Rotorcraft Flight Manual containing takeoff and landing distance data is required, the takeoff and landing distance data contained therein; and</P>
+        <P>(2) For civil aircraft other than those specified in paragraph (b)(1) of this section, other reliable information appropriate to the aircraft, relating to aircraft performance under expected values of airport elevation and runway slope, aircraft gross weight, and wind and temperature.</P>
+      </DIV8>
+    </DIV5>
+  </DIV1>
+</CFRDOC>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Malformed: unclosed DIV8 + stray characters. Parser must raise a
+     clear error rather than silently producing garbage. -->
+<CFRDOC>
+  <DIV1 N="14" TYPE="TITLE">
+    <DIV5 N="91" TYPE="PART">
+      <DIV8 N="Sec. 91.999" TYPE="SECTION">
+        <SECTNO>Sec. 91.999</SECTNO>
+        <SUBJECT>Intentionally broken.</SUBJECT>
+        <P>This paragraph never closes.
+      </DIV8

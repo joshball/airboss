@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Synthetic fixture mimicking the federal eCFR bulk-download XML shape for
+  14 CFR 91.155 (Basic VFR weather minimums). Hand-authored for parser
+  tests; not a real eCFR excerpt. Text values paraphrase the live rule in
+  shortened form so the parser test can match on known substrings without
+  depending on the current real wording.
+
+  Real eCFR structure used: DIV1 (title) -> DIV5 (part) -> DIV8 (section),
+  with SECTNO + SUBJECT headers and P/EAR/GPOTABLE body elements.
+-->
+<CFRDOC>
+  <DIV1 N="14" TYPE="TITLE">
+    <HEAD>Title 14 - Aeronautics and Space</HEAD>
+    <DIV5 N="91" TYPE="PART">
+      <HEAD>PART 91 - GENERAL OPERATING AND FLIGHT RULES</HEAD>
+      <DIV8 N="Sec. 91.151" TYPE="SECTION">
+        <SECTNO>Sec. 91.151</SECTNO>
+        <SUBJECT>Fuel requirements for flight in VFR conditions.</SUBJECT>
+        <P>(a) No person may begin a flight in an airplane under VFR conditions unless (considering wind and forecast weather conditions) there is enough fuel to fly to the first point of intended landing and, assuming normal cruising speed -</P>
+        <P>(1) During the day, to fly after that for at least 30 minutes; or</P>
+        <P>(2) At night, to fly after that for at least 45 minutes.</P>
+      </DIV8>
+      <DIV8 N="Sec. 91.155" TYPE="SECTION">
+        <SECTNO>Sec. 91.155</SECTNO>
+        <SUBJECT>Basic VFR weather minimums.</SUBJECT>
+        <P>(a) Except as provided in paragraph (b) of this section and Sec. 91.157, no person may operate an aircraft under VFR when the flight visibility is less, or at a distance from clouds that is less, than that prescribed for the corresponding altitude and class of airspace in the following table:</P>
+        <GPOTABLE CDEF="s50,r50,r50" COLS="3" OPTS="L2">
+          <BOXHD>
+            <CHED H="1">Airspace</CHED>
+            <CHED H="1">Flight visibility</CHED>
+            <CHED H="1">Distance from clouds</CHED>
+          </BOXHD>
+          <ROW>
+            <ENT I="01">Class A</ENT>
+            <ENT>Not Applicable</ENT>
+            <ENT>Not Applicable.</ENT>
+          </ROW>
+          <ROW>
+            <ENT I="01">Class B</ENT>
+            <ENT>3 statute miles</ENT>
+            <ENT>Clear of clouds.</ENT>
+          </ROW>
+          <ROW>
+            <ENT I="01">Class C</ENT>
+            <ENT>3 statute miles</ENT>
+            <ENT>500 feet below, 1,000 feet above, 2,000 feet horizontal.</ENT>
+          </ROW>
+        </GPOTABLE>
+        <P>(b) Class G Airspace. Notwithstanding the provisions of paragraph (a) of this section, the following operations may be conducted in Class G airspace below 1,200 feet above the surface:</P>
+        <P>(1) Helicopter. A helicopter may be operated clear of clouds in an airport traffic pattern within 1/2 mile of the runway.</P>
+        <P>(2) Airplane, powered parachute, or weight-shift-control aircraft. If the visibility is less than 3 statute miles but not less than 1 statute mile during night hours, an airplane, powered parachute, or weight-shift-control aircraft may be operated clear of clouds if operated in an airport traffic pattern within 1/2 mile of the runway.</P>
+        <P>(c) Except as provided in Sec. 91.157, no person may operate an aircraft beneath the ceiling under VFR within the lateral boundaries of controlled airspace designated to the surface for an airport when the ceiling is less than 1,000 feet.</P>
+      </DIV8>
+      <DIV8 N="Sec. 91.3" TYPE="SECTION">
+        <SECTNO>Sec. 91.3</SECTNO>
+        <SUBJECT>Responsibility and authority of the pilot in command.</SUBJECT>
+        <P>(a) The pilot in command of an aircraft is directly responsible for, and is the final authority as to, the operation of that aircraft.</P>
+        <P>(b) In an in-flight emergency requiring immediate action, the pilot in command may deviate from any rule of this part to the extent required to meet that emergency.</P>
+        <P>(c) Each pilot in command who deviates from a rule under paragraph (b) of this section shall, upon the request of the Administrator, send a written report of that deviation to the Administrator.</P>
+      </DIV8>
+      <DIV8 N="Sec. 91.107" TYPE="SECTION">
+        <SECTNO>Sec. 91.107</SECTNO>
+        <SUBJECT>Use of safety belts, shoulder harnesses, and child restraint systems.</SUBJECT>
+        <P>(a) Unless otherwise authorized by the Administrator -</P>
+        <P>(1) No pilot may take off a U.S.-registered civil aircraft unless the pilot in command of that aircraft ensures that each person on board is briefed on how to fasten and unfasten that person's safety belt.</P>
+        <P>(2) No pilot may cause to be moved on the surface, take off, or land a U.S.-registered civil aircraft unless the pilot in command of that aircraft ensures that each person on board has been notified to fasten his or her safety belt.</P>
+        <P>(3) Except as provided in this paragraph, each person on board a U.S.-registered civil aircraft must occupy an approved seat or berth with a safety belt and, if installed, shoulder harness, properly secured about him or her during movement on the surface, takeoff, and landing.</P>
+      </DIV8>
+    </DIV5>
+  </DIV1>
+</CFRDOC>
