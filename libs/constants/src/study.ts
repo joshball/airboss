@@ -300,15 +300,6 @@ export const BROWSE_PAGE_SIZE = 25;
 export const REVIEW_DEDUPE_WINDOW_MS = 5_000;
 
 /**
- * Idempotency window for duplicate rep-attempt submission protection.
- * Shorter than the review window -- reps submit via a standard form and the
- * UX is "pick an option, see outcome", so a double-click should fold into a
- * single attempt but a deliberate re-attempt a few seconds later is a
- * legitimate separate judgment rep.
- */
-export const REP_DEDUPE_WINDOW_MS = 2_000;
-
-/**
  * Knowledge-graph edge types (see ADR 011). `requires` is the only edge type
  * that must form a DAG; the rest are structural or navigational. Author-facing
  * YAML uses the passive-voice collection keys (`applied_by`, `taught_by`); the

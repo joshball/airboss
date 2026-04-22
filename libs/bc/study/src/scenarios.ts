@@ -1,12 +1,11 @@
 /**
  * Scenario BC functions (Decision Reps).
  *
- * Owns the scenario lifecycle. Rep outcomes post-ADR 012 live on
- * session_item_result, not on a dedicated rep_attempt table; the aggregations
- * below now read the rep-kind slots from there. `submitAttempt` used to
- * write a rep_attempt row but no longer does -- it's a pure validator that
- * resolves the chosen option against the scenario and returns a shaped
- * outcome the caller persists via `recordItemResult` on the slot row.
+ * Owns the scenario lifecycle. Rep outcomes live on session_item_result
+ * (ADR 012); aggregations below read the rep-kind slots from there.
+ * `submitAttempt` is a pure validator: it resolves the chosen option against
+ * the scenario and returns a shaped outcome the caller persists via
+ * `recordItemResult` on the slot row.
  *
  * Inputs are validated here (in addition to the route layer) so cross-BC
  * callers and scripts can't inject invalid values.
@@ -255,108 +254,6 @@ export async function getScenario(scenarioId: string, userId: string, db: Db = d
 }
 
 /**
- * Batch-fetch scenarios by id scoped to the caller. Preserves the caller's
- * id ordering in the returned array so the route layer can render a pinned
- * session batch without reshuffling on reload. Ids that don't resolve (the
- * scenario was archived or hard-deleted between batch-pin and reload) are
- * dropped silently; callers detect the gap by comparing input/output lengths
- * per-id and render a "skipped" slot.
- */
-export async function getScenariosByIds(
-	scenarioIds: readonly string[],
-	userId: string,
-	db: Db = defaultDb,
-): Promise<ScenarioRow[]> {
-	if (scenarioIds.length === 0) return [];
-	const rows = await db
-		.select()
-		.from(scenario)
-		.where(and(eq(scenario.userId, userId), inArray(scenario.id, scenarioIds as string[])));
-	const byId = new Map(rows.map((r) => [r.id, r]));
-	// Caller-ordered result -- missing ids collapse the array; the route layer
-	// reconciles length gaps against the original pin list.
-	return scenarioIds.map((id) => byId.get(id)).filter((r): r is ScenarioRow => r !== undefined);
-}
-
-/**
- * Shape the legacy `/reps/session` resume code expects for "the user already
- * answered this scenario in the current session." Post-ADR 012 the source
- * row is `session_item_result`; the id returned is the slot id (prefixed
- * `sir_`). Callers only use the outcome fields + timestamp, so the rename
- * is source-compatible.
- */
-export interface ResolvedAttempt {
-	id: string;
-	scenarioId: string;
-	chosenOption: string;
-	isCorrect: boolean;
-	confidence: number | null;
-	answerMs: number | null;
-	attemptedAt: Date;
-}
-
-/**
- * Attempts for a specific (user, scenarioIds) set made at/after `since`.
- * Powers server-derived resume on `/reps/session`: the page pins
- * `startedAt` into the URL on first load and, on every subsequent load,
- * asks which of the pinned scenarios the user has already answered since
- * that timestamp.
- *
- * Returns only the most-recent attempt per scenario inside the window --
- * repeated submits on the same scenario (content edits mid-session)
- * collapse to the final recorded attempt. Reads from session_item_result
- * where item_kind='rep', completed_at IS NOT NULL, skip_kind IS NULL.
- */
-export async function getRepAttemptsForSession(
-	userId: string,
-	scenarioIds: readonly string[],
-	since: Date,
-	db: Db = defaultDb,
-): Promise<Map<string, ResolvedAttempt>> {
-	if (scenarioIds.length === 0) return new Map();
-	const rows = await db
-		.select({
-			id: sessionItemResult.id,
-			scenarioId: sessionItemResult.scenarioId,
-			chosenOption: sessionItemResult.chosenOption,
-			isCorrect: sessionItemResult.isCorrect,
-			confidence: sessionItemResult.confidence,
-			answerMs: sessionItemResult.answerMs,
-			completedAt: sessionItemResult.completedAt,
-		})
-		.from(sessionItemResult)
-		.where(
-			and(
-				eq(sessionItemResult.userId, userId),
-				eq(sessionItemResult.itemKind, SESSION_ITEM_KINDS.REP),
-				isNotNull(sessionItemResult.completedAt),
-				isNull(sessionItemResult.skipKind),
-				inArray(sessionItemResult.scenarioId, scenarioIds as string[]),
-				gte(sessionItemResult.completedAt, since),
-			),
-		)
-		.orderBy(desc(sessionItemResult.completedAt));
-	const latest = new Map<string, ResolvedAttempt>();
-	for (const row of rows) {
-		if (row.scenarioId === null || row.chosenOption === null || row.isCorrect === null || row.completedAt === null) {
-			continue;
-		}
-		if (!latest.has(row.scenarioId)) {
-			latest.set(row.scenarioId, {
-				id: row.id,
-				scenarioId: row.scenarioId,
-				chosenOption: row.chosenOption,
-				isCorrect: row.isCorrect,
-				confidence: row.confidence,
-				answerMs: row.answerMs,
-				attemptedAt: row.completedAt,
-			});
-		}
-	}
-	return latest;
-}
-
-/**
  * Session-builder query: prioritizes scenarios the user has never attempted,
  * then falls back to least-recently-attempted. Applies scenario filters the
  * same way `getScenarios` does.
@@ -388,9 +285,8 @@ export async function getNextScenarios(
 	db: Db = defaultDb,
 ): Promise<ScenarioRow[]> {
 	// Alias the FROM so the correlated subquery below can reference
-	// `"outer_scenario"."id"` unambiguously -- a bare `"id"` would bind to
-	// rep_attempt.id under Postgres's name-resolution rules. The outer
-	// column reference is emitted via `outerScenarioId` above.
+	// `"outer_scenario"."id"` unambiguously. The outer column reference is
+	// emitted via `outerScenarioId` above.
 	const outerScenario = aliasedTable(scenario, OUTER_SCENARIO_ALIAS);
 	const clauses: SQL[] = [eq(outerScenario.userId, userId), eq(outerScenario.status, SCENARIO_STATUSES.ACTIVE)];
 	if (filters.domain) clauses.push(eq(outerScenario.domain, filters.domain));
@@ -428,9 +324,8 @@ export async function getNextScenarios(
 /**
  * Resolved rep-attempt outcome. Carries exactly the fields the caller needs
  * to persist the result onto a session_item_result row (or to render a
- * response). Post-ADR 012 this replaces the `RepAttemptRow` the old
- * `rep_attempt` table returned -- the outcome is computed, never stored
- * independently of the slot.
+ * response). Per ADR 012 the outcome is computed, never stored independently
+ * of the slot.
  */
 export interface RepAttemptOutcome {
 	scenarioId: string;
@@ -450,12 +345,11 @@ export interface RepAttemptOutcome {
  * the scenario's options (never trusted from the wire), the scenario must
  * belong to the caller, and it must be in ACTIVE status.
  *
- * Idempotency: the old implementation folded double-submits via a
- * REP_DEDUPE_WINDOW_MS lookup against rep_attempt. That fold now happens at
- * the slot level -- `recordItemResult` updates the existing slot rather than
- * inserting a fresh one, so re-submits on the same (session, slotIndex)
- * collapse inherently. submitAttempt stays pure: it doesn't touch the DB
- * for writes, which means repeated calls are naturally safe.
+ * Idempotency: double-submits fold at the slot level -- `recordItemResult`
+ * updates the existing slot rather than inserting a fresh one, so re-submits
+ * on the same (session, slotIndex) collapse inherently. submitAttempt stays
+ * pure: it doesn't touch the DB for writes, which means repeated calls are
+ * naturally safe.
  */
 export async function submitAttempt(input: SubmitAttemptInput, db: Db = defaultDb): Promise<RepAttemptOutcome> {
 	const parsed = submitAttemptSchema.parse({
@@ -649,9 +543,9 @@ export async function getRepDashboard(
 	const windowStart = new Date(now.getTime() - REP_DASHBOARD_WINDOW_DAYS * 24 * 60 * 60 * 1000);
 	const todayStart = userStartOfDay(now, tz);
 
-	// Alias the scenario table used in the NOT EXISTS subquery so the
-	// outer reference is `"outer_scenario"."id"` (never ambiguous with
-	// rep_attempt.id) without touching the schema name as a string.
+	// Alias the scenario table used in the NOT EXISTS subquery so the outer
+	// reference is `"outer_scenario"."id"` without touching the schema name
+	// as a string.
 	const outerScenario = aliasedTable(scenario, OUTER_SCENARIO_ALIAS);
 
 	// Fan out: every query below is independent. Parallel round-trips keep

@@ -1,11 +1,10 @@
 /**
  * Shared test helpers for BC integration suites.
  *
- * Rep outcomes now live on session_item_result (ADR 012). A rep attempt is no
- * longer a standalone row -- it's the completed state of a rep-kind slot in a
- * real session. Tests that previously inserted into `rep_attempt` directly
- * must now create a session + plan + session_item_result trio, which is more
- * setup than any single test should repeat inline.
+ * Rep outcomes live on session_item_result (ADR 012). A rep attempt is the
+ * completed state of a rep-kind slot in a real session; seeding an attempt
+ * requires a plan + session + session_item_result trio, which is more setup
+ * than any single test should repeat inline.
  *
  * `seedRepAttempt` and `seedRepTestPlan` collapse that setup into two calls:
  * one to get a plan the fixture user owns, and one to append a completed
@@ -68,10 +67,9 @@ export async function seedRepTestPlan(userId: string): Promise<string> {
  * slotIndex 0 because the session is single-slot.
  *
  * `confidence` and `answerMs` default to NULL -- callers that need them
- * pass explicit values (same shape the legacy rep_attempt insert used).
- * `completedAt` defaults to `now` so the row counts immediately; callers
- * backdating attempts (activity streak tests, calibration trend tests)
- * pass their own timestamp.
+ * pass explicit values. `completedAt` defaults to `now` so the row counts
+ * immediately; callers backdating attempts (activity streak tests,
+ * calibration trend tests) pass their own timestamp.
  */
 export async function seedRepAttempt(opts: {
 	userId: string;
@@ -118,7 +116,6 @@ export async function seedRepAttempt(opts: {
 		scenarioId: opts.scenarioId,
 		nodeId: null,
 		reviewId: null,
-		repAttemptId: null,
 		skipKind: null,
 		reasonDetail: null,
 		chosenOption: opts.chosenOption ?? (opts.isCorrect ? 'a' : 'b'),
