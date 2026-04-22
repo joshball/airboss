@@ -25,6 +25,8 @@ const config = {
 			'@ab/bc-study/*': '../../libs/bc/study/src/*',
 			'@ab/aviation': '../../libs/aviation/src/index.ts',
 			'@ab/aviation/*': '../../libs/aviation/src/*',
+			'@ab/help': '../../libs/help/src/index.ts',
+			'@ab/help/*': '../../libs/help/src/*',
 			'@ab/activities/*': '../../libs/activities/*',
 		},
 		env: {

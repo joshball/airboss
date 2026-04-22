@@ -55,6 +55,9 @@
     "libs/db": {
       "name": "@ab/db",
     },
+    "libs/help": {
+      "name": "@ab/help",
+    },
     "libs/themes": {
       "name": "@ab/themes",
     },
@@ -80,6 +83,8 @@
     "@ab/constants": ["@ab/constants@workspace:libs/constants"],
 
     "@ab/db": ["@ab/db@workspace:libs/db"],
+
+    "@ab/help": ["@ab/help@workspace:libs/help"],
 
     "@ab/sim": ["@ab/sim@workspace:apps/sim"],
 

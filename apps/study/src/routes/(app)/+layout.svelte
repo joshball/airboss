@@ -1,9 +1,11 @@
 <script lang="ts">
 import { ROUTES } from '@ab/constants';
+import HelpSearch from '@ab/help/ui/HelpSearch.svelte';
 import { resolveThemeForPath } from '@ab/themes';
 import ThemeProvider from '@ab/themes/ThemeProvider.svelte';
 import type { Snippet } from 'svelte';
 import { page } from '$app/state';
+import '$lib/help/register';
 import type { LayoutData } from './$types';
 
 let { data, children }: { data: LayoutData; children: Snippet } = $props();
@@ -13,6 +15,7 @@ const memoryActive = $derived(page.url.pathname.startsWith(ROUTES.MEMORY));
 const repsActive = $derived(page.url.pathname.startsWith(ROUTES.REPS));
 const knowledgeActive = $derived(page.url.pathname.startsWith(ROUTES.KNOWLEDGE));
 const glossaryActive = $derived(page.url.pathname.startsWith(ROUTES.GLOSSARY));
+const helpActive = $derived(page.url.pathname.startsWith(ROUTES.HELP));
 const calibrationActive = $derived(page.url.pathname.startsWith(ROUTES.CALIBRATION));
 // Plans, /session/start and /sessions/* roll under one nav item -- they're
 // the same flow from the user's perspective.
@@ -77,6 +80,11 @@ function handleMenuKeydown(event: KeyboardEvent) {
 			<a href={ROUTES.KNOWLEDGE} aria-current={knowledgeActive ? 'page' : undefined}>Knowledge</a>
 			<a href={ROUTES.GLOSSARY} aria-current={glossaryActive ? 'page' : undefined}>Glossary</a>
 			<a href={ROUTES.CALIBRATION} aria-current={calibrationActive ? 'page' : undefined}>Calibration</a>
+			<a href={ROUTES.HELP} aria-current={helpActive ? 'page' : undefined}>Help</a>
+		</div>
+
+		<div class="nav-search">
+			<HelpSearch />
 		</div>
 
 		<details class="identity" bind:this={menu}>
@@ -150,8 +158,13 @@ function handleMenuKeydown(event: KeyboardEvent) {
 		background: var(--ab-color-primary-subtle);
 	}
 
-	.identity {
+	.nav-search {
 		margin-left: auto;
+		display: flex;
+		align-items: center;
+	}
+
+	.identity {
 		position: relative;
 	}
 

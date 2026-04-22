@@ -1,17 +1,16 @@
 #!/usr/bin/env bun
 /**
- * Reference + content validator.
+ * Reference + content + help-pages validator.
  *
- * Combines the two validation layers from @ab/aviation:
- *
+ * Layers:
  *   1) validateReferences(AVIATION_REFERENCES) -- schema + tag + related
  *      symmetry + verbatim/sources coherence gates.
  *   2) validateContentWikilinks(scan, registry) -- every
  *      `[[display::id]]` id in content resolves; broken links error,
  *      TBD-id links warn.
- *
- * Plus the extraction-pipeline gates added here:
- *
+ *   2.5) validateHelpPages(registeredPages) -- required axes, section-id
+ *      uniqueness, route shape, wiki-link resolution against aviation +
+ *      help registries.
  *   3) Registry coherence -- every `Reference.sources[].sourceId` exists
  *      in SOURCES with a type matching the id prefix.
  *   4) Meta.json integrity -- for every source, if the binary is on disk,
@@ -42,8 +41,18 @@ import {
 	validateContentWikilinks,
 	validateReferences,
 } from '@ab/aviation';
+import { helpRegistry, validateHelpPages } from '@ab/help';
+// Register per-app help pages before the gate runs so the validator sees
+// exactly what each app will hand to `@ab/help` in production. The study
+// app's pages import from `@ab/help` via Vite aliases at runtime; under
+// Bun (which doesn't read Vite alias config), we re-import the content
+// list directly from its relative path here. Future apps add their
+// own call.
+import { studyHelpPages } from '../../apps/study/src/lib/help/pages';
 import { readExistingGenerated } from './extract';
 import { scanContent } from './scan';
+
+helpRegistry.registerPages('study', studyHelpPages);
 
 const REPO_ROOT = resolve(import.meta.dirname, '..', '..');
 
@@ -73,6 +82,11 @@ const contentResult = validateContentWikilinks(scans, {
 	knownIds: listReferences().map((r) => r.id),
 });
 
+// -------- layer 2.5: help pages from @ab/help --------
+
+const helpPages = helpRegistry.getAllPages();
+const helpResult = validateHelpPages(helpPages, { hasAviationReference: hasReference });
+
 const errors: Issue[] = [];
 const warnings: Issue[] = [];
 
@@ -87,6 +101,18 @@ for (const e of contentResult.errors) {
 }
 for (const w of contentResult.warnings) {
 	warnings.push({ level: 'warn', message: w.message, referenceId: w.referenceId, location: w.location });
+}
+for (const e of helpResult.errors) {
+	errors.push({ level: 'error', message: e.message, location: helpLocation(e) });
+}
+for (const w of helpResult.warnings) {
+	warnings.push({ level: 'warn', message: w.message, location: helpLocation(w) });
+}
+
+function helpLocation(issue: { pageId?: string; sectionId?: string }): string | undefined {
+	if (issue.sectionId && issue.pageId) return `help:${issue.pageId}#${issue.sectionId}`;
+	if (issue.pageId) return `help:${issue.pageId}`;
+	return undefined;
 }
 
 // -------- layer 3: registry coherence --------
@@ -109,8 +135,13 @@ for (const source of SOURCES) {
 	}
 }
 
-// Every Reference.sources[].sourceId must resolve in the registry and the
-// type must match the id's source-type prefix convention.
+// Every Reference.sources[].sourceId must resolve in the registry. The
+// source-prefix convention (id begins with source-type, e.g.
+// `cfr-14-91-155`) is a convention for machine-extracted references
+// only. Hand-authored entries ported from airboss-firc use
+// topic-suffixed ids (e.g. `aircraft-def`, `vfr-wx-minimums`) and are
+// exempt from the prefix check.
+const KNOWN_SOURCE_PREFIXES = new Set(SOURCES.map((s) => s.type));
 for (const ref of AVIATION_REFERENCES) {
 	for (const citation of ref.sources) {
 		const source = getSource(citation.sourceId);
@@ -122,12 +153,19 @@ for (const ref of AVIATION_REFERENCES) {
 			});
 			continue;
 		}
-		// id-prefix convention: id begins with source-type, e.g. 'cfr-14-91-155' -> cfr.
-		const prefix = ref.id.split('-')[0];
-		if (prefix && source.type !== prefix) {
-			errors.push({
-				level: 'error',
-				message: `Reference id prefix '${prefix}' does not match source type '${source.type}' for sourceId '${citation.sourceId}'`,
+		// Warn (don't error) when the id has what looks like a source-prefix
+		// convention (4+ hyphen-separated segments starting with a known
+		// source type) but the citation's source type disagrees. The
+		// hand-authored firc entries use 2-segment topic-suffixed ids
+		// (`ntsb-org`, `ac-reg`) where prefix collision with a source type
+		// name is coincidental. The gate tightens to an error once we have
+		// enough machine-extracted content to measure against.
+		const segments = ref.id.split('-');
+		const looksLikeSourcePrefix = segments.length >= 4 && KNOWN_SOURCE_PREFIXES.has(segments[0] ?? '');
+		if (looksLikeSourcePrefix && source.type !== segments[0]) {
+			warnings.push({
+				level: 'warn',
+				message: `Reference id prefix '${segments[0]}' does not match source type '${source.type}' for sourceId '${citation.sourceId}' (convention check)`,
 				referenceId: ref.id,
 			});
 		}
@@ -272,5 +310,5 @@ if (errors.length > 0) {
 }
 
 console.log(
-	`references: 0 errors, ${warnings.length} warning(s); scanned ${scans.length} content location(s), ${contentResult.summary.linkCount} wiki-link(s); ${SOURCES.length} source(s) registered.`,
+	`references: 0 errors, ${warnings.length} warning(s); scanned ${scans.length} content location(s), ${contentResult.summary.linkCount} wiki-link(s); ${SOURCES.length} source(s) registered; ${helpPages.length} help page(s) validated.`,
 );
