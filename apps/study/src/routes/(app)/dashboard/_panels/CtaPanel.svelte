@@ -1,7 +1,8 @@
 <script lang="ts">
 import type { DashboardStats, PanelResult, RepBacklog, StudyPlanRow } from '@ab/bc-study';
 import { ROUTES } from '@ab/constants';
-import PanelShell from './PanelShell.svelte';
+import Button from '@ab/ui/components/Button.svelte';
+import PanelShell from '@ab/ui/components/PanelShell.svelte';
 
 /**
  * Primary action panel. With the Study Plan + Session Engine BCs live, the
@@ -66,9 +67,9 @@ const subtitle = $derived(hasPlan ? 'What you should do next' : 'Set up your pla
 
 <PanelShell title="Today" {subtitle} error={panelError}>
 	<div class="ctas">
-		<a class="btn primary" href={primary.href}>{primary.label}</a>
+		<Button variant="primary" size="sm" href={primary.href}>{primary.label}</Button>
 		{#each secondaries as cta (cta.href)}
-			<a class="btn secondary" href={cta.href}>{cta.label}</a>
+			<Button variant="secondary" size="sm" href={cta.href}>{cta.label}</Button>
 		{/each}
 	</div>
 </PanelShell>
@@ -76,42 +77,7 @@ const subtitle = $derived(hasPlan ? 'What you should do next' : 'Set up your pla
 <style>
 	.ctas {
 		display: flex;
-		gap: 0.375rem;
+		gap: var(--ab-space-xs);
 		flex-wrap: wrap;
-	}
-
-	.btn {
-		padding: 0.375rem 0.75rem;
-		font-size: 0.8125rem;
-		font-weight: 600;
-		border-radius: 2px;
-		border: 1px solid transparent;
-		text-decoration: none;
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		transition:
-			background 120ms,
-			border-color 120ms;
-		font-variant-numeric: tabular-nums;
-	}
-
-	.btn.primary {
-		background: #2563eb;
-		color: white;
-	}
-
-	.btn.primary:hover {
-		background: #1d4ed8;
-	}
-
-	.btn.secondary {
-		background: #f1f5f9;
-		color: #1a1a2e;
-		border-color: #cbd5e1;
-	}
-
-	.btn.secondary:hover {
-		background: #e2e8f0;
 	}
 </style>

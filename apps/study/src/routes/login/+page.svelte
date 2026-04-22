@@ -1,5 +1,9 @@
 <script lang="ts">
 import { DEV_ACCOUNTS, DEV_PASSWORD } from '@ab/constants';
+import ThemeProvider from '@ab/themes/ThemeProvider.svelte';
+import Banner from '@ab/ui/components/Banner.svelte';
+import Button from '@ab/ui/components/Button.svelte';
+import TextField from '@ab/ui/components/TextField.svelte';
 import { dev } from '$app/environment';
 import { enhance } from '$app/forms';
 import type { ActionData } from './$types';
@@ -24,244 +28,203 @@ function fillDevAccount(accountEmail: string) {
 	<title>Sign in -- airboss</title>
 </svelte:head>
 
-<main>
-	<section class="card">
-		<header>
-			<h1>airboss</h1>
-			<p class="sub">study</p>
-		</header>
+<ThemeProvider theme="web">
+	<main class="page">
+		<section class="card">
+			<header class="hd">
+				<h1>airboss</h1>
+				<p class="sub">study</p>
+			</header>
 
-		{#if form?.error}
-			<div class="error" role="alert">{form.error}</div>
-		{/if}
+			{#if form?.error}
+				<Banner variant="danger">{form.error}</Banner>
+			{/if}
 
-		<form
-			method="POST"
-			use:enhance={() => {
-				loading = true;
-				return async ({ update }) => {
-					loading = false;
-					await update();
-				};
-			}}
-		>
-			<label>
-				<span>Email</span>
-				<input
-					type="email"
+			<form
+				method="POST"
+				class="form"
+				use:enhance={() => {
+					loading = true;
+					return async ({ update }) => {
+						loading = false;
+						await update();
+					};
+				}}
+			>
+				<TextField
 					name="email"
+					label="Email"
+					type="email"
 					bind:value={email}
 					required
 					autocomplete="email"
 					disabled={loading}
 					placeholder="you@example.com"
 				/>
-			</label>
-
-			<label>
-				<span>Password</span>
-				<input
-					type="password"
+				<TextField
 					name="password"
+					label="Password"
+					type="password"
 					bind:value={password}
 					required
 					autocomplete="current-password"
 					disabled={loading}
 				/>
-			</label>
+				<Button
+					type="submit"
+					variant="primary"
+					size="md"
+					fullWidth
+					loading={loading}
+					loadingLabel="Signing in..."
+				>
+					Sign in
+				</Button>
+			</form>
 
-			<button type="submit" disabled={loading}>
-				{loading ? 'Signing in...' : 'Sign in'}
-			</button>
-		</form>
-
-		{#if dev}
-			<section class="dev">
-				<p class="dev-label">Dev accounts</p>
-				<div class="dev-accounts">
-					{#each DEV_ACCOUNTS as account (account.email)}
-						<button type="button" class="dev-btn" onclick={() => fillDevAccount(account.email)}>
-							<span class="dev-name">{account.name}</span>
-							<span class="dev-role">{account.role}</span>
-						</button>
-					{/each}
-				</div>
-				<p class="dev-hint">password: <code>{DEV_PASSWORD}</code></p>
-			</section>
-		{/if}
-	</section>
-</main>
+			{#if dev}
+				<section class="dev">
+					<p class="dev-label">Dev accounts</p>
+					<div class="dev-accounts">
+						{#each DEV_ACCOUNTS as account (account.email)}
+							<button
+								type="button"
+								class="dev-btn"
+								onclick={() => fillDevAccount(account.email)}
+							>
+								<span class="dev-name">{account.name}</span>
+								<span class="dev-role">{account.role}</span>
+							</button>
+						{/each}
+					</div>
+					<p class="dev-hint">
+						password: <code>{DEV_PASSWORD}</code>
+					</p>
+				</section>
+			{/if}
+		</section>
+	</main>
+</ThemeProvider>
 
 <style>
-	main {
+	.page {
 		min-height: 100vh;
 		display: grid;
 		place-items: center;
-		padding: 2rem 1rem;
-		background: #f8fafc;
+		padding: var(--ab-space-2xl) var(--ab-space-lg);
+		background: var(--ab-color-bg);
 	}
 
 	.card {
 		width: 100%;
 		max-width: 22rem;
-		background: white;
-		border: 1px solid #e2e8f0;
-		border-radius: 12px;
-		padding: 2rem;
-		box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+		background: var(--ab-color-surface-raised);
+		border: 1px solid var(--ab-color-border);
+		border-radius: var(--ab-radius-lg);
+		padding: var(--ab-space-2xl);
+		box-shadow: var(--ab-shadow-sm);
+		display: flex;
+		flex-direction: column;
+		gap: var(--ab-space-lg);
 	}
 
-	header {
+	.hd {
 		text-align: center;
-		margin-bottom: 1.5rem;
 	}
 
 	h1 {
 		margin: 0;
-		font-size: 1.5rem;
-		font-weight: 700;
-		letter-spacing: -0.02em;
-		color: #0f172a;
+		font-size: var(--ab-font-size-xl);
+		font-weight: var(--ab-font-weight-bold);
+		letter-spacing: var(--ab-letter-spacing-tight);
+		color: var(--ab-color-fg);
 	}
 
 	.sub {
-		margin: 0.25rem 0 0;
-		font-size: 0.875rem;
-		color: #64748b;
+		margin: var(--ab-space-2xs) 0 0;
+		font-size: var(--ab-font-size-sm);
+		color: var(--ab-color-fg-subtle);
 		text-transform: uppercase;
-		letter-spacing: 0.08em;
+		letter-spacing: var(--ab-letter-spacing-caps);
 	}
 
-	.error {
-		background: #fef2f2;
-		border: 1px solid #fecaca;
-		color: #991b1b;
-		padding: 0.625rem 0.875rem;
-		border-radius: 8px;
-		font-size: 0.875rem;
-		margin-bottom: 1rem;
-	}
-
-	form {
+	.form {
 		display: flex;
 		flex-direction: column;
-		gap: 0.875rem;
-	}
-
-	label {
-		display: flex;
-		flex-direction: column;
-		gap: 0.375rem;
-		font-size: 0.875rem;
-		color: #334155;
-	}
-
-	input {
-		font: inherit;
-		padding: 0.625rem 0.75rem;
-		border: 1px solid #cbd5e1;
-		border-radius: 8px;
-		background: white;
-		color: #0f172a;
-		transition: border-color 120ms, box-shadow 120ms;
-	}
-
-	input:focus {
-		outline: none;
-		border-color: #2563eb;
-		box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
-	}
-
-	input:disabled {
-		background: #f1f5f9;
-		cursor: not-allowed;
-	}
-
-	button[type='submit'] {
-		margin-top: 0.5rem;
-		padding: 0.625rem 1rem;
-		font-size: 0.9375rem;
-		font-weight: 600;
-		background: #2563eb;
-		color: white;
-		border: none;
-		border-radius: 8px;
-		cursor: pointer;
-		transition: background 120ms;
-	}
-
-	button[type='submit']:hover:not(:disabled) {
-		background: #1d4ed8;
-	}
-
-	button[type='submit']:disabled {
-		background: #94a3b8;
-		cursor: not-allowed;
+		gap: var(--ab-space-md);
 	}
 
 	.dev {
-		margin-top: 1.5rem;
-		padding-top: 1.25rem;
-		border-top: 1px dashed #e2e8f0;
+		padding-top: var(--ab-space-lg);
+		border-top: 1px dashed var(--ab-color-border);
 	}
 
 	.dev-label {
-		margin: 0 0 0.5rem;
-		font-size: 0.75rem;
-		font-weight: 600;
-		color: #64748b;
+		margin: 0 0 var(--ab-space-sm);
+		font-size: var(--ab-font-size-xs);
+		font-weight: var(--ab-font-weight-semibold);
+		color: var(--ab-color-fg-subtle);
 		text-transform: uppercase;
-		letter-spacing: 0.08em;
+		letter-spacing: var(--ab-letter-spacing-caps);
 	}
 
 	.dev-accounts {
 		display: flex;
 		flex-direction: column;
-		gap: 0.375rem;
+		gap: var(--ab-space-xs);
 	}
 
 	.dev-btn {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		padding: 0.5rem 0.75rem;
-		background: #f8fafc;
-		border: 1px solid #e2e8f0;
-		border-radius: 6px;
-		font-size: 0.8125rem;
+		padding: var(--ab-space-sm) var(--ab-space-md);
+		background: var(--ab-color-surface-sunken);
+		border: 1px solid var(--ab-color-border);
+		border-radius: var(--ab-radius-sm);
+		font-family: inherit;
+		font-size: var(--ab-font-size-sm);
 		cursor: pointer;
-		transition: background 120ms, border-color 120ms;
+		transition:
+			background var(--ab-transition-fast),
+			border-color var(--ab-transition-fast);
 	}
 
 	.dev-btn:hover {
-		background: #eff6ff;
-		border-color: #bfdbfe;
+		background: var(--ab-color-primary-subtle);
+		border-color: var(--ab-color-primary-subtle-border);
+	}
+
+	.dev-btn:focus-visible {
+		outline: none;
+		box-shadow: 0 0 0 3px var(--ab-color-focus-ring);
 	}
 
 	.dev-name {
-		color: #0f172a;
-		font-weight: 500;
+		color: var(--ab-color-fg);
+		font-weight: var(--ab-font-weight-medium);
 	}
 
 	.dev-role {
-		color: #64748b;
-		font-size: 0.75rem;
+		color: var(--ab-color-fg-subtle);
+		font-size: var(--ab-font-size-xs);
 		text-transform: uppercase;
-		letter-spacing: 0.05em;
+		letter-spacing: var(--ab-letter-spacing-wide);
 	}
 
 	.dev-hint {
-		margin: 0.625rem 0 0;
-		font-size: 0.75rem;
-		color: #94a3b8;
+		margin: var(--ab-space-sm) 0 0;
+		font-size: var(--ab-font-size-xs);
+		color: var(--ab-color-fg-faint);
 		text-align: center;
 	}
 
 	.dev-hint code {
-		background: #f1f5f9;
-		padding: 0.0625rem 0.375rem;
-		border-radius: 4px;
-		font-size: 0.75rem;
-		color: #475569;
+		background: var(--ab-color-surface-sunken);
+		padding: 0 var(--ab-space-2xs);
+		border-radius: var(--ab-radius-sm);
+		font-family: var(--ab-font-family-mono);
+		font-size: var(--ab-font-size-xs);
+		color: var(--ab-color-fg-muted);
 	}
 </style>
