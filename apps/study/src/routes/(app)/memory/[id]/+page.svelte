@@ -35,6 +35,28 @@ const recentReviews = $derived(data.recentReviews);
 const fieldErrors = $derived<Record<string, string>>(form?.fieldErrors ?? {});
 const editValues = $derived<FieldValues>((form?.intent === 'update' ? form.values : undefined) ?? {});
 
+// Edit-then-stay toast: after a successful update the server returns
+// `{ success: true, intent: 'update', message }` and we surface a short-lived
+// status message. Auto-dismiss after ~3 seconds so it never lingers into the
+// next interaction. See DESIGN_PRINCIPLES.md #7.
+let editToastVisible = $state(false);
+let editToastMessage = $state('');
+
+$effect(() => {
+	const isEditSuccess = Boolean(
+		form && 'success' in form && form.success && 'intent' in form && form.intent === 'update',
+	);
+	if (!isEditSuccess) return;
+	editToastMessage = (form && 'message' in form && typeof form.message === 'string' && form.message) || 'Card saved.';
+	editToastVisible = true;
+	// A successful save also exits edit mode so the updated values display.
+	editing = false;
+	const timer = setTimeout(() => {
+		editToastVisible = false;
+	}, 3000);
+	return () => clearTimeout(timer);
+});
+
 const domainOptions = Object.values(DOMAINS);
 const cardTypeOptions = Object.values(CARD_TYPES);
 
@@ -115,6 +137,10 @@ const tagsString = $derived((card.tags ?? []).join(', '));
 			{/if}
 		</div>
 	</header>
+
+	{#if editToastVisible}
+		<div class="toast" role="status">{editToastMessage}</div>
+	{/if}
 
 	{#if fieldErrors._}
 		<div class="error" role="alert">{fieldErrors._}</div>
@@ -384,6 +410,15 @@ const tagsString = $derived((card.tags ?? []).join(', '));
 		background: #fef2f2;
 		border: 1px solid #fecaca;
 		color: #991b1b;
+		padding: 0.625rem 0.875rem;
+		border-radius: 8px;
+		font-size: 0.875rem;
+	}
+
+	.toast {
+		background: #ecfdf5;
+		border: 1px solid #a7f3d0;
+		color: #065f46;
 		padding: 0.625rem 0.875rem;
 		border-radius: 8px;
 		font-size: 0.875rem;

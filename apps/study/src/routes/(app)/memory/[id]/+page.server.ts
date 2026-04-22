@@ -94,7 +94,9 @@ export const actions: Actions = {
 			return fail(500, { values: input, fieldErrors: { _: 'Could not save changes.' }, intent: 'update' });
 		}
 
-		redirect(303, ROUTES.MEMORY_CARD(params.id));
+		// Edit-then-stay: the client swaps back to read mode and shows a
+		// self-dismissing toast. See DESIGN_PRINCIPLES.md #7.
+		return { success: true as const, intent: 'update' as const, message: 'Card saved.' };
 	},
 
 	setStatus: async (event) => {

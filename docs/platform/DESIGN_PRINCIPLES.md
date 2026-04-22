@@ -95,6 +95,21 @@ Learning requires vulnerability. The system must make it safe to fail, to say "I
 
 ---
 
+## 7. Confirmation, Not Guesswork
+
+**Source:** App-wide UX review, 2026-04-22.
+
+Every create and edit flow must tell the user what just happened. Silent redirects break trust -- the user has to infer success from context. Two patterns, applied consistently:
+
+- **Create-then-redirect.** Server redirects to the detail page (for single-record flows like memory) or list page (for multi-item flows like reps and plans) with `?created=<id>` in the query. The destination reads the query param on load, renders a dismissible `role="status"` banner ("Card saved. View it" / "Scenario 'X' saved" / "Plan saved. Start a session"), and when landing on a list, anchors or highlights the just-created row.
+- **Edit-then-stay.** Server returns `{ success: true, message?: string }` from the action (never redirects to self silently). Client shows a `role="status"` toast that auto-dismisses after ~3 seconds. The `/plans/[id]` update action is the canonical implementation.
+
+For browse pages, the "make current state visible" pattern: when filters are applied, render removable filter chips above the results plus a "Showing X of Y matching: ..." summary. Every filter chip links to the same page URL with that one filter removed; a "Clear all" link clears everything.
+
+**How to apply:** After a user clicks Save, they should never have to guess whether the thing actually saved. If you can't see the confirmation from across the room, it's not loud enough. If a page's URL carries filter state, the page must show that state visibly -- not just in the form controls the user may have scrolled past.
+
+---
+
 ## Adding New Principles
 
 Principles are promoted from [IDEAS.md](IDEAS.md) when they've proven their value -- either through implementation experience or through repeated use in design decisions. A principle should be:

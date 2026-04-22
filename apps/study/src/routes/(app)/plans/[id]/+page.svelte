@@ -18,12 +18,33 @@ import {
 	type SessionMode,
 } from '@ab/constants';
 import { enhance } from '$app/forms';
+import { page } from '$app/state';
 import type { ActionData, PageData } from './$types';
 
 let { data, form }: { data: PageData; form: ActionData } = $props();
 
 const plan = $derived(data.plan);
 const isActive = $derived(plan.status === PLAN_STATUSES.ACTIVE);
+
+// `?created=1` lands here straight from /plans/new. Show a one-shot creation
+// banner -- keep it dismissible so the user can clear it without navigating.
+// See DESIGN_PRINCIPLES.md #7.
+let createdBannerShown = $state(page.url.searchParams.get('created') === '1');
+
+// Edit-success toast: auto-dismisses after ~3s so it never lingers into the
+// next interaction. The effect reruns whenever `form` changes; on each
+// successful update, restart the visibility window.
+let editToastVisible = $state(false);
+
+$effect(() => {
+	const success = Boolean(form && 'success' in form && form.success);
+	if (!success) return;
+	editToastVisible = true;
+	const timer = setTimeout(() => {
+		editToastVisible = false;
+	}, 3000);
+	return () => clearTimeout(timer);
+});
 
 // svelte-ignore state_referenced_locally -- seeding initial slider from data; treat as independent thereafter
 let sessionLength = $state<number>(data.plan.sessionLength);
@@ -55,7 +76,18 @@ const skippableDomains = $derived(DOMAIN_VALUES.filter((d) => !focusSet.has(d)))
 		</nav>
 	</header>
 
-	{#if form && 'success' in form && form.success}
+	{#if createdBannerShown}
+		<div class="banner" role="status">
+			<span>Plan saved. {isActive ? '' : 'Activate it to start a session.'}</span>
+			{#if isActive}
+				<a class="banner-action" href={ROUTES.SESSION_START}>Start a session</a>
+			{/if}
+			<button type="button" class="banner-dismiss" onclick={() => (createdBannerShown = false)} aria-label="Dismiss">
+				×
+			</button>
+		</div>
+	{/if}
+	{#if editToastVisible}
 		<div class="success" role="status">Plan updated.</div>
 	{/if}
 	{#if form && 'error' in form && form.error}
@@ -323,6 +355,43 @@ const skippableDomains = $derived(DOMAIN_VALUES.filter((d) => !focusSet.has(d)))
 		border-radius: 8px;
 		border: 1px solid #a7f3d0;
 		font-size: 0.875rem;
+	}
+
+	.banner {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		background: #eff6ff;
+		border: 1px solid #bfdbfe;
+		color: #1e3a8a;
+		padding: 0.625rem 0.875rem;
+		border-radius: 8px;
+		font-size: 0.875rem;
+	}
+
+	.banner-action {
+		margin-left: auto;
+		color: #1d4ed8;
+		font-weight: 600;
+		text-decoration: none;
+	}
+
+	.banner-action:hover {
+		text-decoration: underline;
+	}
+
+	.banner-dismiss {
+		background: transparent;
+		border: none;
+		color: #1e3a8a;
+		font-size: 1.25rem;
+		line-height: 1;
+		cursor: pointer;
+		padding: 0 0.25rem;
+	}
+
+	.banner-dismiss:hover {
+		color: #1d4ed8;
 	}
 
 	.error {

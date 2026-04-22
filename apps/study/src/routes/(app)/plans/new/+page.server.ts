@@ -97,6 +97,8 @@ export const actions: Actions = {
 			});
 		}
 
-		throw redirect(303, ROUTES.PLAN(planId));
+		// Land on the plan detail with `?created=1` so the page can surface a
+		// success banner. Confirmation, not guesswork -- see DESIGN_PRINCIPLES.md #7.
+		throw redirect(303, `${ROUTES.PLAN(planId)}?created=1`);
 	},
 } satisfies Actions;

@@ -12,6 +12,7 @@ import {
 	SCENARIO_STATUSES,
 } from '@ab/constants';
 import { humanize } from '@ab/utils';
+import { tick } from 'svelte';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
@@ -20,11 +21,52 @@ const scenarios = $derived(data.scenarios);
 const filters = $derived(data.filters);
 const currentPage = $derived(data.page);
 const hasMore = $derived(data.hasMore);
+const createdScenario = $derived(data.createdScenario);
 
 const hasActiveFilters = $derived(
 	Boolean(filters.domain || filters.difficulty || filters.phaseOfFlight || filters.sourceType) ||
 		filters.status !== SCENARIO_STATUSES.ACTIVE,
 );
+
+// The newly-created scenario (when redirected from /reps/new?created=<id>)
+// gets a dismissible banner plus an auto-scroll+highlight on the row.
+let bannerDismissed = $state(false);
+const bannerVisible = $derived(createdScenario !== null && !bannerDismissed);
+
+$effect(() => {
+	const current = createdScenario;
+	if (!current) return;
+	void tick().then(() => {
+		const el = document.getElementById(`scenario-${current.id}`);
+		if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+	});
+});
+
+type ChipFilterKey = 'domain' | 'difficulty' | 'phase' | 'source' | 'status';
+
+interface FilterChip {
+	key: ChipFilterKey;
+	label: string;
+	value: string;
+}
+
+const chips = $derived.by<FilterChip[]>(() => {
+	const out: FilterChip[] = [];
+	if (filters.domain) out.push({ key: 'domain', label: 'Domain', value: domainLabel(filters.domain) });
+	if (filters.difficulty)
+		out.push({ key: 'difficulty', label: 'Difficulty', value: difficultyLabel(filters.difficulty) });
+	if (filters.phaseOfFlight) out.push({ key: 'phase', label: 'Phase', value: phaseLabel(filters.phaseOfFlight) });
+	if (filters.sourceType) out.push({ key: 'source', label: 'Source', value: humanize(filters.sourceType) });
+	if (filters.status !== SCENARIO_STATUSES.ACTIVE)
+		out.push({ key: 'status', label: 'Status', value: humanize(filters.status) });
+	return out;
+});
+
+function removeChipHref(key: ChipFilterKey): string {
+	// Build a fresh href that keeps every other active filter but drops `key`.
+	const next: Partial<Record<ChipFilterKey, undefined>> = { [key]: undefined };
+	return buildHref(next);
+}
 
 function domainLabel(slug: string): string {
 	return (DOMAIN_LABELS as Record<string, string>)[slug] ?? humanize(slug);
@@ -79,6 +121,15 @@ function pageHref(n: number): string {
 		<a class="btn primary" href={ROUTES.REPS_NEW}>New scenario</a>
 	</header>
 
+	{#if bannerVisible && createdScenario}
+		<div class="banner" role="status">
+			<span>Scenario <strong>&ldquo;{createdScenario.title}&rdquo;</strong> saved.</span>
+			<button type="button" class="banner-dismiss" onclick={() => (bannerDismissed = true)} aria-label="Dismiss">
+				×
+			</button>
+		</div>
+	{/if}
+
 	<form class="filters" method="GET" role="search" aria-label="Filter scenarios">
 		<input type="hidden" name="page" value="1" />
 		<div class="filter">
@@ -131,6 +182,26 @@ function pageHref(n: number): string {
 		</div>
 	</form>
 
+	{#if chips.length > 0}
+		<div class="chip-row" aria-label="Active filters">
+			<span class="chip-label">Filtering:</span>
+			{#each chips as chip (chip.key)}
+				<a class="chip" href={removeChipHref(chip.key)} aria-label={`Remove ${chip.label} filter`}>
+					<span class="chip-name">{chip.label}:</span>
+					<span class="chip-value">{chip.value}</span>
+					<span class="chip-x" aria-hidden="true">×</span>
+				</a>
+			{/each}
+			<a class="chip-clear" href={ROUTES.REPS_BROWSE}>Clear all</a>
+		</div>
+	{/if}
+
+	{#if hasActiveFilters && scenarios.length > 0}
+		<p class="result-summary">
+			Showing {scenarios.length} scenario{scenarios.length === 1 ? '' : 's'}{hasMore ? '+' : ''} matching your filters.
+		</p>
+	{/if}
+
 	{#if scenarios.length === 0}
 		<div class="empty">
 			{#if hasActiveFilters}
@@ -144,7 +215,7 @@ function pageHref(n: number): string {
 	{:else}
 		<ul class="list">
 			{#each scenarios as s (s.id)}
-				<li class="card">
+				<li id={`scenario-${s.id}`} class="card" class:just-created={createdScenario?.id === s.id}>
 					<div class="card-head">
 						<h2 class="card-title">{s.title}</h2>
 						<span class="count">{s.optionsCount} options</span>
@@ -253,6 +324,106 @@ function pageHref(n: number): string {
 	.filter-actions {
 		display: flex;
 		gap: 0.375rem;
+	}
+
+	.banner {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		background: #eff6ff;
+		border: 1px solid #bfdbfe;
+		color: #1e3a8a;
+		padding: 0.625rem 0.875rem;
+		border-radius: 8px;
+		font-size: 0.875rem;
+	}
+
+	.banner-dismiss {
+		margin-left: auto;
+		background: transparent;
+		border: none;
+		color: #1e3a8a;
+		font-size: 1.25rem;
+		line-height: 1;
+		cursor: pointer;
+		padding: 0 0.25rem;
+	}
+
+	.banner-dismiss:hover {
+		color: #1d4ed8;
+	}
+
+	.chip-row {
+		display: flex;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: 0.375rem;
+		padding: 0 0.125rem;
+	}
+
+	.chip-label {
+		font-size: 0.75rem;
+		text-transform: uppercase;
+		letter-spacing: 0.06em;
+		color: #64748b;
+		font-weight: 600;
+		margin-right: 0.25rem;
+	}
+
+	.chip {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.375rem;
+		padding: 0.25rem 0.625rem;
+		background: #eff6ff;
+		border: 1px solid #bfdbfe;
+		border-radius: 999px;
+		color: #1d4ed8;
+		font-size: 0.8125rem;
+		text-decoration: none;
+		transition: background 120ms, border-color 120ms;
+	}
+
+	.chip:hover {
+		background: #dbeafe;
+		border-color: #93c5fd;
+	}
+
+	.chip-name {
+		color: #1e40af;
+		font-weight: 600;
+	}
+
+	.chip-value {
+		color: #0f172a;
+	}
+
+	.chip-x {
+		color: #2563eb;
+		font-size: 1rem;
+		line-height: 1;
+	}
+
+	.chip-clear {
+		font-size: 0.75rem;
+		color: #475569;
+		text-decoration: underline;
+		margin-left: 0.25rem;
+	}
+
+	.chip-clear:hover {
+		color: #1a1a2e;
+	}
+
+	.result-summary {
+		margin: 0;
+		color: #64748b;
+		font-size: 0.8125rem;
+	}
+
+	.card.just-created {
+		border-color: #86efac;
+		box-shadow: 0 0 0 3px rgba(134, 239, 172, 0.35);
 	}
 
 	.empty {
