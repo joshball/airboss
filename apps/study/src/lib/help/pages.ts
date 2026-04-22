@@ -1,10 +1,12 @@
 /**
  * Study-app help pages.
  *
- * Phase 1 of wp-help-library ships NO authored content. Phase 2
- * (wp-help-library-content) populates this array with the seven pages
- * listed in the work package spec. Keeping this export live today means
- * the registration plumbing is wired end-to-end from day one.
+ * Phase 2 of wp-help-library (this file): the seven authored pages that
+ * cover the UX gaps flagged in docs/work/reviews/2026-04-22-app-wide-ux.md.
+ *
+ * Each page's content file carries a header comment mapping the page to
+ * the specific UX-review findings it addresses. Page content lives in
+ * `./content/*.ts`; this module is the registration manifest.
  *
  * This module imports only the `HelpPage` type -- no aliases -- so it is
  * safe to import from both Vite-based runtime code and Bun-based build
@@ -14,5 +16,20 @@
  */
 
 import type { HelpPage } from '@ab/help';
+import { calibration } from './content/calibration';
+import { dashboard } from './content/dashboard';
+import { gettingStarted } from './content/getting-started';
+import { keyboardShortcuts } from './content/keyboard-shortcuts';
+import { knowledgeGraph } from './content/knowledge-graph';
+import { memoryReview } from './content/memory-review';
+import { repsSession } from './content/reps-session';
 
-export const studyHelpPages: readonly HelpPage[] = [];
+export const studyHelpPages: readonly HelpPage[] = [
+	gettingStarted,
+	dashboard,
+	memoryReview,
+	repsSession,
+	calibration,
+	knowledgeGraph,
+	keyboardShortcuts,
+];
