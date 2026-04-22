@@ -10,6 +10,13 @@ const memoryActive = $derived(page.url.pathname.startsWith(ROUTES.MEMORY));
 const repsActive = $derived(page.url.pathname.startsWith(ROUTES.REPS));
 const knowledgeActive = $derived(page.url.pathname.startsWith(ROUTES.KNOWLEDGE));
 const calibrationActive = $derived(page.url.pathname.startsWith(ROUTES.CALIBRATION));
+// Plans, /session/start and /sessions/* roll under one nav item -- they're
+// the same flow from the user's perspective.
+const plansActive = $derived(
+	page.url.pathname.startsWith(ROUTES.PLANS) ||
+		page.url.pathname.startsWith(ROUTES.SESSION_START) ||
+		page.url.pathname.startsWith(ROUTES.SESSIONS),
+);
 
 // Dashboard renders as a full-bleed TUI grid; every other surface keeps the
 // centered reading-column layout.
@@ -20,6 +27,7 @@ const fullBleed = $derived(dashboardActive);
 
 <nav aria-label="Primary">
 	<a href={ROUTES.DASHBOARD} aria-current={dashboardActive ? 'page' : undefined}>Dashboard</a>
+	<a href={ROUTES.PLANS} aria-current={plansActive ? 'page' : undefined}>Plans</a>
 	<a href={ROUTES.MEMORY} aria-current={memoryActive ? 'page' : undefined}>Memory</a>
 	<a href={ROUTES.REPS} aria-current={repsActive ? 'page' : undefined}>Reps</a>
 	<a href={ROUTES.KNOWLEDGE} aria-current={knowledgeActive ? 'page' : undefined}>Knowledge</a>
