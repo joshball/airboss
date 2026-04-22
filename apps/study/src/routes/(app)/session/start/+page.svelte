@@ -1,6 +1,9 @@
 <script lang="ts">
 import {
+	CUSTOM_TILE,
 	DOMAIN_LABELS,
+	type Preset,
+	type PresetId,
 	QUERY_PARAMS,
 	ROUTES,
 	SESSION_MODE_LABELS,
@@ -12,17 +15,23 @@ import {
 	type SessionReasonCode,
 	type SessionSlice,
 } from '@ab/constants';
+import Banner from '@ab/ui/components/Banner.svelte';
+import Button from '@ab/ui/components/Button.svelte';
 import { enhance } from '$app/forms';
 import { goto } from '$app/navigation';
 import { page } from '$app/state';
-import type { PageData } from './$types';
+import type { ActionData, PageData } from './$types';
 
-let { data }: { data: PageData } = $props();
+let { data, form }: { data: PageData; form: ActionData } = $props();
 
 let shuffling = $state(false);
 let starting = $state(false);
+/** Id of the preset tile currently submitting. Drives pending UI on that tile only. */
+let submittingPresetId = $state<PresetId | null>(null);
 
 const preview = $derived(data.needsPlan ? null : data.preview);
+const presets: readonly Preset[] = $derived(data.needsPlan ? data.presets : []);
+const presetError = $derived(typeof form?.error === 'string' ? form.error : null);
 
 type PreviewItem = NonNullable<typeof preview>['items'][number];
 
@@ -80,19 +89,70 @@ function reasonLabel(code: SessionReasonCode): string {
 			<h1>Start a session</h1>
 			{#if preview}
 				<p class="sub">{preview.items.length} items queued. Review the plan, then start.</p>
+			{:else if data.needsPlan}
+				<p class="sub">Pick a plan to get started -- you'll be in a scenario in one click.</p>
 			{/if}
 		</div>
 		<nav class="quick">
-			<a class="btn ghost" href={ROUTES.DASHBOARD}>Cancel</a>
+			<Button variant="ghost" href={ROUTES.DASHBOARD}>Cancel</Button>
 		</nav>
 	</header>
 
 	{#if data.needsPlan}
-		<article class="empty">
-			<h2>No active study plan yet</h2>
-			<p class="muted">Create one first -- that's how the engine knows what to pick.</p>
-			<a class="btn primary" href={ROUTES.PLANS_NEW}>Create plan</a>
-		</article>
+		{#if presetError}
+			<Banner variant="danger" title="Couldn't start the session">{presetError}</Banner>
+		{/if}
+
+		<section class="gallery" aria-labelledby="gallery-h">
+			<h2 id="gallery-h" class="gallery-h">Pick a plan to get started</h2>
+			<ul class="tiles">
+				{#each presets as preset, idx (preset.id)}
+					{@const isBusy = submittingPresetId === preset.id}
+					{@const disableOthers = submittingPresetId !== null && submittingPresetId !== preset.id}
+					<li>
+						<form
+							method="post"
+							action="?/startFromPreset"
+							use:enhance={() => {
+								submittingPresetId = preset.id as PresetId;
+								return async ({ update }) => {
+									await update();
+									submittingPresetId = null;
+								};
+							}}
+						>
+							<input type="hidden" name="presetId" value={preset.id} />
+							<button
+								type="submit"
+								class="tile"
+								class:is-busy={isBusy}
+								class:is-primary={idx === 0}
+								disabled={isBusy || disableOthers}
+								aria-busy={isBusy}
+							>
+								<span class="tile-label">{preset.label}</span>
+								<span class="tile-desc">{preset.description}</span>
+								{#if isBusy}
+									<span class="tile-status" aria-live="polite">Starting…</span>
+								{/if}
+							</button>
+						</form>
+					</li>
+				{/each}
+				<li>
+					<a
+						class="tile tile-custom"
+						href={ROUTES.PLANS_NEW}
+						class:is-disabled={submittingPresetId !== null}
+						aria-disabled={submittingPresetId !== null ? 'true' : undefined}
+						tabindex={submittingPresetId !== null ? -1 : 0}
+					>
+						<span class="tile-label">{CUSTOM_TILE.label}</span>
+						<span class="tile-desc">{CUSTOM_TILE.description}</span>
+					</a>
+				</li>
+			</ul>
+		</section>
 	{:else if preview}
 		<article class="controls">
 			<div class="mode-row">
@@ -125,8 +185,8 @@ function reasonLabel(code: SessionReasonCode): string {
 				<h2>Nothing to study yet</h2>
 				<p class="muted">Add cards or scenarios first, or wait for the knowledge graph to populate.</p>
 				<div class="row">
-					<a class="btn secondary" href={ROUTES.MEMORY_NEW}>New card</a>
-					<a class="btn secondary" href={ROUTES.REPS_NEW}>New scenario</a>
+					<Button variant="secondary" href={ROUTES.MEMORY_NEW}>New card</Button>
+					<Button variant="secondary" href={ROUTES.REPS_NEW}>New scenario</Button>
 				</div>
 			</article>
 		{:else}
@@ -181,12 +241,12 @@ function reasonLabel(code: SessionReasonCode): string {
 				{#if preview.focus}<input type="hidden" name="focus" value={preview.focus} />{/if}
 				{#if preview.cert}<input type="hidden" name="cert" value={preview.cert} />{/if}
 				<input type="hidden" name="seed" value={preview.seed} />
-				<button type="button" class="btn secondary" onclick={shuffle} disabled={shuffling}>
-					{shuffling ? 'Shuffling…' : 'Shuffle'}
-				</button>
-				<button type="submit" class="btn primary" disabled={starting}>
-					{starting ? 'Starting…' : 'Start session'}
-				</button>
+				<Button variant="secondary" onclick={shuffle} disabled={shuffling} loading={shuffling} loadingLabel="Shuffling…">
+					Shuffle
+				</Button>
+				<Button type="submit" variant="primary" disabled={starting} loading={starting} loadingLabel="Starting…">
+					Start session
+				</Button>
 			</form>
 		{/if}
 	{/if}
@@ -196,14 +256,14 @@ function reasonLabel(code: SessionReasonCode): string {
 	.page {
 		display: flex;
 		flex-direction: column;
-		gap: 1.25rem;
+		gap: var(--ab-space-xl);
 	}
 
 	.hd {
 		display: flex;
 		justify-content: space-between;
 		align-items: flex-start;
-		gap: 1rem;
+		gap: var(--ab-space-lg);
 		flex-wrap: wrap;
 	}
 
@@ -211,24 +271,139 @@ function reasonLabel(code: SessionReasonCode): string {
 		margin: 0;
 		font-size: 1.75rem;
 		letter-spacing: -0.02em;
-		color: #0f172a;
+		color: var(--ab-color-fg);
 	}
 
 	.sub {
-		margin: 0.25rem 0 0;
-		color: #64748b;
+		margin: var(--ab-space-2xs) 0 0;
+		color: var(--ab-color-fg-subtle);
 		font-size: 0.9375rem;
 	}
 
+	/* Preset gallery */
+	.gallery {
+		display: flex;
+		flex-direction: column;
+		gap: var(--ab-space-lg);
+	}
+
+	.gallery-h {
+		margin: 0;
+		font-size: 1.125rem;
+		color: var(--ab-color-fg);
+	}
+
+	.tiles {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+		gap: var(--ab-space-lg);
+	}
+
+	.tiles > li {
+		display: flex;
+	}
+
+	.tiles > li > form,
+	.tiles > li > a {
+		display: flex;
+		width: 100%;
+	}
+
+	.tiles > li > form {
+		margin: 0;
+	}
+
+	.tile {
+		display: flex;
+		flex-direction: column;
+		gap: var(--ab-space-2xs);
+		text-align: left;
+		width: 100%;
+		background: var(--ab-color-surface-raised);
+		border: 1px solid var(--ab-color-border);
+		border-radius: var(--ab-radius-md);
+		padding: var(--ab-space-lg) var(--ab-space-xl);
+		box-shadow: var(--ab-shadow-sm);
+		cursor: pointer;
+		font: inherit;
+		color: var(--ab-color-fg);
+		text-decoration: none;
+		transition:
+			border-color var(--ab-transition-fast),
+			background var(--ab-transition-fast),
+			box-shadow var(--ab-transition-fast),
+			transform var(--ab-transition-fast);
+	}
+
+	.tile:hover:not(:disabled):not(.is-disabled) {
+		border-color: var(--ab-color-primary);
+		background: var(--ab-color-surface-muted);
+	}
+
+	.tile:focus-visible {
+		outline: none;
+		box-shadow: 0 0 0 3px var(--ab-color-focus-ring);
+	}
+
+	.tile:active:not(:disabled):not(.is-disabled) {
+		transform: translateY(1px);
+	}
+
+	.tile:disabled,
+	.tile.is-disabled {
+		cursor: not-allowed;
+		opacity: 0.55;
+	}
+
+	.tile.is-primary {
+		border-color: var(--ab-color-primary);
+	}
+
+	.tile.is-busy {
+		cursor: progress;
+	}
+
+	.tile-label {
+		font-size: 1rem;
+		font-weight: var(--ab-font-weight-semibold);
+		color: var(--ab-color-fg);
+	}
+
+	.tile-desc {
+		font-size: 0.8125rem;
+		color: var(--ab-color-fg-muted);
+		line-height: var(--ab-line-height-normal);
+	}
+
+	.tile-status {
+		margin-top: var(--ab-space-xs);
+		font-size: 0.75rem;
+		color: var(--ab-color-primary);
+		font-weight: var(--ab-font-weight-semibold);
+	}
+
+	.tile-custom {
+		border-style: dashed;
+		background: var(--ab-color-surface-sunken);
+	}
+
+	.tile-custom:hover {
+		background: var(--ab-color-surface-muted);
+	}
+
+	/* Existing in-plan UI */
 	.empty {
-		background: white;
-		border: 1px solid #e2e8f0;
-		border-radius: 12px;
-		padding: 2rem;
+		background: var(--ab-color-surface-raised);
+		border: 1px solid var(--ab-color-border);
+		border-radius: var(--ab-radius-md);
+		padding: var(--ab-space-2xl);
 		text-align: center;
 		display: flex;
 		flex-direction: column;
-		gap: 0.75rem;
+		gap: var(--ab-space-md);
 		align-items: center;
 	}
 
@@ -238,43 +413,45 @@ function reasonLabel(code: SessionReasonCode): string {
 	}
 
 	.controls {
-		background: white;
-		border: 1px solid #e2e8f0;
-		border-radius: 12px;
-		padding: 1rem 1.25rem;
+		background: var(--ab-color-surface-raised);
+		border: 1px solid var(--ab-color-border);
+		border-radius: var(--ab-radius-md);
+		padding: var(--ab-space-lg) var(--ab-space-xl);
 		display: flex;
 		flex-direction: column;
-		gap: 0.75rem;
+		gap: var(--ab-space-md);
 	}
 
 	.mode-row {
 		display: flex;
 		align-items: center;
-		gap: 0.5rem;
+		gap: var(--ab-space-sm);
 	}
 
 	.mode-row label {
-		font-weight: 600;
+		font-weight: var(--ab-font-weight-semibold);
 		font-size: 0.875rem;
 	}
 
 	.mode-row select {
-		border: 1px solid #cbd5e1;
-		border-radius: 8px;
-		padding: 0.375rem 0.5rem;
+		border: 1px solid var(--ab-color-border-strong);
+		border-radius: var(--ab-control-radius);
+		padding: var(--ab-space-xs) var(--ab-space-sm);
 		font-size: 0.875rem;
+		background: var(--ab-color-surface);
+		color: var(--ab-color-fg);
 	}
 
 	.meta {
 		display: flex;
-		gap: 1rem;
+		gap: var(--ab-space-lg);
 		flex-wrap: wrap;
-		color: #475569;
+		color: var(--ab-color-fg-muted);
 		font-size: 0.8125rem;
 	}
 
 	.link {
-		color: #1d4ed8;
+		color: var(--ab-color-primary);
 		text-decoration: none;
 	}
 
@@ -284,36 +461,36 @@ function reasonLabel(code: SessionReasonCode): string {
 
 	.note {
 		margin: 0;
-		color: #92400e;
-		background: #fef3c7;
-		padding: 0.5rem 0.75rem;
-		border-radius: 6px;
+		color: var(--ab-color-warning-active);
+		background: var(--ab-color-warning-subtle);
+		padding: var(--ab-space-sm) var(--ab-space-md);
+		border-radius: var(--ab-radius-sm);
 		font-size: 0.8125rem;
 	}
 
 	.preview {
-		background: white;
-		border: 1px solid #e2e8f0;
-		border-radius: 12px;
-		padding: 1.25rem 1.5rem;
+		background: var(--ab-color-surface-raised);
+		border: 1px solid var(--ab-color-border);
+		border-radius: var(--ab-radius-md);
+		padding: var(--ab-space-xl) var(--ab-space-2xl);
 		display: flex;
 		flex-direction: column;
-		gap: 1rem;
+		gap: var(--ab-space-lg);
 	}
 
 	.preview > h2 {
 		margin: 0;
 		font-size: 0.8125rem;
-		color: #64748b;
+		color: var(--ab-color-fg-subtle);
 		text-transform: uppercase;
 		letter-spacing: 0.08em;
-		font-weight: 600;
+		font-weight: var(--ab-font-weight-semibold);
 	}
 
 	.slice {
 		display: flex;
 		flex-direction: column;
-		gap: 0.5rem;
+		gap: var(--ab-space-sm);
 	}
 
 	.slice-hd {
@@ -325,11 +502,11 @@ function reasonLabel(code: SessionReasonCode): string {
 	.slice-hd h3 {
 		margin: 0;
 		font-size: 0.9375rem;
-		color: #0f172a;
+		color: var(--ab-color-fg);
 	}
 
 	.count {
-		color: #64748b;
+		color: var(--ab-color-fg-subtle);
 		font-size: 0.75rem;
 	}
 
@@ -339,114 +516,72 @@ function reasonLabel(code: SessionReasonCode): string {
 		margin: 0;
 		display: flex;
 		flex-direction: column;
-		gap: 0.25rem;
+		gap: var(--ab-space-2xs);
 	}
 
 	.item {
 		display: flex;
-		gap: 0.5rem;
+		gap: var(--ab-space-sm);
 		align-items: baseline;
-		padding: 0.375rem 0.625rem;
-		background: #f8fafc;
-		border: 1px solid #e2e8f0;
-		border-radius: 8px;
+		padding: var(--ab-space-xs) var(--ab-space-md);
+		background: var(--ab-color-surface-muted);
+		border: 1px solid var(--ab-color-border);
+		border-radius: var(--ab-radius-sm);
 		font-size: 0.8125rem;
 	}
 
 	.kind {
 		display: inline-block;
-		font-weight: 700;
+		font-weight: var(--ab-font-weight-bold);
 		font-size: 0.6875rem;
 		text-transform: uppercase;
 		letter-spacing: 0.06em;
-		padding: 0.125rem 0.375rem;
-		border-radius: 4px;
-		background: #e2e8f0;
-		color: #475569;
+		padding: var(--ab-space-2xs) var(--ab-space-xs);
+		border-radius: var(--ab-radius-sm);
+		background: var(--ab-color-border);
+		color: var(--ab-color-fg-muted);
 	}
 
 	.kind[data-kind='node_start'] {
-		background: #dbeafe;
-		color: #1d4ed8;
+		background: var(--ab-color-info-subtle);
+		color: var(--ab-color-info-active);
 	}
 
 	.kind[data-kind='rep'] {
-		background: #fef3c7;
-		color: #92400e;
+		background: var(--ab-color-warning-subtle);
+		color: var(--ab-color-warning-active);
 	}
 
 	.reason {
-		color: #0f172a;
-		font-weight: 500;
+		color: var(--ab-color-fg);
+		font-weight: var(--ab-font-weight-medium);
 	}
 
 	.detail {
-		color: #64748b;
+		color: var(--ab-color-fg-subtle);
 	}
 
 	.id {
 		margin-left: auto;
-		color: #94a3b8;
-		font-family: ui-monospace, monospace;
+		color: var(--ab-color-fg-faint);
+		font-family: var(--ab-font-family-mono, ui-monospace, monospace);
 		font-size: 0.75rem;
 	}
 
 	.start-row {
 		display: flex;
 		justify-content: flex-end;
-		gap: 0.5rem;
+		gap: var(--ab-space-sm);
 	}
 
 	.row {
 		display: flex;
-		gap: 0.5rem;
+		gap: var(--ab-space-sm);
 	}
 
 	.muted {
-		color: #94a3b8;
+		color: var(--ab-color-fg-faint);
 		margin: 0;
 		font-size: 0.875rem;
-	}
-
-	.btn {
-		padding: 0.5rem 1rem;
-		font-size: 0.9375rem;
-		font-weight: 600;
-		border-radius: 8px;
-		border: 1px solid transparent;
-		cursor: pointer;
-		text-decoration: none;
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-	}
-
-	.btn.primary {
-		background: #2563eb;
-		color: white;
-	}
-
-	.btn.primary:hover:not(:disabled) {
-		background: #1d4ed8;
-	}
-
-	.btn.primary:disabled {
-		opacity: 0.6;
-		cursor: not-allowed;
-	}
-
-	.btn.secondary {
-		background: #f1f5f9;
-		color: #1a1a2e;
-		border-color: #cbd5e1;
-	}
-
-	.btn.ghost {
-		background: transparent;
-		color: #475569;
-	}
-
-	.btn.ghost:hover {
-		background: #f1f5f9;
 	}
 </style>
