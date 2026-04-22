@@ -14,7 +14,7 @@ See [docs/platform/PIVOT.md](docs/platform/PIVOT.md) for why we're here. See [do
 - When porting from airboss-firc: take the code, schema, and patterns. Do **not** take the UI/UX -- that's being redesigned here.
 - Zero tolerance for known issues. A stub is a known issue. Fix it before moving on.
 
-**Never use the word "honest" or any variant.** "Honestly", "to be honest", "the honest answer", "the honest read", "honest-to-god" -- all banned in every line of text: chat replies, code comments, commit messages, docs, PR descriptions. The word implies prior dishonesty. State claims directly ("I didn't switch back -- sloppy"); acknowledge uncertainty directly ("I'm not sure"); never frame either as a confession.
+**Never use the word "honest" or any variant to qualify my own statements.** "Honestly", "to be honest", "the honest answer", "the honest read", "my honest opinion", "honest-to-god" -- all banned *as agent speech*. The word implies my other statements weren't honest, which is absurd. State claims directly ("I got this wrong"); acknowledge uncertainty directly ("I'm not sure"); never frame either as a confession. **This is about me (the agent) qualifying my own voice -- not about the word itself.** Document content (scenario prose, a definition like "a student must be honest with themselves," a quote, a heading about integrity) uses the word naturally and that's fine. Only flag occurrences where an agent uses it to preface or qualify its own assertion.
 
 ## SESSION START
 
