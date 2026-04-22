@@ -18,7 +18,7 @@ import { $ } from 'bun';
 import { randomBytes } from 'node:crypto';
 import dns from 'node:dns/promises';
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
-import { HOSTS } from '../libs/constants/src/hosts';
+import { HOSTS } from '@ab/constants/hosts';
 
 const ENV_PATH = '.env';
 const ENV_EXAMPLE_PATH = '.env.example';

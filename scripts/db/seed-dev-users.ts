@@ -10,10 +10,7 @@
  * Run: bun scripts/db/seed-dev-users.ts
  */
 
-import { and, eq } from 'drizzle-orm';
-import { drizzle } from 'drizzle-orm/postgres-js';
-import postgres from 'postgres';
-import { bauthAccount, bauthUser } from '../../libs/auth/src/schema';
+import { bauthAccount, bauthUser } from '@ab/auth/schema';
 import {
 	BETTER_AUTH_PROVIDERS,
 	DEV_ACCOUNTS,
@@ -22,8 +19,11 @@ import {
 	DEV_PASSWORD,
 	ENV_VARS,
 	isProd,
-} from '../../libs/constants/src/index';
-import { generateAuthId } from '../../libs/utils/src/ids';
+} from '@ab/constants';
+import { generateAuthId } from '@ab/utils/ids';
+import { and, eq } from 'drizzle-orm';
+import { drizzle } from 'drizzle-orm/postgres-js';
+import postgres from 'postgres';
 
 const connectionString = process.env[ENV_VARS.DATABASE_URL] ?? DEV_DB_URL;
 

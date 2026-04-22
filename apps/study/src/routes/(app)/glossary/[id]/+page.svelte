@@ -105,8 +105,8 @@ const related = $derived(data.related);
 	.crumbs {
 		display: flex;
 		gap: 0.375rem;
-		font-size: 0.8125rem;
-		color: var(--ab-color-fg-muted, #475569);
+		font-size: var(--ab-font-size-sm);
+		color: var(--ab-color-fg-muted, var(--ab-color-fg-muted));
 	}
 
 	.crumbs a {
@@ -125,14 +125,14 @@ const related = $derived(data.related);
 
 	.hd h1 {
 		margin: 0;
-		font-size: 1.5rem;
+		font-size: var(--ab-font-size-xl);
 		letter-spacing: -0.02em;
 	}
 
 	.id {
 		font-family: var(--ab-font-mono, ui-monospace, monospace);
-		font-size: 0.8125rem;
-		color: var(--ab-color-fg-subtle, #94a3b8);
+		font-size: var(--ab-font-size-sm);
+		color: var(--ab-color-fg-subtle, var(--ab-color-fg-faint));
 	}
 
 	.tags {
@@ -144,51 +144,51 @@ const related = $derived(data.related);
 	.chip {
 		display: inline-flex;
 		padding: 0.125rem 0.5rem;
-		font-size: 0.6875rem;
-		border-radius: 999px;
-		background: var(--ab-color-surface-sunken, #f1f5f9);
-		color: var(--ab-color-fg-muted, #475569);
+		font-size: var(--ab-font-size-xs);
+		border-radius: var(--ab-radius-pill);
+		background: var(--ab-color-surface-sunken, var(--ab-color-surface-sunken));
+		color: var(--ab-color-fg-muted, var(--ab-color-fg-muted));
 		text-transform: uppercase;
 		letter-spacing: 0.04em;
-		border: 1px solid var(--ab-color-border, #e2e8f0);
+		border: 1px solid var(--ab-color-border, var(--ab-color-border));
 	}
 
 	.body h2 {
 		margin: 0 0 0.5rem;
-		font-size: 0.875rem;
+		font-size: var(--ab-font-size-sm);
 		font-weight: 700;
 		text-transform: uppercase;
 		letter-spacing: 0.06em;
-		color: var(--ab-color-fg-muted, #475569);
+		color: var(--ab-color-fg-muted, var(--ab-color-fg-muted));
 	}
 
 	.body h2 .version {
 		font-weight: 400;
 		text-transform: none;
 		letter-spacing: normal;
-		color: var(--ab-color-fg-subtle, #94a3b8);
-		font-size: 0.75rem;
+		color: var(--ab-color-fg-subtle, var(--ab-color-fg-faint));
+		font-size: var(--ab-font-size-xs);
 	}
 
 	.verbatim {
 		white-space: pre-wrap;
-		background: var(--ab-color-surface-sunken, #f8fafc);
+		background: var(--ab-color-surface-sunken, var(--ab-color-surface-muted));
 		padding: 0.875rem 1rem;
-		border-radius: 8px;
-		border: 1px solid var(--ab-color-border, #e2e8f0);
+		border-radius: var(--ab-radius-md);
+		border: 1px solid var(--ab-color-border, var(--ab-color-border));
 		margin: 0;
 		font-family: var(--ab-font-mono, ui-monospace, monospace);
-		font-size: 0.8125rem;
+		font-size: var(--ab-font-size-sm);
 		line-height: 1.5;
 	}
 
 	.pending {
 		padding: 0.75rem 1rem;
-		border-radius: 8px;
-		background: #fefce8;
-		border: 1px solid #fde047;
-		color: #a16207;
-		font-size: 0.875rem;
+		border-radius: var(--ab-radius-md);
+		background: var(--ab-color-warning-subtle);
+		border: 1px solid var(--ab-color-warning-subtle-border);
+		color: var(--ab-color-warning-hover);
+		font-size: var(--ab-font-size-sm);
 	}
 
 	.sources {
@@ -208,11 +208,11 @@ const related = $derived(data.related);
 
 	.sid {
 		font-family: var(--ab-font-mono, ui-monospace, monospace);
-		font-size: 0.8125rem;
+		font-size: var(--ab-font-size-sm);
 		padding: 0.0625rem 0.375rem;
-		border-radius: 4px;
-		background: var(--ab-color-surface-sunken, #f1f5f9);
-		color: var(--ab-color-fg-muted, #475569);
+		border-radius: var(--ab-radius-xs);
+		background: var(--ab-color-surface-sunken, var(--ab-color-surface-sunken));
+		color: var(--ab-color-fg-muted, var(--ab-color-fg-muted));
 	}
 
 	.related {
@@ -225,7 +225,7 @@ const related = $derived(data.related);
 	}
 
 	.related a {
-		color: var(--ab-color-primary, #2563eb);
+		color: var(--ab-color-primary, var(--ab-color-primary));
 		text-decoration: none;
 		border-bottom: 1px dotted currentColor;
 	}

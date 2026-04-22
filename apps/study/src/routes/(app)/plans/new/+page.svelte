@@ -164,21 +164,21 @@ const seedSkip = $derived(new Set((form?.values?.skipDomains ?? []) as string[])
 
 	h1 {
 		margin: 0;
-		font-size: 1.75rem;
+		font-size: var(--ab-font-size-2xl);
 		letter-spacing: -0.02em;
-		color: #0f172a;
+		color: var(--ab-color-fg);
 	}
 
 	.sub {
 		margin: 0.25rem 0 0;
-		color: #64748b;
-		font-size: 0.9375rem;
+		color: var(--ab-color-fg-subtle);
+		font-size: var(--ab-font-size-body);
 	}
 
 	.wizard {
 		background: white;
-		border: 1px solid #e2e8f0;
-		border-radius: 12px;
+		border: 1px solid var(--ab-color-border);
+		border-radius: var(--ab-radius-lg);
 		padding: 1.5rem;
 		display: flex;
 		flex-direction: column;
@@ -196,20 +196,20 @@ const seedSkip = $derived(new Set((form?.values?.skipDomains ?? []) as string[])
 
 	legend {
 		font-weight: 600;
-		color: #0f172a;
+		color: var(--ab-color-fg);
 	}
 
 	.help {
 		margin: 0;
-		color: #64748b;
-		font-size: 0.8125rem;
+		color: var(--ab-color-fg-subtle);
+		font-size: var(--ab-font-size-sm);
 	}
 
 	input[type='text'] {
-		border: 1px solid #cbd5e1;
-		border-radius: 8px;
+		border: 1px solid var(--ab-color-border-strong);
+		border-radius: var(--ab-radius-md);
 		padding: 0.5rem 0.75rem;
-		font-size: 0.9375rem;
+		font-size: var(--ab-font-size-body);
 	}
 
 	.choice-row {
@@ -229,27 +229,27 @@ const seedSkip = $derived(new Set((form?.values?.skipDomains ?? []) as string[])
 		gap: 0.375rem;
 		align-items: center;
 		padding: 0.375rem 0.75rem;
-		background: #f8fafc;
-		border: 1px solid #e2e8f0;
-		border-radius: 8px;
+		background: var(--ab-color-surface-muted);
+		border: 1px solid var(--ab-color-border);
+		border-radius: var(--ab-radius-md);
 		cursor: pointer;
-		font-size: 0.875rem;
+		font-size: var(--ab-font-size-sm);
 	}
 
 	.choice:hover {
-		background: #eff6ff;
-		border-color: #bfdbfe;
+		background: var(--ab-color-primary-subtle);
+		border-color: var(--ab-color-primary-subtle-border);
 	}
 
 	.choice input {
-		accent-color: #2563eb;
+		accent-color: var(--ab-color-primary);
 	}
 
 	.range-caps {
 		display: flex;
 		justify-content: space-between;
-		font-size: 0.75rem;
-		color: #64748b;
+		font-size: var(--ab-font-size-xs);
+		color: var(--ab-color-fg-subtle);
 	}
 
 	.actions {
@@ -259,19 +259,19 @@ const seedSkip = $derived(new Set((form?.values?.skipDomains ?? []) as string[])
 	}
 
 	.error {
-		background: #fef2f2;
-		color: #b91c1c;
+		background: var(--ab-color-danger-subtle);
+		color: var(--ab-color-danger-hover);
 		padding: 0.625rem 0.875rem;
-		border-radius: 8px;
-		border: 1px solid #fecaca;
-		font-size: 0.875rem;
+		border-radius: var(--ab-radius-md);
+		border: 1px solid var(--ab-color-danger-subtle-border);
+		font-size: var(--ab-font-size-sm);
 	}
 
 	.btn {
 		padding: 0.5rem 1rem;
-		font-size: 0.9375rem;
+		font-size: var(--ab-font-size-body);
 		font-weight: 600;
-		border-radius: 8px;
+		border-radius: var(--ab-radius-md);
 		border: 1px solid transparent;
 		cursor: pointer;
 		text-decoration: none;
@@ -281,12 +281,12 @@ const seedSkip = $derived(new Set((form?.values?.skipDomains ?? []) as string[])
 	}
 
 	.btn.primary {
-		background: #2563eb;
+		background: var(--ab-color-primary);
 		color: white;
 	}
 
 	.btn.primary:hover:not(:disabled) {
-		background: #1d4ed8;
+		background: var(--ab-color-primary-hover);
 	}
 
 	.btn.primary:disabled {
@@ -296,10 +296,10 @@ const seedSkip = $derived(new Set((form?.values?.skipDomains ?? []) as string[])
 
 	.btn.ghost {
 		background: transparent;
-		color: #475569;
+		color: var(--ab-color-fg-muted);
 	}
 
 	.btn.ghost:hover {
-		background: #f1f5f9;
+		background: var(--ab-color-surface-sunken);
 	}
 </style>

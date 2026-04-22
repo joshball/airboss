@@ -32,31 +32,31 @@ let { activityId }: Props = $props();
 		margin: 0.75rem 0;
 		padding: 1rem;
 		background: white;
-		border: 1px solid #e2e8f0;
-		border-radius: 12px;
+		border: 1px solid var(--ab-color-border);
+		border-radius: var(--ab-radius-lg);
 	}
 
 	.activity figcaption {
 		margin-top: 0.625rem;
-		color: #64748b;
-		font-size: 0.875rem;
+		color: var(--ab-color-fg-subtle);
+		font-size: var(--ab-font-size-sm);
 		text-align: center;
 	}
 
 	.unknown {
 		margin: 0.75rem 0;
 		padding: 0.75rem 1rem;
-		background: #fffbeb;
-		border: 1px solid #fde68a;
-		border-radius: 8px;
-		font-size: 0.875rem;
-		color: #92400e;
+		background: var(--ab-color-warning-subtle);
+		border: 1px solid var(--ab-color-warning-subtle-border);
+		border-radius: var(--ab-radius-md);
+		font-size: var(--ab-font-size-sm);
+		color: var(--ab-color-warning-active);
 	}
 
 	.unknown code {
 		font-family: ui-monospace, 'SF Mono', Menlo, monospace;
 		background: white;
 		padding: 0.05em 0.35em;
-		border-radius: 4px;
+		border-radius: var(--ab-radius-xs);
 	}
 </style>

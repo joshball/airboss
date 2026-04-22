@@ -5,9 +5,9 @@
  * Run: bun scripts/db/reset-study.ts
  */
 
+import { DEV_DB_HOST_PATTERN, DEV_DB_URL, ENV_VARS, isProd } from '@ab/constants';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
-import { DEV_DB_HOST_PATTERN, DEV_DB_URL, ENV_VARS, isProd } from '../../libs/constants/src/index';
 
 const connectionString = process.env[ENV_VARS.DATABASE_URL] ?? DEV_DB_URL;
 

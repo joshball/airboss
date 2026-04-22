@@ -38,7 +38,7 @@ The **build script on main** (`bun run build-knowledge`, `scripts/build-knowledg
   tags: []
 ```
 
-`bun run knowledge:seed --user <email>` (`scripts/knowledge-seed.ts`) materializes these as `study.card` rows with `node_id` set, `source_type = 'course'`, `is_editable = false`. Wholesale-replaces any existing course cards for the (user, node) pair so re-running is idempotent. Personal cards (`source_type = 'personal'`) are never touched. When a node's authored card count exceeds ~15 this will be split into a separate `cards/*.yaml` file per node; that split is a v2 concern.
+`bun run db seed cards` (`scripts/db/seed-cards.ts`, orchestrated from `scripts/db/seed-all.ts`) materializes these as `study.card` rows with `node_id` set, `source_type = 'course'`, `is_editable = false`. Runs for every account in `DEV_ACCOUNTS`. Wholesale-replaces any existing course cards for the (user, node) pair so re-running is idempotent. Personal cards (`source_type = 'personal'`) are never touched. When a node's authored card count exceeds ~15 this will be split into a separate `cards/*.yaml` file per node; that split is a v2 concern.
 
 The `bun run knowledge:new <domain> <slug>` scaffolder (`scripts/knowledge-new.ts`) emits a skeleton node.md with TODO-commented frontmatter fields and the seven H2 phase stubs -- the canonical starting point when authoring a new node.
 

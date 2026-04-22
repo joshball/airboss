@@ -72,7 +72,11 @@ export const ROUTES = {
 
 	// Study -- Reps
 	// `REPS_SESSION` retired by ADR 012 phase 3; the `/reps/session` route
-	// was deleted in phase 6. All rep entry points link `SESSION_START`.
+	// was deleted in phase 6. The remaining `/reps` surfaces survive ADR
+	// 012 because they are substrate-independent: `REPS` is the scheduled-
+	// queue dashboard, `REPS_BROWSE` is the rep library, and `REPS_NEW` is
+	// the authoring flow. All rep *runtime* entry points (solving a rep in
+	// a session) now go through `SESSION_START` -> `SESSION_ID`.
 	REPS: '/reps',
 	REPS_BROWSE: '/reps/browse',
 	REPS_NEW: '/reps/new',

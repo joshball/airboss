@@ -9,7 +9,7 @@
  *   bun run db <command> --help     # detailed help for one command
  */
 
-import { DEV_DB, DEV_DB_HOST_PATTERN, DEV_DB_URL, ENV_VARS, isProd, PORTS, SCHEMAS } from '../libs/constants/src/index';
+import { DEV_DB, DEV_DB_HOST_PATTERN, DEV_DB_URL, ENV_VARS, isProd, PORTS, SCHEMAS } from '@ab/constants';
 
 const CONTAINER = 'airboss-db';
 const DB_URL = process.env[ENV_VARS.DATABASE_URL] ?? DEV_DB_URL;

@@ -81,21 +81,21 @@ function groupBySurface(
 
 	.hd h1 {
 		margin: 0;
-		font-size: 1.5rem;
+		font-size: var(--ab-font-size-xl);
 		letter-spacing: -0.02em;
 	}
 
 	.sub {
 		margin: 0.25rem 0 0;
-		color: var(--ab-color-fg-muted, #64748b);
+		color: var(--ab-color-fg-muted, var(--ab-color-fg-subtle));
 	}
 
 	.empty {
-		border: 1px dashed var(--ab-color-border-strong, #cbd5e1);
-		border-radius: 12px;
+		border: 1px dashed var(--ab-color-border-strong, var(--ab-color-border-strong));
+		border-radius: var(--ab-radius-lg);
 		padding: 2rem 1.5rem;
 		text-align: center;
-		color: var(--ab-color-fg-muted, #64748b);
+		color: var(--ab-color-fg-muted, var(--ab-color-fg-subtle));
 		display: flex;
 		flex-direction: column;
 		align-items: center;
@@ -104,8 +104,8 @@ function groupBySurface(
 
 	.empty h2 {
 		margin: 0;
-		font-size: 1.125rem;
-		color: var(--ab-color-fg, #0f172a);
+		font-size: var(--ab-font-size-lg);
+		color: var(--ab-color-fg, var(--ab-color-fg));
 	}
 
 	.empty p {
@@ -115,15 +115,15 @@ function groupBySurface(
 	}
 
 	.empty .hint {
-		font-size: 0.875rem;
+		font-size: var(--ab-font-size-sm);
 	}
 
 	.group h2 {
 		margin: 0 0 0.75rem;
-		font-size: 1rem;
+		font-size: var(--ab-font-size-base);
 		text-transform: uppercase;
 		letter-spacing: 0.08em;
-		color: var(--ab-color-fg-muted, #64748b);
+		color: var(--ab-color-fg-muted, var(--ab-color-fg-subtle));
 	}
 
 	.cards {
@@ -140,52 +140,52 @@ function groupBySurface(
 		flex-direction: column;
 		gap: 0.375rem;
 		padding: 0.875rem 1rem;
-		border: 1px solid var(--ab-color-border, #e2e8f0);
+		border: 1px solid var(--ab-color-border, var(--ab-color-border));
 		border-radius: var(--ab-radius-md, 6px);
-		background: var(--ab-color-surface, #ffffff);
+		background: var(--ab-color-surface, var(--ab-color-surface));
 		text-decoration: none;
 		color: inherit;
 	}
 
 	.card:hover {
-		border-color: var(--ab-color-primary, #3b82f6);
+		border-color: var(--ab-color-primary, var(--ab-color-primary));
 	}
 
 	.card:focus-visible {
-		outline: 2px solid var(--ab-color-focus-ring, #60a5fa);
+		outline: 2px solid var(--ab-color-focus-ring, var(--ab-color-primary-subtle-border));
 		outline-offset: 2px;
 	}
 
 	.title {
 		font-weight: var(--ab-font-weight-semibold, 600);
-		font-size: 1rem;
+		font-size: var(--ab-font-size-base);
 	}
 
 	.summary {
-		font-size: 0.875rem;
-		color: var(--ab-color-fg-muted, #64748b);
+		font-size: var(--ab-font-size-sm);
+		color: var(--ab-color-fg-muted, var(--ab-color-fg-subtle));
 		line-height: 1.45;
 	}
 
 	.documents {
-		font-size: 0.75rem;
-		color: var(--ab-color-fg-subtle, #94a3b8);
+		font-size: var(--ab-font-size-xs);
+		color: var(--ab-color-fg-subtle, var(--ab-color-fg-faint));
 	}
 
 	.documents code {
-		background: var(--ab-color-surface-sunken, #f1f5f9);
+		background: var(--ab-color-surface-sunken, var(--ab-color-surface-sunken));
 		padding: 0 0.3125rem;
-		border-radius: 3px;
+		border-radius: var(--ab-radius-xs);
 		font-family: var(--ab-font-mono, ui-monospace, monospace);
 	}
 
 	kbd {
-		border: 1px solid var(--ab-color-border, #e2e8f0);
+		border: 1px solid var(--ab-color-border, var(--ab-color-border));
 		border-bottom-width: 2px;
-		border-radius: 3px;
+		border-radius: var(--ab-radius-xs);
 		padding: 0 0.25rem;
-		font-size: 0.75rem;
+		font-size: var(--ab-font-size-xs);
 		font-family: var(--ab-font-mono, ui-monospace, monospace);
-		background: var(--ab-color-surface-sunken, #f1f5f9);
+		background: var(--ab-color-surface-sunken, var(--ab-color-surface-sunken));
 	}
 </style>

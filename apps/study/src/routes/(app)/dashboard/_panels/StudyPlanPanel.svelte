@@ -162,7 +162,7 @@ function domainLabel(d: Domain): string {
 		border-radius: var(--ab-radius-sm);
 		background: var(--ab-color-surface-sunken);
 		font-family: var(--ab-font-family-mono);
-		font-size: 0.6875rem;
+		font-size: var(--ab-font-size-xs);
 		font-weight: var(--ab-font-weight-semibold);
 		color: var(--ab-color-fg);
 	}

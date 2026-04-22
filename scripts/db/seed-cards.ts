@@ -22,13 +22,13 @@
 import { Glob } from 'bun';
 import { readFileSync } from 'node:fs';
 import { relative } from 'node:path';
+import { bauthUser } from '@ab/auth/schema';
+import { card, createCard } from '@ab/bc-study';
+import { CARD_TYPES, CONTENT_SOURCES, DEV_DB_HOST_PATTERN, DEV_DB_URL, ENV_VARS } from '@ab/constants';
 import { and, eq } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 import { parse as parseYaml } from 'yaml';
-import { bauthUser } from '../../libs/auth/src/schema';
-import { card, createCard } from '../../libs/bc/study/src/index';
-import { CARD_TYPES, CONTENT_SOURCES, DEV_DB_HOST_PATTERN, DEV_DB_URL, ENV_VARS } from '../../libs/constants/src/index';
 
 const REPO_ROOT = new URL('../../', import.meta.url).pathname;
 const NODE_GLOB = 'course/knowledge/**/node.md';

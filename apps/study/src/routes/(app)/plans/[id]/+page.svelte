@@ -248,14 +248,14 @@ const skippableDomains = $derived(DOMAIN_VALUES.filter((d) => !focusSet.has(d)))
 
 	h1 {
 		margin: 0;
-		font-size: 1.75rem;
-		color: #0f172a;
+		font-size: var(--ab-font-size-2xl);
+		color: var(--ab-color-fg);
 	}
 
 	.sub {
 		margin: 0.25rem 0 0;
-		color: #64748b;
-		font-size: 0.9375rem;
+		color: var(--ab-color-fg-subtle);
+		font-size: var(--ab-font-size-body);
 		display: flex;
 		gap: 0.75rem;
 		align-items: center;
@@ -263,21 +263,21 @@ const skippableDomains = $derived(DOMAIN_VALUES.filter((d) => !focusSet.has(d)))
 
 	.badge {
 		display: inline-block;
-		font-size: 0.75rem;
+		font-size: var(--ab-font-size-xs);
 		font-weight: 600;
 		padding: 0.125rem 0.5rem;
-		border-radius: 999px;
-		background: #e2e8f0;
-		color: #475569;
+		border-radius: var(--ab-radius-pill);
+		background: var(--ab-color-border);
+		color: var(--ab-color-fg-muted);
 	}
 
 	.badge.active {
-		background: #1d4ed8;
+		background: var(--ab-color-primary-hover);
 		color: white;
 	}
 
 	.link {
-		color: #1d4ed8;
+		color: var(--ab-color-primary-hover);
 		font-weight: 500;
 		text-decoration: none;
 	}
@@ -289,8 +289,8 @@ const skippableDomains = $derived(DOMAIN_VALUES.filter((d) => !focusSet.has(d)))
 	.wizard,
 	.card {
 		background: white;
-		border: 1px solid #e2e8f0;
-		border-radius: 12px;
+		border: 1px solid var(--ab-color-border);
+		border-radius: var(--ab-radius-lg);
 		padding: 1.5rem;
 		display: flex;
 		flex-direction: column;
@@ -311,8 +311,8 @@ const skippableDomains = $derived(DOMAIN_VALUES.filter((d) => !focusSet.has(d)))
 	}
 
 	input[type='text'] {
-		border: 1px solid #cbd5e1;
-		border-radius: 8px;
+		border: 1px solid var(--ab-color-border-strong);
+		border-radius: var(--ab-radius-md);
 		padding: 0.5rem 0.75rem;
 	}
 
@@ -333,15 +333,15 @@ const skippableDomains = $derived(DOMAIN_VALUES.filter((d) => !focusSet.has(d)))
 		gap: 0.375rem;
 		align-items: center;
 		padding: 0.375rem 0.75rem;
-		background: #f8fafc;
-		border: 1px solid #e2e8f0;
-		border-radius: 8px;
+		background: var(--ab-color-surface-muted);
+		border: 1px solid var(--ab-color-border);
+		border-radius: var(--ab-radius-md);
 		cursor: pointer;
-		font-size: 0.875rem;
+		font-size: var(--ab-font-size-sm);
 	}
 
 	.choice input {
-		accent-color: #2563eb;
+		accent-color: var(--ab-color-primary);
 	}
 
 	.actions {
@@ -350,29 +350,29 @@ const skippableDomains = $derived(DOMAIN_VALUES.filter((d) => !focusSet.has(d)))
 	}
 
 	.success {
-		background: #ecfdf5;
-		color: #065f46;
+		background: var(--ab-color-success-subtle);
+		color: var(--ab-color-success-active);
 		padding: 0.625rem 0.875rem;
-		border-radius: 8px;
-		border: 1px solid #a7f3d0;
-		font-size: 0.875rem;
+		border-radius: var(--ab-radius-md);
+		border: 1px solid var(--ab-color-success-subtle-border);
+		font-size: var(--ab-font-size-sm);
 	}
 
 	.banner {
 		display: flex;
 		align-items: center;
 		gap: 0.75rem;
-		background: #eff6ff;
-		border: 1px solid #bfdbfe;
-		color: #1e3a8a;
+		background: var(--ab-color-primary-subtle);
+		border: 1px solid var(--ab-color-primary-subtle-border);
+		color: var(--ab-color-primary-active);
 		padding: 0.625rem 0.875rem;
-		border-radius: 8px;
-		font-size: 0.875rem;
+		border-radius: var(--ab-radius-md);
+		font-size: var(--ab-font-size-sm);
 	}
 
 	.banner-action {
 		margin-left: auto;
-		color: #1d4ed8;
+		color: var(--ab-color-primary-hover);
 		font-weight: 600;
 		text-decoration: none;
 	}
@@ -384,30 +384,30 @@ const skippableDomains = $derived(DOMAIN_VALUES.filter((d) => !focusSet.has(d)))
 	.banner-dismiss {
 		background: transparent;
 		border: none;
-		color: #1e3a8a;
-		font-size: 1.25rem;
+		color: var(--ab-color-primary-active);
+		font-size: var(--ab-font-size-2xl);
 		line-height: 1;
 		cursor: pointer;
 		padding: 0 0.25rem;
 	}
 
 	.banner-dismiss:hover {
-		color: #1d4ed8;
+		color: var(--ab-color-primary-hover);
 	}
 
 	.error {
-		background: #fef2f2;
-		color: #b91c1c;
+		background: var(--ab-color-danger-subtle);
+		color: var(--ab-color-danger-hover);
 		padding: 0.625rem 0.875rem;
-		border-radius: 8px;
-		border: 1px solid #fecaca;
-		font-size: 0.875rem;
+		border-radius: var(--ab-radius-md);
+		border: 1px solid var(--ab-color-danger-subtle-border);
+		font-size: var(--ab-font-size-sm);
 	}
 
 	h2 {
 		margin: 0;
-		font-size: 0.8125rem;
-		color: #64748b;
+		font-size: var(--ab-font-size-sm);
+		color: var(--ab-color-fg-subtle);
 		text-transform: uppercase;
 		letter-spacing: 0.08em;
 		font-weight: 600;
@@ -426,19 +426,19 @@ const skippableDomains = $derived(DOMAIN_VALUES.filter((d) => !focusSet.has(d)))
 		display: flex;
 		align-items: center;
 		gap: 0.25rem;
-		background: #f1f5f9;
-		border: 1px solid #e2e8f0;
-		border-radius: 999px;
+		background: var(--ab-color-surface-sunken);
+		border: 1px solid var(--ab-color-border);
+		border-radius: var(--ab-radius-pill);
 		padding: 0.25rem 0.5rem 0.25rem 0.75rem;
-		font-size: 0.8125rem;
+		font-size: var(--ab-font-size-sm);
 	}
 
 	.pill-btn {
 		background: transparent;
 		border: none;
-		color: #1d4ed8;
+		color: var(--ab-color-primary-hover);
 		cursor: pointer;
-		font-size: 0.75rem;
+		font-size: var(--ab-font-size-xs);
 		padding: 0.25rem 0.5rem;
 	}
 
@@ -452,16 +452,16 @@ const skippableDomains = $derived(DOMAIN_VALUES.filter((d) => !focusSet.has(d)))
 	}
 
 	.muted {
-		color: #94a3b8;
+		color: var(--ab-color-fg-faint);
 		margin: 0;
-		font-size: 0.875rem;
+		font-size: var(--ab-font-size-sm);
 	}
 
 	.btn {
 		padding: 0.5rem 1rem;
-		font-size: 0.9375rem;
+		font-size: var(--ab-font-size-body);
 		font-weight: 600;
-		border-radius: 8px;
+		border-radius: var(--ab-radius-md);
 		border: 1px solid transparent;
 		cursor: pointer;
 		text-decoration: none;
@@ -471,12 +471,12 @@ const skippableDomains = $derived(DOMAIN_VALUES.filter((d) => !focusSet.has(d)))
 	}
 
 	.btn.primary {
-		background: #2563eb;
+		background: var(--ab-color-primary);
 		color: white;
 	}
 
 	.btn.primary:hover:not(:disabled) {
-		background: #1d4ed8;
+		background: var(--ab-color-primary-hover);
 	}
 
 	.btn.primary:disabled {
@@ -485,17 +485,17 @@ const skippableDomains = $derived(DOMAIN_VALUES.filter((d) => !focusSet.has(d)))
 	}
 
 	.btn.secondary {
-		background: #f1f5f9;
-		color: #1a1a2e;
-		border-color: #cbd5e1;
+		background: var(--ab-color-surface-sunken);
+		color: var(--ab-color-fg);
+		border-color: var(--ab-color-border-strong);
 	}
 
 	.btn.ghost {
 		background: transparent;
-		color: #475569;
+		color: var(--ab-color-fg-muted);
 	}
 
 	.btn.ghost:hover {
-		background: #f1f5f9;
+		background: var(--ab-color-surface-sunken);
 	}
 </style>

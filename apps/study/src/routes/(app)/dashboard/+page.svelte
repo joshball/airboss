@@ -80,18 +80,18 @@ const stamp = `${loadedAt.getFullYear()}-${String(loadedAt.getMonth() + 1).padSt
 
 	h1 {
 		margin: 0;
-		font-size: 0.8125rem;
+		font-size: var(--ab-font-size-sm);
 		font-weight: 700;
 		text-transform: uppercase;
 		letter-spacing: 0.12em;
-		color: #0f172a;
+		color: var(--ab-color-fg);
 		font-family: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
 	}
 
 	.sub {
 		margin: 0;
-		color: #94a3b8;
-		font-size: 0.75rem;
+		color: var(--ab-color-fg-faint);
+		font-size: var(--ab-font-size-xs);
 		font-family: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
 	}
 
@@ -147,13 +147,13 @@ const stamp = `${loadedAt.getFullYear()}-${String(loadedAt.getMonth() + 1).padSt
 		align-items: center;
 		gap: 0.375rem;
 		padding: 0.25rem 0.125rem 0;
-		color: #94a3b8;
-		font-size: 0.6875rem;
+		color: var(--ab-color-fg-faint);
+		font-size: var(--ab-font-size-xs);
 		font-family: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
 		letter-spacing: 0.04em;
 	}
 
 	.status .sep {
-		color: #cbd5e1;
+		color: var(--ab-color-border-strong);
 	}
 </style>

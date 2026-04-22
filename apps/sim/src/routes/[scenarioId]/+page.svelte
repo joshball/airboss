@@ -36,6 +36,12 @@ let keyboardControlEnabled = $state(true);
 
 // Keyboard-latched command state. We translate these into `inputs` and push
 // to the worker at ~30 Hz, so holding a key ramps the input smoothly.
+// Mutated directly by `onKeyDown`/`onKeyUp` (e.g. `keyState.pitchUp = true`)
+// rather than via proxy-assignment idioms used elsewhere in the codebase,
+// because this is a hot path at ~30 Hz and avoiding a 4-field object
+// allocation per keypress matters. Svelte 5 `$state` uses a proxy so deep
+// mutation is reactive; if you refactor this to a plain `let`, input
+// latching will break.
 let keyState = $state({
 	throttleUp: false,
 	throttleDown: false,

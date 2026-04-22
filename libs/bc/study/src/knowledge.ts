@@ -19,6 +19,8 @@ import {
 	type Domain,
 	KNOWLEDGE_EDGE_TYPES,
 	type KnowledgeEdgeType,
+	NODE_MASTERY_GATES,
+	type NodeMasteryGate,
 	RELEVANCE_PRIORITIES,
 	REP_ACCURACY_THRESHOLD,
 	REP_MIN,
@@ -462,7 +464,7 @@ export class KnowledgeNodeNotFoundError extends Error {
 }
 
 /** Dual-gate mastery gate outcome per pillar. See spec "Mastery computation". */
-export type NodeMasteryGate = 'pass' | 'fail' | 'insufficient_data' | 'not_applicable';
+export type { NodeMasteryGate };
 
 /**
  * Dual-gate node mastery stats.
@@ -602,9 +604,9 @@ export async function isNodeMastered(
  * it without a DB round-trip.
  */
 export function computeCardGate(cardsTotal: number, cardsMasteredRatio: number): NodeMasteryGate {
-	if (cardsTotal === 0) return 'not_applicable';
-	if (cardsTotal < CARD_MIN) return 'insufficient_data';
-	return cardsMasteredRatio >= CARD_MASTERY_RATIO_THRESHOLD ? 'pass' : 'fail';
+	if (cardsTotal === 0) return NODE_MASTERY_GATES.NOT_APPLICABLE;
+	if (cardsTotal < CARD_MIN) return NODE_MASTERY_GATES.INSUFFICIENT_DATA;
+	return cardsMasteredRatio >= CARD_MASTERY_RATIO_THRESHOLD ? NODE_MASTERY_GATES.PASS : NODE_MASTERY_GATES.FAIL;
 }
 
 /**
@@ -613,10 +615,10 @@ export function computeCardGate(cardsTotal: number, cardsMasteredRatio: number):
  * apply to this node (knowledge-only).
  */
 export function computeRepGate(repsTotal: number, repAccuracy: number, scenariosAttached: number): NodeMasteryGate {
-	if (scenariosAttached === 0) return 'not_applicable';
-	if (repsTotal === 0) return 'insufficient_data';
-	if (repsTotal < REP_MIN) return 'insufficient_data';
-	return repAccuracy >= REP_ACCURACY_THRESHOLD ? 'pass' : 'fail';
+	if (scenariosAttached === 0) return NODE_MASTERY_GATES.NOT_APPLICABLE;
+	if (repsTotal === 0) return NODE_MASTERY_GATES.INSUFFICIENT_DATA;
+	if (repsTotal < REP_MIN) return NODE_MASTERY_GATES.INSUFFICIENT_DATA;
+	return repAccuracy >= REP_ACCURACY_THRESHOLD ? NODE_MASTERY_GATES.PASS : NODE_MASTERY_GATES.FAIL;
 }
 
 /**
@@ -629,9 +631,9 @@ export function computeRepGate(repsTotal: number, repAccuracy: number, scenarios
  * attached content are never mastered" rule surfaces here.
  */
 export function isMastered(cardGate: NodeMasteryGate, repGate: NodeMasteryGate): boolean {
-	if (cardGate === 'not_applicable' && repGate === 'not_applicable') return false;
-	const cardOk = cardGate === 'pass' || cardGate === 'not_applicable';
-	const repOk = repGate === 'pass' || repGate === 'not_applicable';
+	if (cardGate === NODE_MASTERY_GATES.NOT_APPLICABLE && repGate === NODE_MASTERY_GATES.NOT_APPLICABLE) return false;
+	const cardOk = cardGate === NODE_MASTERY_GATES.PASS || cardGate === NODE_MASTERY_GATES.NOT_APPLICABLE;
+	const repOk = repGate === NODE_MASTERY_GATES.PASS || repGate === NODE_MASTERY_GATES.NOT_APPLICABLE;
 	return cardOk && repOk;
 }
 
