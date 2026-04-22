@@ -305,43 +305,43 @@ function sliceLabel(slice: SessionSlice): string {
 
 	h1 {
 		margin: 0;
-		font-size: 1.5rem;
-		color: #0f172a;
+		font-size: var(--ab-font-size-xl);
+		color: var(--ab-color-fg);
 	}
 
 	.sub {
 		margin: 0.25rem 0 0;
-		color: #64748b;
-		font-size: 0.875rem;
+		color: var(--ab-color-fg-subtle);
+		font-size: var(--ab-font-size-sm);
 	}
 
 	.progress {
-		background: #e2e8f0;
+		background: var(--ab-color-border);
 		height: 0.375rem;
-		border-radius: 999px;
+		border-radius: var(--ab-radius-pill);
 		overflow: hidden;
 	}
 
 	.progress-fill {
 		display: block;
 		height: 100%;
-		background: #2563eb;
+		background: var(--ab-color-primary);
 		transition: width 200ms;
 	}
 
 	.error {
-		background: #fef2f2;
-		color: #b91c1c;
+		background: var(--ab-color-danger-subtle);
+		color: var(--ab-color-danger-hover);
 		padding: 0.625rem 0.875rem;
-		border-radius: 8px;
-		border: 1px solid #fecaca;
-		font-size: 0.875rem;
+		border-radius: var(--ab-radius-md);
+		border: 1px solid var(--ab-color-danger-subtle-border);
+		font-size: var(--ab-font-size-sm);
 	}
 
 	.item-card {
 		background: white;
-		border: 1px solid #e2e8f0;
-		border-radius: 12px;
+		border: 1px solid var(--ab-color-border);
+		border-radius: var(--ab-radius-lg);
 		padding: 1.5rem;
 		display: flex;
 		flex-direction: column;
@@ -353,36 +353,36 @@ function sliceLabel(slice: SessionSlice): string {
 		gap: 0.5rem;
 		align-items: baseline;
 		flex-wrap: wrap;
-		font-size: 0.8125rem;
+		font-size: var(--ab-font-size-sm);
 	}
 
 	.slice-badge {
 		display: inline-block;
 		font-weight: 700;
-		font-size: 0.6875rem;
+		font-size: var(--ab-font-size-xs);
 		text-transform: uppercase;
 		letter-spacing: 0.06em;
 		padding: 0.125rem 0.5rem;
-		border-radius: 999px;
-		background: #eff6ff;
-		color: #1d4ed8;
+		border-radius: var(--ab-radius-pill);
+		background: var(--ab-color-primary-subtle);
+		color: var(--ab-color-primary-hover);
 	}
 
 	.reason {
-		color: #0f172a;
+		color: var(--ab-color-fg);
 		font-weight: 500;
 	}
 
 	.reason-detail {
-		color: #64748b;
+		color: var(--ab-color-fg-subtle);
 	}
 
 	.domain {
-		font-size: 0.75rem;
+		font-size: var(--ab-font-size-xs);
 		font-weight: 600;
 		text-transform: uppercase;
 		letter-spacing: 0.06em;
-		color: #64748b;
+		color: var(--ab-color-fg-subtle);
 	}
 
 	.card-body,
@@ -394,27 +394,27 @@ function sliceLabel(slice: SessionSlice): string {
 	}
 
 	.card-front {
-		font-size: 1.25rem;
-		color: #0f172a;
+		font-size: var(--ab-font-size-2xl);
+		color: var(--ab-color-fg);
 		line-height: 1.4;
 	}
 
 	.card-back {
-		background: #f8fafc;
-		border: 1px solid #e2e8f0;
-		border-radius: 10px;
+		background: var(--ab-color-surface-muted);
+		border: 1px solid var(--ab-color-border);
+		border-radius: var(--ab-radius-md);
 		padding: 1rem;
-		color: #0f172a;
+		color: var(--ab-color-fg);
 	}
 
 	.rep-title,
 	.node-title {
 		margin: 0;
-		font-size: 1.125rem;
+		font-size: var(--ab-font-size-lg);
 	}
 
 	.situation {
-		color: #0f172a;
+		color: var(--ab-color-fg);
 		line-height: 1.5;
 		margin: 0;
 	}
@@ -437,37 +437,37 @@ function sliceLabel(slice: SessionSlice): string {
 	}
 
 	.option {
-		background: #f8fafc;
-		border: 1px solid #cbd5e1;
-		color: #0f172a;
+		background: var(--ab-color-surface-muted);
+		border: 1px solid var(--ab-color-border-strong);
+		color: var(--ab-color-fg);
 		justify-content: flex-start;
 		text-align: left;
 		padding: 0.75rem 1rem;
 	}
 
 	.option:hover:not(:disabled) {
-		background: #eff6ff;
-		border-color: #bfdbfe;
+		background: var(--ab-color-primary-subtle);
+		border-color: var(--ab-color-primary-subtle-border);
 	}
 
 	.rating.again {
-		background: #fee2e2;
-		color: #991b1b;
+		background: var(--ab-color-danger-subtle);
+		color: var(--ab-color-danger-active);
 	}
 
 	.rating.hard {
-		background: #fef3c7;
-		color: #92400e;
+		background: var(--ab-color-warning-subtle);
+		color: var(--ab-color-warning-active);
 	}
 
 	.rating.good {
-		background: #dcfce7;
-		color: #166534;
+		background: var(--ab-color-success-subtle);
+		color: var(--ab-color-success-active);
 	}
 
 	.rating.easy {
-		background: #dbeafe;
-		color: #1e40af;
+		background: var(--ab-color-primary-subtle);
+		color: var(--ab-color-primary-active);
 	}
 
 	.skip-row {
@@ -475,15 +475,15 @@ function sliceLabel(slice: SessionSlice): string {
 		justify-content: flex-end;
 		gap: 0.75rem;
 		padding-top: 0.5rem;
-		border-top: 1px solid #f1f5f9;
+		border-top: 1px solid var(--ab-color-surface-sunken);
 	}
 
 	.link-btn {
 		background: transparent;
 		border: none;
-		color: #64748b;
+		color: var(--ab-color-fg-subtle);
 		cursor: pointer;
-		font-size: 0.8125rem;
+		font-size: var(--ab-font-size-sm);
 	}
 
 	.link-btn:hover {
@@ -491,13 +491,13 @@ function sliceLabel(slice: SessionSlice): string {
 	}
 
 	.link-btn.danger {
-		color: #b91c1c;
+		color: var(--ab-color-danger-hover);
 	}
 
 	.empty {
 		background: white;
-		border: 1px solid #e2e8f0;
-		border-radius: 12px;
+		border: 1px solid var(--ab-color-border);
+		border-radius: var(--ab-radius-lg);
 		padding: 2rem;
 		text-align: center;
 		display: flex;
@@ -508,24 +508,24 @@ function sliceLabel(slice: SessionSlice): string {
 
 	.empty h2 {
 		margin: 0;
-		font-size: 1.125rem;
+		font-size: var(--ab-font-size-lg);
 	}
 
 	.muted {
-		color: #94a3b8;
+		color: var(--ab-color-fg-faint);
 		margin: 0;
-		font-size: 0.875rem;
+		font-size: var(--ab-font-size-sm);
 	}
 
 	.small {
-		font-size: 0.75rem;
+		font-size: var(--ab-font-size-xs);
 	}
 
 	.btn {
 		padding: 0.5rem 1rem;
-		font-size: 0.9375rem;
+		font-size: var(--ab-font-size-body);
 		font-weight: 600;
-		border-radius: 8px;
+		border-radius: var(--ab-radius-md);
 		border: 1px solid transparent;
 		cursor: pointer;
 		text-decoration: none;
@@ -535,12 +535,12 @@ function sliceLabel(slice: SessionSlice): string {
 	}
 
 	.btn.primary {
-		background: #2563eb;
+		background: var(--ab-color-primary);
 		color: white;
 	}
 
 	.btn.primary:hover:not(:disabled) {
-		background: #1d4ed8;
+		background: var(--ab-color-primary-hover);
 	}
 
 	.btn.primary:disabled {
@@ -549,13 +549,13 @@ function sliceLabel(slice: SessionSlice): string {
 	}
 
 	.btn.secondary {
-		background: #f1f5f9;
-		color: #1a1a2e;
-		border-color: #cbd5e1;
+		background: var(--ab-color-surface-sunken);
+		color: var(--ab-color-fg);
+		border-color: var(--ab-color-border-strong);
 	}
 
 	.btn.ghost {
 		background: transparent;
-		color: #475569;
+		color: var(--ab-color-fg-muted);
 	}
 </style>

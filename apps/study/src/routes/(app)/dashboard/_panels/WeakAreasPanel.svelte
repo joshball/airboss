@@ -98,7 +98,7 @@ function reasonLabel(reason: WeakAreaReason): string {
 	}
 
 	.reason {
-		font-size: 0.6875rem;
+		font-size: var(--ab-font-size-xs);
 		color: var(--ab-color-warning);
 		font-variant-numeric: tabular-nums;
 		font-family: var(--ab-font-family-mono);

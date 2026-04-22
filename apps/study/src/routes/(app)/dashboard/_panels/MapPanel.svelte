@@ -31,10 +31,10 @@ import PanelShell from '@ab/ui/components/PanelShell.svelte';
 
 	.placeholder code {
 		/* indigo accent: no token match. Follow-up: add --ab-color-accent-* */
-		background: #eef2ff;
-		color: #3730a3;
+		background: var(--ab-color-accent-subtle);
+		color: var(--ab-color-accent-fg);
 		padding: 0.125rem 0.3125rem;
 		border-radius: var(--ab-radius-sm);
-		font-size: 0.6875rem;
+		font-size: var(--ab-font-size-xs);
 	}
 </style>

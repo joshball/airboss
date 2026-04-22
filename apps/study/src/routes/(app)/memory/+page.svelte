@@ -131,15 +131,15 @@ function percent(n: number, total: number): number {
 
 	h1 {
 		margin: 0;
-		font-size: 1.75rem;
+		font-size: var(--ab-font-size-2xl);
 		letter-spacing: -0.02em;
-		color: #0f172a;
+		color: var(--ab-color-fg);
 	}
 
 	.sub {
 		margin: 0.25rem 0 0;
-		color: #64748b;
-		font-size: 0.9375rem;
+		color: var(--ab-color-fg-subtle);
+		font-size: var(--ab-font-size-body);
 	}
 
 	.quick {
@@ -156,8 +156,8 @@ function percent(n: number, total: number): number {
 
 	.tile {
 		background: white;
-		border: 1px solid #e2e8f0;
-		border-radius: 12px;
+		border: 1px solid var(--ab-color-border);
+		border-radius: var(--ab-radius-lg);
 		padding: 1rem 1.25rem;
 		display: flex;
 		flex-direction: column;
@@ -165,42 +165,42 @@ function percent(n: number, total: number): number {
 	}
 
 	.tile.due {
-		border-color: #bfdbfe;
-		background: #eff6ff;
+		border-color: var(--ab-color-primary-subtle-border);
+		background: var(--ab-color-primary-subtle);
 	}
 
 	.tile-label {
-		font-size: 0.75rem;
+		font-size: var(--ab-font-size-xs);
 		font-weight: 600;
-		color: #64748b;
+		color: var(--ab-color-fg-subtle);
 		text-transform: uppercase;
 		letter-spacing: 0.06em;
 	}
 
 	.tile.due .tile-label {
-		color: #1d4ed8;
+		color: var(--ab-color-primary-hover);
 	}
 
 	.tile-value {
 		font-size: 2rem;
 		font-weight: 700;
-		color: #0f172a;
+		color: var(--ab-color-fg);
 		line-height: 1;
 	}
 
 	.tile.due .tile-value {
-		color: #1d4ed8;
+		color: var(--ab-color-primary-hover);
 	}
 
 	.tile-sub {
-		font-size: 0.8125rem;
-		color: #64748b;
+		font-size: var(--ab-font-size-sm);
+		color: var(--ab-color-fg-subtle);
 	}
 
 	.card-list {
 		background: white;
-		border: 1px solid #e2e8f0;
-		border-radius: 12px;
+		border: 1px solid var(--ab-color-border);
+		border-radius: var(--ab-radius-lg);
 		padding: 1.25rem 1.5rem;
 		display: flex;
 		flex-direction: column;
@@ -209,8 +209,8 @@ function percent(n: number, total: number): number {
 
 	.card-list h2 {
 		margin: 0;
-		font-size: 0.8125rem;
-		color: #64748b;
+		font-size: var(--ab-font-size-sm);
+		color: var(--ab-color-fg-subtle);
 		text-transform: uppercase;
 		letter-spacing: 0.08em;
 		font-weight: 600;
@@ -230,18 +230,18 @@ function percent(n: number, total: number): number {
 		justify-content: space-between;
 		align-items: center;
 		padding: 0.5rem 0.75rem;
-		background: #f8fafc;
-		border: 1px solid #e2e8f0;
-		border-radius: 8px;
+		background: var(--ab-color-surface-muted);
+		border: 1px solid var(--ab-color-border);
+		border-radius: var(--ab-radius-md);
 	}
 
 	.state-label {
-		color: #475569;
-		font-size: 0.875rem;
+		color: var(--ab-color-fg-muted);
+		font-size: var(--ab-font-size-sm);
 	}
 
 	.state-count {
-		color: #0f172a;
+		color: var(--ab-color-fg);
 		font-weight: 600;
 	}
 
@@ -268,65 +268,65 @@ function percent(n: number, total: number): number {
 	}
 
 	.dm-name {
-		color: #0f172a;
+		color: var(--ab-color-fg);
 		text-decoration: none;
 		font-weight: 500;
 	}
 
 	.dm-name:hover {
-		color: #1d4ed8;
+		color: var(--ab-color-primary-hover);
 	}
 
 	.dm-counts {
 		display: flex;
 		gap: 0.5rem;
-		font-size: 0.8125rem;
+		font-size: var(--ab-font-size-sm);
 	}
 
 	.dm-total {
-		color: #64748b;
+		color: var(--ab-color-fg-subtle);
 	}
 
 	.dm-due {
-		color: #1d4ed8;
+		color: var(--ab-color-primary-hover);
 		font-weight: 600;
 	}
 
 	.bar {
-		background: #e2e8f0;
+		background: var(--ab-color-border);
 		height: 0.375rem;
-		border-radius: 999px;
+		border-radius: var(--ab-radius-pill);
 		overflow: hidden;
 	}
 
 	.bar-fill {
 		display: block;
 		height: 100%;
-		background: #2563eb;
+		background: var(--ab-color-primary);
 		transition: width 250ms;
 	}
 
 	.dm-sub {
-		font-size: 0.75rem;
-		color: #94a3b8;
+		font-size: var(--ab-font-size-xs);
+		color: var(--ab-color-fg-faint);
 	}
 
 	.empty-note {
-		color: #64748b;
-		font-size: 0.875rem;
+		color: var(--ab-color-fg-subtle);
+		font-size: var(--ab-font-size-sm);
 		margin: 0;
 	}
 
 	.empty-note a {
-		color: #1d4ed8;
+		color: var(--ab-color-primary-hover);
 		font-weight: 500;
 	}
 
 	.btn {
 		padding: 0.5rem 1rem;
-		font-size: 0.9375rem;
+		font-size: var(--ab-font-size-body);
 		font-weight: 600;
-		border-radius: 8px;
+		border-radius: var(--ab-radius-md);
 		border: 1px solid transparent;
 		cursor: pointer;
 		text-decoration: none;
@@ -337,30 +337,30 @@ function percent(n: number, total: number): number {
 	}
 
 	.btn.primary {
-		background: #2563eb;
+		background: var(--ab-color-primary);
 		color: white;
 	}
 
 	.btn.primary:hover {
-		background: #1d4ed8;
+		background: var(--ab-color-primary-hover);
 	}
 
 	.btn.secondary {
-		background: #f1f5f9;
-		color: #1a1a2e;
-		border-color: #cbd5e1;
+		background: var(--ab-color-surface-sunken);
+		color: var(--ab-color-fg);
+		border-color: var(--ab-color-border-strong);
 	}
 
 	.btn.secondary:hover {
-		background: #e2e8f0;
+		background: var(--ab-color-border);
 	}
 
 	.btn.ghost {
 		background: transparent;
-		color: #475569;
+		color: var(--ab-color-fg-muted);
 	}
 
 	.btn.ghost:hover {
-		background: #f1f5f9;
+		background: var(--ab-color-surface-sunken);
 	}
 </style>

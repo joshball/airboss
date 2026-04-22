@@ -269,7 +269,7 @@ function reasonLabel(code: SessionReasonCode): string {
 
 	h1 {
 		margin: 0;
-		font-size: 1.75rem;
+		font-size: var(--ab-font-size-2xl);
 		letter-spacing: -0.02em;
 		color: var(--ab-color-fg);
 	}
@@ -277,7 +277,7 @@ function reasonLabel(code: SessionReasonCode): string {
 	.sub {
 		margin: var(--ab-space-2xs) 0 0;
 		color: var(--ab-color-fg-subtle);
-		font-size: 0.9375rem;
+		font-size: var(--ab-font-size-body);
 	}
 
 	/* Preset gallery */
@@ -289,7 +289,7 @@ function reasonLabel(code: SessionReasonCode): string {
 
 	.gallery-h {
 		margin: 0;
-		font-size: 1.125rem;
+		font-size: var(--ab-font-size-lg);
 		color: var(--ab-color-fg);
 	}
 
@@ -367,20 +367,20 @@ function reasonLabel(code: SessionReasonCode): string {
 	}
 
 	.tile-label {
-		font-size: 1rem;
+		font-size: var(--ab-font-size-base);
 		font-weight: var(--ab-font-weight-semibold);
 		color: var(--ab-color-fg);
 	}
 
 	.tile-desc {
-		font-size: 0.8125rem;
+		font-size: var(--ab-font-size-sm);
 		color: var(--ab-color-fg-muted);
 		line-height: var(--ab-line-height-normal);
 	}
 
 	.tile-status {
 		margin-top: var(--ab-space-xs);
-		font-size: 0.75rem;
+		font-size: var(--ab-font-size-xs);
 		color: var(--ab-color-primary);
 		font-weight: var(--ab-font-weight-semibold);
 	}
@@ -409,7 +409,7 @@ function reasonLabel(code: SessionReasonCode): string {
 
 	.empty h2 {
 		margin: 0;
-		font-size: 1.125rem;
+		font-size: var(--ab-font-size-lg);
 	}
 
 	.controls {
@@ -430,14 +430,14 @@ function reasonLabel(code: SessionReasonCode): string {
 
 	.mode-row label {
 		font-weight: var(--ab-font-weight-semibold);
-		font-size: 0.875rem;
+		font-size: var(--ab-font-size-sm);
 	}
 
 	.mode-row select {
 		border: 1px solid var(--ab-color-border-strong);
 		border-radius: var(--ab-control-radius);
 		padding: var(--ab-space-xs) var(--ab-space-sm);
-		font-size: 0.875rem;
+		font-size: var(--ab-font-size-sm);
 		background: var(--ab-color-surface);
 		color: var(--ab-color-fg);
 	}
@@ -447,7 +447,7 @@ function reasonLabel(code: SessionReasonCode): string {
 		gap: var(--ab-space-lg);
 		flex-wrap: wrap;
 		color: var(--ab-color-fg-muted);
-		font-size: 0.8125rem;
+		font-size: var(--ab-font-size-sm);
 	}
 
 	.link {
@@ -465,7 +465,7 @@ function reasonLabel(code: SessionReasonCode): string {
 		background: var(--ab-color-warning-subtle);
 		padding: var(--ab-space-sm) var(--ab-space-md);
 		border-radius: var(--ab-radius-sm);
-		font-size: 0.8125rem;
+		font-size: var(--ab-font-size-sm);
 	}
 
 	.preview {
@@ -480,7 +480,7 @@ function reasonLabel(code: SessionReasonCode): string {
 
 	.preview > h2 {
 		margin: 0;
-		font-size: 0.8125rem;
+		font-size: var(--ab-font-size-sm);
 		color: var(--ab-color-fg-subtle);
 		text-transform: uppercase;
 		letter-spacing: 0.08em;
@@ -501,13 +501,13 @@ function reasonLabel(code: SessionReasonCode): string {
 
 	.slice-hd h3 {
 		margin: 0;
-		font-size: 0.9375rem;
+		font-size: var(--ab-font-size-body);
 		color: var(--ab-color-fg);
 	}
 
 	.count {
 		color: var(--ab-color-fg-subtle);
-		font-size: 0.75rem;
+		font-size: var(--ab-font-size-xs);
 	}
 
 	.items {
@@ -527,13 +527,13 @@ function reasonLabel(code: SessionReasonCode): string {
 		background: var(--ab-color-surface-muted);
 		border: 1px solid var(--ab-color-border);
 		border-radius: var(--ab-radius-sm);
-		font-size: 0.8125rem;
+		font-size: var(--ab-font-size-sm);
 	}
 
 	.kind {
 		display: inline-block;
 		font-weight: var(--ab-font-weight-bold);
-		font-size: 0.6875rem;
+		font-size: var(--ab-font-size-xs);
 		text-transform: uppercase;
 		letter-spacing: 0.06em;
 		padding: var(--ab-space-2xs) var(--ab-space-xs);
@@ -565,7 +565,7 @@ function reasonLabel(code: SessionReasonCode): string {
 		margin-left: auto;
 		color: var(--ab-color-fg-faint);
 		font-family: var(--ab-font-family-mono, ui-monospace, monospace);
-		font-size: 0.75rem;
+		font-size: var(--ab-font-size-xs);
 	}
 
 	.start-row {
@@ -582,6 +582,6 @@ function reasonLabel(code: SessionReasonCode): string {
 	.muted {
 		color: var(--ab-color-fg-faint);
 		margin: 0;
-		font-size: 0.875rem;
+		font-size: var(--ab-font-size-sm);
 	}
 </style>

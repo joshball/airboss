@@ -269,8 +269,8 @@ function clickRating(value: number) {
 	}
 
 	.counter {
-		font-size: 0.8125rem;
-		color: #64748b;
+		font-size: var(--ab-font-size-sm);
+		color: var(--ab-color-fg-subtle);
 		font-weight: 600;
 		letter-spacing: 0.04em;
 		text-transform: uppercase;
@@ -279,34 +279,34 @@ function clickRating(value: number) {
 	.badge {
 		display: inline-flex;
 		padding: 0.125rem 0.625rem;
-		font-size: 0.6875rem;
+		font-size: var(--ab-font-size-xs);
 		font-weight: 600;
-		border-radius: 999px;
-		color: #1d4ed8;
-		background: #eff6ff;
-		border: 1px solid #bfdbfe;
+		border-radius: var(--ab-radius-pill);
+		color: var(--ab-color-primary-hover);
+		background: var(--ab-color-primary-subtle);
+		border: 1px solid var(--ab-color-primary-subtle-border);
 		text-transform: uppercase;
 		letter-spacing: 0.04em;
 	}
 
 	.card {
 		background: white;
-		border: 1px solid #e2e8f0;
-		border-radius: 16px;
+		border: 1px solid var(--ab-color-border);
+		border-radius: var(--ab-radius-lg);
 		padding: 2rem;
 		min-height: 14rem;
 		display: flex;
 		flex-direction: column;
 		gap: 1.25rem;
-		font-size: 1.0625rem;
+		font-size: var(--ab-font-size-lg);
 		line-height: 1.55;
-		color: #0f172a;
+		color: var(--ab-color-fg);
 	}
 
 	.section-label {
-		font-size: 0.75rem;
+		font-size: var(--ab-font-size-xs);
 		font-weight: 600;
-		color: #94a3b8;
+		color: var(--ab-color-fg-faint);
 		text-transform: uppercase;
 		letter-spacing: 0.08em;
 		margin-bottom: 0.5rem;
@@ -318,19 +318,19 @@ function clickRating(value: number) {
 
 	hr {
 		border: none;
-		border-top: 1px dashed #e2e8f0;
+		border-top: 1px dashed var(--ab-color-border);
 		margin: 0;
 	}
 
 	.rate-q {
 		margin: 0.5rem 0 0;
 		text-align: center;
-		color: #475569;
-		font-size: 0.9375rem;
+		color: var(--ab-color-fg-muted);
+		font-size: var(--ab-font-size-body);
 	}
 
 	.rate-q.subdued {
-		color: #94a3b8;
+		color: var(--ab-color-fg-faint);
 	}
 
 	.ratings {
@@ -341,8 +341,8 @@ function clickRating(value: number) {
 
 	.rating {
 		background: white;
-		border: 1px solid #cbd5e1;
-		border-radius: 10px;
+		border: 1px solid var(--ab-color-border-strong);
+		border-radius: var(--ab-radius-md);
 		padding: 0.875rem 0.5rem;
 		display: flex;
 		flex-direction: column;
@@ -353,8 +353,8 @@ function clickRating(value: number) {
 	}
 
 	.rating:hover:not(:disabled) {
-		background: #eff6ff;
-		border-color: #bfdbfe;
+		background: var(--ab-color-primary-subtle);
+		border-color: var(--ab-color-primary-subtle-border);
 	}
 
 	.rating:active:not(:disabled) {
@@ -363,36 +363,36 @@ function clickRating(value: number) {
 
 	.rating-label {
 		font-weight: 600;
-		font-size: 0.9375rem;
-		color: #0f172a;
+		font-size: var(--ab-font-size-body);
+		color: var(--ab-color-fg);
 	}
 
 	.rating-hint {
-		font-size: 0.75rem;
-		color: #64748b;
+		font-size: var(--ab-font-size-xs);
+		color: var(--ab-color-fg-subtle);
 	}
 
 	.rating-1 .rating-label {
-		color: #b91c1c;
+		color: var(--ab-color-danger-hover);
 	}
 
 	.rating-2 .rating-label {
-		color: #c2410c;
+		color: var(--ab-color-warning-active);
 	}
 
 	.rating-3 .rating-label {
-		color: #15803d;
+		color: var(--ab-color-success-hover);
 	}
 
 	.rating-4 .rating-label {
-		color: #1d4ed8;
+		color: var(--ab-color-primary-hover);
 	}
 
 	.btn {
 		padding: 0.625rem 1.25rem;
-		font-size: 0.9375rem;
+		font-size: var(--ab-font-size-body);
 		font-weight: 600;
-		border-radius: 10px;
+		border-radius: var(--ab-radius-md);
 		border: 1px solid transparent;
 		cursor: pointer;
 		text-decoration: none;
@@ -404,55 +404,55 @@ function clickRating(value: number) {
 	}
 
 	.btn.primary {
-		background: #2563eb;
+		background: var(--ab-color-primary);
 		color: white;
 	}
 
 	.btn.primary:hover {
-		background: #1d4ed8;
+		background: var(--ab-color-primary-hover);
 	}
 
 	.btn.secondary {
-		background: #f1f5f9;
-		color: #1a1a2e;
-		border-color: #cbd5e1;
+		background: var(--ab-color-surface-sunken);
+		color: var(--ab-color-fg);
+		border-color: var(--ab-color-border-strong);
 	}
 
 	.btn.secondary:hover {
-		background: #e2e8f0;
+		background: var(--ab-color-border);
 	}
 
 	.btn.ghost {
 		background: transparent;
-		color: #475569;
+		color: var(--ab-color-fg-muted);
 	}
 
 	.btn.ghost:hover {
-		background: #f1f5f9;
+		background: var(--ab-color-surface-sunken);
 	}
 
 	.btn.wide {
 		align-self: center;
 		padding: 0.75rem 2rem;
-		font-size: 1rem;
+		font-size: var(--ab-font-size-base);
 	}
 
 	.kbd {
 		display: inline-flex;
 		align-items: center;
 		padding: 0.0625rem 0.375rem;
-		font-size: 0.6875rem;
-		background: #f1f5f9;
-		color: #64748b;
-		border: 1px solid #cbd5e1;
-		border-radius: 4px;
+		font-size: var(--ab-font-size-xs);
+		background: var(--ab-color-surface-sunken);
+		color: var(--ab-color-fg-subtle);
+		border: 1px solid var(--ab-color-border-strong);
+		border-radius: var(--ab-radius-xs);
 		font-family: ui-monospace, monospace;
 	}
 
 	.caught-up {
 		background: white;
-		border: 1px solid #e2e8f0;
-		border-radius: 16px;
+		border: 1px solid var(--ab-color-border);
+		border-radius: var(--ab-radius-lg);
 		padding: 2.5rem 2rem;
 		text-align: center;
 		display: flex;
@@ -463,14 +463,14 @@ function clickRating(value: number) {
 
 	.caught-up h1 {
 		margin: 0;
-		font-size: 1.75rem;
+		font-size: var(--ab-font-size-2xl);
 		letter-spacing: -0.02em;
-		color: #0f172a;
+		color: var(--ab-color-fg);
 	}
 
 	.summary {
-		color: #475569;
-		font-size: 1rem;
+		color: var(--ab-color-fg-muted);
+		font-size: var(--ab-font-size-base);
 		margin: 0;
 	}
 
@@ -484,24 +484,24 @@ function clickRating(value: number) {
 	}
 
 	.tally > div {
-		background: #f8fafc;
-		border: 1px solid #e2e8f0;
-		border-radius: 8px;
+		background: var(--ab-color-surface-muted);
+		border: 1px solid var(--ab-color-border);
+		border-radius: var(--ab-radius-md);
 		padding: 0.5rem;
 	}
 
 	.tally dt {
-		font-size: 0.6875rem;
-		color: #64748b;
+		font-size: var(--ab-font-size-xs);
+		color: var(--ab-color-fg-subtle);
 		text-transform: uppercase;
 		letter-spacing: 0.06em;
 	}
 
 	.tally dd {
 		margin: 0.125rem 0 0;
-		font-size: 1.25rem;
+		font-size: var(--ab-font-size-2xl);
 		font-weight: 700;
-		color: #0f172a;
+		color: var(--ab-color-fg);
 	}
 
 	.actions {

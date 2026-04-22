@@ -133,15 +133,15 @@ function fmt(date: Date): string {
 
 	h1 {
 		margin: 0;
-		font-size: 1.75rem;
+		font-size: var(--ab-font-size-2xl);
 		letter-spacing: -0.02em;
-		color: #0f172a;
+		color: var(--ab-color-fg);
 	}
 
 	.sub {
 		margin: 0.25rem 0 0;
-		color: #64748b;
-		font-size: 0.9375rem;
+		color: var(--ab-color-fg-subtle);
+		font-size: var(--ab-font-size-body);
 	}
 
 	.quick {
@@ -152,8 +152,8 @@ function fmt(date: Date): string {
 
 	.plan-card {
 		background: white;
-		border: 1px solid #e2e8f0;
-		border-radius: 12px;
+		border: 1px solid var(--ab-color-border);
+		border-radius: var(--ab-radius-lg);
 		padding: 1.25rem 1.5rem;
 		display: flex;
 		flex-direction: column;
@@ -161,8 +161,8 @@ function fmt(date: Date): string {
 	}
 
 	.plan-card.active {
-		border-color: #bfdbfe;
-		background: #f0f6ff;
+		border-color: var(--ab-color-primary-subtle-border);
+		background: var(--ab-color-primary-subtle);
 	}
 
 	.plan-card.empty {
@@ -179,21 +179,21 @@ function fmt(date: Date): string {
 
 	.plan-head h2 {
 		margin: 0 0 0.25rem;
-		font-size: 1.25rem;
+		font-size: var(--ab-font-size-2xl);
 	}
 
 	.badge {
 		display: inline-block;
-		font-size: 0.75rem;
+		font-size: var(--ab-font-size-xs);
 		font-weight: 600;
 		padding: 0.125rem 0.5rem;
-		border-radius: 999px;
-		background: #e2e8f0;
-		color: #475569;
+		border-radius: var(--ab-radius-pill);
+		background: var(--ab-color-border);
+		color: var(--ab-color-fg-muted);
 	}
 
 	.active-badge {
-		background: #1d4ed8;
+		background: var(--ab-color-primary-hover);
 		color: white;
 	}
 
@@ -205,24 +205,24 @@ function fmt(date: Date): string {
 	}
 
 	.plan-meta dt {
-		font-size: 0.75rem;
+		font-size: var(--ab-font-size-xs);
 		font-weight: 600;
 		text-transform: uppercase;
 		letter-spacing: 0.06em;
-		color: #64748b;
+		color: var(--ab-color-fg-subtle);
 	}
 
 	.plan-meta dd {
 		margin: 0.125rem 0 0;
-		color: #0f172a;
-		font-size: 0.9375rem;
+		color: var(--ab-color-fg);
+		font-size: var(--ab-font-size-body);
 	}
 
 	.link {
-		color: #1d4ed8;
+		color: var(--ab-color-primary-hover);
 		font-weight: 500;
 		text-decoration: none;
-		font-size: 0.9375rem;
+		font-size: var(--ab-font-size-body);
 	}
 
 	.link:hover {
@@ -230,14 +230,14 @@ function fmt(date: Date): string {
 	}
 
 	.muted {
-		color: #94a3b8;
-		font-size: 0.875rem;
+		color: var(--ab-color-fg-faint);
+		font-size: var(--ab-font-size-sm);
 	}
 
 	.card-list {
 		background: white;
-		border: 1px solid #e2e8f0;
-		border-radius: 12px;
+		border: 1px solid var(--ab-color-border);
+		border-radius: var(--ab-radius-lg);
 		padding: 1.25rem 1.5rem;
 		display: flex;
 		flex-direction: column;
@@ -246,8 +246,8 @@ function fmt(date: Date): string {
 
 	.card-list h2 {
 		margin: 0;
-		font-size: 0.8125rem;
-		color: #64748b;
+		font-size: var(--ab-font-size-sm);
+		color: var(--ab-color-fg-subtle);
 		text-transform: uppercase;
 		letter-spacing: 0.08em;
 		font-weight: 600;
@@ -267,19 +267,19 @@ function fmt(date: Date): string {
 		justify-content: space-between;
 		align-items: center;
 		padding: 0.5rem 0.75rem;
-		background: #f8fafc;
-		border: 1px solid #e2e8f0;
-		border-radius: 8px;
+		background: var(--ab-color-surface-muted);
+		border: 1px solid var(--ab-color-border);
+		border-radius: var(--ab-radius-md);
 	}
 
 	.plan-name {
-		color: #0f172a;
+		color: var(--ab-color-fg);
 		text-decoration: none;
 		font-weight: 500;
 	}
 
 	.plan-name:hover {
-		color: #1d4ed8;
+		color: var(--ab-color-primary-hover);
 	}
 
 	.meta {
@@ -290,9 +290,9 @@ function fmt(date: Date): string {
 
 	.btn {
 		padding: 0.5rem 1rem;
-		font-size: 0.9375rem;
+		font-size: var(--ab-font-size-body);
 		font-weight: 600;
-		border-radius: 8px;
+		border-radius: var(--ab-radius-md);
 		border: 1px solid transparent;
 		cursor: pointer;
 		text-decoration: none;
@@ -303,21 +303,21 @@ function fmt(date: Date): string {
 	}
 
 	.btn.primary {
-		background: #2563eb;
+		background: var(--ab-color-primary);
 		color: white;
 	}
 
 	.btn.primary:hover {
-		background: #1d4ed8;
+		background: var(--ab-color-primary-hover);
 	}
 
 	.btn.secondary {
-		background: #f1f5f9;
-		color: #1a1a2e;
-		border-color: #cbd5e1;
+		background: var(--ab-color-surface-sunken);
+		color: var(--ab-color-fg);
+		border-color: var(--ab-color-border-strong);
 	}
 
 	.btn.secondary:hover {
-		background: #e2e8f0;
+		background: var(--ab-color-border);
 	}
 </style>

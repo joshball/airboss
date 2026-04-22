@@ -389,21 +389,21 @@ const interpretation = $derived(
 
 	.hd h1 {
 		margin: 0;
-		font-size: 1.75rem;
+		font-size: var(--ab-font-size-2xl);
 		letter-spacing: -0.02em;
-		color: #0f172a;
+		color: var(--ab-color-fg);
 	}
 
 	.sub {
 		margin: 0.125rem 0 0;
-		color: #475569;
-		font-size: 0.9375rem;
+		color: var(--ab-color-fg-muted);
+		font-size: var(--ab-font-size-body);
 	}
 
 	.empty {
 		background: white;
-		border: 1px solid #e2e8f0;
-		border-radius: 16px;
+		border: 1px solid var(--ab-color-border);
+		border-radius: var(--ab-radius-lg);
 		padding: 2rem;
 		text-align: center;
 		display: flex;
@@ -414,25 +414,25 @@ const interpretation = $derived(
 
 	.empty h2 {
 		margin: 0;
-		font-size: 1.25rem;
-		color: #0f172a;
+		font-size: var(--ab-font-size-2xl);
+		color: var(--ab-color-fg);
 	}
 
 	.empty p {
 		margin: 0;
-		color: #475569;
+		color: var(--ab-color-fg-muted);
 		max-width: 36rem;
 	}
 
 	.fine {
-		font-size: 0.8125rem;
-		color: #64748b;
+		font-size: var(--ab-font-size-sm);
+		color: var(--ab-color-fg-subtle);
 	}
 
 	.score-card {
 		background: white;
-		border: 1px solid #e2e8f0;
-		border-radius: 16px;
+		border: 1px solid var(--ab-color-border);
+		border-radius: var(--ab-radius-lg);
 		padding: 1.5rem;
 		display: flex;
 		flex-wrap: wrap;
@@ -445,9 +445,9 @@ const interpretation = $derived(
 	}
 
 	.score-label {
-		font-size: 0.75rem;
+		font-size: var(--ab-font-size-xs);
 		font-weight: 600;
-		color: #64748b;
+		color: var(--ab-color-fg-subtle);
 		text-transform: uppercase;
 		letter-spacing: 0.08em;
 	}
@@ -455,13 +455,13 @@ const interpretation = $derived(
 	.score-value {
 		font-size: 3rem;
 		font-weight: 700;
-		color: #0f172a;
+		color: var(--ab-color-fg);
 		line-height: 1.1;
 	}
 
 	.score-sub {
-		font-size: 0.8125rem;
-		color: #64748b;
+		font-size: var(--ab-font-size-sm);
+		color: var(--ab-color-fg-subtle);
 	}
 
 	.score-meta {
@@ -476,25 +476,25 @@ const interpretation = $derived(
 	}
 
 	.score-meta dt {
-		font-size: 0.75rem;
-		color: #64748b;
+		font-size: var(--ab-font-size-xs);
+		color: var(--ab-color-fg-subtle);
 		text-transform: uppercase;
 		letter-spacing: 0.06em;
 	}
 
 	.score-meta dd {
 		margin: 0;
-		font-size: 1.5rem;
+		font-size: var(--ab-font-size-xl);
 		font-weight: 600;
-		color: #0f172a;
+		color: var(--ab-color-fg);
 	}
 
 	.chart-card,
 	.domains-card,
 	.trend-card {
 		background: white;
-		border: 1px solid #e2e8f0;
-		border-radius: 16px;
+		border: 1px solid var(--ab-color-border);
+		border-radius: var(--ab-radius-lg);
 		padding: 1.5rem;
 		display: flex;
 		flex-direction: column;
@@ -502,9 +502,9 @@ const interpretation = $derived(
 	}
 
 	.interpretation-card {
-		background: #eff6ff;
-		border: 1px solid #bfdbfe;
-		border-radius: 16px;
+		background: var(--ab-color-primary-subtle);
+		border: 1px solid var(--ab-color-primary-subtle-border);
+		border-radius: var(--ab-radius-lg);
 		padding: 1.25rem 1.5rem;
 		display: flex;
 		flex-wrap: wrap;
@@ -515,8 +515,8 @@ const interpretation = $derived(
 
 	.interpretation-card p {
 		margin: 0;
-		color: #0f172a;
-		font-size: 0.9375rem;
+		color: var(--ab-color-fg);
+		font-size: var(--ab-font-size-body);
 		line-height: 1.5;
 		flex: 1 1 24rem;
 		min-width: 0;
@@ -526,14 +526,14 @@ const interpretation = $derived(
 	.domains-card h2,
 	.trend-card h2 {
 		margin: 0;
-		font-size: 1.0625rem;
-		color: #0f172a;
+		font-size: var(--ab-font-size-lg);
+		color: var(--ab-color-fg);
 	}
 
 	.hint {
 		margin: 0;
-		color: #64748b;
-		font-size: 0.875rem;
+		color: var(--ab-color-fg-subtle);
+		font-size: var(--ab-font-size-sm);
 	}
 
 	.buckets {
@@ -546,28 +546,28 @@ const interpretation = $derived(
 	}
 
 	.bucket {
-		border: 1px solid #e2e8f0;
-		border-radius: 12px;
+		border: 1px solid var(--ab-color-border);
+		border-radius: var(--ab-radius-lg);
 		padding: 0.875rem 1rem;
-		background: #f8fafc;
+		background: var(--ab-color-surface-muted);
 		display: flex;
 		flex-direction: column;
 		gap: 0.5rem;
 	}
 
 	.bucket.gap-good {
-		border-color: #86efac;
-		background: #f0fdf4;
+		border-color: var(--ab-color-success-subtle-border);
+		background: var(--ab-color-success-subtle);
 	}
 
 	.bucket.gap-over {
-		border-color: #fecaca;
-		background: #fef2f2;
+		border-color: var(--ab-color-danger-subtle-border);
+		background: var(--ab-color-danger-subtle);
 	}
 
 	.bucket.gap-under {
-		border-color: #fde68a;
-		background: #fefce8;
+		border-color: var(--ab-color-warning-subtle-border);
+		background: var(--ab-color-warning-subtle);
 	}
 
 	.bucket.gap-unknown {
@@ -587,23 +587,23 @@ const interpretation = $derived(
 		justify-content: center;
 		width: 1.5rem;
 		height: 1.5rem;
-		font-size: 0.8125rem;
+		font-size: var(--ab-font-size-sm);
 		font-weight: 700;
-		color: #1d4ed8;
-		background: #eff6ff;
-		border: 1px solid #bfdbfe;
-		border-radius: 999px;
+		color: var(--ab-color-primary-hover);
+		background: var(--ab-color-primary-subtle);
+		border: 1px solid var(--ab-color-primary-subtle-border);
+		border-radius: var(--ab-radius-pill);
 	}
 
 	.bucket-label {
 		font-weight: 600;
-		color: #0f172a;
+		color: var(--ab-color-fg);
 	}
 
 	.bucket-count {
 		margin-left: auto;
-		font-size: 0.8125rem;
-		color: #64748b;
+		font-size: var(--ab-font-size-sm);
+		color: var(--ab-color-fg-subtle);
 	}
 
 	.bars {
@@ -620,8 +620,8 @@ const interpretation = $derived(
 
 	.bar-label {
 		flex: 0 0 5rem;
-		font-size: 0.75rem;
-		color: #64748b;
+		font-size: var(--ab-font-size-xs);
+		color: var(--ab-color-fg-subtle);
 		text-transform: uppercase;
 		letter-spacing: 0.04em;
 	}
@@ -629,8 +629,8 @@ const interpretation = $derived(
 	.bar-track {
 		flex: 1;
 		height: 1.125rem;
-		background: #e2e8f0;
-		border-radius: 999px;
+		background: var(--ab-color-border);
+		border-radius: var(--ab-radius-pill);
 		position: relative;
 		overflow: hidden;
 	}
@@ -640,20 +640,20 @@ const interpretation = $derived(
 		top: 0;
 		left: 0;
 		height: 100%;
-		border-radius: 999px;
+		border-radius: var(--ab-radius-pill);
 	}
 
 	.bar-fill.actual {
-		background: #2563eb;
+		background: var(--ab-color-primary);
 	}
 
 	.bar-fill.expected {
 		background: repeating-linear-gradient(
 			45deg,
-			#94a3b8,
-			#94a3b8 6px,
-			#cbd5e1 6px,
-			#cbd5e1 12px
+			var(--ab-color-fg-faint),
+			var(--ab-color-fg-faint) 6px,
+			var(--ab-color-border-strong) 6px,
+			var(--ab-color-border-strong) 12px
 		);
 	}
 
@@ -662,9 +662,9 @@ const interpretation = $derived(
 		right: 0.375rem;
 		top: 50%;
 		transform: translateY(-50%);
-		font-size: 0.75rem;
+		font-size: var(--ab-font-size-xs);
 		font-weight: 600;
-		color: #0f172a;
+		color: var(--ab-color-fg);
 		text-shadow: 0 0 2px white;
 	}
 
@@ -673,8 +673,8 @@ const interpretation = $derived(
 		left: 0.625rem;
 		top: 50%;
 		transform: translateY(-50%);
-		font-size: 0.75rem;
-		color: #64748b;
+		font-size: var(--ab-font-size-xs);
+		color: var(--ab-color-fg-subtle);
 	}
 
 	.bucket-footer {
@@ -686,85 +686,85 @@ const interpretation = $derived(
 	}
 
 	.bucket-gap {
-		font-size: 0.8125rem;
+		font-size: var(--ab-font-size-sm);
 		font-weight: 600;
-		color: #334155;
+		color: var(--ab-color-fg-strong);
 	}
 
 	.bucket-cta {
 		display: inline-flex;
 		align-items: center;
 		padding: 0.25rem 0.625rem;
-		font-size: 0.8125rem;
+		font-size: var(--ab-font-size-sm);
 		font-weight: 600;
-		color: #1d4ed8;
+		color: var(--ab-color-primary-hover);
 		background: white;
-		border: 1px solid #bfdbfe;
-		border-radius: 8px;
+		border: 1px solid var(--ab-color-primary-subtle-border);
+		border-radius: var(--ab-radius-md);
 		text-decoration: none;
 		transition: background 120ms, border-color 120ms;
 	}
 
 	.bucket-cta:hover {
-		background: #eff6ff;
-		border-color: #93c5fd;
+		background: var(--ab-color-primary-subtle);
+		border-color: var(--ab-color-primary-subtle-border);
 	}
 
 	.gap-over .bucket-cta {
-		color: #b91c1c;
-		border-color: #fecaca;
+		color: var(--ab-color-danger-hover);
+		border-color: var(--ab-color-danger-subtle-border);
 	}
 
 	.gap-over .bucket-cta:hover {
-		background: #fef2f2;
-		border-color: #fca5a5;
+		background: var(--ab-color-danger-subtle);
+		border-color: var(--ab-color-danger-subtle-border);
 	}
 
 	.gap-under .bucket-cta {
-		color: #a16207;
-		border-color: #fde68a;
+		color: var(--ab-color-warning-hover);
+		border-color: var(--ab-color-warning-subtle-border);
 	}
 
 	.gap-under .bucket-cta:hover {
-		background: #fefce8;
-		border-color: #fcd34d;
+		background: var(--ab-color-warning-subtle);
+		border-color: var(--ab-color-warning-subtle-border);
 	}
 
 	.gap-over .bucket-gap {
-		color: #b91c1c;
+		color: var(--ab-color-danger-hover);
 	}
 
 	.gap-under .bucket-gap {
-		color: #a16207;
+		color: var(--ab-color-warning-hover);
 	}
 
 	.gap-good .bucket-gap {
-		color: #15803d;
+		color: var(--ab-color-success-hover);
 	}
 
 	.domain-table {
 		width: 100%;
 		border-collapse: collapse;
-		font-size: 0.9375rem;
+		font-size: var(--ab-font-size-body);
 	}
 
 	.domain-table th,
 	.domain-table td {
 		text-align: left;
 		padding: 0.5rem 0.625rem;
-		border-bottom: 1px solid #e2e8f0;
+		border-bottom: 1px solid var(--ab-color-border);
 	}
 
 	.domain-table thead th {
-		font-size: 0.75rem;
+		font-size: var(--ab-font-size-xs);
 		text-transform: uppercase;
 		letter-spacing: 0.06em;
-		color: #64748b;
+		color: var(--ab-color-fg-subtle);
 	}
 
 	.domain-table tbody th {
 		font-weight: 500;
-		color: #0f172a;
+		color: var(--ab-color-fg);
 	}
 
 	.domain-table .num {
@@ -776,22 +776,22 @@ const interpretation = $derived(
 		display: inline-flex;
 		align-items: center;
 		padding: 0.0625rem 0.5rem;
-		border-radius: 999px;
-		font-size: 0.75rem;
+		border-radius: var(--ab-radius-pill);
+		font-size: var(--ab-font-size-xs);
 		font-weight: 600;
 		border: 1px solid transparent;
 	}
 
 	.gap-pill.gap-over {
-		color: #b91c1c;
-		background: #fef2f2;
-		border-color: #fecaca;
+		color: var(--ab-color-danger-hover);
+		background: var(--ab-color-danger-subtle);
+		border-color: var(--ab-color-danger-subtle-border);
 	}
 
 	.gap-pill.gap-under {
-		color: #a16207;
-		background: #fefce8;
-		border-color: #fde68a;
+		color: var(--ab-color-warning-hover);
+		background: var(--ab-color-warning-subtle);
+		border-color: var(--ab-color-warning-subtle-border);
 	}
 
 	.domain-table .action-col {
@@ -804,19 +804,19 @@ const interpretation = $derived(
 		display: inline-flex;
 		align-items: center;
 		padding: 0.25rem 0.625rem;
-		font-size: 0.8125rem;
+		font-size: var(--ab-font-size-sm);
 		font-weight: 600;
-		color: #1d4ed8;
-		background: #eff6ff;
-		border: 1px solid #bfdbfe;
-		border-radius: 8px;
+		color: var(--ab-color-primary-hover);
+		background: var(--ab-color-primary-subtle);
+		border: 1px solid var(--ab-color-primary-subtle-border);
+		border-radius: var(--ab-radius-md);
 		text-decoration: none;
 		transition: background 120ms, border-color 120ms;
 	}
 
 	.domain-cta:hover {
-		background: #dbeafe;
-		border-color: #93c5fd;
+		background: var(--ab-color-primary-subtle);
+		border-color: var(--ab-color-primary-subtle-border);
 	}
 
 	.visually-hidden {
@@ -838,12 +838,12 @@ const interpretation = $derived(
 	}
 
 	.sparkline-axis {
-		stroke: #e2e8f0;
+		stroke: var(--ab-color-border);
 		stroke-width: 1;
 	}
 
 	.sparkline-path {
-		stroke: #2563eb;
+		stroke: var(--ab-color-primary);
 		stroke-width: 2;
 		stroke-linejoin: round;
 		stroke-linecap: round;
@@ -853,23 +853,23 @@ const interpretation = $derived(
 		display: flex;
 		flex-wrap: wrap;
 		gap: 1rem;
-		font-size: 0.875rem;
-		color: #475569;
+		font-size: var(--ab-font-size-sm);
+		color: var(--ab-color-fg-muted);
 	}
 
 	.trend-legend .up {
-		color: #15803d;
+		color: var(--ab-color-success-hover);
 		font-weight: 600;
 	}
 
 	.trend-legend .down {
-		color: #b91c1c;
+		color: var(--ab-color-danger-hover);
 		font-weight: 600;
 	}
 
 	.empty-note {
-		color: #64748b;
-		font-size: 0.9375rem;
+		color: var(--ab-color-fg-subtle);
+		font-size: var(--ab-font-size-body);
 		margin: 0;
 	}
 
@@ -882,9 +882,9 @@ const interpretation = $derived(
 
 	.btn {
 		padding: 0.625rem 1.25rem;
-		font-size: 0.9375rem;
+		font-size: var(--ab-font-size-body);
 		font-weight: 600;
-		border-radius: 10px;
+		border-radius: var(--ab-radius-md);
 		border: 1px solid transparent;
 		cursor: pointer;
 		text-decoration: none;
@@ -898,22 +898,22 @@ const interpretation = $derived(
 	}
 
 	.btn.primary {
-		background: #2563eb;
+		background: var(--ab-color-primary);
 		color: white;
 	}
 
 	.btn.primary:hover {
-		background: #1d4ed8;
+		background: var(--ab-color-primary-hover);
 	}
 
 	.btn.secondary {
-		background: #f1f5f9;
-		color: #1a1a2e;
-		border-color: #cbd5e1;
+		background: var(--ab-color-surface-sunken);
+		color: var(--ab-color-fg);
+		border-color: var(--ab-color-border-strong);
 	}
 
 	.btn.secondary:hover {
-		background: #e2e8f0;
+		background: var(--ab-color-border);
 	}
 
 	@media (max-width: 560px) {
