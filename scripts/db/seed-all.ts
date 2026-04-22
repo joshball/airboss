@@ -18,7 +18,7 @@
  */
 
 import { resolve } from 'node:path';
-import { DEV_ACCOUNTS } from '../../libs/constants/src/index';
+import { DEV_ACCOUNTS } from '@ab/constants';
 import { seedCardsForUser } from './seed-cards';
 
 type Phase = 'users' | 'knowledge' | 'cards';

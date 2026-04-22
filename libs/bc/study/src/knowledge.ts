@@ -19,6 +19,8 @@ import {
 	type Domain,
 	KNOWLEDGE_EDGE_TYPES,
 	type KnowledgeEdgeType,
+	NODE_MASTERY_GATES,
+	type NodeMasteryGate,
 	RELEVANCE_PRIORITIES,
 	REP_ACCURACY_THRESHOLD,
 	REP_MIN,
@@ -26,6 +28,7 @@ import {
 	STABILITY_MASTERED_DAYS,
 } from '@ab/constants';
 import { db as defaultDb } from '@ab/db';
+import { generateKnowledgeNodeProgressId } from '@ab/utils';
 import { and, asc, count, eq, inArray, isNotNull, isNull, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import {
@@ -34,9 +37,11 @@ import {
 	card,
 	cardState,
 	type KnowledgeEdgeRow,
+	type KnowledgeNodeProgressRow,
 	type KnowledgeNodeRow,
 	knowledgeEdge,
 	knowledgeNode,
+	knowledgeNodeProgress,
 	type NewKnowledgeEdgeRow,
 	type NewKnowledgeNodeRow,
 	scenario,
@@ -491,7 +496,7 @@ export class KnowledgeNodeNotFoundError extends Error {
 }
 
 /** Dual-gate mastery gate outcome per pillar. See spec "Mastery computation". */
-export type NodeMasteryGate = 'pass' | 'fail' | 'insufficient_data' | 'not_applicable';
+export type { NodeMasteryGate };
 
 /**
  * Dual-gate node mastery stats.
@@ -631,9 +636,9 @@ export async function isNodeMastered(
  * it without a DB round-trip.
  */
 export function computeCardGate(cardsTotal: number, cardsMasteredRatio: number): NodeMasteryGate {
-	if (cardsTotal === 0) return 'not_applicable';
-	if (cardsTotal < CARD_MIN) return 'insufficient_data';
-	return cardsMasteredRatio >= CARD_MASTERY_RATIO_THRESHOLD ? 'pass' : 'fail';
+	if (cardsTotal === 0) return NODE_MASTERY_GATES.NOT_APPLICABLE;
+	if (cardsTotal < CARD_MIN) return NODE_MASTERY_GATES.INSUFFICIENT_DATA;
+	return cardsMasteredRatio >= CARD_MASTERY_RATIO_THRESHOLD ? NODE_MASTERY_GATES.PASS : NODE_MASTERY_GATES.FAIL;
 }
 
 /**
@@ -642,10 +647,10 @@ export function computeCardGate(cardsTotal: number, cardsMasteredRatio: number):
  * apply to this node (knowledge-only).
  */
 export function computeRepGate(repsTotal: number, repAccuracy: number, scenariosAttached: number): NodeMasteryGate {
-	if (scenariosAttached === 0) return 'not_applicable';
-	if (repsTotal === 0) return 'insufficient_data';
-	if (repsTotal < REP_MIN) return 'insufficient_data';
-	return repAccuracy >= REP_ACCURACY_THRESHOLD ? 'pass' : 'fail';
+	if (scenariosAttached === 0) return NODE_MASTERY_GATES.NOT_APPLICABLE;
+	if (repsTotal === 0) return NODE_MASTERY_GATES.INSUFFICIENT_DATA;
+	if (repsTotal < REP_MIN) return NODE_MASTERY_GATES.INSUFFICIENT_DATA;
+	return repAccuracy >= REP_ACCURACY_THRESHOLD ? NODE_MASTERY_GATES.PASS : NODE_MASTERY_GATES.FAIL;
 }
 
 /**
@@ -658,9 +663,9 @@ export function computeRepGate(repsTotal: number, repAccuracy: number, scenarios
  * attached content are never mastered" rule surfaces here.
  */
 export function isMastered(cardGate: NodeMasteryGate, repGate: NodeMasteryGate): boolean {
-	if (cardGate === 'not_applicable' && repGate === 'not_applicable') return false;
-	const cardOk = cardGate === 'pass' || cardGate === 'not_applicable';
-	const repOk = repGate === 'pass' || repGate === 'not_applicable';
+	if (cardGate === NODE_MASTERY_GATES.NOT_APPLICABLE && repGate === NODE_MASTERY_GATES.NOT_APPLICABLE) return false;
+	const cardOk = cardGate === NODE_MASTERY_GATES.PASS || cardGate === NODE_MASTERY_GATES.NOT_APPLICABLE;
+	const repOk = repGate === NODE_MASTERY_GATES.PASS || repGate === NODE_MASTERY_GATES.NOT_APPLICABLE;
 	return cardOk && repOk;
 }
 
@@ -943,4 +948,136 @@ export async function getDomainCertMatrix(userId: string, db: Db = defaultDb): P
 		result.push({ domain, cells });
 	}
 	return result;
+}
+
+// ---------------------------------------------------------------------------
+// Per-node phase progress (knowledge /learn stepper)
+// ---------------------------------------------------------------------------
+
+/** Per-user per-node phase progress snapshot. */
+export interface NodePhaseProgress {
+	visitedPhases: string[];
+	completedPhases: string[];
+	lastPhase: string | null;
+}
+
+const EMPTY_PROGRESS: NodePhaseProgress = {
+	visitedPhases: [],
+	completedPhases: [],
+	lastPhase: null,
+};
+
+/**
+ * Read a user's phase progress for a single node. Returns an empty snapshot
+ * (no rows) when the learner has never visited the node -- never null so the
+ * stepper can render uniformly.
+ */
+export async function getNodeProgress(userId: string, nodeId: string, db: Db = defaultDb): Promise<NodePhaseProgress> {
+	const [row] = await db
+		.select()
+		.from(knowledgeNodeProgress)
+		.where(and(eq(knowledgeNodeProgress.userId, userId), eq(knowledgeNodeProgress.nodeId, nodeId)))
+		.limit(1);
+	if (!row) return { ...EMPTY_PROGRESS };
+	return {
+		visitedPhases: [...row.visitedPhases],
+		completedPhases: [...row.completedPhases],
+		lastPhase: row.lastPhase,
+	};
+}
+
+/** Idempotent upsert: ensure `phaseId` is in `visitedPhases`; set as `lastPhase`. */
+export async function recordPhaseVisited(
+	userId: string,
+	nodeId: string,
+	phaseId: string,
+	db: Db = defaultDb,
+): Promise<KnowledgeNodeProgressRow> {
+	return await db.transaction(async (tx) => {
+		const [existing] = await tx
+			.select()
+			.from(knowledgeNodeProgress)
+			.where(and(eq(knowledgeNodeProgress.userId, userId), eq(knowledgeNodeProgress.nodeId, nodeId)))
+			.for('update')
+			.limit(1);
+
+		if (!existing) {
+			const [inserted] = await tx
+				.insert(knowledgeNodeProgress)
+				.values({
+					id: generateKnowledgeNodeProgressId(),
+					userId,
+					nodeId,
+					visitedPhases: [phaseId],
+					completedPhases: [],
+					lastPhase: phaseId,
+				})
+				.returning();
+			return inserted;
+		}
+
+		const visited = existing.visitedPhases.includes(phaseId)
+			? existing.visitedPhases
+			: [...existing.visitedPhases, phaseId];
+		const [updated] = await tx
+			.update(knowledgeNodeProgress)
+			.set({
+				visitedPhases: visited,
+				lastPhase: phaseId,
+				updatedAt: new Date(),
+			})
+			.where(eq(knowledgeNodeProgress.id, existing.id))
+			.returning();
+		return updated;
+	});
+}
+
+/** Idempotent upsert: ensure `phaseId` is in both `visitedPhases` + `completedPhases`. */
+export async function recordPhaseCompleted(
+	userId: string,
+	nodeId: string,
+	phaseId: string,
+	db: Db = defaultDb,
+): Promise<KnowledgeNodeProgressRow> {
+	return await db.transaction(async (tx) => {
+		const [existing] = await tx
+			.select()
+			.from(knowledgeNodeProgress)
+			.where(and(eq(knowledgeNodeProgress.userId, userId), eq(knowledgeNodeProgress.nodeId, nodeId)))
+			.for('update')
+			.limit(1);
+
+		if (!existing) {
+			const [inserted] = await tx
+				.insert(knowledgeNodeProgress)
+				.values({
+					id: generateKnowledgeNodeProgressId(),
+					userId,
+					nodeId,
+					visitedPhases: [phaseId],
+					completedPhases: [phaseId],
+					lastPhase: phaseId,
+				})
+				.returning();
+			return inserted;
+		}
+
+		const visited = existing.visitedPhases.includes(phaseId)
+			? existing.visitedPhases
+			: [...existing.visitedPhases, phaseId];
+		const completed = existing.completedPhases.includes(phaseId)
+			? existing.completedPhases
+			: [...existing.completedPhases, phaseId];
+		const [updated] = await tx
+			.update(knowledgeNodeProgress)
+			.set({
+				visitedPhases: visited,
+				completedPhases: completed,
+				lastPhase: phaseId,
+				updatedAt: new Date(),
+			})
+			.where(eq(knowledgeNodeProgress.id, existing.id))
+			.returning();
+		return updated;
+	});
 }

@@ -1,6 +1,7 @@
 <script lang="ts">
 import type { Snippet } from 'svelte';
-import Button, { type ButtonSize, type ButtonVariant } from './Button.svelte';
+import { tick } from 'svelte';
+import type { ButtonSize, ButtonVariant } from './Button.svelte';
 
 /**
  * Two-step confirm control for destructive actions ("Archive", "Skip
@@ -16,6 +17,11 @@ import Button, { type ButtonSize, type ButtonVariant } from './Button.svelte';
  * Only one of `onConfirm` / `formAction` should be set. When both are
  * present, `formAction` wins (form semantics beat JS callbacks for
  * destructive operations because they degrade without JS).
+ *
+ * A11y:
+ *   - When the confirm row opens, focus moves to the Confirm button.
+ *   - Tab / Shift+Tab cycles between Confirm and Cancel.
+ *   - Escape cancels and returns focus to the re-rendered trigger.
  */
 
 let {
@@ -47,14 +53,22 @@ let {
 } = $props();
 
 let confirming = $state(false);
+let triggerEl = $state<HTMLButtonElement | null>(null);
+let confirmEl = $state<HTMLButtonElement | null>(null);
+let cancelEl = $state<HTMLButtonElement | null>(null);
 
-function openConfirm() {
+async function openConfirm() {
 	if (disabled) return;
 	confirming = true;
+	await tick();
+	confirmEl?.focus();
 }
 
-function cancel() {
+async function cancel() {
 	confirming = false;
+	// Wait for the trigger to re-render, then restore focus to it.
+	await tick();
+	triggerEl?.focus();
 }
 
 function runCallback() {
@@ -62,18 +76,49 @@ function runCallback() {
 	onConfirm?.();
 	confirming = false;
 }
+
+function onPanelKeydown(event: KeyboardEvent) {
+	if (event.key === 'Escape') {
+		event.preventDefault();
+		event.stopPropagation();
+		void cancel();
+		return;
+	}
+	if (event.key !== 'Tab') return;
+	// Focus trap between Confirm and Cancel.
+	const target = event.target as HTMLElement | null;
+	if (event.shiftKey) {
+		if (target === confirmEl) {
+			event.preventDefault();
+			cancelEl?.focus();
+		}
+	} else {
+		if (target === cancelEl) {
+			event.preventDefault();
+			confirmEl?.focus();
+		}
+	}
+}
 </script>
 
 {#if !confirming}
-	<Button variant={triggerVariant} {size} {disabled} onclick={openConfirm}>
+	<button
+		bind:this={triggerEl}
+		type="button"
+		class="trigger v-{triggerVariant} s-{size}"
+		{disabled}
+		onclick={openConfirm}
+	>
 		{#if children}
 			{@render children()}
 		{:else if label}
 			{label}
 		{/if}
-	</Button>
+	</button>
 {:else}
-	<div class="confirm">
+	<!-- svelte-ignore a11y_no_static_element_interactions -->
+	<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+	<div class="confirm" role="group" aria-label={label ?? confirmLabel} onkeydown={onPanelKeydown}>
 		{#if formAction}
 			<form method={formMethod} action={formAction} class="form">
 				{#if hiddenFields}
@@ -81,12 +126,32 @@ function runCallback() {
 						<input type="hidden" name={k} value={v} />
 					{/each}
 				{/if}
-				<Button variant={confirmVariant} {size} type="submit">{confirmLabel}</Button>
+				<button
+					bind:this={confirmEl}
+					type="submit"
+					class="btn v-{confirmVariant} s-{size}"
+				>
+					{confirmLabel}
+				</button>
 			</form>
 		{:else}
-			<Button variant={confirmVariant} {size} onclick={runCallback}>{confirmLabel}</Button>
+			<button
+				bind:this={confirmEl}
+				type="button"
+				class="btn v-{confirmVariant} s-{size}"
+				onclick={runCallback}
+			>
+				{confirmLabel}
+			</button>
 		{/if}
-		<Button variant="ghost" {size} onclick={cancel}>{cancelLabel}</Button>
+		<button
+			bind:this={cancelEl}
+			type="button"
+			class="btn v-ghost s-{size}"
+			onclick={cancel}
+		>
+			{cancelLabel}
+		</button>
 	</div>
 {/if}
 
@@ -100,4 +165,85 @@ function runCallback() {
 	.form {
 		display: inline-flex;
 	}
+
+	/* Local copy of Button primitive styling -- we render raw <button> so we can
+	   bind the DOM ref for focus management. Variants / sizes mirror
+	   libs/ui/src/components/Button.svelte exactly. */
+	.trigger,
+	.btn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: var(--ab-space-xs);
+		font-family: inherit;
+		font-weight: var(--ab-font-weight-semibold);
+		letter-spacing: var(--ab-letter-spacing-normal);
+		border: 1px solid transparent;
+		border-radius: var(--ab-control-radius);
+		cursor: pointer;
+		text-decoration: none;
+		font-variant-numeric: tabular-nums;
+		transition:
+			background var(--ab-transition-fast),
+			border-color var(--ab-transition-fast),
+			color var(--ab-transition-fast);
+	}
+
+	.trigger:focus-visible,
+	.btn:focus-visible {
+		outline: none;
+		box-shadow: 0 0 0 3px var(--ab-color-focus-ring);
+	}
+
+	.trigger:disabled,
+	.btn:disabled {
+		cursor: not-allowed;
+		opacity: 0.6;
+	}
+
+	/* Sizes */
+	.s-sm {
+		padding: var(--ab-control-padding-y-sm) var(--ab-control-padding-x-sm);
+		font-size: var(--ab-control-font-size-sm);
+	}
+	.s-md {
+		padding: var(--ab-control-padding-y-md) var(--ab-control-padding-x-md);
+		font-size: var(--ab-control-font-size-md);
+	}
+	.s-lg {
+		padding: var(--ab-control-padding-y-lg) var(--ab-control-padding-x-lg);
+		font-size: var(--ab-control-font-size-lg);
+	}
+
+	.v-primary {
+		background: var(--ab-color-primary);
+		color: var(--ab-color-primary-fg);
+	}
+	.v-primary:not(:disabled):hover { background: var(--ab-color-primary-hover); }
+	.v-primary:not(:disabled):active { background: var(--ab-color-primary-active); }
+
+	.v-secondary {
+		background: var(--ab-color-surface-sunken);
+		color: var(--ab-color-fg);
+		border-color: var(--ab-color-border-strong);
+	}
+	.v-secondary:not(:disabled):hover { background: var(--ab-color-border); }
+	.v-secondary:not(:disabled):active { background: var(--ab-color-border-strong); }
+
+	.v-ghost {
+		background: transparent;
+		color: var(--ab-color-fg-muted);
+	}
+	.v-ghost:not(:disabled):hover {
+		background: var(--ab-color-surface-sunken);
+		color: var(--ab-color-fg);
+	}
+	.v-ghost:not(:disabled):active { background: var(--ab-color-border); }
+
+	.v-danger {
+		background: var(--ab-color-danger);
+		color: var(--ab-color-danger-fg);
+	}
+	.v-danger:not(:disabled):hover { background: var(--ab-color-danger-hover); }
+	.v-danger:not(:disabled):active { background: var(--ab-color-danger-active); }
 </style>

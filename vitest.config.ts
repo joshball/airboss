@@ -3,6 +3,11 @@ import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
 	resolve: {
+		// Keep this alias list symmetric with `tsconfig.json` `paths` and
+		// `apps/*/svelte.config.js` `alias`. Three registries, one source of
+		// truth for what's real. The sub-path entries (`@ab/constants/env`,
+		// `@ab/auth/schema`) are covered by the wildcard variants below --
+		// they stay listed to document the most common deep imports.
 		alias: {
 			'@ab/constants/env': resolve('./libs/constants/src/env.ts'),
 			'@ab/constants': resolve('./libs/constants/src/index.ts'),
@@ -10,11 +15,14 @@ export default defineConfig({
 			'@ab/db': resolve('./libs/db/src/index.ts'),
 			'@ab/auth/schema': resolve('./libs/auth/src/schema.ts'),
 			'@ab/auth': resolve('./libs/auth/src/index.ts'),
+			'@ab/themes': resolve('./libs/themes/index.ts'),
 			'@ab/ui': resolve('./libs/ui/src/index.ts'),
 			'@ab/utils': resolve('./libs/utils/src/index.ts'),
 			'@ab/bc-study': resolve('./libs/bc/study/src/index.ts'),
 			'@ab/bc-sim': resolve('./libs/bc/sim/src/index.ts'),
 			'@ab/aviation': resolve('./libs/aviation/src/index.ts'),
+			'@ab/help': resolve('./libs/help/src/index.ts'),
+			'@ab/activities': resolve('./libs/activities/src/index.ts'),
 		},
 	},
 	test: {

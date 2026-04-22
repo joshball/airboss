@@ -23,7 +23,6 @@
 import { createHash } from 'node:crypto';
 import { readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { basename, join, relative, resolve } from 'node:path';
-import { parse as parseYaml } from 'yaml';
 import {
 	DOMAIN_LABELS,
 	KNOWLEDGE_EDGE_TYPES,
@@ -33,7 +32,8 @@ import {
 	type KnowledgeEdgeType,
 	NODE_LIFECYCLES,
 	type NodeLifecycle,
-} from '../libs/constants/src/study';
+} from '@ab/constants/study';
+import { parse as parseYaml } from 'yaml';
 
 // ---------------------------------------------------------------------------
 // CLI args

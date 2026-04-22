@@ -10,13 +10,11 @@ import type { ActionData } from './$types';
 
 let { form }: { form: ActionData } = $props();
 let loading = $state(false);
-let email = $state('');
+// Seed email from server-returned form state (populated after a failed
+// submit). The prop is re-rendered on server round-trip; no effect needed.
+// svelte-ignore state_referenced_locally -- initial-value only
+let email = $state<string>(form?.email ?? '');
 let password = $state('');
-
-// Sync email from server-returned form state (populated after a failed submit).
-$effect(() => {
-	if (form?.email) email = form.email;
-});
 
 function fillDevAccount(accountEmail: string) {
 	email = accountEmail;
@@ -90,6 +88,7 @@ function fillDevAccount(accountEmail: string) {
 							<button
 								type="button"
 								class="dev-btn"
+								aria-label="Pre-fill login form as {account.name} ({account.role})"
 								onclick={() => fillDevAccount(account.email)}
 							>
 								<span class="dev-name">{account.name}</span>

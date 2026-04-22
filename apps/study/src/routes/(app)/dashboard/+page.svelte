@@ -26,7 +26,7 @@ const stamp = `${loadedAt.getFullYear()}-${String(loadedAt.getMonth() + 1).padSt
 
 <section class="page">
 	<header class="hd">
-		<h1>Learning Dashboard</h1>
+		<h1>Dashboard</h1>
 		<p class="sub">Where you are. What slipped. What's next.</p>
 	</header>
 
@@ -49,8 +49,8 @@ const stamp = `${loadedAt.getFullYear()}-${String(loadedAt.getMonth() + 1).padSt
 		<div class="cell c7"><ActivityPanel activity={payload.activity} /></div>
 		<div class="cell c5"><StudyPlanPanel activePlan={payload.activePlan} /></div>
 
-		<div class="cell c5"><CertProgressPanel /></div>
-		<div class="cell c7"><MapPanel /></div>
+		<div class="cell c5"><CertProgressPanel certProgress={payload.certProgress} /></div>
+		<div class="cell c7"><MapPanel domainCertMatrix={payload.domainCertMatrix} /></div>
 	</div>
 
 	<footer class="status" aria-hidden="true">
@@ -80,18 +80,18 @@ const stamp = `${loadedAt.getFullYear()}-${String(loadedAt.getMonth() + 1).padSt
 
 	h1 {
 		margin: 0;
-		font-size: 0.8125rem;
+		font-size: var(--ab-font-size-sm);
 		font-weight: 700;
 		text-transform: uppercase;
 		letter-spacing: 0.12em;
-		color: #0f172a;
+		color: var(--ab-color-fg);
 		font-family: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
 	}
 
 	.sub {
 		margin: 0;
-		color: #94a3b8;
-		font-size: 0.75rem;
+		color: var(--ab-color-fg-faint);
+		font-size: var(--ab-font-size-xs);
 		font-family: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
 	}
 
@@ -147,13 +147,13 @@ const stamp = `${loadedAt.getFullYear()}-${String(loadedAt.getMonth() + 1).padSt
 		align-items: center;
 		gap: 0.375rem;
 		padding: 0.25rem 0.125rem 0;
-		color: #94a3b8;
-		font-size: 0.6875rem;
+		color: var(--ab-color-fg-faint);
+		font-size: var(--ab-font-size-xs);
 		font-family: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
 		letter-spacing: 0.04em;
 	}
 
 	.status .sep {
-		color: #cbd5e1;
+		color: var(--ab-color-border-strong);
 	}
 </style>

@@ -5,11 +5,12 @@
  * at a specific locator.
  *
  * The in-repo `Source[]` table is owned by the extraction-pipeline package
- * (`wp-reference-extraction-pipeline`). In this Phase 1 package the types
- * land here so validation + references can typecheck; the `SOURCES` array
- * is empty and the `sources[]` shape-only gate is active (the "citing an
- * unregistered `sourceId`" gate is deferred with a TODO referencing the
- * extraction WP; see `libs/aviation/src/validation.ts`).
+ * (`wp-reference-extraction-pipeline`); its populated list lives at
+ * `libs/aviation/src/sources/registry.ts` as `SOURCES`. Binary corpus
+ * files may not yet be downloaded -- entries use the `PENDING_DOWNLOAD`
+ * sentinel for `downloadedAt` and `checksum` until the pipeline lands. The
+ * `sources[].sourceId` validation gate is active: `validateReferences()`
+ * errors if any citation points at an id not in `SOURCES`.
  */
 
 import type { ReferenceSourceType } from '@ab/constants';

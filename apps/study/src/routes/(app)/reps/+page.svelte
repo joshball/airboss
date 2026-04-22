@@ -1,5 +1,6 @@
 <script lang="ts">
 import { DOMAIN_LABELS, REP_DASHBOARD_WINDOW_DAYS, ROUTES } from '@ab/constants';
+import StatTile from '@ab/ui/components/StatTile.svelte';
 import { humanize } from '@ab/utils';
 import type { PageData } from './$types';
 
@@ -37,7 +38,16 @@ function bar(value: number): number {
 			{#if hasScenarios}
 				<a class="btn primary" href={ROUTES.SESSION_START}>Start session</a>
 			{:else}
-				<button class="btn primary" type="button" disabled>Start session</button>
+				<button
+					class="btn primary"
+					type="button"
+					disabled
+					title="Write a scenario first to enable sessions."
+					aria-describedby="start-session-hint"
+				>
+					Start session
+				</button>
+				<span id="start-session-hint" class="visually-hidden">Write a scenario first to enable sessions.</span>
 			{/if}
 		</nav>
 	</header>
@@ -50,30 +60,28 @@ function bar(value: number): number {
 		</article>
 	{:else}
 		<div class="grid">
-			<article class="tile accent">
-				<div class="tile-label">Available</div>
-				<div class="tile-value">{stats.scenarioCount}</div>
-				<div class="tile-sub">{stats.scenarioCount === 1 ? 'scenario' : 'scenarios'}</div>
-			</article>
-			<article class="tile">
-				<div class="tile-label">Unattempted</div>
-				<div class="tile-value">{stats.unattemptedCount}</div>
-				<div class="tile-sub">never tried</div>
-			</article>
-			<article class="tile">
-				<div class="tile-label">Today</div>
-				<div class="tile-value">{stats.attemptedToday}</div>
-				<div class="tile-sub">{stats.attemptedToday === 1 ? 'rep' : 'reps'}</div>
-			</article>
-			<article class="tile">
-				<div class="tile-label">Accuracy (30d)</div>
-				<div class="tile-value">
-					{stats.accuracyLast30d.attempted === 0 ? '--' : `${percent(stats.accuracyLast30d.accuracy)}%`}
-				</div>
-				<div class="tile-sub">
-					{stats.accuracyLast30d.correct} / {stats.accuracyLast30d.attempted} correct
-				</div>
-			</article>
+			<StatTile
+				label="Available"
+				value={stats.scenarioCount}
+				sub={stats.scenarioCount === 1 ? 'scenario' : 'scenarios'}
+				href={stats.scenarioCount > 0 ? ROUTES.SESSION_START : undefined}
+				tone="primary"
+				ariaLabel="Available: {stats.scenarioCount} scenarios, start a session"
+			/>
+			<StatTile
+				label="Unattempted"
+				value={stats.unattemptedCount}
+				sub="never tried"
+				href={ROUTES.REPS_BROWSE}
+				ariaLabel="Unattempted: {stats.unattemptedCount}, browse reps"
+			/>
+			<StatTile label="Today" value={stats.attemptedToday} sub={stats.attemptedToday === 1 ? 'rep' : 'reps'} />
+			<StatTile
+				label="Accuracy (30d)"
+				value={stats.accuracyLast30d.attempted === 0 ? '--' : `${percent(stats.accuracyLast30d.accuracy)}%`}
+				sub="{stats.accuracyLast30d.correct} / {stats.accuracyLast30d.attempted} correct"
+				href={stats.accuracyLast30d.attempted > 0 ? ROUTES.CALIBRATION : undefined}
+			/>
 		</div>
 
 		<article class="card-list">
@@ -184,47 +192,18 @@ function bar(value: number): number {
 		gap: 0.75rem;
 	}
 
-	.tile {
-		background: white;
-		border: 1px solid #e2e8f0;
-		border-radius: 12px;
-		padding: 1rem 1.25rem;
-		display: flex;
-		flex-direction: column;
-		gap: 0.25rem;
-	}
+	/* StatTile provides its own styling; the grid just lays them out. */
 
-	.tile.accent {
-		border-color: #bfdbfe;
-		background: #eff6ff;
-	}
-
-	.tile-label {
-		font-size: 0.75rem;
-		font-weight: 600;
-		color: #64748b;
-		text-transform: uppercase;
-		letter-spacing: 0.06em;
-	}
-
-	.tile.accent .tile-label {
-		color: #1d4ed8;
-	}
-
-	.tile-value {
-		font-size: 2rem;
-		font-weight: 700;
-		color: #0f172a;
-		line-height: 1;
-	}
-
-	.tile.accent .tile-value {
-		color: #1d4ed8;
-	}
-
-	.tile-sub {
-		font-size: 0.8125rem;
-		color: #64748b;
+	.visually-hidden {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		white-space: nowrap;
+		border: 0;
 	}
 
 	.card-list {

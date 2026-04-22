@@ -1,8 +1,9 @@
 <script lang="ts">
-import { listScenarios } from '@ab/bc-sim';
 import { ROUTES } from '@ab/constants';
+import type { PageData } from './$types';
 
-const scenarios = listScenarios();
+let { data }: { data: PageData } = $props();
+const scenarios = $derived(data.scenarios);
 </script>
 
 <svelte:head>
@@ -17,16 +18,20 @@ const scenarios = listScenarios();
 
 	<section class="scenarios">
 		<h2>Scenarios</h2>
-		<ul>
-			{#each scenarios as scenario (scenario.id)}
-				<li>
-					<a href={ROUTES.SIM_SCENARIO(scenario.id)}>
-						<strong>{scenario.title}</strong>
-						<span class="objective">{scenario.objective}</span>
-					</a>
-				</li>
-			{/each}
-		</ul>
+		{#if scenarios.length === 0}
+			<p class="empty">No scenarios available yet.</p>
+		{:else}
+			<ul>
+				{#each scenarios as scenario (scenario.id)}
+					<li>
+						<a href={ROUTES.SIM_SCENARIO(scenario.id)}>
+							<strong>{scenario.title}</strong>
+							<span class="objective">{scenario.objective}</span>
+						</a>
+					</li>
+				{/each}
+			</ul>
+		{/if}
 	</section>
 
 	<footer>
@@ -93,6 +98,12 @@ const scenarios = listScenarios();
 	.scenarios li a .objective {
 		color: var(--ab-color-fg-muted, #666);
 		font-size: 0.9rem;
+	}
+
+	.empty {
+		color: var(--ab-color-fg-muted, #666);
+		font-size: 0.9375rem;
+		margin: 0;
 	}
 
 	footer {

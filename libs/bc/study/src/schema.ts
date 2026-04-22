@@ -599,3 +599,39 @@ export type SessionRow = typeof session.$inferSelect;
 export type NewSessionRow = typeof session.$inferInsert;
 export type SessionItemResultRow = typeof sessionItemResult.$inferSelect;
 export type NewSessionItemResultRow = typeof sessionItemResult.$inferInsert;
+
+/**
+ * Per-user per-node phase progress for the knowledge /learn stepper.
+ *
+ * Tracks which of the seven phases (Context ... Verify) a learner has visited
+ * and which they've explicitly marked complete via "Got it". `lastPhase`
+ * enables resume-where-you-left-off on return visits.
+ *
+ * Distinct from mastery (which is dual-gate over attached cards + reps): this
+ * table is a lightweight UX signal -- no pedagogical weight. Rows are upserted
+ * idempotently; phase lists dedupe via BC functions.
+ */
+export const knowledgeNodeProgress = studySchema.table(
+	'knowledge_node_progress',
+	{
+		id: text('id').primaryKey(),
+		userId: text('user_id')
+			.notNull()
+			.references(() => bauthUser.id, { onDelete: 'cascade' }),
+		/** Knowledge-graph node slug; no FK because seeded nodes may be rebuilt independently. */
+		nodeId: text('node_id').notNull(),
+		visitedPhases: text('visited_phases').array().notNull().default(sql`'{}'::text[]`),
+		completedPhases: text('completed_phases').array().notNull().default(sql`'{}'::text[]`),
+		lastPhase: text('last_phase'),
+		updatedAt: timestamp('updated_at', { withTimezone: true })
+			.notNull()
+			.defaultNow()
+			.$onUpdate(() => new Date()),
+	},
+	(t) => ({
+		userNodeUnique: uniqueIndex('knp_user_node_unique').on(t.userId, t.nodeId),
+	}),
+);
+
+export type KnowledgeNodeProgressRow = typeof knowledgeNodeProgress.$inferSelect;
+export type NewKnowledgeNodeProgressRow = typeof knowledgeNodeProgress.$inferInsert;

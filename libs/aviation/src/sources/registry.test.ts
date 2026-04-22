@@ -51,9 +51,12 @@ describe('SOURCES registry', () => {
 	it('getSourcesByType() filters the registry', () => {
 		const cfrSources = getSourcesByType('cfr');
 		expect(cfrSources.length).toBeGreaterThanOrEqual(1);
+		// All filtered entries are type=cfr.
 		for (const source of cfrSources) {
 			expect(source.type).toBe('cfr');
 		}
+		// cfr-14 is the Phase 1 required entry; additional CFR titles
+		// (cfr-49, etc.) may land via PR #45's extended registry.
 		expect(cfrSources.map((s) => s.id)).toContain('cfr-14');
 	});
 });

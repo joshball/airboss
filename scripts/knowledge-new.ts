@@ -17,7 +17,7 @@
 
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
-import { DOMAIN_VALUES, KNOWLEDGE_PHASE_LABELS, KNOWLEDGE_PHASE_ORDER } from '../libs/constants/src/study';
+import { DOMAIN_VALUES, KNOWLEDGE_PHASE_LABELS, KNOWLEDGE_PHASE_ORDER } from '@ab/constants/study';
 
 /**
  * Domains accepted by the scaffolder. Starts from DOMAIN_VALUES and adds the

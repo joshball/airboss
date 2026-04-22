@@ -13,7 +13,7 @@
 import { $ } from 'bun';
 import { readdirSync, statSync } from 'node:fs';
 import { basename, join, resolve } from 'node:path';
-import { DEV_DB_URL, ENV_VARS, HOSTS } from '../libs/constants/src/index';
+import { DEV_DB_URL, ENV_VARS, HOSTS } from '@ab/constants';
 
 // Map app name -> dev URL. Keep in step with apps/* and the HOSTS/PORTS
 // constants. Dev serves HTTPS via the SvelteKit/vite TLS setup; the

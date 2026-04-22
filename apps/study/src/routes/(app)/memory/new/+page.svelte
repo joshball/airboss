@@ -31,7 +31,10 @@ const seededCardType = $derived(values.cardType ?? data.seed.cardType ?? CARD_TY
 const seededTags = $derived(values.tags?.join?.(', ') ?? data.seed.tags ?? '');
 
 // After a redirect back from a successful save, put focus on Front so the
-// user can keep typing.
+// user can keep typing. The `void createdId` read is intentional: it
+// registers `createdId` as a dependency so the effect re-fires after each
+// "Save and add another" round-trip (a new query param rewrites
+// `createdId`). Null on first mount is fine -- focus applies anyway.
 $effect(() => {
 	void createdId;
 	void tick().then(() => frontInput?.focus());
@@ -193,51 +196,51 @@ function onKeydown(e: KeyboardEvent) {
 
 	h1 {
 		margin: 0;
-		font-size: 1.5rem;
+		font-size: var(--ab-font-size-xl);
 		letter-spacing: -0.02em;
-		color: #0f172a;
+		color: var(--ab-color-fg);
 	}
 
 	.sub {
 		margin: 0.25rem 0 0;
-		color: #64748b;
-		font-size: 0.9375rem;
+		color: var(--ab-color-fg-subtle);
+		font-size: var(--ab-font-size-body);
 	}
 
 	.back {
-		color: #475569;
+		color: var(--ab-color-fg-muted);
 		text-decoration: none;
-		font-size: 0.875rem;
+		font-size: var(--ab-font-size-sm);
 		padding: 0.375rem 0.75rem;
-		border: 1px solid #cbd5e1;
-		border-radius: 6px;
+		border: 1px solid var(--ab-color-border-strong);
+		border-radius: var(--ab-radius-sm);
 	}
 
 	.back:hover {
-		background: #f1f5f9;
+		background: var(--ab-color-surface-sunken);
 	}
 
 	.banner {
-		background: #eff6ff;
-		border: 1px solid #bfdbfe;
-		color: #1e3a8a;
+		background: var(--ab-color-primary-subtle);
+		border: 1px solid var(--ab-color-primary-subtle-border);
+		color: var(--ab-color-primary-active);
 		padding: 0.625rem 0.875rem;
-		border-radius: 8px;
-		font-size: 0.875rem;
+		border-radius: var(--ab-radius-md);
+		font-size: var(--ab-font-size-sm);
 	}
 
 	.banner a {
-		color: #1d4ed8;
+		color: var(--ab-color-primary-hover);
 		font-weight: 600;
 	}
 
 	.error {
-		background: #fef2f2;
-		border: 1px solid #fecaca;
-		color: #991b1b;
+		background: var(--ab-color-danger-subtle);
+		border: 1px solid var(--ab-color-danger-subtle-border);
+		color: var(--ab-color-danger-active);
 		padding: 0.625rem 0.875rem;
-		border-radius: 8px;
-		font-size: 0.875rem;
+		border-radius: var(--ab-radius-md);
+		font-size: var(--ab-font-size-sm);
 	}
 
 	form {
@@ -245,8 +248,8 @@ function onKeydown(e: KeyboardEvent) {
 		flex-direction: column;
 		gap: 1rem;
 		background: white;
-		border: 1px solid #e2e8f0;
-		border-radius: 12px;
+		border: 1px solid var(--ab-color-border);
+		border-radius: var(--ab-radius-lg);
 		padding: 1.5rem;
 	}
 
@@ -257,14 +260,14 @@ function onKeydown(e: KeyboardEvent) {
 	}
 
 	.label {
-		font-size: 0.875rem;
+		font-size: var(--ab-font-size-sm);
 		font-weight: 500;
-		color: #334155;
+		color: var(--ab-color-fg-strong);
 	}
 
 	.hint {
 		font-weight: 400;
-		color: #94a3b8;
+		color: var(--ab-color-fg-faint);
 	}
 
 	textarea,
@@ -272,10 +275,10 @@ function onKeydown(e: KeyboardEvent) {
 	select {
 		font: inherit;
 		padding: 0.625rem 0.75rem;
-		border: 1px solid #cbd5e1;
-		border-radius: 8px;
+		border: 1px solid var(--ab-color-border-strong);
+		border-radius: var(--ab-radius-md);
 		background: white;
-		color: #0f172a;
+		color: var(--ab-color-fg);
 		transition: border-color 120ms, box-shadow 120ms;
 	}
 
@@ -288,12 +291,12 @@ function onKeydown(e: KeyboardEvent) {
 	input:focus,
 	select:focus {
 		outline: none;
-		border-color: #2563eb;
-		box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+		border-color: var(--ab-color-primary);
+		box-shadow: var(--ab-shadow-focus-ring);
 	}
 
 	:disabled {
-		background: #f1f5f9;
+		background: var(--ab-color-surface-sunken);
 		cursor: not-allowed;
 	}
 
@@ -304,8 +307,8 @@ function onKeydown(e: KeyboardEvent) {
 	}
 
 	.err {
-		font-size: 0.8125rem;
-		color: #b91c1c;
+		font-size: var(--ab-font-size-sm);
+		color: var(--ab-color-danger-hover);
 	}
 
 	.actions {
@@ -318,9 +321,9 @@ function onKeydown(e: KeyboardEvent) {
 
 	.btn {
 		padding: 0.5rem 1rem;
-		font-size: 0.9375rem;
+		font-size: var(--ab-font-size-body);
 		font-weight: 600;
-		border-radius: 8px;
+		border-radius: var(--ab-radius-md);
 		border: 1px solid transparent;
 		cursor: pointer;
 		text-decoration: none;
@@ -330,31 +333,31 @@ function onKeydown(e: KeyboardEvent) {
 	}
 
 	.btn.primary {
-		background: #2563eb;
+		background: var(--ab-color-primary);
 		color: white;
 	}
 
 	.btn.primary:hover:not(:disabled) {
-		background: #1d4ed8;
+		background: var(--ab-color-primary-hover);
 	}
 
 	.btn.secondary {
-		background: #f1f5f9;
-		color: #1a1a2e;
-		border-color: #cbd5e1;
+		background: var(--ab-color-surface-sunken);
+		color: var(--ab-color-fg);
+		border-color: var(--ab-color-border-strong);
 	}
 
 	.btn.secondary:hover:not(:disabled) {
-		background: #e2e8f0;
+		background: var(--ab-color-border);
 	}
 
 	.btn.ghost {
 		background: transparent;
-		color: #475569;
+		color: var(--ab-color-fg-muted);
 	}
 
 	.btn.ghost:hover {
-		background: #f1f5f9;
+		background: var(--ab-color-surface-sunken);
 	}
 
 	.btn:disabled {

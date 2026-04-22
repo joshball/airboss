@@ -755,3 +755,50 @@ export const SESSION_SLICE_LABELS: Record<SessionSlice, string> = {
 	[SESSION_SLICES.EXPAND]: 'Expand',
 	[SESSION_SLICES.DIVERSIFY]: 'Diversify',
 };
+
+/**
+ * Dual-gate mastery outcome per pillar (card pillar + rep pillar). See
+ * `libs/bc/study/src/knowledge.ts` and the knowledge-graph spec
+ * "Mastery computation" section.
+ */
+export const NODE_MASTERY_GATES = {
+	PASS: 'pass',
+	FAIL: 'fail',
+	INSUFFICIENT_DATA: 'insufficient_data',
+	NOT_APPLICABLE: 'not_applicable',
+} as const;
+
+export type NodeMasteryGate = (typeof NODE_MASTERY_GATES)[keyof typeof NODE_MASTERY_GATES];
+
+export const NODE_MASTERY_GATE_VALUES: readonly NodeMasteryGate[] = Object.values(NODE_MASTERY_GATES);
+
+/**
+ * Phases for a single item's review interaction in `/memory/review` --
+ * front shown, confidence captured, answer graded, network submit, batch
+ * complete. Local to the review surface.
+ */
+export const REVIEW_PHASES = {
+	FRONT: 'front',
+	CONFIDENCE: 'confidence',
+	ANSWER: 'answer',
+	SUBMITTING: 'submitting',
+	COMPLETE: 'complete',
+} as const;
+
+export type ReviewPhase = (typeof REVIEW_PHASES)[keyof typeof REVIEW_PHASES];
+
+export const REVIEW_PHASE_VALUES: readonly ReviewPhase[] = Object.values(REVIEW_PHASES);
+
+/**
+ * Phases inside a session-runner slot (`/sessions/[id]`). A slot progresses
+ * read -> confidence -> answer, then advances or skips.
+ */
+export const SESSION_ITEM_PHASES = {
+	READ: 'read',
+	CONFIDENCE: 'confidence',
+	ANSWER: 'answer',
+} as const;
+
+export type SessionItemPhase = (typeof SESSION_ITEM_PHASES)[keyof typeof SESSION_ITEM_PHASES];
+
+export const SESSION_ITEM_PHASE_VALUES: readonly SessionItemPhase[] = Object.values(SESSION_ITEM_PHASES);

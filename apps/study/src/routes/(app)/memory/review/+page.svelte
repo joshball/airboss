@@ -1,6 +1,7 @@
 <script lang="ts">
 import { type ConfidenceLevel, DOMAIN_LABELS, REVIEW_RATINGS, ROUTES } from '@ab/constants';
 import ConfidenceSlider from '@ab/ui/components/ConfidenceSlider.svelte';
+import KbdHint from '@ab/ui/components/KbdHint.svelte';
 import { enhance } from '$app/forms';
 import { invalidateAll } from '$app/navigation';
 import type { PageData } from './$types';
@@ -16,6 +17,20 @@ interface RatingTally {
 	easy: number;
 }
 
+type UndoCard = PageData['batch'][number];
+
+interface PendingUndo {
+	cardId: string;
+	ratingLabel: string;
+	card: UndoCard;
+	confidence: number | null;
+	/** epoch ms when the toast expires. */
+	expiresAt: number;
+}
+
+/** Visible undo window in ms. Shorter than a half-beat breath, long enough to notice a fat-finger. */
+const UNDO_WINDOW_MS = 2500;
+
 // The review session owns a local copy of the batch so the UI stays on a
 // stable queue even if `data` mutates between rating submits. `data` is
 // reread explicitly via startNewSession() -> invalidateAll().
@@ -28,18 +43,21 @@ let revealedAt = $state<number | null>(null);
 let confidence = $state<number | null>(null);
 let tally = $state<RatingTally>({ again: 0, hard: 0, good: 0, easy: 0 });
 let submitError = $state<string | null>(null);
+let pendingUndo = $state<PendingUndo | null>(null);
+let undoTimer: ReturnType<typeof setTimeout> | null = null;
+let undoing = $state(false);
 
 const current = $derived(batch[index]);
 const total = $derived(batch.length);
 const needsConfidence = $derived(Boolean(current?.promptConfidence));
 const showConfidencePrompt = $derived(phase === 'confidence' && needsConfidence);
 
-const ratingLabels = {
+const ratingLabels: Record<number, { label: string; hint: string; key: string }> = {
 	[REVIEW_RATINGS.AGAIN]: { label: 'Again', hint: '< 1m', key: '1' },
 	[REVIEW_RATINGS.HARD]: { label: 'Hard', hint: '< 10m', key: '2' },
 	[REVIEW_RATINGS.GOOD]: { label: 'Good', hint: '~ days', key: '3' },
 	[REVIEW_RATINGS.EASY]: { label: 'Easy', hint: '~ week+', key: '4' },
-} as const;
+};
 
 function humanize(slug: string): string {
 	return slug
@@ -75,11 +93,30 @@ function skipConfidence() {
 	reveal();
 }
 
-function onRatingResult(rating: number) {
+function onRatingResult(rating: number, submittedCard: UndoCard, submittedConfidence: number | null) {
 	if (rating === REVIEW_RATINGS.AGAIN) tally.again++;
 	else if (rating === REVIEW_RATINGS.HARD) tally.hard++;
 	else if (rating === REVIEW_RATINGS.GOOD) tally.good++;
 	else if (rating === REVIEW_RATINGS.EASY) tally.easy++;
+
+	// Start the undo window. Any in-flight undo from a prior card is dropped
+	// immediately (one card = one undo opportunity).
+	if (undoTimer !== null) {
+		clearTimeout(undoTimer);
+		undoTimer = null;
+	}
+	pendingUndo = {
+		cardId: submittedCard.id,
+		ratingLabel: ratingLabels[rating].label,
+		card: submittedCard,
+		confidence: submittedConfidence,
+		expiresAt: Date.now() + UNDO_WINDOW_MS,
+	};
+	undoTimer = setTimeout(() => {
+		pendingUndo = null;
+		undoTimer = null;
+	}, UNDO_WINDOW_MS);
+
 	advance();
 }
 
@@ -97,6 +134,61 @@ function advance() {
 	}
 }
 
+function cancelUndo() {
+	if (undoTimer !== null) {
+		clearTimeout(undoTimer);
+		undoTimer = null;
+	}
+	pendingUndo = null;
+}
+
+async function triggerUndo() {
+	const snap = pendingUndo;
+	if (!snap || undoing) return;
+	undoing = true;
+	if (undoTimer !== null) {
+		clearTimeout(undoTimer);
+		undoTimer = null;
+	}
+	try {
+		const formData = new FormData();
+		formData.set('cardId', snap.cardId);
+		const res = await fetch('?/undoReview', {
+			method: 'POST',
+			headers: { 'x-sveltekit-action': 'true' },
+			body: formData,
+		});
+		if (!res.ok) {
+			submitError = 'Could not undo that rating. The card stays scheduled as rated.';
+			pendingUndo = null;
+			return;
+		}
+		// Restore the rating tally.
+		// We derive the rating from the label to stay resilient across REVIEW_RATINGS.
+		const label = snap.ratingLabel.toLowerCase();
+		if (label === 'again' && tally.again > 0) tally.again--;
+		else if (label === 'hard' && tally.hard > 0) tally.hard--;
+		else if (label === 'good' && tally.good > 0) tally.good--;
+		else if (label === 'easy' && tally.easy > 0) tally.easy--;
+
+		// Put the card back at the top of the queue. When `complete`, reopen the session.
+		const restored: UndoCard = snap.card;
+		const remaining = batch.slice(index);
+		batch = [restored, ...remaining];
+		index = 0;
+		phase = 'front';
+		confidence = null;
+		revealedAt = null;
+		submitError = null;
+		pendingUndo = null;
+	} catch {
+		submitError = 'Network error on undo. The card stays scheduled as rated.';
+		pendingUndo = null;
+	} finally {
+		undoing = false;
+	}
+}
+
 async function startNewSession() {
 	await invalidateAll();
 	batch = data.batch;
@@ -108,7 +200,20 @@ async function startNewSession() {
 }
 
 function onKeydown(e: KeyboardEvent) {
-	if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+	const target = e.target as HTMLElement | null;
+	if (target?.isContentEditable) return;
+	if (target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement) return;
+
+	// Undo shortcut (u / Cmd+Z / Ctrl+Z) while the undo window is open.
+	if (pendingUndo && !undoing) {
+		const isUndoChord = (e.key === 'z' || e.key === 'Z') && (e.metaKey || e.ctrlKey);
+		if (e.key === 'u' || e.key === 'U' || isUndoChord) {
+			e.preventDefault();
+			void triggerUndo();
+			return;
+		}
+	}
+
 	if (phase === 'front') {
 		if (e.key === ' ' || e.key === 'Enter') {
 			e.preventDefault();
@@ -144,9 +249,23 @@ function clickRating(value: number) {
 </svelte:head>
 
 <section class="page">
+	{#if pendingUndo}
+		<div class="undo-toast" role="status" aria-live="polite">
+			<span class="undo-msg">
+				Rated <strong>{pendingUndo.ratingLabel}</strong>.
+				<span class="undo-domain">{domainLabel(pendingUndo.card.domain)}</span>
+			</span>
+			<button type="button" class="undo-btn" onclick={triggerUndo} disabled={undoing}>
+				{undoing ? 'Undoing...' : 'Undo'}
+				<KbdHint>U</KbdHint>
+			</button>
+			<button type="button" class="undo-dismiss" onclick={cancelUndo} aria-label="Dismiss undo">&times;</button>
+		</div>
+	{/if}
+
 	{#if phase === 'complete'}
 		<article class="caught-up">
-			<h1>All caught up.</h1>
+			<h1>{total > 0 ? 'Session complete.' : "You're caught up."}</h1>
 			{#if total > 0}
 				<p class="summary">You reviewed <strong>{total}</strong> {total === 1 ? 'card' : 'cards'} in this session.</p>
 				<dl class="tally">
@@ -200,20 +319,21 @@ function clickRating(value: number) {
 				use:enhance={({ formData }) => {
 					// Snapshot the submitted card + rating BEFORE phase flips so a
 					// late result still knows what was intended.
-					const submittedCardId = current.id;
+					const submittedCard = current;
+					const submittedConfidence = confidence;
 					const rating = Number(formData.get('rating') ?? 0);
 					phase = 'submitting';
-					formData.set('cardId', submittedCardId);
+					formData.set('cardId', submittedCard.id);
 					const answerMs = revealedAt !== null ? Date.now() - revealedAt : '';
 					formData.set('answerMs', String(answerMs));
-					if (confidence !== null) formData.set('confidence', String(confidence));
+					if (submittedConfidence !== null) formData.set('confidence', String(submittedConfidence));
 					return async ({ result, update }) => {
 						await update({ reset: false });
 						// Only advance on a successful review. On failure/redirect/error the
 						// server rejected the write -- leave the learner on the same card
 						// with the error surfaced rather than silently dropping the rating.
 						if (result.type === 'success') {
-							onRatingResult(rating);
+							onRatingResult(rating, submittedCard, submittedConfidence);
 						} else {
 							phase = 'answer';
 							submitError = result.type === 'failure' ? 'Could not save that review. Try again.' : 'Network error. Try again.';
@@ -254,6 +374,82 @@ function clickRating(value: number) {
 		gap: 1.25rem;
 		max-width: 42rem;
 		margin: 0 auto;
+	}
+
+	.undo-toast {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		padding: 0.625rem 0.875rem;
+		background: #eff6ff;
+		border: 1px solid #bfdbfe;
+		border-radius: 10px;
+		font-size: 0.875rem;
+		color: #1e40af;
+		animation: undo-fade var(--ab-transition-normal) ease-out;
+	}
+
+	.undo-msg {
+		flex: 1;
+	}
+
+	.undo-domain {
+		color: #475569;
+		font-size: 0.75rem;
+		margin-left: 0.25rem;
+	}
+
+	.undo-btn {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.375rem;
+		background: white;
+		border: 1px solid #bfdbfe;
+		color: #1d4ed8;
+		font-weight: 600;
+		border-radius: 6px;
+		padding: 0.3125rem 0.625rem;
+		font-size: 0.8125rem;
+		cursor: pointer;
+	}
+
+	.undo-btn:hover:not(:disabled) {
+		background: #dbeafe;
+	}
+
+	.undo-btn:focus-visible {
+		outline: none;
+		box-shadow: 0 0 0 3px var(--ab-color-focus-ring);
+	}
+
+	.undo-btn:disabled {
+		opacity: 0.6;
+		cursor: not-allowed;
+	}
+
+	.undo-dismiss {
+		background: transparent;
+		border: none;
+		color: #475569;
+		cursor: pointer;
+		font-size: 1.125rem;
+		line-height: 1;
+		padding: 0.25rem 0.5rem;
+	}
+
+	.undo-dismiss:focus-visible {
+		outline: none;
+		box-shadow: 0 0 0 3px var(--ab-color-focus-ring);
+		border-radius: 4px;
+	}
+
+	@keyframes undo-fade {
+		from { opacity: 0; transform: translateY(-4px); }
+		to { opacity: 1; transform: translateY(0); }
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.undo-toast { animation: none; }
 	}
 
 	.hd {
@@ -344,7 +540,10 @@ function clickRating(value: number) {
 		gap: 0.125rem;
 		align-items: center;
 		cursor: pointer;
-		transition: background 120ms, border-color 120ms, transform 80ms;
+		transition:
+			background var(--ab-transition-fast),
+			border-color var(--ab-transition-fast),
+			transform var(--ab-transition-fast);
 	}
 
 	.rating:hover:not(:disabled) {
@@ -354,6 +553,11 @@ function clickRating(value: number) {
 
 	.rating:active:not(:disabled) {
 		transform: scale(0.98);
+	}
+
+	.rating:focus-visible {
+		outline: none;
+		box-shadow: 0 0 0 3px var(--ab-color-focus-ring);
 	}
 
 	.rating-label {
@@ -395,7 +599,14 @@ function clickRating(value: number) {
 		align-items: center;
 		justify-content: center;
 		gap: 0.5rem;
-		transition: background 120ms, border-color 120ms;
+		transition:
+			background var(--ab-transition-fast),
+			border-color var(--ab-transition-fast);
+	}
+
+	.btn:focus-visible {
+		outline: none;
+		box-shadow: 0 0 0 3px var(--ab-color-focus-ring);
 	}
 
 	.btn.primary {

@@ -4,6 +4,7 @@ export {
 	generateAuditLogId,
 	generateAuthId,
 	generateCardId,
+	generateKnowledgeNodeProgressId,
 	generateReviewId,
 	generateScenarioId,
 	generateSessionId,

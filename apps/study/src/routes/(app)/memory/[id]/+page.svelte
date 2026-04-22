@@ -10,6 +10,7 @@ import {
 	REVIEW_RATINGS,
 	ROUTES,
 } from '@ab/constants';
+import ConfirmAction from '@ab/ui/components/ConfirmAction.svelte';
 import { tick } from 'svelte';
 import { enhance } from '$app/forms';
 import { replaceState } from '$app/navigation';
@@ -263,44 +264,75 @@ const tagsString = $derived((card.tags ?? []).join(', '));
 				{:else}
 					<span class="note">This card is read-only (source: {humanize(card.sourceType)}).</span>
 				{/if}
-				<form
-					method="POST"
-					action="?/setStatus"
-					class="inline-form"
-					use:enhance={({ formData, cancel }) => {
-						if (formData.get('status') === CARD_STATUSES.ARCHIVED) {
-							// Archive is effectively delete (cards are never hard-removed);
-							// require an explicit confirm.
-							if (!confirm('Archive this card? It will disappear from your deck. You can reactivate it from Browse later.')) {
-								cancel();
-								return;
-							}
-						}
-						statusUpdating = true;
-						return async ({ update }) => {
-							statusUpdating = false;
-							await update();
-						};
-					}}
-				>
+				<div class="inline-form">
 					{#if card.status === CARD_STATUSES.ACTIVE}
-						<button type="submit" class="btn secondary" name="status" value={CARD_STATUSES.SUSPENDED} disabled={statusUpdating}>
-							{statusUpdating ? '...' : 'Suspend'}
-						</button>
-						<button type="submit" class="btn danger" name="status" value={CARD_STATUSES.ARCHIVED} disabled={statusUpdating}>
-							{statusUpdating ? '...' : 'Archive'}
-						</button>
-					{:else}
-						<button type="submit" class="btn secondary" name="status" value={CARD_STATUSES.ACTIVE} disabled={statusUpdating}>
-							{statusUpdating ? '...' : 'Reactivate'}
-						</button>
-						{#if card.status === CARD_STATUSES.SUSPENDED}
-							<button type="submit" class="btn danger" name="status" value={CARD_STATUSES.ARCHIVED} disabled={statusUpdating}>
-								{statusUpdating ? '...' : 'Archive'}
+						<form
+							method="POST"
+							action="?/setStatus"
+							class="status-form"
+							use:enhance={() => {
+								statusUpdating = true;
+								return async ({ update }) => {
+									statusUpdating = false;
+									await update();
+								};
+							}}
+						>
+							<button
+								type="submit"
+								class="btn secondary"
+								name="status"
+								value={CARD_STATUSES.SUSPENDED}
+								disabled={statusUpdating}
+							>
+								{statusUpdating ? '...' : 'Suspend'}
 							</button>
+						</form>
+						<ConfirmAction
+							formAction="?/setStatus"
+							confirmVariant="danger"
+							triggerVariant="ghost"
+							size="md"
+							label="Archive"
+							confirmLabel="Archive this card"
+							hiddenFields={{ status: CARD_STATUSES.ARCHIVED }}
+						/>
+					{:else}
+						<form
+							method="POST"
+							action="?/setStatus"
+							class="status-form"
+							use:enhance={() => {
+								statusUpdating = true;
+								return async ({ update }) => {
+									statusUpdating = false;
+									await update();
+								};
+							}}
+						>
+							<button
+								type="submit"
+								class="btn secondary"
+								name="status"
+								value={CARD_STATUSES.ACTIVE}
+								disabled={statusUpdating}
+							>
+								{statusUpdating ? '...' : 'Reactivate'}
+							</button>
+						</form>
+						{#if card.status === CARD_STATUSES.SUSPENDED}
+							<ConfirmAction
+								formAction="?/setStatus"
+								confirmVariant="danger"
+								triggerVariant="ghost"
+								size="md"
+								label="Archive"
+								confirmLabel="Archive this card"
+								hiddenFields={{ status: CARD_STATUSES.ARCHIVED }}
+							/>
 						{/if}
 					{/if}
-				</form>
+				</div>
 			</div>
 		</article>
 	{/if}
@@ -366,20 +398,20 @@ const tagsString = $derived((card.tags ?? []).join(', '));
 	}
 
 	.back {
-		color: #475569;
+		color: var(--ab-color-fg-muted);
 		text-decoration: none;
-		font-size: 0.8125rem;
+		font-size: var(--ab-font-size-sm);
 	}
 
 	.back:hover {
-		color: #1a1a2e;
+		color: var(--ab-color-fg);
 	}
 
 	h1 {
 		margin: 0.25rem 0 0;
-		font-size: 1.5rem;
+		font-size: var(--ab-font-size-xl);
 		letter-spacing: -0.02em;
-		color: #0f172a;
+		color: var(--ab-color-fg);
 	}
 
 	.badges {
@@ -392,62 +424,62 @@ const tagsString = $derived((card.tags ?? []).join(', '));
 		display: inline-flex;
 		align-items: center;
 		padding: 0.125rem 0.5rem;
-		font-size: 0.6875rem;
+		font-size: var(--ab-font-size-xs);
 		font-weight: 600;
-		border-radius: 999px;
-		border: 1px solid #e2e8f0;
-		color: #475569;
-		background: #f8fafc;
+		border-radius: var(--ab-radius-pill);
+		border: 1px solid var(--ab-color-border);
+		color: var(--ab-color-fg-muted);
+		background: var(--ab-color-surface-muted);
 		text-transform: uppercase;
 		letter-spacing: 0.04em;
 	}
 
 	.badge.domain {
-		color: #1d4ed8;
-		background: #eff6ff;
-		border-color: #bfdbfe;
+		color: var(--ab-color-primary-hover);
+		background: var(--ab-color-primary-subtle);
+		border-color: var(--ab-color-primary-subtle-border);
 	}
 
 	.badge.status-suspended {
-		color: #92400e;
-		background: #fffbeb;
-		border-color: #fde68a;
+		color: var(--ab-color-warning-active);
+		background: var(--ab-color-warning-subtle);
+		border-color: var(--ab-color-warning-subtle-border);
 	}
 
 	.badge.status-archived {
-		color: #4b5563;
-		background: #f3f4f6;
-		border-color: #e5e7eb;
+		color: var(--ab-color-fg-muted);
+		background: var(--ab-color-surface-sunken);
+		border-color: var(--ab-color-border);
 	}
 
 	.badge.source {
-		color: #6b21a8;
-		background: #faf5ff;
-		border-color: #e9d5ff;
+		color: var(--ab-color-accent-fg);
+		background: var(--ab-color-accent-subtle);
+		border-color: var(--ab-color-accent-subtle-border);
 	}
 
 	.error {
-		background: #fef2f2;
-		border: 1px solid #fecaca;
-		color: #991b1b;
+		background: var(--ab-color-danger-subtle);
+		border: 1px solid var(--ab-color-danger-subtle-border);
+		color: var(--ab-color-danger-active);
 		padding: 0.625rem 0.875rem;
-		border-radius: 8px;
-		font-size: 0.875rem;
+		border-radius: var(--ab-radius-md);
+		font-size: var(--ab-font-size-sm);
 	}
 
 	.toast {
-		background: #ecfdf5;
-		border: 1px solid #a7f3d0;
-		color: #065f46;
+		background: var(--ab-color-success-subtle);
+		border: 1px solid var(--ab-color-success-subtle-border);
+		color: var(--ab-color-success-active);
 		padding: 0.625rem 0.875rem;
-		border-radius: 8px;
-		font-size: 0.875rem;
+		border-radius: var(--ab-radius-md);
+		font-size: var(--ab-font-size-sm);
 	}
 
 	.content {
 		background: white;
-		border: 1px solid #e2e8f0;
-		border-radius: 12px;
+		border: 1px solid var(--ab-color-border);
+		border-radius: var(--ab-radius-lg);
 		padding: 1.25rem 1.5rem;
 		display: flex;
 		flex-direction: column;
@@ -456,25 +488,25 @@ const tagsString = $derived((card.tags ?? []).join(', '));
 
 	.content h2 {
 		margin: 0;
-		font-size: 1rem;
-		color: #334155;
+		font-size: var(--ab-font-size-base);
+		color: var(--ab-color-fg-strong);
 		text-transform: uppercase;
 		letter-spacing: 0.08em;
 		font-weight: 600;
 	}
 
 	.cell-label {
-		font-size: 0.75rem;
+		font-size: var(--ab-font-size-xs);
 		font-weight: 600;
-		color: #64748b;
+		color: var(--ab-color-fg-subtle);
 		text-transform: uppercase;
 		letter-spacing: 0.06em;
 		margin-bottom: 0.25rem;
 	}
 
 	.cell-text {
-		color: #0f172a;
-		font-size: 1rem;
+		color: var(--ab-color-fg);
+		font-size: var(--ab-font-size-base);
 		line-height: 1.5;
 		white-space: pre-wrap;
 	}
@@ -487,10 +519,10 @@ const tagsString = $derived((card.tags ?? []).join(', '));
 
 	.tag {
 		padding: 0.125rem 0.5rem;
-		font-size: 0.75rem;
-		background: #f1f5f9;
-		border-radius: 999px;
-		color: #475569;
+		font-size: var(--ab-font-size-xs);
+		background: var(--ab-color-surface-sunken);
+		border-radius: var(--ab-radius-pill);
+		color: var(--ab-color-fg-muted);
 	}
 
 	.row {
@@ -507,17 +539,22 @@ const tagsString = $derived((card.tags ?? []).join(', '));
 	.inline-form {
 		display: flex;
 		gap: 0.375rem;
+		align-items: center;
+	}
+
+	.status-form {
+		display: inline-flex;
 	}
 
 	.note {
-		color: #64748b;
-		font-size: 0.875rem;
+		color: var(--ab-color-fg-subtle);
+		font-size: var(--ab-font-size-sm);
 	}
 
-	form:not(.inline-form) {
+	form:not(.inline-form):not(.status-form) {
 		background: white;
-		border: 1px solid #e2e8f0;
-		border-radius: 12px;
+		border: 1px solid var(--ab-color-border);
+		border-radius: var(--ab-radius-lg);
 		padding: 1.5rem;
 		display: flex;
 		flex-direction: column;
@@ -531,14 +568,14 @@ const tagsString = $derived((card.tags ?? []).join(', '));
 	}
 
 	.label {
-		font-size: 0.875rem;
+		font-size: var(--ab-font-size-sm);
 		font-weight: 500;
-		color: #334155;
+		color: var(--ab-color-fg-strong);
 	}
 
 	.hint {
 		font-weight: 400;
-		color: #94a3b8;
+		color: var(--ab-color-fg-faint);
 	}
 
 	textarea,
@@ -546,10 +583,10 @@ const tagsString = $derived((card.tags ?? []).join(', '));
 	select {
 		font: inherit;
 		padding: 0.625rem 0.75rem;
-		border: 1px solid #cbd5e1;
-		border-radius: 8px;
+		border: 1px solid var(--ab-color-border-strong);
+		border-radius: var(--ab-radius-md);
 		background: white;
-		color: #0f172a;
+		color: var(--ab-color-fg);
 	}
 
 	textarea {
@@ -561,12 +598,12 @@ const tagsString = $derived((card.tags ?? []).join(', '));
 	input:focus,
 	select:focus {
 		outline: none;
-		border-color: #2563eb;
-		box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+		border-color: var(--ab-color-primary);
+		box-shadow: var(--ab-shadow-focus-ring);
 	}
 
 	:disabled {
-		background: #f1f5f9;
+		background: var(--ab-color-surface-sunken);
 		cursor: not-allowed;
 	}
 
@@ -588,15 +625,15 @@ const tagsString = $derived((card.tags ?? []).join(', '));
 	}
 
 	.stats > div {
-		background: #f8fafc;
-		border: 1px solid #e2e8f0;
-		border-radius: 8px;
+		background: var(--ab-color-surface-muted);
+		border: 1px solid var(--ab-color-border);
+		border-radius: var(--ab-radius-md);
 		padding: 0.625rem 0.75rem;
 	}
 
 	.stats dt {
-		font-size: 0.6875rem;
-		color: #64748b;
+		font-size: var(--ab-font-size-xs);
+		color: var(--ab-color-fg-subtle);
 		text-transform: uppercase;
 		letter-spacing: 0.06em;
 		margin: 0;
@@ -604,39 +641,39 @@ const tagsString = $derived((card.tags ?? []).join(', '));
 
 	.stats dd {
 		margin: 0.125rem 0 0;
-		color: #0f172a;
-		font-size: 0.9375rem;
+		color: var(--ab-color-fg);
+		font-size: var(--ab-font-size-body);
 		font-weight: 500;
 	}
 
 	.err {
-		font-size: 0.8125rem;
-		color: #b91c1c;
+		font-size: var(--ab-font-size-sm);
+		color: var(--ab-color-danger-hover);
 	}
 
 	.empty-note {
 		margin: 0;
-		color: #94a3b8;
-		font-size: 0.875rem;
+		color: var(--ab-color-fg-faint);
+		font-size: var(--ab-font-size-sm);
 	}
 
 	.reviews {
 		width: 100%;
 		border-collapse: collapse;
-		font-size: 0.875rem;
+		font-size: var(--ab-font-size-sm);
 	}
 
 	.reviews th,
 	.reviews td {
 		padding: 0.5rem 0.75rem;
 		text-align: left;
-		border-bottom: 1px solid #e2e8f0;
+		border-bottom: 1px solid var(--ab-color-border);
 	}
 
 	.reviews th {
-		color: #64748b;
+		color: var(--ab-color-fg-subtle);
 		font-weight: 600;
-		font-size: 0.6875rem;
+		font-size: var(--ab-font-size-xs);
 		text-transform: uppercase;
 		letter-spacing: 0.06em;
 	}
@@ -647,9 +684,9 @@ const tagsString = $derived((card.tags ?? []).join(', '));
 
 	.btn {
 		padding: 0.5rem 1rem;
-		font-size: 0.9375rem;
+		font-size: var(--ab-font-size-body);
 		font-weight: 600;
-		border-radius: 8px;
+		border-radius: var(--ab-radius-md);
 		border: 1px solid transparent;
 		cursor: pointer;
 		text-decoration: none;
@@ -660,42 +697,42 @@ const tagsString = $derived((card.tags ?? []).join(', '));
 	}
 
 	.btn.primary {
-		background: #2563eb;
+		background: var(--ab-color-primary);
 		color: white;
 	}
 
 	.btn.primary:hover:not(:disabled) {
-		background: #1d4ed8;
+		background: var(--ab-color-primary-hover);
 	}
 
 	.btn.secondary {
-		background: #f1f5f9;
-		color: #1a1a2e;
-		border-color: #cbd5e1;
+		background: var(--ab-color-surface-sunken);
+		color: var(--ab-color-fg);
+		border-color: var(--ab-color-border-strong);
 	}
 
 	.btn.secondary:hover:not(:disabled) {
-		background: #e2e8f0;
+		background: var(--ab-color-border);
 	}
 
 	.btn.ghost {
 		background: transparent;
-		color: #475569;
+		color: var(--ab-color-fg-muted);
 	}
 
 	.btn.ghost:hover {
-		background: #f1f5f9;
+		background: var(--ab-color-surface-sunken);
 	}
 
 	.btn.danger {
 		background: white;
-		color: #b91c1c;
-		border-color: #fecaca;
+		color: var(--ab-color-danger-hover);
+		border-color: var(--ab-color-danger-subtle-border);
 	}
 
 	.btn.danger:hover:not(:disabled) {
-		background: #fef2f2;
-		border-color: #fca5a5;
+		background: var(--ab-color-danger-subtle);
+		border-color: var(--ab-color-danger-subtle-border);
 	}
 
 	.btn:disabled {

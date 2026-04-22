@@ -143,15 +143,15 @@ function domainLabel(slug: string): string {
 
 	h1 {
 		margin: 0;
-		font-size: 1.75rem;
+		font-size: var(--ab-font-size-2xl);
 		letter-spacing: -0.02em;
-		color: #0f172a;
+		color: var(--ab-color-fg);
 	}
 
 	.sub {
 		margin: 0.25rem 0 0;
-		color: #64748b;
-		font-size: 0.9375rem;
+		color: var(--ab-color-fg-subtle);
+		font-size: var(--ab-font-size-body);
 	}
 
 	.quick {
@@ -167,8 +167,8 @@ function domainLabel(slug: string): string {
 
 	.tile {
 		background: white;
-		border: 1px solid #e2e8f0;
-		border-radius: 12px;
+		border: 1px solid var(--ab-color-border);
+		border-radius: var(--ab-radius-lg);
 		padding: 1rem 1.25rem;
 		display: flex;
 		flex-direction: column;
@@ -176,9 +176,9 @@ function domainLabel(slug: string): string {
 	}
 
 	.tile-label {
-		font-size: 0.75rem;
+		font-size: var(--ab-font-size-xs);
 		font-weight: 600;
-		color: #64748b;
+		color: var(--ab-color-fg-subtle);
 		text-transform: uppercase;
 		letter-spacing: 0.06em;
 	}
@@ -186,19 +186,19 @@ function domainLabel(slug: string): string {
 	.tile-value {
 		font-size: 2rem;
 		font-weight: 700;
-		color: #0f172a;
+		color: var(--ab-color-fg);
 		line-height: 1;
 	}
 
 	.tile-sub {
-		font-size: 0.8125rem;
-		color: #64748b;
+		font-size: var(--ab-font-size-sm);
+		color: var(--ab-color-fg-subtle);
 	}
 
 	.card {
 		background: white;
-		border: 1px solid #e2e8f0;
-		border-radius: 12px;
+		border: 1px solid var(--ab-color-border);
+		border-radius: var(--ab-radius-lg);
 		padding: 1.25rem 1.5rem;
 		display: flex;
 		flex-direction: column;
@@ -207,8 +207,8 @@ function domainLabel(slug: string): string {
 
 	.card h2 {
 		margin: 0;
-		font-size: 0.8125rem;
-		color: #64748b;
+		font-size: var(--ab-font-size-sm);
+		color: var(--ab-color-fg-subtle);
 		text-transform: uppercase;
 		letter-spacing: 0.08em;
 		font-weight: 600;
@@ -228,29 +228,29 @@ function domainLabel(slug: string): string {
 		gap: 0.75rem;
 		align-items: baseline;
 		padding: 0.375rem 0.625rem;
-		background: #f8fafc;
-		border: 1px solid #e2e8f0;
-		border-radius: 8px;
-		font-size: 0.875rem;
+		background: var(--ab-color-surface-muted);
+		border: 1px solid var(--ab-color-border);
+		border-radius: var(--ab-radius-md);
+		font-size: var(--ab-font-size-sm);
 	}
 
 	.slice-name {
 		flex: 1;
-		color: #0f172a;
+		color: var(--ab-color-fg);
 		font-weight: 500;
 	}
 
 	.slice-num {
-		color: #1d4ed8;
+		color: var(--ab-color-primary-hover);
 		font-weight: 600;
 	}
 
 	.skip-chip {
-		font-size: 0.75rem;
-		color: #92400e;
-		background: #fef3c7;
+		font-size: var(--ab-font-size-xs);
+		color: var(--ab-color-warning-active);
+		background: var(--ab-color-warning-subtle);
 		padding: 0.125rem 0.5rem;
-		border-radius: 999px;
+		border-radius: var(--ab-radius-pill);
 	}
 
 	.pills {
@@ -263,12 +263,12 @@ function domainLabel(slug: string): string {
 	}
 
 	.pills li {
-		background: #f1f5f9;
-		border: 1px solid #e2e8f0;
-		border-radius: 999px;
+		background: var(--ab-color-surface-sunken);
+		border: 1px solid var(--ab-color-border);
+		border-radius: var(--ab-radius-pill);
 		padding: 0.25rem 0.625rem;
-		font-size: 0.8125rem;
-		color: #0f172a;
+		font-size: var(--ab-font-size-sm);
+		color: var(--ab-color-fg);
 	}
 
 	.suggestion-actions {
@@ -286,42 +286,42 @@ function domainLabel(slug: string): string {
 
 	.btn.suggestion {
 		padding: 0.625rem 1rem;
-		font-size: 0.9375rem;
+		font-size: var(--ab-font-size-body);
 		text-align: left;
 		justify-content: flex-start;
-		border-radius: 10px;
+		border-radius: var(--ab-radius-md);
 	}
 
 	.btn.suggestion.primary {
-		background: #2563eb;
+		background: var(--ab-color-primary);
 		color: white;
 	}
 
 	.btn.suggestion.primary:hover {
-		background: #1d4ed8;
+		background: var(--ab-color-primary-hover);
 	}
 
 	.btn.suggestion.secondary {
-		background: #f1f5f9;
-		color: #0f172a;
-		border: 1px solid #cbd5e1;
+		background: var(--ab-color-surface-sunken);
+		color: var(--ab-color-fg);
+		border: 1px solid var(--ab-color-border-strong);
 	}
 
 	.btn.suggestion.secondary:hover {
-		background: #e2e8f0;
+		background: var(--ab-color-border);
 	}
 
 	.muted {
-		color: #475569;
+		color: var(--ab-color-fg-muted);
 		margin: 0;
-		font-size: 0.9375rem;
+		font-size: var(--ab-font-size-body);
 	}
 
 	.btn {
 		padding: 0.5rem 1rem;
-		font-size: 0.9375rem;
+		font-size: var(--ab-font-size-body);
 		font-weight: 600;
-		border-radius: 8px;
+		border-radius: var(--ab-radius-md);
 		border: 1px solid transparent;
 		cursor: pointer;
 		text-decoration: none;
@@ -331,20 +331,20 @@ function domainLabel(slug: string): string {
 	}
 
 	.btn.primary {
-		background: #2563eb;
+		background: var(--ab-color-primary);
 		color: white;
 	}
 
 	.btn.primary:hover {
-		background: #1d4ed8;
+		background: var(--ab-color-primary-hover);
 	}
 
 	.btn.ghost {
 		background: transparent;
-		color: #475569;
+		color: var(--ab-color-fg-muted);
 	}
 
 	.btn.ghost:hover {
-		background: #f1f5f9;
+		background: var(--ab-color-surface-sunken);
 	}
 </style>
