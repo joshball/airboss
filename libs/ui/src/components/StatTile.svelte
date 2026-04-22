@@ -32,16 +32,9 @@ let {
 	valueSnippet?: Snippet;
 } = $props();
 
-const Tag = $derived(href ? 'a' : 'div');
 </script>
 
-<svelte:element
-	this={Tag}
-	class="tile t-{tone}"
-	class:linked={href !== undefined}
-	href={href}
-	aria-label={ariaLabel}
->
+{#snippet body()}
 	<span class="label">{label}</span>
 	<span class="value">
 		{#if valueSnippet}
@@ -53,7 +46,17 @@ const Tag = $derived(href ? 'a' : 'div');
 	{#if sub}
 		<span class="sub">{sub}</span>
 	{/if}
-</svelte:element>
+{/snippet}
+
+{#if href}
+	<a class="tile t-{tone} linked" {href} aria-label={ariaLabel}>
+		{@render body()}
+	</a>
+{:else}
+	<div class="tile t-{tone}" aria-label={ariaLabel}>
+		{@render body()}
+	</div>
+{/if}
 
 <style>
 	.tile {
