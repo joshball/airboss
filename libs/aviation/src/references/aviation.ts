@@ -1675,9 +1675,9 @@ export const AVIATION_REFERENCES: readonly Reference[] = [
 			'Ground-based radio navigation aid providing bearing information.\n\nVOR stations transmit on VHF frequencies (108.0-117.95 MHz) and provide 360 radials for course guidance. Pilots select a radial using the OBS and track it with the CDI. VORs are being decommissioned as GPS becomes primary, but a minimum operational network (MON) is maintained as backup.',
 		tags: {
 			sourceType: 'aim',
-			aviationTopic: ['navigation'],
+			aviationTopic: ['navigation', 'aircraft-systems'],
 			flightRules: 'ifr',
-			knowledgeKind: 'concept',
+			knowledgeKind: 'system',
 			phaseOfFlight: ['cruise'],
 			certApplicability: ['instrument', 'commercial', 'cfi', 'cfii', 'atp'],
 		},
@@ -1757,9 +1757,9 @@ export const AVIATION_REFERENCES: readonly Reference[] = [
 			'Satellite-based navigation system providing 3D position.\n\nGPS uses a constellation of satellites to provide position, velocity, and time information. In aviation, GPS enables RNAV approaches, en-route navigation, and moving map displays. TSO-C129/C196 certified receivers are required for IFR use. RAIM or WAAS augmentation ensures integrity.',
 		tags: {
 			sourceType: 'aim',
-			aviationTopic: ['navigation'],
-			flightRules: 'ifr',
-			knowledgeKind: 'concept',
+			aviationTopic: ['navigation', 'aircraft-systems', 'procedures'],
+			flightRules: 'both',
+			knowledgeKind: 'system',
 			phaseOfFlight: ['cruise', 'approach'],
 			certApplicability: ['instrument', 'commercial', 'cfi', 'cfii', 'atp'],
 		},
@@ -2463,13 +2463,17 @@ export const AVIATION_REFERENCES: readonly Reference[] = [
 		paraphrase:
 			'Altitude measured from the ground surface directly below.\n\nAGL measures the true height of an aircraft above the terrain surface. AGL is used for traffic pattern altitudes, minimum safe altitudes (1,000 feet over congested areas, 500 feet elsewhere), and cloud clearance requirements. AGL varies as terrain changes, unlike MSL which is constant.',
 		tags: {
-			sourceType: 'aim',
-			aviationTopic: ['regulations'],
+			sourceType: 'pcg',
+			aviationTopic: ['flight-instruments', 'navigation'],
 			flightRules: 'both',
-			knowledgeKind: 'concept',
-			phaseOfFlight: ['cruise'],
+			knowledgeKind: 'definition',
 		},
-		sources: [],
+		sources: [
+			{
+				sourceId: 'pcg-current',
+				locator: { term: 'AGL' },
+			},
+		],
 		related: ['msl-ops', 'standard-atmosphere-def', 'flight-level-def'],
 		reviewedAt: '2026-04-22',
 	},
@@ -2480,13 +2484,17 @@ export const AVIATION_REFERENCES: readonly Reference[] = [
 		paraphrase:
 			'Altitude measured from average sea level -- standard altimeter reference.\n\nMSL is the standard reference datum for altitudes in aviation. Indicated altitude on the altimeter reads MSL when the current altimeter setting is applied. Sectional charts show elevation in MSL. All published MEAs, MOCAs, and airway altitudes are MSL. Flight levels above 18,000 feet use standard pressure altitude.',
 		tags: {
-			sourceType: 'aim',
-			aviationTopic: ['flight-instruments'],
+			sourceType: 'pcg',
+			aviationTopic: ['flight-instruments', 'navigation'],
 			flightRules: 'both',
-			knowledgeKind: 'concept',
-			phaseOfFlight: ['cruise'],
+			knowledgeKind: 'definition',
 		},
-		sources: [],
+		sources: [
+			{
+				sourceId: 'pcg-current',
+				locator: { term: 'MSL' },
+			},
+		],
 		related: ['agl-ops', 'standard-atmosphere-def', 'flight-level-def'],
 		reviewedAt: '2026-04-22',
 	},
@@ -2615,7 +2623,7 @@ export const AVIATION_REFERENCES: readonly Reference[] = [
 			'Lowest altitude at which a fix must be crossed when proceeding to a higher MEA.\n\nMCA is the lowest altitude at certain fixes at which an aircraft must cross when transitioning to a higher minimum en route altitude. MCAs are established where terrain or obstacles require a climb before reaching the next segment. Shown on IFR charts with an X flag and altitude.',
 		tags: {
 			sourceType: 'cfr',
-			aviationTopic: ['regulations'],
+			aviationTopic: ['navigation', 'procedures', 'regulations'],
 			flightRules: 'ifr',
 			knowledgeKind: 'limit',
 			phaseOfFlight: ['climb', 'cruise'],
@@ -2639,7 +2647,7 @@ export const AVIATION_REFERENCES: readonly Reference[] = [
 			'Lowest published altitude on an airway ensuring navaid reception and obstacle clearance.\n\nMEA is the lowest published altitude between radio fixes that assures acceptable navigational signal coverage and meets obstacle clearance requirements. MEA guarantees 1,000 feet of obstacle clearance (2,000 feet in designated mountainous areas). CFIs teach MEA as the primary IFR altitude reference for en-route flight.',
 		tags: {
 			sourceType: 'cfr',
-			aviationTopic: ['regulations'],
+			aviationTopic: ['navigation', 'airspace', 'regulations'],
 			flightRules: 'ifr',
 			knowledgeKind: 'limit',
 			phaseOfFlight: ['cruise'],
@@ -2663,9 +2671,10 @@ export const AVIATION_REFERENCES: readonly Reference[] = [
 			'Operator-specific list of equipment that may be inoperative for dispatch.\n\nThe MEL is an FAA-approved document that permits an aircraft to operate with certain equipment inoperative, subject to specific conditions and limitations. The MEL is derived from the Master Minimum Equipment List (MMEL) for the aircraft type. Most GA aircraft use 14 CFR 91.213(d) for inoperative equipment decisions instead of a formal MEL.',
 		tags: {
 			sourceType: 'cfr',
-			aviationTopic: ['maintenance'],
+			aviationTopic: ['maintenance', 'regulations', 'aircraft-systems'],
 			flightRules: 'both',
 			knowledgeKind: 'regulation',
+			phaseOfFlight: ['preflight'],
 		},
 		sources: [
 			{
@@ -2685,7 +2694,7 @@ export const AVIATION_REFERENCES: readonly Reference[] = [
 			'Lowest altitude providing obstacle clearance on an airway -- navaid reception within 22 NM only.\n\nMOCA ensures obstacle clearance for the full airway segment but only guarantees navaid reception within 22 NM of the facility. MOCA is shown on IFR charts with a T prefix. Flying at MOCA is legal but may result in lost navigation signal between VORs. CFIs teach MOCA as a terrain clearance backup when MEA cannot be maintained.',
 		tags: {
 			sourceType: 'cfr',
-			aviationTopic: ['regulations'],
+			aviationTopic: ['navigation', 'airspace', 'regulations'],
 			flightRules: 'ifr',
 			knowledgeKind: 'limit',
 			phaseOfFlight: ['cruise'],
@@ -2709,7 +2718,7 @@ export const AVIATION_REFERENCES: readonly Reference[] = [
 			'Lowest altitude at which a navaid intersection can be reliably identified.\n\nMRA is the lowest altitude at which an intersection can be determined from off-course navaid signals. MRA is used where a cross-radial or DME is needed to identify a fix and the signal may not be receivable at lower altitudes. Less commonly encountered than MEA/MOCA but appears on IFR charts.',
 		tags: {
 			sourceType: 'cfr',
-			aviationTopic: ['regulations'],
+			aviationTopic: ['navigation', 'regulations'],
 			flightRules: 'ifr',
 			knowledgeKind: 'limit',
 			phaseOfFlight: ['cruise'],
@@ -2983,15 +2992,15 @@ export const AVIATION_REFERENCES: readonly Reference[] = [
 			'UN agency setting international aviation standards and procedures.\n\nICAO establishes international standards and recommended practices (SARPs) for civil aviation. ICAO standards influence U.S. regulations and procedures, including the ICAO flight plan format, ICAO airport identifiers (4-letter codes), and ICAO phonetic alphabet. U.S. procedures generally align with ICAO standards with some differences documented in the AIM.',
 		tags: {
 			sourceType: 'authored',
-			aviationTopic: ['certification', 'procedures'],
+			aviationTopic: ['regulations', 'certification', 'procedures'],
 			flightRules: 'na',
 			knowledgeKind: 'reference',
-			phaseOfFlight: ['preflight'],
 		},
 		sources: [
 			{
 				sourceId: 'icao-annexes',
 				locator: { reference: 'ICAO Annexes' },
+				url: 'https://www.icao.int/',
 			},
 		],
 		related: ['faa-org'],
@@ -3025,16 +3034,18 @@ export const AVIATION_REFERENCES: readonly Reference[] = [
 		paraphrase:
 			'FAA guidance document explaining regulations and best practices.\n\nAdvisory Circulars provide guidance and information on compliance with regulations, but are not regulatory themselves. They describe acceptable means of compliance. AC 61-83K governs FIRC requirements. ACs are numbered to correspond with the CFR part they support (e.g., AC 61-xxx for Part 61).',
 		tags: {
-			sourceType: 'authored',
-			aviationTopic: ['regulations'],
+			sourceType: 'ac',
+			aviationTopic: ['regulations', 'certification', 'training-ops'],
 			flightRules: 'both',
 			knowledgeKind: 'reference',
+			phaseOfFlight: ['preflight'],
 			certApplicability: ['cfi'],
 		},
 		sources: [
 			{
 				sourceId: 'faa-gov',
-				locator: { reference: 'FAA.gov' },
+				locator: { reference: 'FAA.gov / Advisory Circulars' },
+				url: 'https://www.faa.gov/regulations_policies/advisory_circulars/',
 			},
 		],
 		related: ['cfr-reg', 'acs-reg', 'aim-reg'],
@@ -3784,7 +3795,7 @@ export const AVIATION_REFERENCES: readonly Reference[] = [
 			'Weather forecast for a 5 NM radius around an airport.\n\nTAFs are issued four times daily and forecast conditions for 24 or 30 hours. They include expected wind, visibility, weather, and sky conditions with change groups (FM, TEMPO, PROB) indicating timing and probability of weather changes.',
 		tags: {
 			sourceType: 'aim',
-			aviationTopic: ['weather'],
+			aviationTopic: ['weather', 'airports'],
 			flightRules: 'both',
 			knowledgeKind: 'concept',
 			phaseOfFlight: ['preflight'],
@@ -3807,7 +3818,7 @@ export const AVIATION_REFERENCES: readonly Reference[] = [
 			'In-flight weather observation reported by a pilot.\n\nPIREPs provide real-time weather conditions at altitude including turbulence intensity, icing type and severity, cloud tops/bases, and flight visibility. They are the only direct source of icing and turbulence information at altitude. PIREPs are categorized as routine (UA) or urgent (UUA).',
 		tags: {
 			sourceType: 'aim',
-			aviationTopic: ['weather'],
+			aviationTopic: ['weather', 'communications'],
 			flightRules: 'both',
 			knowledgeKind: 'concept',
 			phaseOfFlight: ['cruise'],
@@ -3830,10 +3841,10 @@ export const AVIATION_REFERENCES: readonly Reference[] = [
 			'Advisory for severe weather hazardous to all aircraft.\n\nSIGMETs warn of severe or extreme turbulence, severe icing, volcanic ash, and widespread dust/sandstorms. They apply to all aircraft and are issued for up to 4 hours (convective SIGMETs for 2 hours). Convective SIGMETs cover severe thunderstorms and tornadoes.',
 		tags: {
 			sourceType: 'aim',
-			aviationTopic: ['weather'],
+			aviationTopic: ['weather', 'emergencies'],
 			flightRules: 'both',
-			knowledgeKind: 'concept',
-			phaseOfFlight: ['preflight'],
+			knowledgeKind: 'safety-concept',
+			phaseOfFlight: ['preflight', 'cruise'],
 		},
 		sources: [
 			{
@@ -3948,11 +3959,9 @@ export const AVIATION_REFERENCES: readonly Reference[] = [
 			'Height AGL of the lowest cloud layer reported as broken, overcast, or obscuration.\n\nCeiling is the height above ground of the lowest layer of clouds or obscuring phenomena reported as broken (BKN), overcast (OVC), or obscuration. Thin or partial layers do not constitute a ceiling. Ceiling determines VFR/IFR flight category and is a primary factor in go/no-go decisions and approach minimums.',
 		tags: {
 			sourceType: 'cfr',
-			aviationTopic: ['weather'],
-			flightRules: 'ifr',
+			aviationTopic: ['weather', 'regulations'],
+			flightRules: 'both',
 			knowledgeKind: 'definition',
-			phaseOfFlight: ['preflight', 'approach'],
-			certApplicability: ['instrument', 'commercial', 'cfi', 'cfii', 'atp'],
 		},
 		sources: [
 			{
@@ -3972,7 +3981,7 @@ export const AVIATION_REFERENCES: readonly Reference[] = [
 			'Forward horizontal distance at which objects can be seen from the cockpit in flight.\n\nFlight visibility is the average forward horizontal distance from the cockpit at which prominent unlighted objects can be seen by day and lighted objects by night. Flight visibility is what the pilot actually observes in flight and may differ from reported ground visibility. It determines whether VFR weather minimums are met.',
 		tags: {
 			sourceType: 'cfr',
-			aviationTopic: ['weather'],
+			aviationTopic: ['weather', 'regulations'],
 			flightRules: 'vfr',
 			knowledgeKind: 'definition',
 			certApplicability: ['student', 'private', 'commercial', 'cfi', 'atp'],
@@ -3995,10 +4004,9 @@ export const AVIATION_REFERENCES: readonly Reference[] = [
 			"Prevailing horizontal visibility near the surface as reported by NWS or accredited observer.\n\nGround visibility is the prevailing horizontal visibility near the earth's surface as reported by the National Weather Service or an accredited observer. It appears in METARs and determines whether VFR operations are permitted at airports with reported weather. When ground visibility is not reported, flight visibility controls.",
 		tags: {
 			sourceType: 'cfr',
-			aviationTopic: ['weather'],
+			aviationTopic: ['weather', 'regulations'],
 			flightRules: 'both',
 			knowledgeKind: 'definition',
-			phaseOfFlight: ['preflight'],
 		},
 		sources: [
 			{

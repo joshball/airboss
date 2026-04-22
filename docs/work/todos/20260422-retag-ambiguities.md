@@ -12,6 +12,30 @@ Totals:
 - Entries with at least one ambiguity flag: **38**
 - Total flags: **46**
 
+## Follow-up hand-corrections done at port time
+
+The initial port followed up with a hand-correction pass on the highest-impact
+ambiguities (single-topic entries with richer subject matter, un-parsed source
+strings, and mis-assigned source types). Fourteen entries updated:
+
+- `agl-ops`, `msl-ops` -- sourceType `aim` -> `pcg` (both come from the Pilot/Controller Glossary); topics expanded to `flight-instruments` + `navigation`; knowledgeKind `concept` -> `definition`.
+- `mca-ops`, `mea-ops`, `moca-ops`, `mra-ops` -- topic `regulations` expanded to include `navigation` + (for MCA) `procedures` / (for MEA + MOCA) `airspace`. These are IFR altitude limits, not reg-text.
+- `icao-org` -- removed mis-assigned `phaseOfFlight: preflight` (the org itself has no phase); added `regulations` topic; url set.
+- `ac-reg` -- sourceType `authored` -> `ac`; topics expanded to `certification` + `training-ops`; phaseOfFlight `preflight` added; url set.
+- `taf-wx` -- added `airports` topic (TAF is a terminal-area product).
+- `pirep-wx` -- added `communications` topic (PIREPs are radio-reported).
+- `sigmet-wx` -- knowledgeKind `concept` -> `safety-concept`; added `emergencies`; phase expanded to `preflight, cruise`.
+- `vor-nav`, `gps-nav` -- knowledgeKind `concept` -> `system`; added `aircraft-systems`; gps adds `procedures` (RNAV approaches).
+- `mel-ops` -- added `regulations` + `aircraft-systems`; added `phaseOfFlight: preflight`.
+- `ceiling-wx`, `flight-visibility-wx`, `ground-visibility-wx` -- added `regulations` topic (these are §1.1 definitions).
+
+Remaining single-topic navigation-only entries (`cdi-nav`, `dme-nav`, `ndb-nav`,
+`obs-nav`, `raim-nav`, `tacan-nav`, `waas-nav`, `efvs-nav`, `im-nav`) and
+training-only entries (`ffs-training`, `fstd-training`, `ftd-training`) are left
+as-is: they are genuinely single-domain. A CFI pass may add `aircraft-systems`
+to the radio navaids or `certification` to the simulator classes, but that is
+low-stakes polish.
+
 ## Triage workflow
 
 1. Read each flagged entry's current tags in `libs/aviation/src/references/aviation.ts`.
