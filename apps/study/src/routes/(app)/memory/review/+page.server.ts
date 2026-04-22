@@ -150,7 +150,7 @@ export const actions: Actions = {
 				{ requestId: locals.requestId, userId: user.id, metadata: { cardId } },
 				err instanceof Error ? err : undefined,
 			);
-			error(500, { message: 'Could not undo review' });
+			return fail(500, { error: 'Could not undo review' });
 		}
 	},
 } satisfies Actions;
