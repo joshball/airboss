@@ -31,11 +31,17 @@
         "zod": "^3.25.36",
       },
     },
+    "apps/sim": {
+      "name": "@ab/sim",
+    },
     "apps/study": {
       "name": "@ab/study",
     },
     "libs/auth": {
       "name": "@ab/auth",
+    },
+    "libs/bc/sim": {
+      "name": "@ab/bc-sim",
     },
     "libs/bc/study": {
       "name": "@ab/bc-study",
@@ -62,11 +68,15 @@
   "packages": {
     "@ab/auth": ["@ab/auth@workspace:libs/auth"],
 
+    "@ab/bc-sim": ["@ab/bc-sim@workspace:libs/bc/sim"],
+
     "@ab/bc-study": ["@ab/bc-study@workspace:libs/bc/study"],
 
     "@ab/constants": ["@ab/constants@workspace:libs/constants"],
 
     "@ab/db": ["@ab/db@workspace:libs/db"],
+
+    "@ab/sim": ["@ab/sim@workspace:apps/sim"],
 
     "@ab/study": ["@ab/study@workspace:apps/study"],
 
