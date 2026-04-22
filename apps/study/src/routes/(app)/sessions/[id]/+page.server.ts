@@ -20,6 +20,7 @@ import {
 import {
 	CONFIDENCE_LEVEL_VALUES,
 	type ConfidenceLevel,
+	QUERY_PARAMS,
 	type ReviewRating,
 	ROUTES,
 	SESSION_ITEM_KINDS,
@@ -46,7 +47,27 @@ export const load: PageServerLoad = async (event) => {
 	const results = await getSessionItemResults(session.id, user.id);
 
 	// Find the first unresolved slot (no completedAt); that's the current item.
+	// Submit / skip actions always act on this slot so the queue cannot be
+	// spoofed via URL. `?item=` is a display pointer only: a clamped hint that
+	// the client mirrors into the URL for shareability and refresh-resilience.
 	const current = results.find((r) => r.completedAt === null) ?? null;
+
+	const itemMax = results.length - 1;
+	const itemParam = Number.parseInt(event.url.searchParams.get(QUERY_PARAMS.ITEM) ?? '', 10);
+	const itemClamped = Number.isFinite(itemParam)
+		? Math.max(0, Math.min(itemMax, itemParam))
+		: (current?.slotIndex ?? 0);
+
+	// Per-item flow phases. `read` lets the learner see the prompt without
+	// committing; `confidence` optionally captures a self-rating; `answer`
+	// reveals the answer / picks an option. Narrow against the valid set so a
+	// bogus `?step=foo` falls back cleanly to `read`.
+	const SESSION_ITEM_PHASES = ['read', 'confidence', 'answer'] as const;
+	type SessionItemPhase = (typeof SESSION_ITEM_PHASES)[number];
+	const stepParam = event.url.searchParams.get(QUERY_PARAMS.STEP);
+	const initialStep: SessionItemPhase = (SESSION_ITEM_PHASES as readonly string[]).includes(stepParam ?? '')
+		? (stepParam as SessionItemPhase)
+		: 'read';
 
 	// Hydrate the current item's content if it's a card or rep so the UI can
 	// render front/back / situation / options without a second fetch.
@@ -103,6 +124,8 @@ export const load: PageServerLoad = async (event) => {
 		results,
 		current,
 		hydrated,
+		initialItem: itemClamped,
+		initialStep,
 	};
 };
 

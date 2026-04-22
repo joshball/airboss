@@ -1,14 +1,35 @@
 <script lang="ts">
-import { type ConfidenceLevel, DIFFICULTY_LABELS, DOMAIN_LABELS, PHASE_OF_FLIGHT_LABELS, ROUTES } from '@ab/constants';
+import {
+	type ConfidenceLevel,
+	DIFFICULTY_LABELS,
+	DOMAIN_LABELS,
+	PHASE_OF_FLIGHT_LABELS,
+	QUERY_PARAMS,
+	ROUTES,
+} from '@ab/constants';
 import ConfidenceSlider from '@ab/ui/components/ConfidenceSlider.svelte';
 import { humanize } from '@ab/utils';
 import { enhance } from '$app/forms';
-import { goto, invalidateAll } from '$app/navigation';
+import { goto, invalidateAll, replaceState } from '$app/navigation';
+import { page } from '$app/state';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
 
 type Phase = 'read' | 'confidence' | 'choose' | 'submitting' | 'reveal';
+
+/**
+ * URL-persisted subset of Phase. `submitting` + `reveal` are transient /
+ * post-submit; only pre-submit phases survive a refresh deliberately (a
+ * refresh re-runs server load which computes the new currentIndex anyway).
+ */
+const URL_PHASE_MAP: Record<Phase, 'read' | 'confidence' | 'answer' | null> = {
+	read: 'read',
+	confidence: 'confidence',
+	choose: 'answer',
+	submitting: null,
+	reveal: null,
+};
 
 interface DomainTally {
 	domain: string;
@@ -23,7 +44,8 @@ interface DomainTally {
 // A mid-session hard refresh reruns the server load, which re-derives
 // currentIndex from rep_attempt rows and hands the user back at the first
 // unanswered scenario with the previous attempts already counted.
-let phase = $state<Phase>('read');
+// svelte-ignore state_referenced_locally -- seed from server-narrowed deep link; URL syncs thereafter
+let phase = $state<Phase>(data.initialStep === 'answer' ? 'choose' : data.initialStep);
 let revealedAt = $state<number | null>(null);
 let confidence = $state<ConfidenceLevel | null>(null);
 let selectedOption = $state<string | null>(null);
@@ -89,6 +111,31 @@ $effect(() => {
 		submitError = null;
 		loading = false;
 	}
+});
+
+// Mirror item index + phase to URL so a mid-flow refresh resumes at the
+// same slot + pre-submit phase. `submitting` and `reveal` are transient /
+// post-submit; we don't persist them because the server computes the next
+// slot on reload anyway.
+$effect(() => {
+	const urlPhase = URL_PHASE_MAP[phase];
+	const item = Math.min(Math.max(0, currentIndex), Math.max(0, data.total - 1));
+	const url = new URL(page.url);
+	let changed = false;
+	if (url.searchParams.get(QUERY_PARAMS.ITEM) !== String(item)) {
+		url.searchParams.set(QUERY_PARAMS.ITEM, String(item));
+		changed = true;
+	}
+	if (urlPhase === null) {
+		if (url.searchParams.has(QUERY_PARAMS.STEP)) {
+			url.searchParams.delete(QUERY_PARAMS.STEP);
+			changed = true;
+		}
+	} else if (url.searchParams.get(QUERY_PARAMS.STEP) !== urlPhase) {
+		url.searchParams.set(QUERY_PARAMS.STEP, urlPhase);
+		changed = true;
+	}
+	if (changed) replaceState(url, page.state);
 });
 
 function domainLabel(slug: string): string {
