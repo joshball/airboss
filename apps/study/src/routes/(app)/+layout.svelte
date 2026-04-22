@@ -12,6 +12,7 @@ const dashboardActive = $derived(page.url.pathname === ROUTES.DASHBOARD);
 const memoryActive = $derived(page.url.pathname.startsWith(ROUTES.MEMORY));
 const repsActive = $derived(page.url.pathname.startsWith(ROUTES.REPS));
 const knowledgeActive = $derived(page.url.pathname.startsWith(ROUTES.KNOWLEDGE));
+const glossaryActive = $derived(page.url.pathname.startsWith(ROUTES.GLOSSARY));
 const calibrationActive = $derived(page.url.pathname.startsWith(ROUTES.CALIBRATION));
 // Plans, /session/start and /sessions/* roll under one nav item -- they're
 // the same flow from the user's perspective.
@@ -74,6 +75,7 @@ function handleMenuKeydown(event: KeyboardEvent) {
 			<a href={ROUTES.MEMORY} aria-current={memoryActive ? 'page' : undefined}>Memory</a>
 			<a href={ROUTES.REPS} aria-current={repsActive ? 'page' : undefined}>Reps</a>
 			<a href={ROUTES.KNOWLEDGE} aria-current={knowledgeActive ? 'page' : undefined}>Knowledge</a>
+			<a href={ROUTES.GLOSSARY} aria-current={glossaryActive ? 'page' : undefined}>Glossary</a>
 			<a href={ROUTES.CALIBRATION} aria-current={calibrationActive ? 'page' : undefined}>Calibration</a>
 		</div>
 

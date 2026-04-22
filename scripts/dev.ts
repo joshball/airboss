@@ -190,6 +190,21 @@ async function runAll(): Promise<void> {
 	process.exit(failed ? 1 : 0);
 }
 
+/**
+ * Fast-fail wiki-link scan before vite boots. Per architecture decision #3
+ * the scanner runs synchronously; sub-second on today's content. Broken or
+ * malformed wiki-links exit non-zero so authors catch them before the dev
+ * server starts.
+ */
+async function runReferenceScan(): Promise<void> {
+	const result = await $`bun scripts/references/validate.ts`.nothrow();
+	if (result.exitCode !== 0) {
+		console.error('references: broken wiki-links detected. Fix and retry.');
+		process.exit(result.exitCode);
+	}
+}
+
+await runReferenceScan();
 await maybeBuildKnowledge();
 
 const app = process.argv[2];

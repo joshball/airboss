@@ -40,6 +40,9 @@
     "libs/auth": {
       "name": "@ab/auth",
     },
+    "libs/aviation": {
+      "name": "@ab/aviation",
+    },
     "libs/bc/sim": {
       "name": "@ab/bc-sim",
     },
@@ -67,6 +70,8 @@
   },
   "packages": {
     "@ab/auth": ["@ab/auth@workspace:libs/auth"],
+
+    "@ab/aviation": ["@ab/aviation@workspace:libs/aviation"],
 
     "@ab/bc-sim": ["@ab/bc-sim@workspace:libs/bc/sim"],
 
