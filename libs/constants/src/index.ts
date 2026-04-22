@@ -24,6 +24,18 @@ export {
 export { DEV_ACCOUNTS, DEV_DB, DEV_DB_HOST_PATTERN, DEV_DB_URL, DEV_PASSWORD } from './dev';
 export { ENV_VARS, type EnvVarName, getEnv, getEnvBool, getEnvInt, isProd, requireEnv } from './env';
 export {
+	APP_SURFACE_LABELS,
+	APP_SURFACE_MAX,
+	APP_SURFACE_MIN,
+	APP_SURFACE_VALUES,
+	APP_SURFACES,
+	type AppSurface,
+	HELP_KIND_LABELS,
+	HELP_KIND_VALUES,
+	HELP_KINDS,
+	type HelpKind,
+} from './help-tags';
+export {
 	AUTH_INTERNAL_ORIGIN,
 	COOKIE_DOMAIN_DEV,
 	COOKIE_DOMAIN_PROD,
