@@ -7,8 +7,10 @@ import {
 	CONTENT_SOURCE_VALUES,
 	DOMAIN_LABELS,
 	DOMAIN_VALUES,
+	QUERY_PARAMS,
 	ROUTES,
 } from '@ab/constants';
+import { buildQuery } from '@ab/utils';
 import { tick } from 'svelte';
 import type { PageData } from './$types';
 
@@ -39,7 +41,12 @@ $effect(() => {
 	});
 });
 
-type ChipFilterKey = 'domain' | 'type' | 'source' | 'status' | 'q';
+type ChipFilterKey =
+	| typeof QUERY_PARAMS.DOMAIN
+	| typeof QUERY_PARAMS.CARD_TYPE
+	| typeof QUERY_PARAMS.SOURCE
+	| typeof QUERY_PARAMS.STATUS
+	| typeof QUERY_PARAMS.SEARCH;
 
 interface FilterChip {
 	key: ChipFilterKey;
@@ -74,12 +81,14 @@ function shorten(text: string, max = 120): string {
 
 const chips = $derived.by<FilterChip[]>(() => {
 	const out: FilterChip[] = [];
-	if (filters.search) out.push({ key: 'q', label: 'Search', value: `"${shortenFront(filters.search, 40)}"` });
-	if (filters.domain) out.push({ key: 'domain', label: 'Domain', value: domainLabel(filters.domain) });
-	if (filters.cardType) out.push({ key: 'type', label: 'Type', value: cardTypeLabel(filters.cardType) });
-	if (filters.sourceType) out.push({ key: 'source', label: 'Source', value: humanize(filters.sourceType) });
+	if (filters.search)
+		out.push({ key: QUERY_PARAMS.SEARCH, label: 'Search', value: `"${shortenFront(filters.search, 40)}"` });
+	if (filters.domain) out.push({ key: QUERY_PARAMS.DOMAIN, label: 'Domain', value: domainLabel(filters.domain) });
+	if (filters.cardType)
+		out.push({ key: QUERY_PARAMS.CARD_TYPE, label: 'Type', value: cardTypeLabel(filters.cardType) });
+	if (filters.sourceType) out.push({ key: QUERY_PARAMS.SOURCE, label: 'Source', value: humanize(filters.sourceType) });
 	if (filters.status !== CARD_STATUSES.ACTIVE)
-		out.push({ key: 'status', label: 'Status', value: humanize(filters.status) });
+		out.push({ key: QUERY_PARAMS.STATUS, label: 'Status', value: humanize(filters.status) });
 	return out;
 });
 
@@ -88,24 +97,19 @@ function removeChipHref(key: ChipFilterKey): string {
 }
 
 function buildHref(next: Record<string, string | undefined>): string {
-	const params = new URLSearchParams();
-	const full = {
-		domain: filters.domain,
-		type: filters.cardType,
-		source: filters.sourceType,
-		status: filters.status === CARD_STATUSES.ACTIVE ? undefined : filters.status,
-		q: filters.search || undefined,
+	const full: Record<string, string | number | null | undefined> = {
+		[QUERY_PARAMS.DOMAIN]: filters.domain,
+		[QUERY_PARAMS.CARD_TYPE]: filters.cardType,
+		[QUERY_PARAMS.SOURCE]: filters.sourceType,
+		[QUERY_PARAMS.STATUS]: filters.status === CARD_STATUSES.ACTIVE ? undefined : filters.status,
+		[QUERY_PARAMS.SEARCH]: filters.search || undefined,
 		...next,
 	};
-	for (const [k, v] of Object.entries(full)) {
-		if (v !== undefined && v !== '' && v !== null) params.set(k, String(v));
-	}
-	const qs = params.toString();
-	return qs ? `${ROUTES.MEMORY_BROWSE}?${qs}` : ROUTES.MEMORY_BROWSE;
+	return `${ROUTES.MEMORY_BROWSE}${buildQuery(full)}`;
 }
 
 function pageHref(n: number): string {
-	return buildHref({ page: n > 1 ? String(n) : undefined });
+	return buildHref({ [QUERY_PARAMS.PAGE]: n > 1 ? String(n) : undefined });
 }
 </script>
 
@@ -135,14 +139,20 @@ function pageHref(n: number): string {
 	{/if}
 
 	<form class="filters" method="GET" role="search" aria-label="Filter cards">
-		<input type="hidden" name="page" value="1" />
+		<input type="hidden" name={QUERY_PARAMS.PAGE} value="1" />
 		<div class="filter">
 			<label for="f-q">Search</label>
-			<input id="f-q" type="search" name="q" placeholder="front or back..." value={filters.search ?? ''} />
+			<input
+				id="f-q"
+				type="search"
+				name={QUERY_PARAMS.SEARCH}
+				placeholder="front or back..."
+				value={filters.search ?? ''}
+			/>
 		</div>
 		<div class="filter">
 			<label for="f-domain">Domain</label>
-			<select id="f-domain" name="domain" value={filters.domain ?? ''}>
+			<select id="f-domain" name={QUERY_PARAMS.DOMAIN} value={filters.domain ?? ''}>
 				<option value="">All</option>
 				{#each DOMAIN_VALUES as d (d)}
 					<option value={d}>{domainLabel(d)}</option>
@@ -151,7 +161,7 @@ function pageHref(n: number): string {
 		</div>
 		<div class="filter">
 			<label for="f-type">Type</label>
-			<select id="f-type" name="type" value={filters.cardType ?? ''}>
+			<select id="f-type" name={QUERY_PARAMS.CARD_TYPE} value={filters.cardType ?? ''}>
 				<option value="">All</option>
 				{#each CARD_TYPE_VALUES as t (t)}
 					<option value={t}>{cardTypeLabel(t)}</option>
@@ -160,7 +170,7 @@ function pageHref(n: number): string {
 		</div>
 		<div class="filter">
 			<label for="f-source">Source</label>
-			<select id="f-source" name="source" value={filters.sourceType ?? ''}>
+			<select id="f-source" name={QUERY_PARAMS.SOURCE} value={filters.sourceType ?? ''}>
 				<option value="">All</option>
 				{#each CONTENT_SOURCE_VALUES as s (s)}
 					<option value={s}>{humanize(s)}</option>
@@ -169,7 +179,7 @@ function pageHref(n: number): string {
 		</div>
 		<div class="filter">
 			<label for="f-status">Status</label>
-			<select id="f-status" name="status" value={filters.status ?? CARD_STATUSES.ACTIVE}>
+			<select id="f-status" name={QUERY_PARAMS.STATUS} value={filters.status ?? CARD_STATUSES.ACTIVE}>
 				{#each CARD_STATUS_VALUES as s (s)}
 					<option value={s}>{humanize(s)}</option>
 				{/each}

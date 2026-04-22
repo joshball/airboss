@@ -10,6 +10,7 @@ import {
 	type Domain,
 	PHASE_OF_FLIGHT_VALUES,
 	type PhaseOfFlight,
+	QUERY_PARAMS,
 	SCENARIO_STATUS_VALUES,
 	SCENARIO_STATUSES,
 	type ScenarioStatus,
@@ -25,14 +26,19 @@ export const load: PageServerLoad = async (event) => {
 	const user = requireAuth(event);
 	const { url } = event;
 
-	const domain = narrow<Domain>(url.searchParams.get('domain'), DOMAIN_VALUES);
-	const difficulty = narrow<Difficulty>(url.searchParams.get('difficulty'), DIFFICULTY_VALUES);
-	const phaseOfFlight = narrow<PhaseOfFlight>(url.searchParams.get('phase'), PHASE_OF_FLIGHT_VALUES);
-	const sourceType = narrow<ContentSource>(url.searchParams.get('source'), CONTENT_SOURCE_VALUES);
+	const domain = narrow<Domain>(url.searchParams.get(QUERY_PARAMS.DOMAIN), DOMAIN_VALUES);
+	const difficulty = narrow<Difficulty>(url.searchParams.get(QUERY_PARAMS.DIFFICULTY), DIFFICULTY_VALUES);
+	// Accept both the new `flight-phase` param and the legacy `phase` form so
+	// old bookmarks keep working. New takes precedence when both are set.
+	const phaseOfFlight =
+		narrow<PhaseOfFlight>(url.searchParams.get(QUERY_PARAMS.FLIGHT_PHASE), PHASE_OF_FLIGHT_VALUES) ??
+		narrow<PhaseOfFlight>(url.searchParams.get('phase'), PHASE_OF_FLIGHT_VALUES);
+	const sourceType = narrow<ContentSource>(url.searchParams.get(QUERY_PARAMS.SOURCE), CONTENT_SOURCE_VALUES);
 	const status =
-		narrow<ScenarioStatus>(url.searchParams.get('status'), SCENARIO_STATUS_VALUES) ?? SCENARIO_STATUSES.ACTIVE;
+		narrow<ScenarioStatus>(url.searchParams.get(QUERY_PARAMS.STATUS), SCENARIO_STATUS_VALUES) ??
+		SCENARIO_STATUSES.ACTIVE;
 
-	const pageRaw = Number.parseInt(url.searchParams.get('page') ?? '1', 10);
+	const pageRaw = Number.parseInt(url.searchParams.get(QUERY_PARAMS.PAGE) ?? '1', 10);
 	const pageNum = Number.isFinite(pageRaw) && pageRaw >= 1 ? pageRaw : 1;
 
 	// Fetch one extra row to know whether another page exists.
@@ -54,7 +60,7 @@ export const load: PageServerLoad = async (event) => {
 	// client -- the full scenario (with `options` + `teachingPoint`) stays
 	// server-side so users can't spoil their own answers via view-source.
 	// See DESIGN_PRINCIPLES.md #7.
-	const createdId = url.searchParams.get('created') ?? null;
+	const createdId = url.searchParams.get(QUERY_PARAMS.CREATED) ?? null;
 	let createdScenario: { id: string; title: string } | null = null;
 	if (createdId) {
 		const found = await getScenario(createdId, user.id);
