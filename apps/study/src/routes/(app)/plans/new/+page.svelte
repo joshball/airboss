@@ -301,7 +301,7 @@ const skipPreview = $derived([...selectedSkip].sort().map((d) => domainLabel(d))
 	}
 
 	.help.subtle {
-		color: #94a3b8;
+		color: var(--ab-color-fg-faint);
 		font-size: 0.75rem;
 		font-style: italic;
 	}
