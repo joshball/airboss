@@ -741,6 +741,7 @@ async function writeToDb(nodes: readonly ParsedNode[]): Promise<void> {
 						contentMd: node.body,
 						contentHash: nextHash,
 						version: 1,
+						lifecycle: node.lifecycle,
 					})
 					.onConflictDoUpdate({
 						target: knowledgeNode.id,
@@ -765,6 +766,7 @@ async function writeToDb(nodes: readonly ParsedNode[]): Promise<void> {
 								WHEN coalesce(${knowledgeNode.contentHash}, '') = ${nextHash} THEN ${knowledgeNode.version}
 								ELSE ${knowledgeNode.version} + 1
 							END`,
+							lifecycle: node.lifecycle,
 							updatedAt: new Date(),
 						},
 					});
