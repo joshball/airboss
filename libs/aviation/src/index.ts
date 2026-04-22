@@ -34,7 +34,11 @@ export {
 	isSourceType,
 	type ReferenceTags,
 } from './schema/tags';
-export { SOURCES } from './sources/registry';
+export { CfrExtractor, cfrExtractor } from './sources/cfr/extract';
+export { type CfrDocument, CfrParseError, type CfrSectionLocator, parseCfrXml } from './sources/cfr/parser';
+export { allExtractors, resolveExtractors } from './sources/extractors';
+export { isSourceMeta, metaPathFor, type SourceMeta } from './sources/meta';
+export { getSource, getSourcesByType, isSourceDownloaded, PENDING_DOWNLOAD, SOURCES } from './sources/registry';
 export {
 	type ContentScan,
 	type ContentValidationSummary,

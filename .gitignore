@@ -15,3 +15,12 @@ coverage/
 /tests/e2e/.out/
 /playwright-report/
 /test-results/
+
+# Source binaries - gitignored per reference-system-architecture decision #2
+data/sources/**/*.xml
+data/sources/**/*.pdf
+data/sources/**/*.csv
+data/sources/**/*.txt
+data/sources/**/*.html
+# But KEEP the meta.json files
+!data/sources/**/*.meta.json
