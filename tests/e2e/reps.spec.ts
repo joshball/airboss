@@ -79,9 +79,13 @@ test.describe('reps', () => {
 		const startLink = page.getByRole('link', { name: /start session/i });
 		if (await startLink.isVisible().catch(() => false)) {
 			await startLink.click();
-			await expect(page).toHaveURL((url) => url.pathname === ROUTES.REPS_SESSION);
-			// The session page renders either a rep card (h2 title) or a
-			// "Session complete" heading; either is a valid smoke outcome.
+			// Phase 3 (ADR 012): rep entry points land on the preset gallery /
+			// session preview at `/session/start` instead of the retired
+			// `/reps/session` runner.
+			await expect(page).toHaveURL((url) => url.pathname === ROUTES.SESSION_START);
+			// The session-start page renders either the preset gallery heading
+			// (no active plan) or the in-plan preview heading; either is a
+			// valid smoke outcome.
 			await expect(page.locator('h1, h2').first()).toBeVisible();
 		} else {
 			// Empty state path: the disabled-looking button is a real button.

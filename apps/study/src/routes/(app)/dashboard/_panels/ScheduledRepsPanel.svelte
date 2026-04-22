@@ -35,7 +35,7 @@ function domainHref(slug: string): string {
 >
 	{#snippet action()}
 		{#if totalActive > 0}
-			<a class="action-btn" href={ROUTES.REPS_SESSION}>Start session</a>
+			<a class="action-btn" href={ROUTES.SESSION_START}>Start session</a>
 		{:else}
 			<a class="action-btn ghost" href={ROUTES.REPS_NEW}>New scenario</a>
 		{/if}

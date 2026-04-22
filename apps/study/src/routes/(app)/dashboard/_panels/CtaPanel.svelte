@@ -48,7 +48,7 @@ const primary = $derived<Cta>(
 // backlog is waiting. Empty when neither queue has items.
 const secondaries = $derived<Cta[]>([
 	...(dueCount > 0 ? [{ href: ROUTES.MEMORY_REVIEW, label: `Review (${dueCount})` }] : []),
-	...(scheduledCount > 0 && hasPlan ? [] : scheduledCount > 0 ? [{ href: ROUTES.REPS_SESSION, label: 'Reps' }] : []),
+	...(scheduledCount > 0 && hasPlan ? [] : scheduledCount > 0 ? [{ href: ROUTES.SESSION_START, label: 'Reps' }] : []),
 ]);
 
 // Combine errors from all three feeds; the shell renders it inline.

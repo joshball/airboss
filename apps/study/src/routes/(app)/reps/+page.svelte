@@ -35,7 +35,7 @@ function bar(value: number): number {
 			<a class="btn ghost" href={ROUTES.REPS_BROWSE}>Browse</a>
 			<a class="btn secondary" href={ROUTES.REPS_NEW}>New scenario</a>
 			{#if hasScenarios}
-				<a class="btn primary" href={ROUTES.REPS_SESSION}>Start session</a>
+				<a class="btn primary" href={ROUTES.SESSION_START}>Start session</a>
 			{:else}
 				<button class="btn primary" type="button" disabled>Start session</button>
 			{/if}
