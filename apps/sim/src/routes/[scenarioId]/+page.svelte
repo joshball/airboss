@@ -24,6 +24,15 @@ let inputs = $state<FdmInputs>({ throttle: 0, elevator: 0 });
 let running = $state(false);
 let ready = $state(false);
 let outcome = $state<ScenarioRunResult | null>(null);
+let bootError = $state<string | null>(null);
+let readyTimer: ReturnType<typeof setTimeout> | null = null;
+const WORKER_READY_TIMEOUT_MS = 5_000;
+
+// Keyboard-control toggle -- Shift + Ctrl are hijacked for throttle, which
+// collides with screen-reader modifier chords (NVDA/JAWS + Shift, VoiceOver
+// + Ctrl). Let users turn it off so AT isn't trapped. WCAG 2.1.4 requires a
+// mechanism to disable character-key shortcuts.
+let keyboardControlEnabled = $state(true);
 
 // Keyboard-latched command state. We translate these into `inputs` and push
 // to the worker at ~30 Hz, so holding a key ramps the input smoothly.
@@ -56,6 +65,11 @@ function handleWorkerMessage(event: MessageEvent<WorkerToMain>): void {
 	switch (msg.type) {
 		case SIM_WORKER_MESSAGES.READY: {
 			ready = true;
+			bootError = null;
+			if (readyTimer !== null) {
+				clearTimeout(readyTimer);
+				readyTimer = null;
+			}
 			break;
 		}
 		case SIM_WORKER_MESSAGES.SNAPSHOT: {
@@ -120,6 +134,7 @@ function tickInputs(): void {
 
 function onKeyDown(event: KeyboardEvent): void {
 	if (event.repeat) return;
+	if (!keyboardControlEnabled) return;
 	const key = event.key;
 	if (key === 'w' || key === 'W' || key === 'ArrowUp') {
 		keyState.pitchUp = true;
@@ -147,6 +162,7 @@ function onKeyDown(event: KeyboardEvent): void {
 }
 
 function onKeyUp(event: KeyboardEvent): void {
+	if (!keyboardControlEnabled) return;
 	const key = event.key;
 	if (key === 'w' || key === 'W' || key === 'ArrowUp') keyState.pitchUp = false;
 	else if (key === 's' || key === 'S' || key === 'ArrowDown') keyState.pitchDown = false;
@@ -154,13 +170,34 @@ function onKeyUp(event: KeyboardEvent): void {
 	else if (key === 'Control') keyState.throttleDown = false;
 }
 
-onMount(() => {
+function startWorker(): void {
 	if (!browser) return;
+	worker?.terminate();
+	ready = false;
+	bootError = null;
 	const w = new FdmWorker();
 	worker = w;
 	w.addEventListener('message', handleWorkerMessage);
+	w.addEventListener('error', (e) => {
+		bootError = e.message || 'Failed to start the flight dynamics worker.';
+	});
 	post({ type: SIM_WORKER_MESSAGES.INIT, scenarioId: data.scenario.id });
 	post({ type: SIM_WORKER_MESSAGES.START });
+	if (readyTimer !== null) clearTimeout(readyTimer);
+	readyTimer = setTimeout(() => {
+		if (!ready) {
+			bootError = 'Sim failed to start within 5 seconds. Check the console and try again.';
+		}
+	}, WORKER_READY_TIMEOUT_MS);
+}
+
+function retryWorker(): void {
+	startWorker();
+}
+
+onMount(() => {
+	if (!browser) return;
+	startWorker();
 
 	window.addEventListener('keydown', onKeyDown);
 	window.addEventListener('keyup', onKeyUp);
@@ -173,6 +210,7 @@ onDestroy(() => {
 	window.removeEventListener('keydown', onKeyDown);
 	window.removeEventListener('keyup', onKeyUp);
 	if (inputTimer) clearInterval(inputTimer);
+	if (readyTimer !== null) clearTimeout(readyTimer);
 	worker?.terminate();
 	worker = null;
 });
@@ -203,7 +241,19 @@ const outcomeIsSuccess = $derived(outcome?.outcome === SIM_SCENARIO_OUTCOMES.SUC
 		<p>{data.scenario.briefing}</p>
 	</section>
 
-	<section class="panel">
+	{#if bootError}
+		<section class="boot-error" role="alert" aria-live="assertive">
+			<h2>Sim failed to start</h2>
+			<p>{bootError}</p>
+			<button type="button" class="retry" onclick={retryWorker}>Retry</button>
+		</section>
+	{:else if !ready}
+		<section class="boot-loading" role="status" aria-live="polite">
+			<p class="boot-loading-msg">Initializing flight dynamics...</p>
+		</section>
+	{/if}
+
+	<section class="panel" class:pending={!ready} aria-hidden={!ready && !bootError ? 'true' : undefined}>
 		<Asi {kias} />
 		<AttitudeIndicator pitchRadians={pitchRad} />
 		<Altimeter {altitudeFeet} />
@@ -270,6 +320,7 @@ const outcomeIsSuccess = $derived(outcome?.outcome === SIM_SCENARIO_OUTCOMES.SUC
 
 	<section class="help">
 		<h3>Controls</h3>
+		<p class="help-note">Keyboard required -- desktop only for Phase 0.</p>
 		<dl>
 			<dt>W / &uarr;</dt>
 			<dd>Pitch up (elevator back)</dd>
@@ -284,6 +335,13 @@ const outcomeIsSuccess = $derived(outcome?.outcome === SIM_SCENARIO_OUTCOMES.SUC
 			<dt>R</dt>
 			<dd>Reset scenario</dd>
 		</dl>
+		<label class="kb-toggle">
+			<input type="checkbox" bind:checked={keyboardControlEnabled} />
+			Keyboard controls active
+			<span class="kb-toggle-hint">
+				Uncheck when using a screen reader; Shift/Ctrl collide with AT modifier chords.
+			</span>
+		</label>
 	</section>
 </main>
 
@@ -341,6 +399,65 @@ const outcomeIsSuccess = $derived(outcome?.outcome === SIM_SCENARIO_OUTCOMES.SUC
 		justify-content: center;
 		flex-wrap: wrap;
 		margin-bottom: 1rem;
+		transition: opacity var(--ab-transition-normal, 200ms);
+	}
+
+	.panel.pending {
+		opacity: 0.4;
+	}
+
+	.boot-loading {
+		margin: 1rem 0;
+		padding: 1rem;
+		background: var(--ab-color-surface-sunken, #f6f6f6);
+		border: 1px solid var(--ab-color-border, #ddd);
+		border-radius: 6px;
+		text-align: center;
+		font-size: 0.9rem;
+		color: var(--ab-color-fg-muted, #666);
+	}
+
+	.boot-loading-msg {
+		margin: 0;
+	}
+
+	.boot-error {
+		margin: 1rem 0;
+		padding: 1rem;
+		background: rgba(224, 68, 62, 0.08);
+		border: 1px solid #e0443e;
+		border-radius: 6px;
+	}
+
+	.boot-error h2 {
+		margin: 0 0 0.25rem 0;
+		font-size: 1rem;
+		color: #b91c1c;
+	}
+
+	.boot-error p {
+		margin: 0 0 0.625rem 0;
+		font-size: 0.875rem;
+		color: #7f1d1d;
+	}
+
+	.retry {
+		background: #dc2626;
+		color: white;
+		border: 1px solid transparent;
+		font-weight: 600;
+		padding: 0.375rem 0.75rem;
+		border-radius: 4px;
+		cursor: pointer;
+	}
+
+	.retry:hover {
+		background: #b91c1c;
+	}
+
+	.retry:focus-visible {
+		outline: none;
+		box-shadow: 0 0 0 3px var(--ab-color-focus-ring, rgba(37, 99, 235, 0.5));
 	}
 
 	.readouts {
@@ -481,5 +598,29 @@ const outcomeIsSuccess = $derived(outcome?.outcome === SIM_SCENARIO_OUTCOMES.SUC
 
 	.help dd {
 		margin: 0;
+	}
+
+	.help-note {
+		margin: 0 0 0.5rem 0;
+		font-size: 0.8125rem;
+		color: var(--ab-color-fg-muted, #666);
+	}
+
+	.kb-toggle {
+		margin-top: 0.75rem;
+		display: flex;
+		flex-direction: column;
+		gap: 0.125rem;
+		font-size: 0.8125rem;
+	}
+
+	.kb-toggle input {
+		margin-right: 0.5rem;
+	}
+
+	.kb-toggle-hint {
+		font-size: 0.75rem;
+		color: var(--ab-color-fg-muted, #666);
+		margin-left: 1.5rem;
 	}
 </style>

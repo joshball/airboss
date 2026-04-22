@@ -390,6 +390,11 @@ function pageHref(n: number): string {
 		border-color: var(--ab-color-primary-subtle-border);
 	}
 
+	.chip:focus-visible {
+		outline: none;
+		box-shadow: 0 0 0 3px var(--ab-color-focus-ring);
+	}
+
 	.chip-name {
 		color: var(--ab-color-primary-active);
 		font-weight: 600;

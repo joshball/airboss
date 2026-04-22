@@ -88,6 +88,7 @@ function fillDevAccount(accountEmail: string) {
 							<button
 								type="button"
 								class="dev-btn"
+								aria-label="Pre-fill login form as {account.name} ({account.role})"
 								onclick={() => fillDevAccount(account.email)}
 							>
 								<span class="dev-name">{account.name}</span>

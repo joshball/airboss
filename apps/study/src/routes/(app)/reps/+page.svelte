@@ -1,5 +1,6 @@
 <script lang="ts">
 import { DOMAIN_LABELS, REP_DASHBOARD_WINDOW_DAYS, ROUTES } from '@ab/constants';
+import StatTile from '@ab/ui/components/StatTile.svelte';
 import { humanize } from '@ab/utils';
 import type { PageData } from './$types';
 
@@ -37,7 +38,16 @@ function bar(value: number): number {
 			{#if hasScenarios}
 				<a class="btn primary" href={ROUTES.SESSION_START}>Start session</a>
 			{:else}
-				<button class="btn primary" type="button" disabled>Start session</button>
+				<button
+					class="btn primary"
+					type="button"
+					disabled
+					title="Write a scenario first to enable sessions."
+					aria-describedby="start-session-hint"
+				>
+					Start session
+				</button>
+				<span id="start-session-hint" class="visually-hidden">Write a scenario first to enable sessions.</span>
 			{/if}
 		</nav>
 	</header>
@@ -50,30 +60,28 @@ function bar(value: number): number {
 		</article>
 	{:else}
 		<div class="grid">
-			<article class="tile accent">
-				<div class="tile-label">Available</div>
-				<div class="tile-value">{stats.scenarioCount}</div>
-				<div class="tile-sub">{stats.scenarioCount === 1 ? 'scenario' : 'scenarios'}</div>
-			</article>
-			<article class="tile">
-				<div class="tile-label">Unattempted</div>
-				<div class="tile-value">{stats.unattemptedCount}</div>
-				<div class="tile-sub">never tried</div>
-			</article>
-			<article class="tile">
-				<div class="tile-label">Today</div>
-				<div class="tile-value">{stats.attemptedToday}</div>
-				<div class="tile-sub">{stats.attemptedToday === 1 ? 'rep' : 'reps'}</div>
-			</article>
-			<article class="tile">
-				<div class="tile-label">Accuracy (30d)</div>
-				<div class="tile-value">
-					{stats.accuracyLast30d.attempted === 0 ? '--' : `${percent(stats.accuracyLast30d.accuracy)}%`}
-				</div>
-				<div class="tile-sub">
-					{stats.accuracyLast30d.correct} / {stats.accuracyLast30d.attempted} correct
-				</div>
-			</article>
+			<StatTile
+				label="Available"
+				value={stats.scenarioCount}
+				sub={stats.scenarioCount === 1 ? 'scenario' : 'scenarios'}
+				href={stats.scenarioCount > 0 ? ROUTES.SESSION_START : undefined}
+				tone="primary"
+				ariaLabel="Available: {stats.scenarioCount} scenarios, start a session"
+			/>
+			<StatTile
+				label="Unattempted"
+				value={stats.unattemptedCount}
+				sub="never tried"
+				href={ROUTES.REPS_BROWSE}
+				ariaLabel="Unattempted: {stats.unattemptedCount}, browse reps"
+			/>
+			<StatTile label="Today" value={stats.attemptedToday} sub={stats.attemptedToday === 1 ? 'rep' : 'reps'} />
+			<StatTile
+				label="Accuracy (30d)"
+				value={stats.accuracyLast30d.attempted === 0 ? '--' : `${percent(stats.accuracyLast30d.accuracy)}%`}
+				sub="{stats.accuracyLast30d.correct} / {stats.accuracyLast30d.attempted} correct"
+				href={stats.accuracyLast30d.attempted > 0 ? ROUTES.CALIBRATION : undefined}
+			/>
 		</div>
 
 		<article class="card-list">
@@ -137,15 +145,15 @@ function bar(value: number): number {
 
 	h1 {
 		margin: 0;
-		font-size: var(--ab-font-size-2xl);
+		font-size: 1.75rem;
 		letter-spacing: -0.02em;
-		color: var(--ab-color-fg);
+		color: #0f172a;
 	}
 
 	.sub {
 		margin: 0.25rem 0 0;
-		color: var(--ab-color-fg-subtle);
-		font-size: var(--ab-font-size-body);
+		color: #64748b;
+		font-size: 0.9375rem;
 	}
 
 	.quick {
@@ -156,8 +164,8 @@ function bar(value: number): number {
 
 	.empty {
 		background: white;
-		border: 1px dashed var(--ab-color-border-strong);
-		border-radius: var(--ab-radius-lg);
+		border: 1px dashed #cbd5e1;
+		border-radius: 12px;
 		padding: 2.5rem 1.5rem;
 		text-align: center;
 		display: flex;
@@ -168,13 +176,13 @@ function bar(value: number): number {
 
 	.empty h2 {
 		margin: 0;
-		color: var(--ab-color-fg);
-		font-size: var(--ab-font-size-2xl);
+		color: #0f172a;
+		font-size: 1.25rem;
 	}
 
 	.empty p {
 		margin: 0;
-		color: var(--ab-color-fg-subtle);
+		color: #64748b;
 		max-width: 28rem;
 	}
 
@@ -184,53 +192,24 @@ function bar(value: number): number {
 		gap: 0.75rem;
 	}
 
-	.tile {
-		background: white;
-		border: 1px solid var(--ab-color-border);
-		border-radius: var(--ab-radius-lg);
-		padding: 1rem 1.25rem;
-		display: flex;
-		flex-direction: column;
-		gap: 0.25rem;
-	}
+	/* StatTile provides its own styling; the grid just lays them out. */
 
-	.tile.accent {
-		border-color: var(--ab-color-primary-subtle-border);
-		background: var(--ab-color-primary-subtle);
-	}
-
-	.tile-label {
-		font-size: var(--ab-font-size-xs);
-		font-weight: 600;
-		color: var(--ab-color-fg-subtle);
-		text-transform: uppercase;
-		letter-spacing: 0.06em;
-	}
-
-	.tile.accent .tile-label {
-		color: var(--ab-color-primary-hover);
-	}
-
-	.tile-value {
-		font-size: 2rem;
-		font-weight: 700;
-		color: var(--ab-color-fg);
-		line-height: 1;
-	}
-
-	.tile.accent .tile-value {
-		color: var(--ab-color-primary-hover);
-	}
-
-	.tile-sub {
-		font-size: var(--ab-font-size-sm);
-		color: var(--ab-color-fg-subtle);
+	.visually-hidden {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		white-space: nowrap;
+		border: 0;
 	}
 
 	.card-list {
 		background: white;
-		border: 1px solid var(--ab-color-border);
-		border-radius: var(--ab-radius-lg);
+		border: 1px solid #e2e8f0;
+		border-radius: 12px;
 		padding: 1.25rem 1.5rem;
 		display: flex;
 		flex-direction: column;
@@ -239,8 +218,8 @@ function bar(value: number): number {
 
 	.card-list h2 {
 		margin: 0;
-		font-size: var(--ab-font-size-sm);
-		color: var(--ab-color-fg-subtle);
+		font-size: 0.8125rem;
+		color: #64748b;
 		text-transform: uppercase;
 		letter-spacing: 0.08em;
 		font-weight: 600;
@@ -269,55 +248,55 @@ function bar(value: number): number {
 	}
 
 	.dm-name {
-		color: var(--ab-color-fg);
+		color: #0f172a;
 		text-decoration: none;
 		font-weight: 500;
 	}
 
 	a.dm-name:hover {
-		color: var(--ab-color-primary-hover);
+		color: #1d4ed8;
 	}
 
 	.dm-counts {
 		display: flex;
 		gap: 0.5rem;
-		font-size: var(--ab-font-size-sm);
+		font-size: 0.8125rem;
 	}
 
 	.dm-pct {
-		color: var(--ab-color-primary-hover);
+		color: #1d4ed8;
 		font-weight: 600;
 	}
 
 	.dm-total {
-		color: var(--ab-color-fg-subtle);
+		color: #64748b;
 	}
 
 	.bar {
-		background: var(--ab-color-border);
+		background: #e2e8f0;
 		height: 0.375rem;
-		border-radius: var(--ab-radius-pill);
+		border-radius: 999px;
 		overflow: hidden;
 	}
 
 	.bar-fill {
 		display: block;
 		height: 100%;
-		background: var(--ab-color-primary);
+		background: #2563eb;
 		transition: width 250ms;
 	}
 
 	.empty-note {
-		color: var(--ab-color-fg-subtle);
-		font-size: var(--ab-font-size-sm);
+		color: #64748b;
+		font-size: 0.875rem;
 		margin: 0;
 	}
 
 	.btn {
 		padding: 0.5rem 1rem;
-		font-size: var(--ab-font-size-body);
+		font-size: 0.9375rem;
 		font-weight: 600;
-		border-radius: var(--ab-radius-md);
+		border-radius: 8px;
 		border: 1px solid transparent;
 		cursor: pointer;
 		text-decoration: none;
@@ -328,35 +307,35 @@ function bar(value: number): number {
 	}
 
 	.btn.primary {
-		background: var(--ab-color-primary);
+		background: #2563eb;
 		color: white;
 	}
 
 	.btn.primary:hover {
-		background: var(--ab-color-primary-hover);
+		background: #1d4ed8;
 	}
 
 	.btn.primary:disabled {
-		background: var(--ab-color-fg-faint);
+		background: #94a3b8;
 		cursor: not-allowed;
 	}
 
 	.btn.secondary {
-		background: var(--ab-color-surface-sunken);
-		color: var(--ab-color-fg);
-		border-color: var(--ab-color-border-strong);
+		background: #f1f5f9;
+		color: #1a1a2e;
+		border-color: #cbd5e1;
 	}
 
 	.btn.secondary:hover {
-		background: var(--ab-color-border);
+		background: #e2e8f0;
 	}
 
 	.btn.ghost {
 		background: transparent;
-		color: var(--ab-color-fg-muted);
+		color: #475569;
 	}
 
 	.btn.ghost:hover {
-		background: var(--ab-color-surface-sunken);
+		background: #f1f5f9;
 	}
 </style>

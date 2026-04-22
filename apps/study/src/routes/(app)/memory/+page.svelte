@@ -1,5 +1,6 @@
 <script lang="ts">
-import { CARD_STATES, DOMAIN_LABELS, MASTERY_STABILITY_DAYS, ROUTES } from '@ab/constants';
+import { CARD_STATES, DOMAIN_LABELS, MASTERY_STABILITY_DAYS, QUERY_PARAMS, ROUTES } from '@ab/constants';
+import StatTile from '@ab/ui/components/StatTile.svelte';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
@@ -42,26 +43,34 @@ function percent(n: number, total: number): number {
 	</header>
 
 	<div class="grid">
-		<article class="tile due">
-			<div class="tile-label">Due now</div>
-			<div class="tile-value">{stats.dueNow}</div>
-			<div class="tile-sub">{stats.dueNow === 1 ? 'card' : 'cards'} to review</div>
-		</article>
-		<article class="tile">
-			<div class="tile-label">Reviewed today</div>
-			<div class="tile-value">{stats.reviewedToday}</div>
-			<div class="tile-sub">{stats.reviewedToday === 1 ? 'review' : 'reviews'}</div>
-		</article>
-		<article class="tile">
-			<div class="tile-label">Streak</div>
-			<div class="tile-value">{stats.streakDays}</div>
-			<div class="tile-sub">{stats.streakDays === 1 ? 'day' : 'days'}</div>
-		</article>
-		<article class="tile">
-			<div class="tile-label">Active cards</div>
-			<div class="tile-value">{totalActive}</div>
-			<div class="tile-sub">across {stats.domains.length} {stats.domains.length === 1 ? 'domain' : 'domains'}</div>
-		</article>
+		<StatTile
+			label="Due now"
+			value={stats.dueNow}
+			sub="{stats.dueNow === 1 ? 'card' : 'cards'} to review"
+			href={stats.dueNow > 0 ? ROUTES.MEMORY_REVIEW : undefined}
+			tone="primary"
+			ariaLabel="Due now: {stats.dueNow} cards to review"
+		/>
+		<StatTile
+			label="Reviewed today"
+			value={stats.reviewedToday}
+			sub={stats.reviewedToday === 1 ? 'review' : 'reviews'}
+			href={`${ROUTES.MEMORY_BROWSE}?${QUERY_PARAMS.STATUS}=active`}
+			ariaLabel="Reviewed today: {stats.reviewedToday}, browse active cards"
+		/>
+		<StatTile
+			label="Streak"
+			value={stats.streakDays}
+			sub={stats.streakDays === 1 ? 'day' : 'days'}
+			href={ROUTES.CALIBRATION}
+			ariaLabel="Streak: {stats.streakDays} days, open calibration"
+		/>
+		<StatTile
+			label="Active cards"
+			value={totalActive}
+			sub="across {stats.domains.length} {stats.domains.length === 1 ? 'domain' : 'domains'}"
+			href={ROUTES.MEMORY_BROWSE}
+		/>
 	</div>
 
 	<article class="card-list">
@@ -131,15 +140,15 @@ function percent(n: number, total: number): number {
 
 	h1 {
 		margin: 0;
-		font-size: var(--ab-font-size-2xl);
+		font-size: 1.75rem;
 		letter-spacing: -0.02em;
-		color: var(--ab-color-fg);
+		color: #0f172a;
 	}
 
 	.sub {
 		margin: 0.25rem 0 0;
-		color: var(--ab-color-fg-subtle);
-		font-size: var(--ab-font-size-body);
+		color: #64748b;
+		font-size: 0.9375rem;
 	}
 
 	.quick {
@@ -154,53 +163,12 @@ function percent(n: number, total: number): number {
 		gap: 0.75rem;
 	}
 
-	.tile {
-		background: white;
-		border: 1px solid var(--ab-color-border);
-		border-radius: var(--ab-radius-lg);
-		padding: 1rem 1.25rem;
-		display: flex;
-		flex-direction: column;
-		gap: 0.25rem;
-	}
-
-	.tile.due {
-		border-color: var(--ab-color-primary-subtle-border);
-		background: var(--ab-color-primary-subtle);
-	}
-
-	.tile-label {
-		font-size: var(--ab-font-size-xs);
-		font-weight: 600;
-		color: var(--ab-color-fg-subtle);
-		text-transform: uppercase;
-		letter-spacing: 0.06em;
-	}
-
-	.tile.due .tile-label {
-		color: var(--ab-color-primary-hover);
-	}
-
-	.tile-value {
-		font-size: 2rem;
-		font-weight: 700;
-		color: var(--ab-color-fg);
-		line-height: 1;
-	}
-
-	.tile.due .tile-value {
-		color: var(--ab-color-primary-hover);
-	}
-
-	.tile-sub {
-		font-size: var(--ab-font-size-sm);
-		color: var(--ab-color-fg-subtle);
-	}
+	/* StatTile provides its own styling; the grid just lays them out. */
 
 	.card-list {
 		background: white;
-		border: 1px solid var(--ab-color-border);
-		border-radius: var(--ab-radius-lg);
+		border: 1px solid #e2e8f0;
+		border-radius: 12px;
 		padding: 1.25rem 1.5rem;
 		display: flex;
 		flex-direction: column;
@@ -209,8 +177,8 @@ function percent(n: number, total: number): number {
 
 	.card-list h2 {
 		margin: 0;
-		font-size: var(--ab-font-size-sm);
-		color: var(--ab-color-fg-subtle);
+		font-size: 0.8125rem;
+		color: #64748b;
 		text-transform: uppercase;
 		letter-spacing: 0.08em;
 		font-weight: 600;
@@ -230,18 +198,18 @@ function percent(n: number, total: number): number {
 		justify-content: space-between;
 		align-items: center;
 		padding: 0.5rem 0.75rem;
-		background: var(--ab-color-surface-muted);
-		border: 1px solid var(--ab-color-border);
-		border-radius: var(--ab-radius-md);
+		background: #f8fafc;
+		border: 1px solid #e2e8f0;
+		border-radius: 8px;
 	}
 
 	.state-label {
-		color: var(--ab-color-fg-muted);
-		font-size: var(--ab-font-size-sm);
+		color: #475569;
+		font-size: 0.875rem;
 	}
 
 	.state-count {
-		color: var(--ab-color-fg);
+		color: #0f172a;
 		font-weight: 600;
 	}
 
@@ -268,65 +236,65 @@ function percent(n: number, total: number): number {
 	}
 
 	.dm-name {
-		color: var(--ab-color-fg);
+		color: #0f172a;
 		text-decoration: none;
 		font-weight: 500;
 	}
 
 	.dm-name:hover {
-		color: var(--ab-color-primary-hover);
+		color: #1d4ed8;
 	}
 
 	.dm-counts {
 		display: flex;
 		gap: 0.5rem;
-		font-size: var(--ab-font-size-sm);
+		font-size: 0.8125rem;
 	}
 
 	.dm-total {
-		color: var(--ab-color-fg-subtle);
+		color: #64748b;
 	}
 
 	.dm-due {
-		color: var(--ab-color-primary-hover);
+		color: #1d4ed8;
 		font-weight: 600;
 	}
 
 	.bar {
-		background: var(--ab-color-border);
+		background: #e2e8f0;
 		height: 0.375rem;
-		border-radius: var(--ab-radius-pill);
+		border-radius: 999px;
 		overflow: hidden;
 	}
 
 	.bar-fill {
 		display: block;
 		height: 100%;
-		background: var(--ab-color-primary);
+		background: #2563eb;
 		transition: width 250ms;
 	}
 
 	.dm-sub {
-		font-size: var(--ab-font-size-xs);
-		color: var(--ab-color-fg-faint);
+		font-size: 0.75rem;
+		color: #94a3b8;
 	}
 
 	.empty-note {
-		color: var(--ab-color-fg-subtle);
-		font-size: var(--ab-font-size-sm);
+		color: #64748b;
+		font-size: 0.875rem;
 		margin: 0;
 	}
 
 	.empty-note a {
-		color: var(--ab-color-primary-hover);
+		color: #1d4ed8;
 		font-weight: 500;
 	}
 
 	.btn {
 		padding: 0.5rem 1rem;
-		font-size: var(--ab-font-size-body);
+		font-size: 0.9375rem;
 		font-weight: 600;
-		border-radius: var(--ab-radius-md);
+		border-radius: 8px;
 		border: 1px solid transparent;
 		cursor: pointer;
 		text-decoration: none;
@@ -337,30 +305,30 @@ function percent(n: number, total: number): number {
 	}
 
 	.btn.primary {
-		background: var(--ab-color-primary);
+		background: #2563eb;
 		color: white;
 	}
 
 	.btn.primary:hover {
-		background: var(--ab-color-primary-hover);
+		background: #1d4ed8;
 	}
 
 	.btn.secondary {
-		background: var(--ab-color-surface-sunken);
-		color: var(--ab-color-fg);
-		border-color: var(--ab-color-border-strong);
+		background: #f1f5f9;
+		color: #1a1a2e;
+		border-color: #cbd5e1;
 	}
 
 	.btn.secondary:hover {
-		background: var(--ab-color-border);
+		background: #e2e8f0;
 	}
 
 	.btn.ghost {
 		background: transparent;
-		color: var(--ab-color-fg-muted);
+		color: #475569;
 	}
 
 	.btn.ghost:hover {
-		background: var(--ab-color-surface-sunken);
+		background: #f1f5f9;
 	}
 </style>

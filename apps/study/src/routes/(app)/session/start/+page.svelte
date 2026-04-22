@@ -142,10 +142,12 @@ function reasonLabel(code: SessionReasonCode): string {
 				<li>
 					<a
 						class="tile tile-custom"
-						href={ROUTES.PLANS_NEW}
+						href={submittingPresetId !== null ? undefined : ROUTES.PLANS_NEW}
 						class:is-disabled={submittingPresetId !== null}
 						aria-disabled={submittingPresetId !== null ? 'true' : undefined}
-						tabindex={submittingPresetId !== null ? -1 : 0}
+						onclick={(e: MouseEvent) => {
+							if (submittingPresetId !== null) e.preventDefault();
+						}}
 					>
 						<span class="tile-label">{CUSTOM_TILE.label}</span>
 						<span class="tile-desc">{CUSTOM_TILE.description}</span>

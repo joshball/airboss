@@ -6,15 +6,14 @@ import {
 	REVIEW_RATINGS,
 	ROUTES,
 	SESSION_ITEM_KINDS,
-	SESSION_ITEM_PHASES,
 	SESSION_REASON_CODE_LABELS,
 	SESSION_SKIP_KINDS,
 	SESSION_SLICE_LABELS,
-	type SessionItemPhase,
 	type SessionReasonCode,
 	type SessionSlice,
 } from '@ab/constants';
 import ConfidenceSlider from '@ab/ui/components/ConfidenceSlider.svelte';
+import ConfirmAction from '@ab/ui/components/ConfirmAction.svelte';
 import { enhance } from '$app/forms';
 import { replaceState } from '$app/navigation';
 import { page } from '$app/state';
@@ -30,9 +29,10 @@ const currentNum = $derived(current ? current.slotIndex + 1 : total);
 
 // URL-persisted phases are the 3 meaningful states; `submitting` is a
 // transient in-flight flag tracked by `loading` instead.
+type Phase = 'read' | 'confidence' | 'answer';
 
 // svelte-ignore state_referenced_locally -- seed from server-narrowed deep link; URL syncs thereafter
-let phase = $state<SessionItemPhase>(data.initialStep);
+let phase = $state<Phase>(data.initialStep);
 let confidence = $state<ConfidenceLevel | null>(null);
 let skippedConfidence = $state(false);
 let selectedOption = $state<string | null>(null);
@@ -44,7 +44,7 @@ $effect(() => {
 	const key = current ? `${data.session.id}:${current.slotIndex}` : null;
 	if (key !== lastSlotKey) {
 		lastSlotKey = key;
-		phase = SESSION_ITEM_PHASES.READ;
+		phase = 'read';
 		confidence = null;
 		skippedConfidence = false;
 		selectedOption = null;
@@ -108,6 +108,14 @@ function sliceLabel(slice: SessionSlice): string {
 		<span class="progress-fill" style="width: {total === 0 ? 0 : Math.round((completedCount / total) * 100)}%"></span>
 	</div>
 
+	<div class="visually-hidden" aria-live="polite" aria-atomic="true">
+		{#if current}
+			Item {currentNum} of {total}. Phase {phase}.
+		{:else}
+			All items resolved.
+		{/if}
+	</div>
+
 	{#if form && 'error' in form && form.error}
 		<div class="error" role="alert">{form.error}</div>
 	{/if}
@@ -134,22 +142,22 @@ function sliceLabel(slice: SessionSlice): string {
 					<div class="domain">{domainLabel(cardView.domain)}</div>
 					<div class="card-front">{cardView.front}</div>
 
-					{#if phase === SESSION_ITEM_PHASES.READ}
+					{#if phase === 'read'}
 						{#if current.itemKind === SESSION_ITEM_KINDS.CARD}
 							<div class="actions">
-								<button type="button" class="btn primary" onclick={() => (phase = SESSION_ITEM_PHASES.CONFIDENCE)}>Reveal</button>
+								<button type="button" class="btn primary" onclick={() => (phase = 'confidence')}>Reveal</button>
 							</div>
 						{/if}
-					{:else if phase === SESSION_ITEM_PHASES.CONFIDENCE}
+					{:else if phase === 'confidence'}
 						<ConfidenceSlider
 							onSelect={(v) => {
 								confidence = v;
-								phase = SESSION_ITEM_PHASES.ANSWER;
+								phase = 'answer';
 							}}
 							onSkip={() => {
 								confidence = null;
 								skippedConfidence = true;
-								phase = SESSION_ITEM_PHASES.ANSWER;
+								phase = 'answer';
 							}}
 						/>
 					{:else}
@@ -167,12 +175,15 @@ function sliceLabel(slice: SessionSlice): string {
 								};
 							}}
 						>
-							<input type="hidden" name="slotIndex" value={current.slotIndex} />
-							{#if confidence !== null}<input type="hidden" name="confidence" value={confidence} />{/if}
-							<button type="submit" name="rating" value={REVIEW_RATINGS.AGAIN} class="btn rating again" disabled={loading}>Again</button>
-							<button type="submit" name="rating" value={REVIEW_RATINGS.HARD} class="btn rating hard" disabled={loading}>Hard</button>
-							<button type="submit" name="rating" value={REVIEW_RATINGS.GOOD} class="btn rating good" disabled={loading}>Good</button>
-							<button type="submit" name="rating" value={REVIEW_RATINGS.EASY} class="btn rating easy" disabled={loading}>Easy</button>
+							<fieldset class="rating-fieldset">
+								<legend class="visually-hidden">Rate this card</legend>
+								<input type="hidden" name="slotIndex" value={current.slotIndex} />
+								{#if confidence !== null}<input type="hidden" name="confidence" value={confidence} />{/if}
+								<button type="submit" name="rating" value={REVIEW_RATINGS.AGAIN} class="btn rating again" disabled={loading}>Again</button>
+								<button type="submit" name="rating" value={REVIEW_RATINGS.HARD} class="btn rating hard" disabled={loading}>Hard</button>
+								<button type="submit" name="rating" value={REVIEW_RATINGS.GOOD} class="btn rating good" disabled={loading}>Good</button>
+								<button type="submit" name="rating" value={REVIEW_RATINGS.EASY} class="btn rating easy" disabled={loading}>Easy</button>
+							</fieldset>
 						</form>
 					{/if}
 				</div>
@@ -183,20 +194,20 @@ function sliceLabel(slice: SessionSlice): string {
 					<div class="domain">{domainLabel(repView.domain)}</div>
 					<p class="situation">{repView.situation}</p>
 
-					{#if phase === SESSION_ITEM_PHASES.READ}
+					{#if phase === 'read'}
 						<div class="actions">
-							<button type="button" class="btn primary" onclick={() => (phase = SESSION_ITEM_PHASES.CONFIDENCE)}>Pick an option</button>
+							<button type="button" class="btn primary" onclick={() => (phase = 'confidence')}>Pick an option</button>
 						</div>
-					{:else if phase === SESSION_ITEM_PHASES.CONFIDENCE}
+					{:else if phase === 'confidence'}
 						<ConfidenceSlider
 							onSelect={(v) => {
 								confidence = v;
-								phase = SESSION_ITEM_PHASES.ANSWER;
+								phase = 'answer';
 							}}
 							onSkip={() => {
 								confidence = null;
 								skippedConfidence = true;
-								phase = SESSION_ITEM_PHASES.ANSWER;
+								phase = 'answer';
 							}}
 						/>
 					{:else}
@@ -265,12 +276,20 @@ function sliceLabel(slice: SessionSlice): string {
 					<input type="hidden" name="skipKind" value={SESSION_SKIP_KINDS.TODAY} />
 					<button type="submit" class="link-btn">Skip today</button>
 				</form>
-				<form method="post" action="?/skip" use:enhance>
-					<input type="hidden" name="slotIndex" value={current.slotIndex} />
-					<input type="hidden" name="skipKind" value={SESSION_SKIP_KINDS.PERMANENT} />
-					<button type="submit" class="link-btn danger">Skip permanently</button>
-				</form>
+				<ConfirmAction
+					formAction="?/skip"
+					confirmVariant="danger"
+					triggerVariant="ghost"
+					size="sm"
+					label="Skip permanently"
+					confirmLabel="Skip permanently (undo from plan)"
+					hiddenFields={{
+						slotIndex: String(current.slotIndex),
+						skipKind: SESSION_SKIP_KINDS.PERMANENT,
+					}}
+				/>
 			</footer>
+			<p class="skip-hint">Permanent skip can be reactivated from the plan detail page.</p>
 		</article>
 	{:else if current}
 		<article class="empty">
@@ -305,43 +324,43 @@ function sliceLabel(slice: SessionSlice): string {
 
 	h1 {
 		margin: 0;
-		font-size: var(--ab-font-size-xl);
-		color: var(--ab-color-fg);
+		font-size: 1.5rem;
+		color: #0f172a;
 	}
 
 	.sub {
 		margin: 0.25rem 0 0;
-		color: var(--ab-color-fg-subtle);
-		font-size: var(--ab-font-size-sm);
+		color: #64748b;
+		font-size: 0.875rem;
 	}
 
 	.progress {
-		background: var(--ab-color-border);
+		background: #e2e8f0;
 		height: 0.375rem;
-		border-radius: var(--ab-radius-pill);
+		border-radius: 999px;
 		overflow: hidden;
 	}
 
 	.progress-fill {
 		display: block;
 		height: 100%;
-		background: var(--ab-color-primary);
-		transition: width 200ms;
+		background: #2563eb;
+		transition: width var(--ab-transition-normal);
 	}
 
 	.error {
-		background: var(--ab-color-danger-subtle);
-		color: var(--ab-color-danger-hover);
+		background: #fef2f2;
+		color: #b91c1c;
 		padding: 0.625rem 0.875rem;
-		border-radius: var(--ab-radius-md);
-		border: 1px solid var(--ab-color-danger-subtle-border);
-		font-size: var(--ab-font-size-sm);
+		border-radius: 8px;
+		border: 1px solid #fecaca;
+		font-size: 0.875rem;
 	}
 
 	.item-card {
 		background: white;
-		border: 1px solid var(--ab-color-border);
-		border-radius: var(--ab-radius-lg);
+		border: 1px solid #e2e8f0;
+		border-radius: 12px;
 		padding: 1.5rem;
 		display: flex;
 		flex-direction: column;
@@ -353,36 +372,36 @@ function sliceLabel(slice: SessionSlice): string {
 		gap: 0.5rem;
 		align-items: baseline;
 		flex-wrap: wrap;
-		font-size: var(--ab-font-size-sm);
+		font-size: 0.8125rem;
 	}
 
 	.slice-badge {
 		display: inline-block;
 		font-weight: 700;
-		font-size: var(--ab-font-size-xs);
+		font-size: 0.6875rem;
 		text-transform: uppercase;
 		letter-spacing: 0.06em;
 		padding: 0.125rem 0.5rem;
-		border-radius: var(--ab-radius-pill);
-		background: var(--ab-color-primary-subtle);
-		color: var(--ab-color-primary-hover);
+		border-radius: 999px;
+		background: #eff6ff;
+		color: #1d4ed8;
 	}
 
 	.reason {
-		color: var(--ab-color-fg);
+		color: #0f172a;
 		font-weight: 500;
 	}
 
 	.reason-detail {
-		color: var(--ab-color-fg-subtle);
+		color: #64748b;
 	}
 
 	.domain {
-		font-size: var(--ab-font-size-xs);
+		font-size: 0.75rem;
 		font-weight: 600;
 		text-transform: uppercase;
 		letter-spacing: 0.06em;
-		color: var(--ab-color-fg-subtle);
+		color: #64748b;
 	}
 
 	.card-body,
@@ -394,27 +413,27 @@ function sliceLabel(slice: SessionSlice): string {
 	}
 
 	.card-front {
-		font-size: var(--ab-font-size-2xl);
-		color: var(--ab-color-fg);
+		font-size: 1.25rem;
+		color: #0f172a;
 		line-height: 1.4;
 	}
 
 	.card-back {
-		background: var(--ab-color-surface-muted);
-		border: 1px solid var(--ab-color-border);
-		border-radius: var(--ab-radius-md);
+		background: #f8fafc;
+		border: 1px solid #e2e8f0;
+		border-radius: 10px;
 		padding: 1rem;
-		color: var(--ab-color-fg);
+		color: #0f172a;
 	}
 
 	.rep-title,
 	.node-title {
 		margin: 0;
-		font-size: var(--ab-font-size-lg);
+		font-size: 1.125rem;
 	}
 
 	.situation {
-		color: var(--ab-color-fg);
+		color: #0f172a;
 		line-height: 1.5;
 		margin: 0;
 	}
@@ -430,6 +449,27 @@ function sliceLabel(slice: SessionSlice): string {
 		gap: 0.5rem;
 	}
 
+	.rating-fieldset {
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		gap: 0.5rem;
+		border: 0;
+		margin: 0;
+		padding: 0;
+	}
+
+	.visually-hidden {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		white-space: nowrap;
+		border: 0;
+	}
+
 	.options {
 		display: flex;
 		flex-direction: column;
@@ -437,37 +477,37 @@ function sliceLabel(slice: SessionSlice): string {
 	}
 
 	.option {
-		background: var(--ab-color-surface-muted);
-		border: 1px solid var(--ab-color-border-strong);
-		color: var(--ab-color-fg);
+		background: #f8fafc;
+		border: 1px solid #cbd5e1;
+		color: #0f172a;
 		justify-content: flex-start;
 		text-align: left;
 		padding: 0.75rem 1rem;
 	}
 
 	.option:hover:not(:disabled) {
-		background: var(--ab-color-primary-subtle);
-		border-color: var(--ab-color-primary-subtle-border);
+		background: #eff6ff;
+		border-color: #bfdbfe;
 	}
 
 	.rating.again {
-		background: var(--ab-color-danger-subtle);
-		color: var(--ab-color-danger-active);
+		background: #fee2e2;
+		color: #991b1b;
 	}
 
 	.rating.hard {
-		background: var(--ab-color-warning-subtle);
-		color: var(--ab-color-warning-active);
+		background: #fef3c7;
+		color: #92400e;
 	}
 
 	.rating.good {
-		background: var(--ab-color-success-subtle);
-		color: var(--ab-color-success-active);
+		background: #dcfce7;
+		color: #166534;
 	}
 
 	.rating.easy {
-		background: var(--ab-color-primary-subtle);
-		color: var(--ab-color-primary-active);
+		background: #dbeafe;
+		color: #1e40af;
 	}
 
 	.skip-row {
@@ -475,29 +515,38 @@ function sliceLabel(slice: SessionSlice): string {
 		justify-content: flex-end;
 		gap: 0.75rem;
 		padding-top: 0.5rem;
-		border-top: 1px solid var(--ab-color-surface-sunken);
+		border-top: 1px solid #f1f5f9;
 	}
 
 	.link-btn {
 		background: transparent;
 		border: none;
-		color: var(--ab-color-fg-subtle);
+		color: #64748b;
 		cursor: pointer;
-		font-size: var(--ab-font-size-sm);
+		font-size: 0.8125rem;
 	}
 
 	.link-btn:hover {
 		text-decoration: underline;
 	}
 
-	.link-btn.danger {
-		color: var(--ab-color-danger-hover);
+	.link-btn:focus-visible {
+		outline: none;
+		box-shadow: 0 0 0 3px var(--ab-color-focus-ring);
+		border-radius: 4px;
+	}
+
+	.skip-hint {
+		margin: 0.25rem 0 0;
+		font-size: 0.75rem;
+		color: #64748b;
+		text-align: right;
 	}
 
 	.empty {
 		background: white;
-		border: 1px solid var(--ab-color-border);
-		border-radius: var(--ab-radius-lg);
+		border: 1px solid #e2e8f0;
+		border-radius: 12px;
 		padding: 2rem;
 		text-align: center;
 		display: flex;
@@ -508,39 +557,49 @@ function sliceLabel(slice: SessionSlice): string {
 
 	.empty h2 {
 		margin: 0;
-		font-size: var(--ab-font-size-lg);
+		font-size: 1.125rem;
 	}
 
 	.muted {
-		color: var(--ab-color-fg-faint);
+		color: #94a3b8;
 		margin: 0;
-		font-size: var(--ab-font-size-sm);
+		font-size: 0.875rem;
 	}
 
 	.small {
-		font-size: var(--ab-font-size-xs);
+		font-size: 0.75rem;
 	}
 
 	.btn {
 		padding: 0.5rem 1rem;
-		font-size: var(--ab-font-size-body);
+		font-size: 0.9375rem;
 		font-weight: 600;
-		border-radius: var(--ab-radius-md);
+		border-radius: 8px;
 		border: 1px solid transparent;
 		cursor: pointer;
 		text-decoration: none;
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
+		transition:
+			background var(--ab-transition-fast),
+			border-color var(--ab-transition-fast);
+	}
+
+	.btn:focus-visible,
+	.option:focus-visible,
+	.rating:focus-visible {
+		outline: none;
+		box-shadow: 0 0 0 3px var(--ab-color-focus-ring);
 	}
 
 	.btn.primary {
-		background: var(--ab-color-primary);
+		background: #2563eb;
 		color: white;
 	}
 
 	.btn.primary:hover:not(:disabled) {
-		background: var(--ab-color-primary-hover);
+		background: #1d4ed8;
 	}
 
 	.btn.primary:disabled {
@@ -549,13 +608,13 @@ function sliceLabel(slice: SessionSlice): string {
 	}
 
 	.btn.secondary {
-		background: var(--ab-color-surface-sunken);
-		color: var(--ab-color-fg);
-		border-color: var(--ab-color-border-strong);
+		background: #f1f5f9;
+		color: #1a1a2e;
+		border-color: #cbd5e1;
 	}
 
 	.btn.ghost {
 		background: transparent;
-		color: var(--ab-color-fg-muted);
+		color: #475569;
 	}
 </style>

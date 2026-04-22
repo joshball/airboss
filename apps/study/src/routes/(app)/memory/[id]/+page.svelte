@@ -10,6 +10,7 @@ import {
 	REVIEW_RATINGS,
 	ROUTES,
 } from '@ab/constants';
+import ConfirmAction from '@ab/ui/components/ConfirmAction.svelte';
 import { tick } from 'svelte';
 import { enhance } from '$app/forms';
 import { replaceState } from '$app/navigation';
@@ -263,44 +264,75 @@ const tagsString = $derived((card.tags ?? []).join(', '));
 				{:else}
 					<span class="note">This card is read-only (source: {humanize(card.sourceType)}).</span>
 				{/if}
-				<form
-					method="POST"
-					action="?/setStatus"
-					class="inline-form"
-					use:enhance={({ formData, cancel }) => {
-						if (formData.get('status') === CARD_STATUSES.ARCHIVED) {
-							// Archive is effectively delete (cards are never hard-removed);
-							// require an explicit confirm.
-							if (!confirm('Archive this card? It will disappear from your deck. You can reactivate it from Browse later.')) {
-								cancel();
-								return;
-							}
-						}
-						statusUpdating = true;
-						return async ({ update }) => {
-							statusUpdating = false;
-							await update();
-						};
-					}}
-				>
+				<div class="inline-form">
 					{#if card.status === CARD_STATUSES.ACTIVE}
-						<button type="submit" class="btn secondary" name="status" value={CARD_STATUSES.SUSPENDED} disabled={statusUpdating}>
-							{statusUpdating ? '...' : 'Suspend'}
-						</button>
-						<button type="submit" class="btn danger" name="status" value={CARD_STATUSES.ARCHIVED} disabled={statusUpdating}>
-							{statusUpdating ? '...' : 'Archive'}
-						</button>
-					{:else}
-						<button type="submit" class="btn secondary" name="status" value={CARD_STATUSES.ACTIVE} disabled={statusUpdating}>
-							{statusUpdating ? '...' : 'Reactivate'}
-						</button>
-						{#if card.status === CARD_STATUSES.SUSPENDED}
-							<button type="submit" class="btn danger" name="status" value={CARD_STATUSES.ARCHIVED} disabled={statusUpdating}>
-								{statusUpdating ? '...' : 'Archive'}
+						<form
+							method="POST"
+							action="?/setStatus"
+							class="status-form"
+							use:enhance={() => {
+								statusUpdating = true;
+								return async ({ update }) => {
+									statusUpdating = false;
+									await update();
+								};
+							}}
+						>
+							<button
+								type="submit"
+								class="btn secondary"
+								name="status"
+								value={CARD_STATUSES.SUSPENDED}
+								disabled={statusUpdating}
+							>
+								{statusUpdating ? '...' : 'Suspend'}
 							</button>
+						</form>
+						<ConfirmAction
+							formAction="?/setStatus"
+							confirmVariant="danger"
+							triggerVariant="ghost"
+							size="md"
+							label="Archive"
+							confirmLabel="Archive this card"
+							hiddenFields={{ status: CARD_STATUSES.ARCHIVED }}
+						/>
+					{:else}
+						<form
+							method="POST"
+							action="?/setStatus"
+							class="status-form"
+							use:enhance={() => {
+								statusUpdating = true;
+								return async ({ update }) => {
+									statusUpdating = false;
+									await update();
+								};
+							}}
+						>
+							<button
+								type="submit"
+								class="btn secondary"
+								name="status"
+								value={CARD_STATUSES.ACTIVE}
+								disabled={statusUpdating}
+							>
+								{statusUpdating ? '...' : 'Reactivate'}
+							</button>
+						</form>
+						{#if card.status === CARD_STATUSES.SUSPENDED}
+							<ConfirmAction
+								formAction="?/setStatus"
+								confirmVariant="danger"
+								triggerVariant="ghost"
+								size="md"
+								label="Archive"
+								confirmLabel="Archive this card"
+								hiddenFields={{ status: CARD_STATUSES.ARCHIVED }}
+							/>
 						{/if}
 					{/if}
-				</form>
+				</div>
 			</div>
 		</article>
 	{/if}
@@ -507,6 +539,11 @@ const tagsString = $derived((card.tags ?? []).join(', '));
 	.inline-form {
 		display: flex;
 		gap: 0.375rem;
+		align-items: center;
+	}
+
+	.status-form {
+		display: inline-flex;
 	}
 
 	.note {
@@ -514,7 +551,7 @@ const tagsString = $derived((card.tags ?? []).join(', '));
 		font-size: var(--ab-font-size-sm);
 	}
 
-	form:not(.inline-form) {
+	form:not(.inline-form):not(.status-form) {
 		background: white;
 		border: 1px solid var(--ab-color-border);
 		border-radius: var(--ab-radius-lg);

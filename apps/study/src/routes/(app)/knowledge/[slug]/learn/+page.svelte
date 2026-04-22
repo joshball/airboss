@@ -14,6 +14,11 @@ const totalPhases = $derived(phases.length);
 
 // svelte-ignore state_referenced_locally -- seed from server-validated deep link; URL syncs thereafter
 let currentPhase = $state<KnowledgePhase>(data.initialPhase);
+// svelte-ignore state_referenced_locally -- server-seeded; client optimistic-updates on visit/complete
+let visitedPhases = $state<Set<string>>(new Set(data.progress.visitedPhases));
+// svelte-ignore state_referenced_locally
+let completedPhases = $state<Set<string>>(new Set(data.progress.completedPhases));
+let completing = $state(false);
 
 const stepIndex = $derived(
 	Math.max(
@@ -23,6 +28,7 @@ const stepIndex = $derived(
 );
 const currentPhaseNode = $derived(phases[stepIndex]);
 const progressPct = $derived(Math.round(((stepIndex + 1) / totalPhases) * 100));
+const currentCompleted = $derived(completedPhases.has(currentPhase));
 
 // Keep the URL in sync with the active phase. `replaceState` avoids piling up
 // history entries for each click (back button still goes up a level, not
@@ -34,6 +40,42 @@ $effect(() => {
 	url.searchParams.set(QUERY_PARAMS.STEP, phase);
 	replaceState(url, page.state);
 });
+
+// Persist phase visits. Fires whenever `currentPhase` changes, including the
+// initial load. Optimistic client update + server write; failures are quiet
+// (progress is a UX signal, not a decision-maker).
+$effect(() => {
+	const phase = currentPhase;
+	if (visitedPhases.has(phase)) return;
+	visitedPhases = new Set([...visitedPhases, phase]);
+	void recordVisit(phase);
+});
+
+async function recordVisit(phase: KnowledgePhase): Promise<void> {
+	try {
+		const formData = new FormData();
+		formData.set('phase', phase);
+		await fetch('?/visitPhase', { method: 'POST', body: formData });
+	} catch {
+		// Silently ignore; local visited-set is already updated.
+	}
+}
+
+async function markGotIt(): Promise<void> {
+	if (completing) return;
+	const phase = currentPhase;
+	completing = true;
+	completedPhases = new Set([...completedPhases, phase]);
+	try {
+		const formData = new FormData();
+		formData.set('phase', phase);
+		await fetch('?/completePhase', { method: 'POST', body: formData });
+	} catch {
+		// Silently ignore; local completed-set is already updated.
+	} finally {
+		completing = false;
+	}
+}
 
 function prev(): void {
 	if (stepIndex > 0) currentPhase = phases[stepIndex - 1].phase;
@@ -90,16 +132,31 @@ function domainLabel(slug: string): string {
 		</div>
 		<ol class="steps" aria-label="Phases">
 			{#each phases as p, i (p.phase)}
+				{@const isVisited = visitedPhases.has(p.phase)}
+				{@const isCompleted = completedPhases.has(p.phase)}
 				<li>
 					<button
 						type="button"
 						class="step"
 						class:active={p.phase === currentPhase}
 						class:authored={p.body !== null}
+						class:visited={isVisited}
+						class:completed={isCompleted}
 						aria-current={p.phase === currentPhase ? 'step' : undefined}
+						aria-label="Phase {i + 1}: {phaseLabel(p.phase)}{isCompleted
+							? ' (completed)'
+							: isVisited
+								? ' (visited)'
+								: ''}"
 						onclick={() => selectPhase(p.phase)}
 					>
-						<span class="step-num">{i + 1}</span>
+						<span class="step-num" aria-hidden="true">
+							{#if isCompleted}
+								&#10003;
+							{:else}
+								{i + 1}
+							{/if}
+						</span>
 						<span class="step-name">{phaseLabel(p.phase)}</span>
 					</button>
 				</li>
@@ -117,10 +174,24 @@ function domainLabel(slug: string): string {
 		{#each currentPhaseNode?.activityIds ?? [] as activityId (activityId)}
 			<ActivityHost {activityId} />
 		{/each}
+
+		<div class="got-it-row">
+			{#if currentCompleted}
+				<span class="got-it-done" aria-live="polite">&#10003; Marked as understood</span>
+			{:else}
+				<button type="button" class="btn secondary" onclick={markGotIt} disabled={completing}>
+					{completing ? 'Saving...' : 'Got it'}
+				</button>
+			{/if}
+		</div>
 	</article>
 
 	<nav class="controls" aria-label="Phase navigation">
-		<button type="button" class="btn secondary" onclick={prev} disabled={stepIndex === 0}>Previous</button>
+		{#if stepIndex === 0}
+			<a class="btn secondary" href={ROUTES.KNOWLEDGE_SLUG(node.id)}>Back to node</a>
+		{:else}
+			<button type="button" class="btn secondary" onclick={prev}>Previous</button>
+		{/if}
 		{#if stepIndex === totalPhases - 1}
 			<a class="btn primary" href={ROUTES.MEMORY_REVIEW_FOR_NODE(node.id)}>Review cards for this node</a>
 		{:else}
@@ -139,12 +210,12 @@ function domainLabel(slug: string): string {
 	.crumb {
 		display: flex;
 		gap: 0.5rem;
-		font-size: var(--ab-font-size-sm);
-		color: var(--ab-color-fg-subtle);
+		font-size: 0.875rem;
+		color: #64748b;
 	}
 
 	.crumb a {
-		color: var(--ab-color-primary-hover);
+		color: #1d4ed8;
 		text-decoration: none;
 	}
 
@@ -154,21 +225,21 @@ function domainLabel(slug: string): string {
 
 	.hd h1 {
 		margin: 0;
-		font-size: var(--ab-font-size-xl);
+		font-size: 1.5rem;
 		letter-spacing: -0.02em;
-		color: var(--ab-color-fg);
+		color: #0f172a;
 	}
 
 	.sub {
 		margin: 0.25rem 0 0;
-		color: var(--ab-color-fg-subtle);
-		font-size: var(--ab-font-size-body);
+		color: #64748b;
+		font-size: 0.9375rem;
 	}
 
 	.progress {
 		background: white;
-		border: 1px solid var(--ab-color-border);
-		border-radius: var(--ab-radius-lg);
+		border: 1px solid #e2e8f0;
+		border-radius: 12px;
 		padding: 1rem 1.125rem;
 		display: flex;
 		flex-direction: column;
@@ -182,28 +253,28 @@ function domainLabel(slug: string): string {
 	}
 
 	.progress-step {
-		font-size: var(--ab-font-size-body);
+		font-size: 0.9375rem;
 		font-weight: 600;
-		color: var(--ab-color-fg);
+		color: #0f172a;
 	}
 
 	.progress-pct {
-		font-size: var(--ab-font-size-sm);
-		color: var(--ab-color-fg-subtle);
+		font-size: 0.8125rem;
+		color: #64748b;
 	}
 
 	.progress-bar {
 		width: 100%;
 		height: 6px;
-		background: var(--ab-color-border);
-		border-radius: var(--ab-radius-pill);
+		background: #e2e8f0;
+		border-radius: 999px;
 		overflow: hidden;
 	}
 
 	.progress-fill {
 		display: block;
 		height: 100%;
-		background: var(--ab-color-primary);
+		background: #2563eb;
 	}
 
 	.steps {
@@ -224,56 +295,89 @@ function domainLabel(slug: string): string {
 		padding: 0.375rem 0.25rem;
 		background: transparent;
 		border: 1px solid transparent;
-		border-radius: var(--ab-radius-md);
+		border-radius: 8px;
 		cursor: pointer;
 		font: inherit;
-		color: var(--ab-color-fg-faint);
-		transition: background 120ms, color 120ms, border-color 120ms;
+		color: #94a3b8;
+		transition:
+			background var(--ab-transition-fast),
+			color var(--ab-transition-fast),
+			border-color var(--ab-transition-fast);
 	}
 
 	.step:hover {
-		background: var(--ab-color-surface-sunken);
-		color: var(--ab-color-fg-muted);
+		background: #f1f5f9;
+		color: #475569;
+	}
+
+	.step:focus-visible {
+		outline: none;
+		box-shadow: 0 0 0 3px var(--ab-color-focus-ring);
 	}
 
 	.step.authored {
-		color: var(--ab-color-fg-muted);
+		color: #475569;
+	}
+
+	.step.visited:not(.active) {
+		background: #f8fafc;
+		color: #334155;
+	}
+
+	.step.completed:not(.active) {
+		background: #f0fdf4;
+		color: #166534;
+		border-color: #bbf7d0;
 	}
 
 	.step.active {
-		background: var(--ab-color-primary-subtle);
-		color: var(--ab-color-primary-hover);
-		border-color: var(--ab-color-primary-subtle-border);
+		background: #eff6ff;
+		color: #1d4ed8;
+		border-color: #bfdbfe;
+	}
+
+	.got-it-row {
+		display: flex;
+		justify-content: flex-end;
+		margin-top: 1rem;
+		padding-top: 1rem;
+		border-top: 1px dashed #e2e8f0;
+	}
+
+	.got-it-done {
+		color: #166534;
+		font-size: 0.875rem;
+		font-weight: 500;
 	}
 
 	.step-num {
-		font-size: var(--ab-font-size-xs);
+		font-size: 0.75rem;
 		font-weight: 700;
 		color: inherit;
 	}
 
 	.step-name {
-		font-size: var(--ab-font-size-xs);
+		font-size: 0.6875rem;
 		text-transform: uppercase;
 		letter-spacing: 0.04em;
 	}
 
 	.phase {
 		background: white;
-		border: 1px solid var(--ab-color-border);
-		border-radius: var(--ab-radius-lg);
+		border: 1px solid #e2e8f0;
+		border-radius: 12px;
 		padding: 1.25rem 1.5rem;
 	}
 
 	.phase h2 {
 		margin: 0 0 0.75rem;
-		font-size: var(--ab-font-size-2xl);
-		color: var(--ab-color-fg);
+		font-size: 1.25rem;
+		color: #0f172a;
 	}
 
 	.gap-body {
 		margin: 0;
-		color: var(--ab-color-fg-faint);
+		color: #94a3b8;
 		font-style: italic;
 	}
 
@@ -281,20 +385,20 @@ function domainLabel(slug: string): string {
 	.prose :global(h4),
 	.prose :global(h5) {
 		margin: 1rem 0 0.5rem;
-		color: var(--ab-color-fg);
+		color: #0f172a;
 	}
 
 	.prose :global(p) {
 		margin: 0 0 0.75rem;
 		line-height: 1.6;
-		color: var(--ab-color-fg);
+		color: #1e293b;
 	}
 
 	.prose :global(ul),
 	.prose :global(ol) {
 		margin: 0 0 0.75rem 1.25rem;
 		line-height: 1.6;
-		color: var(--ab-color-fg);
+		color: #1e293b;
 	}
 
 	.prose :global(li) {
@@ -303,19 +407,19 @@ function domainLabel(slug: string): string {
 
 	.prose :global(code) {
 		font-family: ui-monospace, 'SF Mono', Menlo, monospace;
-		font-size: var(--ab-font-size-sm);
-		background: var(--ab-color-surface-sunken);
+		font-size: 0.875em;
+		background: #f1f5f9;
 		padding: 0.05em 0.35em;
-		border-radius: var(--ab-radius-xs);
+		border-radius: 4px;
 	}
 
 	.prose :global(pre) {
-		background: var(--ab-color-fg);
-		color: var(--ab-color-border);
+		background: #0f172a;
+		color: #e2e8f0;
 		padding: 0.75rem 1rem;
-		border-radius: var(--ab-radius-md);
+		border-radius: 8px;
 		overflow-x: auto;
-		font-size: var(--ab-font-size-sm);
+		font-size: 0.875rem;
 	}
 
 	.prose :global(pre code) {
@@ -325,11 +429,11 @@ function domainLabel(slug: string): string {
 	}
 
 	.prose :global(a) {
-		color: var(--ab-color-primary-hover);
+		color: #1d4ed8;
 	}
 
 	.prose :global(strong) {
-		color: var(--ab-color-fg);
+		color: #0f172a;
 	}
 
 	.controls {
@@ -340,34 +444,41 @@ function domainLabel(slug: string): string {
 
 	.btn {
 		padding: 0.625rem 1.125rem;
-		font-size: var(--ab-font-size-body);
+		font-size: 0.9375rem;
 		font-weight: 600;
-		border-radius: var(--ab-radius-md);
+		border-radius: 8px;
 		border: 1px solid transparent;
 		text-decoration: none;
 		cursor: pointer;
 		display: inline-flex;
 		align-items: center;
-		transition: background 120ms, border-color 120ms;
+		transition:
+			background var(--ab-transition-fast),
+			border-color var(--ab-transition-fast);
+	}
+
+	.btn:focus-visible {
+		outline: none;
+		box-shadow: 0 0 0 3px var(--ab-color-focus-ring);
 	}
 
 	.btn.primary {
-		background: var(--ab-color-primary);
+		background: #2563eb;
 		color: white;
 	}
 
 	.btn.primary:hover:not(:disabled) {
-		background: var(--ab-color-primary-hover);
+		background: #1d4ed8;
 	}
 
 	.btn.secondary {
-		background: var(--ab-color-surface-sunken);
-		color: var(--ab-color-fg);
-		border-color: var(--ab-color-border-strong);
+		background: #f1f5f9;
+		color: #1a1a2e;
+		border-color: #cbd5e1;
 	}
 
 	.btn.secondary:hover:not(:disabled) {
-		background: var(--ab-color-border);
+		background: #e2e8f0;
 	}
 
 	.btn:disabled {
