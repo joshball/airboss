@@ -30,11 +30,11 @@ import {
 	AVIATION_REFERENCES,
 	getSource,
 	type Reference,
-	resolveExtractors,
 	SOURCES,
 	type SourceCitation,
 	type VerbatimBlock,
 } from '@ab/aviation';
+import { resolveExtractors } from '@ab/aviation/sources';
 import { type ScanManifest, scanContent } from './scan';
 
 const REPO_ROOT = resolve(import.meta.dirname, '..', '..');
