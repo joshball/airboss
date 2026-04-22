@@ -29,13 +29,14 @@ let {
 
 let input = $state<HTMLInputElement | null>(null);
 let rawQuery = $state('');
-let results = $state<SearchResultSet>({ aviation: [], help: [] });
+const results = $derived<SearchResultSet>(search(rawQuery));
 let focusedBucket = $state<'aviation' | 'help'>('aviation');
 let focusedIndex = $state(0);
 
+// Reset focus whenever the query changes. We depend on `rawQuery` (not
+// `results`) so the effect never reads state it writes, which would loop.
 $effect(() => {
-	results = search(rawQuery);
-	// Keep the focus valid when result sets shrink.
+	void rawQuery;
 	focusedIndex = 0;
 	focusedBucket = results.aviation.length > 0 ? 'aviation' : results.help.length > 0 ? 'help' : 'aviation';
 });
