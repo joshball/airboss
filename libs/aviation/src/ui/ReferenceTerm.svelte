@@ -103,7 +103,7 @@ function truncate(text: string, max: number): string {
 	}
 
 	.link {
-		color: var(--ab-color-primary, #2563eb);
+		color: var(--ab-color-primary);
 		text-decoration: none;
 		border-bottom: 1px dotted currentColor;
 	}
@@ -115,18 +115,18 @@ function truncate(text: string, max: number): string {
 	}
 
 	.link:focus-visible {
-		outline: 2px solid var(--ab-color-focus-ring, #2563eb);
+		outline: 2px solid var(--ab-color-focus-ring);
 		outline-offset: 2px;
 		border-radius: 2px;
 	}
 
 	.unresolved {
-		color: var(--ab-color-fg, #0f172a);
+		color: var(--ab-color-fg);
 	}
 
 	.unresolved.dev {
-		background: rgba(250, 204, 21, 0.25);
-		border-bottom: 1px dashed #ca8a04;
+		background: var(--ab-color-warning-subtle);
+		border-bottom: 1px dashed var(--ab-color-warning);
 	}
 
 	.popover {
@@ -137,8 +137,8 @@ function truncate(text: string, max: number): string {
 		min-width: 18rem;
 		max-width: 24rem;
 		background: var(--ab-color-surface, white);
-		color: var(--ab-color-fg, #0f172a);
-		border: 1px solid var(--ab-color-border, #cbd5e1);
+		color: var(--ab-color-fg);
+		border: 1px solid var(--ab-color-border);
 		border-radius: 8px;
 		padding: 0.625rem 0.75rem;
 		box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
@@ -152,11 +152,11 @@ function truncate(text: string, max: number): string {
 
 	.pop-title {
 		font-weight: 600;
-		color: var(--ab-color-fg, #0f172a);
+		color: var(--ab-color-fg);
 	}
 
 	.pop-body {
-		color: var(--ab-color-fg-muted, #475569);
+		color: var(--ab-color-fg-muted);
 		line-height: 1.4;
 	}
 
@@ -170,14 +170,14 @@ function truncate(text: string, max: number): string {
 		font-size: 0.6875rem;
 		padding: 0.0625rem 0.375rem;
 		border-radius: 999px;
-		background: var(--ab-color-surface-sunken, #f1f5f9);
-		color: var(--ab-color-fg-muted, #475569);
+		background: var(--ab-color-surface-sunken);
+		color: var(--ab-color-fg-muted);
 		text-transform: uppercase;
 		letter-spacing: 0.04em;
 	}
 
 	.pop-hint {
 		font-size: 0.6875rem;
-		color: var(--ab-color-fg-subtle, #94a3b8);
+		color: var(--ab-color-fg-subtle);
 	}
 </style>

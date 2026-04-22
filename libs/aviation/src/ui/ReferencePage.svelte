@@ -96,7 +96,7 @@ const total = $derived(references.length);
 
 	.sub {
 		margin: 0.25rem 0 0;
-		color: var(--ab-color-fg-muted, #64748b);
+		color: var(--ab-color-fg-muted);
 		font-size: 0.9375rem;
 	}
 
@@ -122,11 +122,11 @@ const total = $derived(references.length);
 
 	.empty {
 		background: var(--ab-color-surface, white);
-		border: 1px dashed var(--ab-color-border-strong, #cbd5e1);
+		border: 1px dashed var(--ab-color-border-strong);
 		border-radius: 12px;
 		padding: 2.5rem 1.5rem;
 		text-align: center;
-		color: var(--ab-color-fg-muted, #64748b);
+		color: var(--ab-color-fg-muted);
 		display: flex;
 		flex-direction: column;
 		align-items: center;
@@ -136,7 +136,7 @@ const total = $derived(references.length);
 	.empty h2 {
 		margin: 0;
 		font-size: 1.125rem;
-		color: var(--ab-color-fg, #0f172a);
+		color: var(--ab-color-fg);
 	}
 
 	.empty p {
@@ -147,13 +147,13 @@ const total = $derived(references.length);
 
 	.empty .hint {
 		font-size: 0.875rem;
-		color: var(--ab-color-fg-subtle, #94a3b8);
+		color: var(--ab-color-fg-subtle);
 	}
 
 	code {
 		font-family: var(--ab-font-mono, ui-monospace, monospace);
 		font-size: 0.8125rem;
-		background: var(--ab-color-surface-sunken, #f1f5f9);
+		background: var(--ab-color-surface-sunken);
 		padding: 0.0625rem 0.375rem;
 		border-radius: 4px;
 	}

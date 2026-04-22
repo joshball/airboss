@@ -42,7 +42,7 @@ let {
 	.label {
 		font-size: 0.75rem;
 		font-weight: 600;
-		color: var(--ab-color-fg-muted, #475569);
+		color: var(--ab-color-fg-muted);
 		text-transform: uppercase;
 		letter-spacing: 0.06em;
 	}
@@ -50,15 +50,15 @@ let {
 	.input {
 		font: inherit;
 		padding: 0.5rem 0.625rem;
-		border: 1px solid var(--ab-color-border, #cbd5e1);
+		border: 1px solid var(--ab-color-border);
 		border-radius: 6px;
 		background: var(--ab-color-surface, white);
-		color: var(--ab-color-fg, #0f172a);
+		color: var(--ab-color-fg);
 	}
 
 	.input:focus-visible {
 		outline: none;
-		border-color: var(--ab-color-primary, #2563eb);
+		border-color: var(--ab-color-primary);
 		box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
 	}
 
@@ -66,8 +66,8 @@ let {
 		font: inherit;
 		padding: 0.5rem 1rem;
 		border-radius: 6px;
-		border: 1px solid var(--ab-color-border, #cbd5e1);
-		background: var(--ab-color-surface-sunken, #f1f5f9);
+		border: 1px solid var(--ab-color-border);
+		background: var(--ab-color-surface-sunken);
 		cursor: pointer;
 	}
 </style>
