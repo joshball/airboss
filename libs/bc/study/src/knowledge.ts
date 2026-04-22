@@ -13,8 +13,13 @@ import {
 	CARD_MASTERY_RATIO_THRESHOLD,
 	CARD_MIN,
 	CARD_STATUSES,
+	CERT_VALUES,
+	type Cert,
+	DOMAIN_VALUES,
+	type Domain,
 	KNOWLEDGE_EDGE_TYPES,
 	type KnowledgeEdgeType,
+	RELEVANCE_PRIORITIES,
 	REP_ACCURACY_THRESHOLD,
 	REP_MIN,
 	STABILITY_MASTERED_DAYS,
@@ -632,4 +637,249 @@ export function computeDisplayScore(
 	if (cardsTotal > 0) return cardsMasteredRatio;
 	if (repsTotal > 0) return repAccuracy;
 	return 0;
+}
+
+/**
+ * Per-node mastery snapshot used by the aggregators below. A node is either
+ * `mastered`, `inProgress` (has cards or rep attempts attached but gates fail),
+ * or `untouched` (no attached signal at all). The label is already reduced for
+ * the aggregators -- callers don't need to re-run the dual-gate rules.
+ */
+interface NodeMasterySnapshot {
+	nodeId: string;
+	mastered: boolean;
+	inProgress: boolean;
+}
+
+/**
+ * Batched per-node mastery for a user across an arbitrary set of node ids.
+ *
+ * One round-trip per pillar (cards + reps) plus one to detect which nodes have
+ * scenarios attached at all (drives the `not_applicable` rep-gate fallback for
+ * knowledge-only nodes). Returns a Map keyed on nodeId so the aggregators can
+ * look up mastery without touching the DB again. The graph currently sits at
+ * ~30 authored nodes, but this keeps the cost flat as it grows.
+ *
+ * Rules match `getNodeMastery` exactly:
+ *   - Card gate: active cards attached, count >= CARD_MIN,
+ *     mastered-ratio >= CARD_MASTERY_RATIO_THRESHOLD.
+ *   - Rep gate: scenarios attached at all, attempts >= REP_MIN,
+ *     accuracy >= REP_ACCURACY_THRESHOLD.
+ *   - `mastered` iff both applicable gates pass AND at least one gate applied.
+ *   - `inProgress` iff the node is not mastered AND (cardsTotal > 0 OR repsTotal > 0).
+ */
+async function getNodeMasteryMap(
+	userId: string,
+	nodeIds: readonly string[],
+	db: Db = defaultDb,
+): Promise<Map<string, NodeMasterySnapshot>> {
+	const out = new Map<string, NodeMasterySnapshot>();
+	if (nodeIds.length === 0) return out;
+
+	const ids = nodeIds as string[];
+
+	const [cardRows, repRows, scenarioRows] = await Promise.all([
+		db
+			.select({
+				nodeId: card.nodeId,
+				cardsTotal: count(),
+				cardsMastered: sql<number>`sum(case when ${cardState.stability} > ${STABILITY_MASTERED_DAYS} then 1 else 0 end)`,
+			})
+			.from(card)
+			.innerJoin(cardState, and(eq(cardState.cardId, card.id), eq(cardState.userId, card.userId)))
+			.where(and(eq(card.userId, userId), eq(card.status, CARD_STATUSES.ACTIVE), inArray(card.nodeId, ids)))
+			.groupBy(card.nodeId),
+		db
+			.select({
+				nodeId: scenario.nodeId,
+				repsTotal: count(),
+				repsCorrect: sql<number>`sum(case when ${repAttempt.isCorrect} then 1 else 0 end)`,
+			})
+			.from(repAttempt)
+			.innerJoin(scenario, and(eq(scenario.id, repAttempt.scenarioId), eq(scenario.userId, repAttempt.userId)))
+			.where(and(eq(repAttempt.userId, userId), inArray(scenario.nodeId, ids)))
+			.groupBy(scenario.nodeId),
+		db
+			.select({ nodeId: scenario.nodeId, c: count() })
+			.from(scenario)
+			.where(inArray(scenario.nodeId, ids))
+			.groupBy(scenario.nodeId),
+	]);
+
+	const cardByNode = new Map<string, { total: number; mastered: number }>();
+	for (const r of cardRows) {
+		if (!r.nodeId) continue;
+		cardByNode.set(r.nodeId, { total: Number(r.cardsTotal ?? 0), mastered: Number(r.cardsMastered ?? 0) });
+	}
+	const repByNode = new Map<string, { total: number; correct: number }>();
+	for (const r of repRows) {
+		if (!r.nodeId) continue;
+		repByNode.set(r.nodeId, { total: Number(r.repsTotal ?? 0), correct: Number(r.repsCorrect ?? 0) });
+	}
+	const scenarioByNode = new Map<string, number>();
+	for (const r of scenarioRows) {
+		if (!r.nodeId) continue;
+		scenarioByNode.set(r.nodeId, Number(r.c ?? 0));
+	}
+
+	for (const nodeId of ids) {
+		const cardStats = cardByNode.get(nodeId) ?? { total: 0, mastered: 0 };
+		const repStats = repByNode.get(nodeId) ?? { total: 0, correct: 0 };
+		const scenariosAttached = scenarioByNode.get(nodeId) ?? 0;
+		const cardsMasteredRatio = cardStats.total === 0 ? 0 : cardStats.mastered / cardStats.total;
+		const repAccuracy = repStats.total === 0 ? 0 : repStats.correct / repStats.total;
+		const cardGate = computeCardGate(cardStats.total, cardsMasteredRatio);
+		const repGate = computeRepGate(repStats.total, repAccuracy, scenariosAttached);
+		const mastered = isMastered(cardGate, repGate);
+		const inProgress = !mastered && (cardStats.total > 0 || repStats.total > 0);
+		out.set(nodeId, { nodeId, mastered, inProgress });
+	}
+
+	return out;
+}
+
+/** Per-cert progress row for the cert-progress dashboard panel. */
+export interface CertProgress {
+	cert: Cert;
+	total: number;
+	mastered: number;
+	/** Touched but not mastered: has cards or rep attempts attached, gates not all passed. */
+	inProgress: number;
+	/** `mastered / total`, 0..1; 0 when total === 0. */
+	percent: number;
+}
+
+/**
+ * Per-cert mastery rollup. For each cert, counts distinct nodes in the active
+ * graph whose `relevance[]` carries an entry for that cert with priority
+ * `core` or `supporting` -- `elective` does not count toward progress per the
+ * knowledge-graph spec. A node with the same cert listed in multiple relevance
+ * entries counts once; a node relevant to multiple certs is counted once per
+ * cert.
+ *
+ * `mastered` applies the dual-gate `isNodeMastered` rule. `inProgress` counts
+ * nodes the learner has touched (cards or rep attempts attached) but has not
+ * yet cleared both applicable gates. Empty cert (total = 0) returns zeros with
+ * `percent = 0` so the UI can still render the row.
+ */
+export async function getCertProgress(userId: string, db: Db = defaultDb): Promise<CertProgress[]> {
+	const rows = await db.select({ id: knowledgeNode.id, relevance: knowledgeNode.relevance }).from(knowledgeNode);
+
+	// Build cert -> set of node ids from relevance[], filtering to core/supporting.
+	const certToNodes = new Map<Cert, Set<string>>();
+	for (const cert of CERT_VALUES) certToNodes.set(cert, new Set<string>());
+
+	const allNodeIds = new Set<string>();
+	for (const row of rows) {
+		const rels = Array.isArray(row.relevance) ? row.relevance : [];
+		for (const rel of rels) {
+			if (rel.priority !== RELEVANCE_PRIORITIES.CORE && rel.priority !== RELEVANCE_PRIORITIES.SUPPORTING) continue;
+			const certValue = CERT_VALUES.find((c) => c === rel.cert);
+			if (!certValue) continue;
+			const bucket = certToNodes.get(certValue);
+			if (!bucket) continue;
+			bucket.add(row.id);
+			allNodeIds.add(row.id);
+		}
+	}
+
+	const masteryMap = await getNodeMasteryMap(userId, Array.from(allNodeIds), db);
+
+	const result: CertProgress[] = [];
+	for (const cert of CERT_VALUES) {
+		const ids = certToNodes.get(cert) ?? new Set<string>();
+		const total = ids.size;
+		let mastered = 0;
+		let inProgress = 0;
+		for (const id of ids) {
+			const snap = masteryMap.get(id);
+			if (!snap) continue;
+			if (snap.mastered) mastered += 1;
+			else if (snap.inProgress) inProgress += 1;
+		}
+		const percent = total === 0 ? 0 : mastered / total;
+		result.push({ cert, total, mastered, inProgress, percent });
+	}
+	return result;
+}
+
+/** One cell in the domain x cert mastery matrix. */
+export interface DomainCertCell {
+	cert: Cert;
+	total: number;
+	mastered: number;
+	/** `mastered / total`, 0..1; `null` when total === 0 (no nodes in that cell). */
+	percent: number | null;
+}
+
+/** One row in the domain x cert matrix: a domain and its four cert cells. */
+export interface DomainCertRow {
+	domain: Domain;
+	/** Exactly four entries, one per cert in CERT_VALUES order. */
+	cells: DomainCertCell[];
+}
+
+/**
+ * 14 x 4 matrix of (domain, cert) -> percent mastered. A node contributes to
+ * every (domain, cert) cell implied by its primary `domain` column and each
+ * cert in its `relevance[]` (any priority -- electives show in the map even
+ * though they don't count toward cert progress). A node is not double-counted
+ * within the same cell.
+ *
+ * Cells with `total === 0` return `percent: null` so the UI can render a
+ * neutral placeholder instead of a bogus 0%.
+ */
+export async function getDomainCertMatrix(userId: string, db: Db = defaultDb): Promise<DomainCertRow[]> {
+	const rows = await db
+		.select({ id: knowledgeNode.id, domain: knowledgeNode.domain, relevance: knowledgeNode.relevance })
+		.from(knowledgeNode);
+
+	// Bucket: domain -> cert -> set of node ids (set dedupes multi-relevance entries).
+	const buckets = new Map<Domain, Map<Cert, Set<string>>>();
+	for (const domain of DOMAIN_VALUES) {
+		const certMap = new Map<Cert, Set<string>>();
+		for (const cert of CERT_VALUES) certMap.set(cert, new Set<string>());
+		buckets.set(domain, certMap);
+	}
+
+	const allNodeIds = new Set<string>();
+	for (const row of rows) {
+		const domain = DOMAIN_VALUES.find((d) => d === row.domain);
+		if (!domain) continue;
+		const certMap = buckets.get(domain);
+		if (!certMap) continue;
+		const rels = Array.isArray(row.relevance) ? row.relevance : [];
+		const certsOnNode = new Set<Cert>();
+		for (const rel of rels) {
+			const certValue = CERT_VALUES.find((c) => c === rel.cert);
+			if (certValue) certsOnNode.add(certValue);
+		}
+		for (const cert of certsOnNode) {
+			const bucket = certMap.get(cert);
+			if (!bucket) continue;
+			bucket.add(row.id);
+			allNodeIds.add(row.id);
+		}
+	}
+
+	const masteryMap = await getNodeMasteryMap(userId, Array.from(allNodeIds), db);
+
+	const result: DomainCertRow[] = [];
+	for (const domain of DOMAIN_VALUES) {
+		const certMap = buckets.get(domain) ?? new Map<Cert, Set<string>>();
+		const cells: DomainCertCell[] = [];
+		for (const cert of CERT_VALUES) {
+			const ids = certMap.get(cert) ?? new Set<string>();
+			const total = ids.size;
+			let mastered = 0;
+			for (const id of ids) {
+				const snap = masteryMap.get(id);
+				if (snap?.mastered) mastered += 1;
+			}
+			const percent = total === 0 ? null : mastered / total;
+			cells.push({ cert, total, mastered, percent });
+		}
+		result.push({ domain, cells });
+	}
+	return result;
 }
