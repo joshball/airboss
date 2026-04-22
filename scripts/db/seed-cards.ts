@@ -1,10 +1,6 @@
-#!/usr/bin/env bun
 /**
- * Seed course-sourced study.card rows from inline `yaml-cards` blocks in
- * `course/knowledge/**\/node.md`.
- *
- * Usage:
- *   bun scripts/knowledge-seed.ts --user <email>
+ * Materialize study.card rows from inline `yaml-cards` blocks in
+ * `course/knowledge/**\/node.md` for a given user.
  *
  * Strategy: for each node.md that has an inline ```yaml-cards``` fenced
  * block (typically inside the `## Practice` section), delete the target
@@ -17,8 +13,10 @@
  * inserted, they flow through the normal `/memory/review` FSRS queue.
  *
  * Complements `scripts/build-knowledge-index.ts`, which owns the
- * knowledge_node + knowledge_edge tables. This script owns the per-user
+ * knowledge_node + knowledge_edge tables. This module owns the per-user
  * card materialization only.
+ *
+ * Exports `seedCardsForUser(userEmail)` for the `db seed` orchestrator.
  */
 
 import { Glob } from 'bun';
@@ -28,11 +26,11 @@ import { and, eq } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 import { parse as parseYaml } from 'yaml';
-import { bauthUser } from '../libs/auth/src/schema';
-import { card, createCard } from '../libs/bc/study/src/index';
-import { CARD_TYPES, CONTENT_SOURCES, DEV_DB_HOST_PATTERN, DEV_DB_URL, ENV_VARS } from '../libs/constants/src/index';
+import { bauthUser } from '../../libs/auth/src/schema';
+import { card, createCard } from '../../libs/bc/study/src/index';
+import { CARD_TYPES, CONTENT_SOURCES, DEV_DB_HOST_PATTERN, DEV_DB_URL, ENV_VARS } from '../../libs/constants/src/index';
 
-const REPO_ROOT = new URL('../', import.meta.url).pathname;
+const REPO_ROOT = new URL('../../', import.meta.url).pathname;
 const NODE_GLOB = 'course/knowledge/**/node.md';
 const FRONTMATTER_DELIM = '---';
 const YAML_CARDS_FENCE = /^```yaml-cards\s*$/;
@@ -52,20 +50,15 @@ interface NodeWithCards {
 	cards: ParsedCard[];
 }
 
-const cardTypeSet = new Set<string>(Object.values(CARD_TYPES));
-
-function parseArgs(argv: readonly string[]): { userEmail: string | null } {
-	let userEmail: string | null = null;
-	for (let i = 0; i < argv.length; i++) {
-		if (argv[i] === '--user') {
-			userEmail = argv[i + 1] ?? null;
-			i++;
-		}
-	}
-	return { userEmail };
+export interface SeedCardsResult {
+	userEmail: string;
+	nodesTouched: number;
+	cardsInserted: number;
+	cardsRemoved: number;
 }
 
-/** Split a node.md into its frontmatter and body. Returns null on malformed input. */
+const cardTypeSet = new Set<string>(Object.values(CARD_TYPES));
+
 function splitFrontmatter(text: string): { yaml: string; body: string } | null {
 	if (!text.startsWith(`${FRONTMATTER_DELIM}\n`)) return null;
 	const end = text.indexOf(`\n${FRONTMATTER_DELIM}`, FRONTMATTER_DELIM.length + 1);
@@ -76,7 +69,6 @@ function splitFrontmatter(text: string): { yaml: string; body: string } | null {
 	return { yaml, body };
 }
 
-/** Pull every `yaml-cards` fenced block out of a node body and return parsed card objects. */
 function extractCardsFromBody(body: string, relPath: string): ParsedCard[] {
 	const lines = body.split(/\r?\n/);
 	const cards: ParsedCard[] = [];
@@ -140,30 +132,16 @@ function collectNodesWithCards(): NodeWithCards[] {
 	return results;
 }
 
-async function main(): Promise<void> {
-	const { userEmail } = parseArgs(process.argv.slice(2));
-	if (!userEmail) {
-		process.stderr.write('usage: bun scripts/knowledge-seed.ts --user <email>\n');
-		process.exit(1);
-	}
-
+export async function seedCardsForUser(userEmail: string): Promise<SeedCardsResult> {
 	const connectionString = process.env[ENV_VARS.DATABASE_URL] ?? DEV_DB_URL;
 	if (!DEV_DB_HOST_PATTERN.test(connectionString)) {
-		process.stderr.write('Refusing to seed: DATABASE_URL does not point at a local dev database.\n');
-		process.exit(1);
+		throw new Error('Refusing to seed: DATABASE_URL does not point at a local dev database.');
 	}
 
-	let nodes: NodeWithCards[];
-	try {
-		nodes = collectNodesWithCards();
-	} catch (err) {
-		process.stderr.write(`knowledge-seed: ${(err as Error).message}\n`);
-		process.exit(1);
-	}
-
+	const nodes = collectNodesWithCards();
 	if (nodes.length === 0) {
 		process.stdout.write('No nodes with inline yaml-cards blocks found. Nothing to seed.\n');
-		return;
+		return { userEmail, nodesTouched: 0, cardsInserted: 0, cardsRemoved: 0 };
 	}
 
 	const client = postgres(connectionString);
@@ -176,18 +154,15 @@ async function main(): Promise<void> {
 			.where(eq(bauthUser.email, userEmail))
 			.limit(1);
 		if (!userRow) {
-			process.stderr.write(`User not found: ${userEmail}\n`);
-			process.exit(1);
+			throw new Error(`User not found: ${userEmail}`);
 		}
 		const userId = userRow.id;
 
 		let cardsInserted = 0;
 		let cardsRemoved = 0;
 
-		process.stdout.write(`\nknowledge-seed: ${userEmail}\n`);
+		process.stdout.write(`\nseed-cards: ${userEmail}\n`);
 		for (const node of nodes) {
-			// Wholesale replace: delete existing course cards for this user+node,
-			// then re-insert. createCard runs zod + creates card_state in a tx.
 			const existing = await db
 				.delete(card)
 				.where(and(eq(card.userId, userId), eq(card.nodeId, node.nodeId), eq(card.sourceType, CONTENT_SOURCES.COURSE)))
@@ -215,15 +190,12 @@ async function main(): Promise<void> {
 			process.stdout.write(`  ${node.nodeId.padEnd(36)} ${existing.length} removed / ${node.cards.length} inserted\n`);
 		}
 
-		process.stdout.write(`\nnodes touched : ${nodes.length}\n`);
-		process.stdout.write(`cards removed : ${cardsRemoved}\n`);
-		process.stdout.write(`cards inserted: ${cardsInserted}\n`);
+		process.stdout.write(`  nodes touched : ${nodes.length}\n`);
+		process.stdout.write(`  cards removed : ${cardsRemoved}\n`);
+		process.stdout.write(`  cards inserted: ${cardsInserted}\n`);
+
+		return { userEmail, nodesTouched: nodes.length, cardsInserted, cardsRemoved };
 	} finally {
 		await client.end();
 	}
 }
-
-main().catch((err) => {
-	process.stderr.write(`knowledge-seed: unexpected failure: ${(err as Error).stack ?? err}\n`);
-	process.exit(1);
-});

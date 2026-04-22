@@ -1,11 +1,12 @@
 #!/usr/bin/env bun
 
 /**
- * Database management for airboss.
+ * Database management dispatcher for airboss.
  *
- * Usage: bun run db <command> [flags]
- *
- * Run `bun run db help` for the full list of commands.
+ * Usage:
+ *   bun run db <command> [flags]
+ *   bun run db help                 # full command index
+ *   bun run db <command> --help     # detailed help for one command
  */
 
 import { DEV_DB, DEV_DB_HOST_PATTERN, DEV_DB_URL, ENV_VARS, isProd, PORTS, SCHEMAS } from '../libs/constants/src/index';
@@ -16,10 +17,12 @@ const DB_USER = DEV_DB.USER;
 const DB_NAME = DEV_DB.NAME;
 
 const args = process.argv.slice(2);
-const command = args.find((a) => !a.startsWith('-'));
+const positional = args.filter((a) => !a.startsWith('-'));
+const command = positional[0];
+const subTarget = positional[1];
 const flags = new Set(args.filter((a) => a.startsWith('-')));
 const force = flags.has('--force') || flags.has('-f');
-const help = flags.has('--help') || flags.has('-h');
+const wantsHelp = flags.has('--help') || flags.has('-h');
 
 async function run(cmd: string[]): Promise<void> {
 	console.log(`> ${cmd.join(' ')}`);
@@ -64,7 +67,22 @@ async function confirmOrAbort(message: string): Promise<void> {
 
 async function doReset(): Promise<void> {
 	assertLocalDb();
-	await confirmOrAbort(`This will DROP and recreate "${DB_NAME}". Continue?`);
+	await confirmOrAbort(`This will DROP and recreate "${DB_NAME}", then run the full seed. Continue?`);
+	// Terminate any lingering connections so DROP DATABASE doesn't fail with
+	// "database is being accessed by other users" (leftover drizzle-studio,
+	// crashed dev processes, abandoned postgres.js pools, etc.).
+	await run([
+		'docker',
+		'exec',
+		CONTAINER,
+		'psql',
+		'-U',
+		DB_USER,
+		'-d',
+		'postgres',
+		'-c',
+		`SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname='${DB_NAME}' AND pid <> pg_backend_pid();`,
+	]);
 	await run([
 		'docker',
 		'exec',
@@ -90,13 +108,23 @@ async function doReset(): Promise<void> {
 		`CREATE DATABASE ${DB_NAME};`,
 	]);
 	await run(['bunx', 'drizzle-kit', 'push']);
-	await run(['bun', 'scripts/db/seed-dev-users.ts']);
+	await run(['bun', 'scripts/db/seed-all.ts']);
 }
 
 async function doResetStudy(): Promise<void> {
 	assertLocalDb();
-	await confirmOrAbort('This will TRUNCATE study.card, study.card_state, study.review. Continue?');
+	await confirmOrAbort(
+		'This will TRUNCATE study.card, study.card_state, study.review, then re-materialize course cards. Continue?',
+	);
 	await run(['bun', 'scripts/db/reset-study.ts']);
+	await run(['bun', 'scripts/db/seed-all.ts', 'cards']);
+}
+
+async function doSeed(): Promise<void> {
+	assertLocalDb();
+	const seedArgs = ['bun', 'scripts/db/seed-all.ts'];
+	if (subTarget) seedArgs.push(subTarget);
+	await run(seedArgs);
 }
 
 async function showStatus(): Promise<void> {
@@ -139,52 +167,190 @@ async function showStatus(): Promise<void> {
 	console.log('');
 }
 
-function showHelp(): void {
-	console.log(`Usage: bun run db <command> [flags]
+// ---------------------------------------------------------------------------
+// Help
+// ---------------------------------------------------------------------------
 
-Commands:
-  status            Show DB connection info and table counts (default)
-  up                Start the postgres container (docker compose up -d db)
-  down              Stop containers (docker compose down)
-  push              Run drizzle-kit push (sync schema -> DB)
-  generate          Run drizzle-kit generate
-  migrate           Run drizzle-kit migrate
-  studio            Run drizzle-kit studio
-  seed              Seed dev users (idempotent)
-  reset             DROP + recreate DB, push schema, seed dev users
-  reset-study       TRUNCATE study.* tables (keeps auth users)
-  psql              Open a psql shell in the DB container
-  help              Show this help
-
-Flags:
-  --force, -f       Skip confirmation prompts
-  --help, -h        Show this help`);
+interface CommandHelp {
+	summary: string;
+	what: string;
+	why: string;
+	how: string;
+	links?: string[];
 }
 
-if (help) {
-	showHelp();
-	process.exit(0);
+const COMMAND_HELP: Record<string, CommandHelp> = {
+	status: {
+		summary: 'Show DB connection info and table counts (default command)',
+		what: 'Prints the container name, port, URL, running state, schemas, and row counts for the core tables (users, cards, card_state, review, knowledge_node, knowledge_edge).',
+		why: 'One-shot sanity check before touching anything. Answers "is the DB up, what does it have in it, what URL am I pointing at?" without needing to open psql.',
+		how: 'Uses `docker inspect` for container state and `docker exec psql -c "SELECT COUNT(*)..."` per table. Safe to run anytime -- read-only.',
+		links: ['libs/constants/src/schemas.ts', 'libs/constants/src/dev.ts'],
+	},
+	up: {
+		summary: 'Start the postgres container',
+		what: 'Runs `docker compose up -d db` to bring the local Postgres container online.',
+		why: 'The dev DB lives in a docker-compose service. Running this before any work that needs the DB avoids connection errors from a stopped container.',
+		how: 'Thin passthrough to `docker compose up -d db`. Requires OrbStack or Docker Desktop to be running.',
+		links: ['docker-compose.yml'],
+	},
+	down: {
+		summary: 'Stop all compose containers',
+		what: 'Runs `docker compose down` to stop every container in the compose file.',
+		why: 'Clean way to shut down the dev environment. Not destructive -- data persists in the named volume.',
+		how: 'Thin passthrough to `docker compose down`.',
+	},
+	push: {
+		summary: 'Sync schema to the DB (drizzle-kit push)',
+		what: 'Runs `drizzle-kit push` to apply the current Drizzle schema to the live DB without generating a migration.',
+		why: 'Fast iteration during dev: change a schema file, push it, keep going. Never use in prod -- use `migrate` instead.',
+		how: 'Reads `drizzle.config.ts`, diffs against the live DB, applies changes. Non-destructive for additive changes; prompts on destructive changes.',
+		links: ['drizzle.config.ts', 'libs/bc/study/src/schema.ts', 'libs/auth/src/schema.ts'],
+	},
+	generate: {
+		summary: 'Generate a new drizzle migration',
+		what: 'Runs `drizzle-kit generate` to produce a SQL migration file under `drizzle/`.',
+		why: 'For changes that need to be versioned (prod rollouts, audited schema changes). Dev typically uses `push` instead.',
+		how: 'Diffs schema files against the last migration snapshot and writes a new SQL file plus a `meta/_journal.json` entry.',
+	},
+	migrate: {
+		summary: 'Apply pending drizzle migrations',
+		what: 'Runs `drizzle-kit migrate` to apply any SQL files in `drizzle/` that have not yet been recorded in the DB.',
+		why: 'The production path. In dev you can usually `push` instead; use `migrate` when rehearsing a deployment.',
+		how: 'Tracks applied migrations in a metadata table; skips already-applied ones.',
+	},
+	studio: {
+		summary: 'Open drizzle-kit studio (web UI for the DB)',
+		what: 'Runs `drizzle-kit studio`, which serves a browser-based table browser on a local port.',
+		why: 'Sometimes a GUI is faster than psql for "what did that last seed actually insert?"',
+		how: 'Reads `drizzle.config.ts`, connects to DB_URL, serves studio on its default port (drizzle decides).',
+	},
+	seed: {
+		summary: 'Run seed orchestrator (users + knowledge + cards by default)',
+		what: 'Runs `scripts/db/seed-all.ts`. With no sub-target, executes all three phases in order: (1) dev users via better-auth, (2) knowledge graph build from `course/knowledge/**/node.md`, (3) course-sourced study.card rows for every DEV_ACCOUNTS user. Sub-targets run only that phase.\n\n  bun run db seed            # all three phases\n  bun run db seed users      # only better-auth dev users\n  bun run db seed knowledge  # only knowledge_node + knowledge_edge from markdown\n  bun run db seed cards      # only course-sourced study.card rows',
+		why: 'Single command to get a freshly-pushed DB to a usable state for dev. Every phase is idempotent -- safe to re-run at any time.',
+		how: 'The orchestrator (scripts/db/seed-all.ts) shells out to `scripts/db/seed-dev-users.ts` and `scripts/build-knowledge-index.ts`, and imports `seedCardsForUser` from `scripts/db/seed-cards.ts` once per DEV_ACCOUNTS entry.',
+		links: [
+			'scripts/db/seed-all.ts',
+			'scripts/db/seed-dev-users.ts',
+			'scripts/build-knowledge-index.ts',
+			'scripts/db/seed-cards.ts',
+			'libs/constants/src/dev.ts',
+			'docs/decisions/011-knowledge-graph-learning-system/decision.md',
+			'docs/work-packages/knowledge-graph/spec.md',
+		],
+	},
+	reset: {
+		summary: 'DROP + recreate DB, push schema, run full seed',
+		what: 'Destroys the `airboss` database, recreates it empty, runs `drizzle-kit push` to materialize the schema, then runs the full seed orchestrator (users + knowledge + cards).\n\nRefuses to run if DATABASE_URL does not match the local dev pattern. Prompts for confirmation unless `--force` / `-f` is passed.',
+		why: 'The nuclear option for "get me back to a known good state fast." Useful after schema churn, botched seeds, or when switching branches with divergent migrations. Leaves the DB ready to serve requests with dev users, the full knowledge graph, and their materialized cards.',
+		how: 'Drops + creates the DB via `docker exec psql`, pushes the Drizzle schema, then delegates to `scripts/db/seed-all.ts` with no sub-target (all phases).',
+		links: ['scripts/db/seed-all.ts', 'libs/constants/src/dev.ts (DEV_DB_HOST_PATTERN guards against prod)'],
+	},
+	'reset-study': {
+		summary: 'TRUNCATE study.card/card_state/review, re-materialize cards',
+		what: 'TRUNCATEs `study.card`, `study.card_state`, `study.review`, then re-runs the cards phase of the seed orchestrator. Auth users and the knowledge graph (knowledge_node/knowledge_edge) are untouched.',
+		why: 'Fast "reset my review queue" loop during FSRS or scheduler work. No need to re-seed users or rebuild the knowledge graph.',
+		how: 'Runs `scripts/db/reset-study.ts` (TRUNCATE CASCADE), then `scripts/db/seed-all.ts cards`.',
+		links: ['scripts/db/reset-study.ts', 'scripts/db/seed-cards.ts'],
+	},
+	psql: {
+		summary: 'Open an interactive psql shell in the DB container',
+		what: 'Runs `docker exec -it airboss-db psql -U airboss -d airboss`.',
+		why: 'For ad-hoc queries, quick inspection, or SQL that is too awkward for drizzle-kit studio.',
+		how: 'Requires the container to be running (`bun run db up` first).',
+	},
+	help: {
+		summary: 'Show the command index (or detailed help for one command)',
+		what: '`bun run db help` prints the index of every command with its one-line summary. `bun run db <command> --help` prints a what/why/how/links block for that command only.',
+		why: 'The dispatcher is the single entry point for every DB-adjacent task -- help has to be discoverable, not buried.',
+		how: 'Authored in a `COMMAND_HELP` record in scripts/db.ts, one entry per command. Keep it terse and links-driven.',
+		links: ['CLAUDE.md', 'scripts/db.ts'],
+	},
+};
+
+function printCommandHelp(name: string): void {
+	const entry = COMMAND_HELP[name];
+	if (!entry) {
+		console.error(`No help entry for '${name}'.`);
+		process.exit(1);
+	}
+	console.log(`\nbun run db ${name}`);
+	console.log('-'.repeat(`bun run db ${name}`.length));
+	console.log(`\n  ${entry.summary}`);
+	console.log(`\nWhat\n  ${entry.what.replace(/\n/g, '\n  ')}`);
+	console.log(`\nWhy\n  ${entry.why.replace(/\n/g, '\n  ')}`);
+	console.log(`\nHow\n  ${entry.how.replace(/\n/g, '\n  ')}`);
+	if (entry.links && entry.links.length > 0) {
+		console.log('\nLinks');
+		for (const link of entry.links) console.log(`  - ${link}`);
+	}
+	console.log('');
 }
+
+function printIndex(): void {
+	console.log('Usage: bun run db <command> [flags]');
+	console.log('       bun run db <command> --help   # detailed help for one command');
+	console.log('');
+	console.log('Commands:');
+	const order = [
+		'status',
+		'up',
+		'down',
+		'push',
+		'generate',
+		'migrate',
+		'studio',
+		'seed',
+		'reset',
+		'reset-study',
+		'psql',
+		'help',
+	];
+	const width = order.reduce((m, n) => Math.max(m, n.length), 0);
+	for (const name of order) {
+		const entry = COMMAND_HELP[name];
+		if (!entry) continue;
+		console.log(`  ${name.padEnd(width)}  ${entry.summary}`);
+	}
+	console.log('');
+	console.log('Flags:');
+	console.log('  --force, -f   Skip confirmation prompts (reset, reset-study)');
+	console.log('  --help, -h    Show detailed help for a command');
+}
+
+// ---------------------------------------------------------------------------
+// Dispatch
+// ---------------------------------------------------------------------------
 
 const handlers: Record<string, () => Promise<void> | void> = {
 	status: showStatus,
-	help: showHelp,
+	help: printIndex,
 	up: () => run(['docker', 'compose', 'up', '-d', 'db']),
 	down: () => run(['docker', 'compose', 'down']),
 	push: () => run(['bunx', 'drizzle-kit', 'push']),
 	generate: () => run(['bunx', 'drizzle-kit', 'generate']),
 	migrate: () => run(['bunx', 'drizzle-kit', 'migrate']),
 	studio: () => run(['bunx', 'drizzle-kit', 'studio']),
-	seed: () => run(['bun', 'scripts/db/seed-dev-users.ts']),
+	seed: doSeed,
 	psql: () => run(['docker', 'exec', '-it', CONTAINER, 'psql', '-U', DB_USER, '-d', DB_NAME]),
 	reset: doReset,
 	'reset-study': doResetStudy,
 };
 
+if (wantsHelp) {
+	if (!command || command === 'help') {
+		printIndex();
+	} else {
+		printCommandHelp(command);
+	}
+	process.exit(0);
+}
+
 const handler = command ? handlers[command] : handlers.status;
 if (!handler) {
 	console.error(`Unknown command: ${command}\n`);
-	showHelp();
+	printIndex();
 	process.exit(1);
 }
 

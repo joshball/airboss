@@ -6,7 +6,10 @@ const svelteCheck = await $`cd apps/study && bunx svelte-check --tsconfig ./tsco
 console.log('\nRunning biome...');
 const biome = await $`bunx biome check .`.nothrow();
 
-const failed = svelteCheck.exitCode !== 0 || biome.exitCode !== 0;
+console.log('\nValidating knowledge graph (build-knowledge --dry-run)...');
+const knowledge = await $`bun scripts/build-knowledge-index.ts --dry-run`.nothrow();
+
+const failed = svelteCheck.exitCode !== 0 || biome.exitCode !== 0 || knowledge.exitCode !== 0;
 if (failed) {
 	console.error('\nChecks failed.');
 	process.exit(1);
