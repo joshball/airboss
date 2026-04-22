@@ -1,6 +1,10 @@
 <script lang="ts">
 import {
+	CERT_LABELS,
+	type Cert,
 	CUSTOM_TILE,
+	DEPTH_PREFERENCE_LABELS,
+	type DepthPreference,
 	DOMAIN_LABELS,
 	type Preset,
 	type PresetId,
@@ -77,6 +81,14 @@ function domainLabel(slug: string): string {
 function reasonLabel(code: SessionReasonCode): string {
 	return SESSION_REASON_CODE_LABELS[code] ?? humanize(code);
 }
+
+function certLabel(slug: Cert): string {
+	return (CERT_LABELS as Record<string, string>)[slug] ?? slug;
+}
+
+function depthLabel(slug: DepthPreference): string {
+	return (DEPTH_PREFERENCE_LABELS as Record<string, string>)[slug] ?? humanize(slug);
+}
 </script>
 
 <svelte:head>
@@ -105,38 +117,80 @@ function reasonLabel(code: SessionReasonCode): string {
 
 		<section class="gallery" aria-labelledby="gallery-h">
 			<h2 id="gallery-h" class="gallery-h">Pick a plan to get started</h2>
+			<p class="gallery-hint">
+				Each preset activates a plan and starts a session. Expand a tile to preview the shape, then Start.
+			</p>
 			<ul class="tiles">
 				{#each presets as preset, idx (preset.id)}
 					{@const isBusy = submittingPresetId === preset.id}
 					{@const disableOthers = submittingPresetId !== null && submittingPresetId !== preset.id}
 					<li>
-						<form
-							method="post"
-							action="?/startFromPreset"
-							use:enhance={() => {
-								submittingPresetId = preset.id as PresetId;
-								return async ({ update }) => {
-									await update();
-									submittingPresetId = null;
-								};
-							}}
-						>
-							<input type="hidden" name="presetId" value={preset.id} />
-							<button
-								type="submit"
-								class="tile"
-								class:is-busy={isBusy}
-								class:is-primary={idx === 0}
-								disabled={isBusy || disableOthers}
-								aria-busy={isBusy}
-							>
-								<span class="tile-label">{preset.label}</span>
+						<details class="tile-disclosure" class:is-primary={idx === 0} class:is-disabled={disableOthers}>
+							<summary class="tile tile-summary" aria-busy={isBusy}>
+								<span class="tile-heading">
+									<span class="tile-label">{preset.label}</span>
+									<span class="tile-chev" aria-hidden="true">▾</span>
+								</span>
 								<span class="tile-desc">{preset.description}</span>
-								{#if isBusy}
-									<span class="tile-status" aria-live="polite">Starting…</span>
-								{/if}
-							</button>
-						</form>
+							</summary>
+							<div class="tile-body">
+								<dl class="tile-meta">
+									{#if preset.certGoals.length > 0}
+										<div>
+											<dt>Cert goals</dt>
+											<dd>{preset.certGoals.map((c) => certLabel(c)).join(', ')}</dd>
+										</div>
+									{/if}
+									{#if preset.focusDomains.length > 0}
+										<div>
+											<dt>Focus domains</dt>
+											<dd>{preset.focusDomains.map((d) => domainLabel(d)).join(', ')}</dd>
+										</div>
+									{/if}
+									{#if preset.skipDomains.length > 0}
+										<div>
+											<dt>Skip domains</dt>
+											<dd>{preset.skipDomains.map((d) => domainLabel(d)).join(', ')}</dd>
+										</div>
+									{/if}
+									<div>
+										<dt>Depth</dt>
+										<dd>{depthLabel(preset.depthPreference)}</dd>
+									</div>
+									<div>
+										<dt>Mode</dt>
+										<dd>{SESSION_MODE_LABELS[preset.defaultMode]}</dd>
+									</div>
+									<div>
+										<dt>Session length</dt>
+										<dd>{preset.sessionLength} items</dd>
+									</div>
+								</dl>
+								<p class="tile-warning">Activating this preset archives any currently active plan.</p>
+								<form
+									method="post"
+									action="?/startFromPreset"
+									use:enhance={() => {
+										submittingPresetId = preset.id as PresetId;
+										return async ({ update }) => {
+											await update();
+											submittingPresetId = null;
+										};
+									}}
+								>
+									<input type="hidden" name="presetId" value={preset.id} />
+									<button
+										type="submit"
+										class="tile-start"
+										class:is-busy={isBusy}
+										disabled={isBusy || disableOthers}
+										aria-busy={isBusy}
+									>
+										{isBusy ? 'Starting…' : `Start ${preset.label}`}
+									</button>
+								</form>
+							</div>
+						</details>
 					</li>
 				{/each}
 				<li>
@@ -308,14 +362,129 @@ function reasonLabel(code: SessionReasonCode): string {
 		display: flex;
 	}
 
-	.tiles > li > form,
-	.tiles > li > a {
+	.tiles > li > a,
+	.tiles > li > details {
 		display: flex;
+		flex-direction: column;
 		width: 100%;
 	}
 
-	.tiles > li > form {
+	.tile-disclosure {
 		margin: 0;
+		background: var(--ab-color-surface-raised);
+		border: 1px solid var(--ab-color-border);
+		border-radius: var(--ab-radius-md);
+		box-shadow: var(--ab-shadow-sm);
+		transition: border-color var(--ab-transition-fast);
+	}
+
+	.tile-disclosure.is-primary {
+		border-color: var(--ab-color-primary);
+	}
+
+	.tile-disclosure.is-disabled {
+		opacity: 0.55;
+	}
+
+	.tile-disclosure[open] {
+		border-color: var(--ab-color-primary);
+	}
+
+	.tile-summary {
+		list-style: none;
+		cursor: pointer;
+	}
+
+	.tile-summary::-webkit-details-marker {
+		display: none;
+	}
+
+	.tile-heading {
+		display: flex;
+		justify-content: space-between;
+		align-items: baseline;
+		gap: var(--ab-space-sm);
+		width: 100%;
+	}
+
+	.tile-chev {
+		color: var(--ab-color-fg-faint);
+		font-size: var(--ab-font-size-sm);
+		transition: transform var(--ab-transition-fast);
+	}
+
+	.tile-disclosure[open] .tile-chev {
+		transform: rotate(180deg);
+	}
+
+	.tile-body {
+		padding: var(--ab-space-md) var(--ab-space-xl) var(--ab-space-lg);
+		border-top: 1px solid var(--ab-color-border);
+		display: flex;
+		flex-direction: column;
+		gap: var(--ab-space-md);
+	}
+
+	.tile-meta {
+		margin: 0;
+		display: grid;
+		grid-template-columns: max-content 1fr;
+		gap: var(--ab-space-2xs) var(--ab-space-md);
+		font-size: var(--ab-font-size-sm);
+	}
+
+	.tile-meta > div {
+		display: contents;
+	}
+
+	.tile-meta dt {
+		font-weight: var(--ab-font-weight-semibold);
+		color: var(--ab-color-fg-subtle);
+		text-transform: uppercase;
+		letter-spacing: 0.04em;
+		font-size: var(--ab-font-size-xs);
+	}
+
+	.tile-meta dd {
+		margin: 0;
+		color: var(--ab-color-fg);
+	}
+
+	.tile-warning {
+		margin: 0;
+		font-size: var(--ab-font-size-xs);
+		color: var(--ab-color-warning-active);
+	}
+
+	.tile-start {
+		align-self: flex-start;
+		padding: var(--ab-space-sm) var(--ab-space-lg);
+		background: var(--ab-color-primary);
+		color: var(--ab-color-fg-on-primary, white);
+		border: 1px solid var(--ab-color-primary);
+		border-radius: var(--ab-control-radius);
+		font-weight: var(--ab-font-weight-semibold);
+		font-size: var(--ab-font-size-sm);
+		cursor: pointer;
+		transition: background var(--ab-transition-fast);
+	}
+
+	.tile-start:hover:not(:disabled) {
+		background: var(--ab-color-primary-hover);
+	}
+
+	.tile-start:focus-visible {
+		outline: none;
+		box-shadow: 0 0 0 3px var(--ab-color-focus-ring);
+	}
+
+	.tile-start:disabled {
+		cursor: not-allowed;
+		opacity: 0.55;
+	}
+
+	.tile-start.is-busy {
+		cursor: progress;
 	}
 
 	.tile {
@@ -360,14 +529,6 @@ function reasonLabel(code: SessionReasonCode): string {
 		opacity: 0.55;
 	}
 
-	.tile.is-primary {
-		border-color: var(--ab-color-primary);
-	}
-
-	.tile.is-busy {
-		cursor: progress;
-	}
-
 	.tile-label {
 		font-size: var(--ab-font-size-base);
 		font-weight: var(--ab-font-weight-semibold);
@@ -380,11 +541,10 @@ function reasonLabel(code: SessionReasonCode): string {
 		line-height: var(--ab-line-height-normal);
 	}
 
-	.tile-status {
-		margin-top: var(--ab-space-xs);
-		font-size: var(--ab-font-size-xs);
-		color: var(--ab-color-primary);
-		font-weight: var(--ab-font-weight-semibold);
+	.gallery-hint {
+		margin: 0;
+		color: var(--ab-color-fg-subtle);
+		font-size: var(--ab-font-size-sm);
 	}
 
 	.tile-custom {
