@@ -36,7 +36,8 @@ import {
 	setScenarioStatus,
 	submitAttempt,
 } from './scenarios';
-import { repAttempt, type ScenarioOption, scenario } from './schema';
+import { type ScenarioOption, scenario, session, sessionItemResult, studyPlan } from './schema';
+import { seedRepAttempt } from './test-support';
 
 // Every run picks up a fresh ULID-prefixed marker so parallel CI runs (or
 // re-runs after a crash) don't conflict on user ids. The beforeAll seeds
@@ -61,10 +62,13 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-	// rep_attempt -> scenario is RESTRICT, so delete attempts first, then
-	// scenarios, then the user. bauth_user -> scenario cascades, but the
-	// scenario -> rep_attempt restrict can trip during that cascade.
-	await db.delete(repAttempt).where(eq(repAttempt.userId, TEST_USER_ID));
+	// Order: session_item_result (scenario FK is SET NULL, session FK is
+	// CASCADE) -> session -> plan -> scenario -> user. bauth_user -> scenario
+	// cascades, but session_item_result needs cleanup first so the scenario
+	// FK doesn't dangle.
+	await db.delete(sessionItemResult).where(eq(sessionItemResult.userId, TEST_USER_ID));
+	await db.delete(session).where(eq(session.userId, TEST_USER_ID));
+	await db.delete(studyPlan).where(eq(studyPlan.userId, TEST_USER_ID));
 	await db.delete(scenario).where(eq(scenario.userId, TEST_USER_ID));
 	await db.delete(bauthUser).where(eq(bauthUser.id, TEST_USER_ID));
 });
@@ -252,9 +256,10 @@ describe('getNextScenarios -- priority', () => {
 			const s2 = await createScenario({ ...makeInput(), userId: freshUser });
 			const s3 = await createScenario({ ...makeInput(), userId: freshUser });
 
-			// Attempt s1 and s2 (leave s3 unattempted).
-			await submitAttempt({ scenarioId: s1.id, userId: freshUser, chosenOption: 'b' });
-			await submitAttempt({ scenarioId: s2.id, userId: freshUser, chosenOption: 'a' });
+			// Attempt s1 and s2 (leave s3 unattempted). seedRepAttempt writes
+			// the session + slot the getNextScenarios query orders on.
+			await seedRepAttempt({ userId: freshUser, scenarioId: s1.id, isCorrect: true });
+			await seedRepAttempt({ userId: freshUser, scenarioId: s2.id, isCorrect: false });
 
 			const next = await getNextScenarios(freshUser, {}, 10);
 			// s3 is unattempted -> must appear first.
@@ -265,7 +270,9 @@ describe('getNextScenarios -- priority', () => {
 			expect(s1Pos).toBeGreaterThan(0);
 			expect(s2Pos).toBeGreaterThan(0);
 		} finally {
-			await db.delete(repAttempt).where(eq(repAttempt.userId, freshUser));
+			await db.delete(sessionItemResult).where(eq(sessionItemResult.userId, freshUser));
+			await db.delete(session).where(eq(session.userId, freshUser));
+			await db.delete(studyPlan).where(eq(studyPlan.userId, freshUser));
 			await db.delete(scenario).where(eq(scenario.userId, freshUser));
 			await db.delete(bauthUser).where(eq(bauthUser.id, freshUser));
 		}
@@ -289,19 +296,21 @@ describe('getNextScenarios -- priority', () => {
 			const a = await createScenario({ ...makeInput(), userId: freshUser });
 			const b = await createScenario({ ...makeInput(), userId: freshUser });
 
-			// Attempt a first, then b -- b is more recent, so a should lead.
-			await submitAttempt({ scenarioId: a.id, userId: freshUser, chosenOption: 'b' });
-			// Space the attempts so the ORDER BY on attemptedAt is unambiguous
-			// at the millisecond-truncated timestamp resolution Postgres uses.
-			await new Promise((r) => setTimeout(r, 100));
-			await submitAttempt({ scenarioId: b.id, userId: freshUser, chosenOption: 'a' });
+			// Seed attempts with explicit timestamps so "least recent" is
+			// deterministic at millisecond resolution without a setTimeout.
+			const past = new Date(Date.now() - 10 * 60_000);
+			const recent = new Date();
+			await seedRepAttempt({ userId: freshUser, scenarioId: a.id, isCorrect: true, completedAt: past });
+			await seedRepAttempt({ userId: freshUser, scenarioId: b.id, isCorrect: false, completedAt: recent });
 
 			const next = await getNextScenarios(freshUser, {}, 10);
 			const aPos = next.findIndex((s) => s.id === a.id);
 			const bPos = next.findIndex((s) => s.id === b.id);
 			expect(aPos).toBeLessThan(bPos);
 		} finally {
-			await db.delete(repAttempt).where(eq(repAttempt.userId, freshUser));
+			await db.delete(sessionItemResult).where(eq(sessionItemResult.userId, freshUser));
+			await db.delete(session).where(eq(session.userId, freshUser));
+			await db.delete(studyPlan).where(eq(studyPlan.userId, freshUser));
 			await db.delete(scenario).where(eq(scenario.userId, freshUser));
 			await db.delete(bauthUser).where(eq(bauthUser.id, freshUser));
 		}
@@ -309,21 +318,21 @@ describe('getNextScenarios -- priority', () => {
 });
 
 describe('submitAttempt -- correctness resolution', () => {
-	it('records is_correct=true when the chosen option is the correct one', async () => {
+	it('resolves isCorrect=true when the chosen option is the correct one', async () => {
 		const sc = await createScenario(makeInput());
 		const attempt = await submitAttempt({ scenarioId: sc.id, userId: TEST_USER_ID, chosenOption: 'b' });
 		expect(attempt.isCorrect).toBe(true);
 		expect(attempt.chosenOption).toBe('b');
-		expect(attempt.id.startsWith('rat_')).toBe(true);
+		expect(attempt.scenarioId).toBe(sc.id);
 	});
 
-	it('records is_correct=false when the chosen option is an incorrect one', async () => {
+	it('resolves isCorrect=false when the chosen option is an incorrect one', async () => {
 		const sc = await createScenario(makeInput());
 		const attempt = await submitAttempt({ scenarioId: sc.id, userId: TEST_USER_ID, chosenOption: 'a' });
 		expect(attempt.isCorrect).toBe(false);
 	});
 
-	it('accepts confidence and answerMs when provided', async () => {
+	it('passes confidence and answerMs through when provided', async () => {
 		const sc = await createScenario(makeInput());
 		const attempt = await submitAttempt({
 			scenarioId: sc.id,
@@ -357,37 +366,26 @@ describe('submitAttempt -- correctness resolution', () => {
 		);
 	});
 
-	it('allows multiple attempts on the same scenario', async () => {
+	it('is a pure validator -- repeated calls never touch the DB', async () => {
+		// Post-ADR 012 submitAttempt resolves the outcome but does not persist
+		// anything; the slot row on session_item_result is where persistence
+		// happens (via recordItemResult). Repeated calls return the same shape
+		// and never grow the underlying table.
 		const sc = await createScenario(makeInput());
-		const a1 = await submitAttempt({ scenarioId: sc.id, userId: TEST_USER_ID, chosenOption: 'b' });
-		const a2 = await submitAttempt({ scenarioId: sc.id, userId: TEST_USER_ID, chosenOption: 'a' });
-		expect(a1.id).not.toBe(a2.id);
-		const attempts = await db
-			.select()
-			.from(repAttempt)
-			.where(eq(repAttempt.scenarioId, sc.id))
-			.orderBy(repAttempt.attemptedAt);
-		expect(attempts.length).toBeGreaterThanOrEqual(2);
-	});
-
-	it('folds a duplicate submit on the same option inside the dedupe window', async () => {
-		// A double-click or back-button replay sends two submits for the same
-		// (user, scenario, chosenOption) back-to-back. Only the first lands;
-		// the second returns the existing row so the rep is counted once.
-		const sc = await createScenario(makeInput());
+		const before = await db.select().from(sessionItemResult).where(eq(sessionItemResult.scenarioId, sc.id));
 		const a1 = await submitAttempt({ scenarioId: sc.id, userId: TEST_USER_ID, chosenOption: 'b' });
 		const a2 = await submitAttempt({ scenarioId: sc.id, userId: TEST_USER_ID, chosenOption: 'b' });
-		expect(a2.id).toBe(a1.id);
-		expect(a2.isCorrect).toBe(a1.isCorrect);
+		expect(a1).toEqual(a2);
+		const after = await db.select().from(sessionItemResult).where(eq(sessionItemResult.scenarioId, sc.id));
+		expect(after.length).toBe(before.length);
 	});
 
-	it('records a new attempt when the option differs, even within the window', async () => {
-		// A genuine change of mind is not a duplicate -- different chosenOption
-		// means different judgment rep, so the dedupe key misses.
+	it('resolves distinct outcomes for different chosen options', async () => {
 		const sc = await createScenario(makeInput());
-		const a1 = await submitAttempt({ scenarioId: sc.id, userId: TEST_USER_ID, chosenOption: 'b' });
-		const a2 = await submitAttempt({ scenarioId: sc.id, userId: TEST_USER_ID, chosenOption: 'a' });
-		expect(a2.id).not.toBe(a1.id);
+		const correct = await submitAttempt({ scenarioId: sc.id, userId: TEST_USER_ID, chosenOption: 'b' });
+		const incorrect = await submitAttempt({ scenarioId: sc.id, userId: TEST_USER_ID, chosenOption: 'a' });
+		expect(correct.isCorrect).toBe(true);
+		expect(incorrect.isCorrect).toBe(false);
 	});
 });
 
@@ -420,10 +418,10 @@ describe('getRepAccuracy / getRepStats -- aggregation', () => {
 			// identical submits.
 			const s3 = await createScenario({ ...makeInput(), userId: freshUser, domain: DOMAINS.EMERGENCY_PROCEDURES });
 
-			await submitAttempt({ scenarioId: s1.id, userId: freshUser, chosenOption: 'b' });
-			await submitAttempt({ scenarioId: s1.id, userId: freshUser, chosenOption: 'a' });
-			await submitAttempt({ scenarioId: s3.id, userId: freshUser, chosenOption: 'b' });
-			await submitAttempt({ scenarioId: s2.id, userId: freshUser, chosenOption: 'b' });
+			await seedRepAttempt({ userId: freshUser, scenarioId: s1.id, isCorrect: true });
+			await seedRepAttempt({ userId: freshUser, scenarioId: s1.id, isCorrect: false });
+			await seedRepAttempt({ userId: freshUser, scenarioId: s3.id, isCorrect: true });
+			await seedRepAttempt({ userId: freshUser, scenarioId: s2.id, isCorrect: true });
 
 			const lifetime = await getRepAccuracy(freshUser);
 			expect(lifetime.attempted).toBe(4);
@@ -447,7 +445,9 @@ describe('getRepAccuracy / getRepStats -- aggregation', () => {
 			expect(ep?.attempted).toBe(3);
 			expect(ep?.correct).toBe(2);
 		} finally {
-			await db.delete(repAttempt).where(eq(repAttempt.userId, freshUser));
+			await db.delete(sessionItemResult).where(eq(sessionItemResult.userId, freshUser));
+			await db.delete(session).where(eq(session.userId, freshUser));
+			await db.delete(studyPlan).where(eq(studyPlan.userId, freshUser));
 			await db.delete(scenario).where(eq(scenario.userId, freshUser));
 			await db.delete(bauthUser).where(eq(bauthUser.id, freshUser));
 		}
@@ -498,7 +498,7 @@ describe('getRepDashboard', () => {
 			await createScenario({ ...makeInput(), userId: freshUser });
 			await createScenario({ ...makeInput(), userId: freshUser });
 
-			await submitAttempt({ scenarioId: s1.id, userId: freshUser, chosenOption: 'b' });
+			await seedRepAttempt({ userId: freshUser, scenarioId: s1.id, isCorrect: true });
 
 			const dash = await getRepDashboard(freshUser);
 			expect(dash.scenarioCount).toBe(3);
@@ -508,8 +508,9 @@ describe('getRepDashboard', () => {
 			expect(dash.accuracyLast30d.correct).toBe(1);
 			expect(dash.accuracyLast30d.accuracy).toBeCloseTo(1);
 		} finally {
-			// scenario FK is restrict -- remove attempts, scenarios, then user.
-			await db.delete(repAttempt).where(eq(repAttempt.userId, freshUser));
+			await db.delete(sessionItemResult).where(eq(sessionItemResult.userId, freshUser));
+			await db.delete(session).where(eq(session.userId, freshUser));
+			await db.delete(studyPlan).where(eq(studyPlan.userId, freshUser));
 			await db.delete(scenario).where(eq(scenario.userId, freshUser));
 			await db.delete(bauthUser).where(eq(bauthUser.id, freshUser));
 		}
@@ -578,30 +579,54 @@ describe('getRepAttemptsForSession -- resume-on-refresh', () => {
 			const s3 = await createScenario({ ...makeInput(), userId: freshUser });
 
 			// Pre-session attempt on s1 -- MUST NOT show up with a `since` after it.
-			const pre = await submitAttempt({ scenarioId: s1.id, userId: freshUser, chosenOption: 'a' });
-			// Move the pre-session attempt back in time so `since` clearly
-			// post-dates it. submitAttempt stamps attemptedAt=now, so we patch.
-			await db
-				.update(repAttempt)
-				.set({ attemptedAt: new Date(now.getTime() - 60_000) })
-				.where(eq(repAttempt.id, pre.id));
+			await seedRepAttempt({
+				userId: freshUser,
+				scenarioId: s1.id,
+				isCorrect: false,
+				chosenOption: 'a',
+				completedAt: new Date(now.getTime() - 60_000),
+			});
 
 			const sessionStart = new Date();
 
 			// In-session attempts: two on s2 (only the latest should surface), one on s3.
-			await submitAttempt({ scenarioId: s2.id, userId: freshUser, chosenOption: 'a' });
-			// Second attempt on s2 with a different option so dedupe doesn't fold.
-			const s2Latest = await submitAttempt({ scenarioId: s2.id, userId: freshUser, chosenOption: 'b' });
-			const s3Att = await submitAttempt({ scenarioId: s3.id, userId: freshUser, chosenOption: 'b' });
+			// Stagger timestamps so the "most recent per scenario" collapse is unambiguous.
+			const s2First = new Date(sessionStart.getTime() + 1_000);
+			const s2LastAt = new Date(sessionStart.getTime() + 2_000);
+			const s3At = new Date(sessionStart.getTime() + 3_000);
+			await seedRepAttempt({
+				userId: freshUser,
+				scenarioId: s2.id,
+				isCorrect: false,
+				chosenOption: 'a',
+				completedAt: s2First,
+			});
+			await seedRepAttempt({
+				userId: freshUser,
+				scenarioId: s2.id,
+				isCorrect: true,
+				chosenOption: 'b',
+				completedAt: s2LastAt,
+			});
+			await seedRepAttempt({
+				userId: freshUser,
+				scenarioId: s3.id,
+				isCorrect: true,
+				chosenOption: 'b',
+				completedAt: s3At,
+			});
 
 			const attempts = await getRepAttemptsForSession(freshUser, [s1.id, s2.id, s3.id], sessionStart);
 			expect(attempts.size).toBe(2);
 			expect(attempts.get(s1.id)).toBeUndefined();
-			expect(attempts.get(s2.id)?.id).toBe(s2Latest.id);
-			expect(attempts.get(s3.id)?.id).toBe(s3Att.id);
+			expect(attempts.get(s2.id)?.chosenOption).toBe('b');
+			expect(attempts.get(s2.id)?.isCorrect).toBe(true);
+			expect(attempts.get(s3.id)?.chosenOption).toBe('b');
 			expect(attempts.get(s3.id)?.isCorrect).toBe(true);
 		} finally {
-			await db.delete(repAttempt).where(eq(repAttempt.userId, freshUser));
+			await db.delete(sessionItemResult).where(eq(sessionItemResult.userId, freshUser));
+			await db.delete(session).where(eq(session.userId, freshUser));
+			await db.delete(studyPlan).where(eq(studyPlan.userId, freshUser));
 			await db.delete(scenario).where(eq(scenario.userId, freshUser));
 			await db.delete(bauthUser).where(eq(bauthUser.id, freshUser));
 		}
@@ -641,9 +666,23 @@ describe('reps session resume -- acceptance', () => {
 			const pinnedIds = [s1.id, s2.id, s3.id];
 			const sessionStart = new Date();
 
-			// Answer first two scenarios.
-			await submitAttempt({ scenarioId: s1.id, userId: freshUser, chosenOption: 'b' });
-			await submitAttempt({ scenarioId: s2.id, userId: freshUser, chosenOption: 'a' });
+			// Answer first two scenarios via seedRepAttempt (session_item_result
+			// is the system of record now; the legacy /reps/session page's
+			// resume logic reads through getRepAttemptsForSession).
+			await seedRepAttempt({
+				userId: freshUser,
+				scenarioId: s1.id,
+				isCorrect: true,
+				chosenOption: 'b',
+				completedAt: new Date(sessionStart.getTime() + 1_000),
+			});
+			await seedRepAttempt({
+				userId: freshUser,
+				scenarioId: s2.id,
+				isCorrect: false,
+				chosenOption: 'a',
+				completedAt: new Date(sessionStart.getTime() + 2_000),
+			});
 
 			// ---- simulated refresh: run the same queries the +page.server.ts does ----
 			const [scenarios, attemptsByScenarioId] = await Promise.all([
@@ -674,7 +713,9 @@ describe('reps session resume -- acceptance', () => {
 				expect(slots[2].attempt).toBeNull();
 			}
 		} finally {
-			await db.delete(repAttempt).where(eq(repAttempt.userId, freshUser));
+			await db.delete(sessionItemResult).where(eq(sessionItemResult.userId, freshUser));
+			await db.delete(session).where(eq(session.userId, freshUser));
+			await db.delete(studyPlan).where(eq(studyPlan.userId, freshUser));
 			await db.delete(scenario).where(eq(scenario.userId, freshUser));
 			await db.delete(bauthUser).where(eq(bauthUser.id, freshUser));
 		}

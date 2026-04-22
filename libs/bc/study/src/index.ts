@@ -91,8 +91,10 @@ export type {
 	CreateScenarioInput,
 	DomainAccuracyStats,
 	RepAccuracyStats,
+	RepAttemptOutcome,
 	RepDashboardStats,
 	RepStats,
+	ResolvedAttempt,
 	ScenarioFilters,
 	SubmitAttemptInput,
 } from './scenarios';
