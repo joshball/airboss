@@ -98,6 +98,7 @@ export const ROUTES = {
 
 	// Study -- Help (per-app help content; primitives shared via @ab/help)
 	HELP: '/help',
+	HELP_CONCEPTS: '/help/concepts',
 	HELP_ID: (id: string) => `/help/${encodeURIComponent(id)}` as const,
 
 	// Study -- Knowledge nodes

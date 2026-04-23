@@ -45,7 +45,10 @@ export const CALLOUT_VARIANTS: readonly string[] = ['tip', 'warn', 'danger', 'ho
  */
 export function extractCalloutVariants(body: string): readonly string[] {
 	const out: string[] = [];
-	for (const match of body.matchAll(/^:::\s*([a-z][a-z-]*)\s*(?:$|\s)/gim)) {
+	// Directive opens at the start of a line: `:::ident` followed by end-of-line
+	// or a space/tab (not a newline -- a bare `:::` close must not swallow the
+	// next paragraph's first word via a cross-line whitespace match).
+	for (const match of body.matchAll(/^:::[ \t]*([a-z][a-z-]*)[ \t]*$/gim)) {
 		const name = match[1];
 		if (name) out.push(name.toLowerCase());
 	}

@@ -16,6 +16,8 @@ const repsActive = $derived(page.url.pathname.startsWith(ROUTES.REPS));
 const knowledgeActive = $derived(page.url.pathname.startsWith(ROUTES.KNOWLEDGE));
 const glossaryActive = $derived(page.url.pathname.startsWith(ROUTES.GLOSSARY));
 const helpActive = $derived(page.url.pathname.startsWith(ROUTES.HELP));
+const helpConceptsActive = $derived(page.url.pathname.startsWith(ROUTES.HELP_CONCEPTS));
+const helpIndexActive = $derived(helpActive && !helpConceptsActive);
 const calibrationActive = $derived(page.url.pathname.startsWith(ROUTES.CALIBRATION));
 // Plans, /session/start and /sessions/* roll under one nav item -- they're
 // the same flow from the user's perspective.
@@ -56,13 +58,35 @@ function computeInitials(name: string, email: string): string {
 }
 
 let menu = $state<HTMLDetailsElement | null>(null);
+let helpMenu = $state<HTMLDetailsElement | null>(null);
+
+function closeDetails(target: HTMLDetailsElement | null) {
+	if (!target?.open) return;
+	target.open = false;
+	const summary = target.querySelector('summary');
+	if (summary instanceof HTMLElement) summary.focus();
+}
 
 function handleMenuKeydown(event: KeyboardEvent) {
-	if (event.key === 'Escape' && menu?.open) {
-		menu.open = false;
-		const summary = menu.querySelector('summary');
-		if (summary instanceof HTMLElement) summary.focus();
+	if (event.key !== 'Escape') return;
+	if (menu?.open) {
+		closeDetails(menu);
+		return;
 	}
+	if (helpMenu?.open) {
+		closeDetails(helpMenu);
+	}
+}
+
+function handleHelpMenuBlur(event: FocusEvent) {
+	if (!helpMenu) return;
+	const next = event.relatedTarget;
+	if (next instanceof Node && helpMenu.contains(next)) return;
+	helpMenu.open = false;
+}
+
+function handleHelpItemClick() {
+	if (helpMenu) helpMenu.open = false;
 }
 </script>
 
@@ -80,7 +104,26 @@ function handleMenuKeydown(event: KeyboardEvent) {
 			<a href={ROUTES.KNOWLEDGE} aria-current={knowledgeActive ? 'page' : undefined}>Knowledge</a>
 			<a href={ROUTES.GLOSSARY} aria-current={glossaryActive ? 'page' : undefined}>Glossary</a>
 			<a href={ROUTES.CALIBRATION} aria-current={calibrationActive ? 'page' : undefined}>Calibration</a>
-			<a href={ROUTES.HELP} aria-current={helpActive ? 'page' : undefined}>Help</a>
+			<details class="nav-menu" bind:this={helpMenu} onfocusout={handleHelpMenuBlur}>
+				<summary aria-haspopup="menu" aria-current={helpActive ? 'page' : undefined}>
+					<span>Help</span>
+					<span class="chevron" aria-hidden="true">▾</span>
+				</summary>
+				<div class="nav-menu-panel" role="menu" aria-label="Help sections">
+					<a
+						href={ROUTES.HELP}
+						role="menuitem"
+						aria-current={helpIndexActive ? 'page' : undefined}
+						onclick={handleHelpItemClick}>Help index</a
+					>
+					<a
+						href={ROUTES.HELP_CONCEPTS}
+						role="menuitem"
+						aria-current={helpConceptsActive ? 'page' : undefined}
+						onclick={handleHelpItemClick}>Concepts</a
+					>
+				</div>
+			</details>
 		</div>
 
 		<div class="nav-search">
@@ -156,6 +199,82 @@ function handleMenuKeydown(event: KeyboardEvent) {
 	nav a[aria-current='page'] {
 		color: var(--ab-color-primary-hover);
 		background: var(--ab-color-primary-subtle);
+	}
+
+	.nav-menu {
+		position: relative;
+	}
+
+	.nav-menu > summary {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--ab-space-2xs);
+		cursor: pointer;
+		list-style: none;
+		color: var(--ab-color-fg-muted);
+		font-weight: var(--ab-font-weight-medium);
+		padding: var(--ab-space-2xs) var(--ab-space-sm);
+		border-radius: var(--ab-radius-sm);
+		user-select: none;
+	}
+
+	.nav-menu > summary::-webkit-details-marker {
+		display: none;
+	}
+
+	.nav-menu > summary::marker {
+		content: '';
+	}
+
+	.nav-menu > summary:hover {
+		color: var(--ab-color-fg);
+		background: var(--ab-color-surface-sunken);
+	}
+
+	.nav-menu > summary:focus-visible {
+		outline: 2px solid var(--ab-color-focus-ring);
+		outline-offset: 2px;
+	}
+
+	.nav-menu[open] > summary {
+		color: var(--ab-color-fg);
+		background: var(--ab-color-surface-sunken);
+	}
+
+	.nav-menu > summary[aria-current='page'] {
+		color: var(--ab-color-primary-hover);
+		background: var(--ab-color-primary-subtle);
+	}
+
+	.nav-menu[open] .chevron {
+		transform: rotate(180deg);
+	}
+
+	.nav-menu .chevron {
+		font-size: var(--ab-font-size-xs);
+		line-height: 1;
+		transition: transform var(--ab-transition-fast);
+	}
+
+	.nav-menu-panel {
+		position: absolute;
+		left: 0;
+		top: calc(100% + var(--ab-space-2xs));
+		min-width: 12rem;
+		background: var(--ab-color-surface);
+		border: 1px solid var(--ab-color-border);
+		border-radius: var(--ab-radius-md);
+		box-shadow: var(--ab-shadow-lg);
+		padding: var(--ab-space-2xs);
+		z-index: 50;
+		display: flex;
+		flex-direction: column;
+		gap: 0;
+	}
+
+	.nav-menu-panel a {
+		padding: var(--ab-space-sm) var(--ab-space-sm);
+		border-radius: var(--ab-radius-sm);
 	}
 
 	.nav-search {
