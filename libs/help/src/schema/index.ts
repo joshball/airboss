@@ -1,3 +1,9 @@
+export {
+	EXTERNAL_REF_SOURCE_VALUES,
+	type ExternalRef,
+	type ExternalRefSource,
+	sourceFromUrl,
+} from './external-ref';
 export type { HelpPage } from './help-page';
 export type {
 	FilterKey,

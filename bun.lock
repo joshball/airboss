@@ -37,6 +37,9 @@
     "apps/study": {
       "name": "@ab/study",
     },
+    "libs/activities": {
+      "name": "@ab/activities",
+    },
     "libs/auth": {
       "name": "@ab/auth",
     },
@@ -72,6 +75,8 @@
     },
   },
   "packages": {
+    "@ab/activities": ["@ab/activities@workspace:libs/activities"],
+
     "@ab/auth": ["@ab/auth@workspace:libs/auth"],
 
     "@ab/aviation": ["@ab/aviation@workspace:libs/aviation"],

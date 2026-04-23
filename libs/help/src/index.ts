@@ -9,6 +9,12 @@
 
 export { parseQuery } from './query-parser';
 export { helpRegistry } from './registry';
+export {
+	EXTERNAL_REF_SOURCE_VALUES,
+	type ExternalRef,
+	type ExternalRefSource,
+	sourceFromUrl,
+} from './schema/external-ref';
 export type { HelpPage } from './schema/help-page';
 export type {
 	FilterKey,

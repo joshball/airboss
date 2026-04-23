@@ -705,6 +705,61 @@ export type SessionReasonCode = (typeof SESSION_REASON_CODES)[keyof typeof SESSI
 
 export const SESSION_REASON_CODE_VALUES = Object.values(SESSION_REASON_CODES);
 
+/**
+ * Plain-English explanations of each reason code. Consumed by the
+ * `/session/start` InfoTips and the `session-start` help page table so the
+ * chip label ("Overdue") has a one-click "what does that mean?" path.
+ * Update both LABELS and DEFINITIONS when adding a new reason code.
+ */
+export const SESSION_REASON_CODE_DEFINITIONS: Record<SessionReasonCode, string> = {
+	[SESSION_REASON_CODES.CONTINUE_RECENT_DOMAIN]:
+		'This item lives in a domain you studied in your last session or two. Continuing there builds momentum in that topic.',
+	[SESSION_REASON_CODES.CONTINUE_DUE_IN_DOMAIN]:
+		'This card is coming due and happens to be in a domain you just touched. Good overlap between the scheduler and your current focus.',
+	[SESSION_REASON_CODES.CONTINUE_UNFINISHED_NODE]:
+		'You started learning this knowledge node recently but did not finish all seven phases. Continuing closes the loop.',
+	[SESSION_REASON_CODES.STRENGTHEN_RELEARNING]:
+		'FSRS marked this card as relearning after a recent Again rating. It needs a few short-interval reviews before it stabilises again.',
+	[SESSION_REASON_CODES.STRENGTHEN_RATED_AGAIN]:
+		'You rated this Again within the last few sessions. Surfacing it now catches the memory before it collapses further.',
+	[SESSION_REASON_CODES.STRENGTHEN_OVERDUE]:
+		'This card passed its FSRS due date more than the grace period ago. Each day overdue erodes the stability estimate, so the sooner the better.',
+	[SESSION_REASON_CODES.STRENGTHEN_LOW_REP_ACCURACY]:
+		'Your accuracy on reps in this domain has dropped below the threshold. Targeted practice here restores judgment before deeper work.',
+	[SESSION_REASON_CODES.STRENGTHEN_MASTERY_DROP]:
+		'This node crossed back from mastered to not-mastered because the dual-gate (card stability and rep accuracy) slipped. It needs reinforcement.',
+	[SESSION_REASON_CODES.EXPAND_UNSTARTED_READY]:
+		'All the prerequisite knowledge nodes for this one are mastered. You are ready to learn it.',
+	[SESSION_REASON_CODES.EXPAND_UNSTARTED_PRIORITY]:
+		'This is a core topic for your cert goals and you have not started it yet. Core knowledge is non-negotiable; this makes the queue.',
+	[SESSION_REASON_CODES.EXPAND_FOCUS_MATCH]:
+		'This node matches the focus domain you set for this session. You asked for more of this; you are getting more of this.',
+	[SESSION_REASON_CODES.DIVERSIFY_UNUSED_DOMAIN]:
+		'You have not touched this domain in several sessions. Rotating through it prevents the schedule from collapsing into a single topic.',
+	[SESSION_REASON_CODES.DIVERSIFY_CROSS_DOMAIN_APPLY]:
+		'This node applies knowledge you already have from another domain. Cross-domain connections are how real pilot judgment forms.',
+};
+
+/**
+ * Which slice each reason code belongs to. Used by the session-start help
+ * page to auto-build the reason-codes table keyed by slice.
+ */
+export const SESSION_REASON_CODE_SLICE: Record<SessionReasonCode, SessionSlice> = {
+	[SESSION_REASON_CODES.CONTINUE_RECENT_DOMAIN]: SESSION_SLICES.CONTINUE,
+	[SESSION_REASON_CODES.CONTINUE_DUE_IN_DOMAIN]: SESSION_SLICES.CONTINUE,
+	[SESSION_REASON_CODES.CONTINUE_UNFINISHED_NODE]: SESSION_SLICES.CONTINUE,
+	[SESSION_REASON_CODES.STRENGTHEN_RELEARNING]: SESSION_SLICES.STRENGTHEN,
+	[SESSION_REASON_CODES.STRENGTHEN_RATED_AGAIN]: SESSION_SLICES.STRENGTHEN,
+	[SESSION_REASON_CODES.STRENGTHEN_OVERDUE]: SESSION_SLICES.STRENGTHEN,
+	[SESSION_REASON_CODES.STRENGTHEN_LOW_REP_ACCURACY]: SESSION_SLICES.STRENGTHEN,
+	[SESSION_REASON_CODES.STRENGTHEN_MASTERY_DROP]: SESSION_SLICES.STRENGTHEN,
+	[SESSION_REASON_CODES.EXPAND_UNSTARTED_READY]: SESSION_SLICES.EXPAND,
+	[SESSION_REASON_CODES.EXPAND_UNSTARTED_PRIORITY]: SESSION_SLICES.EXPAND,
+	[SESSION_REASON_CODES.EXPAND_FOCUS_MATCH]: SESSION_SLICES.EXPAND,
+	[SESSION_REASON_CODES.DIVERSIFY_UNUSED_DOMAIN]: SESSION_SLICES.DIVERSIFY,
+	[SESSION_REASON_CODES.DIVERSIFY_CROSS_DOMAIN_APPLY]: SESSION_SLICES.DIVERSIFY,
+};
+
 export const SESSION_REASON_CODE_LABELS: Record<SessionReasonCode, string> = {
 	[SESSION_REASON_CODES.CONTINUE_RECENT_DOMAIN]: 'Recent domain',
 	[SESSION_REASON_CODES.CONTINUE_DUE_IN_DOMAIN]: 'Due in recent domain',

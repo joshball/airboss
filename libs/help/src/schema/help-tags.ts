@@ -12,7 +12,7 @@
  * de-dupe axes across both libraries.
  */
 
-import type { AppSurface, AviationTopic, HelpKind } from '@ab/constants';
+import type { AppSurface, AviationTopic, ConceptGroup, HelpKind } from '@ab/constants';
 
 /**
  * The full tag bag on a help page or section.
@@ -39,4 +39,12 @@ export interface HelpTags {
 	 * length + count caps as reference keywords.
 	 */
 	keywords?: readonly string[];
+
+	/**
+	 * Optional. Grouping axis for the `/help/concepts` index. Only meaningful
+	 * when the parent page has `concept === true`; the concepts route groups
+	 * pages by this value. Pages without a group fall into the
+	 * `airboss-architecture` bucket.
+	 */
+	conceptGroup?: ConceptGroup;
 }

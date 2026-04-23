@@ -22,13 +22,56 @@ import {
 	APP_SURFACE_MIN,
 	APP_SURFACE_VALUES,
 	AVIATION_TOPIC_VALUES,
+	CONCEPT_GROUP_VALUES,
 	HELP_KIND_VALUES,
+	HELP_KINDS,
 	REFERENCE_BANNED_KEYWORDS,
 	REFERENCE_KEYWORD_MAX_COUNT,
 	REFERENCE_KEYWORD_MAX_LENGTH,
 } from '@ab/constants';
+import { EXTERNAL_REF_SOURCE_VALUES, type ExternalRef } from './schema/external-ref';
 import type { HelpPage } from './schema/help-page';
 import type { HelpSection } from './schema/help-section';
+
+/** Callout variants supported by the MarkdownBody renderer (`:::variant`). */
+export const CALLOUT_VARIANTS: readonly string[] = ['tip', 'warn', 'danger', 'howto', 'note', 'example'];
+
+/**
+ * Extract `:::variant` tokens from a markdown body. Returns the set of
+ * variant names (including duplicates) so the validator can flag unknown
+ * ones. Matches the renderer's parser: directive opens at the start of a
+ * line as `:::ident` followed by whitespace or end-of-line; close token
+ * is a bare `:::` line.
+ */
+export function extractCalloutVariants(body: string): readonly string[] {
+	const out: string[] = [];
+	for (const match of body.matchAll(/^:::\s*([a-z][a-z-]*)\s*(?:$|\s)/gim)) {
+		const name = match[1];
+		if (name) out.push(name.toLowerCase());
+	}
+	return out;
+}
+
+/**
+ * Hostnames that should never appear in an external reference. Private
+ * network hosts indicate a misauthored URL that will break in production.
+ * The check is conservative: an external ref should resolve to a public,
+ * https host.
+ */
+const PRIVATE_HOST_PATTERNS: readonly RegExp[] = [
+	/^localhost$/i,
+	/^127\./,
+	/^0\.0\.0\.0$/,
+	/^10\./,
+	/^192\.168\./,
+	/^172\.(1[6-9]|2\d|3[01])\./,
+	/\.local$/i,
+	/\.internal$/i,
+];
+
+function isPrivateHost(host: string): boolean {
+	return PRIVATE_HOST_PATTERNS.some((re) => re.test(host));
+}
 
 export interface HelpValidationIssue {
 	message: string;
@@ -227,6 +270,70 @@ function validateOnePage(page: HelpPage, errors: HelpValidationIssue[], warnings
 		}
 	}
 
+	// conceptGroup: optional, enum, only meaningful when concept === true.
+	if (tags.conceptGroup !== undefined) {
+		if (!(CONCEPT_GROUP_VALUES as readonly string[]).includes(tags.conceptGroup)) {
+			errors.push({
+				message: `Help page '${id}' has invalid conceptGroup '${tags.conceptGroup}'.`,
+				pageId: id,
+			});
+		}
+		if (page.concept !== true) {
+			warnings.push({
+				message: `Help page '${id}' sets tags.conceptGroup but concept !== true. The group is ignored outside the /help/concepts index.`,
+				pageId: id,
+			});
+		}
+	}
+
+	// concept flag: requires helpKind === 'concept' and at least one externalRef.
+	if (page.concept === true) {
+		if (tags.helpKind !== HELP_KINDS.CONCEPT) {
+			errors.push({
+				message: `Help page '${id}' has concept: true but helpKind is '${tags.helpKind}' (must be '${HELP_KINDS.CONCEPT}').`,
+				pageId: id,
+			});
+		}
+		if (!Array.isArray(page.externalRefs) || page.externalRefs.length === 0) {
+			warnings.push({
+				message: `Concept page '${id}' has no externalRefs. Concept pages should cite at least one source.`,
+				pageId: id,
+			});
+		}
+	} else if (tags.helpKind === HELP_KINDS.CONCEPT) {
+		// Forward direction (concept: true -> helpKind concept) is a hard gate
+		// above. The reverse (concept-kind page without concept: true) is a
+		// warning: the kind is legitimately authored this way for some
+		// existing how-tos, but it means the page won't appear on the
+		// /help/concepts index.
+		warnings.push({
+			message: `Help page '${id}' has helpKind '${HELP_KINDS.CONCEPT}' but concept !== true. It won't appear on the /help/concepts index. Set concept: true to include it.`,
+			pageId: id,
+		});
+	}
+
+	// externalRefs: optional, structural + URL safety.
+	if (page.externalRefs !== undefined) {
+		validateExternalRefs(id, page.externalRefs, errors, warnings);
+	}
+
+	// Callout-variant validation: any `:::variant` token inside a section body
+	// must be a known variant. Unknown variants silently fall through in the
+	// renderer, which authors won't notice without this gate.
+	for (const section of page.sections) {
+		if (typeof section.body !== 'string') continue;
+		for (const variant of extractCalloutVariants(section.body)) {
+			if (variant === 'end') continue; // reserved close sentinel if authors use :::end
+			if (!CALLOUT_VARIANTS.includes(variant)) {
+				errors.push({
+					message: `Help page '${id}' section '${section.id}' uses unknown callout variant ':::${variant}'. Known: ${CALLOUT_VARIANTS.join(', ')}.`,
+					pageId: id,
+					sectionId: section.id,
+				});
+			}
+		}
+	}
+
 	// Section-id uniqueness within the page.
 	if (Array.isArray(page.sections)) {
 		const seenSections = new Set<string>();
@@ -260,6 +367,69 @@ function validateOnePage(page: HelpPage, errors: HelpValidationIssue[], warnings
 					sectionId: section.id,
 				});
 			}
+		}
+	}
+}
+
+function validateExternalRefs(
+	pageId: string,
+	refs: readonly ExternalRef[],
+	errors: HelpValidationIssue[],
+	warnings: HelpValidationIssue[],
+): void {
+	for (const [idx, ref] of refs.entries()) {
+		const at = `externalRefs[${idx}]`;
+		if (!ref || typeof ref !== 'object') {
+			errors.push({ message: `Help page '${pageId}' ${at} is not an object.`, pageId, location: at });
+			continue;
+		}
+		if (!ref.title || ref.title.trim() === '') {
+			errors.push({ message: `Help page '${pageId}' ${at} missing title.`, pageId, location: at });
+		}
+		if (!ref.url || ref.url.trim() === '') {
+			errors.push({ message: `Help page '${pageId}' ${at} missing url.`, pageId, location: at });
+			continue;
+		}
+		if (!(EXTERNAL_REF_SOURCE_VALUES as readonly string[]).includes(ref.source)) {
+			errors.push({
+				message: `Help page '${pageId}' ${at} has invalid source '${ref.source}'.`,
+				pageId,
+				location: at,
+			});
+		}
+
+		let parsed: URL;
+		try {
+			parsed = new URL(ref.url);
+		} catch {
+			errors.push({
+				message: `Help page '${pageId}' ${at} has unparseable url '${ref.url}'.`,
+				pageId,
+				location: at,
+			});
+			continue;
+		}
+		if (parsed.protocol !== 'https:' && parsed.protocol !== 'http:') {
+			errors.push({
+				message: `Help page '${pageId}' ${at} url must use http or https (got '${parsed.protocol}').`,
+				pageId,
+				location: at,
+			});
+			continue;
+		}
+		if (parsed.protocol === 'http:') {
+			warnings.push({
+				message: `Help page '${pageId}' ${at} uses http (not https). Prefer https for external references.`,
+				pageId,
+				location: at,
+			});
+		}
+		if (isPrivateHost(parsed.hostname)) {
+			errors.push({
+				message: `Help page '${pageId}' ${at} url resolves to a private-network host ('${parsed.hostname}').`,
+				pageId,
+				location: at,
+			});
 		}
 	}
 }
