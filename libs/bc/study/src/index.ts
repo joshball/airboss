@@ -20,6 +20,7 @@ export {
 	createCard,
 	getCard,
 	getCards,
+	getCardsCount,
 	getDueCards,
 	SourceRefRequiredError,
 	setCardStatus,
@@ -126,6 +127,7 @@ export {
 	getRepStats,
 	getScenario,
 	getScenarios,
+	getScenariosCount,
 	InvalidOptionError,
 	ScenarioNotAttemptableError,
 	ScenarioNotFoundError,
@@ -179,6 +181,7 @@ export type {
 	SessionSuggestedAction,
 	SessionSummary,
 	SessionSummarySliceRow,
+	SkipSessionSlotInput,
 } from './sessions';
 export {
 	buildEnginePools,
@@ -195,6 +198,7 @@ export {
 	recordItemResult,
 	SessionNotFoundError,
 	SessionSlotNotFoundError,
+	skipSessionSlot,
 	startSession,
 } from './sessions';
 export type { CardSchedulerState, ScheduleResult } from './srs';

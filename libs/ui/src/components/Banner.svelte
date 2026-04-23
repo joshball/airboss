@@ -93,6 +93,13 @@ const role = $derived(variant === 'danger' ? 'alert' : 'status');
 		opacity: 1;
 	}
 
+	.dismiss:focus-visible {
+		outline: var(--ab-focus-ring-width) solid var(--ab-focus-ring);
+		outline-offset: var(--ab-focus-ring-offset);
+		border-radius: var(--ab-radius-sm);
+		opacity: 1;
+	}
+
 	.v-info {
 		background: var(--ab-color-info-subtle);
 		border-color: var(--ab-color-info-subtle-border);

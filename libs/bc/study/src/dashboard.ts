@@ -27,6 +27,7 @@ import {
 	WEAK_AREA_WINDOW_DAYS,
 } from '@ab/constants';
 import { db as defaultDb } from '@ab/db';
+import { createLogger } from '@ab/utils';
 import { aliasedTable, and, count, eq, gte, isNotNull, isNull, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import { type CalibrationResult, getCalibration } from './calibration';
@@ -38,9 +39,11 @@ import {
 	getCertProgress,
 	getDomainCertMatrix,
 } from './knowledge';
-import { getActivePlan } from './plans';
+import { getActivePlan, NoActivePlanError, PlanNotFoundError } from './plans';
 import { card, cardState, review, type StudyPlanRow, scenario, sessionItemResult } from './schema';
 import { type DashboardStats, getDashboardStats } from './stats';
+
+const log = createLogger('study:dashboard');
 
 type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;
 
@@ -613,23 +616,43 @@ export async function getDashboardPayload(
 			matrixFetcher(userId, db),
 		]);
 
-	function toResult<T>(r: PromiseSettledResult<T>): PanelResult<T> {
+	function toResult<T>(r: PromiseSettledResult<T>, panel: string): PanelResult<T> {
 		if (r.status === 'fulfilled') return { value: r.value };
-		const err = r.reason;
-		const message = err instanceof Error ? err.message : String(err);
-		return { error: message };
+		return { error: mapToPanelError(r.reason, panel, userId) };
 	}
 
 	return {
-		stats: toResult(stats),
-		repBacklog: toResult(repBacklog),
-		weakAreas: toResult(weakAreas),
-		activity: toResult(activity),
-		activePlan: toResult(activePlan),
-		calibration: toResult(calibration),
-		certProgress: toResult(certProgress),
-		domainCertMatrix: toResult(domainCertMatrix),
+		stats: toResult(stats, 'stats'),
+		repBacklog: toResult(repBacklog, 'repBacklog'),
+		weakAreas: toResult(weakAreas, 'weakAreas'),
+		activity: toResult(activity, 'activity'),
+		activePlan: toResult(activePlan, 'activePlan'),
+		calibration: toResult(calibration, 'calibration'),
+		certProgress: toResult(certProgress, 'certProgress'),
+		domainCertMatrix: toResult(domainCertMatrix, 'domainCertMatrix'),
 	};
+}
+
+/**
+ * Map an arbitrary thrown value to a user-safe panel error string and log
+ * the raw error server-side with context so debugging is still tractable.
+ *
+ * Previously `toResult` returned `err.message` verbatim, which leaked raw
+ * Drizzle / pg messages ("duplicate key value violates unique constraint
+ * ..." / "relation "..." does not exist") to the browser. Those strings are
+ * both unhelpful to learners and a low-grade info leak about the schema.
+ * Known domain errors map to specific user-safe phrases; everything else
+ * collapses to the generic string.
+ */
+export function mapToPanelError(err: unknown, panel: string, userId: string): string {
+	log.error(
+		'dashboard panel failed',
+		{ userId, metadata: { panel } },
+		err instanceof Error ? err : new Error(String(err)),
+	);
+	if (err instanceof NoActivePlanError) return 'No active study plan. Create one to see this panel.';
+	if (err instanceof PlanNotFoundError) return 'Study plan could not be found.';
+	return 'An unexpected error occurred.';
 }
 
 /** Utility for route-level helpers -- checks if a card is past its overdue grace. */

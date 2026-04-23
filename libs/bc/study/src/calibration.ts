@@ -17,6 +17,7 @@
  */
 
 import {
+	CALIBRATION_MAX_HISTORY,
 	CALIBRATION_MIN_BUCKET_COUNT,
 	CALIBRATION_TREND_WINDOW_DAYS,
 	CONFIDENCE_LEVEL_EXPECTED_ACCURACY,
@@ -27,7 +28,7 @@ import {
 	SESSION_ITEM_KINDS,
 } from '@ab/constants';
 import { db as defaultDb } from '@ab/db';
-import { and, eq, gte, isNotNull, isNull, lte, sql } from 'drizzle-orm';
+import { and, desc, eq, gte, isNotNull, isNull, lte, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import { card, review, scenario, sessionItemResult } from './schema';
 
@@ -141,6 +142,11 @@ async function loadPoints(
 	if (range?.end) repClauses.push(lte(sessionItemResult.completedAt, range.end));
 	if (domain) repClauses.push(eq(scenario.domain, domain));
 
+	// Hard-cap each leg at CALIBRATION_MAX_HISTORY rows. The summary +
+	// trend computations are dominated by the most recent points; returning
+	// every row for a long-running user turns a dashboard query into an
+	// unbounded scan. Ordering newest-first + `.limit` keeps the result
+	// shape semantically correct (newest wins) without blowing the budget.
 	const [reviewRows, repRows] = await Promise.all([
 		db
 			.select({
@@ -151,7 +157,9 @@ async function loadPoints(
 			})
 			.from(review)
 			.innerJoin(card, and(eq(card.id, review.cardId), eq(card.userId, review.userId)))
-			.where(and(...reviewClauses)),
+			.where(and(...reviewClauses))
+			.orderBy(desc(review.reviewedAt))
+			.limit(CALIBRATION_MAX_HISTORY),
 		db
 			.select({
 				confidence: sessionItemResult.confidence,
@@ -164,7 +172,9 @@ async function loadPoints(
 				scenario,
 				and(eq(scenario.id, sessionItemResult.scenarioId), eq(scenario.userId, sessionItemResult.userId)),
 			)
-			.where(and(...repClauses)),
+			.where(and(...repClauses))
+			.orderBy(desc(sessionItemResult.completedAt))
+			.limit(CALIBRATION_MAX_HISTORY),
 	]);
 
 	const points: RawPoint[] = [];

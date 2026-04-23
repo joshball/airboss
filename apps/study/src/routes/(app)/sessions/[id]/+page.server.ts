@@ -1,11 +1,8 @@
 import { requireAuth } from '@ab/auth';
 import {
-	addSkipDomain,
-	addSkipNode,
 	CardNotFoundError,
 	CardNotReviewableError,
 	completeSession,
-	getActivePlan,
 	getCard,
 	getScenario,
 	getSession,
@@ -16,15 +13,13 @@ import {
 	ScenarioNotAttemptableError,
 	ScenarioNotFoundError,
 	SessionNotFoundError,
-	setCardStatus,
-	setScenarioStatus,
+	skipSessionSlot,
 	submitAttempt,
 	submitAttemptSchema,
 	submitReview,
 	submitReviewSchema,
 } from '@ab/bc-study';
 import {
-	CARD_STATUSES,
 	CONFIDENCE_LEVEL_VALUES,
 	type ConfidenceLevel,
 	DOMAIN_VALUES,
@@ -32,7 +27,6 @@ import {
 	QUERY_PARAMS,
 	type ReviewRating,
 	ROUTES,
-	SCENARIO_STATUSES,
 	SESSION_ITEM_KINDS,
 	SESSION_ITEM_PHASE_VALUES,
 	SESSION_ITEM_PHASES,
@@ -44,7 +38,7 @@ import {
 	type SessionSkipKind,
 	type SessionSlice,
 } from '@ab/constants';
-import { createLogger } from '@ab/utils';
+import { createLogger, requireInt } from '@ab/utils';
 import { error, fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 
@@ -214,12 +208,12 @@ export const actions: Actions = {
 		const user = requireAuth(event);
 		await requireOpenSession(event.params.id, user.id);
 		const form = await event.request.formData();
-		const slotIndex = Number(form.get('slotIndex'));
+		const slotIndexResult = requireInt(form, 'slotIndex');
+		if (!slotIndexResult.ok) return fail(400, { error: slotIndexResult.error });
+		const slotIndex = slotIndexResult.value;
 		const ratingRaw = form.get('rating');
 		const confidenceRaw = form.get('confidence');
 		const answerMsRaw = form.get('answerMs');
-
-		if (!Number.isInteger(slotIndex)) return fail(400, { error: 'slotIndex required' });
 
 		const slot = await loadSlot(event.params.id, user.id, slotIndex);
 		if (slot.itemKind !== SESSION_ITEM_KINDS.CARD || !slot.cardId) {
@@ -278,12 +272,12 @@ export const actions: Actions = {
 		const user = requireAuth(event);
 		await requireOpenSession(event.params.id, user.id);
 		const form = await event.request.formData();
-		const slotIndex = Number(form.get('slotIndex'));
+		const slotIndexResult = requireInt(form, 'slotIndex');
+		if (!slotIndexResult.ok) return fail(400, { error: slotIndexResult.error });
+		const slotIndex = slotIndexResult.value;
 		const chosenOption = String(form.get('chosenOption') ?? '');
 		const confidenceRaw = form.get('confidence');
 		const answerMsRaw = form.get('answerMs');
-
-		if (!Number.isInteger(slotIndex)) return fail(400, { error: 'slotIndex required' });
 
 		const slot = await loadSlot(event.params.id, user.id, slotIndex);
 		if (slot.itemKind !== SESSION_ITEM_KINDS.REP || !slot.scenarioId) {
@@ -354,9 +348,9 @@ export const actions: Actions = {
 		const user = requireAuth(event);
 		await requireOpenSession(event.params.id, user.id);
 		const form = await event.request.formData();
-		const slotIndex = Number(form.get('slotIndex'));
-		if (!Number.isInteger(slotIndex)) return fail(400, { error: 'slotIndex required' });
-		const slot = await loadSlot(event.params.id, user.id, slotIndex);
+		const slotIndexResult = requireInt(form, 'slotIndex');
+		if (!slotIndexResult.ok) return fail(400, { error: slotIndexResult.error });
+		const slot = await loadSlot(event.params.id, user.id, slotIndexResult.value);
 		if (slot.itemKind !== SESSION_ITEM_KINDS.NODE_START) return fail(400, { error: 'slot is not a node_start' });
 
 		await recordItemResult(event.params.id, user.id, {
@@ -389,61 +383,33 @@ export const actions: Actions = {
 		const user = requireAuth(event);
 		await requireOpenSession(event.params.id, user.id);
 		const form = await event.request.formData();
-		const slotIndex = Number(form.get('slotIndex'));
+		const slotIndexResult = requireInt(form, 'slotIndex');
+		if (!slotIndexResult.ok) return fail(400, { error: slotIndexResult.error });
+		const slotIndex = slotIndexResult.value;
 		const skipKindRaw = String(form.get('skipKind') ?? 'today');
-		if (!Number.isInteger(slotIndex)) return fail(400, { error: 'slotIndex required' });
 		if (!(SESSION_SKIP_KIND_VALUES as readonly string[]).includes(skipKindRaw)) {
 			return fail(400, { error: 'Invalid skip kind' });
 		}
 		const skipKind = skipKindRaw as SessionSkipKind;
 		const slot = await loadSlot(event.params.id, user.id, slotIndex);
 
-		await recordItemResult(event.params.id, user.id, {
-			slotIndex: slot.slotIndex,
-			itemKind: slot.itemKind,
-			slice: slot.slice,
-			reasonCode: slot.reasonCode,
-			cardId: slot.cardId,
-			scenarioId: slot.scenarioId,
-			nodeId: slot.nodeId,
-			skipKind,
-			reasonDetail: slot.reasonDetail,
-		});
-
-		if (skipKind === SESSION_SKIP_KINDS.TODAY) {
-			return { success: true as const };
-		}
-
-		// Both `topic` and `permanent` mutate the plan; `permanent` additionally
-		// suspends the underlying content row. Fetch the active plan once; bail
-		// gracefully if the user has no active plan (shouldn't happen in a
-		// running session, but the BC contract tolerates it).
-		const plan = await getActivePlan(user.id);
+		// Resolve the slot's domain BEFORE handing off to the BC so the
+		// transaction doesn't have to do its own content reads. The BC receives
+		// all the data it needs to record + mutate atomically.
+		const fallbackDomain =
+			skipKind !== SESSION_SKIP_KINDS.TODAY && !slot.nodeId ? await resolveSlotDomain(user.id, slot) : null;
 
 		try {
-			if (plan) {
-				if (slot.nodeId) {
-					await addSkipNode(plan.id, user.id, slot.nodeId);
-				} else {
-					const domain = await resolveSlotDomain(user.id, slot);
-					if (domain) {
-						await addSkipDomain(plan.id, user.id, domain);
-					}
-				}
-			}
-
-			if (skipKind === SESSION_SKIP_KINDS.PERMANENT) {
-				if (slot.itemKind === SESSION_ITEM_KINDS.CARD && slot.cardId) {
-					await setCardStatus(slot.cardId, user.id, CARD_STATUSES.SUSPENDED);
-				} else if (slot.itemKind === SESSION_ITEM_KINDS.REP && slot.scenarioId) {
-					await setScenarioStatus(slot.scenarioId, user.id, SCENARIO_STATUSES.SUSPENDED);
-				}
-				// Node-start slots have no content row to suspend; the skipNode
-				// mutation above is the full persistence.
-			}
+			await skipSessionSlot({
+				userId: user.id,
+				sessionId: event.params.id,
+				slot,
+				skipKind,
+				fallbackDomain,
+			});
 		} catch (err) {
 			log.error(
-				'skip action side-effects threw',
+				'skipSessionSlot transaction threw',
 				{
 					requestId: event.locals.requestId,
 					userId: user.id,
@@ -451,9 +417,7 @@ export const actions: Actions = {
 				},
 				err instanceof Error ? err : undefined,
 			);
-			// Don't fail the whole request; the slot is already recorded. The
-			// engine will reconcile from whatever plan/content state actually
-			// persisted on the next run.
+			return fail(500, { success: false as const, error: 'Could not save skip' });
 		}
 
 		return { success: true as const };

@@ -54,6 +54,7 @@ import {
 	type SessionReasonCode,
 	type SessionSlice,
 } from '@ab/constants';
+import { timestamps } from '@ab/db';
 import { sql } from 'drizzle-orm';
 import {
 	boolean,
@@ -160,8 +161,7 @@ export const knowledgeNode = studySchema.table(
 		 * rows during the migration window; the seed back-fills on next run.
 		 */
 		lifecycle: text('lifecycle').default(NODE_LIFECYCLES.SKELETON),
-		createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
-		updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+		...timestamps(),
 	},
 	(t) => ({
 		knowledgeNodeDomainIdx: index('knowledge_node_domain_idx').on(t.domain),
@@ -236,8 +236,7 @@ export const card = studySchema.table(
 		nodeId: text('node_id').references(() => knowledgeNode.id, { onDelete: 'set null' }),
 		isEditable: boolean('is_editable').notNull().default(true),
 		status: text('status').notNull().default(CARD_STATUSES.ACTIVE),
-		createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
-		updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+		...timestamps(),
 	},
 	(t) => ({
 		cardUserStatusIdx: index('card_user_status_idx').on(t.userId, t.status),
@@ -505,8 +504,7 @@ export const studyPlan = studySchema.table(
 		depthPreference: text('depth_preference').notNull().default(DEPTH_PREFERENCES.WORKING),
 		sessionLength: smallint('session_length').notNull().default(DEFAULT_SESSION_LENGTH),
 		defaultMode: text('default_mode').notNull().default(SESSION_MODES.MIXED),
-		createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
-		updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+		...timestamps(),
 	},
 	(t) => ({
 		planUserStatusIdx: index('plan_user_status_idx').on(t.userId, t.status),
@@ -602,7 +600,14 @@ export const sessionItemResult = studySchema.table(
 		reasonCode: text('reason_code').notNull(),
 		cardId: text('card_id').references(() => card.id, { onDelete: 'set null' }),
 		scenarioId: text('scenario_id').references(() => scenario.id, { onDelete: 'set null' }),
-		nodeId: text('node_id'),
+		/**
+		 * Optional pointer to a knowledge_node. `set null` on delete: rep /
+		 * node-start history outlives the node so the learner's historical
+		 * record stays intact if a node is removed or renamed. Carries a FK +
+		 * index (`sir_node_completed_idx`) so node-scoped aggregations don't
+		 * scan the whole slot table.
+		 */
+		nodeId: text('node_id').references(() => knowledgeNode.id, { onDelete: 'set null' }),
 		reviewId: text('review_id').references(() => review.id, { onDelete: 'set null' }),
 		skipKind: text('skip_kind'),
 		/** Free-text detail when an item is skipped because its source was deleted etc. */
@@ -638,6 +643,10 @@ export const sessionItemResult = studySchema.table(
 		// substrate unification (ADR 012).
 		sirUserKindCompletedIdx: index('sir_user_kind_completed_idx').on(t.userId, t.itemKind, t.completedAt),
 		sirScenarioCompletedIdx: index('sir_scenario_completed_idx').on(t.scenarioId, t.completedAt),
+		// Covers node-scoped aggregations (node mastery, "has the user touched
+		// this node via a session slot?") without scanning the whole slot
+		// table for each knowledge-graph render.
+		sirNodeCompletedIdx: index('sir_node_completed_idx').on(t.nodeId, t.completedAt),
 		itemKindCheck: check('sir_item_kind_check', sql.raw(`"item_kind" IN (${inList(SESSION_ITEM_KIND_VALUES)})`)),
 		sliceCheck: check('sir_slice_check', sql.raw(`"slice" IN (${inList(SESSION_SLICE_VALUES)})`)),
 		reasonCodeCheck: check(
@@ -678,11 +687,21 @@ export const knowledgeNodeProgress = studySchema.table(
 		userId: text('user_id')
 			.notNull()
 			.references(() => bauthUser.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
-		/** Knowledge-graph node slug; no FK because seeded nodes may be rebuilt independently. */
-		nodeId: text('node_id').notNull(),
+		/**
+		 * Knowledge-graph node slug. `set null` on delete so a node rebuild
+		 * that renames a slug doesn't cascade-destroy the learner's progress
+		 * row -- the row is kept as an orphan until the next progress write
+		 * reconciles it. Explicit FK (previously skipped because "seeds may
+		 * rebuild independently") is worth the trade: a dangling `node_id`
+		 * that no longer resolves is a bug, not a feature, and cascade-set-
+		 * null preserves the historical record.
+		 */
+		nodeId: text('node_id').references(() => knowledgeNode.id, { onDelete: 'set null' }),
 		visitedPhases: text('visited_phases').array().notNull().default(sql`'{}'::text[]`),
 		completedPhases: text('completed_phases').array().notNull().default(sql`'{}'::text[]`),
 		lastPhase: text('last_phase'),
+		// Append-only-ish projection: only `updatedAt` matters because every
+		// write is a full upsert of the projection. No createdAt by design.
 		updatedAt: timestamp('updated_at', { withTimezone: true })
 			.notNull()
 			.defaultNow()
@@ -690,6 +709,10 @@ export const knowledgeNodeProgress = studySchema.table(
 	},
 	(t) => ({
 		userNodeUnique: uniqueIndex('knp_user_node_unique').on(t.userId, t.nodeId),
+		// Supports node-first reads ("who has touched this node?" / "what's
+		// the progress on this node across users?"). Without this, listing
+		// node progress falls back to the unique index prefix on `user_id`.
+		knpNodeIdx: index('knp_node_idx').on(t.nodeId),
 	}),
 );
 

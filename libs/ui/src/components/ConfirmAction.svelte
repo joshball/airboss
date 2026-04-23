@@ -4,6 +4,15 @@ import { tick } from 'svelte';
 import type { ButtonSize, ButtonVariant } from './Button.svelte';
 
 /**
+ * CSS selector for all focusable descendants inside the confirm panel. The
+ * trap cycles between every match in DOM order; the hardcoded two-button
+ * cycle previously shipped broke the instant a caller rendered extra
+ * controls (hidden fields + a text input, etc).
+ */
+const FOCUSABLE_SELECTOR =
+	'a[href], area[href], button:not([disabled]), input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
+/**
  * Two-step confirm control for destructive actions ("Archive", "Skip
  * permanently"). First click reveals a confirm row with Confirm + Cancel;
  * second click (Confirm) runs the action.
@@ -55,7 +64,14 @@ let {
 let confirming = $state(false);
 let triggerEl = $state<HTMLButtonElement | null>(null);
 let confirmEl = $state<HTMLButtonElement | null>(null);
-let cancelEl = $state<HTMLButtonElement | null>(null);
+let panelEl = $state<HTMLDivElement | null>(null);
+
+function getFocusables(): HTMLElement[] {
+	if (!panelEl) return [];
+	return Array.from(panelEl.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)).filter(
+		(el) => !el.hasAttribute('aria-hidden') && el.offsetParent !== null,
+	);
+}
 
 async function openConfirm() {
 	if (disabled) return;
@@ -85,20 +101,50 @@ function onPanelKeydown(event: KeyboardEvent) {
 		return;
 	}
 	if (event.key !== 'Tab') return;
-	// Focus trap between Confirm and Cancel.
+	// Focus trap across every focusable in the panel. Falls back to
+	// {confirm, cancel} when the panel only renders those two, matching the
+	// previous behavior exactly.
+	const focusables = getFocusables();
+	if (focusables.length === 0) return;
+	const first = focusables[0];
+	const last = focusables[focusables.length - 1];
 	const target = event.target as HTMLElement | null;
 	if (event.shiftKey) {
-		if (target === confirmEl) {
+		if (target === first || !target || !focusables.includes(target)) {
 			event.preventDefault();
-			cancelEl?.focus();
+			last.focus();
 		}
 	} else {
-		if (target === cancelEl) {
+		if (target === last || !target || !focusables.includes(target)) {
 			event.preventDefault();
-			confirmEl?.focus();
+			first.focus();
 		}
 	}
 }
+
+/**
+ * Click-outside: when the user clicks anywhere outside the confirm panel
+ * while it's open, cancel the confirmation and return focus to the trigger.
+ * Mirrors the Escape contract so pointer users get the same escape hatch.
+ */
+function onDocumentPointerDown(event: PointerEvent) {
+	if (!confirming) return;
+	const target = event.target as Node | null;
+	if (!target || !panelEl) return;
+	if (panelEl.contains(target)) return;
+	void cancel();
+}
+
+$effect(() => {
+	if (!confirming) return;
+	// `pointerdown` fires before `click`, which means a click-outside cancels
+	// before any outer handler interprets the click. Capture phase keeps this
+	// ahead of app-level listeners that might stopPropagation.
+	document.addEventListener('pointerdown', onDocumentPointerDown, true);
+	return () => {
+		document.removeEventListener('pointerdown', onDocumentPointerDown, true);
+	};
+});
 </script>
 
 {#if !confirming}
@@ -118,7 +164,13 @@ function onPanelKeydown(event: KeyboardEvent) {
 {:else}
 	<!-- svelte-ignore a11y_no_static_element_interactions -->
 	<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-	<div class="confirm" role="group" aria-label={label ?? confirmLabel} onkeydown={onPanelKeydown}>
+	<div
+		bind:this={panelEl}
+		class="confirm"
+		role="group"
+		aria-label={label ?? confirmLabel}
+		onkeydown={onPanelKeydown}
+	>
 		{#if formAction}
 			<form method={formMethod} action={formAction} class="form">
 				{#if hiddenFields}
@@ -145,7 +197,6 @@ function onPanelKeydown(event: KeyboardEvent) {
 			</button>
 		{/if}
 		<button
-			bind:this={cancelEl}
 			type="button"
 			class="btn v-ghost s-{size}"
 			onclick={cancel}
@@ -191,8 +242,8 @@ function onPanelKeydown(event: KeyboardEvent) {
 
 	.trigger:focus-visible,
 	.btn:focus-visible {
-		outline: none;
-		box-shadow: 0 0 0 3px var(--ab-color-focus-ring);
+		outline: var(--ab-focus-ring-width) solid var(--ab-focus-ring);
+		outline-offset: var(--ab-focus-ring-offset);
 	}
 
 	.trigger:disabled,

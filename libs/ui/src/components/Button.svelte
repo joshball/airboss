@@ -56,7 +56,15 @@ const isDisabled = $derived(disabled || loading);
 		href={isDisabled ? undefined : href}
 		aria-disabled={isDisabled ? 'true' : undefined}
 		aria-label={ariaLabel}
-		onclick={onclick}
+		tabindex={isDisabled ? -1 : undefined}
+		onclick={(event) => {
+			if (isDisabled) {
+				event.preventDefault();
+				event.stopPropagation();
+				return;
+			}
+			onclick?.(event);
+		}}
 	>
 		{#if loading && loadingLabel}
 			{loadingLabel}
@@ -107,14 +115,21 @@ const isDisabled = $derived(disabled || loading);
 	}
 
 	.btn:focus-visible {
-		outline: none;
-		box-shadow: 0 0 0 3px var(--ab-color-focus-ring);
+		outline: var(--ab-focus-ring-width) solid var(--ab-focus-ring);
+		outline-offset: var(--ab-focus-ring-offset);
 	}
 
 	.btn:disabled,
 	.btn.is-disabled {
 		cursor: not-allowed;
 		opacity: 0.6;
+	}
+
+	/* Anchor form of the primitive with disabled=true must ignore pointer
+	   input entirely -- aria-disabled keeps it out of AT focus order, and
+	   pointer-events: none removes click targets on the link text. */
+	.btn.is-disabled {
+		pointer-events: none;
 	}
 
 	/* Sizes */

@@ -20,7 +20,7 @@ import {
 } from '@ab/constants';
 import { db as defaultDb, escapeLikePattern } from '@ab/db';
 import { generateCardId } from '@ab/utils';
-import { and, asc, desc, eq, ilike, inArray, lte, or, type SQL } from 'drizzle-orm';
+import { and, asc, desc, eq, ilike, inArray, lte, or, type SQL, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import { type CardRow, type CardStateRow, card, cardState } from './schema';
 import { fsrsInitialState } from './srs';
@@ -301,6 +301,43 @@ export async function getCards(userId: string, filters: CardFilters = {}, db: Db
 	if (filters.offset !== undefined && filters.offset > 0) q = q.offset(filters.offset);
 
 	return await q;
+}
+
+/**
+ * Count-only companion to `getCards`. Accepts the same `CardFilters` shape
+ * (minus `limit`/`offset`, which don't apply to counts) and returns the
+ * total-matching-rows integer the browse page needs for pagination display.
+ * Lives alongside `getCards` so both read paths share the filter semantics:
+ * a drift between the list and the count would show up as "Page 3 of 2".
+ */
+export async function getCardsCount(
+	userId: string,
+	filters: Omit<CardFilters, 'limit' | 'offset'> = {},
+	db: Db = defaultDb,
+): Promise<number> {
+	const statusFilter = filters.status
+		? Array.isArray(filters.status)
+			? filters.status
+			: [filters.status]
+		: [CARD_STATUSES.ACTIVE];
+
+	const clauses: SQL[] = [eq(card.userId, userId), inArray(card.status, statusFilter)];
+
+	if (filters.domain) clauses.push(eq(card.domain, filters.domain));
+	if (filters.cardType) clauses.push(eq(card.cardType, filters.cardType));
+	if (filters.sourceType) clauses.push(eq(card.sourceType, filters.sourceType));
+	if (filters.nodeId) clauses.push(eq(card.nodeId, filters.nodeId));
+	if (filters.search && filters.search.trim().length > 0) {
+		const pattern = `%${escapeLikePattern(filters.search.trim())}%`;
+		const cond = or(ilike(card.front, pattern), ilike(card.back, pattern));
+		if (cond) clauses.push(cond);
+	}
+
+	const [row] = await db
+		.select({ total: sql<number>`count(*)::int` })
+		.from(card)
+		.where(and(...clauses));
+	return Number(row?.total ?? 0);
 }
 
 /** Set a card's status (active/suspended/archived). */
