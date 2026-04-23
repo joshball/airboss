@@ -1,13 +1,14 @@
 # Theme system knowledge base
 
-Four documents, read in order. Together they capture what seven prior iterations taught us about building a theme system for a monorepo of surface-typed Svelte apps, and what the next project should start from instead of re-deriving.
+Five documents, read in order. They capture what eight iterations taught us about building a theme system for a monorepo of surface-typed Svelte apps, plus the as-built state post Option A (PRs #78 - #85, 2026-04) so a new agent can see the shape in the running code.
 
 ## Documents
 
-1. **[01-LESSONS.md](01-LESSONS.md)** — what seven prior iterations taught us. What kept working, what kept failing, and why. Read this before anything else.
-2. **[02-ARCHITECTURE.md](02-ARCHITECTURE.md)** — the reference architecture. Directory shape, layered token model, contract types, registry, derivation, emission. The shape every new project should start from.
-3. **[03-ENFORCEMENT.md](03-ENFORCEMENT.md)** — lint rules, codemods, contrast tests, CI gates. The tools that *make the system stick*. Not optional — every prior iteration skipped these and regretted it.
-4. **[04-VOCABULARY.md](04-VOCABULARY.md)** — the complete token name catalog. Copy, don't re-derive.
+1. **[01-LESSONS.md](01-LESSONS.md)** - what eight prior iterations taught us. What kept working, what kept failing, why. Read before anything else.
+2. **[02-ARCHITECTURE.md](02-ARCHITECTURE.md)** - the as-built reference architecture. Directory shape, layered token model, contract types, registry, derivation, emission, pre-hydration, appearance cookie. The shape currently in `libs/themes/` on main.
+3. **[03-ENFORCEMENT.md](03-ENFORCEMENT.md)** - lint rules, codemods, contrast tests, CI gates. The tools that make the system stick.
+4. **[04-VOCABULARY.md](04-VOCABULARY.md)** - complete token-name catalog, derived from `libs/themes/vocab.ts` + the emit pipeline.
+5. **[05-OVERHAUL-2026-04.md](05-OVERHAUL-2026-04.md)** - how Option A actually landed. Wave graph, file-ownership scoping rule, compat-alias bridge strategy, appearance-toggle UX. The "how" companion to 02's "what".
 
 ## The executive summary
 

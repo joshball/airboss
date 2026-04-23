@@ -1,14 +1,14 @@
 # Vocabulary reference
 
-Complete catalog of token names every theme system should start from. Copy, don't re-derive. Change names only with justification — every rename is a migration.
+Complete as-built catalog of every role-token name emitted by `libs/themes/`. Ground truth: `libs/themes/vocab.ts` + the prefix families `emit.ts` synthesizes. Copy, don't re-derive. Every rename is a migration.
 
-## Why this specific vocabulary
+## Why this vocabulary
 
-Seven iterations converged on role-based naming with ~12 role families. Going narrower (e.g. only `color`/`size`) lost expressiveness; going wider (airboss-v1's 100+ information types) lost adoption. This set is the sweet spot that survived.
+Eight iterations converged on role-based naming across ~12 role families plus a small number of component token families. Going narrower (only `color`/`size`) lost expressiveness; going wider (v1's 100+ information types) lost adoption. Option A (2026-04) confirmed the shape under real load: the 12 primitives plus 8 new primitives from package #4 all fit, and migrating 2,614 call sites didn't need a new token class.
 
 ## Role tokens
 
-### ink — text color
+### ink -- text color
 
 ```text
 --ink-body           Default body text
@@ -19,87 +19,100 @@ Seven iterations converged on role-based naming with ~12 role families. Going na
 --ink-inverse        Text on dark/saturated surfaces (buttons, filled states)
 ```
 
-### surface — fills
+### surface -- fills
 
 ```text
---surface-page       The base background everything sits on
---surface-panel      Elevated content (cards, panels) against the page
---surface-raised     Further elevation (popovers, menus)
---surface-sunken     Receded content (input backgrounds, code blocks)
---surface-muted      Low-contrast fill (disabled, placeholder)
---surface-overlay    Modal/dialog content surface
+--surface-page       Page background
+--surface-panel      Card / panel fill
+--surface-raised     Elevated fill (dropdown menu, popover)
+--surface-sunken     Recessed fill (input, nested card)
+--surface-muted      Disabled / read-only fill
+--surface-overlay    Modal scrim backing
 ```
 
-### edge — borders
+### edge -- borders, dividers
 
 ```text
---edge-default       Normal borders
---edge-strong        Emphasized borders (active inputs, selected rows)
---edge-subtle        Barely-visible dividers
---edge-focus         Focused element borders (composes with --focus-ring)
+--edge-default       Default 1px border
+--edge-strong        Emphasized border (hover, active)
+--edge-subtle        Faint divider
+--edge-focus         Focus outline color (rarely used directly; see focus.* below)
 ```
 
-### action — interactive intent
+### action -- interactive colors
 
-Base roles: `default`, `hazard` (destructive), `caution` (warning-level action), `neutral`, `link`.
+Five roles x seven states. Each role ships `base`, `hover`, `active`, `wash`, `edge`, `ink`, `disabled`.
 
-Each role ships a bundle (derived from a single base color):
+Roles: `default`, `hazard`, `caution`, `neutral`, `link`.
 
 ```text
---action-{role}              Solid base color
---action-{role}-hover        Hover state
---action-{role}-active       Pressed/active state
---action-{role}-wash         Subtle tinted background (subtle button, chip)
---action-{role}-edge         Subtle border matching the role
---action-{role}-ink          Text on --action-{role} solid
---action-{role}-disabled     Disabled state
+--action-default                  Base brand action (primary buttons, links)
+--action-default-hover
+--action-default-active
+--action-default-wash             Low-alpha tint for backgrounds, badges
+--action-default-edge             Low-alpha border variant
+--action-default-ink              Contrasting text on a default-filled surface
+--action-default-disabled
+
+--action-hazard-*                 Destructive (delete, remove, kick)
+--action-caution-*                Non-destructive warning (unsaved changes, leave?)
+--action-neutral-*                Secondary/tertiary gray actions
+--action-link-*                   Hyperlink color family
 ```
 
-Example: `--action-default-ink` is the text color of a solid primary button.
+35 tokens total in this family.
 
-### signal — status / feedback
+### signal -- status / feedback
 
-Bases: `success`, `warning`, `danger`, `info`.
+Four roles x four variants. Roles: `success`, `warning`, `danger`, `info`.
 
 ```text
---signal-{role}              Solid base color
---signal-{role}-wash         Subtle tinted background (banners, alerts)
---signal-{role}-edge         Subtle border
---signal-{role}-ink          Text on --signal-{role} solid
+--signal-success                  Solid fill (badge, dot, progress bar)
+--signal-success-wash             Low-alpha backdrop (toast, banner)
+--signal-success-edge             Low-alpha border
+--signal-success-ink              Contrasting text on solid
+
+--signal-warning-*
+--signal-danger-*
+--signal-info-*
 ```
 
-### focus — focus indication
+16 tokens total.
+
+### focus -- keyboard focus
 
 ```text
---focus-ring                 Outline color
---focus-ring-strong          High-contrast variant for small targets
---focus-ring-shadow          Full box-shadow value for composite focus
+--focus-ring                      Standard focus outline (2px)
+--focus-ring-strong               High-visibility variant (admin surfaces)
+--focus-ring-offset               Distance from the focused element
+--focus-ring-width                Ring thickness
+--focus-shadow                    Optional soft shadow companion
 ```
 
-### accent — decorative, non-interactive
+### accent -- inline typographic accents
 
 ```text
---accent-code                Inline code highlights
---accent-reference           Reference-material highlights
---accent-definition          Glossary term highlights
+--accent-code                     Inline code text color
+--accent-reference                Cross-reference link accent (e.g. wiki-links)
+--accent-definition               Glossary-term highlight
 ```
 
-### overlay — scrims, backdrops
+### overlay -- transient chrome
 
 ```text
---overlay-scrim              Modal backdrop
---overlay-tooltip-bg         Tooltip background
---overlay-tooltip-ink        Tooltip text
+--overlay-scrim                   Modal backdrop translucency
+--overlay-tooltip-bg              Tooltip fill
+--overlay-tooltip-ink             Tooltip text
 ```
 
-### selection — text/row selection
+### selection -- text selection
 
 ```text
 --selection-bg
 --selection-ink
 ```
 
-### disabled — disabled state
+### disabled -- across-role disabled baseline
 
 ```text
 --disabled-surface
@@ -107,7 +120,7 @@ Bases: `success`, `warning`, `danger`, `info`.
 --disabled-edge
 ```
 
-### link — hyperlinks (when distinct from action-link)
+### link -- navigation
 
 ```text
 --link-default
@@ -117,206 +130,210 @@ Bases: `success`, `warning`, `danger`, `info`.
 
 ## Typography tokens
 
-Typography lives in *bundles*, not atoms. A bundle is a TypeScript object resolved to a set of CSS variables.
+Emitted per typography pack from `libs/themes/core/typography-packs.ts`.
 
-### Reading
+### Families
 
 ```text
---type-reading-body          Default body prose
---type-reading-lead          Emphasized lead paragraph
---type-reading-caption       Figure captions, small prose
---type-reading-quote         Blockquotes
+--font-family-sans
+--font-family-serif
+--font-family-mono
+--font-family-base        (= families.base; usually sans, overridable per pack)
+--font-family-display     (optional; emitted only when declared)
 ```
 
-### Heading
+### Bundle tokens
+
+One set per bundle x variant x field:
 
 ```text
---type-heading-1 .. --type-heading-6
-```
-
-### UI
-
-```text
---type-ui-control            Button / input text
---type-ui-label              Form labels
---type-ui-caption            Table headers, metadata
---type-ui-badge              Badges, chips
-```
-
-### Code
-
-```text
---type-code-inline
---type-code-block
-```
-
-### Definition
-
-```text
---type-definition-term       Term in a term/definition pair
---type-definition-body       Definition body
-```
-
-### How bundles emit
-
-A bundle expands to five sub-properties per bundle:
-
-```text
---type-reading-body-family
---type-reading-body-size
---type-reading-body-weight
---type-reading-body-line-height
+--type-reading-body-family      --type-reading-body-size
+--type-reading-body-weight      --type-reading-body-line-height
 --type-reading-body-tracking
+
+(same shape for: reading-{body,lead,caption,quote};
+                  heading-{1..6};
+                  ui-{control,label,caption,badge};
+                  code-{inline,block};
+                  definition-{term,body})
 ```
 
-So CSS looks like:
+Sizes multiply by `pack.adjustments[family]` at emit time, so `adjustments.sans = 0.95` shrinks every sans bundle without editing them.
 
-```css
-.body {
-  font-family: var(--type-reading-body-family);
-  font-size: var(--type-reading-body-size);
-  font-weight: var(--type-reading-body-weight);
-  line-height: var(--type-reading-body-line-height);
-  letter-spacing: var(--type-reading-body-tracking);
-}
+### Atomic typography aliases
+
+Shared scales emitted once per theme block for raw use in component CSS:
+
+```text
+--font-size-xs, -sm, -md, -lg, -xl, -2xl, -3xl, -4xl
+--font-weight-regular, -medium, -semibold, -bold
+--line-height-tight, -snug, -normal, -relaxed, -loose
+--letter-spacing-tight, -normal, -wide
 ```
 
-A helper mixin or utility class (e.g. `.type-reading-body`) saves typing, but the five-variable contract is the truth.
+## Scale tokens (layer 0, invariant across themes)
+
+### space
+
+```text
+--space-3xs, -2xs, -xs, -sm, -md, -lg, -xl, -2xl, -3xl, -4xl
+```
+
+### radius
+
+```text
+--radius-xs, -sm, -md, -lg, -xl, -2xl, -pill, -full
+```
+
+### shadow
+
+```text
+--shadow-xs, -sm, -md, -lg, -xl
+```
+
+### motion
+
+```text
+--motion-fast                     120ms + easing (hover, focus)
+--motion-normal                   200ms + easing (panel transitions)
+```
+
+Under `@media (prefers-reduced-motion: reduce)`, both collapse to `0ms`.
+
+### underline-offset
+
+```text
+--underline-offset-2xs, -xs, -sm
+```
 
 ## Layout tokens
 
+Emitted from `theme.chrome.layout`.
+
 ```text
---layout-container-max              Max-width of page container
---layout-container-padding          Horizontal padding of container
---layout-grid-gap                   Default grid gap
---layout-panel-padding              Panel internal padding
---layout-panel-gap                  Panel's internal children gap
---layout-panel-header-size          Panel header type bundle size
---layout-panel-header-weight
---layout-panel-header-transform     (uppercase / none)
---layout-panel-header-tracking
---layout-panel-header-family
+--layout-container-max            Max content width
+--layout-container-padding        Side padding inside the container
+--layout-grid-gap                 Default grid/flex gap
+--layout-panel-radius             Panel default radius
+--layout-panel-padding            Panel default padding
+--layout-panel-gap                Panel internal gap
 ```
 
-## Scale tokens (Layer 0 — never overridden)
+## Control tokens (layer 2)
+
+### Buttons
+
+Five variants x seven slots:
 
 ```text
---space-2xs | --space-xs | --space-sm | --space-md | --space-lg | --space-xl | --space-2xl
---radius-sharp | --radius-xs | --radius-sm | --radius-md | --radius-lg | --radius-pill
---shadow-none | --shadow-sm | --shadow-md | --shadow-lg
---motion-fast | --motion-normal
---z-base | --z-dropdown | --z-sticky | --z-overlay | --z-modal | --z-toast | --z-tooltip
+--button-default-bg       --button-default-ink       --button-default-border
+--button-default-hover-bg --button-default-hover-ink --button-default-active-bg
+--button-default-disabled-bg --button-default-disabled-ink
+--button-default-ring
+
+(same shape for: button-primary-*, button-hazard-*, button-neutral-*, button-ghost-*)
 ```
 
-These form Layer 0 — the universal, immutable contract. Themes can *pick values* for the scale steps but cannot add new scale names without an ADR.
+### Inputs
 
-## Component tokens (Layer 2 — surgical overrides)
-
-Introduce component tokens only when the component has a genuine override surface. Default binding resolves to a role token.
-
-### Button
+Two variants x slots:
 
 ```text
---button-default-bg              default: var(--action-default)
---button-default-ink             default: var(--action-default-ink)
---button-default-edge            default: transparent
---button-default-bg-hover        default: var(--action-default-hover)
---button-default-bg-active       default: var(--action-default-active)
---button-radius                  default: var(--radius-md)
---button-padding-x-{sm,md,lg}
---button-padding-y-{sm,md,lg}
---button-height-{sm,md,lg}
+--input-default-bg --input-default-ink --input-default-border
+--input-default-hover-border --input-default-disabled-bg --input-default-disabled-ink
+--input-default-ring
 
-Same shape for: button-hazard-*, button-caution-*, button-neutral-*, button-ghost-*
+--input-error-bg --input-error-ink --input-error-border --input-error-ring
 ```
 
-### Input / TextField
+### Control heights
 
 ```text
---input-bg                       default: var(--surface-sunken)
---input-ink                      default: var(--ink-body)
---input-placeholder              default: var(--ink-subtle)
---input-edge                     default: var(--edge-default)
---input-edge-focus               default: var(--edge-focus)
---input-edge-error               default: var(--signal-danger)
---input-radius                   default: var(--radius-md)
---input-padding-x-{sm,md,lg}
---input-padding-y-{sm,md,lg}
---input-height-{sm,md,lg}
+--button-height-sm, -md, -lg
+--input-height-sm, -md, -lg
+--badge-height-sm, -md, -lg
 ```
 
-### Card / Panel
+### Control font sizes
 
 ```text
---card-bg                        default: var(--surface-panel)
---card-edge                      default: var(--edge-default)
---card-radius                    default: var(--radius-md)
---card-padding                   default: var(--layout-panel-padding)
---card-shadow                    default: var(--shadow-sm)
+--control-font-size-sm, -md, -lg
 ```
 
-### Dialog / Modal
+## Component tokens (layer 3)
+
+Shared surface for primitives that don't warrant a full control-slot family.
+
+### Dialog
 
 ```text
---dialog-bg                      default: var(--surface-overlay)
---dialog-edge                    default: var(--edge-default)
---dialog-radius                  default: var(--radius-lg)
---dialog-shadow                  default: var(--shadow-lg)
---dialog-scrim                   default: var(--overlay-scrim)
-```
-
-### Badge
-
-```text
---badge-radius                   default: var(--radius-pill)
---badge-padding-x-{sm,md,lg}
---badge-padding-y-{sm,md,lg}
+--dialog-scrim
+--dialog-bg
+--dialog-edge
+--dialog-radius
+--dialog-shadow
 ```
 
 ### Table
 
 ```text
---table-header-bg                default: var(--surface-sunken)
---table-header-ink               default: var(--ink-muted)
---table-row-edge                 default: var(--edge-subtle)
---table-row-bg-hover             default: var(--surface-muted)
---table-row-bg-selected          default: var(--action-default-wash)
+--table-header-bg
+--table-header-ink
+--table-row-edge
+--table-row-bg-hover
+--table-row-bg-selected
 ```
 
-## App-specific vocabulary extensions
+## Sim tokens (layer 4, app-scoped)
 
-Apps may extend vocabulary in their own `vocab.ts`. These tokens are scoped to the app:
+Emitted only when the active theme declares `sim`. Shape from `libs/themes/contract.ts`:
 
-```ts
-// libs/themes/sim/vocab.ts
-export const SIM_VOCAB = {
-  instrumentHorizon: '--instrument-horizon',
-  instrumentNeedle: '--instrument-needle',
-  instrumentCautionArc: '--instrument-caution-arc',
-  instrumentWarningArc: '--instrument-warning-arc',
-  instrumentBezel: '--instrument-bezel',
-  instrumentPanelBg: '--instrument-panel-bg',
-} as const;
+```text
+--sim-panel-bg, --sim-panel-edge, --sim-panel-ink
+--sim-instrument-bg, --sim-instrument-bezel, --sim-instrument-ink, --sim-instrument-accent
+--sim-horizon-sky, --sim-horizon-ground, --sim-horizon-line
+--sim-arc-bg, --sim-arc-fill, --sim-arc-tick
+--sim-status-ok, --sim-status-warn, --sim-status-fail, --sim-status-caution
+--sim-banner-master-caution, --sim-banner-master-warning
+--sim-readout-warning-bg
+--sim-muted-state-bg
 ```
 
-Shared libs (`libs/ui/*`) cannot reference these — enforced via TypeScript import boundaries. Sim's primitives can. This is the correct scope — an attitude indicator's horizon color is not a concern the Table component needs to know about.
+Consumed by `apps/sim/src/**`. The `SimTokens` type in `contract.ts` is `optional` so non-sim themes leave it undefined and emit nothing.
 
-## Naming rules
+## Counts
 
-1. **No rank words.** Never `primary`, `secondary`, `tertiary`. Use the role name.
-2. **Role-modifier order.** `<role>-<variant>-<state>`. Good: `action-default-hover`. Bad: `hover-action-default`.
-3. **No abbreviations.** `background` → `bg` is fine (convention); `foreground` → `fg` is fine; `primary` → `prim` is not.
-4. **kebab-case in CSS, camelCase in TS.** `--ink-body` and `tokens.ink.body`.
-5. **Singular for roles, plural for collections.** `ink-body` (one role), `layouts: { reading, dashboard }` (collection).
-6. **Don't leak tech.** No `-svelte`, `-hex`, `-rgb` in token names. Tokens are semantic, not implementation.
+Per `(theme, appearance)` emit block:
 
-## Checklist when adding a token
+| Family                                      | Token count |
+| ------------------------------------------- | ----------- |
+| ink                                         | 6           |
+| surface                                     | 6           |
+| edge                                        | 4           |
+| action                                      | 35          |
+| signal                                      | 16          |
+| focus                                       | 5           |
+| accent                                      | 3           |
+| overlay                                     | 3           |
+| selection                                   | 2           |
+| disabled                                    | 3           |
+| link                                        | 3           |
+| typography bundles                          | ~120        |
+| atomic typography                           | ~20         |
+| space/radius/shadow/motion/underline-offset | ~35         |
+| layout                                      | 6           |
+| button                                      | 35          |
+| input                                       | 12          |
+| control heights                             | 9           |
+| control font sizes                          | 3           |
+| dialog                                      | 5           |
+| table                                       | 5           |
+| sim (when present)                          | ~20         |
 
-- Does an existing token already cover the need? (90% of the time, yes.)
-- Is it a role or a component token? Role if reusable across primitives; component if specific.
-- What's its Layer? (0 = universal scale, 1 = theme palette, 2 = component override.)
-- Does the derivation utility already compute this? (If so, don't declare it.)
-- Is it shared or app-specific? (App-specific lives in that app's `vocab.ts`.)
-- Will adding it require updating the lint rule's vocabulary? (Always yes for new role tokens; automatic for component tokens.)
+Total: ~350 tokens emitted per appearance for themes without sim, ~370 for sim themes.
 
-If the answers don't come easily, don't add the token yet.
+## Rules for adding a token
+
+1. Does an existing role fit? Use it; don't add a token.
+2. Is it a component surface that can compose from role tokens? Use `var()` chains in the component CSS.
+3. If a new role token is needed: add to `vocab.ts`, add emission in `emit.ts`, add to this doc, add a test in `emit.test.ts`. Every new token is a migration candidate for every existing theme.
