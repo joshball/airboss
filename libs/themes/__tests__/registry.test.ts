@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import type { Theme } from '../contract';
+import type { ControlSlots, ControlTokens, Theme, TypeBundle } from '../contract';
 import {
 	__resetRegistryForTests,
 	getTheme,
@@ -8,6 +8,37 @@ import {
 	listThemes,
 	registerTheme,
 } from '../registry';
+
+function makeBundle(): TypeBundle {
+	return { family: 'base', size: '1rem', weight: 400, lineHeight: 1.5, tracking: '0' };
+}
+
+function makeSlots(): ControlSlots {
+	return {
+		bg: 'transparent',
+		ink: 'currentColor',
+		border: 'transparent',
+		hoverBg: 'transparent',
+		hoverInk: 'currentColor',
+		activeBg: 'transparent',
+		disabledBg: 'transparent',
+		disabledInk: 'currentColor',
+		ring: 'transparent',
+	};
+}
+
+function makeControl(): ControlTokens {
+	return {
+		button: {
+			default: makeSlots(),
+			primary: makeSlots(),
+			hazard: makeSlots(),
+			neutral: makeSlots(),
+			ghost: makeSlots(),
+		},
+		input: { default: makeSlots(), error: makeSlots() },
+	};
+}
 
 function makeTheme(id: string): Theme {
 	return {
@@ -22,6 +53,20 @@ function makeTheme(id: string): Theme {
 		typography: {
 			packId: 'none',
 			families: { sans: 'sans-serif', mono: 'monospace', base: 'sans-serif' },
+			bundles: {
+				reading: { body: makeBundle(), lead: makeBundle(), caption: makeBundle(), quote: makeBundle() },
+				heading: {
+					1: makeBundle(),
+					2: makeBundle(),
+					3: makeBundle(),
+					4: makeBundle(),
+					5: makeBundle(),
+					6: makeBundle(),
+				},
+				ui: { control: makeBundle(), label: makeBundle(), caption: makeBundle(), badge: makeBundle() },
+				code: { inline: makeBundle(), block: makeBundle() },
+				definition: { term: makeBundle(), body: makeBundle() },
+			},
 		},
 		chrome: {
 			space: { '2xs': '0', xs: '0', sm: '0', md: '0', lg: '0', xl: '0', '2xl': '0' },
@@ -41,6 +86,7 @@ function makeTheme(id: string): Theme {
 				panelHeaderFamily: 'sans-serif',
 			},
 		},
+		control: makeControl(),
 	};
 }
 
