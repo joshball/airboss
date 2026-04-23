@@ -1,7 +1,6 @@
 # Theme-lint grandfather list.
 # Each line: <file>:<line>:<rule>. Populated by `bun tools/theme-lint/bin.ts --fix-ignore`.
 # Entries drop out as packages #5 and #7 migrate call sites.
-apps/hangar/src/routes/+page.svelte:216:raw-length
 libs/ui/src/components/NavIndicator.svelte:39:raw-duration
 libs/ui/src/components/Spinner.svelte:38:raw-duration
 libs/ui/src/components/Spinner.svelte:48:rgb-color
