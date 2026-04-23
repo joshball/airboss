@@ -32,7 +32,7 @@ let {
 	.overlay {
 		position: fixed;
 		inset: 0;
-		background: var(--ab-overlay-scrim-heavy);
+		background: var(--overlay-scrim);
 		z-index: 110;
 		display: flex;
 		align-items: center;
@@ -40,64 +40,64 @@ let {
 	}
 
 	.panel {
-		background: var(--ab-sim-panel-bg);
-		color: var(--ab-sim-panel-fg);
-		border: 1px solid var(--ab-sim-panel-border);
-		border-radius: var(--ab-radius-md);
-		padding: 1.25rem var(--ab-space-xl);
+		background: var(--sim-panel-bg);
+		color: var(--sim-panel-fg);
+		border: 1px solid var(--sim-panel-border);
+		border-radius: var(--radius-md);
+		padding: var(--space-xl) var(--space-xl);
 		text-align: center;
 		max-width: 360px;
 	}
 
 	h2 {
-		margin: 0 0 var(--ab-space-sm);
-		font-size: 1.1rem;
+		margin: 0 0 var(--space-sm);
+		font-size: var(--font-size-lg);
 	}
 
 	p {
-		margin: 0 0 var(--ab-space-lg);
-		font-size: 0.9rem;
-		color: var(--ab-sim-panel-fg-lighter);
+		margin: 0 0 var(--space-lg);
+		font-size: var(--font-size-body);
+		color: var(--sim-panel-fg-lighter);
 	}
 
 	kbd {
 		display: inline-block;
-		padding: 0.05rem 0.4rem;
-		margin: 0 0.1rem;
-		background: var(--ab-sim-panel-bg-darker);
-		color: var(--ab-sim-instrument-pointer);
-		border: 1px solid var(--ab-sim-panel-border);
-		border-radius: var(--ab-radius-xs);
-		font-family: var(--ab-font-mono);
-		font-size: 0.85rem;
+		padding: var(--space-2xs) var(--space-sm);
+		margin: 0 var(--space-2xs);
+		background: var(--sim-panel-bg-darker);
+		color: var(--sim-instrument-pointer);
+		border: 1px solid var(--sim-panel-border);
+		border-radius: var(--radius-xs);
+		font-family: var(--font-family-mono);
+		font-size: var(--font-size-sm);
 	}
 
 	.buttons {
 		display: flex;
-		gap: var(--ab-space-sm);
+		gap: var(--space-sm);
 		justify-content: center;
 	}
 
 	button {
-		padding: 0.4rem 0.9rem;
-		border-radius: var(--ab-radius-xs);
-		font-size: 0.9rem;
+		padding: var(--space-sm) var(--space-lg);
+		border-radius: var(--radius-xs);
+		font-size: var(--font-size-body);
 		cursor: pointer;
-		border: 1px solid var(--ab-sim-panel-border);
+		border: 1px solid var(--sim-panel-border);
 	}
 
 	.cancel {
 		background: transparent;
-		color: var(--ab-sim-panel-fg-lighter);
+		color: var(--sim-panel-fg-lighter);
 	}
 
 	.confirm {
-		background: var(--ab-sim-status-danger);
-		color: var(--ab-color-primary-fg);
-		border-color: var(--ab-sim-status-danger);
+		background: var(--sim-status-danger);
+		color: var(--action-default-ink);
+		border-color: var(--sim-status-danger);
 	}
 
 	.confirm:hover {
-		background: var(--ab-sim-status-danger-strong);
+		background: var(--sim-status-danger-strong);
 	}
 </style>

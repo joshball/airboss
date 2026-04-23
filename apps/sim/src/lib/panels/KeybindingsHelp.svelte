@@ -68,118 +68,118 @@ function byGroup(group: SimKeybinding['group']): readonly SimKeybinding[] {
 	.overlay {
 		position: fixed;
 		inset: 0;
-		background: var(--ab-overlay-scrim-heavy);
+		background: var(--overlay-scrim);
 		z-index: 100;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		padding: var(--ab-space-xl);
+		padding: var(--space-xl);
 	}
 
 	.panel {
-		background: var(--ab-sim-panel-bg);
-		color: var(--ab-sim-panel-fg);
-		border: 1px solid var(--ab-sim-panel-border);
-		border-radius: var(--ab-radius-md);
+		background: var(--sim-panel-bg);
+		color: var(--sim-panel-fg);
+		border: 1px solid var(--sim-panel-border);
+		border-radius: var(--radius-md);
 		max-width: 720px;
 		width: 100%;
 		max-height: 90vh;
 		overflow: auto;
-		padding: var(--ab-space-lg) 1.25rem 1.25rem;
+		padding: var(--space-lg) var(--space-xl) var(--space-xl);
 	}
 
 	header {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		border-bottom: 1px solid var(--ab-sim-panel-bg-elevated);
-		padding-bottom: var(--ab-space-sm);
-		margin-bottom: var(--ab-space-md);
+		border-bottom: 1px solid var(--sim-panel-bg-elevated);
+		padding-bottom: var(--space-sm);
+		margin-bottom: var(--space-md);
 	}
 
 	h2 {
 		margin: 0;
-		font-size: 1.1rem;
+		font-size: var(--font-size-lg);
 	}
 
 	.close {
 		background: transparent;
 		border: none;
-		color: var(--ab-sim-panel-fg-light);
-		font-family: var(--ab-font-mono);
-		font-size: 1rem;
+		color: var(--sim-panel-fg-light);
+		font-family: var(--font-family-mono);
+		font-size: var(--font-size-base);
 		cursor: pointer;
-		padding: 0.2rem var(--ab-space-sm);
+		padding: var(--space-2xs) var(--space-sm);
 	}
 
 	.close:hover {
-		color: var(--ab-sim-panel-fg);
+		color: var(--sim-panel-fg);
 	}
 
 	.intro {
-		color: var(--ab-sim-panel-fg-lighter);
-		font-size: 0.9rem;
-		margin: 0 0 var(--ab-space-md);
+		color: var(--sim-panel-fg-lighter);
+		font-size: var(--font-size-body);
+		margin: 0 0 var(--space-md);
 	}
 
 	.grid {
 		display: grid;
 		grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-		gap: var(--ab-space-lg);
+		gap: var(--space-lg);
 	}
 
 	section h3 {
-		margin: 0 0 var(--ab-space-2xs) 0;
-		font-size: 0.8rem;
+		margin: 0 0 var(--space-2xs) 0;
+		font-size: var(--font-size-sm);
 		text-transform: uppercase;
-		letter-spacing: 0.04em;
-		color: var(--ab-sim-panel-fg-light);
+		letter-spacing: var(--letter-spacing-caps);
+		color: var(--sim-panel-fg-light);
 	}
 
 	dl {
 		display: grid;
 		grid-template-columns: auto 1fr;
-		gap: 0.2rem 0.6rem;
-		font-size: 0.82rem;
+		gap: var(--space-2xs) var(--space-md);
+		font-size: var(--font-size-sm);
 		margin: 0;
 	}
 
 	dt {
-		font-family: var(--ab-font-mono);
-		color: var(--ab-sim-instrument-pointer);
+		font-family: var(--font-family-mono);
+		color: var(--sim-instrument-pointer);
 		white-space: nowrap;
 	}
 
 	dd {
 		margin: 0;
-		color: var(--ab-sim-panel-fg-lightest);
+		color: var(--sim-panel-fg-lightest);
 	}
 
 	.note {
-		margin-top: var(--ab-space-lg);
-		font-size: 0.85rem;
-		color: var(--ab-sim-status-primary-fg);
-		border-top: 1px solid var(--ab-sim-panel-bg-elevated);
-		padding-top: var(--ab-space-sm);
+		margin-top: var(--space-lg);
+		font-size: var(--font-size-sm);
+		color: var(--sim-status-primary-fg);
+		border-top: 1px solid var(--sim-panel-bg-elevated);
+		padding-top: var(--space-sm);
 	}
 
 	footer {
-		margin-top: var(--ab-space-md);
+		margin-top: var(--space-md);
 		display: flex;
 		justify-content: flex-end;
 	}
 
 	.ok {
-		background: var(--ab-sim-status-primary);
-		color: var(--ab-color-primary-fg);
+		background: var(--sim-status-primary);
+		color: var(--action-default-ink);
 		border: none;
-		padding: var(--ab-space-sm) var(--ab-space-lg);
-		border-radius: var(--ab-radius-xs);
-		font-size: 0.9rem;
+		padding: var(--space-sm) var(--space-lg);
+		border-radius: var(--radius-xs);
+		font-size: var(--font-size-body);
 		cursor: pointer;
 	}
 
 	.ok:hover {
-		background: var(--ab-sim-status-primary-hover);
+		background: var(--sim-status-primary-hover);
 	}
 </style>

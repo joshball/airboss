@@ -9,8 +9,9 @@
  * per [02-ARCHITECTURE.md](../../docs/platform/theme-system/02-ARCHITECTURE.md).
  *
  * Path policy:
- *   `/dashboard*` → `study/flightdeck` (TUI)
- *   everything else → `study/sectional`
+ *   `/sim*`       -> `sim/glass` (dark-only cockpit theme)
+ *   `/dashboard*` -> `study/flightdeck` (TUI)
+ *   everything else -> `study/sectional`
  *
  * When new dashboard-style surfaces ship (avionics, instrument
  * trainer) extend `FLIGHTDECK_PATH_PREFIXES` here rather than sprinkling
@@ -23,21 +24,32 @@ export const THEMES = {
 	AIRBOSS_DEFAULT: 'airboss/default',
 	STUDY_SECTIONAL: 'study/sectional',
 	STUDY_FLIGHTDECK: 'study/flightdeck',
+	SIM_GLASS: 'sim/glass',
 } as const satisfies Record<string, ThemeId>;
 
 export const DEFAULT_THEME: ThemeId = THEMES.STUDY_SECTIONAL;
 export const FLIGHTDECK_THEME: ThemeId = THEMES.STUDY_FLIGHTDECK;
+export const SIM_THEME: ThemeId = THEMES.SIM_GLASS;
 export const DEFAULT_APPEARANCE: AppearanceMode = 'light';
 
 export type AppearancePreference = AppearanceMode | 'system';
 
 const FLIGHTDECK_PATH_PREFIXES: readonly string[] = ['/dashboard'];
+const SIM_PATH_PREFIXES: readonly string[] = ['/sim'];
 
-function isFlightdeckPath(pathname: string): boolean {
-	for (const prefix of FLIGHTDECK_PATH_PREFIXES) {
+function matchesAnyPrefix(pathname: string, prefixes: readonly string[]): boolean {
+	for (const prefix of prefixes) {
 		if (pathname === prefix || pathname.startsWith(`${prefix}/`)) return true;
 	}
 	return false;
+}
+
+function isFlightdeckPath(pathname: string): boolean {
+	return matchesAnyPrefix(pathname, FLIGHTDECK_PATH_PREFIXES);
+}
+
+function isSimPath(pathname: string): boolean {
+	return matchesAnyPrefix(pathname, SIM_PATH_PREFIXES);
 }
 
 export function resolveThemeForPath(
@@ -45,9 +57,22 @@ export function resolveThemeForPath(
 	userAppearance: AppearancePreference = 'system',
 	systemAppearance: AppearanceMode = DEFAULT_APPEARANCE,
 ): ThemeSelection {
-	const flightdeck = isFlightdeckPath(pathname);
-	const theme: ThemeId = flightdeck ? FLIGHTDECK_THEME : DEFAULT_THEME;
-	const appearance: AppearanceMode = userAppearance === 'system' ? systemAppearance : userAppearance;
-	const layout = flightdeck ? 'dashboard' : 'reading';
+	const sim = isSimPath(pathname);
+	const flightdeck = !sim && isFlightdeckPath(pathname);
+	let theme: ThemeId;
+	let layout: string;
+	if (sim) {
+		theme = SIM_THEME;
+		layout = 'cockpit';
+	} else if (flightdeck) {
+		theme = FLIGHTDECK_THEME;
+		layout = 'dashboard';
+	} else {
+		theme = DEFAULT_THEME;
+		layout = 'reading';
+	}
+	// sim/glass is dark-only; emit throws if asked for a light palette.
+	// Force dark so user/system appearance preferences don't crash sim.
+	const appearance: AppearanceMode = sim ? 'dark' : userAppearance === 'system' ? systemAppearance : userAppearance;
 	return { theme, appearance, layout };
 }

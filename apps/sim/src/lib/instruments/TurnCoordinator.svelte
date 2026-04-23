@@ -97,53 +97,53 @@ const ballX = $derived(100 + Math.max(-1, Math.min(1, ballSafe)) * BALL_TRAVEL_P
 	}
 
 	.instrument-face {
-		fill: var(--ab-sim-instrument-face);
-		stroke: var(--ab-sim-instrument-bezel);
+		fill: var(--sim-instrument-face);
+		stroke: var(--sim-instrument-bezel);
 	}
 
 	.rate-label {
-		fill: var(--ab-sim-instrument-tick);
-		font-family: var(--ab-font-mono);
+		fill: var(--sim-instrument-tick);
+		font-family: var(--font-family-mono);
 	}
 
 	.rate-tick {
-		stroke: var(--ab-sim-instrument-pointer);
+		stroke: var(--sim-instrument-pointer);
 	}
 
 	.wings-ref {
-		stroke: var(--ab-sim-instrument-tick-subtle);
+		stroke: var(--sim-instrument-tick-subtle);
 	}
 
 	.aircraft-ref {
-		stroke: var(--ab-sim-instrument-pointer);
+		stroke: var(--sim-instrument-pointer);
 	}
 
 	.nose-dot {
-		fill: var(--ab-sim-instrument-face);
-		stroke: var(--ab-sim-instrument-pointer);
+		fill: var(--sim-instrument-face);
+		stroke: var(--sim-instrument-pointer);
 	}
 
 	.tube {
-		fill: var(--ab-sim-instrument-face-inner);
-		stroke: var(--ab-sim-instrument-tick-faint);
+		fill: var(--sim-instrument-face-inner);
+		stroke: var(--sim-instrument-tick-faint);
 	}
 
 	.tube-ref {
-		stroke: var(--ab-sim-instrument-tick-subtle);
+		stroke: var(--sim-instrument-tick-subtle);
 	}
 
 	.ball {
-		fill: var(--ab-sim-instrument-tick);
-		stroke: var(--ab-sim-instrument-tick-subtle);
+		fill: var(--sim-instrument-tick);
+		stroke: var(--sim-instrument-tick-subtle);
 	}
 
 	.unit-label {
-		fill: var(--ab-sim-instrument-tick-minor);
-		font-family: var(--ab-font-mono);
+		fill: var(--sim-instrument-tick-minor);
+		font-family: var(--font-family-mono);
 	}
 
 	.foot-label {
-		fill: var(--ab-sim-instrument-tick-dim);
-		font-family: var(--ab-font-mono);
+		fill: var(--sim-instrument-tick-dim);
+		font-family: var(--font-family-mono);
 	}
 </style>

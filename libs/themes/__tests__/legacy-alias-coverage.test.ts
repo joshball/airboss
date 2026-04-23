@@ -36,10 +36,9 @@ describe('legacy alias block coverage', () => {
 		expect(missing, `legacy alias block missing: ${missing.join(', ')}`).toEqual([]);
 	});
 
-	it('includes every --ab-sim-* used in apps/sim/src (TODO sentinels allowed; package #7 fills)', () => {
+	it('has zero --ab-sim-* references in apps/sim/src (package #7 migrated them to --sim-*)', () => {
 		const names = rgUnique(SIM_PATTERN, SIM_SRC);
-		const missing = names.filter((n) => !aliasSet.has(n));
-		expect(missing, `sim alias block missing: ${missing.join(', ')}`).toEqual([]);
+		expect(names, `apps/sim still references: ${names.join(', ')}`).toEqual([]);
 	});
 
 	it('apps/study/src contains zero --ab-* references (package #5 acceptance)', () => {

@@ -105,62 +105,14 @@ export const LEGACY_ALIAS_MAP: ReadonlyArray<readonly [string, string]> = [
 
 	// -------- controls (atomic; package #4 grows component tokens) --------
 
-	// -------- sim surface (package #7 fills these with real values) --------
-	// Every `--ab-sim-*` name grepped from apps/sim/src ships here as a
-	// TODO sentinel so unmigrated apps/sim routes keep rendering until
-	// #7 populates `theme.sim` and the typed emitter path takes over.
-	['--ab-sim-panel-bg', 'initial'],
-	['--ab-sim-panel-bg-darker', 'initial'],
-	['--ab-sim-panel-bg-elevated', 'initial'],
-	['--ab-sim-panel-border', 'initial'],
-	['--ab-sim-panel-fg', 'initial'],
-	['--ab-sim-panel-fg-dim', 'initial'],
-	['--ab-sim-panel-fg-faint', 'initial'],
-	['--ab-sim-panel-fg-light', 'initial'],
-	['--ab-sim-panel-fg-lighter', 'initial'],
-	['--ab-sim-panel-fg-lightest', 'initial'],
-	['--ab-sim-panel-fg-muted', 'initial'],
-	['--ab-sim-panel-fg-note', 'initial'],
-	['--ab-sim-panel-fg-subtle', 'initial'],
-	['--ab-sim-instrument-bezel', 'initial'],
-	['--ab-sim-instrument-bezel-outer', 'initial'],
-	['--ab-sim-instrument-face', 'initial'],
-	['--ab-sim-instrument-face-inner', 'initial'],
-	['--ab-sim-instrument-pointer', 'initial'],
-	['--ab-sim-instrument-pointer-pivot', 'initial'],
-	['--ab-sim-instrument-tick', 'initial'],
-	['--ab-sim-instrument-tick-dim', 'initial'],
-	['--ab-sim-instrument-tick-faint', 'initial'],
-	['--ab-sim-instrument-tick-minor', 'initial'],
-	['--ab-sim-instrument-tick-subtle', 'initial'],
-	['--ab-sim-horizon-ground', 'initial'],
-	['--ab-sim-horizon-sky', 'initial'],
-	['--ab-sim-arc-green', 'initial'],
-	['--ab-sim-arc-red', 'initial'],
-	['--ab-sim-arc-white', 'initial'],
-	['--ab-sim-arc-yellow', 'initial'],
-	['--ab-sim-status-danger', 'initial'],
-	['--ab-sim-status-danger-bg', 'initial'],
-	['--ab-sim-status-danger-border', 'initial'],
-	['--ab-sim-status-danger-fg', 'initial'],
-	['--ab-sim-status-danger-strong', 'initial'],
-	['--ab-sim-status-primary', 'initial'],
-	['--ab-sim-status-primary-fg', 'initial'],
-	['--ab-sim-status-primary-hover', 'initial'],
-	['--ab-sim-status-success', 'initial'],
-	['--ab-sim-status-success-bg', 'initial'],
-	['--ab-sim-status-success-border', 'initial'],
-	['--ab-sim-status-success-fg', 'initial'],
-	['--ab-sim-status-warning', 'initial'],
-	['--ab-sim-status-warning-bg', 'initial'],
-	['--ab-sim-status-warning-border', 'initial'],
-	['--ab-sim-banner-info-bg', 'initial'],
-	['--ab-sim-banner-info-border', 'initial'],
-	['--ab-sim-banner-info-fg', 'initial'],
-	['--ab-sim-banner-success-bg', 'initial'],
-	['--ab-sim-banner-success-border', 'initial'],
-	['--ab-sim-readout-warning-bg', 'initial'],
-	['--ab-sim-muted-state-bg', 'initial'],
+	// -------- sim surface --------
+	// Package #7 populated `theme.sim`, which emits the canonical
+	// `--sim-*` role tokens, and migrated every `apps/sim/src` consumer
+	// off the `--ab-sim-*` aliases. The block is intentionally empty;
+	// `rg -o '--ab-sim-' apps/ libs/` returns zero and the sim coverage
+	// test in `legacy-alias-coverage.test.ts` is gone with the final
+	// references. Do not re-add entries here -- migrate call sites to
+	// the `--sim-*` role tokens instead.
 ] as const;
 
 /** Flat list of legacy names the alias block exposes (for audit). */

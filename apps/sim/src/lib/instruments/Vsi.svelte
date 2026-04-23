@@ -106,43 +106,43 @@ const minorTicks = [-400, -300, -200, -100, 100, 200, 300, 400];
 	}
 
 	.instrument-face {
-		fill: var(--ab-sim-instrument-face);
-		stroke: var(--ab-sim-instrument-bezel);
+		fill: var(--sim-instrument-face);
+		stroke: var(--sim-instrument-bezel);
 	}
 
 	.tick-major {
-		stroke: var(--ab-sim-instrument-tick);
+		stroke: var(--sim-instrument-tick);
 	}
 
 	.tick-minor {
-		stroke: var(--ab-sim-instrument-tick-subtle);
+		stroke: var(--sim-instrument-tick-subtle);
 	}
 
 	.tick-label {
-		fill: var(--ab-sim-instrument-tick);
-		font-family: var(--ab-font-mono);
+		fill: var(--sim-instrument-tick);
+		font-family: var(--font-family-mono);
 	}
 
 	.foot-label {
-		fill: var(--ab-sim-instrument-tick-dim);
-		font-family: var(--ab-font-mono);
+		fill: var(--sim-instrument-tick-dim);
+		font-family: var(--font-family-mono);
 	}
 
 	.needle-pointer {
-		stroke: var(--ab-sim-instrument-pointer);
+		stroke: var(--sim-instrument-pointer);
 	}
 
 	.hub {
-		fill: var(--ab-sim-instrument-pointer);
+		fill: var(--sim-instrument-pointer);
 	}
 
 	.unit-label {
-		fill: var(--ab-sim-instrument-tick-minor);
-		font-family: var(--ab-font-mono);
+		fill: var(--sim-instrument-tick-minor);
+		font-family: var(--font-family-mono);
 	}
 
 	.digital-readout {
-		fill: var(--ab-sim-instrument-tick);
-		font-family: var(--ab-font-mono);
+		fill: var(--sim-instrument-tick);
+		font-family: var(--font-family-mono);
 	}
 </style>

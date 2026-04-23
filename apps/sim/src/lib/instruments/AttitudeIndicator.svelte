@@ -96,45 +96,45 @@ const ladderLines = [-30, -20, -10, 10, 20, 30];
 	}
 
 	.instrument-face {
-		fill: var(--ab-sim-instrument-face);
-		stroke: var(--ab-sim-instrument-bezel);
+		fill: var(--sim-instrument-face);
+		stroke: var(--sim-instrument-bezel);
 	}
 
 	.horizon-sky {
-		fill: var(--ab-sim-horizon-sky);
+		fill: var(--sim-horizon-sky);
 	}
 
 	.horizon-ground {
-		fill: var(--ab-sim-horizon-ground);
+		fill: var(--sim-horizon-ground);
 	}
 
 	.horizon-line {
-		stroke: var(--ab-sim-instrument-tick);
+		stroke: var(--sim-instrument-tick);
 	}
 
 	.ladder-line {
-		stroke: var(--ab-sim-instrument-tick);
+		stroke: var(--sim-instrument-tick);
 	}
 
 	.ladder-label {
-		fill: var(--ab-sim-instrument-tick);
-		font-family: var(--ab-font-mono);
+		fill: var(--sim-instrument-tick);
+		font-family: var(--font-family-mono);
 	}
 
 	.aircraft-ref {
-		stroke: var(--ab-sim-instrument-pointer);
+		stroke: var(--sim-instrument-pointer);
 	}
 
 	.aircraft-ref-fill {
-		fill: var(--ab-sim-instrument-pointer);
+		fill: var(--sim-instrument-pointer);
 	}
 
 	.bezel {
-		stroke: var(--ab-sim-instrument-bezel-outer);
+		stroke: var(--sim-instrument-bezel-outer);
 	}
 
 	.unit-label {
-		fill: var(--ab-sim-instrument-tick-minor);
-		font-family: var(--ab-font-mono);
+		fill: var(--sim-instrument-tick-minor);
+		font-family: var(--font-family-mono);
 	}
 </style>

@@ -79,25 +79,25 @@ function pct(v: number): number {
 
 <style>
 	.controls {
-		padding: 0.6rem 0.8rem;
-		background: var(--ab-sim-panel-bg);
-		border: 1px solid var(--ab-sim-panel-bg-elevated);
-		border-radius: var(--ab-radius-sm);
-		color: var(--ab-sim-panel-fg);
+		padding: var(--space-md) var(--space-lg);
+		background: var(--sim-panel-bg);
+		border: 1px solid var(--sim-panel-bg-elevated);
+		border-radius: var(--radius-sm);
+		color: var(--sim-panel-fg);
 	}
 
 	h3 {
-		margin: 0 0 var(--ab-space-sm) 0;
-		font-size: 0.85rem;
-		color: var(--ab-sim-panel-fg-muted);
+		margin: 0 0 var(--space-sm) 0;
+		font-size: var(--font-size-sm);
+		color: var(--sim-panel-fg-muted);
 		text-transform: uppercase;
-		letter-spacing: 0.05em;
+		letter-spacing: var(--letter-spacing-caps);
 	}
 
 	.grid {
 		display: grid;
 		grid-template-columns: auto 1fr auto auto;
-		gap: 0.3rem var(--ab-space-sm);
+		gap: var(--space-xs) var(--space-sm);
 		align-items: center;
 	}
 
@@ -106,22 +106,22 @@ function pct(v: number): number {
 	}
 
 	.control .label {
-		font-family: var(--ab-font-mono);
-		font-size: 0.8rem;
-		color: var(--ab-sim-panel-fg-light);
+		font-family: var(--font-family-mono);
+		font-size: var(--font-size-sm);
+		color: var(--sim-panel-fg-light);
 	}
 
 	.control .value {
-		font-family: var(--ab-font-mono);
-		font-size: 0.8rem;
+		font-family: var(--font-family-mono);
+		font-size: var(--font-size-sm);
 		text-align: right;
 		width: 3rem;
 	}
 
 	.control .sub {
-		font-family: var(--ab-font-mono);
-		font-size: 0.7rem;
-		color: var(--ab-sim-panel-fg-dim);
+		font-family: var(--font-family-mono);
+		font-size: var(--font-size-xs);
+		color: var(--sim-panel-fg-dim);
 	}
 
 	.control.vert .bar.vert {
@@ -130,18 +130,18 @@ function pct(v: number): number {
 		height: 70px;
 		width: 20px;
 		justify-self: start;
-		background: var(--ab-sim-panel-bg-darker);
-		border: 1px solid var(--ab-sim-panel-border);
-		border-radius: var(--ab-radius-xs);
+		background: var(--sim-panel-bg-darker);
+		border: 1px solid var(--sim-panel-border);
+		border-radius: var(--radius-xs);
 	}
 
 	.control.horiz .bar.horiz {
 		grid-column: 2;
 		position: relative;
 		height: 14px;
-		background: var(--ab-sim-panel-bg-darker);
-		border: 1px solid var(--ab-sim-panel-border);
-		border-radius: var(--ab-radius-xs);
+		background: var(--sim-panel-bg-darker);
+		border: 1px solid var(--sim-panel-border);
+		border-radius: var(--radius-xs);
 	}
 
 	.bar.vert .center {
@@ -150,7 +150,7 @@ function pct(v: number): number {
 		right: 0;
 		top: 50%;
 		height: 1px;
-		background: var(--ab-on-dark-rail);
+		background: var(--sim-panel-border);
 	}
 
 	.bar.horiz .center {
@@ -159,12 +159,12 @@ function pct(v: number): number {
 		bottom: 0;
 		left: 50%;
 		width: 1px;
-		background: var(--ab-on-dark-rail);
+		background: var(--sim-panel-border);
 	}
 
 	.bar .fill {
 		position: absolute;
-		background: var(--ab-sim-status-warning);
+		background: var(--sim-status-warning);
 	}
 
 	.bar.vert .fill {
@@ -178,7 +178,7 @@ function pct(v: number): number {
 	}
 
 	.bar.vert.throttle .fill {
-		background: var(--ab-sim-status-primary);
+		background: var(--sim-status-primary);
 	}
 
 	.trim-mark {
@@ -186,63 +186,64 @@ function pct(v: number): number {
 		left: -3px;
 		right: -3px;
 		height: 2px;
-		background: var(--ab-sim-status-primary-fg);
+		background: var(--sim-status-primary-fg);
 		opacity: 0.8;
 		transform: translateY(1px);
 	}
 
 	.annunciators {
-		margin-top: var(--ab-space-sm);
+		margin-top: var(--space-sm);
 		display: flex;
 		flex-wrap: wrap;
-		gap: 0.35rem;
+		gap: var(--space-sm);
 	}
 
 	.lamp {
-		font-family: var(--ab-font-mono);
-		font-size: 0.72rem;
-		padding: 0.15rem 0.4rem;
-		border: 1px solid var(--ab-sim-panel-border);
-		border-radius: var(--ab-radius-xs);
-		color: var(--ab-sim-panel-fg-faint);
-		background: var(--ab-sim-panel-bg-darker);
-		letter-spacing: 0.05em;
+		font-family: var(--font-family-mono);
+		font-size: var(--font-size-xs);
+		padding: var(--space-2xs) var(--space-sm);
+		border: 1px solid var(--sim-panel-border);
+		border-radius: var(--radius-xs);
+		color: var(--sim-panel-fg-faint);
+		background: var(--sim-panel-bg-darker);
+		letter-spacing: var(--letter-spacing-caps);
 	}
 
 	.lamp.on {
-		background: var(--ab-sim-status-warning-bg);
-		color: var(--ab-sim-instrument-pointer);
-		border-color: var(--ab-sim-status-warning-border);
+		background: var(--sim-status-warning-bg);
+		color: var(--sim-instrument-pointer);
+		border-color: var(--sim-status-warning-border);
 	}
 
 	.lamp.coord.on {
-		background: var(--ab-sim-status-success-bg);
-		color: var(--ab-sim-status-success);
-		border-color: var(--ab-sim-status-success-border);
+		background: var(--sim-status-success-bg);
+		color: var(--sim-status-success);
+		border-color: var(--sim-status-success-border);
 	}
 
 	.lamp.stall.on {
-		background: var(--ab-sim-status-danger-bg);
-		color: var(--ab-sim-status-danger-fg);
-		border-color: var(--ab-sim-status-danger-border);
+		background: var(--sim-status-danger-bg);
+		color: var(--sim-status-danger-fg);
+		border-color: var(--sim-status-danger-border);
 	}
 
 	.lamp.flash {
+		/* lint-disable-token-enforcement: cockpit STALL annunciator cadence -- 600ms/2-step flash is a learned visual convention in training aids and must stay deterministic regardless of app motion tokens */
 		animation: flash 0.6s steps(2, end) infinite;
 	}
 
 	@keyframes flash {
 		0% {
-			background: var(--ab-sim-status-danger-bg);
-			color: var(--ab-sim-status-danger-fg);
+			background: var(--sim-status-danger-bg);
+			color: var(--sim-status-danger-fg);
 		}
 		50% {
-			background: var(--ab-sim-status-danger);
-			color: var(--ab-color-primary-fg);
+			background: var(--sim-status-danger);
+			color: var(--action-default-ink);
 		}
 		100% {
-			background: var(--ab-sim-status-danger-bg);
-			color: var(--ab-sim-status-danger-fg);
+			background: var(--sim-status-danger-bg);
+			color: var(--sim-status-danger-fg);
 		}
 	}
 </style>

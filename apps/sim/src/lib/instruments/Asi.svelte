@@ -130,50 +130,50 @@ const ticks = Array.from({ length: 15 }, (_, i) => MIN_KIAS + i * 10);
 	}
 
 	.instrument-face {
-		fill: var(--ab-sim-instrument-face);
-		stroke: var(--ab-sim-instrument-bezel);
+		fill: var(--sim-instrument-face);
+		stroke: var(--sim-instrument-bezel);
 	}
 
 	.arc-white {
-		stroke: var(--ab-sim-arc-white);
+		stroke: var(--sim-arc-white);
 	}
 
 	.arc-green {
-		stroke: var(--ab-sim-arc-green);
+		stroke: var(--sim-arc-green);
 	}
 
 	.arc-yellow {
-		stroke: var(--ab-sim-arc-yellow);
+		stroke: var(--sim-arc-yellow);
 	}
 
 	.redline {
-		stroke: var(--ab-sim-arc-red);
+		stroke: var(--sim-arc-red);
 	}
 
 	.tick-major {
-		stroke: var(--ab-sim-instrument-tick);
+		stroke: var(--sim-instrument-tick);
 	}
 
 	.tick-label {
-		fill: var(--ab-sim-instrument-tick);
-		font-family: var(--ab-font-mono);
+		fill: var(--sim-instrument-tick);
+		font-family: var(--font-family-mono);
 	}
 
 	.needle-pointer {
-		stroke: var(--ab-sim-instrument-pointer);
+		stroke: var(--sim-instrument-pointer);
 	}
 
 	.hub {
-		fill: var(--ab-sim-instrument-pointer);
+		fill: var(--sim-instrument-pointer);
 	}
 
 	.unit-label {
-		fill: var(--ab-sim-instrument-tick-minor);
-		font-family: var(--ab-font-mono);
+		fill: var(--sim-instrument-tick-minor);
+		font-family: var(--font-family-mono);
 	}
 
 	.digital-readout {
-		fill: var(--ab-sim-instrument-tick);
-		font-family: var(--ab-font-mono);
+		fill: var(--sim-instrument-tick);
+		font-family: var(--font-family-mono);
 	}
 </style>

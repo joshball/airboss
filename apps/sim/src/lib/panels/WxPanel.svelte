@@ -52,32 +52,32 @@ void SIM_KNOTS_PER_METER_PER_SECOND; // keeps the import wired if scenarios ever
 
 <style>
 	.wx {
-		padding: 0.6rem 0.8rem;
-		background: var(--ab-sim-panel-bg);
-		border: 1px solid var(--ab-sim-panel-bg-elevated);
-		border-radius: var(--ab-radius-sm);
-		color: var(--ab-sim-panel-fg);
+		padding: var(--space-md) var(--space-lg);
+		background: var(--sim-panel-bg);
+		border: 1px solid var(--sim-panel-bg-elevated);
+		border-radius: var(--radius-sm);
+		color: var(--sim-panel-fg);
 	}
 
 	h3 {
-		margin: 0 0 var(--ab-space-sm) 0;
-		font-size: 0.85rem;
-		color: var(--ab-sim-panel-fg-muted);
+		margin: 0 0 var(--space-sm) 0;
+		font-size: var(--font-size-sm);
+		color: var(--sim-panel-fg-muted);
 		text-transform: uppercase;
-		letter-spacing: 0.05em;
+		letter-spacing: var(--letter-spacing-caps);
 	}
 
 	dl {
 		display: grid;
 		grid-template-columns: auto 1fr;
-		gap: var(--ab-space-2xs) var(--ab-space-md);
+		gap: var(--space-2xs) var(--space-md);
 		margin: 0;
-		font-family: var(--ab-font-mono);
-		font-size: 0.8rem;
+		font-family: var(--font-family-mono);
+		font-size: var(--font-size-sm);
 	}
 
 	dt {
-		color: var(--ab-sim-panel-fg-subtle);
+		color: var(--sim-panel-fg-subtle);
 	}
 
 	dd {
