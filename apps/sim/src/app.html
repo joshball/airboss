@@ -1,10 +1,33 @@
 <!doctype html>
-<html lang="en" data-app-id="sim">
+<html lang="en" data-app-id="sim" data-theme="airboss/default" data-appearance="light">
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="icon" type="image/svg+xml" href="%sveltekit.assets%/favicon.svg" />
 		<title>airboss sim</title>
+		<script>
+			/*
+			 * Pre-hydration theme resolution.
+			 *
+			 * Sim defaults to the airboss/default theme today; package #7
+			 * will introduce sim/glass and update this resolver. Keeps the
+			 * attributes in place before hydration so tokens paint from
+			 * :root without a flash.
+			 */
+			(function () {
+				try {
+					var theme = 'airboss/default';
+					var cookieMatch = document.cookie.match(/appearance=(light|dark)/);
+					var system = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+					var appearance = cookieMatch ? cookieMatch[1] : system;
+					var html = document.documentElement;
+					html.setAttribute('data-theme', theme);
+					html.setAttribute('data-appearance', appearance);
+				} catch (e) {
+					// CSS :root block covers fallback.
+				}
+			})();
+		</script>
 		%sveltekit.head%
 		<style>
 			html {
@@ -15,20 +38,20 @@
 
 			body {
 				margin: 0;
-				font-family: var(--ab-font-family-base);
-				font-size: var(--ab-font-size-base);
-				line-height: var(--ab-line-height-normal);
+				font-family: var(--font-family-base);
+				font-size: var(--font-size-base);
+				line-height: var(--line-height-normal);
 				min-height: 100vh;
-				background: var(--ab-color-bg);
-				color: var(--ab-color-fg);
+				background: var(--surface-page);
+				color: var(--ink-body);
 			}
 
 			h1, h2, h3, h4 {
-				line-height: var(--ab-line-height-tight);
+				line-height: var(--line-height-tight);
 			}
 
 			:focus-visible {
-				outline: 2px solid var(--ab-color-primary);
+				outline: 2px solid var(--focus-ring-strong);
 				outline-offset: 2px;
 			}
 		</style>

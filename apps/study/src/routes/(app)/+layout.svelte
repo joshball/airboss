@@ -29,10 +29,12 @@ const plansActive = $derived(
 // centered reading-column layout.
 const fullBleed = $derived(dashboardActive);
 
-// Route-driven theme. `resolveThemeForPath` returns 'tui' for /dashboard
-// and 'web' everywhere else. The outer provider wraps the nav + main so
-// every component inside picks up the right tokens automatically.
-const theme = $derived(resolveThemeForPath(page.url.pathname));
+// Route-driven theme. `resolveThemeForPath` returns study/flightdeck for
+// /dashboard and study/sectional everywhere else. The selection wraps ONLY
+// the <main> content -- chrome (nav, identity menu) stays on the outer
+// [data-theme] applied by app.html so navigating from a reading surface to
+// the dashboard doesn't restyle the nav.
+const themeSelection = $derived(resolveThemeForPath(page.url.pathname, 'system', 'light'));
 
 // Identity anchor. Primary label is the user's name; fall back to email if
 // no name is set. The disclosure reveals the email (when it isn't already
@@ -68,10 +70,9 @@ function handleMenuKeydown(event: KeyboardEvent) {
 
 <svelte:window onkeydown={handleMenuKeydown} />
 
-<ThemeProvider {theme}>
-	<a class="skip" href="#main">Skip to main content</a>
+<a class="skip" href="#main">Skip to main content</a>
 
-	<nav aria-label="Primary">
+<nav aria-label="Primary">
 		<div class="nav-sections">
 			<a href={ROUTES.DASHBOARD} aria-current={dashboardActive ? 'page' : undefined}>Dashboard</a>
 			<a href={ROUTES.PLANS} aria-current={plansActive ? 'page' : undefined}>Plans</a>
@@ -101,61 +102,62 @@ function handleMenuKeydown(event: KeyboardEvent) {
 					<button type="submit">Sign out</button>
 				</form>
 			</div>
-		</details>
-	</nav>
+	</details>
+</nav>
 
-	<main id="main" tabindex="-1" class:full-bleed={fullBleed}>
+<main id="main" tabindex="-1" class:full-bleed={fullBleed}>
+	<ThemeProvider theme={themeSelection.theme} appearance={themeSelection.appearance} layout={themeSelection.layout}>
 		{@render children()}
-	</main>
-</ThemeProvider>
+	</ThemeProvider>
+</main>
 
 <style>
 	.skip {
 		position: absolute;
 		top: -3rem;
-		left: var(--ab-space-sm);
-		background: var(--ab-color-fg);
-		color: var(--ab-color-fg-inverse);
-		padding: var(--ab-space-sm) var(--ab-space-md);
-		border-radius: var(--ab-radius-sm);
+		left: var(--space-sm);
+		background: var(--ink-body);
+		color: var(--ink-inverse);
+		padding: var(--space-sm) var(--space-md);
+		border-radius: var(--radius-sm);
 		z-index: 100;
 	}
 
 	.skip:focus {
-		top: var(--ab-space-sm);
+		top: var(--space-sm);
 	}
 
 	nav {
 		display: flex;
 		align-items: center;
-		gap: var(--ab-space-xl);
-		padding: var(--ab-space-lg) var(--ab-space-xl);
-		border-bottom: 1px solid var(--ab-color-border);
-		background: var(--ab-color-surface);
+		gap: var(--space-xl);
+		padding: var(--space-lg) var(--space-xl);
+		border-bottom: 1px solid var(--edge-default);
+		background: var(--surface-panel);
 	}
 
 	.nav-sections {
 		display: flex;
-		gap: var(--ab-space-xl);
+		gap: var(--space-xl);
 		flex-wrap: wrap;
 	}
 
 	nav a {
-		color: var(--ab-color-fg-muted);
+		color: var(--ink-muted);
 		text-decoration: none;
-		font-weight: var(--ab-font-weight-medium);
-		padding: var(--ab-space-2xs) var(--ab-space-sm);
-		border-radius: var(--ab-radius-sm);
+		font-weight: var(--font-weight-medium);
+		padding: var(--space-2xs) var(--space-sm);
+		border-radius: var(--radius-sm);
 	}
 
 	nav a:hover {
-		color: var(--ab-color-fg);
-		background: var(--ab-color-surface-sunken);
+		color: var(--ink-body);
+		background: var(--surface-sunken);
 	}
 
 	nav a[aria-current='page'] {
-		color: var(--ab-color-primary-hover);
-		background: var(--ab-color-primary-subtle);
+		color: var(--action-default-hover);
+		background: var(--action-default-wash);
 	}
 
 	.nav-search {
@@ -171,13 +173,13 @@ function handleMenuKeydown(event: KeyboardEvent) {
 	.identity > summary {
 		display: inline-flex;
 		align-items: center;
-		gap: var(--ab-space-2xs);
+		gap: var(--space-2xs);
 		cursor: pointer;
 		list-style: none;
-		color: var(--ab-color-fg-muted);
-		font-weight: var(--ab-font-weight-medium);
-		padding: var(--ab-space-2xs) var(--ab-space-sm);
-		border-radius: var(--ab-radius-sm);
+		color: var(--ink-muted);
+		font-weight: var(--font-weight-medium);
+		padding: var(--space-2xs) var(--space-sm);
+		border-radius: var(--radius-sm);
 		user-select: none;
 	}
 
@@ -190,18 +192,18 @@ function handleMenuKeydown(event: KeyboardEvent) {
 	}
 
 	.identity > summary:hover {
-		color: var(--ab-color-fg);
-		background: var(--ab-color-surface-sunken);
+		color: var(--ink-body);
+		background: var(--surface-sunken);
 	}
 
 	.identity > summary:focus-visible {
-		outline: 2px solid var(--ab-color-focus-ring);
+		outline: 2px solid var(--focus-ring);
 		outline-offset: 2px;
 	}
 
 	.identity[open] > summary {
-		color: var(--ab-color-fg);
-		background: var(--ab-color-surface-sunken);
+		color: var(--ink-body);
+		background: var(--surface-sunken);
 	}
 
 	.identity[open] .chevron {
@@ -209,9 +211,9 @@ function handleMenuKeydown(event: KeyboardEvent) {
 	}
 
 	.chevron {
-		font-size: var(--ab-font-size-xs);
+		font-size: var(--font-size-xs);
 		line-height: 1;
-		transition: transform var(--ab-transition-fast);
+		transition: transform var(--motion-fast);
 	}
 
 	.identity-label-compact {
@@ -223,22 +225,22 @@ function handleMenuKeydown(event: KeyboardEvent) {
 	.identity-panel {
 		position: absolute;
 		right: 0;
-		top: calc(100% + var(--ab-space-2xs));
+		top: calc(100% + var(--space-2xs));
 		min-width: 12rem;
-		background: var(--ab-color-surface);
-		border: 1px solid var(--ab-color-border);
-		border-radius: var(--ab-radius-md);
-		box-shadow: var(--ab-shadow-lg);
-		padding: var(--ab-space-2xs);
+		background: var(--surface-panel);
+		border: 1px solid var(--edge-default);
+		border-radius: var(--radius-md);
+		box-shadow: var(--shadow-lg);
+		padding: var(--space-2xs);
 		z-index: 50;
 	}
 
 	.identity-email {
-		padding: var(--ab-space-sm) var(--ab-space-sm);
-		font-size: var(--ab-font-size-sm);
-		color: var(--ab-color-fg-muted);
-		border-bottom: 1px solid var(--ab-color-border);
-		margin-bottom: var(--ab-space-2xs);
+		padding: var(--space-sm) var(--space-sm);
+		font-size: var(--font-size-sm);
+		color: var(--ink-muted);
+		border-bottom: 1px solid var(--edge-default);
+		margin-bottom: var(--space-2xs);
 		overflow-wrap: anywhere;
 	}
 
@@ -252,20 +254,20 @@ function handleMenuKeydown(event: KeyboardEvent) {
 		text-align: left;
 		background: transparent;
 		border: 0;
-		color: var(--ab-color-fg-muted);
+		color: var(--ink-muted);
 		font: inherit;
-		padding: var(--ab-space-sm) var(--ab-space-sm);
-		border-radius: var(--ab-radius-sm);
+		padding: var(--space-sm) var(--space-sm);
+		border-radius: var(--radius-sm);
 		cursor: pointer;
 	}
 
 	.identity-signout button:hover {
-		color: var(--ab-color-fg);
-		background: var(--ab-color-surface-sunken);
+		color: var(--ink-body);
+		background: var(--surface-sunken);
 	}
 
 	.identity-signout button:focus-visible {
-		outline: 2px solid var(--ab-color-focus-ring);
+		outline: 2px solid var(--focus-ring);
 		outline-offset: 2px;
 	}
 
@@ -274,12 +276,12 @@ function handleMenuKeydown(event: KeyboardEvent) {
 	   identity when opened. */
 	@media (max-width: 640px) {
 		nav {
-			gap: var(--ab-space-md);
-			padding: var(--ab-space-md) var(--ab-space-lg);
+			gap: var(--space-md);
+			padding: var(--space-md) var(--space-lg);
 		}
 
 		.nav-sections {
-			gap: var(--ab-space-md);
+			gap: var(--space-md);
 		}
 
 		.identity-label-full {
@@ -299,10 +301,10 @@ function handleMenuKeydown(event: KeyboardEvent) {
 	 * without editing this file.
 	 */
 	main {
-		padding: var(--ab-layout-container-padding);
-		max-width: var(--ab-layout-container-max);
+		padding: var(--layout-container-padding);
+		max-width: var(--layout-container-max);
 		margin: 0 auto;
-		background: var(--ab-color-bg);
+		background: var(--surface-page);
 	}
 
 	main.full-bleed {

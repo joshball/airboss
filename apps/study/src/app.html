@@ -1,19 +1,46 @@
 <!doctype html>
-<html lang="en" data-app-id="study">
+<html lang="en" data-app-id="study" data-theme="study/sectional" data-appearance="light">
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="icon" type="image/svg+xml" href="%sveltekit.assets%/favicon.svg" />
 		<title>airboss study</title>
+		<script>
+			/*
+			 * Pre-hydration theme resolution.
+			 *
+			 * Sets data-theme + data-appearance on <html> before the first
+			 * paint, so tokens resolve from the correct block immediately
+			 * and SvelteKit's hydration doesn't cause a theme flash. Mirrors
+			 * the core of @ab/themes/resolveThemeForPath -- keep the two
+			 * in sync when flightdeck paths grow.
+			 */
+			(function () {
+				try {
+					var path = window.location.pathname;
+					var theme = path === '/dashboard' || path.indexOf('/dashboard/') === 0
+						? 'study/flightdeck'
+						: 'study/sectional';
+					var cookieMatch = document.cookie.match(/appearance=(light|dark)/);
+					var system = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+					var appearance = cookieMatch ? cookieMatch[1] : system;
+					var html = document.documentElement;
+					html.setAttribute('data-theme', theme);
+					html.setAttribute('data-appearance', appearance);
+				} catch (e) {
+					// CSS defaults cover fallback (:root block carries the
+					// sectional light palette).
+				}
+			})();
+		</script>
 		%sveltekit.head%
 		<style>
 			/*
 			 * Base document styles. All colors / fonts / sizes resolve from
-			 * the token layer defined at `:root` in `@ab/themes/tokens.css`.
-			 * `:root` carries the `web` theme defaults so the body paints
-			 * correctly before SvelteKit hydrates the `ThemeProvider`; the
-			 * `[data-theme='tui']` subtree inside `<div id="app">` still
-			 * overrides tokens for its descendants.
+			 * the token layer emitted into @ab/themes/generated/tokens.css.
+			 * The :root block there carries the sectional light palette so
+			 * the body paints correctly before hydration; [data-theme][data-appearance]
+			 * selectors override on the subtree matching the active surface.
 			 */
 			html {
 				-webkit-font-smoothing: antialiased;
@@ -23,20 +50,20 @@
 
 			body {
 				margin: 0;
-				font-family: var(--ab-font-family-base);
-				font-size: var(--ab-font-size-base);
-				line-height: var(--ab-line-height-normal);
+				font-family: var(--font-family-base);
+				font-size: var(--font-size-base);
+				line-height: var(--line-height-normal);
 				min-height: 100vh;
-				background: var(--ab-color-bg);
-				color: var(--ab-color-fg);
+				background: var(--surface-page);
+				color: var(--ink-body);
 			}
 
 			h1, h2, h3, h4 {
-				line-height: var(--ab-line-height-tight);
+				line-height: var(--line-height-tight);
 			}
 
 			:focus-visible {
-				outline: 2px solid var(--ab-color-primary);
+				outline: 2px solid var(--focus-ring-strong);
 				outline-offset: 2px;
 			}
 		</style>

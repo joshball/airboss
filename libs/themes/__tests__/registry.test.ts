@@ -68,6 +68,10 @@ describe('listThemes', () => {
 	it('returns every registered theme', () => {
 		registerTheme(stubTheme('test/a'));
 		registerTheme(stubTheme('test/b'));
-		expect(listThemes().map((t) => t.id).sort()).toEqual(['test/a', 'test/b']);
+		expect(
+			listThemes()
+				.map((t) => t.id)
+				.sort(),
+		).toEqual(['test/a', 'test/b']);
 	});
 });

@@ -17,8 +17,7 @@ const themes = new Map<ThemeId, Theme>();
 export function registerTheme(theme: Theme): void {
 	if (themes.has(theme.id)) {
 		throw new Error(
-			`Duplicate theme id: ${theme.id}. ` +
-				`Each theme's index.ts should call registerTheme exactly once per process.`,
+			`Duplicate theme id: ${theme.id}. ` + `Each theme's index.ts should call registerTheme exactly once per process.`,
 		);
 	}
 	themes.set(theme.id, theme);

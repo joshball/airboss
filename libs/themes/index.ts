@@ -33,8 +33,14 @@ export type {
 	ThemeId,
 	TypographyPack,
 } from './contract';
-export { alpha, adjustBrightness, deriveInteractiveStates, deriveSignalVariants, getContrastingTextColor } from './derive';
 export { contrastRatio, relativeLuminance } from './contrast';
+export {
+	adjustBrightness,
+	alpha,
+	deriveInteractiveStates,
+	deriveSignalVariants,
+	getContrastingTextColor,
+} from './derive';
 export { applyDerivations, emitAllThemes, resolveTheme, themeToCss } from './emit';
 export { getTheme, getThemeSafe, isValidThemeId, listThemes, registerTheme } from './registry';
 export {
@@ -46,5 +52,5 @@ export {
 	type ThemeName,
 	type ThemeSelection,
 } from './resolve';
-export { TOKENS, type TokenCssName, type TokenName } from './vocab';
 export { TONES, type Tone } from './tones';
+export { TOKENS, type TokenCssName, type TokenName } from './vocab';

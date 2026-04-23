@@ -7,8 +7,8 @@
  */
 
 import type { Theme } from '../../contract';
-import { registerTheme } from '../../registry';
 import { airbossDefaultTheme } from '../../core/defaults/airboss-default';
+import { registerTheme } from '../../registry';
 import { flightdeckChrome } from './chrome';
 import { flightdeckDarkPalette } from './palette.dark';
 import { flightdeckLightPalette } from './palette.light';

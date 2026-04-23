@@ -32,7 +32,7 @@ export function contrastRatio(foregroundHex: string, backgroundHex: string): num
 
 function channelLuminance(channel255: number): number {
 	const c = channel255 / 255;
-	return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+	return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
 }
 
 function hexToRgb(hex: string): [number, number, number] | null {

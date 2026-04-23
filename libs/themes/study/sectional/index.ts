@@ -8,8 +8,8 @@
  */
 
 import type { Theme } from '../../contract';
-import { registerTheme } from '../../registry';
 import { airbossDefaultTheme } from '../../core/defaults/airboss-default';
+import { registerTheme } from '../../registry';
 import { sectionalDarkPalette } from './palette.dark';
 import { sectionalLightPalette } from './palette.light';
 
