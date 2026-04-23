@@ -83,6 +83,15 @@ export interface DerivedPalette {
 	focus: { ring: string; ringStrong: string; ringShadow: string };
 }
 
+// ---------------------------------------------------------------------
+// Typography
+// ---------------------------------------------------------------------
+
+/**
+ * One typography slot. `family` is a pack family key (`sans | mono | base`
+ * today; package #2 may add `serif | display`). All other fields are raw
+ * CSS values the emitter pipes into `--type-{role}-{variant}-{field}`.
+ */
 export interface TypeBundle {
 	family: string;
 	size: string;
@@ -91,9 +100,56 @@ export interface TypeBundle {
 	tracking: string;
 }
 
+export type TypographyRole = 'reading' | 'heading' | 'ui' | 'code' | 'definition';
+
+export interface ReadingBundles {
+	body: TypeBundle;
+	lead: TypeBundle;
+	caption: TypeBundle;
+	quote: TypeBundle;
+}
+
+export interface HeadingBundles {
+	1: TypeBundle;
+	2: TypeBundle;
+	3: TypeBundle;
+	4: TypeBundle;
+	5: TypeBundle;
+	6: TypeBundle;
+}
+
+export interface UiBundles {
+	control: TypeBundle;
+	label: TypeBundle;
+	caption: TypeBundle;
+	badge: TypeBundle;
+}
+
+export interface CodeBundles {
+	inline: TypeBundle;
+	block: TypeBundle;
+}
+
+export interface DefinitionBundles {
+	term: TypeBundle;
+	body: TypeBundle;
+}
+
+export interface TypographyBundles {
+	reading: ReadingBundles;
+	heading: HeadingBundles;
+	ui: UiBundles;
+	code: CodeBundles;
+	definition: DefinitionBundles;
+}
+
 /**
- * Typography pack -- atomic shape in package #1 (just family tokens +
- * optional bundles). Full bundle-per-role surface lands in package #2.
+ * Typography pack -- families + a full bundle-per-role surface.
+ *
+ * Package #1 lands the shape; `airbossDefaultPack` provides bundle
+ * values derived from today's atomic typography scale. Package #2 ships
+ * curated packs (compact, display-serif, etc.) and refactors call
+ * sites; do not invent new packs here.
  */
 export interface TypographyPack {
 	packId: string;
@@ -102,16 +158,133 @@ export interface TypographyPack {
 		mono: string;
 		base: string;
 	};
+	/** Optional global scale multiplier applied per-family. Default 1.0. */
 	scale?: number;
-	/** Optional bundles; package #2 populates the full shape. */
-	bundles?: {
-		reading?: { body?: TypeBundle; lead?: TypeBundle; caption?: TypeBundle; quote?: TypeBundle };
-		heading?: Partial<Record<'1' | '2' | '3' | '4' | '5' | '6', TypeBundle>>;
-		ui?: { control?: TypeBundle; label?: TypeBundle; caption?: TypeBundle; badge?: TypeBundle };
-		code?: { inline?: TypeBundle; block?: TypeBundle };
-		definition?: { term?: TypeBundle; body?: TypeBundle };
-	};
+	bundles: TypographyBundles;
 }
+
+// ---------------------------------------------------------------------
+// Control tokens (button / input slots)
+// ---------------------------------------------------------------------
+
+/**
+ * Slot set used by interactive controls. Every field is a raw CSS value
+ * the emitter writes as `--{component}-{variant}-{slot}`. Variants
+ * resolve their values from role tokens by default (e.g. `bg:
+ * 'var(--action-default)'`) so theme swaps propagate automatically.
+ */
+export interface ControlSlots {
+	bg: string;
+	ink: string;
+	border: string;
+	hoverBg: string;
+	hoverInk: string;
+	activeBg: string;
+	disabledBg: string;
+	disabledInk: string;
+	ring: string;
+}
+
+export type ButtonVariant = 'default' | 'primary' | 'hazard' | 'neutral' | 'ghost';
+export type InputVariant = 'default' | 'error';
+
+export interface ControlTokens {
+	button: Record<ButtonVariant, ControlSlots>;
+	input: Record<InputVariant, ControlSlots>;
+}
+
+// ---------------------------------------------------------------------
+// Sim tokens (optional; only populated by sim-surface themes)
+// ---------------------------------------------------------------------
+
+/**
+ * Sim-surface tokens. Shape matches the legacy `--ab-sim-*` families
+ * grepped from `apps/sim/src`. Package #7 populates real values; until
+ * then all sim themes leave this undefined and `apps/sim` resolves via
+ * the legacy-alias block's TODO sentinels.
+ */
+export interface SimPanelTokens {
+	bg: string;
+	bgDarker: string;
+	bgElevated: string;
+	border: string;
+	fg: string;
+	fgDim: string;
+	fgFaint: string;
+	fgLight: string;
+	fgLighter: string;
+	fgLightest: string;
+	fgMuted: string;
+	fgNote: string;
+	fgSubtle: string;
+}
+
+export interface SimInstrumentTokens {
+	bezel: string;
+	bezelOuter: string;
+	face: string;
+	faceInner: string;
+	pointer: string;
+	pointerPivot: string;
+	tick: string;
+	tickDim: string;
+	tickFaint: string;
+	tickMinor: string;
+	tickSubtle: string;
+}
+
+export interface SimHorizonTokens {
+	ground: string;
+	sky: string;
+}
+
+export interface SimArcTokens {
+	green: string;
+	red: string;
+	white: string;
+	yellow: string;
+}
+
+export interface SimStatusTokens {
+	danger: string;
+	dangerBg: string;
+	dangerBorder: string;
+	dangerFg: string;
+	dangerStrong: string;
+	primary: string;
+	primaryFg: string;
+	primaryHover: string;
+	success: string;
+	successBg: string;
+	successBorder: string;
+	successFg: string;
+	warning: string;
+	warningBg: string;
+	warningBorder: string;
+}
+
+export interface SimBannerTokens {
+	infoBg: string;
+	infoBorder: string;
+	infoFg: string;
+	successBg: string;
+	successBorder: string;
+}
+
+export interface SimTokens {
+	panel: SimPanelTokens;
+	instrument: SimInstrumentTokens;
+	horizon: SimHorizonTokens;
+	arc: SimArcTokens;
+	status: SimStatusTokens;
+	banner: SimBannerTokens;
+	readout: { warningBg: string };
+	muted: { stateBg: string };
+}
+
+// ---------------------------------------------------------------------
+// Chrome + component overrides
+// ---------------------------------------------------------------------
 
 export interface Chrome {
 	space: Record<'2xs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl', string>;
@@ -160,6 +333,9 @@ export interface Theme {
 	};
 	typography: TypographyPack;
 	chrome: Chrome;
+	control: ControlTokens;
+	/** Populated only by sim-surface themes. Package #7 fills. */
+	sim?: SimTokens;
 	componentTokens?: Partial<ComponentTokens>;
 	vocabulary?: AppVocabulary;
 }
