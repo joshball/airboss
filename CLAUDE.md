@@ -237,6 +237,7 @@ See [docs/platform/MULTI_PRODUCT_ARCHITECTURE.md](docs/platform/MULTI_PRODUCT_AR
 - **Do the right thing, not the easy thing.** Never take shortcuts. Choose what makes the project better, simpler, more correct, less buggy, more professional. If it takes longer, it takes longer.
 - **Questions are not instructions.** When asked "why does X work this way?" -- answer. Don't start changing things.
 - **Capture ideas immediately.** New ideas, approaches, insights -- add to [docs/platform/IDEAS.md](docs/platform/IDEAS.md) the moment they come up. Don't evaluate yet. Ideas are reviewed every 2 weeks.
+- **Mind your own business on other agents' work.** Do not narrate, audit, or comment on worktrees, branches, or in-flight PRs that aren't yours. Do not proactively inform the user about them. Only speak up if you see a concrete problem (conflict, broken state, data loss risk) that blocks your work. Otherwise: leave them alone, don't mention them.
 
 ## Code Quality
 
