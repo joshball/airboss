@@ -95,9 +95,9 @@ function pctOf(n: number, total: number): string {
 		align-items: center;
 		justify-content: center;
 		font-family: var(--font-family-mono);
-		font-size: 0.6875rem;
+		font-size: var(--font-size-xs);
 		font-weight: var(--type-heading-3-weight);
-		letter-spacing: 0.04em;
+		letter-spacing: var(--letter-spacing-wide);
 		padding: 1px var(--space-xs);
 		border-radius: var(--radius-sm);
 		border: 1px solid var(--edge-strong);

@@ -122,7 +122,7 @@ function groupBySurface(
 		margin: 0 0 var(--space-md);
 		font-size: var(--type-reading-body-size);
 		text-transform: uppercase;
-		letter-spacing: 0.08em;
+		letter-spacing: var(--letter-spacing-caps);
 		color: var(--ink-muted);
 	}
 

@@ -271,7 +271,7 @@ const skipPreview = $derived([...selectedSkip].sort().map((d) => domainLabel(d))
 	}
 
 	.wizard {
-		/* TODO-theme: pick a role token for this literal. */ background: white;
+		background: var(--ink-inverse);
 		border: 1px solid var(--edge-default);
 		border-radius: var(--radius-lg);
 		padding: var(--space-xl);
@@ -302,7 +302,7 @@ const skipPreview = $derived([...selectedSkip].sort().map((d) => domainLabel(d))
 
 	.help.subtle {
 		color: var(--ink-faint);
-		font-size: 0.75rem;
+		font-size: var(--font-size-xs);
 		font-style: italic;
 	}
 
@@ -321,7 +321,7 @@ const skipPreview = $derived([...selectedSkip].sort().map((d) => domainLabel(d))
 		font-size: var(--type-ui-label-size);
 		color: var(--ink-subtle);
 		text-transform: uppercase;
-		letter-spacing: 0.08em;
+		letter-spacing: var(--letter-spacing-caps);
 		font-weight: 600;
 	}
 
@@ -347,7 +347,7 @@ const skipPreview = $derived([...selectedSkip].sort().map((d) => domainLabel(d))
 		font-weight: 600;
 		color: var(--ink-subtle);
 		text-transform: uppercase;
-		letter-spacing: 0.04em;
+		letter-spacing: var(--letter-spacing-wide);
 		font-size: var(--type-ui-caption-size);
 	}
 
@@ -433,7 +433,7 @@ const skipPreview = $derived([...selectedSkip].sort().map((d) => domainLabel(d))
 
 	.btn.primary {
 		background: var(--action-default);
-		/* TODO-theme: pick a role token for this literal. */ color: white;
+		color: var(--ink-inverse);
 	}
 
 	.btn.primary:hover:not(:disabled) {

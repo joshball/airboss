@@ -253,7 +253,7 @@ function onKeydown(e: KeyboardEvent) {
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-lg);
-		/* TODO-theme: pick a role token for this literal. */ background: white;
+		background: var(--ink-inverse);
 		border: 1px solid var(--edge-default);
 		border-radius: var(--radius-lg);
 		padding: var(--space-xl);
@@ -283,7 +283,7 @@ function onKeydown(e: KeyboardEvent) {
 		padding: var(--space-sm) var(--space-md);
 		border: 1px solid var(--edge-strong);
 		border-radius: var(--radius-md);
-		/* TODO-theme: pick a role token for this literal. */ background: white;
+		background: var(--ink-inverse);
 		color: var(--ink-body);
 		transition: border-color var(--motion-fast), box-shadow var(--motion-fast);
 	}
@@ -340,7 +340,7 @@ function onKeydown(e: KeyboardEvent) {
 
 	.btn.primary {
 		background: var(--action-default);
-		/* TODO-theme: pick a role token for this literal. */ color: white;
+		color: var(--ink-inverse);
 	}
 
 	.btn.primary:hover:not(:disabled) {

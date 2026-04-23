@@ -294,7 +294,7 @@ const skippableDomains = $derived(DOMAIN_VALUES.filter((d: Domain) => !focusSet.
 
 	.badge.active {
 		background: var(--action-default-hover);
-		/* TODO-theme: pick a role token for this literal. */ color: white;
+		color: var(--ink-inverse);
 	}
 
 	.link {
@@ -309,7 +309,7 @@ const skippableDomains = $derived(DOMAIN_VALUES.filter((d: Domain) => !focusSet.
 
 	.wizard,
 	.card {
-		/* TODO-theme: pick a role token for this literal. */ background: white;
+		background: var(--ink-inverse);
 		border: 1px solid var(--edge-default);
 		border-radius: var(--radius-lg);
 		padding: var(--space-xl);
@@ -371,7 +371,7 @@ const skippableDomains = $derived(DOMAIN_VALUES.filter((d: Domain) => !focusSet.
 	}
 
 	.banner-action {
-		margin-left: 0.5rem;
+		margin-left: var(--space-sm);
 		color: var(--action-default-hover);
 		font-weight: 600;
 		text-decoration: none;
@@ -386,7 +386,7 @@ const skippableDomains = $derived(DOMAIN_VALUES.filter((d: Domain) => !focusSet.
 		font-size: var(--type-ui-label-size);
 		color: var(--ink-subtle);
 		text-transform: uppercase;
-		letter-spacing: 0.08em;
+		letter-spacing: var(--letter-spacing-caps);
 		font-weight: 600;
 	}
 
@@ -449,7 +449,7 @@ const skippableDomains = $derived(DOMAIN_VALUES.filter((d: Domain) => !focusSet.
 
 	.btn.primary {
 		background: var(--action-default);
-		/* TODO-theme: pick a role token for this literal. */ color: white;
+		color: var(--ink-inverse);
 	}
 
 	.btn.primary:hover:not(:disabled) {

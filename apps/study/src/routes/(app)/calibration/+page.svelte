@@ -426,7 +426,7 @@ const interpretation = $derived(
 	}
 
 	.empty {
-		/* TODO-theme: pick a role token for this literal. */ background: white;
+		background: var(--ink-inverse);
 		border: 1px solid var(--edge-default);
 		border-radius: var(--radius-lg);
 		padding: var(--space-2xl);
@@ -455,7 +455,7 @@ const interpretation = $derived(
 	}
 
 	.score-card {
-		/* TODO-theme: pick a role token for this literal. */ background: white;
+		background: var(--ink-inverse);
 		border: 1px solid var(--edge-default);
 		border-radius: var(--radius-lg);
 		padding: var(--space-xl);
@@ -474,11 +474,11 @@ const interpretation = $derived(
 		font-weight: 600;
 		color: var(--ink-subtle);
 		text-transform: uppercase;
-		letter-spacing: 0.08em;
+		letter-spacing: var(--letter-spacing-caps);
 	}
 
 	.score-value {
-		font-size: 3rem;
+		font-size: var(--font-size-2xl);
 		font-weight: 700;
 		color: var(--ink-body);
 		line-height: 1.1;
@@ -504,7 +504,7 @@ const interpretation = $derived(
 		font-size: var(--type-ui-caption-size);
 		color: var(--ink-subtle);
 		text-transform: uppercase;
-		letter-spacing: 0.06em;
+		letter-spacing: var(--letter-spacing-caps);
 	}
 
 	.score-meta dd {
@@ -517,7 +517,7 @@ const interpretation = $derived(
 	.chart-card,
 	.domains-card,
 	.trend-card {
-		/* TODO-theme: pick a role token for this literal. */ background: white;
+		background: var(--ink-inverse);
 		border: 1px solid var(--edge-default);
 		border-radius: var(--radius-lg);
 		padding: var(--space-xl);
@@ -648,7 +648,7 @@ const interpretation = $derived(
 		font-size: var(--type-ui-caption-size);
 		color: var(--ink-subtle);
 		text-transform: uppercase;
-		letter-spacing: 0.04em;
+		letter-spacing: var(--letter-spacing-wide);
 	}
 
 	.bar-track {
@@ -690,7 +690,7 @@ const interpretation = $derived(
 		font-size: var(--type-ui-caption-size);
 		font-weight: 600;
 		color: var(--ink-body);
-		text-shadow: 0 0 2px white;
+		text-shadow: 0 0 2px var(--ink-inverse);
 	}
 
 	.bar-empty {
@@ -726,7 +726,7 @@ const interpretation = $derived(
 		 * modes and monochrome prints where the background tint collapses.
 		 * aria-hidden because the label text carries the signal for AT.
 		 */
-		font-size: 1rem;
+		font-size: var(--font-size-base);
 		line-height: 1;
 		font-weight: 700;
 	}
@@ -738,7 +738,7 @@ const interpretation = $derived(
 		font-size: var(--type-ui-label-size);
 		font-weight: 600;
 		color: var(--action-default-hover);
-		/* TODO-theme: pick a role token for this literal. */ background: white;
+		background: var(--ink-inverse);
 		border: 1px solid var(--action-default-edge);
 		border-radius: var(--radius-md);
 		text-decoration: none;
@@ -798,7 +798,7 @@ const interpretation = $derived(
 	.domain-table thead th {
 		font-size: var(--type-ui-caption-size);
 		text-transform: uppercase;
-		letter-spacing: 0.06em;
+		letter-spacing: var(--letter-spacing-caps);
 		color: var(--ink-subtle);
 	}
 
@@ -939,12 +939,12 @@ const interpretation = $derived(
 		justify-content: center;
 		gap: var(--space-sm);
 		transition: background var(--motion-fast),
-			border-color 120ms;
+			border-color var(--motion-fast);
 	}
 
 	.btn.primary {
 		background: var(--action-default);
-		/* TODO-theme: pick a role token for this literal. */ color: white;
+		color: var(--ink-inverse);
 	}
 
 	.btn.primary:hover {
@@ -967,7 +967,7 @@ const interpretation = $derived(
 		}
 
 		.score-value {
-			font-size: 2.25rem;
+			font-size: var(--font-size-2xl);
 		}
 	}
 </style>

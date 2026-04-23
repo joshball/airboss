@@ -302,7 +302,7 @@ function pageHref(n: number): string {
 		grid-template-columns: 2fr 1fr 1fr 1fr 1fr auto;
 		gap: var(--space-md);
 		align-items: end;
-		/* TODO-theme: pick a role token for this literal. */ background: white;
+		background: var(--ink-inverse);
 		border: 1px solid var(--edge-default);
 		border-radius: var(--radius-lg);
 		padding: var(--space-lg);
@@ -319,7 +319,7 @@ function pageHref(n: number): string {
 		font-weight: 600;
 		color: var(--ink-muted);
 		text-transform: uppercase;
-		letter-spacing: 0.06em;
+		letter-spacing: var(--letter-spacing-caps);
 	}
 
 	.filter input,
@@ -328,7 +328,7 @@ function pageHref(n: number): string {
 		padding: var(--space-sm) var(--space-sm);
 		border: 1px solid var(--edge-strong);
 		border-radius: var(--radius-sm);
-		/* TODO-theme: pick a role token for this literal. */ background: white;
+		background: var(--ink-inverse);
 		color: var(--ink-body);
 	}
 
@@ -366,7 +366,7 @@ function pageHref(n: number): string {
 	.chip-label {
 		font-size: var(--type-ui-caption-size);
 		text-transform: uppercase;
-		letter-spacing: 0.06em;
+		letter-spacing: var(--letter-spacing-caps);
 		color: var(--ink-subtle);
 		font-weight: 600;
 		margin-right: var(--space-2xs);
@@ -434,7 +434,7 @@ function pageHref(n: number): string {
 	}
 
 	.empty {
-		/* TODO-theme: pick a role token for this literal. */ background: white;
+		background: var(--ink-inverse);
 		border: 1px dashed var(--edge-strong);
 		border-radius: var(--radius-lg);
 		padding: var(--space-2xl) var(--space-xl);
@@ -456,7 +456,7 @@ function pageHref(n: number): string {
 	}
 
 	.card {
-		/* TODO-theme: pick a role token for this literal. */ background: white;
+		background: var(--ink-inverse);
 		border: 1px solid var(--edge-default);
 		border-radius: var(--radius-md);
 		transition: border-color var(--motion-fast), box-shadow var(--motion-fast);
@@ -498,7 +498,7 @@ function pageHref(n: number): string {
 		color: var(--ink-muted);
 		background: var(--surface-muted);
 		text-transform: uppercase;
-		letter-spacing: 0.04em;
+		letter-spacing: var(--letter-spacing-wide);
 	}
 
 	.badge.domain {
@@ -562,7 +562,7 @@ function pageHref(n: number): string {
 
 	.btn.primary {
 		background: var(--action-default);
-		/* TODO-theme: pick a role token for this literal. */ color: white;
+		color: var(--ink-inverse);
 	}
 
 	.btn.primary:hover {

@@ -157,7 +157,7 @@ function formatMs(ms: number | null): string {
 		font-weight: var(--type-heading-3-weight);
 		color: var(--ink-subtle);
 		text-transform: uppercase;
-		letter-spacing: 0.04em;
+		letter-spacing: var(--letter-spacing-wide);
 		font-size: var(--type-ui-caption-size);
 	}
 
@@ -182,7 +182,7 @@ function formatMs(ms: number | null): string {
 		font-size: var(--type-ui-label-size);
 		color: var(--ink-subtle);
 		text-transform: uppercase;
-		letter-spacing: 0.08em;
+		letter-spacing: var(--letter-spacing-caps);
 		font-weight: var(--type-heading-3-weight);
 	}
 

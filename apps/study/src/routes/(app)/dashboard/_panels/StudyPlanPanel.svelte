@@ -140,8 +140,8 @@ function domainLabel(d: Domain): string {
 	.row dt {
 		color: var(--ink-faint);
 		text-transform: uppercase;
-		letter-spacing: 0.06em;
-		font-size: 0.625rem;
+		letter-spacing: var(--letter-spacing-caps);
+		font-size: var(--font-size-xs);
 		font-family: var(--font-family-mono);
 		padding-top: var(--space-2xs);
 	}

@@ -104,6 +104,7 @@ const screenReaderSummary = $derived(
 	.bar {
 		width: 100%;
 		max-width: 14px;
+		/* lint-disable-token-enforcement: component-scoped CSS var set via inline style */
 		height: var(--h, 8%);
 		min-height: 3px;
 		background: var(--action-default);
@@ -117,7 +118,7 @@ const screenReaderSummary = $derived(
 	}
 
 	.lbl {
-		font-size: 0.625rem;
+		font-size: var(--font-size-xs);
 		color: var(--ink-faint);
 		font-weight: var(--type-heading-3-weight);
 		line-height: 1;

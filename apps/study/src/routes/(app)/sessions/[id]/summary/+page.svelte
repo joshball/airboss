@@ -177,7 +177,7 @@ function domainLabel(slug: string): string {
 	}
 
 	.tile {
-		/* TODO-theme: pick a role token for this literal. */ background: white;
+		background: var(--ink-inverse);
 		border: 1px solid var(--edge-default);
 		border-radius: var(--radius-lg);
 		padding: var(--space-lg) var(--space-xl);
@@ -191,11 +191,11 @@ function domainLabel(slug: string): string {
 		font-weight: 600;
 		color: var(--ink-subtle);
 		text-transform: uppercase;
-		letter-spacing: 0.06em;
+		letter-spacing: var(--letter-spacing-caps);
 	}
 
 	.tile-value {
-		font-size: 2rem;
+		font-size: var(--font-size-2xl);
 		font-weight: 700;
 		color: var(--ink-body);
 		line-height: 1;
@@ -230,7 +230,7 @@ function domainLabel(slug: string): string {
 	}
 
 	.card {
-		/* TODO-theme: pick a role token for this literal. */ background: white;
+		background: var(--ink-inverse);
 		border: 1px solid var(--edge-default);
 		border-radius: var(--radius-lg);
 		padding: var(--space-xl) var(--space-xl);
@@ -244,7 +244,7 @@ function domainLabel(slug: string): string {
 		font-size: var(--type-ui-label-size);
 		color: var(--ink-subtle);
 		text-transform: uppercase;
-		letter-spacing: 0.08em;
+		letter-spacing: var(--letter-spacing-caps);
 		font-weight: 600;
 	}
 
@@ -328,7 +328,7 @@ function domainLabel(slug: string): string {
 
 	.btn.suggestion.primary {
 		background: var(--action-default);
-		/* TODO-theme: pick a role token for this literal. */ color: white;
+		color: var(--ink-inverse);
 	}
 
 	.btn.suggestion.primary:hover {
@@ -366,7 +366,7 @@ function domainLabel(slug: string): string {
 
 	.btn.primary {
 		background: var(--action-default);
-		/* TODO-theme: pick a role token for this literal. */ color: white;
+		color: var(--ink-inverse);
 	}
 
 	.btn.primary:hover {

@@ -520,7 +520,7 @@ function depthLabel(slug: DepthPreference): string {
 		font-weight: var(--type-heading-3-weight);
 		color: var(--ink-subtle);
 		text-transform: uppercase;
-		letter-spacing: 0.04em;
+		letter-spacing: var(--letter-spacing-wide);
 		font-size: var(--type-ui-caption-size);
 	}
 
@@ -724,7 +724,7 @@ function depthLabel(slug: DepthPreference): string {
 		font-size: var(--type-ui-label-size);
 		color: var(--ink-subtle);
 		text-transform: uppercase;
-		letter-spacing: 0.08em;
+		letter-spacing: var(--letter-spacing-caps);
 		font-weight: var(--type-heading-3-weight);
 	}
 
@@ -776,7 +776,7 @@ function depthLabel(slug: DepthPreference): string {
 		font-weight: var(--type-heading-1-weight);
 		font-size: var(--type-ui-caption-size);
 		text-transform: uppercase;
-		letter-spacing: 0.06em;
+		letter-spacing: var(--letter-spacing-caps);
 		padding: var(--space-2xs) var(--space-xs);
 		border-radius: var(--radius-sm);
 		background: var(--edge-default);

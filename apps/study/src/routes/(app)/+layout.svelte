@@ -337,7 +337,7 @@ function handleHelpItemClick() {
 	.identity-label-compact {
 		display: none;
 		font-variant: small-caps;
-		letter-spacing: 0.02em;
+		letter-spacing: var(--letter-spacing-wide);
 	}
 
 	.identity-panel {

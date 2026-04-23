@@ -323,7 +323,7 @@ function renderPhase(body: string | null): string {
 		color: var(--ink-muted);
 		background: var(--surface-muted);
 		text-transform: uppercase;
-		letter-spacing: 0.04em;
+		letter-spacing: var(--letter-spacing-wide);
 	}
 
 	.badge.domain {
@@ -357,7 +357,7 @@ function renderPhase(body: string | null): string {
 	}
 
 	.mastery-panel {
-		/* TODO-theme: pick a role token for this literal. */ background: white;
+		background: var(--ink-inverse);
 		border: 1px solid var(--edge-default);
 		border-radius: var(--radius-lg);
 		padding: var(--space-lg) var(--space-lg);
@@ -375,7 +375,7 @@ function renderPhase(body: string | null): string {
 	.mastery-label {
 		font-size: var(--type-ui-caption-size);
 		text-transform: uppercase;
-		letter-spacing: 0.08em;
+		letter-spacing: var(--letter-spacing-caps);
 		color: var(--ink-muted);
 		font-weight: 600;
 	}
@@ -416,7 +416,7 @@ function renderPhase(body: string | null): string {
 	.gate dt {
 		font-size: var(--type-ui-caption-size);
 		text-transform: uppercase;
-		letter-spacing: 0.06em;
+		letter-spacing: var(--letter-spacing-caps);
 		color: var(--ink-subtle);
 		font-weight: 600;
 	}
@@ -463,7 +463,7 @@ function renderPhase(body: string | null): string {
 
 	.btn.primary {
 		background: var(--action-default);
-		/* TODO-theme: pick a role token for this literal. */ color: white;
+		color: var(--ink-inverse);
 	}
 
 	.btn.primary:hover {
@@ -503,7 +503,7 @@ function renderPhase(body: string | null): string {
 	.relevance th {
 		font-size: var(--type-ui-caption-size);
 		text-transform: uppercase;
-		letter-spacing: 0.06em;
+		letter-spacing: var(--letter-spacing-caps);
 		color: var(--ink-muted);
 		background: var(--surface-muted);
 	}
@@ -555,7 +555,7 @@ function renderPhase(body: string | null): string {
 	}
 
 	.phase {
-		/* TODO-theme: pick a role token for this literal. */ background: white;
+		background: var(--ink-inverse);
 		border: 1px solid var(--edge-default);
 		border-radius: var(--radius-lg);
 		padding: var(--space-lg) var(--space-lg);
@@ -601,7 +601,7 @@ function renderPhase(body: string | null): string {
 		font-family: var(--font-family-mono);
 		font-size: var(--type-ui-label-size);
 		background: var(--surface-sunken);
-		padding: 0.05em 0.35em;
+		padding: 0 var(--space-xs);
 		border-radius: var(--radius-xs);
 	}
 
@@ -634,7 +634,7 @@ function renderPhase(body: string | null): string {
 	}
 
 	.refs li {
-		/* TODO-theme: pick a role token for this literal. */ background: white;
+		background: var(--ink-inverse);
 		border: 1px solid var(--edge-default);
 		border-radius: var(--radius-md);
 		padding: var(--space-sm) var(--space-md);

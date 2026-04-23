@@ -145,7 +145,7 @@ function bar(value: number): number {
 
 	h1 {
 		margin: 0;
-		font-size: 1.75rem;
+		font-size: var(--font-size-2xl);
 		letter-spacing: -0.02em;
 		color: var(--ink-body);
 	}
@@ -153,7 +153,7 @@ function bar(value: number): number {
 	.sub {
 		margin: var(--space-2xs) 0 0;
 		color: var(--ink-subtle);
-		font-size: 0.9375rem;
+		font-size: var(--font-size-body);
 	}
 
 	.quick {
@@ -163,7 +163,7 @@ function bar(value: number): number {
 	}
 
 	.empty {
-		/* TODO-theme: pick a role token for this literal. */ background: white;
+		background: var(--ink-inverse);
 		border: 1px dashed var(--edge-strong);
 		border-radius: var(--radius-lg);
 		padding: var(--space-2xl) var(--space-xl);
@@ -177,7 +177,7 @@ function bar(value: number): number {
 	.empty h2 {
 		margin: 0;
 		color: var(--ink-body);
-		font-size: 1.25rem;
+		font-size: var(--font-size-xl);
 	}
 
 	.empty p {
@@ -207,7 +207,7 @@ function bar(value: number): number {
 	}
 
 	.card-list {
-		/* TODO-theme: pick a role token for this literal. */ background: white;
+		background: var(--ink-inverse);
 		border: 1px solid var(--edge-default);
 		border-radius: var(--radius-lg);
 		padding: var(--space-xl) var(--space-xl);
@@ -218,10 +218,10 @@ function bar(value: number): number {
 
 	.card-list h2 {
 		margin: 0;
-		font-size: 0.8125rem;
+		font-size: var(--font-size-sm);
 		color: var(--ink-subtle);
 		text-transform: uppercase;
-		letter-spacing: 0.08em;
+		letter-spacing: var(--letter-spacing-caps);
 		font-weight: 600;
 	}
 
@@ -260,7 +260,7 @@ function bar(value: number): number {
 	.dm-counts {
 		display: flex;
 		gap: var(--space-sm);
-		font-size: 0.8125rem;
+		font-size: var(--font-size-sm);
 	}
 
 	.dm-pct {
@@ -288,13 +288,13 @@ function bar(value: number): number {
 
 	.empty-note {
 		color: var(--ink-subtle);
-		font-size: 0.875rem;
+		font-size: var(--font-size-sm);
 		margin: 0;
 	}
 
 	.btn {
 		padding: var(--space-sm) var(--space-lg);
-		font-size: 0.9375rem;
+		font-size: var(--font-size-body);
 		font-weight: 600;
 		border-radius: var(--radius-md);
 		border: 1px solid transparent;
@@ -308,7 +308,7 @@ function bar(value: number): number {
 
 	.btn.primary {
 		background: var(--action-default);
-		/* TODO-theme: pick a role token for this literal. */ color: white;
+		color: var(--ink-inverse);
 	}
 
 	.btn.primary:hover {

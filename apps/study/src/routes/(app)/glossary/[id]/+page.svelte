@@ -149,7 +149,7 @@ const related = $derived(data.related);
 		background: var(--surface-sunken);
 		color: var(--ink-muted);
 		text-transform: uppercase;
-		letter-spacing: 0.04em;
+		letter-spacing: var(--letter-spacing-wide);
 		border: 1px solid var(--edge-default);
 	}
 
@@ -158,7 +158,7 @@ const related = $derived(data.related);
 		font-size: var(--type-ui-label-size);
 		font-weight: 700;
 		text-transform: uppercase;
-		letter-spacing: 0.06em;
+		letter-spacing: var(--letter-spacing-caps);
 		color: var(--ink-muted);
 	}
 

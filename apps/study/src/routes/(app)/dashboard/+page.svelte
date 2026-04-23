@@ -83,7 +83,7 @@ const stamp = `${loadedAt.getFullYear()}-${String(loadedAt.getMonth() + 1).padSt
 		font-size: var(--type-ui-label-size);
 		font-weight: 700;
 		text-transform: uppercase;
-		letter-spacing: 0.12em;
+		letter-spacing: var(--letter-spacing-caps);
 		color: var(--ink-body);
 		font-family: var(--font-family-mono);
 	}
@@ -150,7 +150,7 @@ const stamp = `${loadedAt.getFullYear()}-${String(loadedAt.getMonth() + 1).padSt
 		color: var(--ink-faint);
 		font-size: var(--type-ui-caption-size);
 		font-family: var(--font-family-mono);
-		letter-spacing: 0.04em;
+		letter-spacing: var(--letter-spacing-wide);
 	}
 
 	.status .sep {

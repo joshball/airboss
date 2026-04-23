@@ -151,7 +151,7 @@ function fmt(date: Date): string {
 	}
 
 	.plan-card {
-		/* TODO-theme: pick a role token for this literal. */ background: white;
+		background: var(--ink-inverse);
 		border: 1px solid var(--edge-default);
 		border-radius: var(--radius-lg);
 		padding: var(--space-xl) var(--space-xl);
@@ -194,7 +194,7 @@ function fmt(date: Date): string {
 
 	.active-badge {
 		background: var(--action-default-hover);
-		/* TODO-theme: pick a role token for this literal. */ color: white;
+		color: var(--ink-inverse);
 	}
 
 	.plan-meta {
@@ -208,7 +208,7 @@ function fmt(date: Date): string {
 		font-size: var(--type-ui-caption-size);
 		font-weight: 600;
 		text-transform: uppercase;
-		letter-spacing: 0.06em;
+		letter-spacing: var(--letter-spacing-caps);
 		color: var(--ink-subtle);
 	}
 
@@ -235,7 +235,7 @@ function fmt(date: Date): string {
 	}
 
 	.card-list {
-		/* TODO-theme: pick a role token for this literal. */ background: white;
+		background: var(--ink-inverse);
 		border: 1px solid var(--edge-default);
 		border-radius: var(--radius-lg);
 		padding: var(--space-xl) var(--space-xl);
@@ -249,7 +249,7 @@ function fmt(date: Date): string {
 		font-size: var(--type-ui-label-size);
 		color: var(--ink-subtle);
 		text-transform: uppercase;
-		letter-spacing: 0.08em;
+		letter-spacing: var(--letter-spacing-caps);
 		font-weight: 600;
 	}
 
@@ -304,7 +304,7 @@ function fmt(date: Date): string {
 
 	.btn.primary {
 		background: var(--action-default);
-		/* TODO-theme: pick a role token for this literal. */ color: white;
+		color: var(--ink-inverse);
 	}
 
 	.btn.primary:hover {

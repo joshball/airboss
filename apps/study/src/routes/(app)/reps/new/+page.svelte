@@ -383,7 +383,7 @@ function difficultyLabel(slug: string): string {
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-lg);
-		/* TODO-theme: pick a role token for this literal. */ background: white;
+		background: var(--ink-inverse);
 		border: 1px solid var(--edge-default);
 		border-radius: var(--radius-lg);
 		padding: var(--space-xl);
@@ -419,7 +419,7 @@ function difficultyLabel(slug: string): string {
 		padding: var(--space-sm) var(--space-md);
 		border: 1px solid var(--edge-strong);
 		border-radius: var(--radius-md);
-		/* TODO-theme: pick a role token for this literal. */ background: white;
+		background: var(--ink-inverse);
 		color: var(--ink-body);
 		transition: border-color var(--motion-fast), box-shadow var(--motion-fast);
 	}
@@ -513,7 +513,7 @@ function difficultyLabel(slug: string): string {
 		color: var(--ink-faint);
 		font-weight: 600;
 		text-transform: uppercase;
-		letter-spacing: 0.06em;
+		letter-spacing: var(--letter-spacing-caps);
 	}
 
 	.remove {
@@ -557,7 +557,7 @@ function difficultyLabel(slug: string): string {
 
 	.btn.primary {
 		background: var(--action-default);
-		/* TODO-theme: pick a role token for this literal. */ color: white;
+		color: var(--ink-inverse);
 	}
 
 	.btn.primary:hover:not(:disabled) {

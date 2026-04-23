@@ -31,7 +31,7 @@ let { activityId }: Props = $props();
 	.activity {
 		margin: var(--space-md) 0;
 		padding: var(--space-lg);
-		/* TODO-theme: pick a role token for this literal. */ background: white;
+		background: var(--ink-inverse);
 		border: 1px solid var(--edge-default);
 		border-radius: var(--radius-lg);
 	}
@@ -55,8 +55,8 @@ let { activityId }: Props = $props();
 
 	.unknown code {
 		font-family: var(--font-family-mono);
-		/* TODO-theme: pick a role token for this literal. */ background: white;
-		padding: 0.05em 0.35em;
+		background: var(--ink-inverse);
+		padding: 0 var(--space-xs);
 		border-radius: var(--radius-xs);
 	}
 </style>

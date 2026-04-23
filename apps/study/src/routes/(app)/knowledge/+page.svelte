@@ -198,7 +198,7 @@ const resetHref = $derived.by(() => {
 		grid-template-columns: repeat(4, 1fr) auto;
 		gap: var(--space-md);
 		align-items: end;
-		/* TODO-theme: pick a role token for this literal. */ background: white;
+		background: var(--ink-inverse);
 		border: 1px solid var(--edge-default);
 		border-radius: var(--radius-lg);
 		padding: var(--space-lg);
@@ -215,7 +215,7 @@ const resetHref = $derived.by(() => {
 		font-weight: 600;
 		color: var(--ink-muted);
 		text-transform: uppercase;
-		letter-spacing: 0.06em;
+		letter-spacing: var(--letter-spacing-caps);
 	}
 
 	.filter select {
@@ -223,7 +223,7 @@ const resetHref = $derived.by(() => {
 		padding: var(--space-sm) var(--space-sm);
 		border: 1px solid var(--edge-strong);
 		border-radius: var(--radius-sm);
-		/* TODO-theme: pick a role token for this literal. */ background: white;
+		background: var(--ink-inverse);
 		color: var(--ink-body);
 	}
 
@@ -239,7 +239,7 @@ const resetHref = $derived.by(() => {
 	}
 
 	.empty {
-		/* TODO-theme: pick a role token for this literal. */ background: white;
+		background: var(--ink-inverse);
 		border: 1px dashed var(--edge-strong);
 		border-radius: var(--radius-lg);
 		padding: var(--space-2xl) var(--space-xl);
@@ -262,7 +262,7 @@ const resetHref = $derived.by(() => {
 		font-size: var(--type-ui-label-size);
 		font-weight: 700;
 		text-transform: uppercase;
-		letter-spacing: 0.08em;
+		letter-spacing: var(--letter-spacing-caps);
 		color: var(--ink-muted);
 	}
 
@@ -279,7 +279,7 @@ const resetHref = $derived.by(() => {
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-sm);
-		/* TODO-theme: pick a role token for this literal. */ background: white;
+		background: var(--ink-inverse);
 		border: 1px solid var(--edge-default);
 		border-radius: var(--radius-md);
 		padding: var(--space-lg) var(--space-lg);
@@ -352,7 +352,7 @@ const resetHref = $derived.by(() => {
 		color: var(--ink-muted);
 		background: var(--surface-muted);
 		text-transform: uppercase;
-		letter-spacing: 0.04em;
+		letter-spacing: var(--letter-spacing-wide);
 	}
 
 	.badge.cert {

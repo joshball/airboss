@@ -232,7 +232,7 @@ function domainLabel(slug: string): string {
 	.crumb {
 		display: flex;
 		gap: var(--space-sm);
-		font-size: 0.875rem;
+		font-size: var(--font-size-sm);
 		color: var(--ink-subtle);
 	}
 
@@ -247,7 +247,7 @@ function domainLabel(slug: string): string {
 
 	.hd h1 {
 		margin: 0;
-		font-size: 1.5rem;
+		font-size: var(--font-size-xl);
 		letter-spacing: -0.02em;
 		color: var(--ink-body);
 	}
@@ -255,11 +255,11 @@ function domainLabel(slug: string): string {
 	.sub {
 		margin: var(--space-2xs) 0 0;
 		color: var(--ink-subtle);
-		font-size: 0.9375rem;
+		font-size: var(--font-size-body);
 	}
 
 	.progress {
-		/* TODO-theme: pick a role token for this literal. */ background: white;
+		background: var(--ink-inverse);
 		border: 1px solid var(--edge-default);
 		border-radius: var(--radius-lg);
 		padding: var(--space-lg) var(--space-lg);
@@ -275,13 +275,13 @@ function domainLabel(slug: string): string {
 	}
 
 	.progress-step {
-		font-size: 0.9375rem;
+		font-size: var(--font-size-body);
 		font-weight: 600;
 		color: var(--ink-body);
 	}
 
 	.progress-pct {
-		font-size: 0.8125rem;
+		font-size: var(--font-size-sm);
 		color: var(--ink-subtle);
 	}
 
@@ -368,24 +368,24 @@ function domainLabel(slug: string): string {
 
 	.got-it-done {
 		color: var(--signal-success);
-		font-size: 0.875rem;
+		font-size: var(--font-size-sm);
 		font-weight: 500;
 	}
 
 	.step-num {
-		font-size: 0.75rem;
+		font-size: var(--font-size-xs);
 		font-weight: 700;
 		color: inherit;
 	}
 
 	.step-name {
-		font-size: 0.6875rem;
+		font-size: var(--font-size-xs);
 		text-transform: uppercase;
-		letter-spacing: 0.04em;
+		letter-spacing: var(--letter-spacing-wide);
 	}
 
 	.phase {
-		/* TODO-theme: pick a role token for this literal. */ background: white;
+		background: var(--ink-inverse);
 		border: 1px solid var(--edge-default);
 		border-radius: var(--radius-lg);
 		padding: var(--space-xl) var(--space-xl);
@@ -393,7 +393,7 @@ function domainLabel(slug: string): string {
 
 	.phase h2 {
 		margin: 0 0 var(--space-md);
-		font-size: 1.25rem;
+		font-size: var(--font-size-xl);
 		color: var(--ink-body);
 	}
 
@@ -429,9 +429,9 @@ function domainLabel(slug: string): string {
 
 	.prose :global(code) {
 		font-family: var(--font-family-mono);
-		font-size: 0.875em;
+		font-size: var(--font-size-sm);
 		background: var(--surface-sunken);
-		padding: 0.05em 0.35em;
+		padding: 0 var(--space-xs);
 		border-radius: var(--radius-sm);
 	}
 
@@ -441,7 +441,7 @@ function domainLabel(slug: string): string {
 		padding: var(--space-md) var(--space-lg);
 		border-radius: var(--radius-md);
 		overflow-x: auto;
-		font-size: 0.875rem;
+		font-size: var(--font-size-sm);
 	}
 
 	.prose :global(pre code) {
@@ -466,7 +466,7 @@ function domainLabel(slug: string): string {
 
 	.btn {
 		padding: var(--space-sm) var(--space-lg);
-		font-size: 0.9375rem;
+		font-size: var(--font-size-body);
 		font-weight: 600;
 		border-radius: var(--radius-md);
 		border: 1px solid transparent;
@@ -486,7 +486,7 @@ function domainLabel(slug: string): string {
 
 	.btn.primary {
 		background: var(--action-default);
-		/* TODO-theme: pick a role token for this literal. */ color: white;
+		color: var(--ink-inverse);
 	}
 
 	.btn.primary:hover:not(:disabled) {

@@ -391,7 +391,7 @@ function clickRating(value: number) {
 		background: var(--action-default-wash);
 		border: 1px solid var(--action-default-edge);
 		border-radius: var(--radius-lg);
-		font-size: 0.875rem;
+		font-size: var(--font-size-sm);
 		color: var(--action-default-active);
 		animation: undo-fade var(--motion-normal) ease-out;
 	}
@@ -402,7 +402,7 @@ function clickRating(value: number) {
 
 	.undo-domain {
 		color: var(--ink-muted);
-		font-size: 0.75rem;
+		font-size: var(--font-size-xs);
 		margin-left: var(--space-2xs);
 	}
 
@@ -410,13 +410,13 @@ function clickRating(value: number) {
 		display: inline-flex;
 		align-items: center;
 		gap: var(--space-xs);
-		/* TODO-theme: pick a role token for this literal. */ background: white;
+		background: var(--ink-inverse);
 		border: 1px solid var(--action-default-edge);
 		color: var(--action-default-hover);
 		font-weight: 600;
 		border-radius: var(--radius-sm);
 		padding: var(--space-xs) var(--space-sm);
-		font-size: 0.8125rem;
+		font-size: var(--font-size-sm);
 		cursor: pointer;
 	}
 
@@ -439,7 +439,7 @@ function clickRating(value: number) {
 		border: none;
 		color: var(--ink-muted);
 		cursor: pointer;
-		font-size: 1.125rem;
+		font-size: var(--font-size-lg);
 		line-height: 1;
 		padding: var(--space-2xs) var(--space-sm);
 	}
@@ -480,28 +480,28 @@ function clickRating(value: number) {
 	}
 
 	.counter {
-		font-size: 0.8125rem;
+		font-size: var(--font-size-sm);
 		color: var(--ink-subtle);
 		font-weight: 600;
-		letter-spacing: 0.04em;
+		letter-spacing: var(--letter-spacing-wide);
 		text-transform: uppercase;
 	}
 
 	.badge {
 		display: inline-flex;
 		padding: var(--space-2xs) var(--space-sm);
-		font-size: 0.6875rem;
+		font-size: var(--font-size-xs);
 		font-weight: 600;
 		border-radius: var(--radius-pill);
 		color: var(--action-default-hover);
 		background: var(--action-default-wash);
 		border: 1px solid var(--action-default-edge);
 		text-transform: uppercase;
-		letter-spacing: 0.04em;
+		letter-spacing: var(--letter-spacing-wide);
 	}
 
 	.card {
-		/* TODO-theme: pick a role token for this literal. */ background: white;
+		background: var(--ink-inverse);
 		border: 1px solid var(--edge-default);
 		border-radius: var(--radius-lg);
 		padding: var(--space-2xl);
@@ -509,17 +509,17 @@ function clickRating(value: number) {
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-xl);
-		font-size: 1.0625rem;
+		font-size: var(--type-heading-3-size);
 		line-height: 1.55;
 		color: var(--ink-body);
 	}
 
 	.section-label {
-		font-size: 0.75rem;
+		font-size: var(--font-size-xs);
 		font-weight: 600;
 		color: var(--ink-faint);
 		text-transform: uppercase;
-		letter-spacing: 0.08em;
+		letter-spacing: var(--letter-spacing-caps);
 		margin-bottom: var(--space-sm);
 	}
 
@@ -537,7 +537,7 @@ function clickRating(value: number) {
 		margin: var(--space-sm) 0 0;
 		text-align: center;
 		color: var(--ink-muted);
-		font-size: 0.9375rem;
+		font-size: var(--font-size-body);
 	}
 
 	.rate-q.subdued {
@@ -551,7 +551,7 @@ function clickRating(value: number) {
 	}
 
 	.rating {
-		/* TODO-theme: pick a role token for this literal. */ background: white;
+		background: var(--ink-inverse);
 		border: 1px solid var(--edge-strong);
 		border-radius: var(--radius-lg);
 		padding: var(--space-md) var(--space-sm);
@@ -582,12 +582,12 @@ function clickRating(value: number) {
 
 	.rating-label {
 		font-weight: 600;
-		font-size: 0.9375rem;
+		font-size: var(--font-size-body);
 		color: var(--ink-body);
 	}
 
 	.rating-hint {
-		font-size: 0.75rem;
+		font-size: var(--font-size-xs);
 		color: var(--ink-subtle);
 	}
 
@@ -609,7 +609,7 @@ function clickRating(value: number) {
 
 	.btn {
 		padding: var(--space-sm) var(--space-xl);
-		font-size: 0.9375rem;
+		font-size: var(--font-size-body);
 		font-weight: 600;
 		border-radius: var(--radius-lg);
 		border: 1px solid transparent;
@@ -631,7 +631,7 @@ function clickRating(value: number) {
 
 	.btn.primary {
 		background: var(--action-default);
-		/* TODO-theme: pick a role token for this literal. */ color: white;
+		color: var(--ink-inverse);
 	}
 
 	.btn.primary:hover {
@@ -660,23 +660,23 @@ function clickRating(value: number) {
 	.btn.wide {
 		align-self: center;
 		padding: var(--space-md) var(--space-2xl);
-		font-size: 1rem;
+		font-size: var(--font-size-base);
 	}
 
 	.kbd {
 		display: inline-flex;
 		align-items: center;
 		padding: 1px var(--space-xs);
-		font-size: 0.6875rem;
+		font-size: var(--font-size-xs);
 		background: var(--surface-sunken);
 		color: var(--ink-subtle);
 		border: 1px solid var(--edge-strong);
 		border-radius: var(--radius-sm);
-		font-family: ui-monospace, monospace;
+		font-family: var(--font-family-mono);
 	}
 
 	.caught-up {
-		/* TODO-theme: pick a role token for this literal. */ background: white;
+		background: var(--ink-inverse);
 		border: 1px solid var(--edge-default);
 		border-radius: var(--radius-lg);
 		padding: var(--space-2xl) var(--space-2xl);
@@ -689,14 +689,14 @@ function clickRating(value: number) {
 
 	.caught-up h1 {
 		margin: 0;
-		font-size: 1.75rem;
+		font-size: var(--font-size-2xl);
 		letter-spacing: -0.02em;
 		color: var(--ink-body);
 	}
 
 	.summary {
 		color: var(--ink-muted);
-		font-size: 1rem;
+		font-size: var(--font-size-base);
 		margin: 0;
 	}
 
@@ -717,15 +717,15 @@ function clickRating(value: number) {
 	}
 
 	.tally dt {
-		font-size: 0.6875rem;
+		font-size: var(--font-size-xs);
 		color: var(--ink-subtle);
 		text-transform: uppercase;
-		letter-spacing: 0.06em;
+		letter-spacing: var(--letter-spacing-caps);
 	}
 
 	.tally dd {
 		margin: var(--space-2xs) 0 0;
-		font-size: 1.25rem;
+		font-size: var(--font-size-xl);
 		font-weight: 700;
 		color: var(--ink-body);
 	}

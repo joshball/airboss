@@ -415,7 +415,7 @@ const tagsString = $derived((card.tags ?? []).join(', '));
 		color: var(--ink-muted);
 		background: var(--surface-muted);
 		text-transform: uppercase;
-		letter-spacing: 0.04em;
+		letter-spacing: var(--letter-spacing-wide);
 	}
 
 	.badge.domain {
@@ -461,7 +461,7 @@ const tagsString = $derived((card.tags ?? []).join(', '));
 	}
 
 	.content {
-		/* TODO-theme: pick a role token for this literal. */ background: white;
+		background: var(--ink-inverse);
 		border: 1px solid var(--edge-default);
 		border-radius: var(--radius-lg);
 		padding: var(--space-xl) var(--space-xl);
@@ -475,7 +475,7 @@ const tagsString = $derived((card.tags ?? []).join(', '));
 		font-size: var(--type-reading-body-size);
 		color: var(--ink-strong);
 		text-transform: uppercase;
-		letter-spacing: 0.08em;
+		letter-spacing: var(--letter-spacing-caps);
 		font-weight: 600;
 	}
 
@@ -484,7 +484,7 @@ const tagsString = $derived((card.tags ?? []).join(', '));
 		font-weight: 600;
 		color: var(--ink-subtle);
 		text-transform: uppercase;
-		letter-spacing: 0.06em;
+		letter-spacing: var(--letter-spacing-caps);
 		margin-bottom: var(--space-2xs);
 	}
 
@@ -536,7 +536,7 @@ const tagsString = $derived((card.tags ?? []).join(', '));
 	}
 
 	form:not(.inline-form):not(.status-form) {
-		/* TODO-theme: pick a role token for this literal. */ background: white;
+		background: var(--ink-inverse);
 		border: 1px solid var(--edge-default);
 		border-radius: var(--radius-lg);
 		padding: var(--space-xl);
@@ -569,7 +569,7 @@ const tagsString = $derived((card.tags ?? []).join(', '));
 		padding: var(--space-sm) var(--space-md);
 		border: 1px solid var(--edge-strong);
 		border-radius: var(--radius-md);
-		/* TODO-theme: pick a role token for this literal. */ background: white;
+		background: var(--ink-inverse);
 		color: var(--ink-body);
 	}
 
@@ -619,7 +619,7 @@ const tagsString = $derived((card.tags ?? []).join(', '));
 		font-size: var(--type-ui-caption-size);
 		color: var(--ink-subtle);
 		text-transform: uppercase;
-		letter-spacing: 0.06em;
+		letter-spacing: var(--letter-spacing-caps);
 		margin: 0;
 	}
 
@@ -659,7 +659,7 @@ const tagsString = $derived((card.tags ?? []).join(', '));
 		font-weight: 600;
 		font-size: var(--type-ui-caption-size);
 		text-transform: uppercase;
-		letter-spacing: 0.06em;
+		letter-spacing: var(--letter-spacing-caps);
 	}
 
 	.reviews tr:last-child td {
@@ -682,7 +682,7 @@ const tagsString = $derived((card.tags ?? []).join(', '));
 
 	.btn.primary {
 		background: var(--action-default);
-		/* TODO-theme: pick a role token for this literal. */ color: white;
+		color: var(--ink-inverse);
 	}
 
 	.btn.primary:hover:not(:disabled) {
@@ -709,7 +709,7 @@ const tagsString = $derived((card.tags ?? []).join(', '));
 	}
 
 	.btn.danger {
-		/* TODO-theme: pick a role token for this literal. */ background: white;
+		background: var(--ink-inverse);
 		color: var(--action-hazard-hover);
 		border-color: var(--action-hazard-edge);
 	}

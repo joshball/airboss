@@ -122,8 +122,8 @@ function cellTitle(domain: Domain, cell: DomainCertCell): string {
 	.col-head {
 		font-family: var(--font-family-mono);
 		font-variant-numeric: tabular-nums;
-		font-size: 0.6875rem;
-		letter-spacing: 0.04em;
+		font-size: var(--font-size-xs);
+		letter-spacing: var(--letter-spacing-wide);
 		color: var(--ink-faint);
 		text-align: center;
 		padding-bottom: var(--space-2xs);
@@ -144,7 +144,7 @@ function cellTitle(domain: Domain, cell: DomainCertCell): string {
 		height: 0.9375rem;
 		border-radius: var(--radius-xs);
 		border: 1px solid var(--edge-default);
-		font-size: 0.625rem;
+		font-size: var(--font-size-xs);
 		font-family: var(--font-family-mono);
 		color: var(--ink-faint);
 		text-decoration: none;

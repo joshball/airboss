@@ -337,14 +337,14 @@ function sliceLabel(slice: SessionSlice): string {
 
 	h1 {
 		margin: 0;
-		font-size: 1.5rem;
+		font-size: var(--font-size-xl);
 		color: var(--ink-body);
 	}
 
 	.sub {
 		margin: var(--space-2xs) 0 0;
 		color: var(--ink-subtle);
-		font-size: 0.875rem;
+		font-size: var(--font-size-sm);
 	}
 
 	.progress {
@@ -367,11 +367,11 @@ function sliceLabel(slice: SessionSlice): string {
 		padding: var(--space-sm) var(--space-md);
 		border-radius: var(--radius-md);
 		border: 1px solid var(--action-hazard-edge);
-		font-size: 0.875rem;
+		font-size: var(--font-size-sm);
 	}
 
 	.item-card {
-		/* TODO-theme: pick a role token for this literal. */ background: white;
+		background: var(--ink-inverse);
 		border: 1px solid var(--edge-default);
 		border-radius: var(--radius-lg);
 		padding: var(--space-xl);
@@ -385,15 +385,15 @@ function sliceLabel(slice: SessionSlice): string {
 		gap: var(--space-sm);
 		align-items: baseline;
 		flex-wrap: wrap;
-		font-size: 0.8125rem;
+		font-size: var(--font-size-sm);
 	}
 
 	.slice-badge {
 		display: inline-block;
 		font-weight: 700;
-		font-size: 0.6875rem;
+		font-size: var(--font-size-xs);
 		text-transform: uppercase;
-		letter-spacing: 0.06em;
+		letter-spacing: var(--letter-spacing-caps);
 		padding: var(--space-2xs) var(--space-sm);
 		border-radius: var(--radius-pill);
 		background: var(--action-default-wash);
@@ -410,10 +410,10 @@ function sliceLabel(slice: SessionSlice): string {
 	}
 
 	.domain {
-		font-size: 0.75rem;
+		font-size: var(--font-size-xs);
 		font-weight: 600;
 		text-transform: uppercase;
-		letter-spacing: 0.06em;
+		letter-spacing: var(--letter-spacing-caps);
 		color: var(--ink-subtle);
 	}
 
@@ -426,7 +426,7 @@ function sliceLabel(slice: SessionSlice): string {
 	}
 
 	.card-front {
-		font-size: 1.25rem;
+		font-size: var(--font-size-xl);
 		color: var(--ink-body);
 		line-height: 1.4;
 	}
@@ -442,7 +442,7 @@ function sliceLabel(slice: SessionSlice): string {
 	.rep-title,
 	.node-title {
 		margin: 0;
-		font-size: 1.125rem;
+		font-size: var(--font-size-lg);
 	}
 
 	.situation {
@@ -536,7 +536,7 @@ function sliceLabel(slice: SessionSlice): string {
 		border: none;
 		color: var(--ink-subtle);
 		cursor: pointer;
-		font-size: 0.8125rem;
+		font-size: var(--font-size-sm);
 	}
 
 	.link-btn:hover {
@@ -551,13 +551,13 @@ function sliceLabel(slice: SessionSlice): string {
 
 	.skip-hint {
 		margin: var(--space-2xs) 0 0;
-		font-size: 0.75rem;
+		font-size: var(--font-size-xs);
 		color: var(--ink-subtle);
 		text-align: right;
 	}
 
 	.empty {
-		/* TODO-theme: pick a role token for this literal. */ background: white;
+		background: var(--ink-inverse);
 		border: 1px solid var(--edge-default);
 		border-radius: var(--radius-lg);
 		padding: var(--space-2xl);
@@ -570,22 +570,22 @@ function sliceLabel(slice: SessionSlice): string {
 
 	.empty h2 {
 		margin: 0;
-		font-size: 1.125rem;
+		font-size: var(--font-size-lg);
 	}
 
 	.muted {
 		color: var(--ink-faint);
 		margin: 0;
-		font-size: 0.875rem;
+		font-size: var(--font-size-sm);
 	}
 
 	.small {
-		font-size: 0.75rem;
+		font-size: var(--font-size-xs);
 	}
 
 	.btn {
 		padding: var(--space-sm) var(--space-lg);
-		font-size: 0.9375rem;
+		font-size: var(--font-size-body);
 		font-weight: 600;
 		border-radius: var(--radius-md);
 		border: 1px solid transparent;
@@ -608,7 +608,7 @@ function sliceLabel(slice: SessionSlice): string {
 
 	.btn.primary {
 		background: var(--action-default);
-		/* TODO-theme: pick a role token for this literal. */ color: white;
+		color: var(--ink-inverse);
 	}
 
 	.btn.primary:hover:not(:disabled) {

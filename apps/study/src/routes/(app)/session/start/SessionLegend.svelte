@@ -172,7 +172,7 @@ $effect(() => {
 		font-weight: var(--type-heading-1-weight);
 		font-size: var(--type-ui-caption-size);
 		text-transform: uppercase;
-		letter-spacing: 0.06em;
+		letter-spacing: var(--letter-spacing-caps);
 		padding: var(--space-2xs) var(--space-xs);
 		border-radius: var(--radius-sm);
 		background: var(--edge-default);
