@@ -1,0 +1,17 @@
+/*
+ * Dashboard layout -- full-bleed grid, tighter padding. Used by
+ * study/flightdeck; airboss/default itself only advertises it so
+ * extenders can pick it up without reimporting the CSS.
+ */
+
+[data-layout='dashboard'] .ab-container {
+	max-width: none;
+	margin: 0;
+	padding: var(--layout-container-padding);
+}
+
+[data-layout='dashboard'] .ab-grid {
+	display: grid;
+	grid-template-columns: repeat(12, minmax(0, 1fr));
+	gap: var(--layout-grid-gap);
+}

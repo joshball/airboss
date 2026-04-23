@@ -35,7 +35,7 @@ import { navigating } from '$app/state';
 		display: block;
 		height: 100%;
 		width: 40%;
-		background: var(--ab-color-primary);
+		background: var(--action-default);
 		animation: nav-indicator-slide 900ms ease-in-out infinite;
 	}
 

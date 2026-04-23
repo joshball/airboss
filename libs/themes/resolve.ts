@@ -1,38 +1,53 @@
 /**
  * Theme resolution.
  *
- * Two surfaces today -- `web` (reading column, rounded, mixed sans) and
- * `tui` (dense, monospace, 2px corners, full-bleed grid).
+ * `resolveThemeForPath(path, userAppearance, systemAppearance)` is the
+ * one place that maps a URL + appearance preference to a
+ * `ThemeSelection`. Routes never pick themes directly.
  *
- * `resolveThemeForPath` is the single source of "which theme for this URL".
- * Layouts call it with the current path; instrument-style surfaces (today
- * that's just `/dashboard`) return `tui`, everything else returns `web`.
+ * Returns a `{ theme, appearance, layout }` triple, one per axis
+ * per [02-ARCHITECTURE.md](../../docs/platform/theme-system/02-ARCHITECTURE.md).
  *
- * When new TUI surfaces come online (avionics, instrument trainer, etc.)
- * extend `TUI_PATH_PREFIXES` here rather than sprinkling theme logic across
- * routes.
+ * Path policy:
+ *   `/dashboard*` → `study/flightdeck` (TUI)
+ *   everything else → `study/sectional`
+ *
+ * When new dashboard-style surfaces ship (avionics, instrument
+ * trainer) extend `FLIGHTDECK_PATH_PREFIXES` here rather than sprinkling
+ * theme logic across routes.
  */
+
+import type { AppearanceMode, ThemeId, ThemeSelection } from './contract';
 
 export const THEMES = {
-	WEB: 'web',
-	TUI: 'tui',
-} as const;
+	AIRBOSS_DEFAULT: 'airboss/default',
+	STUDY_SECTIONAL: 'study/sectional',
+	STUDY_FLIGHTDECK: 'study/flightdeck',
+} as const satisfies Record<string, ThemeId>;
 
-export type ThemeName = (typeof THEMES)[keyof typeof THEMES];
+export const DEFAULT_THEME: ThemeId = THEMES.STUDY_SECTIONAL;
+export const FLIGHTDECK_THEME: ThemeId = THEMES.STUDY_FLIGHTDECK;
+export const DEFAULT_APPEARANCE: AppearanceMode = 'light';
 
-export const DEFAULT_THEME: ThemeName = THEMES.WEB;
+export type AppearancePreference = AppearanceMode | 'system';
 
-/**
- * Path prefixes that should render in the TUI theme. Checked as prefix
- * matches so `/dashboard` and `/dashboard/anything` both resolve to `tui`.
- */
-const TUI_PATH_PREFIXES: readonly string[] = ['/dashboard'];
+const FLIGHTDECK_PATH_PREFIXES: readonly string[] = ['/dashboard'];
 
-export function resolveThemeForPath(pathname: string): ThemeName {
-	for (const prefix of TUI_PATH_PREFIXES) {
-		if (pathname === prefix || pathname.startsWith(`${prefix}/`)) {
-			return THEMES.TUI;
-		}
+function isFlightdeckPath(pathname: string): boolean {
+	for (const prefix of FLIGHTDECK_PATH_PREFIXES) {
+		if (pathname === prefix || pathname.startsWith(`${prefix}/`)) return true;
 	}
-	return DEFAULT_THEME;
+	return false;
+}
+
+export function resolveThemeForPath(
+	pathname: string,
+	userAppearance: AppearancePreference = 'system',
+	systemAppearance: AppearanceMode = DEFAULT_APPEARANCE,
+): ThemeSelection {
+	const flightdeck = isFlightdeckPath(pathname);
+	const theme: ThemeId = flightdeck ? FLIGHTDECK_THEME : DEFAULT_THEME;
+	const appearance: AppearanceMode = userAppearance === 'system' ? systemAppearance : userAppearance;
+	const layout = flightdeck ? 'dashboard' : 'reading';
+	return { theme, appearance, layout };
 }

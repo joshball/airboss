@@ -1,5 +1,5 @@
 <script lang="ts">
-import '@ab/themes/tokens.css';
+import '@ab/themes/generated/tokens.css';
 import NavIndicator from '@ab/ui/components/NavIndicator.svelte';
 import type { Snippet } from 'svelte';
 

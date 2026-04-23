@@ -26,7 +26,7 @@ function fillDevAccount(accountEmail: string) {
 	<title>Sign in -- airboss</title>
 </svelte:head>
 
-<ThemeProvider theme="web">
+<ThemeProvider theme="study/sectional">
 	<main class="page">
 		<section class="card">
 			<header class="hd">

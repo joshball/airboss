@@ -1,0 +1,17 @@
+/*
+ * Reading layout -- centered column, generous padding.
+ * Used by the default airboss/default theme and inherited by
+ * study/sectional.
+ */
+
+[data-layout='reading'] .ab-container {
+	max-width: var(--layout-container-max);
+	margin: 0 auto;
+	padding: var(--layout-container-padding);
+}
+
+[data-layout='reading'] .ab-grid {
+	display: grid;
+	grid-template-columns: repeat(12, minmax(0, 1fr));
+	gap: var(--layout-grid-gap);
+}

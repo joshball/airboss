@@ -32,62 +32,62 @@ let {
 	.badge {
 		display: inline-flex;
 		align-items: center;
-		gap: var(--ab-space-2xs);
+		gap: var(--space-2xs);
 		border: 1px solid transparent;
-		border-radius: var(--ab-radius-sm);
+		border-radius: var(--radius-sm);
 		font-family: inherit;
-		font-weight: var(--ab-font-weight-medium);
-		letter-spacing: var(--ab-letter-spacing-normal);
+		font-weight: var(--font-weight-medium);
+		letter-spacing: var(--letter-spacing-normal);
 		line-height: 1.1;
 		font-variant-numeric: tabular-nums;
 		white-space: nowrap;
 	}
 
 	.s-sm {
-		padding: 0 var(--ab-space-2xs);
-		font-size: var(--ab-font-size-xs);
+		padding: 0 var(--space-2xs);
+		font-size: var(--font-size-xs);
 		min-height: 1rem;
 	}
 
 	.s-md {
-		padding: var(--ab-space-2xs) var(--ab-space-xs);
-		font-size: var(--ab-font-size-sm);
+		padding: var(--space-2xs) var(--space-xs);
+		font-size: var(--font-size-sm);
 		min-height: 1.25rem;
 	}
 
 	.v-default {
-		background: var(--ab-color-primary-subtle);
-		color: var(--ab-color-primary);
-		border-color: var(--ab-color-primary-subtle-border);
+		background: var(--action-default-wash);
+		color: var(--action-default);
+		border-color: var(--action-default-edge);
 	}
 
 	.v-info {
-		background: var(--ab-color-info-subtle);
-		color: var(--ab-color-info);
-		border-color: var(--ab-color-info-subtle-border);
+		background: var(--signal-info-wash);
+		color: var(--signal-info);
+		border-color: var(--signal-info-edge);
 	}
 
 	.v-success {
-		background: var(--ab-color-success-subtle);
-		color: var(--ab-color-success);
-		border-color: var(--ab-color-success-subtle-border);
+		background: var(--signal-success-wash);
+		color: var(--signal-success);
+		border-color: var(--signal-success-edge);
 	}
 
 	.v-warning {
-		background: var(--ab-color-warning-subtle);
-		color: var(--ab-color-warning);
-		border-color: var(--ab-color-warning-subtle-border);
+		background: var(--signal-warning-wash);
+		color: var(--signal-warning);
+		border-color: var(--signal-warning-edge);
 	}
 
 	.v-danger {
-		background: var(--ab-color-danger-subtle);
-		color: var(--ab-color-danger);
-		border-color: var(--ab-color-danger-subtle-border);
+		background: var(--action-hazard-wash);
+		color: var(--action-hazard);
+		border-color: var(--action-hazard-edge);
 	}
 
 	.v-muted {
-		background: var(--ab-color-muted-subtle);
-		color: var(--ab-color-fg-subtle);
-		border-color: var(--ab-color-muted-subtle-border);
+		background: var(--action-neutral-wash);
+		color: var(--ink-subtle);
+		border-color: var(--action-neutral-edge);
 	}
 </style>
