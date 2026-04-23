@@ -2,11 +2,9 @@
  * Codemod transforms -- pure functions over CSS source text.
  *
  * The transforms are:
- *   1. Legacy alias rewrite: `var(--ab-foo)` -> the canonical role-token
- *      reference from `LEGACY_ALIAS_MAP`. If the alias value is itself a
- *      `var(--X)` reference, swap in `var(--X)`; if the alias expands to
- *      a literal (pixel value, rgba() fallback), leave the legacy name
- *      alone and let the emitted `--ab-*` block resolve it.
+ *   1. Legacy alias rewrite (historical -- the alias surface was retired
+ *      when Option A closed, so `rewriteLegacyAliases` is now a no-op
+ *      kept for future --ab-* stragglers that might appear).
  *   2. Radius literals: `border-radius: 8px` -> `border-radius: var(--radius-md)`
  *      (nearest rung).
  *   3. Transition durations: `120ms` -> `var(--motion-fast)`, `200ms` ->
@@ -20,8 +18,6 @@
  *
  * Every transform is idempotent: running twice is equivalent to once.
  */
-
-import { LEGACY_ALIAS_MAP } from '@ab/themes';
 
 export interface CodemodChange {
 	rule: CodemodRuleId;
@@ -42,7 +38,9 @@ export interface CodemodResult {
 	changes: CodemodChange[];
 }
 
-const LEGACY_MAP: Map<string, string> = new Map(LEGACY_ALIAS_MAP);
+// Alias surface retired with Option A. Map is empty so the transform
+// becomes a structural no-op without changing the codemod contract.
+const LEGACY_MAP: Map<string, string> = new Map();
 
 const RADIUS_RUNG_ORDER: ReadonlyArray<readonly [number, string]> = [
 	[0, 'var(--radius-sharp)'],

@@ -10,11 +10,9 @@
  *   - A `:root` block with Layer-0 scale defaults (spacing, radius,
  *     shadow, motion). These form the base vocabulary and never change
  *     per-theme; themes may override values but can't rename the rungs.
- *   - A compatibility-alias block per (theme, appearance) that
- *     re-emits every legacy `--ab-*` custom property used by apps/study
- *     pointing at the new role-token value. This is the Option B
- *     hinge: unmigrated call sites in apps/study keep rendering
- *     pixel-identical until package #5's page-level sweep lands.
+ *
+ * Option A closed: the legacy `--ab-*` alias block retired alongside
+ * hangar's migration. Every app now consumes role tokens directly.
  */
 
 import type {
@@ -31,7 +29,6 @@ import type {
 	TypographyPack,
 } from './contract';
 import { deriveInteractiveStates, deriveSignalVariants } from './derive';
-import { LEGACY_ALIAS_MAP } from './legacy-aliases';
 import { getTheme, listThemes } from './registry';
 
 type ActionKey = 'default' | 'hazard' | 'caution' | 'neutral' | 'link';
@@ -256,8 +253,7 @@ function typographyBlock(pack: TypographyPack): string[] {
 	}
 	// Atomic size / weight / line-height / tracking tokens sourced from
 	// bundle role tokens so a pack swap propagates without touching
-	// page-level CSS. The legacy-alias block then re-exports each
-	// `--ab-*` name against the same role tokens -- see legacy-aliases.ts.
+	// page-level CSS.
 	push('--font-size-xs', 'var(--type-ui-caption-size)');
 	push('--font-size-sm', 'var(--type-ui-label-size)');
 	push('--font-size-body', 'var(--type-definition-body-size)');
@@ -456,10 +452,6 @@ function chromeBlock(chrome: Chrome): string[] {
 	return lines;
 }
 
-function legacyAliasBlock(): string[] {
-	return LEGACY_ALIAS_MAP.map(([legacy, value]) => `\t${legacy}: ${value};`);
-}
-
 /**
  * Emit a single `[data-theme][data-appearance]` block.
  */
@@ -477,7 +469,6 @@ export function themeToCss(theme: Theme, appearance: AppearanceMode): string {
 		...controlsAtomicBlock(),
 		...controlTokensBlock(resolved.control),
 		...(resolved.sim ? simBlock(resolved.sim) : []),
-		...legacyAliasBlock(),
 	];
 	const selector = `[data-theme="${theme.id}"][data-appearance="${appearance}"]`;
 	return `${selector} {\n${lines.join('\n')}\n}\n`;

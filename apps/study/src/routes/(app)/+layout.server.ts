@@ -21,5 +21,6 @@ export const load: LayoutServerLoad = async (event) => {
 			email: user.email,
 			role: user.role,
 		},
+		appearance: event.locals.appearance,
 	};
 };

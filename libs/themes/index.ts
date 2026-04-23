@@ -40,7 +40,6 @@ export {
 	getContrastingTextColor,
 } from './derive';
 export { emitAllThemes, themeToCss } from './emit';
-export { LEGACY_ALIAS_MAP, LEGACY_ALIAS_NAMES } from './legacy-aliases';
 export {
 	getTheme,
 	getThemeSafe,
@@ -49,10 +48,15 @@ export {
 	registerTheme,
 } from './registry';
 export {
+	APPEARANCE_COOKIE,
+	APPEARANCE_PREFERENCE_VALUES,
 	type AppearancePreference,
 	DEFAULT_APPEARANCE,
+	DEFAULT_APPEARANCE_PREFERENCE,
 	DEFAULT_THEME,
 	FLIGHTDECK_THEME,
+	isAppearancePreference,
+	parseAppearancePreference,
 	resolveThemeForPath,
 	SIM_THEME,
 	THEMES,

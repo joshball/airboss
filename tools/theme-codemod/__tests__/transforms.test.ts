@@ -8,19 +8,16 @@ import {
 	runAllTransforms,
 } from '../transforms';
 
-describe('rewriteLegacyAliases', () => {
-	it('rewrites a legacy alias that maps to a role-token', () => {
+describe('rewriteLegacyAliases (post-Option A)', () => {
+	// The alias surface retired with Option A. The transform is now a
+	// structural no-op: every `var(--ab-*)` is left alone because there is
+	// no longer a registered replacement. The function stays exported so
+	// future alias surfaces can be plugged in without touching callers.
+	it('leaves --ab-* references alone now that the alias map is empty', () => {
 		const input = '.x { color: var(--ab-color-fg); }';
 		const { source, changes } = rewriteLegacyAliases(input);
-		expect(source).toContain('var(--ink-body)');
-		expect(changes[0]?.rule).toBe('legacy-alias');
-	});
-
-	it('leaves aliases that expand to literal values alone', () => {
-		// `--ab-focus-ring-offset` maps to `2px`, not a var(). Should stay.
-		const input = '.x { outline-offset: var(--ab-focus-ring-offset); }';
-		const { source } = rewriteLegacyAliases(input);
-		expect(source).toContain('var(--ab-focus-ring-offset)');
+		expect(source).toBe(input);
+		expect(changes).toHaveLength(0);
 	});
 
 	it('is idempotent', () => {

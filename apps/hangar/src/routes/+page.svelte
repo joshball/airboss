@@ -101,15 +101,15 @@ const user = $derived(data.user);
 	.nav {
 		display: flex;
 		align-items: center;
-		gap: var(--ab-space-lg);
-		padding: var(--ab-space-md) var(--ab-space-xl);
-		border-bottom: 1px solid var(--ab-color-border);
-		background: var(--ab-color-surface);
+		gap: var(--space-lg);
+		padding: var(--space-md) var(--space-xl);
+		border-bottom: 1px solid var(--edge-default);
+		background: var(--surface-panel);
 	}
 
 	.brand {
-		font-weight: var(--ab-font-weight-semibold);
-		color: var(--ab-color-fg);
+		font-weight: var(--type-heading-3-weight);
+		color: var(--ink-body);
 	}
 
 	.spacer {
@@ -117,8 +117,8 @@ const user = $derived(data.user);
 	}
 
 	.identity {
-		font-size: var(--ab-font-size-sm);
-		color: var(--ab-color-fg-muted);
+		font-size: var(--type-ui-label-size);
+		color: var(--ink-muted);
 	}
 
 	.signout {
@@ -127,26 +127,26 @@ const user = $derived(data.user);
 
 	.signout button {
 		background: transparent;
-		border: 1px solid var(--ab-color-border);
-		color: var(--ab-color-fg-muted);
+		border: 1px solid var(--edge-default);
+		color: var(--ink-muted);
 		font: inherit;
-		padding: var(--ab-space-2xs) var(--ab-space-sm);
-		border-radius: var(--ab-radius-sm);
+		padding: var(--space-2xs) var(--space-sm);
+		border-radius: var(--radius-sm);
 		cursor: pointer;
 	}
 
 	.signout button:hover {
-		color: var(--ab-color-fg);
-		background: var(--ab-color-surface-sunken);
+		color: var(--ink-body);
+		background: var(--surface-sunken);
 	}
 
 	.page {
 		max-width: 56rem;
 		margin: 0 auto;
-		padding: var(--ab-space-2xl) var(--ab-space-xl);
+		padding: var(--space-2xl) var(--space-xl);
 		display: flex;
 		flex-direction: column;
-		gap: var(--ab-space-xl);
+		gap: var(--space-xl);
 	}
 
 	.page:focus {
@@ -154,65 +154,65 @@ const user = $derived(data.user);
 	}
 
 	.hd h1 {
-		margin: 0 0 var(--ab-space-xs);
-		font-size: var(--ab-font-size-2xl);
+		margin: 0 0 var(--space-xs);
+		font-size: var(--type-heading-1-size);
 	}
 
 	.sub {
 		margin: 0;
-		color: var(--ab-color-fg-muted);
+		color: var(--ink-muted);
 	}
 
 	.card {
-		background: var(--ab-color-surface-raised);
-		border: 1px solid var(--ab-color-border);
-		border-radius: var(--ab-radius-lg);
-		padding: var(--ab-space-xl);
+		background: var(--surface-raised);
+		border: 1px solid var(--edge-default);
+		border-radius: var(--radius-lg);
+		padding: var(--space-xl);
 		display: flex;
 		flex-direction: column;
-		gap: var(--ab-space-md);
+		gap: var(--space-md);
 	}
 
 	.card h2 {
 		margin: 0;
-		font-size: var(--ab-font-size-lg);
+		font-size: var(--type-reading-lead-size);
 	}
 
 	.empty {
-		color: var(--ab-color-fg-muted);
+		color: var(--ink-muted);
 		font-style: italic;
 	}
 
 	.audit-table {
 		width: 100%;
 		border-collapse: collapse;
-		font-size: var(--ab-font-size-sm);
+		font-size: var(--type-ui-label-size);
 	}
 
 	.audit-table th,
 	.audit-table td {
-		padding: var(--ab-space-xs) var(--ab-space-sm);
+		padding: var(--space-xs) var(--space-sm);
 		text-align: left;
-		border-bottom: 1px solid var(--ab-color-border);
+		border-bottom: 1px solid var(--edge-default);
 	}
 
 	.audit-table th {
-		color: var(--ab-color-fg-muted);
-		font-weight: var(--ab-font-weight-semibold);
+		color: var(--ink-muted);
+		font-weight: var(--type-heading-3-weight);
 		text-transform: uppercase;
-		letter-spacing: var(--ab-letter-spacing-caps);
-		font-size: var(--ab-font-size-xs);
+		letter-spacing: var(--type-ui-badge-tracking);
+		font-size: var(--type-ui-caption-size);
 	}
 
 	.mono {
-		font-family: var(--ab-font-family-mono);
+		font-family: var(--font-family-mono);
 	}
 
 	code {
-		font-family: var(--ab-font-family-mono);
-		background: var(--ab-color-surface-sunken);
-		padding: 0 var(--ab-space-2xs);
-		border-radius: var(--ab-radius-sm);
-		font-size: 0.9em;
+		font-family: var(--type-code-inline-family);
+		background: var(--surface-sunken);
+		padding: 0 var(--space-2xs);
+		border-radius: var(--radius-sm);
+		font-size: var(--type-code-inline-size);
 	}
 </style>

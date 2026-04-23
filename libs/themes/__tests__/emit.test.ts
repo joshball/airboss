@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { emitAllThemes, LEGACY_ALIAS_NAMES, listThemes } from '../index';
+import { emitAllThemes, listThemes } from '../index';
 
 describe('emitAllThemes', () => {
 	it('is deterministic: two runs produce identical output', () => {
@@ -20,11 +20,9 @@ describe('emitAllThemes', () => {
 		expect(emitAllThemes()).toContain(':root {');
 	});
 
-	it('exposes every legacy --ab-* name as a compatibility alias', () => {
+	it('emits zero --ab-* legacy aliases (Option A retired the compat block)', () => {
 		const css = emitAllThemes();
-		for (const name of LEGACY_ALIAS_NAMES) {
-			expect(css).toContain(`${name}:`);
-		}
+		expect(css).not.toMatch(/^\s*--ab-[a-z0-9-]+:/m);
 	});
 
 	it('declares every core role token', () => {
@@ -121,9 +119,9 @@ describe('emitAllThemes', () => {
 		}
 	});
 
-	it('has no --ab-sim-* legacy aliases (package #7 retired the block)', () => {
-		const simNames = LEGACY_ALIAS_NAMES.filter((n) => n.startsWith('--ab-sim-'));
-		expect(simNames).toEqual([]);
+	it('emits no --ab-sim-* aliases (Option A retired the legacy-alias block)', () => {
+		const css = emitAllThemes();
+		expect(css).not.toMatch(/--ab-sim-/);
 	});
 
 	it('registered themes declare typography bundles + control slots', () => {
