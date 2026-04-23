@@ -89,7 +89,13 @@ export function buildKnownTokens(): Set<string> {
 const KNOWN_PREFIXES: ReadonlyArray<RegExp> = [
 	/^--type-(reading|heading|ui|code|definition)-[a-z0-9-]+-(family|size|weight|line-height|tracking)$/,
 	/^--button-(default|primary|hazard|neutral|ghost)-[a-z-]+$/,
+	/^--button-height-(sm|md|lg)$/,
 	/^--input-(default|error)-[a-z-]+$/,
+	/^--input-height-(sm|md|lg)$/,
+	/^--badge-height-(sm|md|lg)$/,
+	/^--dialog-(scrim|bg|edge|radius|shadow)$/,
+	/^--table-(header-bg|header-ink|row-edge|row-bg-hover|row-bg-selected)$/,
+	/^--underline-offset-[a-z0-9]+$/,
 	/^--sim-[a-z0-9-]+$/,
 ];
 

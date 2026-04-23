@@ -350,5 +350,6 @@ apps/study/src/routes/(app)/sessions/[id]/summary/+page.svelte:233:named-color
 apps/study/src/routes/(app)/sessions/[id]/summary/+page.svelte:247:raw-length
 apps/study/src/routes/(app)/sessions/[id]/summary/+page.svelte:331:named-color
 apps/study/src/routes/(app)/sessions/[id]/summary/+page.svelte:369:named-color
-libs/ui/src/components/InfoTip.svelte:227:raw-length
 libs/ui/src/components/NavIndicator.svelte:39:raw-duration
+libs/ui/src/components/Spinner.svelte:38:raw-duration
+libs/ui/src/components/Spinner.svelte:48:rgb-color
