@@ -9,4 +9,4 @@ let { data }: { data: PageData } = $props();
 	<title>{data.page.title} -- Help -- airboss</title>
 </svelte:head>
 
-<HelpLayout page={data.page} />
+<HelpLayout page={data.page} sectionNodes={data.sectionNodes} />
