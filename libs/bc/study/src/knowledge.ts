@@ -950,6 +950,114 @@ export async function getDomainCertMatrix(userId: string, db: Db = defaultDb): P
 	return result;
 }
 
+/**
+ * Combined cert-progress + domain-cert-matrix read in one pass.
+ *
+ * The dashboard fans out both panels in parallel; prior to this helper each
+ * call re-scanned `knowledge_node` and re-ran `getNodeMasteryMap` over the
+ * same per-user card + rep aggregates. This helper does the node scan once,
+ * unions the node id set across both panels' bucketing rules, runs
+ * `getNodeMasteryMap` once, and folds both outputs from the shared snapshot.
+ *
+ * The individual exports (`getCertProgress` and `getDomainCertMatrix`) still
+ * exist for any caller that only needs one panel; they're thin wrappers that
+ * delegate here and pluck the relevant half.
+ */
+export interface CertAndDomainMatrix {
+	certProgress: CertProgress[];
+	domainCertMatrix: DomainCertRow[];
+}
+
+export async function getCertAndDomainMatrix(userId: string, db: Db = defaultDb): Promise<CertAndDomainMatrix> {
+	const rows = await db
+		.select({ id: knowledgeNode.id, domain: knowledgeNode.domain, relevance: knowledgeNode.relevance })
+		.from(knowledgeNode);
+
+	// Cert-progress buckets: cert -> set of node ids, filtering to core + supporting.
+	const certToNodes = new Map<Cert, Set<string>>();
+	for (const cert of CERT_VALUES) certToNodes.set(cert, new Set<string>());
+
+	// Domain x cert buckets: domain -> cert -> set of node ids (any priority).
+	const domainBuckets = new Map<Domain, Map<Cert, Set<string>>>();
+	for (const domain of DOMAIN_VALUES) {
+		const certMap = new Map<Cert, Set<string>>();
+		for (const cert of CERT_VALUES) certMap.set(cert, new Set<string>());
+		domainBuckets.set(domain, certMap);
+	}
+
+	const allNodeIds = new Set<string>();
+
+	for (const row of rows) {
+		const rels = Array.isArray(row.relevance) ? row.relevance : [];
+
+		// Cert-progress bucketing: core + supporting only.
+		for (const rel of rels) {
+			if (rel.priority !== RELEVANCE_PRIORITIES.CORE && rel.priority !== RELEVANCE_PRIORITIES.SUPPORTING) continue;
+			const certValue = CERT_VALUES.find((c) => c === rel.cert);
+			if (!certValue) continue;
+			const bucket = certToNodes.get(certValue);
+			if (!bucket) continue;
+			bucket.add(row.id);
+			allNodeIds.add(row.id);
+		}
+
+		// Domain x cert bucketing: any priority (electives show on the map).
+		const domain = DOMAIN_VALUES.find((d) => d === row.domain);
+		if (!domain) continue;
+		const certMap = domainBuckets.get(domain);
+		if (!certMap) continue;
+		const certsOnNode = new Set<Cert>();
+		for (const rel of rels) {
+			const certValue = CERT_VALUES.find((c) => c === rel.cert);
+			if (certValue) certsOnNode.add(certValue);
+		}
+		for (const cert of certsOnNode) {
+			const bucket = certMap.get(cert);
+			if (!bucket) continue;
+			bucket.add(row.id);
+			allNodeIds.add(row.id);
+		}
+	}
+
+	const masteryMap = await getNodeMasteryMap(userId, Array.from(allNodeIds), db);
+
+	const certProgress: CertProgress[] = [];
+	for (const cert of CERT_VALUES) {
+		const ids = certToNodes.get(cert) ?? new Set<string>();
+		const total = ids.size;
+		let mastered = 0;
+		let inProgress = 0;
+		for (const id of ids) {
+			const snap = masteryMap.get(id);
+			if (!snap) continue;
+			if (snap.mastered) mastered += 1;
+			else if (snap.inProgress) inProgress += 1;
+		}
+		const percent = total === 0 ? 0 : mastered / total;
+		certProgress.push({ cert, total, mastered, inProgress, percent });
+	}
+
+	const domainCertMatrix: DomainCertRow[] = [];
+	for (const domain of DOMAIN_VALUES) {
+		const certMap = domainBuckets.get(domain) ?? new Map<Cert, Set<string>>();
+		const cells: DomainCertCell[] = [];
+		for (const cert of CERT_VALUES) {
+			const ids = certMap.get(cert) ?? new Set<string>();
+			const total = ids.size;
+			let mastered = 0;
+			for (const id of ids) {
+				const snap = masteryMap.get(id);
+				if (snap?.mastered) mastered += 1;
+			}
+			const percent = total === 0 ? null : mastered / total;
+			cells.push({ cert, total, mastered, percent });
+		}
+		domainCertMatrix.push({ domain, cells });
+	}
+
+	return { certProgress, domainCertMatrix };
+}
+
 // ---------------------------------------------------------------------------
 // Per-node phase progress (knowledge /learn stepper)
 // ---------------------------------------------------------------------------

@@ -34,6 +34,7 @@ export {
 } from './dashboard';
 export { runEngine } from './engine';
 export type {
+	CertAndDomainMatrix,
 	CertProgress,
 	DomainCertCell,
 	DomainCertRow,
@@ -52,6 +53,7 @@ export {
 	computeRepGate,
 	findRequiresCycle,
 	getCardsForNode,
+	getCertAndDomainMatrix,
 	getCertProgress,
 	getDomainCertMatrix,
 	getNodeMastery,
