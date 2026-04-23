@@ -297,9 +297,10 @@ function typographyBlock(pack: TypographyPack): string[] {
 }
 
 function controlsAtomicBlock(): string[] {
-	// Atomic control sizing. Package #4 promotes these to per-variant
-	// component tokens (--button-*-*, --input-*-*). Kept flat in #1 so
-	// migrated primitives keep a stable surface.
+	// Atomic control sizing. Package #4 grows per-size control-height
+	// tokens (--button-height-*, --input-height-*, --badge-height-*) on
+	// top of the legacy atomic padding set so migrated primitives have a
+	// stable surface while new primitives can dispatch on role tokens.
 	return [
 		'\t--control-radius: var(--radius-md);',
 		'\t--control-padding-x-sm: 0.5rem;',
@@ -311,6 +312,30 @@ function controlsAtomicBlock(): string[] {
 		'\t--control-font-size-sm: var(--font-size-sm);',
 		'\t--control-font-size-md: var(--font-size-base);',
 		'\t--control-font-size-lg: var(--font-size-lg);',
+		// Per-size control heights (package #4)
+		'\t--button-height-sm: 1.75rem;',
+		'\t--button-height-md: 2.25rem;',
+		'\t--button-height-lg: 2.75rem;',
+		'\t--input-height-sm: 1.75rem;',
+		'\t--input-height-md: 2.25rem;',
+		'\t--input-height-lg: 2.75rem;',
+		'\t--badge-height-sm: 1rem;',
+		'\t--badge-height-md: 1.25rem;',
+		'\t--badge-height-lg: 1.5rem;',
+		// Underline-offset scale for primitives that need sub-px decorative offsets.
+		'\t--underline-offset-2xs: 2px;',
+		// Dialog component tokens
+		'\t--dialog-bg: var(--surface-panel);',
+		'\t--dialog-edge: var(--edge-default);',
+		'\t--dialog-radius: var(--radius-lg);',
+		'\t--dialog-shadow: var(--shadow-lg);',
+		'\t--dialog-scrim: var(--overlay-scrim);',
+		// Table component tokens
+		'\t--table-header-bg: var(--surface-muted);',
+		'\t--table-header-ink: var(--ink-strong);',
+		'\t--table-row-edge: var(--edge-subtle);',
+		'\t--table-row-bg-hover: var(--surface-muted);',
+		'\t--table-row-bg-selected: var(--action-default-wash);',
 	];
 }
 
