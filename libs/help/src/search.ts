@@ -82,10 +82,11 @@ function searchAviation(parsed: ParsedQuery, limit: number): readonly SearchResu
 
 	// Call @ab/aviation's search. When tagQuery is empty + freeText empty,
 	// return the full listing (caller wants every reference).
-	const refs = aviationSearch({
+	const hits = aviationSearch({
 		text: parsed.freeText.length > 0 ? parsed.freeText : undefined,
 		tags: hasAnyAxis(tagQuery) ? tagQuery : undefined,
 	});
+	const refs: readonly Reference[] = hits.map((h) => h.reference);
 	const needle = parsed.freeText.trim().toLowerCase();
 
 	const results: SearchResult[] = [];

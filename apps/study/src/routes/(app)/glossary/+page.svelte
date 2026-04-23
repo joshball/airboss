@@ -9,4 +9,9 @@ let { data }: { data: PageData } = $props();
 	<title>Glossary -- airboss</title>
 </svelte:head>
 
-<ReferencePage references={data.references} counts={data.counts} initialSearch={data.searchText} />
+<ReferencePage
+	references={data.references}
+	hits={data.hits}
+	counts={data.counts}
+	initialSearch={data.searchText}
+/>
