@@ -7,8 +7,26 @@
 //   import HelpLayout from '@ab/help/ui/HelpLayout.svelte';
 //   import HelpSearch from '@ab/help/ui/HelpSearch.svelte';
 
+export {
+	type CalloutVariant,
+	highlight,
+	type InlineNode,
+	MarkdownParseError,
+	type MdNode,
+	parseMarkdown,
+	SHIKI_THEME,
+	SUPPORTED_LANGS,
+	type SupportedLang,
+	type TableAlign,
+} from './markdown';
 export { parseQuery } from './query-parser';
 export { helpRegistry } from './registry';
+export {
+	EXTERNAL_REF_SOURCE_VALUES,
+	type ExternalRef,
+	type ExternalRefSource,
+	sourceFromUrl,
+} from './schema/external-ref';
 export type { HelpPage } from './schema/help-page';
 export type {
 	FilterKey,

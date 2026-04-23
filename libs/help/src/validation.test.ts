@@ -185,6 +185,168 @@ describe('validateHelpPages - keyword gates', () => {
 	});
 });
 
+describe('validateHelpPages - externalRefs', () => {
+	it('errors on missing title', () => {
+		const page = makePage({
+			externalRefs: [{ title: '', url: 'https://example.org', source: 'other' }],
+		});
+		const { errors } = validateHelpPages([page], noAviation);
+		expect(errors.some((e) => e.message.includes('missing title'))).toBe(true);
+	});
+
+	it('errors on missing url', () => {
+		const page = makePage({
+			externalRefs: [{ title: 'Sample', url: '', source: 'other' }],
+		});
+		const { errors } = validateHelpPages([page], noAviation);
+		expect(errors.some((e) => e.message.includes('missing url'))).toBe(true);
+	});
+
+	it('errors on invalid source enum', () => {
+		const page = makePage({
+			externalRefs: [{ title: 'Sample', url: 'https://example.org', source: 'blog' as never }],
+		});
+		const { errors } = validateHelpPages([page], noAviation);
+		expect(errors.some((e) => e.message.includes("invalid source 'blog'"))).toBe(true);
+	});
+
+	it('errors on unparseable url', () => {
+		const page = makePage({
+			externalRefs: [{ title: 'Sample', url: 'not a url', source: 'other' }],
+		});
+		const { errors } = validateHelpPages([page], noAviation);
+		expect(errors.some((e) => e.message.includes('unparseable url'))).toBe(true);
+	});
+
+	it('errors on non-http(s) protocol', () => {
+		const page = makePage({
+			externalRefs: [{ title: 'Sample', url: 'ftp://example.org/x', source: 'other' }],
+		});
+		const { errors } = validateHelpPages([page], noAviation);
+		expect(errors.some((e) => e.message.includes('must use http or https'))).toBe(true);
+	});
+
+	it('warns when url is http (not https)', () => {
+		const page = makePage({
+			externalRefs: [{ title: 'Sample', url: 'http://example.org/x', source: 'other' }],
+		});
+		const { warnings } = validateHelpPages([page], noAviation);
+		expect(warnings.some((w) => w.message.includes('uses http (not https)'))).toBe(true);
+	});
+
+	it('errors on localhost host', () => {
+		const page = makePage({
+			externalRefs: [{ title: 'Local', url: 'https://localhost:9600/x', source: 'other' }],
+		});
+		const { errors } = validateHelpPages([page], noAviation);
+		expect(errors.some((e) => e.message.includes('private-network host'))).toBe(true);
+	});
+
+	it('errors on RFC1918 10.x host', () => {
+		const page = makePage({
+			externalRefs: [{ title: 'Local', url: 'https://10.0.0.5/x', source: 'other' }],
+		});
+		const { errors } = validateHelpPages([page], noAviation);
+		expect(errors.some((e) => e.message.includes('private-network host'))).toBe(true);
+	});
+
+	it('errors on RFC1918 192.168.x host', () => {
+		const page = makePage({
+			externalRefs: [{ title: 'Local', url: 'https://192.168.1.1/x', source: 'other' }],
+		});
+		const { errors } = validateHelpPages([page], noAviation);
+		expect(errors.some((e) => e.message.includes('private-network host'))).toBe(true);
+	});
+
+	it('errors on 127.x host', () => {
+		const page = makePage({
+			externalRefs: [{ title: 'Local', url: 'https://127.0.0.1/x', source: 'other' }],
+		});
+		const { errors } = validateHelpPages([page], noAviation);
+		expect(errors.some((e) => e.message.includes('private-network host'))).toBe(true);
+	});
+
+	it('errors on *.local hostname', () => {
+		const page = makePage({
+			externalRefs: [{ title: 'Local', url: 'https://box.local/x', source: 'other' }],
+		});
+		const { errors } = validateHelpPages([page], noAviation);
+		expect(errors.some((e) => e.message.includes('private-network host'))).toBe(true);
+	});
+
+	it('accepts a well-formed https external reference', () => {
+		const page = makePage({
+			externalRefs: [{ title: 'Wikipedia FSRS', url: 'https://en.wikipedia.org/wiki/FSRS', source: 'wikipedia' }],
+		});
+		const { errors } = validateHelpPages([page], noAviation);
+		expect(errors).toHaveLength(0);
+	});
+});
+
+describe('validateHelpPages - concept / helpKind consistency', () => {
+	it('errors when concept: true but helpKind is not concept', () => {
+		const page = makePage({
+			concept: true,
+			tags: { appSurface: [APP_SURFACES.GLOBAL], helpKind: HELP_KINDS.REFERENCE },
+		});
+		const { errors } = validateHelpPages([page], noAviation);
+		expect(errors.some((e) => e.message.includes('concept: true'))).toBe(true);
+	});
+
+	it('warns when concept: true but no externalRefs', () => {
+		const page = makePage({ concept: true });
+		const { warnings } = validateHelpPages([page], noAviation);
+		expect(warnings.some((w) => w.message.includes('no externalRefs'))).toBe(true);
+	});
+
+	it('does not warn about externalRefs when concept has at least one', () => {
+		const page = makePage({
+			concept: true,
+			externalRefs: [{ title: 'Wiki', url: 'https://wikipedia.org/x', source: 'wikipedia' }],
+		});
+		const { warnings } = validateHelpPages([page], noAviation);
+		expect(warnings.some((w) => w.message.includes('no externalRefs'))).toBe(false);
+	});
+});
+
+describe('validateHelpPages - callout variants', () => {
+	it('errors on unknown callout variant', () => {
+		const page = makePage({
+			sections: [{ id: 'lede', title: 'Lede', body: ':::mystery\nBody.\n:::' }],
+		});
+		const { errors } = validateHelpPages([page], noAviation);
+		expect(errors.some((e) => e.message.includes("unknown callout variant ':::mystery'"))).toBe(true);
+	});
+
+	it('accepts all known callout variants', () => {
+		const body = [
+			':::tip',
+			'A tip.',
+			':::',
+			':::note',
+			'A note.',
+			':::',
+			':::warn',
+			'A warn.',
+			':::',
+			':::danger',
+			'A danger.',
+			':::',
+			':::howto',
+			'A howto.',
+			':::',
+			':::example',
+			'An example.',
+			':::',
+		].join('\n');
+		const page = makePage({
+			sections: [{ id: 'lede', title: 'Lede', body }],
+		});
+		const { errors } = validateHelpPages([page], noAviation);
+		expect(errors.some((e) => e.message.includes('unknown callout variant'))).toBe(false);
+	});
+});
+
 describe('validateHelpPages - warnings', () => {
 	it('warns on orphan pages', () => {
 		const orphan = makePage({ id: 'orphan' });

@@ -66,7 +66,30 @@ export const HELP_KIND_LABELS: Record<HelpKind, string> = {
 	[HELP_KINDS.REFERENCE]: 'Reference',
 };
 
-// -------- 3. keywords (optional) --------
+// -------- 3. conceptGroup (optional; concept-page-only) --------
+
+/**
+ * Grouping axis for the `/help/concepts` index. Only meaningful on pages
+ * where `concept === true`. The concepts route groups cards by this value;
+ * pages without a group fall into `airboss-architecture` for display.
+ */
+export const CONCEPT_GROUPS = {
+	LEARNING_SCIENCE: 'learning-science',
+	AIRBOSS_ARCHITECTURE: 'airboss-architecture',
+	AVIATION_DOCTRINE: 'aviation-doctrine',
+} as const;
+
+export type ConceptGroup = (typeof CONCEPT_GROUPS)[keyof typeof CONCEPT_GROUPS];
+
+export const CONCEPT_GROUP_VALUES: readonly ConceptGroup[] = Object.values(CONCEPT_GROUPS);
+
+export const CONCEPT_GROUP_LABELS: Record<ConceptGroup, string> = {
+	[CONCEPT_GROUPS.LEARNING_SCIENCE]: 'Learning science',
+	[CONCEPT_GROUPS.AIRBOSS_ARCHITECTURE]: 'Airboss architecture',
+	[CONCEPT_GROUPS.AVIATION_DOCTRINE]: 'Aviation doctrine',
+};
+
+// -------- 4. keywords (optional) --------
 // Reuses the same length + count caps as reference keywords. See
 // REFERENCE_KEYWORD_MAX_COUNT / REFERENCE_KEYWORD_MAX_LENGTH in
 // reference-tags.ts; those constants are the source of truth the help

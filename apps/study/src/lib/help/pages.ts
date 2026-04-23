@@ -1,12 +1,19 @@
 /**
  * Study-app help pages.
  *
- * Phase 2 of wp-help-library (this file): the seven authored pages that
- * cover the UX gaps flagged in docs/work/reviews/2026-04-22-app-wide-ux.md.
+ * Per-page help (`gettingStarted` ... `keyboardShortcuts`) addresses the
+ * UX gaps flagged in docs/work/reviews/2026-04-22-app-wide-ux.md.
  *
- * Each page's content file carries a header comment mapping the page to
- * the specific UX-review findings it addresses. Page content lives in
- * `./content/*.ts`; this module is the registration manifest.
+ * Concept pages (`conceptFsrs` ... `conceptProficiencyCurrency`) ship as
+ * Phase 2 of the session-legibility-and-help-expansion work package:
+ * ten foundational concept pages spanning learning science, airboss
+ * architecture, and aviation doctrine. They power the `/help/concepts`
+ * index and are the cross-link target for every per-page help body.
+ *
+ * Each page's content file carries a header comment mapping it to the
+ * finding or concept it covers. Page content lives in `./content/*.ts`
+ * (and `./content/concepts/*.ts`); this module is the registration
+ * manifest.
  *
  * This module imports only the `HelpPage` type -- no aliases -- so it is
  * safe to import from both Vite-based runtime code and Bun-based build
@@ -17,19 +24,41 @@
 
 import type { HelpPage } from '@ab/help';
 import { calibration } from './content/calibration';
+import { conceptActiveRecall } from './content/concepts/active-recall';
+import { conceptAdmSrm } from './content/concepts/adm-srm';
+import { conceptCalibration } from './content/concepts/calibration';
+import { conceptDesirableDifficulty } from './content/concepts/desirable-difficulty';
+import { conceptFsrs } from './content/concepts/fsrs';
+import { conceptInterleaving } from './content/concepts/interleaving';
+import { conceptKnowledgeGraph } from './content/concepts/knowledge-graph';
+import { conceptProficiencyCurrency } from './content/concepts/proficiency-currency';
+import { conceptSessionSlices } from './content/concepts/session-slices';
+import { conceptSpacedRep } from './content/concepts/spaced-rep';
 import { dashboard } from './content/dashboard';
 import { gettingStarted } from './content/getting-started';
 import { keyboardShortcuts } from './content/keyboard-shortcuts';
 import { knowledgeGraph } from './content/knowledge-graph';
 import { memoryReview } from './content/memory-review';
 import { repsSession } from './content/reps-session';
+import { sessionStart } from './content/session-start';
 
 export const studyHelpPages: readonly HelpPage[] = [
 	gettingStarted,
 	dashboard,
 	memoryReview,
 	repsSession,
+	sessionStart,
 	calibration,
 	knowledgeGraph,
 	keyboardShortcuts,
+	conceptFsrs,
+	conceptSpacedRep,
+	conceptActiveRecall,
+	conceptCalibration,
+	conceptInterleaving,
+	conceptDesirableDifficulty,
+	conceptKnowledgeGraph,
+	conceptSessionSlices,
+	conceptAdmSrm,
+	conceptProficiencyCurrency,
 ];

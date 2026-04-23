@@ -1,6 +1,17 @@
 # Now
 
-Single entry point for "what should I work on?" in airboss. Refresh date: 2026-04-22.
+Single entry point for "what should I work on?" in airboss. Refresh date: 2026-04-23.
+
+## Just shipped
+
+- **session-legibility-and-help-expansion** — rich Markdown help renderer, `<InfoTip>` + `<PageHelp>` primitives, ten concept pages (`/help/concepts`), `memory-review` + `session-start` rebuilt with callouts and `externalRefs`, `/session/start` made legible (clickable IDs, `/reps/[id]` route, collapsible legend), validator hardened with externalRefs URL/host gates and callout-variant checks. Work package: [session-legibility-and-help-expansion](../work-packages/session-legibility-and-help-expansion/spec.md).
+
+## Follow-on candidates
+
+- Per-page help for remaining routes (`/dashboard`, `/reps/*`, `/knowledge/*`) — adopt the `<PageHelp>` pattern one route at a time.
+- Drawer overlay for `<PageHelp>` (currently navigates to `/help/<id>`; drawer is the listed follow-up).
+- Dark-theme Shiki code-block tokens (single theme today).
+- InfoTip `helpId` static validator (parked in Phase 5.2) — grep `.svelte` files, assert each id is registered.
 
 ## Shipped to main
 
@@ -27,7 +38,7 @@ The entire Steps 1-6 roadmap is on main. Feature code, specs, tests, docs — al
 
 ## In flight
 
-Nothing active. PRs from Steps 1-6 are all merged. **Six agent worktrees from prior parallel-build sessions are still on disk** (all `locked`, under `.claude/worktrees/agent-*`). Per user direction 2026-04-22, leaving them in place for now; audit before any future cleanup pass.
+Nothing active after session-legibility-and-help-expansion ships. **Six agent worktrees from prior parallel-build sessions are still on disk** (all `locked`, under `.claude/worktrees/agent-*`). Per user direction 2026-04-22, leaving them in place for now; audit before any future cleanup pass.
 
 ## Build Order
 

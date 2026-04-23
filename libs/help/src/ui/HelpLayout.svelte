@@ -1,6 +1,8 @@
 <script lang="ts">
 import type { Snippet } from 'svelte';
+import type { MdNode } from '../markdown/ast';
 import type { HelpPage } from '../schema/help-page';
+import ExternalRefsFooter from './ExternalRefsFooter.svelte';
 import HelpSection from './HelpSection.svelte';
 import HelpTOC from './HelpTOC.svelte';
 
@@ -14,9 +16,17 @@ import HelpTOC from './HelpTOC.svelte';
 let {
 	page,
 	sidebar,
+	sectionNodes,
 }: {
 	page: HelpPage;
 	sidebar?: Snippet;
+	/**
+	 * Pre-parsed markdown ASTs keyed by section id. When provided, sections
+	 * render via `<MarkdownBody>`; otherwise they fall back to the legacy
+	 * `<ReferenceText>` path. Typically supplied by the page loader after
+	 * awaiting `parseMarkdown` per section.
+	 */
+	sectionNodes?: Readonly<Record<string, MdNode[]>>;
 } = $props();
 
 const sections = $derived(page.sections);
@@ -68,8 +78,10 @@ $effect(() => {
 		</header>
 
 		{#each page.sections as section, index (section.id)}
-			<HelpSection {section} showHeading={index !== 0} />
+			<HelpSection {section} showHeading={index !== 0} nodes={sectionNodes?.[section.id]} />
 		{/each}
+
+		<ExternalRefsFooter refs={page.externalRefs} />
 	</div>
 </article>
 
