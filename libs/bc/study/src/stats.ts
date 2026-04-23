@@ -14,11 +14,12 @@ import {
 	MASTERY_STABILITY_DAYS,
 	REVIEW_RATINGS,
 	type ReviewRating,
+	SESSION_ITEM_KINDS,
 } from '@ab/constants';
 import { db as defaultDb } from '@ab/db';
-import { and, count, desc, eq, gt, gte, lte, sql } from 'drizzle-orm';
+import { and, count, desc, eq, gt, gte, isNotNull, isNull, lte, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
-import { card, cardState, type ReviewRow, review } from './schema';
+import { card, cardState, type ReviewRow, review, type SessionItemResultRow, sessionItemResult } from './schema';
 
 type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;
 
@@ -332,4 +333,47 @@ export async function getMasteredCount(userId: string, db: Db = defaultDb): Prom
 			),
 		);
 	return Number(row?.c ?? 0);
+}
+
+/** Summary row for the scenario-detail recent-attempts panel. */
+export type RecentAttemptRow = Pick<
+	SessionItemResultRow,
+	'id' | 'isCorrect' | 'chosenOption' | 'confidence' | 'answerMs' | 'completedAt'
+>;
+
+/**
+ * Load the most recent completed rep attempts for a scenario. Scoped to
+ * the caller's user so route handlers can't leak another learner's
+ * history. Excludes skipped slots (skipKind IS NOT NULL) and slots still
+ * pending completion (completedAt IS NULL) so the list matches what the
+ * calibration + accuracy readers count.
+ */
+export async function getRecentAttemptsForScenario(
+	scenarioId: string,
+	userId: string,
+	limit = 5,
+	db: Db = defaultDb,
+): Promise<RecentAttemptRow[]> {
+	return await db
+		.select({
+			id: sessionItemResult.id,
+			isCorrect: sessionItemResult.isCorrect,
+			chosenOption: sessionItemResult.chosenOption,
+			confidence: sessionItemResult.confidence,
+			answerMs: sessionItemResult.answerMs,
+			completedAt: sessionItemResult.completedAt,
+		})
+		.from(sessionItemResult)
+		.where(
+			and(
+				eq(sessionItemResult.scenarioId, scenarioId),
+				eq(sessionItemResult.userId, userId),
+				eq(sessionItemResult.itemKind, SESSION_ITEM_KINDS.REP),
+				isNotNull(sessionItemResult.completedAt),
+				isNull(sessionItemResult.skipKind),
+				isNotNull(sessionItemResult.isCorrect),
+			),
+		)
+		.orderBy(desc(sessionItemResult.completedAt))
+		.limit(limit);
 }
