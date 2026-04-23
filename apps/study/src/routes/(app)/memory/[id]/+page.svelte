@@ -3,14 +3,17 @@ import {
 	CARD_STATUSES,
 	CARD_TYPE_LABELS,
 	CARD_TYPES,
+	type CardType,
 	CONTENT_SOURCES,
 	DOMAIN_LABELS,
 	DOMAINS,
+	type Domain,
 	QUERY_PARAMS,
 	REVIEW_RATINGS,
 	ROUTES,
 } from '@ab/constants';
 import ConfirmAction from '@ab/ui/components/ConfirmAction.svelte';
+import { humanize } from '@ab/utils';
 import { tick } from 'svelte';
 import { enhance } from '$app/forms';
 import { replaceState } from '$app/navigation';
@@ -98,19 +101,12 @@ function confirmDiscardEdit() {
 	editing = false;
 }
 
-function humanize(slug: string): string {
-	return slug
-		.split(/[-_]/)
-		.map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-		.join(' ');
-}
-
 function domainLabel(slug: string): string {
-	return (DOMAIN_LABELS as Record<string, string>)[slug] ?? humanize(slug);
+	return (DOMAIN_LABELS as Record<Domain, string>)[slug as Domain] ?? humanize(slug);
 }
 
 function cardTypeLabel(slug: string): string {
-	return (CARD_TYPE_LABELS as Record<string, string>)[slug] ?? humanize(slug);
+	return (CARD_TYPE_LABELS as Record<CardType, string>)[slug as CardType] ?? humanize(slug);
 }
 
 function formatInterval(ms: number): string {
@@ -266,28 +262,16 @@ const tagsString = $derived((card.tags ?? []).join(', '));
 				{/if}
 				<div class="inline-form">
 					{#if card.status === CARD_STATUSES.ACTIVE}
-						<form
-							method="POST"
-							action="?/setStatus"
-							class="status-form"
-							use:enhance={() => {
-								statusUpdating = true;
-								return async ({ update }) => {
-									statusUpdating = false;
-									await update();
-								};
-							}}
-						>
-							<button
-								type="submit"
-								class="btn secondary"
-								name="status"
-								value={CARD_STATUSES.SUSPENDED}
-								disabled={statusUpdating}
-							>
-								{statusUpdating ? '...' : 'Suspend'}
-							</button>
-						</form>
+						<ConfirmAction
+							formAction="?/setStatus"
+							confirmVariant="secondary"
+							triggerVariant="secondary"
+							size="md"
+							label="Suspend"
+							confirmLabel="Suspend this card"
+							hiddenFields={{ status: CARD_STATUSES.SUSPENDED }}
+							disabled={statusUpdating}
+						/>
 						<ConfirmAction
 							formAction="?/setStatus"
 							confirmVariant="danger"

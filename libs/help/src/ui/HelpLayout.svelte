@@ -19,13 +19,14 @@ let {
 	sidebar?: Snippet;
 } = $props();
 
-let activeId = $state<string | null>(null);
 const sections = $derived(page.sections);
-
-$effect(() => {
-	// Reset the active-section highlight when the page itself changes.
-	activeId = sections[0]?.id ?? null;
-});
+// Seed `activeId` to the first section of the current page. Using
+// `$derived` + `$state` with a keyed fallback avoids an `$effect` that
+// would clobber the scroll handler's updates every time the parent
+// rerenders (the effect fires on identity changes of `sections`, not
+// value changes).
+let scrolledActiveId = $state<string | null>(null);
+const activeId = $derived(scrolledActiveId ?? sections[0]?.id ?? null);
 
 function handleScroll(): void {
 	if (sections.length === 0) return;
@@ -36,7 +37,7 @@ function handleScroll(): void {
 		if (!el) continue;
 		if (el.offsetTop <= scrollY) current = section.id;
 	}
-	activeId = current;
+	scrolledActiveId = current;
 }
 
 $effect(() => {

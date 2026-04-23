@@ -1,5 +1,13 @@
 <script lang="ts">
-import { DOMAIN_LABELS, KNOWLEDGE_PHASE_LABELS, type KnowledgePhase, QUERY_PARAMS, ROUTES } from '@ab/constants';
+import {
+	DOMAIN_LABELS,
+	type Domain,
+	KNOWLEDGE_PHASE_LABELS,
+	type KnowledgePhase,
+	QUERY_PARAMS,
+	ROUTES,
+} from '@ab/constants';
+import Banner from '@ab/ui/components/Banner.svelte';
 import { humanize, renderMarkdown } from '@ab/utils';
 import { replaceState } from '$app/navigation';
 import { page } from '$app/state';
@@ -19,6 +27,7 @@ let visitedPhases = $state<Set<string>>(new Set(data.progress.visitedPhases));
 // svelte-ignore state_referenced_locally
 let completedPhases = $state<Set<string>>(new Set(data.progress.completedPhases));
 let completing = $state(false);
+let completeError = $state<string | null>(null);
 
 const stepIndex = $derived(
 	Math.max(
@@ -65,13 +74,22 @@ async function markGotIt(): Promise<void> {
 	if (completing) return;
 	const phase = currentPhase;
 	completing = true;
+	completeError = null;
+	// Optimistic: update the local set so the UI reflects the click
+	// immediately. On failure, roll back and surface a recoverable banner.
+	const previousCompleted = completedPhases;
 	completedPhases = new Set([...completedPhases, phase]);
 	try {
 		const formData = new FormData();
 		formData.set('phase', phase);
-		await fetch('?/completePhase', { method: 'POST', body: formData });
+		const response = await fetch('?/completePhase', { method: 'POST', body: formData });
+		if (!response.ok) {
+			completedPhases = previousCompleted;
+			completeError = 'Could not save your progress. Try again.';
+		}
 	} catch {
-		// Silently ignore; local completed-set is already updated.
+		completedPhases = previousCompleted;
+		completeError = 'Could not reach the server. Your progress was not saved.';
 	} finally {
 		completing = false;
 	}
@@ -90,11 +108,11 @@ function selectPhase(phase: KnowledgePhase): void {
 }
 
 function phaseLabel(phase: string): string {
-	return (KNOWLEDGE_PHASE_LABELS as Record<string, string>)[phase] ?? humanize(phase);
+	return (KNOWLEDGE_PHASE_LABELS as Record<KnowledgePhase, string>)[phase as KnowledgePhase] ?? humanize(phase);
 }
 
 function domainLabel(slug: string): string {
-	return (DOMAIN_LABELS as Record<string, string>)[slug] ?? humanize(slug);
+	return (DOMAIN_LABELS as Record<Domain, string>)[slug as Domain] ?? humanize(slug);
 }
 </script>
 
@@ -174,6 +192,10 @@ function domainLabel(slug: string): string {
 		{#each currentPhaseNode?.activityIds ?? [] as activityId (activityId)}
 			<ActivityHost {activityId} />
 		{/each}
+
+		{#if completeError}
+			<Banner variant="danger" dismissible onDismiss={() => (completeError = null)}>{completeError}</Banner>
+		{/if}
 
 		<div class="got-it-row">
 			{#if currentCompleted}

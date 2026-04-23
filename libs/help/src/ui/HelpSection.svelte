@@ -24,13 +24,13 @@ let {
 	startExpanded?: boolean;
 } = $props();
 
-// Persist expansion state locally once mounted. Capturing `startExpanded`
-// once is intentional -- the prop is an initial value, not a reactive
-// controller.
-let expanded = $state(false);
-$effect(() => {
-	expanded = startExpanded;
-});
+// Persist expansion state locally once mounted. `startExpanded` is treated
+// as an initial value, not a reactive controller: after first render the
+// user's toggle state wins. Using `$state(startExpanded)` captures the
+// initial prop value once without a resetting `$effect`, which would
+// clobber user toggles every time the parent rerendered.
+// svelte-ignore state_referenced_locally -- intentional initial seed
+let expanded = $state(startExpanded);
 
 function toggle(): void {
 	expanded = !expanded;

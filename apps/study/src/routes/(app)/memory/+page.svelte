@@ -1,6 +1,7 @@
 <script lang="ts">
-import { CARD_STATES, DOMAIN_LABELS, MASTERY_STABILITY_DAYS, QUERY_PARAMS, ROUTES } from '@ab/constants';
+import { CARD_STATES, DOMAIN_LABELS, type Domain, MASTERY_STABILITY_DAYS, QUERY_PARAMS, ROUTES } from '@ab/constants';
 import StatTile from '@ab/ui/components/StatTile.svelte';
+import { humanize } from '@ab/utils';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
@@ -8,15 +9,8 @@ let { data }: { data: PageData } = $props();
 const stats = $derived(data.stats);
 const totalActive = $derived(Object.values(stats.stateCounts).reduce((a, b) => a + b, 0));
 
-function humanize(slug: string): string {
-	return slug
-		.split(/[-_]/)
-		.map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-		.join(' ');
-}
-
 function domainLabel(slug: string): string {
-	return (DOMAIN_LABELS as Record<string, string>)[slug] ?? humanize(slug);
+	return (DOMAIN_LABELS as Record<Domain, string>)[slug as Domain] ?? humanize(slug);
 }
 
 function percent(n: number, total: number): number {

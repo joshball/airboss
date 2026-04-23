@@ -3,10 +3,13 @@ import {
 	CONTENT_SOURCE_VALUES,
 	DIFFICULTY_LABELS,
 	DIFFICULTY_VALUES,
+	type Difficulty,
 	DOMAIN_LABELS,
 	DOMAIN_VALUES,
+	type Domain,
 	PHASE_OF_FLIGHT_LABELS,
 	PHASE_OF_FLIGHT_VALUES,
+	type PhaseOfFlight,
 	QUERY_PARAMS,
 	ROUTES,
 	SCENARIO_STATUS_VALUES,
@@ -82,15 +85,15 @@ function removeChipHref(key: ChipFilterKey): string {
 }
 
 function domainLabel(slug: string): string {
-	return (DOMAIN_LABELS as Record<string, string>)[slug] ?? humanize(slug);
+	return (DOMAIN_LABELS as Record<Domain, string>)[slug as Domain] ?? humanize(slug);
 }
 
 function difficultyLabel(slug: string): string {
-	return (DIFFICULTY_LABELS as Record<string, string>)[slug] ?? humanize(slug);
+	return (DIFFICULTY_LABELS as Record<Difficulty, string>)[slug as Difficulty] ?? humanize(slug);
 }
 
 function phaseLabel(slug: string): string {
-	return (PHASE_OF_FLIGHT_LABELS as Record<string, string>)[slug] ?? humanize(slug);
+	return (PHASE_OF_FLIGHT_LABELS as Record<PhaseOfFlight, string>)[slug as PhaseOfFlight] ?? humanize(slug);
 }
 
 function shorten(text: string, max = 160): string {
