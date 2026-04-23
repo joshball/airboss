@@ -1,21 +1,62 @@
 /**
- * airboss design tokens -- public API
+ * airboss theme system -- public API.
  *
- * Tokens are CSS custom properties scoped under `[data-theme='web'|'tui']`.
- * Components read them through `var(--ab-*)`; switching the theme on an
- * ancestor re-skins every descendant without re-rendering.
+ * Usage:
+ *   // Generated CSS (role tokens + legacy aliases) -- import once in
+ *   // the app's root layout:
+ *   import '@ab/themes/generated/tokens.css';
  *
- * Consumers:
- *   // CSS tokens -- import once in your app's root layout
- *   import '@ab/themes/tokens.css';
- *
- *   // Component -- wrap anything you want themed
+ *   // Provider wraps themed content:
  *   import ThemeProvider from '@ab/themes/ThemeProvider.svelte';
- *   <ThemeProvider theme="tui">...</ThemeProvider>
+ *   <ThemeProvider {theme} {appearance} {layout}>...</ThemeProvider>
  *
- *   // Route-aware theme resolver
+ *   // Path-aware resolver:
  *   import { resolveThemeForPath } from '@ab/themes';
  */
 
-export { DEFAULT_THEME, resolveThemeForPath, THEMES, type ThemeName } from './resolve';
-export { TOKENS, type TokenName } from './tokens';
+export type {
+	AppearanceMode,
+	Chrome,
+	DerivedPalette,
+	InteractiveStates,
+	Palette,
+	SignalStates,
+	Theme,
+	ThemeId,
+	ThemeSelection,
+	TypeBundle,
+	TypographyPack,
+} from './contract';
+export { contrastRatio, luminance } from './contrast';
+export {
+	adjustBrightness,
+	alpha,
+	deriveInteractiveStates,
+	deriveSignalVariants,
+	getContrastingTextColor,
+} from './derive';
+export { emitAllThemes, themeToCss } from './emit';
+export { LEGACY_ALIAS_MAP, LEGACY_ALIAS_NAMES } from './legacy-aliases';
+export {
+	getTheme,
+	getThemeSafe,
+	isValidThemeId,
+	listThemes,
+	registerTheme,
+} from './registry';
+export {
+	type AppearancePreference,
+	DEFAULT_APPEARANCE,
+	DEFAULT_THEME,
+	FLIGHTDECK_THEME,
+	resolveThemeForPath,
+	THEMES,
+} from './resolve';
+export { TONES, type Tone } from './tones';
+export { TOKENS, type TokenKey, type TokenName } from './vocab';
+
+// Register every theme that ships today. Import side-effects populate
+// the registry; `emit.ts` walks whatever is registered.
+import './core/defaults/airboss-default/index';
+import './study/sectional/index';
+import './study/flightdeck/index';
