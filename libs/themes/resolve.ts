@@ -34,6 +34,25 @@ export const DEFAULT_APPEARANCE: AppearanceMode = 'light';
 
 export type AppearancePreference = AppearanceMode | 'system';
 
+/** Cookie name for the persisted appearance preference. */
+export const APPEARANCE_COOKIE = 'appearance';
+
+/** Valid appearance-preference values, in toggle order (system → light → dark). */
+export const APPEARANCE_PREFERENCE_VALUES: readonly AppearancePreference[] = ['system', 'light', 'dark'];
+
+/** Default preference when no cookie / invalid cookie is present. */
+export const DEFAULT_APPEARANCE_PREFERENCE: AppearancePreference = 'system';
+
+/** Type guard for untrusted input (cookie, form field, query). */
+export function isAppearancePreference(value: unknown): value is AppearancePreference {
+	return typeof value === 'string' && (APPEARANCE_PREFERENCE_VALUES as readonly string[]).includes(value);
+}
+
+/** Parse a raw string (e.g. cookie) into a preference, falling back to the default. */
+export function parseAppearancePreference(raw: string | null | undefined): AppearancePreference {
+	return isAppearancePreference(raw) ? raw : DEFAULT_APPEARANCE_PREFERENCE;
+}
+
 const FLIGHTDECK_PATH_PREFIXES: readonly string[] = ['/dashboard'];
 const SIM_PATH_PREFIXES: readonly string[] = ['/sim'];
 

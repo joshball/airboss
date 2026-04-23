@@ -59,6 +59,8 @@ export const ROUTES = {
 	LOGIN: '/login',
 	LOGOUT: '/logout',
 	API_AUTH: '/api/auth',
+	/** Appearance-preference endpoint. POST `{ value: 'light'|'dark'|'system' }`. */
+	APPEARANCE: '/appearance',
 
 	// Study -- Dashboard (launchpad; `/` redirects here)
 	DASHBOARD: '/dashboard',
