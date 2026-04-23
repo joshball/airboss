@@ -39,6 +39,14 @@ export const newCardSchema = z.object({
 	isEditable: z.boolean().optional(),
 });
 
+/**
+ * Input shape accepted by `createCard` and the memory/new form action.
+ * Inferred from the zod schema so validation and types stay in sync.
+ * Exported from the BC (not per-route) so every caller reads the same
+ * contract.
+ */
+export type NewCardInput = z.infer<typeof newCardSchema>;
+
 export const updateCardSchema = z.object({
 	front: cardTextSchema.optional(),
 	back: cardTextSchema.optional(),
@@ -143,6 +151,14 @@ export const newScenarioSchema = z.object({
 	regReferences: regReferencesSchema.optional(),
 	isEditable: z.boolean().optional(),
 });
+
+/**
+ * Input shape accepted by `createScenario` and the reps/new form action.
+ * Inferred from the zod schema so validation and types stay in sync.
+ * Exported from the BC so routes and future API surfaces share the
+ * contract.
+ */
+export type NewScenarioInput = z.infer<typeof newScenarioSchema>;
 
 export const submitAttemptSchema = z.object({
 	scenarioId: z.string().trim().min(1),

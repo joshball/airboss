@@ -3,7 +3,6 @@ import { type CardRow, createCard, newCardSchema, SourceRefRequiredError } from 
 import { type CARD_TYPE_VALUES, type DOMAIN_VALUES, QUERY_PARAMS, ROUTES } from '@ab/constants';
 import { createLogger } from '@ab/utils';
 import { fail, redirect } from '@sveltejs/kit';
-import type { z } from 'zod';
 import type { Actions, PageServerLoad } from './$types';
 
 const log = createLogger('study:memory-new');
@@ -96,6 +95,3 @@ export const actions: Actions = {
 		redirect(303, ROUTES.MEMORY_CARD(created.id));
 	},
 } satisfies Actions;
-
-// Satisfy the bundler when zod import is otherwise unused in this file.
-export type NewCardInput = z.infer<typeof newCardSchema>;

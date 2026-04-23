@@ -10,6 +10,29 @@
 import { DEFAULT_USER_TIMEZONE } from '@ab/constants';
 
 /**
+ * Milliseconds in a second. Rarely needed on its own, but useful as a
+ * multiplier alongside the others so call sites can read as arithmetic
+ * instead of a magic number.
+ */
+export const MS_PER_SECOND = 1000;
+
+/** Milliseconds in a minute. */
+export const MS_PER_MINUTE = 60 * MS_PER_SECOND;
+
+/** Milliseconds in an hour. */
+export const MS_PER_HOUR = 60 * MS_PER_MINUTE;
+
+/**
+ * Milliseconds in a nominal 24-hour day. Reviewers flagged 9+ inline copies
+ * of `24 * 60 * 60 * 1000` across the study BC (calibration, stats,
+ * dashboard, engine). Use this constant instead.
+ *
+ * Note: this is 24h flat; it does NOT account for DST transitions. Use
+ * `userStartOfDay` + subtraction if you need calendar-day semantics.
+ */
+export const MS_PER_DAY = 24 * MS_PER_HOUR;
+
+/**
  * UTC instant representing midnight at the start of the local day in `tz`
  * that contains `d`. For a user in America/Denver, `userStartOfDay(now)`
  * returns the UTC timestamp that reads as 00:00 on that learner's calendar.

@@ -116,11 +116,60 @@
 	/* Additional foreground step between `fg` and `fg-muted` */
 	--ab-color-fg-strong: #334155;
 
-	/* Focus ring */
-	--ab-color-focus-ring: rgba(37, 99, 235, 0.35);
-	--ab-color-focus-ring-strong: rgba(37, 99, 235, 0.45);
-	--ab-shadow-focus-ring: 0 0 0 3px rgba(37, 99, 235, 0.15);
-	--ab-shadow-success-glow: 0 0 0 3px rgba(134, 239, 172, 0.35);
+	/*
+	 * Focus ring
+	 *
+	 * `--ab-focus-ring` is the canonical token -- a solid color that meets WCAG
+	 * 2.1 SC 1.4.11 (3:1 against adjacent backgrounds). Previously we shipped
+	 * `rgba(37, 99, 235, 0.35)` which composites to ~1.86:1 against white and
+	 * fails the 3:1 non-text UI contrast floor. The solid `#2563eb` (primary)
+	 * reads at 5.17:1 on white / surface and ~4.8:1 on sunken grey, clearing
+	 * the bar on every light-theme surface we ship.
+	 *
+	 * Downstream primitives (Button, TextField, Select, ConfirmAction, etc.)
+	 * consume `--ab-focus-ring` as the ring color and prefer `outline` over
+	 * `box-shadow` so Windows High Contrast / `forced-colors: active` can map
+	 * the ring to `Highlight` automatically. Components that still use the
+	 * `box-shadow` pattern read `--ab-shadow-focus-ring`, which now points at
+	 * the same solid ring color (no alpha) for consistent contrast.
+	 *
+	 * Legacy aliases `--ab-color-focus-ring` / `--ab-color-focus-ring-strong`
+	 * are kept so existing call sites keep compiling while Wave 2 migrates
+	 * them to the new token. All three resolve to the same solid value.
+	 */
+	--ab-focus-ring: var(--ab-color-primary);
+	--ab-color-focus-ring: var(--ab-focus-ring);
+	--ab-color-focus-ring-strong: var(--ab-focus-ring);
+	--ab-shadow-focus-ring: 0 0 0 3px var(--ab-focus-ring);
+	--ab-shadow-success-glow: 0 0 0 3px var(--ab-color-success);
+	--ab-focus-ring-offset: 2px;
+	--ab-focus-ring-width: 2px;
+
+	/*
+	 * Breakpoints -- canonical viewport widths for the platform.
+	 *
+	 * Reviewers flagged 6+ different breakpoint values scattered across
+	 * apps/study and libs/ui (480, 560, 639, 640, 720, 960, 1023, 1280).
+	 * Pick four rungs that map to the device classes we actually ship to
+	 * and standardize the media queries against them:
+	 *
+	 *   sm  -- 480px  -- small phones in portrait (iPhone SE class)
+	 *   md  -- 640px  -- large phones / phablets; the main reading-column
+	 *                    breakpoint below which two-column layouts collapse
+	 *   lg  -- 960px  -- tablets and small laptops; where the dashboard
+	 *                    grid reflows to 6-col from 12-col
+	 *   xl  -- 1280px -- desktop; reading-column caps at container-max
+	 *
+	 * CSS doesn't let you use custom properties directly inside @media
+	 * queries, so these tokens are documentary (for JS / JSDoc) and for
+	 * the rare component that wires them into container queries via
+	 * `container-type: inline-size`. Hand-authored @media rules should
+	 * cite one of these four pixel values and nothing else.
+	 */
+	--ab-breakpoint-sm: 480px;
+	--ab-breakpoint-md: 640px;
+	--ab-breakpoint-lg: 960px;
+	--ab-breakpoint-xl: 1280px;
 
 	/* Typography */
 	--ab-font-family-sans: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -279,11 +328,24 @@
 	/* Additional foreground step between `fg` and `fg-muted` */
 	--ab-color-fg-strong: #334155;
 
-	/* Focus ring */
-	--ab-color-focus-ring: rgba(37, 99, 235, 0.35);
-	--ab-color-focus-ring-strong: rgba(37, 99, 235, 0.45);
-	--ab-shadow-focus-ring: 0 0 0 3px rgba(37, 99, 235, 0.15);
-	--ab-shadow-success-glow: 0 0 0 3px rgba(134, 239, 172, 0.35);
+	/*
+	 * Focus ring -- matches web theme. See the comment block in the web theme
+	 * for the rationale. Tui uses the same primary blue; 5.17:1 on the tui
+	 * surface palette (same as web: white / #f8fafc / #f1f5f9).
+	 */
+	--ab-focus-ring: var(--ab-color-primary);
+	--ab-color-focus-ring: var(--ab-focus-ring);
+	--ab-color-focus-ring-strong: var(--ab-focus-ring);
+	--ab-shadow-focus-ring: 0 0 0 3px var(--ab-focus-ring);
+	--ab-shadow-success-glow: 0 0 0 3px var(--ab-color-success);
+	--ab-focus-ring-offset: 2px;
+	--ab-focus-ring-width: 2px;
+
+	/* Breakpoints -- same canonical rungs as web. */
+	--ab-breakpoint-sm: 480px;
+	--ab-breakpoint-md: 640px;
+	--ab-breakpoint-lg: 960px;
+	--ab-breakpoint-xl: 1280px;
 
 	/* Typography -- mono everywhere */
 	--ab-font-family-sans: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;

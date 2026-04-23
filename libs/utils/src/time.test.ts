@@ -7,7 +7,7 @@
 
 import { DEFAULT_USER_TIMEZONE } from '@ab/constants';
 import { describe, expect, it } from 'vitest';
-import { userStartOfDay } from './time';
+import { MS_PER_DAY, MS_PER_HOUR, MS_PER_MINUTE, MS_PER_SECOND, userStartOfDay } from './time';
 
 describe('userStartOfDay', () => {
 	it('returns the UTC instant that reads as local midnight in the target tz', () => {
@@ -42,5 +42,27 @@ describe('userStartOfDay', () => {
 		const d = new Date('2026-07-15T18:00:00Z'); // 11:00 MST
 		const start = userStartOfDay(d, 'America/Phoenix');
 		expect(start.toISOString()).toBe('2026-07-15T07:00:00.000Z');
+	});
+});
+
+describe('time constants', () => {
+	it('MS_PER_SECOND is 1000', () => {
+		expect(MS_PER_SECOND).toBe(1000);
+	});
+
+	it('MS_PER_MINUTE is 60 seconds', () => {
+		expect(MS_PER_MINUTE).toBe(60 * MS_PER_SECOND);
+	});
+
+	it('MS_PER_HOUR is 60 minutes', () => {
+		expect(MS_PER_HOUR).toBe(60 * MS_PER_MINUTE);
+	});
+
+	it('MS_PER_DAY is 24 hours', () => {
+		expect(MS_PER_DAY).toBe(24 * MS_PER_HOUR);
+	});
+
+	it('MS_PER_DAY matches the inline expression it replaces', () => {
+		expect(MS_PER_DAY).toBe(24 * 60 * 60 * 1000);
 	});
 });

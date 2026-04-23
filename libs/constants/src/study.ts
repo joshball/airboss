@@ -58,6 +58,22 @@ export const DOMAIN_LABELS: Record<Domain, string> = {
 };
 
 /**
+ * Typed lookup for a domain's display label. Use this instead of reinventing
+ * `function domainLabel(slug)` in every consumer (reviewers flagged 20+
+ * duplicates across the study routes, most of them doing
+ * `(DOMAIN_LABELS as Record<string, string>)[slug] ?? humanize(slug)`).
+ *
+ * The fallback path (`humanize`) is the caller's responsibility when the
+ * input is untrusted -- this helper is typed and will only accept a real
+ * `Domain`. For untrusted input, first run it through
+ * `narrow(raw, DOMAIN_VALUES)` from `@ab/utils`, then pass the narrowed
+ * value through here.
+ */
+export function domainLabel(domain: Domain): string {
+	return DOMAIN_LABELS[domain];
+}
+
+/**
  * Difficulty levels for decision-rep scenarios. Authoring signal -- not
  * enforced by scheduling logic today, but used for filtering and surfaced in
  * the browse/new forms.
