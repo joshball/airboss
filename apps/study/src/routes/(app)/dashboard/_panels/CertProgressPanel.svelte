@@ -72,96 +72,96 @@ function pctOf(n: number, total: number): string {
 		padding: 0;
 		display: flex;
 		flex-direction: column;
-		gap: var(--ab-space-micro);
+		gap: var(--space-2xs);
 	}
 
 	.row {
 		display: grid;
 		grid-template-columns: 2.25rem 1fr auto auto;
 		align-items: center;
-		gap: var(--ab-space-sm);
-		padding: var(--ab-space-micro) var(--ab-space-xs);
-		border-radius: var(--ab-radius-sm);
-		font-size: var(--ab-font-size-sm);
+		gap: var(--space-sm);
+		padding: var(--space-2xs) var(--space-xs);
+		border-radius: var(--radius-sm);
+		font-size: var(--type-ui-label-size);
 	}
 
 	.row.empty {
 		grid-template-columns: 2.25rem 1fr;
-		color: var(--ab-color-fg-faint);
+		color: var(--ink-faint);
 	}
 
 	.chip {
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
-		font-family: var(--ab-font-family-mono);
-		font-size: 0.6875rem;
-		font-weight: var(--ab-font-weight-semibold);
-		letter-spacing: 0.04em;
-		padding: var(--ab-space-hair) var(--ab-space-xs-alt);
-		border-radius: var(--ab-radius-sm);
-		border: 1px solid var(--ab-color-border-strong);
-		color: var(--ab-color-fg-muted);
-		background: var(--ab-color-surface);
+		font-family: var(--font-family-mono);
+		font-size: var(--font-size-xs);
+		font-weight: var(--type-heading-3-weight);
+		letter-spacing: var(--letter-spacing-wide);
+		padding: 1px var(--space-xs);
+		border-radius: var(--radius-sm);
+		border: 1px solid var(--edge-strong);
+		color: var(--ink-muted);
+		background: var(--surface-panel);
 	}
 
 	.row.empty .chip {
-		color: var(--ab-color-fg-faint);
-		border-color: var(--ab-color-border);
+		color: var(--ink-faint);
+		border-color: var(--edge-default);
 	}
 
 	.bar {
 		display: flex;
 		height: 0.4375rem;
-		background: var(--ab-color-surface-sunken);
-		border: 1px solid var(--ab-color-border);
-		border-radius: var(--ab-radius-sm);
+		background: var(--surface-sunken);
+		border: 1px solid var(--edge-default);
+		border-radius: var(--radius-sm);
 		overflow: hidden;
 		min-width: 0;
 	}
 
 	.bar-mastered {
-		background: var(--ab-color-success);
+		background: var(--signal-success);
 	}
 
 	.bar-in-progress {
-		background: var(--ab-color-primary-subtle-border);
+		background: var(--action-default-edge);
 	}
 
 	.counts {
-		font-family: var(--ab-font-family-mono);
+		font-family: var(--font-family-mono);
 		font-variant-numeric: tabular-nums;
-		font-size: var(--ab-font-size-xs);
-		color: var(--ab-color-fg-muted);
+		font-size: var(--type-ui-caption-size);
+		color: var(--ink-muted);
 		display: inline-flex;
-		gap: var(--ab-space-3xs);
+		gap: var(--space-2xs);
 	}
 
 	.count-mastered {
-		color: var(--ab-color-fg);
-		font-weight: var(--ab-font-weight-semibold);
+		color: var(--ink-body);
+		font-weight: var(--type-heading-3-weight);
 	}
 
 	.count-sep {
-		color: var(--ab-color-fg-faint);
+		color: var(--ink-faint);
 	}
 
 	.count-total {
-		color: var(--ab-color-fg-muted);
+		color: var(--ink-muted);
 	}
 
 	.pct {
-		font-family: var(--ab-font-family-mono);
+		font-family: var(--font-family-mono);
 		font-variant-numeric: tabular-nums;
-		font-size: var(--ab-font-size-xs);
-		color: var(--ab-color-fg-muted);
+		font-size: var(--type-ui-caption-size);
+		color: var(--ink-muted);
 		min-width: 2.75rem;
 		text-align: right;
 	}
 
 	.hint {
-		color: var(--ab-color-fg-faint);
-		font-size: var(--ab-font-size-xs);
+		color: var(--ink-faint);
+		font-size: var(--type-ui-caption-size);
 		font-style: italic;
 	}
 </style>

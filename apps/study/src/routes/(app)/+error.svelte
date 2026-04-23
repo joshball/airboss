@@ -54,7 +54,7 @@ function isUserSafeMessage(msg: string): boolean {
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		padding: var(--ab-space-lg);
+		padding: var(--space-lg);
 		min-height: 60vh;
 	}
 
@@ -63,33 +63,33 @@ function isUserSafeMessage(msg: string): boolean {
 		width: 100%;
 		display: flex;
 		flex-direction: column;
-		gap: var(--ab-space-sm);
+		gap: var(--space-sm);
 		text-align: center;
 	}
 
 	.status {
 		margin: 0;
-		font-family: var(--ab-font-family-mono);
-		font-size: var(--ab-font-size-sm);
-		color: var(--ab-color-fg-faint);
-		letter-spacing: var(--ab-letter-spacing-caps);
+		font-family: var(--font-family-mono);
+		font-size: var(--type-ui-label-size);
+		color: var(--ink-faint);
+		letter-spacing: var(--type-ui-badge-tracking);
 	}
 
 	h1 {
 		margin: 0;
-		font-size: var(--ab-font-size-xl);
-		color: var(--ab-color-fg);
+		font-size: var(--type-heading-2-size);
+		color: var(--ink-body);
 	}
 
 	.message {
 		margin: 0;
-		color: var(--ab-color-fg-muted);
+		color: var(--ink-muted);
 	}
 
 	.actions {
 		display: flex;
 		justify-content: center;
-		gap: var(--ab-space-sm);
-		margin-top: var(--ab-space-sm);
+		gap: var(--space-sm);
+		margin-top: var(--space-sm);
 	}
 </style>

@@ -77,7 +77,7 @@ const subtitle = $derived(hasPlan ? 'What you should do next' : 'Set up your pla
 <style>
 	.ctas {
 		display: flex;
-		gap: var(--ab-space-xs);
+		gap: var(--space-xs);
 		flex-wrap: wrap;
 	}
 </style>

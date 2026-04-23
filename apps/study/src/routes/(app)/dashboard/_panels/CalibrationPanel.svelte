@@ -84,67 +84,67 @@ const gapLabel = $derived(
 
 <style>
 	.action-btn {
-		padding: var(--ab-space-2xs) var(--ab-space-sm);
-		font-size: var(--ab-font-size-xs);
-		font-weight: var(--ab-font-weight-semibold);
-		border-radius: var(--ab-radius-sm);
-		border: 1px solid var(--ab-color-border-strong);
-		background: var(--ab-color-surface);
-		color: var(--ab-color-fg-muted);
+		padding: var(--space-2xs) var(--space-sm);
+		font-size: var(--type-ui-caption-size);
+		font-weight: var(--type-heading-3-weight);
+		border-radius: var(--radius-sm);
+		border: 1px solid var(--edge-strong);
+		background: var(--surface-panel);
+		color: var(--ink-muted);
 		text-decoration: none;
 	}
 
 	.action-btn:hover {
-		background: var(--ab-color-surface-sunken);
+		background: var(--surface-sunken);
 	}
 
 	.score-row {
 		display: flex;
 		align-items: baseline;
-		gap: var(--ab-space-2xs);
-		font-family: var(--ab-font-family-mono);
+		gap: var(--space-2xs);
+		font-family: var(--font-family-mono);
 		font-variant-numeric: tabular-nums;
 	}
 
 	.score {
-		font-size: var(--ab-font-size-2xl);
-		font-weight: var(--ab-font-weight-bold);
-		color: var(--ab-color-fg);
+		font-size: var(--type-heading-1-size);
+		font-weight: var(--type-heading-1-weight);
+		color: var(--ink-body);
 		line-height: 1;
 	}
 
 	.score-unit {
-		font-size: var(--ab-font-size-xs);
-		color: var(--ab-color-fg-faint);
+		font-size: var(--type-ui-caption-size);
+		color: var(--ink-faint);
 	}
 
 	.gap {
 		margin: 0;
-		font-size: var(--ab-font-size-xs);
-		color: var(--ab-color-fg-muted);
+		font-size: var(--type-ui-caption-size);
+		color: var(--ink-muted);
 	}
 
 	.gap .over {
-		color: var(--ab-color-danger);
-		font-weight: var(--ab-font-weight-semibold);
+		color: var(--action-hazard);
+		font-weight: var(--type-heading-3-weight);
 	}
 
 	.gap .under {
-		color: var(--ab-color-primary-hover);
-		font-weight: var(--ab-font-weight-semibold);
+		color: var(--action-default-hover);
+		font-weight: var(--type-heading-3-weight);
 	}
 
 	.gap-pct,
 	.gap-level {
-		font-family: var(--ab-font-family-mono);
+		font-family: var(--font-family-mono);
 		font-variant-numeric: tabular-nums;
-		color: var(--ab-color-fg);
-		font-weight: var(--ab-font-weight-semibold);
+		color: var(--ink-body);
+		font-weight: var(--type-heading-3-weight);
 	}
 
 	.muted {
 		margin: 0;
-		color: var(--ab-color-fg-subtle);
-		font-size: var(--ab-font-size-xs);
+		color: var(--ink-subtle);
+		font-size: var(--type-ui-caption-size);
 	}
 </style>

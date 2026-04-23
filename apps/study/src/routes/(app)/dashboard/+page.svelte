@@ -66,39 +66,39 @@ const stamp = `${loadedAt.getFullYear()}-${String(loadedAt.getMonth() + 1).padSt
 	.page {
 		display: flex;
 		flex-direction: column;
-		gap: var(--ab-space-sm);
+		gap: var(--space-sm);
 		min-height: calc(100vh - 4rem);
 	}
 
 	.hd {
 		display: flex;
 		align-items: baseline;
-		gap: var(--ab-space-md);
+		gap: var(--space-md);
 		flex-wrap: wrap;
-		padding: 0 var(--ab-space-3xs);
+		padding: 0 var(--space-2xs);
 	}
 
 	h1 {
 		margin: 0;
-		font-size: var(--ab-font-size-sm);
+		font-size: var(--type-ui-label-size);
 		font-weight: 700;
 		text-transform: uppercase;
-		letter-spacing: 0.12em;
-		color: var(--ab-color-fg);
-		font-family: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
+		letter-spacing: var(--letter-spacing-caps);
+		color: var(--ink-body);
+		font-family: var(--font-family-mono);
 	}
 
 	.sub {
 		margin: 0;
-		color: var(--ab-color-fg-faint);
-		font-size: var(--ab-font-size-xs);
-		font-family: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
+		color: var(--ink-faint);
+		font-size: var(--type-ui-caption-size);
+		font-family: var(--font-family-mono);
 	}
 
 	.grid {
 		display: grid;
 		grid-template-columns: repeat(12, minmax(0, 1fr));
-		gap: var(--ab-space-sm);
+		gap: var(--space-sm);
 		flex: 1;
 	}
 
@@ -120,7 +120,7 @@ const stamp = `${loadedAt.getFullYear()}-${String(loadedAt.getMonth() + 1).padSt
 	.c8 { grid-column: span 8; }
 
 	/* Tablet: collapse to 6 tracks, rebalance. */
-	@media (max-width: 960px) { /* --ab-breakpoint-lg */
+	@media (max-width: 960px) {
 		.grid {
 			grid-template-columns: repeat(6, minmax(0, 1fr));
 		}
@@ -133,7 +133,7 @@ const stamp = `${loadedAt.getFullYear()}-${String(loadedAt.getMonth() + 1).padSt
 	}
 
 	/* Mobile: single-column stack. */
-	@media (max-width: 640px) { /* --ab-breakpoint-md */
+	@media (max-width: 640px) {
 		.grid {
 			grid-template-columns: minmax(0, 1fr);
 		}
@@ -145,15 +145,15 @@ const stamp = `${loadedAt.getFullYear()}-${String(loadedAt.getMonth() + 1).padSt
 	.status {
 		display: flex;
 		align-items: center;
-		gap: var(--ab-space-xs);
-		padding: var(--ab-space-2xs) var(--ab-space-3xs) 0;
-		color: var(--ab-color-fg-faint);
-		font-size: var(--ab-font-size-xs);
-		font-family: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
-		letter-spacing: 0.04em;
+		gap: var(--space-xs);
+		padding: var(--space-2xs) var(--space-2xs) 0;
+		color: var(--ink-faint);
+		font-size: var(--type-ui-caption-size);
+		font-family: var(--font-family-mono);
+		letter-spacing: var(--letter-spacing-wide);
 	}
 
 	.status .sep {
-		color: var(--ab-color-border-strong);
+		color: var(--edge-strong);
 	}
 </style>

@@ -256,49 +256,49 @@ const skippableDomains = $derived(DOMAIN_VALUES.filter((d: Domain) => !focusSet.
 	.page {
 		display: flex;
 		flex-direction: column;
-		gap: var(--ab-space-xl);
+		gap: var(--space-xl);
 	}
 
 	.hd {
 		display: flex;
 		justify-content: space-between;
 		align-items: flex-start;
-		gap: var(--ab-space-lg);
+		gap: var(--space-lg);
 		flex-wrap: wrap;
 	}
 
 	h1 {
 		margin: 0;
-		font-size: var(--ab-font-size-2xl);
-		color: var(--ab-color-fg);
+		font-size: var(--type-heading-1-size);
+		color: var(--ink-body);
 	}
 
 	.sub {
-		margin: var(--ab-space-2xs) 0 0;
-		color: var(--ab-color-fg-subtle);
-		font-size: var(--ab-font-size-body);
+		margin: var(--space-2xs) 0 0;
+		color: var(--ink-subtle);
+		font-size: var(--type-definition-body-size);
 		display: flex;
-		gap: var(--ab-space-md);
+		gap: var(--space-md);
 		align-items: center;
 	}
 
 	.badge {
 		display: inline-block;
-		font-size: var(--ab-font-size-xs);
+		font-size: var(--type-ui-caption-size);
 		font-weight: 600;
-		padding: var(--ab-space-3xs) var(--ab-space-sm);
-		border-radius: var(--ab-radius-pill);
-		background: var(--ab-color-border);
-		color: var(--ab-color-fg-muted);
+		padding: var(--space-2xs) var(--space-sm);
+		border-radius: var(--radius-pill);
+		background: var(--edge-default);
+		color: var(--ink-muted);
 	}
 
 	.badge.active {
-		background: var(--ab-color-primary-hover);
-		color: white;
+		background: var(--action-default-hover);
+		color: var(--ink-inverse);
 	}
 
 	.link {
-		color: var(--ab-color-primary-hover);
+		color: var(--action-default-hover);
 		font-weight: 500;
 		text-decoration: none;
 	}
@@ -309,13 +309,13 @@ const skippableDomains = $derived(DOMAIN_VALUES.filter((d: Domain) => !focusSet.
 
 	.wizard,
 	.card {
-		background: white;
-		border: 1px solid var(--ab-color-border);
-		border-radius: var(--ab-radius-lg);
-		padding: var(--ab-space-xl);
+		background: var(--ink-inverse);
+		border: 1px solid var(--edge-default);
+		border-radius: var(--radius-lg);
+		padding: var(--space-xl);
 		display: flex;
 		flex-direction: column;
-		gap: var(--ab-space-lg);
+		gap: var(--space-lg);
 	}
 
 	fieldset {
@@ -324,7 +324,7 @@ const skippableDomains = $derived(DOMAIN_VALUES.filter((d: Domain) => !focusSet.
 		margin: 0;
 		display: flex;
 		flex-direction: column;
-		gap: var(--ab-space-sm);
+		gap: var(--space-sm);
 	}
 
 	legend {
@@ -332,37 +332,37 @@ const skippableDomains = $derived(DOMAIN_VALUES.filter((d: Domain) => !focusSet.
 	}
 
 	input[type='text'] {
-		border: 1px solid var(--ab-color-border-strong);
-		border-radius: var(--ab-radius-md);
-		padding: var(--ab-space-sm) var(--ab-space-md);
+		border: 1px solid var(--edge-strong);
+		border-radius: var(--radius-md);
+		padding: var(--space-sm) var(--space-md);
 	}
 
 	.choice-row {
 		display: flex;
 		flex-wrap: wrap;
-		gap: var(--ab-space-sm);
+		gap: var(--space-sm);
 	}
 
 	.choice-grid {
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-		gap: var(--ab-space-xs);
+		gap: var(--space-xs);
 	}
 
 	.choice {
 		display: inline-flex;
-		gap: var(--ab-space-xs);
+		gap: var(--space-xs);
 		align-items: center;
-		padding: var(--ab-space-xs) var(--ab-space-md);
-		background: var(--ab-color-surface-muted);
-		border: 1px solid var(--ab-color-border);
-		border-radius: var(--ab-radius-md);
+		padding: var(--space-xs) var(--space-md);
+		background: var(--surface-muted);
+		border: 1px solid var(--edge-default);
+		border-radius: var(--radius-md);
 		cursor: pointer;
-		font-size: var(--ab-font-size-sm);
+		font-size: var(--type-ui-label-size);
 	}
 
 	.choice input {
-		accent-color: var(--ab-color-primary);
+		accent-color: var(--action-default);
 	}
 
 	.actions {
@@ -371,8 +371,8 @@ const skippableDomains = $derived(DOMAIN_VALUES.filter((d: Domain) => !focusSet.
 	}
 
 	.banner-action {
-		margin-left: 0.5rem;
-		color: var(--ab-color-primary-hover);
+		margin-left: var(--space-sm);
+		color: var(--action-default-hover);
 		font-weight: 600;
 		text-decoration: none;
 	}
@@ -383,10 +383,10 @@ const skippableDomains = $derived(DOMAIN_VALUES.filter((d: Domain) => !focusSet.
 
 	h2 {
 		margin: 0;
-		font-size: var(--ab-font-size-sm);
-		color: var(--ab-color-fg-subtle);
+		font-size: var(--type-ui-label-size);
+		color: var(--ink-subtle);
 		text-transform: uppercase;
-		letter-spacing: 0.08em;
+		letter-spacing: var(--letter-spacing-caps);
 		font-weight: 600;
 	}
 
@@ -396,27 +396,27 @@ const skippableDomains = $derived(DOMAIN_VALUES.filter((d: Domain) => !focusSet.
 		margin: 0;
 		display: flex;
 		flex-wrap: wrap;
-		gap: var(--ab-space-sm);
+		gap: var(--space-sm);
 	}
 
 	.pills li {
 		display: flex;
 		align-items: center;
-		gap: var(--ab-space-2xs);
-		background: var(--ab-color-surface-sunken);
-		border: 1px solid var(--ab-color-border);
-		border-radius: var(--ab-radius-pill);
-		padding: var(--ab-space-2xs) var(--ab-space-sm) var(--ab-space-2xs) var(--ab-space-md);
-		font-size: var(--ab-font-size-sm);
+		gap: var(--space-2xs);
+		background: var(--surface-sunken);
+		border: 1px solid var(--edge-default);
+		border-radius: var(--radius-pill);
+		padding: var(--space-2xs) var(--space-sm) var(--space-2xs) var(--space-md);
+		font-size: var(--type-ui-label-size);
 	}
 
 	.pill-btn {
 		background: transparent;
 		border: none;
-		color: var(--ab-color-primary-hover);
+		color: var(--action-default-hover);
 		cursor: pointer;
-		font-size: var(--ab-font-size-xs);
-		padding: var(--ab-space-2xs) var(--ab-space-sm);
+		font-size: var(--type-ui-caption-size);
+		padding: var(--space-2xs) var(--space-sm);
 	}
 
 	.pill-btn:hover {
@@ -425,20 +425,20 @@ const skippableDomains = $derived(DOMAIN_VALUES.filter((d: Domain) => !focusSet.
 
 	.row {
 		display: flex;
-		gap: var(--ab-space-sm);
+		gap: var(--space-sm);
 	}
 
 	.muted {
-		color: var(--ab-color-fg-faint);
+		color: var(--ink-faint);
 		margin: 0;
-		font-size: var(--ab-font-size-sm);
+		font-size: var(--type-ui-label-size);
 	}
 
 	.btn {
-		padding: var(--ab-space-sm) var(--ab-space-lg);
-		font-size: var(--ab-font-size-body);
+		padding: var(--space-sm) var(--space-lg);
+		font-size: var(--type-definition-body-size);
 		font-weight: 600;
-		border-radius: var(--ab-radius-md);
+		border-radius: var(--radius-md);
 		border: 1px solid transparent;
 		cursor: pointer;
 		text-decoration: none;
@@ -448,12 +448,12 @@ const skippableDomains = $derived(DOMAIN_VALUES.filter((d: Domain) => !focusSet.
 	}
 
 	.btn.primary {
-		background: var(--ab-color-primary);
-		color: white;
+		background: var(--action-default);
+		color: var(--ink-inverse);
 	}
 
 	.btn.primary:hover:not(:disabled) {
-		background: var(--ab-color-primary-hover);
+		background: var(--action-default-hover);
 	}
 
 	.btn.primary:disabled {
@@ -463,10 +463,10 @@ const skippableDomains = $derived(DOMAIN_VALUES.filter((d: Domain) => !focusSet.
 
 	.btn.ghost {
 		background: transparent;
-		color: var(--ab-color-fg-muted);
+		color: var(--ink-muted);
 	}
 
 	.btn.ghost:hover {
-		background: var(--ab-color-surface-sunken);
+		background: var(--surface-sunken);
 	}
 </style>

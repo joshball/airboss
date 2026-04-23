@@ -156,50 +156,50 @@ function handleHelpItemClick() {
 <style>
 	.skip {
 		position: absolute;
-		top: calc(var(--ab-space-3xl) * -1);
-		left: var(--ab-space-sm);
-		background: var(--ab-color-fg);
-		color: var(--ab-color-fg-inverse);
-		padding: var(--ab-space-sm) var(--ab-space-md);
-		border-radius: var(--ab-radius-sm);
+		top: calc(var(--space-2xl) * -1);
+		left: var(--space-sm);
+		background: var(--ink-body);
+		color: var(--ink-inverse);
+		padding: var(--space-sm) var(--space-md);
+		border-radius: var(--radius-sm);
 		z-index: 100;
 	}
 
 	.skip:focus {
-		top: var(--ab-space-sm);
+		top: var(--space-sm);
 	}
 
 	nav {
 		display: flex;
 		align-items: center;
-		gap: var(--ab-space-xl);
-		padding: var(--ab-space-lg) var(--ab-space-xl);
-		border-bottom: 1px solid var(--ab-color-border);
-		background: var(--ab-color-surface);
+		gap: var(--space-xl);
+		padding: var(--space-lg) var(--space-xl);
+		border-bottom: 1px solid var(--edge-default);
+		background: var(--surface-panel);
 	}
 
 	.nav-sections {
 		display: flex;
-		gap: var(--ab-space-xl);
+		gap: var(--space-xl);
 		flex-wrap: wrap;
 	}
 
 	nav a {
-		color: var(--ab-color-fg-muted);
+		color: var(--ink-muted);
 		text-decoration: none;
-		font-weight: var(--ab-font-weight-medium);
-		padding: var(--ab-space-2xs) var(--ab-space-sm);
-		border-radius: var(--ab-radius-sm);
+		font-weight: var(--type-ui-control-weight);
+		padding: var(--space-2xs) var(--space-sm);
+		border-radius: var(--radius-sm);
 	}
 
 	nav a:hover {
-		color: var(--ab-color-fg);
-		background: var(--ab-color-surface-sunken);
+		color: var(--ink-body);
+		background: var(--surface-sunken);
 	}
 
 	nav a[aria-current='page'] {
-		color: var(--ab-color-primary-hover);
-		background: var(--ab-color-primary-subtle);
+		color: var(--action-default-hover);
+		background: var(--action-default-wash);
 	}
 
 	.nav-menu {
@@ -209,13 +209,13 @@ function handleHelpItemClick() {
 	.nav-menu > summary {
 		display: inline-flex;
 		align-items: center;
-		gap: var(--ab-space-2xs);
+		gap: var(--space-2xs);
 		cursor: pointer;
 		list-style: none;
-		color: var(--ab-color-fg-muted);
-		font-weight: var(--ab-font-weight-medium);
-		padding: var(--ab-space-2xs) var(--ab-space-sm);
-		border-radius: var(--ab-radius-sm);
+		color: var(--ink-muted);
+		font-weight: var(--type-ui-control-weight);
+		padding: var(--space-2xs) var(--space-sm);
+		border-radius: var(--radius-sm);
 		user-select: none;
 	}
 
@@ -228,23 +228,23 @@ function handleHelpItemClick() {
 	}
 
 	.nav-menu > summary:hover {
-		color: var(--ab-color-fg);
-		background: var(--ab-color-surface-sunken);
+		color: var(--ink-body);
+		background: var(--surface-sunken);
 	}
 
 	.nav-menu > summary:focus-visible {
-		outline: 2px solid var(--ab-color-focus-ring);
+		outline: 2px solid var(--focus-ring);
 		outline-offset: 2px;
 	}
 
 	.nav-menu[open] > summary {
-		color: var(--ab-color-fg);
-		background: var(--ab-color-surface-sunken);
+		color: var(--ink-body);
+		background: var(--surface-sunken);
 	}
 
 	.nav-menu > summary[aria-current='page'] {
-		color: var(--ab-color-primary-hover);
-		background: var(--ab-color-primary-subtle);
+		color: var(--action-default-hover);
+		background: var(--action-default-wash);
 	}
 
 	.nav-menu[open] .chevron {
@@ -252,21 +252,21 @@ function handleHelpItemClick() {
 	}
 
 	.nav-menu .chevron {
-		font-size: var(--ab-font-size-xs);
+		font-size: var(--type-ui-caption-size);
 		line-height: 1;
-		transition: transform var(--ab-transition-fast);
+		transition: transform var(--motion-fast);
 	}
 
 	.nav-menu-panel {
 		position: absolute;
 		left: 0;
-		top: calc(100% + var(--ab-space-2xs));
+		top: calc(100% + var(--space-2xs));
 		min-width: 12rem;
-		background: var(--ab-color-surface);
-		border: 1px solid var(--ab-color-border);
-		border-radius: var(--ab-radius-md);
-		box-shadow: var(--ab-shadow-lg);
-		padding: var(--ab-space-2xs);
+		background: var(--surface-panel);
+		border: 1px solid var(--edge-default);
+		border-radius: var(--radius-md);
+		box-shadow: var(--shadow-lg);
+		padding: var(--space-2xs);
 		z-index: 50;
 		display: flex;
 		flex-direction: column;
@@ -274,8 +274,8 @@ function handleHelpItemClick() {
 	}
 
 	.nav-menu-panel a {
-		padding: var(--ab-space-sm) var(--ab-space-sm);
-		border-radius: var(--ab-radius-sm);
+		padding: var(--space-sm) var(--space-sm);
+		border-radius: var(--radius-sm);
 	}
 
 	.nav-search {
@@ -291,13 +291,13 @@ function handleHelpItemClick() {
 	.identity > summary {
 		display: inline-flex;
 		align-items: center;
-		gap: var(--ab-space-2xs);
+		gap: var(--space-2xs);
 		cursor: pointer;
 		list-style: none;
-		color: var(--ab-color-fg-muted);
-		font-weight: var(--ab-font-weight-medium);
-		padding: var(--ab-space-2xs) var(--ab-space-sm);
-		border-radius: var(--ab-radius-sm);
+		color: var(--ink-muted);
+		font-weight: var(--type-ui-control-weight);
+		padding: var(--space-2xs) var(--space-sm);
+		border-radius: var(--radius-sm);
 		user-select: none;
 	}
 
@@ -310,18 +310,18 @@ function handleHelpItemClick() {
 	}
 
 	.identity > summary:hover {
-		color: var(--ab-color-fg);
-		background: var(--ab-color-surface-sunken);
+		color: var(--ink-body);
+		background: var(--surface-sunken);
 	}
 
 	.identity > summary:focus-visible {
-		outline: 2px solid var(--ab-color-focus-ring);
+		outline: 2px solid var(--focus-ring);
 		outline-offset: 2px;
 	}
 
 	.identity[open] > summary {
-		color: var(--ab-color-fg);
-		background: var(--ab-color-surface-sunken);
+		color: var(--ink-body);
+		background: var(--surface-sunken);
 	}
 
 	.identity[open] .chevron {
@@ -329,36 +329,36 @@ function handleHelpItemClick() {
 	}
 
 	.chevron {
-		font-size: var(--ab-font-size-xs);
+		font-size: var(--type-ui-caption-size);
 		line-height: 1;
-		transition: transform var(--ab-transition-fast);
+		transition: transform var(--motion-fast);
 	}
 
 	.identity-label-compact {
 		display: none;
 		font-variant: small-caps;
-		letter-spacing: 0.02em;
+		letter-spacing: var(--letter-spacing-wide);
 	}
 
 	.identity-panel {
 		position: absolute;
 		right: 0;
-		top: calc(100% + var(--ab-space-2xs));
+		top: calc(100% + var(--space-2xs));
 		min-width: 12rem;
-		background: var(--ab-color-surface);
-		border: 1px solid var(--ab-color-border);
-		border-radius: var(--ab-radius-md);
-		box-shadow: var(--ab-shadow-lg);
-		padding: var(--ab-space-2xs);
+		background: var(--surface-panel);
+		border: 1px solid var(--edge-default);
+		border-radius: var(--radius-md);
+		box-shadow: var(--shadow-lg);
+		padding: var(--space-2xs);
 		z-index: 50;
 	}
 
 	.identity-email {
-		padding: var(--ab-space-sm) var(--ab-space-sm);
-		font-size: var(--ab-font-size-sm);
-		color: var(--ab-color-fg-muted);
-		border-bottom: 1px solid var(--ab-color-border);
-		margin-bottom: var(--ab-space-2xs);
+		padding: var(--space-sm) var(--space-sm);
+		font-size: var(--type-ui-label-size);
+		color: var(--ink-muted);
+		border-bottom: 1px solid var(--edge-default);
+		margin-bottom: var(--space-2xs);
 		overflow-wrap: anywhere;
 	}
 
@@ -372,34 +372,34 @@ function handleHelpItemClick() {
 		text-align: left;
 		background: transparent;
 		border: 0;
-		color: var(--ab-color-fg-muted);
+		color: var(--ink-muted);
 		font: inherit;
-		padding: var(--ab-space-sm) var(--ab-space-sm);
-		border-radius: var(--ab-radius-sm);
+		padding: var(--space-sm) var(--space-sm);
+		border-radius: var(--radius-sm);
 		cursor: pointer;
 	}
 
 	.identity-signout button:hover {
-		color: var(--ab-color-fg);
-		background: var(--ab-color-surface-sunken);
+		color: var(--ink-body);
+		background: var(--surface-sunken);
 	}
 
 	.identity-signout button:focus-visible {
-		outline: 2px solid var(--ab-color-focus-ring);
+		outline: 2px solid var(--focus-ring);
 		outline-offset: 2px;
 	}
 
 	/* Narrow viewports: swap the full name/email label for initials so the
 	   nav stops wrapping around ~600px. The panel still shows the full
 	   identity when opened. */
-	@media (max-width: 640px) { /* --ab-breakpoint-md */
+	@media (max-width: 640px) {
 		nav {
-			gap: var(--ab-space-md);
-			padding: var(--ab-space-md) var(--ab-space-lg);
+			gap: var(--space-md);
+			padding: var(--space-md) var(--space-lg);
 		}
 
 		.nav-sections {
-			gap: var(--ab-space-md);
+			gap: var(--space-md);
 		}
 
 		.identity-label-full {
@@ -419,10 +419,10 @@ function handleHelpItemClick() {
 	 * without editing this file.
 	 */
 	main {
-		padding: var(--ab-layout-container-padding);
-		max-width: var(--ab-layout-container-max);
+		padding: var(--layout-container-padding);
+		max-width: var(--layout-container-max);
 		margin: 0 auto;
-		background: var(--ab-color-bg);
+		background: var(--surface-page);
 	}
 
 	main.full-bleed {

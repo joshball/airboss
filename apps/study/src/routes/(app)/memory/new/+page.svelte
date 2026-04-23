@@ -190,102 +190,102 @@ function onKeydown(e: KeyboardEvent) {
 	.page {
 		display: flex;
 		flex-direction: column;
-		gap: var(--ab-space-xl-alt);
+		gap: var(--space-xl);
 	}
 
 	.hd {
 		display: flex;
 		align-items: flex-start;
 		justify-content: space-between;
-		gap: var(--ab-space-lg);
+		gap: var(--space-lg);
 	}
 
 	h1 {
 		margin: 0;
-		font-size: var(--ab-font-size-xl);
+		font-size: var(--type-heading-2-size);
 		letter-spacing: -0.02em;
-		color: var(--ab-color-fg);
+		color: var(--ink-body);
 	}
 
 	.sub {
-		margin: var(--ab-space-2xs) 0 0;
-		color: var(--ab-color-fg-subtle);
-		font-size: var(--ab-font-size-body);
+		margin: var(--space-2xs) 0 0;
+		color: var(--ink-subtle);
+		font-size: var(--type-definition-body-size);
 	}
 
 	.back {
-		color: var(--ab-color-fg-muted);
+		color: var(--ink-muted);
 		text-decoration: none;
-		font-size: var(--ab-font-size-sm);
-		padding: var(--ab-space-xs) var(--ab-space-md);
-		border: 1px solid var(--ab-color-border-strong);
-		border-radius: var(--ab-radius-sm);
+		font-size: var(--type-ui-label-size);
+		padding: var(--space-xs) var(--space-md);
+		border: 1px solid var(--edge-strong);
+		border-radius: var(--radius-sm);
 	}
 
 	.back:hover {
-		background: var(--ab-color-surface-sunken);
+		background: var(--surface-sunken);
 	}
 
 	.banner {
-		background: var(--ab-color-primary-subtle);
-		border: 1px solid var(--ab-color-primary-subtle-border);
-		color: var(--ab-color-primary-active);
-		padding: var(--ab-space-sm-alt) var(--ab-space-md-alt);
-		border-radius: var(--ab-radius-md);
-		font-size: var(--ab-font-size-sm);
+		background: var(--action-default-wash);
+		border: 1px solid var(--action-default-edge);
+		color: var(--action-default-active);
+		padding: var(--space-sm) var(--space-md);
+		border-radius: var(--radius-md);
+		font-size: var(--type-ui-label-size);
 	}
 
 	.banner a {
-		color: var(--ab-color-primary-hover);
+		color: var(--action-default-hover);
 		font-weight: 600;
 	}
 
 	.error {
-		background: var(--ab-color-danger-subtle);
-		border: 1px solid var(--ab-color-danger-subtle-border);
-		color: var(--ab-color-danger-active);
-		padding: var(--ab-space-sm-alt) var(--ab-space-md-alt);
-		border-radius: var(--ab-radius-md);
-		font-size: var(--ab-font-size-sm);
+		background: var(--action-hazard-wash);
+		border: 1px solid var(--action-hazard-edge);
+		color: var(--action-hazard-active);
+		padding: var(--space-sm) var(--space-md);
+		border-radius: var(--radius-md);
+		font-size: var(--type-ui-label-size);
 	}
 
 	form {
 		display: flex;
 		flex-direction: column;
-		gap: var(--ab-space-lg);
-		background: white;
-		border: 1px solid var(--ab-color-border);
-		border-radius: var(--ab-radius-lg);
-		padding: var(--ab-space-xl);
+		gap: var(--space-lg);
+		background: var(--ink-inverse);
+		border: 1px solid var(--edge-default);
+		border-radius: var(--radius-lg);
+		padding: var(--space-xl);
 	}
 
 	.field {
 		display: flex;
 		flex-direction: column;
-		gap: var(--ab-space-xs);
+		gap: var(--space-xs);
 	}
 
 	.label {
-		font-size: var(--ab-font-size-sm);
+		font-size: var(--type-ui-label-size);
 		font-weight: 500;
-		color: var(--ab-color-fg-strong);
+		color: var(--ink-strong);
 	}
 
 	.hint {
 		font-weight: 400;
-		color: var(--ab-color-fg-faint);
+		color: var(--ink-faint);
 	}
 
 	textarea,
 	input[type='text'],
 	select {
 		font: inherit;
-		padding: var(--ab-space-sm-alt) var(--ab-space-md);
-		border: 1px solid var(--ab-color-border-strong);
-		border-radius: var(--ab-radius-md);
-		background: white;
-		color: var(--ab-color-fg);
-		transition: border-color 120ms, box-shadow 120ms;
+		padding: var(--space-sm) var(--space-md);
+		border: 1px solid var(--edge-strong);
+		border-radius: var(--radius-md);
+		background: var(--ink-inverse);
+		color: var(--ink-body);
+		transition: border-color var(--motion-fast), box-shadow var(--motion-fast);
 	}
 
 	textarea {
@@ -297,73 +297,73 @@ function onKeydown(e: KeyboardEvent) {
 	input:focus,
 	select:focus {
 		outline: none;
-		border-color: var(--ab-color-primary);
-		box-shadow: var(--ab-shadow-focus-ring);
+		border-color: var(--action-default);
+		box-shadow: var(--focus-ring-shadow);
 	}
 
 	:disabled {
-		background: var(--ab-color-surface-sunken);
+		background: var(--surface-sunken);
 		cursor: not-allowed;
 	}
 
 	.row {
 		display: grid;
 		grid-template-columns: 2fr 1fr;
-		gap: var(--ab-space-lg);
+		gap: var(--space-lg);
 	}
 
 	.err {
-		font-size: var(--ab-font-size-sm);
-		color: var(--ab-color-danger-hover);
+		font-size: var(--type-ui-label-size);
+		color: var(--action-hazard-hover);
 	}
 
 	.actions {
 		display: flex;
-		gap: var(--ab-space-sm);
+		gap: var(--space-sm);
 		justify-content: flex-end;
-		margin-top: var(--ab-space-sm);
+		margin-top: var(--space-sm);
 		flex-wrap: wrap;
 	}
 
 	.btn {
-		padding: var(--ab-space-sm) var(--ab-space-lg);
-		font-size: var(--ab-font-size-body);
+		padding: var(--space-sm) var(--space-lg);
+		font-size: var(--type-definition-body-size);
 		font-weight: 600;
-		border-radius: var(--ab-radius-md);
+		border-radius: var(--radius-md);
 		border: 1px solid transparent;
 		cursor: pointer;
 		text-decoration: none;
 		display: inline-flex;
 		align-items: center;
-		transition: background 120ms, border-color 120ms;
+		transition: background var(--motion-fast), border-color var(--motion-fast);
 	}
 
 	.btn.primary {
-		background: var(--ab-color-primary);
-		color: white;
+		background: var(--action-default);
+		color: var(--ink-inverse);
 	}
 
 	.btn.primary:hover:not(:disabled) {
-		background: var(--ab-color-primary-hover);
+		background: var(--action-default-hover);
 	}
 
 	.btn.secondary {
-		background: var(--ab-color-surface-sunken);
-		color: var(--ab-color-fg);
-		border-color: var(--ab-color-border-strong);
+		background: var(--surface-sunken);
+		color: var(--ink-body);
+		border-color: var(--edge-strong);
 	}
 
 	.btn.secondary:hover:not(:disabled) {
-		background: var(--ab-color-border);
+		background: var(--edge-default);
 	}
 
 	.btn.ghost {
 		background: transparent;
-		color: var(--ab-color-fg-muted);
+		color: var(--ink-muted);
 	}
 
 	.btn.ghost:hover {
-		background: var(--ab-color-surface-sunken);
+		background: var(--surface-sunken);
 	}
 
 	.btn:disabled {
@@ -371,7 +371,7 @@ function onKeydown(e: KeyboardEvent) {
 		cursor: not-allowed;
 	}
 
-	@media (max-width: 480px) { /* --ab-breakpoint-sm */
+	@media (max-width: 480px) {
 		.row {
 			grid-template-columns: 1fr;
 		}
