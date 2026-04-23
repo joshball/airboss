@@ -1,6 +1,7 @@
 import type { Theme } from '../../contract';
 import { registerTheme } from '../../registry';
 import '../../core/defaults/airboss-default/index';
+import { control } from '../../core/defaults/airboss-default/control';
 import { chrome } from './chrome';
 import { palette as paletteDark } from './palette.dark';
 import { palette as paletteLight } from './palette.light';
@@ -21,6 +22,7 @@ export const studyFlightdeck: Theme = {
 	},
 	typography,
 	chrome,
+	control,
 };
 
 registerTheme(studyFlightdeck);
