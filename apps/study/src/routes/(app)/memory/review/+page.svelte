@@ -8,6 +8,7 @@ import {
 	type ReviewPhase,
 	ROUTES,
 } from '@ab/constants';
+import PageHelp from '@ab/help/ui/PageHelp.svelte';
 import ConfidenceSlider from '@ab/ui/components/ConfidenceSlider.svelte';
 import KbdHint from '@ab/ui/components/KbdHint.svelte';
 import { humanize } from '@ab/utils';
@@ -265,7 +266,10 @@ function clickRating(value: number) {
 
 	{#if phase === REVIEW_PHASES.COMPLETE}
 		<article class="caught-up">
-			<h1>{total > 0 ? 'Session complete.' : "You're caught up."}</h1>
+			<div class="title-row">
+				<h1>{total > 0 ? 'Session complete.' : "You're caught up."}</h1>
+				<PageHelp pageId="memory-review" />
+			</div>
 			{#if total > 0}
 				<p class="summary">You reviewed <strong>{total}</strong> {total === 1 ? 'card' : 'cards'} in this session.</p>
 				<dl class="tally">
@@ -285,7 +289,10 @@ function clickRating(value: number) {
 		</article>
 	{:else if current}
 		<header class="hd">
-			<span class="counter">Card {index + 1} of {total}</span>
+			<div class="counter-row">
+				<span class="counter">Card {index + 1} of {total}</span>
+				<PageHelp pageId="memory-review" />
+			</div>
 			<span class="badge domain">{domainLabel(current.domain)}</span>
 		</header>
 
@@ -457,6 +464,19 @@ function clickRating(value: number) {
 		justify-content: space-between;
 		align-items: center;
 		gap: var(--ab-space-lg);
+	}
+
+	.title-row {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--ab-space-sm);
+		justify-content: center;
+	}
+
+	.counter-row {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--ab-space-xs);
 	}
 
 	.counter {
