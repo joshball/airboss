@@ -28,6 +28,8 @@
 			"@ab/db/*": ["libs/db/src/*"],
 			"@ab/auth": ["libs/auth/src/index.ts"],
 			"@ab/auth/*": ["libs/auth/src/*"],
+			"@ab/audit": ["libs/audit/src/index.ts"],
+			"@ab/audit/*": ["libs/audit/src/*"],
 			"@ab/themes": ["libs/themes/index.ts"],
 			"@ab/themes/*": ["libs/themes/*"],
 			"@ab/ui": ["libs/ui/src/index.ts"],

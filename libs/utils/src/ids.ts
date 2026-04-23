@@ -23,7 +23,7 @@ export const generateSessionId = (): string => createId('ses');
 export const generateSessionItemResultId = (): string => createId('sir');
 
 // Audit BC -- generic change log, one row per mutation attempted through
-// `auditWrite()` in libs/db/src/audit.ts.
+// `auditWrite()` in libs/audit/src/log.ts.
 export const generateAuditLogId = (): string => createId('aud');
 
 /** Knowledge-node phase-progress row (per-user per-node). */
