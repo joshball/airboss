@@ -1,0 +1,30 @@
+/*
+ * Cockpit layout -- multi-zone instrument grid.
+ *
+ * Applied as `[data-layout='cockpit']` on sim routes that host a full
+ * panel of instruments. The grid leaves room for bezel inserts and an
+ * EFIS/MFD strip; panels inside each zone use the compact chrome
+ * defaults.
+ */
+
+[data-layout='cockpit'] .ab-container {
+	max-width: none;
+	margin: 0;
+	padding: var(--layout-container-padding);
+	background: var(--surface-page);
+	color: var(--ink-body);
+	min-height: 100vh;
+}
+
+[data-layout='cockpit'] .ab-grid {
+	display: grid;
+	grid-template-columns: repeat(12, minmax(0, 1fr));
+	gap: var(--layout-grid-gap);
+}
+
+[data-layout='cockpit'] .ab-instrument-panel {
+	background: var(--sim-panel-bg);
+	border: 1px solid var(--sim-panel-border);
+	border-radius: var(--radius-sm);
+	padding: var(--layout-panel-padding);
+}

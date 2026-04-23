@@ -54,6 +54,7 @@ export {
 	DEFAULT_THEME,
 	FLIGHTDECK_THEME,
 	resolveThemeForPath,
+	SIM_THEME,
 	THEMES,
 } from './resolve';
 export { type LegacyNeutralTone, resolveTone, TONES, type Tone, type ToneInput } from './tones';
@@ -64,3 +65,4 @@ export { TOKENS, type TokenKey, type TokenName } from './vocab';
 import './core/defaults/airboss-default/index';
 import './study/sectional/index';
 import './study/flightdeck/index';
+import './sim/glass/index';
