@@ -11,12 +11,14 @@ import type { Snippet } from 'svelte';
  * Theme-aware button / link primitive.
  *
  * Renders an `<a>` when `href` is provided, otherwise a `<button>`.
- * Reads all colors / sizing / radii from theme tokens so the same instance
- * reskins under `web` vs `tui`.
+ * Reads all colors via the `--button-{variant}-*` role tokens emitted by
+ * the theme system. Variants map to the control contract's button
+ * variants: primary -> primary, secondary -> default, ghost -> ghost,
+ * danger -> hazard.
  *
- * Loading state: pass `loading` + optionally `loadingLabel` to replace the
- * label while the button is disabled. Callers don't need to track disabled
- * separately -- passing `loading` forces disabled.
+ * Loading state: pass `loading` + optionally `loadingLabel` to replace
+ * the label while the button is disabled. Callers don't need to track
+ * disabled separately -- passing `loading` forces disabled.
  */
 
 let {
@@ -115,8 +117,8 @@ const isDisabled = $derived(disabled || loading);
 	}
 
 	.btn:focus-visible {
-		outline: var(2px) solid var(--focus-ring);
-		outline-offset: var(2px);
+		outline: 2px solid var(--focus-ring);
+		outline-offset: 2px;
 	}
 
 	.btn:disabled,
@@ -134,67 +136,96 @@ const isDisabled = $derived(disabled || loading);
 
 	/* Sizes */
 	.s-sm {
+		min-height: var(--button-height-sm);
 		padding: var(--control-padding-y-sm) var(--control-padding-x-sm);
 		font-size: var(--control-font-size-sm);
 	}
 
 	.s-md {
+		min-height: var(--button-height-md);
 		padding: var(--control-padding-y-md) var(--control-padding-x-md);
 		font-size: var(--control-font-size-md);
 	}
 
 	.s-lg {
+		min-height: var(--button-height-lg);
 		padding: var(--control-padding-y-lg) var(--control-padding-x-lg);
 		font-size: var(--control-font-size-lg);
 	}
 
-	/* Primary */
+	/* Primary -> control.button.primary */
 	.v-primary {
-		background: var(--action-default);
-		color: var(--action-default-ink);
+		background: var(--button-primary-bg);
+		color: var(--button-primary-ink);
+		border-color: var(--button-primary-border);
 	}
 	.v-primary:not(:disabled):not(.is-disabled):hover {
-		background: var(--action-default-hover);
+		background: var(--button-primary-hover-bg);
+		color: var(--button-primary-hover-ink);
 	}
 	.v-primary:not(:disabled):not(.is-disabled):active {
-		background: var(--action-default-active);
+		background: var(--button-primary-active-bg);
+	}
+	.v-primary:disabled,
+	.v-primary.is-disabled {
+		background: var(--button-primary-disabled-bg);
+		color: var(--button-primary-disabled-ink);
 	}
 
-	/* Secondary */
+	/* Secondary -> control.button.default (neutral surface) */
 	.v-secondary {
-		background: var(--surface-sunken);
-		color: var(--ink-body);
-		border-color: var(--edge-strong);
+		background: var(--button-default-bg);
+		color: var(--button-default-ink);
+		border-color: var(--button-default-border);
 	}
 	.v-secondary:not(:disabled):not(.is-disabled):hover {
-		background: var(--edge-default);
+		background: var(--button-default-hover-bg);
+		color: var(--button-default-hover-ink);
 	}
 	.v-secondary:not(:disabled):not(.is-disabled):active {
-		background: var(--edge-strong);
+		background: var(--button-default-active-bg);
+	}
+	.v-secondary:disabled,
+	.v-secondary.is-disabled {
+		background: var(--button-default-disabled-bg);
+		color: var(--button-default-disabled-ink);
 	}
 
-	/* Ghost */
+	/* Ghost -> control.button.ghost */
 	.v-ghost {
-		background: transparent;
-		color: var(--ink-muted);
+		background: var(--button-ghost-bg);
+		color: var(--button-ghost-ink);
+		border-color: var(--button-ghost-border);
 	}
 	.v-ghost:not(:disabled):not(.is-disabled):hover {
-		background: var(--surface-sunken);
-		color: var(--ink-body);
+		background: var(--button-ghost-hover-bg);
+		color: var(--button-ghost-hover-ink);
 	}
 	.v-ghost:not(:disabled):not(.is-disabled):active {
-		background: var(--edge-default);
+		background: var(--button-ghost-active-bg);
+	}
+	.v-ghost:disabled,
+	.v-ghost.is-disabled {
+		background: var(--button-ghost-disabled-bg);
+		color: var(--button-ghost-disabled-ink);
 	}
 
-	/* Danger */
+	/* Danger -> control.button.hazard */
 	.v-danger {
-		background: var(--action-hazard);
-		color: var(--action-hazard-ink);
+		background: var(--button-hazard-bg);
+		color: var(--button-hazard-ink);
+		border-color: var(--button-hazard-border);
 	}
 	.v-danger:not(:disabled):not(.is-disabled):hover {
-		background: var(--action-hazard-hover);
+		background: var(--button-hazard-hover-bg);
+		color: var(--button-hazard-hover-ink);
 	}
 	.v-danger:not(:disabled):not(.is-disabled):active {
-		background: var(--action-hazard-active);
+		background: var(--button-hazard-active-bg);
+	}
+	.v-danger:disabled,
+	.v-danger.is-disabled {
+		background: var(--button-hazard-disabled-bg);
+		color: var(--button-hazard-disabled-ink);
 	}
 </style>

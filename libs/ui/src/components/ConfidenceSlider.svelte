@@ -77,7 +77,7 @@ let {
 		border: 1px solid var(--edge-strong);
 		border-radius: var(--control-radius);
 		padding: var(--control-padding-y-lg) var(--control-padding-x-md);
-		min-width: 5rem;
+		min-width: var(--space-2xl);
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-2xs);
@@ -95,8 +95,8 @@ let {
 	}
 
 	.conf:focus-visible {
-		outline: var(2px) solid var(--focus-ring);
-		outline-offset: var(2px);
+		outline: 2px solid var(--focus-ring);
+		outline-offset: 2px;
 	}
 
 	.conf.is-selected {
@@ -130,7 +130,7 @@ let {
 		font-size: var(--font-size-xs);
 		font-weight: var(--font-weight-regular);
 		text-decoration: underline;
-		text-underline-offset: 2px;
+		text-underline-offset: var(--underline-offset-2xs);
 		cursor: pointer;
 		transition: color var(--motion-fast);
 	}
@@ -140,8 +140,8 @@ let {
 	}
 
 	.skip:focus-visible {
-		outline: var(2px) solid var(--focus-ring);
-		outline-offset: var(2px);
+		outline: 2px solid var(--focus-ring);
+		outline-offset: 2px;
 		border-radius: var(--radius-sm);
 	}
 

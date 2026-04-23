@@ -221,56 +221,56 @@ $effect(() => {
 		justify-content: center;
 		width: 1.125rem;
 		height: 1.125rem;
-		margin-left: var(--ab-space-2xs);
+		margin-left: var(--space-2xs);
 		padding: 0;
-		border: 1px solid var(--ab-color-border);
-		border-radius: 999px;
+		border: 1px solid var(--edge-default);
+		border-radius: var(--radius-pill);
 		background: transparent;
-		color: var(--ab-color-fg-subtle);
-		font-size: var(--ab-font-size-xs);
-		font-weight: var(--ab-font-weight-semibold);
+		color: var(--ink-subtle);
+		font-size: var(--font-size-xs);
+		font-weight: var(--font-weight-semibold);
 		line-height: 1;
 		cursor: help;
 		transition:
-			color var(--ab-transition-fast),
-			border-color var(--ab-transition-fast),
-			background var(--ab-transition-fast);
+			color var(--motion-fast),
+			border-color var(--motion-fast),
+			background var(--motion-fast);
 	}
 
 	.trigger:hover,
 	.trigger[aria-expanded='true'] {
-		color: var(--ab-color-fg);
-		border-color: var(--ab-color-border-strong);
-		background: var(--ab-color-surface-sunken);
+		color: var(--ink-body);
+		border-color: var(--edge-strong);
+		background: var(--surface-sunken);
 	}
 
 	.trigger:focus-visible {
-		outline: var(--ab-focus-ring-width) solid var(--ab-focus-ring);
-		outline-offset: var(--ab-focus-ring-offset);
+		outline: 2px solid var(--focus-ring);
+		outline-offset: 2px;
 	}
 
 	.popover {
 		position: absolute;
-		top: calc(100% + var(--ab-space-2xs));
+		top: calc(100% + var(--space-2xs));
 		left: 0;
 		max-width: 18rem;
 		min-width: 14rem;
-		padding: var(--ab-space-sm) var(--ab-space-md);
-		background: var(--ab-color-surface-raised);
-		border: 1px solid var(--ab-color-border-strong);
-		border-radius: var(--ab-radius-md);
-		box-shadow: var(--ab-shadow-lg);
-		color: var(--ab-color-fg);
-		font-size: var(--ab-font-size-sm);
-		line-height: var(--ab-line-height-normal);
+		padding: var(--space-sm) var(--space-md);
+		background: var(--surface-raised);
+		border: 1px solid var(--edge-strong);
+		border-radius: var(--radius-md);
+		box-shadow: var(--shadow-lg);
+		color: var(--ink-body);
+		font-size: var(--font-size-sm);
+		line-height: var(--line-height-normal);
 		z-index: 50;
 		/* Transition respects reduced-motion via the token. */
-		transition: opacity var(--ab-transition-normal);
+		transition: opacity var(--motion-normal);
 	}
 
 	.popover.flip-y {
 		top: auto;
-		bottom: calc(100% + var(--ab-space-2xs));
+		bottom: calc(100% + var(--space-2xs));
 	}
 
 	.popover.flip-x {
@@ -279,22 +279,22 @@ $effect(() => {
 	}
 
 	.title {
-		font-weight: var(--ab-font-weight-semibold);
-		margin-bottom: var(--ab-space-2xs);
-		color: var(--ab-color-fg);
+		font-weight: var(--font-weight-semibold);
+		margin-bottom: var(--space-2xs);
+		color: var(--ink-body);
 	}
 
 	.body {
 		margin: 0;
-		color: var(--ab-color-fg-muted);
+		color: var(--ink-muted);
 	}
 
 	.learn-more {
 		display: inline-block;
-		margin-top: var(--ab-space-xs);
-		color: var(--ab-color-primary);
+		margin-top: var(--space-xs);
+		color: var(--action-default);
 		text-decoration: none;
-		font-weight: var(--ab-font-weight-medium);
+		font-weight: var(--font-weight-medium);
 	}
 
 	.learn-more:hover {
@@ -302,9 +302,9 @@ $effect(() => {
 	}
 
 	.learn-more:focus-visible {
-		outline: var(--ab-focus-ring-width) solid var(--ab-focus-ring);
-		outline-offset: var(--ab-focus-ring-offset);
-		border-radius: var(--ab-radius-sm);
+		outline: 2px solid var(--focus-ring);
+		outline-offset: 2px;
+		border-radius: var(--radius-sm);
 	}
 
 	@media (hover: none) {

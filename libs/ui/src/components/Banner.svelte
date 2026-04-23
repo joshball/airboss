@@ -1,25 +1,34 @@
 <script lang="ts" module>
-export type BannerVariant = 'info' | 'success' | 'warning' | 'danger';
+import type { Tone, ToneInput } from '@ab/themes';
+export type BannerTone = Tone;
+/** @deprecated use `tone` instead. */
+export type BannerVariant = Tone | 'neutral';
 </script>
 
 <script lang="ts">
 import type { Snippet } from 'svelte';
+import { resolveTone } from '@ab/themes';
 
 /**
- * Inline message banner. Used for flash / toast-style notices (e.g. `?created=1`
- * success) and for form-level errors. Role depends on variant so assistive
- * tech announces appropriately.
+ * Inline message banner. Used for flash / toast-style notices (e.g.
+ * `?created=1` success) and for form-level errors. Role depends on tone
+ * so assistive tech announces appropriately.
  *
  * `dismissible=true` renders an X button; pass `onDismiss` to handle it.
+ *
+ * Accepts the shared `Tone` enum via `tone`; the legacy `variant` prop
+ * is still honored until package #5 sweeps call sites.
  */
 
 let {
-	variant = 'info',
+	tone,
+	variant,
 	title,
 	dismissible = false,
 	onDismiss,
 	children,
 }: {
+	tone?: ToneInput;
 	variant?: BannerVariant;
 	title?: string;
 	dismissible?: boolean;
@@ -27,10 +36,11 @@ let {
 	children: Snippet;
 } = $props();
 
-const role = $derived(variant === 'danger' ? 'alert' : 'status');
+const resolved = $derived<Tone>(resolveTone(tone ?? (variant as ToneInput | undefined) ?? 'info'));
+const role = $derived(resolved === 'danger' ? 'alert' : 'status');
 </script>
 
-<div class="banner v-{variant}" {role}>
+<div class="banner v-{resolved}" {role}>
 	<div class="content">
 		{#if title}
 			<p class="title">{title}</p>
@@ -94,10 +104,22 @@ const role = $derived(variant === 'danger' ? 'alert' : 'status');
 	}
 
 	.dismiss:focus-visible {
-		outline: var(2px) solid var(--focus-ring);
-		outline-offset: var(2px);
+		outline: 2px solid var(--focus-ring);
+		outline-offset: 2px;
 		border-radius: var(--radius-sm);
 		opacity: 1;
+	}
+
+	.v-default {
+		background: var(--action-neutral-wash);
+		border-color: var(--action-neutral-edge);
+		color: var(--ink-body);
+	}
+
+	.v-primary {
+		background: var(--action-default-wash);
+		border-color: var(--action-default-edge);
+		color: var(--action-default);
 	}
 
 	.v-info {
@@ -122,5 +144,17 @@ const role = $derived(variant === 'danger' ? 'alert' : 'status');
 		background: var(--action-hazard-wash);
 		border-color: var(--action-hazard-edge);
 		color: var(--action-hazard-active);
+	}
+
+	.v-muted {
+		background: var(--action-neutral-wash);
+		border-color: var(--action-neutral-edge);
+		color: var(--ink-subtle);
+	}
+
+	.v-accent {
+		background: var(--action-default-wash);
+		border-color: var(--action-default-edge);
+		color: var(--accent-code);
 	}
 </style>
