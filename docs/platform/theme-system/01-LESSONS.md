@@ -1,8 +1,21 @@
-# Lessons from seven theme-system iterations
+# Lessons from eight theme-system iterations
 
-This document captures what seven sibling projects (FIRC, airboss-game, airboss-mini, airboss-ng, airboss-v1, overwatch-core, peepfood-launchpad, peepfood-mono, redbook-codex) taught us about building a theme system. Same author, multiple years. The value isn't in what got built — it's in what kept getting *abandoned*, and why.
+This document captures what eight sibling projects (FIRC, airboss-game, airboss-mini, airboss-ng, airboss-v1, overwatch-core, peepfood-launchpad, peepfood-mono, redbook-codex, plus airboss 2026-04) taught us about building a theme system. Same author, multiple years. The value isn't in what got built - it's in what kept getting *abandoned*, and why.
 
 Read this before designing any new theme system.
+
+## 8th iteration: airboss, 2026-04 (Option A)
+
+First iteration to ship end-to-end across a multi-app monorepo with every acceptance criterion met. See [05-OVERHAUL-2026-04.md](05-OVERHAUL-2026-04.md) for the wave-by-wave story. What this iteration added to the TL;DR below:
+
+1. **Compat-alias bridges make two-wave migrations safe.** The original "migrate 2,614 call sites atomically" plan failed (PR #69 drifted on main). Splitting into "land the foundation behind a compat-alias shim, then sweep call sites, then delete the shim" turned an atomic bomb into five clean landings. Takeaway: if the sweep is bigger than one PR can land without drift, ship a shim first.
+2. **File-ownership scoping makes multi-agent parallel safe.** Three parallel agents (typography packs, enforcement, primitives) shipped without collisions because each owned disjoint files. When two agents share a file, they share a block - and blocks collide. The rule "parallel agents scope by file, not by block" became non-negotiable after one pair of agents did collide on `contract.ts` during Wave 1 scouting.
+3. **Deterministic committed `generated/tokens.css` is worth the diff noise.** Every PR that touched a role token produced a visible CSS delta. Reviewers saw the cascade land at call-site resolution, not just at the contract. Zero silent emissions reached main.
+4. **The `appearance` axis survives a real user toggle.** First iteration where users can pick system/light/dark via a cookie and have it carry across refresh + matchMedia live-update + pre-hydration + resolver + per-route forced-dark (sim). The three-axis composition held under this load without needing a fourth axis. This is load-bearing proof that density/chrome staying inside themes was the right call.
+
+What didn't survive from prior iterations:
+
+- The temptation to ship "legacy name aliases" as a permanent bridge. The aliases worked as scaffolding and got deleted in the last PR (#85). Rule reinforced: compat layers are either temporary or a smell.
 
 ## The TL;DR
 
