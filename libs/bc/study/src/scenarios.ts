@@ -551,43 +551,35 @@ export async function getRepDashboard(
 	const windowStart = new Date(now.getTime() - REP_DASHBOARD_WINDOW_DAYS * 24 * 60 * 60 * 1000);
 	const todayStart = userStartOfDay(now, tz);
 
-	// Alias the scenario table used in the NOT EXISTS subquery so the outer
-	// reference is `"outer_scenario"."id"` without touching the schema name
-	// as a string.
-	const outerScenario = aliasedTable(scenario, OUTER_SCENARIO_ALIAS);
-
-	// Fan out: every query below is independent. Parallel round-trips keep
-	// the dashboard responsive even as the scenario library grows.
-	const [scenarioCountRow, scenariosByDomainRows, unattemptedRow, attemptedTodayRow, domainWindow] = await Promise.all([
+	// Single per-domain aggregate over active scenarios that returns:
+	//   - total active scenarios per domain (drives scenarioCount + scenariosByDomain)
+	//   - unattempted-in-history count per domain (drives unattemptedCount)
+	//
+	// Previously this was three separate scans over `scenario` for the same
+	// active-scenarios predicate. The NOT EXISTS stays correlated against the
+	// same row we're aggregating, so the planner still uses
+	// `sir_scenario_completed_idx` for the existence probe -- just once, under
+	// one group-by. Alias the outer `scenario` so the correlated reference is
+	// unambiguously `"outer_scenario"."id"`.
+	const dashboardOuter = aliasedTable(scenario, OUTER_SCENARIO_ALIAS);
+	const [domainRows, attemptedTodayRow, domainWindow] = await Promise.all([
 		db
-			.select({ c: count() })
-			.from(scenario)
-			.where(and(eq(scenario.userId, userId), eq(scenario.status, SCENARIO_STATUSES.ACTIVE)))
-			.then((r) => r[0]),
-		db
-			.select({ domain: scenario.domain, c: count() })
-			.from(scenario)
-			.where(and(eq(scenario.userId, userId), eq(scenario.status, SCENARIO_STATUSES.ACTIVE)))
-			.groupBy(scenario.domain)
-			.orderBy(scenario.domain),
-		db
-			.select({ c: count() })
-			.from(outerScenario)
-			.where(
-				and(
-					eq(outerScenario.userId, userId),
-					eq(outerScenario.status, SCENARIO_STATUSES.ACTIVE),
-					sql`NOT EXISTS (
-						SELECT 1 FROM ${sessionItemResult}
-						WHERE ${sessionItemResult.scenarioId} = ${outerScenarioId}
-						  AND ${sessionItemResult.userId} = ${userId}
-						  AND ${sessionItemResult.itemKind} = ${SESSION_ITEM_KINDS.REP}
-						  AND ${sessionItemResult.completedAt} IS NOT NULL
-						  AND ${sessionItemResult.skipKind} IS NULL
-					)`,
-				),
-			)
-			.then((r) => r[0]),
+			.select({
+				domain: dashboardOuter.domain,
+				total: count(),
+				unattempted: sql<number>`sum(case when not exists (
+						select 1 from ${sessionItemResult}
+						where ${sessionItemResult.scenarioId} = ${outerScenarioId}
+						  and ${sessionItemResult.userId} = ${userId}
+						  and ${sessionItemResult.itemKind} = ${SESSION_ITEM_KINDS.REP}
+						  and ${sessionItemResult.completedAt} is not null
+						  and ${sessionItemResult.skipKind} is null
+					) then 1 else 0 end)`,
+			})
+			.from(dashboardOuter)
+			.where(and(eq(dashboardOuter.userId, userId), eq(dashboardOuter.status, SCENARIO_STATUSES.ACTIVE)))
+			.groupBy(dashboardOuter.domain)
+			.orderBy(dashboardOuter.domain),
 		db
 			.select({ c: count() })
 			.from(sessionItemResult)
@@ -604,6 +596,17 @@ export async function getRepDashboard(
 		getDomainAccuracy(userId, { start: windowStart, end: now }, db),
 	]);
 
+	let scenarioCount = 0;
+	let unattemptedCount = 0;
+	const scenariosByDomain: Array<{ domain: Domain; count: number }> = [];
+	for (const row of domainRows) {
+		const total = Number(row.total);
+		const unattempted = Number(row.unattempted ?? 0);
+		scenarioCount += total;
+		unattemptedCount += unattempted;
+		scenariosByDomain.push({ domain: row.domain as Domain, count: total });
+	}
+
 	// accuracyLast30d rolls up the domain breakdown so the headline number
 	// matches the per-domain rows under it -- no chance of one saying 80%
 	// and the other showing rows that average 75%.
@@ -611,12 +614,9 @@ export async function getRepDashboard(
 	const windowCorrect = domainWindow.reduce((s, d) => s + d.correct, 0);
 
 	return {
-		scenarioCount: Number(scenarioCountRow?.c ?? 0),
-		scenariosByDomain: scenariosByDomainRows.map((r) => ({
-			domain: r.domain as Domain,
-			count: Number(r.c),
-		})),
-		unattemptedCount: Number(unattemptedRow?.c ?? 0),
+		scenarioCount,
+		scenariosByDomain,
+		unattemptedCount,
 		attemptedToday: Number(attemptedTodayRow?.c ?? 0),
 		accuracyLast30d: {
 			attempted: windowAttempted,

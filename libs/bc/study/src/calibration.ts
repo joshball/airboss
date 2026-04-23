@@ -351,6 +351,93 @@ function endOfUtcDay(d: Date): Date {
 	return new Date(`${d.toISOString().slice(0, 10)}T23:59:59.999Z`);
 }
 
+/** Combined payload for the /calibration page -- summary + trend + point count. */
+export interface CalibrationPageData {
+	pointCount: number;
+	calibration: CalibrationResult;
+	trend: CalibrationTrendPoint[];
+}
+
+/**
+ * Shared loader for the /calibration page. Loads every confidence-tagged
+ * point for the user in a single union scan, then computes the summary +
+ * per-day trend + point count from that one array in memory.
+ *
+ * The previous page-load path fired three separate reads: a count query, a
+ * full `loadPoints` via `getCalibration`, and a windowed `loadPoints` via
+ * `getCalibrationTrend`. Two near-identical user-scoped unions over review +
+ * session_item_result per page load; this collapses them to one.
+ *
+ * The trend's in-memory slice (`points.filter(p => p.occurredAt <= dayEnd)`)
+ * keys off `occurredAt`, so the caller-supplied `days` window can start from
+ * the full history without changing semantics -- rows outside the window
+ * simply don't match any day in the trend result.
+ */
+export async function getCalibrationPageData(
+	userId: string,
+	days: number = CALIBRATION_TREND_WINDOW_DAYS,
+	db: Db = defaultDb,
+	now: Date = new Date(),
+): Promise<CalibrationPageData> {
+	// One read over the user's full confidence-tagged history. The trend
+	// window is applied in-memory by filtering per-day; the summary uses the
+	// whole array (which matches the previous `getCalibration(userId, {})`
+	// behavior of no range filter).
+	const points = await loadPoints(userId, undefined, db);
+
+	// ---- Summary (previously getCalibration(userId, {}, db)). ----
+	const overallBuckets = bucket(points);
+	const totalCount = points.length;
+	const overallScore = score(overallBuckets);
+
+	const byDomain = new Map<string, RawPoint[]>();
+	for (const p of points) {
+		const list = byDomain.get(p.domain);
+		if (list) list.push(p);
+		else byDomain.set(p.domain, [p]);
+	}
+	const domainsAgg: DomainCalibration[] = [];
+	for (const [domainKey, domainPoints] of byDomain) {
+		const dBuckets = bucket(domainPoints);
+		const dScore = score(dBuckets);
+		const usableCount = dBuckets.filter((b) => !b.needsMoreData).reduce((s, b) => s + b.count, 0);
+		domainsAgg.push({
+			domain: domainKey as Domain,
+			count: usableCount,
+			score: dScore,
+			largestGap: largestGap(dBuckets),
+		});
+	}
+	domainsAgg.sort((a, b) => a.domain.localeCompare(b.domain));
+
+	const calibration: CalibrationResult = {
+		buckets: overallBuckets,
+		totalCount,
+		score: overallScore,
+		domains: domainsAgg,
+	};
+
+	// ---- Trend (previously getCalibrationTrend). ----
+	const endOfToday = endOfUtcDay(now);
+	const windowStart = startOfUtcDay(new Date(endOfToday.getTime() - (days - 1) * 24 * 60 * 60 * 1000));
+	const trend: CalibrationTrendPoint[] = [];
+	for (let i = 0; i < days; i++) {
+		const dayEnd = endOfUtcDay(new Date(windowStart.getTime() + i * 24 * 60 * 60 * 1000));
+		const dayKey = dayEnd.toISOString().slice(0, 10);
+		const contributing = points.filter((p) => p.occurredAt >= windowStart && p.occurredAt <= dayEnd);
+		const dayBuckets = bucket(contributing);
+		trend.push({
+			date: dayKey,
+			score: score(dayBuckets),
+			count: contributing.length,
+		});
+	}
+
+	// Point count is just the size of the array we already loaded -- no
+	// second round-trip.
+	return { pointCount: totalCount, calibration, trend };
+}
+
 /**
  * Raw count of confidence-tagged data points for a user. Cheap, does not
  * load every row -- used by the route loader to drive the empty state
