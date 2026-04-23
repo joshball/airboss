@@ -130,9 +130,9 @@ Depends on: Spaced Memory Items (shipped), Decision Reps (must ship before this 
 
 ### 13. Author the 30 seed nodes
 
-- [ ] For each of the 30 nodes in [ADR 011 section "The 30-Node Experiment"](../../decisions/011-knowledge-graph-learning-system/decision.md): run `bun run knowledge:new <domain> <slug>`. Fill in frontmatter: `title`, `domain`, `cross_domains`, `knowledge_types`, `technical_depth`, `stability`, `relevance` array, `requires` / `deepens` / `applied_by` / `taught_by` / `related` lists, `modalities`, `estimated_time_minutes`, `review_time_minutes`, `references`, `assessable`, `assessment_methods`.
+- [ ] For each of the 30 nodes in [ADR 011 section "The 30-Node Experiment"](../../decisions/011-knowledge-graph-learning-system/decision.md): run `bun run db new <domain> <slug>`. Fill in frontmatter: `title`, `domain`, `cross_domains`, `knowledge_types`, `technical_depth`, `stability`, `relevance` array, `requires` / `deepens` / `applied_by` / `taught_by` / `related` lists, `modalities`, `estimated_time_minutes`, `review_time_minutes`, `references`, `assessable`, `assessment_methods`.
 - [ ] Leave phase sections empty (`<!-- TODO -->` placeholders) for all 30 -- they ship as skeletons.
-- [ ] Run `bun run build-knowledge --dry-run` -- expect 0 errors. Fix any frontmatter issues surfaced.
+- [ ] Run `bun run db build --dry-run` -- expect 0 errors. Fix any frontmatter issues surfaced.
 - [ ] Commit the 30 skeletons as one logical commit.
 
 ### 14. Deep-build 3 nodes
@@ -142,7 +142,7 @@ Depends on: Spaced Memory Items (shipped), Decision Reps (must ship before this 
 - [ ] For `proc-engine-failure-after-takeoff`: same; judgment-rich, scenario-heavy Practice + Verify.
 - [ ] Author 8-15 cards linked to each deep node (via `node_id` + `content_phase='practice'`). Manual creation via `/memory/new` with a new "Attach to node" field (see task 17) or a seed script.
 - [ ] Author 3-5 scenarios linked to each deep node (Verify phase, `content_phase='verify'`). Same creation pattern via `/reps/new`.
-- [ ] Run `bun run build-knowledge` -- deep nodes transition to `complete` lifecycle; 27 others remain `skeleton`. Commit.
+- [ ] Run `bun run db build` -- deep nodes transition to `complete` lifecycle; 27 others remain `skeleton`. Commit.
 
 ### 15. Interactive activity: wind-triangle
 
@@ -186,7 +186,7 @@ Depends on: Spaced Memory Items (shipped), Decision Reps (must ship before this 
 
 ### 21. Pre-commit hook
 
-- [ ] Extend the repo's pre-commit pipeline (or `bun run check` composite) to run `bun run build-knowledge --dry-run`. Failure blocks commit.
+- [ ] Extend the repo's pre-commit pipeline (or `bun run check` composite) to run `bun run db build --dry-run`. Failure blocks commit.
 - [ ] Document the build command in `CLAUDE.md` "Before You Build" stack reference.
 - [ ] Run `bun run check` -- 0 errors, commit.
 
@@ -199,7 +199,7 @@ Depends on: Spaced Memory Items (shipped), Decision Reps (must ship before this 
 ## Post-implementation
 
 - [ ] Full manual test per [test-plan.md](./test-plan.md).
-- [ ] `bun run build-knowledge` produces a clean build; 30 nodes + edges + 3 complete lifecycle; no warnings (or only expected activity warnings).
+- [ ] `bun run db build` produces a clean build; 30 nodes + edges + 3 complete lifecycle; no warnings (or only expected activity warnings).
 - [ ] Verify `course/knowledge/graph-index.md` is checked in and matches latest build.
 - [ ] Request implementation review via `/ball-review-full`.
 - [ ] Address review findings.
