@@ -193,6 +193,7 @@ $effect(() => {
 			role="dialog"
 			aria-modal="false"
 			aria-labelledby={titleId}
+			tabindex="-1"
 			onkeydown={handlePopoverKeyDown}
 			onpointerenter={handlePointerEnter}
 			onpointerleave={handlePointerLeave}

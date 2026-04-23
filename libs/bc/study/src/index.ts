@@ -203,13 +203,21 @@ export {
 } from './sessions';
 export type { CardSchedulerState, ScheduleResult } from './srs';
 export { fsrsDefaultParams, fsrsInitialState, fsrsSchedule } from './srs';
-export type { DashboardStats, DomainStats, MasteryStats, RecentReviewRow, ReviewStats } from './stats';
+export type {
+	DashboardStats,
+	DomainStats,
+	MasteryStats,
+	RecentAttemptRow,
+	RecentReviewRow,
+	ReviewStats,
+} from './stats';
 export {
 	getCardMastery,
 	getDashboardStats,
 	getDomainBreakdown,
 	getDueCardCount,
 	getMasteredCount,
+	getRecentAttemptsForScenario,
 	getRecentReviewsForCard,
 	getReviewStats,
 } from './stats';

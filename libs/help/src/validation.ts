@@ -45,7 +45,12 @@ export const CALLOUT_VARIANTS: readonly string[] = ['tip', 'warn', 'danger', 'ho
  */
 export function extractCalloutVariants(body: string): readonly string[] {
 	const out: string[] = [];
-	for (const match of body.matchAll(/^:::\s*([a-z][a-z-]*)\s*(?:$|\s)/gim)) {
+	// Variant name must sit on the same line as the opening `:::`, so the
+	// gap can contain only non-newline whitespace. A bare `:::` closer on
+	// its own line followed by a paragraph beginning with a letter used to
+	// capture the paragraph's first word as a phantom variant; restricting
+	// the inter-colon gap to `[\t ]*` prevents that false positive.
+	for (const match of body.matchAll(/^:::[\t ]*([a-z][a-z-]*)[\t ]*(?:$|\s)/gim)) {
 		const name = match[1];
 		if (name) out.push(name.toLowerCase());
 	}

@@ -13,6 +13,7 @@ import {
 	ROUTES,
 	SESSION_MODE_LABELS,
 	SESSION_MODE_VALUES,
+	SESSION_REASON_CODE_DEFINITIONS,
 	SESSION_REASON_CODE_LABELS,
 	SESSION_SLICE_LABELS,
 	SESSION_SLICES,
@@ -20,13 +21,67 @@ import {
 	type SessionReasonCode,
 	type SessionSlice,
 } from '@ab/constants';
+import PageHelp from '@ab/help/ui/PageHelp.svelte';
 import Banner from '@ab/ui/components/Banner.svelte';
 import Button from '@ab/ui/components/Button.svelte';
+import InfoTip from '@ab/ui/components/InfoTip.svelte';
 import { humanize } from '@ab/utils';
 import { enhance } from '$app/forms';
 import { goto } from '$app/navigation';
 import { page } from '$app/state';
 import type { ActionData, PageData } from './$types';
+import SessionLegend from './SessionLegend.svelte';
+
+/**
+ * Plain-English descriptions of each slice for InfoTips. Drive the short
+ * definition shown in the popover; "Learn more" jumps to the matching
+ * section on the session-slices concept page.
+ */
+const SLICE_DEFINITIONS: Record<SessionSlice, string> = {
+	[SESSION_SLICES.CONTINUE]:
+		'Pick up where you left off. Cards due in a domain you just studied, or nodes you started but did not finish.',
+	[SESSION_SLICES.STRENGTHEN]:
+		'Fix things the engine thinks are slipping. Relearning, overdue, recently-missed, or mastery-regressed items.',
+	[SESSION_SLICES.EXPAND]:
+		'Move the frontier forward. Unstarted core nodes whose prerequisites are met, or nodes that match your focus domain.',
+	[SESSION_SLICES.DIVERSIFY]:
+		'Rotate into domains you have been ignoring so the queue does not collapse into a single topic.',
+};
+
+/**
+ * Per-slice help-page fragment (on `concept-session-slices`). Used by the
+ * slice-heading InfoTips' "Learn more" link so the popover jumps you to
+ * the exact subsection for that slice.
+ */
+const SLICE_HELP_SECTION: Record<SessionSlice, string> = {
+	[SESSION_SLICES.CONTINUE]: 'continue',
+	[SESSION_SLICES.STRENGTHEN]: 'strengthen',
+	[SESSION_SLICES.EXPAND]: 'expand',
+	[SESSION_SLICES.DIVERSIFY]: 'diversify',
+};
+
+const KIND_DEFINITIONS = {
+	card: 'A flashcard scheduled by FSRS. Reveal the answer, rate Again/Hard/Good/Easy.',
+	rep: 'A decision-rep scenario. Read the situation, pick an option, see the outcome.',
+	node_start: 'A knowledge-graph node you have not started yet. Launches the 7-phase guided learn flow.',
+} as const;
+
+const KIND_LABELS = {
+	card: 'Card',
+	rep: 'Rep',
+	node_start: 'Node',
+} as const;
+
+const KIND_HELP = {
+	card: { helpId: 'memory-review', helpSection: 'fsrs-in-one-paragraph' },
+	rep: { helpId: 'reps-session', helpSection: '' },
+	node_start: { helpId: 'concept-knowledge-graph', helpSection: '' },
+} as const;
+
+function kindHelpSection(kind: 'card' | 'rep' | 'node_start'): string | undefined {
+	const s = KIND_HELP[kind].helpSection;
+	return s === '' ? undefined : s;
+}
 
 let { data, form }: { data: PageData; form: ActionData } = $props();
 
@@ -93,7 +148,10 @@ function depthLabel(slug: DepthPreference): string {
 <section class="page">
 	<header class="hd">
 		<div>
-			<h1>Start a session</h1>
+			<div class="title-row">
+				<h1>Start a session</h1>
+				<PageHelp pageId="session-start" />
+			</div>
 			{#if preview}
 				<p class="sub">{preview.items.length} items queued. Review the plan, then start.</p>
 			{:else if data.needsPlan}
@@ -241,6 +299,8 @@ function depthLabel(slug: DepthPreference): string {
 				</div>
 			</article>
 		{:else}
+			<SessionLegend />
+
 			<article class="preview">
 				<h2>Preview</h2>
 				{#each Object.values(SESSION_SLICES) as slice (slice)}
@@ -248,25 +308,49 @@ function depthLabel(slug: DepthPreference): string {
 					{#if items && items.length > 0}
 						<section class="slice">
 							<header class="slice-hd">
-								<h3>{SESSION_SLICE_LABELS[slice]}</h3>
+								<h3>
+									{SESSION_SLICE_LABELS[slice]}
+									<InfoTip
+										term={SESSION_SLICE_LABELS[slice]}
+										definition={SLICE_DEFINITIONS[slice]}
+										helpId="concept-session-slices"
+										helpSection={SLICE_HELP_SECTION[slice]}
+									/>
+								</h3>
 								<span class="count">{items.length}</span>
 							</header>
 							<ol class="items">
 								{#each items as item, idx (idx)}
 									<li class="item">
-										<span class="kind" data-kind={item.kind}>
-											{item.kind === 'card' ? 'Card' : item.kind === 'rep' ? 'Rep' : 'Node'}
+										<span class="kind-wrap">
+											<span class="kind" data-kind={item.kind}>
+												{KIND_LABELS[item.kind]}
+											</span>
+											<InfoTip
+												term={KIND_LABELS[item.kind]}
+												definition={KIND_DEFINITIONS[item.kind]}
+												helpId={KIND_HELP[item.kind].helpId}
+												helpSection={kindHelpSection(item.kind)}
+											/>
 										</span>
-										<span class="reason">{reasonLabel(item.reasonCode)}</span>
+										<span class="reason-wrap">
+											<span class="reason">{reasonLabel(item.reasonCode)}</span>
+											<InfoTip
+												term={reasonLabel(item.reasonCode)}
+												definition={SESSION_REASON_CODE_DEFINITIONS[item.reasonCode]}
+												helpId="session-start"
+												helpSection="reason-codes"
+											/>
+										</span>
 										{#if item.reasonDetail}
 											<span class="detail">— {item.reasonDetail}</span>
 										{/if}
 										{#if item.kind === 'node_start'}
-											<span class="id">{item.nodeId}</span>
+											<a class="id id-link" href={ROUTES.KNOWLEDGE_SLUG(item.nodeId)}>{item.nodeId}</a>
 										{:else if item.kind === 'card'}
-											<span class="id">{item.cardId}</span>
+											<a class="id id-link" href={ROUTES.MEMORY_CARD(item.cardId)}>{item.cardId}</a>
 										{:else}
-											<span class="id">{item.scenarioId}</span>
+											<a class="id id-link" href={ROUTES.REP_DETAIL(item.scenarioId)}>{item.scenarioId}</a>
 										{/if}
 									</li>
 								{/each}
@@ -723,6 +807,35 @@ function depthLabel(slug: DepthPreference): string {
 		color: var(--ab-color-fg-faint);
 		font-family: var(--ab-font-family-mono, ui-monospace, monospace);
 		font-size: var(--ab-font-size-xs);
+	}
+
+	.id-link {
+		text-decoration: none;
+		transition: color var(--ab-transition-fast);
+	}
+
+	.id-link:hover {
+		color: var(--ab-color-primary);
+		text-decoration: underline;
+	}
+
+	.id-link:focus-visible {
+		outline: var(--ab-focus-ring-width) solid var(--ab-focus-ring);
+		outline-offset: var(--ab-focus-ring-offset);
+		border-radius: var(--ab-radius-sm);
+	}
+
+	.title-row {
+		display: flex;
+		align-items: center;
+		gap: var(--ab-space-sm);
+		flex-wrap: wrap;
+	}
+
+	.kind-wrap,
+	.reason-wrap {
+		display: inline-flex;
+		align-items: baseline;
 	}
 
 	.start-row {
