@@ -40,7 +40,6 @@ export {
 	getContrastingTextColor,
 } from './derive';
 export { emitAllThemes, themeToCss } from './emit';
-export { LEGACY_ALIAS_MAP, LEGACY_ALIAS_NAMES } from './legacy-aliases';
 export {
 	getTheme,
 	getThemeSafe,

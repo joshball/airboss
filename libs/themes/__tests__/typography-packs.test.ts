@@ -2,10 +2,9 @@
  * Package #2 acceptance: curated typography packs.
  *
  * Verifies that `airbossStandard` and `airbossCompact` ship full
- * bundle-per-role surfaces, that per-family size adjustments are
- * applied at emit time, and that every legacy `--ab-*` typography name
- * in `apps/study/src` resolves to a real `--type-*` role token (not a
- * raw literal, not a TODO sentinel).
+ * bundle-per-role surfaces and that per-family size adjustments are
+ * applied at emit time. Option A also asserts that no legacy `--ab-*`
+ * refs remain across the apps now that the alias block is retired.
  */
 
 import { spawnSync } from 'node:child_process';
@@ -14,7 +13,7 @@ import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import type { TypeBundle, TypographyPack } from '../contract';
 import { AIRBOSS_COMPACT_PACK, AIRBOSS_STANDARD_PACK, TYPOGRAPHY_PACKS } from '../core/typography-packs';
-import { emitAllThemes, LEGACY_ALIAS_MAP, themeToCss } from '../index';
+import { emitAllThemes, themeToCss } from '../index';
 import { getTheme } from '../registry';
 
 const REPO_ROOT = resolve(import.meta.dirname, '../../..');
@@ -150,49 +149,15 @@ describe('emit: family adjustments', () => {
 	});
 });
 
-describe('legacy alias block — typography role bindings', () => {
-	const aliasValueFor = (name: string): string | undefined => LEGACY_ALIAS_MAP.find(([n]) => n === name)?.[1];
-
-	// Only aliases still shipped by the block (package #5 removed study-only
-	// typography atoms; remaining entries are those referenced by
-	// apps/sim/src and apps/hangar/src).
-	const ALIAS_EXPECTATIONS: ReadonlyArray<readonly [string, string]> = [
-		['--ab-font-size-xs', 'var(--type-ui-caption-size)'],
-		['--ab-font-size-sm', 'var(--type-ui-label-size)'],
-		['--ab-font-size-base', 'var(--type-reading-body-size)'],
-		['--ab-font-size-lg', 'var(--type-reading-lead-size)'],
-		['--ab-font-size-xl', 'var(--type-heading-2-size)'],
-		['--ab-font-size-2xl', 'var(--type-heading-1-size)'],
-		['--ab-font-weight-medium', 'var(--type-ui-control-weight)'],
-		['--ab-font-weight-semibold', 'var(--type-heading-3-weight)'],
-		['--ab-font-weight-bold', 'var(--type-heading-1-weight)'],
-		['--ab-line-height-tight', 'var(--type-heading-1-line-height)'],
-		['--ab-line-height-normal', 'var(--type-ui-label-line-height)'],
-		['--ab-letter-spacing-tight', 'var(--type-heading-1-tracking)'],
-		['--ab-letter-spacing-wide', 'var(--type-ui-caption-tracking)'],
-		['--ab-letter-spacing-caps', 'var(--type-ui-badge-tracking)'],
-	];
-
-	for (const [name, expected] of ALIAS_EXPECTATIONS) {
-		it(`${name} -> ${expected}`, () => {
-			expect(aliasValueFor(name)).toBe(expected);
-		});
-	}
-
-	it('every apps/study/src typography atom alias resolves to a --type-* role token', () => {
-		if (!existsSync(STUDY_SRC)) return;
-		const pattern = '--ab-(font-size|font-weight|line-height|letter-spacing)-[a-z0-9-]+';
-		const res = spawnSync('rg', ['-oNI', pattern, STUDY_SRC], { encoding: 'utf8' });
-		const names = Array.from(new Set(res.stdout.split('\n').filter(Boolean))).sort();
-		const lookup = new Map(LEGACY_ALIAS_MAP.map(([n, v]) => [n, v]));
-		const offenders: string[] = [];
-		for (const legacy of names) {
-			const value = lookup.get(legacy);
-			if (value === undefined || !value.startsWith('var(--type-')) {
-				offenders.push(`${legacy} -> ${value ?? '(missing)'}`);
-			}
-		}
-		expect(offenders, `legacy typography aliases not bound to --type-* roles: ${offenders.join('; ')}`).toEqual([]);
+describe('no legacy --ab-* references remain in apps', () => {
+	it('apps/study/src, apps/sim/src, apps/hangar/src are free of --ab-* aliases', () => {
+		const roots = [STUDY_SRC, resolve(REPO_ROOT, 'apps/sim/src'), resolve(REPO_ROOT, 'apps/hangar/src')].filter((p) =>
+			existsSync(p),
+		);
+		if (roots.length === 0) return;
+		const res = spawnSync('rg', ['-oNI', '--ab-[a-z0-9-]+', ...roots], { encoding: 'utf8' });
+		const hits = Array.from(new Set(res.stdout.split('\n').filter(Boolean))).sort();
+		expect(hits, `Option A acceptance: found legacy --ab-* refs: ${hits.join(', ')}`).toEqual([]);
 	});
 });
 

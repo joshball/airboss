@@ -12,12 +12,11 @@
  * suppresses every violation on the *next* non-blank line. The reason
  * is required (non-empty trimmed content after the colon).
  *
- * Known-token list is sourced from `TOKENS` (vocab.ts) plus the full
- * legacy-alias surface (LEGACY_ALIAS_NAMES). Any other `var(--*)`
- * reference is reported as an unknown-token violation.
+ * Known-token list is sourced from `TOKENS` (vocab.ts). Any other
+ * `var(--*)` reference is reported as an unknown-token violation.
+ * Option A retired the legacy `--ab-*` alias surface entirely.
  */
 
-import { LEGACY_ALIAS_NAMES } from '@ab/themes';
 import { TOKENS } from '@ab/themes';
 
 export interface LintViolation {
@@ -46,7 +45,6 @@ const EXCEPTION_RE = /\/\*\s*lint-disable-token-enforcement:\s*([^*]+?)\s*\*\//;
 export function buildKnownTokens(): Set<string> {
 	const known = new Set<string>();
 	for (const value of Object.values(TOKENS)) known.add(value);
-	for (const legacy of LEGACY_ALIAS_NAMES) known.add(legacy);
 	// Atomic families emitted by emit.ts that aren't in TOKENS.
 	const emittedExtras = [
 		// font-size / font-weight / line-height / tracking atomic
