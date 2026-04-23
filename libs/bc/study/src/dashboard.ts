@@ -27,10 +27,17 @@ import {
 	WEAK_AREA_WINDOW_DAYS,
 } from '@ab/constants';
 import { db as defaultDb } from '@ab/db';
-import { and, count, eq, gte, isNotNull, isNull, sql } from 'drizzle-orm';
+import { aliasedTable, and, count, eq, gte, isNotNull, isNull, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import { type CalibrationResult, getCalibration } from './calibration';
-import { type CertProgress, type DomainCertRow, getCertProgress, getDomainCertMatrix } from './knowledge';
+import {
+	type CertAndDomainMatrix,
+	type CertProgress,
+	type DomainCertRow,
+	getCertAndDomainMatrix,
+	getCertProgress,
+	getDomainCertMatrix,
+} from './knowledge';
 import { getActivePlan } from './plans';
 import { card, cardState, review, type StudyPlanRow, scenario, sessionItemResult } from './schema';
 import { type DashboardStats, getDashboardStats } from './stats';
@@ -115,44 +122,90 @@ function utcStartOfDay(d: Date): Date {
  * Scheduled-reps backlog. Active scenarios split into attempted vs never-
  * attempted, grouped by domain. Empty for a user with no scenarios.
  *
- * Uses a single aggregation over scenario LEFT JOIN session_item_result
- * (item_kind='rep', completed, not skipped) so each scenario shows up
- * exactly once, with its attempt count driving the unattempted/attempted
- * split. No second round-trip.
+ * Two per-domain aggregates instead of a per-scenario materialization:
+ *
+ *   - `scenarioCounts`: total active scenarios + count of scenarios with zero
+ *     attempts, by domain. A scalar `NOT EXISTS` correlated subquery drives
+ *     the unattempted flag without joining the attempt table to the outer
+ *     grouping, so the GROUP BY stays O(domains).
+ *   - `attemptCounts`: total rep attempts by domain. Single scan over
+ *     sessionItemResult joined to scenario for the domain, bounded by the
+ *     `sir_user_kind_completed_idx` driving index.
+ *
+ * The previous shape grouped by `(domain, scenario.id)` and threw away the
+ * per-scenario count. That materialized one row per scenario every dashboard
+ * load -- needlessly expensive once the library grows past a few hundred
+ * scenarios.
  */
+// Alias used when the outer `scenario` row needs an unambiguous reference from
+// inside a correlated subquery. Matches the pattern used in scenarios.ts.
+const BACKLOG_SCENARIO_ALIAS = 'backlog_scenario';
+const backlogScenarioId = sql`${sql.identifier(BACKLOG_SCENARIO_ALIAS)}.${sql.identifier('id')}`;
+
 export async function getRepBacklog(userId: string, db: Db = defaultDb): Promise<RepBacklog> {
-	const rows = await db
-		.select({
-			domain: scenario.domain,
-			scenarioId: scenario.id,
-			attemptCount: count(sessionItemResult.id),
-		})
-		.from(scenario)
-		.leftJoin(
-			sessionItemResult,
-			and(
-				eq(sessionItemResult.scenarioId, scenario.id),
-				eq(sessionItemResult.userId, scenario.userId),
-				eq(sessionItemResult.itemKind, SESSION_ITEM_KINDS.REP),
-				isNotNull(sessionItemResult.completedAt),
-				isNull(sessionItemResult.skipKind),
-			),
-		)
-		.where(and(eq(scenario.userId, userId), eq(scenario.status, SCENARIO_STATUSES.ACTIVE)))
-		.groupBy(scenario.domain, scenario.id);
+	// Alias the FROM so the NOT EXISTS subquery's outer reference to
+	// `scenario.id` never binds to a column on the inner table. Matches the
+	// pattern used by scenarios.ts's correlated aggregate.
+	const outerScenario = aliasedTable(scenario, BACKLOG_SCENARIO_ALIAS);
+
+	const [scenarioCounts, attemptCounts] = await Promise.all([
+		db
+			.select({
+				domain: outerScenario.domain,
+				total: count(),
+				unattempted: sql<number>`sum(case when not exists (
+						select 1 from ${sessionItemResult}
+						where ${sessionItemResult.scenarioId} = ${backlogScenarioId}
+						  and ${sessionItemResult.userId} = ${userId}
+						  and ${sessionItemResult.itemKind} = ${SESSION_ITEM_KINDS.REP}
+						  and ${sessionItemResult.completedAt} is not null
+						  and ${sessionItemResult.skipKind} is null
+					) then 1 else 0 end)`,
+			})
+			.from(outerScenario)
+			.where(and(eq(outerScenario.userId, userId), eq(outerScenario.status, SCENARIO_STATUSES.ACTIVE)))
+			.groupBy(outerScenario.domain),
+		db
+			.select({
+				domain: scenario.domain,
+				attempts: count(),
+			})
+			.from(sessionItemResult)
+			.innerJoin(
+				scenario,
+				and(eq(scenario.id, sessionItemResult.scenarioId), eq(scenario.userId, sessionItemResult.userId)),
+			)
+			.where(
+				and(
+					eq(sessionItemResult.userId, userId),
+					eq(sessionItemResult.itemKind, SESSION_ITEM_KINDS.REP),
+					isNotNull(sessionItemResult.completedAt),
+					isNull(sessionItemResult.skipKind),
+					eq(scenario.status, SCENARIO_STATUSES.ACTIVE),
+				),
+			)
+			.groupBy(scenario.domain),
+	]);
 
 	const byDomainMap = new Map<Domain, RepBacklogDomain>();
 	let totalActive = 0;
 	let unattempted = 0;
-	for (const row of rows) {
+	for (const row of scenarioCounts) {
 		const domain = row.domain as Domain;
-		const attempts = Number(row.attemptCount);
+		const total = Number(row.total);
+		const unattemptedForDomain = Number(row.unattempted ?? 0);
 		const bucket = byDomainMap.get(domain) ?? { domain, unattempted: 0, totalAttempts: 0 };
-		if (attempts === 0) bucket.unattempted += 1;
+		bucket.unattempted += unattemptedForDomain;
+		byDomainMap.set(domain, bucket);
+		totalActive += total;
+		unattempted += unattemptedForDomain;
+	}
+	for (const row of attemptCounts) {
+		const domain = row.domain as Domain;
+		const attempts = Number(row.attempts);
+		const bucket = byDomainMap.get(domain) ?? { domain, unattempted: 0, totalAttempts: 0 };
 		bucket.totalAttempts += attempts;
 		byDomainMap.set(domain, bucket);
-		totalActive += 1;
-		if (attempts === 0) unattempted += 1;
 	}
 
 	// Sort unattempted-heavy domains first so the panel emphasises work the
@@ -511,6 +564,10 @@ const defaultFetchers: DashboardFetchers = {
 	activity: (userId, db, now) => getRecentActivity(userId, ACTIVITY_WINDOW_DAYS, db, now),
 	activePlan: (userId, db) => getActivePlan(userId, db),
 	calibration: (userId, db) => getCalibration(userId, {}, db),
+	// certProgress + domainCertMatrix share one getNodeMasteryMap call via
+	// getCertAndDomainMatrix. The shared fetch is memoized per dashboard
+	// invocation below in `getDashboardPayload`; these standalone fetchers
+	// remain available for tests + any caller that injects custom fetchers.
 	certProgress: (userId, db) => getCertProgress(userId, db),
 	domainCertMatrix: (userId, db) => getDomainCertMatrix(userId, db),
 };
@@ -528,6 +585,22 @@ export async function getDashboardPayload(
 	now: Date = new Date(),
 	fetchers: DashboardFetchers = defaultFetchers,
 ): Promise<DashboardPayload> {
+	// When the default fetchers are in use, the two knowledge-panel fetchers
+	// share a single `getCertAndDomainMatrix` call so the node scan + per-user
+	// mastery map runs once instead of twice. Custom fetcher bundles (tests,
+	// experiments) keep the pre-existing fan-out semantics.
+	let certFetcher: (userId: string, db: Db) => Promise<CertProgress[]> = fetchers.certProgress;
+	let matrixFetcher: (userId: string, db: Db) => Promise<DomainCertRow[]> = fetchers.domainCertMatrix;
+	if (fetchers === defaultFetchers) {
+		let sharedPromise: Promise<CertAndDomainMatrix> | null = null;
+		const shared = (uId: string, d: Db): Promise<CertAndDomainMatrix> => {
+			if (!sharedPromise) sharedPromise = getCertAndDomainMatrix(uId, d);
+			return sharedPromise;
+		};
+		certFetcher = async (uId, d) => (await shared(uId, d)).certProgress;
+		matrixFetcher = async (uId, d) => (await shared(uId, d)).domainCertMatrix;
+	}
+
 	const [stats, repBacklog, weakAreas, activity, activePlan, calibration, certProgress, domainCertMatrix] =
 		await Promise.allSettled([
 			fetchers.stats(userId, db, now),
@@ -536,8 +609,8 @@ export async function getDashboardPayload(
 			fetchers.activity(userId, db, now),
 			fetchers.activePlan(userId, db),
 			fetchers.calibration(userId, db),
-			fetchers.certProgress(userId, db),
-			fetchers.domainCertMatrix(userId, db),
+			certFetcher(userId, db),
+			matrixFetcher(userId, db),
 		]);
 
 	function toResult<T>(r: PromiseSettledResult<T>): PanelResult<T> {
