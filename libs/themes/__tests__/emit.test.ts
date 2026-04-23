@@ -109,22 +109,21 @@ describe('emitAllThemes', () => {
 		}
 	});
 
-	it('does not emit --sim-* role tokens when no theme populates sim', () => {
+	it('emits --sim-* role tokens for any theme that populates sim', () => {
 		const anySim = listThemes().some((t) => t.sim !== undefined);
-		if (!anySim) {
-			const css = emitAllThemes();
+		const css = emitAllThemes();
+		if (anySim) {
+			expect(css).toMatch(/--sim-panel-bg:/);
+			expect(css).toMatch(/--sim-instrument-bezel:/);
+			expect(css).toMatch(/--sim-horizon-sky:/);
+		} else {
 			expect(css).not.toMatch(/^\s*--sim-/m);
 		}
 	});
 
-	it('exposes every --ab-sim-* legacy name as a compatibility alias (TODO sentinels OK)', () => {
+	it('has no --ab-sim-* legacy aliases (package #7 retired the block)', () => {
 		const simNames = LEGACY_ALIAS_NAMES.filter((n) => n.startsWith('--ab-sim-'));
-		// Block ships non-empty so apps/sim keeps resolving.
-		expect(simNames.length).toBeGreaterThan(0);
-		const css = emitAllThemes();
-		for (const name of simNames) {
-			expect(css).toContain(`${name}:`);
-		}
+		expect(simNames).toEqual([]);
 	});
 
 	it('registered themes declare typography bundles + control slots', () => {
