@@ -133,4 +133,9 @@ export const ROUTES = {
 	// host (sim.airboss.test), so these paths are relative to that origin.
 	SIM_HOME: '/',
 	SIM_SCENARIO: (id: SimScenarioId) => `/${id}` as const,
+
+	// Hangar (apps/hangar) -- admin surface for data-management. Served from
+	// its own host (hangar.airboss.test), so these paths are relative to that
+	// origin. Role-gated to AUTHOR | OPERATOR | ADMIN.
+	HANGAR_HOME: '/',
 } as const;
