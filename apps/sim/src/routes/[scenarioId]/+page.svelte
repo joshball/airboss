@@ -9,7 +9,13 @@
  * that the first press registers deterministically.
  */
 
-import type { FdmInputs, FdmTruthState, ScenarioRunResult, ScenarioStepState } from '@ab/bc-sim';
+import {
+	C172_CONFIG,
+	type FdmInputs,
+	type FdmTruthState,
+	type ScenarioRunResult,
+	type ScenarioStepState,
+} from '@ab/bc-sim';
 import {
 	ROUTES,
 	SIM_FEET_PER_METER,
@@ -22,6 +28,7 @@ import {
 import { onDestroy, onMount, untrack } from 'svelte';
 import { browser } from '$app/environment';
 import { resolveKey } from '$lib/control-handler';
+import { EngineSound } from '$lib/engine-sound.svelte';
 import FdmWorker from '$lib/fdm-worker.ts?worker';
 import Altimeter from '$lib/instruments/Altimeter.svelte';
 import Asi from '$lib/instruments/Asi.svelte';
@@ -32,6 +39,7 @@ import TurnCoordinator from '$lib/instruments/TurnCoordinator.svelte';
 import Vsi from '$lib/instruments/Vsi.svelte';
 import ControlInputs from '$lib/panels/ControlInputs.svelte';
 import KeybindingsHelp from '$lib/panels/KeybindingsHelp.svelte';
+import KeyboardCheatsheet from '$lib/panels/KeyboardCheatsheet.svelte';
 import ResetConfirm from '$lib/panels/ResetConfirm.svelte';
 import ScenarioStepBanner from '$lib/panels/ScenarioStepBanner.svelte';
 import VSpeeds from '$lib/panels/VSpeeds.svelte';
@@ -74,6 +82,7 @@ const WORKER_READY_TIMEOUT_MS = 5_000;
 let keyboardControlEnabled = $state(true);
 
 const horn = new StallHorn();
+const engineSound = new EngineSound();
 
 function post(msg: MainToWorker): void {
 	worker?.postMessage(msg);
@@ -93,12 +102,24 @@ function handleWorkerMessage(event: MessageEvent<WorkerToMain>): void {
 			stepState = msg.stepState ?? null;
 			// Drive the stall horn off truth AoA, not airspeed.
 			horn.setActive(msg.truth.stallWarning || msg.truth.stalled);
+			// Engine sound follows RPM / throttle / AoA / TAS each snapshot.
+			engineSound.update(
+				{
+					throttle: msg.inputs.throttle,
+					rpm: msg.truth.engineRpm,
+					alphaRad: msg.truth.alpha,
+					trueAirspeed: msg.truth.trueAirspeed,
+				},
+				C172_CONFIG.idleRpm,
+			);
 			break;
 		}
 		case SIM_WORKER_MESSAGES.OUTCOME: {
 			outcome = msg.result;
 			running = false;
 			horn.setActive(false);
+			// Quiet the engine for the debrief.
+			engineSound.stop();
 			break;
 		}
 	}
@@ -106,10 +127,12 @@ function handleWorkerMessage(event: MessageEvent<WorkerToMain>): void {
 
 function firstGesture(): void {
 	horn.ensureStarted();
+	engineSound.ensureStarted();
 }
 
 function handleSpecial(special: string): void {
 	horn.ensureStarted();
+	engineSound.ensureStarted();
 	switch (special) {
 		case SIM_KEYBINDING_ACTIONS.BRAKE_TOGGLE: {
 			post({ type: SIM_WORKER_MESSAGES.TOGGLE_BRAKE });
@@ -139,6 +162,7 @@ function handleSpecial(special: string): void {
 		case SIM_KEYBINDING_ACTIONS.MUTE_TOGGLE: {
 			muted = !muted;
 			horn.setMuted(muted);
+			engineSound.setMuted(muted);
 			if (browser) localStorage.setItem(SIM_STORAGE_KEYS.MUTE, muted ? 'true' : 'false');
 			break;
 		}
@@ -149,6 +173,7 @@ function performReset(): void {
 	resetConfirmOpen = false;
 	outcome = null;
 	horn.setActive(false);
+	engineSound.resume();
 	post({ type: SIM_WORKER_MESSAGES.RESET });
 	post({ type: SIM_WORKER_MESSAGES.START });
 }
@@ -231,9 +256,10 @@ onMount(() => {
 	window.addEventListener('keydown', onKeyDown);
 	window.addEventListener('pointerdown', firstGesture);
 
-	// Mute state
+	// Mute state -- shared between stall horn and engine sound.
 	muted = localStorage.getItem(SIM_STORAGE_KEYS.MUTE) === 'true';
 	horn.setMuted(muted);
+	engineSound.setMuted(muted);
 
 	// First-visit help overlay
 	const dismissed = localStorage.getItem(SIM_STORAGE_KEYS.HELP_DISMISSED) === 'true';
@@ -248,6 +274,7 @@ onDestroy(() => {
 	window.removeEventListener('pointerdown', firstGesture);
 	if (readyTimer !== null) clearTimeout(readyTimer);
 	horn.destroy();
+	engineSound.destroy();
 	worker?.terminate();
 	worker = null;
 });
@@ -284,12 +311,70 @@ const trimBias = $derived(inputs.trim);
 		<div class="header-actions">
 			<label class="auto-coord-toggle">
 				<input type="checkbox" checked={inputs.autoCoordinate} onchange={onAutoCoordClick} />
-				Auto-coordinate
+				Auto-coordinate rudder
 			</label>
-			<button type="button" class="mute-button" onclick={() => handleSpecial(SIM_KEYBINDING_ACTIONS.MUTE_TOGGLE)}>
-				{muted ? 'Muted' : 'Sound on'}
+			<button
+				type="button"
+				class="icon-button"
+				onclick={() => handleSpecial(SIM_KEYBINDING_ACTIONS.PAUSE)}
+				aria-label={running ? 'Playing. Click to pause.' : 'Paused. Click to resume.'}
+				title={running ? 'Playing -- click to pause' : 'Paused -- click to resume'}
+				disabled={!ready || outcome !== null}
+			>
+				{#if running}
+					<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+						<rect x="6" y="5" width="4" height="14" rx="1" fill="currentColor" />
+						<rect x="14" y="5" width="4" height="14" rx="1" fill="currentColor" />
+					</svg>
+				{:else}
+					<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+						<path d="M7 5 L19 12 L7 19 Z" fill="currentColor" />
+					</svg>
+				{/if}
 			</button>
-			<button type="button" class="help-button" onclick={() => { helpOpen = true; }}>? Help</button>
+			<button
+				type="button"
+				class="icon-button"
+				class:muted-state={muted}
+				onclick={() => handleSpecial(SIM_KEYBINDING_ACTIONS.MUTE_TOGGLE)}
+				aria-label={muted ? 'Sound is muted. Click to unmute.' : 'Sound is on. Click to mute.'}
+				title={muted ? 'Sound is muted -- click to unmute' : 'Sound is on -- click to mute'}
+				aria-pressed={muted}
+			>
+				<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+					<!-- Speaker body (always shown). -->
+					<path d="M3 9 L3 15 L7 15 L12 19 L12 5 L7 9 Z" fill="currentColor" />
+					{#if muted}
+						<!-- Diagonal slash for the muted state. -->
+						<line x1="15" y1="6" x2="22" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+					{:else}
+						<!-- Three sound waves for the sound-on state. -->
+						<path
+							d="M15 10 Q17 12 15 14"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="1.6"
+							stroke-linecap="round"
+						/>
+						<path
+							d="M17 8 Q20 12 17 16"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="1.6"
+							stroke-linecap="round"
+						/>
+					{/if}
+				</svg>
+			</button>
+			<button
+				type="button"
+				class="icon-button help-button"
+				onclick={() => { helpOpen = true; }}
+				aria-label="Open keyboard help overlay"
+				title="Keyboard help (?)"
+			>
+				<span aria-hidden="true">?</span>
+			</button>
 		</div>
 	</header>
 
@@ -386,6 +471,8 @@ const trimBias = $derived(inputs.trim);
 			<button type="button" class="reset-button" onclick={performReset}>Reset (Shift+R)</button>
 		{/if}
 	</section>
+
+	<KeyboardCheatsheet />
 </main>
 
 <KeybindingsHelp
@@ -402,15 +489,18 @@ const trimBias = $derived(inputs.trim);
 	main {
 		max-width: 1280px;
 		margin: 0 auto;
-		padding: 1rem 1.5rem 2rem;
+		/* Tight vertical rhythm -- the cockpit needs to fit 1280x800 without
+		   a scrollbar. Padding top/bottom kept minimal; horizontal gives the
+		   panels breathing room. */
+		padding: 0.5rem 1.25rem 0.75rem;
 	}
 
 	header {
 		display: grid;
 		grid-template-columns: auto 1fr auto;
-		gap: 1rem;
+		gap: 0.75rem;
 		align-items: center;
-		margin-bottom: 0.75rem;
+		margin-bottom: 0.4rem;
 	}
 
 	.back {
@@ -425,14 +515,16 @@ const trimBias = $derived(inputs.trim);
 	}
 
 	h1 {
-		margin: 0 0 0.1rem;
-		font-size: 1.35rem;
+		margin: 0;
+		font-size: 1.2rem;
+		line-height: 1.2;
 	}
 
 	.objective {
 		margin: 0;
 		color: var(--ab-color-fg-muted, #666);
-		font-size: 0.9rem;
+		font-size: 0.82rem;
+		line-height: 1.2;
 	}
 
 	.header-actions {
@@ -450,68 +542,89 @@ const trimBias = $derived(inputs.trim);
 		cursor: pointer;
 	}
 
-	.mute-button,
-	.help-button {
+	.icon-button {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 34px;
+		height: 34px;
 		background: var(--ab-color-surface, #f6f6f6);
 		border: 1px solid var(--ab-color-border, #ccc);
 		border-radius: 4px;
-		padding: 0.3rem 0.65rem;
+		padding: 0;
 		cursor: pointer;
-		font-size: 0.85rem;
+		color: var(--ab-color-fg, #222);
+		transition: background-color 0.12s ease, color 0.12s ease;
 	}
 
-	.mute-button:hover,
-	.help-button:hover {
-		background: var(--ab-color-border, #eee);
+	.icon-button:hover {
+		background: var(--ab-color-border, #e6e6e6);
+	}
+
+	.icon-button:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+	}
+
+	.icon-button.muted-state {
+		color: #c23530;
+		border-color: #c23530;
+		background: rgba(224, 68, 62, 0.08);
+	}
+
+	.icon-button.help-button {
+		font-family: ui-monospace, monospace;
+		font-weight: 700;
+		font-size: 1rem;
 	}
 
 	.objective-banner {
-		padding: 0.6rem 0.9rem;
+		padding: 0.4rem 0.8rem;
 		background: var(--ab-color-surface, #f6f6f6);
 		border: 1px solid var(--ab-color-border, #ddd);
 		border-radius: 6px;
-		font-size: 0.9rem;
-		margin-bottom: 0.75rem;
+		font-size: 0.82rem;
+		margin-bottom: 0.4rem;
 	}
 
 	.layout {
 		display: grid;
-		grid-template-columns: minmax(640px, 1fr) 280px;
-		gap: 1rem;
-		margin-bottom: 1rem;
+		grid-template-columns: minmax(560px, 1fr) 260px;
+		gap: 0.6rem;
+		margin-bottom: 0.4rem;
 	}
 
 	.six-pack {
 		display: flex;
 		flex-direction: column;
-		gap: 0.5rem;
+		gap: 0.4rem;
 	}
 
 	.row {
 		display: grid;
-		grid-template-columns: repeat(3, 200px);
-		gap: 0.5rem;
+		grid-template-columns: repeat(3, 180px);
+		gap: 0.4rem;
 		justify-content: center;
 	}
 
 	.engine-row {
 		display: grid;
-		grid-template-columns: 200px 1fr;
-		gap: 0.5rem;
+		grid-template-columns: 180px 1fr;
+		gap: 0.4rem;
 		align-items: start;
 	}
 
 	.readouts {
 		display: grid;
 		grid-template-columns: repeat(3, 1fr);
-		gap: 0.35rem;
+		gap: 0.3rem;
 	}
 
 	.readout {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		padding: 0.5rem;
+		padding: 0.35rem 0.5rem;
 		background: var(--ab-color-surface, #f6f6f6);
 		border-radius: 6px;
 		border: 1px solid var(--ab-color-border, #ddd);
@@ -537,19 +650,20 @@ const trimBias = $derived(inputs.trim);
 	.sidebar {
 		display: flex;
 		flex-direction: column;
-		gap: 0.5rem;
+		gap: 0.4rem;
 	}
 
 	.status {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		padding: 0.6rem 0.8rem;
+		padding: 0.4rem 0.7rem;
 		background: var(--ab-color-surface, #f6f6f6);
 		border-radius: 6px;
 		border: 1px solid var(--ab-color-border, #ddd);
 		border-left-width: 4px;
-		font-size: 0.9rem;
+		font-size: 0.82rem;
+		margin-bottom: 0.4rem;
 		transition: background 120ms ease, border-color 120ms ease;
 	}
 

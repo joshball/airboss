@@ -1,5 +1,13 @@
 // Sim BC -- flight dynamics, scenarios, runner. Phase 0.5 prototype.
 
+export {
+	dynamicPressurePa,
+	engineFundamentalHz,
+	noiseGainTarget,
+	strainDetuneCents,
+	strainFactor,
+	throttleGainTarget,
+} from './audio-mapping';
 export { C172_CONFIG } from './fdm/c172';
 export { FdmEngine, windFromScenario } from './fdm/engine';
 export {

@@ -101,10 +101,44 @@ export const SIM_STALL_HORN = {
 	GAIN: 0.12,
 } as const;
 
+/**
+ * Procedural engine-sound tuning. OSC1 fundamental is scaled by `rpm /
+ * idleRpm`; OSC2 adds a harmonic at 2x the fundamental; a band-passed noise
+ * source models exhaust / wind. AoA-driven detune produces a climb-straining
+ * wobble. Values target a plausible C172 prop note at idle and full power.
+ */
+export const SIM_ENGINE_SOUND = {
+	/** Fundamental oscillator frequency at idle RPM (Hz). */
+	BASE_FREQ_HZ: 60,
+	/** Relative level (linear gain) of the harmonic oscillator. -12 dB ~= 0.25. */
+	HARMONIC_GAIN: 0.25,
+	/** Relative level (linear gain) of the noise source. -18 dB ~= 0.125. */
+	NOISE_GAIN: 0.125,
+	/** Lowpass cutoff for the noise source (Hz). */
+	NOISE_LOWPASS_HZ: 800,
+	/** Throttle-gain slope. Final gain = throttle * SLOPE + OFFSET. */
+	THROTTLE_GAIN_SLOPE: 0.6,
+	/** Idle audibility floor. */
+	THROTTLE_GAIN_OFFSET: 0.1,
+	/** Master gain ceiling applied after throttle gain. */
+	MASTER_GAIN: 0.35,
+	/** AoA (degrees) at which strain detune begins to take effect. */
+	STRAIN_ALPHA_DEG: 8,
+	/** Throttle floor below which strain detune stays at 0. */
+	STRAIN_THROTTLE_MIN: 0.5,
+	/** Maximum detune applied to OSC2 at full strain (cents). */
+	STRAIN_DETUNE_CENTS: 10,
+	/** Reference dynamic pressure (Pa) at which the noise source hits full level. */
+	NOISE_REFERENCE_Q_PA: 3000,
+	/** Smoothing time constant for parameter ramps (seconds). */
+	RAMP_TAU_SECONDS: 0.05,
+} as const;
+
 /** Localstorage keys used by the cockpit UI. */
 export const SIM_STORAGE_KEYS = {
 	MUTE: 'airboss.sim.mute',
 	HELP_DISMISSED: 'airboss.sim.helpDismissed',
+	CHEATSHEET_COLLAPSED: 'airboss.sim.cheatsheetCollapsed',
 } as const;
 
 /**
@@ -155,18 +189,23 @@ export interface SimKeybinding {
 
 export const SIM_KEYBINDINGS: readonly SimKeybinding[] = [
 	{
+		// Yoke-back semantics: S / ArrowUp pulls the yoke back, elevator UP,
+		// nose RISES. The letter-key and arrow-key pairings intentionally
+		// match: the arrows are physically oriented (UpArrow = pitch up), and
+		// the WASD pair mirrors a stick: forward (W) = push, back (S) = pull.
 		action: SIM_KEYBINDING_ACTIONS.ELEVATOR_UP,
-		keys: ['w', 'W'],
+		keys: ['s', 'S', 'ArrowUp'],
 		shift: false,
-		label: 'W',
-		description: 'Elevator up (nose up) +5%',
+		label: 'S / Up',
+		description: 'Yoke back: elevator up, nose rises +5%',
 		group: 'elevator',
 	},
 	{
 		action: SIM_KEYBINDING_ACTIONS.ELEVATOR_DOWN,
-		keys: ['s', 'S'],
-		label: 'S',
-		description: 'Elevator down (nose down) -5%',
+		keys: ['w', 'W', 'ArrowDown'],
+		shift: false,
+		label: 'W / Down',
+		description: 'Yoke forward: elevator down, nose drops -5%',
 		group: 'elevator',
 	},
 	{
@@ -316,7 +355,7 @@ export const SIM_KEYBINDINGS: readonly SimKeybinding[] = [
 		action: SIM_KEYBINDING_ACTIONS.MUTE_TOGGLE,
 		keys: ['m', 'M'],
 		label: 'M',
-		description: 'Toggle stall horn mute',
+		description: 'Toggle sound mute (engine + stall horn)',
 		group: 'system',
 	},
 ];
