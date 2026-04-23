@@ -7,6 +7,7 @@
  * work-package design doc for the authoring shape.
  */
 
+import type { ExternalRef } from './external-ref';
 import type { HelpSection } from './help-section';
 import type { HelpTags } from './help-tags';
 
@@ -62,4 +63,18 @@ export interface HelpPage {
 	 * -- authors never set this.
 	 */
 	appId?: string;
+
+	/**
+	 * When true, the page is a concept page indexed under `/help/concepts`.
+	 * Concept pages have richer editorial standards (externalRefs, cross-
+	 * links, grouped index placement). Validator enforces `helpKind` === 'concept'
+	 * when this flag is true.
+	 */
+	concept?: boolean;
+
+	/**
+	 * External references rendered as a footer block (like an academic
+	 * paper's References section). Required (>=1) for concept pages.
+	 */
+	externalRefs?: readonly ExternalRef[];
 }

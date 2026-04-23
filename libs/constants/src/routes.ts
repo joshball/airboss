@@ -82,6 +82,12 @@ export const ROUTES = {
 	REPS: '/reps',
 	REPS_BROWSE: '/reps/browse',
 	REPS_NEW: '/reps/new',
+	/**
+	 * Detail page for a single scenario. Peer affordance with
+	 * `MEMORY_CARD` and `KNOWLEDGE_SLUG` so the session-start preview can
+	 * expose the rep ID as a real link (not just a mono-label).
+	 */
+	REP_DETAIL: (id: string) => `/reps/${encodeURIComponent(id)}` as const,
 
 	// Study -- Calibration
 	CALIBRATION: '/calibration',

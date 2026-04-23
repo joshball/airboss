@@ -1,16 +1,8 @@
 <script lang="ts">
 import type { Snippet } from 'svelte';
 import { tick } from 'svelte';
+import { createFocusTrap } from '../lib/focus-trap';
 import type { ButtonSize, ButtonVariant } from './Button.svelte';
-
-/**
- * CSS selector for all focusable descendants inside the confirm panel. The
- * trap cycles between every match in DOM order; the hardcoded two-button
- * cycle previously shipped broke the instant a caller rendered extra
- * controls (hidden fields + a text input, etc).
- */
-const FOCUSABLE_SELECTOR =
-	'a[href], area[href], button:not([disabled]), input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
 /**
  * Two-step confirm control for destructive actions ("Archive", "Skip
@@ -66,13 +58,6 @@ let triggerEl = $state<HTMLButtonElement | null>(null);
 let confirmEl = $state<HTMLButtonElement | null>(null);
 let panelEl = $state<HTMLDivElement | null>(null);
 
-function getFocusables(): HTMLElement[] {
-	if (!panelEl) return [];
-	return Array.from(panelEl.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)).filter(
-		(el) => !el.hasAttribute('aria-hidden') && el.offsetParent !== null,
-	);
-}
-
 async function openConfirm() {
 	if (disabled) return;
 	confirming = true;
@@ -94,32 +79,12 @@ function runCallback() {
 }
 
 function onPanelKeydown(event: KeyboardEvent) {
-	if (event.key === 'Escape') {
-		event.preventDefault();
-		event.stopPropagation();
-		void cancel();
-		return;
-	}
-	if (event.key !== 'Tab') return;
+	if (!panelEl) return;
 	// Focus trap across every focusable in the panel. Falls back to
 	// {confirm, cancel} when the panel only renders those two, matching the
 	// previous behavior exactly.
-	const focusables = getFocusables();
-	if (focusables.length === 0) return;
-	const first = focusables[0];
-	const last = focusables[focusables.length - 1];
-	const target = event.target as HTMLElement | null;
-	if (event.shiftKey) {
-		if (target === first || !target || !focusables.includes(target)) {
-			event.preventDefault();
-			last.focus();
-		}
-	} else {
-		if (target === last || !target || !focusables.includes(target)) {
-			event.preventDefault();
-			first.focus();
-		}
-	}
+	const trap = createFocusTrap(panelEl, { onEscape: () => void cancel() });
+	trap.handleKeyDown(event);
 }
 
 /**
