@@ -141,55 +141,55 @@ function domainLabel(slug: string): string {
 	.page {
 		display: flex;
 		flex-direction: column;
-		gap: var(--ab-space-xl-alt);
+		gap: var(--space-xl);
 	}
 
 	.hd {
 		display: flex;
 		justify-content: space-between;
 		align-items: flex-start;
-		gap: var(--ab-space-lg);
+		gap: var(--space-lg);
 		flex-wrap: wrap;
 	}
 
 	h1 {
 		margin: 0;
-		font-size: var(--ab-font-size-2xl);
+		font-size: var(--type-heading-1-size);
 		letter-spacing: -0.02em;
-		color: var(--ab-color-fg);
+		color: var(--ink-body);
 	}
 
 	.sub {
-		margin: var(--ab-space-2xs) 0 0;
-		color: var(--ab-color-fg-subtle);
-		font-size: var(--ab-font-size-body);
+		margin: var(--space-2xs) 0 0;
+		color: var(--ink-subtle);
+		font-size: var(--type-definition-body-size);
 	}
 
 	.quick {
 		display: flex;
-		gap: var(--ab-space-sm);
+		gap: var(--space-sm);
 	}
 
 	.grid {
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-		gap: var(--ab-space-md);
+		gap: var(--space-md);
 	}
 
 	.tile {
-		background: white;
-		border: 1px solid var(--ab-color-border);
-		border-radius: var(--ab-radius-lg);
-		padding: var(--ab-space-lg) var(--ab-space-xl-alt);
+		/* TODO-theme: pick a role token for this literal. */ background: white;
+		border: 1px solid var(--edge-default);
+		border-radius: var(--radius-lg);
+		padding: var(--space-lg) var(--space-xl);
 		display: flex;
 		flex-direction: column;
-		gap: var(--ab-space-2xs);
+		gap: var(--space-2xs);
 	}
 
 	.tile-label {
-		font-size: var(--ab-font-size-xs);
+		font-size: var(--type-ui-caption-size);
 		font-weight: 600;
-		color: var(--ab-color-fg-subtle);
+		color: var(--ink-subtle);
 		text-transform: uppercase;
 		letter-spacing: 0.06em;
 	}
@@ -197,22 +197,22 @@ function domainLabel(slug: string): string {
 	.tile-value {
 		font-size: 2rem;
 		font-weight: 700;
-		color: var(--ab-color-fg);
+		color: var(--ink-body);
 		line-height: 1;
 	}
 
 	.tile-sub {
-		font-size: var(--ab-font-size-sm);
-		color: var(--ab-color-fg-subtle);
+		font-size: var(--type-ui-label-size);
+		color: var(--ink-subtle);
 	}
 
 	.tile-sub-list {
-		margin: var(--ab-space-2xs) 0 0;
+		margin: var(--space-2xs) 0 0;
 		display: grid;
 		grid-template-columns: max-content 1fr;
-		gap: var(--ab-space-3xs) var(--ab-space-sm);
-		font-size: var(--ab-font-size-sm);
-		color: var(--ab-color-fg-subtle);
+		gap: var(--space-2xs) var(--space-sm);
+		font-size: var(--type-ui-label-size);
+		color: var(--ink-subtle);
 	}
 
 	.tile-sub-list > div {
@@ -220,29 +220,29 @@ function domainLabel(slug: string): string {
 	}
 
 	.tile-sub-list dt {
-		color: var(--ab-color-fg-subtle);
+		color: var(--ink-subtle);
 	}
 
 	.tile-sub-list dd {
 		margin: 0;
-		color: var(--ab-color-fg);
+		color: var(--ink-body);
 		font-variant-numeric: tabular-nums;
 	}
 
 	.card {
-		background: white;
-		border: 1px solid var(--ab-color-border);
-		border-radius: var(--ab-radius-lg);
-		padding: var(--ab-space-xl-alt) var(--ab-space-xl);
+		/* TODO-theme: pick a role token for this literal. */ background: white;
+		border: 1px solid var(--edge-default);
+		border-radius: var(--radius-lg);
+		padding: var(--space-xl) var(--space-xl);
 		display: flex;
 		flex-direction: column;
-		gap: var(--ab-space-md-alt);
+		gap: var(--space-md);
 	}
 
 	.card h2 {
 		margin: 0;
-		font-size: var(--ab-font-size-sm);
-		color: var(--ab-color-fg-subtle);
+		font-size: var(--type-ui-label-size);
+		color: var(--ink-subtle);
 		text-transform: uppercase;
 		letter-spacing: 0.08em;
 		font-weight: 600;
@@ -254,37 +254,37 @@ function domainLabel(slug: string): string {
 		margin: 0;
 		display: flex;
 		flex-direction: column;
-		gap: var(--ab-space-xs);
+		gap: var(--space-xs);
 	}
 
 	.slices li {
 		display: flex;
-		gap: var(--ab-space-md);
+		gap: var(--space-md);
 		align-items: baseline;
-		padding: var(--ab-space-xs) var(--ab-space-sm-alt);
-		background: var(--ab-color-surface-muted);
-		border: 1px solid var(--ab-color-border);
-		border-radius: var(--ab-radius-md);
-		font-size: var(--ab-font-size-sm);
+		padding: var(--space-xs) var(--space-sm);
+		background: var(--surface-muted);
+		border: 1px solid var(--edge-default);
+		border-radius: var(--radius-md);
+		font-size: var(--type-ui-label-size);
 	}
 
 	.slice-name {
 		flex: 1;
-		color: var(--ab-color-fg);
+		color: var(--ink-body);
 		font-weight: 500;
 	}
 
 	.slice-num {
-		color: var(--ab-color-primary-hover);
+		color: var(--action-default-hover);
 		font-weight: 600;
 	}
 
 	.skip-chip {
-		font-size: var(--ab-font-size-xs);
-		color: var(--ab-color-warning-active);
-		background: var(--ab-color-warning-subtle);
-		padding: var(--ab-space-3xs) var(--ab-space-sm);
-		border-radius: var(--ab-radius-pill);
+		font-size: var(--type-ui-caption-size);
+		color: var(--signal-warning);
+		background: var(--signal-warning-wash);
+		padding: var(--space-2xs) var(--space-sm);
+		border-radius: var(--radius-pill);
 	}
 
 	.pills {
@@ -292,17 +292,17 @@ function domainLabel(slug: string): string {
 		padding: 0;
 		margin: 0;
 		display: flex;
-		gap: var(--ab-space-xs);
+		gap: var(--space-xs);
 		flex-wrap: wrap;
 	}
 
 	.pills li {
-		background: var(--ab-color-surface-sunken);
-		border: 1px solid var(--ab-color-border);
-		border-radius: var(--ab-radius-pill);
-		padding: var(--ab-space-2xs) var(--ab-space-sm-alt);
-		font-size: var(--ab-font-size-sm);
-		color: var(--ab-color-fg);
+		background: var(--surface-sunken);
+		border: 1px solid var(--edge-default);
+		border-radius: var(--radius-pill);
+		padding: var(--space-2xs) var(--space-sm);
+		font-size: var(--type-ui-label-size);
+		color: var(--ink-body);
 	}
 
 	.suggestion-actions {
@@ -311,7 +311,7 @@ function domainLabel(slug: string): string {
 		margin: 0;
 		display: flex;
 		flex-wrap: wrap;
-		gap: var(--ab-space-sm);
+		gap: var(--space-sm);
 	}
 
 	.suggestion-actions li {
@@ -319,43 +319,43 @@ function domainLabel(slug: string): string {
 	}
 
 	.btn.suggestion {
-		padding: var(--ab-space-sm-alt) var(--ab-space-lg);
-		font-size: var(--ab-font-size-body);
+		padding: var(--space-sm) var(--space-lg);
+		font-size: var(--type-definition-body-size);
 		text-align: left;
 		justify-content: flex-start;
-		border-radius: var(--ab-radius-md);
+		border-radius: var(--radius-md);
 	}
 
 	.btn.suggestion.primary {
-		background: var(--ab-color-primary);
-		color: white;
+		background: var(--action-default);
+		/* TODO-theme: pick a role token for this literal. */ color: white;
 	}
 
 	.btn.suggestion.primary:hover {
-		background: var(--ab-color-primary-hover);
+		background: var(--action-default-hover);
 	}
 
 	.btn.suggestion.secondary {
-		background: var(--ab-color-surface-sunken);
-		color: var(--ab-color-fg);
-		border: 1px solid var(--ab-color-border-strong);
+		background: var(--surface-sunken);
+		color: var(--ink-body);
+		border: 1px solid var(--edge-strong);
 	}
 
 	.btn.suggestion.secondary:hover {
-		background: var(--ab-color-border);
+		background: var(--edge-default);
 	}
 
 	.muted {
-		color: var(--ab-color-fg-muted);
+		color: var(--ink-muted);
 		margin: 0;
-		font-size: var(--ab-font-size-body);
+		font-size: var(--type-definition-body-size);
 	}
 
 	.btn {
-		padding: var(--ab-space-sm) var(--ab-space-lg);
-		font-size: var(--ab-font-size-body);
+		padding: var(--space-sm) var(--space-lg);
+		font-size: var(--type-definition-body-size);
 		font-weight: 600;
-		border-radius: var(--ab-radius-md);
+		border-radius: var(--radius-md);
 		border: 1px solid transparent;
 		cursor: pointer;
 		text-decoration: none;
@@ -365,20 +365,20 @@ function domainLabel(slug: string): string {
 	}
 
 	.btn.primary {
-		background: var(--ab-color-primary);
-		color: white;
+		background: var(--action-default);
+		/* TODO-theme: pick a role token for this literal. */ color: white;
 	}
 
 	.btn.primary:hover {
-		background: var(--ab-color-primary-hover);
+		background: var(--action-default-hover);
 	}
 
 	.btn.ghost {
 		background: transparent;
-		color: var(--ab-color-fg-muted);
+		color: var(--ink-muted);
 	}
 
 	.btn.ghost:hover {
-		background: var(--ab-color-surface-sunken);
+		background: var(--surface-sunken);
 	}
 </style>

@@ -100,37 +100,37 @@ function domainLabel(d: Domain): string {
 
 <style>
 	.action-btn {
-		padding: var(--ab-space-2xs) var(--ab-space-sm);
-		font-size: var(--ab-font-size-xs);
-		font-weight: var(--ab-font-weight-semibold);
-		border-radius: var(--ab-radius-sm);
-		border: 1px solid var(--ab-color-border-strong);
-		background: var(--ab-color-surface);
-		color: var(--ab-color-fg-muted);
+		padding: var(--space-2xs) var(--space-sm);
+		font-size: var(--type-ui-caption-size);
+		font-weight: var(--type-heading-3-weight);
+		border-radius: var(--radius-sm);
+		border: 1px solid var(--edge-strong);
+		background: var(--surface-panel);
+		color: var(--ink-muted);
 		text-decoration: none;
 	}
 
 	.action-btn:hover {
-		background: var(--ab-color-surface-sunken);
+		background: var(--surface-sunken);
 	}
 
 	.action-btn.primary {
-		background: var(--ab-color-primary);
-		color: var(--ab-color-primary-fg);
-		border-color: var(--ab-color-primary);
+		background: var(--action-default);
+		color: var(--action-default-ink);
+		border-color: var(--action-default);
 	}
 
 	.action-btn.primary:hover {
-		background: var(--ab-color-primary-hover);
+		background: var(--action-default-hover);
 	}
 
 	.meta {
 		margin: 0;
 		display: grid;
 		grid-template-columns: auto 1fr;
-		column-gap: var(--ab-space-sm);
-		row-gap: var(--ab-space-3xs);
-		font-size: var(--ab-font-size-xs);
+		column-gap: var(--space-sm);
+		row-gap: var(--space-2xs);
+		font-size: var(--type-ui-caption-size);
 	}
 
 	.row {
@@ -138,60 +138,60 @@ function domainLabel(d: Domain): string {
 	}
 
 	.row dt {
-		color: var(--ab-color-fg-faint);
+		color: var(--ink-faint);
 		text-transform: uppercase;
 		letter-spacing: 0.06em;
 		font-size: 0.625rem;
-		font-family: var(--ab-font-family-mono);
-		padding-top: var(--ab-space-3xs);
+		font-family: var(--font-family-mono);
+		padding-top: var(--space-2xs);
 	}
 
 	.row dd {
 		margin: 0;
-		color: var(--ab-color-fg);
+		color: var(--ink-body);
 		display: flex;
 		flex-wrap: wrap;
 		align-items: baseline;
-		gap: var(--ab-space-2xs);
+		gap: var(--space-2xs);
 		min-width: 0;
 	}
 
 	.chip {
-		padding: var(--ab-space-hair) var(--ab-space-xs-alt);
-		border: 1px solid var(--ab-color-border-strong);
-		border-radius: var(--ab-radius-sm);
-		background: var(--ab-color-surface-sunken);
-		font-family: var(--ab-font-family-mono);
-		font-size: var(--ab-font-size-xs);
-		font-weight: var(--ab-font-weight-semibold);
-		color: var(--ab-color-fg);
+		padding: 1px var(--space-xs);
+		border: 1px solid var(--edge-strong);
+		border-radius: var(--radius-sm);
+		background: var(--surface-sunken);
+		font-family: var(--font-family-mono);
+		font-size: var(--type-ui-caption-size);
+		font-weight: var(--type-heading-3-weight);
+		color: var(--ink-body);
 	}
 
 	.num {
-		font-family: var(--ab-font-family-mono);
+		font-family: var(--font-family-mono);
 		font-variant-numeric: tabular-nums;
-		font-weight: var(--ab-font-weight-semibold);
+		font-weight: var(--type-heading-3-weight);
 	}
 
 	.unit {
-		color: var(--ab-color-fg-subtle);
+		color: var(--ink-subtle);
 	}
 
 	.sep {
-		color: var(--ab-color-border-strong);
-		font-family: var(--ab-font-family-mono);
+		color: var(--edge-strong);
+		font-family: var(--font-family-mono);
 	}
 
 	.muted {
-		color: var(--ab-color-fg-subtle);
+		color: var(--ink-subtle);
 	}
 
 	p.muted {
 		margin: 0;
-		font-size: var(--ab-font-size-xs);
+		font-size: var(--type-ui-caption-size);
 	}
 
 	p.muted a {
-		color: var(--ab-color-primary-hover);
+		color: var(--action-default-hover);
 	}
 </style>

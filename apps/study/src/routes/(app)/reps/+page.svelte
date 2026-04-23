@@ -132,14 +132,14 @@ function bar(value: number): number {
 	.page {
 		display: flex;
 		flex-direction: column;
-		gap: var(--ab-space-xl);
+		gap: var(--space-xl);
 	}
 
 	.hd {
 		display: flex;
 		justify-content: space-between;
 		align-items: flex-start;
-		gap: var(--ab-space-lg);
+		gap: var(--space-lg);
 		flex-wrap: wrap;
 	}
 
@@ -147,49 +147,49 @@ function bar(value: number): number {
 		margin: 0;
 		font-size: 1.75rem;
 		letter-spacing: -0.02em;
-		color: var(--ab-color-fg);
+		color: var(--ink-body);
 	}
 
 	.sub {
-		margin: var(--ab-space-2xs) 0 0;
-		color: var(--ab-color-fg-subtle);
+		margin: var(--space-2xs) 0 0;
+		color: var(--ink-subtle);
 		font-size: 0.9375rem;
 	}
 
 	.quick {
 		display: flex;
-		gap: var(--ab-space-sm);
+		gap: var(--space-sm);
 		flex-wrap: wrap;
 	}
 
 	.empty {
-		background: white;
-		border: 1px dashed var(--ab-color-border-strong);
-		border-radius: var(--ab-radius-xl);
-		padding: var(--ab-space-2xl-alt) var(--ab-space-xl);
+		/* TODO-theme: pick a role token for this literal. */ background: white;
+		border: 1px dashed var(--edge-strong);
+		border-radius: var(--radius-lg);
+		padding: var(--space-2xl) var(--space-xl);
 		text-align: center;
 		display: flex;
 		flex-direction: column;
-		gap: var(--ab-space-md);
+		gap: var(--space-md);
 		align-items: center;
 	}
 
 	.empty h2 {
 		margin: 0;
-		color: var(--ab-color-fg);
+		color: var(--ink-body);
 		font-size: 1.25rem;
 	}
 
 	.empty p {
 		margin: 0;
-		color: var(--ab-color-fg-subtle);
+		color: var(--ink-subtle);
 		max-width: 28rem;
 	}
 
 	.grid {
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-		gap: var(--ab-space-md);
+		gap: var(--space-md);
 	}
 
 	/* StatTile provides its own styling; the grid just lays them out. */
@@ -207,19 +207,19 @@ function bar(value: number): number {
 	}
 
 	.card-list {
-		background: white;
-		border: 1px solid var(--ab-color-border);
-		border-radius: var(--ab-radius-xl);
-		padding: var(--ab-space-xl-alt) var(--ab-space-xl);
+		/* TODO-theme: pick a role token for this literal. */ background: white;
+		border: 1px solid var(--edge-default);
+		border-radius: var(--radius-lg);
+		padding: var(--space-xl) var(--space-xl);
 		display: flex;
 		flex-direction: column;
-		gap: var(--ab-space-md-alt);
+		gap: var(--space-md);
 	}
 
 	.card-list h2 {
 		margin: 0;
 		font-size: 0.8125rem;
-		color: var(--ab-color-fg-subtle);
+		color: var(--ink-subtle);
 		text-transform: uppercase;
 		letter-spacing: 0.08em;
 		font-weight: 600;
@@ -231,111 +231,111 @@ function bar(value: number): number {
 		margin: 0;
 		display: flex;
 		flex-direction: column;
-		gap: var(--ab-space-md);
+		gap: var(--space-md);
 	}
 
 	.domains li {
 		display: flex;
 		flex-direction: column;
-		gap: var(--ab-space-xs);
+		gap: var(--space-xs);
 	}
 
 	.dm-head {
 		display: flex;
 		justify-content: space-between;
 		align-items: baseline;
-		gap: var(--ab-space-sm);
+		gap: var(--space-sm);
 	}
 
 	.dm-name {
-		color: var(--ab-color-fg);
+		color: var(--ink-body);
 		text-decoration: none;
 		font-weight: 500;
 	}
 
 	a.dm-name:hover {
-		color: var(--ab-color-primary-hover);
+		color: var(--action-default-hover);
 	}
 
 	.dm-counts {
 		display: flex;
-		gap: var(--ab-space-sm);
+		gap: var(--space-sm);
 		font-size: 0.8125rem;
 	}
 
 	.dm-pct {
-		color: var(--ab-color-primary-hover);
+		color: var(--action-default-hover);
 		font-weight: 600;
 	}
 
 	.dm-total {
-		color: var(--ab-color-fg-subtle);
+		color: var(--ink-subtle);
 	}
 
 	.bar {
-		background: var(--ab-color-border);
+		background: var(--edge-default);
 		height: 0.375rem;
-		border-radius: var(--ab-radius-pill);
+		border-radius: var(--radius-pill);
 		overflow: hidden;
 	}
 
 	.bar-fill {
 		display: block;
 		height: 100%;
-		background: var(--ab-color-primary);
-		transition: width 250ms;
+		background: var(--action-default);
+		transition: width var(--motion-normal);
 	}
 
 	.empty-note {
-		color: var(--ab-color-fg-subtle);
+		color: var(--ink-subtle);
 		font-size: 0.875rem;
 		margin: 0;
 	}
 
 	.btn {
-		padding: var(--ab-space-sm) var(--ab-space-lg);
+		padding: var(--space-sm) var(--space-lg);
 		font-size: 0.9375rem;
 		font-weight: 600;
-		border-radius: var(--ab-radius-md);
+		border-radius: var(--radius-md);
 		border: 1px solid transparent;
 		cursor: pointer;
 		text-decoration: none;
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
-		transition: background 120ms, border-color 120ms;
+		transition: background var(--motion-fast), border-color var(--motion-fast);
 	}
 
 	.btn.primary {
-		background: var(--ab-color-primary);
-		color: white;
+		background: var(--action-default);
+		/* TODO-theme: pick a role token for this literal. */ color: white;
 	}
 
 	.btn.primary:hover {
-		background: var(--ab-color-primary-hover);
+		background: var(--action-default-hover);
 	}
 
 	.btn.primary:disabled {
-		background: var(--ab-color-fg-faint);
+		background: var(--ink-faint);
 		cursor: not-allowed;
 	}
 
 	.btn.secondary {
-		background: var(--ab-color-surface-sunken);
-		color: var(--ab-color-fg);
-		border-color: var(--ab-color-border-strong);
+		background: var(--surface-sunken);
+		color: var(--ink-body);
+		border-color: var(--edge-strong);
 	}
 
 	.btn.secondary:hover {
-		background: var(--ab-color-border);
+		background: var(--edge-default);
 	}
 
 	.btn.ghost {
 		background: transparent;
-		color: var(--ab-color-fg-muted);
+		color: var(--ink-muted);
 	}
 
 	.btn.ghost:hover {
-		background: var(--ab-color-surface-sunken);
+		background: var(--surface-sunken);
 	}
 </style>

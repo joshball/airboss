@@ -76,36 +76,36 @@ function groupBySurface(
 	.page {
 		display: flex;
 		flex-direction: column;
-		gap: var(--ab-space-xl-hi);
+		gap: var(--space-xl);
 	}
 
 	.hd h1 {
 		margin: 0;
-		font-size: var(--ab-font-size-xl);
+		font-size: var(--type-heading-2-size);
 		letter-spacing: -0.02em;
 	}
 
 	.sub {
-		margin: var(--ab-space-2xs) 0 0;
-		color: var(--ab-color-fg-muted, var(--ab-color-fg-subtle));
+		margin: var(--space-2xs) 0 0;
+		color: var(--ink-muted);
 	}
 
 	.empty {
-		border: 1px dashed var(--ab-color-border-strong, var(--ab-color-border-strong));
-		border-radius: var(--ab-radius-lg);
-		padding: var(--ab-space-2xl) var(--ab-space-xl);
+		border: 1px dashed var(--edge-strong);
+		border-radius: var(--radius-lg);
+		padding: var(--space-2xl) var(--space-xl);
 		text-align: center;
-		color: var(--ab-color-fg-muted, var(--ab-color-fg-subtle));
+		color: var(--ink-muted);
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		gap: var(--ab-space-md);
+		gap: var(--space-md);
 	}
 
 	.empty h2 {
 		margin: 0;
-		font-size: var(--ab-font-size-lg);
-		color: var(--ab-color-fg, var(--ab-color-fg));
+		font-size: var(--type-reading-lead-size);
+		color: var(--ink-body);
 	}
 
 	.empty p {
@@ -115,15 +115,15 @@ function groupBySurface(
 	}
 
 	.empty .hint {
-		font-size: var(--ab-font-size-sm);
+		font-size: var(--type-ui-label-size);
 	}
 
 	.group h2 {
-		margin: 0 0 var(--ab-space-md);
-		font-size: var(--ab-font-size-base);
+		margin: 0 0 var(--space-md);
+		font-size: var(--type-reading-body-size);
 		text-transform: uppercase;
 		letter-spacing: 0.08em;
-		color: var(--ab-color-fg-muted, var(--ab-color-fg-subtle));
+		color: var(--ink-muted);
 	}
 
 	.cards {
@@ -132,60 +132,60 @@ function groupBySurface(
 		margin: 0;
 		display: grid;
 		grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
-		gap: var(--ab-space-md);
+		gap: var(--space-md);
 	}
 
 	.card {
 		display: flex;
 		flex-direction: column;
-		gap: var(--ab-space-xs);
-		padding: var(--ab-space-md-alt) var(--ab-space-lg);
-		border: 1px solid var(--ab-color-border, var(--ab-color-border));
-		border-radius: var(--ab-radius-md, 6px);
-		background: var(--ab-color-surface, var(--ab-color-surface));
+		gap: var(--space-xs);
+		padding: var(--space-md) var(--space-lg);
+		border: 1px solid var(--edge-default);
+		border-radius: var(--radius-md, 6px);
+		background: var(--surface-panel);
 		text-decoration: none;
 		color: inherit;
 	}
 
 	.card:hover {
-		border-color: var(--ab-color-primary, var(--ab-color-primary));
+		border-color: var(--action-default);
 	}
 
 	.card:focus-visible {
-		outline: 2px solid var(--ab-color-focus-ring, var(--ab-color-primary-subtle-border));
+		outline: 2px solid var(--focus-ring);
 		outline-offset: 2px;
 	}
 
 	.title {
-		font-weight: var(--ab-font-weight-semibold, 600);
-		font-size: var(--ab-font-size-base);
+		font-weight: var(--type-heading-3-weight, 600);
+		font-size: var(--type-reading-body-size);
 	}
 
 	.summary {
-		font-size: var(--ab-font-size-sm);
-		color: var(--ab-color-fg-muted, var(--ab-color-fg-subtle));
+		font-size: var(--type-ui-label-size);
+		color: var(--ink-muted);
 		line-height: 1.45;
 	}
 
 	.documents {
-		font-size: var(--ab-font-size-xs);
-		color: var(--ab-color-fg-subtle, var(--ab-color-fg-faint));
+		font-size: var(--type-ui-caption-size);
+		color: var(--ink-subtle);
 	}
 
 	.documents code {
-		background: var(--ab-color-surface-sunken, var(--ab-color-surface-sunken));
-		padding: 0 var(--ab-space-xs-alt);
-		border-radius: var(--ab-radius-xs);
-		font-family: var(--ab-font-mono, ui-monospace, monospace);
+		background: var(--surface-sunken);
+		padding: 0 var(--space-xs);
+		border-radius: var(--radius-xs);
+		font-family: var(--font-family-mono, ui-monospace, monospace);
 	}
 
 	kbd {
-		border: 1px solid var(--ab-color-border, var(--ab-color-border));
+		border: 1px solid var(--edge-default);
 		border-bottom-width: 2px;
-		border-radius: var(--ab-radius-xs);
-		padding: 0 var(--ab-space-2xs);
-		font-size: var(--ab-font-size-xs);
-		font-family: var(--ab-font-mono, ui-monospace, monospace);
-		background: var(--ab-color-surface-sunken, var(--ab-color-surface-sunken));
+		border-radius: var(--radius-xs);
+		padding: 0 var(--space-2xs);
+		font-size: var(--type-ui-caption-size);
+		font-family: var(--font-family-mono, ui-monospace, monospace);
+		background: var(--surface-sunken);
 	}
 </style>

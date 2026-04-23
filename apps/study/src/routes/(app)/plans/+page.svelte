@@ -120,49 +120,49 @@ function fmt(date: Date): string {
 	.page {
 		display: flex;
 		flex-direction: column;
-		gap: var(--ab-space-xl);
+		gap: var(--space-xl);
 	}
 
 	.hd {
 		display: flex;
 		justify-content: space-between;
 		align-items: flex-start;
-		gap: var(--ab-space-lg);
+		gap: var(--space-lg);
 		flex-wrap: wrap;
 	}
 
 	h1 {
 		margin: 0;
-		font-size: var(--ab-font-size-2xl);
+		font-size: var(--type-heading-1-size);
 		letter-spacing: -0.02em;
-		color: var(--ab-color-fg);
+		color: var(--ink-body);
 	}
 
 	.sub {
-		margin: var(--ab-space-2xs) 0 0;
-		color: var(--ab-color-fg-subtle);
-		font-size: var(--ab-font-size-body);
+		margin: var(--space-2xs) 0 0;
+		color: var(--ink-subtle);
+		font-size: var(--type-definition-body-size);
 	}
 
 	.quick {
 		display: flex;
-		gap: var(--ab-space-sm);
+		gap: var(--space-sm);
 		flex-wrap: wrap;
 	}
 
 	.plan-card {
-		background: white;
-		border: 1px solid var(--ab-color-border);
-		border-radius: var(--ab-radius-lg);
-		padding: var(--ab-space-xl-alt) var(--ab-space-xl);
+		/* TODO-theme: pick a role token for this literal. */ background: white;
+		border: 1px solid var(--edge-default);
+		border-radius: var(--radius-lg);
+		padding: var(--space-xl) var(--space-xl);
 		display: flex;
 		flex-direction: column;
-		gap: var(--ab-space-lg);
+		gap: var(--space-lg);
 	}
 
 	.plan-card.active {
-		border-color: var(--ab-color-primary-subtle-border);
-		background: var(--ab-color-primary-subtle);
+		border-color: var(--action-default-edge);
+		background: var(--action-default-wash);
 	}
 
 	.plan-card.empty {
@@ -174,55 +174,55 @@ function fmt(date: Date): string {
 		display: flex;
 		justify-content: space-between;
 		align-items: flex-start;
-		gap: var(--ab-space-md);
+		gap: var(--space-md);
 	}
 
 	.plan-head h2 {
-		margin: 0 0 var(--ab-space-2xs);
-		font-size: var(--ab-font-size-2xl);
+		margin: 0 0 var(--space-2xs);
+		font-size: var(--type-heading-1-size);
 	}
 
 	.badge {
 		display: inline-block;
-		font-size: var(--ab-font-size-xs);
+		font-size: var(--type-ui-caption-size);
 		font-weight: 600;
-		padding: var(--ab-space-3xs) var(--ab-space-sm);
-		border-radius: var(--ab-radius-pill);
-		background: var(--ab-color-border);
-		color: var(--ab-color-fg-muted);
+		padding: var(--space-2xs) var(--space-sm);
+		border-radius: var(--radius-pill);
+		background: var(--edge-default);
+		color: var(--ink-muted);
 	}
 
 	.active-badge {
-		background: var(--ab-color-primary-hover);
-		color: white;
+		background: var(--action-default-hover);
+		/* TODO-theme: pick a role token for this literal. */ color: white;
 	}
 
 	.plan-meta {
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-		gap: var(--ab-space-md) var(--ab-space-xl-alt);
+		gap: var(--space-md) var(--space-xl);
 		margin: 0;
 	}
 
 	.plan-meta dt {
-		font-size: var(--ab-font-size-xs);
+		font-size: var(--type-ui-caption-size);
 		font-weight: 600;
 		text-transform: uppercase;
 		letter-spacing: 0.06em;
-		color: var(--ab-color-fg-subtle);
+		color: var(--ink-subtle);
 	}
 
 	.plan-meta dd {
-		margin: var(--ab-space-3xs) 0 0;
-		color: var(--ab-color-fg);
-		font-size: var(--ab-font-size-body);
+		margin: var(--space-2xs) 0 0;
+		color: var(--ink-body);
+		font-size: var(--type-definition-body-size);
 	}
 
 	.link {
-		color: var(--ab-color-primary-hover);
+		color: var(--action-default-hover);
 		font-weight: 500;
 		text-decoration: none;
-		font-size: var(--ab-font-size-body);
+		font-size: var(--type-definition-body-size);
 	}
 
 	.link:hover {
@@ -230,24 +230,24 @@ function fmt(date: Date): string {
 	}
 
 	.muted {
-		color: var(--ab-color-fg-faint);
-		font-size: var(--ab-font-size-sm);
+		color: var(--ink-faint);
+		font-size: var(--type-ui-label-size);
 	}
 
 	.card-list {
-		background: white;
-		border: 1px solid var(--ab-color-border);
-		border-radius: var(--ab-radius-lg);
-		padding: var(--ab-space-xl-alt) var(--ab-space-xl);
+		/* TODO-theme: pick a role token for this literal. */ background: white;
+		border: 1px solid var(--edge-default);
+		border-radius: var(--radius-lg);
+		padding: var(--space-xl) var(--space-xl);
 		display: flex;
 		flex-direction: column;
-		gap: var(--ab-space-md-alt);
+		gap: var(--space-md);
 	}
 
 	.card-list h2 {
 		margin: 0;
-		font-size: var(--ab-font-size-sm);
-		color: var(--ab-color-fg-subtle);
+		font-size: var(--type-ui-label-size);
+		color: var(--ink-subtle);
 		text-transform: uppercase;
 		letter-spacing: 0.08em;
 		font-weight: 600;
@@ -259,65 +259,65 @@ function fmt(date: Date): string {
 		margin: 0;
 		display: flex;
 		flex-direction: column;
-		gap: var(--ab-space-sm);
+		gap: var(--space-sm);
 	}
 
 	.plans li {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		padding: var(--ab-space-sm) var(--ab-space-md);
-		background: var(--ab-color-surface-muted);
-		border: 1px solid var(--ab-color-border);
-		border-radius: var(--ab-radius-md);
+		padding: var(--space-sm) var(--space-md);
+		background: var(--surface-muted);
+		border: 1px solid var(--edge-default);
+		border-radius: var(--radius-md);
 	}
 
 	.plan-name {
-		color: var(--ab-color-fg);
+		color: var(--ink-body);
 		text-decoration: none;
 		font-weight: 500;
 	}
 
 	.plan-name:hover {
-		color: var(--ab-color-primary-hover);
+		color: var(--action-default-hover);
 	}
 
 	.meta {
 		display: flex;
-		gap: var(--ab-space-sm);
+		gap: var(--space-sm);
 		align-items: center;
 	}
 
 	.btn {
-		padding: var(--ab-space-sm) var(--ab-space-lg);
-		font-size: var(--ab-font-size-body);
+		padding: var(--space-sm) var(--space-lg);
+		font-size: var(--type-definition-body-size);
 		font-weight: 600;
-		border-radius: var(--ab-radius-md);
+		border-radius: var(--radius-md);
 		border: 1px solid transparent;
 		cursor: pointer;
 		text-decoration: none;
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
-		transition: background 120ms, border-color 120ms;
+		transition: background var(--motion-fast), border-color var(--motion-fast);
 	}
 
 	.btn.primary {
-		background: var(--ab-color-primary);
-		color: white;
+		background: var(--action-default);
+		/* TODO-theme: pick a role token for this literal. */ color: white;
 	}
 
 	.btn.primary:hover {
-		background: var(--ab-color-primary-hover);
+		background: var(--action-default-hover);
 	}
 
 	.btn.secondary {
-		background: var(--ab-color-surface-sunken);
-		color: var(--ab-color-fg);
-		border-color: var(--ab-color-border-strong);
+		background: var(--surface-sunken);
+		color: var(--ink-body);
+		border-color: var(--edge-strong);
 	}
 
 	.btn.secondary:hover {
-		background: var(--ab-color-border);
+		background: var(--edge-default);
 	}
 </style>

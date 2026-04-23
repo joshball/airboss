@@ -325,64 +325,64 @@ function sliceLabel(slice: SessionSlice): string {
 	.page {
 		display: flex;
 		flex-direction: column;
-		gap: var(--ab-space-lg);
+		gap: var(--space-lg);
 	}
 
 	.hd {
 		display: flex;
 		justify-content: space-between;
 		align-items: flex-start;
-		gap: var(--ab-space-lg);
+		gap: var(--space-lg);
 	}
 
 	h1 {
 		margin: 0;
 		font-size: 1.5rem;
-		color: var(--ab-color-fg);
+		color: var(--ink-body);
 	}
 
 	.sub {
-		margin: var(--ab-space-2xs) 0 0;
-		color: var(--ab-color-fg-subtle);
+		margin: var(--space-2xs) 0 0;
+		color: var(--ink-subtle);
 		font-size: 0.875rem;
 	}
 
 	.progress {
-		background: var(--ab-color-border);
+		background: var(--edge-default);
 		height: 0.375rem;
-		border-radius: var(--ab-radius-pill);
+		border-radius: var(--radius-pill);
 		overflow: hidden;
 	}
 
 	.progress-fill {
 		display: block;
 		height: 100%;
-		background: var(--ab-color-primary);
-		transition: width var(--ab-transition-normal);
+		background: var(--action-default);
+		transition: width var(--motion-normal);
 	}
 
 	.error {
-		background: var(--ab-color-danger-subtle);
-		color: var(--ab-color-danger-hover);
-		padding: var(--ab-space-sm-alt) var(--ab-space-md-alt);
-		border-radius: var(--ab-radius-md);
-		border: 1px solid var(--ab-color-danger-subtle-border);
+		background: var(--action-hazard-wash);
+		color: var(--action-hazard-hover);
+		padding: var(--space-sm) var(--space-md);
+		border-radius: var(--radius-md);
+		border: 1px solid var(--action-hazard-edge);
 		font-size: 0.875rem;
 	}
 
 	.item-card {
-		background: white;
-		border: 1px solid var(--ab-color-border);
-		border-radius: var(--ab-radius-xl);
-		padding: var(--ab-space-xl);
+		/* TODO-theme: pick a role token for this literal. */ background: white;
+		border: 1px solid var(--edge-default);
+		border-radius: var(--radius-lg);
+		padding: var(--space-xl);
 		display: flex;
 		flex-direction: column;
-		gap: var(--ab-space-lg);
+		gap: var(--space-lg);
 	}
 
 	.item-head {
 		display: flex;
-		gap: var(--ab-space-sm);
+		gap: var(--space-sm);
 		align-items: baseline;
 		flex-wrap: wrap;
 		font-size: 0.8125rem;
@@ -394,19 +394,19 @@ function sliceLabel(slice: SessionSlice): string {
 		font-size: 0.6875rem;
 		text-transform: uppercase;
 		letter-spacing: 0.06em;
-		padding: var(--ab-space-3xs) var(--ab-space-sm);
-		border-radius: var(--ab-radius-pill);
-		background: var(--ab-color-primary-subtle);
-		color: var(--ab-color-primary-hover);
+		padding: var(--space-2xs) var(--space-sm);
+		border-radius: var(--radius-pill);
+		background: var(--action-default-wash);
+		color: var(--action-default-hover);
 	}
 
 	.reason {
-		color: var(--ab-color-fg);
+		color: var(--ink-body);
 		font-weight: 500;
 	}
 
 	.reason-detail {
-		color: var(--ab-color-fg-subtle);
+		color: var(--ink-subtle);
 	}
 
 	.domain {
@@ -414,7 +414,7 @@ function sliceLabel(slice: SessionSlice): string {
 		font-weight: 600;
 		text-transform: uppercase;
 		letter-spacing: 0.06em;
-		color: var(--ab-color-fg-subtle);
+		color: var(--ink-subtle);
 	}
 
 	.card-body,
@@ -422,21 +422,21 @@ function sliceLabel(slice: SessionSlice): string {
 	.node-body {
 		display: flex;
 		flex-direction: column;
-		gap: var(--ab-space-lg);
+		gap: var(--space-lg);
 	}
 
 	.card-front {
 		font-size: 1.25rem;
-		color: var(--ab-color-fg);
+		color: var(--ink-body);
 		line-height: 1.4;
 	}
 
 	.card-back {
-		background: var(--ab-color-surface-muted);
-		border: 1px solid var(--ab-color-border);
-		border-radius: var(--ab-radius-lg);
-		padding: var(--ab-space-lg);
-		color: var(--ab-color-fg);
+		background: var(--surface-muted);
+		border: 1px solid var(--edge-default);
+		border-radius: var(--radius-lg);
+		padding: var(--space-lg);
+		color: var(--ink-body);
 	}
 
 	.rep-title,
@@ -446,26 +446,26 @@ function sliceLabel(slice: SessionSlice): string {
 	}
 
 	.situation {
-		color: var(--ab-color-fg);
+		color: var(--ink-body);
 		line-height: 1.5;
 		margin: 0;
 	}
 
 	.actions {
 		display: flex;
-		gap: var(--ab-space-sm);
+		gap: var(--space-sm);
 	}
 
 	.rating-row {
 		display: grid;
 		grid-template-columns: repeat(4, 1fr);
-		gap: var(--ab-space-sm);
+		gap: var(--space-sm);
 	}
 
 	.rating-fieldset {
 		display: grid;
 		grid-template-columns: repeat(4, 1fr);
-		gap: var(--ab-space-sm);
+		gap: var(--space-sm);
 		border: 0;
 		margin: 0;
 		padding: 0;
@@ -486,55 +486,55 @@ function sliceLabel(slice: SessionSlice): string {
 	.options {
 		display: flex;
 		flex-direction: column;
-		gap: var(--ab-space-sm);
+		gap: var(--space-sm);
 	}
 
 	.option {
-		background: var(--ab-color-surface-muted);
-		border: 1px solid var(--ab-color-border-strong);
-		color: var(--ab-color-fg);
+		background: var(--surface-muted);
+		border: 1px solid var(--edge-strong);
+		color: var(--ink-body);
 		justify-content: flex-start;
 		text-align: left;
-		padding: var(--ab-space-md) var(--ab-space-lg);
+		padding: var(--space-md) var(--space-lg);
 	}
 
 	.option:hover:not(:disabled) {
-		background: var(--ab-color-primary-subtle);
-		border-color: var(--ab-color-primary-subtle-border);
+		background: var(--action-default-wash);
+		border-color: var(--action-default-edge);
 	}
 
 	.rating.again {
-		background: var(--ab-color-danger-subtle);
-		color: var(--ab-color-danger-active);
+		background: var(--action-hazard-wash);
+		color: var(--action-hazard-active);
 	}
 
 	.rating.hard {
-		background: var(--ab-color-warning-subtle);
-		color: var(--ab-color-warning-active);
+		background: var(--signal-warning-wash);
+		color: var(--signal-warning);
 	}
 
 	.rating.good {
-		background: var(--ab-color-success-subtle);
-		color: var(--ab-color-success-active);
+		background: var(--signal-success-wash);
+		color: var(--signal-success);
 	}
 
 	.rating.easy {
-		background: var(--ab-color-primary-subtle);
-		color: var(--ab-color-primary-active);
+		background: var(--action-default-wash);
+		color: var(--action-default-active);
 	}
 
 	.skip-row {
 		display: flex;
 		justify-content: flex-end;
-		gap: var(--ab-space-md);
-		padding-top: var(--ab-space-sm);
-		border-top: 1px solid var(--ab-color-surface-sunken);
+		gap: var(--space-md);
+		padding-top: var(--space-sm);
+		border-top: 1px solid var(--surface-sunken);
 	}
 
 	.link-btn {
 		background: transparent;
 		border: none;
-		color: var(--ab-color-fg-subtle);
+		color: var(--ink-subtle);
 		cursor: pointer;
 		font-size: 0.8125rem;
 	}
@@ -545,26 +545,26 @@ function sliceLabel(slice: SessionSlice): string {
 
 	.link-btn:focus-visible {
 		outline: none;
-		box-shadow: 0 0 0 3px var(--ab-color-focus-ring);
-		border-radius: var(--ab-radius-tight);
+		box-shadow: 0 0 0 3px var(--focus-ring);
+		border-radius: var(--radius-sm);
 	}
 
 	.skip-hint {
-		margin: var(--ab-space-2xs) 0 0;
+		margin: var(--space-2xs) 0 0;
 		font-size: 0.75rem;
-		color: var(--ab-color-fg-subtle);
+		color: var(--ink-subtle);
 		text-align: right;
 	}
 
 	.empty {
-		background: white;
-		border: 1px solid var(--ab-color-border);
-		border-radius: var(--ab-radius-xl);
-		padding: var(--ab-space-2xl);
+		/* TODO-theme: pick a role token for this literal. */ background: white;
+		border: 1px solid var(--edge-default);
+		border-radius: var(--radius-lg);
+		padding: var(--space-2xl);
 		text-align: center;
 		display: flex;
 		flex-direction: column;
-		gap: var(--ab-space-md);
+		gap: var(--space-md);
 		align-items: center;
 	}
 
@@ -574,7 +574,7 @@ function sliceLabel(slice: SessionSlice): string {
 	}
 
 	.muted {
-		color: var(--ab-color-fg-faint);
+		color: var(--ink-faint);
 		margin: 0;
 		font-size: 0.875rem;
 	}
@@ -584,10 +584,10 @@ function sliceLabel(slice: SessionSlice): string {
 	}
 
 	.btn {
-		padding: var(--ab-space-sm) var(--ab-space-lg);
+		padding: var(--space-sm) var(--space-lg);
 		font-size: 0.9375rem;
 		font-weight: 600;
-		border-radius: var(--ab-radius-md);
+		border-radius: var(--radius-md);
 		border: 1px solid transparent;
 		cursor: pointer;
 		text-decoration: none;
@@ -595,24 +595,24 @@ function sliceLabel(slice: SessionSlice): string {
 		align-items: center;
 		justify-content: center;
 		transition:
-			background var(--ab-transition-fast),
-			border-color var(--ab-transition-fast);
+			background var(--motion-fast),
+			border-color var(--motion-fast);
 	}
 
 	.btn:focus-visible,
 	.option:focus-visible,
 	.rating:focus-visible {
 		outline: none;
-		box-shadow: 0 0 0 3px var(--ab-color-focus-ring);
+		box-shadow: 0 0 0 3px var(--focus-ring);
 	}
 
 	.btn.primary {
-		background: var(--ab-color-primary);
-		color: white;
+		background: var(--action-default);
+		/* TODO-theme: pick a role token for this literal. */ color: white;
 	}
 
 	.btn.primary:hover:not(:disabled) {
-		background: var(--ab-color-primary-hover);
+		background: var(--action-default-hover);
 	}
 
 	.btn.primary:disabled {
@@ -621,9 +621,9 @@ function sliceLabel(slice: SessionSlice): string {
 	}
 
 	.btn.secondary {
-		background: var(--ab-color-surface-sunken);
-		color: var(--ab-color-fg);
-		border-color: var(--ab-color-border-strong);
+		background: var(--surface-sunken);
+		color: var(--ink-body);
+		border-color: var(--edge-strong);
 	}
 
 </style>

@@ -226,18 +226,18 @@ function domainLabel(slug: string): string {
 	.page {
 		display: flex;
 		flex-direction: column;
-		gap: var(--ab-space-xl-alt);
+		gap: var(--space-xl);
 	}
 
 	.crumb {
 		display: flex;
-		gap: var(--ab-space-sm);
+		gap: var(--space-sm);
 		font-size: 0.875rem;
-		color: var(--ab-color-fg-subtle);
+		color: var(--ink-subtle);
 	}
 
 	.crumb a {
-		color: var(--ab-color-primary-hover);
+		color: var(--action-default-hover);
 		text-decoration: none;
 	}
 
@@ -249,23 +249,23 @@ function domainLabel(slug: string): string {
 		margin: 0;
 		font-size: 1.5rem;
 		letter-spacing: -0.02em;
-		color: var(--ab-color-fg);
+		color: var(--ink-body);
 	}
 
 	.sub {
-		margin: var(--ab-space-2xs) 0 0;
-		color: var(--ab-color-fg-subtle);
+		margin: var(--space-2xs) 0 0;
+		color: var(--ink-subtle);
 		font-size: 0.9375rem;
 	}
 
 	.progress {
-		background: white;
-		border: 1px solid var(--ab-color-border);
-		border-radius: var(--ab-radius-xl);
-		padding: var(--ab-space-lg) var(--ab-space-lg-alt);
+		/* TODO-theme: pick a role token for this literal. */ background: white;
+		border: 1px solid var(--edge-default);
+		border-radius: var(--radius-lg);
+		padding: var(--space-lg) var(--space-lg);
 		display: flex;
 		flex-direction: column;
-		gap: var(--ab-space-sm-alt);
+		gap: var(--space-sm);
 	}
 
 	.progress-head {
@@ -277,26 +277,26 @@ function domainLabel(slug: string): string {
 	.progress-step {
 		font-size: 0.9375rem;
 		font-weight: 600;
-		color: var(--ab-color-fg);
+		color: var(--ink-body);
 	}
 
 	.progress-pct {
 		font-size: 0.8125rem;
-		color: var(--ab-color-fg-subtle);
+		color: var(--ink-subtle);
 	}
 
 	.progress-bar {
 		width: 100%;
 		height: 6px;
-		background: var(--ab-color-border);
-		border-radius: var(--ab-radius-pill);
+		background: var(--edge-default);
+		border-radius: var(--radius-pill);
 		overflow: hidden;
 	}
 
 	.progress-fill {
 		display: block;
 		height: 100%;
-		background: var(--ab-color-primary);
+		background: var(--action-default);
 	}
 
 	.steps {
@@ -305,7 +305,7 @@ function domainLabel(slug: string): string {
 		padding: 0;
 		display: grid;
 		grid-template-columns: repeat(7, 1fr);
-		gap: var(--ab-space-2xs);
+		gap: var(--space-2xs);
 	}
 
 	.step {
@@ -313,61 +313,61 @@ function domainLabel(slug: string): string {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		gap: var(--ab-space-3xs);
-		padding: var(--ab-space-xs) var(--ab-space-2xs);
+		gap: var(--space-2xs);
+		padding: var(--space-xs) var(--space-2xs);
 		background: transparent;
 		border: 1px solid transparent;
-		border-radius: var(--ab-radius-md);
+		border-radius: var(--radius-md);
 		cursor: pointer;
 		font: inherit;
-		color: var(--ab-color-fg-faint);
+		color: var(--ink-faint);
 		transition:
-			background var(--ab-transition-fast),
-			color var(--ab-transition-fast),
-			border-color var(--ab-transition-fast);
+			background var(--motion-fast),
+			color var(--motion-fast),
+			border-color var(--motion-fast);
 	}
 
 	.step:hover {
-		background: var(--ab-color-surface-sunken);
-		color: var(--ab-color-fg-muted);
+		background: var(--surface-sunken);
+		color: var(--ink-muted);
 	}
 
 	.step:focus-visible {
 		outline: none;
-		box-shadow: 0 0 0 3px var(--ab-color-focus-ring);
+		box-shadow: 0 0 0 3px var(--focus-ring);
 	}
 
 	.step.authored {
-		color: var(--ab-color-fg-muted);
+		color: var(--ink-muted);
 	}
 
 	.step.visited:not(.active) {
-		background: var(--ab-color-surface-muted);
-		color: var(--ab-color-fg-strong);
+		background: var(--surface-muted);
+		color: var(--ink-strong);
 	}
 
 	.step.completed:not(.active) {
-		background: var(--ab-color-success-subtle);
-		color: var(--ab-color-success-active);
-		border-color: var(--ab-color-success-subtle-border);
+		background: var(--signal-success-wash);
+		color: var(--signal-success);
+		border-color: var(--signal-success-edge);
 	}
 
 	.step.active {
-		background: var(--ab-color-primary-subtle);
-		color: var(--ab-color-primary-hover);
-		border-color: var(--ab-color-primary-subtle-border);
+		background: var(--action-default-wash);
+		color: var(--action-default-hover);
+		border-color: var(--action-default-edge);
 	}
 
 	.got-it-row {
 		display: flex;
 		justify-content: flex-end;
-		margin-top: var(--ab-space-lg);
-		padding-top: var(--ab-space-lg);
-		border-top: 1px dashed var(--ab-color-border);
+		margin-top: var(--space-lg);
+		padding-top: var(--space-lg);
+		border-top: 1px dashed var(--edge-default);
 	}
 
 	.got-it-done {
-		color: var(--ab-color-success-active);
+		color: var(--signal-success);
 		font-size: 0.875rem;
 		font-weight: 500;
 	}
@@ -385,61 +385,61 @@ function domainLabel(slug: string): string {
 	}
 
 	.phase {
-		background: white;
-		border: 1px solid var(--ab-color-border);
-		border-radius: var(--ab-radius-xl);
-		padding: var(--ab-space-xl-alt) var(--ab-space-xl);
+		/* TODO-theme: pick a role token for this literal. */ background: white;
+		border: 1px solid var(--edge-default);
+		border-radius: var(--radius-lg);
+		padding: var(--space-xl) var(--space-xl);
 	}
 
 	.phase h2 {
-		margin: 0 0 var(--ab-space-md);
+		margin: 0 0 var(--space-md);
 		font-size: 1.25rem;
-		color: var(--ab-color-fg);
+		color: var(--ink-body);
 	}
 
 	.gap-body {
 		margin: 0;
-		color: var(--ab-color-fg-faint);
+		color: var(--ink-faint);
 		font-style: italic;
 	}
 
 	.prose :global(h3),
 	.prose :global(h4),
 	.prose :global(h5) {
-		margin: var(--ab-space-lg) 0 var(--ab-space-sm);
-		color: var(--ab-color-fg);
+		margin: var(--space-lg) 0 var(--space-sm);
+		color: var(--ink-body);
 	}
 
 	.prose :global(p) {
-		margin: 0 0 var(--ab-space-md);
+		margin: 0 0 var(--space-md);
 		line-height: 1.6;
-		color: var(--ab-color-fg);
+		color: var(--ink-body);
 	}
 
 	.prose :global(ul),
 	.prose :global(ol) {
-		margin: 0 0 var(--ab-space-md) var(--ab-space-xl-alt);
+		margin: 0 0 var(--space-md) var(--space-xl);
 		line-height: 1.6;
-		color: var(--ab-color-fg);
+		color: var(--ink-body);
 	}
 
 	.prose :global(li) {
-		margin-bottom: var(--ab-space-2xs);
+		margin-bottom: var(--space-2xs);
 	}
 
 	.prose :global(code) {
-		font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+		font-family: var(--font-family-mono);
 		font-size: 0.875em;
-		background: var(--ab-color-surface-sunken);
+		background: var(--surface-sunken);
 		padding: 0.05em 0.35em;
-		border-radius: var(--ab-radius-tight);
+		border-radius: var(--radius-sm);
 	}
 
 	.prose :global(pre) {
-		background: var(--ab-color-fg);
-		color: var(--ab-color-border);
-		padding: var(--ab-space-md) var(--ab-space-lg);
-		border-radius: var(--ab-radius-md);
+		background: var(--ink-body);
+		color: var(--edge-default);
+		padding: var(--space-md) var(--space-lg);
+		border-radius: var(--radius-md);
 		overflow-x: auto;
 		font-size: 0.875rem;
 	}
@@ -451,56 +451,56 @@ function domainLabel(slug: string): string {
 	}
 
 	.prose :global(a) {
-		color: var(--ab-color-primary-hover);
+		color: var(--action-default-hover);
 	}
 
 	.prose :global(strong) {
-		color: var(--ab-color-fg);
+		color: var(--ink-body);
 	}
 
 	.controls {
 		display: flex;
 		justify-content: space-between;
-		gap: var(--ab-space-sm);
+		gap: var(--space-sm);
 	}
 
 	.btn {
-		padding: var(--ab-space-sm-alt) var(--ab-space-lg-alt);
+		padding: var(--space-sm) var(--space-lg);
 		font-size: 0.9375rem;
 		font-weight: 600;
-		border-radius: var(--ab-radius-md);
+		border-radius: var(--radius-md);
 		border: 1px solid transparent;
 		text-decoration: none;
 		cursor: pointer;
 		display: inline-flex;
 		align-items: center;
 		transition:
-			background var(--ab-transition-fast),
-			border-color var(--ab-transition-fast);
+			background var(--motion-fast),
+			border-color var(--motion-fast);
 	}
 
 	.btn:focus-visible {
 		outline: none;
-		box-shadow: 0 0 0 3px var(--ab-color-focus-ring);
+		box-shadow: 0 0 0 3px var(--focus-ring);
 	}
 
 	.btn.primary {
-		background: var(--ab-color-primary);
-		color: white;
+		background: var(--action-default);
+		/* TODO-theme: pick a role token for this literal. */ color: white;
 	}
 
 	.btn.primary:hover:not(:disabled) {
-		background: var(--ab-color-primary-hover);
+		background: var(--action-default-hover);
 	}
 
 	.btn.secondary {
-		background: var(--ab-color-surface-sunken);
-		color: var(--ab-color-fg);
-		border-color: var(--ab-color-border-strong);
+		background: var(--surface-sunken);
+		color: var(--ink-body);
+		border-color: var(--edge-strong);
 	}
 
 	.btn.secondary:hover:not(:disabled) {
-		background: var(--ab-color-border);
+		background: var(--edge-default);
 	}
 
 	.btn:disabled {
@@ -508,7 +508,7 @@ function domainLabel(slug: string): string {
 		cursor: not-allowed;
 	}
 
-	@media (max-width: 640px) { /* --ab-breakpoint-md */
+	@media (max-width: 640px) {
 		.steps {
 			grid-template-columns: repeat(4, 1fr);
 		}

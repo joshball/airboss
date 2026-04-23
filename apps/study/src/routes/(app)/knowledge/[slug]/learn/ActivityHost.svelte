@@ -29,34 +29,34 @@ let { activityId }: Props = $props();
 
 <style>
 	.activity {
-		margin: var(--ab-space-md) 0;
-		padding: var(--ab-space-lg);
-		background: white;
-		border: 1px solid var(--ab-color-border);
-		border-radius: var(--ab-radius-lg);
+		margin: var(--space-md) 0;
+		padding: var(--space-lg);
+		/* TODO-theme: pick a role token for this literal. */ background: white;
+		border: 1px solid var(--edge-default);
+		border-radius: var(--radius-lg);
 	}
 
 	.activity figcaption {
-		margin-top: var(--ab-space-sm-alt);
-		color: var(--ab-color-fg-subtle);
-		font-size: var(--ab-font-size-sm);
+		margin-top: var(--space-sm);
+		color: var(--ink-subtle);
+		font-size: var(--type-ui-label-size);
 		text-align: center;
 	}
 
 	.unknown {
-		margin: var(--ab-space-md) 0;
-		padding: var(--ab-space-md) var(--ab-space-lg);
-		background: var(--ab-color-warning-subtle);
-		border: 1px solid var(--ab-color-warning-subtle-border);
-		border-radius: var(--ab-radius-md);
-		font-size: var(--ab-font-size-sm);
-		color: var(--ab-color-warning-active);
+		margin: var(--space-md) 0;
+		padding: var(--space-md) var(--space-lg);
+		background: var(--signal-warning-wash);
+		border: 1px solid var(--signal-warning-edge);
+		border-radius: var(--radius-md);
+		font-size: var(--type-ui-label-size);
+		color: var(--signal-warning);
 	}
 
 	.unknown code {
-		font-family: ui-monospace, 'SF Mono', Menlo, monospace;
-		background: white;
+		font-family: var(--font-family-mono);
+		/* TODO-theme: pick a role token for this literal. */ background: white;
 		padding: 0.05em 0.35em;
-		border-radius: var(--ab-radius-xs);
+		border-radius: var(--radius-xs);
 	}
 </style>

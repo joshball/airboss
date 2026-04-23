@@ -84,11 +84,11 @@ const screenReaderSummary = $derived(
 	.spark {
 		display: flex;
 		align-items: flex-end;
-		gap: var(--ab-space-2xs);
+		gap: var(--space-2xs);
 		height: 48px;
-		padding: var(--ab-space-xs) var(--ab-space-2xs) var(--ab-space-2xs);
-		background: var(--ab-color-surface-sunken);
-		border-radius: var(--ab-radius-sm);
+		padding: var(--space-xs) var(--space-2xs) var(--space-2xs);
+		background: var(--surface-sunken);
+		border-radius: var(--radius-sm);
 	}
 
 	.col {
@@ -97,7 +97,7 @@ const screenReaderSummary = $derived(
 		flex-direction: column;
 		justify-content: flex-end;
 		align-items: center;
-		gap: var(--ab-space-micro);
+		gap: var(--space-2xs);
 		min-width: 0;
 	}
 
@@ -106,42 +106,42 @@ const screenReaderSummary = $derived(
 		max-width: 14px;
 		height: var(--h, 8%);
 		min-height: 3px;
-		background: var(--ab-color-primary);
-		border-radius: var(--ab-radius-sm) var(--ab-radius-sm) 0 0;
-		transition: height var(--ab-transition-normal);
+		background: var(--action-default);
+		border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+		transition: height var(--motion-normal);
 	}
 
 	.bar.zero {
-		background: var(--ab-color-border-strong);
+		background: var(--edge-strong);
 		height: 3px;
 	}
 
 	.lbl {
 		font-size: 0.625rem;
-		color: var(--ab-color-fg-faint);
-		font-weight: var(--ab-font-weight-semibold);
+		color: var(--ink-faint);
+		font-weight: var(--type-heading-3-weight);
 		line-height: 1;
-		font-family: var(--ab-font-family-mono);
+		font-family: var(--font-family-mono);
 	}
 
 	.meta {
 		display: flex;
-		gap: var(--ab-space-md);
+		gap: var(--space-md);
 		flex-wrap: wrap;
-		color: var(--ab-color-fg-muted);
-		font-size: var(--ab-font-size-xs);
-		font-family: var(--ab-font-family-mono);
+		color: var(--ink-muted);
+		font-size: var(--type-ui-caption-size);
+		font-family: var(--font-family-mono);
 	}
 
 	.meta strong {
-		color: var(--ab-color-fg);
+		color: var(--ink-body);
 		font-variant-numeric: tabular-nums;
-		font-weight: var(--ab-font-weight-bold);
+		font-weight: var(--type-heading-1-weight);
 	}
 
 	.muted {
 		margin: 0;
-		color: var(--ab-color-fg-subtle);
-		font-size: var(--ab-font-size-xs);
+		color: var(--ink-subtle);
+		font-size: var(--type-ui-caption-size);
 	}
 </style>

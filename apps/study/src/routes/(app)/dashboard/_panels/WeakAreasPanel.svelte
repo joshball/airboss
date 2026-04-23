@@ -67,46 +67,46 @@ function reasonLabel(reason: WeakAreaReason): string {
 		padding: 0;
 		display: flex;
 		flex-direction: column;
-		gap: var(--ab-space-3xs);
+		gap: var(--space-2xs);
 	}
 
 	.row {
 		display: flex;
 		flex-direction: column;
-		gap: var(--ab-space-3xs);
-		padding: var(--ab-space-xs-alt) var(--ab-space-sm);
-		border-radius: var(--ab-radius-sm);
+		gap: var(--space-2xs);
+		padding: var(--space-xs) var(--space-sm);
+		border-radius: var(--radius-sm);
 		text-decoration: none;
-		color: var(--ab-color-fg);
+		color: var(--ink-body);
 		border: 1px solid transparent;
 	}
 
 	.row:hover {
-		background: var(--ab-color-danger-subtle);
-		border-color: var(--ab-color-danger-subtle-border);
+		background: var(--action-hazard-wash);
+		border-color: var(--action-hazard-edge);
 	}
 
 	.dm-name {
-		font-weight: var(--ab-font-weight-semibold);
-		font-size: var(--ab-font-size-sm);
+		font-weight: var(--type-heading-3-weight);
+		font-size: var(--type-ui-label-size);
 	}
 
 	.reasons {
 		display: flex;
-		gap: var(--ab-space-sm);
+		gap: var(--space-sm);
 		flex-wrap: wrap;
 	}
 
 	.reason {
-		font-size: var(--ab-font-size-xs);
-		color: var(--ab-color-warning);
+		font-size: var(--type-ui-caption-size);
+		color: var(--signal-warning);
 		font-variant-numeric: tabular-nums;
-		font-family: var(--ab-font-family-mono);
+		font-family: var(--font-family-mono);
 	}
 
 	.muted {
 		margin: 0;
-		color: var(--ab-color-fg-subtle);
-		font-size: var(--ab-font-size-xs);
+		color: var(--ink-subtle);
+		font-size: var(--type-ui-caption-size);
 	}
 </style>

@@ -107,7 +107,7 @@ function cellTitle(domain: Domain, cell: DomainCertCell): string {
 	.map {
 		display: flex;
 		flex-direction: column;
-		gap: var(--ab-space-3xs);
+		gap: var(--space-2xs);
 		min-width: 0;
 	}
 
@@ -116,22 +116,22 @@ function cellTitle(domain: Domain, cell: DomainCertCell): string {
 		display: grid;
 		grid-template-columns: minmax(7rem, 1fr) repeat(4, minmax(1.25rem, 2rem));
 		align-items: center;
-		gap: var(--ab-space-2xs);
+		gap: var(--space-2xs);
 	}
 
 	.col-head {
-		font-family: var(--ab-font-family-mono);
+		font-family: var(--font-family-mono);
 		font-variant-numeric: tabular-nums;
 		font-size: 0.6875rem;
 		letter-spacing: 0.04em;
-		color: var(--ab-color-fg-faint);
+		color: var(--ink-faint);
 		text-align: center;
-		padding-bottom: var(--ab-space-3xs);
+		padding-bottom: var(--space-2xs);
 	}
 
 	.row-head {
-		font-size: var(--ab-font-size-xs);
-		color: var(--ab-color-fg-muted);
+		font-size: var(--type-ui-caption-size);
+		color: var(--ink-muted);
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
@@ -142,11 +142,11 @@ function cellTitle(domain: Domain, cell: DomainCertCell): string {
 		align-items: center;
 		justify-content: center;
 		height: 0.9375rem;
-		border-radius: var(--ab-radius-hair);
-		border: 1px solid var(--ab-color-border);
+		border-radius: var(--radius-xs);
+		border: 1px solid var(--edge-default);
 		font-size: 0.625rem;
-		font-family: var(--ab-font-family-mono);
-		color: var(--ab-color-fg-faint);
+		font-family: var(--font-family-mono);
+		color: var(--ink-faint);
 		text-decoration: none;
 	}
 
@@ -155,7 +155,7 @@ function cellTitle(domain: Domain, cell: DomainCertCell): string {
 	}
 
 	.cell.filled:hover {
-		outline: 1px solid var(--ab-color-border-strong);
+		outline: 1px solid var(--edge-strong);
 		outline-offset: 1px;
 	}
 
@@ -168,27 +168,27 @@ function cellTitle(domain: Domain, cell: DomainCertCell): string {
 	   fill so "touched but 0% mastered" is still distinguishable from "no
 	   nodes". */
 	.cell.p0 {
-		background: var(--ab-color-surface-sunken);
-		border-color: var(--ab-color-border);
+		background: var(--surface-sunken);
+		border-color: var(--edge-default);
 	}
 	.cell.p1 {
-		background: var(--ab-color-success-subtle);
-		border-color: var(--ab-color-success-subtle-border);
+		background: var(--signal-success-wash);
+		border-color: var(--signal-success-edge);
 	}
 	.cell.p2 {
-		background: var(--ab-color-success-subtle-border);
+		background: var(--signal-success-edge);
 	}
 	.cell.p3 {
-		background: color-mix(in srgb, var(--ab-color-success) 45%, var(--ab-color-success-subtle-border));
+		background: color-mix(in srgb, var(--signal-success) 45%, var(--signal-success-edge));
 	}
 	.cell.p4 {
-		background: color-mix(in srgb, var(--ab-color-success) 75%, var(--ab-color-success-subtle-border));
+		background: color-mix(in srgb, var(--signal-success) 75%, var(--signal-success-edge));
 	}
 	.cell.p5 {
-		background: var(--ab-color-success);
+		background: var(--signal-success);
 	}
 
-	@media (max-width: 640px) { /* --ab-breakpoint-md */
+	@media (max-width: 640px) {
 		.head,
 		.row {
 			grid-template-columns: minmax(6rem, 1fr) repeat(4, minmax(1rem, 1.5rem));
