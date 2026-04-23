@@ -100,69 +100,69 @@ const describedBy = $derived([hintId, errorId].filter(Boolean).join(' ') || unde
 	.field {
 		display: flex;
 		flex-direction: column;
-		gap: var(--ab-space-2xs);
-		font-size: var(--ab-font-size-sm);
-		color: var(--ab-color-fg);
+		gap: var(--space-2xs);
+		font-size: var(--font-size-sm);
+		color: var(--ink-body);
 		min-width: 0;
 	}
 
 	.label {
 		display: inline-flex;
 		align-items: center;
-		gap: var(--ab-space-2xs);
-		font-weight: var(--ab-font-weight-medium);
-		color: var(--ab-color-fg-muted);
+		gap: var(--space-2xs);
+		font-weight: var(--font-weight-medium);
+		color: var(--ink-muted);
 	}
 
 	.req {
-		color: var(--ab-color-danger);
+		color: var(--action-hazard);
 	}
 
 	input,
 	textarea {
 		font: inherit;
 		font-family: inherit;
-		padding: var(--ab-control-padding-y-md) var(--ab-control-padding-x-md);
-		border: 1px solid var(--ab-color-border-strong);
-		border-radius: var(--ab-control-radius);
-		background: var(--ab-color-surface);
-		color: var(--ab-color-fg);
+		padding: var(--space-sm) var(--space-md);
+		border: 1px solid var(--edge-strong);
+		border-radius: var(--radius-md);
+		background: var(--surface-panel);
+		color: var(--ink-body);
 		transition:
-			border-color var(--ab-transition-fast),
-			box-shadow var(--ab-transition-fast);
+			border-color var(--motion-fast),
+			box-shadow var(--motion-fast);
 		min-width: 0;
 	}
 
 	textarea {
 		resize: vertical;
-		line-height: var(--ab-line-height-normal);
+		line-height: var(--line-height-normal);
 	}
 
 	input:focus,
 	textarea:focus {
 		outline: none;
-		border-color: var(--ab-color-primary);
-		box-shadow: 0 0 0 3px var(--ab-color-focus-ring);
+		border-color: var(--action-default);
+		box-shadow: 0 0 0 3px var(--focus-ring);
 	}
 
 	input:disabled,
 	textarea:disabled {
-		background: var(--ab-color-surface-sunken);
+		background: var(--surface-sunken);
 		cursor: not-allowed;
 	}
 
 	input[aria-invalid='true'],
 	textarea[aria-invalid='true'] {
-		border-color: var(--ab-color-danger);
+		border-color: var(--action-hazard);
 	}
 
 	.hint {
-		color: var(--ab-color-fg-faint);
-		font-size: var(--ab-font-size-xs);
+		color: var(--ink-faint);
+		font-size: var(--font-size-xs);
 	}
 
 	.error {
-		color: var(--ab-color-danger);
-		font-size: var(--ab-font-size-xs);
+		color: var(--action-hazard);
+		font-size: var(--font-size-xs);
 	}
 </style>

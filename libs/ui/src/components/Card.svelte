@@ -44,41 +44,41 @@ let {
 	.card {
 		display: flex;
 		flex-direction: column;
-		gap: var(--ab-layout-panel-gap);
-		background: var(--ab-color-surface-raised);
-		border: 1px solid var(--ab-color-border);
-		border-radius: var(--ab-radius-md);
-		padding: var(--ab-layout-panel-padding);
-		box-shadow: var(--ab-shadow-sm);
+		gap: var(--layout-panel-gap);
+		background: var(--surface-raised);
+		border: 1px solid var(--edge-default);
+		border-radius: var(--radius-md);
+		padding: var(--layout-panel-padding);
+		box-shadow: var(--shadow-sm);
 		min-width: 0;
 	}
 
 	.card.v-muted {
-		background: var(--ab-color-surface-sunken);
+		background: var(--surface-sunken);
 		border-style: dashed;
-		border-color: var(--ab-color-border-strong);
-		color: var(--ab-color-fg-subtle);
-		box-shadow: var(--ab-shadow-none);
+		border-color: var(--edge-strong);
+		color: var(--ink-subtle);
+		box-shadow: var(--shadow-none);
 	}
 
 	.hd {
 		display: flex;
 		justify-content: space-between;
 		align-items: baseline;
-		gap: var(--ab-space-sm);
+		gap: var(--space-sm);
 		flex-wrap: wrap;
 	}
 
 	.body {
 		display: flex;
 		flex-direction: column;
-		gap: var(--ab-space-sm);
+		gap: var(--space-sm);
 		min-width: 0;
 	}
 
 	.ft {
 		display: flex;
 		justify-content: flex-end;
-		gap: var(--ab-space-sm);
+		gap: var(--space-sm);
 	}
 </style>

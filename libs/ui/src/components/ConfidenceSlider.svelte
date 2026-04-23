@@ -49,70 +49,70 @@ let {
 
 <style>
 	.prompt {
-		background: var(--ab-color-surface);
-		border: 1px solid var(--ab-color-border);
-		border-radius: var(--ab-radius-lg);
-		padding: var(--ab-layout-panel-padding);
+		background: var(--surface-panel);
+		border: 1px solid var(--edge-default);
+		border-radius: var(--radius-lg);
+		padding: var(--layout-panel-padding);
 		display: flex;
 		flex-direction: column;
-		gap: var(--ab-space-md);
+		gap: var(--space-md);
 		align-items: center;
 	}
 
 	.prompt-q {
 		margin: 0;
-		color: var(--ab-color-fg);
-		font-size: var(--ab-font-size-sm);
+		color: var(--ink-body);
+		font-size: var(--font-size-sm);
 	}
 
 	.confidence-row {
 		display: flex;
-		gap: var(--ab-space-sm);
+		gap: var(--space-sm);
 		flex-wrap: wrap;
 		justify-content: center;
 	}
 
 	.conf {
-		background: var(--ab-color-surface-sunken);
-		border: 1px solid var(--ab-color-border-strong);
-		border-radius: var(--ab-control-radius);
-		padding: var(--ab-control-padding-y-lg) var(--ab-control-padding-x-md);
+		background: var(--surface-sunken);
+		border: 1px solid var(--edge-strong);
+		border-radius: var(--radius-md);
+		padding: var(--space-sm) var(--space-md);
 		min-width: 5rem;
 		display: flex;
 		flex-direction: column;
-		gap: var(--ab-space-2xs);
+		gap: var(--space-2xs);
 		align-items: center;
 		cursor: pointer;
 		font-family: inherit;
 		transition:
-			background var(--ab-transition-fast),
-			border-color var(--ab-transition-fast);
+			background var(--motion-fast),
+			border-color var(--motion-fast);
 	}
 
 	.conf:hover {
-		background: var(--ab-color-primary-subtle);
-		border-color: var(--ab-color-primary-subtle-border);
+		background: var(--action-default-wash);
+		border-color: var(--action-default-edge);
 	}
 
 	.conf:focus-visible {
 		outline: none;
-		box-shadow: 0 0 0 3px var(--ab-color-focus-ring);
+		box-shadow: 0 0 0 3px var(--focus-ring);
 	}
 
 	.conf.is-selected {
-		background: var(--ab-color-primary-subtle);
-		border-color: var(--ab-color-primary);
+		background: var(--action-default-wash);
+		border-color: var(--action-default);
 	}
 
 	.conf-num {
-		font-weight: var(--ab-font-weight-bold);
-		font-size: var(--ab-font-size-lg);
-		color: var(--ab-color-primary-hover);
+		font-weight: var(--font-weight-bold);
+		font-size: var(--font-size-lg);
+		color: var(--action-default-hover);
 	}
 
 	.conf-label {
-		font-size: var(--ab-font-size-xs);
-		color: var(--ab-color-fg-subtle);
+		font-size: var(--font-size-xs);
+		color: var(--ink-subtle);
 	}
 
 	/*
@@ -124,31 +124,31 @@ let {
 		align-self: center;
 		background: transparent;
 		border: none;
-		padding: var(--ab-space-2xs) var(--ab-space-sm);
-		color: var(--ab-color-fg-subtle);
+		padding: var(--space-2xs) var(--space-sm);
+		color: var(--ink-subtle);
 		font-family: inherit;
-		font-size: var(--ab-font-size-xs);
-		font-weight: var(--ab-font-weight-regular);
+		font-size: var(--font-size-xs);
+		font-weight: var(--font-weight-regular);
 		text-decoration: underline;
 		text-underline-offset: 2px;
 		cursor: pointer;
-		transition: color var(--ab-transition-fast);
+		transition: color var(--motion-fast);
 	}
 
 	.skip:hover {
-		color: var(--ab-color-fg);
+		color: var(--ink-body);
 	}
 
 	.skip:focus-visible {
 		outline: none;
-		box-shadow: 0 0 0 3px var(--ab-color-focus-ring);
-		border-radius: var(--ab-radius-sm);
+		box-shadow: 0 0 0 3px var(--focus-ring);
+		border-radius: var(--radius-sm);
 	}
 
 	.skip-hint {
-		margin-top: calc(-1 * var(--ab-space-sm));
-		color: var(--ab-color-fg-faint);
-		font-size: var(--ab-font-size-xs);
+		margin-top: calc(-1 * var(--space-sm));
+		color: var(--ink-faint);
+		font-size: var(--font-size-xs);
 		text-align: center;
 	}
 </style>

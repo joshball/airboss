@@ -71,89 +71,89 @@ const resolvedError = $derived(error ? (errorMessage ?? fallbackErrorMessage) : 
 
 <style>
 	.panel {
-		background: var(--ab-color-surface-raised);
-		border: 1px solid var(--ab-color-border);
-		border-radius: var(--ab-radius-md);
-		padding: var(--ab-layout-panel-padding);
+		background: var(--surface-raised);
+		border: 1px solid var(--edge-default);
+		border-radius: var(--radius-md);
+		padding: var(--layout-panel-padding);
 		display: flex;
 		flex-direction: column;
-		gap: var(--ab-layout-panel-gap);
+		gap: var(--layout-panel-gap);
 		min-width: 0;
 		min-height: 0;
-		box-shadow: var(--ab-shadow-sm);
+		box-shadow: var(--shadow-sm);
 	}
 
 	.panel.gated {
-		background: var(--ab-color-surface-sunken);
+		background: var(--surface-sunken);
 		border-style: dashed;
-		border-color: var(--ab-color-border-strong);
-		color: var(--ab-color-fg-subtle);
-		box-shadow: var(--ab-shadow-none);
+		border-color: var(--edge-strong);
+		color: var(--ink-subtle);
+		box-shadow: var(--shadow-none);
 	}
 
 	.ph {
 		display: flex;
 		justify-content: space-between;
 		align-items: baseline;
-		gap: var(--ab-space-sm);
+		gap: var(--space-sm);
 		flex-wrap: wrap;
-		padding-bottom: var(--ab-space-2xs);
-		border-bottom: 1px solid var(--ab-color-border-subtle);
+		padding-bottom: var(--space-2xs);
+		border-bottom: 1px solid var(--edge-subtle);
 	}
 
 	.panel.gated .ph {
-		border-bottom-color: var(--ab-color-border);
+		border-bottom-color: var(--edge-default);
 	}
 
 	.hg {
 		display: flex;
 		align-items: baseline;
-		gap: var(--ab-space-sm);
+		gap: var(--space-sm);
 		flex-wrap: wrap;
 		min-width: 0;
 	}
 
 	h2 {
 		margin: 0;
-		font-family: var(--ab-layout-panel-header-family);
-		font-size: var(--ab-layout-panel-header-size);
-		font-weight: var(--ab-layout-panel-header-weight);
-		text-transform: var(--ab-layout-panel-header-transform);
-		letter-spacing: var(--ab-layout-panel-header-tracking);
-		color: var(--ab-color-fg-muted);
+		font-family: var(--layout-panel-header-family);
+		font-size: var(--layout-panel-header-size);
+		font-weight: var(--layout-panel-header-weight);
+		text-transform: var(--layout-panel-header-transform);
+		letter-spacing: var(--layout-panel-header-tracking);
+		color: var(--ink-muted);
 	}
 
 	.panel.gated h2 {
-		color: var(--ab-color-fg-faint);
+		color: var(--ink-faint);
 	}
 
 	.sub {
 		margin: 0;
-		color: var(--ab-color-fg-faint);
-		font-size: var(--ab-font-size-xs);
+		color: var(--ink-faint);
+		font-size: var(--font-size-xs);
 	}
 
 	.action {
 		display: flex;
-		gap: var(--ab-space-xs);
+		gap: var(--space-xs);
 		flex-shrink: 0;
 	}
 
 	.body {
 		display: flex;
 		flex-direction: column;
-		gap: var(--ab-space-xs);
-		font-size: var(--ab-font-size-sm);
+		gap: var(--space-xs);
+		font-size: var(--font-size-sm);
 		min-width: 0;
 	}
 
 	.err {
 		margin: 0;
-		padding: var(--ab-space-xs) var(--ab-space-sm);
-		background: var(--ab-color-danger-subtle);
-		border: 1px solid var(--ab-color-danger-subtle-border);
-		border-radius: var(--ab-radius-sm);
-		color: var(--ab-color-danger);
-		font-size: var(--ab-font-size-xs);
+		padding: var(--space-xs) var(--space-sm);
+		background: var(--action-hazard-wash);
+		border: 1px solid var(--action-hazard-edge);
+		border-radius: var(--radius-sm);
+		color: var(--action-hazard);
+		font-size: var(--font-size-xs);
 	}
 </style>

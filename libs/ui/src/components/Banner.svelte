@@ -53,11 +53,11 @@ const role = $derived(variant === 'danger' ? 'alert' : 'status');
 	.banner {
 		display: flex;
 		align-items: flex-start;
-		gap: var(--ab-space-sm);
-		padding: var(--ab-space-sm) var(--ab-space-md);
+		gap: var(--space-sm);
+		padding: var(--space-sm) var(--space-md);
 		border: 1px solid transparent;
-		border-radius: var(--ab-radius-sm);
-		font-size: var(--ab-font-size-sm);
+		border-radius: var(--radius-sm);
+		font-size: var(--font-size-sm);
 	}
 
 	.content {
@@ -65,16 +65,16 @@ const role = $derived(variant === 'danger' ? 'alert' : 'status');
 		min-width: 0;
 		display: flex;
 		flex-direction: column;
-		gap: var(--ab-space-2xs);
+		gap: var(--space-2xs);
 	}
 
 	.title {
 		margin: 0;
-		font-weight: var(--ab-font-weight-semibold);
+		font-weight: var(--font-weight-semibold);
 	}
 
 	.body {
-		line-height: var(--ab-line-height-normal);
+		line-height: var(--line-height-normal);
 	}
 
 	.dismiss {
@@ -83,8 +83,8 @@ const role = $derived(variant === 'danger' ? 'alert' : 'status');
 		border: none;
 		color: inherit;
 		cursor: pointer;
-		padding: 0 var(--ab-space-2xs);
-		font-size: var(--ab-font-size-base);
+		padding: 0 var(--space-2xs);
+		font-size: var(--font-size-base);
 		line-height: 1;
 		opacity: 0.7;
 	}
@@ -93,27 +93,36 @@ const role = $derived(variant === 'danger' ? 'alert' : 'status');
 		opacity: 1;
 	}
 
+	/*
+	 * Variant treatments read the signal role bundle:
+	 *   background: wash (tinted fill)
+	 *   border:     edge (tinted stroke)
+	 *   color:      solid signal color for legible text on the wash.
+	 *               The role system doesn't ship a separate "ink-on-wash"
+	 *               token; the solid hue is dark enough on its own wash
+	 *               (same approach as the pre-foundation theme).
+	 */
 	.v-info {
-		background: var(--ab-color-info-subtle);
-		border-color: var(--ab-color-info-subtle-border);
-		color: var(--ab-color-info-active);
+		background: var(--signal-info-wash);
+		border-color: var(--signal-info-edge);
+		color: var(--signal-info);
 	}
 
 	.v-success {
-		background: var(--ab-color-success-subtle);
-		border-color: var(--ab-color-success-subtle-border);
-		color: var(--ab-color-success-active);
+		background: var(--signal-success-wash);
+		border-color: var(--signal-success-edge);
+		color: var(--signal-success);
 	}
 
 	.v-warning {
-		background: var(--ab-color-warning-subtle);
-		border-color: var(--ab-color-warning-subtle-border);
-		color: var(--ab-color-warning-active);
+		background: var(--signal-warning-wash);
+		border-color: var(--signal-warning-edge);
+		color: var(--signal-warning);
 	}
 
 	.v-danger {
-		background: var(--ab-color-danger-subtle);
-		border-color: var(--ab-color-danger-subtle-border);
-		color: var(--ab-color-danger-active);
+		background: var(--signal-danger-wash);
+		border-color: var(--signal-danger-edge);
+		color: var(--signal-danger);
 	}
 </style>

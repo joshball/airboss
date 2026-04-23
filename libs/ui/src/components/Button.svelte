@@ -12,7 +12,7 @@ import type { Snippet } from 'svelte';
  *
  * Renders an `<a>` when `href` is provided, otherwise a `<button>`.
  * Reads all colors / sizing / radii from theme tokens so the same instance
- * reskins under `web` vs `tui`.
+ * reskins under sectional vs flightdeck.
  *
  * Loading state: pass `loading` + optionally `loadingLabel` to replace the
  * label while the button is disabled. Callers don't need to track disabled
@@ -86,18 +86,21 @@ const isDisabled = $derived(disabled || loading);
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
-		gap: var(--ab-space-xs);
+		gap: var(--space-xs);
 		font-family: inherit;
-		font-weight: var(--ab-font-weight-semibold);
-		letter-spacing: var(--ab-letter-spacing-normal);
+		font-weight: var(--font-weight-semibold);
+		letter-spacing: var(--letter-spacing-normal);
 		border: 1px solid transparent;
-		border-radius: var(--ab-control-radius);
+		/* Package #4 introduces `--button-radius` and `--button-padding-*`
+		   component tokens for surgical per-theme overrides. Until then
+		   read the Layer 0 scale directly. */
+		border-radius: var(--radius-md);
 		cursor: pointer;
 		text-decoration: none;
 		transition:
-			background var(--ab-transition-fast),
-			border-color var(--ab-transition-fast),
-			color var(--ab-transition-fast);
+			background var(--motion-fast),
+			border-color var(--motion-fast),
+			color var(--motion-fast);
 		font-variant-numeric: tabular-nums;
 	}
 
@@ -108,7 +111,7 @@ const isDisabled = $derived(disabled || loading);
 
 	.btn:focus-visible {
 		outline: none;
-		box-shadow: 0 0 0 3px var(--ab-color-focus-ring);
+		box-shadow: 0 0 0 3px var(--focus-ring);
 	}
 
 	.btn:disabled,
@@ -117,69 +120,70 @@ const isDisabled = $derived(disabled || loading);
 		opacity: 0.6;
 	}
 
-	/* Sizes */
+	/* Sizes -- read the Layer 0 spacing/type scale directly.
+	   Package #4's Button component tokens will take over here. */
 	.s-sm {
-		padding: var(--ab-control-padding-y-sm) var(--ab-control-padding-x-sm);
-		font-size: var(--ab-control-font-size-sm);
+		padding: var(--space-xs) var(--space-sm);
+		font-size: var(--font-size-sm);
 	}
 
 	.s-md {
-		padding: var(--ab-control-padding-y-md) var(--ab-control-padding-x-md);
-		font-size: var(--ab-control-font-size-md);
+		padding: var(--space-sm) var(--space-md);
+		font-size: var(--font-size-base);
 	}
 
 	.s-lg {
-		padding: var(--ab-control-padding-y-lg) var(--ab-control-padding-x-lg);
-		font-size: var(--ab-control-font-size-lg);
+		padding: var(--space-sm) var(--space-lg);
+		font-size: var(--font-size-lg);
 	}
 
-	/* Primary */
+	/* Primary -- action-default bundle */
 	.v-primary {
-		background: var(--ab-color-primary);
-		color: var(--ab-color-primary-fg);
+		background: var(--action-default);
+		color: var(--action-default-ink);
 	}
 	.v-primary:not(:disabled):not(.is-disabled):hover {
-		background: var(--ab-color-primary-hover);
+		background: var(--action-default-hover);
 	}
 	.v-primary:not(:disabled):not(.is-disabled):active {
-		background: var(--ab-color-primary-active);
+		background: var(--action-default-active);
 	}
 
-	/* Secondary */
+	/* Secondary -- subtle surface + strong edge */
 	.v-secondary {
-		background: var(--ab-color-surface-sunken);
-		color: var(--ab-color-fg);
-		border-color: var(--ab-color-border-strong);
+		background: var(--surface-sunken);
+		color: var(--ink-body);
+		border-color: var(--edge-strong);
 	}
 	.v-secondary:not(:disabled):not(.is-disabled):hover {
-		background: var(--ab-color-border);
+		background: var(--edge-default);
 	}
 	.v-secondary:not(:disabled):not(.is-disabled):active {
-		background: var(--ab-color-border-strong);
+		background: var(--edge-strong);
 	}
 
-	/* Ghost */
+	/* Ghost -- transparent, neutral ink, hover reveals surface-sunken */
 	.v-ghost {
 		background: transparent;
-		color: var(--ab-color-fg-muted);
+		color: var(--ink-muted);
 	}
 	.v-ghost:not(:disabled):not(.is-disabled):hover {
-		background: var(--ab-color-surface-sunken);
-		color: var(--ab-color-fg);
+		background: var(--surface-sunken);
+		color: var(--ink-body);
 	}
 	.v-ghost:not(:disabled):not(.is-disabled):active {
-		background: var(--ab-color-border);
+		background: var(--edge-default);
 	}
 
-	/* Danger */
+	/* Danger -- action-hazard bundle */
 	.v-danger {
-		background: var(--ab-color-danger);
-		color: var(--ab-color-danger-fg);
+		background: var(--action-hazard);
+		color: var(--action-hazard-ink);
 	}
 	.v-danger:not(:disabled):not(.is-disabled):hover {
-		background: var(--ab-color-danger-hover);
+		background: var(--action-hazard-hover);
 	}
 	.v-danger:not(:disabled):not(.is-disabled):active {
-		background: var(--ab-color-danger-active);
+		background: var(--action-hazard-active);
 	}
 </style>
