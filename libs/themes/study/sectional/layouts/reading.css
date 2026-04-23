@@ -1,0 +1,9 @@
+/*
+ * study/sectional -- reading layout.
+ *
+ * Inherits the centered reading-column rules from airboss/default's
+ * `layouts/reading.css`. This file is intentionally a re-exporter so the
+ * emit pipeline can pull layout CSS via the theme's registered path.
+ */
+
+@import url('../../../core/defaults/airboss-default/layouts/reading.css');

@@ -1,34 +1,34 @@
 <script lang="ts">
 import type { Snippet } from 'svelte';
-import { DEFAULT_THEME, type ThemeName } from './resolve';
+import type { AppearanceMode, ThemeId } from './contract';
+import { DEFAULT_THEME_ID } from './resolve';
 
 /**
- * Sets `data-theme` on a wrapper div so descendant components pick up the
- * tokens scoped under `[data-theme='web'|'tui']` in `tokens.css`.
+ * Sets `data-theme`, `data-appearance`, and optionally `data-layout` on a
+ * wrapper that uses `display: contents` so it doesn't participate in layout.
+ * Descendants inherit tokens via CSS custom-property cascade and via
+ * `[data-theme='<id>']` selectors in the emitted tokens stylesheet.
  *
- * Nest providers freely -- the inner `data-theme` overrides the outer for
- * its subtree. The (app) layout uses this to keep most routes on `web`
- * while wrapping `/dashboard` in a `tui` provider.
- *
- * The wrapper uses `display: contents` so it does not participate in
- * layout; only `data-theme` is meaningful. Token values cascade to
- * descendants via CSS custom-property inheritance and via
- * `[data-theme='x'] *` selectors in `tokens.css`. If you need a paint
- * surface (background, border, padding), wrap children in a `Card` or
- * `PanelShell` primitive -- do not style this wrapper; `display: contents`
- * drops it from the box tree.
+ * Nest providers freely -- the inner attributes override the outer for its
+ * subtree. Study's `(app)` layout places the provider *inside* `<main>` so
+ * chrome (nav, identity menu) stays on the base theme while the active
+ * surface re-skins the content area.
  */
 
 let {
-	theme = DEFAULT_THEME,
+	theme = DEFAULT_THEME_ID,
+	appearance = 'light',
+	layout,
 	children,
 }: {
-	theme?: ThemeName;
+	theme?: ThemeId;
+	appearance?: AppearanceMode;
+	layout?: string;
 	children: Snippet;
 } = $props();
 </script>
 
-<div data-theme={theme} class="ab-theme">
+<div data-theme={theme} data-appearance={appearance} data-layout={layout} class="ab-theme">
 	{@render children()}
 </div>
 

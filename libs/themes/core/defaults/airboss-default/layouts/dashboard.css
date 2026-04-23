@@ -1,0 +1,18 @@
+/*
+ * airboss-default -- dashboard layout.
+ *
+ * Full-bleed grid used by flightdeck-style surfaces. `.ab-container` drops
+ * the reading max-width and shrinks page padding; `.ab-grid` keeps the
+ * 12-col layout but with tighter gaps.
+ *
+ * This file exists so `airboss/default` can expose "dashboard" as a valid
+ * layout, but the actual rules keyed under `[data-theme='study/flightdeck']`
+ * live in that theme's `layouts/dashboard.css`. Keeping the .ab-container
+ * selector scoped to the exact theme prevents bleeding into sectional.
+ */
+
+[data-theme='study/flightdeck'] .ab-container {
+	max-width: none;
+	margin: 0;
+	padding: var(--layout-container-padding);
+}

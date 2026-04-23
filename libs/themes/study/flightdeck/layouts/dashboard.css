@@ -1,0 +1,12 @@
+/*
+ * study/flightdeck -- dashboard layout.
+ *
+ * Full-bleed container with a tighter padding than the reading column.
+ * The 12-col grid rules themselves are shared (defined alongside reading).
+ */
+
+[data-theme='study/flightdeck'] .ab-container {
+	max-width: none;
+	margin: 0;
+	padding: var(--layout-container-padding);
+}

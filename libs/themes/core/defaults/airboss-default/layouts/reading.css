@@ -1,0 +1,59 @@
+/*
+ * airboss-default -- reading layout.
+ *
+ * Centered max-width column with generous padding. Used by every study
+ * surface that isn't a dashboard (memory, plans, knowledge, glossary, etc.).
+ *
+ * `.ab-container` is the page outer container; `.ab-grid` is the 12-col
+ * responsive grid. Layout primitives stay unprefixed so pages and primitives
+ * can compose them without importing theme CSS. Theme-specific overrides
+ * (flightdeck's full-bleed behaviour) live in that theme's `layouts/`.
+ */
+
+[data-theme='airboss/default'] .ab-container,
+[data-theme='study/sectional'] .ab-container {
+	max-width: var(--layout-container-max);
+	margin: 0 auto;
+	padding: var(--layout-container-padding);
+}
+
+.ab-grid {
+	display: grid;
+	grid-template-columns: repeat(12, minmax(0, 1fr));
+	gap: var(--layout-grid-gap);
+}
+
+.ab-col-3 { grid-column: span 3; }
+.ab-col-4 { grid-column: span 4; }
+.ab-col-5 { grid-column: span 5; }
+.ab-col-6 { grid-column: span 6; }
+.ab-col-7 { grid-column: span 7; }
+.ab-col-8 { grid-column: span 8; }
+.ab-col-12 { grid-column: span 12; }
+
+@media (max-width: 1023px) {
+	.ab-grid {
+		grid-template-columns: repeat(6, minmax(0, 1fr));
+	}
+	.ab-col-3 { grid-column: span 3; }
+	.ab-col-4 { grid-column: span 3; }
+	.ab-col-5 { grid-column: span 3; }
+	.ab-col-6 { grid-column: span 6; }
+	.ab-col-7 { grid-column: span 6; }
+	.ab-col-8 { grid-column: span 6; }
+}
+
+@media (max-width: 639px) {
+	.ab-grid {
+		grid-template-columns: minmax(0, 1fr);
+	}
+	.ab-col-3,
+	.ab-col-4,
+	.ab-col-5,
+	.ab-col-6,
+	.ab-col-7,
+	.ab-col-8,
+	.ab-col-12 {
+		grid-column: span 1;
+	}
+}

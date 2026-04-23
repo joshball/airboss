@@ -1,38 +1,74 @@
 /**
  * Theme resolution.
  *
- * Two surfaces today -- `web` (reading column, rounded, mixed sans) and
- * `tui` (dense, monospace, 2px corners, full-bleed grid).
+ * The single source of "which theme for this URL, which appearance, which
+ * layout". Routes never choose themes directly; they call
+ * `resolveThemeForPath(pathname, userAppearance, systemAppearance)` and
+ * apply the returned `ThemeSelection` to the provider.
  *
- * `resolveThemeForPath` is the single source of "which theme for this URL".
- * Layouts call it with the current path; instrument-style surfaces (today
- * that's just `/dashboard`) return `tui`, everything else returns `web`.
- *
- * When new TUI surfaces come online (avionics, instrument trainer, etc.)
- * extend `TUI_PATH_PREFIXES` here rather than sprinkling theme logic across
- * routes.
+ * Pre-hydration scripts in apps/STAR/src/app.html mirror the core of this
+ * function inline so the document element carries data-theme plus
+ * data-appearance before SvelteKit boots and ThemeProvider remounts.
  */
 
-export const THEMES = {
-	WEB: 'web',
-	TUI: 'tui',
-} as const;
+import type { AppearanceMode, ThemeId } from './contract';
 
-export type ThemeName = (typeof THEMES)[keyof typeof THEMES];
+export interface ThemeSelection {
+	theme: ThemeId;
+	appearance: AppearanceMode;
+	layout: string;
+}
 
-export const DEFAULT_THEME: ThemeName = THEMES.WEB;
+/** Default theme for study surfaces that don't match a TUI path. */
+export const DEFAULT_THEME_ID: ThemeId = 'study/sectional';
+/** Theme used for dashboard / TUI surfaces. */
+export const FLIGHTDECK_THEME_ID: ThemeId = 'study/flightdeck';
 
 /**
- * Path prefixes that should render in the TUI theme. Checked as prefix
- * matches so `/dashboard` and `/dashboard/anything` both resolve to `tui`.
+ * Path prefixes that should render the flightdeck (TUI/dashboard) theme.
+ * Prefix match so `/dashboard` and `/dashboard/anything` both resolve to
+ * flightdeck. Extend this list as new TUI surfaces come online.
  */
-const TUI_PATH_PREFIXES: readonly string[] = ['/dashboard'];
+const FLIGHTDECK_PATH_PREFIXES: readonly string[] = ['/dashboard'];
 
-export function resolveThemeForPath(pathname: string): ThemeName {
-	for (const prefix of TUI_PATH_PREFIXES) {
-		if (pathname === prefix || pathname.startsWith(`${prefix}/`)) {
-			return THEMES.TUI;
-		}
+function isFlightdeckPath(pathname: string): boolean {
+	for (const prefix of FLIGHTDECK_PATH_PREFIXES) {
+		if (pathname === prefix || pathname.startsWith(`${prefix}/`)) return true;
 	}
-	return DEFAULT_THEME;
+	return false;
 }
+
+/**
+ * Resolve theme + appearance + layout for a given route.
+ *
+ * Appearance precedence:
+ *  1. user cookie pick (`light` | `dark`), if any
+ *  2. system preference (`prefers-color-scheme`)
+ *  3. theme default
+ */
+export function resolveThemeForPath(
+	pathname: string,
+	userAppearance: AppearanceMode | 'system' = 'system',
+	systemAppearance: AppearanceMode = 'light',
+): ThemeSelection {
+	const theme = isFlightdeckPath(pathname) ? FLIGHTDECK_THEME_ID : DEFAULT_THEME_ID;
+	const layout = isFlightdeckPath(pathname) ? 'dashboard' : 'reading';
+	const appearance = userAppearance === 'system' ? systemAppearance : userAppearance;
+	return { theme, appearance, layout };
+}
+
+// ----------------------------------------------------------------------------
+// Legacy API (retained until package #5 finishes migrating call sites)
+// ----------------------------------------------------------------------------
+
+/** @deprecated use `resolveThemeForPath` + `ThemeSelection.theme`. */
+export const THEMES = {
+	WEB: DEFAULT_THEME_ID,
+	TUI: FLIGHTDECK_THEME_ID,
+} as const;
+
+/** @deprecated use `ThemeId` from `./contract`. */
+export type ThemeName = ThemeId;
+
+/** @deprecated use `DEFAULT_THEME_ID`. */
+export const DEFAULT_THEME: ThemeName = DEFAULT_THEME_ID;
