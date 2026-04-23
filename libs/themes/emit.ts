@@ -20,11 +20,15 @@
 import type {
 	AppearanceMode,
 	Chrome,
+	ControlTokens,
 	DerivedPalette,
 	InteractiveStates,
 	Palette,
 	SignalStates,
+	SimTokens,
 	Theme,
+	TypeBundle,
+	TypographyPack,
 } from './contract';
 import { deriveInteractiveStates, deriveSignalVariants } from './derive';
 import { LEGACY_ALIAS_MAP } from './legacy-aliases';
@@ -36,11 +40,22 @@ type SignalKey = 'success' | 'warning' | 'danger' | 'info';
 const ACTION_KEYS: readonly ActionKey[] = ['default', 'hazard', 'caution', 'neutral', 'link'];
 const SIGNAL_KEYS: readonly SignalKey[] = ['success', 'warning', 'danger', 'info'];
 
+const READING_VARIANTS = ['body', 'lead', 'caption', 'quote'] as const;
+const HEADING_VARIANTS = ['1', '2', '3', '4', '5', '6'] as const;
+const UI_VARIANTS = ['control', 'label', 'caption', 'badge'] as const;
+const CODE_VARIANTS = ['inline', 'block'] as const;
+const DEFINITION_VARIANTS = ['term', 'body'] as const;
+
+const BUTTON_VARIANTS = ['default', 'primary', 'hazard', 'neutral', 'ghost'] as const;
+const INPUT_VARIANTS = ['default', 'error'] as const;
+
 interface ResolvedTheme {
 	id: string;
 	palette: { light?: Palette; dark?: Palette };
 	chrome: Chrome;
-	typography: Theme['typography'];
+	typography: TypographyPack;
+	control: ControlTokens;
+	sim?: SimTokens;
 }
 
 /** Walk `extends` chain; later entries win on merge. */
@@ -51,6 +66,8 @@ function resolveTheme(theme: Theme): ResolvedTheme {
 			palette: theme.palette,
 			chrome: theme.chrome,
 			typography: theme.typography,
+			control: theme.control,
+			sim: theme.sim,
 		};
 	}
 	const parent = resolveTheme(getTheme(theme.extends));
@@ -62,6 +79,8 @@ function resolveTheme(theme: Theme): ResolvedTheme {
 		},
 		chrome: theme.chrome ?? parent.chrome,
 		typography: theme.typography ?? parent.typography,
+		control: theme.control ?? parent.control,
+		sim: theme.sim ?? parent.sim,
 	};
 }
 
@@ -172,15 +191,35 @@ function paletteBlock(palette: Palette, isDark: boolean): string[] {
 	return lines;
 }
 
-function typographyBlock(theme: Theme): string[] {
+function resolveBundleFamily(pack: TypographyPack, family: string): string {
+	if (family === 'sans') return pack.families.sans;
+	if (family === 'mono') return pack.families.mono;
+	if (family === 'base') return pack.families.base;
+	// Unknown family key -- treat as a raw CSS family stack.
+	return family;
+}
+
+function typographyBundleBlock(pack: TypographyPack, role: string, variant: string, bundle: TypeBundle): string[] {
+	const prefix = `--type-${role}-${variant}`;
+	const family = resolveBundleFamily(pack, bundle.family);
+	return [
+		`\t${prefix}-family: ${family};`,
+		`\t${prefix}-size: ${bundle.size};`,
+		`\t${prefix}-weight: ${bundle.weight};`,
+		`\t${prefix}-line-height: ${bundle.lineHeight};`,
+		`\t${prefix}-tracking: ${bundle.tracking};`,
+	];
+}
+
+function typographyBlock(pack: TypographyPack): string[] {
 	const lines: string[] = [];
 	const push = (name: string, value: string) => lines.push(`\t${name}: ${value};`);
-	push('--font-family-sans', theme.typography.families.sans);
-	push('--font-family-mono', theme.typography.families.mono);
-	push('--font-family-base', theme.typography.families.base);
+	push('--font-family-sans', pack.families.sans);
+	push('--font-family-mono', pack.families.mono);
+	push('--font-family-base', pack.families.base);
 	// Atomic type sizes / weights / line-heights / tracking. Package #2
-	// replaces these with full per-role bundles; for #1 they ship as
-	// the legacy scale so primitives keep rendering.
+	// promotes all call sites to bundle tokens; until then both surfaces
+	// ship so page-level CSS keeps rendering.
 	push('--font-size-xs', '0.75rem');
 	push('--font-size-sm', '0.875rem');
 	push('--font-size-body', '0.9375rem');
@@ -199,12 +238,29 @@ function typographyBlock(theme: Theme): string[] {
 	push('--letter-spacing-normal', '0');
 	push('--letter-spacing-wide', '0.04em');
 	push('--letter-spacing-caps', '0.08em');
+
+	// Bundle role tokens (--type-{role}-{variant}-{field}).
+	for (const variant of READING_VARIANTS) {
+		lines.push(...typographyBundleBlock(pack, 'reading', variant, pack.bundles.reading[variant]));
+	}
+	for (const variant of HEADING_VARIANTS) {
+		lines.push(...typographyBundleBlock(pack, 'heading', variant, pack.bundles.heading[variant]));
+	}
+	for (const variant of UI_VARIANTS) {
+		lines.push(...typographyBundleBlock(pack, 'ui', variant, pack.bundles.ui[variant]));
+	}
+	for (const variant of CODE_VARIANTS) {
+		lines.push(...typographyBundleBlock(pack, 'code', variant, pack.bundles.code[variant]));
+	}
+	for (const variant of DEFINITION_VARIANTS) {
+		lines.push(...typographyBundleBlock(pack, 'definition', variant, pack.bundles.definition[variant]));
+	}
 	return lines;
 }
 
-function controlsBlock(): string[] {
-	// Atomic control sizing. Package #4 promotes these to full
-	// component tokens (--button-*, --input-*). Kept flat in #1 so
+function controlsAtomicBlock(): string[] {
+	// Atomic control sizing. Package #4 promotes these to per-variant
+	// component tokens (--button-*-*, --input-*-*). Kept flat in #1 so
 	// migrated primitives keep a stable surface.
 	return [
 		'\t--control-radius: var(--radius-md);',
@@ -218,6 +274,101 @@ function controlsBlock(): string[] {
 		'\t--control-font-size-md: var(--font-size-base);',
 		'\t--control-font-size-lg: var(--font-size-lg);',
 	];
+}
+
+function controlTokensBlock(control: ControlTokens): string[] {
+	const lines: string[] = [];
+	const push = (name: string, value: string) => lines.push(`\t${name}: ${value};`);
+	for (const variant of BUTTON_VARIANTS) {
+		const s = control.button[variant];
+		push(`--button-${variant}-bg`, s.bg);
+		push(`--button-${variant}-ink`, s.ink);
+		push(`--button-${variant}-border`, s.border);
+		push(`--button-${variant}-hover-bg`, s.hoverBg);
+		push(`--button-${variant}-hover-ink`, s.hoverInk);
+		push(`--button-${variant}-active-bg`, s.activeBg);
+		push(`--button-${variant}-disabled-bg`, s.disabledBg);
+		push(`--button-${variant}-disabled-ink`, s.disabledInk);
+		push(`--button-${variant}-ring`, s.ring);
+	}
+	for (const variant of INPUT_VARIANTS) {
+		const s = control.input[variant];
+		push(`--input-${variant}-bg`, s.bg);
+		push(`--input-${variant}-ink`, s.ink);
+		push(`--input-${variant}-border`, s.border);
+		push(`--input-${variant}-hover-bg`, s.hoverBg);
+		push(`--input-${variant}-hover-ink`, s.hoverInk);
+		push(`--input-${variant}-active-bg`, s.activeBg);
+		push(`--input-${variant}-disabled-bg`, s.disabledBg);
+		push(`--input-${variant}-disabled-ink`, s.disabledInk);
+		push(`--input-${variant}-ring`, s.ring);
+	}
+	return lines;
+}
+
+function simBlock(sim: SimTokens): string[] {
+	const lines: string[] = [];
+	const push = (name: string, value: string) => lines.push(`\t${name}: ${value};`);
+	// panel
+	push('--sim-panel-bg', sim.panel.bg);
+	push('--sim-panel-bg-darker', sim.panel.bgDarker);
+	push('--sim-panel-bg-elevated', sim.panel.bgElevated);
+	push('--sim-panel-border', sim.panel.border);
+	push('--sim-panel-fg', sim.panel.fg);
+	push('--sim-panel-fg-dim', sim.panel.fgDim);
+	push('--sim-panel-fg-faint', sim.panel.fgFaint);
+	push('--sim-panel-fg-light', sim.panel.fgLight);
+	push('--sim-panel-fg-lighter', sim.panel.fgLighter);
+	push('--sim-panel-fg-lightest', sim.panel.fgLightest);
+	push('--sim-panel-fg-muted', sim.panel.fgMuted);
+	push('--sim-panel-fg-note', sim.panel.fgNote);
+	push('--sim-panel-fg-subtle', sim.panel.fgSubtle);
+	// instrument
+	push('--sim-instrument-bezel', sim.instrument.bezel);
+	push('--sim-instrument-bezel-outer', sim.instrument.bezelOuter);
+	push('--sim-instrument-face', sim.instrument.face);
+	push('--sim-instrument-face-inner', sim.instrument.faceInner);
+	push('--sim-instrument-pointer', sim.instrument.pointer);
+	push('--sim-instrument-pointer-pivot', sim.instrument.pointerPivot);
+	push('--sim-instrument-tick', sim.instrument.tick);
+	push('--sim-instrument-tick-dim', sim.instrument.tickDim);
+	push('--sim-instrument-tick-faint', sim.instrument.tickFaint);
+	push('--sim-instrument-tick-minor', sim.instrument.tickMinor);
+	push('--sim-instrument-tick-subtle', sim.instrument.tickSubtle);
+	// horizon
+	push('--sim-horizon-ground', sim.horizon.ground);
+	push('--sim-horizon-sky', sim.horizon.sky);
+	// arc
+	push('--sim-arc-green', sim.arc.green);
+	push('--sim-arc-red', sim.arc.red);
+	push('--sim-arc-white', sim.arc.white);
+	push('--sim-arc-yellow', sim.arc.yellow);
+	// status
+	push('--sim-status-danger', sim.status.danger);
+	push('--sim-status-danger-bg', sim.status.dangerBg);
+	push('--sim-status-danger-border', sim.status.dangerBorder);
+	push('--sim-status-danger-fg', sim.status.dangerFg);
+	push('--sim-status-danger-strong', sim.status.dangerStrong);
+	push('--sim-status-primary', sim.status.primary);
+	push('--sim-status-primary-fg', sim.status.primaryFg);
+	push('--sim-status-primary-hover', sim.status.primaryHover);
+	push('--sim-status-success', sim.status.success);
+	push('--sim-status-success-bg', sim.status.successBg);
+	push('--sim-status-success-border', sim.status.successBorder);
+	push('--sim-status-success-fg', sim.status.successFg);
+	push('--sim-status-warning', sim.status.warning);
+	push('--sim-status-warning-bg', sim.status.warningBg);
+	push('--sim-status-warning-border', sim.status.warningBorder);
+	// banner
+	push('--sim-banner-info-bg', sim.banner.infoBg);
+	push('--sim-banner-info-border', sim.banner.infoBorder);
+	push('--sim-banner-info-fg', sim.banner.infoFg);
+	push('--sim-banner-success-bg', sim.banner.successBg);
+	push('--sim-banner-success-border', sim.banner.successBorder);
+	// readout + muted
+	push('--sim-readout-warning-bg', sim.readout.warningBg);
+	push('--sim-muted-state-bg', sim.muted.stateBg);
+	return lines;
 }
 
 function chromeBlock(chrome: Chrome): string[] {
@@ -258,9 +409,11 @@ export function themeToCss(theme: Theme, appearance: AppearanceMode): string {
 	const isDark = appearance === 'dark';
 	const lines = [
 		...paletteBlock(palette, isDark),
-		...typographyBlock({ ...theme, chrome: resolved.chrome, typography: resolved.typography }),
+		...typographyBlock(resolved.typography),
 		...chromeBlock(resolved.chrome),
-		...controlsBlock(),
+		...controlsAtomicBlock(),
+		...controlTokensBlock(resolved.control),
+		...(resolved.sim ? simBlock(resolved.sim) : []),
 		...legacyAliasBlock(),
 	];
 	const selector = `[data-theme="${theme.id}"][data-appearance="${appearance}"]`;
