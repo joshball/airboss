@@ -9,6 +9,7 @@ import {
 	getCard,
 	getScenario,
 	getSession,
+	getSessionItemResult,
 	getSessionItemResults,
 	InvalidOptionError,
 	recordItemResult,
@@ -152,8 +153,10 @@ interface SlotRefs {
 }
 
 async function loadSlot(sessionId: string, userId: string, slotIndex: number): Promise<SlotRefs> {
-	const results = await getSessionItemResults(sessionId, userId);
-	const slot = results.find((r) => r.slotIndex === slotIndex);
+	// Index-backed single-row fetch via sir_session_slot_unique. Previously
+	// this pulled every slot row in the session and then .find()'d the one we
+	// wanted -- wasted work on every submit / skip / completeNode action.
+	const slot = await getSessionItemResult(sessionId, userId, slotIndex);
 	if (!slot) throw error(404, { message: `Slot ${slotIndex} not found in session ${sessionId}` });
 	return {
 		slotIndex: slot.slotIndex,

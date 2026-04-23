@@ -725,6 +725,37 @@ export async function getSessionItemResults(
 		.orderBy(sessionItemResult.slotIndex);
 }
 
+/**
+ * Single-row fetch for one slot of a session. Backed by the
+ * `sir_session_slot_unique` UNIQUE index on (session_id, slot_index); the
+ * `userId` predicate is an authorization guard that filters out rows owned
+ * by a different user on the same session id (shouldn't happen in practice
+ * since commitSession stamps userId from the session row, but the BC keeps
+ * the guard so a caller can't sidestep it).
+ *
+ * Used by the session runner's per-action `loadSlot` path, which previously
+ * fetched every slot row just to pick one out.
+ */
+export async function getSessionItemResult(
+	sessionId: string,
+	userId: string,
+	slotIndex: number,
+	db: Db = defaultDb,
+): Promise<SessionItemResultRow | null> {
+	const [row] = await db
+		.select()
+		.from(sessionItemResult)
+		.where(
+			and(
+				eq(sessionItemResult.sessionId, sessionId),
+				eq(sessionItemResult.userId, userId),
+				eq(sessionItemResult.slotIndex, slotIndex),
+			),
+		)
+		.limit(1);
+	return row ?? null;
+}
+
 export async function getSessions(userId: string, limit = 20, db: Db = defaultDb): Promise<SessionRow[]> {
 	return await db
 		.select()

@@ -173,6 +173,7 @@ export {
 	completeSession,
 	getResumableSession,
 	getSession,
+	getSessionItemResult,
 	getSessionItemResults,
 	getSessionSummary,
 	getSessions,
