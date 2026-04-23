@@ -24,6 +24,7 @@ import { DEV_DB_URL, ENV_VARS, HOSTS } from '@ab/constants';
 const DEV_URLS: Record<string, string> = {
 	study: `https://${HOSTS.STUDY}`,
 	sim: `https://${HOSTS.SIM}`,
+	hangar: `https://${HOSTS.HANGAR}`,
 };
 
 const REPO_ROOT = resolve(import.meta.dir, '..');

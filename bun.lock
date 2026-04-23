@@ -31,11 +31,20 @@
         "zod": "^3.25.36",
       },
     },
+    "apps/hangar": {
+      "name": "@ab/hangar",
+    },
     "apps/sim": {
       "name": "@ab/sim",
     },
     "apps/study": {
       "name": "@ab/study",
+    },
+    "libs/activities": {
+      "name": "@ab/activities",
+    },
+    "libs/audit": {
+      "name": "@ab/audit",
     },
     "libs/auth": {
       "name": "@ab/auth",
@@ -72,6 +81,10 @@
     },
   },
   "packages": {
+    "@ab/activities": ["@ab/activities@workspace:libs/activities"],
+
+    "@ab/audit": ["@ab/audit@workspace:libs/audit"],
+
     "@ab/auth": ["@ab/auth@workspace:libs/auth"],
 
     "@ab/aviation": ["@ab/aviation@workspace:libs/aviation"],
@@ -83,6 +96,8 @@
     "@ab/constants": ["@ab/constants@workspace:libs/constants"],
 
     "@ab/db": ["@ab/db@workspace:libs/db"],
+
+    "@ab/hangar": ["@ab/hangar@workspace:apps/hangar"],
 
     "@ab/help": ["@ab/help@workspace:libs/help"],
 
