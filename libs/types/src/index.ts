@@ -1,1 +1,1 @@
-// Shared types -- populated as features are built
+export type { ActionFailure, FieldErrors } from './actions';

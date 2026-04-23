@@ -1,14 +1,6 @@
 import { requireAuth } from '@ab/auth';
 import { createScenario, newScenarioSchema, type ScenarioOption, type ScenarioRow } from '@ab/bc-study';
-import {
-	type DIFFICULTY_VALUES,
-	type Difficulty,
-	type DOMAIN_VALUES,
-	type Domain,
-	type PHASE_OF_FLIGHT_VALUES,
-	type PhaseOfFlight,
-	ROUTES,
-} from '@ab/constants';
+import { type DIFFICULTY_VALUES, type DOMAIN_VALUES, type PHASE_OF_FLIGHT_VALUES, ROUTES } from '@ab/constants';
 import { createLogger } from '@ab/utils';
 import { fail, redirect } from '@sveltejs/kit';
 import type { Actions } from './$types';
@@ -127,15 +119,3 @@ export const actions: Actions = {
 		redirect(303, `${ROUTES.REPS_BROWSE}?created=${encodeURIComponent(created.id)}`);
 	},
 } satisfies Actions;
-
-// Exported so `$types` consumers can see the typed action input shape.
-export type NewScenarioInput = {
-	title: string;
-	situation: string;
-	options: ScenarioOption[];
-	teachingPoint: string;
-	domain: Domain;
-	difficulty: Difficulty;
-	phaseOfFlight: PhaseOfFlight | null;
-	regReferences: string[];
-};

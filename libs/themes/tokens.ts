@@ -82,6 +82,17 @@ export const TOKENS = {
 
 	// Color -- focus
 	colorFocusRing: '--ab-color-focus-ring',
+	focusRing: '--ab-focus-ring',
+	focusRingOffset: '--ab-focus-ring-offset',
+	focusRingWidth: '--ab-focus-ring-width',
+	shadowFocusRing: '--ab-shadow-focus-ring',
+	shadowSuccessGlow: '--ab-shadow-success-glow',
+
+	// Breakpoints -- canonical viewport rungs (see tokens.css top-of-file comment)
+	breakpointSm: '--ab-breakpoint-sm',
+	breakpointMd: '--ab-breakpoint-md',
+	breakpointLg: '--ab-breakpoint-lg',
+	breakpointXl: '--ab-breakpoint-xl',
 
 	// Typography -- family
 	fontFamilySans: '--ab-font-family-sans',

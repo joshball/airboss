@@ -199,6 +199,8 @@ export {
 	cardTagsSchema,
 	cardTextSchema,
 	confidenceSchema,
+	type NewCardInput,
+	type NewScenarioInput,
 	newCardSchema,
 	newScenarioSchema,
 	regReferencesSchema,
