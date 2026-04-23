@@ -51,7 +51,7 @@ let {
 		font: inherit;
 		padding: 0.5rem 0.625rem;
 		border: 1px solid var(--ab-color-border);
-		border-radius: 6px;
+		border-radius: var(--ab-radius-sm);
 		background: var(--ab-color-surface, white);
 		color: var(--ab-color-fg);
 	}
@@ -65,7 +65,7 @@ let {
 	.go {
 		font: inherit;
 		padding: 0.5rem 1rem;
-		border-radius: 6px;
+		border-radius: var(--ab-radius-sm);
 		border: 1px solid var(--ab-color-border);
 		background: var(--ab-color-surface-sunken);
 		cursor: pointer;

@@ -72,7 +72,7 @@ function pctOf(n: number, total: number): string {
 		padding: 0;
 		display: flex;
 		flex-direction: column;
-		gap: 0.1875rem;
+		gap: var(--ab-space-micro);
 	}
 
 	.row {
@@ -80,7 +80,7 @@ function pctOf(n: number, total: number): string {
 		grid-template-columns: 2.25rem 1fr auto auto;
 		align-items: center;
 		gap: var(--ab-space-sm);
-		padding: 0.1875rem var(--ab-space-xs);
+		padding: var(--ab-space-micro) var(--ab-space-xs);
 		border-radius: var(--ab-radius-sm);
 		font-size: var(--ab-font-size-sm);
 	}
@@ -98,7 +98,7 @@ function pctOf(n: number, total: number): string {
 		font-size: 0.6875rem;
 		font-weight: var(--ab-font-weight-semibold);
 		letter-spacing: 0.04em;
-		padding: 0.0625rem 0.3125rem;
+		padding: var(--ab-space-hair) var(--ab-space-xs-alt);
 		border-radius: var(--ab-radius-sm);
 		border: 1px solid var(--ab-color-border-strong);
 		color: var(--ab-color-fg-muted);
@@ -134,7 +134,7 @@ function pctOf(n: number, total: number): string {
 		font-size: var(--ab-font-size-xs);
 		color: var(--ab-color-fg-muted);
 		display: inline-flex;
-		gap: 0.125rem;
+		gap: var(--ab-space-3xs);
 	}
 
 	.count-mastered {

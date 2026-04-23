@@ -62,22 +62,22 @@ function handleWindowKey(event: KeyboardEvent): void {
 		align-items: center;
 		gap: 0.5rem;
 		padding: 0.25rem 0.625rem;
-		border: 1px solid var(--ab-color-border, #e2e8f0);
+		border: 1px solid var(--ab-color-border);
 		border-radius: var(--ab-radius-sm, 4px);
-		background: var(--ab-color-surface, #ffffff);
-		color: var(--ab-color-fg-muted, #64748b);
+		background: var(--ab-color-surface);
+		color: var(--ab-color-fg-muted);
 		font: inherit;
 		font-size: 0.875rem;
 		cursor: pointer;
 	}
 
 	.trigger:hover {
-		color: var(--ab-color-fg, #0f172a);
-		background: var(--ab-color-surface-sunken, #f1f5f9);
+		color: var(--ab-color-fg);
+		background: var(--ab-color-surface-sunken);
 	}
 
 	.trigger:focus-visible {
-		outline: 2px solid var(--ab-color-focus-ring, #60a5fa);
+		outline: 2px solid var(--ab-color-focus-ring);
 		outline-offset: 2px;
 	}
 
@@ -89,14 +89,14 @@ function handleWindowKey(event: KeyboardEvent): void {
 		margin-left: 0.25rem;
 		font-size: 0.6875rem;
 		font-family: var(--ab-font-mono, ui-monospace, monospace);
-		border: 1px solid var(--ab-color-border, #e2e8f0);
+		border: 1px solid var(--ab-color-border);
 		border-bottom-width: 2px;
-		border-radius: 3px;
+		border-radius: var(--ab-radius-xs);
 		padding: 0 0.25rem;
-		background: var(--ab-color-surface-sunken, #f1f5f9);
+		background: var(--ab-color-surface-sunken);
 	}
 
-	@media (max-width: 640px) {
+	@media (max-width: 640px) { /* --ab-breakpoint-md */
 		.label {
 			display: none;
 		}

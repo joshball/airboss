@@ -76,7 +76,7 @@ function groupBySurface(
 	.page {
 		display: flex;
 		flex-direction: column;
-		gap: 1.75rem;
+		gap: var(--ab-space-xl-hi);
 	}
 
 	.hd h1 {
@@ -86,20 +86,20 @@ function groupBySurface(
 	}
 
 	.sub {
-		margin: 0.25rem 0 0;
+		margin: var(--ab-space-2xs) 0 0;
 		color: var(--ab-color-fg-muted, var(--ab-color-fg-subtle));
 	}
 
 	.empty {
 		border: 1px dashed var(--ab-color-border-strong, var(--ab-color-border-strong));
 		border-radius: var(--ab-radius-lg);
-		padding: 2rem 1.5rem;
+		padding: var(--ab-space-2xl) var(--ab-space-xl);
 		text-align: center;
 		color: var(--ab-color-fg-muted, var(--ab-color-fg-subtle));
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		gap: 0.75rem;
+		gap: var(--ab-space-md);
 	}
 
 	.empty h2 {
@@ -119,7 +119,7 @@ function groupBySurface(
 	}
 
 	.group h2 {
-		margin: 0 0 0.75rem;
+		margin: 0 0 var(--ab-space-md);
 		font-size: var(--ab-font-size-base);
 		text-transform: uppercase;
 		letter-spacing: 0.08em;
@@ -132,14 +132,14 @@ function groupBySurface(
 		margin: 0;
 		display: grid;
 		grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
-		gap: 0.75rem;
+		gap: var(--ab-space-md);
 	}
 
 	.card {
 		display: flex;
 		flex-direction: column;
-		gap: 0.375rem;
-		padding: 0.875rem 1rem;
+		gap: var(--ab-space-xs);
+		padding: var(--ab-space-md-alt) var(--ab-space-lg);
 		border: 1px solid var(--ab-color-border, var(--ab-color-border));
 		border-radius: var(--ab-radius-md, 6px);
 		background: var(--ab-color-surface, var(--ab-color-surface));
@@ -174,7 +174,7 @@ function groupBySurface(
 
 	.documents code {
 		background: var(--ab-color-surface-sunken, var(--ab-color-surface-sunken));
-		padding: 0 0.3125rem;
+		padding: 0 var(--ab-space-xs-alt);
 		border-radius: var(--ab-radius-xs);
 		font-family: var(--ab-font-mono, ui-monospace, monospace);
 	}
@@ -183,7 +183,7 @@ function groupBySurface(
 		border: 1px solid var(--ab-color-border, var(--ab-color-border));
 		border-bottom-width: 2px;
 		border-radius: var(--ab-radius-xs);
-		padding: 0 0.25rem;
+		padding: 0 var(--ab-space-2xs);
 		font-size: var(--ab-font-size-xs);
 		font-family: var(--ab-font-mono, ui-monospace, monospace);
 		background: var(--ab-color-surface-sunken, var(--ab-color-surface-sunken));

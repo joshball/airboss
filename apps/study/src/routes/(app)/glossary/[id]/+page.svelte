@@ -99,12 +99,12 @@ const related = $derived(data.related);
 	.page {
 		display: flex;
 		flex-direction: column;
-		gap: 1.125rem;
+		gap: var(--ab-space-lg-alt);
 	}
 
 	.crumbs {
 		display: flex;
-		gap: 0.375rem;
+		gap: var(--ab-space-xs);
 		font-size: var(--ab-font-size-sm);
 		color: var(--ab-color-fg-muted, var(--ab-color-fg-muted));
 	}
@@ -120,7 +120,7 @@ const related = $derived(data.related);
 		justify-content: space-between;
 		align-items: baseline;
 		flex-wrap: wrap;
-		gap: 0.75rem;
+		gap: var(--ab-space-md);
 	}
 
 	.hd h1 {
@@ -138,12 +138,12 @@ const related = $derived(data.related);
 	.tags {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 0.375rem;
+		gap: var(--ab-space-xs);
 	}
 
 	.chip {
 		display: inline-flex;
-		padding: 0.125rem 0.5rem;
+		padding: var(--ab-space-3xs) var(--ab-space-sm);
 		font-size: var(--ab-font-size-xs);
 		border-radius: var(--ab-radius-pill);
 		background: var(--ab-color-surface-sunken, var(--ab-color-surface-sunken));
@@ -154,7 +154,7 @@ const related = $derived(data.related);
 	}
 
 	.body h2 {
-		margin: 0 0 0.5rem;
+		margin: 0 0 var(--ab-space-sm);
 		font-size: var(--ab-font-size-sm);
 		font-weight: 700;
 		text-transform: uppercase;
@@ -173,7 +173,7 @@ const related = $derived(data.related);
 	.verbatim {
 		white-space: pre-wrap;
 		background: var(--ab-color-surface-sunken, var(--ab-color-surface-muted));
-		padding: 0.875rem 1rem;
+		padding: var(--ab-space-md-alt) var(--ab-space-lg);
 		border-radius: var(--ab-radius-md);
 		border: 1px solid var(--ab-color-border, var(--ab-color-border));
 		margin: 0;
@@ -183,7 +183,7 @@ const related = $derived(data.related);
 	}
 
 	.pending {
-		padding: 0.75rem 1rem;
+		padding: var(--ab-space-md) var(--ab-space-lg);
 		border-radius: var(--ab-radius-md);
 		background: var(--ab-color-warning-subtle);
 		border: 1px solid var(--ab-color-warning-subtle-border);
@@ -197,19 +197,19 @@ const related = $derived(data.related);
 		margin: 0;
 		display: flex;
 		flex-direction: column;
-		gap: 0.25rem;
+		gap: var(--ab-space-2xs);
 	}
 
 	.sources li {
 		display: flex;
-		gap: 0.5rem;
+		gap: var(--ab-space-sm);
 		align-items: center;
 	}
 
 	.sid {
 		font-family: var(--ab-font-mono, ui-monospace, monospace);
 		font-size: var(--ab-font-size-sm);
-		padding: 0.0625rem 0.375rem;
+		padding: var(--ab-space-hair) var(--ab-space-xs);
 		border-radius: var(--ab-radius-xs);
 		background: var(--ab-color-surface-sunken, var(--ab-color-surface-sunken));
 		color: var(--ab-color-fg-muted, var(--ab-color-fg-muted));
@@ -221,7 +221,7 @@ const related = $derived(data.related);
 		margin: 0;
 		display: flex;
 		flex-wrap: wrap;
-		gap: 0.5rem;
+		gap: var(--ab-space-sm);
 	}
 
 	.related a {

@@ -73,7 +73,7 @@ function domainHref(slug: string): string {
 		padding: 0;
 		display: flex;
 		flex-direction: column;
-		gap: 0.125rem;
+		gap: var(--ab-space-3xs);
 	}
 
 	.dm {
@@ -106,7 +106,7 @@ function domainHref(slug: string): string {
 	.more {
 		color: var(--ab-color-fg-faint);
 		font-size: var(--ab-font-size-xs);
-		padding: 0.125rem var(--ab-space-xs);
+		padding: var(--ab-space-3xs) var(--ab-space-xs);
 	}
 
 	.muted {

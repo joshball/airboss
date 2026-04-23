@@ -254,7 +254,7 @@ const skipPreview = $derived([...selectedSkip].sort().map((d) => domainLabel(d))
 	.page {
 		display: flex;
 		flex-direction: column;
-		gap: 1.5rem;
+		gap: var(--ab-space-xl);
 	}
 
 	h1 {
@@ -265,7 +265,7 @@ const skipPreview = $derived([...selectedSkip].sort().map((d) => domainLabel(d))
 	}
 
 	.sub {
-		margin: 0.25rem 0 0;
+		margin: var(--ab-space-2xs) 0 0;
 		color: var(--ab-color-fg-subtle);
 		font-size: var(--ab-font-size-body);
 	}
@@ -274,10 +274,10 @@ const skipPreview = $derived([...selectedSkip].sort().map((d) => domainLabel(d))
 		background: white;
 		border: 1px solid var(--ab-color-border);
 		border-radius: var(--ab-radius-lg);
-		padding: 1.5rem;
+		padding: var(--ab-space-xl);
 		display: flex;
 		flex-direction: column;
-		gap: 1.5rem;
+		gap: var(--ab-space-xl);
 	}
 
 	fieldset {
@@ -286,7 +286,7 @@ const skipPreview = $derived([...selectedSkip].sort().map((d) => domainLabel(d))
 		margin: 0;
 		display: flex;
 		flex-direction: column;
-		gap: 0.5rem;
+		gap: var(--ab-space-sm);
 	}
 
 	legend {
@@ -310,10 +310,10 @@ const skipPreview = $derived([...selectedSkip].sort().map((d) => domainLabel(d))
 		background: var(--ab-color-surface-muted);
 		border: 1px solid var(--ab-color-border);
 		border-radius: var(--ab-radius-md);
-		padding: 1rem 1.25rem;
+		padding: var(--ab-space-lg) var(--ab-space-xl-alt);
 		display: flex;
 		flex-direction: column;
-		gap: 0.75rem;
+		gap: var(--ab-space-md);
 	}
 
 	.preview-h {
@@ -335,7 +335,7 @@ const skipPreview = $derived([...selectedSkip].sort().map((d) => domainLabel(d))
 		margin: 0;
 		display: grid;
 		grid-template-columns: max-content 1fr;
-		gap: 0.25rem 0.875rem;
+		gap: var(--ab-space-2xs) var(--ab-space-md-alt);
 		font-size: var(--ab-font-size-sm);
 	}
 
@@ -359,27 +359,27 @@ const skipPreview = $derived([...selectedSkip].sort().map((d) => domainLabel(d))
 	input[type='text'] {
 		border: 1px solid var(--ab-color-border-strong);
 		border-radius: var(--ab-radius-md);
-		padding: 0.5rem 0.75rem;
+		padding: var(--ab-space-sm) var(--ab-space-md);
 		font-size: var(--ab-font-size-body);
 	}
 
 	.choice-row {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 0.5rem;
+		gap: var(--ab-space-sm);
 	}
 
 	.choice-grid {
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-		gap: 0.375rem;
+		gap: var(--ab-space-xs);
 	}
 
 	.choice {
 		display: inline-flex;
-		gap: 0.375rem;
+		gap: var(--ab-space-xs);
 		align-items: center;
-		padding: 0.375rem 0.75rem;
+		padding: var(--ab-space-xs) var(--ab-space-md);
 		background: var(--ab-color-surface-muted);
 		border: 1px solid var(--ab-color-border);
 		border-radius: var(--ab-radius-md);
@@ -406,20 +406,20 @@ const skipPreview = $derived([...selectedSkip].sort().map((d) => domainLabel(d))
 	.actions {
 		display: flex;
 		justify-content: flex-end;
-		gap: 0.5rem;
+		gap: var(--ab-space-sm);
 	}
 
 	.error {
 		background: var(--ab-color-danger-subtle);
 		color: var(--ab-color-danger-hover);
-		padding: 0.625rem 0.875rem;
+		padding: var(--ab-space-sm-alt) var(--ab-space-md-alt);
 		border-radius: var(--ab-radius-md);
 		border: 1px solid var(--ab-color-danger-subtle-border);
 		font-size: var(--ab-font-size-sm);
 	}
 
 	.btn {
-		padding: 0.5rem 1rem;
+		padding: var(--ab-space-sm) var(--ab-space-lg);
 		font-size: var(--ab-font-size-body);
 		font-weight: 600;
 		border-radius: var(--ab-radius-md);

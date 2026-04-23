@@ -116,35 +116,35 @@ function toggleCollapse(): void {
 	.cheatsheet {
 		display: flex;
 		align-items: center;
-		gap: 0.5rem;
-		padding: 0.25rem 0.5rem;
-		background: var(--ab-color-surface, #f6f6f6);
-		border: 1px solid var(--ab-color-border, #ddd);
-		border-radius: 6px;
+		gap: var(--ab-space-sm);
+		padding: var(--ab-space-2xs) var(--ab-space-sm);
+		background: var(--ab-color-surface);
+		border: 1px solid var(--ab-color-border);
+		border-radius: var(--ab-radius-sm);
 		font-size: 0.72rem;
-		color: var(--ab-color-fg-muted, #555);
+		color: var(--ab-color-fg-muted);
 		overflow: hidden;
 	}
 
 	.toggle {
 		display: inline-flex;
 		align-items: center;
-		gap: 0.25rem;
+		gap: var(--ab-space-2xs);
 		background: transparent;
 		border: none;
 		cursor: pointer;
 		color: inherit;
 		font-size: inherit;
-		padding: 0.1rem 0.25rem;
-		border-radius: 3px;
+		padding: 0.1rem var(--ab-space-2xs);
+		border-radius: var(--ab-radius-xs);
 	}
 
 	.toggle:hover {
-		background: var(--ab-color-border, #e6e6e6);
+		background: var(--ab-color-border);
 	}
 
 	.chevron {
-		font-family: ui-monospace, monospace;
+		font-family: var(--ab-font-mono);
 		font-size: 0.7rem;
 		width: 0.7rem;
 		display: inline-block;
@@ -161,7 +161,7 @@ function toggleCollapse(): void {
 		display: flex;
 		flex-wrap: wrap;
 		align-items: center;
-		gap: 0.35rem 0.5rem;
+		gap: 0.35rem var(--ab-space-sm);
 		margin: 0;
 		padding: 0;
 	}
@@ -169,27 +169,27 @@ function toggleCollapse(): void {
 	.cluster {
 		display: inline-flex;
 		align-items: center;
-		gap: 0.25rem;
+		gap: var(--ab-space-2xs);
 	}
 
 	.sep {
-		color: var(--ab-color-border, #ccc);
+		color: var(--ab-color-border-strong);
 		user-select: none;
 	}
 
 	kbd {
-		font-family: ui-monospace, monospace;
+		font-family: var(--ab-font-mono);
 		font-size: 0.7rem;
-		background: var(--ab-color-bg, #fff);
-		border: 1px solid var(--ab-color-border, #ccc);
+		background: var(--ab-color-surface);
+		border: 1px solid var(--ab-color-border-strong);
 		border-bottom-width: 2px;
-		border-radius: 3px;
+		border-radius: var(--ab-radius-xs);
 		padding: 0.05rem 0.3rem;
-		color: var(--ab-color-fg, #222);
+		color: var(--ab-color-fg);
 		white-space: nowrap;
 	}
 
 	.hint {
-		color: var(--ab-color-fg-muted, #666);
+		color: var(--ab-color-fg-muted);
 	}
 </style>

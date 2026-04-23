@@ -77,7 +77,7 @@ function handleKey(event: KeyboardEvent): void {
 		margin: 0 0 0.75rem;
 		font-size: 1.125rem;
 		font-weight: var(--ab-font-weight-semibold, 600);
-		color: var(--ab-color-fg, #0f172a);
+		color: var(--ab-color-fg);
 	}
 
 	.toggle {
@@ -94,13 +94,13 @@ function handleKey(event: KeyboardEvent): void {
 	}
 
 	.toggle:focus-visible {
-		outline: 2px solid var(--ab-color-focus-ring, #60a5fa);
+		outline: 2px solid var(--ab-color-focus-ring);
 		outline-offset: 2px;
 		border-radius: var(--ab-radius-sm, 4px);
 	}
 
 	.chevron {
-		color: var(--ab-color-fg-muted, #64748b);
+		color: var(--ab-color-fg-muted);
 		font-size: 0.875rem;
 		width: 1ch;
 		display: inline-block;
@@ -109,7 +109,7 @@ function handleKey(event: KeyboardEvent): void {
 	.body {
 		font-size: 1rem;
 		line-height: 1.6;
-		color: var(--ab-color-fg, #0f172a);
+		color: var(--ab-color-fg);
 		white-space: pre-wrap;
 	}
 </style>

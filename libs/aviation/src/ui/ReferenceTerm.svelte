@@ -117,7 +117,7 @@ function truncate(text: string, max: number): string {
 	.link:focus-visible {
 		outline: 2px solid var(--ab-color-focus-ring);
 		outline-offset: 2px;
-		border-radius: 2px;
+		border-radius: var(--ab-radius-hair);
 	}
 
 	.unresolved {
@@ -139,7 +139,7 @@ function truncate(text: string, max: number): string {
 		background: var(--ab-color-surface, white);
 		color: var(--ab-color-fg);
 		border: 1px solid var(--ab-color-border);
-		border-radius: 8px;
+		border-radius: var(--ab-radius-md);
 		padding: 0.625rem 0.75rem;
 		box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
 		display: flex;
@@ -169,7 +169,7 @@ function truncate(text: string, max: number): string {
 	.chip {
 		font-size: 0.6875rem;
 		padding: 0.0625rem 0.375rem;
-		border-radius: 999px;
+		border-radius: var(--ab-radius-pill);
 		background: var(--ab-color-surface-sunken);
 		color: var(--ab-color-fg-muted);
 		text-transform: uppercase;

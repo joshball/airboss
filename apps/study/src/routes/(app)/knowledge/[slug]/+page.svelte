@@ -279,12 +279,12 @@ function renderPhase(body: string | null): string {
 	.page {
 		display: flex;
 		flex-direction: column;
-		gap: 1.25rem;
+		gap: var(--ab-space-xl-alt);
 	}
 
 	.crumb {
 		display: flex;
-		gap: 0.5rem;
+		gap: var(--ab-space-sm);
 		font-size: var(--ab-font-size-sm);
 		color: var(--ab-color-fg-subtle);
 	}
@@ -308,14 +308,14 @@ function renderPhase(body: string | null): string {
 	.tags {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 0.375rem;
-		margin-top: 0.625rem;
+		gap: var(--ab-space-xs);
+		margin-top: var(--ab-space-sm-alt);
 	}
 
 	.badge {
 		display: inline-flex;
 		align-items: center;
-		padding: 0.125rem 0.5rem;
+		padding: var(--ab-space-3xs) var(--ab-space-sm);
 		font-size: var(--ab-font-size-xs);
 		font-weight: 600;
 		border-radius: var(--ab-radius-pill);
@@ -360,10 +360,10 @@ function renderPhase(body: string | null): string {
 		background: white;
 		border: 1px solid var(--ab-color-border);
 		border-radius: var(--ab-radius-lg);
-		padding: 1rem 1.125rem;
+		padding: var(--ab-space-lg) var(--ab-space-lg-alt);
 		display: flex;
 		flex-direction: column;
-		gap: 0.625rem;
+		gap: var(--ab-space-sm-alt);
 	}
 
 	.mastery-head {
@@ -403,14 +403,14 @@ function renderPhase(body: string | null): string {
 	.gates {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
-		gap: 0.75rem;
-		margin: 0.25rem 0 0;
+		gap: var(--ab-space-md);
+		margin: var(--ab-space-2xs) 0 0;
 	}
 
 	.gate {
 		display: flex;
 		flex-direction: column;
-		gap: 0.125rem;
+		gap: var(--ab-space-3xs);
 	}
 
 	.gate dt {
@@ -445,12 +445,12 @@ function renderPhase(body: string | null): string {
 
 	.ctas {
 		display: flex;
-		gap: 0.5rem;
+		gap: var(--ab-space-sm);
 		flex-wrap: wrap;
 	}
 
 	.btn {
-		padding: 0.625rem 1.125rem;
+		padding: var(--ab-space-sm-alt) var(--ab-space-lg-alt);
 		font-size: var(--ab-font-size-body);
 		font-weight: 600;
 		border-radius: var(--ab-radius-md);
@@ -481,7 +481,7 @@ function renderPhase(body: string | null): string {
 	}
 
 	.section h2 {
-		margin: 0 0 0.625rem;
+		margin: 0 0 var(--ab-space-sm-alt);
 		font-size: var(--ab-font-size-lg);
 		color: var(--ab-color-fg);
 		letter-spacing: -0.01em;
@@ -495,7 +495,7 @@ function renderPhase(body: string | null): string {
 
 	.relevance th,
 	.relevance td {
-		padding: 0.5rem 0.625rem;
+		padding: var(--ab-space-sm) var(--ab-space-sm-alt);
 		text-align: left;
 		border-bottom: 1px solid var(--ab-color-border);
 	}
@@ -527,7 +527,7 @@ function renderPhase(body: string | null): string {
 		margin: 0;
 		display: grid;
 		grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-		gap: 0.375rem;
+		gap: var(--ab-space-xs);
 	}
 
 	.edge-list a {
@@ -551,18 +551,18 @@ function renderPhase(body: string | null): string {
 	.phases {
 		display: flex;
 		flex-direction: column;
-		gap: 0.875rem;
+		gap: var(--ab-space-md-alt);
 	}
 
 	.phase {
 		background: white;
 		border: 1px solid var(--ab-color-border);
 		border-radius: var(--ab-radius-lg);
-		padding: 1rem 1.125rem;
+		padding: var(--ab-space-lg) var(--ab-space-lg-alt);
 	}
 
 	.phase-title {
-		margin: 0 0 0.5rem;
+		margin: 0 0 var(--ab-space-sm);
 		font-size: var(--ab-font-size-base);
 		color: var(--ab-color-fg);
 	}
@@ -576,25 +576,25 @@ function renderPhase(body: string | null): string {
 	.prose :global(h3),
 	.prose :global(h4),
 	.prose :global(h5) {
-		margin: 1rem 0 0.5rem;
+		margin: var(--ab-space-lg) 0 var(--ab-space-sm);
 		color: var(--ab-color-fg);
 	}
 
 	.prose :global(p) {
-		margin: 0 0 0.75rem;
+		margin: 0 0 var(--ab-space-md);
 		line-height: 1.55;
 		color: var(--ab-color-fg);
 	}
 
 	.prose :global(ul),
 	.prose :global(ol) {
-		margin: 0 0 0.75rem 1.25rem;
+		margin: 0 0 var(--ab-space-md) var(--ab-space-xl-alt);
 		line-height: 1.55;
 		color: var(--ab-color-fg);
 	}
 
 	.prose :global(li) {
-		margin-bottom: 0.25rem;
+		margin-bottom: var(--ab-space-2xs);
 	}
 
 	.prose :global(code) {
@@ -608,7 +608,7 @@ function renderPhase(body: string | null): string {
 	.prose :global(pre) {
 		background: var(--ab-color-fg);
 		color: var(--ab-color-border);
-		padding: 0.75rem 1rem;
+		padding: var(--ab-space-md) var(--ab-space-lg);
 		border-radius: var(--ab-radius-md);
 		overflow-x: auto;
 		font-size: var(--ab-font-size-sm);
@@ -630,24 +630,24 @@ function renderPhase(body: string | null): string {
 		margin: 0;
 		display: flex;
 		flex-direction: column;
-		gap: 0.5rem;
+		gap: var(--ab-space-sm);
 	}
 
 	.refs li {
 		background: white;
 		border: 1px solid var(--ab-color-border);
 		border-radius: var(--ab-radius-md);
-		padding: 0.625rem 0.875rem;
+		padding: var(--ab-space-sm-alt) var(--ab-space-md-alt);
 		font-size: var(--ab-font-size-body);
 	}
 
 	.ref-detail {
 		color: var(--ab-color-fg-subtle);
-		margin-left: 0.25rem;
+		margin-left: var(--ab-space-2xs);
 	}
 
 	.ref-note {
-		margin: 0.375rem 0 0;
+		margin: var(--ab-space-xs) 0 0;
 		color: var(--ab-color-fg-muted);
 		font-size: var(--ab-font-size-sm);
 		line-height: 1.45;

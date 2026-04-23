@@ -68,33 +68,33 @@ function byGroup(group: SimKeybinding['group']): readonly SimKeybinding[] {
 	.overlay {
 		position: fixed;
 		inset: 0;
-		background: rgba(0, 0, 0, 0.75);
+		background: var(--ab-overlay-scrim-heavy);
 		z-index: 100;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		padding: 1.5rem;
+		padding: var(--ab-space-xl);
 	}
 
 	.panel {
-		background: #1a1a1a;
-		color: #f5f5f5;
-		border: 1px solid #333;
-		border-radius: 8px;
+		background: var(--ab-sim-panel-bg);
+		color: var(--ab-sim-panel-fg);
+		border: 1px solid var(--ab-sim-panel-border);
+		border-radius: var(--ab-radius-md);
 		max-width: 720px;
 		width: 100%;
 		max-height: 90vh;
 		overflow: auto;
-		padding: 1rem 1.25rem 1.25rem;
+		padding: var(--ab-space-lg) 1.25rem 1.25rem;
 	}
 
 	header {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		border-bottom: 1px solid #2a2a2a;
-		padding-bottom: 0.5rem;
-		margin-bottom: 0.75rem;
+		border-bottom: 1px solid var(--ab-sim-panel-bg-elevated);
+		padding-bottom: var(--ab-space-sm);
+		margin-bottom: var(--ab-space-md);
 	}
 
 	h2 {
@@ -105,35 +105,35 @@ function byGroup(group: SimKeybinding['group']): readonly SimKeybinding[] {
 	.close {
 		background: transparent;
 		border: none;
-		color: #aaa;
-		font-family: ui-monospace, monospace;
+		color: var(--ab-sim-panel-fg-light);
+		font-family: var(--ab-font-mono);
 		font-size: 1rem;
 		cursor: pointer;
-		padding: 0.2rem 0.5rem;
+		padding: 0.2rem var(--ab-space-sm);
 	}
 
 	.close:hover {
-		color: #f5f5f5;
+		color: var(--ab-sim-panel-fg);
 	}
 
 	.intro {
-		color: #ccc;
+		color: var(--ab-sim-panel-fg-lighter);
 		font-size: 0.9rem;
-		margin: 0 0 0.75rem;
+		margin: 0 0 var(--ab-space-md);
 	}
 
 	.grid {
 		display: grid;
 		grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-		gap: 1rem;
+		gap: var(--ab-space-lg);
 	}
 
 	section h3 {
-		margin: 0 0 0.25rem 0;
+		margin: 0 0 var(--ab-space-2xs) 0;
 		font-size: 0.8rem;
 		text-transform: uppercase;
 		letter-spacing: 0.04em;
-		color: #aaa;
+		color: var(--ab-sim-panel-fg-light);
 	}
 
 	dl {
@@ -145,41 +145,41 @@ function byGroup(group: SimKeybinding['group']): readonly SimKeybinding[] {
 	}
 
 	dt {
-		font-family: ui-monospace, monospace;
-		color: #ffe270;
+		font-family: var(--ab-font-mono);
+		color: var(--ab-sim-instrument-pointer);
 		white-space: nowrap;
 	}
 
 	dd {
 		margin: 0;
-		color: #ddd;
+		color: var(--ab-sim-panel-fg-lightest);
 	}
 
 	.note {
-		margin-top: 1rem;
+		margin-top: var(--ab-space-lg);
 		font-size: 0.85rem;
-		color: #9bbfff;
-		border-top: 1px solid #2a2a2a;
-		padding-top: 0.5rem;
+		color: var(--ab-sim-status-primary-fg);
+		border-top: 1px solid var(--ab-sim-panel-bg-elevated);
+		padding-top: var(--ab-space-sm);
 	}
 
 	footer {
-		margin-top: 0.75rem;
+		margin-top: var(--ab-space-md);
 		display: flex;
 		justify-content: flex-end;
 	}
 
 	.ok {
-		background: #2563eb;
-		color: #fff;
+		background: var(--ab-sim-status-primary);
+		color: var(--ab-color-primary-fg);
 		border: none;
-		padding: 0.5rem 1rem;
-		border-radius: 4px;
+		padding: var(--ab-space-sm) var(--ab-space-lg);
+		border-radius: var(--ab-radius-xs);
 		font-size: 0.9rem;
 		cursor: pointer;
 	}
 
 	.ok:hover {
-		background: #1d4ed8;
+		background: var(--ab-sim-status-primary-hover);
 	}
 </style>

@@ -112,7 +112,7 @@ function handleMenuKeydown(event: KeyboardEvent) {
 <style>
 	.skip {
 		position: absolute;
-		top: -3rem;
+		top: -var(--ab-space-3xl);
 		left: var(--ab-space-sm);
 		background: var(--ab-color-fg);
 		color: var(--ab-color-fg-inverse);
@@ -272,7 +272,7 @@ function handleMenuKeydown(event: KeyboardEvent) {
 	/* Narrow viewports: swap the full name/email label for initials so the
 	   nav stops wrapping around ~600px. The panel still shows the full
 	   identity when opened. */
-	@media (max-width: 640px) {
+	@media (max-width: 640px) { /* --ab-breakpoint-md */
 		nav {
 			gap: var(--ab-space-md);
 			padding: var(--ab-space-md) var(--ab-space-lg);

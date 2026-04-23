@@ -51,25 +51,25 @@ const scenarios = $derived(data.scenarios);
 	main {
 		max-width: 720px;
 		margin: 0 auto;
-		padding: 2rem 1.5rem;
+		padding: var(--ab-space-2xl) var(--ab-space-xl);
 	}
 
 	header {
-		margin-bottom: 2rem;
+		margin-bottom: var(--ab-space-2xl);
 	}
 
 	h1 {
-		margin: 0 0 0.25rem 0;
+		margin: 0 0 var(--ab-space-2xs) 0;
 		font-size: 1.75rem;
 	}
 
 	.subtitle {
 		margin: 0;
-		color: var(--ab-color-fg-muted, #666);
+		color: var(--ab-color-fg-muted);
 	}
 
 	.scenarios h2 {
-		margin-bottom: 0.75rem;
+		margin-bottom: var(--ab-space-md);
 		font-size: 1.125rem;
 	}
 
@@ -78,30 +78,30 @@ const scenarios = $derived(data.scenarios);
 		padding: 0;
 		margin: 0;
 		display: grid;
-		gap: 0.75rem;
+		gap: var(--ab-space-md);
 	}
 
 	.scenarios li a {
 		display: block;
-		padding: 1rem 1.25rem;
-		border: 1px solid var(--ab-color-border, #ccc);
-		border-radius: 6px;
+		padding: var(--ab-space-lg) 1.25rem;
+		border: 1px solid var(--ab-color-border);
+		border-radius: var(--ab-radius-sm);
 		text-decoration: none;
 		color: inherit;
-		background: var(--ab-color-surface, #fff);
+		background: var(--ab-color-surface);
 	}
 
 	.scenarios li a:hover,
 	.scenarios li a:focus-visible {
-		border-color: var(--ab-color-primary, #2563eb);
+		border-color: var(--ab-color-primary);
 	}
 
 	.card-head {
 		display: flex;
 		justify-content: space-between;
 		align-items: baseline;
-		gap: 1rem;
-		margin-bottom: 0.25rem;
+		gap: var(--ab-space-lg);
+		margin-bottom: var(--ab-space-2xs);
 	}
 
 	.scenarios li a strong {
@@ -110,25 +110,25 @@ const scenarios = $derived(data.scenarios);
 
 	.scenarios li a .label {
 		font-size: 0.75rem;
-		color: var(--ab-color-primary, #2563eb);
+		color: var(--ab-color-primary);
 		text-transform: uppercase;
 		letter-spacing: 0.04em;
 	}
 
 	.scenarios li a .tagline {
 		margin: 0;
-		color: var(--ab-color-fg, #111);
+		color: var(--ab-color-fg);
 		font-size: 0.95rem;
 	}
 
 	.scenarios li a .objective {
-		margin: 0.25rem 0 0;
-		color: var(--ab-color-fg-muted, #666);
+		margin: var(--ab-space-2xs) 0 0;
+		color: var(--ab-color-fg-muted);
 		font-size: 0.85rem;
 	}
 
 	.empty {
-		color: var(--ab-color-fg-muted, #666);
+		color: var(--ab-color-fg-muted);
 		font-size: 0.9375rem;
 		margin: 0;
 	}
@@ -139,6 +139,6 @@ const scenarios = $derived(data.scenarios);
 
 	.disclaimer {
 		font-size: 0.85rem;
-		color: var(--ab-color-fg-muted, #666);
+		color: var(--ab-color-fg-muted);
 	}
 </style>

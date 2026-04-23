@@ -325,14 +325,14 @@ function sliceLabel(slice: SessionSlice): string {
 	.page {
 		display: flex;
 		flex-direction: column;
-		gap: 1rem;
+		gap: var(--ab-space-lg);
 	}
 
 	.hd {
 		display: flex;
 		justify-content: space-between;
 		align-items: flex-start;
-		gap: 1rem;
+		gap: var(--ab-space-lg);
 	}
 
 	h1 {
@@ -342,7 +342,7 @@ function sliceLabel(slice: SessionSlice): string {
 	}
 
 	.sub {
-		margin: 0.25rem 0 0;
+		margin: var(--ab-space-2xs) 0 0;
 		color: var(--ab-color-fg-subtle);
 		font-size: 0.875rem;
 	}
@@ -350,7 +350,7 @@ function sliceLabel(slice: SessionSlice): string {
 	.progress {
 		background: var(--ab-color-border);
 		height: 0.375rem;
-		border-radius: 999px;
+		border-radius: var(--ab-radius-pill);
 		overflow: hidden;
 	}
 
@@ -364,8 +364,8 @@ function sliceLabel(slice: SessionSlice): string {
 	.error {
 		background: var(--ab-color-danger-subtle);
 		color: var(--ab-color-danger-hover);
-		padding: 0.625rem 0.875rem;
-		border-radius: 8px;
+		padding: var(--ab-space-sm-alt) var(--ab-space-md-alt);
+		border-radius: var(--ab-radius-md);
 		border: 1px solid var(--ab-color-danger-subtle-border);
 		font-size: 0.875rem;
 	}
@@ -373,16 +373,16 @@ function sliceLabel(slice: SessionSlice): string {
 	.item-card {
 		background: white;
 		border: 1px solid var(--ab-color-border);
-		border-radius: 12px;
-		padding: 1.5rem;
+		border-radius: var(--ab-radius-xl);
+		padding: var(--ab-space-xl);
 		display: flex;
 		flex-direction: column;
-		gap: 1rem;
+		gap: var(--ab-space-lg);
 	}
 
 	.item-head {
 		display: flex;
-		gap: 0.5rem;
+		gap: var(--ab-space-sm);
 		align-items: baseline;
 		flex-wrap: wrap;
 		font-size: 0.8125rem;
@@ -394,8 +394,8 @@ function sliceLabel(slice: SessionSlice): string {
 		font-size: 0.6875rem;
 		text-transform: uppercase;
 		letter-spacing: 0.06em;
-		padding: 0.125rem 0.5rem;
-		border-radius: 999px;
+		padding: var(--ab-space-3xs) var(--ab-space-sm);
+		border-radius: var(--ab-radius-pill);
 		background: var(--ab-color-primary-subtle);
 		color: var(--ab-color-primary-hover);
 	}
@@ -422,7 +422,7 @@ function sliceLabel(slice: SessionSlice): string {
 	.node-body {
 		display: flex;
 		flex-direction: column;
-		gap: 1rem;
+		gap: var(--ab-space-lg);
 	}
 
 	.card-front {
@@ -434,8 +434,8 @@ function sliceLabel(slice: SessionSlice): string {
 	.card-back {
 		background: var(--ab-color-surface-muted);
 		border: 1px solid var(--ab-color-border);
-		border-radius: 10px;
-		padding: 1rem;
+		border-radius: var(--ab-radius-lg);
+		padding: var(--ab-space-lg);
 		color: var(--ab-color-fg);
 	}
 
@@ -453,19 +453,19 @@ function sliceLabel(slice: SessionSlice): string {
 
 	.actions {
 		display: flex;
-		gap: 0.5rem;
+		gap: var(--ab-space-sm);
 	}
 
 	.rating-row {
 		display: grid;
 		grid-template-columns: repeat(4, 1fr);
-		gap: 0.5rem;
+		gap: var(--ab-space-sm);
 	}
 
 	.rating-fieldset {
 		display: grid;
 		grid-template-columns: repeat(4, 1fr);
-		gap: 0.5rem;
+		gap: var(--ab-space-sm);
 		border: 0;
 		margin: 0;
 		padding: 0;
@@ -486,7 +486,7 @@ function sliceLabel(slice: SessionSlice): string {
 	.options {
 		display: flex;
 		flex-direction: column;
-		gap: 0.5rem;
+		gap: var(--ab-space-sm);
 	}
 
 	.option {
@@ -495,7 +495,7 @@ function sliceLabel(slice: SessionSlice): string {
 		color: var(--ab-color-fg);
 		justify-content: flex-start;
 		text-align: left;
-		padding: 0.75rem 1rem;
+		padding: var(--ab-space-md) var(--ab-space-lg);
 	}
 
 	.option:hover:not(:disabled) {
@@ -526,8 +526,8 @@ function sliceLabel(slice: SessionSlice): string {
 	.skip-row {
 		display: flex;
 		justify-content: flex-end;
-		gap: 0.75rem;
-		padding-top: 0.5rem;
+		gap: var(--ab-space-md);
+		padding-top: var(--ab-space-sm);
 		border-top: 1px solid var(--ab-color-surface-sunken);
 	}
 
@@ -546,11 +546,11 @@ function sliceLabel(slice: SessionSlice): string {
 	.link-btn:focus-visible {
 		outline: none;
 		box-shadow: 0 0 0 3px var(--ab-color-focus-ring);
-		border-radius: 4px;
+		border-radius: var(--ab-radius-tight);
 	}
 
 	.skip-hint {
-		margin: 0.25rem 0 0;
+		margin: var(--ab-space-2xs) 0 0;
 		font-size: 0.75rem;
 		color: var(--ab-color-fg-subtle);
 		text-align: right;
@@ -559,12 +559,12 @@ function sliceLabel(slice: SessionSlice): string {
 	.empty {
 		background: white;
 		border: 1px solid var(--ab-color-border);
-		border-radius: 12px;
-		padding: 2rem;
+		border-radius: var(--ab-radius-xl);
+		padding: var(--ab-space-2xl);
 		text-align: center;
 		display: flex;
 		flex-direction: column;
-		gap: 0.75rem;
+		gap: var(--ab-space-md);
 		align-items: center;
 	}
 
@@ -584,10 +584,10 @@ function sliceLabel(slice: SessionSlice): string {
 	}
 
 	.btn {
-		padding: 0.5rem 1rem;
+		padding: var(--ab-space-sm) var(--ab-space-lg);
 		font-size: 0.9375rem;
 		font-weight: 600;
-		border-radius: 8px;
+		border-radius: var(--ab-radius-md);
 		border: 1px solid transparent;
 		cursor: pointer;
 		text-decoration: none;

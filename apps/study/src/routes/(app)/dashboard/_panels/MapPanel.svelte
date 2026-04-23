@@ -107,7 +107,7 @@ function cellTitle(domain: Domain, cell: DomainCertCell): string {
 	.map {
 		display: flex;
 		flex-direction: column;
-		gap: 0.125rem;
+		gap: var(--ab-space-3xs);
 		min-width: 0;
 	}
 
@@ -116,7 +116,7 @@ function cellTitle(domain: Domain, cell: DomainCertCell): string {
 		display: grid;
 		grid-template-columns: minmax(7rem, 1fr) repeat(4, minmax(1.25rem, 2rem));
 		align-items: center;
-		gap: 0.25rem;
+		gap: var(--ab-space-2xs);
 	}
 
 	.col-head {
@@ -126,7 +126,7 @@ function cellTitle(domain: Domain, cell: DomainCertCell): string {
 		letter-spacing: 0.04em;
 		color: var(--ab-color-fg-faint);
 		text-align: center;
-		padding-bottom: 0.125rem;
+		padding-bottom: var(--ab-space-3xs);
 	}
 
 	.row-head {
@@ -142,7 +142,7 @@ function cellTitle(domain: Domain, cell: DomainCertCell): string {
 		align-items: center;
 		justify-content: center;
 		height: 0.9375rem;
-		border-radius: 2px;
+		border-radius: var(--ab-radius-hair);
 		border: 1px solid var(--ab-color-border);
 		font-size: 0.625rem;
 		font-family: var(--ab-font-family-mono);
@@ -188,7 +188,7 @@ function cellTitle(domain: Domain, cell: DomainCertCell): string {
 		background: var(--ab-color-success);
 	}
 
-	@media (max-width: 639px) {
+	@media (max-width: 640px) { /* --ab-breakpoint-md */
 		.head,
 		.row {
 			grid-template-columns: minmax(6rem, 1fr) repeat(4, minmax(1rem, 1.5rem));

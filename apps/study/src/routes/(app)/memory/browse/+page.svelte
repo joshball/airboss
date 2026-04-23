@@ -274,14 +274,14 @@ function pageHref(n: number): string {
 	.page {
 		display: flex;
 		flex-direction: column;
-		gap: 1.25rem;
+		gap: var(--ab-space-xl-alt);
 	}
 
 	.hd {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		gap: 1rem;
+		gap: var(--ab-space-lg);
 	}
 
 	h1 {
@@ -292,7 +292,7 @@ function pageHref(n: number): string {
 	}
 
 	.sub {
-		margin: 0.25rem 0 0;
+		margin: var(--ab-space-2xs) 0 0;
 		color: var(--ab-color-fg-subtle);
 		font-size: var(--ab-font-size-body);
 	}
@@ -300,18 +300,18 @@ function pageHref(n: number): string {
 	.filters {
 		display: grid;
 		grid-template-columns: 2fr 1fr 1fr 1fr 1fr auto;
-		gap: 0.75rem;
+		gap: var(--ab-space-md);
 		align-items: end;
 		background: white;
 		border: 1px solid var(--ab-color-border);
 		border-radius: var(--ab-radius-lg);
-		padding: 1rem;
+		padding: var(--ab-space-lg);
 	}
 
 	.filter {
 		display: flex;
 		flex-direction: column;
-		gap: 0.25rem;
+		gap: var(--ab-space-2xs);
 	}
 
 	.filter label {
@@ -325,7 +325,7 @@ function pageHref(n: number): string {
 	.filter input,
 	.filter select {
 		font: inherit;
-		padding: 0.5rem 0.625rem;
+		padding: var(--ab-space-sm) var(--ab-space-sm-alt);
 		border: 1px solid var(--ab-color-border-strong);
 		border-radius: var(--ab-radius-sm);
 		background: white;
@@ -341,14 +341,14 @@ function pageHref(n: number): string {
 
 	.filter-actions {
 		display: flex;
-		gap: 0.375rem;
+		gap: var(--ab-space-xs);
 	}
 
 	.banner-link {
 		color: var(--ab-color-primary-hover);
 		font-weight: 600;
 		text-decoration: none;
-		margin-left: 0.25rem;
+		margin-left: var(--ab-space-2xs);
 	}
 
 	.banner-link:hover {
@@ -359,8 +359,8 @@ function pageHref(n: number): string {
 		display: flex;
 		align-items: center;
 		flex-wrap: wrap;
-		gap: 0.375rem;
-		padding: 0 0.125rem;
+		gap: var(--ab-space-xs);
+		padding: 0 var(--ab-space-3xs);
 	}
 
 	.chip-label {
@@ -369,14 +369,14 @@ function pageHref(n: number): string {
 		letter-spacing: 0.06em;
 		color: var(--ab-color-fg-subtle);
 		font-weight: 600;
-		margin-right: 0.25rem;
+		margin-right: var(--ab-space-2xs);
 	}
 
 	.chip {
 		display: inline-flex;
 		align-items: center;
-		gap: 0.375rem;
-		padding: 0.25rem 0.625rem;
+		gap: var(--ab-space-xs);
+		padding: var(--ab-space-2xs) var(--ab-space-sm-alt);
 		background: var(--ab-color-primary-subtle);
 		border: 1px solid var(--ab-color-primary-subtle-border);
 		border-radius: var(--ab-radius-pill);
@@ -415,7 +415,7 @@ function pageHref(n: number): string {
 		font-size: var(--ab-font-size-xs);
 		color: var(--ab-color-fg-muted);
 		text-decoration: underline;
-		margin-left: 0.25rem;
+		margin-left: var(--ab-space-2xs);
 	}
 
 	.chip-clear:hover {
@@ -437,13 +437,13 @@ function pageHref(n: number): string {
 		background: white;
 		border: 1px dashed var(--ab-color-border-strong);
 		border-radius: var(--ab-radius-lg);
-		padding: 3rem 1.5rem;
+		padding: var(--ab-space-3xl) var(--ab-space-xl);
 		text-align: center;
 		color: var(--ab-color-fg-subtle);
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		gap: 1rem;
+		gap: var(--ab-space-lg);
 	}
 
 	.list {
@@ -452,7 +452,7 @@ function pageHref(n: number): string {
 		margin: 0;
 		display: flex;
 		flex-direction: column;
-		gap: 0.5rem;
+		gap: var(--ab-space-sm);
 	}
 
 	.card {
@@ -469,7 +469,7 @@ function pageHref(n: number): string {
 
 	.card-link {
 		display: block;
-		padding: 0.875rem 1rem;
+		padding: var(--ab-space-md-alt) var(--ab-space-lg);
 		text-decoration: none;
 		color: inherit;
 	}
@@ -481,16 +481,16 @@ function pageHref(n: number): string {
 	}
 
 	.card-meta {
-		margin-top: 0.5rem;
+		margin-top: var(--ab-space-sm);
 		display: flex;
 		flex-wrap: wrap;
-		gap: 0.375rem;
+		gap: var(--ab-space-xs);
 	}
 
 	.badge {
 		display: inline-flex;
 		align-items: center;
-		padding: 0.125rem 0.5rem;
+		padding: var(--ab-space-3xs) var(--ab-space-sm);
 		font-size: var(--ab-font-size-xs);
 		font-weight: 600;
 		border-radius: var(--ab-radius-pill);
@@ -529,8 +529,8 @@ function pageHref(n: number): string {
 		display: grid;
 		grid-template-columns: 1fr auto 1fr;
 		align-items: center;
-		gap: 0.75rem;
-		padding: 0.5rem 0;
+		gap: var(--ab-space-md);
+		padding: var(--ab-space-sm) 0;
 	}
 
 	.pager > :first-child {
@@ -547,7 +547,7 @@ function pageHref(n: number): string {
 	}
 
 	.btn {
-		padding: 0.5rem 1rem;
+		padding: var(--ab-space-sm) var(--ab-space-lg);
 		font-size: var(--ab-font-size-body);
 		font-weight: 600;
 		border-radius: var(--ab-radius-md);
@@ -589,7 +589,7 @@ function pageHref(n: number): string {
 		background: var(--ab-color-surface-sunken);
 	}
 
-	@media (max-width: 640px) {
+	@media (max-width: 640px) { /* --ab-breakpoint-md */
 		.filters {
 			grid-template-columns: 1fr 1fr;
 		}

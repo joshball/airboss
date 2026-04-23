@@ -409,7 +409,7 @@ const interpretation = $derived(
 	.page {
 		display: flex;
 		flex-direction: column;
-		gap: 1.25rem;
+		gap: var(--ab-space-xl-alt);
 	}
 
 	.hd h1 {
@@ -420,7 +420,7 @@ const interpretation = $derived(
 	}
 
 	.sub {
-		margin: 0.125rem 0 0;
+		margin: var(--ab-space-3xs) 0 0;
 		color: var(--ab-color-fg-muted);
 		font-size: var(--ab-font-size-body);
 	}
@@ -429,11 +429,11 @@ const interpretation = $derived(
 		background: white;
 		border: 1px solid var(--ab-color-border);
 		border-radius: var(--ab-radius-lg);
-		padding: 2rem;
+		padding: var(--ab-space-2xl);
 		text-align: center;
 		display: flex;
 		flex-direction: column;
-		gap: 0.75rem;
+		gap: var(--ab-space-md);
 		align-items: center;
 	}
 
@@ -458,11 +458,11 @@ const interpretation = $derived(
 		background: white;
 		border: 1px solid var(--ab-color-border);
 		border-radius: var(--ab-radius-lg);
-		padding: 1.5rem;
+		padding: var(--ab-space-xl);
 		display: flex;
 		flex-wrap: wrap;
 		align-items: flex-end;
-		gap: 1.5rem;
+		gap: var(--ab-space-xl);
 	}
 
 	.score-main {
@@ -491,7 +491,7 @@ const interpretation = $derived(
 
 	.score-meta {
 		display: flex;
-		gap: 1.5rem;
+		gap: var(--ab-space-xl);
 		margin: 0;
 	}
 
@@ -520,20 +520,20 @@ const interpretation = $derived(
 		background: white;
 		border: 1px solid var(--ab-color-border);
 		border-radius: var(--ab-radius-lg);
-		padding: 1.5rem;
+		padding: var(--ab-space-xl);
 		display: flex;
 		flex-direction: column;
-		gap: 0.75rem;
+		gap: var(--ab-space-md);
 	}
 
 	.interpretation-card {
 		background: var(--ab-color-primary-subtle);
 		border: 1px solid var(--ab-color-primary-subtle-border);
 		border-radius: var(--ab-radius-lg);
-		padding: 1.25rem 1.5rem;
+		padding: var(--ab-space-xl-alt) var(--ab-space-xl);
 		display: flex;
 		flex-wrap: wrap;
-		gap: 1rem;
+		gap: var(--ab-space-lg);
 		align-items: center;
 		justify-content: space-between;
 	}
@@ -567,17 +567,17 @@ const interpretation = $derived(
 		margin: 0;
 		display: flex;
 		flex-direction: column;
-		gap: 0.75rem;
+		gap: var(--ab-space-md);
 	}
 
 	.bucket {
 		border: 1px solid var(--ab-color-border);
 		border-radius: var(--ab-radius-lg);
-		padding: 0.875rem 1rem;
+		padding: var(--ab-space-md-alt) var(--ab-space-lg);
 		background: var(--ab-color-surface-muted);
 		display: flex;
 		flex-direction: column;
-		gap: 0.5rem;
+		gap: var(--ab-space-sm);
 	}
 
 	.bucket.gap-good {
@@ -602,7 +602,7 @@ const interpretation = $derived(
 	.bucket-head {
 		display: flex;
 		align-items: baseline;
-		gap: 0.625rem;
+		gap: var(--ab-space-sm-alt);
 		flex-wrap: wrap;
 	}
 
@@ -634,13 +634,13 @@ const interpretation = $derived(
 	.bars {
 		display: flex;
 		flex-direction: column;
-		gap: 0.25rem;
+		gap: var(--ab-space-2xs);
 	}
 
 	.bar-row {
 		display: flex;
 		align-items: center;
-		gap: 0.625rem;
+		gap: var(--ab-space-sm-alt);
 	}
 
 	.bar-label {
@@ -684,7 +684,7 @@ const interpretation = $derived(
 
 	.bar-pct {
 		position: absolute;
-		right: 0.375rem;
+		right: var(--ab-space-xs);
 		top: 50%;
 		transform: translateY(-50%);
 		font-size: var(--ab-font-size-xs);
@@ -695,7 +695,7 @@ const interpretation = $derived(
 
 	.bar-empty {
 		position: absolute;
-		left: 0.625rem;
+		left: var(--ab-space-sm-alt);
 		top: 50%;
 		transform: translateY(-50%);
 		font-size: var(--ab-font-size-xs);
@@ -706,7 +706,7 @@ const interpretation = $derived(
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		gap: 0.75rem;
+		gap: var(--ab-space-md);
 		flex-wrap: wrap;
 	}
 
@@ -716,7 +716,7 @@ const interpretation = $derived(
 		color: var(--ab-color-fg-strong);
 		display: inline-flex;
 		align-items: baseline;
-		gap: 0.35rem;
+		gap: var(--ab-space-tiny);
 	}
 
 	.bucket-gap-icon {
@@ -734,7 +734,7 @@ const interpretation = $derived(
 	.bucket-cta {
 		display: inline-flex;
 		align-items: center;
-		padding: 0.25rem 0.625rem;
+		padding: var(--ab-space-2xs) var(--ab-space-sm-alt);
 		font-size: var(--ab-font-size-sm);
 		font-weight: 600;
 		color: var(--ab-color-primary-hover);
@@ -791,7 +791,7 @@ const interpretation = $derived(
 	.domain-table th,
 	.domain-table td {
 		text-align: left;
-		padding: 0.5rem 0.625rem;
+		padding: var(--ab-space-sm) var(--ab-space-sm-alt);
 		border-bottom: 1px solid var(--ab-color-border);
 	}
 
@@ -815,8 +815,8 @@ const interpretation = $derived(
 	.gap-pill {
 		display: inline-flex;
 		align-items: center;
-		gap: 0.25rem;
-		padding: 0.0625rem 0.5rem;
+		gap: var(--ab-space-2xs);
+		padding: var(--ab-space-hair) var(--ab-space-sm);
 		border-radius: var(--ab-radius-pill);
 		font-size: var(--ab-font-size-xs);
 		font-weight: 600;
@@ -849,7 +849,7 @@ const interpretation = $derived(
 	.domain-cta {
 		display: inline-flex;
 		align-items: center;
-		padding: 0.25rem 0.625rem;
+		padding: var(--ab-space-2xs) var(--ab-space-sm-alt);
 		font-size: var(--ab-font-size-sm);
 		font-weight: 600;
 		color: var(--ab-color-primary-hover);
@@ -898,7 +898,7 @@ const interpretation = $derived(
 	.trend-legend {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 1rem;
+		gap: var(--ab-space-lg);
 		font-size: var(--ab-font-size-sm);
 		color: var(--ab-color-fg-muted);
 	}
@@ -921,13 +921,13 @@ const interpretation = $derived(
 
 	.actions {
 		display: flex;
-		gap: 0.5rem;
+		gap: var(--ab-space-sm);
 		flex-wrap: wrap;
 		justify-content: center;
 	}
 
 	.btn {
-		padding: 0.625rem 1.25rem;
+		padding: var(--ab-space-sm-alt) var(--ab-space-xl-alt);
 		font-size: var(--ab-font-size-body);
 		font-weight: 600;
 		border-radius: var(--ab-radius-md);
@@ -937,7 +937,7 @@ const interpretation = $derived(
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
-		gap: 0.5rem;
+		gap: var(--ab-space-sm);
 		transition:
 			background 120ms,
 			border-color 120ms;
@@ -962,7 +962,7 @@ const interpretation = $derived(
 		background: var(--ab-color-border);
 	}
 
-	@media (max-width: 560px) {
+	@media (max-width: 480px) { /* --ab-breakpoint-sm */
 		.bar-label {
 			flex: 0 0 4rem;
 		}

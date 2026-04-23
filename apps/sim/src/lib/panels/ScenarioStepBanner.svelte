@@ -44,29 +44,29 @@ const holdFrac = $derived.by(() => {
 	.banner {
 		display: grid;
 		grid-template-columns: auto 1fr;
-		gap: 0.75rem;
-		padding: 0.75rem 1rem;
-		background: #0c2a4a;
-		border: 1px solid #1f4a7a;
-		border-radius: 6px;
-		color: #eaf4ff;
+		gap: var(--ab-space-md);
+		padding: var(--ab-space-md) var(--ab-space-lg);
+		background: var(--ab-sim-banner-info-bg);
+		border: 1px solid var(--ab-sim-banner-info-border);
+		border-radius: var(--ab-radius-sm);
+		color: var(--ab-sim-banner-info-fg);
 	}
 
 	.banner.done {
-		background: #0c3a1a;
-		border-color: #1f6a3a;
+		background: var(--ab-sim-banner-success-bg);
+		border-color: var(--ab-sim-banner-success-border);
 	}
 
 	.step-count {
-		font-family: ui-monospace, monospace;
+		font-family: var(--ab-font-mono);
 		font-size: 0.8rem;
-		color: #9bbfff;
+		color: var(--ab-sim-status-primary-fg);
 		align-self: start;
 		white-space: nowrap;
 	}
 
 	.banner.done .step-count {
-		color: #9bffb0;
+		color: var(--ab-sim-status-success-fg);
 	}
 
 	.step-body h3 {
@@ -75,34 +75,34 @@ const holdFrac = $derived.by(() => {
 	}
 
 	.step-body p {
-		margin: 0.25rem 0 0;
+		margin: var(--ab-space-2xs) 0 0;
 		font-size: 0.9rem;
 	}
 
 	.hold-bar {
 		margin-top: 0.4rem;
 		height: 4px;
-		background: rgba(255, 255, 255, 0.12);
-		border-radius: 2px;
+		background: var(--ab-on-dark-track);
+		border-radius: var(--ab-radius-xs);
 		overflow: hidden;
 	}
 
 	.hold-fill {
 		height: 100%;
-		background: #ffe270;
-		transition: width 120ms linear;
+		background: var(--ab-sim-instrument-pointer);
+		transition: width var(--ab-transition-fast);
 	}
 
 	.hold-note {
 		margin-top: 0.2rem;
 		font-size: 0.75rem;
-		color: #9bbfff;
+		color: var(--ab-sim-status-primary-fg);
 	}
 
 	.done-note {
 		margin-top: 0.35rem;
 		font-size: 0.85rem;
-		color: #9bffb0;
+		color: var(--ab-sim-status-success-fg);
 		font-weight: bold;
 	}
 </style>

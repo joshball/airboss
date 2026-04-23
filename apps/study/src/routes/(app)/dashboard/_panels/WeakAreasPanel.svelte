@@ -67,14 +67,14 @@ function reasonLabel(reason: WeakAreaReason): string {
 		padding: 0;
 		display: flex;
 		flex-direction: column;
-		gap: 0.125rem;
+		gap: var(--ab-space-3xs);
 	}
 
 	.row {
 		display: flex;
 		flex-direction: column;
-		gap: 0.125rem;
-		padding: 0.3125rem var(--ab-space-sm);
+		gap: var(--ab-space-3xs);
+		padding: var(--ab-space-xs-alt) var(--ab-space-sm);
 		border-radius: var(--ab-radius-sm);
 		text-decoration: none;
 		color: var(--ab-color-fg);

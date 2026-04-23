@@ -29,23 +29,23 @@ let { activityId }: Props = $props();
 
 <style>
 	.activity {
-		margin: 0.75rem 0;
-		padding: 1rem;
+		margin: var(--ab-space-md) 0;
+		padding: var(--ab-space-lg);
 		background: white;
 		border: 1px solid var(--ab-color-border);
 		border-radius: var(--ab-radius-lg);
 	}
 
 	.activity figcaption {
-		margin-top: 0.625rem;
+		margin-top: var(--ab-space-sm-alt);
 		color: var(--ab-color-fg-subtle);
 		font-size: var(--ab-font-size-sm);
 		text-align: center;
 	}
 
 	.unknown {
-		margin: 0.75rem 0;
-		padding: 0.75rem 1rem;
+		margin: var(--ab-space-md) 0;
+		padding: var(--ab-space-md) var(--ab-space-lg);
 		background: var(--ab-color-warning-subtle);
 		border: 1px solid var(--ab-color-warning-subtle-border);
 		border-radius: var(--ab-radius-md);
