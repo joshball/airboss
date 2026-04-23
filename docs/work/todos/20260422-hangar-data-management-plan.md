@@ -237,9 +237,71 @@ Explicitly NOT porting:
 - Enrollment + learner records. Not applicable.
 - `pdftotext` as a global dep. Each source owns its parser.
 
-## Work packages (proposed)
+## Registry strategy: TOML-hybrid
 
-Three packages, serial dependency:
+**Decided.** Glossary and sources stop being hand-authored TypeScript. They move to checked-in TOML files under `libs/db/seed/`, mirror into a DB at runtime for hangar (so edits + audits + concurrent locks are first-class), and a sync service writes DB edits back to the TOML files with a git commit. Local commits in dev; `gh pr create` in prod (env-configurable).
+
+### Files on disk
+
+```text
+libs/db/seed/
+  glossary.toml      authoritative, checked in, human-editable
+  sources.toml       authoritative, checked in, human-editable
+```
+
+TOML chosen over JSON (no comments, noisy diffs, ugly multiline) and YAML (indentation footguns, key reorder churn). TOML handles multi-line `paraphrase` blocks cleanly, supports comments, and diffs one field per line.
+
+### Runtime shape
+
+- **Build time / library boot:** `libs/aviation/src/registry.ts` parses `glossary.toml` + `sources.toml` -> validates with Zod -> exposes `AVIATION_REFERENCES` + `SOURCES` exactly as today. Study and other read-only apps never touch the DB.
+- **Hangar boot:** seed-check reconciles `hangar.reference` + `hangar.source` DB tables with the TOML files. If TOML is newer, reseed. If DB has unsynced edits, surface a warning banner.
+- **Hangar edits:** update the DB row, mark dirty in `hangar.sync_log`. Sync-to-disk job writes TOML, commits, optionally PRs.
+
+### DB tables (new)
+
+```text
+hangar.reference      mirror of glossary.toml, edit surface for hangar UI
+hangar.source         mirror of sources.toml, edit surface for hangar UI
+hangar.sync_log       every sync: actor, files, commit SHA, pr URL, outcome
+hangar.job            queued + running + completed jobs (fetch/extract/build/diff/sync/...)
+```
+
+### Sync service
+
+New job kind `sync-to-disk`. UI trigger ("Sync pending edits") and optional scheduled sweep. Flow:
+
+1. Diff DB vs TOML for each edited entry
+2. Write new TOML (round-trip via `toml-codec.ts`)
+3. `git add libs/db/seed/glossary.toml libs/db/seed/sources.toml`
+4. `git commit -m "hangar: sync N references ({actor})"`
+5. **Mode A (local, dev default):** stop here; user pushes manually
+6. **Mode B (gh PR, prod default):** `git push` to `hangar-sync/{timestamp}`, open PR via `gh pr create`
+7. Record `hangar.sync_log` row (commit SHA, PR URL, files, outcome)
+
+Conflict handling: sync takes a file lock. If someone hand-edits TOML while DB has pending edits, sync aborts, surfaces the diff, and demands manual reconcile. Rare, loud.
+
+### Job model
+
+`hangar.job` is real, day-one. Worker thread spawned at hangar boot picks queued jobs. Multi-user safe. UI polls (or SSEs) job rows for progress. Every action -- fetch, upload, extract, build, diff, validate, sync-to-disk -- creates a job.
+
+```text
+hangar.job {
+  id:          job_ULID
+  kind:        'fetch' | 'upload' | 'extract' | 'build' | 'diff'
+               | 'validate' | 'size-report' | 'sync-to-disk'
+  targetId:    string | null         sourceId / referenceId / null
+  status:      'queued' | 'running' | 'complete' | 'failed' | 'cancelled'
+  progress:    jsonb                 { step, total, message, partials[] }
+  result:      jsonb | null          final payload (diff hunks, issues, counts)
+  error:       text | null
+  actorId:     user_id
+  startedAt / finishedAt / createdAt
+}
+```
+
+## Work packages
+
+Four packages, serial dependency.
 
 ### wp-hangar-scaffold (first)
 
@@ -247,7 +309,7 @@ Stand up `apps/hangar/` with auth, role gates, shell, nav, theme wire, audit log
 
 - `apps/hangar/` workspace + `svelte.config.js` + `package.json` + routing scaffold
 - `/login` shared with other apps (cross-subdomain cookie)
-- `/` redirect to `/sources`
+- `/` redirect to `/sources` (placeholder page until wp-hangar-sources-v1)
 - Port `requireAuth` + `requireRole` from FIRC into `libs/auth/`
 - Port `libs/audit` from FIRC (one table, one helper, one action)
 - Port roles from FIRC (4 values already right)
@@ -258,24 +320,42 @@ Stand up `apps/hangar/` with auth, role gates, shell, nav, theme wire, audit log
 
 Gate: `bun run check` clean. `bun run dev hangar` boots. Login works via existing better-auth. Auditable stub action on the empty home page to prove the logging path.
 
-### wp-hangar-sources-v1
+### wp-hangar-registry (second -- foundational)
 
-The interactive flow + source table + fetch + upload + validate + extract + build + diff. The meat.
+Migrate glossary + sources to TOML, stand up the DB mirror, build the edit UI, build the sync service, land `hangar.job` plumbing. This is the real first-feature wp; everything after reuses it.
+
+- `toml-codec.ts` in `libs/aviation/` -- round-trip `Reference[]` and `Source[]` to/from TOML, tested
+- One-shot generator: current `aviation.ts` + `sources/registry.ts` -> `libs/db/seed/glossary.toml` + `libs/db/seed/sources.toml`
+- Rewrite `libs/aviation/src/registry.ts` to parse TOML on boot; delete `aviation.ts`
+- Machine-generated `*-generated.ts` files stay as-is (they are verbatim blocks, not content)
+- Drizzle schemas: `hangar.reference`, `hangar.source`, `hangar.sync_log`, `hangar.job` + migrations
+- Boot-time seed reconciliation (TOML <-> DB)
+- `/glossary` edit UI in hangar: list, detail, form, markdown preview for `paraphrase`, enum-driven tag pickers (5-axis)
+- Per-row "Sync" and global "Sync all to disk" action
+- `hangar.job` worker (in-process Bun worker thread), progress polling endpoint
+- Sync service: local-commit mode + gh-PR mode, env-configurable
+- Audit log on every edit + sync
+- Concurrent edit safety: optimistic locking on `hangar.reference.rev`
+
+Gate: `bun run check` clean. All 175 references round-trip through TOML byte-identical. Edit a reference in UI, sync to disk, commit lands on the branch (local mode) or PR opens (gh mode). Study app still reads glossary correctly (file-parsed path unchanged). `hangar.job` shows history for every action.
+
+### wp-hangar-sources-v1 (third)
+
+The interactive flow + source table + fetch + upload + validate + extract + build + diff. Reuses `hangar.job` from wp-hangar-registry.
 
 - `/sources` index: flow diagram + source table + status panel
 - `/sources/[id]` detail
 - `/sources/[id]/files` filesystem browser
 - `/sources/[id]/diff` diff view
-- Form actions: fetch, upload, extract, build, diff, validate, size-report
+- `/jobs` route: full job history + live progress for running jobs
+- Job kinds: fetch, upload, extract, build, diff, validate, size-report (sync-to-disk already landed in wp-hangar-registry)
 - Port `downloadFile` from FIRC into `libs/aviation/src/sources/download.ts`
 - Port `DataTable` + `FormStack` + `ConfirmDialog` components to `libs/ui/`
 - Port `ValidationReport` component
 - Server loaders compute per-source state (binary present, meta present, verbatim coverage, freshness)
-- Audit-log every action
-- Spinner UX on long-running actions
 - Write through to `data/sources/<type>/<id>.<ext>` + `.meta.json`
 
-Gate: fetch + upload + validate + extract + diff all work end-to-end for the CFR source when a 14 CFR XML is present. `bun run check` clean.
+Gate: fetch + upload + validate + extract + diff all work end-to-end for the CFR source when a 14 CFR XML is present. Every action shows up in `/jobs`. Two users triggering extract at the same time don't collide. `bun run check` clean.
 
 ### wp-hangar-non-textual (later, after v1 ships)
 
@@ -289,18 +369,18 @@ Charts, approach plates, airport diagrams, NTSB CSV, AOPA HTML. Extends the Sour
 
 Gate: seeding one sectional chart works end-to-end; glossary page for a chart-referenced entry renders the preview.
 
-## Open questions for user
+## Decisions (locked)
 
-Before any work starts, decide these. My recommendations in parens; override freely.
-
-1. **Source registry: code-based or DB-mirrored?** (Code-based for MVP. UI is inspect + trigger; adding a source means editing `registry.ts` in an editor. Flip to DB-mirror only if multi-user editing lands.)
-2. **Long-running job model: sync + spinner, SSE, or job rows?** (Sync for MVP. Promote to job rows when the first extract exceeds ~10s in practice.)
-3. **UI-authored source entries: read-only for MVP, or writeable (form → TS diff → commit)?** (Read-only. Adding a source means editing `registry.ts`.)
-4. **App URL:** `hangar.airboss.test` in dev? (Yes, matches the pattern.)
-5. **Port `libs/audit` into airboss or re-author from scratch?** (Port -- it's small and battle-tested; just rename FIRC-isms.)
-6. **Include the `/jobs` route (task board from FIRC) in MVP?** (No. Defer with a `/jobs` stub that says "coming soon" if users start asking.)
-7. **Users + roles: reuse the existing 4-role enum from CLAUDE.md stack, or reduce to 2 (`admin`, `author`) for hangar?** (Reuse 4-role; airboss will grow into ops eventually. Hangar gates to `AUTHOR | OPERATOR | ADMIN`.)
-8. **Single-user (just you) for now, or multi-user day 1?** (Single-user. Invite flow lives in `ops` if we stand it up later. Hangar just checks role.)
+| #   | Question                   | Decision                                                                                                                          |
+| --- | -------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Source / glossary registry | **TOML-hybrid.** Files in `libs/db/seed/` authoritative + checked in; DB mirrors at runtime for hangar; sync service writes back. |
+| 2   | Long-running job model     | **Real `hangar.job` rows day one.** In-process worker, polled by UI. `/jobs` route ships in wp-hangar-sources-v1.                 |
+| 3   | UI-authored entries        | **Writeable** via hangar -> DB -> TOML -> commit. No TS editing required. Adds and edits both covered.                            |
+| 4   | App URL                    | `hangar.airboss.test` in dev.                                                                                                     |
+| 5   | `libs/audit`               | Port from FIRC, rename FIRC-isms.                                                                                                 |
+| 6   | `/jobs` route              | In scope for wp-hangar-sources-v1 (required by Q2 decision).                                                                      |
+| 7   | Roles                      | Reuse 4-role enum. Hangar gates to `AUTHOR` / `OPERATOR` / `ADMIN`.                                                               |
+| 8   | Single-user / multi-user   | **Multi-user day one.** Actor-logged audits, concurrent-safe job queue, manual user seeding for MVP.                              |
 
 ## Success criteria
 
@@ -317,29 +397,25 @@ All without touching a terminal.
 
 ## Not in scope (explicitly)
 
-- User invite / role management (maybe later, as ops)
-- Job queue (spinner for MVP)
-- DB-backed source registry (code stays authoritative)
+- User invite / role management (manual DB seeding for MVP; invite flow lives in ops later)
+- Presence / "someone else is editing this" indicators
 - Chart / plate source types (separate WP)
-- Content authoring (knowledge nodes stay markdown in an editor)
+- Content authoring for knowledge nodes (stay markdown in an editor)
 - FIRC compliance features (TCO, FAA package, traceability)
-- Release / publish semantics (airboss uses git commits for this)
+- Release / publish semantics beyond the sync-to-disk + git commit flow
 - Enrollment / certificate issuance
 - Analytics dashboards
 
 ## Timeline shape
 
-Agent-driven, serial:
+Agent-driven, serial, each in an isolated worktree:
 
-1. wp-hangar-scaffold → PR → review → merge
-2. wp-hangar-sources-v1 → PR → review → merge → manual walkthrough
-3. download a real CFR XML, use hangar to fetch/extract/build/diff for real (this closes the Extract-2 blocker from the reference-system work)
-4. wp-hangar-non-textual (after we have a chart in mind)
+1. wp-hangar-scaffold -> PR -> review -> merge
+2. wp-hangar-registry -> PR -> review -> merge -> manual walkthrough (edit one reference via UI, sync to disk, verify commit)
+3. wp-hangar-sources-v1 -> PR -> review -> merge -> manual walkthrough
+4. Download a real 14 CFR XML, use hangar to fetch/extract/build/diff for real (closes the Extract-2 blocker from the reference-system work)
+5. wp-hangar-non-textual (once we have a chart in mind)
 
-## What I need from you
+## Status
 
-- **Go / hold / change-X** on this plan
-- Answers to the 8 open questions (or "use your recommendations")
-- A rough sense of priority vs the other outstanding work (manual test passes, CFI content review, KG scaling)
-
-Once the plan's approved, wp-hangar-scaffold starts as an isolated-worktree agent.
+Plan approved 2026-04-23. Decisions locked above. wp-hangar-scaffold is next.
