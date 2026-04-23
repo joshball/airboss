@@ -20,12 +20,14 @@
 				try {
 					var doc = document.documentElement;
 					var path = window.location.pathname;
-					var flightdeck = path === '/dashboard' || path.indexOf('/dashboard/') === 0;
-					var theme = flightdeck ? 'study/flightdeck' : 'study/sectional';
-					var layout = flightdeck ? 'dashboard' : 'reading';
-					var stored = document.cookie.match(/(?:^|;\s*)appearance=(light|dark)/);
+					var sim = path === '/sim' || path.indexOf('/sim/') === 0;
+					var flightdeck = !sim && (path === '/dashboard' || path.indexOf('/dashboard/') === 0);
+					var theme = sim ? 'sim/glass' : flightdeck ? 'study/flightdeck' : 'study/sectional';
+					var layout = sim ? 'cockpit' : flightdeck ? 'dashboard' : 'reading';
+					var stored = document.cookie.match(/(?:^|;\s*)appearance=(system|light|dark)/);
+					var pref = stored ? stored[1] : 'system';
 					var system = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-					var appearance = stored ? stored[1] : system;
+					var appearance = sim ? 'dark' : pref === 'system' ? system : pref;
 					doc.setAttribute('data-theme', theme);
 					doc.setAttribute('data-appearance', appearance);
 					doc.setAttribute('data-layout', layout);

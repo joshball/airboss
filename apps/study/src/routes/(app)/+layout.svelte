@@ -1,7 +1,13 @@
 <script lang="ts">
 import { ROUTES } from '@ab/constants';
 import HelpSearch from '@ab/help/ui/HelpSearch.svelte';
-import { resolveThemeForPath } from '@ab/themes';
+import {
+	APPEARANCE_PREFERENCE_VALUES,
+	type AppearanceMode,
+	type AppearancePreference,
+	DEFAULT_APPEARANCE,
+	resolveThemeForPath,
+} from '@ab/themes';
 import ThemeProvider from '@ab/themes/ThemeProvider.svelte';
 import type { Snippet } from 'svelte';
 import { page } from '$app/state';
@@ -9,6 +15,52 @@ import '$lib/help/register';
 import type { LayoutData } from './$types';
 
 let { data, children }: { data: LayoutData; children: Snippet } = $props();
+
+// Appearance preference + live system-appearance tracking.
+// `data.appearance` is the server-side cookie read; `systemAppearance`
+// mirrors `prefers-color-scheme` and updates when the OS changes.
+let appearancePref = $state<AppearancePreference>(data.appearance);
+let systemAppearance = $state<AppearanceMode>(DEFAULT_APPEARANCE);
+
+$effect(() => {
+	// Sync state with server on navigation that changes the preference.
+	appearancePref = data.appearance;
+});
+
+$effect(() => {
+	if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') return;
+	const mq = window.matchMedia('(prefers-color-scheme: dark)');
+	systemAppearance = mq.matches ? 'dark' : 'light';
+	const handler = (e: MediaQueryListEvent) => {
+		systemAppearance = e.matches ? 'dark' : 'light';
+	};
+	mq.addEventListener('change', handler);
+	return () => mq.removeEventListener('change', handler);
+});
+
+// Reflect the effective appearance on <html> pre-provider so the nav,
+// <body>, and the skip link (all outside ThemeProvider) follow the
+// user's choice. Avoids a flash of old appearance when toggling.
+$effect(() => {
+	if (typeof document === 'undefined') return;
+	const effective: AppearanceMode = appearancePref === 'system' ? systemAppearance : appearancePref;
+	document.documentElement.setAttribute('data-appearance', effective);
+});
+
+async function setAppearance(value: AppearancePreference) {
+	if (value === appearancePref) return;
+	appearancePref = value;
+	try {
+		await fetch(ROUTES.APPEARANCE, {
+			method: 'POST',
+			headers: { 'content-type': 'application/json' },
+			body: JSON.stringify({ value }),
+		});
+	} catch {
+		// Non-fatal: the cookie just won't persist. The in-page attribute
+		// has already flipped, so the user sees the change immediately.
+	}
+}
 
 const dashboardActive = $derived(page.url.pathname === ROUTES.DASHBOARD);
 const memoryActive = $derived(page.url.pathname.startsWith(ROUTES.MEMORY));
@@ -35,7 +87,7 @@ const fullBleed = $derived(dashboardActive);
 // /dashboard and study/sectional everywhere else. The provider wraps
 // *only* <main> so the nav keeps the outer chrome theme while the
 // content area switches to flightdeck on dashboard routes.
-const selection = $derived(resolveThemeForPath(page.url.pathname));
+const selection = $derived(resolveThemeForPath(page.url.pathname, appearancePref, systemAppearance));
 
 // Identity anchor. Primary label is the user's name; fall back to email if
 // no name is set. The disclosure reveals the email (when it isn't already
@@ -140,6 +192,21 @@ function handleHelpItemClick() {
 			{#if showEmailRow}
 				<div class="identity-email">{data.user.email}</div>
 			{/if}
+			<fieldset class="identity-appearance">
+				<legend>Appearance</legend>
+				{#each APPEARANCE_PREFERENCE_VALUES as option (option)}
+					<label class="identity-appearance-option">
+						<input
+							type="radio"
+							name="appearance"
+							value={option}
+							checked={appearancePref === option}
+							onchange={() => setAppearance(option)}
+						/>
+						<span class="identity-appearance-label">{option}</span>
+					</label>
+				{/each}
+			</fieldset>
 			<form method="POST" action={ROUTES.LOGOUT} class="identity-signout">
 				<button type="submit">Sign out</button>
 			</form>
@@ -362,8 +429,50 @@ function handleHelpItemClick() {
 		overflow-wrap: anywhere;
 	}
 
+	.identity-appearance {
+		margin: 0;
+		padding: var(--space-sm);
+		border: 0;
+		border-top: 1px solid var(--edge-default);
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-2xs);
+	}
+
+	.identity-appearance legend {
+		padding: 0 0 var(--space-2xs);
+		font-size: var(--type-ui-label-size);
+		color: var(--ink-muted);
+		font-weight: var(--type-ui-control-weight);
+	}
+
+	.identity-appearance-option {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-xs);
+		padding: var(--space-2xs) var(--space-2xs);
+		border-radius: var(--radius-sm);
+		cursor: pointer;
+		font-size: var(--type-ui-label-size);
+		color: var(--ink-body);
+	}
+
+	.identity-appearance-option:hover {
+		background: var(--surface-sunken);
+	}
+
+	.identity-appearance-option input {
+		accent-color: var(--action-default);
+	}
+
+	.identity-appearance-label {
+		text-transform: capitalize;
+	}
+
 	.identity-signout {
 		margin: 0;
+		border-top: 1px solid var(--edge-default);
+		padding-top: var(--space-2xs);
 	}
 
 	.identity-signout button {
