@@ -6,10 +6,12 @@ import {
 	CONFIDENCE_LEVEL_LABELS,
 	type ConfidenceLevel,
 	DOMAIN_LABELS,
+	type Domain,
 	QUERY_PARAMS,
 	ROUTES,
 	SESSION_MODES,
 } from '@ab/constants';
+import { humanize } from '@ab/utils';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
@@ -19,15 +21,8 @@ const trend = $derived(data.trend);
 const pointCount = $derived(data.pointCount);
 const hasData = $derived(pointCount > 0);
 
-function humanize(slug: string): string {
-	return slug
-		.split(/[-_]/)
-		.map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-		.join(' ');
-}
-
 function domainLabel(slug: string): string {
-	return (DOMAIN_LABELS as Record<string, string>)[slug] ?? humanize(slug);
+	return (DOMAIN_LABELS as Record<Domain, string>)[slug as Domain] ?? humanize(slug);
 }
 
 function confidenceLabel(level: ConfidenceLevel): string {

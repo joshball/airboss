@@ -6,6 +6,7 @@ import {
 	DEPTH_PREFERENCE_LABELS,
 	type DepthPreference,
 	DOMAIN_LABELS,
+	type Domain,
 	type Preset,
 	type PresetId,
 	QUERY_PARAMS,
@@ -21,6 +22,7 @@ import {
 } from '@ab/constants';
 import Banner from '@ab/ui/components/Banner.svelte';
 import Button from '@ab/ui/components/Button.svelte';
+import { humanize } from '@ab/utils';
 import { enhance } from '$app/forms';
 import { goto } from '$app/navigation';
 import { page } from '$app/state';
@@ -67,15 +69,8 @@ function changeMode(nextMode: SessionMode) {
 	void goto(next, { replaceState: true, invalidateAll: true });
 }
 
-function humanize(slug: string): string {
-	return slug
-		.split(/[-_]/)
-		.map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-		.join(' ');
-}
-
 function domainLabel(slug: string): string {
-	return (DOMAIN_LABELS as Record<string, string>)[slug] ?? humanize(slug);
+	return (DOMAIN_LABELS as Record<Domain, string>)[slug as Domain] ?? humanize(slug);
 }
 
 function reasonLabel(code: SessionReasonCode): string {
@@ -83,11 +78,11 @@ function reasonLabel(code: SessionReasonCode): string {
 }
 
 function certLabel(slug: Cert): string {
-	return (CERT_LABELS as Record<string, string>)[slug] ?? slug;
+	return (CERT_LABELS as Record<Cert, string>)[slug] ?? slug;
 }
 
 function depthLabel(slug: DepthPreference): string {
-	return (DEPTH_PREFERENCE_LABELS as Record<string, string>)[slug] ?? humanize(slug);
+	return (DEPTH_PREFERENCE_LABELS as Record<DepthPreference, string>)[slug] ?? humanize(slug);
 }
 </script>
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-import { DOMAIN_LABELS, REP_DASHBOARD_WINDOW_DAYS, ROUTES } from '@ab/constants';
+import { DOMAIN_LABELS, type Domain, REP_DASHBOARD_WINDOW_DAYS, ROUTES } from '@ab/constants';
 import StatTile from '@ab/ui/components/StatTile.svelte';
 import { humanize } from '@ab/utils';
 import type { PageData } from './$types';
@@ -10,7 +10,7 @@ const stats = $derived(data.stats);
 const hasScenarios = $derived(stats.scenarioCount > 0);
 
 function domainLabel(slug: string): string {
-	return (DOMAIN_LABELS as Record<string, string>)[slug] ?? humanize(slug);
+	return (DOMAIN_LABELS as Record<Domain, string>)[slug as Domain] ?? humanize(slug);
 }
 
 function percent(value: number): number {

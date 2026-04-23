@@ -1,11 +1,16 @@
 <script lang="ts">
 import {
 	BLOOM_LEVEL_LABELS,
+	type BloomLevel,
 	CERT_LABELS,
+	type Cert,
 	DOMAIN_LABELS,
+	type Domain,
 	KNOWLEDGE_PHASE_LABELS,
+	type KnowledgePhase,
 	NODE_LIFECYCLE_LABELS,
 	RELEVANCE_PRIORITY_LABELS,
+	type RelevancePriority,
 	ROUTES,
 } from '@ab/constants';
 import { humanize, renderMarkdown } from '@ab/utils';
@@ -20,23 +25,23 @@ const mastery = $derived(data.mastery);
 const lifecycle = $derived(data.lifecycle);
 
 function domainLabel(slug: string): string {
-	return (DOMAIN_LABELS as Record<string, string>)[slug] ?? humanize(slug);
+	return (DOMAIN_LABELS as Record<Domain, string>)[slug as Domain] ?? humanize(slug);
 }
 
 function phaseLabel(phase: string): string {
-	return (KNOWLEDGE_PHASE_LABELS as Record<string, string>)[phase] ?? humanize(phase);
+	return (KNOWLEDGE_PHASE_LABELS as Record<KnowledgePhase, string>)[phase as KnowledgePhase] ?? humanize(phase);
 }
 
 function certLabel(slug: string): string {
-	return (CERT_LABELS as Record<string, string>)[slug] ?? slug;
+	return (CERT_LABELS as Record<Cert, string>)[slug as Cert] ?? slug;
 }
 
 function bloomLabel(slug: string): string {
-	return (BLOOM_LEVEL_LABELS as Record<string, string>)[slug] ?? humanize(slug);
+	return (BLOOM_LEVEL_LABELS as Record<BloomLevel, string>)[slug as BloomLevel] ?? humanize(slug);
 }
 
 function priorityLabel(slug: string): string {
-	return (RELEVANCE_PRIORITY_LABELS as Record<string, string>)[slug] ?? humanize(slug);
+	return (RELEVANCE_PRIORITY_LABELS as Record<RelevancePriority, string>)[slug as RelevancePriority] ?? humanize(slug);
 }
 
 function lifecycleLabel(slug: string): string {

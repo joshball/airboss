@@ -1,5 +1,14 @@
 <script lang="ts">
-import { CARD_TYPE_LABELS, CARD_TYPES, DOMAIN_LABELS, DOMAIN_VALUES, QUERY_PARAMS, ROUTES } from '@ab/constants';
+import {
+	CARD_TYPE_LABELS,
+	CARD_TYPES,
+	DOMAIN_LABELS,
+	DOMAIN_VALUES,
+	type Domain,
+	QUERY_PARAMS,
+	ROUTES,
+} from '@ab/constants';
+import { humanize } from '@ab/utils';
 import { onMount, tick } from 'svelte';
 import { enhance } from '$app/forms';
 import { page } from '$app/state';
@@ -44,15 +53,8 @@ onMount(() => {
 	void tick().then(() => frontInput?.focus());
 });
 
-function humanize(slug: string): string {
-	return slug
-		.split(/[-_]/)
-		.map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-		.join(' ');
-}
-
 function domainLabel(slug: string): string {
-	const known = (DOMAIN_LABELS as Record<string, string>)[slug];
+	const known = (DOMAIN_LABELS as Record<Domain, string>)[slug as Domain];
 	return known ?? humanize(slug);
 }
 

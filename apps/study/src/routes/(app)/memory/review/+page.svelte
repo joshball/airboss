@@ -1,14 +1,21 @@
 <script lang="ts">
-import { type ConfidenceLevel, DOMAIN_LABELS, REVIEW_RATINGS, ROUTES } from '@ab/constants';
+import {
+	type ConfidenceLevel,
+	DOMAIN_LABELS,
+	type Domain,
+	REVIEW_PHASES,
+	REVIEW_RATINGS,
+	type ReviewPhase,
+	ROUTES,
+} from '@ab/constants';
 import ConfidenceSlider from '@ab/ui/components/ConfidenceSlider.svelte';
 import KbdHint from '@ab/ui/components/KbdHint.svelte';
+import { humanize } from '@ab/utils';
 import { enhance } from '$app/forms';
 import { invalidateAll } from '$app/navigation';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
-
-type Phase = 'front' | 'confidence' | 'answer' | 'submitting' | 'complete';
 
 interface RatingTally {
 	again: number;
@@ -38,7 +45,7 @@ const UNDO_WINDOW_MS = 2500;
 let batch = $state(data.batch);
 let index = $state(0);
 // svelte-ignore state_referenced_locally
-let phase = $state<Phase>(batch.length === 0 ? 'complete' : 'front');
+let phase = $state<ReviewPhase>(batch.length === 0 ? REVIEW_PHASES.COMPLETE : REVIEW_PHASES.FRONT);
 let revealedAt = $state<number | null>(null);
 let confidence = $state<number | null>(null);
 let tally = $state<RatingTally>({ again: 0, hard: 0, good: 0, easy: 0 });
@@ -50,7 +57,7 @@ let undoing = $state(false);
 const current = $derived(batch[index]);
 const total = $derived(batch.length);
 const needsConfidence = $derived(Boolean(current?.promptConfidence));
-const showConfidencePrompt = $derived(phase === 'confidence' && needsConfidence);
+const showConfidencePrompt = $derived(phase === REVIEW_PHASES.CONFIDENCE && needsConfidence);
 
 const ratingLabels: Record<number, { label: string; hint: string; key: string }> = {
 	[REVIEW_RATINGS.AGAIN]: { label: 'Again', hint: '< 1m', key: '1' },
@@ -59,20 +66,13 @@ const ratingLabels: Record<number, { label: string; hint: string; key: string }>
 	[REVIEW_RATINGS.EASY]: { label: 'Easy', hint: '~ week+', key: '4' },
 };
 
-function humanize(slug: string): string {
-	return slug
-		.split(/[-_]/)
-		.map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-		.join(' ');
-}
-
 function domainLabel(slug: string): string {
-	return (DOMAIN_LABELS as Record<string, string>)[slug] ?? humanize(slug);
+	return (DOMAIN_LABELS as Record<Domain, string>)[slug as Domain] ?? humanize(slug);
 }
 
 function goToConfidenceOrReveal() {
 	if (needsConfidence && confidence === null) {
-		phase = 'confidence';
+		phase = REVIEW_PHASES.CONFIDENCE;
 		return;
 	}
 	reveal();
@@ -80,7 +80,7 @@ function goToConfidenceOrReveal() {
 
 function reveal() {
 	revealedAt = Date.now();
-	phase = 'answer';
+	phase = REVIEW_PHASES.ANSWER;
 }
 
 function pickConfidence(value: ConfidenceLevel) {
@@ -126,11 +126,11 @@ function advance() {
 	revealedAt = null;
 	submitError = null;
 	if (next >= batch.length) {
-		phase = 'complete';
+		phase = REVIEW_PHASES.COMPLETE;
 		index = next;
 	} else {
 		index = next;
-		phase = 'front';
+		phase = REVIEW_PHASES.FRONT;
 	}
 }
 
@@ -176,7 +176,7 @@ async function triggerUndo() {
 		const remaining = batch.slice(index);
 		batch = [restored, ...remaining];
 		index = 0;
-		phase = 'front';
+		phase = REVIEW_PHASES.FRONT;
 		confidence = null;
 		revealedAt = null;
 		submitError = null;
@@ -196,7 +196,7 @@ async function startNewSession() {
 	confidence = null;
 	revealedAt = null;
 	tally = { again: 0, hard: 0, good: 0, easy: 0 };
-	phase = batch.length === 0 ? 'complete' : 'front';
+	phase = batch.length === 0 ? REVIEW_PHASES.COMPLETE : REVIEW_PHASES.FRONT;
 }
 
 function onKeydown(e: KeyboardEvent) {
@@ -214,12 +214,12 @@ function onKeydown(e: KeyboardEvent) {
 		}
 	}
 
-	if (phase === 'front') {
+	if (phase === REVIEW_PHASES.FRONT) {
 		if (e.key === ' ' || e.key === 'Enter') {
 			e.preventDefault();
 			goToConfidenceOrReveal();
 		}
-	} else if (phase === 'confidence') {
+	} else if (phase === REVIEW_PHASES.CONFIDENCE) {
 		const n = Number(e.key);
 		if (Number.isInteger(n) && n >= 1 && n <= 5) {
 			e.preventDefault();
@@ -228,7 +228,7 @@ function onKeydown(e: KeyboardEvent) {
 			e.preventDefault();
 			skipConfidence();
 		}
-	} else if (phase === 'answer') {
+	} else if (phase === REVIEW_PHASES.ANSWER) {
 		if (e.key === '1' || e.key === 'a') clickRating(REVIEW_RATINGS.AGAIN);
 		else if (e.key === '2' || e.key === 'h') clickRating(REVIEW_RATINGS.HARD);
 		else if (e.key === '3' || e.key === 'g') clickRating(REVIEW_RATINGS.GOOD);
@@ -263,7 +263,7 @@ function clickRating(value: number) {
 		</div>
 	{/if}
 
-	{#if phase === 'complete'}
+	{#if phase === REVIEW_PHASES.COMPLETE}
 		<article class="caught-up">
 			<h1>{total > 0 ? 'Session complete.' : "You're caught up."}</h1>
 			{#if total > 0}
@@ -295,7 +295,7 @@ function clickRating(value: number) {
 				<div class="section-text">{current.front}</div>
 			</div>
 
-			{#if phase === 'answer'}
+			{#if phase === REVIEW_PHASES.ANSWER}
 				<hr />
 				<div class="section">
 					<div class="section-label">Back</div>
@@ -306,12 +306,12 @@ function clickRating(value: number) {
 
 		{#if showConfidencePrompt}
 			<ConfidenceSlider onSelect={pickConfidence} onSkip={skipConfidence} />
-		{:else if phase === 'front'}
+		{:else if phase === REVIEW_PHASES.FRONT}
 			<button type="button" class="btn primary wide" onclick={goToConfidenceOrReveal}>
 				Show answer
 				<span class="kbd">Space</span>
 			</button>
-		{:else if phase === 'answer'}
+		{:else if phase === REVIEW_PHASES.ANSWER}
 			<p class="rate-q">How well did you remember?</p>
 			<form
 				method="POST"
@@ -322,7 +322,7 @@ function clickRating(value: number) {
 					const submittedCard = current;
 					const submittedConfidence = confidence;
 					const rating = Number(formData.get('rating') ?? 0);
-					phase = 'submitting';
+					phase = REVIEW_PHASES.SUBMITTING;
 					formData.set('cardId', submittedCard.id);
 					const answerMs = revealedAt !== null ? Date.now() - revealedAt : '';
 					formData.set('answerMs', String(answerMs));
@@ -335,7 +335,7 @@ function clickRating(value: number) {
 						if (result.type === 'success') {
 							onRatingResult(rating, submittedCard, submittedConfidence);
 						} else {
-							phase = 'answer';
+							phase = REVIEW_PHASES.ANSWER;
 							submitError = result.type === 'failure' ? 'Could not save that review. Try again.' : 'Network error. Try again.';
 						}
 					};
@@ -349,7 +349,7 @@ function clickRating(value: number) {
 							value={r}
 							data-rating={r}
 							class="rating rating-{r}"
-							disabled={phase !== 'answer'}
+							disabled={phase !== REVIEW_PHASES.ANSWER}
 						>
 							<span class="rating-label">{ratingLabels[r].label}</span>
 							<span class="rating-hint">{ratingLabels[r].hint}</span>
@@ -361,7 +361,7 @@ function clickRating(value: number) {
 					<p class="submit-error" role="alert">{submitError}</p>
 				{/if}
 			</form>
-		{:else if phase === 'submitting'}
+		{:else if phase === REVIEW_PHASES.SUBMITTING}
 			<p class="rate-q subdued">Saving...</p>
 		{/if}
 	{/if}

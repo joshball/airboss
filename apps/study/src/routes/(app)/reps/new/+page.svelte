@@ -4,14 +4,18 @@ import {
 	DIFFICULTIES,
 	DIFFICULTY_LABELS,
 	DIFFICULTY_VALUES,
+	type Difficulty,
 	DOMAIN_LABELS,
 	DOMAIN_VALUES,
+	type Domain,
 	PHASE_OF_FLIGHT_LABELS,
 	PHASE_OF_FLIGHT_VALUES,
+	type PhaseOfFlight,
 	ROUTES,
 	SCENARIO_OPTIONS_MAX,
 	SCENARIO_OPTIONS_MIN,
 } from '@ab/constants';
+import { humanize } from '@ab/utils';
 import { enhance } from '$app/forms';
 import type { ActionData } from './$types';
 
@@ -81,15 +85,15 @@ function setCorrect(index: number) {
 }
 
 function domainLabel(slug: string): string {
-	return (DOMAIN_LABELS as Record<string, string>)[slug] ?? slug;
+	return (DOMAIN_LABELS as Record<Domain, string>)[slug as Domain] ?? humanize(slug);
 }
 
 function phaseLabel(slug: string): string {
-	return (PHASE_OF_FLIGHT_LABELS as Record<string, string>)[slug] ?? slug;
+	return (PHASE_OF_FLIGHT_LABELS as Record<PhaseOfFlight, string>)[slug as PhaseOfFlight] ?? humanize(slug);
 }
 
 function difficultyLabel(slug: string): string {
-	return (DIFFICULTY_LABELS as Record<string, string>)[slug] ?? slug;
+	return (DIFFICULTY_LABELS as Record<Difficulty, string>)[slug as Difficulty] ?? humanize(slug);
 }
 </script>
 
@@ -314,21 +318,11 @@ function difficultyLabel(slug: string): string {
 		</label>
 
 		<div class="actions">
-			<!-- Progressive enhancement: with JS, history.back() returns to the referring page
-			     (/reps, /reps/browse, or wherever the user clicked "New scenario"). Without JS,
-			     the href fallback routes to /reps. -->
-			<a
-				class="btn ghost"
-				href={ROUTES.REPS}
-				onclick={(e: MouseEvent) => {
-					if (typeof window !== 'undefined' && window.history.length > 1) {
-						e.preventDefault();
-						window.history.back();
-					}
-				}}
-			>
-				Cancel
-			</a>
+			<!-- Cancel always routes to /reps (the rep index). Previously this used
+			     `history.back()`, but that can take the user off-site if they
+			     landed on /reps/new via a direct link or a redirect from an
+			     external origin. A deterministic back-target is the safer default. -->
+			<a class="btn ghost" href={ROUTES.REPS}>Cancel</a>
 			<button type="submit" class="btn primary" disabled={loading}>
 				{loading ? 'Saving...' : 'Save scenario'}
 			</button>

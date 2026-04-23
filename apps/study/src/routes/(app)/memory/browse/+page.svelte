@@ -4,13 +4,15 @@ import {
 	CARD_STATUSES,
 	CARD_TYPE_LABELS,
 	CARD_TYPE_VALUES,
+	type CardType,
 	CONTENT_SOURCE_VALUES,
 	DOMAIN_LABELS,
 	DOMAIN_VALUES,
+	type Domain,
 	QUERY_PARAMS,
 	ROUTES,
 } from '@ab/constants';
-import { buildQuery } from '@ab/utils';
+import { buildQuery, humanize } from '@ab/utils';
 import { tick } from 'svelte';
 import type { PageData } from './$types';
 
@@ -67,19 +69,12 @@ function shortenFront(text: string, max = 60): string {
 	return `${text.slice(0, max).trimEnd()}...`;
 }
 
-function humanize(slug: string): string {
-	return slug
-		.split(/[-_]/)
-		.map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-		.join(' ');
-}
-
 function domainLabel(slug: string): string {
-	return (DOMAIN_LABELS as Record<string, string>)[slug] ?? humanize(slug);
+	return (DOMAIN_LABELS as Record<Domain, string>)[slug as Domain] ?? humanize(slug);
 }
 
 function cardTypeLabel(slug: string): string {
-	return (CARD_TYPE_LABELS as Record<string, string>)[slug] ?? humanize(slug);
+	return (CARD_TYPE_LABELS as Record<CardType, string>)[slug as CardType] ?? humanize(slug);
 }
 
 function shorten(text: string, max = 120): string {

@@ -2,13 +2,17 @@
 import {
 	CERT_LABELS,
 	CERT_VALUES,
+	type Cert,
 	DOMAIN_LABELS,
 	DOMAIN_VALUES,
+	type Domain,
 	NODE_LIFECYCLE_LABELS,
 	NODE_LIFECYCLE_VALUES,
+	type NodeLifecycle,
 	QUERY_PARAMS,
 	RELEVANCE_PRIORITY_LABELS,
 	RELEVANCE_PRIORITY_VALUES,
+	type RelevancePriority,
 	ROUTES,
 } from '@ab/constants';
 import { humanize } from '@ab/utils';
@@ -33,19 +37,19 @@ const totalNodes = $derived(data.totalNodes);
 const hasActiveFilters = $derived(Boolean(filters.domain || filters.cert || filters.priority || filters.lifecycle));
 
 function domainLabel(slug: string): string {
-	return (DOMAIN_LABELS as Record<string, string>)[slug] ?? humanize(slug);
+	return (DOMAIN_LABELS as Record<Domain, string>)[slug as Domain] ?? humanize(slug);
 }
 
 function lifecycleLabel(slug: string): string {
-	return (NODE_LIFECYCLE_LABELS as Record<string, string>)[slug] ?? humanize(slug);
+	return (NODE_LIFECYCLE_LABELS as Record<NodeLifecycle, string>)[slug as NodeLifecycle] ?? humanize(slug);
 }
 
 function certLabel(slug: string): string {
-	return (CERT_LABELS as Record<string, string>)[slug] ?? slug;
+	return (CERT_LABELS as Record<Cert, string>)[slug as Cert] ?? slug;
 }
 
 function priorityLabel(slug: string): string {
-	return (RELEVANCE_PRIORITY_LABELS as Record<string, string>)[slug] ?? humanize(slug);
+	return (RELEVANCE_PRIORITY_LABELS as Record<RelevancePriority, string>)[slug as RelevancePriority] ?? humanize(slug);
 }
 
 function masteryPct(score: number): number {

@@ -11,13 +11,18 @@ import {
 	type Domain,
 	MAX_SESSION_LENGTH,
 	MIN_SESSION_LENGTH,
+	PLAN_STATUS_LABELS,
 	PLAN_STATUSES,
+	type PlanStatus,
 	QUERY_PARAMS,
 	ROUTES,
 	SESSION_MODE_LABELS,
 	SESSION_MODE_VALUES,
 	type SessionMode,
 } from '@ab/constants';
+import type { ActionFailure } from '@ab/types';
+import Banner from '@ab/ui/components/Banner.svelte';
+import ConfirmAction from '@ab/ui/components/ConfirmAction.svelte';
 import { enhance } from '$app/forms';
 import { page } from '$app/state';
 import type { ActionData, PageData } from './$types';
@@ -26,6 +31,18 @@ let { data, form }: { data: PageData; form: ActionData } = $props();
 
 const plan = $derived(data.plan);
 const isActive = $derived(plan.status === PLAN_STATUSES.ACTIVE);
+
+// Pull form-level error from any action on the page. The route exposes
+// update / archive / activate / removeSkipNode / addSkipNode actions and
+// any of them may return a `{ error: string }` ActionFailure. The previous
+// implementation only rendered errors scoped to `?/update`, which made
+// archive / activate / skip-node failures silently disappear. Render
+// `form?.error` once at the top of the page so every action surfaces.
+const formError = $derived<string | null>(
+	form && 'error' in form && typeof (form as ActionFailure).error === 'string'
+		? ((form as ActionFailure).error ?? null)
+		: null,
+);
 
 // `?created=1` lands here straight from /plans/new. Show a one-shot creation
 // banner -- keep it dismissible so the user can clear it without navigating.
@@ -55,8 +72,8 @@ const certSet = $derived(new Set<string>(plan.certGoals));
 const focusSet = $derived(new Set<string>(plan.focusDomains));
 const skipSet = $derived(new Set<string>(plan.skipDomains));
 
-const focusableDomains = $derived(DOMAIN_VALUES.filter((d) => !skipSet.has(d)));
-const skippableDomains = $derived(DOMAIN_VALUES.filter((d) => !focusSet.has(d)));
+const focusableDomains = $derived(DOMAIN_VALUES.filter((d: Domain) => !skipSet.has(d)));
+const skippableDomains = $derived(DOMAIN_VALUES.filter((d: Domain) => !focusSet.has(d)));
 </script>
 
 <svelte:head>
@@ -68,7 +85,7 @@ const skippableDomains = $derived(DOMAIN_VALUES.filter((d) => !focusSet.has(d)))
 		<div>
 			<h1>{plan.title}</h1>
 			<p class="sub">
-				<span class="badge" class:active={isActive}>{plan.status}</span>
+				<span class="badge" class:active={isActive}>{PLAN_STATUS_LABELS[plan.status as PlanStatus]}</span>
 				{#if isActive}<a class="link" href={ROUTES.SESSION_START}>Start a session</a>{/if}
 			</p>
 		</div>
@@ -78,21 +95,19 @@ const skippableDomains = $derived(DOMAIN_VALUES.filter((d) => !focusSet.has(d)))
 	</header>
 
 	{#if createdBannerShown}
-		<div class="banner" role="status">
-			<span>Plan saved. {isActive ? '' : 'Activate it to start a session.'}</span>
+		<Banner variant="info" dismissible onDismiss={() => (createdBannerShown = false)}>
+			Plan saved.
+			{isActive ? '' : 'Activate it to start a session.'}
 			{#if isActive}
 				<a class="banner-action" href={ROUTES.SESSION_START}>Start a session</a>
 			{/if}
-			<button type="button" class="banner-dismiss" onclick={() => (createdBannerShown = false)} aria-label="Dismiss">
-				×
-			</button>
-		</div>
+		</Banner>
 	{/if}
 	{#if editToastVisible}
-		<div class="success" role="status">Plan updated.</div>
+		<Banner variant="success">Plan updated.</Banner>
 	{/if}
-	{#if form && 'error' in form && form.error}
-		<div class="error" role="alert">{form.error}</div>
+	{#if formError}
+		<Banner variant="danger">{formError}</Banner>
 	{/if}
 
 	<form
@@ -219,9 +234,14 @@ const skippableDomains = $derived(DOMAIN_VALUES.filter((d) => !focusSet.has(d)))
 		<h2>Lifecycle</h2>
 		<div class="row">
 			{#if isActive}
-				<form method="post" action="?/archive" use:enhance>
-					<button type="submit" class="btn secondary">Archive plan</button>
-				</form>
+				<ConfirmAction
+					formAction="?/archive"
+					triggerVariant="secondary"
+					confirmVariant="danger"
+					size="md"
+					label="Archive plan"
+					confirmLabel="Archive this plan"
+				/>
 			{:else}
 				<form method="post" action="?/activate" use:enhance>
 					<button type="submit" class="btn primary">Make this plan active</button>
@@ -350,29 +370,8 @@ const skippableDomains = $derived(DOMAIN_VALUES.filter((d) => !focusSet.has(d)))
 		justify-content: flex-end;
 	}
 
-	.success {
-		background: var(--ab-color-success-subtle);
-		color: var(--ab-color-success-active);
-		padding: 0.625rem 0.875rem;
-		border-radius: var(--ab-radius-md);
-		border: 1px solid var(--ab-color-success-subtle-border);
-		font-size: var(--ab-font-size-sm);
-	}
-
-	.banner {
-		display: flex;
-		align-items: center;
-		gap: 0.75rem;
-		background: var(--ab-color-primary-subtle);
-		border: 1px solid var(--ab-color-primary-subtle-border);
-		color: var(--ab-color-primary-active);
-		padding: 0.625rem 0.875rem;
-		border-radius: var(--ab-radius-md);
-		font-size: var(--ab-font-size-sm);
-	}
-
 	.banner-action {
-		margin-left: auto;
+		margin-left: 0.5rem;
 		color: var(--ab-color-primary-hover);
 		font-weight: 600;
 		text-decoration: none;
@@ -380,29 +379,6 @@ const skippableDomains = $derived(DOMAIN_VALUES.filter((d) => !focusSet.has(d)))
 
 	.banner-action:hover {
 		text-decoration: underline;
-	}
-
-	.banner-dismiss {
-		background: transparent;
-		border: none;
-		color: var(--ab-color-primary-active);
-		font-size: var(--ab-font-size-2xl);
-		line-height: 1;
-		cursor: pointer;
-		padding: 0 0.25rem;
-	}
-
-	.banner-dismiss:hover {
-		color: var(--ab-color-primary-hover);
-	}
-
-	.error {
-		background: var(--ab-color-danger-subtle);
-		color: var(--ab-color-danger-hover);
-		padding: 0.625rem 0.875rem;
-		border-radius: var(--ab-radius-md);
-		border: 1px solid var(--ab-color-danger-subtle-border);
-		font-size: var(--ab-font-size-sm);
 	}
 
 	h2 {
@@ -483,12 +459,6 @@ const skippableDomains = $derived(DOMAIN_VALUES.filter((d) => !focusSet.has(d)))
 	.btn.primary:disabled {
 		opacity: 0.6;
 		cursor: not-allowed;
-	}
-
-	.btn.secondary {
-		background: var(--ab-color-surface-sunken);
-		color: var(--ab-color-fg);
-		border-color: var(--ab-color-border-strong);
 	}
 
 	.btn.ghost {
