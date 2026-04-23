@@ -55,16 +55,17 @@ export interface AuthUser {
  * Guard: redirect to login if not authenticated.
  * Reads session from locals (set by hooks.server.ts).
  *
- * Preserves the full original URL (pathname + query string + hash) as the
- * `redirectTo` param so a bounced request lands back exactly where the user
- * was trying to go. `event.url.pathname` alone strips `?flight-phase=...`
- * and similar query state.
+ * Preserves the pathname + query string as `redirectTo` so a bounced request
+ * lands back where the user was trying to go. Fragments are never sent to the
+ * server (browsers strip them), and SvelteKit now forbids reading
+ * `event.url.hash` on the server -- any fragment must be restored client-side
+ * if needed.
  */
 export function requireAuth(event: RequestEvent): AuthUser {
 	const user = event.locals.user;
 	if (!user) {
-		const { pathname, search, hash } = event.url;
-		const original = `${pathname}${search}${hash}`;
+		const { pathname, search } = event.url;
+		const original = `${pathname}${search}`;
 		const redirectTo = encodeURIComponent(original);
 		redirect(302, `${ROUTES.LOGIN}?redirectTo=${redirectTo}`);
 	}
