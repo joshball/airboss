@@ -25,9 +25,13 @@ export type {
 	ThemeId,
 	ThemeSelection,
 	TypeBundle,
+	TypeFamilyKey,
+	TypographyAdjustments,
+	TypographyFamilies,
 	TypographyPack,
 } from './contract';
 export { contrastRatio, luminance } from './contrast';
+export { AIRBOSS_COMPACT_PACK, AIRBOSS_STANDARD_PACK, TYPOGRAPHY_PACKS } from './core/typography-packs';
 export {
 	adjustBrightness,
 	alpha,

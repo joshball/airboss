@@ -1,24 +1,13 @@
 /**
- * study/flightdeck typography -- mono stack everywhere.
+ * study/flightdeck typography — references `airboss-compact`.
  *
- * Package #1 inherits airboss-default's bundle shape and remaps every
- * family key to the mono stack. Package #2 may ship a dedicated
- * flightdeck pack; until then this preserves the legacy atomic
- * behavior under the new typed surface.
+ * Flightdeck is a dashboard density theme: every family collapses to a
+ * mono stack, sizes are compressed, leading is tighter. The
+ * `airboss-compact` pack encodes all of that; this module just
+ * re-exports it so the theme wiring stays uniform.
  */
 
 import type { TypographyPack } from '../../contract';
-import { typography as defaultTypography } from '../../core/defaults/airboss-default/typography';
+import { AIRBOSS_COMPACT_PACK } from '../../core/typography-packs';
 
-const MONO = "ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace";
-
-export const typography: TypographyPack = {
-	packId: 'flightdeck-mono',
-	families: {
-		sans: MONO,
-		mono: MONO,
-		base: MONO,
-	},
-	scale: defaultTypography.scale,
-	bundles: defaultTypography.bundles,
-};
+export const typography: TypographyPack = AIRBOSS_COMPACT_PACK;
