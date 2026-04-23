@@ -6,6 +6,7 @@ import {
 	type AppearanceMode,
 	type AppearancePreference,
 	DEFAULT_APPEARANCE,
+	DEFAULT_APPEARANCE_PREFERENCE,
 	resolveThemeForPath,
 } from '@ab/themes';
 import ThemeProvider from '@ab/themes/ThemeProvider.svelte';
@@ -19,11 +20,13 @@ let { data, children }: { data: LayoutData; children: Snippet } = $props();
 // Appearance preference + live system-appearance tracking.
 // `data.appearance` is the server-side cookie read; `systemAppearance`
 // mirrors `prefers-color-scheme` and updates when the OS changes.
-let appearancePref = $state<AppearancePreference>(data.appearance);
+// Seeded from DEFAULT_APPEARANCE_PREFERENCE and populated via $effect so
+// Svelte's state-referenced-locally check stays clean; the effect re-syncs
+// on every navigation that changes the cookie.
+let appearancePref = $state<AppearancePreference>(DEFAULT_APPEARANCE_PREFERENCE);
 let systemAppearance = $state<AppearanceMode>(DEFAULT_APPEARANCE);
 
 $effect(() => {
-	// Sync state with server on navigation that changes the preference.
 	appearancePref = data.appearance;
 });
 
