@@ -304,7 +304,7 @@ Every node's metadata template includes ALL fields: cert relevance, prerequisite
 
 ### Markdown-first, DB-built
 
-Authoring happens in markdown + YAML. No authoring UI initially -- the editor is VS Code. A build script (`bun run build-knowledge`) parses `course/knowledge/**/node.md`, validates graph integrity, and writes to the DB. Runtime queries hit the DB. This keeps authoring in version control and makes the graph grep-able.
+Authoring happens in markdown + YAML. No authoring UI initially -- the editor is VS Code. A build script (`bun run db build`) parses `course/knowledge/**/node.md`, validates graph integrity, and writes to the DB. Runtime queries hit the DB. This keeps authoring in version control and makes the graph grep-able.
 
 ### Separation of content and activities
 
@@ -354,7 +354,7 @@ A skeleton is useful. The session engine can see "you haven't started Weather ye
 
 ### Build validation
 
-The `build-knowledge` script enforces:
+The `bun run db build` script enforces:
 
 - Every node has a valid `id`, `title`, `domain`
 - All `requires` edges point to existing nodes

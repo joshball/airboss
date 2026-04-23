@@ -12,7 +12,7 @@ const biome = await $`bunx biome check .`.nothrow();
 console.log('\nValidating references (schema + wiki-links)...');
 const references = await $`bun scripts/references.ts validate`.nothrow();
 
-console.log('\nValidating knowledge graph (build-knowledge --dry-run)...');
+console.log('\nValidating knowledge graph (db build --dry-run)...');
 const knowledge = await $`bun scripts/build-knowledge-index.ts --dry-run`.nothrow();
 
 const failed =

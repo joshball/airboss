@@ -22,70 +22,70 @@ review_status: pending
 
 ## Build script
 
-### KG-1: `bun run knowledge:new` scaffolds a node
+### KG-1: `bun run db new` scaffolds a node
 
-1. Run `bun run knowledge:new airspace vfr-weather-minimums`.
+1. Run `bun run db new airspace vfr-weather-minimums`.
 2. **Expected:** File `course/knowledge/airspace/vfr-weather-minimums/node.md` created. Frontmatter has every field present (empty / `[]` / TODO-commented). Seven H2 sections stubbed (`## Context` through `## Verify`).
 3. Run the same command again.
 4. **Expected:** Refuses with "file already exists" error; does not overwrite.
 
-### KG-2: `bun run knowledge:new` rejects unknown domain
+### KG-2: `bun run db new` rejects unknown domain
 
-1. Run `bun run knowledge:new mystery-domain some-node`.
+1. Run `bun run db new mystery-domain some-node`.
 2. **Expected:** Error "unknown domain"; no file created.
 
-### KG-3: `bun run build-knowledge --dry-run` on a single scaffolded node
+### KG-3: `bun run db build --dry-run` on a single scaffolded node
 
 1. Scaffold one node (KG-1). Leave frontmatter mostly empty.
-2. Run `bun run build-knowledge --dry-run`.
+2. Run `bun run db build --dry-run`.
 3. **Expected:** Validation errors listed (missing title, empty relevance, etc.). Exit code non-zero. No DB writes.
 
 ### KG-4: Valid frontmatter produces a clean dry-run
 
 1. Fill in one node's frontmatter with valid values (title, domain, one relevance entry, empty edges).
-2. Run `bun run build-knowledge --dry-run`.
+2. Run `bun run db build --dry-run`.
 3. **Expected:** 0 errors. Summary prints node count 1, lifecycle `skeleton`. No DB writes.
 
 ### KG-5: Broken edge reference is caught
 
 1. Create two nodes: A and B. A's frontmatter has `requires: [nonexistent-node]`.
-2. Run `bun run build-knowledge --dry-run`.
+2. Run `bun run db build --dry-run`.
 3. **Expected:** Error: "node 'A' references unknown slug 'nonexistent-node'." Build fails.
 
 ### KG-6: Cycle in `requires` is caught
 
 1. Create two nodes A and B. A's frontmatter has `requires: [B]`; B's frontmatter has `requires: [A]`.
-2. Run `bun run build-knowledge --dry-run`.
+2. Run `bun run db build --dry-run`.
 3. **Expected:** `KnowledgeCycleError` listing the cycle. Build fails.
 
 ### KG-7: Duplicate phase heading is caught
 
 1. In a node's `node.md`, include `## Context` twice.
-2. Run `bun run build-knowledge --dry-run`.
+2. Run `bun run db build --dry-run`.
 3. **Expected:** Error: "duplicate phase heading 'Context' in <path>". Build fails.
 
 ### KG-8: Successful build writes DB
 
 1. Author all 30 skeleton nodes (valid frontmatter, no body).
-2. Run `bun run build-knowledge`.
+2. Run `bun run db build`.
 3. **Expected:** Exit 0. Summary: 30 nodes, N edges (count matches authored edges). All 30 nodes appear in `study.knowledge_node` with `lifecycle='skeleton'`. `course/knowledge/graph-index.md` regenerated.
 
 ### KG-9: Idempotent rebuild
 
-1. Run `bun run build-knowledge` twice in a row without changing files.
+1. Run `bun run db build` twice in a row without changing files.
 2. **Expected:** Second run reports 0 node writes (all hashes match). `updated_at` on node rows does not advance. A fresh `knowledge_build` row is still recorded.
 
 ### KG-10: Edit one node then rebuild
 
 1. Edit `airspace-vfr-weather-minimums` -- add a paragraph to `## Context`.
-2. Run `bun run build-knowledge`.
+2. Run `bun run db build`.
 3. **Expected:** Only that node's `content_hash` changes; that node's phases are upserted; its `updated_at` advances. Other 29 unchanged. Lifecycle for that node transitions skeleton -> started.
 
 ### KG-11: Pre-commit hook blocks invalid graph
 
 1. Break one node's frontmatter (invalid domain).
 2. Attempt `git commit`.
-3. **Expected:** Commit blocked; `bun run check` / `bun run build-knowledge --dry-run` prints the validation error.
+3. **Expected:** Commit blocked; `bun run check` / `bun run db build --dry-run` prints the validation error.
 
 ---
 
@@ -263,10 +263,10 @@ review_status: pending
 
 ### KG-38: Full-cycle authoring round trip
 
-1. Scaffold a new node via `knowledge:new`.
+1. Scaffold a new node via `bun run db new`.
 2. Fill in frontmatter + some phase prose.
 3. Create a card via `/memory/new`, attach to the new node.
-4. Run `bun run build-knowledge`.
+4. Run `bun run db build`.
 5. Open `/knowledge/<new-slug>`.
 6. **Expected:** Node appears with correct metadata, the attached card counts toward mastery.
 

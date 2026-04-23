@@ -79,9 +79,9 @@ Argued against two alternatives:
 **Why hybrid is the right fit:**
 
 - Matches the discovery-first pedagogy rule. Authors write prose in markdown, under H2 headings that name each of the seven phases. The structure is visible in git diffs and code reviews -- a reviewer can see that a node has Context and Reveal but no Discover, and call the gap out. That's the "ask the questions, leave them unanswered" discipline from ADR 011 made concrete.
-- Keeps authoring friction at "write a file, run `bun run build-knowledge --dry-run`." No authoring UI needed for v1.
+- Keeps authoring friction at "write a file, run `bun run db build --dry-run`." No authoring UI needed for v1.
 - DB mirrors everything the app needs to query. The app never reads the filesystem.
-- Rebuildable. If the DB is wiped, `bun run build-knowledge` restores the graph exactly.
+- Rebuildable. If the DB is wiped, `bun run db build` restores the graph exactly.
 
 **What lives where:**
 
@@ -148,13 +148,13 @@ A card can be `source_type='personal'` and `node_id='kn_...'` (author-linked a p
 
 **Chosen workflow:**
 
-1. `bun run knowledge:new <domain> <slug>` scaffolds `course/knowledge/<domain>/<slug>/node.md`. The scaffold contains:
+1. `bun run db new <domain> <slug>` scaffolds `course/knowledge/<domain>/<slug>/node.md`. The scaffold contains:
    - YAML frontmatter with every field present. Required fields are empty strings; arrays are `[]`; optional fields are commented with `# TODO:` markers. This implements ADR 011's "ask the questions, even when you can't answer them" principle.
    - H2 section stubs for all seven phases, each containing a `<!-- TODO -->` placeholder comment.
 2. Author fills in whatever is known. Commits the skeleton immediately -- a skeleton is useful per ADR 011 ("session engine can see 'you haven't started Weather yet' from metadata alone").
-3. Author runs `bun run build-knowledge --dry-run` whenever they want validation feedback. Fast enough to run on save.
+3. Author runs `bun run db build --dry-run` whenever they want validation feedback. Fast enough to run on save.
 4. Content fills in over time. Every fill is a commit.
-5. On commit: `bun run check` includes `build-knowledge --dry-run`. Invalid frontmatter blocks commit.
+5. On commit: `bun run check` includes `bun run db build --dry-run`. Invalid frontmatter blocks commit.
 
 **Why not an in-app form?** For 30 nodes, a form would take longer to build than to use. Markdown in VS Code is fine. An authoring UI lands when hangar does.
 
@@ -164,7 +164,7 @@ A card can be `source_type='personal'` and `node_id='kn_...'` (author-linked a p
 
 | Alternative                                              | Why not                                                           |
 | -------------------------------------------------------- | ----------------------------------------------------------------- |
-| Build on file-save (watch mode)                          | Surprise writes; breaks when multiple nodes change. Explicit `bun run build-knowledge` is saner |
+| Build on file-save (watch mode)                          | Surprise writes; breaks when multiple nodes change. Explicit `bun run db build` is saner |
 | Neo4j or a dedicated graph DB                            | Adds a service, a query language, and ops. Postgres at 500 nodes is trivially fast |
 | Store edges as `node.edges: jsonb`                       | See "Schema rationale"                                            |
 | Store phases as seven columns on node row                | See "Schema rationale"                                            |
@@ -185,4 +185,4 @@ A card can be `source_type='personal'` and `node_id='kn_...'` (author-linked a p
 
 ## Security + permissions
 
-The graph is read-only for all authenticated users in v1. Writes happen exclusively through `bun run build-knowledge`, which runs outside request context (CLI). No route exposes a write path. This means no auth scope for "edit node" is needed in v1 -- authorship is a git operation.
+The graph is read-only for all authenticated users in v1. Writes happen exclusively through `bun run db build`, which runs outside request context (CLI). No route exposes a write path. This means no auth scope for "edit node" is needed in v1 -- authorship is a git operation.
