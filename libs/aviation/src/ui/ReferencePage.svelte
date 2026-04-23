@@ -1,4 +1,5 @@
 <script lang="ts">
+import type { SearchHit } from '../registry';
 import type { Reference } from '../schema/reference';
 import ReferenceCard from './ReferenceCard.svelte';
 import ReferenceFilter from './ReferenceFilter.svelte';
@@ -15,10 +16,12 @@ import ReferenceSidebar from './ReferenceSidebar.svelte';
 
 let {
 	references,
+	hits = null,
 	counts,
 	initialSearch = '',
 }: {
 	references: readonly Reference[];
+	hits?: readonly SearchHit[] | null;
 	counts: {
 		sourceType: Readonly<Record<string, number>>;
 		aviationTopic: Readonly<Record<string, number>>;
@@ -31,6 +34,14 @@ let {
 } = $props();
 
 const total = $derived(references.length);
+
+const hitsById = $derived.by(() => {
+	const map = new Map<string, SearchHit>();
+	if (hits) {
+		for (const hit of hits) map.set(hit.reference.id, hit);
+	}
+	return map;
+});
 </script>
 
 <section class="page">
@@ -64,7 +75,7 @@ const total = $derived(references.length);
 				<ul class="cards">
 					{#each references as reference (reference.id)}
 						<li>
-							<ReferenceCard {reference} />
+							<ReferenceCard {reference} hit={hitsById.get(reference.id) ?? null} />
 						</li>
 					{/each}
 				</ul>

@@ -216,29 +216,183 @@ export interface SearchQuery {
 }
 
 /**
- * Combined text + tag search. Text match is substring-any of lowercased
- * displayName/aliases/keywords. Tag filter applied after text. Returns in
- * registration order (no ranking in Phase 1 -- that's wp-help-library's
- * problem).
+ * A single ranked search hit. Carries match provenance so the UI can render
+ * highlight marks and show the user which field matched.
  */
-export function search(query: SearchQuery): readonly Reference[] {
-	const tagFiltered = query.tags ? findByTags(query.tags) : listReferences();
-	if (!query.text || query.text.trim().length === 0) return tagFiltered;
+export interface SearchHit {
+	reference: Reference;
+	matchedField: 'displayName' | 'alias' | 'keyword';
+	/** The actual alias / keyword that hit (or displayName when field is displayName). */
+	matchedText: string;
+	/** [start, end) offsets into matchedText where the needle matched. */
+	matchRange: readonly [number, number];
+	score: number;
+}
 
-	const needle = query.text.trim().toLowerCase();
-	return tagFiltered.filter((ref) => {
-		if (ref.displayName.toLowerCase().includes(needle)) return true;
-		for (const alias of ref.aliases) {
-			if (alias.toLowerCase().includes(needle)) return true;
-		}
-		const keywords = ref.tags.keywords;
-		if (keywords) {
-			for (const keyword of keywords) {
-				if (keyword.toLowerCase().includes(needle)) return true;
+/**
+ * Word-boundary prefix: needle appears at the start of `haystack`, or
+ * immediately after a non-word character.
+ */
+function wordBoundaryIndex(haystack: string, needle: string): number {
+	if (needle.length === 0) return -1;
+	let from = 0;
+	while (from <= haystack.length - needle.length) {
+		const idx = haystack.indexOf(needle, from);
+		if (idx === -1) return -1;
+		const prev = idx === 0 ? '' : haystack.charAt(idx - 1);
+		if (idx === 0 || /[^a-z0-9]/i.test(prev)) return idx;
+		from = idx + 1;
+	}
+	return -1;
+}
+
+interface Scored {
+	hit: SearchHit;
+	order: number;
+}
+
+/**
+ * Score a single reference against a lowercased needle. Returns the best
+ * (highest-score) hit for that reference, or `null` if no field matched.
+ *
+ * Scoring tiers (see work package):
+ *   100 displayName exact, 90 alias exact, 80 displayName word-boundary
+ *   prefix, 70 alias word-boundary prefix, 50 displayName substring, 40
+ *   alias substring at word boundary, 30 alias substring mid-word, 20
+ *   keyword substring.
+ */
+function scoreReference(ref: Reference, needle: string): SearchHit | null {
+	let best: SearchHit | null = null;
+	const consider = (candidate: SearchHit): void => {
+		if (!best || candidate.score > best.score) best = candidate;
+	};
+
+	const displayLower = ref.displayName.toLowerCase();
+	if (displayLower === needle) {
+		consider({
+			reference: ref,
+			matchedField: 'displayName',
+			matchedText: ref.displayName,
+			matchRange: [0, ref.displayName.length],
+			score: 100,
+		});
+	} else {
+		const wb = wordBoundaryIndex(displayLower, needle);
+		if (wb === 0 || wb > 0) {
+			consider({
+				reference: ref,
+				matchedField: 'displayName',
+				matchedText: ref.displayName,
+				matchRange: [wb, wb + needle.length],
+				score: 80,
+			});
+		} else {
+			const idx = displayLower.indexOf(needle);
+			if (idx !== -1) {
+				consider({
+					reference: ref,
+					matchedField: 'displayName',
+					matchedText: ref.displayName,
+					matchRange: [idx, idx + needle.length],
+					score: 50,
+				});
 			}
 		}
-		return false;
+	}
+
+	for (const alias of ref.aliases) {
+		const aliasLower = alias.toLowerCase();
+		if (aliasLower === needle) {
+			consider({
+				reference: ref,
+				matchedField: 'alias',
+				matchedText: alias,
+				matchRange: [0, alias.length],
+				score: 90,
+			});
+			continue;
+		}
+		const wb = wordBoundaryIndex(aliasLower, needle);
+		if (wb !== -1) {
+			const score = wb === 0 ? 70 : 40;
+			consider({
+				reference: ref,
+				matchedField: 'alias',
+				matchedText: alias,
+				matchRange: [wb, wb + needle.length],
+				score,
+			});
+			continue;
+		}
+		const idx = aliasLower.indexOf(needle);
+		if (idx !== -1) {
+			consider({
+				reference: ref,
+				matchedField: 'alias',
+				matchedText: alias,
+				matchRange: [idx, idx + needle.length],
+				score: 30,
+			});
+		}
+	}
+
+	const keywords = ref.tags.keywords;
+	if (keywords) {
+		for (const keyword of keywords) {
+			const keywordLower = keyword.toLowerCase();
+			const idx = keywordLower.indexOf(needle);
+			if (idx !== -1) {
+				consider({
+					reference: ref,
+					matchedField: 'keyword',
+					matchedText: keyword,
+					matchRange: [idx, idx + needle.length],
+					score: 20,
+				});
+			}
+		}
+	}
+
+	return best;
+}
+
+/**
+ * Combined text + tag search. Text match scores across
+ * displayName/aliases/keywords and returns hits sorted by score descending,
+ * with shorter displayName and earlier registration as tiebreakers. Tag
+ * filter applied before scoring. When no text is supplied, every tag-filtered
+ * reference is returned as a bucket-3 SearchHit carrying the displayName as
+ * matched text (so UI consumers can treat the shape uniformly).
+ */
+export function search(query: SearchQuery): readonly SearchHit[] {
+	const tagFiltered = query.tags ? findByTags(query.tags) : listReferences();
+	const text = query.text?.trim() ?? '';
+
+	if (text.length === 0) {
+		return tagFiltered.map((ref) => ({
+			reference: ref,
+			matchedField: 'displayName' as const,
+			matchedText: ref.displayName,
+			matchRange: [0, 0] as const,
+			score: 0,
+		}));
+	}
+
+	const needle = text.toLowerCase();
+	const scored: Scored[] = [];
+	tagFiltered.forEach((ref, order) => {
+		const hit = scoreReference(ref, needle);
+		if (hit) scored.push({ hit, order });
 	});
+
+	scored.sort((a, b) => {
+		if (b.hit.score !== a.hit.score) return b.hit.score - a.hit.score;
+		const nameDiff = a.hit.reference.displayName.length - b.hit.reference.displayName.length;
+		if (nameDiff !== 0) return nameDiff;
+		return a.order - b.order;
+	});
+
+	return scored.map((s) => s.hit);
 }
 
 /** Count per axis value for facet-sidebar rendering. */
