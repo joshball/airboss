@@ -1,7 +1,18 @@
 // Study BC -- spaced repetition, cards, reviews, scenarios, calibration.
 
-export type { CalibrationBucket, CalibrationResult, CalibrationTrendPoint, DomainCalibration } from './calibration';
-export { getCalibration, getCalibrationPointCount, getCalibrationTrend } from './calibration';
+export type {
+	CalibrationBucket,
+	CalibrationPageData,
+	CalibrationResult,
+	CalibrationTrendPoint,
+	DomainCalibration,
+} from './calibration';
+export {
+	getCalibration,
+	getCalibrationPageData,
+	getCalibrationPointCount,
+	getCalibrationTrend,
+} from './calibration';
 export type { CardFilters, CardWithState, CreateCardInput, UpdateCardInput } from './cards';
 export {
 	CardNotEditableError,
