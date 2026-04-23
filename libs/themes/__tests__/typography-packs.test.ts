@@ -153,23 +153,22 @@ describe('emit: family adjustments', () => {
 describe('legacy alias block — typography role bindings', () => {
 	const aliasValueFor = (name: string): string | undefined => LEGACY_ALIAS_MAP.find(([n]) => n === name)?.[1];
 
+	// Only aliases still shipped by the block (package #5 removed study-only
+	// typography atoms; remaining entries are those referenced by
+	// apps/sim/src and apps/hangar/src).
 	const ALIAS_EXPECTATIONS: ReadonlyArray<readonly [string, string]> = [
 		['--ab-font-size-xs', 'var(--type-ui-caption-size)'],
 		['--ab-font-size-sm', 'var(--type-ui-label-size)'],
-		['--ab-font-size-body', 'var(--type-definition-body-size)'],
 		['--ab-font-size-base', 'var(--type-reading-body-size)'],
 		['--ab-font-size-lg', 'var(--type-reading-lead-size)'],
 		['--ab-font-size-xl', 'var(--type-heading-2-size)'],
 		['--ab-font-size-2xl', 'var(--type-heading-1-size)'],
-		['--ab-font-weight-regular', 'var(--type-reading-body-weight)'],
 		['--ab-font-weight-medium', 'var(--type-ui-control-weight)'],
 		['--ab-font-weight-semibold', 'var(--type-heading-3-weight)'],
 		['--ab-font-weight-bold', 'var(--type-heading-1-weight)'],
 		['--ab-line-height-tight', 'var(--type-heading-1-line-height)'],
 		['--ab-line-height-normal', 'var(--type-ui-label-line-height)'],
-		['--ab-line-height-relaxed', 'var(--type-reading-body-line-height)'],
 		['--ab-letter-spacing-tight', 'var(--type-heading-1-tracking)'],
-		['--ab-letter-spacing-normal', 'var(--type-reading-body-tracking)'],
 		['--ab-letter-spacing-wide', 'var(--type-ui-caption-tracking)'],
 		['--ab-letter-spacing-caps', 'var(--type-ui-badge-tracking)'],
 	];

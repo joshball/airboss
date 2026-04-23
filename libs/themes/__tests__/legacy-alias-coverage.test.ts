@@ -41,4 +41,10 @@ describe('legacy alias block coverage', () => {
 		const missing = names.filter((n) => !aliasSet.has(n));
 		expect(missing, `sim alias block missing: ${missing.join(', ')}`).toEqual([]);
 	});
+
+	it('apps/study/src contains zero --ab-* references (package #5 acceptance)', () => {
+		if (!existsSync(STUDY_SRC)) return;
+		const hits = rgUnique('--ab-[a-z0-9-]+', STUDY_SRC);
+		expect(hits, `apps/study/src still references legacy aliases: ${hits.join(', ')}`).toEqual([]);
+	});
 });
