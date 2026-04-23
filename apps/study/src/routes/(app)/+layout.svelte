@@ -224,6 +224,16 @@ function handleHelpItemClick() {
 </ThemeProvider>
 
 <style>
+	:global(body) {
+		min-height: 100dvh;
+	}
+
+	:global(#app) {
+		min-height: 100dvh;
+		display: flex;
+		flex-direction: column;
+	}
+
 	.skip {
 		position: absolute;
 		top: calc(var(--space-2xl) * -1);
@@ -241,6 +251,7 @@ function handleHelpItemClick() {
 
 	nav {
 		display: flex;
+		flex: 0 0 auto;
 		align-items: center;
 		gap: var(--space-xl);
 		padding: var(--space-lg) var(--space-xl);
@@ -531,6 +542,11 @@ function handleHelpItemClick() {
 	 * without editing this file.
 	 */
 	main {
+		flex: 1 1 auto;
+		width: 100%;
+		min-width: 0;
+		min-height: 0;
+		box-sizing: border-box;
 		padding: var(--layout-container-padding);
 		max-width: var(--layout-container-max);
 		margin: 0 auto;
@@ -538,6 +554,7 @@ function handleHelpItemClick() {
 	}
 
 	main.full-bleed {
+		display: flex;
 		max-width: none;
 		margin: 0;
 	}

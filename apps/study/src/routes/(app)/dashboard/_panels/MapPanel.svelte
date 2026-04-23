@@ -107,23 +107,35 @@ function cellTitle(domain: Domain, cell: DomainCertCell): string {
 	.map {
 		display: flex;
 		flex-direction: column;
+		flex: 1 1 auto;
 		gap: var(--space-2xs);
 		min-width: 0;
+		min-height: 0;
+		overflow: auto;
+		padding-right: var(--space-2xs);
 	}
 
 	.head,
 	.row {
 		display: grid;
-		grid-template-columns: minmax(7rem, 1fr) repeat(4, minmax(1.25rem, 2rem));
+		grid-template-columns: minmax(7rem, 1fr) repeat(4, minmax(1.2rem, 1.65rem));
 		align-items: center;
 		gap: var(--space-2xs);
+	}
+
+	.head {
+		position: sticky;
+		top: 0;
+		background: var(--surface-raised);
+		z-index: 1;
+		padding-bottom: var(--space-2xs);
 	}
 
 	.col-head {
 		font-family: var(--font-family-mono);
 		font-variant-numeric: tabular-nums;
-		font-size: var(--font-size-xs);
-		letter-spacing: var(--letter-spacing-wide);
+		font-size: var(--type-ui-caption-size);
+		letter-spacing: 0;
 		color: var(--ink-faint);
 		text-align: center;
 		padding-bottom: var(--space-2xs);
@@ -141,7 +153,7 @@ function cellTitle(domain: Domain, cell: DomainCertCell): string {
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
-		height: 0.9375rem;
+		height: 1.125rem;
 		border-radius: var(--radius-xs);
 		border: 1px solid var(--edge-default);
 		font-size: var(--font-size-xs);
@@ -191,7 +203,7 @@ function cellTitle(domain: Domain, cell: DomainCertCell): string {
 	@media (max-width: 640px) {
 		.head,
 		.row {
-			grid-template-columns: minmax(6rem, 1fr) repeat(4, minmax(1rem, 1.5rem));
+			grid-template-columns: minmax(5.5rem, 1fr) repeat(4, minmax(1rem, 1.4rem));
 		}
 	}
 </style>

@@ -50,7 +50,7 @@ const screenReaderSummary = $derived(
 		<!-- error path handled by shell; value=null only happens under error. -->
 		<p class="muted">No data.</p>
 	{:else if value.total === 0}
-		<div class="spark" aria-label={screenReaderSummary}>
+		<div class="spark empty" aria-label={screenReaderSummary}>
 			{#each days as d, i (`${d.day}-${i}`)}
 				<span class="col" title={tooltipFor(d)}>
 					<span class="bar zero"></span>
@@ -83,12 +83,17 @@ const screenReaderSummary = $derived(
 <style>
 	.spark {
 		display: flex;
+		flex: 1 1 auto;
 		align-items: flex-end;
 		gap: var(--space-2xs);
-		height: 48px;
-		padding: var(--space-xs) var(--space-2xs) var(--space-2xs);
+		min-height: 6rem;
+		padding: var(--space-xs) var(--space-sm) var(--space-sm);
 		background: var(--surface-sunken);
 		border-radius: var(--radius-sm);
+	}
+
+	.spark.empty {
+		min-height: 5rem;
 	}
 
 	.col {
@@ -126,9 +131,9 @@ const screenReaderSummary = $derived(
 	}
 
 	.meta {
-		display: flex;
-		gap: var(--space-md);
-		flex-wrap: wrap;
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: var(--space-sm);
 		color: var(--ink-muted);
 		font-size: var(--type-ui-caption-size);
 		font-family: var(--font-family-mono);
@@ -144,5 +149,11 @@ const screenReaderSummary = $derived(
 		margin: 0;
 		color: var(--ink-subtle);
 		font-size: var(--type-ui-caption-size);
+	}
+
+	@media (max-width: 640px) {
+		.meta {
+			grid-template-columns: 1fr;
+		}
 	}
 </style>

@@ -78,8 +78,10 @@ const resolvedError = $derived(error ? (errorMessage ?? fallbackErrorMessage) : 
 		display: flex;
 		flex-direction: column;
 		gap: var(--layout-panel-gap);
+		height: 100%;
 		min-width: 0;
 		min-height: 0;
+		overflow: hidden;
 		box-shadow: var(--shadow-sm);
 	}
 
@@ -141,8 +143,10 @@ const resolvedError = $derived(error ? (errorMessage ?? fallbackErrorMessage) : 
 
 	.body {
 		display: flex;
+		flex: 1 1 auto;
 		flex-direction: column;
 		gap: var(--space-xs);
+		min-height: 0;
 		font-size: var(--font-size-sm);
 		min-width: 0;
 	}

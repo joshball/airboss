@@ -1,6 +1,7 @@
 <script lang="ts">
 import type { CalibrationResult, PanelResult } from '@ab/bc-study';
 import { CONFIDENCE_LEVEL_LABELS, type ConfidenceLevel, ROUTES } from '@ab/constants';
+import Button from '@ab/ui/components/Button.svelte';
 import PanelShell from '@ab/ui/components/PanelShell.svelte';
 
 /**
@@ -60,7 +61,7 @@ const gapLabel = $derived(
 	error={errorMessage}
 >
 	{#snippet action()}
-		<a class="action-btn" href={ROUTES.CALIBRATION}>View</a>
+		<Button variant="secondary" size="sm" href={ROUTES.CALIBRATION}>View</Button>
 	{/snippet}
 
 	{#if scorePct === null}
@@ -83,21 +84,6 @@ const gapLabel = $derived(
 </PanelShell>
 
 <style>
-	.action-btn {
-		padding: var(--space-2xs) var(--space-sm);
-		font-size: var(--type-ui-caption-size);
-		font-weight: var(--type-heading-3-weight);
-		border-radius: var(--radius-sm);
-		border: 1px solid var(--edge-strong);
-		background: var(--surface-panel);
-		color: var(--ink-muted);
-		text-decoration: none;
-	}
-
-	.action-btn:hover {
-		background: var(--surface-sunken);
-	}
-
 	.score-row {
 		display: flex;
 		align-items: baseline;
