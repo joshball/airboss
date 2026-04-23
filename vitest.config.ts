@@ -28,7 +28,7 @@ export default defineConfig({
 	},
 	test: {
 		environment: 'node',
-		include: ['libs/**/*.test.ts', 'scripts/**/*.test.ts'],
+		include: ['libs/**/*.test.ts', 'scripts/**/*.test.ts', 'tools/**/*.test.ts'],
 		// Load the dev `.env` before any test module runs. Required for any
 		// BC test that touches the shared db connection.
 		setupFiles: ['./vitest.setup.ts'],

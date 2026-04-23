@@ -18,13 +18,17 @@ const references = await $`bun scripts/references.ts validate`.nothrow();
 console.log('\nValidating knowledge graph (db build --dry-run)...');
 const knowledge = await $`bun scripts/build-knowledge-index.ts --dry-run`.nothrow();
 
+console.log('\nRunning theme-lint...');
+const themeLint = await $`bun tools/theme-lint/bin.ts`.nothrow();
+
 const failed =
 	svelteCheck.exitCode !== 0 ||
 	svelteCheckSim.exitCode !== 0 ||
 	svelteCheckHangar.exitCode !== 0 ||
 	biome.exitCode !== 0 ||
 	references.exitCode !== 0 ||
-	knowledge.exitCode !== 0;
+	knowledge.exitCode !== 0 ||
+	themeLint.exitCode !== 0;
 if (failed) {
 	console.error('\nChecks failed.');
 	process.exit(1);
