@@ -12,8 +12,11 @@ import {
 	QUERY_PARAMS,
 	ROUTES,
 } from '@ab/constants';
+import Banner from '@ab/ui/components/Banner.svelte';
 import { buildQuery, humanize } from '@ab/utils';
 import { tick } from 'svelte';
+import { goto } from '$app/navigation';
+import { page } from '$app/state';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
@@ -38,10 +41,6 @@ const hasActiveFilters = $derived(
 		filters.status !== CARD_STATUSES.ACTIVE,
 );
 
-// Success banner + row highlight when redirected from a create.
-let bannerDismissed = $state(false);
-const bannerVisible = $derived(createdCard !== null && !bannerDismissed);
-
 $effect(() => {
 	const current = createdCard;
 	if (!current) return;
@@ -50,6 +49,15 @@ $effect(() => {
 		if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
 	});
 });
+
+function dismissCreatedBanner(): void {
+	// Clear the `?created=...` param so the banner doesn't re-appear on
+	// navigation and the scroll effect doesn't re-fire. `noScroll` keeps the
+	// viewport where the user left it.
+	const next = new URL(page.url);
+	next.searchParams.delete(QUERY_PARAMS.CREATED);
+	void goto(next, { replaceState: true, keepFocus: true, noScroll: true });
+}
 
 type ChipFilterKey =
 	| typeof QUERY_PARAMS.DOMAIN
@@ -129,16 +137,11 @@ function pageHref(n: number): string {
 		<a class="btn primary" href={ROUTES.MEMORY_NEW}>New card</a>
 	</header>
 
-	{#if bannerVisible && createdCard}
-		<div class="banner" role="status">
-			<span>
-				Card saved.
-				<a class="banner-link" href={ROUTES.MEMORY_CARD(createdCard.id)}>View &ldquo;{shortenFront(createdCard.front)}&rdquo;</a>
-			</span>
-			<button type="button" class="banner-dismiss" onclick={() => (bannerDismissed = true)} aria-label="Dismiss">
-				×
-			</button>
-		</div>
+	{#if createdCard}
+		<Banner variant="success" dismissible onDismiss={dismissCreatedBanner}>
+			Card saved.
+			<a class="banner-link" href={ROUTES.MEMORY_CARD(createdCard.id)}>View &ldquo;{shortenFront(createdCard.front)}&rdquo;</a>
+		</Banner>
 	{/if}
 
 	<form class="filters" method="GET" role="search" aria-label="Filter cards">
@@ -341,18 +344,6 @@ function pageHref(n: number): string {
 		gap: 0.375rem;
 	}
 
-	.banner {
-		display: flex;
-		align-items: center;
-		gap: 0.75rem;
-		background: var(--ab-color-primary-subtle);
-		border: 1px solid var(--ab-color-primary-subtle-border);
-		color: var(--ab-color-primary-active);
-		padding: 0.625rem 0.875rem;
-		border-radius: var(--ab-radius-md);
-		font-size: var(--ab-font-size-sm);
-	}
-
 	.banner-link {
 		color: var(--ab-color-primary-hover);
 		font-weight: 600;
@@ -362,21 +353,6 @@ function pageHref(n: number): string {
 
 	.banner-link:hover {
 		text-decoration: underline;
-	}
-
-	.banner-dismiss {
-		margin-left: auto;
-		background: transparent;
-		border: none;
-		color: var(--ab-color-primary-active);
-		font-size: var(--ab-font-size-2xl);
-		line-height: 1;
-		cursor: pointer;
-		padding: 0 0.25rem;
-	}
-
-	.banner-dismiss:hover {
-		color: var(--ab-color-primary-hover);
 	}
 
 	.chip-row {
