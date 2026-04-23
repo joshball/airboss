@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en" data-app-id="hangar">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="icon" type="image/svg+xml" href="%sveltekit.assets%/favicon.svg" />
+		<title>airboss hangar</title>
+		%sveltekit.head%
+		<style>
+			html {
+				-webkit-font-smoothing: antialiased;
+				-moz-osx-font-smoothing: grayscale;
+				text-rendering: optimizeLegibility;
+			}
+
+			body {
+				margin: 0;
+				font-family: var(--ab-font-family-base);
+				font-size: var(--ab-font-size-base);
+				line-height: var(--ab-line-height-normal);
+				min-height: 100vh;
+				background: var(--ab-color-bg);
+				color: var(--ab-color-fg);
+			}
+
+			h1, h2, h3, h4 {
+				line-height: var(--ab-line-height-tight);
+			}
+
+			:focus-visible {
+				outline: 2px solid var(--ab-color-primary);
+				outline-offset: 2px;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="app">%sveltekit.body%</div>
+	</body>
+</html>

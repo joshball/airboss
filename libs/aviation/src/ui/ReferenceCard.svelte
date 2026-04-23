@@ -1,10 +1,17 @@
 <script lang="ts">
 import { ROUTES } from '@ab/constants';
+import type { SearchHit } from '../registry';
 import type { Reference } from '../schema/reference';
 
 const MAX_PREVIEW = 200;
 
-let { reference }: { reference: Reference } = $props();
+let {
+	reference,
+	hit = null,
+}: {
+	reference: Reference;
+	hit?: SearchHit | null;
+} = $props();
 
 function truncate(text: string, max: number): string {
 	const collapsed = text.replace(/\s+/g, ' ').trim();
@@ -13,13 +20,46 @@ function truncate(text: string, max: number): string {
 }
 
 const preview = $derived(truncate(reference.paraphrase, MAX_PREVIEW));
+
+interface HighlightParts {
+	before: string;
+	match: string;
+	after: string;
+}
+
+function splitHighlight(text: string, range: readonly [number, number]): HighlightParts | null {
+	const [start, end] = range;
+	if (start < 0 || end <= start || end > text.length) return null;
+	return {
+		before: text.slice(0, start),
+		match: text.slice(start, end),
+		after: text.slice(end),
+	};
+}
+
+const titleParts = $derived.by<HighlightParts | null>(() => {
+	if (!hit || hit.matchedField !== 'displayName') return null;
+	return splitHighlight(reference.displayName, hit.matchRange);
+});
+
+const matchedParts = $derived.by<HighlightParts | null>(() => {
+	if (!hit || hit.matchedField === 'displayName') return null;
+	return splitHighlight(hit.matchedText, hit.matchRange);
+});
 </script>
 
 <a class="card" href={ROUTES.GLOSSARY_ID(reference.id)}>
 	<header class="hd">
-		<h3>{reference.displayName}</h3>
+		<h3>
+			{#if titleParts}{titleParts.before}<mark>{titleParts.match}</mark>{titleParts.after}{:else}{reference.displayName}{/if}
+		</h3>
 		<span class="id">{reference.id}</span>
 	</header>
+	{#if matchedParts && hit}
+		<p class="matched">
+			matched: <em>{matchedParts.before}<mark>{matchedParts.match}</mark>{matchedParts.after}</em> ({hit.matchedField})
+		</p>
+	{/if}
 	<p class="para">{preview}</p>
 	<div class="tags">
 		<span class="chip source">{reference.tags.sourceType}</span>
@@ -78,6 +118,24 @@ const preview = $derived(truncate(reference.paraphrase, MAX_PREVIEW));
 		font-size: var(--ab-font-size-sm);
 		color: var(--ab-color-fg-muted);
 		line-height: var(--ab-line-height-normal);
+	}
+
+	.matched {
+		margin: 0;
+		font-size: var(--ab-font-size-xs);
+		color: var(--ab-color-fg-subtle);
+	}
+
+	.matched em {
+		font-style: normal;
+		color: var(--ab-color-fg-muted);
+	}
+
+	mark {
+		background: var(--ab-color-warning-subtle);
+		color: var(--ab-color-fg);
+		padding: 0 0.0625rem;
+		border-radius: var(--ab-radius-tight);
 	}
 
 	.tags {

@@ -70,15 +70,14 @@ The code side of the original MVP roadmap is done. What remains is the human sid
    - [study-plan-and-session-engine/test-plan.md](../work-packages/study-plan-and-session-engine/test-plan.md)
    - [learning-dashboard/test-plan.md](../work-packages/learning-dashboard/test-plan.md)
 
-2. **Seed the 12 vfr-weather-minimums cards into your local DB.** PR #15 shipped the authoring pipeline; cards don't flow through `/memory/review` until `bun run knowledge:seed --user <email>` runs once. Gated on the script-consolidation TODO below.
+2. **Seed the 12 vfr-weather-minimums cards into your local DB.** PR #15 shipped the authoring pipeline; cards don't flow through `/memory/review` until the cards seed runs once. Run `bun run db seed cards` (or `bun run db seed` for the full users + knowledge + cards pass).
 
 3. **CFI-review the 27 skeleton nodes.** PR #15 flagged `references` and `mastery_criteria` defaults as needing CFI accuracy before they're trusted. Skim-pass your own content.
 
-4. **Scale the graph.** Steps 7 is gradual: author one node at a time as you study. The authoring loop is `bun scripts/knowledge-new.ts <domain> <slug>` → fill in phases → `bun run check` validates.
+4. **Scale the graph.** Step 7 is gradual: author one node at a time as you study. The authoring loop is `bun run db new <domain> <slug>` → fill in phases → `bun run db build --dry-run` (or `bun run check`, which invokes it) validates.
 
 ## Pending infra cleanup
 
-- **Script consolidation:** proposal pending — collapse `knowledge:new`, `knowledge:seed`, `build-knowledge` into the `db` dispatcher and auto-run build on `dev`. One `bun run db seed` seeds everything; `bun run db reset --force` resets + seeds. See chat for the design.
 - **review_status flips** on each work package's `review.md` — agent-controlled field that hasn't been flipped to `done` on some of the newer packages.
 
 ## Links

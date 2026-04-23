@@ -23,6 +23,7 @@ export {
 	hasReference,
 	listReferences,
 	registerReferences,
+	type SearchHit,
 	type SearchQuery,
 	search,
 	type TagQuery,

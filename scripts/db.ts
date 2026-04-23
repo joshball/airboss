@@ -20,9 +20,13 @@ const args = process.argv.slice(2);
 const positional = args.filter((a) => !a.startsWith('-'));
 const command = positional[0];
 const subTarget = positional[1];
+const extraPositional = positional.slice(1);
 const flags = new Set(args.filter((a) => a.startsWith('-')));
 const force = flags.has('--force') || flags.has('-f');
 const wantsHelp = flags.has('--help') || flags.has('-h');
+const passthroughFlags = args.filter(
+	(a) => a.startsWith('-') && a !== '--help' && a !== '-h' && a !== '--force' && a !== '-f',
+);
 
 async function run(cmd: string[]): Promise<void> {
 	console.log(`> ${cmd.join(' ')}`);
@@ -125,6 +129,19 @@ async function doSeed(): Promise<void> {
 	const seedArgs = ['bun', 'scripts/db/seed-all.ts'];
 	if (subTarget) seedArgs.push(subTarget);
 	await run(seedArgs);
+}
+
+async function doBuild(): Promise<void> {
+	await run(['bun', 'scripts/build-knowledge-index.ts', ...passthroughFlags]);
+}
+
+async function doNew(): Promise<void> {
+	const [domain, slug] = extraPositional;
+	if (!domain || !slug) {
+		console.error('Usage: bun run db new <domain> <slug>');
+		process.exit(1);
+	}
+	await run(['bun', 'scripts/knowledge-new.ts', domain, slug]);
 }
 
 async function showStatus(): Promise<void> {
@@ -247,6 +264,25 @@ const COMMAND_HELP: Record<string, CommandHelp> = {
 		how: 'Drops + creates the DB via `docker exec psql`, pushes the Drizzle schema, then delegates to `scripts/db/seed-all.ts` with no sub-target (all phases).',
 		links: ['scripts/db/seed-all.ts', 'libs/constants/src/dev.ts (DEV_DB_HOST_PATTERN guards against prod)'],
 	},
+	build: {
+		summary: 'Build knowledge graph from course/knowledge/**/node.md',
+		what: 'Runs `scripts/build-knowledge-index.ts`. Parses every `course/knowledge/**/node.md`, validates the graph (required fields, DAG on `requires`, duplicate id detection, unknown H2 detection, edge resolution), upserts `knowledge_node` and `knowledge_edge` rows, and rewrites `course/knowledge/graph-index.md`.\n\n  bun run db build                   # full build\n  bun run db build --dry-run         # validate only, no DB writes\n  bun run db build --json            # machine-readable build summary on stdout\n  bun run db build --fail-on-coverage # non-zero if any node is lifecycle=skeleton',
+		why: 'Authoring lives in markdown + YAML; the graph lives in Postgres. `db build` is the bridge. `--dry-run` is what `bun run check` invokes pre-commit to catch broken frontmatter and dangling edges before they land.',
+		how: 'Thin wrapper around `scripts/build-knowledge-index.ts` with flag pass-through. Validation is all-or-nothing: a single invalid node fails the whole build and leaves the DB untouched. The `bun run dev` loop also runs this automatically when sources are newer than `graph-index.md`.',
+		links: [
+			'scripts/build-knowledge-index.ts',
+			'course/knowledge/graph-index.md',
+			'docs/decisions/011-knowledge-graph-learning-system/decision.md',
+			'docs/work-packages/knowledge-graph/spec.md',
+		],
+	},
+	new: {
+		summary: 'Scaffold a new knowledge-graph node',
+		what: 'Runs `scripts/knowledge-new.ts <domain> <slug>`. Creates `course/knowledge/<domain>/<slug>/node.md` with a full frontmatter template (every field present, TODO-commented for unknown values) plus the seven H2 phase stubs (Context, Problem, Exploration, Principle, Application, Integration, Mastery).\n\n  bun run db new airspace vfr-weather-minimums\n  bun run db new weather cloud-types',
+		why: 'Single entry point for authoring. Refuses to overwrite existing files and rejects unknown domains -- cheap guardrail against typos that would later fail validation.',
+		how: 'Resolves the accepted domain set from `@ab/constants/study` (`DOMAIN_VALUES` plus graph-specific additions), writes the scaffold, exits. Follow up with `bun run db build --dry-run` to validate as you author.',
+		links: ['scripts/knowledge-new.ts', 'libs/constants/src/study.ts', 'docs/work-packages/knowledge-graph/spec.md'],
+	},
 	'reset-study': {
 		summary: 'TRUNCATE study.card/card_state/review, re-materialize cards',
 		what: 'TRUNCATEs `study.card`, `study.card_state`, `study.review`, then re-runs the cards phase of the seed orchestrator. Auth users and the knowledge graph (knowledge_node/knowledge_edge) are untouched.',
@@ -301,6 +337,7 @@ const COMMAND_GROUPS: readonly CommandGroup[] = [
 	{ label: 'Container lifecycle', commands: ['up', 'down'] },
 	{ label: 'Schema', commands: ['push', 'generate', 'migrate'] },
 	{ label: 'Data + content', commands: ['seed', 'reset', 'reset-study'] },
+	{ label: 'Knowledge authoring', commands: ['new', 'build'] },
 	{ label: 'Utility', commands: ['help'] },
 ];
 
@@ -343,6 +380,8 @@ const handlers: Record<string, () => Promise<void> | void> = {
 	psql: () => run(['docker', 'exec', '-it', CONTAINER, 'psql', '-U', DB_USER, '-d', DB_NAME]),
 	reset: doReset,
 	'reset-study': doResetStudy,
+	build: doBuild,
+	new: doNew,
 };
 
 if (wantsHelp) {

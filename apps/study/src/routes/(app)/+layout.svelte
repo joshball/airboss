@@ -155,7 +155,7 @@ function handleHelpItemClick() {
 <style>
 	.skip {
 		position: absolute;
-		top: -var(--ab-space-3xl);
+		top: calc(var(--ab-space-3xl) * -1);
 		left: var(--ab-space-sm);
 		background: var(--ab-color-fg);
 		color: var(--ab-color-fg-inverse);

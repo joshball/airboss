@@ -27,7 +27,7 @@ The **shipped schema** on main (PR #6) is a deliberate simplification of the ful
 | `study.card.content_phase`                                         | Not added in v1                                                            | Add when UI grouping by phase (vs. grouping by node_id alone) delivers authoring or learning signal.             |
 | `study.scenario.node_id` + `content_phase`                         | Not added in v1 (scenarios stay decoupled)                                 | Add when scenarios need to aggregate into node mastery via the `repGate`. Stub `repGate = not_applicable` in v1. |
 
-The **build script on main** (`bun run build-knowledge`, `scripts/build-knowledge-index.ts`) follows the spec's pipeline but writes into the v1 shape: parse `course/knowledge/**/node.md`, split the body into H2-keyed phases in memory, upsert `knowledge_node` with full metadata + raw `content_md`, replace outbound `knowledge_edge` rows, refresh `target_exists`. Validation (required fields, DAG on `requires`, duplicate id detection, unknown H2 detection) matches the spec. Coverage (`byLifecycle`, `byDomain`, `phaseGaps`) is computed per-build and written to `course/knowledge/graph-index.md` for authors but is not persisted in a DB audit table.
+The **build script on main** (`bun run db build`, `scripts/build-knowledge-index.ts`) follows the spec's pipeline but writes into the v1 shape: parse `course/knowledge/**/node.md`, split the body into H2-keyed phases in memory, upsert `knowledge_node` with full metadata + raw `content_md`, replace outbound `knowledge_edge` rows, refresh `target_exists`. Validation (required fields, DAG on `requires`, duplicate id detection, unknown H2 detection) matches the spec. Coverage (`byLifecycle`, `byDomain`, `phaseGaps`) is computed per-build and written to `course/knowledge/graph-index.md` for authors but is not persisted in a DB audit table.
 
 **Card authoring workflow (inline YAML):** Practice-phase cards are authored inline inside each `node.md` as a fenced block with the info string `yaml-cards`:
 
@@ -40,7 +40,7 @@ The **build script on main** (`bun run build-knowledge`, `scripts/build-knowledg
 
 `bun run db seed cards` (`scripts/db/seed-cards.ts`, orchestrated from `scripts/db/seed-all.ts`) materializes these as `study.card` rows with `node_id` set, `source_type = 'course'`, `is_editable = false`. Runs for every account in `DEV_ACCOUNTS`. Wholesale-replaces any existing course cards for the (user, node) pair so re-running is idempotent. Personal cards (`source_type = 'personal'`) are never touched. When a node's authored card count exceeds ~15 this will be split into a separate `cards/*.yaml` file per node; that split is a v2 concern.
 
-The `bun run knowledge:new <domain> <slug>` scaffolder (`scripts/knowledge-new.ts`) emits a skeleton node.md with TODO-commented frontmatter fields and the seven H2 phase stubs -- the canonical starting point when authoring a new node.
+The `bun run db new <domain> <slug>` scaffolder (`scripts/knowledge-new.ts`) emits a skeleton node.md with TODO-commented frontmatter fields and the seven H2 phase stubs -- the canonical starting point when authoring a new node.
 
 ## Data Model
 
@@ -48,7 +48,7 @@ All tables in the `study` Postgres schema namespace. IDs use `prefix_ULID` via `
 
 ### study.knowledge_node
 
-Canonical graph node. One row per `course/knowledge/**/node.md` file. Created/upserted by `bun run build-knowledge`.
+Canonical graph node. One row per `course/knowledge/**/node.md` file. Created/upserted by `bun run db build`.
 
 | Column                  | Type        | Constraints                              | Notes                                                                                                                    |
 | ----------------------- | ----------- | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
@@ -119,7 +119,7 @@ Unique constraint: `(node_id, phase)`. A node is `complete` when all seven phase
 
 ### study.knowledge_build
 
-Audit row per `bun run build-knowledge` invocation. Supports rollback and "which build produced this state" queries.
+Audit row per `bun run db build` invocation. Supports rollback and "which build produced this state" queries.
 
 | Column          | Type        | Constraints             | Notes                                        |
 | --------------- | ----------- | ----------------------- | -------------------------------------------- |
@@ -210,7 +210,7 @@ The build script parses the frontmatter, splits the body on `## {PhaseName}` hea
 
 ## Behavior
 
-### Build pipeline -- `bun run build-knowledge`
+### Build pipeline -- `bun run db build`
 
 1. Insert a `knowledge_build` row with `status='running'`.
 2. Glob `course/knowledge/**/node.md`.
@@ -228,7 +228,7 @@ Idempotent: re-running with no file changes makes no DB writes (each node hash m
 
 ### CLI
 
-`bun run build-knowledge` (entry in `apps/study/package.json` forwards to `scripts/build-knowledge-index.ts`):
+`bun run db build` (entry in `apps/study/package.json` forwards to `scripts/build-knowledge-index.ts`):
 
 | Flag                  | Effect                                                         |
 | --------------------- | -------------------------------------------------------------- |
@@ -237,7 +237,7 @@ Idempotent: re-running with no file changes makes no DB writes (each node hash m
 | `--json`              | Emit build summary as JSON on stdout (for CI)                  |
 | `--fail-on-coverage`  | Exit non-zero if any node is `skeleton` (useful once scaled)   |
 
-Pre-build `bun run check` hook wires `build-knowledge --dry-run` into the pre-commit pipeline. The study app's server start does NOT run the build automatically -- authoring is explicit.
+Pre-build `bun run check` hook wires `bun run db build --dry-run` into the pre-commit pipeline. The study app's server start does NOT run the build automatically -- authoring is explicit.
 
 ### Node detail page -- `GET /knowledge/[slug]`
 
@@ -263,11 +263,11 @@ Lists all nodes grouped by domain. Filter by cert (PPL / IR / CPL / CFI), priori
 
 ### Seed-node authoring workflow
 
-1. Author runs `bun run knowledge:new airspace vfr-weather-minimums`. Script scaffolds `course/knowledge/airspace/vfr-weather-minimums/node.md` with a frontmatter template (all fields present, commented where unknown) + empty `## Context` / `## Problem` / ... skeleton.
+1. Author runs `bun run db new airspace vfr-weather-minimums`. Script scaffolds `course/knowledge/airspace/vfr-weather-minimums/node.md` with a frontmatter template (all fields present, commented where unknown) + empty `## Context` / `## Problem` / ... skeleton.
 2. Author fills in the frontmatter (domain, relevance, requires/related, references).
 3. Author fills in content phases as they study. Partial is fine.
-4. Author runs `bun run build-knowledge --dry-run` to see validation feedback.
-5. Clean dry-run -> commit. Next `build-knowledge` picks it up.
+4. Author runs `bun run db build --dry-run` to see validation feedback.
+5. Clean dry-run -> commit. Next `bun run db build` picks it up.
 
 No in-app authoring UI in v1. The editor is VS Code. CLAUDE.md's "markdown-first, DB-built" is the principle.
 

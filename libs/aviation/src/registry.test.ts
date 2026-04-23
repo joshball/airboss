@@ -126,9 +126,82 @@ describe('registry - search + axisCounts', () => {
 	});
 
 	it('text search matches displayName, alias, keywords', () => {
-		expect(search({ text: 'metar' }).map((r) => r.id)).toEqual(['metar']);
-		expect(search({ text: 'wx report' }).map((r) => r.id)).toEqual(['metar']);
+		expect(search({ text: 'metar' }).map((h) => h.reference.id)).toEqual(['metar']);
+		expect(search({ text: 'wx report' }).map((h) => h.reference.id)).toEqual(['metar']);
 		expect(search({ text: 'unknown' })).toEqual([]);
+	});
+
+	it('ranks displayName/alias/keyword matches by tier and tiebreaks by length then order', () => {
+		__resetRegistryForTests();
+		registerReferences([
+			makeRef({
+				id: 'faa',
+				displayName: 'FAA',
+				aliases: ['Federal Aviation Administration'],
+				tags: {
+					sourceType: REFERENCE_SOURCE_TYPES.AIM,
+					aviationTopic: [AVIATION_TOPICS.REGULATIONS],
+					flightRules: FLIGHT_RULES.BOTH,
+					knowledgeKind: KNOWLEDGE_KINDS.DEFINITION,
+				},
+			}),
+			makeRef({
+				id: 'tsa',
+				displayName: 'TSA',
+				aliases: ['Transportation Security Administration'],
+				tags: {
+					sourceType: REFERENCE_SOURCE_TYPES.AIM,
+					aviationTopic: [AVIATION_TOPICS.REGULATIONS],
+					flightRules: FLIGHT_RULES.BOTH,
+					knowledgeKind: KNOWLEDGE_KINDS.DEFINITION,
+				},
+			}),
+			makeRef({
+				id: 'administrator',
+				displayName: 'Administrator',
+				aliases: [],
+				tags: {
+					sourceType: REFERENCE_SOURCE_TYPES.AIM,
+					aviationTopic: [AVIATION_TOPICS.REGULATIONS],
+					flightRules: FLIGHT_RULES.BOTH,
+					knowledgeKind: KNOWLEDGE_KINDS.DEFINITION,
+				},
+			}),
+			makeRef({
+				id: 'adm',
+				displayName: 'ADM',
+				aliases: [],
+				tags: {
+					sourceType: REFERENCE_SOURCE_TYPES.AIM,
+					aviationTopic: [AVIATION_TOPICS.REGULATIONS],
+					flightRules: FLIGHT_RULES.BOTH,
+					knowledgeKind: KNOWLEDGE_KINDS.DEFINITION,
+				},
+			}),
+		]);
+
+		const hits = search({ text: 'adm' });
+		expect(hits.map((h) => h.reference.id)).toEqual(['adm', 'administrator', 'faa', 'tsa']);
+
+		const [admHit, adminHit, faaHit, tsaHit] = hits;
+		expect(admHit.matchedField).toBe('displayName');
+		expect(admHit.matchedText).toBe('ADM');
+		expect(admHit.matchRange).toEqual([0, 3]);
+		expect(admHit.score).toBe(100);
+
+		expect(adminHit.matchedField).toBe('displayName');
+		expect(adminHit.matchedText).toBe('Administrator');
+		expect(adminHit.matchRange).toEqual([0, 3]);
+		expect(adminHit.score).toBe(80);
+
+		expect(faaHit.matchedField).toBe('alias');
+		expect(faaHit.matchedText).toBe('Federal Aviation Administration');
+		expect(faaHit.matchRange).toEqual(['Federal Aviation '.length, 'Federal Aviation '.length + 3]);
+		expect(faaHit.score).toBe(40);
+
+		expect(tsaHit.matchedField).toBe('alias');
+		expect(tsaHit.matchedText).toBe('Transportation Security Administration');
+		expect(tsaHit.score).toBe(40);
 	});
 
 	it('counts axis values', () => {

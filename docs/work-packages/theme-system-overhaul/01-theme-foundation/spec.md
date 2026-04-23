@@ -68,4 +68,5 @@ The full `--ab-*` → role-name mapping lives in the tasks file. Codemod handles
 - Visual regression: every study route pixel-identical to pre-change (values unchanged; only names changed).
 - Dashboard nav no longer restyles into mono when navigating to `/dashboard` (ThemeProvider scope fix).
 - `<html>` carries `data-theme` + `data-appearance` before domcontentloaded (manual devtools check; automated in #3).
-- Grep for `--ab-` in `apps/**` and `libs/ui/**` returns zero results.
+- Grep for `--ab-` in `libs/ui/src/components/*.svelte` returns zero results (the 12 primitives are fully migrated).
+- Grep for `--ab-` in `apps/study/src/**` is allowed to be non-empty; page-level sweep is package #5's acceptance criterion (see Non-goals). The emitted `generated/tokens.css` exposes the legacy `--ab-*` names as compatibility aliases pointing at the new role-token values, so unmigrated call sites keep rendering identically until #5 lands.

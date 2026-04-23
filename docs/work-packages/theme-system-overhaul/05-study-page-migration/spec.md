@@ -18,6 +18,8 @@ Sweep every route in `apps/study/src/routes/(app)/` and `apps/study/src/routes/l
 
 This closes the bulk of the UX review's major findings.
 
+**Inherited from package #1:** The app-wide `--ab-*` → role-token sweep is this package's responsibility. Package #1 migrated the 12 `libs/ui/` primitives and left `generated/tokens.css` exposing `--ab-*` names as compatibility aliases so unmigrated study routes kept rendering. Those aliases must be removed as part of this package's acceptance: final grep for `--ab-` across `apps/study/src/**` returns zero, and the alias block in the emit pipeline is deleted.
+
 ## Sub-PRs
 
 Split by folder for reviewability. Each sub-PR is a self-contained migration.

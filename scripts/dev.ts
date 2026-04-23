@@ -24,6 +24,7 @@ import { DEV_DB_URL, ENV_VARS, HOSTS } from '@ab/constants';
 const DEV_URLS: Record<string, string> = {
 	study: `https://${HOSTS.STUDY}`,
 	sim: `https://${HOSTS.SIM}`,
+	hangar: `https://${HOSTS.HANGAR}`,
 };
 
 const REPO_ROOT = resolve(import.meta.dir, '..');
@@ -204,10 +205,62 @@ async function runReferenceScan(): Promise<void> {
 	}
 }
 
+function printHelp(): void {
+	console.log('Usage: bun run dev [app] [flags]');
+	console.log('');
+	console.log('Starts one or more local dev servers. With no app, spawns all of them in parallel');
+	console.log('with coloured prefixed output. Before vite boots, validates wiki-links across all');
+	console.log('content and rebuilds the knowledge graph if markdown sources have changed.');
+	console.log('');
+	console.log('Apps:');
+	const width = APPS.reduce((m, n) => Math.max(m, n.length), 0);
+	for (const name of APPS) {
+		console.log(`  ${name.padEnd(width)}  ${DEV_URLS[name]}`);
+	}
+	console.log('');
+	console.log('Flags:');
+	console.log('  --help, -h    Show this message');
+	console.log('');
+	console.log('Examples:');
+	console.log('  bun run dev              Spawn every app in parallel');
+	console.log('  bun run dev study        Spawn only the study app');
+	console.log('  bun run dev hangar       Spawn only the hangar app');
+}
+
+/**
+ * Run `svelte-kit sync` in every app workspace. Generates `.svelte-kit/tsconfig.json`
+ * which the app's tsconfig extends. Without this, first-boot spits a tsconfig warning;
+ * harmless but noisy. Sync is fast (<200ms per app) and idempotent.
+ */
+async function runSvelteKitSync(): Promise<void> {
+	await Promise.all(
+		APPS.map(async (app) => {
+			const proc = Bun.spawn(['bunx', 'svelte-kit', 'sync'], {
+				cwd: join(REPO_ROOT, 'apps', app),
+				stdout: 'ignore',
+				stderr: 'pipe',
+			});
+			const code = await proc.exited;
+			if (code !== 0) {
+				const err = await new Response(proc.stderr).text();
+				console.warn(`svelte-kit sync failed for ${app} (exit ${code}); continuing. ${err.trim()}`);
+			}
+		}),
+	);
+}
+
+const firstArg = process.argv[2];
+
+if (firstArg === '--help' || firstArg === '-h') {
+	printHelp();
+	process.exit(0);
+}
+
 await runReferenceScan();
 await maybeBuildKnowledge();
+await runSvelteKitSync();
 
-const app = process.argv[2];
+const app = firstArg;
 
 if (app === undefined) {
 	await runAll();
@@ -215,5 +268,6 @@ if (app === undefined) {
 	await runOne(app);
 } else {
 	console.error(`Unknown app: '${app}'. Valid apps: ${APPS.join(', ')}`);
+	console.error('Run `bun run dev --help` for usage.');
 	process.exit(1);
 }

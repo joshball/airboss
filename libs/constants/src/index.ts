@@ -1,3 +1,4 @@
+export { AUDIT_TARGETS, type AuditTarget } from './audit';
 export {
 	BETTER_AUTH_COOKIES,
 	BETTER_AUTH_ENDPOINTS,
