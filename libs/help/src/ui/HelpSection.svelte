@@ -1,27 +1,31 @@
 <script lang="ts">
 import ReferenceText from '@ab/aviation/ui/ReferenceText.svelte';
+import type { MdNode } from '../markdown/ast';
 import type { HelpSection } from '../schema/help-section';
+import MarkdownBody from './MarkdownBody.svelte';
 
 /**
  * A single help-page section. Collapsible: click the heading or use
  * Enter/Space to toggle. First section of a page typically renders with
  * `showHeading={false}` to act as the lede.
  *
- * The markdown body is piped through `ReferenceText` from `@ab/aviation`
- * so `[[display::id]]` wiki-links resolve to the aviation glossary inline.
- * `ReferenceText` handles plain-text segments as-is, so non-wiki-link
- * markdown passes through untouched (Phase 1 does not render full
- * markdown -- the body is treated as prose with wiki-link resolution).
+ * When `nodes` is provided the section body is rendered with the full
+ * `<MarkdownBody>` renderer (headings, lists, tables, callouts, etc.).
+ * When `nodes` is omitted the legacy `<ReferenceText>` fallback is used,
+ * which only resolves `[[display::id]]` wiki-links -- sufficient for
+ * simple callers that haven't migrated to the loader-parse pipeline.
  */
 
 let {
 	section,
 	showHeading = true,
 	startExpanded = true,
+	nodes,
 }: {
 	section: HelpSection;
 	showHeading?: boolean;
 	startExpanded?: boolean;
+	nodes?: MdNode[];
 } = $props();
 
 // Persist expansion state locally once mounted. `startExpanded` is treated
@@ -62,7 +66,11 @@ function handleKey(event: KeyboardEvent): void {
 	{/if}
 	{#if expanded}
 		<div id={`${section.id}-body`} class="body">
-			<ReferenceText source={section.body} />
+			{#if nodes}
+				<MarkdownBody {nodes} />
+			{:else}
+				<ReferenceText source={section.body} />
+			{/if}
 		</div>
 	{/if}
 </section>

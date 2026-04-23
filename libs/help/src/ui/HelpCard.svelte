@@ -12,9 +12,11 @@ import type { Snippet } from 'svelte';
  *   - 'warn'    -- caution (yellow accent)
  *   - 'danger'  -- safety-critical (red accent)
  *   - 'howto'   -- a stepwise recipe
+ *   - 'note'    -- neutral aside with low-emphasis border
+ *   - 'example' -- worked example with subtle accent tint
  */
 
-type Variant = 'tip' | 'warn' | 'danger' | 'howto';
+type Variant = 'tip' | 'warn' | 'danger' | 'howto' | 'note' | 'example';
 
 let {
 	title,
@@ -60,6 +62,16 @@ let {
 	.card.danger {
 		border-left-color: var(--ab-color-danger);
 		background: var(--ab-color-danger-subtle);
+	}
+
+	.card.note {
+		border-left-color: var(--ab-color-border);
+		background: var(--ab-color-surface-sunken);
+	}
+
+	.card.example {
+		border-left-color: var(--ab-color-primary);
+		background: var(--ab-color-surface-raised);
 	}
 
 	header {
