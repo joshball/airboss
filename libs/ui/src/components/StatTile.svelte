@@ -1,9 +1,11 @@
 <script lang="ts" module>
-export type StatTileTone = 'neutral' | 'primary' | 'success' | 'warning' | 'danger';
+import type { Tone, ToneInput } from '@ab/themes';
+export type StatTileTone = Tone;
 </script>
 
 <script lang="ts">
 import type { Snippet } from 'svelte';
+import { resolveTone } from '@ab/themes';
 
 /**
  * Key / value tile for dashboard-style stat grids. Label on top, big
@@ -12,6 +14,9 @@ import type { Snippet } from 'svelte';
  * Pass `href` to make the whole tile a link -- the review flagged
  * non-clickable tiles as a UX smell, so the primitive makes "clickable"
  * the default expectation when a destination exists.
+ *
+ * Accepts the shared `Tone` enum; `neutral` is mapped to `default` via
+ * `resolveTone` for legacy call sites (package #5 migration).
  */
 
 let {
@@ -19,7 +24,7 @@ let {
 	value,
 	sub,
 	href,
-	tone = 'neutral',
+	tone,
 	ariaLabel,
 	valueSnippet,
 }: {
@@ -27,11 +32,12 @@ let {
 	value: string | number;
 	sub?: string;
 	href?: string;
-	tone?: StatTileTone;
+	tone?: ToneInput;
 	ariaLabel?: string;
 	valueSnippet?: Snippet;
 } = $props();
 
+const resolved = $derived<Tone>(resolveTone(tone));
 </script>
 
 {#snippet body()}
@@ -49,11 +55,11 @@ let {
 {/snippet}
 
 {#if href}
-	<a class="tile t-{tone} linked" {href} aria-label={ariaLabel}>
+	<a class="tile t-{resolved} linked" {href} aria-label={ariaLabel}>
 		{@render body()}
 	</a>
 {:else}
-	<div class="tile t-{tone}" aria-label={ariaLabel}>
+	<div class="tile t-{resolved}" aria-label={ariaLabel}>
 		{@render body()}
 	</div>
 {/if}
@@ -85,8 +91,8 @@ let {
 	}
 
 	.tile.linked:focus-visible {
-		outline: var(2px) solid var(--focus-ring);
-		outline-offset: var(2px);
+		outline: 2px solid var(--focus-ring);
+		outline-offset: 2px;
 	}
 
 	.label {
@@ -111,7 +117,10 @@ let {
 	}
 
 	.t-primary .value { color: var(--action-default); }
+	.t-info    .value { color: var(--signal-info); }
 	.t-success .value { color: var(--signal-success); }
 	.t-warning .value { color: var(--signal-warning); }
-	.t-danger .value  { color: var(--action-hazard); }
+	.t-danger  .value { color: var(--action-hazard); }
+	.t-muted   .value { color: var(--ink-subtle); }
+	.t-accent  .value { color: var(--accent-code); }
 </style>

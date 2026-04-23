@@ -232,34 +232,37 @@ $effect(() => {
 	}
 
 	.v-primary {
-		background: var(--action-default);
-		color: var(--action-default-ink);
+		background: var(--button-primary-bg);
+		color: var(--button-primary-ink);
+		border-color: var(--button-primary-border);
 	}
-	.v-primary:not(:disabled):hover { background: var(--action-default-hover); }
-	.v-primary:not(:disabled):active { background: var(--action-default-active); }
+	.v-primary:not(:disabled):hover { background: var(--button-primary-hover-bg); }
+	.v-primary:not(:disabled):active { background: var(--button-primary-active-bg); }
 
 	.v-secondary {
-		background: var(--surface-sunken);
-		color: var(--ink-body);
-		border-color: var(--edge-strong);
+		background: var(--button-default-bg);
+		color: var(--button-default-ink);
+		border-color: var(--button-default-border);
 	}
-	.v-secondary:not(:disabled):hover { background: var(--edge-default); }
-	.v-secondary:not(:disabled):active { background: var(--edge-strong); }
+	.v-secondary:not(:disabled):hover { background: var(--button-default-hover-bg); }
+	.v-secondary:not(:disabled):active { background: var(--button-default-active-bg); }
 
 	.v-ghost {
-		background: transparent;
-		color: var(--ink-muted);
+		background: var(--button-ghost-bg);
+		color: var(--button-ghost-ink);
+		border-color: var(--button-ghost-border);
 	}
 	.v-ghost:not(:disabled):hover {
-		background: var(--surface-sunken);
-		color: var(--ink-body);
+		background: var(--button-ghost-hover-bg);
+		color: var(--button-ghost-hover-ink);
 	}
-	.v-ghost:not(:disabled):active { background: var(--edge-default); }
+	.v-ghost:not(:disabled):active { background: var(--button-ghost-active-bg); }
 
 	.v-danger {
-		background: var(--action-hazard);
-		color: var(--action-hazard-ink);
+		background: var(--button-hazard-bg);
+		color: var(--button-hazard-ink);
+		border-color: var(--button-hazard-border);
 	}
-	.v-danger:not(:disabled):hover { background: var(--action-hazard-hover); }
-	.v-danger:not(:disabled):active { background: var(--action-hazard-active); }
+	.v-danger:not(:disabled):hover { background: var(--button-hazard-hover-bg); }
+	.v-danger:not(:disabled):active { background: var(--button-hazard-active-bg); }
 </style>

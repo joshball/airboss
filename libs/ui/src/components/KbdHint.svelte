@@ -36,8 +36,8 @@ let {
 		border-bottom-width: 2px;
 		border-radius: var(--radius-sm);
 		padding: 0 var(--space-2xs);
-		min-width: 1.25rem;
-		min-height: 1.1rem;
+		min-width: var(--badge-height-md);
+		min-height: var(--badge-height-md);
 		line-height: 1;
 	}
 </style>
