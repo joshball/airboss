@@ -1,19 +1,48 @@
 <!doctype html>
-<html lang="en" data-app-id="study">
+<html lang="en" data-app-id="study" data-theme="study/sectional" data-appearance="light" data-layout="reading">
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="icon" type="image/svg+xml" href="%sveltekit.assets%/favicon.svg" />
 		<title>airboss study</title>
+		<script>
+			/*
+			 * Pre-hydration theme script. Runs before SvelteKit mounts so
+			 * data-theme / data-appearance / data-layout are set on <html>
+			 * before first paint. Solves FOUC: if the user selected dark
+			 * mode, we never render a light-mode flash on reload.
+			 *
+			 * The script mirrors resolveThemeForPath() in @ab/themes --
+			 * simple enough to duplicate inline; when the path matrix grows
+			 * factor this into a generated script.
+			 */
+			(function () {
+				try {
+					var doc = document.documentElement;
+					var path = window.location.pathname;
+					var flightdeck = path === '/dashboard' || path.indexOf('/dashboard/') === 0;
+					var theme = flightdeck ? 'study/flightdeck' : 'study/sectional';
+					var layout = flightdeck ? 'dashboard' : 'reading';
+					var stored = document.cookie.match(/(?:^|;\s*)appearance=(light|dark)/);
+					var system = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+					var appearance = stored ? stored[1] : system;
+					doc.setAttribute('data-theme', theme);
+					doc.setAttribute('data-appearance', appearance);
+					doc.setAttribute('data-layout', layout);
+				} catch (e) {
+					/* Fall through to the HTML defaults. */
+				}
+			})();
+		</script>
 		%sveltekit.head%
 		<style>
 			/*
 			 * Base document styles. All colors / fonts / sizes resolve from
-			 * the token layer defined at `:root` in `@ab/themes/tokens.css`.
-			 * `:root` carries the `web` theme defaults so the body paints
-			 * correctly before SvelteKit hydrates the `ThemeProvider`; the
-			 * `[data-theme='tui']` subtree inside `<div id="app">` still
-			 * overrides tokens for its descendants.
+			 * the token layer in `@ab/themes/generated/tokens.css`. The
+			 * `:root` block there carries the airboss/default palette so the
+			 * body paints correctly before SvelteKit hydrates the per-page
+			 * `ThemeProvider`. `[data-theme='study/flightdeck']` on the
+			 * subtree still overrides tokens for its descendants.
 			 */
 			html {
 				-webkit-font-smoothing: antialiased;
@@ -23,20 +52,20 @@
 
 			body {
 				margin: 0;
-				font-family: var(--ab-font-family-base);
-				font-size: var(--ab-font-size-base);
-				line-height: var(--ab-line-height-normal);
+				font-family: var(--font-family-base);
+				font-size: var(--font-size-base);
+				line-height: var(--line-height-normal);
 				min-height: 100vh;
-				background: var(--ab-color-bg);
-				color: var(--ab-color-fg);
+				background: var(--surface-page);
+				color: var(--ink-body);
 			}
 
 			h1, h2, h3, h4 {
-				line-height: var(--ab-line-height-tight);
+				line-height: var(--line-height-tight);
 			}
 
 			:focus-visible {
-				outline: 2px solid var(--ab-color-primary);
+				outline: 2px solid var(--focus-ring-strong);
 				outline-offset: 2px;
 			}
 		</style>

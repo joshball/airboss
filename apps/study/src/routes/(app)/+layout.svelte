@@ -31,10 +31,11 @@ const plansActive = $derived(
 // centered reading-column layout.
 const fullBleed = $derived(dashboardActive);
 
-// Route-driven theme. `resolveThemeForPath` returns 'tui' for /dashboard
-// and 'web' everywhere else. The outer provider wraps the nav + main so
-// every component inside picks up the right tokens automatically.
-const theme = $derived(resolveThemeForPath(page.url.pathname));
+// Route-driven theme. `resolveThemeForPath` returns study/flightdeck for
+// /dashboard and study/sectional everywhere else. The provider wraps
+// *only* <main> so the nav keeps the outer chrome theme while the
+// content area switches to flightdeck on dashboard routes.
+const selection = $derived(resolveThemeForPath(page.url.pathname));
 
 // Identity anchor. Primary label is the user's name; fall back to email if
 // no name is set. The disclosure reveals the email (when it isn't already
@@ -92,61 +93,61 @@ function handleHelpItemClick() {
 
 <svelte:window onkeydown={handleMenuKeydown} />
 
-<ThemeProvider {theme}>
-	<a class="skip" href="#main">Skip to main content</a>
+<a class="skip" href="#main">Skip to main content</a>
 
-	<nav aria-label="Primary">
-		<div class="nav-sections">
-			<a href={ROUTES.DASHBOARD} aria-current={dashboardActive ? 'page' : undefined}>Dashboard</a>
-			<a href={ROUTES.PLANS} aria-current={plansActive ? 'page' : undefined}>Plans</a>
-			<a href={ROUTES.MEMORY} aria-current={memoryActive ? 'page' : undefined}>Memory</a>
-			<a href={ROUTES.REPS} aria-current={repsActive ? 'page' : undefined}>Reps</a>
-			<a href={ROUTES.KNOWLEDGE} aria-current={knowledgeActive ? 'page' : undefined}>Knowledge</a>
-			<a href={ROUTES.GLOSSARY} aria-current={glossaryActive ? 'page' : undefined}>Glossary</a>
-			<a href={ROUTES.CALIBRATION} aria-current={calibrationActive ? 'page' : undefined}>Calibration</a>
-			<details class="nav-menu" bind:this={helpMenu} onfocusout={handleHelpMenuBlur}>
-				<summary aria-haspopup="menu" aria-current={helpActive ? 'page' : undefined}>
-					<span>Help</span>
-					<span class="chevron" aria-hidden="true">▾</span>
-				</summary>
-				<div class="nav-menu-panel" role="menu" aria-label="Help sections">
-					<a
-						href={ROUTES.HELP}
-						role="menuitem"
-						aria-current={helpIndexActive ? 'page' : undefined}
-						onclick={handleHelpItemClick}>Help index</a
-					>
-					<a
-						href={ROUTES.HELP_CONCEPTS}
-						role="menuitem"
-						aria-current={helpConceptsActive ? 'page' : undefined}
-						onclick={handleHelpItemClick}>Concepts</a
-					>
-				</div>
-			</details>
-		</div>
-
-		<div class="nav-search">
-			<HelpSearch />
-		</div>
-
-		<details class="identity" bind:this={menu}>
-			<summary aria-label="Account menu for {identityLabel}">
-				<span class="identity-label-full">{identityLabel}</span>
-				<span class="identity-label-compact" aria-hidden="true">{initials}</span>
+<nav aria-label="Primary">
+	<div class="nav-sections">
+		<a href={ROUTES.DASHBOARD} aria-current={dashboardActive ? 'page' : undefined}>Dashboard</a>
+		<a href={ROUTES.PLANS} aria-current={plansActive ? 'page' : undefined}>Plans</a>
+		<a href={ROUTES.MEMORY} aria-current={memoryActive ? 'page' : undefined}>Memory</a>
+		<a href={ROUTES.REPS} aria-current={repsActive ? 'page' : undefined}>Reps</a>
+		<a href={ROUTES.KNOWLEDGE} aria-current={knowledgeActive ? 'page' : undefined}>Knowledge</a>
+		<a href={ROUTES.GLOSSARY} aria-current={glossaryActive ? 'page' : undefined}>Glossary</a>
+		<a href={ROUTES.CALIBRATION} aria-current={calibrationActive ? 'page' : undefined}>Calibration</a>
+		<details class="nav-menu" bind:this={helpMenu} onfocusout={handleHelpMenuBlur}>
+			<summary aria-haspopup="menu" aria-current={helpActive ? 'page' : undefined}>
+				<span>Help</span>
 				<span class="chevron" aria-hidden="true">▾</span>
 			</summary>
-			<div class="identity-panel">
-				{#if showEmailRow}
-					<div class="identity-email">{data.user.email}</div>
-				{/if}
-				<form method="POST" action={ROUTES.LOGOUT} class="identity-signout">
-					<button type="submit">Sign out</button>
-				</form>
+			<div class="nav-menu-panel" role="menu" aria-label="Help sections">
+				<a
+					href={ROUTES.HELP}
+					role="menuitem"
+					aria-current={helpIndexActive ? 'page' : undefined}
+					onclick={handleHelpItemClick}>Help index</a
+				>
+				<a
+					href={ROUTES.HELP_CONCEPTS}
+					role="menuitem"
+					aria-current={helpConceptsActive ? 'page' : undefined}
+					onclick={handleHelpItemClick}>Concepts</a
+				>
 			</div>
 		</details>
-	</nav>
+	</div>
 
+	<div class="nav-search">
+		<HelpSearch />
+	</div>
+
+	<details class="identity" bind:this={menu}>
+		<summary aria-label="Account menu for {identityLabel}">
+			<span class="identity-label-full">{identityLabel}</span>
+			<span class="identity-label-compact" aria-hidden="true">{initials}</span>
+			<span class="chevron" aria-hidden="true">▾</span>
+		</summary>
+		<div class="identity-panel">
+			{#if showEmailRow}
+				<div class="identity-email">{data.user.email}</div>
+			{/if}
+			<form method="POST" action={ROUTES.LOGOUT} class="identity-signout">
+				<button type="submit">Sign out</button>
+			</form>
+		</div>
+	</details>
+</nav>
+
+<ThemeProvider theme={selection.theme} appearance={selection.appearance} layout={selection.layout}>
 	<main id="main" tabindex="-1" class:full-bleed={fullBleed}>
 		{@render children()}
 	</main>

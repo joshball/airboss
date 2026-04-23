@@ -16,7 +16,7 @@ const user = $derived(data.user);
 	<title>Hangar -- airboss</title>
 </svelte:head>
 
-<ThemeProvider theme="web">
+<ThemeProvider theme="airboss/default">
 	<nav aria-label="Primary" class="nav">
 		<span class="brand">airboss / hangar</span>
 		<span class="spacer"></span>
