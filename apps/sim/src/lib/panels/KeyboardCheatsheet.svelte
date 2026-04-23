@@ -116,36 +116,36 @@ function toggleCollapse(): void {
 	.cheatsheet {
 		display: flex;
 		align-items: center;
-		gap: var(--ab-space-sm);
-		padding: var(--ab-space-2xs) var(--ab-space-sm);
-		background: var(--ab-color-surface);
-		border: 1px solid var(--ab-color-border);
-		border-radius: var(--ab-radius-sm);
-		font-size: 0.72rem;
-		color: var(--ab-color-fg-muted);
+		gap: var(--space-sm);
+		padding: var(--space-2xs) var(--space-sm);
+		background: var(--surface-panel);
+		border: 1px solid var(--edge-default);
+		border-radius: var(--radius-sm);
+		font-size: var(--font-size-xs);
+		color: var(--ink-muted);
 		overflow: hidden;
 	}
 
 	.toggle {
 		display: inline-flex;
 		align-items: center;
-		gap: var(--ab-space-2xs);
+		gap: var(--space-2xs);
 		background: transparent;
 		border: none;
 		cursor: pointer;
 		color: inherit;
 		font-size: inherit;
-		padding: 0.1rem var(--ab-space-2xs);
-		border-radius: var(--ab-radius-xs);
+		padding: var(--space-2xs) var(--space-2xs);
+		border-radius: var(--radius-xs);
 	}
 
 	.toggle:hover {
-		background: var(--ab-color-border);
+		background: var(--edge-default);
 	}
 
 	.chevron {
-		font-family: var(--ab-font-mono);
-		font-size: 0.7rem;
+		font-family: var(--font-family-mono);
+		font-size: var(--font-size-xs);
 		width: 0.7rem;
 		display: inline-block;
 		text-align: center;
@@ -153,7 +153,7 @@ function toggleCollapse(): void {
 
 	.toggle-label {
 		font-weight: 600;
-		letter-spacing: 0.02em;
+		letter-spacing: var(--letter-spacing-wide);
 	}
 
 	.clusters {
@@ -161,7 +161,7 @@ function toggleCollapse(): void {
 		display: flex;
 		flex-wrap: wrap;
 		align-items: center;
-		gap: 0.35rem var(--ab-space-sm);
+		gap: var(--space-sm) var(--space-sm);
 		margin: 0;
 		padding: 0;
 	}
@@ -169,27 +169,27 @@ function toggleCollapse(): void {
 	.cluster {
 		display: inline-flex;
 		align-items: center;
-		gap: var(--ab-space-2xs);
+		gap: var(--space-2xs);
 	}
 
 	.sep {
-		color: var(--ab-color-border-strong);
+		color: var(--edge-strong);
 		user-select: none;
 	}
 
 	kbd {
-		font-family: var(--ab-font-mono);
-		font-size: 0.7rem;
-		background: var(--ab-color-surface);
-		border: 1px solid var(--ab-color-border-strong);
+		font-family: var(--font-family-mono);
+		font-size: var(--font-size-xs);
+		background: var(--surface-panel);
+		border: 1px solid var(--edge-strong);
 		border-bottom-width: 2px;
-		border-radius: var(--ab-radius-xs);
-		padding: 0.05rem 0.3rem;
-		color: var(--ab-color-fg);
+		border-radius: var(--radius-xs);
+		padding: var(--space-2xs) var(--space-xs);
+		color: var(--ink-body);
 		white-space: nowrap;
 	}
 
 	.hint {
-		color: var(--ab-color-fg-muted);
+		color: var(--ink-muted);
 	}
 </style>

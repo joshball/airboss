@@ -44,65 +44,65 @@ const holdFrac = $derived.by(() => {
 	.banner {
 		display: grid;
 		grid-template-columns: auto 1fr;
-		gap: var(--ab-space-md);
-		padding: var(--ab-space-md) var(--ab-space-lg);
-		background: var(--ab-sim-banner-info-bg);
-		border: 1px solid var(--ab-sim-banner-info-border);
-		border-radius: var(--ab-radius-sm);
-		color: var(--ab-sim-banner-info-fg);
+		gap: var(--space-md);
+		padding: var(--space-md) var(--space-lg);
+		background: var(--sim-banner-info-bg);
+		border: 1px solid var(--sim-banner-info-border);
+		border-radius: var(--radius-sm);
+		color: var(--sim-banner-info-fg);
 	}
 
 	.banner.done {
-		background: var(--ab-sim-banner-success-bg);
-		border-color: var(--ab-sim-banner-success-border);
+		background: var(--sim-banner-success-bg);
+		border-color: var(--sim-banner-success-border);
 	}
 
 	.step-count {
-		font-family: var(--ab-font-mono);
-		font-size: 0.8rem;
-		color: var(--ab-sim-status-primary-fg);
+		font-family: var(--font-family-mono);
+		font-size: var(--font-size-sm);
+		color: var(--sim-status-primary-fg);
 		align-self: start;
 		white-space: nowrap;
 	}
 
 	.banner.done .step-count {
-		color: var(--ab-sim-status-success-fg);
+		color: var(--sim-status-success-fg);
 	}
 
 	.step-body h3 {
 		margin: 0;
-		font-size: 1rem;
+		font-size: var(--font-size-base);
 	}
 
 	.step-body p {
-		margin: var(--ab-space-2xs) 0 0;
-		font-size: 0.9rem;
+		margin: var(--space-2xs) 0 0;
+		font-size: var(--font-size-body);
 	}
 
 	.hold-bar {
-		margin-top: 0.4rem;
+		margin-top: var(--space-sm);
 		height: 4px;
-		background: var(--ab-on-dark-track);
-		border-radius: var(--ab-radius-xs);
+		background: var(--sim-panel-bg-darker);
+		border-radius: var(--radius-xs);
 		overflow: hidden;
 	}
 
 	.hold-fill {
 		height: 100%;
-		background: var(--ab-sim-instrument-pointer);
-		transition: width var(--ab-transition-fast);
+		background: var(--sim-instrument-pointer);
+		transition: width var(--motion-fast);
 	}
 
 	.hold-note {
-		margin-top: 0.2rem;
-		font-size: 0.75rem;
-		color: var(--ab-sim-status-primary-fg);
+		margin-top: var(--space-2xs);
+		font-size: var(--font-size-xs);
+		color: var(--sim-status-primary-fg);
 	}
 
 	.done-note {
-		margin-top: 0.35rem;
-		font-size: 0.85rem;
-		color: var(--ab-sim-status-success-fg);
+		margin-top: var(--space-sm);
+		font-size: var(--font-size-sm);
+		color: var(--sim-status-success-fg);
 		font-weight: bold;
 	}
 </style>

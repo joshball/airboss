@@ -42,30 +42,30 @@ const rows = [
 
 <style>
 	.vspeeds {
-		padding: 0.6rem 0.8rem;
-		background: var(--ab-sim-panel-bg);
-		border: 1px solid var(--ab-sim-panel-bg-elevated);
-		border-radius: var(--ab-radius-sm);
-		color: var(--ab-sim-panel-fg);
+		padding: var(--space-md) var(--space-lg);
+		background: var(--sim-panel-bg);
+		border: 1px solid var(--sim-panel-bg-elevated);
+		border-radius: var(--radius-sm);
+		color: var(--sim-panel-fg);
 	}
 
 	.vspeeds h3 {
-		margin: 0 0 var(--ab-space-sm) 0;
-		font-size: 0.85rem;
-		color: var(--ab-sim-panel-fg-muted);
+		margin: 0 0 var(--space-sm) 0;
+		font-size: var(--font-size-sm);
+		color: var(--sim-panel-fg-muted);
 		text-transform: uppercase;
-		letter-spacing: 0.05em;
+		letter-spacing: var(--letter-spacing-caps);
 	}
 
 	table {
 		width: 100%;
 		border-collapse: collapse;
-		font-family: var(--ab-font-mono);
-		font-size: 0.8rem;
+		font-family: var(--font-family-mono);
+		font-size: var(--font-size-sm);
 	}
 
 	td {
-		padding: 0.1rem 0.3rem;
+		padding: var(--space-2xs) var(--space-xs);
 		white-space: nowrap;
 	}
 
@@ -79,38 +79,38 @@ const rows = [
 	}
 
 	td.unit {
-		color: var(--ab-sim-panel-fg-subtle);
+		color: var(--sim-panel-fg-subtle);
 		width: 3rem;
 	}
 
 	td.note {
-		color: var(--ab-sim-panel-fg-note);
-		font-size: 0.72rem;
+		color: var(--sim-panel-fg-note);
+		font-size: var(--font-size-xs);
 	}
 
 	.swatch {
 		display: inline-block;
 		width: 8px;
 		height: 8px;
-		margin-right: 0.35rem;
+		margin-right: var(--space-sm);
 		vertical-align: middle;
-		border-radius: var(--ab-radius-xs);
+		border-radius: var(--radius-xs);
 	}
 
 	.swatch.green {
-		background: var(--ab-sim-arc-green);
+		background: var(--sim-arc-green);
 	}
 
 	.swatch.white {
-		background: var(--ab-sim-arc-white);
+		background: var(--sim-arc-white);
 	}
 
 	.swatch.red {
-		background: var(--ab-sim-arc-red);
+		background: var(--sim-arc-red);
 	}
 
 	.swatch.plain {
 		background: transparent;
-		border: 1px solid var(--ab-sim-instrument-tick-faint);
+		border: 1px solid var(--sim-instrument-tick-faint);
 	}
 </style>

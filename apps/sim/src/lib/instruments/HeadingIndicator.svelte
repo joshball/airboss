@@ -114,52 +114,52 @@ const majorTicks = Array.from({ length: 36 }, (_, i) => i * 10);
 	}
 
 	.instrument-face {
-		fill: var(--ab-sim-instrument-face);
-		stroke: var(--ab-sim-instrument-bezel);
+		fill: var(--sim-instrument-face);
+		stroke: var(--sim-instrument-bezel);
 	}
 
 	.tick-major {
-		stroke: var(--ab-sim-instrument-tick);
+		stroke: var(--sim-instrument-tick);
 	}
 
 	.label-north {
-		fill: var(--ab-sim-arc-red);
-		font-family: var(--ab-font-mono);
+		fill: var(--sim-arc-red);
+		font-family: var(--font-family-mono);
 	}
 
 	.label-std {
-		fill: var(--ab-sim-instrument-tick);
-		font-family: var(--ab-font-mono);
+		fill: var(--sim-instrument-tick);
+		font-family: var(--font-family-mono);
 	}
 
 	.lubber-pointer {
-		fill: var(--ab-sim-instrument-pointer);
+		fill: var(--sim-instrument-pointer);
 	}
 
 	.lubber-aux {
-		fill: var(--ab-sim-instrument-tick-subtle);
+		fill: var(--sim-instrument-tick-subtle);
 	}
 
 	.aircraft-ref {
-		stroke: var(--ab-sim-instrument-pointer);
+		stroke: var(--sim-instrument-pointer);
 	}
 
 	.aircraft-ref-fill {
-		fill: var(--ab-sim-instrument-pointer);
+		fill: var(--sim-instrument-pointer);
 	}
 
 	.unit-label {
-		fill: var(--ab-sim-instrument-tick-minor);
-		font-family: var(--ab-font-mono);
+		fill: var(--sim-instrument-tick-minor);
+		font-family: var(--font-family-mono);
 	}
 
 	.readout-box {
-		fill: var(--ab-sim-instrument-pointer-pivot);
-		stroke: var(--ab-sim-instrument-tick-faint);
+		fill: var(--sim-instrument-pointer-pivot);
+		stroke: var(--sim-instrument-tick-faint);
 	}
 
 	.digital-readout {
-		fill: var(--ab-sim-instrument-tick);
-		font-family: var(--ab-font-mono);
+		fill: var(--sim-instrument-tick);
+		font-family: var(--font-family-mono);
 	}
 </style>

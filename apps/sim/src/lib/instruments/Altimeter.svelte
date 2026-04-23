@@ -85,43 +85,43 @@ const ticks = Array.from({ length: 10 }, (_, i) => i);
 	}
 
 	.instrument-face {
-		fill: var(--ab-sim-instrument-face);
-		stroke: var(--ab-sim-instrument-bezel);
+		fill: var(--sim-instrument-face);
+		stroke: var(--sim-instrument-bezel);
 	}
 
 	.tick-major {
-		stroke: var(--ab-sim-instrument-tick);
+		stroke: var(--sim-instrument-tick);
 	}
 
 	.tick-label {
-		fill: var(--ab-sim-instrument-tick);
-		font-family: var(--ab-font-mono);
+		fill: var(--sim-instrument-tick);
+		font-family: var(--font-family-mono);
 	}
 
 	.pointer-caution {
-		fill: var(--ab-sim-arc-yellow);
+		fill: var(--sim-arc-yellow);
 	}
 
 	.needle-thousands {
-		fill: var(--ab-sim-instrument-tick);
-		stroke: var(--ab-sim-instrument-face);
+		fill: var(--sim-instrument-tick);
+		stroke: var(--sim-instrument-face);
 	}
 
 	.needle-pointer {
-		stroke: var(--ab-sim-instrument-pointer);
+		stroke: var(--sim-instrument-pointer);
 	}
 
 	.hub {
-		fill: var(--ab-sim-instrument-pointer);
+		fill: var(--sim-instrument-pointer);
 	}
 
 	.unit-label {
-		fill: var(--ab-sim-instrument-tick-minor);
-		font-family: var(--ab-font-mono);
+		fill: var(--sim-instrument-tick-minor);
+		font-family: var(--font-family-mono);
 	}
 
 	.digital-readout {
-		fill: var(--ab-sim-instrument-tick);
-		font-family: var(--ab-font-mono);
+		fill: var(--sim-instrument-tick);
+		font-family: var(--font-family-mono);
 	}
 </style>
