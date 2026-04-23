@@ -80,16 +80,16 @@ function pct(v: number): number {
 <style>
 	.controls {
 		padding: 0.6rem 0.8rem;
-		background: #1a1a1a;
-		border: 1px solid #2a2a2a;
-		border-radius: 6px;
-		color: #f5f5f5;
+		background: var(--ab-sim-panel-bg);
+		border: 1px solid var(--ab-sim-panel-bg-elevated);
+		border-radius: var(--ab-radius-sm);
+		color: var(--ab-sim-panel-fg);
 	}
 
 	h3 {
-		margin: 0 0 0.5rem 0;
+		margin: 0 0 var(--ab-space-sm) 0;
 		font-size: 0.85rem;
-		color: #bbb;
+		color: var(--ab-sim-panel-fg-muted);
 		text-transform: uppercase;
 		letter-spacing: 0.05em;
 	}
@@ -97,7 +97,7 @@ function pct(v: number): number {
 	.grid {
 		display: grid;
 		grid-template-columns: auto 1fr auto auto;
-		gap: 0.3rem 0.5rem;
+		gap: 0.3rem var(--ab-space-sm);
 		align-items: center;
 	}
 
@@ -106,22 +106,22 @@ function pct(v: number): number {
 	}
 
 	.control .label {
-		font-family: ui-monospace, monospace;
+		font-family: var(--ab-font-mono);
 		font-size: 0.8rem;
-		color: #aaa;
+		color: var(--ab-sim-panel-fg-light);
 	}
 
 	.control .value {
-		font-family: ui-monospace, monospace;
+		font-family: var(--ab-font-mono);
 		font-size: 0.8rem;
 		text-align: right;
 		width: 3rem;
 	}
 
 	.control .sub {
-		font-family: ui-monospace, monospace;
+		font-family: var(--ab-font-mono);
 		font-size: 0.7rem;
-		color: #777;
+		color: var(--ab-sim-panel-fg-dim);
 	}
 
 	.control.vert .bar.vert {
@@ -130,18 +130,18 @@ function pct(v: number): number {
 		height: 70px;
 		width: 20px;
 		justify-self: start;
-		background: #0a0a0a;
-		border: 1px solid #333;
-		border-radius: 3px;
+		background: var(--ab-sim-panel-bg-darker);
+		border: 1px solid var(--ab-sim-panel-border);
+		border-radius: var(--ab-radius-xs);
 	}
 
 	.control.horiz .bar.horiz {
 		grid-column: 2;
 		position: relative;
 		height: 14px;
-		background: #0a0a0a;
-		border: 1px solid #333;
-		border-radius: 3px;
+		background: var(--ab-sim-panel-bg-darker);
+		border: 1px solid var(--ab-sim-panel-border);
+		border-radius: var(--ab-radius-xs);
 	}
 
 	.bar.vert .center {
@@ -150,7 +150,7 @@ function pct(v: number): number {
 		right: 0;
 		top: 50%;
 		height: 1px;
-		background: rgba(255, 255, 255, 0.2);
+		background: var(--ab-on-dark-rail);
 	}
 
 	.bar.horiz .center {
@@ -159,12 +159,12 @@ function pct(v: number): number {
 		bottom: 0;
 		left: 50%;
 		width: 1px;
-		background: rgba(255, 255, 255, 0.2);
+		background: var(--ab-on-dark-rail);
 	}
 
 	.bar .fill {
 		position: absolute;
-		background: #ffa62b;
+		background: var(--ab-sim-status-warning);
 	}
 
 	.bar.vert .fill {
@@ -178,7 +178,7 @@ function pct(v: number): number {
 	}
 
 	.bar.vert.throttle .fill {
-		background: #2563eb;
+		background: var(--ab-sim-status-primary);
 	}
 
 	.trim-mark {
@@ -186,45 +186,45 @@ function pct(v: number): number {
 		left: -3px;
 		right: -3px;
 		height: 2px;
-		background: #9bbfff;
+		background: var(--ab-sim-status-primary-fg);
 		opacity: 0.8;
 		transform: translateY(1px);
 	}
 
 	.annunciators {
-		margin-top: 0.5rem;
+		margin-top: var(--ab-space-sm);
 		display: flex;
 		flex-wrap: wrap;
 		gap: 0.35rem;
 	}
 
 	.lamp {
-		font-family: ui-monospace, monospace;
+		font-family: var(--ab-font-mono);
 		font-size: 0.72rem;
 		padding: 0.15rem 0.4rem;
-		border: 1px solid #333;
-		border-radius: 3px;
-		color: #555;
-		background: #0a0a0a;
+		border: 1px solid var(--ab-sim-panel-border);
+		border-radius: var(--ab-radius-xs);
+		color: var(--ab-sim-panel-fg-faint);
+		background: var(--ab-sim-panel-bg-darker);
 		letter-spacing: 0.05em;
 	}
 
 	.lamp.on {
-		background: #5a4000;
-		color: #ffe270;
-		border-color: #8b6a00;
+		background: var(--ab-sim-status-warning-bg);
+		color: var(--ab-sim-instrument-pointer);
+		border-color: var(--ab-sim-status-warning-border);
 	}
 
 	.lamp.coord.on {
-		background: #063b1c;
-		color: #2fb856;
-		border-color: #0c5a2c;
+		background: var(--ab-sim-status-success-bg);
+		color: var(--ab-sim-status-success);
+		border-color: var(--ab-sim-status-success-border);
 	}
 
 	.lamp.stall.on {
-		background: #4a1210;
-		color: #ffd1cf;
-		border-color: #852524;
+		background: var(--ab-sim-status-danger-bg);
+		color: var(--ab-sim-status-danger-fg);
+		border-color: var(--ab-sim-status-danger-border);
 	}
 
 	.lamp.flash {
@@ -233,16 +233,16 @@ function pct(v: number): number {
 
 	@keyframes flash {
 		0% {
-			background: #4a1210;
-			color: #ffd1cf;
+			background: var(--ab-sim-status-danger-bg);
+			color: var(--ab-sim-status-danger-fg);
 		}
 		50% {
-			background: #e0443e;
-			color: #fff;
+			background: var(--ab-sim-status-danger);
+			color: var(--ab-color-primary-fg);
 		}
 		100% {
-			background: #4a1210;
-			color: #ffd1cf;
+			background: var(--ab-sim-status-danger-bg);
+			color: var(--ab-sim-status-danger-fg);
 		}
 	}
 </style>

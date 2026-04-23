@@ -47,7 +47,7 @@ let {
 		display: block;
 		padding: 0.375rem 0.625rem;
 		border-radius: var(--ab-radius-sm, 4px);
-		color: var(--ab-color-fg-muted, #64748b);
+		color: var(--ab-color-fg-muted);
 		text-decoration: none;
 		font-size: 0.875rem;
 		line-height: 1.4;
@@ -55,18 +55,18 @@ let {
 	}
 
 	.toc a:hover {
-		color: var(--ab-color-fg, #0f172a);
-		background: var(--ab-color-surface-sunken, #f1f5f9);
+		color: var(--ab-color-fg);
+		background: var(--ab-color-surface-sunken);
 	}
 
 	.toc a.active {
-		color: var(--ab-color-primary-hover, #2563eb);
-		background: var(--ab-color-primary-subtle, #dbeafe);
-		border-left-color: var(--ab-color-primary, #3b82f6);
+		color: var(--ab-color-primary-hover);
+		background: var(--ab-color-primary-subtle);
+		border-left-color: var(--ab-color-primary);
 	}
 
 	.toc a:focus-visible {
-		outline: 2px solid var(--ab-color-focus-ring, #60a5fa);
+		outline: 2px solid var(--ab-color-focus-ring);
 		outline-offset: 2px;
 	}
 </style>

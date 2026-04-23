@@ -141,14 +141,14 @@ function domainLabel(slug: string): string {
 	.page {
 		display: flex;
 		flex-direction: column;
-		gap: 1.25rem;
+		gap: var(--ab-space-xl-alt);
 	}
 
 	.hd {
 		display: flex;
 		justify-content: space-between;
 		align-items: flex-start;
-		gap: 1rem;
+		gap: var(--ab-space-lg);
 		flex-wrap: wrap;
 	}
 
@@ -160,30 +160,30 @@ function domainLabel(slug: string): string {
 	}
 
 	.sub {
-		margin: 0.25rem 0 0;
+		margin: var(--ab-space-2xs) 0 0;
 		color: var(--ab-color-fg-subtle);
 		font-size: var(--ab-font-size-body);
 	}
 
 	.quick {
 		display: flex;
-		gap: 0.5rem;
+		gap: var(--ab-space-sm);
 	}
 
 	.grid {
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-		gap: 0.75rem;
+		gap: var(--ab-space-md);
 	}
 
 	.tile {
 		background: white;
 		border: 1px solid var(--ab-color-border);
 		border-radius: var(--ab-radius-lg);
-		padding: 1rem 1.25rem;
+		padding: var(--ab-space-lg) var(--ab-space-xl-alt);
 		display: flex;
 		flex-direction: column;
-		gap: 0.25rem;
+		gap: var(--ab-space-2xs);
 	}
 
 	.tile-label {
@@ -207,10 +207,10 @@ function domainLabel(slug: string): string {
 	}
 
 	.tile-sub-list {
-		margin: 0.25rem 0 0;
+		margin: var(--ab-space-2xs) 0 0;
 		display: grid;
 		grid-template-columns: max-content 1fr;
-		gap: 0.125rem 0.5rem;
+		gap: var(--ab-space-3xs) var(--ab-space-sm);
 		font-size: var(--ab-font-size-sm);
 		color: var(--ab-color-fg-subtle);
 	}
@@ -233,10 +233,10 @@ function domainLabel(slug: string): string {
 		background: white;
 		border: 1px solid var(--ab-color-border);
 		border-radius: var(--ab-radius-lg);
-		padding: 1.25rem 1.5rem;
+		padding: var(--ab-space-xl-alt) var(--ab-space-xl);
 		display: flex;
 		flex-direction: column;
-		gap: 0.875rem;
+		gap: var(--ab-space-md-alt);
 	}
 
 	.card h2 {
@@ -254,14 +254,14 @@ function domainLabel(slug: string): string {
 		margin: 0;
 		display: flex;
 		flex-direction: column;
-		gap: 0.375rem;
+		gap: var(--ab-space-xs);
 	}
 
 	.slices li {
 		display: flex;
-		gap: 0.75rem;
+		gap: var(--ab-space-md);
 		align-items: baseline;
-		padding: 0.375rem 0.625rem;
+		padding: var(--ab-space-xs) var(--ab-space-sm-alt);
 		background: var(--ab-color-surface-muted);
 		border: 1px solid var(--ab-color-border);
 		border-radius: var(--ab-radius-md);
@@ -283,7 +283,7 @@ function domainLabel(slug: string): string {
 		font-size: var(--ab-font-size-xs);
 		color: var(--ab-color-warning-active);
 		background: var(--ab-color-warning-subtle);
-		padding: 0.125rem 0.5rem;
+		padding: var(--ab-space-3xs) var(--ab-space-sm);
 		border-radius: var(--ab-radius-pill);
 	}
 
@@ -292,7 +292,7 @@ function domainLabel(slug: string): string {
 		padding: 0;
 		margin: 0;
 		display: flex;
-		gap: 0.375rem;
+		gap: var(--ab-space-xs);
 		flex-wrap: wrap;
 	}
 
@@ -300,7 +300,7 @@ function domainLabel(slug: string): string {
 		background: var(--ab-color-surface-sunken);
 		border: 1px solid var(--ab-color-border);
 		border-radius: var(--ab-radius-pill);
-		padding: 0.25rem 0.625rem;
+		padding: var(--ab-space-2xs) var(--ab-space-sm-alt);
 		font-size: var(--ab-font-size-sm);
 		color: var(--ab-color-fg);
 	}
@@ -311,7 +311,7 @@ function domainLabel(slug: string): string {
 		margin: 0;
 		display: flex;
 		flex-wrap: wrap;
-		gap: 0.5rem;
+		gap: var(--ab-space-sm);
 	}
 
 	.suggestion-actions li {
@@ -319,7 +319,7 @@ function domainLabel(slug: string): string {
 	}
 
 	.btn.suggestion {
-		padding: 0.625rem 1rem;
+		padding: var(--ab-space-sm-alt) var(--ab-space-lg);
 		font-size: var(--ab-font-size-body);
 		text-align: left;
 		justify-content: flex-start;
@@ -352,7 +352,7 @@ function domainLabel(slug: string): string {
 	}
 
 	.btn {
-		padding: 0.5rem 1rem;
+		padding: var(--ab-space-sm) var(--ab-space-lg);
 		font-size: var(--ab-font-size-body);
 		font-weight: 600;
 		border-radius: var(--ab-radius-md);

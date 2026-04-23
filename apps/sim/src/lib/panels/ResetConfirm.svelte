@@ -32,7 +32,7 @@ let {
 	.overlay {
 		position: fixed;
 		inset: 0;
-		background: rgba(0, 0, 0, 0.75);
+		background: var(--ab-overlay-scrim-heavy);
 		z-index: 110;
 		display: flex;
 		align-items: center;
@@ -40,64 +40,64 @@ let {
 	}
 
 	.panel {
-		background: #1a1a1a;
-		color: #f5f5f5;
-		border: 1px solid #333;
-		border-radius: 8px;
-		padding: 1.25rem 1.5rem;
+		background: var(--ab-sim-panel-bg);
+		color: var(--ab-sim-panel-fg);
+		border: 1px solid var(--ab-sim-panel-border);
+		border-radius: var(--ab-radius-md);
+		padding: 1.25rem var(--ab-space-xl);
 		text-align: center;
 		max-width: 360px;
 	}
 
 	h2 {
-		margin: 0 0 0.5rem;
+		margin: 0 0 var(--ab-space-sm);
 		font-size: 1.1rem;
 	}
 
 	p {
-		margin: 0 0 1rem;
+		margin: 0 0 var(--ab-space-lg);
 		font-size: 0.9rem;
-		color: #ccc;
+		color: var(--ab-sim-panel-fg-lighter);
 	}
 
 	kbd {
 		display: inline-block;
 		padding: 0.05rem 0.4rem;
 		margin: 0 0.1rem;
-		background: #0a0a0a;
-		color: #ffe270;
-		border: 1px solid #333;
-		border-radius: 3px;
-		font-family: ui-monospace, monospace;
+		background: var(--ab-sim-panel-bg-darker);
+		color: var(--ab-sim-instrument-pointer);
+		border: 1px solid var(--ab-sim-panel-border);
+		border-radius: var(--ab-radius-xs);
+		font-family: var(--ab-font-mono);
 		font-size: 0.85rem;
 	}
 
 	.buttons {
 		display: flex;
-		gap: 0.5rem;
+		gap: var(--ab-space-sm);
 		justify-content: center;
 	}
 
 	button {
 		padding: 0.4rem 0.9rem;
-		border-radius: 4px;
+		border-radius: var(--ab-radius-xs);
 		font-size: 0.9rem;
 		cursor: pointer;
-		border: 1px solid #333;
+		border: 1px solid var(--ab-sim-panel-border);
 	}
 
 	.cancel {
 		background: transparent;
-		color: #ccc;
+		color: var(--ab-sim-panel-fg-lighter);
 	}
 
 	.confirm {
-		background: #e0443e;
-		color: #fff;
-		border-color: #e0443e;
+		background: var(--ab-sim-status-danger);
+		color: var(--ab-color-primary-fg);
+		border-color: var(--ab-sim-status-danger);
 	}
 
 	.confirm:hover {
-		background: #c23530;
+		background: var(--ab-sim-status-danger-strong);
 	}
 </style>

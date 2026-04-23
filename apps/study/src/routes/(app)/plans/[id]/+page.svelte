@@ -256,14 +256,14 @@ const skippableDomains = $derived(DOMAIN_VALUES.filter((d: Domain) => !focusSet.
 	.page {
 		display: flex;
 		flex-direction: column;
-		gap: 1.5rem;
+		gap: var(--ab-space-xl);
 	}
 
 	.hd {
 		display: flex;
 		justify-content: space-between;
 		align-items: flex-start;
-		gap: 1rem;
+		gap: var(--ab-space-lg);
 		flex-wrap: wrap;
 	}
 
@@ -274,11 +274,11 @@ const skippableDomains = $derived(DOMAIN_VALUES.filter((d: Domain) => !focusSet.
 	}
 
 	.sub {
-		margin: 0.25rem 0 0;
+		margin: var(--ab-space-2xs) 0 0;
 		color: var(--ab-color-fg-subtle);
 		font-size: var(--ab-font-size-body);
 		display: flex;
-		gap: 0.75rem;
+		gap: var(--ab-space-md);
 		align-items: center;
 	}
 
@@ -286,7 +286,7 @@ const skippableDomains = $derived(DOMAIN_VALUES.filter((d: Domain) => !focusSet.
 		display: inline-block;
 		font-size: var(--ab-font-size-xs);
 		font-weight: 600;
-		padding: 0.125rem 0.5rem;
+		padding: var(--ab-space-3xs) var(--ab-space-sm);
 		border-radius: var(--ab-radius-pill);
 		background: var(--ab-color-border);
 		color: var(--ab-color-fg-muted);
@@ -312,10 +312,10 @@ const skippableDomains = $derived(DOMAIN_VALUES.filter((d: Domain) => !focusSet.
 		background: white;
 		border: 1px solid var(--ab-color-border);
 		border-radius: var(--ab-radius-lg);
-		padding: 1.5rem;
+		padding: var(--ab-space-xl);
 		display: flex;
 		flex-direction: column;
-		gap: 1rem;
+		gap: var(--ab-space-lg);
 	}
 
 	fieldset {
@@ -324,7 +324,7 @@ const skippableDomains = $derived(DOMAIN_VALUES.filter((d: Domain) => !focusSet.
 		margin: 0;
 		display: flex;
 		flex-direction: column;
-		gap: 0.5rem;
+		gap: var(--ab-space-sm);
 	}
 
 	legend {
@@ -334,26 +334,26 @@ const skippableDomains = $derived(DOMAIN_VALUES.filter((d: Domain) => !focusSet.
 	input[type='text'] {
 		border: 1px solid var(--ab-color-border-strong);
 		border-radius: var(--ab-radius-md);
-		padding: 0.5rem 0.75rem;
+		padding: var(--ab-space-sm) var(--ab-space-md);
 	}
 
 	.choice-row {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 0.5rem;
+		gap: var(--ab-space-sm);
 	}
 
 	.choice-grid {
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-		gap: 0.375rem;
+		gap: var(--ab-space-xs);
 	}
 
 	.choice {
 		display: inline-flex;
-		gap: 0.375rem;
+		gap: var(--ab-space-xs);
 		align-items: center;
-		padding: 0.375rem 0.75rem;
+		padding: var(--ab-space-xs) var(--ab-space-md);
 		background: var(--ab-color-surface-muted);
 		border: 1px solid var(--ab-color-border);
 		border-radius: var(--ab-radius-md);
@@ -396,17 +396,17 @@ const skippableDomains = $derived(DOMAIN_VALUES.filter((d: Domain) => !focusSet.
 		margin: 0;
 		display: flex;
 		flex-wrap: wrap;
-		gap: 0.5rem;
+		gap: var(--ab-space-sm);
 	}
 
 	.pills li {
 		display: flex;
 		align-items: center;
-		gap: 0.25rem;
+		gap: var(--ab-space-2xs);
 		background: var(--ab-color-surface-sunken);
 		border: 1px solid var(--ab-color-border);
 		border-radius: var(--ab-radius-pill);
-		padding: 0.25rem 0.5rem 0.25rem 0.75rem;
+		padding: var(--ab-space-2xs) var(--ab-space-sm) var(--ab-space-2xs) var(--ab-space-md);
 		font-size: var(--ab-font-size-sm);
 	}
 
@@ -416,7 +416,7 @@ const skippableDomains = $derived(DOMAIN_VALUES.filter((d: Domain) => !focusSet.
 		color: var(--ab-color-primary-hover);
 		cursor: pointer;
 		font-size: var(--ab-font-size-xs);
-		padding: 0.25rem 0.5rem;
+		padding: var(--ab-space-2xs) var(--ab-space-sm);
 	}
 
 	.pill-btn:hover {
@@ -425,7 +425,7 @@ const skippableDomains = $derived(DOMAIN_VALUES.filter((d: Domain) => !focusSet.
 
 	.row {
 		display: flex;
-		gap: 0.5rem;
+		gap: var(--ab-space-sm);
 	}
 
 	.muted {
@@ -435,7 +435,7 @@ const skippableDomains = $derived(DOMAIN_VALUES.filter((d: Domain) => !focusSet.
 	}
 
 	.btn {
-		padding: 0.5rem 1rem;
+		padding: var(--ab-space-sm) var(--ab-space-lg);
 		font-size: var(--ab-font-size-body);
 		font-weight: 600;
 		border-radius: var(--ab-radius-md);

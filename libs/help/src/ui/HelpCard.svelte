@@ -36,30 +36,30 @@ let {
 
 <style>
 	.card {
-		border: 1px solid var(--ab-color-border, #e2e8f0);
+		border: 1px solid var(--ab-color-border);
 		border-left-width: 4px;
 		border-radius: var(--ab-radius-md, 6px);
 		padding: 0.75rem 1rem;
 		margin: 1rem 0;
-		background: var(--ab-color-surface, #ffffff);
+		background: var(--ab-color-surface);
 	}
 
 	.card.tip {
-		border-left-color: var(--ab-color-primary, #3b82f6);
+		border-left-color: var(--ab-color-primary);
 	}
 
 	.card.howto {
-		border-left-color: var(--ab-color-success, #10b981);
+		border-left-color: var(--ab-color-success);
 	}
 
 	.card.warn {
-		border-left-color: var(--ab-color-warning, #f59e0b);
-		background: var(--ab-color-warning-subtle, #fef3c7);
+		border-left-color: var(--ab-color-warning);
+		background: var(--ab-color-warning-subtle);
 	}
 
 	.card.danger {
-		border-left-color: var(--ab-color-danger, #ef4444);
-		background: var(--ab-color-danger-subtle, #fee2e2);
+		border-left-color: var(--ab-color-danger);
+		background: var(--ab-color-danger-subtle);
 	}
 
 	header {

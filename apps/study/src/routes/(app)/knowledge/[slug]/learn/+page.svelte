@@ -226,12 +226,12 @@ function domainLabel(slug: string): string {
 	.page {
 		display: flex;
 		flex-direction: column;
-		gap: 1.25rem;
+		gap: var(--ab-space-xl-alt);
 	}
 
 	.crumb {
 		display: flex;
-		gap: 0.5rem;
+		gap: var(--ab-space-sm);
 		font-size: 0.875rem;
 		color: var(--ab-color-fg-subtle);
 	}
@@ -253,7 +253,7 @@ function domainLabel(slug: string): string {
 	}
 
 	.sub {
-		margin: 0.25rem 0 0;
+		margin: var(--ab-space-2xs) 0 0;
 		color: var(--ab-color-fg-subtle);
 		font-size: 0.9375rem;
 	}
@@ -261,11 +261,11 @@ function domainLabel(slug: string): string {
 	.progress {
 		background: white;
 		border: 1px solid var(--ab-color-border);
-		border-radius: 12px;
-		padding: 1rem 1.125rem;
+		border-radius: var(--ab-radius-xl);
+		padding: var(--ab-space-lg) var(--ab-space-lg-alt);
 		display: flex;
 		flex-direction: column;
-		gap: 0.625rem;
+		gap: var(--ab-space-sm-alt);
 	}
 
 	.progress-head {
@@ -289,7 +289,7 @@ function domainLabel(slug: string): string {
 		width: 100%;
 		height: 6px;
 		background: var(--ab-color-border);
-		border-radius: 999px;
+		border-radius: var(--ab-radius-pill);
 		overflow: hidden;
 	}
 
@@ -305,7 +305,7 @@ function domainLabel(slug: string): string {
 		padding: 0;
 		display: grid;
 		grid-template-columns: repeat(7, 1fr);
-		gap: 0.25rem;
+		gap: var(--ab-space-2xs);
 	}
 
 	.step {
@@ -313,11 +313,11 @@ function domainLabel(slug: string): string {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		gap: 0.125rem;
-		padding: 0.375rem 0.25rem;
+		gap: var(--ab-space-3xs);
+		padding: var(--ab-space-xs) var(--ab-space-2xs);
 		background: transparent;
 		border: 1px solid transparent;
-		border-radius: 8px;
+		border-radius: var(--ab-radius-md);
 		cursor: pointer;
 		font: inherit;
 		color: var(--ab-color-fg-faint);
@@ -361,8 +361,8 @@ function domainLabel(slug: string): string {
 	.got-it-row {
 		display: flex;
 		justify-content: flex-end;
-		margin-top: 1rem;
-		padding-top: 1rem;
+		margin-top: var(--ab-space-lg);
+		padding-top: var(--ab-space-lg);
 		border-top: 1px dashed var(--ab-color-border);
 	}
 
@@ -387,12 +387,12 @@ function domainLabel(slug: string): string {
 	.phase {
 		background: white;
 		border: 1px solid var(--ab-color-border);
-		border-radius: 12px;
-		padding: 1.25rem 1.5rem;
+		border-radius: var(--ab-radius-xl);
+		padding: var(--ab-space-xl-alt) var(--ab-space-xl);
 	}
 
 	.phase h2 {
-		margin: 0 0 0.75rem;
+		margin: 0 0 var(--ab-space-md);
 		font-size: 1.25rem;
 		color: var(--ab-color-fg);
 	}
@@ -406,25 +406,25 @@ function domainLabel(slug: string): string {
 	.prose :global(h3),
 	.prose :global(h4),
 	.prose :global(h5) {
-		margin: 1rem 0 0.5rem;
+		margin: var(--ab-space-lg) 0 var(--ab-space-sm);
 		color: var(--ab-color-fg);
 	}
 
 	.prose :global(p) {
-		margin: 0 0 0.75rem;
+		margin: 0 0 var(--ab-space-md);
 		line-height: 1.6;
 		color: var(--ab-color-fg);
 	}
 
 	.prose :global(ul),
 	.prose :global(ol) {
-		margin: 0 0 0.75rem 1.25rem;
+		margin: 0 0 var(--ab-space-md) var(--ab-space-xl-alt);
 		line-height: 1.6;
 		color: var(--ab-color-fg);
 	}
 
 	.prose :global(li) {
-		margin-bottom: 0.25rem;
+		margin-bottom: var(--ab-space-2xs);
 	}
 
 	.prose :global(code) {
@@ -432,14 +432,14 @@ function domainLabel(slug: string): string {
 		font-size: 0.875em;
 		background: var(--ab-color-surface-sunken);
 		padding: 0.05em 0.35em;
-		border-radius: 4px;
+		border-radius: var(--ab-radius-tight);
 	}
 
 	.prose :global(pre) {
 		background: var(--ab-color-fg);
 		color: var(--ab-color-border);
-		padding: 0.75rem 1rem;
-		border-radius: 8px;
+		padding: var(--ab-space-md) var(--ab-space-lg);
+		border-radius: var(--ab-radius-md);
 		overflow-x: auto;
 		font-size: 0.875rem;
 	}
@@ -461,14 +461,14 @@ function domainLabel(slug: string): string {
 	.controls {
 		display: flex;
 		justify-content: space-between;
-		gap: 0.5rem;
+		gap: var(--ab-space-sm);
 	}
 
 	.btn {
-		padding: 0.625rem 1.125rem;
+		padding: var(--ab-space-sm-alt) var(--ab-space-lg-alt);
 		font-size: 0.9375rem;
 		font-weight: 600;
-		border-radius: 8px;
+		border-radius: var(--ab-radius-md);
 		border: 1px solid transparent;
 		text-decoration: none;
 		cursor: pointer;
@@ -508,7 +508,7 @@ function domainLabel(slug: string): string {
 		cursor: not-allowed;
 	}
 
-	@media (max-width: 640px) {
+	@media (max-width: 640px) { /* --ab-breakpoint-md */
 		.steps {
 			grid-template-columns: repeat(4, 1fr);
 		}

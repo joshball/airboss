@@ -129,7 +129,7 @@ function domainLabel(d: Domain): string {
 		display: grid;
 		grid-template-columns: auto 1fr;
 		column-gap: var(--ab-space-sm);
-		row-gap: 0.125rem;
+		row-gap: var(--ab-space-3xs);
 		font-size: var(--ab-font-size-xs);
 	}
 
@@ -143,7 +143,7 @@ function domainLabel(d: Domain): string {
 		letter-spacing: 0.06em;
 		font-size: 0.625rem;
 		font-family: var(--ab-font-family-mono);
-		padding-top: 0.125rem;
+		padding-top: var(--ab-space-3xs);
 	}
 
 	.row dd {
@@ -157,7 +157,7 @@ function domainLabel(d: Domain): string {
 	}
 
 	.chip {
-		padding: 0.0625rem 0.3125rem;
+		padding: var(--ab-space-hair) var(--ab-space-xs-alt);
 		border: 1px solid var(--ab-color-border-strong);
 		border-radius: var(--ab-radius-sm);
 		background: var(--ab-color-surface-sunken);

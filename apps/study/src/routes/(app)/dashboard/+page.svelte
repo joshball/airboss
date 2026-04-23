@@ -66,16 +66,16 @@ const stamp = `${loadedAt.getFullYear()}-${String(loadedAt.getMonth() + 1).padSt
 	.page {
 		display: flex;
 		flex-direction: column;
-		gap: 0.5rem;
+		gap: var(--ab-space-sm);
 		min-height: calc(100vh - 4rem);
 	}
 
 	.hd {
 		display: flex;
 		align-items: baseline;
-		gap: 0.75rem;
+		gap: var(--ab-space-md);
 		flex-wrap: wrap;
-		padding: 0 0.125rem;
+		padding: 0 var(--ab-space-3xs);
 	}
 
 	h1 {
@@ -98,7 +98,7 @@ const stamp = `${loadedAt.getFullYear()}-${String(loadedAt.getMonth() + 1).padSt
 	.grid {
 		display: grid;
 		grid-template-columns: repeat(12, minmax(0, 1fr));
-		gap: 0.5rem;
+		gap: var(--ab-space-sm);
 		flex: 1;
 	}
 
@@ -120,7 +120,7 @@ const stamp = `${loadedAt.getFullYear()}-${String(loadedAt.getMonth() + 1).padSt
 	.c8 { grid-column: span 8; }
 
 	/* Tablet: collapse to 6 tracks, rebalance. */
-	@media (max-width: 1023px) {
+	@media (max-width: 960px) { /* --ab-breakpoint-lg */
 		.grid {
 			grid-template-columns: repeat(6, minmax(0, 1fr));
 		}
@@ -133,7 +133,7 @@ const stamp = `${loadedAt.getFullYear()}-${String(loadedAt.getMonth() + 1).padSt
 	}
 
 	/* Mobile: single-column stack. */
-	@media (max-width: 639px) {
+	@media (max-width: 640px) { /* --ab-breakpoint-md */
 		.grid {
 			grid-template-columns: minmax(0, 1fr);
 		}
@@ -145,8 +145,8 @@ const stamp = `${loadedAt.getFullYear()}-${String(loadedAt.getMonth() + 1).padSt
 	.status {
 		display: flex;
 		align-items: center;
-		gap: 0.375rem;
-		padding: 0.25rem 0.125rem 0;
+		gap: var(--ab-space-xs);
+		padding: var(--ab-space-2xs) var(--ab-space-3xs) 0;
 		color: var(--ab-color-fg-faint);
 		font-size: var(--ab-font-size-xs);
 		font-family: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;

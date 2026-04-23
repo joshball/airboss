@@ -370,14 +370,14 @@ const tagsString = $derived((card.tags ?? []).join(', '));
 	.page {
 		display: flex;
 		flex-direction: column;
-		gap: 1.25rem;
+		gap: var(--ab-space-xl-alt);
 	}
 
 	.hd {
 		display: flex;
 		align-items: flex-start;
 		justify-content: space-between;
-		gap: 1rem;
+		gap: var(--ab-space-lg);
 		flex-wrap: wrap;
 	}
 
@@ -392,7 +392,7 @@ const tagsString = $derived((card.tags ?? []).join(', '));
 	}
 
 	h1 {
-		margin: 0.25rem 0 0;
+		margin: var(--ab-space-2xs) 0 0;
 		font-size: var(--ab-font-size-xl);
 		letter-spacing: -0.02em;
 		color: var(--ab-color-fg);
@@ -400,14 +400,14 @@ const tagsString = $derived((card.tags ?? []).join(', '));
 
 	.badges {
 		display: flex;
-		gap: 0.375rem;
+		gap: var(--ab-space-xs);
 		flex-wrap: wrap;
 	}
 
 	.badge {
 		display: inline-flex;
 		align-items: center;
-		padding: 0.125rem 0.5rem;
+		padding: var(--ab-space-3xs) var(--ab-space-sm);
 		font-size: var(--ab-font-size-xs);
 		font-weight: 600;
 		border-radius: var(--ab-radius-pill);
@@ -446,7 +446,7 @@ const tagsString = $derived((card.tags ?? []).join(', '));
 		background: var(--ab-color-danger-subtle);
 		border: 1px solid var(--ab-color-danger-subtle-border);
 		color: var(--ab-color-danger-active);
-		padding: 0.625rem 0.875rem;
+		padding: var(--ab-space-sm-alt) var(--ab-space-md-alt);
 		border-radius: var(--ab-radius-md);
 		font-size: var(--ab-font-size-sm);
 	}
@@ -455,7 +455,7 @@ const tagsString = $derived((card.tags ?? []).join(', '));
 		background: var(--ab-color-success-subtle);
 		border: 1px solid var(--ab-color-success-subtle-border);
 		color: var(--ab-color-success-active);
-		padding: 0.625rem 0.875rem;
+		padding: var(--ab-space-sm-alt) var(--ab-space-md-alt);
 		border-radius: var(--ab-radius-md);
 		font-size: var(--ab-font-size-sm);
 	}
@@ -464,10 +464,10 @@ const tagsString = $derived((card.tags ?? []).join(', '));
 		background: white;
 		border: 1px solid var(--ab-color-border);
 		border-radius: var(--ab-radius-lg);
-		padding: 1.25rem 1.5rem;
+		padding: var(--ab-space-xl-alt) var(--ab-space-xl);
 		display: flex;
 		flex-direction: column;
-		gap: 1rem;
+		gap: var(--ab-space-lg);
 	}
 
 	.content h2 {
@@ -485,7 +485,7 @@ const tagsString = $derived((card.tags ?? []).join(', '));
 		color: var(--ab-color-fg-subtle);
 		text-transform: uppercase;
 		letter-spacing: 0.06em;
-		margin-bottom: 0.25rem;
+		margin-bottom: var(--ab-space-2xs);
 	}
 
 	.cell-text {
@@ -498,11 +498,11 @@ const tagsString = $derived((card.tags ?? []).join(', '));
 	.tags {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 0.375rem;
+		gap: var(--ab-space-xs);
 	}
 
 	.tag {
-		padding: 0.125rem 0.5rem;
+		padding: var(--ab-space-3xs) var(--ab-space-sm);
 		font-size: var(--ab-font-size-xs);
 		background: var(--ab-color-surface-sunken);
 		border-radius: var(--ab-radius-pill);
@@ -511,7 +511,7 @@ const tagsString = $derived((card.tags ?? []).join(', '));
 
 	.row {
 		display: flex;
-		gap: 1rem;
+		gap: var(--ab-space-lg);
 	}
 
 	.action-row {
@@ -522,7 +522,7 @@ const tagsString = $derived((card.tags ?? []).join(', '));
 
 	.inline-form {
 		display: flex;
-		gap: 0.375rem;
+		gap: var(--ab-space-xs);
 		align-items: center;
 	}
 
@@ -539,16 +539,16 @@ const tagsString = $derived((card.tags ?? []).join(', '));
 		background: white;
 		border: 1px solid var(--ab-color-border);
 		border-radius: var(--ab-radius-lg);
-		padding: 1.5rem;
+		padding: var(--ab-space-xl);
 		display: flex;
 		flex-direction: column;
-		gap: 1rem;
+		gap: var(--ab-space-lg);
 	}
 
 	.field {
 		display: flex;
 		flex-direction: column;
-		gap: 0.375rem;
+		gap: var(--ab-space-xs);
 	}
 
 	.label {
@@ -566,7 +566,7 @@ const tagsString = $derived((card.tags ?? []).join(', '));
 	input[type='text'],
 	select {
 		font: inherit;
-		padding: 0.625rem 0.75rem;
+		padding: var(--ab-space-sm-alt) var(--ab-space-md);
 		border: 1px solid var(--ab-color-border-strong);
 		border-radius: var(--ab-radius-md);
 		background: white;
@@ -597,7 +597,7 @@ const tagsString = $derived((card.tags ?? []).join(', '));
 
 	.actions {
 		display: flex;
-		gap: 0.5rem;
+		gap: var(--ab-space-sm);
 		justify-content: flex-end;
 	}
 
@@ -605,14 +605,14 @@ const tagsString = $derived((card.tags ?? []).join(', '));
 		margin: 0;
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-		gap: 0.75rem;
+		gap: var(--ab-space-md);
 	}
 
 	.stats > div {
 		background: var(--ab-color-surface-muted);
 		border: 1px solid var(--ab-color-border);
 		border-radius: var(--ab-radius-md);
-		padding: 0.625rem 0.75rem;
+		padding: var(--ab-space-sm-alt) var(--ab-space-md);
 	}
 
 	.stats dt {
@@ -624,7 +624,7 @@ const tagsString = $derived((card.tags ?? []).join(', '));
 	}
 
 	.stats dd {
-		margin: 0.125rem 0 0;
+		margin: var(--ab-space-3xs) 0 0;
 		color: var(--ab-color-fg);
 		font-size: var(--ab-font-size-body);
 		font-weight: 500;
@@ -649,7 +649,7 @@ const tagsString = $derived((card.tags ?? []).join(', '));
 
 	.reviews th,
 	.reviews td {
-		padding: 0.5rem 0.75rem;
+		padding: var(--ab-space-sm) var(--ab-space-md);
 		text-align: left;
 		border-bottom: 1px solid var(--ab-color-border);
 	}
@@ -667,7 +667,7 @@ const tagsString = $derived((card.tags ?? []).join(', '));
 	}
 
 	.btn {
-		padding: 0.5rem 1rem;
+		padding: var(--ab-space-sm) var(--ab-space-lg);
 		font-size: var(--ab-font-size-body);
 		font-weight: 600;
 		border-radius: var(--ab-radius-md);
@@ -724,7 +724,7 @@ const tagsString = $derived((card.tags ?? []).join(', '));
 		cursor: not-allowed;
 	}
 
-	@media (max-width: 480px) {
+	@media (max-width: 480px) { /* --ab-breakpoint-sm */
 		.stats {
 			grid-template-columns: 1fr 1fr;
 		}

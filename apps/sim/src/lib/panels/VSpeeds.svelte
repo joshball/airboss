@@ -43,16 +43,16 @@ const rows = [
 <style>
 	.vspeeds {
 		padding: 0.6rem 0.8rem;
-		background: #1a1a1a;
-		border: 1px solid #2a2a2a;
-		border-radius: 6px;
-		color: #f5f5f5;
+		background: var(--ab-sim-panel-bg);
+		border: 1px solid var(--ab-sim-panel-bg-elevated);
+		border-radius: var(--ab-radius-sm);
+		color: var(--ab-sim-panel-fg);
 	}
 
 	.vspeeds h3 {
-		margin: 0 0 0.5rem 0;
+		margin: 0 0 var(--ab-space-sm) 0;
 		font-size: 0.85rem;
-		color: #bbb;
+		color: var(--ab-sim-panel-fg-muted);
 		text-transform: uppercase;
 		letter-spacing: 0.05em;
 	}
@@ -60,7 +60,7 @@ const rows = [
 	table {
 		width: 100%;
 		border-collapse: collapse;
-		font-family: ui-monospace, monospace;
+		font-family: var(--ab-font-mono);
 		font-size: 0.8rem;
 	}
 
@@ -79,12 +79,12 @@ const rows = [
 	}
 
 	td.unit {
-		color: #888;
+		color: var(--ab-sim-panel-fg-subtle);
 		width: 3rem;
 	}
 
 	td.note {
-		color: #999;
+		color: var(--ab-sim-panel-fg-note);
 		font-size: 0.72rem;
 	}
 
@@ -94,23 +94,23 @@ const rows = [
 		height: 8px;
 		margin-right: 0.35rem;
 		vertical-align: middle;
-		border-radius: 1px;
+		border-radius: var(--ab-radius-xs);
 	}
 
 	.swatch.green {
-		background: #2fb856;
+		background: var(--ab-sim-arc-green);
 	}
 
 	.swatch.white {
-		background: #eaeaea;
+		background: var(--ab-sim-arc-white);
 	}
 
 	.swatch.red {
-		background: #e0443e;
+		background: var(--ab-sim-arc-red);
 	}
 
 	.swatch.plain {
 		background: transparent;
-		border: 1px solid #444;
+		border: 1px solid var(--ab-sim-instrument-tick-faint);
 	}
 </style>

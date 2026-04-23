@@ -91,7 +91,7 @@ $effect(() => {
 	}
 
 	.sidebar-extra {
-		border-top: 1px solid var(--ab-color-border, #e2e8f0);
+		border-top: 1px solid var(--ab-color-border);
 		padding-top: 0.75rem;
 	}
 
@@ -102,7 +102,7 @@ $effect(() => {
 	.page-head {
 		margin-bottom: 1.5rem;
 		padding-bottom: 1rem;
-		border-bottom: 1px solid var(--ab-color-border, #e2e8f0);
+		border-bottom: 1px solid var(--ab-color-border);
 	}
 
 	.page-head h1 {
@@ -113,7 +113,7 @@ $effect(() => {
 
 	.summary {
 		margin: 0;
-		color: var(--ab-color-fg-muted, #64748b);
+		color: var(--ab-color-fg-muted);
 		font-size: 1rem;
 		line-height: 1.5;
 	}
@@ -121,18 +121,18 @@ $effect(() => {
 	.documents {
 		margin: 0.5rem 0 0;
 		font-size: 0.8125rem;
-		color: var(--ab-color-fg-subtle, #94a3b8);
+		color: var(--ab-color-fg-subtle);
 	}
 
 	.documents code {
-		background: var(--ab-color-surface-sunken, #f1f5f9);
+		background: var(--ab-color-surface-sunken);
 		padding: 0.0625rem 0.375rem;
-		border-radius: 4px;
+		border-radius: var(--ab-radius-tight);
 		font-family: var(--ab-font-mono, ui-monospace, monospace);
 		font-size: 0.8125rem;
 	}
 
-	@media (max-width: 720px) {
+	@media (max-width: 640px) { /* --ab-breakpoint-md */
 		.help {
 			grid-template-columns: 1fr;
 		}

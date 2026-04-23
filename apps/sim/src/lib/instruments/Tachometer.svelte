@@ -44,10 +44,10 @@ const majorTicks = [0, 500, 1000, 1500, 2000, 2500, 3000];
 
 <div class="instrument" aria-label={`Tachometer reading ${rpmSafe.toFixed(0)} RPM`}>
 	<svg viewBox="0 0 200 200" role="img">
-		<circle cx="100" cy="100" r="96" fill="#111" stroke="#333" stroke-width="2" />
+		<circle cx="100" cy="100" r="96" class="instrument-face" stroke-width="2" />
 
 		<!-- green operating arc -->
-		<path d={greenArc} stroke="#2fb856" stroke-width="6" fill="none" />
+		<path d={greenArc} class="arc-green" stroke-width="6" fill="none" />
 
 		<!-- redline -->
 		<line
@@ -55,7 +55,7 @@ const majorTicks = [0, 500, 1000, 1500, 2000, 2500, 3000];
 			y1={100 + 60 * Math.sin(((REDLINE_ANGLE - 90) * Math.PI) / 180)}
 			x2={100 + 82 * Math.cos(((REDLINE_ANGLE - 90) * Math.PI) / 180)}
 			y2={100 + 82 * Math.sin(((REDLINE_ANGLE - 90) * Math.PI) / 180)}
-			stroke="#e0443e"
+			class="redline"
 			stroke-width="3"
 		/>
 
@@ -68,7 +68,7 @@ const majorTicks = [0, 500, 1000, 1500, 2000, 2500, 3000];
 				y1={100 + 62 * Math.sin(rad)}
 				x2={100 + 78 * Math.cos(rad)}
 				y2={100 + 78 * Math.sin(rad)}
-				stroke="#f5f5f5"
+				class="tick-major"
 				stroke-width="2"
 			/>
 			<text
@@ -77,21 +77,20 @@ const majorTicks = [0, 500, 1000, 1500, 2000, 2500, 3000];
 				text-anchor="middle"
 				dominant-baseline="central"
 				font-size="11"
-				fill="#f5f5f5"
-				font-family="ui-monospace, monospace">{t / 100}</text
+				class="tick-label">{t / 100}</text
 			>
 		{/each}
 
 		<!-- needle -->
 		<g transform={`rotate(${needleAngle} 100 100)`}>
-			<line x1="100" y1="100" x2="100" y2="28" stroke="#ffe270" stroke-width="3" stroke-linecap="round" />
-			<circle cx="100" cy="100" r="5" fill="#ffe270" />
+			<line x1="100" y1="100" x2="100" y2="28" class="needle-pointer" stroke-width="3" stroke-linecap="round" />
+			<circle cx="100" cy="100" r="5" class="hub" />
 		</g>
 
-		<text x="100" y="148" text-anchor="middle" font-size="10" fill="#bbb" font-family="ui-monospace, monospace">
+		<text x="100" y="148" text-anchor="middle" font-size="10" class="unit-label">
 			RPM x100
 		</text>
-		<text x="100" y="172" text-anchor="middle" font-size="15" fill="#f5f5f5" font-family="ui-monospace, monospace">
+		<text x="100" y="172" text-anchor="middle" font-size="15" class="digital-readout">
 			{rpmSafe.toFixed(0)}
 		</text>
 	</svg>
@@ -107,5 +106,45 @@ const majorTicks = [0, 500, 1000, 1500, 2000, 2500, 3000];
 		width: 100%;
 		height: 100%;
 		display: block;
+	}
+
+	.instrument-face {
+		fill: var(--ab-sim-instrument-face);
+		stroke: var(--ab-sim-instrument-bezel);
+	}
+
+	.arc-green {
+		stroke: var(--ab-sim-arc-green);
+	}
+
+	.redline {
+		stroke: var(--ab-sim-arc-red);
+	}
+
+	.tick-major {
+		stroke: var(--ab-sim-instrument-tick);
+	}
+
+	.tick-label {
+		fill: var(--ab-sim-instrument-tick);
+		font-family: var(--ab-font-mono);
+	}
+
+	.needle-pointer {
+		stroke: var(--ab-sim-instrument-pointer);
+	}
+
+	.hub {
+		fill: var(--ab-sim-instrument-pointer);
+	}
+
+	.unit-label {
+		fill: var(--ab-sim-instrument-tick-minor);
+		font-family: var(--ab-font-mono);
+	}
+
+	.digital-readout {
+		fill: var(--ab-sim-instrument-tick);
+		font-family: var(--ab-font-mono);
 	}
 </style>

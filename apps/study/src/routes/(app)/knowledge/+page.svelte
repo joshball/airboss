@@ -177,7 +177,7 @@ const resetHref = $derived.by(() => {
 	.page {
 		display: flex;
 		flex-direction: column;
-		gap: 1.25rem;
+		gap: var(--ab-space-xl-alt);
 	}
 
 	.hd h1 {
@@ -188,7 +188,7 @@ const resetHref = $derived.by(() => {
 	}
 
 	.sub {
-		margin: 0.25rem 0 0;
+		margin: var(--ab-space-2xs) 0 0;
 		color: var(--ab-color-fg-subtle);
 		font-size: var(--ab-font-size-body);
 	}
@@ -196,18 +196,18 @@ const resetHref = $derived.by(() => {
 	.filters {
 		display: grid;
 		grid-template-columns: repeat(4, 1fr) auto;
-		gap: 0.75rem;
+		gap: var(--ab-space-md);
 		align-items: end;
 		background: white;
 		border: 1px solid var(--ab-color-border);
 		border-radius: var(--ab-radius-lg);
-		padding: 1rem;
+		padding: var(--ab-space-lg);
 	}
 
 	.filter {
 		display: flex;
 		flex-direction: column;
-		gap: 0.25rem;
+		gap: var(--ab-space-2xs);
 	}
 
 	.filter label {
@@ -220,7 +220,7 @@ const resetHref = $derived.by(() => {
 
 	.filter select {
 		font: inherit;
-		padding: 0.5rem 0.625rem;
+		padding: var(--ab-space-sm) var(--ab-space-sm-alt);
 		border: 1px solid var(--ab-color-border-strong);
 		border-radius: var(--ab-radius-sm);
 		background: white;
@@ -235,26 +235,26 @@ const resetHref = $derived.by(() => {
 
 	.filter-actions {
 		display: flex;
-		gap: 0.375rem;
+		gap: var(--ab-space-xs);
 	}
 
 	.empty {
 		background: white;
 		border: 1px dashed var(--ab-color-border-strong);
 		border-radius: var(--ab-radius-lg);
-		padding: 3rem 1.5rem;
+		padding: var(--ab-space-3xl) var(--ab-space-xl);
 		text-align: center;
 		color: var(--ab-color-fg-subtle);
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		gap: 1rem;
+		gap: var(--ab-space-lg);
 	}
 
 	.domain {
 		display: flex;
 		flex-direction: column;
-		gap: 0.625rem;
+		gap: var(--ab-space-sm-alt);
 	}
 
 	.domain-title {
@@ -272,17 +272,17 @@ const resetHref = $derived.by(() => {
 		margin: 0;
 		display: flex;
 		flex-direction: column;
-		gap: 0.5rem;
+		gap: var(--ab-space-sm);
 	}
 
 	.card {
 		display: flex;
 		flex-direction: column;
-		gap: 0.5rem;
+		gap: var(--ab-space-sm);
 		background: white;
 		border: 1px solid var(--ab-color-border);
 		border-radius: var(--ab-radius-md);
-		padding: 1rem 1.125rem;
+		padding: var(--ab-space-lg) var(--ab-space-lg-alt);
 		text-decoration: none;
 		color: inherit;
 		transition: border-color 120ms, box-shadow 120ms;
@@ -297,7 +297,7 @@ const resetHref = $derived.by(() => {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		gap: 0.75rem;
+		gap: var(--ab-space-md);
 	}
 
 	.card-title {
@@ -309,7 +309,7 @@ const resetHref = $derived.by(() => {
 	.mastery {
 		display: inline-flex;
 		align-items: center;
-		gap: 0.375rem;
+		gap: var(--ab-space-xs);
 		flex-shrink: 0;
 	}
 
@@ -338,13 +338,13 @@ const resetHref = $derived.by(() => {
 	.card-meta {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 0.375rem;
+		gap: var(--ab-space-xs);
 	}
 
 	.badge {
 		display: inline-flex;
 		align-items: center;
-		padding: 0.125rem 0.5rem;
+		padding: var(--ab-space-3xs) var(--ab-space-sm);
 		font-size: var(--ab-font-size-xs);
 		font-weight: 600;
 		border-radius: var(--ab-radius-pill);
@@ -410,7 +410,7 @@ const resetHref = $derived.by(() => {
 	}
 
 	.btn {
-		padding: 0.5rem 1rem;
+		padding: var(--ab-space-sm) var(--ab-space-lg);
 		font-size: var(--ab-font-size-body);
 		font-weight: 600;
 		border-radius: var(--ab-radius-md);
@@ -443,7 +443,7 @@ const resetHref = $derived.by(() => {
 		background: var(--ab-color-surface-sunken);
 	}
 
-	@media (max-width: 640px) {
+	@media (max-width: 640px) { /* --ab-breakpoint-md */
 		.filters {
 			grid-template-columns: 1fr 1fr;
 		}

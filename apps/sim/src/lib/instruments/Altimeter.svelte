@@ -22,7 +22,7 @@ const ticks = Array.from({ length: 10 }, (_, i) => i);
 
 <div class="instrument" aria-label={`Altimeter reading ${altSafe.toFixed(0)} feet`}>
 	<svg viewBox="0 0 200 200" role="img">
-		<circle cx="100" cy="100" r="96" fill="#111" stroke="#333" stroke-width="2" />
+		<circle cx="100" cy="100" r="96" class="instrument-face" />
 
 		<!-- tick marks: 0..9 (hundreds scale) -->
 		{#each ticks as tick (tick)}
@@ -33,7 +33,7 @@ const ticks = Array.from({ length: 10 }, (_, i) => i);
 				y1={100 + 60 * Math.sin(rad)}
 				x2={100 + 74 * Math.cos(rad)}
 				y2={100 + 74 * Math.sin(rad)}
-				stroke="#f5f5f5"
+				class="tick-major"
 				stroke-width="2"
 			/>
 			<text
@@ -42,32 +42,31 @@ const ticks = Array.from({ length: 10 }, (_, i) => i);
 				text-anchor="middle"
 				dominant-baseline="central"
 				font-size="16"
-				fill="#f5f5f5"
-				font-family="ui-monospace, monospace">{tick}</text
+				class="tick-label">{tick}</text
 			>
 		{/each}
 
 		<!-- ten-thousands pointer (small triangle well outside needle hub) -->
 		<g transform={`rotate(${tenThousandsAngle} 100 100)`}>
-			<polygon points="100,22 94,32 106,32" fill="#e9c53c" />
+			<polygon points="100,22 94,32 106,32" class="pointer-caution" />
 		</g>
 
 		<!-- thousands needle (short, fat) -->
 		<g transform={`rotate(${thousandsAngle} 100 100)`}>
-			<polygon points="100,100 92,96 96,48 104,48 108,96" fill="#f5f5f5" stroke="#111" stroke-width="0.5" />
+			<polygon points="100,100 92,96 96,48 104,48 108,96" class="needle-thousands" stroke-width="0.5" />
 		</g>
 
 		<!-- hundreds needle (long, thin) -->
 		<g transform={`rotate(${hundredsAngle} 100 100)`}>
-			<line x1="100" y1="100" x2="100" y2="28" stroke="#ffe270" stroke-width="3" stroke-linecap="round" />
+			<line x1="100" y1="100" x2="100" y2="28" class="needle-pointer" stroke-width="3" stroke-linecap="round" />
 		</g>
 
-		<circle cx="100" cy="100" r="6" fill="#ffe270" />
+		<circle cx="100" cy="100" r="6" class="hub" />
 
-		<text x="100" y="158" text-anchor="middle" font-size="10" fill="#bbb" font-family="ui-monospace, monospace">
+		<text x="100" y="158" text-anchor="middle" font-size="10" class="unit-label">
 			FEET MSL
 		</text>
-		<text x="100" y="176" text-anchor="middle" font-size="16" fill="#f5f5f5" font-family="ui-monospace, monospace">
+		<text x="100" y="176" text-anchor="middle" font-size="16" class="digital-readout">
 			{altSafe.toFixed(0)}
 		</text>
 	</svg>
@@ -83,5 +82,46 @@ const ticks = Array.from({ length: 10 }, (_, i) => i);
 		width: 100%;
 		height: 100%;
 		display: block;
+	}
+
+	.instrument-face {
+		fill: var(--ab-sim-instrument-face);
+		stroke: var(--ab-sim-instrument-bezel);
+	}
+
+	.tick-major {
+		stroke: var(--ab-sim-instrument-tick);
+	}
+
+	.tick-label {
+		fill: var(--ab-sim-instrument-tick);
+		font-family: var(--ab-font-mono);
+	}
+
+	.pointer-caution {
+		fill: var(--ab-sim-arc-yellow);
+	}
+
+	.needle-thousands {
+		fill: var(--ab-sim-instrument-tick);
+		stroke: var(--ab-sim-instrument-face);
+	}
+
+	.needle-pointer {
+		stroke: var(--ab-sim-instrument-pointer);
+	}
+
+	.hub {
+		fill: var(--ab-sim-instrument-pointer);
+	}
+
+	.unit-label {
+		fill: var(--ab-sim-instrument-tick-minor);
+		font-family: var(--ab-font-mono);
+	}
+
+	.digital-readout {
+		fill: var(--ab-sim-instrument-tick);
+		font-family: var(--ab-font-mono);
 	}
 </style>

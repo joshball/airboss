@@ -492,26 +492,26 @@ const trimBias = $derived(inputs.trim);
 		/* Tight vertical rhythm -- the cockpit needs to fit 1280x800 without
 		   a scrollbar. Padding top/bottom kept minimal; horizontal gives the
 		   panels breathing room. */
-		padding: 0.5rem 1.25rem 0.75rem;
+		padding: var(--ab-space-sm) 1.25rem var(--ab-space-md);
 	}
 
 	header {
 		display: grid;
 		grid-template-columns: auto 1fr auto;
-		gap: 0.75rem;
+		gap: var(--ab-space-md);
 		align-items: center;
 		margin-bottom: 0.4rem;
 	}
 
 	.back {
-		color: var(--ab-color-fg-muted, #666);
+		color: var(--ab-color-fg-muted);
 		text-decoration: none;
 		font-size: 0.9rem;
 		white-space: nowrap;
 	}
 
 	.back:hover {
-		color: var(--ab-color-fg, #111);
+		color: var(--ab-color-fg);
 	}
 
 	h1 {
@@ -522,14 +522,14 @@ const trimBias = $derived(inputs.trim);
 
 	.objective {
 		margin: 0;
-		color: var(--ab-color-fg-muted, #666);
+		color: var(--ab-color-fg-muted);
 		font-size: 0.82rem;
 		line-height: 1.2;
 	}
 
 	.header-actions {
 		display: flex;
-		gap: 0.5rem;
+		gap: var(--ab-space-sm);
 		align-items: center;
 	}
 
@@ -538,7 +538,7 @@ const trimBias = $derived(inputs.trim);
 		align-items: center;
 		gap: 0.35rem;
 		font-size: 0.85rem;
-		color: var(--ab-color-fg, #111);
+		color: var(--ab-color-fg);
 		cursor: pointer;
 	}
 
@@ -548,17 +548,17 @@ const trimBias = $derived(inputs.trim);
 		justify-content: center;
 		width: 34px;
 		height: 34px;
-		background: var(--ab-color-surface, #f6f6f6);
-		border: 1px solid var(--ab-color-border, #ccc);
-		border-radius: 4px;
+		background: var(--ab-color-surface);
+		border: 1px solid var(--ab-color-border);
+		border-radius: var(--ab-radius-xs);
 		padding: 0;
 		cursor: pointer;
-		color: var(--ab-color-fg, #222);
-		transition: background-color 0.12s ease, color 0.12s ease;
+		color: var(--ab-color-fg);
+		transition: background-color var(--ab-transition-fast), color var(--ab-transition-fast);
 	}
 
 	.icon-button:hover {
-		background: var(--ab-color-border, #e6e6e6);
+		background: var(--ab-color-border);
 	}
 
 	.icon-button:disabled {
@@ -567,22 +567,22 @@ const trimBias = $derived(inputs.trim);
 	}
 
 	.icon-button.muted-state {
-		color: #c23530;
-		border-color: #c23530;
-		background: rgba(224, 68, 62, 0.08);
+		color: var(--ab-sim-status-danger-strong);
+		border-color: var(--ab-sim-status-danger-strong);
+		background: var(--ab-sim-muted-state-bg);
 	}
 
 	.icon-button.help-button {
-		font-family: ui-monospace, monospace;
+		font-family: var(--ab-font-mono);
 		font-weight: 700;
 		font-size: 1rem;
 	}
 
 	.objective-banner {
 		padding: 0.4rem 0.8rem;
-		background: var(--ab-color-surface, #f6f6f6);
-		border: 1px solid var(--ab-color-border, #ddd);
-		border-radius: 6px;
+		background: var(--ab-color-surface);
+		border: 1px solid var(--ab-color-border);
+		border-radius: var(--ab-radius-sm);
 		font-size: 0.82rem;
 		margin-bottom: 0.4rem;
 	}
@@ -624,26 +624,26 @@ const trimBias = $derived(inputs.trim);
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		padding: 0.35rem 0.5rem;
-		background: var(--ab-color-surface, #f6f6f6);
-		border-radius: 6px;
-		border: 1px solid var(--ab-color-border, #ddd);
+		padding: 0.35rem var(--ab-space-sm);
+		background: var(--ab-color-surface);
+		border-radius: var(--ab-radius-sm);
+		border: 1px solid var(--ab-color-border);
 	}
 
 	.readout.warning {
-		border-color: #e0443e;
-		background: rgba(224, 68, 62, 0.12);
+		border-color: var(--ab-sim-arc-red);
+		background: var(--ab-sim-readout-warning-bg);
 	}
 
 	.readout .label {
 		font-size: 0.72rem;
-		color: var(--ab-color-fg-muted, #666);
+		color: var(--ab-color-fg-muted);
 		text-transform: uppercase;
 		letter-spacing: 0.04em;
 	}
 
 	.readout .value {
-		font-family: ui-monospace, monospace;
+		font-family: var(--ab-font-mono);
 		font-size: 1rem;
 	}
 
@@ -658,13 +658,13 @@ const trimBias = $derived(inputs.trim);
 		justify-content: space-between;
 		align-items: center;
 		padding: 0.4rem 0.7rem;
-		background: var(--ab-color-surface, #f6f6f6);
-		border-radius: 6px;
-		border: 1px solid var(--ab-color-border, #ddd);
+		background: var(--ab-color-surface);
+		border-radius: var(--ab-radius-sm);
+		border: 1px solid var(--ab-color-border);
 		border-left-width: 4px;
 		font-size: 0.82rem;
 		margin-bottom: 0.4rem;
-		transition: background 120ms ease, border-color 120ms ease;
+		transition: background var(--ab-transition-fast), border-color var(--ab-transition-fast);
 	}
 
 	.status-body {
@@ -680,10 +680,10 @@ const trimBias = $derived(inputs.trim);
 		min-width: 1.5rem;
 		height: 1.5rem;
 		padding: 0 0.4rem;
-		border-radius: 999px;
+		border-radius: var(--ab-radius-pill);
 		font-size: 0.9rem;
 		font-weight: bold;
-		background: #fff;
+		background: var(--ab-color-surface);
 		border: 1px solid currentColor;
 	}
 
@@ -695,37 +695,37 @@ const trimBias = $derived(inputs.trim);
 	 * Visual lanes -- each lifecycle state gets a distinct border-left color,
 	 * background tint, and badge glyph so Connecting / Flying / Paused /
 	 * SUCCESS / FAILURE read as separate states without relying on color alone.
-	 * Hex used deliberately here; see apps/sim/README.md for the Phase 0
-	 * accepted-residual rationale.
+	 * Colors read from the `--ab-status-*` tokens in libs/themes/tokens.css so
+	 * the palette is centralized.
 	 */
 	.status-connecting {
-		border-left-color: #6b7280;
-		background: #f1f5f9;
-		color: #334155;
+		border-left-color: var(--ab-status-neutral-accent);
+		background: var(--ab-status-neutral-bg);
+		color: var(--ab-status-neutral-fg);
 	}
 
 	.status-flying {
-		border-left-color: #2563eb;
-		background: #eff6ff;
-		color: #1e40af;
+		border-left-color: var(--ab-status-primary-accent);
+		background: var(--ab-status-primary-bg);
+		color: var(--ab-status-primary-fg);
 	}
 
 	.status-paused {
-		border-left-color: #d97706;
-		background: #fffbeb;
-		color: #92400e;
+		border-left-color: var(--ab-status-warning-accent);
+		background: var(--ab-status-warning-bg);
+		color: var(--ab-status-warning-fg);
 	}
 
 	.status-success {
-		border-left-color: #059669;
-		background: #ecfdf5;
-		color: #065f46;
+		border-left-color: var(--ab-status-success-accent);
+		background: var(--ab-status-success-bg);
+		color: var(--ab-status-success-fg);
 	}
 
 	.status-failure {
-		border-left-color: #dc2626;
-		background: #fef2f2;
-		color: #991b1b;
+		border-left-color: var(--ab-status-danger-accent);
+		background: var(--ab-status-danger-bg);
+		color: var(--ab-status-danger-fg);
 	}
 
 	@media (prefers-reduced-motion: reduce) {
@@ -735,61 +735,62 @@ const trimBias = $derived(inputs.trim);
 	}
 
 	.reset-button {
-		background: #e0443e;
-		color: #fff;
+		background: var(--ab-sim-status-danger);
+		color: var(--ab-color-primary-fg);
 		border: none;
 		padding: 0.35rem 0.8rem;
-		border-radius: 4px;
+		border-radius: var(--ab-radius-xs);
 		font-size: 0.85rem;
 		cursor: pointer;
 	}
 
 	.reset-button:hover {
-		background: #c23530;
+		background: var(--ab-sim-status-danger-strong);
 	}
 
-	@media (max-width: 960px) {
+	@media (max-width: 960px) { /* --ab-breakpoint-lg */
+		/* --ab-breakpoint-lg */
 		.layout {
 			grid-template-columns: 1fr;
 		}
 	}
 	.boot-error {
-		background: var(--ab-color-danger-surface, #fee);
-		border: 1px solid var(--ab-color-danger, #c00);
-		color: var(--ab-color-danger-strong, #900);
-		border-radius: 0.5rem;
-		padding: 0.75rem 1rem;
-		margin-bottom: 0.75rem;
+		background: var(--ab-color-danger-surface);
+		border: 1px solid var(--ab-color-danger);
+		color: var(--ab-color-danger-strong);
+		border-radius: var(--ab-radius-sm);
+		padding: var(--ab-space-md) var(--ab-space-lg);
+		margin-bottom: var(--ab-space-md);
 	}
 	.boot-error h2 {
-		margin: 0 0 0.25rem;
+		margin: 0 0 var(--ab-space-2xs);
 		font-size: 1rem;
 	}
 	.boot-error p {
-		margin: 0 0 0.5rem;
+		margin: 0 0 var(--ab-space-sm);
 		font-size: 0.875rem;
 	}
 	.boot-error .retry {
-		background: var(--ab-color-danger, #c00);
-		color: white;
+		background: var(--ab-color-danger);
+		color: var(--ab-color-primary-fg);
 		border: none;
-		border-radius: 0.25rem;
-		padding: 0.25rem 0.75rem;
+		border-radius: var(--ab-radius-xs);
+		padding: var(--ab-space-2xs) var(--ab-space-md);
 		cursor: pointer;
 	}
 	.kb-toggle {
 		display: grid;
 		grid-template-columns: auto 1fr;
-		gap: 0.25rem 0.5rem;
-		padding: 0.5rem 0.75rem;
+		gap: var(--ab-space-2xs) var(--ab-space-sm);
+		padding: var(--ab-space-sm) var(--ab-space-md);
 		font-size: 0.8125rem;
-		border: 1px solid var(--ab-color-border, #ccc);
-		border-radius: 0.375rem;
-		background: var(--ab-color-surface, #fff);
+		border: 1px solid var(--ab-color-border);
+		border-radius: var(--ab-radius-xs);
+		background: var(--ab-color-surface);
 	}
 	.kb-toggle small {
 		grid-column: 1 / -1;
-		color: var(--ab-color-fg-muted, #666);
+		color: var(--ab-color-fg-muted);
 		font-size: 0.75rem;
 	}
 </style>

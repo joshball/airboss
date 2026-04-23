@@ -190,14 +190,14 @@ function onKeydown(e: KeyboardEvent) {
 	.page {
 		display: flex;
 		flex-direction: column;
-		gap: 1.25rem;
+		gap: var(--ab-space-xl-alt);
 	}
 
 	.hd {
 		display: flex;
 		align-items: flex-start;
 		justify-content: space-between;
-		gap: 1rem;
+		gap: var(--ab-space-lg);
 	}
 
 	h1 {
@@ -208,7 +208,7 @@ function onKeydown(e: KeyboardEvent) {
 	}
 
 	.sub {
-		margin: 0.25rem 0 0;
+		margin: var(--ab-space-2xs) 0 0;
 		color: var(--ab-color-fg-subtle);
 		font-size: var(--ab-font-size-body);
 	}
@@ -217,7 +217,7 @@ function onKeydown(e: KeyboardEvent) {
 		color: var(--ab-color-fg-muted);
 		text-decoration: none;
 		font-size: var(--ab-font-size-sm);
-		padding: 0.375rem 0.75rem;
+		padding: var(--ab-space-xs) var(--ab-space-md);
 		border: 1px solid var(--ab-color-border-strong);
 		border-radius: var(--ab-radius-sm);
 	}
@@ -230,7 +230,7 @@ function onKeydown(e: KeyboardEvent) {
 		background: var(--ab-color-primary-subtle);
 		border: 1px solid var(--ab-color-primary-subtle-border);
 		color: var(--ab-color-primary-active);
-		padding: 0.625rem 0.875rem;
+		padding: var(--ab-space-sm-alt) var(--ab-space-md-alt);
 		border-radius: var(--ab-radius-md);
 		font-size: var(--ab-font-size-sm);
 	}
@@ -244,7 +244,7 @@ function onKeydown(e: KeyboardEvent) {
 		background: var(--ab-color-danger-subtle);
 		border: 1px solid var(--ab-color-danger-subtle-border);
 		color: var(--ab-color-danger-active);
-		padding: 0.625rem 0.875rem;
+		padding: var(--ab-space-sm-alt) var(--ab-space-md-alt);
 		border-radius: var(--ab-radius-md);
 		font-size: var(--ab-font-size-sm);
 	}
@@ -252,17 +252,17 @@ function onKeydown(e: KeyboardEvent) {
 	form {
 		display: flex;
 		flex-direction: column;
-		gap: 1rem;
+		gap: var(--ab-space-lg);
 		background: white;
 		border: 1px solid var(--ab-color-border);
 		border-radius: var(--ab-radius-lg);
-		padding: 1.5rem;
+		padding: var(--ab-space-xl);
 	}
 
 	.field {
 		display: flex;
 		flex-direction: column;
-		gap: 0.375rem;
+		gap: var(--ab-space-xs);
 	}
 
 	.label {
@@ -280,7 +280,7 @@ function onKeydown(e: KeyboardEvent) {
 	input[type='text'],
 	select {
 		font: inherit;
-		padding: 0.625rem 0.75rem;
+		padding: var(--ab-space-sm-alt) var(--ab-space-md);
 		border: 1px solid var(--ab-color-border-strong);
 		border-radius: var(--ab-radius-md);
 		background: white;
@@ -309,7 +309,7 @@ function onKeydown(e: KeyboardEvent) {
 	.row {
 		display: grid;
 		grid-template-columns: 2fr 1fr;
-		gap: 1rem;
+		gap: var(--ab-space-lg);
 	}
 
 	.err {
@@ -319,14 +319,14 @@ function onKeydown(e: KeyboardEvent) {
 
 	.actions {
 		display: flex;
-		gap: 0.5rem;
+		gap: var(--ab-space-sm);
 		justify-content: flex-end;
-		margin-top: 0.5rem;
+		margin-top: var(--ab-space-sm);
 		flex-wrap: wrap;
 	}
 
 	.btn {
-		padding: 0.5rem 1rem;
+		padding: var(--ab-space-sm) var(--ab-space-lg);
 		font-size: var(--ab-font-size-body);
 		font-weight: 600;
 		border-radius: var(--ab-radius-md);
@@ -371,7 +371,7 @@ function onKeydown(e: KeyboardEvent) {
 		cursor: not-allowed;
 	}
 
-	@media (max-width: 480px) {
+	@media (max-width: 480px) { /* --ab-breakpoint-sm */
 		.row {
 			grid-template-columns: 1fr;
 		}

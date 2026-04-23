@@ -34,7 +34,7 @@ const minorTicks = [-400, -300, -200, -100, 100, 200, 300, 400];
 
 <div class="instrument" aria-label={`Vertical speed indicator reading ${fpmSafe.toFixed(0)} feet per minute`}>
 	<svg viewBox="0 0 200 200" role="img">
-		<circle cx="100" cy="100" r="96" fill="#111" stroke="#333" stroke-width="2" />
+		<circle cx="100" cy="100" r="96" class="instrument-face" stroke-width="2" />
 
 		{#each majorTicks as t (t)}
 			{@const a = fpmToAngle(t) - 90}
@@ -44,7 +44,7 @@ const minorTicks = [-400, -300, -200, -100, 100, 200, 300, 400];
 				y1={100 + 74 * Math.sin(rad)}
 				x2={100 + 86 * Math.cos(rad)}
 				y2={100 + 86 * Math.sin(rad)}
-				stroke="#f5f5f5"
+				class="tick-major"
 				stroke-width={t === 0 ? 3 : 2}
 			/>
 			<text
@@ -53,8 +53,7 @@ const minorTicks = [-400, -300, -200, -100, 100, 200, 300, 400];
 				text-anchor="middle"
 				dominant-baseline="central"
 				font-size="10"
-				fill="#f5f5f5"
-				font-family="ui-monospace, monospace">{Math.abs(t) / 1000}</text
+				class="tick-label">{Math.abs(t) / 1000}</text
 			>
 		{/each}
 		{#each minorTicks as t (t)}
@@ -65,30 +64,30 @@ const minorTicks = [-400, -300, -200, -100, 100, 200, 300, 400];
 				y1={100 + 78 * Math.sin(rad)}
 				x2={100 + 86 * Math.cos(rad)}
 				y2={100 + 86 * Math.sin(rad)}
-				stroke="#888"
+				class="tick-minor"
 				stroke-width="1"
 			/>
 		{/each}
 
 		<!-- UP / DOWN arrows -->
-		<text x="100" y="60" text-anchor="middle" font-size="9" fill="#777" font-family="ui-monospace, monospace">
+		<text x="100" y="60" text-anchor="middle" font-size="9" class="foot-label">
 			UP
 		</text>
-		<text x="100" y="148" text-anchor="middle" font-size="9" fill="#777" font-family="ui-monospace, monospace">
+		<text x="100" y="148" text-anchor="middle" font-size="9" class="foot-label">
 			DN
 		</text>
 
 		<!-- Needle -->
 		<g transform={`rotate(${needleAngle} 100 100)`}>
-			<line x1="100" y1="100" x2="100" y2="22" stroke="#ffe270" stroke-width="3" stroke-linecap="round" />
-			<circle cx="100" cy="100" r="5" fill="#ffe270" />
+			<line x1="100" y1="100" x2="100" y2="22" class="needle-pointer" stroke-width="3" stroke-linecap="round" />
+			<circle cx="100" cy="100" r="5" class="hub" />
 		</g>
 
 		<!-- Digital readout -->
-		<text x="100" y="170" text-anchor="middle" font-size="10" fill="#bbb" font-family="ui-monospace, monospace">
+		<text x="100" y="170" text-anchor="middle" font-size="10" class="unit-label">
 			FPM
 		</text>
-		<text x="100" y="186" text-anchor="middle" font-size="13" fill="#f5f5f5" font-family="ui-monospace, monospace">
+		<text x="100" y="186" text-anchor="middle" font-size="13" class="digital-readout">
 			{fpmSafe >= 0 ? '+' : ''}{fpmSafe.toFixed(0)}
 		</text>
 	</svg>
@@ -104,5 +103,46 @@ const minorTicks = [-400, -300, -200, -100, 100, 200, 300, 400];
 		width: 100%;
 		height: 100%;
 		display: block;
+	}
+
+	.instrument-face {
+		fill: var(--ab-sim-instrument-face);
+		stroke: var(--ab-sim-instrument-bezel);
+	}
+
+	.tick-major {
+		stroke: var(--ab-sim-instrument-tick);
+	}
+
+	.tick-minor {
+		stroke: var(--ab-sim-instrument-tick-subtle);
+	}
+
+	.tick-label {
+		fill: var(--ab-sim-instrument-tick);
+		font-family: var(--ab-font-mono);
+	}
+
+	.foot-label {
+		fill: var(--ab-sim-instrument-tick-dim);
+		font-family: var(--ab-font-mono);
+	}
+
+	.needle-pointer {
+		stroke: var(--ab-sim-instrument-pointer);
+	}
+
+	.hub {
+		fill: var(--ab-sim-instrument-pointer);
+	}
+
+	.unit-label {
+		fill: var(--ab-sim-instrument-tick-minor);
+		font-family: var(--ab-font-mono);
+	}
+
+	.digital-readout {
+		fill: var(--ab-sim-instrument-tick);
+		font-family: var(--ab-font-mono);
 	}
 </style>

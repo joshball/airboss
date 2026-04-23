@@ -132,14 +132,14 @@ function bar(value: number): number {
 	.page {
 		display: flex;
 		flex-direction: column;
-		gap: 1.5rem;
+		gap: var(--ab-space-xl);
 	}
 
 	.hd {
 		display: flex;
 		justify-content: space-between;
 		align-items: flex-start;
-		gap: 1rem;
+		gap: var(--ab-space-lg);
 		flex-wrap: wrap;
 	}
 
@@ -151,26 +151,26 @@ function bar(value: number): number {
 	}
 
 	.sub {
-		margin: 0.25rem 0 0;
+		margin: var(--ab-space-2xs) 0 0;
 		color: var(--ab-color-fg-subtle);
 		font-size: 0.9375rem;
 	}
 
 	.quick {
 		display: flex;
-		gap: 0.5rem;
+		gap: var(--ab-space-sm);
 		flex-wrap: wrap;
 	}
 
 	.empty {
 		background: white;
 		border: 1px dashed var(--ab-color-border-strong);
-		border-radius: 12px;
-		padding: 2.5rem 1.5rem;
+		border-radius: var(--ab-radius-xl);
+		padding: var(--ab-space-2xl-alt) var(--ab-space-xl);
 		text-align: center;
 		display: flex;
 		flex-direction: column;
-		gap: 0.75rem;
+		gap: var(--ab-space-md);
 		align-items: center;
 	}
 
@@ -189,7 +189,7 @@ function bar(value: number): number {
 	.grid {
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-		gap: 0.75rem;
+		gap: var(--ab-space-md);
 	}
 
 	/* StatTile provides its own styling; the grid just lays them out. */
@@ -209,11 +209,11 @@ function bar(value: number): number {
 	.card-list {
 		background: white;
 		border: 1px solid var(--ab-color-border);
-		border-radius: 12px;
-		padding: 1.25rem 1.5rem;
+		border-radius: var(--ab-radius-xl);
+		padding: var(--ab-space-xl-alt) var(--ab-space-xl);
 		display: flex;
 		flex-direction: column;
-		gap: 0.875rem;
+		gap: var(--ab-space-md-alt);
 	}
 
 	.card-list h2 {
@@ -231,20 +231,20 @@ function bar(value: number): number {
 		margin: 0;
 		display: flex;
 		flex-direction: column;
-		gap: 0.75rem;
+		gap: var(--ab-space-md);
 	}
 
 	.domains li {
 		display: flex;
 		flex-direction: column;
-		gap: 0.375rem;
+		gap: var(--ab-space-xs);
 	}
 
 	.dm-head {
 		display: flex;
 		justify-content: space-between;
 		align-items: baseline;
-		gap: 0.5rem;
+		gap: var(--ab-space-sm);
 	}
 
 	.dm-name {
@@ -259,7 +259,7 @@ function bar(value: number): number {
 
 	.dm-counts {
 		display: flex;
-		gap: 0.5rem;
+		gap: var(--ab-space-sm);
 		font-size: 0.8125rem;
 	}
 
@@ -275,7 +275,7 @@ function bar(value: number): number {
 	.bar {
 		background: var(--ab-color-border);
 		height: 0.375rem;
-		border-radius: 999px;
+		border-radius: var(--ab-radius-pill);
 		overflow: hidden;
 	}
 
@@ -293,10 +293,10 @@ function bar(value: number): number {
 	}
 
 	.btn {
-		padding: 0.5rem 1rem;
+		padding: var(--ab-space-sm) var(--ab-space-lg);
 		font-size: 0.9375rem;
 		font-weight: 600;
-		border-radius: 8px;
+		border-radius: var(--ab-radius-md);
 		border: 1px solid transparent;
 		cursor: pointer;
 		text-decoration: none;

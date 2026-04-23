@@ -371,7 +371,7 @@ function clickRating(value: number) {
 	.page {
 		display: flex;
 		flex-direction: column;
-		gap: 1.25rem;
+		gap: var(--ab-space-xl-alt);
 		max-width: 42rem;
 		margin: 0 auto;
 	}
@@ -379,11 +379,11 @@ function clickRating(value: number) {
 	.undo-toast {
 		display: flex;
 		align-items: center;
-		gap: 0.75rem;
-		padding: 0.625rem 0.875rem;
+		gap: var(--ab-space-md);
+		padding: var(--ab-space-sm-alt) var(--ab-space-md-alt);
 		background: var(--ab-color-primary-subtle);
 		border: 1px solid var(--ab-color-primary-subtle-border);
-		border-radius: 10px;
+		border-radius: var(--ab-radius-lg);
 		font-size: 0.875rem;
 		color: var(--ab-color-primary-active);
 		animation: undo-fade var(--ab-transition-normal) ease-out;
@@ -396,19 +396,19 @@ function clickRating(value: number) {
 	.undo-domain {
 		color: var(--ab-color-fg-muted);
 		font-size: 0.75rem;
-		margin-left: 0.25rem;
+		margin-left: var(--ab-space-2xs);
 	}
 
 	.undo-btn {
 		display: inline-flex;
 		align-items: center;
-		gap: 0.375rem;
+		gap: var(--ab-space-xs);
 		background: white;
 		border: 1px solid var(--ab-color-primary-subtle-border);
 		color: var(--ab-color-primary-hover);
 		font-weight: 600;
-		border-radius: 6px;
-		padding: 0.3125rem 0.625rem;
+		border-radius: var(--ab-radius-sm);
+		padding: var(--ab-space-xs-alt) var(--ab-space-sm-alt);
 		font-size: 0.8125rem;
 		cursor: pointer;
 	}
@@ -434,13 +434,13 @@ function clickRating(value: number) {
 		cursor: pointer;
 		font-size: 1.125rem;
 		line-height: 1;
-		padding: 0.25rem 0.5rem;
+		padding: var(--ab-space-2xs) var(--ab-space-sm);
 	}
 
 	.undo-dismiss:focus-visible {
 		outline: none;
 		box-shadow: 0 0 0 3px var(--ab-color-focus-ring);
-		border-radius: 4px;
+		border-radius: var(--ab-radius-tight);
 	}
 
 	@keyframes undo-fade {
@@ -456,7 +456,7 @@ function clickRating(value: number) {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		gap: 1rem;
+		gap: var(--ab-space-lg);
 	}
 
 	.counter {
@@ -469,10 +469,10 @@ function clickRating(value: number) {
 
 	.badge {
 		display: inline-flex;
-		padding: 0.125rem 0.625rem;
+		padding: var(--ab-space-3xs) var(--ab-space-sm-alt);
 		font-size: 0.6875rem;
 		font-weight: 600;
-		border-radius: 999px;
+		border-radius: var(--ab-radius-pill);
 		color: var(--ab-color-primary-hover);
 		background: var(--ab-color-primary-subtle);
 		border: 1px solid var(--ab-color-primary-subtle-border);
@@ -483,12 +483,12 @@ function clickRating(value: number) {
 	.card {
 		background: white;
 		border: 1px solid var(--ab-color-border);
-		border-radius: 16px;
-		padding: 2rem;
+		border-radius: var(--ab-radius-2xl);
+		padding: var(--ab-space-2xl);
 		min-height: 14rem;
 		display: flex;
 		flex-direction: column;
-		gap: 1.25rem;
+		gap: var(--ab-space-xl-alt);
 		font-size: 1.0625rem;
 		line-height: 1.55;
 		color: var(--ab-color-fg);
@@ -500,7 +500,7 @@ function clickRating(value: number) {
 		color: var(--ab-color-fg-faint);
 		text-transform: uppercase;
 		letter-spacing: 0.08em;
-		margin-bottom: 0.5rem;
+		margin-bottom: var(--ab-space-sm);
 	}
 
 	.section-text {
@@ -514,7 +514,7 @@ function clickRating(value: number) {
 	}
 
 	.rate-q {
-		margin: 0.5rem 0 0;
+		margin: var(--ab-space-sm) 0 0;
 		text-align: center;
 		color: var(--ab-color-fg-muted);
 		font-size: 0.9375rem;
@@ -527,17 +527,17 @@ function clickRating(value: number) {
 	.ratings {
 		display: grid;
 		grid-template-columns: repeat(4, 1fr);
-		gap: 0.5rem;
+		gap: var(--ab-space-sm);
 	}
 
 	.rating {
 		background: white;
 		border: 1px solid var(--ab-color-border-strong);
-		border-radius: 10px;
-		padding: 0.875rem 0.5rem;
+		border-radius: var(--ab-radius-lg);
+		padding: var(--ab-space-md-alt) var(--ab-space-sm);
 		display: flex;
 		flex-direction: column;
-		gap: 0.125rem;
+		gap: var(--ab-space-3xs);
 		align-items: center;
 		cursor: pointer;
 		transition:
@@ -588,17 +588,17 @@ function clickRating(value: number) {
 	}
 
 	.btn {
-		padding: 0.625rem 1.25rem;
+		padding: var(--ab-space-sm-alt) var(--ab-space-xl-alt);
 		font-size: 0.9375rem;
 		font-weight: 600;
-		border-radius: 10px;
+		border-radius: var(--ab-radius-lg);
 		border: 1px solid transparent;
 		cursor: pointer;
 		text-decoration: none;
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
-		gap: 0.5rem;
+		gap: var(--ab-space-sm);
 		transition:
 			background var(--ab-transition-fast),
 			border-color var(--ab-transition-fast);
@@ -639,31 +639,31 @@ function clickRating(value: number) {
 
 	.btn.wide {
 		align-self: center;
-		padding: 0.75rem 2rem;
+		padding: var(--ab-space-md) var(--ab-space-2xl);
 		font-size: 1rem;
 	}
 
 	.kbd {
 		display: inline-flex;
 		align-items: center;
-		padding: 0.0625rem 0.375rem;
+		padding: var(--ab-space-hair) var(--ab-space-xs);
 		font-size: 0.6875rem;
 		background: var(--ab-color-surface-sunken);
 		color: var(--ab-color-fg-subtle);
 		border: 1px solid var(--ab-color-border-strong);
-		border-radius: 4px;
+		border-radius: var(--ab-radius-tight);
 		font-family: ui-monospace, monospace;
 	}
 
 	.caught-up {
 		background: white;
 		border: 1px solid var(--ab-color-border);
-		border-radius: 16px;
-		padding: 2.5rem 2rem;
+		border-radius: var(--ab-radius-2xl);
+		padding: var(--ab-space-2xl-alt) var(--ab-space-2xl);
 		text-align: center;
 		display: flex;
 		flex-direction: column;
-		gap: 1rem;
+		gap: var(--ab-space-lg);
 		align-items: center;
 	}
 
@@ -683,8 +683,8 @@ function clickRating(value: number) {
 	.tally {
 		display: grid;
 		grid-template-columns: repeat(4, 1fr);
-		gap: 0.75rem;
-		margin: 0.5rem 0;
+		gap: var(--ab-space-md);
+		margin: var(--ab-space-sm) 0;
 		width: 100%;
 		max-width: 24rem;
 	}
@@ -692,8 +692,8 @@ function clickRating(value: number) {
 	.tally > div {
 		background: var(--ab-color-surface-muted);
 		border: 1px solid var(--ab-color-border);
-		border-radius: 8px;
-		padding: 0.5rem;
+		border-radius: var(--ab-radius-md);
+		padding: var(--ab-space-sm);
 	}
 
 	.tally dt {
@@ -704,7 +704,7 @@ function clickRating(value: number) {
 	}
 
 	.tally dd {
-		margin: 0.125rem 0 0;
+		margin: var(--ab-space-3xs) 0 0;
 		font-size: 1.25rem;
 		font-weight: 700;
 		color: var(--ab-color-fg);
@@ -712,12 +712,12 @@ function clickRating(value: number) {
 
 	.actions {
 		display: flex;
-		gap: 0.5rem;
+		gap: var(--ab-space-sm);
 		flex-wrap: wrap;
 		justify-content: center;
 	}
 
-	@media (max-width: 480px) {
+	@media (max-width: 480px) { /* --ab-breakpoint-sm */
 		.ratings {
 			grid-template-columns: repeat(2, 1fr);
 		}

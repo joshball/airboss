@@ -123,7 +123,7 @@ const total = $derived(references.length);
 	.empty {
 		background: var(--ab-color-surface, white);
 		border: 1px dashed var(--ab-color-border-strong);
-		border-radius: 12px;
+		border-radius: var(--ab-radius-xl);
 		padding: 2.5rem 1.5rem;
 		text-align: center;
 		color: var(--ab-color-fg-muted);
@@ -155,10 +155,10 @@ const total = $derived(references.length);
 		font-size: 0.8125rem;
 		background: var(--ab-color-surface-sunken);
 		padding: 0.0625rem 0.375rem;
-		border-radius: 4px;
+		border-radius: var(--ab-radius-tight);
 	}
 
-	@media (max-width: 720px) {
+	@media (max-width: 640px) { /* --ab-breakpoint-md */
 		.layout {
 			grid-template-columns: 1fr;
 		}

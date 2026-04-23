@@ -120,14 +120,14 @@ function fmt(date: Date): string {
 	.page {
 		display: flex;
 		flex-direction: column;
-		gap: 1.5rem;
+		gap: var(--ab-space-xl);
 	}
 
 	.hd {
 		display: flex;
 		justify-content: space-between;
 		align-items: flex-start;
-		gap: 1rem;
+		gap: var(--ab-space-lg);
 		flex-wrap: wrap;
 	}
 
@@ -139,14 +139,14 @@ function fmt(date: Date): string {
 	}
 
 	.sub {
-		margin: 0.25rem 0 0;
+		margin: var(--ab-space-2xs) 0 0;
 		color: var(--ab-color-fg-subtle);
 		font-size: var(--ab-font-size-body);
 	}
 
 	.quick {
 		display: flex;
-		gap: 0.5rem;
+		gap: var(--ab-space-sm);
 		flex-wrap: wrap;
 	}
 
@@ -154,10 +154,10 @@ function fmt(date: Date): string {
 		background: white;
 		border: 1px solid var(--ab-color-border);
 		border-radius: var(--ab-radius-lg);
-		padding: 1.25rem 1.5rem;
+		padding: var(--ab-space-xl-alt) var(--ab-space-xl);
 		display: flex;
 		flex-direction: column;
-		gap: 1rem;
+		gap: var(--ab-space-lg);
 	}
 
 	.plan-card.active {
@@ -174,11 +174,11 @@ function fmt(date: Date): string {
 		display: flex;
 		justify-content: space-between;
 		align-items: flex-start;
-		gap: 0.75rem;
+		gap: var(--ab-space-md);
 	}
 
 	.plan-head h2 {
-		margin: 0 0 0.25rem;
+		margin: 0 0 var(--ab-space-2xs);
 		font-size: var(--ab-font-size-2xl);
 	}
 
@@ -186,7 +186,7 @@ function fmt(date: Date): string {
 		display: inline-block;
 		font-size: var(--ab-font-size-xs);
 		font-weight: 600;
-		padding: 0.125rem 0.5rem;
+		padding: var(--ab-space-3xs) var(--ab-space-sm);
 		border-radius: var(--ab-radius-pill);
 		background: var(--ab-color-border);
 		color: var(--ab-color-fg-muted);
@@ -200,7 +200,7 @@ function fmt(date: Date): string {
 	.plan-meta {
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-		gap: 0.75rem 1.25rem;
+		gap: var(--ab-space-md) var(--ab-space-xl-alt);
 		margin: 0;
 	}
 
@@ -213,7 +213,7 @@ function fmt(date: Date): string {
 	}
 
 	.plan-meta dd {
-		margin: 0.125rem 0 0;
+		margin: var(--ab-space-3xs) 0 0;
 		color: var(--ab-color-fg);
 		font-size: var(--ab-font-size-body);
 	}
@@ -238,10 +238,10 @@ function fmt(date: Date): string {
 		background: white;
 		border: 1px solid var(--ab-color-border);
 		border-radius: var(--ab-radius-lg);
-		padding: 1.25rem 1.5rem;
+		padding: var(--ab-space-xl-alt) var(--ab-space-xl);
 		display: flex;
 		flex-direction: column;
-		gap: 0.875rem;
+		gap: var(--ab-space-md-alt);
 	}
 
 	.card-list h2 {
@@ -259,14 +259,14 @@ function fmt(date: Date): string {
 		margin: 0;
 		display: flex;
 		flex-direction: column;
-		gap: 0.5rem;
+		gap: var(--ab-space-sm);
 	}
 
 	.plans li {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		padding: 0.5rem 0.75rem;
+		padding: var(--ab-space-sm) var(--ab-space-md);
 		background: var(--ab-color-surface-muted);
 		border: 1px solid var(--ab-color-border);
 		border-radius: var(--ab-radius-md);
@@ -284,12 +284,12 @@ function fmt(date: Date): string {
 
 	.meta {
 		display: flex;
-		gap: 0.5rem;
+		gap: var(--ab-space-sm);
 		align-items: center;
 	}
 
 	.btn {
-		padding: 0.5rem 1rem;
+		padding: var(--ab-space-sm) var(--ab-space-lg);
 		font-size: var(--ab-font-size-body);
 		font-weight: 600;
 		border-radius: var(--ab-radius-md);

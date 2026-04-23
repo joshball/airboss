@@ -97,7 +97,7 @@ const screenReaderSummary = $derived(
 		flex-direction: column;
 		justify-content: flex-end;
 		align-items: center;
-		gap: 0.1875rem;
+		gap: var(--ab-space-micro);
 		min-width: 0;
 	}
 
