@@ -551,13 +551,16 @@ describe('getDashboardPayload', () => {
 			expect('value' in payload.repBacklog).toBe(true);
 			expect('value' in payload.activity).toBe(true);
 			expect('value' in payload.certProgress).toBe(true);
+			// Unknown errors collapse to a generic user-safe string; the raw
+			// Drizzle / BC message is logged server-side via `mapToPanelError`
+			// but never leaks to the browser.
 			expect('error' in payload.weakAreas).toBe(true);
 			if ('error' in payload.weakAreas) {
-				expect(payload.weakAreas.error).toContain('boom from weak areas');
+				expect(payload.weakAreas.error).toBe('An unexpected error occurred.');
 			}
 			expect('error' in payload.domainCertMatrix).toBe(true);
 			if ('error' in payload.domainCertMatrix) {
-				expect(payload.domainCertMatrix.error).toContain('boom from domain matrix');
+				expect(payload.domainCertMatrix.error).toBe('An unexpected error occurred.');
 			}
 		} finally {
 			await cleanup();

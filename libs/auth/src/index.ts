@@ -2,7 +2,7 @@
 // Infrastructure: same interface for all apps.
 
 // Guards and types
-export { type AuthSession, type AuthUser, requireAuth, requireRole } from './auth';
+export { type AuthSession, type AuthUser, requireAuth, requireRole, requireVerifiedEmail } from './auth';
 // Client-side auth (Svelte)
 export { authClient } from './client';
 // Cookie forwarding

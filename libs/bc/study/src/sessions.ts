@@ -32,6 +32,7 @@ import {
 	SESSION_ITEM_KINDS,
 	SESSION_MODES,
 	SESSION_SKIP_KIND_VALUES,
+	SESSION_SKIP_KINDS,
 	type SessionItemKind,
 	type SessionMode,
 	type SessionReasonCode,
@@ -42,6 +43,7 @@ import { db as defaultDb } from '@ab/db';
 import { generateSessionId, generateSessionItemResultId } from '@ab/utils';
 import { and, desc, eq, gte, inArray, isNotNull, isNull, lt, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
+import { setCardStatus } from './cards';
 import {
 	type EngineCardCandidate,
 	type EngineDomainMasteryTrend,
@@ -54,7 +56,8 @@ import {
 	runEngine,
 } from './engine';
 import { getNodeMasteryMap } from './knowledge';
-import { getActivePlan, NoActivePlanError } from './plans';
+import { addSkipDomain, addSkipNode, getActivePlan, NoActivePlanError } from './plans';
+import { setScenarioStatus } from './scenarios';
 import {
 	card,
 	cardState,
@@ -814,6 +817,12 @@ export class SessionSlotNotFoundError extends Error {
  * unset a field without that being indistinguishable from "I forgot to pass
  * it." `itemKind`, `slice`, `reasonCode`, and `slotIndex` are always set from
  * the engine-authored slot row at commit time and must be supplied here.
+ *
+ * INVARIANT: when `result.reviewId` is non-null, the caller must have just
+ * produced that review row for `userId`. `submitReview` (reviews.ts) is the
+ * only write path today: it inserts the review and returns the id, which is
+ * then passed straight through here. We defensively re-check ownership so a
+ * buggy caller can't smuggle someone else's review id onto a slot result.
  */
 export async function recordItemResult(
 	sessionId: string,
@@ -824,6 +833,15 @@ export async function recordItemResult(
 ): Promise<SessionItemResultRow> {
 	const sess = await getSession(sessionId, userId, db);
 	if (!sess) throw new SessionNotFoundError(sessionId, userId);
+
+	if (result.reviewId) {
+		const [rev] = await db
+			.select({ id: review.id })
+			.from(review)
+			.where(and(eq(review.id, result.reviewId), eq(review.userId, userId)))
+			.limit(1);
+		if (!rev) throw new SessionNotFoundError(sessionId, userId);
+	}
 
 	// Build the UPDATE set, omitting any field the caller didn't provide so
 	// the existing row's value is preserved. `undefined` = skip, `null` = clear.
@@ -883,6 +901,88 @@ export async function recordItemResult(
 	const row = rows[0];
 	if (!row) throw new SessionSlotNotFoundError(sessionId, result.slotIndex);
 	return row;
+}
+
+/** Slot shape the `skipSessionSlot` orchestration needs. Narrow on purpose --
+ * the caller resolves it from `getSessionItemResult` and passes in just the
+ * fields that matter for the write path. */
+export interface SkipSessionSlotInput {
+	userId: string;
+	sessionId: string;
+	slot: {
+		slotIndex: number;
+		itemKind: SessionItemKind;
+		slice: SessionSlice;
+		reasonCode: SessionReasonCode;
+		cardId: string | null;
+		scenarioId: string | null;
+		nodeId: string | null;
+		reasonDetail: string | null;
+	};
+	skipKind: SessionSkipKind;
+	/** Domain resolved by the caller when `slot.nodeId` is null and the skip
+	 * kind mutates the plan. Null when skipKind is TODAY or when a nodeId is
+	 * already set (node takes precedence). */
+	fallbackDomain: Domain | null;
+}
+
+/**
+ * Transactional skip: writes the session_item_result row, mutates the plan's
+ * skip_nodes / skip_domains, and (for PERMANENT) suspends the underlying
+ * card or scenario -- all on the same `db.transaction`. If any step throws
+ * the whole thing rolls back; the caller sees one typed failure instead of a
+ * half-applied skip.
+ *
+ * Previously the route handler did each write outside a transaction and
+ * swallowed downstream errors so the slot stayed recorded while the plan
+ * mutation quietly failed. That could leave a "permanent" skip without the
+ * content suspension the user asked for -- a correctness bug.
+ */
+export async function skipSessionSlot(input: SkipSessionSlotInput, db: Db = defaultDb): Promise<void> {
+	const { userId, sessionId, slot, skipKind, fallbackDomain } = input;
+
+	await db.transaction(async (tx) => {
+		await recordItemResult(
+			sessionId,
+			userId,
+			{
+				slotIndex: slot.slotIndex,
+				itemKind: slot.itemKind,
+				slice: slot.slice,
+				reasonCode: slot.reasonCode,
+				cardId: slot.cardId,
+				scenarioId: slot.scenarioId,
+				nodeId: slot.nodeId,
+				skipKind,
+				reasonDetail: slot.reasonDetail,
+			},
+			tx,
+		);
+
+		if (skipKind === SESSION_SKIP_KINDS.TODAY) return;
+
+		// TOPIC + PERMANENT mutate the plan; PERMANENT additionally suspends
+		// the content row. Use the same tx so a plan-write failure rolls the
+		// slot write back instead of leaving a ghost skip.
+		const plan = await getActivePlan(userId, tx);
+		if (plan) {
+			if (slot.nodeId) {
+				await addSkipNode(plan.id, userId, slot.nodeId, tx);
+			} else if (fallbackDomain) {
+				await addSkipDomain(plan.id, userId, fallbackDomain, tx);
+			}
+		}
+
+		if (skipKind === SESSION_SKIP_KINDS.PERMANENT) {
+			if (slot.itemKind === SESSION_ITEM_KINDS.CARD && slot.cardId) {
+				await setCardStatus(slot.cardId, userId, CARD_STATUSES.SUSPENDED, tx);
+			} else if (slot.itemKind === SESSION_ITEM_KINDS.REP && slot.scenarioId) {
+				await setScenarioStatus(slot.scenarioId, userId, SCENARIO_STATUSES.SUSPENDED, tx);
+			}
+			// Node-start slots have no content row to suspend; the skipNode
+			// mutation above is the full persistence.
+		}
+	});
 }
 
 /**

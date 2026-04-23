@@ -120,10 +120,10 @@ const describedBy = $derived([hintId, errorId].filter(Boolean).join(' ') || unde
 		min-width: 0;
 	}
 
-	select:focus {
-		outline: none;
+	select:focus-visible {
+		outline: var(--ab-focus-ring-width) solid var(--ab-focus-ring);
+		outline-offset: var(--ab-focus-ring-offset);
 		border-color: var(--ab-color-primary);
-		box-shadow: 0 0 0 3px var(--ab-color-focus-ring);
 	}
 
 	select:disabled {

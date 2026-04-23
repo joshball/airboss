@@ -243,6 +243,37 @@ export async function getScenarios(
 	return await q;
 }
 
+/**
+ * Count-only companion to `getScenarios`. Accepts the same filter shape
+ * (minus `limit`/`offset`) and returns the total-matching-rows integer the
+ * browse page needs for pagination display. Shares clause assembly with
+ * `getScenarios` so list and count can't drift.
+ */
+export async function getScenariosCount(
+	userId: string,
+	filters: Omit<ScenarioFilters, 'limit' | 'offset'> = {},
+	db: Db = defaultDb,
+): Promise<number> {
+	const statusFilter = filters.status
+		? Array.isArray(filters.status)
+			? filters.status
+			: [filters.status]
+		: [SCENARIO_STATUSES.ACTIVE];
+
+	const clauses: SQL[] = [eq(scenario.userId, userId), inArray(scenario.status, statusFilter)];
+
+	if (filters.domain) clauses.push(eq(scenario.domain, filters.domain));
+	if (filters.difficulty) clauses.push(eq(scenario.difficulty, filters.difficulty));
+	if (filters.phaseOfFlight) clauses.push(eq(scenario.phaseOfFlight, filters.phaseOfFlight));
+	if (filters.sourceType) clauses.push(eq(scenario.sourceType, filters.sourceType));
+
+	const [row] = await db
+		.select({ total: sql<number>`count(*)::int` })
+		.from(scenario)
+		.where(and(...clauses));
+	return Number(row?.total ?? 0);
+}
+
 /** Load a single scenario by id scoped to the caller. */
 export async function getScenario(scenarioId: string, userId: string, db: Db = defaultDb): Promise<ScenarioRow | null> {
 	const [row] = await db

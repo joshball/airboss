@@ -294,6 +294,17 @@ export const CALIBRATION_MIN_BUCKET_COUNT = 5;
 export const CALIBRATION_TREND_WINDOW_DAYS = 30;
 
 /**
+ * Hard cap on how many confidence-tagged points the calibration loader reads
+ * per leg (review / rep). The calibration summary + trend are dominated by
+ * the last few thousand items; scanning every historical row for a long-
+ * running account turns a cheap dashboard panel into an unbounded full-user-
+ * history read. Cap generously (10k per leg, 20k combined) so the score and
+ * trend stay accurate on any realistic account while putting an upper bound
+ * on the memory footprint.
+ */
+export const CALIBRATION_MAX_HISTORY = 10_000;
+
+/**
  * Mastery threshold (days of FSRS stability) at which a card is considered
  * mastered for dashboard metrics. Matches spec SMI success criteria.
  */

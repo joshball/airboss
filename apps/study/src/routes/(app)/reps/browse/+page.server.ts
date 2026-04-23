@@ -1,5 +1,5 @@
 import { requireAuth } from '@ab/auth';
-import { getScenario, getScenarios, scenario } from '@ab/bc-study';
+import { getScenario, getScenarios, getScenariosCount } from '@ab/bc-study';
 import {
 	BROWSE_PAGE_SIZE,
 	CONTENT_SOURCE_VALUES,
@@ -15,9 +15,7 @@ import {
 	SCENARIO_STATUSES,
 	type ScenarioStatus,
 } from '@ab/constants';
-import { db } from '@ab/db';
-import { createLogger } from '@ab/utils';
-import { and, eq, inArray, type SQL, sql } from 'drizzle-orm';
+import { createLogger, narrow } from '@ab/utils';
 import type { PageServerLoad } from './$types';
 
 const log = createLogger('study:reps-browse');
@@ -25,11 +23,6 @@ const log = createLogger('study:reps-browse');
 /** Legacy query-string name for `flight-phase`. Accepted for old bookmarks;
  * TODO(retire): drop after 2026-07-01 once no logs show it being hit. */
 const LEGACY_PHASE_PARAM = 'phase';
-
-function narrow<T extends string>(value: string | null, allowed: readonly string[]): T | undefined {
-	if (!value) return undefined;
-	return allowed.includes(value) ? (value as T) : undefined;
-}
 
 export const load: PageServerLoad = async (event) => {
 	const user = requireAuth(event);
@@ -64,32 +57,26 @@ export const load: PageServerLoad = async (event) => {
 	const pageRaw = Number.parseInt(url.searchParams.get(QUERY_PARAMS.PAGE) ?? '1', 10);
 	const pageNum = Number.isFinite(pageRaw) && pageRaw >= 1 ? pageRaw : 1;
 
-	// Fetch one extra row to know whether another page exists.
-	const scenarios = await getScenarios(user.id, {
+	// Shared filter shape keeps list + count in lockstep; see `getScenariosCount`.
+	const filters = {
 		domain,
 		difficulty,
 		phaseOfFlight,
 		sourceType,
 		status,
-		limit: BROWSE_PAGE_SIZE + 1,
-		offset: (pageNum - 1) * BROWSE_PAGE_SIZE,
-	});
+	};
+
+	const [scenarios, total] = await Promise.all([
+		getScenarios(user.id, {
+			...filters,
+			limit: BROWSE_PAGE_SIZE + 1,
+			offset: (pageNum - 1) * BROWSE_PAGE_SIZE,
+		}),
+		getScenariosCount(user.id, filters),
+	]);
 
 	const hasMore = scenarios.length > BROWSE_PAGE_SIZE;
 	const visible = hasMore ? scenarios.slice(0, BROWSE_PAGE_SIZE) : scenarios;
-
-	// Total count for pagination "Page X of Y" / "Showing N-M of T". Mirrors
-	// the filter shape of `getScenarios` so the count matches what's listed.
-	// Inline rather than promoted to BC -- single consumer at the moment.
-	const countClauses: SQL[] = [eq(scenario.userId, user.id), inArray(scenario.status, [status])];
-	if (domain) countClauses.push(eq(scenario.domain, domain));
-	if (difficulty) countClauses.push(eq(scenario.difficulty, difficulty));
-	if (phaseOfFlight) countClauses.push(eq(scenario.phaseOfFlight, phaseOfFlight));
-	if (sourceType) countClauses.push(eq(scenario.sourceType, sourceType));
-	const [{ total }] = await db
-		.select({ total: sql<number>`count(*)::int` })
-		.from(scenario)
-		.where(and(...countClauses));
 	const totalPages = Math.max(1, Math.ceil(total / BROWSE_PAGE_SIZE));
 
 	// If the user was redirected here from /reps/new, surface the created

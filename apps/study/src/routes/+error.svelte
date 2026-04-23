@@ -1,0 +1,100 @@
+<script lang="ts">
+import { ROUTES } from '@ab/constants';
+import Button from '@ab/ui/components/Button.svelte';
+import { page } from '$app/state';
+
+/**
+ * Root error boundary. Catches any load-time error thrown outside the (app)
+ * layout -- typically 404s on unknown routes, `/login` / `/logout` failures,
+ * or server-level 500s. `(app)/+error.svelte` handles errors for routes
+ * under the authenticated shell.
+ *
+ * Error messages from thrown `error(status, ...)` calls are typed and user-
+ * safe; everything else (caught exceptions, raw `throw new Error(...)`)
+ * falls back to the generic string so stack traces / internal details
+ * never reach the browser.
+ */
+
+const STATUS_TITLES: Record<number, string> = {
+	400: 'Bad request',
+	401: 'Sign in required',
+	403: 'Not allowed',
+	404: 'Not found',
+	500: 'Something went wrong',
+	503: 'Service unavailable',
+};
+
+const status = $derived(page.status);
+const rawMessage = $derived(page.error?.message ?? '');
+const safeMessage = $derived(isUserSafeMessage(rawMessage) ? rawMessage : 'An unexpected error occurred.');
+const title = $derived(STATUS_TITLES[status] ?? 'Something went wrong');
+
+function isUserSafeMessage(msg: string): boolean {
+	if (!msg || msg.trim().length === 0) return false;
+	if (msg.length > 200) return false;
+	if (msg.startsWith('Error:')) return false;
+	if (msg.includes('\n')) return false;
+	if (/\bat\s+\w+\s*\(/.test(msg)) return false;
+	return true;
+}
+</script>
+
+<svelte:head>
+	<title>{status} -- {title} -- airboss</title>
+</svelte:head>
+
+<main class="wrap">
+	<div class="card">
+		<p class="status">{status}</p>
+		<h1>{title}</h1>
+		<p class="message">{safeMessage}</p>
+		<div class="actions">
+			<Button href={ROUTES.HOME} variant="primary">Back home</Button>
+		</div>
+	</div>
+</main>
+
+<style>
+	.wrap {
+		min-height: 100dvh;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: var(--ab-space-lg);
+	}
+
+	.card {
+		max-width: 32rem;
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		gap: var(--ab-space-sm);
+		text-align: center;
+	}
+
+	.status {
+		margin: 0;
+		font-family: var(--ab-font-family-mono);
+		font-size: var(--ab-font-size-sm);
+		color: var(--ab-color-fg-faint);
+		letter-spacing: var(--ab-letter-spacing-caps);
+	}
+
+	h1 {
+		margin: 0;
+		font-size: var(--ab-font-size-xl);
+		color: var(--ab-color-fg);
+	}
+
+	.message {
+		margin: 0;
+		color: var(--ab-color-fg-muted);
+	}
+
+	.actions {
+		display: flex;
+		justify-content: center;
+		gap: var(--ab-space-sm);
+		margin-top: var(--ab-space-sm);
+	}
+</style>

@@ -95,8 +95,8 @@ let {
 	}
 
 	.conf:focus-visible {
-		outline: none;
-		box-shadow: 0 0 0 3px var(--ab-color-focus-ring);
+		outline: var(--ab-focus-ring-width) solid var(--ab-focus-ring);
+		outline-offset: var(--ab-focus-ring-offset);
 	}
 
 	.conf.is-selected {
@@ -140,8 +140,8 @@ let {
 	}
 
 	.skip:focus-visible {
-		outline: none;
-		box-shadow: 0 0 0 3px var(--ab-color-focus-ring);
+		outline: var(--ab-focus-ring-width) solid var(--ab-focus-ring);
+		outline-offset: var(--ab-focus-ring-offset);
 		border-radius: var(--ab-radius-sm);
 	}
 
