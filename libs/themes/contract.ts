@@ -88,12 +88,15 @@ export interface DerivedPalette {
 // ---------------------------------------------------------------------
 
 /**
- * One typography slot. `family` is a pack family key (`sans | mono | base`
- * today; package #2 may add `serif | display`). All other fields are raw
+ * One typography slot. `family` is a pack family key
+ * (`sans | serif | mono | base | display`). All other fields are raw
  * CSS values the emitter pipes into `--type-{role}-{variant}-{field}`.
+ * Sizes are multiplied by `pack.adjustments[family]` at emit time.
  */
+export type TypeFamilyKey = 'sans' | 'serif' | 'mono' | 'base' | 'display';
+
 export interface TypeBundle {
-	family: string;
+	family: TypeFamilyKey;
 	size: string;
 	weight: number;
 	lineHeight: number;
@@ -151,15 +154,33 @@ export interface TypographyBundles {
  * curated packs (compact, display-serif, etc.) and refactors call
  * sites; do not invent new packs here.
  */
+/** Font stacks per family key. `base` is the default family used by
+ * bundles that don't specify one explicitly. `serif` and `display` are
+ * optional; if a bundle references them and the pack doesn't provide
+ * one, the emitter falls back to `base`. */
+export interface TypographyFamilies {
+	sans: string;
+	serif: string;
+	mono: string;
+	base: string;
+	display?: string;
+}
+
+/** Per-family size multipliers applied to every bundle whose `family`
+ * key matches. Defaults to 1.0 for any missing key. Used so visual
+ * weight stays consistent when a pack swaps in a serif or mono face. */
+export interface TypographyAdjustments {
+	sans: number;
+	serif: number;
+	mono: number;
+	base: number;
+	display?: number;
+}
+
 export interface TypographyPack {
 	packId: string;
-	families: {
-		sans: string;
-		mono: string;
-		base: string;
-	};
-	/** Optional global scale multiplier applied per-family. Default 1.0. */
-	scale?: number;
+	families: TypographyFamilies;
+	adjustments: TypographyAdjustments;
 	bundles: TypographyBundles;
 }
 

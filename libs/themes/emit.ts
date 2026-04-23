@@ -191,20 +191,53 @@ function paletteBlock(palette: Palette, isDark: boolean): string[] {
 	return lines;
 }
 
-function resolveBundleFamily(pack: TypographyPack, family: string): string {
+function resolveBundleFamily(pack: TypographyPack, family: TypeBundle['family']): string {
 	if (family === 'sans') return pack.families.sans;
+	if (family === 'serif') return pack.families.serif;
 	if (family === 'mono') return pack.families.mono;
 	if (family === 'base') return pack.families.base;
-	// Unknown family key -- treat as a raw CSS family stack.
-	return family;
+	if (family === 'display') return pack.families.display ?? pack.families.base;
+	return pack.families.base;
+}
+
+function resolveFamilyAdjustment(pack: TypographyPack, family: TypeBundle['family']): number {
+	if (family === 'sans') return pack.adjustments.sans;
+	if (family === 'serif') return pack.adjustments.serif;
+	if (family === 'mono') return pack.adjustments.mono;
+	if (family === 'base') return pack.adjustments.base;
+	if (family === 'display') return pack.adjustments.display ?? pack.adjustments.base;
+	return pack.adjustments.base;
+}
+
+// Match a CSS size token like `1.25rem`, `0.9375em`, `14px`. Anything
+// else (calc(), var(), unitless numbers, etc.) passes through wrapped
+// in a `calc(<value> * <mult>)` when a multiplier is active.
+const SIZE_PATTERN = /^(\d+(?:\.\d+)?)(rem|em|px|pt|%)$/;
+
+function applyFamilyAdjustment(size: string, multiplier: number): string {
+	if (multiplier === 1) return size;
+	const match = SIZE_PATTERN.exec(size.trim());
+	if (match) {
+		const raw = Number.parseFloat(match[1]);
+		const unit = match[2];
+		const scaled = raw * multiplier;
+		// Trim to 5 decimals; strip trailing zeros for deterministic,
+		// readable output (`0.95rem` not `0.95000rem`).
+		const rounded = Math.round(scaled * 1e5) / 1e5;
+		const cleaned = rounded.toString();
+		return `${cleaned}${unit}`;
+	}
+	return `calc(${size} * ${multiplier})`;
 }
 
 function typographyBundleBlock(pack: TypographyPack, role: string, variant: string, bundle: TypeBundle): string[] {
 	const prefix = `--type-${role}-${variant}`;
 	const family = resolveBundleFamily(pack, bundle.family);
+	const adjustment = resolveFamilyAdjustment(pack, bundle.family);
+	const size = applyFamilyAdjustment(bundle.size, adjustment);
 	return [
 		`\t${prefix}-family: ${family};`,
-		`\t${prefix}-size: ${bundle.size};`,
+		`\t${prefix}-size: ${size};`,
 		`\t${prefix}-weight: ${bundle.weight};`,
 		`\t${prefix}-line-height: ${bundle.lineHeight};`,
 		`\t${prefix}-tracking: ${bundle.tracking};`,
@@ -215,29 +248,34 @@ function typographyBlock(pack: TypographyPack): string[] {
 	const lines: string[] = [];
 	const push = (name: string, value: string) => lines.push(`\t${name}: ${value};`);
 	push('--font-family-sans', pack.families.sans);
+	push('--font-family-serif', pack.families.serif);
 	push('--font-family-mono', pack.families.mono);
 	push('--font-family-base', pack.families.base);
-	// Atomic type sizes / weights / line-heights / tracking. Package #2
-	// promotes all call sites to bundle tokens; until then both surfaces
-	// ship so page-level CSS keeps rendering.
-	push('--font-size-xs', '0.75rem');
-	push('--font-size-sm', '0.875rem');
-	push('--font-size-body', '0.9375rem');
-	push('--font-size-base', '1rem');
-	push('--font-size-lg', '1.125rem');
-	push('--font-size-xl', '1.375rem');
-	push('--font-size-2xl', '1.75rem');
-	push('--font-weight-regular', '400');
-	push('--font-weight-medium', '500');
-	push('--font-weight-semibold', '600');
-	push('--font-weight-bold', '700');
-	push('--line-height-tight', '1.2');
-	push('--line-height-normal', '1.5');
-	push('--line-height-relaxed', '1.65');
-	push('--letter-spacing-tight', '-0.01em');
-	push('--letter-spacing-normal', '0');
-	push('--letter-spacing-wide', '0.04em');
-	push('--letter-spacing-caps', '0.08em');
+	if (pack.families.display !== undefined) {
+		push('--font-family-display', pack.families.display);
+	}
+	// Atomic size / weight / line-height / tracking tokens sourced from
+	// bundle role tokens so a pack swap propagates without touching
+	// page-level CSS. The legacy-alias block then re-exports each
+	// `--ab-*` name against the same role tokens -- see legacy-aliases.ts.
+	push('--font-size-xs', 'var(--type-ui-caption-size)');
+	push('--font-size-sm', 'var(--type-ui-label-size)');
+	push('--font-size-body', 'var(--type-definition-body-size)');
+	push('--font-size-base', 'var(--type-reading-body-size)');
+	push('--font-size-lg', 'var(--type-reading-lead-size)');
+	push('--font-size-xl', 'var(--type-heading-2-size)');
+	push('--font-size-2xl', 'var(--type-heading-1-size)');
+	push('--font-weight-regular', 'var(--type-reading-body-weight)');
+	push('--font-weight-medium', 'var(--type-ui-control-weight)');
+	push('--font-weight-semibold', 'var(--type-heading-3-weight)');
+	push('--font-weight-bold', 'var(--type-heading-1-weight)');
+	push('--line-height-tight', 'var(--type-heading-1-line-height)');
+	push('--line-height-normal', 'var(--type-ui-label-line-height)');
+	push('--line-height-relaxed', 'var(--type-reading-body-line-height)');
+	push('--letter-spacing-tight', 'var(--type-heading-1-tracking)');
+	push('--letter-spacing-normal', 'var(--type-reading-body-tracking)');
+	push('--letter-spacing-wide', 'var(--type-ui-caption-tracking)');
+	push('--letter-spacing-caps', 'var(--type-ui-badge-tracking)');
 
 	// Bundle role tokens (--type-{role}-{variant}-{field}).
 	for (const variant of READING_VARIANTS) {

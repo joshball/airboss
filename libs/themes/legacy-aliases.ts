@@ -107,36 +107,37 @@ export const LEGACY_ALIAS_MAP: ReadonlyArray<readonly [string, string]> = [
 
 	// -------- typography: families --------
 	['--ab-font-family-sans', 'var(--font-family-sans)'],
+	['--ab-font-family-serif', 'var(--font-family-serif)'],
 	['--ab-font-family-mono', 'var(--font-family-mono)'],
 	['--ab-font-family-base', 'var(--font-family-base)'],
 	['--ab-font-mono', 'var(--font-family-mono)'],
 	['--ab-font-sans', 'var(--font-family-sans)'],
 
-	// -------- typography: sizes (atomic; bundles in #2) --------
-	['--ab-font-size-xs', '0.75rem'],
-	['--ab-font-size-sm', '0.875rem'],
-	['--ab-font-size-body', '0.9375rem'],
-	['--ab-font-size-base', '1rem'],
-	['--ab-font-size-lg', '1.125rem'],
-	['--ab-font-size-xl', '1.375rem'],
-	['--ab-font-size-2xl', '1.75rem'],
+	// -------- typography: sizes (role-token aliases; pack-aware) --------
+	['--ab-font-size-xs', 'var(--type-ui-caption-size)'],
+	['--ab-font-size-sm', 'var(--type-ui-label-size)'],
+	['--ab-font-size-body', 'var(--type-definition-body-size)'],
+	['--ab-font-size-base', 'var(--type-reading-body-size)'],
+	['--ab-font-size-lg', 'var(--type-reading-lead-size)'],
+	['--ab-font-size-xl', 'var(--type-heading-2-size)'],
+	['--ab-font-size-2xl', 'var(--type-heading-1-size)'],
 
-	// -------- typography: weights --------
-	['--ab-font-weight-regular', '400'],
-	['--ab-font-weight-medium', '500'],
-	['--ab-font-weight-semibold', '600'],
-	['--ab-font-weight-bold', '700'],
+	// -------- typography: weights (role-token aliases) --------
+	['--ab-font-weight-regular', 'var(--type-reading-body-weight)'],
+	['--ab-font-weight-medium', 'var(--type-ui-control-weight)'],
+	['--ab-font-weight-semibold', 'var(--type-heading-3-weight)'],
+	['--ab-font-weight-bold', 'var(--type-heading-1-weight)'],
 
-	// -------- typography: line-height --------
-	['--ab-line-height-tight', '1.2'],
-	['--ab-line-height-normal', '1.5'],
-	['--ab-line-height-relaxed', '1.65'],
+	// -------- typography: line-height (role-token aliases) --------
+	['--ab-line-height-tight', 'var(--type-heading-1-line-height)'],
+	['--ab-line-height-normal', 'var(--type-ui-label-line-height)'],
+	['--ab-line-height-relaxed', 'var(--type-reading-body-line-height)'],
 
-	// -------- typography: letter-spacing --------
-	['--ab-letter-spacing-tight', '-0.01em'],
-	['--ab-letter-spacing-normal', '0'],
-	['--ab-letter-spacing-wide', '0.04em'],
-	['--ab-letter-spacing-caps', '0.08em'],
+	// -------- typography: letter-spacing (role-token aliases) --------
+	['--ab-letter-spacing-tight', 'var(--type-heading-1-tracking)'],
+	['--ab-letter-spacing-normal', 'var(--type-reading-body-tracking)'],
+	['--ab-letter-spacing-wide', 'var(--type-ui-caption-tracking)'],
+	['--ab-letter-spacing-caps', 'var(--type-ui-badge-tracking)'],
 
 	// -------- spacing (core + legacy half-steps) --------
 	['--ab-space-hair', '0.0625rem'],
