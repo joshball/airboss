@@ -1,4 +1,5 @@
 import { ROUTES, type Role } from '@ab/constants';
+import { APPEARANCE_COOKIE, parseAppearancePreference } from '@ab/themes';
 import { createErrorHandler, createLogger } from '@ab/utils';
 import type { Handle, HandleServerError } from '@sveltejs/kit';
 import { building, dev } from '$app/environment';
@@ -53,6 +54,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 	const start = performance.now();
 	const requestId = resolveRequestId(event.request);
 	event.locals.requestId = requestId;
+	event.locals.appearance = parseAppearancePreference(event.cookies.get(APPEARANCE_COOKIE));
 
 	let response: Response;
 
