@@ -62,17 +62,17 @@ let {
 	.tile {
 		display: flex;
 		flex-direction: column;
-		gap: var(--ab-space-2xs);
-		padding: var(--ab-space-sm) var(--ab-space-md);
-		background: var(--ab-color-surface-raised);
-		border: 1px solid var(--ab-color-border);
-		border-radius: var(--ab-radius-sm);
+		gap: var(--space-2xs);
+		padding: var(--space-sm) var(--space-md);
+		background: var(--surface-raised);
+		border: 1px solid var(--edge-default);
+		border-radius: var(--radius-sm);
 		color: inherit;
 		text-decoration: none;
 		min-width: 0;
 		transition:
-			background var(--ab-transition-fast),
-			border-color var(--ab-transition-fast);
+			background var(--motion-fast),
+			border-color var(--motion-fast);
 	}
 
 	.tile.linked {
@@ -80,38 +80,38 @@ let {
 	}
 
 	.tile.linked:hover {
-		background: var(--ab-color-surface-sunken);
-		border-color: var(--ab-color-border-strong);
+		background: var(--surface-sunken);
+		border-color: var(--edge-strong);
 	}
 
 	.tile.linked:focus-visible {
-		outline: var(--ab-focus-ring-width) solid var(--ab-focus-ring);
-		outline-offset: var(--ab-focus-ring-offset);
+		outline: var(2px) solid var(--focus-ring);
+		outline-offset: var(2px);
 	}
 
 	.label {
-		font-size: var(--ab-font-size-xs);
-		color: var(--ab-color-fg-faint);
+		font-size: var(--font-size-xs);
+		color: var(--ink-faint);
 		text-transform: uppercase;
-		letter-spacing: var(--ab-letter-spacing-caps);
-		font-weight: var(--ab-font-weight-semibold);
+		letter-spacing: var(--letter-spacing-caps);
+		font-weight: var(--font-weight-semibold);
 	}
 
 	.value {
-		font-size: var(--ab-font-size-xl);
-		font-weight: var(--ab-font-weight-bold);
+		font-size: var(--font-size-xl);
+		font-weight: var(--font-weight-bold);
 		font-variant-numeric: tabular-nums;
-		line-height: var(--ab-line-height-tight);
-		color: var(--ab-color-fg);
+		line-height: var(--line-height-tight);
+		color: var(--ink-body);
 	}
 
 	.sub {
-		font-size: var(--ab-font-size-xs);
-		color: var(--ab-color-fg-subtle);
+		font-size: var(--font-size-xs);
+		color: var(--ink-subtle);
 	}
 
-	.t-primary .value { color: var(--ab-color-primary); }
-	.t-success .value { color: var(--ab-color-success); }
-	.t-warning .value { color: var(--ab-color-warning); }
-	.t-danger .value  { color: var(--ab-color-danger); }
+	.t-primary .value { color: var(--action-default); }
+	.t-success .value { color: var(--signal-success); }
+	.t-warning .value { color: var(--signal-warning); }
+	.t-danger .value  { color: var(--action-hazard); }
 </style>
