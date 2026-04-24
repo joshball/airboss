@@ -1,183 +1,170 @@
 # Enforcement playbook
 
-Every prior iteration meant to add enforcement and didn't. airboss-v1 left behind eleven deleted "adoption plan" docs because documentation doesn't enforce anything. The tools below are **not optional** — they ship *with* the architecture, not after.
+The tools below are not optional. They ship with the architecture, not after. Every prior iteration tried to adopt a theme system by documentation; none stuck. Option A (PRs #78 - #85) landed the lint, codemod, and test surface in the same wave as the role-token vocabulary, and the system has held since.
 
 If you can't write the lint rule, you haven't defined the vocabulary yet.
 
+Read [02-ARCHITECTURE.md](02-ARCHITECTURE.md) for what the system looks like, [04-VOCABULARY.md](04-VOCABULARY.md) for the token catalog, and [05-OVERHAUL-2026-04.md](05-OVERHAUL-2026-04.md) for how the migration landed.
+
 ## What enforcement covers
 
-| Concern                                      | Tool                                | When                            |
-| -------------------------------------------- | ----------------------------------- | ------------------------------- |
-| Pages/components use hardcoded colors        | Lint rule (Biome custom / ESLint)   | Every save + CI                 |
-| Pages/components use hardcoded spacing       | Lint rule                           | Every save + CI                 |
-| Pages/components use hardcoded transitions   | Lint rule                           | Every save + CI                 |
-| Token names exist in vocabulary              | Lint rule reads `vocab.ts`          | Every save + CI                 |
-| Contrast ratios meet WCAG AA                 | Vitest test per (theme × appearance × role-pair) | CI      |
-| Light/dark palettes parse as valid OKLCH     | Vitest test per palette             | CI                              |
-| No duplicate theme IDs in the registry       | Registry runtime check              | App boot (dev) + test suite     |
-| `data-theme` + `data-appearance` in first paint | Playwright test                  | CI                              |
-| No FOUC on route change                      | Playwright test                     | CI                              |
-| Migrations happen                            | Codemod + CI fail on violations     | PR gates                        |
+| Concern                                         | Tool                                                                           | When                        |
+| ----------------------------------------------- | ------------------------------------------------------------------------------ | --------------------------- |
+| Hardcoded color literals in components          | `tools/theme-lint/` (standalone Bun scanner)                                   | `bun run check` + CI        |
+| Hardcoded spacing/radius/font-size in `<style>` | `tools/theme-lint/` raw-length rule                                            | `bun run check` + CI        |
+| Hardcoded transition/animation durations        | `tools/theme-lint/` raw-duration rule                                          | `bun run check` + CI        |
+| Unknown `var(--*)` references                   | `tools/theme-lint/` unknown-token rule (reads `vocab.ts` + `emit.ts` prefixes) | `bun run check` + CI        |
+| Contrast ratios meet WCAG AA                    | `libs/themes/__tests__/contrast-matrix.test.ts`                                | `bun run test` + CI         |
+| Light/dark palettes parse                       | `libs/themes/__tests__/palette-parse.test.ts`                                  | `bun run test` + CI         |
+| Emit pipeline is deterministic                  | `libs/themes/__tests__/emit.test.ts`                                           | `bun run test` + CI         |
+| No duplicate theme IDs                          | `registerTheme` throws; registry test enforces                                 | App boot (dev) + test suite |
+| `data-theme` + `data-appearance` before paint   | `tests/e2e/theme-fouc.spec.ts` (Playwright)                                    | `bun run test e2e` + CI     |
+| Migration of existing literals                  | `tools/theme-codemod/`                                                         | One-off, per folder         |
 
-## 1. Lint rule: no hardcoded visual values in `<style>` blocks
+## 1. Lint rule: `tools/theme-lint/`
 
-**What it blocks:**
+A standalone Bun script. No Biome custom rule, no ESLint plugin. It tokenizes CSS declarations and runs a small set of pure rules against each declaration's value.
 
-- `#rrggbb`, `#rgb`, `rgb(`, `rgba(` (except `transparent`, `currentColor`, `inherit`, variables)
-- Named CSS colors (`white`, `black`, `red`, etc.)
-- `\d+(\.\d+)?rem|px|em` as values for any property in the blocklist:
-  - `color`, `background*`, `border*`, `outline*`
-  - `padding*`, `margin*`, `gap`, `row-gap`, `column-gap`
-  - `font-size`, `font-family`, `font-weight`, `line-height`, `letter-spacing`
-  - `border-radius`
-  - `box-shadow`, `text-shadow`
-  - `transition*`, `animation-duration`
-  - `min-width`, `max-width`, `width`, `min-height`, `max-height`, `height` (at page/layout level — inside primitives is fine)
-- Hardcoded millisecond durations
-- `font-family` with actual family names (must use `var(--type-*)` or `var(--font-family-*)`)
+Entry point: `bun run lint:theme` (aliased from `bun tools/theme-lint/bin.ts`).
 
-**What it allows:**
+Scope:
 
-- `1px solid` borders (the `1px` is a convention-level value)
-- `0` (dimensionless)
-- Percentages, `auto`, CSS keywords
-- Values inside `var(...)` calls
-- Values inside comments
+- Scans `apps/**/*.svelte`, `apps/**/*.css`, `libs/ui/**/*.svelte`, `libs/ui/**/*.css`.
+- Excludes `libs/themes/**` (tokens are defined there), `node_modules`, `.svelte-kit`, `dist`, `build`, test fixtures for the lint + codemod tools.
 
-**Exception mechanism:** a `/* lint-disable-token-enforcement: <reason> */` comment suppresses the next rule. Reviewers must justify every exception.
+Rules (see `tools/theme-lint/rules.ts`):
 
-**Where to implement:** start as a simple AST pass in a pre-commit hook or a custom Biome plugin. Keep it in `tools/theme-lint/` so it's versioned with the repo.
+| Rule ID               | What it catches                                                                                                      |
+| --------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| `hex-color`           | `#rrggbb`, `#rgb`, `#rrggbbaa` on any property                                                                       |
+| `rgb-color`           | `rgb(...)` / `rgba(...)` literals                                                                                    |
+| `hsl-color`           | `hsl(...)` / `hsla(...)` literals                                                                                    |
+| `oklch-literal`       | `oklch(...)` literals (palette OKLCH values belong in `libs/themes`)                                                 |
+| `named-color`         | `white`, `black`, `red`, ... on color-carrying properties                                                            |
+| `raw-length`          | `Nrem`, `Nem`, `Npx` on spacing / sizing / radius / font properties (`1px` allowed for hairlines, `0` always allowed) |
+| `raw-duration`        | Hardcoded `Nms` / `Ns` in `transition-*` / `animation-*`                                                             |
+| `font-family-literal` | `font-family` without `var(...)` or an inherit keyword                                                               |
+| `unknown-token`       | `var(--foo)` where `--foo` is not in `vocab.ts` or an emitted prefix family                                          |
 
-**Scope:** runs on `.svelte`, `.css`, `.scss` files in `apps/**` and `libs/ui/**`. Excluded: `libs/themes/**` (that's where values are *defined*), `libs/themes/<app>/<theme>/**` (obviously), test fixtures.
+Known-token discovery:
 
-## 2. Codemod: rewrite existing hardcoded values
+- Every value of `TOKENS` from `libs/themes/vocab.ts`.
+- An allowlist of emit-synthesized atomics (`--font-size-*`, `--font-weight-*`, `--line-height-*`, `--letter-spacing-*`, `--control-*`).
+- Prefix families for bundle / control / sim tokens:
+  - `--type-{reading|heading|ui|code|definition}-{variant}-{field}`
+  - `--button-{variant}-*`, `--button-height-{sm|md|lg}`
+  - `--input-{variant}-*`, `--input-height-{sm|md|lg}`
+  - `--badge-height-{sm|md|lg}`
+  - `--dialog-{scrim|bg|edge|radius|shadow}`
+  - `--table-{header-bg|header-ink|row-edge|row-bg-hover|row-bg-selected}`
+  - `--underline-offset-*`
+  - `--sim-*` (populated by sim-surface themes only)
 
-Lint rule tells you what's broken; codemod fixes it. Run once per folder during migration.
+Exception mechanism:
 
-**Mappings it should know:**
-
-```text
-white, #ffffff, #fff        -> var(--surface-page) | var(--ink-inverse)   [context-dependent]
-black, #000000, #000        -> var(--ink-body) | var(--surface-page) in dark
-\d+px border-radius         -> nearest var(--radius-*)
-\d+(ms|s) transition        -> var(--motion-fast) or var(--motion-normal)
-raw rem values              -> nearest var(--space-*) or var(--type-*)
+```css
+/* lint-disable-token-enforcement: <reason> */
+animation: spin 800ms linear infinite;
 ```
 
-Context-dependent cases (is this `white` a background fill or a text-on-dark color?) the codemod shouldn't guess. Instead it:
+The comment suppresses every violation on the next non-blank line. The reason is required - a bare `/* lint-disable-token-enforcement: */` is ignored. Reviewers must justify every exception.
 
-- Flags the line
-- Inserts a `/* TODO-theme: background-or-foreground? */` comment
-- Refuses to auto-fix
+Grandfather ignore file: `tools/theme-lint/ignore.txt`. Each non-blank, non-comment line is `<relative-path>:<line>:<rule>` and suppresses a single known violation. Entries drop as migrations land. The file shrank to zero during Option A and stays empty on main as of the `--motion-slow` / `--ink-inverse-subtle` clean-up; any new entry is a signal that a role token is missing, not that enforcement should be relaxed.
 
-The human decides; the codemod handles the mechanical cases.
+CLI usage:
 
-**Implementation:** a TypeScript script using the Svelte compiler AST. Ships in `tools/theme-codemod/`. Takes a glob, writes changes in place, leaves a diff for review.
-
-## 3. Contrast tests
-
-Every theme × appearance × role-pair must meet WCAG AA (4.5:1 for body, 3:1 for large text and non-text elements).
-
-```ts
-// libs/themes/__tests__/contrast.test.ts
-import { describe, it, expect } from 'vitest';
-import { listThemes, resolveTheme, contrast } from '@ab/themes';
-
-const requiredPairs = [
-  { fg: 'ink.body', bg: 'surface.page', ratio: 4.5, reason: 'body text' },
-  { fg: 'ink.body', bg: 'surface.panel', ratio: 4.5 },
-  { fg: 'ink.muted', bg: 'surface.page', ratio: 4.5 },
-  { fg: 'action.default.ink', bg: 'action.default', ratio: 4.5, reason: 'button label on solid' },
-  { fg: 'signal.danger.ink', bg: 'signal.danger.wash', ratio: 4.5 },
-  { fg: 'signal.success.ink', bg: 'signal.success.wash', ratio: 4.5 },
-  { fg: 'edge.default', bg: 'surface.page', ratio: 3.0, reason: 'border visibility' },
-  // ... 20-30 pairs total
-];
-
-describe.each(listThemes())('$id', (theme) => {
-  describe.each(theme.appearances)('%s appearance', (appearance) => {
-    const resolved = resolveTheme(theme, appearance);
-    describe.each(requiredPairs)('$fg on $bg ≥ $ratio', (pair) => {
-      it(pair.reason ?? '', () => {
-        const ratio = contrast(get(resolved, pair.fg), get(resolved, pair.bg));
-        expect(ratio).toBeGreaterThanOrEqual(pair.ratio);
-      });
-    });
-  });
-});
+```bash
+bun run lint:theme                  # lint the whole repo
+bun tools/theme-lint/bin.ts apps/study    # lint one subtree
+bun tools/theme-lint/bin.ts --fix-ignore  # rewrite ignore.txt to current violations
+bun tools/theme-lint/bin.ts --json        # machine-readable output
 ```
 
-**The test fails on regression.** Someone adds a new theme or tweaks a palette and breaks a ratio — CI catches it immediately. No theme ships until this test is green.
+## 2. Codemod: `tools/theme-codemod/`
 
-## 4. Palette parse tests
+Companion tool to the lint rule. Lint tells you what's broken; codemod fixes the mechanical cases. Run once per folder during migration.
 
-OKLCH strings are easy to typo. Parse every color in every theme at test time:
+Entry point: `bun run codemod:theme`.
 
-```ts
-describe.each(listThemes())('$id palette parses', (theme) => {
-  it.each(['light', 'dark'])('%s', (appearance) => {
-    if (!theme.palette[appearance]) return;
-    for (const [path, value] of flattenPalette(theme.palette[appearance]!)) {
-      expect(parseOklch(value), `${path}: ${value}`).toBeDefined();
-    }
-  });
-});
-```
+Passes (run in this order -- see `runAllTransforms` in `tools/theme-codemod/transforms.ts`):
 
-## 5. Vocabulary guard
+| Pass                        | Input                                                  | Output                                                                                                      |
+| --------------------------- | ------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------- |
+| `rewriteLegacyAliases`      | `var(--ab-foo)` references                             | Historical; the `--ab-*` alias surface retired in #85 so this pass is a no-op today. Kept for archaeology   |
+| `rewriteRadiusLiterals`     | `border-radius: Npx` / `border-top-left-radius: ...`   | `var(--radius-{rung})` (nearest rung)                                                                       |
+| `rewriteMotionLiterals`     | `transition`, `transition-duration`, `animation-*`     | `var(--motion-fast)` / `--motion-normal)` / `--motion-slow)` (within 60ms of a known rung; else left as-is) |
+| `rewriteFontFamilyLiterals` | `font-family: <known-stack>`                           | `var(--font-family-mono)` / `--font-family-sans)`                                                           |
+| `annotateAmbiguousColors`   | `color`/`background`/`border`/`fill`/`stroke` literals | Inserts `/* TODO-theme: pick a role token for this literal. */` inline; never auto-rewrites                 |
 
-The `vocab.ts` file is the master list of legal token names. The lint rule above reads from it. When someone uses `var(--ink-wrong)` and no such token exists, lint fails with a suggestion (`did you mean --ink-muted?`).
+Context-dependent cases (is this `#ffffff` a background or a text-on-dark color?) the codemod refuses to guess. It flags the line with a TODO and leaves the human to pick the right role token.
 
-Implementation: token names live in a `TOKENS` object in `vocab.ts`; lint reads the object and cross-references every `var(--*)` reference in the codebase. Typos fail instantly.
+Implementation: TypeScript + regex over the source text. Ships in `tools/theme-codemod/`. Takes a glob, writes changes in place, leaves a diff for review. Tests in `tools/theme-codemod/__tests__/` cover every pass.
 
-## 6. Appearance toggle persistence test (Playwright)
+## 3. Contrast matrix
 
-```ts
-test('appearance preference survives reload', async ({ page }) => {
-  await page.goto('/');
-  await page.click('[data-test="appearance-toggle-dark"]');
-  await expect(page.locator('html')).toHaveAttribute('data-appearance', 'dark');
-  await page.reload();
-  await expect(page.locator('html')).toHaveAttribute('data-appearance', 'dark');
-});
-```
+File: `libs/themes/__tests__/contrast-matrix.test.ts`.
+
+Enforces WCAG AA (4.5:1 for body text, 3:1 for large text and non-text elements) on 11 required role-pairs per `(theme, appearance)`. Failures block the suite. The pairs cover the usual high-leverage combinations: body ink on page / panel surface, action-default ink on action-default fill, `signal-*` ink on `signal-*` wash, edge visibility on page, focus ring on page.
+
+An advisory list logs below-bar ratios without failing. This catches "the pair is not in the required matrix but the contrast is poor anyway" without blocking, so regressions stay visible during theme tuning.
+
+AAA is not enforced. Aviation UX prefers legibility but not at the cost of limiting the palette; pushing AAA across every role would force the palette into a narrow ink-on-white corner.
+
+## 4. Palette parse
+
+File: `libs/themes/__tests__/palette-parse.test.ts`.
+
+Walks every theme's light and dark palettes and confirms every color string parses. OKLCH strings are easy to typo -- a single `/` where a space belongs and the value silently reverts to the browser default.
+
+## 5. Emit determinism
+
+File: `libs/themes/__tests__/emit.test.ts`.
+
+Asserts:
+
+- Two successive `emitAllThemes()` calls produce identical strings. Catches non-deterministic ordering (Object.keys order shifts between bun versions, anything).
+- Every `(theme, appearance)` pair emits its `[data-theme=...][data-appearance=...]` selector block.
+- A `:root` fallback block exists (for pre-hydration body paint).
+- Zero `--ab-*` aliases (Option A retired them; any reappearance is a regression).
+- Every core role token (`--ink-body`, `--surface-page`, `--action-default-hover`, `--motion-normal`, `--radius-md`, ...) appears.
+- Every action role emits its full state set (base / hover / active / wash / edge / ink / disabled).
+- Every typography bundle emits every field.
+- Every button / input variant emits every slot.
+
+## 6. Vocabulary guard
+
+`vocab.ts` is the master list of legal role-token names. The lint rule reads it at startup (`buildKnownTokens`). Any `var(--foo)` the vocab doesn't recognize fails the `unknown-token` rule with the offending name. Typos fail instantly and point at the source of truth.
 
 ## 7. FOUC test
 
-```ts
-test('no appearance flash on first paint', async ({ page }) => {
-  await page.addInitScript(() => {
-    document.cookie = 'appearance=dark; path=/';
-  });
-  await page.goto('/', { waitUntil: 'domcontentloaded' });
-  // Before hydration, <html> must already carry data-appearance=dark.
-  await expect(page.locator('html')).toHaveAttribute('data-appearance', 'dark');
-});
-```
+File: `tests/e2e/theme-fouc.spec.ts` (Playwright).
 
-The pre-hydration script runs before `domcontentloaded` completes. If it doesn't set the attribute, this test fails and FOUC is back.
+Asserts that when `DOMContentLoaded` fires, `<html>` already has non-empty `data-theme` and `data-appearance` attributes, and that the appearance cookie (`appearance=dark` / `appearance=light`) is honored on first paint. Covers the study, flightdeck, and sim (forced-dark) routes. The pre-hydration script in `apps/study/src/app.html` runs before `domcontentloaded` and sets the attributes from the cookie + `prefers-color-scheme`; if it regresses, the test fails and we see FOUC again.
+
+Run locally: `bun run test e2e tests/e2e/theme-fouc.spec.ts`. Full e2e pass: `bun run test e2e`. CI runs e2e as a gating check alongside unit tests. Browser install is one-time: `bun run test e2e:install`.
 
 ## 8. CI gates
 
-Summary of what blocks a PR from merging:
+Summary of what blocks a PR:
 
-- `bun run lint:theme` — lint rule, 0 violations
-- `bun run test:unit libs/themes` — contrast + palette parse + derivation unit tests
-- `bun run test:e2e theme` — Playwright appearance + FOUC tests
-- TypeScript strict mode — theme contract violations surface at compile time
+- `bun run check` -- runs svelte-check, Biome, the reference validator, the knowledge-graph dry-run, `theme-lint` (0 violations tolerated outside `ignore.txt`), and the help-id validator.
+- `bun run test` -- Vitest unit suite (contrast, palette-parse, derive, emit, registry, resolve, typography-packs).
+- `bun run test e2e` -- Playwright smoke + auth + theme-FOUC.
+- TypeScript strict mode -- theme contract violations surface at compile time.
 
-All four must pass. No "critical/major/minor" classification on theme violations — the vocabulary is either followed or it isn't.
+All of the above must pass. There is no "critical / major / minor" classification on theme violations -- the vocabulary is either followed or it isn't.
 
-## Adoption strategy
+## Adoption strategy (history)
 
-The past seven iterations suggest this order:
+The adoption sequence that shipped:
 
-1. **Land the lint rule with a grandfather list.** Every existing violation goes into an ignore file. New code can't add violations; old code stays as-is until migrated.
-2. **Run the codemod folder-by-folder.** Each folder becomes one PR. Ignore file shrinks with each merge.
-3. **Delete the ignore file when empty.** The lint rule now prevents backslide indefinitely.
+1. #78 - #82: land the role-token vocabulary, emit pipeline, and compat-alias shim. Theme-lint lands with an ignore file the size of the pre-existing violation set.
+2. #83 - #84: run the codemod folder-by-folder. Each PR is one surface or app. Ignore file shrinks every merge.
+3. #85: delete the `--ab-*` compat shim and its allowlist. Every app now consumes role tokens directly. Ignore file collapses to a handful of primitive-level exceptions.
+4. Post-overhaul clean-up (this doc's current wave): retire the last three ignore entries by promoting them to role tokens (`--motion-slow`, `--ink-inverse-subtle`). Ignore file empty.
 
-Without the ignore file, you can't land the lint rule without migrating the whole codebase first — that's a big-bang migration nobody ships. With it, you get enforcement from day one and incremental adoption from day one.
+The pattern is general: you can't land the lint rule without an ignore file (that's a big-bang migration nobody ships), but once it's landed, adoption stops being a milestone and becomes continuous enforcement.
 
 ## Why this beats documentation
 
-airboss-v1's graveyard of eleven deleted adoption docs happened because documentation is advice. A lint rule is a command. Developers read advice and defer; developers read red squigglies and fix. This is the single biggest lever for making the system stick.
+Documentation is advice. A lint rule is a command. Developers read advice and defer; developers read red squigglies and fix. Of all the investments a theme system can make, the lint rule is the single biggest lever for making the vocabulary stick.
