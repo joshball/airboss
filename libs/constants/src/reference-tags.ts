@@ -33,6 +33,7 @@ export const REFERENCE_SOURCE_TYPES = {
 	SOP: 'sop',
 	AUTHORED: 'authored',
 	DERIVED: 'derived',
+	SECTIONAL: 'sectional',
 } as const;
 
 export type ReferenceSourceType = (typeof REFERENCE_SOURCE_TYPES)[keyof typeof REFERENCE_SOURCE_TYPES];
@@ -56,6 +57,7 @@ export const SOURCE_TYPE_LABELS: Record<ReferenceSourceType, string> = {
 	[REFERENCE_SOURCE_TYPES.SOP]: 'SOP',
 	[REFERENCE_SOURCE_TYPES.AUTHORED]: 'Authored',
 	[REFERENCE_SOURCE_TYPES.DERIVED]: 'Derived',
+	[REFERENCE_SOURCE_TYPES.SECTIONAL]: 'VFR Sectional',
 };
 
 /**

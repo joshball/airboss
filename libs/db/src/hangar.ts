@@ -25,6 +25,30 @@ import { SCHEMAS } from '@ab/constants';
 import { boolean, index, integer, jsonb, pgSchema, text, timestamp } from 'drizzle-orm/pg-core';
 import { timestamps } from './columns';
 
+/**
+ * Shape of the `media` jsonb column on `hangar.source` (wp-hangar-non-textual).
+ * Mirrors `SourceMedia` in `@ab/aviation`; duplicated here so `@ab/db` stays
+ * free of any `@ab/aviation` dependency.
+ */
+export interface HangarSourceMedia {
+	thumbnailPath: string;
+	thumbnailSha256: string;
+	thumbnailSizeBytes: number;
+	archiveEntries: ReadonlyArray<{ name: string; sizeBytes: number }>;
+	generator: string;
+}
+
+/**
+ * Shape of the `edition` jsonb column on `hangar.source` (wp-hangar-non-textual).
+ * Mirrors `SourceEdition` in `@ab/aviation`.
+ */
+export interface HangarSourceEdition {
+	effectiveDate: string;
+	editionNumber: number | null;
+	resolvedUrl: string;
+	resolvedAt: string;
+}
+
 export const hangarSchema = pgSchema(SCHEMAS.HANGAR);
 
 // -------- reference mirror --------
@@ -95,6 +119,18 @@ export const hangarSource = hangarSchema.table(
 		sizeBytes: integer('size_bytes'),
 		/** Locator shape hint for UI forms (see `SourceCitation.locator`). */
 		locatorShape: jsonb('locator_shape').$type<Record<string, unknown> | null>(),
+		/**
+		 * Per-kind media sidecar; populated for `binary-visual` sources at ingest
+		 * time (thumbnail path, archive manifest, generator tool used). Null for
+		 * text sources. See wp-hangar-non-textual design.md.
+		 */
+		media: jsonb('media').$type<HangarSourceMedia | null>(),
+		/**
+		 * Edition tracking for sources with scheduled refreshes (sectionals,
+		 * plates, ACS revisions). Null until the first fetch captures the
+		 * effective date + resolved URL.
+		 */
+		edition: jsonb('edition').$type<HangarSourceEdition | null>(),
 		dirty: boolean('dirty').notNull().default(false),
 		updatedBy: text('updated_by').references(() => bauthUser.id, { onDelete: 'set null', onUpdate: 'cascade' }),
 		deletedAt: timestamp('deleted_at', { withTimezone: true }),

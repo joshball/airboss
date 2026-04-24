@@ -29,7 +29,15 @@ export {
 	type TagQuery,
 } from './registry';
 export type { Reference, VerbatimBlock } from './schema/reference';
-export type { Source, SourceCitation, SourceExtractor } from './schema/source';
+export {
+	isSourceEdition,
+	isSourceMedia,
+	type Source,
+	type SourceCitation,
+	type SourceEdition,
+	type SourceExtractor,
+	type SourceMedia,
+} from './schema/source';
 export {
 	isAviationTopic,
 	isCertApplicability,
