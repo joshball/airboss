@@ -13,6 +13,7 @@ import {
 	type RelevancePriority,
 	ROUTES,
 } from '@ab/constants';
+import PageHelp from '@ab/help/ui/PageHelp.svelte';
 import { humanize, renderMarkdown } from '@ab/utils';
 import type { PageData } from './$types';
 
@@ -83,7 +84,10 @@ function renderPhase(body: string | null): string {
 	</nav>
 
 	<header class="hd">
-		<h1>{node.title}</h1>
+		<div class="title-row">
+			<h1>{node.title}</h1>
+			<PageHelp pageId="knowledge-graph" />
+		</div>
 		<div class="tags">
 			<span class="badge domain">{domainLabel(node.domain)}</span>
 			{#each node.crossDomains as d (d)}
@@ -296,6 +300,13 @@ function renderPhase(body: string | null): string {
 
 	.crumb a:hover {
 		text-decoration: underline;
+	}
+
+	.title-row {
+		display: flex;
+		align-items: center;
+		gap: var(--space-sm);
+		flex-wrap: wrap;
 	}
 
 	.hd h1 {

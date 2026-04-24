@@ -7,6 +7,7 @@ import {
 	QUERY_PARAMS,
 	ROUTES,
 } from '@ab/constants';
+import PageHelp from '@ab/help/ui/PageHelp.svelte';
 import Banner from '@ab/ui/components/Banner.svelte';
 import { humanize, renderMarkdown } from '@ab/utils';
 import { replaceState } from '$app/navigation';
@@ -130,7 +131,10 @@ function domainLabel(slug: string): string {
 	</nav>
 
 	<header class="hd">
-		<h1>{node.title}</h1>
+		<div class="title-row">
+			<h1>{node.title}</h1>
+			<PageHelp pageId="knowledge-graph" />
+		</div>
 		<p class="sub">Guided walkthrough of the seven-phase content model. {domainLabel(node.domain)}.</p>
 	</header>
 
@@ -243,6 +247,13 @@ function domainLabel(slug: string): string {
 
 	.crumb a:hover {
 		text-decoration: underline;
+	}
+
+	.title-row {
+		display: flex;
+		align-items: center;
+		gap: var(--space-sm);
+		flex-wrap: wrap;
 	}
 
 	.hd h1 {

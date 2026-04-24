@@ -15,6 +15,7 @@ import {
 	type RelevancePriority,
 	ROUTES,
 } from '@ab/constants';
+import PageHelp from '@ab/help/ui/PageHelp.svelte';
 import { humanize } from '@ab/utils';
 import { page } from '$app/state';
 import type { PageData } from './$types';
@@ -73,7 +74,10 @@ const resetHref = $derived.by(() => {
 <section class="page">
 	<header class="hd">
 		<div>
-			<h1>Knowledge</h1>
+			<div class="title-row">
+				<h1>Knowledge</h1>
+				<PageHelp pageId="knowledge-graph" />
+			</div>
 			<p class="sub">
 				The aviation knowledge graph. {totalNodes} node{totalNodes === 1 ? '' : 's'} grouped by domain.
 			</p>
@@ -178,6 +182,13 @@ const resetHref = $derived.by(() => {
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-xl);
+	}
+
+	.title-row {
+		display: flex;
+		align-items: center;
+		gap: var(--space-sm);
+		flex-wrap: wrap;
 	}
 
 	.hd h1 {
