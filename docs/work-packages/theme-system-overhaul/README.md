@@ -17,17 +17,18 @@ Derived from seven prior theme-system iterations. See [docs/platform/theme-syste
 - **`airboss/default`** — shared base both themes inherit from.
 - **`sim/glass`** — reserved for when sim theme work lands (package #7).
 
-## The seven packages
+## The packages
 
-| # | Package                          | Depends on |
-| - | -------------------------------- | ---------- |
-| 1 | [theme-foundation](01-theme-foundation/) — contract + vocabulary + directory restructure + emission + registry + pre-hydration + primitive rename | — |
-| 2 | [theme-typography-packs](02-theme-typography-packs/) — semantic bundles replace atomic font tokens | #1 |
-| 3 | [theme-enforcement](03-theme-enforcement/) — lint rule, codemod, contrast tests, CI gates | #1, #2 |
-| 4 | [ui-primitives](04-ui-primitives/) — contract fixes + new primitives (Dialog, FormField, Checkbox, Radio, Table, Spinner, Divider, Tabs) | #1 (can run parallel with #2, #3) |
-| 5 | [study-page-migration](05-study-page-migration/) — seven per-folder sub-PRs, swap to primitives, replace every hardcoded value | #3, #4 |
-| 6 | [appearance-dark-mode](06-appearance-dark-mode/) — real dark palettes + toggle + cookie | #5 |
-| 7 | [sim-theme-glass](07-sim-theme-glass/) — deferred until sim work resumes | deferred |
+| # | Package                          | Status | Depends on |
+| - | -------------------------------- | ------ | ---------- |
+| 1 | [theme-foundation](01-theme-foundation/) — contract + vocabulary + directory restructure + emission + registry + pre-hydration + primitive rename | shipped (#78, #79) | — |
+| 2 | [theme-typography-packs](02-theme-typography-packs/) — semantic bundles replace atomic font tokens | shipped (#80) | #1 |
+| 3 | [theme-enforcement](03-theme-enforcement/) — lint rule, codemod, contrast tests, CI gates | shipped (#82) | #1, #2 |
+| 4 | [ui-primitives](04-ui-primitives/) — contract fixes + new primitives (Dialog, FormField, Checkbox, Radio, Table, Spinner, Divider, Tabs) | shipped (#81) | #1 (can run parallel with #2, #3) |
+| 5 | [study-page-migration](05-study-page-migration/) — seven per-folder sub-PRs, swap to primitives, replace every hardcoded value | shipped (#83) | #3, #4 |
+| 6 | [appearance-dark-mode](06-appearance-dark-mode/) — real dark palettes + toggle + cookie | shipped (#85) | #5 |
+| 7 | [sim-theme-glass](07-sim-theme-glass/) — sim app theme + migration | shipped (#84) | — |
+| 8 | [oklch-palette-migration](08-oklch-palette-migration/) — convert palettes from hex to OKLCH; extend contrast matrix to measure them | spec | #6 |
 
 ## Sequencing
 
