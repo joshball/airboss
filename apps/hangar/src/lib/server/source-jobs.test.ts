@@ -102,7 +102,7 @@ describe('source-jobs.makeFetchHandler', () => {
 			await onStdout('sha256=abc');
 			return { exitCode: 0, stdout: ['sha256=abc'], stderr: [] };
 		};
-		const handler = makeFetchHandler({ runner });
+		const handler = makeFetchHandler({ runner, loadSource: async () => null });
 		const { ctx, stdout, progress } = fakeContext({
 			kind: 'fetch-source',
 			payload: { sourceId: 'cfr-14-91' },
@@ -115,13 +115,13 @@ describe('source-jobs.makeFetchHandler', () => {
 	});
 
 	it('throws when sourceId is missing', async () => {
-		const handler = makeFetchHandler({ runner: makeSuccessRunner([]) });
+		const handler = makeFetchHandler({ runner: makeSuccessRunner([]), loadSource: async () => null });
 		const { ctx } = fakeContext({ kind: 'fetch-source', payload: {} });
 		await expect(handler(ctx)).rejects.toThrow(/missing payload.sourceId/);
 	});
 
 	it('throws and reports exit code when the script fails', async () => {
-		const handler = makeFetchHandler({ runner: makeFailureRunner(2, ['boom']) });
+		const handler = makeFetchHandler({ runner: makeFailureRunner(2, ['boom']), loadSource: async () => null });
 		const { ctx, stderr, progress } = fakeContext({
 			kind: 'fetch-source',
 			payload: { sourceId: 'cfr-14-91' },
@@ -139,7 +139,7 @@ describe('source-jobs.makeExtractHandler', () => {
 			captured.push([...cmd]);
 			return { exitCode: 0, stdout: [], stderr: [] };
 		};
-		const handler = makeExtractHandler({ runner });
+		const handler = makeExtractHandler({ runner, loadSource: async () => null });
 		const { ctx } = fakeContext({ kind: 'extract-source', payload: { sourceId: 'aim' } });
 		const result = await handler(ctx);
 		expect(captured[0]).toEqual(['bun', 'scripts/references/extract.ts', '--source', 'aim']);
@@ -170,7 +170,7 @@ describe('source-jobs.makeDiffHandler', () => {
 			await onStdout('+new');
 			return { exitCode: 0, stdout: ['@@ -1 +1 @@', '-old', '+new'], stderr: [] };
 		};
-		const handler = makeDiffHandler({ runner });
+		const handler = makeDiffHandler({ runner, loadSource: async () => null });
 		const { ctx } = fakeContext({ kind: 'diff-source', payload: { sourceId: 'cfr-14' } });
 		const result = await handler(ctx);
 		expect(result).toMatchObject({ kind: 'diff', sourceId: 'cfr-14', lines: 3 });

@@ -96,10 +96,25 @@ async function waitForDb(): Promise<void> {
 	throw new Error('Postgres did not become ready within 30s');
 }
 
+async function checkThumbnailTool(): Promise<void> {
+	const gdal = await $`gdal_translate --version`.nothrow().quiet();
+	if (gdal.exitCode === 0) return;
+	const sips = await $`sips --help`.nothrow().quiet();
+	if (sips.exitCode === 0) return;
+	console.log(
+		'\n  note: neither gdal_translate nor sips is on PATH. The hangar fetch pipeline for\n' +
+			'  binary-visual sources (sectional charts) will degrade to a placeholder thumbnail\n' +
+			'  tile until you install one. On macOS, sips ships with the OS; otherwise, try:\n' +
+			'    brew install gdal        # macOS\n' +
+			'    sudo apt install gdal-bin # Debian/Ubuntu\n',
+	);
+}
+
 async function main(): Promise<void> {
 	console.log('airboss setup\n-----');
 
 	await step('verify /etc/hosts', checkHostsEntries);
+	await step('check thumbnail tool (gdal / sips)', checkThumbnailTool);
 
 	await step('install deps', async () => {
 		await $`bun install`.quiet();

@@ -13,7 +13,7 @@ import { stat } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { requireRole } from '@ab/auth';
 import { PENDING_DOWNLOAD } from '@ab/aviation';
-import { JOB_KINDS, ROLES, ROUTES } from '@ab/constants';
+import { JOB_KINDS, type ReferenceSourceType, ROLES, ROUTES, SOURCE_KIND_BY_TYPE, SOURCE_KINDS } from '@ab/constants';
 import { db, hangarJob, hangarSource } from '@ab/db';
 import { enqueueJob } from '@ab/hangar-jobs';
 import { createLogger } from '@ab/utils';
@@ -50,6 +50,7 @@ export const load: PageServerLoad = async (event) => {
 	}
 
 	const isPendingChecksum = row.checksum === PENDING_DOWNLOAD || row.checksum === '';
+	const sourceKind = SOURCE_KIND_BY_TYPE[row.type as ReferenceSourceType] ?? SOURCE_KINDS.TEXT;
 
 	return {
 		user: { id: user.id, role: user.role },
@@ -66,6 +67,9 @@ export const load: PageServerLoad = async (event) => {
 			sizeBytes: row.sizeBytes,
 			downloadedAt: row.downloadedAt,
 			locatorShape: row.locatorShape,
+			media: row.media,
+			edition: row.edition,
+			sourceKind,
 			dirty: row.dirty,
 			updatedAt: row.updatedAt.toISOString(),
 			isPendingChecksum,

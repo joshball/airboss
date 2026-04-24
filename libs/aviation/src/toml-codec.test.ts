@@ -116,4 +116,24 @@ describe('toml-codec sources', () => {
 		const second = encodeSources(decodeSources(first));
 		expect(second).toBe(first);
 	});
+
+	it('round-trips a sectional (geotiff-zip) source byte-identically', () => {
+		const sectional: Source = {
+			id: 'sectional-denver',
+			type: 'sectional',
+			title: 'Denver VFR Sectional Chart',
+			version: 'pending-download',
+			format: 'geotiff-zip',
+			path: 'data/sources/sectional/sectional-denver',
+			url: 'https://aeronav.faa.gov/visual/{edition-date}/sectional-files/Denver.zip',
+			checksum: 'pending-download',
+			downloadedAt: 'pending-download',
+		};
+		const encoded = encodeSources([sectional]);
+		const decoded = decodeSources(encoded);
+		expect(decoded).toHaveLength(1);
+		expect(decoded[0]).toEqual(sectional);
+		// Idempotent.
+		expect(encodeSources(decoded)).toBe(encoded);
+	});
 });

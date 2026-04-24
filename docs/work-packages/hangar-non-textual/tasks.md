@@ -4,7 +4,7 @@ product: hangar
 feature: hangar-non-textual
 type: tasks
 status: unread
-review_status: pending
+review_status: done
 ---
 
 # Tasks: Hangar non-textual sources

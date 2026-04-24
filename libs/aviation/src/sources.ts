@@ -16,3 +16,10 @@ export {
 	headCheck,
 } from './sources/download';
 export { allExtractors, resolveExtractors } from './sources/extractors';
+// wp-hangar-non-textual additions:
+export {
+	type ResolvedEdition,
+	type ResolveEditionOptions,
+	resolveCurrentSectionalEdition,
+} from './sources/sectional/resolve-edition';
+export { generateSectionalThumbnail, type ThumbnailOptions, type ThumbnailResult } from './sources/thumbnail';

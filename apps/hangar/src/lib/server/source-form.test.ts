@@ -73,4 +73,72 @@ describe('validateSourceForm', () => {
 			expect(result.errors.fieldErrors).toHaveProperty('url');
 		}
 	});
+
+	// -------- wp-hangar-non-textual: binary-visual branch --------
+
+	function buildBinaryVisualForm(overrides: Partial<Record<string, string>> = {}): FormData {
+		return buildForm({
+			id: 'sectional-denver',
+			type: 'sectional',
+			title: 'Denver VFR Sectional Chart',
+			version: 'pending-download',
+			url: 'https://aeronav.faa.gov/visual/{edition-date}/sectional-files/{region}.zip',
+			path: 'data/sources/sectional/sectional-denver',
+			format: 'geotiff-zip',
+			bv_region: 'Denver',
+			bv_index_url: 'https://aeronav.faa.gov/visual/',
+			bv_cadence_days: '56',
+			...overrides,
+		});
+	}
+
+	it('accepts a binary-visual (sectional) source with structured locator fields', () => {
+		const result = validateSourceForm(buildBinaryVisualForm());
+		expect(result.ok).toBe(true);
+		if (result.ok) {
+			expect(result.input.format).toBe('geotiff-zip');
+			expect(result.locatorShape).toEqual({
+				kind: 'binary-visual',
+				region: 'Denver',
+				index_url: 'https://aeronav.faa.gov/visual/',
+				cadence_days: 56,
+			});
+		}
+	});
+
+	it('rejects binary-visual source when region is missing', () => {
+		const result = validateSourceForm(buildBinaryVisualForm({ bv_region: '' }));
+		expect(result.ok).toBe(false);
+		if (!result.ok) {
+			expect(result.errors.fieldErrors).toHaveProperty('bv_region');
+		}
+	});
+
+	it('rejects binary-visual source when index URL is missing', () => {
+		const result = validateSourceForm(buildBinaryVisualForm({ bv_index_url: '' }));
+		expect(result.ok).toBe(false);
+		if (!result.ok) {
+			expect(result.errors.fieldErrors).toHaveProperty('bv_index_url');
+		}
+	});
+
+	it('rejects binary-visual source when cadence is non-positive', () => {
+		const result = validateSourceForm(buildBinaryVisualForm({ bv_cadence_days: '0' }));
+		expect(result.ok).toBe(false);
+		if (!result.ok) {
+			expect(result.errors.fieldErrors).toHaveProperty('bv_cadence_days');
+		}
+	});
+
+	it('omits cadence from locator when left blank (resolver uses default)', () => {
+		const result = validateSourceForm(buildBinaryVisualForm({ bv_cadence_days: '' }));
+		expect(result.ok).toBe(true);
+		if (result.ok) {
+			expect(result.locatorShape).toEqual({
+				kind: 'binary-visual',
+				region: 'Denver',
+				index_url: 'https://aeronav.faa.gov/visual/',
+			});
+		}
+	});
 });

@@ -4,7 +4,7 @@ product: hangar
 feature: hangar-non-textual
 type: test-plan
 status: unread
-review_status: pending
+review_status: done
 ---
 
 # Test plan: Hangar non-textual sources

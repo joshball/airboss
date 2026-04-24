@@ -35,6 +35,7 @@ import {
 	type VerbatimBlock,
 } from '@ab/aviation';
 import { resolveExtractors } from '@ab/aviation/sources';
+import { type ReferenceSourceType, SOURCE_KIND_BY_TYPE, SOURCE_KINDS } from '@ab/constants';
 import { type ScanManifest, scanContent } from './scan';
 
 const REPO_ROOT = resolve(import.meta.dirname, '..', '..');
@@ -265,6 +266,29 @@ function parseArgs(argv: readonly string[]): ExtractOptions {
 
 if (import.meta.main) {
 	const options = parseArgs(process.argv.slice(2));
+
+	// wp-hangar-non-textual: binary-visual sources have no prose to extract.
+	// Short-circuit cleanly when the operator targets one; the same rule lives
+	// in the hangar job handler for UI parity.
+	if (options.idFilter) {
+		const ref = AVIATION_REFERENCES.find((r) => r.id === options.idFilter);
+		const firstSourceId = ref?.sources[0]?.sourceId ?? options.idFilter;
+		const source = getSource(firstSourceId);
+		if (source && SOURCE_KIND_BY_TYPE[source.type as ReferenceSourceType] === SOURCE_KINDS.BINARY_VISUAL) {
+			console.log(`[extract] ${options.idFilter}: binary-visual source, skipping extraction (not applicable).`);
+			process.exit(0);
+		}
+	}
+	if (options.sourceTypeFilter) {
+		const maybeKind = SOURCE_KIND_BY_TYPE[options.sourceTypeFilter as ReferenceSourceType];
+		if (maybeKind === SOURCE_KINDS.BINARY_VISUAL) {
+			console.log(
+				`[extract] source type '${options.sourceTypeFilter}': binary-visual, skipping extraction (not applicable).`,
+			);
+			process.exit(0);
+		}
+	}
+
 	const result = await runExtract(options);
 
 	for (const w of result.warnings) {

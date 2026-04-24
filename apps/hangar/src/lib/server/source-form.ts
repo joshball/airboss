@@ -3,6 +3,7 @@
  * Centralised so create + edit share one pipeline.
  */
 
+import { type ReferenceSourceType, SOURCE_KIND_BY_TYPE, SOURCE_KINDS } from '@ab/constants';
 import type { z } from 'zod';
 import { type FieldErrors, getString, parseJsonObject, zodIssuesToFieldErrors } from './form-helpers';
 import type { SourceInput } from './registry';
@@ -22,6 +23,9 @@ export function sourceFormDataToInitial(form: FormData): SourceFormInitial {
 		downloadedAt: getString(form, 'downloadedAt'),
 		sizeBytes: getString(form, 'sizeBytes'),
 		locatorShapeJson: getString(form, 'locatorShape') || '{}',
+		bvRegion: getString(form, 'bv_region'),
+		bvCadenceDays: getString(form, 'bv_cadence_days'),
+		bvIndexUrl: getString(form, 'bv_index_url'),
 	};
 }
 
@@ -70,8 +74,40 @@ export function validateSourceForm(form: FormData): ValidatedSource | SourceVali
 		return { ok: false, errors: zodIssuesToFieldErrors(parsed.error) };
 	}
 
-	const locatorRaw = initial.locatorShapeJson.trim();
-	const locatorShape = locatorRaw.length > 0 && locatorRaw !== '{}' ? parseJsonObject(locatorRaw) : null;
+	const sourceKind = SOURCE_KIND_BY_TYPE[initial.type as ReferenceSourceType] ?? SOURCE_KINDS.TEXT;
+	let locatorShape: Record<string, unknown> | null;
+
+	if (sourceKind === SOURCE_KINDS.BINARY_VISUAL) {
+		// Binary-visual sources build locator_shape from structured fields,
+		// not from the raw JSON textarea (which the form hides for this kind).
+		const region = (initial.bvRegion ?? '').trim();
+		const indexUrl = (initial.bvIndexUrl ?? '').trim();
+		const cadenceRaw = (initial.bvCadenceDays ?? '').trim();
+		const fieldErrors: Record<string, string> = {};
+		if (region.length === 0) fieldErrors.bv_region = 'Region is required for binary-visual sources';
+		if (indexUrl.length === 0) fieldErrors.bv_index_url = 'Index URL is required for binary-visual sources';
+		let cadenceDays: number | undefined;
+		if (cadenceRaw.length > 0) {
+			const n = Number.parseInt(cadenceRaw, 10);
+			if (!Number.isFinite(n) || n < 1) {
+				fieldErrors.bv_cadence_days = 'Cadence must be a positive integer';
+			} else {
+				cadenceDays = n;
+			}
+		}
+		if (Object.keys(fieldErrors).length > 0) {
+			return { ok: false, errors: { fieldErrors, formError: null } };
+		}
+		locatorShape = {
+			kind: 'binary-visual',
+			region,
+			index_url: indexUrl,
+			...(cadenceDays !== undefined ? { cadence_days: cadenceDays } : {}),
+		};
+	} else {
+		const locatorRaw = initial.locatorShapeJson.trim();
+		locatorShape = locatorRaw.length > 0 && locatorRaw !== '{}' ? parseJsonObject(locatorRaw) : null;
+	}
 
 	return {
 		ok: true,

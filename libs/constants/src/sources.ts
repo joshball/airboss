@@ -6,6 +6,8 @@
  * force a reach across unrelated domains.
  */
 
+import { REFERENCE_SOURCE_TYPES, type ReferenceSourceType } from './reference-tags';
+
 /** Limits that bound the cost of a single source-ingest operation. */
 export const SOURCE_ACTION_LIMITS = {
 	/** Hard cap on a single upload body. 500 MiB covers yearly CFR + AIM bundles. */
@@ -52,4 +54,89 @@ export const EXTENSION_TO_PREVIEW_KIND: Readonly<Record<string, PreviewKind>> = 
 	text: PREVIEW_KINDS.TEXT,
 	log: PREVIEW_KINDS.TEXT,
 	html: PREVIEW_KINDS.TEXT,
+	// wp-hangar-non-textual: raster/archive previews
+	zip: PREVIEW_KINDS.BINARY,
+	tif: PREVIEW_KINDS.BINARY,
+	tiff: PREVIEW_KINDS.BINARY,
+	jpg: PREVIEW_KINDS.BINARY,
+	jpeg: PREVIEW_KINDS.BINARY,
 };
+
+// -------- wp-hangar-non-textual: source kind classifier --------
+
+/**
+ * `source-kind` discriminator. Drives the fetch/extract/diff/validate pipeline
+ * branch: text sources run the wiki-link extraction pipeline; binary-visual
+ * sources skip extraction (there is no prose to capture from a raster chart)
+ * and instead capture edition metadata + a thumbnail at ingest time.
+ *
+ * See wp-hangar-non-textual design.md. When a new non-textual family lands
+ * (plates, airport diagrams, NTSB CSV, AOPA HTML), extend this enum and the
+ * `SOURCE_KIND_BY_TYPE` map; every pipeline step reads from the map so the
+ * extension stays additive.
+ */
+export const SOURCE_KINDS = {
+	TEXT: 'text',
+	BINARY_VISUAL: 'binary-visual',
+} as const;
+
+export type SourceKind = (typeof SOURCE_KINDS)[keyof typeof SOURCE_KINDS];
+
+export const SOURCE_KIND_VALUES: readonly SourceKind[] = Object.values(SOURCE_KINDS);
+
+/**
+ * Every `ReferenceSourceType` maps to exactly one kind. Callers that used to
+ * switch on the source type for pipeline-shaped decisions (extract vs skip,
+ * render preview tile vs not) switch to this map; the type value still drives
+ * label + locator decisions.
+ */
+export const SOURCE_KIND_BY_TYPE: Readonly<Record<ReferenceSourceType, SourceKind>> = {
+	[REFERENCE_SOURCE_TYPES.CFR]: SOURCE_KINDS.TEXT,
+	[REFERENCE_SOURCE_TYPES.AIM]: SOURCE_KINDS.TEXT,
+	[REFERENCE_SOURCE_TYPES.PCG]: SOURCE_KINDS.TEXT,
+	[REFERENCE_SOURCE_TYPES.AC]: SOURCE_KINDS.TEXT,
+	[REFERENCE_SOURCE_TYPES.ACS]: SOURCE_KINDS.TEXT,
+	[REFERENCE_SOURCE_TYPES.PHAK]: SOURCE_KINDS.TEXT,
+	[REFERENCE_SOURCE_TYPES.AFH]: SOURCE_KINDS.TEXT,
+	[REFERENCE_SOURCE_TYPES.IFH]: SOURCE_KINDS.TEXT,
+	[REFERENCE_SOURCE_TYPES.POH]: SOURCE_KINDS.TEXT,
+	[REFERENCE_SOURCE_TYPES.NTSB]: SOURCE_KINDS.TEXT,
+	[REFERENCE_SOURCE_TYPES.GAJSC]: SOURCE_KINDS.TEXT,
+	[REFERENCE_SOURCE_TYPES.AOPA]: SOURCE_KINDS.TEXT,
+	[REFERENCE_SOURCE_TYPES.FAA_SAFETY]: SOURCE_KINDS.TEXT,
+	[REFERENCE_SOURCE_TYPES.SOP]: SOURCE_KINDS.TEXT,
+	[REFERENCE_SOURCE_TYPES.AUTHORED]: SOURCE_KINDS.TEXT,
+	[REFERENCE_SOURCE_TYPES.DERIVED]: SOURCE_KINDS.TEXT,
+	[REFERENCE_SOURCE_TYPES.SECTIONAL]: SOURCE_KINDS.BINARY_VISUAL,
+};
+
+/**
+ * Thumbnail generation budget for sectional charts. The detail page reserves
+ * layout space at these fixed dimensions; the generator steps JPEG quality
+ * down until the encoded size fits under MAX_BYTES, and throws if it would
+ * drop below MIN_QUALITY.
+ */
+export const SECTIONAL_THUMBNAIL = {
+	WIDTH: 512,
+	HEIGHT: 384,
+	QUALITY: 70,
+	MIN_QUALITY: 40,
+	MAX_BYTES: 256 * 1024,
+} as const;
+
+/**
+ * Default cadence for VFR sectional editions. FAA AeroNav publishes on a
+ * 56-day cycle; the registry stores this per-source so future products with
+ * different cadences (e.g. 28-day IFR charts) plug into the same shape.
+ */
+export const SECTIONAL_CADENCE_DAYS = 56;
+
+/**
+ * URL-template placeholders recognised by the sectional edition resolver.
+ * Kept as constants so the form-side validator can insist the operator-typed
+ * template uses one of the known tokens.
+ */
+export const SECTIONAL_URL_PLACEHOLDERS = {
+	EDITION_DATE: '{edition-date}',
+	REGION: '{region}',
+} as const;

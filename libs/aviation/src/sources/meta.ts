@@ -48,7 +48,7 @@ export function isSourceMeta(value: unknown): value is SourceMeta {
 		typeof v.checksum === 'string' &&
 		typeof v.downloadedAt === 'string' &&
 		typeof v.format === 'string' &&
-		['xml', 'pdf', 'html', 'txt', 'json', 'csv'].includes(v.format as string) &&
+		['xml', 'pdf', 'html', 'txt', 'json', 'csv', 'geotiff-zip'].includes(v.format as string) &&
 		typeof v.sizeBytes === 'number' &&
 		Number.isFinite(v.sizeBytes)
 	);
