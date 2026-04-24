@@ -15,6 +15,7 @@ export default defineConfig({
 			'@ab/db': resolve('./libs/db/src/index.ts'),
 			'@ab/auth/schema': resolve('./libs/auth/src/schema.ts'),
 			'@ab/auth': resolve('./libs/auth/src/index.ts'),
+			'@ab/audit': resolve('./libs/audit/src/index.ts'),
 			'@ab/themes': resolve('./libs/themes/index.ts'),
 			'@ab/ui': resolve('./libs/ui/src/index.ts'),
 			'@ab/utils': resolve('./libs/utils/src/index.ts'),
@@ -24,6 +25,8 @@ export default defineConfig({
 			'@ab/aviation': resolve('./libs/aviation/src/index.ts'),
 			'@ab/help': resolve('./libs/help/src/index.ts'),
 			'@ab/activities': resolve('./libs/activities/src/index.ts'),
+			'@ab/hangar-jobs': resolve('./libs/hangar-jobs/src/index.ts'),
+			'@ab/hangar-sync': resolve('./libs/hangar-sync/src/index.ts'),
 		},
 	},
 	test: {

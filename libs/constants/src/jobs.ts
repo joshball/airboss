@@ -70,6 +70,8 @@ export const HANGAR_SYNC_MODE_VALUES: readonly HangarSyncMode[] = Object.values(
 /** Sync outcome (persisted in `hangar.sync_log.outcome`). */
 export const SYNC_OUTCOMES = {
 	SUCCESS: 'success',
+	/** Successful run where the re-emitted TOML matched the on-disk file (no write). */
+	NOOP: 'noop',
 	CONFLICT: 'conflict',
 	FAILED: 'failed',
 } as const;

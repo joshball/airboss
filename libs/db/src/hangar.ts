@@ -126,6 +126,17 @@ export const hangarSyncLog = hangarSchema.table(
 		outcome: text('outcome').notNull(),
 		/** Human-readable commit message / failure reason. */
 		message: text('message').notNull(),
+		/**
+		 * Per-id `rev` snapshot captured at the end of a successful sync.
+		 * Shape: `{ references: { [id]: rev }, sources: { [id]: rev } }`.
+		 * `detectConflict` compares current `rev`s against the most recent
+		 * successful sync's snapshot to surface writes that happened after
+		 * the last sync saw the row.
+		 */
+		revSnapshot: jsonb('rev_snapshot').$type<{
+			readonly references: Readonly<Record<string, number>>;
+			readonly sources: Readonly<Record<string, number>>;
+		} | null>(),
 		startedAt: timestamp('started_at', { withTimezone: true }).notNull().defaultNow(),
 		finishedAt: timestamp('finished_at', { withTimezone: true }),
 	},

@@ -42,20 +42,24 @@ Serial. Each bucket ends with `bun run check` clean + its own commit. One PR for
 
 ## Phase 4 — Sync service lib
 
-- [ ] New workspace `libs/hangar-sync/`. `@ab/hangar-sync`.
-- [ ] `src/detect-drift.ts` — compute drift between DB (`dirty = true` rows) and current on-disk TOML.
-- [ ] `src/detect-conflict.ts` — compare on-disk TOML sha against the last `sync_log.commit_sha`; abort sync if drift detected.
-- [ ] `src/emit.ts` — serialise dirty-applied DB state to TOML via `toml-codec`.
-- [ ] `src/commit.ts` — `git add + commit` with structured message; returns SHA.
-- [ ] `src/push-and-pr.ts` — push to `hangar-sync/<timestamp>`; `gh pr create` via `Bun.spawn`; returns PR URL.
-- [ ] `src/run.ts` — entry point used by the `sync-to-disk` job handler: advisory lock, detect drift, detect conflict, emit, commit (or PR), clear `dirty`, write `sync_log`.
-- [ ] Unit tests for detect-drift + detect-conflict + emit. Integration test with a temp git repo for commit.
+- [x] New workspace `libs/hangar-sync/`. `@ab/hangar-sync`.
+- [x] `src/detect-drift.ts` — compute drift between DB (`dirty = true` rows) and current on-disk TOML.
+- [x] `src/detect-conflict.ts` — compare DB revs against the last successful sync's `rev_snapshot`; abort sync if any row advanced past the baseline.
+- [x] `src/emit-toml.ts` — serialise dirty-applied DB state to TOML via `toml-codec`.
+- [x] `src/emit-aviation-ts.ts` — regenerate `libs/aviation/src/references/aviation.ts` per Option 3 (keep the TS artifact so study's client bundle stays fast).
+- [x] `src/commit-and-maybe-pr.ts` — two-mode runner (`commit-local` / `pr`); PR mode branches + pushes + opens a `gh pr create`.
+- [x] `src/git.ts` — `ProcessRunner` interface backed by `node:child_process.spawn` so hangar (node) + scripts (bun) share one implementation; tests inject a fake runner.
+- [x] `src/run-sync-job.ts` — `runSync` + `runSyncJob`. `executeSync` is the pure core state machine; `runSync` wraps it with the DB transaction (pg_advisory_xact_lock + loaders + writers); `runSyncJob` wraps `runSync` with the `@ab/hangar-jobs` `JobContext` adapter.
+- [x] `libs/db/src/hangar.ts` extended with `rev_snapshot` column on `hangar.sync_log` (new `0002_hangar_sync_rev_snapshot.sql` migration).
+- [x] `SYNC_OUTCOMES.NOOP` added to `libs/constants/src/jobs.ts`.
+- [x] Unit tests for detect-drift, detect-conflict, emit-aviation-ts (round-trip + byte-identity), and end-to-end run-sync-job (happy, conflict, noop paths + pr-mode process-runner assertions).
 
 ## Phase 5 — Hangar job handler registration
 
-- [ ] `apps/hangar/src/lib/server/jobs.ts`: register the `sync-to-disk` handler wrapping `@ab/hangar-sync`.
-- [ ] Hook the worker startup into `hooks.server.ts` (fire-once on first request, or explicit boot hook — whichever matches the SvelteKit idiom).
-- [ ] Env plumbing: `HANGAR_SYNC_MODE` read in the handler; default per-env.
+- [x] `apps/hangar/src/lib/server/jobs.ts`: register the `sync-to-disk` handler wrapping `@ab/hangar-sync`.
+- [x] Hook the worker startup into `hooks.server.ts` — module-scope `bootWorker()` fires once, `recoverOrphanedRunning` runs before `startWorker`, `beforeExit` requests a graceful drain.
+- [x] Env plumbing: `HANGAR_SYNC_MODE` is resolved inside `resolveSyncMode(config)` with `commit-local` as the dev default.
+- [x] `apps/hangar/svelte.config.js` alias entries added for `@ab/hangar-jobs`, `@ab/hangar-sync`, and `@ab/aviation` so the worker wiring resolves.
 
 ## Phase 6 — Edit UI (`/glossary`)
 

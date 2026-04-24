@@ -1,12 +1,52 @@
 import { ROUTES, type Role } from '@ab/constants';
+import { recoverOrphanedRunning, startWorker, type WorkerHandle } from '@ab/hangar-jobs';
 import { createErrorHandler, createLogger } from '@ab/utils';
 import type { Handle, HandleServerError } from '@sveltejs/kit';
 import { building, dev } from '$app/environment';
 import { auth } from '$lib/server/auth';
 import { rewriteSetCookieDomain } from '$lib/server/cookies';
+import { hangarJobHandlers } from '$lib/server/jobs';
 
 const log = createLogger('hangar');
 const errorHandler = createErrorHandler({ logger: log });
+
+/**
+ * Hangar's in-process job worker. Boots once on server startup (not during
+ * the SvelteKit `building` prerender pass), recovers any orphaned `running`
+ * rows from a prior crash, then begins the poll loop. The handle is kept at
+ * module scope so every request share one worker; `beforeExit` requests a
+ * graceful drain so no job gets killed mid-run.
+ */
+let worker: WorkerHandle | null = null;
+
+async function bootWorker(): Promise<void> {
+	if (worker !== null) return;
+	try {
+		const recovered = await recoverOrphanedRunning();
+		if (recovered > 0) {
+			log.info('hangar worker recovered orphaned jobs', { metadata: { recovered } });
+		}
+		worker = startWorker({ handlers: hangarJobHandlers });
+		log.info('hangar worker started');
+	} catch (err) {
+		log.error('hangar worker failed to start', undefined, err instanceof Error ? err : undefined);
+	}
+}
+
+/**
+ * Kick the worker boot once per module load. We intentionally do NOT await
+ * this in the request path -- the worker loop runs on its own timer, and
+ * `bootWorker` swallows its own errors so a transient DB hiccup during
+ * startup doesn't take the app down.
+ */
+if (!building) {
+	void bootWorker();
+	process.on('beforeExit', () => {
+		if (worker !== null) {
+			void worker.stop();
+		}
+	});
+}
 
 const REQUEST_ID_PATTERN = /^[a-zA-Z0-9_-]{1,64}$/;
 const REQUEST_ID_HEADER = 'x-request-id';
