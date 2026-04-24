@@ -18,6 +18,7 @@ import {
 	DIFFICULTIES,
 	DOMAIN_VALUES,
 	DOMAINS,
+	MS_PER_DAY,
 	REVIEW_RATINGS,
 	SCENARIO_STATUSES,
 	WEAK_AREA_MIN_DATA_POINTS,
@@ -161,7 +162,7 @@ async function seedReview(userId: string, cardId: string, opts: SeedReviewOption
 		elapsedDays: 0,
 		scheduledDays: 1,
 		state: CARD_STATES.LEARNING,
-		dueAt: new Date(opts.reviewedAt.getTime() + 24 * 60 * 60 * 1000),
+		dueAt: new Date(opts.reviewedAt.getTime() + MS_PER_DAY),
 		reviewedAt: opts.reviewedAt,
 		answerMs: null,
 	});

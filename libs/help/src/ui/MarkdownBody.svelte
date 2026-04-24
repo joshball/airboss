@@ -158,39 +158,39 @@ function resolveWikilink(pageId: string): { href: string; resolved: boolean } {
 	.md-body {
 		font-size: 1rem;
 		line-height: 1.6;
-		color: var(--ab-color-fg);
+		color: var(--ink-body);
 	}
 
 	.md-body :global(.md-h) {
-		margin: var(--ab-space-lg, 1.5rem) 0 var(--ab-space-sm, 0.5rem);
-		color: var(--ab-color-fg);
+		margin: var(--space-lg) 0 var(--space-sm);
+		color: var(--ink-body);
 		letter-spacing: -0.01em;
 	}
 
 	.md-body :global(.md-h2) {
 		font-size: 1.25rem;
-		font-weight: var(--ab-font-weight-semibold, 600);
+		font-weight: var(--font-weight-semibold);
 		scroll-margin-top: 4rem;
 	}
 
 	.md-body :global(.md-h3) {
 		font-size: 1.0625rem;
-		font-weight: var(--ab-font-weight-semibold, 600);
+		font-weight: var(--font-weight-semibold);
 	}
 
 	.md-body :global(.md-h4) {
 		font-size: 1rem;
-		font-weight: var(--ab-font-weight-semibold, 600);
-		color: var(--ab-color-fg-muted);
+		font-weight: var(--font-weight-semibold);
+		color: var(--ink-muted);
 	}
 
 	.md-body :global(.md-p) {
-		margin: 0 0 var(--ab-space-md, 0.75rem);
+		margin: 0 0 var(--space-md);
 	}
 
 	.md-body :global(.md-ul),
 	.md-body :global(.md-ol) {
-		margin: 0 0 var(--ab-space-md, 0.75rem);
+		margin: 0 0 var(--space-md);
 		padding-left: 1.5rem;
 	}
 
@@ -200,18 +200,18 @@ function resolveWikilink(pageId: string): { href: string; resolved: boolean } {
 	}
 
 	.md-body :global(.md-inline-code) {
-		background: var(--ab-color-surface-sunken);
+		background: var(--surface-sunken);
 		padding: 0.0625rem 0.375rem;
-		border-radius: var(--ab-radius-tight, 3px);
-		font-family: var(--ab-font-mono, ui-monospace, monospace);
+		border-radius: var(--radius-xs);
+		font-family: var(--font-family-mono);
 		font-size: 0.875em;
 	}
 
 	.md-body :global(.md-link) {
-		color: var(--ab-color-primary);
+		color: var(--action-default);
 		text-decoration: none;
 		border-bottom: 1px solid transparent;
-		transition: border-color var(--ab-transition-normal, 150ms ease);
+		transition: border-color var(--motion-normal);
 	}
 
 	.md-body :global(.md-link:hover),
@@ -220,62 +220,62 @@ function resolveWikilink(pageId: string): { href: string; resolved: boolean } {
 	}
 
 	.md-body :global(.md-link:focus-visible) {
-		outline: 2px solid var(--ab-color-focus-ring);
+		outline: 2px solid var(--focus-ring);
 		outline-offset: 2px;
-		border-radius: var(--ab-radius-tight, 3px);
+		border-radius: var(--radius-xs);
 	}
 
 	.md-body :global(.md-external-icon) {
 		display: inline-block;
 		margin-left: 0.15em;
 		font-size: 0.8em;
-		color: var(--ab-color-fg-subtle);
+		color: var(--ink-subtle);
 	}
 
 	.md-body :global(.md-source-badge) {
 		display: inline-block;
 		margin-left: 0.375rem;
 		padding: 0 0.375rem;
-		border-radius: var(--ab-radius-tight, 3px);
+		border-radius: var(--radius-xs);
 		font-size: 0.6875rem;
-		font-weight: var(--ab-font-weight-semibold, 600);
+		font-weight: var(--font-weight-semibold);
 		text-transform: uppercase;
 		letter-spacing: 0.05em;
-		background: var(--ab-color-surface-sunken);
-		color: var(--ab-color-fg-muted);
-		border: 1px solid var(--ab-color-border);
+		background: var(--surface-sunken);
+		color: var(--ink-muted);
+		border: 1px solid var(--edge-default);
 	}
 
 	.md-body :global(.md-source-wikipedia) {
-		background: var(--ab-color-surface-sunken);
-		color: var(--ab-color-fg);
+		background: var(--surface-sunken);
+		color: var(--ink-body);
 	}
 
 	.md-body :global(.md-source-faa) {
-		background: var(--ab-color-primary-subtle, var(--ab-color-surface-sunken));
-		color: var(--ab-color-primary);
+		background: var(--action-default-wash);
+		color: var(--action-default);
 	}
 
 	.md-body :global(.md-source-paper) {
-		background: var(--ab-color-surface-sunken);
-		color: var(--ab-color-fg-muted);
+		background: var(--surface-sunken);
+		color: var(--ink-muted);
 	}
 
 	.md-body :global(.md-source-book) {
-		background: var(--ab-color-surface-sunken);
-		color: var(--ab-color-fg-muted);
+		background: var(--surface-sunken);
+		color: var(--ink-muted);
 	}
 
 	.md-body :global(.md-wikilink-unresolved) {
-		color: var(--ab-color-danger);
+		color: var(--action-hazard);
 		text-decoration: underline wavy;
 	}
 
 	.md-body :global(.md-table-wrap) {
 		overflow-x: auto;
-		margin: 0 0 var(--ab-space-md, 0.75rem);
-		border: 1px solid var(--ab-color-border);
-		border-radius: var(--ab-radius-md, 6px);
+		margin: 0 0 var(--space-md);
+		border: 1px solid var(--edge-default);
+		border-radius: var(--radius-md);
 	}
 
 	.md-body :global(.md-table) {
@@ -287,13 +287,13 @@ function resolveWikilink(pageId: string): { href: string; resolved: boolean } {
 	.md-body :global(.md-table th),
 	.md-body :global(.md-table td) {
 		padding: 0.5rem 0.75rem;
-		border-bottom: 1px solid var(--ab-color-border);
+		border-bottom: 1px solid var(--edge-default);
 		vertical-align: top;
 	}
 
 	.md-body :global(.md-table th) {
-		background: var(--ab-color-surface-sunken);
-		font-weight: var(--ab-font-weight-semibold, 600);
+		background: var(--surface-sunken);
+		font-weight: var(--font-weight-semibold);
 		text-align: left;
 	}
 
@@ -314,17 +314,17 @@ function resolveWikilink(pageId: string): { href: string; resolved: boolean } {
 	}
 
 	.md-body :global(.md-code-wrap) {
-		margin: 0 0 var(--ab-space-md, 0.75rem);
-		border-radius: var(--ab-radius-md, 6px);
+		margin: 0 0 var(--space-md);
+		border-radius: var(--radius-md);
 		overflow: hidden;
-		border: 1px solid var(--ab-color-border);
+		border: 1px solid var(--edge-default);
 	}
 
 	.md-body :global(.md-code-wrap pre),
 	.md-body :global(.md-code) {
 		margin: 0;
 		padding: 0.75rem 1rem;
-		font-family: var(--ab-font-mono, ui-monospace, monospace);
+		font-family: var(--font-family-mono);
 		font-size: 0.875rem;
 		overflow-x: auto;
 	}
@@ -354,34 +354,34 @@ function resolveWikilink(pageId: string): { href: string; resolved: boolean } {
 	}
 
 	.md-body :global(.md-quote) {
-		margin: var(--ab-space-md, 0.75rem) 0;
+		margin: var(--space-md) 0;
 		padding: 0.5rem 1rem;
-		border-left: 3px solid var(--ab-color-border);
-		background: var(--ab-color-surface-sunken);
-		color: var(--ab-color-fg-muted);
+		border-left: 3px solid var(--edge-default);
+		background: var(--surface-sunken);
+		color: var(--ink-muted);
 		font-style: italic;
 	}
 
 	.md-body :global(.md-figure) {
-		margin: var(--ab-space-md, 0.75rem) 0;
+		margin: var(--space-md) 0;
 	}
 
 	.md-body :global(.md-figure img) {
 		max-width: 100%;
 		height: auto;
-		border-radius: var(--ab-radius-md, 6px);
+		border-radius: var(--radius-md);
 	}
 
 	.md-body :global(.md-figure figcaption) {
 		margin-top: 0.375rem;
 		font-size: 0.875rem;
-		color: var(--ab-color-fg-muted);
+		color: var(--ink-muted);
 		text-align: center;
 	}
 
 	.md-body :global(.md-hr) {
 		border: 0;
-		border-top: 1px solid var(--ab-color-border);
-		margin: var(--ab-space-lg, 1.5rem) 0;
+		border-top: 1px solid var(--edge-default);
+		margin: var(--space-lg) 0;
 	}
 </style>

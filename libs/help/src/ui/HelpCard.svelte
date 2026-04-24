@@ -38,44 +38,44 @@ let {
 
 <style>
 	.card {
-		border: 1px solid var(--ab-color-border);
+		border: 1px solid var(--edge-default);
 		border-left-width: 4px;
-		border-radius: var(--ab-radius-md, 6px);
+		border-radius: var(--radius-md);
 		padding: 0.75rem 1rem;
 		margin: 1rem 0;
-		background: var(--ab-color-surface);
+		background: var(--surface-panel);
 	}
 
 	.card.tip {
-		border-left-color: var(--ab-color-primary);
+		border-left-color: var(--action-default);
 	}
 
 	.card.howto {
-		border-left-color: var(--ab-color-success);
+		border-left-color: var(--signal-success);
 	}
 
 	.card.warn {
-		border-left-color: var(--ab-color-warning);
-		background: var(--ab-color-warning-subtle);
+		border-left-color: var(--action-caution);
+		background: var(--action-caution-wash);
 	}
 
 	.card.danger {
-		border-left-color: var(--ab-color-danger);
-		background: var(--ab-color-danger-subtle);
+		border-left-color: var(--action-hazard);
+		background: var(--action-hazard-wash);
 	}
 
 	.card.note {
-		border-left-color: var(--ab-color-border);
-		background: var(--ab-color-surface-sunken);
+		border-left-color: var(--edge-default);
+		background: var(--surface-sunken);
 	}
 
 	.card.example {
-		border-left-color: var(--ab-color-primary);
-		background: var(--ab-color-surface-raised);
+		border-left-color: var(--action-default);
+		background: var(--surface-raised);
 	}
 
 	header {
-		font-weight: var(--ab-font-weight-semibold, 600);
+		font-weight: var(--font-weight-semibold);
 		margin-bottom: 0.375rem;
 		font-size: 0.9375rem;
 	}

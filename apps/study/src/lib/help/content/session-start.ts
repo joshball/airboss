@@ -19,6 +19,7 @@ import {
 	HELP_KINDS,
 	MODE_WEIGHTS,
 	RELEVANCE_PRIORITY_LABELS,
+	ROUTES,
 	SESSION_MODE_LABELS,
 	SESSION_MODE_VALUES,
 	SESSION_REASON_CODE_DEFINITIONS,
@@ -92,7 +93,7 @@ export const sessionStart: HelpPage = {
 	title: 'Your session preview',
 	summary:
 		'Decoder ring for /session/start: slices, kinds, reason codes, priorities, domains, and how mode weights shape the queue.',
-	documents: '/session/start',
+	documents: ROUTES.SESSION_START,
 	tags: {
 		appSurface: [APP_SURFACES.SESSION],
 		helpKind: HELP_KINDS.HOW_TO,

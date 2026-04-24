@@ -42,7 +42,7 @@ let {
 	.label {
 		font-size: 0.75rem;
 		font-weight: 600;
-		color: var(--ab-color-fg-muted);
+		color: var(--ink-muted);
 		text-transform: uppercase;
 		letter-spacing: 0.06em;
 	}
@@ -50,24 +50,24 @@ let {
 	.input {
 		font: inherit;
 		padding: 0.5rem 0.625rem;
-		border: 1px solid var(--ab-color-border);
-		border-radius: var(--ab-radius-sm);
-		background: var(--ab-color-surface, white);
-		color: var(--ab-color-fg);
+		border: 1px solid var(--edge-default);
+		border-radius: var(--radius-sm);
+		background: var(--surface-panel);
+		color: var(--ink-body);
 	}
 
 	.input:focus-visible {
 		outline: none;
-		border-color: var(--ab-color-primary);
+		border-color: var(--action-default);
 		box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
 	}
 
 	.go {
 		font: inherit;
 		padding: 0.5rem 1rem;
-		border-radius: var(--ab-radius-sm);
-		border: 1px solid var(--ab-color-border);
-		background: var(--ab-color-surface-sunken);
+		border-radius: var(--radius-sm);
+		border: 1px solid var(--edge-default);
+		background: var(--surface-sunken);
 		cursor: pointer;
 	}
 </style>

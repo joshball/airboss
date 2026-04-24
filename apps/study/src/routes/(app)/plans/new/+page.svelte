@@ -4,6 +4,7 @@ import {
 	CERT_VALUES,
 	type Cert,
 	DEFAULT_SESSION_LENGTH,
+	DEFAULT_SESSION_MODE,
 	DEPTH_PREFERENCE_LABELS,
 	DEPTH_PREFERENCE_VALUES,
 	type DepthPreference,
@@ -35,7 +36,7 @@ let selectedCerts = $state<Set<string>>(new Set((seedFormValues?.certGoals ?? []
 let selectedFocus = $state<Set<string>>(new Set((seedFormValues?.focusDomains ?? []) as string[]));
 let selectedSkip = $state<Set<string>>(new Set((seedFormValues?.skipDomains ?? []) as string[]));
 let depthPreference = $state<DepthPreference>('working');
-let defaultMode = $state<SessionMode>('mixed');
+let defaultMode = $state<SessionMode>(DEFAULT_SESSION_MODE);
 
 function toggleCert(cert: string, checked: boolean) {
 	const next = new Set(selectedCerts);

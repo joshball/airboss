@@ -107,7 +107,7 @@ const hitsById = $derived.by(() => {
 
 	.sub {
 		margin: 0.25rem 0 0;
-		color: var(--ab-color-fg-muted);
+		color: var(--ink-muted);
 		font-size: 0.9375rem;
 	}
 
@@ -132,12 +132,12 @@ const hitsById = $derived.by(() => {
 	}
 
 	.empty {
-		background: var(--ab-color-surface, white);
-		border: 1px dashed var(--ab-color-border-strong);
-		border-radius: var(--ab-radius-xl);
+		background: var(--surface-panel);
+		border: 1px dashed var(--edge-strong);
+		border-radius: var(--radius-lg);
 		padding: 2.5rem 1.5rem;
 		text-align: center;
-		color: var(--ab-color-fg-muted);
+		color: var(--ink-muted);
 		display: flex;
 		flex-direction: column;
 		align-items: center;
@@ -147,7 +147,7 @@ const hitsById = $derived.by(() => {
 	.empty h2 {
 		margin: 0;
 		font-size: 1.125rem;
-		color: var(--ab-color-fg);
+		color: var(--ink-body);
 	}
 
 	.empty p {
@@ -158,15 +158,15 @@ const hitsById = $derived.by(() => {
 
 	.empty .hint {
 		font-size: 0.875rem;
-		color: var(--ab-color-fg-subtle);
+		color: var(--ink-subtle);
 	}
 
 	code {
-		font-family: var(--ab-font-mono, ui-monospace, monospace);
+		font-family: var(--font-family-mono);
 		font-size: 0.8125rem;
-		background: var(--ab-color-surface-sunken);
+		background: var(--surface-sunken);
 		padding: 0.0625rem 0.375rem;
-		border-radius: var(--ab-radius-tight);
+		border-radius: var(--radius-xs);
 	}
 
 	@media (max-width: 640px) { /* --ab-breakpoint-md */

@@ -42,7 +42,7 @@ let {
 	.sticky :global(thead th) {
 		position: sticky;
 		top: 0;
-		z-index: 1;
+		z-index: var(--z-sticky);
 	}
 
 	:global(thead th) {

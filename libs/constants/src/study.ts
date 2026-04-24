@@ -7,6 +7,7 @@
  */
 
 import { CERT_APPLICABILITIES } from './reference-tags';
+import { MS_PER_DAY, MS_PER_HOUR } from './time';
 
 /**
  * Platform default for "what timezone is the user in?" Used for day-boundary
@@ -60,19 +61,36 @@ export const DOMAIN_LABELS: Record<Domain, string> = {
 };
 
 /**
- * Typed lookup for a domain's display label. Use this instead of reinventing
- * `function domainLabel(slug)` in every consumer (reviewers flagged 20+
- * duplicates across the study routes, most of them doing
- * `(DOMAIN_LABELS as Record<string, string>)[slug] ?? humanize(slug)`).
+ * Typed lookup for a domain's display label. Accepts an arbitrary slug
+ * string (for server-provided values that aren't already narrowed) and
+ * falls back to a title-cased version of the slug on a miss so the UI
+ * never renders a raw kebab-case value.
  *
- * The fallback path (`humanize`) is the caller's responsibility when the
- * input is untrusted -- this helper is typed and will only accept a real
- * `Domain`. For untrusted input, first run it through
- * `narrow(raw, DOMAIN_VALUES)` from `@ab/utils`, then pass the narrowed
- * value through here.
+ * Reviewers flagged 20+ duplicates across the study routes, most of them
+ * doing `(DOMAIN_LABELS as Record<string, string>)[slug] ?? humanize(slug)`.
+ * This helper collapses all of those to one call site.
  */
-export function domainLabel(domain: Domain): string {
-	return DOMAIN_LABELS[domain];
+export function domainLabel(domain: Domain | string): string {
+	const known = (DOMAIN_LABELS as Record<string, string>)[domain];
+	if (known) return known;
+	return humanize(domain);
+}
+
+/**
+ * Inline humanize so `@ab/constants` stays dependency-free (`@ab/utils`
+ * already imports `@ab/constants`, so an import the other way would create
+ * a cycle). Mirrors `libs/utils/src/strings.ts humanize()` behaviour:
+ * splits camelCase/PascalCase boundaries, then kebab/snake separators,
+ * title-cases each word, preserves all-caps acronyms.
+ */
+function humanize(slug: string): string {
+	if (!slug) return '';
+	const withBoundaries = slug.replace(/([a-z0-9])([A-Z])/g, '$1 $2').replace(/([A-Z]+)([A-Z][a-z])/g, '$1 $2');
+	return withBoundaries
+		.split(/[\s\-_]+/)
+		.filter((w) => w.length > 0)
+		.map((w) => (w === w.toUpperCase() ? w : w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()))
+		.join(' ');
 }
 
 /**
@@ -176,7 +194,7 @@ export const ACTIVITY_WINDOW_DAYS = 7;
  * been past its `dueAt` longer than this. 2 days matches the spec's "missed
  * review" threshold for weak-areas ranking.
  */
-export const OVERDUE_GRACE_MS = 2 * 24 * 60 * 60 * 1000;
+export const OVERDUE_GRACE_MS = 2 * MS_PER_DAY;
 
 export const CARD_TYPES = {
 	BASIC: 'basic',
@@ -251,6 +269,19 @@ export const REVIEW_RATINGS = {
 export type ReviewRating = (typeof REVIEW_RATINGS)[keyof typeof REVIEW_RATINGS];
 
 export const REVIEW_RATING_VALUES = Object.values(REVIEW_RATINGS);
+
+/**
+ * One-word labels for the rating buttons in the review surface. Product
+ * decision: `Wrong / Hard / Right / Easy` (rather than FSRS's `Again /
+ * Hard / Good / Easy`). Keep the map single-sourced so session-runner and
+ * `/memory/review` stay consistent.
+ */
+export const REVIEW_RATING_LABELS: Record<ReviewRating, string> = {
+	[REVIEW_RATINGS.AGAIN]: 'Wrong',
+	[REVIEW_RATINGS.HARD]: 'Hard',
+	[REVIEW_RATINGS.GOOD]: 'Right',
+	[REVIEW_RATINGS.EASY]: 'Easy',
+};
 
 /** FSRS scheduler states for a card. */
 export const CARD_STATES = {
@@ -661,6 +692,13 @@ export const SESSION_MODE_LABELS: Record<SessionMode, string> = {
 	[SESSION_MODES.EXPAND]: 'Try something new',
 };
 
+/**
+ * Default session mode when a plan / form hasn't specified one. Centralises
+ * the "mixed is the default" product decision so flipping it (e.g. to
+ * `continue`) only touches this constant.
+ */
+export const DEFAULT_SESSION_MODE: SessionMode = SESSION_MODES.MIXED;
+
 export const SESSION_SLICES = {
 	CONTINUE: 'continue',
 	STRENGTHEN: 'strengthen',
@@ -865,7 +903,7 @@ export const MAX_SESSION_LENGTH = 50;
  * How long an abandoned in-progress session remains resumable before the
  * `/session/start` flow offers a fresh preview instead. 2h from the spec.
  */
-export const RESUME_WINDOW_MS = 2 * 60 * 60 * 1000;
+export const RESUME_WINDOW_MS = 2 * MS_PER_HOUR;
 
 export const SESSION_SLICE_LABELS: Record<SessionSlice, string> = {
 	[SESSION_SLICES.CONTINUE]: 'Continue where you left off',
@@ -889,6 +927,18 @@ export const NODE_MASTERY_GATES = {
 export type NodeMasteryGate = (typeof NODE_MASTERY_GATES)[keyof typeof NODE_MASTERY_GATES];
 
 export const NODE_MASTERY_GATE_VALUES: readonly NodeMasteryGate[] = Object.values(NODE_MASTERY_GATES);
+
+/**
+ * Human-readable labels for each mastery-gate outcome. Used by the
+ * knowledge detail page's gate badges; single-sourced so renames don't
+ * drift.
+ */
+export const NODE_MASTERY_GATE_LABELS: Record<NodeMasteryGate, string> = {
+	[NODE_MASTERY_GATES.PASS]: 'Pass',
+	[NODE_MASTERY_GATES.FAIL]: 'Fail',
+	[NODE_MASTERY_GATES.INSUFFICIENT_DATA]: 'Not enough data',
+	[NODE_MASTERY_GATES.NOT_APPLICABLE]: 'Not applicable',
+};
 
 /**
  * Phases for a single item's review interaction in `/memory/review` --

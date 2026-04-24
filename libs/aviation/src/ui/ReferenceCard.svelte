@@ -75,22 +75,22 @@ const matchedParts = $derived.by<HighlightParts | null>(() => {
 	.card {
 		display: flex;
 		flex-direction: column;
-		gap: var(--ab-space-sm);
-		background: var(--ab-color-surface);
-		border: 1px solid var(--ab-color-border);
-		border-radius: var(--ab-radius-md);
-		padding: 0.875rem var(--ab-space-lg);
+		gap: var(--space-sm);
+		background: var(--surface-panel);
+		border: 1px solid var(--edge-default);
+		border-radius: var(--radius-md);
+		padding: 0.875rem var(--space-lg);
 		text-decoration: none;
 		color: inherit;
 		transition:
-			border-color var(--ab-transition-fast),
-			box-shadow var(--ab-transition-fast);
+			border-color var(--motion-fast),
+			box-shadow var(--motion-fast);
 	}
 
 	.card:hover,
 	.card:focus-visible {
-		border-color: var(--ab-color-primary-hover);
-		box-shadow: var(--ab-shadow-sm);
+		border-color: var(--action-default-hover);
+		box-shadow: var(--shadow-sm);
 		outline: none;
 	}
 
@@ -98,74 +98,74 @@ const matchedParts = $derived.by<HighlightParts | null>(() => {
 		display: flex;
 		justify-content: space-between;
 		align-items: baseline;
-		gap: var(--ab-space-sm);
+		gap: var(--space-sm);
 	}
 
 	.hd h3 {
 		margin: 0;
-		font-size: var(--ab-font-size-base);
-		color: var(--ab-color-fg);
+		font-size: var(--font-size-base);
+		color: var(--ink-body);
 	}
 
 	.id {
-		font-family: var(--ab-font-family-mono);
-		font-size: var(--ab-font-size-xs);
-		color: var(--ab-color-fg-subtle);
+		font-family: var(--font-family-mono);
+		font-size: var(--font-size-xs);
+		color: var(--ink-subtle);
 	}
 
 	.para {
 		margin: 0;
-		font-size: var(--ab-font-size-sm);
-		color: var(--ab-color-fg-muted);
-		line-height: var(--ab-line-height-normal);
+		font-size: var(--font-size-sm);
+		color: var(--ink-muted);
+		line-height: var(--line-height-normal);
 	}
 
 	.matched {
 		margin: 0;
-		font-size: var(--ab-font-size-xs);
-		color: var(--ab-color-fg-subtle);
+		font-size: var(--font-size-xs);
+		color: var(--ink-subtle);
 	}
 
 	.matched em {
 		font-style: normal;
-		color: var(--ab-color-fg-muted);
+		color: var(--ink-muted);
 	}
 
 	mark {
-		background: var(--ab-color-warning-subtle);
-		color: var(--ab-color-fg);
+		background: var(--action-caution-wash);
+		color: var(--ink-body);
 		padding: 0 0.0625rem;
-		border-radius: var(--ab-radius-tight);
+		border-radius: var(--radius-xs);
 	}
 
 	.tags {
 		display: flex;
 		flex-wrap: wrap;
-		gap: var(--ab-space-2xs);
+		gap: var(--space-2xs);
 	}
 
 	.chip {
 		display: inline-flex;
 		align-items: center;
-		padding: 0.0625rem var(--ab-space-sm);
-		font-size: var(--ab-font-size-xs);
-		border-radius: var(--ab-radius-pill);
-		background: var(--ab-color-surface-sunken);
-		color: var(--ab-color-fg-muted);
+		padding: 0.0625rem var(--space-sm);
+		font-size: var(--font-size-xs);
+		border-radius: var(--radius-pill);
+		background: var(--surface-sunken);
+		color: var(--ink-muted);
 		text-transform: uppercase;
-		letter-spacing: var(--ab-letter-spacing-wide);
-		border: 1px solid var(--ab-color-border);
+		letter-spacing: var(--letter-spacing-wide);
+		border: 1px solid var(--edge-default);
 	}
 
 	.chip.source {
-		background: var(--ab-color-primary-subtle);
-		color: var(--ab-color-primary);
-		border-color: var(--ab-color-primary-subtle-border);
+		background: var(--action-default-wash);
+		color: var(--action-default);
+		border-color: var(--action-default-edge);
 	}
 
 	.chip.kind {
-		background: var(--ab-color-warning-subtle);
-		color: var(--ab-color-warning);
-		border-color: var(--ab-color-warning-subtle-border);
+		background: var(--action-caution-wash);
+		color: var(--action-caution);
+		border-color: var(--action-caution-edge);
 	}
 </style>

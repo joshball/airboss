@@ -1,4 +1,4 @@
-import { CARD_STATES, REVIEW_RATINGS } from '@ab/constants';
+import { CARD_STATES, MS_PER_DAY, REVIEW_RATINGS } from '@ab/constants';
 import { describe, expect, it } from 'vitest';
 import { fsrsDefaultParams, fsrsInitialState, fsrsSchedule } from './srs';
 
@@ -44,7 +44,7 @@ describe('fsrsSchedule -- new card', () => {
 		// Due should be soon: within a day of now.
 		const msToDue = result.dueAt.getTime() - NOW.getTime();
 		expect(msToDue).toBeGreaterThan(0);
-		expect(msToDue).toBeLessThan(24 * 60 * 60 * 1000);
+		expect(msToDue).toBeLessThan(MS_PER_DAY);
 	});
 
 	it('Easy on a new card schedules a longer interval than Good', () => {
@@ -58,13 +58,13 @@ describe('fsrsSchedule -- new card', () => {
 		// Compare against a card already in Review state so all four ratings
 		// schedule real intervals (Again on a new card goes to Learning with a
 		// sub-day interval that reorders the comparison).
-		const dueIn5 = new Date(NOW.getTime() + 5 * 24 * 60 * 60 * 1000);
+		const dueIn5 = new Date(NOW.getTime() + 5 * MS_PER_DAY);
 		const state: Parameters<typeof fsrsSchedule>[0] = {
 			stability: 5,
 			difficulty: 5,
 			state: CARD_STATES.REVIEW,
 			dueAt: dueIn5,
-			lastReview: new Date(NOW.getTime() - 5 * 24 * 60 * 60 * 1000),
+			lastReview: new Date(NOW.getTime() - 5 * MS_PER_DAY),
 			reviewCount: 2,
 			lapseCount: 0,
 		};
@@ -87,8 +87,8 @@ describe('fsrsSchedule -- review cards', () => {
 	// time. We build the state directly so the test is isolated from FSRS's
 	// graduation heuristics.
 	function makeMatureCard() {
-		const dueInTenDays = new Date(NOW.getTime() + 10 * 24 * 60 * 60 * 1000);
-		const lastReview = new Date(NOW.getTime() - 10 * 24 * 60 * 60 * 1000);
+		const dueInTenDays = new Date(NOW.getTime() + 10 * MS_PER_DAY);
+		const lastReview = new Date(NOW.getTime() - 10 * MS_PER_DAY);
 		const state: Parameters<typeof fsrsSchedule>[0] = {
 			stability: 10,
 			difficulty: 5,
@@ -109,7 +109,7 @@ describe('fsrsSchedule -- review cards', () => {
 		expect(result.state).toBe(CARD_STATES.RELEARNING);
 		// Due should be much sooner than the prior 10-day interval.
 		const newIntervalMs = result.dueAt.getTime() - at.getTime();
-		expect(newIntervalMs).toBeLessThan(24 * 60 * 60 * 1000);
+		expect(newIntervalMs).toBeLessThan(MS_PER_DAY);
 		// Stability collapses after a lapse.
 		expect(result.stability).toBeLessThan(before);
 	});

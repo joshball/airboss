@@ -20,6 +20,7 @@ import {
 	KNOWLEDGE_EDGE_TYPES,
 	type KnowledgeEdgeType,
 	NODE_MASTERY_GATES,
+	type NodeLifecycle,
 	type NodeMasteryGate,
 	RELEVANCE_PRIORITIES,
 	REP_ACCURACY_THRESHOLD,
@@ -438,7 +439,7 @@ export interface KnowledgeNodeListRow {
 	title: string;
 	domain: string;
 	estimatedTimeMinutes: number | null;
-	lifecycle: 'skeleton' | 'started' | 'complete';
+	lifecycle: NodeLifecycle;
 	certs: string[];
 	priorities: string[];
 }

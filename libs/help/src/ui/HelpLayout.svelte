@@ -103,7 +103,7 @@ $effect(() => {
 	}
 
 	.sidebar-extra {
-		border-top: 1px solid var(--ab-color-border);
+		border-top: 1px solid var(--edge-default);
 		padding-top: 0.75rem;
 	}
 
@@ -114,7 +114,7 @@ $effect(() => {
 	.page-head {
 		margin-bottom: 1.5rem;
 		padding-bottom: 1rem;
-		border-bottom: 1px solid var(--ab-color-border);
+		border-bottom: 1px solid var(--edge-default);
 	}
 
 	.page-head h1 {
@@ -125,7 +125,7 @@ $effect(() => {
 
 	.summary {
 		margin: 0;
-		color: var(--ab-color-fg-muted);
+		color: var(--ink-muted);
 		font-size: 1rem;
 		line-height: 1.5;
 	}
@@ -133,14 +133,14 @@ $effect(() => {
 	.documents {
 		margin: 0.5rem 0 0;
 		font-size: 0.8125rem;
-		color: var(--ab-color-fg-subtle);
+		color: var(--ink-subtle);
 	}
 
 	.documents code {
-		background: var(--ab-color-surface-sunken);
+		background: var(--surface-sunken);
 		padding: 0.0625rem 0.375rem;
-		border-radius: var(--ab-radius-tight);
-		font-family: var(--ab-font-mono, ui-monospace, monospace);
+		border-radius: var(--radius-xs);
+		font-family: var(--font-family-mono);
 		font-size: 0.8125rem;
 	}
 

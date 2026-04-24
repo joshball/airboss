@@ -18,11 +18,18 @@
  */
 
 import {
+	CARD_STATES,
+	type CardState,
 	type Cert,
 	DEPTH_PREFERENCES,
 	type DepthPreference,
 	type Domain,
 	MODE_WEIGHTS,
+	MS_PER_WEEK,
+	RELEVANCE_PRIORITIES,
+	REVIEW_RATINGS,
+	type RelevancePriority,
+	SESSION_ITEM_KINDS,
 	SESSION_REASON_CODES,
 	SESSION_SLICES,
 	type SessionItemKind,
@@ -52,7 +59,7 @@ export interface EngineCardCandidate {
 	cardId: string;
 	domain: Domain;
 	nodeId: string | null;
-	state: string;
+	state: CardState;
 	dueAt: Date;
 	/** Rating of the last review; null for never-reviewed cards. */
 	lastRating: number | null;
@@ -79,7 +86,7 @@ export interface EngineNodeCandidate {
 	domain: Domain;
 	crossDomains: readonly string[];
 	/** Priority from relevance[] entries matching the user's cert_filter. */
-	priority: 'core' | 'supporting' | 'elective';
+	priority: RelevancePriority;
 	/**
 	 * True when every `requires` prerequisite resolves to a node the user has
 	 * mastered (per knowledge-graph dual-gate isNodeMastered). Engine refuses
@@ -245,7 +252,7 @@ function scoreContinueCard(card: EngineCardCandidate, filters: EnginePoolFilters
 	// Last session == index 0, second-to-last == index 1. Earlier = lower weight.
 	const domainRecencyWeight = lastIdx === 0 ? 1.0 : 0.5;
 	const dueMs = Math.max(0, now.getTime() - card.dueAt.getTime());
-	const dueUrgency = Math.min(1, dueMs / (7 * 24 * 60 * 60 * 1000)) + Math.min(1, card.overdueRatio);
+	const dueUrgency = Math.min(1, dueMs / MS_PER_WEEK) + Math.min(1, card.overdueRatio);
 	return domainRecencyWeight * 0.6 + Math.min(1, dueUrgency) * 0.4;
 }
 
@@ -262,10 +269,10 @@ function scoreContinueRep(rep: EngineRepCandidate, filters: EnginePoolFilters): 
 /** Strengthen-slice card score. Rewards relearning > rated-Again > overdue. */
 function scoreStrengthenCard(card: EngineCardCandidate, overconfidence: number): number {
 	let base = 0;
-	if (card.state === 'relearning') base += 0.9;
-	if (card.lastRating === 1)
+	if (card.state === CARD_STATES.RELEARNING) base += 0.9;
+	if (card.lastRating === REVIEW_RATINGS.AGAIN)
 		base += 0.6; // Again
-	else if (card.lastRating === 2) base += 0.3; // Hard
+	else if (card.lastRating === REVIEW_RATINGS.HARD) base += 0.3; // Hard
 	if (card.overdueRatio >= 2) base += 0.4;
 	return base + overconfidence * 0.3;
 }
@@ -282,7 +289,8 @@ function scoreExpandNode(
 	filters: EnginePoolFilters,
 	depthPreference: DepthPreference,
 ): number {
-	const priorityWeight = node.priority === 'core' ? 1.0 : node.priority === 'supporting' ? 0.6 : 0.2;
+	const priorityWeight =
+		node.priority === RELEVANCE_PRIORITIES.CORE ? 1.0 : node.priority === RELEVANCE_PRIORITIES.SUPPORTING ? 0.6 : 0.2;
 	const focusMatch = filters.focusFilter.includes(node.domain) ? 0.4 : 0;
 	const bloomMatch = node.bloomDepth !== null && node.bloomDepth === depthPreference ? 0.2 : 0;
 	return priorityWeight + focusMatch + bloomMatch;
@@ -308,8 +316,9 @@ function continueCardReason(card: EngineCardCandidate): SessionReasonCode {
 }
 
 function strengthenCardReason(card: EngineCardCandidate): SessionReasonCode {
-	if (card.state === 'relearning') return SESSION_REASON_CODES.STRENGTHEN_RELEARNING;
-	if (card.lastRating === 1 || card.lastRating === 2) return SESSION_REASON_CODES.STRENGTHEN_RATED_AGAIN;
+	if (card.state === CARD_STATES.RELEARNING) return SESSION_REASON_CODES.STRENGTHEN_RELEARNING;
+	if (card.lastRating === REVIEW_RATINGS.AGAIN || card.lastRating === REVIEW_RATINGS.HARD)
+		return SESSION_REASON_CODES.STRENGTHEN_RATED_AGAIN;
 	if (card.overdueRatio >= 2) return SESSION_REASON_CODES.STRENGTHEN_OVERDUE;
 	return SESSION_REASON_CODES.STRENGTHEN_RATED_AGAIN;
 }
@@ -321,7 +330,7 @@ function strengthenRepReason(rep: EngineRepCandidate): SessionReasonCode {
 
 function expandNodeReason(node: EngineNodeCandidate, filters: EnginePoolFilters): SessionReasonCode {
 	if (filters.focusFilter.includes(node.domain)) return SESSION_REASON_CODES.EXPAND_FOCUS_MATCH;
-	if (node.priority === 'core') return SESSION_REASON_CODES.EXPAND_UNSTARTED_PRIORITY;
+	if (node.priority === RELEVANCE_PRIORITIES.CORE) return SESSION_REASON_CODES.EXPAND_UNSTARTED_PRIORITY;
 	return SESSION_REASON_CODES.EXPAND_UNSTARTED_READY;
 }
 
@@ -351,16 +360,16 @@ function toSessionItem<T extends { cardId?: string; scenarioId?: string; nodeId?
 	scored: Scored<T>,
 ): SessionItem {
 	const { slice, reasonCode, reasonDetail } = scored;
-	if (scored.kind === 'card') {
+	if (scored.kind === SESSION_ITEM_KINDS.CARD) {
 		const cardId = (scored.candidate as unknown as EngineCardCandidate).cardId;
-		return { kind: 'card', cardId, slice, reasonCode, reasonDetail };
+		return { kind: SESSION_ITEM_KINDS.CARD, cardId, slice, reasonCode, reasonDetail };
 	}
-	if (scored.kind === 'rep') {
+	if (scored.kind === SESSION_ITEM_KINDS.REP) {
 		const scenarioId = (scored.candidate as unknown as EngineRepCandidate).scenarioId;
-		return { kind: 'rep', scenarioId, slice, reasonCode, reasonDetail };
+		return { kind: SESSION_ITEM_KINDS.REP, scenarioId, slice, reasonCode, reasonDetail };
 	}
 	const nodeId = (scored.candidate as unknown as EngineNodeCandidate).nodeId;
-	return { kind: 'node_start', nodeId, slice, reasonCode, reasonDetail };
+	return { kind: SESSION_ITEM_KINDS.NODE_START, nodeId, slice, reasonCode, reasonDetail };
 }
 
 interface IdentityKey {
@@ -369,15 +378,17 @@ interface IdentityKey {
 }
 
 function identityOf(s: SessionItem): IdentityKey {
-	if (s.kind === 'card') return { kind: 'card', id: s.cardId };
-	if (s.kind === 'rep') return { kind: 'rep', id: s.scenarioId };
-	return { kind: 'node_start', id: s.nodeId };
+	if (s.kind === SESSION_ITEM_KINDS.CARD) return { kind: SESSION_ITEM_KINDS.CARD, id: s.cardId };
+	if (s.kind === SESSION_ITEM_KINDS.REP) return { kind: SESSION_ITEM_KINDS.REP, id: s.scenarioId };
+	return { kind: SESSION_ITEM_KINDS.NODE_START, id: s.nodeId };
 }
 
 function identityKeyOfScored<T>(s: Scored<T>): IdentityKey {
-	if (s.kind === 'card') return { kind: 'card', id: (s.candidate as EngineCardCandidate).cardId };
-	if (s.kind === 'rep') return { kind: 'rep', id: (s.candidate as EngineRepCandidate).scenarioId };
-	return { kind: 'node_start', id: (s.candidate as EngineNodeCandidate).nodeId };
+	if (s.kind === SESSION_ITEM_KINDS.CARD)
+		return { kind: SESSION_ITEM_KINDS.CARD, id: (s.candidate as EngineCardCandidate).cardId };
+	if (s.kind === SESSION_ITEM_KINDS.REP)
+		return { kind: SESSION_ITEM_KINDS.REP, id: (s.candidate as EngineRepCandidate).scenarioId };
+	return { kind: SESSION_ITEM_KINDS.NODE_START, id: (s.candidate as EngineNodeCandidate).nodeId };
 }
 
 function serializeKey(k: IdentityKey): string {
@@ -416,7 +427,7 @@ export async function runEngine(inputs: EngineInputs, now: Date = new Date()): P
 			continuePool.push({
 				candidate: c,
 				score: s,
-				kind: 'card',
+				kind: SESSION_ITEM_KINDS.CARD,
 				slice: SESSION_SLICES.CONTINUE,
 				reasonCode: continueCardReason(c),
 			});
@@ -428,7 +439,7 @@ export async function runEngine(inputs: EngineInputs, now: Date = new Date()): P
 			continuePool.push({
 				candidate: r,
 				score: s,
-				kind: 'rep',
+				kind: SESSION_ITEM_KINDS.REP,
 				slice: SESSION_SLICES.CONTINUE,
 				reasonCode: SESSION_REASON_CODES.CONTINUE_RECENT_DOMAIN,
 			});
@@ -443,7 +454,7 @@ export async function runEngine(inputs: EngineInputs, now: Date = new Date()): P
 			strengthenPool.push({
 				candidate: c,
 				score: s,
-				kind: 'card',
+				kind: SESSION_ITEM_KINDS.CARD,
 				slice: SESSION_SLICES.STRENGTHEN,
 				reasonCode: strengthenCardReason(c),
 				reasonDetail: strengthenCardDetail(c),
@@ -457,7 +468,7 @@ export async function runEngine(inputs: EngineInputs, now: Date = new Date()): P
 			strengthenPool.push({
 				candidate: r,
 				score: s,
-				kind: 'rep',
+				kind: SESSION_ITEM_KINDS.REP,
 				slice: SESSION_SLICES.STRENGTHEN,
 				reasonCode: strengthenRepReason(r),
 				reasonDetail: strengthenRepDetail(r),
@@ -475,7 +486,7 @@ export async function runEngine(inputs: EngineInputs, now: Date = new Date()): P
 		expandPool.push({
 			candidate: n,
 			score: s,
-			kind: 'node_start',
+			kind: SESSION_ITEM_KINDS.NODE_START,
 			slice: SESSION_SLICES.EXPAND,
 			reasonCode: expandNodeReason(n, filters),
 		});
@@ -490,7 +501,7 @@ export async function runEngine(inputs: EngineInputs, now: Date = new Date()): P
 			diversifyPool.push({
 				candidate: c,
 				score: freq,
-				kind: 'card',
+				kind: SESSION_ITEM_KINDS.CARD,
 				slice: SESSION_SLICES.DIVERSIFY,
 				reasonCode: SESSION_REASON_CODES.DIVERSIFY_UNUSED_DOMAIN,
 			});
@@ -503,7 +514,7 @@ export async function runEngine(inputs: EngineInputs, now: Date = new Date()): P
 			diversifyPool.push({
 				candidate: r,
 				score: freq,
-				kind: 'rep',
+				kind: SESSION_ITEM_KINDS.REP,
 				slice: SESSION_SLICES.DIVERSIFY,
 				reasonCode: SESSION_REASON_CODES.DIVERSIFY_CROSS_DOMAIN_APPLY,
 			});
@@ -520,7 +531,7 @@ export async function runEngine(inputs: EngineInputs, now: Date = new Date()): P
 			diversifyPool.push({
 				candidate: n,
 				score: freq + (plan.depthPreference === DEPTH_PREFERENCES.DEEP ? 0.1 : 0),
-				kind: 'node_start',
+				kind: SESSION_ITEM_KINDS.NODE_START,
 				slice: SESSION_SLICES.DIVERSIFY,
 				reasonCode: SESSION_REASON_CODES.DIVERSIFY_UNUSED_DOMAIN,
 			});
@@ -718,9 +729,9 @@ export function redistribute(
 // ---------- Reason detail helpers ----------
 
 function strengthenCardDetail(card: EngineCardCandidate): string | undefined {
-	if (card.state === 'relearning') return 'Relearning state';
-	if (card.lastRating === 1) return 'You rated Again recently';
-	if (card.lastRating === 2) return 'You rated Hard recently';
+	if (card.state === CARD_STATES.RELEARNING) return 'Relearning state';
+	if (card.lastRating === REVIEW_RATINGS.AGAIN) return 'You rated Again recently';
+	if (card.lastRating === REVIEW_RATINGS.HARD) return 'You rated Hard recently';
 	if (card.overdueRatio >= 2) return `Overdue by ${Math.round(card.overdueRatio)}x scheduled interval`;
 	return undefined;
 }

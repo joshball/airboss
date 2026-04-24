@@ -15,6 +15,7 @@ import {
 import {
 	CERT_VALUES,
 	type Cert,
+	DEFAULT_SESSION_MODE,
 	DEPTH_PREFERENCE_VALUES,
 	type DepthPreference,
 	DOMAIN_VALUES,
@@ -53,7 +54,7 @@ export const actions: Actions = {
 		const focusDomainsRaw = form.getAll('focusDomains').map((v) => String(v));
 		const skipDomainsRaw = form.getAll('skipDomains').map((v) => String(v));
 		const depthRaw = String(form.get('depthPreference') ?? 'working');
-		const modeRaw = String(form.get('defaultMode') ?? 'mixed');
+		const modeRaw = String(form.get('defaultMode') ?? DEFAULT_SESSION_MODE);
 		const lengthRaw = String(form.get('sessionLength') ?? '10');
 
 		const certGoals: Cert[] = certGoalsRaw.filter((v): v is Cert => CERT_VALUES.includes(v as Cert));
@@ -75,7 +76,7 @@ export const actions: Actions = {
 				focusDomains,
 				skipDomains,
 				depthPreference: coerceEnum<DepthPreference>(depthRaw, DEPTH_PREFERENCE_VALUES as DepthPreference[], 'working'),
-				defaultMode: coerceEnum<SessionMode>(modeRaw, SESSION_MODE_VALUES as SessionMode[], 'mixed'),
+				defaultMode: coerceEnum<SessionMode>(modeRaw, SESSION_MODE_VALUES as SessionMode[], DEFAULT_SESSION_MODE),
 				sessionLength,
 			});
 		} catch (err) {

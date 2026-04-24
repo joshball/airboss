@@ -5,18 +5,19 @@ import {
 	CUSTOM_TILE,
 	DEPTH_PREFERENCE_LABELS,
 	type DepthPreference,
-	DOMAIN_LABELS,
-	type Domain,
+	domainLabel,
 	type Preset,
 	type PresetId,
 	QUERY_PARAMS,
 	ROUTES,
+	SESSION_ITEM_KINDS,
 	SESSION_MODE_LABELS,
 	SESSION_MODE_VALUES,
 	SESSION_REASON_CODE_DEFINITIONS,
 	SESSION_REASON_CODE_LABELS,
 	SESSION_SLICE_LABELS,
 	SESSION_SLICES,
+	type SessionItemKind,
 	type SessionMode,
 	type SessionReasonCode,
 	type SessionSlice,
@@ -60,25 +61,26 @@ const SLICE_HELP_SECTION: Record<SessionSlice, string> = {
 	[SESSION_SLICES.DIVERSIFY]: 'diversify',
 };
 
-const KIND_DEFINITIONS = {
-	card: 'A flashcard scheduled by FSRS. Reveal the answer, rate Again/Hard/Good/Easy.',
-	rep: 'A decision-rep scenario. Read the situation, pick an option, see the outcome.',
-	node_start: 'A knowledge-graph node you have not started yet. Launches the 7-phase guided learn flow.',
-} as const;
+const KIND_DEFINITIONS: Record<SessionItemKind, string> = {
+	[SESSION_ITEM_KINDS.CARD]: 'A flashcard scheduled by FSRS. Reveal the answer, rate Again/Hard/Good/Easy.',
+	[SESSION_ITEM_KINDS.REP]: 'A decision-rep scenario. Read the situation, pick an option, see the outcome.',
+	[SESSION_ITEM_KINDS.NODE_START]:
+		'A knowledge-graph node you have not started yet. Launches the 7-phase guided learn flow.',
+};
 
-const KIND_LABELS = {
-	card: 'Card',
-	rep: 'Rep',
-	node_start: 'Node',
-} as const;
+const KIND_LABELS: Record<SessionItemKind, string> = {
+	[SESSION_ITEM_KINDS.CARD]: 'Card',
+	[SESSION_ITEM_KINDS.REP]: 'Rep',
+	[SESSION_ITEM_KINDS.NODE_START]: 'Node',
+};
 
-const KIND_HELP = {
-	card: { helpId: 'memory-review', helpSection: 'fsrs-in-one-paragraph' },
-	rep: { helpId: 'reps-session', helpSection: '' },
-	node_start: { helpId: 'concept-knowledge-graph', helpSection: '' },
-} as const;
+const KIND_HELP: Record<SessionItemKind, { helpId: string; helpSection: string }> = {
+	[SESSION_ITEM_KINDS.CARD]: { helpId: 'memory-review', helpSection: 'fsrs-in-one-paragraph' },
+	[SESSION_ITEM_KINDS.REP]: { helpId: 'reps-session', helpSection: '' },
+	[SESSION_ITEM_KINDS.NODE_START]: { helpId: 'concept-knowledge-graph', helpSection: '' },
+};
 
-function kindHelpSection(kind: 'card' | 'rep' | 'node_start'): string | undefined {
+function kindHelpSection(kind: SessionItemKind): string | undefined {
 	const s = KIND_HELP[kind].helpSection;
 	return s === '' ? undefined : s;
 }
@@ -122,10 +124,6 @@ function changeMode(nextMode: SessionMode) {
 	next.searchParams.set(QUERY_PARAMS.SESSION_MODE, nextMode);
 	next.searchParams.delete(QUERY_PARAMS.SESSION_SEED);
 	void goto(next, { replaceState: true, invalidateAll: true });
-}
-
-function domainLabel(slug: string): string {
-	return (DOMAIN_LABELS as Record<Domain, string>)[slug as Domain] ?? humanize(slug);
 }
 
 function reasonLabel(code: SessionReasonCode): string {
@@ -345,9 +343,9 @@ function depthLabel(slug: DepthPreference): string {
 										{#if item.reasonDetail}
 											<span class="detail">— {item.reasonDetail}</span>
 										{/if}
-										{#if item.kind === 'node_start'}
+										{#if item.kind === SESSION_ITEM_KINDS.NODE_START}
 											<a class="id id-link" href={ROUTES.KNOWLEDGE_SLUG(item.nodeId)}>{item.nodeId}</a>
-										{:else if item.kind === 'card'}
+										{:else if item.kind === SESSION_ITEM_KINDS.CARD}
 											<a class="id id-link" href={ROUTES.MEMORY_CARD(item.cardId)}>{item.cardId}</a>
 										{:else}
 											<a class="id id-link" href={ROUTES.REP_DETAIL(item.scenarioId)}>{item.scenarioId}</a>
@@ -783,6 +781,13 @@ function depthLabel(slug: DepthPreference): string {
 		color: var(--ink-muted);
 	}
 
+	/*
+	 * Selector values track SESSION_ITEM_KINDS.NODE_START and
+	 * SESSION_ITEM_KINDS.REP in @ab/constants. Scoped CSS cannot interpolate
+	 * TS constants, so the coupling is expressed via the data-kind attribute
+	 * writer above (`data-kind={item.kind}` -- the value comes straight from
+	 * the constant).
+	 */
 	.kind[data-kind='node_start'] {
 		background: var(--signal-info-wash);
 		color: var(--signal-info);

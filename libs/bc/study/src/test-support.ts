@@ -95,7 +95,7 @@ export async function seedRepAttempt(opts: {
 		sessionLength: MIN_SESSION_LENGTH,
 		items: [
 			{
-				kind: 'rep',
+				kind: SESSION_ITEM_KINDS.REP,
 				scenarioId: opts.scenarioId,
 				slice: SESSION_SLICES.CONTINUE,
 				reasonCode: SESSION_REASON_CODES.CONTINUE_RECENT_DOMAIN,

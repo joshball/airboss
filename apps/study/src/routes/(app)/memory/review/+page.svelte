@@ -1,8 +1,7 @@
 <script lang="ts">
 import {
 	type ConfidenceLevel,
-	DOMAIN_LABELS,
-	type Domain,
+	domainLabel,
 	REVIEW_PHASES,
 	REVIEW_RATINGS,
 	type ReviewPhase,
@@ -12,7 +11,6 @@ import PageHelp from '@ab/help/ui/PageHelp.svelte';
 import ConfidenceSlider from '@ab/ui/components/ConfidenceSlider.svelte';
 import InfoTip from '@ab/ui/components/InfoTip.svelte';
 import KbdHint from '@ab/ui/components/KbdHint.svelte';
-import { humanize } from '@ab/utils';
 import { enhance } from '$app/forms';
 import { invalidateAll } from '$app/navigation';
 import type { PageData } from './$types';
@@ -87,10 +85,6 @@ const ratingLabels: Record<number, { label: string; hint: string; key: string; d
 		definition: 'You knew it instantly. Next interval jumps forward further than Good.',
 	},
 };
-
-function domainLabel(slug: string): string {
-	return (DOMAIN_LABELS as Record<Domain, string>)[slug as Domain] ?? humanize(slug);
-}
 
 function goToConfidenceOrReveal() {
 	if (needsConfidence && confidence === null) {

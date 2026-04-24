@@ -127,7 +127,7 @@ let {
 		font-weight: 700;
 		text-transform: uppercase;
 		letter-spacing: 0.08em;
-		color: var(--ab-color-fg-muted);
+		color: var(--ink-muted);
 	}
 
 	ul {
@@ -144,11 +144,11 @@ let {
 		gap: 0.5rem;
 		padding: 0.25rem 0;
 		font-size: 0.8125rem;
-		color: var(--ab-color-fg);
+		color: var(--ink-body);
 	}
 
 	.n {
-		color: var(--ab-color-fg-subtle);
+		color: var(--ink-subtle);
 		font-variant-numeric: tabular-nums;
 	}
 </style>

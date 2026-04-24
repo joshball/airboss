@@ -13,14 +13,14 @@
  *   - Error-tuple pattern (dashed-border "couldn't load" card) undocumented.
  */
 
-import { APP_SURFACES, HELP_KINDS } from '@ab/constants';
+import { APP_SURFACES, HELP_KINDS, ROUTES } from '@ab/constants';
 import type { HelpPage } from '@ab/help';
 
 export const dashboard: HelpPage = {
 	id: 'dashboard',
 	title: 'Dashboard',
 	summary: 'Panel-by-panel reference for the dashboard launchpad.',
-	documents: '/dashboard',
+	documents: ROUTES.DASHBOARD,
 	tags: {
 		appSurface: [APP_SURFACES.DASHBOARD],
 		helpKind: HELP_KINDS.REFERENCE,

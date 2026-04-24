@@ -17,6 +17,7 @@ import {
 	ACTIVITY_WINDOW_DAYS,
 	CARD_STATUSES,
 	type Domain,
+	MS_PER_DAY,
 	OVERDUE_GRACE_MS,
 	REVIEW_RATINGS,
 	SCENARIO_STATUSES,
@@ -242,7 +243,7 @@ export async function getRecentActivity(
 	const todayKey = utcDayKey(now);
 	// Window starts at UTC midnight `days - 1` days before today, inclusive.
 	const todayStart = utcStartOfDay(now);
-	const windowStart = new Date(todayStart.getTime() - (days - 1) * 24 * 60 * 60 * 1000);
+	const windowStart = new Date(todayStart.getTime() - (days - 1) * MS_PER_DAY);
 
 	// Grouped-by-day pulls for reviews and attempts. Each query hits an
 	// already-indexed (userId, timestamp) path.
@@ -283,7 +284,7 @@ export async function getRecentActivity(
 	// Build the fixed-length day array from oldest -> newest.
 	const out: ActivityDay[] = [];
 	for (let i = days - 1; i >= 0; i--) {
-		const d = new Date(todayStart.getTime() - i * 24 * 60 * 60 * 1000);
+		const d = new Date(todayStart.getTime() - i * MS_PER_DAY);
 		const key = utcDayKey(d);
 		out.push({
 			day: key,
@@ -301,7 +302,7 @@ export async function getRecentActivity(
 	// yesterday so the streak doesn't flip to 0 overnight. Matches
 	// getStreakDays in sessions.ts + extendedStreak below.
 	const todayHasActivity = (reviewByDay.get(todayKey) ?? 0) + (attemptByDay.get(todayKey) ?? 0) > 0;
-	const yesterdayKey = utcDayKey(new Date(todayStart.getTime() - 24 * 60 * 60 * 1000));
+	const yesterdayKey = utcDayKey(new Date(todayStart.getTime() - MS_PER_DAY));
 	let streakDays = 0;
 	let cursorKey = todayHasActivity ? todayKey : yesterdayKey;
 	for (let i = 0; i < 366; i++) {
@@ -333,7 +334,7 @@ export async function getRecentActivity(
  * 366 distinct UTC review/attempt days and walks backwards.
  */
 async function extendedStreak(userId: string, db: Db, now: Date): Promise<number> {
-	const lookbackStart = new Date(now.getTime() - 366 * 24 * 60 * 60 * 1000);
+	const lookbackStart = new Date(now.getTime() - 366 * MS_PER_DAY);
 	const rows = await db
 		.select({
 			day: sql<string>`to_char(dt, 'YYYY-MM-DD')`.as('day'),
@@ -359,7 +360,7 @@ async function extendedStreak(userId: string, db: Db, now: Date): Promise<number
 	if (rows.length === 0) return 0;
 
 	const todayKey = utcDayKey(now);
-	const yesterdayKey = utcDayKey(new Date(now.getTime() - 24 * 60 * 60 * 1000));
+	const yesterdayKey = utcDayKey(new Date(now.getTime() - MS_PER_DAY));
 	// Grace: if the first activity day is yesterday, start the walk there
 	// instead of today so a learner who hasn't yet opened the app this morning
 	// doesn't see their streak flip to 0. Matches getStreakDays in sessions.ts.
@@ -399,7 +400,7 @@ export async function getWeakAreas(
 	db: Db = defaultDb,
 	now: Date = new Date(),
 ): Promise<WeakArea[]> {
-	const windowStart = new Date(now.getTime() - WEAK_AREA_WINDOW_DAYS * 24 * 60 * 60 * 1000);
+	const windowStart = new Date(now.getTime() - WEAK_AREA_WINDOW_DAYS * MS_PER_DAY);
 	const overdueCutoff = new Date(now.getTime() - OVERDUE_GRACE_MS);
 
 	const [cardRows, repRows, overdueRows] = await Promise.all([

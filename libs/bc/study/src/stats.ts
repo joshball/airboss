@@ -12,6 +12,7 @@ import {
 	type CardState,
 	type Domain,
 	MASTERY_STABILITY_DAYS,
+	MS_PER_DAY,
 	REVIEW_RATINGS,
 	type ReviewRating,
 	SESSION_ITEM_KINDS,
@@ -66,7 +67,7 @@ function utcStartOfDay(d: Date): Date {
  * Queries distinct review days (UTC) in descending order and walks backwards.
  */
 async function computeStreakDays(userId: string, db: Db, now: Date): Promise<number> {
-	const lookbackStart = new Date(now.getTime() - 366 * 24 * 60 * 60 * 1000);
+	const lookbackStart = new Date(now.getTime() - 366 * MS_PER_DAY);
 	const rows = await db
 		.selectDistinct({
 			day: sql<string>`to_char(date_trunc('day', ${review.reviewedAt} at time zone 'UTC'), 'YYYY-MM-DD')`.as('day'),
@@ -78,7 +79,7 @@ async function computeStreakDays(userId: string, db: Db, now: Date): Promise<num
 	if (rows.length === 0) return 0;
 
 	const todayKey = utcDayKey(now);
-	const yesterdayKey = utcDayKey(new Date(now.getTime() - 24 * 60 * 60 * 1000));
+	const yesterdayKey = utcDayKey(new Date(now.getTime() - MS_PER_DAY));
 	// Grace: no activity today yet but yesterday counts -- keep the streak
 	// intact. Matches getStreakDays in sessions.ts / extendedStreak in dashboard.ts.
 	let cursorKey = rows[0]?.day === todayKey ? todayKey : yesterdayKey;

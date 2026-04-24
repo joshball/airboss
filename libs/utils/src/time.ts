@@ -9,28 +9,11 @@
 
 import { DEFAULT_USER_TIMEZONE } from '@ab/constants';
 
-/**
- * Milliseconds in a second. Rarely needed on its own, but useful as a
- * multiplier alongside the others so call sites can read as arithmetic
- * instead of a magic number.
- */
-export const MS_PER_SECOND = 1000;
-
-/** Milliseconds in a minute. */
-export const MS_PER_MINUTE = 60 * MS_PER_SECOND;
-
-/** Milliseconds in an hour. */
-export const MS_PER_HOUR = 60 * MS_PER_MINUTE;
-
-/**
- * Milliseconds in a nominal 24-hour day. Reviewers flagged 9+ inline copies
- * of `24 * 60 * 60 * 1000` across the study BC (calibration, stats,
- * dashboard, engine). Use this constant instead.
- *
- * Note: this is 24h flat; it does NOT account for DST transitions. Use
- * `userStartOfDay` + subtraction if you need calendar-day semantics.
- */
-export const MS_PER_DAY = 24 * MS_PER_HOUR;
+// Re-export the canonical MS_PER_* constants from @ab/constants so existing
+// `@ab/utils` consumers keep working but the single source of truth lives
+// with the rest of the constants. New callers should import directly from
+// @ab/constants.
+export { MS_PER_DAY, MS_PER_HOUR, MS_PER_MINUTE, MS_PER_SECOND } from '@ab/constants';
 
 /**
  * UTC instant representing midnight at the start of the local day in `tz`

@@ -19,6 +19,7 @@ import {
 	CONTENT_SOURCES,
 	type ConfidenceLevel,
 	DOMAINS,
+	MS_PER_DAY,
 	REVIEW_RATINGS,
 } from '@ab/constants';
 import { db } from '@ab/db';
@@ -390,7 +391,7 @@ describe('getCalibrationTrend', () => {
 			// Plant 20 PROBABLY reviews distributed across the last 2 days so
 			// the cumulative calc has something to compute.
 			const now = new Date();
-			const twoDaysAgo = new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000);
+			const twoDaysAgo = new Date(now.getTime() - 2 * MS_PER_DAY);
 			for (let i = 0; i < 20; i++) {
 				await seedReview(userId, cardId, CONFIDENCE_LEVELS.PROBABLY, i < 15, i < 10 ? twoDaysAgo : now);
 			}

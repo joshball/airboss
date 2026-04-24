@@ -17,6 +17,7 @@ import {
 	DEFAULT_USER_TIMEZONE,
 	type Difficulty,
 	type Domain,
+	MS_PER_DAY,
 	type PhaseOfFlight,
 	REP_BATCH_SIZE,
 	REP_DASHBOARD_WINDOW_DAYS,
@@ -579,7 +580,7 @@ export async function getRepDashboard(
 	now: Date = new Date(),
 	tz: string = DEFAULT_USER_TIMEZONE,
 ): Promise<RepDashboardStats> {
-	const windowStart = new Date(now.getTime() - REP_DASHBOARD_WINDOW_DAYS * 24 * 60 * 60 * 1000);
+	const windowStart = new Date(now.getTime() - REP_DASHBOARD_WINDOW_DAYS * MS_PER_DAY);
 	const todayStart = userStartOfDay(now, tz);
 
 	// Single per-domain aggregate over active scenarios that returns:

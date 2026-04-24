@@ -103,7 +103,7 @@ function truncate(text: string, max: number): string {
 	}
 
 	.link {
-		color: var(--ab-color-primary);
+		color: var(--action-default);
 		text-decoration: none;
 		border-bottom: 1px dotted currentColor;
 	}
@@ -115,31 +115,31 @@ function truncate(text: string, max: number): string {
 	}
 
 	.link:focus-visible {
-		outline: 2px solid var(--ab-color-focus-ring);
+		outline: 2px solid var(--focus-ring);
 		outline-offset: 2px;
-		border-radius: var(--ab-radius-hair);
+		border-radius: var(--radius-xs);
 	}
 
 	.unresolved {
-		color: var(--ab-color-fg);
+		color: var(--ink-body);
 	}
 
 	.unresolved.dev {
-		background: var(--ab-color-warning-subtle);
-		border-bottom: 1px dashed var(--ab-color-warning);
+		background: var(--action-caution-wash);
+		border-bottom: 1px dashed var(--action-caution);
 	}
 
 	.popover {
 		position: absolute;
 		left: 0;
 		top: calc(100% + 4px);
-		z-index: 20;
+		z-index: var(--z-popover);
 		min-width: 18rem;
 		max-width: 24rem;
-		background: var(--ab-color-surface, white);
-		color: var(--ab-color-fg);
-		border: 1px solid var(--ab-color-border);
-		border-radius: var(--ab-radius-md);
+		background: var(--surface-panel);
+		color: var(--ink-body);
+		border: 1px solid var(--edge-default);
+		border-radius: var(--radius-md);
 		padding: 0.625rem 0.75rem;
 		box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
 		display: flex;
@@ -152,11 +152,11 @@ function truncate(text: string, max: number): string {
 
 	.pop-title {
 		font-weight: 600;
-		color: var(--ab-color-fg);
+		color: var(--ink-body);
 	}
 
 	.pop-body {
-		color: var(--ab-color-fg-muted);
+		color: var(--ink-muted);
 		line-height: 1.4;
 	}
 
@@ -169,15 +169,15 @@ function truncate(text: string, max: number): string {
 	.chip {
 		font-size: 0.6875rem;
 		padding: 0.0625rem 0.375rem;
-		border-radius: var(--ab-radius-pill);
-		background: var(--ab-color-surface-sunken);
-		color: var(--ab-color-fg-muted);
+		border-radius: var(--radius-pill);
+		background: var(--surface-sunken);
+		color: var(--ink-muted);
 		text-transform: uppercase;
 		letter-spacing: 0.04em;
 	}
 
 	.pop-hint {
 		font-size: 0.6875rem;
-		color: var(--ab-color-fg-subtle);
+		color: var(--ink-subtle);
 	}
 </style>

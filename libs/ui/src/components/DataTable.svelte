@@ -166,7 +166,7 @@ function sortIndicator(column: DataTableColumn<T>): string {
 	th.sticky {
 		position: sticky;
 		left: 0;
-		z-index: 1;
+		z-index: var(--z-sticky);
 	}
 
 	:global(.data-table-body td) {
