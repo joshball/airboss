@@ -27,14 +27,11 @@ import { navigating } from '$app/state';
 		right: 0;
 		height: 3px;
 		/*
-		 * NAV_PROGRESS tier sits above MODAL (100) but below COMMAND_PALETTE
-		 * (200) and TOAST (300). Reason: a Dialog with a form action submits
-		 * and triggers a SvelteKit route transition while the modal is still
-		 * visible during its close animation; the progress bar has to render
-		 * above the scrim so the user sees "something is happening" feedback
-		 * during that window. See @ab/constants Z_INDEX.
+		 * Sits at STICKY so a MODAL (tier 100) visually covers the progress
+		 * bar. Modals own the screen: if one is open, the user's focus is
+		 * there, not on a route transition underneath.
 		 */
-		z-index: var(--z-nav-progress);
+		z-index: var(--z-sticky);
 		pointer-events: none;
 		background: transparent;
 	}

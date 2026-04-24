@@ -11,16 +11,13 @@
  * / `1000` literals across files. Tiers:
  *
  * - `BASE` (0): default document flow.
- * - `STICKY` (10): sticky table headers, sticky section headers.
+ * - `STICKY` (10): sticky table headers, sticky section headers, and the
+ *   top-of-page nav progress bar. Modals own the screen, so the progress
+ *   bar deliberately sits below MODAL.
  * - `SIDEBAR` (20): app sidebars / off-canvas panels.
  * - `DROPDOWN` (30): menus anchored to a trigger.
  * - `POPOVER` (50): floating popovers (e.g. InfoTip).
  * - `MODAL` (100): dialog scrims + panels.
- * - `NAV_PROGRESS` (150): top-of-page navigation progress bar. Above
- *   MODAL because form-action submissions from inside a Dialog trigger
- *   route transitions while the modal is still visible during its close
- *   animation; the progress bar needs to render above the scrim so the
- *   user sees "something is happening" feedback during that window.
  * - `COMMAND_PALETTE` (200): global cmd-K palette that must sit above
  *   modals opened from it.
  * - `TOAST` (300): transient notifications; system feedback outranks
@@ -35,7 +32,6 @@ export const Z_INDEX = {
 	DROPDOWN: 30,
 	POPOVER: 50,
 	MODAL: 100,
-	NAV_PROGRESS: 150,
 	COMMAND_PALETTE: 200,
 	TOAST: 300,
 	TOP: 1000,
