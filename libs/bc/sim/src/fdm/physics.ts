@@ -196,7 +196,11 @@ export function derivatives(
 	const drag = dynamicPressure * cfg.wingArea * cd;
 
 	const densityRatio = rho / SIM_SEA_LEVEL_DENSITY_KG_M3;
-	const thrust = inputs.throttle * cfg.maxThrustSeaLevel * densityRatio;
+	// Fixed-pitch prop: thrust falls linearly from static down to zero as
+	// airspeed approaches vZeroThrust. Keeps takeoff acceleration strong
+	// while still settling to a sane cruise airspeed.
+	const propFactor = Math.max(0, 1 - tas / cfg.vZeroThrust);
+	const thrust = inputs.throttle * cfg.maxThrustSeaLevel * densityRatio * propFactor;
 
 	const gamma = tas > 1e-4 ? Math.atan2(w, u) : pitch;
 	const cosGamma = Math.cos(gamma);
