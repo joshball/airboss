@@ -34,6 +34,7 @@ export const chrome: Chrome = {
 	motion: {
 		fast: '80ms ease-out',
 		normal: '120ms ease-out',
+		slow: '600ms linear',
 	},
 	layout: {
 		containerMax: 'none',

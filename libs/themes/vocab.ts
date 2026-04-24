@@ -154,6 +154,7 @@ export const TOKENS = {
 	// -------- scale: motion --------
 	motionFast: '--motion-fast',
 	motionNormal: '--motion-normal',
+	motionSlow: '--motion-slow',
 
 	// -------- layout --------
 	layoutContainerMax: '--layout-container-max',

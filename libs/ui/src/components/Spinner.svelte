@@ -35,7 +35,7 @@ let {
 	}
 
 	svg {
-		animation: spin 800ms linear infinite;
+		animation: spin var(--motion-slow) linear infinite;
 	}
 
 	.s-sm svg { width: 1rem; height: 1rem; }

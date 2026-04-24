@@ -488,7 +488,7 @@ function rootFallbackBlock(): string {
 /**
  * Reduced-motion override -- shared across every theme.
  */
-const REDUCED_MOTION_BLOCK = `@media (prefers-reduced-motion: reduce) {\n\t:root, [data-theme] {\n\t\t--motion-fast: 0ms;\n\t\t--motion-normal: 0ms;\n\t}\n}\n`;
+const REDUCED_MOTION_BLOCK = `@media (prefers-reduced-motion: reduce) {\n\t:root, [data-theme] {\n\t\t--motion-fast: 0ms;\n\t\t--motion-normal: 0ms;\n\t\t--motion-slow: 0ms;\n\t}\n}\n`;
 
 /**
  * Render the full tokens.css output. Deterministic: for a given
