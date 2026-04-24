@@ -4,7 +4,7 @@ product: hangar
 feature: hangar-sources-v1
 type: design
 status: unread
-review_status: pending
+review_status: done
 ---
 
 # Design: Hangar sources v1

@@ -4,7 +4,7 @@ product: hangar
 feature: hangar-sources-v1
 type: test-plan
 status: unread
-review_status: pending
+review_status: done
 ---
 
 # Test plan: Hangar sources v1
