@@ -45,7 +45,11 @@
 			"@ab/help": ["libs/help/src/index.ts"],
 			"@ab/help/*": ["libs/help/src/*"],
 			"@ab/activities": ["libs/activities/src/index.ts"],
-			"@ab/activities/*": ["libs/activities/src/*"]
+			"@ab/activities/*": ["libs/activities/src/*"],
+			"@ab/hangar-jobs": ["libs/hangar-jobs/src/index.ts"],
+			"@ab/hangar-jobs/*": ["libs/hangar-jobs/src/*"],
+			"@ab/hangar-sync": ["libs/hangar-sync/src/index.ts"],
+			"@ab/hangar-sync/*": ["libs/hangar-sync/src/*"]
 		}
 	},
 	"include": ["libs/*/src/**/*.ts", "libs/bc/*/src/**/*.ts", "libs/themes/**/*.ts", "apps/*/src/**/*.ts", "scripts/**/*.ts"],

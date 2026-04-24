@@ -28,3 +28,8 @@ export const generateAuditLogId = (): string => createId('aud');
 
 /** Knowledge-node phase-progress row (per-user per-node). */
 export const generateKnowledgeNodeProgressId = (): string => createId('knp');
+
+// Hangar BC -- job queue + streamed log + sync ledger.
+export const generateHangarJobId = (): string => createId('job');
+export const generateHangarJobLogId = (): string => createId('jlg');
+export const generateHangarSyncLogId = (): string => createId('syn');
