@@ -113,10 +113,12 @@ describe('runAllTransforms', () => {
 			'}',
 		].join('\n');
 		const { source, changes } = runAllTransforms(input);
-		expect(source).toContain('var(--ink-body)');
+		// Legacy-alias rewriting was retired with Option A; `var(--ab-color-fg)`
+		// stays as-is and the codemod only remaps the radius + motion literals.
+		expect(source).toContain('var(--ab-color-fg)');
 		expect(source).toContain('var(--radius-md)');
 		expect(source).toContain('var(--motion-fast)');
-		expect(changes.length).toBeGreaterThanOrEqual(3);
+		expect(changes.length).toBeGreaterThanOrEqual(2);
 	});
 
 	it('is idempotent', () => {
