@@ -4,7 +4,7 @@ product: hangar
 feature: hangar-non-textual
 type: user-stories
 status: unread
-review_status: pending
+review_status: done
 ---
 
 # User stories: Hangar non-textual sources

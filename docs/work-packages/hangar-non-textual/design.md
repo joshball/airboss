@@ -4,7 +4,7 @@ product: hangar
 feature: hangar-non-textual
 type: design
 status: unread
-review_status: pending
+review_status: done
 ---
 
 # Design: Hangar non-textual sources
