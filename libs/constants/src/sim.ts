@@ -90,6 +90,23 @@ export const SIM_CONTROL_INCREMENTS = {
 	TRIM: 0.01,
 } as const;
 
+/**
+ * Spring-centered ramp tuning for held keyboard primary controls. Elevator,
+ * aileron, rudder deflect toward a target while the key is held and return to
+ * neutral when released -- modeling the spring-centered feel of a yoke or
+ * stick. Throttle ramps while held and holds position when released.
+ *
+ * Rates are per-second; the frame loop multiplies by dt and accumulates.
+ */
+export const SIM_CONTROL_RAMP = {
+	/** Elevator/aileron/rudder: rate while a direction key is held (full-scale per sec). ~0.3 s to full deflection. */
+	PRIMARY_DEFLECT_PER_SEC: 1 / 0.3,
+	/** Elevator/aileron/rudder: rate while no key is held (return-to-center per sec). ~0.2 s to center. */
+	PRIMARY_CENTER_PER_SEC: 1 / 0.2,
+	/** Throttle: rate while Shift/Ctrl is held (full-scale per sec). ~2.5 s idle->full. */
+	THROTTLE_PER_SEC: 0.4,
+} as const;
+
 /** Flap detent positions (0 = up, last = full). C172 ships 0/10/20/30. */
 export const SIM_FLAP_NOTCHES = [0, 10, 20, 30] as const;
 export type SimFlapDegrees = (typeof SIM_FLAP_NOTCHES)[number];
@@ -197,7 +214,7 @@ export const SIM_KEYBINDINGS: readonly SimKeybinding[] = [
 		keys: ['s', 'S', 'ArrowUp'],
 		shift: false,
 		label: 'S / Up',
-		description: 'Yoke back: elevator up, nose rises +5%',
+		description: 'Yoke back: hold for elevator up, nose rises',
 		group: 'elevator',
 	},
 	{
@@ -205,7 +222,7 @@ export const SIM_KEYBINDINGS: readonly SimKeybinding[] = [
 		keys: ['w', 'W', 'ArrowDown'],
 		shift: false,
 		label: 'W / Down',
-		description: 'Yoke forward: elevator down, nose drops -5%',
+		description: 'Yoke forward: hold for elevator down, nose drops',
 		group: 'elevator',
 	},
 	{
@@ -233,14 +250,14 @@ export const SIM_KEYBINDINGS: readonly SimKeybinding[] = [
 		action: SIM_KEYBINDING_ACTIONS.AILERON_LEFT,
 		keys: ['a', 'A'],
 		label: 'A',
-		description: 'Aileron left -5%',
+		description: 'Hold for aileron left (spring-centered)',
 		group: 'aileron',
 	},
 	{
 		action: SIM_KEYBINDING_ACTIONS.AILERON_RIGHT,
 		keys: ['d', 'D'],
 		label: 'D',
-		description: 'Aileron right +5%',
+		description: 'Hold for aileron right (spring-centered)',
 		group: 'aileron',
 	},
 	{
@@ -254,14 +271,14 @@ export const SIM_KEYBINDINGS: readonly SimKeybinding[] = [
 		action: SIM_KEYBINDING_ACTIONS.RUDDER_LEFT,
 		keys: [','],
 		label: ',',
-		description: 'Rudder left -5%',
+		description: 'Hold for rudder left (spring-centered)',
 		group: 'rudder',
 	},
 	{
 		action: SIM_KEYBINDING_ACTIONS.RUDDER_RIGHT,
 		keys: ['/'],
 		label: '/',
-		description: 'Rudder right +5%',
+		description: 'Hold for rudder right (spring-centered)',
 		group: 'rudder',
 	},
 	{
@@ -275,14 +292,14 @@ export const SIM_KEYBINDINGS: readonly SimKeybinding[] = [
 		action: SIM_KEYBINDING_ACTIONS.THROTTLE_UP,
 		keys: ['Shift'],
 		label: 'Shift',
-		description: 'Throttle up +5%',
+		description: 'Hold to push throttle up',
 		group: 'throttle',
 	},
 	{
 		action: SIM_KEYBINDING_ACTIONS.THROTTLE_DOWN,
 		keys: ['Control'],
 		label: 'Ctrl',
-		description: 'Throttle down -5%',
+		description: 'Hold to pull throttle back',
 		group: 'throttle',
 	},
 	{

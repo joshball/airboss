@@ -1,12 +1,15 @@
 /**
- * Keyboard-to-control-input mapping. Pure and dispatch-free: given a key
- * event plus current `FdmInputs`, returns either a new input patch, a
- * special action token, or null (no match). Callers take the returned
- * patch and post it to the FDM worker.
+ * Keyboard-to-control-input mapping. Pure and dispatch-free.
  *
- * The tap-based model means every keypress yields a single discrete
- * increment. Holding a key relies on OS-level key autorepeat; each
- * repeat event fires another call through here.
+ * Two resolution paths share the same keybinding table:
+ *
+ * - `resolveRampAction` matches keys that drive held/spring-centered axes
+ *   (elevator, aileron, rudder, throttle up/down). The caller tracks which
+ *   actions are currently held and feeds them to a per-frame ramp.
+ * - `resolveKey` handles discrete taps: center/snap commands, trim nudges,
+ *   flaps, and system actions (pause, reset, help, mute, brake). Returning
+ *   `null` here for a ramp action lets the page route it through the ramp
+ *   path instead of applying a one-shot patch.
  */
 
 import type { FdmInputs } from '@ab/bc-sim';
@@ -26,6 +29,31 @@ export type SpecialAction =
 	| typeof SIM_KEYBINDING_ACTIONS.RESET_IMMEDIATE
 	| typeof SIM_KEYBINDING_ACTIONS.HELP_TOGGLE
 	| typeof SIM_KEYBINDING_ACTIONS.MUTE_TOGGLE;
+
+export type RampAction =
+	| typeof SIM_KEYBINDING_ACTIONS.ELEVATOR_UP
+	| typeof SIM_KEYBINDING_ACTIONS.ELEVATOR_DOWN
+	| typeof SIM_KEYBINDING_ACTIONS.AILERON_LEFT
+	| typeof SIM_KEYBINDING_ACTIONS.AILERON_RIGHT
+	| typeof SIM_KEYBINDING_ACTIONS.RUDDER_LEFT
+	| typeof SIM_KEYBINDING_ACTIONS.RUDDER_RIGHT
+	| typeof SIM_KEYBINDING_ACTIONS.THROTTLE_UP
+	| typeof SIM_KEYBINDING_ACTIONS.THROTTLE_DOWN;
+
+const RAMP_ACTIONS: ReadonlySet<SimKeybindingAction> = new Set<SimKeybindingAction>([
+	SIM_KEYBINDING_ACTIONS.ELEVATOR_UP,
+	SIM_KEYBINDING_ACTIONS.ELEVATOR_DOWN,
+	SIM_KEYBINDING_ACTIONS.AILERON_LEFT,
+	SIM_KEYBINDING_ACTIONS.AILERON_RIGHT,
+	SIM_KEYBINDING_ACTIONS.RUDDER_LEFT,
+	SIM_KEYBINDING_ACTIONS.RUDDER_RIGHT,
+	SIM_KEYBINDING_ACTIONS.THROTTLE_UP,
+	SIM_KEYBINDING_ACTIONS.THROTTLE_DOWN,
+]);
+
+function isRampAction(action: SimKeybindingAction): action is RampAction {
+	return RAMP_ACTIONS.has(action);
+}
 
 export interface ControlResolution {
 	/** Partial input update to apply. */
@@ -55,41 +83,39 @@ function nextFlap(current: SimFlapDegrees, direction: 1 | -1): SimFlapDegrees {
 	return SIM_FLAP_NOTCHES[next];
 }
 
-/** Resolve a keyboard event against current input state. */
+/**
+ * Match a key event against ramp-driven actions (held primary surfaces +
+ * throttle). Returns the action if matched so the caller can track pressed
+ * state; returns null for taps/specials which `resolveKey` handles.
+ */
+export function resolveRampAction(event: KeyboardEvent): RampAction | null {
+	const action = matchAction(event);
+	if (action === null) return null;
+	return isRampAction(action) ? action : null;
+}
+
+/**
+ * Resolve a keyboard event against current input state for discrete actions.
+ * Returns null for ramp-driver keys (callers route those through the ramp).
+ */
 export function resolveKey(event: KeyboardEvent, inputs: FdmInputs): ControlResolution | null {
 	const action = matchAction(event);
 	if (action === null) return null;
+	if (isRampAction(action)) return null;
 
-	const step = SIM_CONTROL_INCREMENTS.PRIMARY;
 	const trimStep = SIM_CONTROL_INCREMENTS.TRIM;
 
 	switch (action) {
-		case SIM_KEYBINDING_ACTIONS.ELEVATOR_UP:
-			return { patch: { elevator: clamp(inputs.elevator + step, -1, 1) } };
-		case SIM_KEYBINDING_ACTIONS.ELEVATOR_DOWN:
-			return { patch: { elevator: clamp(inputs.elevator - step, -1, 1) } };
 		case SIM_KEYBINDING_ACTIONS.ELEVATOR_CENTER:
 			return { patch: { elevator: 0 } };
 		case SIM_KEYBINDING_ACTIONS.TRIM_DOWN:
 			return { patch: { trim: clamp(inputs.trim - trimStep, -1, 1) } };
 		case SIM_KEYBINDING_ACTIONS.TRIM_UP:
 			return { patch: { trim: clamp(inputs.trim + trimStep, -1, 1) } };
-		case SIM_KEYBINDING_ACTIONS.AILERON_LEFT:
-			return { patch: { aileron: clamp(inputs.aileron - step, -1, 1) } };
-		case SIM_KEYBINDING_ACTIONS.AILERON_RIGHT:
-			return { patch: { aileron: clamp(inputs.aileron + step, -1, 1) } };
 		case SIM_KEYBINDING_ACTIONS.AILERON_CENTER:
 			return { patch: { aileron: 0 } };
-		case SIM_KEYBINDING_ACTIONS.RUDDER_LEFT:
-			return { patch: { rudder: clamp(inputs.rudder - step, -1, 1) } };
-		case SIM_KEYBINDING_ACTIONS.RUDDER_RIGHT:
-			return { patch: { rudder: clamp(inputs.rudder + step, -1, 1) } };
 		case SIM_KEYBINDING_ACTIONS.RUDDER_CENTER:
 			return { patch: { rudder: 0 } };
-		case SIM_KEYBINDING_ACTIONS.THROTTLE_UP:
-			return { patch: { throttle: clamp(inputs.throttle + step, 0, 1) } };
-		case SIM_KEYBINDING_ACTIONS.THROTTLE_DOWN:
-			return { patch: { throttle: clamp(inputs.throttle - step, 0, 1) } };
 		case SIM_KEYBINDING_ACTIONS.THROTTLE_IDLE:
 			return { patch: { throttle: 0 } };
 		case SIM_KEYBINDING_ACTIONS.THROTTLE_FULL:
@@ -99,7 +125,6 @@ export function resolveKey(event: KeyboardEvent, inputs: FdmInputs): ControlReso
 		case SIM_KEYBINDING_ACTIONS.FLAPS_UP:
 			return { patch: { flaps: nextFlap(inputs.flaps, -1) } };
 		case SIM_KEYBINDING_ACTIONS.BRAKE_TOGGLE:
-			return { special: action };
 		case SIM_KEYBINDING_ACTIONS.PAUSE:
 		case SIM_KEYBINDING_ACTIONS.RESET:
 		case SIM_KEYBINDING_ACTIONS.RESET_IMMEDIATE:
