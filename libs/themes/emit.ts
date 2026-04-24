@@ -15,6 +15,7 @@
  * hangar's migration. Every app now consumes role tokens directly.
  */
 
+import { Z_INDEX } from '@ab/constants';
 import type {
 	AppearanceMode,
 	Chrome,
@@ -492,24 +493,30 @@ function rootFallbackBlock(): string {
 const REDUCED_MOTION_BLOCK = `@media (prefers-reduced-motion: reduce) {\n\t:root, [data-theme] {\n\t\t--motion-fast: 0ms;\n\t\t--motion-normal: 0ms;\n\t\t--motion-slow: 0ms;\n\t}\n}\n`;
 
 /**
+ * Convert a Z_INDEX tier key (UPPER_SNAKE_CASE) to a kebab-case CSS
+ * custom-property suffix: `COMMAND_PALETTE` -> `command-palette`,
+ * `NAV_PROGRESS` -> `nav-progress`, `MODAL` -> `modal`.
+ */
+function zTierToCssName(key: string): string {
+	return key.toLowerCase().replace(/_/g, '-');
+}
+
+/**
  * Z-index ladder -- single-sourced in @ab/constants Z_INDEX and mirrored
  * here as CSS custom properties so scoped Svelte `<style>` blocks (which
- * can't interpolate TS values) still resolve the ladder. Non-themed:
- * stacking semantics don't change per theme, so one block covers every
- * theme/appearance combination.
+ * can't interpolate TS values) still resolve the ladder. Generated from
+ * the Z_INDEX object so the TS constant is the one source of truth; a
+ * new tier added there emits a matching `--z-<kebab>` automatically.
+ *
+ * Non-themed: stacking semantics don't change per theme, so one block
+ * covers every theme/appearance combination.
  */
-const Z_INDEX_BLOCK = `:root, [data-theme] {
-\t--z-base: 0;
-\t--z-sticky: 10;
-\t--z-sidebar: 20;
-\t--z-dropdown: 30;
-\t--z-popover: 50;
-\t--z-modal: 100;
-\t--z-command-palette: 200;
-\t--z-toast: 300;
-\t--z-top: 1000;
+function buildZIndexBlock(): string {
+	const lines = Object.entries(Z_INDEX).map(([key, value]) => `\t--z-${zTierToCssName(key)}: ${value};`);
+	return `:root, [data-theme] {\n${lines.join('\n')}\n}\n`;
 }
-`;
+
+const Z_INDEX_BLOCK = buildZIndexBlock();
 
 /**
  * Render the full tokens.css output. Deterministic: for a given
