@@ -5,6 +5,10 @@
  * link to a help page. Used across `/session/start` to de-mystify slice,
  * kind, reason-code, priority, and domain labels.
  *
+ * Length budget: one to two short sentences. Anything longer belongs in a
+ * full help page. The popover caps at 20rem height and scrolls overflow, but
+ * that is a guardrail against accidents, not a design target.
+ *
  * A11y choices:
  *   - Role is `dialog` + `aria-modal="false"` (not `tooltip`) because the
  *     popover contains interactive content (the "Learn more" link). WAI-ARIA
@@ -21,6 +25,7 @@
  * when it would overflow the viewport.
  */
 
+import { helpRegistry } from '@ab/help';
 import { tick } from 'svelte';
 import { page } from '$app/state';
 import { createFocusTrap } from '../lib/focus-trap';
@@ -62,6 +67,15 @@ const learnMoreHref = $derived.by<string | null>(() => {
 });
 
 const triggerLabel = $derived(label ?? `Learn more about ${term}`);
+
+$effect(() => {
+	if (!helpId) return;
+	if (!import.meta.env.DEV) return;
+	if (helpRegistry.getById(helpId) === undefined) {
+		// biome-ignore lint/suspicious/noConsole: dev-only authoring guard
+		console.warn(`InfoTip: no help page registered for id '${helpId}' (term='${term}').`);
+	}
+});
 
 async function show(fromClick: boolean): Promise<void> {
 	open = true;
@@ -255,6 +269,8 @@ $effect(() => {
 		left: 0;
 		max-width: 18rem;
 		min-width: 14rem;
+		max-height: 20rem;
+		overflow-y: auto;
 		padding: var(--space-sm) var(--space-md);
 		background: var(--surface-raised);
 		border: 1px solid var(--edge-strong);
