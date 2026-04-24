@@ -164,6 +164,7 @@ export const TOKENS = {
 	zDropdown: '--z-dropdown',
 	zPopover: '--z-popover',
 	zModal: '--z-modal',
+	zNavProgress: '--z-nav-progress',
 	zCommandPalette: '--z-command-palette',
 	zToast: '--z-toast',
 	zTop: '--z-top',
