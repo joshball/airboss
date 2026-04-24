@@ -299,6 +299,32 @@ describe('slipBall', () => {
 	});
 });
 
+describe('parked on the ground', () => {
+	it('holds pitch perfectly steady at idle (no integrator jitter)', () => {
+		// Regression: qScale had a 0.05 floor, so at zero airspeed the
+		// restoring-moment term still swung pitch toward trimAlpha, producing
+		// visible 0.3 deg fluctuations on a stationary airplane.
+		const initialPitch = 0.05; // 2.86 deg
+		const engine = new FdmEngine(
+			C172_CONFIG,
+			defaultInitial({
+				altitude: 0,
+				u: 0,
+				w: 0,
+				pitch: initialPitch,
+				pitchRate: 0,
+				throttle: 0,
+				brake: true,
+				onGround: true,
+			}),
+		);
+		runFor(engine, 5);
+		const snap = engine.snapshot();
+		expect(snap.pitch).toBeCloseTo(initialPitch, 6);
+		expect(snap.pitchRate).toBe(0);
+	});
+});
+
 describe('parking brake', () => {
 	it('prevents motion at full throttle on the ground', () => {
 		const engine = new FdmEngine(

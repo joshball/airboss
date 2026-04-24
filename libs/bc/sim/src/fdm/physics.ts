@@ -104,8 +104,12 @@ export function dragCoefficient(cl: number, cfg: AircraftConfig, flapsDeg: numbe
 
 /**
  * Pitching moment model. Combines natural stability, pitch damping, and
- * pilot authority (elevator + trim). Dynamic-pressure scaling is used so
- * authority fades in deep stall.
+ * pilot authority (elevator + trim). Dynamic-pressure scaling makes all
+ * three terms fade as airspeed drops -- at zero airspeed there is no air
+ * flowing over the stabilizer, so the pitching moment is zero. Pilot
+ * authority alone gets a small floor so deep-stall recovery stays
+ * controllable (real aircraft still respond at elevator even with the
+ * wing stalled, thanks to prop wash and residual tail lift).
  */
 export function pitchingAcceleration(
 	alpha: number,
@@ -114,10 +118,11 @@ export function pitchingAcceleration(
 	trueAirspeed: number,
 	cfg: AircraftConfig,
 ): number {
-	const qScale = Math.max(0.05, (trueAirspeed * trueAirspeed) / (cfg.vS1 * cfg.vS1));
+	const qScale = (trueAirspeed * trueAirspeed) / (cfg.vS1 * cfg.vS1);
+	const pilotQScale = Math.max(0.05, qScale);
 	const restoring = cfg.pitchStability * (cfg.trimAlpha - alpha) * qScale;
 	const damping = -cfg.pitchDamping * pitchRate * qScale;
-	const pilot = cfg.pitchAuthority * elevatorEffective * qScale;
+	const pilot = cfg.pitchAuthority * elevatorEffective * pilotQScale;
 	return restoring + damping + pilot;
 }
 
@@ -293,6 +298,14 @@ function rk4LongitudinalStep(
 		if (next.w < 0) next.w = 0;
 	}
 	if (onGround && next.u < 0) next.u = 0;
+
+	// Parked clamp: with weight on wheels and near-zero ground speed, the
+	// gear and c.g. geometry hold pitch constant. Kill any residual pitch
+	// rate from integrator noise so the nose sits still at idle.
+	const PARKED_SPEED_THRESHOLD_M_S = 0.5;
+	if (onGround && Math.abs(next.u) < PARKED_SPEED_THRESHOLD_M_S && Math.abs(next.w) < PARKED_SPEED_THRESHOLD_M_S) {
+		next.pitchRate = 0;
+	}
 
 	return next;
 }
