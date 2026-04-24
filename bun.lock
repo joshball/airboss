@@ -72,6 +72,9 @@
     "libs/hangar-jobs": {
       "name": "@ab/hangar-jobs",
     },
+    "libs/hangar-sync": {
+      "name": "@ab/hangar-sync",
+    },
     "libs/help": {
       "name": "@ab/help",
     },
@@ -108,6 +111,8 @@
     "@ab/hangar": ["@ab/hangar@workspace:apps/hangar"],
 
     "@ab/hangar-jobs": ["@ab/hangar-jobs@workspace:libs/hangar-jobs"],
+
+    "@ab/hangar-sync": ["@ab/hangar-sync@workspace:libs/hangar-sync"],
 
     "@ab/help": ["@ab/help@workspace:libs/help"],
 

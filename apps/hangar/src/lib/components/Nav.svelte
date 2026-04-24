@@ -1,0 +1,61 @@
+<script lang="ts">
+import { ROUTES } from '@ab/constants';
+import { page } from '$app/state';
+
+/**
+ * Hangar top-level nav shell. Links to the three primary surfaces:
+ * Glossary, Sources, Jobs. Active-route highlighting via `aria-current`
+ * matches the study-app pattern. Colors + spacing resolve from role
+ * tokens (04-VOCABULARY.md) so light/dark + future themes work.
+ */
+
+const glossaryActive = $derived(
+	page.url.pathname === ROUTES.HANGAR_GLOSSARY ||
+		(page.url.pathname.startsWith(`${ROUTES.HANGAR_GLOSSARY}/`) &&
+			!page.url.pathname.startsWith(`${ROUTES.HANGAR_GLOSSARY_SOURCES}`)),
+);
+const sourcesActive = $derived(
+	page.url.pathname === ROUTES.HANGAR_GLOSSARY_SOURCES ||
+		page.url.pathname.startsWith(`${ROUTES.HANGAR_GLOSSARY_SOURCES}/`),
+);
+const jobsActive = $derived(
+	page.url.pathname === ROUTES.HANGAR_JOBS || page.url.pathname.startsWith(`${ROUTES.HANGAR_JOBS}/`),
+);
+</script>
+
+<div class="nav-sections">
+	<a href={ROUTES.HANGAR_GLOSSARY} aria-current={glossaryActive ? 'page' : undefined}>Glossary</a>
+	<a href={ROUTES.HANGAR_GLOSSARY_SOURCES} aria-current={sourcesActive ? 'page' : undefined}>Sources</a>
+	<a href={ROUTES.HANGAR_JOBS} aria-current={jobsActive ? 'page' : undefined}>Jobs</a>
+</div>
+
+<style>
+	.nav-sections {
+		display: flex;
+		gap: var(--space-xl);
+		flex-wrap: wrap;
+	}
+
+	a {
+		color: var(--ink-muted);
+		text-decoration: none;
+		font-weight: var(--type-ui-control-weight);
+		padding: var(--space-2xs) var(--space-sm);
+		border-radius: var(--radius-sm);
+	}
+
+	a:hover {
+		color: var(--ink-body);
+		background: var(--surface-sunken);
+	}
+
+	a[aria-current='page'] {
+		color: var(--action-default-hover);
+		background: var(--action-default-wash);
+	}
+
+	a:focus-visible {
+		outline: 2px solid var(--focus-ring);
+		outline-offset: 2px;
+	}
+</style>
