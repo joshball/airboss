@@ -23,6 +23,7 @@ export type { ButtonSize, ButtonType, ButtonVariant } from './components/Button.
 export type { CheckboxSize } from './components/Checkbox.svelte';
 export type { DialogSize } from './components/Dialog.svelte';
 export type { DividerOrientation } from './components/Divider.svelte';
+export type { DrawerSide, DrawerSize } from './components/Drawer.svelte';
 export type { RadioGroupOrientation, RadioOption } from './components/RadioGroup.svelte';
 export type { SelectOption, SelectSize } from './components/Select.svelte';
 export type { SpinnerSize, SpinnerTone } from './components/Spinner.svelte';

@@ -25,6 +25,8 @@ export const QUERY_PARAMS = {
 	EDIT: 'edit',
 	/** One-shot banner carrying the id of a just-created entity. */
 	CREATED: 'created',
+	/** Page-help drawer target id; when set, `<PageHelp>` opens its drawer on mount. */
+	HELP: 'help',
 
 	// Filter / browse keys
 	/** Phase-of-flight filter on browse pages (renamed from legacy `phase`). */
