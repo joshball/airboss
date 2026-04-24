@@ -4,19 +4,19 @@ import { page } from '$app/state';
 
 /**
  * Hangar top-level nav shell. Links to the three primary surfaces:
- * Glossary, Sources, Jobs. Active-route highlighting via `aria-current`
+ * Sources, Glossary, Jobs. Active-route highlighting via `aria-current`
  * matches the study-app pattern. Colors + spacing resolve from role
  * tokens (04-VOCABULARY.md) so light/dark + future themes work.
+ *
+ * Sources comes first because /sources (the operational flow diagram)
+ * is the post-sources-v1 primary landing.
  */
 
-const glossaryActive = $derived(
-	page.url.pathname === ROUTES.HANGAR_GLOSSARY ||
-		(page.url.pathname.startsWith(`${ROUTES.HANGAR_GLOSSARY}/`) &&
-			!page.url.pathname.startsWith(`${ROUTES.HANGAR_GLOSSARY_SOURCES}`)),
-);
 const sourcesActive = $derived(
-	page.url.pathname === ROUTES.HANGAR_GLOSSARY_SOURCES ||
-		page.url.pathname.startsWith(`${ROUTES.HANGAR_GLOSSARY_SOURCES}/`),
+	page.url.pathname === ROUTES.HANGAR_SOURCES || page.url.pathname.startsWith(`${ROUTES.HANGAR_SOURCES}/`),
+);
+const glossaryActive = $derived(
+	page.url.pathname === ROUTES.HANGAR_GLOSSARY || page.url.pathname.startsWith(`${ROUTES.HANGAR_GLOSSARY}/`),
 );
 const jobsActive = $derived(
 	page.url.pathname === ROUTES.HANGAR_JOBS || page.url.pathname.startsWith(`${ROUTES.HANGAR_JOBS}/`),
@@ -24,8 +24,8 @@ const jobsActive = $derived(
 </script>
 
 <div class="nav-sections">
+	<a href={ROUTES.HANGAR_SOURCES} aria-current={sourcesActive ? 'page' : undefined}>Sources</a>
 	<a href={ROUTES.HANGAR_GLOSSARY} aria-current={glossaryActive ? 'page' : undefined}>Glossary</a>
-	<a href={ROUTES.HANGAR_GLOSSARY_SOURCES} aria-current={sourcesActive ? 'page' : undefined}>Sources</a>
 	<a href={ROUTES.HANGAR_JOBS} aria-current={jobsActive ? 'page' : undefined}>Jobs</a>
 </div>
 
