@@ -285,7 +285,7 @@ export async function runSectionalFetch(
 	const archivePath = join(editionDir, 'chart.zip');
 	const thumbPath = join(editionDir, 'thumb.jpg');
 	const metaPath = join(editionDir, 'meta.json');
-	const recordedArchivePath = relative(input.repoRoot, archivePath);
+	const _recordedArchivePath = relative(input.repoRoot, archivePath);
 	const recordedThumbPath = relative(input.repoRoot, thumbPath);
 
 	// Step 2: short-circuit if edition + on-disk sha match.

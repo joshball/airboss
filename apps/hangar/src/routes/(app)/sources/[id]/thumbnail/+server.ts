@@ -27,7 +27,7 @@ export const GET: RequestHandler = async (event) => {
 	if (kind !== SOURCE_KINDS.BINARY_VISUAL) {
 		throw error(400, 'thumbnail is only available for binary-visual sources');
 	}
-	if (!row.media || !row.media.thumbnailPath || row.media.thumbnailSizeBytes === 0) {
+	if (!row.media?.thumbnailPath || row.media.thumbnailSizeBytes === 0) {
 		return new Response(null, { status: 204 });
 	}
 
