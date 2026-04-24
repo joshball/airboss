@@ -52,6 +52,14 @@ export interface SubmitReviewInput {
 	rating: ReviewRating;
 	confidence?: ConfidenceLevel | null;
 	answerMs?: number | null;
+	/**
+	 * Optional `memory_review_session` id. Set when the review was produced
+	 * inside a session URL (`/memory/review/<sessionId>`); stays null for
+	 * legacy stateless review-queue submissions and for engine-session slots.
+	 * Drives the Sessions row in the card cross-references panel on
+	 * `/memory/<id>`.
+	 */
+	reviewSessionId?: string | null;
 }
 
 export async function submitReview(input: SubmitReviewInput, db: Db = defaultDb): Promise<ReviewRow> {
@@ -125,6 +133,7 @@ export async function submitReview(input: SubmitReviewInput, db: Db = defaultDb)
 				dueAt: result.dueAt,
 				reviewedAt: now,
 				answerMs: input.answerMs ?? null,
+				reviewSessionId: input.reviewSessionId ?? null,
 			})
 			.returning();
 

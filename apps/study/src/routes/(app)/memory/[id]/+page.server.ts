@@ -14,6 +14,7 @@ import {
 	CardNotEditableError,
 	CardNotFoundError,
 	getCard,
+	getCardCrossReferences,
 	getRecentReviewsForCard,
 	setCardStatus,
 	updateCard,
@@ -47,12 +48,14 @@ export const load: PageServerLoad = async (event) => {
 	const user = requireAuth(event);
 	const { params } = event;
 
-	// Card, recent reviews, and citations are all keyed on params.id; no
-	// dependency between them, so fire in parallel.
-	const [found, recentReviews, citationRows] = await Promise.all([
+	// Keyed on params.id; no dependency between the legs, so fire in parallel.
+	// Citations are from Bundle C; cross-refs are from Bundle B; both hydrate
+	// the owner detail page on first paint.
+	const [found, recentReviews, citationRows, crossRefs] = await Promise.all([
 		getCard(params.id, user.id),
 		getRecentReviewsForCard(params.id, user.id, 10),
 		getCitationsOf(CITATION_SOURCE_TYPES.CARD, params.id),
+		getCardCrossReferences(params.id, user.id),
 	]);
 	if (!found) error(404, { message: 'Card not found' });
 
@@ -63,6 +66,7 @@ export const load: PageServerLoad = async (event) => {
 		state: found.state,
 		recentReviews,
 		citations,
+		crossRefs,
 	};
 };
 

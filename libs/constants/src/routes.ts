@@ -73,11 +73,25 @@ export const ROUTES = {
 	// Study -- Memory
 	MEMORY: '/memory',
 	MEMORY_REVIEW: '/memory/review',
+	/**
+	 * Session-scoped review URL (review-sessions-url layer a "Resume"). The
+	 * `/memory/review` entry point creates a session row and redirects here so
+	 * the learner's position is durable across tabs and reloads. See
+	 * `docs/work-packages/review-sessions-url/spec.md`.
+	 */
+	MEMORY_REVIEW_SESSION: (sessionId: string) => `/memory/review/${encodeURIComponent(sessionId)}` as const,
 	MEMORY_NEW: '/memory/new',
 	MEMORY_BROWSE: '/memory/browse',
 	MEMORY_CARD: (id: string) => `/memory/${id}` as const,
 	/** Detail page with the inline edit-mode flag set. */
 	MEMORY_CARD_EDIT: (id: string) => `/memory/${encodeURIComponent(id)}?${QUERY_PARAMS.EDIT}=1` as const,
+	/**
+	 * Public shareable card view (`card-page-and-cross-references`). No
+	 * scheduling internals, no edit controls, no auth requirement. Suspended
+	 * and archived cards 404 on this route; the owner-only `/memory/<id>`
+	 * surface still shows them.
+	 */
+	CARD_PUBLIC: (id: string) => `/cards/${encodeURIComponent(id)}` as const,
 
 	// Study -- Reps
 	// `REPS_SESSION` retired by ADR 012 phase 3; the `/reps/session` route
