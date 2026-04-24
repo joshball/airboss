@@ -28,7 +28,6 @@ export const memoryCard: HelpPage = {
 		keywords: [
 			'memory',
 			'card',
-			'detail',
 			'domain',
 			'type',
 			'lifecycle',
@@ -36,7 +35,6 @@ export const memoryCard: HelpPage = {
 			'state',
 			'stability',
 			'difficulty',
-			'reviews',
 			'lapses',
 			'suspend',
 			'archive',
