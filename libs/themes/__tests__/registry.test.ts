@@ -72,7 +72,7 @@ function makeTheme(id: string): Theme {
 			space: { '2xs': '0', xs: '0', sm: '0', md: '0', lg: '0', xl: '0', '2xl': '0' },
 			radius: { sharp: '0', xs: '0', sm: '0', md: '0', lg: '0', pill: '0' },
 			shadow: { none: 'none', sm: 'none', md: 'none', lg: 'none' },
-			motion: { fast: '0ms', normal: '0ms' },
+			motion: { fast: '0ms', normal: '0ms', slow: '0ms' },
 			layout: {
 				containerMax: '0',
 				containerPadding: '0',

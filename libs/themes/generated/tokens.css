@@ -12,6 +12,7 @@
 	--ink-faint: #94a3b8;
 	--ink-strong: #334155;
 	--ink-inverse: #ffffff;
+	--ink-inverse-subtle: rgba(255, 255, 255, 0.25);
 	--surface-page: #f8fafc;
 	--surface-panel: #ffffff;
 	--surface-raised: #ffffff;
@@ -221,6 +222,7 @@
 	--shadow-lg: 0 6px 16px rgba(15, 23, 42, 0.08);
 	--motion-fast: 120ms ease-out;
 	--motion-normal: 200ms ease-out;
+	--motion-slow: 800ms ease-out;
 	--layout-container-max: 48rem;
 	--layout-container-padding: 1.5rem;
 	--layout-grid-gap: 1rem;
@@ -333,6 +335,7 @@
 	--ink-faint: #94a3b8;
 	--ink-strong: #334155;
 	--ink-inverse: #ffffff;
+	--ink-inverse-subtle: rgba(255, 255, 255, 0.25);
 	--surface-page: #f8fafc;
 	--surface-panel: #ffffff;
 	--surface-raised: #ffffff;
@@ -542,6 +545,7 @@
 	--shadow-lg: 0 6px 16px rgba(15, 23, 42, 0.08);
 	--motion-fast: 120ms ease-out;
 	--motion-normal: 200ms ease-out;
+	--motion-slow: 800ms ease-out;
 	--layout-container-max: 48rem;
 	--layout-container-padding: 1.5rem;
 	--layout-grid-gap: 1rem;
@@ -654,6 +658,7 @@
 	--ink-faint: #64748b;
 	--ink-strong: #f8fafc;
 	--ink-inverse: #0f172a;
+	--ink-inverse-subtle: rgba(15, 23, 42, 0.25);
 	--surface-page: #0b1120;
 	--surface-panel: #111827;
 	--surface-raised: #1f2937;
@@ -863,6 +868,7 @@
 	--shadow-lg: 0 6px 16px rgba(15, 23, 42, 0.08);
 	--motion-fast: 120ms ease-out;
 	--motion-normal: 200ms ease-out;
+	--motion-slow: 800ms ease-out;
 	--layout-container-max: 48rem;
 	--layout-container-padding: 1.5rem;
 	--layout-grid-gap: 1rem;
@@ -975,6 +981,7 @@
 	--ink-faint: #555;
 	--ink-strong: #ffffff;
 	--ink-inverse: #0a0a0a;
+	--ink-inverse-subtle: rgba(10, 10, 10, 0.25);
 	--surface-page: #0a0a0a;
 	--surface-panel: #1a1a1a;
 	--surface-raised: #2a2a2a;
@@ -1184,6 +1191,7 @@
 	--shadow-lg: 0 0 0 1px rgba(255, 226, 112, 0.15);
 	--motion-fast: 80ms ease-out;
 	--motion-normal: 120ms ease-out;
+	--motion-slow: 600ms linear;
 	--layout-container-max: none;
 	--layout-container-padding: 0.75rem;
 	--layout-grid-gap: 0.5rem;
@@ -1348,6 +1356,7 @@
 	--ink-faint: #94a3b8;
 	--ink-strong: #334155;
 	--ink-inverse: #ffffff;
+	--ink-inverse-subtle: rgba(255, 255, 255, 0.25);
 	--surface-page: #f1f5f9;
 	--surface-panel: #ffffff;
 	--surface-raised: #ffffff;
@@ -1557,6 +1566,7 @@
 	--shadow-lg: none;
 	--motion-fast: 80ms ease-out;
 	--motion-normal: 120ms ease-out;
+	--motion-slow: 600ms linear;
 	--layout-container-max: none;
 	--layout-container-padding: 0.875rem;
 	--layout-grid-gap: 0.875rem;
@@ -1669,6 +1679,7 @@
 	--ink-faint: #475569;
 	--ink-strong: #f1f5f9;
 	--ink-inverse: #020617;
+	--ink-inverse-subtle: rgba(2, 6, 23, 0.25);
 	--surface-page: #020617;
 	--surface-panel: #0b1120;
 	--surface-raised: #111827;
@@ -1878,6 +1889,7 @@
 	--shadow-lg: none;
 	--motion-fast: 80ms ease-out;
 	--motion-normal: 120ms ease-out;
+	--motion-slow: 600ms linear;
 	--layout-container-max: none;
 	--layout-container-padding: 0.875rem;
 	--layout-grid-gap: 0.875rem;
@@ -1990,6 +2002,7 @@
 	--ink-faint: #94a3b8;
 	--ink-strong: #334155;
 	--ink-inverse: #ffffff;
+	--ink-inverse-subtle: rgba(255, 255, 255, 0.25);
 	--surface-page: #f8fafc;
 	--surface-panel: #ffffff;
 	--surface-raised: #ffffff;
@@ -2199,6 +2212,7 @@
 	--shadow-lg: 0 6px 16px rgba(15, 23, 42, 0.08);
 	--motion-fast: 120ms ease-out;
 	--motion-normal: 200ms ease-out;
+	--motion-slow: 800ms ease-out;
 	--layout-container-max: 48rem;
 	--layout-container-padding: 1.5rem;
 	--layout-grid-gap: 1rem;
@@ -2311,6 +2325,7 @@
 	--ink-faint: #64748b;
 	--ink-strong: #f8fafc;
 	--ink-inverse: #0f172a;
+	--ink-inverse-subtle: rgba(15, 23, 42, 0.25);
 	--surface-page: #0b1120;
 	--surface-panel: #111827;
 	--surface-raised: #1f2937;
@@ -2520,6 +2535,7 @@
 	--shadow-lg: 0 6px 16px rgba(15, 23, 42, 0.08);
 	--motion-fast: 120ms ease-out;
 	--motion-normal: 200ms ease-out;
+	--motion-slow: 800ms ease-out;
 	--layout-container-max: 48rem;
 	--layout-container-padding: 1.5rem;
 	--layout-grid-gap: 1rem;
@@ -2629,5 +2645,6 @@
 	:root, [data-theme] {
 		--motion-fast: 0ms;
 		--motion-normal: 0ms;
+		--motion-slow: 0ms;
 	}
 }

@@ -311,7 +311,7 @@ export interface Chrome {
 	space: Record<'2xs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl', string>;
 	radius: Record<'sharp' | 'xs' | 'sm' | 'md' | 'lg' | 'pill', string>;
 	shadow: Record<'none' | 'sm' | 'md' | 'lg', string>;
-	motion: Record<'fast' | 'normal', string>;
+	motion: Record<'fast' | 'normal' | 'slow', string>;
 	layout: {
 		containerMax: string;
 		containerPadding: string;

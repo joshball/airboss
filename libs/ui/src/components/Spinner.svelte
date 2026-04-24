@@ -35,7 +35,7 @@ let {
 	}
 
 	svg {
-		animation: spin 800ms linear infinite;
+		animation: spin var(--motion-slow) linear infinite;
 	}
 
 	.s-sm svg { width: 1rem; height: 1rem; }
@@ -45,7 +45,7 @@ let {
 	.t-default .track { stroke: var(--edge-subtle); }
 	.t-default .arc { stroke: var(--action-default); stroke-dasharray: 40 62.8; }
 
-	.t-inverse .track { stroke: rgba(255, 255, 255, 0.25); }
+	.t-inverse .track { stroke: var(--ink-inverse-subtle); }
 	.t-inverse .arc { stroke: var(--ink-inverse); stroke-dasharray: 40 62.8; }
 
 	@keyframes spin {

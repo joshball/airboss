@@ -17,6 +17,7 @@ export const TOKENS = {
 	inkFaint: '--ink-faint',
 	inkStrong: '--ink-strong',
 	inkInverse: '--ink-inverse',
+	inkInverseSubtle: '--ink-inverse-subtle',
 
 	// -------- surface --------
 	surfacePage: '--surface-page',
@@ -154,6 +155,7 @@ export const TOKENS = {
 	// -------- scale: motion --------
 	motionFast: '--motion-fast',
 	motionNormal: '--motion-normal',
+	motionSlow: '--motion-slow',
 
 	// -------- layout --------
 	layoutContainerMax: '--layout-container-max',

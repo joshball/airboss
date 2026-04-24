@@ -16,7 +16,15 @@ const config = {
 			mode: 'auto',
 			directives: {
 				'default-src': ['self'],
-				'script-src': ['self'],
+				// Hash allowlists the hand-authored pre-hydration theme script in
+				// `src/app.html` -- SvelteKit's `auto` mode only nonces scripts it
+				// emits, not inline scripts in the template. Without the hash CSP
+				// blocks the script, FOUC returns, and `data-appearance` stays
+				// stuck on the HTML default. Regenerate with:
+				//   bun -e "import('crypto').then(c=>import('fs/promises').then(async f=>{const m=(await f.readFile('apps/study/src/app.html','utf8')).match(/<script>([\\s\\S]*?)<\\/script>/);console.log('sha256-'+c.createHash('sha256').update(m[1]).digest('base64'))}))"
+				// The FOUC Playwright test (tests/e2e/unauthed/theme-fouc.spec.ts)
+				// fails if this hash drifts.
+				'script-src': ['self', 'sha256-uZg+LUdqFwlAPrf1bltQac2iAlhXLPA7JuD/P3RE684='],
 				'style-src': ['self', 'unsafe-inline'],
 				'img-src': ['self', 'data:'],
 				'font-src': ['self', 'data:'],
