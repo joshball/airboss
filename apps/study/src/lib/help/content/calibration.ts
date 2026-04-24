@@ -10,14 +10,14 @@
  *   - "Empty state has no 'come back after X reviews'" -- documented here.
  */
 
-import { APP_SURFACES, AVIATION_TOPICS, HELP_KINDS } from '@ab/constants';
+import { APP_SURFACES, AVIATION_TOPICS, HELP_KINDS, ROUTES } from '@ab/constants';
 import type { HelpPage } from '@ab/help';
 
 export const calibration: HelpPage = {
 	id: 'calibration',
 	title: 'Calibration',
 	summary: 'What the calibration score means, why gaps matter in piloting, and what to do about them.',
-	documents: '/calibration',
+	documents: ROUTES.CALIBRATION,
 	tags: {
 		appSurface: [APP_SURFACES.CALIBRATION],
 		helpKind: HELP_KINDS.CONCEPT,

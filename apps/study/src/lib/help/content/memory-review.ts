@@ -19,7 +19,7 @@
  *     'queue just completed'" -- covered in the overview.
  */
 
-import { APP_SURFACES, HELP_KINDS } from '@ab/constants';
+import { APP_SURFACES, HELP_KINDS, ROUTES } from '@ab/constants';
 import type { HelpPage } from '@ab/help';
 
 export const memoryReview: HelpPage = {
@@ -27,7 +27,7 @@ export const memoryReview: HelpPage = {
 	title: 'Memory review',
 	summary:
 		'What the memory review queue is for, how the four ratings drive FSRS scheduling, and how the confidence prompt feeds calibration.',
-	documents: '/memory/review',
+	documents: ROUTES.MEMORY_REVIEW,
 	tags: {
 		appSurface: [APP_SURFACES.MEMORY],
 		helpKind: HELP_KINDS.HOW_TO,

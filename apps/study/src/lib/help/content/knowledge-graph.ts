@@ -13,14 +13,14 @@
  *     case that needs documentation.
  */
 
-import { APP_SURFACES, HELP_KINDS } from '@ab/constants';
+import { APP_SURFACES, HELP_KINDS, ROUTES } from '@ab/constants';
 import type { HelpPage } from '@ab/help';
 
 export const knowledgeGraph: HelpPage = {
 	id: 'knowledge-graph',
 	title: 'Knowledge graph',
 	summary: 'The seven discovery-first phases and how dual-gate mastery works.',
-	documents: '/knowledge',
+	documents: ROUTES.KNOWLEDGE,
 	tags: {
 		appSurface: [APP_SURFACES.KNOWLEDGE],
 		helpKind: HELP_KINDS.CONCEPT,

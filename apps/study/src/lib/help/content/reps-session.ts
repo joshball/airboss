@@ -13,14 +13,14 @@
  *   - IME composition guard on keyboard handler.
  */
 
-import { APP_SURFACES, HELP_KINDS } from '@ab/constants';
+import { APP_SURFACES, HELP_KINDS, ROUTES } from '@ab/constants';
 import type { HelpPage } from '@ab/help';
 
 export const repsSession: HelpPage = {
 	id: 'reps-session',
 	title: 'Decision reps session',
 	summary: 'How a rep session flows, how the shuffle seed works, and how skip-permanently behaves.',
-	documents: '/session/start',
+	documents: ROUTES.SESSION_START,
 	tags: {
 		appSurface: [APP_SURFACES.REPS, APP_SURFACES.SESSION],
 		helpKind: HELP_KINDS.HOW_TO,
