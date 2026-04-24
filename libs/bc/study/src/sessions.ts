@@ -18,6 +18,7 @@
 import {
 	CARD_STATES,
 	CARD_STATUSES,
+	type CardState,
 	CERT_VALUES,
 	type Cert,
 	type ConfidenceLevel,
@@ -28,6 +29,7 @@ import {
 	QUERY_PARAMS,
 	RELEVANCE_PRIORITIES,
 	RESUME_WINDOW_MS,
+	type RelevancePriority,
 	ROUTES,
 	SCENARIO_STATUSES,
 	SESSION_ITEM_KINDS,
@@ -233,7 +235,7 @@ async function fetchCardCandidates(userId: string, now: Date, db: Db): Promise<E
 			cardId: r.card.id,
 			domain: r.card.domain as Domain,
 			nodeId: r.card.nodeId ?? null,
-			state: r.state.state,
+			state: r.state.state as CardState,
 			dueAt: r.state.dueAt,
 			lastRating: r.lastRating !== null ? Number(r.lastRating) : null,
 			stability: r.state.stability,
@@ -397,11 +399,11 @@ async function fetchNodeCandidates(
 		const relevantCerts = Array.from(new Set(rels.map((r) => r.cert))).filter((c): c is Cert => knownCerts.includes(c));
 
 		const priorities = rels.map((r) => r.priority);
-		const priority: 'core' | 'supporting' | 'elective' = priorities.includes(RELEVANCE_PRIORITIES.CORE)
-			? 'core'
+		const priority: RelevancePriority = priorities.includes(RELEVANCE_PRIORITIES.CORE)
+			? RELEVANCE_PRIORITIES.CORE
 			: priorities.includes(RELEVANCE_PRIORITIES.SUPPORTING)
-				? 'supporting'
-				: 'elective';
+				? RELEVANCE_PRIORITIES.SUPPORTING
+				: RELEVANCE_PRIORITIES.ELECTIVE;
 
 		const bloom = rels[0]?.bloom ?? null;
 		const bloomDepth: EngineNodeCandidate['bloomDepth'] =
@@ -505,9 +507,9 @@ async function fetchRecentSessionDomains(userId: string, db: Db, lookback = 2): 
 	const scenarioIds = new Set<string>();
 	for (const row of recent) {
 		for (const item of row.items) {
-			if (item.kind === 'card') cardIds.add(item.cardId);
-			else if (item.kind === 'rep') scenarioIds.add(item.scenarioId);
-			else if (item.kind === 'node_start') nodeIds.add(item.nodeId);
+			if (item.kind === SESSION_ITEM_KINDS.CARD) cardIds.add(item.cardId);
+			else if (item.kind === SESSION_ITEM_KINDS.REP) scenarioIds.add(item.scenarioId);
+			else if (item.kind === SESSION_ITEM_KINDS.NODE_START) nodeIds.add(item.nodeId);
 		}
 	}
 
@@ -677,9 +679,9 @@ export async function commitSession(
 				itemKind: item.kind as SessionItemKind,
 				slice: item.slice,
 				reasonCode: item.reasonCode,
-				cardId: item.kind === 'card' ? item.cardId : null,
-				scenarioId: item.kind === 'rep' ? item.scenarioId : null,
-				nodeId: item.kind === 'node_start' ? item.nodeId : null,
+				cardId: item.kind === SESSION_ITEM_KINDS.CARD ? item.cardId : null,
+				scenarioId: item.kind === SESSION_ITEM_KINDS.REP ? item.scenarioId : null,
+				nodeId: item.kind === SESSION_ITEM_KINDS.NODE_START ? item.nodeId : null,
 				reviewId: null,
 				skipKind: null,
 				reasonDetail: item.reasonDetail ?? null,
