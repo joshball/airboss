@@ -76,7 +76,7 @@ const ticks = Array.from({ length: 10 }, (_, i) => i);
 
 		<!-- Digital readout: bordered box below the "5" tick label so the
 			 numeric altitude is instantly legible without reading the needles. -->
-		<rect x="74" y="166" width="52" height="20" rx="2" class="readout-frame" stroke-width="1" />
+		<rect x="74" y="166" width="52" height="20" rx="2" class="readout-frame" stroke-width="1.5" />
 		<text x="100" y="176" text-anchor="middle" dominant-baseline="central" font-size="14" class="digital-readout">
 			{altSafe.toFixed(0)}
 		</text>
@@ -133,7 +133,7 @@ const ticks = Array.from({ length: 10 }, (_, i) => i);
 
 	.readout-frame {
 		fill: var(--sim-panel-bg-darker);
-		stroke: var(--sim-instrument-tick-faint);
+		stroke: var(--sim-instrument-tick-minor);
 	}
 
 	.digital-readout {
