@@ -1,8 +1,9 @@
 /**
  * Airboss default palette -- dark.
  *
- * Hex-native dark palette. Stays in hex so the contrast matrix keeps
- * AA enforcement live (OKLCH-aware ratio math is a separate follow-up).
+ * Authored in OKLCH (CSS Color 4). Values converted from the original
+ * hex set via `scripts/themes/hex-to-oklch.ts`; drift < 0.005 per
+ * channel. See WP #8 for migration context.
  *
  * Design notes:
  *   - Surfaces progress from `surface.page` (deepest) -> `panel` ->
@@ -10,133 +11,154 @@
  *   - Ink is near-white for body / strong, slate for muted / subtle.
  *   - Action bases are LIGHTER than their light-mode counterparts so
  *     they read as "luminous controls on a dark field." Their `ink`
- *     override is `#0b1120` (darker than `surface.page`) to clear AA.
- *   - Washes in dark are hue-tinted deep surfaces; body ink on any
- *     wash clears 4.5:1 because the wash stays near the page floor.
- *   - Because derivation is a no-op on hex, every action / signal
- *     variant is spelled out in `overrides` -- the emit pipeline uses
- *     these values verbatim.
+ *     override is near-black so every fill clears AA.
+ *   - Washes in dark are translucent tints that preview as deep surfaces;
+ *     body ink on any wash clears 4.5:1 because the wash stays near the
+ *     page floor when composited.
+ *   - Overrides stay explicit so the emit pipeline uses these exact
+ *     values; the derivation contract covers most pairs but some (e.g.
+ *     signal washes tinted away from pure hue) still warrant pins.
  */
 import type { Palette } from '../../../contract';
 
 export const palette: Palette = {
 	ink: {
-		body: '#f1f5f9',
-		muted: '#cbd5e1',
-		subtle: '#94a3b8',
-		faint: '#64748b',
-		strong: '#f8fafc',
-		inverse: '#0f172a',
+		body: 'oklch(0.968 0.007 247.9)', // from #f1f5f9
+		muted: 'oklch(0.869 0.02 252.9)', // from #cbd5e1
+		subtle: 'oklch(0.711 0.035 256.8)', // from #94a3b8
+		faint: 'oklch(0.554 0.041 257.4)', // from #64748b
+		strong: 'oklch(0.984 0.003 247.9)', // from #f8fafc
+		inverse: 'oklch(0.208 0.04 265.8)', // from #0f172a
 	},
 	surface: {
-		page: '#0b1120',
-		panel: '#111827',
-		raised: '#1f2937',
-		sunken: '#0f172a',
-		muted: '#0f172a',
-		overlay: '#1f2937',
+		page: 'oklch(0.18 0.032 266.6)', // from #0b1120
+		panel: 'oklch(0.21 0.032 264.7)', // from #111827
+		raised: 'oklch(0.278 0.03 256.8)', // from #1f2937
+		sunken: 'oklch(0.208 0.04 265.8)', // from #0f172a
+		muted: 'oklch(0.208 0.04 265.8)', // from #0f172a
+		overlay: 'oklch(0.278 0.03 256.8)', // from #1f2937
 	},
 	edge: {
-		default: '#334155',
-		strong: '#475569',
-		subtle: '#1f2937',
+		default: 'oklch(0.372 0.039 257.3)', // from #334155
+		strong: 'oklch(0.446 0.037 257.3)', // from #475569
+		subtle: 'oklch(0.278 0.03 256.8)', // from #1f2937
 	},
 	action: {
-		default: '#60a5fa',
-		hazard: '#f87171',
-		caution: '#fbbf24',
-		neutral: '#94a3b8',
-		link: '#60a5fa',
+		default: 'oklch(0.714 0.143 254.6)', // from #60a5fa
+		hazard: 'oklch(0.711 0.166 22.2)', // from #f87171
+		caution: 'oklch(0.837 0.164 84.4)', // from #fbbf24
+		neutral: 'oklch(0.711 0.035 256.8)', // from #94a3b8
+		link: 'oklch(0.714 0.143 254.6)', // from #60a5fa
 	},
 	signal: {
-		success: '#4ade80',
-		warning: '#fbbf24',
-		danger: '#f87171',
-		info: '#38bdf8',
+		success: 'oklch(0.8 0.182 151.7)', // from #4ade80
+		warning: 'oklch(0.837 0.164 84.4)', // from #fbbf24
+		danger: 'oklch(0.711 0.166 22.2)', // from #f87171
+		info: 'oklch(0.754 0.139 232.7)', // from #38bdf8
 	},
-	focus: '#60a5fa',
+	focus: 'oklch(0.714 0.143 254.6)', // from #60a5fa
 	accent: {
-		code: '#a5b4fc',
-		reference: '#a5b4fc',
-		definition: '#a5b4fc',
+		code: 'oklch(0.785 0.104 274.7)', // from #a5b4fc
+		reference: 'oklch(0.785 0.104 274.7)', // from #a5b4fc
+		definition: 'oklch(0.785 0.104 274.7)', // from #a5b4fc
 	},
 	overrides: {
 		action: {
 			default: {
-				base: '#60a5fa',
-				hover: '#93c5fd',
-				active: '#bfdbfe',
-				wash: 'rgba(96, 165, 250, 0.18)',
-				edge: 'rgba(96, 165, 250, 0.4)',
-				ink: '#0b1120',
-				disabled: 'rgba(96, 165, 250, 0.4)',
+				base: 'oklch(0.714 0.143 254.6)', // from #60a5fa
+				hover: 'oklch(0.809 0.096 251.8)', // from #93c5fd
+				active: 'oklch(0.882 0.057 254.1)', // from #bfdbfe
+				wash: 'oklch(0.714 0.143 254.6 / 0.18)', // from rgba(96, 165, 250, 0.18)
+				edge: 'oklch(0.714 0.143 254.6 / 0.4)', // from rgba(96, 165, 250, 0.4)
+				ink: 'oklch(0.18 0.032 266.6)', // from #0b1120
+				disabled: 'oklch(0.714 0.143 254.6 / 0.4)', // from rgba(96, 165, 250, 0.4)
 			},
 			hazard: {
-				base: '#f87171',
-				hover: '#fca5a5',
-				active: '#fecaca',
-				wash: 'rgba(248, 113, 113, 0.18)',
-				edge: 'rgba(248, 113, 113, 0.4)',
-				ink: '#0b1120',
-				disabled: 'rgba(248, 113, 113, 0.4)',
+				base: 'oklch(0.711 0.166 22.2)', // from #f87171
+				hover: 'oklch(0.808 0.103 19.6)', // from #fca5a5
+				active: 'oklch(0.885 0.059 18.3)', // from #fecaca
+				wash: 'oklch(0.711 0.166 22.2 / 0.18)', // from rgba(248, 113, 113, 0.18)
+				edge: 'oklch(0.711 0.166 22.2 / 0.4)', // from rgba(248, 113, 113, 0.4)
+				ink: 'oklch(0.18 0.032 266.6)', // from #0b1120
+				disabled: 'oklch(0.711 0.166 22.2 / 0.4)', // from rgba(248, 113, 113, 0.4)
 			},
 			caution: {
-				base: '#fbbf24',
-				hover: '#fcd34d',
-				active: '#fde68a',
-				wash: 'rgba(251, 191, 36, 0.18)',
-				edge: 'rgba(251, 191, 36, 0.4)',
-				ink: '#0b1120',
-				disabled: 'rgba(251, 191, 36, 0.4)',
+				base: 'oklch(0.837 0.164 84.4)', // from #fbbf24
+				hover: 'oklch(0.879 0.153 91.6)', // from #fcd34d
+				active: 'oklch(0.924 0.115 95.7)', // from #fde68a
+				wash: 'oklch(0.837 0.164 84.4 / 0.18)', // from rgba(251, 191, 36, 0.18)
+				edge: 'oklch(0.837 0.164 84.4 / 0.4)', // from rgba(251, 191, 36, 0.4)
+				ink: 'oklch(0.18 0.032 266.6)', // from #0b1120
+				disabled: 'oklch(0.837 0.164 84.4 / 0.4)', // from rgba(251, 191, 36, 0.4)
 			},
 			neutral: {
-				base: '#94a3b8',
-				hover: '#cbd5e1',
-				active: '#e2e8f0',
-				wash: 'rgba(148, 163, 184, 0.18)',
-				edge: 'rgba(148, 163, 184, 0.4)',
-				ink: '#0b1120',
-				disabled: 'rgba(148, 163, 184, 0.4)',
+				base: 'oklch(0.711 0.035 256.8)', // from #94a3b8
+				hover: 'oklch(0.869 0.02 252.9)', // from #cbd5e1
+				active: 'oklch(0.929 0.013 255.5)', // from #e2e8f0
+				wash: 'oklch(0.711 0.035 256.8 / 0.18)', // from rgba(148, 163, 184, 0.18)
+				edge: 'oklch(0.711 0.035 256.8 / 0.4)', // from rgba(148, 163, 184, 0.4)
+				ink: 'oklch(0.18 0.032 266.6)', // from #0b1120
+				disabled: 'oklch(0.711 0.035 256.8 / 0.4)', // from rgba(148, 163, 184, 0.4)
 			},
 			link: {
-				base: '#60a5fa',
-				hover: '#93c5fd',
-				active: '#bfdbfe',
-				wash: 'rgba(96, 165, 250, 0.18)',
-				edge: 'rgba(96, 165, 250, 0.4)',
-				ink: '#0b1120',
-				disabled: 'rgba(96, 165, 250, 0.4)',
+				base: 'oklch(0.714 0.143 254.6)', // from #60a5fa
+				hover: 'oklch(0.809 0.096 251.8)', // from #93c5fd
+				active: 'oklch(0.882 0.057 254.1)', // from #bfdbfe
+				wash: 'oklch(0.714 0.143 254.6 / 0.18)', // from rgba(96, 165, 250, 0.18)
+				edge: 'oklch(0.714 0.143 254.6 / 0.4)', // from rgba(96, 165, 250, 0.4)
+				ink: 'oklch(0.18 0.032 266.6)', // from #0b1120
+				disabled: 'oklch(0.714 0.143 254.6 / 0.4)', // from rgba(96, 165, 250, 0.4)
 			},
 		},
 		signal: {
-			success: { solid: '#4ade80', wash: '#0f2a1c', edge: '#166534', ink: '#0b1120' },
-			warning: { solid: '#fbbf24', wash: '#2a1f0a', edge: '#854d0e', ink: '#0b1120' },
-			danger: { solid: '#f87171', wash: '#2a1212', edge: '#7f1d1d', ink: '#0b1120' },
-			info: { solid: '#38bdf8', wash: '#0a2533', edge: '#075985', ink: '#0b1120' },
+			success: {
+				solid: 'oklch(0.8 0.182 151.7)', // from #4ade80
+				wash: 'oklch(0.259 0.043 158.7)', // from #0f2a1c
+				edge: 'oklch(0.448 0.108 151.3)', // from #166534
+				ink: 'oklch(0.18 0.032 266.6)', // from #0b1120
+			},
+			warning: {
+				solid: 'oklch(0.837 0.164 84.4)', // from #fbbf24
+				wash: 'oklch(0.247 0.038 81.6)', // from #2a1f0a
+				edge: 'oklch(0.476 0.103 61.9)', // from #854d0e
+				ink: 'oklch(0.18 0.032 266.6)', // from #0b1120
+			},
+			danger: {
+				solid: 'oklch(0.711 0.166 22.2)', // from #f87171
+				wash: 'oklch(0.218 0.04 20.8)', // from #2a1212
+				edge: 'oklch(0.396 0.133 25.7)', // from #7f1d1d
+				ink: 'oklch(0.18 0.032 266.6)', // from #0b1120
+			},
+			info: {
+				solid: 'oklch(0.754 0.139 232.7)', // from #38bdf8
+				wash: 'oklch(0.251 0.042 234.6)', // from #0a2533
+				edge: 'oklch(0.443 0.1 240.8)', // from #075985
+				ink: 'oklch(0.18 0.032 266.6)', // from #0b1120
+			},
 		},
 		focus: {
-			ring: '#60a5fa',
-			ringStrong: '#93c5fd',
-			ringShadow: '0 0 0 3px rgba(96, 165, 250, 0.5)',
+			ring: 'oklch(0.714 0.143 254.6)', // from #60a5fa
+			ringStrong: 'oklch(0.809 0.096 251.8)', // from #93c5fd
+			ringShadow: '0 0 0 3px oklch(0.714 0.143 254.6 / 0.5)', // from 0 0 0 3px rgba(96, 165, 250, 0.5)
 		},
 		overlay: {
-			scrim: 'rgba(0, 0, 0, 0.7)',
-			tooltipBg: '#f1f5f9',
-			tooltipInk: '#0f172a',
+			scrim: 'oklch(0 0 0 / 0.7)', // from rgba(0, 0, 0, 0.7)
+			tooltipBg: 'oklch(0.968 0.007 247.9)', // from #f1f5f9
+			tooltipInk: 'oklch(0.208 0.04 265.8)', // from #0f172a
 		},
 		selection: {
-			bg: 'rgba(96, 165, 250, 0.3)',
-			ink: '#f1f5f9',
+			bg: 'oklch(0.714 0.143 254.6 / 0.3)', // from rgba(96, 165, 250, 0.3)
+			ink: 'oklch(0.968 0.007 247.9)', // from #f1f5f9
 		},
 		disabled: {
-			surface: '#1f2937',
-			ink: '#64748b',
-			edge: '#334155',
+			surface: 'oklch(0.278 0.03 256.8)', // from #1f2937
+			ink: 'oklch(0.554 0.041 257.4)', // from #64748b
+			edge: 'oklch(0.372 0.039 257.3)', // from #334155
 		},
 		link: {
-			default: '#60a5fa',
-			hover: '#93c5fd',
-			visited: '#c4b5fd',
+			default: 'oklch(0.714 0.143 254.6)', // from #60a5fa
+			hover: 'oklch(0.809 0.096 251.8)', // from #93c5fd
+			visited: 'oklch(0.811 0.101 293.6)', // from #c4b5fd
 		},
 	},
 };
