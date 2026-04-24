@@ -153,6 +153,22 @@ export const ROUTES = {
 	HANGAR_GLOSSARY_SOURCES: '/glossary/sources',
 	HANGAR_GLOSSARY_SOURCES_NEW: '/glossary/sources/new',
 	HANGAR_GLOSSARY_SOURCES_DETAIL: (id: string) => `/glossary/sources/${encodeURIComponent(id)}` as const,
+	// Hangar -- /sources operational surface (wp-hangar-sources-v1).
+	HANGAR_SOURCES: '/sources',
+	HANGAR_SOURCE_DETAIL: (id: string) => `/sources/${encodeURIComponent(id)}` as const,
+	HANGAR_SOURCE_FILES: (id: string) => `/sources/${encodeURIComponent(id)}/files` as const,
+	HANGAR_SOURCE_DIFF: (id: string) => `/sources/${encodeURIComponent(id)}/diff` as const,
+	HANGAR_SOURCE_UPLOAD: (id: string) => `/sources/${encodeURIComponent(id)}/upload` as const,
+	/** Operational form actions on a source. */
+	HANGAR_SOURCE_FETCH_ACTION: '?/fetch',
+	HANGAR_SOURCE_EXTRACT_ACTION: '?/extract',
+	HANGAR_SOURCE_DIFF_ACTION: '?/diff',
+	HANGAR_SOURCE_VALIDATE_ACTION: '?/validate',
+	/** Global flow-level actions on /sources. */
+	HANGAR_SOURCES_RESCAN_ACTION: '?/rescan',
+	HANGAR_SOURCES_REVALIDATE_ACTION: '?/revalidate',
+	HANGAR_SOURCES_BUILD_ACTION: '?/build',
+	HANGAR_SOURCES_SIZE_REPORT_ACTION: '?/sizeReport',
 	HANGAR_JOBS: '/jobs',
 	HANGAR_JOB_DETAIL: (id: string) => `/jobs/${encodeURIComponent(id)}` as const,
 	/** JSON endpoint for the /jobs/[id] streaming log (cursor-based polling). */

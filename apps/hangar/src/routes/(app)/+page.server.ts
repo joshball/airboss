@@ -3,10 +3,10 @@ import { redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
 /**
- * Hangar root redirects to the glossary surface. Matches the finish-plan
- * shape: /glossary is the primary admin landing. The audit-ping demo
- * from the scaffold WP moved to /admin/audit-ping.
+ * Hangar root redirects to the /sources flow diagram. Post wp-hangar-sources-v1
+ * this is the primary admin landing; the interactive reference-system pipeline
+ * is the first thing the operator sees.
  */
 export const load: PageServerLoad = async () => {
-	redirect(302, ROUTES.HANGAR_GLOSSARY);
+	redirect(302, ROUTES.HANGAR_SOURCES);
 };
