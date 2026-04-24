@@ -492,6 +492,26 @@ function rootFallbackBlock(): string {
 const REDUCED_MOTION_BLOCK = `@media (prefers-reduced-motion: reduce) {\n\t:root, [data-theme] {\n\t\t--motion-fast: 0ms;\n\t\t--motion-normal: 0ms;\n\t\t--motion-slow: 0ms;\n\t}\n}\n`;
 
 /**
+ * Z-index ladder -- single-sourced in @ab/constants Z_INDEX and mirrored
+ * here as CSS custom properties so scoped Svelte `<style>` blocks (which
+ * can't interpolate TS values) still resolve the ladder. Non-themed:
+ * stacking semantics don't change per theme, so one block covers every
+ * theme/appearance combination.
+ */
+const Z_INDEX_BLOCK = `:root, [data-theme] {
+\t--z-base: 0;
+\t--z-sticky: 10;
+\t--z-sidebar: 20;
+\t--z-dropdown: 30;
+\t--z-popover: 50;
+\t--z-modal: 100;
+\t--z-command-palette: 200;
+\t--z-toast: 300;
+\t--z-top: 1000;
+}
+`;
+
+/**
  * Render the full tokens.css output. Deterministic: for a given
  * registry state, output is byte-identical across runs.
  */
@@ -510,5 +530,5 @@ export function emitAllThemes(): string {
 			blocks.push(themeToCss(theme, appearance));
 		}
 	}
-	return `${banner}\n${root}\n${blocks.join('\n')}\n${REDUCED_MOTION_BLOCK}`;
+	return `${banner}\n${root}\n${blocks.join('\n')}\n${Z_INDEX_BLOCK}\n${REDUCED_MOTION_BLOCK}`;
 }

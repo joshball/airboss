@@ -127,7 +127,7 @@ function cellTitle(domain: Domain, cell: DomainCertCell): string {
 		position: sticky;
 		top: 0;
 		background: var(--surface-raised);
-		z-index: 1;
+		z-index: var(--z-sticky);
 		padding-bottom: var(--space-2xs);
 	}
 

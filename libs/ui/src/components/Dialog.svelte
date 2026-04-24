@@ -113,7 +113,7 @@ $effect(() => {
 		align-items: center;
 		justify-content: center;
 		padding: var(--space-lg);
-		z-index: 100;
+		z-index: var(--z-modal);
 	}
 
 	.panel {

@@ -279,7 +279,7 @@ $effect(() => {
 		color: var(--ink-body);
 		font-size: var(--font-size-sm);
 		line-height: var(--line-height-normal);
-		z-index: 50;
+		z-index: var(--z-popover);
 		/* Transition respects reduced-motion via the token. */
 		transition: opacity var(--motion-normal);
 	}

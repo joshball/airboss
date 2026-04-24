@@ -157,6 +157,17 @@ export const TOKENS = {
 	motionNormal: '--motion-normal',
 	motionSlow: '--motion-slow',
 
+	// -------- scale: z-index ladder (mirrors @ab/constants Z_INDEX) --------
+	zBase: '--z-base',
+	zSticky: '--z-sticky',
+	zSidebar: '--z-sidebar',
+	zDropdown: '--z-dropdown',
+	zPopover: '--z-popover',
+	zModal: '--z-modal',
+	zCommandPalette: '--z-command-palette',
+	zToast: '--z-toast',
+	zTop: '--z-top',
+
 	// -------- layout --------
 	layoutContainerMax: '--layout-container-max',
 	layoutContainerPadding: '--layout-container-padding',

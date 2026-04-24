@@ -133,7 +133,7 @@ function truncate(text: string, max: number): string {
 		position: absolute;
 		left: 0;
 		top: calc(100% + 4px);
-		z-index: 20;
+		z-index: var(--z-popover);
 		min-width: 18rem;
 		max-width: 24rem;
 		background: var(--ab-color-surface, white);

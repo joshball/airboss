@@ -293,7 +293,13 @@ function handleMemoryItemClick() {
 		color: var(--ink-inverse);
 		padding: var(--space-sm) var(--space-md);
 		border-radius: var(--radius-sm);
-		z-index: 100;
+		/*
+		 * Skip-to-content is keyboard-focusable layout chrome that must pop
+		 * above sticky headers / sidebars when focused. Focus trap in Dialog
+		 * prevents reaching this while a modal is open, so MODAL tier is
+		 * safe even though numerically it matches the dialog.
+		 */
+		z-index: var(--z-modal);
 	}
 
 	.skip:focus {
@@ -399,7 +405,7 @@ function handleMemoryItemClick() {
 		border-radius: var(--radius-md);
 		box-shadow: var(--shadow-lg);
 		padding: var(--space-2xs);
-		z-index: 50;
+		z-index: var(--z-dropdown);
 		display: flex;
 		flex-direction: column;
 		gap: 0;
@@ -482,7 +488,7 @@ function handleMemoryItemClick() {
 		border-radius: var(--radius-md);
 		box-shadow: var(--shadow-lg);
 		padding: var(--space-2xs);
-		z-index: 50;
+		z-index: var(--z-dropdown);
 	}
 
 	.identity-email {

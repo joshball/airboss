@@ -209,7 +209,7 @@ function backdropKeydown(event: KeyboardEvent): void {
 		align-items: flex-start;
 		justify-content: center;
 		padding-top: 6rem;
-		z-index: 200;
+		z-index: var(--z-command-palette);
 	}
 
 	.palette {

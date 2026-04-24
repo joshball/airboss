@@ -26,7 +26,12 @@ import { navigating } from '$app/state';
 		left: 0;
 		right: 0;
 		height: 3px;
-		z-index: 1000;
+		/*
+		 * STICKY tier (not TOP) so a modal dialog (MODAL tier) visually covers
+		 * the progress bar when a navigation originates from inside a modal.
+		 * See @ab/constants Z_INDEX.
+		 */
+		z-index: var(--z-sticky);
 		pointer-events: none;
 		background: transparent;
 	}
