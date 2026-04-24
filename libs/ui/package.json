@@ -1,5 +1,13 @@
 {
 	"name": "@ab/ui",
 	"private": true,
-	"type": "module"
+	"type": "module",
+	"exports": {
+		".": {
+			"types": "./src/index.ts",
+			"default": "./src/index.ts"
+		},
+		"./components/*": "./src/components/*",
+		"./lib/*": "./src/lib/*"
+	}
 }

@@ -198,7 +198,7 @@ CREATE TABLE "study"."session" (
 	"completed_at" timestamp with time zone,
 	CONSTRAINT "session_mode_check" CHECK ("mode" IN ('continue', 'strengthen', 'mixed', 'expand')),
 	CONSTRAINT "session_focus_override_check" CHECK ("focus_override" IS NULL OR "focus_override" IN ('regulations', 'weather', 'airspace', 'glass-cockpits', 'ifr-procedures', 'vfr-operations', 'aerodynamics', 'teaching-methodology', 'adm-human-factors', 'safety-accident-analysis', 'aircraft-systems', 'flight-planning', 'emergency-procedures', 'faa-practical-standards')),
-	CONSTRAINT "session_cert_override_check" CHECK ("cert_override" IS NULL OR "cert_override" IN ('PPL', 'IR', 'CPL', 'CFI')),
+	CONSTRAINT "session_cert_override_check" CHECK ("cert_override" IS NULL OR "cert_override" IN ('private', 'instrument', 'commercial', 'cfi')),
 	CONSTRAINT "session_session_length_check" CHECK ("session_length" BETWEEN 3 AND 50)
 );
 --> statement-breakpoint

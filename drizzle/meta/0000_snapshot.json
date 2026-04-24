@@ -1852,7 +1852,7 @@
         },
         "session_cert_override_check": {
           "name": "session_cert_override_check",
-          "value": "\"cert_override\" IS NULL OR \"cert_override\" IN ('PPL', 'IR', 'CPL', 'CFI')"
+          "value": "\"cert_override\" IS NULL OR \"cert_override\" IN ('private', 'instrument', 'commercial', 'cfi')"
         },
         "session_session_length_check": {
           "name": "session_session_length_check",

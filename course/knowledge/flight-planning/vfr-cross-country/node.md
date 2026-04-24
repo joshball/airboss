@@ -9,13 +9,13 @@ technical_depth: working
 stability: evolving
 
 relevance:
-  - cert: PPL
+  - cert: private
     bloom: apply
     priority: core
-  - cert: CPL
+  - cert: commercial
     bloom: apply
     priority: supporting
-  - cert: CFI
+  - cert: cfi
     bloom: evaluate
     priority: core
 

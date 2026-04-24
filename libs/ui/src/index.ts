@@ -1,10 +1,18 @@
-// UI component library -- populated as components are built.
+// UI component library.
 //
-// Svelte components are imported by path (e.g.
-// `import Dialog from '@ab/ui/components/Dialog.svelte'`); this barrel
-// only re-exports types + lightweight utilities. Re-exporting
-// components here would pull the full svelte runtime into non-UI
-// consumers.
+// This barrel is the **pure-TS entry** -- types and lightweight utilities
+// only. Svelte components are loaded by subpath so non-svelte consumers
+// don't pull the svelte runtime:
+//
+//   import Dialog from '@ab/ui/components/Dialog.svelte';
+//
+// Subpath routing is enforced by the `exports` field in `package.json`:
+//   - `.`              -> this file (types + utilities, no svelte runtime)
+//   - `./components/*` -> individual .svelte files by name
+//   - `./lib/*`        -> shared helpers used by components
+//
+// Re-exporting components here would pull the full svelte runtime into
+// non-UI consumers -- hence the deliberate split.
 
 // Shared tone vocabulary re-exported so callers don't have to import
 // from two packages for a single prop.

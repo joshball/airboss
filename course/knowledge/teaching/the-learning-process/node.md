@@ -9,13 +9,13 @@ technical_depth: working
 stability: stable
 
 relevance:
-  - cert: CFI
+  - cert: cfi
     bloom: understand
     priority: core
-  - cert: CFI
+  - cert: cfi
     bloom: apply
     priority: core
-  - cert: CFI
+  - cert: cfi
     bloom: create
     priority: core
 

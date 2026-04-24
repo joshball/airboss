@@ -9,16 +9,16 @@ technical_depth: working
 stability: evolving
 
 relevance:
-  - cert: IR
+  - cert: instrument
     bloom: apply
     priority: core
-  - cert: IR
+  - cert: instrument
     bloom: evaluate
     priority: core
-  - cert: CPL
+  - cert: commercial
     bloom: apply
     priority: core
-  - cert: CFI
+  - cert: cfi
     bloom: create
     priority: core
 
