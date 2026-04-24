@@ -329,6 +329,30 @@ function resolveWikilink(pageId: string): { href: string; resolved: boolean } {
 		overflow-x: auto;
 	}
 
+	/*
+	 * Shiki dual-theme wiring.
+	 *
+	 * Shiki emits every token span with `--shiki-light` + `--shiki-dark`
+	 * CSS variables (and `-bg` variants on the <pre>). `defaultColor: false`
+	 * means Shiki applies no inline color itself, so these rules own the
+	 * resolution. The light branch is the default; the dark branch matches
+	 * the `data-appearance='dark'` attribute the theme system sets on
+	 * <html> before first paint, which keeps the highlighted block in sync
+	 * with the rest of the app through the appearance toggle and avoids
+	 * a FOUC on reload.
+	 */
+	.md-body :global(.md-code-wrap .shiki),
+	.md-body :global(.md-code-wrap .shiki span) {
+		color: var(--shiki-light);
+		background-color: var(--shiki-light-bg);
+	}
+
+	:global([data-appearance='dark']) .md-body :global(.md-code-wrap .shiki),
+	:global([data-appearance='dark']) .md-body :global(.md-code-wrap .shiki span) {
+		color: var(--shiki-dark);
+		background-color: var(--shiki-dark-bg);
+	}
+
 	.md-body :global(.md-quote) {
 		margin: var(--ab-space-md, 0.75rem) 0;
 		padding: 0.5rem 1rem;
