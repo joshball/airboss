@@ -3,12 +3,10 @@
  * Cockpit page. Full six-pack + tach, control input panel, V-speeds, WX,
  * stall horn, scenario banner, keybindings help, reset-confirm overlay.
  *
- * Control model: spring-centered ramp for primary surfaces + hold-to-adjust
- * throttle. Elevator/aileron/rudder deflect while a direction key is held
- * and return to neutral on release (yoke spring). Throttle ramps while
- * Shift/Ctrl is held and holds position on release. A requestAnimationFrame
- * loop ticks the ramp; keydown/keyup track which ramp actions are pressed.
- * Trim and flaps stay tap-based through `resolveKey`.
+ * Control model: tap-based. Each keypress adjusts a surface by a fixed
+ * increment (5% for primary surfaces, 1% for trim). OS key autorepeat
+ * drives continued nudges; the `event.repeat` flag is still honored so
+ * that the first press registers deterministically.
  */
 
 import {
@@ -29,8 +27,7 @@ import {
 } from '@ab/constants';
 import { onDestroy, onMount, untrack } from 'svelte';
 import { browser } from '$app/environment';
-import { type RampAction, resolveKey, resolveRampAction } from '$lib/control-handler';
-import { tickRamp } from '$lib/control-ramp';
+import { resolveKey } from '$lib/control-handler';
 import { EngineSound } from '$lib/engine-sound.svelte';
 import FdmWorker from '$lib/fdm-worker.ts?worker';
 import Altimeter from '$lib/instruments/Altimeter.svelte';
@@ -79,10 +76,6 @@ let muted = $state(false);
 let bootError = $state<string | null>(null);
 let readyTimer: ReturnType<typeof setTimeout> | null = null;
 const WORKER_READY_TIMEOUT_MS = 5_000;
-
-const pressedActions = new Set<RampAction>();
-let rampFrame: number | null = null;
-let lastRampTs = 0;
 
 // WCAG 2.1.4: users on screen readers need to disable character-key
 // shortcuts so Shift/Ctrl (throttle) do not collide with AT modifier chords.
@@ -208,17 +201,6 @@ function onKeyDown(event: KeyboardEvent): void {
 		return;
 	}
 
-	const rampAction = resolveRampAction(event);
-	if (rampAction !== null) {
-		event.preventDefault();
-		firstGesture();
-		pressedActions.add(rampAction);
-		return;
-	}
-
-	// Block OS-level autorepeat from spamming tap-based actions (trim, flaps).
-	if (event.repeat) return;
-
 	const resolution = resolveKey(event, inputs);
 	if (!resolution) return;
 	event.preventDefault();
@@ -235,60 +217,6 @@ function onKeyDown(event: KeyboardEvent): void {
 	if (resolution.special) {
 		handleSpecial(resolution.special);
 	}
-}
-
-function onKeyUp(event: KeyboardEvent): void {
-	const rampAction = resolveRampAction(event);
-	if (rampAction === null) return;
-	pressedActions.delete(rampAction);
-	event.preventDefault();
-}
-
-function releaseAllRampKeys(): void {
-	pressedActions.clear();
-}
-
-function tickInputs(ts: number): void {
-	if (lastRampTs === 0) lastRampTs = ts;
-	const dt = Math.min(0.1, (ts - lastRampTs) / 1000);
-	lastRampTs = ts;
-
-	const next = tickRamp(
-		{
-			elevator: inputs.elevator,
-			aileron: inputs.aileron,
-			rudder: inputs.rudder,
-			throttle: inputs.throttle,
-		},
-		pressedActions,
-		dt,
-	);
-
-	const patch: Partial<FdmInputs> = {};
-	let changed = false;
-	if (next.elevator !== inputs.elevator) {
-		patch.elevator = next.elevator;
-		changed = true;
-	}
-	if (next.aileron !== inputs.aileron) {
-		patch.aileron = next.aileron;
-		changed = true;
-	}
-	if (next.rudder !== inputs.rudder) {
-		patch.rudder = next.rudder;
-		changed = true;
-	}
-	if (next.throttle !== inputs.throttle) {
-		patch.throttle = next.throttle;
-		changed = true;
-	}
-
-	if (changed) {
-		inputs = { ...inputs, ...patch };
-		post({ type: SIM_WORKER_MESSAGES.INPUT, inputs: patch });
-	}
-
-	rampFrame = requestAnimationFrame(tickInputs);
 }
 
 function onAutoCoordClick(): void {
@@ -326,12 +254,7 @@ onMount(() => {
 	startWorker();
 
 	window.addEventListener('keydown', onKeyDown);
-	window.addEventListener('keyup', onKeyUp);
-	window.addEventListener('blur', releaseAllRampKeys);
 	window.addEventListener('pointerdown', firstGesture);
-
-	lastRampTs = 0;
-	rampFrame = requestAnimationFrame(tickInputs);
 
 	// Mute state -- shared between stall horn and engine sound.
 	muted = localStorage.getItem(SIM_STORAGE_KEYS.MUTE) === 'true';
@@ -348,11 +271,7 @@ onMount(() => {
 onDestroy(() => {
 	if (!browser) return;
 	window.removeEventListener('keydown', onKeyDown);
-	window.removeEventListener('keyup', onKeyUp);
-	window.removeEventListener('blur', releaseAllRampKeys);
 	window.removeEventListener('pointerdown', firstGesture);
-	if (rampFrame !== null) cancelAnimationFrame(rampFrame);
-	rampFrame = null;
 	if (readyTimer !== null) clearTimeout(readyTimer);
 	horn.destroy();
 	engineSound.destroy();

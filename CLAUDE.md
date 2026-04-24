@@ -2,312 +2,178 @@
 
 Pilot performance and rehearsal platform. Post-pivot from FIRC-specific to broader aviation learning. Surface-typed monorepo: apps grouped by rendering surface (study, spatial, audio, etc.), not by content theme.
 
-See [docs/platform/PIVOT.md](docs/platform/PIVOT.md) for why we're here. See [docs/platform/MULTI_PRODUCT_ARCHITECTURE.md](docs/platform/MULTI_PRODUCT_ARCHITECTURE.md) for the Option 7 surface architecture.
+Framing: [docs/platform/PIVOT.md](docs/platform/PIVOT.md) (why) and [docs/platform/MULTI_PRODUCT_ARCHITECTURE.md](docs/platform/MULTI_PRODUCT_ARCHITECTURE.md) (surface architecture).
 
-## PRIME DIRECTIVE
+> Global rules (stubs, "honest", worktree cleanup, AI attribution, commit hygiene) live in `~/.claude/CLAUDE.md`. This file is airboss-specific only.
 
-**Do the right thing. Always.**
+## Session start
 
-- Never propose stubs, hardcoded values, or "MVP shortcuts" when a real implementation exists -- especially in the `airboss-firc` sibling repo, which has years of battle-tested auth, schema, engine, and BC code.
-- "For now" and "as a stub" are red flags. If you're tempted to say either, stop. Check whether porting the real thing is within reach. It usually is.
-- Longer scope to do it right is always acceptable. Quality shortcuts are not.
-- When porting from airboss-firc: take the code, schema, and patterns. Do **not** take the UI/UX -- that's being redesigned here.
-- Zero tolerance for known issues. A stub is a known issue. Fix it before moving on.
+Quick scan, don't ritualize:
 
-**Never use the word "honest" or any variant to qualify my own statements.** "Honestly", "to be honest", "the honest answer", "the honest read", "my honest opinion", "honest-to-god" -- all banned *as agent speech*. The word implies my other statements weren't honest, which is absurd. State claims directly ("I got this wrong"); acknowledge uncertainty directly ("I'm not sure"); never frame either as a confession. **This is about me (the agent) qualifying my own voice -- not about the word itself.** Document content (scenario prose, a definition like "a student must be honest with themselves," a quote, a heading about integrity) uses the word naturally and that's fine. Only flag occurrences where an agent uses it to preface or qualify its own assertion.
+- [docs/work/NOW.md](docs/work/NOW.md) -- what's active.
+- `docs/work/todos/` -- any incomplete prior-session todos.
+- If working in a feature area, glance at its work package (if one exists) and the relevant ADR.
 
-## SESSION START
+Skip the rest unless it's relevant to the current task. Don't surface reminders for their own sake.
 
-**Do this at the start of every conversation, before any work:**
+## Required reading (once, not every session)
 
-1. Check [docs/work/NOW.md](docs/work/NOW.md) -- what's active? This is the single source of "what's next."
-2. Check [docs/platform/IDEAS.md](docs/platform/IDEAS.md) -- any ideas pending review? If the last review was >2 weeks ago, remind the user.
-3. Check `docs/work/todos/` -- any incomplete todos from prior sessions? Surface them.
-4. Check [docs/platform/DESIGN_PRINCIPLES.md](docs/platform/DESIGN_PRINCIPLES.md) -- if the current task involves a feature, remind the user which principles apply.
-5. Check [docs/platform/VOCABULARY.md](docs/platform/VOCABULARY.md) -- if naming anything, reference the terminology bank.
-
-**Periodic reminders (surface when relevant, at most once per session):**
-
-- **Ideas review** -- "IDEAS.md hasn't been reviewed since [date]. Want to do a quick scan?"
-- **TEMP_FIXES.md** -- if it exists and has open items, remind the user.
-- **Stale docs** -- if working in an area, check that the relevant ADR/doc still matches reality.
-
-Don't block work for reminders. Surface them briefly at the start, then move on.
-
-## REQUIRED READING
-
-**Before writing any code, read these in order:**
+New contributors / fresh context:
 
 1. [docs/platform/PIVOT.md](docs/platform/PIVOT.md) -- what airboss is and isn't
 2. [docs/platform/MULTI_PRODUCT_ARCHITECTURE.md](docs/platform/MULTI_PRODUCT_ARCHITECTURE.md) -- apps, libs, surface typology
 3. [docs/platform/DESIGN_PRINCIPLES.md](docs/platform/DESIGN_PRINCIPLES.md) -- core beliefs
-4. The relevant pattern doc for your area (see "Before You Build" below)
-5. The feature spec for what you're implementing (if it exists)
 
-## Doc Structure
+Pattern references (read when touching that area, not preemptively):
+
+- SvelteKit / Svelte 5 / forms / auth / CSP / styling: [docs/agents/best-practices.md](docs/agents/best-practices.md)
+- Scenario engine / tick loop / scoring / replay: [docs/agents/reference-engine-patterns.md](docs/agents/reference-engine-patterns.md)
+- Constants / DB schema / scripts / monorepo setup: [docs/agents/reference-sveltekit-patterns.md](docs/agents/reference-sveltekit-patterns.md)
+- Common pitfalls: [docs/agents/common-pitfalls.md](docs/agents/common-pitfalls.md)
+- Naming: [docs/platform/VOCABULARY.md](docs/platform/VOCABULARY.md)
+
+## Doc structure
 
 ```text
-course/                 AVIATION KNOWLEDGE (organized by information architecture layers)
-  L01-FAA/              Regulatory foundation (AC 61-83K, CFRs, TCO, submission)
+course/                 AVIATION KNOWLEDGE
+  L01-FAA/              Regulatory foundation
   L02-Knowledge/        Per-topic aviation research (A.1-A.13)
   L03-Objectives/       Learning objectives, competency framework
   L04-Design/           Instructional design, module structure
   L05-Implementation/   Scenarios, question banks, feature specs
 
-docs/                   PLATFORM
-  platform/             Architecture, vision, design principles, info architecture
-    PIVOT.md            Post-pivot framing (FIRC -> broader platform)
-    MULTI_PRODUCT_ARCHITECTURE.md   Option 7 surface-typed apps
-    PRODUCT_BRAINSTORM.md           53 product ideas across 9 categories
-    DESIGN_PRINCIPLES.md            Core beliefs
-    IDEAS.md            Idea intake funnel
-    VOCABULARY.md       Naming standards
-  vision/               Product vision and PRDs
-    INDEX.md            All 53 products indexed
-    learning/           Learning domain taxonomy
-    products/           Per-product PRDs (audio/, community/, event-prep/,
-                        experimental/, in-flight/, pre-flight/, proficiency/,
-                        reflection/, specialty/)
-  products/             Per-app docs (sim/, hangar/, ops/, runway/ from pre-pivot)
-    {app}/
-      VISION.md
-      PRD.md
-      ROADMAP.md
-      TASKS.md
-      features/         App-specific feature specs
+docs/
+  platform/             Architecture, vision, principles, vocabulary
+  vision/               Product vision and PRDs (53 products indexed)
+  products/             Per-app docs (sim/, hangar/, ops/, runway/)
   decisions/            ADRs (numbered, immutable once approved)
-    NNN-topic.md        Single-file ADR (simple decisions)
-    NNN-topic/          Directory ADR (complex decisions with context)
-      context.md        Conversation evolution, feedback rounds
-      decision.md       Final plan
   agents/               Agent instructions, pattern references
   business/             Market research, business context
   devops/               Deployment, infrastructure
-  work/                 Session-scoped (todos, plans, reviews)
-    NOW.md              What's active, what's next
+  work/
+    NOW.md              What's active
     todos/              Per-session todos: YYYYMMDD-NN-TODO.md
     plans/              Multi-session plans
-  work-packages/        Feature work packages (from /ball-wp-spec)
-    {feature}/
-      spec.md
-      tasks.md
-      test-plan.md
-      design.md         (medium+ features)
-      user-stories.md   (large features)
+  work-packages/        Feature work packages (large features only)
   .archive/             Superseded files (never delete, always archive)
 ```
 
-**Rules:**
+Rules:
 
-- Never create files outside this structure. Ask if unsure.
-- Archive superseded docs, never delete. Preserve directory structure in `.archive/`.
-- Never leave orphaned files. When moving or renaming, grep for references and update them.
-- PRDs link to feature specs. Feature details live in feature dirs, not inline.
-- Session todos committed with work. One per session: `docs/work/todos/YYYYMMDD-NN-TODO.md`.
-- Update docs as part of the work, not as a separate task.
+- Stay inside this structure. Ask if unsure.
+- Archive, don't delete. Update references when moving files.
+- Update docs as part of the work, not after.
 
-## Before You Build
+## How we build features
 
-Read the relevant pattern doc before writing code in that area:
+**Always work in a worktree.** Default to `/ball-worktree` for any task that writes files. Clean up the worktree and branch when the PR merges (part of `/ball-worktree`'s lifecycle -- don't leave cruft).
 
-- **SvelteKit / Svelte 5 / forms / auth / CSP / styling:** [docs/agents/best-practices.md](docs/agents/best-practices.md)
-- **Scenario engine / tick loop / scoring / replay:** [docs/agents/reference-engine-patterns.md](docs/agents/reference-engine-patterns.md)
-- **Constants / DB schema / scripts / monorepo setup:** [docs/agents/reference-sveltekit-patterns.md](docs/agents/reference-sveltekit-patterns.md)
-- **Before writing any page / BC / component / schema:** [docs/agents/common-pitfalls.md](docs/agents/common-pitfalls.md)
-- **New feature? Author work package:** `/ball-wp-spec`
-- **Ready to build? Phased implementation:** `/ball-wp-build`
-- **Code review (10 parallel spec-aware reviewers):** `/ball-review-full`
-- **Naming features or UI elements:** [docs/platform/VOCABULARY.md](docs/platform/VOCABULARY.md)
-- **Design philosophy / product shaping principles:** [docs/platform/DESIGN_PRINCIPLES.md](docs/platform/DESIGN_PRINCIPLES.md)
+**Use skills, don't reinvent.** Before writing code or prose, check if a skill already does it: `/ball-help` lists them. Common ones: `/ball-wp-spec`, `/ball-wp-build`, `/ball-review-full`, `/ball-review-fix` (aka `/rfix`), `/ship`, `/branch-it`, `/diagnose`, `/status`, `/handoff`, `/loose-ends`. If a skill fits the task, invoke it instead of hand-rolling the steps.
 
-## Feature Work Rules
+**Default: just build it.** Small/medium features do not need a work package. Plan in chat, implement, test, ship.
 
-Feature lifecycle is driven by shared skills:
+**Work package (`/ball-wp-spec`) only for large items:**
 
-- **New feature?** Run `/ball-wp-spec` -- generates work package docs (spec, tasks, test-plan, design, user-stories)
-- **Ready to build?** Run `/ball-wp-build` -- phased implementation from signed-off work package, with per-phase reviews
-- **Need a review?** Run `/ball-review-full` -- 10 parallel spec-aware reviewers + fixer
-- **Periodic:** `/ball-wp-drift` to check spec/code divergence, `/ball-wp-coverage` for undocumented features
+- Crosses 3+ libs or introduces a new BC.
+- Non-trivial schema migration or data model change.
+- Multi-session scope where context will be lost between sessions.
+- Needs design sign-off before code (complex UX, new interaction patterns).
 
-**Project rules:**
+If it fits in one session and one reviewer can hold it in their head, skip the work package.
 
-- **Go slowly.** One feature at a time. Test it. Then move on. No parallel features.
-- **Nothing merges without a manual test plan.** User tests every feature by hand before it ships.
-- **Feature dirs** hold spec, user stories, design, tasks, test-plan, review notes. Co-located at `docs/work-packages/{feature}/`.
-- **Update docs with the work.** Feature spec, TASKS.md, PRD.md, ROADMAP.md -- all updated as part of shipping, not after.
-- **Automated tests** alongside implementation: unit (Vitest) for BC/lib logic, e2e (Playwright) for user flows.
-- **Review docs have two status fields.** `status` (unread/reading/done) is controlled by the user. `review_status` (pending/done) is controlled by the agent. A feature can't be "done" until both are satisfied.
-- **ALWAYS FIX EVERYTHING from a review, unless explicitly told not to.** Critical, major, minor, nit -- all of it. A review is a punch list to close, not a menu to pick from. Default action after any `/ball-review-*` finishes is to launch the fixer, or fix inline if the scope is small. Don't present fix options and wait; just do the work.
-- **Convergent findings get fixed at the root, once.** When multiple reviewers flag the same cause (e.g., token migration stopped at primitives so every page still ships hex), fix the root cause in one pass, not N times.
-- **No undecided "considerations for future work."** Anything the agent or reviewer flags as "worth considering later" must be resolved in the same turn: do it now, write a work package and schedule it, defer with a specific trigger, or explicitly drop. "Maybe someday" is not allowed to survive a session.
-- **After fixes land, re-verify.** `bun run check` clean, relevant tests pass, and grep for the symptom returns empty. A finding is closed when the evidence says so, not when the diff looks plausible.
+**Parallelize aggressively when safe:**
 
-### Tracking: three levels
+- Independent features/areas → parallel agents, one per file-scope.
+- Multi-layer feature → small contract agent first (types + constants), then parallel layer agents against that contract.
+- Sequential only when work shares files or has real dependencies.
 
-| Level         | Location                              | Scope                                 | Lifespan            |
-| ------------- | ------------------------------------- | ------------------------------------- | ------------------- |
-| Session todos | `docs/work/todos/YYYYMMDD-NN-TODO.md` | What I'm doing right now              | One session         |
-| Product tasks | `docs/products/{app}/TASKS.md`        | What needs building next for this app | Ongoing backlog     |
-| Feature tasks | `docs/work-packages/{name}/tasks.md`  | What's left to finish this feature    | Until feature ships |
+**Slow down for:**
 
-## Doc Style
+- Schema changes (one migration lands, verified, then next).
+- Anything that touches auth, identity, or billing.
+- Token/styling passes (run last, alone, never mixed with UX edits).
 
-- **No walls of text.** Max 2-3 screens per file. Break into index + linked sub-docs.
-- **Start with the map.** Every doc opens with overview/index, then links to details.
-- **Headers are the outline.** A reader should understand the doc from headers alone.
-- **Tables over paragraphs.** Lists with attributes become tables.
-- **Link, don't inline.** Reference other docs, don't copy content between files.
-- **Name things first.** Propose names and boundaries before writing code.
+**Always:**
 
-## Critical Rules
+- Test by hand before shipping. User tests every feature.
+- Unit tests (Vitest) for BC/lib logic. e2e (Playwright) for user flows that matter.
+- Update feature docs / TASKS.md / PRD.md as part of the work.
 
-- **No `any`.** No magic strings. No implicit types.
-- **All literal values in `libs/constants/`.** Enums, routes, ports, config.
-- **All routes go through `ROUTES` in `libs/constants/src/routes.ts`.** Never write a path string inline. Static routes are string constants. Routes with parameters are typed functions.
-- **Cross-lib imports use `@ab/*` aliases, never relative paths.** See Import rules below.
+### Tracking
+
+| Level         | Location                              | Scope                   | Lifespan            |
+| ------------- | ------------------------------------- | ----------------------- | ------------------- |
+| Session todos | `docs/work/todos/YYYYMMDD-NN-TODO.md` | Now                     | One session         |
+| Product tasks | `docs/products/{app}/TASKS.md`        | App backlog             | Ongoing             |
+| Feature tasks | `docs/work-packages/{name}/tasks.md`  | Until feature ships     | Feature lifetime    |
+
+### Reviews
+
+- Review = punch list to close, not a menu. Fix all findings (critical → nit) unless told otherwise. Default action after any review: launch fixer or fix inline.
+- Convergent findings (same root cause flagged by multiple reviewers) get fixed once at the root.
+- After fixes: `bun run check` clean, relevant tests pass, grep for the symptom returns empty. Closed = evidence says so.
+- No undecided "considerations for future work." Resolve in the same turn: do it, schedule it (work package + trigger), or drop it.
+
+## Doc style
+
+- No walls of text. Break long docs into index + linked sub-docs.
+- Headers are the outline. Tables beat paragraphs. Link, don't inline.
+- Name things first. Propose names and boundaries before writing code.
+
+## Code rules (airboss-specific)
+
+- **No `any`.** No magic strings/numbers. No non-null assertions (`!`).
+- **Constants in `libs/constants/`.** Enums, routes, ports, config.
+- **Routes through `ROUTES`** in `libs/constants/src/routes.ts`. Static = string constants. Parameterized = typed functions.
+- **Cross-lib imports use `@ab/*` aliases.** Intra-lib relative imports are fine.
 - **Drizzle ORM only.** No raw SQL.
-- **Svelte 5 runes only.** No `$:`, no `export let`, no `<slot>`, no Svelte 4 stores (`writable`, `readable`, `$app/stores`). Use `$app/state`.
-- **Discovery-first pedagogy for knowledge nodes.** Lead with WHY. Let the learner derive the answer. Reveal regulations as confirmation of reasoning, not as arbitrary rules. See [ADR 011](docs/decisions/011-knowledge-graph-learning-system/decision.md).
+- **Svelte 5 runes only.** No `$:`, `export let`, `<slot>`, Svelte 4 stores. Use `$app/state`, not `$app/stores`.
+- **IDs via `@ab/utils` `createId()`.** `prefix_ULID` format. Never call `nanoid()` / `ulid()` directly.
+- **Discovery-first pedagogy for knowledge nodes.** Lead with WHY, reveal regs as confirmation. See [ADR 011](docs/decisions/011-knowledge-graph-learning-system/decision.md).
+- `bun run check` passes (0 errors, 0 warnings) before calling work done.
 
 ## Stack
 
-- Runtime: Bun (always `bun`, never npm/yarn/pnpm)
-- Framework: SvelteKit + Svelte 5 (runes only)
-- DB: PostgreSQL + Drizzle ORM (OrbStack for local dev, port 5435)
-- Formatting: Biome
+- Runtime: **Bun** (always; never npm/yarn/pnpm)
+- Framework: SvelteKit + Svelte 5 (runes)
+- DB: PostgreSQL + Drizzle ORM (OrbStack local, port 5435)
+- Formatting: Biome (tabs width 2, single quotes, 120 cols, trailing commas all, semicolons)
 - Testing: Vitest (unit) + Playwright (e2e)
 
 ## Monorepo
 
 ```text
 apps/
-  study/          SvelteKit -- quiz, reps, spaced rep, calibration (active)
+  study/          quiz, reps, spaced rep, calibration (active)
 libs/
   auth/           Identity, sessions, permissions
-  bc/
-    study/        Spaced rep, cards, reviews, scenarios, calibration
+  bc/study/       Spaced rep, cards, reviews, scenarios, calibration
   constants/      Enums, routes, ports, config
-  db/             Shared Drizzle connection (PostgreSQL)
-  themes/         Design tokens, theme definitions
+  db/             Shared Drizzle connection
+  themes/         Design tokens
   types/          Shared types, Zod schemas
   ui/             Svelte components
   utils/          ID generators, helpers
 ```
 
-**Future surface apps** (created when needed, not before):
+Future surfaces (created when needed): `spatial/`, `audio/`, `reflect/`, `avionics/`, `firc/`, `hangar/`, `runway/`. See [MULTI_PRODUCT_ARCHITECTURE.md](docs/platform/MULTI_PRODUCT_ARCHITECTURE.md).
 
-- `spatial/` -- route, airport, airspace, map-based products
-- `audio/` -- narrative, drills, TTS
-- `reflect/` -- journals, heatmaps, tracking
-- `avionics/` -- glass cockpit trainer
-- `firc/` -- FIRC course (migrated from airboss-firc after study MVP proven)
-- `hangar/` -- content authoring + admin
-- `runway/` -- public site
+Path aliases: `@ab/constants`, `@ab/types`, `@ab/db`, `@ab/auth`, `@ab/themes`, `@ab/ui`, `@ab/utils`, `@ab/bc-study`, `@ab/bc-sim`, `@ab/aviation`, `@ab/activities`, `@ab/help`.
 
-See [docs/platform/MULTI_PRODUCT_ARCHITECTURE.md](docs/platform/MULTI_PRODUCT_ARCHITECTURE.md) for the full surface taxonomy and build order.
-
-## Import Rules
-
-- **Always use `@ab/*` path aliases for cross-lib imports.** Never relative paths across lib boundaries.
-- **Intra-lib relative imports are fine.**
-- Path aliases: `@ab/constants`, `@ab/types`, `@ab/db`, `@ab/auth`, `@ab/themes`, `@ab/ui`, `@ab/utils`, `@ab/bc-study`, `@ab/bc-sim`, `@ab/aviation`, `@ab/activities`, `@ab/help`.
-
-## Svelte 5
-
-- Runes: `$state`, `$derived`, `$effect`, `$props`, `$bindable`. No legacy.
-- Snippets: `{#snippet}` + `{@render}`. No `<slot>`.
-- `$app/state` not `$app/stores`.
-- `.svelte.ts` for rune files outside components.
-
-## Database
-
-- Drizzle ORM only. No raw SQL.
-- PostgreSQL via OrbStack, port 5435.
-- Schema namespaces: `identity`, `audit`, `study` (more added as BCs grow).
-- IDs: `prefix_ULID` format via `@ab/utils` `createId()`. Never call `nanoid()` or `ulid()` directly.
+Schema namespaces: `identity`, `audit`, `study` (more added as BCs grow).
 
 ## Workflow
 
-- Never interrupt current work. New requests go to END of todo list.
-- **Capture every request immediately.** Tasks, ideas, suggestions -- add to todo the second they're mentioned. Don't act on them now, don't forget them later.
-- Track everything in `docs/work/todos/YYYYMMDD-NN-TODO.md`.
-- Finish current task before starting next.
-- Report status after each completed task: what completed, what remains, what's next.
-- **Never lose information.** Archive, don't delete. If something might be useful later, keep it findable.
-- **Do the right thing, not the easy thing.** Never take shortcuts. Choose what makes the project better, simpler, more correct, less buggy, more professional. If it takes longer, it takes longer.
-- **Questions are not instructions.** When asked "why does X work this way?" -- answer. Don't start changing things.
-- **Capture ideas immediately.** New ideas, approaches, insights -- add to [docs/platform/IDEAS.md](docs/platform/IDEAS.md) the moment they come up. Don't evaluate yet. Ideas are reviewed every 2 weeks.
-- **Mind your own business on other agents' work.** Do not narrate, audit, or comment on worktrees, branches, or in-flight PRs that aren't yours. Do not proactively inform the user about them. Only speak up if you see a concrete problem (conflict, broken state, data loss risk) that blocks your work. Otherwise: leave them alone, don't mention them.
-
-## Code Quality
-
-- `bun run check` must pass with 0 errors, 0 warnings before completing changes.
-- No `any`. Prefer proper types, generics, `unknown` with guards.
-- No non-null assertions (`!`). Use explicit guards.
-- No magic strings/numbers. Use `libs/constants/`.
-- Never delete commented-out code without asking.
-- Format before commit: `bunx biome format --write` on staged files.
-- Fix all bugs directly. Never dismiss, deflect, or suggest restarts.
-
-## Biome
-
-- Indent: tabs (width 2)
-- Quotes: single quotes
-- Line width: 120
-- Trailing commas: all
-- Semicolons: always
-
-## Git
-
-- Stage individual files by name. Never `git add -A` or `git add .`.
-- No AI attribution anywhere. No "Generated by Claude", no Co-Authored-By.
-- Commit messages: what and why, not how.
-- Commit after each unit of work.
-- Review staged files before committing (`git status` after staging).
-- Never stage files you didn't edit.
-- Never commit directly to main. Always work on feature branches.
-
-## Worktree + branch cleanup
-
-Clean up your own worktrees and branches as part of the work, not as a separate task. Never accumulate cruft across sessions.
-
-**Rules:**
-
-- **PR merged → clean up immediately.** No confirmation needed; it's expected housekeeping. Remove the worktree, delete the local branch, prune the remote branch if it survived `--delete-branch`. The commit history is preserved on main via the squash commit and reachable via `git reflog` for ~30 days.
-
-  ```bash
-  git worktree remove --force .claude/worktrees/<id>
-  git branch -D <branch>
-  git push origin --delete <branch>  # only if ls-remote shows it still exists
-  ```
-
-- **PR pushed but NOT merged, and the user's next request is unrelated to that PR:** STOP. Do not begin the new work. Report the in-flight PR URL, branch name, and worktree path, and ask: merge it now (then clean up), abandon it (clean up without merging), or park it (leave worktree/branch in place, proceed with new work on a fresh branch)? Only continue after the user answers.
-
-- **Local branches or stashes without a corresponding PR** (speculative or abandoned work): never silently delete. Audit the content (`git status --porcelain --ignored`, `git stash show --patch`, diff vs main), surface what's in them, and ask before destroying.
-
-- **Stashes are shared across worktrees** (stored in the parent repo's `.git`). One `stash list` result shows up in every worktree; dropping a stash affects everyone.
-
-**Session start:** survey `git worktree list`, `git branch`, `git stash list`. Any leftovers from prior sessions → flag as part of orientation before starting new work. If the user requests new work and cruft exists, ask about cleanup first.
-
-**Before any destructive op (triple-check):**
-
-- `git status --porcelain --ignored` → zero non-ignored output
-- `git stash list` → empty, OR each stash verified content-on-main
-- `git diff <branch> origin/main --stat` for the branch → content-unique-to-branch empty after accounting for subsequent merges
-- `git cherry -v origin/main <branch>` → all `+` lines accounted for by the squash merge commit (cherry can't detect squash equivalence, so verify via file diffs)
-
-"Safe to delete" requires verified content-on-main, NOT just "the PR merged." The squash commit is the proof; the individual pre-squash commits become unreachable after cleanup.
+- Capture every request immediately in the session todo. Don't lose tasks, ideas, or asides.
+- Finish current task before pivoting. Report status concisely at each unit boundary.
+- Questions are not instructions. "Why does X work this way?" → answer, don't change code.
+- Ideas → [docs/platform/IDEAS.md](docs/platform/IDEAS.md) (intake funnel, reviewed periodically).
+- Archive, don't delete. Keep things findable.
 
 ## Relationship to airboss-firc
 
-This repo was originally created from patterns in the FIRC course platform (previously `firc-boss`, now `airboss-firc` at `/Users/joshua/src/_me/aviation/airboss-firc`). **As of 2026-04-17, airboss is the primary repo for all ongoing work** -- planning docs, vision, course material, and implementation have migrated here.
+airboss is the primary repo (as of 2026-04-17). Planning, vision, course material, implementation all live here.
 
-Per [MULTI_PRODUCT_ARCHITECTURE.md](docs/platform/MULTI_PRODUCT_ARCHITECTURE.md), **FIRC will migrate into airboss as `apps/firc/`** after the study app MVP is proven. The migration brings:
+Per [MULTI_PRODUCT_ARCHITECTURE.md](docs/platform/MULTI_PRODUCT_ARCHITECTURE.md), FIRC will migrate into airboss as `apps/firc/` after study MVP is proven. Brings `libs/engine/`, `libs/audit/`, FIRC BCs (`course`, `enrollment`, `evidence`, `compliance`), `apps/sim/` → `apps/firc/`, and `apps/hangar/`. airboss-firc archives after migration.
 
-- `libs/engine/`, `libs/audit/`, and the FIRC bounded contexts (`course`, `enrollment`, `evidence`, `compliance`) from airboss-firc
-- `apps/sim/` -> `apps/firc/` (renamed -- it's the FIRC course surface)
-- `apps/hangar/` -- content authoring for all products
-
-Once migration is complete, airboss-firc becomes archived. Nothing stays there long-term.
-
-The FIRC question bank, scenario library, and aviation knowledge research already copied into `course/` serve two purposes: reference material for current work, and candidate content for the knowledge graph (see [ADR 011](docs/decisions/011-knowledge-graph-learning-system/decision.md)).
+The FIRC question bank, scenarios, and aviation research in `course/` are reference material and knowledge-graph candidates ([ADR 011](docs/decisions/011-knowledge-graph-learning-system/decision.md)).
