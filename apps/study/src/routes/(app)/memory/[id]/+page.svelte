@@ -16,7 +16,9 @@ import {
 	REVIEW_RATINGS,
 	ROUTES,
 } from '@ab/constants';
+import PageHelp from '@ab/help/ui/PageHelp.svelte';
 import ConfirmAction from '@ab/ui/components/ConfirmAction.svelte';
+import InfoTip from '@ab/ui/components/InfoTip.svelte';
 import { humanize } from '@ab/utils';
 import { tick } from 'svelte';
 import { enhance } from '$app/forms';
@@ -153,13 +155,48 @@ const tagsString = $derived((card.tags ?? []).join(', '));
 	<header class="hd">
 		<div>
 			<a class="back" href={ROUTES.MEMORY_BROWSE}>← Browse</a>
-			<h1>Card detail</h1>
+			<div class="title-row">
+				<h1>Card detail</h1>
+				<PageHelp pageId="memory-card" />
+			</div>
 		</div>
 		<div class="badges">
-			<span class="badge domain">{domainLabel(card.domain)}</span>
-			<span class="badge type">{cardTypeLabel(card.cardType)}</span>
-			<span class="badge status-{card.status}">{statusLabel(card.status)}</span>
-			<span class="badge source" title={card.sourceRef ?? ''}>{sourceLabel(card.sourceType)}</span>
+			<span class="badge-wrap">
+				<span class="badge domain">{domainLabel(card.domain)}</span>
+				<InfoTip
+					term="Domain"
+					definition="The topic bucket this card belongs to. Drives browse filters and session mix."
+					helpId="memory-card"
+					helpSection="domain"
+				/>
+			</span>
+			<span class="badge-wrap">
+				<span class="badge type">{cardTypeLabel(card.cardType)}</span>
+				<InfoTip
+					term="Type"
+					definition="Card format. Basic is a single front/back question-and-answer."
+					helpId="memory-card"
+					helpSection="type"
+				/>
+			</span>
+			<span class="badge-wrap">
+				<span class="badge status-{card.status}">{statusLabel(card.status)}</span>
+				<InfoTip
+					term={`Status: ${statusLabel(card.status)}`}
+					definition="Whether this card is active, suspended, or archived. See the full lifecycle."
+					helpId="memory-card"
+					helpSection="lifecycle"
+				/>
+			</span>
+			<span class="badge-wrap">
+				<span class="badge source" title={card.sourceRef ?? ''}>{sourceLabel(card.sourceType)}</span>
+				<InfoTip
+					term={`Source: ${sourceLabel(card.sourceType)}`}
+					definition="Personal cards you authored are editable. Course cards ported from curriculum material are read-only."
+					helpId="memory-card"
+					helpSection="source"
+				/>
+			</span>
 		</div>
 	</header>
 
@@ -270,49 +307,25 @@ const tagsString = $derived((card.tags ?? []).join(', '));
 				{/if}
 				<div class="inline-form">
 					{#if card.status === CARD_STATUSES.ACTIVE}
-						<ConfirmAction
-							formAction="?/setStatus"
-							confirmVariant="secondary"
-							triggerVariant="secondary"
-							size="md"
-							label="Suspend"
-							confirmLabel="Suspend this card"
-							hiddenFields={{ status: CARD_STATUSES.SUSPENDED }}
-							disabled={statusUpdating}
-						/>
-						<ConfirmAction
-							formAction="?/setStatus"
-							confirmVariant="danger"
-							triggerVariant="ghost"
-							size="md"
-							label="Archive"
-							confirmLabel="Archive this card"
-							hiddenFields={{ status: CARD_STATUSES.ARCHIVED }}
-						/>
-					{:else}
-						<form
-							method="POST"
-							action="?/setStatus"
-							class="status-form"
-							use:enhance={() => {
-								statusUpdating = true;
-								return async ({ update }) => {
-									statusUpdating = false;
-									await update();
-								};
-							}}
-						>
-							<button
-								type="submit"
-								class="btn secondary"
-								name="status"
-								value={CARD_STATUSES.ACTIVE}
+						<span class="action-wrap">
+							<ConfirmAction
+								formAction="?/setStatus"
+								confirmVariant="secondary"
+								triggerVariant="secondary"
+								size="md"
+								label="Suspend"
+								confirmLabel="Suspend this card"
+								hiddenFields={{ status: CARD_STATUSES.SUSPENDED }}
 								disabled={statusUpdating}
-							>
-								{statusUpdating ? '...' : 'Reactivate'}
-							</button>
-						</form>
-						{#if card.status === CARD_STATUSES.SUSPENDED}
+							/>
+							<InfoTip
+								term="Suspend"
+								definition="Pause scheduling for this card without deleting it. Reactivate later to rejoin the queue."
+								helpId="memory-card"
+								helpSection="lifecycle"
+							/>
+						</span>
+						<span class="action-wrap">
 							<ConfirmAction
 								formAction="?/setStatus"
 								confirmVariant="danger"
@@ -322,6 +335,62 @@ const tagsString = $derived((card.tags ?? []).join(', '));
 								confirmLabel="Archive this card"
 								hiddenFields={{ status: CARD_STATUSES.ARCHIVED }}
 							/>
+							<InfoTip
+								term="Archive"
+								definition="Retire this card from the deck. History is preserved but it no longer appears in review or browse by default."
+								helpId="memory-card"
+								helpSection="lifecycle"
+							/>
+						</span>
+					{:else}
+						<span class="action-wrap">
+							<form
+								method="POST"
+								action="?/setStatus"
+								class="status-form"
+								use:enhance={() => {
+									statusUpdating = true;
+									return async ({ update }) => {
+										statusUpdating = false;
+										await update();
+									};
+								}}
+							>
+								<button
+									type="submit"
+									class="btn secondary"
+									name="status"
+									value={CARD_STATUSES.ACTIVE}
+									disabled={statusUpdating}
+								>
+									{statusUpdating ? '...' : 'Reactivate'}
+								</button>
+							</form>
+							<InfoTip
+								term="Reactivate"
+								definition="Put this card back into rotation. Scheduling resumes from where it left off."
+								helpId="memory-card"
+								helpSection="lifecycle"
+							/>
+						</span>
+						{#if card.status === CARD_STATUSES.SUSPENDED}
+							<span class="action-wrap">
+								<ConfirmAction
+									formAction="?/setStatus"
+									confirmVariant="danger"
+									triggerVariant="ghost"
+									size="md"
+									label="Archive"
+									confirmLabel="Archive this card"
+									hiddenFields={{ status: CARD_STATUSES.ARCHIVED }}
+								/>
+								<InfoTip
+									term="Archive"
+									definition="Retire this card from the deck. History is preserved but it no longer appears in review or browse by default."
+									helpId="memory-card"
+									helpSection="lifecycle"
+								/>
+							</span>
 						{/if}
 					{/if}
 				</div>
@@ -332,12 +401,78 @@ const tagsString = $derived((card.tags ?? []).join(', '));
 	<article class="content schedule">
 		<h2>Schedule</h2>
 		<dl class="stats">
-			<div><dt>State</dt><dd>{humanize(schedule.state)}</dd></div>
-			<div><dt>Due</dt><dd>{dueLabel}</dd></div>
-			<div><dt>Stability</dt><dd>{schedule.stability.toFixed(2)} d</dd></div>
-			<div><dt>Difficulty</dt><dd>{schedule.difficulty.toFixed(2)}</dd></div>
-			<div><dt>Reviews</dt><dd>{schedule.reviewCount}</dd></div>
-			<div><dt>Lapses</dt><dd>{schedule.lapseCount}</dd></div>
+			<div>
+				<dt>
+					State
+					<InfoTip
+						term="State"
+						definition="Where this card sits in the FSRS lifecycle: New, Learning, Review, or Relearning."
+						helpId="concept-fsrs"
+						helpSection="states"
+					/>
+				</dt>
+				<dd>{humanize(schedule.state)}</dd>
+			</div>
+			<div>
+				<dt>
+					Due
+					<InfoTip
+						term="Due"
+						definition="When the scheduler wants to see this card next. Negative means overdue."
+						helpId="memory-card"
+						helpSection="due"
+					/>
+				</dt>
+				<dd>{dueLabel}</dd>
+			</div>
+			<div>
+				<dt>
+					Stability
+					<InfoTip
+						term="Stability"
+						definition="Estimated days of retention. Higher means a longer interval to the next review."
+						helpId="concept-fsrs"
+						helpSection="stability-vs-difficulty"
+					/>
+				</dt>
+				<dd>{schedule.stability.toFixed(2)} d</dd>
+			</div>
+			<div>
+				<dt>
+					Difficulty
+					<InfoTip
+						term="Difficulty"
+						definition="How hard this card is for you, 1 (easy) to 10 (hard). FSRS adjusts it from your ratings."
+						helpId="concept-fsrs"
+						helpSection="stability-vs-difficulty"
+					/>
+				</dt>
+				<dd>{schedule.difficulty.toFixed(2)}</dd>
+			</div>
+			<div>
+				<dt>
+					Reviews
+					<InfoTip
+						term="Reviews"
+						definition="Total times you have rated this card across all sessions."
+						helpId="memory-card"
+						helpSection="reviews"
+					/>
+				</dt>
+				<dd>{schedule.reviewCount}</dd>
+			</div>
+			<div>
+				<dt>
+					Lapses
+					<InfoTip
+						term="Lapses"
+						definition="Times you rated Again after the card left Learning. Each lapse pushes difficulty up."
+						helpId="memory-card"
+						helpSection="lapses"
+					/>
+				</dt>
+				<dd>{schedule.lapseCount}</dd>
+			</div>
 		</dl>
 	</article>
 
@@ -406,10 +541,28 @@ const tagsString = $derived((card.tags ?? []).join(', '));
 		color: var(--ink-body);
 	}
 
+	.title-row {
+		display: flex;
+		align-items: center;
+		gap: var(--space-sm);
+	}
+
 	.badges {
 		display: flex;
 		gap: var(--space-xs);
 		flex-wrap: wrap;
+	}
+
+	.badge-wrap {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-2xs);
+	}
+
+	.action-wrap {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-2xs);
 	}
 
 	.badge {
@@ -629,6 +782,9 @@ const tagsString = $derived((card.tags ?? []).join(', '));
 		text-transform: uppercase;
 		letter-spacing: var(--letter-spacing-caps);
 		margin: 0;
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-2xs);
 	}
 
 	.stats dd {

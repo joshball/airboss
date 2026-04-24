@@ -1,8 +1,26 @@
 <script lang="ts">
 import { CARD_STATES, DOMAIN_LABELS, type Domain, MASTERY_STABILITY_DAYS, QUERY_PARAMS, ROUTES } from '@ab/constants';
+import PageHelp from '@ab/help/ui/PageHelp.svelte';
+import InfoTip from '@ab/ui/components/InfoTip.svelte';
 import StatTile from '@ab/ui/components/StatTile.svelte';
 import { humanize } from '@ab/utils';
 import type { PageData } from './$types';
+
+const STATE_TIPS: Record<'new' | 'learning' | 'review' | 'relearning', { label: string; definition: string }> = {
+	new: {
+		label: 'New',
+		definition: 'Cards you have not reviewed yet. They enter the rotation the first time you see them.',
+	},
+	learning: {
+		label: 'Learning',
+		definition: 'New cards still being introduced. Short intervals until the first successful review.',
+	},
+	review: { label: 'Review', definition: 'Cards in long-term rotation. Intervals grow as stability grows.' },
+	relearning: {
+		label: 'Relearning',
+		definition: 'Cards you recently forgot. Back to short intervals until they stabilize.',
+	},
+};
 
 let { data }: { data: PageData } = $props();
 
@@ -26,7 +44,10 @@ function percent(n: number, total: number): number {
 <section class="page">
 	<header class="hd">
 		<div>
-			<h1>Memory</h1>
+			<div class="title-row">
+				<h1>Memory</h1>
+				<PageHelp pageId="memory-dashboard" />
+			</div>
 			<p class="sub">Cards you've written; the algorithm schedules reviews.</p>
 		</div>
 		<nav class="quick" aria-label="Quick actions">
@@ -37,60 +58,137 @@ function percent(n: number, total: number): number {
 	</header>
 
 	<div class="grid">
-		<StatTile
-			label="Due now"
-			value={stats.dueNow}
-			sub="{stats.dueNow === 1 ? 'card' : 'cards'} to review"
-			href={stats.dueNow > 0 ? ROUTES.MEMORY_REVIEW : undefined}
-			tone="primary"
-			ariaLabel="Due now: {stats.dueNow} cards to review"
-		/>
-		<StatTile
-			label="Reviewed today"
-			value={stats.reviewedToday}
-			sub={stats.reviewedToday === 1 ? 'review' : 'reviews'}
-			href={`${ROUTES.MEMORY_BROWSE}?${QUERY_PARAMS.STATUS}=active`}
-			ariaLabel="Reviewed today: {stats.reviewedToday}, browse active cards"
-		/>
-		<StatTile
-			label="Streak"
-			value={stats.streakDays}
-			sub={stats.streakDays === 1 ? 'day' : 'days'}
-			href={ROUTES.CALIBRATION}
-			ariaLabel="Streak: {stats.streakDays} days, open calibration"
-		/>
-		<StatTile
-			label="Active cards"
-			value={totalActive}
-			sub="across {stats.domains.length} {stats.domains.length === 1 ? 'domain' : 'domains'}"
-			href={ROUTES.MEMORY_BROWSE}
-		/>
+		<div class="tile-wrap">
+			<StatTile
+				label="Due now"
+				value={stats.dueNow}
+				sub="{stats.dueNow === 1 ? 'card' : 'cards'} to review"
+				href={stats.dueNow > 0 ? ROUTES.MEMORY_REVIEW : undefined}
+				tone="primary"
+				ariaLabel="Due now: {stats.dueNow} cards to review"
+			/>
+			<span class="tile-tip">
+				<InfoTip
+					term="Due now"
+					definition="Cards the scheduler says are ready to review right now. The queue grows as stability clocks elapse."
+					helpId="memory-review"
+					helpSection="how-scheduling-works"
+				/>
+			</span>
+		</div>
+		<div class="tile-wrap">
+			<StatTile
+				label="Reviewed today"
+				value={stats.reviewedToday}
+				sub={stats.reviewedToday === 1 ? 'review' : 'reviews'}
+				href={`${ROUTES.MEMORY_BROWSE}?${QUERY_PARAMS.STATUS}=active`}
+				ariaLabel="Reviewed today: {stats.reviewedToday}, browse active cards"
+			/>
+			<span class="tile-tip">
+				<InfoTip
+					term="Reviewed today"
+					definition="Reviews you have rated since local midnight. Includes repeat reviews of the same card."
+					helpId="memory-dashboard"
+				/>
+			</span>
+		</div>
+		<div class="tile-wrap">
+			<StatTile
+				label="Streak"
+				value={stats.streakDays}
+				sub={stats.streakDays === 1 ? 'day' : 'days'}
+				href={ROUTES.CALIBRATION}
+				ariaLabel="Streak: {stats.streakDays} days, open calibration"
+			/>
+			<span class="tile-tip">
+				<InfoTip
+					term="Streak"
+					definition="Consecutive days you reviewed at least one due card. Resets if a day passes with zero reviews."
+					helpId="memory-dashboard"
+				/>
+			</span>
+		</div>
+		<div class="tile-wrap">
+			<StatTile
+				label="Active cards"
+				value={totalActive}
+				sub="across {stats.domains.length} {stats.domains.length === 1 ? 'domain' : 'domains'}"
+				href={ROUTES.MEMORY_BROWSE}
+			/>
+			<span class="tile-tip">
+				<InfoTip
+					term="Active cards"
+					definition="Cards currently in rotation. Excludes suspended and archived items."
+					helpId="memory-dashboard"
+				/>
+			</span>
+		</div>
 	</div>
 
 	<article class="card-list">
 		<h2>By state</h2>
 		<ul class="states">
 			<li>
-				<span class="state-label">New</span>
+				<span class="state-cell">
+					<span class="state-label">New</span>
+					<InfoTip
+						term={STATE_TIPS.new.label}
+						definition={STATE_TIPS.new.definition}
+						helpId="concept-fsrs"
+						helpSection="states"
+					/>
+				</span>
 				<span class="state-count">{stats.stateCounts[CARD_STATES.NEW]}</span>
 			</li>
 			<li>
-				<span class="state-label">Learning</span>
+				<span class="state-cell">
+					<span class="state-label">Learning</span>
+					<InfoTip
+						term={STATE_TIPS.learning.label}
+						definition={STATE_TIPS.learning.definition}
+						helpId="concept-fsrs"
+						helpSection="states"
+					/>
+				</span>
 				<span class="state-count">{stats.stateCounts[CARD_STATES.LEARNING]}</span>
 			</li>
 			<li>
-				<span class="state-label">Review</span>
+				<span class="state-cell">
+					<span class="state-label">Review</span>
+					<InfoTip
+						term={STATE_TIPS.review.label}
+						definition={STATE_TIPS.review.definition}
+						helpId="concept-fsrs"
+						helpSection="states"
+					/>
+				</span>
 				<span class="state-count">{stats.stateCounts[CARD_STATES.REVIEW]}</span>
 			</li>
 			<li>
-				<span class="state-label">Relearning</span>
+				<span class="state-cell">
+					<span class="state-label">Relearning</span>
+					<InfoTip
+						term={STATE_TIPS.relearning.label}
+						definition={STATE_TIPS.relearning.definition}
+						helpId="concept-fsrs"
+						helpSection="states"
+					/>
+				</span>
 				<span class="state-count">{stats.stateCounts[CARD_STATES.RELEARNING]}</span>
 			</li>
 		</ul>
 	</article>
 
 	<article class="card-list">
-		<h2>By domain</h2>
+		<div class="domain-hd">
+			<h2>By domain</h2>
+			<InfoTip
+				term="Domain breakdown"
+				definition="Per-domain totals, due count, and the percent of cards with stability above the mastery threshold."
+				helpId="concept-fsrs"
+				helpSection="stability-and-mastery"
+			/>
+		</div>
 		{#if stats.domains.length === 0}
 			<p class="empty-note">No active cards yet. <a href={ROUTES.MEMORY_NEW}>Create your first</a>.</p>
 		{:else}
@@ -132,6 +230,12 @@ function percent(n: number, total: number): number {
 		flex-wrap: wrap;
 	}
 
+	.title-row {
+		display: flex;
+		align-items: center;
+		gap: var(--space-sm);
+	}
+
 	h1 {
 		margin: 0;
 		font-size: var(--font-size-2xl);
@@ -158,6 +262,21 @@ function percent(n: number, total: number): number {
 	}
 
 	/* StatTile provides its own styling; the grid just lays them out. */
+
+	.tile-wrap {
+		position: relative;
+		display: flex;
+	}
+
+	.tile-wrap > :global(.tile) {
+		flex: 1;
+	}
+
+	.tile-tip {
+		position: absolute;
+		top: var(--space-xs);
+		right: var(--space-xs);
+	}
 
 	.card-list {
 		background: var(--ink-inverse);
@@ -197,9 +316,30 @@ function percent(n: number, total: number): number {
 		border-radius: var(--radius-md);
 	}
 
+	.state-cell {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-2xs);
+	}
+
 	.state-label {
 		color: var(--ink-muted);
 		font-size: var(--font-size-sm);
+	}
+
+	.domain-hd {
+		display: flex;
+		align-items: center;
+		gap: var(--space-xs);
+	}
+
+	.domain-hd h2 {
+		margin: 0;
+		font-size: var(--font-size-sm);
+		color: var(--ink-subtle);
+		text-transform: uppercase;
+		letter-spacing: var(--letter-spacing-caps);
+		font-weight: 600;
 	}
 
 	.state-count {

@@ -8,6 +8,8 @@ import {
 	QUERY_PARAMS,
 	ROUTES,
 } from '@ab/constants';
+import PageHelp from '@ab/help/ui/PageHelp.svelte';
+import InfoTip from '@ab/ui/components/InfoTip.svelte';
 import { humanize } from '@ab/utils';
 import { onMount, tick } from 'svelte';
 import { enhance } from '$app/forms';
@@ -74,7 +76,10 @@ function onKeydown(e: KeyboardEvent) {
 <section class="page">
 	<header class="hd">
 		<div>
-			<h1>New card</h1>
+			<div class="title-row">
+				<h1>New card</h1>
+				<PageHelp pageId="memory-new" />
+			</div>
 			<p class="sub">Capture a question and answer now; the scheduler handles when you see it next.</p>
 		</div>
 		<a class="back" href={ROUTES.MEMORY_BROWSE}>Browse</a>
@@ -140,7 +145,15 @@ function onKeydown(e: KeyboardEvent) {
 
 		<div class="row">
 			<label class="field">
-				<span class="label">Domain</span>
+				<span class="label">
+					Domain
+					<InfoTip
+						term="Domain"
+						definition="The topic bucket this card belongs to. Drives browse filters and session mix."
+						helpId="memory-new"
+						helpSection="domain"
+					/>
+				</span>
 				<select name="domain" required disabled={loading} value={seededDomain}>
 					<option value="" disabled>Pick a domain</option>
 					{#each DOMAIN_VALUES as opt (opt)}
@@ -151,7 +164,15 @@ function onKeydown(e: KeyboardEvent) {
 			</label>
 
 			<label class="field">
-				<span class="label">Type</span>
+				<span class="label">
+					Type
+					<InfoTip
+						term="Type"
+						definition="Card format. Basic is a single front/back question-and-answer. More types are coming."
+						helpId="memory-new"
+						helpSection="type"
+					/>
+				</span>
 				<select name="cardType" required disabled={loading} value={seededCardType}>
 					{#each cardTypeOptions as opt (opt)}
 						<option value={opt}>{CARD_TYPE_LABELS[opt]}</option>
@@ -162,7 +183,15 @@ function onKeydown(e: KeyboardEvent) {
 		</div>
 
 		<label class="field">
-			<span class="label">Tags <span class="hint" id="tags-hint">(comma-separated, optional)</span></span>
+			<span class="label">
+				Tags <span class="hint" id="tags-hint">(comma-separated, optional)</span>
+				<InfoTip
+					term="Tags"
+					definition="Freeform labels for cross-cutting retrieval. Use them to group cards beyond domain boundaries."
+					helpId="memory-new"
+					helpSection="tags"
+				/>
+			</span>
 			<input
 				type="text"
 				name="tags"
@@ -198,6 +227,12 @@ function onKeydown(e: KeyboardEvent) {
 		align-items: flex-start;
 		justify-content: space-between;
 		gap: var(--space-lg);
+	}
+
+	.title-row {
+		display: flex;
+		align-items: center;
+		gap: var(--space-sm);
 	}
 
 	h1 {
