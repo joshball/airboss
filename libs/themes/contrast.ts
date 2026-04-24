@@ -12,7 +12,8 @@
  */
 
 const OKLCH_RE = /^oklch\(\s*(\d*\.?\d+%?)\s+(\d*\.?\d+)\s+(\d*\.?\d+)\s*(?:\/\s*(\d*\.?\d+))?\s*\)$/;
-const HEX_RE = /^#([0-9a-fA-F]{6})$/;
+const HEX_LONG_RE = /^#([0-9a-fA-F]{6})$/;
+const HEX_SHORT_RE = /^#([0-9a-fA-F])([0-9a-fA-F])([0-9a-fA-F])$/;
 const RGB_RE = /^rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*(?:,\s*([\d.]+)\s*)?\)$/;
 
 interface LinearRgb {
@@ -34,14 +35,27 @@ function srgbChannelLinear(component: number): number {
 }
 
 function parseHex(hex: string): LinearRgb | undefined {
-	const match = hex.match(HEX_RE);
-	if (!match) return undefined;
-	const raw = match[1];
-	if (raw === undefined) return undefined;
-	const r = Number.parseInt(raw.slice(0, 2), 16);
-	const g = Number.parseInt(raw.slice(2, 4), 16);
-	const b = Number.parseInt(raw.slice(4, 6), 16);
-	return { r: srgbChannelLinear(r), g: srgbChannelLinear(g), b: srgbChannelLinear(b) };
+	const long = hex.match(HEX_LONG_RE);
+	if (long) {
+		const raw = long[1];
+		if (raw === undefined) return undefined;
+		const r = Number.parseInt(raw.slice(0, 2), 16);
+		const g = Number.parseInt(raw.slice(2, 4), 16);
+		const b = Number.parseInt(raw.slice(4, 6), 16);
+		return { r: srgbChannelLinear(r), g: srgbChannelLinear(g), b: srgbChannelLinear(b) };
+	}
+	const short = hex.match(HEX_SHORT_RE);
+	if (short) {
+		const rs = short[1];
+		const gs = short[2];
+		const bs = short[3];
+		if (rs === undefined || gs === undefined || bs === undefined) return undefined;
+		const r = Number.parseInt(`${rs}${rs}`, 16);
+		const g = Number.parseInt(`${gs}${gs}`, 16);
+		const b = Number.parseInt(`${bs}${bs}`, 16);
+		return { r: srgbChannelLinear(r), g: srgbChannelLinear(g), b: srgbChannelLinear(b) };
+	}
+	return undefined;
 }
 
 function parseRgb(value: string): LinearRgb | undefined {
@@ -191,7 +205,7 @@ export function luminance(value: string): number {
 	const trimmed = value.trim();
 	const oklch = parseOklch(trimmed);
 	if (oklch) return luminanceOklch(oklch);
-	if (HEX_RE.test(trimmed)) return luminanceHex(trimmed);
+	if (HEX_LONG_RE.test(trimmed) || HEX_SHORT_RE.test(trimmed)) return luminanceHex(trimmed);
 	const rgb = parseRgb(trimmed);
 	if (rgb) return luminanceLinear(rgb);
 	return 0;

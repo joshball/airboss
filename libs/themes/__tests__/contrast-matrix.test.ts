@@ -133,16 +133,6 @@ const ADVISORY_PAIRS: Pair[] = [
 	{ fg: 'signal.info.ink', bg: 'signal.info.wash', min: 4.5, description: 'info ink on wash (deepInk TBD)' },
 ];
 
-/**
- * Only hex-based palettes can be measured with WCAG luminance math.
- * OKLCH palettes (flightdeck dark) would need converting first -- the
- * package #6 dark-mode work lands that path. Until then, skip themes
- * whose values aren't all hex.
- */
-function isHexResolvable(resolved: ResolvedRolePalette): boolean {
-	return Object.values(resolved).every((v) => /^#[0-9a-fA-F]{6}$/.test(v));
-}
-
 const themes = listThemes();
 if (themes.length === 0) throw new Error('no themes registered');
 
@@ -151,10 +141,6 @@ for (const theme of themes) {
 		const resolved = resolvePalette(theme, appearance);
 		if (!resolved) continue;
 		describe(`contrast: ${theme.id} / ${appearance}`, () => {
-			if (!isHexResolvable(resolved)) {
-				it.skip('palette contains non-hex values; AA check deferred until OKLCH->sRGB lands', () => {});
-				return;
-			}
 			for (const pair of REQUIRED_PAIRS) {
 				const fg = resolved[pair.fg];
 				const bg = resolved[pair.bg];
