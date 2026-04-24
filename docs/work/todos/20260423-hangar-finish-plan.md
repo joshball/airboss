@@ -217,7 +217,7 @@ Open items from `session-legibility-and-help-expansion` (shipped PR #77). Each i
 | Per-page help for `/dashboard`, `/reps/*`, `/knowledge/*` | Adopt `<PageHelp>` pattern route-by-route                                                | Copy the wiring from `/session/start`                      |
 | Drawer overlay for `<PageHelp>`                          | Today `<PageHelp>` navigates to `/help/<id>`; follow-up is a slide-over drawer           | Parked in WP spec "Drawer overlay" section                 |
 | Dark-theme Shiki code-block tokens                       | Shiki currently ships one theme; swap palettes based on appearance                       | Fits into the theme-system enforcement contract            |
-| `InfoTip helpId` static validator                        | Grep `.svelte` files, assert every `helpId` is registered in `helpRegistry`              | Parked at Phase 5.2 in the session-legibility tasks        |
+| `InfoTip helpId` static validator                        | Grep `.svelte` files, assert every `helpId` is registered in `helpRegistry`              | Shipped: `scripts/validate-help-ids.ts`                    |
 
 Source: [session-legibility-and-help-expansion/spec.md](../../work-packages/session-legibility-and-help-expansion/spec.md).
 

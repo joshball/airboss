@@ -227,10 +227,10 @@ One task per page. Each page:
 - [x] Add regression tests for each new check.
 - [x] Run `bun run check`.
 
-### 5.2 InfoTip helpId static check (optional, else parking lot)
+### 5.2 InfoTip helpId static check
 
-- [x] Decide inline vs parking-lot: parked. Captured in [docs/work/NOW.md](../../work/NOW.md) "Follow-on candidates" — every existing `helpId` literal already resolves (Phase 4 wired them against registered pages), so the runtime scan is speculative until a broader author base exists. Re-open when a second author starts writing InfoTips.
-- [ ] If kept: wire into `bun run check`.
+- [x] Shipped. `scripts/validate-help-ids.ts` scans every `.svelte` + `.svelte.ts` file under `apps/` + `libs/` for `helpId=` / `pageId=` prop literals and fails the build on any id not registered in the `HelpPage` content set. Static extraction (double quotes, single quotes, bare template literal) fails on drift; dynamic expressions (`helpId={foo}`) are reported as "skipped" with a count so drift is visible. Unit tests in `scripts/validate-help-ids/extract.test.ts`.
+- [x] Wired into `bun run check` (see `scripts/check.ts`).
 
 ### 5.3 Nav + visibility
 
