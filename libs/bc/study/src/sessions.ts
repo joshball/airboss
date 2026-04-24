@@ -18,8 +18,8 @@
 import {
 	CARD_STATES,
 	CARD_STATUSES,
-	type Cert,
 	CERT_VALUES,
+	type Cert,
 	type ConfidenceLevel,
 	DEFAULT_SESSION_LENGTH,
 	DEFAULT_USER_TIMEZONE,
