@@ -49,6 +49,24 @@ export {
 	MAIL_FROM_NOREPLY,
 } from './hosts';
 export { MIN_PASSWORD_LENGTH, USER_STATUS, type UserStatus } from './identity';
+export {
+	HANGAR_SYNC_MODE_VALUES,
+	HANGAR_SYNC_MODES,
+	type HangarSyncMode,
+	JOB_KIND_VALUES,
+	JOB_KINDS,
+	JOB_LOG_STREAM_VALUES,
+	JOB_LOG_STREAMS,
+	JOB_STATUS_VALUES,
+	JOB_STATUSES,
+	JOB_TERMINAL_STATUSES,
+	type JobKind,
+	type JobLogStream,
+	type JobStatus,
+	SYNC_OUTCOME_VALUES,
+	SYNC_OUTCOMES,
+	type SyncOutcome,
+} from './jobs';
 export { PORTS } from './ports';
 export {
 	CUSTOM_TILE,
