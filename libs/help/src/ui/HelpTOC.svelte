@@ -46,8 +46,8 @@ let {
 	.toc a {
 		display: block;
 		padding: 0.375rem 0.625rem;
-		border-radius: var(--ab-radius-sm, 4px);
-		color: var(--ab-color-fg-muted);
+		border-radius: var(--radius-sm);
+		color: var(--ink-muted);
 		text-decoration: none;
 		font-size: 0.875rem;
 		line-height: 1.4;
@@ -55,18 +55,18 @@ let {
 	}
 
 	.toc a:hover {
-		color: var(--ab-color-fg);
-		background: var(--ab-color-surface-sunken);
+		color: var(--ink-body);
+		background: var(--surface-sunken);
 	}
 
 	.toc a.active {
-		color: var(--ab-color-primary-hover);
-		background: var(--ab-color-primary-subtle);
-		border-left-color: var(--ab-color-primary);
+		color: var(--action-default-hover);
+		background: var(--action-default-wash);
+		border-left-color: var(--action-default);
 	}
 
 	.toc a:focus-visible {
-		outline: 2px solid var(--ab-color-focus-ring);
+		outline: 2px solid var(--focus-ring);
 		outline-offset: 2px;
 	}
 </style>

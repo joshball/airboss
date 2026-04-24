@@ -33,27 +33,27 @@ let { refs }: { refs: readonly ExternalRef[] | undefined } = $props();
 
 <style>
 	.refs {
-		margin-top: var(--ab-space-xl, 2rem);
-		padding-top: var(--ab-space-md, 1rem);
-		border-top: 1px solid var(--ab-color-border);
+		margin-top: var(--space-xl);
+		padding-top: var(--space-md);
+		border-top: 1px solid var(--edge-default);
 	}
 
 	.refs h2 {
-		margin: 0 0 var(--ab-space-sm, 0.5rem);
+		margin: 0 0 var(--space-sm);
 		font-size: 1.125rem;
-		font-weight: var(--ab-font-weight-semibold, 600);
-		color: var(--ab-color-fg);
+		font-weight: var(--font-weight-semibold);
+		color: var(--ink-body);
 	}
 
 	.list {
 		margin: 0;
 		padding-left: 1.25rem;
 		display: grid;
-		gap: var(--ab-space-sm, 0.5rem);
+		gap: var(--space-sm);
 	}
 
 	.item {
-		color: var(--ab-color-fg);
+		color: var(--ink-body);
 	}
 
 	.head {
@@ -64,9 +64,9 @@ let { refs }: { refs: readonly ExternalRef[] | undefined } = $props();
 	}
 
 	.title {
-		color: var(--ab-color-primary);
+		color: var(--action-default);
 		text-decoration: none;
-		font-weight: var(--ab-font-weight-semibold, 600);
+		font-weight: var(--font-weight-semibold);
 	}
 
 	.title:hover,
@@ -75,33 +75,33 @@ let { refs }: { refs: readonly ExternalRef[] | undefined } = $props();
 	}
 
 	.title:focus-visible {
-		outline: 2px solid var(--ab-color-focus-ring);
+		outline: 2px solid var(--focus-ring);
 		outline-offset: 2px;
-		border-radius: var(--ab-radius-tight, 3px);
+		border-radius: var(--radius-xs);
 	}
 
 	.badge {
 		display: inline-block;
 		padding: 0 0.375rem;
-		border-radius: var(--ab-radius-tight, 3px);
+		border-radius: var(--radius-xs);
 		font-size: 0.6875rem;
-		font-weight: var(--ab-font-weight-semibold, 600);
+		font-weight: var(--font-weight-semibold);
 		text-transform: uppercase;
 		letter-spacing: 0.05em;
-		background: var(--ab-color-surface-sunken);
-		color: var(--ab-color-fg-muted);
-		border: 1px solid var(--ab-color-border);
+		background: var(--surface-sunken);
+		color: var(--ink-muted);
+		border: 1px solid var(--edge-default);
 	}
 
 	.badge-faa {
-		background: var(--ab-color-primary-subtle, var(--ab-color-surface-sunken));
-		color: var(--ab-color-primary);
+		background: var(--action-default-wash);
+		color: var(--action-default);
 	}
 
 	.note {
 		margin: 0.125rem 0 0;
 		font-size: 0.875rem;
-		color: var(--ab-color-fg-muted);
+		color: var(--ink-muted);
 	}
 
 	.url {
@@ -111,19 +111,19 @@ let { refs }: { refs: readonly ExternalRef[] | undefined } = $props();
 	}
 
 	.url a {
-		color: var(--ab-color-fg-subtle);
+		color: var(--ink-subtle);
 		text-decoration: none;
 	}
 
 	.url a:hover,
 	.url a:focus-visible {
-		color: var(--ab-color-fg);
+		color: var(--ink-body);
 		text-decoration: underline;
 	}
 
 	.url a:focus-visible {
-		outline: 2px solid var(--ab-color-focus-ring);
+		outline: 2px solid var(--focus-ring);
 		outline-offset: 2px;
-		border-radius: var(--ab-radius-tight, 3px);
+		border-radius: var(--radius-xs);
 	}
 </style>

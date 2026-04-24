@@ -441,10 +441,10 @@ function tickEnd(angleDeg: number): { x: number; y: number } {
 	.activity {
 		display: grid;
 		grid-template-columns: minmax(280px, 1fr) minmax(280px, 380px);
-		gap: var(--ab-space-xl);
+		gap: var(--space-xl);
 		align-items: start;
-		font-family: var(--ab-font-sans);
-		color: var(--ab-color-fg);
+		font-family: var(--font-family-sans);
+		color: var(--ink-body);
 	}
 
 	@media (max-width: 640px) { /* --ab-breakpoint-md */
@@ -470,9 +470,9 @@ function tickEnd(angleDeg: number): { x: number; y: number } {
 	}
 
 	.compass:focus-visible {
-		outline: 2px solid var(--ab-focus-ring);
+		outline: 2px solid var(--focus-ring);
 		outline-offset: 4px;
-		border-radius: var(--ab-radius-md);
+		border-radius: var(--radius-md);
 	}
 
 	.compass:active {
@@ -480,30 +480,30 @@ function tickEnd(angleDeg: number): { x: number; y: number } {
 	}
 
 	.compass-ring {
-		fill: var(--ab-color-surface-muted);
-		stroke: var(--ab-color-border-strong);
+		fill: var(--surface-muted);
+		stroke: var(--edge-strong);
 		stroke-width: 2;
 	}
 
 	.compass-tick {
-		stroke: var(--ab-color-fg-faint);
+		stroke: var(--ink-faint);
 		stroke-width: 1.5;
 	}
 
 	.cardinal {
 		font-size: 14px;
 		font-weight: 600;
-		fill: var(--ab-color-fg-muted);
+		fill: var(--ink-muted);
 	}
 
 	.runway {
-		fill: var(--ab-color-fg-strong);
-		stroke: var(--ab-color-fg);
+		fill: var(--ink-strong);
+		stroke: var(--ink-body);
 		stroke-width: 1;
 	}
 
 	.runway-centerline {
-		stroke: var(--ab-color-surface-sunken);
+		stroke: var(--surface-sunken);
 		stroke-width: 2;
 		stroke-dasharray: 6 6;
 	}
@@ -511,29 +511,29 @@ function tickEnd(angleDeg: number): { x: number; y: number } {
 	.runway-label {
 		font-size: 11px;
 		font-weight: 700;
-		fill: var(--ab-color-surface-sunken);
+		fill: var(--surface-sunken);
 	}
 
 	.wind-arrow {
-		stroke: var(--ab-color-info);
+		stroke: var(--signal-info);
 		stroke-width: 4;
 		stroke-linecap: round;
 	}
 
 	.wind-arrowhead {
-		fill: var(--ab-color-info);
+		fill: var(--signal-info);
 	}
 
 	.wind-handle {
-		fill: var(--ab-color-info);
-		stroke: var(--ab-color-surface);
+		fill: var(--signal-info);
+		stroke: var(--surface-panel);
 		stroke-width: 3;
 		cursor: grab;
 		transition: r 0.15s ease;
 	}
 
 	.wind-handle.dragging {
-		fill: var(--ab-color-info-hover);
+		fill: var(--signal-info);
 		cursor: grabbing;
 	}
 
@@ -543,54 +543,54 @@ function tickEnd(angleDeg: number): { x: number; y: number } {
 	}
 
 	.headwind-line {
-		stroke: var(--ab-color-success);
+		stroke: var(--signal-success);
 	}
 
 	.headwind-line.tailwind {
-		stroke: var(--ab-color-warning);
+		stroke: var(--action-caution);
 	}
 
 	.headwind-arrowhead {
-		fill: var(--ab-color-success);
+		fill: var(--signal-success);
 	}
 
 	.crosswind-line {
-		stroke: var(--ab-color-accent);
+		stroke: var(--accent-reference);
 	}
 
 	.crosswind-line.over {
-		stroke: var(--ab-color-danger);
+		stroke: var(--action-hazard);
 	}
 
 	.crosswind-arrowhead {
-		fill: var(--ab-color-accent);
+		fill: var(--accent-reference);
 	}
 
 	.panel {
 		display: flex;
 		flex-direction: column;
-		gap: var(--ab-space-xl-alt);
+		gap: var(--space-xl);
 	}
 
 	.readout {
-		background: var(--ab-color-bg);
-		border: 1px solid var(--ab-color-border);
-		border-radius: var(--ab-radius-md);
-		padding: var(--ab-space-lg) var(--ab-space-xl-alt);
+		background: var(--surface-page);
+		border: 1px solid var(--edge-default);
+		border-radius: var(--radius-md);
+		padding: var(--space-lg) var(--space-xl);
 		font-size: 0.9rem;
 	}
 
 	.readout hr {
 		border: none;
-		border-top: 1px solid var(--ab-color-border);
-		margin: var(--ab-space-md) 0;
+		border-top: 1px solid var(--edge-default);
+		margin: var(--space-md) 0;
 	}
 
 	.readout-row {
 		display: flex;
 		justify-content: space-between;
 		align-items: baseline;
-		gap: var(--ab-space-lg);
+		gap: var(--space-lg);
 		padding: 0.15rem 0;
 	}
 
@@ -604,7 +604,7 @@ function tickEnd(angleDeg: number): { x: number; y: number } {
 	}
 
 	.label {
-		color: var(--ab-color-fg-muted);
+		color: var(--ink-muted);
 	}
 
 	.value {
@@ -613,26 +613,26 @@ function tickEnd(angleDeg: number): { x: number; y: number } {
 	}
 
 	.value.warn {
-		color: var(--ab-color-danger);
+		color: var(--action-hazard);
 	}
 
 	.warn-badge {
 		display: inline-block;
-		margin-left: var(--ab-space-sm);
+		margin-left: var(--space-sm);
 		padding: 0.1rem 0.45rem;
 		font-size: 0.7rem;
 		font-weight: 700;
 		letter-spacing: 0.04em;
-		color: var(--ab-color-danger-fg);
-		background: var(--ab-color-danger);
-		border-radius: var(--ab-radius-tight);
+		color: var(--action-hazard);
+		background: var(--action-hazard);
+		border-radius: var(--radius-xs);
 		vertical-align: middle;
 	}
 
 	.formula {
-		font-family: var(--ab-font-mono);
+		font-family: var(--font-family-mono);
 		font-size: 0.8rem;
-		color: var(--ab-color-fg-strong);
+		color: var(--ink-strong);
 		line-height: 1.55;
 	}
 
@@ -651,21 +651,21 @@ function tickEnd(angleDeg: number): { x: number; y: number } {
 	.control.toggle {
 		flex-direction: row;
 		align-items: center;
-		gap: var(--ab-space-sm);
+		gap: var(--space-sm);
 	}
 
 	.control-label {
 		font-size: 0.85rem;
-		color: var(--ab-color-fg-strong);
+		color: var(--ink-strong);
 		font-weight: 500;
 	}
 
 	input[type='range'] {
 		width: 100%;
-		accent-color: var(--ab-color-info);
+		accent-color: var(--signal-info);
 	}
 
 	input[type='checkbox'] {
-		accent-color: var(--ab-color-info);
+		accent-color: var(--signal-info);
 	}
 </style>
