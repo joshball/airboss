@@ -6,6 +6,9 @@
  */
 
 import type { FdmInputs } from '@ab/bc-sim';
+import { SIM_FLAP_NOTCHES } from '@ab/constants';
+
+const FLAP_MAX = SIM_FLAP_NOTCHES[SIM_FLAP_NOTCHES.length - 1];
 
 let {
 	inputs,
@@ -67,11 +70,21 @@ function pct(v: number): number {
 			</div>
 			<span class="value">{pct(inputs.throttle)}%</span>
 		</div>
+
+		<div class="control vert flaps">
+			<span class="label">Flaps</span>
+			<div class="bar vert flap-bar">
+				{#each SIM_FLAP_NOTCHES as notch (notch)}
+					<div class="notch" style:bottom={`${(notch / FLAP_MAX) * 100}%`}></div>
+				{/each}
+				<div class="fill" style:height={`${(inputs.flaps / FLAP_MAX) * 100}%`} style:bottom="0"></div>
+			</div>
+			<span class="value">{inputs.flaps}°</span>
+		</div>
 	</div>
 
 	<div class="annunciators">
 		<span class={brakeOn ? 'lamp on' : 'lamp'}>BRAKE</span>
-		<span class="lamp flaps">FLAPS {inputs.flaps}</span>
 		<span class={stalled ? 'lamp stall on flash' : stallWarning ? 'lamp stall on flash' : 'lamp stall'}>STALL</span>
 		<span class={inputs.autoCoordinate ? 'lamp coord on' : 'lamp coord'}>AUTO-COORD</span>
 	</div>
@@ -127,7 +140,8 @@ function pct(v: number): number {
 
 	/* .sub appears only on Elev; other controls collapse the trailing cell. */
 	.control.horiz .value,
-	.control.vert.thr .value {
+	.control.vert.thr .value,
+	.control.vert.flaps .value {
 		grid-column: 3 / span 2;
 	}
 
@@ -184,6 +198,22 @@ function pct(v: number): number {
 
 	.bar.vert.throttle .fill {
 		background: var(--sim-status-primary);
+	}
+
+	.bar.vert.flap-bar .fill {
+		background: var(--sim-arc-white);
+		opacity: 0.9;
+	}
+
+	/* Notches stick out on both sides of the bar so the detent positions
+	   (0 / 10 / 20 / 30) are visible as indents in the flap gauge. */
+	.bar.vert .notch {
+		position: absolute;
+		left: -4px;
+		right: -4px;
+		height: 2px;
+		background: var(--sim-panel-fg-light);
+		pointer-events: none;
 	}
 
 	.trim-mark {

@@ -49,10 +49,14 @@ export const C172_CONFIG: AircraftConfig = {
 	cd0: 0.027,
 	oswald: 0.75,
 	aspectRatio: 7.32,
-	// Constant-thrust model (no prop curve). Chosen between static thrust
-	// (~2300 N) and cruise thrust (~1600 N) so takeoff roll and cruise both
-	// land in the right neighborhood. Phase 2 will replace with a prop map.
-	maxThrustSeaLevel: 1800,
+	// Fixed-pitch prop curve: thrust falls linearly from static to zero at
+	// vZeroThrust. Static 2400 N is close to real C172S static thrust
+	// (180 HP, ~70% prop eff at low speed gives ~2500 N); vZeroThrust 80 m/s
+	// (~155 kt) is past Vno so climb thrust stays strong but cruise settles
+	// around 75-80 kt body u at 65% throttle. Phase 2 will replace with a
+	// proper prop map.
+	maxThrustSeaLevel: 2400,
+	vZeroThrust: 80,
 	// Authority: full elevator is enough to overcome natural stability at
 	// slow speeds (so the pilot can stall the airplane on purpose, as
 	// happens in real life). Scales with dynamic pressure, so cruise-speed

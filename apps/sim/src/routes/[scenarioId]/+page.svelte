@@ -396,6 +396,22 @@ const trimBias = $derived(inputs.trim);
 
 	<div class="layout">
 		<section class="six-pack">
+			<!-- Readout bar sits above the six-pack: Time over ASI, Alpha / AOA
+				 over the attitude indicator, AGL over the altimeter. -->
+			<div class="readouts">
+				<div class="readout">
+					<span class="label">Time</span>
+					<span class="value">{truth ? truth.t.toFixed(1) : '0.0'}s</span>
+				</div>
+				<div class="readout" class:warning={stalled}>
+					<span class="label">Alpha / AOA</span>
+					<span class="value">{truth ? ((truth.alpha * 180) / Math.PI).toFixed(1) : '0.0'}°</span>
+				</div>
+				<div class="readout">
+					<span class="label">AGL</span>
+					<span class="value">{altitudeAglFeet.toFixed(0)} ft</span>
+				</div>
+			</div>
 			<div class="row">
 				<Asi {kias} />
 				<AttitudeIndicator pitchRadians={pitchRad} rollRadians={rollRad} />
@@ -408,20 +424,6 @@ const trimBias = $derived(inputs.trim);
 			</div>
 			<div class="engine-row">
 				<Tachometer {rpm} />
-			</div>
-			<div class="readouts">
-				<div class="readout">
-					<span class="label">AGL</span>
-					<span class="value">{altitudeAglFeet.toFixed(0)} ft</span>
-				</div>
-				<div class="readout" class:warning={stalled}>
-					<span class="label">Alpha / AOA</span>
-					<span class="value">{truth ? ((truth.alpha * 180) / Math.PI).toFixed(1) : '0.0'}°</span>
-				</div>
-				<div class="readout">
-					<span class="label">Time</span>
-					<span class="value">{truth ? truth.t.toFixed(1) : '0.0'}s</span>
-				</div>
 			</div>
 		</section>
 
@@ -605,15 +607,15 @@ const trimBias = $derived(inputs.trim);
 		gap: var(--space-sm);
 	}
 
-	/* Full-width readout bar under the six-pack. Width matches 3 instruments
-	   (3 * 200px + 2 gaps) so AGL / Alpha / Time line up directly under the
-	   ASI / AI / Altimeter above. */
+	/* Readout bar sits above the six-pack. Width matches the three top-row
+	   instruments (3 * 200px + 2 gaps) so Time / Alpha+AOA / AGL line up
+	   directly above the ASI / AI / Altimeter column. */
 	.readouts {
 		display: grid;
 		grid-template-columns: repeat(3, 1fr);
 		gap: var(--space-sm);
 		width: calc(200px * 3 + var(--space-sm) * 2);
-		margin: var(--space-sm) auto 0;
+		margin: 0 auto;
 	}
 
 	.readout {

@@ -132,8 +132,15 @@ export interface AircraftConfig {
 	oswald: number;
 	/** Effective aspect ratio. */
 	aspectRatio: number;
-	/** Max thrust at sea level, full throttle (N). */
+	/** Static thrust at sea level, full throttle, zero airspeed (N). */
 	maxThrustSeaLevel: number;
+	/**
+	 * Airspeed (m/s TAS) at which a fixed-pitch prop produces zero thrust.
+	 * Models the prop power curve: thrust falls linearly from static to zero
+	 * as airspeed approaches this value. Captures the "takeoff thrust is
+	 * much higher than cruise thrust" behavior without a full prop map.
+	 */
+	vZeroThrust: number;
 	/** Pitch authority -- elevator command to pitching acceleration (rad/s^2 per unit elevator at 1 G). */
 	pitchAuthority: number;
 	/** Pitch damping coefficient -- opposes pitch rate. */
