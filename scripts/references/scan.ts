@@ -17,11 +17,14 @@
  *                                              Phase 1)
  *
  * The scanner is intentionally regex-tolerant for TS: it concatenates the
- * file source verbatim and hands it to the parser. The parser already
- * skips fenced code blocks and inline code spans, so `` ` `` in the TS
- * source (which is how authors embed strings) is handled correctly. The
- * parser does not evaluate TS -- it's looking for the literal `[[...::...]]`
- * syntax, which string literals carry verbatim.
+ * file source and hands it to the parser. The parser skips markdown code
+ * fences and inline code spans. For TS-family files (`.ts`, `.tsx`,
+ * `.svelte.ts`, `.svelte`) we also blank out template-literal contents
+ * before parsing, so backticks inside TS source do not confuse the
+ * markdown-oriented skip logic (a nested backtick inside `${...}` used to
+ * produce phantom matches). Single-quoted and double-quoted string
+ * literals are left intact: authors legitimately embed `[[...::...]]` in
+ * those (see help content), and those should still be scanned.
  *
  * Per architecture decision #3: this is fast (sub-second). No caching, no
  * incremental scan. Full re-scan every invocation.
@@ -30,8 +33,16 @@
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, relative, resolve } from 'node:path';
 import { type ContentScan, extractWikilinks, listReferences } from '@ab/aviation';
+import { stripTsTemplateLiterals } from './strip-ts-templates';
 
 const REPO_ROOT = resolve(import.meta.dirname ?? import.meta.dir, '..', '..');
+
+/**
+ * File extensions whose source contains TypeScript template literals that
+ * the scanner must blank out before running the markdown wiki-link parser.
+ * Ordered longest-first so `.svelte.ts` is matched before `.ts`.
+ */
+const TS_TEMPLATE_EXTENSIONS = ['.svelte.ts', '.tsx', '.svelte', '.ts'] as const;
 
 export interface ManifestEntry {
 	id: string;
@@ -109,8 +120,16 @@ function collectHelpContent(): string[] {
 	return out;
 }
 
+function hasTsTemplateExtension(path: string): boolean {
+	for (const ext of TS_TEMPLATE_EXTENSIONS) {
+		if (path.endsWith(ext)) return true;
+	}
+	return false;
+}
+
 function readAsScan(path: string): ContentScan {
-	const source = readFileSync(path, 'utf8');
+	const raw = readFileSync(path, 'utf8');
+	const source = hasTsTemplateExtension(path) ? stripTsTemplateLiterals(raw) : raw;
 	return { path: relative(REPO_ROOT, path), source };
 }
 
