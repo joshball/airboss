@@ -24,26 +24,29 @@ const ticks = Array.from({ length: 10 }, (_, i) => i);
 	<svg viewBox="0 0 200 200" role="img">
 		<circle cx="100" cy="100" r="96" class="instrument-face" />
 
-		<!-- tick marks: 0..9 (hundreds scale) -->
+		<!-- tick marks: 0..9 (hundreds scale). The "5" position (6 o'clock)
+			 is deliberately skipped so the digital readout below has clear air. -->
 		{#each ticks as tick (tick)}
-			{@const angle = tick * 36 - 90}
-			{@const rad = (angle * Math.PI) / 180}
-			<line
-				x1={100 + 60 * Math.cos(rad)}
-				y1={100 + 60 * Math.sin(rad)}
-				x2={100 + 74 * Math.cos(rad)}
-				y2={100 + 74 * Math.sin(rad)}
-				class="tick-major"
-				stroke-width="2"
-			/>
-			<text
-				x={100 + 48 * Math.cos(rad)}
-				y={100 + 48 * Math.sin(rad)}
-				text-anchor="middle"
-				dominant-baseline="central"
-				font-size="16"
-				class="tick-label">{tick}</text
-			>
+			{#if tick !== 5}
+				{@const angle = tick * 36 - 90}
+				{@const rad = (angle * Math.PI) / 180}
+				<line
+					x1={100 + 60 * Math.cos(rad)}
+					y1={100 + 60 * Math.sin(rad)}
+					x2={100 + 74 * Math.cos(rad)}
+					y2={100 + 74 * Math.sin(rad)}
+					class="tick-major"
+					stroke-width="2"
+				/>
+				<text
+					x={100 + 48 * Math.cos(rad)}
+					y={100 + 48 * Math.sin(rad)}
+					text-anchor="middle"
+					dominant-baseline="central"
+					font-size="16"
+					class="tick-label">{tick}</text
+				>
+			{/if}
 		{/each}
 
 		<!-- ten-thousands pointer (small triangle well outside needle hub) -->
@@ -61,12 +64,16 @@ const ticks = Array.from({ length: 10 }, (_, i) => i);
 			<line x1="100" y1="100" x2="100" y2="28" class="needle-pointer" stroke-width="3" stroke-linecap="round" />
 		</g>
 
+		<!-- FEET / MSL label tucked at roughly 10-11 o'clock, inside the tick
+			 ring, so it stays clear of the digital readout at 6 o'clock. -->
+		<text x="74" y="76" text-anchor="middle" font-size="7" class="unit-label">
+			<tspan x="74" dy="0">FEET</tspan>
+			<tspan x="74" dy="8">MSL</tspan>
+		</text>
+
 		<circle cx="100" cy="100" r="6" class="hub" />
 
-		<text x="100" y="158" text-anchor="middle" font-size="10" class="unit-label">
-			FEET MSL
-		</text>
-		<text x="100" y="176" text-anchor="middle" font-size="16" class="digital-readout">
+		<text x="100" y="160" text-anchor="middle" font-size="16" class="digital-readout">
 			{altSafe.toFixed(0)}
 		</text>
 	</svg>

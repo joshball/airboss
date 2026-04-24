@@ -74,26 +74,35 @@ const ballX = $derived(100 + Math.max(-1, Math.min(1, ballSafe)) * BALL_TRAVEL_P
 		<!-- Ball -->
 		<circle cx={ballX} cy="160" r="5.5" class="ball" stroke-width="1" />
 
-		<!-- Label -->
+		<!-- Top label stays on-face; it's well clear of the symbol. -->
 		<text x="100" y="40" text-anchor="middle" font-size="10" class="unit-label">
 			TURN COORDINATOR
 		</text>
-		<text x="100" y="188" text-anchor="middle" font-size="9" class="foot-label">
-			NO PITCH INFORMATION
-		</text>
 	</svg>
+	<div class="foot-caption">NO PITCH INFORMATION</div>
 </div>
 
 <style>
 	.instrument {
 		width: 200px;
-		height: 200px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
 	}
 
 	svg {
-		width: 100%;
-		height: 100%;
+		width: 200px;
+		height: 200px;
 		display: block;
+	}
+
+	.foot-caption {
+		font-family: var(--font-family-mono);
+		font-size: var(--font-size-xs);
+		color: var(--sim-instrument-tick-dim);
+		text-transform: uppercase;
+		letter-spacing: var(--letter-spacing-caps);
+		margin-top: var(--space-2xs);
 	}
 
 	.instrument-face {
@@ -142,8 +151,4 @@ const ballX = $derived(100 + Math.max(-1, Math.min(1, ballSafe)) * BALL_TRAVEL_P
 		font-family: var(--font-family-mono);
 	}
 
-	.foot-label {
-		fill: var(--sim-instrument-tick-dim);
-		font-family: var(--font-family-mono);
-	}
 </style>
