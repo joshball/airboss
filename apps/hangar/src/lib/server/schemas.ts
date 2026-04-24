@@ -122,7 +122,7 @@ export const sourceIdSchema = z
 	.max(64)
 	.regex(/^[a-z][a-z0-9-]*$/, 'ID must be lowercase letters, digits, and dashes (starting with a letter)');
 
-export const sourceFormatSchema = z.enum(['xml', 'pdf', 'html', 'txt', 'json', 'csv']);
+export const sourceFormatSchema = z.enum(['xml', 'pdf', 'html', 'txt', 'json', 'csv', 'geotiff-zip']);
 
 export const sourceSchema = z.object({
 	id: sourceIdSchema,

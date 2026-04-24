@@ -1,5 +1,5 @@
 import { requireRole } from '@ab/auth';
-import { ROLES, ROUTES } from '@ab/constants';
+import { type ReferenceSourceType, ROLES, ROUTES, SOURCE_KIND_BY_TYPE, SOURCE_KINDS } from '@ab/constants';
 import { createLogger } from '@ab/utils';
 import { error, fail, redirect } from '@sveltejs/kit';
 import { getSource, NotFoundError, RevConflictError, softDeleteSource, updateSource } from '$lib/server/registry';
@@ -22,7 +22,8 @@ function rowToInitial(row: {
 	sizeBytes: number | null;
 	locatorShape: Record<string, unknown> | null;
 }): SourceFormInitial {
-	return {
+	const kind = SOURCE_KIND_BY_TYPE[row.type as ReferenceSourceType] ?? SOURCE_KINDS.TEXT;
+	const base: SourceFormInitial = {
 		id: row.id,
 		type: row.type,
 		title: row.title,
@@ -35,6 +36,13 @@ function rowToInitial(row: {
 		sizeBytes: row.sizeBytes == null ? '' : String(row.sizeBytes),
 		locatorShapeJson: JSON.stringify(row.locatorShape ?? {}, null, 2),
 	};
+	if (kind === SOURCE_KINDS.BINARY_VISUAL && row.locatorShape) {
+		const ls = row.locatorShape;
+		if (typeof ls.region === 'string') base.bvRegion = ls.region;
+		if (typeof ls.index_url === 'string') base.bvIndexUrl = ls.index_url;
+		if (typeof ls.cadence_days === 'number') base.bvCadenceDays = String(ls.cadence_days);
+	}
+	return base;
 }
 
 export const load: PageServerLoad = async (event) => {

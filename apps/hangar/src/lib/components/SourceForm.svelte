@@ -1,5 +1,12 @@
 <script lang="ts">
-import { SOURCE_TYPE_LABELS, SOURCE_TYPE_VALUES } from '@ab/constants';
+import {
+	type ReferenceSourceType,
+	SECTIONAL_CADENCE_DAYS,
+	SOURCE_KIND_BY_TYPE,
+	SOURCE_KINDS,
+	SOURCE_TYPE_LABELS,
+	SOURCE_TYPE_VALUES,
+} from '@ab/constants';
 import type { SourceFormInitial } from '$lib/server/source-form-types';
 
 /** Shared form body for /glossary/sources/new + /glossary/sources/[id]. */
@@ -18,7 +25,13 @@ let {
 	rev?: number | null;
 } = $props();
 
-const FORMATS = ['xml', 'pdf', 'html', 'txt', 'json', 'csv'] as const;
+const FORMATS = ['xml', 'pdf', 'html', 'txt', 'json', 'csv', 'geotiff-zip'] as const;
+
+// Local state tracks the user's current type pick so the non-textual panel
+// toggles responsively before submit.
+let currentType = $state(initial.type);
+const currentKind = $derived(SOURCE_KIND_BY_TYPE[currentType as ReferenceSourceType] ?? SOURCE_KINDS.TEXT);
+const isBinaryVisual = $derived(currentKind === SOURCE_KINDS.BINARY_VISUAL);
 
 function fieldError(key: string): string | undefined {
 	return fieldErrors[key];
@@ -52,13 +65,17 @@ function fieldError(key: string): string | undefined {
 
 		<div class="field">
 			<label for="src-type">Source type</label>
-			<select id="src-type" name="type" required>
+			<select id="src-type" name="type" required bind:value={currentType}>
 				<option value="" selected={initial.type === ''}>-- pick one --</option>
 				{#each SOURCE_TYPE_VALUES as value (value)}
-					<option {value} selected={initial.type === value}>{SOURCE_TYPE_LABELS[value]}</option>
+					<option {value}>{SOURCE_TYPE_LABELS[value]}</option>
 				{/each}
 			</select>
 			{#if fieldError('type')}<p class="err">{fieldError('type')}</p>{/if}
+			<p class="hint">
+				Kind: <code class="kind-chip">{currentKind}</code>. Binary-visual sources (sectional charts, plates)
+				use the non-textual panel below instead of the extraction pipeline.
+			</p>
 		</div>
 	</div>
 
@@ -133,13 +150,63 @@ function fieldError(key: string): string | undefined {
 		</div>
 	</div>
 
-	<div class="field">
-		<label for="src-locator">Locator shape (JSON)</label>
-		<textarea id="src-locator" name="locatorShape" rows="4">{initial.locatorShapeJson}</textarea>
-		<p class="hint">
-			UI hint for citation locator forms. Example: <code>&#123; "title": "number", "part": "number" &#125;</code>.
-		</p>
-	</div>
+	{#if isBinaryVisual}
+		<fieldset class="panel">
+			<legend>Non-textual details</legend>
+			<p class="panel-hint">
+				Binary-visual sources require an upstream index URL to resolve the current edition, and a URL template
+				with <code>{'{edition-date}'}</code> / <code>{'{region}'}</code> placeholders. The fetch handler
+				substitutes these before downloading.
+			</p>
+			<div class="grid">
+				<div class="field">
+					<label for="src-region">Region</label>
+					<input
+						id="src-region"
+						name="bv_region"
+						type="text"
+						value={initial.bvRegion ?? ''}
+						placeholder="e.g. Denver"
+						required
+					/>
+					{#if fieldError('bv_region')}<p class="err">{fieldError('bv_region')}</p>{/if}
+				</div>
+				<div class="field">
+					<label for="src-cadence">Cadence (days)</label>
+					<input
+						id="src-cadence"
+						name="bv_cadence_days"
+						type="number"
+						min="1"
+						step="1"
+						value={initial.bvCadenceDays ?? String(SECTIONAL_CADENCE_DAYS)}
+					/>
+					{#if fieldError('bv_cadence_days')}<p class="err">{fieldError('bv_cadence_days')}</p>{/if}
+				</div>
+			</div>
+			<div class="field">
+				<label for="src-index-url">Index URL</label>
+				<input
+					id="src-index-url"
+					name="bv_index_url"
+					type="url"
+					value={initial.bvIndexUrl ?? ''}
+					placeholder="https://aeronav.faa.gov/visual/"
+					required
+				/>
+				<p class="hint">Upstream page the resolver scrapes for the current edition date.</p>
+				{#if fieldError('bv_index_url')}<p class="err">{fieldError('bv_index_url')}</p>{/if}
+			</div>
+		</fieldset>
+	{:else}
+		<div class="field">
+			<label for="src-locator">Locator shape (JSON)</label>
+			<textarea id="src-locator" name="locatorShape" rows="4">{initial.locatorShapeJson}</textarea>
+			<p class="hint">
+				UI hint for citation locator forms. Example: <code>&#123; "title": "number", "part": "number" &#125;</code>.
+			</p>
+		</div>
+	{/if}
 </div>
 
 <style>
@@ -227,5 +294,39 @@ function fieldError(key: string): string | undefined {
 		margin: 0;
 		color: var(--signal-danger);
 		font-size: var(--type-ui-caption-size);
+	}
+
+	/* wp-hangar-non-textual: binary-visual panel */
+	.panel {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-md);
+		padding: var(--space-md);
+		background: var(--surface-panel);
+		border: 1px solid var(--edge-subtle);
+		border-radius: var(--radius-md);
+	}
+
+	.panel legend {
+		font-size: var(--type-ui-caption-size);
+		color: var(--ink-muted);
+		font-weight: var(--font-weight-semibold);
+		text-transform: uppercase;
+		letter-spacing: var(--letter-spacing-wide);
+		padding: 0 var(--space-xs);
+	}
+
+	.panel-hint {
+		margin: 0;
+		color: var(--ink-muted);
+		font-size: var(--type-ui-caption-size);
+	}
+
+	.kind-chip {
+		font-family: var(--font-family-mono);
+		background: var(--surface-sunken);
+		padding: 0 var(--space-2xs);
+		border-radius: var(--radius-sm);
+		font-size: var(--type-code-inline-size);
 	}
 </style>

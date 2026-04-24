@@ -14,6 +14,10 @@ export interface SourceFormInitial {
 	downloadedAt: string;
 	sizeBytes: string;
 	locatorShapeJson: string;
+	/** wp-hangar-non-textual: binary-visual locator fields. */
+	bvRegion?: string;
+	bvCadenceDays?: string;
+	bvIndexUrl?: string;
 }
 
 export const EMPTY_SOURCE_INITIAL: SourceFormInitial = {
@@ -28,4 +32,7 @@ export const EMPTY_SOURCE_INITIAL: SourceFormInitial = {
 	downloadedAt: 'pending-download',
 	sizeBytes: '',
 	locatorShapeJson: '{}',
+	bvRegion: '',
+	bvCadenceDays: '',
+	bvIndexUrl: '',
 };
