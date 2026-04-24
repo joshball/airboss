@@ -15,6 +15,7 @@ import {
 	SCENARIO_STATUS_VALUES,
 	SCENARIO_STATUSES,
 } from '@ab/constants';
+import PageHelp from '@ab/help/ui/PageHelp.svelte';
 import Banner from '@ab/ui/components/Banner.svelte';
 import { buildQuery, humanize } from '@ab/utils';
 import { tick } from 'svelte';
@@ -135,7 +136,10 @@ function pageHref(n: number): string {
 <section class="page">
 	<header class="hd">
 		<div>
-			<h1>Browse</h1>
+			<div class="title-row">
+				<h1>Browse</h1>
+				<PageHelp pageId="reps-browse" />
+			</div>
 			<p class="sub">Your decision-rep scenarios. Filter by domain, difficulty, or phase.</p>
 		</div>
 		<a class="btn primary" href={ROUTES.REPS_NEW}>New scenario</a>
@@ -289,6 +293,13 @@ function pageHref(n: number): string {
 		align-items: center;
 		justify-content: space-between;
 		gap: var(--space-lg);
+	}
+
+	.title-row {
+		display: flex;
+		align-items: center;
+		gap: var(--space-sm);
+		flex-wrap: wrap;
 	}
 
 	h1 {

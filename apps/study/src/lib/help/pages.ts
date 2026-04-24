@@ -43,6 +43,9 @@ import { memoryCard } from './content/memory-card';
 import { memoryDashboard } from './content/memory-dashboard';
 import { memoryNew } from './content/memory-new';
 import { memoryReview } from './content/memory-review';
+import { reps } from './content/reps';
+import { repsBrowse } from './content/reps-browse';
+import { repsNew } from './content/reps-new';
 import { repsSession } from './content/reps-session';
 import { sessionStart } from './content/session-start';
 
@@ -54,6 +57,9 @@ export const studyHelpPages: readonly HelpPage[] = [
 	memoryBrowse,
 	memoryCard,
 	memoryReview,
+	reps,
+	repsBrowse,
+	repsNew,
 	repsSession,
 	sessionStart,
 	calibration,

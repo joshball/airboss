@@ -1,4 +1,5 @@
 <script lang="ts">
+import PageHelp from '@ab/help/ui/PageHelp.svelte';
 import ActivityPanel from './_panels/ActivityPanel.svelte';
 import CalibrationPanel from './_panels/CalibrationPanel.svelte';
 import CertProgressPanel from './_panels/CertProgressPanel.svelte';
@@ -27,6 +28,7 @@ const stamp = `${loadedAt.getFullYear()}-${String(loadedAt.getMonth() + 1).padSt
 		<p class="eyebrow">Study // dashboard</p>
 		<div class="title-row">
 			<h1>Dashboard</h1>
+			<PageHelp pageId="dashboard" />
 			<p class="sub">Where you are. What slipped. What&apos;s next.</p>
 		</div>
 	</header>
