@@ -24,6 +24,7 @@ export const calibration: HelpPage = {
 		aviationTopic: [AVIATION_TOPICS.HUMAN_FACTORS],
 		keywords: ['calibration', 'brier', 'overconfident', 'underconfident', 'confidence', 'metacognition'],
 	},
+	concept: true,
 	related: ['memory-review', 'reps-session', 'getting-started', 'adm-safety', 'srm-safety'],
 	reviewedAt: '2026-04-22',
 	sections: [

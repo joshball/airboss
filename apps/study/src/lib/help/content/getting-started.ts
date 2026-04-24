@@ -22,6 +22,7 @@ export const gettingStarted: HelpPage = {
 		helpKind: HELP_KINDS.CONCEPT,
 		keywords: ['orientation', 'first-time', 'overview', 'pivot', 'invite-only'],
 	},
+	concept: true,
 	related: ['dashboard', 'memory-review', 'reps-session', 'knowledge-graph'],
 	reviewedAt: '2026-04-22',
 	sections: [
