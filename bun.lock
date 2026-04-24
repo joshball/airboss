@@ -57,6 +57,9 @@
         "smol-toml": "^1.6.1",
       },
     },
+    "libs/bc/citations": {
+      "name": "@ab/bc-citations",
+    },
     "libs/bc/sim": {
       "name": "@ab/bc-sim",
     },
@@ -99,6 +102,8 @@
     "@ab/auth": ["@ab/auth@workspace:libs/auth"],
 
     "@ab/aviation": ["@ab/aviation@workspace:libs/aviation"],
+
+    "@ab/bc-citations": ["@ab/bc-citations@workspace:libs/bc/citations"],
 
     "@ab/bc-sim": ["@ab/bc-sim@workspace:libs/bc/sim"],
 

@@ -1,5 +1,16 @@
 import { requireAuth } from '@ab/auth';
 import {
+	CitationSourceNotFoundError,
+	CitationTargetNotFoundError,
+	CitationValidationError,
+	type CitationWithTarget,
+	createCitation,
+	DuplicateCitationError,
+	deleteCitation,
+	getCitationsOf,
+	resolveCitationTargets,
+} from '@ab/bc-citations';
+import {
 	CardNotEditableError,
 	CardNotFoundError,
 	getCard,
@@ -13,6 +24,9 @@ import {
 	CARD_STATUSES,
 	type CARD_TYPE_VALUES,
 	type CardStatus,
+	CITATION_SOURCE_TYPES,
+	CITATION_TARGET_VALUES,
+	type CitationTargetType,
 	type DOMAIN_VALUES,
 	ROUTES,
 } from '@ab/constants';
@@ -33,17 +47,22 @@ export const load: PageServerLoad = async (event) => {
 	const user = requireAuth(event);
 	const { params } = event;
 
-	// Both queries are keyed on params.id; no dependency between them.
-	const [found, recentReviews] = await Promise.all([
+	// Card, recent reviews, and citations are all keyed on params.id; no
+	// dependency between them, so fire in parallel.
+	const [found, recentReviews, citationRows] = await Promise.all([
 		getCard(params.id, user.id),
 		getRecentReviewsForCard(params.id, user.id, 10),
+		getCitationsOf(CITATION_SOURCE_TYPES.CARD, params.id),
 	]);
 	if (!found) error(404, { message: 'Card not found' });
+
+	const citations: CitationWithTarget[] = await resolveCitationTargets(citationRows);
 
 	return {
 		card: found.card,
 		state: found.state,
 		recentReviews,
+		citations,
 	};
 };
 
@@ -127,5 +146,78 @@ export const actions: Actions = {
 			redirect(303, ROUTES.MEMORY_BROWSE);
 		}
 		redirect(303, ROUTES.MEMORY_CARD(params.id));
+	},
+
+	addCitation: async (event) => {
+		const user = requireAuth(event);
+		const { params, request, locals } = event;
+
+		const form = await request.formData();
+		const targetType = String(form.get('targetType') ?? '');
+		const targetId = String(form.get('targetId') ?? '');
+		const note = String(form.get('note') ?? '');
+
+		if (!(CITATION_TARGET_VALUES as readonly string[]).includes(targetType)) {
+			return fail(400, { intent: 'addCitation', fieldErrors: { _: 'Invalid target type.' } });
+		}
+
+		try {
+			await createCitation({
+				sourceType: CITATION_SOURCE_TYPES.CARD,
+				sourceId: params.id,
+				targetType: targetType as CitationTargetType,
+				targetId,
+				citationContext: note,
+				userId: user.id,
+			});
+		} catch (err) {
+			if (err instanceof DuplicateCitationError) {
+				return fail(409, {
+					intent: 'addCitation',
+					fieldErrors: { _: 'That reference is already cited on this card.' },
+				});
+			}
+			if (err instanceof CitationValidationError) {
+				return fail(400, { intent: 'addCitation', fieldErrors: { _: err.message } });
+			}
+			if (err instanceof CitationSourceNotFoundError) {
+				error(404, { message: 'Card not found' });
+			}
+			if (err instanceof CitationTargetNotFoundError) {
+				return fail(400, { intent: 'addCitation', fieldErrors: { _: 'That reference could not be found.' } });
+			}
+			log.error(
+				'createCitation threw',
+				{ requestId: locals.requestId, userId: user.id, metadata: { cardId: params.id, targetType, targetId } },
+				err instanceof Error ? err : undefined,
+			);
+			return fail(500, { intent: 'addCitation', fieldErrors: { _: 'Could not add citation.' } });
+		}
+
+		return { success: true as const, intent: 'addCitation' as const };
+	},
+
+	removeCitation: async (event) => {
+		const user = requireAuth(event);
+		const { params, request, locals } = event;
+
+		const form = await request.formData();
+		const citationId = String(form.get('citationId') ?? '');
+		if (!citationId) {
+			return fail(400, { intent: 'removeCitation', fieldErrors: { _: 'Missing citation id.' } });
+		}
+
+		try {
+			await deleteCitation(citationId, user.id);
+		} catch (err) {
+			log.error(
+				'deleteCitation threw',
+				{ requestId: locals.requestId, userId: user.id, metadata: { cardId: params.id, citationId } },
+				err instanceof Error ? err : undefined,
+			);
+			return fail(500, { intent: 'removeCitation', fieldErrors: { _: 'Could not remove citation.' } });
+		}
+
+		return { success: true as const, intent: 'removeCitation' as const };
 	},
 } satisfies Actions;

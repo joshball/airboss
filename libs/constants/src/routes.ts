@@ -61,6 +61,11 @@ export const ROUTES = {
 	API_AUTH: '/api/auth',
 	/** Appearance-preference endpoint. POST `{ value: 'light'|'dark'|'system' }`. */
 	APPEARANCE: '/appearance',
+	/**
+	 * Citation picker search endpoint. GET `?target=<CitationTargetType>&q=<term>`
+	 * returns `{ results: { id, label, detail }[] }`. Auth-gated.
+	 */
+	API_CITATIONS_SEARCH: '/api/citations/search',
 
 	// Study -- Dashboard (launchpad; `/` redirects here)
 	DASHBOARD: '/dashboard',
