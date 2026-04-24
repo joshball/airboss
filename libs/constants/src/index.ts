@@ -24,6 +24,7 @@ export {
 } from './deployment';
 export { DEV_ACCOUNTS, DEV_DB, DEV_DB_HOST_PATTERN, DEV_DB_URL, DEV_PASSWORD } from './dev';
 export { ENV_VARS, type EnvVarName, getEnv, getEnvBool, getEnvInt, isProd, requireEnv } from './env';
+export { HELP_TRIGGER_LABELS, type HelpTriggerLabelKey } from './help';
 export {
 	APP_SURFACE_LABELS,
 	APP_SURFACE_MAX,
