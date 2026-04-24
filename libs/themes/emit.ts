@@ -28,7 +28,7 @@ import type {
 	TypeBundle,
 	TypographyPack,
 } from './contract';
-import { deriveInteractiveStates, deriveSignalVariants } from './derive';
+import { alpha, deriveInteractiveStates, deriveSignalVariants } from './derive';
 import { getTheme, listThemes } from './registry';
 
 type ActionKey = 'default' | 'hazard' | 'caution' | 'neutral' | 'link';
@@ -117,6 +117,7 @@ function paletteBlock(palette: Palette, isDark: boolean): string[] {
 	push('--ink-faint', palette.ink.faint);
 	push('--ink-strong', palette.ink.strong);
 	push('--ink-inverse', palette.ink.inverse);
+	push('--ink-inverse-subtle', alpha(palette.ink.inverse, 0.25));
 
 	// surface
 	push('--surface-page', palette.surface.page);

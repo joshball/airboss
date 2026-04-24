@@ -40,13 +40,55 @@ function roundLightness(value: number): number {
 }
 
 /**
- * Append an alpha channel to an OKLCH color.
- * Returns the input unchanged if parsing fails.
+ * Append an alpha channel to a color. Accepts OKLCH (`oklch(l c h)`) or
+ * hex (`#rgb` / `#rrggbb`). Hex inputs are expanded to `rgba()` at the
+ * requested opacity. Returns the input unchanged if parsing fails for
+ * both formats.
  */
 export function alpha(color: string, opacity: number): string {
 	const parsed = parseOklch(color);
-	if (!parsed) return color;
-	return `oklch(${parsed.l} ${parsed.c} ${parsed.h} / ${opacity})`;
+	if (parsed) return `oklch(${parsed.l} ${parsed.c} ${parsed.h} / ${opacity})`;
+	const hex = parseHex(color);
+	if (hex) return `rgba(${hex.r}, ${hex.g}, ${hex.b}, ${opacity})`;
+	return color;
+}
+
+interface ParsedRgb {
+	r: number;
+	g: number;
+	b: number;
+}
+
+const HEX_SHORT_RE = /^#([0-9a-fA-F])([0-9a-fA-F])([0-9a-fA-F])$/;
+const HEX_LONG_RE = /^#([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})$/;
+
+function parseHex(color: string): ParsedRgb | undefined {
+	const trimmed = color.trim();
+	const short = HEX_SHORT_RE.exec(trimmed);
+	if (short) {
+		const r = short[1];
+		const g = short[2];
+		const b = short[3];
+		if (r === undefined || g === undefined || b === undefined) return undefined;
+		return {
+			r: Number.parseInt(`${r}${r}`, 16),
+			g: Number.parseInt(`${g}${g}`, 16),
+			b: Number.parseInt(`${b}${b}`, 16),
+		};
+	}
+	const long = HEX_LONG_RE.exec(trimmed);
+	if (long) {
+		const r = long[1];
+		const g = long[2];
+		const b = long[3];
+		if (r === undefined || g === undefined || b === undefined) return undefined;
+		return {
+			r: Number.parseInt(r, 16),
+			g: Number.parseInt(g, 16),
+			b: Number.parseInt(b, 16),
+		};
+	}
+	return undefined;
 }
 
 /**

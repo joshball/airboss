@@ -17,6 +17,7 @@ export const TOKENS = {
 	inkFaint: '--ink-faint',
 	inkStrong: '--ink-strong',
 	inkInverse: '--ink-inverse',
+	inkInverseSubtle: '--ink-inverse-subtle',
 
 	// -------- surface --------
 	surfacePage: '--surface-page',
