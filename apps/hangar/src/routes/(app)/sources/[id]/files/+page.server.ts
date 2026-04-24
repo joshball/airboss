@@ -10,9 +10,18 @@
  */
 
 import { readdir, readFile, stat, unlink } from 'node:fs/promises';
-import { dirname, resolve } from 'node:path';
+import { dirname, relative, resolve } from 'node:path';
 import { requireRole } from '@ab/auth';
-import { EXTENSION_TO_PREVIEW_KIND, PREVIEW_KINDS, type PreviewKind, ROLES, ROUTES } from '@ab/constants';
+import {
+	EXTENSION_TO_PREVIEW_KIND,
+	PREVIEW_KINDS,
+	type PreviewKind,
+	type ReferenceSourceType,
+	ROLES,
+	ROUTES,
+	SOURCE_KIND_BY_TYPE,
+	SOURCE_KINDS,
+} from '@ab/constants';
 import { db, hangarSource } from '@ab/db';
 import { createLogger } from '@ab/utils';
 import { error, fail, redirect } from '@sveltejs/kit';
@@ -45,52 +54,94 @@ function isInsideRoot(candidate: string, root: string): boolean {
 	return rel;
 }
 
+async function buildEntry(full: string, displayName: string, isArchive: boolean): Promise<FileEntry> {
+	const s = await stat(full);
+	const ext = extensionOf(displayName);
+	const previewKind = EXTENSION_TO_PREVIEW_KIND[ext] ?? PREVIEW_KINDS.BINARY;
+	let previewText: string | null = null;
+	if (previewKind !== PREVIEW_KINDS.BINARY && previewKind !== PREVIEW_KINDS.PDF && s.size <= MAX_PREVIEW_BYTES) {
+		try {
+			previewText = await readFile(full, 'utf8');
+		} catch {
+			previewText = null;
+		}
+	}
+	return {
+		name: displayName,
+		sizeBytes: s.size,
+		mtime: s.mtime.toISOString(),
+		previewKind,
+		previewText,
+		isArchive,
+	};
+}
+
 export const load: PageServerLoad = async (event) => {
 	const user = requireRole(event, ROLES.AUTHOR, ROLES.OPERATOR, ROLES.ADMIN);
 	const [source] = await db.select().from(hangarSource).where(eq(hangarSource.id, event.params.id)).limit(1);
 	if (!source) throw error(404, `source '${event.params.id}' not found`);
-
-	const dir = resolve(REPO_ROOT, 'data', 'sources', source.type);
+	const kind = SOURCE_KIND_BY_TYPE[source.type as ReferenceSourceType] ?? SOURCE_KINDS.TEXT;
 	const sourcesRoot = resolve(REPO_ROOT, 'data', 'sources');
 
 	let entries: FileEntry[] = [];
-	try {
-		const names = await readdir(dir);
-		const prefix1 = `${source.id}.`;
-		const prefix2 = `${source.id}@`;
-		const ownedNames = names.filter((name) => name.startsWith(prefix1) || name.startsWith(prefix2));
+	let dirDisplay: string;
 
-		entries = await Promise.all(
-			ownedNames.sort().map(async (name): Promise<FileEntry> => {
-				const full = resolve(dir, name);
-				// Guard against symlink escapes.
-				if (!isInsideRoot(full, sourcesRoot)) {
-					throw new Error(`path escape detected: ${full}`);
+	if (kind === SOURCE_KINDS.BINARY_VISUAL) {
+		// Binary-visual layout: data/sources/<type>/<id>/<edition>/{chart.zip, thumb.jpg, meta.json}
+		// Each edition directory becomes a section prefix in the displayed name.
+		const sourceRoot = resolve(REPO_ROOT, 'data', 'sources', source.type, source.id);
+		dirDisplay = `data/sources/${source.type}/${source.id}`;
+		try {
+			const editions = await readdir(sourceRoot, { withFileTypes: true });
+			const editionDirs = editions.filter((e) => e.isDirectory()).map((e) => e.name);
+			editionDirs.sort().reverse(); // newest edition first
+			const collected: FileEntry[] = [];
+			for (const ed of editionDirs) {
+				const edPath = resolve(sourceRoot, ed);
+				if (!isInsideRoot(edPath, sourcesRoot)) {
+					throw new Error(`path escape detected: ${edPath}`);
 				}
-				const s = await stat(full);
-				const ext = extensionOf(name);
-				const previewKind = EXTENSION_TO_PREVIEW_KIND[ext] ?? PREVIEW_KINDS.BINARY;
-				let previewText: string | null = null;
-				if (previewKind !== PREVIEW_KINDS.BINARY && previewKind !== PREVIEW_KINDS.PDF && s.size <= MAX_PREVIEW_BYTES) {
-					try {
-						previewText = await readFile(full, 'utf8');
-					} catch {
-						previewText = null;
+				const files = await readdir(edPath);
+				files.sort();
+				for (const file of files) {
+					const full = resolve(edPath, file);
+					if (!isInsideRoot(full, sourcesRoot)) continue;
+					const isArchive = ed.includes('@archived-');
+					const display = `${ed}/${file}`;
+					collected.push(await buildEntry(full, display, isArchive));
+				}
+			}
+			entries = collected;
+		} catch (err) {
+			log.warn(`failed to scan ${sourceRoot}`, {
+				sourceId: source.id,
+				err: err instanceof Error ? err.message : err,
+			});
+			entries = [];
+		}
+	} else {
+		const dir = resolve(REPO_ROOT, 'data', 'sources', source.type);
+		dirDisplay = `data/sources/${source.type}`;
+		try {
+			const names = await readdir(dir);
+			const prefix1 = `${source.id}.`;
+			const prefix2 = `${source.id}@`;
+			const ownedNames = names.filter((name) => name.startsWith(prefix1) || name.startsWith(prefix2));
+
+			entries = await Promise.all(
+				ownedNames.sort().map(async (name): Promise<FileEntry> => {
+					const full = resolve(dir, name);
+					// Guard against symlink escapes.
+					if (!isInsideRoot(full, sourcesRoot)) {
+						throw new Error(`path escape detected: ${full}`);
 					}
-				}
-				return {
-					name,
-					sizeBytes: s.size,
-					mtime: s.mtime.toISOString(),
-					previewKind,
-					previewText,
-					isArchive: name.startsWith(prefix2),
-				};
-			}),
-		);
-	} catch (err) {
-		log.warn(`failed to scan ${dir}`, { sourceId: source.id, err: err instanceof Error ? err.message : err });
-		entries = [];
+					return buildEntry(full, name, name.startsWith(prefix2));
+				}),
+			);
+		} catch (err) {
+			log.warn(`failed to scan ${dir}`, { sourceId: source.id, err: err instanceof Error ? err.message : err });
+			entries = [];
+		}
 	}
 
 	return {
@@ -98,13 +149,18 @@ export const load: PageServerLoad = async (event) => {
 			id: source.id,
 			type: source.type,
 			title: source.title,
+			sourceKind: kind,
 		},
 		user: { id: user.id, role: user.role },
 		isAdmin: user.role === ROLES.ADMIN,
-		dir: `data/sources/${source.type}`,
+		dir: dirDisplay,
 		entries,
 	};
 };
+
+// Suppress unused-import for `relative` which is kept for symmetry if later
+// features display relative paths directly.
+void relative;
 
 export const actions: Actions = {
 	delete: async (event) => {

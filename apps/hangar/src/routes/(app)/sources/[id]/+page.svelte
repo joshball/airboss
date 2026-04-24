@@ -1,7 +1,8 @@
 <script lang="ts">
-import { ROUTES } from '@ab/constants';
+import { ROUTES, SOURCE_KINDS } from '@ab/constants';
 import Banner from '@ab/ui/components/Banner.svelte';
 import Button from '@ab/ui/components/Button.svelte';
+import SourcePreviewTile from '$lib/components/SourcePreviewTile.svelte';
 import type { ActionData, PageData } from './$types';
 
 let { data, form }: { data: PageData; form: ActionData } = $props();
@@ -77,6 +78,21 @@ const checksumMatchesOnDisk = $derived(
 
 	{#if formError}
 		<Banner tone="danger">{formError}</Banner>
+	{/if}
+
+	{#if data.source.sourceKind === SOURCE_KINDS.BINARY_VISUAL && data.source.media}
+		<SourcePreviewTile
+			sourceId={data.source.id}
+			title={data.source.title}
+			thumbnailUrl={ROUTES.HANGAR_SOURCE_THUMBNAIL(data.source.id)}
+			thumbnailAvailable={data.source.media.thumbnailSizeBytes > 0 &&
+				data.source.media.generator !== 'unavailable'}
+			edition={data.source.edition}
+			archiveSizeBytes={data.source.sizeBytes}
+			archiveSha={data.source.checksum}
+			downloadedAt={data.source.downloadedAt}
+			generator={data.source.media.generator}
+		/>
 	{/if}
 
 	<section class="cards" aria-label="State">
