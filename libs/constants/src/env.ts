@@ -15,6 +15,8 @@ export const ENV_VARS = {
 	BETTER_AUTH_URL: 'BETTER_AUTH_URL',
 	RESEND_API_KEY: 'RESEND_API_KEY',
 	AIRBOSS_ALLOW_DEV_SEED: 'AIRBOSS_ALLOW_DEV_SEED',
+	/** Hangar sync-to-disk mode override. Values: `commit-local` | `pr`. */
+	HANGAR_SYNC_MODE: 'HANGAR_SYNC_MODE',
 } as const;
 
 export type EnvVarName = (typeof ENV_VARS)[keyof typeof ENV_VARS];

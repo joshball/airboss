@@ -1,0 +1,3829 @@
+[[reference]]
+id = "ac-reg"
+displayName = "AC"
+aliases = ["Advisory Circular"]
+paraphrase = """
+FAA guidance document explaining regulations and best practices.
+
+Advisory Circulars provide guidance and information on compliance with regulations, but are not regulatory themselves. They describe acceptable means of compliance. AC 61-83K governs FIRC requirements. ACs are numbered to correspond with the CFR part they support (e.g., AC 61-xxx for Part 61)."""
+reviewedAt = "2026-04-22"
+related = ["cfr-reg", "acs-reg", "aim-reg"]
+
+tags.sourceType = "ac"
+tags.aviationTopic = ["regulations", "certification", "training-ops"]
+tags.flightRules = "both"
+tags.knowledgeKind = "reference"
+tags.phaseOfFlight = ["preflight"]
+tags.certApplicability = ["cfi"]
+
+[[reference.sources]]
+sourceId = "faa-gov"
+locator = { reference = "FAA.gov / Advisory Circulars" }
+url = "https://www.faa.gov/regulations_policies/advisory_circulars/"
+
+[[reference]]
+id = "acs-reg"
+displayName = "ACS"
+aliases = ["Airman Certification Standards"]
+paraphrase = """
+Testing standards replacing PTS for airman certification.
+
+The ACS integrates knowledge, risk management, and skill elements into a single standard for airman certification. It replaces the Practical Test Standards (PTS) and aligns written tests, oral exams, and practical tests to the same standard. ACS documents exist for each certificate/rating level."""
+reviewedAt = "2026-04-22"
+related = ["ac-reg", "cfr-reg"]
+
+tags.sourceType = "acs"
+tags.aviationTopic = ["regulations", "certification", "human-factors"]
+tags.flightRules = "both"
+tags.knowledgeKind = "reference"
+
+[[reference.sources]]
+sourceId = "acs-current"
+locator = { document = "FAA-S-ACS Series" }
+
+[[reference]]
+id = "adi-aircraft"
+displayName = "ADI"
+aliases = ["Attitude Director Indicator"]
+paraphrase = """
+Instrument combining attitude indicator with flight director bars.
+
+The ADI displays aircraft attitude (pitch and bank) and overlays flight director command bars showing the pilot where to fly to follow a selected course or glideslope. In glass cockpits, ADI functionality is integrated into the PFD. The term is more common with older electromechanical instruments."""
+reviewedAt = "2026-04-22"
+related = ["pfd-aircraft", "ahrs-aircraft"]
+
+tags.sourceType = "phak"
+tags.aviationTopic = ["aircraft-systems", "flight-instruments"]
+tags.flightRules = "ifr"
+tags.knowledgeKind = "system"
+tags.phaseOfFlight = ["approach"]
+tags.certApplicability = ["instrument", "commercial", "cfi", "cfii", "atp"]
+
+[[reference.sources]]
+sourceId = "phak-current"
+locator = { chapter = 8 }
+url = "https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/phak"
+
+[[reference]]
+id = "adm-safety"
+displayName = "ADM"
+aliases = ["Aeronautical Decision-Making"]
+paraphrase = """
+Systematic approach to mental processes used in aviation decision-making.
+
+ADM is a structured decision-making process that reduces the probability of pilot error. It includes hazard identification, risk assessment, and choosing the best course of action. ADM encompasses recognizing hazardous attitudes (anti-authority, impulsivity, invulnerability, macho, resignation) and applying appropriate antidotes."""
+reviewedAt = "2026-04-22"
+related = ["crm-safety", "srm-safety", "pave-safety", "vfr-over-the-top-def", "cfit-safety", "loc-safety", "imsafe-safety", "three-p-safety"]
+
+tags.sourceType = "phak"
+tags.aviationTopic = ["human-factors"]
+tags.flightRules = "both"
+tags.knowledgeKind = "safety-concept"
+tags.phaseOfFlight = ["approach"]
+
+[[reference.sources]]
+sourceId = "phak-current"
+locator = { chapter = 2 }
+url = "https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/phak"
+
+[[reference]]
+id = "administrator-def"
+displayName = "Administrator"
+aliases = []
+paraphrase = """
+The Federal Aviation Administrator or any delegate with authority in the matter.
+
+In the FARs, "Administrator" means the Federal Aviation Administrator or any person to whom the FAA has delegated authority. This includes Designated Pilot Examiners (DPEs), Designated Airworthiness Representatives (DARs), and other delegated officials. CFIs work with the Administrator through DPEs for practical tests."""
+reviewedAt = "2026-04-22"
+related = ["faa-org", "approved-def", "show-def"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["regulations", "certification", "maintenance"]
+tags.flightRules = "both"
+tags.knowledgeKind = "definition"
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "afm-aircraft"
+displayName = "AFM"
+aliases = ["Airplane Flight Manual"]
+paraphrase = """
+FAA-approved document with operating limitations and performance data for a specific aircraft.
+
+The AFM is a regulatory document required by 14 CFR 91.9 to be carried aboard the aircraft. It contains operating limitations, emergency procedures, and performance data specific to that aircraft serial number. CFIs must teach students to reference the AFM for weight and balance, V-speeds, and emergency checklists."""
+reviewedAt = "2026-04-22"
+related = ["mel-ops"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["aircraft-systems", "weight-balance", "emergencies", "certification"]
+tags.flightRules = "both"
+tags.knowledgeKind = "regulation"
+tags.phaseOfFlight = ["emergency"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "2" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.2"
+
+[[reference]]
+id = "agl-ops"
+displayName = "AGL"
+aliases = ["Above Ground Level"]
+paraphrase = """
+Altitude measured from the ground surface directly below.
+
+AGL measures the true height of an aircraft above the terrain surface. AGL is used for traffic pattern altitudes, minimum safe altitudes (1,000 feet over congested areas, 500 feet elsewhere), and cloud clearance requirements. AGL varies as terrain changes, unlike MSL which is constant."""
+reviewedAt = "2026-04-22"
+related = ["msl-ops", "standard-atmosphere-def", "flight-level-def"]
+
+tags.sourceType = "pcg"
+tags.aviationTopic = ["flight-instruments", "navigation"]
+tags.flightRules = "both"
+tags.knowledgeKind = "definition"
+
+[[reference.sources]]
+sourceId = "pcg-current"
+locator = { term = "AGL" }
+
+[[reference]]
+id = "ahrs-aircraft"
+displayName = "AHRS"
+aliases = ["Attitude and Heading Reference System"]
+paraphrase = """
+Solid-state sensor providing attitude and heading data to glass cockpits.
+
+AHRS uses accelerometers, rate gyros, and magnetometers to compute aircraft attitude (pitch, roll) and magnetic heading. Unlike mechanical gyros, AHRS has no moving parts and does not suffer from precession or gimbal lock. AHRS failure causes loss of attitude indication on the PFD."""
+reviewedAt = "2026-04-22"
+related = ["pfd-aircraft", "adi-aircraft"]
+
+tags.sourceType = "phak"
+tags.aviationTopic = ["aircraft-systems", "flight-instruments"]
+tags.flightRules = "both"
+tags.knowledgeKind = "system"
+
+[[reference.sources]]
+sourceId = "phak-current"
+locator = { chapter = 8 }
+url = "https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/phak"
+
+[[reference]]
+id = "aim-reg"
+displayName = "AIM"
+aliases = ["Aeronautical Information Manual"]
+paraphrase = """
+Official guide to basic flight information and ATC procedures.
+
+The AIM is the FAA official guide providing fundamental flight information and ATC procedures for use in the National Airspace System. It covers navigation aids, airspace, ATC, emergency procedures, safety, and medical facts. The AIM is updated regularly and is essential CFI reference material."""
+reviewedAt = "2026-04-22"
+related = ["cfr-reg", "ac-reg"]
+
+tags.sourceType = "aim"
+tags.aviationTopic = ["regulations", "emergencies", "medical", "airspace"]
+tags.flightRules = "both"
+tags.knowledgeKind = "reference"
+tags.phaseOfFlight = ["emergency"]
+
+[[reference.sources]]
+sourceId = "aim-current"
+locator = {}
+url = "https://www.faa.gov/air_traffic/publications/atpubs/aim_html/"
+
+[[reference]]
+id = "air-traffic-clearance-def"
+displayName = "Air traffic clearance"
+aliases = []
+paraphrase = """
+ATC authorization for an aircraft to proceed under specified conditions to prevent collisions.
+
+An ATC clearance authorizes an aircraft to proceed under specified traffic conditions within controlled airspace for the purpose of preventing collisions. A clearance is not authorization to deviate from regulations. CFIs must teach that accepting a clearance is mandatory when given, but pilots may request amendments."""
+reviewedAt = "2026-04-22"
+related = ["air-traffic-def", "air-traffic-control-def", "ifr-ops"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["communications", "airspace"]
+tags.flightRules = "ifr"
+tags.knowledgeKind = "definition"
+tags.certApplicability = ["instrument", "commercial", "cfi", "cfii", "atp"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "air-traffic-control-def"
+displayName = "Air traffic control"
+aliases = []
+paraphrase = """
+Service promoting the safe, orderly, and expeditious flow of air traffic.
+
+ATC is the service operated by appropriate authority to promote safe, orderly, and expeditious flow of air traffic. ATC includes tower, approach/departure control, and en-route centers. CFIs teach that ATC provides separation for IFR traffic and can provide VFR flight following on a workload-permitting basis."""
+reviewedAt = "2026-04-22"
+related = ["tracon-atc", "artcc-atc", "air-traffic-clearance-def", "air-traffic-def", "atc-abbrev"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["communications", "procedures"]
+tags.flightRules = "ifr"
+tags.knowledgeKind = "definition"
+tags.phaseOfFlight = ["cruise", "approach"]
+tags.certApplicability = ["instrument", "commercial", "cfi", "cfii", "atp"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "air-traffic-def"
+displayName = "Air traffic"
+aliases = []
+paraphrase = """
+Aircraft operating in the air or on an airport surface, excluding ramps and parking areas.
+
+Per 14 CFR 1.1, air traffic means aircraft operating in the air or on an airport surface, exclusive of loading ramps and parking areas. This definition determines where ATC authority applies and where see-and-avoid responsibilities begin."""
+reviewedAt = "2026-04-22"
+related = ["air-traffic-clearance-def", "air-traffic-control-def"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["airspace", "certification", "communications"]
+tags.flightRules = "both"
+tags.knowledgeKind = "definition"
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "aircraft-def"
+displayName = "Aircraft"
+aliases = []
+paraphrase = """
+Any device used or intended to be used for flight in the air.
+
+The FAA defines aircraft broadly as any device used or intended for flight. This includes airplanes, rotorcraft, gliders, lighter-than-air vehicles, powered-lift, and unmanned aircraft. CFIs should understand this definition because it determines what regulations apply."""
+reviewedAt = "2026-04-22"
+related = ["airplane-def", "rotorcraft-def", "civil-aircraft-def", "glider-def", "helicopter-def", "large-aircraft-def", "small-aircraft-def"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["aircraft-systems", "aerodynamics"]
+tags.flightRules = "both"
+tags.knowledgeKind = "definition"
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "aircraft-engine-def"
+displayName = "Aircraft engine"
+aliases = []
+paraphrase = """
+An engine used for propelling aircraft, including accessories but not propellers.
+
+Per 14 CFR 1.1, an aircraft engine includes turbosuperchargers, appurtenances, and accessories necessary for its functioning, but does not include propellers. This distinction matters for maintenance records, logbook entries, and understanding what requires separate inspections."""
+reviewedAt = "2026-04-22"
+related = ["airframe-def", "appliance-def", "propeller-def"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["aircraft-systems", "maintenance"]
+tags.flightRules = "both"
+tags.knowledgeKind = "definition"
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "airframe-def"
+displayName = "Airframe"
+aliases = []
+paraphrase = """
+Aircraft structure excluding engine and propeller -- fuselage, wings, landing gear, and controls.
+
+The airframe includes the fuselage, booms, nacelles, cowlings, fairings, airfoil surfaces (including rotors but excluding propellers), landing gear, and their accessories and controls. CFIs need this definition for maintenance record discussions -- airframe, engine, and propeller each have separate logbooks."""
+reviewedAt = "2026-04-22"
+related = ["aircraft-engine-def", "appliance-def", "propeller-def"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["aircraft-systems", "maintenance", "training-ops"]
+tags.flightRules = "both"
+tags.knowledgeKind = "definition"
+tags.phaseOfFlight = ["landing"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "airmet-wx"
+displayName = "AIRMET"
+aliases = ["Airman's Meteorological Information"]
+paraphrase = """
+Advisory for weather potentially hazardous to light aircraft.
+
+AIRMETs are issued for moderate icing (AIRMET Zulu), moderate turbulence and sustained surface winds >30 knots (AIRMET Tango), and IFR conditions and mountain obscuration (AIRMET Sierra). They are significant for small, single-engine aircraft and VFR pilots."""
+reviewedAt = "2026-04-22"
+related = ["sigmet-wx", "pirep-wx"]
+
+tags.sourceType = "aim"
+tags.aviationTopic = ["weather", "aircraft-systems"]
+tags.flightRules = "ifr"
+tags.knowledgeKind = "concept"
+tags.phaseOfFlight = ["preflight"]
+tags.certApplicability = ["instrument", "commercial", "cfi", "cfii", "atp"]
+
+[[reference.sources]]
+sourceId = "aim-current"
+locator = { chapter = 7, section = 1, paragraph = 5 }
+url = "https://www.faa.gov/air_traffic/publications/atpubs/aim_html/"
+
+[[reference]]
+id = "airplane-def"
+displayName = "Airplane"
+aliases = []
+paraphrase = """
+An engine-driven, fixed-wing, heavier-than-air aircraft supported by wing lift.
+
+Per 14 CFR 1.1, an airplane is specifically an engine-driven fixed-wing aircraft heavier than air, supported in flight by dynamic air reaction against its wings. This distinguishes it from gliders (no engine), rotorcraft (rotating wings), and lighter-than-air craft. CFIs must understand aircraft categories for certification and rating purposes."""
+reviewedAt = "2026-04-22"
+related = ["aircraft-def", "rotorcraft-def", "glider-def", "light-sport-aircraft-def"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["aircraft-systems", "aerodynamics", "certification"]
+tags.flightRules = "both"
+tags.knowledgeKind = "definition"
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "airport-def"
+displayName = "Airport"
+aliases = []
+paraphrase = """
+An area of land or water used for aircraft landing and takeoff, including buildings and facilities.
+
+Per 14 CFR 1.1, an airport is an area of land or water used or intended for landing and takeoff of aircraft, including its buildings and facilities. This broad definition covers everything from major international airports to grass strips. CFIs should teach students to evaluate airport suitability using the Chart Supplement."""
+reviewedAt = "2026-04-22"
+related = ["alternate-airport-def", "traffic-pattern-def"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["airports", "training-ops"]
+tags.flightRules = "both"
+tags.knowledgeKind = "definition"
+tags.phaseOfFlight = ["landing"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "als-ops"
+displayName = "ALS"
+aliases = ["Approach Light System"]
+paraphrase = """
+Runway lighting extending from the threshold to help pilots transition from instruments to visual.
+
+Approach light systems extend outward from the runway threshold providing visual guidance during the transition from instrument flight to visual landing. Types include ALSF-1, ALSF-2, MALS, MALSR, SALS, and SSALS. ALS is one of the visual references that allows descent below MDA/DA per 14 CFR 91.175."""
+reviewedAt = "2026-04-22"
+related = ["iap-ops", "da-ops", "mda-ops", "reil-ops"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["airports"]
+tags.flightRules = "ifr"
+tags.knowledgeKind = "regulation"
+tags.phaseOfFlight = ["descent", "approach", "landing"]
+tags.certApplicability = ["instrument", "commercial", "cfi", "cfii", "atp"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "2" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.2"
+
+[[reference]]
+id = "alternate-airport-def"
+displayName = "Alternate airport"
+aliases = []
+paraphrase = """
+Airport designated for landing if the intended destination becomes unavailable.
+
+An alternate airport is one where an aircraft may land if landing at the intended airport becomes inadvisable. IFR flight plans require an alternate if the destination weather forecast shows ceiling below 2,000 feet or visibility below 3 SM (1-2-3 rule). Alternate minimums are typically higher than standard approach minimums."""
+reviewedAt = "2026-04-22"
+related = ["airport-def", "ifr-ops", "flight-plan-def"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["procedures", "weather"]
+tags.flightRules = "ifr"
+tags.knowledgeKind = "definition"
+tags.phaseOfFlight = ["preflight", "approach", "landing"]
+tags.certApplicability = ["instrument", "commercial", "cfi", "cfii", "atp"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "appliance-def"
+displayName = "Appliance"
+aliases = []
+paraphrase = """
+Aircraft instrument or equipment that is not part of the airframe, engine, or propeller.
+
+An appliance is any instrument, mechanism, equipment, or accessory (including communications equipment) used in operating or controlling an aircraft in flight, installed in or attached to the aircraft, and not part of an airframe, engine, or propeller. Understanding this category matters for maintenance authorization under 14 CFR 43."""
+reviewedAt = "2026-04-22"
+related = ["airframe-def", "aircraft-engine-def"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["aircraft-systems", "aerodynamics", "certification"]
+tags.flightRules = "both"
+tags.knowledgeKind = "definition"
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "approved-def"
+displayName = "Approved"
+aliases = []
+paraphrase = """
+Approved by the FAA or its delegate -- includes bilateral agreements with foreign authorities.
+
+Unless referencing another person, "approved" means approved by the FAA or its delegate, or approved under a bilateral agreement between the U.S. and a foreign country. This term appears throughout the FARs and determines what equipment, procedures, and training meet regulatory standards."""
+reviewedAt = "2026-04-22"
+related = ["administrator-def", "faa-org", "show-def"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["regulations", "procedures"]
+tags.flightRules = "both"
+tags.knowledgeKind = "definition"
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "artcc-atc"
+displayName = "ARTCC"
+aliases = ["Air Route Traffic Control Center"]
+paraphrase = """
+ATC facility controlling en-route IFR traffic between terminal areas.
+
+ARTCCs (Centers) provide separation services for IFR aircraft in controlled airspace, primarily above 18,000 feet in Class A airspace and in en-route Class E airspace. The U.S. has 20 ARTCCs, each covering a large geographic area. Centers hand off traffic to TRACONs near destination airports."""
+reviewedAt = "2026-04-22"
+related = ["tracon-atc", "air-traffic-control-def", "atc-abbrev"]
+
+tags.sourceType = "aim"
+tags.aviationTopic = ["communications", "airspace"]
+tags.flightRules = "ifr"
+tags.knowledgeKind = "concept"
+tags.phaseOfFlight = ["cruise"]
+tags.certApplicability = ["instrument", "commercial", "cfi", "cfii", "atp"]
+
+[[reference.sources]]
+sourceId = "aim-current"
+locator = { chapter = 4, section = 1, paragraph = 14 }
+url = "https://www.faa.gov/air_traffic/publications/atpubs/aim_html/"
+
+[[reference]]
+id = "asr-atc"
+displayName = "ASR"
+aliases = ["Airport Surveillance Radar"]
+paraphrase = """
+Radar providing range and azimuth of aircraft near an airport -- used for ASR approaches.
+
+ASR is a primary radar system that shows aircraft range and azimuth on approach control displays. It does not show altitude. ASR approaches (surveillance approaches) provide azimuth guidance from ATC with the pilot controlling descent. CFIs should know ASR approaches exist as a backup when other approach systems are unavailable."""
+reviewedAt = "2026-04-22"
+related = ["par-atc", "tracon-atc", "iap-ops"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["communications"]
+tags.flightRules = "ifr"
+tags.knowledgeKind = "regulation"
+tags.phaseOfFlight = ["descent", "approach"]
+tags.certApplicability = ["instrument", "commercial", "cfi", "cfii", "atp"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "2" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.2"
+
+[[reference]]
+id = "atc-abbrev"
+displayName = "ATC"
+aliases = ["Air Traffic Control"]
+paraphrase = """
+Service and facilities providing separation and traffic flow management.
+
+ATC encompasses the facilities and services that manage the flow of aircraft in controlled airspace. This includes control towers, TRACON, ARTCC, and associated radar and communication systems. CFIs use this abbreviation constantly and must ensure students understand ATC roles at each facility level."""
+reviewedAt = "2026-04-22"
+related = ["tracon-atc", "artcc-atc", "air-traffic-control-def"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["communications", "airspace", "procedures", "training-ops"]
+tags.flightRules = "both"
+tags.knowledgeKind = "regulation"
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "2" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.2"
+
+[[reference]]
+id = "atis-atc"
+displayName = "ATIS"
+aliases = ["Automatic Terminal Information Service"]
+paraphrase = """
+Recorded broadcast of current airport operational information.
+
+ATIS is a continuous broadcast of non-control airport information including weather, active runways, available approaches, and NOTAMs. Updated hourly or when conditions change, each version is identified by a phonetic letter. Pilots report the current ATIS code on initial contact."""
+reviewedAt = "2026-04-22"
+related = ["ctaf-atc", "fss-atc"]
+
+tags.sourceType = "aim"
+tags.aviationTopic = ["communications", "airports", "weather"]
+tags.flightRules = "both"
+tags.knowledgeKind = "concept"
+tags.phaseOfFlight = ["approach"]
+
+[[reference.sources]]
+sourceId = "aim-current"
+locator = { chapter = 4, section = 1, paragraph = 13 }
+url = "https://www.faa.gov/air_traffic/publications/atpubs/aim_html/"
+
+[[reference]]
+id = "atp-training"
+displayName = "ATP"
+aliases = ["Airline Transport Pilot"]
+paraphrase = """
+Highest level of pilot certificate issued by the FAA.
+
+The ATP certificate is required to serve as pilot in command of scheduled airline operations. Requirements include minimum age of 23 (restricted ATP at 21), 1,500 hours total time (with exceptions), and passing the ATP knowledge and practical tests. ATP holders may exercise all privileges of lower certificates."""
+reviewedAt = "2026-04-22"
+related = ["pic-training", "cfi-training", "medical-certificate-def"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["training-ops", "certification"]
+tags.flightRules = "na"
+tags.knowledgeKind = "regulation"
+tags.certApplicability = ["atp"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 61, section = "159" }
+url = "https://www.ecfr.gov/current/title-14/part-61#p-61.159"
+
+[[reference]]
+id = "ats-route-def"
+displayName = "ATS route"
+aliases = []
+paraphrase = """
+Designated airway or route for channeling traffic flow -- includes jet routes and RNAV routes.
+
+An ATS route is a specified route for channeling traffic flow. Includes jet routes (J-routes above FL180), victor airways (V-routes below FL180), RNAV routes (T/Q routes), and arrival/departure routes. Each route is defined by designator, path between fixes, distance, reporting requirements, and minimum altitude."""
+reviewedAt = "2026-04-22"
+related = ["rnav-nav", "vor-nav"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["procedures", "navigation"]
+tags.flightRules = "ifr"
+tags.knowledgeKind = "definition"
+tags.certApplicability = ["instrument", "commercial", "cfi", "cfii", "atp"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "brake-horsepower-def"
+displayName = "Brake horsepower"
+aliases = []
+paraphrase = """
+Engine power measured at the propeller shaft output.
+
+Brake horsepower (BHP) is the power delivered at the propeller shaft of an aircraft engine. It represents the actual usable power before propeller efficiency losses. CFIs reference BHP when discussing engine performance charts and power settings."""
+reviewedAt = "2026-04-22"
+related = ["manifold-pressure-def"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["aircraft-systems", "performance"]
+tags.flightRules = "both"
+tags.knowledgeKind = "definition"
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "calibrated-airspeed-def"
+displayName = "Calibrated airspeed"
+aliases = []
+paraphrase = """
+Indicated airspeed corrected for instrument and position error.
+
+CAS is IAS corrected for instrument and position error. CAS equals true airspeed in standard atmosphere at sea level. Most V-speeds in the POH are expressed as CAS. The difference between IAS and CAS varies by aircraft and is shown in the POH correction table."""
+reviewedAt = "2026-04-22"
+related = ["ias-aircraft", "tas-aircraft", "eas-aircraft", "cas-aircraft", "standard-atmosphere-def"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["aircraft-systems", "performance"]
+tags.flightRules = "both"
+tags.knowledgeKind = "definition"
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "cas-aircraft"
+displayName = "CAS"
+aliases = ["Calibrated Airspeed"]
+paraphrase = """
+IAS corrected for instrument and position error -- used for V-speed definitions.
+
+CAS is the indicated airspeed corrected for position and instrument error. Most aircraft performance data and V-speed definitions reference CAS. CFIs should teach students the airspeed chain: IAS -> CAS -> EAS -> TAS."""
+reviewedAt = "2026-04-22"
+related = ["ias-aircraft", "tas-aircraft", "calibrated-airspeed-def", "eas-aircraft"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["aircraft-systems", "performance", "training-ops"]
+tags.flightRules = "both"
+tags.knowledgeKind = "regulation"
+tags.phaseOfFlight = ["cruise"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "2" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.2"
+
+[[reference]]
+id = "category-aircraft-def"
+displayName = "Category (aircraft)"
+aliases = []
+paraphrase = """
+Aircraft grouping by intended use: normal, utility, acrobatic, transport.
+
+In the context of aircraft certification, category groups aircraft by intended use or operating limitations. Examples: transport, normal, utility, acrobatic, limited, restricted, provisional. Normal category limits load factor to +3.8/-1.52g; utility allows +4.4g for limited aerobatics; acrobatic has no specific limit."""
+reviewedAt = "2026-04-22"
+related = ["category-airman-def", "class-airman-def", "load-factor-def"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["aircraft-systems", "aerodynamics", "certification"]
+tags.flightRules = "both"
+tags.knowledgeKind = "definition"
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "category-airman-def"
+displayName = "Category (airman)"
+aliases = []
+paraphrase = """
+Broad aircraft classification for pilot certification: airplane, rotorcraft, glider, lighter-than-air.
+
+In the context of airman certification, category is the broadest classification of aircraft. Examples: airplane, rotorcraft, glider, lighter-than-air. This is distinct from aircraft certification categories (normal, utility, acrobatic). CFIs must understand this dual meaning -- it appears frequently on knowledge tests."""
+reviewedAt = "2026-04-22"
+related = ["class-airman-def", "type-airman-def", "category-aircraft-def", "rating-def"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["aircraft-systems", "certification"]
+tags.flightRules = "both"
+tags.knowledgeKind = "definition"
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "cdi-nav"
+displayName = "CDI"
+aliases = ["Course Deviation Indicator"]
+paraphrase = """
+Needle showing lateral deviation from selected course.
+
+The CDI displays the aircraft position relative to a selected VOR radial or GPS course. Full-scale deflection represents 10 degrees for VOR, 5 degrees for ILS localizer, or a fixed distance for GPS (typically 1 NM en-route, 0.3 NM on approach). Centered CDI means the aircraft is on course."""
+reviewedAt = "2026-04-22"
+related = ["vor-nav", "obs-nav", "hsi-nav"]
+
+tags.sourceType = "phak"
+tags.aviationTopic = ["navigation"]
+tags.flightRules = "ifr"
+tags.knowledgeKind = "concept"
+tags.phaseOfFlight = ["cruise", "approach"]
+tags.certApplicability = ["instrument", "commercial", "cfi", "cfii", "atp"]
+
+[[reference.sources]]
+sourceId = "phak-current"
+locator = { chapter = 16 }
+url = "https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/phak"
+
+[[reference]]
+id = "ceiling-wx"
+displayName = "Ceiling"
+aliases = []
+paraphrase = """
+Height AGL of the lowest cloud layer reported as broken, overcast, or obscuration.
+
+Ceiling is the height above ground of the lowest layer of clouds or obscuring phenomena reported as broken (BKN), overcast (OVC), or obscuration. Thin or partial layers do not constitute a ceiling. Ceiling determines VFR/IFR flight category and is a primary factor in go/no-go decisions and approach minimums."""
+reviewedAt = "2026-04-22"
+related = ["imc-wx", "vmc-wx", "metar-wx", "ifr-conditions-wx", "over-the-top-wx"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["weather", "regulations"]
+tags.flightRules = "both"
+tags.knowledgeKind = "definition"
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "cfi-training"
+displayName = "CFI"
+aliases = ["Certificated Flight Instructor"]
+paraphrase = """
+FAA certificate authorizing instruction in aircraft.
+
+A CFI holds an FAA flight instructor certificate that authorizes providing flight and ground instruction. CFI certificates expire every 24 calendar months and must be renewed via FIRC, practical test, or activity-based renewal. CFIs are the primary gatekeepers of aviation safety through initial and recurrent training."""
+reviewedAt = "2026-04-22"
+related = ["cfii-training", "mei-training", "firc-reg", "medical-certificate-def", "atp-training"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["training-ops", "certification"]
+tags.flightRules = "na"
+tags.knowledgeKind = "regulation"
+tags.certApplicability = ["cfi"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 61, section = "183" }
+url = "https://www.ecfr.gov/current/title-14/part-61#p-61.183"
+
+[[reference]]
+id = "cfii-training"
+displayName = "CFII"
+aliases = ["Certificated Flight Instructor - Instrument"]
+paraphrase = """
+CFI with instrument instructor rating.
+
+A CFII holds an instrument rating on their flight instructor certificate, authorizing them to provide instrument flight instruction and conduct instrument proficiency checks (IPCs). CFII certification requires demonstrating instructional proficiency in instrument flight procedures."""
+reviewedAt = "2026-04-22"
+related = ["cfi-training", "mei-training"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["training-ops", "certification", "procedures"]
+tags.flightRules = "ifr"
+tags.knowledgeKind = "regulation"
+tags.certApplicability = ["cfi"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 61, section = "195" }
+url = "https://www.ecfr.gov/current/title-14/part-61#p-61.195"
+
+[[reference]]
+id = "cfit-safety"
+displayName = "CFIT"
+aliases = ["Controlled Flight Into Terrain"]
+paraphrase = """
+Accident where an airworthy aircraft is flown into terrain.
+
+CFIT occurs when an aircraft under the crew's control is unintentionally flown into terrain, water, or an obstacle. Contributing factors include loss of situational awareness, inadequate instrument procedures, failure to monitor altitude, and spatial disorientation. CFIT is preventable through terrain awareness training and TAWS/GPWS equipment."""
+reviewedAt = "2026-04-22"
+related = ["loc-safety", "adm-safety"]
+
+tags.sourceType = "ntsb"
+tags.aviationTopic = ["human-factors", "medical", "procedures"]
+tags.flightRules = "both"
+tags.knowledgeKind = "safety-concept"
+
+[[reference.sources]]
+sourceId = "ntsb-current"
+locator = { reference = "NTSB Safety Reports" }
+
+[[reference]]
+id = "cfr-reg"
+displayName = "CFR"
+aliases = ["Code of Federal Regulations"]
+paraphrase = """
+Federal regulatory code -- Title 14 covers aeronautics.
+
+The CFR is the codification of all federal regulations. Title 14 (Aeronautics and Space) contains the Federal Aviation Regulations (FARs). Key parts include Part 61 (certification of pilots), Part 91 (general operating rules), and Part 141 (pilot schools). Flight instructors must be current with regulatory changes."""
+reviewedAt = "2026-04-22"
+related = ["ac-reg", "aim-reg", "acs-reg"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["regulations", "certification", "training-ops"]
+tags.flightRules = "both"
+tags.knowledgeKind = "reference"
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14 }
+
+[[reference]]
+id = "civil-aircraft-def"
+displayName = "Civil aircraft"
+aliases = []
+paraphrase = """
+Any aircraft other than a public aircraft -- subject to FAA certification and operating rules.
+
+Civil aircraft means all aircraft other than public aircraft (government-operated). All civil aircraft must comply with FAA airworthiness requirements, registration, and operating rules. The distinction matters because public aircraft are exempt from certain regulations."""
+reviewedAt = "2026-04-22"
+related = ["aircraft-def", "large-aircraft-def", "small-aircraft-def"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["aircraft-systems", "certification", "maintenance"]
+tags.flightRules = "both"
+tags.knowledgeKind = "definition"
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "class-airman-def"
+displayName = "Class (airman)"
+aliases = []
+paraphrase = """
+Aircraft subdivision within a category: single-engine, multi-engine, land, sea.
+
+In airman certification, class is a subdivision within a category based on similar operating characteristics. For airplanes: single-engine land, single-engine sea, multi-engine land, multi-engine sea. For rotorcraft: helicopter, gyroplane. CFIs need class ratings to provide instruction in the applicable aircraft."""
+reviewedAt = "2026-04-22"
+related = ["category-airman-def", "type-airman-def", "category-aircraft-def", "rating-def"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["aircraft-systems", "flight-instruments", "certification", "training-ops"]
+tags.flightRules = "both"
+tags.knowledgeKind = "definition"
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "controlled-airspace-def"
+displayName = "Controlled airspace"
+aliases = []
+paraphrase = """
+Airspace where ATC service is provided to IFR and some VFR flights.
+
+Controlled airspace is airspace of defined dimensions within which ATC service is provided to IFR flights and to VFR flights in accordance with the airspace classification. Includes Class A, B, C, D, and E. Each class has different entry requirements, equipment, and weather minimums. CFIs must teach all five classes and their requirements."""
+reviewedAt = "2026-04-22"
+related = ["tfr-atc", "navigable-airspace-def", "positive-control-def"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["airspace", "weather", "communications"]
+tags.flightRules = "ifr"
+tags.knowledgeKind = "definition"
+tags.certApplicability = ["instrument", "commercial", "cfi", "cfii", "atp"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "crewmember-def"
+displayName = "Crewmember"
+aliases = []
+paraphrase = """
+A person assigned to perform duty in an aircraft during flight time.
+
+A crewmember is anyone assigned to perform duty in an aircraft during flight time, including flightcrew members (pilots, flight engineers) and cabin crew. CFIs acting as required crewmembers may log PIC or SIC time. The crewmember definition is important for duty time, rest requirements, and sterile cockpit rules."""
+reviewedAt = "2026-04-22"
+related = ["pic-training", "sic-training", "flightcrew-member-def"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["aircraft-systems"]
+tags.flightRules = "both"
+tags.knowledgeKind = "definition"
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "critical-engine-def"
+displayName = "Critical engine"
+aliases = []
+paraphrase = """
+The engine whose failure would most adversely affect performance or handling.
+
+The critical engine is the one whose failure would most adversely affect aircraft performance or handling qualities. On conventional twin-engine propeller aircraft, the left engine is typically critical due to P-factor, accelerated slipstream, spiraling slipstream, and torque effects. CFIs must understand Vmc and critical engine concepts for multi-engine instruction."""
+reviewedAt = "2026-04-22"
+related = []
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["aircraft-systems", "performance", "training-ops"]
+tags.flightRules = "both"
+tags.knowledgeKind = "definition"
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "crm-safety"
+displayName = "CRM"
+aliases = ["Crew Resource Management"]
+paraphrase = """
+Effective use of all available resources by a flight crew.
+
+CRM applies to multi-crew operations and focuses on communication, situational awareness, workload management, decision-making, and leadership. Originally developed for airline operations, CRM principles are adapted for single-pilot GA operations as SRM (Single-Pilot Resource Management)."""
+reviewedAt = "2026-04-22"
+related = ["srm-safety", "adm-safety"]
+
+tags.sourceType = "phak"
+tags.aviationTopic = ["human-factors"]
+tags.flightRules = "both"
+tags.knowledgeKind = "safety-concept"
+
+[[reference.sources]]
+sourceId = "phak-current"
+locator = { chapter = 2 }
+url = "https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/phak"
+
+[[reference]]
+id = "ctaf-atc"
+displayName = "CTAF"
+aliases = ["Common Traffic Advisory Frequency"]
+paraphrase = """
+Frequency for self-announce traffic advisories at non-towered airports.
+
+The CTAF is the frequency used for position reporting and traffic advisories at airports without an operating control tower. At some airports, the CTAF is the UNICOM frequency; at others it may be MULTICOM (122.9). Standard self-announce procedures include position, altitude, and intentions."""
+reviewedAt = "2026-04-22"
+related = ["unicom-atc", "atis-atc", "traffic-pattern-def"]
+
+tags.sourceType = "aim"
+tags.aviationTopic = ["communications", "certification", "procedures"]
+tags.flightRules = "vfr"
+tags.knowledgeKind = "procedure"
+tags.phaseOfFlight = ["cruise"]
+tags.certApplicability = ["student", "private", "commercial", "cfi", "atp"]
+
+[[reference.sources]]
+sourceId = "aim-current"
+locator = { chapter = 4, section = 1, paragraph = 9 }
+url = "https://www.faa.gov/air_traffic/publications/atpubs/aim_html/"
+
+[[reference]]
+id = "da-ops"
+displayName = "DA"
+aliases = ["Decision Altitude"]
+paraphrase = """
+Altitude on a precision approach where a missed approach decision is made.
+
+DA is the altitude at which a missed approach must be initiated if the required visual reference to continue the approach is not established. Unlike MDA, DA is a decision point during a continuous descent -- the pilot does not level off at DA. DA is referenced to MSL."""
+reviewedAt = "2026-04-22"
+related = ["dh-ops", "mda-ops", "iap-ops", "faf-nav", "precision-approach-def", "als-ops", "rvr-ops"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["procedures"]
+tags.flightRules = "ifr"
+tags.knowledgeKind = "limit"
+tags.phaseOfFlight = ["descent", "approach", "missed"]
+tags.certApplicability = ["instrument", "commercial", "cfi", "cfii", "atp"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 91, section = "175" }
+url = "https://www.ecfr.gov/current/title-14/part-91#p-91.175"
+
+[[reference]]
+id = "dh-ops"
+displayName = "DH"
+aliases = ["Decision Height"]
+paraphrase = """
+Decision altitude expressed as height above touchdown zone.
+
+DH is the same concept as DA but expressed as a height above the touchdown zone elevation rather than as an altitude above mean sea level. DH is used primarily for CAT II and CAT III ILS approaches. The terms DA and DH are often used interchangeably in general aviation."""
+reviewedAt = "2026-04-22"
+related = ["da-ops", "mda-ops"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["procedures"]
+tags.flightRules = "ifr"
+tags.knowledgeKind = "limit"
+tags.phaseOfFlight = ["approach", "landing"]
+tags.certApplicability = ["instrument", "commercial", "cfi", "cfii", "atp"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 91, section = "175" }
+url = "https://www.ecfr.gov/current/title-14/part-91#p-91.175"
+
+[[reference]]
+id = "dme-nav"
+displayName = "DME"
+aliases = ["Distance Measuring Equipment"]
+paraphrase = """
+Provides slant-range distance to a ground station.
+
+DME measures the time delay of UHF signals between the aircraft and a ground transponder to calculate distance. DME reads slant range, not ground distance -- the difference is significant at high altitudes close to the station. Often co-located with VOR or ILS facilities."""
+reviewedAt = "2026-04-22"
+related = ["vor-nav", "ils-nav", "tacan-nav", "vortac-nav"]
+
+tags.sourceType = "aim"
+tags.aviationTopic = ["navigation"]
+tags.flightRules = "ifr"
+tags.knowledgeKind = "concept"
+tags.phaseOfFlight = ["cruise"]
+tags.certApplicability = ["instrument", "commercial", "cfi", "cfii", "atp"]
+
+[[reference.sources]]
+sourceId = "aim-current"
+locator = { chapter = 1, section = 1, paragraph = 7 }
+url = "https://www.faa.gov/air_traffic/publications/atpubs/aim_html/"
+
+[[reference]]
+id = "eas-aircraft"
+displayName = "EAS"
+aliases = ["Equivalent Airspeed"]
+paraphrase = """
+CAS corrected for compressibility -- significant above 200 knots or 10,000 feet.
+
+Equivalent airspeed is CAS corrected for adiabatic compressible flow at a given altitude. EAS equals CAS in standard atmosphere at sea level. The difference between CAS and EAS is negligible at typical GA speeds and altitudes but becomes significant for high-performance aircraft."""
+reviewedAt = "2026-04-22"
+related = ["cas-aircraft", "ias-aircraft", "tas-aircraft", "calibrated-airspeed-def"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["aircraft-systems", "performance", "procedures"]
+tags.flightRules = "both"
+tags.knowledgeKind = "regulation"
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "2" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.2"
+
+[[reference]]
+id = "efvs-nav"
+displayName = "EFVS"
+aliases = ["Enhanced Flight Vision System"]
+paraphrase = """
+Sensor-based cockpit display showing forward terrain using infrared or other imaging.
+
+EFVS uses imaging sensors (forward-looking infrared, millimeter wave radar, low-light cameras) to display the external scene on a head-up or head-down display. Under 14 CFR 91.176, EFVS can be used in lieu of natural vision during certain approach and landing operations, allowing lower approach minimums. CFIs should be aware of evolving EFVS regulations."""
+reviewedAt = "2026-04-22"
+related = ["synthetic-vision-def", "iap-ops"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["navigation"]
+tags.flightRules = "ifr"
+tags.knowledgeKind = "regulation"
+tags.phaseOfFlight = ["approach", "landing"]
+tags.certApplicability = ["instrument", "commercial", "cfi", "cfii", "atp"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "2" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.2"
+
+[[reference]]
+id = "faa-org"
+displayName = "FAA"
+aliases = ["Federal Aviation Administration"]
+paraphrase = """
+U.S. government agency responsible for civil aviation regulation and safety.
+
+The FAA regulates civil aviation in the United States, including airman certification, aircraft airworthiness, airspace management, and air traffic control. The FAA operates under the Department of Transportation and sets the standards for flight instructor certification and renewal, including FIRC requirements."""
+reviewedAt = "2026-04-22"
+related = ["ntsb-org", "tsa-org", "icao-org", "administrator-def", "approved-def"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["certification", "airspace", "maintenance", "training-ops"]
+tags.flightRules = "na"
+tags.knowledgeKind = "reference"
+tags.certApplicability = ["cfi"]
+
+[[reference.sources]]
+sourceId = "usc"
+locator = { title = 49, section = 106 }
+url = "https://www.govinfo.gov/app/collection/uscode"
+
+[[reference]]
+id = "faf-nav"
+displayName = "FAF"
+aliases = ["Final Approach Fix"]
+paraphrase = """
+Fix marking the start of the final approach segment where descent to MDA/DA begins.
+
+The FAF defines the beginning of the final approach segment and the point where final segment descent may begin. On non-precision approaches, the FAF is identified by a Maltese cross on the profile view. On precision approaches, the glideslope intercept point typically serves as the FAF equivalent. CFIs must teach FAF identification for approach briefings."""
+reviewedAt = "2026-04-22"
+related = ["iap-ops", "mda-ops", "da-ops", "nopt-ops"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["navigation", "procedures"]
+tags.flightRules = "ifr"
+tags.knowledgeKind = "definition"
+tags.phaseOfFlight = ["descent", "approach"]
+tags.certApplicability = ["instrument", "commercial", "cfi", "cfii", "atp"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "ffs-training"
+displayName = "FFS"
+aliases = ["Full Flight Simulator"]
+paraphrase = """
+High-fidelity cockpit replica with motion, visuals, and full aircraft system simulation.
+
+An FFS is a replica of a specific aircraft cockpit with visual system, motion platform (at least 3-DOF), and full system simulation per Part 60 qualification standards. FFS time may substitute for aircraft time in many training and checking requirements. Levels range from A through D, with Level D being the highest fidelity."""
+reviewedAt = "2026-04-22"
+related = ["ftd-training", "fstd-training"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["training-ops"]
+tags.flightRules = "na"
+tags.knowledgeKind = "regulation"
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "2" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.2"
+
+[[reference]]
+id = "firc-reg"
+displayName = "FIRC"
+aliases = ["Flight Instructor Refresher Course"]
+paraphrase = """
+FAA-approved course for flight instructor certificate renewal.
+
+A FIRC is one method for renewing a flight instructor certificate under 14 CFR 61.197. The course must cover 16 hours of ground training on the 13 core topics specified in AC 61-83K Appendix A. Completion of a FIRC satisfies the renewal requirement for a 24-month period."""
+reviewedAt = "2026-04-22"
+related = ["wings-reg", "cfi-training", "reed-reg"]
+
+tags.sourceType = "ac"
+tags.aviationTopic = ["regulations", "certification", "training-ops"]
+tags.flightRules = "both"
+tags.knowledgeKind = "concept"
+tags.phaseOfFlight = ["cruise"]
+tags.certApplicability = ["cfi"]
+
+[[reference.sources]]
+sourceId = "ac-61-83k"
+locator = { document = "61-83K" }
+url = "https://www.faa.gov/regulations_policies/advisory_circulars/"
+
+[[reference]]
+id = "flap-extended-speed-def"
+displayName = "Flap extended speed"
+aliases = []
+paraphrase = """
+Maximum speed permissible with flaps in a given extended position.
+
+Flap extended speed is the highest speed permissible with wing flaps in a prescribed extended position. Exceeding this speed risks structural damage to flap components. On the airspeed indicator, the top of the white arc marks the maximum flap extended speed (Vfe)."""
+reviewedAt = "2026-04-22"
+related = ["vfe-aircraft", "vne-aircraft"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["aircraft-systems", "performance", "flight-instruments"]
+tags.flightRules = "both"
+tags.knowledgeKind = "definition"
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "flight-level-def"
+displayName = "Flight level"
+aliases = []
+paraphrase = """
+Altitude reference using standard pressure (29.92 inHg) -- stated in hundreds of feet.
+
+A flight level is a constant atmospheric pressure level referenced to 29.92 inHg, stated in three digits representing hundreds of feet. FL180 = 18,000 feet pressure altitude. Above FL180 (Class A airspace), all aircraft set altimeters to 29.92. CFIs must teach the transition altitude concept and altimetry procedures."""
+reviewedAt = "2026-04-22"
+related = ["msl-ops", "agl-ops"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["flight-instruments", "airspace", "procedures"]
+tags.flightRules = "ifr"
+tags.knowledgeKind = "definition"
+tags.certApplicability = ["instrument", "commercial", "cfi", "cfii", "atp"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "flight-plan-def"
+displayName = "Flight plan"
+aliases = []
+paraphrase = """
+Information about an intended flight filed with ATC, orally or in writing.
+
+A flight plan provides specified information about an intended flight, filed with ATC. IFR flight plans are mandatory for IFR operations. VFR flight plans are optional but recommended for search and rescue purposes. CFIs should teach both IFR and VFR flight plan filing, including ICAO format."""
+reviewedAt = "2026-04-22"
+related = ["ifr-ops", "vfr-ops", "alternate-airport-def"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["communications"]
+tags.flightRules = "ifr"
+tags.knowledgeKind = "definition"
+tags.phaseOfFlight = ["preflight"]
+tags.certApplicability = ["instrument", "commercial", "cfi", "cfii", "atp"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "flight-time-def"
+displayName = "Flight time"
+aliases = []
+paraphrase = """
+Time from when aircraft moves under its own power for flight until it stops after landing.
+
+Flight time commences when an aircraft moves under its own power for the purpose of flight and ends when it comes to rest after landing. For gliders without self-launch, it begins when towed for flight. This definition is critical for logging requirements -- flight time, not Hobbs time, determines currency and experience."""
+reviewedAt = "2026-04-22"
+related = ["pic-training"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["regulations"]
+tags.flightRules = "both"
+tags.knowledgeKind = "definition"
+tags.phaseOfFlight = ["landing"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "flight-time-training"
+displayName = "Flight time (logging)"
+aliases = []
+paraphrase = """
+Loggable time from aircraft movement under power for flight to rest after landing.
+
+Flight time for logging purposes begins when the aircraft moves under its own power for flight and ends when it comes to rest after landing. This determines what time a pilot may log and applies to total time, PIC, SIC, and instruction given/received. CFIs must teach proper logbook documentation per 14 CFR 61.51."""
+reviewedAt = "2026-04-22"
+related = ["pic-training", "sic-training", "time-in-service-training"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["training-ops", "maintenance"]
+tags.flightRules = "na"
+tags.knowledgeKind = "definition"
+tags.phaseOfFlight = ["landing"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "flight-visibility-wx"
+displayName = "Flight visibility"
+aliases = []
+paraphrase = """
+Forward horizontal distance at which objects can be seen from the cockpit in flight.
+
+Flight visibility is the average forward horizontal distance from the cockpit at which prominent unlighted objects can be seen by day and lighted objects by night. Flight visibility is what the pilot actually observes in flight and may differ from reported ground visibility. It determines whether VFR weather minimums are met."""
+reviewedAt = "2026-04-22"
+related = ["ground-visibility-wx", "rvr-ops"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["weather", "regulations"]
+tags.flightRules = "vfr"
+tags.knowledgeKind = "definition"
+tags.certApplicability = ["student", "private", "commercial", "cfi", "atp"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "flightcrew-member-def"
+displayName = "Flightcrew member"
+aliases = []
+paraphrase = """
+A pilot, flight engineer, or flight navigator assigned to flight duty.
+
+A flightcrew member is a pilot, flight engineer, or flight navigator assigned to duty in an aircraft during flight time. This is a subset of crewmember. The distinction matters for duty time limitations and rest requirements under Part 117, and for determining who may manipulate the controls."""
+reviewedAt = "2026-04-22"
+related = ["pic-training", "sic-training", "crewmember-def"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["aircraft-systems"]
+tags.flightRules = "both"
+tags.knowledgeKind = "definition"
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "fss-atc"
+displayName = "FSS"
+aliases = ["Flight Service Station"]
+paraphrase = """
+FAA facility providing pilot briefings, flight plans, and in-flight services.
+
+FSS specialists provide preflight weather briefings (standard, abbreviated, outlook), accept and activate flight plans, issue NOTAMs, and provide in-flight weather updates. Leidos Flight Service operates the automated FSS system. Pilots reach FSS on 122.2 MHz or via 1-800-WX-BRIEF."""
+reviewedAt = "2026-04-22"
+related = ["atis-atc"]
+
+tags.sourceType = "aim"
+tags.aviationTopic = ["communications", "weather"]
+tags.flightRules = "both"
+tags.knowledgeKind = "procedure"
+tags.phaseOfFlight = ["preflight"]
+
+[[reference.sources]]
+sourceId = "aim-current"
+locator = { chapter = 7, section = 1, paragraph = 2 }
+url = "https://www.faa.gov/air_traffic/publications/atpubs/aim_html/"
+
+[[reference]]
+id = "fstd-training"
+displayName = "FSTD"
+aliases = ["Flight Simulation Training Device"]
+paraphrase = """
+Umbrella term for full flight simulators and flight training devices.
+
+FSTD is the collective term for both full flight simulators (FFS) and flight training devices (FTD). All FSTDs must be qualified under Part 60 to be used for regulatory credit. CFIs should know what training tasks can be credited in each device level."""
+reviewedAt = "2026-04-22"
+related = ["ffs-training", "ftd-training"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["training-ops"]
+tags.flightRules = "na"
+tags.knowledgeKind = "regulation"
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "2" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.2"
+
+[[reference]]
+id = "ftd-training"
+displayName = "FTD"
+aliases = ["Flight Training Device"]
+paraphrase = """
+Cockpit replica without motion -- represents aircraft systems for training credit.
+
+An FTD is a replica of aircraft instruments, equipment, panels, and controls in an open or enclosed cockpit area, without motion. FTDs are qualified under Part 60 at levels 1 through 7. Aviation Training Devices (ATDs) are a related but separate category commonly used in GA training under 14 CFR 61.51(h)."""
+reviewedAt = "2026-04-22"
+related = ["ffs-training", "fstd-training"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["training-ops"]
+tags.flightRules = "na"
+tags.knowledgeKind = "regulation"
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "2" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.2"
+
+[[reference]]
+id = "glider-def"
+displayName = "Glider"
+aliases = []
+paraphrase = """
+Heavier-than-air aircraft supported by lift surfaces, not principally dependent on an engine.
+
+A glider is a heavier-than-air aircraft supported by dynamic air reaction against its lifting surfaces, whose free flight does not principally depend on an engine. Some gliders have sustainer engines but are still classified as gliders. Glider is a category for airman certification."""
+reviewedAt = "2026-04-22"
+related = ["airplane-def", "aircraft-def"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["aircraft-systems", "aerodynamics"]
+tags.flightRules = "both"
+tags.knowledgeKind = "definition"
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "gps-nav"
+displayName = "GPS"
+aliases = ["Global Positioning System"]
+paraphrase = """
+Satellite-based navigation system providing 3D position.
+
+GPS uses a constellation of satellites to provide position, velocity, and time information. In aviation, GPS enables RNAV approaches, en-route navigation, and moving map displays. TSO-C129/C196 certified receivers are required for IFR use. RAIM or WAAS augmentation ensures integrity."""
+reviewedAt = "2026-04-22"
+related = ["waas-nav", "raim-nav", "rnav-nav", "tso-aircraft", "rnp-nav", "pilotage-def", "synthetic-vision-def"]
+
+tags.sourceType = "aim"
+tags.aviationTopic = ["navigation", "aircraft-systems", "procedures"]
+tags.flightRules = "both"
+tags.knowledgeKind = "system"
+tags.phaseOfFlight = ["cruise", "approach"]
+tags.certApplicability = ["instrument", "commercial", "cfi", "cfii", "atp"]
+
+[[reference.sources]]
+sourceId = "aim-current"
+locator = { chapter = 1, section = 1, paragraph = 17 }
+url = "https://www.faa.gov/air_traffic/publications/atpubs/aim_html/"
+
+[[reference]]
+id = "ground-visibility-wx"
+displayName = "Ground visibility"
+aliases = []
+paraphrase = """
+Prevailing horizontal visibility near the surface as reported by NWS or accredited observer.
+
+Ground visibility is the prevailing horizontal visibility near the earth's surface as reported by the National Weather Service or an accredited observer. It appears in METARs and determines whether VFR operations are permitted at airports with reported weather. When ground visibility is not reported, flight visibility controls."""
+reviewedAt = "2026-04-22"
+related = ["flight-visibility-wx", "metar-wx", "rvr-ops"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["weather", "regulations"]
+tags.flightRules = "both"
+tags.knowledgeKind = "definition"
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "gs-nav"
+displayName = "GS"
+aliases = ["Glideslope"]
+paraphrase = """
+Vertical guidance component of an ILS approach.
+
+The glideslope provides vertical (up/down) guidance during an ILS approach, typically at a 3-degree descent angle. It operates on UHF frequencies paired with the localizer. Loss of glideslope signal requires the pilot to execute a missed approach or transition to a localizer-only approach."""
+reviewedAt = "2026-04-22"
+related = ["loc-nav", "ils-nav"]
+
+tags.sourceType = "aim"
+tags.aviationTopic = ["navigation", "procedures"]
+tags.flightRules = "ifr"
+tags.knowledgeKind = "procedure"
+tags.phaseOfFlight = ["descent", "approach", "missed"]
+tags.certApplicability = ["instrument", "commercial", "cfi", "cfii", "atp"]
+
+[[reference.sources]]
+sourceId = "aim-current"
+locator = { chapter = 1, section = 1, paragraph = 9 }
+url = "https://www.faa.gov/air_traffic/publications/atpubs/aim_html/"
+
+[[reference]]
+id = "helicopter-def"
+displayName = "Helicopter"
+aliases = []
+paraphrase = """
+A rotorcraft that depends principally on engine-driven rotors for horizontal motion.
+
+A helicopter is a rotorcraft whose horizontal motion depends principally on its engine-driven rotors. Helicopters are a class within the rotorcraft category. CFIs should understand helicopter classification for certificate and rating discussions, as rotorcraft-helicopter is a separate class rating."""
+reviewedAt = "2026-04-22"
+related = ["rotorcraft-def", "aircraft-def"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["aircraft-systems", "certification"]
+tags.flightRules = "both"
+tags.knowledgeKind = "definition"
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "hsi-nav"
+displayName = "HSI"
+aliases = ["Horizontal Situation Indicator"]
+paraphrase = """
+Combined heading and course deviation display.
+
+The HSI integrates a heading indicator with a CDI, showing the aircraft heading and course deviation on a single instrument. This eliminates the need for mental reverse-sensing when tracking VOR radials. Modern glass cockpits incorporate HSI functionality in the PFD."""
+reviewedAt = "2026-04-22"
+related = ["cdi-nav", "obs-nav", "pfd-aircraft"]
+
+tags.sourceType = "phak"
+tags.aviationTopic = ["navigation", "flight-instruments"]
+tags.flightRules = "ifr"
+tags.knowledgeKind = "concept"
+tags.certApplicability = ["instrument", "commercial", "cfi", "cfii", "atp"]
+
+[[reference.sources]]
+sourceId = "phak-current"
+locator = { chapter = 16 }
+url = "https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/phak"
+
+[[reference]]
+id = "iap-ops"
+displayName = "IAP"
+aliases = ["Instrument Approach Procedure"]
+paraphrase = """
+Published procedure for descent from en-route to landing under IFR.
+
+IAPs provide a series of predetermined maneuvers for orderly transfer from instrument flight to a landing, or to a point where a landing can be made visually. IAPs include initial, intermediate, final, and missed approach segments. Types include precision (ILS, GLS), non-precision (VOR, NDB, LOC), and RNAV (GPS) approaches."""
+reviewedAt = "2026-04-22"
+related = ["mda-ops", "da-ops", "ils-nav", "asr-atc", "par-atc", "efvs-nav", "faf-nav", "als-ops", "nopt-ops", "rvr-ops"]
+
+tags.sourceType = "aim"
+tags.aviationTopic = ["procedures", "navigation"]
+tags.flightRules = "ifr"
+tags.knowledgeKind = "procedure"
+tags.phaseOfFlight = ["cruise", "descent", "approach"]
+tags.certApplicability = ["instrument", "commercial", "cfi", "cfii", "atp"]
+
+[[reference.sources]]
+sourceId = "aim-current"
+locator = { chapter = 5, section = 4, paragraph = 1 }
+url = "https://www.faa.gov/air_traffic/publications/atpubs/aim_html/"
+
+[[reference]]
+id = "ias-aircraft"
+displayName = "IAS"
+aliases = ["Indicated Airspeed"]
+paraphrase = """
+Airspeed read directly from the pitot-static instrument, uncorrected for errors.
+
+IAS is the speed shown on the airspeed indicator, calibrated to standard atmosphere at sea level but uncorrected for instrument and position errors. It is the primary airspeed reference a pilot reads in the cockpit. The difference between IAS and CAS is typically small in normal flight attitudes."""
+reviewedAt = "2026-04-22"
+related = ["cas-aircraft", "tas-aircraft", "eas-aircraft", "calibrated-airspeed-def"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["aircraft-systems", "performance", "flight-instruments"]
+tags.flightRules = "both"
+tags.knowledgeKind = "regulation"
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "2" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.2"
+
+[[reference]]
+id = "icao-org"
+displayName = "ICAO"
+aliases = ["International Civil Aviation Organization"]
+paraphrase = """
+UN agency setting international aviation standards and procedures.
+
+ICAO establishes international standards and recommended practices (SARPs) for civil aviation. ICAO standards influence U.S. regulations and procedures, including the ICAO flight plan format, ICAO airport identifiers (4-letter codes), and ICAO phonetic alphabet. U.S. procedures generally align with ICAO standards with some differences documented in the AIM."""
+reviewedAt = "2026-04-22"
+related = ["faa-org"]
+
+tags.sourceType = "authored"
+tags.aviationTopic = ["regulations", "certification", "procedures"]
+tags.flightRules = "na"
+tags.knowledgeKind = "reference"
+
+[[reference.sources]]
+sourceId = "icao-annexes"
+locator = { reference = "ICAO Annexes" }
+url = "https://www.icao.int/"
+
+[[reference]]
+id = "ifr-conditions-wx"
+displayName = "IFR conditions"
+aliases = []
+paraphrase = """
+Weather below VFR minimums -- ceiling below 1,000 feet or visibility below 3 SM.
+
+IFR conditions exist when weather is below the minimum required for VFR flight. On aviation weather charts, IFR is depicted in red (ceiling below 1,000 feet and/or visibility below 3 SM). Flight in IFR conditions requires instrument rating, IFR-equipped aircraft, and IFR clearance."""
+reviewedAt = "2026-04-22"
+related = ["imc-wx", "mvfr-wx", "ceiling-wx", "ifr-ops"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["weather", "certification"]
+tags.flightRules = "ifr"
+tags.knowledgeKind = "definition"
+tags.phaseOfFlight = ["preflight"]
+tags.certApplicability = ["instrument", "commercial", "cfi", "cfii", "atp"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "ifr-ops"
+displayName = "IFR"
+aliases = ["Instrument Flight Rules"]
+paraphrase = """
+Rules governing flight by instrument reference in controlled airspace.
+
+IFR governs flight operations when weather is below VFR minimums or when operating in Class A airspace. IFR requires an instrument-rated pilot, properly equipped aircraft, an IFR flight plan, and ATC clearance. IFR flight provides positive separation from other IFR traffic through ATC."""
+reviewedAt = "2026-04-22"
+related = ["vfr-ops", "svfr-ops", "imc-wx", "air-traffic-clearance-def", "flight-plan-def", "positive-control-def", "alternate-airport-def", "vfr-over-the-top-def", "ifr-conditions-wx"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["regulations", "airspace", "certification", "weather"]
+tags.flightRules = "ifr"
+tags.knowledgeKind = "regulation"
+tags.phaseOfFlight = ["preflight"]
+tags.certApplicability = ["instrument", "commercial", "cfi", "cfii", "atp"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 91, section = "167" }
+url = "https://www.ecfr.gov/current/title-14/part-91#p-91.167"
+
+[[reference]]
+id = "ils-nav"
+displayName = "ILS"
+aliases = ["Instrument Landing System"]
+paraphrase = """
+Precision approach system providing lateral and vertical guidance.
+
+The ILS is a precision approach system consisting of a localizer (lateral guidance), glideslope (vertical guidance), outer marker, middle marker, and approach lighting. ILS approaches are categorized as CAT I, II, or III based on decision altitude and visibility minimums."""
+reviewedAt = "2026-04-22"
+related = ["loc-nav", "gs-nav", "par-atc", "dme-nav", "lpv-nav", "im-nav", "lda-nav", "mm-nav", "om-nav", "precision-approach-def", "iap-ops"]
+
+tags.sourceType = "aim"
+tags.aviationTopic = ["navigation", "weather"]
+tags.flightRules = "ifr"
+tags.knowledgeKind = "concept"
+tags.phaseOfFlight = ["approach"]
+tags.certApplicability = ["instrument", "commercial", "cfi", "cfii", "atp"]
+
+[[reference.sources]]
+sourceId = "aim-current"
+locator = { chapter = 1, section = 1, paragraph = 9 }
+url = "https://www.faa.gov/air_traffic/publications/atpubs/aim_html/"
+
+[[reference]]
+id = "im-nav"
+displayName = "IM"
+aliases = ["Inner Marker"]
+paraphrase = """
+ILS marker beacon at the decision height on CAT II approaches.
+
+The inner marker is located at the decision height point on CAT II ILS approaches. It transmits a pattern of dots that triggers a white light on the marker beacon receiver. Inner markers are rare in the U.S. and most general aviation pilots will not encounter them, but CFIs should know the ILS component set."""
+reviewedAt = "2026-04-22"
+related = ["mm-nav", "om-nav", "ils-nav"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["navigation"]
+tags.flightRules = "ifr"
+tags.knowledgeKind = "regulation"
+tags.phaseOfFlight = ["approach"]
+tags.certApplicability = ["instrument", "commercial", "cfi", "cfii", "atp"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "2" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.2"
+
+[[reference]]
+id = "imc-wx"
+displayName = "IMC"
+aliases = ["Instrument Meteorological Conditions"]
+paraphrase = """
+Weather conditions requiring flight by instrument reference.
+
+IMC exists when visibility is below 3 statute miles and/or ceilings are below 1,000 feet AGL. Flight in IMC requires an IFR flight plan, an instrument-rated pilot, and a properly equipped aircraft. Inadvertent IMC entry is a leading cause of VFR-into-IMC accidents."""
+reviewedAt = "2026-04-22"
+related = ["vmc-wx", "mvfr-wx", "ifr-ops", "ceiling-wx", "ifr-conditions-wx", "special-vfr-conditions-wx"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["weather"]
+tags.flightRules = "ifr"
+tags.knowledgeKind = "regulation"
+tags.phaseOfFlight = ["preflight"]
+tags.certApplicability = ["instrument", "commercial", "cfi", "cfii", "atp"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 91, section = "155" }
+url = "https://www.ecfr.gov/current/title-14/part-91#p-91.155"
+
+[[reference]]
+id = "imsafe-safety"
+displayName = "IMSAFE"
+aliases = []
+paraphrase = """
+Personal fitness checklist: Illness, Medication, Stress, Alcohol, Fatigue, Eating.
+
+IMSAFE is a personal fitness self-assessment checklist. Illness: am I sick? Medication: am I taking any medications? Stress: am I under psychological pressure? Alcohol: have I been drinking within the required timeframe? Fatigue: am I rested? Eating: have I eaten properly? Each factor can impair pilot performance."""
+reviewedAt = "2026-04-22"
+related = ["pave-safety", "adm-safety"]
+
+tags.sourceType = "phak"
+tags.aviationTopic = ["human-factors", "medical", "procedures"]
+tags.flightRules = "both"
+tags.knowledgeKind = "safety-concept"
+tags.phaseOfFlight = ["preflight"]
+
+[[reference.sources]]
+sourceId = "phak-current"
+locator = { chapter = 2 }
+url = "https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/phak"
+
+[[reference]]
+id = "large-aircraft-def"
+displayName = "Large aircraft"
+aliases = []
+paraphrase = """
+Aircraft over 12,500 pounds maximum certificated takeoff weight.
+
+Large aircraft are those exceeding 12,500 pounds MCTOW. The large/small distinction triggers additional regulations including wake turbulence separation requirements, operating limitations near airports, and equipment requirements. CFIs should understand wake turbulence categories for traffic pattern awareness."""
+reviewedAt = "2026-04-22"
+related = ["small-aircraft-def", "aircraft-def", "civil-aircraft-def"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["aircraft-systems", "certification", "weather"]
+tags.flightRules = "both"
+tags.knowledgeKind = "definition"
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "lda-nav"
+displayName = "LDA"
+aliases = ["Localizer-Type Directional Aid"]
+paraphrase = """
+Localizer not aligned with the runway -- provides lateral guidance with an offset course.
+
+An LDA provides localizer-quality lateral guidance but the course is not aligned with the runway centerline (typically offset more than 3 degrees). LDA approaches may have glideslope guidance. The offset requires a visual correction to the runway after reaching MDA/DA. CFIs should teach LDA approaches as a variation of localizer procedures."""
+reviewedAt = "2026-04-22"
+related = ["loc-nav", "ils-nav"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["navigation", "airports", "procedures"]
+tags.flightRules = "ifr"
+tags.knowledgeKind = "regulation"
+tags.phaseOfFlight = ["approach"]
+tags.certApplicability = ["instrument", "commercial", "cfi", "cfii", "atp"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "2" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.2"
+
+[[reference]]
+id = "light-sport-aircraft-def"
+displayName = "Light-sport aircraft"
+aliases = []
+paraphrase = """
+Aircraft meeting specific weight, speed, and configuration limits for sport pilot operations.
+
+An LSA is a fixed-wing aircraft with a max takeoff weight of 1,320 lbs (1,430 lbs for seaplanes), max airspeed of 120 knots CAS, max stall speed of 45 knots CAS, max 2 seats, single engine, fixed landing gear, fixed or ground-adjustable prop, and nonpressurized cabin. CFIs with sport pilot privileges must know these limits."""
+reviewedAt = "2026-04-22"
+related = ["small-aircraft-def", "airplane-def"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["aircraft-systems", "aerodynamics"]
+tags.flightRules = "both"
+tags.knowledgeKind = "definition"
+tags.phaseOfFlight = ["landing"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "load-factor-def"
+displayName = "Load factor"
+aliases = []
+paraphrase = """
+Ratio of total lift to aircraft weight -- expressed in G units.
+
+Load factor is the ratio of specified load to aircraft weight, expressed as G units. In level flight, load factor is 1G. In a 60-degree bank turn, load factor is 2G. Exceeding the aircraft category load limit (3.8G normal, 4.4G utility, 6G acrobatic) risks structural failure. CFIs must teach load factor awareness, especially in steep turns and turbulence."""
+reviewedAt = "2026-04-22"
+related = ["va-aircraft", "category-aircraft-def"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["aircraft-systems", "performance", "aerodynamics", "weather"]
+tags.flightRules = "both"
+tags.knowledgeKind = "definition"
+tags.phaseOfFlight = ["cruise"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "loc-nav"
+displayName = "LOC"
+aliases = ["Localizer"]
+paraphrase = """
+Lateral guidance component of an ILS approach.
+
+The localizer provides horizontal (left/right) guidance to the runway centerline during an ILS approach. It operates on frequencies between 108.10 and 111.95 MHz and has a typical course width of 3 to 6 degrees. A localizer-only approach (LOC approach) uses lateral guidance without the glideslope."""
+reviewedAt = "2026-04-22"
+related = ["gs-nav", "ils-nav", "lda-nav", "nonprecision-approach-def"]
+
+tags.sourceType = "aim"
+tags.aviationTopic = ["navigation", "airports"]
+tags.flightRules = "ifr"
+tags.knowledgeKind = "concept"
+tags.phaseOfFlight = ["approach"]
+tags.certApplicability = ["instrument", "commercial", "cfi", "cfii", "atp"]
+
+[[reference.sources]]
+sourceId = "aim-current"
+locator = { chapter = 1, section = 1, paragraph = 9 }
+url = "https://www.faa.gov/air_traffic/publications/atpubs/aim_html/"
+
+[[reference]]
+id = "loc-safety"
+displayName = "LOC-I"
+aliases = ["Loss of Control-Inflight"]
+paraphrase = """
+NTSB accident category for uncontrolled flight -- leading cause of GA fatalities.
+
+LOC-I encompasses accidents where the pilot fails to maintain or recover aircraft control, including stall/spin events, upset conditions, and VFR-into-IMC spatial disorientation. The GAJSC cited LOC as the number one cause of GA fatalities from 2012-2021. Prevention focuses on stall awareness, unusual attitude recovery, and angle-of-attack training."""
+reviewedAt = "2026-04-22"
+related = ["cfit-safety", "adm-safety"]
+
+tags.sourceType = "gajsc"
+tags.aviationTopic = ["human-factors", "aerodynamics", "emergencies", "medical"]
+tags.flightRules = "both"
+tags.knowledgeKind = "safety-concept"
+tags.phaseOfFlight = ["emergency"]
+
+[[reference.sources]]
+sourceId = "gajsc-current"
+locator = { reference = "GAJSC Safety Enhancements" }
+
+[[reference]]
+id = "lpv-nav"
+displayName = "LPV"
+aliases = ["Localizer Performance with Vertical Guidance"]
+paraphrase = """
+WAAS-based approach with ILS-like precision minimums.
+
+LPV is the highest precision level of RNAV GPS approaches. It requires WAAS and provides lateral and vertical guidance comparable to ILS CAT I. LPV minimums can be as low as 200 feet HAT and 1/2 mile visibility. The approach uses angular scaling like a localizer."""
+reviewedAt = "2026-04-22"
+related = ["waas-nav", "rnav-nav", "ils-nav"]
+
+tags.sourceType = "aim"
+tags.aviationTopic = ["navigation", "procedures", "weather"]
+tags.flightRules = "ifr"
+tags.knowledgeKind = "concept"
+tags.phaseOfFlight = ["approach"]
+tags.certApplicability = ["instrument", "commercial", "cfi", "cfii", "atp"]
+
+[[reference.sources]]
+sourceId = "aim-current"
+locator = { chapter = 1, section = 1, paragraph = 18 }
+url = "https://www.faa.gov/air_traffic/publications/atpubs/aim_html/"
+
+[[reference]]
+id = "mach-number-def"
+displayName = "Mach number"
+aliases = []
+paraphrase = """
+Ratio of true airspeed to the local speed of sound.
+
+Mach number is the ratio of TAS to the speed of sound at the current altitude and temperature. Mach 1.0 equals the speed of sound. Above FL250, airspeed limitations are often expressed as Mach numbers (Mmo). The speed of sound decreases with altitude, so a given Mach number represents a lower TAS at higher altitudes."""
+reviewedAt = "2026-04-22"
+related = ["tas-aircraft"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["aircraft-systems", "performance"]
+tags.flightRules = "both"
+tags.knowledgeKind = "definition"
+tags.phaseOfFlight = ["cruise"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "maintenance-def"
+displayName = "Maintenance"
+aliases = []
+paraphrase = """
+Inspection, overhaul, repair, preservation, and parts replacement -- excludes preventive maintenance.
+
+Maintenance includes inspection, overhaul, repair, preservation, and replacement of parts, but excludes preventive maintenance. Only certificated mechanics (A&P) or repair stations may perform maintenance. CFIs must teach the distinction between maintenance and preventive maintenance, as pilots may perform the latter under 14 CFR 43 Appendix A."""
+reviewedAt = "2026-04-22"
+related = ["preventive-maintenance-def", "major-alteration-def", "major-repair-def", "time-in-service-training"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["aircraft-systems", "maintenance", "certification"]
+tags.flightRules = "both"
+tags.knowledgeKind = "definition"
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "major-alteration-def"
+displayName = "Major alteration"
+aliases = []
+paraphrase = """
+Alteration that may affect airworthiness or requires complex work beyond accepted practices.
+
+A major alteration might appreciably affect weight, balance, structural strength, performance, powerplant operation, or flight characteristics, or cannot be done by elementary operations. Major alterations require FAA Form 337 and must be performed by appropriately rated mechanics or repair stations. CFIs should know this for maintenance record discussions."""
+reviewedAt = "2026-04-22"
+related = ["maintenance-def", "major-repair-def"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["aircraft-systems", "maintenance"]
+tags.flightRules = "both"
+tags.knowledgeKind = "definition"
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "major-repair-def"
+displayName = "Major repair"
+aliases = []
+paraphrase = """
+Repair that could affect airworthiness if improperly done, or requires complex work.
+
+A major repair, if improperly done, might appreciably affect weight, balance, structural strength, performance, or flight characteristics. Like major alterations, major repairs require FAA Form 337 and must be returned to service by an appropriately rated person. CFIs should understand the distinction for logbook review."""
+reviewedAt = "2026-04-22"
+related = ["maintenance-def", "major-alteration-def"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["aircraft-systems", "maintenance"]
+tags.flightRules = "both"
+tags.knowledgeKind = "definition"
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "manifold-pressure-def"
+displayName = "Manifold pressure"
+aliases = []
+paraphrase = """
+Absolute pressure in the engine induction system, measured in inches of mercury.
+
+Manifold pressure (MP) indicates the air pressure in the engine intake manifold and is a primary power indicator for constant-speed propeller aircraft. Higher MP means more power. CFIs teach MP management in conjunction with RPM for proper power settings to avoid over-boosting or detonation."""
+reviewedAt = "2026-04-22"
+related = ["brake-horsepower-def"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["aircraft-systems", "performance"]
+tags.flightRules = "both"
+tags.knowledgeKind = "definition"
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "mca-ops"
+displayName = "MCA"
+aliases = ["Minimum Crossing Altitude"]
+paraphrase = """
+Lowest altitude at which a fix must be crossed when proceeding to a higher MEA.
+
+MCA is the lowest altitude at certain fixes at which an aircraft must cross when transitioning to a higher minimum en route altitude. MCAs are established where terrain or obstacles require a climb before reaching the next segment. Shown on IFR charts with an X flag and altitude."""
+reviewedAt = "2026-04-22"
+related = ["mea-ops", "moca-ops", "mra-ops"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["navigation", "procedures", "regulations"]
+tags.flightRules = "ifr"
+tags.knowledgeKind = "limit"
+tags.phaseOfFlight = ["climb", "cruise"]
+tags.certApplicability = ["instrument", "commercial", "cfi", "cfii", "atp"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "2" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.2"
+
+[[reference]]
+id = "mda-ops"
+displayName = "MDA"
+aliases = ["Minimum Descent Altitude"]
+paraphrase = """
+Lowest altitude on a non-precision approach without required visual reference.
+
+MDA is the lowest altitude to which descent is authorized on a non-precision approach without the required visual references. Upon reaching MDA, the pilot levels off and continues to the missed approach point (MAP). If the runway environment is not in sight at the MAP, a missed approach is mandatory."""
+reviewedAt = "2026-04-22"
+related = ["da-ops", "dh-ops", "iap-ops", "faf-nav", "nonprecision-approach-def", "als-ops", "rvr-ops"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["procedures", "airports"]
+tags.flightRules = "ifr"
+tags.knowledgeKind = "limit"
+tags.phaseOfFlight = ["descent", "approach", "missed"]
+tags.certApplicability = ["instrument", "commercial", "cfi", "cfii", "atp"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 91, section = "175" }
+url = "https://www.ecfr.gov/current/title-14/part-91#p-91.175"
+
+[[reference]]
+id = "mea-ops"
+displayName = "MEA"
+aliases = ["Minimum En Route Altitude"]
+paraphrase = """
+Lowest published altitude on an airway ensuring navaid reception and obstacle clearance.
+
+MEA is the lowest published altitude between radio fixes that assures acceptable navigational signal coverage and meets obstacle clearance requirements. MEA guarantees 1,000 feet of obstacle clearance (2,000 feet in designated mountainous areas). CFIs teach MEA as the primary IFR altitude reference for en-route flight."""
+reviewedAt = "2026-04-22"
+related = ["moca-ops", "mca-ops", "mra-ops"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["navigation", "airspace", "regulations"]
+tags.flightRules = "ifr"
+tags.knowledgeKind = "limit"
+tags.phaseOfFlight = ["cruise"]
+tags.certApplicability = ["instrument", "commercial", "cfi", "cfii", "atp"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "2" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.2"
+
+[[reference]]
+id = "medical-certificate-def"
+displayName = "Medical certificate"
+aliases = []
+paraphrase = """
+FAA-prescribed evidence of physical fitness required for most pilot operations.
+
+A medical certificate is acceptable evidence of physical fitness on an FAA-prescribed form, issued by an Aviation Medical Examiner (AME). Three classes exist: First (airline), Second (commercial), Third (private). BasicMed is an alternative for certain operations. CFIs must hold at least a Third Class medical (or BasicMed) to exercise PIC privileges while instructing."""
+reviewedAt = "2026-04-22"
+related = ["cfi-training", "atp-training"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["regulations", "medical", "certification"]
+tags.flightRules = "both"
+tags.knowledgeKind = "definition"
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "mei-training"
+displayName = "MEI"
+aliases = ["Multi-Engine Instructor"]
+paraphrase = """
+CFI authorized to provide multi-engine flight instruction.
+
+An MEI is a flight instructor certified to provide instruction in multi-engine aircraft. The MEI rating requires demonstrating proficiency in multi-engine operations including engine failure procedures, Vmc demonstrations, and single-engine approaches."""
+reviewedAt = "2026-04-22"
+related = ["cfi-training", "cfii-training"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["training-ops", "aircraft-systems", "emergencies", "certification"]
+tags.flightRules = "na"
+tags.knowledgeKind = "regulation"
+tags.phaseOfFlight = ["approach", "emergency"]
+tags.certApplicability = ["cfi"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 61, section = "195" }
+url = "https://www.ecfr.gov/current/title-14/part-61#p-61.195"
+
+[[reference]]
+id = "mel-ops"
+displayName = "MEL"
+aliases = ["Minimum Equipment List"]
+paraphrase = """
+Operator-specific list of equipment that may be inoperative for dispatch.
+
+The MEL is an FAA-approved document that permits an aircraft to operate with certain equipment inoperative, subject to specific conditions and limitations. The MEL is derived from the Master Minimum Equipment List (MMEL) for the aircraft type. Most GA aircraft use 14 CFR 91.213(d) for inoperative equipment decisions instead of a formal MEL."""
+reviewedAt = "2026-04-22"
+related = ["afm-aircraft"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["maintenance", "regulations", "aircraft-systems"]
+tags.flightRules = "both"
+tags.knowledgeKind = "regulation"
+tags.phaseOfFlight = ["preflight"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "2" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.2"
+
+[[reference]]
+id = "metar-wx"
+displayName = "METAR"
+aliases = ["Meteorological Aerodrome Report"]
+paraphrase = """
+Routine hourly surface weather observation at an airport.
+
+METARs are issued at 55 minutes past each hour and include wind, visibility, weather phenomena, sky condition, temperature, dewpoint, and altimeter setting. Special observations (SPECI) are issued when significant changes occur between regular reports."""
+reviewedAt = "2026-04-22"
+related = ["taf-wx", "pirep-wx", "ceiling-wx", "ground-visibility-wx"]
+
+tags.sourceType = "aim"
+tags.aviationTopic = ["weather", "flight-instruments"]
+tags.flightRules = "both"
+tags.knowledgeKind = "concept"
+tags.phaseOfFlight = ["preflight"]
+
+[[reference.sources]]
+sourceId = "aim-current"
+locator = { chapter = 7, section = 1, paragraph = 30 }
+url = "https://www.faa.gov/air_traffic/publications/atpubs/aim_html/"
+
+[[reference]]
+id = "mfd-aircraft"
+displayName = "MFD"
+aliases = ["Multi-Function Display"]
+paraphrase = """
+Glass cockpit screen showing navigation, weather, and engine data.
+
+The MFD is the secondary display in a glass cockpit, typically showing a moving map, terrain awareness, weather radar or datalink weather, traffic, engine instruments, and system status. In reversionary mode, the MFD can display PFD information if the primary display fails."""
+reviewedAt = "2026-04-22"
+related = ["pfd-aircraft"]
+
+tags.sourceType = "phak"
+tags.aviationTopic = ["aircraft-systems", "flight-instruments", "weather"]
+tags.flightRules = "both"
+tags.knowledgeKind = "system"
+
+[[reference.sources]]
+sourceId = "phak-current"
+locator = { chapter = 8 }
+url = "https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/phak"
+
+[[reference]]
+id = "mm-nav"
+displayName = "MM"
+aliases = ["Middle Marker"]
+paraphrase = """
+ILS marker beacon approximately 3,500 feet from the runway threshold.
+
+The middle marker is located approximately at the CAT I decision height point, about 3,500 feet from the runway threshold. It transmits alternating dots and dashes, triggering an amber light on the marker beacon receiver. Many middle markers have been decommissioned but the concept appears on knowledge tests."""
+reviewedAt = "2026-04-22"
+related = ["om-nav", "im-nav", "ils-nav"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["navigation", "airports", "certification"]
+tags.flightRules = "ifr"
+tags.knowledgeKind = "regulation"
+tags.certApplicability = ["instrument", "commercial", "cfi", "cfii", "atp"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "2" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.2"
+
+[[reference]]
+id = "moca-ops"
+displayName = "MOCA"
+aliases = ["Minimum Obstruction Clearance Altitude"]
+paraphrase = """
+Lowest altitude providing obstacle clearance on an airway -- navaid reception within 22 NM only.
+
+MOCA ensures obstacle clearance for the full airway segment but only guarantees navaid reception within 22 NM of the facility. MOCA is shown on IFR charts with a T prefix. Flying at MOCA is legal but may result in lost navigation signal between VORs. CFIs teach MOCA as a terrain clearance backup when MEA cannot be maintained."""
+reviewedAt = "2026-04-22"
+related = ["mea-ops", "mca-ops", "mra-ops"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["navigation", "airspace", "regulations"]
+tags.flightRules = "ifr"
+tags.knowledgeKind = "limit"
+tags.phaseOfFlight = ["cruise"]
+tags.certApplicability = ["instrument", "commercial", "cfi", "cfii", "atp"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "2" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.2"
+
+[[reference]]
+id = "mra-ops"
+displayName = "MRA"
+aliases = ["Minimum Reception Altitude"]
+paraphrase = """
+Lowest altitude at which a navaid intersection can be reliably identified.
+
+MRA is the lowest altitude at which an intersection can be determined from off-course navaid signals. MRA is used where a cross-radial or DME is needed to identify a fix and the signal may not be receivable at lower altitudes. Less commonly encountered than MEA/MOCA but appears on IFR charts."""
+reviewedAt = "2026-04-22"
+related = ["mea-ops", "moca-ops", "mca-ops"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["navigation", "regulations"]
+tags.flightRules = "ifr"
+tags.knowledgeKind = "limit"
+tags.phaseOfFlight = ["cruise"]
+tags.certApplicability = ["instrument", "commercial", "cfi", "cfii", "atp"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "2" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.2"
+
+[[reference]]
+id = "msl-ops"
+displayName = "MSL"
+aliases = ["Mean Sea Level"]
+paraphrase = """
+Altitude measured from average sea level -- standard altimeter reference.
+
+MSL is the standard reference datum for altitudes in aviation. Indicated altitude on the altimeter reads MSL when the current altimeter setting is applied. Sectional charts show elevation in MSL. All published MEAs, MOCAs, and airway altitudes are MSL. Flight levels above 18,000 feet use standard pressure altitude."""
+reviewedAt = "2026-04-22"
+related = ["agl-ops", "standard-atmosphere-def", "flight-level-def"]
+
+tags.sourceType = "pcg"
+tags.aviationTopic = ["flight-instruments", "navigation"]
+tags.flightRules = "both"
+tags.knowledgeKind = "definition"
+
+[[reference.sources]]
+sourceId = "pcg-current"
+locator = { term = "MSL" }
+
+[[reference]]
+id = "mvfr-wx"
+displayName = "MVFR"
+aliases = ["Marginal Visual Flight Rules"]
+paraphrase = """
+Weather between VFR and IFR minimums -- ceiling 1,000-3,000 feet or visibility 3-5 SM.
+
+MVFR conditions indicate marginal weather where VFR flight is legal but requires increased vigilance. Ceiling is 1,000 to 3,000 feet AGL and/or visibility is 3 to 5 statute miles. MVFR is depicted as blue on aviation weather charts and should prompt careful go/no-go decision-making."""
+reviewedAt = "2026-04-22"
+related = ["imc-wx", "vmc-wx", "ifr-conditions-wx"]
+
+tags.sourceType = "aim"
+tags.aviationTopic = ["weather"]
+tags.flightRules = "ifr"
+tags.knowledgeKind = "concept"
+tags.phaseOfFlight = ["preflight"]
+tags.certApplicability = ["instrument", "commercial", "cfi", "cfii", "atp"]
+
+[[reference.sources]]
+sourceId = "aim-current"
+locator = { chapter = 7, section = 1, paragraph = 30 }
+url = "https://www.faa.gov/air_traffic/publications/atpubs/aim_html/"
+
+[[reference]]
+id = "navigable-airspace-def"
+displayName = "Navigable airspace"
+aliases = []
+paraphrase = """
+Airspace at and above minimum flight altitudes, including airspace needed for safe takeoff/landing.
+
+Navigable airspace includes all airspace at and above the minimum flight altitudes prescribed by regulations, plus airspace needed for safe takeoff and landing. This concept determines FAA jurisdiction and where federal aviation regulations apply."""
+reviewedAt = "2026-04-22"
+related = ["controlled-airspace-def"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["airspace"]
+tags.flightRules = "both"
+tags.knowledgeKind = "definition"
+tags.phaseOfFlight = ["landing"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "ndb-nav"
+displayName = "NDB"
+aliases = ["Non-Directional Beacon"]
+paraphrase = """
+Low-frequency radio beacon used with ADF for navigation.
+
+NDBs transmit on low/medium frequencies (190-535 kHz) and are received by the aircraft ADF (Automatic Direction Finder). NDB approaches are non-precision and require the pilot to interpret relative bearing. Most NDBs are being decommissioned in favor of GPS."""
+reviewedAt = "2026-04-22"
+related = ["vor-nav"]
+
+tags.sourceType = "aim"
+tags.aviationTopic = ["navigation"]
+tags.flightRules = "ifr"
+tags.knowledgeKind = "concept"
+tags.phaseOfFlight = ["approach"]
+tags.certApplicability = ["instrument", "commercial", "cfi", "cfii", "atp"]
+
+[[reference.sources]]
+sourceId = "aim-current"
+locator = { chapter = 1, section = 1, paragraph = 2 }
+url = "https://www.faa.gov/air_traffic/publications/atpubs/aim_html/"
+
+[[reference]]
+id = "night-def"
+displayName = "Night"
+aliases = []
+paraphrase = """
+Time between end of evening civil twilight and beginning of morning civil twilight.
+
+The FAA defines night as the time between the end of evening civil twilight and the beginning of morning civil twilight, per the Air Almanac. This definition differs from "one hour after sunset to one hour before sunrise" used for logging night flight and night currency. CFIs must teach both definitions and their different applications."""
+reviewedAt = "2026-04-22"
+related = []
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["regulations"]
+tags.flightRules = "both"
+tags.knowledgeKind = "definition"
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "nm-ops"
+displayName = "NM"
+aliases = ["Nautical Mile"]
+paraphrase = """
+Standard aviation distance unit: 6,076 feet, or one minute of latitude.
+
+A nautical mile equals 6,076 feet (1,852 meters) or approximately one minute of latitude. Nautical miles are the standard unit of distance in aviation and maritime navigation. One knot equals one nautical mile per hour. CFIs must ensure students understand the relationship between NM, SM (5,280 feet), and knots."""
+reviewedAt = "2026-04-22"
+related = []
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["regulations", "training-ops"]
+tags.flightRules = "both"
+tags.knowledgeKind = "regulation"
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "2" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.2"
+
+[[reference]]
+id = "nonprecision-approach-def"
+displayName = "Non-precision approach"
+aliases = []
+paraphrase = """
+Instrument approach with lateral guidance only -- no electronic glideslope.
+
+A non-precision approach provides lateral guidance but no electronic glideslope. Examples include VOR, NDB, LOC, and LNAV approaches. Pilots descend to a Minimum Descent Altitude (MDA) and fly level until the missed approach point. CFIs must teach dive-and-drive vs. stabilized descent techniques for non-precision approaches."""
+reviewedAt = "2026-04-22"
+related = ["precision-approach-def", "mda-ops", "vor-nav", "loc-nav"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["procedures", "navigation"]
+tags.flightRules = "ifr"
+tags.knowledgeKind = "definition"
+tags.phaseOfFlight = ["descent", "approach", "missed"]
+tags.certApplicability = ["instrument", "commercial", "cfi", "cfii", "atp"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "nopt-ops"
+displayName = "NOPT"
+aliases = ["No Procedure Turn Required"]
+paraphrase = """
+Chart notation indicating a procedure turn is not authorized from a given routing.
+
+NOPT indicates that a procedure turn is not required (and usually not authorized) when approaching from certain directions or routes. NOPT is shown when a radar vector, hold-in-lieu-of-PT, or direct feeder route provides course alignment. CFIs must teach students to identify when a procedure turn is expected vs. prohibited."""
+reviewedAt = "2026-04-22"
+related = ["iap-ops", "faf-nav"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["procedures", "training-ops"]
+tags.flightRules = "ifr"
+tags.knowledgeKind = "regulation"
+tags.phaseOfFlight = ["approach"]
+tags.certApplicability = ["instrument", "commercial", "cfi", "cfii", "atp"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "2" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.2"
+
+[[reference]]
+id = "ntsb-org"
+displayName = "NTSB"
+aliases = ["National Transportation Safety Board"]
+paraphrase = """
+Independent agency investigating transportation accidents and issuing safety recommendations.
+
+The NTSB investigates all civil aviation accidents in the United States and issues safety recommendations. The NTSB determines probable cause but has no regulatory authority -- it recommends actions to the FAA. NTSB Part 830 requires reporting of accidents and certain incidents. The NTSB also serves as the appellate body for FAA certificate actions."""
+reviewedAt = "2026-04-22"
+related = ["faa-org"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["certification"]
+tags.flightRules = "na"
+tags.knowledgeKind = "reference"
+
+[[reference.sources]]
+sourceId = "cfr-49"
+locator = { title = 49, part = 830 }
+
+[[reference]]
+id = "obs-nav"
+displayName = "OBS"
+aliases = ["Omnibearing Selector"]
+paraphrase = """
+Knob to select desired VOR radial for tracking.
+
+The OBS is the rotatable knob on a VOR indicator that sets the desired course or radial. Rotating the OBS changes the CDI reference. On GPS navigators, the OBS may be used to select a course to a waypoint. OBS mode suspends automatic waypoint sequencing."""
+reviewedAt = "2026-04-22"
+related = ["cdi-nav", "vor-nav", "hsi-nav"]
+
+tags.sourceType = "phak"
+tags.aviationTopic = ["navigation"]
+tags.flightRules = "ifr"
+tags.knowledgeKind = "concept"
+tags.certApplicability = ["instrument", "commercial", "cfi", "cfii", "atp"]
+
+[[reference.sources]]
+sourceId = "phak-current"
+locator = { chapter = 16 }
+url = "https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/phak"
+
+[[reference]]
+id = "om-nav"
+displayName = "OM"
+aliases = ["Outer Marker"]
+paraphrase = """
+ILS marker beacon located 4-7 NM from the runway on the final approach course.
+
+The outer marker is located on the localizer course approximately at the glideslope intercept altitude, 4-7 NM from the runway. It transmits continuous dashes, triggering a blue light on the marker beacon receiver. Many outer markers have been replaced by GPS fixes, but the concept is tested on knowledge exams."""
+reviewedAt = "2026-04-22"
+related = ["mm-nav", "im-nav", "ils-nav"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["navigation", "airports"]
+tags.flightRules = "ifr"
+tags.knowledgeKind = "regulation"
+tags.phaseOfFlight = ["approach"]
+tags.certApplicability = ["instrument", "commercial", "cfi", "cfii", "atp"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "2" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.2"
+
+[[reference]]
+id = "operate-def"
+displayName = "Operate"
+aliases = []
+paraphrase = """
+To use, cause to use, or authorize the use of an aircraft for air navigation.
+
+Per 14 CFR 1.1, "operate" means to use, cause to use, or authorize the use of aircraft for air navigation, with or without legal control. This broad definition means aircraft owners can be considered operators even if not flying. Understanding this definition matters for regulatory compliance and liability."""
+reviewedAt = "2026-04-22"
+related = ["pic-training"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["regulations"]
+tags.flightRules = "both"
+tags.knowledgeKind = "definition"
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "over-the-top-wx"
+displayName = "Over-the-top"
+aliases = []
+paraphrase = """
+Above the cloud layer or obscuring phenomena forming the ceiling.
+
+Over-the-top means above the layer of clouds or other obscuring phenomena forming the ceiling. Relevant to both VFR over-the-top (flying above a layer in VMC without IFR clearance) and IFR over-the-top (on IFR clearance, maintaining VFR conditions above clouds). CFIs should discuss the risks of being trapped above an undercast."""
+reviewedAt = "2026-04-22"
+related = ["ceiling-wx", "vfr-over-the-top-def"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["weather"]
+tags.flightRules = "ifr"
+tags.knowledgeKind = "definition"
+tags.certApplicability = ["instrument", "commercial", "cfi", "cfii", "atp"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "par-atc"
+displayName = "PAR"
+aliases = ["Precision Approach Radar"]
+paraphrase = """
+Radar providing azimuth, elevation, and range for GCA precision approaches.
+
+PAR provides azimuth, elevation, and range information for precision approaches at military and some civil airports. The controller talks the pilot down by giving heading and glidepath corrections. PAR approaches (GCA) have decision heights similar to ILS. CFIs should know PAR approaches exist, especially near military fields."""
+reviewedAt = "2026-04-22"
+related = ["asr-atc", "iap-ops", "ils-nav"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["communications"]
+tags.flightRules = "ifr"
+tags.knowledgeKind = "regulation"
+tags.phaseOfFlight = ["approach"]
+tags.certApplicability = ["instrument", "commercial", "cfi", "cfii", "atp"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "2" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.2"
+
+[[reference]]
+id = "pave-safety"
+displayName = "PAVE"
+aliases = []
+paraphrase = """
+Risk assessment checklist: Pilot, Aircraft, enVironment, External pressures.
+
+PAVE is a preflight risk assessment framework. Pilot: experience, currency, health, stress. Aircraft: equipment, performance, airworthiness. enVironment: weather, airports, airspace, terrain. External pressures: schedules, passengers, get-there-itis. Each element is evaluated for risk level before each flight."""
+reviewedAt = "2026-04-22"
+related = ["imsafe-safety", "three-p-safety", "adm-safety", "srm-safety"]
+
+tags.sourceType = "phak"
+tags.aviationTopic = ["human-factors", "airspace", "maintenance", "procedures"]
+tags.flightRules = "both"
+tags.knowledgeKind = "safety-concept"
+tags.phaseOfFlight = ["preflight"]
+
+[[reference.sources]]
+sourceId = "phak-current"
+locator = { chapter = 2 }
+url = "https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/phak"
+
+[[reference]]
+id = "pfd-aircraft"
+displayName = "PFD"
+aliases = ["Primary Flight Display"]
+paraphrase = """
+Glass cockpit screen showing attitude, airspeed, altitude, and heading.
+
+The PFD integrates traditional flight instruments (attitude indicator, airspeed, altimeter, heading, VSI, and turn coordinator) into a single electronic display. It typically also shows navigation data, flight director commands, and autopilot mode annunciations. PFD failure requires proficiency in partial-panel flying."""
+reviewedAt = "2026-04-22"
+related = ["mfd-aircraft", "ahrs-aircraft", "adi-aircraft", "hsi-nav"]
+
+tags.sourceType = "phak"
+tags.aviationTopic = ["aircraft-systems", "flight-instruments"]
+tags.flightRules = "both"
+tags.knowledgeKind = "system"
+
+[[reference.sources]]
+sourceId = "phak-current"
+locator = { chapter = 8 }
+url = "https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/phak"
+
+[[reference]]
+id = "pic-training"
+displayName = "PIC"
+aliases = ["Pilot in Command"]
+paraphrase = """
+The pilot directly responsible for and final authority on the flight.
+
+The PIC is the person who has final authority and responsibility for the operation and safety of the flight. The PIC may deviate from any rule to the extent required to meet an emergency. PIC time can only be logged when the pilot is the sole manipulator of the controls, sole occupant, or acting as PIC under 14 CFR 61.3."""
+reviewedAt = "2026-04-22"
+related = ["sic-training", "flight-time-def", "operate-def", "atp-training", "crewmember-def", "flightcrew-member-def", "flight-time-training"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["training-ops", "emergencies"]
+tags.flightRules = "na"
+tags.knowledgeKind = "definition"
+tags.phaseOfFlight = ["emergency"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "pilotage-def"
+displayName = "Pilotage"
+aliases = []
+paraphrase = """
+Navigation by visual reference to landmarks on the ground.
+
+Pilotage is the most basic form of navigation -- using visual reference to landmarks such as rivers, roads, towns, and terrain features to determine position and track a course. CFIs teach pilotage as a fundamental VFR skill, emphasizing chart reading, checkpoint selection, and situational awareness."""
+reviewedAt = "2026-04-22"
+related = ["vor-nav", "gps-nav"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["navigation", "human-factors"]
+tags.flightRules = "vfr"
+tags.knowledgeKind = "definition"
+tags.certApplicability = ["student", "private", "commercial", "cfi", "atp"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "pirep-wx"
+displayName = "PIREP"
+aliases = ["Pilot Report"]
+paraphrase = """
+In-flight weather observation reported by a pilot.
+
+PIREPs provide real-time weather conditions at altitude including turbulence intensity, icing type and severity, cloud tops/bases, and flight visibility. They are the only direct source of icing and turbulence information at altitude. PIREPs are categorized as routine (UA) or urgent (UUA)."""
+reviewedAt = "2026-04-22"
+related = ["metar-wx", "sigmet-wx", "airmet-wx"]
+
+tags.sourceType = "aim"
+tags.aviationTopic = ["weather", "communications"]
+tags.flightRules = "both"
+tags.knowledgeKind = "concept"
+tags.phaseOfFlight = ["cruise"]
+
+[[reference.sources]]
+sourceId = "aim-current"
+locator = { chapter = 7, section = 1, paragraph = 20 }
+url = "https://www.faa.gov/air_traffic/publications/atpubs/aim_html/"
+
+[[reference]]
+id = "positive-control-def"
+displayName = "Positive control"
+aliases = []
+paraphrase = """
+ATC control of all air traffic within designated airspace -- defines Class A.
+
+Positive control means ATC controls all air traffic within designated airspace. Class A airspace (FL180-FL600) is the primary example of positive control airspace. All operations in Class A require IFR clearance, IFR-equipped aircraft, and an instrument-rated pilot. No VFR flight is permitted."""
+reviewedAt = "2026-04-22"
+related = ["controlled-airspace-def", "ifr-ops"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["airspace", "communications"]
+tags.flightRules = "ifr"
+tags.knowledgeKind = "definition"
+tags.certApplicability = ["instrument", "commercial", "cfi", "cfii", "atp"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "precision-approach-def"
+displayName = "Precision approach"
+aliases = []
+paraphrase = """
+Instrument approach with electronic lateral and vertical guidance -- ILS, PAR, GLS.
+
+A precision approach procedure provides an electronic glideslope for vertical guidance in addition to lateral guidance. Examples include ILS and PAR. Precision approaches use Decision Altitude (DA) rather than MDA. CFIs must teach the distinction between precision and non-precision approaches for instrument training."""
+reviewedAt = "2026-04-22"
+related = ["nonprecision-approach-def", "ils-nav", "da-ops"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["procedures"]
+tags.flightRules = "ifr"
+tags.knowledgeKind = "definition"
+tags.phaseOfFlight = ["approach"]
+tags.certApplicability = ["instrument", "commercial", "cfi", "cfii", "atp"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "preventive-maintenance-def"
+displayName = "Preventive maintenance"
+aliases = []
+paraphrase = """
+Simple preservation and small parts replacement -- may be performed by certificated pilots.
+
+Preventive maintenance is limited to simple or minor preservation operations and replacement of small standard parts not involving complex assembly. Per 14 CFR 43.3(g), certificated pilots may perform preventive maintenance on aircraft they own or operate. The approved list is in 14 CFR 43 Appendix A."""
+reviewedAt = "2026-04-22"
+related = ["maintenance-def"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["aircraft-systems", "maintenance", "certification"]
+tags.flightRules = "both"
+tags.knowledgeKind = "definition"
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "propeller-def"
+displayName = "Propeller"
+aliases = []
+paraphrase = """
+Engine-driven rotating blades that produce thrust -- has separate maintenance records.
+
+A propeller is a device with blades on an engine-driven shaft that produces thrust by action on the air. It includes manufacturer-supplied control components but excludes main/auxiliary rotors. The propeller has its own logbook separate from airframe and engine. CFIs should understand propeller types (fixed-pitch, constant-speed, feathering) for performance discussions."""
+reviewedAt = "2026-04-22"
+related = ["aircraft-engine-def", "airframe-def"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["aircraft-systems", "maintenance"]
+tags.flightRules = "both"
+tags.knowledgeKind = "definition"
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "raim-nav"
+displayName = "RAIM"
+aliases = ["Receiver Autonomous Integrity Monitoring"]
+paraphrase = """
+GPS self-check ensuring signal integrity for IFR use.
+
+RAIM is a function within a GPS receiver that checks the consistency of satellite signals to detect position errors. RAIM requires a minimum of 5 visible satellites (6 for fault exclusion). Pilots must verify RAIM availability before GPS-based IFR departures and approaches."""
+reviewedAt = "2026-04-22"
+related = ["gps-nav", "waas-nav"]
+
+tags.sourceType = "aim"
+tags.aviationTopic = ["navigation"]
+tags.flightRules = "ifr"
+tags.knowledgeKind = "concept"
+tags.phaseOfFlight = ["preflight", "approach"]
+tags.certApplicability = ["instrument", "commercial", "cfi", "cfii", "atp"]
+
+[[reference.sources]]
+sourceId = "aim-current"
+locator = { chapter = 1, section = 1, paragraph = 17 }
+url = "https://www.faa.gov/air_traffic/publications/atpubs/aim_html/"
+
+[[reference]]
+id = "rating-def"
+displayName = "Rating"
+aliases = []
+paraphrase = """
+A statement on a certificate setting forth special conditions, privileges, or limitations.
+
+A rating is a certification statement that sets forth special conditions, privileges, or limitations. Examples include instrument rating, multi-engine rating, and type ratings. CFIs hold ratings that authorize instruction in specific categories/classes. Understanding the rating system is fundamental to CFI work."""
+reviewedAt = "2026-04-22"
+related = ["category-airman-def", "class-airman-def", "type-airman-def"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["regulations", "aircraft-systems", "certification", "training-ops"]
+tags.flightRules = "both"
+tags.knowledgeKind = "definition"
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "reed-reg"
+displayName = "REED"
+aliases = ["Renewal and Exchange Evaluation Data"]
+paraphrase = """
+System for tracking CFI renewal and FIRC completion records.
+
+REED is the FAA system used to process flight instructor certificate renewals. FIRC providers submit completion data through REED, which the FAA uses to verify eligibility and issue renewed certificates. The system tracks renewal dates, completion records, and certificate status."""
+reviewedAt = "2026-04-22"
+related = ["firc-reg"]
+
+tags.sourceType = "ac"
+tags.aviationTopic = ["regulations", "certification", "training-ops"]
+tags.flightRules = "both"
+tags.knowledgeKind = "concept"
+tags.phaseOfFlight = ["cruise"]
+tags.certApplicability = ["cfi"]
+
+[[reference.sources]]
+sourceId = "ac-61-83k"
+locator = { document = "61-83K" }
+url = "https://www.faa.gov/regulations_policies/advisory_circulars/"
+
+[[reference]]
+id = "reil-ops"
+displayName = "REIL"
+aliases = ["Runway End Identification Lights"]
+paraphrase = """
+Synchronized flashing lights at each side of the runway threshold for rapid identification.
+
+REILs are synchronized flashing lights installed at each end of a runway to provide rapid and positive identification of the runway threshold, especially useful at night or in reduced visibility. They help pilots distinguish the runway from surrounding terrain and are one of the visual references for approach minimums."""
+reviewedAt = "2026-04-22"
+related = ["als-ops"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["aerodynamics", "airports", "weather"]
+tags.flightRules = "both"
+tags.knowledgeKind = "regulation"
+tags.phaseOfFlight = ["approach"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "2" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.2"
+
+[[reference]]
+id = "rnav-nav"
+displayName = "RNAV"
+aliases = ["Area Navigation"]
+paraphrase = """
+Navigation permitting flight on any desired path.
+
+RNAV allows aircraft to fly point-to-point without tracking ground-based navaids. Modern RNAV uses GPS but the concept also includes DME/DME and INS methods. RNAV approaches are coded with GPS, LNAV, LNAV/VNAV, or LPV minimums depending on equipment."""
+reviewedAt = "2026-04-22"
+related = ["gps-nav", "rnp-nav", "lpv-nav", "ats-route-def"]
+
+tags.sourceType = "aim"
+tags.aviationTopic = ["navigation", "procedures"]
+tags.flightRules = "ifr"
+tags.knowledgeKind = "concept"
+tags.phaseOfFlight = ["approach"]
+tags.certApplicability = ["instrument", "commercial", "cfi", "cfii", "atp"]
+
+[[reference.sources]]
+sourceId = "aim-current"
+locator = { chapter = 1, section = 2, paragraph = 1 }
+url = "https://www.faa.gov/air_traffic/publications/atpubs/aim_html/"
+
+[[reference]]
+id = "rnp-nav"
+displayName = "RNP"
+aliases = ["Required Navigation Performance"]
+paraphrase = """
+RNAV with on-board performance monitoring and alerting.
+
+RNP adds performance monitoring and alerting to RNAV capability. RNP values (e.g., RNP 0.3) specify the required accuracy in nautical miles for 95% of flight time. RNP AR approaches allow curved paths and lower minimums at airports with terrain challenges."""
+reviewedAt = "2026-04-22"
+related = ["rnav-nav", "gps-nav"]
+
+tags.sourceType = "aim"
+tags.aviationTopic = ["navigation", "procedures"]
+tags.flightRules = "ifr"
+tags.knowledgeKind = "concept"
+tags.phaseOfFlight = ["approach"]
+tags.certApplicability = ["instrument", "commercial", "cfi", "cfii", "atp"]
+
+[[reference.sources]]
+sourceId = "aim-current"
+locator = { chapter = 1, section = 2, paragraph = 2 }
+url = "https://www.faa.gov/air_traffic/publications/atpubs/aim_html/"
+
+[[reference]]
+id = "rotorcraft-def"
+displayName = "Rotorcraft"
+aliases = []
+paraphrase = """
+Heavier-than-air aircraft supported principally by lift from one or more rotors.
+
+A rotorcraft depends principally on lift generated by one or more rotors for support in flight. Rotorcraft is a category that includes two classes: helicopter and gyroplane. Understanding rotorcraft as a separate category is important for certificate and rating discussions."""
+reviewedAt = "2026-04-22"
+related = ["helicopter-def", "airplane-def", "aircraft-def"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["aircraft-systems", "aerodynamics", "flight-instruments", "certification"]
+tags.flightRules = "both"
+tags.knowledgeKind = "definition"
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "rvr-ops"
+displayName = "RVR"
+aliases = ["Runway Visual Range"]
+paraphrase = """
+Instrumentally measured horizontal visibility along the runway in the touchdown zone.
+
+RVR is the horizontal distance a pilot can see down the runway from the approach end, measured by transmissometers in the touchdown zone. RVR is reported in hundreds of feet and is the controlling visibility for CAT II/III approaches and some CAT I approaches. When RVR is reported, it takes precedence over prevailing visibility for approach minimums."""
+reviewedAt = "2026-04-22"
+related = ["da-ops", "mda-ops", "iap-ops", "flight-visibility-wx", "ground-visibility-wx"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["procedures", "airports", "weather"]
+tags.flightRules = "ifr"
+tags.knowledgeKind = "regulation"
+tags.phaseOfFlight = ["approach", "landing"]
+tags.certApplicability = ["instrument", "commercial", "cfi", "cfii", "atp"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "2" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.2"
+
+[[reference]]
+id = "show-def"
+displayName = "Show"
+aliases = []
+paraphrase = """
+To demonstrate to the satisfaction of the Administrator -- the regulatory standard of proof.
+
+In FAA regulations, "show" means to demonstrate to the satisfaction of the Administrator. This is the standard of proof for compliance demonstrations, type certification testing, and exemption requests. The term establishes a subjective standard evaluated by FAA officials or designees."""
+reviewedAt = "2026-04-22"
+related = ["administrator-def", "approved-def"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["regulations"]
+tags.flightRules = "both"
+tags.knowledgeKind = "definition"
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "sic-training"
+displayName = "SIC"
+aliases = ["Second in Command"]
+paraphrase = """
+Pilot designated to assist the PIC during flight.
+
+The SIC is a qualified pilot who assists the PIC during flight operations. SIC is required when the aircraft type certificate requires two pilots or when operating under instrument flight rules in certain conditions. SIC time may be logged when serving as a required crewmember."""
+reviewedAt = "2026-04-22"
+related = ["pic-training", "crewmember-def", "flightcrew-member-def", "flight-time-training"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["training-ops", "certification"]
+tags.flightRules = "ifr"
+tags.knowledgeKind = "definition"
+tags.certApplicability = ["instrument", "commercial", "cfi", "cfii", "atp"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "sigmet-wx"
+displayName = "SIGMET"
+aliases = ["Significant Meteorological Information"]
+paraphrase = """
+Advisory for severe weather hazardous to all aircraft.
+
+SIGMETs warn of severe or extreme turbulence, severe icing, volcanic ash, and widespread dust/sandstorms. They apply to all aircraft and are issued for up to 4 hours (convective SIGMETs for 2 hours). Convective SIGMETs cover severe thunderstorms and tornadoes."""
+reviewedAt = "2026-04-22"
+related = ["airmet-wx", "pirep-wx"]
+
+tags.sourceType = "aim"
+tags.aviationTopic = ["weather", "emergencies"]
+tags.flightRules = "both"
+tags.knowledgeKind = "safety-concept"
+tags.phaseOfFlight = ["preflight", "cruise"]
+
+[[reference.sources]]
+sourceId = "aim-current"
+locator = { chapter = 7, section = 1, paragraph = 6 }
+url = "https://www.faa.gov/air_traffic/publications/atpubs/aim_html/"
+
+[[reference]]
+id = "small-aircraft-def"
+displayName = "Small aircraft"
+aliases = []
+paraphrase = """
+Aircraft of 12,500 pounds or less maximum certificated takeoff weight.
+
+Small aircraft are those at or below 12,500 pounds MCTOW. Most general aviation aircraft fall into this category. The small/large distinction affects wake turbulence separation, equipment requirements, and certain operating rules."""
+reviewedAt = "2026-04-22"
+related = ["large-aircraft-def", "aircraft-def", "civil-aircraft-def", "light-sport-aircraft-def"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["aircraft-systems", "certification", "weather"]
+tags.flightRules = "both"
+tags.knowledgeKind = "definition"
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "special-vfr-conditions-wx"
+displayName = "Special VFR conditions"
+aliases = []
+paraphrase = """
+Weather below basic VFR minimums in controlled airspace where some VFR flight is permitted.
+
+Special VFR conditions exist when weather is below basic VFR minimums within controlled airspace. Aircraft may operate under SVFR with ATC clearance, requiring at least 1 SM visibility and clear of clouds. At night, SVFR requires instrument rating and IFR equipment. CFIs should teach SVFR as an ADM decision point."""
+reviewedAt = "2026-04-22"
+related = ["svfr-ops", "imc-wx", "vmc-wx"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["weather", "airspace", "certification", "human-factors"]
+tags.flightRules = "ifr"
+tags.knowledgeKind = "definition"
+tags.certApplicability = ["instrument", "commercial", "cfi", "cfii", "atp"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "srm-safety"
+displayName = "SRM"
+aliases = ["Single-Pilot Resource Management"]
+paraphrase = """
+CRM concepts adapted for single-pilot operations.
+
+SRM adapts CRM principles for single-pilot GA operations. It emphasizes task management, automation management, situational awareness, and controlled flight into terrain avoidance. SRM recognizes that single pilots must manage all resources (ATC, passengers, automation, checklists) without crew support."""
+reviewedAt = "2026-04-22"
+related = ["crm-safety", "adm-safety", "pave-safety"]
+
+tags.sourceType = "phak"
+tags.aviationTopic = ["human-factors", "procedures"]
+tags.flightRules = "both"
+tags.knowledgeKind = "safety-concept"
+
+[[reference.sources]]
+sourceId = "phak-current"
+locator = { chapter = 2 }
+url = "https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/phak"
+
+[[reference]]
+id = "standard-atmosphere-def"
+displayName = "Standard atmosphere"
+aliases = []
+paraphrase = """
+Reference atmosphere: 29.92 inHg, 15 degrees C at sea level, lapse rate 2 degrees C per 1,000 ft.
+
+The standard atmosphere (ISA) is defined as 29.92 inches of mercury and 15 degrees C at sea level, with a temperature lapse rate of approximately 2 degrees C per 1,000 feet. All aircraft performance data is based on standard atmosphere. Nonstandard conditions require performance corrections -- a critical CFI teaching point."""
+reviewedAt = "2026-04-22"
+related = ["calibrated-airspeed-def", "msl-ops", "agl-ops"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["aircraft-systems", "performance", "certification", "training-ops"]
+tags.flightRules = "both"
+tags.knowledgeKind = "definition"
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "svfr-ops"
+displayName = "SVFR"
+aliases = ["Special VFR"]
+paraphrase = """
+ATC clearance to operate VFR in controlled airspace below VMC.
+
+Special VFR allows VFR operations within Class B/C/D/E surface areas when weather is below standard VFR minimums but at least 1 SM visibility and clear of clouds. SVFR must be requested by the pilot and approved by ATC. At night, SVFR requires an instrument rating and IFR-equipped aircraft."""
+reviewedAt = "2026-04-22"
+related = ["vfr-ops", "ifr-ops", "special-vfr-conditions-wx"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["regulations", "airspace", "certification", "weather"]
+tags.flightRules = "ifr"
+tags.knowledgeKind = "regulation"
+tags.certApplicability = ["instrument", "commercial", "cfi", "cfii", "atp"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 91, section = "157" }
+url = "https://www.ecfr.gov/current/title-14/part-91#p-91.157"
+
+[[reference]]
+id = "synthetic-vision-def"
+displayName = "Synthetic vision"
+aliases = []
+paraphrase = """
+Computer-generated terrain display derived from GPS position and terrain database.
+
+Synthetic vision generates a computer image of external terrain topography from the flight deck perspective, using aircraft attitude, navigation solution, and terrain/obstacle databases. Unlike EFVS, synthetic vision does not use real-time sensors. SVS improves situational awareness but is advisory only -- it is not approved for reduced approach minimums."""
+reviewedAt = "2026-04-22"
+related = ["efvs-nav", "gps-nav"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["navigation", "human-factors"]
+tags.flightRules = "both"
+tags.knowledgeKind = "definition"
+tags.phaseOfFlight = ["approach"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "tacan-nav"
+displayName = "TACAN"
+aliases = ["Tactical Air Navigation"]
+paraphrase = """
+Military UHF navigation aid providing bearing and distance -- civil aircraft use distance only.
+
+TACAN is a UHF military navigation system providing both azimuth and distance information. Civil aircraft can receive the distance (DME) component but not the azimuth. A VORTAC is a co-located VOR and TACAN, giving both civil and military users full bearing and distance capability."""
+reviewedAt = "2026-04-22"
+related = ["vor-nav", "dme-nav", "vortac-nav"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["navigation"]
+tags.flightRules = "ifr"
+tags.knowledgeKind = "regulation"
+tags.certApplicability = ["instrument", "commercial", "cfi", "cfii", "atp"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "2" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.2"
+
+[[reference]]
+id = "taf-wx"
+displayName = "TAF"
+aliases = ["Terminal Aerodrome Forecast"]
+paraphrase = """
+Weather forecast for a 5 NM radius around an airport.
+
+TAFs are issued four times daily and forecast conditions for 24 or 30 hours. They include expected wind, visibility, weather, and sky conditions with change groups (FM, TEMPO, PROB) indicating timing and probability of weather changes."""
+reviewedAt = "2026-04-22"
+related = ["metar-wx"]
+
+tags.sourceType = "aim"
+tags.aviationTopic = ["weather", "airports"]
+tags.flightRules = "both"
+tags.knowledgeKind = "concept"
+tags.phaseOfFlight = ["preflight"]
+
+[[reference.sources]]
+sourceId = "aim-current"
+locator = { chapter = 7, section = 1, paragraph = 31 }
+url = "https://www.faa.gov/air_traffic/publications/atpubs/aim_html/"
+
+[[reference]]
+id = "tas-aircraft"
+displayName = "TAS"
+aliases = ["True Airspeed"]
+paraphrase = """
+Actual speed of aircraft through undisturbed air -- used for flight planning.
+
+TAS is the aircraft speed relative to undisturbed air. TAS equals EAS corrected for air density at altitude. TAS increases with altitude for a given IAS because air density decreases. CFIs use TAS for flight planning, wind correction, and calculating ground speed."""
+reviewedAt = "2026-04-22"
+related = ["cas-aircraft", "ias-aircraft", "eas-aircraft", "mach-number-def", "calibrated-airspeed-def"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["aircraft-systems", "performance"]
+tags.flightRules = "both"
+tags.knowledgeKind = "regulation"
+tags.phaseOfFlight = ["preflight", "cruise"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "2" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.2"
+
+[[reference]]
+id = "tcas-aircraft"
+displayName = "TCAS"
+aliases = ["Traffic Alert and Collision Avoidance System"]
+paraphrase = """
+Airborne system that detects nearby transponder-equipped aircraft and issues alerts.
+
+TCAS interrogates nearby transponders to detect traffic conflicts. TCAS I provides traffic advisories (TAs). TCAS II adds resolution advisories (RAs) with vertical guidance. Required on aircraft with more than 30 seats or turbine-powered aircraft with more than 19 seats. CFIs should understand TCAS for situational awareness training."""
+reviewedAt = "2026-04-22"
+related = []
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["aircraft-systems", "human-factors"]
+tags.flightRules = "both"
+tags.knowledgeKind = "regulation"
+tags.phaseOfFlight = ["cruise"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "2" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.2"
+
+[[reference]]
+id = "tfr-atc"
+displayName = "TFR"
+aliases = ["Temporary Flight Restriction"]
+paraphrase = """
+Temporary restricted airspace issued via NOTAM.
+
+TFRs restrict flight operations in a defined area for a specific time period. Common reasons include VIP movement (presidential), disaster relief, sporting events, space launches, and wildfire suppression. Violating a TFR can result in pilot deviation, interception, certificate action, and civil penalties."""
+reviewedAt = "2026-04-22"
+related = ["controlled-airspace-def"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["communications", "airspace", "emergencies", "certification"]
+tags.flightRules = "both"
+tags.knowledgeKind = "regulation"
+tags.phaseOfFlight = ["preflight"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 91, section = "137" }
+url = "https://www.ecfr.gov/current/title-14/part-91#p-91.137"
+
+[[reference]]
+id = "three-p-safety"
+displayName = "3P"
+aliases = []
+paraphrase = """
+Continuous risk management model: Perceive, Process, Perform.
+
+The 3P model (Perceive, Process, Perform) is a continuous risk management framework. Perceive: identify hazards using PAVE. Process: evaluate risk level of each hazard using a risk matrix. Perform: take action to mitigate unacceptable risks. The cycle repeats throughout the flight as conditions change."""
+reviewedAt = "2026-04-22"
+related = ["pave-safety", "adm-safety"]
+
+tags.sourceType = "phak"
+tags.aviationTopic = ["human-factors"]
+tags.flightRules = "both"
+tags.knowledgeKind = "safety-concept"
+
+[[reference.sources]]
+sourceId = "phak-current"
+locator = { chapter = 2 }
+url = "https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/phak"
+
+[[reference]]
+id = "time-in-service-training"
+displayName = "Time in service"
+aliases = []
+paraphrase = """
+For maintenance records: from when the aircraft leaves the surface until it next touches down.
+
+Time in service for maintenance records begins when the aircraft leaves the surface of the earth and ends when it touches at the next point of landing. This differs from flight time (which starts at first movement under power). Time in service determines when inspections and overhauls are due."""
+reviewedAt = "2026-04-22"
+related = ["maintenance-def", "flight-time-training"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["training-ops", "maintenance"]
+tags.flightRules = "na"
+tags.knowledgeKind = "definition"
+tags.phaseOfFlight = ["landing"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "tracon-atc"
+displayName = "TRACON"
+aliases = ["Terminal Radar Approach Control"]
+paraphrase = """
+ATC facility handling traffic in terminal airspace around airports.
+
+TRACON controls IFR and participating VFR aircraft in the terminal area, typically from the surface to 10,000 feet within a 30-50 NM radius of major airports. TRACON provides approach and departure sequencing, vectoring, and traffic separation using radar."""
+reviewedAt = "2026-04-22"
+related = ["artcc-atc", "air-traffic-control-def", "asr-atc", "atc-abbrev"]
+
+tags.sourceType = "aim"
+tags.aviationTopic = ["communications", "airspace"]
+tags.flightRules = "ifr"
+tags.knowledgeKind = "concept"
+tags.phaseOfFlight = ["approach"]
+tags.certApplicability = ["instrument", "commercial", "cfi", "cfii", "atp"]
+
+[[reference.sources]]
+sourceId = "aim-current"
+locator = { chapter = 4, section = 1, paragraph = 15 }
+url = "https://www.faa.gov/air_traffic/publications/atpubs/aim_html/"
+
+[[reference]]
+id = "traffic-pattern-def"
+displayName = "Traffic pattern"
+aliases = []
+paraphrase = """
+Prescribed traffic flow for aircraft landing, taxiing, and taking off at an airport.
+
+The traffic pattern is the prescribed flow of traffic for aircraft operating at an airport. Standard patterns are left-hand turns. Pattern includes upwind, crosswind, downwind, base, and final legs. Standard altitude is typically 1,000 feet AGL. CFIs must teach proper pattern entry, speed, and communication procedures."""
+reviewedAt = "2026-04-22"
+related = ["airport-def", "ctaf-atc"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["certification", "procedures"]
+tags.flightRules = "vfr"
+tags.knowledgeKind = "definition"
+tags.phaseOfFlight = ["landing"]
+tags.certApplicability = ["student", "private", "commercial", "cfi", "atp"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "tsa-org"
+displayName = "TSA"
+aliases = ["Transportation Security Administration"]
+paraphrase = """
+Agency responsible for flight training security requirements.
+
+The TSA has a role in flight training under 49 CFR 1552. Flight instructors must verify citizenship or TSA approval before providing instruction to non-U.S. citizens. TSA-approved flight training security programs require background checks, recordkeeping (5-year retention), and security awareness training."""
+reviewedAt = "2026-04-22"
+related = ["faa-org"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["certification", "training-ops"]
+tags.flightRules = "na"
+tags.knowledgeKind = "reference"
+
+[[reference.sources]]
+sourceId = "cfr-49"
+locator = { title = 49, part = 1552 }
+
+[[reference]]
+id = "tso-aircraft"
+displayName = "TSO"
+aliases = ["Technical Standard Order"]
+paraphrase = """
+FAA minimum performance standard for aircraft materials, parts, and appliances.
+
+A TSO is a minimum performance standard for specified materials, parts, and appliances used on civil aircraft. TSO authorization means the FAA has found the article meets the minimum standard. Common TSOs include C129/C196 for GPS receivers. CFIs reference TSO requirements when discussing IFR equipment."""
+reviewedAt = "2026-04-22"
+related = ["gps-nav"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["aircraft-systems", "navigation"]
+tags.flightRules = "ifr"
+tags.knowledgeKind = "regulation"
+tags.certApplicability = ["instrument", "commercial", "cfi", "cfii", "atp"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "2" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.2"
+
+[[reference]]
+id = "type-airman-def"
+displayName = "Type (airman)"
+aliases = []
+paraphrase = """
+Specific make and model of aircraft requiring a type rating: large, turbojet, or designated.
+
+In airman certification, type designates a specific make and basic model of aircraft. Type ratings are required for aircraft over 12,500 lbs MCTOW, turbojet-powered aircraft, or other aircraft designated by the Administrator. Examples: B737, CE-500. CFIs should understand type rating requirements for career-track students."""
+reviewedAt = "2026-04-22"
+related = ["category-airman-def", "class-airman-def", "rating-def"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["aircraft-systems", "certification", "training-ops"]
+tags.flightRules = "both"
+tags.knowledgeKind = "definition"
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "unicom-atc"
+displayName = "UNICOM"
+aliases = []
+paraphrase = """
+Non-government advisory radio station at an airport.
+
+UNICOM is a non-government communication facility providing airport advisory information such as wind, runway in use, and traffic. At non-towered airports, the UNICOM frequency often serves as the CTAF. Common UNICOM frequencies are 122.7, 122.725, 122.8, and 123.0 MHz."""
+reviewedAt = "2026-04-22"
+related = ["ctaf-atc"]
+
+tags.sourceType = "aim"
+tags.aviationTopic = ["communications", "airports"]
+tags.flightRules = "vfr"
+tags.knowledgeKind = "concept"
+tags.phaseOfFlight = ["cruise"]
+tags.certApplicability = ["student", "private", "commercial", "cfi", "atp"]
+
+[[reference.sources]]
+sourceId = "aim-current"
+locator = { chapter = 4, section = 1, paragraph = 11 }
+url = "https://www.faa.gov/air_traffic/publications/atpubs/aim_html/"
+
+[[reference]]
+id = "va-aircraft"
+displayName = "Va"
+aliases = []
+paraphrase = """
+Maneuvering speed -- maximum speed for full control deflection.
+
+Va is the speed below which the aircraft will stall before exceeding its structural load limits during abrupt control inputs. Va decreases as weight decreases because a lighter aircraft reaches its load limit at a lower speed. Va is not marked on the airspeed indicator."""
+reviewedAt = "2026-04-22"
+related = ["vne-aircraft", "vx-aircraft", "vy-aircraft", "load-factor-def", "vno-aircraft"]
+
+tags.sourceType = "phak"
+tags.aviationTopic = ["aircraft-systems", "performance", "aerodynamics", "flight-instruments"]
+tags.flightRules = "both"
+tags.knowledgeKind = "limit"
+
+[[reference.sources]]
+sourceId = "phak-current"
+locator = { chapter = 5 }
+url = "https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/phak"
+
+[[reference]]
+id = "vfe-aircraft"
+displayName = "Vfe"
+aliases = []
+paraphrase = """
+Maximum flap extended speed -- top of white arc on airspeed indicator.
+
+Vfe is the maximum speed permissible with flaps fully extended. It marks the upper limit of the white arc on the airspeed indicator. Exceeding Vfe with flaps deployed risks structural damage to the flap mechanism. CFIs must teach students to check airspeed before deploying flaps."""
+reviewedAt = "2026-04-22"
+related = ["vne-aircraft", "vno-aircraft", "flap-extended-speed-def", "vle-aircraft"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["aircraft-systems", "performance", "aerodynamics", "flight-instruments"]
+tags.flightRules = "both"
+tags.knowledgeKind = "limit"
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "2" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.2"
+
+[[reference]]
+id = "vfr-ops"
+displayName = "VFR"
+aliases = ["Visual Flight Rules"]
+paraphrase = """
+Rules governing flight by visual reference to the ground and horizon.
+
+VFR governs flight operations when weather conditions meet or exceed VMC minimums for the applicable airspace class. VFR pilots are responsible for see-and-avoid traffic separation. VFR weather minimums vary by airspace class and altitude, with the most restrictive being Class B (3 SM visibility, clear of clouds)."""
+reviewedAt = "2026-04-22"
+related = ["ifr-ops", "svfr-ops", "vmc-wx", "flight-plan-def", "vfr-over-the-top-def"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["regulations", "airspace", "weather"]
+tags.flightRules = "vfr"
+tags.knowledgeKind = "regulation"
+tags.certApplicability = ["student", "private", "commercial", "cfi", "atp"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 91, section = "155" }
+url = "https://www.ecfr.gov/current/title-14/part-91#p-91.155"
+
+[[reference]]
+id = "vfr-over-the-top-def"
+displayName = "VFR over-the-top"
+aliases = []
+paraphrase = """
+VFR flight above a cloud layer without an IFR flight plan.
+
+VFR over-the-top is operating above a cloud layer under VFR when not on an IFR flight plan. The pilot must maintain VFR cloud clearance and visibility above the layer. This is legal but risky -- if the layer thickens or destination is below clouds, the pilot may be trapped on top. CFIs should discuss this as an ADM topic."""
+reviewedAt = "2026-04-22"
+related = ["vfr-ops", "ifr-ops", "adm-safety", "over-the-top-wx"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["regulations", "certification", "human-factors", "weather"]
+tags.flightRules = "vfr"
+tags.knowledgeKind = "definition"
+tags.phaseOfFlight = ["preflight"]
+tags.certApplicability = ["student", "private", "commercial", "cfi", "atp"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "1" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.1"
+
+[[reference]]
+id = "vle-aircraft"
+displayName = "Vle"
+aliases = []
+paraphrase = """
+Maximum speed with landing gear extended.
+
+Vle is the maximum speed at which the aircraft can be safely flown with the landing gear extended. It is higher than Vlo on retractable gear aircraft. Exceeding Vle with gear down creates excessive drag and risks gear door damage."""
+reviewedAt = "2026-04-22"
+related = ["vlo-aircraft", "vfe-aircraft"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["aircraft-systems", "performance", "aerodynamics", "procedures"]
+tags.flightRules = "both"
+tags.knowledgeKind = "limit"
+tags.phaseOfFlight = ["landing"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "2" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.2"
+
+[[reference]]
+id = "vlo-aircraft"
+displayName = "Vlo"
+aliases = []
+paraphrase = """
+Maximum speed for extending or retracting landing gear.
+
+Vlo is the maximum speed at which the landing gear can be safely extended or retracted. It is typically lower than Vle because the gear doors and mechanism are most vulnerable during the transition. CFIs teach Vlo awareness for retractable-gear training."""
+reviewedAt = "2026-04-22"
+related = ["vle-aircraft"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["aircraft-systems", "performance", "aerodynamics"]
+tags.flightRules = "both"
+tags.knowledgeKind = "limit"
+tags.phaseOfFlight = ["landing"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "2" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.2"
+
+[[reference]]
+id = "vmc-wx"
+displayName = "VMC"
+aliases = ["Visual Meteorological Conditions"]
+paraphrase = """
+Weather conditions permitting flight by visual reference.
+
+VMC exists when visibility and cloud clearance meet or exceed VFR minimums for the airspace class. In Class G below 1,200 feet AGL during the day, VMC requires 1 SM visibility and clear of clouds. VMC does not guarantee safe visual flight -- haze, glare, and reduced contrast can impair vision."""
+reviewedAt = "2026-04-22"
+related = ["imc-wx", "mvfr-wx", "vfr-ops", "ceiling-wx", "special-vfr-conditions-wx"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["weather", "airspace"]
+tags.flightRules = "vfr"
+tags.knowledgeKind = "regulation"
+tags.certApplicability = ["student", "private", "commercial", "cfi", "atp"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 91, section = "155" }
+url = "https://www.ecfr.gov/current/title-14/part-91#p-91.155"
+
+[[reference]]
+id = "vne-aircraft"
+displayName = "Vne"
+aliases = []
+paraphrase = """
+Never-exceed speed -- maximum speed in any operation.
+
+Vne is marked by a red line on the airspeed indicator and represents the maximum speed the aircraft may be operated under any circumstances. Exceeding Vne risks structural failure, flutter, or loss of control. Vne is a fixed value set during type certification."""
+reviewedAt = "2026-04-22"
+related = ["va-aircraft", "flap-extended-speed-def", "vfe-aircraft", "vno-aircraft"]
+
+tags.sourceType = "phak"
+tags.aviationTopic = ["aircraft-systems", "performance", "aerodynamics", "flight-instruments"]
+tags.flightRules = "both"
+tags.knowledgeKind = "limit"
+
+[[reference.sources]]
+sourceId = "phak-current"
+locator = { chapter = 5 }
+url = "https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/phak"
+
+[[reference]]
+id = "vno-aircraft"
+displayName = "Vno"
+aliases = []
+paraphrase = """
+Maximum structural cruising speed -- top of green arc on airspeed indicator.
+
+Vno is the maximum speed for normal operations. It marks the boundary between the green and yellow arcs on the airspeed indicator. Flight above Vno is permitted only in smooth air and with caution. Exceeding Vno in turbulence risks structural overload. CFIs teach this as the upper speed limit for routine flight."""
+reviewedAt = "2026-04-22"
+related = ["vne-aircraft", "va-aircraft", "vfe-aircraft"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["aircraft-systems", "performance", "aerodynamics", "flight-instruments"]
+tags.flightRules = "both"
+tags.knowledgeKind = "limit"
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "2" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.2"
+
+[[reference]]
+id = "vor-nav"
+displayName = "VOR"
+aliases = ["VHF Omnidirectional Range"]
+paraphrase = """
+Ground-based radio navigation aid providing bearing information.
+
+VOR stations transmit on VHF frequencies (108.0-117.95 MHz) and provide 360 radials for course guidance. Pilots select a radial using the OBS and track it with the CDI. VORs are being decommissioned as GPS becomes primary, but a minimum operational network (MON) is maintained as backup."""
+reviewedAt = "2026-04-22"
+related = ["obs-nav", "cdi-nav", "dme-nav", "ndb-nav", "ats-route-def", "pilotage-def", "nonprecision-approach-def", "tacan-nav", "vortac-nav"]
+
+tags.sourceType = "aim"
+tags.aviationTopic = ["navigation", "aircraft-systems"]
+tags.flightRules = "ifr"
+tags.knowledgeKind = "system"
+tags.phaseOfFlight = ["cruise"]
+tags.certApplicability = ["instrument", "commercial", "cfi", "cfii", "atp"]
+
+[[reference.sources]]
+sourceId = "aim-current"
+locator = { chapter = 1, section = 1, paragraph = 3 }
+url = "https://www.faa.gov/air_traffic/publications/atpubs/aim_html/"
+
+[[reference]]
+id = "vortac-nav"
+displayName = "VORTAC"
+aliases = []
+paraphrase = """
+Co-located VOR and TACAN providing bearing and distance to civil and military aircraft.
+
+A VORTAC combines a VOR (civil azimuth) with a TACAN (military azimuth and DME). Civil pilots get VOR bearing plus DME distance from the same facility. VORTACs are the most common type of VOR installation. On sectional charts, VORTAC symbols appear as a hexagon with three dots."""
+reviewedAt = "2026-04-22"
+related = ["vor-nav", "tacan-nav", "dme-nav"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["navigation", "aerodynamics"]
+tags.flightRules = "ifr"
+tags.knowledgeKind = "regulation"
+tags.certApplicability = ["instrument", "commercial", "cfi", "cfii", "atp"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "2" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.2"
+
+[[reference]]
+id = "vr-aircraft"
+displayName = "Vr"
+aliases = []
+paraphrase = """
+Rotation speed -- the speed at which the pilot begins to raise the nose for liftoff.
+
+Vr is the speed during takeoff at which the pilot begins to apply back pressure to rotate the aircraft to the takeoff attitude. In multi-engine aircraft, Vr must allow achieving V2 by 35 feet AGL. CFIs teaching multi-engine students must emphasize Vr in the context of the takeoff decision speed (V1)."""
+reviewedAt = "2026-04-22"
+related = ["vx-aircraft", "vy-aircraft"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["aircraft-systems", "performance", "aerodynamics", "training-ops"]
+tags.flightRules = "both"
+tags.knowledgeKind = "limit"
+tags.phaseOfFlight = ["takeoff"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "2" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.2"
+
+[[reference]]
+id = "vref-aircraft"
+displayName = "Vref"
+aliases = []
+paraphrase = """
+Reference landing speed -- typically 1.3 Vso for the landing configuration.
+
+Vref is the reference speed for landing, defined as the speed at which the aircraft crosses the 50-foot point on approach in the landing configuration. For most GA aircraft, approach speed is calculated as 1.3 times Vso. CFIs teach Vref management as critical for safe landings -- too slow risks stall, too fast causes floating and long landings."""
+reviewedAt = "2026-04-22"
+related = ["vso-aircraft", "vs1-aircraft"]
+
+tags.sourceType = "cfr"
+tags.aviationTopic = ["aircraft-systems", "performance", "aerodynamics"]
+tags.flightRules = "both"
+tags.knowledgeKind = "limit"
+tags.phaseOfFlight = ["approach", "landing"]
+
+[[reference.sources]]
+sourceId = "cfr-14"
+locator = { title = 14, part = 1, section = "2" }
+url = "https://www.ecfr.gov/current/title-14/part-1#p-1.2"
+
+[[reference]]
+id = "vs1-aircraft"
+displayName = "Vs1"
+aliases = []
+paraphrase = """
+Stall speed in clean configuration (flaps up, gear up).
+
+Vs1 is the stall speed or minimum steady flight speed with the aircraft in a specified clean configuration. It defines the lower limit of the green arc on the airspeed indicator. The difference between Vs1 and Vso shows the effect of flaps on stall speed."""
+reviewedAt = "2026-04-22"
+related = ["vso-aircraft", "vref-aircraft"]
+
+tags.sourceType = "phak"
+tags.aviationTopic = ["aircraft-systems", "performance", "aerodynamics", "flight-instruments"]
+tags.flightRules = "both"
+tags.knowledgeKind = "limit"
+tags.phaseOfFlight = ["landing"]
+
+[[reference.sources]]
+sourceId = "phak-current"
+locator = { chapter = 5 }
+url = "https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/phak"
+
+[[reference]]
+id = "vso-aircraft"
+displayName = "Vso"
+aliases = []
+paraphrase = """
+Stall speed in landing configuration (full flaps, gear down).
+
+Vso is the stall speed or minimum steady flight speed with the aircraft in landing configuration. It defines the lower limit of the white arc on the airspeed indicator. Vso increases with weight and bank angle. It is used to calculate approach speeds (typically 1.3 Vso)."""
+reviewedAt = "2026-04-22"
+related = ["vs1-aircraft", "vref-aircraft"]
+
+tags.sourceType = "phak"
+tags.aviationTopic = ["aircraft-systems", "performance", "aerodynamics", "flight-instruments"]
+tags.flightRules = "both"
+tags.knowledgeKind = "limit"
+tags.phaseOfFlight = ["approach", "landing"]
+
+[[reference.sources]]
+sourceId = "phak-current"
+locator = { chapter = 5 }
+url = "https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/phak"
+
+[[reference]]
+id = "vx-aircraft"
+displayName = "Vx"
+aliases = []
+paraphrase = """
+Best angle-of-climb speed -- maximum altitude gain per distance.
+
+Vx produces the greatest altitude gain per unit of horizontal distance. Used for obstacle clearance after takeoff. Vx is slower than Vy and decreases with altitude. At the absolute ceiling, Vx and Vy converge. Flying below Vx risks operating on the back side of the power curve."""
+reviewedAt = "2026-04-22"
+related = ["vy-aircraft", "va-aircraft", "vr-aircraft"]
+
+tags.sourceType = "phak"
+tags.aviationTopic = ["aircraft-systems", "performance", "aerodynamics", "certification"]
+tags.flightRules = "both"
+tags.knowledgeKind = "limit"
+tags.phaseOfFlight = ["climb"]
+
+[[reference.sources]]
+sourceId = "phak-current"
+locator = { chapter = 11 }
+url = "https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/phak"
+
+[[reference]]
+id = "vy-aircraft"
+displayName = "Vy"
+aliases = []
+paraphrase = """
+Best rate-of-climb speed -- maximum altitude gain per time.
+
+Vy produces the greatest altitude gain per unit of time. Used for normal climbs to cruise altitude when obstacle clearance is not a concern. Vy is faster than Vx and also decreases with altitude. At the absolute ceiling, Vy converges with Vx."""
+reviewedAt = "2026-04-22"
+related = ["vx-aircraft", "va-aircraft", "vr-aircraft"]
+
+tags.sourceType = "phak"
+tags.aviationTopic = ["aircraft-systems", "performance", "aerodynamics", "weather"]
+tags.flightRules = "both"
+tags.knowledgeKind = "limit"
+tags.phaseOfFlight = ["climb", "cruise"]
+
+[[reference.sources]]
+sourceId = "phak-current"
+locator = { chapter = 11 }
+url = "https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/phak"
+
+[[reference]]
+id = "waas-nav"
+displayName = "WAAS"
+aliases = ["Wide Area Augmentation System"]
+paraphrase = """
+GPS augmentation providing precision approach capability.
+
+WAAS improves GPS accuracy from meters to sub-meter using a network of ground reference stations and geostationary satellites. WAAS-equipped aircraft can fly LPV approaches with minimums comparable to ILS CAT I. WAAS eliminates the need for RAIM checks."""
+reviewedAt = "2026-04-22"
+related = ["gps-nav", "raim-nav", "lpv-nav"]
+
+tags.sourceType = "aim"
+tags.aviationTopic = ["navigation"]
+tags.flightRules = "ifr"
+tags.knowledgeKind = "concept"
+tags.phaseOfFlight = ["approach"]
+tags.certApplicability = ["instrument", "commercial", "cfi", "cfii", "atp"]
+
+[[reference.sources]]
+sourceId = "aim-current"
+locator = { chapter = 1, section = 1, paragraph = 18 }
+url = "https://www.faa.gov/air_traffic/publications/atpubs/aim_html/"
+
+[[reference]]
+id = "wings-reg"
+displayName = "WINGS"
+aliases = []
+paraphrase = """
+FAA pilot proficiency program with three achievement levels.
+
+The WINGS Pilot Proficiency Program offers structured proficiency training at Basic, Advanced, and Master levels. Completing a phase of WINGS satisfies the flight review requirement under 14 CFR 61.56. The program encourages ongoing training beyond minimum requirements and rewards participation."""
+reviewedAt = "2026-04-22"
+related = ["firc-reg"]
+
+tags.sourceType = "faa-safety"
+tags.aviationTopic = ["regulations"]
+tags.flightRules = "both"
+tags.knowledgeKind = "concept"
+
+[[reference.sources]]
+sourceId = "faa-safety-current"
+locator = { reference = "FAASTeam.gov" }

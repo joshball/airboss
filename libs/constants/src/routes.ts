@@ -147,4 +147,14 @@ export const ROUTES = {
 	// its own host (hangar.airboss.test), so these paths are relative to that
 	// origin. Role-gated to AUTHOR | OPERATOR | ADMIN.
 	HANGAR_HOME: '/',
+	HANGAR_GLOSSARY: '/glossary',
+	HANGAR_GLOSSARY_NEW: '/glossary/new',
+	HANGAR_GLOSSARY_DETAIL: (id: string) => `/glossary/${encodeURIComponent(id)}` as const,
+	HANGAR_GLOSSARY_SOURCES: '/glossary/sources',
+	HANGAR_GLOSSARY_SOURCES_NEW: '/glossary/sources/new',
+	HANGAR_GLOSSARY_SOURCES_DETAIL: (id: string) => `/glossary/sources/${encodeURIComponent(id)}` as const,
+	HANGAR_JOBS: '/jobs',
+	HANGAR_JOB_DETAIL: (id: string) => `/jobs/${encodeURIComponent(id)}` as const,
+	/** Form-action id for the sync-all-pending button. */
+	HANGAR_SYNC_ACTION: '?/syncAll',
 } as const;

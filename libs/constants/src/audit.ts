@@ -17,6 +17,14 @@ export const AUDIT_TARGETS = {
 	 * as later work packages land.
 	 */
 	HANGAR_PING: 'hangar.ping',
+	/** Reference-registry edits in hangar (create / update / delete). */
+	HANGAR_REFERENCE: 'hangar.reference',
+	/** Source-registry edits in hangar. */
+	HANGAR_SOURCE: 'hangar.source',
+	/** Sync-to-disk events (the glossary/sources TOML commit flow). */
+	HANGAR_SYNC: 'hangar.sync',
+	/** Lifecycle events on a `hangar.job` row (enqueue, start, complete, fail). */
+	HANGAR_JOB: 'hangar.job',
 } as const;
 
 export type AuditTarget = (typeof AUDIT_TARGETS)[keyof typeof AUDIT_TARGETS];

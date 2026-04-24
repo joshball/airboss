@@ -1,5 +1,8 @@
 {
 	"name": "@ab/aviation",
 	"private": true,
-	"type": "module"
+	"type": "module",
+	"dependencies": {
+		"smol-toml": "^1.6.1"
+	}
 }

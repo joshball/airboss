@@ -13,11 +13,15 @@
  *   One append-only row per tracked mutation.
  * - `STUDY`: home of the study BC tables (cards, reviews, scenarios, plans,
  *   sessions, knowledge graph).
+ * - `HANGAR`: home of the hangar BC tables -- runtime mirror of the TOML
+ *   content registry (reference, source), the job queue + log, and the
+ *   sync-to-disk ledger. See `libs/db/src/hangar.ts`.
  */
 export const SCHEMAS = {
 	IDENTITY: 'identity',
 	AUDIT: 'audit',
 	STUDY: 'study',
+	HANGAR: 'hangar',
 } as const;
 
 export type SchemaName = (typeof SCHEMAS)[keyof typeof SCHEMAS];
