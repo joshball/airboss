@@ -26,6 +26,8 @@ import {
 	DEFAULT_USER_TIMEZONE,
 	DOMAIN_VALUES,
 	type Domain,
+	MS_PER_DAY,
+	MS_PER_WEEK,
 	QUERY_PARAMS,
 	RELEVANCE_PRIORITIES,
 	RESUME_WINDOW_MS,
@@ -228,7 +230,7 @@ async function fetchCardCandidates(userId: string, now: Date, db: Db): Promise<E
 		// divide-by-zero for unreviewed cards. For learning-state cards with
 		// short scheduled intervals (e.g. 15 minutes), use the real interval
 		// so their overdue-ness registers properly in the Continue slice.
-		const scheduledMs = lastReviewedAt === null ? 24 * 60 * 60 * 1000 : Math.max(1, dueAtMs - lastReviewedAt);
+		const scheduledMs = lastReviewedAt === null ? MS_PER_DAY : Math.max(1, dueAtMs - lastReviewedAt);
 		const overdueMs = Math.max(0, now.getTime() - dueAtMs);
 		const overdueRatio = overdueMs / scheduledMs;
 		return {
@@ -246,7 +248,7 @@ async function fetchCardCandidates(userId: string, now: Date, db: Db): Promise<E
 
 /** Rep candidates + last-5 accuracy for the engine. */
 async function fetchRepCandidates(userId: string, now: Date, db: Db): Promise<EngineRepCandidate[]> {
-	const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+	const sevenDaysAgo = new Date(now.getTime() - MS_PER_WEEK);
 
 	const scenarios = await db
 		.select()
@@ -434,7 +436,7 @@ async function fetchNodeCandidates(
 }
 
 async function fetchDomainFrequency(userId: string, now: Date, db: Db): Promise<Record<string, number>> {
-	const thirtyAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+	const thirtyAgo = new Date(now.getTime() - 30 * MS_PER_DAY);
 	const [reviewRows, attemptRows] = await Promise.all([
 		db
 			.select({ domain: card.domain, n: sql<number>`count(*)::int` })
@@ -465,7 +467,7 @@ async function fetchDomainFrequency(userId: string, now: Date, db: Db): Promise<
 }
 
 async function fetchActiveDomainsLast7(userId: string, now: Date, db: Db): Promise<Domain[]> {
-	const sevenAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+	const sevenAgo = new Date(now.getTime() - MS_PER_WEEK);
 	const [reviewRows, attemptRows] = await Promise.all([
 		db
 			.selectDistinct({ domain: card.domain })
@@ -1035,7 +1037,7 @@ export async function getStreakDays(
 	// Streak can't exceed ~366 consecutive days; bounding the row scan keeps
 	// this O(window) instead of O(history) regardless of user age. Chosen
 	// window matches dashboard.ts extendedStreak's 366-day lookback.
-	const lookbackStart = new Date(now.getTime() - 366 * 24 * 60 * 60 * 1000);
+	const lookbackStart = new Date(now.getTime() - 366 * MS_PER_DAY);
 
 	// SQL-side day bucketing in the user's timezone. Drizzle's sql``
 	// fragment keeps the tz and the completed_at column inside a single
@@ -1067,7 +1069,7 @@ export async function getStreakDays(
 		day: '2-digit',
 	});
 	const todayKey = fmt.format(now); // 'YYYY-MM-DD' in en-CA.
-	const yesterdayKey = fmt.format(new Date(now.getTime() - 24 * 60 * 60 * 1000));
+	const yesterdayKey = fmt.format(new Date(now.getTime() - MS_PER_DAY));
 
 	const days = dayRows.map((r) => r.day);
 
@@ -1207,7 +1209,7 @@ export async function getSessionSummary(
 	// each other, so batch them in a single Promise.all to cut the load-path
 	// round-trips from three sequential hits to one parallel fan-out.
 	const suggestedNext: SessionSuggestedAction[] = [];
-	const tomorrow = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+	const tomorrow = new Date(now.getTime() + MS_PER_DAY);
 	const nodeStarts = sirRows.filter((r) => r.itemKind === SESSION_ITEM_KINDS.NODE_START && r.nodeId && r.completedAt);
 	const firstNodeId = nodeStarts[0]?.nodeId ?? null;
 	const wantRelearning = sess.mode === SESSION_MODES.CONTINUE || sess.mode === SESSION_MODES.EXPAND;

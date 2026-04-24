@@ -25,6 +25,7 @@ import {
 	type DepthPreference,
 	type Domain,
 	MODE_WEIGHTS,
+	MS_PER_WEEK,
 	RELEVANCE_PRIORITIES,
 	REVIEW_RATINGS,
 	type RelevancePriority,
@@ -251,7 +252,7 @@ function scoreContinueCard(card: EngineCardCandidate, filters: EnginePoolFilters
 	// Last session == index 0, second-to-last == index 1. Earlier = lower weight.
 	const domainRecencyWeight = lastIdx === 0 ? 1.0 : 0.5;
 	const dueMs = Math.max(0, now.getTime() - card.dueAt.getTime());
-	const dueUrgency = Math.min(1, dueMs / (7 * 24 * 60 * 60 * 1000)) + Math.min(1, card.overdueRatio);
+	const dueUrgency = Math.min(1, dueMs / MS_PER_WEEK) + Math.min(1, card.overdueRatio);
 	return domainRecencyWeight * 0.6 + Math.min(1, dueUrgency) * 0.4;
 }
 

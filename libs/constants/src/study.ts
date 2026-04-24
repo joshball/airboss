@@ -7,6 +7,7 @@
  */
 
 import { CERT_APPLICABILITIES } from './reference-tags';
+import { MS_PER_DAY, MS_PER_HOUR } from './time';
 
 /**
  * Platform default for "what timezone is the user in?" Used for day-boundary
@@ -60,19 +61,36 @@ export const DOMAIN_LABELS: Record<Domain, string> = {
 };
 
 /**
- * Typed lookup for a domain's display label. Use this instead of reinventing
- * `function domainLabel(slug)` in every consumer (reviewers flagged 20+
- * duplicates across the study routes, most of them doing
- * `(DOMAIN_LABELS as Record<string, string>)[slug] ?? humanize(slug)`).
+ * Typed lookup for a domain's display label. Accepts an arbitrary slug
+ * string (for server-provided values that aren't already narrowed) and
+ * falls back to a title-cased version of the slug on a miss so the UI
+ * never renders a raw kebab-case value.
  *
- * The fallback path (`humanize`) is the caller's responsibility when the
- * input is untrusted -- this helper is typed and will only accept a real
- * `Domain`. For untrusted input, first run it through
- * `narrow(raw, DOMAIN_VALUES)` from `@ab/utils`, then pass the narrowed
- * value through here.
+ * Reviewers flagged 20+ duplicates across the study routes, most of them
+ * doing `(DOMAIN_LABELS as Record<string, string>)[slug] ?? humanize(slug)`.
+ * This helper collapses all of those to one call site.
  */
-export function domainLabel(domain: Domain): string {
-	return DOMAIN_LABELS[domain];
+export function domainLabel(domain: Domain | string): string {
+	const known = (DOMAIN_LABELS as Record<string, string>)[domain];
+	if (known) return known;
+	return humanize(domain);
+}
+
+/**
+ * Inline humanize so `@ab/constants` stays dependency-free (`@ab/utils`
+ * already imports `@ab/constants`, so an import the other way would create
+ * a cycle). Mirrors `libs/utils/src/strings.ts humanize()` behaviour:
+ * splits camelCase/PascalCase boundaries, then kebab/snake separators,
+ * title-cases each word, preserves all-caps acronyms.
+ */
+function humanize(slug: string): string {
+	if (!slug) return '';
+	const withBoundaries = slug.replace(/([a-z0-9])([A-Z])/g, '$1 $2').replace(/([A-Z]+)([A-Z][a-z])/g, '$1 $2');
+	return withBoundaries
+		.split(/[\s\-_]+/)
+		.filter((w) => w.length > 0)
+		.map((w) => (w === w.toUpperCase() ? w : w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()))
+		.join(' ');
 }
 
 /**
@@ -176,7 +194,7 @@ export const ACTIVITY_WINDOW_DAYS = 7;
  * been past its `dueAt` longer than this. 2 days matches the spec's "missed
  * review" threshold for weak-areas ranking.
  */
-export const OVERDUE_GRACE_MS = 2 * 24 * 60 * 60 * 1000;
+export const OVERDUE_GRACE_MS = 2 * MS_PER_DAY;
 
 export const CARD_TYPES = {
 	BASIC: 'basic',
@@ -885,7 +903,7 @@ export const MAX_SESSION_LENGTH = 50;
  * How long an abandoned in-progress session remains resumable before the
  * `/session/start` flow offers a fresh preview instead. 2h from the spec.
  */
-export const RESUME_WINDOW_MS = 2 * 60 * 60 * 1000;
+export const RESUME_WINDOW_MS = 2 * MS_PER_HOUR;
 
 export const SESSION_SLICE_LABELS: Record<SessionSlice, string> = {
 	[SESSION_SLICES.CONTINUE]: 'Continue where you left off',

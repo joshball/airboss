@@ -24,6 +24,7 @@ import {
 	CONFIDENCE_LEVEL_VALUES,
 	type ConfidenceLevel,
 	type Domain,
+	MS_PER_DAY,
 	REVIEW_RATINGS,
 	SESSION_ITEM_KINDS,
 } from '@ab/constants';
@@ -333,12 +334,12 @@ export async function getCalibrationTrend(
 	now: Date = new Date(),
 ): Promise<CalibrationTrendPoint[]> {
 	const endOfToday = endOfUtcDay(now);
-	const windowStart = startOfUtcDay(new Date(endOfToday.getTime() - (days - 1) * 24 * 60 * 60 * 1000));
+	const windowStart = startOfUtcDay(new Date(endOfToday.getTime() - (days - 1) * MS_PER_DAY));
 	const points = await loadPoints(userId, { start: windowStart, end: endOfToday }, db);
 
 	const result: CalibrationTrendPoint[] = [];
 	for (let i = 0; i < days; i++) {
-		const dayEnd = endOfUtcDay(new Date(windowStart.getTime() + i * 24 * 60 * 60 * 1000));
+		const dayEnd = endOfUtcDay(new Date(windowStart.getTime() + i * MS_PER_DAY));
 		const dayKey = dayEnd.toISOString().slice(0, 10);
 		// Cumulative: every point whose occurredAt is on or before dayEnd and
 		// within the window. Same shape as "calibration so far" through that day.
@@ -429,10 +430,10 @@ export async function getCalibrationPageData(
 
 	// ---- Trend (previously getCalibrationTrend). ----
 	const endOfToday = endOfUtcDay(now);
-	const windowStart = startOfUtcDay(new Date(endOfToday.getTime() - (days - 1) * 24 * 60 * 60 * 1000));
+	const windowStart = startOfUtcDay(new Date(endOfToday.getTime() - (days - 1) * MS_PER_DAY));
 	const trend: CalibrationTrendPoint[] = [];
 	for (let i = 0; i < days; i++) {
-		const dayEnd = endOfUtcDay(new Date(windowStart.getTime() + i * 24 * 60 * 60 * 1000));
+		const dayEnd = endOfUtcDay(new Date(windowStart.getTime() + i * MS_PER_DAY));
 		const dayKey = dayEnd.toISOString().slice(0, 10);
 		const contributing = points.filter((p) => p.occurredAt >= windowStart && p.occurredAt <= dayEnd);
 		const dayBuckets = bucket(contributing);

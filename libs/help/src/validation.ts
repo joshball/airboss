@@ -25,6 +25,7 @@ import {
 	CONCEPT_GROUP_VALUES,
 	HELP_KIND_VALUES,
 	HELP_KINDS,
+	MS_PER_YEAR,
 	REFERENCE_BANNED_KEYWORDS,
 	REFERENCE_KEYWORD_MAX_COUNT,
 	REFERENCE_KEYWORD_MAX_LENGTH,
@@ -93,7 +94,7 @@ export interface HelpValidationOptions {
 	hasAviationReference(id: string): boolean;
 }
 
-const STALE_REVIEW_MS = 365 * 24 * 60 * 60 * 1000;
+const STALE_REVIEW_MS = MS_PER_YEAR;
 
 export function validateHelpPages(pages: readonly HelpPage[], opts: HelpValidationOptions): HelpValidationResult {
 	const errors: HelpValidationIssue[] = [];
