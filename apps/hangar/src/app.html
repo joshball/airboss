@@ -1,10 +1,32 @@
 <!doctype html>
-<html lang="en" data-app-id="hangar">
+<html lang="en" data-app-id="hangar" data-theme="airboss/default" data-appearance="light" data-layout="reading">
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="icon" type="image/svg+xml" href="%sveltekit.assets%/favicon.svg" />
 		<title>airboss hangar</title>
+		<script>
+			/*
+			 * Pre-hydration theme script. Runs before SvelteKit mounts so
+			 * data-theme / data-appearance are set on <html> before first
+			 * paint. Solves FOUC: a user who selected dark never sees a
+			 * light-mode flash on reload.
+			 */
+			(function () {
+				try {
+					var doc = document.documentElement;
+					var stored = document.cookie.match(/(?:^|;\s*)appearance=(system|light|dark)/);
+					var pref = stored ? stored[1] : 'system';
+					var system = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+					var appearance = pref === 'system' ? system : pref;
+					doc.setAttribute('data-theme', 'airboss/default');
+					doc.setAttribute('data-appearance', appearance);
+					doc.setAttribute('data-layout', 'reading');
+				} catch (e) {
+					/* fall through to HTML defaults */
+				}
+			})();
+		</script>
 		%sveltekit.head%
 		<style>
 			html {
@@ -28,7 +50,7 @@
 			}
 
 			:focus-visible {
-				outline: 2px solid var(--action-default);
+				outline: 2px solid var(--focus-ring-strong);
 				outline-offset: 2px;
 			}
 		</style>
