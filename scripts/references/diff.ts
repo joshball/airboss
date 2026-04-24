@@ -16,6 +16,7 @@
  */
 
 import type { VerbatimBlock } from '@ab/aviation';
+import { type ReferenceSourceType, SOURCE_KIND_BY_TYPE, SOURCE_KINDS } from '@ab/constants';
 import { readExistingGenerated, runExtract } from './extract';
 import { scanContent } from './scan';
 
@@ -181,6 +182,19 @@ function hunksFromLcs(
 
 if (import.meta.main) {
 	const options = parseArgs(process.argv.slice(2));
+
+	// wp-hangar-non-textual: binary-visual sources have no verbatim text to diff.
+	if (
+		options.sourceTypeFilter &&
+		SOURCE_KIND_BY_TYPE[options.sourceTypeFilter as ReferenceSourceType] === SOURCE_KINDS.BINARY_VISUAL
+	) {
+		console.log(
+			`[diff] source type '${options.sourceTypeFilter}': binary-visual, skipping text diff (not applicable). ` +
+				`Use /sources/[id]/diff in hangar for the edition-comparison view.`,
+		);
+		process.exit(0);
+	}
+
 	const { manifest } = scanContent();
 
 	const result = await runExtract({

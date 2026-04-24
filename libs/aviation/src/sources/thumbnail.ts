@@ -24,6 +24,7 @@
  * branch without requiring the binaries.
  */
 
+import { spawn } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { mkdir, readFile, rm, stat, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
@@ -62,14 +63,21 @@ export interface ThumbnailOptions {
 	log?: (event: string, detail: Record<string, unknown>) => void;
 }
 
+function runSilent(cmd: string, args: readonly string[]): Promise<number> {
+	return new Promise((res) => {
+		try {
+			const child = spawn(cmd, [...args], { stdio: 'ignore' });
+			child.on('close', (code) => res(code ?? 0));
+			child.on('error', () => res(-1));
+		} catch {
+			res(-1);
+		}
+	});
+}
+
 async function defaultProbeTool(cmd: string): Promise<boolean> {
-	try {
-		const proc = Bun.spawn([cmd, '--version'], { stdout: 'ignore', stderr: 'ignore' });
-		const code = await proc.exited;
-		return code === 0;
-	} catch {
-		return false;
-	}
+	const code = await runSilent(cmd, ['--version']);
+	return code === 0;
 }
 
 async function defaultRunCommand(args: {
@@ -79,21 +87,43 @@ async function defaultRunCommand(args: {
 }): Promise<number> {
 	const [head, ...rest] = args.cmd;
 	if (!head) throw new Error('runCommand: empty cmd');
-	const proc = Bun.spawn([head, ...rest], { stdout: 'pipe', stderr: 'pipe' });
-	// Drain but discard if no hook provided.
-	if (args.onStdout) {
-		const text = await new Response(proc.stdout).text();
-		for (const line of text.split('\n').filter((l) => l.length > 0)) {
-			args.onStdout(line);
+	return new Promise((res) => {
+		const child = spawn(head, rest, { stdio: ['ignore', 'pipe', 'pipe'] });
+		if (child.stdout && args.onStdout) {
+			let buffer = '';
+			child.stdout.setEncoding('utf8');
+			child.stdout.on('data', (chunk: string) => {
+				buffer += chunk;
+				let nl = buffer.indexOf('\n');
+				while (nl >= 0) {
+					args.onStdout?.(buffer.slice(0, nl));
+					buffer = buffer.slice(nl + 1);
+					nl = buffer.indexOf('\n');
+				}
+			});
+			child.stdout.on('end', () => {
+				if (buffer.length > 0) args.onStdout?.(buffer);
+			});
 		}
-	}
-	if (args.onStderr) {
-		const text = await new Response(proc.stderr).text();
-		for (const line of text.split('\n').filter((l) => l.length > 0)) {
-			args.onStderr(line);
+		if (child.stderr && args.onStderr) {
+			let buffer = '';
+			child.stderr.setEncoding('utf8');
+			child.stderr.on('data', (chunk: string) => {
+				buffer += chunk;
+				let nl = buffer.indexOf('\n');
+				while (nl >= 0) {
+					args.onStderr?.(buffer.slice(0, nl));
+					buffer = buffer.slice(nl + 1);
+					nl = buffer.indexOf('\n');
+				}
+			});
+			child.stderr.on('end', () => {
+				if (buffer.length > 0) args.onStderr?.(buffer);
+			});
 		}
-	}
-	return await proc.exited;
+		child.on('close', (code) => res(code ?? 0));
+		child.on('error', () => res(-1));
+	});
 }
 
 function sha256(bytes: Uint8Array): string {

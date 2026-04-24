@@ -5,6 +5,8 @@ export {
 	type HangarJobLogRow,
 	type HangarJobRow,
 	type HangarReferenceRow,
+	type HangarSourceEdition,
+	type HangarSourceMedia,
 	type HangarSourceRow,
 	type HangarSyncLogRow,
 	hangarJob,

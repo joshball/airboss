@@ -19,8 +19,11 @@ import { spawn } from 'node:child_process';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { AUDIT_OPS, auditWrite } from '@ab/audit';
-import { AUDIT_TARGETS } from '@ab/constants';
+import { AUDIT_TARGETS, type ReferenceSourceType, SOURCE_KIND_BY_TYPE, SOURCE_KINDS } from '@ab/constants';
+import { db, type HangarSourceRow, hangarSource } from '@ab/db';
 import type { JobContext, JobHandler } from '@ab/hangar-jobs';
+import { eq } from 'drizzle-orm';
+import { handleBinaryVisualFetch, type SectionalFetchHooks } from './source-fetch';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 /** Three ascents: src/lib/server/ -> src/lib/ -> src/ -> app root -> repo root. */
@@ -188,9 +191,59 @@ async function runReferenceScript(
 	return result;
 }
 
-export function makeFetchHandler(options: SourceJobOptions = {}): JobHandler {
+/** Extended fetch options that also carry binary-visual pipeline hooks. */
+export interface FetchHandlerOptions extends SourceJobOptions {
+	/** Injected hooks for the binary-visual branch (test-overridable). */
+	binaryVisualHooks?: SectionalFetchHooks;
+	/** Injected source loader for the binary-visual branch (test-overridable). */
+	loadSource?: (id: string) => Promise<HangarSourceRow | null>;
+	/** Injected HTML fetcher for the edition resolver (test-overridable). */
+	fetchHtml?: (url: string) => Promise<string>;
+}
+
+/**
+ * Fetch handler. Dispatches on source-kind:
+ *   text         -> subprocess shell-out to `scripts/references/scan.ts`
+ *                  (unchanged from wp-hangar-sources-v1)
+ *   binary-visual -> in-process pipeline from `source-fetch.ts`
+ */
+export function makeFetchHandler(options: FetchHandlerOptions = {}): JobHandler {
 	return async (ctx) => {
 		const sourceId = readSourceId(ctx);
+		const repoRoot = options.repoRoot ?? REPO_ROOT;
+
+		// Resolve the source row so we can branch by kind.
+		const loadSource =
+			options.loadSource ??
+			(async (id: string) => {
+				const [row] = await db.select().from(hangarSource).where(eq(hangarSource.id, id)).limit(1);
+				return row ?? null;
+			});
+		const row = await loadSource(sourceId);
+		const kind = row ? SOURCE_KIND_BY_TYPE[row.type as ReferenceSourceType] : SOURCE_KINDS.TEXT;
+
+		if (kind === SOURCE_KINDS.BINARY_VISUAL) {
+			await ctx.logEvent(`fetch: binary-visual kind (${row?.type}); running in-process pipeline`);
+			const outcome = await handleBinaryVisualFetch(ctx, sourceId, {
+				repoRoot,
+				fetchHtml: options.fetchHtml,
+				hooks: options.binaryVisualHooks,
+				// Re-use already-loaded row so we do not hit the DB twice.
+				loadSource: async () => row,
+			});
+			return {
+				kind: 'fetch',
+				sourceId,
+				sourceKind: 'binary-visual',
+				outcome: outcome.kind,
+				editionDate: outcome.editionDate,
+				sha256: outcome.sha256,
+				sizeBytes: outcome.sizeBytes,
+				thumbnailPath: outcome.thumbnailPath,
+				generator: outcome.generator,
+			};
+		}
+
 		const result = await runReferenceScript(ctx, {
 			scriptPath: 'scripts/references/scan.ts',
 			extraArgs: ['--id', sourceId],
@@ -200,15 +253,46 @@ export function makeFetchHandler(options: SourceJobOptions = {}): JobHandler {
 		return {
 			kind: 'fetch',
 			sourceId,
+			sourceKind: 'text',
 			exitCode: result.exitCode,
 			stdoutLines: result.stdout.length,
 		};
 	};
 }
 
-export function makeExtractHandler(options: SourceJobOptions = {}): JobHandler {
+/**
+ * Short-circuit helper: returns true + logs a "not applicable" line when the
+ * target source is a binary-visual kind. Keeps the extract/diff/scan/build
+ * CLIs and their UI buttons behaving identically against sectionals.
+ */
+async function skipIfBinaryVisual(
+	ctx: JobContext,
+	sourceId: string,
+	verb: string,
+	loader?: (id: string) => Promise<HangarSourceRow | null>,
+): Promise<boolean> {
+	const loadSource =
+		loader ??
+		(async (id: string) => {
+			const [row] = await db.select().from(hangarSource).where(eq(hangarSource.id, id)).limit(1);
+			return row ?? null;
+		});
+	const row = await loadSource(sourceId);
+	if (!row) return false;
+	if (SOURCE_KIND_BY_TYPE[row.type as ReferenceSourceType] !== SOURCE_KINDS.BINARY_VISUAL) return false;
+	await ctx.logEvent(`${verb}: binary-visual source '${sourceId}' -- not applicable, skipping`);
+	return true;
+}
+
+export function makeExtractHandler(
+	options: SourceJobOptions & { loadSource?: (id: string) => Promise<HangarSourceRow | null> } = {},
+): JobHandler {
 	return async (ctx) => {
 		const sourceId = readSourceId(ctx);
+		if (await skipIfBinaryVisual(ctx, sourceId, 'extract', options.loadSource)) {
+			await finalizeAudit(ctx, sourceId, { outcome: 'not-applicable', kind: 'binary-visual' });
+			return { kind: 'extract', sourceId, skipped: true, reason: 'binary-visual source' };
+		}
 		const result = await runReferenceScript(ctx, {
 			scriptPath: 'scripts/references/extract.ts',
 			extraArgs: ['--source', sourceId],
@@ -237,9 +321,32 @@ export function makeBuildHandler(options: SourceJobOptions = {}): JobHandler {
 	};
 }
 
-export function makeDiffHandler(options: SourceJobOptions = {}): JobHandler {
+export function makeDiffHandler(
+	options: SourceJobOptions & { loadSource?: (id: string) => Promise<HangarSourceRow | null> } = {},
+): JobHandler {
 	return async (ctx) => {
 		const sourceId = readSourceId(ctx);
+		if (await skipIfBinaryVisual(ctx, sourceId, 'diff', options.loadSource)) {
+			// Surface the edition-comparison summary rather than a text diff.
+			const loadSource =
+				options.loadSource ??
+				(async (id: string) => {
+					const [row] = await db.select().from(hangarSource).where(eq(hangarSource.id, id)).limit(1);
+					return row ?? null;
+				});
+			const row = await loadSource(sourceId);
+			const { formatEditionDiff } = await import('./source-fetch');
+			const summary = formatEditionDiff(null, row?.edition ?? null);
+			await ctx.logEvent(`diff (binary-visual): ${summary}`);
+			await finalizeAudit(ctx, sourceId, { outcome: 'diffed', kind: 'binary-visual' });
+			return {
+				kind: 'diff',
+				sourceId,
+				skipped: true,
+				text: summary,
+				reason: 'binary-visual source (edition-comparison)',
+			};
+		}
 		const result = await runReferenceScript(ctx, {
 			scriptPath: 'scripts/references/diff.ts',
 			extraArgs: [sourceId],
