@@ -52,6 +52,8 @@ const config = {
 			'@ab/ui/*': '../../libs/ui/src/*',
 			'@ab/bc-study': '../../libs/bc/study/src/index.ts',
 			'@ab/bc-study/*': '../../libs/bc/study/src/*',
+			'@ab/bc-citations': '../../libs/bc/citations/src/index.ts',
+			'@ab/bc-citations/*': '../../libs/bc/citations/src/*',
 			'@ab/aviation': '../../libs/aviation/src/index.ts',
 			'@ab/aviation/*': '../../libs/aviation/src/*',
 			'@ab/help': '../../libs/help/src/index.ts',

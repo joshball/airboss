@@ -5,6 +5,7 @@ export {
 	generateAuditLogId,
 	generateAuthId,
 	generateCardId,
+	generateContentCitationId,
 	generateHangarJobId,
 	generateHangarJobLogId,
 	generateHangarSyncLogId,

@@ -6,6 +6,9 @@ import {
 	CARD_TYPE_VALUES,
 	type CardStatus,
 	type CardType,
+	CITATION_TARGET_LABELS,
+	CITATION_TARGET_TYPES,
+	type CitationTargetType,
 	CONTENT_SOURCE_LABELS,
 	CONTENT_SOURCES,
 	type ContentSource,
@@ -17,12 +20,13 @@ import {
 	ROUTES,
 } from '@ab/constants';
 import PageHelp from '@ab/help/ui/PageHelp.svelte';
+import CitationPicker, { type CitationPickerSelection } from '@ab/ui/components/CitationPicker.svelte';
 import ConfirmAction from '@ab/ui/components/ConfirmAction.svelte';
 import InfoTip from '@ab/ui/components/InfoTip.svelte';
 import { humanize } from '@ab/utils';
 import { tick } from 'svelte';
 import { enhance } from '$app/forms';
-import { replaceState } from '$app/navigation';
+import { invalidateAll, replaceState } from '$app/navigation';
 import { page } from '$app/state';
 import type { ActionData, PageData } from './$types';
 
@@ -145,6 +149,50 @@ function formatDate(d: Date | string): string {
 
 const dueLabel = $derived(formatInterval(new Date(schedule.dueAt).getTime() - Date.now()));
 const tagsString = $derived((card.tags ?? []).join(', '));
+
+// Citation state. `citationPickerOpen` controls the shared dialog. Target
+// types in v1: all four (regulation, AC, external, knowledge). The Picker
+// submits via fetch to `?/addCitation`, then we `invalidateAll()` so the
+// server load refreshes the citations list.
+let citationPickerOpen = $state(false);
+let citationError = $state<string | null>(null);
+
+const citations = $derived(data.citations);
+const citationTargets = [
+	CITATION_TARGET_TYPES.REGULATION_NODE,
+	CITATION_TARGET_TYPES.AC_REFERENCE,
+	CITATION_TARGET_TYPES.KNOWLEDGE_NODE,
+	CITATION_TARGET_TYPES.EXTERNAL_REF,
+];
+
+function targetTypeLabel(t: CitationTargetType): string {
+	return CITATION_TARGET_LABELS[t];
+}
+
+async function handleCitationSelect(selection: CitationPickerSelection): Promise<void> {
+	citationError = null;
+	const body = new FormData();
+	body.set('targetType', selection.targetType);
+	body.set('targetId', selection.targetId);
+	body.set('note', selection.note);
+	const res = await fetch(`${ROUTES.MEMORY_CARD(card.id)}?/addCitation`, {
+		method: 'POST',
+		body,
+		headers: { accept: 'application/json' },
+	});
+	if (!res.ok) {
+		// Surface the actionResult error message when present.
+		try {
+			const payload = await res.json();
+			const message = payload?.data?.fieldErrors?._ ?? 'Could not add citation.';
+			throw new Error(message);
+		} catch (err) {
+			throw err instanceof Error ? err : new Error('Could not add citation.');
+		}
+	}
+	citationPickerOpen = false;
+	await invalidateAll();
+}
 </script>
 
 <svelte:head>
@@ -397,6 +445,66 @@ const tagsString = $derived((card.tags ?? []).join(', '));
 			</div>
 		</article>
 	{/if}
+
+	<article class="content">
+		<div class="citations-header">
+			<h2>Citations</h2>
+			<button type="button" class="btn secondary citations-add" onclick={() => (citationPickerOpen = true)}>
+				+ Cite a reference
+			</button>
+		</div>
+		{#if citationError}
+			<div class="error" role="alert">{citationError}</div>
+		{/if}
+		{#if citations.length === 0}
+			<p class="empty-note">No citations yet. Link a regulation, AC, knowledge node, or external reference.</p>
+		{:else}
+			<ul class="citation-list">
+				{#each citations as c (c.citation.id)}
+					<li class="citation-chip">
+						<span class="citation-type">{targetTypeLabel(c.target.type)}</span>
+						{#if c.target.href}
+							<a class="citation-label" href={c.target.href} target="_blank" rel="noopener noreferrer">
+								{c.target.label}
+							</a>
+						{:else}
+							<span class="citation-label">{c.target.label}</span>
+						{/if}
+						{#if c.citation.citationContext}
+							<span class="citation-context">"{c.citation.citationContext}"</span>
+						{/if}
+						<form
+							method="POST"
+							action="?/removeCitation"
+							class="citation-remove-form"
+							use:enhance={() => {
+								return async ({ update }) => {
+									await update();
+								};
+							}}
+						>
+							<input type="hidden" name="citationId" value={c.citation.id} />
+							<button type="submit" class="citation-remove" aria-label="Remove citation">×</button>
+						</form>
+					</li>
+				{/each}
+			</ul>
+		{/if}
+	</article>
+
+	<CitationPicker
+		bind:open={citationPickerOpen}
+		targetTypes={citationTargets}
+		onSelect={async (selection) => {
+			try {
+				await handleCitationSelect(selection);
+			} catch (err) {
+				citationError = err instanceof Error ? err.message : 'Could not add citation.';
+				throw err;
+			}
+		}}
+		onCancel={() => (citationPickerOpen = false)}
+	/>
 
 	<article class="content schedule">
 		<h2>Schedule</h2>
@@ -886,6 +994,84 @@ const tagsString = $derived((card.tags ?? []).join(', '));
 	.btn:disabled {
 		opacity: 0.6;
 		cursor: not-allowed;
+	}
+
+	.citations-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--space-md);
+	}
+
+	.citations-add {
+		flex: 0 0 auto;
+	}
+
+	.citation-list {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-xs);
+	}
+
+	.citation-chip {
+		display: flex;
+		align-items: center;
+		gap: var(--space-sm);
+		padding: var(--space-xs) var(--space-md);
+		background: var(--surface-muted);
+		border: 1px solid var(--edge-default);
+		border-radius: var(--radius-md);
+		font-size: var(--type-ui-label-size);
+		flex-wrap: wrap;
+	}
+
+	.citation-type {
+		font-size: var(--type-ui-caption-size);
+		font-weight: 600;
+		color: var(--ink-subtle);
+		text-transform: uppercase;
+		letter-spacing: var(--letter-spacing-caps);
+	}
+
+	.citation-label {
+		color: var(--ink-body);
+		font-weight: 500;
+	}
+
+	.citation-label:is(a) {
+		color: var(--action-default-active);
+		text-decoration: none;
+	}
+
+	.citation-label:is(a):hover {
+		text-decoration: underline;
+	}
+
+	.citation-context {
+		color: var(--ink-muted);
+		font-style: italic;
+	}
+
+	.citation-remove-form {
+		margin-left: auto;
+		display: inline-flex;
+	}
+
+	.citation-remove {
+		background: transparent;
+		border: none;
+		color: var(--ink-muted);
+		font-size: var(--font-size-body);
+		cursor: pointer;
+		padding: 0 var(--space-xs);
+		line-height: 1;
+	}
+
+	.citation-remove:hover {
+		color: var(--action-hazard-active);
 	}
 
 	@media (max-width: 480px) {
