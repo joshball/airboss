@@ -7,7 +7,7 @@
  * or browsing all reps.
  */
 
-import { DIFFICULTY_LABELS, type Difficulty, DOMAIN_LABELS, type Domain, ROUTES } from '@ab/constants';
+import { DIFFICULTY_LABELS, type Difficulty, domainLabel as formatDomain, ROUTES } from '@ab/constants';
 import PageHelp from '@ab/help/ui/PageHelp.svelte';
 import Button from '@ab/ui/components/Button.svelte';
 import { humanize } from '@ab/utils';
@@ -18,9 +18,7 @@ let { data }: { data: PageData } = $props();
 const scenario = $derived(data.scenario);
 const attempts = $derived(data.recentAttempts);
 
-const domainLabel = $derived(
-	(DOMAIN_LABELS as Record<Domain, string>)[scenario.domain as Domain] ?? humanize(scenario.domain),
-);
+const domainLabel = $derived(formatDomain(scenario.domain));
 const difficultyLabel = $derived(
 	(DIFFICULTY_LABELS as Record<Difficulty, string>)[scenario.difficulty as Difficulty] ?? humanize(scenario.difficulty),
 );

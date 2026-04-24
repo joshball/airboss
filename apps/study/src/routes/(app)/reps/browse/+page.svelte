@@ -4,9 +4,9 @@ import {
 	DIFFICULTY_LABELS,
 	DIFFICULTY_VALUES,
 	type Difficulty,
-	DOMAIN_LABELS,
 	DOMAIN_VALUES,
 	type Domain,
+	domainLabel,
 	PHASE_OF_FLIGHT_LABELS,
 	PHASE_OF_FLIGHT_VALUES,
 	type PhaseOfFlight,
@@ -92,10 +92,6 @@ const chips = $derived.by<FilterChip[]>(() => {
 function removeChipHref(key: ChipFilterKey): string {
 	// Build a fresh href that keeps every other active filter but drops `key`.
 	return buildHref({ [key]: undefined });
-}
-
-function domainLabel(slug: string): string {
-	return (DOMAIN_LABELS as Record<Domain, string>)[slug as Domain] ?? humanize(slug);
 }
 
 function difficultyLabel(slug: string): string {

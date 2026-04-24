@@ -5,8 +5,7 @@ import {
 	CUSTOM_TILE,
 	DEPTH_PREFERENCE_LABELS,
 	type DepthPreference,
-	DOMAIN_LABELS,
-	type Domain,
+	domainLabel,
 	type Preset,
 	type PresetId,
 	QUERY_PARAMS,
@@ -125,10 +124,6 @@ function changeMode(nextMode: SessionMode) {
 	next.searchParams.set(QUERY_PARAMS.SESSION_MODE, nextMode);
 	next.searchParams.delete(QUERY_PARAMS.SESSION_SEED);
 	void goto(next, { replaceState: true, invalidateAll: true });
-}
-
-function domainLabel(slug: string): string {
-	return (DOMAIN_LABELS as Record<Domain, string>)[slug as Domain] ?? humanize(slug);
 }
 
 function reasonLabel(code: SessionReasonCode): string {
