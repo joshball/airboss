@@ -24,12 +24,13 @@ const ticks = Array.from({ length: 10 }, (_, i) => i);
 	<svg viewBox="0 0 200 200" role="img">
 		<circle cx="100" cy="100" r="96" class="instrument-face" />
 
-		<!-- tick marks: 0..9 (hundreds scale). The "5" position (6 o'clock)
-			 is deliberately skipped so the digital readout below has clear air. -->
+		<!-- tick marks: 0..9 (hundreds scale). The "5" tick line (6 o'clock)
+			 is skipped to give the digital readout below a clear upper edge,
+			 but the "5" digit itself is kept so the scale still reads 0..9. -->
 		{#each ticks as tick (tick)}
+			{@const angle = tick * 36 - 90}
+			{@const rad = (angle * Math.PI) / 180}
 			{#if tick !== 5}
-				{@const angle = tick * 36 - 90}
-				{@const rad = (angle * Math.PI) / 180}
 				<line
 					x1={100 + 60 * Math.cos(rad)}
 					y1={100 + 60 * Math.sin(rad)}
@@ -38,15 +39,15 @@ const ticks = Array.from({ length: 10 }, (_, i) => i);
 					class="tick-major"
 					stroke-width="2"
 				/>
-				<text
-					x={100 + 48 * Math.cos(rad)}
-					y={100 + 48 * Math.sin(rad)}
-					text-anchor="middle"
-					dominant-baseline="central"
-					font-size="16"
-					class="tick-label">{tick}</text
-				>
 			{/if}
+			<text
+				x={100 + 48 * Math.cos(rad)}
+				y={100 + 48 * Math.sin(rad)}
+				text-anchor="middle"
+				dominant-baseline="central"
+				font-size="16"
+				class="tick-label">{tick}</text
+			>
 		{/each}
 
 		<!-- ten-thousands pointer (small triangle well outside needle hub) -->
@@ -73,7 +74,10 @@ const ticks = Array.from({ length: 10 }, (_, i) => i);
 
 		<circle cx="100" cy="100" r="6" class="hub" />
 
-		<text x="100" y="160" text-anchor="middle" font-size="16" class="digital-readout">
+		<!-- Digital readout: bordered box below the "5" tick label so the
+			 numeric altitude is instantly legible without reading the needles. -->
+		<rect x="74" y="166" width="52" height="20" rx="2" class="readout-frame" stroke-width="1" />
+		<text x="100" y="176" text-anchor="middle" dominant-baseline="central" font-size="14" class="digital-readout">
 			{altSafe.toFixed(0)}
 		</text>
 	</svg>
@@ -125,6 +129,11 @@ const ticks = Array.from({ length: 10 }, (_, i) => i);
 	.unit-label {
 		fill: var(--sim-instrument-tick-minor);
 		font-family: var(--font-family-mono);
+	}
+
+	.readout-frame {
+		fill: var(--sim-panel-bg-darker);
+		stroke: var(--sim-instrument-tick-faint);
 	}
 
 	.digital-readout {
