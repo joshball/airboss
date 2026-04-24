@@ -7,4 +7,12 @@
 // Consumers: `scripts/references/*` and any future SSR-only call sites.
 
 export { CfrExtractor, cfrExtractor } from './sources/cfr/extract';
+export {
+	computeFileHash,
+	type DownloadOptions,
+	type DownloadResult,
+	downloadFile,
+	type HeadInfo,
+	headCheck,
+} from './sources/download';
 export { allExtractors, resolveExtractors } from './sources/extractors';

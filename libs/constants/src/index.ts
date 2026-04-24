@@ -147,6 +147,13 @@ export {
 	type SimWorkerMessage,
 } from './sim';
 export {
+	EXTENSION_TO_PREVIEW_KIND,
+	PREVIEW_KINDS,
+	type PreviewKind,
+	SOURCE_ACTION_LIMITS,
+	SOURCE_DOWNLOADER_USER_AGENT,
+} from './sources';
+export {
 	ACTIVITY_WINDOW_DAYS,
 	ASSESSMENT_METHOD_VALUES,
 	ASSESSMENT_METHODS,
