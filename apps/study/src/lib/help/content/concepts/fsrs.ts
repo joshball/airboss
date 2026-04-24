@@ -20,8 +20,15 @@ export const conceptFsrs: HelpPage = {
 		keywords: ['fsrs', 'fsrs-5', 'scheduler', 'stability', 'difficulty', 'retrievability', 'sm-2', 'anki'],
 	},
 	concept: true,
-	related: ['concept-spaced-rep', 'concept-active-recall', 'concept-calibration', 'memory-review'],
-	reviewedAt: '2026-04-23',
+	related: [
+		'concept-spaced-rep',
+		'concept-active-recall',
+		'concept-calibration',
+		'memory-review',
+		'memory-dashboard',
+		'memory-card',
+	],
+	reviewedAt: '2026-04-24',
 	sections: [
 		{
 			id: 'overview',
@@ -63,6 +70,24 @@ The real FSRS-5 update uses 19 trained weights (\`w[0]..w[18]\`) fit by gradient
 :::`,
 		},
 		{
+			id: 'states',
+			title: 'States',
+			body: `Every card is always in exactly one of four FSRS states. The state controls which scheduling rules apply and how aggressive the next interval will be.
+
+| State       | Meaning                                                                                          | How a card enters it                                                        |
+| ----------- | ------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------- |
+| New         | Never been reviewed. Not yet in the scheduler's long-interval model.                             | Freshly authored card. No reviews yet.                                      |
+| Learning    | In the initial short-interval loop (minutes to hours) before graduating to Review.               | A New card that's been rated at least once but hasn't graduated yet.        |
+| Review      | Graduated to the long-interval scheduler. Stability grows and shrinks based on ratings.          | A Learning card that hit the graduation interval via a Good or Easy rating. |
+| Relearning  | Dropped back into short-interval recovery after a lapse (an Again rating on a Review-state card). | A Review card that you rated Again. Returns to Review once stabilized again. |
+
+The normal lifecycle is **New -> Learning -> Review**, with the occasional trip through **Relearning** when a Review card slips. Cards that keep bouncing between Review and Relearning usually aren't atomic enough; see [[minimum-information::memory-new]].
+
+:::note
+State is visible on the [memory dashboard](/help/memory-dashboard) (the row of pills under the stat tiles, one pill per state) and on each card's [detail page](/help/memory-card#state). A fat Relearning pill relative to your deck size is a signal to audit card quality, not a signal to study harder.
+:::`,
+		},
+		{
 			id: 'stability-vs-difficulty',
 			title: 'Stability vs difficulty',
 			body: `These two variables get confused a lot. They measure different things.
@@ -76,6 +101,19 @@ A procedure you keep mis-sequencing: stability stays stuck in the single-digit d
 Stability is a property of _this particular card in your head right now_. Difficulty is a running estimate of how much work this card takes _you_ compared to your average card. Two pilots studying the same deck will end up with different difficulty values on the same card.
 
 When you see a card every two days for weeks despite rating Good, that's high difficulty (not low stability) -- the model thinks you're about to forget if pushed further. Trust it.`,
+		},
+		{
+			id: 'stability-and-mastery',
+			title: 'Stability and mastery',
+			body: `Stability is measured in days. It is the scheduler's estimate of how long it will take for your predicted recall of this card to decay to the target retention rate (default 90%). A card with stability = 7 will be scheduled about a week out; a card with stability = 180 will be scheduled about six months out.
+
+Mastery is a derived signal on top of stability. A card counts as **mastered** once its stability clears a fixed threshold: the \`MASTERY_STABILITY_DAYS\` constant (currently 30 days). Operationally that means: the scheduler is confident you'll still recall the card a month from now without another review. That's the bar airboss uses for the "% mastered" metric on the [memory dashboard](/help/memory-dashboard).
+
+:::note
+Mastery is not a terminal state. A mastered card is still in the Review state and still gets scheduled; it just happens that its current interval has stretched past the 30-day horizon. Rate Again on a mastered card and its stability collapses, pulling it back out of the mastered bucket until it re-earns the threshold.
+:::
+
+The threshold is a product decision, not an FSRS output. FSRS only gives you stability; where you draw the line between "learning it" and "know it" is a policy choice. 30 days is a conservative line: it rules out cards that happen to be due next month because of a lucky interval and weights toward cards that have actually earned durable retention.`,
 		},
 		{
 			id: 'why-not-sm-2',

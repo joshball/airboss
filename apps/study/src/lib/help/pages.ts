@@ -38,6 +38,10 @@ import { dashboard } from './content/dashboard';
 import { gettingStarted } from './content/getting-started';
 import { keyboardShortcuts } from './content/keyboard-shortcuts';
 import { knowledgeGraph } from './content/knowledge-graph';
+import { memoryBrowse } from './content/memory-browse';
+import { memoryCard } from './content/memory-card';
+import { memoryDashboard } from './content/memory-dashboard';
+import { memoryNew } from './content/memory-new';
 import { memoryReview } from './content/memory-review';
 import { repsSession } from './content/reps-session';
 import { sessionStart } from './content/session-start';
@@ -45,6 +49,10 @@ import { sessionStart } from './content/session-start';
 export const studyHelpPages: readonly HelpPage[] = [
 	gettingStarted,
 	dashboard,
+	memoryDashboard,
+	memoryNew,
+	memoryBrowse,
+	memoryCard,
 	memoryReview,
 	repsSession,
 	sessionStart,
