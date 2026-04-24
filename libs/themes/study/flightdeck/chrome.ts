@@ -1,6 +1,6 @@
 /**
- * study/flightdeck chrome -- sharp corners, flat shadows, tighter space.
- * Values ported verbatim from the legacy `tui` theme.
+ * study/flightdeck chrome -- sharp corners, flat shadows, denser than the
+ * reading theme without collapsing into tiny "zoom me to 133%" UI.
  */
 
 import type { Chrome } from '../../contract';
@@ -9,13 +9,13 @@ const MONO = "ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospac
 
 export const chrome: Chrome = {
 	space: {
-		'2xs': '0.125rem',
-		xs: '0.25rem',
-		sm: '0.375rem',
-		md: '0.5rem',
-		lg: '0.75rem',
-		xl: '1rem',
-		'2xl': '1.5rem',
+		'2xs': '0.1875rem',
+		xs: '0.3125rem',
+		sm: '0.5rem',
+		md: '0.75rem',
+		lg: '1rem',
+		xl: '1.25rem',
+		'2xl': '1.75rem',
 	},
 	radius: {
 		sharp: '0',
@@ -37,11 +37,11 @@ export const chrome: Chrome = {
 	},
 	layout: {
 		containerMax: 'none',
-		containerPadding: '0.75rem',
-		gridGap: '0.5rem',
-		panelPadding: '0.625rem',
+		containerPadding: '0.875rem',
+		gridGap: '0.875rem',
+		panelPadding: '0.75rem',
 		panelGap: '0.5rem',
-		panelHeaderSize: '0.6875rem',
+		panelHeaderSize: '0.9375rem',
 		panelHeaderWeight: '600',
 		panelHeaderTransform: 'uppercase',
 		panelHeaderTracking: '0.08em',

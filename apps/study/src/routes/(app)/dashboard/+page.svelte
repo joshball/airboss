@@ -14,8 +14,6 @@ let { data }: { data: PageData } = $props();
 
 const payload = $derived(data.payload);
 
-// Updated once per page load. The status line is read-only ornament; not a
-// real-time clock.
 const loadedAt = new Date();
 const stamp = `${loadedAt.getFullYear()}-${String(loadedAt.getMonth() + 1).padStart(2, '0')}-${String(loadedAt.getDate()).padStart(2, '0')} ${String(loadedAt.getHours()).padStart(2, '0')}:${String(loadedAt.getMinutes()).padStart(2, '0')}`;
 </script>
@@ -26,31 +24,33 @@ const stamp = `${loadedAt.getFullYear()}-${String(loadedAt.getMonth() + 1).padSt
 
 <section class="page">
 	<header class="hd">
-		<h1>Dashboard</h1>
-		<p class="sub">Where you are. What slipped. What's next.</p>
+		<p class="eyebrow">Study // dashboard</p>
+		<div class="title-row">
+			<h1>Dashboard</h1>
+			<p class="sub">Where you are. What slipped. What&apos;s next.</p>
+		</div>
 	</header>
 
-	<!--
-		TUI-style grid: 12 cols desktop, 6 cols tablet, 1 col mobile.
-		Panel order still encodes act -> orient -> correct -> reflect:
-		  row 1: TODAY (act) | Reviews (act) | Reps (act)
-		  row 2: Calibration (orient) | Weak areas (correct)
-		  row 3: Recent activity (reflect) | Active plan (orient)
-		  row 4: Cert progress (reflect) | The map (orient)
-	-->
 	<div class="grid">
-		<div class="cell c6"><CtaPanel stats={payload.stats} repBacklog={payload.repBacklog} activePlan={payload.activePlan} /></div>
-		<div class="cell c3"><DueReviewsPanel stats={payload.stats} /></div>
-		<div class="cell c3"><ScheduledRepsPanel repBacklog={payload.repBacklog} /></div>
+		<div class="col left">
+			<div class="slot hero"><CtaPanel stats={payload.stats} repBacklog={payload.repBacklog} activePlan={payload.activePlan} /></div>
+			<div class="slot activity"><ActivityPanel activity={payload.activity} /></div>
+			<div class="slot reviews"><DueReviewsPanel stats={payload.stats} /></div>
+		</div>
 
-		<div class="cell c4"><CalibrationPanel calibration={payload.calibration} /></div>
-		<div class="cell c8"><WeakAreasPanel weakAreas={payload.weakAreas} /></div>
+		<div class="col center">
+			<div class="slot weak"><WeakAreasPanel weakAreas={payload.weakAreas} /></div>
+			<div class="slot plan"><StudyPlanPanel activePlan={payload.activePlan} /></div>
+			<div class="pair">
+				<div class="slot reps"><ScheduledRepsPanel repBacklog={payload.repBacklog} /></div>
+				<div class="slot calibration"><CalibrationPanel calibration={payload.calibration} /></div>
+			</div>
+		</div>
 
-		<div class="cell c7"><ActivityPanel activity={payload.activity} /></div>
-		<div class="cell c5"><StudyPlanPanel activePlan={payload.activePlan} /></div>
-
-		<div class="cell c5"><CertProgressPanel certProgress={payload.certProgress} /></div>
-		<div class="cell c7"><MapPanel domainCertMatrix={payload.domainCertMatrix} /></div>
+		<div class="col rail">
+			<div class="slot cert"><CertProgressPanel certProgress={payload.certProgress} /></div>
+			<div class="slot map"><MapPanel domainCertMatrix={payload.domainCertMatrix} /></div>
+		</div>
 	</div>
 
 	<footer class="status" aria-hidden="true">
@@ -66,87 +66,132 @@ const stamp = `${loadedAt.getFullYear()}-${String(loadedAt.getMonth() + 1).padSt
 	.page {
 		display: flex;
 		flex-direction: column;
-		gap: var(--space-sm);
-		min-height: calc(100vh - 4rem);
+		flex: 1 1 auto;
+		gap: var(--space-md);
+		min-height: 0;
+		overflow: hidden;
 	}
 
 	.hd {
 		display: flex;
-		align-items: baseline;
-		gap: var(--space-md);
-		flex-wrap: wrap;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: var(--space-2xs);
 		padding: 0 var(--space-2xs);
 	}
 
-	h1 {
-		margin: 0;
-		font-size: var(--type-ui-label-size);
-		font-weight: 700;
-		text-transform: uppercase;
-		letter-spacing: var(--letter-spacing-caps);
-		color: var(--ink-body);
-		font-family: var(--font-family-mono);
-	}
-
-	.sub {
+	.eyebrow {
 		margin: 0;
 		color: var(--ink-faint);
 		font-size: var(--type-ui-caption-size);
 		font-family: var(--font-family-mono);
+		letter-spacing: var(--letter-spacing-caps);
+		text-transform: uppercase;
+	}
+
+	.title-row {
+		display: flex;
+		align-items: baseline;
+		flex-wrap: wrap;
+		gap: var(--space-sm) var(--space-lg);
+	}
+
+	h1 {
+		margin: 0;
+		font-size: var(--type-heading-2-size);
+		font-weight: var(--type-heading-2-weight);
+		letter-spacing: var(--type-heading-2-tracking);
+		color: var(--ink-body);
+	}
+
+	.sub {
+		margin: 0;
+		color: var(--ink-muted);
+		font-size: var(--type-ui-label-size);
+		line-height: var(--type-ui-label-line-height);
+		max-width: 30rem;
 	}
 
 	.grid {
 		display: grid;
+		flex: 1 1 auto;
 		grid-template-columns: repeat(12, minmax(0, 1fr));
-		gap: var(--space-sm);
-		flex: 1;
+		grid-template-rows: 12rem 10rem 11rem;
+		gap: calc(var(--space-xl) + var(--space-2xs));
+		align-content: start;
+		min-height: 0;
 	}
 
-	.cell {
+	.slot {
 		display: flex;
+		box-sizing: border-box;
 		min-width: 0;
+		min-height: 0;
 	}
 
-	.cell :global(.panel) {
-		flex: 1;
+	.left,
+	.center,
+	.rail,
+	.pair {
+		display: contents;
 	}
 
-	/* Desktop spans (>= 1024px default). */
-	.c3 { grid-column: span 3; }
-	.c4 { grid-column: span 4; }
-	.c5 { grid-column: span 5; }
-	.c6 { grid-column: span 6; }
-	.c7 { grid-column: span 7; }
-	.c8 { grid-column: span 8; }
-
-	/* Tablet: collapse to 6 tracks, rebalance. */
-	@media (max-width: 960px) {
-		.grid {
-			grid-template-columns: repeat(6, minmax(0, 1fr));
-		}
-		.c3 { grid-column: span 3; }
-		.c4 { grid-column: span 3; }
-		.c5 { grid-column: span 3; }
-		.c6 { grid-column: span 6; }
-		.c7 { grid-column: span 6; }
-		.c8 { grid-column: span 6; }
+	.hero {
+		grid-column: 1 / span 5;
+		grid-row: 1;
 	}
 
-	/* Mobile: single-column stack. */
-	@media (max-width: 640px) {
-		.grid {
-			grid-template-columns: minmax(0, 1fr);
-		}
-		.c3, .c4, .c5, .c6, .c7, .c8 {
-			grid-column: span 1;
-		}
+	.weak {
+		grid-column: 6 / span 4;
+		grid-row: 1;
+	}
+
+	.cert {
+		grid-column: 10 / span 3;
+		grid-row: 1;
+	}
+
+	.activity {
+		grid-column: 1 / span 5;
+		grid-row: 2;
+	}
+
+	.plan {
+		grid-column: 6 / span 4;
+		grid-row: 2;
+	}
+
+	.map {
+		grid-column: 10 / span 3;
+		grid-row: 2 / span 2;
+	}
+
+	.reviews {
+		grid-column: 1 / span 5;
+		grid-row: 3;
+	}
+
+	.reps {
+		grid-column: 6 / span 2;
+		grid-row: 3;
+	}
+
+	.calibration {
+		grid-column: 8 / span 2;
+		grid-row: 3;
+	}
+
+	.slot :global(.panel) {
+		flex: 1 1 auto;
+		min-height: 0;
 	}
 
 	.status {
 		display: flex;
+		flex: 0 0 auto;
 		align-items: center;
 		gap: var(--space-xs);
-		padding: var(--space-2xs) var(--space-2xs) 0;
+		padding: 0 var(--space-2xs);
 		color: var(--ink-faint);
 		font-size: var(--type-ui-caption-size);
 		font-family: var(--font-family-mono);
@@ -155,5 +200,94 @@ const stamp = `${loadedAt.getFullYear()}-${String(loadedAt.getMonth() + 1).padSt
 
 	.status .sep {
 		color: var(--edge-strong);
+	}
+
+	@media (max-width: 1200px) {
+		.page {
+			overflow: auto;
+		}
+
+		.grid {
+			grid-template-columns: repeat(6, minmax(0, 1fr));
+			grid-template-rows: auto;
+		}
+
+		.hero {
+			grid-column: 1 / span 4;
+			grid-row: 1;
+		}
+
+		.reviews {
+			grid-column: 5 / span 2;
+			grid-row: 1;
+		}
+
+		.weak {
+			grid-column: 1 / span 4;
+			grid-row: 2;
+		}
+
+		.cert {
+			grid-column: 5 / span 2;
+			grid-row: 2;
+		}
+
+		.activity {
+			grid-column: 1 / span 4;
+			grid-row: 3;
+		}
+
+		.plan {
+			grid-column: 5 / span 2;
+			grid-row: 3;
+		}
+
+		.reps {
+			grid-column: 1 / span 3;
+			grid-row: 4;
+		}
+
+		.calibration {
+			grid-column: 4 / span 3;
+			grid-row: 4;
+		}
+
+		.map {
+			grid-column: 1 / -1;
+			grid-row: 5;
+		}
+
+		.sub {
+			max-width: none;
+		}
+	}
+
+	@media (max-width: 900px) {
+		.grid {
+			grid-template-columns: minmax(0, 1fr);
+			grid-template-rows: auto;
+			gap: var(--space-lg);
+		}
+
+		.sub {
+			max-width: none;
+		}
+
+		.hero,
+		.weak,
+		.cert,
+		.activity,
+		.plan,
+		.map,
+		.reviews,
+		.reps,
+		.calibration {
+			grid-column: 1;
+			grid-row: auto;
+		}
+
+		h1 {
+			font-size: var(--type-heading-3-size);
+		}
 	}
 </style>

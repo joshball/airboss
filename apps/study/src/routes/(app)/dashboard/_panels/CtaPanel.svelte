@@ -30,6 +30,8 @@ const backlogValue = $derived('value' in repBacklog ? repBacklog.value : null);
 const planValue = $derived('value' in activePlan ? activePlan.value : null);
 const dueCount = $derived(statsValue?.dueNow ?? 0);
 const scheduledCount = $derived(backlogValue?.totalActive ?? 0);
+const reviewedToday = $derived(statsValue?.reviewedToday ?? 0);
+const streakDays = $derived(statsValue?.streakDays ?? 0);
 const hasPlan = $derived(planValue !== null);
 
 type Cta = { href: string; label: string };
@@ -63,21 +65,113 @@ const panelError = $derived(
 );
 
 const subtitle = $derived(hasPlan ? 'What you should do next' : 'Set up your plan to unlock sessions');
+const intro = $derived(
+	hasPlan
+		? 'Launch the next session or jump straight into the queue that is backing up.'
+		: 'Start with a plan, then use this board as your launch panel for the next block of work.',
+);
 </script>
 
 <PanelShell title="Today" {subtitle} error={panelError}>
-	<div class="ctas">
-		<Button variant="primary" size="sm" href={primary.href}>{primary.label}</Button>
-		{#each secondaries as cta (cta.href)}
-			<Button variant="secondary" size="sm" href={cta.href}>{cta.label}</Button>
-		{/each}
+	<div class="hero">
+		<p class="intro">{intro}</p>
+
+		<div class="ctas">
+			<Button variant="primary" size="sm" href={primary.href}>{primary.label}</Button>
+			{#each secondaries as cta (cta.href)}
+				<Button variant="secondary" size="sm" href={cta.href}>{cta.label}</Button>
+			{/each}
+		</div>
+
+		<dl class="stats" aria-label="Dashboard launch metrics">
+			<div>
+				<dt>Due now</dt>
+				<dd>{dueCount}</dd>
+			</div>
+			<div>
+				<dt>Done today</dt>
+				<dd>{reviewedToday}</dd>
+			</div>
+			<div>
+				<dt>Streak</dt>
+				<dd>
+					{streakDays}
+					<span>{streakDays === 1 ? 'day' : 'days'}</span>
+				</dd>
+			</div>
+		</dl>
 	</div>
 </PanelShell>
 
 <style>
+	.hero {
+		display: grid;
+		flex: 1 1 auto;
+		align-content: start;
+		gap: var(--space-sm);
+		min-height: 0;
+	}
+
+	.intro {
+		margin: 0;
+		max-width: 34rem;
+		color: var(--ink-muted);
+		font-size: var(--type-ui-label-size);
+		line-height: 1.5;
+	}
+
 	.ctas {
 		display: flex;
-		gap: var(--space-xs);
+		gap: var(--space-sm);
 		flex-wrap: wrap;
+	}
+
+	.stats {
+		margin: 0;
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: var(--space-sm);
+	}
+
+	.stats div {
+		min-width: 0;
+		padding: var(--space-xs) var(--space-sm);
+		border: 1px solid var(--edge-default);
+		background: var(--surface-sunken);
+		border-radius: var(--radius-md);
+	}
+
+	.stats dt {
+		margin: 0 0 var(--space-2xs);
+		color: var(--ink-faint);
+		font-size: var(--type-ui-caption-size);
+		font-family: var(--font-family-mono);
+		letter-spacing: var(--letter-spacing-caps);
+		text-transform: uppercase;
+	}
+
+	.stats dd {
+		display: flex;
+		align-items: flex-end;
+		flex-wrap: wrap;
+		gap: var(--space-2xs);
+		margin: 0;
+		color: var(--ink-body);
+		font-size: var(--type-heading-3-size);
+		font-weight: var(--type-heading-3-weight);
+		line-height: 1.1;
+		font-variant-numeric: tabular-nums;
+	}
+
+	.stats dd span {
+		color: var(--ink-muted);
+		font-size: var(--type-ui-label-size);
+		font-weight: var(--type-ui-label-weight);
+	}
+
+	@media (max-width: 640px) {
+		.stats {
+			grid-template-columns: 1fr;
+		}
 	}
 </style>

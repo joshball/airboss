@@ -1,6 +1,7 @@
 <script lang="ts">
 import type { PanelResult, RepBacklog } from '@ab/bc-study';
 import { DOMAIN_LABELS, ROUTES } from '@ab/constants';
+import Button from '@ab/ui/components/Button.svelte';
 import PanelShell from '@ab/ui/components/PanelShell.svelte';
 
 /**
@@ -35,9 +36,9 @@ function domainHref(slug: string): string {
 >
 	{#snippet action()}
 		{#if totalActive > 0}
-			<a class="action-btn" href={ROUTES.SESSION_START}>Start session</a>
+			<Button variant="primary" size="sm" href={ROUTES.SESSION_START}>Start session</Button>
 		{:else}
-			<a class="action-btn ghost" href={ROUTES.REPS_NEW}>New scenario</a>
+			<Button variant="secondary" size="sm" href={ROUTES.REPS_NEW}>New scenario</Button>
 		{/if}
 	{/snippet}
 
@@ -46,6 +47,10 @@ function domainHref(slug: string): string {
 			No scenarios yet. <a href={ROUTES.REPS_NEW}>Create one</a> to start doing reps.
 		</p>
 	{:else}
+		<div class="summary">
+			<span class="count">{totalActive}</span>
+			<span class="label">{totalActive === 1 ? 'active scenario' : 'active scenarios'}</span>
+		</div>
 		<ul class="domains">
 			{#each topDomains as d (d.domain)}
 				<li>
@@ -66,13 +71,35 @@ function domainHref(slug: string): string {
 </PanelShell>
 
 <style>
+	.summary {
+		display: flex;
+		align-items: baseline;
+		gap: var(--space-sm);
+		font-variant-numeric: tabular-nums;
+	}
+
+	.count {
+		color: var(--ink-body);
+		font-size: var(--type-heading-2-size);
+		font-weight: var(--type-heading-2-weight);
+		line-height: 1;
+	}
+
+	.label {
+		color: var(--ink-muted);
+		font-size: var(--type-ui-label-size);
+	}
+
 	.domains {
 		list-style: none;
 		margin: 0;
 		padding: 0;
 		display: flex;
 		flex-direction: column;
+		flex: 1 1 auto;
 		gap: var(--space-2xs);
+		min-height: 0;
+		overflow: auto;
 	}
 
 	.dm {
@@ -126,30 +153,5 @@ function domainHref(slug: string): string {
 
 	.muted a {
 		color: var(--action-default-hover);
-	}
-
-	.action-btn {
-		padding: var(--space-2xs) var(--space-sm);
-		font-size: var(--type-ui-caption-size);
-		font-weight: var(--type-heading-3-weight);
-		border-radius: var(--radius-sm);
-		border: 1px solid var(--action-default);
-		background: var(--action-default);
-		color: var(--action-default-ink);
-		text-decoration: none;
-	}
-
-	.action-btn:hover {
-		background: var(--action-default-hover);
-	}
-
-	.action-btn.ghost {
-		background: transparent;
-		color: var(--ink-muted);
-		border-color: var(--edge-strong);
-	}
-
-	.action-btn.ghost:hover {
-		background: var(--surface-sunken);
 	}
 </style>

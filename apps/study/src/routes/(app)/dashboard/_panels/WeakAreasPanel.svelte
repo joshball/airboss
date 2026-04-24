@@ -67,7 +67,10 @@ function reasonLabel(reason: WeakAreaReason): string {
 		padding: 0;
 		display: flex;
 		flex-direction: column;
+		flex: 1 1 auto;
 		gap: var(--space-2xs);
+		min-height: 0;
+		overflow: auto;
 	}
 
 	.row {
@@ -98,6 +101,9 @@ function reasonLabel(reason: WeakAreaReason): string {
 	}
 
 	.reason {
+		padding: var(--space-2xs) var(--space-xs);
+		border-radius: var(--radius-pill);
+		background: var(--action-hazard-wash);
 		font-size: var(--type-ui-caption-size);
 		color: var(--signal-warning);
 		font-variant-numeric: tabular-nums;

@@ -11,6 +11,7 @@ import {
 	SESSION_MODE_LABELS,
 	type SessionMode,
 } from '@ab/constants';
+import Button from '@ab/ui/components/Button.svelte';
 import PanelShell from '@ab/ui/components/PanelShell.svelte';
 
 /**
@@ -45,9 +46,9 @@ function domainLabel(d: Domain): string {
 >
 	{#snippet action()}
 		{#if plan}
-			<a class="action-btn" href={ROUTES.PLAN(plan.id)}>Edit</a>
+			<Button variant="secondary" size="sm" href={ROUTES.PLAN(plan.id)}>Edit</Button>
 		{:else}
-			<a class="action-btn primary" href={ROUTES.PLANS_NEW}>Create one</a>
+			<Button variant="primary" size="sm" href={ROUTES.PLANS_NEW}>Create one</Button>
 		{/if}
 	{/snippet}
 
@@ -99,38 +100,13 @@ function domainLabel(d: Domain): string {
 </PanelShell>
 
 <style>
-	.action-btn {
-		padding: var(--space-2xs) var(--space-sm);
-		font-size: var(--type-ui-caption-size);
-		font-weight: var(--type-heading-3-weight);
-		border-radius: var(--radius-sm);
-		border: 1px solid var(--edge-strong);
-		background: var(--surface-panel);
-		color: var(--ink-muted);
-		text-decoration: none;
-	}
-
-	.action-btn:hover {
-		background: var(--surface-sunken);
-	}
-
-	.action-btn.primary {
-		background: var(--action-default);
-		color: var(--action-default-ink);
-		border-color: var(--action-default);
-	}
-
-	.action-btn.primary:hover {
-		background: var(--action-default-hover);
-	}
-
 	.meta {
 		margin: 0;
 		display: grid;
 		grid-template-columns: auto 1fr;
 		column-gap: var(--space-sm);
-		row-gap: var(--space-2xs);
-		font-size: var(--type-ui-caption-size);
+		row-gap: var(--space-xs);
+		font-size: var(--type-ui-label-size);
 	}
 
 	.row {
@@ -188,7 +164,7 @@ function domainLabel(d: Domain): string {
 
 	p.muted {
 		margin: 0;
-		font-size: var(--type-ui-caption-size);
+		font-size: var(--type-ui-label-size);
 	}
 
 	p.muted a {
