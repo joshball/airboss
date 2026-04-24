@@ -11,6 +11,53 @@
 import { SIM_SCENARIO_OUTCOMES, type SimScenarioId, type SimScenarioOutcome } from '@ab/constants';
 import type { FdmInputs, FdmTruthState, ScenarioDefinition, ScenarioRunResult, ScenarioStepState } from '../types';
 
+/**
+ * Crash thresholds. A crash is a physical event distinct from a scoring
+ * failure -- it fires for every scenario, including endless ones like the
+ * playground. The aircraft is no longer airworthy, so the sim stops.
+ */
+const CRASH = {
+	/** Hard impact: vertical speed at ground contact, m/s (negative = descending). */
+	HARD_IMPACT_M_S: -3.0, // ~590 FPM descent
+	/** Bank angle at ground contact counted as a wing strike, radians. */
+	WING_STRIKE_BANK_RAD: 30 * (Math.PI / 180),
+	/** Nose-up attitude at ground contact counted as a tail strike, radians. */
+	TAIL_STRIKE_PITCH_RAD: 15 * (Math.PI / 180),
+	/** Nose-down attitude at ground contact counted as a nose strike, radians. */
+	NOSE_STRIKE_PITCH_RAD: -5 * (Math.PI / 180),
+	/** Load factor above which the airframe is considered structurally failed. */
+	G_OVERSTRESS: 4.0,
+} as const;
+
+/**
+ * Detect a crash from the truth state. Returns the reason if crashed,
+ * null otherwise. Uses previous airborne-state to distinguish "just
+ * touched down" from "sitting on the runway at scenario start".
+ */
+function detectCrash(truth: FdmTruthState, wasAirborne: boolean): string | null {
+	// In-flight structural failure.
+	if (truth.loadFactor > CRASH.G_OVERSTRESS) {
+		return `G overstress (${truth.loadFactor.toFixed(1)} G) -- airframe structural failure.`;
+	}
+	// Only evaluate ground-impact signatures on the transition from airborne
+	// to on-ground. Parked scenarios start onGround and must not crash-fire.
+	if (!truth.onGround || !wasAirborne) return null;
+	if (truth.verticalSpeed < CRASH.HARD_IMPACT_M_S) {
+		const fpm = Math.abs(truth.verticalSpeed) * 196.85; // m/s -> fpm
+		return `Hard impact at ${fpm.toFixed(0)} fpm descent -- landing gear and airframe destroyed.`;
+	}
+	if (Math.abs(truth.roll) > CRASH.WING_STRIKE_BANK_RAD) {
+		return `Wing strike at ${((Math.abs(truth.roll) * 180) / Math.PI).toFixed(0)} deg bank.`;
+	}
+	if (truth.pitch > CRASH.TAIL_STRIKE_PITCH_RAD) {
+		return `Tail strike at ${((truth.pitch * 180) / Math.PI).toFixed(0)} deg nose-up.`;
+	}
+	if (truth.pitch < CRASH.NOSE_STRIKE_PITCH_RAD) {
+		return `Nose strike at ${((truth.pitch * 180) / Math.PI).toFixed(0)} deg nose-down.`;
+	}
+	return null;
+}
+
 export interface RunnerEvaluation {
 	outcome: SimScenarioOutcome;
 	reason: string;
@@ -29,6 +76,7 @@ export class ScenarioRunner {
 	private currentStepIndex = 0;
 	private stepHoldAccumulator = 0;
 	private stepsCompleted = false;
+	private wasAirborne = false;
 
 	constructor(def: ScenarioDefinition) {
 		this.def = def;
@@ -59,6 +107,21 @@ export class ScenarioRunner {
 		if (truth.stalled) this.stallAccumulator += dt;
 		else this.stallAccumulator = 0;
 
+		// Crash detection: physical events that end the flight regardless of
+		// scoring. Runs for every scenario, including endless (Playground).
+		const crashReason = detectCrash(truth, this.wasAirborne);
+		if (crashReason !== null) {
+			this.outcome = SIM_SCENARIO_OUTCOMES.FAILURE;
+			this.outcomeReason = crashReason;
+			// Freeze airborne tracking so a bounce after the crash call is
+			// still classified as the same event.
+			this.wasAirborne = false;
+			return { outcome: this.outcome, reason: this.outcomeReason, stepState: this.buildStepState() };
+		}
+		// Update airborne latch after crash evaluation so a clean takeoff is
+		// captured before we ever get a chance to see the next touchdown.
+		if (!truth.onGround) this.wasAirborne = true;
+
 		// Step ladder (if present).
 		if (this.def.steps && this.def.steps.length > 0) {
 			this.updateSteps(truth, inputs, dt);
@@ -66,7 +129,8 @@ export class ScenarioRunner {
 
 		const crit = this.def.criteria;
 
-		// Endless scenarios (Playground) never terminate on their own.
+		// Endless scenarios (Playground) never terminate on their own, but
+		// crash detection above still applies.
 		if (crit.endless) {
 			return { outcome: this.outcome, reason: this.outcomeReason, stepState: this.buildStepState() };
 		}

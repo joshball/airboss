@@ -160,12 +160,113 @@ describe('ScenarioRunner -- departure stall', () => {
 });
 
 describe('ScenarioRunner -- playground', () => {
-	it('never ends', () => {
+	it('never ends on its own', () => {
 		const def = getScenario(SIM_SCENARIO_IDS.PLAYGROUND);
 		const runner = new ScenarioRunner(def);
 		const ground = def.initial.groundElevation;
 		const verdict = runner.evaluate(
 			sampleTruth({ t: 10000, altitude: ground + 10000, groundElevation: ground }),
+			defaultInputs(),
+		);
+		expect(verdict.outcome).toBe(SIM_SCENARIO_OUTCOMES.RUNNING);
+	});
+});
+
+describe('ScenarioRunner -- crash detection', () => {
+	function playgroundRunner(): ScenarioRunner {
+		return new ScenarioRunner(getScenario(SIM_SCENARIO_IDS.PLAYGROUND));
+	}
+
+	it('flags hard-impact crash on playground (endless scenario)', () => {
+		const runner = playgroundRunner();
+		const ground = 305;
+		// First tick: airborne climbing.
+		runner.evaluate(
+			sampleTruth({ t: 5, altitude: ground + 30, groundElevation: ground, verticalSpeed: 5 }),
+			defaultInputs(),
+		);
+		// Second tick: slammed into the ground at 700 fpm sink.
+		const verdict = runner.evaluate(
+			sampleTruth({
+				t: 10,
+				altitude: ground,
+				groundElevation: ground,
+				verticalSpeed: -3.6, // ~700 fpm descent
+				onGround: true,
+			}),
+			defaultInputs(),
+		);
+		expect(verdict.outcome).toBe(SIM_SCENARIO_OUTCOMES.FAILURE);
+		expect(verdict.reason).toMatch(/Hard impact/);
+	});
+
+	it('does not crash-fire on parked scenario start', () => {
+		const runner = playgroundRunner();
+		const def = getScenario(SIM_SCENARIO_IDS.PLAYGROUND);
+		const ground = def.initial.groundElevation;
+		const verdict = runner.evaluate(
+			sampleTruth({
+				t: 0,
+				altitude: ground,
+				groundElevation: ground,
+				verticalSpeed: 0,
+				onGround: true,
+			}),
+			defaultInputs({ brake: true }),
+		);
+		expect(verdict.outcome).toBe(SIM_SCENARIO_OUTCOMES.RUNNING);
+	});
+
+	it('flags wing strike on touchdown above 30 deg bank', () => {
+		const runner = playgroundRunner();
+		const ground = 305;
+		runner.evaluate(
+			sampleTruth({ t: 5, altitude: ground + 20, groundElevation: ground, verticalSpeed: -1 }),
+			defaultInputs(),
+		);
+		const verdict = runner.evaluate(
+			sampleTruth({
+				t: 10,
+				altitude: ground,
+				groundElevation: ground,
+				verticalSpeed: -1, // soft sink, but banked
+				roll: 45 * (Math.PI / 180),
+				onGround: true,
+			}),
+			defaultInputs(),
+		);
+		expect(verdict.outcome).toBe(SIM_SCENARIO_OUTCOMES.FAILURE);
+		expect(verdict.reason).toMatch(/Wing strike/);
+	});
+
+	it('flags structural failure on G overstress in flight', () => {
+		const runner = playgroundRunner();
+		const ground = 305;
+		const verdict = runner.evaluate(
+			sampleTruth({ t: 5, altitude: ground + 500, groundElevation: ground, loadFactor: 5.2 }),
+			defaultInputs(),
+		);
+		expect(verdict.outcome).toBe(SIM_SCENARIO_OUTCOMES.FAILURE);
+		expect(verdict.reason).toMatch(/G overstress/);
+	});
+
+	it('passes a soft touchdown within envelope', () => {
+		const runner = playgroundRunner();
+		const ground = 305;
+		runner.evaluate(
+			sampleTruth({ t: 5, altitude: ground + 20, groundElevation: ground, verticalSpeed: -1 }),
+			defaultInputs(),
+		);
+		const verdict = runner.evaluate(
+			sampleTruth({
+				t: 10,
+				altitude: ground,
+				groundElevation: ground,
+				verticalSpeed: -1.5, // ~300 fpm sink, within envelope
+				pitch: 5 * (Math.PI / 180),
+				roll: 0,
+				onGround: true,
+			}),
 			defaultInputs(),
 		);
 		expect(verdict.outcome).toBe(SIM_SCENARIO_OUTCOMES.RUNNING);
