@@ -254,7 +254,7 @@ export const actions: Actions = {
 					slice: slot.slice,
 					reasonCode: slot.reasonCode,
 					cardId: slot.cardId,
-					skipKind: 'today',
+					skipKind: SESSION_SKIP_KINDS.TODAY,
 					reasonDetail: 'Card no longer reviewable',
 				});
 				return { success: true as const, skipped: true as const };
@@ -329,7 +329,7 @@ export const actions: Actions = {
 					slice: slot.slice,
 					reasonCode: slot.reasonCode,
 					scenarioId: slot.scenarioId,
-					skipKind: 'today',
+					skipKind: SESSION_SKIP_KINDS.TODAY,
 					reasonDetail: 'Scenario no longer attemptable',
 				});
 				return { success: true as const, skipped: true as const };
@@ -386,7 +386,7 @@ export const actions: Actions = {
 		const slotIndexResult = requireInt(form, 'slotIndex');
 		if (!slotIndexResult.ok) return fail(400, { error: slotIndexResult.error });
 		const slotIndex = slotIndexResult.value;
-		const skipKindRaw = String(form.get('skipKind') ?? 'today');
+		const skipKindRaw = String(form.get('skipKind') ?? SESSION_SKIP_KINDS.TODAY);
 		if (!(SESSION_SKIP_KIND_VALUES as readonly string[]).includes(skipKindRaw)) {
 			return fail(400, { error: 'Invalid skip kind' });
 		}

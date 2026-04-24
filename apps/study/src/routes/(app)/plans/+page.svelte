@@ -7,6 +7,7 @@ import {
 	DOMAIN_LABELS,
 	type Domain,
 	PLAN_STATUS_LABELS,
+	PLAN_STATUSES,
 	type PlanStatus,
 	QUERY_PARAMS,
 	ROUTES,
@@ -22,12 +23,15 @@ let { data }: { data: PageData } = $props();
 const active = $derived(data.activePlan);
 const archivedCount = $derived(data.archived.length);
 
-const TABS = { ACTIVE: 'active', ARCHIVED: 'archived' } as const;
-type PlanTab = (typeof TABS)[keyof typeof TABS];
-const TAB_VALUES: readonly PlanTab[] = Object.values(TABS);
+// The plan-index page only ever toggles between active + archived plans
+// (drafts live on /plans/new). Reuse the shared PLAN_STATUSES constants
+// instead of redefining a parallel two-state enum so labels and status
+// values stay single-sourced.
+type PlanTab = Extract<PlanStatus, 'active' | 'archived'>;
+const TAB_VALUES: readonly PlanTab[] = [PLAN_STATUSES.ACTIVE, PLAN_STATUSES.ARCHIVED];
 
 function narrowTab(raw: string | null): PlanTab {
-	return TAB_VALUES.includes((raw ?? '') as PlanTab) ? (raw as PlanTab) : TABS.ACTIVE;
+	return TAB_VALUES.includes((raw ?? '') as PlanTab) ? (raw as PlanTab) : PLAN_STATUSES.ACTIVE;
 }
 
 // svelte-ignore state_referenced_locally -- seed from URL on mount; URL syncs thereafter
@@ -41,7 +45,7 @@ $effect(() => {
 	const url = new URL(page.url);
 	const current = url.searchParams.get(QUERY_PARAMS.TAB);
 	// Default (active) stays out of the URL so clean links don't grow a param.
-	if (tab === TABS.ACTIVE) {
+	if (tab === PLAN_STATUSES.ACTIVE) {
 		if (current === null) return;
 		url.searchParams.delete(QUERY_PARAMS.TAB);
 	} else {
@@ -80,20 +84,20 @@ function fmt(date: Date): string {
 		<button
 			type="button"
 			role="tab"
-			aria-selected={currentTab === TABS.ACTIVE}
+			aria-selected={currentTab === PLAN_STATUSES.ACTIVE}
 			class="tab"
-			class:selected={currentTab === TABS.ACTIVE}
-			onclick={() => (currentTab = TABS.ACTIVE)}
+			class:selected={currentTab === PLAN_STATUSES.ACTIVE}
+			onclick={() => (currentTab = PLAN_STATUSES.ACTIVE)}
 		>
 			Active
 		</button>
 		<button
 			type="button"
 			role="tab"
-			aria-selected={currentTab === TABS.ARCHIVED}
+			aria-selected={currentTab === PLAN_STATUSES.ARCHIVED}
 			class="tab"
-			class:selected={currentTab === TABS.ARCHIVED}
-			onclick={() => (currentTab = TABS.ARCHIVED)}
+			class:selected={currentTab === PLAN_STATUSES.ARCHIVED}
+			onclick={() => (currentTab = PLAN_STATUSES.ARCHIVED)}
 		>
 			Archived
 			{#if archivedCount > 0}
@@ -102,7 +106,7 @@ function fmt(date: Date): string {
 		</button>
 	</div>
 
-	{#if currentTab === TABS.ACTIVE}
+	{#if currentTab === PLAN_STATUSES.ACTIVE}
 		{#if active}
 			<article class="plan-card active">
 				<div class="plan-head">

@@ -9,6 +9,8 @@ import {
 	KNOWLEDGE_PHASE_LABELS,
 	type KnowledgePhase,
 	NODE_LIFECYCLE_LABELS,
+	NODE_MASTERY_GATE_LABELS,
+	type NodeMasteryGate,
 	RELEVANCE_PRIORITY_LABELS,
 	type RelevancePriority,
 	ROUTES,
@@ -52,18 +54,7 @@ function lifecycleLabel(slug: string): string {
 const masteryPct = $derived(Math.round(mastery.displayScore * 100));
 
 function gateLabel(gate: string): string {
-	switch (gate) {
-		case 'pass':
-			return 'Pass';
-		case 'fail':
-			return 'Fail';
-		case 'insufficient_data':
-			return 'Not enough data';
-		case 'not_applicable':
-			return 'Not applicable';
-		default:
-			return gate;
-	}
+	return (NODE_MASTERY_GATE_LABELS as Record<NodeMasteryGate, string>)[gate as NodeMasteryGate] ?? gate;
 }
 
 function renderPhase(body: string | null): string {
