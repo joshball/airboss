@@ -64,8 +64,19 @@ export const load: PageServerLoad = async (event) => {
 		if (found) createdCard = { id: found.card.id, front: found.card.front };
 	}
 
+	// Flatten `{card, state}` into a shape that keeps the card fields the row
+	// template already uses and adds the per-user schedule signals the user
+	// needs to locate a card they just touched (SMI item 23).
+	const rows = visible.map(({ card, state }) => ({
+		...card,
+		scheduleState: state.state,
+		stabilityDays: state.stability,
+		dueAt: state.dueAt,
+		lastReviewedAt: state.lastReviewedAt,
+	}));
+
 	return {
-		cards: visible,
+		cards: rows,
 		filters: { domain, cardType, sourceType, status, search },
 		page: pageNum,
 		hasMore,

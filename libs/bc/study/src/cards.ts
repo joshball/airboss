@@ -268,8 +268,18 @@ export async function getDueCards(
  * Browse cards for a user with optional filters. Default order: most recently
  * updated first. Default status filter: active only. Pass an explicit status
  * filter to include suspended or archived cards.
+ *
+ * Joins per-user `cardState` so browse rows can render the same schedule
+ * signals the detail page shows (state, due, stability, last reviewed). The
+ * join is an inner join because `createCard` always inserts a paired
+ * `cardState` row inside a transaction -- a card without scheduler state is
+ * a data-integrity bug, not an expected state.
  */
-export async function getCards(userId: string, filters: CardFilters = {}, db: Db = defaultDb): Promise<CardRow[]> {
+export async function getCards(
+	userId: string,
+	filters: CardFilters = {},
+	db: Db = defaultDb,
+): Promise<CardWithState[]> {
 	const statusFilter = filters.status
 		? Array.isArray(filters.status)
 			? filters.status
@@ -291,8 +301,9 @@ export async function getCards(userId: string, filters: CardFilters = {}, db: Db
 	// Drizzle's query builder returns a new object per chained call; reassign
 	// rather than mutate so limit/offset are actually applied.
 	let q = db
-		.select()
+		.select({ card, state: cardState })
 		.from(card)
+		.innerJoin(cardState, and(eq(cardState.cardId, card.id), eq(cardState.userId, card.userId)))
 		.where(and(...clauses))
 		.orderBy(desc(card.updatedAt))
 		.$dynamic();
@@ -300,7 +311,8 @@ export async function getCards(userId: string, filters: CardFilters = {}, db: Db
 	if (filters.limit !== undefined && filters.limit > 0) q = q.limit(filters.limit);
 	if (filters.offset !== undefined && filters.offset > 0) q = q.offset(filters.offset);
 
-	return await q;
+	const rows = await q;
+	return rows.map((r) => ({ card: r.card, state: r.state }));
 }
 
 /**
