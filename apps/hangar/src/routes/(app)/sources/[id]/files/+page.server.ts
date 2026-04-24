@@ -36,6 +36,8 @@ const MAX_PREVIEW_BYTES = 256 * 1024;
 
 export interface FileEntry {
 	name: string;
+	/** Lowercase extension with no leading dot (e.g. `zip`, `tif`). Empty when the file has no extension. */
+	extension: string;
 	sizeBytes: number;
 	mtime: string;
 	previewKind: PreviewKind;
@@ -68,6 +70,7 @@ async function buildEntry(full: string, displayName: string, isArchive: boolean)
 	}
 	return {
 		name: displayName,
+		extension: ext,
 		sizeBytes: s.size,
 		mtime: s.mtime.toISOString(),
 		previewKind,
@@ -150,6 +153,11 @@ export const load: PageServerLoad = async (event) => {
 			type: source.type,
 			title: source.title,
 			sourceKind: kind,
+			sizeBytes: source.sizeBytes,
+			checksum: source.checksum,
+			downloadedAt: source.downloadedAt,
+			media: source.media,
+			edition: source.edition,
 		},
 		user: { id: user.id, role: user.role },
 		isAdmin: user.role === ROLES.ADMIN,

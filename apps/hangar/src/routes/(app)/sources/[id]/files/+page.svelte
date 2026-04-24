@@ -1,5 +1,8 @@
 <script lang="ts">
 import { PREVIEW_KINDS, ROUTES } from '@ab/constants';
+import GeotiffPreview from '$lib/components/preview/GeotiffPreview.svelte';
+import JpegPreview from '$lib/components/preview/JpegPreview.svelte';
+import ZipPreview from '$lib/components/preview/ZipPreview.svelte';
 import type { ActionData, PageData } from './$types';
 
 let { data, form }: { data: PageData; form: ActionData } = $props();
@@ -96,10 +99,34 @@ function truncate(text: string | null, max = 20_000): string {
 					</div>
 					{#if isOpen}
 						<div class="preview">
-							{#if file.previewKind === PREVIEW_KINDS.BINARY}
-								<p class="muted">No inline preview available for binary content.</p>
+							{#if file.previewKind === PREVIEW_KINDS.GEOTIFF}
+								<GeotiffPreview
+									sourceId={data.source.id}
+									fileName={file.name}
+									fileSizeBytes={file.sizeBytes}
+									media={data.source.media}
+									edition={data.source.edition}
+								/>
+							{:else if file.previewKind === PREVIEW_KINDS.JPEG}
+								<JpegPreview
+									sourceId={data.source.id}
+									fileName={file.name}
+									fileSizeBytes={file.sizeBytes}
+									altText={data.source.edition
+										? `${data.source.title} - edition ${data.source.edition.effectiveDate}`
+										: `${data.source.title} preview`}
+								/>
+							{:else if file.previewKind === PREVIEW_KINDS.ZIP}
+								<ZipPreview
+									fileName={file.name}
+									fileSizeBytes={file.sizeBytes}
+									isArchive={file.isArchive}
+									media={data.source.media}
+								/>
 							{:else if file.previewKind === PREVIEW_KINDS.PDF}
 								<p class="muted">PDF preview is available via the detail page (browser-native PDF viewer).</p>
+							{:else if file.previewKind === PREVIEW_KINDS.BINARY}
+								<p class="muted">No inline preview available for binary content.</p>
 							{:else if file.previewText === null}
 								<p class="muted">Preview skipped (file above the size threshold). Use a terminal to inspect.</p>
 							{:else if file.previewKind === PREVIEW_KINDS.MARKDOWN}
