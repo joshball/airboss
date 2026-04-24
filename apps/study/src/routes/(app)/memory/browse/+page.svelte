@@ -18,7 +18,9 @@ import {
 	QUERY_PARAMS,
 	ROUTES,
 } from '@ab/constants';
+import PageHelp from '@ab/help/ui/PageHelp.svelte';
 import Banner from '@ab/ui/components/Banner.svelte';
+import InfoTip from '@ab/ui/components/InfoTip.svelte';
 import { buildQuery, humanize } from '@ab/utils';
 import { tick } from 'svelte';
 import { goto } from '$app/navigation';
@@ -176,7 +178,10 @@ function pageHref(n: number): string {
 <section class="page">
 	<header class="hd">
 		<div>
-			<h1>Browse</h1>
+			<div class="title-row">
+				<h1>Browse</h1>
+				<PageHelp pageId="memory-browse" />
+			</div>
 			<p class="sub">Your deck of memory items. Filter, search, or click a card to edit.</p>
 		</div>
 		<a class="btn primary" href={ROUTES.MEMORY_NEW}>New card</a>
@@ -202,7 +207,15 @@ function pageHref(n: number): string {
 			/>
 		</div>
 		<div class="filter">
-			<label for="f-domain">Domain</label>
+			<div class="filter-label-row">
+				<label for="f-domain">Domain</label>
+				<InfoTip
+					term="Domain filter"
+					definition="Narrow to a single topic bucket. Domains map to the curriculum areas each card belongs to."
+					helpId="memory-browse"
+					helpSection="filters"
+				/>
+			</div>
 			<select id="f-domain" name={QUERY_PARAMS.DOMAIN} value={filters.domain ?? ''}>
 				<option value="">All</option>
 				{#each DOMAIN_VALUES as d (d)}
@@ -211,7 +224,15 @@ function pageHref(n: number): string {
 			</select>
 		</div>
 		<div class="filter">
-			<label for="f-type">Type</label>
+			<div class="filter-label-row">
+				<label for="f-type">Type</label>
+				<InfoTip
+					term="Type filter"
+					definition="Narrow to a card format. Basic is the default front/back question-and-answer shape."
+					helpId="memory-browse"
+					helpSection="filters"
+				/>
+			</div>
 			<select id="f-type" name={QUERY_PARAMS.CARD_TYPE} value={filters.cardType ?? ''}>
 				<option value="">All</option>
 				{#each CARD_TYPE_VALUES as t (t)}
@@ -220,7 +241,15 @@ function pageHref(n: number): string {
 			</select>
 		</div>
 		<div class="filter">
-			<label for="f-source">Source</label>
+			<div class="filter-label-row">
+				<label for="f-source">Source</label>
+				<InfoTip
+					term="Source filter"
+					definition="Separate cards you authored from cards ported from course material. Course cards are read-only."
+					helpId="memory-browse"
+					helpSection="filters"
+				/>
+			</div>
 			<select id="f-source" name={QUERY_PARAMS.SOURCE} value={filters.sourceType ?? ''}>
 				<option value="">All</option>
 				{#each CONTENT_SOURCE_VALUES as s (s)}
@@ -229,7 +258,15 @@ function pageHref(n: number): string {
 			</select>
 		</div>
 		<div class="filter">
-			<label for="f-status">Status</label>
+			<div class="filter-label-row">
+				<label for="f-status">Status</label>
+				<InfoTip
+					term="Status filter"
+					definition="Active cards are in rotation. Suspended cards pause scheduling. Archived cards leave the deck."
+					helpId="memory-browse"
+					helpSection="status-lifecycle"
+				/>
+			</div>
 			<select id="f-status" name={QUERY_PARAMS.STATUS} value={filters.status ?? CARD_STATUSES.ACTIVE}>
 				{#each CARD_STATUS_VALUES as s (s)}
 					<option value={s}>{statusLabel(s)}</option>
@@ -331,6 +368,12 @@ function pageHref(n: number): string {
 		gap: var(--space-lg);
 	}
 
+	.title-row {
+		display: flex;
+		align-items: center;
+		gap: var(--space-sm);
+	}
+
 	h1 {
 		margin: 0;
 		font-size: var(--type-heading-2-size);
@@ -367,6 +410,12 @@ function pageHref(n: number): string {
 		color: var(--ink-muted);
 		text-transform: uppercase;
 		letter-spacing: var(--letter-spacing-caps);
+	}
+
+	.filter-label-row {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-2xs);
 	}
 
 	.filter input,

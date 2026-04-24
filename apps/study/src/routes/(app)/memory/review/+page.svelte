@@ -10,6 +10,7 @@ import {
 } from '@ab/constants';
 import PageHelp from '@ab/help/ui/PageHelp.svelte';
 import ConfidenceSlider from '@ab/ui/components/ConfidenceSlider.svelte';
+import InfoTip from '@ab/ui/components/InfoTip.svelte';
 import KbdHint from '@ab/ui/components/KbdHint.svelte';
 import { humanize } from '@ab/utils';
 import { enhance } from '$app/forms';
@@ -60,11 +61,31 @@ const total = $derived(batch.length);
 const needsConfidence = $derived(Boolean(current?.promptConfidence));
 const showConfidencePrompt = $derived(phase === REVIEW_PHASES.CONFIDENCE && needsConfidence);
 
-const ratingLabels: Record<number, { label: string; hint: string; key: string }> = {
-	[REVIEW_RATINGS.AGAIN]: { label: 'Again', hint: '< 1m', key: '1' },
-	[REVIEW_RATINGS.HARD]: { label: 'Hard', hint: '< 10m', key: '2' },
-	[REVIEW_RATINGS.GOOD]: { label: 'Good', hint: '~ days', key: '3' },
-	[REVIEW_RATINGS.EASY]: { label: 'Easy', hint: '~ week+', key: '4' },
+const ratingLabels: Record<number, { label: string; hint: string; key: string; definition: string }> = {
+	[REVIEW_RATINGS.AGAIN]: {
+		label: 'Again',
+		hint: '< 1m',
+		key: '1',
+		definition: 'You blanked or got it wrong. Card resets toward short intervals so you can rebuild the memory.',
+	},
+	[REVIEW_RATINGS.HARD]: {
+		label: 'Hard',
+		hint: '< 10m',
+		key: '2',
+		definition: 'You recalled it but it took effort. Next interval grows only a little.',
+	},
+	[REVIEW_RATINGS.GOOD]: {
+		label: 'Good',
+		hint: '~ days',
+		key: '3',
+		definition: 'You recalled it without a struggle. This is the default steady-state rating.',
+	},
+	[REVIEW_RATINGS.EASY]: {
+		label: 'Easy',
+		hint: '~ week+',
+		key: '4',
+		definition: 'You knew it instantly. Next interval jumps forward further than Good.',
+	},
 };
 
 function domainLabel(slug: string): string {
@@ -293,7 +314,15 @@ function clickRating(value: number) {
 				<span class="counter">Card {index + 1} of {total}</span>
 				<PageHelp pageId="memory-review" />
 			</div>
-			<span class="badge domain">{domainLabel(current.domain)}</span>
+			<span class="domain-wrap">
+				<span class="badge domain">{domainLabel(current.domain)}</span>
+				<InfoTip
+					term={domainLabel(current.domain)}
+					definition="The topic bucket this card belongs to. Drives browse filters and session mix."
+					helpId="memory-card"
+					helpSection="domain"
+				/>
+			</span>
 		</header>
 
 		<article class="card">
@@ -314,10 +343,17 @@ function clickRating(value: number) {
 		{#if showConfidencePrompt}
 			<ConfidenceSlider onSelect={pickConfidence} onSkip={skipConfidence} />
 		{:else if phase === REVIEW_PHASES.FRONT}
-			<button type="button" class="btn primary wide" onclick={goToConfidenceOrReveal}>
-				Show answer
-				<span class="kbd">Space</span>
-			</button>
+			<div class="reveal-row">
+				<button type="button" class="btn primary wide" onclick={goToConfidenceOrReveal}>
+					Show answer
+					<span class="kbd">Space</span>
+				</button>
+				<InfoTip
+					term="Show answer"
+					definition="Recall first, then check. Active recall builds retention; rereading the back first does not."
+					helpId="concept-active-recall"
+				/>
+			</div>
 		{:else if phase === REVIEW_PHASES.ANSWER}
 			<p class="rate-q">How well did you remember?</p>
 			<form
@@ -350,18 +386,28 @@ function clickRating(value: number) {
 			>
 				<div class="ratings">
 					{#each [REVIEW_RATINGS.AGAIN, REVIEW_RATINGS.HARD, REVIEW_RATINGS.GOOD, REVIEW_RATINGS.EASY] as r (r)}
-						<button
-							type="submit"
-							name="rating"
-							value={r}
-							data-rating={r}
-							class="rating rating-{r}"
-							disabled={phase !== REVIEW_PHASES.ANSWER}
-						>
-							<span class="rating-label">{ratingLabels[r].label}</span>
-							<span class="rating-hint">{ratingLabels[r].hint}</span>
-							<span class="kbd">{ratingLabels[r].key}</span>
-						</button>
+						<div class="rating-cell">
+							<button
+								type="submit"
+								name="rating"
+								value={r}
+								data-rating={r}
+								class="rating rating-{r}"
+								disabled={phase !== REVIEW_PHASES.ANSWER}
+							>
+								<span class="rating-label">{ratingLabels[r].label}</span>
+								<span class="rating-hint">{ratingLabels[r].hint}</span>
+								<span class="kbd">{ratingLabels[r].key}</span>
+							</button>
+							<span class="rating-tip">
+								<InfoTip
+									term={ratingLabels[r].label}
+									definition={ratingLabels[r].definition}
+									helpId="memory-review"
+									helpSection="the-four-ratings"
+								/>
+							</span>
+						</div>
 					{/each}
 				</div>
 				{#if submitError}
@@ -547,6 +593,33 @@ function clickRating(value: number) {
 	.ratings {
 		display: grid;
 		grid-template-columns: repeat(4, 1fr);
+		gap: var(--space-sm);
+	}
+
+	.rating-cell {
+		position: relative;
+		display: flex;
+	}
+
+	.rating-cell > .rating {
+		flex: 1;
+	}
+
+	.rating-tip {
+		position: absolute;
+		top: var(--space-xs);
+		right: var(--space-xs);
+	}
+
+	.domain-wrap {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-2xs);
+	}
+
+	.reveal-row {
+		display: flex;
+		align-items: center;
 		gap: var(--space-sm);
 	}
 
