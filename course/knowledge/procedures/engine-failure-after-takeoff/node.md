@@ -27,22 +27,22 @@ stability: stable
 
 # === Cert relevance (multi-dimensional) ===
 relevance:
-  - cert: PPL
+  - cert: private
     bloom: apply
     priority: core
-  - cert: PPL
+  - cert: private
     bloom: evaluate
     priority: core
-  - cert: IR
+  - cert: instrument
     bloom: evaluate
     priority: core
-  - cert: CPL
+  - cert: commercial
     bloom: evaluate
     priority: core
-  - cert: CFI
+  - cert: cfi
     bloom: create
     priority: core
-  - cert: CFI
+  - cert: cfi
     bloom: evaluate
     priority: core
 

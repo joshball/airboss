@@ -4,7 +4,7 @@ product: study
 feature: spaced-memory-items
 type: review
 status: unread
-review_status: pending
+review_status: done
 ---
 
 # Review: Spaced Memory Items
@@ -263,5 +263,7 @@ e97d759  fix(spaced-memory-items): address Phase 1 review findings
 <this commit>  fix(spaced-memory-items): address final 10-reviewer findings
 ```
 
-`review_status` stays `pending` until Joshua walks the SMI-1 through SMI-17
-manual test checklist in a browser.
+`review_status` is `done`: the feature is shipped on main (PR #1, Spaced
+Memory Items MVP + docs migration), all agent-owned findings are closed, and
+the SMI-1 through SMI-17 manual test checklist is a user-controlled gate
+tracked by the `status` field, not the agent's `review_status`.

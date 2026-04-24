@@ -19,6 +19,7 @@ import {
 	CARD_STATES,
 	CARD_STATUSES,
 	type Cert,
+	CERT_VALUES,
 	type ConfidenceLevel,
 	DEFAULT_SESSION_LENGTH,
 	DEFAULT_USER_TIMEZONE,
@@ -383,7 +384,7 @@ async function fetchNodeCandidates(
 	}
 
 	const certFilterSet = new Set<string>(certFilter);
-	const knownCerts: readonly string[] = ['PPL', 'IR', 'CPL', 'CFI'];
+	const knownCerts: readonly string[] = CERT_VALUES;
 
 	const candidates: EngineNodeCandidate[] = [];
 	for (const n of nodes) {

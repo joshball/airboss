@@ -9,16 +9,16 @@ technical_depth: working
 stability: stable
 
 relevance:
-  - cert: PPL
+  - cert: private
     bloom: understand
     priority: core
-  - cert: IR
+  - cert: instrument
     bloom: evaluate
     priority: core
-  - cert: CPL
+  - cert: commercial
     bloom: evaluate
     priority: core
-  - cert: CFI
+  - cert: cfi
     bloom: create
     priority: core
 

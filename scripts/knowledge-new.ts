@@ -56,7 +56,7 @@ technical_depth: working
 stability: stable
 
 # === Cert relevance (multi-dimensional) ===
-# Each entry: { cert: PPL|IR|CPL|CFI, bloom: remember|understand|apply|analyze|evaluate|create, priority: core|supporting|elective }
+# Each entry: { cert: private|instrument|commercial|cfi, bloom: remember|understand|apply|analyze|evaluate|create, priority: core|supporting|elective }
 relevance: []
 
 # === Graph edges ===

@@ -414,6 +414,10 @@ export const scenario = studySchema.table(
 	(t) => ({
 		scenarioUserStatusIdx: index('scenario_user_status_idx').on(t.userId, t.status),
 		scenarioUserDomainIdx: index('scenario_user_domain_idx').on(t.userId, t.domain),
+		// (userId, createdAt) backs `getScenarios` (scenarios.ts) which filters
+		// by user_id and orders by created_at DESC for the browse list; also
+		// backs `getRepBacklog` which uses `created_at DESC` as a tiebreaker in
+		// the last-attempted-first ordering. Kept deliberately; do not drop.
 		scenarioUserCreatedIdx: index('scenario_user_created_idx').on(t.userId, t.createdAt),
 		scenarioUserNodeIdx: index('scenario_user_node_idx').on(t.userId, t.nodeId),
 		// Difficulty is low-cardinality; useful on larger backlogs. `getScenarios`

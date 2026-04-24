@@ -6,6 +6,8 @@
  * graph's domain taxonomy rather than an authoritative constant.
  */
 
+import { CERT_APPLICABILITIES } from './reference-tags';
+
 /**
  * Platform default for "what timezone is the user in?" Used for day-boundary
  * aggregations (streaks, attemptedToday). User-zero is in America/Denver;
@@ -406,19 +408,30 @@ export const KNOWLEDGE_PHASE_LABELS: Record<KnowledgePhase, string> = {
  * Certifications a knowledge node can be relevant at. Tagged per-node via
  * the relevance array. Not to be confused with specific ratings / endorsements;
  * this is the cert framework itself.
+ *
+ * `CERTS` is a curated *subset* of {@link CERT_APPLICABILITIES} from
+ * `reference-tags.ts` -- the four cert goals the study-plan dashboard targets
+ * today (private / instrument / commercial / cfi). The canonical value strings
+ * live in `CERT_APPLICABILITIES`; keeping the keys here as the short aviation
+ * acronym (PPL/IR/CPL/CFI) preserves dashboard call-sites and authoring ergonomics
+ * while routing all data through one source of truth.
  */
 export const CERTS = {
-	PPL: 'PPL',
-	IR: 'IR',
-	CPL: 'CPL',
-	CFI: 'CFI',
+	PPL: CERT_APPLICABILITIES.PRIVATE,
+	IR: CERT_APPLICABILITIES.INSTRUMENT,
+	CPL: CERT_APPLICABILITIES.COMMERCIAL,
+	CFI: CERT_APPLICABILITIES.CFI,
 } as const;
 
 export type Cert = (typeof CERTS)[keyof typeof CERTS];
 
-export const CERT_VALUES = Object.values(CERTS);
+export const CERT_VALUES: readonly Cert[] = Object.values(CERTS);
 
-/** Human-readable labels for certs. Short form matches the authored YAML. */
+/**
+ * Human-readable labels for certs. Short-form aviation acronym matches the
+ * authored YAML key style and dashboard column headers. Drives display only;
+ * storage uses the canonical lowercase {@link CertApplicability} value.
+ */
 export const CERT_LABELS: Record<Cert, string> = {
 	[CERTS.PPL]: 'PPL',
 	[CERTS.IR]: 'IR',
