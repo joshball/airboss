@@ -3,7 +3,7 @@ title: 'Tasks: OKLCH Palette Migration'
 feature: oklch-palette-migration
 type: tasks
 status: unread
-review_status: pending
+review_status: done
 ---
 
 # Tasks: OKLCH Palette Migration

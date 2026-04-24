@@ -106,7 +106,7 @@ File: `libs/themes/__tests__/contrast-matrix.test.ts`.
 
 Enforces WCAG AA (4.5:1 for body text, 3:1 for large text and non-text elements) on 11 required role-pairs per `(theme, appearance)`. Failures block the suite. The pairs cover the usual high-leverage combinations: body ink on page / panel surface, action-default ink on action-default fill, `signal-*` ink on `signal-*` wash, edge visibility on page, focus ring on page.
 
-An advisory list logs below-bar ratios without failing. This catches "the pair is not in the required matrix but the contrast is poor anyway" without blocking, so regressions stay visible during theme tuning.
+Since WP #8, `contrast.ts` computes luminance directly from OKLCH (OKLab intermediate, CSS Color 4 matrices) instead of requiring callers to pre-convert to hex. Every `(theme, appearance)` pair is measured -- there is no skip branch. An advisory list still logs below-bar ratios without failing. This catches "the pair is not in the required matrix but the contrast is poor anyway" without blocking, so regressions stay visible during theme tuning.
 
 AAA is not enforced. Aviation UX prefers legibility but not at the cost of limiting the palette; pushing AAA across every role would force the palette into a narrow ink-on-white corner.
 
@@ -114,7 +114,9 @@ AAA is not enforced. Aviation UX prefers legibility but not at the cost of limit
 
 File: `libs/themes/__tests__/palette-parse.test.ts`.
 
-Walks every theme's light and dark palettes and confirms every color string parses. OKLCH strings are easy to typo -- a single `/` where a space belongs and the value silently reverts to the browser default.
+Walks every theme's light and dark palettes and confirms every color string parses. OKLCH strings are easy to typo -- a single `/` where a space belongs and the value silently reverts to the browser default. A second describe block asserts that every palette entry parses as OKLCH (not just "a valid color"); since WP #8 landed the OKLCH migration, a palette commit that reintroduces hex fails immediately and points at the offending role path.
+
+OKLCH is Baseline 2023 across every target browser, so the emit pipeline writes `oklch(...)` verbatim -- no hex fallback is generated.
 
 ## 5. Emit determinism
 

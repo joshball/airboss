@@ -3,7 +3,7 @@ title: 'Spec: OKLCH Palette Migration'
 feature: oklch-palette-migration
 type: spec
 status: unread
-review_status: pending
+review_status: done
 ---
 
 # Spec: OKLCH Palette Migration

@@ -3,7 +3,7 @@ title: 'Test plan: OKLCH Palette Migration'
 feature: oklch-palette-migration
 type: test-plan
 status: unread
-review_status: pending
+review_status: done
 ---
 
 # Test plan: OKLCH Palette Migration
