@@ -115,7 +115,7 @@ export {
 	SOURCE_TYPE_VALUES,
 } from './reference-tags';
 export { ROLES, type Role } from './roles';
-export { QUERY_PARAMS, ROUTES } from './routes';
+export { NAV_LABELS, QUERY_PARAMS, ROUTES } from './routes';
 export { SCHEMAS, type SchemaName } from './schemas';
 export {
 	SIM_AIRCRAFT_IDS,
@@ -163,6 +163,7 @@ export {
 	CARD_MIN,
 	CARD_STATE_VALUES,
 	CARD_STATES,
+	CARD_STATUS_LABELS,
 	CARD_STATUS_VALUES,
 	CARD_STATUSES,
 	CARD_TYPE_LABELS,
@@ -180,6 +181,7 @@ export {
 	CONFIDENCE_LEVEL_VALUES,
 	CONFIDENCE_LEVELS,
 	CONFIDENCE_SAMPLE_RATE,
+	CONTENT_SOURCE_LABELS,
 	CONTENT_SOURCE_VALUES,
 	CONTENT_SOURCES,
 	type ConfidenceLevel,

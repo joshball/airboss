@@ -162,3 +162,24 @@ export const ROUTES = {
 	/** Form-action id for the sync-all-pending button. */
 	HANGAR_SYNC_ACTION: '?/syncAll',
 } as const;
+
+/**
+ * Labels for primary navigation links. Kept out of markup so every surface
+ * renders the same text and a rename only touches one file.
+ */
+export const NAV_LABELS = {
+	DASHBOARD: 'Dashboard',
+	PLANS: 'Plans',
+	MEMORY: 'Memory',
+	MEMORY_HOME: 'Overview',
+	MEMORY_BROWSE: 'Browse',
+	MEMORY_REVIEW: 'Review',
+	MEMORY_NEW: 'New card',
+	REPS: 'Reps',
+	KNOWLEDGE: 'Knowledge',
+	GLOSSARY: 'Glossary',
+	CALIBRATION: 'Calibration',
+	HELP: 'Help',
+	HELP_INDEX: 'Help index',
+	HELP_CONCEPTS: 'Concepts',
+} as const;

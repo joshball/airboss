@@ -207,6 +207,18 @@ export type ContentSource = (typeof CONTENT_SOURCES)[keyof typeof CONTENT_SOURCE
 
 export const CONTENT_SOURCE_VALUES = Object.values(CONTENT_SOURCES);
 
+/**
+ * Human-readable labels for content sources. Lets the card detail + browse
+ * surfaces render "Personal" / "Course" / "Product" / "Imported" without
+ * relying on `humanize()` on the raw slug.
+ */
+export const CONTENT_SOURCE_LABELS: Record<ContentSource, string> = {
+	[CONTENT_SOURCES.PERSONAL]: 'Personal',
+	[CONTENT_SOURCES.COURSE]: 'Course',
+	[CONTENT_SOURCES.PRODUCT]: 'Product',
+	[CONTENT_SOURCES.IMPORTED]: 'Imported',
+};
+
 export const CARD_STATUSES = {
 	ACTIVE: 'active',
 	SUSPENDED: 'suspended',
@@ -216,6 +228,17 @@ export const CARD_STATUSES = {
 export type CardStatus = (typeof CARD_STATUSES)[keyof typeof CARD_STATUSES];
 
 export const CARD_STATUS_VALUES = Object.values(CARD_STATUSES);
+
+/**
+ * Human-readable labels for card statuses. Keeps display strings out of
+ * inline markup so every Memory surface renders "Active" / "Suspended" /
+ * "Archived" consistently.
+ */
+export const CARD_STATUS_LABELS: Record<CardStatus, string> = {
+	[CARD_STATUSES.ACTIVE]: 'Active',
+	[CARD_STATUSES.SUSPENDED]: 'Suspended',
+	[CARD_STATUSES.ARCHIVED]: 'Archived',
+};
 
 /** FSRS rating values (matches ts-fsrs / Anki convention). */
 export const REVIEW_RATINGS = {

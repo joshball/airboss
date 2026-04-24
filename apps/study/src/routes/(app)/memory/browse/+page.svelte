@@ -1,11 +1,17 @@
 <script lang="ts">
 import {
+	CARD_STATE_VALUES,
+	CARD_STATUS_LABELS,
 	CARD_STATUS_VALUES,
 	CARD_STATUSES,
 	CARD_TYPE_LABELS,
 	CARD_TYPE_VALUES,
+	type CardState,
+	type CardStatus,
 	type CardType,
+	CONTENT_SOURCE_LABELS,
 	CONTENT_SOURCE_VALUES,
+	type ContentSource,
 	DOMAIN_LABELS,
 	DOMAIN_VALUES,
 	type Domain,
@@ -85,6 +91,44 @@ function cardTypeLabel(slug: string): string {
 	return (CARD_TYPE_LABELS as Record<CardType, string>)[slug as CardType] ?? humanize(slug);
 }
 
+function statusLabel(slug: string): string {
+	return (CARD_STATUS_LABELS as Record<CardStatus, string>)[slug as CardStatus] ?? humanize(slug);
+}
+
+function sourceLabel(slug: string): string {
+	return (CONTENT_SOURCE_LABELS as Record<ContentSource, string>)[slug as ContentSource] ?? humanize(slug);
+}
+
+function cardStateLabel(slug: string): string {
+	return humanize(slug);
+}
+
+function formatRelative(ms: number): string {
+	const abs = Math.abs(ms);
+	const minutes = abs / 60_000;
+	const hours = minutes / 60;
+	const days = hours / 24;
+	const future = ms >= 0;
+	let value: string;
+	if (abs < 60_000) value = `${Math.round(abs / 1000)}s`;
+	else if (minutes < 60) value = `${Math.round(minutes)}m`;
+	else if (hours < 48) value = `${Math.round(hours)}h`;
+	else if (days < 60) value = `${Math.round(days)}d`;
+	else value = `${Math.round(days / 30)}mo`;
+	return future ? `in ${value}` : `${value} ago`;
+}
+
+function dueLabel(dueAt: Date | string): string {
+	const t = (typeof dueAt === 'string' ? new Date(dueAt) : dueAt).getTime();
+	return formatRelative(t - Date.now());
+}
+
+function lastReviewedLabel(lastReviewedAt: Date | string | null): string {
+	if (!lastReviewedAt) return 'Never';
+	const t = (typeof lastReviewedAt === 'string' ? new Date(lastReviewedAt) : lastReviewedAt).getTime();
+	return formatRelative(t - Date.now());
+}
+
 function shorten(text: string, max = 120): string {
 	if (text.length <= max) return text;
 	return `${text.slice(0, max).trimEnd()}...`;
@@ -97,9 +141,10 @@ const chips = $derived.by<FilterChip[]>(() => {
 	if (filters.domain) out.push({ key: QUERY_PARAMS.DOMAIN, label: 'Domain', value: domainLabel(filters.domain) });
 	if (filters.cardType)
 		out.push({ key: QUERY_PARAMS.CARD_TYPE, label: 'Type', value: cardTypeLabel(filters.cardType) });
-	if (filters.sourceType) out.push({ key: QUERY_PARAMS.SOURCE, label: 'Source', value: humanize(filters.sourceType) });
+	if (filters.sourceType)
+		out.push({ key: QUERY_PARAMS.SOURCE, label: 'Source', value: sourceLabel(filters.sourceType) });
 	if (filters.status !== CARD_STATUSES.ACTIVE)
-		out.push({ key: QUERY_PARAMS.STATUS, label: 'Status', value: humanize(filters.status) });
+		out.push({ key: QUERY_PARAMS.STATUS, label: 'Status', value: statusLabel(filters.status) });
 	return out;
 });
 
@@ -179,7 +224,7 @@ function pageHref(n: number): string {
 			<select id="f-source" name={QUERY_PARAMS.SOURCE} value={filters.sourceType ?? ''}>
 				<option value="">All</option>
 				{#each CONTENT_SOURCE_VALUES as s (s)}
-					<option value={s}>{humanize(s)}</option>
+					<option value={s}>{sourceLabel(s)}</option>
 				{/each}
 			</select>
 		</div>
@@ -187,7 +232,7 @@ function pageHref(n: number): string {
 			<label for="f-status">Status</label>
 			<select id="f-status" name={QUERY_PARAMS.STATUS} value={filters.status ?? CARD_STATUSES.ACTIVE}>
 				{#each CARD_STATUS_VALUES as s (s)}
-					<option value={s}>{humanize(s)}</option>
+					<option value={s}>{statusLabel(s)}</option>
 				{/each}
 			</select>
 		</div>
@@ -242,13 +287,15 @@ function pageHref(n: number): string {
 						<div class="card-meta">
 							<span class="badge domain">{domainLabel(c.domain)}</span>
 							<span class="badge type">{cardTypeLabel(c.cardType)}</span>
-							{#if c.status !== CARD_STATUSES.ACTIVE}
-								<span class="badge status-{c.status}">{humanize(c.status)}</span>
-							{/if}
-							{#if c.sourceType !== 'personal'}
-								<span class="badge source">{humanize(c.sourceType)}</span>
-							{/if}
+							<span class="badge status-{c.status}">{statusLabel(c.status)}</span>
+							<span class="badge source">{sourceLabel(c.sourceType)}</span>
 						</div>
+						<dl class="card-stats" aria-label="Schedule">
+							<div><dt>State</dt><dd>{cardStateLabel(c.scheduleState)}</dd></div>
+							<div><dt>Due</dt><dd>{dueLabel(c.dueAt)}</dd></div>
+							<div><dt>Stability</dt><dd>{c.stabilityDays.toFixed(1)} d</dd></div>
+							<div><dt>Last reviewed</dt><dd>{lastReviewedLabel(c.lastReviewedAt)}</dd></div>
+						</dl>
 					</a>
 				</li>
 			{/each}
