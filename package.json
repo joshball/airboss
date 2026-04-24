@@ -26,6 +26,7 @@
 		"drizzle-kit": "^0.31.4",
 		"drizzle-orm": "^0.44.2",
 		"postgres": "^3.4.7",
+		"smol-toml": "^1.6.1",
 		"svelte": "^5.34.7",
 		"svelte-check": "^4.2.1",
 		"typescript": "^5.9.3",
