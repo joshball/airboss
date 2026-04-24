@@ -69,7 +69,7 @@ Run in order on dev (`bun run dev hangar`). Each step has a pass condition.
 
 ### Re-fetch (next edition)
 
-18. Inject a "next edition" via the resolver override (environment flag or admin tool; see Phase 6 in tasks.md) so the resolver returns a newer effective date.
+18. Inject a "next edition" via the `HANGAR_EDITION_STUB_URL` env var. Write an AeroNav-shaped HTML fixture with a newer effective date (e.g. `/tmp/next-edition.html` containing a `Denver - 2026-05-16 (Edition 117)` row); start hangar with `HANGAR_EDITION_STUB_URL=/tmp/next-edition.html bun run dev hangar`. The resolver reads the stub for every fetch call until the var is unset. Refuses to activate when `NODE_ENV=production`.
 19. Click `Fetch`. **Pass:** job runs end to end; new directory `data/sources/sectional/sectional-denver/<new-edition>/` populated; old directory renamed to `<old-edition>@archived-<ts>`; previous thumbnail preserved.
 20. `/sources/sectional-denver` preview tile now shows the new edition's thumbnail + metadata.
 21. Verify archive retention: run `Fetch` enough times (with different simulated editions) to exceed `ARCHIVE_RETENTION`. **Pass:** oldest archived directory is pruned.

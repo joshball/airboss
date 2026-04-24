@@ -17,6 +17,15 @@ export const ENV_VARS = {
 	AIRBOSS_ALLOW_DEV_SEED: 'AIRBOSS_ALLOW_DEV_SEED',
 	/** Hangar sync-to-disk mode override. Values: `commit-local` | `pr`. */
 	HANGAR_SYNC_MODE: 'HANGAR_SYNC_MODE',
+	/**
+	 * Dev-only override for the sectional edition resolver. When set, the
+	 * binary-visual fetch pipeline loads HTML from this location (an http(s)://
+	 * URL or a local filesystem path) instead of the source's configured index
+	 * URL. Off by default. Used to simulate a "next edition available" payload
+	 * during the wp-hangar-non-textual manual walkthrough (test-plan step 18).
+	 * Refuses to activate when `NODE_ENV=production`.
+	 */
+	HANGAR_EDITION_STUB_URL: 'HANGAR_EDITION_STUB_URL',
 } as const;
 
 export type EnvVarName = (typeof ENV_VARS)[keyof typeof ENV_VARS];

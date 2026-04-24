@@ -14,6 +14,7 @@
 import { JOB_KINDS } from '@ab/constants';
 import type { JobHandlers } from '@ab/hangar-jobs';
 import { runSyncJob } from '@ab/hangar-sync';
+import { withEditionStub } from './edition-stub';
 import {
 	makeBuildHandler,
 	makeDiffHandler,
@@ -36,7 +37,7 @@ import {
  */
 export const hangarJobHandlers: JobHandlers = {
 	[JOB_KINDS.SYNC_TO_DISK]: runSyncJob,
-	[JOB_KINDS.FETCH_SOURCE]: makeFetchHandler(),
+	[JOB_KINDS.FETCH_SOURCE]: makeFetchHandler({ fetchHtml: withEditionStub() }),
 	[JOB_KINDS.UPLOAD_SOURCE]: makeUploadHandler(),
 	[JOB_KINDS.EXTRACT_SOURCE]: makeExtractHandler(),
 	[JOB_KINDS.BUILD_REFERENCES]: makeBuildHandler(),
