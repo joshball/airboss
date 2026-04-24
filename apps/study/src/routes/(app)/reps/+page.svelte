@@ -1,5 +1,6 @@
 <script lang="ts">
 import { DOMAIN_LABELS, type Domain, REP_DASHBOARD_WINDOW_DAYS, ROUTES } from '@ab/constants';
+import PageHelp from '@ab/help/ui/PageHelp.svelte';
 import StatTile from '@ab/ui/components/StatTile.svelte';
 import { humanize } from '@ab/utils';
 import type { PageData } from './$types';
@@ -29,7 +30,10 @@ function bar(value: number): number {
 <section class="page">
 	<header class="hd">
 		<div>
-			<h1>Decision Reps</h1>
+			<div class="title-row">
+				<h1>Decision Reps</h1>
+				<PageHelp pageId="reps" />
+			</div>
 			<p class="sub">Read a situation. Pick a call. See what happens. 60 seconds at a time.</p>
 		</div>
 		<nav class="quick" aria-label="Quick actions">
@@ -140,6 +144,13 @@ function bar(value: number): number {
 		justify-content: space-between;
 		align-items: flex-start;
 		gap: var(--space-lg);
+		flex-wrap: wrap;
+	}
+
+	.title-row {
+		display: flex;
+		align-items: center;
+		gap: var(--space-sm);
 		flex-wrap: wrap;
 	}
 

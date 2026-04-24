@@ -15,6 +15,7 @@ import {
 	SCENARIO_OPTIONS_MAX,
 	SCENARIO_OPTIONS_MIN,
 } from '@ab/constants';
+import PageHelp from '@ab/help/ui/PageHelp.svelte';
 import { humanize } from '@ab/utils';
 import { enhance } from '$app/forms';
 import type { ActionData } from './$types';
@@ -104,7 +105,10 @@ function difficultyLabel(slug: string): string {
 <section class="page">
 	<header class="hd">
 		<div>
-			<h1>New scenario</h1>
+			<div class="title-row">
+				<h1>New scenario</h1>
+				<PageHelp pageId="reps-new" />
+			</div>
 			<p class="sub">Write a micro-decision: 2-3 sentences of situation, 2-5 options, exactly one correct.</p>
 		</div>
 		<a class="back" href={ROUTES.REPS_BROWSE}>Browse</a>
@@ -342,6 +346,13 @@ function difficultyLabel(slug: string): string {
 		align-items: flex-start;
 		justify-content: space-between;
 		gap: var(--space-lg);
+	}
+
+	.title-row {
+		display: flex;
+		align-items: center;
+		gap: var(--space-sm);
+		flex-wrap: wrap;
 	}
 
 	h1 {

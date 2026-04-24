@@ -39,6 +39,9 @@ import { gettingStarted } from './content/getting-started';
 import { keyboardShortcuts } from './content/keyboard-shortcuts';
 import { knowledgeGraph } from './content/knowledge-graph';
 import { memoryReview } from './content/memory-review';
+import { reps } from './content/reps';
+import { repsBrowse } from './content/reps-browse';
+import { repsNew } from './content/reps-new';
 import { repsSession } from './content/reps-session';
 import { sessionStart } from './content/session-start';
 
@@ -46,6 +49,9 @@ export const studyHelpPages: readonly HelpPage[] = [
 	gettingStarted,
 	dashboard,
 	memoryReview,
+	reps,
+	repsBrowse,
+	repsNew,
 	repsSession,
 	sessionStart,
 	calibration,
