@@ -105,3 +105,49 @@ The session runner writes rep/card/skip outcomes through `recordItemResult`, whi
 ADR 012 is explicit that the substrate is the single audit trail -- duplicate rows defeat that promise. Load-bearing fix: add a `UNIQUE(session_id, slot_index)` constraint on `session_item_result`, then switch `recordItemResult` to an atomic UPSERT via `.onConflictDoUpdate({ target: [sessionId, slotIndex], ... })`. The DB guarantees single-row-per-slot regardless of how many concurrent writers show up. The UPSERT makes the "second submit updates the existing row" contract actual instead of aspirational.
 
 Don't remove the UNIQUE constraint. Without it the idempotency claim is a lie.
+
+## Addendum: Idempotency (2026-04-23)
+
+Verification pass after the `REP_DEDUPE_WINDOW_MS` constant was removed in PR #41. The goal: prove double-writes cannot slip through without that window. Walk of every write path into `session_item_result`, plus the upstream `submitReview` write that feeds it.
+
+### The guarantee
+
+For any given `(session_id, slot_index)` pair, at most one row exists in `session_item_result`. Concurrent submits (double-tap, SvelteKit `enhance` retry on a transient 5xx, duplicate tab, network retry) collapse to exactly one row. The second writer updates the row the first writer inserted; it does not create a duplicate.
+
+For card reviews specifically, `submitReview` is idempotent within `REVIEW_DEDUPE_WINDOW_MS`: a second review submit for the same `(card_id, user_id)` inside the window returns the original review row without writing a new one. This is independent of the slot-result guarantee above.
+
+### Where it is enforced
+
+1. **DB constraint: `sir_session_slot_unique`** on `session_item_result(session_id, slot_index)`. Defined in `libs/bc/study/src/schema.ts` line 639. This is the load-bearing invariant. Without it, the UPSERT below would race and insert duplicates.
+
+2. **Atomic UPSERT in `recordItemResult`** (`libs/bc/study/src/sessions.ts` line 827-904). The write is a single statement: `db.insert(sessionItemResult).values({...}).onConflictDoUpdate({ target: [sessionId, slotIndex], set: updateSet }).returning()`. The conflict target matches the UNIQUE index exactly. Two writers racing on the same slot both hit `ON CONFLICT DO UPDATE`, and Postgres serializes the update; neither gets `INSERT`-then-duplicate.
+
+3. **`submitAttempt` is pure** (`libs/bc/study/src/scenarios.ts` line 385-414). It validates the chosen option against the scenario and returns a `RepAttemptOutcome`. No writes. Double-calling it has no persistence effect. The caller (session route) persists the outcome via `recordItemResult`, which is the UPSERT above.
+
+4. **`submitReview` locks + dedupes** (`libs/bc/study/src/reviews.ts` line 57-129). Inside a `db.transaction`, the function takes `SELECT FOR UPDATE` on the `card_state` row for `(card_id, user_id)`, then checks for an existing review within `REVIEW_DEDUPE_WINDOW_MS` and returns it if present. The row lock ensures a concurrent submit sees the first inserter's row. The session route then calls `recordItemResult` with `reviewId=rev.id`, which UPSERTs the slot row.
+
+5. **Route-level ordering**: `apps/study/src/routes/(app)/sessions/[id]/+page.server.ts` actions (`submitReview`, `submitRep`, `completeNode`, skip variants) all funnel to `recordItemResult`. The `submitRep` path validates via `submitAttempt` (pure) then UPSERTs. The `submitReview` path writes a review row (dedupe-windowed) then UPSERTs the slot with that `reviewId`.
+
+Double-submit scenarios, by path:
+
+| Scenario                                               | What prevents duplicate            | Where                                           |
+| ------------------------------------------------------ | ---------------------------------- | ----------------------------------------------- |
+| Rep submit hit twice in parallel                       | UPSERT + `sir_session_slot_unique` | `recordItemResult`                              |
+| Card submit hit twice in parallel                      | Row lock + dedupe window + UPSERT  | `submitReview` tx, then `recordItemResult`      |
+| Node-complete hit twice in parallel                    | UPSERT + `sir_session_slot_unique` | `recordItemResult`                              |
+| Skip submit hit twice in parallel                      | Transactional skip + UPSERT        | `skipSessionSlot` -> `recordItemResult`         |
+| Complete session hit twice in parallel                 | Predicate `completed_at IS NULL`   | `completeSession` UPDATE with null guard        |
+| `submitAttempt` called twice (e.g., retry)             | Pure function; no persistence      | n/a (idempotent by construction)                |
+
+### Gap analysis
+
+None found. The DB constraint is present and the BC uses it via an atomic UPSERT. Every known write path into `session_item_result` routes through `recordItemResult`; there is no alternative insert path that could bypass the conflict target. `submitReview` has its own idempotency (row lock + window) which is independent and additive: even if a caller invoked `submitReview` twice, the review row-count would not diverge, and the slot row would reference the same `reviewId` either way.
+
+The removed `REP_DEDUPE_WINDOW_MS` constant was protecting the old `rep_attempt` table at the BC layer. With `rep_attempt` deleted and rep outcomes living on the slot row, the slot's DB-level UNIQUE subsumes that protection and is strictly stronger (atomic, concurrent-safe, no wall-clock window to tune).
+
+### Invariants to keep
+
+- `sir_session_slot_unique` stays. Removing it collapses the claim back to a race.
+- `recordItemResult` stays an UPSERT with `target: [sessionId, slotIndex]`. Any rewrite to SELECT-then-INSERT reintroduces the duplicate-insert race.
+- `submitReview` keeps its `SELECT FOR UPDATE` lock + dedupe-window check inside the transaction. Dropping either lets parallel card submits produce two review rows.
+- Any new write path into `session_item_result` must go through `recordItemResult`. Callers that bypass it are a correctness bug.
