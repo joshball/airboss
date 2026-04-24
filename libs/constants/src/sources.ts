@@ -36,6 +36,11 @@ export const PREVIEW_KINDS = {
 	PDF: 'pdf',
 	CSV: 'csv',
 	TEXT: 'text',
+	/** Dedicated binary-visual kinds (wp-hangar-non-textual Phase 5). */
+	ZIP: 'zip',
+	GEOTIFF: 'geotiff',
+	JPEG: 'jpeg',
+	/** Fallback for any extension with no dedicated previewer. */
 	BINARY: 'binary',
 } as const;
 
@@ -55,11 +60,12 @@ export const EXTENSION_TO_PREVIEW_KIND: Readonly<Record<string, PreviewKind>> = 
 	log: PREVIEW_KINDS.TEXT,
 	html: PREVIEW_KINDS.TEXT,
 	// wp-hangar-non-textual: raster/archive previews
-	zip: PREVIEW_KINDS.BINARY,
-	tif: PREVIEW_KINDS.BINARY,
-	tiff: PREVIEW_KINDS.BINARY,
-	jpg: PREVIEW_KINDS.BINARY,
-	jpeg: PREVIEW_KINDS.BINARY,
+	zip: PREVIEW_KINDS.ZIP,
+	tif: PREVIEW_KINDS.GEOTIFF,
+	tiff: PREVIEW_KINDS.GEOTIFF,
+	geotiff: PREVIEW_KINDS.GEOTIFF,
+	jpg: PREVIEW_KINDS.JPEG,
+	jpeg: PREVIEW_KINDS.JPEG,
 };
 
 // -------- wp-hangar-non-textual: source kind classifier --------
