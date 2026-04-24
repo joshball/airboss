@@ -1,5 +1,5 @@
 <script lang="ts">
-import { ROUTES } from '@ab/constants';
+import { NAV_LABELS, ROUTES } from '@ab/constants';
 import HelpSearch from '@ab/help/ui/HelpSearch.svelte';
 import {
 	APPEARANCE_PREFERENCE_VALUES,
@@ -67,6 +67,10 @@ async function setAppearance(value: AppearancePreference) {
 
 const dashboardActive = $derived(page.url.pathname === ROUTES.DASHBOARD);
 const memoryActive = $derived(page.url.pathname.startsWith(ROUTES.MEMORY));
+const memoryHomeActive = $derived(page.url.pathname === ROUTES.MEMORY);
+const memoryBrowseActive = $derived(page.url.pathname.startsWith(ROUTES.MEMORY_BROWSE));
+const memoryReviewActive = $derived(page.url.pathname.startsWith(ROUTES.MEMORY_REVIEW));
+const memoryNewActive = $derived(page.url.pathname.startsWith(ROUTES.MEMORY_NEW));
 const repsActive = $derived(page.url.pathname.startsWith(ROUTES.REPS));
 const knowledgeActive = $derived(page.url.pathname.startsWith(ROUTES.KNOWLEDGE));
 const glossaryActive = $derived(page.url.pathname.startsWith(ROUTES.GLOSSARY));
@@ -115,6 +119,7 @@ function computeInitials(name: string, email: string): string {
 
 let menu = $state<HTMLDetailsElement | null>(null);
 let helpMenu = $state<HTMLDetailsElement | null>(null);
+let memoryMenu = $state<HTMLDetailsElement | null>(null);
 
 function closeDetails(target: HTMLDetailsElement | null) {
 	if (!target?.open) return;
@@ -127,6 +132,10 @@ function handleMenuKeydown(event: KeyboardEvent) {
 	if (event.key !== 'Escape') return;
 	if (menu?.open) {
 		closeDetails(menu);
+		return;
+	}
+	if (memoryMenu?.open) {
+		closeDetails(memoryMenu);
 		return;
 	}
 	if (helpMenu?.open) {
@@ -144,6 +153,17 @@ function handleHelpMenuBlur(event: FocusEvent) {
 function handleHelpItemClick() {
 	if (helpMenu) helpMenu.open = false;
 }
+
+function handleMemoryMenuBlur(event: FocusEvent) {
+	if (!memoryMenu) return;
+	const next = event.relatedTarget;
+	if (next instanceof Node && memoryMenu.contains(next)) return;
+	memoryMenu.open = false;
+}
+
+function handleMemoryItemClick() {
+	if (memoryMenu) memoryMenu.open = false;
+}
 </script>
 
 <svelte:window onkeydown={handleMenuKeydown} />
@@ -152,16 +172,47 @@ function handleHelpItemClick() {
 
 <nav aria-label="Primary">
 	<div class="nav-sections">
-		<a href={ROUTES.DASHBOARD} aria-current={dashboardActive ? 'page' : undefined}>Dashboard</a>
-		<a href={ROUTES.PLANS} aria-current={plansActive ? 'page' : undefined}>Plans</a>
-		<a href={ROUTES.MEMORY} aria-current={memoryActive ? 'page' : undefined}>Memory</a>
-		<a href={ROUTES.REPS} aria-current={repsActive ? 'page' : undefined}>Reps</a>
-		<a href={ROUTES.KNOWLEDGE} aria-current={knowledgeActive ? 'page' : undefined}>Knowledge</a>
-		<a href={ROUTES.GLOSSARY} aria-current={glossaryActive ? 'page' : undefined}>Glossary</a>
-		<a href={ROUTES.CALIBRATION} aria-current={calibrationActive ? 'page' : undefined}>Calibration</a>
+		<a href={ROUTES.DASHBOARD} aria-current={dashboardActive ? 'page' : undefined}>{NAV_LABELS.DASHBOARD}</a>
+		<a href={ROUTES.PLANS} aria-current={plansActive ? 'page' : undefined}>{NAV_LABELS.PLANS}</a>
+		<details class="nav-menu" bind:this={memoryMenu} onfocusout={handleMemoryMenuBlur}>
+			<summary aria-haspopup="menu" aria-current={memoryActive ? 'page' : undefined}>
+				<span>{NAV_LABELS.MEMORY}</span>
+				<span class="chevron" aria-hidden="true">▾</span>
+			</summary>
+			<div class="nav-menu-panel" role="menu" aria-label="Memory sections">
+				<a
+					href={ROUTES.MEMORY}
+					role="menuitem"
+					aria-current={memoryHomeActive ? 'page' : undefined}
+					onclick={handleMemoryItemClick}>{NAV_LABELS.MEMORY_HOME}</a
+				>
+				<a
+					href={ROUTES.MEMORY_BROWSE}
+					role="menuitem"
+					aria-current={memoryBrowseActive ? 'page' : undefined}
+					onclick={handleMemoryItemClick}>{NAV_LABELS.MEMORY_BROWSE}</a
+				>
+				<a
+					href={ROUTES.MEMORY_REVIEW}
+					role="menuitem"
+					aria-current={memoryReviewActive ? 'page' : undefined}
+					onclick={handleMemoryItemClick}>{NAV_LABELS.MEMORY_REVIEW}</a
+				>
+				<a
+					href={ROUTES.MEMORY_NEW}
+					role="menuitem"
+					aria-current={memoryNewActive ? 'page' : undefined}
+					onclick={handleMemoryItemClick}>{NAV_LABELS.MEMORY_NEW}</a
+				>
+			</div>
+		</details>
+		<a href={ROUTES.REPS} aria-current={repsActive ? 'page' : undefined}>{NAV_LABELS.REPS}</a>
+		<a href={ROUTES.KNOWLEDGE} aria-current={knowledgeActive ? 'page' : undefined}>{NAV_LABELS.KNOWLEDGE}</a>
+		<a href={ROUTES.GLOSSARY} aria-current={glossaryActive ? 'page' : undefined}>{NAV_LABELS.GLOSSARY}</a>
+		<a href={ROUTES.CALIBRATION} aria-current={calibrationActive ? 'page' : undefined}>{NAV_LABELS.CALIBRATION}</a>
 		<details class="nav-menu" bind:this={helpMenu} onfocusout={handleHelpMenuBlur}>
 			<summary aria-haspopup="menu" aria-current={helpActive ? 'page' : undefined}>
-				<span>Help</span>
+				<span>{NAV_LABELS.HELP}</span>
 				<span class="chevron" aria-hidden="true">▾</span>
 			</summary>
 			<div class="nav-menu-panel" role="menu" aria-label="Help sections">
@@ -169,13 +220,13 @@ function handleHelpItemClick() {
 					href={ROUTES.HELP}
 					role="menuitem"
 					aria-current={helpIndexActive ? 'page' : undefined}
-					onclick={handleHelpItemClick}>Help index</a
+					onclick={handleHelpItemClick}>{NAV_LABELS.HELP_INDEX}</a
 				>
 				<a
 					href={ROUTES.HELP_CONCEPTS}
 					role="menuitem"
 					aria-current={helpConceptsActive ? 'page' : undefined}
-					onclick={handleHelpItemClick}>Concepts</a
+					onclick={handleHelpItemClick}>{NAV_LABELS.HELP_CONCEPTS}</a
 				>
 			</div>
 		</details>
