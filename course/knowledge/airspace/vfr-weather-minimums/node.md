@@ -288,7 +288,7 @@ Authored inline. `bun run knowledge seed --user <email>` materializes these as `
   back: "3 SM, 500 below / 1000 above / 2000 horizontal. (Tighter than Class G day because the pilot's visual acquisition degrades at night, not because the traffic mix changed.)"
   cardType: basic
   tags: [vfr-mins, class-g, night, 91.155]
-- front: "91.155(b)(2) traffic-pattern exception: what does it allow and where?"
+- front: "91.155(b)(2) traffic-pattern exception: what does it allow and where regarding visibility and cloud clearance?"
   back: "At an airport in Class G at night, within 1/2 mile of the runway and operating within the traffic pattern, you may operate at 1 SM visibility and clear of clouds. Narrow in scope and easy to misquote -- memorize as an exception, not a rule."
   cardType: regulation
   tags: [vfr-mins, class-g, night, pattern, 91.155]
