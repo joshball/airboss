@@ -252,6 +252,19 @@ export type ReviewRating = (typeof REVIEW_RATINGS)[keyof typeof REVIEW_RATINGS];
 
 export const REVIEW_RATING_VALUES = Object.values(REVIEW_RATINGS);
 
+/**
+ * One-word labels for the rating buttons in the review surface. Product
+ * decision: `Wrong / Hard / Right / Easy` (rather than FSRS's `Again /
+ * Hard / Good / Easy`). Keep the map single-sourced so session-runner and
+ * `/memory/review` stay consistent.
+ */
+export const REVIEW_RATING_LABELS: Record<ReviewRating, string> = {
+	[REVIEW_RATINGS.AGAIN]: 'Wrong',
+	[REVIEW_RATINGS.HARD]: 'Hard',
+	[REVIEW_RATINGS.GOOD]: 'Right',
+	[REVIEW_RATINGS.EASY]: 'Easy',
+};
+
 /** FSRS scheduler states for a card. */
 export const CARD_STATES = {
 	NEW: 'new',
@@ -661,6 +674,13 @@ export const SESSION_MODE_LABELS: Record<SessionMode, string> = {
 	[SESSION_MODES.EXPAND]: 'Try something new',
 };
 
+/**
+ * Default session mode when a plan / form hasn't specified one. Centralises
+ * the "mixed is the default" product decision so flipping it (e.g. to
+ * `continue`) only touches this constant.
+ */
+export const DEFAULT_SESSION_MODE: SessionMode = SESSION_MODES.MIXED;
+
 export const SESSION_SLICES = {
 	CONTINUE: 'continue',
 	STRENGTHEN: 'strengthen',
@@ -889,6 +909,18 @@ export const NODE_MASTERY_GATES = {
 export type NodeMasteryGate = (typeof NODE_MASTERY_GATES)[keyof typeof NODE_MASTERY_GATES];
 
 export const NODE_MASTERY_GATE_VALUES: readonly NodeMasteryGate[] = Object.values(NODE_MASTERY_GATES);
+
+/**
+ * Human-readable labels for each mastery-gate outcome. Used by the
+ * knowledge detail page's gate badges; single-sourced so renames don't
+ * drift.
+ */
+export const NODE_MASTERY_GATE_LABELS: Record<NodeMasteryGate, string> = {
+	[NODE_MASTERY_GATES.PASS]: 'Pass',
+	[NODE_MASTERY_GATES.FAIL]: 'Fail',
+	[NODE_MASTERY_GATES.INSUFFICIENT_DATA]: 'Not enough data',
+	[NODE_MASTERY_GATES.NOT_APPLICABLE]: 'Not applicable',
+};
 
 /**
  * Phases for a single item's review interaction in `/memory/review` --

@@ -9,7 +9,7 @@
 
 import { bauthUser } from '@ab/auth/schema';
 import { JOB_KINDS, JOB_STATUSES } from '@ab/constants';
-import { db, hangarJob, hangarJobLog } from '@ab/db';
+import { db, hangarJob } from '@ab/db';
 import { appendJobLog, enqueueJob, readJobLog } from '@ab/hangar-jobs';
 import { generateAuthId } from '@ab/utils';
 import { eq } from 'drizzle-orm';
