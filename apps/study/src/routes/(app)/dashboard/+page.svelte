@@ -117,14 +117,14 @@ const stamp = `${loadedAt.getFullYear()}-${String(loadedAt.getMonth() + 1).padSt
 		flex: 1 1 auto;
 		grid-template-columns: repeat(12, minmax(0, 1fr));
 		grid-template-rows: 12rem 10rem 11rem;
-		column-gap: var(--layout-grid-gap);
-		row-gap: var(--space-2xl);
+		gap: calc(var(--space-xl) + var(--space-2xs));
 		align-content: start;
 		min-height: 0;
 	}
 
 	.slot {
 		display: flex;
+		box-sizing: border-box;
 		min-width: 0;
 		min-height: 0;
 	}
@@ -210,8 +210,6 @@ const stamp = `${loadedAt.getFullYear()}-${String(loadedAt.getMonth() + 1).padSt
 		.grid {
 			grid-template-columns: repeat(6, minmax(0, 1fr));
 			grid-template-rows: auto;
-			column-gap: var(--layout-grid-gap);
-			row-gap: var(--space-2xl);
 		}
 
 		.hero {
@@ -268,7 +266,7 @@ const stamp = `${loadedAt.getFullYear()}-${String(loadedAt.getMonth() + 1).padSt
 		.grid {
 			grid-template-columns: minmax(0, 1fr);
 			grid-template-rows: auto;
-			row-gap: var(--space-xl);
+			gap: var(--space-lg);
 		}
 
 		.sub {
