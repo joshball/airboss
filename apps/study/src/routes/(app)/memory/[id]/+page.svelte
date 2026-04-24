@@ -1,12 +1,16 @@
 <script lang="ts">
 import {
+	CARD_STATUS_LABELS,
 	CARD_STATUSES,
 	CARD_TYPE_LABELS,
-	CARD_TYPES,
+	CARD_TYPE_VALUES,
+	type CardStatus,
 	type CardType,
+	CONTENT_SOURCE_LABELS,
 	CONTENT_SOURCES,
+	type ContentSource,
 	DOMAIN_LABELS,
-	DOMAINS,
+	DOMAIN_VALUES,
 	type Domain,
 	QUERY_PARAMS,
 	REVIEW_RATINGS,
@@ -81,8 +85,8 @@ $effect(() => {
 	return () => clearTimeout(timer);
 });
 
-const domainOptions = Object.values(DOMAINS);
-const cardTypeOptions = Object.values(CARD_TYPES);
+const domainOptions = DOMAIN_VALUES;
+const cardTypeOptions = CARD_TYPE_VALUES;
 
 const ratingLabels: Record<number, string> = {
 	[REVIEW_RATINGS.AGAIN]: 'Again',
@@ -107,6 +111,14 @@ function domainLabel(slug: string): string {
 
 function cardTypeLabel(slug: string): string {
 	return (CARD_TYPE_LABELS as Record<CardType, string>)[slug as CardType] ?? humanize(slug);
+}
+
+function statusLabel(slug: string): string {
+	return (CARD_STATUS_LABELS as Record<CardStatus, string>)[slug as CardStatus] ?? humanize(slug);
+}
+
+function sourceLabel(slug: string): string {
+	return (CONTENT_SOURCE_LABELS as Record<ContentSource, string>)[slug as ContentSource] ?? humanize(slug);
 }
 
 function formatInterval(ms: number): string {
@@ -146,12 +158,8 @@ const tagsString = $derived((card.tags ?? []).join(', '));
 		<div class="badges">
 			<span class="badge domain">{domainLabel(card.domain)}</span>
 			<span class="badge type">{cardTypeLabel(card.cardType)}</span>
-			{#if card.status !== CARD_STATUSES.ACTIVE}
-				<span class="badge status-{card.status}">{humanize(card.status)}</span>
-			{/if}
-			{#if card.sourceType !== CONTENT_SOURCES.PERSONAL}
-				<span class="badge source" title={card.sourceRef ?? ''}>{humanize(card.sourceType)}</span>
-			{/if}
+			<span class="badge status-{card.status}">{statusLabel(card.status)}</span>
+			<span class="badge source" title={card.sourceRef ?? ''}>{sourceLabel(card.sourceType)}</span>
 		</div>
 	</header>
 
