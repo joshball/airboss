@@ -408,19 +408,19 @@ const trimBias = $derived(inputs.trim);
 			</div>
 			<div class="engine-row">
 				<Tachometer {rpm} />
-				<div class="readouts">
-					<div class="readout">
-						<span class="label">AGL</span>
-						<span class="value">{altitudeAglFeet.toFixed(0)} ft</span>
-					</div>
-					<div class="readout" class:warning={stalled}>
-						<span class="label">Alpha</span>
-						<span class="value">{truth ? ((truth.alpha * 180) / Math.PI).toFixed(1) : '0.0'}°</span>
-					</div>
-					<div class="readout">
-						<span class="label">Time</span>
-						<span class="value">{truth ? truth.t.toFixed(1) : '0.0'}s</span>
-					</div>
+			</div>
+			<div class="readouts">
+				<div class="readout">
+					<span class="label">AGL</span>
+					<span class="value">{altitudeAglFeet.toFixed(0)} ft</span>
+				</div>
+				<div class="readout" class:warning={stalled}>
+					<span class="label">Alpha / AOA</span>
+					<span class="value">{truth ? ((truth.alpha * 180) / Math.PI).toFixed(1) : '0.0'}°</span>
+				</div>
+				<div class="readout">
+					<span class="label">Time</span>
+					<span class="value">{truth ? truth.t.toFixed(1) : '0.0'}s</span>
 				</div>
 			</div>
 		</section>
@@ -600,17 +600,20 @@ const trimBias = $derived(inputs.trim);
 	}
 
 	.engine-row {
-		display: grid;
-		grid-template-columns: 200px 1fr;
+		display: flex;
+		justify-content: center;
 		gap: var(--space-sm);
-		align-items: start;
 	}
 
+	/* Full-width readout bar under the six-pack. Width matches 3 instruments
+	   (3 * 200px + 2 gaps) so AGL / Alpha / Time line up directly under the
+	   ASI / AI / Altimeter above. */
 	.readouts {
 		display: grid;
 		grid-template-columns: repeat(3, 1fr);
-		gap: var(--space-xs);
-		max-width: calc(200px * 2 + var(--space-sm));
+		gap: var(--space-sm);
+		width: calc(200px * 3 + var(--space-sm) * 2);
+		margin: var(--space-sm) auto 0;
 	}
 
 	.readout {
