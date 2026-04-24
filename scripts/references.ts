@@ -79,6 +79,17 @@ const COMMAND_HELP: Record<string, CommandHelp> = {
 		how: 'Pure function over AVIATION_REFERENCES, helpRegistry.getAllPages(), and SOURCES. Exit code 1 on any error; exit 0 on clean or warnings-only. Errors go to stderr, warnings to stdout.',
 		links: ['scripts/references/validate.ts', 'libs/aviation/src/validation.ts', 'libs/help/src/validation.ts'],
 	},
+	download: {
+		summary: 'Download a binary-visual source (sectional chart) via the hangar fetch pipeline',
+		what: "Runs the same in-process pipeline the hangar UI's Fetch action drives (`handleBinaryVisualFetch`). Resolves the current edition from the upstream index, short-circuits if the on-disk edition + sha still match, otherwise downloads the archive, rotates prior editions, generates a thumbnail, writes meta.json, and updates the `hangar.source` row.\n\n  bun run references download --id sectional-denver",
+		why: 'Gives operators a terminal-only path for source fetches without standing up the hangar dev app. Same pipeline, same audit writes, same drift detection, driven from argv instead of a form action.',
+		how: 'Requires a live Postgres with migration 0003 applied and the source row authored as a binary-visual kind. Progress + event lines stream to stdout; errors (drift, 404, checksum mismatch) go to stderr with a non-zero exit. Wraps `apps/hangar/src/lib/server/source-fetch.ts`. Non-binary-visual source kinds are rejected by the pipeline.',
+		links: [
+			'scripts/references/download.ts',
+			'apps/hangar/src/lib/server/source-fetch.ts',
+			'docs/work-packages/hangar-non-textual/spec.md',
+		],
+	},
 	'size-report': {
 		summary: 'Tally data/sources/ sizes + storage classification',
 		what: 'Walks data/sources/**, measures every binary + every .meta.json, groups by source type, and classifies each file: commit-directly (<1 MB), commit-borderline (1-5 MB), use-LFS (5-100 MB), external-storage (>100 MB).',
@@ -123,7 +134,7 @@ interface CommandGroup {
 // inspect what's cited, build verbatim, validate, then meta/help.
 const COMMAND_GROUPS: readonly CommandGroup[] = [
 	{ label: 'Inspection', commands: ['scan', 'size-report'] },
-	{ label: 'Build', commands: ['extract', 'build', 'diff'] },
+	{ label: 'Build', commands: ['extract', 'build', 'diff', 'download'] },
 	{ label: 'Validation', commands: ['validate'] },
 	{ label: 'Utility', commands: ['help'] },
 ];
@@ -160,6 +171,7 @@ const handlers: Record<string, () => Promise<void> | void> = {
 	extract: () => run(['bun', 'scripts/references/extract.ts', ...passthrough]),
 	build: () => run(['bun', 'scripts/references/build.ts', ...passthrough]),
 	diff: () => run(['bun', 'scripts/references/diff.ts', ...passthrough]),
+	download: () => run(['bun', 'scripts/references/download.ts', ...passthrough]),
 	validate: () => run(['bun', 'scripts/references/validate.ts', ...passthrough]),
 	'size-report': () => run(['bun', 'scripts/references/size-report.ts', ...passthrough]),
 	help: printIndex,
