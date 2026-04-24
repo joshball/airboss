@@ -11,6 +11,7 @@ export {
 	generateHangarSyncLogId,
 	generateKnowledgeNodeProgressId,
 	generateReviewId,
+	generateReviewSessionId,
 	generateScenarioId,
 	generateSessionId,
 	generateSessionItemResultId,

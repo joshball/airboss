@@ -1,5 +1,13 @@
 <script lang="ts">
-import { CARD_STATES, DOMAIN_LABELS, type Domain, MASTERY_STABILITY_DAYS, QUERY_PARAMS, ROUTES } from '@ab/constants';
+import {
+	CARD_STATES,
+	DOMAIN_LABELS,
+	type Domain,
+	MASTERY_STABILITY_DAYS,
+	QUERY_PARAMS,
+	REVIEW_SESSION_STATUSES,
+	ROUTES,
+} from '@ab/constants';
 import PageHelp from '@ab/help/ui/PageHelp.svelte';
 import InfoTip from '@ab/ui/components/InfoTip.svelte';
 import StatTile from '@ab/ui/components/StatTile.svelte';
@@ -26,6 +34,14 @@ let { data }: { data: PageData } = $props();
 
 const stats = $derived(data.stats);
 const totalActive = $derived(Object.values(stats.stateCounts).reduce((a, b) => a + b, 0));
+const resumable = $derived(data.resumableSession);
+
+function formatResumeSub(sub: { status: string; currentIndex: number; totalCards: number }): string {
+	const remaining = Math.max(0, sub.totalCards - sub.currentIndex);
+	const label = sub.status === REVIEW_SESSION_STATUSES.ABANDONED ? 'Stale run' : 'In progress';
+	if (sub.totalCards === 0) return `${label} -- empty deck`;
+	return `${label} -- ${sub.currentIndex} of ${sub.totalCards} reviewed${remaining > 0 ? `, ${remaining} to go` : ''}`;
+}
 
 function domainLabel(slug: string): string {
 	return (DOMAIN_LABELS as Record<Domain, string>)[slug as Domain] ?? humanize(slug);
@@ -56,6 +72,14 @@ function percent(n: number, total: number): number {
 			<a class="btn primary" href={ROUTES.MEMORY_REVIEW}>Start review</a>
 		</nav>
 	</header>
+
+	{#if resumable}
+		<a class="resume-tile" href={ROUTES.MEMORY_REVIEW_SESSION(resumable.id)}>
+			<div class="resume-label">Resume your last run</div>
+			<div class="resume-sub">{formatResumeSub(resumable)}</div>
+			<div class="resume-cta">Continue -&gt;</div>
+		</a>
+	{/if}
 
 	<div class="grid">
 		<div class="tile-wrap">
@@ -259,6 +283,42 @@ function percent(n: number, total: number): number {
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
 		gap: var(--space-md);
+	}
+
+	.resume-tile {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-2xs);
+		padding: var(--space-md) var(--space-lg);
+		background: var(--action-default-wash);
+		border: 1px solid var(--action-default-edge);
+		border-radius: var(--radius-lg);
+		text-decoration: none;
+		color: var(--action-default-hover);
+		transition: background var(--motion-fast), border-color var(--motion-fast);
+	}
+
+	.resume-tile:hover {
+		background: var(--action-default-wash);
+		border-color: var(--action-default-hover);
+	}
+
+	.resume-label {
+		font-size: var(--font-size-sm);
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: var(--letter-spacing-caps);
+	}
+
+	.resume-sub {
+		color: var(--ink-muted);
+		font-size: var(--font-size-body);
+	}
+
+	.resume-cta {
+		color: var(--action-default-hover);
+		font-weight: 600;
+		font-size: var(--font-size-sm);
 	}
 
 	/* StatTile provides its own styling; the grid just lays them out. */

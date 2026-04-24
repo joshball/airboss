@@ -13,6 +13,13 @@ export {
 	getCalibrationPointCount,
 	getCalibrationTrend,
 } from './calibration';
+export type {
+	CardCrossReferences,
+	CardCrossRefsPlans,
+	CardCrossRefsReps,
+	CardCrossRefsScenarios,
+} from './card-cross-references';
+export { CROSS_REF_SESSION_LIMIT, getCardCrossReferences } from './card-cross-references';
 export type { CardFilters, CardWithState, CreateCardInput, UpdateCardInput } from './cards';
 export {
 	CardNotEditableError,
@@ -26,6 +33,8 @@ export {
 	setCardStatus,
 	updateCard,
 } from './cards';
+export type { PublicCard, PublicCardCitation } from './cards-public';
+export { getPublicCard } from './cards-public';
 export type {
 	ActivityDay,
 	DashboardFetchers,
@@ -106,6 +115,22 @@ export {
 	removeSkipNode,
 	updatePlan,
 } from './plans';
+export type {
+	CardSessionRef,
+	ReviewSessionCard,
+	ReviewSessionState,
+	StartReviewSessionInput,
+} from './review-sessions';
+export {
+	abandonStaleSessions,
+	advanceReviewSession,
+	computeDeckHash,
+	getLatestResumableSession,
+	getSessionsForCard,
+	ReviewSessionNotFoundError,
+	resumeReviewSession,
+	startReviewSession,
+} from './review-sessions';
 export type { SubmitReviewInput } from './reviews';
 export { CardNotReviewableError, NoReviewToUndoError, submitReview, undoReview } from './reviews';
 export type {
@@ -143,17 +168,20 @@ export type {
 	KnowledgeEdgeRow,
 	KnowledgeNodeProgressRow,
 	KnowledgeNodeRow,
+	MemoryReviewSessionRow,
 	NewCardRow,
 	NewCardStateRow,
 	NewKnowledgeEdgeRow,
 	NewKnowledgeNodeProgressRow,
 	NewKnowledgeNodeRow,
+	NewMemoryReviewSessionRow,
 	NewReviewRow,
 	NewScenarioRow,
 	NewSessionItemResultRow,
 	NewSessionRow,
 	NewStudyPlanRow,
 	ReviewRow,
+	ReviewSessionDeckSpec,
 	ScenarioOption,
 	ScenarioRow,
 	SessionItem,
@@ -167,6 +195,7 @@ export {
 	knowledgeEdge,
 	knowledgeNode,
 	knowledgeNodeProgress,
+	memoryReviewSession,
 	review,
 	scenario,
 	session,

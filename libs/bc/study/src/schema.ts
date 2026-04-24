@@ -40,6 +40,8 @@ import {
 	PHASE_OF_FLIGHT_VALUES,
 	PLAN_STATUS_VALUES,
 	PLAN_STATUSES,
+	REVIEW_SESSION_STATUS_VALUES,
+	REVIEW_SESSION_STATUSES,
 	SCENARIO_OPTIONS_MAX,
 	SCENARIO_OPTIONS_MIN,
 	SCENARIO_STATUS_VALUES,
@@ -290,10 +292,22 @@ export const review = studySchema.table(
 		dueAt: timestamp('due_at', { withTimezone: true }).notNull(),
 		reviewedAt: timestamp('reviewed_at', { withTimezone: true }).notNull().defaultNow(),
 		answerMs: integer('answer_ms'),
+		/**
+		 * Optional link back to the `memory_review_session` that produced this
+		 * review (review-sessions-url layer a). Stays NULL for reviews written
+		 * outside a session (legacy data, `/sessions/[id]` engine slots, future
+		 * deep-link review flows). Cross-references panel on `/memory/<id>`
+		 * uses this pointer to list "sessions that included this card." `set
+		 * null` on delete so a session cleanup never destroys review history.
+		 */
+		reviewSessionId: text('review_session_id').references(() => memoryReviewSession.id, { onDelete: 'set null' }),
 	},
 	(t) => ({
 		reviewCardReviewedIdx: index('review_card_reviewed_idx').on(t.cardId, t.reviewedAt),
 		reviewUserReviewedIdx: index('review_user_reviewed_idx').on(t.userId, t.reviewedAt),
+		// Supports the cross-refs query "memory_review_sessions that included
+		// this card" without scanning every review row for the user.
+		reviewSessionCardIdx: index('review_session_card_idx').on(t.reviewSessionId, t.cardId),
 		// IN (1,2,3,4) rather than BETWEEN so the CHECK documents the
 		// discrete ts-fsrs labels (AGAIN/HARD/GOOD/EASY) a reader of
 		// `\d study.review` sees at the psql prompt.
@@ -722,3 +736,59 @@ export const knowledgeNodeProgress = studySchema.table(
 
 export type KnowledgeNodeProgressRow = typeof knowledgeNodeProgress.$inferSelect;
 export type NewKnowledgeNodeProgressRow = typeof knowledgeNodeProgress.$inferInsert;
+
+/**
+ * Canonical deck spec persisted on a review session row. The hash is
+ * SHA-1(JSON.stringify(deck_spec)) first 8 chars and is recomputed on the
+ * server at session-creation time so two requests with the same logical
+ * filter land on the same `deck_hash` regardless of JSON key order.
+ *
+ * Layer (a) Resume only uses `deck_spec`/`deck_hash` as bookkeeping -- the
+ * filter is always "due now, optional domain" today. Layer (b) Redo (deferred
+ * per spec) is what lights these fields up as the reproducible entry point.
+ */
+export interface ReviewSessionDeckSpec {
+	/** Domain filter when the session was scoped by one. `null` = all domains. */
+	domain: string | null;
+}
+
+/**
+ * Memory-review session row (review-sessions-url layer a "Resume", see
+ * `docs/work-packages/review-sessions-url/spec.md`). One row per run; the
+ * card list is frozen at start and replayed from `current_index` so closing
+ * and reopening the URL lands the learner on the same card.
+ *
+ * Distinct from `session` (the engine-scheduler session): engine sessions
+ * mix cards, reps, and node starts under a plan; review sessions are a
+ * pure memory-card traversal driven by the due-queue + an optional filter.
+ */
+export const memoryReviewSession = studySchema.table(
+	'memory_review_session',
+	{
+		id: text('id').primaryKey(),
+		userId: text('user_id')
+			.notNull()
+			.references(() => bauthUser.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
+		/** SHA-1(deck_spec JSON) first 8 chars. Buckets runs of the "same deck" for future analytics + Layer (b) Redo. */
+		deckHash: text('deck_hash').notNull(),
+		deckSpec: jsonb('deck_spec').$type<ReviewSessionDeckSpec>().notNull(),
+		cardIdList: jsonb('card_id_list').$type<string[]>().notNull(),
+		currentIndex: integer('current_index').notNull().default(0),
+		status: text('status').notNull().default(REVIEW_SESSION_STATUSES.ACTIVE),
+		startedAt: timestamp('started_at', { withTimezone: true }).notNull().defaultNow(),
+		lastActivityAt: timestamp('last_activity_at', { withTimezone: true }).notNull().defaultNow(),
+		completedAt: timestamp('completed_at', { withTimezone: true }),
+	},
+	(t) => ({
+		// Resolves "is there an active/abandoned run of this deck for this user?"
+		// without scanning the user's full session history.
+		mrsUserDeckStatusIdx: index('mrs_user_deck_status_idx').on(t.userId, t.deckHash, t.status),
+		// Dashboard history read: "most recent sessions for this user."
+		mrsUserStartedIdx: index('mrs_user_started_idx').on(t.userId, t.startedAt),
+		mrsStatusCheck: check('mrs_status_check', sql.raw(`"status" IN (${inList(REVIEW_SESSION_STATUS_VALUES)})`)),
+		mrsCurrentIndexCheck: check('mrs_current_index_check', sql.raw(`"current_index" >= 0`)),
+	}),
+);
+
+export type MemoryReviewSessionRow = typeof memoryReviewSession.$inferSelect;
+export type NewMemoryReviewSessionRow = typeof memoryReviewSession.$inferInsert;

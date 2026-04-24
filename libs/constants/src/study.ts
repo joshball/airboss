@@ -970,3 +970,34 @@ export const SESSION_ITEM_PHASES = {
 export type SessionItemPhase = (typeof SESSION_ITEM_PHASES)[keyof typeof SESSION_ITEM_PHASES];
 
 export const SESSION_ITEM_PHASE_VALUES: readonly SessionItemPhase[] = Object.values(SESSION_ITEM_PHASES);
+
+// -------- Memory-review sessions (bundle-b, review-sessions-url layer a) --------
+
+/**
+ * Lifecycle states for a `memory_review_session` row.
+ *
+ * A session is `active` while the learner is progressing through its frozen
+ * card list, `completed` once `current_index` reaches the end of the list,
+ * and `abandoned` if `last_activity_at` is more than
+ * {@link REVIEW_SESSION_ABANDON_MS} in the past. The abandoned status is
+ * computed lazily on visit via `abandonStaleSessions` so the dashboard can
+ * surface "resumable but stale" runs without a background job.
+ */
+export const REVIEW_SESSION_STATUSES = {
+	ACTIVE: 'active',
+	COMPLETED: 'completed',
+	ABANDONED: 'abandoned',
+} as const;
+
+export type ReviewSessionStatus = (typeof REVIEW_SESSION_STATUSES)[keyof typeof REVIEW_SESSION_STATUSES];
+
+export const REVIEW_SESSION_STATUS_VALUES: readonly ReviewSessionStatus[] = Object.values(REVIEW_SESSION_STATUSES);
+
+/**
+ * Window after which an inactive review session is flagged as `abandoned`.
+ * Per `docs/work-packages/review-sessions-url/spec.md` decision 3 (no hard
+ * expiry; mark abandoned at 14 days). The dashboard still offers a resume
+ * link for abandoned sessions; this is a surface-level categorisation, not a
+ * delete.
+ */
+export const REVIEW_SESSION_ABANDON_MS = 14 * MS_PER_DAY;

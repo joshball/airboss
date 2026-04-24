@@ -17,6 +17,8 @@ import {
 	type Domain,
 	QUERY_PARAMS,
 	REVIEW_RATINGS,
+	REVIEW_SESSION_STATUSES,
+	type ReviewSessionStatus,
 	ROUTES,
 } from '@ab/constants';
 import PageHelp from '@ab/help/ui/PageHelp.svelte';
@@ -65,6 +67,44 @@ $effect(() => {
 const card = $derived(data.card);
 const schedule = $derived(data.state);
 const recentReviews = $derived(data.recentReviews);
+const crossRefs = $derived(data.crossRefs);
+
+const publicCardPath = $derived(ROUTES.CARD_PUBLIC(card.id));
+
+let shareToastVisible = $state(false);
+let shareToastMessage = $state('');
+let shareToastTimer: ReturnType<typeof setTimeout> | null = null;
+
+function absolutePublicCardUrl(): string {
+	if (typeof window === 'undefined') return publicCardPath;
+	return `${window.location.origin}${publicCardPath}`;
+}
+
+async function sharePublicLink() {
+	const url = absolutePublicCardUrl();
+	let copied = false;
+	try {
+		if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+			await navigator.clipboard.writeText(url);
+			copied = true;
+		}
+	} catch {
+		copied = false;
+	}
+
+	shareToastMessage = copied ? 'Public card link copied.' : `Copy this link: ${url}`;
+	shareToastVisible = true;
+	if (shareToastTimer !== null) clearTimeout(shareToastTimer);
+	shareToastTimer = setTimeout(() => {
+		shareToastVisible = false;
+	}, 3000);
+}
+
+const reviewSessionStatusLabels: Record<ReviewSessionStatus, string> = {
+	[REVIEW_SESSION_STATUSES.ACTIVE]: 'Active',
+	[REVIEW_SESSION_STATUSES.COMPLETED]: 'Completed',
+	[REVIEW_SESSION_STATUSES.ABANDONED]: 'Abandoned',
+};
 
 const fieldErrors = $derived<Record<string, string>>(form?.fieldErrors ?? {});
 const editValues = $derived<FieldValues>((form?.intent === 'update' ? form.values : undefined) ?? {});
@@ -252,6 +292,10 @@ async function handleCitationSelect(selection: CitationPickerSelection): Promise
 		<div class="toast" role="status">{editToastMessage}</div>
 	{/if}
 
+	{#if shareToastVisible}
+		<div class="toast" role="status" aria-live="polite">{shareToastMessage}</div>
+	{/if}
+
 	{#if fieldErrors._}
 		<div class="error" role="alert">{fieldErrors._}</div>
 	{/if}
@@ -348,11 +392,23 @@ async function handleCitationSelect(selection: CitationPickerSelection): Promise
 			{/if}
 
 			<div class="row action-row">
-				{#if card.isEditable}
-					<button type="button" class="btn secondary" onclick={startEdit}>Edit</button>
-				{:else}
-					<span class="note">This card is read-only (source: {humanize(card.sourceType)}).</span>
-				{/if}
+				<div class="primary-actions">
+					{#if card.isEditable}
+						<button type="button" class="btn secondary" onclick={startEdit}>Edit</button>
+					{:else}
+						<span class="note">This card is read-only (source: {humanize(card.sourceType)}).</span>
+					{/if}
+					<span class="action-wrap">
+						<button type="button" class="btn secondary" onclick={sharePublicLink}>Share</button>
+						<InfoTip
+							term="Share"
+							definition="Copies the public card link ({ROUTES.CARD_PUBLIC(card.id)}). Only the question and answer are visible on the public page; scheduling internals stay private."
+							helpId="memory-card"
+							helpSection="share"
+						/>
+					</span>
+					<a class="btn ghost" href={publicCardPath} target="_blank" rel="noopener noreferrer">Open public view</a>
+				</div>
 				<div class="inline-form">
 					{#if card.status === CARD_STATUSES.ACTIVE}
 						<span class="action-wrap">
@@ -584,6 +640,92 @@ async function handleCitationSelect(selection: CitationPickerSelection): Promise
 		</dl>
 	</article>
 
+	<article class="content cross-refs">
+		<h2>Cross-references</h2>
+		<ul class="xref-list">
+			<li class="xref-row">
+				<div class="xref-head">
+					<span class="xref-label">Sessions</span>
+					<InfoTip
+						term="Sessions"
+						definition="Memory-review sessions (the /memory/review flow) that included this card. Each row is a full run you can reopen."
+						helpId="memory-card"
+						helpSection="cross-refs"
+					/>
+					<span class="xref-count">{crossRefs.sessions.length}</span>
+				</div>
+				{#if crossRefs.sessions.length === 0}
+					<p class="xref-empty">No review sessions have included this card yet.</p>
+				{:else}
+					<ul class="xref-items">
+						{#each crossRefs.sessions as s (s.id)}
+							<li>
+								<a href={ROUTES.MEMORY_REVIEW_SESSION(s.id)}>
+									{new Date(s.startedAt).toLocaleString()}
+								</a>
+								<span class="xref-sub">{reviewSessionStatusLabels[s.status]}</span>
+							</li>
+						{/each}
+					</ul>
+				{/if}
+			</li>
+
+			<li class="xref-row">
+				<div class="xref-head">
+					<span class="xref-label">Reps</span>
+					<InfoTip
+						term="Reps"
+						definition="Decision-rep scenarios that cite this card. Enrollment between reps and cards is not tracked yet; this row lights up once it is."
+						helpId="memory-card"
+						helpSection="cross-refs"
+					/>
+					{#if crossRefs.reps.comingSoon}
+						<span class="xref-pill">Coming soon</span>
+					{:else}
+						<span class="xref-count">{crossRefs.reps.items.length}</span>
+					{/if}
+				</div>
+				<p class="xref-empty">Reps-to-card enrollment is not tracked yet.</p>
+			</li>
+
+			<li class="xref-row">
+				<div class="xref-head">
+					<span class="xref-label">Plans</span>
+					<InfoTip
+						term="Plans"
+						definition="Study plans that include this card. Plan-to-card enrollment is not yet tracked."
+						helpId="memory-card"
+						helpSection="cross-refs"
+					/>
+					{#if crossRefs.plans.comingSoon}
+						<span class="xref-pill">Coming soon</span>
+					{:else}
+						<span class="xref-count">{crossRefs.plans.items.length}</span>
+					{/if}
+				</div>
+				<p class="xref-empty">Plan-to-card enrollment is not yet tracked.</p>
+			</li>
+
+			<li class="xref-row">
+				<div class="xref-head">
+					<span class="xref-label">Scenarios</span>
+					<InfoTip
+						term="Scenarios"
+						definition="Rep scenarios that cite this card as a reference. Waits on the content-citations work package."
+						helpId="memory-card"
+						helpSection="cross-refs"
+					/>
+					{#if crossRefs.scenarios.comingSoon}
+						<span class="xref-pill">Coming soon</span>
+					{:else}
+						<span class="xref-count">{crossRefs.scenarios.items.length}</span>
+					{/if}
+				</div>
+				<p class="xref-empty">Cite this card from a scenario to see it here.</p>
+			</li>
+		</ul>
+	</article>
+
 	<article class="content">
 		<h2>Recent reviews</h2>
 		{#if recentReviews.length === 0}
@@ -789,10 +931,104 @@ async function handleCitationSelect(selection: CitationPickerSelection): Promise
 		align-items: center;
 	}
 
+	.primary-actions {
+		display: inline-flex;
+		gap: var(--space-sm);
+		align-items: center;
+		flex-wrap: wrap;
+	}
+
 	.inline-form {
 		display: flex;
 		gap: var(--space-xs);
 		align-items: center;
+	}
+
+	.cross-refs .xref-list {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-md);
+	}
+
+	.xref-row {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-xs);
+		padding: var(--space-sm) var(--space-md);
+		background: var(--surface-muted);
+		border: 1px solid var(--edge-default);
+		border-radius: var(--radius-md);
+	}
+
+	.xref-head {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-xs);
+	}
+
+	.xref-label {
+		font-size: var(--type-ui-label-size);
+		font-weight: 600;
+		color: var(--ink-body);
+	}
+
+	.xref-count {
+		margin-left: auto;
+		color: var(--ink-muted);
+		font-size: var(--type-ui-caption-size);
+		font-weight: 600;
+	}
+
+	.xref-pill {
+		margin-left: auto;
+		padding: var(--space-2xs) var(--space-sm);
+		font-size: var(--font-size-xs);
+		font-weight: 600;
+		border-radius: var(--radius-pill);
+		color: var(--ink-subtle);
+		background: var(--surface-sunken);
+		border: 1px solid var(--edge-default);
+		text-transform: uppercase;
+		letter-spacing: var(--letter-spacing-wide);
+	}
+
+	.xref-empty {
+		margin: 0;
+		font-size: var(--type-ui-caption-size);
+		color: var(--ink-faint);
+	}
+
+	.xref-items {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-2xs);
+	}
+
+	.xref-items li {
+		display: flex;
+		gap: var(--space-sm);
+		align-items: baseline;
+		font-size: var(--type-ui-label-size);
+	}
+
+	.xref-items a {
+		color: var(--action-default-hover);
+		text-decoration: none;
+	}
+
+	.xref-items a:hover {
+		text-decoration: underline;
+	}
+
+	.xref-sub {
+		color: var(--ink-faint);
+		font-size: var(--font-size-xs);
 	}
 
 	.status-form {
