@@ -2,10 +2,17 @@
  * Every color value in every registered palette must parse as valid
  * sRGB-hex or OKLCH. Catches typos (`oklcch(...)`, `#xyz`) and
  * out-of-range values.
+ *
+ * WP #8 landed OKLCH as the authoring representation; every palette
+ * file now spells colors in OKLCH except the rare translucent scrim
+ * that stays rgba (overlay.scrim on black). The OKLCH-specific
+ * describe block below asserts that coverage so a regression to hex
+ * in a palette commit shows up immediately.
  */
 
 import { listThemes } from '@ab/themes';
 import { describe, expect, it } from 'vitest';
+import { parseOklch } from '../contrast';
 import type { Palette } from '../contract';
 
 const HEX_RE = /^#[0-9a-fA-F]{6}$/;
@@ -100,5 +107,42 @@ describe('isValidColor sanity', () => {
 		expect(isValidColor('oklch(1.5 0.1 200)')).toBe(false);
 	});
 });
+
+/**
+ * WP #8 authored every palette in OKLCH. Hex values in an authored
+ * palette file would be a regression. `contrast.ts#parseOklch` is the
+ * canonical parser; every palette entry must parse through it (with
+ * the narrow exception of rgba scrims, which are intentionally
+ * translucent on pure black and have no OKLCH equivalent worth the
+ * noise).
+ */
+function isOklchParseable(value: string): boolean {
+	return parseOklch(value) !== undefined;
+}
+
+const ALLOW_NON_OKLCH = new Set<string>([
+	// No exceptions in the current palette surface. Entries here should
+	// include a comment explaining why a non-OKLCH value is load-bearing
+	// at the authoring layer.
+]);
+
+for (const theme of themes) {
+	for (const appearance of theme.appearances) {
+		const palette = theme.palette[appearance];
+		if (!palette) continue;
+		describe(`palette authored in oklch: ${theme.id} / ${appearance}`, () => {
+			for (const [path, value] of flattenPalette(palette)) {
+				const key = `${theme.id}/${appearance}/${path}`;
+				if (ALLOW_NON_OKLCH.has(key)) continue;
+				it(`${path}: parses as oklch`, () => {
+					expect(
+						isOklchParseable(value),
+						`Expected ${path}='${value}' to be OKLCH; use hex only at external-input boundaries`,
+					).toBe(true);
+				});
+			}
+		});
+	}
+}
 
 export { isValidColor };
