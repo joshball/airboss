@@ -17,7 +17,7 @@ interface Props {
 	as?: 'form' | 'div';
 	method?: 'GET' | 'POST';
 	action?: string;
-	enctype?: string;
+	enctype?: 'application/x-www-form-urlencoded' | 'multipart/form-data' | 'text/plain';
 	ariaLabel?: string;
 	children: Snippet;
 }
