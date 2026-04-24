@@ -99,6 +99,31 @@ Ideas, approaches, and insights that might shape the course or platform. This is
 | Evidence packet integrity hash | Phase 2 design session 2026-03-27 | Include a server-computed hash of the run state in the evidence packet that cannot be forged by the client. Server verifies hash at completion. Raises bar for tampered run state submissions.                                                        | Under consideration -- design into scenario player complete action |
 | AFK detection                  | Phase 2 design session 2026-03-27 | If scenario player receives no input for an extended period, mark the run as potentially AFK in the evidence packet. FAA audit can flag these for manual review.                                                                                      | Under consideration                                                |
 
+## 2026-04-23 Annotations
+
+Per-idea status notes from the 2026-04-23 review walk. Kept separate from the tables so column widths stay stable.
+
+### Graduated (promoted out of the intake funnel)
+
+- **Browser flight dynamics sim** (Technical Approaches): already marked "Promoted to PRD + plan." PRD at `docs/vision/products/proficiency/flight-dynamics-sim/`. Keep in the funnel as a provenance record; do not act on from here.
+- **Instruments that lie (fault model)** (Technical Approaches): already marked "Promoted to PRD." Captured inside the Flight Dynamics Sim PRD. Provenance only.
+- **NTSB-style failure analysis** (Course Design): already marked "Promoted to DESIGN_PRINCIPLES (Debrief Culture)." Provenance only.
+- **Briefing must not spoil the scenario** / **Kill "Difficulty %" on briefing page** / **FAA topic badges must be human-readable** / **Intervention ladder needs on-screen definitions** (Course Design): all marked "Done" or "Done (...)" from the 2026-04-07 playtest sweep. Kept as provenance.
+
+### Stale-but-not-dead (FIRC-scope, parked pending `apps/firc/` migration)
+
+All marked "New -- CRITICAL" on 2026-04-07 from the pre-pivot playtest. Post-pivot, these apply to `apps/firc/` when the FIRC surface ships (see CLAUDE.md relationship-to-airboss-firc). They do not apply to `apps/study/`. Leaving in the funnel so they resurface when FIRC lands:
+
+- **Course needs a proper beginning** -- FIRC course onboarding, not study-app scope.
+- **Course structure is invisible** -- same.
+- **Scenario player is overwhelming** -- scenario-player UX is FIRC course surface.
+- **Scenario immersion approach** -- FIRC scenario pedagogy.
+- **Pre-scenario CFI warmup questions** -- FIRC pedagogy.
+
+### Still live, no change
+
+Every other row keeps its existing status. No new promotions this pass, no archives. `Under consideration` items stay under consideration pending either a design session or a real pull from a feature that needs them.
+
 ## Archived Ideas
 
 | Idea       | Source | Reason archived | Date |
@@ -107,7 +132,8 @@ Ideas, approaches, and insights that might shape the course or platform. This is
 
 ## Review Log
 
-| Date       | Reviewer         | Actions                                                                                                                                                                                                      |
-| ---------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| 2026-03-25 | Initial creation | Seeded from APP_NAMING research, VISION.md, and ADR review process                                                                                                                                           |
-| 2026-04-07 | Playtest session | Added 10 ideas from R1-R10 content review. Promoted briefing rewrite, difficulty labels, topic badges, intervention ladder. Flagged 3 CRITICAL gaps: course beginning, course structure, scenario player UX. |
+| Date       | Reviewer         | Actions                                                                                                                                                                                                                                     |
+| ---------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 2026-03-25 | Initial creation | Seeded from APP_NAMING research, VISION.md, and ADR review process                                                                                                                                                                          |
+| 2026-04-07 | Playtest session | Added 10 ideas from R1-R10 content review. Promoted briefing rewrite, difficulty labels, topic badges, intervention ladder. Flagged 3 CRITICAL gaps: course beginning, course structure, scenario player UX.                                |
+| 2026-04-23 | Wave-C cleanup   | Walked every pending idea. Annotated graduated items (Flight Dynamics Sim, instruments-that-lie). Tagged pre-pivot FIRC-specific ideas as stale pending FIRC migration. No promotions or archives this pass.                                |
