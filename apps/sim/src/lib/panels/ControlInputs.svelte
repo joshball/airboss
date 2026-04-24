@@ -30,7 +30,7 @@ function pct(v: number): number {
 	<h3>Controls</h3>
 
 	<div class="grid">
-		<div class="control vert">
+		<div class="control vert elev">
 			<span class="label">Elev</span>
 			<div class="bar vert">
 				<div class="center"></div>
@@ -60,7 +60,7 @@ function pct(v: number): number {
 			<span class="value">{pct(inputs.rudder)}</span>
 		</div>
 
-		<div class="control vert">
+		<div class="control vert thr">
 			<span class="label">Thr</span>
 			<div class="bar vert throttle">
 				<div class="fill" style:height={`${inputs.throttle * 100}%`} style:bottom="0"></div>
@@ -95,14 +95,16 @@ function pct(v: number): number {
 	}
 
 	.grid {
-		display: grid;
-		grid-template-columns: auto 1fr auto auto;
-		gap: var(--space-xs) var(--space-sm);
-		align-items: center;
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-xs);
 	}
 
 	.control {
-		display: contents;
+		display: grid;
+		grid-template-columns: 2.5rem 1fr 3rem 4.5rem;
+		gap: var(--space-sm);
+		align-items: center;
 	}
 
 	.control .label {
@@ -115,7 +117,6 @@ function pct(v: number): number {
 		font-family: var(--font-family-mono);
 		font-size: var(--font-size-sm);
 		text-align: right;
-		width: 3rem;
 	}
 
 	.control .sub {
@@ -124,8 +125,13 @@ function pct(v: number): number {
 		color: var(--sim-panel-fg-dim);
 	}
 
+	/* .sub appears only on Elev; other controls collapse the trailing cell. */
+	.control.horiz .value,
+	.control.vert.thr .value {
+		grid-column: 3 / span 2;
+	}
+
 	.control.vert .bar.vert {
-		grid-column: 2;
 		position: relative;
 		height: 70px;
 		width: 20px;
@@ -136,7 +142,6 @@ function pct(v: number): number {
 	}
 
 	.control.horiz .bar.horiz {
-		grid-column: 2;
 		position: relative;
 		height: 14px;
 		background: var(--sim-panel-bg-darker);

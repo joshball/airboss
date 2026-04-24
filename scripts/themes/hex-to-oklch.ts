@@ -10,7 +10,7 @@
  * rewrite is committed.
  */
 
-import { readFileSync, readdirSync, statSync } from 'node:fs';
+import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { contrastRatio, hexToOklch } from '../../libs/themes/contrast';
 

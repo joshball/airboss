@@ -66,26 +66,26 @@ const rows = [
 
 	td {
 		padding: var(--space-2xs) var(--space-xs);
-		white-space: nowrap;
 	}
 
-	td.name {
-		width: 4.5rem;
+	td.name,
+	td.val,
+	td.unit {
+		white-space: nowrap;
 	}
 
 	td.val {
 		text-align: right;
-		width: 2rem;
 	}
 
 	td.unit {
 		color: var(--sim-panel-fg-subtle);
-		width: 3rem;
 	}
 
 	td.note {
 		color: var(--sim-panel-fg-note);
 		font-size: var(--font-size-xs);
+		line-height: 1.3;
 	}
 
 	.swatch {

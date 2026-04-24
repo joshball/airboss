@@ -12,8 +12,8 @@
 
 import { listThemes } from '@ab/themes';
 import { describe, expect, it } from 'vitest';
-import { parseOklch } from '../contrast';
 import type { Palette } from '../contract';
+import { parseOklch } from '../contrast';
 
 const HEX_RE = /^#[0-9a-fA-F]{6}$/;
 const HEX_SHORT_RE = /^#[0-9a-fA-F]{3}$/;

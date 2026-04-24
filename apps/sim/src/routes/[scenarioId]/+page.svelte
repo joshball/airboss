@@ -306,7 +306,6 @@ const trimBias = $derived(inputs.trim);
 		<a class="back" href={ROUTES.SIM_HOME}>&larr; Scenarios</a>
 		<div>
 			<h1>{data.scenario.title}</h1>
-			<p class="objective">{data.scenario.objective}</p>
 		</div>
 		<div class="header-actions">
 			<label class="auto-coord-toggle">
@@ -520,13 +519,6 @@ const trimBias = $derived(inputs.trim);
 		line-height: 1.2;
 	}
 
-	.objective {
-		margin: 0;
-		color: var(--ink-muted);
-		font-size: var(--font-size-sm);
-		line-height: 1.2;
-	}
-
 	.header-actions {
 		display: flex;
 		gap: var(--space-sm);
@@ -589,7 +581,7 @@ const trimBias = $derived(inputs.trim);
 
 	.layout {
 		display: grid;
-		grid-template-columns: minmax(560px, 1fr) 260px;
+		grid-template-columns: minmax(620px, 1fr) 260px;
 		gap: var(--space-md);
 		margin-bottom: var(--space-sm);
 	}
@@ -602,14 +594,14 @@ const trimBias = $derived(inputs.trim);
 
 	.row {
 		display: grid;
-		grid-template-columns: repeat(3, 180px);
+		grid-template-columns: repeat(3, 200px);
 		gap: var(--space-sm);
 		justify-content: center;
 	}
 
 	.engine-row {
 		display: grid;
-		grid-template-columns: 180px 1fr;
+		grid-template-columns: 200px 1fr;
 		gap: var(--space-sm);
 		align-items: start;
 	}
@@ -618,6 +610,7 @@ const trimBias = $derived(inputs.trim);
 		display: grid;
 		grid-template-columns: repeat(3, 1fr);
 		gap: var(--space-xs);
+		max-width: calc(200px * 2 + var(--space-sm));
 	}
 
 	.readout {
