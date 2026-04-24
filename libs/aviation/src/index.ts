@@ -42,6 +42,7 @@ export {
 export { type CfrDocument, CfrParseError, type CfrSectionLocator, parseCfrXml } from './sources/cfr/parser';
 export { isSourceMeta, metaPathFor, type SourceMeta } from './sources/meta';
 export { getSource, getSourcesByType, isSourceDownloaded, PENDING_DOWNLOAD, SOURCES } from './sources/registry';
+export { decodeReferences, decodeSources, encodeReferences, encodeSources } from './toml-codec';
 export {
 	type ContentScan,
 	type ContentValidationSummary,

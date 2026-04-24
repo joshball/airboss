@@ -299,19 +299,19 @@ function decodeTags(value: unknown, where: string): ReferenceTags {
 		knowledgeKind: asString(rec.knowledgeKind, `${where}.knowledgeKind`) as ReferenceTags['knowledgeKind'],
 	};
 	if (rec.phaseOfFlight !== undefined) {
-		(tags as Record<string, unknown>).phaseOfFlight = asStringArray(
+		(tags as unknown as Record<string, unknown>).phaseOfFlight = asStringArray(
 			rec.phaseOfFlight,
 			`${where}.phaseOfFlight`,
 		) as ReferenceTags['phaseOfFlight'];
 	}
 	if (rec.certApplicability !== undefined) {
-		(tags as Record<string, unknown>).certApplicability = asStringArray(
+		(tags as unknown as Record<string, unknown>).certApplicability = asStringArray(
 			rec.certApplicability,
 			`${where}.certApplicability`,
 		) as ReferenceTags['certApplicability'];
 	}
 	if (rec.keywords !== undefined) {
-		(tags as Record<string, unknown>).keywords = asStringArray(
+		(tags as unknown as Record<string, unknown>).keywords = asStringArray(
 			rec.keywords,
 			`${where}.keywords`,
 		) as ReferenceTags['keywords'];
@@ -341,11 +341,11 @@ function decodeReference(value: unknown, index: number): Reference {
 		related: asStringArray(rec.related, `${where}.related`),
 	};
 	const author = asOptionalString(rec.author, `${where}.author`);
-	if (author !== undefined) (reference as Record<string, unknown>).author = author;
+	if (author !== undefined) (reference as unknown as Record<string, unknown>).author = author;
 	const reviewedAt = asOptionalString(rec.reviewedAt, `${where}.reviewedAt`);
-	if (reviewedAt !== undefined) (reference as Record<string, unknown>).reviewedAt = reviewedAt;
+	if (reviewedAt !== undefined) (reference as unknown as Record<string, unknown>).reviewedAt = reviewedAt;
 	if (rec.verbatim !== undefined) {
-		(reference as Record<string, unknown>).verbatim = decodeVerbatim(rec.verbatim, `${where}.verbatim`);
+		(reference as unknown as Record<string, unknown>).verbatim = decodeVerbatim(rec.verbatim, `${where}.verbatim`);
 	}
 	return reference;
 }
