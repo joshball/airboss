@@ -3,6 +3,7 @@
 	"private": true,
 	"type": "module",
 	"dependencies": {
+		"@ab/constants": "workspace:*",
 		"smol-toml": "^1.6.1"
 	}
 }

@@ -1,5 +1,10 @@
 {
 	"name": "@ab/db",
 	"private": true,
-	"type": "module"
+	"type": "module",
+	"dependencies": {
+		"@ab/auth": "workspace:*",
+		"@ab/constants": "workspace:*",
+		"@ab/utils": "workspace:*"
+	}
 }

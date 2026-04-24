@@ -1,5 +1,11 @@
 {
 	"name": "@ab/hangar-jobs",
 	"private": true,
-	"type": "module"
+	"type": "module",
+	"dependencies": {
+		"@ab/audit": "workspace:*",
+		"@ab/constants": "workspace:*",
+		"@ab/db": "workspace:*",
+		"@ab/utils": "workspace:*"
+	}
 }

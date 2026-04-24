@@ -9,5 +9,10 @@
 		},
 		"./components/*": "./src/components/*",
 		"./lib/*": "./src/lib/*"
+	},
+	"dependencies": {
+		"@ab/constants": "workspace:*",
+		"@ab/help": "workspace:*",
+		"@ab/themes": "workspace:*"
 	}
 }

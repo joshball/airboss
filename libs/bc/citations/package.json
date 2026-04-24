@@ -1,5 +1,12 @@
 {
 	"name": "@ab/bc-citations",
 	"private": true,
-	"type": "module"
+	"type": "module",
+	"dependencies": {
+		"@ab/auth": "workspace:*",
+		"@ab/bc-study": "workspace:*",
+		"@ab/constants": "workspace:*",
+		"@ab/db": "workspace:*",
+		"@ab/utils": "workspace:*"
+	}
 }
