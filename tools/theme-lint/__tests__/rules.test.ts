@@ -98,9 +98,12 @@ describe('theme-lint rules', () => {
 		expect(v.some((e) => e.rule === 'unknown-token' && e.message.includes('--ink-wrongname'))).toBe(true);
 	});
 
-	it('passes legacy --ab-* aliases (they exist)', () => {
+	it('flags retired --ab-* aliases as unknown tokens', () => {
+		// The --ab-* alias surface was retired when Option A closed. Any
+		// remaining reference is a straggler that should be fixed, not a
+		// known token.
 		const v = scan('.x { background: var(--ab-color-surface); }');
-		expect(v.filter((e) => e.rule === 'unknown-token')).toHaveLength(0);
+		expect(v.filter((e) => e.rule === 'unknown-token')).toHaveLength(1);
 	});
 
 	it('suppresses violations after a lint-disable comment on its own line', () => {

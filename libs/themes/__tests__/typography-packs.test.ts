@@ -79,8 +79,8 @@ describe('registered theme typography', () => {
 		expect(getTheme('study/sectional').typography.packId).toBe('airboss-standard');
 	});
 
-	it('study/flightdeck references airboss-compact', () => {
-		expect(getTheme('study/flightdeck').typography.packId).toBe('airboss-compact');
+	it('study/flightdeck ships its own balanced sans-first pack', () => {
+		expect(getTheme('study/flightdeck').typography.packId).toBe('study-flightdeck-balanced');
 	});
 });
 
