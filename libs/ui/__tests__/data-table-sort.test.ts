@@ -1,5 +1,5 @@
-import { compareValues, flipSortState, sortRows } from '@ab/ui/lib/data-table-sort';
 import { describe, expect, it } from 'vitest';
+import { compareValues, flipSortState, sortRows } from '../src/lib/data-table-sort';
 
 describe('compareValues', () => {
 	it('orders numbers ascending by default', () => {
