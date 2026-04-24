@@ -26,6 +26,7 @@ export const knowledgeGraph: HelpPage = {
 		helpKind: HELP_KINDS.CONCEPT,
 		keywords: ['knowledge-graph', 'phases', 'mastery', 'discovery', 'adr-011', 'node', 'learn', 'stepper'],
 	},
+	concept: true,
 	related: ['memory-review', 'reps-session', 'getting-started'],
 	reviewedAt: '2026-04-22',
 	sections: [
