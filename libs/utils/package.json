@@ -1,5 +1,8 @@
 {
 	"name": "@ab/utils",
 	"private": true,
-	"type": "module"
+	"type": "module",
+	"dependencies": {
+		"@ab/constants": "workspace:*"
+	}
 }

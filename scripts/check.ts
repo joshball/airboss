@@ -1,4 +1,18 @@
 import { $ } from 'bun';
+import { existsSync } from 'node:fs';
+
+// Ensure every SvelteKit app has its generated `.svelte-kit/tsconfig.json`
+// before svelte-check reads each app's local tsconfig (which `extends` it).
+// `svelte-kit sync` is idempotent and cheap; running it up-front makes a
+// fresh worktree self-bootstrap instead of failing the first `bun run check`.
+const SVELTE_APPS = ['apps/study', 'apps/sim', 'apps/hangar'] as const;
+for (const app of SVELTE_APPS) {
+	const generated = `${app}/.svelte-kit/tsconfig.json`;
+	if (!existsSync(generated)) {
+		console.log(`svelte-kit sync (${app})...`);
+		await $`cd ${app} && bunx svelte-kit sync`.quiet();
+	}
+}
 
 console.log('Running svelte-check (study)...');
 const svelteCheck = await $`cd apps/study && bunx svelte-check --tsconfig ./tsconfig.json`.nothrow();

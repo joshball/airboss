@@ -6,5 +6,9 @@
 		"dev": "vite dev --port 9610",
 		"build": "vite build",
 		"preview": "vite preview"
+	},
+	"dependencies": {
+		"@ab/bc-sim": "workspace:*",
+		"@ab/constants": "workspace:*"
 	}
 }

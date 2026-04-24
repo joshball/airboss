@@ -1,5 +1,13 @@
 {
 	"name": "@ab/hangar-sync",
 	"private": true,
-	"type": "module"
+	"type": "module",
+	"dependencies": {
+		"@ab/audit": "workspace:*",
+		"@ab/aviation": "workspace:*",
+		"@ab/constants": "workspace:*",
+		"@ab/db": "workspace:*",
+		"@ab/hangar-jobs": "workspace:*",
+		"@ab/utils": "workspace:*"
+	}
 }

@@ -35,63 +35,156 @@
     },
     "apps/hangar": {
       "name": "@ab/hangar",
+      "dependencies": {
+        "@ab/audit": "workspace:*",
+        "@ab/auth": "workspace:*",
+        "@ab/aviation": "workspace:*",
+        "@ab/constants": "workspace:*",
+        "@ab/db": "workspace:*",
+        "@ab/hangar-jobs": "workspace:*",
+        "@ab/hangar-sync": "workspace:*",
+        "@ab/themes": "workspace:*",
+        "@ab/ui": "workspace:*",
+        "@ab/utils": "workspace:*",
+      },
     },
     "apps/sim": {
       "name": "@ab/sim",
+      "dependencies": {
+        "@ab/bc-sim": "workspace:*",
+        "@ab/constants": "workspace:*",
+      },
     },
     "apps/study": {
       "name": "@ab/study",
+      "dependencies": {
+        "@ab/activities": "workspace:*",
+        "@ab/auth": "workspace:*",
+        "@ab/aviation": "workspace:*",
+        "@ab/bc-citations": "workspace:*",
+        "@ab/bc-study": "workspace:*",
+        "@ab/constants": "workspace:*",
+        "@ab/db": "workspace:*",
+        "@ab/help": "workspace:*",
+        "@ab/themes": "workspace:*",
+        "@ab/types": "workspace:*",
+        "@ab/ui": "workspace:*",
+        "@ab/utils": "workspace:*",
+      },
     },
     "libs/activities": {
       "name": "@ab/activities",
     },
     "libs/audit": {
       "name": "@ab/audit",
+      "dependencies": {
+        "@ab/auth": "workspace:*",
+        "@ab/constants": "workspace:*",
+        "@ab/db": "workspace:*",
+        "@ab/utils": "workspace:*",
+      },
     },
     "libs/auth": {
       "name": "@ab/auth",
+      "dependencies": {
+        "@ab/constants": "workspace:*",
+        "@ab/db": "workspace:*",
+        "@ab/utils": "workspace:*",
+      },
     },
     "libs/aviation": {
       "name": "@ab/aviation",
       "dependencies": {
+        "@ab/constants": "workspace:*",
         "smol-toml": "^1.6.1",
       },
     },
     "libs/bc/citations": {
       "name": "@ab/bc-citations",
+      "dependencies": {
+        "@ab/auth": "workspace:*",
+        "@ab/bc-study": "workspace:*",
+        "@ab/constants": "workspace:*",
+        "@ab/db": "workspace:*",
+        "@ab/utils": "workspace:*",
+      },
     },
     "libs/bc/sim": {
       "name": "@ab/bc-sim",
+      "dependencies": {
+        "@ab/constants": "workspace:*",
+      },
     },
     "libs/bc/study": {
       "name": "@ab/bc-study",
+      "dependencies": {
+        "@ab/auth": "workspace:*",
+        "@ab/constants": "workspace:*",
+        "@ab/db": "workspace:*",
+        "@ab/utils": "workspace:*",
+      },
     },
     "libs/constants": {
       "name": "@ab/constants",
     },
     "libs/db": {
       "name": "@ab/db",
+      "dependencies": {
+        "@ab/auth": "workspace:*",
+        "@ab/constants": "workspace:*",
+        "@ab/utils": "workspace:*",
+      },
     },
     "libs/hangar-jobs": {
       "name": "@ab/hangar-jobs",
+      "dependencies": {
+        "@ab/audit": "workspace:*",
+        "@ab/constants": "workspace:*",
+        "@ab/db": "workspace:*",
+        "@ab/utils": "workspace:*",
+      },
     },
     "libs/hangar-sync": {
       "name": "@ab/hangar-sync",
+      "dependencies": {
+        "@ab/audit": "workspace:*",
+        "@ab/aviation": "workspace:*",
+        "@ab/constants": "workspace:*",
+        "@ab/db": "workspace:*",
+        "@ab/hangar-jobs": "workspace:*",
+        "@ab/utils": "workspace:*",
+      },
     },
     "libs/help": {
       "name": "@ab/help",
+      "dependencies": {
+        "@ab/aviation": "workspace:*",
+        "@ab/constants": "workspace:*",
+        "@ab/utils": "workspace:*",
+      },
     },
     "libs/themes": {
       "name": "@ab/themes",
+      "dependencies": {
+        "@ab/constants": "workspace:*",
+      },
     },
     "libs/types": {
       "name": "@ab/types",
     },
     "libs/ui": {
       "name": "@ab/ui",
+      "dependencies": {
+        "@ab/constants": "workspace:*",
+        "@ab/help": "workspace:*",
+        "@ab/themes": "workspace:*",
+      },
     },
     "libs/utils": {
       "name": "@ab/utils",
+      "dependencies": {
+        "@ab/constants": "workspace:*",
+      },
     },
   },
   "packages": {

@@ -38,3 +38,8 @@ function loadEnvFile(path: string): void {
 }
 
 loadEnvFile(resolve(process.cwd(), '.env'));
+// Fall back to `.env.example` so a fresh worktree (which inherits
+// `.env.example` from git but has no personal `.env`) can still boot the
+// test suite against the dev-DB defaults. The no-overwrite rule above keeps
+// real `.env` entries winning when both files exist.
+loadEnvFile(resolve(process.cwd(), '.env.example'));
