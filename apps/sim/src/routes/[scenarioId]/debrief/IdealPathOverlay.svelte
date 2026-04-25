@@ -143,7 +143,7 @@ const playheadX = $derived(tToX(startT + currentT));
 	.axis-label {
 		fill: var(--sim-instrument-tick-minor);
 		font-family: var(--font-family-mono, monospace);
-		font-size: 10px;
+		font-size: var(--font-size-xs);
 	}
 	.actual {
 		stroke: var(--sim-arc-green);

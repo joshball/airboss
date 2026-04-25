@@ -58,17 +58,17 @@ const lowPct = $derived(lowFuelThreshold === undefined ? 0 : fillPct(lowFuelThre
 		display: grid;
 		grid-template-columns: 1fr 1fr;
 		grid-template-rows: 1fr auto;
-		gap: 4px 8px;
-		padding: 4px;
+		gap: var(--space-2xs) var(--space-sm);
+		padding: var(--space-2xs);
 		border: 1px solid var(--sim-instrument-bezel);
-		border-radius: 4px;
+		border-radius: var(--radius-xs);
 		background: var(--sim-instrument-face);
 	}
 	.tank {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		gap: 2px;
+		gap: var(--space-2xs);
 	}
 	.bar {
 		position: relative;
@@ -95,14 +95,14 @@ const lowPct = $derived(lowFuelThreshold === undefined ? 0 : fillPct(lowFuelThre
 	}
 	.caption {
 		font-family: var(--font-family-mono, monospace);
-		font-size: 11px;
+		font-size: var(--font-size-xs);
 		color: var(--sim-instrument-tick);
 	}
 	.label {
 		grid-column: 1 / -1;
 		text-align: center;
 		font-family: var(--font-family-mono, monospace);
-		font-size: 11px;
+		font-size: var(--font-size-xs);
 		color: var(--sim-instrument-tick-minor);
 		text-transform: uppercase;
 	}
