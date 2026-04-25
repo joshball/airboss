@@ -122,6 +122,8 @@ async function doReset(): Promise<void> {
 	]);
 	await run(['bunx', 'drizzle-kit', 'push']);
 	await run(['bun', 'scripts/db/seed-all.ts']);
+	// Final summary so the operator sees what landed.
+	await run(['bun', 'scripts/db/seed-check.ts']);
 }
 
 async function doResetStudy(): Promise<void> {
@@ -293,8 +295,8 @@ const COMMAND_HELP: Record<string, CommandHelp> = {
 	},
 	'seed:check': {
 		summary: 'Print a per-table count of rows that still carry a seed_origin marker',
-		what: 'Runs `scripts/db/seed-check.ts`. For every seeded table, lists how many rows have a non-NULL `seed_origin`, grouped by tag. Exits 0 if zero, exits 1 if any seeded rows remain. CI-safe.',
-		why: '"Did the seed actually wipe?" / "What got left behind?" -- one command answers it. Pair with `seed:remove` until check is clean.',
+		what: 'Runs `scripts/db/seed-check.ts`. For every seeded table, lists how many rows have a non-NULL `seed_origin`, grouped by tag. Default exits 0 (info command). Pass `--require-clean` to exit 1 when any seeded rows remain (CI gate).',
+		why: '"What is in this DB right now?" -- one command answers it. Default behavior is informational so it is safe to run from any shell. The `--require-clean` flag turns it into a CI assertion that the DB has zero dev-seed rows.',
 		how: 'Read-only query loop over the seeded tables. Reads `seed_origin` directly except on `bauth_user`, which uses `address->>seed_origin` since better-auth owns the table.',
 		links: ['scripts/db/seed-check.ts', 'scripts/db/seed-tables.ts'],
 	},

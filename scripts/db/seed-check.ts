@@ -1,10 +1,16 @@
 #!/usr/bin/env bun
 /**
- * Print a per-table per-origin summary of seeded rows. Exits 0 if every
- * table is clean (no rows with non-null seed_origin); exits 1 if any
- * dev-seed rows remain. CI-friendly.
+ * Print a per-table per-origin summary of seeded rows.
  *
- * Usage: bun scripts/db/seed-check.ts
+ * Default: informational. Exit 0 always (so it's safe to run anywhere as
+ * a status command).
+ *
+ * `--require-clean`: gate mode for CI. Exit 1 if any seeded rows remain.
+ * Use this when you want to assert "this DB has no dev-seed rows".
+ *
+ * Usage:
+ *   bun scripts/db/seed-check.ts                  # info, always exit 0
+ *   bun scripts/db/seed-check.ts --require-clean  # CI gate, exit 1 if dirty
  */
 
 import { DEV_DB_URL, ENV_VARS } from '@ab/constants';
@@ -19,6 +25,7 @@ interface CountRow {
 }
 
 async function main(): Promise<void> {
+	const requireClean = process.argv.includes('--require-clean');
 	const connectionString = process.env[ENV_VARS.DATABASE_URL] ?? DEV_DB_URL;
 	const client = postgres(connectionString);
 	const db = drizzle(client);
@@ -50,11 +57,14 @@ async function main(): Promise<void> {
 		process.stdout.write('\nseed:check\n');
 		for (const line of lines) process.stdout.write(`${line}\n`);
 		if (totalRows === 0) {
-			process.stdout.write('\nResult: clean (0 seeded rows). Exit 0.\n');
+			process.stdout.write('\nResult: clean (0 seeded rows).\n');
 			process.exitCode = 0;
-		} else {
-			process.stdout.write(`\nResult: ${totalRows} seeded rows present. Exit 1.\n`);
+		} else if (requireClean) {
+			process.stdout.write(`\nResult: ${totalRows} seeded rows present (--require-clean specified, exit 1).\n`);
 			process.exitCode = 1;
+		} else {
+			process.stdout.write(`\nResult: ${totalRows} seeded rows present.\n`);
+			process.exitCode = 0;
 		}
 	} catch (err) {
 		process.stderr.write(`seed:check failed: ${(err as Error).stack ?? err}\n`);
