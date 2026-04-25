@@ -18,7 +18,7 @@ import type {
 	ScenarioRunResult,
 	ScenarioStepState,
 } from '@ab/bc-sim';
-import type { SIM_WORKER_MESSAGES, SimScenarioId } from '@ab/constants';
+import type { SIM_WORKER_MESSAGES, SimMarkerBeaconKind, SimScenarioId } from '@ab/constants';
 
 export type MainToWorker =
 	| { type: typeof SIM_WORKER_MESSAGES.INIT; scenarioId: SimScenarioId }
@@ -46,6 +46,13 @@ export type WorkerToMain =
 			stepState?: ScenarioStepState;
 			/** Sticky list of active fault activations as of this snapshot. */
 			activations: readonly FaultActivation[];
+			/**
+			 * Marker-beacon kind active at this position, if any. The worker
+			 * resolves this from `def.markerBeacons` against truth.x and AGL
+			 * each snapshot; the cockpit dispatches the cue. `null` (and
+			 * absent) both mean "no zone active" -- the cockpit silences.
+			 */
+			markerBeaconKind?: SimMarkerBeaconKind | null;
 	  }
 	| { type: typeof SIM_WORKER_MESSAGES.OUTCOME; result: ScenarioRunResult }
 	/**

@@ -1,4 +1,9 @@
-import { SIM_ENGINE_SOUND, SIM_GEAR_WARNING, SIM_SEA_LEVEL_DENSITY_KG_M3 } from '@ab/constants';
+import {
+	SIM_ENGINE_SOUND,
+	SIM_GEAR_WARNING,
+	SIM_MARKER_BEACON_KINDS,
+	SIM_SEA_LEVEL_DENSITY_KG_M3,
+} from '@ab/constants';
 import { describe, expect, it } from 'vitest';
 import {
 	altitudeAlertCrossed,
@@ -6,6 +11,7 @@ import {
 	engineFiringHz,
 	engineFundamentalHz,
 	flapsChanged,
+	markerBeaconAtPosition,
 	noiseGainTarget,
 	propBladePassHz,
 	shouldSoundGearWarning,
@@ -14,6 +20,7 @@ import {
 	throttleGainTarget,
 	tremoloHz,
 } from './audio-mapping';
+import type { MarkerBeaconZone } from './types';
 
 describe('engineFiringHz', () => {
 	it('returns 0 at zero RPM', () => {
@@ -225,5 +232,52 @@ describe('altitudeAlertCrossed', () => {
 
 	it('fires when the current sample lands exactly on the threshold from below', () => {
 		expect(altitudeAlertCrossed(3999, 4000, target, lead)).toBe(true);
+	});
+});
+
+describe('markerBeaconAtPosition', () => {
+	// Standard ILS-ish layout: outer ~7 km from threshold (200 m AGL ceiling),
+	// middle ~1 km, inner ~300 m. Half-widths get progressively narrower
+	// closer to the runway.
+	const layout: readonly MarkerBeaconZone[] = [
+		{ kind: SIM_MARKER_BEACON_KINDS.OUTER, xMeters: 7000, halfWidthMeters: 200, aglCeilingMeters: 600 },
+		{ kind: SIM_MARKER_BEACON_KINDS.MIDDLE, xMeters: 1000, halfWidthMeters: 80, aglCeilingMeters: 300 },
+		{ kind: SIM_MARKER_BEACON_KINDS.INNER, xMeters: 300, halfWidthMeters: 30, aglCeilingMeters: 150 },
+	];
+
+	it('returns null when zones list is empty', () => {
+		expect(markerBeaconAtPosition([], 1000, 100)).toBeNull();
+	});
+
+	it('returns null when aircraft is outside every zone horizontally', () => {
+		expect(markerBeaconAtPosition(layout, 5000, 100)).toBeNull();
+	});
+
+	it('returns null when aircraft is over the zone but above the ceiling', () => {
+		expect(markerBeaconAtPosition(layout, 7000, 700)).toBeNull();
+	});
+
+	it('returns the zone kind when within half-width and below ceiling', () => {
+		expect(markerBeaconAtPosition(layout, 7050, 400)).toBe(SIM_MARKER_BEACON_KINDS.OUTER);
+		expect(markerBeaconAtPosition(layout, 1010, 200)).toBe(SIM_MARKER_BEACON_KINDS.MIDDLE);
+		expect(markerBeaconAtPosition(layout, 290, 100)).toBe(SIM_MARKER_BEACON_KINDS.INNER);
+	});
+
+	it('picks the narrowest zone when multiple overlap', () => {
+		// A wide outer zone that engulfs a narrow inner zone -- the
+		// inner zone should win because the narrowest signal dominates
+		// in real layouts.
+		const overlapping: readonly MarkerBeaconZone[] = [
+			{ kind: SIM_MARKER_BEACON_KINDS.OUTER, xMeters: 1000, halfWidthMeters: 500, aglCeilingMeters: 1000 },
+			{ kind: SIM_MARKER_BEACON_KINDS.INNER, xMeters: 1000, halfWidthMeters: 50, aglCeilingMeters: 1000 },
+		];
+		expect(markerBeaconAtPosition(overlapping, 1000, 100)).toBe(SIM_MARKER_BEACON_KINDS.INNER);
+	});
+
+	it('treats zone boundaries as inclusive', () => {
+		// At exactly the half-width edge AND at exactly the AGL ceiling,
+		// the cue still fires -- consistent with altitudeAlertCrossed's
+		// treatment of "lands exactly on the threshold".
+		expect(markerBeaconAtPosition(layout, 7200, 600)).toBe(SIM_MARKER_BEACON_KINDS.OUTER);
 	});
 });
