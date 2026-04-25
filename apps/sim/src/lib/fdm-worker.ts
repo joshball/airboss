@@ -16,9 +16,9 @@ import type { FrameRing, ReplayFrame, ScenarioStepState } from '@ab/bc-sim';
 import {
 	applyFaults,
 	buildTape,
-	C172_CONFIG,
 	createFrameRing,
 	FdmEngine,
+	getAircraftConfig,
 	getScenario,
 	pushFrame,
 	ScenarioRunner,
@@ -71,10 +71,10 @@ function post(msg: WorkerToMain): void {
 
 function buildState(scenarioId: SimScenarioId): WorkerState {
 	const def = getScenario(scenarioId);
-	// Phase 0.5 only ships the C172. If future scenarios pin a different
-	// aircraft, resolve it here. Using the id keyed lookup keeps the switch
-	// explicit rather than implicit string matching.
-	const cfg = C172_CONFIG;
+	// Resolve the scenario's pinned aircraft via the registry. C172 today,
+	// PA28 lit up in #172, future airframes added by registering a new
+	// AircraftConfig in libs/bc/sim/src/fdm/aircraft-registry.ts.
+	const cfg = getAircraftConfig(def.aircraft);
 	const engine = new FdmEngine(cfg, def.initial, def.wind, def.scriptedInput);
 	const runner = new ScenarioRunner(def);
 	return {

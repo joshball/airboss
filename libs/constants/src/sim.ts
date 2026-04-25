@@ -21,15 +21,17 @@ export const SIM_SCENARIO_IDS = {
 	UNUSUAL_ATTITUDES_NOSE_LO: 'unusual-attitudes-nose-lo',
 	AFT_CG_SLOW_FLIGHT: 'aft-cg-slow-flight',
 	VMC_INTO_IMC: 'vmc-into-imc',
+	PLAYGROUND_PA28: 'playground-pa28',
 } as const;
 
 export type SimScenarioId = (typeof SIM_SCENARIO_IDS)[keyof typeof SIM_SCENARIO_IDS];
 
 export const SIM_SCENARIO_ID_VALUES = Object.values(SIM_SCENARIO_IDS) as readonly SimScenarioId[];
 
-/** Aircraft profile identifiers. Phase 0 only ships the C172. */
+/** Aircraft profile identifiers. */
 export const SIM_AIRCRAFT_IDS = {
 	C172: 'c172',
+	PA28: 'pa28',
 } as const;
 
 export type SimAircraftId = (typeof SIM_AIRCRAFT_IDS)[keyof typeof SIM_AIRCRAFT_IDS];

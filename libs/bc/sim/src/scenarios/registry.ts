@@ -13,6 +13,7 @@ import { FIRST_FLIGHT_SCENARIO } from './first-flight';
 import { PARTIAL_PANEL_SCENARIO } from './partial-panel';
 import { PITOT_BLOCK_SCENARIO } from './pitot-block';
 import { PLAYGROUND_SCENARIO } from './playground';
+import { PLAYGROUND_PA28_SCENARIO } from './playground-pa28';
 import { STATIC_BLOCK_SCENARIO } from './static-block';
 import { UNUSUAL_ATTITUDES_SCENARIO } from './unusual-attitudes';
 import { UNUSUAL_ATTITUDES_NOSE_LO_SCENARIO } from './unusual-attitudes-nose-lo';
@@ -32,6 +33,7 @@ export const SCENARIO_REGISTRY: Record<SimScenarioId, ScenarioDefinition> = {
 	[SIM_SCENARIO_IDS.UNUSUAL_ATTITUDES_NOSE_LO]: UNUSUAL_ATTITUDES_NOSE_LO_SCENARIO,
 	[SIM_SCENARIO_IDS.AFT_CG_SLOW_FLIGHT]: AFT_CG_SLOW_FLIGHT_SCENARIO,
 	[SIM_SCENARIO_IDS.VMC_INTO_IMC]: VMC_INTO_IMC_SCENARIO,
+	[SIM_SCENARIO_IDS.PLAYGROUND_PA28]: PLAYGROUND_PA28_SCENARIO,
 };
 
 /** Defensive lookup; throws on unknown ids so callers fail fast. */
