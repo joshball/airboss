@@ -42,7 +42,7 @@ Publish pipeline per [ADR 005](../../decisions/005-PUBLISHED_CONTENT.md). Route:
 - [x] DB schema: all 8 namespaces in Drizzle (course, published, enrollment, evidence, compliance, identity, audit, platform)
 - [x] Auth lib: better-auth + Drizzle, `requireAuth()` + `requireRole()` guards
 - [x] Audit lib: `logAction()`, `getContentHistory()`, schema
-- [x] Design system: aviation + glass-cockpit themes (light/dark, `--t-*` tokens)
+- [x] Design system: theme system with `theme` x `appearance` x `layout` axes; current themes include `airboss/default`, `study/sectional`, `study/flightdeck`, `sim/glass`. See [theme-system-overhaul](../../work-packages/theme-system-overhaul/README.md) for the rewrite.
 - [x] UI lib: 30 components (AppShell, Sidebar, DataTable, forms, auth, etc.)
 
 ### Hangar App Shell

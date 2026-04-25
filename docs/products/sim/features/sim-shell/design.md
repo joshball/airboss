@@ -86,20 +86,9 @@ export const actions = {
 
 ## Theme System
 
-Identical to hangar. Copy `(app)/+layout.svelte` from hangar, change default theme to `glassCockpitTheme` (already the default -- no change needed). The `ThemeControl` context is set here; `ThemeEditor` in settings consumes it.
+> **Note (2026-04-25):** This section described a `glassCockpitTheme` / `aviationTheme` model that has been replaced. The current theme system uses three orthogonal axes (`theme` x `appearance` x `layout`) with route-resolved themes; sim resolves to `sim/glass`. See [docs/platform/theme-system/QUICK_REFERENCE.md](../../../../platform/theme-system/QUICK_REFERENCE.md) and the [shared theme picker](../../../../work-packages/theme-system-overhaul/10-theme-picker-shared-lib/spec.md).
 
-```typescript
-// (app)/+layout.svelte -- key shape (see hangar layout for full impl)
-import { glassCockpitTheme, aviationTheme, THEME_CONTROL_CONTEXT, type ThemeControl } from "@firc/themes";
-import { THEME_PREFERENCES } from "@firc/constants";
-import { setContext } from "svelte";
-
-const THEMES = [glassCockpitTheme, aviationTheme];
-
-// Init from localStorage synchronously (browser guard)
-// $effect to persist changes
-// setContext(THEME_CONTROL_CONTEXT, themeControl)
-```
+Identical to other apps. The shared `ThemePicker` in `libs/themes/picker/` is mounted in the layout; route resolution via `libs/themes/resolve.ts` selects `sim/glass` as the default theme for sim routes. No per-app theme list needs to be authored.
 
 ## Constants Required
 
