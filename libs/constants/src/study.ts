@@ -379,6 +379,23 @@ export const REVIEW_BATCH_SIZE = 20;
 /** Default browse page size. */
 export const BROWSE_PAGE_SIZE = 25;
 
+/** Allowed browse page-size values. Must include `BROWSE_PAGE_SIZE`. */
+export const BROWSE_PAGE_SIZE_VALUES = [10, 25, 50, 100] as const;
+export type BrowsePageSize = (typeof BROWSE_PAGE_SIZE_VALUES)[number];
+
+/** Allowed group-by buckets for the Browse list. `'none'` = flat list. */
+export const BROWSE_GROUP_BY_VALUES = ['none', 'domain', 'type', 'source', 'status', 'state'] as const;
+export type BrowseGroupBy = (typeof BROWSE_GROUP_BY_VALUES)[number];
+
+export const BROWSE_GROUP_BY_LABELS: Record<BrowseGroupBy, string> = {
+	none: 'No grouping',
+	domain: 'Domain',
+	type: 'Type',
+	source: 'Source',
+	status: 'Status',
+	state: 'Schedule state',
+};
+
 /** Idempotency window for duplicate review submission protection. */
 export const REVIEW_DEDUPE_WINDOW_MS = 5_000;
 

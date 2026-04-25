@@ -288,7 +288,7 @@ export async function getDueCards(
 		WHERE ${cardSnooze.cardId} = ${card.id}
 		  AND ${cardSnooze.userId} = ${cardState.userId}
 		  AND ${cardSnooze.resolvedAt} IS NULL
-		  AND (${cardSnooze.snoozeUntil} IS NULL OR ${cardSnooze.snoozeUntil} > ${now})
+		  AND (${cardSnooze.snoozeUntil} IS NULL OR ${cardSnooze.snoozeUntil} > ${now.toISOString()})
 	)`;
 	clauses.push(notActivelySnoozed);
 
@@ -509,4 +509,88 @@ export async function getRemovedCardsCount(
 		.innerJoin(card, eq(card.id, cardSnooze.cardId))
 		.where(and(...clauses));
 	return Number(row?.total ?? 0);
+}
+
+/**
+ * Per-facet bucket counts so the Browse filter UI can show "Domain (12)"
+ * style hints next to each option. Each facet is computed against the
+ * *other* active filters -- e.g. the `domain` facet counts respect the
+ * user's chosen `cardType` / `sourceType` / `search` so the numbers
+ * always tell the user "if I pick X, I'll see Y cards with my current
+ * filters."
+ *
+ * Excludes the "removed" virtual status because removed cards live in
+ * `card_snooze`, not `card`. The browse page calls this only for the
+ * non-removed paths.
+ */
+export interface CardsFacetCounts {
+	domain: Record<string, number>;
+	cardType: Record<string, number>;
+	sourceType: Record<string, number>;
+	status: Record<string, number>;
+}
+
+export async function getCardsFacetCounts(
+	userId: string,
+	filters: Omit<CardFilters, 'limit' | 'offset'> = {},
+	db: Db = defaultDb,
+): Promise<CardsFacetCounts> {
+	const baseClauses: SQL[] = [eq(card.userId, userId)];
+	if (filters.nodeId) baseClauses.push(eq(card.nodeId, filters.nodeId));
+	if (filters.search && filters.search.trim().length > 0) {
+		const pattern = `%${escapeLikePattern(filters.search.trim())}%`;
+		const cond = or(ilike(card.front, pattern), ilike(card.back, pattern));
+		if (cond) baseClauses.push(cond);
+	}
+
+	const statusFilter = filters.status
+		? Array.isArray(filters.status)
+			? filters.status
+			: [filters.status]
+		: [CARD_STATUSES.ACTIVE];
+
+	const withExcept = (exclude: 'domain' | 'cardType' | 'sourceType' | 'status'): SQL[] => {
+		const c = [...baseClauses];
+		if (exclude !== 'status') c.push(inArray(card.status, statusFilter));
+		if (exclude !== 'domain' && filters.domain) c.push(eq(card.domain, filters.domain));
+		if (exclude !== 'cardType' && filters.cardType) c.push(eq(card.cardType, filters.cardType));
+		if (exclude !== 'sourceType' && filters.sourceType) c.push(eq(card.sourceType, filters.sourceType));
+		return c;
+	};
+
+	const [domainRows, typeRows, sourceRows, statusRows] = await Promise.all([
+		db
+			.select({ key: card.domain, n: sql<number>`count(*)::int` })
+			.from(card)
+			.where(and(...withExcept('domain')))
+			.groupBy(card.domain),
+		db
+			.select({ key: card.cardType, n: sql<number>`count(*)::int` })
+			.from(card)
+			.where(and(...withExcept('cardType')))
+			.groupBy(card.cardType),
+		db
+			.select({ key: card.sourceType, n: sql<number>`count(*)::int` })
+			.from(card)
+			.where(and(...withExcept('sourceType')))
+			.groupBy(card.sourceType),
+		db
+			.select({ key: card.status, n: sql<number>`count(*)::int` })
+			.from(card)
+			.where(and(...withExcept('status')))
+			.groupBy(card.status),
+	]);
+
+	const toRecord = (rows: Array<{ key: string; n: number }>): Record<string, number> => {
+		const out: Record<string, number> = {};
+		for (const r of rows) out[r.key] = Number(r.n);
+		return out;
+	};
+
+	return {
+		domain: toRecord(domainRows),
+		cardType: toRecord(typeRows),
+		sourceType: toRecord(sourceRows),
+		status: toRecord(statusRows),
+	};
 }

@@ -22,6 +22,7 @@ export type {
 export { CROSS_REF_SESSION_LIMIT, getCardCrossReferences } from './card-cross-references';
 export type {
 	CardFilters,
+	CardsFacetCounts,
 	CardWithState,
 	CreateCardInput,
 	RemovedCardRow,
@@ -35,6 +36,7 @@ export {
 	getCard,
 	getCards,
 	getCardsCount,
+	getCardsFacetCounts,
 	getDueCards,
 	getRemovedCards,
 	getRemovedCardsCount,
