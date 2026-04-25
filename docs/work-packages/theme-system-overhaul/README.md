@@ -28,9 +28,9 @@ Derived from seven prior theme-system iterations. See [docs/platform/theme-syste
 | 5  | [study-page-migration](05-study-page-migration/) — seven per-folder sub-PRs, swap to primitives, replace every hardcoded value                     | shipped (#83)       | #3, #4                            |
 | 6  | [appearance-dark-mode](06-appearance-dark-mode/) — real dark palettes + toggle + cookie                                                            | shipped (#85)       | #5                                |
 | 7  | [sim-theme-glass](07-sim-theme-glass/) — sim app theme + migration                                                                                 | shipped (#84)       | —                                 |
-| 8  | [oklch-palette-migration](08-oklch-palette-migration/) — convert palettes from hex to OKLCH; extend contrast matrix to measure them                | spec                | #6                                |
+| 8  | [oklch-palette-migration](08-oklch-palette-migration/) — convert palettes from hex to OKLCH; extend contrast matrix to measure them                | shipped (#114)      | #6                                |
 | 9  | [theme-picker](09-theme-picker/) — user-selectable theme picker (study only)                                                                       | shipped (#183)      | #6                                |
-| 10 | [theme-picker-shared-lib](10-theme-picker-shared-lib/) — extract picker into `@ab/themes/picker/*`, wire study, sim, and hangar                    | shipped             | #9                                |
+| 10 | [theme-picker-shared-lib](10-theme-picker-shared-lib/) — extract picker into `@ab/themes/picker/*`, wire study, sim, and hangar                    | shipped (#190)      | #9                                |
 
 ## Sequencing
 
