@@ -27,6 +27,7 @@ import TurnCoordinator from '$lib/instruments/TurnCoordinator.svelte';
 import Vsi from '$lib/instruments/Vsi.svelte';
 import { loadTape } from '$lib/tape-store.svelte';
 import type { PageData } from './$types';
+import InputTrace from './InputTrace.svelte';
 
 let { data }: { data: PageData } = $props();
 
@@ -202,6 +203,12 @@ function onScrubKey(event: KeyboardEvent): void {
 				{/if}
 			</section>
 
+			<section class="input-tape" aria-label="Pilot input traces">
+				<h3>Inputs</h3>
+				<p class="panel-help">Throttle, elevator, aileron, and rudder commands across the run. Playhead tracks the scrubber.</p>
+				<InputTrace frames={tape.frames} {currentT} />
+			</section>
+
 			<section class="dual" aria-label="Truth versus display panels">
 				<article class="panel">
 					<h3>Truth</h3>
@@ -282,6 +289,7 @@ function onScrubKey(event: KeyboardEvent): void {
 	.stale,
 	.summary,
 	.scrubber,
+	.input-tape,
 	.dual {
 		margin-bottom: var(--space-lg);
 		padding: var(--space-md) var(--space-lg);
