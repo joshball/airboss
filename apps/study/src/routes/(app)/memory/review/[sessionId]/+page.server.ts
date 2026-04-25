@@ -12,20 +12,62 @@ import {
 	advanceReviewSession,
 	CardNotFoundError,
 	CardNotReviewableError,
+	type CardSchedulerState,
+	FeedbackCommentRequiredError,
+	fsrsPreviewAll,
+	getReplacementCard,
+	getUnresolvedReEntrySnooze,
 	NoReviewToUndoError,
 	ReviewSessionNotFoundError,
 	type ReviewSessionState,
+	removeCard,
+	replaceSessionAtIndex,
 	resumeReviewSession,
+	SnoozeCommentRequiredError,
+	shrinkSessionAtIndex,
+	snoozeCard,
+	submitFeedback,
 	submitReview,
 	submitReviewSchema,
 	undoReview,
 } from '@ab/bc-study';
-import type { ConfidenceLevel, ReviewRating } from '@ab/constants';
+import {
+	CARD_FEEDBACK_SIGNAL_VALUES,
+	type CardFeedbackSignal,
+	type CardState,
+	type ConfidenceLevel,
+	REVIEW_RATING_VALUES,
+	type ReviewRating,
+	SNOOZE_DURATION_LEVEL_VALUES,
+	SNOOZE_REASON_VALUES,
+	SNOOZE_REASONS,
+	type SnoozeDurationLevel,
+	type SnoozeReason,
+} from '@ab/constants';
 import { createLogger } from '@ab/utils';
 import { error, fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 
 const log = createLogger('study:memory-review-session');
+
+function previewIntervalsFor(state: ReviewSessionState['currentCard'], now: Date): Record<ReviewRating, number> | null {
+	if (!state) return null;
+	const schedulerState: CardSchedulerState = {
+		stability: state.stability,
+		difficulty: state.difficulty,
+		state: state.state as CardState,
+		dueAt: state.dueAt,
+		lastReview: state.lastReview,
+		reviewCount: state.reviewCount,
+		lapseCount: state.lapseCount,
+	};
+	const previews = fsrsPreviewAll(schedulerState, now);
+	const out = {} as Record<ReviewRating, number>;
+	for (const r of REVIEW_RATING_VALUES) {
+		out[r] = previews[r].dueAt.getTime();
+	}
+	return out;
+}
 
 export const load: PageServerLoad = async (event) => {
 	const user = requireAuth(event);
@@ -41,6 +83,17 @@ export const load: PageServerLoad = async (event) => {
 		throw err;
 	}
 
+	const now = new Date();
+	const previewDueAtMs = previewIntervalsFor(state.currentCard, now);
+
+	let reEntryBanner: { snoozeId: string; cardEditedAt: string } | null = null;
+	if (state.currentCard) {
+		const row = await getUnresolvedReEntrySnooze(state.currentCard.id, user.id);
+		if (row?.cardEditedAt) {
+			reEntryBanner = { snoozeId: row.id, cardEditedAt: row.cardEditedAt.toISOString() };
+		}
+	}
+
 	return {
 		sessionId: state.session.id,
 		position: state.position,
@@ -48,6 +101,9 @@ export const load: PageServerLoad = async (event) => {
 		isComplete: state.isComplete,
 		startedAt: state.session.startedAt.toISOString(),
 		domainFilter: state.session.deckSpec.domain ?? null,
+		nowMs: now.getTime(),
+		reEntryBanner,
+		previewDueAtMs,
 		currentCard: state.currentCard
 			? {
 					id: state.currentCard.id,
@@ -155,6 +211,102 @@ export const actions: Actions = {
 				err instanceof Error ? err : undefined,
 			);
 			return fail(500, { error: 'Could not undo review' });
+		}
+	},
+	snooze: async (event) => {
+		const user = requireAuth(event);
+		const { params, request, locals } = event;
+
+		const form = await request.formData();
+		const cardId = String(form.get('cardId') ?? '');
+		const reasonRaw = String(form.get('reason') ?? '');
+		const comment = String(form.get('comment') ?? '');
+		const durationRaw = String(form.get('durationLevel') ?? '');
+		const waitForEdit = String(form.get('waitForEdit') ?? '') === 'true';
+		const domain = String(form.get('domain') ?? '');
+
+		if (!cardId) return fail(400, { error: 'cardId is required' });
+		if (!(SNOOZE_REASON_VALUES as readonly string[]).includes(reasonRaw)) {
+			return fail(400, { error: 'Unknown snooze reason' });
+		}
+		const reason = reasonRaw as SnoozeReason;
+
+		const durationLevel: SnoozeDurationLevel | null =
+			durationRaw && (SNOOZE_DURATION_LEVEL_VALUES as readonly string[]).includes(durationRaw)
+				? (durationRaw as SnoozeDurationLevel)
+				: null;
+
+		try {
+			if (reason === SNOOZE_REASONS.REMOVE) {
+				await removeCard({ cardId, userId: user.id, comment });
+				const replacement = domain ? await getReplacementCard({ userId: user.id, afterCardId: cardId, domain }) : null;
+				if (replacement) {
+					await replaceSessionAtIndex(params.sessionId, user.id, replacement.cardId);
+				} else {
+					await shrinkSessionAtIndex(params.sessionId, user.id);
+				}
+				return { success: true as const, intent: 'snooze' as const, replaced: Boolean(replacement) };
+			}
+
+			await snoozeCard({
+				cardId,
+				userId: user.id,
+				reason,
+				comment: comment || null,
+				durationLevel,
+				waitForEdit: reason === SNOOZE_REASONS.BAD_QUESTION ? waitForEdit : false,
+			});
+			await shrinkSessionAtIndex(params.sessionId, user.id);
+			return { success: true as const, intent: 'snooze' as const, replaced: false };
+		} catch (err) {
+			if (err instanceof SnoozeCommentRequiredError) {
+				return fail(400, { error: 'A comment is required for this reason.' });
+			}
+			if (err instanceof CardNotFoundError) {
+				return fail(404, { error: 'Card not found' });
+			}
+			if (err instanceof ReviewSessionNotFoundError) {
+				error(404, { message: 'Review session not found' });
+			}
+			log.error(
+				'snoozeCard threw',
+				{ requestId: locals.requestId, userId: user.id, metadata: { cardId, sessionId: params.sessionId, reason } },
+				err instanceof Error ? err : undefined,
+			);
+			return fail(500, { error: 'Could not snooze card' });
+		}
+	},
+	feedback: async (event) => {
+		const user = requireAuth(event);
+		const { request, locals, params } = event;
+
+		const form = await request.formData();
+		const cardId = String(form.get('cardId') ?? '');
+		const signalRaw = String(form.get('signal') ?? '');
+		const comment = String(form.get('comment') ?? '');
+
+		if (!cardId) return fail(400, { error: 'cardId is required' });
+		if (!(CARD_FEEDBACK_SIGNAL_VALUES as readonly string[]).includes(signalRaw)) {
+			return fail(400, { error: 'Unknown feedback signal' });
+		}
+		const signal = signalRaw as CardFeedbackSignal;
+
+		try {
+			await submitFeedback({ cardId, userId: user.id, signal, comment: comment || null });
+			return { success: true as const, intent: 'feedback' as const, signal };
+		} catch (err) {
+			if (err instanceof FeedbackCommentRequiredError) {
+				return fail(400, { error: 'A comment is required for this feedback.' });
+			}
+			if (err instanceof CardNotFoundError) {
+				return fail(404, { error: 'Card not found' });
+			}
+			log.error(
+				'submitFeedback threw',
+				{ requestId: locals.requestId, userId: user.id, metadata: { cardId, sessionId: params.sessionId, signal } },
+				err instanceof Error ? err : undefined,
+			);
+			return fail(500, { error: 'Could not save feedback' });
 		}
 	},
 } satisfies Actions;
