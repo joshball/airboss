@@ -116,6 +116,7 @@ export const sessionStart: HelpPage = {
 		'concept-session-slices',
 		'concept-knowledge-graph',
 		'concept-fsrs',
+		'focus-domains',
 		'memory-review',
 		'reps-session',
 		'getting-started',

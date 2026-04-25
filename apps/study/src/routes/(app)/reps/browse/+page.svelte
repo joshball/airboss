@@ -149,49 +149,51 @@ function pageHref(n: number): string {
 
 	<form class="filters" method="GET" role="search" aria-label="Filter scenarios">
 		<input type="hidden" name={QUERY_PARAMS.PAGE} value="1" />
-		<div class="filter">
-			<label for="f-domain">Domain</label>
-			<select id="f-domain" name={QUERY_PARAMS.DOMAIN} value={filters.domain ?? ''}>
-				<option value="">All</option>
-				{#each DOMAIN_VALUES as d (d)}
-					<option value={d}>{domainLabel(d)}</option>
-				{/each}
-			</select>
-		</div>
-		<div class="filter">
-			<label for="f-difficulty">Difficulty</label>
-			<select id="f-difficulty" name={QUERY_PARAMS.DIFFICULTY} value={filters.difficulty ?? ''}>
-				<option value="">All</option>
-				{#each DIFFICULTY_VALUES as d (d)}
-					<option value={d}>{difficultyLabel(d)}</option>
-				{/each}
-			</select>
-		</div>
-		<div class="filter">
-			<label for="f-phase">Phase</label>
-			<select id="f-phase" name={QUERY_PARAMS.FLIGHT_PHASE} value={filters.phaseOfFlight ?? ''}>
-				<option value="">All</option>
-				{#each PHASE_OF_FLIGHT_VALUES as p (p)}
-					<option value={p}>{phaseLabel(p)}</option>
-				{/each}
-			</select>
-		</div>
-		<div class="filter">
-			<label for="f-source">Source</label>
-			<select id="f-source" name={QUERY_PARAMS.SOURCE} value={filters.sourceType ?? ''}>
-				<option value="">All</option>
-				{#each CONTENT_SOURCE_VALUES as s (s)}
-					<option value={s}>{humanize(s)}</option>
-				{/each}
-			</select>
-		</div>
-		<div class="filter">
-			<label for="f-status">Status</label>
-			<select id="f-status" name={QUERY_PARAMS.STATUS} value={filters.status ?? SCENARIO_STATUSES.ACTIVE}>
-				{#each SCENARIO_STATUS_VALUES as s (s)}
-					<option value={s}>{humanize(s)}</option>
-				{/each}
-			</select>
+		<div class="filter-grid">
+			<div class="filter">
+				<label for="f-domain">Domain</label>
+				<select id="f-domain" name={QUERY_PARAMS.DOMAIN} value={filters.domain ?? ''}>
+					<option value="">All</option>
+					{#each DOMAIN_VALUES as d (d)}
+						<option value={d}>{domainLabel(d)}</option>
+					{/each}
+				</select>
+			</div>
+			<div class="filter">
+				<label for="f-difficulty">Difficulty</label>
+				<select id="f-difficulty" name={QUERY_PARAMS.DIFFICULTY} value={filters.difficulty ?? ''}>
+					<option value="">All</option>
+					{#each DIFFICULTY_VALUES as d (d)}
+						<option value={d}>{difficultyLabel(d)}</option>
+					{/each}
+				</select>
+			</div>
+			<div class="filter">
+				<label for="f-phase">Phase</label>
+				<select id="f-phase" name={QUERY_PARAMS.FLIGHT_PHASE} value={filters.phaseOfFlight ?? ''}>
+					<option value="">All</option>
+					{#each PHASE_OF_FLIGHT_VALUES as p (p)}
+						<option value={p}>{phaseLabel(p)}</option>
+					{/each}
+				</select>
+			</div>
+			<div class="filter">
+				<label for="f-source">Source</label>
+				<select id="f-source" name={QUERY_PARAMS.SOURCE} value={filters.sourceType ?? ''}>
+					<option value="">All</option>
+					{#each CONTENT_SOURCE_VALUES as s (s)}
+						<option value={s}>{humanize(s)}</option>
+					{/each}
+				</select>
+			</div>
+			<div class="filter">
+				<label for="f-status">Status</label>
+				<select id="f-status" name={QUERY_PARAMS.STATUS} value={filters.status ?? SCENARIO_STATUSES.ACTIVE}>
+					{#each SCENARIO_STATUS_VALUES as s (s)}
+						<option value={s}>{humanize(s)}</option>
+					{/each}
+				</select>
+			</div>
 		</div>
 		<div class="filter-actions">
 			<button type="submit" class="btn secondary">Apply</button>
@@ -312,20 +314,30 @@ function pageHref(n: number): string {
 	}
 
 	.filters {
-		display: grid;
-		grid-template-columns: repeat(5, 1fr) auto;
+		display: flex;
+		flex-direction: column;
 		gap: var(--space-md);
-		align-items: end;
 		background: var(--ink-inverse);
 		border: 1px solid var(--edge-default);
 		border-radius: var(--radius-lg);
 		padding: var(--space-lg);
 	}
 
+	/* Filter selects share a single grid that wraps as the card narrows. The
+	 * Apply / Reset row lives below in `.filter-actions` so they never escape
+	 * the card edge regardless of how many filters are present. */
+	.filter-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+		gap: var(--space-md);
+		align-items: end;
+	}
+
 	.filter {
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-2xs);
+		min-width: 0;
 	}
 
 	.filter label {
@@ -354,6 +366,9 @@ function pageHref(n: number): string {
 	.filter-actions {
 		display: flex;
 		gap: var(--space-xs);
+		justify-content: flex-end;
+		padding-top: var(--space-sm);
+		border-top: 1px solid var(--edge-default);
 	}
 
 	.chip-row {
@@ -630,13 +645,8 @@ function pageHref(n: number): string {
 	}
 
 	@media (max-width: 640px) {
-		.filters {
+		.filter-grid {
 			grid-template-columns: 1fr 1fr;
-		}
-
-		.filter-actions {
-			grid-column: 1 / -1;
-			justify-content: flex-end;
 		}
 	}
 </style>

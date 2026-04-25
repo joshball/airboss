@@ -298,7 +298,8 @@ function difficultyLabel(slug: string): string {
 			</label>
 
 			<label class="field">
-				<span class="label">Phase of flight <span class="hint">(optional)</span></span>
+				<span class="label">Phase of flight</span>
+				<span class="hint optional-note">(optional)</span>
 				<select name="phaseOfFlight" bind:value={phaseOfFlight} disabled={loading}>
 					<option value="">Any</option>
 					{#each PHASE_OF_FLIGHT_VALUES as p (p)}
@@ -462,6 +463,14 @@ function difficultyLabel(slug: string): string {
 		display: grid;
 		grid-template-columns: 2fr 1fr 1fr;
 		gap: var(--space-lg);
+		/* Align inputs (the visually heavy element) on the same baseline so a
+		 * field with extra label subtext (Phase of flight's "(optional)" hint)
+		 * does not push its select below the row's other selects. */
+		align-items: end;
+	}
+
+	.optional-note {
+		font-size: var(--type-ui-caption-size);
 	}
 
 	.options {

@@ -35,6 +35,7 @@ import { conceptProficiencyCurrency } from './content/concepts/proficiency-curre
 import { conceptSessionSlices } from './content/concepts/session-slices';
 import { conceptSpacedRep } from './content/concepts/spaced-rep';
 import { dashboard } from './content/dashboard';
+import { focusDomains } from './content/focus-domains';
 import { gettingStarted } from './content/getting-started';
 import { keyboardShortcuts } from './content/keyboard-shortcuts';
 import { knowledgeGraph } from './content/knowledge-graph';
@@ -62,6 +63,7 @@ export const studyHelpPages: readonly HelpPage[] = [
 	repsNew,
 	repsSession,
 	sessionStart,
+	focusDomains,
 	calibration,
 	knowledgeGraph,
 	keyboardShortcuts,

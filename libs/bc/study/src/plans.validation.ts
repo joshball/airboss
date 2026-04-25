@@ -31,8 +31,12 @@ export const createPlanSchema = z
 		// plans produce sessions full of reps without any cert filter. Upper bound
 		// stays at 4 so authors can't list every cert.
 		certGoals: z.array(planEnum.cert).max(4).default([]),
-		focusDomains: z.array(planEnum.domain).max(5).default([]),
-		skipDomains: z.array(planEnum.domain).max(14).default([]),
+		// Cap = canonical domain count. Selecting every domain is a valid "broad
+		// refresher" intent (e.g. the Private Pilot overview preset emphasises 8).
+		// A lower cap was a leftover from a smaller taxonomy and crashed
+		// `startFromPreset` on legitimate preset configs.
+		focusDomains: z.array(planEnum.domain).max(DOMAIN_VALUES.length).default([]),
+		skipDomains: z.array(planEnum.domain).max(DOMAIN_VALUES.length).default([]),
 		skipNodes: z.array(z.string().trim().min(1).max(100)).max(200).default([]),
 		depthPreference: planEnum.depth.optional(),
 		sessionLength: z.number().int().min(MIN_SESSION_LENGTH).max(MAX_SESSION_LENGTH).optional(),
@@ -57,8 +61,8 @@ export const updatePlanSchema = z
 	.object({
 		title: planTitleSchema.optional(),
 		certGoals: z.array(planEnum.cert).max(4).optional(),
-		focusDomains: z.array(planEnum.domain).max(5).optional(),
-		skipDomains: z.array(planEnum.domain).max(14).optional(),
+		focusDomains: z.array(planEnum.domain).max(DOMAIN_VALUES.length).optional(),
+		skipDomains: z.array(planEnum.domain).max(DOMAIN_VALUES.length).optional(),
 		skipNodes: z.array(z.string().trim().min(1).max(100)).max(200).optional(),
 		depthPreference: planEnum.depth.optional(),
 		sessionLength: z.number().int().min(MIN_SESSION_LENGTH).max(MAX_SESSION_LENGTH).optional(),
