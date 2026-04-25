@@ -59,6 +59,10 @@ export const QUERY_PARAMS = {
 	SEARCH: 'q',
 	/** 1-based page number for paginated browse. */
 	PAGE: 'page',
+	/** Items-per-page for paginated browse (one of `BROWSE_PAGE_SIZE_VALUES`). */
+	PAGE_SIZE: 'size',
+	/** Group-by bucket for the Browse list (one of `BROWSE_GROUP_BY_VALUES`). */
+	GROUP_BY: 'group',
 } as const;
 
 export const ROUTES = {

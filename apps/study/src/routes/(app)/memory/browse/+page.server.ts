@@ -3,14 +3,19 @@ import {
 	getCard,
 	getCards,
 	getCardsCount,
+	getCardsFacetCounts,
 	getRemovedCards,
 	getRemovedCardsCount,
 	restoreCardByCard,
 } from '@ab/bc-study';
 import {
+	BROWSE_GROUP_BY_VALUES,
 	BROWSE_PAGE_SIZE,
+	BROWSE_PAGE_SIZE_VALUES,
 	BROWSE_STATUS_FILTER_VALUES,
 	BROWSE_STATUS_REMOVED,
+	type BrowseGroupBy,
+	type BrowsePageSize,
 	type BrowseStatusFilter,
 	CARD_STATUSES,
 	CARD_TYPE_VALUES,
@@ -42,6 +47,14 @@ export const load: PageServerLoad = async (event) => {
 	const pageRaw = Number.parseInt(url.searchParams.get(QUERY_PARAMS.PAGE) ?? '1', 10);
 	const pageNum = Number.isFinite(pageRaw) && pageRaw >= 1 ? pageRaw : 1;
 
+	const pageSizeRaw = Number.parseInt(url.searchParams.get(QUERY_PARAMS.PAGE_SIZE) ?? '', 10);
+	const pageSize: BrowsePageSize = (BROWSE_PAGE_SIZE_VALUES as readonly number[]).includes(pageSizeRaw)
+		? (pageSizeRaw as BrowsePageSize)
+		: BROWSE_PAGE_SIZE;
+
+	const groupBy: BrowseGroupBy =
+		narrow<BrowseGroupBy>(url.searchParams.get(QUERY_PARAMS.GROUP_BY), BROWSE_GROUP_BY_VALUES) ?? 'none';
+
 	// Branch on whether the caller wants the virtual "removed" view or the
 	// ordinary card.status filter. The two data sources are different tables
 	// (card vs card + card_snooze join) so they don't compose into the same
@@ -69,13 +82,13 @@ export const load: PageServerLoad = async (event) => {
 		const [removed, removedCount] = await Promise.all([
 			getRemovedCards(user.id, {
 				...filters,
-				limit: BROWSE_PAGE_SIZE + 1,
-				offset: (pageNum - 1) * BROWSE_PAGE_SIZE,
+				limit: pageSize + 1,
+				offset: (pageNum - 1) * pageSize,
 			}),
 			getRemovedCardsCount(user.id, filters),
 		]);
-		hasMore = removed.length > BROWSE_PAGE_SIZE;
-		const visible = hasMore ? removed.slice(0, BROWSE_PAGE_SIZE) : removed;
+		hasMore = removed.length > pageSize;
+		const visible = hasMore ? removed.slice(0, pageSize) : removed;
 		rows = visible.map((r) => ({
 			id: r.card.id,
 			front: r.card.front,
@@ -102,13 +115,13 @@ export const load: PageServerLoad = async (event) => {
 		const [cards, totalCount] = await Promise.all([
 			getCards(user.id, {
 				...filters,
-				limit: BROWSE_PAGE_SIZE + 1,
-				offset: (pageNum - 1) * BROWSE_PAGE_SIZE,
+				limit: pageSize + 1,
+				offset: (pageNum - 1) * pageSize,
 			}),
 			getCardsCount(user.id, filters),
 		]);
-		hasMore = cards.length > BROWSE_PAGE_SIZE;
-		const visible = hasMore ? cards.slice(0, BROWSE_PAGE_SIZE) : cards;
+		hasMore = cards.length > pageSize;
+		const visible = hasMore ? cards.slice(0, pageSize) : cards;
 		rows = visible.map(({ card, state }) => ({
 			id: card.id,
 			front: card.front,
@@ -125,7 +138,23 @@ export const load: PageServerLoad = async (event) => {
 		total = totalCount;
 	}
 
-	const totalPages = Math.max(1, Math.ceil(total / BROWSE_PAGE_SIZE));
+	const totalPages = Math.max(1, Math.ceil(total / pageSize));
+
+	// Facet counts back the "Domain (12)" hints in the filter UI. We compute
+	// counts against the *other* active filters so each facet answers
+	// "what would I get if I picked this option, keeping my other filters?"
+	// Removed cards live in `card_snooze`, so the removed view skips facets;
+	// the existing status-removed UI doesn't need them.
+	const facets =
+		status === BROWSE_STATUS_REMOVED
+			? null
+			: await getCardsFacetCounts(user.id, {
+					domain,
+					cardType,
+					sourceType,
+					status,
+					search: search || undefined,
+				});
 
 	// Read `?created=<id>` -- set when the user lands here straight from a
 	// successful create. The banner + row highlight read this.
@@ -142,9 +171,11 @@ export const load: PageServerLoad = async (event) => {
 		filters: { domain, cardType, sourceType, status, search },
 		page: pageNum,
 		hasMore,
-		pageSize: BROWSE_PAGE_SIZE,
+		pageSize,
 		total,
 		totalPages,
+		groupBy,
+		facets,
 		createdCard,
 	};
 };

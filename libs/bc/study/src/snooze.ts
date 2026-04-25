@@ -373,7 +373,7 @@ export async function getReplacementCard(
 		})
 		.from(cardState)
 		.innerJoin(card, and(eq(card.id, cardState.cardId), eq(card.userId, cardState.userId)))
-		.where(and(eq(card.userId, opts.userId), eq(card.domain, opts.domain), sql`"due_at" <= ${now}`))
+		.where(and(eq(card.userId, opts.userId), eq(card.domain, opts.domain), sql`"due_at" <= ${now.toISOString()}`))
 		.orderBy(cardState.dueAt);
 
 	for (const row of dueRows) {

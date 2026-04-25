@@ -1,8 +1,13 @@
 <script lang="ts">
 import {
+	BROWSE_GROUP_BY_LABELS,
+	BROWSE_GROUP_BY_VALUES,
+	BROWSE_PAGE_SIZE,
+	BROWSE_PAGE_SIZE_VALUES,
 	BROWSE_STATUS_FILTER_LABELS,
 	BROWSE_STATUS_FILTER_VALUES,
 	BROWSE_STATUS_REMOVED,
+	type BrowseGroupBy,
 	type BrowseStatusFilter,
 	CARD_STATUSES,
 	CARD_TYPE_LABELS,
@@ -35,14 +40,13 @@ const hasMore = $derived(data.hasMore);
 const total = $derived(data.total);
 const totalPages = $derived(data.totalPages);
 const pageSize = $derived(data.pageSize);
+const groupBy = $derived(data.groupBy);
+const facets = $derived(data.facets);
 const createdCard = $derived(data.createdCard);
 
-// Range "Showing 21-40 of 137" -- computed client-side so the list and pager
-// agree even if `total` and `cards.length` drift (e.g., a concurrent delete).
 const rangeStart = $derived(cards.length === 0 ? 0 : (currentPage - 1) * pageSize + 1);
 const rangeEnd = $derived(cards.length === 0 ? 0 : (currentPage - 1) * pageSize + cards.length);
 
-// True when no filters are active -- a blank deck vs over-filtered.
 const hasActiveFilters = $derived(
 	Boolean(filters.domain || filters.cardType || filters.sourceType || filters.search) ||
 		filters.status !== CARD_STATUSES.ACTIVE,
@@ -58,9 +62,6 @@ $effect(() => {
 });
 
 function dismissCreatedBanner(): void {
-	// Clear the `?created=...` param so the banner doesn't re-appear on
-	// navigation and the scroll effect doesn't re-fire. `noScroll` keeps the
-	// viewport where the user left it.
 	const next = new URL(page.url);
 	next.searchParams.delete(QUERY_PARAMS.CREATED);
 	void goto(next, { replaceState: true, keepFocus: true, noScroll: true });
@@ -162,6 +163,8 @@ function buildHref(next: Record<string, string | undefined>): string {
 		[QUERY_PARAMS.SOURCE]: filters.sourceType,
 		[QUERY_PARAMS.STATUS]: filters.status === CARD_STATUSES.ACTIVE ? undefined : filters.status,
 		[QUERY_PARAMS.SEARCH]: filters.search || undefined,
+		[QUERY_PARAMS.PAGE_SIZE]: pageSize === BROWSE_PAGE_SIZE ? undefined : String(pageSize),
+		[QUERY_PARAMS.GROUP_BY]: groupBy === 'none' ? undefined : groupBy,
 		...next,
 	};
 	return `${ROUTES.MEMORY_BROWSE}${buildQuery(full)}`;
@@ -170,6 +173,80 @@ function buildHref(next: Record<string, string | undefined>): string {
 function pageHref(n: number): string {
 	return buildHref({ [QUERY_PARAMS.PAGE]: n > 1 ? String(n) : undefined });
 }
+
+// Facet helpers: render "(12)" hints next to filter options. `undefined`
+// when the facet bucket is missing (e.g. removed view); `0` renders a
+// dimmed "(0)".
+function domainCount(slug: string): number | undefined {
+	return facets?.domain?.[slug];
+}
+function typeCount(slug: string): number | undefined {
+	return facets?.cardType?.[slug];
+}
+function sourceCount(slug: string): number | undefined {
+	return facets?.sourceType?.[slug];
+}
+function statusCount(slug: string): number | undefined {
+	if (slug === BROWSE_STATUS_REMOVED) return undefined;
+	return facets?.status?.[slug];
+}
+function fmtCount(n: number | undefined): string {
+	return n === undefined ? '' : ` (${n})`;
+}
+
+interface CardRow {
+	id: string;
+	front: string;
+	domain: string;
+	cardType: string;
+	status: string;
+	sourceType: string;
+	scheduleState: string;
+	stabilityDays: number;
+	dueAt: Date;
+	lastReviewedAt: Date | null;
+	removed?: { snoozeId: string; removedAt: Date; comment: string | null };
+}
+
+interface CardGroup {
+	key: string;
+	label: string;
+	cards: CardRow[];
+}
+
+function groupKeyFor(c: CardRow, by: BrowseGroupBy): string {
+	if (by === 'domain') return c.domain;
+	if (by === 'type') return c.cardType;
+	if (by === 'source') return c.sourceType;
+	if (by === 'status') return c.removed ? BROWSE_STATUS_REMOVED : c.status;
+	if (by === 'state') return c.scheduleState;
+	return '';
+}
+
+function groupLabelFor(by: BrowseGroupBy, key: string): string {
+	if (by === 'domain') return domainLabel(key);
+	if (by === 'type') return cardTypeLabel(key);
+	if (by === 'source') return sourceLabel(key);
+	if (by === 'status') return statusLabel(key);
+	if (by === 'state') return cardStateLabel(key);
+	return '';
+}
+
+const groups = $derived.by<CardGroup[]>(() => {
+	if (groupBy === 'none' || cards.length === 0) {
+		return [{ key: '', label: '', cards: cards as CardRow[] }];
+	}
+	const map = new Map<string, CardRow[]>();
+	for (const c of cards as CardRow[]) {
+		const k = groupKeyFor(c, groupBy);
+		const list = map.get(k) ?? [];
+		list.push(c);
+		map.set(k, list);
+	}
+	return [...map.entries()]
+		.map(([k, cs]) => ({ key: k, label: groupLabelFor(groupBy, k), cards: cs }))
+		.sort((a, b) => a.label.localeCompare(b.label));
+});
 </script>
 
 <svelte:head>
@@ -183,7 +260,10 @@ function pageHref(n: number): string {
 				<h1>Browse</h1>
 				<PageHelp pageId="memory-browse" />
 			</div>
-			<p class="sub">Your deck of memory items. Filter, search, or click a card to edit.</p>
+			<p class="sub">
+				Every memory card on your account -- the ones you've authored and the ones seeded from course material.
+				Filter, search, and click any card to edit it.
+			</p>
 		</div>
 		<a class="btn primary" href={ROUTES.MEMORY_NEW}>New card</a>
 	</header>
@@ -197,8 +277,13 @@ function pageHref(n: number): string {
 
 	<form class="filters" method="GET" role="search" aria-label="Filter cards">
 		<input type="hidden" name={QUERY_PARAMS.PAGE} value="1" />
+		<input type="hidden" name={QUERY_PARAMS.PAGE_SIZE} value={pageSize === BROWSE_PAGE_SIZE ? '' : String(pageSize)} />
+		<input type="hidden" name={QUERY_PARAMS.GROUP_BY} value={groupBy === 'none' ? '' : groupBy} />
+
 		<div class="filter">
-			<label for="f-q">Search</label>
+			<div class="filter-label-row">
+				<label for="f-q">Search</label>
+			</div>
 			<input
 				id="f-q"
 				type="search"
@@ -207,6 +292,7 @@ function pageHref(n: number): string {
 				value={filters.search ?? ''}
 			/>
 		</div>
+
 		<div class="filter">
 			<div class="filter-label-row">
 				<label for="f-domain">Domain</label>
@@ -220,10 +306,11 @@ function pageHref(n: number): string {
 			<select id="f-domain" name={QUERY_PARAMS.DOMAIN} value={filters.domain ?? ''}>
 				<option value="">All</option>
 				{#each DOMAIN_VALUES as d (d)}
-					<option value={d}>{domainLabel(d)}</option>
+					<option value={d}>{domainLabel(d)}{fmtCount(domainCount(d))}</option>
 				{/each}
 			</select>
 		</div>
+
 		<div class="filter">
 			<div class="filter-label-row">
 				<label for="f-type">Type</label>
@@ -237,10 +324,11 @@ function pageHref(n: number): string {
 			<select id="f-type" name={QUERY_PARAMS.CARD_TYPE} value={filters.cardType ?? ''}>
 				<option value="">All</option>
 				{#each CARD_TYPE_VALUES as t (t)}
-					<option value={t}>{cardTypeLabel(t)}</option>
+					<option value={t}>{cardTypeLabel(t)}{fmtCount(typeCount(t))}</option>
 				{/each}
 			</select>
 		</div>
+
 		<div class="filter">
 			<div class="filter-label-row">
 				<label for="f-source">Source</label>
@@ -254,10 +342,11 @@ function pageHref(n: number): string {
 			<select id="f-source" name={QUERY_PARAMS.SOURCE} value={filters.sourceType ?? ''}>
 				<option value="">All</option>
 				{#each CONTENT_SOURCE_VALUES as s (s)}
-					<option value={s}>{sourceLabel(s)}</option>
+					<option value={s}>{sourceLabel(s)}{fmtCount(sourceCount(s))}</option>
 				{/each}
 			</select>
 		</div>
+
 		<div class="filter">
 			<div class="filter-label-row">
 				<label for="f-status">Status</label>
@@ -270,15 +359,40 @@ function pageHref(n: number): string {
 			</div>
 			<select id="f-status" name={QUERY_PARAMS.STATUS} value={filters.status ?? CARD_STATUSES.ACTIVE}>
 				{#each BROWSE_STATUS_FILTER_VALUES as s (s)}
-					<option value={s}>{statusLabel(s)}</option>
+					<option value={s}>{statusLabel(s)}{fmtCount(statusCount(s))}</option>
 				{/each}
 			</select>
 		</div>
-		<div class="filter-actions">
-			<button type="submit" class="btn secondary">Apply</button>
-			<a class="btn ghost" href={ROUTES.MEMORY_BROWSE}>Reset</a>
+
+		<div class="filter filter-actions">
+			<div class="filter-label-row" aria-hidden="true">
+				<span class="filter-spacer">&nbsp;</span>
+			</div>
+			<div class="actions-row">
+				<button type="submit" class="btn secondary">Apply</button>
+				<a class="btn ghost" href={ROUTES.MEMORY_BROWSE}>Reset</a>
+			</div>
 		</div>
 	</form>
+
+	<div class="view-controls" aria-label="View options">
+		<div class="view-control">
+			<label for="f-group">Group by</label>
+			<select id="f-group" value={groupBy} onchange={(e) => goto(buildHref({ [QUERY_PARAMS.GROUP_BY]: (e.currentTarget as HTMLSelectElement).value === 'none' ? undefined : (e.currentTarget as HTMLSelectElement).value }))}>
+				{#each BROWSE_GROUP_BY_VALUES as g (g)}
+					<option value={g}>{BROWSE_GROUP_BY_LABELS[g]}</option>
+				{/each}
+			</select>
+		</div>
+		<div class="view-control">
+			<label for="f-size">Per page</label>
+			<select id="f-size" value={pageSize} onchange={(e) => goto(buildHref({ [QUERY_PARAMS.PAGE_SIZE]: (e.currentTarget as HTMLSelectElement).value === String(BROWSE_PAGE_SIZE) ? undefined : (e.currentTarget as HTMLSelectElement).value, [QUERY_PARAMS.PAGE]: undefined }))}>
+				{#each BROWSE_PAGE_SIZE_VALUES as n (n)}
+					<option value={n}>{n}</option>
+				{/each}
+			</select>
+		</div>
+	</div>
 
 	{#if chips.length > 0}
 		<div class="chip-row" aria-label="Active filters">
@@ -317,40 +431,50 @@ function pageHref(n: number): string {
 			{/if}
 		</div>
 	{:else}
-		<ul class="list">
-			{#each cards as c (c.id)}
-				<li id={`card-${c.id}`} class="card" class:just-created={createdCard?.id === c.id}>
-					<a class="card-link" href={ROUTES.MEMORY_CARD(c.id)}>
-						<div class="card-front">{shorten(c.front)}</div>
-						<div class="card-meta">
-							<span class="badge domain">{domainLabel(c.domain)}</span>
-							<span class="badge type">{cardTypeLabel(c.cardType)}</span>
-							{#if c.removed}
-								<span class="badge status-removed">Removed</span>
-							{:else}
-								<span class="badge status-{c.status}">{statusLabel(c.status)}</span>
+		{#each groups as group (group.key)}
+			{#if groupBy !== 'none'}
+				<h2 class="group-heading">
+					<span>{group.label}</span>
+					<span class="group-count">{group.cards.length}</span>
+				</h2>
+			{/if}
+			<ul class="list">
+				{#each group.cards as c (c.id)}
+					<li id={`card-${c.id}`} class="card" class:just-created={createdCard?.id === c.id}>
+						<a class="card-link" href={ROUTES.MEMORY_CARD(c.id)}>
+							<div class="card-front">{shorten(c.front)}</div>
+							<div class="card-row">
+								<div class="card-meta">
+									<span class="badge domain">{domainLabel(c.domain)}</span>
+									<span class="badge type">{cardTypeLabel(c.cardType)}</span>
+									{#if c.removed}
+										<span class="badge status-removed">Removed</span>
+									{:else}
+										<span class="badge status-{c.status}">{statusLabel(c.status)}</span>
+									{/if}
+									<span class="badge source">{sourceLabel(c.sourceType)}</span>
+								</div>
+								<div class="card-stats" aria-label="Schedule">
+									<span class="stat"><span class="stat-key">{cardStateLabel(c.scheduleState)}</span></span>
+									<span class="stat"><span class="stat-key">Due</span> {dueLabel(c.dueAt)}</span>
+									<span class="stat"><span class="stat-key">Stab</span> {c.stabilityDays.toFixed(1)}d</span>
+									<span class="stat"><span class="stat-key">Last</span> {lastReviewedLabel(c.lastReviewedAt)}</span>
+								</div>
+							</div>
+							{#if c.removed?.comment}
+								<p class="removed-comment">Removed comment: {c.removed.comment}</p>
 							{/if}
-							<span class="badge source">{sourceLabel(c.sourceType)}</span>
-						</div>
-						<dl class="card-stats" aria-label="Schedule">
-							<div><dt>State</dt><dd>{cardStateLabel(c.scheduleState)}</dd></div>
-							<div><dt>Due</dt><dd>{dueLabel(c.dueAt)}</dd></div>
-							<div><dt>Stability</dt><dd>{c.stabilityDays.toFixed(1)} d</dd></div>
-							<div><dt>Last reviewed</dt><dd>{lastReviewedLabel(c.lastReviewedAt)}</dd></div>
-						</dl>
-						{#if c.removed?.comment}
-							<p class="removed-comment">Removed comment: {c.removed.comment}</p>
+						</a>
+						{#if c.removed}
+							<form method="POST" action="?/restore" class="restore-form">
+								<input type="hidden" name="cardId" value={c.id} />
+								<button type="submit" class="btn ghost restore-btn">Restore</button>
+							</form>
 						{/if}
-					</a>
-					{#if c.removed}
-						<form method="POST" action="?/restore" class="restore-form">
-							<input type="hidden" name="cardId" value={c.id} />
-							<button type="submit" class="btn ghost restore-btn">Restore</button>
-						</form>
-					{/if}
-				</li>
-			{/each}
-		</ul>
+					</li>
+				{/each}
+			</ul>
+		{/each}
 
 		<nav class="pager" aria-label="Pagination">
 			{#if currentPage > 1}
@@ -399,13 +523,14 @@ function pageHref(n: number): string {
 		margin: var(--space-2xs) 0 0;
 		color: var(--ink-subtle);
 		font-size: var(--type-definition-body-size);
+		max-width: 70ch;
 	}
 
 	.filters {
 		display: grid;
 		grid-template-columns: 2fr 1fr 1fr 1fr 1fr auto;
 		gap: var(--space-md);
-		align-items: end;
+		align-items: stretch;
 		background: var(--ink-inverse);
 		border: 1px solid var(--edge-default);
 		border-radius: var(--radius-lg);
@@ -416,6 +541,14 @@ function pageHref(n: number): string {
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-2xs);
+		min-width: 0;
+	}
+
+	.filter-label-row {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-2xs);
+		min-height: 1.25rem;
 	}
 
 	.filter label {
@@ -426,12 +559,6 @@ function pageHref(n: number): string {
 		letter-spacing: var(--letter-spacing-caps);
 	}
 
-	.filter-label-row {
-		display: inline-flex;
-		align-items: center;
-		gap: var(--space-2xs);
-	}
-
 	.filter input,
 	.filter select {
 		font: inherit;
@@ -440,6 +567,7 @@ function pageHref(n: number): string {
 		border-radius: var(--radius-sm);
 		background: var(--ink-inverse);
 		color: var(--ink-body);
+		min-width: 0;
 	}
 
 	.filter input:focus,
@@ -450,8 +578,50 @@ function pageHref(n: number): string {
 	}
 
 	.filter-actions {
+		justify-content: flex-end;
+	}
+
+	.actions-row {
 		display: flex;
 		gap: var(--space-xs);
+		align-items: center;
+		height: 100%;
+	}
+
+	.filter-spacer {
+		display: inline-block;
+		font-size: var(--type-ui-caption-size);
+	}
+
+	.view-controls {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--space-lg);
+		align-items: center;
+		padding: 0 var(--space-2xs);
+	}
+
+	.view-control {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-xs);
+	}
+
+	.view-control label {
+		font-size: var(--type-ui-caption-size);
+		font-weight: 600;
+		color: var(--ink-muted);
+		text-transform: uppercase;
+		letter-spacing: var(--letter-spacing-caps);
+	}
+
+	.view-control select {
+		font: inherit;
+		padding: var(--space-2xs) var(--space-sm);
+		border: 1px solid var(--edge-strong);
+		border-radius: var(--radius-sm);
+		background: var(--ink-inverse);
+		color: var(--ink-body);
 	}
 
 	.banner-link {
@@ -538,6 +708,22 @@ function pageHref(n: number): string {
 		font-size: var(--type-ui-label-size);
 	}
 
+	.group-heading {
+		display: flex;
+		align-items: baseline;
+		gap: var(--space-sm);
+		margin: var(--space-md) 0 var(--space-xs);
+		font-size: var(--type-heading-3-size);
+		color: var(--ink-body);
+		letter-spacing: -0.01em;
+	}
+
+	.group-count {
+		color: var(--ink-subtle);
+		font-size: var(--type-ui-label-size);
+		font-weight: 500;
+	}
+
 	.card.just-created {
 		border-color: var(--signal-success-edge);
 		box-shadow: 0 0 0 3px var(--signal-success);
@@ -562,7 +748,7 @@ function pageHref(n: number): string {
 		margin: 0;
 		display: flex;
 		flex-direction: column;
-		gap: var(--space-sm);
+		gap: var(--space-xs);
 	}
 
 	.card {
@@ -579,7 +765,7 @@ function pageHref(n: number): string {
 
 	.card-link {
 		display: block;
-		padding: var(--space-md) var(--space-lg);
+		padding: var(--space-sm) var(--space-md);
 		text-decoration: none;
 		color: inherit;
 	}
@@ -590,11 +776,41 @@ function pageHref(n: number): string {
 		line-height: 1.4;
 	}
 
-	.card-meta {
-		margin-top: var(--space-sm);
+	.card-row {
+		margin-top: var(--space-2xs);
 		display: flex;
 		flex-wrap: wrap;
-		gap: var(--space-xs);
+		align-items: center;
+		gap: var(--space-md);
+		row-gap: var(--space-2xs);
+	}
+
+	.card-meta {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--space-2xs);
+	}
+
+	.card-stats {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--space-md);
+		color: var(--ink-subtle);
+		font-size: var(--type-ui-label-size);
+	}
+
+	.stat {
+		display: inline-flex;
+		gap: var(--space-2xs);
+		white-space: nowrap;
+	}
+
+	.stat-key {
+		color: var(--ink-muted);
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: var(--letter-spacing-caps);
+		font-size: var(--type-ui-caption-size);
 	}
 
 	.badge {
@@ -633,6 +849,12 @@ function pageHref(n: number): string {
 		color: var(--accent-code);
 		background: var(--action-default-wash);
 		border-color: var(--action-default-edge);
+	}
+
+	.removed-comment {
+		margin: var(--space-2xs) 0 0;
+		color: var(--ink-subtle);
+		font-size: var(--type-ui-label-size);
 	}
 
 	.pager {
@@ -699,7 +921,7 @@ function pageHref(n: number): string {
 		background: var(--surface-sunken);
 	}
 
-	@media (max-width: 640px) {
+	@media (max-width: 720px) {
 		.filters {
 			grid-template-columns: 1fr 1fr;
 		}
@@ -707,6 +929,11 @@ function pageHref(n: number): string {
 		.filter-actions {
 			grid-column: 1 / -1;
 			justify-content: flex-end;
+		}
+
+		.card-row {
+			flex-direction: column;
+			align-items: flex-start;
 		}
 	}
 </style>
