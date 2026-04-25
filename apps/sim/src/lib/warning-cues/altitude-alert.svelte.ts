@@ -56,10 +56,23 @@ export class AltitudeAlert {
 		}
 	}
 
-	/** Set a new altitude target (feet MSL). Pass null to disarm. */
+	/**
+	 * Set a new altitude target (feet MSL). Pass null to disarm.
+	 *
+	 * On a fresh arm (previous target was null and the new target is a
+	 * number) we fire the cue once as an arming confirmation -- this
+	 * mirrors a real altitude-alerter's "ding" when you dial in a new
+	 * cleared altitude. Re-arming to the same value or changing between
+	 * two non-null targets does NOT pulse, since those are mid-clearance
+	 * adjustments rather than a fresh acknowledgement.
+	 */
 	setTarget(feet: number | null): void {
+		const wasDisarmed = this.targetFt === null;
 		this.targetFt = feet;
 		this.lastAltitudeFt = null;
+		if (wasDisarmed && feet !== null && !this.stoppedScenario) {
+			this.fire();
+		}
 	}
 
 	/** Feed a fresh altitude sample (feet MSL). Fires the tone on threshold crossings. */
