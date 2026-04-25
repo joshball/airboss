@@ -24,13 +24,14 @@ import {
 	type ConfidenceLevel,
 	REVIEW_DEDUPE_WINDOW_MS,
 	type ReviewRating,
+	SNOOZE_REASONS,
 } from '@ab/constants';
 import { db as defaultDb } from '@ab/db';
 import { generateReviewId } from '@ab/utils';
-import { and, desc, eq, gte } from 'drizzle-orm';
+import { and, desc, eq, gte, isNull } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import { CardNotFoundError } from './cards';
-import { card, cardState, type ReviewRow, review } from './schema';
+import { card, cardSnooze, cardState, type ReviewRow, review } from './schema';
 import { fsrsInitialState, fsrsSchedule } from './srs';
 
 type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;
@@ -52,13 +53,7 @@ export interface SubmitReviewInput {
 	rating: ReviewRating;
 	confidence?: ConfidenceLevel | null;
 	answerMs?: number | null;
-	/**
-	 * Optional `memory_review_session` id. Set when the review was produced
-	 * inside a session URL (`/memory/review/<sessionId>`); stays null for
-	 * legacy stateless review-queue submissions and for engine-session slots.
-	 * Drives the Sessions row in the card cross-references panel on
-	 * `/memory/<id>`.
-	 */
+	/** Link the review to the memory_review_session that produced it (layer a). */
 	reviewSessionId?: string | null;
 }
 
@@ -156,6 +151,22 @@ export async function submitReview(input: SubmitReviewInput, db: Db = defaultDb)
 				lapseCount: newLapseCount,
 			})
 			.where(and(eq(cardState.cardId, input.cardId), eq(cardState.userId, input.userId)));
+
+		// Re-entry resolution: when the learner rates a card that was in a
+		// `bad-question` snooze, close that row so the banner does not fire
+		// again. Any rating counts; the intent is "user has passed judgement
+		// on the edited card." Idempotent when no active row exists.
+		await tx
+			.update(cardSnooze)
+			.set({ resolvedAt: now })
+			.where(
+				and(
+					eq(cardSnooze.cardId, input.cardId),
+					eq(cardSnooze.userId, input.userId),
+					eq(cardSnooze.reason, SNOOZE_REASONS.BAD_QUESTION),
+					isNull(cardSnooze.resolvedAt),
+				),
+			);
 
 		return inserted;
 	});

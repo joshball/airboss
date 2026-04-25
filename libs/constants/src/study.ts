@@ -1001,3 +1001,144 @@ export const REVIEW_SESSION_STATUS_VALUES: readonly ReviewSessionStatus[] = Obje
  * delete.
  */
 export const REVIEW_SESSION_ABANDON_MS = 14 * MS_PER_DAY;
+
+// -------- Snooze + card feedback (Bundle A -- snooze-and-flag WP) --------
+
+/**
+ * Why a learner pushed a card out of their deck. Drives the `study.card_snooze`
+ * row lifecycle and the replacement policy:
+ *
+ * - `bad-question`  -- comment required; snoozes until author edits the card.
+ * - `wrong-domain`  -- comment required; long snooze (60d default).
+ * - `know-it-bored` -- no comment; three duration levels (short/medium/long).
+ * - `remove`        -- comment required; soft-removal with no `snooze_until`.
+ *
+ * See `docs/work-packages/snooze-and-flag/spec.md` product decision (1).
+ */
+export const SNOOZE_REASONS = {
+	BAD_QUESTION: 'bad-question',
+	WRONG_DOMAIN: 'wrong-domain',
+	KNOW_IT_BORED: 'know-it-bored',
+	REMOVE: 'remove',
+} as const;
+
+export type SnoozeReason = (typeof SNOOZE_REASONS)[keyof typeof SNOOZE_REASONS];
+
+export const SNOOZE_REASON_VALUES = Object.values(SNOOZE_REASONS);
+
+export const SNOOZE_REASON_LABELS: Record<SnoozeReason, string> = {
+	[SNOOZE_REASONS.BAD_QUESTION]: 'Bad question',
+	[SNOOZE_REASONS.WRONG_DOMAIN]: 'Wrong domain',
+	[SNOOZE_REASONS.KNOW_IT_BORED]: 'Know it (bored)',
+	[SNOOZE_REASONS.REMOVE]: 'Remove from deck',
+};
+
+/**
+ * One-line descriptions for the snooze reason popover. Each reason drives a
+ * different lifecycle; surface the consequence rather than the label.
+ */
+export const SNOOZE_REASON_DESCRIPTIONS: Record<SnoozeReason, string> = {
+	[SNOOZE_REASONS.BAD_QUESTION]:
+		'Flag this question for author review. The card returns with a banner once it has been edited.',
+	[SNOOZE_REASONS.WRONG_DOMAIN]: 'This card belongs in a different topic. Long snooze while it is retagged.',
+	[SNOOZE_REASONS.KNOW_IT_BORED]: 'You know it; push it out to free the queue for something useful.',
+	[SNOOZE_REASONS.REMOVE]: 'Soft-remove from your deck. Reversible from Browse.',
+};
+
+/** Reasons that require a free-text comment from the learner. */
+export const SNOOZE_REASONS_REQUIRING_COMMENT: readonly SnoozeReason[] = [
+	SNOOZE_REASONS.BAD_QUESTION,
+	SNOOZE_REASONS.WRONG_DOMAIN,
+	SNOOZE_REASONS.REMOVE,
+];
+
+/**
+ * Snooze duration levels (short / medium / long). Values are authoritative:
+ * `know-it-bored` defaults to medium, `wrong-domain` to long, `bad-question`
+ * to medium (with "until fixed" override by setting `snooze_until = NULL`).
+ * `remove` has no duration. See spec product decision (4).
+ */
+export const SNOOZE_DURATION_LEVELS = {
+	SHORT: 'short',
+	MEDIUM: 'medium',
+	LONG: 'long',
+} as const;
+
+export type SnoozeDurationLevel = (typeof SNOOZE_DURATION_LEVELS)[keyof typeof SNOOZE_DURATION_LEVELS];
+
+export const SNOOZE_DURATION_LEVEL_VALUES = Object.values(SNOOZE_DURATION_LEVELS);
+
+export const SNOOZE_DURATION_DAYS: Record<SnoozeDurationLevel, number> = {
+	[SNOOZE_DURATION_LEVELS.SHORT]: 3,
+	[SNOOZE_DURATION_LEVELS.MEDIUM]: 14,
+	[SNOOZE_DURATION_LEVELS.LONG]: 60,
+};
+
+export const SNOOZE_DURATION_LEVEL_LABELS: Record<SnoozeDurationLevel, string> = {
+	[SNOOZE_DURATION_LEVELS.SHORT]: 'Short (3 days)',
+	[SNOOZE_DURATION_LEVELS.MEDIUM]: 'Medium (14 days)',
+	[SNOOZE_DURATION_LEVELS.LONG]: 'Long (60 days)',
+};
+
+/**
+ * Per-reason default duration level. The popover pre-selects this when the
+ * user picks a reason; they can override for `know-it-bored`.
+ */
+export const SNOOZE_DEFAULT_DURATION: Record<SnoozeReason, SnoozeDurationLevel | null> = {
+	[SNOOZE_REASONS.BAD_QUESTION]: SNOOZE_DURATION_LEVELS.MEDIUM,
+	[SNOOZE_REASONS.WRONG_DOMAIN]: SNOOZE_DURATION_LEVELS.LONG,
+	[SNOOZE_REASONS.KNOW_IT_BORED]: SNOOZE_DURATION_LEVELS.MEDIUM,
+	[SNOOZE_REASONS.REMOVE]: null,
+};
+
+/**
+ * Per-card content feedback. Separate from recall rating (see `REVIEW_RATINGS`)
+ * and from the schedule-altering `SNOOZE_REASONS`. A `flag` feeds the same
+ * author-review surface as a `bad-question` snooze.
+ */
+export const CARD_FEEDBACK_SIGNALS = {
+	LIKE: 'like',
+	DISLIKE: 'dislike',
+	FLAG: 'flag',
+} as const;
+
+export type CardFeedbackSignal = (typeof CARD_FEEDBACK_SIGNALS)[keyof typeof CARD_FEEDBACK_SIGNALS];
+
+export const CARD_FEEDBACK_SIGNAL_VALUES = Object.values(CARD_FEEDBACK_SIGNALS);
+
+export const CARD_FEEDBACK_SIGNAL_LABELS: Record<CardFeedbackSignal, string> = {
+	[CARD_FEEDBACK_SIGNALS.LIKE]: 'Like',
+	[CARD_FEEDBACK_SIGNALS.DISLIKE]: 'Dislike',
+	[CARD_FEEDBACK_SIGNALS.FLAG]: 'Flag',
+};
+
+/** Feedback signals that require a free-text comment. */
+export const CARD_FEEDBACK_SIGNALS_REQUIRING_COMMENT: readonly CardFeedbackSignal[] = [
+	CARD_FEEDBACK_SIGNALS.DISLIKE,
+	CARD_FEEDBACK_SIGNALS.FLAG,
+];
+
+/**
+ * How long the undo toast stays visible after a rating. Spec decision (4):
+ * undo reverts the last card's rating + confidence together; a 10 second
+ * window balances "noticed the fat-finger" against "clutters the next card".
+ */
+export const REVIEW_UNDO_WINDOW_MS = 10_000;
+
+/**
+ * Status filter for memory browse that surfaces soft-removed cards. Distinct
+ * from `CARD_STATUSES` (the card lifecycle enum) because removal is tracked
+ * via an open `card_snooze(reason='remove')` row, not as a card.status value.
+ * The browse page treats `removed` as a virtual status that triggers a
+ * different query path in `getCards`.
+ */
+export const BROWSE_STATUS_REMOVED = 'removed' as const;
+export type BrowseStatusFilter = CardStatus | typeof BROWSE_STATUS_REMOVED;
+export const BROWSE_STATUS_FILTER_VALUES: readonly BrowseStatusFilter[] = [
+	...CARD_STATUS_VALUES,
+	BROWSE_STATUS_REMOVED,
+];
+export const BROWSE_STATUS_FILTER_LABELS: Record<BrowseStatusFilter, string> = {
+	...CARD_STATUS_LABELS,
+	[BROWSE_STATUS_REMOVED]: 'Removed',
+};

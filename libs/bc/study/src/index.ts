@@ -20,7 +20,14 @@ export type {
 	CardCrossRefsScenarios,
 } from './card-cross-references';
 export { CROSS_REF_SESSION_LIMIT, getCardCrossReferences } from './card-cross-references';
-export type { CardFilters, CardWithState, CreateCardInput, UpdateCardInput } from './cards';
+export type {
+	CardFilters,
+	CardWithState,
+	CreateCardInput,
+	RemovedCardRow,
+	RemovedCardsFilters,
+	UpdateCardInput,
+} from './cards';
 export {
 	CardNotEditableError,
 	CardNotFoundError,
@@ -29,6 +36,8 @@ export {
 	getCards,
 	getCardsCount,
 	getDueCards,
+	getRemovedCards,
+	getRemovedCardsCount,
 	SourceRefRequiredError,
 	setCardStatus,
 	updateCard,
@@ -54,6 +63,9 @@ export {
 	overdueCutoff,
 } from './dashboard';
 export { runEngine } from './engine';
+export type { SubmitFeedbackInput } from './feedback';
+export { FeedbackCommentRequiredError, getLatestFeedback, submitFeedback } from './feedback';
+export { formatNextInterval, formatNextIntervalAbsolute } from './formatters';
 export type {
 	CertAndDomainMatrix,
 	CertProgress,
@@ -163,13 +175,17 @@ export {
 // and seed code; route handlers should prefer BC functions and never issue
 // raw db.insert/select on these tables.
 export type {
+	CardFeedbackRow,
 	CardRow,
+	CardSnoozeRow,
 	CardStateRow,
 	KnowledgeEdgeRow,
 	KnowledgeNodeProgressRow,
 	KnowledgeNodeRow,
 	MemoryReviewSessionRow,
+	NewCardFeedbackRow,
 	NewCardRow,
+	NewCardSnoozeRow,
 	NewCardStateRow,
 	NewKnowledgeEdgeRow,
 	NewKnowledgeNodeProgressRow,
@@ -191,6 +207,8 @@ export type {
 } from './schema';
 export {
 	card,
+	cardFeedback,
+	cardSnooze,
 	cardState,
 	knowledgeEdge,
 	knowledgeNode,
@@ -230,8 +248,23 @@ export {
 	skipSessionSlot,
 	startSession,
 } from './sessions';
+export type { RemoveCardInput, ReplacementCardResult, RestoreCardInput, SnoozeCardInput } from './snooze';
+export {
+	CardAlreadyRemovedError,
+	getActiveSnoozes,
+	getReplacementCard,
+	getUnresolvedReEntrySnooze,
+	markCardEditedForActiveBadQuestionSnoozes,
+	removeCard,
+	resolveBadQuestionSnooze,
+	restoreCard,
+	restoreCardByCard,
+	SnoozeCommentRequiredError,
+	SnoozeNotFoundError,
+	snoozeCard,
+} from './snooze';
 export type { CardSchedulerState, ScheduleResult } from './srs';
-export { fsrsDefaultParams, fsrsInitialState, fsrsSchedule } from './srs';
+export { fsrsDefaultParams, fsrsInitialState, fsrsPreviewAll, fsrsSchedule } from './srs';
 export type {
 	DashboardStats,
 	DomainStats,

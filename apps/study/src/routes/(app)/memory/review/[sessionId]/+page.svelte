@@ -252,6 +252,7 @@ function formatStartedAt(iso: string): string {
 				Rated <strong>{pendingUndo.ratingLabel}</strong>.
 				<span class="undo-domain">{domainLabel(pendingUndo.card.domain)}</span>
 			</span>
+			<a class="undo-link" href={ROUTES.MEMORY_CARD(pendingUndo.cardId)}>View card</a>
 			<button type="button" class="undo-btn" onclick={triggerUndo} disabled={undoing}>
 				{undoing ? 'Undoing...' : 'Undo'}
 				<KbdHint>U</KbdHint>
@@ -443,6 +444,18 @@ function formatStartedAt(iso: string): string {
 		padding: var(--space-xs) var(--space-sm);
 		font-size: var(--font-size-sm);
 		cursor: pointer;
+	}
+
+	.undo-link {
+		color: var(--action-default-hover);
+		font-size: var(--font-size-sm);
+		text-decoration: underline;
+		text-underline-offset: 2px;
+	}
+
+	.undo-link:hover,
+	.undo-link:focus-visible {
+		color: var(--action-default);
 	}
 
 	.undo-btn:hover:not(:disabled) {

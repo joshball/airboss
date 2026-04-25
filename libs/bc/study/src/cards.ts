@@ -17,12 +17,13 @@ import {
 	type ContentSource,
 	type Domain,
 	REVIEW_BATCH_SIZE,
+	SNOOZE_REASONS,
 } from '@ab/constants';
 import { db as defaultDb, escapeLikePattern } from '@ab/db';
 import { generateCardId } from '@ab/utils';
-import { and, asc, desc, eq, ilike, inArray, lte, or, type SQL, sql } from 'drizzle-orm';
+import { and, asc, desc, eq, ilike, inArray, isNull, lte, or, type SQL, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
-import { type CardRow, type CardStateRow, card, cardState } from './schema';
+import { type CardRow, type CardStateRow, card, cardSnooze, cardState } from './schema';
 import { fsrsInitialState } from './srs';
 import { newCardSchema, updateCardSchema } from './validation';
 
@@ -194,6 +195,31 @@ export async function updateCard(
 		.where(and(eq(card.id, cardId), eq(card.userId, userId)))
 		.returning();
 
+	// Mark any active `bad-question` snoozes so the re-entry banner fires
+	// the next time this card surfaces in a review. Only triggers on real
+	// content changes (front/back/domain/cardType/tags) -- the whitelist
+	// above already screens out status-only flips.
+	const contentChanged =
+		parsed.front !== undefined ||
+		parsed.back !== undefined ||
+		parsed.domain !== undefined ||
+		parsed.cardType !== undefined ||
+		parsed.tags !== undefined;
+	if (contentChanged) {
+		const editedAt = new Date();
+		await db
+			.update(cardSnooze)
+			.set({ cardEditedAt: editedAt, snoozeUntil: editedAt })
+			.where(
+				and(
+					eq(cardSnooze.cardId, cardId),
+					eq(cardSnooze.reason, SNOOZE_REASONS.BAD_QUESTION),
+					isNull(cardSnooze.resolvedAt),
+					isNull(cardSnooze.cardEditedAt),
+				),
+			);
+	}
+
 	return updated;
 }
 
@@ -252,6 +278,19 @@ export async function getDueCards(
 	];
 	if (options.nodeId) clauses.push(eq(card.nodeId, options.nodeId));
 	if (options.domain) clauses.push(eq(card.domain, options.domain));
+
+	// Exclude active snoozes via a correlated NOT EXISTS so the query stays a
+	// single round-trip and we don't have to materialize a card-id list. A
+	// row is active when it is unresolved AND (indefinite OR still in the
+	// future). This filters both time-based snoozes and soft-removed cards.
+	const notActivelySnoozed = sql`NOT EXISTS (
+		SELECT 1 FROM ${cardSnooze}
+		WHERE ${cardSnooze.cardId} = ${card.id}
+		  AND ${cardSnooze.userId} = ${cardState.userId}
+		  AND ${cardSnooze.resolvedAt} IS NULL
+		  AND (${cardSnooze.snoozeUntil} IS NULL OR ${cardSnooze.snoozeUntil} > ${now})
+	)`;
+	clauses.push(notActivelySnoozed);
 
 	const rows = await db
 		.select({ card, state: cardState })
@@ -366,4 +405,108 @@ export async function setCardStatus(
 		.returning();
 	if (!updated) throw new CardNotFoundError(cardId, userId);
 	return updated;
+}
+
+/**
+ * Row shape returned by `getRemovedCards` -- a card paired with its scheduler
+ * state and the snooze row that represents the removal so the UI can render
+ * the Restore affordance (and expose the comment / removed-at timestamp).
+ */
+export interface RemovedCardRow {
+	card: CardRow;
+	state: CardStateRow;
+	snoozeId: string;
+	removedAt: Date;
+	comment: string | null;
+}
+
+export interface RemovedCardsFilters {
+	domain?: Domain;
+	cardType?: CardType;
+	sourceType?: ContentSource;
+	search?: string;
+	limit?: number;
+	offset?: number;
+}
+
+/**
+ * Load cards the user has soft-removed (active `card_snooze(reason='remove')`
+ * rows). Mirrors `getCards` filter surface so the Browse `Removed` filter
+ * reuses the same domain / type / source / search controls, but the data
+ * source is the snooze row + its joined card + state.
+ */
+export async function getRemovedCards(
+	userId: string,
+	filters: RemovedCardsFilters = {},
+	db: Db = defaultDb,
+): Promise<RemovedCardRow[]> {
+	const clauses: SQL[] = [
+		eq(cardSnooze.userId, userId),
+		eq(cardSnooze.reason, SNOOZE_REASONS.REMOVE),
+		isNull(cardSnooze.resolvedAt),
+		eq(card.userId, userId),
+	];
+	if (filters.domain) clauses.push(eq(card.domain, filters.domain));
+	if (filters.cardType) clauses.push(eq(card.cardType, filters.cardType));
+	if (filters.sourceType) clauses.push(eq(card.sourceType, filters.sourceType));
+	if (filters.search && filters.search.trim().length > 0) {
+		const pattern = `%${escapeLikePattern(filters.search.trim())}%`;
+		const cond = or(ilike(card.front, pattern), ilike(card.back, pattern));
+		if (cond) clauses.push(cond);
+	}
+
+	let q = db
+		.select({
+			card,
+			state: cardState,
+			snoozeId: cardSnooze.id,
+			removedAt: cardSnooze.createdAt,
+			comment: cardSnooze.comment,
+		})
+		.from(cardSnooze)
+		.innerJoin(card, eq(card.id, cardSnooze.cardId))
+		.innerJoin(cardState, and(eq(cardState.cardId, card.id), eq(cardState.userId, card.userId)))
+		.where(and(...clauses))
+		.orderBy(desc(cardSnooze.createdAt))
+		.$dynamic();
+
+	if (filters.limit !== undefined && filters.limit > 0) q = q.limit(filters.limit);
+	if (filters.offset !== undefined && filters.offset > 0) q = q.offset(filters.offset);
+
+	const rows = await q;
+	return rows.map((r) => ({
+		card: r.card,
+		state: r.state,
+		snoozeId: r.snoozeId,
+		removedAt: r.removedAt,
+		comment: r.comment,
+	}));
+}
+
+/** Count companion to `getRemovedCards`. Same filter shape minus pagination. */
+export async function getRemovedCardsCount(
+	userId: string,
+	filters: Omit<RemovedCardsFilters, 'limit' | 'offset'> = {},
+	db: Db = defaultDb,
+): Promise<number> {
+	const clauses: SQL[] = [
+		eq(cardSnooze.userId, userId),
+		eq(cardSnooze.reason, SNOOZE_REASONS.REMOVE),
+		isNull(cardSnooze.resolvedAt),
+		eq(card.userId, userId),
+	];
+	if (filters.domain) clauses.push(eq(card.domain, filters.domain));
+	if (filters.cardType) clauses.push(eq(card.cardType, filters.cardType));
+	if (filters.sourceType) clauses.push(eq(card.sourceType, filters.sourceType));
+	if (filters.search && filters.search.trim().length > 0) {
+		const pattern = `%${escapeLikePattern(filters.search.trim())}%`;
+		const cond = or(ilike(card.front, pattern), ilike(card.back, pattern));
+		if (cond) clauses.push(cond);
+	}
+	const [row] = await db
+		.select({ total: sql<number>`count(*)::int` })
+		.from(cardSnooze)
+		.innerJoin(card, eq(card.id, cardSnooze.cardId))
+		.where(and(...clauses));
+	return Number(row?.total ?? 0);
 }

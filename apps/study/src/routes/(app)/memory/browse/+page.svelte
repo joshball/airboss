@@ -1,13 +1,12 @@
 <script lang="ts">
 import {
-	CARD_STATE_VALUES,
-	CARD_STATUS_LABELS,
-	CARD_STATUS_VALUES,
+	BROWSE_STATUS_FILTER_LABELS,
+	BROWSE_STATUS_FILTER_VALUES,
+	BROWSE_STATUS_REMOVED,
+	type BrowseStatusFilter,
 	CARD_STATUSES,
 	CARD_TYPE_LABELS,
 	CARD_TYPE_VALUES,
-	type CardState,
-	type CardStatus,
 	type CardType,
 	CONTENT_SOURCE_LABELS,
 	CONTENT_SOURCE_VALUES,
@@ -94,7 +93,9 @@ function cardTypeLabel(slug: string): string {
 }
 
 function statusLabel(slug: string): string {
-	return (CARD_STATUS_LABELS as Record<CardStatus, string>)[slug as CardStatus] ?? humanize(slug);
+	return (
+		(BROWSE_STATUS_FILTER_LABELS as Record<BrowseStatusFilter, string>)[slug as BrowseStatusFilter] ?? humanize(slug)
+	);
 }
 
 function sourceLabel(slug: string): string {
@@ -268,7 +269,7 @@ function pageHref(n: number): string {
 				/>
 			</div>
 			<select id="f-status" name={QUERY_PARAMS.STATUS} value={filters.status ?? CARD_STATUSES.ACTIVE}>
-				{#each CARD_STATUS_VALUES as s (s)}
+				{#each BROWSE_STATUS_FILTER_VALUES as s (s)}
 					<option value={s}>{statusLabel(s)}</option>
 				{/each}
 			</select>
@@ -324,7 +325,11 @@ function pageHref(n: number): string {
 						<div class="card-meta">
 							<span class="badge domain">{domainLabel(c.domain)}</span>
 							<span class="badge type">{cardTypeLabel(c.cardType)}</span>
-							<span class="badge status-{c.status}">{statusLabel(c.status)}</span>
+							{#if c.removed}
+								<span class="badge status-removed">Removed</span>
+							{:else}
+								<span class="badge status-{c.status}">{statusLabel(c.status)}</span>
+							{/if}
 							<span class="badge source">{sourceLabel(c.sourceType)}</span>
 						</div>
 						<dl class="card-stats" aria-label="Schedule">
@@ -333,7 +338,16 @@ function pageHref(n: number): string {
 							<div><dt>Stability</dt><dd>{c.stabilityDays.toFixed(1)} d</dd></div>
 							<div><dt>Last reviewed</dt><dd>{lastReviewedLabel(c.lastReviewedAt)}</dd></div>
 						</dl>
+						{#if c.removed?.comment}
+							<p class="removed-comment">Removed comment: {c.removed.comment}</p>
+						{/if}
 					</a>
+					{#if c.removed}
+						<form method="POST" action="?/restore" class="restore-form">
+							<input type="hidden" name="cardId" value={c.id} />
+							<button type="submit" class="btn ghost restore-btn">Restore</button>
+						</form>
+					{/if}
 				</li>
 			{/each}
 		</ul>

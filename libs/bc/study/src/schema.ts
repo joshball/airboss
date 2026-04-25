@@ -17,6 +17,7 @@
 // drizzle-kit can resolve the file without pulling in SvelteKit/Svelte deps.
 import { bauthUser } from '@ab/auth/schema';
 import {
+	CARD_FEEDBACK_SIGNAL_VALUES,
 	CARD_STATE_VALUES,
 	CARD_STATUS_VALUES,
 	CARD_STATUSES,
@@ -55,6 +56,8 @@ import {
 	SESSION_SLICE_VALUES,
 	type SessionReasonCode,
 	type SessionSlice,
+	SNOOZE_DURATION_LEVEL_VALUES,
+	SNOOZE_REASON_VALUES,
 } from '@ab/constants';
 import { timestamps } from '@ab/db';
 import { sql } from 'drizzle-orm';
@@ -792,3 +795,105 @@ export const memoryReviewSession = studySchema.table(
 
 export type MemoryReviewSessionRow = typeof memoryReviewSession.$inferSelect;
 export type NewMemoryReviewSessionRow = typeof memoryReviewSession.$inferInsert;
+/**
+ * Snooze rows for per-user card-out-of-deck actions.
+ *
+ * One row per Snooze press. `reason` drives the lifecycle:
+ *
+ * - `bad-question`  -- `snooze_until` may be NULL (wait-for-author-edit) or a
+ *   future timestamp; `resolved_at` is set when the author edits the card.
+ * - `wrong-domain`  -- `snooze_until` is future, `resolved_at` NULL while active.
+ * - `know-it-bored` -- `snooze_until` is future; never requires resolution.
+ * - `remove`        -- `snooze_until` NULL; `resolved_at` set when the user
+ *   restores the card from Browse.
+ *
+ * Active rows are those with `resolved_at IS NULL` AND (`snooze_until IS NULL`
+ * OR `snooze_until > now()`). The review scheduler and Browse filters honour
+ * this shape via `getActiveSnoozes` / `getRemovedCards`.
+ */
+export const cardSnooze = studySchema.table(
+	'card_snooze',
+	{
+		id: text('id').primaryKey(),
+		cardId: text('card_id')
+			.notNull()
+			.references(() => card.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
+		userId: text('user_id')
+			.notNull()
+			.references(() => bauthUser.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
+		reason: text('reason').notNull(),
+		comment: text('comment'),
+		durationLevel: text('duration_level'),
+		snoozeUntil: timestamp('snooze_until', { withTimezone: true }),
+		resolvedAt: timestamp('resolved_at', { withTimezone: true }),
+		/**
+		 * Stamped when the underlying card is edited after the snooze was
+		 * created. Used by the review queue to mark re-entry so the banner
+		 * "This card was updated. Does it look better now?" shows exactly once.
+		 * NULL means the card has not been edited since this snooze row was
+		 * created; non-NULL triggers the re-entry path.
+		 */
+		cardEditedAt: timestamp('card_edited_at', { withTimezone: true }),
+		createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+	},
+	(t) => ({
+		// Hot path: "is this card currently snoozed for this user?" for the
+		// review-queue filter. A (user, card) prefix matches both the per-card
+		// lookup and the per-user bulk snooze list.
+		cardSnoozeUserCardIdx: index('card_snooze_user_card_idx').on(t.userId, t.cardId),
+		// Author-review queue query ("unresolved bad-question rows") and the
+		// re-entry banner read filter by (user, reason, resolvedAt).
+		cardSnoozeUserReasonIdx: index('card_snooze_user_reason_idx').on(t.userId, t.reason, t.resolvedAt),
+		// Browse Removed filter: active remove rows per user.
+		cardSnoozeUserRemovedIdx: index('card_snooze_user_removed_idx')
+			.on(t.userId, t.cardId)
+			.where(sql`reason = 'remove' AND resolved_at IS NULL`),
+		// Enforce: one active `remove` row per (card, user). Restoring writes
+		// `resolved_at`, which drops the row from this partial index and
+		// allows a future re-remove.
+		cardSnoozeUniqueRemove: uniqueIndex('card_snooze_unique_remove')
+			.on(t.cardId, t.userId)
+			.where(sql`reason = 'remove' AND resolved_at IS NULL`),
+		reasonCheck: check('card_snooze_reason_check', sql.raw(`"reason" IN (${inList(SNOOZE_REASON_VALUES)})`)),
+		durationLevelCheck: check(
+			'card_snooze_duration_level_check',
+			sql.raw(`"duration_level" IS NULL OR "duration_level" IN (${inList(SNOOZE_DURATION_LEVEL_VALUES)})`),
+		),
+	}),
+);
+
+/**
+ * Per-user per-card content feedback. Separate from recall ratings (stored
+ * on `review`) and from schedule-altering snoozes (stored on `card_snooze`).
+ * Multiple rows per (card, user) allowed: the learner can like a card today
+ * and flag it a week later.
+ *
+ * `flag` rows surface in the same author-review surface as `bad-question`
+ * snoozes via a UNION in the admin query (future Hangar queue, not this WP).
+ */
+export const cardFeedback = studySchema.table(
+	'card_feedback',
+	{
+		id: text('id').primaryKey(),
+		cardId: text('card_id')
+			.notNull()
+			.references(() => card.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
+		userId: text('user_id')
+			.notNull()
+			.references(() => bauthUser.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
+		signal: text('signal').notNull(),
+		comment: text('comment'),
+		createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+	},
+	(t) => ({
+		// Per-card aggregate read ("has this user liked / flagged this card?"),
+		// per-user list for the learner's history.
+		cardFeedbackUserCardIdx: index('card_feedback_user_card_idx').on(t.userId, t.cardId),
+		signalCheck: check('card_feedback_signal_check', sql.raw(`"signal" IN (${inList(CARD_FEEDBACK_SIGNAL_VALUES)})`)),
+	}),
+);
+
+export type CardSnoozeRow = typeof cardSnooze.$inferSelect;
+export type NewCardSnoozeRow = typeof cardSnooze.$inferInsert;
+export type CardFeedbackRow = typeof cardFeedback.$inferSelect;
+export type NewCardFeedbackRow = typeof cardFeedback.$inferInsert;
