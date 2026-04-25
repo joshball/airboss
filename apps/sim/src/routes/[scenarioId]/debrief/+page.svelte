@@ -27,6 +27,7 @@ import TurnCoordinator from '$lib/instruments/TurnCoordinator.svelte';
 import Vsi from '$lib/instruments/Vsi.svelte';
 import { loadTape } from '$lib/tape-store.svelte';
 import type { PageData } from './$types';
+import IdealPathOverlay from './IdealPathOverlay.svelte';
 import InputTrace from './InputTrace.svelte';
 
 let { data }: { data: PageData } = $props();
@@ -209,6 +210,16 @@ function onScrubKey(event: KeyboardEvent): void {
 				<InputTrace frames={tape.frames} {currentT} />
 			</section>
 
+			{#if data.scenario.idealPath}
+				<section class="ideal-path" aria-label="Actual versus ideal trajectory">
+					<h3>Actual vs Ideal</h3>
+					<p class="panel-help">
+						Altitude across the run plotted against the scenario's authored target path. The ideal-path is the "good" run authors expected; the gap is what to study in the debrief.
+					</p>
+					<IdealPathOverlay frames={tape.frames} idealPath={data.scenario.idealPath} {currentT} />
+				</section>
+			{/if}
+
 			<section class="dual" aria-label="Truth versus display panels">
 				<article class="panel">
 					<h3>Truth</h3>
@@ -290,6 +301,7 @@ function onScrubKey(event: KeyboardEvent): void {
 	.summary,
 	.scrubber,
 	.input-tape,
+	.ideal-path,
 	.dual {
 		margin-bottom: var(--space-lg);
 		padding: var(--space-md) var(--space-lg);
