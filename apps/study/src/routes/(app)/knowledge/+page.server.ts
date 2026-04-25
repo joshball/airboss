@@ -42,13 +42,21 @@ export const load: PageServerLoad = async (event) => {
 
 	const { rows, facets } = await listNodesWithFacets({ domain, cert, priority, lifecycle });
 	const total = rows.length;
+	const totalPages = Math.max(1, Math.ceil(total / pageSize));
+	const offset = (pageNum - 1) * pageSize;
+
+	// Slice the page before the mastery lookup so we only fan out for what's
+	// actually rendered. Cheap today (~30 nodes) but linear in graph size, so
+	// this is the right shape as the graph scales toward Step 7's ~500 nodes.
+	const pageRows = rows.slice(offset, offset + pageSize);
+	const hasMore = offset + pageSize < total;
 
 	const masteryMap = await getNodeMasteryMap(
 		user.id,
-		rows.map((r) => r.id),
+		pageRows.map((r) => r.id),
 	);
 
-	const enriched = rows.map((row) => {
+	const visible = pageRows.map((row) => {
 		const mastery = masteryMap.get(row.id);
 		return {
 			id: row.id,
@@ -62,11 +70,6 @@ export const load: PageServerLoad = async (event) => {
 			mastered: mastery?.mastered ?? false,
 		};
 	});
-
-	const totalPages = Math.max(1, Math.ceil(total / pageSize));
-	const offset = (pageNum - 1) * pageSize;
-	const visible = enriched.slice(offset, offset + pageSize);
-	const hasMore = offset + pageSize < total;
 
 	return {
 		nodes: visible,
