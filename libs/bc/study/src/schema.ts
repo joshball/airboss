@@ -136,6 +136,12 @@ export const knowledgeNode = studySchema.table(
 		assessable: boolean('assessable').notNull().default(false),
 		assessmentMethods: jsonb('assessment_methods').$type<string[]>().notNull().default([]),
 		masteryCriteria: text('mastery_criteria'),
+		/**
+		 * Dev-seed marker. NULL on production rows; set to a tag like
+		 * `dev-seed-2026-04-25` for rows inserted by the dev-seed pipeline so
+		 * `db seed:remove` can find and clean them.
+		 */
+		seedOrigin: text('seed_origin'),
 		/** Markdown body (everything after the frontmatter). Phase slicing happens at render-time. */
 		contentMd: text('content_md').notNull(),
 		/**
@@ -241,6 +247,8 @@ export const card = studySchema.table(
 		nodeId: text('node_id').references(() => knowledgeNode.id, { onDelete: 'set null' }),
 		isEditable: boolean('is_editable').notNull().default(true),
 		status: text('status').notNull().default(CARD_STATUSES.ACTIVE),
+		/** Dev-seed marker. NULL on production rows. */
+		seedOrigin: text('seed_origin'),
 		...timestamps(),
 	},
 	(t) => ({
@@ -304,6 +312,8 @@ export const review = studySchema.table(
 		 * null` on delete so a session cleanup never destroys review history.
 		 */
 		reviewSessionId: text('review_session_id').references(() => memoryReviewSession.id, { onDelete: 'set null' }),
+		/** Dev-seed marker. NULL on production rows. */
+		seedOrigin: text('seed_origin'),
 	},
 	(t) => ({
 		reviewCardReviewedIdx: index('review_card_reviewed_idx').on(t.cardId, t.reviewedAt),
@@ -426,6 +436,8 @@ export const scenario = studySchema.table(
 		isEditable: boolean('is_editable').notNull().default(true),
 		regReferences: jsonb('reg_references').$type<string[]>().notNull().default([]),
 		status: text('status').notNull().default(SCENARIO_STATUSES.ACTIVE),
+		/** Dev-seed marker. NULL on production rows. */
+		seedOrigin: text('seed_origin'),
 		createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
 	},
 	(t) => ({
@@ -525,6 +537,8 @@ export const studyPlan = studySchema.table(
 		depthPreference: text('depth_preference').notNull().default(DEPTH_PREFERENCES.WORKING),
 		sessionLength: smallint('session_length').notNull().default(DEFAULT_SESSION_LENGTH),
 		defaultMode: text('default_mode').notNull().default(SESSION_MODES.MIXED),
+		/** Dev-seed marker. NULL on production rows. */
+		seedOrigin: text('seed_origin'),
 		...timestamps(),
 	},
 	(t) => ({
@@ -571,6 +585,8 @@ export const session = studySchema.table(
 		seed: text('seed').notNull(),
 		startedAt: timestamp('started_at', { withTimezone: true }).notNull().defaultNow(),
 		completedAt: timestamp('completed_at', { withTimezone: true }),
+		/** Dev-seed marker. NULL on production rows. */
+		seedOrigin: text('seed_origin'),
 	},
 	(t) => ({
 		sessionUserStartedIdx: index('session_user_started_idx').on(t.userId, t.startedAt),
@@ -651,6 +667,8 @@ export const sessionItemResult = studySchema.table(
 		answerMs: integer('answer_ms'),
 		presentedAt: timestamp('presented_at', { withTimezone: true }).notNull().defaultNow(),
 		completedAt: timestamp('completed_at', { withTimezone: true }),
+		/** Dev-seed marker. NULL on production rows. */
+		seedOrigin: text('seed_origin'),
 	},
 	(t) => ({
 		// UNIQUE on (session_id, slot_index) backs the atomic UPSERT in

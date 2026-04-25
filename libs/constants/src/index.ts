@@ -34,7 +34,18 @@ export {
 	SESSION_MAX_AGE_SECONDS,
 	SHUTDOWN_TIMEOUT_MS,
 } from './deployment';
-export { DEV_ACCOUNTS, DEV_DB, DEV_DB_HOST_PATTERN, DEV_DB_URL, DEV_PASSWORD } from './dev';
+export {
+	DEV_ACCOUNTS,
+	DEV_DB,
+	DEV_DB_HOST_ALLOWLIST,
+	DEV_DB_HOST_PATTERN,
+	DEV_DB_HOST_SUFFIX_ALLOWLIST,
+	DEV_DB_URL,
+	DEV_PASSWORD,
+	DEV_SEED_BYPASS_FLAG,
+	DEV_SEED_LEARNER_EMAIL,
+	DEV_SEED_ORIGIN_TAG,
+} from './dev';
 export { ENGINE_SCORING } from './engine';
 export { ENV_VARS, type EnvVarName, getEnv, getEnvBool, getEnvInt, isProd, requireEnv } from './env';
 export { HELP_TRIGGER_LABELS, type HelpTriggerLabelKey } from './help';
