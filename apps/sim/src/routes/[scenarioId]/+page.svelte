@@ -15,8 +15,10 @@ import {
 	C172_CONFIG,
 	type FdmInputs,
 	type FdmTruthState,
+	flapsChanged,
 	type ScenarioRunResult,
 	type ScenarioStepState,
+	shouldSoundGearWarning,
 } from '@ab/bc-sim';
 import {
 	ROUTES,
@@ -40,6 +42,7 @@ import HeadingIndicator from '$lib/instruments/HeadingIndicator.svelte';
 import Tachometer from '$lib/instruments/Tachometer.svelte';
 import TurnCoordinator from '$lib/instruments/TurnCoordinator.svelte';
 import Vsi from '$lib/instruments/Vsi.svelte';
+import AudioCaptions from '$lib/panels/AudioCaptions.svelte';
 import ControlInputs from '$lib/panels/ControlInputs.svelte';
 import KeybindingsHelp from '$lib/panels/KeybindingsHelp.svelte';
 import KeyboardCheatsheet from '$lib/panels/KeyboardCheatsheet.svelte';
@@ -48,6 +51,7 @@ import ScenarioStepBanner from '$lib/panels/ScenarioStepBanner.svelte';
 import VSpeeds from '$lib/panels/VSpeeds.svelte';
 import WxPanel from '$lib/panels/WxPanel.svelte';
 import { StallHorn } from '$lib/stall-horn.svelte';
+import { AltitudeAlert, ApDisconnect, captionStore, FlapMotor, GearWarning, MarkerBeacon } from '$lib/warning-cues';
 import type { MainToWorker, WorkerToMain } from '$lib/worker-protocol';
 import type { PageData } from './$types';
 
@@ -90,6 +94,12 @@ let keyboardControlEnabled = $state(true);
 
 const horn = new StallHorn();
 const engineSound = new EngineSound();
+const gearWarning = new GearWarning();
+const flapMotor = new FlapMotor();
+const markerBeacon = new MarkerBeacon();
+const altitudeAlert = new AltitudeAlert();
+const apDisconnect = new ApDisconnect();
+let lastFlaps: number | null = null;
 
 function post(msg: MainToWorker): void {
 	worker?.postMessage(msg);
@@ -119,6 +129,21 @@ function handleWorkerMessage(event: MessageEvent<WorkerToMain>): void {
 				},
 				C172_CONFIG.idleRpm,
 			);
+			// Warning cue dispatch -- pure functions in @ab/bc-sim decide,
+			// the cue classes own the audio + caption side effects.
+			// gearDown is hard-wired true for the fixed-gear C172; flip when
+			// retractable airframes (PA28-R / C182RG) land in Phase 6.
+			gearWarning.setActive(
+				shouldSoundGearWarning(msg.inputs.throttle, msg.truth.indicatedAirspeed * SIM_KNOTS_PER_METER_PER_SECOND, true),
+			);
+			if (lastFlaps !== null && flapsChanged(lastFlaps, msg.inputs.flaps)) {
+				flapMotor.trigger();
+			}
+			lastFlaps = msg.inputs.flaps;
+			// Marker-beacon trigger source lives in Phase 4 navaid work; pass
+			// null today so the cue stays armed but silent.
+			markerBeacon.setKind(null);
+			altitudeAlert.observeAltitude(msg.truth.altitude * SIM_FEET_PER_METER);
 			break;
 		}
 		case SIM_WORKER_MESSAGES.OUTCOME: {
@@ -127,6 +152,11 @@ function handleWorkerMessage(event: MessageEvent<WorkerToMain>): void {
 			horn.setActive(false);
 			// Quiet the engine for the debrief.
 			engineSound.stop();
+			gearWarning.stop();
+			flapMotor.stop();
+			markerBeacon.stop();
+			altitudeAlert.stop();
+			apDisconnect.stop();
 			break;
 		}
 	}
@@ -135,6 +165,11 @@ function handleWorkerMessage(event: MessageEvent<WorkerToMain>): void {
 function firstGesture(): void {
 	horn.ensureStarted();
 	engineSound.ensureStarted();
+	gearWarning.ensureStarted();
+	flapMotor.ensureStarted();
+	markerBeacon.ensureStarted();
+	altitudeAlert.ensureStarted();
+	apDisconnect.ensureStarted();
 }
 
 function handleSpecial(special: string): void {
@@ -170,6 +205,11 @@ function handleSpecial(special: string): void {
 			muted = !muted;
 			horn.setMuted(muted);
 			engineSound.setMuted(muted);
+			gearWarning.setMuted(muted);
+			flapMotor.setMuted(muted);
+			markerBeacon.setMuted(muted);
+			altitudeAlert.setMuted(muted);
+			apDisconnect.setMuted(muted);
 			if (browser) localStorage.setItem(SIM_STORAGE_KEYS.MUTE, muted ? 'true' : 'false');
 			break;
 		}
@@ -181,6 +221,11 @@ function performReset(): void {
 	outcome = null;
 	horn.setActive(false);
 	engineSound.resume();
+	gearWarning.setActive(false);
+	altitudeAlert.resume();
+	apDisconnect.resume();
+	captionStore.reset();
+	lastFlaps = null;
 	post({ type: SIM_WORKER_MESSAGES.RESET });
 	post({ type: SIM_WORKER_MESSAGES.START });
 }
@@ -333,10 +378,15 @@ onMount(() => {
 	lastRampTs = 0;
 	rampFrame = requestAnimationFrame(tickInputs);
 
-	// Mute state -- shared between stall horn and engine sound.
+	// Mute state -- shared across every cockpit audio source.
 	muted = localStorage.getItem(SIM_STORAGE_KEYS.MUTE) === 'true';
 	horn.setMuted(muted);
 	engineSound.setMuted(muted);
+	gearWarning.setMuted(muted);
+	flapMotor.setMuted(muted);
+	markerBeacon.setMuted(muted);
+	altitudeAlert.setMuted(muted);
+	apDisconnect.setMuted(muted);
 
 	// First-visit help overlay
 	const dismissed = localStorage.getItem(SIM_STORAGE_KEYS.HELP_DISMISSED) === 'true';
@@ -356,6 +406,12 @@ onDestroy(() => {
 	if (readyTimer !== null) clearTimeout(readyTimer);
 	horn.destroy();
 	engineSound.destroy();
+	gearWarning.destroy();
+	flapMotor.destroy();
+	markerBeacon.destroy();
+	altitudeAlert.destroy();
+	apDisconnect.destroy();
+	captionStore.reset();
 	worker?.terminate();
 	worker = null;
 });
@@ -555,6 +611,7 @@ const trimBias = $derived(inputs.trim);
 	</section>
 
 	<KeyboardCheatsheet />
+	<AudioCaptions />
 </main>
 
 <KeybindingsHelp

@@ -1,9 +1,12 @@
-import { SIM_ENGINE_SOUND, SIM_SEA_LEVEL_DENSITY_KG_M3 } from '@ab/constants';
+import { SIM_ENGINE_SOUND, SIM_GEAR_WARNING, SIM_SEA_LEVEL_DENSITY_KG_M3 } from '@ab/constants';
 import { describe, expect, it } from 'vitest';
 import {
+	altitudeAlertCrossed,
 	dynamicPressurePa,
 	engineFundamentalHz,
+	flapsChanged,
 	noiseGainTarget,
+	shouldSoundGearWarning,
 	strainDetuneCents,
 	strainFactor,
 	throttleGainTarget,
@@ -109,5 +112,70 @@ describe('strainDetuneCents', () => {
 		const alphaMid = ((SIM_ENGINE_SOUND.STRAIN_ALPHA_DEG + 3) * Math.PI) / 180;
 		const throttleHi = SIM_ENGINE_SOUND.STRAIN_THROTTLE_MIN + 0.1;
 		expect(strainDetuneCents(alphaMid, throttleHi)).toBeCloseTo(0.5 * SIM_ENGINE_SOUND.STRAIN_DETUNE_CENTS, 3);
+	});
+});
+
+describe('shouldSoundGearWarning', () => {
+	const throttleLow = SIM_GEAR_WARNING.THROTTLE_MAX - 0.01;
+	const throttleHigh = SIM_GEAR_WARNING.THROTTLE_MAX + 0.01;
+	const kiasSlow = SIM_GEAR_WARNING.KIAS_MAX - 1;
+	const kiasFast = SIM_GEAR_WARNING.KIAS_MAX + 1;
+
+	it('never fires when gear is down', () => {
+		expect(shouldSoundGearWarning(throttleLow, kiasSlow, true)).toBe(false);
+	});
+
+	it('fires when throttle is low AND slow AND gear is up', () => {
+		expect(shouldSoundGearWarning(throttleLow, kiasSlow, false)).toBe(true);
+	});
+
+	it('silent above the throttle gate', () => {
+		expect(shouldSoundGearWarning(throttleHigh, kiasSlow, false)).toBe(false);
+	});
+
+	it('silent above the KIAS gate', () => {
+		expect(shouldSoundGearWarning(throttleLow, kiasFast, false)).toBe(false);
+	});
+
+	it('silent at exactly the KIAS gate (strict inequality)', () => {
+		expect(shouldSoundGearWarning(throttleLow, SIM_GEAR_WARNING.KIAS_MAX, false)).toBe(false);
+	});
+});
+
+describe('flapsChanged', () => {
+	it('returns true when the detent differs', () => {
+		expect(flapsChanged(0, 10)).toBe(true);
+		expect(flapsChanged(20, 10)).toBe(true);
+	});
+
+	it('returns false when the detent is unchanged', () => {
+		expect(flapsChanged(10, 10)).toBe(false);
+	});
+});
+
+describe('altitudeAlertCrossed', () => {
+	// Threshold = target - lead.
+	const target = 5000;
+	const lead = 1000;
+	// threshold = 4000.
+
+	it('fires when climbing through the threshold from below', () => {
+		expect(altitudeAlertCrossed(3990, 4010, target, lead)).toBe(true);
+	});
+
+	it('fires when descending through the threshold from above', () => {
+		expect(altitudeAlertCrossed(4010, 3990, target, lead)).toBe(true);
+	});
+
+	it('silent when both samples are below the threshold', () => {
+		expect(altitudeAlertCrossed(3500, 3800, target, lead)).toBe(false);
+	});
+
+	it('silent when both samples are above the threshold', () => {
+		expect(altitudeAlertCrossed(4500, 4800, target, lead)).toBe(false);
+	});
+
+	it('fires when the current sample lands exactly on the threshold from below', () => {
+		expect(altitudeAlertCrossed(3999, 4000, target, lead)).toBe(true);
 	});
 });

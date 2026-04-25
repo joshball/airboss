@@ -6,7 +6,7 @@
  * lets them be unit tested without a browser.
  */
 
-import { SIM_ENGINE_SOUND, SIM_SEA_LEVEL_DENSITY_KG_M3 } from '@ab/constants';
+import { SIM_ENGINE_SOUND, SIM_GEAR_WARNING, SIM_SEA_LEVEL_DENSITY_KG_M3 } from '@ab/constants';
 
 /** Fundamental oscillator frequency (Hz) given RPM and the airframe idle. */
 export function engineFundamentalHz(rpm: number, idleRpm: number): number {
@@ -53,4 +53,41 @@ export function noiseGainTarget(trueAirspeed: number): number {
 /** Detune target (cents) for the harmonic oscillator given alpha + throttle. */
 export function strainDetuneCents(alphaRad: number, throttle: number): number {
 	return strainFactor(alphaRad, throttle) * SIM_ENGINE_SOUND.STRAIN_DETUNE_CENTS;
+}
+
+/**
+ * Gear-warning predicate. Fires when throttle is at/below the idle gate AND
+ * IAS (knots) is below the low-speed gate AND gear is up. The C172 has fixed
+ * gear so `gearDown` is hard-wired `true` by the airframe profile today,
+ * which means the predicate never fires on C172. The follow-up retractable
+ * airframe (PA28-R / C182RG) flips the input, and the predicate will fire
+ * naturally.
+ */
+export function shouldSoundGearWarning(throttle: number, kias: number, gearDown: boolean): boolean {
+	if (gearDown) return false;
+	if (throttle > SIM_GEAR_WARNING.THROTTLE_MAX) return false;
+	if (kias >= SIM_GEAR_WARNING.KIAS_MAX) return false;
+	return true;
+}
+
+/**
+ * Detect whether the commanded flap detent changed between two snapshots.
+ * Phase 0.5 flaps are instantaneous-detent (no continuous motion model) so
+ * each change pulses the motor cue; continuous-flap work will subsume this
+ * with real travel-time detection.
+ */
+export function flapsChanged(prevDeg: number, currDeg: number): boolean {
+	return prevDeg !== currDeg;
+}
+
+/**
+ * True when altitude transitions across the alert threshold between two
+ * snapshots. The threshold is `targetFt - leadFt`. Returns true if the
+ * previous altitude was on one side and the current is on the other side
+ * (strict inequality both sides) so a single-shot tone fires once per
+ * crossing in either direction.
+ */
+export function altitudeAlertCrossed(prevFt: number, currFt: number, targetFt: number, leadFt: number): boolean {
+	const threshold = targetFt - leadFt;
+	return (prevFt < threshold && currFt >= threshold) || (prevFt > threshold && currFt <= threshold);
 }
