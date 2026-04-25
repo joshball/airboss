@@ -1,6 +1,9 @@
 import { requireAuth } from '@ab/auth';
-import { getNodeMasteryMap, listNodesForBrowse } from '@ab/bc-study';
+import { getNodeMasteryMap, listNodesWithFacets } from '@ab/bc-study';
 import {
+	BROWSE_PAGE_SIZE,
+	BROWSE_PAGE_SIZE_VALUES,
+	type BrowsePageSize,
 	CERT_VALUES,
 	type Cert,
 	DOMAIN_VALUES,
@@ -11,12 +14,11 @@ import {
 	RELEVANCE_PRIORITY_VALUES,
 	type RelevancePriority,
 } from '@ab/constants';
+import { narrow } from '@ab/utils';
 import type { PageServerLoad } from './$types';
 
-function narrow<T extends string>(value: string | null, allowed: readonly string[]): T | undefined {
-	if (!value) return undefined;
-	return allowed.includes(value) ? (value as T) : undefined;
-}
+const KNOWLEDGE_GROUP_BY_VALUES = ['domain', 'cert', 'priority', 'lifecycle', 'none'] as const;
+type KnowledgeGroupBy = (typeof KNOWLEDGE_GROUP_BY_VALUES)[number];
 
 export const load: PageServerLoad = async (event) => {
 	const user = requireAuth(event);
@@ -27,16 +29,26 @@ export const load: PageServerLoad = async (event) => {
 	const priority = narrow<RelevancePriority>(url.searchParams.get(QUERY_PARAMS.PRIORITY), RELEVANCE_PRIORITY_VALUES);
 	const lifecycle = narrow<NodeLifecycle>(url.searchParams.get(QUERY_PARAMS.LIFECYCLE), NODE_LIFECYCLE_VALUES);
 
-	const rows = await listNodesForBrowse({ domain, cert, priority, lifecycle });
+	const pageRaw = Number.parseInt(url.searchParams.get(QUERY_PARAMS.PAGE) ?? '1', 10);
+	const pageNum = Number.isFinite(pageRaw) && pageRaw >= 1 ? pageRaw : 1;
 
-	// Batched mastery: one fan-out of three round-trips regardless of node
-	// count, not 3-per-node as the previous per-row `getNodeMastery` loop.
+	const pageSizeRaw = Number.parseInt(url.searchParams.get(QUERY_PARAMS.PAGE_SIZE) ?? '', 10);
+	const pageSize: BrowsePageSize = (BROWSE_PAGE_SIZE_VALUES as readonly number[]).includes(pageSizeRaw)
+		? (pageSizeRaw as BrowsePageSize)
+		: BROWSE_PAGE_SIZE;
+
+	const groupBy: KnowledgeGroupBy =
+		narrow<KnowledgeGroupBy>(url.searchParams.get(QUERY_PARAMS.GROUP_BY), KNOWLEDGE_GROUP_BY_VALUES) ?? 'domain';
+
+	const { rows, facets } = await listNodesWithFacets({ domain, cert, priority, lifecycle });
+	const total = rows.length;
+
 	const masteryMap = await getNodeMasteryMap(
 		user.id,
 		rows.map((r) => r.id),
 	);
 
-	const withMastery = rows.map((row) => {
+	const enriched = rows.map((row) => {
 		const mastery = masteryMap.get(row.id);
 		return {
 			id: row.id,
@@ -51,18 +63,23 @@ export const load: PageServerLoad = async (event) => {
 		};
 	});
 
-	// Group by domain for the render layer. Domain order follows the source
-	// listing (already alphabetical by domain).
-	const byDomain = new Map<string, typeof withMastery>();
-	for (const node of withMastery) {
-		const bucket = byDomain.get(node.domain);
-		if (bucket) bucket.push(node);
-		else byDomain.set(node.domain, [node]);
-	}
+	const totalPages = Math.max(1, Math.ceil(total / pageSize));
+	const offset = (pageNum - 1) * pageSize;
+	const visible = enriched.slice(offset, offset + pageSize);
+	const hasMore = offset + pageSize < total;
 
 	return {
-		groups: Array.from(byDomain.entries()).map(([domainKey, nodes]) => ({ domain: domainKey, nodes })),
+		nodes: visible,
 		filters: { domain, cert, priority, lifecycle },
-		totalNodes: withMastery.length,
+		page: pageNum,
+		hasMore,
+		pageSize,
+		total,
+		totalPages,
+		groupBy,
+		facets,
 	};
 };
+
+export type KnowledgeGroupByValue = KnowledgeGroupBy;
+export const KNOWLEDGE_GROUP_BY_OPTIONS = KNOWLEDGE_GROUP_BY_VALUES;

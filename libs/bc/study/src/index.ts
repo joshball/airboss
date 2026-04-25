@@ -82,6 +82,7 @@ export type {
 	CertProgress,
 	DomainCertCell,
 	DomainCertRow,
+	KnowledgeFacetCounts,
 	KnowledgeNodeListRow,
 	ListNodesFilters,
 	NodeMasteryGate,
@@ -113,6 +114,7 @@ export {
 	listNodeIds,
 	listNodeSummaries,
 	listNodesForBrowse,
+	listNodesWithFacets,
 	recordPhaseCompleted,
 	recordPhaseVisited,
 	refreshEdgeTargetExists,
@@ -172,6 +174,7 @@ export type {
 	RepDashboardStats,
 	RepStats,
 	ScenarioFilters,
+	ScenariosFacetCounts,
 	SubmitAttemptInput,
 } from './scenarios';
 export {
@@ -184,6 +187,7 @@ export {
 	getScenario,
 	getScenarios,
 	getScenariosCount,
+	getScenariosFacetCounts,
 	InvalidOptionError,
 	ScenarioNotAttemptableError,
 	ScenarioNotFoundError,

@@ -19,6 +19,9 @@
 export { type LegacyNeutralTone, resolveTone, TONES, type Tone, type ToneInput } from '@ab/themes';
 export type { BadgeSize, BadgeTone, BadgeVariant } from './components/Badge.svelte';
 export type { BannerTone, BannerVariant } from './components/Banner.svelte';
+export type { BrowseListGroup, BrowseListProps } from './components/BrowseList.svelte';
+export type { BrowseListItemProps } from './components/BrowseListItem.svelte';
+export type { BrowseViewControlsOption, BrowseViewControlsProps } from './components/BrowseViewControls.svelte';
 export type { ButtonSize, ButtonType, ButtonVariant } from './components/Button.svelte';
 export type { CheckboxSize } from './components/Checkbox.svelte';
 export type { DialogSize } from './components/Dialog.svelte';

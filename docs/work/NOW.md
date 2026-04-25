@@ -1,14 +1,21 @@
 # Now
 
-Single entry point for "what should I work on?" in airboss. Refresh date: 2026-04-23.
+Single entry point for "what should I work on?" in airboss. Refresh date: 2026-04-25.
 
-## Just shipped
+## Just shipped (2026-04-25 sweep)
 
-- **session-legibility-and-help-expansion** — rich Markdown help renderer, `<InfoTip>` + `<PageHelp>` primitives, ten concept pages (`/help/concepts`), `memory-review` + `session-start` rebuilt with callouts and `externalRefs`, `/session/start` made legible (clickable IDs, `/reps/[id]` route, collapsible legend), validator hardened with externalRefs URL/host gates and callout-variant checks. Work package: [session-legibility-and-help-expansion](../work-packages/session-legibility-and-help-expansion/spec.md).
+- **Browse pages refactor (memory + reps + knowledge)** — extracted seven shared `@ab/ui` components (`FilterCard`, `FilterChips`, `ResultSummary`, `Pager`, `BrowseList`, `BrowseListItem`, `BrowseViewControls`); brought reps and knowledge to feature parity with memory (search where applicable, page-size, group-by, facet `(N)` counts, active-filter chips). PRs #180, #182, plus the in-flight follow-up.
+- **`/memory/review` 500 fix.** `getDueCards` and the snooze auto-suspend path interpolated a JS `Date` directly into raw `sql\`\`` templates; postgres-js sent `Date.toString()` and rejected. Both call sites now use `.toISOString()`. PR #180.
+- **Dev-seed pipeline + Abby + content** — `seed_origin` markers on every seedable table, prod guard with vitest tests, `bun run db seed:remove` and `seed:check`, Abby (`abby@airboss.test`) as the canonical dev test learner, 18 personal cards + 16 scenarios + 1 active plan + 3 historical sessions across VFR weather, airspace, emergencies. Calibration deliberately uncalibrated. PRs #178, #179.
+- **Sim phase 4-6 push** — debrief route shell + scrubber + truth/display panels + input tape + ideal-path overlay, EFATO + vacuum + pitot/static + partial-panel + unusual-attitudes + aft-CG + nose-low + VMC-into-IMC seed scenarios, departure-stall promotion, scenario grading evaluator, PA-28 aircraft profile, engine sound harmonic stack, annunciator strip, theme-token cluster. PRs #155, #157, #158, #160, #161, #163, #164, #166, #167, #168, #170, #171, #173, #181, #184.
+- **Reviews / sessions URL layer (b) + (c)** — deck encoder + resolver + saved decks, share popover with Copy + Report. PRs #154, #159.
+- **Sprint follow-ups** — sprint 1, 2, 4 post-merge review fix passes, citations wiring for rep + scenario detail, jump-to-card dropdown, "No idea" confidence label, archive SMI feedback, reps form + browse + session-start polish, rep submit fix on session_item_result insert, help-startup-warning closeouts. PRs #156, #162, #165, #169, #172, #174, #175, #177.
+- **Walkthroughs doc** — 2026-04-25 audit plan + decision-reps capture. PR #176.
+- **session-legibility-and-help-expansion** — rich Markdown help renderer, `<InfoTip>` + `<PageHelp>` primitives, ten concept pages (`/help/concepts`), `memory-review` + `session-start` rebuilt with callouts + `externalRefs`, `/session/start` made legible. Earlier in the cycle.
 
 ## Follow-on candidates
 
-- Per-page help for remaining routes (`/dashboard`, `/reps/*`, `/knowledge/*`) — adopt the `<PageHelp>` pattern one route at a time.
+- Per-page help for remaining routes (`/dashboard`, `/reps/*`, `/knowledge/*`) — `<PageHelp>` is wired on memory-browse, reps-browse, knowledge-graph; dashboard and detail routes are still uncovered.
 - Drawer overlay for `<PageHelp>` (currently navigates to `/help/<id>`; drawer is the listed follow-up).
 - Dark-theme Shiki code-block tokens (single theme today).
 - InfoTip `helpId` static validator (parked in Phase 5.2) — grep `.svelte` files, assert each id is registered.
@@ -34,11 +41,11 @@ Single entry point for "what should I work on?" in airboss. Refresh date: 2026-0
 | #15 | 30-node skeleton + inline yaml-cards seeder                   | content  |
 | #16 | Playwright e2e suite                                          | infra    |
 
-The entire Steps 1-6 roadmap is on main. Feature code, specs, tests, docs — all shipped.
+PRs #17-#184 (everything since the original "Steps 1-6 shipped" snapshot) are catalogued in `git log` and the "Just shipped" section above. The roadmap below tracks the original MVP build order; ongoing feature work happens in work-packages and the per-app TASKS.md files.
 
 ## In flight
 
-Nothing active after session-legibility-and-help-expansion ships. **Six agent worktrees from prior parallel-build sessions are still on disk** (all `locked`, under `.claude/worktrees/agent-*`). Per user direction 2026-04-22, leaving them in place for now; audit before any future cleanup pass.
+Nothing active after the browse-pages refactor ships.
 
 ## Build Order
 

@@ -448,7 +448,28 @@ export async function listNodesForBrowse(
 	filters: ListNodesFilters = {},
 	db: Db = defaultDb,
 ): Promise<KnowledgeNodeListRow[]> {
-	const rows = await db
+	const { rows } = await listNodesWithFacets(filters, db);
+	return rows;
+}
+
+/**
+ * Per-facet bucket counts for the knowledge-graph browse filters. Knowledge
+ * is a small enough table that we materialize all rows once, derive every
+ * facet's tag set in JS, then count with each facet's own filter excluded
+ * (so "(N)" counts answer "if I pick this option, what would I see?").
+ */
+export interface KnowledgeFacetCounts {
+	domain: Record<string, number>;
+	cert: Record<string, number>;
+	priority: Record<string, number>;
+	lifecycle: Record<string, number>;
+}
+
+export async function listNodesWithFacets(
+	filters: ListNodesFilters = {},
+	db: Db = defaultDb,
+): Promise<{ rows: KnowledgeNodeListRow[]; facets: KnowledgeFacetCounts }> {
+	const dbRows = await db
 		.select({
 			id: knowledgeNode.id,
 			title: knowledgeNode.title,
@@ -460,19 +481,12 @@ export async function listNodesForBrowse(
 		.from(knowledgeNode)
 		.orderBy(asc(knowledgeNode.domain), asc(knowledgeNode.title));
 
-	const result: KnowledgeNodeListRow[] = [];
-	for (const row of rows) {
+	const enriched = dbRows.map((row) => {
 		const rels = Array.isArray(row.relevance) ? row.relevance : [];
 		const certs = Array.from(new Set(rels.map((r) => r.cert).filter((c) => typeof c === 'string')));
 		const priorities = Array.from(new Set(rels.map((r) => r.priority).filter((p) => typeof p === 'string')));
 		const lifecycle = lifecycleFromContent(row.contentMd ?? '');
-
-		if (filters.domain && row.domain !== filters.domain) continue;
-		if (filters.cert && !certs.includes(filters.cert)) continue;
-		if (filters.priority && !priorities.includes(filters.priority)) continue;
-		if (filters.lifecycle && lifecycle !== filters.lifecycle) continue;
-
-		result.push({
+		const node: KnowledgeNodeListRow = {
 			id: row.id,
 			title: row.title,
 			domain: row.domain,
@@ -480,9 +494,29 @@ export async function listNodesForBrowse(
 			lifecycle,
 			certs,
 			priorities,
-		});
+		};
+		return node;
+	});
+
+	const passes = (n: KnowledgeNodeListRow, exclude?: keyof ListNodesFilters): boolean => {
+		if (filters.domain && exclude !== 'domain' && n.domain !== filters.domain) return false;
+		if (filters.cert && exclude !== 'cert' && !n.certs.includes(filters.cert)) return false;
+		if (filters.priority && exclude !== 'priority' && !n.priorities.includes(filters.priority)) return false;
+		if (filters.lifecycle && exclude !== 'lifecycle' && n.lifecycle !== filters.lifecycle) return false;
+		return true;
+	};
+
+	const rows = enriched.filter((n) => passes(n));
+
+	const facets: KnowledgeFacetCounts = { domain: {}, cert: {}, priority: {}, lifecycle: {} };
+	for (const n of enriched) {
+		if (passes(n, 'domain')) facets.domain[n.domain] = (facets.domain[n.domain] ?? 0) + 1;
+		if (passes(n, 'cert')) for (const c of n.certs) facets.cert[c] = (facets.cert[c] ?? 0) + 1;
+		if (passes(n, 'priority')) for (const p of n.priorities) facets.priority[p] = (facets.priority[p] ?? 0) + 1;
+		if (passes(n, 'lifecycle')) facets.lifecycle[n.lifecycle] = (facets.lifecycle[n.lifecycle] ?? 0) + 1;
 	}
-	return result;
+
+	return { rows, facets };
 }
 
 /** Export the edge-type enum for callers that don't already depend on @ab/constants. */
