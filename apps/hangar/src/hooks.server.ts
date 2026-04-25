@@ -1,6 +1,12 @@
 import { ROUTES, type Role } from '@ab/constants';
 import { recoverOrphanedRunning, startWorker, type WorkerHandle } from '@ab/hangar-jobs';
-import { APPEARANCE_COOKIE, parseAppearancePreference } from '@ab/themes';
+import {
+	APPEARANCE_COOKIE,
+	injectPreHydrationScript,
+	parseAppearancePreference,
+	readThemeFromCookies,
+} from '@ab/themes';
+import { PRE_HYDRATION_SCRIPT } from '@ab/themes/generated/pre-hydration';
 import { createErrorHandler, createLogger } from '@ab/utils';
 import type { Handle, HandleServerError } from '@sveltejs/kit';
 import { building, dev } from '$app/environment';
@@ -93,6 +99,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 	const requestId = resolveRequestId(event.request);
 	event.locals.requestId = requestId;
 	event.locals.appearance = parseAppearancePreference(event.cookies.get(APPEARANCE_COOKIE));
+	event.locals.theme = readThemeFromCookies(event.cookies);
 
 	let response: Response;
 
@@ -153,7 +160,9 @@ export const handle: Handle = async ({ event, resolve }) => {
 			});
 			response = new Response('Account suspended', { status: 403 });
 		} else {
-			response = await resolve(event);
+			response = await resolve(event, {
+				transformPageChunk: ({ html }) => injectPreHydrationScript(html, PRE_HYDRATION_SCRIPT),
+			});
 		}
 	}
 

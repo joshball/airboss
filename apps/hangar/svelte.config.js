@@ -1,5 +1,6 @@
 import adapter from '@sveltejs/adapter-node';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
+import { PRE_HYDRATION_SCRIPT_CSP_HASH } from '../../libs/themes/generated/pre-hydration.ts';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -14,7 +15,12 @@ const config = {
 			mode: 'auto',
 			directives: {
 				'default-src': ['self'],
-				'script-src': ['self'],
+				// Hash allowlists the shared pre-hydration script substituted
+				// into `app.html` by `transformPageChunk` in hooks.server.ts.
+				// SvelteKit's `auto` mode only nonces scripts it emits, not
+				// scripts injected after template read. The hash is regenerated
+				// alongside the body by `bun themes:emit` -- never edit by hand.
+				'script-src': ['self', PRE_HYDRATION_SCRIPT_CSP_HASH],
 				'style-src': ['self', 'unsafe-inline'],
 				'img-src': ['self', 'data:'],
 				'font-src': ['self', 'data:'],

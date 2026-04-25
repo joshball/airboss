@@ -1,14 +1,80 @@
 <script lang="ts">
 import { ROUTES } from '@ab/constants';
-import { APPEARANCE_PREFERENCE_VALUES, type AppearancePreference } from '@ab/themes';
+import {
+	APPEARANCE_PREFERENCE_VALUES,
+	type AppearanceMode,
+	type AppearancePreference,
+	DEFAULT_APPEARANCE,
+	DEFAULT_THEME_PREFERENCE,
+	resolveThemeSelection,
+	type ThemeId,
+	type ThemePreference,
+} from '@ab/themes';
+import ThemePicker from '@ab/themes/picker/ThemePicker.svelte';
 import ThemeProvider from '@ab/themes/ThemeProvider.svelte';
 import type { Snippet } from 'svelte';
+import { page } from '$app/state';
 import Nav from '$lib/components/Nav.svelte';
 import type { LayoutData } from './$types';
 
 let { data, children }: { data: LayoutData; children: Snippet } = $props();
 
 const appearancePref = $derived(data.appearance);
+let themePref = $state<ThemePreference>(DEFAULT_THEME_PREFERENCE);
+let systemAppearance = $state<AppearanceMode>(DEFAULT_APPEARANCE);
+
+$effect(() => {
+	themePref = data.theme;
+});
+
+$effect(() => {
+	if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') return;
+	const mq = window.matchMedia('(prefers-color-scheme: dark)');
+	systemAppearance = mq.matches ? 'dark' : 'light';
+	const handler = (e: MediaQueryListEvent) => {
+		systemAppearance = e.matches ? 'dark' : 'light';
+	};
+	mq.addEventListener('change', handler);
+	return () => mq.removeEventListener('change', handler);
+});
+
+// Hangar has no theme-locked routes today, so the resolver effectively
+// always returns the user's pick (or `airboss/default` when nothing is
+// set). Wired through `resolveThemeSelection` for future-proofing -- if
+// hangar ever grows a route that hard-requires a fixed theme (e.g. a
+// preview pane that shows another app's theme), the lock works without
+// editing layouts.
+const selection = $derived(
+	resolveThemeSelection({
+		pathname: page.url.pathname,
+		userTheme: themePref,
+		userAppearance: appearancePref,
+		systemAppearance,
+	}),
+);
+
+$effect(() => {
+	if (typeof document === 'undefined') return;
+	document.documentElement.setAttribute('data-theme', selection.theme);
+	document.documentElement.setAttribute('data-appearance', selection.appearance);
+	document.documentElement.setAttribute('data-layout', selection.layout);
+});
+
+const themePickerLocked = $derived(themePref != null && selection.theme !== themePref);
+
+async function setTheme(value: ThemeId) {
+	if (value === themePref) return;
+	themePref = value;
+	try {
+		await fetch(ROUTES.THEME, {
+			method: 'POST',
+			headers: { 'content-type': 'application/json' },
+			body: JSON.stringify({ value }),
+		});
+	} catch {
+		// Non-fatal: cookie just won't persist this turn.
+	}
+}
 
 async function setAppearance(value: AppearancePreference) {
 	if (value === appearancePref) return;
@@ -67,11 +133,13 @@ function handleMenuKeydown(event: KeyboardEvent) {
 
 <a class="skip" href="#main">Skip to main content</a>
 
-<ThemeProvider theme="airboss/default">
+<ThemeProvider theme={selection.theme} appearance={selection.appearance} layout={selection.layout}>
 	<nav aria-label="Primary" class="topnav">
 		<span class="brand">airboss / hangar</span>
 		<Nav />
 		<div class="spacer"></div>
+
+		<ThemePicker currentThemeId={selection.theme} onSelect={setTheme} locked={themePickerLocked} />
 
 		<details class="identity" bind:this={identityMenu}>
 			<summary aria-label="Account menu for {identityLabel}">

@@ -1,7 +1,7 @@
 /// <reference types="@sveltejs/kit" />
 
 import type { AuthSession, AuthUser } from '@ab/auth';
-import type { AppearancePreference } from '@ab/themes';
+import type { AppearancePreference, ThemePreference } from '@ab/themes';
 
 declare global {
 	namespace App {
@@ -10,6 +10,7 @@ declare global {
 			user: AuthUser | null;
 			requestId: string;
 			appearance: AppearancePreference;
+			theme: ThemePreference;
 		}
 		interface Error {
 			message: string;

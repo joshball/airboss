@@ -40,6 +40,23 @@ export {
 	getContrastingTextColor,
 } from './derive';
 export { emitAllThemes, themeToCss } from './emit';
+// Picker surface (server endpoint factory, cookie reader, pre-hydration
+// generator). The Svelte UI component is exposed at the sub-path
+// `@ab/themes/picker/ThemePicker.svelte` rather than re-exported here --
+// barrel-exporting a .svelte file forces every consumer of this index
+// (including vitest, which has no svelte plugin) to compile it. Apps
+// import `ThemePicker` directly via that sub-path; node-side code keeps
+// using the index without dragging the component in.
+export {
+	buildPreHydrationCspHash,
+	buildPreHydrationScript,
+	injectPreHydrationScript,
+	PRE_HYDRATION_PLACEHOLDER,
+} from './picker/pre-hydration';
+export {
+	createThemeEndpoint,
+	readThemeFromCookies,
+} from './picker/server';
 export {
 	getTheme,
 	getThemeSafe,
