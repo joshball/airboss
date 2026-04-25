@@ -6,22 +6,24 @@ Phase plan of record: [docs/work/plans/20260422-flight-dynamics-sim-plan.md](../
 
 ## Shipped
 
-| Phase | Work                                          | PRs                                    |
-| ----- | --------------------------------------------- | -------------------------------------- |
-| 0     | Feasibility prototype (throwaway)             | (pre-history)                          |
-| 0.5   | Expanded prototype -- full six-pack + tach    | (pre-history, ~2026-04-22)             |
-| 0.6   | Cockpit polish -- engine sound, layout, icons | (pre-history, ~2026-04-22)             |
-| 0.7   | Session 2026-04-24 polish                     | #116, #118, #120, #123, #124, #125     |
-| 0.8   | Spring-centered stick + hold-ramp throttle    | #126                                   |
+| Phase    | Work                                          | PRs                                |
+| -------- | --------------------------------------------- | ---------------------------------- |
+| 0        | Feasibility prototype (throwaway)             | (pre-history)                      |
+| 0.5      | Expanded prototype -- full six-pack + tach    | (pre-history, ~2026-04-22)         |
+| 0.6      | Cockpit polish -- engine sound, layout, icons | (pre-history, ~2026-04-22)         |
+| 0.7      | Session 2026-04-24 polish                     | #116, #118, #120, #123, #124, #125 |
+| 0.8      | Spring-centered stick + hold-ramp throttle    | #126                               |
+| 5.A      | Warning cue library + a11y captions           | #136                               |
+| 1        | Phase 1 work package (spec + design + tasks)  | #137                               |
+| 3.B1     | Fault-model interface + dev gallery rig       | #140                               |
+| 4.B3     | Scenario format extensions + replay tape      | #141                               |
+| 3.B5.alt | Static-block altimeter freeze                 | #142                               |
 
 ## Active backlog
 
-### Phase 1 -- Work package (doc sprint)
+### Phase 1 -- Work package
 
-Author the formal work package before any new capability wave.
-
-- [ ] `/ball-wp-spec flight-dynamics-sim` -- spec, tasks, test-plan, design, user-stories
-- [ ] Lock MVP decisions: aircraft scope (C172 first, PA28 Phase 6), scenario list (from PRD), control scope (keyboard + mouse; gamepad deferred; HID yoke deferred), surface (`apps/sim/` standalone), FDM path (JSBSim WASM for Phase 2), BC layout (`libs/bc/sim/`)
+- [x] Spec, design, user-stories, tasks, test-plan authored (#137)
 - [ ] User sign-off
 
 ### Phase 2 -- FDM port (JSBSim)
@@ -38,13 +40,20 @@ Replace the hand-rolled FDM with JSBSim compiled to WASM, running in the worker.
 
 Full panel, with truth-vs-display separation so instrument faults are first-class.
 
-- [ ] `TruthState -> DisplayState` transform layer
-- [ ] Per-instrument fault configs: pitot block (ASI), static block (ASI + ALT + VSI), vacuum (AI + HI), alternator (electric instruments), gyro tumble (AI + HI)
-- [ ] Complete engine gauges: oil pressure, oil temp, fuel quantity L+R, ammeter
-- [ ] Annunciators: gear, flap motor, alternator, low voltage, low fuel
-- [ ] Record both truth and display in the replay tape
-- [ ] Storybook-style gallery page for every instrument in every fault state
-- [ ] Accessibility: keyboard-readable instrument values, colorblind-safe warnings
+- [x] `TruthState -> DisplayState` transform layer (#140)
+- [x] Storybook gallery page rig at `/_dev/instruments` (#140)
+- [ ] Per-instrument fault rendering (B5 fan-out):
+  - [x] B5.alt -- static block freezes altimeter (#142)
+  - [ ] B5.asi -- pitot block (climb -> reads like altimeter); static block (descent -> reverses)
+  - [ ] B5.ai -- vacuum drift; gyro tumble
+  - [ ] B5.hi -- vacuum drift; gyro tumble; alternator (electric variant gracefully degrades)
+  - [ ] B5.tc -- alternator failure (electric instrument fades with bus volts)
+  - [ ] B5.vsi -- static block (zero VSI)
+- [ ] B6 -- Engine cluster: oil pressure, oil temp, fuel quantity L+R, ammeter, vacuum
+- [ ] B6 -- Annunciators: gear, flap motor, alternator, low voltage, low fuel
+- [ ] B6 -- Accessibility: per-instrument `aria-label` + 1 Hz live region narration
+- [ ] B6 -- Gallery extended to cover every gauge in every fault state
+- [ ] B7 -- Cockpit reads `DisplayState` end-to-end (after every B5 lands)
 
 ### Phase 4 -- Scenario engine + debrief
 
@@ -59,17 +68,18 @@ Scenarios runnable end-to-end with scrubbable replay.
 
 ### Phase 5 -- Sound (remaining)
 
-Engine sound already shipped in 0.6. Remaining: warning cue library.
+Engine sound shipped in 0.6 as a procedural two-osc + band-passed noise synth. Warning cue library shipped in #136.
 
-- [ ] Stall horn (done, carry through)
-- [ ] Gear warning
-- [ ] Flap motor
-- [ ] Marker beacons
-- [ ] Altitude alert
-- [ ] AP disconnect
-- [ ] Mute + volume controls (extend existing)
-- [ ] Mobile gesture-to-start (extend existing)
-- [ ] Visible captions for every audio cue (a11y)
+- [x] Stall horn (#136 carry-through)
+- [x] Gear warning (#136)
+- [x] Flap motor (#136)
+- [x] Marker beacons (cue plumbing #136; trigger pending Phase 4 navaid work)
+- [x] Altitude alert (cue plumbing #136; trigger pending Phase 4 scripted altitudes)
+- [x] AP disconnect (cue plumbing #136; trigger pending future AP model)
+- [x] Mute + volume controls (#136 extends the existing mute toggle to every cue)
+- [x] Mobile gesture-to-start (#136 inherits existing pattern)
+- [x] Visible captions for every audio cue (#136 adds `<AudioCaptions>` `aria-live` panel)
+- [ ] **Engine sound quality upgrade** -- the current procedural synth sounds like a 1980s arcade. Replace with sample-based playback (single C172 startup/idle/cruise/shutdown loop, playback-rate scaled by RPM) or upgraded multi-oscillator additive with formant filters and exhaust resonance. Must keep current mute / gesture-start / scenario-stop lifecycle and `RAMP_TAU_SECONDS` smoothing.
 
 ### Phase 6 -- Second aircraft + remaining MVP scenarios
 
