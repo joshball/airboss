@@ -16,16 +16,13 @@
  */
 
 import type { DisplayState, FdmTruthState } from '@ab/bc-sim';
-import { ROUTES, SIM_FEET_PER_METER, SIM_KNOTS_PER_METER_PER_SECOND, SIM_WORKER_MESSAGES } from '@ab/constants';
+import { ROUTES, SIM_WORKER_MESSAGES } from '@ab/constants';
 import { onDestroy, onMount } from 'svelte';
 import { browser } from '$app/environment';
+import CockpitPanel from '$lib/cockpit/CockpitPanel.svelte';
 import FdmWorker from '$lib/fdm-worker.ts?worker';
 import Horizon3D from '$lib/horizon/Horizon3D.svelte';
 import ScenarioSurfaceNav from '$lib/horizon/ScenarioSurfaceNav.svelte';
-import Altimeter from '$lib/instruments/Altimeter.svelte';
-import Asi from '$lib/instruments/Asi.svelte';
-import AttitudeIndicator from '$lib/instruments/AttitudeIndicator.svelte';
-import HeadingIndicator from '$lib/instruments/HeadingIndicator.svelte';
 import type { MainToWorker, WorkerToMain } from '$lib/worker-protocol';
 import type { PageData } from './$types';
 
@@ -76,10 +73,6 @@ const rollRadians = $derived(truth?.roll ?? 0);
 const headingRadians = $derived(truth?.heading ?? 0);
 const altitudeMeters = $derived(truth?.altitude ?? 0);
 const groundElevationMeters = $derived(truth?.groundElevation ?? 0);
-
-const displayKias = $derived(display ? display.indicatedAirspeed * SIM_KNOTS_PER_METER_PER_SECOND : 0);
-const displayAltFt = $derived(display ? display.altitudeMsl * SIM_FEET_PER_METER : 0);
-const displayHeadingDeg = $derived(display ? (display.headingIndicated * 180) / Math.PI : 0);
 </script>
 
 <svelte:head>
@@ -105,20 +98,10 @@ const displayHeadingDeg = $derived(display ? (display.headingIndicated * 180) / 
 			<section class="horizon-pane" aria-label="3D horizon">
 				<Horizon3D {pitchRadians} {rollRadians} {headingRadians} {altitudeMeters} {groundElevationMeters} />
 			</section>
-			<section class="instrument-pane" aria-label="Primary instruments">
-				<div class="row">
-					<Asi kias={displayKias} />
-					<AttitudeIndicator
-						pitchRadians={display?.pitchIndicated ?? 0}
-						rollRadians={display?.rollIndicated ?? 0}
-					/>
-					<Altimeter altitudeFeet={displayAltFt} />
-				</div>
-				<div class="row">
-					<HeadingIndicator headingDeg={displayHeadingDeg} />
-				</div>
+			<section class="instrument-pane" aria-label="Cockpit instrument panel">
+				<CockpitPanel {truth} {display} />
 				<p class="help">
-					Primary instruments only. The full panel composes on the cockpit page; this surface demonstrates that the 3D view and the instrument widgets render side-by-side without any cross-component imports.
+					Full cockpit panel rendered alongside the 3D horizon. Both components are pure-prop and unaware of each other; this page hosts the FDM worker and feeds them the same SNAPSHOT stream.
 				</p>
 			</section>
 		</div>
@@ -177,12 +160,6 @@ const displayHeadingDeg = $derived(display ? (display.headingIndicated * 180) / 
 		gap: var(--space-md);
 		padding: var(--space-md);
 		overflow: auto;
-	}
-	.row {
-		display: flex;
-		flex-wrap: wrap;
-		gap: var(--space-md);
-		justify-content: center;
 	}
 	.help {
 		font-size: var(--font-size-sm);
