@@ -103,4 +103,24 @@ Rationale: pilots who derived the rule from first principles apply it in edge ca
 Cards and reps reinforce the discovered knowledge through spaced repetition. The graph is the spine; the cards and reps are the proficiency surface. They work together.`,
 		},
 	],
+	externalRefs: [
+		{
+			title: 'ADR 011 -- Knowledge Graph Learning System',
+			url: 'https://github.com/joshball/airboss/blob/main/docs/decisions/011-knowledge-graph-learning-system/decision.md',
+			source: 'other',
+			note: 'The internal architecture decision record that defines the seven-phase stepper, dual-gate mastery, and the discovery-first pedagogy this page documents.',
+		},
+		{
+			title: 'Airman Certification Standards (ACS) -- Private Pilot Airplane',
+			url: 'https://www.faa.gov/training_testing/testing/acs',
+			source: 'faa',
+			note: 'The ACS framework integrates knowledge, risk management, and skill into a single standard. The dual-gate mastery model (cards for knowledge, reps for application) maps to that integration.',
+		},
+		{
+			title: 'AC 61-83K -- Industry-Conducted FIRC guidance on adult learning principles',
+			url: 'https://www.faa.gov/regulations_policies/advisory_circulars/index.cfm/go/document.information/documentID/1041665',
+			source: 'faa',
+			note: 'The FAA guidance that explicitly endorses scenario-based, discovery-led instruction over rote regulation memorization. Discovery-first pedagogy aligns with this guidance.',
+		},
+	],
 };

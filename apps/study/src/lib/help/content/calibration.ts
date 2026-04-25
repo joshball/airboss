@@ -88,4 +88,24 @@ Both frameworks include self-assessment as a core skill. The PAVE checklist (Pil
 airboss's calibration surface is a training ground for the self-assessment skill ADM and SRM both depend on. A pilot who is well calibrated on ground can self-assess more accurately in the aircraft. A pilot who is systematically overconfident on ground will be overconfident in the aircraft, where the cost is much higher.`,
 		},
 	],
+	externalRefs: [
+		{
+			title: "FAA-H-8083-25C -- Pilot's Handbook of Aeronautical Knowledge, Chapter 2 (Aeronautical Decision-Making)",
+			url: 'https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/phak',
+			source: 'faa',
+			note: 'PHAK Chapter 2 covers ADM, SRM, hazardous attitudes, and the self-assessment frameworks (PAVE, 5P) that calibration trains.',
+		},
+		{
+			title: 'Verification of forecasts expressed in terms of probability (Brier, 1950)',
+			url: 'https://doi.org/10.1175/1520-0493(1950)078%3C0001:VOFEIT%3E2.0.CO;2',
+			source: 'paper',
+			note: "The original Brier score paper. airboss's calibration metric is a Brier-style mean squared error between confidence and outcome.",
+		},
+		{
+			title: 'Calibration of probabilities: The state of the art to 1980 (Lichtenstein, Fischhoff, Phillips)',
+			url: 'https://doi.org/10.1017/CBO9780511809477.023',
+			source: 'paper',
+			note: 'Foundational survey of the metacognitive-calibration literature, including the systematic overconfidence finding that motivates the calibration surface.',
+		},
+	],
 };
