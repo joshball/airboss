@@ -180,6 +180,29 @@ describe('jumpToIndex', () => {
 			ReviewSessionNotActiveError,
 		);
 	});
+
+	it('refuses to jump in an abandoned session', async () => {
+		const ids = [await seedCard(), await seedCard()];
+		const sessionId = generateReviewSessionId();
+		const now = new Date();
+		await db.insert(memoryReviewSession).values({
+			id: sessionId,
+			userId: TEST_USER_ID,
+			deckHash: 'testhash',
+			deckSpec: { domain: null },
+			cardIdList: [...ids],
+			currentIndex: 0,
+			status: 'abandoned',
+			startedAt: now,
+			lastActivityAt: now,
+			completedAt: null,
+		});
+		CREATED_SESSION_IDS.push(sessionId);
+
+		await expect(jumpToIndex({ sessionId, userId: TEST_USER_ID, index: 1 })).rejects.toBeInstanceOf(
+			ReviewSessionNotActiveError,
+		);
+	});
 });
 
 describe('getReviewedCardIdsInSession', () => {
