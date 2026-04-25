@@ -55,6 +55,7 @@ import ScenarioStepBanner from '$lib/panels/ScenarioStepBanner.svelte';
 import VSpeeds from '$lib/panels/VSpeeds.svelte';
 import WxPanel from '$lib/panels/WxPanel.svelte';
 import { StallHorn } from '$lib/stall-horn.svelte';
+import { saveTape } from '$lib/tape-store.svelte';
 import { AltitudeAlert, ApDisconnect, captionStore, FlapMotor, GearWarning, MarkerBeacon } from '$lib/warning-cues';
 import type { MainToWorker, WorkerToMain } from '$lib/worker-protocol';
 import type { PageData } from './$types';
@@ -163,6 +164,13 @@ function handleWorkerMessage(event: MessageEvent<WorkerToMain>): void {
 			markerBeacon.stop();
 			altitudeAlert.stop();
 			apDisconnect.stop();
+			break;
+		}
+		case SIM_WORKER_MESSAGES.TAPE: {
+			// Persist the tape for the debrief route to read. Worker emits
+			// TAPE once per run (post-OUTCOME or post-RESET-mid-run); the
+			// store overwrites any previous tape for this scenario.
+			saveTape(msg.tape);
 			break;
 		}
 	}
@@ -620,7 +628,10 @@ const trimBias = $derived(inputs.trim);
 			</span>
 		</div>
 		{#if outcome}
-			<button type="button" class="reset-button" onclick={performReset}>Reset (Shift+R)</button>
+			<div class="outcome-actions">
+				<a class="debrief-link" href={ROUTES.SIM_SCENARIO_DEBRIEF(data.scenario.id)}>View debrief</a>
+				<button type="button" class="reset-button" onclick={performReset}>Reset (Shift+R)</button>
+			</div>
 		{/if}
 	</section>
 
@@ -882,6 +893,25 @@ const trimBias = $derived(inputs.trim);
 		.status {
 			transition: none;
 		}
+	}
+
+	.outcome-actions {
+		display: inline-flex;
+		gap: var(--space-sm);
+		align-items: center;
+	}
+
+	.debrief-link {
+		color: var(--ink-body);
+		text-decoration: none;
+		padding: var(--space-sm) var(--space-md);
+		border: 1px solid var(--edge-default);
+		border-radius: var(--radius-xs);
+		font-size: var(--font-size-sm);
+	}
+
+	.debrief-link:hover {
+		background: var(--edge-default);
 	}
 
 	.reset-button {
