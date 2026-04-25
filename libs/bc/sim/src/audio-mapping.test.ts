@@ -3,14 +3,62 @@ import { describe, expect, it } from 'vitest';
 import {
 	altitudeAlertCrossed,
 	dynamicPressurePa,
+	engineFiringHz,
 	engineFundamentalHz,
 	flapsChanged,
 	noiseGainTarget,
+	propBladePassHz,
 	shouldSoundGearWarning,
 	strainDetuneCents,
 	strainFactor,
 	throttleGainTarget,
+	tremoloHz,
 } from './audio-mapping';
+
+describe('engineFiringHz', () => {
+	it('returns 0 at zero RPM', () => {
+		expect(engineFiringHz(0)).toBe(0);
+	});
+
+	it('models a 4-cylinder 4-stroke firing rate (RPM/30)', () => {
+		expect(engineFiringHz(800)).toBeCloseTo(800 / 30, 5);
+		expect(engineFiringHz(2400)).toBeCloseTo(2400 / 30, 5);
+		expect(engineFiringHz(2700)).toBeCloseTo(90, 5);
+	});
+
+	it('clamps negative RPM to zero', () => {
+		expect(engineFiringHz(-100)).toBe(0);
+	});
+});
+
+describe('propBladePassHz', () => {
+	it('models a 2-blade prop (2 * RPM / 60)', () => {
+		expect(propBladePassHz(800)).toBeCloseTo((2 * 800) / 60, 5);
+		expect(propBladePassHz(2700)).toBeCloseTo(90, 5);
+	});
+
+	it('clamps negative RPM to zero', () => {
+		expect(propBladePassHz(-100)).toBe(0);
+	});
+});
+
+describe('tremoloHz', () => {
+	it('returns 5 Hz at idle', () => {
+		expect(tremoloHz(800, 800, 2700)).toBeCloseTo(5, 5);
+	});
+
+	it('returns 12 Hz at max RPM', () => {
+		expect(tremoloHz(2700, 800, 2700)).toBeCloseTo(12, 5);
+	});
+
+	it('returns 5 when max <= idle', () => {
+		expect(tremoloHz(2400, 2700, 2700)).toBe(5);
+	});
+
+	it('clamps below idle to the floor', () => {
+		expect(tremoloHz(0, 800, 2700)).toBeCloseTo(5, 5);
+	});
+});
 
 describe('engineFundamentalHz', () => {
 	it('returns base frequency at idle RPM', () => {

@@ -16,13 +16,16 @@ export {
 export {
 	altitudeAlertCrossed,
 	dynamicPressurePa,
+	engineFiringHz,
 	engineFundamentalHz,
 	flapsChanged,
 	noiseGainTarget,
+	propBladePassHz,
 	shouldSoundGearWarning,
 	strainDetuneCents,
 	strainFactor,
 	throttleGainTarget,
+	tremoloHz,
 } from './audio-mapping';
 export {
 	activateFault,
