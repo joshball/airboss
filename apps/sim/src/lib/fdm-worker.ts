@@ -12,11 +12,12 @@
 
 /// <reference lib="webworker" />
 
-import type { FrameRing, ReplayFrame, ScenarioStepState } from '@ab/bc-sim';
+import type { FrameRing, GradeReport, ReplayFrame, ScenarioStepState } from '@ab/bc-sim';
 import {
 	applyFaults,
 	buildTape,
 	createFrameRing,
+	evaluateGrading,
 	FdmEngine,
 	getAircraftConfig,
 	getScenario,
@@ -149,7 +150,26 @@ function emitTape(s: WorkerState, result: Parameters<typeof buildTape>[0]['resul
 		frames: s.frameRing,
 		result,
 	});
-	post({ type: SIM_WORKER_MESSAGES.TAPE, tape });
+	// Grade is best-effort: if the scenario declared a `grading` block and
+	// the tape has frames, compute it. evaluateGrading throws on malformed
+	// definitions or empty tapes; we swallow that here so a grading bug
+	// can't suppress the tape itself (debrief still needs the tape for
+	// scrubber + ideal-path overlay).
+	// Grade is best-effort. evaluateGrading throws on malformed grading
+	// definitions (weights not summing to 1.0, empty components, empty
+	// frames) -- those are authoring bugs that should surface in BC unit
+	// tests, not crash the worker mid-tape-emit. Swallowing here keeps
+	// the tape postable so the debrief still has scrubber + traces; the
+	// missing grade section is itself the visible signal.
+	let grade: GradeReport | undefined;
+	if (def.grading !== undefined && tape.frames.length > 0) {
+		try {
+			grade = evaluateGrading(def.grading, tape, { idealPath: def.idealPath });
+		} catch {
+			grade = undefined;
+		}
+	}
+	post({ type: SIM_WORKER_MESSAGES.TAPE, tape, grade });
 	s.tapePosted = true;
 }
 

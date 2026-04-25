@@ -55,7 +55,7 @@ import ScenarioStepBanner from '$lib/panels/ScenarioStepBanner.svelte';
 import VSpeeds from '$lib/panels/VSpeeds.svelte';
 import WxPanel from '$lib/panels/WxPanel.svelte';
 import { StallHorn } from '$lib/stall-horn.svelte';
-import { saveTape } from '$lib/tape-store.svelte';
+import { saveGrade, saveTape } from '$lib/tape-store.svelte';
 import { AltitudeAlert, ApDisconnect, captionStore, FlapMotor, GearWarning, MarkerBeacon } from '$lib/warning-cues';
 import type { MainToWorker, WorkerToMain } from '$lib/worker-protocol';
 import type { PageData } from './$types';
@@ -168,10 +168,14 @@ function handleWorkerMessage(event: MessageEvent<WorkerToMain>): void {
 			break;
 		}
 		case SIM_WORKER_MESSAGES.TAPE: {
-			// Persist the tape for the debrief route to read. Worker emits
-			// TAPE once per run (post-OUTCOME or post-RESET-mid-run); the
-			// store overwrites any previous tape for this scenario.
+			// Persist the tape and (when present) the grade report for the
+			// debrief route to read. Worker emits TAPE once per run (post-
+			// OUTCOME or post-RESET-mid-run); the store overwrites any
+			// previous tape/grade for this scenario. Passing
+			// `msg.grade === undefined` clears any prior grade so a re-run
+			// of an ungraded scenario does not leave a stale grade behind.
 			saveTape(msg.tape);
+			saveGrade(msg.tape.scenarioId, msg.grade);
 			break;
 		}
 	}
