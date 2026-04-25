@@ -6,6 +6,7 @@
 
 import { SIM_SCENARIO_IDS, type SimScenarioId } from '@ab/constants';
 import type { ScenarioDefinition } from '../types';
+import { AFT_CG_SLOW_FLIGHT_SCENARIO } from './aft-cg-slow-flight';
 import { DEPARTURE_STALL_SCENARIO } from './departure-stall';
 import { EFATO_SCENARIO } from './efato';
 import { FIRST_FLIGHT_SCENARIO } from './first-flight';
@@ -14,7 +15,9 @@ import { PITOT_BLOCK_SCENARIO } from './pitot-block';
 import { PLAYGROUND_SCENARIO } from './playground';
 import { STATIC_BLOCK_SCENARIO } from './static-block';
 import { UNUSUAL_ATTITUDES_SCENARIO } from './unusual-attitudes';
+import { UNUSUAL_ATTITUDES_NOSE_LO_SCENARIO } from './unusual-attitudes-nose-lo';
 import { VACUUM_FAILURE_SCENARIO } from './vacuum-failure';
+import { VMC_INTO_IMC_SCENARIO } from './vmc-into-imc';
 
 export const SCENARIO_REGISTRY: Record<SimScenarioId, ScenarioDefinition> = {
 	[SIM_SCENARIO_IDS.PLAYGROUND]: PLAYGROUND_SCENARIO,
@@ -26,6 +29,9 @@ export const SCENARIO_REGISTRY: Record<SimScenarioId, ScenarioDefinition> = {
 	[SIM_SCENARIO_IDS.STATIC_BLOCK]: STATIC_BLOCK_SCENARIO,
 	[SIM_SCENARIO_IDS.PARTIAL_PANEL]: PARTIAL_PANEL_SCENARIO,
 	[SIM_SCENARIO_IDS.UNUSUAL_ATTITUDES_NOSE_HI]: UNUSUAL_ATTITUDES_SCENARIO,
+	[SIM_SCENARIO_IDS.UNUSUAL_ATTITUDES_NOSE_LO]: UNUSUAL_ATTITUDES_NOSE_LO_SCENARIO,
+	[SIM_SCENARIO_IDS.AFT_CG_SLOW_FLIGHT]: AFT_CG_SLOW_FLIGHT_SCENARIO,
+	[SIM_SCENARIO_IDS.VMC_INTO_IMC]: VMC_INTO_IMC_SCENARIO,
 };
 
 /** Defensive lookup; throws on unknown ids so callers fail fast. */

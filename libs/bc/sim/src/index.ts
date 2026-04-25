@@ -78,6 +78,7 @@ export {
 	type TapeOutcome,
 	validateTapeHash,
 } from './replay';
+export { AFT_CG_SLOW_FLIGHT_SCENARIO } from './scenarios/aft-cg-slow-flight';
 export { DEPARTURE_STALL_SCENARIO } from './scenarios/departure-stall';
 export { EFATO_SCENARIO } from './scenarios/efato';
 export { FIRST_FLIGHT_SCENARIO } from './scenarios/first-flight';
@@ -88,7 +89,9 @@ export { getScenario, listScenarios, SCENARIO_REGISTRY } from './scenarios/regis
 export { type RunnerEvaluation, ScenarioRunner } from './scenarios/runner';
 export { STATIC_BLOCK_SCENARIO } from './scenarios/static-block';
 export { UNUSUAL_ATTITUDES_SCENARIO } from './scenarios/unusual-attitudes';
+export { UNUSUAL_ATTITUDES_NOSE_LO_SCENARIO } from './scenarios/unusual-attitudes-nose-lo';
 export { VACUUM_FAILURE_SCENARIO } from './scenarios/vacuum-failure';
+export { VMC_INTO_IMC_SCENARIO } from './scenarios/vmc-into-imc';
 export type {
 	AircraftConfig,
 	FdmInputs,
