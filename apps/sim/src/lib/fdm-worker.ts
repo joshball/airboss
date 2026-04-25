@@ -12,8 +12,17 @@
 
 /// <reference lib="webworker" />
 
-import type { ScenarioStepState } from '@ab/bc-sim';
-import { applyFaults, C172_CONFIG, FdmEngine, getScenario, ScenarioRunner } from '@ab/bc-sim';
+import type { FrameRing, ReplayFrame, ScenarioStepState } from '@ab/bc-sim';
+import {
+	applyFaults,
+	buildTape,
+	C172_CONFIG,
+	createFrameRing,
+	FdmEngine,
+	getScenario,
+	pushFrame,
+	ScenarioRunner,
+} from '@ab/bc-sim';
 import {
 	SIM_ELECTRIC_BUS_NOMINAL_VOLTS,
 	SIM_FDM_DT_SECONDS,
@@ -38,6 +47,20 @@ interface WorkerState {
 	tickHandle: number | null;
 	lastTickMs: number;
 	lastStepState?: ScenarioStepState;
+	/** Frame ring the worker writes into at snapshot cadence. Drained
+	 *  into a ReplayTape once per run on outcome (or on RESET if a tape
+	 *  was in progress). */
+	frameRing: FrameRing;
+	/** Latched at INIT so the tape carries the same state the run started
+	 *  from, regardless of any later state-mutation paths. */
+	initialState: ReturnType<typeof getScenario>['initial'];
+	/** Most recent frame data captured at snapshot cadence. Also used to
+	 *  populate the OUTCOME/TAPE messages so the tape's last frame matches
+	 *  the user's last visible cockpit state. */
+	lastFrame: ReplayFrame | null;
+	/** True once a TAPE message has been posted -- guards against double-
+	 *  posting on a pause-then-outcome race. */
+	tapePosted: boolean;
 }
 
 let state: WorkerState | null = null;
@@ -64,26 +87,70 @@ function buildState(scenarioId: SimScenarioId): WorkerState {
 		snapshotClock: 0,
 		tickHandle: null,
 		lastTickMs: 0,
+		frameRing: createFrameRing(),
+		initialState: def.initial,
+		lastFrame: null,
+		tapePosted: false,
 	};
 }
 
-function postSnapshot(s: WorkerState): void {
+/**
+ * Build a ReplayFrame from the current engine + runner state. Pure
+ * construction -- no message posting and no ring writes. Used by both
+ * the snapshot path (which just needs the data to post to the UI) and
+ * the in-loop ring writer (which records the same frame for replay).
+ */
+function captureFrame(s: WorkerState, firedThisTick: readonly ReplayFrame['firedThisTick'][number][]): ReplayFrame {
 	const truth = s.engine.snapshot();
+	const inputs = s.engine.getInputs();
 	const activations = s.runner.getActivations();
 	const display = applyFaults({
 		truth,
 		activations,
 		nominalBusVolts: SIM_ELECTRIC_BUS_NOMINAL_VOLTS,
 	});
-	post({
-		type: SIM_WORKER_MESSAGES.SNAPSHOT,
+	return {
+		t: truth.t,
 		truth,
 		display,
-		inputs: s.engine.getInputs(),
+		inputs,
+		activations: activations.slice(),
+		firedThisTick,
+	};
+}
+
+function postSnapshot(s: WorkerState): void {
+	const frame = captureFrame(s, []);
+	s.lastFrame = frame;
+	post({
+		type: SIM_WORKER_MESSAGES.SNAPSHOT,
+		truth: frame.truth,
+		display: frame.display,
+		inputs: frame.inputs,
 		running: s.running,
 		stepState: s.lastStepState,
-		activations,
+		activations: frame.activations,
 	});
+}
+
+/**
+ * Build the run's tape and post it to the main thread. Idempotent --
+ * once posted, the `tapePosted` latch prevents a second post (e.g. a
+ * RESET racing with an OUTCOME). Called on outcome and on user-driven
+ * RESET when a run was in progress.
+ */
+function emitTape(s: WorkerState, result: Parameters<typeof buildTape>[0]['result']): void {
+	if (s.tapePosted) return;
+	const def = getScenario(s.scenarioId);
+	const tape = buildTape({
+		def,
+		initial: s.initialState,
+		seed: 0,
+		frames: s.frameRing,
+		result,
+	});
+	post({ type: SIM_WORKER_MESSAGES.TAPE, tape });
+	s.tapePosted = true;
 }
 
 function loop(): void {
@@ -107,18 +174,45 @@ function loop(): void {
 		state.accumulator -= SIM_FDM_DT_SECONDS;
 		state.snapshotClock += SIM_FDM_DT_SECONDS;
 
+		// Capture a tape frame on the same cadence as snapshot posting.
+		// firedThisTick is captured per-FDM-step (not per-snapshot) so the
+		// debrief can mark the exact tick a fault triggered.
+		if (evalResult.firedThisTick.length > 0 && state.lastFrame !== null) {
+			// Carry the edge into the next ring frame so the tape's
+			// "fault fired here" mark sits at the right t.
+			state.lastFrame = { ...state.lastFrame, firedThisTick: evalResult.firedThisTick };
+		}
+
 		if (evalResult.outcome !== SIM_SCENARIO_OUTCOMES.RUNNING) {
 			state.terminated = true;
 			state.running = false;
+			// Final frame (the one that locked the outcome) lands in the ring
+			// alongside the snapshot post.
+			const finalFrame = captureFrame(state, evalResult.firedThisTick);
+			state.lastFrame = finalFrame;
+			pushFrame(state.frameRing, finalFrame);
 			postSnapshot(state);
-			post({ type: SIM_WORKER_MESSAGES.OUTCOME, result: state.runner.finalResult() });
+			const result = state.runner.finalResult();
+			post({ type: SIM_WORKER_MESSAGES.OUTCOME, result });
+			emitTape(state, result);
 			return;
 		}
 	}
 
 	if (state.snapshotClock >= SIM_SNAPSHOT_INTERVAL_SECONDS) {
 		state.snapshotClock = 0;
-		postSnapshot(state);
+		const frame = captureFrame(state, []);
+		state.lastFrame = frame;
+		pushFrame(state.frameRing, frame);
+		post({
+			type: SIM_WORKER_MESSAGES.SNAPSHOT,
+			truth: frame.truth,
+			display: frame.display,
+			inputs: frame.inputs,
+			running: state.running,
+			stepState: state.lastStepState,
+			activations: frame.activations,
+		});
 	}
 
 	state.tickHandle = ctx.setTimeout(loop, 1000 / SIM_TIMING.FDM_HZ) as unknown as number;
@@ -144,6 +238,13 @@ function stop(): void {
 
 function reset(): void {
 	if (!state) return;
+	// If we were mid-run (frames written + no outcome yet), emit an ABORTED
+	// tape so the debrief can still inspect what happened up to the reset.
+	const wasMidRun = !state.tapePosted && state.frameRing.totalWrites > 0 && !state.terminated;
+	if (wasMidRun) {
+		state.runner.abort('User reset before scenario terminated.');
+		emitTape(state, state.runner.finalResult());
+	}
 	stop();
 	state = buildState(state.scenarioId);
 	postSnapshot(state);
