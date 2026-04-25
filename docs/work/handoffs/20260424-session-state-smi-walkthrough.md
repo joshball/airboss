@@ -15,7 +15,7 @@ Fresh session picks up cold from this file. Pairs with [20260424-help-system-fix
 1. **Wave A decisions** captured: no FIRC migration, keep flat Bloom thresholds, punt manual tests until after B + C.
 2. **Wave B code cleanups** shipped -- PR #90 merged. CERTS unified as curated subset of CERT_APPLICABILITIES, ui subpath exports, `/plans` tab URL, review_status audit, scenario index decision, references scripts consolidated. Biome import-order follow-up in PR #91.
 3. **Wave C docs work** shipped -- PR #89 merged. URL deep-linking plan promoted to ADR 013, IDEAS.md 2026-04-23 review pass, ADR 012 idempotency addendum (no gap found: DB UNIQUE + UPSERT is strictly stronger than the removed `REP_DEDUPE_WINDOW_MS`).
-4. **Manual test walkthrough of spaced-memory-items** started. User walked `/memory/new`, `/memory/browse`, `/memory/review`, `/memory/[id]`, `/memory`. Raw feedback captured in `docs/work/todos/20260424-02-smi-walkthrough-feedback.md` -- 24 items grouped into 7 clusters.
+4. **Manual test walkthrough of spaced-memory-items** started. User walked `/memory/new`, `/memory/browse`, `/memory/review`, `/memory/[id]`, `/memory`. Raw feedback captured in `docs/work/.archive/todos/20260424-02-smi-walkthrough-feedback.md` -- 24 items grouped into 7 clusters.
 5. **Help-system review** run as a read-only audit. Found one critical bug (PageHelp ships unstyled -- references `--ab-*` tokens that do not exist) and wide coverage collapse on memory surfaces. Plan written: [20260424-help-system-fix-pass.md](20260424-help-system-fix-pass.md), shipped in PRs #100 + #101.
 6. **Magic-strings / magic-numbers audit** launched as a read-only background agent. Report not yet received at time of this handoff.
 
@@ -50,7 +50,7 @@ From the SMI walkthrough and follow-up Q+A:
 
 ## The 24 SMI walkthrough items, clustered
 
-Full verbatim capture: `docs/work/todos/20260424-02-smi-walkthrough-feedback.md`.
+Full verbatim capture: `docs/work/.archive/todos/20260424-02-smi-walkthrough-feedback.md`.
 
 | Cluster | Items                        | Handling                                                             |
 | ------- | ---------------------------- | -------------------------------------------------------------------- |
@@ -188,7 +188,7 @@ You are continuing the airboss SMI walkthrough work. Read these three files in f
 
 1. docs/work/handoffs/20260424-session-state-smi-walkthrough.md (this snapshot)
 2. docs/work/handoffs/20260424-help-system-fix-pass.md (executable plan for the help system)
-3. docs/work/todos/20260424-02-smi-walkthrough-feedback.md (raw user feedback, 24 items)
+3. docs/work/.archive/todos/20260424-02-smi-walkthrough-feedback.md (raw user feedback, 24 items)
 
 Pending in priority order:
 

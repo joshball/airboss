@@ -313,7 +313,7 @@ export const CONFIDENCE_LEVEL_VALUES = Object.values(CONFIDENCE_LEVELS);
  * ConfidenceSlider component and the calibration page bucket chart.
  */
 export const CONFIDENCE_LEVEL_LABELS: Record<ConfidenceLevel, string> = {
-	[CONFIDENCE_LEVELS.WILD_GUESS]: 'Wild guess',
+	[CONFIDENCE_LEVELS.WILD_GUESS]: 'No idea',
 	[CONFIDENCE_LEVELS.UNCERTAIN]: 'Uncertain',
 	[CONFIDENCE_LEVELS.MAYBE]: 'Maybe',
 	[CONFIDENCE_LEVELS.PROBABLY]: 'Probably',

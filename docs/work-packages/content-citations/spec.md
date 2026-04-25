@@ -16,7 +16,7 @@ One polymorphic citation table so any content surface (card, rep, scenario, know
 
 SMI walkthrough item 1 asked for optional regulation references on cards. The locked decision is to go broad: this is not a card-specific feature, it is a platform-level connection fabric. Every content surface can cite references, and references can be asked "who cites you?" This closes a recurring "wasted opportunity for connections and coverage" comment and sets the foundation for coverage analytics, regulatory traceability, and cross-product learning graph queries.
 
-Source items: `docs/work/todos/20260424-02-smi-walkthrough-feedback.md` item 1.
+Source items: `docs/work/.archive/todos/20260424-02-smi-walkthrough-feedback.md` item 1.
 
 ## In scope
 
@@ -205,7 +205,7 @@ Cited by (6)
 
 ## References
 
-- `docs/work/todos/20260424-02-smi-walkthrough-feedback.md` item 1
+- `docs/work/.archive/todos/20260424-02-smi-walkthrough-feedback.md` item 1
 - `docs/work/handoffs/20260424-session-state-smi-walkthrough.md` locked decision: polymorphic, one schema
 - `docs/work-packages/card-page-and-cross-references/spec.md` public card page renders citations
 - `course/knowledge/graph-index.md` knowledge-node taxonomy

@@ -16,7 +16,7 @@ Split the card surface in two: an owner-only detail view with cross-reference co
 
 SMI walkthrough item 4 asked for a way to start a review from the card detail page. The better answer is to split surfaces: `/memory/<id>` stays owner-only (edit, suspend, archive, source, scheduling history, cross-references) and a new `/cards/<id>` is the shareable view (front, back, domain, source, nothing private). The user also asked for cross-references (which sessions, plans, scenarios, and reps include or cite this card) on the owner detail view.
 
-Source items: `docs/work/todos/20260424-02-smi-walkthrough-feedback.md` item 4 (reframed), plus the new cross-ref ask captured in the session handoff.
+Source items: `docs/work/.archive/todos/20260424-02-smi-walkthrough-feedback.md` item 4 (reframed), plus the new cross-ref ask captured in the session handoff.
 
 ## In scope
 
@@ -154,7 +154,7 @@ No edit controls. No scheduling internals. No reveal timing. Just the content.
 
 ## References
 
-- `docs/work/todos/20260424-02-smi-walkthrough-feedback.md` item 4
+- `docs/work/.archive/todos/20260424-02-smi-walkthrough-feedback.md` item 4
 - `docs/work/handoffs/20260424-session-state-smi-walkthrough.md` work package scope summaries + locked decisions
 - `docs/work-packages/spaced-memory-items/spec.md` existing card detail + source semantics
 - `docs/work-packages/content-citations/spec.md` Citations rendered on the public page

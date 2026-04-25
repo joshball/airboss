@@ -16,8 +16,12 @@ import {
 	FeedbackCommentRequiredError,
 	fsrsPreviewAll,
 	getReplacementCard,
+	getReviewedCardIdsInSession,
 	getUnresolvedReEntrySnooze,
+	jumpToIndex,
 	NoReviewToUndoError,
+	ReviewSessionJumpOutOfRangeError,
+	ReviewSessionNotActiveError,
 	ReviewSessionNotFoundError,
 	type ReviewSessionState,
 	removeCard,
@@ -94,6 +98,14 @@ export const load: PageServerLoad = async (event) => {
 		}
 	}
 
+	// Jump-to-card status: any card with at least one review row stamped
+	// with this session id is `rated`; everything else is `pending`. The
+	// dropdown overrides the `current` slot to "Current" client-side.
+	const ratedCardIds = await getReviewedCardIdsInSession(state.session.id, user.id);
+	const ratedSet = new Set(ratedCardIds);
+	const cardStatuses = state.session.cardIdList.map((id) => (ratedSet.has(id) ? 'rated' : 'pending'));
+	const currentIndex = state.session.currentIndex;
+
 	return {
 		sessionId: state.session.id,
 		position: state.position,
@@ -104,6 +116,8 @@ export const load: PageServerLoad = async (event) => {
 		nowMs: now.getTime(),
 		reEntryBanner,
 		previewDueAtMs,
+		currentIndex,
+		cardStatuses,
 		currentCard: state.currentCard
 			? {
 					id: state.currentCard.id,
@@ -180,6 +194,42 @@ export const actions: Actions = {
 				err instanceof Error ? err : undefined,
 			);
 			return fail(500, { success: false as const, cardId, error: 'Could not save review' });
+		}
+	},
+	jumpTo: async (event) => {
+		const user = requireAuth(event);
+		const { params, request, locals } = event;
+
+		const form = await request.formData();
+		const indexRaw = form.get('index');
+		const index = Number(indexRaw);
+		if (!Number.isInteger(index) || index < 0) {
+			return fail(400, { error: 'index must be a non-negative integer' });
+		}
+
+		try {
+			const updated = await jumpToIndex({ sessionId: params.sessionId, userId: user.id, index });
+			return {
+				success: true as const,
+				intent: 'jumpTo' as const,
+				currentIndex: updated.currentIndex,
+			};
+		} catch (err) {
+			if (err instanceof ReviewSessionJumpOutOfRangeError) {
+				return fail(400, { error: 'That card is not in this session.' });
+			}
+			if (err instanceof ReviewSessionNotActiveError) {
+				return fail(409, { error: 'Cannot jump in a completed or abandoned session.' });
+			}
+			if (err instanceof ReviewSessionNotFoundError) {
+				error(404, { message: 'Review session not found' });
+			}
+			log.error(
+				'jumpToIndex threw',
+				{ requestId: locals.requestId, userId: user.id, metadata: { sessionId: params.sessionId, index } },
+				err instanceof Error ? err : undefined,
+			);
+			return fail(500, { error: 'Could not jump to that card' });
 		}
 	},
 	undoReview: async (event) => {

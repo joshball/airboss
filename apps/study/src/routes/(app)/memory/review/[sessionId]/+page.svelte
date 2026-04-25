@@ -23,6 +23,7 @@ import {
 } from '@ab/constants';
 import PageHelp from '@ab/help/ui/PageHelp.svelte';
 import InfoTip from '@ab/ui/components/InfoTip.svelte';
+import JumpToCardPopover, { type JumpCardStatus } from '@ab/ui/components/JumpToCardPopover.svelte';
 import KbdHint from '@ab/ui/components/KbdHint.svelte';
 import SharePopover from '@ab/ui/components/SharePopover.svelte';
 import SnoozeReasonPopover from '@ab/ui/components/SnoozeReasonPopover.svelte';
@@ -58,6 +59,8 @@ const isComplete = $derived(data.isComplete);
 const reEntryBanner = $derived(data.reEntryBanner);
 const previewDueAtMs = $derived(data.previewDueAtMs);
 const nowMs = $derived(data.nowMs);
+const cardStatuses = $derived<readonly JumpCardStatus[]>(data.cardStatuses as readonly JumpCardStatus[]);
+const currentIndex = $derived(data.currentIndex);
 
 // svelte-ignore state_referenced_locally
 let phase = $state<ReviewPhase>(isComplete || !current ? REVIEW_PHASES.COMPLETE : REVIEW_PHASES.FRONT);
@@ -70,6 +73,7 @@ let pendingUndo = $state<PendingUndo | null>(null);
 let undoTimer: ReturnType<typeof setTimeout> | null = null;
 let undoing = $state(false);
 
+let jumpOpen = $state(false);
 let snoozeOpen = $state(false);
 let snoozeInitialReason = $state<SnoozeReason | undefined>(undefined);
 let snoozeFocusComment = $state(false);
@@ -223,7 +227,7 @@ function onKeydown(e: KeyboardEvent) {
 	const target = e.target as HTMLElement | null;
 	if (target?.isContentEditable) return;
 	if (target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement) return;
-	if (snoozeOpen || shareOpen) return;
+	if (snoozeOpen || shareOpen || jumpOpen) return;
 
 	if (pendingUndo && !undoing) {
 		const isUndoChord = (e.key === 'z' || e.key === 'Z') && (e.metaKey || e.ctrlKey);
@@ -298,6 +302,34 @@ function openShare() {
 
 function closeShare() {
 	shareOpen = false;
+}
+
+function openJump() {
+	jumpOpen = true;
+}
+
+function closeJump() {
+	jumpOpen = false;
+}
+
+async function handleJumpPick(index: number) {
+	if (index === currentIndex) return;
+	const formData = new FormData();
+	formData.set('index', String(index));
+	try {
+		const res = await fetch('?/jumpTo', {
+			method: 'POST',
+			headers: { 'x-sveltekit-action': 'true' },
+			body: formData,
+		});
+		if (!res.ok) {
+			submitError = 'Could not jump to that card. Try again.';
+			return;
+		}
+		await invalidateAll();
+	} catch {
+		submitError = 'Network error jumping. Try again.';
+	}
 }
 
 function handleShareCopy(_url: string) {
@@ -433,10 +465,20 @@ async function submitFeedbackForm(event: SubmitEvent) {
 	{:else}
 		<header class="hd">
 			<div class="counter-row">
-				<span class="counter">
-					Session {position} of {totalCards}
+				<button
+					type="button"
+					class="counter counter-trigger"
+					onclick={openJump}
+					aria-haspopup="dialog"
+					aria-expanded={jumpOpen}
+					aria-label={`Card ${position} of ${totalCards}. Open jump menu.`}
+				>
+					<span class="counter-line">
+						Card {position} of {totalCards}
+						<span class="counter-caret" aria-hidden="true">&#9662;</span>
+					</span>
 					<span class="counter-sub">started {formatStartedAt(data.startedAt)}</span>
-				</span>
+				</button>
 				<PageHelp pageId="memory-review" />
 			</div>
 			<div class="hd-right">
@@ -674,6 +716,15 @@ async function submitFeedbackForm(event: SubmitEvent) {
 		{/if}
 	{/if}
 
+	<JumpToCardPopover
+		bind:open={jumpOpen}
+		totalCards={totalCards}
+		currentIndex={currentIndex}
+		statuses={cardStatuses}
+		onPick={handleJumpPick}
+		onClose={closeJump}
+	/>
+
 	<SnoozeReasonPopover
 		bind:open={snoozeOpen}
 		initialReason={snoozeInitialReason}
@@ -864,6 +915,43 @@ async function submitFeedbackForm(event: SubmitEvent) {
 		display: inline-flex;
 		flex-direction: column;
 		line-height: 1.2;
+	}
+
+	.counter-trigger {
+		background: transparent;
+		border: 1px solid transparent;
+		color: var(--ink-subtle);
+		padding: var(--space-2xs) var(--space-sm);
+		border-radius: var(--radius-sm);
+		cursor: pointer;
+		text-align: left;
+		font: inherit;
+		font-size: var(--font-size-sm);
+		font-weight: 600;
+		letter-spacing: var(--letter-spacing-wide);
+		text-transform: uppercase;
+	}
+
+	.counter-trigger:hover {
+		background: var(--surface-sunken);
+		color: var(--ink-body);
+	}
+
+	.counter-trigger:focus-visible {
+		outline: none;
+		box-shadow: 0 0 0 3px var(--focus-ring);
+		border-color: var(--action-default-edge);
+	}
+
+	.counter-line {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-2xs);
+	}
+
+	.counter-caret {
+		font-size: var(--font-size-xs);
+		color: var(--ink-faint);
 	}
 
 	.counter-sub {

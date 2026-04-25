@@ -16,7 +16,7 @@ Overhaul the memory review screen so confidence, rating, and undo all feel like 
 
 SMI walkthrough items 7, 8, 9, 12, 13, 16 all point at the same root cause: the review screen was built keyboard-first and the visual layer lags behind. Confidence looks like a prompt, rating buttons hide their scheduling consequence, and the undo toast shifts layout. Net effect is the review session feels mechanical rather than deliberate.
 
-Source items: `docs/work/todos/20260424-02-smi-walkthrough-feedback.md` items 7, 8, 9, 12, 13, 16.
+Source items: `docs/work/.archive/todos/20260424-02-smi-walkthrough-feedback.md` items 7, 8, 9, 12, 13, 16.
 
 ## In scope
 
@@ -135,7 +135,7 @@ All changes land together. Internal order inside the PR:
 
 ## References
 
-- `docs/work/todos/20260424-02-smi-walkthrough-feedback.md` items 7, 8, 9, 12, 13, 16
+- `docs/work/.archive/todos/20260424-02-smi-walkthrough-feedback.md` items 7, 8, 9, 12, 13, 16
 - `docs/work/handoffs/20260424-session-state-smi-walkthrough.md` work package scope summaries
 - `docs/work-packages/spaced-memory-items/spec.md` existing review flow baseline
 - `libs/constants/src/study.ts` existing `REVIEW_RATINGS` constant
