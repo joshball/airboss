@@ -9,7 +9,16 @@
  *   bun run db <command> --help     # detailed help for one command
  */
 
-import { DEV_DB, DEV_DB_HOST_PATTERN, DEV_DB_URL, ENV_VARS, isProd, PORTS, SCHEMAS } from '@ab/constants';
+import {
+	DEV_DB,
+	DEV_DB_HOST_PATTERN,
+	DEV_DB_URL,
+	DEV_SEED_ORIGIN_TAG,
+	ENV_VARS,
+	isProd,
+	PORTS,
+	SCHEMAS,
+} from '@ab/constants';
 
 const CONTAINER = 'airboss-db';
 const DB_URL = process.env[ENV_VARS.DATABASE_URL] ?? DEV_DB_URL;
@@ -125,10 +134,28 @@ async function doResetStudy(): Promise<void> {
 }
 
 async function doSeed(): Promise<void> {
-	assertLocalDb();
+	// seed-all.ts owns the production guard now; do not double-gate.
 	const seedArgs = ['bun', 'scripts/db/seed-all.ts'];
 	if (subTarget) seedArgs.push(subTarget);
+	// Forward bypass flags so the dev can opt into a non-allowlisted host.
+	for (const f of passthroughFlags) seedArgs.push(f);
 	await run(seedArgs);
+}
+
+async function doSeedRemove(): Promise<void> {
+	const args = ['bun', 'scripts/db/seed-remove.ts'];
+	// Default to the canonical tag if --origin isn't passed.
+	const hasOriginFlag = passthroughFlags.some((f) => f === '--origin' || f.startsWith('--origin='));
+	if (hasOriginFlag) {
+		for (const f of passthroughFlags) args.push(f);
+	} else {
+		args.push('--origin', DEV_SEED_ORIGIN_TAG);
+	}
+	await run(args);
+}
+
+async function doSeedCheck(): Promise<void> {
+	await run(['bun', 'scripts/db/seed-check.ts']);
 }
 
 async function doBuild(): Promise<void> {
@@ -243,8 +270,8 @@ const COMMAND_HELP: Record<string, CommandHelp> = {
 		how: 'Reads `drizzle.config.ts`, connects to DB_URL, serves studio on its default port (drizzle decides).',
 	},
 	seed: {
-		summary: 'Run seed orchestrator (users + knowledge + cards by default)',
-		what: 'Runs `scripts/db/seed-all.ts`. With no sub-target, executes all three phases in order: (1) dev users via better-auth, (2) knowledge graph build from `course/knowledge/**/node.md`, (3) course-sourced study.card rows for every DEV_ACCOUNTS user. Sub-targets run only that phase.\n\n  bun run db seed            # all three phases\n  bun run db seed users      # only better-auth dev users\n  bun run db seed knowledge  # only knowledge_node + knowledge_edge from markdown\n  bun run db seed cards      # only course-sourced study.card rows',
+		summary: 'Run seed orchestrator (users + knowledge + cards + abby by default)',
+		what: 'Runs `scripts/db/seed-all.ts`. With no sub-target, executes all phases in order: (1) dev users via better-auth, (2) knowledge graph build from `course/knowledge/**/node.md`, (3) course-sourced study.card rows for every DEV_ACCOUNTS user, (4) Abby (canonical dev-seed test learner) plus her personal cards / scenarios / plan / sessions / reviews. Sub-targets run only that phase.\n\n  bun run db seed            # all phases\n  bun run db seed users      # only better-auth dev users\n  bun run db seed knowledge  # only knowledge_node + knowledge_edge from markdown\n  bun run db seed cards      # only course-sourced study.card rows\n  bun run db seed abby       # only Abby + her chained content',
 		why: 'Single command to get a freshly-pushed DB to a usable state for dev. Every phase is idempotent -- safe to re-run at any time.',
 		how: 'The orchestrator (scripts/db/seed-all.ts) shells out to `scripts/db/seed-dev-users.ts` and `scripts/build-knowledge-index.ts`, and imports `seedCardsForUser` from `scripts/db/seed-cards.ts` once per DEV_ACCOUNTS entry.',
 		links: [
@@ -256,6 +283,20 @@ const COMMAND_HELP: Record<string, CommandHelp> = {
 			'docs/decisions/011-knowledge-graph-learning-system/decision.md',
 			'docs/work-packages/knowledge-graph/spec.md',
 		],
+	},
+	'seed:remove': {
+		summary: 'Remove every dev-seeded row tagged with a given seed-origin marker',
+		what: `Runs \`scripts/db/seed-remove.ts --origin <tag>\`. Atomically deletes (or, for \`bauth_user\`, untags) every row whose \`seed_origin\` column matches the given tag. FK order is enforced. Default tag (when no flag is passed) is the canonical \`${DEV_SEED_ORIGIN_TAG}\`.\n\n  bun run db seed:remove                                       # canonical tag\n  bun run db seed:remove --origin some-other-tag`,
+		why: 'Lets a developer wipe synthetic dev content without rebuilding the whole database. Also the cleanup tool when a stray seed leaks into a non-dev DB; works in any environment so leaks can always be cleaned up.',
+		how: 'Single transaction over the seeded tables in FK order. Each table is deleted by `seed_origin = <tag>` (or, for bauth_user, by `address->>seed_origin = <tag>` and the marker is stripped via jsonb subtraction so other data attached to the user survives).',
+		links: ['scripts/db/seed-remove.ts', 'scripts/db/seed-tables.ts', 'libs/constants/src/dev.ts'],
+	},
+	'seed:check': {
+		summary: 'Print a per-table count of rows that still carry a seed_origin marker',
+		what: 'Runs `scripts/db/seed-check.ts`. For every seeded table, lists how many rows have a non-NULL `seed_origin`, grouped by tag. Exits 0 if zero, exits 1 if any seeded rows remain. CI-safe.',
+		why: '"Did the seed actually wipe?" / "What got left behind?" -- one command answers it. Pair with `seed:remove` until check is clean.',
+		how: 'Read-only query loop over the seeded tables. Reads `seed_origin` directly except on `bauth_user`, which uses `address->>seed_origin` since better-auth owns the table.',
+		links: ['scripts/db/seed-check.ts', 'scripts/db/seed-tables.ts'],
 	},
 	reset: {
 		summary: 'DROP + recreate DB, push schema, run full seed',
@@ -336,7 +377,7 @@ const COMMAND_GROUPS: readonly CommandGroup[] = [
 	{ label: 'Inspection', commands: ['status', 'psql', 'studio'] },
 	{ label: 'Container lifecycle', commands: ['up', 'down'] },
 	{ label: 'Schema', commands: ['push', 'generate', 'migrate'] },
-	{ label: 'Data + content', commands: ['seed', 'reset', 'reset-study'] },
+	{ label: 'Data + content', commands: ['seed', 'seed:check', 'seed:remove', 'reset', 'reset-study'] },
 	{ label: 'Knowledge authoring', commands: ['new', 'build'] },
 	{ label: 'Utility', commands: ['help'] },
 ];
@@ -377,6 +418,8 @@ const handlers: Record<string, () => Promise<void> | void> = {
 	migrate: () => run(['bunx', 'drizzle-kit', 'migrate']),
 	studio: () => run(['bunx', 'drizzle-kit', 'studio']),
 	seed: doSeed,
+	'seed:remove': doSeedRemove,
+	'seed:check': doSeedCheck,
 	psql: () => run(['docker', 'exec', '-it', CONTAINER, 'psql', '-U', DB_USER, '-d', DB_NAME]),
 	reset: doReset,
 	'reset-study': doResetStudy,
