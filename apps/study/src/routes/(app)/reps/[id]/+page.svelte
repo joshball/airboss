@@ -5,18 +5,36 @@
  * scenario prompt, domain, last-5 attempts, and the canonical entry
  * points for starting a new attempt (always through a session per ADR 012)
  * or browsing all reps.
+ *
+ * Citations: a "Citations" panel mounts the shared `CitationPicker`
+ * (Bundle C) so authors can attach regulations, AC paragraphs, knowledge
+ * nodes, or external references. Mirrors the card-editor wiring at
+ * `/memory/<id>`. Add/remove submit via SvelteKit form actions and trigger
+ * `invalidateAll()` to refresh the chips list without a navigation.
  */
 
-import { DIFFICULTY_LABELS, type Difficulty, domainLabel as formatDomain, ROUTES } from '@ab/constants';
+import {
+	CITATION_TARGET_LABELS,
+	CITATION_TARGET_TYPES,
+	type CitationTargetType,
+	DIFFICULTY_LABELS,
+	type Difficulty,
+	domainLabel as formatDomain,
+	ROUTES,
+} from '@ab/constants';
 import PageHelp from '@ab/help/ui/PageHelp.svelte';
 import Button from '@ab/ui/components/Button.svelte';
+import CitationChips, { type CitationChipItem } from '@ab/ui/components/CitationChips.svelte';
+import CitationPicker, { type CitationPickerSelection } from '@ab/ui/components/CitationPicker.svelte';
 import { humanize } from '@ab/utils';
+import { invalidateAll } from '$app/navigation';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
 
 const scenario = $derived(data.scenario);
 const attempts = $derived(data.recentAttempts);
+const citations = $derived(data.citations);
 
 const domainLabel = $derived(formatDomain(scenario.domain));
 const difficultyLabel = $derived(
@@ -26,6 +44,57 @@ const difficultyLabel = $derived(
 const attemptedCount = $derived(attempts.length);
 const correctCount = $derived(attempts.filter((a) => a.isCorrect === true).length);
 const accuracyPct = $derived(attemptedCount === 0 ? null : Math.round((correctCount / attemptedCount) * 100));
+
+// Citation state mirrors the card-editor flow at /memory/<id>. The picker
+// is controlled via `bind:open`; `onSelect` posts to `?/addCitation` and we
+// invalidateAll on success so the server load refreshes the chips list.
+let citationPickerOpen = $state(false);
+let citationError = $state<string | null>(null);
+
+const citationItems = $derived<CitationChipItem[]>(
+	citations.map((c) => ({
+		id: c.citation.id,
+		typeLabel: targetTypeLabel(c.target.type),
+		label: c.target.label,
+		href: c.target.href ?? null,
+		context: c.citation.citationContext,
+	})),
+);
+const citationRemoveAction = $derived(`${ROUTES.REP_DETAIL(scenario.id)}?/removeCitation`);
+const citationTargets = [
+	CITATION_TARGET_TYPES.REGULATION_NODE,
+	CITATION_TARGET_TYPES.AC_REFERENCE,
+	CITATION_TARGET_TYPES.KNOWLEDGE_NODE,
+	CITATION_TARGET_TYPES.EXTERNAL_REF,
+];
+
+function targetTypeLabel(t: CitationTargetType): string {
+	return CITATION_TARGET_LABELS[t];
+}
+
+async function handleCitationSelect(selection: CitationPickerSelection): Promise<void> {
+	citationError = null;
+	const body = new FormData();
+	body.set('targetType', selection.targetType);
+	body.set('targetId', selection.targetId);
+	body.set('note', selection.note);
+	const res = await fetch(`${ROUTES.REP_DETAIL(scenario.id)}?/addCitation`, {
+		method: 'POST',
+		body,
+		headers: { accept: 'application/json' },
+	});
+	if (!res.ok) {
+		try {
+			const payload = await res.json();
+			const message = payload?.data?.fieldErrors?._ ?? 'Could not add citation.';
+			throw new Error(message);
+		} catch (err) {
+			throw err instanceof Error ? err : new Error('Could not add citation.');
+		}
+	}
+	citationPickerOpen = false;
+	await invalidateAll();
+}
 
 function formatDate(d: Date | null): string {
 	if (!d) return '';
@@ -77,6 +146,35 @@ function formatMs(ms: number | null): string {
 		<h2>Situation</h2>
 		<p class="situation">{scenario.situation}</p>
 	</article>
+
+	<article class="citations">
+		<div class="citations-header">
+			<h2>Citations</h2>
+			<button type="button" class="btn-add" onclick={() => (citationPickerOpen = true)}>+ Cite a reference</button>
+		</div>
+		{#if citationError}
+			<div class="error" role="alert">{citationError}</div>
+		{/if}
+		{#if citations.length === 0}
+			<p class="muted">No citations yet. Link a regulation, AC, knowledge node, or external reference.</p>
+		{:else}
+			<CitationChips items={citationItems} editable removeAction={citationRemoveAction} />
+		{/if}
+	</article>
+
+	<CitationPicker
+		bind:open={citationPickerOpen}
+		targetTypes={citationTargets}
+		onSelect={async (selection) => {
+			try {
+				await handleCitationSelect(selection);
+			} catch (err) {
+				citationError = err instanceof Error ? err.message : 'Could not add citation.';
+				throw err;
+			}
+		}}
+		onCancel={() => (citationPickerOpen = false)}
+	/>
 
 	<article class="stats">
 		<h2>Last 5 attempts</h2>
@@ -165,7 +263,8 @@ function formatMs(ms: number | null): string {
 	}
 
 	.prompt,
-	.stats {
+	.stats,
+	.citations {
 		background: var(--surface-raised);
 		border: 1px solid var(--edge-default);
 		border-radius: var(--radius-md);
@@ -182,6 +281,45 @@ function formatMs(ms: number | null): string {
 		text-transform: uppercase;
 		letter-spacing: var(--letter-spacing-caps);
 		font-weight: var(--type-heading-3-weight);
+	}
+
+	.citations-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--space-md);
+	}
+
+	.btn-add {
+		flex: 0 0 auto;
+		padding: var(--space-sm) var(--space-lg);
+		font-size: var(--type-definition-body-size);
+		font-weight: 600;
+		border-radius: var(--radius-md);
+		border: 1px solid var(--edge-strong);
+		background: var(--surface-sunken);
+		color: var(--ink-body);
+		cursor: pointer;
+		transition: background var(--motion-fast), border-color var(--motion-fast);
+	}
+
+	.btn-add:hover {
+		background: var(--edge-default);
+	}
+
+	.btn-add:focus-visible {
+		outline: none;
+		border-color: var(--action-default);
+		box-shadow: var(--focus-ring-shadow);
+	}
+
+	.error {
+		background: var(--action-hazard-wash);
+		border: 1px solid var(--action-hazard-edge);
+		color: var(--action-hazard-active);
+		padding: var(--space-sm) var(--space-md);
+		border-radius: var(--radius-md);
+		font-size: var(--type-ui-label-size);
 	}
 
 	.situation {
