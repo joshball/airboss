@@ -462,8 +462,133 @@ describe('static block -- ASI sense reverses (B5.asi)', () => {
 	});
 });
 
+describe('vacuum failure -- AI pitch + roll drift (B5.ai)', () => {
+	function aiAfter(args: { driftDegPerSec?: number; elapsedSec: number }) {
+		const activation = activateFault(
+			{
+				kind: SIM_FAULT_KINDS.VACUUM_FAILURE,
+				trigger: { kind: SIM_FAULT_TRIGGER_KINDS.TIME_SECONDS, at: 0 },
+				params: args.driftDegPerSec === undefined ? undefined : { vacuumDriftDegPerSec: args.driftDegPerSec },
+			},
+			0,
+		);
+		return applyFaults({
+			truth: makeTruth({ t: args.elapsedSec, pitch: 0, roll: 0, onGround: false }),
+			activations: [activation],
+			nominalBusVolts: NOMINAL_VOLTS,
+		});
+	}
+
+	it('reads truth at the moment of activation', () => {
+		const display = aiAfter({ elapsedSec: 0 });
+		expect(display.pitchIndicated).toBeCloseTo(0, 5);
+		expect(display.rollIndicated).toBeCloseTo(0, 5);
+	});
+
+	it('drifts pitch nose-up at the configured rate', () => {
+		// 30 sec at 1 deg/sec -> 30 deg
+		const display = aiAfter({ elapsedSec: 30 });
+		expect((display.pitchIndicated * 180) / Math.PI).toBeCloseTo(30, 1);
+	});
+
+	it('drifts roll at half the pitch rate', () => {
+		const display = aiAfter({ elapsedSec: 30 });
+		expect((display.rollIndicated * 180) / Math.PI).toBeCloseTo(15, 1);
+	});
+
+	it('respects scenario-overridden drift rate', () => {
+		const display = aiAfter({ driftDegPerSec: 2.5, elapsedSec: 10 });
+		expect((display.pitchIndicated * 180) / Math.PI).toBeCloseTo(25, 1);
+	});
+
+	it('adds the drift on top of truth pitch (does not zero it)', () => {
+		const activation = activateFault(
+			{
+				kind: SIM_FAULT_KINDS.VACUUM_FAILURE,
+				trigger: { kind: SIM_FAULT_TRIGGER_KINDS.TIME_SECONDS, at: 0 },
+			},
+			0,
+		);
+		const display = applyFaults({
+			truth: makeTruth({ t: 10, pitch: 0.1, roll: -0.05, onGround: false }),
+			activations: [activation],
+			nominalBusVolts: NOMINAL_VOLTS,
+		});
+		// 10 sec at 1 deg/sec = 0.1745 rad pitch drift; roll drift = 0.0873 rad.
+		expect(display.pitchIndicated).toBeCloseTo(0.1 + (10 * Math.PI) / 180, 3);
+		expect(display.rollIndicated).toBeCloseTo(-0.05 + (5 * Math.PI) / 180, 3);
+	});
+});
+
+describe('gyro tumble -- AI pegs/cycles to limits (B5.ai)', () => {
+	it('cycles pitch + roll out of phase when gyroTumbleContinues = true', () => {
+		const activation = activateFault(
+			{
+				kind: SIM_FAULT_KINDS.GYRO_TUMBLE,
+				trigger: { kind: SIM_FAULT_TRIGGER_KINDS.TIME_SECONDS, at: 0 },
+				params: { gyroTumbleContinues: true },
+			},
+			0,
+		);
+		// At t=0: phase=0 -> pitch=sin(0)=0, roll=cos(0)=1 (full deflection)
+		const t0 = applyFaults({
+			truth: makeTruth({ t: 0, onGround: false }),
+			activations: [activation],
+			nominalBusVolts: NOMINAL_VOLTS,
+		});
+		expect(t0.pitchIndicated).toBeCloseTo(0, 5);
+		expect((t0.rollIndicated * 180) / Math.PI).toBeCloseTo(90, 1);
+
+		// At t=1.5 (quarter period): phase=pi/2 -> pitch=1, roll=0
+		const t1 = applyFaults({
+			truth: makeTruth({ t: 1.5, onGround: false }),
+			activations: [activation],
+			nominalBusVolts: NOMINAL_VOLTS,
+		});
+		expect((t1.pitchIndicated * 180) / Math.PI).toBeCloseTo(90, 1);
+		expect(t1.rollIndicated).toBeCloseTo(0, 2);
+	});
+
+	it('freezes at limits when gyroTumbleContinues = false', () => {
+		const activation = activateFault(
+			{
+				kind: SIM_FAULT_KINDS.GYRO_TUMBLE,
+				trigger: { kind: SIM_FAULT_TRIGGER_KINDS.TIME_SECONDS, at: 0 },
+				params: { gyroTumbleContinues: false },
+			},
+			0,
+		);
+		const display = applyFaults({
+			truth: makeTruth({ t: 30, pitch: 0.5, roll: -0.3, onGround: false }),
+			activations: [activation],
+			nominalBusVolts: NOMINAL_VOLTS,
+		});
+		expect((display.pitchIndicated * 180) / Math.PI).toBeCloseTo(90, 1);
+		expect((display.rollIndicated * 180) / Math.PI).toBeCloseTo(-90, 1);
+	});
+
+	it('overrides truth attitude entirely once tumbled', () => {
+		const activation = activateFault(
+			{
+				kind: SIM_FAULT_KINDS.GYRO_TUMBLE,
+				trigger: { kind: SIM_FAULT_TRIGGER_KINDS.TIME_SECONDS, at: 0 },
+				params: { gyroTumbleContinues: false },
+			},
+			0,
+		);
+		// Truth shows level flight; tumble pegs anyway.
+		const display = applyFaults({
+			truth: makeTruth({ t: 5, pitch: 0, roll: 0, onGround: false }),
+			activations: [activation],
+			nominalBusVolts: NOMINAL_VOLTS,
+		});
+		expect(Math.abs(display.pitchIndicated)).toBeGreaterThan(1);
+		expect(Math.abs(display.rollIndicated)).toBeGreaterThan(1);
+	});
+});
+
 describe('applyFaults -- multi-fault composition', () => {
-	it('composes alternator + vacuum without losing either', () => {
+	it('composes alternator + vacuum: bus volts decay AND AI drifts', () => {
 		const truth = makeTruth({ t: 30 });
 		const alternator = activateFault(
 			{
@@ -484,10 +609,9 @@ describe('applyFaults -- multi-fault composition', () => {
 			activations: [alternator, vacuum],
 			nominalBusVolts: NOMINAL_VOLTS,
 		});
-		// Alternator decay is the only behavior wired in Phase 3; vacuum
-		// is identity until B5.{ai,hi} fan-out. So the multi-fault
-		// composition test verifies the alternator math survives the
-		// presence of a vacuum activation.
+		// Both effects survive -- alternator decays bus volts to half,
+		// vacuum drifts pitch by 30 deg after 30 sec at default 1 deg/sec.
 		expect(display.electricBusVolts).toBeCloseTo(NOMINAL_VOLTS / 2, 5);
+		expect((display.pitchIndicated * 180) / Math.PI).toBeCloseTo(30, 1);
 	});
 });
