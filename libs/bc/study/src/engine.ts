@@ -24,8 +24,8 @@ import {
 	DEPTH_PREFERENCES,
 	type DepthPreference,
 	type Domain,
+	ENGINE_SCORING,
 	MODE_WEIGHTS,
-	MS_PER_WEEK,
 	RELEVANCE_PRIORITIES,
 	REVIEW_RATINGS,
 	type RelevancePriority,
@@ -250,38 +250,50 @@ function scoreContinueCard(card: EngineCardCandidate, filters: EnginePoolFilters
 	const lastIdx = filters.recentDomains.indexOf(card.domain);
 	if (lastIdx === -1) return 0;
 	// Last session == index 0, second-to-last == index 1. Earlier = lower weight.
-	const domainRecencyWeight = lastIdx === 0 ? 1.0 : 0.5;
+	const domainRecencyWeight =
+		lastIdx === 0 ? ENGINE_SCORING.CONTINUE.LAST_SESSION_DOMAIN : ENGINE_SCORING.CONTINUE.EARLIER_RECENT_DOMAIN;
 	const dueMs = Math.max(0, now.getTime() - card.dueAt.getTime());
-	const dueUrgency = Math.min(1, dueMs / MS_PER_WEEK) + Math.min(1, card.overdueRatio);
-	return domainRecencyWeight * 0.6 + Math.min(1, dueUrgency) * 0.4;
+	const dueUrgency =
+		Math.min(1, dueMs / ENGINE_SCORING.WINDOWS.DUE_URGENCY_SATURATION_MS) + Math.min(1, card.overdueRatio);
+	return (
+		domainRecencyWeight * ENGINE_SCORING.CONTINUE.DOMAIN_RECENCY_SHARE +
+		Math.min(1, dueUrgency) * ENGINE_SCORING.CONTINUE.DUE_URGENCY_SHARE
+	);
 }
 
 function scoreContinueRep(rep: EngineRepCandidate, filters: EnginePoolFilters): number {
 	const lastIdx = filters.recentDomains.indexOf(rep.domain);
 	if (lastIdx === -1) return 0;
-	const domainRecencyWeight = lastIdx === 0 ? 1.0 : 0.5;
+	const domainRecencyWeight =
+		lastIdx === 0 ? ENGINE_SCORING.CONTINUE.LAST_SESSION_DOMAIN : ENGINE_SCORING.CONTINUE.EARLIER_RECENT_DOMAIN;
 	// Lower accuracy == more urgent. Clamp to [0, 1].
 	const urgency = Math.min(1, Math.max(0, 1 - rep.accuracyLast5));
-	const recentMiss = rep.lastIncorrectAt ? 0.2 : 0;
-	return domainRecencyWeight * 0.6 + urgency * 0.4 + recentMiss;
+	const recentMiss = rep.lastIncorrectAt ? ENGINE_SCORING.CONTINUE.RECENT_MISS_BONUS : 0;
+	return (
+		domainRecencyWeight * ENGINE_SCORING.CONTINUE.DOMAIN_RECENCY_SHARE +
+		urgency * ENGINE_SCORING.CONTINUE.DUE_URGENCY_SHARE +
+		recentMiss
+	);
 }
 
 /** Strengthen-slice card score. Rewards relearning > rated-Again > overdue. */
 function scoreStrengthenCard(card: EngineCardCandidate, overconfidence: number): number {
 	let base = 0;
-	if (card.state === CARD_STATES.RELEARNING) base += 0.9;
+	if (card.state === CARD_STATES.RELEARNING) base += ENGINE_SCORING.STRENGTHEN.RELEARNING;
 	if (card.lastRating === REVIEW_RATINGS.AGAIN)
-		base += 0.6; // Again
-	else if (card.lastRating === REVIEW_RATINGS.HARD) base += 0.3; // Hard
-	if (card.overdueRatio >= 2) base += 0.4;
-	return base + overconfidence * 0.3;
+		base += ENGINE_SCORING.STRENGTHEN.RATED_AGAIN; // Again
+	else if (card.lastRating === REVIEW_RATINGS.HARD) base += ENGINE_SCORING.STRENGTHEN.RATED_HARD; // Hard
+	if (card.overdueRatio >= ENGINE_SCORING.THRESHOLDS.HEAVILY_OVERDUE_RATIO)
+		base += ENGINE_SCORING.STRENGTHEN.HEAVILY_OVERDUE;
+	return base + overconfidence * ENGINE_SCORING.STRENGTHEN.OVERCONFIDENCE_FACTOR;
 }
 
 function scoreStrengthenRep(rep: EngineRepCandidate, overconfidence: number): number {
 	let base = 0;
-	if (rep.accuracyLast5 < 0.6) base += 0.6;
-	if (rep.lastIncorrectAt) base += 0.4;
-	return base + overconfidence * 0.3;
+	if (rep.accuracyLast5 < ENGINE_SCORING.THRESHOLDS.REP_LOW_ACCURACY)
+		base += ENGINE_SCORING.STRENGTHEN.REP_LOW_ACCURACY;
+	if (rep.lastIncorrectAt) base += ENGINE_SCORING.STRENGTHEN.REP_RECENT_MISS;
+	return base + overconfidence * ENGINE_SCORING.STRENGTHEN.OVERCONFIDENCE_FACTOR;
 }
 
 function scoreExpandNode(
@@ -290,9 +302,14 @@ function scoreExpandNode(
 	depthPreference: DepthPreference,
 ): number {
 	const priorityWeight =
-		node.priority === RELEVANCE_PRIORITIES.CORE ? 1.0 : node.priority === RELEVANCE_PRIORITIES.SUPPORTING ? 0.6 : 0.2;
-	const focusMatch = filters.focusFilter.includes(node.domain) ? 0.4 : 0;
-	const bloomMatch = node.bloomDepth !== null && node.bloomDepth === depthPreference ? 0.2 : 0;
+		node.priority === RELEVANCE_PRIORITIES.CORE
+			? ENGINE_SCORING.EXPAND.PRIORITY_CORE
+			: node.priority === RELEVANCE_PRIORITIES.SUPPORTING
+				? ENGINE_SCORING.EXPAND.PRIORITY_SUPPORTING
+				: ENGINE_SCORING.EXPAND.PRIORITY_ELECTIVE;
+	const focusMatch = filters.focusFilter.includes(node.domain) ? ENGINE_SCORING.EXPAND.FOCUS_DOMAIN_MATCH : 0;
+	const bloomMatch =
+		node.bloomDepth !== null && node.bloomDepth === depthPreference ? ENGINE_SCORING.EXPAND.BLOOM_DEPTH_MATCH : 0;
 	return priorityWeight + focusMatch + bloomMatch;
 }
 
@@ -311,7 +328,8 @@ function diversifyFrequencyScore(domain: string, filters: EnginePoolFilters): nu
  * together.
  */
 function continueCardReason(card: EngineCardCandidate): SessionReasonCode {
-	if (card.overdueRatio >= 1) return SESSION_REASON_CODES.CONTINUE_DUE_IN_DOMAIN;
+	if (card.overdueRatio >= ENGINE_SCORING.THRESHOLDS.CONTINUE_DUE_RATIO)
+		return SESSION_REASON_CODES.CONTINUE_DUE_IN_DOMAIN;
 	return SESSION_REASON_CODES.CONTINUE_RECENT_DOMAIN;
 }
 
@@ -319,12 +337,14 @@ function strengthenCardReason(card: EngineCardCandidate): SessionReasonCode {
 	if (card.state === CARD_STATES.RELEARNING) return SESSION_REASON_CODES.STRENGTHEN_RELEARNING;
 	if (card.lastRating === REVIEW_RATINGS.AGAIN || card.lastRating === REVIEW_RATINGS.HARD)
 		return SESSION_REASON_CODES.STRENGTHEN_RATED_AGAIN;
-	if (card.overdueRatio >= 2) return SESSION_REASON_CODES.STRENGTHEN_OVERDUE;
+	if (card.overdueRatio >= ENGINE_SCORING.THRESHOLDS.HEAVILY_OVERDUE_RATIO)
+		return SESSION_REASON_CODES.STRENGTHEN_OVERDUE;
 	return SESSION_REASON_CODES.STRENGTHEN_RATED_AGAIN;
 }
 
 function strengthenRepReason(rep: EngineRepCandidate): SessionReasonCode {
-	if (rep.accuracyLast5 < 0.6) return SESSION_REASON_CODES.STRENGTHEN_LOW_REP_ACCURACY;
+	if (rep.accuracyLast5 < ENGINE_SCORING.THRESHOLDS.REP_LOW_ACCURACY)
+		return SESSION_REASON_CODES.STRENGTHEN_LOW_REP_ACCURACY;
 	return SESSION_REASON_CODES.STRENGTHEN_MASTERY_DROP;
 }
 
@@ -530,7 +550,9 @@ export async function runEngine(inputs: EngineInputs, now: Date = new Date()): P
 		if (freq > 0) {
 			diversifyPool.push({
 				candidate: n,
-				score: freq + (plan.depthPreference === DEPTH_PREFERENCES.DEEP ? 0.1 : 0),
+				score:
+					freq +
+					(plan.depthPreference === DEPTH_PREFERENCES.DEEP ? ENGINE_SCORING.DIVERSIFY.DEEP_DEPTH_PREFERENCE_BONUS : 0),
 				kind: SESSION_ITEM_KINDS.NODE_START,
 				slice: SESSION_SLICES.DIVERSIFY,
 				reasonCode: SESSION_REASON_CODES.DIVERSIFY_UNUSED_DOMAIN,
@@ -546,7 +568,7 @@ export async function runEngine(inputs: EngineInputs, now: Date = new Date()): P
 		for (const item of pool) {
 			const domain = item.candidate.domain;
 			if (domain && filters.focusFilter.includes(domain)) {
-				item.score += 0.25;
+				item.score += ENGINE_SCORING.DIVERSIFY.CROSS_DOMAIN_APPLY_BONUS;
 			}
 		}
 	}
@@ -732,12 +754,13 @@ function strengthenCardDetail(card: EngineCardCandidate): string | undefined {
 	if (card.state === CARD_STATES.RELEARNING) return 'Relearning state';
 	if (card.lastRating === REVIEW_RATINGS.AGAIN) return 'You rated Again recently';
 	if (card.lastRating === REVIEW_RATINGS.HARD) return 'You rated Hard recently';
-	if (card.overdueRatio >= 2) return `Overdue by ${Math.round(card.overdueRatio)}x scheduled interval`;
+	if (card.overdueRatio >= ENGINE_SCORING.THRESHOLDS.HEAVILY_OVERDUE_RATIO)
+		return `Overdue by ${Math.round(card.overdueRatio)}x scheduled interval`;
 	return undefined;
 }
 
 function strengthenRepDetail(rep: EngineRepCandidate): string | undefined {
-	if (rep.accuracyLast5 < 0.6) {
+	if (rep.accuracyLast5 < ENGINE_SCORING.THRESHOLDS.REP_LOW_ACCURACY) {
 		const pct = Math.round(rep.accuracyLast5 * 100);
 		return `Accuracy ${pct}% over last attempts`;
 	}

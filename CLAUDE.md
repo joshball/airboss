@@ -168,6 +168,7 @@ Feature lifecycle is driven by shared skills:
 - **Drizzle ORM only.** No raw SQL.
 - **Svelte 5 runes only.** No `$:`, no `export let`, no `<slot>`, no Svelte 4 stores (`writable`, `readable`, `$app/stores`). Use `$app/state`.
 - **Discovery-first pedagogy for knowledge nodes.** Lead with WHY. Let the learner derive the answer. Reveal regulations as confirmation of reasoning, not as arbitrary rules. See [ADR 011](docs/decisions/011-knowledge-graph-learning-system/decision.md).
+- **Engine scoring tuning lives in `ENGINE_SCORING`** (`libs/constants/src/engine.ts`). Never inline a numeric literal in `libs/bc/study/src/engine.ts` scoring functions; route through the constant. See ADR 014.
 
 ## Stack
 
