@@ -72,6 +72,13 @@ export interface ReviewSessionCard {
 	stability: number;
 	difficulty: number;
 	dueAt: Date;
+	/**
+	 * Counters needed to feed `fsrsPreviewAll` server-side so the rating
+	 * chicklets can show the next interval per rating. Mirrors `cardState`.
+	 */
+	reviewCount: number;
+	lapseCount: number;
+	lastReview: Date | null;
 	/** Whether the review chrome should prompt for pre-reveal confidence. */
 	promptConfidence: boolean;
 }
@@ -130,6 +137,9 @@ async function loadCardsForSession(
 			stability: row.state.stability,
 			difficulty: row.state.difficulty,
 			dueAt: row.state.dueAt,
+			reviewCount: row.state.reviewCount,
+			lapseCount: row.state.lapseCount,
+			lastReview: row.state.lastReviewedAt ?? null,
 			promptConfidence: options.promptConfidence,
 		});
 	}
@@ -247,6 +257,90 @@ export async function advanceReviewSession(
 				lastActivityAt: now,
 				status: reachedEnd ? REVIEW_SESSION_STATUSES.COMPLETED : REVIEW_SESSION_STATUSES.ACTIVE,
 				completedAt: reachedEnd ? now : null,
+			})
+			.where(and(eq(memoryReviewSession.id, sessionId), eq(memoryReviewSession.userId, userId)))
+			.returning();
+		return updated;
+	});
+}
+
+/**
+ * Drop the card at the current index from the session's frozen list. The
+ * `current_index` stays put because the next card slid into its slot. Used
+ * by the snooze flow when the learner pushes a card out of the queue: the
+ * deck shrinks rather than the cursor advancing past empty space.
+ *
+ * Marks the session COMPLETED when the shrink leaves no remaining cards.
+ */
+export async function shrinkSessionAtIndex(
+	sessionId: string,
+	userId: string,
+	db: Db = defaultDb,
+	now: Date = new Date(),
+): Promise<MemoryReviewSessionRow> {
+	return await db.transaction(async (tx) => {
+		const [row] = await tx
+			.select()
+			.from(memoryReviewSession)
+			.where(and(eq(memoryReviewSession.id, sessionId), eq(memoryReviewSession.userId, userId)))
+			.for('update')
+			.limit(1);
+		if (!row) throw new ReviewSessionNotFoundError(sessionId, userId);
+		if (row.status === REVIEW_SESSION_STATUSES.COMPLETED) return row;
+
+		const idx = row.currentIndex;
+		if (idx >= row.cardIdList.length) return row;
+
+		const nextList = [...row.cardIdList.slice(0, idx), ...row.cardIdList.slice(idx + 1)];
+		const reachedEnd = idx >= nextList.length;
+
+		const [updated] = await tx
+			.update(memoryReviewSession)
+			.set({
+				cardIdList: nextList,
+				lastActivityAt: now,
+				status: reachedEnd ? REVIEW_SESSION_STATUSES.COMPLETED : REVIEW_SESSION_STATUSES.ACTIVE,
+				completedAt: reachedEnd ? now : null,
+			})
+			.where(and(eq(memoryReviewSession.id, sessionId), eq(memoryReviewSession.userId, userId)))
+			.returning();
+		return updated;
+	});
+}
+
+/**
+ * Replace the card at the current index with a different card id. The
+ * `current_index` stays put so the learner sees the replacement immediately.
+ * Used by the snooze REMOVE flow paired with `getReplacementCard`.
+ */
+export async function replaceSessionAtIndex(
+	sessionId: string,
+	userId: string,
+	replacementCardId: string,
+	db: Db = defaultDb,
+	now: Date = new Date(),
+): Promise<MemoryReviewSessionRow> {
+	return await db.transaction(async (tx) => {
+		const [row] = await tx
+			.select()
+			.from(memoryReviewSession)
+			.where(and(eq(memoryReviewSession.id, sessionId), eq(memoryReviewSession.userId, userId)))
+			.for('update')
+			.limit(1);
+		if (!row) throw new ReviewSessionNotFoundError(sessionId, userId);
+		if (row.status === REVIEW_SESSION_STATUSES.COMPLETED) return row;
+
+		const idx = row.currentIndex;
+		if (idx >= row.cardIdList.length) return row;
+
+		const nextList = [...row.cardIdList];
+		nextList[idx] = replacementCardId;
+
+		const [updated] = await tx
+			.update(memoryReviewSession)
+			.set({
+				cardIdList: nextList,
+				lastActivityAt: now,
 			})
 			.where(and(eq(memoryReviewSession.id, sessionId), eq(memoryReviewSession.userId, userId)))
 			.returning();

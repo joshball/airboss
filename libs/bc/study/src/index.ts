@@ -140,7 +140,9 @@ export {
 	getLatestResumableSession,
 	getSessionsForCard,
 	ReviewSessionNotFoundError,
+	replaceSessionAtIndex,
 	resumeReviewSession,
+	shrinkSessionAtIndex,
 	startReviewSession,
 } from './review-sessions';
 export type { SubmitReviewInput } from './reviews';

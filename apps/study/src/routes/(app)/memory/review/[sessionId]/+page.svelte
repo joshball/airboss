@@ -1,16 +1,29 @@
 <script lang="ts">
+import { formatNextInterval, formatNextIntervalAbsolute } from '@ab/bc-study';
 import {
+	CARD_FEEDBACK_SIGNAL_LABELS,
+	CARD_FEEDBACK_SIGNAL_VALUES,
+	CARD_FEEDBACK_SIGNALS,
+	CARD_FEEDBACK_SIGNALS_REQUIRING_COMMENT,
+	type CardFeedbackSignal,
+	CONFIDENCE_LEVEL_LABELS,
+	CONFIDENCE_LEVEL_VALUES,
 	type ConfidenceLevel,
 	domainLabel,
 	REVIEW_PHASES,
+	REVIEW_RATING_LABELS,
 	REVIEW_RATINGS,
+	REVIEW_UNDO_WINDOW_MS,
 	type ReviewPhase,
+	type ReviewRating,
 	ROUTES,
+	type SnoozeDurationLevel,
+	type SnoozeReason,
 } from '@ab/constants';
 import PageHelp from '@ab/help/ui/PageHelp.svelte';
-import ConfidenceSlider from '@ab/ui/components/ConfidenceSlider.svelte';
 import InfoTip from '@ab/ui/components/InfoTip.svelte';
 import KbdHint from '@ab/ui/components/KbdHint.svelte';
+import SnoozeReasonPopover from '@ab/ui/components/SnoozeReasonPopover.svelte';
 import { enhance } from '$app/forms';
 import { invalidateAll } from '$app/navigation';
 import type { PageData } from './$types';
@@ -35,22 +48,30 @@ interface PendingUndo {
 	expiresAt: number;
 }
 
-/** Visible undo window in ms. Shorter than a half-beat breath, long enough to notice a fat-finger. */
-const UNDO_WINDOW_MS = 2500;
-
 const current = $derived(data.currentCard);
 const totalCards = $derived(data.totalCards);
 const position = $derived(data.position);
 const isComplete = $derived(data.isComplete);
+const reEntryBanner = $derived(data.reEntryBanner);
+const previewDueAtMs = $derived(data.previewDueAtMs);
+const nowMs = $derived(data.nowMs);
+
 // svelte-ignore state_referenced_locally
 let phase = $state<ReviewPhase>(isComplete || !current ? REVIEW_PHASES.COMPLETE : REVIEW_PHASES.FRONT);
 let revealedAt = $state<number | null>(null);
 let confidence = $state<number | null>(null);
+let adjustingConfidence = $state(false);
 let tally = $state<RatingTally>({ again: 0, hard: 0, good: 0, easy: 0 });
 let submitError = $state<string | null>(null);
 let pendingUndo = $state<PendingUndo | null>(null);
 let undoTimer: ReturnType<typeof setTimeout> | null = null;
 let undoing = $state(false);
+
+let snoozeOpen = $state(false);
+let feedbackSignal = $state<CardFeedbackSignal | null>(null);
+let feedbackComment = $state('');
+let feedbackError = $state<string | null>(null);
+let feedbackSubmitting = $state(false);
 
 // Re-seed the local phase whenever the server sends a new card / completion.
 // `$effect.pre` runs before the component body re-renders so the buttons
@@ -62,61 +83,56 @@ $effect.pre(() => {
 		phase = REVIEW_PHASES.FRONT;
 	}
 	confidence = null;
+	adjustingConfidence = false;
 	revealedAt = null;
 	submitError = null;
+	feedbackSignal = null;
+	feedbackComment = '';
+	feedbackError = null;
 });
 
 const needsConfidence = $derived(Boolean(current?.promptConfidence));
-const showConfidencePrompt = $derived(phase === REVIEW_PHASES.CONFIDENCE && needsConfidence);
 
-const ratingLabels: Record<number, { label: string; hint: string; key: string; definition: string }> = {
-	[REVIEW_RATINGS.AGAIN]: {
-		label: 'Again',
-		hint: '< 1m',
-		key: '1',
-		definition: 'You blanked or got it wrong. Card resets toward short intervals so you can rebuild the memory.',
-	},
-	[REVIEW_RATINGS.HARD]: {
-		label: 'Hard',
-		hint: '< 10m',
-		key: '2',
-		definition: 'You recalled it but it took effort. Next interval grows only a little.',
-	},
-	[REVIEW_RATINGS.GOOD]: {
-		label: 'Good',
-		hint: '~ days',
-		key: '3',
-		definition: 'You recalled it without a struggle. This is the default steady-state rating.',
-	},
-	[REVIEW_RATINGS.EASY]: {
-		label: 'Easy',
-		hint: '~ week+',
-		key: '4',
-		definition: 'You knew it instantly. Next interval jumps forward further than Good.',
-	},
-};
+function previewLabel(rating: ReviewRating): string {
+	if (!previewDueAtMs) return '';
+	const due = previewDueAtMs[rating];
+	if (typeof due !== 'number') return '';
+	return formatNextInterval(due - nowMs);
+}
 
-function goToConfidenceOrReveal() {
-	if (needsConfidence && confidence === null) {
-		phase = REVIEW_PHASES.CONFIDENCE;
-		return;
-	}
-	reveal();
+function previewTitle(rating: ReviewRating): string {
+	if (!previewDueAtMs) return '';
+	const due = previewDueAtMs[rating];
+	if (typeof due !== 'number') return '';
+	return formatNextIntervalAbsolute(new Date(due));
 }
 
 function reveal() {
 	revealedAt = Date.now();
 	phase = REVIEW_PHASES.ANSWER;
+	adjustingConfidence = false;
 }
 
 function pickConfidence(value: ConfidenceLevel) {
 	confidence = value;
-	reveal();
+	if (phase === REVIEW_PHASES.FRONT) {
+		reveal();
+	} else {
+		adjustingConfidence = false;
+	}
 }
 
 function skipConfidence() {
 	confidence = null;
-	reveal();
+	if (phase === REVIEW_PHASES.FRONT) {
+		reveal();
+	} else {
+		adjustingConfidence = false;
+	}
+}
+
+function startAdjustConfidence() {
+	adjustingConfidence = true;
 }
 
 function recordTally(rating: number) {
@@ -133,15 +149,15 @@ function startUndoWindow(rating: number, submittedCard: CurrentCard, submittedCo
 	}
 	pendingUndo = {
 		cardId: submittedCard.id,
-		ratingLabel: ratingLabels[rating].label,
+		ratingLabel: REVIEW_RATING_LABELS[rating as ReviewRating] ?? '',
 		card: submittedCard,
 		confidence: submittedConfidence,
-		expiresAt: Date.now() + UNDO_WINDOW_MS,
+		expiresAt: Date.now() + REVIEW_UNDO_WINDOW_MS,
 	};
 	undoTimer = setTimeout(() => {
 		pendingUndo = null;
 		undoTimer = null;
-	}, UNDO_WINDOW_MS);
+	}, REVIEW_UNDO_WINDOW_MS);
 }
 
 function cancelUndo() {
@@ -174,15 +190,12 @@ async function triggerUndo() {
 			return;
 		}
 		const label = snap.ratingLabel.toLowerCase();
-		if (label === 'again' && tally.again > 0) tally.again--;
-		else if (label === 'hard' && tally.hard > 0) tally.hard--;
-		else if (label === 'good' && tally.good > 0) tally.good--;
-		else if (label === 'easy' && tally.easy > 0) tally.easy--;
+		// Rating labels are `Wrong / Hard / Right / Easy`. Map back to tally keys.
+		if (label === REVIEW_RATING_LABELS[REVIEW_RATINGS.AGAIN].toLowerCase() && tally.again > 0) tally.again--;
+		else if (label === REVIEW_RATING_LABELS[REVIEW_RATINGS.HARD].toLowerCase() && tally.hard > 0) tally.hard--;
+		else if (label === REVIEW_RATING_LABELS[REVIEW_RATINGS.GOOD].toLowerCase() && tally.good > 0) tally.good--;
+		else if (label === REVIEW_RATING_LABELS[REVIEW_RATINGS.EASY].toLowerCase() && tally.easy > 0) tally.easy--;
 		pendingUndo = null;
-		// Re-fetch so the undone card comes back into rotation. The session
-		// still points at the next unseen card -- undo recreates the card
-		// state, not the traversal -- so the learner sees the correct
-		// "current" card for the session as it stands.
 		await invalidateAll();
 	} catch {
 		submitError = 'Network error on undo. The card stays scheduled as rated.';
@@ -192,10 +205,16 @@ async function triggerUndo() {
 	}
 }
 
+function ratingShortcut(value: number) {
+	const btn = document.querySelector<HTMLButtonElement>(`button[data-rating="${value}"]`);
+	btn?.click();
+}
+
 function onKeydown(e: KeyboardEvent) {
 	const target = e.target as HTMLElement | null;
 	if (target?.isContentEditable) return;
 	if (target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement) return;
+	if (snoozeOpen) return;
 
 	if (pendingUndo && !undoing) {
 		const isUndoChord = (e.key === 'z' || e.key === 'Z') && (e.metaKey || e.ctrlKey);
@@ -207,35 +226,136 @@ function onKeydown(e: KeyboardEvent) {
 	}
 
 	if (phase === REVIEW_PHASES.FRONT) {
-		if (e.key === ' ' || e.key === 'Enter') {
-			e.preventDefault();
-			goToConfidenceOrReveal();
-		}
-	} else if (phase === REVIEW_PHASES.CONFIDENCE) {
 		const n = Number(e.key);
 		if (Number.isInteger(n) && n >= 1 && n <= 5) {
 			e.preventDefault();
 			pickConfidence(n as ConfidenceLevel);
-		} else if (e.key === 'Escape') {
+			return;
+		}
+		if (e.key === ' ') {
 			e.preventDefault();
 			skipConfidence();
+			return;
+		}
+		if (e.key === 'Enter') {
+			e.preventDefault();
+			if (needsConfidence && confidence === null) {
+				skipConfidence();
+			} else {
+				reveal();
+			}
 		}
 	} else if (phase === REVIEW_PHASES.ANSWER) {
-		if (e.key === '1' || e.key === 'a') clickRating(REVIEW_RATINGS.AGAIN);
-		else if (e.key === '2' || e.key === 'h') clickRating(REVIEW_RATINGS.HARD);
-		else if (e.key === '3' || e.key === 'g') clickRating(REVIEW_RATINGS.GOOD);
-		else if (e.key === '4' || e.key === 'e') clickRating(REVIEW_RATINGS.EASY);
+		if (adjustingConfidence) {
+			const n = Number(e.key);
+			if (Number.isInteger(n) && n >= 1 && n <= 5) {
+				e.preventDefault();
+				pickConfidence(n as ConfidenceLevel);
+				return;
+			}
+			if (e.key === 'Escape') {
+				e.preventDefault();
+				adjustingConfidence = false;
+				return;
+			}
+		}
+		if (e.key === '1' || e.key === 'a') ratingShortcut(REVIEW_RATINGS.AGAIN);
+		else if (e.key === '2' || e.key === 'h') ratingShortcut(REVIEW_RATINGS.HARD);
+		else if (e.key === '3' || e.key === 'g') ratingShortcut(REVIEW_RATINGS.GOOD);
+		else if (e.key === '4' || e.key === 'e') ratingShortcut(REVIEW_RATINGS.EASY);
 	}
-}
-
-function clickRating(value: number) {
-	const btn = document.querySelector<HTMLButtonElement>(`button[data-rating="${value}"]`);
-	btn?.click();
 }
 
 function formatStartedAt(iso: string): string {
 	const date = new Date(iso);
 	return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+}
+
+function openSnooze() {
+	snoozeOpen = true;
+}
+
+function closeSnooze() {
+	snoozeOpen = false;
+}
+
+async function handleSnoozeSubmit(payload: {
+	reason: SnoozeReason;
+	comment: string;
+	durationLevel: SnoozeDurationLevel | null;
+	waitForEdit: boolean;
+}) {
+	if (!current) return;
+	const formData = new FormData();
+	formData.set('cardId', current.id);
+	formData.set('reason', payload.reason);
+	formData.set('comment', payload.comment);
+	if (payload.durationLevel) formData.set('durationLevel', payload.durationLevel);
+	formData.set('waitForEdit', payload.waitForEdit ? 'true' : 'false');
+	formData.set('domain', current.domain);
+	try {
+		const res = await fetch('?/snooze', {
+			method: 'POST',
+			headers: { 'x-sveltekit-action': 'true' },
+			body: formData,
+		});
+		if (!res.ok) {
+			submitError = 'Could not snooze that card. Try again.';
+			return;
+		}
+		await invalidateAll();
+	} catch {
+		submitError = 'Network error snoozing. Try again.';
+	}
+}
+
+function pickFeedback(signal: CardFeedbackSignal) {
+	if (feedbackSignal === signal) {
+		feedbackSignal = null;
+		feedbackComment = '';
+		feedbackError = null;
+		return;
+	}
+	feedbackSignal = signal;
+	feedbackError = null;
+}
+
+const feedbackRequiresComment = $derived(
+	feedbackSignal !== null &&
+		(CARD_FEEDBACK_SIGNALS_REQUIRING_COMMENT as readonly CardFeedbackSignal[]).includes(feedbackSignal),
+);
+
+async function submitFeedbackForm(event: SubmitEvent) {
+	event.preventDefault();
+	if (!current || !feedbackSignal || feedbackSubmitting) return;
+	const trimmed = feedbackComment.trim();
+	if (feedbackRequiresComment && !trimmed) {
+		feedbackError = 'A comment is required for this feedback.';
+		return;
+	}
+	feedbackSubmitting = true;
+	feedbackError = null;
+	try {
+		const formData = new FormData();
+		formData.set('cardId', current.id);
+		formData.set('signal', feedbackSignal);
+		formData.set('comment', trimmed);
+		const res = await fetch('?/feedback', {
+			method: 'POST',
+			headers: { 'x-sveltekit-action': 'true' },
+			body: formData,
+		});
+		if (!res.ok) {
+			feedbackError = 'Could not save feedback. Try again.';
+			return;
+		}
+		feedbackSignal = null;
+		feedbackComment = '';
+	} catch {
+		feedbackError = 'Network error saving feedback. Try again.';
+	} finally {
+		feedbackSubmitting = false;
+	}
 }
 </script>
 
@@ -246,21 +366,6 @@ function formatStartedAt(iso: string): string {
 </svelte:head>
 
 <section class="page">
-	{#if pendingUndo}
-		<div class="undo-toast" role="status" aria-live="polite">
-			<span class="undo-msg">
-				Rated <strong>{pendingUndo.ratingLabel}</strong>.
-				<span class="undo-domain">{domainLabel(pendingUndo.card.domain)}</span>
-			</span>
-			<a class="undo-link" href={ROUTES.MEMORY_CARD(pendingUndo.cardId)}>View card</a>
-			<button type="button" class="undo-btn" onclick={triggerUndo} disabled={undoing}>
-				{undoing ? 'Undoing...' : 'Undo'}
-				<KbdHint>U</KbdHint>
-			</button>
-			<button type="button" class="undo-dismiss" onclick={cancelUndo} aria-label="Dismiss undo">&times;</button>
-		</div>
-	{/if}
-
 	{#if phase === REVIEW_PHASES.COMPLETE || !current}
 		<article class="caught-up">
 			<div class="title-row">
@@ -272,10 +377,10 @@ function formatStartedAt(iso: string): string {
 					You reviewed <strong>{totalCards}</strong> {totalCards === 1 ? 'card' : 'cards'} in this session.
 				</p>
 				<dl class="tally">
-					<div><dt>Again</dt><dd>{tally.again}</dd></div>
-					<div><dt>Hard</dt><dd>{tally.hard}</dd></div>
-					<div><dt>Good</dt><dd>{tally.good}</dd></div>
-					<div><dt>Easy</dt><dd>{tally.easy}</dd></div>
+					<div><dt>{REVIEW_RATING_LABELS[REVIEW_RATINGS.AGAIN]}</dt><dd>{tally.again}</dd></div>
+					<div><dt>{REVIEW_RATING_LABELS[REVIEW_RATINGS.HARD]}</dt><dd>{tally.hard}</dd></div>
+					<div><dt>{REVIEW_RATING_LABELS[REVIEW_RATINGS.GOOD]}</dt><dd>{tally.good}</dd></div>
+					<div><dt>{REVIEW_RATING_LABELS[REVIEW_RATINGS.EASY]}</dt><dd>{tally.easy}</dd></div>
 				</dl>
 			{:else}
 				<p class="summary">No cards due right now. Come back later or write more cards.</p>
@@ -295,16 +400,27 @@ function formatStartedAt(iso: string): string {
 				</span>
 				<PageHelp pageId="memory-review" />
 			</div>
-			<span class="domain-wrap">
-				<span class="badge domain">{domainLabel(current.domain)}</span>
-				<InfoTip
-					term={domainLabel(current.domain)}
-					definition="The topic bucket this card belongs to. Drives browse filters and session mix."
-					helpId="memory-card"
-					helpSection="domain"
-				/>
-			</span>
+			<div class="hd-right">
+				<span class="domain-wrap">
+					<span class="badge domain">{domainLabel(current.domain)}</span>
+					<InfoTip
+						term={domainLabel(current.domain)}
+						definition="The topic bucket this card belongs to. Drives browse filters and session mix."
+						helpId="memory-card"
+						helpSection="domain"
+					/>
+				</span>
+				<button type="button" class="snooze-btn" onclick={openSnooze} aria-haspopup="dialog">
+					Snooze
+				</button>
+			</div>
 		</header>
+
+		{#if reEntryBanner}
+			<div class="re-entry-banner" role="status">
+				This card was updated. Does it look better now?
+			</div>
+		{/if}
 
 		<article class="card">
 			<div class="section">
@@ -321,13 +437,40 @@ function formatStartedAt(iso: string): string {
 			{/if}
 		</article>
 
-		{#if showConfidencePrompt}
-			<ConfidenceSlider onSelect={pickConfidence} onSkip={skipConfidence} />
-		{:else if phase === REVIEW_PHASES.FRONT}
+		{#if phase === REVIEW_PHASES.FRONT}
+			{#if needsConfidence}
+				<div class="confidence-strip" role="radiogroup" aria-label="Confidence">
+					<span class="strip-label">Confidence</span>
+					{#each CONFIDENCE_LEVEL_VALUES as level (level)}
+						<button
+							type="button"
+							role="radio"
+							aria-checked={confidence === level}
+							aria-label={`${level} -- ${CONFIDENCE_LEVEL_LABELS[level]}`}
+							class="chicklet"
+							class:is-selected={confidence === level}
+							onclick={() => pickConfidence(level)}
+							title={CONFIDENCE_LEVEL_LABELS[level]}
+						>
+							{level}
+						</button>
+					{/each}
+					<span class="strip-skip">
+						Space to skip <KbdHint>Space</KbdHint>
+					</span>
+				</div>
+			{/if}
 			<div class="reveal-row">
-				<button type="button" class="btn primary wide" onclick={goToConfidenceOrReveal}>
+				<button
+					type="button"
+					class="btn primary wide"
+					onclick={() => {
+						if (needsConfidence && confidence === null) skipConfidence();
+						else reveal();
+					}}
+				>
 					Show answer
-					<span class="kbd">Space</span>
+					<span class="kbd">Enter</span>
 				</button>
 				<InfoTip
 					term="Show answer"
@@ -336,6 +479,88 @@ function formatStartedAt(iso: string): string {
 				/>
 			</div>
 		{:else if phase === REVIEW_PHASES.ANSWER}
+			<div class="confidence-recall">
+				{#if adjustingConfidence}
+					<div class="confidence-strip" role="radiogroup" aria-label="Adjust confidence">
+						<span class="strip-label">Confidence</span>
+						{#each CONFIDENCE_LEVEL_VALUES as level (level)}
+							<button
+								type="button"
+								role="radio"
+								aria-checked={confidence === level}
+								aria-label={`${level} -- ${CONFIDENCE_LEVEL_LABELS[level]}`}
+								class="chicklet"
+								class:is-selected={confidence === level}
+								onclick={() => pickConfidence(level)}
+							>
+								{level}
+							</button>
+						{/each}
+						<button type="button" class="strip-link" onclick={skipConfidence}>Clear</button>
+					</div>
+				{:else}
+					<button type="button" class="confidence-recall-btn" onclick={startAdjustConfidence}>
+						{#if confidence !== null}
+							Confidence: <strong>{confidence}</strong>
+							<span class="confidence-recall-hint">(click to adjust)</span>
+						{:else}
+							No confidence recorded
+							<span class="confidence-recall-hint">(click to set)</span>
+						{/if}
+					</button>
+				{/if}
+			</div>
+
+			<form class="feedback-form" onsubmit={submitFeedbackForm}>
+				<div class="feedback-row" role="radiogroup" aria-label="Card feedback">
+					{#each CARD_FEEDBACK_SIGNAL_VALUES as signal (signal)}
+						<button
+							type="button"
+							role="radio"
+							aria-checked={feedbackSignal === signal}
+							class="feedback-pill feedback-{signal}"
+							class:is-selected={feedbackSignal === signal}
+							onclick={() => pickFeedback(signal)}
+						>
+							{CARD_FEEDBACK_SIGNAL_LABELS[signal]}
+						</button>
+					{/each}
+				</div>
+				{#if feedbackSignal}
+					<label class="feedback-comment">
+						<span class="feedback-comment-label">
+							Comment{feedbackRequiresComment ? ' (required)' : ' (optional)'}
+						</span>
+						<textarea
+							bind:value={feedbackComment}
+							rows="2"
+							placeholder={feedbackRequiresComment ? 'Tell us what is wrong with this card.' : 'Optional note'}
+						></textarea>
+						{#if feedbackError}
+							<span class="feedback-error" role="alert">{feedbackError}</span>
+						{/if}
+						<div class="feedback-actions">
+							<button
+								type="button"
+								class="btn ghost btn-small"
+								onclick={() => {
+									feedbackSignal = null;
+									feedbackComment = '';
+									feedbackError = null;
+								}}
+							>
+								Cancel
+							</button>
+							<button type="submit" class="btn primary btn-small" disabled={feedbackSubmitting}>
+								{feedbackSubmitting ? 'Saving...' : 'Save feedback'}
+							</button>
+						</div>
+					</label>
+				{:else if feedbackSignal === CARD_FEEDBACK_SIGNALS.LIKE}
+					<!-- placeholder: Like is committed via the click above; keep node so layout doesn't jump -->
+				{/if}
+			</form>
+
 			<p class="rate-q">How well did you remember?</p>
 			<form
 				method="POST"
@@ -345,6 +570,7 @@ function formatStartedAt(iso: string): string {
 					const submittedConfidence = confidence;
 					const rating = Number(formData.get('rating') ?? 0);
 					phase = REVIEW_PHASES.SUBMITTING;
+					if (!submittedCard) return;
 					formData.set('cardId', submittedCard.id);
 					const answerMs = revealedAt !== null ? Date.now() - revealedAt : '';
 					formData.set('answerMs', String(answerMs));
@@ -354,8 +580,6 @@ function formatStartedAt(iso: string): string {
 						if (result.type === 'success') {
 							recordTally(rating);
 							startUndoWindow(rating, submittedCard, submittedConfidence);
-							// Server `load` re-ran via `update`; `$effect.pre` will
-							// re-seed phase/confidence against the new card.
 						} else {
 							phase = REVIEW_PHASES.ANSWER;
 							submitError =
@@ -366,28 +590,18 @@ function formatStartedAt(iso: string): string {
 			>
 				<div class="ratings">
 					{#each [REVIEW_RATINGS.AGAIN, REVIEW_RATINGS.HARD, REVIEW_RATINGS.GOOD, REVIEW_RATINGS.EASY] as r (r)}
-						<div class="rating-cell">
-							<button
-								type="submit"
-								name="rating"
-								value={r}
-								data-rating={r}
-								class="rating rating-{r}"
-								disabled={phase !== REVIEW_PHASES.ANSWER}
-							>
-								<span class="rating-label">{ratingLabels[r].label}</span>
-								<span class="rating-hint">{ratingLabels[r].hint}</span>
-								<span class="kbd">{ratingLabels[r].key}</span>
-							</button>
-							<span class="rating-tip">
-								<InfoTip
-									term={ratingLabels[r].label}
-									definition={ratingLabels[r].definition}
-									helpId="memory-review"
-									helpSection="the-four-ratings"
-								/>
-							</span>
-						</div>
+						<button
+							type="submit"
+							name="rating"
+							value={r}
+							data-rating={r}
+							class="rating rating-{r}"
+							disabled={phase !== REVIEW_PHASES.ANSWER}
+							title={previewTitle(r)}
+						>
+							<span class="rating-label">{REVIEW_RATING_LABELS[r]}</span>
+							<span class="rating-interval">{previewLabel(r)}</span>
+						</button>
 					{/each}
 				</div>
 				{#if submitError}
@@ -397,7 +611,24 @@ function formatStartedAt(iso: string): string {
 		{:else if phase === REVIEW_PHASES.SUBMITTING}
 			<p class="rate-q subdued">Saving...</p>
 		{/if}
+
+		{#if pendingUndo}
+			<div class="undo-toast" role="status" aria-live="polite">
+				<span class="undo-msg">
+					Rated <strong>{pendingUndo.ratingLabel}</strong>.
+					<span class="undo-domain">{domainLabel(pendingUndo.card.domain)}</span>
+				</span>
+				<a class="undo-link" href={ROUTES.MEMORY_CARD(pendingUndo.cardId)}>View card</a>
+				<button type="button" class="undo-btn" onclick={triggerUndo} disabled={undoing}>
+					{undoing ? 'Undoing...' : 'Undo'}
+					<KbdHint>U</KbdHint>
+				</button>
+				<button type="button" class="undo-dismiss" onclick={cancelUndo} aria-label="Dismiss undo">&times;</button>
+			</div>
+		{/if}
 	{/if}
+
+	<SnoozeReasonPopover bind:open={snoozeOpen} onSubmit={handleSnoozeSubmit} onClose={closeSnooze} />
 </section>
 
 <style>
@@ -407,6 +638,7 @@ function formatStartedAt(iso: string): string {
 		gap: var(--space-xl);
 		max-width: 42rem;
 		margin: 0 auto;
+		position: relative;
 	}
 
 	.undo-toast {
@@ -419,7 +651,8 @@ function formatStartedAt(iso: string): string {
 		border-radius: var(--radius-lg);
 		font-size: var(--font-size-sm);
 		color: var(--action-default-active);
-		animation: undo-fade var(--motion-normal) ease-out;
+		animation: undo-fade-in var(--motion-normal) ease-out;
+		margin-top: var(--space-md);
 	}
 
 	.undo-msg {
@@ -488,8 +721,8 @@ function formatStartedAt(iso: string): string {
 		border-radius: var(--radius-sm);
 	}
 
-	@keyframes undo-fade {
-		from { opacity: 0; transform: translateY(-4px); }
+	@keyframes undo-fade-in {
+		from { opacity: 0; transform: translateY(4px); }
 		to { opacity: 1; transform: translateY(0); }
 	}
 
@@ -502,6 +735,32 @@ function formatStartedAt(iso: string): string {
 		justify-content: space-between;
 		align-items: center;
 		gap: var(--space-lg);
+	}
+
+	.hd-right {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-md);
+	}
+
+	.snooze-btn {
+		background: var(--surface-sunken);
+		border: 1px solid var(--edge-strong);
+		color: var(--ink-body);
+		font-size: var(--font-size-sm);
+		font-weight: 600;
+		padding: var(--space-2xs) var(--space-sm);
+		border-radius: var(--radius-pill);
+		cursor: pointer;
+	}
+
+	.snooze-btn:hover {
+		background: var(--edge-default);
+	}
+
+	.snooze-btn:focus-visible {
+		outline: none;
+		box-shadow: 0 0 0 3px var(--focus-ring);
 	}
 
 	.title-row {
@@ -549,6 +808,16 @@ function formatStartedAt(iso: string): string {
 		letter-spacing: var(--letter-spacing-wide);
 	}
 
+	.re-entry-banner {
+		background: var(--signal-info-wash, var(--action-default-wash));
+		border: 1px solid var(--action-default-edge);
+		border-radius: var(--radius-md);
+		padding: var(--space-sm) var(--space-md);
+		color: var(--action-default-hover);
+		font-size: var(--font-size-sm);
+		font-weight: 500;
+	}
+
 	.card {
 		background: var(--ink-inverse);
 		border: 1px solid var(--edge-default);
@@ -582,6 +851,182 @@ function formatStartedAt(iso: string): string {
 		margin: 0;
 	}
 
+	.confidence-strip {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-xs);
+		padding: var(--space-sm) var(--space-md);
+		background: var(--surface-panel, var(--ink-inverse));
+		border: 1px solid var(--edge-default);
+		border-radius: var(--radius-lg);
+		flex-wrap: wrap;
+	}
+
+	.strip-label {
+		font-size: var(--font-size-xs);
+		font-weight: 600;
+		color: var(--ink-muted);
+		text-transform: uppercase;
+		letter-spacing: var(--letter-spacing-caps);
+		margin-right: var(--space-xs);
+	}
+
+	.strip-skip {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-2xs);
+		font-size: var(--font-size-xs);
+		color: var(--ink-faint);
+		margin-left: auto;
+	}
+
+	.strip-link {
+		background: transparent;
+		border: none;
+		color: var(--ink-subtle);
+		font-size: var(--font-size-xs);
+		cursor: pointer;
+		padding: 0;
+		margin-left: auto;
+		text-decoration: underline;
+	}
+
+	.chicklet {
+		min-width: 2.5rem;
+		min-height: 2.5rem;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		font-weight: 600;
+		font-size: var(--font-size-body);
+		background: var(--ink-inverse);
+		border: 1px solid var(--edge-strong);
+		color: var(--ink-body);
+		border-radius: var(--radius-md);
+		cursor: pointer;
+		transition:
+			background var(--motion-fast),
+			border-color var(--motion-fast),
+			transform var(--motion-fast);
+	}
+
+	.chicklet:hover {
+		background: var(--action-default-wash);
+		border-color: var(--action-default-edge);
+	}
+
+	.chicklet:focus-visible {
+		outline: none;
+		box-shadow: 0 0 0 3px var(--focus-ring);
+	}
+
+	.chicklet.is-selected {
+		background: var(--action-default-wash);
+		border-color: var(--action-default);
+		color: var(--action-default-hover);
+	}
+
+	.confidence-recall {
+		display: flex;
+		justify-content: center;
+	}
+
+	.confidence-recall-btn {
+		background: transparent;
+		border: 1px dashed var(--edge-strong);
+		color: var(--ink-subtle);
+		font-size: var(--font-size-sm);
+		padding: var(--space-2xs) var(--space-md);
+		border-radius: var(--radius-pill);
+		cursor: pointer;
+	}
+
+	.confidence-recall-btn:hover,
+	.confidence-recall-btn:focus-visible {
+		background: var(--surface-sunken);
+		color: var(--ink-body);
+		outline: none;
+	}
+
+	.confidence-recall-hint {
+		color: var(--ink-faint);
+		margin-left: var(--space-2xs);
+	}
+
+	.feedback-form {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-sm);
+	}
+
+	.feedback-row {
+		display: inline-flex;
+		gap: var(--space-xs);
+		align-self: flex-start;
+	}
+
+	.feedback-pill {
+		background: var(--ink-inverse);
+		border: 1px solid var(--edge-default);
+		color: var(--ink-muted);
+		font-size: var(--font-size-xs);
+		font-weight: 600;
+		padding: var(--space-2xs) var(--space-sm);
+		border-radius: var(--radius-pill);
+		cursor: pointer;
+	}
+
+	.feedback-pill:hover {
+		background: var(--surface-sunken);
+		color: var(--ink-body);
+	}
+
+	.feedback-pill:focus-visible {
+		outline: none;
+		box-shadow: 0 0 0 3px var(--focus-ring);
+	}
+
+	.feedback-pill.is-selected {
+		background: var(--action-default-wash);
+		border-color: var(--action-default);
+		color: var(--action-default-hover);
+	}
+
+	.feedback-comment {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-2xs);
+	}
+
+	.feedback-comment-label {
+		font-size: var(--font-size-xs);
+		font-weight: 600;
+		color: var(--ink-muted);
+		text-transform: uppercase;
+		letter-spacing: var(--letter-spacing-caps);
+	}
+
+	.feedback-comment textarea {
+		font: inherit;
+		resize: vertical;
+		padding: var(--space-sm);
+		border: 1px solid var(--edge-strong);
+		border-radius: var(--radius-sm);
+		background: var(--ink-inverse);
+		color: var(--ink-body);
+	}
+
+	.feedback-error {
+		color: var(--action-hazard-hover);
+		font-size: var(--font-size-xs);
+	}
+
+	.feedback-actions {
+		display: flex;
+		justify-content: flex-end;
+		gap: var(--space-xs);
+	}
+
 	.rate-q {
 		margin: var(--space-sm) 0 0;
 		text-align: center;
@@ -597,21 +1042,6 @@ function formatStartedAt(iso: string): string {
 		display: grid;
 		grid-template-columns: repeat(4, 1fr);
 		gap: var(--space-sm);
-	}
-
-	.rating-cell {
-		position: relative;
-		display: flex;
-	}
-
-	.rating-cell > .rating {
-		flex: 1;
-	}
-
-	.rating-tip {
-		position: absolute;
-		top: var(--space-xs);
-		right: var(--space-xs);
 	}
 
 	.domain-wrap {
@@ -662,9 +1092,10 @@ function formatStartedAt(iso: string): string {
 		color: var(--ink-body);
 	}
 
-	.rating-hint {
+	.rating-interval {
 		font-size: var(--font-size-xs);
 		color: var(--ink-subtle);
+		font-variant-numeric: tabular-nums;
 	}
 
 	.rating-1 .rating-label {
@@ -737,6 +1168,11 @@ function formatStartedAt(iso: string): string {
 		align-self: center;
 		padding: var(--space-md) var(--space-2xl);
 		font-size: var(--font-size-base);
+	}
+
+	.btn-small {
+		padding: var(--space-2xs) var(--space-md);
+		font-size: var(--font-size-sm);
 	}
 
 	.kbd {
