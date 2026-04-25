@@ -44,6 +44,12 @@ function sampleTruth(partial: Partial<FdmTruthState> = {}): FdmTruthState {
 		flapsDegrees: SIM_FLAP_NOTCHES[0],
 		elevatorEffective: 0,
 		engineRpm: 800,
+		oilPressurePsi: 30,
+		oilTempCelsius: 95,
+		fuelLeftGallons: 26,
+		fuelRightGallons: 26,
+		ammeterAmps: 3,
+		vacuumInHg: 5,
 		...partial,
 	};
 }

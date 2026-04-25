@@ -96,6 +96,22 @@ export const C172_CONFIG: AircraftConfig = {
 	maxRpm: 2600,
 	greenArcRpmLow: 2100,
 	greenArcRpmHigh: 2500,
+	// Cluster gauge ranges -- POH typical values for the C172S.
+	oilPressureIdlePsi: 30,
+	oilPressureMaxPsi: 80,
+	oilPressureGreenLowPsi: 30,
+	oilPressureGreenHighPsi: 90,
+	oilTempCruiseC: 95,
+	oilTempRedlineC: 116,
+	oilWarmupSeconds: 90,
+	fuelTankCapacityGallons: 26,
+	// 9.0 gph full + 1.2 gph idle is the published C172S burn profile.
+	fuelBurnGphFull: 9.0,
+	fuelBurnGphIdle: 1.2,
+	// 28V system: ~3 A standby, ~14 A under cruise load with avionics.
+	ammeterIdleAmps: 3,
+	ammeterCruiseAmps: 14,
+	vacuumNominalInHg: 5.0,
 	vS0: knotsToMetersPerSecond(33),
 	vS1: knotsToMetersPerSecond(44),
 	vR: knotsToMetersPerSecond(55),

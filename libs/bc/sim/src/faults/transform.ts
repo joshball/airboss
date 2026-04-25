@@ -66,6 +66,12 @@ function baseline(input: FaultTransformInput): DisplayState {
 		electricBusVolts: nominalBusVolts,
 		onGround: truth.onGround,
 		t: truth.t,
+		oilPressurePsi: truth.oilPressurePsi,
+		oilTempCelsius: truth.oilTempCelsius,
+		fuelLeftGallons: truth.fuelLeftGallons,
+		fuelRightGallons: truth.fuelRightGallons,
+		ammeterAmps: truth.ammeterAmps,
+		vacuumInHg: truth.vacuumInHg,
 	};
 }
 
@@ -183,7 +189,9 @@ function applyVacuumFailure(
 	// gyro precesses as it spools down. Pilots cross-check against the
 	// magnetic compass to recognise the drift.
 	const headingIndicated = display.headingIndicated - driftRad;
-	return { ...display, pitchIndicated, rollIndicated, headingIndicated };
+	// Vacuum gauge reads zero -- the trigger for "this is a vacuum
+	// failure, look at the gauge" recognition.
+	return { ...display, pitchIndicated, rollIndicated, headingIndicated, vacuumInHg: 0 };
 }
 
 /**
@@ -211,7 +219,13 @@ function applyAlternatorFailure(
 	const volts = input.nominalBusVolts * (1 - decayFraction);
 	const usableFraction = Math.max(0, (volts - TC_BROWNOUT_VOLTS) / (input.nominalBusVolts - TC_BROWNOUT_VOLTS));
 	const yawRateIndicated = display.yawRateIndicated * usableFraction;
-	return { ...display, electricBusVolts: volts, yawRateIndicated };
+	// Ammeter: alternator offline means the bus is on battery alone, so
+	// the ammeter shows a negative discharge proportional to load. We
+	// model the discharge magnitude as the negative of what the
+	// healthy-cruise reading would be -- the gauge swings to the same
+	// magnitude on the discharge side, the universal training signal.
+	const ammeterAmps = -Math.abs(display.ammeterAmps) * (1 - decayFraction * 0.5);
+	return { ...display, electricBusVolts: volts, yawRateIndicated, ammeterAmps };
 }
 
 /**

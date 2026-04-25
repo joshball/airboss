@@ -140,6 +140,15 @@ export interface DisplayState {
 	onGround: boolean;
 	/** Sim time forwarded for debrief alignment. Always truth. */
 	t: number;
+	/** Engine cluster gauges shown opposite the tach. Pass-through truth
+	 *  for now; the fault model owns the layers that lie -- alternator
+	 *  zeros the ammeter, vacuum-failure zeros the vacuum gauge. */
+	oilPressurePsi: number;
+	oilTempCelsius: number;
+	fuelLeftGallons: number;
+	fuelRightGallons: number;
+	ammeterAmps: number;
+	vacuumInHg: number;
 }
 
 /** Identifier for a fault kind, re-exported from @ab/constants for ergonomic

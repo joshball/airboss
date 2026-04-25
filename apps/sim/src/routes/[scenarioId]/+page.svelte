@@ -39,6 +39,7 @@ import FdmWorker from '$lib/fdm-worker.ts?worker';
 import Altimeter from '$lib/instruments/Altimeter.svelte';
 import Asi from '$lib/instruments/Asi.svelte';
 import AttitudeIndicator from '$lib/instruments/AttitudeIndicator.svelte';
+import EngineCluster from '$lib/instruments/cluster/EngineCluster.svelte';
 import HeadingIndicator from '$lib/instruments/HeadingIndicator.svelte';
 import Tachometer from '$lib/instruments/Tachometer.svelte';
 import TurnCoordinator from '$lib/instruments/TurnCoordinator.svelte';
@@ -568,6 +569,7 @@ const trimBias = $derived(inputs.trim);
 			</div>
 			<div class="engine-row">
 				<Tachometer {rpm} />
+				<EngineCluster {display} />
 			</div>
 		</section>
 

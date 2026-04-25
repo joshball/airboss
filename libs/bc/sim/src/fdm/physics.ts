@@ -29,6 +29,7 @@
 
 import { SIM_GRAVITY_M_S2, SIM_SEA_LEVEL_DENSITY_KG_M3, type SimFlapDegrees } from '@ab/constants';
 import type { AircraftConfig, FdmInputs, FdmTruthState } from '../types';
+import { computeEngineCluster, fuelBurnGallonsPerSecond } from './engine-cluster';
 
 /** Internal continuous state vector used by the longitudinal integrator. */
 interface LongitudinalState {
@@ -54,6 +55,9 @@ export interface FdmStateVector extends LongitudinalState {
 	engineRpm: number;
 	/** Scenario-scripted trim bias accumulator (separate from pilot trim). */
 	scriptedTrim: number;
+	/** Per-tank fuel quantity (US gallons). Decreases as the engine burns. */
+	fuelLeftGallons: number;
+	fuelRightGallons: number;
 }
 
 /** Instantaneous derivatives for the longitudinal RK4 step. */
@@ -436,6 +440,13 @@ export function fdmStep(
 
 	const engineRpm = updateRpm(state.engineRpm, inputs.throttle, cfg, dt);
 
+	// Fuel integration: burn evenly from both tanks today (the C172 has a
+	// "BOTH" selector that does exactly this). Tank-specific selection
+	// lands when the fuel-selector input ships in Phase 6.
+	const burnPerTank = fuelBurnGallonsPerSecond(cfg, inputs.throttle) * 0.5 * dt;
+	const fuelLeftGallons = Math.max(0, state.fuelLeftGallons - burnPerTank);
+	const fuelRightGallons = Math.max(0, state.fuelRightGallons - burnPerTank);
+
 	return {
 		...long,
 		posNorth,
@@ -446,6 +457,8 @@ export function fdmStep(
 		heading: lateral.heading,
 		engineRpm,
 		scriptedTrim: state.scriptedTrim,
+		fuelLeftGallons,
+		fuelRightGallons,
 	};
 }
 
@@ -478,6 +491,13 @@ export function truthStateFromVector(
 
 	const elevEff = effectiveElevator(inputs, cfg, state.scriptedTrim);
 
+	const cluster = computeEngineCluster({
+		cfg,
+		rpm: state.engineRpm,
+		throttle: inputs.throttle,
+		elapsedSeconds: state.t,
+	});
+
 	return {
 		t: state.t,
 		x: state.x,
@@ -507,5 +527,11 @@ export function truthStateFromVector(
 		flapsDegrees: inputs.flaps as SimFlapDegrees,
 		elevatorEffective: elevEff,
 		engineRpm: state.engineRpm,
+		oilPressurePsi: cluster.oilPressurePsi,
+		oilTempCelsius: cluster.oilTempCelsius,
+		fuelLeftGallons: state.fuelLeftGallons,
+		fuelRightGallons: state.fuelRightGallons,
+		ammeterAmps: cluster.ammeterAmps,
+		vacuumInHg: cluster.vacuumInHg,
 	};
 }
