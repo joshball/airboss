@@ -4,17 +4,27 @@
  * the FDM worker via the client-side tape store, validates the
  * scenario hash, and renders a recap.
  *
- * Phase 4 D1.a (this PR) ships the route shell + tape loading +
- * outcome summary. Subsequent D1 PRs add:
- *   - timeline scrubber (D1.b)
- *   - truth-vs-display dual panels (D1.c)
- *   - input tape (D1.d)
- *   - ideal-path overlay (D1.e)
+ * Phase 4 D1.b (this PR) extends the route shell from D1.a with:
+ *   - a timeline scrubber over recorded frames
+ *   - truth + display dual instrument panels at the scrubbed t
+ *   - "fault fired here" tick markers on the slider
+ *   - keyboard nav (arrows / home / end)
+ *
+ * D1.d will add the input tape; D1.e will overlay an ideal path when
+ * the scenario authors one.
  */
 
-import { type ReplayTape, type TapeHashValidation, validateTapeHash } from '@ab/bc-sim';
+import { type ReplayFrame, type ReplayTape, type TapeHashValidation, validateTapeHash } from '@ab/bc-sim';
 import { ROUTES, SIM_FEET_PER_METER, SIM_KNOTS_PER_METER_PER_SECOND, SIM_SCENARIO_OUTCOMES } from '@ab/constants';
 import { onMount } from 'svelte';
+import Altimeter from '$lib/instruments/Altimeter.svelte';
+import Asi from '$lib/instruments/Asi.svelte';
+import AttitudeIndicator from '$lib/instruments/AttitudeIndicator.svelte';
+import EngineCluster from '$lib/instruments/cluster/EngineCluster.svelte';
+import HeadingIndicator from '$lib/instruments/HeadingIndicator.svelte';
+import Tachometer from '$lib/instruments/Tachometer.svelte';
+import TurnCoordinator from '$lib/instruments/TurnCoordinator.svelte';
+import Vsi from '$lib/instruments/Vsi.svelte';
 import { loadTape } from '$lib/tape-store.svelte';
 import type { PageData } from './$types';
 
@@ -23,10 +33,16 @@ let { data }: { data: PageData } = $props();
 let tape = $state<ReplayTape | null>(null);
 let validation = $state<TapeHashValidation | null>(null);
 let mounted = $state(false);
+let frameIndex = $state(0);
 
 onMount(() => {
 	tape = loadTape(data.scenario.id);
-	if (tape !== null) validation = validateTapeHash(tape, data.scenario);
+	if (tape !== null) {
+		validation = validateTapeHash(tape, data.scenario);
+		// Land the scrubber on the final frame -- that's the moment of
+		// outcome, the most useful starting view for any debrief.
+		frameIndex = Math.max(0, tape.frames.length - 1);
+	}
 	mounted = true;
 });
 
@@ -47,9 +63,61 @@ const outcomeLabel = $derived.by(() => {
 const peakAltFt = $derived(tape ? tape.result.peakAltitudeAgl * SIM_FEET_PER_METER : 0);
 const maxAlphaDeg = $derived(tape ? (tape.result.maxAlpha * 180) / Math.PI : 0);
 
+const currentFrame = $derived<ReplayFrame | null>(tape?.frames[frameIndex] ?? null);
+const startT = $derived(tape && tape.frames.length > 0 ? tape.frames[0].t : 0);
+const endT = $derived(tape && tape.frames.length > 0 ? tape.frames[tape.frames.length - 1].t : 0);
+const currentT = $derived(currentFrame ? currentFrame.t - startT : 0);
+
+const truth = $derived(currentFrame?.truth ?? null);
+const display = $derived(currentFrame?.display ?? null);
+
+const truthKias = $derived(truth ? truth.indicatedAirspeed * SIM_KNOTS_PER_METER_PER_SECOND : 0);
+const truthAltFt = $derived(truth ? truth.altitude * SIM_FEET_PER_METER : 0);
+const truthVsiFpm = $derived(truth ? truth.verticalSpeed * SIM_FEET_PER_METER * 60 : 0);
+const truthHeadingDeg = $derived(truth ? (truth.heading * 180) / Math.PI : 0);
+const truthYawDegSec = $derived(truth ? (truth.yawRate * 180) / Math.PI : 0);
+
+const displayKias = $derived(display ? display.indicatedAirspeed * SIM_KNOTS_PER_METER_PER_SECOND : 0);
+const displayAltFt = $derived(display ? display.altitudeMsl * SIM_FEET_PER_METER : 0);
+const displayVsiFpm = $derived(display ? display.verticalSpeed * SIM_FEET_PER_METER * 60 : 0);
+const displayHeadingDeg = $derived(display ? (display.headingIndicated * 180) / Math.PI : 0);
+const displayYawDegSec = $derived(display ? (display.yawRateIndicated * 180) / Math.PI : 0);
+
+/** Frame indices where any fault fired -- rendered as ticks under the slider. */
+const faultEdges = $derived<readonly number[]>(
+	tape === null ? [] : tape.frames.map((f, i) => (f.firedThisTick.length > 0 ? i : -1)).filter((i) => i >= 0),
+);
+
 function backToCockpit(): void {
 	if (typeof window === 'undefined') return;
 	window.location.href = ROUTES.SIM_SCENARIO(data.scenario.id);
+}
+
+function onScrubKey(event: KeyboardEvent): void {
+	if (tape === null) return;
+	const last = tape.frames.length - 1;
+	switch (event.key) {
+		case 'ArrowRight':
+		case 'l':
+			event.preventDefault();
+			frameIndex = Math.min(last, frameIndex + 1);
+			break;
+		case 'ArrowLeft':
+		case 'h':
+			event.preventDefault();
+			frameIndex = Math.max(0, frameIndex - 1);
+			break;
+		case 'Home':
+		case '0':
+			event.preventDefault();
+			frameIndex = 0;
+			break;
+		case 'End':
+		case '$':
+			event.preventDefault();
+			frameIndex = last;
+			break;
+	}
 }
 </script>
 
@@ -94,25 +162,92 @@ function backToCockpit(): void {
 				<dd>{maxAlphaDeg.toFixed(1)} deg</dd>
 				<dt>Frames recorded</dt>
 				<dd>{tape.frames.length}</dd>
-				<dt>Faults activated</dt>
-				<dd>
-					{#if tape.frames.length === 0}
-						0
-					{:else}
-						{tape.frames[tape.frames.length - 1].activations.length}
-					{/if}
-				</dd>
 			</dl>
 		</section>
 
-		<section class="placeholder" aria-label="Replay timeline placeholder">
-			<h3>Timeline scrubber lands in D1.b</h3>
-			<p>
-				The replay tape carries {tape.frames.length} frames covering
-				{tape.frames.length > 0 ? (tape.frames[tape.frames.length - 1].t - tape.frames[0].t).toFixed(1) : '0.0'} seconds.
-				The next debrief PR adds a scrubber to step through truth + display state at any moment in the run.
-			</p>
-		</section>
+		{#if tape.frames.length > 0}
+			<section class="scrubber" aria-label="Replay timeline">
+				<div class="scrub-meta">
+					<span class="t">t = {currentT.toFixed(1)} s</span>
+					<span class="frame-count">frame {frameIndex + 1} / {tape.frames.length}</span>
+				</div>
+				<div class="scrub-track" role="presentation">
+					<input
+						type="range"
+						min="0"
+						max={tape.frames.length - 1}
+						bind:value={frameIndex}
+						onkeydown={onScrubKey}
+						aria-label="Scrub replay timeline; arrow keys to step, home / end to jump"
+					/>
+					{#if faultEdges.length > 0}
+						<ul class="fault-ticks" aria-label="Faults fired">
+							{#each faultEdges as idx (idx)}
+								<li
+									class="fault-tick"
+									style:left={`${(idx / Math.max(1, tape.frames.length - 1)) * 100}%`}
+									title={`Fault fired at t=${(tape.frames[idx].t - startT).toFixed(1)}s`}
+								></li>
+							{/each}
+						</ul>
+					{/if}
+				</div>
+				<div class="scrub-help">
+					Arrow keys / h / l to step; Home or 0 to start; End or $ to outcome. Run is {(endT - startT).toFixed(1)} seconds long.
+				</div>
+				{#if currentFrame && currentFrame.activations.length > 0}
+					<p class="active-faults">
+						Active faults at this frame: {currentFrame.activations.map((a) => a.kind).join(', ')}.
+					</p>
+				{/if}
+			</section>
+
+			<section class="dual" aria-label="Truth versus display panels">
+				<article class="panel">
+					<h3>Truth</h3>
+					<p class="panel-help">What the airplane was actually doing.</p>
+					<div class="row">
+						<Asi kias={truthKias} />
+						<AttitudeIndicator pitchRadians={truth?.pitch ?? 0} rollRadians={truth?.roll ?? 0} />
+						<Altimeter altitudeFeet={truthAltFt} />
+					</div>
+					<div class="row">
+						<TurnCoordinator yawRateDegPerSec={truthYawDegSec} slipBall={truth?.slipBall ?? 0} />
+						<HeadingIndicator headingDeg={truthHeadingDeg} />
+						<Vsi fpm={truthVsiFpm} />
+					</div>
+					<div class="row tach-row">
+						<Tachometer rpm={truth?.engineRpm ?? 0} />
+					</div>
+				</article>
+
+				<article class="panel">
+					<h3>Display</h3>
+					<p class="panel-help">What the cockpit gauges showed (post-fault transform).</p>
+					<div class="row">
+						<Asi kias={displayKias} />
+						<AttitudeIndicator
+							pitchRadians={display?.pitchIndicated ?? 0}
+							rollRadians={display?.rollIndicated ?? 0}
+						/>
+						<Altimeter altitudeFeet={displayAltFt} />
+					</div>
+					<div class="row">
+						<TurnCoordinator yawRateDegPerSec={displayYawDegSec} slipBall={display?.slipBall ?? 0} />
+						<HeadingIndicator headingDeg={displayHeadingDeg} />
+						<Vsi fpm={displayVsiFpm} />
+					</div>
+					<div class="row tach-row">
+						<Tachometer rpm={display?.engineRpm ?? 0} />
+						<EngineCluster {display} />
+					</div>
+				</article>
+			</section>
+		{:else}
+			<section class="empty" role="status">
+				<p>No frames were recorded -- the run aborted before the first snapshot fired.</p>
+			</section>
+		{/if}
 
 		<button type="button" class="run-again" onclick={backToCockpit}>Run again</button>
 	{/if}
@@ -120,7 +255,7 @@ function backToCockpit(): void {
 
 <style>
 	main {
-		max-width: 880px;
+		max-width: 1280px;
 		margin: 0 auto;
 		padding: var(--space-md) var(--space-xl);
 		color: var(--ink-body);
@@ -146,7 +281,8 @@ function backToCockpit(): void {
 	.empty,
 	.stale,
 	.summary,
-	.placeholder {
+	.scrubber,
+	.dual {
 		margin-bottom: var(--space-lg);
 		padding: var(--space-md) var(--space-lg);
 		background: var(--surface-panel);
@@ -177,6 +313,71 @@ function backToCockpit(): void {
 		margin: 0;
 		font-family: var(--font-family-mono);
 	}
+	.scrubber .scrub-meta {
+		display: flex;
+		justify-content: space-between;
+		font-family: var(--font-family-mono);
+		font-size: var(--font-size-sm);
+		color: var(--ink-muted);
+		margin-bottom: var(--space-2xs);
+	}
+	.scrubber .scrub-track {
+		position: relative;
+		padding-bottom: 12px;
+	}
+	.scrubber input[type='range'] {
+		width: 100%;
+	}
+	.fault-ticks {
+		position: absolute;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		height: 8px;
+		list-style: none;
+		padding: 0;
+		margin: 0;
+	}
+	.fault-tick {
+		position: absolute;
+		top: 0;
+		width: 2px;
+		height: 8px;
+		transform: translateX(-1px);
+		background: var(--sim-arc-red);
+	}
+	.scrub-help {
+		margin-top: var(--space-2xs);
+		font-size: var(--font-size-xs);
+		color: var(--ink-muted);
+	}
+	.active-faults {
+		margin: var(--space-xs) 0 0;
+		font-family: var(--font-family-mono);
+		font-size: var(--font-size-sm);
+		color: var(--sim-arc-yellow);
+	}
+	.dual {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: var(--space-lg);
+	}
+	.panel h3 {
+		margin: 0 0 var(--space-2xs);
+	}
+	.panel-help {
+		margin: 0 0 var(--space-md);
+		color: var(--ink-muted);
+		font-size: var(--font-size-sm);
+	}
+	.row {
+		display: flex;
+		gap: var(--space-sm);
+		margin-bottom: var(--space-sm);
+	}
+	.tach-row {
+		align-items: flex-start;
+	}
 	button {
 		padding: var(--space-sm) var(--space-md);
 		background: var(--surface-panel);
@@ -190,5 +391,10 @@ function backToCockpit(): void {
 	}
 	.run-again {
 		font-weight: 600;
+	}
+	@media (max-width: 1100px) {
+		.dual {
+			grid-template-columns: 1fr;
+		}
 	}
 </style>
