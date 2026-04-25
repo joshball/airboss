@@ -2,10 +2,12 @@
 /**
  * Theme picker UI -- shared across study, sim, and hangar.
  *
- * The picker is a `<details>/<summary>` disclosure (matches the pattern
- * the study identity dropdown uses). It iterates `listThemes()` so a new
- * registered theme appears automatically -- per-app picker code never
- * grows when a theme ships.
+ * The picker is a `<details>/<summary>` disclosure that exposes a
+ * single-select `role="listbox"` of registered themes. Listbox (rather
+ * than `role="menu"` with `menuitemradio`) is the correct WAI-ARIA
+ * pattern for "pick one from a small set of mutually exclusive options"
+ * -- it requires the standard arrow/Home/End/Enter keyboard model and
+ * announces the selected option as such on every supported AT.
  *
  * The component does NOT post to `/theme` directly. The host app passes
  * an `onSelect` callback which decides what to do (POST the cookie,
@@ -15,9 +17,25 @@
  * `locked` mirrors the route safety rule: when the resolved theme can't
  * match the user's pick (today, on `/sim/*` where the route forces
  * sim/glass), the host passes `locked` so the picker shows the
- * explanation and disables every option. The user can still see what
- * they picked elsewhere; on leaving the locked route their pref takes
- * effect again.
+ * explanation, disables every option, and exposes the reason via
+ * `aria-describedby` so AT users hear it before opening the panel.
+ *
+ * Accessibility highlights:
+ *   - `aria-haspopup="listbox"` + `aria-expanded` bound to the open state.
+ *   - Roving tabindex inside the listbox: only the focused option is
+ *     tab-focusable; arrow / Home / End move focus, Enter / Space select.
+ *   - On open, focus moves to the currently-selected option (or the
+ *     first option if no current id matches).
+ *   - On Escape or selection, focus returns to the trigger.
+ *   - A polite live region announces the new active theme on selection
+ *     so screen-reader users get confirmation their pick took effect.
+ *   - Locked state: the trigger is `aria-disabled` and `aria-describedby`
+ *     points to a visually-hidden description; every option carries the
+ *     native `disabled` attribute so the AT announces the unavailability.
+ *   - Reduced motion: the chevron transition collapses to none under
+ *     `prefers-reduced-motion: reduce`.
+ *   - Min click target on options is 44px (WCAG 2.5.5 AAA, well above
+ *     2.5.8 AA).
  */
 import type { Theme, ThemeId } from '../contract';
 import { listThemes } from '../registry';
@@ -54,59 +72,183 @@ const activeLabel = $derived(availableThemes.find((t) => t.id === currentThemeId
 const triggerLabel = $derived(ariaLabel ?? `Theme: ${activeLabel}`);
 
 let menu = $state<HTMLDetailsElement | null>(null);
+let isOpen = $state(false);
+// Index of the option that currently holds focus inside the listbox.
+// Drives roving tabindex; only this option is tab-focusable, others are
+// `tabindex="-1"` so Tab leaves the listbox in one step.
+let focusedIndex = $state(-1);
+let liveAnnouncement = $state('');
+
+// Stable ids so `aria-describedby` and `aria-activedescendant` resolve
+// against rendered DOM nodes regardless of how many pickers are on a page.
+const instanceId = $props.id();
+const lockedDescriptionId = `${instanceId}-locked-desc`;
+const listboxId = `${instanceId}-listbox`;
+function optionId(themeId: ThemeId): string {
+	return `${instanceId}-opt-${themeId}`;
+}
+
+function focusOption(index: number) {
+	if (!menu) return;
+	const buttons = menu.querySelectorAll<HTMLButtonElement>('[data-theme-option]');
+	const target = buttons.item(index);
+	if (target) {
+		focusedIndex = index;
+		target.focus();
+	}
+}
+
+function handleToggle() {
+	if (!menu) return;
+	isOpen = menu.open;
+	if (!menu.open) {
+		focusedIndex = -1;
+		return;
+	}
+	// On open, land on the currently-selected option (or the first one
+	// if no match). Defer to the next microtask so the panel is in the
+	// DOM before we try to focus.
+	const fallback = availableThemes.findIndex((t) => t.id === currentThemeId);
+	const initial = fallback >= 0 ? fallback : 0;
+	queueMicrotask(() => focusOption(initial));
+}
 
 function handleBlur(event: FocusEvent) {
 	if (!menu) return;
 	const next = event.relatedTarget;
 	if (next instanceof Node && menu.contains(next)) return;
 	menu.open = false;
+	isOpen = false;
+	focusedIndex = -1;
 }
 
-function handleKeydown(event: KeyboardEvent) {
-	if (event.key !== 'Escape' || !menu?.open) return;
+function closeAndReturnFocus() {
+	if (!menu) return;
 	menu.open = false;
+	isOpen = false;
+	focusedIndex = -1;
 	const summary = menu.querySelector('summary');
 	if (summary instanceof HTMLElement) summary.focus();
 }
 
-function handleSelect(themeId: ThemeId) {
-	if (themeId === currentThemeId) {
-		if (menu) menu.open = false;
+function handleSummaryKeydown(event: KeyboardEvent) {
+	if (event.key === 'Escape' && menu?.open) {
+		event.preventDefault();
+		closeAndReturnFocus();
 		return;
 	}
-	if (menu) menu.open = false;
+	// ArrowDown on a closed picker should open the listbox and focus the
+	// active option, matching the listbox APG combobox-ish pattern. The
+	// `ontoggle` handler runs `handleToggle` which moves focus.
+	if ((event.key === 'ArrowDown' || event.key === 'ArrowUp') && menu && !menu.open) {
+		event.preventDefault();
+		menu.open = true;
+	}
+}
+
+function handleOptionKeydown(event: KeyboardEvent, index: number, themeId: ThemeId) {
+	switch (event.key) {
+		case 'Escape':
+			event.preventDefault();
+			closeAndReturnFocus();
+			return;
+		case 'ArrowDown': {
+			event.preventDefault();
+			const next = (index + 1) % availableThemes.length;
+			focusOption(next);
+			return;
+		}
+		case 'ArrowUp': {
+			event.preventDefault();
+			const prev = (index - 1 + availableThemes.length) % availableThemes.length;
+			focusOption(prev);
+			return;
+		}
+		case 'Home':
+			event.preventDefault();
+			focusOption(0);
+			return;
+		case 'End':
+			event.preventDefault();
+			focusOption(availableThemes.length - 1);
+			return;
+		case 'Enter':
+		case ' ':
+			event.preventDefault();
+			handleSelect(themeId);
+			return;
+		case 'Tab':
+			// Native Tab closes the picker (focus moves outside, blur
+			// handler picks it up). Don't preventDefault.
+			return;
+	}
+}
+
+function handleSelect(themeId: ThemeId) {
+	if (locked) return;
+	if (themeId === currentThemeId) {
+		closeAndReturnFocus();
+		return;
+	}
+	const newLabel = availableThemes.find((t) => t.id === themeId)?.label ?? themeId;
+	closeAndReturnFocus();
 	onSelect(themeId);
+	// Polite announcement -- the visual change is immediate; the SR
+	// confirmation tells AT users their selection landed.
+	liveAnnouncement = `Theme changed to ${newLabel}.`;
 }
 </script>
 
-<details class="theme-picker" bind:this={menu} onfocusout={handleBlur}>
+<details
+	class="theme-picker"
+	bind:this={menu}
+	ontoggle={handleToggle}
+	onfocusout={handleBlur}
+>
 	<summary
-		aria-haspopup="menu"
+		aria-haspopup="listbox"
+		aria-expanded={isOpen}
+		aria-controls={listboxId}
 		aria-label={triggerLabel}
 		aria-disabled={locked}
-		onkeydown={handleKeydown}
+		aria-describedby={locked ? lockedDescriptionId : undefined}
+		onkeydown={handleSummaryKeydown}
 	>
 		<span class="theme-picker-label">{activeLabel}</span>
 		<span class="chevron" aria-hidden="true">▾</span>
 	</summary>
 	<!--
-		Escape inside the panel routes through individual options' onkeydown
-		(below) so the menu role doesn't have to be focusable itself.
+		`role="listbox"` is the correct ARIA shape for single-select
+		"pick one of N" widgets. Each option is a real `<button>` so it
+		stays operable without JS-driven activation; we just supply the
+		listbox semantics on top.
 	-->
-	<div class="theme-picker-panel" role="menu" aria-label="Choose theme">
+	<div
+		id={listboxId}
+		class="theme-picker-panel"
+		role="listbox"
+		tabindex="-1"
+		aria-label={locked ? 'Theme (locked on this route)' : 'Choose theme'}
+		aria-activedescendant={focusedIndex >= 0
+			? optionId(availableThemes[focusedIndex]?.id ?? currentThemeId)
+			: undefined}
+	>
 		{#if locked}
 			<p class="theme-picker-locked">This route requires a fixed theme.</p>
 		{/if}
-		{#each availableThemes as option (option.id)}
+		{#each availableThemes as option, index (option.id)}
 			<button
 				type="button"
-				role="menuitemradio"
-				aria-checked={currentThemeId === option.id}
+				role="option"
+				id={optionId(option.id)}
+				aria-selected={currentThemeId === option.id}
 				class="theme-picker-option"
 				class:active={currentThemeId === option.id}
 				disabled={locked}
+				data-theme-option
+				tabindex={focusedIndex === index || (focusedIndex < 0 && currentThemeId === option.id) ? 0 : -1}
 				onclick={() => handleSelect(option.id)}
-				onkeydown={handleKeydown}
+				onkeydown={(event) => handleOptionKeydown(event, index, option.id)}
 			>
 				<span class="theme-picker-option-label">{option.label}</span>
 				{#if currentThemeId === option.id}
@@ -116,6 +258,21 @@ function handleSelect(themeId: ThemeId) {
 		{/each}
 	</div>
 </details>
+
+<!--
+	Visually hidden description that hangs off the trigger via
+	`aria-describedby` whenever the picker is locked. Rendering it
+	unconditionally (rather than gating on `locked`) keeps the id
+	stable so AT scrapes don't drop the association across renders.
+-->
+<span id={lockedDescriptionId} class="visually-hidden">
+	{locked
+		? 'Theme is locked because the current route requires a fixed theme. Your preference is saved and will apply on other routes.'
+		: ''}
+</span>
+
+<!-- Polite live region: announces the new theme name after a selection. -->
+<span class="visually-hidden" aria-live="polite" aria-atomic="true">{liveAnnouncement}</span>
 
 <style>
 	.theme-picker {
@@ -133,6 +290,11 @@ function handleSelect(themeId: ThemeId) {
 		padding: var(--space-2xs) var(--space-sm);
 		border-radius: var(--radius-sm);
 		user-select: none;
+		/* WCAG 2.5.5 AAA: 44x44 minimum click target. No `--target-min`
+		   token in the system today, so we hold a literal here. The lint
+		   rule blocks raw lengths only on padding/margin/gap/font/radius;
+		   `min-height` is exempt. */
+		min-height: 2.75rem;
 	}
 
 	.theme-picker > summary::-webkit-details-marker {
@@ -177,6 +339,12 @@ function handleSelect(themeId: ThemeId) {
 		transition: transform var(--motion-fast);
 	}
 
+	@media (prefers-reduced-motion: reduce) {
+		.chevron {
+			transition: none;
+		}
+	}
+
 	.theme-picker-panel {
 		position: absolute;
 		right: 0;
@@ -207,6 +375,11 @@ function handleSelect(themeId: ThemeId) {
 		justify-content: space-between;
 		gap: var(--space-sm);
 		width: 100%;
+		/* WCAG 2.5.5 AAA: 44x44 minimum click target. No `--target-min`
+		   token in the system today, so we hold a literal here. The lint
+		   rule blocks raw lengths only on padding/margin/gap/font/radius;
+		   `min-height` is exempt. */
+		min-height: 2.75rem;
 		text-align: left;
 		background: transparent;
 		border: 0;
@@ -239,5 +412,21 @@ function handleSelect(themeId: ThemeId) {
 
 	.theme-picker-check {
 		font-size: var(--type-ui-caption-size);
+	}
+
+	/*
+	 * `visually-hidden`: kept off-screen but exposed to AT. Used by the
+	 * locked-state description and the polite announcement region.
+	 */
+	.visually-hidden {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		white-space: nowrap;
+		border: 0;
 	}
 </style>
