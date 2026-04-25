@@ -1,7 +1,7 @@
 <script lang="ts">
 /**
- * Surface-switcher for a sim scenario. Renders three sibling links --
- * cockpit / horizon / dual -- with the current surface marked
+ * Surface-switcher for a sim scenario. Renders four sibling links --
+ * cockpit / horizon / dual / window -- with the current surface marked
  * `aria-current="page"`. Any sim page that wants to expose the other
  * surfaces drops this in. The component holds no state and imports
  * nothing surface-specific; it is purely a navigation widget keyed on
@@ -15,7 +15,7 @@ import { ROUTES, type SimScenarioId } from '@ab/constants';
 
 interface Props {
 	scenarioId: SimScenarioId;
-	current: 'cockpit' | 'horizon' | 'dual';
+	current: 'cockpit' | 'horizon' | 'dual' | 'window';
 }
 
 let { scenarioId, current }: Props = $props();
@@ -42,6 +42,13 @@ let { scenarioId, current }: Props = $props();
 		aria-current={current === 'dual' ? 'page' : undefined}
 	>
 		Dual
+	</a>
+	<a
+		href={ROUTES.SIM_SCENARIO_WINDOW(scenarioId)}
+		class:current={current === 'window'}
+		aria-current={current === 'window' ? 'page' : undefined}
+	>
+		Window
 	</a>
 </nav>
 

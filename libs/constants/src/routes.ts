@@ -189,6 +189,8 @@ export const ROUTES = {
 	SIM_SCENARIO_HORIZON: (id: SimScenarioId) => `/${id}/horizon` as const,
 	/** Combined surface: 3D horizon + primary instruments composed side-by-side. */
 	SIM_SCENARIO_DUAL: (id: SimScenarioId) => `/${id}/dual` as const,
+	/** Windowed surface: 3D horizon full-bleed with the instrument panel overlaid. */
+	SIM_SCENARIO_WINDOW: (id: SimScenarioId) => `/${id}/window` as const,
 
 	// Hangar (apps/hangar) -- admin surface for data-management. Served from
 	// its own host (hangar.airboss.test), so these paths are relative to that
