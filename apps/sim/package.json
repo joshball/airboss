@@ -9,6 +9,10 @@
 	},
 	"dependencies": {
 		"@ab/bc-sim": "workspace:*",
-		"@ab/constants": "workspace:*"
+		"@ab/constants": "workspace:*",
+		"three": "^0.169.0"
+	},
+	"devDependencies": {
+		"@types/three": "^0.169.0"
 	}
 }

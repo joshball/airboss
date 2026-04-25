@@ -36,6 +36,7 @@ import { type RampAction, resolveKey, resolveRampAction } from '$lib/control-han
 import { tickRamp } from '$lib/control-ramp';
 import { EngineSound } from '$lib/engine-sound.svelte';
 import FdmWorker from '$lib/fdm-worker.ts?worker';
+import ScenarioSurfaceNav from '$lib/horizon/ScenarioSurfaceNav.svelte';
 import Altimeter from '$lib/instruments/Altimeter.svelte';
 import Asi from '$lib/instruments/Asi.svelte';
 import AttitudeIndicator from '$lib/instruments/AttitudeIndicator.svelte';
@@ -487,6 +488,7 @@ const trimBias = $derived(inputs.trim);
 		<a class="back" href={ROUTES.SIM_HOME}>&larr; Scenarios</a>
 		<div>
 			<h1>{data.scenario.title}</h1>
+			<ScenarioSurfaceNav scenarioId={data.scenario.id} current="cockpit" />
 		</div>
 		<div class="header-actions">
 			<label class="auto-coord-toggle">
