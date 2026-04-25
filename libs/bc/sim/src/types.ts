@@ -75,6 +75,21 @@ export interface FdmTruthState {
 	elevatorEffective: number;
 	/** Engine RPM (revolutions per minute). */
 	engineRpm: number;
+	/**
+	 * Engine cluster state. These are not modelled by the FDM physics;
+	 * they are derived each tick from RPM + throttle + time as a coherent
+	 * cockpit-cluster proxy, so the gauges respond to pilot input. The
+	 * fault model can override them via DisplayState (alternator zeros
+	 * the ammeter, vacuum-failure zeros the vacuum gauge).
+	 */
+	oilPressurePsi: number;
+	oilTempCelsius: number;
+	fuelLeftGallons: number;
+	fuelRightGallons: number;
+	/** Bus current in amperes. Positive = charging, negative = discharging. */
+	ammeterAmps: number;
+	/** Vacuum-pump output in inches of mercury. C172 nominal ~5 in.Hg. */
+	vacuumInHg: number;
 }
 
 /** Pilot-commanded inputs sent from the main thread into the FDM worker. */
@@ -188,6 +203,31 @@ export interface AircraftConfig {
 	greenArcRpmLow: number;
 	/** Green arc high RPM. */
 	greenArcRpmHigh: number;
+	/** Oil pressure at idle RPM (psi). */
+	oilPressureIdlePsi: number;
+	/** Oil pressure at full RPM (psi). */
+	oilPressureMaxPsi: number;
+	/** Oil pressure green-arc bounds (psi). */
+	oilPressureGreenLowPsi: number;
+	oilPressureGreenHighPsi: number;
+	/** Steady-state oil temperature at cruise (Celsius). */
+	oilTempCruiseC: number;
+	/** Oil temp redline (Celsius). */
+	oilTempRedlineC: number;
+	/** Time for oil to warm from cold-start to cruise temp (seconds). */
+	oilWarmupSeconds: number;
+	/** Per-side fuel tank capacity (US gallons). */
+	fuelTankCapacityGallons: number;
+	/** Fuel burn at full throttle (gallons per hour). */
+	fuelBurnGphFull: number;
+	/** Fuel burn at idle (gallons per hour). */
+	fuelBurnGphIdle: number;
+	/** Steady-state ammeter reading at idle (positive = charging, A). */
+	ammeterIdleAmps: number;
+	/** Steady-state ammeter reading at cruise (A). */
+	ammeterCruiseAmps: number;
+	/** Vacuum-pump output at and above idle RPM (in.Hg). */
+	vacuumNominalInHg: number;
 	/** Stall speed clean (m/s IAS) -- reference only; FDM does not use directly. */
 	vS1: number;
 	/** Stall speed flaps-down (m/s IAS). */

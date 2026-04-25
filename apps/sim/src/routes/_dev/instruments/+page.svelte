@@ -22,6 +22,7 @@ import { SIM_FAULT_KINDS, SIM_FAULT_LABELS, SIM_FLAP_NOTCHES, type SimFaultKind 
 import Altimeter from '$lib/instruments/Altimeter.svelte';
 import Asi from '$lib/instruments/Asi.svelte';
 import AttitudeIndicator from '$lib/instruments/AttitudeIndicator.svelte';
+import EngineCluster from '$lib/instruments/cluster/EngineCluster.svelte';
 import HeadingIndicator from '$lib/instruments/HeadingIndicator.svelte';
 import Tachometer from '$lib/instruments/Tachometer.svelte';
 import TurnCoordinator from '$lib/instruments/TurnCoordinator.svelte';
@@ -66,6 +67,12 @@ function makeTruth(overrides: Partial<Preset['truth']> = {}): Preset['truth'] {
 		flapsDegrees: SIM_FLAP_NOTCHES[0],
 		elevatorEffective: 0,
 		engineRpm: 800,
+		oilPressurePsi: 30,
+		oilTempCelsius: 95,
+		fuelLeftGallons: 26,
+		fuelRightGallons: 26,
+		ammeterAmps: 3,
+		vacuumInHg: 5,
 		...overrides,
 	};
 }
@@ -262,6 +269,10 @@ function yawRateDegPerSec(d: DisplayState): number {
 				<figure aria-label={`Tachometer -- ${preset.label}`}>
 					<Tachometer rpm={d.engineRpm} />
 					<figcaption>TACH</figcaption>
+				</figure>
+				<figure aria-label={`Engine cluster -- ${preset.label}`}>
+					<EngineCluster display={d} />
+					<figcaption>ENGINE CLUSTER</figcaption>
 				</figure>
 				<dl class="meta" aria-label="Display state numeric values">
 					<dt>Bus volts</dt>

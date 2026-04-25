@@ -68,6 +68,8 @@ export class FdmEngine {
 			posEast: 0,
 			engineRpm: cfg.idleRpm + (cfg.maxRpm - cfg.idleRpm) * initial.throttle,
 			scriptedTrim: 0,
+			fuelLeftGallons: cfg.fuelTankCapacityGallons,
+			fuelRightGallons: cfg.fuelTankCapacityGallons,
 		};
 		this.inputs = {
 			throttle: initial.throttle,
