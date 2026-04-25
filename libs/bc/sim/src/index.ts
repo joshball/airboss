@@ -76,10 +76,12 @@ export {
 	validateTapeHash,
 } from './replay';
 export { DEPARTURE_STALL_SCENARIO } from './scenarios/departure-stall';
+export { EFATO_SCENARIO } from './scenarios/efato';
 export { FIRST_FLIGHT_SCENARIO } from './scenarios/first-flight';
 export { PLAYGROUND_SCENARIO } from './scenarios/playground';
 export { getScenario, listScenarios, SCENARIO_REGISTRY } from './scenarios/registry';
 export { type RunnerEvaluation, ScenarioRunner } from './scenarios/runner';
+export { VACUUM_FAILURE_SCENARIO } from './scenarios/vacuum-failure';
 export type {
 	AircraftConfig,
 	FdmInputs,
