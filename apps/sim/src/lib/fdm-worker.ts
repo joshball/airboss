@@ -12,7 +12,7 @@
 
 /// <reference lib="webworker" />
 
-import type { FrameRing, GradeReport, ReplayFrame, ScenarioStepState } from '@ab/bc-sim';
+import type { FrameRing, GradeReport, MarkerBeaconZone, ReplayFrame, ScenarioStepState } from '@ab/bc-sim';
 import {
 	applyFaults,
 	buildTape,
@@ -21,6 +21,7 @@ import {
 	FdmEngine,
 	getAircraftConfig,
 	getScenario,
+	markerBeaconAtPosition,
 	pushFrame,
 	ScenarioRunner,
 } from '@ab/bc-sim';
@@ -62,6 +63,8 @@ interface WorkerState {
 	/** True once a TAPE message has been posted -- guards against double-
 	 *  posting on a pause-then-outcome race. */
 	tapePosted: boolean;
+	/** Cached scenario marker-beacon zones (empty when scenario declares none). */
+	markerBeacons: readonly MarkerBeaconZone[];
 }
 
 let state: WorkerState | null = null;
@@ -92,7 +95,14 @@ function buildState(scenarioId: SimScenarioId): WorkerState {
 		initialState: def.initial,
 		lastFrame: null,
 		tapePosted: false,
+		markerBeacons: def.markerBeacons ?? [],
 	};
+}
+
+function resolveMarkerBeaconKind(s: WorkerState, frame: ReplayFrame): ReturnType<typeof markerBeaconAtPosition> {
+	if (s.markerBeacons.length === 0) return null;
+	const aglMeters = frame.truth.altitude - frame.truth.groundElevation;
+	return markerBeaconAtPosition(s.markerBeacons, frame.truth.x, aglMeters);
 }
 
 /**
@@ -131,6 +141,7 @@ function postSnapshot(s: WorkerState): void {
 		running: s.running,
 		stepState: s.lastStepState,
 		activations: frame.activations,
+		markerBeaconKind: resolveMarkerBeaconKind(s, frame),
 	});
 }
 
@@ -232,6 +243,7 @@ function loop(): void {
 			running: state.running,
 			stepState: state.lastStepState,
 			activations: frame.activations,
+			markerBeaconKind: resolveMarkerBeaconKind(state, frame),
 		});
 	}
 

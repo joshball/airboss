@@ -148,9 +148,11 @@ function handleWorkerMessage(event: MessageEvent<WorkerToMain>): void {
 				flapMotor.trigger();
 			}
 			lastFlaps = msg.inputs.flaps;
-			// Marker-beacon trigger source lives in Phase 4 navaid work; pass
-			// null today so the cue stays armed but silent.
-			markerBeacon.setKind(null);
+			// Marker-beacon trigger -- the worker resolves the active kind
+			// against the scenario's authored zones (`def.markerBeacons`)
+			// each snapshot. Scenarios with no zones (or aircraft outside
+			// every zone) post `null`, which silences the cue.
+			markerBeacon.setKind(msg.markerBeaconKind ?? null);
 			altitudeAlert.observeAltitude(msg.truth.altitude * SIM_FEET_PER_METER);
 			break;
 		}

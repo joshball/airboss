@@ -5,7 +5,13 @@
  * structured-clone-safe (no functions, no symbols).
  */
 
-import type { SimAircraftId, SimFlapDegrees, SimScenarioId, SimScenarioOutcome } from '@ab/constants';
+import type {
+	SimAircraftId,
+	SimFlapDegrees,
+	SimMarkerBeaconKind,
+	SimScenarioId,
+	SimScenarioOutcome,
+} from '@ab/constants';
 import type { ScenarioFault } from './faults/types';
 
 /**
@@ -480,6 +486,38 @@ export interface ScenarioDefinition {
 	grading?: GradingDefinition;
 	/** Optional spaced-rep linkage. Present for scored scenarios. */
 	repMetadata?: RepMetadata;
+	/**
+	 * Optional ILS-style marker-beacon zones. The cockpit fires the
+	 * matching cue when the aircraft enters a zone (downrange position
+	 * within `halfWidthMeters` of `xMeters` AND AGL <= `aglCeilingMeters`)
+	 * and silences when the aircraft leaves all zones. Useful for ILS
+	 * approach drills; absent on every other scenario.
+	 */
+	markerBeacons?: readonly MarkerBeaconZone[];
+}
+
+/**
+ * Authored marker-beacon zone. Approximates the upward cone of a real
+ * marker-beacon antenna with a horizontal half-width along the scenario's
+ * downrange `x` axis plus an AGL ceiling. Real ILS layouts have three
+ * non-overlapping zones (outer/middle/inner), positioned at standard
+ * distances from the runway threshold.
+ */
+export interface MarkerBeaconZone {
+	kind: SimMarkerBeaconKind;
+	/** Downrange center of the zone along scenario `x` (meters). */
+	xMeters: number;
+	/**
+	 * Half-width of the zone along `x` (meters). The aircraft fires the
+	 * cue when |truth.x - xMeters| <= halfWidthMeters.
+	 */
+	halfWidthMeters: number;
+	/**
+	 * AGL ceiling above which the cue stays silent (meters AGL). Real
+	 * marker beams are narrow and high-gain enough that the receiver only
+	 * triggers within a few hundred feet AGL on approach.
+	 */
+	aglCeilingMeters: number;
 }
 
 /**

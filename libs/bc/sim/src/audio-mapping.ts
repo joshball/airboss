@@ -6,7 +6,13 @@
  * lets them be unit tested without a browser.
  */
 
-import { SIM_ENGINE_SOUND, SIM_GEAR_WARNING, SIM_SEA_LEVEL_DENSITY_KG_M3 } from '@ab/constants';
+import {
+	SIM_ENGINE_SOUND,
+	SIM_GEAR_WARNING,
+	SIM_SEA_LEVEL_DENSITY_KG_M3,
+	type SimMarkerBeaconKind,
+} from '@ab/constants';
+import type { MarkerBeaconZone } from './types';
 
 /** Fundamental oscillator frequency (Hz) given RPM and the airframe idle. */
 export function engineFundamentalHz(rpm: number, idleRpm: number): number {
@@ -128,4 +134,37 @@ export function flapsChanged(prevDeg: number, currDeg: number): boolean {
 export function altitudeAlertCrossed(prevFt: number, currFt: number, targetFt: number, leadFt: number): boolean {
 	const threshold = targetFt - leadFt;
 	return (prevFt < threshold && currFt >= threshold) || (prevFt > threshold && currFt <= threshold);
+}
+
+/**
+ * Resolve which marker-beacon kind (if any) the aircraft is currently over.
+ *
+ * A real ILS marker-beacon antenna radiates a narrow upward cone; we
+ * approximate the cone with a horizontal half-width along the scenario's
+ * downrange axis (`x`) plus an AGL ceiling. The aircraft is "in" the zone
+ * when:
+ * - |truth.x - zone.xMeters| <= zone.halfWidthMeters
+ * - aglMeters <= zone.aglCeilingMeters
+ *
+ * If multiple zones overlap (rare; non-overlapping in real ILS layouts)
+ * the narrowest zone wins. This biases toward the inner marker on a
+ * standard layout where outer/middle/inner sit progressively closer to
+ * the threshold with progressively narrower beams.
+ *
+ * Returns `null` when no zone matches -- the cue stays silent.
+ */
+export function markerBeaconAtPosition(
+	zones: readonly MarkerBeaconZone[],
+	truthXMeters: number,
+	aglMeters: number,
+): SimMarkerBeaconKind | null {
+	let best: MarkerBeaconZone | null = null;
+	for (const zone of zones) {
+		if (aglMeters > zone.aglCeilingMeters) continue;
+		if (Math.abs(truthXMeters - zone.xMeters) > zone.halfWidthMeters) continue;
+		if (best === null || zone.halfWidthMeters < best.halfWidthMeters) {
+			best = zone;
+		}
+	}
+	return best?.kind ?? null;
 }
