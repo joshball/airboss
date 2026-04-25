@@ -22,7 +22,7 @@ review_status: done
 
 **File:** apps/hangar/src/routes/(app)/tasks/board/+page.svelte:68-83
 **Issue:** `.filter-select` and `.filter-label` have no CSS. Render as browser-default selects.
-**Recommendation:** Style with `--t-control-*` tokens or use Select component.
+**Recommendation:** Use the shared Select component, or style with control tokens (`--control-bg`, `--control-border`, `--control-ink`) per [docs/platform/theme-system/QUICK_REFERENCE.md](../../../../platform/theme-system/QUICK_REFERENCE.md).
 
 ### [MEDIUM] "Clear filters" button unstyled
 

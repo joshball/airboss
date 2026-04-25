@@ -23,8 +23,8 @@ reviews:
 ### [MEDIUM] Error page uses wrong CSS custom property names
 
 **File:** apps/sim/src/routes/+error.svelte:31-35
-**Issue:** `var(--color-text-muted, #666)` and `var(--color-link, #0066cc)` use `--color-*` naming, not `--t-*` theme tokens. Hardcoded hex fallbacks will always be used since the custom properties don't exist.
-**Recommendation:** Use `var(--t-text-muted)` and `var(--t-primary)`.
+**Issue:** `var(--color-text-muted, #666)` and `var(--color-link, #0066cc)` use `--color-*` naming instead of theme tokens. Hardcoded hex fallbacks will always be used since the custom properties don't exist.
+**Recommendation:** Use `var(--ink-muted)` for muted text and `var(--link-default)` for the link color (see [docs/platform/theme-system/QUICK_REFERENCE.md](../../../../platform/theme-system/QUICK_REFERENCE.md)).
 
 ### [MEDIUM] Nav active state uses exact path matching -- breaks on child routes
 
@@ -159,7 +159,7 @@ The actual hangar pattern (implemented in `apps/hangar/src/routes/(app)/+layout.
 
 - Uses `THEME_PREFERENCES.STORAGE_KEYS.THEME_MODE` (from `@firc/constants`) for the localStorage key -- not a bare string.
 - Uses `THEME_PREFERENCES.STORAGE_KEYS.THEME_ID` and `STORAGE_KEYS.SCALE` as well.
-- Sets `data-theme-id`, `data-theme-mode`, and `--t-user-scale` via a `$effect`.
+- Sets `data-theme`, `data-appearance`, and `data-layout` on `<html>` via a `$effect`, plus a user-scale custom property.
 - Provides a `ThemeControl` context (`THEME_CONTROL_CONTEXT`) consumed by `ThemeEditor` in settings.
 - Handles legacy scale migration.
 
@@ -238,8 +238,8 @@ The design mentions "user name + logout button" in the nav. Best-practices.md ru
 
 - **SSR disabled** -- `apps/sim/src/routes/+layout.ts` already has `export const ssr = false`. No change needed.
 - **`data-app-id="sim"`** -- `apps/sim/src/app.html` already has `data-app-id="sim"`. Amber accent is applied automatically. No change needed.
-- **`data-theme-id="glass-cockpit"` and `data-theme-mode="light"`** -- already set in `app.html`. Correct defaults.
-- **Theme imports in `+layout.svelte`** -- glass-cockpit tokens already imported. Correct.
+- **`data-theme="sim/glass"` and `data-appearance="dark"`** -- already set in `app.html`. Correct defaults.
+- **Theme imports in `+layout.svelte`** -- the `sim/glass` theme tokens are emitted into `libs/themes/generated/tokens.css` and applied automatically; no per-app import is needed.
 - **No schema changes** -- spec correctly identifies that sim-shell adds no new DB tables. Identity tables are managed by better-auth.
 - **`AUTH_INTERNAL_ORIGIN`** -- constant exists in `@firc/constants` and is the right way to construct internal auth requests. Good.
 - **No registration in sim** -- correct architectural boundary. Learner accounts are created via ops/runway.
