@@ -118,6 +118,8 @@
       "name": "@ab/bc-sim",
       "dependencies": {
         "@ab/constants": "workspace:*",
+        "@ab/db": "workspace:*",
+        "@ab/utils": "workspace:*",
       },
     },
     "libs/bc/study": {
