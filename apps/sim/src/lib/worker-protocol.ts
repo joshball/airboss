@@ -13,6 +13,7 @@ import type {
 	FaultActivation,
 	FdmInputs,
 	FdmTruthState,
+	GradeReport,
 	ReplayTape,
 	ScenarioRunResult,
 	ScenarioStepState,
@@ -51,5 +52,10 @@ export type WorkerToMain =
 	 * Full replay tape posted once per scenario run, immediately after the
 	 * OUTCOME message. The main thread persists it for the debrief route.
 	 * Even ABORTED runs post a tape (with whatever frames accumulated).
+	 *
+	 * `grade` is present when the scenario declared a `grading` block and
+	 * the evaluator could run (non-empty frames). It is omitted on
+	 * scenarios with no grading definition and on aborted runs whose
+	 * tapes have zero frames.
 	 */
-	| { type: typeof SIM_WORKER_MESSAGES.TAPE; tape: ReplayTape };
+	| { type: typeof SIM_WORKER_MESSAGES.TAPE; tape: ReplayTape; grade?: GradeReport };

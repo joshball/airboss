@@ -14,7 +14,13 @@
  * the scenario authors one.
  */
 
-import { type ReplayFrame, type ReplayTape, type TapeHashValidation, validateTapeHash } from '@ab/bc-sim';
+import {
+	type GradeReport,
+	type ReplayFrame,
+	type ReplayTape,
+	type TapeHashValidation,
+	validateTapeHash,
+} from '@ab/bc-sim';
 import { ROUTES, SIM_FEET_PER_METER, SIM_KNOTS_PER_METER_PER_SECOND, SIM_SCENARIO_OUTCOMES } from '@ab/constants';
 import { onMount } from 'svelte';
 import Altimeter from '$lib/instruments/Altimeter.svelte';
@@ -25,7 +31,7 @@ import HeadingIndicator from '$lib/instruments/HeadingIndicator.svelte';
 import Tachometer from '$lib/instruments/Tachometer.svelte';
 import TurnCoordinator from '$lib/instruments/TurnCoordinator.svelte';
 import Vsi from '$lib/instruments/Vsi.svelte';
-import { loadTape } from '$lib/tape-store.svelte';
+import { loadGrade, loadTape } from '$lib/tape-store.svelte';
 import type { PageData } from './$types';
 import IdealPathOverlay from './IdealPathOverlay.svelte';
 import InputTrace from './InputTrace.svelte';
@@ -33,6 +39,7 @@ import InputTrace from './InputTrace.svelte';
 let { data }: { data: PageData } = $props();
 
 let tape = $state<ReplayTape | null>(null);
+let grade = $state<GradeReport | null>(null);
 let validation = $state<TapeHashValidation | null>(null);
 let mounted = $state(false);
 let frameIndex = $state(0);
@@ -44,9 +51,33 @@ onMount(() => {
 		// Land the scrubber on the final frame -- that's the moment of
 		// outcome, the most useful starting view for any debrief.
 		frameIndex = Math.max(0, tape.frames.length - 1);
+		grade = loadGrade(data.scenario.id);
 	}
 	mounted = true;
 });
+
+const gradeTotalPct = $derived(grade ? Math.round(grade.total * 100) : 0);
+
+function componentLabel(kind: GradeReport['components'][number]['kind']): string {
+	switch (kind) {
+		case 'altitude_hold':
+			return 'Altitude hold';
+		case 'heading_hold':
+			return 'Heading hold';
+		case 'airspeed_hold':
+			return 'Airspeed hold';
+		case 'stall_margin':
+			return 'Stall margin';
+		case 'reaction_time':
+			return 'Reaction time';
+		case 'ideal_path_match':
+			return 'Ideal path match';
+		default: {
+			const _never: never = kind;
+			return _never;
+		}
+	}
+}
 
 const outcomeLabel = $derived.by(() => {
 	if (tape === null) return null;
@@ -204,6 +235,46 @@ function onScrubKey(event: KeyboardEvent): void {
 				{/if}
 			</section>
 
+			{#if grade}
+				<section class="grade" aria-label="Scenario grade">
+					<header class="grade-head">
+						<h3>Grade</h3>
+						<span class="grade-total" aria-label={`Weighted total ${gradeTotalPct} percent`}>
+							{gradeTotalPct}%
+						</span>
+					</header>
+					<p class="panel-help">
+						Per-component quality signals beyond pass/fail. Each component scores 0..1 inside its tolerance band and decays linearly to 0 at the hard-fail boundary.
+					</p>
+					<ol class="grade-components">
+						{#each grade.components as component (component.kind)}
+							{@const pct = Math.round(component.score * 100)}
+							{@const weightPct = Math.round(component.weight * 100)}
+							<li class="grade-component">
+								<div class="grade-row">
+									<span class="grade-label">{componentLabel(component.kind)}</span>
+									<span class="grade-weight">w {weightPct}%</span>
+									<span class="grade-score">{pct}%</span>
+								</div>
+								<div
+									class="grade-bar"
+									role="meter"
+									aria-valuemin={0}
+									aria-valuemax={100}
+									aria-valuenow={pct}
+									aria-label={`${componentLabel(component.kind)} score`}
+								>
+									<div class="grade-fill" style:width={`${pct}%`}></div>
+								</div>
+								{#if component.summary}
+									<p class="grade-summary">{component.summary}</p>
+								{/if}
+							</li>
+						{/each}
+					</ol>
+				</section>
+			{/if}
+
 			<section class="input-tape" aria-label="Pilot input traces">
 				<h3>Inputs</h3>
 				<p class="panel-help">Throttle, elevator, aileron, and rudder commands across the run. Playhead tracks the scrubber.</p>
@@ -300,6 +371,7 @@ function onScrubKey(event: KeyboardEvent): void {
 	.stale,
 	.summary,
 	.scrubber,
+	.grade,
 	.input-tape,
 	.ideal-path,
 	.dual {
@@ -308,6 +380,63 @@ function onScrubKey(event: KeyboardEvent): void {
 		background: var(--surface-panel);
 		border: 1px solid var(--edge-default);
 		border-radius: var(--radius-sm);
+	}
+	.grade-head {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: var(--space-md);
+	}
+	.grade-head h3 {
+		margin: 0;
+	}
+	.grade-total {
+		font-family: var(--font-family-mono);
+		font-size: var(--font-size-xl);
+		color: var(--ink-body);
+	}
+	.grade-components {
+		list-style: none;
+		margin: var(--space-md) 0 0;
+		padding: 0;
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-md);
+	}
+	.grade-row {
+		display: grid;
+		grid-template-columns: 1fr auto auto;
+		gap: var(--space-md);
+		align-items: baseline;
+	}
+	.grade-label {
+		color: var(--ink-body);
+	}
+	.grade-weight {
+		font-family: var(--font-family-mono);
+		font-size: var(--font-size-sm);
+		color: var(--ink-muted);
+	}
+	.grade-score {
+		font-family: var(--font-family-mono);
+		font-size: var(--font-size-sm);
+		color: var(--ink-body);
+	}
+	.grade-bar {
+		margin-top: var(--space-2xs);
+		height: var(--space-xs);
+		background: var(--edge-default);
+		border-radius: var(--radius-pill);
+		overflow: hidden;
+	}
+	.grade-fill {
+		height: 100%;
+		background: var(--sim-arc-green);
+	}
+	.grade-summary {
+		margin: var(--space-2xs) 0 0;
+		font-size: var(--font-size-sm);
+		color: var(--ink-muted);
 	}
 	.stale {
 		border-color: var(--sim-arc-yellow);

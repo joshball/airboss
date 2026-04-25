@@ -11,13 +11,18 @@
  * debrief route does not have to change.
  */
 
-import { parseTape, type ReplayTape, serializeTape } from '@ab/bc-sim';
+import { type GradeReport, parseTape, type ReplayTape, serializeTape } from '@ab/bc-sim';
 import type { SimScenarioId } from '@ab/constants';
 
 const STORAGE_PREFIX = 'sim.tape.';
+const GRADE_PREFIX = 'sim.grade.';
 
 function storageKey(scenarioId: SimScenarioId): string {
 	return `${STORAGE_PREFIX}${scenarioId}`;
+}
+
+function gradeKey(scenarioId: SimScenarioId): string {
+	return `${GRADE_PREFIX}${scenarioId}`;
 }
 
 /**
@@ -61,4 +66,46 @@ export function loadTape(scenarioId: SimScenarioId): ReplayTape | null {
 export function clearTape(scenarioId: SimScenarioId): void {
 	if (typeof sessionStorage === 'undefined') return;
 	sessionStorage.removeItem(storageKey(scenarioId));
+	sessionStorage.removeItem(gradeKey(scenarioId));
+}
+
+/**
+ * Save the grade report alongside its tape. Stored as plain JSON --
+ * GradeReport is structurally simple (numbers, strings, kind enums) and
+ * does not need a versioned envelope yet. Pass `undefined` to clear any
+ * stored grade for this scenario (used when a re-run produces a tape
+ * with no grading definition or with an evaluator failure).
+ */
+export function saveGrade(scenarioId: SimScenarioId, grade: GradeReport | undefined): void {
+	if (typeof sessionStorage === 'undefined') return;
+	const key = gradeKey(scenarioId);
+	if (grade === undefined) {
+		sessionStorage.removeItem(key);
+		return;
+	}
+	try {
+		sessionStorage.setItem(key, JSON.stringify(grade));
+	} catch {
+		// Quota exceeded or storage disabled. Debrief will simply not have
+		// a grade to render -- correct degradation, no silent data loss.
+	}
+}
+
+/**
+ * Load the grade report for a scenario. Returns null when no grade was
+ * recorded (scenario has no grading definition, evaluator failed, or
+ * sessionStorage is unavailable) or when the stored payload is unreadable.
+ */
+export function loadGrade(scenarioId: SimScenarioId): GradeReport | null {
+	if (typeof sessionStorage === 'undefined') return null;
+	const raw = sessionStorage.getItem(gradeKey(scenarioId));
+	if (raw === null) return null;
+	try {
+		return JSON.parse(raw) as GradeReport;
+	} catch {
+		// Stored payload is unreadable. Drop it so subsequent reads do
+		// not keep tripping on it.
+		sessionStorage.removeItem(gradeKey(scenarioId));
+		return null;
+	}
 }
