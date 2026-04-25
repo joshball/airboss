@@ -23,7 +23,12 @@
  * surface or any caller.
  */
 
-import { SIM_FAULT_DEFAULTS, SIM_FAULT_KINDS, SIM_KNOTS_PER_METER_PER_SECOND } from '@ab/constants';
+import {
+	SIM_FAULT_DEFAULTS,
+	SIM_FAULT_KINDS,
+	SIM_KNOTS_PER_METER_PER_SECOND,
+	SIM_METERS_PER_FOOT,
+} from '@ab/constants';
 import type { DisplayState, FaultActivation, FaultParams, FaultTransformInput, ScenarioFault } from './types';
 
 /** Build an activation for a scenario-declared fault firing now (sim time t).
@@ -91,12 +96,19 @@ function applyPitotBlock(
 
 function applyStaticBlock(
 	display: DisplayState,
-	_activation: FaultActivation,
+	activation: FaultActivation,
 	_input: FaultTransformInput,
 ): DisplayState {
-	// B5.{asi,alt,vsi} will compute: altimeter freezes at block altitude;
-	// VSI reads zero; ASI reverses sense on descent. Until then, pass through.
-	return display;
+	// Altimeter behavior: a blocked static port traps a single reference
+	// pressure inside the case. The altimeter capsule no longer sees outside
+	// pressure changes, so the indicated altitude freezes at whatever it was
+	// reading the moment the block engaged. The B5.alt PR ships this layer.
+	//
+	// B5.{asi,vsi} extends this for the rest of the static system: VSI
+	// drops to zero, ASI reverses sense on descent. Those branches stay
+	// pass-through here until their PRs land.
+	const frozenAltitudeMsl = activation.params.staticBlockFreezeAltFt * SIM_METERS_PER_FOOT;
+	return { ...display, altitudeMsl: frozenAltitudeMsl };
 }
 
 function applyVacuumFailure(

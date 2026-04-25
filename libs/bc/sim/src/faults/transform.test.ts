@@ -5,7 +5,7 @@
  * extend this file with their own per-fault tests.
  */
 
-import { SIM_FAULT_KINDS, SIM_FAULT_TRIGGER_KINDS, SIM_FLAP_NOTCHES } from '@ab/constants';
+import { SIM_FAULT_KINDS, SIM_FAULT_TRIGGER_KINDS, SIM_FLAP_NOTCHES, SIM_METERS_PER_FOOT } from '@ab/constants';
 import { describe, expect, it } from 'vitest';
 import type { FdmTruthState } from '../types';
 import { activateFault, applyFaults } from './transform';
@@ -136,6 +136,84 @@ describe('alternator failure -- bus voltage decay', () => {
 
 	it('respects per-fault decay overrides', () => {
 		expect(busAfter(15, 30)).toBeCloseTo(NOMINAL_VOLTS / 2, 5);
+	});
+});
+
+describe('static block -- altimeter freeze (B5.alt)', () => {
+	function frozenDisplay(args: { freezeAltFt: number; truthAltMsl: number }) {
+		const activation = activateFault(
+			{
+				kind: SIM_FAULT_KINDS.STATIC_BLOCK,
+				trigger: { kind: SIM_FAULT_TRIGGER_KINDS.TIME_SECONDS, at: 0 },
+				params: { staticBlockFreezeAltFt: args.freezeAltFt },
+			},
+			0,
+		);
+		return applyFaults({
+			truth: makeTruth({ t: 30, altitude: args.truthAltMsl, onGround: false }),
+			activations: [activation],
+			nominalBusVolts: NOMINAL_VOLTS,
+		});
+	}
+
+	it('freezes altitude at the block altitude regardless of true altitude', () => {
+		const display = frozenDisplay({ freezeAltFt: 3000, truthAltMsl: 2000 });
+		expect(display.altitudeMsl).toBeCloseTo(3000 * SIM_METERS_PER_FOOT, 4);
+	});
+
+	it('keeps the same indicated altitude when truth climbs through it', () => {
+		const climbing = frozenDisplay({ freezeAltFt: 3000, truthAltMsl: 4500 });
+		expect(climbing.altitudeMsl).toBeCloseTo(3000 * SIM_METERS_PER_FOOT, 4);
+	});
+
+	it('keeps the same indicated altitude when truth descends through it', () => {
+		const descending = frozenDisplay({ freezeAltFt: 3000, truthAltMsl: 1500 });
+		expect(descending.altitudeMsl).toBeCloseTo(3000 * SIM_METERS_PER_FOOT, 4);
+	});
+
+	it('does not affect other display fields (pitch, roll, RPM, alpha)', () => {
+		const activation = activateFault(
+			{
+				kind: SIM_FAULT_KINDS.STATIC_BLOCK,
+				trigger: { kind: SIM_FAULT_TRIGGER_KINDS.TIME_SECONDS, at: 0 },
+				params: { staticBlockFreezeAltFt: 1000 },
+			},
+			0,
+		);
+		const display = applyFaults({
+			truth: makeTruth({
+				t: 30,
+				altitude: 2000,
+				pitch: 0.1,
+				roll: -0.05,
+				heading: 1.5,
+				engineRpm: 2200,
+				alpha: 0.08,
+			}),
+			activations: [activation],
+			nominalBusVolts: NOMINAL_VOLTS,
+		});
+		expect(display.pitchIndicated).toBe(0.1);
+		expect(display.rollIndicated).toBe(-0.05);
+		expect(display.headingIndicated).toBe(1.5);
+		expect(display.engineRpm).toBe(2200);
+		expect(display.alpha).toBe(0.08);
+	});
+
+	it('uses default freeze altitude (0 ft MSL) when scenario does not override', () => {
+		const activation = activateFault(
+			{
+				kind: SIM_FAULT_KINDS.STATIC_BLOCK,
+				trigger: { kind: SIM_FAULT_TRIGGER_KINDS.TIME_SECONDS, at: 0 },
+			},
+			0,
+		);
+		const display = applyFaults({
+			truth: makeTruth({ t: 30, altitude: 1500, onGround: false }),
+			activations: [activation],
+			nominalBusVolts: NOMINAL_VOLTS,
+		});
+		expect(display.altitudeMsl).toBe(0);
 	});
 });
 
