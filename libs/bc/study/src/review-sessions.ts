@@ -10,7 +10,6 @@
  * memory-card traversal driven by the due queue + an optional domain filter.
  */
 
-import { createHash } from 'node:crypto';
 import {
 	type CardStatus,
 	type CardType,
@@ -21,9 +20,10 @@ import {
 } from '@ab/constants';
 import { db as defaultDb } from '@ab/db';
 import { generateReviewSessionId } from '@ab/utils';
-import { and, desc, eq, inArray, isNotNull, lt } from 'drizzle-orm';
+import { and, count, desc, eq, inArray, isNotNull, lt, max } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import { getDueCards } from './cards';
+import { computeDeckHash } from './deck-spec';
 import {
 	card,
 	cardState,
@@ -32,6 +32,11 @@ import {
 	type ReviewSessionDeckSpec,
 	review,
 } from './schema';
+
+// Layer (b) "Redo" moved the deck-spec hash + canonical-JSON helpers into
+// `./deck-spec`. Re-export so existing call sites that imported
+// `computeDeckHash` from this module (or via `@ab/bc-study`) keep working.
+export { computeDeckHash } from './deck-spec';
 
 type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;
 
@@ -94,18 +99,6 @@ export interface ReviewSessionState {
 }
 
 // ---------- Helpers ----------
-
-/**
- * Deterministic canonical JSON of a deck spec + SHA-1 first 8 chars. Two
- * requests with the same logical filter land on the same hash regardless of
- * property-insertion order.
- */
-export function computeDeckHash(spec: ReviewSessionDeckSpec): string {
-	// Sort keys so `{ domain: null }` and future multi-field specs round-trip
-	// deterministically.
-	const canonical = JSON.stringify(spec, Object.keys(spec).sort());
-	return createHash('sha1').update(canonical).digest('hex').slice(0, 8);
-}
 
 interface LoadCardOptions {
 	promptConfidence: boolean;
@@ -389,6 +382,125 @@ export async function getLatestResumableSession(
 		.orderBy(desc(memoryReviewSession.lastActivityAt))
 		.limit(1);
 	return row ?? null;
+}
+
+/**
+ * Find the most-recent in-progress (active or abandoned) session for this
+ * user and deck hash. Drives the Layer (b) Redo resolver's "Resume your
+ * in-progress run?" prompt: if the visit to `?deck=<...>` matches a hash the
+ * user already has a partial run on, the resolver offers Resume vs Start
+ * fresh rather than silently creating a new session.
+ *
+ * Returns the row or null. Completed sessions never match -- finishing a run
+ * is the explicit signal that "this deck is done for now."
+ */
+export async function findResumableSessionByDeckHash(
+	userId: string,
+	deckHash: string,
+	db: Db = defaultDb,
+): Promise<MemoryReviewSessionRow | null> {
+	const resumableStatuses: ReviewSessionStatus[] = [REVIEW_SESSION_STATUSES.ACTIVE, REVIEW_SESSION_STATUSES.ABANDONED];
+	const [row] = await db
+		.select()
+		.from(memoryReviewSession)
+		.where(
+			and(
+				eq(memoryReviewSession.userId, userId),
+				eq(memoryReviewSession.deckHash, deckHash),
+				inArray(memoryReviewSession.status, resumableStatuses),
+			),
+		)
+		.orderBy(desc(memoryReviewSession.lastActivityAt))
+		.limit(1);
+	return row ?? null;
+}
+
+/**
+ * Saved-deck summary for the `/memory` dashboard "Saved decks" section. One
+ * entry per distinct `deck_hash` the user has run, with the most recently
+ * stored canonical spec, the timestamp of the last run, and a count of total
+ * runs (active + completed + abandoned). When an in-progress session exists
+ * for the deck, its id + position are included so the entry can render a
+ * "Resume in progress (N of M)" affordance instead of just a Re-run link.
+ */
+export interface SavedDeckSummary {
+	deckHash: string;
+	deckSpec: ReviewSessionDeckSpec;
+	lastVisitedAt: Date;
+	sessionCount: number;
+	resumable: {
+		sessionId: string;
+		status: ReviewSessionStatus;
+		currentIndex: number;
+		totalCards: number;
+	} | null;
+}
+
+/**
+ * Aggregate the user's saved decks. Saved decks are implicit: any
+ * `memory_review_session` row contributes its `deck_hash` to the list, so
+ * running a session with non-default filters automatically saves the deck.
+ */
+export async function listSavedDecks(userId: string, db: Db = defaultDb): Promise<SavedDeckSummary[]> {
+	const aggregateRows = await db
+		.select({
+			deckHash: memoryReviewSession.deckHash,
+			lastVisitedAt: max(memoryReviewSession.lastActivityAt),
+			sessionCount: count(memoryReviewSession.id),
+		})
+		.from(memoryReviewSession)
+		.where(eq(memoryReviewSession.userId, userId))
+		.groupBy(memoryReviewSession.deckHash);
+
+	if (aggregateRows.length === 0) return [];
+
+	const deckHashes = aggregateRows.map((r) => r.deckHash);
+
+	// Fetch all candidate rows for these hashes in one query, then pick the
+	// representative (latest deck_spec) + the resumable row (latest active /
+	// abandoned) per hash in memory. One round-trip beats N per-hash queries.
+	const sessionRows = await db
+		.select()
+		.from(memoryReviewSession)
+		.where(and(eq(memoryReviewSession.userId, userId), inArray(memoryReviewSession.deckHash, deckHashes)))
+		.orderBy(desc(memoryReviewSession.lastActivityAt));
+
+	const latestSpecByHash = new Map<string, ReviewSessionDeckSpec>();
+	const resumableByHash = new Map<string, MemoryReviewSessionRow>();
+	for (const row of sessionRows) {
+		if (!latestSpecByHash.has(row.deckHash)) {
+			latestSpecByHash.set(row.deckHash, row.deckSpec);
+		}
+		const isResumable =
+			row.status === REVIEW_SESSION_STATUSES.ACTIVE || row.status === REVIEW_SESSION_STATUSES.ABANDONED;
+		if (isResumable && !resumableByHash.has(row.deckHash)) {
+			resumableByHash.set(row.deckHash, row);
+		}
+	}
+
+	const summaries: SavedDeckSummary[] = aggregateRows.map((agg) => {
+		const resumableRow = resumableByHash.get(agg.deckHash);
+		// `max()` over a non-empty group never returns null but TS sees it as
+		// nullable; default to epoch as a defensive guard.
+		const lastVisitedAt = agg.lastVisitedAt ?? new Date(0);
+		return {
+			deckHash: agg.deckHash,
+			deckSpec: latestSpecByHash.get(agg.deckHash) ?? ({} as ReviewSessionDeckSpec),
+			lastVisitedAt,
+			sessionCount: Number(agg.sessionCount),
+			resumable: resumableRow
+				? {
+						sessionId: resumableRow.id,
+						status: resumableRow.status as ReviewSessionStatus,
+						currentIndex: resumableRow.currentIndex,
+						totalCards: resumableRow.cardIdList.length,
+					}
+				: null,
+		};
+	});
+
+	summaries.sort((a, b) => b.lastVisitedAt.getTime() - a.lastVisitedAt.getTime());
+	return summaries;
 }
 
 /**

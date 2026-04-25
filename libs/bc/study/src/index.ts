@@ -62,6 +62,13 @@ export {
 	getWeakAreas,
 	overdueCutoff,
 } from './dashboard';
+export {
+	canonicalDeckSpecJson,
+	computeDeckHash,
+	DeckSpecDecodeError,
+	decodeDeckSpec,
+	encodeDeckSpec,
+} from './deck-spec';
 export { runEngine } from './engine';
 export type { SubmitFeedbackInput } from './feedback';
 export { FeedbackCommentRequiredError, getLatestFeedback, submitFeedback } from './feedback';
@@ -131,14 +138,16 @@ export type {
 	CardSessionRef,
 	ReviewSessionCard,
 	ReviewSessionState,
+	SavedDeckSummary,
 	StartReviewSessionInput,
 } from './review-sessions';
 export {
 	abandonStaleSessions,
 	advanceReviewSession,
-	computeDeckHash,
+	findResumableSessionByDeckHash,
 	getLatestResumableSession,
 	getSessionsForCard,
+	listSavedDecks,
 	ReviewSessionNotFoundError,
 	replaceSessionAtIndex,
 	resumeReviewSession,
