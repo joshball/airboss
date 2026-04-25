@@ -587,6 +587,98 @@ describe('gyro tumble -- AI pegs/cycles to limits (B5.ai)', () => {
 	});
 });
 
+describe('vacuum failure -- HI heading drift (B5.hi)', () => {
+	function hiAfter(args: { driftDegPerSec?: number; elapsedSec: number; truthHeadingRad?: number }) {
+		const activation = activateFault(
+			{
+				kind: SIM_FAULT_KINDS.VACUUM_FAILURE,
+				trigger: { kind: SIM_FAULT_TRIGGER_KINDS.TIME_SECONDS, at: 0 },
+				params: args.driftDegPerSec === undefined ? undefined : { vacuumDriftDegPerSec: args.driftDegPerSec },
+			},
+			0,
+		);
+		return applyFaults({
+			truth: makeTruth({
+				t: args.elapsedSec,
+				heading: args.truthHeadingRad ?? 0,
+				onGround: false,
+			}),
+			activations: [activation],
+			nominalBusVolts: NOMINAL_VOLTS,
+		});
+	}
+
+	it('reads truth heading at activation', () => {
+		const display = hiAfter({ elapsedSec: 0, truthHeadingRad: 1.5 });
+		expect(display.headingIndicated).toBeCloseTo(1.5, 5);
+	});
+
+	it('drifts heading left (negative) as the gyro spools down', () => {
+		// 30 sec at 1 deg/sec -> -30 deg from truth
+		const display = hiAfter({ elapsedSec: 30 });
+		expect((display.headingIndicated * 180) / Math.PI).toBeCloseTo(-30, 1);
+	});
+
+	it('drifts at the same rate as pitch (gyro is shared spool)', () => {
+		const display = hiAfter({ elapsedSec: 20 });
+		const pitchDeg = (display.pitchIndicated * 180) / Math.PI;
+		const headingDriftDeg = -((display.headingIndicated * 180) / Math.PI);
+		expect(pitchDeg).toBeCloseTo(headingDriftDeg, 1);
+	});
+
+	it('respects scenario-overridden drift rate', () => {
+		const display = hiAfter({ driftDegPerSec: 2.5, elapsedSec: 10 });
+		expect((display.headingIndicated * 180) / Math.PI).toBeCloseTo(-25, 1);
+	});
+});
+
+describe('gyro tumble -- HI spins or freezes (B5.hi)', () => {
+	it('spins heading through 0..2pi when gyroTumbleContinues = true', () => {
+		const activation = activateFault(
+			{
+				kind: SIM_FAULT_KINDS.GYRO_TUMBLE,
+				trigger: { kind: SIM_FAULT_TRIGGER_KINDS.TIME_SECONDS, at: 0 },
+				params: { gyroTumbleContinues: true },
+			},
+			0,
+		);
+		// At t=0 phase=0 -> heading=0
+		const t0 = applyFaults({
+			truth: makeTruth({ t: 0, heading: 1.5, onGround: false }),
+			activations: [activation],
+			nominalBusVolts: NOMINAL_VOLTS,
+		});
+		expect(t0.headingIndicated).toBeCloseTo(0, 5);
+
+		// At t=3 (half period): phase=pi -> heading=pi
+		const t1 = applyFaults({
+			truth: makeTruth({ t: 3, heading: 1.5, onGround: false }),
+			activations: [activation],
+			nominalBusVolts: NOMINAL_VOLTS,
+		});
+		expect(t1.headingIndicated).toBeCloseTo(Math.PI, 3);
+	});
+
+	it('freezes HI at last-indicated heading when gyroTumbleContinues = false', () => {
+		const activation = activateFault(
+			{
+				kind: SIM_FAULT_KINDS.GYRO_TUMBLE,
+				trigger: { kind: SIM_FAULT_TRIGGER_KINDS.TIME_SECONDS, at: 0 },
+				params: { gyroTumbleContinues: false },
+			},
+			0,
+		);
+		const display = applyFaults({
+			truth: makeTruth({ t: 30, heading: 2.0, onGround: false }),
+			activations: [activation],
+			nominalBusVolts: NOMINAL_VOLTS,
+		});
+		// Heading is whatever the prior layers wrote; vacuum is not active
+		// here so it's truth (2.0) propagated through the baseline.
+		expect(display.headingIndicated).toBeCloseTo(2.0, 5);
+	});
+});
+
 describe('applyFaults -- multi-fault composition', () => {
 	it('composes alternator + vacuum: bus volts decay AND AI drifts', () => {
 		const truth = makeTruth({ t: 30 });
