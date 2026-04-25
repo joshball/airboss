@@ -8,12 +8,11 @@ import {
 	DEFAULT_APPEARANCE,
 	DEFAULT_APPEARANCE_PREFERENCE,
 	DEFAULT_THEME_PREFERENCE,
-	listThemes,
 	resolveThemeSelection,
-	type Theme,
 	type ThemeId,
 	type ThemePreference,
 } from '@ab/themes';
+import ThemePicker from '@ab/themes/picker/ThemePicker.svelte';
 import ThemeProvider from '@ab/themes/ThemeProvider.svelte';
 import type { Snippet } from 'svelte';
 import { page } from '$app/state';
@@ -31,14 +30,6 @@ let { data, children }: { data: LayoutData; children: Snippet } = $props();
 let appearancePref = $state<AppearancePreference>(DEFAULT_APPEARANCE_PREFERENCE);
 let systemAppearance = $state<AppearanceMode>(DEFAULT_APPEARANCE);
 let themePref = $state<ThemePreference>(DEFAULT_THEME_PREFERENCE);
-
-// Theme registry snapshot. Populated once at module init via the registry's
-// side-effect imports; the picker iterates this directly so a new theme
-// shipping in @ab/themes shows up without touching this file.
-const availableThemes: { id: ThemeId; label: string }[] = listThemes().map((t: Theme) => ({
-	id: t.id,
-	label: t.name,
-}));
 
 $effect(() => {
 	appearancePref = data.appearance;
@@ -87,7 +78,6 @@ async function setAppearance(value: AppearancePreference) {
 async function setTheme(value: ThemeId) {
 	if (value === themePref) return;
 	themePref = value;
-	if (themeMenu) themeMenu.open = false;
 	try {
 		await fetch(ROUTES.THEME, {
 			method: 'POST',
@@ -165,12 +155,7 @@ function computeInitials(name: string, email: string): string {
 let menu = $state<HTMLDetailsElement | null>(null);
 let helpMenu = $state<HTMLDetailsElement | null>(null);
 let memoryMenu = $state<HTMLDetailsElement | null>(null);
-let themeMenu = $state<HTMLDetailsElement | null>(null);
 
-// Active picker label tracks the *resolved* selection (which can differ from
-// the user's preference on a route-locked path like /sim). Falls back to the
-// theme id if a registered theme somehow lacks a name.
-const activeThemeLabel = $derived(availableThemes.find((t) => t.id === selection.theme)?.label ?? selection.theme);
 // Disable the picker on routes that hard-require a specific theme (sim).
 // `resolveThemeSelection` already enforces this server-side; the visual
 // affordance keeps the user from wondering why their click was ignored.
@@ -193,20 +178,9 @@ function handleMenuKeydown(event: KeyboardEvent) {
 		closeDetails(memoryMenu);
 		return;
 	}
-	if (themeMenu?.open) {
-		closeDetails(themeMenu);
-		return;
-	}
 	if (helpMenu?.open) {
 		closeDetails(helpMenu);
 	}
-}
-
-function handleThemeMenuBlur(event: FocusEvent) {
-	if (!themeMenu) return;
-	const next = event.relatedTarget;
-	if (next instanceof Node && themeMenu.contains(next)) return;
-	themeMenu.open = false;
 }
 
 function handleHelpMenuBlur(event: FocusEvent) {
@@ -302,33 +276,7 @@ function handleMemoryItemClick() {
 		<HelpSearch />
 	</div>
 
-	<details class="theme-picker" bind:this={themeMenu} onfocusout={handleThemeMenuBlur}>
-		<summary aria-haspopup="menu" aria-label="Theme: {activeThemeLabel}" aria-disabled={themePickerLocked}>
-			<span class="theme-picker-label">{activeThemeLabel}</span>
-			<span class="chevron" aria-hidden="true">▾</span>
-		</summary>
-		<div class="theme-picker-panel" role="menu" aria-label="Choose theme">
-			{#if themePickerLocked}
-				<p class="theme-picker-locked">This route requires a fixed theme.</p>
-			{/if}
-			{#each availableThemes as option (option.id)}
-				<button
-					type="button"
-					role="menuitemradio"
-					aria-checked={selection.theme === option.id}
-					class="theme-picker-option"
-					class:active={selection.theme === option.id}
-					disabled={themePickerLocked}
-					onclick={() => setTheme(option.id)}
-				>
-					<span class="theme-picker-option-label">{option.label}</span>
-					{#if selection.theme === option.id}
-						<span class="theme-picker-check" aria-hidden="true">✓</span>
-					{/if}
-				</button>
-			{/each}
-		</div>
-	</details>
+	<ThemePicker currentThemeId={selection.theme} onSelect={setTheme} locked={themePickerLocked} />
 
 	<details class="identity" bind:this={menu}>
 		<summary aria-label="Account menu for {identityLabel}">
@@ -514,123 +462,6 @@ function handleMemoryItemClick() {
 		margin-left: auto;
 		display: flex;
 		align-items: center;
-	}
-
-	.theme-picker {
-		position: relative;
-	}
-
-	.theme-picker > summary {
-		display: inline-flex;
-		align-items: center;
-		gap: var(--space-2xs);
-		cursor: pointer;
-		list-style: none;
-		color: var(--ink-muted);
-		font-weight: var(--type-ui-control-weight);
-		padding: var(--space-2xs) var(--space-sm);
-		border-radius: var(--radius-sm);
-		user-select: none;
-	}
-
-	.theme-picker > summary::-webkit-details-marker {
-		display: none;
-	}
-
-	.theme-picker > summary::marker {
-		content: '';
-	}
-
-	.theme-picker > summary:hover {
-		color: var(--ink-body);
-		background: var(--surface-sunken);
-	}
-
-	.theme-picker > summary:focus-visible {
-		outline: 2px solid var(--focus-ring);
-		outline-offset: 2px;
-	}
-
-	.theme-picker > summary[aria-disabled='true'] {
-		color: var(--ink-faint);
-		cursor: not-allowed;
-	}
-
-	.theme-picker[open] > summary {
-		color: var(--ink-body);
-		background: var(--surface-sunken);
-	}
-
-	.theme-picker[open] .chevron {
-		transform: rotate(180deg);
-	}
-
-	.theme-picker-label {
-		text-transform: capitalize;
-	}
-
-	.theme-picker-panel {
-		position: absolute;
-		right: 0;
-		top: calc(100% + var(--space-2xs));
-		min-width: 12rem;
-		background: var(--surface-panel);
-		border: 1px solid var(--edge-default);
-		border-radius: var(--radius-md);
-		box-shadow: var(--shadow-lg);
-		padding: var(--space-2xs);
-		z-index: var(--z-dropdown);
-		display: flex;
-		flex-direction: column;
-		gap: 0;
-	}
-
-	.theme-picker-locked {
-		margin: 0;
-		padding: var(--space-sm);
-		font-size: var(--type-ui-label-size);
-		color: var(--ink-muted);
-		border-bottom: 1px solid var(--edge-default);
-	}
-
-	.theme-picker-option {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: var(--space-sm);
-		width: 100%;
-		text-align: left;
-		background: transparent;
-		border: 0;
-		color: var(--ink-body);
-		font: inherit;
-		font-size: var(--type-ui-label-size);
-		padding: var(--space-sm) var(--space-sm);
-		border-radius: var(--radius-sm);
-		cursor: pointer;
-	}
-
-	.theme-picker-option:hover:not([disabled]) {
-		background: var(--surface-sunken);
-	}
-
-	.theme-picker-option:focus-visible {
-		outline: 2px solid var(--focus-ring);
-		outline-offset: -2px;
-	}
-
-	.theme-picker-option.active {
-		color: var(--action-default-hover);
-		background: var(--action-default-wash);
-	}
-
-	.theme-picker-option[disabled] {
-		color: var(--ink-faint);
-		cursor: not-allowed;
-	}
-
-	.theme-picker-check {
-		font-size: var(--type-ui-caption-size);
 	}
 
 	.identity {

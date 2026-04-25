@@ -20,7 +20,11 @@ import type { LayoutServerLoad } from './$types';
 export const load: LayoutServerLoad = async (event) => {
 	// Login page is reachable without a session.
 	if (event.url.pathname === ROUTES.LOGIN) {
-		return { user: null, appearance: event.locals.appearance };
+		return {
+			user: null,
+			appearance: event.locals.appearance,
+			theme: event.locals.theme,
+		};
 	}
 
 	// Unauthenticated users get bounced with a redirect-back path so login
@@ -42,5 +46,6 @@ export const load: LayoutServerLoad = async (event) => {
 			role: user.role,
 		},
 		appearance: event.locals.appearance,
+		theme: event.locals.theme,
 	};
 };
