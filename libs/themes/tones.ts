@@ -1,39 +1,37 @@
 /**
- * Shared tone vocabulary for Badge, StatTile, Banner, and any primitive
- * that needs to dispatch styling on intent.
+ * Shared tone vocabulary for status-bearing primitives (Badge, StatTile,
+ * Banner). A tone communicates *intent of the indicator*, mapped to
+ * role tokens by the consuming component.
  *
  * Kept as a separate module so primitives outside `libs/themes` can
  * import tones without pulling in the full contract / emit pipeline.
  *
- * The tone set matches the spec (package #4):
- *   default | primary | success | warning | danger | info | muted | accent
+ * Tone semantics:
  *
- * `neutral` is retained as a deprecated alias for `default` for
- * migration purposes; package #5 sweeps call sites.
+ *   default  -- ordinary, no special intent (action-neutral roles)
+ *   featured -- the focal indicator on a surface (action-default roles)
+ *   muted    -- de-emphasized "FYI" (neutral roles + ink-subtle)
+ *   success  -- positive state (signal-success roles)
+ *   warning  -- caution / attention (signal-warning roles)
+ *   danger   -- error / destructive state (signal-danger roles)
+ *   info     -- informational state (signal-info roles)
+ *   accent   -- decorative emphasis (accent roles)
+ *
+ * `featured` replaces the prior `primary` tone. `primary` was a ranked
+ * name that collided with `Button.variant="primary"` and had no clear
+ * status meaning; `featured` describes what it actually does -- mark
+ * the focal status indicator on a surface.
+ *
+ * Tones are intentionally separate from `Button.variant` (`primary |
+ * secondary | ghost | danger`). Buttons express *role of an action*;
+ * tones express *intent of a status indicator*. The vocabularies
+ * overlap but should not be merged.
  */
 
-export const TONES = {
-	default: 'default',
-	primary: 'primary',
-	success: 'success',
-	warning: 'warning',
-	danger: 'danger',
-	info: 'info',
-	muted: 'muted',
-	accent: 'accent',
-} as const;
+export const TONES = ['default', 'featured', 'muted', 'success', 'warning', 'danger', 'info', 'accent'] as const;
 
-export type Tone = (typeof TONES)[keyof typeof TONES];
+export type Tone = (typeof TONES)[number];
 
-/** @deprecated `neutral` is aliased to `default`; migrate call sites in package #5. */
-export type LegacyNeutralTone = 'neutral';
-
-/** Accepts either the current `Tone` set or the legacy `neutral` alias. */
-export type ToneInput = Tone | LegacyNeutralTone;
-
-/** Normalize an incoming tone (including the legacy `neutral`) to a `Tone`. */
-export function resolveTone(value: ToneInput | undefined): Tone {
-	if (value === undefined) return 'default';
-	if (value === 'neutral') return 'default';
-	return value;
+export function isTone(value: unknown): value is Tone {
+	return typeof value === 'string' && (TONES as readonly string[]).includes(value);
 }

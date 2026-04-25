@@ -1,4 +1,14 @@
-# 008: Glass Cockpit Extended Token Contract
+# 008: Glass Cockpit Extended Token Contract (ARCHIVED)
+
+> **Archived 2026-04-25.** Superseded by the as-built theme system. The "Glass Cockpit" single-theme concept this ADR amends was replaced during the Option A overhaul: the system now ships `study/sectional`, `study/flightdeck`, and `sim/glass` as distinct themes under three orthogonal axes (`theme` × `appearance` × `layout`). The `--t-*` token prefix referenced throughout was never adopted; live tokens are unprefixed (`--action-default`, `--surface-page`, etc.).
+>
+> The control-token problem this ADR identified (gradient/inset bg values that can't be derived) was addressed differently: themes ship a `ControlTokens` block ([libs/themes/contract.ts](../../../libs/themes/contract.ts)) with explicit `bg`/`hoverBg`/`activeBg`/etc. slots per button variant, and theme-specific values land in each theme's `control.ts` (e.g. `libs/themes/sim/glass/control.ts`). No `color-mix()` derivation contract remained.
+>
+> **Current source of truth:** [docs/platform/theme-system/02-ARCHITECTURE.md](../../platform/theme-system/02-ARCHITECTURE.md) §"The layered token model" and §"The contract (TypeScript)".
+>
+> Kept for historical context only.
+
+---
 
 Decided 2026-03-26. Amends ADR 003.
 

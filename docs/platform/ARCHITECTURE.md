@@ -47,14 +47,15 @@ Details: [004-DATABASE_NAMESPACES.md](../decisions/004-DATABASE_NAMESPACES.md)
 
 ## Design System
 
-Two libs: `themes` (token contract + implementations) and `ui` (components + layouts).
+Two libs: `themes` (token contract + theme implementations + emit pipeline) and `ui` (components consuming tokens via CSS variables).
 
-- Themes control layout via CSS tokens, not theme-specific components
-- Pages are routes, not layouts -- they hand data to theme-driven layout shells
-- All colors OKLCH, 8 font roles by purpose, semantic color groups
+- Three orthogonal axes: `theme` (`study/sectional`, `study/flightdeck`, `sim/glass`, ...) × `appearance` (`light` / `dark`) × `layout` (`reading`, `dashboard`, `cockpit`)
+- Role-based tokens (`--ink-*`, `--surface-*`, `--action-*`, `--signal-*`) -- never ranked names
+- TypeScript theme objects -> `bun themes:emit` -> committed `tokens.css` (CI drift-checked)
+- Lint, contrast tests, and pre-hydration ship with the system
 - Zero styles in app route files
 
-Details: [003-DESIGN_SYSTEM.md](../decisions/003-DESIGN_SYSTEM.md)
+Details: [docs/platform/theme-system/](theme-system/00-INDEX.md) -- start at `02-ARCHITECTURE.md` for the as-built shape, `QUICK_REFERENCE.md` for "which token do I use".
 
 ## Content Publishing
 
@@ -126,7 +127,7 @@ No direct app-to-app calls. Cross-boundary workflows use shared database + BC li
 | --- | ------------------------------------------------------------- | ---------------------------------------------- |
 | 001 | App boundaries, inter-app communication, learner self-service | [001](../decisions/001-APP_BOUNDARIES.md)      |
 | 002 | Lib structure, bounded contexts, access matrix, enforcement   | [002](../decisions/002-LIB_STRUCTURE.md)       |
-| 003 | Design system (two libs, layout tokens, naming convention)    | [003](../decisions/003-DESIGN_SYSTEM.md)       |
+| 003 | Design system (superseded; see theme-system KB)               | [theme-system/](theme-system/00-INDEX.md)      |
 | 004 | Database namespaces and access matrix                         | [004](../decisions/004-DATABASE_NAMESPACES.md) |
 | 005 | Published content model (versioned, atomic publish)           | [005](../decisions/005-PUBLISHED_CONTENT.md)   |
 | 006 | Content versioning, releases, multi-version serving           | [006](../decisions/006-CONTENT_VERSIONING.md)  |

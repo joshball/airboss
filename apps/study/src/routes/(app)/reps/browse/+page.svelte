@@ -215,7 +215,7 @@ const groups = $derived.by<BrowseListGroup<ScenarioRow>[]>(() => {
 	</header>
 
 	{#if createdScenario}
-		<Banner variant="success" dismissible onDismiss={dismissCreatedBanner}>
+		<Banner tone="success" dismissible onDismiss={dismissCreatedBanner}>
 			Scenario <strong>&ldquo;{createdScenario.title}&rdquo;</strong> saved.
 		</Banner>
 	{/if}

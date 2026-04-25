@@ -50,29 +50,30 @@ Originally extracted from legion-overwatch (2026-03-24).
 ### Styling
 
 - CSS custom properties only. No Tailwind. No hardcoded values.
-- All visual values from token vars (legion uses `--ds-*`; airboss-firc uses `--t-*`).
+- All visual values come from role tokens (`var(--ink-body)`, `var(--surface-page)`, `var(--action-default)`, ...).
 - CSS in component `<style>` blocks only.
 
 ### Theme System
 
-**Two libs:** `libs/themes/` defines CSS custom properties (`--t-*` tokens). `libs/ui/` provides Svelte components that consume them. No styling decisions in apps.
+Full reference: [docs/platform/theme-system/](../platform/theme-system/00-INDEX.md). Quick lookup for "which token do I use": [QUICK_REFERENCE.md](../platform/theme-system/QUICK_REFERENCE.md).
 
-**Active theme set in `app.html`** via `<html>` attributes:
+**Two libs:** `libs/themes/` defines TypeScript theme objects + emits `tokens.css`. `libs/ui/` provides Svelte components that consume role tokens. No styling decisions in apps.
 
-- `data-theme-id="glass-cockpit"` -- which theme
-- `data-theme-mode="light"` -- light or dark (toggled at runtime via JS)
-- `data-app-id="hangar"` -- **required for Glass Cockpit**. Sets per-app accent colors.
+**Three orthogonal axes** set on `<html>` via the pre-hydration script and `ThemeProvider`:
 
-**`data-app-id` is not optional.** Without it, all Glass Cockpit apps get hangar's blue accent. Valid values: `hangar`, `sim`, `ops`, `runway`. Already set in all four `app.html` files.
+- `data-theme` -- one of `airboss/default`, `study/sectional`, `study/flightdeck`, `sim/glass`
+- `data-appearance` -- `light` or `dark`
+- `data-layout` -- `reading`, `dashboard`, or `cockpit`
 
-**Per-app colors** (Glass Cockpit only): `data-app-id` overrides `--t-app-primary-*`, `--t-app-accent-*`, and `--t-app-glow-*`, which cascade into `--t-primary`, `--t-accent`, and the `--t-body-background` gradient.
+**Themes are picked by route + user preference** in `libs/themes/resolve.ts`. Routes never set `data-theme` directly. `/sim/*` is locked to `sim/glass` (dark-only safety); everywhere else respects the user's theme cookie, falling back to the path default.
 
-**Adding a new component -- theme contract:**
+**Adding a new component -- token contract:**
 
-- **Aviation:** Use semantic tokens (`--t-primary`, `--t-surface`, `--t-text-muted`, etc.) directly. State variants use `color-mix()`. No extra theme work needed.
-- **Glass Cockpit:** Pre-computes component tokens (`--t-button-primary-bg`, `--t-panel-bg`, etc.) because glassmorphic gradients can't be derived at render time. **When you add a component, also add its tokens to `glass-cockpit/light.css` and `glass-cockpit/dark.css`.** Use the existing `--t-button-*`, `--t-panel-*`, `--t-control-*` blocks as templates.
+- Use role tokens directly: `var(--ink-body)`, `var(--surface-panel)`, `var(--action-default)`, `var(--signal-warning)`, etc. State variants are derived per-theme (hover, active, wash, edge, ink, disabled) -- consume the derived tokens, don't compute them.
+- For interactive controls, prefer the `button-*` / `input-*` slot tokens (e.g. `var(--button-primary-bg)`) so theme-specific gradients/shadows propagate correctly.
+- Never write a hex / rgb / hsl / oklch literal in a component or page. The `tools/theme-lint` rule fails CI on raw colors and raw `px`/`ms` values.
 
-**Route files may only have layout-flow CSS:** `display`, `flex`, `grid`, `gap`, `position`, `width`, `height`, `overflow`. No colors, fonts, padding, margin, borders, or shadows. Enforced by `bun scripts/check/styles.ts`.
+**Route files may only have layout-flow CSS:** `display`, `flex`, `grid`, `gap`, `position`, `width`, `height`, `overflow`. No colors, fonts, padding, margin, borders, or shadows. Enforced by `tools/theme-lint`.
 
 ## Database (adapted for PostgreSQL)
 

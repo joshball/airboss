@@ -6,7 +6,7 @@
  * surface before page-level migration (#5).
  */
 
-import type { Tone } from '@ab/ui';
+import { TONES } from '@ab/ui';
 import Badge from '@ab/ui/components/Badge.svelte';
 import Banner from '@ab/ui/components/Banner.svelte';
 import Button from '@ab/ui/components/Button.svelte';
@@ -27,7 +27,6 @@ import TableRow from '@ab/ui/components/TableRow.svelte';
 import Tabs from '@ab/ui/components/Tabs.svelte';
 import TextField from '@ab/ui/components/TextField.svelte';
 
-const TONES: Tone[] = ['default', 'primary', 'success', 'warning', 'danger', 'info', 'muted', 'accent'];
 let dialogOpen = $state(false);
 let checked = $state(false);
 let indeterminate = $state(true);

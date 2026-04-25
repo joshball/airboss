@@ -1,9 +1,24 @@
 /**
- * Token vocabulary registry -- Layer 0.
+ * Role token registry -- Layer 0 of the layered token model.
  *
- * Single source of truth for every CSS custom-property name the theme
- * system emits. Grouped by role family. Flattened `TokenName` gives
- * callers a typed handle on every token.
+ * Catalog of *role tokens only* -- the semantic vocabulary themes
+ * declare base values for (`--ink-*`, `--surface-*`, `--action-*`,
+ * `--signal-*`, `--edge-*`, scales). Other layers are emitted
+ * directly by `emit.ts` and are not registered here:
+ *
+ *   - Control tokens (`--button-*`, `--input-*`)        -- `ControlTokens` shape
+ *   - Component tokens (`--dialog-*`, `--table-*`, ...) -- emitted atomic block
+ *   - Typography bundles (`--type-*-*-*`)               -- `TypographyPack` shape
+ *   - Sim tokens (`--sim-*`)                            -- `SimTokens` shape
+ *
+ * Role tokens are the surface every theme must satisfy; everything
+ * else is derived or declared in narrower shapes. Keeping the
+ * derived layers out of this file keeps the role vocabulary small
+ * enough to eyeball.
+ *
+ * For a full listing of *every* emitted token (~380 per
+ * theme x appearance block), see `04-VOCABULARY.md` or grep
+ * `libs/themes/generated/tokens.css` directly.
  *
  * Keep additions rare and deliberate. Every new role token is a
  * migration. Prefer composing existing tokens via `var()` references.

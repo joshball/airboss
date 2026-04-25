@@ -140,7 +140,7 @@ function percent(n: number, total: number): number {
 				value={stats.dueNow}
 				sub="{stats.dueNow === 1 ? 'card' : 'cards'} to review"
 				href={stats.dueNow > 0 ? ROUTES.MEMORY_REVIEW : undefined}
-				tone="primary"
+				tone="featured"
 				ariaLabel="Due now: {stats.dueNow} cards to review"
 			/>
 			<span class="tile-tip">

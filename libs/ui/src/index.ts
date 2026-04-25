@@ -16,9 +16,9 @@
 
 // Shared tone vocabulary re-exported so callers don't have to import
 // from two packages for a single prop.
-export { type LegacyNeutralTone, resolveTone, TONES, type Tone, type ToneInput } from '@ab/themes';
-export type { BadgeSize, BadgeTone, BadgeVariant } from './components/Badge.svelte';
-export type { BannerTone, BannerVariant } from './components/Banner.svelte';
+export { isTone, TONES, type Tone } from '@ab/themes';
+export type { BadgeSize, BadgeTone } from './components/Badge.svelte';
+export type { BannerTone } from './components/Banner.svelte';
 export type { BrowseListGroup, BrowseListProps } from './components/BrowseList.svelte';
 export type { BrowseListItemProps } from './components/BrowseListItem.svelte';
 export type { BrowseViewControlsOption, BrowseViewControlsProps } from './components/BrowseViewControls.svelte';

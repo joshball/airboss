@@ -1,13 +1,10 @@
 <script lang="ts" module>
-import type { Tone, ToneInput } from '@ab/themes';
+import type { Tone } from '@ab/themes';
 export type BannerTone = Tone;
-/** @deprecated use `tone` instead. */
-export type BannerVariant = Tone | 'neutral';
 </script>
 
 <script lang="ts">
 import type { Snippet } from 'svelte';
-import { resolveTone } from '@ab/themes';
 
 /**
  * Inline message banner. Used for flash / toast-style notices (e.g.
@@ -15,32 +12,26 @@ import { resolveTone } from '@ab/themes';
  * so assistive tech announces appropriately.
  *
  * `dismissible=true` renders an X button; pass `onDismiss` to handle it.
- *
- * Accepts the shared `Tone` enum via `tone`; the legacy `variant` prop
- * is still honored until package #5 sweeps call sites.
  */
 
 let {
-	tone,
-	variant,
+	tone = 'info',
 	title,
 	dismissible = false,
 	onDismiss,
 	children,
 }: {
-	tone?: ToneInput;
-	variant?: BannerVariant;
+	tone?: Tone;
 	title?: string;
 	dismissible?: boolean;
 	onDismiss?: () => void;
 	children: Snippet;
 } = $props();
 
-const resolved = $derived<Tone>(resolveTone(tone ?? (variant as ToneInput | undefined) ?? 'info'));
-const role = $derived(resolved === 'danger' ? 'alert' : 'status');
+const role = $derived(tone === 'danger' ? 'alert' : 'status');
 </script>
 
-<div class="banner v-{resolved}" {role}>
+<div class="banner v-{tone}" {role}>
 	<div class="content">
 		{#if title}
 			<p class="title">{title}</p>
@@ -116,7 +107,7 @@ const role = $derived(resolved === 'danger' ? 'alert' : 'status');
 		color: var(--ink-body);
 	}
 
-	.v-primary {
+	.v-featured {
 		background: var(--action-default-wash);
 		border-color: var(--action-default-edge);
 		color: var(--action-default);

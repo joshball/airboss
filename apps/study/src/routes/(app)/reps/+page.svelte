@@ -69,7 +69,7 @@ function bar(value: number): number {
 				value={stats.scenarioCount}
 				sub={stats.scenarioCount === 1 ? 'scenario' : 'scenarios'}
 				href={stats.scenarioCount > 0 ? ROUTES.SESSION_START : undefined}
-				tone="primary"
+				tone="featured"
 				ariaLabel="Available: {stats.scenarioCount} scenarios, start a session"
 			/>
 			<StatTile

@@ -23,7 +23,7 @@ let submitting = $state(false);
 	</header>
 
 	{#if form?.ok}
-		<Banner variant="success">Ping recorded. Reload to see it in the log.</Banner>
+		<Banner tone="success">Ping recorded. Reload to see it in the log.</Banner>
 	{/if}
 
 	<section class="card">

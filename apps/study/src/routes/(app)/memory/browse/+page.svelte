@@ -275,7 +275,7 @@ const groups = $derived.by<BrowseListGroup<CardRow>[]>(() => {
 	</header>
 
 	{#if createdCard}
-		<Banner variant="success" dismissible onDismiss={dismissCreatedBanner}>
+		<Banner tone="success" dismissible onDismiss={dismissCreatedBanner}>
 			Card saved.
 			<a class="banner-link" href={ROUTES.MEMORY_CARD(createdCard.id)}>View &ldquo;{shortenFront(createdCard.front)}&rdquo;</a>
 		</Banner>

@@ -1,30 +1,33 @@
 /**
  * Tone contract: the shared `Tone` enum powers Badge / StatTile / Banner.
- * `resolveTone` collapses the legacy `neutral` alias onto `default` so
- * migrated primitives keep a uniform switch shape.
+ * Tones describe the *intent of a status indicator*, distinct from
+ * `Button.variant` which describes the *role of an action*.
  */
 
-import { resolveTone, TONES, type Tone } from '@ab/ui';
+import { isTone, TONES, type Tone } from '@ab/ui';
 import { describe, expect, it } from 'vitest';
 
 describe('tones', () => {
-	it('exposes the full spec set', () => {
-		const expected: Tone[] = ['default', 'primary', 'success', 'warning', 'danger', 'info', 'muted', 'accent'];
-		const got = Object.values(TONES).sort();
-		expect(got).toEqual(expected.slice().sort());
+	it('exposes the full canonical set', () => {
+		const expected: Tone[] = ['default', 'featured', 'muted', 'success', 'warning', 'danger', 'info', 'accent'];
+		expect([...TONES].sort()).toEqual(expected.slice().sort());
 	});
 
-	it('resolveTone collapses legacy neutral to default', () => {
-		expect(resolveTone('neutral')).toBe('default');
-	});
-
-	it('resolveTone is identity on canonical tones', () => {
-		for (const t of Object.values(TONES)) {
-			expect(resolveTone(t)).toBe(t);
+	it('isTone accepts every canonical tone', () => {
+		for (const t of TONES) {
+			expect(isTone(t)).toBe(true);
 		}
 	});
 
-	it('resolveTone handles undefined safely', () => {
-		expect(resolveTone(undefined)).toBe('default');
+	it('isTone rejects retired aliases and unknown values', () => {
+		// `primary` was renamed to `featured`; `neutral` was a legacy alias
+		// for `default`. Both must now be type-rejected so call sites can't
+		// silently regress.
+		expect(isTone('primary')).toBe(false);
+		expect(isTone('neutral')).toBe(false);
+		expect(isTone('')).toBe(false);
+		expect(isTone(undefined)).toBe(false);
+		expect(isTone(null)).toBe(false);
+		expect(isTone(42)).toBe(false);
 	});
 });

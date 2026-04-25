@@ -184,7 +184,7 @@ function depthLabel(slug: DepthPreference): string {
 
 	{#if data.needsPlan}
 		{#if presetError}
-			<Banner variant="danger" title="Couldn't start the session">{presetError}</Banner>
+			<Banner tone="danger" title="Couldn't start the session">{presetError}</Banner>
 		{/if}
 
 		<section class="gallery" aria-labelledby="gallery-h">

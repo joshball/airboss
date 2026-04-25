@@ -1,4 +1,12 @@
-# 003: Design System Architecture
+# 003: Design System Architecture (ARCHIVED)
+
+> **Archived 2026-04-25.** Superseded by the eight-package theme-system overhaul (PRs #78 - #85, #105, #114, #183, #190). The token-prefix decision (`--t-*`) and two-lib split assertion below no longer match the running code: tokens are unprefixed (`--ink-body`, `--surface-page`, etc.) and live in `libs/themes/` with `libs/ui/` consuming them. `--t-*` was never adopted in production code.
+>
+> **Current source of truth:** [docs/platform/theme-system/](../../platform/theme-system/00-INDEX.md). Read `02-ARCHITECTURE.md` for the as-built shape and `04-VOCABULARY.md` for the current token catalog.
+>
+> Kept for historical context only.
+
+---
 
 Decided 2026-03-25.
 
