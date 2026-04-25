@@ -74,4 +74,18 @@ A rep session refresh is safe. The current slot is derived server-side as "first
 The product is not monetized. The motivation is craft, not revenue. See the [pivot doc](https://github.com) (linked from internal docs only) for the full framing.`,
 		},
 	],
+	externalRefs: [
+		{
+			title: 'AC 61-83K -- Nationally Scheduled FAA-Approved Industry-Conducted Flight Instructor Refresher Course',
+			url: 'https://www.faa.gov/regulations_policies/advisory_circulars/index.cfm/go/document.information/documentID/1041665',
+			source: 'faa',
+			note: 'The FAA guidance that governs FIRC course design. airboss originated as a FIRC-targeted platform; this AC is the regulatory anchor for the original scope.',
+		},
+		{
+			title: '14 CFR 61.197 -- Renewal requirements for flight instructor certification',
+			url: 'https://www.ecfr.gov/current/title-14/chapter-I/subchapter-D/part-61/subpart-H/section-61.197',
+			source: 'faa',
+			note: 'The CFR section that requires CFI renewal every 24 months and lists FIRC completion as one acceptable path.',
+		},
+	],
 };
