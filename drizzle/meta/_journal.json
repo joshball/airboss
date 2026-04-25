@@ -57,6 +57,13 @@
       "when": 1777131345117,
       "tag": "0007_seed_origin_columns",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1777155876707,
+      "tag": "0008_tearful_bedlam",
+      "breakpoints": true
     }
   ]
 }

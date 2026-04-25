@@ -42,3 +42,6 @@ export const generateContentCitationId = (): string => createId('ccit');
 export const generateHangarJobId = (): string => createId('job');
 export const generateHangarJobLogId = (): string => createId('jlg');
 export const generateHangarSyncLogId = (): string => createId('syn');
+
+// Sim BC -- one row per completed flight (Track 5).
+export const generateSimAttemptId = (): string => createId('sat');

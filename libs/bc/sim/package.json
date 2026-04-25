@@ -3,6 +3,8 @@
 	"private": true,
 	"type": "module",
 	"dependencies": {
-		"@ab/constants": "workspace:*"
+		"@ab/constants": "workspace:*",
+		"@ab/db": "workspace:*",
+		"@ab/utils": "workspace:*"
 	}
 }

@@ -21,3 +21,11 @@ export {
 	type NewHangarSourceRow,
 	type NewHangarSyncLogRow,
 } from './hangar';
+export {
+	type NewSimAttemptRow,
+	type SimAttemptGrade,
+	type SimAttemptRow,
+	type SimAttemptTape,
+	simAttempt,
+	simSchema,
+} from './sim';

@@ -16,12 +16,17 @@
  * - `HANGAR`: home of the hangar BC tables -- runtime mirror of the TOML
  *   content registry (reference, source), the job queue + log, and the
  *   sync-to-disk ledger. See `libs/db/src/hangar.ts`.
+ * - `SIM`: home of the sim BC persistence tables. Today: `sim_attempt`
+ *   (one row per completed flight, with grade + outcome + tape ref).
+ *   Future spaced-rep integration reads this to bias the scheduler when a
+ *   sim drill grades poorly.
  */
 export const SCHEMAS = {
 	IDENTITY: 'identity',
 	AUDIT: 'audit',
 	STUDY: 'study',
 	HANGAR: 'hangar',
+	SIM: 'sim',
 } as const;
 
 export type SchemaName = (typeof SCHEMAS)[keyof typeof SCHEMAS];

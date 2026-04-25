@@ -17,6 +17,7 @@ export {
 	generateScenarioId,
 	generateSessionId,
 	generateSessionItemResultId,
+	generateSimAttemptId,
 	generateStudyPlanId,
 } from './ids';
 export { createLogger, type Logger } from './logger';

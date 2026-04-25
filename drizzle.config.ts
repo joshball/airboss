@@ -9,10 +9,11 @@ export default defineConfig({
 		'./libs/bc/citations/src/schema.ts',
 		'./libs/audit/src/schema.ts',
 		'./libs/db/src/hangar.ts',
+		'./libs/db/src/sim.ts',
 	],
 	// 'public' is the Postgres default (home for better-auth's bauth_* tables);
 	// the rest come from the SCHEMAS constant so additions stay in one place.
-	schemaFilter: ['public', SCHEMAS.IDENTITY, SCHEMAS.AUDIT, SCHEMAS.STUDY, SCHEMAS.HANGAR],
+	schemaFilter: ['public', SCHEMAS.IDENTITY, SCHEMAS.AUDIT, SCHEMAS.STUDY, SCHEMAS.HANGAR, SCHEMAS.SIM],
 	out: './drizzle',
 	dbCredentials: {
 		url: process.env[ENV_VARS.DATABASE_URL] ?? DEV_DB_URL,
