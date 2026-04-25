@@ -19,6 +19,7 @@
 
 import { requireAuth } from '@ab/auth';
 import {
+	CitationNotFoundError,
 	CitationSourceNotFoundError,
 	CitationTargetNotFoundError,
 	CitationValidationError,
@@ -130,6 +131,12 @@ export const actions: Actions = {
 			// else's citation even on a scenario they're viewing.
 			await deleteCitation(citationId, user.id);
 		} catch (err) {
+			if (err instanceof CitationNotFoundError) {
+				// Both "row missing" and "not owned by caller" surface as
+				// CitationNotFoundError; treat as 404 so we don't conflate
+				// ownership/missing with a server error.
+				return fail(404, { intent: 'removeCitation', fieldErrors: { _: 'That citation was not found.' } });
+			}
 			log.error(
 				'deleteCitation threw',
 				{ requestId: locals.requestId, userId: user.id, metadata: { scenarioId: params.id, citationId } },

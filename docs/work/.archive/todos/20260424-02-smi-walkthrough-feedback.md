@@ -2,7 +2,7 @@
 title: 'Spaced Memory Items -- User Walkthrough Feedback (2026-04-24)'
 status: archived
 archived_date: 2026-04-25
-closed_by: PRs #106, #107, #108, #111, #127, #128, #135, #138, #149, #150, #153, #156, #154, #159, #162, #165, #<this-pr>
+closed_by: PRs #106, #107, #108, #111, #127, #128, #135, #138, #149, #150, #153, #154, #156, #159, #162, #165, #169
 feature: spaced-memory-items
 session: 2026-04-24 manual test pass
 ---

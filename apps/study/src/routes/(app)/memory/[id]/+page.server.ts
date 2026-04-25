@@ -1,5 +1,6 @@
 import { requireAuth } from '@ab/auth';
 import {
+	CitationNotFoundError,
 	CitationSourceNotFoundError,
 	CitationTargetNotFoundError,
 	CitationValidationError,
@@ -214,6 +215,12 @@ export const actions: Actions = {
 		try {
 			await deleteCitation(citationId, user.id);
 		} catch (err) {
+			if (err instanceof CitationNotFoundError) {
+				// `deleteCitation` raises CitationNotFoundError both when the row is
+				// missing and when the caller does not own it. Surface as 404 so the
+				// learner sees a clean "already gone" rather than a server error.
+				return fail(404, { intent: 'removeCitation', fieldErrors: { _: 'That citation was not found.' } });
+			}
 			log.error(
 				'deleteCitation threw',
 				{ requestId: locals.requestId, userId: user.id, metadata: { cardId: params.id, citationId } },
