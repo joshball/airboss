@@ -74,6 +74,12 @@ export const SIM_WORKER_MESSAGES = {
 	TOGGLE_AUTO_COORDINATE: 'toggle-auto-coordinate',
 	SNAPSHOT: 'snapshot',
 	OUTCOME: 'outcome',
+	/**
+	 * Posted once per scenario run, immediately after OUTCOME. Carries the
+	 * full ReplayTape -- frames + scenarioHash + result -- so the persistence
+	 * layer can save it for the debrief.
+	 */
+	TAPE: 'tape',
 	READY: 'ready',
 } as const;
 

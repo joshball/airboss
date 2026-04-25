@@ -13,6 +13,7 @@ import type {
 	FaultActivation,
 	FdmInputs,
 	FdmTruthState,
+	ReplayTape,
 	ScenarioRunResult,
 	ScenarioStepState,
 } from '@ab/bc-sim';
@@ -45,4 +46,10 @@ export type WorkerToMain =
 			/** Sticky list of active fault activations as of this snapshot. */
 			activations: readonly FaultActivation[];
 	  }
-	| { type: typeof SIM_WORKER_MESSAGES.OUTCOME; result: ScenarioRunResult };
+	| { type: typeof SIM_WORKER_MESSAGES.OUTCOME; result: ScenarioRunResult }
+	/**
+	 * Full replay tape posted once per scenario run, immediately after the
+	 * OUTCOME message. The main thread persists it for the debrief route.
+	 * Even ABORTED runs post a tape (with whatever frames accumulated).
+	 */
+	| { type: typeof SIM_WORKER_MESSAGES.TAPE; tape: ReplayTape };
