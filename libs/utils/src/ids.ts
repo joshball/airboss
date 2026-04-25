@@ -14,6 +14,10 @@ export const generateAuthId = (): string => ulid().toLowerCase();
 // Study BC
 export const generateCardId = (): string => createId('crd');
 export const generateReviewId = (): string => createId('rev');
+/** Snooze row (study BC, snooze-and-flag WP). One row per Snooze press. */
+export const generateCardSnoozeId = (): string => createId('csnz');
+/** Card feedback row (study BC, snooze-and-flag WP). Like/dislike/flag. */
+export const generateCardFeedbackId = (): string => createId('cfbk');
 // Decision reps (study BC) -- scenarios only. `repAttempt` was deleted per
 // ADR 012; rep outcomes live on session_item_result rows now.
 export const generateScenarioId = (): string => createId('rep');

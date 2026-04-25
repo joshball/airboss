@@ -7,7 +7,7 @@
  * only translates between our types and ts-fsrs types.
  */
 
-import { CARD_STATES, type CardState, REVIEW_RATINGS, type ReviewRating } from '@ab/constants';
+import { CARD_STATES, type CardState, REVIEW_RATING_VALUES, REVIEW_RATINGS, type ReviewRating } from '@ab/constants';
 import {
 	type Card,
 	type CardInput,
@@ -95,6 +95,27 @@ export function fsrsInitialState(now: Date = new Date()): CardSchedulerState {
  */
 export function fsrsDefaultParams(): readonly number[] {
 	return default_w;
+}
+
+/**
+ * Preview the scheduler's output for every rating without persisting anything.
+ * Returns a map keyed by `ReviewRating` so the review chrome can render
+ * "show again in 3d" underneath each rating button at load time.
+ *
+ * Calls `getScheduler(params).repeat` once which produces all four paths in
+ * a single pass; cheaper than four `fsrsSchedule` calls when the UI wants
+ * every interval.
+ */
+export function fsrsPreviewAll(
+	state: CardSchedulerState,
+	now: Date = new Date(),
+	params?: Partial<FSRSParameters>,
+): Record<ReviewRating, ScheduleResult> {
+	const results = {} as Record<ReviewRating, ScheduleResult>;
+	for (const rating of REVIEW_RATING_VALUES) {
+		results[rating] = fsrsSchedule(state, rating, now, params);
+	}
+	return results;
 }
 
 /**
