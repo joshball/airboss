@@ -24,6 +24,10 @@ import {
 } from '@ab/constants';
 import PageHelp from '@ab/help/ui/PageHelp.svelte';
 import Banner from '@ab/ui/components/Banner.svelte';
+import type { BrowseListGroup } from '@ab/ui/components/BrowseList.svelte';
+import BrowseList from '@ab/ui/components/BrowseList.svelte';
+import BrowseListItem from '@ab/ui/components/BrowseListItem.svelte';
+import BrowseViewControls from '@ab/ui/components/BrowseViewControls.svelte';
 import FilterCard from '@ab/ui/components/FilterCard.svelte';
 import type { FilterChipDef } from '@ab/ui/components/FilterChips.svelte';
 import FilterChips from '@ab/ui/components/FilterChips.svelte';
@@ -216,12 +220,6 @@ interface CardRow {
 	removed?: { snoozeId: string; removedAt: Date; comment: string | null };
 }
 
-interface CardGroup {
-	key: string;
-	label: string;
-	cards: CardRow[];
-}
-
 function groupKeyFor(c: CardRow, by: BrowseGroupBy): string {
 	if (by === 'domain') return c.domain;
 	if (by === 'type') return c.cardType;
@@ -240,9 +238,9 @@ function groupLabelFor(by: BrowseGroupBy, key: string): string {
 	return '';
 }
 
-const groups = $derived.by<CardGroup[]>(() => {
+const groups = $derived.by<BrowseListGroup<CardRow>[]>(() => {
 	if (groupBy === 'none' || cards.length === 0) {
-		return [{ key: '', label: '', cards: cards as CardRow[] }];
+		return [{ key: '', label: '', items: cards as CardRow[] }];
 	}
 	const map = new Map<string, CardRow[]>();
 	for (const c of cards as CardRow[]) {
@@ -252,7 +250,7 @@ const groups = $derived.by<CardGroup[]>(() => {
 		map.set(k, list);
 	}
 	return [...map.entries()]
-		.map(([k, cs]) => ({ key: k, label: groupLabelFor(groupBy, k), cards: cs }))
+		.map(([k, items]) => ({ key: k, label: groupLabelFor(groupBy, k), items }))
 		.sort((a, b) => a.label.localeCompare(b.label));
 });
 </script>
@@ -376,49 +374,20 @@ const groups = $derived.by<CardGroup[]>(() => {
 		{/snippet}
 	</FilterCard>
 
-	<div class="view-controls" aria-label="View options">
-		<div class="view-control">
-			<label for="f-group">Group by</label>
-			<select
-				id="f-group"
-				value={groupBy}
-				onchange={(e) =>
-					goto(
-						buildHref({
-							[QUERY_PARAMS.GROUP_BY]:
-								(e.currentTarget as HTMLSelectElement).value === 'none'
-									? undefined
-									: (e.currentTarget as HTMLSelectElement).value,
-						}),
-					)}
-			>
-				{#each BROWSE_GROUP_BY_VALUES as g (g)}
-					<option value={g}>{BROWSE_GROUP_BY_LABELS[g]}</option>
-				{/each}
-			</select>
-		</div>
-		<div class="view-control">
-			<label for="f-size">Per page</label>
-			<select
-				id="f-size"
-				value={pageSize}
-				onchange={(e) =>
-					goto(
-						buildHref({
-							[QUERY_PARAMS.PAGE_SIZE]:
-								(e.currentTarget as HTMLSelectElement).value === String(BROWSE_PAGE_SIZE)
-									? undefined
-									: (e.currentTarget as HTMLSelectElement).value,
-							[QUERY_PARAMS.PAGE]: undefined,
-						}),
-					)}
-			>
-				{#each BROWSE_PAGE_SIZE_VALUES as n (n)}
-					<option value={n}>{n}</option>
-				{/each}
-			</select>
-		</div>
-	</div>
+	<BrowseViewControls
+		{groupBy}
+		groupByOptions={BROWSE_GROUP_BY_VALUES.map((g) => ({ value: g, label: BROWSE_GROUP_BY_LABELS[g] }))}
+		onGroupBy={(v) => goto(buildHref({ [QUERY_PARAMS.GROUP_BY]: v === 'none' ? undefined : v }))}
+		{pageSize}
+		pageSizeOptions={BROWSE_PAGE_SIZE_VALUES.map((n) => ({ value: n, label: String(n) }))}
+		onPageSize={(v) =>
+			goto(
+				buildHref({
+					[QUERY_PARAMS.PAGE_SIZE]: v === BROWSE_PAGE_SIZE ? undefined : String(v),
+					[QUERY_PARAMS.PAGE]: undefined,
+				}),
+			)}
+	/>
 
 	<FilterChips {chips} clearHref={ROUTES.MEMORY_BROWSE} />
 
@@ -442,50 +411,48 @@ const groups = $derived.by<CardGroup[]>(() => {
 			{/if}
 		</div>
 	{:else}
-		{#each groups as group (group.key)}
-			{#if groupBy !== 'none'}
-				<h2 class="group-heading">
-					<span>{group.label}</span>
-					<span class="group-count">{group.cards.length}</span>
-				</h2>
-			{/if}
-			<ul class="list">
-				{#each group.cards as c (c.id)}
-					<li id={`card-${c.id}`} class="card" class:just-created={createdCard?.id === c.id}>
-						<a class="card-link" href={ROUTES.MEMORY_CARD(c.id)}>
-							<div class="card-front">{shorten(c.front)}</div>
-							<div class="card-row">
-								<div class="card-meta">
-									<span class="badge domain">{domainLabel(c.domain)}</span>
-									<span class="badge type">{cardTypeLabel(c.cardType)}</span>
-									{#if c.removed}
-										<span class="badge status-removed">Removed</span>
-									{:else}
-										<span class="badge status-{c.status}">{statusLabel(c.status)}</span>
-									{/if}
-									<span class="badge source">{sourceLabel(c.sourceType)}</span>
-								</div>
-								<div class="card-stats" aria-label="Schedule">
-									<span class="stat"><span class="stat-key">{cardStateLabel(c.scheduleState)}</span></span>
-									<span class="stat"><span class="stat-key">Due</span> {dueLabel(c.dueAt)}</span>
-									<span class="stat"><span class="stat-key">Stab</span> {c.stabilityDays.toFixed(1)}d</span>
-									<span class="stat"><span class="stat-key">Last</span> {lastReviewedLabel(c.lastReviewedAt)}</span>
-								</div>
-							</div>
-							{#if c.removed?.comment}
-								<p class="removed-comment">Removed comment: {c.removed.comment}</p>
-							{/if}
-						</a>
+		<BrowseList {groups}>
+			{#snippet item(c)}
+				<BrowseListItem
+					href={ROUTES.MEMORY_CARD(c.id)}
+					id={`card-${c.id}`}
+					justCreated={createdCard?.id === c.id}
+				>
+					{#snippet title()}
+						<span class="card-front">{shorten(c.front)}</span>
+					{/snippet}
+					{#snippet meta()}
+						<span class="badge domain">{domainLabel(c.domain)}</span>
+						<span class="badge type">{cardTypeLabel(c.cardType)}</span>
+						{#if c.removed}
+							<span class="badge status-removed">Removed</span>
+						{:else}
+							<span class="badge status-{c.status}">{statusLabel(c.status)}</span>
+						{/if}
+						<span class="badge source">{sourceLabel(c.sourceType)}</span>
+					{/snippet}
+					{#snippet stats()}
+						<span class="stat"><span class="stat-key">{cardStateLabel(c.scheduleState)}</span></span>
+						<span class="stat"><span class="stat-key">Due</span> {dueLabel(c.dueAt)}</span>
+						<span class="stat"><span class="stat-key">Stab</span> {c.stabilityDays.toFixed(1)}d</span>
+						<span class="stat"><span class="stat-key">Last</span> {lastReviewedLabel(c.lastReviewedAt)}</span>
+					{/snippet}
+					{#snippet extra()}
+						{#if c.removed?.comment}
+							<p class="removed-comment">Removed comment: {c.removed.comment}</p>
+						{/if}
+					{/snippet}
+					{#snippet trailing()}
 						{#if c.removed}
 							<form method="POST" action="?/restore" class="restore-form">
 								<input type="hidden" name="cardId" value={c.id} />
 								<button type="submit" class="btn ghost restore-btn">Restore</button>
 							</form>
 						{/if}
-					</li>
-				{/each}
-			</ul>
-		{/each}
+					{/snippet}
+				</BrowseListItem>
+			{/snippet}
+		</BrowseList>
 
 		<Pager {currentPage} {totalPages} {hasMore} {pageHref} />
 	{/if}
@@ -525,37 +492,6 @@ const groups = $derived.by<CardGroup[]>(() => {
 		max-width: 70ch;
 	}
 
-	.view-controls {
-		display: flex;
-		flex-wrap: wrap;
-		gap: var(--space-lg);
-		align-items: center;
-		padding: 0 var(--space-2xs);
-	}
-
-	.view-control {
-		display: inline-flex;
-		align-items: center;
-		gap: var(--space-xs);
-	}
-
-	.view-control label {
-		font-size: var(--type-ui-caption-size);
-		font-weight: 600;
-		color: var(--ink-muted);
-		text-transform: uppercase;
-		letter-spacing: var(--letter-spacing-caps);
-	}
-
-	.view-control select {
-		font: inherit;
-		padding: var(--space-2xs) var(--space-sm);
-		border: 1px solid var(--edge-strong);
-		border-radius: var(--radius-sm);
-		background: var(--ink-inverse);
-		color: var(--ink-body);
-	}
-
 	.banner-link {
 		color: var(--action-default-hover);
 		font-weight: 600;
@@ -565,27 +501,6 @@ const groups = $derived.by<CardGroup[]>(() => {
 
 	.banner-link:hover {
 		text-decoration: underline;
-	}
-
-	.group-heading {
-		display: flex;
-		align-items: baseline;
-		gap: var(--space-sm);
-		margin: var(--space-md) 0 var(--space-xs);
-		font-size: var(--type-heading-3-size);
-		color: var(--ink-body);
-		letter-spacing: -0.01em;
-	}
-
-	.group-count {
-		color: var(--ink-subtle);
-		font-size: var(--type-ui-label-size);
-		font-weight: 500;
-	}
-
-	.card.just-created {
-		border-color: var(--signal-success-edge);
-		box-shadow: 0 0 0 3px var(--signal-success);
 	}
 
 	.empty {
@@ -601,61 +516,10 @@ const groups = $derived.by<CardGroup[]>(() => {
 		gap: var(--space-lg);
 	}
 
-	.list {
-		list-style: none;
-		padding: 0;
-		margin: 0;
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-xs);
-	}
-
-	.card {
-		background: var(--ink-inverse);
-		border: 1px solid var(--edge-default);
-		border-radius: var(--radius-md);
-		transition: border-color var(--motion-fast), box-shadow var(--motion-fast);
-	}
-
-	.card:hover {
-		border-color: var(--action-default-edge);
-		box-shadow: var(--shadow-sm);
-	}
-
-	.card-link {
-		display: block;
-		padding: var(--space-sm) var(--space-md);
-		text-decoration: none;
-		color: inherit;
-	}
-
 	.card-front {
 		color: var(--ink-body);
 		font-size: var(--type-definition-body-size);
 		line-height: 1.4;
-	}
-
-	.card-row {
-		margin-top: var(--space-2xs);
-		display: flex;
-		flex-wrap: wrap;
-		align-items: center;
-		gap: var(--space-md);
-		row-gap: var(--space-2xs);
-	}
-
-	.card-meta {
-		display: flex;
-		flex-wrap: wrap;
-		gap: var(--space-2xs);
-	}
-
-	.card-stats {
-		display: flex;
-		flex-wrap: wrap;
-		gap: var(--space-md);
-		color: var(--ink-subtle);
-		font-size: var(--type-ui-label-size);
 	}
 
 	.stat {
@@ -749,10 +613,4 @@ const groups = $derived.by<CardGroup[]>(() => {
 		background: var(--surface-sunken);
 	}
 
-	@media (max-width: 720px) {
-		.card-row {
-			flex-direction: column;
-			align-items: flex-start;
-		}
-	}
 </style>

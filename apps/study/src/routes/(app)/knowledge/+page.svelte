@@ -1,5 +1,7 @@
 <script lang="ts">
 import {
+	BROWSE_PAGE_SIZE,
+	BROWSE_PAGE_SIZE_VALUES,
 	CERT_LABELS,
 	CERT_VALUES,
 	type Cert,
@@ -16,55 +18,145 @@ import {
 	ROUTES,
 } from '@ab/constants';
 import PageHelp from '@ab/help/ui/PageHelp.svelte';
+import type { BrowseListGroup } from '@ab/ui/components/BrowseList.svelte';
+import BrowseList from '@ab/ui/components/BrowseList.svelte';
+import BrowseListItem from '@ab/ui/components/BrowseListItem.svelte';
+import BrowseViewControls from '@ab/ui/components/BrowseViewControls.svelte';
 import FilterCard from '@ab/ui/components/FilterCard.svelte';
-import { humanize } from '@ab/utils';
-import { page } from '$app/state';
+import type { FilterChipDef } from '@ab/ui/components/FilterChips.svelte';
+import FilterChips from '@ab/ui/components/FilterChips.svelte';
+import Pager from '@ab/ui/components/Pager.svelte';
+import ResultSummary from '@ab/ui/components/ResultSummary.svelte';
+import { buildQuery, humanize } from '@ab/utils';
+import { goto } from '$app/navigation';
+import { KNOWLEDGE_GROUP_BY_OPTIONS, type KnowledgeGroupByValue } from './+page.server';
 import type { PageData } from './$types';
-
-// Filter params this page owns. Reset strips only these so any unrelated future
-// query params (sort, view, etc.) that happen to be on the URL survive.
-const FILTER_PARAM_KEYS = [
-	QUERY_PARAMS.DOMAIN,
-	QUERY_PARAMS.CERT,
-	QUERY_PARAMS.PRIORITY,
-	QUERY_PARAMS.LIFECYCLE,
-] as const;
 
 let { data }: { data: PageData } = $props();
 
-const groups = $derived(data.groups);
+const nodes = $derived(data.nodes);
 const filters = $derived(data.filters);
-const totalNodes = $derived(data.totalNodes);
+const currentPage = $derived(data.page);
+const hasMore = $derived(data.hasMore);
+const total = $derived(data.total);
+const totalPages = $derived(data.totalPages);
+const pageSize = $derived(data.pageSize);
+const groupBy = $derived(data.groupBy);
+const facets = $derived(data.facets);
 
 const hasActiveFilters = $derived(Boolean(filters.domain || filters.cert || filters.priority || filters.lifecycle));
 
 function domainLabel(slug: string): string {
 	return (DOMAIN_LABELS as Record<Domain, string>)[slug as Domain] ?? humanize(slug);
 }
-
 function lifecycleLabel(slug: string): string {
 	return (NODE_LIFECYCLE_LABELS as Record<NodeLifecycle, string>)[slug as NodeLifecycle] ?? humanize(slug);
 }
-
 function certLabel(slug: string): string {
 	return (CERT_LABELS as Record<Cert, string>)[slug as Cert] ?? slug;
 }
-
 function priorityLabel(slug: string): string {
 	return (RELEVANCE_PRIORITY_LABELS as Record<RelevancePriority, string>)[slug as RelevancePriority] ?? humanize(slug);
 }
-
 function masteryPct(score: number): number {
 	return Math.round(score * 100);
 }
+function fmtCount(n: number | undefined): string {
+	return n === undefined ? '' : ` (${n})`;
+}
 
-// Reset href: drops only filter params, keeps anything unrelated currently on
-// the URL. Uses the page's current URL so SSR and client paths stay consistent.
-const resetHref = $derived.by(() => {
-	const params = new URLSearchParams(page.url.searchParams);
-	for (const key of FILTER_PARAM_KEYS) params.delete(key);
-	const qs = params.toString();
-	return qs.length > 0 ? `${ROUTES.KNOWLEDGE}?${qs}` : ROUTES.KNOWLEDGE;
+function buildHref(next: Record<string, string | undefined>): string {
+	const full: Record<string, string | number | null | undefined> = {
+		[QUERY_PARAMS.DOMAIN]: filters.domain,
+		[QUERY_PARAMS.CERT]: filters.cert,
+		[QUERY_PARAMS.PRIORITY]: filters.priority,
+		[QUERY_PARAMS.LIFECYCLE]: filters.lifecycle,
+		[QUERY_PARAMS.PAGE_SIZE]: pageSize === BROWSE_PAGE_SIZE ? undefined : String(pageSize),
+		[QUERY_PARAMS.GROUP_BY]: groupBy === 'domain' ? undefined : groupBy,
+		...next,
+	};
+	return `${ROUTES.KNOWLEDGE}${buildQuery(full)}`;
+}
+
+function pageHref(n: number): string {
+	return buildHref({ [QUERY_PARAMS.PAGE]: n > 1 ? String(n) : undefined });
+}
+
+const chips = $derived.by<FilterChipDef[]>(() => {
+	const out: FilterChipDef[] = [];
+	if (filters.domain)
+		out.push({
+			key: QUERY_PARAMS.DOMAIN,
+			label: 'Domain',
+			value: domainLabel(filters.domain),
+			removeHref: buildHref({ [QUERY_PARAMS.DOMAIN]: undefined }),
+		});
+	if (filters.cert)
+		out.push({
+			key: QUERY_PARAMS.CERT,
+			label: 'Cert',
+			value: certLabel(filters.cert),
+			removeHref: buildHref({ [QUERY_PARAMS.CERT]: undefined }),
+		});
+	if (filters.priority)
+		out.push({
+			key: QUERY_PARAMS.PRIORITY,
+			label: 'Priority',
+			value: priorityLabel(filters.priority),
+			removeHref: buildHref({ [QUERY_PARAMS.PRIORITY]: undefined }),
+		});
+	if (filters.lifecycle)
+		out.push({
+			key: QUERY_PARAMS.LIFECYCLE,
+			label: 'Lifecycle',
+			value: lifecycleLabel(filters.lifecycle),
+			removeHref: buildHref({ [QUERY_PARAMS.LIFECYCLE]: undefined }),
+		});
+	return out;
+});
+
+const groupByLabels: Record<KnowledgeGroupByValue, string> = {
+	domain: 'Domain',
+	cert: 'Cert',
+	priority: 'Priority',
+	lifecycle: 'Lifecycle',
+	none: 'No grouping',
+};
+
+type NodeRow = (typeof nodes)[number];
+
+function expandKeys(n: NodeRow, by: KnowledgeGroupByValue): string[] {
+	if (by === 'domain') return [n.domain];
+	if (by === 'cert') return n.certs.length > 0 ? n.certs : ['(none)'];
+	if (by === 'priority') return n.priorities.length > 0 ? n.priorities : ['(none)'];
+	if (by === 'lifecycle') return [n.lifecycle];
+	return [''];
+}
+
+function groupHeading(by: KnowledgeGroupByValue, key: string): string {
+	if (key === '(none)') return 'Unspecified';
+	if (by === 'domain') return domainLabel(key);
+	if (by === 'cert') return certLabel(key);
+	if (by === 'priority') return priorityLabel(key);
+	if (by === 'lifecycle') return lifecycleLabel(key);
+	return '';
+}
+
+const groups = $derived.by<BrowseListGroup<NodeRow>[]>(() => {
+	if (groupBy === 'none' || nodes.length === 0) {
+		return [{ key: '', label: '', items: nodes as NodeRow[] }];
+	}
+	const map = new Map<string, NodeRow[]>();
+	for (const n of nodes as NodeRow[]) {
+		for (const k of expandKeys(n, groupBy)) {
+			const list = map.get(k) ?? [];
+			list.push(n);
+			map.set(k, list);
+		}
+	}
+	return [...map.entries()]
+		.map(([k, items]) => ({ key: k, label: groupHeading(groupBy, k), items }))
+		.sort((a, b) => a.label.localeCompare(b.label));
 });
 </script>
 
@@ -80,19 +172,29 @@ const resetHref = $derived.by(() => {
 				<PageHelp pageId="knowledge-graph" />
 			</div>
 			<p class="sub">
-				The aviation knowledge graph. {totalNodes} node{totalNodes === 1 ? '' : 's'} grouped by domain.
+				The aviation knowledge graph. {total} node{total === 1 ? '' : 's'}; group by domain, cert, priority, or
+				lifecycle, or browse flat.
 			</p>
 		</div>
 	</header>
 
-	<FilterCard {resetHref} ariaLabel="Filter nodes">
+	<FilterCard resetHref={ROUTES.KNOWLEDGE} ariaLabel="Filter nodes">
+		{#snippet hidden()}
+			<input type="hidden" name={QUERY_PARAMS.PAGE} value="1" />
+			<input
+				type="hidden"
+				name={QUERY_PARAMS.PAGE_SIZE}
+				value={pageSize === BROWSE_PAGE_SIZE ? '' : String(pageSize)}
+			/>
+			<input type="hidden" name={QUERY_PARAMS.GROUP_BY} value={groupBy === 'domain' ? '' : groupBy} />
+		{/snippet}
 		{#snippet controls()}
 			<div class="filter">
 				<label for="f-domain">Domain</label>
 				<select id="f-domain" name={QUERY_PARAMS.DOMAIN} value={filters.domain ?? ''}>
 					<option value="">All</option>
 					{#each DOMAIN_VALUES as d (d)}
-						<option value={d}>{domainLabel(d)}</option>
+						<option value={d}>{domainLabel(d)}{fmtCount(facets?.domain?.[d])}</option>
 					{/each}
 				</select>
 			</div>
@@ -101,7 +203,7 @@ const resetHref = $derived.by(() => {
 				<select id="f-cert" name={QUERY_PARAMS.CERT} value={filters.cert ?? ''}>
 					<option value="">All</option>
 					{#each CERT_VALUES as c (c)}
-						<option value={c}>{certLabel(c)}</option>
+						<option value={c}>{certLabel(c)}{fmtCount(facets?.cert?.[c])}</option>
 					{/each}
 				</select>
 			</div>
@@ -110,7 +212,7 @@ const resetHref = $derived.by(() => {
 				<select id="f-priority" name={QUERY_PARAMS.PRIORITY} value={filters.priority ?? ''}>
 					<option value="">All</option>
 					{#each RELEVANCE_PRIORITY_VALUES as p (p)}
-						<option value={p}>{priorityLabel(p)}</option>
+						<option value={p}>{priorityLabel(p)}{fmtCount(facets?.priority?.[p])}</option>
 					{/each}
 				</select>
 			</div>
@@ -119,60 +221,83 @@ const resetHref = $derived.by(() => {
 				<select id="f-lifecycle" name={QUERY_PARAMS.LIFECYCLE} value={filters.lifecycle ?? ''}>
 					<option value="">All</option>
 					{#each NODE_LIFECYCLE_VALUES as l (l)}
-						<option value={l}>{lifecycleLabel(l)}</option>
+						<option value={l}>{lifecycleLabel(l)}{fmtCount(facets?.lifecycle?.[l])}</option>
 					{/each}
 				</select>
 			</div>
 		{/snippet}
 	</FilterCard>
 
-	{#if groups.length === 0}
+	<BrowseViewControls
+		{groupBy}
+		groupByOptions={KNOWLEDGE_GROUP_BY_OPTIONS.map((g) => ({ value: g, label: groupByLabels[g] }))}
+		onGroupBy={(v) => goto(buildHref({ [QUERY_PARAMS.GROUP_BY]: v === 'domain' ? undefined : v }))}
+		{pageSize}
+		pageSizeOptions={BROWSE_PAGE_SIZE_VALUES.map((n) => ({ value: n, label: String(n) }))}
+		onPageSize={(v) =>
+			goto(
+				buildHref({
+					[QUERY_PARAMS.PAGE_SIZE]: v === BROWSE_PAGE_SIZE ? undefined : String(v),
+					[QUERY_PARAMS.PAGE]: undefined,
+				}),
+			)}
+	/>
+
+	<FilterChips {chips} clearHref={ROUTES.KNOWLEDGE} />
+
+	<ResultSummary
+		{total}
+		pageCount={nodes.length}
+		{currentPage}
+		{pageSize}
+		noun="node"
+		filtersActive={hasActiveFilters}
+	/>
+
+	{#if nodes.length === 0}
 		<div class="empty">
 			{#if hasActiveFilters}
 				<p>No knowledge nodes match these filters.</p>
-				<a class="btn ghost" href={resetHref}>Clear filters</a>
+				<a class="btn ghost" href={ROUTES.KNOWLEDGE}>Clear filters</a>
 			{:else}
 				<p>No knowledge nodes yet. Author one with <code>bun run knowledge:new</code>, then build.</p>
 			{/if}
 		</div>
 	{:else}
-		{#each groups as group (group.domain)}
-			<section class="domain">
-				<h2 class="domain-title">{domainLabel(group.domain)}</h2>
-				<ul class="list">
-					{#each group.nodes as node (node.id)}
-						<li>
-							<a class="card" href={ROUTES.KNOWLEDGE_SLUG(node.id)}>
-								<div class="card-head">
-									<h3 class="card-title">{node.title}</h3>
-									<span class="mastery" aria-label="Mastery {masteryPct(node.displayScore)} percent">
-										<span class="mastery-bar">
-											<span class="mastery-fill" style:width="{masteryPct(node.displayScore)}%"></span>
-										</span>
-										<span class="mastery-pct">{masteryPct(node.displayScore)}%</span>
-									</span>
-								</div>
-								<div class="card-meta">
-									<span class="badge lifecycle lifecycle-{node.lifecycle}">{lifecycleLabel(node.lifecycle)}</span>
-									{#each node.certs as c (c)}
-										<span class="badge cert">{certLabel(c)}</span>
-									{/each}
-									{#each node.priorities as p (p)}
-										<span class="badge priority priority-{p}">{priorityLabel(p)}</span>
-									{/each}
-									{#if node.estimatedTimeMinutes}
-										<span class="badge time">{node.estimatedTimeMinutes}m</span>
-									{/if}
-									{#if node.mastered}
-										<span class="badge mastered">Mastered</span>
-									{/if}
-								</div>
-							</a>
-						</li>
-					{/each}
-				</ul>
-			</section>
-		{/each}
+		<BrowseList {groups}>
+			{#snippet item(n)}
+				<BrowseListItem href={ROUTES.KNOWLEDGE_SLUG(n.id)} id={`node-${n.id}`}>
+					{#snippet title()}
+						<div class="card-head">
+							<span class="card-title">{n.title}</span>
+							<span class="mastery" aria-label="Mastery {masteryPct(n.displayScore)} percent">
+								<span class="mastery-bar">
+									<span class="mastery-fill" style:width="{masteryPct(n.displayScore)}%"></span>
+								</span>
+								<span class="mastery-pct">{masteryPct(n.displayScore)}%</span>
+							</span>
+						</div>
+					{/snippet}
+					{#snippet meta()}
+						<span class="badge lifecycle lifecycle-{n.lifecycle}">{lifecycleLabel(n.lifecycle)}</span>
+						{#each n.certs as c (c)}
+							<span class="badge cert">{certLabel(c)}</span>
+						{/each}
+						{#each n.priorities as p (p)}
+							<span class="badge priority priority-{p}">{priorityLabel(p)}</span>
+						{/each}
+						{#if n.estimatedTimeMinutes}
+							<span class="badge time">{n.estimatedTimeMinutes}m</span>
+						{/if}
+						{#if n.mastered}
+							<span class="badge mastered">Mastered</span>
+						{/if}
+					{/snippet}
+				</BrowseListItem>
+			{/snippet}
+		</BrowseList>
+
+		<Pager {currentPage} {totalPages} {hasMore} {pageHref} />
 	{/if}
 </section>
 
@@ -201,6 +326,7 @@ const resetHref = $derived.by(() => {
 		margin: var(--space-2xs) 0 0;
 		color: var(--ink-subtle);
 		font-size: var(--type-definition-body-size);
+		max-width: 70ch;
 	}
 
 	.empty {
@@ -216,73 +342,30 @@ const resetHref = $derived.by(() => {
 		gap: var(--space-lg);
 	}
 
-	.domain {
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-sm);
-	}
-
-	.domain-title {
-		margin: 0;
-		font-size: var(--type-ui-label-size);
-		font-weight: 700;
-		text-transform: uppercase;
-		letter-spacing: var(--letter-spacing-caps);
-		color: var(--ink-muted);
-	}
-
-	.list {
-		list-style: none;
-		padding: 0;
-		margin: 0;
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-sm);
-	}
-
-	.card {
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-sm);
-		background: var(--ink-inverse);
-		border: 1px solid var(--edge-default);
-		border-radius: var(--radius-md);
-		padding: var(--space-lg) var(--space-lg);
-		text-decoration: none;
-		color: inherit;
-		transition: border-color var(--motion-fast), box-shadow var(--motion-fast);
-	}
-
-	.card:hover {
-		border-color: var(--action-default-edge);
-		box-shadow: var(--shadow-sm);
-	}
-
 	.card-head {
 		display: flex;
-		align-items: center;
+		align-items: baseline;
 		justify-content: space-between;
 		gap: var(--space-md);
 	}
 
 	.card-title {
-		margin: 0;
 		font-size: var(--type-reading-body-size);
 		color: var(--ink-body);
+		font-weight: 600;
 	}
 
 	.mastery {
 		display: inline-flex;
 		align-items: center;
 		gap: var(--space-xs);
-		flex-shrink: 0;
+		min-width: 8rem;
 	}
 
 	.mastery-bar {
-		display: inline-block;
-		width: 80px;
-		height: 6px;
-		background: var(--edge-default);
+		flex: 1;
+		height: 0.4rem;
+		background: var(--surface-sunken);
 		border-radius: var(--radius-pill);
 		overflow: hidden;
 	}
@@ -291,19 +374,15 @@ const resetHref = $derived.by(() => {
 		display: block;
 		height: 100%;
 		background: var(--action-default);
+		transition: width var(--motion-fast);
 	}
 
 	.mastery-pct {
 		font-size: var(--type-ui-caption-size);
 		color: var(--ink-subtle);
-		min-width: 2.25rem;
+		font-variant-numeric: tabular-nums;
+		min-width: 2.5em;
 		text-align: right;
-	}
-
-	.card-meta {
-		display: flex;
-		flex-wrap: wrap;
-		gap: var(--space-xs);
 	}
 
 	.badge {
@@ -321,33 +400,14 @@ const resetHref = $derived.by(() => {
 	}
 
 	.badge.cert {
-		color: var(--action-default-hover);
+		color: var(--accent-code);
 		background: var(--action-default-wash);
 		border-color: var(--action-default-edge);
-	}
-
-	.badge.priority-core {
-		color: var(--action-hazard-hover);
-		background: var(--action-hazard-wash);
-		border-color: var(--action-hazard-edge);
-	}
-
-	.badge.priority-supporting {
-		color: var(--signal-warning);
-		background: var(--signal-warning-wash);
-		border-color: var(--signal-warning-edge);
-	}
-
-	.badge.priority-elective {
-		color: var(--ink-muted);
-		background: var(--surface-sunken);
-		border-color: var(--edge-default);
 	}
 
 	.badge.lifecycle-skeleton {
 		color: var(--ink-muted);
 		background: var(--surface-sunken);
-		border-color: var(--edge-strong);
 	}
 
 	.badge.lifecycle-started {
@@ -362,16 +422,27 @@ const resetHref = $derived.by(() => {
 		border-color: var(--signal-success-edge);
 	}
 
+	.badge.priority-must-know {
+		color: var(--action-hazard-hover);
+		background: var(--action-hazard-wash);
+		border-color: var(--action-hazard-edge);
+	}
+
+	.badge.priority-should-know {
+		color: var(--signal-warning);
+		background: var(--signal-warning-wash);
+		border-color: var(--signal-warning-edge);
+	}
+
+	.badge.priority-nice-to-know {
+		color: var(--ink-muted);
+		background: var(--surface-sunken);
+	}
+
 	.badge.mastered {
 		color: var(--signal-success);
 		background: var(--signal-success-wash);
 		border-color: var(--signal-success-edge);
-	}
-
-	.badge.time {
-		color: var(--ink-subtle);
-		background: var(--surface-muted);
-		border-color: var(--edge-default);
 	}
 
 	.btn {
@@ -396,16 +467,5 @@ const resetHref = $derived.by(() => {
 
 	.btn.ghost:hover {
 		background: var(--surface-sunken);
-	}
-
-	@media (max-width: 640px) {
-		.filters {
-			grid-template-columns: 1fr 1fr;
-		}
-
-		.filter-actions {
-			grid-column: 1 / -1;
-			justify-content: flex-end;
-		}
 	}
 </style>

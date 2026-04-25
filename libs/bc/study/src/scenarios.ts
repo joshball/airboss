@@ -25,9 +25,24 @@ import {
 	type ScenarioStatus,
 	SESSION_ITEM_KINDS,
 } from '@ab/constants';
-import { db as defaultDb } from '@ab/db';
+import { db as defaultDb, escapeLikePattern } from '@ab/db';
 import { generateScenarioId, userStartOfDay } from '@ab/utils';
-import { aliasedTable, and, asc, count, desc, eq, gte, inArray, isNotNull, isNull, type SQL, sql } from 'drizzle-orm';
+import {
+	aliasedTable,
+	and,
+	asc,
+	count,
+	desc,
+	eq,
+	gte,
+	ilike,
+	inArray,
+	isNotNull,
+	isNull,
+	or,
+	type SQL,
+	sql,
+} from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import { type ScenarioOption, type ScenarioRow, scenario, sessionItemResult } from './schema';
 import { newScenarioSchema, submitAttemptSchema } from './validation';
@@ -106,6 +121,8 @@ export interface ScenarioFilters {
 	phaseOfFlight?: PhaseOfFlight;
 	sourceType?: ContentSource;
 	status?: ScenarioStatus | ScenarioStatus[];
+	/** Free-text search over title + situation. */
+	search?: string;
 	limit?: number;
 	offset?: number;
 }
@@ -230,6 +247,11 @@ export async function getScenarios(
 	if (filters.difficulty) clauses.push(eq(scenario.difficulty, filters.difficulty));
 	if (filters.phaseOfFlight) clauses.push(eq(scenario.phaseOfFlight, filters.phaseOfFlight));
 	if (filters.sourceType) clauses.push(eq(scenario.sourceType, filters.sourceType));
+	if (filters.search && filters.search.trim().length > 0) {
+		const pattern = `%${escapeLikePattern(filters.search.trim())}%`;
+		const cond = or(ilike(scenario.title, pattern), ilike(scenario.situation, pattern));
+		if (cond) clauses.push(cond);
+	}
 
 	let q = db
 		.select()
@@ -267,12 +289,103 @@ export async function getScenariosCount(
 	if (filters.difficulty) clauses.push(eq(scenario.difficulty, filters.difficulty));
 	if (filters.phaseOfFlight) clauses.push(eq(scenario.phaseOfFlight, filters.phaseOfFlight));
 	if (filters.sourceType) clauses.push(eq(scenario.sourceType, filters.sourceType));
+	if (filters.search && filters.search.trim().length > 0) {
+		const pattern = `%${escapeLikePattern(filters.search.trim())}%`;
+		const cond = or(ilike(scenario.title, pattern), ilike(scenario.situation, pattern));
+		if (cond) clauses.push(cond);
+	}
 
 	const [row] = await db
 		.select({ total: sql<number>`count(*)::int` })
 		.from(scenario)
 		.where(and(...clauses));
 	return Number(row?.total ?? 0);
+}
+
+/**
+ * Per-facet bucket counts for the Browse filters. Each facet excludes its
+ * own filter so the numbers answer "if I pick this option (keeping my other
+ * filters), how many would I see?". Mirrors `getCardsFacetCounts` in shape.
+ */
+export interface ScenariosFacetCounts {
+	domain: Record<string, number>;
+	difficulty: Record<string, number>;
+	phaseOfFlight: Record<string, number>;
+	sourceType: Record<string, number>;
+	status: Record<string, number>;
+}
+
+export async function getScenariosFacetCounts(
+	userId: string,
+	filters: Omit<ScenarioFilters, 'limit' | 'offset'> = {},
+	db: Db = defaultDb,
+): Promise<ScenariosFacetCounts> {
+	const baseClauses: SQL[] = [eq(scenario.userId, userId)];
+	if (filters.search && filters.search.trim().length > 0) {
+		const pattern = `%${escapeLikePattern(filters.search.trim())}%`;
+		const cond = or(ilike(scenario.title, pattern), ilike(scenario.situation, pattern));
+		if (cond) baseClauses.push(cond);
+	}
+
+	const statusFilter = filters.status
+		? Array.isArray(filters.status)
+			? filters.status
+			: [filters.status]
+		: [SCENARIO_STATUSES.ACTIVE];
+
+	const withExcept = (exclude: 'domain' | 'difficulty' | 'phaseOfFlight' | 'sourceType' | 'status'): SQL[] => {
+		const c = [...baseClauses];
+		if (exclude !== 'status') c.push(inArray(scenario.status, statusFilter));
+		if (exclude !== 'domain' && filters.domain) c.push(eq(scenario.domain, filters.domain));
+		if (exclude !== 'difficulty' && filters.difficulty) c.push(eq(scenario.difficulty, filters.difficulty));
+		if (exclude !== 'phaseOfFlight' && filters.phaseOfFlight) c.push(eq(scenario.phaseOfFlight, filters.phaseOfFlight));
+		if (exclude !== 'sourceType' && filters.sourceType) c.push(eq(scenario.sourceType, filters.sourceType));
+		return c;
+	};
+
+	const [domainRows, difficultyRows, phaseRows, sourceRows, statusRows] = await Promise.all([
+		db
+			.select({ key: scenario.domain, n: sql<number>`count(*)::int` })
+			.from(scenario)
+			.where(and(...withExcept('domain')))
+			.groupBy(scenario.domain),
+		db
+			.select({ key: scenario.difficulty, n: sql<number>`count(*)::int` })
+			.from(scenario)
+			.where(and(...withExcept('difficulty')))
+			.groupBy(scenario.difficulty),
+		db
+			.select({ key: scenario.phaseOfFlight, n: sql<number>`count(*)::int` })
+			.from(scenario)
+			.where(and(...withExcept('phaseOfFlight')))
+			.groupBy(scenario.phaseOfFlight),
+		db
+			.select({ key: scenario.sourceType, n: sql<number>`count(*)::int` })
+			.from(scenario)
+			.where(and(...withExcept('sourceType')))
+			.groupBy(scenario.sourceType),
+		db
+			.select({ key: scenario.status, n: sql<number>`count(*)::int` })
+			.from(scenario)
+			.where(and(...withExcept('status')))
+			.groupBy(scenario.status),
+	]);
+
+	const toRecord = (rows: Array<{ key: string | null; n: number }>): Record<string, number> => {
+		const out: Record<string, number> = {};
+		for (const r of rows) {
+			if (r.key !== null) out[r.key] = Number(r.n);
+		}
+		return out;
+	};
+
+	return {
+		domain: toRecord(domainRows),
+		difficulty: toRecord(difficultyRows),
+		phaseOfFlight: toRecord(phaseRows),
+		sourceType: toRecord(sourceRows),
+		status: toRecord(statusRows),
+	};
 }
 
 /** Load a single scenario by id scoped to the caller. */
