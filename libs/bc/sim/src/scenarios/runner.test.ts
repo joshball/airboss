@@ -77,12 +77,14 @@ describe('scenario registry', () => {
 
 	it('lists every registered scenario in recommended order', () => {
 		const list = listScenarios();
-		expect(list.length).toBe(5);
+		expect(list.length).toBe(7);
 		expect(list[0].id).toBe(SIM_SCENARIO_IDS.PLAYGROUND);
 		expect(list[1].id).toBe(SIM_SCENARIO_IDS.FIRST_FLIGHT);
 		expect(list[2].id).toBe(SIM_SCENARIO_IDS.DEPARTURE_STALL);
 		expect(list[3].id).toBe(SIM_SCENARIO_IDS.EFATO);
 		expect(list[4].id).toBe(SIM_SCENARIO_IDS.VACUUM_FAILURE);
+		expect(list[5].id).toBe(SIM_SCENARIO_IDS.PITOT_BLOCK);
+		expect(list[6].id).toBe(SIM_SCENARIO_IDS.STATIC_BLOCK);
 	});
 
 	it('returns every scenario from the id registry', () => {
@@ -91,6 +93,8 @@ describe('scenario registry', () => {
 		expect(getScenario(SIM_SCENARIO_IDS.DEPARTURE_STALL).id).toBe(SIM_SCENARIO_IDS.DEPARTURE_STALL);
 		expect(getScenario(SIM_SCENARIO_IDS.EFATO).id).toBe(SIM_SCENARIO_IDS.EFATO);
 		expect(getScenario(SIM_SCENARIO_IDS.VACUUM_FAILURE).id).toBe(SIM_SCENARIO_IDS.VACUUM_FAILURE);
+		expect(getScenario(SIM_SCENARIO_IDS.PITOT_BLOCK).id).toBe(SIM_SCENARIO_IDS.PITOT_BLOCK);
+		expect(getScenario(SIM_SCENARIO_IDS.STATIC_BLOCK).id).toBe(SIM_SCENARIO_IDS.STATIC_BLOCK);
 	});
 });
 
