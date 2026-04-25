@@ -9,19 +9,26 @@
  * Per spec:
  *   - Active cards only (suspended + archived -> 404).
  *   - No scheduling internals leak.
- *   - Citations render when `content-citations` (Bundle C) lands; empty now.
+ *   - Citations are composed here from `@ab/bc-citations`; the policy of
+ *     "external links only on the public page" lives in `composePublicCardCitations`.
  */
 
-import { getPublicCard } from '@ab/bc-study';
+import { getCitationsOf, resolveCitationTargets } from '@ab/bc-citations';
+import { composePublicCardCitations, getPublicCard } from '@ab/bc-study';
+import { CITATION_SOURCE_TYPES } from '@ab/constants';
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async (event) => {
 	const { params } = event;
-	const card = await getPublicCard(params.id);
-	if (!card) error(404, { message: 'Card not found' });
+	const baseCard = await getPublicCard(params.id);
+	if (!baseCard) error(404, { message: 'Card not found' });
+
+	const citationRows = await getCitationsOf(CITATION_SOURCE_TYPES.CARD, baseCard.id);
+	const enriched = await resolveCitationTargets(citationRows);
+	const citations = composePublicCardCitations(enriched);
 
 	return {
-		card,
+		card: { ...baseCard, citations },
 	};
 };

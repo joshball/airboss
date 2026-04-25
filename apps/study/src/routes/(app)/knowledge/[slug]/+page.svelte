@@ -4,6 +4,9 @@ import {
 	type BloomLevel,
 	CERT_LABELS,
 	type Cert,
+	CITATION_SOURCE_LABELS,
+	CITATION_SOURCE_TYPES,
+	type CitationSourceType,
 	DOMAIN_LABELS,
 	type Domain,
 	KNOWLEDGE_PHASE_LABELS,
@@ -26,6 +29,26 @@ const phases = $derived(data.phases);
 const edges = $derived(data.edges);
 const mastery = $derived(data.mastery);
 const lifecycle = $derived(data.lifecycle);
+const citedBy = $derived(data.citedBy);
+
+function citedByHref(type: CitationSourceType, id: string): string | null {
+	switch (type) {
+		case CITATION_SOURCE_TYPES.CARD:
+			// Public card surface: works for any reader regardless of card ownership.
+			return ROUTES.CARD_PUBLIC(id);
+		case CITATION_SOURCE_TYPES.REP:
+		case CITATION_SOURCE_TYPES.SCENARIO:
+			return ROUTES.REP_DETAIL(id);
+		case CITATION_SOURCE_TYPES.NODE:
+			return ROUTES.KNOWLEDGE_SLUG(id);
+		default:
+			return null;
+	}
+}
+
+function sourceTypeLabel(type: CitationSourceType): string {
+	return CITATION_SOURCE_LABELS[type];
+}
 
 function domainLabel(slug: string): string {
 	return (DOMAIN_LABELS as Record<Domain, string>)[slug as Domain] ?? humanize(slug);
@@ -268,6 +291,30 @@ function renderPhase(body: string | null): string {
 			</ul>
 		</section>
 	{/if}
+
+	<section class="section" aria-label="Cited by">
+		<h2>Cited by ({citedBy.length})</h2>
+		{#if citedBy.length === 0}
+			<p class="cited-by-empty">Not yet cited by other content.</p>
+		{:else}
+			<ul class="cited-by-list">
+				{#each citedBy as c (c.citation.id)}
+					{@const href = c.source.exists ? citedByHref(c.source.type, c.source.id) : null}
+					<li class="cited-by-row">
+						<span class="cited-by-type">{sourceTypeLabel(c.source.type)}</span>
+						{#if href}
+							<a class="cited-by-label" {href}>{c.source.label}</a>
+						{:else}
+							<span class="cited-by-label cited-by-missing">{c.source.label}</span>
+						{/if}
+						{#if c.citation.citationContext}
+							<span class="cited-by-context">"{c.citation.citationContext}"</span>
+						{/if}
+					</li>
+				{/each}
+			</ul>
+		{/if}
+	</section>
 </section>
 
 <style>
@@ -653,5 +700,60 @@ function renderPhase(body: string | null): string {
 		color: var(--ink-muted);
 		font-size: var(--type-ui-label-size);
 		line-height: 1.45;
+	}
+
+	.cited-by-empty {
+		margin: 0;
+		color: var(--ink-faint);
+		font-size: var(--type-ui-label-size);
+	}
+
+	.cited-by-list {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-xs);
+	}
+
+	.cited-by-row {
+		display: flex;
+		align-items: center;
+		gap: var(--space-sm);
+		padding: var(--space-xs) var(--space-md);
+		background: var(--surface-muted);
+		border: 1px solid var(--edge-default);
+		border-radius: var(--radius-md);
+		font-size: var(--type-ui-label-size);
+		flex-wrap: wrap;
+	}
+
+	.cited-by-type {
+		font-size: var(--type-ui-caption-size);
+		font-weight: 600;
+		color: var(--ink-subtle);
+		text-transform: uppercase;
+		letter-spacing: var(--letter-spacing-caps);
+	}
+
+	.cited-by-label {
+		color: var(--action-default-active);
+		text-decoration: none;
+		font-weight: 500;
+	}
+
+	.cited-by-label:is(a):hover {
+		text-decoration: underline;
+	}
+
+	.cited-by-missing {
+		color: var(--ink-subtle);
+		font-style: italic;
+	}
+
+	.cited-by-context {
+		color: var(--ink-muted);
+		font-style: italic;
 	}
 </style>

@@ -1,11 +1,21 @@
 <script lang="ts">
 import { CARD_TYPE_LABELS, type CardType, CONTENT_SOURCE_LABELS, type ContentSource, domainLabel } from '@ab/constants';
+import CitationChips, { type CitationChipItem } from '@ab/ui/components/CitationChips.svelte';
 import { humanize } from '@ab/utils';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
 
 const card = $derived(data.card);
+
+const citationItems = $derived<CitationChipItem[]>(
+	card.citations.map((c) => ({
+		id: c.id,
+		typeLabel: c.detail,
+		label: c.label,
+		href: c.href,
+	})),
+);
 
 function cardTypeLabel(slug: string): string {
 	return (CARD_TYPE_LABELS as Record<CardType, string>)[slug as CardType] ?? humanize(slug);
@@ -43,20 +53,10 @@ function sourceLabel(slug: string): string {
 			<div class="section-text">{card.back}</div>
 		</section>
 
-		{#if card.citations.length > 0}
+		{#if citationItems.length > 0}
 			<section class="section">
 				<div class="section-label">Citations</div>
-				<ul class="citations">
-					{#each card.citations as cite (cite.id)}
-						<li>
-							{#if cite.href}
-								<a href={cite.href} target="_blank" rel="noopener noreferrer">{cite.label}</a>
-							{:else}
-								{cite.label}
-							{/if}
-						</li>
-					{/each}
-				</ul>
+				<CitationChips items={citationItems} />
 			</section>
 		{/if}
 
@@ -130,13 +130,6 @@ function sourceLabel(slug: string): string {
 		border: none;
 		border-top: 1px dashed var(--edge-default);
 		margin: 0;
-	}
-
-	.citations {
-		margin: 0;
-		padding-left: var(--space-lg);
-		color: var(--ink-muted);
-		font-size: var(--font-size-sm);
 	}
 
 	.ft {

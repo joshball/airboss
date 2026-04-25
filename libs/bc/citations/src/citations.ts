@@ -18,6 +18,7 @@
 import { card, knowledgeNode, scenario } from '@ab/bc-study';
 import {
 	CITATION_CONTEXT_MAX_LENGTH,
+	CITATION_SOURCE_LABELS,
 	CITATION_SOURCE_TYPES,
 	CITATION_SOURCE_VALUES,
 	CITATION_TARGET_LABELS,
@@ -96,6 +97,25 @@ export interface CitationWithTarget {
 		detail?: string;
 		/** Optional external URL (external_ref only). */
 		href?: string;
+	};
+}
+
+/**
+ * Source-side enrichment used by the "Cited by" panel: pairs a raw citation
+ * with a display label for the source row (the card front, scenario title,
+ * knowledge-node title) and a typed flag the caller maps to a route.
+ */
+export interface CitationWithSource {
+	citation: ContentCitationRow;
+	source: {
+		type: CitationSourceType;
+		id: string;
+		/** Rendered label (card front excerpt, scenario title, node title). */
+		label: string;
+		/** Optional secondary line (e.g. "Card", "Scenario"). */
+		detail?: string;
+		/** Whether the source row still exists. False rows render as missing. */
+		exists: boolean;
 	};
 }
 
@@ -400,6 +420,123 @@ export async function resolveCitationTargets(
 				label: title || url,
 				detail: url,
 				href: url,
+			},
+		};
+	});
+}
+
+/** Card-front excerpt length used in source labels for the "Cited by" panel. */
+const CITED_BY_CARD_LABEL_MAX = 120;
+
+function truncateLabel(text: string, max: number): string {
+	const trimmed = text.trim();
+	if (trimmed.length <= max) return trimmed;
+	return `${trimmed.slice(0, max - 1).trimEnd()}...`;
+}
+
+/**
+ * Enrich raw citation rows with their source display data. Used by the
+ * "Cited by" panel on regulation-node and knowledge-node detail pages, where
+ * each row is rendered as a link back to the citing source. Like
+ * `resolveCitationTargets`, this batches by source type so the read cost is
+ * O(distinct-source-types), not O(citations).
+ */
+export async function resolveCitationSources(
+	citations: ContentCitationRow[],
+	db: Db = defaultDb,
+): Promise<CitationWithSource[]> {
+	if (citations.length === 0) return [];
+
+	const cardIds = new Set<string>();
+	const scenarioIds = new Set<string>();
+	const nodeIds = new Set<string>();
+	for (const c of citations) {
+		if (c.sourceType === CITATION_SOURCE_TYPES.CARD) {
+			cardIds.add(c.sourceId);
+		} else if (c.sourceType === CITATION_SOURCE_TYPES.REP || c.sourceType === CITATION_SOURCE_TYPES.SCENARIO) {
+			scenarioIds.add(c.sourceId);
+		} else if (c.sourceType === CITATION_SOURCE_TYPES.NODE) {
+			nodeIds.add(c.sourceId);
+		}
+	}
+
+	const [cards, scenarios, nodes] = await Promise.all([
+		cardIds.size > 0
+			? db
+					.select({ id: card.id, front: card.front })
+					.from(card)
+					.where(inArray(card.id, Array.from(cardIds)))
+			: Promise.resolve([] as { id: string; front: string }[]),
+		scenarioIds.size > 0
+			? db
+					.select({ id: scenario.id, title: scenario.title })
+					.from(scenario)
+					.where(inArray(scenario.id, Array.from(scenarioIds)))
+			: Promise.resolve([] as { id: string; title: string }[]),
+		nodeIds.size > 0
+			? db
+					.select({ id: knowledgeNode.id, title: knowledgeNode.title })
+					.from(knowledgeNode)
+					.where(inArray(knowledgeNode.id, Array.from(nodeIds)))
+			: Promise.resolve([] as { id: string; title: string }[]),
+	]);
+
+	const cardById = new Map(cards.map((r) => [r.id, r.front]));
+	const scenarioById = new Map(scenarios.map((r) => [r.id, r.title]));
+	const nodeById = new Map(nodes.map((r) => [r.id, r.title]));
+
+	return citations.map((c) => {
+		const sourceTypeLabel = CITATION_SOURCE_LABELS[c.sourceType as CitationSourceType];
+		if (c.sourceType === CITATION_SOURCE_TYPES.CARD) {
+			const front = cardById.get(c.sourceId);
+			return {
+				citation: c,
+				source: {
+					type: c.sourceType as CitationSourceType,
+					id: c.sourceId,
+					label: front ? truncateLabel(front, CITED_BY_CARD_LABEL_MAX) : c.sourceId,
+					detail: sourceTypeLabel,
+					exists: front !== undefined,
+				},
+			};
+		}
+		if (c.sourceType === CITATION_SOURCE_TYPES.REP || c.sourceType === CITATION_SOURCE_TYPES.SCENARIO) {
+			const title = scenarioById.get(c.sourceId);
+			return {
+				citation: c,
+				source: {
+					type: c.sourceType as CitationSourceType,
+					id: c.sourceId,
+					label: title ?? c.sourceId,
+					detail: sourceTypeLabel,
+					exists: title !== undefined,
+				},
+			};
+		}
+		if (c.sourceType === CITATION_SOURCE_TYPES.NODE) {
+			const title = nodeById.get(c.sourceId);
+			return {
+				citation: c,
+				source: {
+					type: c.sourceType as CitationSourceType,
+					id: c.sourceId,
+					label: title ?? c.sourceId,
+					detail: sourceTypeLabel,
+					exists: title !== undefined,
+				},
+			};
+		}
+		// Unknown source types are coerced through CITATION_SOURCE_VALUES at write
+		// time, so this branch is unreachable today. Keep it total to satisfy the
+		// type checker if a future source type lands without a render path.
+		return {
+			citation: c,
+			source: {
+				type: c.sourceType as CitationSourceType,
+				id: c.sourceId,
+				label: c.sourceId,
+				detail: sourceTypeLabel,
+				exists: false,
 			},
 		};
 	});

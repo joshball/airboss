@@ -22,6 +22,7 @@ import {
 	ROUTES,
 } from '@ab/constants';
 import PageHelp from '@ab/help/ui/PageHelp.svelte';
+import CitationChips, { type CitationChipItem } from '@ab/ui/components/CitationChips.svelte';
 import CitationPicker, { type CitationPickerSelection } from '@ab/ui/components/CitationPicker.svelte';
 import ConfirmAction from '@ab/ui/components/ConfirmAction.svelte';
 import InfoTip from '@ab/ui/components/InfoTip.svelte';
@@ -198,6 +199,16 @@ let citationPickerOpen = $state(false);
 let citationError = $state<string | null>(null);
 
 const citations = $derived(data.citations);
+const citationItems = $derived<CitationChipItem[]>(
+	citations.map((c) => ({
+		id: c.citation.id,
+		typeLabel: targetTypeLabel(c.target.type),
+		label: c.target.label,
+		href: c.target.href ?? null,
+		context: c.citation.citationContext,
+	})),
+);
+const citationRemoveAction = $derived(`${ROUTES.MEMORY_CARD(card.id)}?/removeCitation`);
 const citationTargets = [
 	CITATION_TARGET_TYPES.REGULATION_NODE,
 	CITATION_TARGET_TYPES.AC_REFERENCE,
@@ -515,36 +526,7 @@ async function handleCitationSelect(selection: CitationPickerSelection): Promise
 		{#if citations.length === 0}
 			<p class="empty-note">No citations yet. Link a regulation, AC, knowledge node, or external reference.</p>
 		{:else}
-			<ul class="citation-list">
-				{#each citations as c (c.citation.id)}
-					<li class="citation-chip">
-						<span class="citation-type">{targetTypeLabel(c.target.type)}</span>
-						{#if c.target.href}
-							<a class="citation-label" href={c.target.href} target="_blank" rel="noopener noreferrer">
-								{c.target.label}
-							</a>
-						{:else}
-							<span class="citation-label">{c.target.label}</span>
-						{/if}
-						{#if c.citation.citationContext}
-							<span class="citation-context">"{c.citation.citationContext}"</span>
-						{/if}
-						<form
-							method="POST"
-							action="?/removeCitation"
-							class="citation-remove-form"
-							use:enhance={() => {
-								return async ({ update }) => {
-									await update();
-								};
-							}}
-						>
-							<input type="hidden" name="citationId" value={c.citation.id} />
-							<button type="submit" class="citation-remove" aria-label="Remove citation">×</button>
-						</form>
-					</li>
-				{/each}
-			</ul>
+			<CitationChips items={citationItems} editable removeAction={citationRemoveAction} />
 		{/if}
 	</article>
 
@@ -1241,73 +1223,6 @@ async function handleCitationSelect(selection: CitationPickerSelection): Promise
 
 	.citations-add {
 		flex: 0 0 auto;
-	}
-
-	.citation-list {
-		margin: 0;
-		padding: 0;
-		list-style: none;
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-xs);
-	}
-
-	.citation-chip {
-		display: flex;
-		align-items: center;
-		gap: var(--space-sm);
-		padding: var(--space-xs) var(--space-md);
-		background: var(--surface-muted);
-		border: 1px solid var(--edge-default);
-		border-radius: var(--radius-md);
-		font-size: var(--type-ui-label-size);
-		flex-wrap: wrap;
-	}
-
-	.citation-type {
-		font-size: var(--type-ui-caption-size);
-		font-weight: 600;
-		color: var(--ink-subtle);
-		text-transform: uppercase;
-		letter-spacing: var(--letter-spacing-caps);
-	}
-
-	.citation-label {
-		color: var(--ink-body);
-		font-weight: 500;
-	}
-
-	.citation-label:is(a) {
-		color: var(--action-default-active);
-		text-decoration: none;
-	}
-
-	.citation-label:is(a):hover {
-		text-decoration: underline;
-	}
-
-	.citation-context {
-		color: var(--ink-muted);
-		font-style: italic;
-	}
-
-	.citation-remove-form {
-		margin-left: auto;
-		display: inline-flex;
-	}
-
-	.citation-remove {
-		background: transparent;
-		border: none;
-		color: var(--ink-muted);
-		font-size: var(--font-size-body);
-		cursor: pointer;
-		padding: 0 var(--space-xs);
-		line-height: 1;
-	}
-
-	.citation-remove:hover {
-		color: var(--action-hazard-active);
 	}
 
 	@media (max-width: 480px) {

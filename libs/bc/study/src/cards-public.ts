@@ -6,11 +6,21 @@
  *   - No scheduler internals leak (no stability, difficulty, due-at).
  *   - `source_ref` is not exposed; only the high-level `source_type` label is.
  *
- * Citations are wired as an empty array today. `content-citations` is a
- * separate work package (Bundle C); when that lands it hydrates this list.
+ * Citations are owned by `@ab/bc-citations`; the route layer composes the
+ * citation read with `getPublicCard`. We expose `PublicCardCitation` as the
+ * stable wire shape and a `composePublicCardCitations` helper that takes the
+ * resolved citations and projects the public-safe subset (no createdBy,
+ * no scheduling internals, no internal hrefs).
  */
 
-import { CARD_STATUSES, type CardType, type ContentSource, type Domain } from '@ab/constants';
+import {
+	CARD_STATUSES,
+	type CardType,
+	CITATION_TARGET_TYPES,
+	type CitationTargetType,
+	type ContentSource,
+	type Domain,
+} from '@ab/constants';
 import { db as defaultDb } from '@ab/db';
 import { and, eq } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
@@ -21,6 +31,9 @@ type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;
 export interface PublicCardCitation {
 	id: string;
 	label: string;
+	/** Optional secondary text (e.g. "Regulation"). */
+	detail: string | null;
+	/** External link when the citation has one (external_ref). Internal targets stay unlinked on the public page. */
 	href: string | null;
 }
 
@@ -31,8 +44,29 @@ export interface PublicCard {
 	domain: Domain;
 	cardType: CardType;
 	sourceType: ContentSource;
-	/** Authored citations rendered below the content. Empty until `content-citations` lands. */
+	/** Authored citations rendered below the content. Hydrated by the route layer from `@ab/bc-citations`. */
 	citations: PublicCardCitation[];
+}
+
+/**
+ * Public-safe projection of a resolved citation. Lives here (not in the
+ * citations BC) because the policy of "external links only on the public
+ * page" is a card-public concern, and keeping it here avoids a dep cycle
+ * (citations already imports from study). Internal targets render as text;
+ * external_ref carries its href through.
+ */
+export function composePublicCardCitations(
+	resolved: ReadonlyArray<{
+		citation: { id: string };
+		target: { type: CitationTargetType; label: string; detail?: string; href?: string };
+	}>,
+): PublicCardCitation[] {
+	return resolved.map((c) => ({
+		id: c.citation.id,
+		label: c.target.label,
+		detail: c.target.detail ?? null,
+		href: c.target.type === CITATION_TARGET_TYPES.EXTERNAL_REF && c.target.href ? c.target.href : null,
+	}));
 }
 
 /**
@@ -41,6 +75,10 @@ export interface PublicCard {
  * a 404. `userId` is intentionally not a parameter -- the public view does
  * not know who "owns" a shared card and the author's ownership is not part
  * of the identity projection exposed here.
+ *
+ * The returned `citations` array is empty -- the route layer hydrates it
+ * from `@ab/bc-citations`. Doing the import here would create a cycle
+ * (citations -> study -> citations).
  */
 export async function getPublicCard(cardId: string, db: Db = defaultDb): Promise<PublicCard | null> {
 	const [row] = await db
@@ -65,9 +103,6 @@ export async function getPublicCard(cardId: string, db: Db = defaultDb): Promise
 		domain: row.domain as Domain,
 		cardType: row.cardType as CardType,
 		sourceType: row.sourceType as ContentSource,
-		// `content-citations` (Bundle C) populates this list. Shipping the
-		// empty array now so the public-card shape is stable and the panel
-		// component can render against one contract.
 		citations: [],
 	};
 }
