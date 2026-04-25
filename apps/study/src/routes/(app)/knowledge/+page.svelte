@@ -125,16 +125,23 @@ const groupByLabels: Record<KnowledgeGroupByValue, string> = {
 
 type NodeRow = (typeof nodes)[number];
 
+// Sentinels for nodes that don't have a value in the active grouping
+// dimension (e.g. a node with no `certs` when grouping by cert). Keep
+// them distinct per group type so the heading reads naturally.
+const NO_CERT = '__no-cert__';
+const NO_PRIORITY = '__no-priority__';
+
 function expandKeys(n: NodeRow, by: KnowledgeGroupByValue): string[] {
 	if (by === 'domain') return [n.domain];
-	if (by === 'cert') return n.certs.length > 0 ? n.certs : ['(none)'];
-	if (by === 'priority') return n.priorities.length > 0 ? n.priorities : ['(none)'];
+	if (by === 'cert') return n.certs.length > 0 ? n.certs : [NO_CERT];
+	if (by === 'priority') return n.priorities.length > 0 ? n.priorities : [NO_PRIORITY];
 	if (by === 'lifecycle') return [n.lifecycle];
 	return [''];
 }
 
 function groupHeading(by: KnowledgeGroupByValue, key: string): string {
-	if (key === '(none)') return 'Unspecified';
+	if (key === NO_CERT) return 'No cert';
+	if (key === NO_PRIORITY) return 'No priority';
 	if (by === 'domain') return domainLabel(key);
 	if (by === 'cert') return certLabel(key);
 	if (by === 'priority') return priorityLabel(key);
