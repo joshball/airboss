@@ -92,6 +92,14 @@ export interface HelpValidationResult {
 export interface HelpValidationOptions {
 	/** Resolver for aviation reference ids (drives wiki-link + related checks). */
 	hasAviationReference(id: string): boolean;
+	/**
+	 * Page ids that are reached via a route surface (e.g. mounted with
+	 * `<PageHelp pageId="...">` on a SvelteKit route). These are not orphans
+	 * even if no other help page links to them: the route is the entry point.
+	 * Optional; when omitted, orphan detection falls back to "no other page
+	 * links here" alone.
+	 */
+	routeMountedIds?: ReadonlySet<string>;
 }
 
 const STALE_REVIEW_MS = MS_PER_YEAR;
@@ -145,9 +153,12 @@ export function validateHelpPages(pages: readonly HelpPage[], opts: HelpValidati
 			for (const rel of section.related ?? []) linkedIds.add(rel);
 		}
 	}
+	const routeMounted = opts.routeMountedIds ?? new Set<string>();
 	const orphans: string[] = [];
 	for (const page of pages) {
-		if (!linkedIds.has(page.id)) orphans.push(page.id);
+		if (linkedIds.has(page.id)) continue;
+		if (routeMounted.has(page.id)) continue;
+		orphans.push(page.id);
 	}
 	if (orphans.length > 0) {
 		warnings.push({
