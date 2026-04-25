@@ -41,6 +41,8 @@ export class FdmEngine {
 	private readonly groundElevation: number;
 	private readonly wind: WindVector;
 	private readonly scriptedInput: ScenarioScriptedInput | undefined;
+	/** Latches true once the scripted EFATO threshold has been crossed. */
+	private engineFailed = false;
 
 	constructor(
 		cfg: AircraftConfig,
@@ -118,9 +120,15 @@ export class FdmEngine {
 	 */
 	step(dt: number): FdmStateVector {
 		this.updateScriptedTrim(dt);
+		this.updateScriptedEngineFailure();
+		// Once the engine has failed the FDM still receives the pilot's
+		// throttle command (we want the cockpit lever to keep moving), but
+		// the actual thrust input is forced to zero. We pass a clamped
+		// inputs snapshot to fdmStep without mutating the latched state.
+		const effectiveInputs = this.engineFailed ? { ...this.inputs, throttle: 0 } : this.inputs;
 		this.state = fdmStep(
 			this.state,
-			this.inputs,
+			effectiveInputs,
 			this.cfg,
 			this.groundElevation,
 			this.wind,
@@ -128,6 +136,14 @@ export class FdmEngine {
 			dt,
 		);
 		return this.state;
+	}
+
+	private updateScriptedEngineFailure(): void {
+		if (this.engineFailed) return;
+		const threshold = this.scriptedInput?.engineFailureAtAglMeters;
+		if (typeof threshold !== 'number') return;
+		const agl = this.state.altitude - this.groundElevation;
+		if (agl >= threshold) this.engineFailed = true;
 	}
 
 	private updateScriptedTrim(dt: number): void {

@@ -258,7 +258,9 @@ export interface ScenarioWind {
 
 /**
  * Scripted-input step applied by the scenario runner. Phase 0.5 uses this
- * for the Departure Stall's "distracted pilot" trim drift.
+ * for the Departure Stall's "distracted pilot" trim drift; Phase 4 adds
+ * `engineFailureAtAglMeters` so EFATO scenarios can force the engine off
+ * at a specified AGL transition without inventing a new fault kind.
  */
 export interface ScenarioScriptedInput {
 	/** Earliest sim time (seconds) before this input is active. */
@@ -269,6 +271,13 @@ export interface ScenarioScriptedInput {
 	trimBiasRatePerSecond?: number;
 	/** Cap on total scripted trim magnitude. */
 	trimBiasMax?: number;
+	/**
+	 * When set, the FDM clamps throttle to zero permanently after the
+	 * aircraft first crosses this AGL upward. Models EFATO-style engine
+	 * failure on the climbout. Latching: a later descent does not
+	 * un-fail the engine.
+	 */
+	engineFailureAtAglMeters?: number;
 }
 
 /**
