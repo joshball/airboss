@@ -1002,6 +1002,17 @@ export const REVIEW_SESSION_STATUS_VALUES: readonly ReviewSessionStatus[] = Obje
  */
 export const REVIEW_SESSION_ABANDON_MS = 14 * MS_PER_DAY;
 
+/**
+ * Length of the canonical deck-spec hash stored on
+ * `memory_review_session.deck_hash` and used to bucket "all runs of the same
+ * deck" for the Saved Decks surface + future analytics. First N hex chars of
+ * SHA-1(canonical JSON). 8 chars is plenty given we only need to distinguish
+ * a per-user handful of saved decks.
+ *
+ * See `docs/work-packages/review-sessions-url/spec.md` product decision (2).
+ */
+export const DECK_HASH_LENGTH = 8;
+
 // -------- Snooze + card feedback (Bundle A -- snooze-and-flag WP) --------
 
 /**

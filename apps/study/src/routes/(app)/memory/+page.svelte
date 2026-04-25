@@ -1,4 +1,5 @@
 <script lang="ts">
+import type { ReviewSessionDeckSpec } from '@ab/bc-study';
 import {
 	CARD_STATES,
 	DOMAIN_LABELS,
@@ -35,6 +36,7 @@ let { data }: { data: PageData } = $props();
 const stats = $derived(data.stats);
 const totalActive = $derived(Object.values(stats.stateCounts).reduce((a, b) => a + b, 0));
 const resumable = $derived(data.resumableSession);
+const savedDecks = $derived(data.savedDecks);
 
 function formatResumeSub(sub: { status: string; currentIndex: number; totalCards: number }): string {
 	const remaining = Math.max(0, sub.totalCards - sub.currentIndex);
@@ -45,6 +47,55 @@ function formatResumeSub(sub: { status: string; currentIndex: number; totalCards
 
 function domainLabel(slug: string): string {
 	return (DOMAIN_LABELS as Record<Domain, string>)[slug as Domain] ?? humanize(slug);
+}
+
+/**
+ * Build the deck-review URL from an encoded `?deck=` value. Inline-built
+ * because `ROUTES.MEMORY_REVIEW` is a static string and the encoder lives
+ * in the BC; routing the construction through a route helper would just
+ * shuffle the string concatenation one layer up.
+ */
+function deckHref(deckParam: string): string {
+	return `${ROUTES.MEMORY_REVIEW}?${QUERY_PARAMS.DECK}=${deckParam}`;
+}
+
+/**
+ * Render a deck spec as a human-readable label for the Saved Decks list.
+ * Mirrors the resolver-prompt page's `summarizeDeckSpec` so the same deck
+ * surfaces with the same wording in both places. Read as a loose record so
+ * future Layer (b)/Layer (c) filter dimensions render without a type touch.
+ */
+function summarizeDeckSpec(spec: ReviewSessionDeckSpec): string {
+	const loose = spec as unknown as Record<string, unknown>;
+	const parts: string[] = [];
+	if (typeof loose.domain === 'string' && loose.domain.length > 0) {
+		parts.push(domainLabel(loose.domain));
+	} else {
+		parts.push('All domains');
+	}
+	if (loose.dueOnly === true) parts.push('due now');
+	if (Array.isArray(loose.tags) && loose.tags.length > 0) {
+		parts.push(`tags: ${(loose.tags as string[]).join(', ')}`);
+	}
+	if (Array.isArray(loose.cardType) && loose.cardType.length > 0) {
+		parts.push(`type: ${(loose.cardType as string[]).join(', ')}`);
+	}
+	return parts.join(' / ');
+}
+
+function formatLastVisited(iso: string): string {
+	const d = new Date(iso);
+	const today = new Date();
+	const sameDay = d.toDateString() === today.toDateString();
+	if (sameDay) {
+		return `today ${d.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' })}`;
+	}
+	return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+}
+
+function formatResumeBadge(r: { currentIndex: number; totalCards: number }): string {
+	if (r.totalCards === 0) return 'empty';
+	return `${r.currentIndex} of ${r.totalCards}`;
 }
 
 function percent(n: number, total: number): number {
@@ -79,6 +130,31 @@ function percent(n: number, total: number): number {
 			<div class="resume-sub">{formatResumeSub(resumable)}</div>
 			<div class="resume-cta">Continue -&gt;</div>
 		</a>
+	{/if}
+
+	{#if savedDecks.length > 0}
+		<article class="saved-decks">
+			<h2>Saved decks</h2>
+			<p class="hint">Bookmarkable filters from your past runs. Each entry rebuilds the same deck.</p>
+			<ul class="deck-list">
+				{#each savedDecks as deck (deck.deckHash)}
+					<li class="deck-item">
+						<a class="deck-link" href={deckHref(deck.deckParam)}>
+							<div class="deck-head">
+								<span class="deck-label">{summarizeDeckSpec(deck.deckSpec)}</span>
+								{#if deck.resumable}
+									<span class="deck-badge">Resume {formatResumeBadge(deck.resumable)}</span>
+								{/if}
+							</div>
+							<div class="deck-meta">
+								<span>Last run {formatLastVisited(deck.lastVisitedAt)}</span>
+								<span>{deck.sessionCount} {deck.sessionCount === 1 ? 'run' : 'runs'}</span>
+							</div>
+						</a>
+					</li>
+				{/each}
+			</ul>
+		</article>
 	{/if}
 
 	<div class="grid">
@@ -319,6 +395,84 @@ function percent(n: number, total: number): number {
 		color: var(--action-default-hover);
 		font-weight: 600;
 		font-size: var(--font-size-sm);
+	}
+
+	.saved-decks {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-sm);
+		padding: var(--space-xl);
+		background: var(--ink-inverse);
+		border: 1px solid var(--edge-default);
+		border-radius: var(--radius-lg);
+	}
+
+	.saved-decks h2 {
+		margin: 0;
+		font-size: var(--font-size-sm);
+		color: var(--ink-subtle);
+		text-transform: uppercase;
+		letter-spacing: var(--letter-spacing-caps);
+		font-weight: 600;
+	}
+
+	.hint {
+		margin: 0;
+		color: var(--ink-faint);
+		font-size: var(--font-size-sm);
+	}
+
+	.deck-list {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-xs);
+	}
+
+	.deck-link {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-2xs);
+		padding: var(--space-sm) var(--space-md);
+		background: var(--surface-muted);
+		border: 1px solid var(--edge-default);
+		border-radius: var(--radius-md);
+		text-decoration: none;
+		color: inherit;
+		transition: background var(--motion-fast), border-color var(--motion-fast);
+	}
+
+	.deck-link:hover {
+		background: var(--surface-sunken);
+		border-color: var(--action-default-hover);
+	}
+
+	.deck-head {
+		display: flex;
+		justify-content: space-between;
+		align-items: baseline;
+		gap: var(--space-md);
+	}
+
+	.deck-label {
+		color: var(--ink-body);
+		font-weight: 500;
+	}
+
+	.deck-badge {
+		color: var(--action-default-hover);
+		font-size: var(--font-size-sm);
+		font-weight: 600;
+	}
+
+	.deck-meta {
+		display: flex;
+		justify-content: space-between;
+		gap: var(--space-md);
+		color: var(--ink-subtle);
+		font-size: var(--font-size-xs);
 	}
 
 	/* StatTile provides its own styling; the grid just lays them out. */

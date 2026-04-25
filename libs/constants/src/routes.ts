@@ -29,6 +29,12 @@ export const QUERY_PARAMS = {
 	HELP: 'help',
 
 	// Filter / browse keys
+	/**
+	 * Base64url'd canonical-JSON deck spec for `/memory/review?deck=<...>` (Layer (b)
+	 * Redo). Decoded server-side; no DB lookup needed. See
+	 * `docs/work-packages/review-sessions-url/spec.md` decision (2).
+	 */
+	DECK: 'deck',
 	/** Phase-of-flight filter on browse pages (renamed from legacy `phase`). */
 	FLIGHT_PHASE: 'flight-phase',
 	/** Domain filter. */
