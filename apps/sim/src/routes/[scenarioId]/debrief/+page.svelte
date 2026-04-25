@@ -343,7 +343,7 @@ function onScrubKey(event: KeyboardEvent): void {
 	}
 	.scrubber .scrub-track {
 		position: relative;
-		padding-bottom: 12px;
+		padding-bottom: var(--space-md);
 	}
 	.scrubber input[type='range'] {
 		width: 100%;

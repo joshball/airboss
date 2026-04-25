@@ -86,7 +86,7 @@ const LOW_FUEL_GALLONS = 5;
 		display: grid;
 		grid-template-columns: repeat(2, 120px);
 		grid-template-rows: repeat(3, 120px);
-		gap: 8px;
+		gap: var(--space-sm);
 		justify-content: center;
 		align-content: center;
 	}

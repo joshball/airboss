@@ -131,7 +131,7 @@ const centerY = $derived(padY + (height - padY * 2) / 2);
 	.axis-label {
 		fill: var(--sim-instrument-tick-minor);
 		font-family: var(--font-family-mono, monospace);
-		font-size: 10px;
+		font-size: var(--font-size-xs);
 	}
 	.series {
 		stroke-linejoin: round;
