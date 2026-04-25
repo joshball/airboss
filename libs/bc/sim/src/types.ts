@@ -6,6 +6,7 @@
  */
 
 import type { SimAircraftId, SimFlapDegrees, SimScenarioId, SimScenarioOutcome } from '@ab/constants';
+import type { ScenarioFault } from './faults/types';
 
 /**
  * Full truth state the FDM produces each tick. This is what the aeroplane
@@ -295,6 +296,110 @@ export interface ScenarioStepContext {
 	brakeOn: boolean;
 }
 
+/**
+ * Trajectory segment from the "ideal" run, used by the debrief to overlay
+ * a ghosted target path. Authors specify a few keyframes (start, end,
+ * inflection points) and the debrief linearly interpolates between them.
+ *
+ * Used by Phase 4 debrief UI; absent on scenarios that have no canonical
+ * "right" path (e.g. Playground).
+ */
+export interface IdealPathDefinition {
+	/** Sparse keyframes describing the target trajectory. */
+	segments: readonly IdealPathSegment[];
+}
+
+/**
+ * One keyframe of the ideal trajectory. The debrief draws lines between
+ * consecutive segments and rolls each rendered field forward to the
+ * current scrubber position.
+ */
+export interface IdealPathSegment {
+	/** Sim time at the end of this segment (seconds). Monotonically increasing. */
+	endT: number;
+	/** Altitude MSL at endT (meters). */
+	altitudeMsl: number;
+	/** Indicated airspeed at endT (m/s). */
+	indicatedAirspeed: number;
+	/** Heading at endT (radians). */
+	heading: number;
+	/** Pitch at endT (radians). */
+	pitch: number;
+	/** Roll at endT (radians). */
+	roll: number;
+	/** Throttle at endT (0..1). */
+	throttle: number;
+	/** Optional human-readable label for the keyframe. Rendered as a tooltip. */
+	label?: string;
+}
+
+/**
+ * Weighted grading signals beyond pass/fail. Each component yields a
+ * 0..1 score; the final grade is sum(score_i * weight_i). Weights must
+ * sum to 1.0 within +/-0.001 (validator-enforced).
+ *
+ * Components map to functions the runner evaluates over the run's
+ * sample buffer; see `libs/bc/sim/src/scenarios/grading.ts` (Phase 4)
+ * for the evaluation surface.
+ */
+export interface GradingDefinition {
+	/** Components are summed weighted; weights must sum to ~1.0. */
+	components: readonly GradingComponent[];
+}
+
+/**
+ * One graded dimension. The Phase 4 design lists six initial component
+ * kinds; authors pick the ones relevant to their scenario.
+ */
+export interface GradingComponent {
+	kind: GradingComponentKind;
+	weight: number;
+	/** Component-specific tuning (target altitude, tolerance bands, etc). */
+	params?: GradingComponentParams;
+}
+
+export type GradingComponentKind =
+	/** How close altitude held to a target band, weighted by sample. */
+	| 'altitude_hold'
+	/** How close heading held to a target. */
+	| 'heading_hold'
+	/** How close airspeed held to a target. */
+	| 'airspeed_hold'
+	/** Time spent above stall-warning AoA (less is better). */
+	| 'stall_margin'
+	/** Latency from a triggering event to the pilot reaction (less is better). */
+	| 'reaction_time'
+	/** Absolute deviation from the authored ideal path, weighted by sample. */
+	| 'ideal_path_match';
+
+/** Per-component tuning, shape varies by `kind`. */
+export interface GradingComponentParams {
+	/** altitude_hold / airspeed_hold target value. Units match the component. */
+	target?: number;
+	/** Tolerance band; deviations within this band score 1.0. */
+	tolerance?: number;
+	/** Hard fail outside this band. */
+	hardFail?: number;
+	/** reaction_time: which fault kind triggers the timer; what input ends it. */
+	triggerFaultKind?: string;
+	/** reaction_time: input the pilot must produce to stop the clock. */
+	reactionPredicate?: 'stick_forward' | 'throttle_idle' | 'flaps_extended' | 'autopilot_disengaged';
+}
+
+/**
+ * Linkage to the study spaced-rep scheduler. Each scenario attempt that
+ * carries `repMetadata` emits a `RepAttempt` into `libs/bc/study/` so
+ * weak scenarios re-queue through the existing engine.
+ */
+export interface RepMetadata {
+	/** Coarse domain bucket, e.g. 'stalls', 'partial-panel', 'efato'. */
+	domain: string;
+	/** 1..5 difficulty hint shown in the home list. */
+	difficulty: number;
+	/** Free-form tags for filtering / grouping in the home page. */
+	tags: readonly string[];
+}
+
 /** Full scenario definition consumed by the BC runner and the app UI. */
 export interface ScenarioDefinition {
 	id: SimScenarioId;
@@ -314,6 +419,18 @@ export interface ScenarioDefinition {
 	scriptedInput?: ScenarioScriptedInput;
 	/** Runway heading in degrees true. */
 	runwayHeadingDegrees: number;
+	/**
+	 * Optional instrument faults declared for this scenario. The runner
+	 * watches each trigger; the fault model derives `DisplayState`. See
+	 * `ScenarioFault` in `./faults/types.ts`.
+	 */
+	faults?: readonly ScenarioFault[];
+	/** Optional ghosted "target" trajectory for the debrief overlay. */
+	idealPath?: IdealPathDefinition;
+	/** Optional weighted grading definition. Pass/fail is independent. */
+	grading?: GradingDefinition;
+	/** Optional spaced-rep linkage. Present for scored scenarios. */
+	repMetadata?: RepMetadata;
 }
 
 /**
