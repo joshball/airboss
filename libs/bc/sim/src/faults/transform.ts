@@ -159,13 +159,34 @@ const STATIC_BLOCK_ASI_KIAS_PER_FOOT = 0.02;
 
 function applyVacuumFailure(
 	display: DisplayState,
-	_activation: FaultActivation,
-	_input: FaultTransformInput,
+	activation: FaultActivation,
+	input: FaultTransformInput,
 ): DisplayState {
-	// B5.{ai,hi} will compute: pitch/roll/heading drift at
-	// activation.params.vacuumDriftDegPerSec since firedAtT. Until then, pass through.
-	return display;
+	// Vacuum-driven gyros (AI + HI on the C172) lose erection slowly as
+	// the gyro spools down. The pilot sees gradual drift -- typically
+	// pitch creeps in one direction and roll/heading drift in the
+	// opposite. The drift rate is the activation's
+	// `vacuumDriftDegPerSec`.
+	//
+	// B5.ai (this PR) drifts pitch + roll on the AI. B5.hi extends the
+	// same activation to the heading indicator. The drift accumulates
+	// from firedAtT, so the longer the failure goes unnoticed the
+	// further from truth the gauge reads.
+	const elapsedSec = Math.max(0, input.truth.t - activation.firedAtT);
+	const driftRad = activation.params.vacuumDriftDegPerSec * (Math.PI / 180) * elapsedSec;
+	// AI pitch drifts nose-up (positive); AI roll drifts right wing down
+	// (positive). Pilots train to recognise the drift signature.
+	const pitchIndicated = display.pitchIndicated + driftRad;
+	const rollIndicated = display.rollIndicated + driftRad * VACUUM_ROLL_DRIFT_RATIO;
+	return { ...display, pitchIndicated, rollIndicated };
 }
+
+/**
+ * Roll drift develops more slowly than pitch on a real failing AI
+ * because the roll erection mechanism has more inertia. A 0.5 ratio
+ * gives a recognisable but not-overwhelming roll bias.
+ */
+const VACUUM_ROLL_DRIFT_RATIO = 0.5;
 
 function applyAlternatorFailure(
 	display: DisplayState,
@@ -181,15 +202,42 @@ function applyAlternatorFailure(
 	return { ...display, electricBusVolts: volts };
 }
 
-function applyGyroTumble(
-	display: DisplayState,
-	_activation: FaultActivation,
-	_input: FaultTransformInput,
-): DisplayState {
-	// B5.{ai,hi} will compute: AI pitches/rolls to mechanical limits;
-	// HI spins. Until then, pass through.
-	return display;
+function applyGyroTumble(display: DisplayState, activation: FaultActivation, input: FaultTransformInput): DisplayState {
+	// Gyro tumble: when the AI's gimbal limits are exceeded (real-world
+	// trigger: aerobatic attitudes, severe turbulence, or post-failure
+	// mechanical damage), the gyro pegs at its mechanical limits. If
+	// `gyroTumbleContinues`, the gimbal continues cycling through the
+	// limits at a slow rate. If false, it freezes at the first limit
+	// it hits.
+	//
+	// B5.ai (this PR) tumbles the AI. B5.hi will extend to the heading
+	// indicator. The tumble visually pegs pitch and roll at the
+	// mechanical limits regardless of truth.
+	const elapsedSec = Math.max(0, input.truth.t - activation.firedAtT);
+	if (activation.params.gyroTumbleContinues) {
+		// Slow cycle: 1 full tumble per TUMBLE_PERIOD_SEC. Pitch and
+		// roll oscillate ±90 deg out of phase so the AI looks broken,
+		// not just stuck.
+		const phase = (elapsedSec / GYRO_TUMBLE_PERIOD_SEC) * Math.PI * 2;
+		const pitchIndicated = Math.sin(phase) * GYRO_TUMBLE_LIMIT_RAD;
+		const rollIndicated = Math.cos(phase) * GYRO_TUMBLE_LIMIT_RAD;
+		return { ...display, pitchIndicated, rollIndicated };
+	}
+	// Freeze at the limit on the first tick.
+	return {
+		...display,
+		pitchIndicated: GYRO_TUMBLE_LIMIT_RAD,
+		rollIndicated: -GYRO_TUMBLE_LIMIT_RAD,
+	};
 }
+
+/** AI mechanical gimbal limit. ~90 deg corresponds to a fully tumbled
+ *  gyro pegged against the case. */
+const GYRO_TUMBLE_LIMIT_RAD = (90 * Math.PI) / 180;
+/** Continuous-tumble cycle period (sec). Matches a real failing gyro
+ *  -- slow enough to read as broken, fast enough to be visibly
+ *  unsettled. */
+const GYRO_TUMBLE_PERIOD_SEC = 6;
 
 /**
  * Compose the fault layers in deterministic order.
