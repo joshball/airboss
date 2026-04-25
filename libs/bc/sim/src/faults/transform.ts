@@ -178,7 +178,12 @@ function applyVacuumFailure(
 	// (positive). Pilots train to recognise the drift signature.
 	const pitchIndicated = display.pitchIndicated + driftRad;
 	const rollIndicated = display.rollIndicated + driftRad * VACUUM_ROLL_DRIFT_RATIO;
-	return { ...display, pitchIndicated, rollIndicated };
+	// HI heading drifts at the same rate as pitch but in the opposite
+	// direction (left in the northern hemisphere) -- the directional
+	// gyro precesses as it spools down. Pilots cross-check against the
+	// magnetic compass to recognise the drift.
+	const headingIndicated = display.headingIndicated - driftRad;
+	return { ...display, pitchIndicated, rollIndicated, headingIndicated };
 }
 
 /**
@@ -217,17 +222,23 @@ function applyGyroTumble(display: DisplayState, activation: FaultActivation, inp
 	if (activation.params.gyroTumbleContinues) {
 		// Slow cycle: 1 full tumble per TUMBLE_PERIOD_SEC. Pitch and
 		// roll oscillate ±90 deg out of phase so the AI looks broken,
-		// not just stuck.
+		// not just stuck. The HI spins continuously through 0..2pi at
+		// the same period -- a tumbled directional gyro is the textbook
+		// "compass card going around the dial."
 		const phase = (elapsedSec / GYRO_TUMBLE_PERIOD_SEC) * Math.PI * 2;
 		const pitchIndicated = Math.sin(phase) * GYRO_TUMBLE_LIMIT_RAD;
 		const rollIndicated = Math.cos(phase) * GYRO_TUMBLE_LIMIT_RAD;
-		return { ...display, pitchIndicated, rollIndicated };
+		const headingIndicated = phase % (Math.PI * 2);
+		return { ...display, pitchIndicated, rollIndicated, headingIndicated };
 	}
-	// Freeze at the limit on the first tick.
+	// Freeze at the limit on the first tick. HI freezes at whatever
+	// heading was indicated when the tumble started (truth-state
+	// snapshot, not zero).
 	return {
 		...display,
 		pitchIndicated: GYRO_TUMBLE_LIMIT_RAD,
 		rollIndicated: -GYRO_TUMBLE_LIMIT_RAD,
+		headingIndicated: display.headingIndicated,
 	};
 }
 
