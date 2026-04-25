@@ -9,7 +9,9 @@ import type { ScenarioDefinition } from '../types';
 import { DEPARTURE_STALL_SCENARIO } from './departure-stall';
 import { EFATO_SCENARIO } from './efato';
 import { FIRST_FLIGHT_SCENARIO } from './first-flight';
+import { PITOT_BLOCK_SCENARIO } from './pitot-block';
 import { PLAYGROUND_SCENARIO } from './playground';
+import { STATIC_BLOCK_SCENARIO } from './static-block';
 import { VACUUM_FAILURE_SCENARIO } from './vacuum-failure';
 
 export const SCENARIO_REGISTRY: Record<SimScenarioId, ScenarioDefinition> = {
@@ -18,6 +20,8 @@ export const SCENARIO_REGISTRY: Record<SimScenarioId, ScenarioDefinition> = {
 	[SIM_SCENARIO_IDS.DEPARTURE_STALL]: DEPARTURE_STALL_SCENARIO,
 	[SIM_SCENARIO_IDS.EFATO]: EFATO_SCENARIO,
 	[SIM_SCENARIO_IDS.VACUUM_FAILURE]: VACUUM_FAILURE_SCENARIO,
+	[SIM_SCENARIO_IDS.PITOT_BLOCK]: PITOT_BLOCK_SCENARIO,
+	[SIM_SCENARIO_IDS.STATIC_BLOCK]: STATIC_BLOCK_SCENARIO,
 };
 
 /** Defensive lookup; throws on unknown ids so callers fail fast. */
