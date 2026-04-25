@@ -5,7 +5,14 @@
  * extend this file with their own per-fault tests.
  */
 
-import { SIM_FAULT_KINDS, SIM_FAULT_TRIGGER_KINDS, SIM_FLAP_NOTCHES, SIM_METERS_PER_FOOT } from '@ab/constants';
+import {
+	SIM_FAULT_KINDS,
+	SIM_FAULT_TRIGGER_KINDS,
+	SIM_FEET_PER_METER,
+	SIM_FLAP_NOTCHES,
+	SIM_KNOTS_PER_METER_PER_SECOND,
+	SIM_METERS_PER_FOOT,
+} from '@ab/constants';
 import { describe, expect, it } from 'vitest';
 import type { FdmTruthState } from '../types';
 import { activateFault, applyFaults } from './transform';
@@ -360,6 +367,98 @@ describe('shouldTriggerFault -- step-based', () => {
 			currStepId: 'climb-out',
 		});
 		expect(fired).toBe(false);
+	});
+});
+
+describe('pitot block -- ASI behaves like an altimeter (B5.asi)', () => {
+	function asiKiasAt(args: { blockedKias: number; blockAltFt: number; truthAltMsl: number }): number {
+		const activation = activateFault(
+			{
+				kind: SIM_FAULT_KINDS.PITOT_BLOCK,
+				trigger: { kind: SIM_FAULT_TRIGGER_KINDS.TIME_SECONDS, at: 0 },
+				params: {
+					pitotBlockFreezeKias: args.blockedKias,
+					staticBlockFreezeAltFt: args.blockAltFt,
+				},
+			},
+			0,
+		);
+		const display = applyFaults({
+			truth: makeTruth({ t: 30, altitude: args.truthAltMsl, onGround: false }),
+			activations: [activation],
+			nominalBusVolts: NOMINAL_VOLTS,
+		});
+		return display.indicatedAirspeed * SIM_KNOTS_PER_METER_PER_SECOND;
+	}
+
+	it('reads the block-time IAS at the block altitude', () => {
+		const blockAltMsl = 3000 / SIM_FEET_PER_METER; // 3000 ft as meters
+		expect(asiKiasAt({ blockedKias: 90, blockAltFt: 3000, truthAltMsl: blockAltMsl })).toBeCloseTo(90, 1);
+	});
+
+	it('reads HIGHER as the airplane climbs through the block', () => {
+		// 1000 ft above block -> +20 KIAS at 0.02 KIAS/ft
+		const truthAltMsl = 4000 / SIM_FEET_PER_METER;
+		expect(asiKiasAt({ blockedKias: 90, blockAltFt: 3000, truthAltMsl })).toBeCloseTo(110, 0);
+	});
+
+	it('reads LOWER as the airplane descends through the block', () => {
+		// 500 ft below block -> -10 KIAS
+		const truthAltMsl = 2500 / SIM_FEET_PER_METER;
+		expect(asiKiasAt({ blockedKias: 90, blockAltFt: 3000, truthAltMsl })).toBeCloseTo(80, 0);
+	});
+
+	it('clamps at zero rather than going negative on deep descent', () => {
+		// Massive descent: -10000 ft delta -> -200 KIAS, clamped to 0.
+		const truthAltMsl = -7000 / SIM_FEET_PER_METER;
+		expect(asiKiasAt({ blockedKias: 90, blockAltFt: 3000, truthAltMsl })).toBe(0);
+	});
+});
+
+describe('static block -- ASI sense reverses (B5.asi)', () => {
+	function asiKiasAt(args: { truthKias: number; blockAltFt: number; truthAltMsl: number }): number {
+		const activation = activateFault(
+			{
+				kind: SIM_FAULT_KINDS.STATIC_BLOCK,
+				trigger: { kind: SIM_FAULT_TRIGGER_KINDS.TIME_SECONDS, at: 0 },
+				params: { staticBlockFreezeAltFt: args.blockAltFt },
+			},
+			0,
+		);
+		const truthMs = args.truthKias / SIM_KNOTS_PER_METER_PER_SECOND;
+		const display = applyFaults({
+			truth: makeTruth({
+				t: 30,
+				altitude: args.truthAltMsl,
+				indicatedAirspeed: truthMs,
+				onGround: false,
+			}),
+			activations: [activation],
+			nominalBusVolts: NOMINAL_VOLTS,
+		});
+		return display.indicatedAirspeed * SIM_KNOTS_PER_METER_PER_SECOND;
+	}
+
+	it('reads truth IAS at the block altitude', () => {
+		const blockAltMsl = 3000 / SIM_FEET_PER_METER;
+		expect(asiKiasAt({ truthKias: 95, blockAltFt: 3000, truthAltMsl: blockAltMsl })).toBeCloseTo(95, 1);
+	});
+
+	it('reads HIGHER than truth on descent (sense reversed vs pitot)', () => {
+		// 500 ft below block, truth 95 -> indicated 95 + 0.02*500 = 105
+		const truthAltMsl = 2500 / SIM_FEET_PER_METER;
+		expect(asiKiasAt({ truthKias: 95, blockAltFt: 3000, truthAltMsl })).toBeCloseTo(105, 0);
+	});
+
+	it('reads LOWER than truth on climb', () => {
+		// 1000 ft above block -> 95 - 20 = 75
+		const truthAltMsl = 4000 / SIM_FEET_PER_METER;
+		expect(asiKiasAt({ truthKias: 95, blockAltFt: 3000, truthAltMsl })).toBeCloseTo(75, 0);
+	});
+
+	it('clamps at zero on extreme climb', () => {
+		const truthAltMsl = 10000 / SIM_FEET_PER_METER;
+		expect(asiKiasAt({ truthKias: 95, blockAltFt: 3000, truthAltMsl })).toBe(0);
 	});
 });
 

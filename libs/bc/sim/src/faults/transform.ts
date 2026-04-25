@@ -26,6 +26,7 @@
 import {
 	SIM_FAULT_DEFAULTS,
 	SIM_FAULT_KINDS,
+	SIM_FEET_PER_METER,
 	SIM_KNOTS_PER_METER_PER_SECOND,
 	SIM_METERS_PER_FOOT,
 } from '@ab/constants';
@@ -84,20 +85,41 @@ function find(activations: readonly FaultActivation[], kind: FaultActivation['ki
 // Phase 3 ships these as identity. B5.* fan-out PRs replace each body with
 // the real transform without changing the signature.
 
-function applyPitotBlock(
-	display: DisplayState,
-	_activation: FaultActivation,
-	_input: FaultTransformInput,
-): DisplayState {
-	// B5.asi will compute: ASI reads like a second altimeter above the
-	// block altitude, zero on descent. Until then, pass through.
-	return display;
+function applyPitotBlock(display: DisplayState, activation: FaultActivation, input: FaultTransformInput): DisplayState {
+	// A blocked pitot tube traps total pressure at the block-time value.
+	// As the airplane climbs, static drops, and the trapped-vs-current
+	// differential grows -- so the ASI reads HIGHER as altitude
+	// increases. On descent, static rises, the differential shrinks,
+	// and the ASI reads LOWER (eventually zero or negative-clamped).
+	// POH characterises this as "the ASI behaves like an altimeter."
+	//
+	// We use a linear approximation tuned to the documented C172
+	// behavior: ~2 KIAS per 100 ft of altitude change above the block
+	// point. That matches the FSX/X-Plane training scenarios. A
+	// fully-compressible IAS-from-pressure recompute is post-MVP.
+	const blockedKias = activation.params.pitotBlockFreezeKias;
+	const altitudeFt = input.truth.altitude * SIM_FEET_PER_METER;
+	// `staticBlockFreezeAltFt` doubles as the block-time altitude when
+	// authors want to override; otherwise default 0 -- which is the
+	// freeze-at-MSL-zero case the static-block default used.
+	const blockAltitudeFt = activation.params.staticBlockFreezeAltFt;
+	const altitudeDeltaFt = altitudeFt - blockAltitudeFt;
+	const indicatedKias = Math.max(0, blockedKias + altitudeDeltaFt * PITOT_BLOCK_KIAS_PER_FOOT);
+	const indicatedMs = indicatedKias / SIM_KNOTS_PER_METER_PER_SECOND;
+	return { ...display, indicatedAirspeed: indicatedMs };
 }
+
+/**
+ * Linear proxy for the pitot-block "ASI behaves like an altimeter" effect.
+ * 2 KIAS per 100 ft of altitude change. Source: FSX/X-Plane training
+ * tuning, matches POH "altimeter-style" qualitative description.
+ */
+const PITOT_BLOCK_KIAS_PER_FOOT = 0.02;
 
 function applyStaticBlock(
 	display: DisplayState,
 	activation: FaultActivation,
-	_input: FaultTransformInput,
+	input: FaultTransformInput,
 ): DisplayState {
 	// A blocked static port traps a single reference pressure inside the
 	// case shared by the altimeter, VSI, and ASI:
@@ -107,12 +129,33 @@ function applyStaticBlock(
 	//     (B5.alt #142).
 	//   - VSI: with no pressure differential to integrate, the diaphragm
 	//     reads zero -- the airplane appears to be in steady level flight
-	//     even when climbing or descending (this PR, B5.vsi).
-	//   - ASI: trapped static reverses the dynamic-vs-static differential
-	//     on descent (B5.asi, pending).
+	//     even when climbing or descending (B5.vsi #144).
+	//   - ASI: pitot keeps live total but static is trapped at the block
+	//     altitude. Descent through the block altitude raises P_total
+	//     vs trapped P_static, so IAS reads higher than truth. Climb
+	//     does the opposite, IAS reads lower. The effect inverts the
+	//     pitot-block sense (this PR, B5.asi).
 	const frozenAltitudeMsl = activation.params.staticBlockFreezeAltFt * SIM_METERS_PER_FOOT;
-	return { ...display, altitudeMsl: frozenAltitudeMsl, verticalSpeed: 0 };
+	const altitudeFt = input.truth.altitude * SIM_FEET_PER_METER;
+	const altitudeBelowBlockFt = activation.params.staticBlockFreezeAltFt - altitudeFt;
+	const truthKias = input.truth.indicatedAirspeed * SIM_KNOTS_PER_METER_PER_SECOND;
+	const indicatedKias = Math.max(0, truthKias + altitudeBelowBlockFt * STATIC_BLOCK_ASI_KIAS_PER_FOOT);
+	const indicatedAirspeed = indicatedKias / SIM_KNOTS_PER_METER_PER_SECOND;
+	return {
+		...display,
+		altitudeMsl: frozenAltitudeMsl,
+		verticalSpeed: 0,
+		indicatedAirspeed,
+	};
 }
+
+/**
+ * Linear proxy for the static-block ASI effect. Same magnitude as the
+ * pitot-block model (~2 KIAS per 100 ft) because the underlying
+ * pressure delta is the same; only the sign relative to altitude
+ * changes inverts.
+ */
+const STATIC_BLOCK_ASI_KIAS_PER_FOOT = 0.02;
 
 function applyVacuumFailure(
 	display: DisplayState,
