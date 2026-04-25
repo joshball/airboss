@@ -1,7 +1,6 @@
 <script lang="ts">
-import type { ReviewSessionDeckSpec } from '@ab/bc-study';
-import { DOMAIN_LABELS, type Domain, QUERY_PARAMS, REVIEW_SESSION_STATUSES, ROUTES } from '@ab/constants';
-import { humanize } from '@ab/utils';
+import { summarizeDeckSpec } from '@ab/bc-study';
+import { QUERY_PARAMS, REVIEW_SESSION_STATUSES, ROUTES } from '@ab/constants';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
@@ -27,25 +26,6 @@ function formatProgress(currentIndex: number, totalCards: number, status: string
 	if (totalCards === 0) return 'Empty deck';
 	const label = status === REVIEW_SESSION_STATUSES.ABANDONED ? 'Last touched' : 'In progress';
 	return `${label} -- ${currentIndex} of ${totalCards} reviewed`;
-}
-
-function summarizeDeckSpec(spec: ReviewSessionDeckSpec): string {
-	const loose = spec as unknown as Record<string, unknown>;
-	const parts: string[] = [];
-	if (typeof loose.domain === 'string' && loose.domain.length > 0) {
-		const label = (DOMAIN_LABELS as Record<Domain, string>)[loose.domain as Domain] ?? humanize(loose.domain);
-		parts.push(label);
-	} else {
-		parts.push('All domains');
-	}
-	if (loose.dueOnly === true) parts.push('due now');
-	if (Array.isArray(loose.tags) && loose.tags.length > 0) {
-		parts.push(`tags: ${(loose.tags as string[]).join(', ')}`);
-	}
-	if (Array.isArray(loose.cardType) && loose.cardType.length > 0) {
-		parts.push(`type: ${(loose.cardType as string[]).join(', ')}`);
-	}
-	return parts.join(' / ');
 }
 </script>
 
