@@ -42,8 +42,10 @@ export {
 	shouldTriggerFault,
 	type TriggerEvalContext,
 } from './faults';
+export { AIRCRAFT_REGISTRY, getAircraftConfig, listAircraftConfigs } from './fdm/aircraft-registry';
 export { C172_CONFIG } from './fdm/c172';
 export { FdmEngine, windFromScenario } from './fdm/engine';
+export { PA28_CONFIG } from './fdm/pa28';
 export {
 	airDensity,
 	angleOfAttack,
@@ -85,6 +87,7 @@ export { FIRST_FLIGHT_SCENARIO } from './scenarios/first-flight';
 export { PARTIAL_PANEL_SCENARIO } from './scenarios/partial-panel';
 export { PITOT_BLOCK_SCENARIO } from './scenarios/pitot-block';
 export { PLAYGROUND_SCENARIO } from './scenarios/playground';
+export { PLAYGROUND_PA28_SCENARIO } from './scenarios/playground-pa28';
 export { getScenario, listScenarios, SCENARIO_REGISTRY } from './scenarios/registry';
 export { type RunnerEvaluation, ScenarioRunner } from './scenarios/runner';
 export { STATIC_BLOCK_SCENARIO } from './scenarios/static-block';
