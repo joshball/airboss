@@ -99,16 +99,19 @@ function applyStaticBlock(
 	activation: FaultActivation,
 	_input: FaultTransformInput,
 ): DisplayState {
-	// Altimeter behavior: a blocked static port traps a single reference
-	// pressure inside the case. The altimeter capsule no longer sees outside
-	// pressure changes, so the indicated altitude freezes at whatever it was
-	// reading the moment the block engaged. The B5.alt PR ships this layer.
+	// A blocked static port traps a single reference pressure inside the
+	// case shared by the altimeter, VSI, and ASI:
 	//
-	// B5.{asi,vsi} extends this for the rest of the static system: VSI
-	// drops to zero, ASI reverses sense on descent. Those branches stay
-	// pass-through here until their PRs land.
+	//   - Altimeter: capsule no longer sees outside pressure changes,
+	//     freezes at whatever it was reading when the block engaged
+	//     (B5.alt #142).
+	//   - VSI: with no pressure differential to integrate, the diaphragm
+	//     reads zero -- the airplane appears to be in steady level flight
+	//     even when climbing or descending (this PR, B5.vsi).
+	//   - ASI: trapped static reverses the dynamic-vs-static differential
+	//     on descent (B5.asi, pending).
 	const frozenAltitudeMsl = activation.params.staticBlockFreezeAltFt * SIM_METERS_PER_FOOT;
-	return { ...display, altitudeMsl: frozenAltitudeMsl };
+	return { ...display, altitudeMsl: frozenAltitudeMsl, verticalSpeed: 0 };
 }
 
 function applyVacuumFailure(
