@@ -18,6 +18,9 @@ export const SIM_SCENARIO_IDS = {
 	STATIC_BLOCK: 'static-block',
 	PARTIAL_PANEL: 'partial-panel',
 	UNUSUAL_ATTITUDES_NOSE_HI: 'unusual-attitudes-nose-hi',
+	UNUSUAL_ATTITUDES_NOSE_LO: 'unusual-attitudes-nose-lo',
+	AFT_CG_SLOW_FLIGHT: 'aft-cg-slow-flight',
+	VMC_INTO_IMC: 'vmc-into-imc',
 } as const;
 
 export type SimScenarioId = (typeof SIM_SCENARIO_IDS)[keyof typeof SIM_SCENARIO_IDS];
