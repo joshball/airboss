@@ -159,6 +159,128 @@ export const SIM_STORAGE_KEYS = {
 } as const;
 
 /**
+ * Warning cue ids. Used to key the caption store, the tuning table, and the
+ * per-cue audio class. Extends as new cues land.
+ */
+export const SIM_WARNING_CUES = {
+	STALL_WARNING: 'stall-warning',
+	GEAR_WARNING: 'gear-warning',
+	FLAP_MOTOR: 'flap-motor',
+	MARKER_OUTER: 'marker-outer',
+	MARKER_MIDDLE: 'marker-middle',
+	MARKER_INNER: 'marker-inner',
+	ALTITUDE_ALERT: 'altitude-alert',
+	AP_DISCONNECT: 'ap-disconnect',
+} as const;
+
+export type SimWarningCue = (typeof SIM_WARNING_CUES)[keyof typeof SIM_WARNING_CUES];
+
+/** Human-readable captions rendered in the a11y caption panel. */
+export const SIM_WARNING_CUE_LABELS: Record<SimWarningCue, string> = {
+	[SIM_WARNING_CUES.STALL_WARNING]: 'Stall warning horn',
+	[SIM_WARNING_CUES.GEAR_WARNING]: 'Gear warning horn',
+	[SIM_WARNING_CUES.FLAP_MOTOR]: 'Flap motor running',
+	[SIM_WARNING_CUES.MARKER_OUTER]: 'Outer marker beacon',
+	[SIM_WARNING_CUES.MARKER_MIDDLE]: 'Middle marker beacon',
+	[SIM_WARNING_CUES.MARKER_INNER]: 'Inner marker beacon',
+	[SIM_WARNING_CUES.ALTITUDE_ALERT]: 'Altitude alert',
+	[SIM_WARNING_CUES.AP_DISCONNECT]: 'Autopilot disconnect',
+};
+
+/** Marker-beacon kinds used by the scaffolded trigger API. */
+export const SIM_MARKER_BEACON_KINDS = {
+	OUTER: 'outer',
+	MIDDLE: 'middle',
+	INNER: 'inner',
+} as const;
+
+export type SimMarkerBeaconKind = (typeof SIM_MARKER_BEACON_KINDS)[keyof typeof SIM_MARKER_BEACON_KINDS];
+
+/**
+ * Gear-warning thresholds. Fires when throttle is at/below the idle gate AND
+ * IAS is below the low-speed gate AND gear is up. The C172 has fixed gear so
+ * this never fires today; the hook is scaffolded for retractable airframes.
+ */
+export const SIM_GEAR_WARNING = {
+	/** Throttle (0..1) at/below which the warning can fire. */
+	THROTTLE_MAX: 0.15,
+	/** IAS (knots) below which the warning can fire. C172 Vs0 * 1.3 ~ 43 kt. */
+	KIAS_MAX: 45,
+	/** Warning carrier tone (Hz). */
+	CARRIER_HZ: 280,
+	/** Pulse cadence (Hz). */
+	PULSE_HZ: 3,
+	/** Master gain when active. */
+	GAIN: 0.08,
+} as const;
+
+/**
+ * Flap-motor cue tuning. The C172 has detent flaps in the Phase 0.5 prototype
+ * (no continuous motion), so the cue fires on each detent-change command for
+ * a fixed motor-run duration. Phase 6 continuous-flap work will drive the
+ * duration from actual travel time.
+ */
+export const SIM_FLAP_MOTOR = {
+	/** Milliseconds the motor cue plays per detent change. */
+	DURATION_MS: 1500,
+	/** Master gain. */
+	GAIN: 0.04,
+	/** Mechanical whirr carrier (Hz). */
+	CARRIER_HZ: 110,
+	/** Noise lowpass cutoff for the motor gear-train hiss (Hz). */
+	NOISE_LOWPASS_HZ: 1200,
+} as const;
+
+/**
+ * Marker beacon tuning. Audio frequencies and pulse rates are per-kind,
+ * matching the ICAO/FAA standard:
+ * - Outer: 400 Hz, continuous dashes (2/s)
+ * - Middle: 1300 Hz, alternating dot-dash
+ * - Inner: 3000 Hz, continuous dots (6/s)
+ */
+export const SIM_MARKER_BEACON = {
+	OUTER_HZ: 400,
+	OUTER_PULSE_HZ: 2,
+	MIDDLE_HZ: 1300,
+	MIDDLE_PULSE_HZ: 3,
+	INNER_HZ: 3000,
+	INNER_PULSE_HZ: 6,
+	GAIN: 0.07,
+} as const;
+
+/**
+ * Altitude-alert cue tuning. Tone fires once when the aircraft transitions
+ * across `target - LEAD_FEET`. Follow-up Phase 4 scenario work wires
+ * `setAltitudeAlert(targetFeet)` from scripted scenarios.
+ */
+export const SIM_ALTITUDE_ALERT = {
+	/** Lead distance below target (feet) at which the alert fires. */
+	LEAD_FEET: 1000,
+	/** Single-shot tone duration (ms). */
+	DURATION_MS: 700,
+	/** Tone carrier (Hz). */
+	CARRIER_HZ: 1000,
+	/** Master gain. */
+	GAIN: 0.08,
+} as const;
+
+/** Autopilot disconnect cue tuning. Single-shot rapid pulse. */
+export const SIM_AP_DISCONNECT = {
+	DURATION_MS: 900,
+	CARRIER_HZ: 800,
+	PULSE_HZ: 8,
+	GAIN: 0.1,
+} as const;
+
+/** Caption panel timing. */
+export const SIM_CAPTION = {
+	/** How long each caption stays visible (ms) after its cue deactivates. */
+	LINGER_MS: 3000,
+	/** Cap on simultaneously visible captions. */
+	MAX_VISIBLE: 6,
+} as const;
+
+/**
  * Keybinding definitions for the cockpit. Single source of truth rendered
  * in the help overlay and consumed by the keydown handler.
  */

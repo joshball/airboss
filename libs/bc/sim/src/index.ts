@@ -1,9 +1,12 @@
 // Sim BC -- flight dynamics, scenarios, runner. Phase 0.5 prototype.
 
 export {
+	altitudeAlertCrossed,
 	dynamicPressurePa,
 	engineFundamentalHz,
+	flapsChanged,
 	noiseGainTarget,
+	shouldSoundGearWarning,
 	strainDetuneCents,
 	strainFactor,
 	throttleGainTarget,

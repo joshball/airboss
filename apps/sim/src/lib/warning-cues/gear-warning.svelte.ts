@@ -1,32 +1,19 @@
 /**
- * Stall horn audio via Web Audio API. AudioContext is gesture-started
- * (Safari/iOS require a user gesture to resume). Tone is a square-ish
- * oscillator at the configured carrier frequency, pulsed at the pulse
- * rate via a square-wave gain envelope. Gain ramps up/down smoothly when
- * the horn triggers / silences so we never click.
+ * Gear warning horn. Continuous pulsed tone, driven by the BC
+ * `shouldSoundGearWarning` predicate. For the Phase 0.5 C172 the predicate
+ * is wired with `gearDown: true` (fixed gear) so the cue never fires today;
+ * retractable airframes will pass `gearDown` from their own state.
  *
- * Public API:
- * - setActive(active): horn should be sounding.
- * - setMuted(muted): user mute toggle (persisted by the caller).
- * - ensureStarted(): resume the AudioContext on the first user gesture.
- * - destroy(): clean up everything.
+ * Lifecycle mirrors `StallHorn`: gesture-started AudioContext, shared mute
+ * flag, stops on scenario outcome, caption pushed to `captionStore` while
+ * active.
  */
 
-import { SIM_STALL_HORN, SIM_WARNING_CUES } from '@ab/constants';
-import { captionStore } from './warning-cues/audio-captions.svelte';
+import { SIM_GEAR_WARNING, SIM_WARNING_CUES } from '@ab/constants';
+import { captionStore } from './audio-captions.svelte';
+import { getAudioContextCtor } from './shared';
 
-interface WindowWithWebkit {
-	AudioContext?: typeof AudioContext;
-	webkitAudioContext?: typeof AudioContext;
-}
-
-function getAudioContextCtor(): typeof AudioContext | null {
-	if (typeof window === 'undefined') return null;
-	const win = window as unknown as WindowWithWebkit;
-	return win.AudioContext ?? win.webkitAudioContext ?? null;
-}
-
-export class StallHorn {
+export class GearWarning {
 	private ctx: AudioContext | null = null;
 	private osc: OscillatorNode | null = null;
 	private pulseOsc: OscillatorNode | null = null;
@@ -35,7 +22,6 @@ export class StallHorn {
 	private muted = false;
 	private started = false;
 
-	/** Must be called from a user gesture on first use (click / keydown). */
 	ensureStarted(): void {
 		if (this.started) {
 			if (this.ctx && this.ctx.state === 'suspended') {
@@ -51,18 +37,15 @@ export class StallHorn {
 			master.gain.value = 0;
 			master.connect(ctx.destination);
 
-			// Carrier oscillator.
 			const osc = ctx.createOscillator();
 			osc.type = 'square';
-			osc.frequency.value = SIM_STALL_HORN.CARRIER_HZ;
+			osc.frequency.value = SIM_GEAR_WARNING.CARRIER_HZ;
 
-			// Pulse: LFO -> gain -> master. LFO at PULSE_HZ drives a gain
-			// between 0 and 1 so the carrier is gated on/off rapidly.
 			const pulseGain = ctx.createGain();
 			pulseGain.gain.value = 0.5;
 			const pulseLfo = ctx.createOscillator();
 			pulseLfo.type = 'square';
-			pulseLfo.frequency.value = SIM_STALL_HORN.PULSE_HZ;
+			pulseLfo.frequency.value = SIM_GEAR_WARNING.PULSE_HZ;
 			const pulseAmp = ctx.createGain();
 			pulseAmp.gain.value = 0.5;
 			pulseLfo.connect(pulseAmp);
@@ -91,9 +74,9 @@ export class StallHorn {
 		this.active = active;
 		this.applyGain();
 		if (active && !this.muted) {
-			captionStore.show(SIM_WARNING_CUES.STALL_WARNING);
+			captionStore.show(SIM_WARNING_CUES.GEAR_WARNING);
 		} else {
-			captionStore.hide(SIM_WARNING_CUES.STALL_WARNING);
+			captionStore.hide(SIM_WARNING_CUES.GEAR_WARNING);
 		}
 	}
 
@@ -102,13 +85,14 @@ export class StallHorn {
 		this.applyGain();
 	}
 
-	isMuted(): boolean {
-		return this.muted;
+	/** Stop for scenario outcome. Ramps gain to 0 and drops the caption. */
+	stop(): void {
+		this.setActive(false);
 	}
 
 	private applyGain(): void {
 		if (!this.ctx || !this.masterGain) return;
-		const target = this.active && !this.muted ? SIM_STALL_HORN.GAIN : 0;
+		const target = this.active && !this.muted ? SIM_GEAR_WARNING.GAIN : 0;
 		const now = this.ctx.currentTime;
 		this.masterGain.gain.cancelScheduledValues(now);
 		this.masterGain.gain.setTargetAtTime(target, now, 0.03);
