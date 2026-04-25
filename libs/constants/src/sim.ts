@@ -539,6 +539,14 @@ export const SIM_FAULT_TRIGGER_KINDS = {
 export type SimFaultTriggerKind = (typeof SIM_FAULT_TRIGGER_KINDS)[keyof typeof SIM_FAULT_TRIGGER_KINDS];
 
 /**
+ * Nominal cockpit electric-bus voltage. The C172 runs a 28V system; the
+ * fault transform reads this as the "what every electric instrument sees
+ * when the alternator is healthy" baseline. Scenarios with alternator
+ * failure decay from here toward zero.
+ */
+export const SIM_ELECTRIC_BUS_NOMINAL_VOLTS = 28;
+
+/**
  * Per-fault parameter defaults. Scenarios may override these on a fault-by-
  * fault basis via ScenarioFault.params.
  */

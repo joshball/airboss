@@ -8,7 +8,14 @@
  * scenario reaches a terminal state.
  */
 
-import type { FdmInputs, FdmTruthState, ScenarioRunResult, ScenarioStepState } from '@ab/bc-sim';
+import type {
+	DisplayState,
+	FaultActivation,
+	FdmInputs,
+	FdmTruthState,
+	ScenarioRunResult,
+	ScenarioStepState,
+} from '@ab/bc-sim';
 import type { SIM_WORKER_MESSAGES, SimScenarioId } from '@ab/constants';
 
 export type MainToWorker =
@@ -26,8 +33,16 @@ export type WorkerToMain =
 	| {
 			type: typeof SIM_WORKER_MESSAGES.SNAPSHOT;
 			truth: FdmTruthState;
+			/**
+			 * What the cockpit gauges show. Equals truth when no faults are
+			 * active; lies in fault-specific ways when activations are live.
+			 * Instruments read from this, not from `truth`.
+			 */
+			display: DisplayState;
 			inputs: FdmInputs;
 			running: boolean;
 			stepState?: ScenarioStepState;
+			/** Sticky list of active fault activations as of this snapshot. */
+			activations: readonly FaultActivation[];
 	  }
 	| { type: typeof SIM_WORKER_MESSAGES.OUTCOME; result: ScenarioRunResult };

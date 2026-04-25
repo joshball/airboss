@@ -8,7 +8,10 @@
  * the runner just reports the current evaluation.
  */
 
-import { SIM_SCENARIO_OUTCOMES, type SimScenarioId, type SimScenarioOutcome } from '@ab/constants';
+import { SIM_SCENARIO_OUTCOMES, type SimFaultKind, type SimScenarioId, type SimScenarioOutcome } from '@ab/constants';
+import { activateFault } from '../faults/transform';
+import { shouldTriggerFault } from '../faults/triggers';
+import type { FaultActivation } from '../faults/types';
 import type { FdmInputs, FdmTruthState, ScenarioDefinition, ScenarioRunResult, ScenarioStepState } from '../types';
 
 /**
@@ -63,6 +66,18 @@ export interface RunnerEvaluation {
 	reason: string;
 	/** Populated when the scenario has a step ladder. */
 	stepState?: ScenarioStepState;
+	/**
+	 * Fault activations live this tick. Sticky -- once fired, an activation
+	 * stays in this list for the rest of the run. Empty when the scenario
+	 * declares no faults or none have triggered yet.
+	 */
+	activations: readonly FaultActivation[];
+	/**
+	 * Subset of activations that fired on THIS tick (the edge). The replay
+	 * tape records this so the debrief can mark "fault fired here" on the
+	 * scrubber timeline.
+	 */
+	firedThisTick: readonly SimFaultKind[];
 }
 
 export class ScenarioRunner {
@@ -77,6 +92,12 @@ export class ScenarioRunner {
 	private stepHoldAccumulator = 0;
 	private stepsCompleted = false;
 	private wasAirborne = false;
+	private prevTruth: FdmTruthState | null = null;
+	private prevStepId: string | null = null;
+	/** Sticky list of activated faults. Mutated in `evaluateFaults`. */
+	private readonly activations: FaultActivation[] = [];
+	/** Set of fault kinds already fired -- prevents double-trigger on edge bounces. */
+	private readonly firedKinds = new Set<SimFaultKind>();
 
 	constructor(def: ScenarioDefinition) {
 		this.def = def;
@@ -88,12 +109,11 @@ export class ScenarioRunner {
 
 	/** Evaluate the next truth state. Returns current outcome + step state. */
 	evaluate(truth: FdmTruthState, inputs: FdmInputs): RunnerEvaluation {
+		// Once outcome is locked, fault evaluation also stops -- the tape
+		// captures activations as they were at the moment of outcome and
+		// nothing further changes them.
 		if (this.outcome !== SIM_SCENARIO_OUTCOMES.RUNNING) {
-			return {
-				outcome: this.outcome,
-				reason: this.outcomeReason,
-				stepState: this.buildStepState(),
-			};
+			return this.respond([]);
 		}
 
 		const dt = Math.max(0, truth.t - this.lastTime);
@@ -107,6 +127,10 @@ export class ScenarioRunner {
 		if (truth.stalled) this.stallAccumulator += dt;
 		else this.stallAccumulator = 0;
 
+		// Fault evaluation runs every tick before crash / scoring so the
+		// activations propagate even if outcome locks this tick.
+		const firedThisTick = this.evaluateFaults(truth);
+
 		// Crash detection: physical events that end the flight regardless of
 		// scoring. Runs for every scenario, including endless (Playground).
 		const crashReason = detectCrash(truth, this.wasAirborne);
@@ -116,7 +140,7 @@ export class ScenarioRunner {
 			// Freeze airborne tracking so a bounce after the crash call is
 			// still classified as the same event.
 			this.wasAirborne = false;
-			return { outcome: this.outcome, reason: this.outcomeReason, stepState: this.buildStepState() };
+			return this.respond(firedThisTick);
 		}
 		// Update airborne latch after crash evaluation so a clean takeoff is
 		// captured before we ever get a chance to see the next touchdown.
@@ -132,7 +156,7 @@ export class ScenarioRunner {
 		// Endless scenarios (Playground) never terminate on their own, but
 		// crash detection above still applies.
 		if (crit.endless) {
-			return { outcome: this.outcome, reason: this.outcomeReason, stepState: this.buildStepState() };
+			return this.respond(firedThisTick);
 		}
 
 		// Failure: sustained stall.
@@ -142,7 +166,7 @@ export class ScenarioRunner {
 		) {
 			this.outcome = SIM_SCENARIO_OUTCOMES.FAILURE;
 			this.outcomeReason = `Stalled for ${this.stallAccumulator.toFixed(2)} s -- aircraft departed controlled flight.`;
-			return { outcome: this.outcome, reason: this.outcomeReason, stepState: this.buildStepState() };
+			return this.respond(firedThisTick);
 		}
 
 		// Failure: altitude below floor (while not on ground).
@@ -154,7 +178,7 @@ export class ScenarioRunner {
 		) {
 			this.outcome = SIM_SCENARIO_OUTCOMES.FAILURE;
 			this.outcomeReason = `Descended below ${crit.failureMinimumAltitudeAglMeters.toFixed(0)} m AGL.`;
-			return { outcome: this.outcome, reason: this.outcomeReason, stepState: this.buildStepState() };
+			return this.respond(firedThisTick);
 		}
 
 		// Ground contact is NOT an automatic failure when the scenario starts
@@ -171,14 +195,14 @@ export class ScenarioRunner {
 		) {
 			this.outcome = SIM_SCENARIO_OUTCOMES.FAILURE;
 			this.outcomeReason = 'Touched the ground after departure.';
-			return { outcome: this.outcome, reason: this.outcomeReason, stepState: this.buildStepState() };
+			return this.respond(firedThisTick);
 		}
 
 		// Success: step-driven scenarios graduate when all steps are done.
 		if (this.def.steps && this.def.steps.length > 0 && this.stepsCompleted) {
 			this.outcome = SIM_SCENARIO_OUTCOMES.SUCCESS;
 			this.outcomeReason = 'All steps completed. Well done.';
-			return { outcome: this.outcome, reason: this.outcomeReason, stepState: this.buildStepState() };
+			return this.respond(firedThisTick);
 		}
 
 		// Success: reached target altitude AGL (only for altitude-based scenarios without steps).
@@ -189,17 +213,72 @@ export class ScenarioRunner {
 		) {
 			this.outcome = SIM_SCENARIO_OUTCOMES.SUCCESS;
 			this.outcomeReason = `Reached ${aglMeters.toFixed(0)} m AGL without stalling.`;
-			return { outcome: this.outcome, reason: this.outcomeReason, stepState: this.buildStepState() };
+			return this.respond(firedThisTick);
 		}
 
 		// Timeout.
 		if (typeof crit.timeoutSeconds === 'number' && truth.t >= crit.timeoutSeconds) {
 			this.outcome = SIM_SCENARIO_OUTCOMES.FAILURE;
 			this.outcomeReason = `Timed out at ${crit.timeoutSeconds.toFixed(0)} s.`;
-			return { outcome: this.outcome, reason: this.outcomeReason, stepState: this.buildStepState() };
+			return this.respond(firedThisTick);
 		}
 
-		return { outcome: SIM_SCENARIO_OUTCOMES.RUNNING, reason: '', stepState: this.buildStepState() };
+		this.prevTruth = truth;
+		this.prevStepId = this.currentStepId();
+		return this.respond(firedThisTick);
+	}
+
+	/**
+	 * Build the per-tick response shared across every termination branch.
+	 * Threads the running `outcome` + `reason` + step state + activations.
+	 */
+	private respond(firedThisTick: readonly SimFaultKind[]): RunnerEvaluation {
+		return {
+			outcome: this.outcome,
+			reason: this.outcomeReason,
+			stepState: this.buildStepState(),
+			activations: this.activations,
+			firedThisTick,
+		};
+	}
+
+	/**
+	 * Walk `def.faults`, fire any that just triggered, and return the kinds
+	 * that fired on this tick. Activations are sticky -- once a kind fires
+	 * it stays in `this.activations` for the rest of the run.
+	 */
+	private evaluateFaults(truth: FdmTruthState): readonly SimFaultKind[] {
+		const declared = this.def.faults;
+		if (!declared || declared.length === 0) return [];
+		const fired: SimFaultKind[] = [];
+		const currStepId = this.currentStepId();
+		for (const fault of declared) {
+			if (this.firedKinds.has(fault.kind)) continue;
+			const triggered = shouldTriggerFault(fault, {
+				prev: this.prevTruth,
+				curr: truth,
+				prevStepId: this.prevStepId,
+				currStepId,
+			});
+			if (triggered) {
+				this.activations.push(activateFault(fault, truth.t));
+				this.firedKinds.add(fault.kind);
+				fired.push(fault.kind);
+			}
+		}
+		return fired;
+	}
+
+	/** Current step id when the scenario has a step ladder, else null. */
+	private currentStepId(): string | null {
+		if (!this.def.steps || this.def.steps.length === 0) return null;
+		const idx = Math.min(this.currentStepIndex, this.def.steps.length - 1);
+		return this.def.steps[idx]?.id ?? null;
+	}
+
+	/** Read-only access to the live activations list (consumed by the worker). */
+	getActivations(): readonly FaultActivation[] {
+		return this.activations;
 	}
 
 	private updateSteps(truth: FdmTruthState, inputs: FdmInputs, dt: number): void {

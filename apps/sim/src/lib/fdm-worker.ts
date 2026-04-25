@@ -13,8 +13,9 @@
 /// <reference lib="webworker" />
 
 import type { ScenarioStepState } from '@ab/bc-sim';
-import { C172_CONFIG, FdmEngine, getScenario, ScenarioRunner } from '@ab/bc-sim';
+import { applyFaults, C172_CONFIG, FdmEngine, getScenario, ScenarioRunner } from '@ab/bc-sim';
 import {
+	SIM_ELECTRIC_BUS_NOMINAL_VOLTS,
 	SIM_FDM_DT_SECONDS,
 	SIM_SCENARIO_OUTCOMES,
 	SIM_SNAPSHOT_INTERVAL_SECONDS,
@@ -67,12 +68,21 @@ function buildState(scenarioId: SimScenarioId): WorkerState {
 }
 
 function postSnapshot(s: WorkerState): void {
+	const truth = s.engine.snapshot();
+	const activations = s.runner.getActivations();
+	const display = applyFaults({
+		truth,
+		activations,
+		nominalBusVolts: SIM_ELECTRIC_BUS_NOMINAL_VOLTS,
+	});
 	post({
 		type: SIM_WORKER_MESSAGES.SNAPSHOT,
-		truth: s.engine.snapshot(),
+		truth,
+		display,
 		inputs: s.engine.getInputs(),
 		running: s.running,
 		stepState: s.lastStepState,
+		activations,
 	});
 }
 
