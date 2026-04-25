@@ -78,7 +78,7 @@ See [sim TASKS](../products/sim/TASKS.md) and [sim features/PHASE2.md](../produc
 
 Operations and compliance. Depends on enrollment and evidence data from sim.
 
-See [ops TASKS](../products/ops/TASKS.md) and [ops features/PHASE3.md](../products/ops/features/PHASE3.md).
+Archived post-pivot: see [ops ARCHIVED.md](../.archive/products/ops/ARCHIVED.md) for context, and the original [ops TASKS](../.archive/products/ops/TASKS.md) and [ops features/PHASE3.md](../.archive/products/ops/features/PHASE3.md). The `ops` app does not exist post-pivot; admin / operations responsibilities will be picked up by `hangar` and per-surface admin views as needed.
 
 - [x] Ops app shell
 - [x] User management (accounts, roles, enrollment)
