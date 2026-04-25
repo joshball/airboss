@@ -52,6 +52,29 @@ export class ReviewSessionNotFoundError extends Error {
 	}
 }
 
+/** Jump target was outside `[0, cardIdList.length - 1]`. */
+export class ReviewSessionJumpOutOfRangeError extends Error {
+	constructor(
+		public readonly sessionId: string,
+		public readonly index: number,
+		public readonly totalCards: number,
+	) {
+		super(`Jump index ${index} out of range for session ${sessionId} (total ${totalCards})`);
+		this.name = 'ReviewSessionJumpOutOfRangeError';
+	}
+}
+
+/** Jumping is only allowed while the session is `active`. */
+export class ReviewSessionNotActiveError extends Error {
+	constructor(
+		public readonly sessionId: string,
+		public readonly status: ReviewSessionStatus,
+	) {
+		super(`Review session ${sessionId} is ${status}; cannot jump`);
+		this.name = 'ReviewSessionNotActiveError';
+	}
+}
+
 // ---------- Public types ----------
 
 export interface StartReviewSessionInput {
@@ -255,6 +278,72 @@ export async function advanceReviewSession(
 			.returning();
 		return updated;
 	});
+}
+
+/**
+ * Jump the session's `current_index` to a specific position in the frozen
+ * card list. A navigation aid -- skipped cards remain pending (no
+ * `session_item_result` is written), the learner can return to them later.
+ *
+ * Only valid while the session is `ACTIVE`. Out-of-range indices raise
+ * {@link ReviewSessionJumpOutOfRangeError}; jumping a completed/abandoned
+ * session raises {@link ReviewSessionNotActiveError}.
+ */
+export async function jumpToIndex(
+	input: { sessionId: string; userId: string; index: number },
+	db: Db = defaultDb,
+	now: Date = new Date(),
+): Promise<MemoryReviewSessionRow> {
+	return await db.transaction(async (tx) => {
+		const [row] = await tx
+			.select()
+			.from(memoryReviewSession)
+			.where(and(eq(memoryReviewSession.id, input.sessionId), eq(memoryReviewSession.userId, input.userId)))
+			.for('update')
+			.limit(1);
+		if (!row) throw new ReviewSessionNotFoundError(input.sessionId, input.userId);
+		if (row.status !== REVIEW_SESSION_STATUSES.ACTIVE) {
+			throw new ReviewSessionNotActiveError(input.sessionId, row.status as ReviewSessionStatus);
+		}
+
+		const total = row.cardIdList.length;
+		if (!Number.isInteger(input.index) || input.index < 0 || input.index >= total) {
+			throw new ReviewSessionJumpOutOfRangeError(input.sessionId, input.index, total);
+		}
+
+		// Already there: skip the write so `last_activity_at` only moves on
+		// an actual navigation. Cheap to skip; matters for the abandon-stale
+		// bookkeeping.
+		if (row.currentIndex === input.index) return row;
+
+		const [updated] = await tx
+			.update(memoryReviewSession)
+			.set({
+				currentIndex: input.index,
+				lastActivityAt: now,
+			})
+			.where(and(eq(memoryReviewSession.id, input.sessionId), eq(memoryReviewSession.userId, input.userId)))
+			.returning();
+		return updated;
+	});
+}
+
+/**
+ * Card ids that already received at least one review row stamped with this
+ * session's id. Drives the per-position status indicator (rated vs pending)
+ * on the jump-to-card dropdown so the learner can see where they have been
+ * without leaking front/back content.
+ */
+export async function getReviewedCardIdsInSession(
+	sessionId: string,
+	userId: string,
+	db: Db = defaultDb,
+): Promise<readonly string[]> {
+	const rows = await db
+		.selectDistinct({ cardId: review.cardId })
+		.from(review)
+		.where(and(eq(review.userId, userId), eq(review.reviewSessionId, sessionId)));
+	return rows.map((r) => r.cardId);
 }
 
 /**

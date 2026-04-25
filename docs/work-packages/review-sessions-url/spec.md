@@ -18,7 +18,7 @@ SMI walkthrough item 18 flagged that `/memory/review` has no concept of "this ru
 
 Aligns with ADR 013 (URL state taxonomy): session identity belongs in the path, reproducible filters belong in the query string, and card identity belongs in its own canonical URL.
 
-Source items: `docs/work/todos/20260424-02-smi-walkthrough-feedback.md` items 15, 18.
+Source items: `docs/work/.archive/todos/20260424-02-smi-walkthrough-feedback.md` items 15, 18.
 
 ## In scope
 
@@ -145,7 +145,7 @@ Do not bundle (a) with (b) in a single PR. The resume surface needs to burn in b
 
 ## References
 
-- `docs/work/todos/20260424-02-smi-walkthrough-feedback.md` items 15, 18
+- `docs/work/.archive/todos/20260424-02-smi-walkthrough-feedback.md` items 15, 18
 - `docs/work/handoffs/20260424-session-state-smi-walkthrough.md` work package scope summaries
 - `docs/decisions/013-url-state-taxonomy.md` URL-state tiers (path for identity, query for filters)
 - `docs/decisions/012-reps-session-substrate.md` existing session substrate (reps and review sessions share the substrate)

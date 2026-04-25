@@ -19,7 +19,7 @@ SMI walkthrough items 10 and 11 surfaced two distinct needs that today's review 
 - The reviewer wants to push a card out even when they know it, or flag it as bad, or say "this belongs to a different domain," or remove it outright, all without polluting the FSRS signal.
 - The reviewer wants to rate the content quality (like/dislike/flag) separately from rating their own recall.
 
-Source items: `docs/work/todos/20260424-02-smi-walkthrough-feedback.md` items 10, 11.
+Source items: `docs/work/.archive/todos/20260424-02-smi-walkthrough-feedback.md` items 10, 11.
 
 ## In scope
 
@@ -196,7 +196,7 @@ Re-entry banner on the review card (when applicable):
 
 ## References
 
-- `docs/work/todos/20260424-02-smi-walkthrough-feedback.md` items 10, 11
+- `docs/work/.archive/todos/20260424-02-smi-walkthrough-feedback.md` items 10, 11
 - `docs/work/handoffs/20260424-session-state-smi-walkthrough.md` work package scope summaries + Product decisions locked in
 - `docs/work-packages/spaced-memory-items/spec.md` existing review flow + FSRS scheduler
 - `libs/constants/src/study.ts` existing study constants (`REVIEW_RATINGS`, `CARD_TYPES`, `DOMAINS`)
