@@ -1,7 +1,10 @@
 <script lang="ts">
 import { PREVIEW_KINDS, ROUTES } from '@ab/constants';
+import CsvPreview from '$lib/components/preview/CsvPreview.svelte';
 import GeotiffPreview from '$lib/components/preview/GeotiffPreview.svelte';
 import JpegPreview from '$lib/components/preview/JpegPreview.svelte';
+import MarkdownPreview from '$lib/components/preview/MarkdownPreview.svelte';
+import PdfPreview from '$lib/components/preview/PdfPreview.svelte';
 import ZipPreview from '$lib/components/preview/ZipPreview.svelte';
 import type { ActionData, PageData } from './$types';
 
@@ -124,15 +127,25 @@ function truncate(text: string | null, max = 20_000): string {
 									media={data.source.media}
 								/>
 							{:else if file.previewKind === PREVIEW_KINDS.PDF}
-								<p class="muted">PDF preview is available via the detail page (browser-native PDF viewer).</p>
+								<PdfPreview sourceId={data.source.id} fileName={file.name} fileSizeBytes={file.sizeBytes} />
 							{:else if file.previewKind === PREVIEW_KINDS.BINARY}
 								<p class="muted">No inline preview available for binary content.</p>
 							{:else if file.previewText === null}
 								<p class="muted">Preview skipped (file above the size threshold). Use a terminal to inspect.</p>
+							{:else if file.previewKind === PREVIEW_KINDS.MARKDOWN && file.markdownNodes !== null}
+								<MarkdownPreview
+									fileName={file.name}
+									fileSizeBytes={file.sizeBytes}
+									nodes={file.markdownNodes}
+								/>
 							{:else if file.previewKind === PREVIEW_KINDS.MARKDOWN}
 								<pre class="markdown">{truncate(file.previewText)}</pre>
 							{:else if file.previewKind === PREVIEW_KINDS.CSV}
-								<pre class="csv mono">{truncate(file.previewText, 10_000)}</pre>
+								<CsvPreview
+									fileName={file.name}
+									fileSizeBytes={file.sizeBytes}
+									previewText={file.previewText}
+								/>
 							{:else}
 								<pre class="mono">{truncate(file.previewText)}</pre>
 							{/if}

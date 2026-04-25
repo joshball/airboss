@@ -14,6 +14,7 @@ const formError = $derived.by(() => {
 });
 
 const maxMiB = $derived(Math.round(data.limits.maxUploadBytes / (1024 * 1024)));
+const isBusy = $derived(data.activeJob !== null);
 </script>
 
 <svelte:head>
@@ -38,6 +39,14 @@ const maxMiB = $derived(Math.round(data.limits.maxUploadBytes / (1024 * 1024)));
 		</p>
 	</header>
 
+	{#if data.activeJob}
+		<Banner tone="warning" title="This source has a running operation">
+			A <code class="mono">{data.activeJob.kind}</code> job
+			(<a class="mono" href={ROUTES.HANGAR_JOB_DETAIL(data.activeJob.id)}>{data.activeJob.id}</a>)
+			is {data.activeJob.status}. Wait for it to finish (or cancel it) before uploading.
+		</Banner>
+	{/if}
+
 	{#if formError}
 		<Banner tone="danger">{formError}</Banner>
 	{/if}
@@ -45,7 +54,7 @@ const maxMiB = $derived(Math.round(data.limits.maxUploadBytes / (1024 * 1024)));
 	<FormStack as="form" method="POST" enctype="multipart/form-data">
 		<div class="field">
 			<label for="file">File</label>
-			<input id="file" type="file" name="file" required />
+			<input id="file" type="file" name="file" required disabled={isBusy} />
 		</div>
 		<div class="field">
 			<label for="version">Version tag</label>
@@ -55,6 +64,7 @@ const maxMiB = $derived(Math.round(data.limits.maxUploadBytes / (1024 * 1024)));
 				name="version"
 				placeholder={data.source.version}
 				autocomplete="off"
+				disabled={isBusy}
 			/>
 			<p class="hint">
 				Set a new version string (e.g. a new year) to archive the current file under
@@ -64,7 +74,7 @@ const maxMiB = $derived(Math.round(data.limits.maxUploadBytes / (1024 * 1024)));
 		</div>
 		<div class="actions">
 			<a class="btn-like" href={ROUTES.HANGAR_SOURCE_DETAIL(data.source.id)}>Cancel</a>
-			<Button type="submit" variant="primary" size="md">Upload</Button>
+			<Button type="submit" variant="primary" size="md" disabled={isBusy}>Upload</Button>
 		</div>
 	</FormStack>
 </section>

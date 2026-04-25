@@ -178,26 +178,170 @@ describe('ZipPreview.svelte', () => {
 	});
 });
 
+describe('PdfPreview.svelte', () => {
+	const source = read('./PdfPreview.svelte');
+	const style = extractStyle(source);
+	const template = extractTemplate(source);
+
+	it('declares the spec-required props', () => {
+		expect(source).toContain('sourceId');
+		expect(source).toContain('fileName');
+		expect(source).toContain('fileSizeBytes');
+	});
+
+	it('embeds the file via <object> wired to the raw-file route', () => {
+		expect(template).toContain('<object');
+		expect(template).toContain('type="application/pdf"');
+		expect(source).toContain('ROUTES.HANGAR_SOURCE_FILE_RAW(sourceId, fileName)');
+	});
+
+	it('renders an "open in new tab" fallback link', () => {
+		expect(template).toContain('Open in new tab');
+		expect(template).toContain('target="_blank"');
+	});
+
+	it('renders fallback content for browsers that decline to embed PDFs', () => {
+		expect(template).toContain('declined to embed');
+	});
+
+	it('has zero hardcoded colour values in <style>', () => {
+		expect(style.match(HEX)).toBeNull();
+		expect(style.match(RGB)).toBeNull();
+		expect(style.match(HSL)).toBeNull();
+		expect(style.match(NAMED_COLOR)).toBeNull();
+	});
+
+	it('uses role tokens for colour / spacing / radius', () => {
+		expect(style).toMatch(/var\(--surface-raised\)/);
+		expect(style).toMatch(/var\(--edge-subtle\)/);
+		expect(style).toMatch(/var\(--ink-body\)/);
+		expect(style).toMatch(/var\(--space-/);
+		expect(style).toMatch(/var\(--radius-/);
+	});
+});
+
+describe('CsvPreview.svelte', () => {
+	const source = read('./CsvPreview.svelte');
+	const style = extractStyle(source);
+	const template = extractTemplate(source);
+
+	it('declares the spec-required props', () => {
+		expect(source).toContain('fileName');
+		expect(source).toContain('fileSizeBytes');
+		expect(source).toContain('previewText');
+		expect(source).toContain('maxRows');
+	});
+
+	it('parses the previewText with the local CSV parser', () => {
+		expect(source).toContain("import { parseCsv } from './parse-csv'");
+		expect(source).toContain('parseCsv(previewText, delimiter)');
+	});
+
+	it('selects tab vs comma delimiter from the file extension', () => {
+		expect(source).toContain(".endsWith('.tsv')");
+	});
+
+	it('renders rows through the shared DataTable primitive', () => {
+		expect(source).toContain("import DataTable, { type DataTableColumn } from '@ab/ui/components/DataTable.svelte'");
+		expect(template).toContain('<DataTable');
+	});
+
+	it('caps the visible row count and surfaces the truncation', () => {
+		expect(source).toContain('parsed.rows.slice(0, maxRows)');
+		expect(template).toContain('truncated');
+	});
+
+	it('falls back to an empty-state when the CSV has no header', () => {
+		expect(template).toContain('CSV is empty or could not be parsed');
+	});
+
+	it('has zero hardcoded colour values in <style>', () => {
+		expect(style.match(HEX)).toBeNull();
+		expect(style.match(RGB)).toBeNull();
+		expect(style.match(HSL)).toBeNull();
+		expect(style.match(NAMED_COLOR)).toBeNull();
+	});
+
+	it('uses role tokens for colour / spacing / radius', () => {
+		expect(style).toMatch(/var\(--surface-raised\)/);
+		expect(style).toMatch(/var\(--edge-subtle\)/);
+		expect(style).toMatch(/var\(--ink-body\)/);
+		expect(style).toMatch(/var\(--space-/);
+		expect(style).toMatch(/var\(--radius-/);
+	});
+});
+
+describe('MarkdownPreview.svelte', () => {
+	const source = read('./MarkdownPreview.svelte');
+	const style = extractStyle(source);
+	const template = extractTemplate(source);
+
+	it('declares the spec-required props', () => {
+		expect(source).toContain('fileName');
+		expect(source).toContain('fileSizeBytes');
+		expect(source).toContain('nodes');
+	});
+
+	it('renders the AST through the shared MarkdownBody primitive', () => {
+		expect(source).toContain("import MarkdownBody from '@ab/help/ui/MarkdownBody.svelte'");
+		expect(template).toContain('<MarkdownBody {nodes}');
+	});
+
+	it('imports the MdNode type from @ab/help', () => {
+		expect(source).toContain("import type { MdNode } from '@ab/help'");
+	});
+
+	it('renders a header strip with file name + size', () => {
+		expect(template).toContain('{fileName}');
+		expect(template).toContain('formatBytes(fileSizeBytes)');
+	});
+
+	it('has zero hardcoded colour values in <style>', () => {
+		expect(style.match(HEX)).toBeNull();
+		expect(style.match(RGB)).toBeNull();
+		expect(style.match(HSL)).toBeNull();
+		expect(style.match(NAMED_COLOR)).toBeNull();
+	});
+
+	it('uses role tokens for colour / spacing / radius', () => {
+		expect(style).toMatch(/var\(--surface-raised\)/);
+		expect(style).toMatch(/var\(--edge-subtle\)/);
+		expect(style).toMatch(/var\(--ink-body\)/);
+		expect(style).toMatch(/var\(--space-/);
+		expect(style).toMatch(/var\(--radius-/);
+	});
+});
+
 describe('files route dispatcher', () => {
 	const dispatcher = readFileSync(
 		resolve(HERE, '..', '..', '..', 'routes', '(app)', 'sources', '[id]', 'files', '+page.svelte'),
 		'utf8',
 	);
 
-	it('imports all three dedicated preview components', () => {
+	it('imports all six dedicated preview components', () => {
 		expect(dispatcher).toContain("import GeotiffPreview from '$lib/components/preview/GeotiffPreview.svelte'");
 		expect(dispatcher).toContain("import JpegPreview from '$lib/components/preview/JpegPreview.svelte'");
 		expect(dispatcher).toContain("import ZipPreview from '$lib/components/preview/ZipPreview.svelte'");
+		expect(dispatcher).toContain("import PdfPreview from '$lib/components/preview/PdfPreview.svelte'");
+		expect(dispatcher).toContain("import CsvPreview from '$lib/components/preview/CsvPreview.svelte'");
+		expect(dispatcher).toContain("import MarkdownPreview from '$lib/components/preview/MarkdownPreview.svelte'");
 	});
 
-	it('dispatches on PREVIEW_KINDS for each binary-visual kind', () => {
+	it('dispatches on PREVIEW_KINDS for every preview kind', () => {
 		expect(dispatcher).toContain('PREVIEW_KINDS.GEOTIFF');
 		expect(dispatcher).toContain('PREVIEW_KINDS.JPEG');
 		expect(dispatcher).toContain('PREVIEW_KINDS.ZIP');
+		expect(dispatcher).toContain('PREVIEW_KINDS.PDF');
+		expect(dispatcher).toContain('PREVIEW_KINDS.CSV');
+		expect(dispatcher).toContain('PREVIEW_KINDS.MARKDOWN');
 	});
 
 	it('forwards source media + edition into the geotiff tile', () => {
 		expect(dispatcher).toContain('media={data.source.media}');
 		expect(dispatcher).toContain('edition={data.source.edition}');
+	});
+
+	it('forwards parsed markdown nodes to the MarkdownPreview', () => {
+		expect(dispatcher).toContain('nodes={file.markdownNodes}');
 	});
 });

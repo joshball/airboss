@@ -48,6 +48,8 @@ const config = {
 			'@ab/hangar-jobs/*': '../../libs/hangar-jobs/src/*',
 			'@ab/hangar-sync': '../../libs/hangar-sync/src/index.ts',
 			'@ab/hangar-sync/*': '../../libs/hangar-sync/src/*',
+			'@ab/help': '../../libs/help/src/index.ts',
+			'@ab/help/*': '../../libs/help/src/*',
 		},
 		env: {
 			dir: '../../',
