@@ -679,6 +679,71 @@ describe('gyro tumble -- HI spins or freezes (B5.hi)', () => {
 	});
 });
 
+describe('alternator failure -- TC yaw rate fades with bus volts (B5.tc)', () => {
+	function tcAfter(args: { elapsedSec: number; truthYawRateRadS: number; decaySec?: number }) {
+		const activation = activateFault(
+			{
+				kind: SIM_FAULT_KINDS.ALTERNATOR_FAILURE,
+				trigger: { kind: SIM_FAULT_TRIGGER_KINDS.TIME_SECONDS, at: 0 },
+				params: args.decaySec === undefined ? undefined : { alternatorDecaySeconds: args.decaySec },
+			},
+			0,
+		);
+		return applyFaults({
+			truth: makeTruth({
+				t: args.elapsedSec,
+				yawRate: args.truthYawRateRadS,
+				onGround: false,
+			}),
+			activations: [activation],
+			nominalBusVolts: NOMINAL_VOLTS,
+		});
+	}
+
+	it('reads truth yaw rate at activation (full bus)', () => {
+		const display = tcAfter({ elapsedSec: 0, truthYawRateRadS: 0.05 });
+		expect(display.yawRateIndicated).toBeCloseTo(0.05, 5);
+	});
+
+	it('fades yaw rate proportionally as bus decays toward brownout', () => {
+		// At t=30 (decay 60s) bus is at 14V; usableFraction = (14-7)/(28-7) = 1/3.
+		const display = tcAfter({ elapsedSec: 30, truthYawRateRadS: 0.06 });
+		expect(display.yawRateIndicated).toBeCloseTo(0.06 / 3, 4);
+	});
+
+	it('reads zero past the brownout point', () => {
+		// At t=60 bus is 0V (well below brownout) -> usable=0 -> yaw=0.
+		const display = tcAfter({ elapsedSec: 60, truthYawRateRadS: 0.05 });
+		expect(display.yawRateIndicated).toBe(0);
+	});
+
+	it('clamps usable fraction at 0 (does not return negative yaw)', () => {
+		const display = tcAfter({ elapsedSec: 120, truthYawRateRadS: 0.1 });
+		expect(display.yawRateIndicated).toBe(0);
+	});
+
+	it('still drives bus volts decay (sanity)', () => {
+		const display = tcAfter({ elapsedSec: 30, truthYawRateRadS: 0 });
+		expect(display.electricBusVolts).toBeCloseTo(NOMINAL_VOLTS / 2, 5);
+	});
+
+	it('does not affect TC slip ball (mechanical inclinometer)', () => {
+		const activation = activateFault(
+			{
+				kind: SIM_FAULT_KINDS.ALTERNATOR_FAILURE,
+				trigger: { kind: SIM_FAULT_TRIGGER_KINDS.TIME_SECONDS, at: 0 },
+			},
+			0,
+		);
+		const display = applyFaults({
+			truth: makeTruth({ t: 60, slipBall: 0.4, onGround: false }),
+			activations: [activation],
+			nominalBusVolts: NOMINAL_VOLTS,
+		});
+		expect(display.slipBall).toBe(0.4);
+	});
+});
+
 describe('applyFaults -- multi-fault composition', () => {
 	it('composes alternator + vacuum: bus volts decay AND AI drifts', () => {
 		const truth = makeTruth({ t: 30 });

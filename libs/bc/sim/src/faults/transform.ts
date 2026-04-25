@@ -199,13 +199,27 @@ function applyAlternatorFailure(
 	input: FaultTransformInput,
 ): DisplayState {
 	// Bus voltage decay is the load-bearing behavior every electric instrument
-	// reads from. Implement it now so B5.tc and the engine-cluster ammeter
-	// can rely on it without another round-trip.
+	// reads from. The turn coordinator (electric on the C172) fades its
+	// yaw-rate indication proportional to bus volts -- below the brownout
+	// threshold the gyro is effectively stopped and reads zero.
+	//
+	// B5.tc (this PR) wires the TC fade. B6 will cascade the same volts
+	// reading into the ammeter, low-voltage annunciator, and electric
+	// AI/HI on complex airframes that have them.
 	const elapsed = Math.max(0, input.truth.t - activation.firedAtT);
 	const decayFraction = Math.min(1, elapsed / activation.params.alternatorDecaySeconds);
 	const volts = input.nominalBusVolts * (1 - decayFraction);
-	return { ...display, electricBusVolts: volts };
+	const usableFraction = Math.max(0, (volts - TC_BROWNOUT_VOLTS) / (input.nominalBusVolts - TC_BROWNOUT_VOLTS));
+	const yawRateIndicated = display.yawRateIndicated * usableFraction;
+	return { ...display, electricBusVolts: volts, yawRateIndicated };
 }
+
+/**
+ * Bus voltage below which the electric turn-coordinator gyro can no
+ * longer maintain spin. ~7 volts is typical for a 28V bus; below this
+ * the gimbal stops responding to yaw rate and the gauge reads zero.
+ */
+const TC_BROWNOUT_VOLTS = 7;
 
 function applyGyroTumble(display: DisplayState, activation: FaultActivation, input: FaultTransformInput): DisplayState {
 	// Gyro tumble: when the AI's gimbal limits are exceeded (real-world
