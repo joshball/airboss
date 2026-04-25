@@ -16,6 +16,44 @@ export function engineFundamentalHz(rpm: number, idleRpm: number): number {
 }
 
 /**
+ * 4-cylinder 4-stroke firing rate (Hz). Each cylinder fires once per
+ * two crank revolutions, so an n-cylinder engine fires `n/2` times per
+ * revolution -> firing rate = (RPM / 60) * (n/2) = RPM / 30 for a
+ * 4-cylinder. This is the actual exhaust-pulse rate the ear hears as
+ * the engine's "note", lower than the legacy `engineFundamentalHz`
+ * which was tuned to a synth bass-note feel rather than the airplane.
+ */
+export function engineFiringHz(rpm: number): number {
+	const safeRpm = Math.max(0, rpm);
+	return safeRpm / 30;
+}
+
+/**
+ * Propeller blade-pass frequency (Hz). The C172's two-blade prop
+ * passes the listener twice per shaft revolution, so blade-pass =
+ * 2 * RPM / 60 = RPM / 30 -- coincidentally the same as the
+ * 4-cylinder firing rate. Kept as a separate function so a future
+ * three-blade or constant-speed prop can override.
+ */
+export function propBladePassHz(rpm: number): number {
+	const safeRpm = Math.max(0, rpm);
+	return (2 * safeRpm) / 60;
+}
+
+/**
+ * Tremolo / exhaust-burble rate (Hz). Real engines have a slow
+ * envelope modulation from cylinder-to-cylinder timing variation,
+ * around 5-12 Hz depending on RPM. We slope it linearly with RPM to
+ * keep the cockpit feel "alive" at idle without becoming choppy at
+ * full throttle.
+ */
+export function tremoloHz(rpm: number, idleRpm: number, maxRpm: number): number {
+	if (maxRpm <= idleRpm) return 5;
+	const t = Math.max(0, Math.min(1, (rpm - idleRpm) / (maxRpm - idleRpm)));
+	return 5 + 7 * t;
+}
+
+/**
  * Strain factor in [0, 1] -- how much climb-strain wobble to apply to the
  * harmonic oscillator. Zero unless throttle is high AND AoA is above the
  * strain threshold; ramps linearly over 6 degrees of alpha past the threshold.

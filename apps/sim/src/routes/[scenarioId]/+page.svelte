@@ -135,6 +135,7 @@ function handleWorkerMessage(event: MessageEvent<WorkerToMain>): void {
 					trueAirspeed: msg.truth.trueAirspeed,
 				},
 				C172_CONFIG.idleRpm,
+				C172_CONFIG.maxRpm,
 			);
 			// Warning cue dispatch -- pure functions in @ab/bc-sim decide,
 			// the cue classes own the audio + caption side effects.
