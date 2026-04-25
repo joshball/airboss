@@ -73,6 +73,8 @@ export const ROUTES = {
 	API_AUTH: '/api/auth',
 	/** Appearance-preference endpoint. POST `{ value: 'light'|'dark'|'system' }`. */
 	APPEARANCE: '/appearance',
+	/** Theme-preference endpoint. POST `{ value: '<registered theme id>' }`. */
+	THEME: '/theme',
 	/**
 	 * Citation picker search endpoint. GET `?target=<CitationTargetType>&q=<term>`
 	 * returns `{ results: { id, label, detail }[] }`. Auth-gated.

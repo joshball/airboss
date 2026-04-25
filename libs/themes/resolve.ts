@@ -19,6 +19,7 @@
  */
 
 import type { AppearanceMode, ThemeId, ThemeSelection } from './contract';
+import { isValidThemeId } from './registry';
 
 export const THEMES = {
 	AIRBOSS_DEFAULT: 'airboss/default',
@@ -51,6 +52,54 @@ export function isAppearancePreference(value: unknown): value is AppearancePrefe
 /** Parse a raw string (e.g. cookie) into a preference, falling back to the default. */
 export function parseAppearancePreference(raw: string | null | undefined): AppearancePreference {
 	return isAppearancePreference(raw) ? raw : DEFAULT_APPEARANCE_PREFERENCE;
+}
+
+// ---------------------------------------------------------------------
+// Theme preference (user-selectable override)
+// ---------------------------------------------------------------------
+
+/**
+ * User-selectable theme preference. `null` means "no preference -- use the
+ * route-resolved default". Otherwise a registered `ThemeId`.
+ */
+export type ThemePreference = ThemeId | null;
+
+/** Cookie name for the persisted user-selected theme. */
+export const THEME_COOKIE = 'theme';
+
+/** Default preference when no cookie / invalid cookie is present. */
+export const DEFAULT_THEME_PREFERENCE: ThemePreference = null;
+
+/**
+ * Type guard for untrusted theme input (cookie, form field, query).
+ *
+ * Only registered theme ids pass; the registry is the single source of truth
+ * for "what themes ship". Unknown ids fall back to the default.
+ */
+export function isThemePreference(value: unknown): value is ThemeId {
+	return typeof value === 'string' && isValidThemeId(value);
+}
+
+/** Parse a raw string (e.g. cookie) into a theme preference, falling back to `null`. */
+export function parseThemePreference(raw: string | null | undefined): ThemePreference {
+	if (raw == null || raw === '') return DEFAULT_THEME_PREFERENCE;
+	return isThemePreference(raw) ? raw : DEFAULT_THEME_PREFERENCE;
+}
+
+/**
+ * Themes that hard-require a specific appearance regardless of user preference.
+ *
+ * Today only `sim/glass` qualifies (dark-only -- emit throws if asked for
+ * a light palette). Centralized here so the picker, server, and pre-hydration
+ * script all agree.
+ */
+const FORCED_APPEARANCE_BY_THEME: Readonly<Partial<Record<ThemeId, AppearanceMode>>> = {
+	[THEMES.SIM_GLASS]: 'dark',
+};
+
+/** Returns the forced appearance for a theme, or `null` if appearance is free. */
+export function forcedAppearanceFor(theme: ThemeId): AppearanceMode | null {
+	return FORCED_APPEARANCE_BY_THEME[theme] ?? null;
 }
 
 const FLIGHTDECK_PATH_PREFIXES: readonly string[] = ['/dashboard'];
@@ -92,6 +141,58 @@ export function resolveThemeForPath(
 	}
 	// sim/glass is dark-only; emit throws if asked for a light palette.
 	// Force dark so user/system appearance preferences don't crash sim.
-	const appearance: AppearanceMode = sim ? 'dark' : userAppearance === 'system' ? systemAppearance : userAppearance;
+	const forced = forcedAppearanceFor(theme);
+	const appearance: AppearanceMode = forced ?? (userAppearance === 'system' ? systemAppearance : userAppearance);
 	return { theme, appearance, layout };
+}
+
+/**
+ * Returns true when the route hard-requires a specific theme that the user
+ * cannot override (today: only `/sim/*`, which is locked to `sim/glass` for
+ * dark-only safety -- the other surfaces are free).
+ */
+function routeRequiresFixedTheme(pathname: string): boolean {
+	return isSimPath(pathname);
+}
+
+/**
+ * Full theme selection given a route and user preferences.
+ *
+ * Precedence rule (read this before changing anything):
+ *
+ *   1. **Route safety lock wins.** If a path hard-requires a specific theme
+ *      (today: `/sim/*` -> `sim/glass`), the route's choice is final. The
+ *      user's picker preference is ignored on those routes. Reason: sim is
+ *      a dark-only cockpit surface; the emit pipeline throws if asked for
+ *      a light palette, and other themes' panel chrome would be unsafe in
+ *      a flying scenario.
+ *   2. **User theme preference wins** over the path-default theme on every
+ *      other route. So if a user picks `study/flightdeck`, they get it on
+ *      `/memory`, `/reps`, `/dashboard`, etc.
+ *   3. **Path default** otherwise (today: `/dashboard*` -> flightdeck,
+ *      everything else -> sectional).
+ *   4. Some themes force a specific appearance regardless of the user's
+ *      light/dark preference (see `forcedAppearanceFor`). The forced value
+ *      always wins; otherwise the user's appearance pref applies.
+ *
+ * The layout still tracks the *route* (path defines whether the surface is
+ * a reading column, dashboard grid, or cockpit), independent of which
+ * palette the user picked. Layout and palette are orthogonal axes.
+ */
+export function resolveThemeSelection(args: {
+	pathname: string;
+	userTheme: ThemePreference;
+	userAppearance?: AppearancePreference;
+	systemAppearance?: AppearanceMode;
+}): ThemeSelection {
+	const { pathname, userTheme } = args;
+	const userAppearance = args.userAppearance ?? 'system';
+	const systemAppearance = args.systemAppearance ?? DEFAULT_APPEARANCE;
+	const routeSelection = resolveThemeForPath(pathname, userAppearance, systemAppearance);
+	if (routeRequiresFixedTheme(pathname) || userTheme == null) {
+		return routeSelection;
+	}
+	const forced = forcedAppearanceFor(userTheme);
+	const appearance: AppearanceMode = forced ?? (userAppearance === 'system' ? systemAppearance : userAppearance);
+	return { theme: userTheme, appearance, layout: routeSelection.layout };
 }

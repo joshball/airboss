@@ -54,12 +54,19 @@ export {
 	DEFAULT_APPEARANCE,
 	DEFAULT_APPEARANCE_PREFERENCE,
 	DEFAULT_THEME,
+	DEFAULT_THEME_PREFERENCE,
 	FLIGHTDECK_THEME,
+	forcedAppearanceFor,
 	isAppearancePreference,
+	isThemePreference,
 	parseAppearancePreference,
+	parseThemePreference,
 	resolveThemeForPath,
+	resolveThemeSelection,
 	SIM_THEME,
+	THEME_COOKIE,
 	THEMES,
+	type ThemePreference,
 } from './resolve';
 export { type LegacyNeutralTone, resolveTone, TONES, type Tone, type ToneInput } from './tones';
 export { TOKENS, type TokenKey, type TokenName } from './vocab';
