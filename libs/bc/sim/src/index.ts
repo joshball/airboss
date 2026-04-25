@@ -43,6 +43,25 @@ export {
 	truthStateFromVector,
 	type WindVector,
 } from './fdm/physics';
+export {
+	buildTape,
+	createFrameRing,
+	DEFAULT_RING_CAPACITY,
+	drainFrames,
+	type FrameRing,
+	hashScenarioDefinition,
+	parseTape,
+	pushFrame,
+	REPLAY_TAPE_FORMAT_VERSION,
+	type ReplayFrame,
+	type ReplayTape,
+	ringFramesDropped,
+	ringHasWrapped,
+	serializeTape,
+	type TapeHashValidation,
+	type TapeOutcome,
+	validateTapeHash,
+} from './replay';
 export { DEPARTURE_STALL_SCENARIO } from './scenarios/departure-stall';
 export { FIRST_FLIGHT_SCENARIO } from './scenarios/first-flight';
 export { PLAYGROUND_SCENARIO } from './scenarios/playground';
@@ -52,6 +71,13 @@ export type {
 	AircraftConfig,
 	FdmInputs,
 	FdmTruthState,
+	GradingComponent,
+	GradingComponentKind,
+	GradingComponentParams,
+	GradingDefinition,
+	IdealPathDefinition,
+	IdealPathSegment,
+	RepMetadata,
 	ScenarioCriteria,
 	ScenarioDefinition,
 	ScenarioInitialState,
