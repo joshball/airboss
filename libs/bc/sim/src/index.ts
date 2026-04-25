@@ -11,6 +11,21 @@ export {
 	strainFactor,
 	throttleGainTarget,
 } from './audio-mapping';
+export {
+	activateFault,
+	applyFaults,
+	type DisplayState,
+	type FaultActivation,
+	type FaultKind,
+	type FaultParams,
+	type FaultTransformInput,
+	type FaultTriggerKind,
+	indicatedAirspeedKnots,
+	type ScenarioFault,
+	type ScenarioFaultTrigger,
+	shouldTriggerFault,
+	type TriggerEvalContext,
+} from './faults';
 export { C172_CONFIG } from './fdm/c172';
 export { FdmEngine, windFromScenario } from './fdm/engine';
 export {

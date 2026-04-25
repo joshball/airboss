@@ -498,3 +498,59 @@ export const SIM_KEYBINDINGS: readonly SimKeybinding[] = [
 		group: 'system',
 	},
 ];
+
+/**
+ * Instrument fault kinds. Each fault transforms truth state into a display
+ * state that lies in a specific way -- pitot block freezes the ASI sensor,
+ * vacuum failure drifts the AI gyro, etc. The transform is pure (see
+ * libs/bc/sim/src/faults/transform.ts); these ids are how scenarios declare
+ * which faults to fire and how the runner activates them.
+ */
+export const SIM_FAULT_KINDS = {
+	PITOT_BLOCK: 'pitot_block',
+	STATIC_BLOCK: 'static_block',
+	VACUUM_FAILURE: 'vacuum_failure',
+	ALTERNATOR_FAILURE: 'alternator_failure',
+	GYRO_TUMBLE: 'gyro_tumble',
+} as const;
+
+export type SimFaultKind = (typeof SIM_FAULT_KINDS)[keyof typeof SIM_FAULT_KINDS];
+
+/** Human-readable label per fault, used in the storybook gallery + debrief. */
+export const SIM_FAULT_LABELS: Record<SimFaultKind, string> = {
+	pitot_block: 'Pitot block',
+	static_block: 'Static block',
+	vacuum_failure: 'Vacuum failure',
+	alternator_failure: 'Alternator failure',
+	gyro_tumble: 'Gyro tumble',
+};
+
+/**
+ * How a fault is fired. Time-based fires after N seconds of scenario time.
+ * Altitude-based fires the first tick the aircraft crosses the threshold
+ * upward through it. Step-based fires when a named scenario step starts.
+ */
+export const SIM_FAULT_TRIGGER_KINDS = {
+	TIME_SECONDS: 'time_seconds',
+	ALTITUDE_AGL_METERS: 'altitude_agl_meters',
+	ON_STEP: 'on_step',
+} as const;
+
+export type SimFaultTriggerKind = (typeof SIM_FAULT_TRIGGER_KINDS)[keyof typeof SIM_FAULT_TRIGGER_KINDS];
+
+/**
+ * Per-fault parameter defaults. Scenarios may override these on a fault-by-
+ * fault basis via ScenarioFault.params.
+ */
+export const SIM_FAULT_DEFAULTS = {
+	/** Vacuum AI/HI drift rate (deg/sec) when no override is given. */
+	VACUUM_DRIFT_DEG_PER_SEC: 1.0,
+	/** Alternator: time from trigger until the bus is fully discharged (sec). */
+	ALTERNATOR_DECAY_SECONDS: 60,
+	/** Whether gyro-tumble continues cycling once initiated. */
+	GYRO_TUMBLE_CONTINUES: true,
+	/** Static block: altitude at which the static port effectively froze (ft). */
+	STATIC_BLOCK_FREEZE_ALT_FT: 0,
+	/** Pitot block: airspeed at which the pitot tube effectively froze (KIAS). */
+	PITOT_BLOCK_FREEZE_KIAS: 0,
+} as const;
