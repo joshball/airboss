@@ -1,5 +1,5 @@
 <script lang="ts">
-import type { ReviewSessionDeckSpec } from '@ab/bc-study';
+import { summarizeDeckSpec } from '@ab/bc-study';
 import {
 	CARD_STATES,
 	DOMAIN_LABELS,
@@ -57,30 +57,6 @@ function domainLabel(slug: string): string {
  */
 function deckHref(deckParam: string): string {
 	return `${ROUTES.MEMORY_REVIEW}?${QUERY_PARAMS.DECK}=${deckParam}`;
-}
-
-/**
- * Render a deck spec as a human-readable label for the Saved Decks list.
- * Mirrors the resolver-prompt page's `summarizeDeckSpec` so the same deck
- * surfaces with the same wording in both places. Read as a loose record so
- * future Layer (b)/Layer (c) filter dimensions render without a type touch.
- */
-function summarizeDeckSpec(spec: ReviewSessionDeckSpec): string {
-	const loose = spec as unknown as Record<string, unknown>;
-	const parts: string[] = [];
-	if (typeof loose.domain === 'string' && loose.domain.length > 0) {
-		parts.push(domainLabel(loose.domain));
-	} else {
-		parts.push('All domains');
-	}
-	if (loose.dueOnly === true) parts.push('due now');
-	if (Array.isArray(loose.tags) && loose.tags.length > 0) {
-		parts.push(`tags: ${(loose.tags as string[]).join(', ')}`);
-	}
-	if (Array.isArray(loose.cardType) && loose.cardType.length > 0) {
-		parts.push(`type: ${(loose.cardType as string[]).join(', ')}`);
-	}
-	return parts.join(' / ');
 }
 
 function formatLastVisited(iso: string): string {

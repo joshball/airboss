@@ -68,6 +68,8 @@ export {
 	DeckSpecDecodeError,
 	decodeDeckSpec,
 	encodeDeckSpec,
+	normalizeDeckSpec,
+	summarizeDeckSpec,
 } from './deck-spec';
 export { runEngine } from './engine';
 export type { SubmitFeedbackInput } from './feedback';

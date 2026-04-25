@@ -15,7 +15,8 @@
  */
 
 import { createHash } from 'node:crypto';
-import { DECK_HASH_LENGTH } from '@ab/constants';
+import { DECK_HASH_LENGTH, DOMAIN_LABELS, type Domain } from '@ab/constants';
+import { humanize } from '@ab/utils';
 import type { ReviewSessionDeckSpec } from './schema';
 
 // ---------- Errors ----------
@@ -38,10 +39,20 @@ export class DeckSpecDecodeError extends Error {
  * unordered array we currently support (`tags`) is sorted ascending so two
  * inputs with the same set of tags produce the same string.
  *
+ * Top-level `domain` is normalized so the empty string collapses to `null`
+ * (the schema's "all domains" sentinel). Without this, two specs that
+ * users perceive as the same filter -- one passing `domain: ''` and one
+ * passing `domain: null` -- would land on different hashes and split a
+ * Saved-Decks entry into two.
+ *
  * The schema-level `ReviewSessionDeckSpec` shape is open-ended (Layer (a)
  * only required `domain`). This walker handles arbitrary nested objects /
  * arrays so future filter dimensions added to the spec land canonically
  * without code changes here.
+ *
+ * NOTE: the `tags`-is-unordered rule is keyed on the immediate parent key
+ * name, so any future field literally named `tags` anywhere in the tree
+ * inherits the sort. Document this constraint when adding new dimensions.
  */
 function canonicalize(value: unknown, path: readonly string[] = []): unknown {
 	if (value === null) return null;
@@ -66,7 +77,15 @@ function canonicalize(value: unknown, path: readonly string[] = []): unknown {
 			.sort();
 		const out: Record<string, unknown> = {};
 		for (const k of keys) {
-			out[k] = canonicalize(obj[k], [...path, k]);
+			let next = obj[k];
+			// Normalize `domain: ''` to `null` only at the top level. The
+			// schema declares `domain: string | null` and uses `null` as
+			// the "all domains" sentinel; canonicalising the empty string
+			// keeps Saved-Decks entries from splitting.
+			if (path.length === 0 && k === 'domain' && next === '') {
+				next = null;
+			}
+			out[k] = canonicalize(next, [...path, k]);
 		}
 		return out;
 	}
@@ -132,4 +151,53 @@ export function decodeDeckSpec(encoded: string): ReviewSessionDeckSpec {
 export function computeDeckHash(spec: ReviewSessionDeckSpec): string {
 	const canonical = canonicalDeckSpecJson(spec);
 	return createHash('sha1').update(canonical).digest('hex').slice(0, DECK_HASH_LENGTH);
+}
+
+/**
+ * Render a deck spec as a one-line human-readable summary. Used by the
+ * `/memory` Saved Decks list and the `?deck=` resolver's Resume prompt;
+ * lives here so both surfaces produce identical wording for the same
+ * deck. Read as a loose record so future filter dimensions appended to
+ * the spec render without a type touch on the call sites.
+ */
+export function summarizeDeckSpec(spec: ReviewSessionDeckSpec): string {
+	const loose = spec as unknown as Record<string, unknown>;
+	const parts: string[] = [];
+	if (typeof loose.domain === 'string' && loose.domain.length > 0) {
+		const label = (DOMAIN_LABELS as Record<Domain, string>)[loose.domain as Domain] ?? humanize(loose.domain);
+		parts.push(label);
+	} else {
+		parts.push('All domains');
+	}
+	if (loose.dueOnly === true) parts.push('due now');
+	if (Array.isArray(loose.tags) && loose.tags.length > 0) {
+		const tagStrings = (loose.tags as unknown[]).filter((t): t is string => typeof t === 'string');
+		if (tagStrings.length > 0) parts.push(`tags: ${tagStrings.join(', ')}`);
+	}
+	if (Array.isArray(loose.cardType) && loose.cardType.length > 0) {
+		const typeStrings = (loose.cardType as unknown[]).filter((t): t is string => typeof t === 'string');
+		if (typeStrings.length > 0) parts.push(`type: ${typeStrings.join(', ')}`);
+	}
+	return parts.join(' / ');
+}
+
+/**
+ * Normalize a decoded deck spec against the current domain enum. A stale
+ * `?deck=` bookmark may carry a `domain` slug that has since been removed
+ * or renamed; without this guard, the spec sails into `getDueCards`,
+ * matches no rows, and the user sees an empty session with no explanation.
+ *
+ * Rewrites an unrecognised non-null `domain` to `null` ("all domains") so
+ * the bookmark gracefully degrades to a working run instead of a silent
+ * empty deck. Callers should normalize BEFORE computing the deck hash so
+ * the rewritten spec buckets with other "all domains" runs in Saved Decks.
+ */
+export function normalizeDeckSpec(spec: ReviewSessionDeckSpec, knownDomains: readonly string[]): ReviewSessionDeckSpec {
+	if (spec.domain === null || spec.domain === undefined || spec.domain === '') {
+		return { ...spec, domain: null };
+	}
+	if (!knownDomains.includes(spec.domain)) {
+		return { ...spec, domain: null };
+	}
+	return spec;
 }

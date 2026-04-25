@@ -48,6 +48,15 @@ describe('deck-spec', () => {
 			const b: TestSpec = { domain: 'airspace', dueOnly: undefined } as TestSpec;
 			expect(computeDeckHash(a)).toBe(computeDeckHash(b));
 		});
+
+		it('treats empty-string domain and null domain as the same deck', () => {
+			// The schema uses `null` as the "all domains" sentinel; an empty
+			// string from a stale URL or hand-edited query MUST collapse to
+			// the same hash so Saved-Decks does not split into two entries.
+			const a: TestSpec = { domain: null };
+			const b: TestSpec = { domain: '' as unknown as string | null };
+			expect(computeDeckHash(a)).toBe(computeDeckHash(b));
+		});
 	});
 
 	describe('encodeDeckSpec / decodeDeckSpec', () => {

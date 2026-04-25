@@ -28,6 +28,7 @@ import {
 	DeckSpecDecodeError,
 	decodeDeckSpec,
 	findResumableSessionByDeckHash,
+	normalizeDeckSpec,
 	startReviewSession,
 } from '@ab/bc-study';
 import { DOMAIN_VALUES, type Domain, QUERY_PARAMS, ROUTES } from '@ab/constants';
@@ -89,7 +90,11 @@ export const load: PageServerLoad = async (event) => {
 
 	const deckParam = event.url.searchParams.get(QUERY_PARAMS.DECK);
 	if (deckParam) {
-		const deckSpec = decodeDeckOr400(deckParam);
+		// Normalize stale domain values BEFORE hashing so a bookmark whose
+		// `domain` slug was renamed/removed degrades to "all domains" and
+		// buckets with the user's other unfiltered runs in Saved Decks
+		// instead of producing an empty session.
+		const deckSpec = normalizeDeckSpec(decodeDeckOr400(deckParam), DOMAIN_VALUES);
 		const deckHash = computeDeckHash(deckSpec);
 		const resumable = await findResumableSessionByDeckHash(user.id, deckHash);
 		if (resumable) {
@@ -131,13 +136,14 @@ export const actions: Actions = {
 		const decoded = decodeDeckOrFail(String(form.get(QUERY_PARAMS.DECK) ?? ''));
 		if (!decoded.ok) return decoded.failure;
 
-		const deckHash = computeDeckHash(decoded.spec);
+		const spec = normalizeDeckSpec(decoded.spec, DOMAIN_VALUES);
+		const deckHash = computeDeckHash(spec);
 		const resumable = await findResumableSessionByDeckHash(user.id, deckHash);
 		if (!resumable) {
 			// The session completed (or fell out of the resumable window)
 			// between prompt render and submit. Fall back to a fresh run so
 			// the user isn't stuck on a dead form.
-			const created = await startReviewSession({ userId: user.id, deckSpec: decoded.spec });
+			const created = await startReviewSession({ userId: user.id, deckSpec: spec });
 			redirect(303, ROUTES.MEMORY_REVIEW_SESSION(created.id));
 		}
 		redirect(303, ROUTES.MEMORY_REVIEW_SESSION(resumable.id));
@@ -148,7 +154,8 @@ export const actions: Actions = {
 		const decoded = decodeDeckOrFail(String(form.get(QUERY_PARAMS.DECK) ?? ''));
 		if (!decoded.ok) return decoded.failure;
 
-		const created = await startReviewSession({ userId: user.id, deckSpec: decoded.spec });
+		const spec = normalizeDeckSpec(decoded.spec, DOMAIN_VALUES);
+		const created = await startReviewSession({ userId: user.id, deckSpec: spec });
 		redirect(303, ROUTES.MEMORY_REVIEW_SESSION(created.id));
 	},
 } satisfies Actions;

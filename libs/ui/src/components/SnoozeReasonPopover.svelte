@@ -124,8 +124,20 @@ function submit(event: SubmitEvent): void {
 	open = false;
 }
 
+// Track the previous `open` value so the seed effect only fires on a
+// false -> true transition. Reading `initialReason` / `focusComment`
+// inside the effect would also subscribe to those, which would clobber
+// a user's manual reason change if the parent re-passed the same
+// `initialReason` mid-flight.
+let wasOpen = false;
 $effect(() => {
-	if (!open) return;
+	const isOpen = open;
+	if (!isOpen) {
+		wasOpen = false;
+		return;
+	}
+	if (wasOpen) return;
+	wasOpen = true;
 	// Re-seed the local state every time the popover opens so callers can
 	// re-open with a different `initialReason` (e.g., the Share -> Report
 	// hand-off lands on `bad-question` even after a prior Snooze open
@@ -139,9 +151,10 @@ $effect(() => {
 	// Move focus into the panel on open. When `focusComment` is true,
 	// jump straight to the textarea -- the Report flow has already
 	// pre-selected the reason and the user just needs to type.
+	const shouldFocusComment = focusComment;
 	queueMicrotask(() => {
 		if (!panelEl) return;
-		if (focusComment) {
+		if (shouldFocusComment) {
 			panelEl.querySelector<HTMLTextAreaElement>('textarea')?.focus();
 			return;
 		}
