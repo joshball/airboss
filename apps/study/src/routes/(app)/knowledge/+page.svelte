@@ -16,6 +16,7 @@ import {
 	ROUTES,
 } from '@ab/constants';
 import PageHelp from '@ab/help/ui/PageHelp.svelte';
+import FilterCard from '@ab/ui/components/FilterCard.svelte';
 import { humanize } from '@ab/utils';
 import { page } from '$app/state';
 import type { PageData } from './$types';
@@ -84,48 +85,46 @@ const resetHref = $derived.by(() => {
 		</div>
 	</header>
 
-	<form class="filters" method="GET" role="search" aria-label="Filter nodes">
-		<div class="filter">
-			<label for="f-domain">Domain</label>
-			<select id="f-domain" name={QUERY_PARAMS.DOMAIN} value={filters.domain ?? ''}>
-				<option value="">All</option>
-				{#each DOMAIN_VALUES as d (d)}
-					<option value={d}>{domainLabel(d)}</option>
-				{/each}
-			</select>
-		</div>
-		<div class="filter">
-			<label for="f-cert">Cert</label>
-			<select id="f-cert" name={QUERY_PARAMS.CERT} value={filters.cert ?? ''}>
-				<option value="">All</option>
-				{#each CERT_VALUES as c (c)}
-					<option value={c}>{certLabel(c)}</option>
-				{/each}
-			</select>
-		</div>
-		<div class="filter">
-			<label for="f-priority">Priority</label>
-			<select id="f-priority" name={QUERY_PARAMS.PRIORITY} value={filters.priority ?? ''}>
-				<option value="">All</option>
-				{#each RELEVANCE_PRIORITY_VALUES as p (p)}
-					<option value={p}>{priorityLabel(p)}</option>
-				{/each}
-			</select>
-		</div>
-		<div class="filter">
-			<label for="f-lifecycle">Lifecycle</label>
-			<select id="f-lifecycle" name={QUERY_PARAMS.LIFECYCLE} value={filters.lifecycle ?? ''}>
-				<option value="">All</option>
-				{#each NODE_LIFECYCLE_VALUES as l (l)}
-					<option value={l}>{lifecycleLabel(l)}</option>
-				{/each}
-			</select>
-		</div>
-		<div class="filter-actions">
-			<button type="submit" class="btn secondary">Apply</button>
-			<a class="btn ghost" href={resetHref}>Reset</a>
-		</div>
-	</form>
+	<FilterCard {resetHref} ariaLabel="Filter nodes">
+		{#snippet controls()}
+			<div class="filter">
+				<label for="f-domain">Domain</label>
+				<select id="f-domain" name={QUERY_PARAMS.DOMAIN} value={filters.domain ?? ''}>
+					<option value="">All</option>
+					{#each DOMAIN_VALUES as d (d)}
+						<option value={d}>{domainLabel(d)}</option>
+					{/each}
+				</select>
+			</div>
+			<div class="filter">
+				<label for="f-cert">Cert</label>
+				<select id="f-cert" name={QUERY_PARAMS.CERT} value={filters.cert ?? ''}>
+					<option value="">All</option>
+					{#each CERT_VALUES as c (c)}
+						<option value={c}>{certLabel(c)}</option>
+					{/each}
+				</select>
+			</div>
+			<div class="filter">
+				<label for="f-priority">Priority</label>
+				<select id="f-priority" name={QUERY_PARAMS.PRIORITY} value={filters.priority ?? ''}>
+					<option value="">All</option>
+					{#each RELEVANCE_PRIORITY_VALUES as p (p)}
+						<option value={p}>{priorityLabel(p)}</option>
+					{/each}
+				</select>
+			</div>
+			<div class="filter">
+				<label for="f-lifecycle">Lifecycle</label>
+				<select id="f-lifecycle" name={QUERY_PARAMS.LIFECYCLE} value={filters.lifecycle ?? ''}>
+					<option value="">All</option>
+					{#each NODE_LIFECYCLE_VALUES as l (l)}
+						<option value={l}>{lifecycleLabel(l)}</option>
+					{/each}
+				</select>
+			</div>
+		{/snippet}
+	</FilterCard>
 
 	{#if groups.length === 0}
 		<div class="empty">
@@ -202,51 +201,6 @@ const resetHref = $derived.by(() => {
 		margin: var(--space-2xs) 0 0;
 		color: var(--ink-subtle);
 		font-size: var(--type-definition-body-size);
-	}
-
-	.filters {
-		display: grid;
-		grid-template-columns: repeat(4, 1fr) auto;
-		gap: var(--space-md);
-		align-items: end;
-		background: var(--ink-inverse);
-		border: 1px solid var(--edge-default);
-		border-radius: var(--radius-lg);
-		padding: var(--space-lg);
-	}
-
-	.filter {
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-2xs);
-	}
-
-	.filter label {
-		font-size: var(--type-ui-caption-size);
-		font-weight: 600;
-		color: var(--ink-muted);
-		text-transform: uppercase;
-		letter-spacing: var(--letter-spacing-caps);
-	}
-
-	.filter select {
-		font: inherit;
-		padding: var(--space-sm) var(--space-sm);
-		border: 1px solid var(--edge-strong);
-		border-radius: var(--radius-sm);
-		background: var(--ink-inverse);
-		color: var(--ink-body);
-	}
-
-	.filter select:focus {
-		outline: none;
-		border-color: var(--action-default);
-		box-shadow: var(--focus-ring-shadow);
-	}
-
-	.filter-actions {
-		display: flex;
-		gap: var(--space-xs);
 	}
 
 	.empty {
@@ -432,16 +386,6 @@ const resetHref = $derived.by(() => {
 		align-items: center;
 		justify-content: center;
 		transition: background var(--motion-fast), border-color var(--motion-fast);
-	}
-
-	.btn.secondary {
-		background: var(--surface-sunken);
-		color: var(--ink-body);
-		border-color: var(--edge-strong);
-	}
-
-	.btn.secondary:hover {
-		background: var(--edge-default);
 	}
 
 	.btn.ghost {

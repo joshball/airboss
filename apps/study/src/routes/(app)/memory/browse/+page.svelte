@@ -24,7 +24,12 @@ import {
 } from '@ab/constants';
 import PageHelp from '@ab/help/ui/PageHelp.svelte';
 import Banner from '@ab/ui/components/Banner.svelte';
+import FilterCard from '@ab/ui/components/FilterCard.svelte';
+import type { FilterChipDef } from '@ab/ui/components/FilterChips.svelte';
+import FilterChips from '@ab/ui/components/FilterChips.svelte';
 import InfoTip from '@ab/ui/components/InfoTip.svelte';
+import Pager from '@ab/ui/components/Pager.svelte';
+import ResultSummary from '@ab/ui/components/ResultSummary.svelte';
 import { buildQuery, humanize } from '@ab/utils';
 import { tick } from 'svelte';
 import { goto } from '$app/navigation';
@@ -44,9 +49,6 @@ const groupBy = $derived(data.groupBy);
 const facets = $derived(data.facets);
 const createdCard = $derived(data.createdCard);
 
-const rangeStart = $derived(cards.length === 0 ? 0 : (currentPage - 1) * pageSize + 1);
-const rangeEnd = $derived(cards.length === 0 ? 0 : (currentPage - 1) * pageSize + cards.length);
-
 const hasActiveFilters = $derived(
 	Boolean(filters.domain || filters.cardType || filters.sourceType || filters.search) ||
 		filters.status !== CARD_STATUSES.ACTIVE,
@@ -65,19 +67,6 @@ function dismissCreatedBanner(): void {
 	const next = new URL(page.url);
 	next.searchParams.delete(QUERY_PARAMS.CREATED);
 	void goto(next, { replaceState: true, keepFocus: true, noScroll: true });
-}
-
-type ChipFilterKey =
-	| typeof QUERY_PARAMS.DOMAIN
-	| typeof QUERY_PARAMS.CARD_TYPE
-	| typeof QUERY_PARAMS.SOURCE
-	| typeof QUERY_PARAMS.STATUS
-	| typeof QUERY_PARAMS.SEARCH;
-
-interface FilterChip {
-	key: ChipFilterKey;
-	label: string;
-	value: string;
 }
 
 function shortenFront(text: string, max = 60): string {
@@ -138,24 +127,6 @@ function shorten(text: string, max = 120): string {
 	return `${text.slice(0, max).trimEnd()}...`;
 }
 
-const chips = $derived.by<FilterChip[]>(() => {
-	const out: FilterChip[] = [];
-	if (filters.search)
-		out.push({ key: QUERY_PARAMS.SEARCH, label: 'Search', value: `"${shortenFront(filters.search, 40)}"` });
-	if (filters.domain) out.push({ key: QUERY_PARAMS.DOMAIN, label: 'Domain', value: domainLabel(filters.domain) });
-	if (filters.cardType)
-		out.push({ key: QUERY_PARAMS.CARD_TYPE, label: 'Type', value: cardTypeLabel(filters.cardType) });
-	if (filters.sourceType)
-		out.push({ key: QUERY_PARAMS.SOURCE, label: 'Source', value: sourceLabel(filters.sourceType) });
-	if (filters.status !== CARD_STATUSES.ACTIVE)
-		out.push({ key: QUERY_PARAMS.STATUS, label: 'Status', value: statusLabel(filters.status) });
-	return out;
-});
-
-function removeChipHref(key: ChipFilterKey): string {
-	return buildHref({ [key]: undefined });
-}
-
 function buildHref(next: Record<string, string | undefined>): string {
 	const full: Record<string, string | number | null | undefined> = {
 		[QUERY_PARAMS.DOMAIN]: filters.domain,
@@ -174,9 +145,46 @@ function pageHref(n: number): string {
 	return buildHref({ [QUERY_PARAMS.PAGE]: n > 1 ? String(n) : undefined });
 }
 
-// Facet helpers: render "(12)" hints next to filter options. `undefined`
-// when the facet bucket is missing (e.g. removed view); `0` renders a
-// dimmed "(0)".
+const chips = $derived.by<FilterChipDef[]>(() => {
+	const out: FilterChipDef[] = [];
+	if (filters.search)
+		out.push({
+			key: QUERY_PARAMS.SEARCH,
+			label: 'Search',
+			value: `"${shortenFront(filters.search, 40)}"`,
+			removeHref: buildHref({ [QUERY_PARAMS.SEARCH]: undefined }),
+		});
+	if (filters.domain)
+		out.push({
+			key: QUERY_PARAMS.DOMAIN,
+			label: 'Domain',
+			value: domainLabel(filters.domain),
+			removeHref: buildHref({ [QUERY_PARAMS.DOMAIN]: undefined }),
+		});
+	if (filters.cardType)
+		out.push({
+			key: QUERY_PARAMS.CARD_TYPE,
+			label: 'Type',
+			value: cardTypeLabel(filters.cardType),
+			removeHref: buildHref({ [QUERY_PARAMS.CARD_TYPE]: undefined }),
+		});
+	if (filters.sourceType)
+		out.push({
+			key: QUERY_PARAMS.SOURCE,
+			label: 'Source',
+			value: sourceLabel(filters.sourceType),
+			removeHref: buildHref({ [QUERY_PARAMS.SOURCE]: undefined }),
+		});
+	if (filters.status !== CARD_STATUSES.ACTIVE)
+		out.push({
+			key: QUERY_PARAMS.STATUS,
+			label: 'Status',
+			value: statusLabel(filters.status),
+			removeHref: buildHref({ [QUERY_PARAMS.STATUS]: undefined }),
+		});
+	return out;
+});
+
 function domainCount(slug: string): number | undefined {
 	return facets?.domain?.[slug];
 }
@@ -275,110 +283,115 @@ const groups = $derived.by<CardGroup[]>(() => {
 		</Banner>
 	{/if}
 
-	<form class="filters" method="GET" role="search" aria-label="Filter cards">
-		<input type="hidden" name={QUERY_PARAMS.PAGE} value="1" />
-		<input type="hidden" name={QUERY_PARAMS.PAGE_SIZE} value={pageSize === BROWSE_PAGE_SIZE ? '' : String(pageSize)} />
-		<input type="hidden" name={QUERY_PARAMS.GROUP_BY} value={groupBy === 'none' ? '' : groupBy} />
-
-		<div class="filter">
-			<div class="filter-label-row">
-				<label for="f-q">Search</label>
-			</div>
+	<FilterCard resetHref={ROUTES.MEMORY_BROWSE} ariaLabel="Filter cards">
+		{#snippet hidden()}
+			<input type="hidden" name={QUERY_PARAMS.PAGE} value="1" />
 			<input
-				id="f-q"
-				type="search"
-				name={QUERY_PARAMS.SEARCH}
-				placeholder="front or back..."
-				value={filters.search ?? ''}
+				type="hidden"
+				name={QUERY_PARAMS.PAGE_SIZE}
+				value={pageSize === BROWSE_PAGE_SIZE ? '' : String(pageSize)}
 			/>
-		</div>
-
-		<div class="filter">
-			<div class="filter-label-row">
-				<label for="f-domain">Domain</label>
-				<InfoTip
-					term="Domain filter"
-					definition="Narrow to a single topic bucket. Domains map to the curriculum areas each card belongs to."
-					helpId="memory-browse"
-					helpSection="filters"
+			<input type="hidden" name={QUERY_PARAMS.GROUP_BY} value={groupBy === 'none' ? '' : groupBy} />
+		{/snippet}
+		{#snippet controls()}
+			<div class="filter">
+				<div class="filter-label-row">
+					<label for="f-q">Search</label>
+				</div>
+				<input
+					id="f-q"
+					type="search"
+					name={QUERY_PARAMS.SEARCH}
+					placeholder="front or back..."
+					value={filters.search ?? ''}
 				/>
 			</div>
-			<select id="f-domain" name={QUERY_PARAMS.DOMAIN} value={filters.domain ?? ''}>
-				<option value="">All</option>
-				{#each DOMAIN_VALUES as d (d)}
-					<option value={d}>{domainLabel(d)}{fmtCount(domainCount(d))}</option>
-				{/each}
-			</select>
-		</div>
-
-		<div class="filter">
-			<div class="filter-label-row">
-				<label for="f-type">Type</label>
-				<InfoTip
-					term="Type filter"
-					definition="Narrow to a card format. Basic is the default front/back question-and-answer shape."
-					helpId="memory-browse"
-					helpSection="filters"
-				/>
+			<div class="filter">
+				<div class="filter-label-row">
+					<label for="f-domain">Domain</label>
+					<InfoTip
+						term="Domain filter"
+						definition="Narrow to a single topic bucket. Domains map to the curriculum areas each card belongs to."
+						helpId="memory-browse"
+						helpSection="filters"
+					/>
+				</div>
+				<select id="f-domain" name={QUERY_PARAMS.DOMAIN} value={filters.domain ?? ''}>
+					<option value="">All</option>
+					{#each DOMAIN_VALUES as d (d)}
+						<option value={d}>{domainLabel(d)}{fmtCount(domainCount(d))}</option>
+					{/each}
+				</select>
 			</div>
-			<select id="f-type" name={QUERY_PARAMS.CARD_TYPE} value={filters.cardType ?? ''}>
-				<option value="">All</option>
-				{#each CARD_TYPE_VALUES as t (t)}
-					<option value={t}>{cardTypeLabel(t)}{fmtCount(typeCount(t))}</option>
-				{/each}
-			</select>
-		</div>
-
-		<div class="filter">
-			<div class="filter-label-row">
-				<label for="f-source">Source</label>
-				<InfoTip
-					term="Source filter"
-					definition="Separate cards you authored from cards ported from course material. Course cards are read-only."
-					helpId="memory-browse"
-					helpSection="filters"
-				/>
+			<div class="filter">
+				<div class="filter-label-row">
+					<label for="f-type">Type</label>
+					<InfoTip
+						term="Type filter"
+						definition="Narrow to a card format. Basic is the default front/back question-and-answer shape."
+						helpId="memory-browse"
+						helpSection="filters"
+					/>
+				</div>
+				<select id="f-type" name={QUERY_PARAMS.CARD_TYPE} value={filters.cardType ?? ''}>
+					<option value="">All</option>
+					{#each CARD_TYPE_VALUES as t (t)}
+						<option value={t}>{cardTypeLabel(t)}{fmtCount(typeCount(t))}</option>
+					{/each}
+				</select>
 			</div>
-			<select id="f-source" name={QUERY_PARAMS.SOURCE} value={filters.sourceType ?? ''}>
-				<option value="">All</option>
-				{#each CONTENT_SOURCE_VALUES as s (s)}
-					<option value={s}>{sourceLabel(s)}{fmtCount(sourceCount(s))}</option>
-				{/each}
-			</select>
-		</div>
-
-		<div class="filter">
-			<div class="filter-label-row">
-				<label for="f-status">Status</label>
-				<InfoTip
-					term="Status filter"
-					definition="Active cards are in rotation. Suspended cards pause scheduling. Archived cards leave the deck."
-					helpId="memory-browse"
-					helpSection="status-lifecycle"
-				/>
+			<div class="filter">
+				<div class="filter-label-row">
+					<label for="f-source">Source</label>
+					<InfoTip
+						term="Source filter"
+						definition="Separate cards you authored from cards ported from course material. Course cards are read-only."
+						helpId="memory-browse"
+						helpSection="filters"
+					/>
+				</div>
+				<select id="f-source" name={QUERY_PARAMS.SOURCE} value={filters.sourceType ?? ''}>
+					<option value="">All</option>
+					{#each CONTENT_SOURCE_VALUES as s (s)}
+						<option value={s}>{sourceLabel(s)}{fmtCount(sourceCount(s))}</option>
+					{/each}
+				</select>
 			</div>
-			<select id="f-status" name={QUERY_PARAMS.STATUS} value={filters.status ?? CARD_STATUSES.ACTIVE}>
-				{#each BROWSE_STATUS_FILTER_VALUES as s (s)}
-					<option value={s}>{statusLabel(s)}{fmtCount(statusCount(s))}</option>
-				{/each}
-			</select>
-		</div>
-
-		<div class="filter filter-actions">
-			<div class="filter-label-row" aria-hidden="true">
-				<span class="filter-spacer">&nbsp;</span>
+			<div class="filter">
+				<div class="filter-label-row">
+					<label for="f-status">Status</label>
+					<InfoTip
+						term="Status filter"
+						definition="Active cards are in rotation. Suspended cards pause scheduling. Archived cards leave the deck."
+						helpId="memory-browse"
+						helpSection="status-lifecycle"
+					/>
+				</div>
+				<select id="f-status" name={QUERY_PARAMS.STATUS} value={filters.status ?? CARD_STATUSES.ACTIVE}>
+					{#each BROWSE_STATUS_FILTER_VALUES as s (s)}
+						<option value={s}>{statusLabel(s)}{fmtCount(statusCount(s))}</option>
+					{/each}
+				</select>
 			</div>
-			<div class="actions-row">
-				<button type="submit" class="btn secondary">Apply</button>
-				<a class="btn ghost" href={ROUTES.MEMORY_BROWSE}>Reset</a>
-			</div>
-		</div>
-	</form>
+		{/snippet}
+	</FilterCard>
 
 	<div class="view-controls" aria-label="View options">
 		<div class="view-control">
 			<label for="f-group">Group by</label>
-			<select id="f-group" value={groupBy} onchange={(e) => goto(buildHref({ [QUERY_PARAMS.GROUP_BY]: (e.currentTarget as HTMLSelectElement).value === 'none' ? undefined : (e.currentTarget as HTMLSelectElement).value }))}>
+			<select
+				id="f-group"
+				value={groupBy}
+				onchange={(e) =>
+					goto(
+						buildHref({
+							[QUERY_PARAMS.GROUP_BY]:
+								(e.currentTarget as HTMLSelectElement).value === 'none'
+									? undefined
+									: (e.currentTarget as HTMLSelectElement).value,
+						}),
+					)}
+			>
 				{#each BROWSE_GROUP_BY_VALUES as g (g)}
 					<option value={g}>{BROWSE_GROUP_BY_LABELS[g]}</option>
 				{/each}
@@ -386,7 +399,20 @@ const groups = $derived.by<CardGroup[]>(() => {
 		</div>
 		<div class="view-control">
 			<label for="f-size">Per page</label>
-			<select id="f-size" value={pageSize} onchange={(e) => goto(buildHref({ [QUERY_PARAMS.PAGE_SIZE]: (e.currentTarget as HTMLSelectElement).value === String(BROWSE_PAGE_SIZE) ? undefined : (e.currentTarget as HTMLSelectElement).value, [QUERY_PARAMS.PAGE]: undefined }))}>
+			<select
+				id="f-size"
+				value={pageSize}
+				onchange={(e) =>
+					goto(
+						buildHref({
+							[QUERY_PARAMS.PAGE_SIZE]:
+								(e.currentTarget as HTMLSelectElement).value === String(BROWSE_PAGE_SIZE)
+									? undefined
+									: (e.currentTarget as HTMLSelectElement).value,
+							[QUERY_PARAMS.PAGE]: undefined,
+						}),
+					)}
+			>
 				{#each BROWSE_PAGE_SIZE_VALUES as n (n)}
 					<option value={n}>{n}</option>
 				{/each}
@@ -394,31 +420,16 @@ const groups = $derived.by<CardGroup[]>(() => {
 		</div>
 	</div>
 
-	{#if chips.length > 0}
-		<div class="chip-row" aria-label="Active filters">
-			<span class="chip-label">Filtering:</span>
-			{#each chips as chip (chip.key)}
-				<a class="chip" href={removeChipHref(chip.key)} aria-label={`Remove ${chip.label} filter`}>
-					<span class="chip-name">{chip.label}:</span>
-					<span class="chip-value">{chip.value}</span>
-					<span class="chip-x" aria-hidden="true">×</span>
-				</a>
-			{/each}
-			<a class="chip-clear" href={ROUTES.MEMORY_BROWSE}>Clear all</a>
-		</div>
-	{/if}
+	<FilterChips {chips} clearHref={ROUTES.MEMORY_BROWSE} />
 
-	{#if total > 0}
-		<p class="result-summary">
-			{#if total > pageSize}
-				Showing {rangeStart}&ndash;{rangeEnd} of {total} card{total === 1 ? '' : 's'}{hasActiveFilters
-					? ' matching your filters'
-					: ''}.
-			{:else}
-				Showing {total} card{total === 1 ? '' : 's'}{hasActiveFilters ? ' matching your filters' : ''}.
-			{/if}
-		</p>
-	{/if}
+	<ResultSummary
+		{total}
+		pageCount={cards.length}
+		{currentPage}
+		{pageSize}
+		noun="card"
+		filtersActive={hasActiveFilters}
+	/>
 
 	{#if cards.length === 0}
 		<div class="empty">
@@ -476,19 +487,7 @@ const groups = $derived.by<CardGroup[]>(() => {
 			</ul>
 		{/each}
 
-		<nav class="pager" aria-label="Pagination">
-			{#if currentPage > 1}
-				<a class="btn ghost" href={pageHref(currentPage - 1)}>Previous</a>
-			{:else}
-				<span></span>
-			{/if}
-			<span class="page-num">Page {currentPage} of {totalPages}</span>
-			{#if hasMore}
-				<a class="btn ghost" href={pageHref(currentPage + 1)}>Next</a>
-			{:else}
-				<span></span>
-			{/if}
-		</nav>
+		<Pager {currentPage} {totalPages} {hasMore} {pageHref} />
 	{/if}
 </section>
 
@@ -524,73 +523,6 @@ const groups = $derived.by<CardGroup[]>(() => {
 		color: var(--ink-subtle);
 		font-size: var(--type-definition-body-size);
 		max-width: 70ch;
-	}
-
-	.filters {
-		display: grid;
-		grid-template-columns: 2fr 1fr 1fr 1fr 1fr auto;
-		gap: var(--space-md);
-		align-items: stretch;
-		background: var(--ink-inverse);
-		border: 1px solid var(--edge-default);
-		border-radius: var(--radius-lg);
-		padding: var(--space-lg);
-	}
-
-	.filter {
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-2xs);
-		min-width: 0;
-	}
-
-	.filter-label-row {
-		display: inline-flex;
-		align-items: center;
-		gap: var(--space-2xs);
-		min-height: 1.25rem;
-	}
-
-	.filter label {
-		font-size: var(--type-ui-caption-size);
-		font-weight: 600;
-		color: var(--ink-muted);
-		text-transform: uppercase;
-		letter-spacing: var(--letter-spacing-caps);
-	}
-
-	.filter input,
-	.filter select {
-		font: inherit;
-		padding: var(--space-sm) var(--space-sm);
-		border: 1px solid var(--edge-strong);
-		border-radius: var(--radius-sm);
-		background: var(--ink-inverse);
-		color: var(--ink-body);
-		min-width: 0;
-	}
-
-	.filter input:focus,
-	.filter select:focus {
-		outline: none;
-		border-color: var(--action-default);
-		box-shadow: var(--focus-ring-shadow);
-	}
-
-	.filter-actions {
-		justify-content: flex-end;
-	}
-
-	.actions-row {
-		display: flex;
-		gap: var(--space-xs);
-		align-items: center;
-		height: 100%;
-	}
-
-	.filter-spacer {
-		display: inline-block;
-		font-size: var(--type-ui-caption-size);
 	}
 
 	.view-controls {
@@ -633,79 +565,6 @@ const groups = $derived.by<CardGroup[]>(() => {
 
 	.banner-link:hover {
 		text-decoration: underline;
-	}
-
-	.chip-row {
-		display: flex;
-		align-items: center;
-		flex-wrap: wrap;
-		gap: var(--space-xs);
-		padding: 0 var(--space-2xs);
-	}
-
-	.chip-label {
-		font-size: var(--type-ui-caption-size);
-		text-transform: uppercase;
-		letter-spacing: var(--letter-spacing-caps);
-		color: var(--ink-subtle);
-		font-weight: 600;
-		margin-right: var(--space-2xs);
-	}
-
-	.chip {
-		display: inline-flex;
-		align-items: center;
-		gap: var(--space-xs);
-		padding: var(--space-2xs) var(--space-sm);
-		background: var(--action-default-wash);
-		border: 1px solid var(--action-default-edge);
-		border-radius: var(--radius-pill);
-		color: var(--action-default-hover);
-		font-size: var(--type-ui-label-size);
-		text-decoration: none;
-		transition: background var(--motion-fast), border-color var(--motion-fast);
-	}
-
-	.chip:hover {
-		background: var(--action-default-wash);
-		border-color: var(--action-default-edge);
-	}
-
-	.chip:focus-visible {
-		outline: none;
-		box-shadow: 0 0 0 3px var(--focus-ring);
-	}
-
-	.chip-name {
-		color: var(--action-default-active);
-		font-weight: 600;
-	}
-
-	.chip-value {
-		color: var(--ink-body);
-	}
-
-	.chip-x {
-		color: var(--action-default);
-		font-size: var(--type-reading-body-size);
-		line-height: 1;
-	}
-
-	.chip-clear {
-		font-size: var(--type-ui-caption-size);
-		color: var(--ink-muted);
-		text-decoration: underline;
-		margin-left: var(--space-2xs);
-	}
-
-	.chip-clear:hover {
-		color: var(--ink-body);
-	}
-
-	.result-summary {
-		margin: 0;
-		color: var(--ink-subtle);
-		font-size: var(--type-ui-label-size);
 	}
 
 	.group-heading {
@@ -857,27 +716,6 @@ const groups = $derived.by<CardGroup[]>(() => {
 		font-size: var(--type-ui-label-size);
 	}
 
-	.pager {
-		display: grid;
-		grid-template-columns: 1fr auto 1fr;
-		align-items: center;
-		gap: var(--space-md);
-		padding: var(--space-sm) 0;
-	}
-
-	.pager > :first-child {
-		justify-self: start;
-	}
-
-	.pager > :last-child {
-		justify-self: end;
-	}
-
-	.page-num {
-		color: var(--ink-subtle);
-		font-size: var(--type-ui-label-size);
-	}
-
 	.btn {
 		padding: var(--space-sm) var(--space-lg);
 		font-size: var(--type-definition-body-size);
@@ -901,16 +739,6 @@ const groups = $derived.by<CardGroup[]>(() => {
 		background: var(--action-default-hover);
 	}
 
-	.btn.secondary {
-		background: var(--surface-sunken);
-		color: var(--ink-body);
-		border-color: var(--edge-strong);
-	}
-
-	.btn.secondary:hover {
-		background: var(--edge-default);
-	}
-
 	.btn.ghost {
 		background: transparent;
 		color: var(--ink-muted);
@@ -922,15 +750,6 @@ const groups = $derived.by<CardGroup[]>(() => {
 	}
 
 	@media (max-width: 720px) {
-		.filters {
-			grid-template-columns: 1fr 1fr;
-		}
-
-		.filter-actions {
-			grid-column: 1 / -1;
-			justify-content: flex-end;
-		}
-
 		.card-row {
 			flex-direction: column;
 			align-items: flex-start;
