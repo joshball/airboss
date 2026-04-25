@@ -32,20 +32,12 @@ import {
 } from '@ab/constants';
 import { onDestroy, onMount, untrack } from 'svelte';
 import { browser } from '$app/environment';
+import CockpitPanel from '$lib/cockpit/CockpitPanel.svelte';
 import { type RampAction, resolveKey, resolveRampAction } from '$lib/control-handler';
 import { tickRamp } from '$lib/control-ramp';
 import { EngineSound } from '$lib/engine-sound.svelte';
 import FdmWorker from '$lib/fdm-worker.ts?worker';
 import ScenarioSurfaceNav from '$lib/horizon/ScenarioSurfaceNav.svelte';
-import Altimeter from '$lib/instruments/Altimeter.svelte';
-import Asi from '$lib/instruments/Asi.svelte';
-import AttitudeIndicator from '$lib/instruments/AttitudeIndicator.svelte';
-import EngineCluster from '$lib/instruments/cluster/EngineCluster.svelte';
-import HeadingIndicator from '$lib/instruments/HeadingIndicator.svelte';
-import Tachometer from '$lib/instruments/Tachometer.svelte';
-import TurnCoordinator from '$lib/instruments/TurnCoordinator.svelte';
-import Vsi from '$lib/instruments/Vsi.svelte';
-import AnnunciatorStrip from '$lib/panels/AnnunciatorStrip.svelte';
 import AudioCaptions from '$lib/panels/AudioCaptions.svelte';
 import CockpitNarration from '$lib/panels/CockpitNarration.svelte';
 import ControlInputs from '$lib/panels/ControlInputs.svelte';
@@ -457,20 +449,10 @@ onDestroy(() => {
 	worker = null;
 });
 
-// Instruments read from `display` -- the fault-aware view. When no
-// faults are active display equals truth field-for-field. AGL is an
-// out-of-truth-only quantity (no fault lies about ground elevation
-// today) so we still derive it from `truth`.
-const kias = $derived(display ? display.indicatedAirspeed * SIM_KNOTS_PER_METER_PER_SECOND : 0);
-const altitudeFeet = $derived(display ? display.altitudeMsl * SIM_FEET_PER_METER : 0);
-const altitudeAglFeet = $derived(truth ? (truth.altitude - truth.groundElevation) * SIM_FEET_PER_METER : 0);
-const vsiFpm = $derived(display ? display.verticalSpeed * SIM_FEET_PER_METER * 60 : 0);
-const pitchRad = $derived(display ? display.pitchIndicated : 0);
-const rollRad = $derived(display ? display.rollIndicated : 0);
+// CockpitPanel owns its gauge derivations. The cockpit page only keeps
+// the values the side panels (WxPanel, ControlInputs) need, plus the
+// outcome banner state.
 const headingDeg = $derived(display ? (display.headingIndicated * 180) / Math.PI : 0);
-const yawRateDegPerSec = $derived(display ? (display.yawRateIndicated * 180) / Math.PI : 0);
-const slipBallValue = $derived(display?.slipBall ?? 0);
-const rpm = $derived(display?.engineRpm ?? 0);
 const stallWarning = $derived(display?.stallWarning ?? false);
 const stalled = $derived(display?.stalled ?? false);
 const outcomeIsSuccess = $derived(outcome?.outcome === SIM_SCENARIO_OUTCOMES.SUCCESS);
@@ -578,39 +560,7 @@ const trimBias = $derived(inputs.trim);
 	{/if}
 
 	<div class="layout">
-		<section class="six-pack">
-			<!-- Readout bar sits above the six-pack: Time over ASI, Alpha / AOA
-				 over the attitude indicator, AGL over the altimeter. -->
-			<div class="readouts">
-				<div class="readout">
-					<span class="label">Time</span>
-					<span class="value">{truth ? truth.t.toFixed(1) : '0.0'}s</span>
-				</div>
-				<div class="readout" class:warning={stalled}>
-					<span class="label">Alpha / AOA</span>
-					<span class="value">{truth ? ((truth.alpha * 180) / Math.PI).toFixed(1) : '0.0'}°</span>
-				</div>
-				<div class="readout">
-					<span class="label">AGL</span>
-					<span class="value">{altitudeAglFeet.toFixed(0)} ft</span>
-				</div>
-			</div>
-			<div class="row">
-				<Asi {kias} />
-				<AttitudeIndicator pitchRadians={pitchRad} rollRadians={rollRad} />
-				<Altimeter {altitudeFeet} />
-			</div>
-			<div class="row">
-				<TurnCoordinator {yawRateDegPerSec} slipBall={slipBallValue} />
-				<HeadingIndicator {headingDeg} />
-				<Vsi fpm={vsiFpm} />
-			</div>
-			<div class="engine-row">
-				<Tachometer {rpm} />
-				<EngineCluster {display} />
-			</div>
-			<AnnunciatorStrip {display} />
-		</section>
+		<CockpitPanel {truth} {display} />
 
 		<CockpitNarration {display} />
 
@@ -777,63 +727,6 @@ const trimBias = $derived(inputs.trim);
 		grid-template-columns: minmax(620px, 1fr) 260px;
 		gap: var(--space-md);
 		margin-bottom: var(--space-sm);
-	}
-
-	.six-pack {
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-sm);
-	}
-
-	.row {
-		display: grid;
-		grid-template-columns: repeat(3, 200px);
-		gap: var(--space-sm);
-		justify-content: center;
-	}
-
-	.engine-row {
-		display: flex;
-		justify-content: center;
-		gap: var(--space-sm);
-	}
-
-	/* Readout bar sits above the six-pack. Width matches the three top-row
-	   instruments (3 * 200px + 2 gaps) so Time / Alpha+AOA / AGL line up
-	   directly above the ASI / AI / Altimeter column. */
-	.readouts {
-		display: grid;
-		grid-template-columns: repeat(3, 1fr);
-		gap: var(--space-sm);
-		width: calc(200px * 3 + var(--space-sm) * 2);
-		margin: 0 auto;
-	}
-
-	.readout {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		padding: var(--space-sm) var(--space-sm);
-		background: var(--surface-panel);
-		border-radius: var(--radius-sm);
-		border: 1px solid var(--edge-default);
-	}
-
-	.readout.warning {
-		border-color: var(--sim-arc-red);
-		background: var(--sim-readout-warning-bg);
-	}
-
-	.readout .label {
-		font-size: var(--font-size-xs);
-		color: var(--ink-muted);
-		text-transform: uppercase;
-		letter-spacing: var(--letter-spacing-caps);
-	}
-
-	.readout .value {
-		font-family: var(--font-family-mono);
-		font-size: var(--font-size-base);
 	}
 
 	.sidebar {
