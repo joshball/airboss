@@ -321,6 +321,15 @@ export interface ContentValidationSummary {
 	tbd: readonly { path: string; display: string }[];
 	/** All ids observed (for orphan computation). */
 	citedIds: ReadonlySet<string>;
+	/**
+	 * Reference ids in the registry that no content currently cites. Surfaced
+	 * as a summary field (not a warning) because in early build-out most
+	 * registered references are bulk-imported FAA material waiting on
+	 * citing content -- a noisy `warn:` line on every dev startup is not
+	 * useful. Callers (e.g. `scripts/references/validate.ts`) can promote
+	 * this to a warning behind `--verbose` when they want the signal.
+	 */
+	orphanIds: readonly string[];
 }
 
 export function validateContentWikilinks(
@@ -364,17 +373,14 @@ export function validateContentWikilinks(
 	}
 
 	// Orphan detection: registered references with no citing content.
+	// Returned via `summary.orphanIds` rather than pushed as a warning. See
+	// the type doc for the rationale.
 	const orphanIds = options.knownIds.filter((id) => !citedIds.has(id));
-	if (orphanIds.length > 0) {
-		warnings.push({
-			message: `${orphanIds.length} orphan reference${orphanIds.length === 1 ? '' : 's'} (no content cites them). First: '${orphanIds[0]}'.`,
-		});
-	}
 
 	return {
 		errors,
 		warnings,
-		summary: { linkCount, tbd, citedIds },
+		summary: { linkCount, tbd, citedIds, orphanIds },
 	};
 }
 

@@ -269,11 +269,12 @@ describe('validateContentWikilinks', () => {
 		expect(result.summary.citedIds.has('known-id')).toBe(true);
 	});
 
-	it('warns on orphan references (registered, uncited)', () => {
+	it('reports orphan references on the summary (not as a warning)', () => {
 		const result = validateContentWikilinks([{ path: 'c.md', source: 'no links here' }], {
 			hasReference: () => true,
 			knownIds: ['orphan-id'],
 		});
-		expect(result.warnings.some((w) => /orphan/i.test(w.message))).toBe(true);
+		expect(result.summary.orphanIds).toEqual(['orphan-id']);
+		expect(result.warnings.some((w) => /orphan/i.test(w.message))).toBe(false);
 	});
 });

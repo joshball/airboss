@@ -25,6 +25,7 @@
 
 import { createHash } from 'node:crypto';
 import { existsSync, readFileSync } from 'node:fs';
+import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import {
 	AVIATION_REFERENCES,
@@ -49,12 +50,16 @@ import { helpRegistry, validateHelpPages } from '@ab/help';
 // list directly from its relative path here. Future apps add their
 // own call.
 import { studyHelpPages } from '../../apps/study/src/lib/help/pages';
+import { discoverSvelteFiles } from '../validate-help-ids/discover';
+import { extractHelpIdRefs } from '../validate-help-ids/extract';
 import { readExistingGenerated } from './extract';
 import { scanContent } from './scan';
 
 helpRegistry.registerPages('study', studyHelpPages);
 
 const REPO_ROOT = resolve(import.meta.dirname, '..', '..');
+
+const VERBOSE = process.argv.slice(2).some((a) => a === '--verbose' || a === '-v');
 
 interface Issue {
 	level: 'error' | 'warn';
@@ -85,7 +90,32 @@ const contentResult = validateContentWikilinks(scans, {
 // -------- layer 2.5: help pages from @ab/help --------
 
 const helpPages = helpRegistry.getAllPages();
-const helpResult = validateHelpPages(helpPages, { hasAviationReference: hasReference });
+const routeMountedIds = await collectRouteMountedHelpIds();
+const helpResult = validateHelpPages(helpPages, {
+	hasAviationReference: hasReference,
+	routeMountedIds,
+});
+
+/**
+ * Scan `.svelte` and `.svelte.ts` files for static `helpId="..."` /
+ * `pageId="..."` props. Any id mounted via a Svelte component (typically
+ * `<PageHelp pageId="...">` on a route) is reachable through that route
+ * surface and isn't an "orphan" even if no other help page links to it.
+ *
+ * Reuses the static-prop extractor that powers `scripts/validate-help-ids.ts`.
+ */
+async function collectRouteMountedHelpIds(): Promise<ReadonlySet<string>> {
+	const ids = new Set<string>();
+	const files = await discoverSvelteFiles(REPO_ROOT);
+	for (const filePath of files) {
+		const content = await readFile(filePath, 'utf8');
+		if (!content.includes('helpId') && !content.includes('pageId')) continue;
+		for (const ref of extractHelpIdRefs(content, filePath)) {
+			if (ref.kind === 'static') ids.add(ref.helpId);
+		}
+	}
+	return ids;
+}
 
 const errors: Issue[] = [];
 const warnings: Issue[] = [];
@@ -300,6 +330,21 @@ for (const ref of AVIATION_REFERENCES) {
 	}
 }
 
+// -------- orphan-references info (verbose-only warning) --------
+
+// Most references are bulk-imported FAA material that no content cites yet.
+// Promoting that to a `warn:` line on every dev startup is noise. We surface
+// the count on the summary line and only emit a `warn:` (with the first id)
+// when the operator asks for `--verbose`.
+const orphanRefIds = contentResult.summary.orphanIds;
+if (VERBOSE && orphanRefIds.length > 0) {
+	const first = orphanRefIds[0];
+	warnings.push({
+		level: 'warn',
+		message: `${orphanRefIds.length} orphan reference${orphanRefIds.length === 1 ? '' : 's'} (no content cites them). First: '${first}'.`,
+	});
+}
+
 // -------- output --------
 
 for (const w of warnings) print(w);
@@ -309,6 +354,8 @@ if (errors.length > 0) {
 	process.exit(1);
 }
 
+const orphanRefSuffix =
+	orphanRefIds.length > 0 ? `; ${orphanRefIds.length} orphan reference(s) (run with --verbose to list)` : '';
 console.log(
-	`references: 0 errors, ${warnings.length} warning(s); scanned ${scans.length} content location(s), ${contentResult.summary.linkCount} wiki-link(s); ${SOURCES.length} source(s) registered; ${helpPages.length} help page(s) validated.`,
+	`references: 0 errors, ${warnings.length} warning(s); scanned ${scans.length} content location(s), ${contentResult.summary.linkCount} wiki-link(s); ${SOURCES.length} source(s) registered; ${helpPages.length} help page(s) validated${orphanRefSuffix}.`,
 );
