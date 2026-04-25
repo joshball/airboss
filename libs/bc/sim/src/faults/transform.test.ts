@@ -217,6 +217,51 @@ describe('static block -- altimeter freeze (B5.alt)', () => {
 	});
 });
 
+describe('static block -- VSI reads zero (B5.vsi)', () => {
+	function vsiAfter(args: { truthVsiMs: number; truthAltMsl: number }): number {
+		const activation = activateFault(
+			{
+				kind: SIM_FAULT_KINDS.STATIC_BLOCK,
+				trigger: { kind: SIM_FAULT_TRIGGER_KINDS.TIME_SECONDS, at: 0 },
+				params: { staticBlockFreezeAltFt: 3000 },
+			},
+			0,
+		);
+		const display = applyFaults({
+			truth: makeTruth({
+				t: 30,
+				altitude: args.truthAltMsl,
+				verticalSpeed: args.truthVsiMs,
+				onGround: false,
+			}),
+			activations: [activation],
+			nominalBusVolts: NOMINAL_VOLTS,
+		});
+		return display.verticalSpeed;
+	}
+
+	it('reads zero in steady-level flight', () => {
+		expect(vsiAfter({ truthVsiMs: 0, truthAltMsl: 914 })).toBe(0);
+	});
+
+	it('reads zero during climb (port saw no change)', () => {
+		expect(vsiAfter({ truthVsiMs: 5, truthAltMsl: 1500 })).toBe(0);
+	});
+
+	it('reads zero during descent', () => {
+		expect(vsiAfter({ truthVsiMs: -3, truthAltMsl: 600 })).toBe(0);
+	});
+
+	it('does not affect VSI when static block is not active', () => {
+		const display = applyFaults({
+			truth: makeTruth({ t: 30, altitude: 914, verticalSpeed: 5, onGround: false }),
+			activations: [],
+			nominalBusVolts: NOMINAL_VOLTS,
+		});
+		expect(display.verticalSpeed).toBe(5);
+	});
+});
+
 describe('shouldTriggerFault -- time-based', () => {
 	const fault: ScenarioFault = {
 		kind: SIM_FAULT_KINDS.VACUUM_FAILURE,
