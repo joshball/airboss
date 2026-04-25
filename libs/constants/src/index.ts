@@ -18,6 +18,7 @@ export {
 	CITATION_TARGET_VALUES,
 	type CitationSourceType,
 	type CitationTargetType,
+	EXTERNAL_REF_TARGET_DELIMITER,
 } from './citations';
 export {
 	DB_CONNECT_TIMEOUT_MS,

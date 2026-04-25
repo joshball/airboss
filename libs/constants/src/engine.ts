@@ -56,8 +56,17 @@ export const ENGINE_SCORING = {
 	DIVERSIFY: {
 		/** Bonus when the user prefers deep-coverage sessions. */
 		DEEP_DEPTH_PREFERENCE_BONUS: 0.1,
-		/** Bonus on a node whose domain has cross-domain apply edges into it. */
-		CROSS_DOMAIN_APPLY_BONUS: 0.25,
+	},
+	FOCUS: {
+		/**
+		 * Score promotion applied to any candidate whose domain matches the
+		 * session's focus filter. Spec treats focus as a *preference*, not a
+		 * hard gate, so we add a flat bonus across continue/strengthen/diversify
+		 * pools instead of filtering. EXPAND has its own larger
+		 * `FOCUS_DOMAIN_MATCH` because the spec gives focus higher weight on
+		 * the unstarted-node selection.
+		 */
+		DOMAIN_PROMOTION_BONUS: 0.25,
 	},
 	THRESHOLDS: {
 		/** Overdue ratio at or above which a card counts as "heavily overdue". */

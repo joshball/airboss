@@ -568,7 +568,7 @@ export async function runEngine(inputs: EngineInputs, now: Date = new Date()): P
 		for (const item of pool) {
 			const domain = item.candidate.domain;
 			if (domain && filters.focusFilter.includes(domain)) {
-				item.score += ENGINE_SCORING.DIVERSIFY.CROSS_DOMAIN_APPLY_BONUS;
+				item.score += ENGINE_SCORING.FOCUS.DOMAIN_PROMOTION_BONUS;
 			}
 		}
 	}

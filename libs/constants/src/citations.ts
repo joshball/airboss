@@ -47,3 +47,13 @@ export const CITATION_TARGET_LABELS: Record<CitationTargetType, string> = {
 
 /** Maximum character count for the optional citation-context note, after trim. */
 export const CITATION_CONTEXT_MAX_LENGTH = 500;
+
+/**
+ * Encoding delimiter for external_ref `target_id` rows. The picker writes
+ * `<url>|<title>` so the read path can split out the display title without an
+ * extra table or schema column. Any pipes in the title round-trip via the
+ * splitter taking the first segment as the URL and rejoining the rest. Both
+ * the picker (write) and `resolveCitationTargets` (read) reference this
+ * constant so a future schema change has one source of truth.
+ */
+export const EXTERNAL_REF_TARGET_DELIMITER = '|';
