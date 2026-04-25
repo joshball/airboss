@@ -92,10 +92,12 @@ Engine sound shipped in 0.6 as a procedural two-osc + band-passed noise synth. W
 
 ### Phase 7 -- Horizon + low-res outside view (optional)
 
-- [ ] Three.js horizon + flat terrain + runway mesh + sky/sun
-- [ ] Driven by FDM pitch/roll/heading/altitude
-- [ ] Toggleable per scenario (instrument-only scenarios keep it off)
+- [x] Three.js horizon + sky dome + ground plane + grid
+- [x] Driven by FDM pitch/roll/heading/altitude (props-only Horizon3D)
+- [x] Composable per scenario via separate routes (`/horizon`, `/dual`); cockpit unchanged
+- [ ] Runway mesh + sun (later visual polish)
 - [ ] One VFR maneuver scenario that actually needs the view (steep turns or ground reference)
+- [ ] Extract `CockpitPanel.svelte` so the dual page can show the full six-pack (see ADR 015)
 
 ## Standing polish backlog (smaller items found during user-zero flying)
 
