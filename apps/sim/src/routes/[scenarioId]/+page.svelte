@@ -106,6 +106,14 @@ const markerBeacon = new MarkerBeacon();
 const altitudeAlert = new AltitudeAlert();
 const apDisconnect = new ApDisconnect();
 let lastFlaps: number | null = null;
+/**
+ * Number of fault activations the cockpit has seen so far. Activations
+ * are sticky in the runner -- once a fault fires it stays in the list
+ * for the rest of the run -- so a strict length-grew test cleanly
+ * identifies a fresh activation edge without needing identity diffs.
+ * Reset on RESET so a re-fly of the same scenario re-arms the trigger.
+ */
+let lastActivationCount = 0;
 
 function post(msg: MainToWorker): void {
 	worker?.postMessage(msg);
@@ -154,6 +162,16 @@ function handleWorkerMessage(event: MessageEvent<WorkerToMain>): void {
 			// every zone) post `null`, which silences the cue.
 			markerBeacon.setKind(msg.markerBeaconKind ?? null);
 			altitudeAlert.observeAltitude(msg.truth.altitude * SIM_FEET_PER_METER);
+			// AP-disconnect cue fires on the edge of any new fault
+			// activation. Real airplane semantics: a servo failure or
+			// sensor loss kicks the AP off the moment it happens, so
+			// the pilot has to take over. The cue itself is one-shot
+			// + pulse-timed, so multiple back-to-back activations only
+			// produce overlapping pulses, not a continuous tone.
+			if (msg.activations.length > lastActivationCount) {
+				apDisconnect.firePilotDisconnect();
+			}
+			lastActivationCount = msg.activations.length;
 			break;
 		}
 		case SIM_WORKER_MESSAGES.OUTCOME: {
@@ -247,6 +265,7 @@ function performReset(): void {
 	apDisconnect.resume();
 	captionStore.reset();
 	lastFlaps = null;
+	lastActivationCount = 0;
 	post({ type: SIM_WORKER_MESSAGES.RESET });
 	post({ type: SIM_WORKER_MESSAGES.START });
 }
