@@ -17,15 +17,18 @@ import {
 	type ReviewPhase,
 	type ReviewRating,
 	ROUTES,
+	SNOOZE_REASONS,
 	type SnoozeDurationLevel,
 	type SnoozeReason,
 } from '@ab/constants';
 import PageHelp from '@ab/help/ui/PageHelp.svelte';
 import InfoTip from '@ab/ui/components/InfoTip.svelte';
 import KbdHint from '@ab/ui/components/KbdHint.svelte';
+import SharePopover from '@ab/ui/components/SharePopover.svelte';
 import SnoozeReasonPopover from '@ab/ui/components/SnoozeReasonPopover.svelte';
 import { enhance } from '$app/forms';
 import { invalidateAll } from '$app/navigation';
+import { page } from '$app/state';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
@@ -68,6 +71,12 @@ let undoTimer: ReturnType<typeof setTimeout> | null = null;
 let undoing = $state(false);
 
 let snoozeOpen = $state(false);
+let snoozeInitialReason = $state<SnoozeReason | undefined>(undefined);
+let snoozeFocusComment = $state(false);
+let shareOpen = $state(false);
+let shareToast = $state<string | null>(null);
+let shareToastTimer: ReturnType<typeof setTimeout> | null = null;
+const SHARE_TOAST_MS = 2000;
 let feedbackSignal = $state<CardFeedbackSignal | null>(null);
 let feedbackComment = $state('');
 let feedbackError = $state<string | null>(null);
@@ -214,7 +223,7 @@ function onKeydown(e: KeyboardEvent) {
 	const target = e.target as HTMLElement | null;
 	if (target?.isContentEditable) return;
 	if (target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement) return;
-	if (snoozeOpen) return;
+	if (snoozeOpen || shareOpen) return;
 
 	if (pendingUndo && !undoing) {
 		const isUndoChord = (e.key === 'z' || e.key === 'Z') && (e.metaKey || e.ctrlKey);
@@ -272,11 +281,41 @@ function formatStartedAt(iso: string): string {
 }
 
 function openSnooze() {
+	snoozeInitialReason = undefined;
+	snoozeFocusComment = false;
 	snoozeOpen = true;
 }
 
 function closeSnooze() {
 	snoozeOpen = false;
+	snoozeInitialReason = undefined;
+	snoozeFocusComment = false;
+}
+
+function openShare() {
+	shareOpen = true;
+}
+
+function closeShare() {
+	shareOpen = false;
+}
+
+function handleShareCopy(_url: string) {
+	if (shareToastTimer !== null) clearTimeout(shareToastTimer);
+	shareToast = 'Link copied';
+	shareToastTimer = setTimeout(() => {
+		shareToast = null;
+		shareToastTimer = null;
+	}, SHARE_TOAST_MS);
+}
+
+function handleShareReport(_cardId: string) {
+	// Hand off to the snooze flow with `bad-question` pre-selected and the
+	// comment field focused, so the existing snooze-and-flag pipeline (which
+	// requires a comment for `bad-question`) handles the rest.
+	snoozeInitialReason = SNOOZE_REASONS.BAD_QUESTION;
+	snoozeFocusComment = true;
+	snoozeOpen = true;
 }
 
 async function handleSnoozeSubmit(payload: {
@@ -410,11 +449,18 @@ async function submitFeedbackForm(event: SubmitEvent) {
 						helpSection="domain"
 					/>
 				</span>
-				<button type="button" class="snooze-btn" onclick={openSnooze} aria-haspopup="dialog">
+				<button type="button" class="header-btn" onclick={openShare} aria-haspopup="dialog">
+					Share
+				</button>
+				<button type="button" class="header-btn" onclick={openSnooze} aria-haspopup="dialog">
 					Snooze
 				</button>
 			</div>
 		</header>
+
+		{#if shareToast}
+			<div class="share-toast" role="status" aria-live="polite">{shareToast}</div>
+		{/if}
 
 		{#if reEntryBanner}
 			<div class="re-entry-banner" role="status">
@@ -628,7 +674,24 @@ async function submitFeedbackForm(event: SubmitEvent) {
 		{/if}
 	{/if}
 
-	<SnoozeReasonPopover bind:open={snoozeOpen} onSubmit={handleSnoozeSubmit} onClose={closeSnooze} />
+	<SnoozeReasonPopover
+		bind:open={snoozeOpen}
+		initialReason={snoozeInitialReason}
+		focusComment={snoozeFocusComment}
+		onSubmit={handleSnoozeSubmit}
+		onClose={closeSnooze}
+	/>
+
+	{#if current}
+		<SharePopover
+			bind:open={shareOpen}
+			cardId={current.id}
+			cardPublicUrl={`${page.url.origin}${ROUTES.CARD_PUBLIC(current.id)}`}
+			onCopy={handleShareCopy}
+			onReport={handleShareReport}
+			onClose={closeShare}
+		/>
+	{/if}
 </section>
 
 <style>
@@ -743,7 +806,7 @@ async function submitFeedbackForm(event: SubmitEvent) {
 		gap: var(--space-md);
 	}
 
-	.snooze-btn {
+	.header-btn {
 		background: var(--surface-sunken);
 		border: 1px solid var(--edge-strong);
 		color: var(--ink-body);
@@ -754,13 +817,29 @@ async function submitFeedbackForm(event: SubmitEvent) {
 		cursor: pointer;
 	}
 
-	.snooze-btn:hover {
+	.header-btn:hover {
 		background: var(--edge-default);
 	}
 
-	.snooze-btn:focus-visible {
+	.header-btn:focus-visible {
 		outline: none;
 		box-shadow: 0 0 0 3px var(--focus-ring);
+	}
+
+	.share-toast {
+		align-self: flex-end;
+		padding: var(--space-2xs) var(--space-md);
+		background: var(--action-default-wash);
+		border: 1px solid var(--action-default-edge);
+		color: var(--action-default-hover);
+		font-size: var(--font-size-sm);
+		font-weight: 600;
+		border-radius: var(--radius-pill);
+		animation: undo-fade-in var(--motion-normal) ease-out;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.share-toast { animation: none; }
 	}
 
 	.title-row {

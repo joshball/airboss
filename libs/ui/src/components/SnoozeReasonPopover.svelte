@@ -37,17 +37,38 @@ interface SnoozeSubmission {
 
 let {
 	open = $bindable(false),
+	initialReason,
+	focusComment = false,
 	onSubmit,
 	onClose,
 }: {
 	open?: boolean;
+	/**
+	 * Reason to pre-select when the popover opens. Defaults to
+	 * `KNOW_IT_BORED`. Used by the Share -> Report handoff to land
+	 * directly on `bad-question` with the comment field focused.
+	 */
+	initialReason?: SnoozeReason;
+	/**
+	 * When true, focus the comment textarea on open instead of the first
+	 * focusable element. Pairs with `initialReason` for the Report flow,
+	 * where the user has already chosen the reason and just needs to type.
+	 */
+	focusComment?: boolean;
 	onSubmit: (payload: SnoozeSubmission) => void;
 	onClose?: () => void;
 } = $props();
 
-let selectedReason = $state<SnoozeReason>(SNOOZE_REASONS.KNOW_IT_BORED);
+function resolveDefaultReason(reason: SnoozeReason | undefined): SnoozeReason {
+	return reason ?? SNOOZE_REASONS.KNOW_IT_BORED;
+}
+// svelte-ignore state_referenced_locally
+let selectedReason = $state<SnoozeReason>(resolveDefaultReason(initialReason));
 let comment = $state('');
-let durationLevel = $state<SnoozeDurationLevel>(SNOOZE_DEFAULT_DURATION[SNOOZE_REASONS.KNOW_IT_BORED] ?? 'medium');
+// svelte-ignore state_referenced_locally
+let durationLevel = $state<SnoozeDurationLevel>(
+	SNOOZE_DEFAULT_DURATION[resolveDefaultReason(initialReason)] ?? 'medium',
+);
 let waitForEdit = $state(true);
 let panelEl = $state<HTMLDivElement | null>(null);
 let submitError = $state<string | null>(null);
@@ -105,9 +126,26 @@ function submit(event: SubmitEvent): void {
 
 $effect(() => {
 	if (!open) return;
-	// Move focus into the panel on open.
+	// Re-seed the local state every time the popover opens so callers can
+	// re-open with a different `initialReason` (e.g., the Share -> Report
+	// hand-off lands on `bad-question` even after a prior Snooze open
+	// landed on `know-it-bored`).
+	const seeded = resolveDefaultReason(initialReason);
+	selectedReason = seeded;
+	const seedDuration = SNOOZE_DEFAULT_DURATION[seeded];
+	if (seedDuration) durationLevel = seedDuration;
+	comment = '';
+	submitError = null;
+	// Move focus into the panel on open. When `focusComment` is true,
+	// jump straight to the textarea -- the Report flow has already
+	// pre-selected the reason and the user just needs to type.
 	queueMicrotask(() => {
-		panelEl?.querySelector<HTMLElement>('input, textarea, button')?.focus();
+		if (!panelEl) return;
+		if (focusComment) {
+			panelEl.querySelector<HTMLTextAreaElement>('textarea')?.focus();
+			return;
+		}
+		panelEl.querySelector<HTMLElement>('input, textarea, button')?.focus();
 	});
 });
 </script>
