@@ -1,4 +1,5 @@
 import { requireAuth } from '@ab/auth';
+import { type CitationWithSource, getCitedBy, resolveCitationSources } from '@ab/bc-citations';
 import {
 	getNodeMastery,
 	getNodesByIds,
@@ -8,7 +9,7 @@ import {
 	lifecycleFromContent,
 	splitContentPhases,
 } from '@ab/bc-study';
-import { KNOWLEDGE_EDGE_TYPES, KNOWLEDGE_PHASE_ORDER, type KnowledgePhase } from '@ab/constants';
+import { CITATION_TARGET_TYPES, KNOWLEDGE_EDGE_TYPES, KNOWLEDGE_PHASE_ORDER, type KnowledgePhase } from '@ab/constants';
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
@@ -80,6 +81,12 @@ export const load: PageServerLoad = async (event) => {
 	const mastery = await getNodeMastery(user.id, node.id);
 	const lifecycle = lifecycleFromContent(node.contentMd);
 
+	// "Cited by": every content row that cites this knowledge node. Source-side
+	// resolution gives us a display label per row (card front / scenario title /
+	// node title) and an `exists` flag we render as a missing chip.
+	const citedByRows = await getCitedBy(CITATION_TARGET_TYPES.KNOWLEDGE_NODE, node.id);
+	const citedBy: CitationWithSource[] = await resolveCitationSources(citedByRows);
+
 	return {
 		node: {
 			id: node.id,
@@ -110,5 +117,6 @@ export const load: PageServerLoad = async (event) => {
 		},
 		mastery,
 		lifecycle,
+		citedBy,
 	};
 };

@@ -43,7 +43,7 @@ export {
 	updateCard,
 } from './cards';
 export type { PublicCard, PublicCardCitation } from './cards-public';
-export { getPublicCard } from './cards-public';
+export { composePublicCardCitations, getPublicCard } from './cards-public';
 export type {
 	ActivityDay,
 	DashboardFetchers,

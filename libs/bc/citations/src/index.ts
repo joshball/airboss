@@ -5,6 +5,7 @@ export {
 	CitationSourceNotFoundError,
 	CitationTargetNotFoundError,
 	CitationValidationError,
+	type CitationWithSource,
 	type CitationWithTarget,
 	type CreateCitationInput,
 	createCitation,
@@ -12,6 +13,7 @@ export {
 	deleteCitation,
 	getCitationsOf,
 	getCitedBy,
+	resolveCitationSources,
 	resolveCitationTargets,
 } from './citations';
 export { type ContentCitationRow, contentCitation, type NewContentCitationRow, studySchema } from './schema';
