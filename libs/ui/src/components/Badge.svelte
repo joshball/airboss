@@ -1,42 +1,31 @@
 <script lang="ts" module>
-import type { Tone, ToneInput } from '@ab/themes';
+import type { Tone } from '@ab/themes';
 export type BadgeTone = Tone;
 export type BadgeSize = 'sm' | 'md' | 'lg';
-
-/** @deprecated use `tone` instead. Mapped via `resolveTone`. */
-export type BadgeVariant = Tone | 'neutral';
 </script>
 
 <script lang="ts">
 import type { Snippet } from 'svelte';
-import { resolveTone } from '@ab/themes';
 
 /**
  * Small inline status marker. Theme-aware -- reads wash/edge tokens for
  * each semantic tone so colors stay consistent with the host theme.
- *
- * Accepts the shared `Tone` enum via `tone`, or the legacy `variant`
- * prop (maintained for compat; package #5 migrates call sites).
  */
 
 let {
-	tone,
-	variant,
+	tone = 'default',
 	size = 'md',
 	ariaLabel,
 	children,
 }: {
-	tone?: ToneInput;
-	variant?: BadgeVariant;
+	tone?: Tone;
 	size?: BadgeSize;
 	ariaLabel?: string;
 	children: Snippet;
 } = $props();
-
-const resolved = $derived<Tone>(resolveTone(tone ?? (variant as ToneInput | undefined)));
 </script>
 
-<span class="badge v-{resolved} s-{size}" aria-label={ariaLabel}>
+<span class="badge v-{tone} s-{size}" aria-label={ariaLabel}>
 	{@render children()}
 </span>
 
@@ -79,7 +68,7 @@ const resolved = $derived<Tone>(resolveTone(tone ?? (variant as ToneInput | unde
 		border-color: var(--action-neutral-edge);
 	}
 
-	.v-primary {
+	.v-featured {
 		background: var(--action-default-wash);
 		color: var(--action-default);
 		border-color: var(--action-default-edge);

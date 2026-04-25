@@ -95,7 +95,7 @@ const skippableDomains = $derived(DOMAIN_VALUES.filter((d: Domain) => !focusSet.
 	</header>
 
 	{#if createdBannerShown}
-		<Banner variant="info" dismissible onDismiss={() => (createdBannerShown = false)}>
+		<Banner tone="info" dismissible onDismiss={() => (createdBannerShown = false)}>
 			Plan saved.
 			{isActive ? '' : 'Activate it to start a session.'}
 			{#if isActive}
@@ -104,10 +104,10 @@ const skippableDomains = $derived(DOMAIN_VALUES.filter((d: Domain) => !focusSet.
 		</Banner>
 	{/if}
 	{#if editToastVisible}
-		<Banner variant="success">Plan updated.</Banner>
+		<Banner tone="success">Plan updated.</Banner>
 	{/if}
 	{#if formError}
-		<Banner variant="danger">{formError}</Banner>
+		<Banner tone="danger">{formError}</Banner>
 	{/if}
 
 	<form

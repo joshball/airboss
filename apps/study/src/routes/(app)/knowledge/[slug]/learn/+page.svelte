@@ -198,7 +198,7 @@ function domainLabel(slug: string): string {
 		{/each}
 
 		{#if completeError}
-			<Banner variant="danger" dismissible onDismiss={() => (completeError = null)}>{completeError}</Banner>
+			<Banner tone="danger" dismissible onDismiss={() => (completeError = null)}>{completeError}</Banner>
 		{/if}
 
 		<div class="got-it-row">

@@ -1,14 +1,19 @@
 # Theme system knowledge base
 
-Five documents, read in order. They capture what eight iterations taught us about building a theme system for a monorepo of surface-typed Svelte apps, plus the as-built state post Option A (PRs #78 - #85, 2026-04) so a new agent can see the shape in the running code.
+Documents capture what eight iterations taught us about building a theme system for a monorepo of surface-typed Svelte apps, plus the as-built state post Option A (PRs #78 - #85, #105, #114, #183, #190, 2026-04) so a new agent can see the shape in the running code.
+
+## If you just need to use the system
+
+Start at **[QUICK_REFERENCE.md](QUICK_REFERENCE.md)** -- "I want to style X, here's the token." That covers ~95% of day-to-day work.
 
 ## Documents
 
-1. **[01-LESSONS.md](01-LESSONS.md)** - what eight prior iterations taught us. What kept working, what kept failing, why. Read before anything else.
-2. **[02-ARCHITECTURE.md](02-ARCHITECTURE.md)** - the as-built reference architecture. Directory shape, layered token model, contract types, registry, derivation, emission, pre-hydration, appearance cookie. The shape currently in `libs/themes/` on main.
-3. **[03-ENFORCEMENT.md](03-ENFORCEMENT.md)** - lint rules, codemods, contrast tests, CI gates. The tools that make the system stick.
-4. **[04-VOCABULARY.md](04-VOCABULARY.md)** - complete token-name catalog, derived from `libs/themes/vocab.ts` + the emit pipeline.
-5. **[05-OVERHAUL-2026-04.md](05-OVERHAUL-2026-04.md)** - how Option A actually landed. Wave graph, file-ownership scoping rule, compat-alias bridge strategy, appearance-toggle UX. The "how" companion to 02's "what".
+1. **[QUICK_REFERENCE.md](QUICK_REFERENCE.md)** - one-page cheat sheet. Which token / primitive / tone do I reach for, right now.
+2. **[01-LESSONS.md](01-LESSONS.md)** - what eight prior iterations taught us. What kept working, what kept failing, why. Read before changing the architecture.
+3. **[02-ARCHITECTURE.md](02-ARCHITECTURE.md)** - the as-built reference architecture. Directory shape, layered token model, contract types, registry, derivation, emission, pre-hydration, appearance cookie. The shape currently in `libs/themes/` on main.
+4. **[03-ENFORCEMENT.md](03-ENFORCEMENT.md)** - lint rules, codemods, contrast tests, CI gates. The tools that make the system stick.
+5. **[04-VOCABULARY.md](04-VOCABULARY.md)** - complete token-name catalog, derived from `libs/themes/vocab.ts` + the emit pipeline.
+6. **[05-OVERHAUL-2026-04.md](05-OVERHAUL-2026-04.md)** - how Option A actually landed. Wave graph, file-ownership scoping rule, compat-alias bridge strategy, appearance-toggle UX. The "how" companion to 02's "what".
 
 ## The executive summary
 

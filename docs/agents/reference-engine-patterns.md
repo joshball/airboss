@@ -376,53 +376,9 @@ Replays can be re-simulated for verification (deterministic). Same commands + sa
 
 ## 9. Design System
 
-### OKLCH Color Tokens
+The theme system is its own knowledge base. See [docs/platform/theme-system/](../platform/theme-system/00-INDEX.md) for the as-built shape, and [QUICK_REFERENCE.md](../platform/theme-system/QUICK_REFERENCE.md) for "which token do I use".
 
-All colors use OKLCH for perceptual uniformity. Token naming: `--t-*`
-
-```css
-/* Core palette */
---t-bg: oklch(0.13 0.012 240);
---t-surface: oklch(0.17 0.01 240);
---t-surface-raised: oklch(0.21 0.012 240);
---t-border: oklch(0.27 0.012 220);
-
-/* Text */
---t-text: oklch(0.92 0.01 220);
---t-text-dim: oklch(0.62 0.01 220);
---t-text-muted: oklch(0.45 0.01 220);
-
-/* Semantic */
---t-accent: oklch(0.76 0.16 75);
---t-success: oklch(0.72 0.17 155);
---t-danger: oklch(0.67 0.2 25);
---t-warning: oklch(0.74 0.16 70);
-
-/* Domain-specific */
---t-node-depot: oklch(0.76 0.16 75);
---t-status-moving: oklch(0.7 0.12 250);
---t-battery-high: oklch(0.72 0.17 155);
-```
-
-### Theme Files
-
-```
-libs/themes/src/
-  dark.css      dark mode colors + typography
-  light.css     light mode overrides
-  fonts.css     font definitions
-  types.ts      ThemeDefinition type
-  theme.ts      useTheme composable
-```
-
-**For airboss-firc:** Use same OKLCH approach. Define training-specific tokens:
-
-```css
---t-competency-met: oklch(...);
---t-competency-gap: oklch(...);
---t-scenario-active: oklch(...);
---t-faa-topic: oklch(...);
-```
+Short version: TypeScript theme objects in `libs/themes/{app}/{name}/` emit `tokens.css`; components consume role tokens (`var(--ink-body)`, `var(--surface-page)`, `var(--action-default)`, ...) via CSS custom properties. Three orthogonal axes (`theme` × `appearance` × `layout`) on `<html>`. Lint enforces no raw colors / lengths / durations in component or page CSS.
 
 ---
 

@@ -1,12 +1,22 @@
-# App Theme Strategy
+# Archived: App Theme Strategy (2026-04-25)
+
+This document describes a families-based architecture (`workbench` / `focus` / `brand`) and a `--t-*` token prefix that were never adopted. The shipped system uses three orthogonal axes (`theme` × `appearance` × `layout`) with role-based tokens (`--ink-body`, `--surface-page`, `--action-default`, etc.) under `data-theme` / `data-appearance` / `data-layout` attributes.
+
+**Current source of truth:** [docs/platform/theme-system/](../../platform/theme-system/00-INDEX.md). Start at `QUICK_REFERENCE.md` for "which token do I use," `02-ARCHITECTURE.md` for the as-built shape.
+
+Kept for historical context only. Do not implement anything described below.
+
+---
+
+## Original document
 
 Cross-app strategy for how FIRC Boss should express different products without turning the design system into four unrelated codebases.
 
-See also:
+See also (links updated for archive location; archived ADRs are themselves marked superseded):
 
-- [003-DESIGN_SYSTEM.md](../decisions/003-DESIGN_SYSTEM.md)
-- [008-GLASS_COCKPIT_TOKEN_CONTRACT.md](../decisions/008-GLASS_COCKPIT_TOKEN_CONTRACT.md)
-- [DESIGN_PRINCIPLES.md](./DESIGN_PRINCIPLES.md)
+- ADR 003 (archived): `../decisions/003-DESIGN_SYSTEM.md`
+- ADR 008 (archived): `../decisions/008-GLASS_COCKPIT_TOKEN_CONTRACT.md`
+- [DESIGN_PRINCIPLES.md](../../platform/DESIGN_PRINCIPLES.md)
 
 ## Summary
 

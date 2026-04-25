@@ -85,7 +85,7 @@ export {
 	THEMES,
 	type ThemePreference,
 } from './resolve';
-export { type LegacyNeutralTone, resolveTone, TONES, type Tone, type ToneInput } from './tones';
+export { isTone, TONES, type Tone } from './tones';
 export { TOKENS, type TokenKey, type TokenName } from './vocab';
 
 // Register every theme that ships today. Import side-effects populate

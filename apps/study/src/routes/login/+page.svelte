@@ -35,7 +35,7 @@ function fillDevAccount(accountEmail: string) {
 			</header>
 
 			{#if form?.error}
-				<Banner variant="danger">{form.error}</Banner>
+				<Banner tone="danger">{form.error}</Banner>
 			{/if}
 
 			<form
