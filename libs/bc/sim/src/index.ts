@@ -81,11 +81,13 @@ export {
 export { DEPARTURE_STALL_SCENARIO } from './scenarios/departure-stall';
 export { EFATO_SCENARIO } from './scenarios/efato';
 export { FIRST_FLIGHT_SCENARIO } from './scenarios/first-flight';
+export { PARTIAL_PANEL_SCENARIO } from './scenarios/partial-panel';
 export { PITOT_BLOCK_SCENARIO } from './scenarios/pitot-block';
 export { PLAYGROUND_SCENARIO } from './scenarios/playground';
 export { getScenario, listScenarios, SCENARIO_REGISTRY } from './scenarios/registry';
 export { type RunnerEvaluation, ScenarioRunner } from './scenarios/runner';
 export { STATIC_BLOCK_SCENARIO } from './scenarios/static-block';
+export { UNUSUAL_ATTITUDES_SCENARIO } from './scenarios/unusual-attitudes';
 export { VACUUM_FAILURE_SCENARIO } from './scenarios/vacuum-failure';
 export type {
 	AircraftConfig,

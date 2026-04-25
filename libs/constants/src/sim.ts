@@ -16,6 +16,8 @@ export const SIM_SCENARIO_IDS = {
 	VACUUM_FAILURE: 'vacuum-failure',
 	PITOT_BLOCK: 'pitot-block',
 	STATIC_BLOCK: 'static-block',
+	PARTIAL_PANEL: 'partial-panel',
+	UNUSUAL_ATTITUDES_NOSE_HI: 'unusual-attitudes-nose-hi',
 } as const;
 
 export type SimScenarioId = (typeof SIM_SCENARIO_IDS)[keyof typeof SIM_SCENARIO_IDS];
