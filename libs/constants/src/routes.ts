@@ -178,6 +178,9 @@ export const ROUTES = {
 	HANGAR_SOURCES: '/sources',
 	HANGAR_SOURCE_DETAIL: (id: string) => `/sources/${encodeURIComponent(id)}` as const,
 	HANGAR_SOURCE_FILES: (id: string) => `/sources/${encodeURIComponent(id)}/files` as const,
+	/** Stream a single file inside a source's data directory (text-source preview embeds). */
+	HANGAR_SOURCE_FILE_RAW: (id: string, name: string) =>
+		`/sources/${encodeURIComponent(id)}/files/raw?name=${encodeURIComponent(name)}` as const,
 	HANGAR_SOURCE_DIFF: (id: string) => `/sources/${encodeURIComponent(id)}/diff` as const,
 	HANGAR_SOURCE_UPLOAD: (id: string) => `/sources/${encodeURIComponent(id)}/upload` as const,
 	/** Binary-visual: stream the full archive from disk with content-disposition: attachment. */

@@ -7,6 +7,8 @@ import type { ActionData, PageData } from './$types';
 
 let { data, form }: { data: PageData; form: ActionData } = $props();
 
+const isBusy = $derived(data.activeJob !== null);
+
 const formError = $derived.by(() => {
 	if (!form) return null;
 	const err = (form as { error?: unknown }).error;
@@ -57,24 +59,32 @@ const checksumMatchesOnDisk = $derived(
 		</div>
 		<div class="action-row">
 			<form method="POST" action={ROUTES.HANGAR_SOURCE_FETCH_ACTION}>
-				<Button type="submit" variant="primary" size="sm">Fetch</Button>
+				<Button type="submit" variant="primary" size="sm" disabled={isBusy}>Fetch</Button>
 			</form>
-			<a class="btn-like" href={ROUTES.HANGAR_SOURCE_UPLOAD(data.source.id)}>Upload</a>
+			<a class="btn-like" class:disabled-link={isBusy} aria-disabled={isBusy} href={ROUTES.HANGAR_SOURCE_UPLOAD(data.source.id)}>Upload</a>
 			<form method="POST" action={ROUTES.HANGAR_SOURCE_EXTRACT_ACTION}>
-				<Button type="submit" variant="secondary" size="sm" disabled={data.source.isPendingChecksum}>
+				<Button type="submit" variant="secondary" size="sm" disabled={data.source.isPendingChecksum || isBusy}>
 					Extract
 				</Button>
 			</form>
 			<form method="POST" action={ROUTES.HANGAR_SOURCE_DIFF_ACTION}>
-				<Button type="submit" variant="secondary" size="sm" disabled={data.source.isPendingChecksum}>
+				<Button type="submit" variant="secondary" size="sm" disabled={data.source.isPendingChecksum || isBusy}>
 					Diff
 				</Button>
 			</form>
 			<form method="POST" action={ROUTES.HANGAR_SOURCE_VALIDATE_ACTION}>
-				<Button type="submit" variant="secondary" size="sm">Validate this source</Button>
+				<Button type="submit" variant="secondary" size="sm" disabled={isBusy}>Validate this source</Button>
 			</form>
 		</div>
 	</header>
+
+	{#if data.activeJob}
+		<Banner tone="warning" title="This source has a running operation">
+			A <code class="mono">{data.activeJob.kind}</code> job
+			(<a class="mono" href={ROUTES.HANGAR_JOB_DETAIL(data.activeJob.id)}>{data.activeJob.id}</a>)
+			is {data.activeJob.status}. Wait for it to finish (or cancel it) before submitting another action against this source.
+		</Banner>
+	{/if}
 
 	{#if formError}
 		<Banner tone="danger">{formError}</Banner>
@@ -264,6 +274,13 @@ const checksumMatchesOnDisk = $derived(
 	.btn-like:hover {
 		background: var(--action-default-wash);
 		border-color: var(--action-default-edge);
+	}
+
+	.btn-like.disabled-link,
+	.btn-like[aria-disabled='true'] {
+		opacity: 0.5;
+		pointer-events: none;
+		cursor: not-allowed;
 	}
 
 	.cards {

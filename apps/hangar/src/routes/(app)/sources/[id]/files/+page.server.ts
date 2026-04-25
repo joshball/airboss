@@ -23,6 +23,7 @@ import {
 	SOURCE_KINDS,
 } from '@ab/constants';
 import { db, hangarSource } from '@ab/db';
+import { MarkdownParseError, type MdNode, parseMarkdown } from '@ab/help';
 import { createLogger } from '@ab/utils';
 import { error, fail, redirect } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
@@ -42,6 +43,12 @@ export interface FileEntry {
 	mtime: string;
 	previewKind: PreviewKind;
 	previewText: string | null;
+	/**
+	 * Pre-parsed Markdown AST. Populated server-side for `previewKind === MARKDOWN`
+	 * because `parseMarkdown` is async (it calls Shiki for code-block highlight)
+	 * and the MarkdownBody primitive expects nodes, not raw text.
+	 */
+	markdownNodes: MdNode[] | null;
 	isArchive: boolean;
 }
 
@@ -61,11 +68,31 @@ async function buildEntry(full: string, displayName: string, isArchive: boolean)
 	const ext = extensionOf(displayName);
 	const previewKind = EXTENSION_TO_PREVIEW_KIND[ext] ?? PREVIEW_KINDS.BINARY;
 	let previewText: string | null = null;
-	if (previewKind !== PREVIEW_KINDS.BINARY && previewKind !== PREVIEW_KINDS.PDF && s.size <= MAX_PREVIEW_BYTES) {
+	let markdownNodes: MdNode[] | null = null;
+	const isTextLike =
+		previewKind !== PREVIEW_KINDS.BINARY &&
+		previewKind !== PREVIEW_KINDS.PDF &&
+		previewKind !== PREVIEW_KINDS.GEOTIFF &&
+		previewKind !== PREVIEW_KINDS.JPEG &&
+		previewKind !== PREVIEW_KINDS.ZIP;
+	if (isTextLike && s.size <= MAX_PREVIEW_BYTES) {
 		try {
 			previewText = await readFile(full, 'utf8');
 		} catch {
 			previewText = null;
+		}
+	}
+	if (previewKind === PREVIEW_KINDS.MARKDOWN && previewText !== null) {
+		try {
+			markdownNodes = await parseMarkdown(previewText);
+		} catch (err) {
+			// Surface parse failures in the log but keep `previewText` so the
+			// dispatcher can fall back to the plain `<pre>` renderer.
+			log.warn('markdown preview parse failed', {
+				file: displayName,
+				err: err instanceof MarkdownParseError ? err.message : err instanceof Error ? err.message : String(err),
+			});
+			markdownNodes = null;
 		}
 	}
 	return {
@@ -75,6 +102,7 @@ async function buildEntry(full: string, displayName: string, isArchive: boolean)
 		mtime: s.mtime.toISOString(),
 		previewKind,
 		previewText,
+		markdownNodes,
 		isArchive,
 	};
 }

@@ -13,12 +13,20 @@ import { stat } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { requireRole } from '@ab/auth';
 import { PENDING_DOWNLOAD } from '@ab/aviation';
-import { JOB_KINDS, type ReferenceSourceType, ROLES, ROUTES, SOURCE_KIND_BY_TYPE, SOURCE_KINDS } from '@ab/constants';
+import {
+	JOB_KINDS,
+	JOB_STATUSES,
+	type ReferenceSourceType,
+	ROLES,
+	ROUTES,
+	SOURCE_KIND_BY_TYPE,
+	SOURCE_KINDS,
+} from '@ab/constants';
 import { db, hangarJob, hangarSource } from '@ab/db';
 import { enqueueJob } from '@ab/hangar-jobs';
 import { createLogger } from '@ab/utils';
 import { error, fail, redirect } from '@sveltejs/kit';
-import { desc, eq } from 'drizzle-orm';
+import { and, desc, eq, inArray } from 'drizzle-orm';
 import { REPO_ROOT } from '$lib/server/source-jobs';
 import type { Actions, PageServerLoad } from './$types';
 
@@ -35,6 +43,21 @@ export const load: PageServerLoad = async (event) => {
 		.where(eq(hangarJob.targetId, event.params.id))
 		.orderBy(desc(hangarJob.createdAt))
 		.limit(10);
+
+	// Pre-check: if a job for this source is already queued or running, the
+	// worker will serialise a second submission anyway (see source-jobs.ts).
+	// Surface that fact on the form so the operator doesn't fire-and-wait.
+	const [activeJob] = await db
+		.select()
+		.from(hangarJob)
+		.where(
+			and(
+				eq(hangarJob.targetId, event.params.id),
+				inArray(hangarJob.status, [JOB_STATUSES.QUEUED, JOB_STATUSES.RUNNING]),
+			),
+		)
+		.orderBy(desc(hangarJob.createdAt))
+		.limit(1);
 
 	// On-disk snapshot. Surfaces missing-file / rev-mismatch / size-match state
 	// so the operator knows whether a fetch is needed.
@@ -82,6 +105,14 @@ export const load: PageServerLoad = async (event) => {
 			createdAt: job.createdAt.toISOString(),
 			finishedAt: job.finishedAt?.toISOString() ?? null,
 		})),
+		activeJob: activeJob
+			? {
+					id: activeJob.id,
+					kind: activeJob.kind,
+					status: activeJob.status,
+					startedAt: activeJob.startedAt?.toISOString() ?? null,
+				}
+			: null,
 	};
 };
 
@@ -89,6 +120,24 @@ function buildEnqueue(kind: (typeof JOB_KINDS)[keyof typeof JOB_KINDS]) {
 	return async (event: Parameters<NonNullable<Actions['fetch']>>[0]): Promise<Response | ReturnType<typeof fail>> => {
 		const user = requireRole(event, ROLES.AUTHOR, ROLES.OPERATOR, ROLES.ADMIN);
 		try {
+			// Defense-in-depth: even though the worker serialises by targetId, refuse
+			// to enqueue a second non-terminal job from the form layer so the user
+			// gets a fast, unambiguous error rather than a deferred queue position.
+			const [existing] = await db
+				.select()
+				.from(hangarJob)
+				.where(
+					and(
+						eq(hangarJob.targetId, event.params.id),
+						inArray(hangarJob.status, [JOB_STATUSES.QUEUED, JOB_STATUSES.RUNNING]),
+					),
+				)
+				.limit(1);
+			if (existing) {
+				return fail(409, {
+					error: `source '${event.params.id}' already has a ${existing.status} ${existing.kind} job (#${existing.id}); wait for it to finish or cancel it first`,
+				});
+			}
 			const job = await enqueueJob({
 				kind,
 				targetType: 'hangar.source',

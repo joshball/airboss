@@ -46,7 +46,7 @@ interface Props {
 	actions?: Snippet;
 }
 
-const { state, actions }: Props = $props();
+const { state: flowState, actions }: Props = $props();
 
 function timeAgo(iso: string | null): string {
 	if (!iso) return 'never';
@@ -56,84 +56,207 @@ function timeAgo(iso: string | null): string {
 		return iso;
 	}
 }
+
+/**
+ * SVG arrow geometry. Each path connects two tile centres; we measure the
+ * tiles after mount and on resize so the arrows track responsive layouts.
+ *
+ * The row layout flips to a single column under 700px, so the manifest and
+ * validation columns slide. Computing geometry from the live DOM keeps the
+ * arrows correct in every layout without duplicating the pipeline shape in
+ * static CSS.
+ */
+interface ArrowGeometry {
+	id: string;
+	d: string;
+	/** True when an adjacent tile has a running connected job. */
+	busy: boolean;
+}
+
+let containerEl = $state<HTMLElement | null>(null);
+let contentTileEl = $state<HTMLElement | null>(null);
+let manifestTileEl = $state<HTMLElement | null>(null);
+let validationTileEl = $state<HTMLElement | null>(null);
+let registryTileEl = $state<HTMLElement | null>(null);
+let glossaryTileEl = $state<HTMLElement | null>(null);
+let viewBox = $state('0 0 0 0');
+let arrows = $state<readonly ArrowGeometry[]>([]);
+
+const manifestBusy = $derived(flowState.manifest.scanJobId !== null);
+const validationBusy = $derived(flowState.validation.validateJobId !== null);
+
+function recomputeArrows(): void {
+	const container = containerEl;
+	const content = contentTileEl;
+	const manifest = manifestTileEl;
+	const validation = validationTileEl;
+	const registry = registryTileEl;
+	const glossary = glossaryTileEl;
+	if (!container || !content || !manifest || !validation || !registry || !glossary) {
+		arrows = [];
+		viewBox = '0 0 0 0';
+		return;
+	}
+	const cb = container.getBoundingClientRect();
+	function localCentre(el: HTMLElement): { x: number; top: number; bottom: number } {
+		const r = el.getBoundingClientRect();
+		return {
+			x: r.left - cb.left + r.width / 2,
+			top: r.top - cb.top,
+			bottom: r.bottom - cb.top,
+		};
+	}
+	const c = localCentre(content);
+	const m = localCentre(manifest);
+	const v = localCentre(validation);
+	const r = localCentre(registry);
+	const g = localCentre(glossary);
+	function curve(from: { x: number; y: number }, to: { x: number; y: number }): string {
+		const midY = (from.y + to.y) / 2;
+		return `M ${from.x.toFixed(1)} ${from.y.toFixed(1)} C ${from.x.toFixed(1)} ${midY.toFixed(1)}, ${to.x.toFixed(1)} ${midY.toFixed(1)}, ${to.x.toFixed(1)} ${to.y.toFixed(1)}`;
+	}
+	const cBottom = { x: c.x, y: c.bottom };
+	const mTop = { x: m.x, y: m.top };
+	const vTop = { x: v.x, y: v.top };
+	const mBottom = { x: m.x, y: m.bottom };
+	const vBottom = { x: v.x, y: v.bottom };
+	const rTop = { x: r.x, y: r.top };
+	const rBottom = { x: r.x, y: r.bottom };
+	const gTop = { x: g.x, y: g.top };
+
+	arrows = [
+		{ id: 'content-manifest', d: curve(cBottom, mTop), busy: manifestBusy },
+		{ id: 'content-validation', d: curve(cBottom, vTop), busy: validationBusy },
+		{ id: 'manifest-registry', d: curve(mBottom, rTop), busy: manifestBusy },
+		{ id: 'validation-registry', d: curve(vBottom, rTop), busy: validationBusy },
+		{ id: 'registry-glossary', d: curve(rBottom, gTop), busy: false },
+	];
+	viewBox = `0 0 ${cb.width} ${cb.height}`;
+}
+
+$effect(() => {
+	if (typeof window === 'undefined') return;
+	const container = containerEl;
+	if (!container) return;
+	// Re-run when busy state flips so arrows redraw with the active class.
+	void manifestBusy;
+	void validationBusy;
+	recomputeArrows();
+	const ro = new ResizeObserver(() => recomputeArrows());
+	ro.observe(container);
+	for (const el of [contentTileEl, manifestTileEl, validationTileEl, registryTileEl, glossaryTileEl]) {
+		if (el) ro.observe(el);
+	}
+	const onResize = (): void => recomputeArrows();
+	window.addEventListener('resize', onResize);
+	return () => {
+		ro.disconnect();
+		window.removeEventListener('resize', onResize);
+	};
+});
 </script>
 
-<section class="diagram" aria-label="Reference-system flow">
+<section class="diagram" aria-label="Reference-system flow" bind:this={containerEl}>
+	<svg class="arrows" viewBox={viewBox} aria-hidden="true" preserveAspectRatio="none">
+		<defs>
+			<marker
+				id="flow-arrowhead"
+				viewBox="0 0 10 10"
+				refX="9"
+				refY="5"
+				markerWidth="6"
+				markerHeight="6"
+				orient="auto-start-reverse"
+			>
+				<path d="M 0 0 L 10 5 L 0 10 z" />
+			</marker>
+		</defs>
+		{#each arrows as arrow (arrow.id)}
+			<path class="arrow-path" class:busy={arrow.busy} d={arrow.d} marker-end="url(#flow-arrowhead)" />
+		{/each}
+	</svg>
+
 	<!-- Row 1: Content -->
 	<div class="row row-content">
-		<article class="tile" aria-labelledby="content-h">
+		<article class="tile" aria-labelledby="content-h" bind:this={contentTileEl}>
 			<h2 id="content-h" class="tile-title">Content</h2>
 			<dl class="tile-body">
 				<div class="metric">
 					<dt>Wiki-links</dt>
-					<dd>{state.content.wikiLinkCount}</dd>
+					<dd>{flowState.content.wikiLinkCount}</dd>
 				</div>
 				<div class="metric">
 					<dt>Help pages</dt>
-					<dd>{state.content.helpPageCount}</dd>
+					<dd>{flowState.content.helpPageCount}</dd>
 				</div>
-				<div class="metric" class:warn={state.content.tbdCount > 0}>
+				<div class="metric" class:warn={flowState.content.tbdCount > 0}>
 					<dt>TBD ids</dt>
-					<dd>{state.content.tbdCount}</dd>
+					<dd>{flowState.content.tbdCount}</dd>
 				</div>
 			</dl>
 		</article>
 	</div>
 
-	<div class="arrow" aria-hidden="true"><span>v</span></div>
-
 	<!-- Row 2: Manifest + Validation -->
 	<div class="row row-two">
-		<article class="tile" aria-labelledby="manifest-h" class:busy={state.manifest.scanJobId !== null}>
+		<article
+			class="tile"
+			aria-labelledby="manifest-h"
+			class:busy={manifestBusy}
+			bind:this={manifestTileEl}
+		>
 			<h2 id="manifest-h" class="tile-title">Manifest</h2>
 			<dl class="tile-body">
 				<div class="metric">
 					<dt>Cited ids</dt>
-					<dd>{state.manifest.citedCount}</dd>
+					<dd>{flowState.manifest.citedCount}</dd>
 				</div>
 				<div class="metric">
 					<dt>Scanned</dt>
-					<dd class="ts">{timeAgo(state.manifest.scannedAt)}</dd>
+					<dd class="ts">{timeAgo(flowState.manifest.scannedAt)}</dd>
 				</div>
 			</dl>
 		</article>
-		<article class="tile" aria-labelledby="validation-h">
+		<article
+			class="tile"
+			aria-labelledby="validation-h"
+			class:busy={validationBusy}
+			bind:this={validationTileEl}
+		>
 			<h2 id="validation-h" class="tile-title">Validation</h2>
 			<dl class="tile-body">
-				<div class="metric" class:error={state.validation.errors > 0}>
+				<div class="metric" class:error={flowState.validation.errors > 0}>
 					<dt>Errors</dt>
-					<dd>{state.validation.errors}</dd>
+					<dd>{flowState.validation.errors}</dd>
 				</div>
-				<div class="metric" class:warn={state.validation.warnings > 0}>
+				<div class="metric" class:warn={flowState.validation.warnings > 0}>
 					<dt>Warnings</dt>
-					<dd>{state.validation.warnings}</dd>
+					<dd>{flowState.validation.warnings}</dd>
 				</div>
 				<div class="metric">
 					<dt>Last run</dt>
-					<dd class="ts">{timeAgo(state.validation.runAt)}</dd>
+					<dd class="ts">{timeAgo(flowState.validation.runAt)}</dd>
 				</div>
 			</dl>
 		</article>
 	</div>
 
-	<div class="arrow" aria-hidden="true"><span>v</span></div>
-
 	<!-- Row 3: Registry merge + Glossary -->
 	<div class="row row-two">
-		<article class="tile" aria-labelledby="registry-h">
+		<article class="tile" aria-labelledby="registry-h" bind:this={registryTileEl}>
 			<h2 id="registry-h" class="tile-title">Registry merge</h2>
 			<dl class="tile-body">
 				<div class="metric">
 					<dt>References</dt>
-					<dd>{state.glossary.referenceCount}</dd>
+					<dd>{flowState.glossary.referenceCount}</dd>
 				</div>
 				<div class="metric">
 					<dt>Sources</dt>
-					<dd>{state.glossary.sourceCount}</dd>
+					<dd>{flowState.glossary.sourceCount}</dd>
 				</div>
 			</dl>
 		</article>
-		<article class="tile" aria-labelledby="glossary-h">
+		<article class="tile" aria-labelledby="glossary-h" bind:this={glossaryTileEl}>
 			<h2 id="glossary-h" class="tile-title">Glossary render</h2>
 			<p class="muted">Edit in <a href="/glossary">/glossary</a></p>
 		</article>
@@ -167,14 +290,6 @@ function timeAgo(iso: string | null): string {
 	.row-two {
 		grid-template-columns: repeat(2, minmax(14rem, 22rem));
 		justify-content: center;
-	}
-
-	.arrow {
-		text-align: center;
-		color: var(--edge-strong);
-		font-family: var(--font-family-mono);
-		font-size: var(--type-ui-control-size);
-		letter-spacing: var(--letter-spacing-wide);
 	}
 
 	.tile {
