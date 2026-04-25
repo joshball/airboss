@@ -60,9 +60,9 @@ const lowPct = $derived(lowFuelThreshold === undefined ? 0 : fillPct(lowFuelThre
 		grid-template-rows: 1fr auto;
 		gap: 4px 8px;
 		padding: 4px;
-		border: 1px solid var(--ink-3, #555);
+		border: 1px solid var(--sim-instrument-bezel);
 		border-radius: 4px;
-		background: var(--surface-2, #1a1a22);
+		background: var(--sim-instrument-face);
 	}
 	.tank {
 		display: flex;
@@ -74,8 +74,8 @@ const lowPct = $derived(lowFuelThreshold === undefined ? 0 : fillPct(lowFuelThre
 		position: relative;
 		flex: 1;
 		width: 24px;
-		background: var(--surface-1, #0e0e14);
-		border: 1px solid var(--ink-3, #555);
+		background: var(--sim-instrument-face-inner);
+		border: 1px solid var(--sim-instrument-bezel);
 		overflow: hidden;
 	}
 	.low-band {
@@ -83,26 +83,27 @@ const lowPct = $derived(lowFuelThreshold === undefined ? 0 : fillPct(lowFuelThre
 		bottom: 0;
 		left: 0;
 		right: 0;
-		background: rgba(250, 204, 21, 0.18);
+		background: var(--sim-arc-yellow);
+		opacity: 0.18;
 	}
 	.fill {
 		position: absolute;
 		bottom: 0;
 		left: 0;
 		right: 0;
-		background: #4ade80;
+		background: var(--sim-arc-green);
 	}
 	.caption {
-		font-family: monospace;
+		font-family: var(--font-family-mono, monospace);
 		font-size: 11px;
-		color: var(--ink-1, #f5f5f5);
+		color: var(--sim-instrument-tick);
 	}
 	.label {
 		grid-column: 1 / -1;
 		text-align: center;
-		font-family: monospace;
+		font-family: var(--font-family-mono, monospace);
 		font-size: 11px;
-		color: var(--ink-2, #aaa);
+		color: var(--sim-instrument-tick-minor);
 		text-transform: uppercase;
 	}
 </style>

@@ -44,7 +44,9 @@ import HeadingIndicator from '$lib/instruments/HeadingIndicator.svelte';
 import Tachometer from '$lib/instruments/Tachometer.svelte';
 import TurnCoordinator from '$lib/instruments/TurnCoordinator.svelte';
 import Vsi from '$lib/instruments/Vsi.svelte';
+import AnnunciatorStrip from '$lib/panels/AnnunciatorStrip.svelte';
 import AudioCaptions from '$lib/panels/AudioCaptions.svelte';
+import CockpitNarration from '$lib/panels/CockpitNarration.svelte';
 import ControlInputs from '$lib/panels/ControlInputs.svelte';
 import KeybindingsHelp from '$lib/panels/KeybindingsHelp.svelte';
 import KeyboardCheatsheet from '$lib/panels/KeyboardCheatsheet.svelte';
@@ -571,7 +573,10 @@ const trimBias = $derived(inputs.trim);
 				<Tachometer {rpm} />
 				<EngineCluster {display} />
 			</div>
+			<AnnunciatorStrip {display} />
 		</section>
+
+		<CockpitNarration {display} />
 
 		<aside class="sidebar">
 			<ControlInputs {inputs} {trimBias} brakeOn={truth?.brakeOn ?? false} {stallWarning} {stalled} />

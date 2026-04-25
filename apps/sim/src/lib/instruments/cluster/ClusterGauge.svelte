@@ -103,31 +103,31 @@ const display = $derived(formatter ? formatter(safeValue) : safeValue.toFixed(0)
 		height: 100%;
 	}
 	.instrument-face {
-		fill: var(--surface-2, #1a1a22);
-		stroke: var(--ink-3, #555);
+		fill: var(--sim-instrument-face);
+		stroke: var(--sim-instrument-bezel);
 	}
 	.arc-green {
-		stroke: #4ade80;
+		stroke: var(--sim-arc-green);
 	}
 	.redline {
-		stroke: #ef4444;
+		stroke: var(--sim-arc-red);
 	}
 	.tick {
-		stroke: var(--ink-2, #aaa);
+		stroke: var(--sim-instrument-tick);
 	}
 	.needle {
-		stroke: var(--ink-1, #f5f5f5);
+		stroke: var(--sim-instrument-pointer);
 	}
 	.hub {
-		fill: var(--ink-3, #555);
+		fill: var(--sim-instrument-pointer-pivot);
 	}
 	.label {
-		fill: var(--ink-2, #aaa);
-		font-family: monospace;
+		fill: var(--sim-instrument-tick-minor);
+		font-family: var(--font-family-mono, monospace);
 		text-transform: uppercase;
 	}
 	.readout {
-		fill: var(--ink-1, #f5f5f5);
-		font-family: monospace;
+		fill: var(--sim-instrument-tick);
+		font-family: var(--font-family-mono, monospace);
 	}
 </style>
