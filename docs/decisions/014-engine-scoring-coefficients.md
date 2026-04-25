@@ -33,7 +33,8 @@ Top-level shape:
 - `ENGINE_SCORING.CONTINUE` -- last-session domain match, recency share, due-urgency share, recent-miss bonus.
 - `ENGINE_SCORING.STRENGTHEN` -- relearning, rated-Again/Hard, heavily-overdue, rep low-accuracy, rep recent-miss, overconfidence factor.
 - `ENGINE_SCORING.EXPAND` -- priority weights (core/supporting/elective), focus-domain match, bloom-depth match.
-- `ENGINE_SCORING.DIVERSIFY` -- deep-depth-preference bonus, cross-domain apply bonus.
+- `ENGINE_SCORING.DIVERSIFY` -- deep-depth-preference bonus.
+- `ENGINE_SCORING.FOCUS` -- domain promotion bonus applied across continue / strengthen / diversify pools when the candidate's domain is in the focus filter.
 - `ENGINE_SCORING.THRESHOLDS` -- heavily-overdue ratio, rep low-accuracy cut-off, continue-due ratio.
 - `ENGINE_SCORING.WINDOWS` -- due-urgency saturation window (currently 1 week).
 

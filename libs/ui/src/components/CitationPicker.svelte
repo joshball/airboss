@@ -4,6 +4,7 @@ import {
 	CITATION_TARGET_LABELS,
 	CITATION_TARGET_TYPES,
 	type CitationTargetType,
+	EXTERNAL_REF_TARGET_DELIMITER,
 	ROUTES,
 } from '@ab/constants';
 
@@ -36,9 +37,9 @@ interface SearchResult {
  * caller decides, because a successful submit may want to show a toast
  * before closing.
  *
- * Target-id encoding for external refs: `${url}|${title}`. The BC layer
- * splits this apart for rendering; this keeps the schema single-column
- * without a JSON side-table just for URLs.
+ * Target-id encoding for external refs: `${url}${EXTERNAL_REF_TARGET_DELIMITER}${title}`.
+ * The BC layer splits this apart for rendering; this keeps the schema
+ * single-column without a JSON side-table just for URLs.
  */
 
 import Dialog from './Dialog.svelte';
@@ -174,7 +175,7 @@ async function submit(): Promise<void> {
 	try {
 		const targetId =
 			activeType === CITATION_TARGET_TYPES.EXTERNAL_REF
-				? `${externalUrl.trim()}|${externalTitle.trim()}`
+				? `${externalUrl.trim()}${EXTERNAL_REF_TARGET_DELIMITER}${externalTitle.trim()}`
 				: (selectedId ?? '');
 		await onSelect({
 			targetType: activeType,

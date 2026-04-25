@@ -19,6 +19,7 @@ import {
 	ROUTES,
 } from '@ab/constants';
 import PageHelp from '@ab/help/ui/PageHelp.svelte';
+import CitedByPanel, { type CitedByItem } from '@ab/ui/components/CitedByPanel.svelte';
 import { humanize, renderMarkdown } from '@ab/utils';
 import type { PageData } from './$types';
 
@@ -84,6 +85,16 @@ function renderPhase(body: string | null): string {
 	if (!body) return '';
 	return renderMarkdown(body);
 }
+
+const citedByItems = $derived<CitedByItem[]>(
+	citedBy.map((c) => ({
+		id: c.citation.id,
+		typeLabel: sourceTypeLabel(c.source.type),
+		label: c.source.label,
+		href: c.source.exists ? citedByHref(c.source.type, c.source.id) : null,
+		context: c.citation.citationContext,
+	})),
+);
 </script>
 
 <svelte:head>
@@ -292,28 +303,8 @@ function renderPhase(body: string | null): string {
 		</section>
 	{/if}
 
-	<section class="section" aria-label="Cited by">
-		<h2>Cited by ({citedBy.length})</h2>
-		{#if citedBy.length === 0}
-			<p class="cited-by-empty">Not yet cited by other content.</p>
-		{:else}
-			<ul class="cited-by-list">
-				{#each citedBy as c (c.citation.id)}
-					{@const href = c.source.exists ? citedByHref(c.source.type, c.source.id) : null}
-					<li class="cited-by-row">
-						<span class="cited-by-type">{sourceTypeLabel(c.source.type)}</span>
-						{#if href}
-							<a class="cited-by-label" {href}>{c.source.label}</a>
-						{:else}
-							<span class="cited-by-label cited-by-missing">{c.source.label}</span>
-						{/if}
-						{#if c.citation.citationContext}
-							<span class="cited-by-context">"{c.citation.citationContext}"</span>
-						{/if}
-					</li>
-				{/each}
-			</ul>
-		{/if}
+	<section class="section">
+		<CitedByPanel items={citedByItems} />
 	</section>
 </section>
 
@@ -702,58 +693,4 @@ function renderPhase(body: string | null): string {
 		line-height: 1.45;
 	}
 
-	.cited-by-empty {
-		margin: 0;
-		color: var(--ink-faint);
-		font-size: var(--type-ui-label-size);
-	}
-
-	.cited-by-list {
-		list-style: none;
-		padding: 0;
-		margin: 0;
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-xs);
-	}
-
-	.cited-by-row {
-		display: flex;
-		align-items: center;
-		gap: var(--space-sm);
-		padding: var(--space-xs) var(--space-md);
-		background: var(--surface-muted);
-		border: 1px solid var(--edge-default);
-		border-radius: var(--radius-md);
-		font-size: var(--type-ui-label-size);
-		flex-wrap: wrap;
-	}
-
-	.cited-by-type {
-		font-size: var(--type-ui-caption-size);
-		font-weight: 600;
-		color: var(--ink-subtle);
-		text-transform: uppercase;
-		letter-spacing: var(--letter-spacing-caps);
-	}
-
-	.cited-by-label {
-		color: var(--action-default-active);
-		text-decoration: none;
-		font-weight: 500;
-	}
-
-	.cited-by-label:is(a):hover {
-		text-decoration: underline;
-	}
-
-	.cited-by-missing {
-		color: var(--ink-subtle);
-		font-style: italic;
-	}
-
-	.cited-by-context {
-		color: var(--ink-muted);
-		font-style: italic;
-	}
 </style>

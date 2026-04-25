@@ -26,6 +26,7 @@ import {
 	CITATION_TARGET_VALUES,
 	type CitationSourceType,
 	type CitationTargetType,
+	EXTERNAL_REF_TARGET_DELIMITER,
 } from '@ab/constants';
 import { db as defaultDb, hangarReference } from '@ab/db';
 import { generateContentCitationId } from '@ab/utils';
@@ -210,10 +211,11 @@ async function verifyTargetExists(targetType: CitationTargetType, targetId: stri
 		case CITATION_TARGET_TYPES.EXTERNAL_REF: {
 			// External refs are user-supplied URLs. We accept whatever target id
 			// the caller provides as long as it parses as a URL. The picker
-			// stores `url|title` in target_id so the read path can split it
+			// stores `<url>|<title>` in target_id (delimiter from
+			// EXTERNAL_REF_TARGET_DELIMITER) so the read path can split it
 			// without an extra table. Validation below; empty string is invalid.
 			if (targetId.length === 0) return false;
-			const [raw] = targetId.split('|');
+			const [raw] = targetId.split(EXTERNAL_REF_TARGET_DELIMITER);
 			if (!raw) return false;
 			try {
 				const u = new URL(raw);
@@ -409,9 +411,10 @@ export async function resolveCitationTargets(
 				},
 			};
 		}
-		// external_ref: target_id is `url|title`. Split it back out.
-		const [url, ...rest] = c.targetId.split('|');
-		const title = rest.join('|').trim();
+		// external_ref: target_id is `<url><delim><title>`. Split it back out.
+		// Title may contain the delimiter; rejoin trailing segments.
+		const [url, ...rest] = c.targetId.split(EXTERNAL_REF_TARGET_DELIMITER);
+		const title = rest.join(EXTERNAL_REF_TARGET_DELIMITER).trim();
 		return {
 			citation: c,
 			target: {
