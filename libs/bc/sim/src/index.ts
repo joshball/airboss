@@ -1,6 +1,19 @@
 // Sim BC -- flight dynamics, scenarios, runner. Phase 0.5 prototype.
 
 export {
+	type AnnunciatorState,
+	annunciatorState,
+	LOW_FUEL_GALLONS,
+	LOW_VOLTAGE_THRESHOLD_V,
+	OIL_TEMP_BUFFER_C,
+	shouldAnnunciateLowFuel,
+	shouldAnnunciateLowVoltage,
+	shouldAnnunciateOilPress,
+	shouldAnnunciateOilTemp,
+	shouldAnnunciateVacuumLow,
+	VACUUM_LOW_INHG,
+} from './annunciators';
+export {
 	altitudeAlertCrossed,
 	dynamicPressurePa,
 	engineFundamentalHz,
