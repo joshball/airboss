@@ -2,9 +2,15 @@
  * Scenario runner + registry tests. Deterministic, DB-free.
  */
 
-import { SIM_FLAP_NOTCHES, SIM_SCENARIO_IDS, SIM_SCENARIO_OUTCOMES } from '@ab/constants';
+import {
+	SIM_FAULT_KINDS,
+	SIM_FAULT_TRIGGER_KINDS,
+	SIM_FLAP_NOTCHES,
+	SIM_SCENARIO_IDS,
+	SIM_SCENARIO_OUTCOMES,
+} from '@ab/constants';
 import { describe, expect, it } from 'vitest';
-import type { FdmInputs, FdmTruthState } from '../types';
+import type { FdmInputs, FdmTruthState, ScenarioDefinition } from '../types';
 import { getScenario, listScenarios } from './registry';
 import { ScenarioRunner } from './runner';
 
@@ -304,5 +310,100 @@ describe('ScenarioRunner -- first-flight steps', () => {
 			defaultInputs({ brake: false }),
 		);
 		expect(after.stepState?.currentStepId).toBe('full-throttle');
+	});
+});
+
+describe('ScenarioRunner -- fault firing from def.faults', () => {
+	function playgroundWithFaults(faults: ScenarioDefinition['faults']): ScenarioRunner {
+		const base = getScenario(SIM_SCENARIO_IDS.PLAYGROUND);
+		const def: ScenarioDefinition = { ...base, faults };
+		return new ScenarioRunner(def);
+	}
+
+	it('returns empty activations when the scenario declares no faults', () => {
+		const runner = playgroundWithFaults(undefined);
+		const verdict = runner.evaluate(sampleTruth({ t: 5 }), defaultInputs());
+		expect(verdict.activations).toEqual([]);
+		expect(verdict.firedThisTick).toEqual([]);
+	});
+
+	it('fires a time-based fault on the first tick past the threshold', () => {
+		const runner = playgroundWithFaults([
+			{
+				kind: SIM_FAULT_KINDS.VACUUM_FAILURE,
+				trigger: { kind: SIM_FAULT_TRIGGER_KINDS.TIME_SECONDS, at: 30 },
+			},
+		]);
+		// Before the threshold: no fire.
+		const before = runner.evaluate(sampleTruth({ t: 29 }), defaultInputs());
+		expect(before.firedThisTick).toEqual([]);
+		// Edge tick: fires.
+		const at = runner.evaluate(sampleTruth({ t: 30 }), defaultInputs());
+		expect(at.firedThisTick).toEqual([SIM_FAULT_KINDS.VACUUM_FAILURE]);
+		expect(at.activations.length).toBe(1);
+		expect(at.activations[0].kind).toBe(SIM_FAULT_KINDS.VACUUM_FAILURE);
+		expect(at.activations[0].firedAtT).toBe(30);
+		// Subsequent tick: still active but firedThisTick is empty.
+		const after = runner.evaluate(sampleTruth({ t: 31 }), defaultInputs());
+		expect(after.firedThisTick).toEqual([]);
+		expect(after.activations.length).toBe(1);
+	});
+
+	it('fires an altitude-AGL fault on upward crossing', () => {
+		const runner = playgroundWithFaults([
+			{
+				kind: SIM_FAULT_KINDS.PITOT_BLOCK,
+				trigger: { kind: SIM_FAULT_TRIGGER_KINDS.ALTITUDE_AGL_METERS, above: 500 },
+			},
+		]);
+		const ground = getScenario(SIM_SCENARIO_IDS.PLAYGROUND).initial.groundElevation;
+		// Below: no fire.
+		const below = runner.evaluate(
+			sampleTruth({ t: 5, altitude: ground + 200, groundElevation: ground }),
+			defaultInputs(),
+		);
+		expect(below.firedThisTick).toEqual([]);
+		// Crossing tick: fires.
+		const cross = runner.evaluate(
+			sampleTruth({ t: 10, altitude: ground + 600, groundElevation: ground }),
+			defaultInputs(),
+		);
+		expect(cross.firedThisTick).toEqual([SIM_FAULT_KINDS.PITOT_BLOCK]);
+		// Descending below 500 again: does not re-fire (faults are sticky).
+		const back = runner.evaluate(
+			sampleTruth({ t: 15, altitude: ground + 100, groundElevation: ground }),
+			defaultInputs(),
+		);
+		expect(back.firedThisTick).toEqual([]);
+		expect(back.activations.length).toBe(1);
+	});
+
+	it('fires multiple faults independently within the same tick', () => {
+		const runner = playgroundWithFaults([
+			{
+				kind: SIM_FAULT_KINDS.VACUUM_FAILURE,
+				trigger: { kind: SIM_FAULT_TRIGGER_KINDS.TIME_SECONDS, at: 10 },
+			},
+			{
+				kind: SIM_FAULT_KINDS.ALTERNATOR_FAILURE,
+				trigger: { kind: SIM_FAULT_TRIGGER_KINDS.TIME_SECONDS, at: 10 },
+			},
+		]);
+		const at = runner.evaluate(sampleTruth({ t: 10 }), defaultInputs());
+		expect(at.firedThisTick).toContain(SIM_FAULT_KINDS.VACUUM_FAILURE);
+		expect(at.firedThisTick).toContain(SIM_FAULT_KINDS.ALTERNATOR_FAILURE);
+		expect(at.activations.length).toBe(2);
+	});
+
+	it('exposes activations via getActivations() for the worker', () => {
+		const runner = playgroundWithFaults([
+			{
+				kind: SIM_FAULT_KINDS.VACUUM_FAILURE,
+				trigger: { kind: SIM_FAULT_TRIGGER_KINDS.TIME_SECONDS, at: 5 },
+			},
+		]);
+		runner.evaluate(sampleTruth({ t: 5 }), defaultInputs());
+		expect(runner.getActivations().length).toBe(1);
+		expect(runner.getActivations()[0].kind).toBe(SIM_FAULT_KINDS.VACUUM_FAILURE);
 	});
 });

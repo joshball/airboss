@@ -13,6 +13,7 @@
 
 import {
 	C172_CONFIG,
+	type DisplayState,
 	type FdmInputs,
 	type FdmTruthState,
 	flapsChanged,
@@ -72,6 +73,7 @@ function initialInputsFrom(init: PageData['scenario']['initial']): FdmInputs {
 
 let worker = $state<Worker | null>(null);
 let truth = $state<FdmTruthState | null>(null);
+let display = $state<DisplayState | null>(null);
 let inputs = $state<FdmInputs>(untrack(() => initialInputsFrom(data.scenario.initial)));
 let running = $state(false);
 let ready = $state(false);
@@ -114,6 +116,7 @@ function handleWorkerMessage(event: MessageEvent<WorkerToMain>): void {
 		}
 		case SIM_WORKER_MESSAGES.SNAPSHOT: {
 			truth = msg.truth;
+			display = msg.display;
 			inputs = msg.inputs;
 			running = msg.running;
 			stepState = msg.stepState ?? null;
@@ -416,18 +419,22 @@ onDestroy(() => {
 	worker = null;
 });
 
-const kias = $derived(truth ? truth.indicatedAirspeed * SIM_KNOTS_PER_METER_PER_SECOND : 0);
-const altitudeFeet = $derived(truth ? truth.altitude * SIM_FEET_PER_METER : 0);
+// Instruments read from `display` -- the fault-aware view. When no
+// faults are active display equals truth field-for-field. AGL is an
+// out-of-truth-only quantity (no fault lies about ground elevation
+// today) so we still derive it from `truth`.
+const kias = $derived(display ? display.indicatedAirspeed * SIM_KNOTS_PER_METER_PER_SECOND : 0);
+const altitudeFeet = $derived(display ? display.altitudeMsl * SIM_FEET_PER_METER : 0);
 const altitudeAglFeet = $derived(truth ? (truth.altitude - truth.groundElevation) * SIM_FEET_PER_METER : 0);
-const vsiFpm = $derived(truth ? truth.verticalSpeed * SIM_FEET_PER_METER * 60 : 0);
-const pitchRad = $derived(truth ? truth.pitch : 0);
-const rollRad = $derived(truth ? truth.roll : 0);
-const headingDeg = $derived(truth ? (truth.heading * 180) / Math.PI : 0);
-const yawRateDegPerSec = $derived(truth ? (truth.yawRate * 180) / Math.PI : 0);
-const slipBallValue = $derived(truth?.slipBall ?? 0);
-const rpm = $derived(truth?.engineRpm ?? 0);
-const stallWarning = $derived(truth?.stallWarning ?? false);
-const stalled = $derived(truth?.stalled ?? false);
+const vsiFpm = $derived(display ? display.verticalSpeed * SIM_FEET_PER_METER * 60 : 0);
+const pitchRad = $derived(display ? display.pitchIndicated : 0);
+const rollRad = $derived(display ? display.rollIndicated : 0);
+const headingDeg = $derived(display ? (display.headingIndicated * 180) / Math.PI : 0);
+const yawRateDegPerSec = $derived(display ? (display.yawRateIndicated * 180) / Math.PI : 0);
+const slipBallValue = $derived(display?.slipBall ?? 0);
+const rpm = $derived(display?.engineRpm ?? 0);
+const stallWarning = $derived(display?.stallWarning ?? false);
+const stalled = $derived(display?.stalled ?? false);
 const outcomeIsSuccess = $derived(outcome?.outcome === SIM_SCENARIO_OUTCOMES.SUCCESS);
 
 // Trim bias rendered on the control panel.
