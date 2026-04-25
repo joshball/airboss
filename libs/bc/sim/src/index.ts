@@ -84,6 +84,13 @@ export { AFT_CG_SLOW_FLIGHT_SCENARIO } from './scenarios/aft-cg-slow-flight';
 export { DEPARTURE_STALL_SCENARIO } from './scenarios/departure-stall';
 export { EFATO_SCENARIO } from './scenarios/efato';
 export { FIRST_FLIGHT_SCENARIO } from './scenarios/first-flight';
+export {
+	evaluateGrading,
+	type GradeComponentResult,
+	type GradeReport,
+	type GradingEvaluationContext,
+	tapeWasSuccessful,
+} from './scenarios/grading';
 export { PARTIAL_PANEL_SCENARIO } from './scenarios/partial-panel';
 export { PITOT_BLOCK_SCENARIO } from './scenarios/pitot-block';
 export { PLAYGROUND_SCENARIO } from './scenarios/playground';

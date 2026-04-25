@@ -579,3 +579,33 @@ export const SIM_FAULT_DEFAULTS = {
 	/** Pitot block: airspeed at which the pitot tube effectively froze (KIAS). */
 	PITOT_BLOCK_FREEZE_KIAS: 0,
 } as const;
+
+/**
+ * Tuning for the scenario grading evaluator (libs/bc/sim/src/scenarios/grading.ts).
+ * Pass/fail is independent and decided by the runner; these numbers shape
+ * the 0..1 quality grade that feeds the spaced-rep scheduler.
+ */
+export const SIM_GRADING = {
+	/** Tolerance for "weights sum to one" on a GradingDefinition. */
+	WEIGHT_SUM_EPSILON: 0.001,
+	/** When `hardFail` is omitted, decay-to-zero distance defaults to tolerance * this. */
+	HARD_FAIL_TOLERANCE_MULTIPLIER: 4,
+	/** EFATO-style trigger: engine RPM below this fraction of peak counts as cut. */
+	ENGINE_CUT_RPM_FRACTION: 0.5,
+	/** Reaction latency at/below this gets full credit (seconds). */
+	REACTION_EXCELLENT_SECONDS: 2.0,
+	/** Reaction latency at/above this gets zero credit (seconds). */
+	REACTION_POOR_SECONDS: 8.0,
+	/** Elevator command threshold for the `stick_forward` reaction predicate. */
+	STICK_FORWARD_ELEVATOR: -0.2,
+	/** Throttle at/below this counts as "idle" for the throttle_idle predicate. */
+	THROTTLE_IDLE_THRESHOLD: 0.15,
+	/** Stall warning seconds counted at 1x; stalled seconds at 2x. */
+	STALL_PENALTY_MULTIPLIER: 2,
+	/** ideal_path_match axis weights: altitude in m, IAS scaled by this. */
+	IDEAL_PATH_IAS_WEIGHT: 20,
+	/** ideal_path_match heading scaled by this (per degree). */
+	IDEAL_PATH_HEADING_WEIGHT: 20,
+	/** Min control-axis delta to count as "any input change" reaction. */
+	REACTION_INPUT_DELTA: 0.1,
+} as const;
