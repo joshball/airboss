@@ -17,6 +17,11 @@ import {
 } from '@ab/constants';
 import PageHelp from '@ab/help/ui/PageHelp.svelte';
 import Banner from '@ab/ui/components/Banner.svelte';
+import FilterCard from '@ab/ui/components/FilterCard.svelte';
+import type { FilterChipDef } from '@ab/ui/components/FilterChips.svelte';
+import FilterChips from '@ab/ui/components/FilterChips.svelte';
+import Pager from '@ab/ui/components/Pager.svelte';
+import ResultSummary from '@ab/ui/components/ResultSummary.svelte';
 import { buildQuery, humanize } from '@ab/utils';
 import { tick } from 'svelte';
 import { goto } from '$app/navigation';
@@ -33,10 +38,6 @@ const total = $derived(data.total);
 const totalPages = $derived(data.totalPages);
 const pageSize = $derived(data.pageSize);
 const createdScenario = $derived(data.createdScenario);
-
-// Range "Showing 21-40 of 137" -- computed client-side so list + pager align.
-const rangeStart = $derived(scenarios.length === 0 ? 0 : (currentPage - 1) * pageSize + 1);
-const rangeEnd = $derived(scenarios.length === 0 ? 0 : (currentPage - 1) * pageSize + scenarios.length);
 
 const hasActiveFilters = $derived(
 	Boolean(filters.domain || filters.difficulty || filters.phaseOfFlight || filters.sourceType) ||
@@ -63,36 +64,45 @@ function dismissCreatedBanner(): void {
 	void goto(next, { replaceState: true, keepFocus: true, noScroll: true });
 }
 
-type ChipFilterKey =
-	| typeof QUERY_PARAMS.DOMAIN
-	| typeof QUERY_PARAMS.DIFFICULTY
-	| typeof QUERY_PARAMS.FLIGHT_PHASE
-	| typeof QUERY_PARAMS.SOURCE
-	| typeof QUERY_PARAMS.STATUS;
-
-interface FilterChip {
-	key: ChipFilterKey;
-	label: string;
-	value: string;
-}
-
-const chips = $derived.by<FilterChip[]>(() => {
-	const out: FilterChip[] = [];
-	if (filters.domain) out.push({ key: QUERY_PARAMS.DOMAIN, label: 'Domain', value: domainLabel(filters.domain) });
+const chips = $derived.by<FilterChipDef[]>(() => {
+	const out: FilterChipDef[] = [];
+	if (filters.domain)
+		out.push({
+			key: QUERY_PARAMS.DOMAIN,
+			label: 'Domain',
+			value: domainLabel(filters.domain),
+			removeHref: buildHref({ [QUERY_PARAMS.DOMAIN]: undefined }),
+		});
 	if (filters.difficulty)
-		out.push({ key: QUERY_PARAMS.DIFFICULTY, label: 'Difficulty', value: difficultyLabel(filters.difficulty) });
+		out.push({
+			key: QUERY_PARAMS.DIFFICULTY,
+			label: 'Difficulty',
+			value: difficultyLabel(filters.difficulty),
+			removeHref: buildHref({ [QUERY_PARAMS.DIFFICULTY]: undefined }),
+		});
 	if (filters.phaseOfFlight)
-		out.push({ key: QUERY_PARAMS.FLIGHT_PHASE, label: 'Phase', value: phaseLabel(filters.phaseOfFlight) });
-	if (filters.sourceType) out.push({ key: QUERY_PARAMS.SOURCE, label: 'Source', value: humanize(filters.sourceType) });
+		out.push({
+			key: QUERY_PARAMS.FLIGHT_PHASE,
+			label: 'Phase',
+			value: phaseLabel(filters.phaseOfFlight),
+			removeHref: buildHref({ [QUERY_PARAMS.FLIGHT_PHASE]: undefined }),
+		});
+	if (filters.sourceType)
+		out.push({
+			key: QUERY_PARAMS.SOURCE,
+			label: 'Source',
+			value: humanize(filters.sourceType),
+			removeHref: buildHref({ [QUERY_PARAMS.SOURCE]: undefined }),
+		});
 	if (filters.status !== SCENARIO_STATUSES.ACTIVE)
-		out.push({ key: QUERY_PARAMS.STATUS, label: 'Status', value: humanize(filters.status) });
+		out.push({
+			key: QUERY_PARAMS.STATUS,
+			label: 'Status',
+			value: humanize(filters.status),
+			removeHref: buildHref({ [QUERY_PARAMS.STATUS]: undefined }),
+		});
 	return out;
 });
-
-function removeChipHref(key: ChipFilterKey): string {
-	// Build a fresh href that keeps every other active filter but drops `key`.
-	return buildHref({ [key]: undefined });
-}
 
 function difficultyLabel(slug: string): string {
 	return (DIFFICULTY_LABELS as Record<Difficulty, string>)[slug as Difficulty] ?? humanize(slug);
@@ -147,9 +157,11 @@ function pageHref(n: number): string {
 		</Banner>
 	{/if}
 
-	<form class="filters" method="GET" role="search" aria-label="Filter scenarios">
-		<input type="hidden" name={QUERY_PARAMS.PAGE} value="1" />
-		<div class="filter-grid">
+	<FilterCard resetHref={ROUTES.REPS_BROWSE} ariaLabel="Filter scenarios">
+		{#snippet hidden()}
+			<input type="hidden" name={QUERY_PARAMS.PAGE} value="1" />
+		{/snippet}
+		{#snippet controls()}
 			<div class="filter">
 				<label for="f-domain">Domain</label>
 				<select id="f-domain" name={QUERY_PARAMS.DOMAIN} value={filters.domain ?? ''}>
@@ -194,38 +206,19 @@ function pageHref(n: number): string {
 					{/each}
 				</select>
 			</div>
-		</div>
-		<div class="filter-actions">
-			<button type="submit" class="btn secondary">Apply</button>
-			<a class="btn ghost" href={ROUTES.REPS_BROWSE}>Reset</a>
-		</div>
-	</form>
+		{/snippet}
+	</FilterCard>
 
-	{#if chips.length > 0}
-		<div class="chip-row" aria-label="Active filters">
-			<span class="chip-label">Filtering:</span>
-			{#each chips as chip (chip.key)}
-				<a class="chip" href={removeChipHref(chip.key)} aria-label={`Remove ${chip.label} filter`}>
-					<span class="chip-name">{chip.label}:</span>
-					<span class="chip-value">{chip.value}</span>
-					<span class="chip-x" aria-hidden="true">×</span>
-				</a>
-			{/each}
-			<a class="chip-clear" href={ROUTES.REPS_BROWSE}>Clear all</a>
-		</div>
-	{/if}
+	<FilterChips {chips} clearHref={ROUTES.REPS_BROWSE} />
 
-	{#if total > 0}
-		<p class="result-summary">
-			{#if total > pageSize}
-				Showing {rangeStart}&ndash;{rangeEnd} of {total} scenario{total === 1 ? '' : 's'}{hasActiveFilters
-					? ' matching your filters'
-					: ''}.
-			{:else}
-				Showing {total} scenario{total === 1 ? '' : 's'}{hasActiveFilters ? ' matching your filters' : ''}.
-			{/if}
-		</p>
-	{/if}
+	<ResultSummary
+		{total}
+		pageCount={scenarios.length}
+		{currentPage}
+		{pageSize}
+		noun="scenario"
+		filtersActive={hasActiveFilters}
+	/>
 
 	{#if scenarios.length === 0}
 		<div class="empty">
@@ -263,19 +256,7 @@ function pageHref(n: number): string {
 			{/each}
 		</ul>
 
-		<nav class="pager" aria-label="Pagination">
-			{#if currentPage > 1}
-				<a class="btn ghost" href={pageHref(currentPage - 1)}>Previous</a>
-			{:else}
-				<span></span>
-			{/if}
-			<span class="page-num">Page {currentPage} of {totalPages}</span>
-			{#if hasMore}
-				<a class="btn ghost" href={pageHref(currentPage + 1)}>Next</a>
-			{:else}
-				<span></span>
-			{/if}
-		</nav>
+		<Pager {currentPage} {totalPages} {hasMore} {pageHref} />
 	{/if}
 </section>
 
@@ -311,137 +292,6 @@ function pageHref(n: number): string {
 		margin: var(--space-2xs) 0 0;
 		color: var(--ink-subtle);
 		font-size: var(--type-definition-body-size);
-	}
-
-	.filters {
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-md);
-		background: var(--ink-inverse);
-		border: 1px solid var(--edge-default);
-		border-radius: var(--radius-lg);
-		padding: var(--space-lg);
-	}
-
-	/* Filter selects share a single grid that wraps as the card narrows. The
-	 * Apply / Reset row lives below in `.filter-actions` so they never escape
-	 * the card edge regardless of how many filters are present. */
-	.filter-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
-		gap: var(--space-md);
-		align-items: end;
-	}
-
-	.filter {
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-2xs);
-		min-width: 0;
-	}
-
-	.filter label {
-		font-size: var(--type-ui-caption-size);
-		font-weight: 600;
-		color: var(--ink-muted);
-		text-transform: uppercase;
-		letter-spacing: var(--letter-spacing-caps);
-	}
-
-	.filter select {
-		font: inherit;
-		padding: var(--space-sm) var(--space-sm);
-		border: 1px solid var(--edge-strong);
-		border-radius: var(--radius-sm);
-		background: var(--ink-inverse);
-		color: var(--ink-body);
-	}
-
-	.filter select:focus {
-		outline: none;
-		border-color: var(--action-default);
-		box-shadow: var(--focus-ring-shadow);
-	}
-
-	.filter-actions {
-		display: flex;
-		gap: var(--space-xs);
-		justify-content: flex-end;
-		padding-top: var(--space-sm);
-		border-top: 1px solid var(--edge-default);
-	}
-
-	.chip-row {
-		display: flex;
-		align-items: center;
-		flex-wrap: wrap;
-		gap: var(--space-xs);
-		padding: 0 var(--space-2xs);
-	}
-
-	.chip-label {
-		font-size: var(--type-ui-caption-size);
-		text-transform: uppercase;
-		letter-spacing: var(--letter-spacing-caps);
-		color: var(--ink-subtle);
-		font-weight: 600;
-		margin-right: var(--space-2xs);
-	}
-
-	.chip {
-		display: inline-flex;
-		align-items: center;
-		gap: var(--space-xs);
-		padding: var(--space-2xs) var(--space-sm);
-		background: var(--action-default-wash);
-		border: 1px solid var(--action-default-edge);
-		border-radius: var(--radius-pill);
-		color: var(--action-default-hover);
-		font-size: var(--type-ui-label-size);
-		text-decoration: none;
-		transition: background var(--motion-fast), border-color var(--motion-fast);
-	}
-
-	.chip:hover {
-		background: var(--action-default-wash);
-		border-color: var(--action-default-edge);
-	}
-
-	.chip:focus-visible {
-		outline: none;
-		box-shadow: 0 0 0 3px var(--focus-ring);
-	}
-
-	.chip-name {
-		color: var(--action-default-active);
-		font-weight: 600;
-	}
-
-	.chip-value {
-		color: var(--ink-body);
-	}
-
-	.chip-x {
-		color: var(--action-default);
-		font-size: var(--type-reading-body-size);
-		line-height: 1;
-	}
-
-	.chip-clear {
-		font-size: var(--type-ui-caption-size);
-		color: var(--ink-muted);
-		text-decoration: underline;
-		margin-left: var(--space-2xs);
-	}
-
-	.chip-clear:hover {
-		color: var(--ink-body);
-	}
-
-	.result-summary {
-		margin: 0;
-		color: var(--ink-subtle);
-		font-size: var(--type-ui-label-size);
 	}
 
 	.card.just-created {
@@ -580,27 +430,6 @@ function pageHref(n: number): string {
 		border-color: var(--action-default-edge);
 	}
 
-	.pager {
-		display: grid;
-		grid-template-columns: 1fr auto 1fr;
-		align-items: center;
-		gap: var(--space-md);
-		padding: var(--space-sm) 0;
-	}
-
-	.pager > :first-child {
-		justify-self: start;
-	}
-
-	.pager > :last-child {
-		justify-self: end;
-	}
-
-	.page-num {
-		color: var(--ink-subtle);
-		font-size: var(--type-ui-label-size);
-	}
-
 	.btn {
 		padding: var(--space-sm) var(--space-lg);
 		font-size: var(--type-definition-body-size);
@@ -624,16 +453,6 @@ function pageHref(n: number): string {
 		background: var(--action-default-hover);
 	}
 
-	.btn.secondary {
-		background: var(--surface-sunken);
-		color: var(--ink-body);
-		border-color: var(--edge-strong);
-	}
-
-	.btn.secondary:hover {
-		background: var(--edge-default);
-	}
-
 	.btn.ghost {
 		background: transparent;
 		color: var(--ink-muted);
@@ -644,9 +463,4 @@ function pageHref(n: number): string {
 		background: var(--surface-sunken);
 	}
 
-	@media (max-width: 640px) {
-		.filter-grid {
-			grid-template-columns: 1fr 1fr;
-		}
-	}
 </style>
