@@ -48,7 +48,14 @@ function handleWindowKey(event: KeyboardEvent): void {
 
 <svelte:window onkeydown={handleWindowKey} />
 
-<button type="button" class="trigger" onclick={toggleFromButton} aria-label="Open search">
+<button
+	type="button"
+	class="trigger"
+	onclick={toggleFromButton}
+	aria-label="Open search"
+	data-testid="helpsearch-trigger"
+	data-state={open ? 'open' : 'closed'}
+>
 	<span class="glyph" aria-hidden="true">⌕</span>
 	<span class="label">Search</span>
 	<kbd class="hint" aria-hidden="true">/</kbd>

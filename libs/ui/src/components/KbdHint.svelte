@@ -18,7 +18,7 @@ let {
 } = $props();
 </script>
 
-<kbd class="kbd" aria-label={ariaLabel}>
+<kbd class="kbd" aria-label={ariaLabel} data-testid="kbdhint-root">
 	{@render children()}
 </kbd>
 

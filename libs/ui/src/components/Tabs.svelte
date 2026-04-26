@@ -75,8 +75,8 @@ function handleKeyDown(event: KeyboardEvent, id: string): void {
 }
 </script>
 
-<div class="tabs">
-	<div class="tablist" role="tablist" aria-label={ariaLabel}>
+<div class="tabs" data-testid="tabs-root">
+	<div class="tablist" role="tablist" aria-label={ariaLabel} data-testid="tabs-list">
 		{#each tabs as t (t.id)}
 			{@const selected = resolvedActive === t.id}
 			<button
@@ -89,6 +89,8 @@ function handleKeyDown(event: KeyboardEvent, id: string): void {
 				aria-controls="panel-{t.id}"
 				tabindex={selected ? 0 : -1}
 				disabled={t.disabled}
+				data-testid={`tabs-item-${t.id}`}
+				data-state={t.disabled ? 'disabled' : selected ? 'active' : 'idle'}
 				onclick={() => (active = t.id)}
 				onkeydown={(e) => handleKeyDown(e, t.id)}
 			>
@@ -102,6 +104,7 @@ function handleKeyDown(event: KeyboardEvent, id: string): void {
 		role="tabpanel"
 		aria-labelledby="tab-{resolvedActive}"
 		tabindex="0"
+		data-testid="tabs-panel"
 	>
 		{@render panel(resolvedActive)}
 	</div>

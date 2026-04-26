@@ -93,22 +93,23 @@ $effect(() => {
 {#if open}
 	<!-- svelte-ignore a11y_click_events_have_key_events -->
 	<!-- svelte-ignore a11y_no_static_element_interactions -->
-	<div class="scrim" onpointerdown={handleScrim} onkeydown={handleKeyDown}>
+	<div class="scrim" onpointerdown={handleScrim} onkeydown={handleKeyDown} data-testid="jumptocardpopover-scrim">
 		<div
 			bind:this={panelEl}
 			class="panel"
 			role="dialog"
 			aria-modal="true"
 			aria-label="Jump to card in session"
+			data-testid="jumptocardpopover-root"
 		>
 			<header class="hd">
-				<h2>Jump to card</h2>
-				<button type="button" class="close" aria-label="Close" onclick={close}>&times;</button>
+				<h2 data-testid="jumptocardpopover-title">Jump to card</h2>
+				<button type="button" class="close" aria-label="Close" data-testid="jumptocardpopover-close" onclick={close}>&times;</button>
 			</header>
 
 			<p class="sub">Pick a position. Skipped cards stay pending; come back to them anytime.</p>
 
-			<div class="list" bind:this={listEl} role="listbox" aria-label="Card positions">
+			<div class="list" bind:this={listEl} role="listbox" aria-label="Card positions" data-testid="jumptocardpopover-list">
 				{#each Array.from({ length: totalCards }, (_, i) => i) as index (index)}
 					{@const status = index === currentIndex ? 'current' : (statuses[index] ?? 'pending')}
 					<button
@@ -116,6 +117,8 @@ $effect(() => {
 						class="row row-{status}"
 						class:is-current={status === 'current'}
 						data-jump-row={index}
+						data-testid={`jumptocardpopover-item-${index}`}
+						data-state={status}
 						role="option"
 						aria-selected={index === currentIndex}
 						onclick={() => pick(index)}

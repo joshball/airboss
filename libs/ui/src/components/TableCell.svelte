@@ -10,4 +10,4 @@ let {
 } = $props();
 </script>
 
-<td style:text-align={align}>{@render children()}</td>
+<td style:text-align={align} data-testid="tablecell-root" data-align={align}>{@render children()}</td>

@@ -20,7 +20,14 @@ let {
 } = $props();
 </script>
 
-<span class="sp s-{size} t-{tone}" role="status" aria-label={ariaLabel}>
+<span
+	class="sp s-{size} t-{tone}"
+	role="status"
+	aria-label={ariaLabel}
+	data-testid="spinner-root"
+	data-size={size}
+	data-tone={tone}
+>
 	<svg viewBox="0 0 24 24" aria-hidden="true">
 		<circle class="track" cx="12" cy="12" r="10" fill="none" stroke-width="3" />
 		<circle class="arc" cx="12" cy="12" r="10" fill="none" stroke-width="3" stroke-linecap="round" />

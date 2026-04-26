@@ -24,12 +24,12 @@ let { groups, item, ariaLabel = 'Results' }: BrowseListProps<T> = $props();
 
 {#each groups as group (group.key)}
 	{#if group.label}
-		<h2 class="group-heading">
+		<h2 class="group-heading" data-testid={`browselist-group-heading-${group.key}`}>
 			<span>{group.label}</span>
-			<span class="group-count">{group.items.length}</span>
+			<span class="group-count" data-testid={`browselist-group-count-${group.key}`}>{group.items.length}</span>
 		</h2>
 	{/if}
-	<ul class="list" aria-label={ariaLabel}>
+	<ul class="list" aria-label={ariaLabel} data-testid={`browselist-list-${group.key}`} data-group-key={group.key}>
 		{#each group.items as it (it)}
 			{@render item(it)}
 		{/each}

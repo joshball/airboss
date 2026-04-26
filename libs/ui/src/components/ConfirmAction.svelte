@@ -118,6 +118,8 @@ $effect(() => {
 		type="button"
 		class="trigger v-{triggerVariant} s-{size}"
 		{disabled}
+		data-testid="confirmaction-trigger"
+		data-state={disabled ? 'disabled' : 'idle'}
 		onclick={openConfirm}
 	>
 		{#if children}
@@ -134,10 +136,12 @@ $effect(() => {
 		class="confirm"
 		role="group"
 		aria-label={label ?? confirmLabel}
+		data-testid="confirmaction-panel"
+		data-state="confirming"
 		onkeydown={onPanelKeydown}
 	>
 		{#if formAction}
-			<form method={formMethod} action={formAction} class="form">
+			<form method={formMethod} action={formAction} class="form" data-testid="confirmaction-form">
 				{#if hiddenFields}
 					{#each Object.entries(hiddenFields) as [k, v] (k)}
 						<input type="hidden" name={k} value={v} />
@@ -147,6 +151,7 @@ $effect(() => {
 					bind:this={confirmEl}
 					type="submit"
 					class="btn v-{confirmVariant} s-{size}"
+					data-testid="confirmaction-confirm"
 				>
 					{confirmLabel}
 				</button>
@@ -156,6 +161,7 @@ $effect(() => {
 				bind:this={confirmEl}
 				type="button"
 				class="btn v-{confirmVariant} s-{size}"
+				data-testid="confirmaction-confirm"
 				onclick={runCallback}
 			>
 				{confirmLabel}
@@ -164,6 +170,7 @@ $effect(() => {
 		<button
 			type="button"
 			class="btn v-ghost s-{size}"
+			data-testid="confirmaction-cancel"
 			onclick={cancel}
 		>
 			{cancelLabel}

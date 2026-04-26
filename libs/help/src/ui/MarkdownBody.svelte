@@ -150,7 +150,7 @@ function resolveWikilink(pageId: string): { href: string; resolved: boolean } {
 	{/each}
 {/snippet}
 
-<div class="md-body">
+<div class="md-body" data-testid="markdownbody-root">
 	{@render blockNodes(nodes)}
 </div>
 

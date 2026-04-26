@@ -204,8 +204,9 @@ function cancel(): void {
 	{/snippet}
 
 	{#snippet body()}
+		<span data-testid="citationpicker-body" data-active-type={activeType}></span>
 		{#if activeTypes.length > 1}
-			<div class="tabs" role="tablist" aria-label="Reference types">
+			<div class="tabs" role="tablist" aria-label="Reference types" data-testid="citationpicker-tabs">
 				{#each activeTypes as t (t)}
 					<button
 						type="button"
@@ -213,6 +214,8 @@ function cancel(): void {
 						aria-selected={activeType === t}
 						class="tab"
 						class:active={activeType === t}
+						data-testid={`citationpicker-tab-${t}`}
+						data-state={activeType === t ? 'active' : 'idle'}
 						onclick={() => handleTabClick(t)}
 					>
 						{tabLabel(t)}

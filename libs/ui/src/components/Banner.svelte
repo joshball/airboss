@@ -31,18 +31,19 @@ let {
 const role = $derived(tone === 'danger' ? 'alert' : 'status');
 </script>
 
-<div class="banner v-{tone}" {role}>
-	<div class="content">
+<div class="banner v-{tone}" {role} data-testid="banner-root" data-tone={tone}>
+	<div class="content" data-testid="banner-content">
 		{#if title}
-			<p class="title">{title}</p>
+			<p class="title" data-testid="banner-title">{title}</p>
 		{/if}
-		<div class="body">{@render children()}</div>
+		<div class="body" data-testid="banner-body">{@render children()}</div>
 	</div>
 	{#if dismissible && onDismiss}
 		<button
 			type="button"
 			class="dismiss"
 			aria-label="Dismiss"
+			data-testid="banner-dismiss"
 			onclick={onDismiss}
 		>
 			x

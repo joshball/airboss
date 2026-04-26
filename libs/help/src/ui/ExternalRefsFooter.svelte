@@ -12,17 +12,17 @@ let { refs }: { refs: readonly ExternalRef[] | undefined } = $props();
 </script>
 
 {#if refs && refs.length > 0}
-	<section class="refs" aria-labelledby="external-refs-heading">
-		<h2 id="external-refs-heading">External references</h2>
-		<ol class="list">
+	<section class="refs" aria-labelledby="external-refs-heading" data-testid="externalrefsfooter-root">
+		<h2 id="external-refs-heading" data-testid="externalrefsfooter-heading">External references</h2>
+		<ol class="list" data-testid="externalrefsfooter-list">
 			{#each refs as ref, i (i)}
-				<li class="item">
+				<li class="item" data-testid={`externalrefsfooter-item-${i}`}>
 					<div class="head">
-						<a class="title" href={ref.url} target="_blank" rel="noopener noreferrer">{ref.title}</a>
-						<span class="badge badge-{ref.source}">{ref.source}</span>
+						<a class="title" href={ref.url} target="_blank" rel="noopener noreferrer" data-testid={`externalrefsfooter-title-${i}`}>{ref.title}</a>
+						<span class="badge badge-{ref.source}" data-testid={`externalrefsfooter-source-${i}`}>{ref.source}</span>
 					</div>
 					{#if ref.note}
-						<p class="note">{ref.note}</p>
+						<p class="note" data-testid={`externalrefsfooter-note-${i}`}>{ref.note}</p>
 					{/if}
 					<p class="url"><a href={ref.url} target="_blank" rel="noopener noreferrer">{ref.url}</a></p>
 				</li>

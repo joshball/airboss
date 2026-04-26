@@ -33,7 +33,13 @@ let {
 } = $props();
 </script>
 
-<div data-theme={theme} data-appearance={appearance} data-layout={layout} class="ab-theme">
+<div
+	data-theme={theme}
+	data-appearance={appearance}
+	data-layout={layout}
+	data-testid="themeprovider-root"
+	class="ab-theme"
+>
 	{@render children()}
 </div>
 

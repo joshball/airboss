@@ -30,13 +30,15 @@ let {
 <article
 	class="card v-{variant}"
 	aria-labelledby={ariaLabelledby}
+	data-testid="card-root"
+	data-variant={variant}
 >
 	{#if header}
-		<header class="hd">{@render header()}</header>
+		<header class="hd" data-testid="card-header">{@render header()}</header>
 	{/if}
-	<div class="body">{@render children()}</div>
+	<div class="body" data-testid="card-body">{@render children()}</div>
 	{#if footer}
-		<footer class="ft">{@render footer()}</footer>
+		<footer class="ft" data-testid="card-footer">{@render footer()}</footer>
 	{/if}
 </article>
 

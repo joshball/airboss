@@ -16,17 +16,28 @@ const aliases = {
 	'@ab/auth': resolve('./libs/auth/src/index.ts'),
 	'@ab/audit': resolve('./libs/audit/src/index.ts'),
 	'@ab/themes': resolve('./libs/themes/index.ts'),
+	'@ab/ui/components/Drawer.svelte': resolve('./libs/ui/src/components/Drawer.svelte'),
 	'@ab/ui': resolve('./libs/ui/src/index.ts'),
 	'@ab/utils': resolve('./libs/utils/src/index.ts'),
 	'@ab/bc-study': resolve('./libs/bc/study/src/index.ts'),
 	'@ab/bc-sim': resolve('./libs/bc/sim/src/index.ts'),
 	'@ab/bc-citations': resolve('./libs/bc/citations/src/index.ts'),
 	'@ab/aviation/sources': resolve('./libs/aviation/src/sources/index.ts'),
+	'@ab/aviation/ui/ReferenceText.svelte': resolve('./libs/aviation/src/ui/ReferenceText.svelte'),
 	'@ab/aviation': resolve('./libs/aviation/src/index.ts'),
 	'@ab/help': resolve('./libs/help/src/index.ts'),
 	'@ab/activities': resolve('./libs/activities/src/index.ts'),
 	'@ab/hangar-jobs': resolve('./libs/hangar-jobs/src/index.ts'),
 	'@ab/hangar-sync': resolve('./libs/hangar-sync/src/index.ts'),
+};
+
+// `$app/state` is a SvelteKit runtime module. The standalone DOM project
+// doesn't ship SvelteKit, so we point library DOM tests at a static stub
+// that exposes the same shape (page / navigating / updated). Apps still
+// resolve the real module via their own svelte.config.js / vite.config.ts.
+const domAliases = {
+	...aliases,
+	$app: resolve('./libs/ui/__tests__/stubs/app'),
 };
 
 // Two-project workspace:
@@ -75,7 +86,7 @@ export default defineConfig({
 			},
 			{
 				plugins: [svelte({ hot: false })],
-				resolve: { alias: aliases, conditions: ['browser'] },
+				resolve: { alias: domAliases, conditions: ['browser'] },
 				test: {
 					name: 'unit-dom',
 					environment: 'happy-dom',

@@ -17,7 +17,7 @@ let {
 } = $props();
 </script>
 
-<nav class="toc" aria-label="Table of contents">
+<nav class="toc" aria-label="Table of contents" data-testid="helptoc-root">
 	<ul>
 		{#each sections as section (section.id)}
 			<li>
@@ -25,6 +25,8 @@ let {
 					href={`#${section.id}`}
 					aria-current={activeId === section.id ? 'true' : undefined}
 					class:active={activeId === section.id}
+					data-testid={`helptoc-link-${section.id}`}
+					data-state={activeId === section.id ? 'active' : 'idle'}
 				>
 					{section.title}
 				</a>

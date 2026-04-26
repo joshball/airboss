@@ -25,7 +25,13 @@ let {
 } = $props();
 </script>
 
-<span class="badge v-{tone} s-{size}" aria-label={ariaLabel}>
+<span
+	class="badge v-{tone} s-{size}"
+	aria-label={ariaLabel}
+	data-testid="badge-root"
+	data-tone={tone}
+	data-size={size}
+>
 	{@render children()}
 </span>
 

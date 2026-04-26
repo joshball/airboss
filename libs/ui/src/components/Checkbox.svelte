@@ -40,7 +40,15 @@ $effect(() => {
 });
 </script>
 
-<label class="cb s-{size}" class:is-error={error} class:is-disabled={disabled} for={autoId}>
+<label
+	class="cb s-{size}"
+	class:is-error={error}
+	class:is-disabled={disabled}
+	for={autoId}
+	data-testid="checkbox-root"
+	data-size={size}
+	data-state={disabled ? 'disabled' : error ? 'error' : indeterminate ? 'indeterminate' : checked ? 'checked' : 'unchecked'}
+>
 	<input
 		bind:this={inputEl}
 		type="checkbox"
@@ -50,9 +58,10 @@ $effect(() => {
 		{disabled}
 		aria-invalid={error ? 'true' : undefined}
 		aria-describedby={ariaDescribedby}
+		data-testid="checkbox-input"
 		onchange={(e) => onchange?.((e.currentTarget as HTMLInputElement).checked)}
 	/>
-	<span class="text">{label}</span>
+	<span class="text" data-testid="checkbox-label">{label}</span>
 </label>
 
 <style>

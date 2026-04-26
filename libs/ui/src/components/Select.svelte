@@ -52,8 +52,14 @@ const errorId = $derived(error ? `${autoId}-error` : undefined);
 const describedBy = $derived([hintId, errorId].filter(Boolean).join(' ') || undefined);
 </script>
 
-<label class="field s-{size}" for={autoId}>
-	<span class="label">
+<label
+	class="field s-{size}"
+	for={autoId}
+	data-testid="select-root"
+	data-size={size}
+	data-state={disabled ? 'disabled' : error ? 'error' : 'idle'}
+>
+	<span class="label" data-testid="select-label">
 		{label}
 		{#if required}
 			<span class="req" aria-hidden="true">*</span>
@@ -68,6 +74,7 @@ const describedBy = $derived([hintId, errorId].filter(Boolean).join(' ') || unde
 		{disabled}
 		aria-invalid={error ? 'true' : undefined}
 		aria-describedby={describedBy}
+		data-testid="select-control"
 	>
 		{#if placeholder !== undefined}
 			<option value="" disabled>{placeholder}</option>
@@ -82,10 +89,10 @@ const describedBy = $derived([hintId, errorId].filter(Boolean).join(' ') || unde
 	</select>
 
 	{#if hint && !error}
-		<span id={hintId} class="hint">{hint}</span>
+		<span id={hintId} class="hint" data-testid="select-hint">{hint}</span>
 	{/if}
 	{#if error}
-		<span id={errorId} class="error" role="alert">{error}</span>
+		<span id={errorId} class="error" role="alert" data-testid="select-error">{error}</span>
 	{/if}
 </label>
 

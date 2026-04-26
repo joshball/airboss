@@ -10,4 +10,4 @@ let {
 } = $props();
 </script>
 
-<th {scope}>{@render children()}</th>
+<th {scope} data-testid="tableheadercell-root" data-scope={scope}>{@render children()}</th>
