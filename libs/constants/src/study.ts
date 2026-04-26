@@ -476,9 +476,11 @@ export const KNOWLEDGE_PHASE_LABELS: Record<KnowledgePhase, string> = {
 };
 
 /**
- * Certifications a knowledge node can be relevant at. Tagged per-node via
- * the relevance array. Not to be confused with specific ratings / endorsements;
- * this is the cert framework itself.
+ * Certifications a knowledge node can be relevant at. Stored per-node as a
+ * single `minimum_cert` (the lowest cert that requires the topic in its
+ * ACS/PTS / operating privileges). Higher certs inherit it through
+ * `CERT_PREREQUISITES`. Not to be confused with specific ratings or
+ * endorsements; this is the cert framework itself.
  *
  * `CERTS` is a curated *subset* of {@link CERT_APPLICABILITIES} from
  * `reference-tags.ts` -- the four cert goals the study-plan dashboard targets
@@ -511,6 +513,34 @@ export const CERT_LABELS: Record<Cert, string> = {
 };
 
 /**
+ * Cert hierarchy for mastery + browse filtering.
+ *
+ * Each cert maps to the set of certs whose knowledge it inherits (its
+ * prerequisites *and* the cert itself). A holder of cert C needs every node
+ * whose `minimum_cert` is in `CERT_PREREQUISITES[C]`.
+ *
+ * IFR and CPL are siblings (both require PPL, neither requires the other).
+ * A pure-CPL pilot (CPL without IFR) doesn't need IFR-floor topics; a
+ * pure-IFR pilot (PPL+IFR, no CPL) doesn't need CPL-floor topics. CFI
+ * requires CPL plus IFR for the instrument-instructor add-on, so the CFI
+ * inheritance set covers everything.
+ */
+export const CERT_PREREQUISITES: Record<Cert, readonly Cert[]> = {
+	[CERTS.PPL]: [CERTS.PPL],
+	[CERTS.IR]: [CERTS.PPL, CERTS.IR],
+	[CERTS.CPL]: [CERTS.PPL, CERTS.CPL],
+	[CERTS.CFI]: [CERTS.PPL, CERTS.IR, CERTS.CPL, CERTS.CFI],
+};
+
+/**
+ * Returns the certs whose knowledge a holder of `cert` is responsible for.
+ * Includes `cert` itself.
+ */
+export function certsCoveredBy(cert: Cert): readonly Cert[] {
+	return CERT_PREREQUISITES[cert];
+}
+
+/**
  * Bloom's taxonomy levels used per-relevance-entry. A node can be relevant at
  * Remember for PPL but at Evaluate for CFI -- the same knowledge, different
  * depth of understanding expected.
@@ -538,23 +568,28 @@ export const BLOOM_LEVEL_LABELS: Record<BloomLevel, string> = {
 };
 
 /**
- * Priority of a node within a cert's scope. Core = must-know. Supporting =
- * helpful context. Elective = nice-to-have / advanced.
+ * Study priority for a knowledge node. Every node on a learner's surface is
+ * already on the ACS/PTS for their cert -- "must-know" is the regulatory
+ * default. This field expresses *study-time allocation*, not testability.
+ *
+ * - `critical`  -- safety-of-flight or examiner-favorite. "If you only have 30 minutes."
+ * - `standard`  -- everything else on the ACS/PTS for the minimum cert. Default.
+ * - `stretch`   -- useful adjacent knowledge below or beyond the strict ACS scope.
  */
-export const RELEVANCE_PRIORITIES = {
-	CORE: 'core',
-	SUPPORTING: 'supporting',
-	ELECTIVE: 'elective',
+export const STUDY_PRIORITIES = {
+	CRITICAL: 'critical',
+	STANDARD: 'standard',
+	STRETCH: 'stretch',
 } as const;
 
-export type RelevancePriority = (typeof RELEVANCE_PRIORITIES)[keyof typeof RELEVANCE_PRIORITIES];
+export type StudyPriority = (typeof STUDY_PRIORITIES)[keyof typeof STUDY_PRIORITIES];
 
-export const RELEVANCE_PRIORITY_VALUES = Object.values(RELEVANCE_PRIORITIES);
+export const STUDY_PRIORITY_VALUES = Object.values(STUDY_PRIORITIES);
 
-export const RELEVANCE_PRIORITY_LABELS: Record<RelevancePriority, string> = {
-	[RELEVANCE_PRIORITIES.CORE]: 'Core',
-	[RELEVANCE_PRIORITIES.SUPPORTING]: 'Supporting',
-	[RELEVANCE_PRIORITIES.ELECTIVE]: 'Elective',
+export const STUDY_PRIORITY_LABELS: Record<StudyPriority, string> = {
+	[STUDY_PRIORITIES.CRITICAL]: 'Critical',
+	[STUDY_PRIORITIES.STANDARD]: 'Standard',
+	[STUDY_PRIORITIES.STRETCH]: 'Stretch',
 };
 
 /**

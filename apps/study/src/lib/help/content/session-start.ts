@@ -18,7 +18,6 @@ import {
 	DOMAIN_VALUES,
 	HELP_KINDS,
 	MODE_WEIGHTS,
-	RELEVANCE_PRIORITY_LABELS,
 	ROUTES,
 	SESSION_MODE_LABELS,
 	SESSION_MODE_VALUES,
@@ -29,6 +28,7 @@ import {
 	SESSION_SLICE_LABELS,
 	SESSION_SLICE_VALUES,
 	type SessionMode,
+	STUDY_PRIORITY_LABELS,
 } from '@ab/constants';
 import type { HelpPage } from '@ab/help';
 
@@ -172,16 +172,16 @@ Reason codes are stable API: the set above is the full authoritative list. If yo
 		},
 		{
 			id: 'priorities',
-			title: 'Priorities',
-			body: `Knowledge nodes are tagged with a **priority** that says how central the node is to your cert goals. Priorities flow through reason-code selection (e.g., \`expand_unstarted_priority\` surfaces core-only) and through tiebreakers when multiple slices compete for the same slot.
+			title: 'Study priority',
+			body: `Knowledge nodes are tagged with a **study priority** that says where to spend study time. Every node a learner sees is already on the ACS/PTS for their cert -- "must-know" is the regulatory default. Priority answers a different question: *if you only have 30 minutes today, what's the highest-leverage thing to drill?* Priorities flow through reason-code selection (e.g., \`expand_unstarted_priority\` surfaces \`critical\` first) and through tiebreakers when multiple slices compete for the same slot.
 
-| Priority   | Meaning                                                                                                              |
-| ---------- | -------------------------------------------------------------------------------------------------------------------- |
-| ${RELEVANCE_PRIORITY_LABELS.core}       | Must-know. Non-negotiable for the cert. Surfaces in Expand even when you haven't set a focus.                        |
-| ${RELEVANCE_PRIORITY_LABELS.supporting} | Helpful context. Queued as capacity allows once core topics are in flight.                                           |
-| ${RELEVANCE_PRIORITY_LABELS.elective}   | Nice-to-have or advanced. Won't surface unless you explicitly focus on the domain or run an Expand-heavy mode.       |
+| Priority   | Meaning                                                                                                                                 |
+| ---------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| ${STUDY_PRIORITY_LABELS.critical} | Safety-of-flight or examiner-favorite. Surfaces in Expand even when you haven't set a focus.                                            |
+| ${STUDY_PRIORITY_LABELS.standard} | Everything else on the ACS/PTS for the cert. Queued as capacity allows once critical topics are in flight.                              |
+| ${STUDY_PRIORITY_LABELS.stretch}  | Useful adjacent knowledge below the floor or beyond strict ACS scope. Won't surface unless you explicitly focus on the domain.          |
 
-A preview row labelled "Core topic, unstarted" is a Priority: Core node the engine wants you to begin on; the Expand slice is how it gets there.`,
+A preview row labelled "Critical topic, unstarted" is a Priority: Critical node the engine wants you to begin on; the Expand slice is how it gets there.`,
 		},
 		{
 			id: 'domains',

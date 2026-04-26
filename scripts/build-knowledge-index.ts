@@ -24,6 +24,7 @@ import { createHash } from 'node:crypto';
 import { readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { basename, join, relative, resolve } from 'node:path';
 import {
+	CERT_VALUES,
 	DOMAIN_LABELS,
 	KNOWLEDGE_EDGE_TYPES,
 	KNOWLEDGE_EDGE_YAML_KEYS,
@@ -32,6 +33,7 @@ import {
 	type KnowledgeEdgeType,
 	NODE_LIFECYCLES,
 	type NodeLifecycle,
+	STUDY_PRIORITY_VALUES,
 } from '@ab/constants/study';
 import { parse as parseYaml } from 'yaml';
 
@@ -70,12 +72,6 @@ interface ParsedReference {
 	note: string;
 }
 
-interface ParsedRelevance {
-	cert: string;
-	bloom: string;
-	priority: string;
-}
-
 interface ParsedFrontmatter {
 	id: string;
 	title: string;
@@ -84,7 +80,10 @@ interface ParsedFrontmatter {
 	knowledgeTypes: string[];
 	technicalDepth: string | null;
 	stability: string | null;
-	relevance: ParsedRelevance[];
+	/** Lowest cert that requires this topic. Required field on authored nodes. */
+	minimumCert: string | null;
+	/** Study-time bucket: critical / standard / stretch. Required on authored nodes. */
+	studyPriority: string | null;
 	requires: string[];
 	deepens: string[];
 	appliedBy: string[];
@@ -264,21 +263,6 @@ function asReferenceArray(value: unknown): ParsedReference[] {
 		}));
 }
 
-function asRelevanceArray(value: unknown): ParsedRelevance[] {
-	if (!Array.isArray(value)) return [];
-	const out: ParsedRelevance[] = [];
-	for (const entry of value) {
-		if (typeof entry !== 'object' || entry === null) continue;
-		const rec = entry as Record<string, unknown>;
-		out.push({
-			cert: typeof rec.cert === 'string' ? rec.cert : '',
-			bloom: typeof rec.bloom === 'string' ? rec.bloom : '',
-			priority: typeof rec.priority === 'string' ? rec.priority : '',
-		});
-	}
-	return out;
-}
-
 function parseFrontmatterYaml(yaml: string, relPath: string): { frontmatter: ParsedFrontmatter; errors: string[] } {
 	const errors: string[] = [];
 	let raw: unknown;
@@ -302,7 +286,8 @@ function parseFrontmatterYaml(yaml: string, relPath: string): { frontmatter: Par
 		knowledgeTypes: asStringArray(obj.knowledge_types),
 		technicalDepth: asString(obj.technical_depth),
 		stability: asString(obj.stability),
-		relevance: asRelevanceArray(obj.relevance),
+		minimumCert: asString(obj.minimum_cert),
+		studyPriority: asString(obj.study_priority),
 		requires: asStringArray(obj[KNOWLEDGE_EDGE_YAML_KEYS.REQUIRES]),
 		deepens: asStringArray(obj[KNOWLEDGE_EDGE_YAML_KEYS.DEEPENS]),
 		appliedBy: asStringArray(obj[KNOWLEDGE_EDGE_YAML_KEYS.APPLIED_BY]),
@@ -336,7 +321,8 @@ function emptyFrontmatter(): ParsedFrontmatter {
 		knowledgeTypes: [],
 		technicalDepth: null,
 		stability: null,
-		relevance: [],
+		minimumCert: null,
+		studyPriority: null,
 		requires: [],
 		deepens: [],
 		appliedBy: [],
@@ -406,14 +392,30 @@ function validate(nodes: readonly ParsedNode[]): ValidationResult {
 			}
 		}
 
-		// Relevance shape
-		for (const r of fm.relevance) {
-			if (!r.cert || !r.bloom || !r.priority) {
-				errors.push({
-					relPath: node.relPath,
-					message: `relevance entry requires cert, bloom, priority (got ${JSON.stringify(r)})`,
-				});
-			}
+		// minimum_cert is required and must be one of the known cert slugs.
+		if (!fm.minimumCert) {
+			errors.push({
+				relPath: node.relPath,
+				message: `missing 'minimum_cert' (one of: ${CERT_VALUES.join(', ')})`,
+			});
+		} else if (!CERT_VALUES.includes(fm.minimumCert as (typeof CERT_VALUES)[number])) {
+			errors.push({
+				relPath: node.relPath,
+				message: `minimum_cert '${fm.minimumCert}' must be one of: ${CERT_VALUES.join(', ')}`,
+			});
+		}
+
+		// study_priority is required and must be one of critical / standard / stretch.
+		if (!fm.studyPriority) {
+			errors.push({
+				relPath: node.relPath,
+				message: `missing 'study_priority' (one of: ${STUDY_PRIORITY_VALUES.join(', ')})`,
+			});
+		} else if (!STUDY_PRIORITY_VALUES.includes(fm.studyPriority as (typeof STUDY_PRIORITY_VALUES)[number])) {
+			errors.push({
+				relPath: node.relPath,
+				message: `study_priority '${fm.studyPriority}' must be one of: ${STUDY_PRIORITY_VALUES.join(', ')}`,
+			});
 		}
 	}
 
@@ -730,7 +732,8 @@ async function writeToDb(nodes: readonly ParsedNode[]): Promise<void> {
 						knowledgeTypes: node.frontmatter.knowledgeTypes,
 						technicalDepth: node.frontmatter.technicalDepth,
 						stability: node.frontmatter.stability,
-						relevance: node.frontmatter.relevance,
+						minimumCert: node.frontmatter.minimumCert,
+						studyPriority: node.frontmatter.studyPriority,
 						modalities: node.frontmatter.modalities,
 						estimatedTimeMinutes: node.frontmatter.estimatedTimeMinutes,
 						reviewTimeMinutes: node.frontmatter.reviewTimeMinutes,
@@ -752,7 +755,8 @@ async function writeToDb(nodes: readonly ParsedNode[]): Promise<void> {
 							knowledgeTypes: node.frontmatter.knowledgeTypes,
 							technicalDepth: node.frontmatter.technicalDepth,
 							stability: node.frontmatter.stability,
-							relevance: node.frontmatter.relevance,
+							minimumCert: node.frontmatter.minimumCert,
+							studyPriority: node.frontmatter.studyPriority,
 							modalities: node.frontmatter.modalities,
 							estimatedTimeMinutes: node.frontmatter.estimatedTimeMinutes,
 							reviewTimeMinutes: node.frontmatter.reviewTimeMinutes,

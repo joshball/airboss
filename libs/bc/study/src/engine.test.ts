@@ -23,6 +23,7 @@ import {
 	SESSION_SLICES,
 	type SessionSlice,
 	SLICE_PRIORITY,
+	STUDY_PRIORITIES,
 } from '@ab/constants';
 import { describe, expect, it } from 'vitest';
 import {
@@ -352,21 +353,21 @@ describe('runEngine', () => {
 				nodeId: 'node_cfi_only',
 				domain: DOMAINS.TEACHING_METHODOLOGY,
 				crossDomains: [],
-				priority: 'core',
+				priority: STUDY_PRIORITIES.CRITICAL,
 				prerequisitesMet: true,
 				bloomDepth: null,
 				unstarted: true,
-				certs: [CERTS.CFI],
+				minimumCert: CERTS.CFI,
 			},
 			{
 				nodeId: 'node_ppl_ok',
 				domain: DOMAINS.AIRSPACE,
 				crossDomains: [],
-				priority: 'core',
+				priority: STUDY_PRIORITIES.CRITICAL,
 				prerequisitesMet: true,
 				bloomDepth: null,
 				unstarted: true,
-				certs: [CERTS.PPL],
+				minimumCert: CERTS.PPL,
 			},
 		];
 		const pools = makePools({}, { nodes });
@@ -379,6 +380,7 @@ describe('runEngine', () => {
 		const ids = preview.items
 			.filter((i) => i.kind === 'node_start')
 			.map((i) => (i.kind === 'node_start' ? i.nodeId : ''));
+		// CFI-floor node not covered by a PPL goal; PPL-floor node is.
 		expect(ids).not.toContain('node_cfi_only');
 		if (preview.allocation[SESSION_SLICES.EXPAND] > 0) {
 			expect(ids).toContain('node_ppl_ok');
@@ -391,21 +393,21 @@ describe('runEngine', () => {
 				nodeId: 'node_prereq_ok',
 				domain: DOMAINS.AIRSPACE,
 				crossDomains: [],
-				priority: 'core',
+				priority: STUDY_PRIORITIES.CRITICAL,
 				prerequisitesMet: true,
 				bloomDepth: null,
 				unstarted: true,
-				certs: [CERTS.PPL],
+				minimumCert: CERTS.PPL,
 			},
 			{
 				nodeId: 'node_prereq_missing',
 				domain: DOMAINS.IFR_PROCEDURES,
 				crossDomains: [],
-				priority: 'core',
+				priority: STUDY_PRIORITIES.CRITICAL,
 				prerequisitesMet: false,
 				bloomDepth: null,
 				unstarted: true,
-				certs: [CERTS.IR],
+				minimumCert: CERTS.IR,
 			},
 		];
 		const pools = makePools({}, { nodes });

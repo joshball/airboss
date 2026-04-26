@@ -11,8 +11,8 @@ import {
 	NODE_LIFECYCLE_VALUES,
 	type NodeLifecycle,
 	QUERY_PARAMS,
-	RELEVANCE_PRIORITY_VALUES,
-	type RelevancePriority,
+	STUDY_PRIORITY_VALUES,
+	type StudyPriority,
 } from '@ab/constants';
 import { narrow } from '@ab/utils';
 import type { PageServerLoad } from './$types';
@@ -26,7 +26,7 @@ export const load: PageServerLoad = async (event) => {
 
 	const domain = narrow<Domain>(url.searchParams.get(QUERY_PARAMS.DOMAIN), DOMAIN_VALUES);
 	const cert = narrow<Cert>(url.searchParams.get(QUERY_PARAMS.CERT), CERT_VALUES);
-	const priority = narrow<RelevancePriority>(url.searchParams.get(QUERY_PARAMS.PRIORITY), RELEVANCE_PRIORITY_VALUES);
+	const priority = narrow<StudyPriority>(url.searchParams.get(QUERY_PARAMS.PRIORITY), STUDY_PRIORITY_VALUES);
 	const lifecycle = narrow<NodeLifecycle>(url.searchParams.get(QUERY_PARAMS.LIFECYCLE), NODE_LIFECYCLE_VALUES);
 
 	const pageRaw = Number.parseInt(url.searchParams.get(QUERY_PARAMS.PAGE) ?? '1', 10);
@@ -64,8 +64,8 @@ export const load: PageServerLoad = async (event) => {
 			domain: row.domain,
 			estimatedTimeMinutes: row.estimatedTimeMinutes,
 			lifecycle: row.lifecycle,
-			certs: row.certs,
-			priorities: row.priorities,
+			minimumCert: row.minimumCert,
+			studyPriority: row.studyPriority,
 			displayScore: mastery?.displayScore ?? 0,
 			mastered: mastery?.mastered ?? false,
 		};

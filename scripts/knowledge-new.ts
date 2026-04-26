@@ -55,9 +55,15 @@ technical_depth: working
 # TODO: stable | evolving | volatile
 stability: stable
 
-# === Cert relevance (multi-dimensional) ===
-# Each entry: { cert: private|instrument|commercial|cfi, bloom: remember|understand|apply|analyze|evaluate|create, priority: core|supporting|elective }
-relevance: []
+# === Cert + study priority ===
+# minimum_cert: lowest cert that requires this topic. private | instrument | commercial | cfi.
+# Higher certs inherit through the prereq hierarchy (see CERT_PREREQUISITES).
+minimum_cert: private
+# study_priority: where this falls in study-time allocation. critical | standard | stretch.
+# critical = safety-of-flight or examiner-favorite.
+# standard = on the ACS/PTS but not as urgent.
+# stretch  = below the floor or beyond strict ACS scope; useful adjacent.
+study_priority: standard
 
 # === Graph edges ===
 # Author-facing collection keys; the build script normalizes on write.

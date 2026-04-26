@@ -22,6 +22,7 @@ import {
 	CERT_VALUES,
 	type Cert,
 	type ConfidenceLevel,
+	certsCoveredBy,
 	DEFAULT_SESSION_LENGTH,
 	DEFAULT_USER_TIMEZONE,
 	DOMAIN_VALUES,
@@ -29,9 +30,7 @@ import {
 	MS_PER_DAY,
 	MS_PER_WEEK,
 	QUERY_PARAMS,
-	RELEVANCE_PRIORITIES,
 	RESUME_WINDOW_MS,
-	type RelevancePriority,
 	ROUTES,
 	SCENARIO_STATUSES,
 	SESSION_ITEM_KINDS,
@@ -43,6 +42,8 @@ import {
 	type SessionReasonCode,
 	type SessionSkipKind,
 	type SessionSlice,
+	STUDY_PRIORITIES,
+	type StudyPriority,
 } from '@ab/constants';
 import { db as defaultDb } from '@ab/db';
 import { generateSessionId, generateSessionItemResultId } from '@ab/utils';
@@ -307,9 +308,11 @@ async function fetchRepCandidates(userId: string, now: Date, db: Db): Promise<En
 
 /**
  * Knowledge-node candidates for Expand/Diversify. Pulls every node whose
- * relevance entry intersects the cert filter, marks `unstarted` by left-joining
- * card / rep / session_item_result presence, and computes `prerequisitesMet`
- * via dual-gate `isNodeMastered` on each `requires` prerequisite.
+ * `minimumCert` is covered by the user's cert filter (via `certsCoveredBy`),
+ * marks `unstarted` by left-joining card / rep / session_item_result
+ * presence, and computes `prerequisitesMet` via dual-gate `isNodeMastered`
+ * on each `requires` prerequisite. Untagged nodes (`minimumCert IS NULL`)
+ * are skipped until an author tags them.
  */
 async function fetchNodeCandidates(
 	userId: string,
@@ -322,7 +325,8 @@ async function fetchNodeCandidates(
 			id: knowledgeNode.id,
 			domain: knowledgeNode.domain,
 			crossDomains: knowledgeNode.crossDomains,
-			relevance: knowledgeNode.relevance,
+			minimumCert: knowledgeNode.minimumCert,
+			studyPriority: knowledgeNode.studyPriority,
 		})
 		.from(knowledgeNode);
 
@@ -387,35 +391,29 @@ async function fetchNodeCandidates(
 		}
 	}
 
-	const certFilterSet = new Set<string>(certFilter);
-	const knownCerts: readonly string[] = CERT_VALUES;
+	// Cert-filter inheritance: a goal-cert holder is responsible for everything
+	// in `certsCoveredBy(goal)`. The user picks one or more cert goals on the
+	// study plan; the union of their inheritance sets is the eligibility list.
+	// An empty cert filter means "no cert goals set" -- include every tagged
+	// node regardless of cert.
+	const eligibleCerts = new Set<Cert>();
+	for (const c of certFilter) for (const covered of certsCoveredBy(c)) eligibleCerts.add(covered);
 
 	const candidates: EngineNodeCandidate[] = [];
 	for (const n of nodes) {
-		const rels = Array.isArray(n.relevance) ? n.relevance : [];
-		if (certFilterSet.size > 0) {
-			const matches = rels.some((r) => certFilterSet.has(r.cert));
-			if (!matches) continue;
-		}
+		const minCert = (n.minimumCert as Cert | null) ?? null;
+		// Untagged nodes (no minimum_cert yet) are skipped by the engine -- they
+		// shouldn't surface in expand until the author tags them.
+		if (minCert === null) continue;
+		if (certFilter.length > 0 && !eligibleCerts.has(minCert)) continue;
 
-		const relevantCerts = Array.from(new Set(rels.map((r) => r.cert))).filter((c): c is Cert => knownCerts.includes(c));
+		const priority = ((n.studyPriority as StudyPriority | null) ?? STUDY_PRIORITIES.STANDARD) satisfies StudyPriority;
 
-		const priorities = rels.map((r) => r.priority);
-		const priority: RelevancePriority = priorities.includes(RELEVANCE_PRIORITIES.CORE)
-			? RELEVANCE_PRIORITIES.CORE
-			: priorities.includes(RELEVANCE_PRIORITIES.SUPPORTING)
-				? RELEVANCE_PRIORITIES.SUPPORTING
-				: RELEVANCE_PRIORITIES.ELECTIVE;
-
-		const bloom = rels[0]?.bloom ?? null;
-		const bloomDepth: EngineNodeCandidate['bloomDepth'] =
-			bloom === 'understand'
-				? 'surface'
-				: bloom === 'apply'
-					? 'working'
-					: bloom === 'analyze' || bloom === 'evaluate' || bloom === 'create'
-						? 'deep'
-						: null;
+		// Without the per-cert bloom array we no longer have a per-node depth
+		// signal. Engine still scores depth-match at the user-preference level
+		// via `DEPTH_PREFERENCES`; nodes contribute null until a richer
+		// per-node depth signal exists.
+		const bloomDepth: EngineNodeCandidate['bloomDepth'] = null;
 
 		const unstarted = !cardTouched.has(n.id) && !repTouched.has(n.id) && !sirTouched.has(n.id);
 		const requires = requiresByFrom.get(n.id) ?? [];
@@ -426,10 +424,10 @@ async function fetchNodeCandidates(
 			domain: n.domain as Domain,
 			crossDomains: (n.crossDomains ?? []) as readonly string[],
 			priority,
+			minimumCert: minCert,
 			prerequisitesMet,
 			bloomDepth,
 			unstarted,
-			certs: relevantCerts,
 		});
 	}
 	return candidates;

@@ -8,17 +8,11 @@ knowledge_types: [pedagogical, perceptual, judgment]
 technical_depth: working
 stability: stable
 
-relevance:
-  - cert: cfi
-    bloom: apply
-    priority: core
-  - cert: cfi
-    bloom: evaluate
-    priority: core
-  - cert: cfi
-    bloom: create
-    priority: core
-
+# === Cert + study priority ===
+# minimum_cert: lowest cert that requires this topic. Higher certs inherit.
+minimum_cert: cfi
+# study_priority: critical (safety/checkride hot) | standard (default) | stretch (adjacent).
+study_priority: critical
 requires:
   - teach-the-learning-process
   - aero-angle-of-attack-and-stall

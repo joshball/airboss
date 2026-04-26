@@ -8,20 +8,11 @@ knowledge_types: [conceptual]
 technical_depth: working
 stability: stable
 
-relevance:
-  - cert: private
-    bloom: understand
-    priority: core
-  - cert: instrument
-    bloom: understand
-    priority: supporting
-  - cert: commercial
-    bloom: apply
-    priority: supporting
-  - cert: cfi
-    bloom: create
-    priority: core
-
+# === Cert + study priority ===
+# minimum_cert: lowest cert that requires this topic. Higher certs inherit.
+minimum_cert: private
+# study_priority: critical (safety/checkride hot) | standard (default) | stretch (adjacent).
+study_priority: critical
 requires: []
 deepens: []
 applied_by:
