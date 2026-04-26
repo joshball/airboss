@@ -135,7 +135,7 @@ function handleMenuKeydown(event: KeyboardEvent) {
 
 <ThemeProvider theme={selection.theme} appearance={selection.appearance} layout={selection.layout}>
 	<nav aria-label="Primary" class="topnav">
-		<span class="brand">airboss / hangar</span>
+		<a class="brand" href={ROUTES.HANGAR_HOME}>airboss / hangar</a>
 		<Nav />
 		<div class="spacer"></div>
 
@@ -222,6 +222,18 @@ function handleMenuKeydown(event: KeyboardEvent) {
 		color: var(--ink-body);
 		font-family: var(--font-family-mono);
 		font-size: var(--type-ui-label-size);
+		text-decoration: none;
+		padding: var(--space-2xs) var(--space-sm);
+		border-radius: var(--radius-sm);
+	}
+
+	.brand:hover {
+		background: var(--surface-sunken);
+	}
+
+	.brand:focus-visible {
+		outline: 2px solid var(--focus-ring);
+		outline-offset: 2px;
 	}
 
 	.spacer {
