@@ -166,6 +166,13 @@ export {
 } from './review-sessions';
 export type { SubmitReviewInput } from './reviews';
 export { CardNotReviewableError, NoReviewToUndoError, submitReview, undoReview } from './reviews';
+export {
+	deleteSavedDeck,
+	getSavedDeckOverlays,
+	normalizeSavedDeckLabel,
+	renameSavedDeck,
+	SavedDeckLabelTooLongError,
+} from './saved-decks';
 export type {
 	CreateScenarioInput,
 	DomainAccuracyStats,
@@ -215,12 +222,14 @@ export type {
 	NewKnowledgeNodeRow,
 	NewMemoryReviewSessionRow,
 	NewReviewRow,
+	NewSavedDeckRow,
 	NewScenarioRow,
 	NewSessionItemResultRow,
 	NewSessionRow,
 	NewStudyPlanRow,
 	ReviewRow,
 	ReviewSessionDeckSpec,
+	SavedDeckRow,
 	ScenarioOption,
 	ScenarioRow,
 	SessionItem,
@@ -238,6 +247,7 @@ export {
 	knowledgeNodeProgress,
 	memoryReviewSession,
 	review,
+	savedDeck,
 	scenario,
 	session,
 	sessionItemResult,

@@ -178,11 +178,14 @@ function isFailure<T>(result: unknown): result is ActionFailure<T> {
 /**
  * Run a SvelteKit action that always redirects on success, capturing the
  * `Redirect` sentinel via the runtime helper. Re-throws anything that isn't a
- * Redirect so genuine errors surface in the test report.
+ * Redirect so genuine errors surface in the test report. Accepts
+ * `MaybePromise<unknown>` so SvelteKit's `Action` return type
+ * (`MaybePromise<void | Record>`) is trivially assignable without a per-call
+ * cast.
  */
-async function expectRedirect(run: () => Promise<unknown>): Promise<Redirect> {
+async function expectRedirect(run: () => unknown | Promise<unknown>): Promise<Redirect> {
 	try {
-		await run();
+		await Promise.resolve(run());
 	} catch (err) {
 		if (isRedirect(err)) return err;
 		throw err;

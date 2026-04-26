@@ -43,6 +43,7 @@ import {
 	PLAN_STATUSES,
 	REVIEW_SESSION_STATUS_VALUES,
 	REVIEW_SESSION_STATUSES,
+	SAVED_DECK_LABEL_MAX_LENGTH,
 	SCENARIO_OPTIONS_MAX,
 	SCENARIO_OPTIONS_MIN,
 	SCENARIO_STATUS_VALUES,
@@ -837,6 +838,77 @@ export const memoryReviewSession = studySchema.table(
 
 export type MemoryReviewSessionRow = typeof memoryReviewSession.$inferSelect;
 export type NewMemoryReviewSessionRow = typeof memoryReviewSession.$inferInsert;
+
+/**
+ * Per-(user, deckHash) overlay row for the Saved Decks dashboard surface.
+ *
+ * Saved Decks are otherwise implicit -- every distinct `deck_hash` on a
+ * `memory_review_session` row contributes to the list (see
+ * `listSavedDecks`). This table lets a learner attach a custom label to a
+ * deck (`label`) and dismiss it from the dashboard (`dismissed_at`) without
+ * touching the underlying review-session history. Both fields are optional;
+ * absent rows fall back to the auto-derived summary and stay visible.
+ *
+ * The deck-hash itself isn't a foreign key (no `saved_deck_hash` table
+ * exists) -- it's just whatever `computeDeckHash` produced when the
+ * matching memory-review session was started. Re-running the same filter
+ * after dismissal re-creates the implicit Saved Decks entry; a future call
+ * to `renameSavedDeck` or `deleteSavedDeck` upserts onto the same row.
+ *
+ * Unique on (user_id, deck_hash) so we never have to merge multiple
+ * overlay rows for one deck.
+ */
+export const savedDeck = studySchema.table(
+	'saved_deck',
+	{
+		id: text('id').primaryKey(),
+		userId: text('user_id')
+			.notNull()
+			.references(() => bauthUser.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
+		/** Same 8-char hash carried on `memory_review_session.deck_hash`. */
+		deckHash: text('deck_hash').notNull(),
+		/**
+		 * Optional learner-supplied display name. NULL means "use the
+		 * auto-derived summary." Capped at {@link SAVED_DECK_LABEL_MAX_LENGTH}
+		 * characters at the BC layer; the DB check enforces the same bound so
+		 * any future direct insert (seed, migration) can't sneak past.
+		 */
+		label: text('label'),
+		/**
+		 * When set, the dashboard hides this saved deck. The underlying
+		 * memory-review sessions are untouched -- "delete" here means "stop
+		 * surfacing this entry on the Saved Decks list." Re-running the same
+		 * filter clears the timestamp via the upsert path so the deck
+		 * reappears next visit.
+		 */
+		dismissedAt: timestamp('dismissed_at', { withTimezone: true }),
+		...timestamps(),
+	},
+	(t) => ({
+		// One overlay row per (user, deckHash). Conflict target for the
+		// rename + delete upserts.
+		savedDeckUserHashUnique: uniqueIndex('saved_deck_user_hash_unique').on(t.userId, t.deckHash),
+		// Active-only read used by the dashboard `listSavedDecks` join.
+		savedDeckUserActiveIdx: index('saved_deck_user_active_idx')
+			.on(t.userId, t.deckHash)
+			.where(sql`dismissed_at IS NULL`),
+		// Length guard. The BC validator catches user input up-front; the
+		// CHECK is the belt-and-suspenders guard against direct writes.
+		savedDeckLabelLengthCheck: check(
+			'saved_deck_label_length_check',
+			sql.raw(`"label" IS NULL OR char_length("label") <= ${SAVED_DECK_LABEL_MAX_LENGTH}`),
+		),
+		// Empty-string label is meaningless -- callers should pass NULL to
+		// clear. This blocks the "" sneak-past at the storage layer too.
+		savedDeckLabelNonEmptyCheck: check(
+			'saved_deck_label_non_empty_check',
+			sql.raw(`"label" IS NULL OR char_length("label") > 0`),
+		),
+	}),
+);
+
+export type SavedDeckRow = typeof savedDeck.$inferSelect;
+export type NewSavedDeckRow = typeof savedDeck.$inferInsert;
 /**
  * Snooze rows for per-user card-out-of-deck actions.
  *

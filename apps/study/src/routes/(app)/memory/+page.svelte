@@ -8,12 +8,15 @@ import {
 	QUERY_PARAMS,
 	REVIEW_SESSION_STATUSES,
 	ROUTES,
+	SAVED_DECK_COPY,
+	SAVED_DECK_LABEL_MAX_LENGTH,
 } from '@ab/constants';
 import PageHelp from '@ab/help/ui/PageHelp.svelte';
+import ConfirmAction from '@ab/ui/components/ConfirmAction.svelte';
 import InfoTip from '@ab/ui/components/InfoTip.svelte';
 import StatTile from '@ab/ui/components/StatTile.svelte';
 import { humanize } from '@ab/utils';
-import type { PageData } from './$types';
+import type { ActionData, PageData } from './$types';
 
 const STATE_TIPS: Record<'new' | 'learning' | 'review' | 'relearning', { label: string; definition: string }> = {
 	new: {
@@ -31,12 +34,71 @@ const STATE_TIPS: Record<'new' | 'learning' | 'review' | 'relearning', { label: 
 	},
 };
 
-let { data }: { data: PageData } = $props();
+let { data, form }: { data: PageData; form: ActionData } = $props();
 
 const stats = $derived(data.stats);
 const totalActive = $derived(Object.values(stats.stateCounts).reduce((a, b) => a + b, 0));
 const resumable = $derived(data.resumableSession);
 const savedDecks = $derived(data.savedDecks);
+
+/**
+ * Per-row open state for the inline rename popover. Keyed by `deckHash` so
+ * opening one row's editor closes the others (one rename in flight at a
+ * time keeps the focus model unambiguous). Undefined => closed.
+ */
+let renamingHash = $state<string | null>(null);
+
+function openRename(hash: string): void {
+	renamingHash = hash;
+}
+
+function cancelRename(): void {
+	renamingHash = null;
+}
+
+/**
+ * Svelte action: focus the bound element on mount. Replaces `autofocus`
+ * (banned by `a11y_autofocus`) for the rename input, which only mounts in
+ * response to a deliberate Rename click -- the same user gesture that
+ * `autofocus` would have honored, just without the global lint warning.
+ */
+function focusOnMount(node: HTMLElement): void {
+	node.focus();
+}
+
+/**
+ * Pull a friendly display name out of the (label override, deck spec)
+ * pair. Lives next to the renderer so the SR text and the visible label
+ * stay in lockstep.
+ */
+function deckName(deck: { label: string | null; deckSpec: Parameters<typeof summarizeDeckSpec>[0] }): string {
+	return deck.label?.length ? deck.label : summarizeDeckSpec(deck.deckSpec);
+}
+
+/**
+ * SvelteKit derives `ActionData` from the intersection of every `fail()`
+ * branch (and the redirect path narrows to `null`). We read it through
+ * a permissive shape because (a) the BC is the source of truth for which
+ * fields are valid, and (b) the per-branch narrowing makes "is there a
+ * label error?" awkward across action variants. The runtime semantics
+ * ("surface whichever error is present") are preserved.
+ */
+type SavedDeckFormShape = {
+	intent?: string;
+	deckHash?: string;
+	fieldErrors?: { label?: string; _?: string };
+};
+
+const renameForm = $derived(
+	form && (form as SavedDeckFormShape).intent === 'renameDeck' ? (form as SavedDeckFormShape) : null,
+);
+const renameError = $derived(renameForm?.fieldErrors?.label ?? renameForm?.fieldErrors?._ ?? null);
+const renameErrorHash = $derived(renameForm?.deckHash ?? null);
+
+const deleteForm = $derived(
+	form && (form as SavedDeckFormShape).intent === 'deleteDeck' ? (form as SavedDeckFormShape) : null,
+);
+const deleteError = $derived(deleteForm?.fieldErrors?._ ?? null);
 
 function formatResumeSub(sub: { status: string; currentIndex: number; totalCards: number }): string {
 	const remaining = Math.max(0, sub.totalCards - sub.currentIndex);
@@ -112,21 +174,83 @@ function percent(n: number, total: number): number {
 		<article class="saved-decks">
 			<h2>Saved decks</h2>
 			<p class="hint">Bookmarkable filters from your past runs. Each entry rebuilds the same deck.</p>
+			{#if deleteError}
+				<p class="form-error" role="alert">{deleteError}</p>
+			{/if}
 			<ul class="deck-list">
 				{#each savedDecks as deck (deck.deckHash)}
 					<li class="deck-item">
-						<a class="deck-link" href={deckHref(deck.deckParam)}>
-							<div class="deck-head">
-								<span class="deck-label">{summarizeDeckSpec(deck.deckSpec)}</span>
-								{#if deck.resumable}
-									<span class="deck-badge">Resume {formatResumeBadge(deck.resumable)}</span>
+						{#if renamingHash === deck.deckHash}
+							<form
+								method="POST"
+								action="?/renameDeck"
+								class="deck-rename"
+								aria-label="Rename {deckName(deck)}"
+							>
+								<input type="hidden" name="deckHash" value={deck.deckHash} />
+								<label class="rename-label">
+									<span class="visually-hidden">{SAVED_DECK_COPY.RENAME_LABEL_INPUT}</span>
+									<input
+										type="text"
+										name="label"
+										class="rename-input"
+										value={deck.label ?? ''}
+										maxlength={SAVED_DECK_LABEL_MAX_LENGTH}
+										placeholder={SAVED_DECK_COPY.RENAME_PLACEHOLDER}
+										autocomplete="off"
+										aria-invalid={renameErrorHash === deck.deckHash ? 'true' : undefined}
+										aria-describedby={renameErrorHash === deck.deckHash
+											? `rename-error-${deck.deckHash}`
+											: undefined}
+										use:focusOnMount
+									/>
+								</label>
+								<div class="rename-actions">
+									<button type="submit" class="btn primary sm">{SAVED_DECK_COPY.RENAME_SAVE}</button>
+									<button type="button" class="btn ghost sm" onclick={cancelRename}>
+										{SAVED_DECK_COPY.RENAME_CANCEL}
+									</button>
+								</div>
+								{#if renameErrorHash === deck.deckHash && renameError}
+									<p class="form-error" id="rename-error-{deck.deckHash}" role="alert">{renameError}</p>
 								{/if}
+								<p class="rename-hint">{SAVED_DECK_COPY.RENAME_CLEAR}: leave blank and Save.</p>
+							</form>
+						{:else}
+							<div class="deck-row">
+								<a class="deck-link" href={deckHref(deck.deckParam)}>
+									<div class="deck-head">
+										<span class="deck-label">{deckName(deck)}</span>
+										{#if deck.resumable}
+											<span class="deck-badge">Resume {formatResumeBadge(deck.resumable)}</span>
+										{/if}
+									</div>
+									<div class="deck-meta">
+										<span>Last run {formatLastVisited(deck.lastVisitedAt)}</span>
+										<span>{deck.sessionCount} {deck.sessionCount === 1 ? 'run' : 'runs'}</span>
+									</div>
+								</a>
+								<div class="deck-actions">
+									<button
+										type="button"
+										class="btn ghost sm"
+										onclick={() => openRename(deck.deckHash)}
+										aria-label="{SAVED_DECK_COPY.RENAME_TRIGGER} {deckName(deck)}"
+									>
+										{SAVED_DECK_COPY.RENAME_TRIGGER}
+									</button>
+									<ConfirmAction
+										formAction="?/deleteDeck"
+										triggerVariant="ghost"
+										confirmVariant="danger"
+										size="sm"
+										label={SAVED_DECK_COPY.DELETE_TRIGGER}
+										confirmLabel={SAVED_DECK_COPY.DELETE_CONFIRM}
+										hiddenFields={{ deckHash: deck.deckHash }}
+									/>
+								</div>
 							</div>
-							<div class="deck-meta">
-								<span>Last run {formatLastVisited(deck.lastVisitedAt)}</span>
-								<span>{deck.sessionCount} {deck.sessionCount === 1 ? 'run' : 'runs'}</span>
-							</div>
-						</a>
+						{/if}
 					</li>
 				{/each}
 			</ul>
@@ -407,22 +531,102 @@ function percent(n: number, total: number): number {
 		gap: var(--space-xs);
 	}
 
+	.deck-row {
+		display: grid;
+		grid-template-columns: 1fr auto;
+		align-items: stretch;
+		gap: var(--space-xs);
+		background: var(--surface-muted);
+		border: 1px solid var(--edge-default);
+		border-radius: var(--radius-md);
+		padding: var(--space-2xs) var(--space-2xs) var(--space-2xs) 0;
+		transition: background var(--motion-fast), border-color var(--motion-fast);
+	}
+
+	.deck-row:hover {
+		background: var(--surface-sunken);
+		border-color: var(--action-default-hover);
+	}
+
 	.deck-link {
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-2xs);
 		padding: var(--space-sm) var(--space-md);
-		background: var(--surface-muted);
-		border: 1px solid var(--edge-default);
-		border-radius: var(--radius-md);
 		text-decoration: none;
 		color: inherit;
-		transition: background var(--motion-fast), border-color var(--motion-fast);
+		min-width: 0;
 	}
 
-	.deck-link:hover {
+	.deck-actions {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-2xs);
+		padding-right: var(--space-2xs);
+	}
+
+	.deck-rename {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-xs);
+		padding: var(--space-sm) var(--space-md);
 		background: var(--surface-sunken);
-		border-color: var(--action-default-hover);
+		border: 1px solid var(--action-default-edge);
+		border-radius: var(--radius-md);
+	}
+
+	.rename-label {
+		display: block;
+	}
+
+	.rename-input {
+		width: 100%;
+		font-family: inherit;
+		font-size: var(--font-size-body);
+		padding: var(--space-2xs) var(--space-sm);
+		border: 1px solid var(--edge-default);
+		border-radius: var(--radius-sm);
+		background: var(--ink-inverse);
+		color: var(--ink-body);
+	}
+
+	.rename-input:focus-visible {
+		outline: 2px solid var(--focus-ring);
+		outline-offset: 2px;
+	}
+
+	.rename-actions {
+		display: inline-flex;
+		gap: var(--space-xs);
+	}
+
+	.rename-hint {
+		margin: 0;
+		font-size: var(--font-size-xs);
+		color: var(--ink-faint);
+	}
+
+	.btn.sm {
+		padding: var(--space-2xs) var(--space-sm);
+		font-size: var(--font-size-sm);
+	}
+
+	.form-error {
+		margin: 0;
+		font-size: var(--font-size-sm);
+		color: var(--button-hazard-bg);
+	}
+
+	.visually-hidden {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		white-space: nowrap;
+		border: 0;
 	}
 
 	.deck-head {

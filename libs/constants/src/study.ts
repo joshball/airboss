@@ -1065,6 +1065,34 @@ export const REVIEW_SESSION_ABANDON_MS = 14 * MS_PER_DAY;
  */
 export const DECK_HASH_LENGTH = 8;
 
+/**
+ * Maximum length of a user-supplied label for a saved deck. Stored on the
+ * `study.saved_deck` row when present and overrides the auto-derived
+ * `summarizeDeckSpec()` summary in the dashboard list. Bounded so the UI row
+ * stays single-line and the column is cheap to index.
+ */
+export const SAVED_DECK_LABEL_MAX_LENGTH = 80;
+
+/**
+ * Copy strings for the Saved Decks rename + delete affordances. Live in
+ * constants so the route action, the UI, and any future toast / confirmation
+ * banner share one source of truth.
+ */
+export const SAVED_DECK_COPY = {
+	RENAME_TRIGGER: 'Rename',
+	RENAME_LABEL_INPUT: 'Deck name',
+	RENAME_PLACEHOLDER: 'Custom name (leave blank to clear)',
+	RENAME_SAVE: 'Save',
+	RENAME_CANCEL: 'Cancel',
+	RENAME_CLEAR: 'Reset to default',
+	DELETE_TRIGGER: 'Delete',
+	DELETE_CONFIRM: 'Delete deck',
+	DELETE_HINT:
+		'Removes this saved deck from the list. Past runs are kept; the deck reappears if you run the same filter again.',
+	LABEL_TOO_LONG: `Deck name must be ${SAVED_DECK_LABEL_MAX_LENGTH} characters or fewer.`,
+	NOT_FOUND: 'Saved deck not found.',
+} as const;
+
 // -------- Snooze + card feedback (Bundle A -- snooze-and-flag WP) --------
 
 /**
