@@ -56,11 +56,8 @@
     "apps/sim": {
       "name": "@ab/sim",
       "dependencies": {
-        "@ab/auth": "workspace:*",
         "@ab/bc-sim": "workspace:*",
         "@ab/constants": "workspace:*",
-        "@ab/db": "workspace:*",
-        "@ab/utils": "workspace:*",
         "three": "^0.169.0",
       },
       "devDependencies": {

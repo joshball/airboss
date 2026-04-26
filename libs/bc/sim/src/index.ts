@@ -92,7 +92,6 @@ export {
 	type GradingEvaluationContext,
 	tapeWasSuccessful,
 } from './scenarios/grading';
-export { ILS_APPROACH_SCENARIO } from './scenarios/ils-approach';
 export { PARTIAL_PANEL_SCENARIO } from './scenarios/partial-panel';
 export { PITOT_BLOCK_SCENARIO } from './scenarios/pitot-block';
 export { PLAYGROUND_SCENARIO } from './scenarios/playground';
@@ -100,7 +99,6 @@ export { PLAYGROUND_PA28_SCENARIO } from './scenarios/playground-pa28';
 export { getScenario, listScenarios, SCENARIO_REGISTRY } from './scenarios/registry';
 export { type RunnerEvaluation, ScenarioRunner } from './scenarios/runner';
 export { STATIC_BLOCK_SCENARIO } from './scenarios/static-block';
-export { STEEP_TURNS_SCENARIO } from './scenarios/steep-turns';
 export { UNUSUAL_ATTITUDES_SCENARIO } from './scenarios/unusual-attitudes';
 export { UNUSUAL_ATTITUDES_NOSE_LO_SCENARIO } from './scenarios/unusual-attitudes-nose-lo';
 export { VACUUM_FAILURE_SCENARIO } from './scenarios/vacuum-failure';
