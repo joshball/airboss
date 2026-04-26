@@ -7,12 +7,14 @@ import type { PageServerLoad } from './$types';
 /**
  * Read-only detail view for a single user. Shows the basic identity card,
  * the most recent N sessions (token + ip + ua + timestamps), and the
- * most recent M audit rows the user authored. No edit affordances --
- * the parent `/users` surface is read-only until the auth-policy
- * questions on the PR are resolved.
+ * most recent M audit rows the user authored. No edit affordances yet.
+ *
+ * Gated to ADMIN-only -- matches the floor on `/users`. User session +
+ * audit data is sensitive enough that AUTHOR/OPERATOR roles shouldn't
+ * see it.
  */
 export const load: PageServerLoad = async (event) => {
-	requireRole(event, ROLES.AUTHOR, ROLES.OPERATOR, ROLES.ADMIN);
+	requireRole(event, ROLES.ADMIN);
 
 	const userId = event.params.id;
 	const user = await getUser(userId);

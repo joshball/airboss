@@ -8,13 +8,12 @@ import type { PageServerLoad } from './$types';
  * derived from `bauth_session`. Search (by name or email) runs server-
  * side via Drizzle `ilike` -- same pattern as `/glossary`.
  *
- * The page is gated by the `(app)/+layout.server.ts` AUTHOR | OPERATOR |
- * ADMIN guard. Whether we should tighten that to ADMIN-only for this
- * specific surface is the open auth question on the PR; do not narrow
- * the gate without an explicit decision.
+ * Gated to ADMIN-only. The parent `(app)/+layout.server.ts` allows
+ * AUTHOR | OPERATOR | ADMIN, but user data is more sensitive than
+ * reference content so this surface narrows the floor.
  */
 export const load: PageServerLoad = async (event) => {
-	requireRole(event, ROLES.AUTHOR, ROLES.OPERATOR, ROLES.ADMIN);
+	requireRole(event, ROLES.ADMIN);
 	const search = event.url.searchParams.get(QUERY_PARAMS.SEARCH)?.trim() ?? '';
 
 	const [users, roleCounts] = await Promise.all([
