@@ -1,5 +1,11 @@
 # Scenario Engine Specification
 
+> **Scope note (2026-04-26):** This spec describes the FIRC instructor-intervention engine -- pilot observes a student model, intervenes via Ask / Prompt / Coach / Direct / Take Controls. It's the engine that lives in `airboss-firc/libs/engine/` and migrates to `airboss/libs/engine/` when `apps/firc/` lands per [MULTI_PRODUCT_ARCHITECTURE.md](MULTI_PRODUCT_ARCHITECTURE.md).
+>
+> The flight-dynamics engine in `apps/sim/` (post-pivot, hand-rolled C172 FDM) reuses the tick / world-state / scoring concepts but has different decision affordances (control inputs, configuration, divert/continue). See [docs/work-packages/flight-dynamics-sim/spec.md](../work-packages/flight-dynamics-sim/spec.md) and [ADR 015](../decisions/015-sim-surface-loose-coupling.md) for the sim engine.
+>
+> The rest of this doc retains FIRC-era framing (CFI / FAA / instructor) for accuracy of the engine it describes.
+
 ## Core Design Goal
 
 The engine adapts difficulty, context, and reinforcement without changing the compliance skeleton. Every learner still covers all required core topics, but scenarios, airports, aircraft, emphasis, and review spacing all adapt.
@@ -368,7 +374,7 @@ Watch a perfect pattern: clean takeoff, crosswind, downwind, base, final, full s
 
 ### Live Run (abbreviated tick sequence)
 
-```
+```text
 Tick 4: Airspeed reading: 71 (target 76). Bank: 15 deg. Student quiet.
 Tick 5: Airspeed: 69. Student hasn't noticed.
 Tick 6: Student says "everything looks good"

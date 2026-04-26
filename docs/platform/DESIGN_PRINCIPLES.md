@@ -1,10 +1,10 @@
 # Design Principles
 
-The beliefs and approaches that shape how FIRC Boss works. These aren't rules -- they're the lens through which we evaluate every feature, every interaction, every design decision.
+The beliefs and approaches that shape how airboss works. These aren't rules -- they're the lens through which we evaluate every feature, every interaction, every design decision.
 
 Review these when designing features. Review features against these. If a feature doesn't serve at least one principle, question why it exists.
 
-See also: [IDEAS.md](IDEAS.md) for ideas not yet promoted to principles, and [VOCABULARY.md](VOCABULARY.md) for the language we use.
+See also: [VISION.md](VISION.md) for what airboss is, [LEARNING_PHILOSOPHY.md](LEARNING_PHILOSOPHY.md) for the discovery-first pedagogy, [IDEAS.md](IDEAS.md) for ideas not yet promoted to principles, and [VOCABULARY.md](VOCABULARY.md) for the language we use.
 
 ---
 
@@ -14,88 +14,75 @@ See also: [IDEAS.md](IDEAS.md) for ideas not yet promoted to principles, and [VO
 
 The system embodies the culture of the debrief room:
 
-- **Anonymous public data.** How do people perform in each scenario? What do most people miss? Where do instructors struggle? The Greenie Board shows everyone's grades because that's how the squadron improves.
+- **Anonymous public data.** How do pilots perform in each scenario? What do most people miss? Where do learners struggle? Aggregate performance is shared (anonymously) because that's how the squadron improves.
 - **No shame in failure.** Bolters happen. The system celebrates failure as learning, not as punishment. "This is where learning happens" is not a platitude -- it's a design constraint.
 - **NTSB-style analysis.** When you fail a scenario, the debrief explains the chain of events, not just the outcome. Same spirit as accident investigation: no blame, just understanding.
-- **Commanders get debriefed too.** Even experienced CFIs should see where they missed cues. The system does not soften feedback based on experience level. A 10,000-hour CFI who misses an early stall indicator gets the same feedback as a 500-hour one.
+- **Experience doesn't soften feedback.** Even experienced pilots should see where they missed cues. A 10,000-hour ATP who misses an early stall indicator gets the same feedback as a 500-hour student.
 
 **How to apply:** Every post-scenario experience should feel like a debrief, not a report card. Show the chain, not the score. Make failure data useful, not shameful.
 
 ---
 
-## 2. Two Systems, Layered
+## 2. Decisions Under Pressure
 
-**Source:** VISION.md core concept.
-
-The FAA sees a conservative, traditional curriculum. Users experience an adaptive, game-like training engine. Both are real. Neither is fake.
-
-- The FAA system is the **compliance layer**: structured curriculum, traceability matrix, time tracking, evidence packets.
-- The real system is the **experience layer**: adaptive scenarios, spaced repetition, mastery-based progression, personalization.
-
-**How to apply:** Every feature must satisfy both layers. A scenario must map to FAA topics AND be a compelling training experience. Never build compliance-only features that users endure. Never build experience-only features that can't be traced.
-
----
-
-## 3. Decisions Under Pressure
-
-**Source:** VISION.md -- "knowledge without decision-making" is the problem we're solving.
+**Source:** [VISION.md](VISION.md) -- "knowledge without decision-making" is the gap airboss closes.
 
 Traditional training teaches knowledge. We train judgment. The difference is time pressure, incomplete information, and consequences.
 
 - Every scenario should require **real-time decisions** with imperfect information.
-- The intervention ladder (Ask -> Prompt -> Coach -> Direct -> Take Controls) is the core interaction, not multiple choice.
+- Decision affordances vary by surface: pilot decisions in `apps/sim/` (control inputs, configuration changes, divert/continue), instructor interventions in a future FIRC surface (Ask → Prompt → Coach → Direct → Take Controls).
 - Scoring rewards **noticing earlier**, not knowing more.
 
 **How to apply:** If a feature can be reduced to "read text, answer question," it's not using the engine properly. Push toward simulation, time pressure, and consequence.
 
 ---
 
-## 4. Never a Trick
+## 3. Never a Trick
 
-**Source:** VISION.md -- "It does NOT reward psychic guessing, menu gaming, or memorizing scripts."
+**Source:** Pre-pivot VISION ("It does NOT reward psychic guessing, menu gaming, or memorizing scripts"). Survives the pivot unchanged.
 
-The system rewards good instructing, not game-playing. If a student can pass by memorizing patterns instead of developing judgment, the system is broken.
+The system rewards good flying and good judgment, not pattern recognition of how the platform itself works. If a learner can pass by memorizing platform behavior instead of developing real skill, the platform is broken.
 
 - No giveaway UI cues that telegraph the "right" answer.
-- Intervention options are always the same (the ladder), so there's no menu to game.
-- Student behavior varies (skill, compliance, freeze tendency), so scripts don't work.
+- Decision affordances are always the same per surface, so there's no menu to game.
+- Scenario conditions vary (student behavior in instructor surfaces; weather/traffic/aircraft state in pilot surfaces), so memorized scripts don't work.
 - Scoring is multi-dimensional (timing, appropriateness, safety, communication), not binary.
 
-**How to apply:** After building a scenario or feature, ask: "Can someone pass this by gaming instead of learning?" If yes, redesign.
+**How to apply:** After building a scenario or feature, ask: "Can someone pass this by gaming the platform instead of learning?" If yes, redesign.
 
 ---
 
-## 5. Replay is the Product
+## 4. Replay is the Product
 
-**Source:** VISION.md -- "This is what gets people from 16 -> 100 hours."
+**Source:** [VISION.md](VISION.md) -- daily / between-flights practice is the core loop, not one-shot completion.
 
-The FAA requires 16 hours. We want people to spend 100+. Replay value comes from variation, not repetition.
+We want pilots to spend 100+ hours over a flying career. Replay value comes from variation, not repetition.
 
-- Same scenario, different student behavior = different experience.
-- Same student, different weather/conditions = different decisions.
+- Same scenario, different conditions (weather, traffic, weight) = different decisions.
+- Same conditions, different aircraft profile = different feel.
+- Spaced rep + recent-weakness lift means the *queue* of scenarios changes daily.
 - Debrief after each run shows what you missed, creating motivation to retry.
-- The Greenie Board creates social motivation (anonymous, but comparative).
 
-**How to apply:** Every scenario should have meaningful variation. If replaying feels identical, the student model or conditions aren't varied enough.
+**How to apply:** Every scenario should have meaningful variation. If replaying feels identical, the conditions or student model aren't varied enough. Spaced rep should never serve the same card the same way twice in a row.
 
 ---
 
-## 6. Emotional Safety
+## 5. Emotional Safety
 
-**Source:** VISION.md.
+**Source:** Pre-pivot VISION. Survives the pivot unchanged -- if anything, more important when the user is rebuilding decade-old skills.
 
-Learning requires vulnerability. The system must make it safe to fail, to say "I don't know," to try risky interventions.
+Learning requires vulnerability. The platform must make it safe to fail, to say "I don't know," to try risky decisions.
 
 - **No permanent penalties.** Everything is replayable.
-- **Debrief > Score.** Instead of "65%", show "You missed early stall indicators" and "You delayed intervention by 4 seconds."
-- **Trust and honesty.** "No" and "I don't know" are valid responses, logged for improvement, never punished.
-- **Progressive challenge.** The system adapts to the learner, not the other way around.
+- **Debrief > Score.** Instead of "65%", show "You missed early stall indicators" and "You delayed go-around by 4 seconds."
+- **Trust and honesty.** "I don't know" is a valid response on calibration prompts, logged for adaptive scheduling, never punished.
+- **Progressive challenge.** The platform adapts to the learner, not the other way around.
 
 **How to apply:** If a feature makes a user feel judged, stupid, or trapped, redesign it. The system should feel like a supportive but honest instructor.
 
 ---
 
-## 7. Confirmation, Not Guesswork
+## 6. Confirmation, Not Guesswork
 
 **Source:** App-wide UX review, 2026-04-22.
 

@@ -1,117 +1,107 @@
 # Vocabulary
 
-Aviation terminology used throughout FIRC Boss. Feature specs, UI copy, and internal naming should draw from this vocabulary. The carrier metaphor is core to the project identity.
+Aviation terminology used throughout airboss. Feature specs, UI copy, and internal naming should draw from this vocabulary.
 
-Source: [APP_NAMING.md](../.archive/work/research/APP_NAMING.md)
+The carrier-operations metaphor was central pre-pivot ("FIRC Boss" sat in Pri-Fly above the deck). Post-pivot, airboss is broader than carrier ops -- the metaphor is one source among several. Pick what fits the surface; don't force-cram carrier terms onto general-aviation features.
 
-## App Names
+See also: [VISION.md](VISION.md), [DESIGN_PRINCIPLES.md](DESIGN_PRINCIPLES.md), [LEARNING_PHILOSOPHY.md](LEARNING_PHILOSOPHY.md).
 
-| App               | Name       | Metaphor                                        |
-| ----------------- | ---------- | ----------------------------------------------- |
-| Content authoring | **hangar** | Where aircraft are built, maintained, inspected |
-| Public site       | **runway** | Entry point. Where you arrive and launch.       |
-| Operations        | **ops**    | Managing the flight schedule, people, records   |
-| Training          | **sim**    | The simulator. Where you train.                 |
+## App names
 
-## Feature Names
+| App          | Status | Metaphor                                                |
+| ------------ | ------ | ------------------------------------------------------- |
+| **study**    | Active | Where you sit and study -- cards, reps, knowledge graph |
+| **sim**      | Active | The simulator. Hand-rolled FDM, scenarios, debrief.     |
+| **hangar**   | Active | Where aircraft are built, maintained, inspected (admin) |
+| **spatial**  | Future | Maps and route work                                     |
+| **audio**    | Future | Listening + voice drills                                |
+| **reflect**  | Future | Journals, heatmaps, decision diary                      |
+| **avionics** | Future | Glass cockpit trainer                                   |
+| **firc**     | Future | FIRC course (migrated from airboss-firc)                |
+| **runway**   | Future | Public-facing entry. Where you arrive and launch.       |
 
-These are internal names used in code, docs, and UI. Not all are implemented yet -- see [IDEAS.md](IDEAS.md) for tracking.
+The pre-pivot `ops` app is gone (folded into hangar's People + System areas).
 
-| Feature              | Term                  | Origin                                           | Status  |
-| -------------------- | --------------------- | ------------------------------------------------ | ------- |
-| Scenario replay      | **Tape**              | PLAT camera records every carrier approach       | Planned |
-| Post-scenario review | **Debrief**           | Military post-mission review                     | Planned |
-| Performance history  | **Greenie Board**     | LSO grading board, public, anonymous             | Planned |
-| Starting a scenario  | **Cat shot**          | Catapult launch                                  | Idea    |
-| Passing a scenario   | **Trap**              | Successful arrested landing                      | Planned |
-| Failing / replaying  | **Bolter**            | Missed the wires, go around                      | Planned |
-| Course curriculum    | **Air Plan**          | Daily flight schedule                            | Idea    |
-| FAA compliance docs  | **NATOPS**            | THE procedures book                              | Idea    |
-| Scoring system       | **LSO**               | Landing Signal Officer grades every approach     | Planned |
-| Difficulty levels    | **Case I / II / III** | Carrier landing categories by weather visibility | Idea    |
+## Engine and system terms
 
-## Engine & System Terms
+Core concepts from the scenario engines and platform infrastructure.
 
-Core concepts from the scenario engine and platform. These are internal terms -- never used in FAA-facing documents.
+| Term                    | Definition                                                                                                                                                           | Where used                                                |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------- |
+| **Tick**                | The fundamental time unit (1 sec or 0.5 sec). Each tick updates aircraft state, decision affordances, scoring inputs.                                                | sim engine, future firc engine                            |
+| **Evidence packet**     | The complete record of a scenario run: every tick decision, timing, scoring breakdown, outcome.                                                                      | sim BC, future firc BC                                    |
+| **Intervention ladder** | The five-level FIRC escalation model: Ask -> Prompt -> Coach -> Direct -> Take Controls. Same options every tick.                                                    | Future firc engine, SCENARIO_ENGINE_SPEC                  |
+| **Student model**       | Behavioral profile for simulated students in instructor-track scenarios: skill, compliance, freeze tendency, overconfidence, startle delay.                          | Future firc engine                                        |
+| **Aircraft profile**    | Flight-dynamics parameters for a specific airplane (C172, PA-28, etc.). Drives sim scenario behavior.                                                                | sim engine                                                |
+| **Cert**                | A pilot certificate or rating (PPL, IR, CPL, CFI). See [ADR 016](../decisions/016-cert-syllabus-goal-model/decision.md).                                             | study, hangar (content authoring)                         |
+| **Syllabus**            | A versioned plan that maps cert requirements to objectives. See ADR 016.                                                                                             | study                                                     |
+| **Goal**                | A learner-facing wrapper around objectives ("Pass IR checkride", "Stay current"). See ADR 016.                                                                       | study                                                     |
+| **Lens**                | The framing through which the syllabus is taught (ACS triad, experiential, etc.). See ADR 016.                                                                       | study, hangar                                             |
+| **Knowledge node**      | A single teachable idea with edges to related nodes. See [ADR 011](../decisions/011-knowledge-graph-learning-system/decision.md).                                    | study (knowledge graph)                                   |
+| **Card**                | A spaced-rep memory item. Has a state (new / learning / review / relearning) per FSRS-5.                                                                             | study                                                     |
+| **Decision rep**        | A short decision prompt with feedback. Mental rehearsal under spaced repetition.                                                                                     | study                                                     |
+| **Calibration**         | The learner's confidence-vs-correctness gap. The platform tracks it explicitly per [docs/work-packages/calibration-tracker/](../work-packages/calibration-tracker/). | study                                                     |
+| **Release**             | A versioned, atomic snapshot of authored content published from hangar to learner surfaces.                                                                          | [ADR 005](../decisions/005-PUBLISHED_CONTENT.md)          |
+| **Reference**           | Authoritative source material (CFR, AC, AIM, handbook, NTSB report). Citations from content link to references.                                                      | hangar, [REFERENCE_SYSTEM_FLOW](REFERENCE_SYSTEM_FLOW.md) |
+| **Glossary term**       | A defined aviation term cited from prose via wiki-link. Backed by a reference, rendered in the glossary surface.                                                     | hangar, study                                             |
 
-| Term                    | Definition                                                                                                                                                                      | Where used                             |
-| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------- |
-| **Tick**                | The fundamental time unit (1 sec or 0.5 sec). Each tick updates aircraft state, student state, and cue visibility. The engine is a tick loop.                                   | `libs/engine/`, SCENARIO_ENGINE_SPEC   |
-| **Discovery phase**     | Entry experience that builds a `LearnerProfile`. Soft knowledge probing, interest mapping, confidence mapping, scenario reflection. Not a test -- calibration.                  | `apps/sim/`, VISION.md                 |
-| **Evidence packet**     | The complete record of a scenario run: every tick decision, timing, scoring breakdown, student behavior, outcome. Stored in `evidence.*` schema. Audit-grade proof of learning. | `libs/bc/evidence/`, ADR 004           |
-| **Intervention ladder** | The five-level escalation model: Ask -> Prompt -> Coach -> Direct -> Take Controls. Same options every tick -- no giveaway UI cues.                                             | SCENARIO_ENGINE_SPEC, VISION.md        |
-| **Student model**       | Behavioral profile for simulated students: skill level, compliance tendency, freeze tendency, overconfidence, startle delay. Drives scenario variation and replay value.        | `libs/engine/`, `course.student_model` |
-| **Release**             | A versioned, atomic snapshot of all authored content published from hangar to sim. Keyed by `release_id`. All releases retained, not just latest.                               | ADR 005, ADR 006                       |
-| **Module**              | A grouping of scenarios, lessons, and assessments organized around an experience (not a topic). The canonical term for course units.                                            | `course.module`, COURSE_STRUCTURE      |
-| **Competency**          | A measurable skill or knowledge area. 8 domains, 22 competencies. Each scenario maps to competencies, and competencies map to FAA topics.                                       | `course.competency`, COMPETENCY_GRAPH  |
+## Carrier operations terms
 
-## Carrier Operations Terms
+The carrier metaphor is **partially adopted**. Use these for FIRC-era surfaces (instructor flow, scoring) where the metaphor fits cleanly. Don't force-cram them onto pilot-performance features that have nothing to do with carrier ops.
 
-Reference for naming features, UI elements, and internal concepts.
+| Term              | Meaning                                              | Where it fits today                          |
+| ----------------- | ---------------------------------------------------- | -------------------------------------------- |
+| **LSO**           | Landing Signal Officer. Grades every landing.        | Future firc scoring system                   |
+| **Greenie Board** | LSO's grading board. Public, anonymous, comparative. | Future firc aggregate performance view       |
+| **Trap**          | Successful arrested landing.                         | Future firc -- passing a scenario            |
+| **Bolter**        | Missed the wires, go around.                         | Future firc -- failing / replaying           |
+| **Cat shot**      | Catapult launch.                                     | Future firc -- starting a scenario           |
+| **Tape**          | PLAT camera record of every approach.                | Future firc -- scenario replay               |
+| **Pri-Fly**       | Primary Flight Control. Where the Air Boss sits.     | Reserved -- hangar admin name candidate      |
+| **Air Plan**      | Daily flight schedule.                               | Reserved -- session plan candidate           |
+| **NATOPS**        | THE procedures book for naval aviators.              | Reserved -- procedures library candidate     |
+| **Sortie**        | A single training mission.                           | Reserved -- a single study session candidate |
 
-| Term              | Meaning                                           | Potential use               |
-| ----------------- | ------------------------------------------------- | --------------------------- |
-| **Pri-Fly**       | Primary Flight Control. Air Boss sits here.       | Platform name or admin view |
-| **LSO**           | Landing Signal Officer. Grades every landing.     | Scoring/grading system      |
-| **CAG**           | Commander Air Group. Runs the air wing.           | Admin role                  |
-| **CIC**           | Combat Information Center. Tactical nerve center. | Analytics                   |
-| **The Ball**      | Fresnel lens landing system. "Call the ball."     | Committing to a scenario    |
-| **Paddles**       | Nickname for LSO. Your coach on approach.         | The instructor AI/system    |
-| **Marshal**       | Holding pattern stack before approach.            | Queue/scheduling            |
-| **Handler**       | Manages aircraft positions. Moves chess pieces.   | Content arrangement         |
-| **Vulture's Row** | Observation deck. Watch the action.               | Analytics/spectator mode    |
-| **Deck**          | The flight deck. Where action happens.            | Training environment        |
-| **Island**        | Carrier superstructure. Command.                  | Operations                  |
-| **Ready Room**    | Squadron briefing/debrief room. Personal.         | Training environment        |
-| **Sortie**        | A single training mission.                        | A training session          |
+Reserved means: named for future use, not adopted. Don't introduce a new carrier term in code without a real surface that benefits from the metaphor.
 
-## Internal vs FAA-Facing Naming
+## Pilot-training terms (non-carrier)
 
-The two-systems principle (see [DESIGN_PRINCIPLES.md](DESIGN_PRINCIPLES.md)) applies to naming too. The FAA sees conservative terminology; users and code use the real names.
+For the broader pilot performance platform, plain-aviation terminology fits better than carrier metaphor.
 
-| Internal term        | FAA-facing equivalent                  |
-| -------------------- | -------------------------------------- |
-| Game mode            | Scenario-based interactive instruction |
-| Tick engine          | Adaptive assessment engine             |
-| Student model        | Learner behavior simulation            |
-| Bolter (fail/replay) | Additional practice opportunity        |
-| Trap (pass)          | Successful completion                  |
-| Debrief              | Post-scenario performance review       |
-| Greenie Board        | Aggregate performance analytics        |
-| Scenario             | Scenario-based training exercise       |
-| Discovery phase      | Initial learner assessment             |
-| Intervention ladder  | Graduated instructional response model |
+| Term                    | Meaning                                                                       |
+| ----------------------- | ----------------------------------------------------------------------------- |
+| **Brief**               | Pre-flight discussion; what we'll do, what to watch for.                      |
+| **Debrief**             | Post-flight discussion; what happened, what we learned.                       |
+| **Maneuver**            | A specific airwork or procedure (steep turns, slow flight, stall recovery).   |
+| **Approach**            | A type of instrument arrival (ILS, RNAV, VOR, LOC, circling).                 |
+| **Pattern**             | The traffic pattern; downwind, base, final.                                   |
+| **Procedure**           | A standardized sequence (engine start, before takeoff, missed approach).      |
+| **Profile**             | A standardized maneuver shape (visual approach profile, instrument profile).  |
+| **Currency**            | Legal recency-of-experience (90-day, BFR, IPC).                               |
+| **Proficiency**         | Actual skill level (distinct from currency, often higher bar).                |
+| **Endorsement**         | A logged CFI sign-off authorizing privilege (high-performance, complex, etc). |
+| **Checkride**           | The practical test for a cert / rating.                                       |
+| **BFR / Flight Review** | The biennial recurrent-training requirement.                                  |
+| **IPC**                 | Instrument Proficiency Check.                                                 |
+| **Recurrent**           | Periodic re-training (currency or beyond).                                    |
+| **Type**                | A specific aircraft model requiring a type rating (>12,500 lbs or turbojet).  |
+| **Transition**          | Moving to a new aircraft, avionics suite, or operating environment.           |
 
-**Rule:** Never use internal/carrier terms in TCO, traceability matrix, FAA submission package, or any document that could be reviewed by the FAA. See CLAUDE.md FAA rules.
+These terms are user-facing. Use them in UI copy and content authoring.
 
-## Adoption Audit
+## Naming guidelines
 
-Which terms are actually used in code/UI vs aspirational (named but not yet built)?
+- **Draw from this vocabulary** when naming features, routes, UI elements, and internal concepts.
+- **Match the metaphor to the surface.** Carrier terms for FIRC-flavored work, plain-aviation terms for general pilot work, plain-engineering terms for platform infrastructure.
+- **Not every term needs to be user-facing.** Some are internal-only (code, docs). Some are UI copy. The carrier terms in particular should rarely surface to a non-naval-aviation user.
+- **Name things before building them.** When adding a new term, add it here first.
+- **Code uses real names.** Database tables, route paths, function names use the real domain term, not a marketing name.
 
-| Term                     | Status           | Notes                                                                    |
-| ------------------------ | ---------------- | ------------------------------------------------------------------------ |
-| hangar, sim, ops, runway | **Adopted**      | App names, routes, directories                                           |
-| Module                   | **Adopted**      | `course.module` table, hangar CRUD, COURSE_STRUCTURE                     |
-| Competency               | **Adopted**      | `course.competency` table, seed data, hangar view                        |
-| Release                  | **Adopted**      | `published.*` schema, publish pipeline, ADR 005/006                      |
-| Evidence packet          | **Adopted**      | `evidence.*` schema exists, not yet populated by sim                     |
-| Tick                     | **Aspirational** | Defined in SCENARIO_ENGINE_SPEC, not yet in code                         |
-| Discovery phase          | **Aspirational** | Route exists (`/discovery`), no engine logic yet                         |
-| Intervention ladder      | **Aspirational** | Defined in VISION/ENGINE_SPEC, not yet in code                           |
-| Student model            | **Partial**      | `course.student_model` table + CRUD exists, engine integration not built |
-| Debrief                  | **Aspirational** | Route exists (`/debrief/[runId]`), no engine logic yet                   |
-| Tape                     | **Aspirational** | Named, no implementation                                                 |
-| Greenie Board            | **Aspirational** | Named, no implementation                                                 |
-| Cat shot                 | **Aspirational** | Named, no implementation                                                 |
-| Trap / Bolter            | **Aspirational** | Named, no implementation                                                 |
-| Air Plan                 | **Aspirational** | Named, no implementation                                                 |
-| NATOPS                   | **Aspirational** | Named, no implementation                                                 |
-| LSO (scoring)            | **Aspirational** | Named, no implementation                                                 |
-| Case I/II/III            | **Aspirational** | Named, no implementation                                                 |
+## What's gone
 
-## Usage Guidelines
+These terms appeared in the pre-pivot vocabulary and don't fit airboss anymore:
 
-- Draw from this vocabulary when naming features, routes, UI elements, and internal concepts.
-- Not every term needs to be user-facing. Some are internal-only (code, docs). Some are UI copy.
-- When adding a new term, add it here first. Name things before building them.
-- Never use carrier/military terminology in FAA-facing documents. See CLAUDE.md FAA rules.
+- "**FIRC Boss**" -- the project name. Replaced by airboss.
+- "**Internal vs FAA-facing naming** / Two-systems principle" -- the FAA-wrapper layer is dormant per [PIVOT.md](PIVOT.md) and [ADR 017](../decisions/017-firc-compliance-dormant.md). When a FIRC pack ships, this distinction comes back.
+- "**ops**" -- the standalone admin app. Folded into hangar's People + System areas.
+- "**Adoption Audit** as a section" -- replaced by per-term "where used" notes inline.

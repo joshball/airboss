@@ -1,58 +1,61 @@
+---
+title: Sim PRD
+product: sim
+type: prd
+status: current
+date: 2026-04-26
+supersedes: ../../.archive/products/sim/PRD.md
+---
+
 # Sim PRD
 
-Product requirements for the sim app. Each feature links to its spec in `features/`.
+What `apps/sim/` does today and what's queued next. Per-feature spec lives in [docs/work-packages/flight-dynamics-sim/](../../work-packages/flight-dynamics-sim/spec.md), not inline here.
+
+For the why, see [VISION.md](VISION.md). For the FIRC-era PRD, see [.archive/products/sim/PRD.md](../../.archive/products/sim/PRD.md).
 
 ## Sim grading feeds the study scheduler
 
-Recent sim weakness lifts the study cards / reps tied to the knowledge each scenario exercises. See work package: [sim-card-mapping](../../work-packages/sim-card-mapping/spec.md).
+Recent sim weakness lifts the study cards / reps tied to the knowledge each scenario exercises. The signal is `getRecentSimWeakness` (sim BC) -> `simWeaknessByNode` (study BC bridge) -> per-node pressure on the strengthen slice's card / rep scorers, multiplied by `ENGINE_SCORING.STRENGTHEN.SIM_PRESSURE_FACTOR`. Slot rows attributed to that lift carry the `STRENGTHEN_SIM_WEAKNESS_CARD` or `STRENGTHEN_SIM_WEAKNESS_REP` reason code so the runner UI can cite the recent flight as the reason the card is here. See [docs/products/study/STUDY_BC_SIM_BRIDGE.md](../study/STUDY_BC_SIM_BRIDGE.md) for the layered breakdown. Linked work package: [sim-card-mapping](../../work-packages/sim-card-mapping/spec.md).
 
-## Phase 2 Features
+## Shipped
 
-| #   | Feature                                          | Size   | Status      | Spec                                       |
-| --- | ------------------------------------------------ | ------ | ----------- | ------------------------------------------ |
-| 1   | [Sim App Shell](features/sim-shell/)             | Large  | Implemented | [spec](features/sim-shell/spec.md)         |
-| 2   | [Discovery](features/discovery/)                 | Large  | Implemented | [spec](features/discovery/spec.md)         |
-| 3   | [Scenario Player](features/scenario-player/)     | Large  | Implemented | [spec](features/scenario-player/spec.md)   |
-| 4   | [Debrief](features/debrief/)                     | Large  | Implemented | [spec](features/debrief/spec.md)           |
-| 5   | [Progress Tracking](features/progress-tracking/) | Medium | Implemented | [spec](features/progress-tracking/spec.md) |
-| 6   | [Knowledge Checks](features/knowledge-checks/)   | Medium | Implemented | [spec](features/knowledge-checks/spec.md)  |
+| Surface                | What it does                                                                                  | Spec                                                                                  |
+| ---------------------- | --------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| `/`                    | Scenarios index. Lists available scenarios; click to fly.                                    | [flight-dynamics-sim](../../work-packages/flight-dynamics-sim/spec.md)                |
+| `/cockpit/[id]`        | Cockpit view. Six-pack + engine gauges + annunciator strip. Keyboard / mouse control.         | [flight-dynamics-sim](../../work-packages/flight-dynamics-sim/spec.md)                |
+| `/horizon/[id]`        | Outside-the-cockpit 3D horizon view. Surface-loose-coupled per ADR 015.                       | [ADR 015](../../decisions/015-sim-surface-loose-coupling.md)                          |
+| `/dual/[id]`           | Cockpit + horizon side-by-side. Composes both surfaces; spawns its own FDM worker.            | [ADR 015](../../decisions/015-sim-surface-loose-coupling.md)                          |
+| `/debrief/[runId]`     | Scrubbable post-run tape. Truth vs display per tick. Ideal-path overlay. Input tape view.     | [flight-dynamics-sim](../../work-packages/flight-dynamics-sim/spec.md)                |
+| `/history`             | Per-pilot run history. Click into any prior run's debrief.                                    | --                                                                                    |
+| FDM worker             | JSBSim-style hand-rolled FDM running in a Web Worker. Truth state computed every tick.         | [flight-dynamics-sim](../../work-packages/flight-dynamics-sim/spec.md)                |
+| Aircraft profiles      | C172 (canonical), PA-28 (second profile).                                                     | [flight-dynamics-sim](../../work-packages/flight-dynamics-sim/spec.md)                |
+| Scenario library       | Departure stall, EFATO, vacuum, pitot/static, partial panel, unusual attitudes, aft-CG, nose-low, VMC-into-IMC. | [flight-dynamics-sim](../../work-packages/flight-dynamics-sim/spec.md) |
+| Sim grading evaluator  | Tick-by-tick scoring against ideal path. Outputs run weaknesses keyed to knowledge nodes.     | [flight-dynamics-sim](../../work-packages/flight-dynamics-sim/spec.md)                |
+| Study scheduler bridge | Sim weakness pressure on study card / rep scorers per node.                                  | [sim-card-mapping](../../work-packages/sim-card-mapping/spec.md)                      |
+| Engine sound + theme   | Harmonic stack engine audio; theme tokens for cockpit, horizon, debrief surfaces.            | --                                                                                    |
 
-## Dependencies
+## In flight or imminent
 
-- Published content from hangar (at least one published release)
-- `enrollment.enrollment` record created by ops (or auto-created on first login -- TBD)
-- Auth lib (session management, `requireAuth`)
+| Item                                                                  | State              | Notes                                                                                                                    |
+| --------------------------------------------------------------------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------ |
+| Cockpit panel extraction (`CockpitPanel.svelte`)                      | Queued             | Per ADR 015 follow-up. Lets the dual page render the full panel, not just four primary gauges.                            |
+| Phase 7 horizon view continuation                                     | In flight          | 3D horizon visual fidelity, instrument-strip overlay tuning.                                                              |
+| Additional aircraft profiles                                          | Backlog            | Cherokee variants, complex/HP, glass.                                                                                     |
+| More scenarios                                                        | Backlog            | Crosswind landing, gust front, microburst, mountain wave, ridge soaring, ditching.                                       |
+| Anti-cheating / engagement integrity                                  | Out of scope (v1)  | The FIRC-era PRD specified extensive anti-cheating (engagement timing, rate limits, evidence hash, AFK flag, honeypots). Not load-bearing for a no-FAA-credit pilot performance platform. Revisit only if a FIRC pack ships. |
 
-## Exit Criteria (Phase 2)
+## Out of scope (intentionally)
 
-A learner can:
+- **3D scenery / world rendering.** Sim is instruments-first. The horizon view is minimal by design. If a scenario needs immersive VFR cues, MSFS/X-Plane is the right tool.
+- **AI traffic / ATC.** Single-pilot scenarios only, today.
+- **Multiplayer.** Out of scope until v1 ships.
+- **FAA log credit.** Sim runs aren't FAA-recognized training time. They feed proficiency, not currency.
 
-1. Log in and see the course dashboard
-2. Complete discovery (or skip it)
-3. Navigate to a published scenario and play it
-4. See a debrief after the scenario
-5. View module progress and FAA time tracking
+## References
 
-FAA time tracking records time per topic per session.
-
-## Non-Functional Requirements
-
-### Integrity and Anti-Cheating
-
-FAA time credit and evidence records must be generated by real human engagement. The sim must be designed from the start to resist bots, auto-clickers, and AFK farming.
-
-Required in Phase 2 design:
-
-- **Engagement timing:** Record time-per-tick and time-per-question in the evidence packet. Server flags runs with implausibly uniform decision timing.
-- **Rate limiting:** Server enforces a minimum plausible time-per-scenario on the complete action. A run completed in 30 seconds is rejected.
-- **Evidence integrity hash:** The scenario player complete action includes a server-computed hash of the full run state. The server verifies this hash before writing the evidence packet. Prevents tampered run state from being submitted by the client.
-- **AFK flag:** If the player receives no input for an extended period mid-scenario, set `afkSuspected: true` in the evidence packet. FAA audit can filter these.
-- **Honeypot questions (Phase 3+):** Inject occasional clearly-absurd "spot the fake" questions. Legitimate learners flag them; bots answer them. Scored separately, not counted against the learner. See IDEAS.md.
-
-## Deferred to Phase 3+
-
-- Certificate issuance (ops feature)
-- Advanced adaptive engine (Phase 6)
-- Greenie board / social features (Phase 6)
-- Offline/offline-first mode (future)
-- TTS for student voice (future)
+- [VISION.md](VISION.md)
+- [ROADMAP.md](ROADMAP.md)
+- [docs/work-packages/flight-dynamics-sim/spec.md](../../work-packages/flight-dynamics-sim/spec.md) -- canonical spec
+- [docs/work-packages/sim-card-mapping/spec.md](../../work-packages/sim-card-mapping/spec.md) -- study scheduler bridge
+- [ADR 015](../../decisions/015-sim-surface-loose-coupling.md) -- sim surface loose coupling
+- [docs/work/plans/20260422-flight-dynamics-sim-plan.md](../../work/plans/20260422-flight-dynamics-sim-plan.md) -- staged plan

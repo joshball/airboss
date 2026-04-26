@@ -4,7 +4,7 @@ product: hangar
 type: vision
 status: current
 date: 2026-04-26
-supersedes: ../../.archive/firc-era/products/hangar/VISION.md
+supersedes: ../../.archive/products/hangar/VISION.md
 ---
 
 # Hangar Vision
@@ -17,11 +17,11 @@ One place to author content, manage people, and run platform operations -- acros
 
 ## Who it's for
 
-| Audience              | What they do here                                                              |
-| --------------------- | ------------------------------------------------------------------------------ |
-| Joshua (today)        | Everything -- author, admin, ops                                               |
-| Future contributors   | Author scenarios, cards, routes, glossary entries (open-source posture)        |
-| Future platform admin | User management, moderation, audit review                                      |
+| Audience              | What they do here                                                       |
+| --------------------- | ----------------------------------------------------------------------- |
+| Joshua (today)        | Everything -- author, admin, ops                                        |
+| Future contributors   | Author scenarios, cards, routes, glossary entries (open-source posture) |
+| Future platform admin | User management, moderation, audit review                               |
 
 Today these are one person. The system should work for one person doing everything and scale to a team with distinct roles.
 
@@ -29,11 +29,11 @@ Today these are one person. The system should work for one person doing everythi
 
 Three areas:
 
-| Area        | What lives here                                                                                       | Status                            |
-| ----------- | ----------------------------------------------------------------------------------------------------- | --------------------------------- |
-| **Content** | Sources, glossary, scenarios, cards, routes, modules -- the upstream of every learner surface         | Sources + glossary shipped        |
-| **People**  | Users, sessions, invites, bans, audit-by-actor                                                        | Read-only `/users` shipped        |
-| **System**  | Job queue, audit log, diagnostics, future feature flags                                               | Jobs + audit-ping shipped         |
+| Area        | What lives here                                                                               | Status                     |
+| ----------- | --------------------------------------------------------------------------------------------- | -------------------------- |
+| **Content** | Sources, glossary, scenarios, cards, routes, modules -- the upstream of every learner surface | Sources + glossary shipped |
+| **People**  | Users, sessions, invites, bans, audit-by-actor                                                | Read-only `/users` shipped |
+| **System**  | Job queue, audit log, diagnostics, future feature flags                                       | Jobs + audit-ping shipped  |
 
 Each area is a section in the top nav. Sub-pages live underneath.
 
@@ -71,11 +71,11 @@ Authoring once feeds many surfaces. A scenario authored in hangar runs in study 
 
 Per-area phasing. No fixed dates.
 
-| Area    | Now                          | Next                                                         | Later                                            |
-| ------- | ---------------------------- | ------------------------------------------------------------ | ------------------------------------------------ |
-| Content | Sources, Glossary            | Scenarios authoring, Cards authoring                         | Routes, Modules, Cross-surface authoring shell   |
-| People  | Read-only `/users`           | Role editing, ban/unban, session revoke, invite flow         | Per-user activity heatmap, content attribution   |
-| System  | Jobs, audit-ping diagnostic  | Real audit explorer (filter by actor / target / op / window) | Feature flags, diagnostics dashboard, queue ops  |
+| Area    | Now                         | Next                                                         | Later                                           |
+| ------- | --------------------------- | ------------------------------------------------------------ | ----------------------------------------------- |
+| Content | Sources, Glossary           | Scenarios authoring, Cards authoring                         | Routes, Modules, Cross-surface authoring shell  |
+| People  | Read-only `/users`          | Role editing, ban/unban, session revoke, invite flow         | Per-user activity heatmap, content attribution  |
+| System  | Jobs, audit-ping diagnostic | Real audit explorer (filter by actor / target / op / window) | Feature flags, diagnostics dashboard, queue ops |
 
 The dashboard at `/` aggregates one stat per area. Each area gets its own surface as features land.
 
@@ -83,10 +83,10 @@ The dashboard at `/` aggregates one stat per area. Each area gets its own surfac
 
 The FIRC-era hangar carried a large FAA-submission surface: TCO editor, traceability matrix, FAA package generator, submission tracker, regulatory-change monitor, content lifecycle states, content-validation engine, content versioning UI. Per [PIVOT.md](../../platform/PIVOT.md), this is **dormant, not deleted**. The schema rigor stays; the UI is archived.
 
-| Where the dormant work lives                           | When it wakes up                                              |
-| ------------------------------------------------------ | ------------------------------------------------------------- |
-| [.archive/firc-era/products/hangar/](../../.archive/firc-era/products/hangar/) | A FIRC content pack (or any Part 141 / WINGS module) ships    |
-| [ADR 017](../../decisions/017-firc-compliance-dormant.md) | The decision record explaining what was dormanted and why      |
+| Where the dormant work lives                                                   | When it wakes up                                           |
+| ------------------------------------------------------------------------------ | ---------------------------------------------------------- |
+| [.archive/products/hangar/](../../.archive/products/hangar/) | A FIRC content pack (or any Part 141 / WINGS module) ships |
+| [ADR 017](../../decisions/017-firc-compliance-dormant.md)                      | The decision record explaining what was dormanted and why  |
 
 When that day comes: restore from the archive, integrate against current platform conventions, and resume.
 
@@ -95,4 +95,4 @@ When that day comes: restore from the archive, integrate against current platfor
 - [docs/platform/PIVOT.md](../../platform/PIVOT.md) -- why hangar's scope changed
 - [docs/platform/MULTI_PRODUCT_ARCHITECTURE.md](../../platform/MULTI_PRODUCT_ARCHITECTURE.md) -- surface architecture; hangar is upstream of every learner app
 - [ADR 017 -- FIRC compliance dormant](../../decisions/017-firc-compliance-dormant.md) -- archival decision and reawakening trigger
-- [.archive/firc-era/products/hangar/VISION.md](../../.archive/firc-era/products/hangar/VISION.md) -- the prior FIRC-era vision
+- [.archive/products/hangar/VISION.md](../../.archive/products/hangar/VISION.md) -- the prior FIRC-era vision
