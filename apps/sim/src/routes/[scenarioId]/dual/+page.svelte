@@ -1,25 +1,26 @@
 <script lang="ts">
 /**
- * Dual surface: horizon view + a minimal instrument strip composed
+ * Dual surface: horizon view + the cockpit instrument panel composed
  * side-by-side from independently-authored components. Demonstrates
- * the loose-coupling architecture for Phase 7 -- the same components
- * (Horizon3D, the atomic instrument widgets) drop in next to each
- * other with no cross-imports between them.
+ * the loose-coupling architecture from ADR 015 -- the same Horizon3D,
+ * CockpitPanel, and ControlInput components drop in next to each other
+ * with no cross-imports between them.
  *
- * This page hosts the FDM worker; both the 3D view and the gauges
- * read the SNAPSHOT stream off the same worker instance.
+ * This page hosts the FDM worker; the 3D view, the gauges, and the
+ * input host all read / write through the same worker instance.
  *
- * Future: a follow-up extracts a `CockpitPanel.svelte` from the cockpit
- * route's gauge stack so the dual page can render the full six-pack
- * + cluster, not just the three primary gauges. Out of scope for the
- * initial Phase 7 PR; the architecture stays the same either way.
+ * Audio cue dispatch (stall horn, gear, AP disconnect, captions) and
+ * the scenario outcome / debrief flow stay on the cockpit page; the
+ * dual surface focuses on the visual + input loop.
  */
 
-import type { DisplayState, FdmTruthState } from '@ab/bc-sim';
-import { ROUTES, SIM_WORKER_MESSAGES } from '@ab/constants';
-import { onDestroy, onMount } from 'svelte';
+import type { DisplayState, FdmInputs, FdmTruthState } from '@ab/bc-sim';
+import { ROUTES, SIM_KEYBINDING_ACTIONS, SIM_WORKER_MESSAGES } from '@ab/constants';
+import { onDestroy, onMount, untrack } from 'svelte';
 import { browser } from '$app/environment';
 import CockpitPanel from '$lib/cockpit/CockpitPanel.svelte';
+import ControlInput from '$lib/cockpit/ControlInput.svelte';
+import type { SpecialAction } from '$lib/control-handler';
 import FdmWorker from '$lib/fdm-worker.ts?worker';
 import Horizon3D from '$lib/horizon/Horizon3D.svelte';
 import ScenarioSurfaceNav from '$lib/horizon/ScenarioSurfaceNav.svelte';
@@ -28,20 +29,73 @@ import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
 
+function initialInputsFrom(init: PageData['scenario']['initial']): FdmInputs {
+	return {
+		throttle: init.throttle,
+		elevator: init.elevator,
+		trim: init.trim,
+		aileron: init.aileron,
+		rudder: init.rudder,
+		brake: init.brake,
+		autoCoordinate: init.autoCoordinate,
+		flaps: init.flaps,
+	};
+}
+
 let worker = $state<Worker | null>(null);
 let truth = $state<FdmTruthState | null>(null);
 let display = $state<DisplayState | null>(null);
+let inputs = $state<FdmInputs>(untrack(() => initialInputsFrom(data.scenario.initial)));
+let running = $state(false);
+let ready = $state(false);
 let bootError = $state<string | null>(null);
 
 function post(msg: MainToWorker): void {
 	worker?.postMessage(msg);
 }
 
+function postInputPatch(patch: Partial<FdmInputs>): void {
+	inputs = { ...inputs, ...patch };
+	post({ type: SIM_WORKER_MESSAGES.INPUT, inputs: patch });
+}
+
+function onControlInput(patch: Partial<FdmInputs>): void {
+	postInputPatch(patch);
+}
+
+function onControlSpecial(action: SpecialAction): void {
+	switch (action) {
+		case SIM_KEYBINDING_ACTIONS.PAUSE: {
+			if (!ready) return;
+			if (running) post({ type: SIM_WORKER_MESSAGES.PAUSE });
+			else post({ type: SIM_WORKER_MESSAGES.RESUME });
+			break;
+		}
+		case SIM_KEYBINDING_ACTIONS.BRAKE_TOGGLE: {
+			post({ type: SIM_WORKER_MESSAGES.TOGGLE_BRAKE });
+			break;
+		}
+	}
+}
+
+function toggleAutoCoordinate(): void {
+	post({ type: SIM_WORKER_MESSAGES.TOGGLE_AUTO_COORDINATE });
+}
+
 function handleWorkerMessage(event: MessageEvent<WorkerToMain>): void {
 	const msg = event.data;
-	if (msg.type === SIM_WORKER_MESSAGES.SNAPSHOT) {
-		truth = msg.truth;
-		display = msg.display;
+	switch (msg.type) {
+		case SIM_WORKER_MESSAGES.READY: {
+			ready = true;
+			break;
+		}
+		case SIM_WORKER_MESSAGES.SNAPSHOT: {
+			truth = msg.truth;
+			display = msg.display;
+			inputs = msg.inputs;
+			running = msg.running;
+			break;
+		}
 	}
 }
 
@@ -79,6 +133,13 @@ const groundElevationMeters = $derived(truth?.groundElevation ?? 0);
 	<title>{data.scenario.title} -- Dual</title>
 </svelte:head>
 
+<ControlInput
+	{inputs}
+	oninput={onControlInput}
+	onspecial={onControlSpecial}
+	ontoggleAutoCoordinate={toggleAutoCoordinate}
+/>
+
 <main>
 	<header>
 		<a class="back" href={ROUTES.SIM_HOME}>&larr; Scenarios</a>
@@ -101,7 +162,7 @@ const groundElevationMeters = $derived(truth?.groundElevation ?? 0);
 			<section class="instrument-pane" aria-label="Cockpit instrument panel">
 				<CockpitPanel {truth} {display} />
 				<p class="help">
-					Full cockpit panel rendered alongside the 3D horizon. Both components are pure-prop and unaware of each other; this page hosts the FDM worker and feeds them the same SNAPSHOT stream.
+					Full cockpit panel rendered alongside the 3D horizon. All three components (Horizon3D, CockpitPanel, ControlInput) are pure-prop and unaware of each other; this page hosts the FDM worker and feeds them the same SNAPSHOT stream.
 				</p>
 			</section>
 		</div>

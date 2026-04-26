@@ -3,12 +3,11 @@
  * Cockpit page. Full six-pack + tach, control input panel, V-speeds, WX,
  * stall horn, scenario banner, keybindings help, reset-confirm overlay.
  *
- * Control model: spring-centered ramp for primary surfaces + hold-to-adjust
- * throttle. Elevator/aileron/rudder deflect while a direction key is held
- * and return to neutral on release (yoke spring). Throttle ramps while
- * Shift/Ctrl is held and holds position on release. A requestAnimationFrame
- * loop ticks the ramp; keydown/keyup track which ramp actions are pressed.
- * Trim and flaps stay tap-based through `resolveKey`.
+ * Control input is delegated to `ControlInput.svelte` -- a pure-prop host
+ * that owns keyboard listeners + the spring/ramp loop and emits patches
+ * via callbacks. The page wires those callbacks to worker postMessage
+ * (and to the system-action handlers for pause / reset / help / mute /
+ * brake / auto-coordinate).
  */
 
 import {
@@ -34,8 +33,8 @@ import { onDestroy, onMount, untrack } from 'svelte';
 import { browser } from '$app/environment';
 import { postAttempt } from '$lib/attempt-client';
 import CockpitPanel from '$lib/cockpit/CockpitPanel.svelte';
-import { type RampAction, resolveKey, resolveRampAction } from '$lib/control-handler';
-import { tickRamp } from '$lib/control-ramp';
+import ControlInput from '$lib/cockpit/ControlInput.svelte';
+import type { SpecialAction } from '$lib/control-handler';
 import { EngineSound } from '$lib/engine-sound.svelte';
 import FdmWorker from '$lib/fdm-worker.ts?worker';
 import ScenarioSurfaceNav from '$lib/horizon/ScenarioSurfaceNav.svelte';
@@ -84,10 +83,6 @@ let bootError = $state<string | null>(null);
 let readyTimer: ReturnType<typeof setTimeout> | null = null;
 const WORKER_READY_TIMEOUT_MS = 5_000;
 
-const pressedActions = new Set<RampAction>();
-let rampFrame: number | null = null;
-let lastRampTs = 0;
-
 // WCAG 2.1.4: users on screen readers need to disable character-key
 // shortcuts so Shift/Ctrl (throttle) do not collide with AT modifier chords.
 let keyboardControlEnabled = $state(true);
@@ -111,6 +106,11 @@ let lastActivationCount = 0;
 
 function post(msg: MainToWorker): void {
 	worker?.postMessage(msg);
+}
+
+function postInputPatch(patch: Partial<FdmInputs>): void {
+	inputs = { ...inputs, ...patch };
+	post({ type: SIM_WORKER_MESSAGES.INPUT, inputs: patch });
 }
 
 function handleWorkerMessage(event: MessageEvent<WorkerToMain>): void {
@@ -280,106 +280,43 @@ function toggleAutoCoordinate(): void {
 	post({ type: SIM_WORKER_MESSAGES.TOGGLE_AUTO_COORDINATE });
 }
 
-function onKeyDown(event: KeyboardEvent): void {
-	if (!keyboardControlEnabled) return;
+/**
+ * Modal-overlay key intercepts. Reset-confirm and help overlays both
+ * grab Escape (and Y for reset confirm) before the input host gets a
+ * chance to resolve the key. ControlInput calls this for every keydown
+ * and skips its own handling when we return true.
+ */
+function interceptKey(event: KeyboardEvent): boolean {
 	if (resetConfirmOpen) {
 		if (event.key === 'y' || event.key === 'Y') {
 			event.preventDefault();
 			performReset();
-		} else if (event.key === 'Escape') {
+			return true;
+		}
+		if (event.key === 'Escape') {
 			event.preventDefault();
 			resetConfirmOpen = false;
+			return true;
 		}
-		return;
+		// Swallow every other key while the confirm modal is open so
+		// flight controls don't fire underneath the dialog.
+		return true;
 	}
 	if (helpOpen && event.key === 'Escape') {
 		event.preventDefault();
 		helpOpen = false;
 		if (browser) localStorage.setItem(SIM_STORAGE_KEYS.HELP_DISMISSED, 'true');
-		return;
+		return true;
 	}
-
-	const rampAction = resolveRampAction(event);
-	if (rampAction !== null) {
-		event.preventDefault();
-		firstGesture();
-		pressedActions.add(rampAction);
-		return;
-	}
-
-	// Block OS-level autorepeat from spamming tap-based actions (trim, flaps).
-	if (event.repeat) return;
-
-	const resolution = resolveKey(event, inputs);
-	if (!resolution) return;
-	event.preventDefault();
-	firstGesture();
-
-	if (resolution.patch) {
-		const next = { ...inputs, ...resolution.patch };
-		inputs = next;
-		post({ type: SIM_WORKER_MESSAGES.INPUT, inputs: resolution.patch });
-	}
-	if (resolution.toggleAutoCoordinate) {
-		toggleAutoCoordinate();
-	}
-	if (resolution.special) {
-		handleSpecial(resolution.special);
-	}
+	return false;
 }
 
-function onKeyUp(event: KeyboardEvent): void {
-	const rampAction = resolveRampAction(event);
-	if (rampAction === null) return;
-	pressedActions.delete(rampAction);
-	event.preventDefault();
+function onControlInput(patch: Partial<FdmInputs>): void {
+	postInputPatch(patch);
 }
 
-function releaseAllRampKeys(): void {
-	pressedActions.clear();
-}
-
-function tickInputs(ts: number): void {
-	if (lastRampTs === 0) lastRampTs = ts;
-	const dt = Math.min(0.1, (ts - lastRampTs) / 1000);
-	lastRampTs = ts;
-
-	const next = tickRamp(
-		{
-			elevator: inputs.elevator,
-			aileron: inputs.aileron,
-			rudder: inputs.rudder,
-			throttle: inputs.throttle,
-		},
-		pressedActions,
-		dt,
-	);
-
-	const patch: Partial<FdmInputs> = {};
-	let changed = false;
-	if (next.elevator !== inputs.elevator) {
-		patch.elevator = next.elevator;
-		changed = true;
-	}
-	if (next.aileron !== inputs.aileron) {
-		patch.aileron = next.aileron;
-		changed = true;
-	}
-	if (next.rudder !== inputs.rudder) {
-		patch.rudder = next.rudder;
-		changed = true;
-	}
-	if (next.throttle !== inputs.throttle) {
-		patch.throttle = next.throttle;
-		changed = true;
-	}
-
-	if (changed) {
-		inputs = { ...inputs, ...patch };
-		post({ type: SIM_WORKER_MESSAGES.INPUT, inputs: patch });
-	}
-
-	rampFrame = requestAnimationFrame(tickInputs);
+function onControlSpecial(action: SpecialAction): void {
+	handleSpecial(action);
 }
 
 function onAutoCoordClick(): void {
@@ -416,13 +353,11 @@ onMount(() => {
 	if (!browser) return;
 	startWorker();
 
-	window.addEventListener('keydown', onKeyDown);
-	window.addEventListener('keyup', onKeyUp);
-	window.addEventListener('blur', releaseAllRampKeys);
+	// Pointerdown unlocks WebAudio sources for clicks outside the
+	// keyboard control path (e.g. the play/pause button). Keyboard-
+	// driven first gesture is signalled by ControlInput via
+	// `onfirstgesture`.
 	window.addEventListener('pointerdown', firstGesture);
-
-	lastRampTs = 0;
-	rampFrame = requestAnimationFrame(tickInputs);
 
 	// Mute state -- shared across every cockpit audio source.
 	muted = localStorage.getItem(SIM_STORAGE_KEYS.MUTE) === 'true';
@@ -443,12 +378,7 @@ onMount(() => {
 
 onDestroy(() => {
 	if (!browser) return;
-	window.removeEventListener('keydown', onKeyDown);
-	window.removeEventListener('keyup', onKeyUp);
-	window.removeEventListener('blur', releaseAllRampKeys);
 	window.removeEventListener('pointerdown', firstGesture);
-	if (rampFrame !== null) cancelAnimationFrame(rampFrame);
-	rampFrame = null;
 	if (readyTimer !== null) clearTimeout(readyTimer);
 	horn.destroy();
 	engineSound.destroy();
@@ -477,6 +407,16 @@ const trimBias = $derived(inputs.trim);
 <svelte:head>
 	<title>{data.scenario.title} -- airboss sim</title>
 </svelte:head>
+
+<ControlInput
+	{inputs}
+	enabled={keyboardControlEnabled}
+	oninput={onControlInput}
+	onspecial={onControlSpecial}
+	ontoggleAutoCoordinate={toggleAutoCoordinate}
+	onfirstgesture={firstGesture}
+	intercept={interceptKey}
+/>
 
 <main>
 	<header>
