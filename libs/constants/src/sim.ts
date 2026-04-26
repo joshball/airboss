@@ -175,6 +175,12 @@ export const SIM_STORAGE_KEYS = {
 	MUTE: 'airboss.sim.mute',
 	HELP_DISMISSED: 'airboss.sim.helpDismissed',
 	CHEATSHEET_COLLAPSED: 'airboss.sim.cheatsheetCollapsed',
+	/**
+	 * Sessionstorage flag for the unauthenticated sign-in banner.
+	 * Cleared on tab close so the banner reappears on the next session
+	 * start (per the auth-banner work item).
+	 */
+	AUTH_BANNER_DISMISSED: 'airboss.sim.authBannerDismissed',
 } as const;
 
 /**

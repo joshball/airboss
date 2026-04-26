@@ -69,9 +69,11 @@ export {
 	AUTH_INTERNAL_ORIGIN,
 	COOKIE_DOMAIN_DEV,
 	COOKIE_DOMAIN_PROD,
+	HOST_PREFIXES,
 	HOSTS,
 	MAIL_DOMAIN_PROD,
 	MAIL_FROM_NOREPLY,
+	siblingOrigin,
 } from './hosts';
 export { MIN_PASSWORD_LENGTH, USER_STATUS, type UserStatus } from './identity';
 export {
