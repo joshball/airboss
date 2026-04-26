@@ -352,6 +352,7 @@ export {
 	HandbookValidationError,
 	listAllSectionsForReference,
 	listChapterSections,
+	listFiguresForSection,
 	listHandbookChapters,
 	listReferences,
 	markAsReread,

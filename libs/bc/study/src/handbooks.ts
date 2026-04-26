@@ -263,6 +263,18 @@ export async function getHandbookChapter(
 	return row;
 }
 
+/** Figures bound to any handbook_section row (chapter or section), ordered. */
+export async function listFiguresForSection(
+	sectionId: string,
+	db: Db = defaultDb,
+): Promise<HandbookFigureRow[]> {
+	return db
+		.select()
+		.from(handbookFigure)
+		.where(eq(handbookFigure.sectionId, sectionId))
+		.orderBy(asc(handbookFigure.ordinal));
+}
+
 // ---------------------------------------------------------------------------
 // Reverse citation: nodes that cite this section
 // ---------------------------------------------------------------------------

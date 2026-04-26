@@ -20,7 +20,9 @@
 
 import {
 	HANDBOOK_READ_STATUS_VALUES,
+	type HandbookReadStatus,
 	HANDBOOK_SECTION_LEVEL_VALUES,
+	type HandbookSectionLevel,
 	REFERENCE_KIND_VALUES,
 	REFERENCE_KINDS,
 } from '@ab/constants';
@@ -74,7 +76,7 @@ export type HandbookManifestFigure = z.infer<typeof handbookManifestFigureSchema
  * to walk the tree and validate the (parent, ordinal, hash) triples.
  */
 export const handbookManifestSectionSchema = z.object({
-	level: z.enum(HANDBOOK_SECTION_LEVEL_VALUES as [string, ...string[]]),
+	level: z.enum(HANDBOOK_SECTION_LEVEL_VALUES as unknown as readonly [HandbookSectionLevel, ...HandbookSectionLevel[]]),
 	code: z.string().regex(SECTION_CODE_REGEX),
 	ordinal: z.number().int().nonnegative(),
 	parent_code: z.string().regex(SECTION_CODE_REGEX).nullable(),
@@ -252,7 +254,9 @@ export const citationSchema = z.union([structuredCitationSchema, legacyCitationS
 // Read-state input schemas (validate BC write inputs)
 // ---------------------------------------------------------------------------
 
-export const handbookReadStatusSchema = z.enum(HANDBOOK_READ_STATUS_VALUES as [string, ...string[]]);
+export const handbookReadStatusSchema = z.enum(
+	HANDBOOK_READ_STATUS_VALUES as unknown as readonly [HandbookReadStatus, ...HandbookReadStatus[]],
+);
 
 export const handbookHeartbeatInputSchema = z.object({
 	deltaSeconds: z.number().int().nonnegative(),
