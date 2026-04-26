@@ -10,6 +10,7 @@ import { AFT_CG_SLOW_FLIGHT_SCENARIO } from './aft-cg-slow-flight';
 import { DEPARTURE_STALL_SCENARIO } from './departure-stall';
 import { EFATO_SCENARIO } from './efato';
 import { FIRST_FLIGHT_SCENARIO } from './first-flight';
+import { ILS_APPROACH_SCENARIO } from './ils-approach';
 import { PARTIAL_PANEL_SCENARIO } from './partial-panel';
 import { PITOT_BLOCK_SCENARIO } from './pitot-block';
 import { PLAYGROUND_SCENARIO } from './playground';
@@ -34,6 +35,7 @@ export const SCENARIO_REGISTRY: Record<SimScenarioId, ScenarioDefinition> = {
 	[SIM_SCENARIO_IDS.AFT_CG_SLOW_FLIGHT]: AFT_CG_SLOW_FLIGHT_SCENARIO,
 	[SIM_SCENARIO_IDS.VMC_INTO_IMC]: VMC_INTO_IMC_SCENARIO,
 	[SIM_SCENARIO_IDS.PLAYGROUND_PA28]: PLAYGROUND_PA28_SCENARIO,
+	[SIM_SCENARIO_IDS.ILS_APPROACH]: ILS_APPROACH_SCENARIO,
 };
 
 /** Defensive lookup; throws on unknown ids so callers fail fast. */

@@ -92,6 +92,7 @@ export {
 	type GradingEvaluationContext,
 	tapeWasSuccessful,
 } from './scenarios/grading';
+export { ILS_APPROACH_SCENARIO } from './scenarios/ils-approach';
 export { PARTIAL_PANEL_SCENARIO } from './scenarios/partial-panel';
 export { PITOT_BLOCK_SCENARIO } from './scenarios/pitot-block';
 export { PLAYGROUND_SCENARIO } from './scenarios/playground';
