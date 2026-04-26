@@ -23,25 +23,31 @@ export interface BrowseListItemProps {
 let { href, id, justCreated = false, title, meta, stats, extra, trailing }: BrowseListItemProps = $props();
 </script>
 
-<li class="card" class:just-created={justCreated} {id}>
-	<a class="card-link" {href}>
-		<div class="card-title">{@render title()}</div>
+<li
+	class="card"
+	class:just-created={justCreated}
+	{id}
+	data-testid="browselistitem-root"
+	data-state={justCreated ? 'just-created' : 'idle'}
+>
+	<a class="card-link" {href} data-testid="browselistitem-link">
+		<div class="card-title" data-testid="browselistitem-title">{@render title()}</div>
 		{#if meta || stats}
 			<div class="card-row">
 				{#if meta}
-					<div class="card-meta">{@render meta()}</div>
+					<div class="card-meta" data-testid="browselistitem-meta">{@render meta()}</div>
 				{/if}
 				{#if stats}
-					<div class="card-stats" aria-label="Details">{@render stats()}</div>
+					<div class="card-stats" aria-label="Details" data-testid="browselistitem-stats">{@render stats()}</div>
 				{/if}
 			</div>
 		{/if}
 		{#if extra}
-			{@render extra()}
+			<div data-testid="browselistitem-extra">{@render extra()}</div>
 		{/if}
 	</a>
 	{#if trailing}
-		{@render trailing()}
+		<div data-testid="browselistitem-trailing">{@render trailing()}</div>
 	{/if}
 </li>
 

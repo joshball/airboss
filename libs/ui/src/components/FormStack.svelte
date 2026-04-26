@@ -26,11 +26,26 @@ const { gap = 'md', as = 'div', method, action, enctype, ariaLabel, children }: 
 </script>
 
 {#if as === 'form'}
-	<form class="stack gap-{gap}" {method} {action} {enctype} aria-label={ariaLabel}>
+	<form
+		class="stack gap-{gap}"
+		{method}
+		{action}
+		{enctype}
+		aria-label={ariaLabel}
+		data-testid="formstack-root"
+		data-as="form"
+		data-gap={gap}
+	>
 		{@render children()}
 	</form>
 {:else}
-	<div class="stack gap-{gap}" aria-label={ariaLabel}>
+	<div
+		class="stack gap-{gap}"
+		aria-label={ariaLabel}
+		data-testid="formstack-root"
+		data-as="div"
+		data-gap={gap}
+	>
 		{@render children()}
 	</div>
 {/if}

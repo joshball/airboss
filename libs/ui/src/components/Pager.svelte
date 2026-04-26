@@ -30,17 +30,17 @@ let {
 }: PagerProps = $props();
 </script>
 
-<nav class="pager" aria-label={ariaLabel}>
+<nav class="pager" aria-label={ariaLabel} data-testid="pager-root" data-current-page={currentPage} data-total-pages={totalPages}>
 	{#if currentPage > 1}
-		<Button href={pageHref(currentPage - 1)} variant="ghost">{previousLabel}</Button>
+		<span data-testid="pager-prev"><Button href={pageHref(currentPage - 1)} variant="ghost">{previousLabel}</Button></span>
 	{:else}
-		<span></span>
+		<span data-testid="pager-prev-empty"></span>
 	{/if}
-	<span class="page-num">Page {currentPage} of {totalPages}</span>
+	<span class="page-num" data-testid="pager-status">Page {currentPage} of {totalPages}</span>
 	{#if hasMore}
-		<Button href={pageHref(currentPage + 1)} variant="ghost">{nextLabel}</Button>
+		<span data-testid="pager-next"><Button href={pageHref(currentPage + 1)} variant="ghost">{nextLabel}</Button></span>
 	{:else}
-		<span></span>
+		<span data-testid="pager-next-empty"></span>
 	{/if}
 </nav>
 

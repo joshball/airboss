@@ -47,22 +47,25 @@ const resolvedError = $derived(error ? (errorMessage ?? fallbackErrorMessage) : 
 	class="panel"
 	class:gated={variant === 'gated'}
 	aria-labelledby={slugId}
+	data-testid="panelshell-root"
+	data-variant={variant}
+	data-state={resolvedError ? 'error' : 'idle'}
 >
-	<header class="ph">
+	<header class="ph" data-testid="panelshell-header">
 		<div class="hg">
-			<h2 id={slugId}>{title}</h2>
+			<h2 id={slugId} data-testid="panelshell-title">{title}</h2>
 			{#if subtitle}
-				<p class="sub">{subtitle}</p>
+				<p class="sub" data-testid="panelshell-subtitle">{subtitle}</p>
 			{/if}
 		</div>
 		{#if action}
-			<div class="action">{@render action()}</div>
+			<div class="action" data-testid="panelshell-action">{@render action()}</div>
 		{/if}
 	</header>
 
-	<div class="body">
+	<div class="body" data-testid="panelshell-body">
 		{#if resolvedError}
-			<p class="err" role="alert">{resolvedError}</p>
+			<p class="err" role="alert" data-testid="panelshell-error">{resolvedError}</p>
 		{:else}
 			{@render children()}
 		{/if}

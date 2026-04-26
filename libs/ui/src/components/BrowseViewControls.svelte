@@ -31,12 +31,13 @@ let {
 }: BrowseViewControlsProps<G, S> = $props();
 </script>
 
-<div class="view-controls" aria-label="View options">
+<div class="view-controls" aria-label="View options" data-testid="browseviewcontrols-root">
 	<div class="view-control">
 		<label for="vc-group">Group by</label>
 		<select
 			id="vc-group"
 			value={groupBy}
+			data-testid="browseviewcontrols-groupby"
 			onchange={(e) => onGroupBy((e.currentTarget as HTMLSelectElement).value as G)}
 		>
 			{#each groupByOptions as opt (opt.value)}
@@ -49,6 +50,7 @@ let {
 		<select
 			id="vc-size"
 			value={pageSize}
+			data-testid="browseviewcontrols-pagesize"
 			onchange={(e) => {
 				const raw = (e.currentTarget as HTMLSelectElement).value;
 				const isNumber = typeof pageSizeOptions[0]?.value === 'number';

@@ -34,16 +34,21 @@ let {
 </script>
 
 {#if chips.length > 0}
-	<div class="chip-row" aria-label={ariaLabel}>
-		<span class="chip-label">{heading}</span>
+	<div class="chip-row" aria-label={ariaLabel} data-testid="filterchips-root">
+		<span class="chip-label" data-testid="filterchips-heading">{heading}</span>
 		{#each chips as chip (chip.key)}
-			<a class="chip" href={chip.removeHref} aria-label={`Remove ${chip.label} filter`}>
+			<a
+				class="chip"
+				href={chip.removeHref}
+				aria-label={`Remove ${chip.label} filter`}
+				data-testid={`filterchips-chip-${chip.key}`}
+			>
 				<span class="chip-name">{chip.label}:</span>
 				<span class="chip-value">{chip.value}</span>
 				<span class="chip-x" aria-hidden="true">×</span>
 			</a>
 		{/each}
-		<a class="chip-clear" href={clearHref}>{clearLabel}</a>
+		<a class="chip-clear" href={clearHref} data-testid="filterchips-clear">{clearLabel}</a>
 	</div>
 {/if}
 

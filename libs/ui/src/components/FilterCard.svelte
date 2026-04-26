@@ -28,12 +28,12 @@ let {
 }: FilterCardProps = $props();
 </script>
 
-<form class="filters" method="GET" role="search" aria-label={ariaLabel}>
+<form class="filters" method="GET" role="search" aria-label={ariaLabel} data-testid="filtercard-root">
 	{#if hidden}{@render hidden()}{/if}
-	<div class="filter-grid">
+	<div class="filter-grid" data-testid="filtercard-grid">
 		{@render controls()}
 	</div>
-	<div class="filter-actions">
+	<div class="filter-actions" data-testid="filtercard-actions">
 		<Button type="submit" variant="secondary">{applyLabel}</Button>
 		<Button href={resetHref} variant="ghost">{resetLabel}</Button>
 	</div>

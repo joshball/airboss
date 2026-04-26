@@ -35,8 +35,8 @@ let {
 </script>
 
 {#snippet body()}
-	<span class="label">{label}</span>
-	<span class="value">
+	<span class="label" data-testid="stattile-label">{label}</span>
+	<span class="value" data-testid="stattile-value">
 		{#if valueSnippet}
 			{@render valueSnippet()}
 		{:else}
@@ -44,16 +44,29 @@ let {
 		{/if}
 	</span>
 	{#if sub}
-		<span class="sub">{sub}</span>
+		<span class="sub" data-testid="stattile-sub">{sub}</span>
 	{/if}
 {/snippet}
 
 {#if href}
-	<a class="tile t-{tone} linked" {href} aria-label={ariaLabel}>
+	<a
+		class="tile t-{tone} linked"
+		{href}
+		aria-label={ariaLabel}
+		data-testid="stattile-root"
+		data-tone={tone}
+		data-linked="true"
+	>
 		{@render body()}
 	</a>
 {:else}
-	<div class="tile t-{tone}" aria-label={ariaLabel}>
+	<div
+		class="tile t-{tone}"
+		aria-label={ariaLabel}
+		data-testid="stattile-root"
+		data-tone={tone}
+		data-linked="false"
+	>
 		{@render body()}
 	</div>
 {/if}

@@ -14,7 +14,13 @@ import { navigating } from '$app/state';
 </script>
 
 {#if navigating.to}
-	<div class="nav-indicator" role="status" aria-live="polite" aria-label="Loading next page">
+	<div
+		class="nav-indicator"
+		role="status"
+		aria-live="polite"
+		aria-label="Loading next page"
+		data-testid="navindicator-root"
+	>
 		<span class="nav-indicator-bar"></span>
 	</div>
 {/if}

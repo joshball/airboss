@@ -82,9 +82,9 @@ function sortIndicator(column: DataTableColumn<T>): string {
 }
 </script>
 
-<div class="wrap">
-	<table aria-label={ariaLabel}>
-		<thead>
+<div class="wrap" data-testid="datatable-root" data-state={sortedRows.length === 0 ? 'empty' : 'idle'}>
+	<table aria-label={ariaLabel} data-testid="datatable-table">
+		<thead data-testid="datatable-head">
 			<tr>
 				{#each columns as column (column.id)}
 					<th
@@ -96,12 +96,14 @@ function sortIndicator(column: DataTableColumn<T>): string {
 								? 'ascending'
 								: 'descending'
 							: 'none'}
+						data-testid={`datatable-header-${column.id}`}
 					>
 						{#if column.sortBy}
 							<button
 								type="button"
 								class="sort"
 								class:active={sort.columnId === column.id}
+								data-testid={`datatable-sort-${column.id}`}
 								onclick={() => flipSort(column)}
 							>
 								<span>{column.header}</span>
@@ -114,9 +116,9 @@ function sortIndicator(column: DataTableColumn<T>): string {
 				{/each}
 			</tr>
 		</thead>
-		<tbody>
+		<tbody data-testid="datatable-body">
 			{#if sortedRows.length === 0}
-				<tr class="empty-row">
+				<tr class="empty-row" data-testid="datatable-empty">
 					<td colspan={columns.length}>
 						{#if empty}
 							{@render empty()}
