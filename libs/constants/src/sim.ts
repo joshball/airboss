@@ -634,3 +634,13 @@ export const SIM_BIAS = {
 	/** Floor on the returned weight (0..1). Keeps the signal nonzero when the user is right at the threshold. */
 	WEIGHT_FLOOR: 0.1,
 } as const;
+
+/**
+ * Tuning for the sim history dashboard (`/history`). Limits the recent-
+ * attempts list size so a noisy training session does not produce a
+ * megabyte payload, and keeps the value out of route/load code.
+ */
+export const SIM_HISTORY = {
+	/** Default cap on rows returned by `listRecentSimAttempts` for the dashboard. */
+	LIST_LIMIT: 50,
+} as const;
