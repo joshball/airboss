@@ -609,3 +609,26 @@ export const SIM_GRADING = {
 	/** Min control-axis delta to count as "any input change" reaction. */
 	REACTION_INPUT_DELTA: 0.1,
 } as const;
+
+/**
+ * Spaced-rep bias from sim performance.
+ *
+ * Read by `getRecentSimWeakness` to translate a learner's recent
+ * `sim.attempt` rows into a per-scenario weakness signal that the
+ * study scheduler can later consume. The thresholds are deliberately
+ * loose -- the goal is "this scenario keeps grading <= POOR_THRESHOLD,
+ * surface its related study cards" without being noisy on a single
+ * bad run.
+ */
+export const SIM_BIAS = {
+	/** Default lookback window when no `since` is provided (days). */
+	DEFAULT_WINDOW_DAYS: 30,
+	/** Default cap on attempts considered per scenario; newest wins. */
+	DEFAULT_MAX_ATTEMPTS_PER_SCENARIO: 5,
+	/** Below this average grade total a scenario is "weak" (0..1). */
+	POOR_THRESHOLD: 0.6,
+	/** Min attempts in the window before the signal counts; one bad run is noise. */
+	MIN_ATTEMPTS: 2,
+	/** Floor on the returned weight (0..1). Keeps the signal nonzero when the user is right at the threshold. */
+	WEIGHT_FLOOR: 0.1,
+} as const;
