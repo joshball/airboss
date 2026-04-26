@@ -1,4 +1,12 @@
-# Runway -- Product Requirements
+# Archived: FIRC-era Runway PRD (2026-04-26)
+
+> **Archived 2026-04-26.** Same dormancy as [VISION.md](VISION.md) -- the FIRC marketing site is not the airboss public surface.
+>
+> **Current source of truth:** [docs/products/runway/VISION.md](../../../products/runway/VISION.md).
+
+---
+
+## Original document
 
 ## Overview
 

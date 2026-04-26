@@ -1,6 +1,16 @@
-# Architecture
+# Archived: FIRC-era Platform Architecture (2026-04-26)
 
-A regulated, adaptive decision-training platform for flight instructor certification renewal. Four apps, shared libraries, one monorepo.
+> **Archived 2026-04-26.** Superseded by [docs/platform/MULTI_PRODUCT_ARCHITECTURE.md](../../platform/MULTI_PRODUCT_ARCHITECTURE.md) (Option 7, decided 2026-04-17). The four-app FIRC stack (sim/hangar/ops/runway) under `*.fircboss.com` and the bounded contexts wired to FAA submission are not the airboss architecture. Surface-typed apps (study, spatial, audio, reflect, avionics, future firc, hangar, runway) live in airboss instead.
+>
+> **Current source of truth:** [docs/platform/MULTI_PRODUCT_ARCHITECTURE.md](../../platform/MULTI_PRODUCT_ARCHITECTURE.md). Read [PIVOT.md](../../platform/PIVOT.md) for the why.
+>
+> Kept for historical context only.
+
+---
+
+## Original document
+
+The pre-pivot platform architecture, organized around the four-app FIRC stack. References to fircboss.com domain, FAA submission machinery, and the original `course/published/enrollment/evidence/compliance/identity/audit/platform` schema layout preserved for context.
 
 ## Apps
 

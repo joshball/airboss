@@ -1,4 +1,10 @@
-# 001: App Boundaries
+# 001: App Boundaries (SUPERSEDED)
+
+> **Superseded 2026-04-26.** This ADR defined the four-app FIRC stack (sim/hangar/ops/runway) under `*.fircboss.com`. Per [PIVOT.md](../platform/PIVOT.md), airboss is surface-typed (study, sim, hangar, plus future spatial/audio/reflect/avionics/firc/runway), the `ops` app is gone (folded into hangar), and the FIRC-specific app responsibilities below no longer match.
+>
+> **Current source of truth:** [docs/platform/MULTI_PRODUCT_ARCHITECTURE.md](../platform/MULTI_PRODUCT_ARCHITECTURE.md). The "Inter-App Communication" rule (shared DB + BC libs, no app-to-app calls, no event bus) and the "no separate API server" rule survive the pivot. The app list and the FAA-flavored responsibilities don't.
+>
+> Kept for historical context only.
 
 Decided 2026-03-25.
 

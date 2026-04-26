@@ -1,213 +1,119 @@
-# FIRC Boss - Product Vision
+---
+title: airboss Platform Vision
+type: vision
+status: current
+date: 2026-04-26
+supersedes: ../.archive/platform/VISION.md
+---
 
-## The Problem
+# airboss
 
-The FAA requires Flight Instructor Refresher Courses (FIRCs) to be 16 hours of content. Current FIRC courses are:
+Pilot performance and rehearsal. A platform for pilots to learn, rehearse, and reflect across every certificate and rating, from PPL through CFI -- with airframe-specific drills, route-specific rehearsal, and decision-pattern practice that compounds over a flying career.
 
-- **Time-gated** - sit and wait for timers to tick down
-- **Passive** - slides and text with minimal interaction
-- **Checkbox-driven** - pass a 70% quiz, move on
-- **Divorced from real cockpit pressure** - knowledge without decision-making
+This is **not** a course. **Not** a sim. **Not** a logbook. It's a rehearsal and proficiency tool that fits between planning and flying, and between flying and reflection. See [PIVOT.md](PIVOT.md) for why we're here.
 
-The result: instructors endure compliance training that teaches knowledge but fails to develop the judgment, timing, and intervention skills that actually prevent accidents.
+## Core loops
 
-## The Vision
+```text
+Before flight    →  Load route → rehearse scenario → load decisions into working memory
+Between flights  →  Daily 10-min spaced practice on weak areas
+After flight     →  Debrief with timeline, self-rating, note which decisions held up
+Over time        →  Track calibration, proficiency trends, where the pilot is drifting
+```
 
-**Replace compliance training with a mastery engine pilots actually want to live in.**
+## Audience
 
-FIRC Boss is a scenario-based, adaptive decision-training platform for flight instructors. Think:
+- **User zero (today):** Joshua -- returning CFI rebuilding PPL/IR/CPL/CFI knowledge. The platform is shaped around his relearning workflow.
+- **Pilots in training:** PPL/IR/CPL/CFI students who want rehearsal between lessons.
+- **Returning pilots:** anyone re-currenting after a gap.
+- **Active CFIs:** judgment + intervention practice; FIRC content if/when a partner adopts it.
+- **Future:** type-rating prep, airline interview prep, recurrent training.
 
-> Microsoft Flight Simulator x Into the Breach x Case Study Engine x CRM Trainer
+## Surface architecture
 
-You are not "taking lessons." You are a CFI operating in a dynamic world -- managing students, flights, risk, weather, and decisions -- being evaluated constantly but invisibly.
+Apps are organized by **rendering surface**, not content theme. A weather quiz and a regulation quiz both live in `study/` because they share card UI and spaced-rep infrastructure. A route map and an airport card both live in `spatial/`. See [MULTI_PRODUCT_ARCHITECTURE.md](MULTI_PRODUCT_ARCHITECTURE.md) for the full taxonomy and build order.
 
-### Core Promise
+Built today:
 
-- FAA says 16 hours? We satisfy that (and more).
-- But pilots **want** to spend 100+ hours because scenarios evolve, outcomes differ, and mastery matters.
-- Every interaction maps invisibly to FAA requirements while feeling like real instructional practice.
+| App      | Surface                                                              | Status |
+| -------- | -------------------------------------------------------------------- | ------ |
+| `study`  | Cards, quizzes, spaced rep, calibration, knowledge graph             | Active |
+| `sim`    | Flight-dynamics simulator (hand-rolled C172 FDM, scenarios, debrief) | Active |
+| `hangar` | Operator app -- content authoring, users, system ops                 | Active |
 
-## What Makes This Different
+Future surfaces (created when product demands them):
 
-### Two Systems, Layered
+| App        | Surface                                         |
+| ---------- | ----------------------------------------------- |
+| `spatial`  | Route, airport, airspace, map-based products    |
+| `audio`    | NTSB stories, drills, ATC comms, TTS narrative  |
+| `reflect`  | Journals, heatmaps, currency, decision diary    |
+| `avionics` | Glass cockpit trainer (G1000 / G3000 / Garmin)  |
+| `firc`     | FIRC course (migrated from airboss-firc)        |
+| `runway`   | Public site (open-source landing, free content) |
 
-1. **FAA System (visible)** - Structured curriculum, traceability matrix, compliance mapping. On paper, it looks completely traditional.
-2. **Real System (invisible)** - Adaptive engine, spaced repetition, scenario mastery, personalization. This is what users actually experience.
+## What's worth building
 
-The FAA approves #1. Users love #2.
+Per [PIVOT.md](PIVOT.md), the wedges that earn shipping priority:
 
-### Real Instructor Skills, Not Trivia
+| Layer                       | What it is                                                                                 | Priority |
+| --------------------------- | ------------------------------------------------------------------------------------------ | -------- |
+| **Proficiency maintenance** | Short daily scenarios; spaced + interleaved; targets the pilot's weak areas                | v1 core  |
+| **Route rehearsal**         | Import a route; tailored pre-brief: terrain/airspace/WX gotchas, ATC, go/no-go, diversions | v1 hook  |
+| **Event prep modules**      | IPC, flight review, BFR, checkride prep, type rating, airline interview                    | v2       |
+| **Transition support**      | New type, new avionics, new environment (mountain, IFR, international)                     | v2       |
+| **FIRC content module**     | The 503 questions + AC 61-83K scenarios; not FAA-approved unless a partner adopts it       | v3+      |
 
-Traditional FIRC fails because it teaches knowledge, but flying requires decision-making under pressure.
+## Learning philosophy
 
-Our system trains:
+Discovery-first. Lead with WHY, let the pilot derive the answer, reveal regulations as confirmation of reasoning. Mastery framed as cert/syllabus/goal/lens (any pilot has a current syllabus, an active goal, and a lens through which they view the syllabus). See [LEARNING_PHILOSOPHY.md](LEARNING_PHILOSOPHY.md) and [ADR 011 -- Knowledge graph](../decisions/011-knowledge-graph-learning-system/decision.md), [ADR 016 -- Cert/syllabus/goal/lens model](../decisions/016-cert-syllabus-goal-model/decision.md).
 
-- **Pattern recognition** - detect weak signals early
-- **Timing** - when to ask, prompt, coach, direct, or take controls
-- **Judgment** - choose the least invasive effective intervention
-- **Intervention skill** - rescue safely when needed
-- **Debrief quality** - teach causes, not just outcomes
+## Business posture
 
-### The Addictive Loop
+- **Cover costs / potentially open-source.** No FAA approval needed for v1; no chief instructor required.
+- **No business pressure.** No deadline besides self-imposed launch milestones.
+- **Open-core leaning** (engine + scenario format + content schemas open; hosted instance covers costs; community + curated scenario/route packs). Final license decision deferred to its own ADR.
+- **Regulatory moat:** explicitly not load-bearing. The contribution is the point.
 
-1. Fly scenario
-2. Make decisions
-3. Outcome plays out (sometimes crash, sometimes success)
-4. Debrief (this is GOLD - what you did, what you missed, what FAA expects)
-5. Replay with new strategy
+## Engineering posture
 
-### Never a Trick
+- **Audit everything.** Every authoring action and every admin action is tracked.
+- **Validate continuously.** Citation drift, broken wiki-links, stale references caught on every change.
+- **Compliance schema stays.** Audit, content versioning, and the compliance bounded context are preserved even though FIRC submission is dormant ([ADR 017](../decisions/017-firc-compliance-dormant.md)). The rigor makes the platform trustworthy regardless of regulatory posture.
+- **Surface apps are independently deployable.** Fix spaced rep without redeploying the map app.
 
-The engine rewards:
+## What stays from FIRC-era
 
-- Noticing earlier
-- Asking better
-- Coaching earlier
-- Salvaging safer
-- Debriefing honestly
+The 90%+ of work that transferred:
 
-It does NOT reward: psychic guessing, menu gaming, or memorizing scripts.
+- **`libs/engine/`** (in airboss-firc, migrating later) -- scenario tick engine, scoring, student model. Core IP.
+- **Scenario content model** -- ticks, decisions, branches.
+- **Pre-brief / debrief architecture.**
+- **Bounded-context structure** -- most BCs survive (course, enrollment, evidence; compliance dormant).
+- **Two-tier ID strategy.**
+- **Stack** -- Bun / SvelteKit / Svelte 5 / Drizzle / Postgres.
 
-## The Tick Engine (Core Mechanic)
+What changed:
 
-The fundamental game primitive is the **Instructional Intervention Simulator**:
-
-Each second (or half-second) is a "tick." At every tick:
-
-- Aircraft state updates (instruments, position, energy)
-- Student internal state updates (confusion, compliance, workload)
-- Instructor can observe, pause, or intervene
-
-### Intervention Ladder (same everywhere, no giveaways)
-
-| Level             | Examples                                                   |
-| ----------------- | ---------------------------------------------------------- |
-| **Ask**           | "What is your airspeed?" / "Talk me through what you see." |
-| **Prompt**        | "Correct to target speed." / "Reduce bank."                |
-| **Coach**         | "Pitch for speed." / "Add power smoothly."                 |
-| **Direct**        | "I want you to do X now."                                  |
-| **Take Controls** | Positive exchange procedure (three-step verbal handoff)    |
-
-### Student Behavior Model
-
-Students are not scripted puppets. They have:
-
-- Skill level, compliance tendency, communication quality
-- Freeze tendency, overconfidence tendency
-- Instrument interpretation accuracy
-- Startle delay, fatigue/distraction modifier
-
-One student says the right thing and does the wrong thing. Another freezes. Another overbanks. That is where replay value comes from.
-
-## The Learning Stack (4 Layers)
-
-### 1. Scenario Learning (Primary)
-
-Realistic situations requiring real-time decision-making.
-
-### 2. Micro-Learning (Just-in-time)
-
-Definitions, regulations, concepts -- appearing when needed, not as slides.
-
-- "RAIM failure detected" -> clickable -> micro-lesson (10-20 sec)
-
-### 3. Rote System (Reinforcement)
-
-Flash challenges, recall drills, timed responses.
-
-- "RAIM failure before FAF -- what now?" (3-second answer)
-- Spaced repetition: weak areas shown more often, strong areas spaced out.
-
-### 4. Replay System
-
-Try again. Improve. Different student, different weather, different outcome.
-This is what gets people from 16 -> 100 hours.
-
-## Personalization
-
-### Discovery Phase (Entry Experience)
-
-Not a test. "We're building your training profile."
-
-- **Soft knowledge probing** - FAA-style questions (hidden calibration), no pass/fail
-- **Interest mapping** - areas to improve, aircraft flown, airports, goals
-- **Scenario reflection** - "Tell us about a scary moment" (reveals real gaps, creates emotional engagement, seeds custom scenarios)
-- **Confidence mapping** - "How confident are you teaching GPS approaches?"
-
-Output: A `LearnerProfile` that drives the entire adaptive experience.
-
-### Contextual Scenarios
-
-Instead of "You are at an airport..." -> "You are departing KAPA..."
-
-- Local airports, terrain, airspace
-- Their aircraft type (G1000 vs steam, turbine vs piston)
-- Their goals ("transition to jets", "improve IFR instruction")
-
-### Adaptive Inside Constraints
-
-All required FAA topics must be completed. But order, emphasis, airport, aircraft, and review spacing all adapt to the learner.
-
-## Emotional Safety
-
-- **No permanent penalties** - everything replayable
-- **Celebrate failure** - "This is where learning happens"
-- **Debrief > Score** - Instead of "65%", show "You missed early stall indicators" and "You delayed intervention by 4 seconds"
-- **Trust and honesty are crucial** - "no" and "I don't know" are fine, logged for improvement tracking
-
-## Game Modes
-
-### 1. Career Mode (Primary)
-
-You are a CFI. Build reputation. Handle students. Progress through campaigns.
-
-### 2. Free Play Scenarios
-
-"Give me a GPS failure in IMC." "Give me a student who panics."
-
-### 3. Drill Mode (Rote Learning)
-
-Timed challenges, spaced repetition, flash scenarios (not flashcards).
-
-### 4. Multiplayer (Future)
-
-One plays student, one plays instructor. Or: ATC + pilot + instructor roles.
-
-## The Big Vision (Beyond FIRC)
-
-This becomes the "Factorio" of pilot training -- deep, replayable, skill-based, endlessly engaging.
-
-Eventually, not just FIRC but:
-
-- Private pilot training
-- IFR training
-- Airline CRM
-- Any scenario-based aviation training
-
-## Technology
-
-See [ARCHITECTURE.md](ARCHITECTURE.md) for the current tech stack and monorepo structure.
-
-## Strategic Framing
-
-### To the FAA
-
-- Never say "game" -- say "adaptive, scenario-based, interactive instruction system aligned with FAA SBT principles"
-- Never say "fun" -- say "individualized learning paths with continuous assessment"
-- Conservative framing, perfect traceability, strong assessment
-
-### To Users
-
-- This is the training you wish existed
-- Every minute matters, nothing is wasted
-- You'll actually be a better instructor after this
-
-### Competitive Moat
-
-What we protect (never fully expose):
-
-1. Competency model design
-2. Tick-based scenario engine
-3. Student behavior simulation
-4. Adaptive + spaced repetition algorithms
-5. Assessment/scoring logic
+- **Audience** -- every pilot, daily, not CFIs every 24 months.
+- **FAA submission** -- dormant unless a partner adopts.
+- **Naming** -- "FIRC Boss" → airboss; the FIRC course becomes one possible content pack, not the product.
+- **Apps** -- four monolithic FIRC apps (sim/hangar/ops/runway) → 5-7 surface-typed apps (study, spatial, audio, reflect, etc.).
+
+## What's NOT airboss
+
+- **Not a flight simulator** in the Microsoft sense -- the FDM in `apps/sim/` is built for *learning the airplane*, not for entertainment.
+- **Not a logbook** -- ForeFlight/Garmin Pilot/MyFlightbook do that.
+- **Not a planning tool** -- ForeFlight does that.
+- **Not a course platform** -- though a FIRC course or any cert syllabus can run on top.
+- **Not a marketing funnel** -- runway is dormant until v1 launches; this is craft, not commerce.
+
+## References
+
+- [PIVOT.md](PIVOT.md) -- why we left FIRC framing
+- [MULTI_PRODUCT_ARCHITECTURE.md](MULTI_PRODUCT_ARCHITECTURE.md) -- surface-typed apps and build order
+- [DESIGN_PRINCIPLES.md](DESIGN_PRINCIPLES.md) -- core beliefs
+- [LEARNING_PHILOSOPHY.md](LEARNING_PHILOSOPHY.md) -- discovery-first pedagogy
+- [ROADMAP.md](ROADMAP.md) -- per-area phasing
+- [VOCABULARY.md](VOCABULARY.md) -- naming bank
+- [.archive/platform/VISION.md](../.archive/platform/VISION.md) -- prior FIRC Boss vision

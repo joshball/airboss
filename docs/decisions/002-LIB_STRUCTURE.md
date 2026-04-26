@@ -1,4 +1,12 @@
-# 002: Lib Structure and Bounded Contexts
+# 002: Lib Structure and Bounded Contexts (PARTIALLY SUPERSEDED)
+
+> **Partially superseded 2026-04-26.** The architectural rules (apps are thin routing shells, business logic in BCs, three access levels per BC: `manage` / `write` / `read`, dependency direction `constants -> types -> bc/engine -> apps`) survive the pivot and are still authoritative.
+>
+> The specific BC list is FIRC-flavored. Today airboss has `bc/study` (cards, reviews, scenarios, calibration, knowledge graph) -- not in the original list. Pre-pivot BCs (`bc/course`, `bc/enrollment`, `bc/evidence`, `bc/compliance`, `bc/platform`) live in airboss-firc and migrate when `apps/firc/` lands per [MULTI_PRODUCT_ARCHITECTURE.md](../platform/MULTI_PRODUCT_ARCHITECTURE.md). The `bc/compliance` BC is dormant per [ADR 017](017-firc-compliance-dormant.md).
+>
+> **What's still authoritative:** lib categories (Infrastructure / Domain / Presentation / Shared), three-access-level pattern, dependency direction, "auth and audit are not BCs" rationale.
+>
+> **What's stale:** the specific BC list and feature responsibilities below.
 
 Decided 2026-03-25.
 

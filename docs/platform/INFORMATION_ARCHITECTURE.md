@@ -1,324 +1,268 @@
+---
+title: Information Architecture
+type: platform-reference
+status: current
+date: 2026-04-26
+---
+
 # Information Architecture
 
-How knowledge, course design, and implementation relate to each other in this project. This is the conceptual model -- not a file structure, but the entities, relationships, and layers that everything else is built on.
+How regulatory foundation, knowledge, course design, and implementation relate to each other in airboss. This is the conceptual model -- the entities, relationships, and layers that everything else is built on.
 
-## The Problem This Solves
+## The problem this solves
 
-We have regulatory requirements, domain knowledge, learning objectives, instructional design, and code implementation all mixed together in docs/. As the project grows, we lose track of what depends on what. If we change a learning objective, what downstream things break? If the FAA updates a regulation, what content needs updating? If we redesign the delivery mechanism, what stays the same?
+We have regulatory requirements, domain knowledge, learning objectives, instructional design, and code implementation all mixed together in `docs/` and `course/`. As the platform grows, we lose track of what depends on what. If we change a learning objective, what downstream things break? If the FAA updates a regulation, what content needs updating? If we redesign the delivery mechanism, what stays the same?
 
 This document defines the layers so changes propagate correctly.
 
----
-
-## Five Layers
+## Five layers
 
 ```text
 L01-FAA: Regulatory Foundation
-  "What the FAA requires"
+  "What the FAA + ACS / PTS / FIRC docs require"
        |
        v
 L02-Knowledge: Knowledge Domain
-  "What a CFI needs to know and do"
+  "What a pilot at this cert + syllabus needs to know and do"
        |
        v
-L03-Objectives: Learning Objectives
-  "What we will teach, specifically"
+L03-Objectives: Learning Objectives + Goals
+  "What we will teach, specifically, for this cert/syllabus/goal"
        |
        v
 L04-Design: Instructional Design
-  "How we will teach it"
+  "How we will teach it, through which lens"
        |
        v
 L05-Implementation: Course Implementation
-  "The specs, content, and features that deliver the course"
+  "The specs, content, and features that deliver it"
 ```
 
 Changes flow downward. A change at L01 may require changes at all layers below it. A change at L04 (switching from reading to scenario) should NOT require changes at L03 (the objective stays the same). If it does, our layers are coupled wrong.
 
-**Note:** L05 is course-specific implementation -- scenario player spec, debrief spec, tick scripts, questions. Platform infrastructure (auth, themes, deployment, DB design) is NOT part of the course layers. It lives separately in docs/.
+**Note:** L05 is course-specific implementation -- scenario player spec, debrief spec, tick scripts, questions. Platform infrastructure (auth, themes, deployment, DB design) is **not** part of these course layers. It lives separately in `docs/platform/`, `docs/products/`, `docs/decisions/`.
 
----
+**Cert/syllabus/goal/lens model** ([ADR 016](../decisions/016-cert-syllabus-goal-model/decision.md)) sits across L01-L03: a learner has a current cert (PPL/IR/CPL/CFI), is operating against a current syllabus version, has an active goal (passing a checkride, recurrent currency, transition prep), and views the syllabus through a lens (skill / knowledge / risk-management triad from the ACS, or experiential lens from a partner CFI).
 
-## L01-FAA: Regulatory Foundation
+## L01: Regulatory Foundation
 
-**What it is:** The legal and advisory framework that defines what a FIRC must contain. This is external to us -- we don't control it, we comply with it.
+**What it is:** The legal and advisory framework that defines what each cert requires. External -- we don't control it, we comply with it.
 
 **Sources:**
 
-- AC 61-83K (Advisory Circular -- the "soft law" governing FIRC design)
-- 14 CFR Part 61 (the regulation -- the "hard law")
+- 14 CFR Part 61 / Part 91 / Part 141 (the regulations)
+- ACS / PTS for each cert (Airman Certification Standards / Practical Test Standards -- the "soft law" governing what's tested)
+- AC 61-83K (FIRC-specific Advisory Circular)
 - 49 CFR Part 1552 (TSA flight training security)
+- AIM, Pilot's Handbook of Aeronautical Knowledge, Airplane Flying Handbook (FAA references)
 
 **What it defines:**
 
-- 13 core topic areas (A.1-A.13) that must be covered
-- Time requirements (16 hours total, 45 min per core topic, 30 min per elective)
-- Testing requirements (60+ questions, 70% pass, no true/false)
-- Record retention (24 months FAA, 5 years TSA)
-- Internet delivery requirements (12 hours content, identity verification, LMS controls)
+- For each cert: required knowledge areas, skill tasks, risk-management considerations.
+- For FIRC specifically: 13 core topic areas (A.1-A.13), 16-hour minimum, 60+ questions, no true/false, 2-year renewal cadence.
+- Record retention rules.
+- Examination requirements (oral + practical, written knowledge test).
+- Currency requirements (BFR, IPC, etc).
 
-**How AC numbers work:** Advisory Circular 61-83K means: related to Part 61 (pilot certification), number 83, revision K. ACs provide guidance on how to comply with CFRs. They're "soft law" -- not legally binding, but the FAA expects compliance and uses them as the standard during review.
+**What lives here:** ACS / PTS text, CFR references, FAA submission templates (FIRC-specific). Reference material -- we read it, we don't write it.
 
-**What lives here:** The AC text itself, CFR references, FAA submission templates. This is reference material -- we read it, we don't write it.
+**When it changes:** When the FAA issues a new revision (a new ACS edition, a new AC). We diff the changes and propagate them through all lower layers. The cert/syllabus/goal/lens model means a syllabus carries an explicit FAA version; learners can opt in to the new version per [ADR 016](../decisions/016-cert-syllabus-goal-model/decision.md).
 
-**When it changes:** When the FAA issues a new revision (61-83L would replace 61-83K). We would need to diff the changes and propagate them through all lower layers.
+## L02: Knowledge Domain
 
----
-
-## L02-Knowledge: Knowledge Domain
-
-**What it is:** The professional knowledge and skills a CFI actually needs. This is broader than what the FAA requires -- the FAA defines topics, not depth. A CFI needs to know enough to teach, which means knowing more than the minimum.
+**What it is:** The professional knowledge and skills a pilot at a given cert level actually needs. This is broader than what the FAA requires -- the FAA defines topics, not depth. A pilot needs to know enough to operate safely, which usually means knowing more than the minimum.
 
 **Entities:**
 
-- **Topic Area** -- a broad subject (GPS/Automation/TAA, LOC Prevention, etc.)
-- **Sub-topic** -- a specific knowledge area within a topic (ADS-B Out vs In, base-to-final stall chain, etc.)
-- **Concept** -- a single teachable idea ("FIS-B weather data can be 15-20 minutes old")
-- **Skill** -- something the CFI must be able to do ("Recognize automation fixation in a student")
-- **Reference** -- authoritative source material (ACs, handbooks, AIM, NTSB reports)
+- **Topic Area** -- a broad subject (Airspace, Weather, Navigation, Aerodynamics, Procedures, Loss-of-Control Prevention, etc.)
+- **Sub-topic** -- a specific knowledge area within a topic (Class B operations, microbursts, GPS RAIM, base-to-final stall chain, etc.)
+- **Knowledge Node** -- a single teachable idea, structured per [ADR 011](../decisions/011-knowledge-graph-learning-system/decision.md) (e.g. "FIS-B weather data can be 15-20 minutes old"). Nodes carry teach/apply/related/requires edges.
+- **Skill** -- something the pilot must be able to do ("Recognize wind-shear cues in a final-approach traffic call")
+- **Reference** -- authoritative source material (ACs, handbooks, AIM, NTSB reports, manufacturer documents)
 
-**Two kinds of knowledge per topic:**
+**Two flavors of knowledge per topic, when authoring for instructors:**
 
-1. **Domain knowledge** -- what the CFI must understand (the subject matter itself)
-2. **Instructional knowledge** -- how the CFI teaches it to students (technique, pedagogy, common misconceptions)
+1. **Domain knowledge** -- what the pilot/instructor must understand (the subject matter itself)
+2. **Instructional knowledge** -- how the instructor teaches it (technique, pedagogy, common student misconceptions). Only relevant for cert tracks that include teaching (CFI, CFII, MEI).
 
-Your NextGen example illustrates this perfectly:
+**What lives here:** Per-topic research docs (`course/L02-Knowledge/`), reference-material analysis. Answers "what does a pilot at this cert need to know about X?" without saying how we'll teach it.
 
-- Domain: "What is NextGen? PBN, Data Comm, VOR decommissioning, how it changes approaches"
-- Instructional: "How do you teach a private pilot student what NextGen means for them? What's the overview? What misconceptions will they have?"
+**When it changes:** When aviation technology, regulations, or best practices evolve. ADS-B requirements expand, a new LOC study is published, an aircraft manufacturer issues a service letter. Changes here may or may not require L01 changes (the regulation might stay the same even as the knowledge evolves).
 
-Both are necessary. The AC says "fully understand" (domain) and "teach an overview" (instructional). Different knowledge, different depth.
+## L03: Objectives + Goals
 
-**What lives here:** Course research docs. The sub-topic breakdowns. Reference material analysis. This layer answers "what does a CFI need to know about X?" without saying how we'll teach it.
-
-**When it changes:** When aviation technology, regulations, or best practices change. ADS-B requirements expand, a new LOC study is published, ACS is updated. Changes here may or may not require Layer 1 changes (the FAA requirement might stay the same even as the knowledge evolves).
-
----
-
-## L03-Objectives: Learning Objectives
-
-**What it is:** Specific, testable statements of what our course will teach. Derived from Layer 2, constrained by Layer 1. This is where we make decisions about scope and depth.
+**What it is:** Specific, testable statements of what airboss will teach a learner working a given syllabus. Derived from L02, constrained by L01. Where we make decisions about scope and depth.
 
 **Terminology:**
 
-- **Learning Objective** -- "The CFI will be able to [verb] [specific thing]." Testable, observable, unambiguous.
-- **Prerequisite** -- an objective that must be met before another can be attempted
-- **Competency** -- a cluster of related objectives that together demonstrate a skill (our 23 competencies)
-- **Assessment Criteria** -- how we determine if the objective is met
+- **Learning Objective** -- "The pilot will be able to [verb] [specific thing]." Testable, observable, unambiguous.
+- **Goal** -- a learner-facing wrapper around objectives ("Pass the IR checkride", "Stay current on emergency procedures"). Goals can be cert-aligned or self-directed. See [ADR 016](../decisions/016-cert-syllabus-goal-model/decision.md).
+- **Prerequisite** -- an objective that must be met before another can be attempted.
+- **Competency** -- a cluster of related objectives that together demonstrate a skill (FIRC has 23 competencies; PPL/IR/CPL have their own per-ACS).
+- **Assessment Criteria** -- how we determine if the objective is met.
 
-**Example for A.1.3 NextGen:**
+**Example for an IR learner working "Approaches" within the IR ACS syllabus:**
 
-- LO-1: "The CFI will be able to describe the five areas of NextGen modernization (communications, navigation, surveillance, automation, information management)."
-- LO-2: "The CFI will be able to explain how PBN procedures differ from conventional approaches and why this matters for student training."
-- LO-3: "The CFI will be able to identify which NextGen changes affect their students at each certificate level."
+- LO-1: "The pilot will identify the chart symbology for an ILS approach including DA, MDA, missed approach point."
+- LO-2: "The pilot will brief the approach including frequencies, altitudes, missed approach procedure."
+- LO-3: "The pilot will fly an ILS to DA holding ±100 ft and ±10 KIAS."
 
 Each objective is:
 
-- Derived from a Layer 2 knowledge area
-- Traceable to a Layer 1 FAA requirement
-- Independent of Layer 4 delivery method
+- Derived from L02 (the underlying knowledge / skill).
+- Traceable to L01 (the ACS / PTS task it satisfies).
+- Independent of L04 (the delivery method).
 
-**The key principle:** If you can't state the objective without naming the delivery method, the objective is coupled to the design. "The CFI will complete a NextGen scenario" is NOT an objective -- it's a delivery spec. "The CFI will be able to explain PBN to a private pilot student" IS an objective -- it doesn't care whether we teach it via scenario, reading, or discussion.
+**The key principle:** If you can't state the objective without naming the delivery method, the objective is coupled to the design. "Pilot will complete the IR-Approach scenario in `apps/sim/`" is **not** an objective -- it's a delivery spec. "Pilot will fly an ILS to DA holding ±100 ft and ±10 KIAS" **is** an objective -- it doesn't care whether we deliver it via sim, oral drill, or real flight.
 
-**What lives here:** Learning objective documents per topic. Competency definitions. Assessment criteria. Prerequisite maps.
+**What lives here:** Learning objective documents per cert / topic. Competency definitions. Assessment criteria. Prerequisite maps. Goal definitions per syllabus.
 
-**When it changes:** When we decide to teach more or less depth, add or remove scope, or restructure competencies. Changes here require re-evaluating Layer 4 (does our delivery still cover the objective?) and Layer 5 (does our content still match?).
+**When it changes:** When we decide to teach more or less depth, add or remove scope, restructure competencies, or wire a new goal type. Changes here require re-evaluating L04 and L05.
 
----
+## L04: Instructional Design
 
-## L04-Design: Instructional Design
-
-**What it is:** How we teach each objective. The methods, sequence, activities, and structure of the course experience.
+**What it is:** How we teach each objective. The methods, sequence, activities, and structure of the airboss experience.
 
 **Terminology:**
 
-- **Module** -- a group of related objectives taught together (our 6 modules)
-- **Lesson** -- a focused learning experience targeting one or more objectives
-- **Activity** -- a specific thing the learner does (scenario, reading, question, discussion, analysis)
-- **Sequence** -- the order activities happen within a lesson or module
-- **Assessment** -- how we verify the objective was met (knowledge check, scenario scoring, debrief quality)
+- **Module** -- a group of related objectives taught together.
+- **Lesson** -- a focused learning experience targeting one or more objectives.
+- **Activity** -- a specific thing the learner does (scenario, reading, card review, drill, journal entry, debrief).
+- **Sequence** -- the order activities happen within a lesson or module.
+- **Lens** -- the framing through which the syllabus is taught. The ACS triad (skill / knowledge / risk-management) is one lens; an experiential lens (a CFI's curated scenario walk) is another. See [ADR 016](../decisions/016-cert-syllabus-goal-model/decision.md).
+- **Assessment** -- how we verify the objective was met (knowledge check, scenario scoring, calibration confidence, debrief quality).
 
-**Activity types (our delivery mechanisms):**
+**Activity types (delivery mechanisms across surfaces):**
 
-| Activity            | What the learner does                                           | Best for                                   |
-| ------------------- | --------------------------------------------------------------- | ------------------------------------------ |
-| Scenario            | Makes real-time CFI decisions in a simulation                   | Judgment, timing, recognition              |
-| Micro lesson        | Reads or watches a short focused teaching moment                | Knowledge building before practice         |
-| Knowledge check     | Answers questions                                               | Factual recall, regulatory knowledge       |
-| Reference study     | Reads source material (handbook, AC, AIM) at their own pace     | Deep domain knowledge, self-directed       |
-| Discussion/analysis | Analyzes a recorded conversation, NTSB report, or case study    | Instructional technique, critical thinking |
-| Journal             | Reflects on reading, notes questions, tracks learning over time | Long-term retention, personalization       |
+| Activity            | Surface          | What the learner does                         | Best for                              |
+| ------------------- | ---------------- | --------------------------------------------- | ------------------------------------- |
+| Scenario (sim)      | sim              | Real-time control + decision inputs in FDM    | Judgment, motor skills, recognition   |
+| Scenario (FIRC)     | firc (future)    | Real-time intervention on a student model     | Instructor judgment, timing           |
+| Card review         | study            | Answers a spaced-rep card                     | Factual recall, regulations           |
+| Decision rep        | study            | Picks the best response to a brief prompt     | Mental rehearsal, pattern recognition |
+| Reference study     | study / hangar   | Reads source material at their own pace       | Deep domain knowledge, self-directed  |
+| Knowledge node      | study            | Discovery-first walk through a knowledge node | Understanding before recall           |
+| Discussion/analysis | reflect (future) | Analyzes an NTSB report or case study         | Critical thinking                     |
+| Journal             | reflect (future) | Reflects on a flight or session               | Long-term retention, decision diary   |
+| Audio drill         | audio (future)   | Listens + responds to a brief drill           | Hands-busy practice                   |
+| Route rehearsal     | spatial (future) | Walks through a planned route                 | Pre-flight mental rehearsal           |
 
-**The key principle:** The same objective can be taught multiple ways. Changing the delivery method (Layer 4) should NOT change the objective (Layer 3). If a learner masters an objective through reading and journaling, they don't also need to do the scenario -- they've met the objective.
+**The key principle:** The same objective can be taught multiple ways. Changing the delivery method (L04) should NOT change the objective (L03). A pilot mastering an objective through reading + journaling + decision reps doesn't also need a sim scenario -- they've met the objective.
 
-**What lives here:** Module design docs. Lesson plans. Activity specifications. Sequence decisions. The "how" of the course.
+**What lives here:** Module design docs. Lesson plans. Activity specifications. Sequence decisions. Per-cert syllabus + lens definitions. The "how" of the platform.
 
-**When it changes:** When we add new activity types (MSFS integration, voice recording), redesign the scenario player, change the module sequence, or add personalization. Changes here should NOT require changes at Layer 3 (objectives stay the same) but DO require changes at Layer 5 (implementation must match the design).
+**When it changes:** When we add new activity types, redesign a surface, change module sequence, add a new lens, or wire personalization. Changes here should NOT require changes at L03 but DO require changes at L05.
 
----
+## L05: Course Implementation
 
-## L05-Implementation: Course Implementation
-
-**What it is:** The actual code, content, and data that delivers the course.
+**What it is:** The actual code, content, and data that delivers each cert / syllabus.
 
 **Entities:**
 
-- **App code** -- SvelteKit routes, components, engine
-- **Tick scripts** -- scenario decision trees (the authored content)
-- **Question bank** -- 503 questions in markdown files
-- **Student models** -- behavioral profiles for scenario variation
-- **UI components** -- InterventionLadder, SituationCard, ScoreDisplay, etc.
-- **DB schema** -- course, published, enrollment, evidence tables
-- **Seed data** -- demo scenarios, test accounts
+- **App code** -- SvelteKit routes, components, BC engine in `apps/` + `libs/`.
+- **Tick scripts** -- scenario decision trees (the authored content) for sim and future firc.
+- **Card decks** -- per-syllabus card content for study.
+- **Question bank** -- 503 FIRC questions in markdown (preserved); other-cert banks built as needed.
+- **Student models** -- behavioral profiles for FIRC scenarios (future, when firc migrates).
+- **Aircraft profiles** -- C172, PA-28, etc. for sim.
+- **UI components** -- Svelte components in `libs/ui/` and per-app `lib/components/`.
+- **DB schema** -- `study`, `audit`, `identity`, `hangar`, `published`, `sim` schemas in Drizzle.
+- **Seed data** -- demo scenarios, Abby (the dev-seed test user).
 
-**What lives here:** apps/, libs/, scripts/, data/. The code.
+**What lives here:** `apps/`, `libs/`, `course/L05-Implementation/`, `data/`. The code.
 
-**When it changes:** Constantly. Implementation changes should be driven by Layer 4 decisions, not the reverse. If we find ourselves changing objectives to match what the code can do, we have the dependency backwards.
+**When it changes:** Constantly. Implementation changes should be driven by L04 decisions, not the reverse. If we find ourselves changing objectives to match what the code can do, we have the dependency backwards.
 
----
+## How changes propagate
 
-## How Changes Propagate
-
-| Something changes at...            | What needs updating below it                                                                                    |
-| ---------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| Layer 1 (FAA updates AC)           | Review L2 knowledge areas -> update L3 objectives if scope changed -> update L4 activities -> update L5 content |
-| Layer 2 (new NTSB study on LOC)    | Review affected L3 objectives -> may add new objectives -> update L4 to cover them -> build L5 content          |
-| Layer 3 (add a learning objective) | Design L4 activity to teach it -> build L5 content                                                              |
-| Layer 4 (redesign scenario player) | Rebuild L5 components and content. L3 objectives unchanged.                                                     |
-| Layer 5 (fix a bug in scoring)     | Nothing above changes.                                                                                          |
+| Something changes at...                | What needs updating below it                                                                              |
+| -------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| L01 (FAA updates an ACS revision)      | Review L2 knowledge -> update L3 objectives if scope changed -> update L4 activities -> update L5 content |
+| L02 (new NTSB study on LOC)            | Review affected L3 objectives -> may add new objectives -> update L4 to cover them -> build L5 content    |
+| L03 (add a learning objective)         | Design L4 activity to teach it -> build L5 content                                                        |
+| L04 (redesign the sim scenario player) | Rebuild L5 components and content. L3 objectives unchanged.                                               |
+| L05 (fix a bug in scoring)             | Nothing above changes.                                                                                    |
 
 The critical test: **can I change the delivery method without changing the objective?** If yes, the layers are clean. If no, we have coupling.
 
----
-
-## Current State vs Target
-
-### What we have now (mixed)
+## Where the layers live in the repo
 
 ```text
-docs/
-  firc/                  -- Layers 1, 2, 3, 4 all mixed together
-    references/          -- Layer 1 (good, isolated)
-    course-research/     -- Layer 2 (new, starting to separate)
-    COURSE_STRUCTURE.md  -- Layer 3 + 4 mixed
-    COMPETENCY_GRAPH.md  -- Layer 3
-    TCO.md               -- Layer 1 + 3 + 4 mixed (FAA-facing)
-    scenarios/           -- Layer 5 content (tick scripts)
-    question-bank/       -- Layer 5 content (questions)
-  platform/              -- Layer 4 + 5 mixed
-  products/              -- Layer 5
+course/                            COURSE CONTENT (all 5 layers, organized by cert)
+  L01-FAA/                         Regulatory foundation (AC 61-83K, CFRs, ACS / PTS docs)
+  L02-Knowledge/                   Per-topic research, sub-topics, refs, knowledge nodes
+  L03-Objectives/                  Learning objectives, competencies, goals, prerequisites
+  L04-Design/                      Module structure, activity design, scenario authoring rules
+  L05-Implementation/              Per-cert scenarios, question banks, feature specs
+
+docs/                              PLATFORM (not course-specific)
+  platform/                        Architecture, design principles, vision, roadmap
+  products/                        Per-app docs (study, sim, hangar, runway)
+  decisions/                       ADRs
+  agents/                          Agent instructions, pattern references
+  business/                        Market research, business context
+  devops/                          Deployment, infrastructure
+  work/                            Session todos, plans, reviews (session-scoped)
+  work-packages/                   Per-feature spec / tasks / test-plan / design / user-stories
 ```
 
-### What we need (separated)
-
-The course itself lives in `course/` off the project root -- separate from app docs.
-
-```text
-airboss-firc/                        -- (previously firc-boss)
-  apps/                              -- platform code
-  libs/                              -- shared code libraries
-
-  course/                            -- THE COURSE (all 5 layers)
-    L01-FAA/                         -- Regulatory Foundation
-      references/                    -- AC 61-83K, CFRs (source PDFs/text)
-      submission/                    -- TCO, FAA submission package
-
-    L02-Knowledge/                   -- Knowledge Domain
-      A.1_GPS-Automation-TAA/        -- Per-topic research, sub-topics, refs
-      A.2_SUA-Airspace-Security/
-      ...A.13/
-
-    L03-Objectives/                  -- Learning Objectives
-      competencies.md                -- Competency framework (23 competencies)
-      per-module/                    -- Learning objectives by module
-      prerequisites.md               -- Dependency map
-
-    L04-Design/                      -- Instructional Design
-      course-structure.md            -- Module sequence, lesson plans
-      activity-types.md              -- How each activity type works
-      scenario-design/               -- How to author scenarios
-      assessment-design/             -- How testing/grading works
-
-    L05-Implementation/              -- Course-specific implementation
-      scenarios/                     -- Tick scripts (the authored content)
-      question-bank/                 -- 503 questions in section files
-      features/                      -- Feature specs that DELIVER course content
-        scenario-player/             -- spec, design, tasks, test-plan
-        debrief/
-        knowledge-checks/
-        scenario-immersion/
-        discovery/
-        progress-tracking/
-
-  docs/                              -- PLATFORM (not course)
-    platform/                        -- Architecture, design principles, vision
-    decisions/                       -- ADRs
-    devops/                          -- Deployment, infrastructure
-    products/                        -- App-specific docs (hangar CRUD, ops workflows)
-      sim/features/sim-shell/        -- Platform features (not course delivery)
-      hangar/features/               -- Content authoring features
-      ops/features/                  -- Operations features
-      runway/features/               -- Public site features
-    work/                            -- Session todos, plans, reviews
-```
-
-**The key distinction:** If a spec exists to deliver a course objective (scenario player, debrief, knowledge checks), it goes in `course/L05-Implementation/`. If it exists because the app needs infrastructure (auth, themes, DB schema, task board), it stays in `docs/`.
+**The key distinction:** If a spec exists to deliver course content (scenario player, debrief, knowledge checks), it goes in `course/L05-Implementation/`. If it exists because the platform needs infrastructure (auth, themes, DB schema, hangar admin), it goes in `docs/work-packages/` or `docs/products/{app}/`.
 
 This means:
 
-- A CFI reviewer can read `course/` top to bottom without seeing deployment docs
-- An engineer working on auth doesn't need the competency graph
-- Course content changes don't touch `docs/` at all
-- Platform changes don't touch `course/` at all
+- A pilot reviewer can read `course/` top to bottom without seeing deployment docs.
+- A platform engineer working on auth doesn't need the IR competency graph.
+- Course content changes don't touch `docs/`.
+- Platform changes don't touch `course/`.
 
-This is a proposal, not a mandate. The exact structure matters less than the principle: **each document should live at one layer, not span multiple.**
+## Terminology summary
 
----
+| Term                    | Layer | Definition                                                                      |
+| ----------------------- | ----- | ------------------------------------------------------------------------------- |
+| Regulation / CFR        | L01   | Federal law. Non-negotiable.                                                    |
+| Advisory Circular (AC)  | L01   | FAA guidance on how to comply with CFRs. Soft law.                              |
+| ACS / PTS               | L01   | Airman Certification Standards / Practical Test Standards -- the cert standard. |
+| Cert                    | L01   | A pilot certificate or rating (PPL, IR, CPL, CFI, etc.). See ADR 016.           |
+| Core Topic              | L01   | One of 13 required FAA subject areas in FIRC (A.1-A.13). FIRC-specific.         |
+| Topic Area              | L02   | A broad subject within a cert.                                                  |
+| Sub-topic               | L02   | A specific knowledge area within a topic.                                       |
+| Knowledge Node          | L02   | A single teachable idea with edges to related nodes. See ADR 011.               |
+| Domain Knowledge        | L02   | What the pilot must understand.                                                 |
+| Instructional Knowledge | L02   | How the instructor teaches it (CFI tracks only).                                |
+| Learning Objective      | L03   | Specific, testable statement of what we teach.                                  |
+| Goal                    | L03   | A learner-facing wrapper around objectives. See ADR 016.                        |
+| Syllabus                | L03   | A versioned plan that maps cert requirements to objectives. See ADR 016.        |
+| Lens                    | L04   | The framing through which the syllabus is taught. See ADR 016.                  |
+| Competency              | L03   | Cluster of objectives that demonstrate a skill.                                 |
+| Prerequisite            | L03   | Objective that must be met before another.                                      |
+| Module                  | L04   | Group of related objectives taught together.                                    |
+| Lesson                  | L04   | Focused learning experience targeting objectives.                               |
+| Activity                | L04   | Specific thing the learner does (scenario, card, decision rep, etc.).           |
+| Sequence                | L04   | Order of activities within a lesson or module.                                  |
+| Scenario (sim)          | L05   | Interactive flight-dynamics simulation with control inputs and a debrief.       |
+| Scenario (FIRC)         | L05   | Interactive tick-driven instructor-intervention simulation. Future.             |
+| Card                    | L05   | Spaced-repetition memory item.                                                  |
+| Decision Rep            | L05   | A short decision prompt with feedback.                                          |
+| Question                | L05   | Knowledge check item.                                                           |
 
-## Terminology Summary
+## The analogy to code
 
-| Term                    | Layer | Definition                                                          |
-| ----------------------- | ----- | ------------------------------------------------------------------- |
-| Regulation / CFR        | L01   | Federal law. Non-negotiable.                                        |
-| Advisory Circular (AC)  | L01   | FAA guidance on how to comply with CFRs. Soft law.                  |
-| Core Topic              | L01   | One of 13 required FAA subject areas (A.1-A.13).                    |
-| Elective Topic          | L01   | Optional additional subject area. FAA-approved.                     |
-| Topic Area              | L02   | A broad subject within a core topic.                                |
-| Sub-topic               | L02   | A specific knowledge area within a topic.                           |
-| Concept                 | L02   | A single teachable idea.                                            |
-| Domain Knowledge        | L02   | What the CFI must understand (subject matter).                      |
-| Instructional Knowledge | L02   | How the CFI teaches it (technique, pedagogy).                       |
-| Learning Objective      | L03   | Specific, testable statement of what we teach.                      |
-| Competency              | L03   | Cluster of objectives that demonstrate a skill.                     |
-| Prerequisite            | L03   | Objective that must be met before another.                          |
-| Module                  | L04   | Group of related objectives taught together.                        |
-| Lesson                  | L04   | Focused learning experience targeting objectives.                   |
-| Activity                | L04   | Specific thing the learner does (scenario, reading, etc.).          |
-| Sequence                | L04   | Order of activities within a lesson or module.                      |
-| Scenario                | L05   | Interactive tick-driven simulation (an activity type, implemented). |
-| Question                | L05   | Knowledge check item (an activity type, implemented).               |
-| Micro Lesson            | L05   | Short teaching content (an activity type, implemented).             |
+The layers work like a dependency graph:
 
----
+- **L01 is the external API** -- we don't control it, we implement against it.
+- **L02 is the domain model** -- the real-world entities and knowledge.
+- **L03 is the interface/contract** -- what we promise to deliver.
+- **L04 is the architecture** -- how we structure the delivery.
+- **L05 is the implementation** -- the actual code.
 
-## The Analogy to Code
+Just like in code: if you change an interface (L03), all implementations (L05) must update. If you change an implementation detail, the interface stays the same. If the external API changes (L01), you propagate through the interface and down to implementation.
 
-You asked about interfaces and propagation. The layers work like a dependency graph:
+The difference from code: educational content can't be automatically tested for compliance. If we change a learning objective, we need a human to verify that the activity still teaches it. This is why traceability matters -- every scenario / card / rep traces back to objectives, which trace back to knowledge areas, which trace back to ACS / PTS / regulation. When something changes, we follow the trace.
 
-- **Layer 1 is the external API** -- we don't control it, we implement against it
-- **Layer 2 is the domain model** -- the real-world entities and knowledge
-- **Layer 3 is the interface/contract** -- what we promise to deliver
-- **Layer 4 is the architecture** -- how we structure the delivery
-- **Layer 5 is the implementation** -- the actual code
+## References
 
-Just like in code: if you change an interface (Layer 3), all implementations (Layer 5) must update. If you change an implementation detail, the interface stays the same. And if the external API changes (Layer 1), you propagate through the interface and down to implementation.
-
-The difference from code: educational content can't be automatically tested for compliance. If we change a learning objective, we need a human to verify that the scenario still teaches it. This is why traceability matters -- every scenario must trace back to objectives, which trace back to knowledge areas, which trace back to FAA requirements. When something changes, we follow the trace to find what's affected.
-
----
-
-## Next Steps
-
-1. **Don't reorganize files yet.** This model needs to be reviewed and agreed on first.
-2. **Use this as a lens** when creating new content. Ask: "What layer is this? Does it belong with the other things at that layer?"
-3. **When the model feels right,** plan the file reorganization as a single deliberate move, not gradual drift.
+- [VISION.md](VISION.md) -- airboss platform vision
+- [LEARNING_PHILOSOPHY.md](LEARNING_PHILOSOPHY.md) -- discovery-first pedagogy
+- [ADR 011 -- Knowledge graph learning system](../decisions/011-knowledge-graph-learning-system/decision.md)
+- [ADR 016 -- Cert / syllabus / goal / lens model](../decisions/016-cert-syllabus-goal-model/decision.md)
+- [DESIGN_PRINCIPLES.md](DESIGN_PRINCIPLES.md)

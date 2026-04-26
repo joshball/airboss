@@ -1,4 +1,12 @@
-# 004: Database Namespaces
+# 004: Database Namespaces (PARTIALLY SUPERSEDED)
+
+> **Partially superseded 2026-04-26.** The schema namespacing decision (PostgreSQL schemas via `pgSchema()`) survives the pivot. The schema list and access matrix below reference the four-app FIRC stack (sim/hangar/ops/runway) -- per [ADR 001 (superseded)](001-APP_BOUNDARIES.md) and [PIVOT.md](../platform/PIVOT.md), `ops` is gone (folded into hangar) and the post-pivot apps are study, sim, hangar plus future surfaces.
+>
+> Today the live schemas are `study`, `audit`, `identity`, `hangar`, `published`, `sim` (see `libs/db/src/`, `libs/auth/src/schema.ts`). The `compliance` schema is dormant per [ADR 017](017-firc-compliance-dormant.md) but the namespacing rule it followed still applies. The access-control philosophy (BC-mediated `manage` / `write` / `read`) survives unchanged from [ADR 002](002-LIB_STRUCTURE.md).
+>
+> **What's still authoritative below:** the "Why Namespaces Over Prefixes" rationale, the cross-schema query patterns, the migration approach.
+>
+> **What's stale below:** the schema list (sim and study schemas were added; some compliance/platform schemas are dormant) and the per-app access matrix.
 
 Decided 2026-03-25.
 

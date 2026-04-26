@@ -1,136 +1,83 @@
+---
+title: airboss Platform Roadmap
+type: roadmap
+status: current
+date: 2026-04-26
+supersedes: ../.archive/platform/ROADMAP.md
+---
+
 # Platform Roadmap
 
-What gets built, in what order. Platform work unblocks app work. App roadmaps ([hangar](../products/hangar/ROADMAP.md), sim, ops, runway) handle feature-level detail.
+What gets built, in what order, across the airboss platform. No fixed dates. Per-feature phasing lives in [docs/work-packages/](../work-packages/); per-app phasing lives in each app's `ROADMAP.md`.
 
-## Current Work
+For the why, see [VISION.md](VISION.md). For the surface architecture, see [MULTI_PRODUCT_ARCHITECTURE.md](MULTI_PRODUCT_ARCHITECTURE.md).
 
-**Phases 0-5 complete.** No active phase.
+## Where we are (2026-04-26)
 
-Next phase -- pick one:
+Three apps active in airboss:
 
-- **Phase 4b -- Payment Integration** (Stripe, webhooks, receipts)
-- **Phase 6 -- Polish, Analytics, Advanced Features**
+- **study** -- spaced cards, knowledge graph, decision reps, calibration tracker, learning dashboard, content authoring co-located. Multiple work packages shipped (see [docs/work/NOW.md](../work/NOW.md)).
+- **sim** -- flight-dynamics simulator with hand-rolled C172 FDM, scenarios, debrief, scoring. Phase 4-6 push complete; Phase 7 (3D horizon) introduced surface-loose-coupling per [ADR 015](../decisions/015-sim-surface-loose-coupling.md).
+- **hangar** -- operator app: sources pipeline, glossary, jobs, read-only users surface, dashboard. Three-area model (Content / People / System) per [hangar VISION](../products/hangar/VISION.md).
 
-Open cleanup: [DOC-CLEANUP-PLAN.md](../work/plans/20260325-DOC-CLEANUP-PLAN.md)
+FIRC compliance machinery is dormant per [ADR 017](../decisions/017-firc-compliance-dormant.md).
 
-## Maintenance
+## Near-term (next 1-3 features)
 
-After completing any task:
+Ordered by what unblocks the most downstream work.
 
-- Check off the item in the relevant `TASKS.md` Active section
-- Update session `TODO.md`
-- If a cleanup item is resolved, mark it in `DOC-CLEANUP-PLAN.md`
+| Surface | Work                                                                                                            |
+| ------- | --------------------------------------------------------------------------------------------------------------- |
+| study   | Calibration improvements, more knowledge-graph content, content authoring polish                                |
+| sim     | Phase 7 horizon view continuation; cockpit panel extraction (per ADR 015 follow-up note); more scenarios        |
+| hangar  | Real audit explorer (replaces audit-ping); /users editing (role assign, ban/unban, session revoke); invite flow |
 
-After completing a phase:
+Specifics live in each app's roadmap and the per-feature work packages.
 
-- Mark phase header `[DONE]` in this file
-- Update `## Current Work` pointer above to the next phase
-- Update `TASKS.md` for the newly active app (move items from Up Next to Active)
+## Medium-term (after near-term lands and proves stable)
 
-## Phase 0 -- Platform Foundation `[DONE]`
+| Surface     | Work                                                                                                                 |
+| ----------- | -------------------------------------------------------------------------------------------------------------------- |
+| **spatial** | First map-based surface. Probably route rehearsal as the v1 hook (per [PIVOT.md](PIVOT.md) "what's worth building"). |
+| **audio**   | First narrative surface. NTSB stories or daily-decision drill as the lead.                                           |
+| **reflect** | Journals, heatmaps, currency tracking, decision diary.                                                               |
+| sim         | Additional aircraft profiles (PA-28 done; Cherokee, complex/HP, glass).                                              |
+| hangar      | Scenario authoring UI (downstream of stable scenario schema). Cards authoring (downstream of stable card spec).      |
 
-Cross-cutting infrastructure that all apps depend on. Must be done before any app feature work.
+## Long-term (v3+ horizon)
 
-| Task                                                                    | Depends on      | Status                                                                                   |
-| ----------------------------------------------------------------------- | --------------- | ---------------------------------------------------------------------------------------- |
-| Restructure libs to match ADR 002 (bc/, audit, ui, platform)            | --              | Done                                                                                     |
-| Set up TS path aliases for BC access enforcement per app                | Lib restructure | Done (root tsconfig; per-access-level aliases not enforced -- review convention instead) |
-| Database schema: all 8 namespaces in Drizzle (`pgSchema()`)             | Lib restructure | Done                                                                                     |
-| Auth lib: sessions, guards, accounts (better-auth + Drizzle)            | DB schema       | Done                                                                                     |
-| Audit lib: action logging, content version tracking                     | DB schema       | Done                                                                                     |
-| Design system: base theme tokens (aviation + glass-cockpit, light/dark) | --              | Done                                                                                     |
-| UI lib: layout shells, basic components                                 | Theme tokens    | Done (30 components)                                                                     |
-| Seed data: competencies, FAA topics, modules                            | DB schema       | Done (`scripts/db/seed.ts`)                                                              |
+| Surface             | Work                                                                                                        |
+| ------------------- | ----------------------------------------------------------------------------------------------------------- |
+| **avionics**        | Glass cockpit trainer (G1000 / G3000 / Garmin avionics).                                                    |
+| **firc**            | Migration from airboss-firc as `apps/firc/`. Restores dormant compliance docs per ADR 017 + migration plan. |
+| **runway**          | Public site -- open-source landing, free content, signup if/when applicable.                                |
+| Multiplayer         | One pilot/instructor pair, or ATC + pilot + instructor roles. Not before v1 ships.                          |
+| Open-source release | License (open core leaning) + first public commit. Pre-launch tasks: name, license, hosting model.          |
 
-**Exit criteria:** `bun run check` passes. All 4 apps start. Auth works. One theme renders. BC imports enforced by TS config.
+## Cross-cutting
 
-**Status:** Phase 0 complete.
+These run across all surfaces and don't fit a single app's roadmap:
 
-## Phase 1 -- Hangar Foundation `[DONE]`
+- **Theme system** -- shipped per [docs/platform/theme-system/](theme-system/00-INDEX.md).
+- **Auth + identity** -- shipped per [ADR 007](../decisions/007-AUTH_TOPOLOGY.md). Better Auth on `*.airboss.test`. Cross-subdomain session cookie. Future: invite flow, role editing UI.
+- **Audit + content versioning** -- shipped per [ADR 005](../decisions/005-PUBLISHED_CONTENT.md), [ADR 006](../decisions/006-CONTENT_VERSIONING.md). Schema rigor stays even though FIRC submission is dormant.
+- **Reference / glossary pipeline** -- shipped per [docs/work-packages/hangar-sources-v1/](../work-packages/hangar-sources-v1/spec.md), [docs/platform/REFERENCE_SYSTEM_FLOW.md](REFERENCE_SYSTEM_FLOW.md).
+- **Knowledge graph** -- foundation shipped per [ADR 011](../decisions/011-knowledge-graph-learning-system/decision.md). Ongoing content authoring.
+- **Cert/syllabus/goal/lens model** -- foundation per [ADR 016](../decisions/016-cert-syllabus-goal-model/decision.md). Ongoing wiring across surfaces.
 
-First real app. Content authoring drives the schema and validates the architecture.
+## What's NOT on the roadmap
 
-See [hangar ROADMAP Phase 1](../products/hangar/ROADMAP.md#phase-1----foundation) and [hangar TASKS](../products/hangar/TASKS.md).
+- **FAA submission machinery.** Dormant per [ADR 017](../decisions/017-firc-compliance-dormant.md). Returns only if a content pack ships and a partner pursues approval.
+- **Project / task management** in hangar. GitHub Issues handles this.
+- **Marketing surface.** Until v1 ships, runway is a placeholder.
+- **Payment / billing infrastructure.** Not before a v1 launch decides on hosting + monetization.
 
-- [x] Hangar app shell (nav, routes, auth)
-- [x] Content CRUD (scenarios, modules, competencies, questions, micro-lessons, student models)
-- [x] Task board (kanban, drag-and-drop, filters)
-- [x] Content publishing (atomic publish action, release creation, published content viewer)
+## Links to per-app roadmaps
 
-**Exit criteria:** Can author a complete scenario, assign to module, link competencies, publish to `published` schema. Sim can read it.
+- [study](../products/study/ROADMAP.md)
+- [sim](../products/sim/ROADMAP.md)
+- [hangar](../products/hangar/PRD.md) (per-PRD timing tables; no separate ROADMAP)
 
-## Phase 2 -- Sim Core `[DONE]`
+## What this doc is for
 
-Learner-facing course execution. Depends on published content from hangar.
-
-See [sim TASKS](../products/sim/TASKS.md) and [sim features/PHASE2.md](../products/sim/features/PHASE2.md).
-
-- [x] Sim app shell (nav, routes, auth, learner self-service)
-- [x] Discovery phase (profile building, soft knowledge probing)
-- [x] Scenario player (tick engine integration, intervention ladder UI)
-- [x] Debrief (post-scenario review, tape replay)
-- [x] Progress tracking (module completion, time logging)
-- [x] Knowledge checks (question rendering, scoring)
-
-**Exit criteria:** A learner can log in, complete discovery, play a published scenario, see a debrief, and track progress. FAA time tracking works.
-
-## Phase 3 -- Ops Foundation `[DONE]`
-
-Operations and compliance. Depends on enrollment and evidence data from sim.
-
-Archived post-pivot: see [ops ARCHIVED.md](../.archive/products/ops/ARCHIVED.md) for context, and the original [ops TASKS](../.archive/products/ops/TASKS.md) and [ops features/PHASE3.md](../.archive/products/ops/features/PHASE3.md). The `ops` app does not exist post-pivot; admin / operations responsibilities will be picked up by `hangar` and per-surface admin views as needed.
-
-- [x] Ops app shell
-- [x] User management (accounts, roles, enrollment)
-- [x] Enrollment management (create, view, status changes)
-- [x] Learner progress view
-- [x] Certificate issuance (graduation vs completion)
-- [x] FAA record keeping (24-month retention, evidence packets)
-- [x] Analytics dashboards (completion rates, struggle points)
-
-**Exit criteria:** An operator can manage users, view learner progress, issue certificates, and pull FAA records.
-
-## Phase 4a -- Runway Foundation `[DONE]`
-
-Public-facing site. See [runway ROADMAP](../products/runway/ROADMAP.md) and [Phase 4 plan](../work/plans/20260329-PHASE4-RUNWAY-PLAN.md).
-
-- [x] Runway app shell (SSR, SEO, auth, route groups)
-- [x] Marketing pages (landing, about, pricing)
-- [x] Course catalog (reads from `published` schema)
-- [x] Signup flow (account creation, self-registration)
-- [x] Payment stub (mock with 12 configurable failure scenarios)
-- [x] Enrollment creation (post-payment)
-
-**Exit criteria:** A visitor can browse the catalog, sign up, pay (stubbed), and be enrolled. Redirects to sim.
-
-**Note:** Real payment integration deferred to Phase 4b.
-
-## Phase 5 -- Hangar Compliance + Versioning `[DONE]`
-
-Back to hangar for the compliance pipeline. See [hangar ROADMAP Phases 2-4](../products/hangar/ROADMAP.md).
-
-- [x] Content validation engine (10 declarative rules, publish gate)
-- [x] Traceability matrix editor (13-row interactive, auto-populate, live validation)
-- [x] Content versioning (5-state workflow, version history, rollback)
-- [x] TCO editor (structured form)
-- [x] FAA package generator (validation + traceability + TCO + assessment)
-- [x] Compliance dashboard (single-view compliance status)
-- [x] Submission tracker (6-state FAA submission workflow)
-
-**Exit criteria:** Full content lifecycle. FAA submission package generation. Version traceability.
-
-## Phase 6 -- Polish, Analytics, Advanced Features `[NOT STARTED]`
-
-- Hangar analytics (coverage, question stats, time projection)
-- Hangar reference library + regulatory monitoring
-- Sim adaptive engine (spaced repetition, difficulty adjustment)
-- Sim game modes (free play, drill mode)
-- Cross-app analytics
-- Deployment hardening
-
-## Sequencing Principles
-
-- **Platform before apps.** Lib structure, schema, auth, and theme must exist before feature work.
-- **Hangar before sim.** You need content before you can play it.
-- **One app at a time.** Complete the foundation of each app before starting the next. Exception: runway can overlap with sim/ops since it's mostly independent.
-- **Schema validates architecture.** Writing Drizzle schema for all 8 namespaces is the first real test of the ADRs.
+A platform-wide "what's coming" anchor. Quick context for new contributors and a sanity check that the per-app roadmaps add up. **Not** a contract -- priorities shift as user-zero (Joshua) hits new flying milestones and the platform reshapes around them.

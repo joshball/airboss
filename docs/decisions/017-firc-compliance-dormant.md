@@ -6,7 +6,7 @@
 
 ## Problem
 
-The pre-pivot hangar PRD ([.archive/firc-era/products/hangar/PRD.md](../.archive/firc-era/products/hangar/PRD.md)) defined a 425-line surface with five capability areas: course content management, FAA compliance and document management, reference document library, product and task management, content analytics. Roughly 80% of that doc was FAA-submission machinery -- traceability matrix editor, TCO editor, FAA package generator, submission tracker, regulatory-change monitor, content-validation engine tied to AC 61-83K's "13 core topics × 45 min × 60+ questions" rules.
+The pre-pivot hangar PRD ([.archive/products/hangar/PRD.md](../.archive/products/hangar/PRD.md)) defined a 425-line surface with five capability areas: course content management, FAA compliance and document management, reference document library, product and task management, content analytics. Roughly 80% of that doc was FAA-submission machinery -- traceability matrix editor, TCO editor, FAA package generator, submission tracker, regulatory-change monitor, content-validation engine tied to AC 61-83K's "13 core topics × 45 min × 60+ questions" rules.
 
 [PIVOT.md](../platform/PIVOT.md) (2026-04-14) explicitly killed FIRC as the headline product. Quote: *"TSA 5-year retention, 24-month FAA retention, TCO submission, Appendix A 90-day policy check -- all deferred to if/when a FIRC module ships."* The compliance bounded context is preserved in the schema but marked dormant by default.
 
@@ -17,15 +17,15 @@ Two failure modes if we don't decide explicitly:
 
 ## Decision
 
-**Archive the FIRC-era hangar product docs and the FIRC-era hangar feature specs to [docs/.archive/firc-era/products/hangar/](../.archive/firc-era/products/hangar/). Keep the compliance schema. Write a thin replacement VISION/PRD that names the dormancy explicitly.**
+**Archive the FIRC-era hangar product docs and the FIRC-era hangar feature specs to [docs/.archive/products/hangar/](../.archive/products/hangar/). Keep the compliance schema. Write a thin replacement VISION/PRD that names the dormancy explicitly.**
 
-| What                                                  | Where now                                                                                            |
-| ----------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
-| FIRC-era VISION, PRD, ROADMAP, TASKS                  | [.archive/firc-era/products/hangar/](../.archive/firc-era/products/hangar/)                           |
-| FIRC-era feature specs (analytics, auth, content-crud, content-validation, content-versioning, publish, published-viewer, reference-library, task-board, traceability-matrix) | [.archive/firc-era/products/hangar/features/](../.archive/firc-era/products/hangar/features/) |
-| FIRC-era PHASE1.md status doc                         | [.archive/firc-era/products/hangar/features/PHASE1.md](../.archive/firc-era/products/hangar/features/PHASE1.md) |
-| Compliance bounded context (schema, audit columns)    | Stays where it is. Dormant != deleted.                                                                |
-| New hangar VISION + PRD                               | [docs/products/hangar/VISION.md](../products/hangar/VISION.md), [PRD.md](../products/hangar/PRD.md)   |
+| What                                                                                                                                                                          | Where now                                                                                                       |
+| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| FIRC-era VISION, PRD, ROADMAP, TASKS                                                                                                                                          | [.archive/products/hangar/](../.archive/products/hangar/)                                     |
+| FIRC-era feature specs (analytics, auth, content-crud, content-validation, content-versioning, publish, published-viewer, reference-library, task-board, traceability-matrix) | [.archive/products/hangar/features/](../.archive/products/hangar/features/)                   |
+| FIRC-era PHASE1.md status doc                                                                                                                                                 | [.archive/products/hangar/features/PHASE1.md](../.archive/products/hangar/features/PHASE1.md) |
+| Compliance bounded context (schema, audit columns)                                                                                                                            | Stays where it is. Dormant != deleted.                                                                          |
+| New hangar VISION + PRD                                                                                                                                                       | [docs/products/hangar/VISION.md](../products/hangar/VISION.md), [PRD.md](../products/hangar/PRD.md)             |
 
 Three areas in the new hangar: Content, People, System. Compliance is **not** a fourth area today. It becomes one when reawakened.
 

@@ -1,4 +1,12 @@
-# 005: Published Content Model
+# 005: Published Content Model (PARTIALLY SUPERSEDED)
+
+> **Partially superseded 2026-04-26.** The "lean published snapshot, separate from authoring" principle survives the pivot and applies wherever airboss publishes content (knowledge graph, glossary, future scenario packs). The specific `published.*` table set described below targets the FIRC course (scenarios, student models, modules, questions, micro lessons, competencies) and is dormant per [ADR 017](017-firc-compliance-dormant.md) until a content pack ships.
+>
+> Today the platform's content surfaces (knowledge graph, glossary, study cards, sim scenarios) follow per-BC publishing patterns rather than the FIRC-style monolithic release pipeline. The release-versioning concept (see [ADR 006](006-CONTENT_VERSIONING.md)) still applies; the table-by-table FIRC schema does not.
+>
+> **What's still authoritative:** the publish-isolation principle, the all-releases-retained model, the immutable-once-published rule, the no-drafts-in-published rule.
+>
+> **What's stale:** the specific table list (FIRC-flavored), the hangar -> sim publish flow (the post-pivot flow varies by surface).
 
 Decided 2026-03-25.
 

@@ -117,7 +117,7 @@ FIRC will eventually migrate into `airboss` as a surface app. Not now -- the pla
 
 **What does NOT migrate prematurely:** everything. Don't move code until airboss is ready to receive it. The study app needs to prove the new repo's patterns work before we start porting FIRC infrastructure.
 
-**Restore dormant hangar compliance docs.** The FIRC-era hangar PRD (TCO editor, traceability matrix, FAA package generator, submission tracker, regulatory-change monitor, content-validation engine) was archived to [.archive/firc-era/products/hangar/](../.archive/firc-era/products/hangar/) per [ADR 017](../decisions/017-firc-compliance-dormant.md). When `apps/firc/` lands here, read the archive, port the still-relevant pieces against current platform conventions, and grow them into hangar as a new "Compliance" area. Do **not** restore wholesale -- ID strategy, routes, roles, and theme tokens have all evolved.
+**Restore dormant hangar compliance docs.** The FIRC-era hangar PRD (TCO editor, traceability matrix, FAA package generator, submission tracker, regulatory-change monitor, content-validation engine) was archived to [.archive/products/hangar/](../.archive/products/hangar/) per [ADR 017](../decisions/017-firc-compliance-dormant.md). When `apps/firc/` lands here, read the archive, port the still-relevant pieces against current platform conventions, and grow them into hangar as a new "Compliance" area. Do **not** restore wholesale -- ID strategy, routes, roles, and theme tokens have all evolved.
 
 ## Build order
 
