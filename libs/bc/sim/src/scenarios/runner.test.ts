@@ -77,7 +77,7 @@ describe('scenario registry', () => {
 
 	it('lists every registered scenario in recommended order', () => {
 		const list = listScenarios();
-		expect(list.length).toBe(13);
+		expect(list.length).toBe(15);
 		expect(list[0].id).toBe(SIM_SCENARIO_IDS.PLAYGROUND);
 		expect(list[1].id).toBe(SIM_SCENARIO_IDS.FIRST_FLIGHT);
 		expect(list[2].id).toBe(SIM_SCENARIO_IDS.DEPARTURE_STALL);
@@ -91,6 +91,8 @@ describe('scenario registry', () => {
 		expect(list[10].id).toBe(SIM_SCENARIO_IDS.UNUSUAL_ATTITUDES_NOSE_LO);
 		expect(list[11].id).toBe(SIM_SCENARIO_IDS.VMC_INTO_IMC);
 		expect(list[12].id).toBe(SIM_SCENARIO_IDS.PLAYGROUND_PA28);
+		expect(list[13].id).toBe(SIM_SCENARIO_IDS.ILS_APPROACH);
+		expect(list[14].id).toBe(SIM_SCENARIO_IDS.STEEP_TURNS);
 	});
 
 	it('returns every scenario from the id registry', () => {

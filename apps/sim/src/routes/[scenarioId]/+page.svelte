@@ -32,6 +32,7 @@ import {
 } from '@ab/constants';
 import { onDestroy, onMount, untrack } from 'svelte';
 import { browser } from '$app/environment';
+import { postAttempt } from '$lib/attempt-client';
 import CockpitPanel from '$lib/cockpit/CockpitPanel.svelte';
 import { type RampAction, resolveKey, resolveRampAction } from '$lib/control-handler';
 import { tickRamp } from '$lib/control-ramp';
@@ -189,6 +190,18 @@ function handleWorkerMessage(event: MessageEvent<WorkerToMain>): void {
 			// of an ungraded scenario does not leave a stale grade behind.
 			saveTape(msg.tape);
 			saveGrade(msg.tape.scenarioId, msg.grade);
+			// Server-side persistence (best-effort). Anonymous calls return
+			// 401 and stay in sessionStorage; an authenticated user gets a
+			// row in `sim.attempt`. Failure here is silent end-to-end --
+			// the debrief view still loads from sessionStorage.
+			if (outcome) {
+				void postAttempt({
+					scenarioId: msg.tape.scenarioId,
+					result: outcome,
+					tape: msg.tape,
+					grade: msg.grade ?? null,
+				});
+			}
 			break;
 		}
 	}
