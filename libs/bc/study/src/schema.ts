@@ -104,11 +104,11 @@ function nonNegativeDurationCheckSql(column: string): string {
  *
  * Identity, knowledge-character, and a small set of scalar fields live in
  * dedicated columns so the build script and read-side queries can filter on
- * them without a JSON traversal. Everything with variable shape (relevance
- * array, references array, assessment method list, cross-domain list) stays
- * in jsonb -- the schema prompt in the ADR is explicit that empty fields are
- * information, and jsonb lets us round-trip heterogeneous metadata without
- * forcing premature typing on fields that are still stabilising.
+ * them without a JSON traversal. Variable-shape data (references array,
+ * assessment-method list, cross-domain list) stays in jsonb -- the schema
+ * prompt in the ADR is explicit that empty fields are information, and
+ * jsonb lets us round-trip heterogeneous metadata without forcing premature
+ * typing on fields that are still stabilising.
  */
 export const knowledgeNode = studySchema.table(
 	'knowledge_node',
@@ -126,21 +126,16 @@ export const knowledgeNode = studySchema.table(
 		stability: text('stability'),
 		/**
 		 * Lowest cert that requires this knowledge: PPL / IR / CPL / CFI. Higher
-		 * certs inherit through `CERT_PREREQUISITES`. Replaces the old per-cert
-		 * relevance array (a topic only ever had one floor; the array invited
-		 * authoring drift).
-		 *
-		 * Nullable for the migration window; backfilled by the seed and
-		 * enforced NOT NULL in a follow-up once every authored node has it.
+		 * certs inherit through `CERT_PREREQUISITES`. Nullable so freshly-
+		 * scaffolded nodes can land before the author tags them; the build
+		 * script errors on missing values for committed nodes.
 		 */
 		minimumCert: text('minimum_cert'),
 		/**
-		 * Study-time priority bucket: critical / standard / stretch. Every node
-		 * a learner sees is already on the ACS/PTS for `minimumCert` -- this
+		 * Study-time priority: critical / standard / stretch. Every node a
+		 * learner sees is already on the ACS/PTS for `minimumCert` -- this
 		 * field expresses where to spend the next 30 minutes, not what's
 		 * testable. See `STUDY_PRIORITIES` in libs/constants/src/study.ts.
-		 *
-		 * Nullable for the migration window; backfilled by the seed.
 		 */
 		studyPriority: text('study_priority'),
 		modalities: jsonb('modalities').$type<string[]>().notNull().default([]),
