@@ -7,14 +7,18 @@
 import { SIM_SCENARIO_IDS, type SimScenarioId } from '@ab/constants';
 import type { ScenarioDefinition } from '../types';
 import { AFT_CG_SLOW_FLIGHT_SCENARIO } from './aft-cg-slow-flight';
+import { CROSSWIND_LANDING_SCENARIO } from './crosswind-landing';
 import { DEPARTURE_STALL_SCENARIO } from './departure-stall';
 import { EFATO_SCENARIO } from './efato';
 import { FIRST_FLIGHT_SCENARIO } from './first-flight';
+import { GROUND_REFERENCE_TURNS_AROUND_POINT_SCENARIO } from './ground-reference-turns-around-point';
 import { ILS_APPROACH_SCENARIO } from './ils-approach';
 import { PARTIAL_PANEL_SCENARIO } from './partial-panel';
 import { PITOT_BLOCK_SCENARIO } from './pitot-block';
 import { PLAYGROUND_SCENARIO } from './playground';
 import { PLAYGROUND_PA28_SCENARIO } from './playground-pa28';
+import { SHORT_FIELD_LANDING_SCENARIO } from './short-field-landing';
+import { SLOW_FLIGHT_SCENARIO } from './slow-flight';
 import { STATIC_BLOCK_SCENARIO } from './static-block';
 import { STEEP_TURNS_SCENARIO } from './steep-turns';
 import { UNUSUAL_ATTITUDES_SCENARIO } from './unusual-attitudes';
@@ -38,6 +42,10 @@ export const SCENARIO_REGISTRY: Record<SimScenarioId, ScenarioDefinition> = {
 	[SIM_SCENARIO_IDS.PLAYGROUND_PA28]: PLAYGROUND_PA28_SCENARIO,
 	[SIM_SCENARIO_IDS.ILS_APPROACH]: ILS_APPROACH_SCENARIO,
 	[SIM_SCENARIO_IDS.STEEP_TURNS]: STEEP_TURNS_SCENARIO,
+	[SIM_SCENARIO_IDS.GROUND_REFERENCE_TURNS_AROUND_POINT]: GROUND_REFERENCE_TURNS_AROUND_POINT_SCENARIO,
+	[SIM_SCENARIO_IDS.SHORT_FIELD_LANDING]: SHORT_FIELD_LANDING_SCENARIO,
+	[SIM_SCENARIO_IDS.SLOW_FLIGHT]: SLOW_FLIGHT_SCENARIO,
+	[SIM_SCENARIO_IDS.CROSSWIND_LANDING]: CROSSWIND_LANDING_SCENARIO,
 };
 
 /** Defensive lookup; throws on unknown ids so callers fail fast. */

@@ -82,6 +82,7 @@ export {
 	validateTapeHash,
 } from './replay';
 export { AFT_CG_SLOW_FLIGHT_SCENARIO } from './scenarios/aft-cg-slow-flight';
+export { CROSSWIND_LANDING_SCENARIO } from './scenarios/crosswind-landing';
 export { DEPARTURE_STALL_SCENARIO } from './scenarios/departure-stall';
 export { EFATO_SCENARIO } from './scenarios/efato';
 export { FIRST_FLIGHT_SCENARIO } from './scenarios/first-flight';
@@ -92,6 +93,7 @@ export {
 	type GradingEvaluationContext,
 	tapeWasSuccessful,
 } from './scenarios/grading';
+export { GROUND_REFERENCE_TURNS_AROUND_POINT_SCENARIO } from './scenarios/ground-reference-turns-around-point';
 export { ILS_APPROACH_SCENARIO } from './scenarios/ils-approach';
 export { PARTIAL_PANEL_SCENARIO } from './scenarios/partial-panel';
 export { PITOT_BLOCK_SCENARIO } from './scenarios/pitot-block';
@@ -99,6 +101,8 @@ export { PLAYGROUND_SCENARIO } from './scenarios/playground';
 export { PLAYGROUND_PA28_SCENARIO } from './scenarios/playground-pa28';
 export { getScenario, listScenarios, SCENARIO_REGISTRY } from './scenarios/registry';
 export { type RunnerEvaluation, ScenarioRunner } from './scenarios/runner';
+export { SHORT_FIELD_LANDING_SCENARIO } from './scenarios/short-field-landing';
+export { SLOW_FLIGHT_SCENARIO } from './scenarios/slow-flight';
 export { STATIC_BLOCK_SCENARIO } from './scenarios/static-block';
 export { STEEP_TURNS_SCENARIO } from './scenarios/steep-turns';
 export { UNUSUAL_ATTITUDES_SCENARIO } from './scenarios/unusual-attitudes';

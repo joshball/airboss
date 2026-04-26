@@ -24,6 +24,10 @@ export const SIM_SCENARIO_IDS = {
 	PLAYGROUND_PA28: 'playground-pa28',
 	ILS_APPROACH: 'ils-approach',
 	STEEP_TURNS: 'steep-turns',
+	GROUND_REFERENCE_TURNS_AROUND_POINT: 'ground-reference-turns-around-point',
+	SHORT_FIELD_LANDING: 'short-field-landing',
+	SLOW_FLIGHT: 'slow-flight',
+	CROSSWIND_LANDING: 'crosswind-landing',
 } as const;
 
 export type SimScenarioId = (typeof SIM_SCENARIO_IDS)[keyof typeof SIM_SCENARIO_IDS];
