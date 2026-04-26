@@ -31,7 +31,7 @@ import { buildQuery, humanize } from '@ab/utils';
 import { tick } from 'svelte';
 import { goto } from '$app/navigation';
 import { page } from '$app/state';
-import { REPS_GROUP_BY_OPTIONS, type RepsGroupByValue } from './+page.server';
+import { REPS_GROUP_BY_VALUES, type RepsGroupByValue } from './group-by';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
@@ -290,7 +290,7 @@ const groups = $derived.by<BrowseListGroup<ScenarioRow>[]>(() => {
 
 	<BrowseViewControls
 		{groupBy}
-		groupByOptions={REPS_GROUP_BY_OPTIONS.map((g) => ({ value: g, label: groupByLabels[g] }))}
+		groupByOptions={REPS_GROUP_BY_VALUES.map((g) => ({ value: g, label: groupByLabels[g] }))}
 		onGroupBy={(v) => goto(buildHref({ [QUERY_PARAMS.GROUP_BY]: v === 'none' ? undefined : v }))}
 		{pageSize}
 		pageSizeOptions={BROWSE_PAGE_SIZE_VALUES.map((n) => ({ value: n, label: String(n) }))}

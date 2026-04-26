@@ -15,10 +15,8 @@ import {
 	type StudyPriority,
 } from '@ab/constants';
 import { narrow } from '@ab/utils';
+import { KNOWLEDGE_GROUP_BY_VALUES, type KnowledgeGroupByValue } from './group-by';
 import type { PageServerLoad } from './$types';
-
-const KNOWLEDGE_GROUP_BY_VALUES = ['domain', 'cert', 'priority', 'lifecycle', 'none'] as const;
-type KnowledgeGroupBy = (typeof KNOWLEDGE_GROUP_BY_VALUES)[number];
 
 export const load: PageServerLoad = async (event) => {
 	const user = requireAuth(event);
@@ -37,8 +35,8 @@ export const load: PageServerLoad = async (event) => {
 		? (pageSizeRaw as BrowsePageSize)
 		: BROWSE_PAGE_SIZE;
 
-	const groupBy: KnowledgeGroupBy =
-		narrow<KnowledgeGroupBy>(url.searchParams.get(QUERY_PARAMS.GROUP_BY), KNOWLEDGE_GROUP_BY_VALUES) ?? 'domain';
+	const groupBy: KnowledgeGroupByValue =
+		narrow<KnowledgeGroupByValue>(url.searchParams.get(QUERY_PARAMS.GROUP_BY), KNOWLEDGE_GROUP_BY_VALUES) ?? 'domain';
 
 	const { rows, facets } = await listNodesWithFacets({ domain, cert, priority, lifecycle });
 	const total = rows.length;
@@ -83,6 +81,3 @@ export const load: PageServerLoad = async (event) => {
 		facets,
 	};
 };
-
-export type KnowledgeGroupByValue = KnowledgeGroupBy;
-export const KNOWLEDGE_GROUP_BY_OPTIONS = KNOWLEDGE_GROUP_BY_VALUES;

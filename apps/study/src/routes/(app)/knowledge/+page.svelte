@@ -29,7 +29,7 @@ import Pager from '@ab/ui/components/Pager.svelte';
 import ResultSummary from '@ab/ui/components/ResultSummary.svelte';
 import { buildQuery, humanize } from '@ab/utils';
 import { goto } from '$app/navigation';
-import { KNOWLEDGE_GROUP_BY_OPTIONS, type KnowledgeGroupByValue } from './+page.server';
+import { KNOWLEDGE_GROUP_BY_VALUES, type KnowledgeGroupByValue } from './group-by';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
@@ -236,7 +236,7 @@ const groups = $derived.by<BrowseListGroup<NodeRow>[]>(() => {
 
 	<BrowseViewControls
 		{groupBy}
-		groupByOptions={KNOWLEDGE_GROUP_BY_OPTIONS.map((g) => ({ value: g, label: groupByLabels[g] }))}
+		groupByOptions={KNOWLEDGE_GROUP_BY_VALUES.map((g) => ({ value: g, label: groupByLabels[g] }))}
 		onGroupBy={(v) => goto(buildHref({ [QUERY_PARAMS.GROUP_BY]: v === 'domain' ? undefined : v }))}
 		{pageSize}
 		pageSizeOptions={BROWSE_PAGE_SIZE_VALUES.map((n) => ({ value: n, label: String(n) }))}

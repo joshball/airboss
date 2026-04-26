@@ -18,12 +18,8 @@ import {
 	type ScenarioStatus,
 } from '@ab/constants';
 import { narrow } from '@ab/utils';
+import { REPS_GROUP_BY_VALUES, type RepsGroupByValue } from './group-by';
 import type { PageServerLoad } from './$types';
-
-/** Subset of the shared `BROWSE_GROUP_BY_VALUES` that makes sense for scenarios.
- * Cards have `state` (FSRS), but scenarios don't, so we drop that bucket. */
-const REPS_GROUP_BY_VALUES = ['none', 'domain', 'difficulty', 'phaseOfFlight', 'source', 'status'] as const;
-type RepsGroupBy = (typeof REPS_GROUP_BY_VALUES)[number];
 
 export const load: PageServerLoad = async (event) => {
 	const user = requireAuth(event);
@@ -46,8 +42,8 @@ export const load: PageServerLoad = async (event) => {
 		? (pageSizeRaw as BrowsePageSize)
 		: BROWSE_PAGE_SIZE;
 
-	const groupBy: RepsGroupBy =
-		narrow<RepsGroupBy>(url.searchParams.get(QUERY_PARAMS.GROUP_BY), REPS_GROUP_BY_VALUES) ?? 'none';
+	const groupBy: RepsGroupByValue =
+		narrow<RepsGroupByValue>(url.searchParams.get(QUERY_PARAMS.GROUP_BY), REPS_GROUP_BY_VALUES) ?? 'none';
 
 	const filters = {
 		domain,
@@ -100,6 +96,3 @@ export const load: PageServerLoad = async (event) => {
 		createdScenario,
 	};
 };
-
-export type RepsGroupByValue = RepsGroupBy;
-export const REPS_GROUP_BY_OPTIONS = REPS_GROUP_BY_VALUES;
