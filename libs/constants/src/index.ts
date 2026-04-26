@@ -141,7 +141,7 @@ export {
 	SOURCE_TYPE_LABELS,
 	SOURCE_TYPE_VALUES,
 } from './reference-tags';
-export { ROLES, type Role } from './roles';
+export { ROLE_LABELS, ROLE_VALUES, ROLES, type Role } from './roles';
 export { NAV_LABELS, QUERY_PARAMS, ROUTES } from './routes';
 export { SCHEMAS, type SchemaName } from './schemas';
 export {

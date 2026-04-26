@@ -233,6 +233,13 @@ export const ROUTES = {
 	HANGAR_JOB_DETAIL: (id: string) => `/jobs/${encodeURIComponent(id)}` as const,
 	/** JSON endpoint for the /jobs/[id] streaming log (cursor-based polling). */
 	HANGAR_JOB_LOG: (id: string) => `/jobs/${encodeURIComponent(id)}/log` as const,
+	// Hangar -- /users read-only directory of bauth_user rows. Lists the
+	// authoring team + learners; detail shows recent sessions and audit
+	// activity. Editing affordances (role change, ban toggle, session
+	// revoke, invite flow) are intentionally deferred -- this surface is
+	// read-only until the policy questions are resolved.
+	HANGAR_USERS: '/users',
+	HANGAR_USER_DETAIL: (id: string) => `/users/${encodeURIComponent(id)}` as const,
 	/** Scaffold-era audit heartbeat demo, kept as an admin diagnostic. */
 	HANGAR_ADMIN_AUDIT_PING: '/admin/audit-ping',
 	/** Form-action id for the sync-all-pending button. */
