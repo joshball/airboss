@@ -23,6 +23,7 @@ export const SIM_SCENARIO_IDS = {
 	VMC_INTO_IMC: 'vmc-into-imc',
 	PLAYGROUND_PA28: 'playground-pa28',
 	ILS_APPROACH: 'ils-approach',
+	STEEP_TURNS: 'steep-turns',
 } as const;
 
 export type SimScenarioId = (typeof SIM_SCENARIO_IDS)[keyof typeof SIM_SCENARIO_IDS];

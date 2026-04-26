@@ -100,6 +100,7 @@ export { PLAYGROUND_PA28_SCENARIO } from './scenarios/playground-pa28';
 export { getScenario, listScenarios, SCENARIO_REGISTRY } from './scenarios/registry';
 export { type RunnerEvaluation, ScenarioRunner } from './scenarios/runner';
 export { STATIC_BLOCK_SCENARIO } from './scenarios/static-block';
+export { STEEP_TURNS_SCENARIO } from './scenarios/steep-turns';
 export { UNUSUAL_ATTITUDES_SCENARIO } from './scenarios/unusual-attitudes';
 export { UNUSUAL_ATTITUDES_NOSE_LO_SCENARIO } from './scenarios/unusual-attitudes-nose-lo';
 export { VACUUM_FAILURE_SCENARIO } from './scenarios/vacuum-failure';

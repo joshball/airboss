@@ -16,6 +16,7 @@ import { PITOT_BLOCK_SCENARIO } from './pitot-block';
 import { PLAYGROUND_SCENARIO } from './playground';
 import { PLAYGROUND_PA28_SCENARIO } from './playground-pa28';
 import { STATIC_BLOCK_SCENARIO } from './static-block';
+import { STEEP_TURNS_SCENARIO } from './steep-turns';
 import { UNUSUAL_ATTITUDES_SCENARIO } from './unusual-attitudes';
 import { UNUSUAL_ATTITUDES_NOSE_LO_SCENARIO } from './unusual-attitudes-nose-lo';
 import { VACUUM_FAILURE_SCENARIO } from './vacuum-failure';
@@ -36,6 +37,7 @@ export const SCENARIO_REGISTRY: Record<SimScenarioId, ScenarioDefinition> = {
 	[SIM_SCENARIO_IDS.VMC_INTO_IMC]: VMC_INTO_IMC_SCENARIO,
 	[SIM_SCENARIO_IDS.PLAYGROUND_PA28]: PLAYGROUND_PA28_SCENARIO,
 	[SIM_SCENARIO_IDS.ILS_APPROACH]: ILS_APPROACH_SCENARIO,
+	[SIM_SCENARIO_IDS.STEEP_TURNS]: STEEP_TURNS_SCENARIO,
 };
 
 /** Defensive lookup; throws on unknown ids so callers fail fast. */
