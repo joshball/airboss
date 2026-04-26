@@ -31,8 +31,8 @@ import { buildQuery, humanize } from '@ab/utils';
 import { tick } from 'svelte';
 import { goto } from '$app/navigation';
 import { page } from '$app/state';
-import { REPS_GROUP_BY_VALUES, type RepsGroupByValue } from './group-by';
 import type { PageData } from './$types';
+import { REPS_GROUP_BY_VALUES, type RepsGroupByValue } from './group-by';
 
 let { data }: { data: PageData } = $props();
 

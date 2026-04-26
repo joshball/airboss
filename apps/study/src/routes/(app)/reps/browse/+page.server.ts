@@ -18,8 +18,8 @@ import {
 	type ScenarioStatus,
 } from '@ab/constants';
 import { narrow } from '@ab/utils';
-import { REPS_GROUP_BY_VALUES, type RepsGroupByValue } from './group-by';
 import type { PageServerLoad } from './$types';
+import { REPS_GROUP_BY_VALUES, type RepsGroupByValue } from './group-by';
 
 export const load: PageServerLoad = async (event) => {
 	const user = requireAuth(event);

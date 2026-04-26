@@ -15,8 +15,8 @@ import {
 	type StudyPriority,
 } from '@ab/constants';
 import { narrow } from '@ab/utils';
-import { KNOWLEDGE_GROUP_BY_VALUES, type KnowledgeGroupByValue } from './group-by';
 import type { PageServerLoad } from './$types';
+import { KNOWLEDGE_GROUP_BY_VALUES, type KnowledgeGroupByValue } from './group-by';
 
 export const load: PageServerLoad = async (event) => {
 	const user = requireAuth(event);
