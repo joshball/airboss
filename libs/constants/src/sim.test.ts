@@ -10,12 +10,7 @@
 
 import { describe, expect, it } from 'vitest';
 import { ENGINE_SCORING } from './engine';
-import {
-	SIM_SCENARIO_ID_VALUES,
-	SIM_SCENARIO_IDS,
-	SIM_SCENARIO_NODE_MAPPINGS,
-	type SimScenarioId,
-} from './sim';
+import { SIM_SCENARIO_ID_VALUES, SIM_SCENARIO_IDS, SIM_SCENARIO_NODE_MAPPINGS, type SimScenarioId } from './sim';
 
 const NODE_ID_PATTERN = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 const UNGRADED: ReadonlySet<SimScenarioId> = new Set([SIM_SCENARIO_IDS.PLAYGROUND, SIM_SCENARIO_IDS.PLAYGROUND_PA28]);

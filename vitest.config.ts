@@ -20,6 +20,7 @@ const aliases = {
 	'@ab/ui': resolve('./libs/ui/src/index.ts'),
 	'@ab/utils': resolve('./libs/utils/src/index.ts'),
 	'@ab/bc-study': resolve('./libs/bc/study/src/index.ts'),
+	'@ab/bc-sim/persistence': resolve('./libs/bc/sim/src/persistence.ts'),
 	'@ab/bc-sim': resolve('./libs/bc/sim/src/index.ts'),
 	'@ab/bc-citations': resolve('./libs/bc/citations/src/index.ts'),
 	'@ab/aviation/sources': resolve('./libs/aviation/src/sources/index.ts'),
