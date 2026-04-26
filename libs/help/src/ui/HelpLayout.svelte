@@ -60,20 +60,20 @@ $effect(() => {
 });
 </script>
 
-<article class="help">
-	<aside class="sidebar" aria-label="Help navigation">
+<article class="help" data-testid="helplayout-root">
+	<aside class="sidebar" aria-label="Help navigation" data-testid="helplayout-sidebar">
 		<HelpTOC sections={page.sections} {activeId} />
 		{#if sidebar}
-			<div class="sidebar-extra">{@render sidebar()}</div>
+			<div class="sidebar-extra" data-testid="helplayout-sidebar-extra">{@render sidebar()}</div>
 		{/if}
 	</aside>
 
-	<div class="content">
-		<header class="page-head">
-			<h1>{page.title}</h1>
-			<p class="summary">{page.summary}</p>
+	<div class="content" data-testid="helplayout-content">
+		<header class="page-head" data-testid="helplayout-head">
+			<h1 data-testid="helplayout-title">{page.title}</h1>
+			<p class="summary" data-testid="helplayout-summary">{page.summary}</p>
 			{#if page.documents}
-				<p class="documents">Documents: <code>{page.documents}</code></p>
+				<p class="documents" data-testid="helplayout-documents">Documents: <code>{page.documents}</code></p>
 			{/if}
 		</header>
 

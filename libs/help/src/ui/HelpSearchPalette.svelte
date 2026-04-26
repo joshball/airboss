@@ -120,8 +120,21 @@ function backdropKeydown(event: KeyboardEvent): void {
 		 palette is a dialog-role child that traps focus. -->
 	<!-- svelte-ignore a11y_click_events_have_key_events -->
 	<!-- svelte-ignore a11y_no_static_element_interactions -->
-	<div class="backdrop" onclick={backdropClick} onkeydown={backdropKeydown} role="presentation">
-		<div class="palette" role="dialog" aria-modal="true" aria-label="Search help and aviation references">
+	<div
+		class="backdrop"
+		onclick={backdropClick}
+		onkeydown={backdropKeydown}
+		role="presentation"
+		data-testid="helpsearchpalette-backdrop"
+	>
+		<div
+			class="palette"
+			role="dialog"
+			aria-modal="true"
+			aria-label="Search help and aviation references"
+			data-testid="helpsearchpalette-root"
+			data-focused-bucket={focusedBucket}
+		>
 			<div class="input-row">
 				<input
 					bind:this={input}
@@ -132,6 +145,7 @@ function backdropKeydown(event: KeyboardEvent): void {
 					autocomplete="off"
 					spellcheck="false"
 					aria-label="Search query"
+					data-testid="helpsearchpalette-input"
 				/>
 			</div>
 

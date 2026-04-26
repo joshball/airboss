@@ -29,11 +29,11 @@ let {
 } = $props();
 </script>
 
-<aside class="card {variant}" role="note">
+<aside class="card {variant}" role="note" data-testid="helpcard-root" data-variant={variant}>
 	{#if title}
-		<header>{title}</header>
+		<header data-testid="helpcard-title">{title}</header>
 	{/if}
-	<div class="body">{@render children()}</div>
+	<div class="body" data-testid="helpcard-body">{@render children()}</div>
 </aside>
 
 <style>

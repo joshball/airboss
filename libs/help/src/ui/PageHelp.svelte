@@ -116,6 +116,9 @@ function handleTriggerClick(event: MouseEvent): void {
 		aria-haspopup="dialog"
 		aria-expanded={open}
 		title={accessibleLabel}
+		data-testid="pagehelp-trigger"
+		data-state={open ? 'open' : 'closed'}
+		data-variant={variant}
 		onclick={handleTriggerClick}
 	>
 		<span class="glyph" aria-hidden="true">?</span>

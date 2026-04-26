@@ -48,7 +48,7 @@ function handleKey(event: KeyboardEvent): void {
 }
 </script>
 
-<section id={section.id} class="section">
+<section id={section.id} class="section" data-testid="helpsection-root" data-state={expanded ? 'expanded' : 'collapsed'}>
 	{#if showHeading}
 		<h2>
 			<button
@@ -56,16 +56,17 @@ function handleKey(event: KeyboardEvent): void {
 				class="toggle"
 				aria-expanded={expanded}
 				aria-controls={`${section.id}-body`}
+				data-testid="helpsection-toggle"
 				onclick={toggle}
 				onkeydown={handleKey}
 			>
 				<span class="chevron" aria-hidden="true">{expanded ? '▾' : '▸'}</span>
-				<span class="title">{section.title}</span>
+				<span class="title" data-testid="helpsection-title">{section.title}</span>
 			</button>
 		</h2>
 	{/if}
 	{#if expanded}
-		<div id={`${section.id}-body`} class="body">
+		<div id={`${section.id}-body`} class="body" data-testid="helpsection-body">
 			{#if nodes}
 				<MarkdownBody {nodes} />
 			{:else}
