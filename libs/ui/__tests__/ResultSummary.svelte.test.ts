@@ -28,7 +28,7 @@ describe('ResultSummary', () => {
 		expect(screen.getByTestId('resultsummary-root').textContent).toContain('Showing 1 card');
 	});
 
-	it('plural noun (default `${noun}s`) for total > 1', () => {
+	it('plural noun (default appends "s") for total > 1', () => {
 		render(ResultSummary, { total: 3, pageCount: 3, currentPage: 1, pageSize: 10, noun: 'card' });
 		expect(screen.getByTestId('resultsummary-root').textContent).toContain('Showing 3 cards');
 	});

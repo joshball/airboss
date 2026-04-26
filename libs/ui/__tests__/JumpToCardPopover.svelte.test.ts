@@ -44,7 +44,13 @@ describe('JumpToCardPopover -- open', () => {
 	});
 
 	it('list has role=listbox', () => {
-		render(JumpToCardPopover, { open: true, totalCards: 2, currentIndex: 0, statuses: ['current', 'pending'], onPick: vi.fn() });
+		render(JumpToCardPopover, {
+			open: true,
+			totalCards: 2,
+			currentIndex: 0,
+			statuses: ['current', 'pending'],
+			onPick: vi.fn(),
+		});
 		expect(screen.getByTestId('jumptocardpopover-list').getAttribute('role')).toBe('listbox');
 	});
 });
