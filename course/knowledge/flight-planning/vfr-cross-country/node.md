@@ -8,17 +8,11 @@ knowledge_types: [procedural, conceptual]
 technical_depth: working
 stability: evolving
 
-relevance:
-  - cert: private
-    bloom: apply
-    priority: core
-  - cert: commercial
-    bloom: apply
-    priority: supporting
-  - cert: cfi
-    bloom: evaluate
-    priority: core
-
+# === Cert + study priority ===
+# minimum_cert: lowest cert that requires this topic. Higher certs inherit.
+minimum_cert: private
+# study_priority: critical (safety/checkride hot) | standard (default) | stretch (adjacent).
+study_priority: critical
 requires:
   - airspace-classes-and-dimensions
   - airspace-vfr-weather-minimums

@@ -26,28 +26,11 @@ knowledge_types:
 technical_depth: working
 stability: stable
 
-# === Cert relevance (multi-dimensional) ===
-relevance:
-  - cert: private
-    bloom: remember
-    priority: core
-  - cert: private
-    bloom: apply
-    priority: core
-  - cert: instrument
-    bloom: apply
-    priority: core
-  - cert: commercial
-    bloom: apply
-    priority: supporting
-  - cert: cfi
-    bloom: evaluate
-    priority: core
-  - cert: cfi
-    bloom: create
-    priority: core
-
-# === Graph edges ===
+# === Cert + study priority ===
+# minimum_cert: lowest cert that requires this topic. Higher certs inherit.
+minimum_cert: private
+# study_priority: critical (safety/checkride hot) | standard (default) | stretch (adjacent).
+study_priority: critical
 requires:
   - airspace-classes-and-dimensions
   - wx-reading-metars-tafs

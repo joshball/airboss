@@ -8,17 +8,11 @@ knowledge_types: [procedural, judgment]
 technical_depth: working
 stability: stable
 
-relevance:
-  - cert: instrument
-    bloom: evaluate
-    priority: core
-  - cert: commercial
-    bloom: evaluate
-    priority: supporting
-  - cert: cfi
-    bloom: create
-    priority: core
-
+# === Cert + study priority ===
+# minimum_cert: lowest cert that requires this topic. Higher certs inherit.
+minimum_cert: instrument
+# study_priority: critical (safety/checkride hot) | standard (default) | stretch (adjacent).
+study_priority: critical
 requires:
   - nav-instrument-approach-structure
 deepens: []

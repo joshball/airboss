@@ -15,6 +15,7 @@ import {
 	CARD_STATUSES,
 	CERT_VALUES,
 	type Cert,
+	certsCoveredBy,
 	DOMAIN_VALUES,
 	type Domain,
 	KNOWLEDGE_EDGE_TYPES,
@@ -22,11 +23,12 @@ import {
 	NODE_MASTERY_GATES,
 	type NodeLifecycle,
 	type NodeMasteryGate,
-	RELEVANCE_PRIORITIES,
 	REP_ACCURACY_THRESHOLD,
 	REP_MIN,
 	SESSION_ITEM_KINDS,
 	STABILITY_MASTERED_DAYS,
+	STUDY_PRIORITIES,
+	type StudyPriority,
 } from '@ab/constants';
 import { db as defaultDb } from '@ab/db';
 import { generateKnowledgeNodeProgressId } from '@ab/utils';
@@ -190,7 +192,8 @@ export async function upsertKnowledgeNode(row: NewKnowledgeNodeRow, db: Db = def
 				knowledgeTypes: row.knowledgeTypes ?? [],
 				technicalDepth: row.technicalDepth ?? null,
 				stability: row.stability ?? null,
-				relevance: row.relevance ?? [],
+				minimumCert: row.minimumCert ?? null,
+				studyPriority: row.studyPriority ?? null,
 				modalities: row.modalities ?? [],
 				estimatedTimeMinutes: row.estimatedTimeMinutes ?? null,
 				reviewTimeMinutes: row.reviewTimeMinutes ?? null,
@@ -422,15 +425,21 @@ export function splitContentPhases(contentMd: string): Record<string, string | n
 }
 
 /**
- * Filterable list for the browse page. `cert` filters to nodes whose
- * `relevance` array contains at least one entry for that cert; `priority`
- * filters similarly on priority. Lifecycle filter is applied in-memory
- * (derived from content) since lifecycle isn't a stored column yet.
+ * Filterable list for the browse page.
+ *
+ * `cert` matches by cert *inheritance*: picking 'commercial' returns nodes
+ * with `minimumCert IN ('private','commercial')` because every commercial
+ * pilot also needs PPL-floor knowledge. See `CERT_PREREQUISITES` in
+ * libs/constants/src/study.ts.
+ *
+ * `priority` is an exact match against `studyPriority` (critical / standard /
+ * stretch). Lifecycle is in-memory because it's still derived from content
+ * markdown rather than persisted -- see `lifecycleFromContent`.
  */
 export interface ListNodesFilters {
-	cert?: string;
-	priority?: string;
-	lifecycle?: 'skeleton' | 'started' | 'complete';
+	cert?: Cert;
+	priority?: StudyPriority;
+	lifecycle?: NodeLifecycle;
 	domain?: string;
 }
 
@@ -440,8 +449,10 @@ export interface KnowledgeNodeListRow {
 	domain: string;
 	estimatedTimeMinutes: number | null;
 	lifecycle: NodeLifecycle;
-	certs: string[];
-	priorities: string[];
+	/** Lowest cert that requires this node. May be null on freshly-authored nodes. */
+	minimumCert: Cert | null;
+	/** Study-time bucket. May be null on freshly-authored nodes. */
+	studyPriority: StudyPriority | null;
 }
 
 export async function listNodesForBrowse(
@@ -455,8 +466,11 @@ export async function listNodesForBrowse(
 /**
  * Per-facet bucket counts for the knowledge-graph browse filters. Knowledge
  * is a small enough table that we materialize all rows once, derive every
- * facet's tag set in JS, then count with each facet's own filter excluded
- * (so "(N)" counts answer "if I pick this option, what would I see?").
+ * facet with the corresponding filter excluded, and count in JS.
+ *
+ * `cert` counts use inheritance: the count for 'cpl' is "how many nodes
+ * would a commercial pilot see," i.e. anything with `minimumCert IN
+ * ('private','commercial')`. `priority` counts are exact matches.
  */
 export interface KnowledgeFacetCounts {
 	domain: Record<string, number>;
@@ -476,32 +490,35 @@ export async function listNodesWithFacets(
 			domain: knowledgeNode.domain,
 			estimatedTimeMinutes: knowledgeNode.estimatedTimeMinutes,
 			contentMd: knowledgeNode.contentMd,
-			relevance: knowledgeNode.relevance,
+			minimumCert: knowledgeNode.minimumCert,
+			studyPriority: knowledgeNode.studyPriority,
 		})
 		.from(knowledgeNode)
 		.orderBy(asc(knowledgeNode.domain), asc(knowledgeNode.title));
 
-	const enriched = dbRows.map((row) => {
-		const rels = Array.isArray(row.relevance) ? row.relevance : [];
-		const certs = Array.from(new Set(rels.map((r) => r.cert).filter((c) => typeof c === 'string')));
-		const priorities = Array.from(new Set(rels.map((r) => r.priority).filter((p) => typeof p === 'string')));
+	const enriched = dbRows.map((row): KnowledgeNodeListRow => {
 		const lifecycle = lifecycleFromContent(row.contentMd ?? '');
-		const node: KnowledgeNodeListRow = {
+		return {
 			id: row.id,
 			title: row.title,
 			domain: row.domain,
 			estimatedTimeMinutes: row.estimatedTimeMinutes ?? null,
 			lifecycle,
-			certs,
-			priorities,
+			minimumCert: (row.minimumCert as Cert | null) ?? null,
+			studyPriority: (row.studyPriority as StudyPriority | null) ?? null,
 		};
-		return node;
 	});
+
+	// Cert inheritance set for the active filter (`cert: 'cpl'` matches
+	// PPL-floor + CPL-floor topics). Untagged nodes (`minimumCert IS NULL`)
+	// don't match any cert filter.
+	const certCovers = (n: KnowledgeNodeListRow, c: Cert): boolean =>
+		n.minimumCert !== null && certsCoveredBy(c).includes(n.minimumCert);
 
 	const passes = (n: KnowledgeNodeListRow, exclude?: keyof ListNodesFilters): boolean => {
 		if (filters.domain && exclude !== 'domain' && n.domain !== filters.domain) return false;
-		if (filters.cert && exclude !== 'cert' && !n.certs.includes(filters.cert)) return false;
-		if (filters.priority && exclude !== 'priority' && !n.priorities.includes(filters.priority)) return false;
+		if (filters.cert && exclude !== 'cert' && !certCovers(n, filters.cert)) return false;
+		if (filters.priority && exclude !== 'priority' && n.studyPriority !== filters.priority) return false;
 		if (filters.lifecycle && exclude !== 'lifecycle' && n.lifecycle !== filters.lifecycle) return false;
 		return true;
 	};
@@ -511,8 +528,21 @@ export async function listNodesWithFacets(
 	const facets: KnowledgeFacetCounts = { domain: {}, cert: {}, priority: {}, lifecycle: {} };
 	for (const n of enriched) {
 		if (passes(n, 'domain')) facets.domain[n.domain] = (facets.domain[n.domain] ?? 0) + 1;
-		if (passes(n, 'cert')) for (const c of n.certs) facets.cert[c] = (facets.cert[c] ?? 0) + 1;
-		if (passes(n, 'priority')) for (const p of n.priorities) facets.priority[p] = (facets.priority[p] ?? 0) + 1;
+		if (passes(n, 'cert')) {
+			// Tally the node under every cert whose inheritance set includes
+			// `minimumCert`. A PPL-floor node bumps PPL/IFR/CPL/CFI counts;
+			// a CFI-floor node only bumps CFI.
+			if (n.minimumCert !== null) {
+				for (const c of CERT_VALUES) {
+					if (certsCoveredBy(c).includes(n.minimumCert)) {
+						facets.cert[c] = (facets.cert[c] ?? 0) + 1;
+					}
+				}
+			}
+		}
+		if (passes(n, 'priority') && n.studyPriority !== null) {
+			facets.priority[n.studyPriority] = (facets.priority[n.studyPriority] ?? 0) + 1;
+		}
 		if (passes(n, 'lifecycle')) facets.lifecycle[n.lifecycle] = (facets.lifecycle[n.lifecycle] ?? 0) + 1;
 	}
 
@@ -851,37 +881,43 @@ export interface CertProgress {
 }
 
 /**
- * Per-cert mastery rollup. For each cert, counts distinct nodes in the active
- * graph whose `relevance[]` carries an entry for that cert with priority
- * `core` or `supporting` -- `elective` does not count toward progress per the
- * knowledge-graph spec. A node with the same cert listed in multiple relevance
- * entries counts once; a node relevant to multiple certs is counted once per
- * cert.
+ * Per-cert mastery rollup. For each cert, counts distinct nodes whose
+ * `minimumCert` is inherited by that cert (PPL-floor topics roll up into
+ * IFR/CPL/CFI; CFI-floor topics only into CFI). `stretch` priority nodes
+ * are excluded from progress totals -- they're below-floor adjacencies that
+ * the learner can study but isn't responsible for. Untagged nodes
+ * (`minimumCert IS NULL`) count nowhere.
  *
- * `mastered` applies the dual-gate `isNodeMastered` rule. `inProgress` counts
- * nodes the learner has touched (cards or rep attempts attached) but has not
- * yet cleared both applicable gates. Empty cert (total = 0) returns zeros with
- * `percent = 0` so the UI can still render the row.
+ * `mastered` applies the dual-gate `isNodeMastered` rule. `inProgress`
+ * counts nodes the learner has touched but not yet cleared. Empty cert
+ * (total = 0) returns zeros with `percent = 0` so the UI can still render
+ * the row.
  */
 export async function getCertProgress(userId: string, db: Db = defaultDb): Promise<CertProgress[]> {
-	const rows = await db.select({ id: knowledgeNode.id, relevance: knowledgeNode.relevance }).from(knowledgeNode);
+	const rows = await db
+		.select({
+			id: knowledgeNode.id,
+			minimumCert: knowledgeNode.minimumCert,
+			studyPriority: knowledgeNode.studyPriority,
+		})
+		.from(knowledgeNode);
 
-	// Build cert -> set of node ids from relevance[], filtering to core/supporting.
 	const certToNodes = new Map<Cert, Set<string>>();
 	for (const cert of CERT_VALUES) certToNodes.set(cert, new Set<string>());
 
 	const allNodeIds = new Set<string>();
 	for (const row of rows) {
-		const rels = Array.isArray(row.relevance) ? row.relevance : [];
-		for (const rel of rels) {
-			if (rel.priority !== RELEVANCE_PRIORITIES.CORE && rel.priority !== RELEVANCE_PRIORITIES.SUPPORTING) continue;
-			const certValue = CERT_VALUES.find((c) => c === rel.cert);
-			if (!certValue) continue;
-			const bucket = certToNodes.get(certValue);
-			if (!bucket) continue;
-			bucket.add(row.id);
-			allNodeIds.add(row.id);
+		if (row.minimumCert === null) continue;
+		if (row.studyPriority === STUDY_PRIORITIES.STRETCH) continue;
+		const minCert = CERT_VALUES.find((c) => c === row.minimumCert);
+		if (!minCert) continue;
+		// A node with `minimumCert = X` rolls into every cert that inherits X.
+		for (const cert of CERT_VALUES) {
+			if (certsCoveredBy(cert).includes(minCert)) {
+				certToNodes.get(cert)?.add(row.id);
+			}
 		}
+		allNodeIds.add(row.id);
 	}
 
 	const masteryMap = await getNodeMasteryMap(userId, Array.from(allNodeIds), db);
@@ -922,20 +958,24 @@ export interface DomainCertRow {
 
 /**
  * 14 x 4 matrix of (domain, cert) -> percent mastered. A node contributes to
- * every (domain, cert) cell implied by its primary `domain` column and each
- * cert in its `relevance[]` (any priority -- electives show in the map even
- * though they don't count toward cert progress). A node is not double-counted
- * within the same cell.
+ * every (domain, cert) cell where the cert inherits the node's `minimumCert`
+ * (PPL-floor topics show in PPL/IFR/CPL/CFI columns; CFI-floor topics only in
+ * CFI). `stretch` priority is included on the map -- it shows where the
+ * learner could go beyond strict cert requirements -- but the per-cell
+ * mastery uses the same dual-gate rule as the rest of the system.
  *
- * Cells with `total === 0` return `percent: null` so the UI can render a
+ * Cells with `total === 0` return `percent: null` so the UI renders a
  * neutral placeholder instead of a bogus 0%.
  */
 export async function getDomainCertMatrix(userId: string, db: Db = defaultDb): Promise<DomainCertRow[]> {
 	const rows = await db
-		.select({ id: knowledgeNode.id, domain: knowledgeNode.domain, relevance: knowledgeNode.relevance })
+		.select({
+			id: knowledgeNode.id,
+			domain: knowledgeNode.domain,
+			minimumCert: knowledgeNode.minimumCert,
+		})
 		.from(knowledgeNode);
 
-	// Bucket: domain -> cert -> set of node ids (set dedupes multi-relevance entries).
 	const buckets = new Map<Domain, Map<Cert, Set<string>>>();
 	for (const domain of DOMAIN_VALUES) {
 		const certMap = new Map<Cert, Set<string>>();
@@ -945,22 +985,19 @@ export async function getDomainCertMatrix(userId: string, db: Db = defaultDb): P
 
 	const allNodeIds = new Set<string>();
 	for (const row of rows) {
+		if (row.minimumCert === null) continue;
 		const domain = DOMAIN_VALUES.find((d) => d === row.domain);
 		if (!domain) continue;
+		const minCert = CERT_VALUES.find((c) => c === row.minimumCert);
+		if (!minCert) continue;
 		const certMap = buckets.get(domain);
 		if (!certMap) continue;
-		const rels = Array.isArray(row.relevance) ? row.relevance : [];
-		const certsOnNode = new Set<Cert>();
-		for (const rel of rels) {
-			const certValue = CERT_VALUES.find((c) => c === rel.cert);
-			if (certValue) certsOnNode.add(certValue);
+		for (const cert of CERT_VALUES) {
+			if (certsCoveredBy(cert).includes(minCert)) {
+				certMap.get(cert)?.add(row.id);
+			}
 		}
-		for (const cert of certsOnNode) {
-			const bucket = certMap.get(cert);
-			if (!bucket) continue;
-			bucket.add(row.id);
-			allNodeIds.add(row.id);
-		}
+		allNodeIds.add(row.id);
 	}
 
 	const masteryMap = await getNodeMasteryMap(userId, Array.from(allNodeIds), db);
@@ -1005,14 +1042,20 @@ export interface CertAndDomainMatrix {
 
 export async function getCertAndDomainMatrix(userId: string, db: Db = defaultDb): Promise<CertAndDomainMatrix> {
 	const rows = await db
-		.select({ id: knowledgeNode.id, domain: knowledgeNode.domain, relevance: knowledgeNode.relevance })
+		.select({
+			id: knowledgeNode.id,
+			domain: knowledgeNode.domain,
+			minimumCert: knowledgeNode.minimumCert,
+			studyPriority: knowledgeNode.studyPriority,
+		})
 		.from(knowledgeNode);
 
-	// Cert-progress buckets: cert -> set of node ids, filtering to core + supporting.
+	// Cert-progress buckets: cert -> set of node ids, excluding `stretch`.
 	const certToNodes = new Map<Cert, Set<string>>();
 	for (const cert of CERT_VALUES) certToNodes.set(cert, new Set<string>());
 
-	// Domain x cert buckets: domain -> cert -> set of node ids (any priority).
+	// Domain x cert buckets: domain -> cert -> set of node ids (all priorities,
+	// including stretch -- the matrix shows everywhere the learner could go).
 	const domainBuckets = new Map<Domain, Map<Cert, Set<string>>>();
 	for (const domain of DOMAIN_VALUES) {
 		const certMap = new Map<Cert, Set<string>>();
@@ -1023,33 +1066,27 @@ export async function getCertAndDomainMatrix(userId: string, db: Db = defaultDb)
 	const allNodeIds = new Set<string>();
 
 	for (const row of rows) {
-		const rels = Array.isArray(row.relevance) ? row.relevance : [];
+		if (row.minimumCert === null) continue;
+		const minCert = CERT_VALUES.find((c) => c === row.minimumCert);
+		if (!minCert) continue;
+		const isStretch = row.studyPriority === STUDY_PRIORITIES.STRETCH;
+		const inheritingCerts = CERT_VALUES.filter((c) => certsCoveredBy(c).includes(minCert));
 
-		// Cert-progress bucketing: core + supporting only.
-		for (const rel of rels) {
-			if (rel.priority !== RELEVANCE_PRIORITIES.CORE && rel.priority !== RELEVANCE_PRIORITIES.SUPPORTING) continue;
-			const certValue = CERT_VALUES.find((c) => c === rel.cert);
-			if (!certValue) continue;
-			const bucket = certToNodes.get(certValue);
-			if (!bucket) continue;
-			bucket.add(row.id);
-			allNodeIds.add(row.id);
+		// Cert-progress bucketing: stretch nodes don't count.
+		if (!isStretch) {
+			for (const cert of inheritingCerts) {
+				certToNodes.get(cert)?.add(row.id);
+				allNodeIds.add(row.id);
+			}
 		}
 
-		// Domain x cert bucketing: any priority (electives show on the map).
+		// Domain x cert matrix: includes stretch.
 		const domain = DOMAIN_VALUES.find((d) => d === row.domain);
 		if (!domain) continue;
 		const certMap = domainBuckets.get(domain);
 		if (!certMap) continue;
-		const certsOnNode = new Set<Cert>();
-		for (const rel of rels) {
-			const certValue = CERT_VALUES.find((c) => c === rel.cert);
-			if (certValue) certsOnNode.add(certValue);
-		}
-		for (const cert of certsOnNode) {
-			const bucket = certMap.get(cert);
-			if (!bucket) continue;
-			bucket.add(row.id);
+		for (const cert of inheritingCerts) {
+			certMap.get(cert)?.add(row.id);
 			allNodeIds.add(row.id);
 		}
 	}

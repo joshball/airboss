@@ -10,25 +10,11 @@ knowledge_types: [procedural, conceptual, perceptual]
 technical_depth: working
 stability: stable
 
-# === Cert relevance (multi-dimensional) ===
-relevance:
-  - cert: private
-    bloom: apply
-    priority: core
-  - cert: private
-    bloom: understand
-    priority: core
-  - cert: instrument
-    bloom: apply
-    priority: supporting
-  - cert: commercial
-    bloom: apply
-    priority: core
-  - cert: cfi
-    bloom: evaluate
-    priority: core
-
-# === Graph edges ===
+# === Cert + study priority ===
+# minimum_cert: lowest cert that requires this topic. Higher certs inherit.
+minimum_cert: private
+# study_priority: critical (safety/checkride hot) | standard (default) | stretch (adjacent).
+study_priority: critical
 requires:
   - math-trig-sin-cos-refresher
   - wx-wind-direction-and-magnetic-variation

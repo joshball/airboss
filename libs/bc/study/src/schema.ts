@@ -58,6 +58,7 @@ import {
 	type SessionSlice,
 	SNOOZE_DURATION_LEVEL_VALUES,
 	SNOOZE_REASON_VALUES,
+	STUDY_PRIORITY_VALUES,
 } from '@ab/constants';
 import { timestamps } from '@ab/db';
 import { sql } from 'drizzle-orm';
@@ -123,11 +124,24 @@ export const knowledgeNode = studySchema.table(
 		technicalDepth: text('technical_depth'),
 		stability: text('stability'),
 		/**
-		 * Cert relevance array: [{ cert, bloom, priority }, ...]. Stored as jsonb
-		 * so the full multi-row structure round-trips; future queries (study-plan
-		 * filters) will read it without a join.
+		 * Lowest cert that requires this knowledge: PPL / IR / CPL / CFI. Higher
+		 * certs inherit through `CERT_PREREQUISITES`. Replaces the old per-cert
+		 * relevance array (a topic only ever had one floor; the array invited
+		 * authoring drift).
+		 *
+		 * Nullable for the migration window; backfilled by the seed and
+		 * enforced NOT NULL in a follow-up once every authored node has it.
 		 */
-		relevance: jsonb('relevance').$type<{ cert: string; bloom: string; priority: string }[]>().notNull().default([]),
+		minimumCert: text('minimum_cert'),
+		/**
+		 * Study-time priority bucket: critical / standard / stretch. Every node
+		 * a learner sees is already on the ACS/PTS for `minimumCert` -- this
+		 * field expresses where to spend the next 30 minutes, not what's
+		 * testable. See `STUDY_PRIORITIES` in libs/constants/src/study.ts.
+		 *
+		 * Nullable for the migration window; backfilled by the seed.
+		 */
+		studyPriority: text('study_priority'),
 		modalities: jsonb('modalities').$type<string[]>().notNull().default([]),
 		estimatedTimeMinutes: integer('estimated_time_minutes'),
 		reviewTimeMinutes: integer('review_time_minutes'),
@@ -177,9 +191,19 @@ export const knowledgeNode = studySchema.table(
 	(t) => ({
 		knowledgeNodeDomainIdx: index('knowledge_node_domain_idx').on(t.domain),
 		knowledgeNodeLifecycleIdx: index('knowledge_node_lifecycle_idx').on(t.lifecycle),
+		knowledgeNodeMinimumCertIdx: index('knowledge_node_minimum_cert_idx').on(t.minimumCert),
+		knowledgeNodeStudyPriorityIdx: index('knowledge_node_study_priority_idx').on(t.studyPriority),
 		lifecycleCheck: check(
 			'knowledge_node_lifecycle_check',
 			sql.raw(`"lifecycle" IS NULL OR "lifecycle" IN (${inList(NODE_LIFECYCLE_VALUES)})`),
+		),
+		minimumCertCheck: check(
+			'knowledge_node_minimum_cert_check',
+			sql.raw(`"minimum_cert" IS NULL OR "minimum_cert" IN (${inList(CERT_VALUES)})`),
+		),
+		studyPriorityCheck: check(
+			'knowledge_node_study_priority_check',
+			sql.raw(`"study_priority" IS NULL OR "study_priority" IN (${inList(STUDY_PRIORITY_VALUES)})`),
 		),
 	}),
 );

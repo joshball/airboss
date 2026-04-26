@@ -1,7 +1,5 @@
 <script lang="ts">
 import {
-	BLOOM_LEVEL_LABELS,
-	type BloomLevel,
 	CERT_LABELS,
 	type Cert,
 	CITATION_SOURCE_LABELS,
@@ -14,9 +12,9 @@ import {
 	NODE_LIFECYCLE_LABELS,
 	NODE_MASTERY_GATE_LABELS,
 	type NodeMasteryGate,
-	RELEVANCE_PRIORITY_LABELS,
-	type RelevancePriority,
 	ROUTES,
+	STUDY_PRIORITY_LABELS,
+	type StudyPriority,
 } from '@ab/constants';
 import PageHelp from '@ab/help/ui/PageHelp.svelte';
 import CitedByPanel, { type CitedByItem } from '@ab/ui/components/CitedByPanel.svelte';
@@ -63,12 +61,8 @@ function certLabel(slug: string): string {
 	return (CERT_LABELS as Record<Cert, string>)[slug as Cert] ?? slug;
 }
 
-function bloomLabel(slug: string): string {
-	return (BLOOM_LEVEL_LABELS as Record<BloomLevel, string>)[slug as BloomLevel] ?? humanize(slug);
-}
-
 function priorityLabel(slug: string): string {
-	return (RELEVANCE_PRIORITY_LABELS as Record<RelevancePriority, string>)[slug as RelevancePriority] ?? humanize(slug);
+	return (STUDY_PRIORITY_LABELS as Record<StudyPriority, string>)[slug as StudyPriority] ?? humanize(slug);
 }
 
 function lifecycleLabel(slug: string): string {
@@ -160,27 +154,20 @@ const citedByItems = $derived<CitedByItem[]>(
 		<a class="btn secondary" href={ROUTES.MEMORY_REVIEW_FOR_NODE(node.id)}>Just review cards</a>
 	</div>
 
-	{#if node.relevance.length > 0}
-		<section class="section" aria-label="Cert relevance">
-			<h2>Cert relevance</h2>
-			<table class="relevance">
-				<thead>
-					<tr>
-						<th>Cert</th>
-						<th>Bloom</th>
-						<th>Priority</th>
-					</tr>
-				</thead>
-				<tbody>
-					{#each node.relevance as rel (rel.cert + rel.bloom)}
-						<tr>
-							<td>{certLabel(rel.cert)}</td>
-							<td>{bloomLabel(rel.bloom)}</td>
-							<td class="priority priority-{rel.priority}">{priorityLabel(rel.priority)}</td>
-						</tr>
-					{/each}
-				</tbody>
-			</table>
+	{#if node.minimumCert || node.studyPriority}
+		<section class="section relevance-row" aria-label="Cert and study priority">
+			{#if node.minimumCert}
+				<div class="relevance-cell">
+					<dt>Minimum cert</dt>
+					<dd>{certLabel(node.minimumCert)}</dd>
+				</div>
+			{/if}
+			{#if node.studyPriority}
+				<div class="relevance-cell">
+					<dt>Study priority</dt>
+					<dd class="priority priority-{node.studyPriority}">{priorityLabel(node.studyPriority)}</dd>
+				</div>
+			{/if}
 		</section>
 	{/if}
 
@@ -527,37 +514,42 @@ const citedByItems = $derived<CitedByItem[]>(
 		letter-spacing: -0.01em;
 	}
 
-	.relevance {
-		width: 100%;
-		border-collapse: collapse;
+	.relevance-row {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--space-xl);
 		font-size: var(--type-ui-label-size);
 	}
 
-	.relevance th,
-	.relevance td {
-		padding: var(--space-sm) var(--space-sm);
-		text-align: left;
-		border-bottom: 1px solid var(--edge-default);
+	.relevance-cell {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-2xs);
 	}
 
-	.relevance th {
+	.relevance-cell dt {
 		font-size: var(--type-ui-caption-size);
 		text-transform: uppercase;
 		letter-spacing: var(--letter-spacing-caps);
 		color: var(--ink-muted);
-		background: var(--surface-muted);
-	}
-
-	.priority-core {
-		color: var(--action-hazard-hover);
 		font-weight: 600;
 	}
 
-	.priority-supporting {
+	.relevance-cell dd {
+		margin: 0;
+		color: var(--ink-body);
+		font-weight: 600;
+	}
+
+	.priority.priority-critical {
+		color: var(--action-hazard-hover);
+	}
+
+	.priority.priority-standard {
 		color: var(--signal-warning);
 	}
 
-	.priority-elective {
+	.priority.priority-stretch {
 		color: var(--ink-muted);
 	}
 

@@ -21,14 +21,13 @@ import {
 	CARD_STATES,
 	type CardState,
 	type Cert,
+	certsCoveredBy,
 	DEPTH_PREFERENCES,
 	type DepthPreference,
 	type Domain,
 	ENGINE_SCORING,
 	MODE_WEIGHTS,
-	RELEVANCE_PRIORITIES,
 	REVIEW_RATINGS,
-	type RelevancePriority,
 	SESSION_ITEM_KINDS,
 	SESSION_REASON_CODES,
 	SESSION_SLICES,
@@ -37,6 +36,8 @@ import {
 	type SessionReasonCode,
 	type SessionSlice,
 	SLICE_PRIORITY,
+	STUDY_PRIORITIES,
+	type StudyPriority,
 } from '@ab/constants';
 import type { SessionItem } from './schema';
 
@@ -85,8 +86,10 @@ export interface EngineNodeCandidate {
 	nodeId: string;
 	domain: Domain;
 	crossDomains: readonly string[];
-	/** Priority from relevance[] entries matching the user's cert_filter. */
-	priority: RelevancePriority;
+	/** Study-time priority bucket. Defaults to `standard` when the node is untagged. */
+	priority: StudyPriority;
+	/** Lowest cert that requires this node, or null when untagged. */
+	minimumCert: Cert | null;
 	/**
 	 * True when every `requires` prerequisite resolves to a node the user has
 	 * mastered (per knowledge-graph dual-gate isNodeMastered). Engine refuses
@@ -99,7 +102,6 @@ export interface EngineNodeCandidate {
 	 * or node_start records against it).
 	 */
 	unstarted: boolean;
-	certs: readonly Cert[];
 }
 
 /** Aggregate domain-level mastery trend produced by graph BC. */
@@ -302,11 +304,11 @@ function scoreExpandNode(
 	depthPreference: DepthPreference,
 ): number {
 	const priorityWeight =
-		node.priority === RELEVANCE_PRIORITIES.CORE
-			? ENGINE_SCORING.EXPAND.PRIORITY_CORE
-			: node.priority === RELEVANCE_PRIORITIES.SUPPORTING
-				? ENGINE_SCORING.EXPAND.PRIORITY_SUPPORTING
-				: ENGINE_SCORING.EXPAND.PRIORITY_ELECTIVE;
+		node.priority === STUDY_PRIORITIES.CRITICAL
+			? ENGINE_SCORING.EXPAND.PRIORITY_CRITICAL
+			: node.priority === STUDY_PRIORITIES.STANDARD
+				? ENGINE_SCORING.EXPAND.PRIORITY_STANDARD
+				: ENGINE_SCORING.EXPAND.PRIORITY_STRETCH;
 	const focusMatch = filters.focusFilter.includes(node.domain) ? ENGINE_SCORING.EXPAND.FOCUS_DOMAIN_MATCH : 0;
 	const bloomMatch =
 		node.bloomDepth !== null && node.bloomDepth === depthPreference ? ENGINE_SCORING.EXPAND.BLOOM_DEPTH_MATCH : 0;
@@ -350,7 +352,7 @@ function strengthenRepReason(rep: EngineRepCandidate): SessionReasonCode {
 
 function expandNodeReason(node: EngineNodeCandidate, filters: EnginePoolFilters): SessionReasonCode {
 	if (filters.focusFilter.includes(node.domain)) return SESSION_REASON_CODES.EXPAND_FOCUS_MATCH;
-	if (node.priority === RELEVANCE_PRIORITIES.CORE) return SESSION_REASON_CODES.EXPAND_UNSTARTED_PRIORITY;
+	if (node.priority === STUDY_PRIORITIES.CRITICAL) return SESSION_REASON_CODES.EXPAND_UNSTARTED_PRIORITY;
 	return SESSION_REASON_CODES.EXPAND_UNSTARTED_READY;
 }
 
@@ -496,12 +498,25 @@ export async function runEngine(inputs: EngineInputs, now: Date = new Date()): P
 		}
 	}
 
+	// Eligibility set for the current cert filter: a node is eligible if some
+	// goal cert in the filter inherits the node's `minimumCert`. Empty filter
+	// means "no cert goals," which the BC layer (sessions.ts) handles by
+	// passing every tagged candidate through; we still gate untagged nodes
+	// here defensively.
+	const eligibleCerts = new Set<Cert>();
+	for (const c of filters.certFilter) for (const covered of certsCoveredBy(c)) eligibleCerts.add(covered);
+	const passesCertFilter = (n: EngineNodeCandidate): boolean => {
+		if (n.minimumCert === null) return false;
+		if (filters.certFilter.length === 0) return true;
+		return eligibleCerts.has(n.minimumCert);
+	};
+
 	const expandPool: Scored<EngineNodeCandidate>[] = [];
 	for (const n of nodes) {
 		if (!n.unstarted || !n.prerequisitesMet) continue;
 		if (filters.skipDomains.includes(n.domain)) continue;
 		if (filters.skipNodes.includes(n.nodeId)) continue;
-		if (filters.certFilter.length > 0 && !n.certs.some((c) => filters.certFilter.includes(c))) continue;
+		if (!passesCertFilter(n)) continue;
 		const s = scoreExpandNode(n, filters, plan.depthPreference);
 		expandPool.push({
 			candidate: n,
@@ -545,7 +560,7 @@ export async function runEngine(inputs: EngineInputs, now: Date = new Date()): P
 		if (activeSet.has(n.domain)) continue;
 		if (filters.skipDomains.includes(n.domain)) continue;
 		if (filters.skipNodes.includes(n.nodeId)) continue;
-		if (filters.certFilter.length > 0 && !n.certs.some((c) => filters.certFilter.includes(c))) continue;
+		if (!passesCertFilter(n)) continue;
 		const freq = diversifyFrequencyScore(n.domain, filters);
 		if (freq > 0) {
 			diversifyPool.push({

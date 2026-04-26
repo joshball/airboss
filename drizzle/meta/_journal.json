@@ -64,6 +64,13 @@
       "when": 1777155876707,
       "tag": "0008_tearful_bedlam",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1777228000000,
+      "tag": "0009_knowledge_minimum_cert_study_priority",
+      "breakpoints": true
     }
   ]
 }

@@ -44,10 +44,10 @@ export const ENGINE_SCORING = {
 		OVERCONFIDENCE_FACTOR: 0.3,
 	},
 	EXPAND: {
-		/** Knowledge-node priority weight: core / supporting / elective. */
-		PRIORITY_CORE: 1.0,
-		PRIORITY_SUPPORTING: 0.6,
-		PRIORITY_ELECTIVE: 0.2,
+		/** Knowledge-node priority weight: critical / standard / stretch. */
+		PRIORITY_CRITICAL: 1.0,
+		PRIORITY_STANDARD: 0.6,
+		PRIORITY_STRETCH: 0.2,
 		/** Bonus when the node's domain is in the user's focus filter. */
 		FOCUS_DOMAIN_MATCH: 0.4,
 		/** Bonus when the node's bloom depth matches the user's depth preference. */

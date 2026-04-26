@@ -12,10 +12,10 @@ import {
 	NODE_LIFECYCLE_VALUES,
 	type NodeLifecycle,
 	QUERY_PARAMS,
-	RELEVANCE_PRIORITY_LABELS,
-	RELEVANCE_PRIORITY_VALUES,
-	type RelevancePriority,
 	ROUTES,
+	STUDY_PRIORITY_LABELS,
+	STUDY_PRIORITY_VALUES,
+	type StudyPriority,
 } from '@ab/constants';
 import PageHelp from '@ab/help/ui/PageHelp.svelte';
 import type { BrowseListGroup } from '@ab/ui/components/BrowseList.svelte';
@@ -56,7 +56,7 @@ function certLabel(slug: string): string {
 	return (CERT_LABELS as Record<Cert, string>)[slug as Cert] ?? slug;
 }
 function priorityLabel(slug: string): string {
-	return (RELEVANCE_PRIORITY_LABELS as Record<RelevancePriority, string>)[slug as RelevancePriority] ?? humanize(slug);
+	return (STUDY_PRIORITY_LABELS as Record<StudyPriority, string>)[slug as StudyPriority] ?? humanize(slug);
 }
 function masteryPct(score: number): number {
 	return Math.round(score * 100);
@@ -125,23 +125,23 @@ const groupByLabels: Record<KnowledgeGroupByValue, string> = {
 
 type NodeRow = (typeof nodes)[number];
 
-// Sentinels for nodes that don't have a value in the active grouping
-// dimension (e.g. a node with no `certs` when grouping by cert). Keep
-// them distinct per group type so the heading reads naturally.
-const NO_CERT = '__no-cert__';
-const NO_PRIORITY = '__no-priority__';
+// Sentinels for nodes that haven't been tagged yet (`minimumCert` /
+// `studyPriority` are nullable until the author fills them in). Distinct
+// per dimension so the heading reads naturally.
+const UNTAGGED_CERT = '__untagged-cert__';
+const UNTAGGED_PRIORITY = '__untagged-priority__';
 
-function expandKeys(n: NodeRow, by: KnowledgeGroupByValue): string[] {
-	if (by === 'domain') return [n.domain];
-	if (by === 'cert') return n.certs.length > 0 ? n.certs : [NO_CERT];
-	if (by === 'priority') return n.priorities.length > 0 ? n.priorities : [NO_PRIORITY];
-	if (by === 'lifecycle') return [n.lifecycle];
-	return [''];
+function groupKey(n: NodeRow, by: KnowledgeGroupByValue): string {
+	if (by === 'domain') return n.domain;
+	if (by === 'cert') return n.minimumCert ?? UNTAGGED_CERT;
+	if (by === 'priority') return n.studyPriority ?? UNTAGGED_PRIORITY;
+	if (by === 'lifecycle') return n.lifecycle;
+	return '';
 }
 
 function groupHeading(by: KnowledgeGroupByValue, key: string): string {
-	if (key === NO_CERT) return 'No cert';
-	if (key === NO_PRIORITY) return 'No priority';
+	if (key === UNTAGGED_CERT) return 'No minimum cert';
+	if (key === UNTAGGED_PRIORITY) return 'No study priority';
 	if (by === 'domain') return domainLabel(key);
 	if (by === 'cert') return certLabel(key);
 	if (by === 'priority') return priorityLabel(key);
@@ -155,11 +155,10 @@ const groups = $derived.by<BrowseListGroup<NodeRow>[]>(() => {
 	}
 	const map = new Map<string, NodeRow[]>();
 	for (const n of nodes as NodeRow[]) {
-		for (const k of expandKeys(n, groupBy)) {
-			const list = map.get(k) ?? [];
-			list.push(n);
-			map.set(k, list);
-		}
+		const k = groupKey(n, groupBy);
+		const list = map.get(k) ?? [];
+		list.push(n);
+		map.set(k, list);
 	}
 	return [...map.entries()]
 		.map(([k, items]) => ({ key: k, label: groupHeading(groupBy, k), items }))
@@ -218,7 +217,7 @@ const groups = $derived.by<BrowseListGroup<NodeRow>[]>(() => {
 				<label for="f-priority">Priority</label>
 				<select id="f-priority" name={QUERY_PARAMS.PRIORITY} value={filters.priority ?? ''}>
 					<option value="">All</option>
-					{#each RELEVANCE_PRIORITY_VALUES as p (p)}
+					{#each STUDY_PRIORITY_VALUES as p (p)}
 						<option value={p}>{priorityLabel(p)}{fmtCount(facets?.priority?.[p])}</option>
 					{/each}
 				</select>
@@ -287,12 +286,12 @@ const groups = $derived.by<BrowseListGroup<NodeRow>[]>(() => {
 					{/snippet}
 					{#snippet meta()}
 						<span class="badge lifecycle lifecycle-{n.lifecycle}">{lifecycleLabel(n.lifecycle)}</span>
-						{#each n.certs as c (c)}
-							<span class="badge cert">{certLabel(c)}</span>
-						{/each}
-						{#each n.priorities as p (p)}
-							<span class="badge priority priority-{p}">{priorityLabel(p)}</span>
-						{/each}
+						{#if n.minimumCert}
+							<span class="badge cert">{certLabel(n.minimumCert)}+</span>
+						{/if}
+						{#if n.studyPriority}
+							<span class="badge priority priority-{n.studyPriority}">{priorityLabel(n.studyPriority)}</span>
+						{/if}
 						{#if n.estimatedTimeMinutes}
 							<span class="badge time">{n.estimatedTimeMinutes}m</span>
 						{/if}
@@ -429,19 +428,19 @@ const groups = $derived.by<BrowseListGroup<NodeRow>[]>(() => {
 		border-color: var(--signal-success-edge);
 	}
 
-	.badge.priority-must-know {
+	.badge.priority-critical {
 		color: var(--action-hazard-hover);
 		background: var(--action-hazard-wash);
 		border-color: var(--action-hazard-edge);
 	}
 
-	.badge.priority-should-know {
+	.badge.priority-standard {
 		color: var(--signal-warning);
 		background: var(--signal-warning-wash);
 		border-color: var(--signal-warning-edge);
 	}
 
-	.badge.priority-nice-to-know {
+	.badge.priority-stretch {
 		color: var(--ink-muted);
 		background: var(--surface-sunken);
 	}
