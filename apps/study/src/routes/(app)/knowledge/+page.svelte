@@ -29,8 +29,8 @@ import Pager from '@ab/ui/components/Pager.svelte';
 import ResultSummary from '@ab/ui/components/ResultSummary.svelte';
 import { buildQuery, humanize } from '@ab/utils';
 import { goto } from '$app/navigation';
-import { KNOWLEDGE_GROUP_BY_VALUES, type KnowledgeGroupByValue } from './group-by';
 import type { PageData } from './$types';
+import { KNOWLEDGE_GROUP_BY_VALUES, type KnowledgeGroupByValue } from './group-by';
 
 let { data }: { data: PageData } = $props();
 
