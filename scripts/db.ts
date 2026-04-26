@@ -120,6 +120,23 @@ async function doReset(): Promise<void> {
 		'-c',
 		`CREATE DATABASE ${DB_NAME};`,
 	]);
+	// pg_trgm is a contrib extension; the schema declares GIN trigram indexes on
+	// study.card (front, back) using gin_trgm_ops. Drizzle-kit push fails the
+	// CREATE INDEX if the extension is not present, so install it before push.
+	// The extension is also re-declared at the top of drizzle/0000_initial.sql
+	// so `bun run db migrate` against an empty DB works the same way.
+	await run([
+		'docker',
+		'exec',
+		CONTAINER,
+		'psql',
+		'-U',
+		DB_USER,
+		'-d',
+		DB_NAME,
+		'-c',
+		'CREATE EXTENSION IF NOT EXISTS pg_trgm;',
+	]);
 	await run(['bunx', 'drizzle-kit', 'push']);
 	await run(['bun', 'scripts/db/seed-all.ts']);
 	// Final summary so the operator sees what landed.
