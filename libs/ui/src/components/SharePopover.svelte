@@ -105,38 +105,40 @@ $effect(() => {
 {#if open}
 	<!-- svelte-ignore a11y_click_events_have_key_events -->
 	<!-- svelte-ignore a11y_no_static_element_interactions -->
-	<div class="scrim" onpointerdown={handleScrim} onkeydown={handleKeyDown}>
+	<div class="scrim" onpointerdown={handleScrim} onkeydown={handleKeyDown} data-testid="sharepopover-scrim">
 		<div
 			bind:this={panelEl}
 			class="panel"
 			role="dialog"
 			aria-modal="true"
 			aria-label="Share this card"
+			data-testid="sharepopover-root"
+			data-state={copied ? 'copied' : copyError ? 'error' : 'idle'}
 		>
 			<header class="hd">
-				<h2>Share this card</h2>
-				<button type="button" class="close" aria-label="Close" onclick={close}>&times;</button>
+				<h2 data-testid="sharepopover-title">Share this card</h2>
+				<button type="button" class="close" aria-label="Close" data-testid="sharepopover-close" onclick={close}>&times;</button>
 			</header>
 
 			<div class="actions">
-				<button type="button" class="action" onclick={copy} aria-live="polite">
+				<button type="button" class="action" onclick={copy} aria-live="polite" data-testid="sharepopover-copy">
 					<span class="action-label">{copied ? 'Copied!' : 'Copy card link'}</span>
 					<span class="action-desc">
 						{copied ? 'The public card URL is on your clipboard.' : 'Public link to this card.'}
 					</span>
 				</button>
 
-				<button type="button" class="action" onclick={report}>
+				<button type="button" class="action" onclick={report} data-testid="sharepopover-report">
 					<span class="action-label">Report this card</span>
 					<span class="action-desc">Flag a problem; we'll ask you for a comment.</span>
 				</button>
 			</div>
 
 			{#if copyError}
-				<p class="error" role="alert">{copyError}</p>
+				<p class="error" role="alert" data-testid="sharepopover-error">{copyError}</p>
 			{/if}
 
-			<p class="url" aria-label="Card link preview">{cardPublicUrl}</p>
+			<p class="url" aria-label="Card link preview" data-testid="sharepopover-url">{cardPublicUrl}</p>
 		</div>
 	</div>
 {/if}

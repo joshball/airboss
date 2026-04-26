@@ -166,28 +166,36 @@ $effect(() => {
 {#if open}
 	<!-- svelte-ignore a11y_click_events_have_key_events -->
 	<!-- svelte-ignore a11y_no_static_element_interactions -->
-	<div class="scrim" onpointerdown={handleScrim} onkeydown={handleKeyDown}>
+	<div class="scrim" onpointerdown={handleScrim} onkeydown={handleKeyDown} data-testid="snoozereasonpopover-scrim">
 		<div
 			bind:this={panelEl}
 			class="panel"
 			role="dialog"
 			aria-modal="true"
 			aria-label="Snooze this card"
+			data-testid="snoozereasonpopover-root"
+			data-selected-reason={selectedReason}
 		>
 			<header class="hd">
-				<h2 id="snooze-title">Snooze this card</h2>
-				<button type="button" class="close" aria-label="Close" onclick={close}>&times;</button>
+				<h2 id="snooze-title" data-testid="snoozereasonpopover-title">Snooze this card</h2>
+				<button type="button" class="close" aria-label="Close" data-testid="snoozereasonpopover-close" onclick={close}>&times;</button>
 			</header>
-			<form onsubmit={submit}>
-				<fieldset class="reasons">
+			<form onsubmit={submit} data-testid="snoozereasonpopover-form">
+				<fieldset class="reasons" data-testid="snoozereasonpopover-reasons">
 					<legend class="visually-hidden">Reason</legend>
 					{#each SNOOZE_REASON_VALUES as reason (reason)}
-						<label class="reason-row" class:is-selected={selectedReason === reason}>
+						<label
+							class="reason-row"
+							class:is-selected={selectedReason === reason}
+							data-testid={`snoozereasonpopover-reason-${reason}`}
+							data-state={selectedReason === reason ? 'selected' : 'idle'}
+						>
 							<input
 								type="radio"
 								name="reason"
 								value={reason}
 								checked={selectedReason === reason}
+								data-testid={`snoozereasonpopover-reason-input-${reason}`}
 								onchange={() => pickReason(reason)}
 							/>
 							<span class="reason-body">
@@ -225,7 +233,7 @@ $effect(() => {
 					</fieldset>
 				{/if}
 
-				<label class="comment">
+				<label class="comment" data-testid="snoozereasonpopover-comment">
 					<span class="comment-label">
 						Comment{requiresComment ? ' (required)' : ' (optional)'}
 					</span>
@@ -233,16 +241,17 @@ $effect(() => {
 						bind:value={comment}
 						rows="3"
 						placeholder={requiresComment ? 'Why are you snoozing this card?' : 'Optional note'}
+						data-testid="snoozereasonpopover-comment-input"
 					></textarea>
 				</label>
 
 				{#if submitError}
-					<p class="error" role="alert">{submitError}</p>
+					<p class="error" role="alert" data-testid="snoozereasonpopover-error">{submitError}</p>
 				{/if}
 
 				<footer class="ft">
-					<button type="button" class="btn ghost" onclick={close}>Cancel</button>
-					<button type="submit" class="btn primary">Snooze</button>
+					<button type="button" class="btn ghost" data-testid="snoozereasonpopover-cancel" onclick={close}>Cancel</button>
+					<button type="submit" class="btn primary" data-testid="snoozereasonpopover-submit">Snooze</button>
 				</footer>
 			</form>
 		</div>

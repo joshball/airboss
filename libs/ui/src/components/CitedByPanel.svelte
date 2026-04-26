@@ -40,26 +40,31 @@ let { items, heading, emptyMessage = 'Not yet cited by other content.', headingL
 const resolvedHeading = $derived(heading ?? `Cited by (${items.length})`);
 </script>
 
-<section class="cited-by" aria-label="Cited by">
+<section
+	class="cited-by"
+	aria-label="Cited by"
+	data-testid="citedbypanel-root"
+	data-state={items.length === 0 ? 'empty' : 'idle'}
+>
 	{#if headingLevel === 2}
-		<h2>{resolvedHeading}</h2>
+		<h2 data-testid="citedbypanel-heading">{resolvedHeading}</h2>
 	{:else}
-		<h3>{resolvedHeading}</h3>
+		<h3 data-testid="citedbypanel-heading">{resolvedHeading}</h3>
 	{/if}
 	{#if items.length === 0}
-		<p class="cited-by-empty">{emptyMessage}</p>
+		<p class="cited-by-empty" data-testid="citedbypanel-empty">{emptyMessage}</p>
 	{:else}
-		<ul class="cited-by-list">
+		<ul class="cited-by-list" data-testid="citedbypanel-list">
 			{#each items as item (item.id)}
-				<li class="cited-by-row">
+				<li class="cited-by-row" data-testid={`citedbypanel-row-${item.id}`} data-state={item.href ? 'linked' : 'missing'}>
 					<span class="cited-by-type">{item.typeLabel}</span>
 					{#if item.href}
-						<a class="cited-by-label" href={item.href}>{item.label}</a>
+						<a class="cited-by-label" href={item.href} data-testid={`citedbypanel-label-${item.id}`}>{item.label}</a>
 					{:else}
-						<span class="cited-by-label cited-by-missing">{item.label}</span>
+						<span class="cited-by-label cited-by-missing" data-testid={`citedbypanel-label-${item.id}`}>{item.label}</span>
 					{/if}
 					{#if item.context}
-						<span class="cited-by-context">"{item.context}"</span>
+						<span class="cited-by-context" data-testid={`citedbypanel-context-${item.id}`}>"{item.context}"</span>
 					{/if}
 				</li>
 			{/each}

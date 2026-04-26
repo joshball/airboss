@@ -175,7 +175,7 @@ $effect(() => {
 });
 </script>
 
-<span class="infotip">
+<span class="infotip" data-testid="infotip-root" data-state={open ? 'open' : 'closed'}>
 	<button
 		bind:this={triggerEl}
 		type="button"
@@ -185,6 +185,7 @@ $effect(() => {
 		aria-controls={popoverId}
 		aria-label={triggerLabel}
 		title={triggerLabel}
+		data-testid="infotip-trigger"
 		onclick={handleClick}
 		onkeydown={handleTriggerKeyDown}
 		onpointerenter={handlePointerEnter}
@@ -208,14 +209,15 @@ $effect(() => {
 			aria-modal="false"
 			aria-labelledby={titleId}
 			tabindex="-1"
+			data-testid="infotip-popover"
 			onkeydown={handlePopoverKeyDown}
 			onpointerenter={handlePointerEnter}
 			onpointerleave={handlePointerLeave}
 		>
-			<div class="title" id={titleId}>{term}</div>
-			<p class="body">{definition}</p>
+			<div class="title" id={titleId} data-testid="infotip-title">{term}</div>
+			<p class="body" data-testid="infotip-body">{definition}</p>
 			{#if learnMoreHref}
-				<a class="learn-more" href={learnMoreHref}>Learn more</a>
+				<a class="learn-more" href={learnMoreHref} data-testid="infotip-learnmore">Learn more</a>
 			{/if}
 		</div>
 	{/if}
