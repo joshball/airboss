@@ -1,0 +1,127 @@
+/**
+ * Citation shapes carried on `knowledge_node.references` JSONB array entries.
+ *
+ * Two shapes coexist on the same column:
+ *
+ * 1. {@link LegacyCitation} -- the original freeform shape used by every node
+ *    authored before the handbook-ingestion-and-reader WP. Survives untouched;
+ *    the cert-syllabus WP runs the migration that converts these to structured
+ *    citations once the syllabus tree is known.
+ * 2. {@link StructuredCitation} -- discriminated by `kind`. v1 only resolves
+ *    `kind === 'handbook'`; every other kind is a valid storage shape that
+ *    `resolveCitationUrl` returns `null` for until the cert-syllabus WP fills
+ *    in the per-kind resolvers.
+ *
+ * The build script (`bun run db build`) narrows on the presence of a `kind`
+ * field to decide which shape it parsed. Both shapes round-trip through the
+ * same JSONB column.
+ *
+ * See `docs/work-packages/handbook-ingestion-and-reader/spec.md` "Bidirectional
+ * citation upgrade -- knowledge_node.references JSONB shape" for the contract.
+ */
+
+/**
+ * Pre-WP freeform citation. Three string fields, no resolver. The reader
+ * renders these as plain text; click-through is not available until the
+ * citation is converted to a {@link StructuredCitation}.
+ */
+export interface LegacyCitation {
+	source: string;
+	detail: string;
+	note: string;
+}
+
+/**
+ * Structured citation. Discriminated by `kind`. Each kind carries its own
+ * locator shape; the resolver per kind is defined in `@ab/bc-study handbooks`.
+ *
+ * `reference_id` always points at a `study.reference` row. Locator fields are
+ * kind-specific because each reference family has different addressing (CFR
+ * uses title/part/section; AC uses paragraph; ACS uses area/task/element).
+ */
+export type StructuredCitation =
+	| {
+			kind: 'handbook';
+			reference_id: string;
+			locator: {
+				chapter: number;
+				section?: number;
+				subsection?: number;
+				/** FAA pagination is hyphenated, e.g. `12-7`. Stored as text. */
+				page_start?: string;
+				page_end?: string;
+			};
+			note?: string;
+	  }
+	| {
+			kind: 'cfr';
+			reference_id: string;
+			locator: {
+				title: number;
+				part: number;
+				/** Section number; may include subparts like `175(b)(2)`. */
+				section: string;
+			};
+			note?: string;
+	  }
+	| {
+			kind: 'ac';
+			reference_id: string;
+			locator: {
+				paragraph?: string;
+			};
+			note?: string;
+	  }
+	| {
+			kind: 'acs' | 'pts';
+			reference_id: string;
+			locator: {
+				area?: string;
+				task?: string;
+				element?: string;
+			};
+			note?: string;
+	  }
+	| {
+			kind: 'aim';
+			reference_id: string;
+			locator: {
+				/** AIM paragraph code, e.g. `5-1-7`. */
+				paragraph?: string;
+			};
+			note?: string;
+	  }
+	| {
+			kind: 'pcg';
+			reference_id: string;
+			locator: {
+				term?: string;
+			};
+			note?: string;
+	  }
+	| {
+			kind: 'ntsb' | 'poh' | 'other';
+			reference_id: string;
+			locator: {
+				detail?: string;
+			};
+			note?: string;
+	  };
+
+/** Either citation shape -- legacy freeform or structured. */
+export type Citation = LegacyCitation | StructuredCitation;
+
+/**
+ * Type guard distinguishing structured citations from legacy freeform ones.
+ * Structured citations carry a `kind` discriminator; legacy ones do not.
+ */
+export function isStructuredCitation(citation: Citation): citation is StructuredCitation {
+	return typeof (citation as { kind?: unknown }).kind === 'string';
+}
+
+/**
+ * Type guard for handbook-kind citations specifically. v1 resolver target.
+ */
+export function isHandbookCitation(citation: Citation): citation is Extract<StructuredCitation, { kind: 'handbook' }> {
+	return isStructuredCitation(citation) && citation.kind === 'handbook';
+}
