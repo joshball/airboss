@@ -29,6 +29,15 @@ const aliases = {
 	'@ab/hangar-sync': resolve('./libs/hangar-sync/src/index.ts'),
 };
 
+// `$app/state` is a SvelteKit runtime module. The standalone DOM project
+// doesn't ship SvelteKit, so we point library DOM tests at a static stub
+// that exposes the same shape (page / navigating / updated). Apps still
+// resolve the real module via their own svelte.config.js / vite.config.ts.
+const domAliases = {
+	...aliases,
+	$app: resolve('./libs/ui/__tests__/stubs/app'),
+};
+
 // Two-project workspace:
 //   - `unit-node`: every existing `.test.ts` runs in a node env. BC/lib
 //     logic, server endpoints, schema codegen -- none of this needs a
@@ -75,7 +84,7 @@ export default defineConfig({
 			},
 			{
 				plugins: [svelte({ hot: false })],
-				resolve: { alias: aliases, conditions: ['browser'] },
+				resolve: { alias: domAliases, conditions: ['browser'] },
 				test: {
 					name: 'unit-dom',
 					environment: 'happy-dom',
