@@ -1,43 +1,98 @@
+---
+title: Hangar Vision
+product: hangar
+type: vision
+status: current
+date: 2026-04-26
+supersedes: ../../.archive/firc-era/products/hangar/VISION.md
+---
+
 # Hangar Vision
 
-## What It Is
+The operator app for airboss. Where the human running the platform does work that learners and pilots never see.
 
-The command center for FIRC Boss. One app where you build the course, manage FAA compliance, organize reference documents, and track all product work.
+## What it is
 
-## Who It's For
+One place to author content, manage people, and run platform operations -- across every learner-facing surface (study, spatial, audio, reflect, avionics, future firc). Hangar isn't tied to a content theme; it's the upstream surface every other surface depends on.
 
-- **Content authors** -- writing scenarios, modules, questions
-- **Course managers** -- structuring the curriculum, mapping to FAA requirements
-- **Compliance officers** -- maintaining traceability, generating FAA packages, tracking regulatory changes
-- **Product leads** -- prioritizing work across all apps, tracking progress
+## Who it's for
 
-Today these are the same person. The system should work for one person doing everything and scale to a team with distinct roles.
+| Audience              | What they do here                                                              |
+| --------------------- | ------------------------------------------------------------------------------ |
+| Joshua (today)        | Everything -- author, admin, ops                                               |
+| Future contributors   | Author scenarios, cards, routes, glossary entries (open-source posture)        |
+| Future platform admin | User management, moderation, audit review                                      |
 
-## What It Does
+Today these are one person. The system should work for one person doing everything and scale to a team with distinct roles.
 
-Five things:
+## What it does
 
-1. **Course content management** -- Create and edit scenarios, modules, competencies, questions. Full content lifecycle: draft, review, validate, approve, publish. Every edit versioned and auditable.
+Three areas:
 
-2. **FAA compliance management** -- Traceability matrix, TCO, FAA package generation. Automated compliance checks. Submission tracking. Regulatory change monitoring.
+| Area        | What lives here                                                                                       | Status                            |
+| ----------- | ----------------------------------------------------------------------------------------------------- | --------------------------------- |
+| **Content** | Sources, glossary, scenarios, cards, routes, modules -- the upstream of every learner surface         | Sources + glossary shipped        |
+| **People**  | Users, sessions, invites, bans, audit-by-actor                                                        | Read-only `/users` shipped        |
+| **System**  | Job queue, audit log, diagnostics, future feature flags                                               | Jobs + audit-ping shipped         |
 
-3. **Reference document library** -- Store FAA documents, ACs, CFRs, handbooks, NTSB reports. Link them to course content. Track which versions we're building against.
+Each area is a section in the top nav. Sub-pages live underneath.
 
-4. **Product & task management** -- Boards, backlogs, task tracking across all apps (sim, hangar, ops, engine, content). Content tasks link directly to content items.
+## What it serves
 
-5. **Content analytics** -- Coverage dashboards, scenario inventory, question bank depth, time allocation projections.
+```text
+                    learner surfaces
+                    ┌─ study     (cards, quizzes, reps)
+                    ├─ spatial   (route, airport, airspace)
+hangar ──┬── feeds ─┼─ audio     (NTSB, drills, ATC)
+(content)│          ├─ reflect   (journals, heatmaps)
+         │          ├─ avionics  (panel trainer)
+         │          └─ firc      (course, when migrated)
+         │
+         └── operates: users, sessions, audit, jobs (across all surfaces)
+```
 
-## What It's NOT
+Authoring once feeds many surfaces. A scenario authored in hangar runs in study as a card and in audio as a narrative drill. Single-source-of-truth, surface-specific rendering.
 
-- Not the learner experience (that's sim)
-- Not user/enrollment management (that's ops)
-- Not a general-purpose project management tool -- just enough task tracking to know what's next
-- Not a flight simulator editor -- scenarios are defined as data (tick scripts, student models, parameters), not visual simulations
+## What it's NOT
 
-## Design Principles
+- **Not a learner experience.** Learners use study/spatial/audio/etc.
+- **Not a project management tool.** GitHub Issues / Linear handle that better. A future internal task board may live here, but only if it earns its place by serving content workflows the issue tracker can't.
+- **Not an FAA-submission tool by default.** Submission machinery is dormant -- see "Dormant: FIRC compliance" below.
 
-- **Audit everything.** Every content change is tracked, timestamped, and attributable. This is a regulated product.
-- **Validate continuously.** Don't wait for submission time to find out you're missing TSA coverage. Show compliance state in real time.
-- **Link everything.** A scenario links to competencies, which link to FAA topics, which link to the traceability matrix. Navigate in any direction.
-- **One place for what's next.** Tasks, content work, compliance work -- all visible from one dashboard.
-- **Simple until proven otherwise.** Task boards are kanban columns, not workflow engines. Content editing is forms and fields, not a CMS. Add complexity only when the simple version fails.
+## Design principles
+
+- **Audit everything.** Every authoring action and every admin action is tracked. Carries from FIRC-era requirements; still load-bearing.
+- **Link everything.** Sources cite glossary terms; scenarios cite sources; cards cite scenarios. Navigate any direction.
+- **Single operator-mental-model across surfaces.** One author flow, regardless of whether the artifact ends up in study or spatial or audio.
+- **Validate continuously.** Citation drift, broken wiki-links, stale references caught on every change, not at submission time.
+- **Simple until proven otherwise.** Form-based editing over CMS sophistication. Markdown over rich-text. Add complexity only when the simple version fails.
+
+## Roadmap
+
+Per-area phasing. No fixed dates.
+
+| Area    | Now                          | Next                                                         | Later                                            |
+| ------- | ---------------------------- | ------------------------------------------------------------ | ------------------------------------------------ |
+| Content | Sources, Glossary            | Scenarios authoring, Cards authoring                         | Routes, Modules, Cross-surface authoring shell   |
+| People  | Read-only `/users`           | Role editing, ban/unban, session revoke, invite flow         | Per-user activity heatmap, content attribution   |
+| System  | Jobs, audit-ping diagnostic  | Real audit explorer (filter by actor / target / op / window) | Feature flags, diagnostics dashboard, queue ops  |
+
+The dashboard at `/` aggregates one stat per area. Each area gets its own surface as features land.
+
+## Dormant: FIRC compliance
+
+The FIRC-era hangar carried a large FAA-submission surface: TCO editor, traceability matrix, FAA package generator, submission tracker, regulatory-change monitor, content lifecycle states, content-validation engine, content versioning UI. Per [PIVOT.md](../../platform/PIVOT.md), this is **dormant, not deleted**. The schema rigor stays; the UI is archived.
+
+| Where the dormant work lives                           | When it wakes up                                              |
+| ------------------------------------------------------ | ------------------------------------------------------------- |
+| [.archive/firc-era/products/hangar/](../../.archive/firc-era/products/hangar/) | A FIRC content pack (or any Part 141 / WINGS module) ships    |
+| [ADR 017](../../decisions/017-firc-compliance-dormant.md) | The decision record explaining what was dormanted and why      |
+
+When that day comes: restore from the archive, integrate against current platform conventions, and resume.
+
+## References
+
+- [docs/platform/PIVOT.md](../../platform/PIVOT.md) -- why hangar's scope changed
+- [docs/platform/MULTI_PRODUCT_ARCHITECTURE.md](../../platform/MULTI_PRODUCT_ARCHITECTURE.md) -- surface architecture; hangar is upstream of every learner app
+- [ADR 017 -- FIRC compliance dormant](../../decisions/017-firc-compliance-dormant.md) -- archival decision and reawakening trigger
+- [.archive/firc-era/products/hangar/VISION.md](../../.archive/firc-era/products/hangar/VISION.md) -- the prior FIRC-era vision
