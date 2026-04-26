@@ -14,6 +14,7 @@ export {
 	generateKnowledgeNodeProgressId,
 	generateReviewId,
 	generateReviewSessionId,
+	generateSavedDeckId,
 	generateScenarioId,
 	generateSessionId,
 	generateSessionItemResultId,

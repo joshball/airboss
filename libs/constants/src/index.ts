@@ -342,6 +342,8 @@ export {
 	type ReviewPhase,
 	type ReviewRating,
 	type ReviewSessionStatus,
+	SAVED_DECK_COPY,
+	SAVED_DECK_LABEL_MAX_LENGTH,
 	SCENARIO_OPTIONS_MAX,
 	SCENARIO_OPTIONS_MIN,
 	SCENARIO_STATUS_VALUES,

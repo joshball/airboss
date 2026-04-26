@@ -27,6 +27,12 @@ export const generateSessionId = (): string => createId('ses');
 export const generateSessionItemResultId = (): string => createId('sir');
 /** Memory-review session (review-sessions-url layer a "Resume"). */
 export const generateReviewSessionId = (): string => createId('mrs');
+/**
+ * Saved-deck row (study BC). One row per (user, deckHash) when the learner
+ * has renamed or dismissed the implicit Saved Decks entry derived from
+ * memory-review sessions.
+ */
+export const generateSavedDeckId = (): string => createId('sdck');
 
 // Audit BC -- generic change log, one row per mutation attempted through
 // `auditWrite()` in libs/audit/src/log.ts.

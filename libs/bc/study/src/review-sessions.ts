@@ -24,6 +24,7 @@ import { and, count, desc, eq, inArray, isNotNull, lt, max } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import { getDueCards } from './cards';
 import { computeDeckHash } from './deck-spec';
+import { getSavedDeckOverlays } from './saved-decks';
 import {
 	card,
 	cardState,
@@ -517,6 +518,12 @@ export interface SavedDeckSummary {
 	deckSpec: ReviewSessionDeckSpec;
 	lastVisitedAt: Date;
 	sessionCount: number;
+	/**
+	 * Learner-supplied display name overriding the auto-derived summary, or
+	 * `null` when the learner hasn't renamed the deck. The dashboard falls
+	 * back to `summarizeDeckSpec(deckSpec)` when this is null.
+	 */
+	label: string | null;
 	resumable: {
 		sessionId: string;
 		status: ReviewSessionStatus;
@@ -529,6 +536,10 @@ export interface SavedDeckSummary {
  * Aggregate the user's saved decks. Saved decks are implicit: any
  * `memory_review_session` row contributes its `deck_hash` to the list, so
  * running a session with non-default filters automatically saves the deck.
+ *
+ * Joins the `study.saved_deck` overlay so per-deck rename / dismiss applies:
+ * decks with `dismissed_at` set are filtered out, and a non-null `label`
+ * replaces the auto-derived summary on the dashboard row.
  */
 export async function listSavedDecks(userId: string, db: Db = defaultDb): Promise<SavedDeckSummary[]> {
 	const aggregateRows = await db
@@ -567,16 +578,29 @@ export async function listSavedDecks(userId: string, db: Db = defaultDb): Promis
 		}
 	}
 
-	const summaries: SavedDeckSummary[] = aggregateRows.map((agg) => {
+	// Per-(user, hash) overlay: label override + dismissal. Fetched once
+	// after the aggregate so a user with no overlay rows pays nothing
+	// beyond the existing two queries.
+	const overlays = await getSavedDeckOverlays(userId, db);
+
+	const summaries: SavedDeckSummary[] = [];
+	for (const agg of aggregateRows) {
+		const overlay = overlays.get(agg.deckHash);
+		// Dismissed decks are hidden from the dashboard list. Re-running the
+		// same filter (or a Rename) clears `dismissed_at` and the entry
+		// returns -- see `renameSavedDeck` / `?deck=<...>` resolver.
+		if (overlay?.dismissedAt) continue;
+
 		const resumableRow = resumableByHash.get(agg.deckHash);
 		// `max()` over a non-empty group never returns null but TS sees it as
 		// nullable; default to epoch as a defensive guard.
 		const lastVisitedAt = agg.lastVisitedAt ?? new Date(0);
-		return {
+		summaries.push({
 			deckHash: agg.deckHash,
 			deckSpec: latestSpecByHash.get(agg.deckHash) ?? ({} as ReviewSessionDeckSpec),
 			lastVisitedAt,
 			sessionCount: Number(agg.sessionCount),
+			label: overlay?.label ?? null,
 			resumable: resumableRow
 				? {
 						sessionId: resumableRow.id,
@@ -585,8 +609,8 @@ export async function listSavedDecks(userId: string, db: Db = defaultDb): Promis
 						totalCards: resumableRow.cardIdList.length,
 					}
 				: null,
-		};
-	});
+		});
+	}
 
 	summaries.sort((a, b) => b.lastVisitedAt.getTime() - a.lastVisitedAt.getTime());
 	return summaries;
