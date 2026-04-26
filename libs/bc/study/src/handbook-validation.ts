@@ -100,6 +100,7 @@ export const handbookManifestWarningSchema = z.object({
 		'figure-without-caption',
 		'caption-without-figure',
 		'table-merge-failed',
+		'table-empty',
 		'cross-reference-unresolved',
 	]),
 	section_code: z.string().regex(SECTION_CODE_REGEX).optional(),
@@ -123,7 +124,10 @@ export const handbookManifestSchema = z.object({
 		.string()
 		.regex(/^[0-9a-f]{64}$/i)
 		.optional(),
-	fetched_at: z.string().datetime(),
+	// Allow ISO 8601 timestamps with timezone offsets (`+00:00`) -- Python's
+	// `datetime.now(tz=UTC).isoformat()` produces this; Zod's `.datetime()`
+	// rejects it by default. `offset: true` opts in.
+	fetched_at: z.string().datetime({ offset: true }),
 	sections: z.array(handbookManifestSectionSchema).min(1),
 	figures: z.array(handbookManifestFigureSchema),
 	warnings: z.array(handbookManifestWarningSchema).default([]),
