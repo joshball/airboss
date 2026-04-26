@@ -140,7 +140,7 @@ export interface EnginePoolFilters {
 
 ## Authored Mapping
 
-The full table for the 13 graded scenarios. Knowledge node slugs follow the existing `<domain-prefix>-<topic>` convention used in seeded knowledge nodes ([course/L02-Knowledge](../../../course/L02-Knowledge/) and the sample slugs in `course/knowledge/`). Where a node does not yet exist, the seed validator will fail and the engineer either authors the node or removes the link before merge.
+The full table for the 13 graded scenarios. Knowledge node slugs follow the existing `<domain-prefix>-<topic>` convention used in seeded knowledge nodes ([course/knowledge/](../../../course/knowledge/); the FIRC-era research dossiers at [course/firc/L02-Knowledge/](../../../course/firc/L02-Knowledge/) are reference-only). Where a node does not yet exist, the seed validator will fail and the engineer either authors the node or removes the link before merge.
 
 | Scenario                       | Node id                                       | Weight | Rationale                                                                |
 | ------------------------------ | --------------------------------------------- | ------ | ------------------------------------------------------------------------ |

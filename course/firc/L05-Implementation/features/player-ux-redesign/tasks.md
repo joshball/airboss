@@ -15,7 +15,7 @@ status: unread
 - [ ] Read `libs/types/src/engine-types.ts` -- understand ImmersionTick, TickScript, RunState
 - [ ] Read `libs/ui/src/components/InterventionLadder.svelte` -- understand current ladder UI
 - [ ] Read `libs/ui/src/components/SituationCard.svelte` -- understand current briefing card
-- [ ] Read `course/L05-Implementation/features/instrument-scan/spec.md` -- understand layout constraint
+- [ ] Read `course/firc/L05-Implementation/features/instrument-scan/spec.md` -- understand layout constraint
 - [ ] Read `scripts/db/seed-e2e-demo.ts` -- understand seed data shape
 
 ## Implementation

@@ -1,12 +1,12 @@
 # Curriculum Roadmap
 
-What gets written, reviewed, and entered, in what order. Parallel to the [Platform Roadmap](../../docs/platform/ROADMAP.md) -- these tracks have specific handoff points but don't fully block each other.
+What gets written, reviewed, and entered, in what order. Parallel to the [Platform Roadmap](../../../docs/platform/ROADMAP.md) -- these tracks have specific handoff points but don't fully block each other.
 
 ## Current Work
 
 Active phase: **C1.5 -- Module Design Docs**
 Next tasks: see Phase C1.5 below
-**Status:** C3 complete (scenarios + questions seeded). C4 deferred per [platform pivot](../../docs/platform/PIVOT.md). Module 1 design docs complete; modules 2-6 need the same treatment.
+**Status:** C3 complete (scenarios + questions seeded). C4 deferred per [platform pivot](../../../docs/platform/PIVOT.md). Module 1 design docs complete; modules 2-6 need the same treatment.
 
 ## Maintenance
 
@@ -52,7 +52,7 @@ Structural decisions. All platform-independent.
 
 ## Phase C1 -- Scenario Scripts `[DONE]`
 
-All 43+ scenario scripts written with complete tick scripts, student models, competency links, and FAA topic tags. Scripts live in `course/L05-Implementation/scenarios/module-{1-6}/`.
+All 43+ scenario scripts written with complete tick scripts, student models, competency links, and FAA topic tags. Scripts live in `course/firc/L05-Implementation/scenarios/module-{1-6}/`.
 
 - [x] Module 1 -- Instructor Foundations & Modern Cockpit (10 scenarios -- expanded from 7)
 - [x] Module 2 -- Instructional Effectiveness & Safety Culture (8 scenarios)
@@ -144,7 +144,7 @@ See [COURSE_DESIGN.md](COURSE_DESIGN.md) "Modules 2-6 Work Remaining" for module
 
 ## Phase C4 -- FAA Package `[DEFERRED]`
 
-Deferred per [platform pivot](../../docs/platform/PIVOT.md) (2026-04-14). FIRC is no longer the primary product; FAA submission is paused indefinitely. The validation tooling and content remain valuable if a FIRC module is later built on the pilot performance platform.
+Deferred per [platform pivot](../../../docs/platform/PIVOT.md) (2026-04-14). FIRC is no longer the primary product; FAA submission is paused indefinitely. The validation tooling and content remain valuable if a FIRC module is later built on the pilot performance platform.
 
 - [x] Validate topic coverage >= 45 min each, total >= 16 hours -- `bun run faa validate`
 - [x] Validate question bank >= 60, no true/false -- `bun run faa validate`
