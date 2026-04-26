@@ -2,6 +2,10 @@
 
 Product requirements for the sim app. Each feature links to its spec in `features/`.
 
+## Sim grading feeds the study scheduler
+
+Recent sim weakness lifts the study cards / reps tied to the knowledge each scenario exercises. See work package: [sim-card-mapping](../../work-packages/sim-card-mapping/spec.md).
+
 ## Phase 2 Features
 
 | #   | Feature                                          | Size   | Status      | Spec                                       |
