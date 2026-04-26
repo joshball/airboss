@@ -16,9 +16,21 @@ expected_pages: null
 # page number. PHAK ships a ~20-page Roman-numeral preface; tune after the
 # first run if the printed page numbers in the manifest are off.
 page_offset: 0
-# Hand-curated outline overrides for sections the FAA's PDF outline mangles.
+# PHAK 25C ships per-chapter PDFs concatenated together; the bookmark tree
+# lists the file names ("03_phak_ch1.pdf") rather than the chapter titles, so
+# we infer chapter boundaries from page text (the FAA-style `<chapter>-<page>`
+# header on every page) instead of trusting `get_toc()`.
+outline_strategy: content
+# Hand-curated outline overrides for sections the content scan mis-detects.
 # Each entry is { code, level, parent_code, title, page_start, page_end }.
 outline_overrides: []
+# Per-chapter title corrections. The content scan extracts the title above
+# each "Chapter N" sentinel; chapters whose typeset title spans more than
+# the heuristic window (or whose layout buries the title in body text) get
+# the right name applied here.
+title_overrides:
+  "5": "Aerodynamics of Flight"
+  "8": "Flight Instruments"
 # Default patterns are inherited from the loader; override per-handbook only
 # when the FAA changes its captioning convention.
 figure_prefix_pattern: 'Figure (\d+)-(\d+)\.'

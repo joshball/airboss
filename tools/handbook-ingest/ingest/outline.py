@@ -1,13 +1,19 @@
 """PDF outline -> tree of `OutlineNode` records.
 
-PyMuPDF exposes the PDF outline (table of contents) as a flat list of
-`(level, title, page)` tuples. We walk that list level-aware, building a tree
-that preserves chapter / section / subsection boundaries plus each node's
-page range (start = its own page; end = the next sibling's page - 1).
+Two strategies produce an outline:
 
-When the FAA outline is wrong (a chapter starts at the wrong page, or a
-section is missing because the FAA never bookmarked it), `outline_overrides`
-in the per-handbook YAML config replaces specific nodes by code path.
+1. **PDF bookmarks** (`parse_outline`). PyMuPDF exposes `get_toc()` as a flat
+   list of `(level, title, page)` tuples. We walk that list level-aware,
+   building a tree of chapter / section / subsection nodes with page ranges.
+2. **Content-driven detection** (`detect_outline_from_text`). When the
+   handbook's PDF bookmarks are mangled (PHAK 25C ships per-chapter PDFs
+   concatenated together with worthless bookmark titles like
+   `03_phak_ch1.pdf`), we scan page text for the chapter-page header pattern
+   the FAA uses on every page (`<chapter>-<page>`, e.g. `12-7`) and treat the
+   first page that increments the chapter number as the chapter boundary.
+
+The per-handbook YAML config picks which strategy applies via
+`outline_strategy: bookmark | content` (default `bookmark`).
 """
 
 from __future__ import annotations
@@ -117,6 +123,77 @@ def to_tree(flat: list[OutlineNode]) -> list[OutlineNode]:
     return roots
 
 
+def detect_outline_from_text(pdf_path: Path) -> list[OutlineNode]:
+    """Scan page text for FAA-style `<chapter>-<page>` headers and infer chapter boundaries.
+
+    Each FAA handbook page carries the printed page number in the header /
+    footer in the form `12-7` (chapter 12, page 7 within the chapter). The
+    first page where the chapter number increments is the start of the new
+    chapter. Section numbers are likewise inferred from the H1-style headings
+    that appear early on each page (`Atmospheric Pressure and Altitude`,
+    bold, isolated on a page); we surface chapters only and let `sections.py`
+    extract the body text per chapter range -- this avoids guessing at FAA
+    section boundaries that aren't reliably typeset.
+    """
+    chapter_starts: dict[int, int] = {}
+    chapter_titles: dict[int, str] = {}
+
+    page_header_re = re.compile(r"^(\d+)-\d+\b")
+
+    with fitz.open(pdf_path) as doc:
+        for page_num in range(doc.page_count):
+            page = doc.load_page(page_num)
+            text = page.get_text("text")
+            chapter_num: int | None = None
+            for line in text.splitlines():
+                stripped = line.strip()
+                if not stripped:
+                    continue
+                m = page_header_re.match(stripped)
+                if m:
+                    candidate = int(m.group(1))
+                    if 1 <= candidate <= 30:
+                        chapter_num = candidate
+                        break
+            if chapter_num is None:
+                continue
+            if chapter_num not in chapter_starts:
+                chapter_starts[chapter_num] = page_num + 1
+                # FAA cover page typeset: title-line-1 / title-line-2 (often
+                # split across two lines, e.g. "Introduction" / "To Flying"),
+                # then "Chapter N". Look upward from the "Chapter N" sentinel
+                # for the title; require Title-Case and short lines.
+                lines = [line.strip() for line in text.splitlines()]
+                title = _extract_chapter_title(lines, chapter_num, page_header_re)
+                if title:
+                    chapter_titles[chapter_num] = title
+        total_pages = doc.page_count
+
+    if not chapter_starts:
+        raise OutlineError(f"Could not detect any FAA `<chapter>-<page>` headers in {pdf_path}.")
+
+    sorted_chapters = sorted(chapter_starts.keys())
+    nodes: list[OutlineNode] = []
+    for idx, chap_num in enumerate(sorted_chapters):
+        page_start = chapter_starts[chap_num]
+        page_end = (
+            chapter_starts[sorted_chapters[idx + 1]] - 1 if idx + 1 < len(sorted_chapters) else total_pages
+        )
+        title = chapter_titles.get(chap_num) or f"Chapter {chap_num}"
+        nodes.append(
+            OutlineNode(
+                level="chapter",
+                code=str(chap_num),
+                title=title,
+                page_start=page_start,
+                page_end=page_end,
+                parent_code=None,
+                ordinal=chap_num,
+            )
+        )
+    return nodes
+
+
 def filter_to_chapter(flat: list[OutlineNode], chapter_code: str) -> list[OutlineNode]:
     """Filter the flat outline to the subtree under `chapter_code` (CLI `--chapter`)."""
     keep: list[OutlineNode] = []
@@ -133,3 +210,60 @@ _NORMALISE_WS = re.compile(r"\s+")
 
 def _clean_title(title: str) -> str:
     return _NORMALISE_WS.sub(" ", title).strip()
+
+
+def _extract_chapter_title(lines: list[str], chapter_num: int, page_header_re: re.Pattern[str]) -> str | None:
+    """Heuristic: scan upward from `Chapter N` collecting Title-Case short lines.
+
+    The FAA chapter cover pages place the title above the `Chapter N` sentinel
+    in 1-3 short, mostly-Title-Case lines. We collect those, joining them
+    until we hit a longer body line (the introductory paragraph) or run out.
+    """
+    chapter_header_re = re.compile(r"^Chapter\s+(\d+)$", re.IGNORECASE)
+    for i in range(len(lines) - 1, -1, -1):
+        cm = chapter_header_re.match(lines[i])
+        if not cm or int(cm.group(1)) != chapter_num:
+            continue
+        parts: list[str] = []
+        for back in range(i - 1, max(-1, i - 6), -1):
+            candidate = lines[back]
+            if not candidate:
+                if parts:
+                    break
+                continue
+            if page_header_re.match(candidate):
+                # Page header bled into the upward scan; ignore.
+                continue
+            # Skip body lines (long; end with sentence punctuation; not Title Case).
+            if len(candidate) > 50:
+                if parts:
+                    break
+                continue
+            if candidate.endswith((".", ",", ";", ":")):
+                if parts:
+                    break
+                continue
+            if not _is_title_case(candidate):
+                if parts:
+                    break
+                continue
+            parts.insert(0, candidate)
+            if len(parts) >= 4:
+                break
+        if parts:
+            return _clean_title(" ".join(parts))
+        return None
+    return None
+
+
+def _is_title_case(text: str) -> bool:
+    """Lenient: any line where the first non-`[\\d-]` token starts with a capital letter."""
+    stripped = text.strip()
+    if not stripped:
+        return False
+    if not stripped[0].isupper():
+        return False
+    # Reject lines that look like `12-1 Some Body`; those are page headers.
+    if re.match(r"^\d+-\d+", stripped):
+        return False
+    return True

@@ -30,6 +30,14 @@ class HandbookConfig:
     outline_overrides: list[dict[str, object]] = field(default_factory=list)
     figure_prefix_pattern: str = r"Figure (\d+)-(\d+)\."
     table_prefix_pattern: str = r"Table (\d+)-(\d+)\."
+    # `bookmark` (default) reads PyMuPDF's get_toc(); `content` falls back to
+    # scanning page text for FAA-style chapter-page headers when the PDF's
+    # bookmark tree is mangled (PHAK 25C is the v1 reason this exists).
+    outline_strategy: str = "bookmark"
+    # Per-chapter title corrections when the auto-detector produces a partial
+    # or wrong title. Keyed by chapter number (string in YAML); applied after
+    # the content scan in detect_outline_from_text.
+    title_overrides: dict[str, str] = field(default_factory=dict)
 
 
 def load_config(document_slug: str) -> HandbookConfig:
@@ -52,6 +60,8 @@ def load_config(document_slug: str) -> HandbookConfig:
         outline_overrides=list(raw.get("outline_overrides", [])),
         figure_prefix_pattern=raw.get("figure_prefix_pattern", r"Figure (\d+)-(\d+)\."),
         table_prefix_pattern=raw.get("table_prefix_pattern", r"Table (\d+)-(\d+)\."),
+        outline_strategy=raw.get("outline_strategy", "bookmark"),
+        title_overrides={str(k): str(v) for k, v in (raw.get("title_overrides") or {}).items()},
     )
 
 

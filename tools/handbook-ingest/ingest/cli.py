@@ -21,7 +21,7 @@ from .config_loader import load_config
 from .fetch import fetch_pdf
 from .figures import extract_figures
 from .normalize import write_outputs
-from .outline import OutlineError, filter_to_chapter, parse_outline
+from .outline import OutlineError, detect_outline_from_text, filter_to_chapter, parse_outline
 from .sections import extract_sections
 from .tables import extract_tables
 
@@ -48,10 +48,19 @@ def main(document_slug: str, edition: str | None, chapter: str | None, dry_run: 
     )
 
     try:
-        flat_outline = parse_outline(fetch_result.path)
+        if config.outline_strategy == "content":
+            flat_outline = detect_outline_from_text(fetch_result.path)
+        else:
+            flat_outline = parse_outline(fetch_result.path)
     except OutlineError as exc:
         click.echo(f"error: {exc}", err=True)
         raise SystemExit(2) from exc
+
+    if config.title_overrides:
+        for node in flat_outline:
+            override = config.title_overrides.get(node.code)
+            if override:
+                node.title = override
 
     if chapter is not None:
         flat_outline = filter_to_chapter(flat_outline, chapter)
@@ -130,4 +139,6 @@ def _override_edition(config, edition: str):  # type: ignore[no-untyped-def]
         outline_overrides=config.outline_overrides,
         figure_prefix_pattern=config.figure_prefix_pattern,
         table_prefix_pattern=config.table_prefix_pattern,
+        outline_strategy=config.outline_strategy,
+        title_overrides=config.title_overrides,
     )
