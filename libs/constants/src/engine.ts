@@ -42,6 +42,19 @@ export const ENGINE_SCORING = {
 		REP_RECENT_MISS: 0.4,
 		/** Multiplier on the calibration overconfidence signal (cards + reps). */
 		OVERCONFIDENCE_FACTOR: 0.3,
+		/**
+		 * Multiplier on per-knowledge-node sim weakness pressure (0..1) when
+		 * scoring strengthen-slice cards / reps. The pressure value is
+		 * `simWeaknessByNode` output for the candidate's `nodeId` (0 when
+		 * absent or null); the scorer adds `pressure * SIM_PRESSURE_FACTOR`
+		 * to the base strengthen score. Mid-range (0.5) sits between
+		 * `RATED_AGAIN: 0.6` and `RATED_HARD: 0.3` so a saturated weakness
+		 * signal lifts a card roughly as much as a recent Again rating.
+		 *
+		 * See `docs/work-packages/sim-card-mapping/design.md` decision (3)
+		 * for the magnitude rationale.
+		 */
+		SIM_PRESSURE_FACTOR: 0.5,
 	},
 	EXPAND: {
 		/** Knowledge-node priority weight: critical / standard / stretch. */
