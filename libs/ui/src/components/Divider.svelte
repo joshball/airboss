@@ -27,6 +27,8 @@ const aria = $derived(orientation === 'vertical' ? 'vertical' : 'horizontal');
 	role="separator"
 	aria-orientation={aria}
 	aria-label={ariaLabel}
+	data-testid="divider-root"
+	data-orientation={orientation}
 ></div>
 
 <style>

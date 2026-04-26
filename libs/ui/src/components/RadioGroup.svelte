@@ -78,19 +78,32 @@ function handleKeyDown(event: KeyboardEvent): void {
 }
 </script>
 
-<fieldset class="rg o-{orientation}" aria-label={ariaLabel} {disabled}>
+<fieldset
+	class="rg o-{orientation}"
+	aria-label={ariaLabel}
+	{disabled}
+	data-testid="radiogroup-root"
+	data-orientation={orientation}
+	data-state={disabled ? 'disabled' : 'idle'}
+>
 	{#if legend}
-		<legend class="legend">{legend}</legend>
+		<legend class="legend" data-testid="radiogroup-legend">{legend}</legend>
 	{/if}
-	<div class="list" role="radiogroup" aria-label={legend ?? ariaLabel}>
+	<div class="list" role="radiogroup" aria-label={legend ?? ariaLabel} data-testid="radiogroup-list">
 		{#each options as opt (opt.value)}
-			<label class="row" class:is-disabled={opt.disabled || disabled}>
+			<label
+				class="row"
+				class:is-disabled={opt.disabled || disabled}
+				data-testid={`radiogroup-item-${opt.value}`}
+				data-state={opt.disabled || disabled ? 'disabled' : value === opt.value ? 'selected' : 'idle'}
+			>
 				<input
 					type="radio"
 					{name}
 					value={opt.value}
 					checked={value === opt.value}
 					disabled={opt.disabled || disabled}
+					data-testid={`radiogroup-input-${opt.value}`}
 					onchange={() => (value = opt.value)}
 					onkeydown={handleKeyDown}
 				/>

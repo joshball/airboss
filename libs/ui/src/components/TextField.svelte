@@ -57,8 +57,15 @@ const errorId = $derived(error ? `${autoId}-error` : undefined);
 const describedBy = $derived([hintId, errorId].filter(Boolean).join(' ') || undefined);
 </script>
 
-<label class="field s-{size}" for={autoId}>
-	<span class="label">
+<label
+	class="field s-{size}"
+	for={autoId}
+	data-testid="textfield-root"
+	data-size={size}
+	data-state={disabled ? 'disabled' : error ? 'error' : 'idle'}
+	data-type={type}
+>
+	<span class="label" data-testid="textfield-label">
 		{label}
 		{#if required}
 			<span class="req" aria-hidden="true">*</span>
@@ -77,6 +84,7 @@ const describedBy = $derived([hintId, errorId].filter(Boolean).join(' ') || unde
 			{rows}
 			aria-invalid={error ? 'true' : undefined}
 			aria-describedby={describedBy}
+			data-testid="textfield-control"
 		></textarea>
 	{:else}
 		<input
@@ -91,14 +99,15 @@ const describedBy = $derived([hintId, errorId].filter(Boolean).join(' ') || unde
 			{inputmode}
 			aria-invalid={error ? 'true' : undefined}
 			aria-describedby={describedBy}
+			data-testid="textfield-control"
 		/>
 	{/if}
 
 	{#if hint && !error}
-		<span id={hintId} class="hint">{hint}</span>
+		<span id={hintId} class="hint" data-testid="textfield-hint">{hint}</span>
 	{/if}
 	{#if error}
-		<span id={errorId} class="error" role="alert">{error}</span>
+		<span id={errorId} class="error" role="alert" data-testid="textfield-error">{error}</span>
 	{/if}
 </label>
 

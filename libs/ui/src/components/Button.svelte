@@ -59,6 +59,10 @@ const isDisabled = $derived(disabled || loading);
 		aria-disabled={isDisabled ? 'true' : undefined}
 		aria-label={ariaLabel}
 		tabindex={isDisabled ? -1 : undefined}
+		data-testid="button-root"
+		data-variant={variant}
+		data-size={size}
+		data-state={loading ? 'loading' : isDisabled ? 'disabled' : 'idle'}
 		onclick={(event) => {
 			if (isDisabled) {
 				event.preventDefault();
@@ -81,6 +85,10 @@ const isDisabled = $derived(disabled || loading);
 		{type}
 		disabled={isDisabled}
 		aria-label={ariaLabel}
+		data-testid="button-root"
+		data-variant={variant}
+		data-size={size}
+		data-state={loading ? 'loading' : isDisabled ? 'disabled' : 'idle'}
 		onclick={onclick}
 	>
 		{#if loading && loadingLabel}
