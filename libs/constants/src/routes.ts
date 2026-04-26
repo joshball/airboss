@@ -191,6 +191,10 @@ export const ROUTES = {
 	SIM_SCENARIO_DUAL: (id: SimScenarioId) => `/${id}/dual` as const,
 	/** Windowed surface: 3D horizon full-bleed with the instrument panel overlaid. */
 	SIM_SCENARIO_WINDOW: (id: SimScenarioId) => `/${id}/window` as const,
+	/** Sim history dashboard -- recent attempts for the authenticated learner. */
+	SIM_HISTORY: '/history',
+	/** Per-attempt detail view; includes the full per-component grade breakdown. */
+	SIM_HISTORY_DETAIL: (attemptId: string) => `/history/${encodeURIComponent(attemptId)}` as const,
 
 	// Hangar (apps/hangar) -- admin surface for data-management. Served from
 	// its own host (hangar.airboss.test), so these paths are relative to that
