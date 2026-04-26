@@ -19,7 +19,6 @@ import {
 	CARD_STATES,
 	CARD_STATUSES,
 	type CardState,
-	CERT_VALUES,
 	type Cert,
 	type ConfidenceLevel,
 	certsCoveredBy,
