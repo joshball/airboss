@@ -32,6 +32,11 @@ import {
 	DIFFICULTY_VALUES,
 	DOMAIN_VALUES,
 	type Domain,
+	HANDBOOK_NOTES_MAX_LENGTH,
+	HANDBOOK_READ_STATUS_VALUES,
+	HANDBOOK_READ_STATUSES,
+	HANDBOOK_SECTION_LEVEL_VALUES,
+	HANDBOOK_SECTION_LEVELS,
 	KNOWLEDGE_EDGE_TYPE_VALUES,
 	MASTERY_STABILITY_DAYS,
 	MAX_SESSION_LENGTH,
@@ -41,6 +46,7 @@ import {
 	PHASE_OF_FLIGHT_VALUES,
 	PLAN_STATUS_VALUES,
 	PLAN_STATUSES,
+	REFERENCE_KIND_VALUES,
 	REVIEW_SESSION_STATUS_VALUES,
 	REVIEW_SESSION_STATUSES,
 	SAVED_DECK_LABEL_MAX_LENGTH,
@@ -64,6 +70,7 @@ import {
 import { timestamps } from '@ab/db';
 import { sql } from 'drizzle-orm';
 import {
+	type AnyPgColumn,
 	boolean,
 	check,
 	index,
@@ -189,6 +196,16 @@ export const knowledgeNode = studySchema.table(
 		knowledgeNodeLifecycleIdx: index('knowledge_node_lifecycle_idx').on(t.lifecycle),
 		knowledgeNodeMinimumCertIdx: index('knowledge_node_minimum_cert_idx').on(t.minimumCert),
 		knowledgeNodeStudyPriorityIdx: index('knowledge_node_study_priority_idx').on(t.studyPriority),
+		// GIN index on the JSONB `references` array supports the reverse query
+		// "knowledge nodes that cite this handbook section." `getNodesCitingSection`
+		// uses `references @> ?::jsonb` with a `{kind, reference_id}` probe; the
+		// jsonb_path_ops opclass keeps the index small and the `@>` containment
+		// check fast at the cost of a narrower operator surface (we never need
+		// `?` / `?|` / `?&` against this column).
+		knowledgeNodeReferencesGinIdx: index('knowledge_node_references_gin_idx').using(
+			'gin',
+			sql`"references" jsonb_path_ops`,
+		),
 		lifecycleCheck: check(
 			'knowledge_node_lifecycle_check',
 			sql.raw(`"lifecycle" IS NULL OR "lifecycle" IN (${inList(NODE_LIFECYCLE_VALUES)})`),
@@ -1006,3 +1023,248 @@ export type CardSnoozeRow = typeof cardSnooze.$inferSelect;
 export type NewCardSnoozeRow = typeof cardSnooze.$inferInsert;
 export type CardFeedbackRow = typeof cardFeedback.$inferSelect;
 export type NewCardFeedbackRow = typeof cardFeedback.$inferInsert;
+
+/**
+ * First-class citation source. Edition-versioned. One row per
+ * `(document_slug, edition)` pair. Powers the `Citation` discriminated union
+ * carried on `knowledge_node.references` and the handbook reader's index +
+ * "newer edition available" banner.
+ *
+ * Spans every kind of FAA reference (handbooks, CFR titles, ACs, ACS / PTS,
+ * AIM, PCG, NTSB reports, POH excerpts, other). v1 only ingests handbooks
+ * end-to-end; the schema is shaped to accept the rest as the cert-syllabus
+ * and ref-extraction WPs land.
+ *
+ * `superseded_by_id` self-FK lets the seed wire each older edition to the
+ * latest; `seed_origin` matches the project-wide dev-seed marker convention.
+ */
+export const reference = studySchema.table(
+	'reference',
+	{
+		id: text('id').primaryKey(),
+		/**
+		 * Reference family. See {@link REFERENCE_KINDS}. Storage discriminator
+		 * for the structured `Citation` union; the resolver in
+		 * `libs/bc/study/src/handbooks.ts` only handles `handbook` in v1.
+		 */
+		kind: text('kind').notNull(),
+		/** Stable cross-edition slug: `phak`, `afh`, `avwx`, `14cfr61`, etc. */
+		documentSlug: text('document_slug').notNull(),
+		/** FAA edition tag: `FAA-H-8083-25C`, `2024-09`, free-form per kind. */
+		edition: text('edition').notNull(),
+		/** Display name: "Pilot's Handbook of Aeronautical Knowledge". */
+		title: text('title').notNull(),
+		publisher: text('publisher').notNull().default('FAA'),
+		url: text('url'),
+		/**
+		 * Set when a newer edition exists. The reader surfaces "newer edition
+		 * available" when this points to a non-archived row; resolvers continue
+		 * to honor citations against the older edition so historical links
+		 * never break. `set null` so deleting a newer edition (rare) doesn't
+		 * cascade-destroy the older ones.
+		 */
+		supersededById: text('superseded_by_id').references((): AnyPgColumn => reference.id, {
+			onDelete: 'set null',
+		}),
+		/** Dev-seed marker; NULL on production rows. */
+		seedOrigin: text('seed_origin'),
+		...timestamps(),
+	},
+	(t) => ({
+		// One row per (document_slug, edition). The seed conflict-targets this.
+		referenceDocEditionUnique: uniqueIndex('reference_doc_edition_unique').on(t.documentSlug, t.edition),
+		referenceKindIdx: index('reference_kind_idx').on(t.kind),
+		// "Most-recent edition for this document" probe + the "is this row
+		// superseded?" filter both lean on (document_slug, superseded_by_id).
+		referenceDocSupersededIdx: index('reference_doc_superseded_idx').on(t.documentSlug, t.supersededById),
+		kindCheck: check('reference_kind_check', sql.raw(`"kind" IN (${inList(REFERENCE_KIND_VALUES)})`)),
+		// Slug shape: kebab-case, 3..32 chars. Document slugs are reader URL
+		// fragments; constraining at the storage layer keeps a typo from
+		// shipping a route that breaks `decodeURIComponent` round-trips.
+		documentSlugShapeCheck: check(
+			'reference_document_slug_shape_check',
+			sql.raw(`"document_slug" ~ '^[a-z0-9][a-z0-9-]{1,30}[a-z0-9]$'`),
+		),
+		editionLengthCheck: check('reference_edition_length_check', sql.raw(`char_length("edition") BETWEEN 1 AND 64`)),
+	}),
+);
+
+/**
+ * Per-section content row. One row per `<chapter>/<section>.md` file in the
+ * `handbooks/` tree. Tree-shaped via `parent_id`: a chapter is a row at
+ * `level='chapter'` with `parent_id IS NULL`; sections nest under chapters,
+ * subsections under sections.
+ *
+ * `code` is the citation-grade dotted index ("12", "12.3", "12.3.2"); the
+ * seed composes it deterministically so URL stability across re-ingests
+ * doesn't depend on row ordering. `content_hash` (SHA-256 of the source
+ * markdown file) drives idempotent seed: an unchanged section is a no-op.
+ */
+export const handbookSection = studySchema.table(
+	'handbook_section',
+	{
+		id: text('id').primaryKey(),
+		referenceId: text('reference_id')
+			.notNull()
+			.references(() => reference.id, { onDelete: 'cascade' }),
+		/**
+		 * NULL for chapter rows; the chapter id for section rows; the section
+		 * id for subsection rows. `cascade` so a chapter delete drops its
+		 * subtree -- per-edition trees are mass-replaced by the seed when an
+		 * extraction warning becomes a fixable bug.
+		 */
+		parentId: text('parent_id').references((): AnyPgColumn => handbookSection.id, {
+			onDelete: 'cascade',
+		}),
+		/** chapter / section / subsection. See {@link HANDBOOK_SECTION_LEVELS}. */
+		level: text('level').notNull(),
+		/** Within-parent sort order. */
+		ordinal: integer('ordinal').notNull(),
+		/** Citation code: "12", "12.3", "12.3.2". Composed deterministically. */
+		code: text('code').notNull(),
+		title: text('title').notNull(),
+		/** First FAA-printed page. Hyphenated FAA pagination is unrelated; this is the integer prefix. */
+		faaPageStart: integer('faa_page_start'),
+		faaPageEnd: integer('faa_page_end'),
+		/** Canonical citation string ("PHAK Ch 12 §3 (pp. 12-7..12-9)"). Cached for display. */
+		sourceLocator: text('source_locator').notNull(),
+		/** Section body markdown. Empty on chapter rows. */
+		contentMd: text('content_md').notNull().default(''),
+		/** SHA-256 of the source markdown file. Drives idempotent seed. */
+		contentHash: text('content_hash').notNull(),
+		/** Cached aggregates so list rendering avoids per-row joins. */
+		hasFigures: boolean('has_figures').notNull().default(false),
+		hasTables: boolean('has_tables').notNull().default(false),
+		seedOrigin: text('seed_origin'),
+		...timestamps(),
+	},
+	(t) => ({
+		// One row per (reference, code). Conflict target for the seed upsert.
+		handbookSectionRefCodeUnique: uniqueIndex('handbook_section_ref_code_unique').on(t.referenceId, t.code),
+		// Tree walks: chapter list -> sections -> subsections.
+		handbookSectionTreeIdx: index('handbook_section_tree_idx').on(t.referenceId, t.parentId, t.ordinal),
+		// "List chapters in this handbook" -- level=chapter ordered by ordinal.
+		handbookSectionLevelIdx: index('handbook_section_level_idx').on(t.referenceId, t.level, t.ordinal),
+		levelCheck: check('handbook_section_level_check', sql.raw(`"level" IN (${inList(HANDBOOK_SECTION_LEVEL_VALUES)})`)),
+		// Code shape: dotted decimal up to 3 levels deep ("12", "12.3", "12.3.2").
+		codeShapeCheck: check('handbook_section_code_shape_check', sql.raw(`"code" ~ '^[0-9]+(\\.[0-9]+){0,2}$'`)),
+		// `parent_id IS NULL` iff `level = 'chapter'`. Belt-and-suspenders against
+		// a buggy seed inserting a section without a chapter or a chapter under
+		// another row.
+		parentLevelConsistencyCheck: check(
+			'handbook_section_parent_level_check',
+			sql.raw(
+				`("level" = '${HANDBOOK_SECTION_LEVELS.CHAPTER}' AND "parent_id" IS NULL) OR ("level" <> '${HANDBOOK_SECTION_LEVELS.CHAPTER}' AND "parent_id" IS NOT NULL)`,
+			),
+		),
+		ordinalNonNegativeCheck: check('handbook_section_ordinal_check', sql.raw(`"ordinal" >= 0`)),
+		faaPagesConsistentCheck: check(
+			'handbook_section_faa_pages_check',
+			sql.raw(
+				`("faa_page_start" IS NULL AND "faa_page_end" IS NULL) OR ("faa_page_start" IS NOT NULL AND ("faa_page_end" IS NULL OR "faa_page_end" >= "faa_page_start"))`,
+			),
+		),
+	}),
+);
+
+/**
+ * Per-figure record. Bound to a section by FK; ordered by `ordinal` within
+ * the section. Asset path is repo-relative under `handbooks/<doc>/<edition>/figures/`.
+ *
+ * Figures are mass-replaced when a section's `content_hash` changes: the
+ * seed deletes every row for the section and re-inserts to keep ordinals
+ * dense. Width / height are nullable because the extractor records them
+ * opportunistically (some PDFs decode to vector content with no pixel
+ * dimension to record).
+ */
+export const handbookFigure = studySchema.table(
+	'handbook_figure',
+	{
+		id: text('id').primaryKey(),
+		sectionId: text('section_id')
+			.notNull()
+			.references(() => handbookSection.id, { onDelete: 'cascade' }),
+		ordinal: integer('ordinal').notNull(),
+		caption: text('caption').notNull().default(''),
+		/** Repo-relative path under `handbooks/<doc>/<edition>/figures/`. */
+		assetPath: text('asset_path').notNull(),
+		width: integer('width'),
+		height: integer('height'),
+		seedOrigin: text('seed_origin'),
+		createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+	},
+	(t) => ({
+		handbookFigureSectionIdx: index('handbook_figure_section_idx').on(t.sectionId, t.ordinal),
+		ordinalNonNegativeCheck: check('handbook_figure_ordinal_check', sql.raw(`"ordinal" >= 0`)),
+		dimensionsCheck: check(
+			'handbook_figure_dimensions_check',
+			sql.raw(`("width" IS NULL OR "width" > 0) AND ("height" IS NULL OR "height" > 0)`),
+		),
+	}),
+);
+
+/**
+ * Per-(user, section) read tracking. Composite PK so a user has at most
+ * one row per section. Editions cycle row identity at the `handbook_section`
+ * layer (a new edition produces fresh rows with new ids), so the user
+ * automatically gets a fresh read state when opening a new-edition section.
+ *
+ * Status flips: `unread -> reading` is the only automatic transition (first
+ * heartbeat / first open); every other transition requires user input.
+ * `comprehended` is a separate "read but didn't get it" toggle scoped to a
+ * read or reading row.
+ */
+export const handbookReadState = studySchema.table(
+	'handbook_read_state',
+	{
+		userId: text('user_id')
+			.notNull()
+			.references(() => bauthUser.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
+		handbookSectionId: text('handbook_section_id')
+			.notNull()
+			.references(() => handbookSection.id, { onDelete: 'cascade' }),
+		status: text('status').notNull().default(HANDBOOK_READ_STATUSES.UNREAD),
+		/**
+		 * "Read but didn't get it" toggle. Counts as read for coverage; queryable
+		 * for a "to revisit" lens. UI keeps it disabled until status reaches
+		 * `reading` (BC enforces this on writes).
+		 */
+		comprehended: boolean('comprehended').notNull().default(false),
+		/** Most-recent heartbeat timestamp. */
+		lastReadAt: timestamp('last_read_at', { withTimezone: true }),
+		/** Increments per distinct page open (debounced 5s server-side). */
+		openedCount: integer('opened_count').notNull().default(0),
+		/** Sum of heartbeat-windowed seconds the section was visible. */
+		totalSecondsVisible: integer('total_seconds_visible').notNull().default(0),
+		/** User's private markdown notes scoped to this section. */
+		notesMd: text('notes_md').notNull().default(''),
+		seedOrigin: text('seed_origin'),
+		...timestamps(),
+	},
+	(t) => ({
+		pk: primaryKey({ columns: [t.userId, t.handbookSectionId] }),
+		// "Unread sections in handbook X" / "what am I currently reading" query.
+		handbookReadStateUserStatusIdx: index('handbook_read_state_user_status_idx').on(t.userId, t.status),
+		// Cross-user analytics (later phases): "how many users have read this section?"
+		handbookReadStateSectionIdx: index('handbook_read_state_section_idx').on(t.handbookSectionId),
+		statusCheck: check(
+			'handbook_read_state_status_check',
+			sql.raw(`"status" IN (${inList(HANDBOOK_READ_STATUS_VALUES)})`),
+		),
+		totalSecondsCheck: check('handbook_read_state_total_seconds_check', sql.raw(`"total_seconds_visible" >= 0`)),
+		openedCountCheck: check('handbook_read_state_opened_count_check', sql.raw(`"opened_count" >= 0`)),
+		notesLengthCheck: check(
+			'handbook_read_state_notes_length_check',
+			sql.raw(`char_length("notes_md") <= ${HANDBOOK_NOTES_MAX_LENGTH}`),
+		),
+	}),
+);
+
+export type ReferenceRow = typeof reference.$inferSelect;
+export type NewReferenceRow = typeof reference.$inferInsert;
+export type HandbookSectionRow = typeof handbookSection.$inferSelect;
+export type NewHandbookSectionRow = typeof handbookSection.$inferInsert;
+export type HandbookFigureRow = typeof handbookFigure.$inferSelect;
+export type NewHandbookFigureRow = typeof handbookFigure.$inferInsert;
+export type HandbookReadStateRow = typeof handbookReadState.$inferSelect;
+export type NewHandbookReadStateRow = typeof handbookReadState.$inferInsert;
