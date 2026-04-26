@@ -167,11 +167,17 @@ $effect(() => {
 	};
 });
 
-// Hide when the user navigates away. `page.url.pathname` is reactive.
+// Hide when the user navigates away.
+// `lastPathname` is a plain `let`, not `$state`: the effect only depends on
+// `page.url.pathname`. The previous version also read `open`, so opening
+// the popover re-fired the effect and closed it immediately.
+let lastPathname = page.url.pathname;
 $effect(() => {
-	// Read the pathname so the effect subscribes. Value is not otherwise used.
-	void page.url.pathname;
-	if (open) hide();
+	const current = page.url.pathname;
+	if (current !== lastPathname) {
+		lastPathname = current;
+		hide();
+	}
 });
 </script>
 

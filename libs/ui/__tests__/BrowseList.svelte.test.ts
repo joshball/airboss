@@ -22,7 +22,16 @@ describe('BrowseList', () => {
 	});
 
 	it('renders group heading + count when label is set', () => {
-		const groups = [{ key: 'g1', label: 'Domain', items: [{ id: 'a', name: 'A' }, { id: 'b', name: 'B' }] }];
+		const groups = [
+			{
+				key: 'g1',
+				label: 'Domain',
+				items: [
+					{ id: 'a', name: 'A' },
+					{ id: 'b', name: 'B' },
+				],
+			},
+		];
 		render(BrowseListHarness, { groups });
 		expect(screen.getByTestId('browselist-group-heading-g1').textContent).toContain('Domain');
 		expect(screen.getByTestId('browselist-group-count-g1').textContent).toBe('2');
@@ -35,7 +44,16 @@ describe('BrowseList', () => {
 	});
 
 	it('renders one item per data row via the item snippet', () => {
-		const groups = [{ key: 'g1', label: '', items: [{ id: 'a', name: 'Alpha' }, { id: 'b', name: 'Bravo' }] }];
+		const groups = [
+			{
+				key: 'g1',
+				label: '',
+				items: [
+					{ id: 'a', name: 'Alpha' },
+					{ id: 'b', name: 'Bravo' },
+				],
+			},
+		];
 		render(BrowseListHarness, { groups });
 		expect(screen.getByTestId('harness-item-a').textContent).toBe('Alpha');
 		expect(screen.getByTestId('harness-item-b').textContent).toBe('Bravo');

@@ -22,9 +22,7 @@ describe('MarkdownBody', () => {
 	});
 
 	it('renders an h2 from a heading node', () => {
-		const nodes: MdNode[] = [
-			{ kind: 'heading', level: 2, id: 'intro', children: [{ kind: 'text', value: 'Intro' }] },
-		];
+		const nodes: MdNode[] = [{ kind: 'heading', level: 2, id: 'intro', children: [{ kind: 'text', value: 'Intro' }] }];
 		const { container } = render(MarkdownBody, { nodes });
 		const h2 = container.querySelector('h2#intro');
 		expect(h2).not.toBeNull();
