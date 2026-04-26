@@ -12,9 +12,10 @@
  * line.
  */
 
+import { SIM_BIAS } from '@ab/constants';
 import { db as defaultDb, type SimAttemptRow, simAttempt } from '@ab/db';
 import { generateSimAttemptId } from '@ab/utils';
-import { and, desc, eq } from 'drizzle-orm';
+import { and, desc, eq, gte, isNotNull } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import { parseTape, serializeTape } from './replay/tape';
 import type { ReplayTape } from './replay/types';
@@ -145,4 +146,92 @@ export async function loadSimAttempt(id: string, userId: string, db: Db = defaul
 export function tapeFromRow(row: Pick<SimAttemptRow, 'tape'>): ReplayTape | null {
 	if (row.tape === null || row.tape === undefined) return null;
 	return parseTape(JSON.stringify(row.tape));
+}
+
+/** Per-scenario weakness signal returned by `getRecentSimWeakness`. */
+export interface SimWeaknessSignal {
+	scenarioId: string;
+	/** Number of attempts considered (capped by `maxAttemptsPerScenario`). */
+	attempts: number;
+	/** Average grade total across the considered attempts (0..1). */
+	avgGradeTotal: number;
+	/** Weight in [0..1]; higher = the scheduler should pressure related cards more. */
+	weight: number;
+}
+
+export interface GetRecentSimWeaknessOptions {
+	/** Cutoff for "recent". Defaults to `now - SIM_BIAS.DEFAULT_WINDOW_DAYS`. */
+	since?: Date;
+	/** Max attempts considered per scenario; defaults to `SIM_BIAS.DEFAULT_MAX_ATTEMPTS_PER_SCENARIO`. */
+	maxAttemptsPerScenario?: number;
+	/** Override the poor-grade threshold; defaults to `SIM_BIAS.POOR_THRESHOLD`. */
+	poorThreshold?: number;
+}
+
+/**
+ * Read-only spaced-rep signal: which scenarios has the user been flying
+ * poorly recently?
+ *
+ * Returns one entry per scenario with at least
+ * `SIM_BIAS.MIN_ATTEMPTS` attempts in the window whose average grade
+ * total is at or below the poor threshold. Weight scales linearly from
+ * `WEIGHT_FLOOR` (at the threshold) to 1.0 (at zero); a scenario that
+ * is in the window but grading well returns nothing.
+ *
+ * Designed for cross-BC consumption by the study scheduler. Study
+ * imports this from `@ab/bc-sim/persistence` (deep import; not
+ * re-exported from the package index, mirroring the rest of the
+ * persistence surface).
+ *
+ * Authoring the actual sim-scenario -> study-card mapping is a
+ * separate work-package -- this fn produces the signal; the consumer
+ * decides what to do with it.
+ */
+export async function getRecentSimWeakness(
+	userId: string,
+	options: GetRecentSimWeaknessOptions = {},
+	db: Db = defaultDb,
+): Promise<ReadonlyArray<SimWeaknessSignal>> {
+	const since = options.since ?? new Date(Date.now() - SIM_BIAS.DEFAULT_WINDOW_DAYS * 24 * 60 * 60 * 1000);
+	const maxPerScenario = options.maxAttemptsPerScenario ?? SIM_BIAS.DEFAULT_MAX_ATTEMPTS_PER_SCENARIO;
+	const poorThreshold = options.poorThreshold ?? SIM_BIAS.POOR_THRESHOLD;
+
+	const rows = await db
+		.select({
+			scenarioId: simAttempt.scenarioId,
+			gradeTotal: simAttempt.gradeTotal,
+			endedAt: simAttempt.endedAt,
+		})
+		.from(simAttempt)
+		.where(and(eq(simAttempt.userId, userId), gte(simAttempt.endedAt, since), isNotNull(simAttempt.gradeTotal)))
+		.orderBy(desc(simAttempt.endedAt));
+
+	const buckets = new Map<string, { sum: number; count: number }>();
+	for (const row of rows) {
+		const grade = row.gradeTotal;
+		if (grade === null) continue;
+		const bucket = buckets.get(row.scenarioId) ?? { sum: 0, count: 0 };
+		if (bucket.count >= maxPerScenario) continue;
+		bucket.sum += grade;
+		bucket.count += 1;
+		buckets.set(row.scenarioId, bucket);
+	}
+
+	const signals: SimWeaknessSignal[] = [];
+	for (const [scenarioId, bucket] of buckets) {
+		if (bucket.count < SIM_BIAS.MIN_ATTEMPTS) continue;
+		const avg = bucket.sum / bucket.count;
+		if (avg > poorThreshold) continue;
+		// Linear ramp: at threshold -> WEIGHT_FLOOR, at zero -> 1.0.
+		// Clamped to [WEIGHT_FLOOR, 1].
+		const span = poorThreshold > 0 ? (poorThreshold - avg) / poorThreshold : 0;
+		const weight = Math.max(
+			SIM_BIAS.WEIGHT_FLOOR,
+			Math.min(1, SIM_BIAS.WEIGHT_FLOOR + (1 - SIM_BIAS.WEIGHT_FLOOR) * span),
+		);
+		signals.push({ scenarioId, attempts: bucket.count, avgGradeTotal: avg, weight });
+	}
+
+	signals.sort((a, b) => b.weight - a.weight);
+	return signals;
 }
