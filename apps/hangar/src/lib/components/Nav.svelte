@@ -1,15 +1,18 @@
 <script lang="ts">
-import { ROUTES } from '@ab/constants';
+import { ROLES, ROUTES } from '@ab/constants';
 import { page } from '$app/state';
 
 /**
- * Hangar top-level nav shell. Links to the three primary surfaces:
- * Sources, Glossary, Jobs. Active-route highlighting via `aria-current`
- * matches the study-app pattern. Colors + spacing resolve from role
- * tokens (04-VOCABULARY.md) so light/dark + future themes work.
+ * Hangar top-level nav shell. Links to the primary admin surfaces:
+ * Sources, Glossary, Users (admin-only), Jobs. Active-route highlighting
+ * via `aria-current` matches the study-app pattern. Colors + spacing
+ * resolve from role tokens (04-VOCABULARY.md) so light/dark + future
+ * themes work.
  *
  * Sources comes first because /sources (the operational flow diagram)
- * is the post-sources-v1 primary landing.
+ * is the post-sources-v1 primary landing. Users is hidden for non-admin
+ * roles to match the route gate -- showing a link that 403s on click is
+ * worse than not showing it.
  */
 
 const sourcesActive = $derived(
@@ -18,14 +21,21 @@ const sourcesActive = $derived(
 const glossaryActive = $derived(
 	page.url.pathname === ROUTES.HANGAR_GLOSSARY || page.url.pathname.startsWith(`${ROUTES.HANGAR_GLOSSARY}/`),
 );
+const usersActive = $derived(
+	page.url.pathname === ROUTES.HANGAR_USERS || page.url.pathname.startsWith(`${ROUTES.HANGAR_USERS}/`),
+);
 const jobsActive = $derived(
 	page.url.pathname === ROUTES.HANGAR_JOBS || page.url.pathname.startsWith(`${ROUTES.HANGAR_JOBS}/`),
 );
+const isAdmin = $derived(page.data.user?.role === ROLES.ADMIN);
 </script>
 
 <div class="nav-sections">
 	<a href={ROUTES.HANGAR_SOURCES} aria-current={sourcesActive ? 'page' : undefined}>Sources</a>
 	<a href={ROUTES.HANGAR_GLOSSARY} aria-current={glossaryActive ? 'page' : undefined}>Glossary</a>
+	{#if isAdmin}
+		<a href={ROUTES.HANGAR_USERS} aria-current={usersActive ? 'page' : undefined}>Users</a>
+	{/if}
 	<a href={ROUTES.HANGAR_JOBS} aria-current={jobsActive ? 'page' : undefined}>Jobs</a>
 </div>
 
