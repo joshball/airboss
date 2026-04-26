@@ -17,14 +17,8 @@ import {
 	SCENARIO_STATUSES,
 	type ScenarioStatus,
 } from '@ab/constants';
-import { createLogger, narrow } from '@ab/utils';
+import { narrow } from '@ab/utils';
 import type { PageServerLoad } from './$types';
-
-const log = createLogger('study:reps-browse');
-
-/** Legacy query-string name for `flight-phase`. Accepted for old bookmarks;
- * TODO(retire): drop after 2026-07-01 once no logs show it being hit. */
-const LEGACY_PHASE_PARAM = 'phase';
 
 /** Subset of the shared `BROWSE_GROUP_BY_VALUES` that makes sense for scenarios.
  * Cards have `state` (FSRS), but scenarios don't, so we drop that bucket. */
@@ -33,26 +27,11 @@ type RepsGroupBy = (typeof REPS_GROUP_BY_VALUES)[number];
 
 export const load: PageServerLoad = async (event) => {
 	const user = requireAuth(event);
-	const { url, locals } = event;
+	const { url } = event;
 
 	const domain = narrow<Domain>(url.searchParams.get(QUERY_PARAMS.DOMAIN), DOMAIN_VALUES);
 	const difficulty = narrow<Difficulty>(url.searchParams.get(QUERY_PARAMS.DIFFICULTY), DIFFICULTY_VALUES);
-	const newPhase = narrow<PhaseOfFlight>(url.searchParams.get(QUERY_PARAMS.FLIGHT_PHASE), PHASE_OF_FLIGHT_VALUES);
-	const legacyPhase = narrow<PhaseOfFlight>(url.searchParams.get(LEGACY_PHASE_PARAM), PHASE_OF_FLIGHT_VALUES);
-	if (legacyPhase && !newPhase) {
-		log.info('legacy ?phase= used on /reps/browse', {
-			requestId: locals.requestId,
-			userId: user.id,
-			metadata: { legacyPhase },
-		});
-	} else if (legacyPhase && newPhase && legacyPhase !== newPhase) {
-		log.warn('legacy ?phase= disagrees with ?flight-phase= on /reps/browse; using flight-phase', {
-			requestId: locals.requestId,
-			userId: user.id,
-			metadata: { legacyPhase, newPhase },
-		});
-	}
-	const phaseOfFlight = newPhase ?? legacyPhase;
+	const phaseOfFlight = narrow<PhaseOfFlight>(url.searchParams.get(QUERY_PARAMS.FLIGHT_PHASE), PHASE_OF_FLIGHT_VALUES);
 	const sourceType = narrow<ContentSource>(url.searchParams.get(QUERY_PARAMS.SOURCE), CONTENT_SOURCE_VALUES);
 	const status =
 		narrow<ScenarioStatus>(url.searchParams.get(QUERY_PARAMS.STATUS), SCENARIO_STATUS_VALUES) ??
