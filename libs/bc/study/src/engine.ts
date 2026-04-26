@@ -123,6 +123,15 @@ export interface EnginePoolFilters {
 	domainFrequencyLast30Days: Readonly<Record<string, number>>;
 	/** Domains touched in the last 7 days (diversify candidate gate). */
 	activeDomainsLast7Days: readonly Domain[];
+	/**
+	 * Per-knowledge-node sim weakness pressure in `[0, 1]`, produced by
+	 * `simWeaknessByNode` in `sim-bias.ts`. The strengthen-slice scorers
+	 * read `simNodePressure[candidate.nodeId ?? '']` and add `pressure *
+	 * ENGINE_SCORING.STRENGTHEN.SIM_PRESSURE_FACTOR` to the candidate
+	 * score. Empty record (`{}`) is the default and means "no recent sim
+	 * weakness" -- engine behaves as before.
+	 */
+	simNodePressure: Readonly<Record<string, number>>;
 }
 
 /**
@@ -278,24 +287,84 @@ function scoreContinueRep(rep: EngineRepCandidate, filters: EnginePoolFilters): 
 	);
 }
 
-/** Strengthen-slice card score. Rewards relearning > rated-Again > overdue. */
-function scoreStrengthenCard(card: EngineCardCandidate, overconfidence: number): number {
-	let base = 0;
-	if (card.state === CARD_STATES.RELEARNING) base += ENGINE_SCORING.STRENGTHEN.RELEARNING;
-	if (card.lastRating === REVIEW_RATINGS.AGAIN)
-		base += ENGINE_SCORING.STRENGTHEN.RATED_AGAIN; // Again
-	else if (card.lastRating === REVIEW_RATINGS.HARD) base += ENGINE_SCORING.STRENGTHEN.RATED_HARD; // Hard
-	if (card.overdueRatio >= ENGINE_SCORING.THRESHOLDS.HEAVILY_OVERDUE_RATIO)
-		base += ENGINE_SCORING.STRENGTHEN.HEAVILY_OVERDUE;
-	return base + overconfidence * ENGINE_SCORING.STRENGTHEN.OVERCONFIDENCE_FACTOR;
+/**
+ * Strengthen-slice scoring contribution from one signal. Tracking the
+ * components individually (rather than only the sum) lets the reason
+ * resolver attribute the slot to whichever signal was dominant -- the
+ * spec wants `STRENGTHEN_SIM_WEAKNESS_*` to win when sim pressure is
+ * what tipped the card over the placement threshold.
+ */
+interface StrengthenContribution {
+	relearning: number;
+	ratedAgain: number;
+	ratedHard: number;
+	heavilyOverdue: number;
+	repLowAccuracy: number;
+	repRecentMiss: number;
+	overconfidence: number;
+	simPressure: number;
 }
 
-function scoreStrengthenRep(rep: EngineRepCandidate, overconfidence: number): number {
-	let base = 0;
+function emptyContribution(): StrengthenContribution {
+	return {
+		relearning: 0,
+		ratedAgain: 0,
+		ratedHard: 0,
+		heavilyOverdue: 0,
+		repLowAccuracy: 0,
+		repRecentMiss: 0,
+		overconfidence: 0,
+		simPressure: 0,
+	};
+}
+
+function contributionTotal(c: StrengthenContribution): number {
+	return (
+		c.relearning +
+		c.ratedAgain +
+		c.ratedHard +
+		c.heavilyOverdue +
+		c.repLowAccuracy +
+		c.repRecentMiss +
+		c.overconfidence +
+		c.simPressure
+	);
+}
+
+/** Strengthen-slice card score. Rewards relearning > rated-Again > overdue. */
+function strengthenCardContribution(
+	card: EngineCardCandidate,
+	overconfidence: number,
+	simPressure: number,
+): StrengthenContribution {
+	const c = emptyContribution();
+	if (card.state === CARD_STATES.RELEARNING) c.relearning = ENGINE_SCORING.STRENGTHEN.RELEARNING;
+	if (card.lastRating === REVIEW_RATINGS.AGAIN) c.ratedAgain = ENGINE_SCORING.STRENGTHEN.RATED_AGAIN;
+	else if (card.lastRating === REVIEW_RATINGS.HARD) c.ratedHard = ENGINE_SCORING.STRENGTHEN.RATED_HARD;
+	if (card.overdueRatio >= ENGINE_SCORING.THRESHOLDS.HEAVILY_OVERDUE_RATIO)
+		c.heavilyOverdue = ENGINE_SCORING.STRENGTHEN.HEAVILY_OVERDUE;
+	c.overconfidence = overconfidence * ENGINE_SCORING.STRENGTHEN.OVERCONFIDENCE_FACTOR;
+	c.simPressure = simPressure * ENGINE_SCORING.STRENGTHEN.SIM_PRESSURE_FACTOR;
+	return c;
+}
+
+function strengthenRepContribution(
+	rep: EngineRepCandidate,
+	overconfidence: number,
+	simPressure: number,
+): StrengthenContribution {
+	const c = emptyContribution();
 	if (rep.accuracyLast5 < ENGINE_SCORING.THRESHOLDS.REP_LOW_ACCURACY)
-		base += ENGINE_SCORING.STRENGTHEN.REP_LOW_ACCURACY;
-	if (rep.lastIncorrectAt) base += ENGINE_SCORING.STRENGTHEN.REP_RECENT_MISS;
-	return base + overconfidence * ENGINE_SCORING.STRENGTHEN.OVERCONFIDENCE_FACTOR;
+		c.repLowAccuracy = ENGINE_SCORING.STRENGTHEN.REP_LOW_ACCURACY;
+	if (rep.lastIncorrectAt) c.repRecentMiss = ENGINE_SCORING.STRENGTHEN.REP_RECENT_MISS;
+	c.overconfidence = overconfidence * ENGINE_SCORING.STRENGTHEN.OVERCONFIDENCE_FACTOR;
+	c.simPressure = simPressure * ENGINE_SCORING.STRENGTHEN.SIM_PRESSURE_FACTOR;
+	return c;
+}
+
+function simPressureFor(filters: EnginePoolFilters, nodeId: string | null): number {
+	if (!nodeId) return 0;
+	return filters.simNodePressure[nodeId] ?? 0;
 }
 
 function scoreExpandNode(
@@ -335,7 +404,26 @@ function continueCardReason(card: EngineCardCandidate): SessionReasonCode {
 	return SESSION_REASON_CODES.CONTINUE_RECENT_DOMAIN;
 }
 
-function strengthenCardReason(card: EngineCardCandidate): SessionReasonCode {
+/**
+ * Resolve the reason code for a strengthen-slice card slot. Sim pressure
+ * wins when it is the largest individual contributor, since the user's
+ * recent flight evidence is the freshest and most actionable signal --
+ * if the sim says "you keep busting this," the slot should cite the sim
+ * even when a relearning or rated-Again contribution is also present.
+ *
+ * The spec's tie-break rule says sim wins on a tie because flight
+ * evidence is more recent than rep accuracy.
+ */
+function strengthenCardReason(card: EngineCardCandidate, contribution: StrengthenContribution): SessionReasonCode {
+	if (
+		contribution.simPressure > 0 &&
+		contribution.simPressure >= contribution.relearning &&
+		contribution.simPressure >= contribution.ratedAgain &&
+		contribution.simPressure >= contribution.ratedHard &&
+		contribution.simPressure >= contribution.heavilyOverdue
+	) {
+		return SESSION_REASON_CODES.STRENGTHEN_SIM_WEAKNESS_CARD;
+	}
 	if (card.state === CARD_STATES.RELEARNING) return SESSION_REASON_CODES.STRENGTHEN_RELEARNING;
 	if (card.lastRating === REVIEW_RATINGS.AGAIN || card.lastRating === REVIEW_RATINGS.HARD)
 		return SESSION_REASON_CODES.STRENGTHEN_RATED_AGAIN;
@@ -344,7 +432,14 @@ function strengthenCardReason(card: EngineCardCandidate): SessionReasonCode {
 	return SESSION_REASON_CODES.STRENGTHEN_RATED_AGAIN;
 }
 
-function strengthenRepReason(rep: EngineRepCandidate): SessionReasonCode {
+function strengthenRepReason(rep: EngineRepCandidate, contribution: StrengthenContribution): SessionReasonCode {
+	if (
+		contribution.simPressure > 0 &&
+		contribution.simPressure >= contribution.repLowAccuracy &&
+		contribution.simPressure >= contribution.repRecentMiss
+	) {
+		return SESSION_REASON_CODES.STRENGTHEN_SIM_WEAKNESS_REP;
+	}
 	if (rep.accuracyLast5 < ENGINE_SCORING.THRESHOLDS.REP_LOW_ACCURACY)
 		return SESSION_REASON_CODES.STRENGTHEN_LOW_REP_ACCURACY;
 	return SESSION_REASON_CODES.STRENGTHEN_MASTERY_DROP;
@@ -471,29 +566,33 @@ export async function runEngine(inputs: EngineInputs, now: Date = new Date()): P
 	const strengthenPool: Scored<EngineCardCandidate | EngineRepCandidate>[] = [];
 	for (const c of cards) {
 		const over = overconfidence[c.domain] ?? 0;
-		const s = scoreStrengthenCard(c, over);
+		const sim = simPressureFor(filters, c.nodeId);
+		const contribution = strengthenCardContribution(c, over, sim);
+		const s = contributionTotal(contribution);
 		if (s > 0) {
 			strengthenPool.push({
 				candidate: c,
 				score: s,
 				kind: SESSION_ITEM_KINDS.CARD,
 				slice: SESSION_SLICES.STRENGTHEN,
-				reasonCode: strengthenCardReason(c),
-				reasonDetail: strengthenCardDetail(c),
+				reasonCode: strengthenCardReason(c, contribution),
+				reasonDetail: strengthenCardDetail(c, contribution),
 			});
 		}
 	}
 	for (const r of reps) {
 		const over = overconfidence[r.domain] ?? 0;
-		const s = scoreStrengthenRep(r, over);
+		const sim = simPressureFor(filters, r.nodeId);
+		const contribution = strengthenRepContribution(r, over, sim);
+		const s = contributionTotal(contribution);
 		if (s > 0) {
 			strengthenPool.push({
 				candidate: r,
 				score: s,
 				kind: SESSION_ITEM_KINDS.REP,
 				slice: SESSION_SLICES.STRENGTHEN,
-				reasonCode: strengthenRepReason(r),
-				reasonDetail: strengthenRepDetail(r),
+				reasonCode: strengthenRepReason(r, contribution),
+				reasonDetail: strengthenRepDetail(r, contribution),
 			});
 		}
 	}
@@ -765,7 +864,18 @@ export function redistribute(
 
 // ---------- Reason detail helpers ----------
 
-function strengthenCardDetail(card: EngineCardCandidate): string | undefined {
+function strengthenCardDetail(card: EngineCardCandidate, contribution: StrengthenContribution): string | undefined {
+	// When sim pressure is the dominant contributor, surface that in the detail
+	// so the slot row (and the help-explained reason) carries the attribution.
+	if (
+		contribution.simPressure > 0 &&
+		contribution.simPressure >= contribution.relearning &&
+		contribution.simPressure >= contribution.ratedAgain &&
+		contribution.simPressure >= contribution.ratedHard &&
+		contribution.simPressure >= contribution.heavilyOverdue
+	) {
+		return 'Recent sim weakness on a scenario tied to this knowledge';
+	}
 	if (card.state === CARD_STATES.RELEARNING) return 'Relearning state';
 	if (card.lastRating === REVIEW_RATINGS.AGAIN) return 'You rated Again recently';
 	if (card.lastRating === REVIEW_RATINGS.HARD) return 'You rated Hard recently';
@@ -774,7 +884,14 @@ function strengthenCardDetail(card: EngineCardCandidate): string | undefined {
 	return undefined;
 }
 
-function strengthenRepDetail(rep: EngineRepCandidate): string | undefined {
+function strengthenRepDetail(rep: EngineRepCandidate, contribution: StrengthenContribution): string | undefined {
+	if (
+		contribution.simPressure > 0 &&
+		contribution.simPressure >= contribution.repLowAccuracy &&
+		contribution.simPressure >= contribution.repRecentMiss
+	) {
+		return 'Recent sim weakness on a scenario tied to this rep';
+	}
 	if (rep.accuracyLast5 < ENGINE_SCORING.THRESHOLDS.REP_LOW_ACCURACY) {
 		const pct = Math.round(rep.accuracyLast5 * 100);
 		return `Accuracy ${pct}% over last attempts`;

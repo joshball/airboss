@@ -77,6 +77,7 @@ import {
 	session,
 	sessionItemResult,
 } from './schema';
+import { simWeaknessByNode } from './sim-bias';
 
 type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;
 
@@ -594,14 +595,21 @@ export async function previewSession(
 	const sessionLength = options.sessionLength ?? plan.sessionLength ?? DEFAULT_SESSION_LENGTH;
 	const seed = options.seed ?? `${userId}:${now.getTime()}`;
 
-	const [recentDomains, activeDomainsLast7Days, domainFrequencyLast30Days] = await Promise.all([
+	const [recentDomains, activeDomainsLast7Days, domainFrequencyLast30Days, simNodePressureMap] = await Promise.all([
 		fetchRecentSessionDomains(userId, db),
 		fetchActiveDomainsLast7(userId, now, db),
 		fetchDomainFrequency(userId, now, db),
+		simWeaknessByNode(userId, {}, db),
 	]);
 
 	const certFilter: readonly Cert[] = cert ? [cert] : plan.certGoals;
 	const focusFilter: readonly Domain[] = focus ? [focus] : plan.focusDomains;
+
+	// Materialise the Map<string, number> into a plain Record so the engine
+	// stays free of Map mutation concerns. Empty record when the user has no
+	// recent weak scenarios; the engine treats that as a no-op.
+	const simNodePressure: Record<string, number> = {};
+	for (const [nodeId, pressure] of simNodePressureMap) simNodePressure[nodeId] = pressure;
 
 	const filters: EnginePoolFilters = {
 		certFilter,
@@ -611,6 +619,7 @@ export async function previewSession(
 		recentDomains,
 		domainFrequencyLast30Days,
 		activeDomainsLast7Days,
+		simNodePressure,
 	};
 
 	const pools = buildEnginePools(userId, now, db);
