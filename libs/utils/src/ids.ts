@@ -44,6 +44,14 @@ export const generateKnowledgeNodeProgressId = (): string => createId('knp');
 /** Content-citation row (polymorphic source -> reference). */
 export const generateContentCitationId = (): string => createId('ccit');
 
+// Handbook ingestion + reader (ADR 016 phase 0). Reference = edition-versioned
+// citation source; handbookSection = per-section row (chapter / section /
+// subsection); handbookFigure = per-figure asset record. Read-state has a
+// composite PK so it doesn't need its own id.
+export const generateReferenceId = (): string => createId('ref');
+export const generateHandbookSectionId = (): string => createId('hbs');
+export const generateHandbookFigureId = (): string => createId('hbf');
+
 // Hangar BC -- job queue + streamed log + sync ledger.
 export const generateHangarJobId = (): string => createId('job');
 export const generateHangarJobLogId = (): string => createId('jlg');
