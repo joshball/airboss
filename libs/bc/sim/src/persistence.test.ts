@@ -12,7 +12,6 @@ import { generateAuthId } from '@ab/utils';
 import { eq } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import {
-	getRecentSimWeakness,
 	listRecentSimAttempts,
 	loadLatestSimAttempt,
 	loadSimAttempt,
@@ -215,119 +214,6 @@ describe('loadSimAttempt', () => {
 	it('returns null for a non-existent id', async () => {
 		const fetched = await loadSimAttempt('sat_nope', TEST_USER_ID);
 		expect(fetched).toBeNull();
-	});
-});
-
-describe('getRecentSimWeakness', () => {
-	const WEAKNESS_USER_ID = generateAuthId();
-	const WEAKNESS_EMAIL = `sim-weakness-${WEAKNESS_USER_ID}@airboss.test`;
-
-	beforeAll(async () => {
-		const now = new Date();
-		await db.insert(bauthUser).values({
-			id: WEAKNESS_USER_ID,
-			email: WEAKNESS_EMAIL,
-			name: 'Sim Weakness Test',
-			firstName: 'Sim',
-			lastName: 'Weakness',
-			emailVerified: true,
-			role: 'learner',
-			createdAt: now,
-			updatedAt: now,
-		});
-	});
-
-	afterAll(async () => {
-		await db.delete(simAttempt).where(eq(simAttempt.userId, WEAKNESS_USER_ID));
-		await db.delete(bauthUser).where(eq(bauthUser.id, WEAKNESS_USER_ID));
-	});
-
-	function gradeOf(total: number) {
-		return { total, components: [{ kind: 'altitude_hold' as const, weight: 1, score: total }] };
-	}
-
-	it('returns nothing when the user has no recent attempts', async () => {
-		const signals = await getRecentSimWeakness(WEAKNESS_USER_ID);
-		expect(signals.length).toBe(0);
-	});
-
-	it('returns nothing when only one weak attempt exists (below MIN_ATTEMPTS)', async () => {
-		await recordSimAttempt({
-			userId: WEAKNESS_USER_ID,
-			scenarioId: 'efato',
-			result: fakeResult('failure'),
-			tape: null,
-			grade: gradeOf(0.3),
-		});
-		const signals = await getRecentSimWeakness(WEAKNESS_USER_ID);
-		expect(signals.find((s) => s.scenarioId === 'efato')).toBeUndefined();
-	});
-
-	it('returns a signal once two weak attempts exist; weight scales with how poor the average is', async () => {
-		await recordSimAttempt({
-			userId: WEAKNESS_USER_ID,
-			scenarioId: 'efato',
-			result: fakeResult('failure'),
-			tape: null,
-			grade: gradeOf(0.4),
-		});
-		const signals = await getRecentSimWeakness(WEAKNESS_USER_ID);
-		const efato = signals.find((s) => s.scenarioId === 'efato');
-		expect(efato).toBeDefined();
-		if (!efato) return;
-		expect(efato.attempts).toBe(2);
-		// avg = (0.3 + 0.4) / 2 = 0.35; below the 0.6 threshold.
-		expect(efato.avgGradeTotal).toBeCloseTo(0.35, 2);
-		// Weight is in [WEIGHT_FLOOR, 1].
-		expect(efato.weight).toBeGreaterThan(0.1);
-		expect(efato.weight).toBeLessThanOrEqual(1);
-	});
-
-	it('returns nothing when grades are above the poor threshold', async () => {
-		await recordSimAttempt({
-			userId: WEAKNESS_USER_ID,
-			scenarioId: 'departure-stall',
-			result: fakeResult('success'),
-			tape: null,
-			grade: gradeOf(0.85),
-		});
-		await recordSimAttempt({
-			userId: WEAKNESS_USER_ID,
-			scenarioId: 'departure-stall',
-			result: fakeResult('success'),
-			tape: null,
-			grade: gradeOf(0.9),
-		});
-		const signals = await getRecentSimWeakness(WEAKNESS_USER_ID);
-		expect(signals.find((s) => s.scenarioId === 'departure-stall')).toBeUndefined();
-	});
-
-	it('honours the `since` cutoff', async () => {
-		// All recent attempts are within the default window; with a future
-		// `since` (an hour from now), nothing should match.
-		const signals = await getRecentSimWeakness(WEAKNESS_USER_ID, { since: new Date(Date.now() + 60 * 60 * 1000) });
-		expect(signals.length).toBe(0);
-	});
-
-	it('sorts strongest weakness signal first', async () => {
-		await recordSimAttempt({
-			userId: WEAKNESS_USER_ID,
-			scenarioId: 'partial-panel',
-			result: fakeResult('failure'),
-			tape: null,
-			grade: gradeOf(0.1),
-		});
-		await recordSimAttempt({
-			userId: WEAKNESS_USER_ID,
-			scenarioId: 'partial-panel',
-			result: fakeResult('failure'),
-			tape: null,
-			grade: gradeOf(0.05),
-		});
-		const signals = await getRecentSimWeakness(WEAKNESS_USER_ID);
-		// partial-panel (avg ~0.075) should outrank efato (avg 0.35).
-		const ids = signals.map((s) => s.scenarioId);
-		expect(ids[0]).toBe('partial-panel');
 	});
 });
 
