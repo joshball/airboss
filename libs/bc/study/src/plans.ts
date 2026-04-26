@@ -2,14 +2,10 @@
  * Study plan BC functions.
  *
  * Study plans are mutable config aggregates (spec "Plan lifecycle"): one
- * active plan per user, enforced by a partial UNIQUE index on
- * study.study_plan(user_id) WHERE status='active'. The index is declared in
- * the Drizzle schema (`planUserActiveUniq`) so `bun run db push` creates it;
- * `scripts/db/plan-active-unique.sql` is kept as a backward-compatible
- * one-shot for databases provisioned before the DSL expression landed.
- * Creating or activating a plan archives any other active plan for the user
- * inside the same transaction so the invariant holds even when the DB index
- * is missing in ancient environments.
+ * active plan per user, enforced by the partial UNIQUE index on
+ * study.study_plan(user_id) WHERE status='active' (declared on `studyPlan`
+ * as `planUserActiveUniq`). Creating or activating a plan archives any
+ * other active plan for the user inside the same transaction.
  */
 
 import {
