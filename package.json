@@ -9,6 +9,7 @@
 		"test": "bun scripts/test.ts",
 		"db": "bun scripts/db.ts",
 		"references": "bun scripts/references.ts",
+		"airboss-ref": "bun scripts/airboss-ref.ts",
 		"setup": "bun scripts/setup.ts",
 		"smoke": "bun scripts/smoke.ts",
 		"themes:emit": "bun scripts/themes/emit.ts",
