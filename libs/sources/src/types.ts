@@ -187,6 +187,8 @@ export type ParsedLocator = {
 	readonly regs?: ParsedRegsLocator;
 	/** Handbooks payload populated by Phase 6's `parseHandbooksLocator`. */
 	readonly handbooks?: ParsedHandbooksLocator;
+	/** ACS payload populated by `parseAcsLocator` (cert-syllabus WP). */
+	readonly acs?: ParsedAcsLocator;
 };
 
 /**
@@ -231,6 +233,43 @@ export interface ParsedHandbooksLocator {
 	readonly figure?: string;
 	/** Table id (e.g. `'tbl-12-3'`); parses but has no registry entry. */
 	readonly table?: string;
+}
+
+/**
+ * Structured ACS / PTS locator surfaced by `parseAcsLocator` in
+ * `libs/sources/src/acs/locator.ts`. Source of truth: ADR 019 §1.2 ("ACS")
+ * plus the WP at `docs/work-packages/cert-syllabus-and-goal-composer/`.
+ *
+ * Locator shape -- pinned to ADR 019 §1.2's documented convention:
+ *
+ *   <cert>/<edition>                                            whole publication
+ *   <cert>/<edition>/area-<n>                                   area
+ *   <cert>/<edition>/area-<n>/task-<x>                          task
+ *   <cert>/<edition>/area-<n>/task-<x>/element-<triad><ord>     element
+ *
+ * `<n>` is a roman-numeral lowercased (e.g. `area-v`); `<x>` is a
+ * lowercased letter (e.g. `task-a`); element names always carry the K/R/S
+ * triad prefix followed by the ordinal (e.g. `element-k1`, `element-r2`,
+ * `element-s3`).
+ *
+ * Open Question 7 (final ACS locator convention) is still pending. This
+ * parser implements ADR 019 §1.2's example exactly; if the convention
+ * resolves differently the parser updates here without breaking callers
+ * that only consume `segments`.
+ */
+export interface ParsedAcsLocator {
+	/** Cert slug -- `ppl-asel`, `cfi-asel`, etc. Lowercase kebab-case. */
+	readonly cert: string;
+	/** Edition slug -- `faa-s-acs-25`, etc. Lowercase. */
+	readonly edition: string;
+	/** Area roman numeral, lowercased (e.g. `'v'` for Area V). */
+	readonly area?: string;
+	/** Task letter, lowercased (e.g. `'a'`). */
+	readonly task?: string;
+	/** Element triad: `'k'`, `'r'`, or `'s'`. Always present when `elementOrdinal` is set. */
+	readonly elementTriad?: 'k' | 'r' | 's';
+	/** Element ordinal as written (`'1'`, `'2'`, ...). */
+	readonly elementOrdinal?: string;
 }
 
 export interface LocatorError {
