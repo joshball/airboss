@@ -1,0 +1,47 @@
+---
+handbook: afh
+edition: FAA-H-8083-3C
+chapter_number: 6
+section_title: Takeoffs and Departure Climbs
+faa_pages: 6-1..6-14
+source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/airplane_handbook/00_afh_full.pdf
+---
+
+# Takeoffs and Departure Climbs
+
+![Figure 6-1. Takeoff and climb. 
+Figure 6-2. Performance chart examples. 
+6-2](/handbooks/afh/FAA-H-8083-3C/figures/fig-6-00-takeoff-and-climb-figure-6-2-performance-chart-e.png)
+
+![Figure 6-2. Performance chart examples. 
+6-2](/handbooks/afh/FAA-H-8083-3C/figures/fig-6-01-performance-chart-examples-6-2.png)
+
+![Figure 6-3. Initial roll and takeoff attitude. 
+Each type of airplane has a best pitch attitude for normal lift-off; however, varying conditions may make a difference in the required 
+takeoff technique. A rough field, a smooth field, a hard surface runway, or a short or soft, muddy field all call for a slightly differe](/handbooks/afh/FAA-H-8083-3C/figures/fig-6-02-initial-roll-and-takeoff-attitude-each-type-of-a.png)
+
+![Figure 6-5. Crosswind effect. 
+Initial Climb 
+If a proper crosswind correction is applied, the aircraft will maintain alignment with the runway while accelerating to takeoff speed 
+and then maintain that alignment once airborne. As takeoff acceleration occurs, the efficiency of the up-aileron will increase with 
+aircra](/handbooks/afh/FAA-H-8083-3C/figures/fig-6-03-crosswind-effect-initial-climb-if-a-proper-cross.png)
+
+![Figure 6-6. Crosswind climb flightpath. 
+6-9](/handbooks/afh/FAA-H-8083-3C/figures/fig-6-04-crosswind-climb-flightpath-6-9.png)
+
+![Figure 6-7. Takeoff in ground effect area. 
+When the wing is under the influence of ground effect, there is a reduction in upwash, downwash, and wingtip vortices. As a result of 
+the reduced wingtip vortices, induced drag is reduced. When the wing is at a height equal to 1/4 the span, the reduction in induced 
+drag is](/handbooks/afh/FAA-H-8083-3C/figures/fig-6-05-takeoff-in-ground-effect-area-when-the-wing-is-u.png)
+
+![Figure 6-8. Short-field takeoff. 
+The pilot should have adequate knowledge in the use and effectiveness of the best angle-of-climb speed (VX) and the best rate-of­
+climb speed (VY) for the specific make and model of airplane being flown in order to safely accomplish a takeoff at maximum 
+performance. 
+Takeoff Roll 
+Tak](/handbooks/afh/FAA-H-8083-3C/figures/fig-6-06-short-field-takeoff-the-pilot-should-have-adequa.png)
+
+![Figure 6-9. Effect of premature lift-off. 
+The objective is to rotate to the appropriate pitch attitude at (or near) VX. The pilot should be aware that some airplanes have a 
+natural tendency to lift off well before reaching VX. In these airplanes, it may be necessary to allow the airplane to lift off in ground 
+effect](/handbooks/afh/FAA-H-8083-3C/figures/fig-6-07-effect-of-premature-lift-off-the-objective-is-to.png)
