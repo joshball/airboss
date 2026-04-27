@@ -1,0 +1,8 @@
+{
+	"name": "@ab/sources",
+	"private": true,
+	"type": "module",
+	"dependencies": {
+		"yaml": "^2.8.3"
+	}
+}

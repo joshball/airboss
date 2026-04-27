@@ -30,6 +30,7 @@ const aliases = {
 	'@ab/activities': resolve('./libs/activities/src/index.ts'),
 	'@ab/hangar-jobs': resolve('./libs/hangar-jobs/src/index.ts'),
 	'@ab/hangar-sync': resolve('./libs/hangar-sync/src/index.ts'),
+	'@ab/sources': resolve('./libs/sources/src/index.ts'),
 };
 
 // `$app/state` is a SvelteKit runtime module. The standalone DOM project
