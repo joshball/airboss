@@ -15,6 +15,8 @@
 import './regs/index.ts';
 // Side-effect import: registers the `handbooks` CorpusResolver.
 import './handbooks/index.ts';
+// Side-effect import: registers the `aim` CorpusResolver.
+import './aim/index.ts';
 
 export { productionRegistry } from './registry/index.ts';
 export { NULL_REGISTRY } from './registry-stub.ts';
