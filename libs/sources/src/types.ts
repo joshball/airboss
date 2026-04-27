@@ -155,11 +155,34 @@ export type LessonId = string;
 
 /**
  * Per-corpus parsed locator. Phase 2 ships the default no-op resolver which
- * returns segmented opaque shape. Phase 3+ corpus resolvers may return richer
- * shapes (CFR returns `{ title, part, section, paragraph }`, etc.) by extending
- * this discriminated union when their corpus lands.
+ * returns the segmented opaque shape. Phase 3+ corpus resolvers extend with an
+ * optional, corpus-specific payload (the `regs` payload below for CFR, future
+ * `handbooks` / `aim` / etc.) without breaking the Phase 1 + Phase 2 readers
+ * that only consume `kind` + `segments`.
+ *
+ * The richer payload is optional in TypeScript's structural sense: callers who
+ * only read `segments` continue to work; resolvers that know about a specific
+ * corpus narrow on their key (`'regs' in parsed`) before consuming the payload.
  */
-export type ParsedLocator = { readonly kind: 'ok'; readonly segments: readonly string[] };
+export type ParsedLocator = {
+	readonly kind: 'ok';
+	readonly segments: readonly string[];
+	/** CFR (regs) payload populated by Phase 3's `parseRegsLocator`. */
+	readonly regs?: ParsedRegsLocator;
+};
+
+/**
+ * Structured CFR locator surfaced by `parseRegsLocator` in `libs/sources/src/regs/locator.ts`.
+ * Source of truth: ADR 019 §1.2 ("Regulations") plus the WP at
+ * `docs/work-packages/reference-cfr-ingestion-bulk/`.
+ */
+export interface ParsedRegsLocator {
+	readonly title: '14' | '49';
+	readonly part: string;
+	readonly subpart?: string;
+	readonly section?: string;
+	readonly paragraph?: readonly string[];
+}
 
 export interface LocatorError {
 	readonly kind: 'error';
