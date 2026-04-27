@@ -32,8 +32,8 @@ ADR 016 phase 0 is the contract. This spec implements it.
 
 ## In Scope
 
-1. **Ingestion pipeline (Python).** Fetch FAA PDFs, extract structure via PDF outline, per-section text via PyMuPDF (`fitz`), per-page images bound to figure captions, table detection -> HTML, normalize each section into markdown with frontmatter `(handbook, edition, chapter_number, section_number, section_title, faa_pages, source_url)`. Edition-locked output: a new edition produces a new tree under `<root>/<doc>/<edition>/`; old editions stay.
-2. **Storage tree.** New top-level `handbooks/` directory holds the per-section markdown + figure images + tables. Edition-locked. Committed to the repo. (See Open Question 1.)
+1. **Ingestion pipeline (Python).** Fetch FAA PDFs, extract structure via PDF outline, per-section text via PyMuPDF (`fitz`), per-page images bound to figure captions, table detection -> HTML, normalize each section into markdown with frontmatter `(handbook, edition, chapter_number, section_number, section_title, faa_pages, source_url)`. Edition-locked output: a new edition produces a new tree under `<root>/<doc>/<edition>/`; old editions stay. Source PDF is cached locally outside the repo at `$AIRBOSS_HANDBOOK_CACHE/handbooks/<doc>/<edition>/source.pdf` per [ADR 018](../../decisions/018-source-artifact-storage-policy/decision.md).
+2. **Storage tree.** Top-level `handbooks/` directory holds inline derivatives only (per-section markdown + figure images + tables + manifest.json). Source PDFs live in the developer-local cache (default `~/Documents/airboss-handbook-cache/`, override via `AIRBOSS_HANDBOOK_CACHE`), not the repo. Layout follows the three-tier rule in [docs/platform/STORAGE.md](../../platform/STORAGE.md): the source PDF is cached + gitignored (LFS plumbing in `.gitattributes` is dormant for the future flip); markdown / figures / tables / manifest.json are inline derivatives; DB rows are generated artifacts that live in Postgres.
 3. **DB schema.** New `study.reference`, `study.handbook_section`, `study.handbook_figure`, `study.handbook_read_state` tables. Drizzle ORM only; CHECK constraints mirror existing patterns; IDs use `prefix_ULID` via `@ab/utils createId()`.
 4. **BC functions.** `libs/bc/study/src/handbooks.ts` -- list handbooks, list sections per handbook/chapter, get section by locator, list nodes that cite a section (reverse query over the `knowledge_node.references` JSONB), record + read read-state, render markdown to HTML through the existing references pipeline.
 5. **Seed pipeline.** `bun run db seed handbooks` rebuilds the DB tables from the committed `handbooks/` tree. Idempotent, content-hashed, no rebuild on unchanged sections.
@@ -285,13 +285,15 @@ bun run handbook-ingest phak --edition 8083-25C --force          # re-extract ev
 
 (The `bun run handbook-ingest` script in the monorepo root `package.json` shells out to `python -m ingest` from `tools/handbook-ingest/`. Bun is the dispatcher; Python is the runtime. This keeps the developer entry point uniform.)
 
-Output tree (Open Question 1; recommended):
+Output trees (per [ADR 018](../../decisions/018-source-artifact-storage-policy/decision.md) and [STORAGE.md](../../platform/STORAGE.md)):
+
+In-repo (committed inline):
 
 ```text
 handbooks/
   phak/
     8083-25C/
-      manifest.json                      # {reference, chapters, sections, hashes, figures}
+      manifest.json                      # {reference, source_url, source_sha256, chapters, sections, hashes, figures}
       00-front-matter.md
       01/
         index.md                         # chapter overview text + section list
@@ -310,11 +312,25 @@ handbooks/
         ...
   afh/
     8083-3C/
+      manifest.json
       ...
   avwx/
     8083-28/
+      manifest.json
       ...
 ```
+
+Local cache (NOT in repo; default `~/Documents/airboss-handbook-cache/`, override via `AIRBOSS_HANDBOOK_CACHE`):
+
+```text
+$AIRBOSS_HANDBOOK_CACHE/
+  handbooks/
+    phak/8083-25C/source.pdf             # 74 MB FAA-fetched
+    afh/8083-3C/source.pdf               # 261 MB FAA-fetched
+    avwx/8083-28/source.pdf              # FAA-fetched
+```
+
+The cached `source.pdf` is canonical for re-extraction. The pipeline writes it once (downloaded from `source_url`) and re-uses it on subsequent runs. Re-extraction (improved cropping, table fix, etc.) reads from the cached bytes; no internet round-trip after the first pull. The audit trail lives in `manifest.json` via `(source_url, source_sha256, fetched_at)`. The text the reader renders is the per-section markdown, which *is* the canonical extracted text -- there is no separate plaintext blob alongside the markdown.
 
 Section markdown shape:
 
@@ -535,13 +551,13 @@ HANDBOOK_SECTION_AT_EDITION: (doc: string, chapter: number | string, section: nu
 - **A node's structured citation references a `reference_id` that no longer exists.** The reverse query skips the row; the resolver returns `null`. The build script warns at validation time. The detail UI on the node renders the freeform `note` if present, otherwise a faded "(citation broken)" tag.
 - **Heartbeat throttle collision with browser background-tab throttling.** The `document.visibilityState !== 'visible'` gate already blocks heartbeats from background tabs, so the OS-level setInterval throttle is moot.
 
-## Open Questions
+## Resolved decisions
 
-The user resolves each before tasks/test-plan finalize. Each carries a recommendation and rationale.
+The five questions below were originally posed as Open Questions for the user to resolve. All were resolved on 2026-04-26 in favor of the recommended option in each. The original alternatives + rationale are kept here as the design record. ADR 018 (storage policy) was authored alongside Decision 1 because the answer establishes a repo-wide rule, not just a WP-local choice.
 
-### 1. Storage location -- top-level `handbooks/` vs `course/handbooks/` vs `content/handbooks/`
+### 1. Storage location -- top-level `handbooks/` (resolved)
 
-**Recommended: top-level `handbooks/` (peer to `course/`, `apps/`, `libs/`).**
+**Resolved: top-level `handbooks/` for inline derivatives only. Source PDFs live in `$AIRBOSS_HANDBOOK_CACHE/handbooks/<doc>/<edition>/source.pdf` (developer-local cache, default `~/Documents/airboss-handbook-cache/`) per [ADR 018](../../decisions/018-source-artifact-storage-policy/decision.md). LFS plumbing in `.gitattributes` is dormant; `.gitignore` blocks PDFs from staging. Derivatives (markdown, figures, tables, manifest.json) are inline.**
 
 | Option                | For                                                                                                                                    | Against                                                                                                |
 | --------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
@@ -551,17 +567,17 @@ The user resolves each before tasks/test-plan finalize. Each carries a recommend
 
 Top-level `handbooks/` reflects the lifecycle separation: ingested, edition-locked, gitignored binaries, committed markdown + figures. The directory structure is unique to this kind of artifact (per-edition subtree, manifest.json, figure assets). Co-locating with `course/` would invite confusion between authored and imported material.
 
-### 2. Routes -- `/handbooks/*` vs `/study/handbooks/*`
+### 2. Routes -- `/handbooks/*` (resolved)
 
-**Recommended: top-level `/handbooks/*` under the existing `(app)` group.**
+**Resolved: top-level `/handbooks/*` under the existing `(app)` group, peer to `/glossary` and `/references`.**
 
 The `apps/study/` app already mounts `/glossary`, `/references`, `/help`, `/knowledge`, `/calibration`, `/dashboard`, `/memory`, `/plans`, `/reps`, `/sessions`, `/session` directly under `(app)/`. There is no `/study/...` group. `/handbooks/*` slots in next to `/glossary` and `/references`, which it most resembles -- a reference-shaped surface that the rest of the app links into.
 
 Alternate: `/study/handbooks/*` would imply a future per-app route group. None exists today; introducing one for this feature is premature. If the firc app ever ships handbooks too, both apps will mount their own `/handbooks` at their host (just like they do for `/glossary`). The constant in `routes.ts` stays a single string; the host disambiguates.
 
-### 3. Build / runtime model -- committed markdown + DB seed vs build-time regen vs scheduled
+### 3. Build / runtime model -- committed markdown + DB seed (resolved)
 
-**Recommended: ingestion produces committed markdown + assets; `bun run db seed handbooks` rebuilds the DB tables from that committed content.**
+**Resolved: ingestion produces committed markdown + assets; `bun run db seed handbooks` rebuilds the DB tables from that committed content. Source PDFs are cached locally (per ADR 018) so re-extraction does not require an FAA round-trip after the first pull.**
 
 | Option                               | For                                                                                                                                         | Against                                                                                                                                                         |
 | ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -571,9 +587,9 @@ Alternate: `/study/handbooks/*` would imply a future per-app route group. None e
 
 The committed-markdown model matches how `course/knowledge/` works today: authoring happens in markdown, the seed builds the DB. Reviewability of FAA edition diffs is the load-bearing argument -- a new PHAK edition is a content event, not a build event.
 
-### 4. Read-progress UI shape -- segmented three-state vs toggle + secondary action vs other
+### 4. Read-progress UI shape (resolved)
 
-**Recommended: a segmented Unread / Reading / Read control at the section foot, plus a secondary "Read but didn't get it" toggle that only enables once `status >= reading`.**
+**Resolved: segmented Unread / Reading / Read control at the section foot, plus a secondary "Read but didn't get it" toggle that only enables once `status >= reading`.**
 
 | Option                                | For                                                                                                          | Against                                                                                                       |
 | ------------------------------------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------- |
@@ -583,13 +599,11 @@ The committed-markdown model matches how `course/knowledge/` works today: author
 
 The segmented control resolves intent at every state and gives the suggestion heuristic a clean target ("Mark read?" advances Reading -> Read). The "didn't get it" toggle is positioned beneath as a secondary-line affordance to keep the primary control simple.
 
-### 5. Suggestion-heuristic thresholds
+### 5. Suggestion-heuristic thresholds (resolved)
 
-**Recommended defaults:** `HANDBOOK_SUGGEST_OPEN_SECONDS = 60`, `HANDBOOK_SUGGEST_TOTAL_SECONDS = 90`, scroll-to-bottom required, heartbeat interval 15s.
+**Resolved: accept the spec defaults.** `HANDBOOK_SUGGEST_OPEN_SECONDS = 60`, `HANDBOOK_SUGGEST_TOTAL_SECONDS = 90`, scroll-to-bottom required, heartbeat interval 15s.
 
 These are starting numbers, not gospel. The real evidence comes from user zero's first month: if "Mark read?" prompts feel either too eager (he's still reading) or too late (he closed the tab already), the constants shift. They live in `libs/constants/src/study.ts` so a tuning pass is a one-file change.
-
-User picks final numbers (or accepts defaults). No code branches on the number; it's a single platform constant.
 
 ## Migration considerations
 

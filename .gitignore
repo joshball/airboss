@@ -24,3 +24,10 @@ data/sources/**/*.txt
 data/sources/**/*.html
 # But KEEP the meta.json files
 !data/sources/**/*.meta.json
+
+# Source artifact storage policy -- see ADR 018 and docs/platform/STORAGE.md.
+# Source documents (FAA PDFs etc.) live in $AIRBOSS_HANDBOOK_CACHE
+# (default ~/Documents/airboss-handbook-cache/), not the repo.
+# These lines block accidental staging; the matching .gitattributes lines
+# carry dormant LFS plumbing for the day this policy flips.
+handbooks/**/*.pdf
