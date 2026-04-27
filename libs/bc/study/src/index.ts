@@ -101,6 +101,30 @@ export { runEngine } from './engine';
 export type { SubmitFeedbackInput } from './feedback';
 export { FeedbackCommentRequiredError, getLatestFeedback, submitFeedback } from './feedback';
 export { formatNextInterval, formatNextIntervalAbsolute } from './formatters';
+export type { CreateGoalParams, ListGoalsOptions as ListGoalsOpts } from './goals';
+export {
+	addGoalNode,
+	addGoalSyllabus,
+	archiveGoal,
+	createGoal,
+	GoalAlreadyPrimaryError,
+	GoalNotFoundError,
+	GoalNotOwnedError,
+	getActiveGoals,
+	getDerivedCertGoals,
+	getGoalById,
+	getGoalNodes,
+	getGoalNodeUnion,
+	getGoalSyllabi,
+	getOwnedGoal,
+	getPrimaryGoal,
+	listGoals,
+	removeGoalNode,
+	removeGoalSyllabus,
+	setGoalSyllabusWeight,
+	setPrimaryGoal,
+	updateGoal,
+} from './goals';
 export {
 	citationSchema,
 	type HandbookManifest,
