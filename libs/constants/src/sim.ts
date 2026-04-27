@@ -654,3 +654,123 @@ export const SIM_HISTORY = {
 	/** Default cap on rows returned by `listRecentSimAttempts` for the dashboard. */
 	LIST_LIMIT: 50,
 } as const;
+
+/**
+ * One sim-scenario -> knowledge-node link. Authored, not derived. The
+ * study scheduler reads `SIM_SCENARIO_NODE_MAPPINGS` to translate a
+ * weakness signal on a scenario into per-node pressure on cards / reps.
+ *
+ * `nodeId` is a kebab-case `knowledge_node.id` slug; resolution is
+ * checked at seed time by the build-knowledge validator (see
+ * `scripts/build-knowledge-index.ts`).
+ *
+ * `weight` is in `(0, 1]`. Higher means the node is more central to the
+ * scenario; the scheduler multiplies it by the scenario's weakness
+ * weight and sums (then clamps) per node.
+ */
+export interface SimScenarioNodeLink {
+	/** Knowledge graph node id (kebab-case slug, must resolve at seed time). */
+	readonly nodeId: string;
+	/** Edge weight in (0, 1]. Higher = this node is more central to the scenario. */
+	readonly weight: number;
+}
+
+/**
+ * Sim scenario ids excluded from the authored mapping. `playground` and
+ * `playground-pa28` are sandbox scenarios with no grading -- they never
+ * produce a weakness signal, so a mapping row would be dead weight.
+ *
+ * Excluded ids surface in code review (the `Exclude<...>` in the typed
+ * `Record` below) so adding a new ungraded scenario is a deliberate
+ * choice, not a quiet drop.
+ */
+export type SimScenarioIdUngraded = typeof SIM_SCENARIO_IDS.PLAYGROUND | typeof SIM_SCENARIO_IDS.PLAYGROUND_PA28;
+
+export type SimScenarioIdGraded = Exclude<SimScenarioId, SimScenarioIdUngraded>;
+
+/**
+ * Authored mapping from sim scenarios to the knowledge nodes they exercise.
+ * Many-to-many. Empty array is illegal (validated by unit test).
+ *
+ * The typed `Record<SimScenarioIdGraded, ...>` makes adding a new graded
+ * scenario fail compilation until a mapping row is authored. Removing a
+ * scenario invalidates the matching row at compile time.
+ *
+ * Edge weights in `(0, 1]`: 1.0 means the node is the headline concept
+ * the scenario exercises; lower values capture secondary / supporting
+ * nodes the scheduler should also lift, but less strongly.
+ *
+ * See `docs/work-packages/sim-card-mapping/design.md#authored-mapping`
+ * for the rationale behind each row.
+ */
+export const SIM_SCENARIO_NODE_MAPPINGS: Record<SimScenarioIdGraded, readonly SimScenarioNodeLink[]> = {
+	[SIM_SCENARIO_IDS.FIRST_FLIGHT]: [
+		{ nodeId: 'aero-four-forces', weight: 0.6 },
+		{ nodeId: 'proc-traffic-pattern', weight: 0.4 },
+	],
+	[SIM_SCENARIO_IDS.DEPARTURE_STALL]: [
+		{ nodeId: 'aero-angle-of-attack-and-stall', weight: 1.0 },
+		{ nodeId: 'proc-stall-recovery', weight: 0.6 },
+	],
+	[SIM_SCENARIO_IDS.EFATO]: [
+		{ nodeId: 'proc-engine-failure-after-takeoff', weight: 1.0 },
+		{ nodeId: 'proc-emergency-authority', weight: 0.4 },
+	],
+	[SIM_SCENARIO_IDS.VACUUM_FAILURE]: [
+		{ nodeId: 'nav-partial-panel', weight: 0.8 },
+		{ nodeId: 'proc-instrument-cross-check', weight: 0.6 },
+	],
+	[SIM_SCENARIO_IDS.PITOT_BLOCK]: [
+		{ nodeId: 'proc-pitot-static-failures', weight: 1.0 },
+		{ nodeId: 'proc-instrument-cross-check', weight: 0.4 },
+	],
+	[SIM_SCENARIO_IDS.STATIC_BLOCK]: [
+		{ nodeId: 'proc-pitot-static-failures', weight: 1.0 },
+		{ nodeId: 'proc-alternate-static-source', weight: 0.6 },
+	],
+	[SIM_SCENARIO_IDS.PARTIAL_PANEL]: [
+		{ nodeId: 'nav-partial-panel', weight: 1.0 },
+		{ nodeId: 'proc-instrument-cross-check', weight: 0.5 },
+	],
+	[SIM_SCENARIO_IDS.UNUSUAL_ATTITUDES_NOSE_HI]: [
+		{ nodeId: 'proc-unusual-attitude-recovery', weight: 1.0 },
+		{ nodeId: 'aero-angle-of-attack-and-stall', weight: 0.4 },
+	],
+	[SIM_SCENARIO_IDS.UNUSUAL_ATTITUDES_NOSE_LO]: [
+		{ nodeId: 'proc-unusual-attitude-recovery', weight: 1.0 },
+		{ nodeId: 'proc-overspeed-recovery', weight: 0.4 },
+	],
+	[SIM_SCENARIO_IDS.AFT_CG_SLOW_FLIGHT]: [
+		{ nodeId: 'aero-cg-and-stability', weight: 0.8 },
+		{ nodeId: 'aero-slow-flight', weight: 0.6 },
+	],
+	[SIM_SCENARIO_IDS.VMC_INTO_IMC]: [
+		{ nodeId: 'proc-spatial-disorientation', weight: 1.0 },
+		{ nodeId: 'proc-180-degree-turn', weight: 0.6 },
+	],
+	[SIM_SCENARIO_IDS.ILS_APPROACH]: [
+		{ nodeId: 'nav-instrument-approach-structure', weight: 0.6 },
+		{ nodeId: 'nav-localiser-and-glide-slope-tracking', weight: 1.0 },
+		{ nodeId: 'nav-marker-beacon-recognition', weight: 0.4 },
+	],
+	[SIM_SCENARIO_IDS.STEEP_TURNS]: [
+		{ nodeId: 'aero-load-factor-and-bank-angle', weight: 1.0 },
+		{ nodeId: 'aero-coordination-rudder', weight: 0.5 },
+	],
+	[SIM_SCENARIO_IDS.GROUND_REFERENCE_TURNS_AROUND_POINT]: [
+		{ nodeId: 'aero-coordination-rudder', weight: 0.8 },
+		{ nodeId: 'aero-load-factor-and-bank-angle', weight: 0.4 },
+	],
+	[SIM_SCENARIO_IDS.SHORT_FIELD_LANDING]: [
+		{ nodeId: 'aero-slow-flight', weight: 0.8 },
+		{ nodeId: 'proc-traffic-pattern', weight: 0.4 },
+	],
+	[SIM_SCENARIO_IDS.SLOW_FLIGHT]: [
+		{ nodeId: 'aero-slow-flight', weight: 1.0 },
+		{ nodeId: 'aero-angle-of-attack-and-stall', weight: 0.5 },
+	],
+	[SIM_SCENARIO_IDS.CROSSWIND_LANDING]: [
+		{ nodeId: 'aero-coordination-rudder', weight: 1.0 },
+		{ nodeId: 'proc-traffic-pattern', weight: 0.4 },
+	],
+};

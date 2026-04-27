@@ -281,6 +281,8 @@ export {
 	skipSessionSlot,
 	startSession,
 } from './sessions';
+export type { SimScenarioNodeMappings } from './sim-bias';
+export { aggregateSimNodePressure, simWeaknessByNode } from './sim-bias';
 export type { RemoveCardInput, ReplacementCardResult, RestoreCardInput, SnoozeCardInput } from './snooze';
 export {
 	CardAlreadyRemovedError,

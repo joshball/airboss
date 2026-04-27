@@ -47,12 +47,15 @@ Don't block work for reminders. Surface them briefly at the start, then move on.
 ## Doc Structure
 
 ```text
-course/                 AVIATION KNOWLEDGE (organized by information architecture layers)
-  L01-FAA/              Regulatory foundation (AC 61-83K, CFRs, TCO, submission)
-  L02-Knowledge/        Per-topic aviation research (A.1-A.13)
-  L03-Objectives/       Learning objectives, competency framework
-  L04-Design/           Instructional design, module structure
-  L05-Implementation/   Scenarios, question banks, feature specs
+course/                 AVIATION COURSE CONTENT (surface-agnostic)
+  knowledge/            Post-pivot knowledge graph (atomic ADR-011 nodes, live in apps/study/)
+  regulations/          FAR navigation course (post-pivot, structured walk through Parts 1/61/91/141/135)
+  firc/                 Dormant FIRC-era 5-layer corpus (revives with apps/firc/ -- see course/firc/README.md)
+    L01-FAA/            Regulatory foundation (AC 61-83K, CFRs, TCO, submission)
+    L02-Knowledge/      Per-topic aviation research (A.1-A.13)
+    L03-Objectives/     Learning objectives, competency framework
+    L04-Design/         Instructional design, module structure
+    L05-Implementation/ FIRC scenarios, question banks, feature specs
 
 docs/                   PLATFORM
   platform/             Architecture, vision, design principles, info architecture
@@ -170,6 +173,7 @@ Feature lifecycle is driven by shared skills:
 - **Svelte 5 runes only.** No `$:`, no `export let`, no `<slot>`, no Svelte 4 stores (`writable`, `readable`, `$app/stores`). Use `$app/state`.
 - **Discovery-first pedagogy for knowledge nodes.** Lead with WHY. Let the learner derive the answer. Reveal regulations as confirmation of reasoning, not as arbitrary rules. See [ADR 011](docs/decisions/011-knowledge-graph-learning-system/decision.md).
 - **Engine scoring tuning lives in `ENGINE_SCORING`** (`libs/constants/src/engine.ts`). Never inline a numeric literal in `libs/bc/study/src/engine.ts` scoring functions; route through the constant. See ADR 014.
+- **Source documents (PDFs, audio masters, scanned regulations) live in a developer-local cache, not the repo.** Cache default: `~/Documents/airboss-handbook-cache/` (override via `AIRBOSS_HANDBOOK_CACHE`). LFS plumbing in `.gitattributes` is dormant; `.gitignore` blocks the source bytes from staging. Extracted derivatives (markdown, figure PNGs, table HTML, manifest.json) stay inline. Generated artifacts (DB rows, indexes) stay out of the repo. See [ADR 018](docs/decisions/018-source-artifact-storage-policy/decision.md) and [docs/platform/STORAGE.md](docs/platform/STORAGE.md). Adding a new content corpus = one `.gitattributes` line + one `.gitignore` line + cache subdirectory.
 
 ## Stack
 

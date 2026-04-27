@@ -1,45 +1,50 @@
-# Runway -- Vision
+---
+title: Runway Vision
+product: runway
+type: vision
+status: deferred
+date: 2026-04-26
+supersedes: ../../.archive/products/runway/VISION.md
+---
 
-The entry point. Where visitors arrive, learn what FIRC Boss is, and launch into training.
+# Runway Vision
 
-## Purpose
+The public-facing surface for airboss. Where someone who isn't logged in can land, learn what the platform is, see free content, and (eventually) sign up.
 
-Runway is the public-facing site for FIRC Boss. It serves three audiences:
+**Status: deferred.** No `apps/runway/` exists today. The platform is single-user (Joshua, see [user_profile memory entry]) and has no public face. Runway becomes a real surface when:
 
-| Audience                | Need                          | Runway delivers                   |
-| ----------------------- | ----------------------------- | --------------------------------- |
-| Prospective learner     | "What is this? Is it for me?" | Marketing pages, course catalog   |
-| Ready-to-enroll learner | "I want to sign up and start" | Registration, payment, enrollment |
-| Returning learner       | "Take me to my course"        | Login, redirect to sim            |
+1. v1 launch milestone is hit and the project goes public, OR
+2. Open-source release per [PIVOT.md](../../platform/PIVOT.md)'s open-core posture decides on hosting + landing-page direction, OR
+3. A second user joins and we need a "what is this" page.
 
-## Principles
+Until then this doc is a placeholder.
 
-- **Public first.** Browsing requires no account. The catalog, pricing, and marketing are open.
-- **SSR for SEO.** Runway is the only app with server-side rendering. Search engines must index it.
-- **Fast to launch.** Signup-to-first-scenario should feel frictionless. Minimal steps.
-- **Two Systems, Layered.** Public copy says "scenario-based interactive instruction." Never "game." Never expose engine internals, scoring formulas, or adaptive algorithms.
-- **Never a Trick.** Pricing is clear. No hidden fees, no dark patterns, no surprise charges.
+## What runway will do (when it lands)
 
-## What Runway Is Not
+- **Landing page** -- explain what airboss is to a pilot who isn't logged in.
+- **Free content sample** -- a few scenarios, cards, or knowledge-graph nodes accessible without auth.
+- **Open-source repo pointers** -- if open-source, links to GitHub, contribution guide.
+- **Self-host instructions** -- if open-source, how to run your own instance.
+- **Sign-up flow** -- whatever shape that takes per the hosting decision.
 
-- Not a learner dashboard (that's sim)
-- Not account management (that's sim)
-- Not user administration (that's ops)
-- Not content authoring (that's hangar)
+## What runway will NOT be
 
-Once a learner is enrolled, runway's job is done. Hand off to sim.
+- **A marketing funnel** for a paid course. The pre-pivot runway sold FIRC; airboss is "cover-costs / potentially open-source," not commercial. The FIRC-era marketing surface is archived to [.archive/products/runway/](../../.archive/products/runway/).
+- **A learner experience.** Logged-in learners go to study / sim / future surfaces.
+- **A blog or content site.** The reference / glossary system already handles authoritative content.
 
-## Domain
+## Trigger to elevate this from "deferred"
 
-- Production: `fircboss.com` (apex)
-- Development: `runway.firc.test:7640`
+When the user decides:
 
-## Data Access
+- That airboss has a v1 ready to be shown to others.
+- Whether airboss is going open-source, hosted-only, or both.
+- What the project name actually is (the working name is "airboss"; per [PIVOT.md](../../platform/PIVOT.md) the final name is TBD).
 
-| Schema      | Access | Purpose                                           |
-| ----------- | ------ | ------------------------------------------------- |
-| `published` | read   | Course catalog (modules, scenarios, competencies) |
-| `identity`  | write  | Account creation (signup)                         |
-| `audit`     | write  | Action logging                                    |
+At that point: write a real PRD, scope a build, and either rebuild from scratch or selectively port pieces from the [archived FIRC-era runway](../../.archive/products/runway/) (auth-infrastructure, marketing-pages had reusable patterns; checkout-enrollment is dead unless monetization comes back).
 
-Runway never reads raw authoring data (`course` schema). Only published snapshots.
+## References
+
+- [PIVOT.md](../../platform/PIVOT.md) -- business posture
+- [docs/platform/MULTI_PRODUCT_ARCHITECTURE.md](../../platform/MULTI_PRODUCT_ARCHITECTURE.md) -- runway listed as future surface
+- [.archive/products/runway/](../../.archive/products/runway/) -- prior FIRC-era runway docs

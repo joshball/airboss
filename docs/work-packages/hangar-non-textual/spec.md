@@ -27,7 +27,7 @@ Depends on: [wp-hangar-registry](../hangar-registry/spec.md), [wp-hangar-sources
 
 ## Why sectional chart first
 
-The user picked sectional. The Denver sectional is the highest-value specific seed for user zero: mountain / high-DA terrain drives most of their relearning scenarios (see `course/L05-Implementation/scenarios/module-2/SCN-hot-high-departure.md` and the A.5 question bank). One concrete chart proves the whole binary-visual pipeline; everything else downstream (Seattle, San Francisco, Chicago) is just additional registry rows.
+The user picked sectional. The Denver sectional is the highest-value specific seed for user zero: mountain / high-DA terrain drives most of their relearning scenarios (see `course/firc/L05-Implementation/scenarios/module-2/SCN-hot-high-departure.md` and the A.5 question bank). One concrete chart proves the whole binary-visual pipeline; everything else downstream (Seattle, San Francisco, Chicago) is just additional registry rows.
 
 ## First source seeded
 

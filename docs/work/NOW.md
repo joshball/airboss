@@ -45,7 +45,8 @@ PRs #17-#184 (everything since the original "Steps 1-6 shipped" snapshot) are ca
 
 ## In flight
 
-Nothing active after the browse-pages refactor ships.
+- **sim-card-mapping** -- closes the loop between sim grading and the spaced-rep scheduler. `SIM_SCENARIO_NODE_MAPPINGS` (typed `Record<SimScenarioIdGraded, ...>`) + `simWeaknessByNode` BC bridge + strengthen-slice scoring lift via `ENGINE_SCORING.STRENGTHEN.SIM_PRESSURE_FACTOR`. Spec: [docs/work-packages/sim-card-mapping/](../work-packages/sim-card-mapping/spec.md).
+- **FAR navigation course (course/regulations/)** -- post-pivot regulatory course material. Skeleton authored 2026-04-26: [README](../../course/regulations/README.md), [SYLLABUS](../../course/regulations/SYLLABUS.md), [DESIGN](../../course/regulations/DESIGN.md), 10 week overviews, [capstone oral](../../course/regulations/orals/night-ifr-passenger.md), drills + references READMEs. Per-week lesson content is the next pull -- one week at a time, starting with Week 1 (architecture) since it's load-bearing. Independent of the FIRC restructure that landed in the same PR.
 
 ## Build Order
 

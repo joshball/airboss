@@ -22,9 +22,11 @@ Depends on: knowledge-graph (shipped; this WP extends `knowledge_node.references
 - [ ] Read `libs/constants/src/routes.ts` and `apps/study/src/routes/(app)/+layout.svelte` -- understand the route grammar and nav.
 - [ ] Read `docs/work-packages/knowledge-graph/spec.md` for the seed-pipeline pattern + `bun run db build` shape.
 - [ ] Read `docs/work-packages/reference-system-core/spec.md` and `docs/work-packages/reference-extraction-pipeline/spec.md` -- this WP composes with both.
-- [ ] Confirm Open Questions 1-5 in spec.md are resolved by Joshua. Apply any required changes (storage path, route prefix, build model, UI shape, threshold values) before starting implementation.
+- [x] Confirm Open Questions 1-5 in spec.md are resolved by Joshua. **Resolved 2026-04-26**: all five recommendations accepted; storage policy promoted to [ADR 018](../../decisions/018-source-artifact-storage-policy/decision.md) and [docs/platform/STORAGE.md](../../platform/STORAGE.md).
 - [ ] Verify DB is running (OrbStack postgres on port 5435).
 - [ ] Verify Python 3.11+ is available locally; the ingestion pipeline depends on it.
+- [ ] Verify the cache directory exists or can be created at `$AIRBOSS_HANDBOOK_CACHE` (default `~/Documents/airboss-handbook-cache/`). Pipeline auto-creates it on first run.
+- [ ] Verify `.gitattributes` at repo root has `handbooks/**/*.pdf filter=lfs diff=lfs merge=lfs -text` (dormant LFS plumbing per ADR 018) and `.gitignore` has `handbooks/**/*.pdf` (active gate). `git lfs install` is NOT required today.
 
 ## Implementation
 
@@ -100,9 +102,9 @@ Depends on: knowledge-graph (shipped; this WP extends `knowledge_node.references
 - [ ] Add `tools/handbook-ingest/README.md` documenting CLI + config layout.
 - [ ] Add `bun run handbook-ingest` script entry in the root `package.json` that shells to `python -m ingest` from `tools/handbook-ingest/`.
 - [ ] Scaffold the Python module layout: `ingest/__init__.py`, `ingest/cli.py`, `ingest/fetch.py`, `ingest/outline.py`, `ingest/sections.py`, `ingest/figures.py`, `ingest/tables.py`, `ingest/normalize.py`, `ingest/config/`.
-- [ ] Add `.gitignore` rules: `tools/handbook-ingest/.venv/`, `*.pdf`, `__pycache__/`.
+- [ ] Add `.gitignore` rules: `tools/handbook-ingest/.venv/`, `__pycache__/`. The repo-root `.gitignore` already blocks `handbooks/**/*.pdf` per [ADR 018](../../decisions/018-source-artifact-storage-policy/decision.md); source PDFs live in the developer-local cache (`$AIRBOSS_HANDBOOK_CACHE`, default `~/Documents/airboss-handbook-cache/`), not the repo.
 - [ ] Implement `cli.py` with the click subcommand layout (`<doc> --edition <e> [--chapter N] [--dry-run] [--force]`).
-- [ ] Implement `fetch.py`: download URL -> local PDF, record `(url, sha256, fetched_at)` for the manifest.
+- [ ] Implement `fetch.py`: resolve cache path from `$AIRBOSS_HANDBOOK_CACHE` env var (default `~/Documents/airboss-handbook-cache/`). If `<cache>/handbooks/<doc>/<edition>/source.pdf` already exists, use it (read-from-disk). Otherwise download URL to that cache path; auto-create directories as needed. Record `(url, sha256, fetched_at)` in the manifest. Subsequent runs against an unchanged cached source.pdf are a no-op for the fetch step. The cache lives outside the repo per [ADR 018](../../decisions/018-source-artifact-storage-policy/decision.md).
 - [ ] Implement `outline.py`: parse PDF outline into chapter/section/subsection tree; raise on outline-missing.
 - [ ] Run `python -m ingest --help` to verify the CLI surface. Commit (`feat(handbook-ingest): scaffold + fetch + outline`).
 
@@ -120,7 +122,7 @@ Depends on: knowledge-graph (shipped; this WP extends `knowledge_node.references
 - [ ] Author `tools/handbook-ingest/ingest/config/phak.yaml`: source URL, expected page count, page-offset map, figure-prefix conventions, optional outline overrides for sections the FAA outline mangles.
 - [ ] Run the full pipeline: `bun run handbook-ingest phak --edition 8083-25C`. Expect the entire `handbooks/phak/8083-25C/` tree to populate.
 - [ ] Manual visual review: open each chapter `index.md` and a sampling of section markdown. Spot-check figure renderings, tables, and the manifest. Note any cosmetic gaps or extraction errors as either pipeline bugs (fix here) or chapter-specific overrides in the YAML config.
-- [ ] Commit `handbooks/phak/8083-25C/` -- markdown + figure PNGs + manifest.json. Use individual `git add` paths; never `git add -A`.
+- [ ] Commit `handbooks/phak/8083-25C/` -- markdown, figure PNGs, manifest.json (inline derivatives only). Use individual `git add` paths; never `git add -A`. Verify the cached source.pdf was NOT staged: `git status --short | grep -i pdf` should be empty (the `.gitignore` block prevents it). The PDF stays in `$AIRBOSS_HANDBOOK_CACHE/handbooks/phak/8083-25C/source.pdf`.
 
 ### Phase 9: Seed wiring -- `bun run db seed handbooks`
 
@@ -157,6 +159,16 @@ Depends on: knowledge-graph (shipped; this WP extends `knowledge_node.references
 - [ ] Wire form actions for `setReadStatus`, `setComprehended`, `setNotes`, `markAsReread`.
 - [ ] Run `bun run check` -- 0 errors. Manual: open a section, change status, change comprehended, type notes, click Re-read.
 
+### CHECKPOINT (after Phase 12)
+
+PHAK is ingested, seeded, and renderable in the reader. Stop here and report to the user:
+
+- Sample URL the user can open: `/handbooks/phak/12/3` (or a comparable section).
+- Summary: row counts in DB, repo size delta (inline derivatives only), cache size delta (source PDFs in `$AIRBOSS_HANDBOOK_CACHE`), any extraction warnings from the manifest.
+- Visual review pass requested before proceeding to Phases 13-16.
+
+Resume Phases 13-16 only after the user confirms the reader looks correct.
+
 ### Phase 13: Heartbeat endpoint + client tick
 
 - [ ] Add `(app)/handbooks/[doc]/[chapter]/[section]/heartbeat/+server.ts` -- POST handler, body `{ delta: number }`, calls `recordHeartbeat`. Reject deltas < 5s; cap deltas at `HANDBOOK_HEARTBEAT_INTERVAL_SEC * 4`.
@@ -172,9 +184,10 @@ Depends on: knowledge-graph (shipped; this WP extends `knowledge_node.references
 
 ### Phase 15: AvWX + AFH ingestion (close the WP)
 
-- [ ] Author `tools/handbook-ingest/ingest/config/avwx.yaml`. Run pipeline. Visual review. Commit `handbooks/avwx/8083-28/`.
-- [ ] Author `tools/handbook-ingest/ingest/config/afh.yaml`. Run pipeline. Visual review. Commit `handbooks/afh/8083-3C/` (or whatever current edition's tag is).
+- [ ] Author `tools/handbook-ingest/ingest/config/avwx.yaml`. Run pipeline (writes `$AIRBOSS_HANDBOOK_CACHE/handbooks/avwx/8083-28/source.pdf` to local cache + derivatives inline). Visual review. Commit only the inline `handbooks/avwx/8083-28/` derivatives.
+- [ ] Author `tools/handbook-ingest/ingest/config/afh.yaml`. Run pipeline (writes `$AIRBOSS_HANDBOOK_CACHE/handbooks/afh/<edition>/source.pdf` to local cache + derivatives inline). Visual review. Commit only the inline `handbooks/afh/<edition>/` derivatives.
 - [ ] Run `bun run db seed handbooks` -- confirm all three handbooks land in DB. Manual smoke through the UI for each.
+- [ ] Verify zero `*.pdf` files staged anywhere in the repo. Note cache size for each handbook in the PR description (PHAK ~74 MB, AFH ~261 MB, AvWX ~tbd).
 
 ### Phase 16: e2e Playwright + acceptance review
 

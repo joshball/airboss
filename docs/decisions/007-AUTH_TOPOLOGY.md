@@ -1,4 +1,16 @@
-# 007: Auth Topology
+# 007: Auth Topology (PARTIALLY SUPERSEDED)
+
+> **Partially superseded 2026-04-26.** The shared-session-via-cross-subdomain-cookie principle survives the pivot and is the implementation today. Specifics changed:
+>
+> - Domain is `*.airboss.test` in dev (`fircboss.com` was a pre-pivot decision; final production domain TBD).
+> - Auth provider is **Better Auth** ([libs/auth/src/](../../libs/auth/src/)) rather than the placeholder "Auth lib middleware" described below.
+> - The four-app stack (sim/hangar/ops/runway) is gone -- post-pivot apps are study, sim, hangar (active) plus future surfaces. `ops` is folded into hangar.
+> - Per-app subdomains today: `study.airboss.test`, `sim.airboss.test`, `hangar.airboss.test` (dev). See [docs/devops/LOCAL_DEV.md](../devops/LOCAL_DEV.md).
+> - Role model is in [ADR 009 -- Role Model](009-ROLE_MODEL.md), which extends this ADR. The role table below pre-dates ADR 009.
+>
+> **What's still authoritative:** shared-session principle, common-domain cookie, role gates on every request, cross-app links via subdomain URLs.
+>
+> **What's stale:** the four-app list, the `fircboss.com` domain, the role-by-app matrix (current authoritative source: hangar's layout-level `requireRole` + per-app gates).
 
 Decided 2026-03-25.
 

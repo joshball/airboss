@@ -123,9 +123,9 @@ Dead-end labels that reference something the user can't access are frustrating. 
 
 If the system uses a threshold, cutoff, or requirement, explain where it comes from.
 
-- "16 hours FAA-qualified time" -- what makes time "FAA-qualified"? Where does 16 come from?
-- "All 13 topics >= 45 minutes" -- why 45? Why 13? (Answer: AC 61-83K)
-- "Minimum score of 70%" -- why 70? (Answer: AC 61-83K SS 13.7)
+- "1500 ft AGL pattern altitude" -- where does 1500 come from? (Answer: airport-specific; show the ChartSupp citation or note that the field elevation +1000 is the default)
+- "Reps every 24 hours" -- why 24? (Answer: spaced-rep schedule, see [ENGINE_SCORING](../../libs/constants/src/engine.ts) constants)
+- "Minimum score of 70%" -- why 70? (FIRC-only example: AC 61-83K SS 13.7. For non-FIRC content, cite the source or call it a project default.)
 
 Requirements that come from regulation should cite the regulation. Requirements that come from our design should be explained in the UI or in a help reference.
 
