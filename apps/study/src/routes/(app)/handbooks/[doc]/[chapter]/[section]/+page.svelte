@@ -10,7 +10,7 @@ import HandbookCitingNodesPanel from '@ab/ui/handbooks/HandbookCitingNodesPanel.
 import HandbookEditionBadge from '@ab/ui/handbooks/HandbookEditionBadge.svelte';
 import HandbookReadProgressControl from '@ab/ui/handbooks/HandbookReadProgressControl.svelte';
 import HandbookSectionNotes from '@ab/ui/handbooks/HandbookSectionNotes.svelte';
-import { renderMarkdown } from '@ab/utils';
+import { extractImageUrls, normalizeHandbookAssetPath, renderMarkdown } from '@ab/utils';
 import type { PageData } from './$types';
 import { shouldShowReadSuggestion } from './read-suggestion';
 
@@ -18,6 +18,15 @@ let { data }: { data: PageData } = $props();
 
 const bodyMd = $derived(stripFrontmatter(data.section.contentMd));
 const bodyHtml = $derived(renderMarkdown(bodyMd));
+
+// Dedup the manifest's figure list against figures already embedded inline in
+// the body markdown. Without this, sections whose markdown contains
+// `![alt](url)` images render the figure both in the body and again under the
+// "figures" tail block.
+const inlineAssetPaths = $derived(new Set(extractImageUrls(bodyMd).map((url) => normalizeHandbookAssetPath(url))));
+const orphanFigures = $derived(
+	data.figures.filter((fig) => !inlineAssetPaths.has(normalizeHandbookAssetPath(fig.assetPath))),
+);
 
 // Read-tracking state for the heartbeat tick + suggestion banner. Local-only;
 // the server's authoritative `total_seconds_visible` is the persisted truth.
@@ -149,7 +158,7 @@ function dismissSuggestion(): void {
 		<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 		{@html bodyHtml}
 
-		{#each data.figures as fig (fig.id)}
+		{#each orphanFigures as fig (fig.id)}
 			<figure class="inline-figure">
 				<img src={figureUrl(fig.assetPath)} alt={fig.caption} loading="lazy" />
 				<figcaption>{fig.caption}</figcaption>

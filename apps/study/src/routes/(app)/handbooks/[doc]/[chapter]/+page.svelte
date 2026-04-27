@@ -5,7 +5,7 @@ import HandbookEditionBadge from '@ab/ui/handbooks/HandbookEditionBadge.svelte';
 import HandbookReadProgressControl from '@ab/ui/handbooks/HandbookReadProgressControl.svelte';
 import HandbookSectionListItem from '@ab/ui/handbooks/HandbookSectionListItem.svelte';
 import HandbookSectionNotes from '@ab/ui/handbooks/HandbookSectionNotes.svelte';
-import { renderMarkdown } from '@ab/utils';
+import { extractImageUrls, normalizeHandbookAssetPath, renderMarkdown } from '@ab/utils';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
@@ -15,6 +15,13 @@ let { data }: { data: PageData } = $props();
 // markdown so the renderer doesn't accidentally typeset the frontmatter.
 const bodyMd = $derived(stripFrontmatter(data.chapter.contentMd));
 const bodyHtml = $derived(renderMarkdown(bodyMd));
+
+// Dedup manifest figures against any already inline in the body markdown so
+// chapters whose body contains `![alt](url)` don't double-render.
+const inlineAssetPaths = $derived(new Set(extractImageUrls(bodyMd).map((url) => normalizeHandbookAssetPath(url))));
+const orphanFigures = $derived(
+	data.figures.filter((fig) => !inlineAssetPaths.has(normalizeHandbookAssetPath(fig.assetPath))),
+);
 
 function stripFrontmatter(md: string): string {
 	if (!md.startsWith('---')) return md;
@@ -82,7 +89,7 @@ function figureUrl(assetPath: string): string {
 		{@html bodyHtml}
 	</article>
 
-	{#each data.figures as fig (fig.id)}
+	{#each orphanFigures as fig (fig.id)}
 		<figure class="inline-figure">
 			<img src={figureUrl(fig.assetPath)} alt={fig.caption} loading="lazy" />
 			<figcaption>{fig.caption}</figcaption>
