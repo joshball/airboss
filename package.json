@@ -9,6 +9,7 @@
 		"test": "bun scripts/test.ts",
 		"db": "bun scripts/db.ts",
 		"handbook-ingest": "bun scripts/handbook-ingest.ts",
+		"handbook-corpus-ingest": "bun scripts/handbook-corpus-ingest.ts",
 		"references": "bun scripts/references.ts",
 		"airboss-ref": "bun scripts/airboss-ref.ts",
 		"cfr-ingest": "bun scripts/cfr-ingest.ts",

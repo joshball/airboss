@@ -185,6 +185,8 @@ export type ParsedLocator = {
 	readonly segments: readonly string[];
 	/** CFR (regs) payload populated by Phase 3's `parseRegsLocator`. */
 	readonly regs?: ParsedRegsLocator;
+	/** Handbooks payload populated by Phase 6's `parseHandbooksLocator`. */
+	readonly handbooks?: ParsedHandbooksLocator;
 };
 
 /**
@@ -198,6 +200,37 @@ export interface ParsedRegsLocator {
 	readonly subpart?: string;
 	readonly section?: string;
 	readonly paragraph?: readonly string[];
+}
+
+/**
+ * Structured handbooks locator surfaced by `parseHandbooksLocator` in
+ * `libs/sources/src/handbooks/locator.ts`. Source of truth: ADR 019 §1.2
+ * ("Handbooks") plus the WP at `docs/work-packages/reference-handbook-ingestion/`.
+ *
+ * The doc slug + edition slug together pin the handbook (8083-25D is a new
+ * doc slug entirely). Section identifiers are integers reflecting the FAA's
+ * dotted-code convention (locator path `12/3` maps to manifest code `12.3`).
+ *
+ * Figures and tables parse correctly but do not have registry entries; they
+ * resolve to derivative files via the renderer when `@text` / `@quote` is bound.
+ */
+export interface ParsedHandbooksLocator {
+	/** Document slug -- `phak`, `afh`, `avwx`, ... */
+	readonly doc: string;
+	/** Edition slug -- `8083-25C`, `8083-3C`, `8083-28B`, ... (no `FAA-H-` prefix) */
+	readonly edition: string;
+	/** Chapter number as written in the locator (e.g. `'12'`). */
+	readonly chapter?: string;
+	/** Section component -- digits or the special string `'intro'`. */
+	readonly section?: string;
+	/** Subsection number as written (e.g. `'2'`). */
+	readonly subsection?: string;
+	/** Paragraph token (e.g. `'para-2'`); resolves to the containing section. */
+	readonly paragraph?: string;
+	/** Figure id (e.g. `'fig-12-7'`); parses but has no registry entry. */
+	readonly figure?: string;
+	/** Table id (e.g. `'tbl-12-3'`); parses but has no registry entry. */
+	readonly table?: string;
 }
 
 export interface LocatorError {
