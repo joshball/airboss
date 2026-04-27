@@ -100,13 +100,17 @@ const MONTHS: Record<string, number> = {
 };
 
 /**
- * Find the "Effective: <date>" line that the FAA puts on every ACS / AC
- * cover page. Returns ISO `YYYY-MM-DD` or `null`.
+ * Find the cover-page date the FAA stamps on ACS, AC, and handbook publications.
+ * Returns ISO `YYYY-MM-DD` or `null`.
  *
  * Patterns observed in real FAA docs:
- *   "Effective May 31, 2024"
- *   "Effective Date: 5/31/2024"
- *   "Effective: November 1, 2023"
+ *   ACS: "Effective May 31, 2024" / "Effective Date: 5/31/2024" / "Effective: November 1, 2023"
+ *   AC:  "Date: 10/30/24" (next to "Subject:" and "AC No:" in the standardized AC header)
+ *
+ * Tries the explicit "Effective" patterns first, then falls back to "Date:"
+ * which is what AC headers use. Order matters -- "Effective" is unambiguous;
+ * a bare "Date:" earlier in the doc would be a false positive on a non-AC.
+ * Caller passes only cover pages (typically pages 1-3) to limit scope.
  */
 export function findEffectiveDate(pages: readonly ExtractedPage[]): string | null {
 	for (const p of pages) {
@@ -117,8 +121,9 @@ export function findEffectiveDate(pages: readonly ExtractedPage[]): string | nul
 }
 
 function scanForEffectiveDate(text: string): string | null {
-	const monthFirst = /Effective(?:\s+Date)?:?\s+([A-Za-z]+)\s+(\d{1,2}),\s+(\d{4})/i;
-	const m1 = text.match(monthFirst);
+	// "Effective <Month> <day>, <year>"
+	const effectiveMonthFirst = /Effective(?:\s+Date)?:?\s+([A-Za-z]+)\s+(\d{1,2}),\s+(\d{4})/i;
+	const m1 = text.match(effectiveMonthFirst);
 	if (m1 !== null) {
 		const month = MONTHS[m1[1].toLowerCase()];
 		const day = parseInt(m1[2], 10);
@@ -127,18 +132,38 @@ function scanForEffectiveDate(text: string): string | null {
 			return formatIso(year, month, day);
 		}
 	}
-	const numericFirst = /Effective(?:\s+Date)?:?\s+(\d{1,2})[\/-](\d{1,2})[\/-](\d{2,4})/i;
-	const m2 = text.match(numericFirst);
+	// "Effective[ Date]: M/D/YY[YY]" or "Effective: M-D-YY[YY]"
+	const effectiveNumeric = /Effective(?:\s+Date)?:?\s+(\d{1,2})[\/-](\d{1,2})[\/-](\d{2,4})/i;
+	const m2 = text.match(effectiveNumeric);
 	if (m2 !== null) {
-		const month = parseInt(m2[1], 10);
-		const day = parseInt(m2[2], 10);
-		let year = parseInt(m2[3], 10);
-		if (year < 100) year += year >= 50 ? 1900 : 2000;
-		if (month >= 1 && month <= 12 && Number.isFinite(day) && Number.isFinite(year)) {
-			return formatIso(year, month, day);
+		const iso = parseNumericDate(m2[1], m2[2], m2[3]);
+		if (iso !== null) return iso;
+	}
+	// AC fallback: "Date: M/D/YY" appearing adjacent to "AC No:" in the
+	// standardized AC header. Match only when "AC No" appears nearby (within
+	// 200 chars) to avoid false positives on non-AC docs that happen to have
+	// a "Date:" string on the cover.
+	const acDateRe = /\bDate:\s+(\d{1,2})[\/-](\d{1,2})[\/-](\d{2,4})/g;
+	for (const m of text.matchAll(acDateRe)) {
+		const start = m.index ?? 0;
+		const window = text.slice(Math.max(0, start - 200), start + 200);
+		if (/\bAC\s*No\b/i.test(window)) {
+			const iso = parseNumericDate(m[1], m[2], m[3]);
+			if (iso !== null) return iso;
 		}
 	}
 	return null;
+}
+
+function parseNumericDate(monthStr: string, dayStr: string, yearStr: string): string | null {
+	const month = parseInt(monthStr, 10);
+	const day = parseInt(dayStr, 10);
+	let year = parseInt(yearStr, 10);
+	if (!Number.isFinite(month) || !Number.isFinite(day) || !Number.isFinite(year)) return null;
+	if (year < 100) year += year >= 50 ? 1900 : 2000;
+	if (month < 1 || month > 12) return null;
+	if (day < 1 || day > 31) return null;
+	return formatIso(year, month, day);
 }
 
 function formatIso(year: number, month: number, day: number): string {

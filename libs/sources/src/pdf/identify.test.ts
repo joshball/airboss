@@ -133,4 +133,20 @@ describe('findEffectiveDate', () => {
 		const result = findEffectiveDate(pages('cover only', 'body without date', 'Effective: October 5, 2025'));
 		expect(result).toBe('2025-10-05');
 	});
+
+	// AC fallback: cover pages often use "Date: M/D/YY" next to "AC No:"
+	// instead of "Effective:". Mirror the real AC 61-65J header layout.
+	it('finds AC-style "Date: 10/30/24" when AC No is nearby', () => {
+		const acHeader = 'Subject: Certification: Pilots and Flight and    Date: 10/30/24            AC No: 61-65J';
+		expect(findEffectiveDate(pages(acHeader))).toBe('2024-10-30');
+	});
+
+	it('does NOT match a bare "Date:" without AC No nearby', () => {
+		expect(findEffectiveDate(pages('Some random Date: 10/30/24 in non-AC content'))).toBeNull();
+	});
+
+	it('prefers "Effective" over "Date:" when both appear', () => {
+		const text = 'Effective: November 1, 2023\n...\nDate: 10/30/24 AC No: 61-65J';
+		expect(findEffectiveDate(pages(text))).toBe('2023-11-01');
+	});
 });
