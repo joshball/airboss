@@ -9,9 +9,6 @@ source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/
 
 # Navigation
 
-Navigation
-Chapter 16
-Introduction
 This chapter provides an introduction to cross-country
 flying under visual flight rules (VFR). It contains practical
 information for planning and executing cross-country flights

@@ -9,7 +9,6 @@ source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/
 
 # Flight Instruments
 
-Introduction
 In order to safely fly any aircraft, a pilot must understand
 how to interpret and operate the flight instruments. The
 pilot also needs to be able to recognize associated errors and

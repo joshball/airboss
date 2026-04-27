@@ -9,7 +9,6 @@ source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/
 
 # Flight Controls
 
-Introduction
 This chapter focuses on the flight control systems a pilot uses
 to control the forces of flight and the aircraft’s direction and
 attitude. It should be noted that flight control systems and

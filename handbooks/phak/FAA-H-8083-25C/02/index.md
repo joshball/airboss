@@ -9,7 +9,6 @@ source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/
 
 # Aeronautical Decision-Making
 
-Introduction
 Aeronautical decision-making (ADM) is decision-making
 in a unique environment—aviation. It is a systematic
 approach to the mental process used by pilots to consistently

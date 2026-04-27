@@ -9,7 +9,6 @@ source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/
 
 # Airport Operations
 
-Introduction
 Each time a pilot operates an aircraft, the flight normally
 begins and ends at an airport. An airport may be a small sod
 field or a large complex utilized by air carriers. This chapter

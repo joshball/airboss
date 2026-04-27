@@ -9,7 +9,6 @@ source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/
 
 # Flight Manuals and Other Documents
 
-Introduction
 Each aircraft comes with documentation and a set of manuals
 with which a pilot must be familiar in order to fly that aircraft.
 This chapter covers airplane flight manuals (AFM), the

@@ -9,7 +9,6 @@ source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/
 
 # Introduction To Flying
 
-Introduction
 The Pilot’s Handbook of Aeronautical Knowledge provides
 basic knowledge for the student pilot learning to fly, as well
 as pilots seeking advanced pilot certification. For detailed

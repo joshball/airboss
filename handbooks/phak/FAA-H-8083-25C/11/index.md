@@ -9,7 +9,6 @@ source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/
 
 # Aircraft Performance
 
-Introduction
 This chapter discusses the factors that affect aircraft
 performance, which include the aircraft weight, atmospheric
 conditions, runway environment, and the fundamental

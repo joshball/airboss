@@ -9,7 +9,6 @@ source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/
 
 # Aviation Weather Services
 
-Introduction
 In aviation, weather service is a combined effort of the
 National Weather Service (NWS), Federal Aviation
 Administration (FAA), Department of Defense (DOD), other

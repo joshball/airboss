@@ -9,7 +9,6 @@ source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/
 
 # Weight and Balance
 
-Introduction
 Compliance with the weight and balance limits of any aircraft
 is critical to flight safety. Operating above the maximum
 weight limitation compromises the structural integrity of

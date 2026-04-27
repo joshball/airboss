@@ -9,7 +9,6 @@ source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/
 
 # Aircraft Construction
 
-Introduction
 An aircraft is a device that is used, or intended to be used, for
 flight according to the current Title 14 of the Code of Federal
 Regulations (14 CFR) part 1, Definitions and Abbreviations.

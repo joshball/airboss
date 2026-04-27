@@ -9,9 +9,6 @@ source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/
 
 # Weather Theory
 
-Weather Theory
-Chapter 12
-Introduction
 Weather is an important factor that influences aircraft
 performance and flying safety. It is the state of the atmosphere
 at a given time and place with respect to variables, such as

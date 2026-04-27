@@ -9,7 +9,6 @@ source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/
 
 # Airspace
 
-Introduction
 The two categories of airspace are: regulatory and
 nonregulatory. Within these two categories, there are four
 types: controlled, uncontrolled, special use, and other
