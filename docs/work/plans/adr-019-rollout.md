@@ -25,8 +25,8 @@ Companion to:
 | 3 | reference-cfr-ingestion-bulk | [WP](../../work-packages/reference-cfr-ingestion-bulk/) | #247 | ✅ |
 | 4 | reference-renderer-runtime | [WP](../../work-packages/reference-renderer-runtime/) | #249 | 🟧 |
 | 5 | reference-versioning-tooling | [WP](../../work-packages/reference-versioning-tooling/) | -- | 🟨 |
-| 6 | reference-handbook-ingestion | [WP](../../work-packages/reference-handbook-ingestion/) | (this PR) | 🟧 |
-| 7 | reference-aim-ingestion | -- | -- | ⬜ |
+| 6 | reference-handbook-ingestion | [WP](../../work-packages/reference-handbook-ingestion/) | #251 | ✅ |
+| 7 | reference-aim-ingestion | [WP](../../work-packages/reference-aim-ingestion/) | (this PR) | 🟧 |
 | 8 | reference-ac-ingestion | -- | -- | ⬜ |
 | 9 | reference-lesson-migration | -- | -- | ⬜ |
 | 10 | reference-irregular-corpora | -- | -- | ⬜ |
@@ -118,6 +118,25 @@ Out of scope and deferred:
 
 AIM ingestion. After this, lessons can cite `airboss-ref:aim/5-1-7?at=2026-09`.
 
+Lands the third real corpus (`aim`) into the registry, after Phase 3's `regs` and Phase 6's `handbooks`. Live AIM source-document ingestion (PDF / HTML -> markdown derivatives) is **out of scope** for this WP -- that's a separate operator pipeline (a follow-up to ADR 016 phase 0). Phase 7 ships the resolver + ingest CLI + a hand-authored fixture so the registration path is exercised end-to-end without depending on live extraction.
+
+Locator shapes covered (per ADR 019 §1.2):
+
+```text
+airboss-ref:aim/<chapter>?at=YYYY-MM
+airboss-ref:aim/<chapter>-<section>?at=YYYY-MM
+airboss-ref:aim/<chapter>-<section>-<paragraph>?at=YYYY-MM
+airboss-ref:aim/glossary/<slug>?at=YYYY-MM
+airboss-ref:aim/appendix-<N>?at=YYYY-MM
+```
+
+Out of scope and deferred:
+
+- Live AIM source-document ingestion (operator action, separate pipeline).
+- Per-glossary-term structured content beyond the title and body markdown.
+- Sub-paragraph identifiers (the ADR 019 §1.2 "AIM" spec stops at paragraph granularity).
+- Cross-edition aliases (Phase 5's diff job catches silent paragraph rewrites).
+
 ### Phase 8 -- reference-ac-ingestion
 
 AC catalog ingestion. Full text where licensing permits. After this, lessons can cite `airboss-ref:ac/61-65/j`.
@@ -144,3 +163,5 @@ Phases 5, 6, 7, 8, 10 can run in parallel after Phase 2 lands -- they each unloc
 | 2026-04-27 | -- | Rollout tracker created. |
 | 2026-04-27 | 2 | Registry core + --fix mode shipped (PR #246). |
 | 2026-04-27 | 3 | CFR bulk ingestion WP authored + implementation (PR #247). |
+| 2026-04-27 | 6 | Handbook corpus shipped (PR #251). |
+| 2026-04-27 | 7 | AIM corpus WP authored + implementation (this PR). |
