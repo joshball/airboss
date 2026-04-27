@@ -22,6 +22,13 @@
       "when": 1777294519832,
       "tag": "0002_handbook_faa_pages_text",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1777315974456,
+      "tag": "0003_cert_syllabus_goal",
+      "breakpoints": true
     }
   ]
 }

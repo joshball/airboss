@@ -19,6 +19,8 @@
  */
 
 import {
+	CITATION_FRAMING_VALUES,
+	type CitationFraming,
 	HANDBOOK_READ_STATUS_VALUES,
 	HANDBOOK_SECTION_LEVEL_VALUES,
 	type HandbookReadStatus,
@@ -27,6 +29,28 @@ import {
 	REFERENCE_KINDS,
 } from '@ab/constants';
 import { z } from 'zod';
+
+/**
+ * Optional fields shared by every {@link structuredCitationSchema} variant.
+ *
+ * The cert-syllabus WP extends the discriminated union with two optional
+ * fields (`framing` and `airboss_ref`); both default to absent so entries
+ * seeded by WP #1 keep validating. `airboss_ref` is checked syntactically
+ * here (must start with `airboss-ref:`); full ADR 019 parsing happens in
+ * `@ab/sources` at the BC + seed layer.
+ */
+const citationFramingSchema = z.enum(
+	CITATION_FRAMING_VALUES as unknown as readonly [CitationFraming, ...CitationFraming[]],
+);
+
+const airbossRefShapeSchema = z.string().regex(/^airboss-ref:.+$/, {
+	message: 'airboss_ref must start with `airboss-ref:`',
+});
+
+const structuredCitationCommonShape = {
+	framing: citationFramingSchema.optional(),
+	airboss_ref: airbossRefShapeSchema.optional(),
+} as const;
 
 /** Storage-shape regex for `reference.document_slug` (mirrors the DB CHECK). */
 const DOCUMENT_SLUG_REGEX = /^[a-z0-9][a-z0-9-]{1,30}[a-z0-9]$/;
@@ -199,67 +223,84 @@ export const legacyCitationSchema = z.object({
 	note: z.string(),
 });
 
-/** Discriminated union of structured citations. v1 only resolves `handbook`. */
+/**
+ * Discriminated union of structured citations. v1 resolves `handbook`; the
+ * cert-syllabus WP fills in the rest of the per-kind URL resolvers.
+ *
+ * Every variant accepts the optional `framing` + `airboss_ref` fields from
+ * {@link structuredCitationCommonShape}. WP #1 entries lacking those fields
+ * continue to validate (both are optional).
+ */
 export const structuredCitationSchema = z.discriminatedUnion('kind', [
 	z.object({
 		kind: z.literal(REFERENCE_KINDS.HANDBOOK),
 		reference_id: z.string().min(1),
 		locator: handbookLocatorSchema,
 		note: z.string().optional(),
+		...structuredCitationCommonShape,
 	}),
 	z.object({
 		kind: z.literal(REFERENCE_KINDS.CFR),
 		reference_id: z.string().min(1),
 		locator: cfrLocatorSchema,
 		note: z.string().optional(),
+		...structuredCitationCommonShape,
 	}),
 	z.object({
 		kind: z.literal(REFERENCE_KINDS.AC),
 		reference_id: z.string().min(1),
 		locator: acLocatorSchema,
 		note: z.string().optional(),
+		...structuredCitationCommonShape,
 	}),
 	z.object({
 		kind: z.literal(REFERENCE_KINDS.ACS),
 		reference_id: z.string().min(1),
 		locator: acsLocatorSchema,
 		note: z.string().optional(),
+		...structuredCitationCommonShape,
 	}),
 	z.object({
 		kind: z.literal(REFERENCE_KINDS.PTS),
 		reference_id: z.string().min(1),
 		locator: acsLocatorSchema,
 		note: z.string().optional(),
+		...structuredCitationCommonShape,
 	}),
 	z.object({
 		kind: z.literal(REFERENCE_KINDS.AIM),
 		reference_id: z.string().min(1),
 		locator: aimLocatorSchema,
 		note: z.string().optional(),
+		...structuredCitationCommonShape,
 	}),
 	z.object({
 		kind: z.literal(REFERENCE_KINDS.PCG),
 		reference_id: z.string().min(1),
 		locator: pcgLocatorSchema,
 		note: z.string().optional(),
+		...structuredCitationCommonShape,
 	}),
 	z.object({
 		kind: z.literal(REFERENCE_KINDS.NTSB),
 		reference_id: z.string().min(1),
 		locator: detailLocatorSchema,
 		note: z.string().optional(),
+		...structuredCitationCommonShape,
 	}),
 	z.object({
 		kind: z.literal(REFERENCE_KINDS.POH),
 		reference_id: z.string().min(1),
 		locator: detailLocatorSchema,
 		note: z.string().optional(),
+		...structuredCitationCommonShape,
 	}),
 	z.object({
 		kind: z.literal(REFERENCE_KINDS.OTHER),
 		reference_id: z.string().min(1),
 		locator: detailLocatorSchema,
 		note: z.string().optional(),
+		...structuredCitationCommonShape,
 	}),
 ]);
 

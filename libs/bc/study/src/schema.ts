@@ -17,6 +17,8 @@
 // drizzle-kit can resolve the file without pulling in SvelteKit/Svelte deps.
 import { bauthUser } from '@ab/auth/schema';
 import {
+	ACS_TRIAD_VALUES,
+	BLOOM_LEVEL_VALUES,
 	CARD_FEEDBACK_SIGNAL_VALUES,
 	CARD_STATE_VALUES,
 	CARD_STATUS_VALUES,
@@ -26,12 +28,22 @@ import {
 	type Cert,
 	CONTENT_SOURCE_VALUES,
 	CONTENT_SOURCES,
+	CREDENTIAL_CATEGORY_VALUES,
+	CREDENTIAL_CLASS_VALUES,
+	CREDENTIAL_KIND_VALUES,
+	CREDENTIAL_PREREQ_KIND_VALUES,
+	CREDENTIAL_STATUS_VALUES,
+	CREDENTIAL_STATUSES,
 	DEFAULT_SESSION_LENGTH,
 	DEPTH_PREFERENCE_VALUES,
 	DEPTH_PREFERENCES,
 	DIFFICULTY_VALUES,
 	DOMAIN_VALUES,
 	type Domain,
+	GOAL_STATUS_VALUES,
+	GOAL_STATUSES,
+	GOAL_SYLLABUS_WEIGHT_MAX,
+	GOAL_SYLLABUS_WEIGHT_MIN,
 	HANDBOOK_NOTES_MAX_LENGTH,
 	HANDBOOK_READ_STATUS_VALUES,
 	HANDBOOK_READ_STATUSES,
@@ -66,8 +78,15 @@ import {
 	SNOOZE_DURATION_LEVEL_VALUES,
 	SNOOZE_REASON_VALUES,
 	STUDY_PRIORITY_VALUES,
+	SYLLABUS_KIND_VALUES,
+	SYLLABUS_NODE_LEVEL_VALUES,
+	SYLLABUS_PRIMACY,
+	SYLLABUS_PRIMACY_VALUES,
+	SYLLABUS_STATUS_VALUES,
+	SYLLABUS_STATUSES,
 } from '@ab/constants';
 import { timestamps } from '@ab/db';
+import type { StructuredCitation } from '@ab/types';
 import { sql } from 'drizzle-orm';
 import {
 	type AnyPgColumn,
@@ -189,6 +208,16 @@ export const knowledgeNode = studySchema.table(
 		 * rows during the migration window; the seed back-fills on next run.
 		 */
 		lifecycle: text('lifecycle').default(NODE_LIFECYCLES.SKELETON),
+		/**
+		 * Cert-syllabus WP migration flag. False on every existing row at
+		 * migration time; flips true after `migrate-references-to-structured.ts`
+		 * has reshaped the row's `references` JSONB array from `LegacyCitation`
+		 * to a uniform array of `StructuredCitation` entries. Idempotency
+		 * gate: the migration script skips rows where this is true. Once
+		 * the migration phase completes for every row this column becomes
+		 * informational; a follow-on cleanup can drop it.
+		 */
+		referencesV2Migrated: boolean('references_v2_migrated').notNull().default(false),
 		...timestamps(),
 	},
 	(t) => ({
@@ -574,6 +603,16 @@ export const studyPlan = studySchema.table(
 		depthPreference: text('depth_preference').notNull().default(DEPTH_PREFERENCES.WORKING),
 		sessionLength: smallint('session_length').notNull().default(DEFAULT_SESSION_LENGTH),
 		defaultMode: text('default_mode').notNull().default(SESSION_MODES.MIXED),
+		/**
+		 * Cert-syllabus WP migration flag. NULL on every existing row at
+		 * migration time; set to `now()` after `migrate-study-plan-to-goals.ts`
+		 * has materialized this plan's `cert_goals` into a `goal` row plus
+		 * `goal_syllabus` rows. Idempotency gate: the migration script skips
+		 * rows where this is non-null. The engine continues reading
+		 * `cert_goals` directly until a follow-on WP cuts it over to
+		 * `getDerivedCertGoals(userId)`.
+		 */
+		goalMigratedAt: timestamp('goal_migrated_at', { withTimezone: true }),
 		/** Dev-seed marker. NULL on production rows. */
 		seedOrigin: text('seed_origin'),
 		...timestamps(),
@@ -1276,3 +1315,460 @@ export type HandbookFigureRow = typeof handbookFigure.$inferSelect;
 export type NewHandbookFigureRow = typeof handbookFigure.$inferInsert;
 export type HandbookReadStateRow = typeof handbookReadState.$inferSelect;
 export type NewHandbookReadStateRow = typeof handbookReadState.$inferInsert;
+
+// ---------------------------------------------------------------------------
+// Cert-syllabus-and-goal-composer WP -- ADR 016 phases 1-6.
+//
+// Three new object families:
+//   - credential / credential_prereq / credential_syllabus
+//   - syllabus / syllabus_node / syllabus_node_link
+//   - goal / goal_syllabus / goal_node
+//
+// See `docs/work-packages/cert-syllabus-and-goal-composer/spec.md` and
+// `docs/decisions/016-cert-syllabus-goal-model/decision.md`.
+// ---------------------------------------------------------------------------
+
+/**
+ * One pilot-cert / instructor-cert / rating / endorsement / etc. node in the
+ * credential DAG. Replaces the four-cert `CERTS` constant as the source of
+ * truth once the engine cutover happens; until then `CERTS` stays as a
+ * fast-path subset (see `CERT_PREREQUISITES` deprecation).
+ *
+ * `regulatory_basis` is a JSONB array of `StructuredCitation` shapes
+ * (typically `kind: 'cfr'`) so a credential defined across multiple CFR
+ * sections (e.g. multi-engine class rating spans 14 CFR 61.63 + 61.31) can
+ * carry every citation inline. Empty array = unanchored credential (the
+ * `student` placeholder credential, school-internal credentials).
+ */
+export const credential = studySchema.table(
+	'credential',
+	{
+		id: text('id').primaryKey(),
+		/** Stable kebab-case slug: `private`, `commercial`, `cfi`, `multi-engine-land`. */
+		slug: text('slug').notNull(),
+		/** See {@link CREDENTIAL_KINDS}. */
+		kind: text('kind').notNull(),
+		/** Display name: "Private Pilot Certificate". */
+		title: text('title').notNull(),
+		/** See {@link CREDENTIAL_CATEGORIES}. `none` for credentials that don't carry a category. */
+		category: text('category').notNull(),
+		/** See {@link CREDENTIAL_CLASSES}. NULL for credentials without an associated class. */
+		class: text('class'),
+		/**
+		 * Inline `StructuredCitation` array carrying the CFR / AC sections
+		 * that define this credential. Empty array allowed for student /
+		 * school-internal credentials.
+		 */
+		regulatoryBasis: jsonb('regulatory_basis').$type<StructuredCitation[]>().notNull().default([]),
+		status: text('status').notNull().default(CREDENTIAL_STATUSES.ACTIVE),
+		seedOrigin: text('seed_origin'),
+		...timestamps(),
+	},
+	(t) => ({
+		credentialSlugUnique: uniqueIndex('credential_slug_unique').on(t.slug),
+		credentialKindIdx: index('credential_kind_idx').on(t.kind),
+		credentialCategoryClassIdx: index('credential_category_class_idx').on(t.category, t.class),
+		credentialStatusIdx: index('credential_status_idx').on(t.status),
+		// GIN index on regulatory_basis so the eventual "every credential
+		// citing this CFR" reverse query is index-backed.
+		credentialRegulatoryBasisGinIdx: index('credential_regulatory_basis_gin_idx').using(
+			'gin',
+			sql`"regulatory_basis" jsonb_path_ops`,
+		),
+		kindCheck: check('credential_kind_check', sql.raw(`"kind" IN (${inList(CREDENTIAL_KIND_VALUES)})`)),
+		categoryCheck: check('credential_category_check', sql.raw(`"category" IN (${inList(CREDENTIAL_CATEGORY_VALUES)})`)),
+		classCheck: check(
+			'credential_class_check',
+			sql.raw(`"class" IS NULL OR "class" IN (${inList(CREDENTIAL_CLASS_VALUES)})`),
+		),
+		statusCheck: check('credential_status_check', sql.raw(`"status" IN (${inList(CREDENTIAL_STATUS_VALUES)})`)),
+		slugShapeCheck: check('credential_slug_shape_check', sql.raw(`"slug" ~ '^[a-z0-9][a-z0-9-]{1,62}[a-z0-9]$'`)),
+	}),
+);
+
+/**
+ * One edge in the credential prereq DAG. Many-to-many: CFII requires CFI
+ * AND IR. Cycle prevention happens at the seed layer (topological sort);
+ * the BC walkers carry a defence-in-depth visited-set guard.
+ *
+ * Composite PK so the same (credential, prereq, kind) edge can't be
+ * inserted twice.
+ */
+export const credentialPrereq = studySchema.table(
+	'credential_prereq',
+	{
+		credentialId: text('credential_id')
+			.notNull()
+			.references(() => credential.id, { onDelete: 'cascade' }),
+		prereqId: text('prereq_id')
+			.notNull()
+			.references(() => credential.id, { onDelete: 'restrict' }),
+		/** See {@link CREDENTIAL_PREREQ_KINDS}. */
+		kind: text('kind').notNull(),
+		/** Authoring note explaining why this prereq exists. */
+		notes: text('notes').notNull().default(''),
+		seedOrigin: text('seed_origin'),
+		createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+	},
+	(t) => ({
+		pk: primaryKey({ columns: [t.credentialId, t.prereqId, t.kind] }),
+		// Reverse query: "what credentials require X as a prereq?"
+		credentialPrereqByPrereqIdx: index('credential_prereq_by_prereq_idx').on(t.prereqId, t.kind),
+		kindCheck: check('credential_prereq_kind_check', sql.raw(`"kind" IN (${inList(CREDENTIAL_PREREQ_KIND_VALUES)})`)),
+		// Self-loop guard. Cycle detection is the seed's job; this catches the
+		// trivial case at the DB layer.
+		noSelfLoopCheck: check('credential_prereq_no_self_loop_check', sql.raw(`"credential_id" <> "prereq_id"`)),
+	}),
+);
+
+/**
+ * Many-to-many between credentials and syllabi. A credential has at most
+ * one `primary` syllabus (enforced via partial UNIQUE) and any number of
+ * `supplemental` syllabi. The primary syllabus is what `getDerivedCertGoals`
+ * resolves to when migrating `study_plan.cert_goals`.
+ */
+export const credentialSyllabus = studySchema.table(
+	'credential_syllabus',
+	{
+		credentialId: text('credential_id')
+			.notNull()
+			.references(() => credential.id, { onDelete: 'cascade' }),
+		syllabusId: text('syllabus_id')
+			.notNull()
+			.references((): AnyPgColumn => syllabus.id, { onDelete: 'cascade' }),
+		primacy: text('primacy').notNull().default(SYLLABUS_PRIMACY.SUPPLEMENTAL),
+		seedOrigin: text('seed_origin'),
+		createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+	},
+	(t) => ({
+		credentialSyllabusUnique: uniqueIndex('credential_syllabus_unique').on(t.credentialId, t.syllabusId),
+		// One primary syllabus per credential; supplementals unbounded.
+		credentialSyllabusPrimaryUnique: uniqueIndex('credential_syllabus_primary_unique')
+			.on(t.credentialId)
+			.where(sql`primacy = '${sql.raw(SYLLABUS_PRIMACY.PRIMARY)}'`),
+		credentialSyllabusBySyllabusIdx: index('credential_syllabus_by_syllabus_idx').on(t.syllabusId),
+		primacyCheck: check(
+			'credential_syllabus_primacy_check',
+			sql.raw(`"primacy" IN (${inList(SYLLABUS_PRIMACY_VALUES)})`),
+		),
+	}),
+);
+
+/**
+ * Authored syllabus -- ACS / PTS / school / personal track. Top of the
+ * syllabus-tree; its rows live on `syllabus_node`.
+ *
+ * `(kind, edition)` is partially UNIQUE for ACS / PTS so the same FAA
+ * publication doesn't ship twice; school / personal syllabi don't get
+ * edition uniqueness because edition isn't a meaningful concept there.
+ */
+export const syllabus = studySchema.table(
+	'syllabus',
+	{
+		id: text('id').primaryKey(),
+		slug: text('slug').notNull(),
+		kind: text('kind').notNull(),
+		title: text('title').notNull(),
+		/**
+		 * Edition slug per ADR 020 (e.g. `faa-s-acs-25` for the PPL ACS).
+		 * Free-form text for school / personal syllabi.
+		 */
+		edition: text('edition').notNull(),
+		sourceUrl: text('source_url'),
+		status: text('status').notNull().default(SYLLABUS_STATUSES.ACTIVE),
+		/**
+		 * Set when a newer edition exists. Mirrors the `reference.superseded_by_id`
+		 * pattern: deleting a newer edition (rare) doesn't cascade-destroy the
+		 * older ones. Goals pinned to the older edition keep working.
+		 */
+		supersededById: text('superseded_by_id').references((): AnyPgColumn => syllabus.id, {
+			onDelete: 'set null',
+		}),
+		/**
+		 * Optional FK to the FAA publication that backs this syllabus. NULL
+		 * for school / personal syllabi.
+		 */
+		referenceId: text('reference_id').references(() => reference.id, { onDelete: 'set null' }),
+		seedOrigin: text('seed_origin'),
+		...timestamps(),
+	},
+	(t) => ({
+		syllabusSlugUnique: uniqueIndex('syllabus_slug_unique').on(t.slug),
+		// Partial UNIQUE for ACS / PTS only: one row per (kind, edition).
+		syllabusAcsPtsEditionUnique: uniqueIndex('syllabus_acs_pts_edition_unique')
+			.on(t.kind, t.edition)
+			.where(sql`kind IN ('acs', 'pts')`),
+		syllabusKindStatusIdx: index('syllabus_kind_status_idx').on(t.kind, t.status),
+		syllabusReferenceIdx: index('syllabus_reference_idx').on(t.referenceId),
+		kindCheck: check('syllabus_kind_check', sql.raw(`"kind" IN (${inList(SYLLABUS_KIND_VALUES)})`)),
+		statusCheck: check('syllabus_status_check', sql.raw(`"status" IN (${inList(SYLLABUS_STATUS_VALUES)})`)),
+		slugShapeCheck: check('syllabus_slug_shape_check', sql.raw(`"slug" ~ '^[a-z0-9][a-z0-9-]{1,62}[a-z0-9]$'`)),
+	}),
+);
+
+/**
+ * One node in a syllabus tree. Areas / tasks / elements for ACS / PTS;
+ * chapters / sections / subsections for non-ACS shapes.
+ *
+ * `airboss_ref` is the canonical ADR 019 identifier; required at the BC
+ * layer for ACS / PTS leaves (the seed pipeline rejects authored leaves
+ * that lack it). The DB CHECK is syntactic only -- full validation runs
+ * via `@ab/sources` parser at upsert time.
+ *
+ * `citations` carries the per-node `StructuredCitation` array inline (see
+ * the design rationale: citations stay inline rather than getting their
+ * own row table now that WP #1's `StructuredCitation` is the primitive).
+ */
+export const syllabusNode = studySchema.table(
+	'syllabus_node',
+	{
+		id: text('id').primaryKey(),
+		syllabusId: text('syllabus_id')
+			.notNull()
+			.references(() => syllabus.id, { onDelete: 'cascade' }),
+		parentId: text('parent_id').references((): AnyPgColumn => syllabusNode.id, {
+			onDelete: 'cascade',
+		}),
+		/** See {@link SYLLABUS_NODE_LEVELS}. */
+		level: text('level').notNull(),
+		/** Within-parent sort order. */
+		ordinal: integer('ordinal').notNull(),
+		/**
+		 * Citation code per the deterministic composition rule (`V` -> `V.A`
+		 * -> `V.A.K1`). Free-form for non-ACS / non-PTS syllabi.
+		 */
+		code: text('code').notNull(),
+		title: text('title').notNull(),
+		/** Verbatim ACS / PTS element text (or authored description for non-ACS). */
+		description: text('description').notNull().default(''),
+		/**
+		 * ACS K/R/S triad. Required for `level='element'` rows on ACS / PTS
+		 * syllabi; null on internal nodes and non-ACS leaves.
+		 */
+		triad: text('triad'),
+		/**
+		 * Bloom level expected at this leaf. NULL on internal nodes; required
+		 * on element-level rows. Drives the relevance cache rebuild.
+		 */
+		requiredBloom: text('required_bloom'),
+		/**
+		 * Stored leaf flag for the hot lens-rollup query. Maintained by the
+		 * seed pipeline; CHECK enforces consistency with `required_bloom`.
+		 */
+		isLeaf: boolean('is_leaf').notNull().default(false),
+		/**
+		 * Canonical ADR 019 identifier. Validated by `@ab/sources` parser at
+		 * the BC + seed layer. The DB CHECK is syntactic-only: rows either
+		 * carry a string starting with `airboss-ref:` or NULL.
+		 */
+		airbossRef: text('airboss_ref'),
+		/**
+		 * Inline `StructuredCitation` array. Empty by default; the seed
+		 * appends entries from the YAML manifest.
+		 */
+		citations: jsonb('citations').$type<StructuredCitation[]>().notNull().default([]),
+		/**
+		 * SHA-256 of the YAML node entry (canonicalized). Drives idempotent
+		 * seed: an unchanged node entry is a no-op.
+		 */
+		contentHash: text('content_hash'),
+		seedOrigin: text('seed_origin'),
+		...timestamps(),
+	},
+	(t) => ({
+		syllabusNodeSyllabusCodeUnique: uniqueIndex('syllabus_node_syllabus_code_unique').on(t.syllabusId, t.code),
+		// Tree walk: parent -> children, ordered by ordinal.
+		syllabusNodeTreeIdx: index('syllabus_node_tree_idx').on(t.syllabusId, t.parentId, t.ordinal),
+		// "All rows at level X in syllabus Y" -- e.g. every area in PPL ACS.
+		syllabusNodeLevelIdx: index('syllabus_node_level_idx').on(t.syllabusId, t.level, t.ordinal),
+		// Hot path for lens rollup: every leaf under a syllabus.
+		syllabusNodeLeafIdx: index('syllabus_node_leaf_idx').on(t.syllabusId, t.isLeaf),
+		// GIN index on citations so the reverse-citation query is index-backed.
+		syllabusNodeCitationsGinIdx: index('syllabus_node_citations_gin_idx').using('gin', sql`"citations" jsonb_path_ops`),
+		levelCheck: check('syllabus_node_level_check', sql.raw(`"level" IN (${inList(SYLLABUS_NODE_LEVEL_VALUES)})`)),
+		triadCheck: check(
+			'syllabus_node_triad_check',
+			sql.raw(`"triad" IS NULL OR "triad" IN (${inList(ACS_TRIAD_VALUES)})`),
+		),
+		requiredBloomCheck: check(
+			'syllabus_node_required_bloom_check',
+			sql.raw(`"required_bloom" IS NULL OR "required_bloom" IN (${inList(BLOOM_LEVEL_VALUES)})`),
+		),
+		// `parent_id IS NULL` iff `level` is a top-of-tree level (area / chapter).
+		parentLevelConsistencyCheck: check(
+			'syllabus_node_parent_level_check',
+			sql.raw(
+				`("level" IN ('area', 'chapter') AND "parent_id" IS NULL) OR ("level" NOT IN ('area', 'chapter') AND "parent_id" IS NOT NULL)`,
+			),
+		),
+		// Triad is meaningful only on element-level rows.
+		triadLevelConsistencyCheck: check(
+			'syllabus_node_triad_level_check',
+			sql.raw(`("level" = 'element' AND "triad" IS NOT NULL) OR ("level" <> 'element' AND "triad" IS NULL)`),
+		),
+		// `required_bloom` is set iff `is_leaf=true`.
+		requiredBloomLeafCheck: check(
+			'syllabus_node_required_bloom_leaf_check',
+			sql.raw(
+				`("is_leaf" = true AND "required_bloom" IS NOT NULL) OR ("is_leaf" = false AND "required_bloom" IS NULL)`,
+			),
+		),
+		// Syntactic guard for airboss_ref. Full validation runs via `@ab/sources`.
+		airbossRefShapeCheck: check(
+			'syllabus_node_airboss_ref_shape_check',
+			sql.raw(`"airboss_ref" IS NULL OR "airboss_ref" LIKE 'airboss-ref:%'`),
+		),
+		ordinalNonNegativeCheck: check('syllabus_node_ordinal_check', sql.raw(`"ordinal" >= 0`)),
+	}),
+);
+
+/**
+ * Many-to-many between syllabus leaves and knowledge graph nodes. A leaf
+ * can link to multiple nodes (an ACS element exercising multiple skills);
+ * a node can be linked from multiple leaves (the same skill cited across
+ * areas / certs).
+ *
+ * `weight` defaults to 1.0 (full coverage); authoring downweights below 1
+ * for partial coverage. The relevance cache rebuild reads this column to
+ * derive `(cert, bloom, priority)` triples per linked node.
+ */
+export const syllabusNodeLink = studySchema.table(
+	'syllabus_node_link',
+	{
+		id: text('id').primaryKey(),
+		syllabusNodeId: text('syllabus_node_id')
+			.notNull()
+			.references(() => syllabusNode.id, { onDelete: 'cascade' }),
+		knowledgeNodeId: text('knowledge_node_id')
+			.notNull()
+			.references(() => knowledgeNode.id, { onDelete: 'restrict' }),
+		weight: real('weight').notNull().default(1.0),
+		/** Authoring note explaining the link (rendered as a tooltip in the UI). */
+		notes: text('notes').notNull().default(''),
+		seedOrigin: text('seed_origin'),
+		createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+	},
+	(t) => ({
+		syllabusNodeLinkUnique: uniqueIndex('syllabus_node_link_unique').on(t.syllabusNodeId, t.knowledgeNodeId),
+		// Forward: "what knowledge nodes does this leaf link to?"
+		syllabusNodeLinkBySyllabusNodeIdx: index('syllabus_node_link_by_syllabus_node_idx').on(t.syllabusNodeId),
+		// Reverse: "what syllabus leaves link to this node?" -- hot for the
+		// relevance cache rebuild.
+		syllabusNodeLinkByKnowledgeNodeIdx: index('syllabus_node_link_by_knowledge_node_idx').on(
+			t.knowledgeNodeId,
+			t.syllabusNodeId,
+		),
+		weightRangeCheck: check('syllabus_node_link_weight_check', sql.raw(`"weight" >= 0 AND "weight" <= 1`)),
+	}),
+);
+
+/**
+ * Learner goal -- composes syllabi + ad-hoc nodes. One row per goal; the
+ * partial UNIQUE on `(user_id) WHERE is_primary=true` enforces the
+ * exactly-one-primary invariant.
+ *
+ * `cert_goals` derivation walks the user's primary goal's `goal_syllabus`
+ * rows -> credential_syllabus reverse-lookup -> credential.slug, surfaced
+ * via `getDerivedCertGoals(userId)` in the goals BC.
+ */
+export const goal = studySchema.table(
+	'goal',
+	{
+		id: text('id').primaryKey(),
+		userId: text('user_id')
+			.notNull()
+			.references(() => bauthUser.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
+		title: text('title').notNull(),
+		notesMd: text('notes_md').notNull().default(''),
+		status: text('status').notNull().default(GOAL_STATUSES.ACTIVE),
+		isPrimary: boolean('is_primary').notNull().default(false),
+		/** Free-form target date authored by the learner ("2026-12-31"). NULL = no target. */
+		targetDate: timestamp('target_date', { withTimezone: true }),
+		seedOrigin: text('seed_origin'),
+		...timestamps(),
+	},
+	(t) => ({
+		goalUserStatusIdx: index('goal_user_status_idx').on(t.userId, t.status),
+		// Partial UNIQUE: one primary goal per user. Mirrors `plan_user_active_uniq`.
+		goalUserPrimaryUnique: uniqueIndex('goal_user_primary_unique').on(t.userId).where(sql`is_primary = true`),
+		statusCheck: check('goal_status_check', sql.raw(`"status" IN (${inList(GOAL_STATUS_VALUES)})`)),
+	}),
+);
+
+/**
+ * Many-to-many between goals and syllabi with per-link weight. The lens
+ * framework consumes `(goal_id, syllabus_id, weight)` as the projection
+ * input. Default weight is 1.0; max is `GOAL_SYLLABUS_WEIGHT_MAX`.
+ */
+export const goalSyllabus = studySchema.table(
+	'goal_syllabus',
+	{
+		goalId: text('goal_id')
+			.notNull()
+			.references(() => goal.id, { onDelete: 'cascade' }),
+		syllabusId: text('syllabus_id')
+			.notNull()
+			.references(() => syllabus.id, { onDelete: 'restrict' }),
+		weight: real('weight').notNull().default(1.0),
+		seedOrigin: text('seed_origin'),
+		createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+	},
+	(t) => ({
+		pk: primaryKey({ columns: [t.goalId, t.syllabusId] }),
+		// Reverse: "what goals reference this syllabus?"
+		goalSyllabusBySyllabusIdx: index('goal_syllabus_by_syllabus_idx').on(t.syllabusId),
+		weightRangeCheck: check(
+			'goal_syllabus_weight_check',
+			sql.raw(`"weight" >= ${GOAL_SYLLABUS_WEIGHT_MIN} AND "weight" <= ${GOAL_SYLLABUS_WEIGHT_MAX}`),
+		),
+	}),
+);
+
+/**
+ * Many-to-many between goals and knowledge nodes -- the ad-hoc piece that
+ * lets a learner pin nodes outside any syllabus they've added. Aggregates
+ * with `goal_syllabus` in `getGoalNodeUnion`.
+ */
+export const goalNode = studySchema.table(
+	'goal_node',
+	{
+		goalId: text('goal_id')
+			.notNull()
+			.references(() => goal.id, { onDelete: 'cascade' }),
+		knowledgeNodeId: text('knowledge_node_id')
+			.notNull()
+			.references(() => knowledgeNode.id, { onDelete: 'restrict' }),
+		weight: real('weight').notNull().default(1.0),
+		notes: text('notes').notNull().default(''),
+		seedOrigin: text('seed_origin'),
+		createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+	},
+	(t) => ({
+		pk: primaryKey({ columns: [t.goalId, t.knowledgeNodeId] }),
+		// Reverse: "what goals pin this node?"
+		goalNodeByKnowledgeNodeIdx: index('goal_node_by_knowledge_node_idx').on(t.knowledgeNodeId),
+		weightRangeCheck: check(
+			'goal_node_weight_check',
+			sql.raw(`"weight" >= ${GOAL_SYLLABUS_WEIGHT_MIN} AND "weight" <= ${GOAL_SYLLABUS_WEIGHT_MAX}`),
+		),
+	}),
+);
+
+export type CredentialRow = typeof credential.$inferSelect;
+export type NewCredentialRow = typeof credential.$inferInsert;
+export type CredentialPrereqRow = typeof credentialPrereq.$inferSelect;
+export type NewCredentialPrereqRow = typeof credentialPrereq.$inferInsert;
+export type CredentialSyllabusRow = typeof credentialSyllabus.$inferSelect;
+export type NewCredentialSyllabusRow = typeof credentialSyllabus.$inferInsert;
+export type SyllabusRow = typeof syllabus.$inferSelect;
+export type NewSyllabusRow = typeof syllabus.$inferInsert;
+export type SyllabusNodeRow = typeof syllabusNode.$inferSelect;
+export type NewSyllabusNodeRow = typeof syllabusNode.$inferInsert;
+export type SyllabusNodeLinkRow = typeof syllabusNodeLink.$inferSelect;
+export type NewSyllabusNodeLinkRow = typeof syllabusNodeLink.$inferInsert;
+export type GoalRow = typeof goal.$inferSelect;
+export type NewGoalRow = typeof goal.$inferInsert;
+export type GoalSyllabusRow = typeof goalSyllabus.$inferSelect;
+export type NewGoalSyllabusRow = typeof goalSyllabus.$inferInsert;
+export type GoalNodeRow = typeof goalNode.$inferSelect;
+export type NewGoalNodeRow = typeof goalNode.$inferInsert;
