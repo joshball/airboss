@@ -524,6 +524,10 @@ export const CERT_LABELS: Record<Cert, string> = {
  * pure-IFR pilot (PPL+IFR, no CPL) doesn't need CPL-floor topics. CFI
  * requires CPL plus IFR for the instrument-instructor add-on, so the CFI
  * inheritance set covers everything.
+ *
+ * @deprecated Once the `credential` DAG is seeded (cert-syllabus WP), use
+ * `getCertsCoveredBy(db, credentialId)` from `@ab/bc-study`. Retained as a
+ * fast-path for the four-cert dashboard subset until the engine cutover.
  */
 export const CERT_PREREQUISITES: Record<Cert, readonly Cert[]> = {
 	[CERTS.PPL]: [CERTS.PPL],
