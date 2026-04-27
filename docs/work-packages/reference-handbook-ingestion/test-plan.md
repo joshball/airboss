@@ -38,9 +38,9 @@ The fixture is small enough that ingest runs in milliseconds and tests can exerc
 After the PR ships, the user runs the following to verify end-to-end:
 
 ```bash
-bun run handbook-corpus-ingest --doc=phak --edition=8083-25C
-bun run handbook-corpus-ingest --doc=afh --edition=8083-3C
-bun run handbook-corpus-ingest --doc=avwx --edition=8083-28B
+bun run ingest handbooks --doc=phak --edition=8083-25C
+bun run ingest handbooks --doc=afh --edition=8083-3C
+bun run ingest handbooks --doc=avwx --edition=8083-28B
 bun run check
 ```
 

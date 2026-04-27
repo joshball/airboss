@@ -201,9 +201,9 @@ review_status: pending
     - Refuses to run in CI without `--fixture=` (per spec).
     - Returns the CLI exit code.
 - [ ] Add to root `package.json` scripts: `"cfr-ingest": "bun scripts/cfr-ingest.ts"`.
-- [ ] Smoke: `bun run cfr-ingest --fixture=tests/fixtures/cfr/title-14-2026-fixture.xml --out=/tmp/cfr-smoke` exits 0.
-- [ ] Smoke: `bun run cfr-ingest --help` prints usage.
-- [ ] Smoke: `CI=true bun run cfr-ingest --edition=2026-01-01` exits 2 with "CI guard" message.
+- [ ] Smoke: `bun run ingest cfr --fixture=tests/fixtures/cfr/title-14-2026-fixture.xml --out=/tmp/cfr-smoke` exits 0.
+- [ ] Smoke: `bun run ingest cfr --help` prints usage.
+- [ ] Smoke: `CI=true bun run ingest cfr --edition=2026-01-01` exits 2 with "CI guard" message.
 - [ ] Commit: `feat(sources): phase-3 cfr-ingest dispatcher script`.
 
 ## Phase 14 - Verification + smoke gates
@@ -211,7 +211,7 @@ review_status: pending
 - [ ] `bun run check` exits 0.
 - [ ] `bun test libs/sources/` -- all tests pass.
 - [ ] svelte-check unaffected.
-- [ ] Smoke 1 (fixture ingest): `bun run cfr-ingest --fixture=tests/fixtures/cfr/title-14-2026-fixture.xml --out=/tmp/cfr-smoke`. Verify the temp tree has the expected structure (Parts, sections, manifest, sections.json).
+- [ ] Smoke 1 (fixture ingest): `bun run ingest cfr --fixture=tests/fixtures/cfr/title-14-2026-fixture.xml --out=/tmp/cfr-smoke`. Verify the temp tree has the expected structure (Parts, sections, manifest, sections.json).
 - [ ] Smoke 2 (validator publish gate): manually create a temp lesson under `course/regulations/` containing `[@cite](airboss-ref:regs/cfr-14/91/103?at=2026)`, run `bun run check`. Expect zero ERRORs (assuming Phase 3's smoke ingestion has run; if not, run the fixture ingest first to prime the active table). Revert the temp lesson.
 - [ ] Smoke 3 (idempotence): run `cfr-ingest` twice; second run reports zero modifications.
 - [ ] Commit any tweaks discovered along the way.

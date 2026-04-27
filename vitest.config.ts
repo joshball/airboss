@@ -32,6 +32,9 @@ const aliases = {
 	'@ab/hangar-sync': resolve('./libs/hangar-sync/src/index.ts'),
 	'@ab/sources/registry/__test_helpers__': resolve('./libs/sources/src/registry/__test_helpers__.ts'),
 	'@ab/sources/registry': resolve('./libs/sources/src/registry/index.ts'),
+	'@ab/sources/regs': resolve('./libs/sources/src/regs/index.ts'),
+	'@ab/sources/handbooks': resolve('./libs/sources/src/handbooks/index.ts'),
+	'@ab/sources/aim': resolve('./libs/sources/src/aim/index.ts'),
 	'@ab/sources': resolve('./libs/sources/src/index.ts'),
 };
 

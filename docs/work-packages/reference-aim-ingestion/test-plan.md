@@ -40,7 +40,7 @@ The fixture is small enough that ingest runs in milliseconds and tests can exerc
 After the PR ships, the user runs the following to verify end-to-end against the fixture:
 
 ```bash
-bun run aim-corpus-ingest --edition=2026-09 --out=tests/fixtures/aim/aim-fixture/aim
+bun run ingest aim --edition=2026-09 --out=tests/fixtures/aim/aim-fixture/aim
 bun run check
 ```
 

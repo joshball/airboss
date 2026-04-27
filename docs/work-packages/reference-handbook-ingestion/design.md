@@ -33,7 +33,7 @@ review_status: pending
 
 - The Python pipeline's job is "PDF -> derivatives". The TS resolver's job is "derivatives -> registry entries + render-time content". These are separate concerns.
 - The Python pipeline is non-deterministic in places (PDF extraction quality varies by FAA's typesetting), so making the TS path depend on a re-run would conflate "did the registry update?" with "did extraction quality change?". Keeping them separate makes each side debuggable.
-- The user-facing workflow is: (1) operator runs `bun run handbook-ingest --doc=phak` to fetch + extract (Python), (2) operator runs `bun run handbook-corpus-ingest --doc=phak` to register (TS). Step 2 is what Phase 6 ships. Step 1 is unchanged from PR #242.
+- The user-facing workflow is: (1) operator runs `bun run handbook-ingest --doc=phak` to fetch + extract (Python), (2) operator runs `bun run ingest handbooks --doc=phak` to register (TS). Step 2 is what Phase 6 ships. Step 1 is unchanged from PR #242.
 
 **Cost accepted:** Two CLIs, but with clear responsibility split. The naming `handbook-corpus-ingest` distinguishes from PR #242's `handbook-ingest`.
 
@@ -138,7 +138,7 @@ export interface ParsedHandbooksLocator {
 
 - `handbook-ingest` is taken (PR #242). Reusing the name would force one or the other to rename.
 - "corpus-ingest" matches the @ab/sources mental model: the corpus is the registry-side noun. Phase 7's CLI will follow this pattern (`aim-corpus-ingest`).
-- Pairing the names in the operator workflow is intentional: `bun run handbook-ingest --doc=phak` then `bun run handbook-corpus-ingest --doc=phak` -- two ergonomic commands that compose.
+- Pairing the names in the operator workflow is intentional: `bun run handbook-ingest --doc=phak` then `bun run ingest handbooks --doc=phak` -- two ergonomic commands that compose.
 
 **Cost accepted:** Two CLI commands instead of one. The split mirrors the actual concern boundary.
 
