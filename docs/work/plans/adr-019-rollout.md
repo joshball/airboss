@@ -165,3 +165,4 @@ Phases 5, 6, 7, 8, 10 can run in parallel after Phase 2 lands -- they each unloc
 | 2026-04-27 | 3 | CFR bulk ingestion WP authored + implementation (PR #247). |
 | 2026-04-27 | 6 | Handbook corpus shipped (PR #251). |
 | 2026-04-27 | 7 | AIM corpus WP authored + implementation (this PR). |
+| 2026-04-27 | -- | Downloader fix: corrected URLs (AC 120-71B, AC 91.21-1D, ACS path), browser User-Agent, eCFR per-title `latest_amended_on` auto-detect, descriptive cached filenames + `source.<ext>` symlink, HEAD-then-skip cache check, `--verify` audit mode (follow-up to PR #253). |
