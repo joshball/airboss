@@ -426,6 +426,36 @@ export {
 	getRecentReviewsForCard,
 	getReviewStats,
 } from './stats';
+export type {
+	ListSyllabiOptions,
+	RelevanceCacheReport,
+	SyllabusAreaView,
+	SyllabusLeafWithSyllabus,
+	SyllabusTreeNode,
+	SyllabusTreeValidationInput,
+} from './syllabi';
+export {
+	AirbossRefValidationError,
+	buildSyllabusTreeFromRows,
+	getCitationsForSyllabusNode,
+	getKnowledgeNodesForSyllabusLeaf,
+	getSyllabusArea,
+	getSyllabusById,
+	getSyllabusBySlug,
+	getSyllabusLeaves,
+	getSyllabusLeavesForKnowledgeNode,
+	getSyllabusTree,
+	levelIsLeafEligible,
+	listSyllabi,
+	rebuildKnowledgeNodeRelevanceCache,
+	replaceSyllabusNodeLinks,
+	SyllabusNotFoundError,
+	SyllabusValidationError,
+	upsertSyllabus,
+	upsertSyllabusNode,
+	validateAirbossRefForLeaf,
+	validateSyllabusTree,
+} from './syllabi';
 export {
 	cardTagsSchema,
 	cardTextSchema,
