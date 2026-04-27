@@ -13,18 +13,20 @@ let {
 	chapterCode: string;
 	code: string;
 	title: string;
-	faaPageStart: number | null;
-	faaPageEnd: number | null;
+	faaPageStart: string | null;
+	faaPageEnd: string | null;
 } = $props();
 
 // `code` is `<chapter>.<section>`; URL takes the section number alone.
 const sectionPart = $derived(code.split('.').slice(1).join('.'));
+// Bare printed FAA page reference (e.g. `12-7`); no `pp.`/`p.` prefix so the
+// column tabular-aligns with sibling rows in the section list.
 const pageRange = $derived(
 	faaPageStart === null
 		? null
 		: faaPageEnd && faaPageEnd !== faaPageStart
-			? `pp. ${faaPageStart}-${faaPageEnd}`
-			: `p. ${faaPageStart}`,
+			? `${faaPageStart} - ${faaPageEnd}`
+			: faaPageStart,
 );
 </script>
 
@@ -63,6 +65,9 @@ const pageRange = $derived(
 	}
 	.pages {
 		font-family: var(--font-family-mono);
+		font-variant-numeric: tabular-nums;
 		color: var(--ink-muted);
+		text-align: right;
+		min-width: 8ch;
 	}
 </style>

@@ -11,16 +11,19 @@ let {
 	documentSlug: string;
 	code: string;
 	title: string;
-	faaPageStart: number | null;
-	faaPageEnd: number | null;
+	faaPageStart: string | null;
+	faaPageEnd: string | null;
 } = $props();
 
+// Display the printed FAA page reference verbatim. No `pp.`/`p.` prefix --
+// readers know what page numbers look like, and the prefix interferes with
+// tabular alignment of the range column.
 const pageRange = $derived(
 	faaPageStart === null
 		? null
 		: faaPageEnd && faaPageEnd !== faaPageStart
-			? `pp. ${faaPageStart}-${faaPageEnd}`
-			: `p. ${faaPageStart}`,
+			? `${faaPageStart} - ${faaPageEnd}`
+			: faaPageStart,
 );
 </script>
 
@@ -61,6 +64,9 @@ const pageRange = $derived(
 	}
 	.pages {
 		font-family: var(--font-family-mono);
+		font-variant-numeric: tabular-nums;
 		color: var(--ink-muted);
+		text-align: right;
+		min-width: 8ch;
 	}
 </style>
