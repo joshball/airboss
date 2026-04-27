@@ -116,7 +116,7 @@ beforeAll(async () => {
 		slug: PPL_SYL_SLUG,
 		kind: 'acs',
 		title: 'Test PPL ACS',
-		edition: 'faa-s-acs-25',
+		edition: `faa-s-acs-25-${SUITE_TOKEN}`,
 		status: SYLLABUS_STATUSES.ACTIVE,
 		seedOrigin: SUITE_TAG,
 		createdAt: now,

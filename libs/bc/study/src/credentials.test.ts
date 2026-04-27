@@ -295,7 +295,7 @@ beforeAll(async () => {
 		slug: PRIVATE_SYLLABUS_SLUG,
 		kind: 'acs',
 		title: 'Private Pilot ACS (test)',
-		edition: 'faa-s-acs-25',
+		edition: `faa-s-acs-test-${SUITE_TOKEN}`,
 		status: SYLLABUS_STATUSES.ACTIVE,
 		seedOrigin: SUITE_TAG,
 		createdAt: now,

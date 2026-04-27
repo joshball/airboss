@@ -126,7 +126,7 @@ beforeAll(async () => {
 		slug: slug('ppl-acs-lens'),
 		kind: 'acs',
 		title: 'PPL ACS lens test',
-		edition: 'faa-s-acs-25',
+		edition: `faa-s-acs-lens-${SUITE_TOKEN}`,
 		status: SYLLABUS_STATUSES.ACTIVE,
 		seedOrigin: SUITE_TAG,
 		createdAt: now,

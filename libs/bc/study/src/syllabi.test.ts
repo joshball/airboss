@@ -337,7 +337,7 @@ beforeAll(async () => {
 		slug: SYL_SLUG,
 		kind: 'acs',
 		title: 'Test ACS',
-		edition: 'faa-s-acs-test',
+		edition: `faa-s-acs-test-${SUITE_TOKEN}`,
 		status: SYLLABUS_STATUSES.ACTIVE,
 		seedOrigin: SUITE_TAG,
 		createdAt: now,
