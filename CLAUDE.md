@@ -170,6 +170,7 @@ Feature lifecycle is driven by shared skills:
 - **Svelte 5 runes only.** No `$:`, no `export let`, no `<slot>`, no Svelte 4 stores (`writable`, `readable`, `$app/stores`). Use `$app/state`.
 - **Discovery-first pedagogy for knowledge nodes.** Lead with WHY. Let the learner derive the answer. Reveal regulations as confirmation of reasoning, not as arbitrary rules. See [ADR 011](docs/decisions/011-knowledge-graph-learning-system/decision.md).
 - **Engine scoring tuning lives in `ENGINE_SCORING`** (`libs/constants/src/engine.ts`). Never inline a numeric literal in `libs/bc/study/src/engine.ts` scoring functions; route through the constant. See ADR 014.
+- **Source documents (PDFs, audio masters, scanned regulations) live in a developer-local cache, not the repo.** Cache default: `~/Documents/airboss-handbook-cache/` (override via `AIRBOSS_HANDBOOK_CACHE`). LFS plumbing in `.gitattributes` is dormant; `.gitignore` blocks the source bytes from staging. Extracted derivatives (markdown, figure PNGs, table HTML, manifest.json) stay inline. Generated artifacts (DB rows, indexes) stay out of the repo. See [ADR 018](docs/decisions/018-source-artifact-storage-policy/decision.md) and [docs/platform/STORAGE.md](docs/platform/STORAGE.md). Adding a new content corpus = one `.gitattributes` line + one `.gitignore` line + cache subdirectory.
 
 ## Stack
 
