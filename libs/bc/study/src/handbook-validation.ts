@@ -114,6 +114,12 @@ export const handbookManifestWarningSchema = z.object({
 		'toc-verify',
 		'llm',
 		'section-strategy',
+		// Page-label fallbacks emitted by sections.py when the printed FAA
+		// header isn't readable on a given PDF page (e.g. chapter-summary
+		// pages that omit the header). The walk-back recovery and the
+		// offset-derived fallback both surface here so the failures are
+		// visible to seed reviewers.
+		'page-label',
 	]),
 	section_code: z.string().regex(SECTION_CODE_REGEX).nullish(),
 	message: z.string().min(1),

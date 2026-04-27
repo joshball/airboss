@@ -25,6 +25,17 @@ SECTION_STRATEGY_VALUES = (
     SECTION_STRATEGY_PER_CHAPTER,
 )
 
+# How far back from a target PDF page to walk while looking for a parseable
+# FAA page header before falling back to `pdf_page - page_offset`. Five pages
+# clears a multi-page figure spread, a chapter summary that omits the page
+# header, or the trailing glossary stub that ends a handbook.
+PAGE_LABEL_WALK_BACK_DEFAULT = 5
+
+# Allowed keys inside a `chapter_overrides[<ord>]` block. Keep this narrow so
+# YAML typos fail loud (KeyError) rather than silently silencing later parser
+# fixes. Each value is a printed FAA page reference verbatim, e.g. "17-100".
+CHAPTER_OVERRIDE_KEYS = frozenset({"faa_page_start", "faa_page_end"})
+
 
 @dataclass(frozen=True)
 class HandbookConfig:
@@ -62,6 +73,15 @@ class HandbookConfig:
     # See `normalize._strip_cover_residue` for the heuristic.
     chapter_cover_strip_enabled: bool = False
     chapter_cover_strip_max_lines: int = 6
+    # Per-chapter explicit overrides for fields the parser can't recover from
+    # the PDF. Keyed by chapter ordinal (int). Today only `faa_page_start` /
+    # `faa_page_end` are honored. Used to short-circuit the page-label
+    # walk-back when a chapter's last page lacks any parseable FAA header
+    # within the walk-back window. See ADR notes / Phase 15 fix-C.
+    chapter_overrides: dict[int, dict[str, str]] = field(default_factory=dict)
+    # How many PDF pages to walk backward from a target page when reading the
+    # printed FAA page label. 0 disables the walk-back (the legacy behavior).
+    page_label_walk_back: int = PAGE_LABEL_WALK_BACK_DEFAULT
     # Raw YAML payload, exposed so strategy modules can read their own blocks
     # (`toc`, `heading_style`, `llm`) without each one re-parsing the file.
     raw_yaml: dict[str, object] = field(default_factory=dict)
@@ -96,6 +116,33 @@ def load_config(document_slug: str) -> HandbookConfig:
                 f"per_chapter_section_strategy[{k}]={v!r} in {config_path} must be 'toc' or 'llm'."
             )
         per_chapter[kk] = vv
+
+    chapter_overrides_raw = raw.get("chapter_overrides") or {}
+    if not isinstance(chapter_overrides_raw, dict):
+        raise ValueError(
+            f"chapter_overrides in {config_path} must be a mapping, got {type(chapter_overrides_raw).__name__}."
+        )
+    chapter_overrides: dict[int, dict[str, str]] = {}
+    for k, v in chapter_overrides_raw.items():
+        if not isinstance(v, dict):
+            raise ValueError(
+                f"chapter_overrides[{k}] in {config_path} must be a mapping of field -> value."
+            )
+        unknown = set(v.keys()) - CHAPTER_OVERRIDE_KEYS
+        if unknown:
+            raise ValueError(
+                f"chapter_overrides[{k}] in {config_path} has unknown keys {sorted(unknown)!r}; "
+                f"allowed keys: {sorted(CHAPTER_OVERRIDE_KEYS)!r}."
+            )
+        chapter_overrides[int(k)] = {str(kk): str(vv) for kk, vv in v.items()}
+
+    walk_back_raw = raw.get("page_label_walk_back", PAGE_LABEL_WALK_BACK_DEFAULT)
+    walk_back = int(walk_back_raw)
+    if walk_back < 0:
+        raise ValueError(
+            f"page_label_walk_back in {config_path} must be >= 0 (got {walk_back})."
+        )
+
     return HandbookConfig(
         document_slug=raw["document_slug"],
         edition=raw["edition"],
@@ -114,6 +161,8 @@ def load_config(document_slug: str) -> HandbookConfig:
         per_chapter_section_strategy=per_chapter,
         chapter_cover_strip_enabled=bool(cover_strip_raw.get("enabled", False)),
         chapter_cover_strip_max_lines=int(cover_strip_raw.get("max_lines", 6)),
+        chapter_overrides=chapter_overrides,
+        page_label_walk_back=walk_back,
         raw_yaml=raw,
     )
 

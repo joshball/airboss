@@ -134,9 +134,16 @@ def detect_outline_from_text(pdf_path: Path) -> list[OutlineNode]:
     bold, isolated on a page); we surface chapters only and let `sections.py`
     extract the body text per chapter range -- this avoids guessing at FAA
     section boundaries that aren't reliably typeset.
+
+    The last chapter ends at the last PDF page bearing its `<chapter>-<page>`
+    header -- not at the document's total page count. PHAK's PDF includes a
+    glossary (G-NN headers) and an index (I-NN headers) after the last
+    chapter; treating those as part of the final chapter inflates its body
+    and breaks the printed-page-end resolution.
     """
     chapter_starts: dict[int, int] = {}
     chapter_titles: dict[int, str] = {}
+    chapter_last_seen: dict[int, int] = {}
 
     page_header_re = re.compile(r"^(\d+)-\d+\b")
 
@@ -157,6 +164,7 @@ def detect_outline_from_text(pdf_path: Path) -> list[OutlineNode]:
                         break
             if chapter_num is None:
                 continue
+            chapter_last_seen[chapter_num] = page_num + 1
             if chapter_num not in chapter_starts:
                 chapter_starts[chapter_num] = page_num + 1
                 # FAA cover page typeset: title-line-1 / title-line-2 (often
@@ -167,7 +175,6 @@ def detect_outline_from_text(pdf_path: Path) -> list[OutlineNode]:
                 title = _extract_chapter_title(lines, chapter_num, page_header_re)
                 if title:
                     chapter_titles[chapter_num] = title
-        total_pages = doc.page_count
 
     if not chapter_starts:
         raise OutlineError(f"Could not detect any FAA `<chapter>-<page>` headers in {pdf_path}.")
@@ -176,9 +183,15 @@ def detect_outline_from_text(pdf_path: Path) -> list[OutlineNode]:
     nodes: list[OutlineNode] = []
     for idx, chap_num in enumerate(sorted_chapters):
         page_start = chapter_starts[chap_num]
-        page_end = (
-            chapter_starts[sorted_chapters[idx + 1]] - 1 if idx + 1 < len(sorted_chapters) else total_pages
-        )
+        if idx + 1 < len(sorted_chapters):
+            page_end = chapter_starts[sorted_chapters[idx + 1]] - 1
+        else:
+            # Last chapter: stop at the last PDF page that actually carried a
+            # `<this-chapter>-<page>` header. The pages after it (glossary,
+            # index, appendices typeset with G-NN/I-NN/A-NN headers) are not
+            # part of the chapter and would otherwise pull in body text and
+            # break the printed-page-end resolution.
+            page_end = chapter_last_seen[chap_num]
         title = chapter_titles.get(chap_num) or f"Chapter {chap_num}"
         nodes.append(
             OutlineNode(

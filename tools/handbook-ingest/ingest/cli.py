@@ -102,7 +102,15 @@ def main(
     else:
         click.echo(f"  outline: {len(flat_outline)} nodes")
 
-    bodies = extract_sections(fetch_result.path, flat_outline, page_offset=config.page_offset)
+    section_result = extract_sections(
+        fetch_result.path,
+        flat_outline,
+        page_offset=config.page_offset,
+        chapter_overrides=config.chapter_overrides,
+        walk_back=config.page_label_walk_back,
+    )
+    bodies = section_result.bodies
+    section_label_warnings = section_result.warnings
     empty_bodies = [b for b in bodies if b.char_count == 0]
     if empty_bodies:
         click.echo(
@@ -206,6 +214,8 @@ def main(
     )
     if section_extra_warnings:
         click.echo(f"  section-tree warnings: {len(section_extra_warnings)} -- see manifest")
+    if section_label_warnings:
+        click.echo(f"  page-label warnings: {len(section_label_warnings)} -- see manifest")
 
     # Promote section_nodes into the OutlineNode + body list so existing
     # write_outputs() seeds them as `handbook_section` rows.
@@ -231,7 +241,7 @@ def main(
         tables=tables,
         table_warnings=table_warnings,
         extraction_metadata=extraction_metadata,
-        extra_warnings=section_extra_warnings,
+        extra_warnings=[*section_extra_warnings, *section_label_warnings],
     )
     click.echo(
         f"  wrote {summary.sections_written} sections, "
@@ -265,6 +275,8 @@ def _override_edition(config: HandbookConfig, edition: str) -> HandbookConfig:
         per_chapter_section_strategy=config.per_chapter_section_strategy,
         chapter_cover_strip_enabled=config.chapter_cover_strip_enabled,
         chapter_cover_strip_max_lines=config.chapter_cover_strip_max_lines,
+        chapter_overrides=config.chapter_overrides,
+        page_label_walk_back=config.page_label_walk_back,
         raw_yaml=config.raw_yaml,
     )
 

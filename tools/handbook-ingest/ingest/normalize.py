@@ -138,6 +138,7 @@ def write_outputs(
             "toc-verify",
             "llm",
             "section-strategy",
+            "page-label",
         }
         for msg in extra_warnings:
             prefix = msg.split(":", 1)[0].strip() if ":" in msg else ""

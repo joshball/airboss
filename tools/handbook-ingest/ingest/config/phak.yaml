@@ -82,3 +82,22 @@ llm:
 chapter_cover_strip:
   enabled: true
   max_lines: 6
+
+# How many PDF pages to walk backward from a target page when reading the
+# printed FAA page label. Five pages clears chapter-summary pages that omit
+# the FAA header, multi-page figure spreads, and the trailing glossary stub
+# that ends a handbook. Set to 0 to disable the walk-back (legacy behavior).
+page_label_walk_back: 5
+
+# Per-chapter explicit field overrides. Used when the parser cannot recover
+# a value from the PDF -- e.g. a chapter-summary page that lacks any
+# parseable FAA header within the walk-back window. Today only
+# `faa_page_start` / `faa_page_end` are honored. The PHAK chapter 17 case
+# is now resolved by the content-scan outline detector capping the last
+# chapter at the last page bearing its FAA header, so no override is
+# currently needed for PHAK 25C. Example shape:
+#
+#   chapter_overrides:
+#     17:
+#       faa_page_end: "17-100"
+chapter_overrides: {}

@@ -6,7 +6,7 @@
   "publisher": "FAA",
   "source_url": "https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/faa-h-8083-25c.pdf",
   "source_checksum": "247929cace0ab56b376e683eba540cc4c8f39f199ab35414e8b604e24f395cb7",
-  "fetched_at": "2026-04-27T13:07:36.640029+00:00",
+  "fetched_at": "2026-04-27T13:37:57.816596+00:00",
   "sections": [
     {
       "level": "chapter",
@@ -239,10 +239,10 @@
       "parent_code": null,
       "title": "Aeromedical Factors",
       "faa_page_start": "17-1",
-      "faa_page_end": "522",
-      "source_locator": "PHAK Ch 17 (17-1..522)",
+      "faa_page_end": "17-30",
+      "source_locator": "PHAK Ch 17 (17-1..17-30)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/17/index.md",
-      "content_hash": "2335a045e5f4312b1ba61fbf1bb765381b7e2e190075c7d10f5e09bd1d154edd",
+      "content_hash": "7913daa741edc9fec28fe042c5e36ee72b086b6cc40916bbc43bd068644a7449",
       "has_figures": true,
       "has_tables": true
     },
@@ -11904,7 +11904,7 @@
       "faa_page_end": "17-29",
       "source_locator": "PHAK Ch 17 §50 (17-29)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/17/50-chapter-summary.md",
-      "content_hash": "61585668e9078adcf720568e0e4d1eb64b374e8e0b8434d121db0896c12a6cce",
+      "content_hash": "2d16dce5a8d11aca07f8e0b89cc4c74de214367fd0af945c9cadd5d45e55b6e1",
       "has_figures": false,
       "has_tables": false
     }
@@ -15925,36 +15925,6 @@
       "code": "figure-without-caption",
       "section_code": "17",
       "message": "Image on page 423 (index 0) had no paired caption."
-    },
-    {
-      "code": "figure-without-caption",
-      "section_code": "17",
-      "message": "Image on page 453 (index 0) had no paired caption."
-    },
-    {
-      "code": "figure-without-caption",
-      "section_code": "17",
-      "message": "Image on page 454 (index 0) had no paired caption."
-    },
-    {
-      "code": "figure-without-caption",
-      "section_code": "17",
-      "message": "Image on page 455 (index 0) had no paired caption."
-    },
-    {
-      "code": "figure-without-caption",
-      "section_code": "17",
-      "message": "Image on page 456 (index 0) had no paired caption."
-    },
-    {
-      "code": "figure-without-caption",
-      "section_code": "17",
-      "message": "Image on page 474 (index 0) had no paired caption."
-    },
-    {
-      "code": "figure-without-caption",
-      "section_code": "17",
-      "message": "Image on page 475 (index 0) had no paired caption."
     },
     {
       "code": "table-empty",
