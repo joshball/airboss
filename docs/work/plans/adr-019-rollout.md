@@ -22,8 +22,8 @@ Companion to:
 | - | --- | --- | --- | --- |
 | 1 | reference-identifier-scheme-validator | [WP](../../work-packages/reference-identifier-scheme-validator/) | #240 (WP), #241 (impl) | ✅ |
 | 2 | reference-source-registry-core | [WP](../../work-packages/reference-source-registry-core/) | #246 | ✅ |
-| 3 | reference-cfr-ingestion-bulk | [WP](../../work-packages/reference-cfr-ingestion-bulk/) | #247 | 🟧 |
-| 4 | reference-renderer-runtime | -- | -- | ⬜ |
+| 3 | reference-cfr-ingestion-bulk | [WP](../../work-packages/reference-cfr-ingestion-bulk/) | #247 | ✅ |
+| 4 | reference-renderer-runtime | [WP](../../work-packages/reference-renderer-runtime/) | (PR pending) | 🟧 |
 | 5 | reference-versioning-tooling | -- | -- | ⬜ |
 | 6 | reference-handbook-ingestion | -- | -- | ⬜ |
 | 7 | reference-aim-ingestion | -- | -- | ⬜ |
@@ -63,9 +63,22 @@ Ingestion writes section-level `SourceEntry` records (plus subpart + Part overvi
 
 After Phase 3 lands, lessons can write `[@cite](airboss-ref:regs/cfr-14/91/103?at=2026)` and the validator resolves it without ERROR.
 
-### Phase 4 -- reference-renderer-runtime
+### Phase 4 -- reference-renderer-runtime 🟧
 
-Renderer in `apps/study/`. Resolves identifiers at render time via `@ab/sources/render`. Performs token substitution (`@cite`, `@short`, `@formal`, `@title`, `@list`, `@as-of`, `@text`, `@quote`, `@last-amended`, `@deeplink`, `@chapter`, `@subpart`, `@part`). Applies render-mode rules per §3.1 (web, print, audio TTS, screen reader, plain-text export, RSS, share-card, RAG, Slack unfurl, transclusion, tooltip).
+Renderer at `libs/sources/src/render/` (the `@ab/sources/render` API), plus a SvelteKit server-load helper and Svelte 5 component in `apps/study/`. Resolves identifiers at render time, performs token substitution, applies adjacency-merge per §1.4, attaches acknowledgment annotations per §3.4 + §6.3, and emits the §3.1 render-mode surface.
+
+Shipped surface:
+
+- Public API: `extractIdentifiers`, `batchResolve`, `substituteTokens` -- plus `registerToken` / `getToken` / `listTokens` (open token set per §3.1) and `toSerializable` / `fromSerializable` (SvelteKit transport).
+- 12 default tokens registered eagerly: `@short`, `@formal`, `@title`, `@cite`, `@list`, `@as-of`, `@text`, `@quote`, `@last-amended`, `@deeplink`, `@chapter`, `@subpart`, `@part`.
+- 4 production-quality modes: `web`, `plain-text`, `print`, `tts`.
+- 7 forward-compatible modes (documented surfaces): `screen-reader`, `rss`, `share-card`, `rag`, `slack-unfurl`, `transclusion`, `tooltip`.
+- Adjacency-merge: contiguous numeric runs render as `§91.167-91.169`; non-contiguous render as `§91.167, §91.169, §91.171`; mixed corpus or pin -> no merge.
+- Acknowledgment cascade: `historical_lens`, per-target ack with `historical: true`, ack with `superseder` matching chain end (`covered`), ack with chain advanced past `superseder` (`chain-advanced`), cross-corpus chain (`cross-corpus`).
+- SvelteKit `loadLessonReferences` server helper + `<RenderedLesson>` component (Svelte 5 runes, `{@html}`).
+- Demo route at `/references` under `apps/study/(dev)/` with three fixture lessons + mode-toggle UI.
+
+Coverage: 366 tests (libs/sources) + 6 tests (apps/study/lib/server/references); all 2393 project tests pass.
 
 ### Phase 5 -- reference-versioning-tooling
 
