@@ -219,6 +219,17 @@ export {
 	splitContentPhases,
 	upsertKnowledgeNode,
 } from './knowledge';
+export type {
+	AcsLensFilters,
+	DomainLensFilters,
+	Lens,
+	LensInput,
+	LensLeaf,
+	LensResult,
+	LensTreeNode,
+	MasteryRollup,
+} from './lenses';
+export { acsLens, computeMasteryRollup, domainLens, LensError } from './lenses';
 export type { CreatePlanInput, UpdatePlanInput } from './plans';
 export {
 	activatePlan,
