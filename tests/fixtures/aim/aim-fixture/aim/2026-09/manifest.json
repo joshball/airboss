@@ -1,0 +1,53 @@
+{
+	"edition": "2026-09",
+	"kind": "aim",
+	"title": "Aeronautical Information Manual",
+	"publisher": "FAA",
+	"source_url": "https://www.faa.gov/air_traffic/publications/atpubs/aim_html/",
+	"source_checksum": "deadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
+	"fetched_at": "2026-09-01T00:00:00.000000+00:00",
+	"entries": [
+		{
+			"kind": "chapter",
+			"code": "5",
+			"title": "Air Traffic Procedures",
+			"body_path": "aim/2026-09/chapter-5/index.md",
+			"content_hash": "abc123"
+		},
+		{
+			"kind": "section",
+			"code": "5-1",
+			"title": "Preflight",
+			"body_path": "aim/2026-09/chapter-5/section-1/index.md",
+			"content_hash": "def456"
+		},
+		{
+			"kind": "paragraph",
+			"code": "5-1-7",
+			"title": "Pilot Responsibility upon Clearance Issuance",
+			"body_path": "aim/2026-09/chapter-5/section-1/paragraph-7.md",
+			"content_hash": "ghi789"
+		},
+		{
+			"kind": "paragraph",
+			"code": "5-1-8",
+			"title": "Flight Plan Cancellation",
+			"body_path": "aim/2026-09/chapter-5/section-1/paragraph-8.md",
+			"content_hash": "jkl012"
+		},
+		{
+			"kind": "glossary",
+			"code": "glossary/pilot-in-command",
+			"title": "Pilot In Command",
+			"body_path": "aim/2026-09/glossary/pilot-in-command.md",
+			"content_hash": "mno345"
+		},
+		{
+			"kind": "appendix",
+			"code": "appendix-1",
+			"title": "Bird/Other Wildlife Strike Reporting",
+			"body_path": "aim/2026-09/appendix-1.md",
+			"content_hash": "pqr678"
+		}
+	]
+}

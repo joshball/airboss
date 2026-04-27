@@ -189,6 +189,8 @@ export type ParsedLocator = {
 	readonly handbooks?: ParsedHandbooksLocator;
 	/** ACS payload populated by `parseAcsLocator` (cert-syllabus WP). */
 	readonly acs?: ParsedAcsLocator;
+	/** AIM payload populated by Phase 7's `parseAimLocator`. */
+	readonly aim?: ParsedAimLocator;
 };
 
 /**
@@ -270,6 +272,31 @@ export interface ParsedAcsLocator {
 	readonly elementTriad?: 'k' | 'r' | 's';
 	/** Element ordinal as written (`'1'`, `'2'`, ...). */
 	readonly elementOrdinal?: string;
+}
+
+/**
+ * Structured AIM locator surfaced by `parseAimLocator` in
+ * `libs/sources/src/aim/locator.ts`. Source of truth: ADR 019 §1.2 ("AIM")
+ * plus the WP at `docs/work-packages/reference-aim-ingestion/`.
+ *
+ * The AIM is a single continuous publication (no doc slug). Chapter / section /
+ * paragraph numbering uses dashes between numerics in the locator path
+ * (`aim/5-1-7` -> chapter 5, section 1, paragraph 7). Glossary entries use a
+ * `glossary/<slug>` shape; appendices use `appendix-<N>`.
+ *
+ * Pin format: `?at=YYYY-MM`. AIM publishes change cycles roughly twice a year.
+ */
+export interface ParsedAimLocator {
+	/** Chapter number (e.g. `'5'`). */
+	readonly chapter?: string;
+	/** Section number (e.g. `'1'`). */
+	readonly section?: string;
+	/** Paragraph number (e.g. `'7'`). */
+	readonly paragraph?: string;
+	/** Glossary entry slug (e.g. `'pilot-in-command'`); mutually exclusive with chapter/section/paragraph. */
+	readonly glossarySlug?: string;
+	/** Appendix number as written (e.g. `'1'`); mutually exclusive with chapter/section/paragraph. */
+	readonly appendix?: string;
 }
 
 export interface LocatorError {
