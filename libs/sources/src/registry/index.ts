@@ -140,4 +140,4 @@ export {
 	stripPin,
 	walkSupersessionChain,
 } from './query.ts';
-export { SOURCES } from './sources.ts';
+export { __sources_internal__, getSources, SOURCES } from './sources.ts';

@@ -138,7 +138,23 @@ export interface SourceLocation {
 // Render mode -- ADR 019 §3.1
 // ---------------------------------------------------------------------------
 
-export type RenderMode = 'web' | 'print' | 'tts' | 'plain-text';
+/**
+ * The full §3.1 mode set. Phase 4 (renderer) ships full implementations for
+ * `web`, `plain-text`, `print`, `tts`, plus forward-compatible surfaces for
+ * the seven additional modes per §3.1's render-mode behavior table.
+ */
+export type RenderMode =
+	| 'web'
+	| 'plain-text'
+	| 'print'
+	| 'tts'
+	| 'screen-reader'
+	| 'rss'
+	| 'share-card'
+	| 'rag'
+	| 'slack-unfurl'
+	| 'transclusion'
+	| 'tooltip';
 
 // ---------------------------------------------------------------------------
 // Phase 2 -- registry core (ADR 019 §2)
@@ -241,4 +257,131 @@ export interface LessonParseResult {
 	readonly occurrences: readonly IdentifierOccurrence[];
 	/** Findings from the lesson-parser itself (frontmatter / label resolution / orphan acks). */
 	readonly findings: readonly ValidationFinding[];
+}
+
+// ---------------------------------------------------------------------------
+// Phase 4 -- Renderer runtime (ADR 019 §1.4, §2.5, §3.1, §3.4, §6.2, §6.3)
+// ---------------------------------------------------------------------------
+
+/**
+ * Annotation kind derived from the lesson's `acknowledgments` cascade plus the
+ * supersession chain shape. Computed once per identifier in `batchResolve`;
+ * each render mode then PLACES the annotation per §3.1's render-mode table.
+ */
+export type AnnotationKind = 'none' | 'covered' | 'chain-advanced' | 'historical' | 'cross-corpus';
+
+export interface ResolvedAnnotation {
+	readonly kind: AnnotationKind;
+	/** Display text for the annotation. Format depends on `kind`. */
+	readonly text: string;
+	/** Optional ack `note` for tooltip-bound rendering. */
+	readonly note?: string;
+}
+
+/**
+ * One identifier resolved for render-time consumption. The map returned by
+ * `batchResolve` is keyed on the **raw identifier string with pin** so two
+ * references to the same entry under different pins each get a row.
+ */
+export interface ResolvedIdentifier {
+	readonly raw: string;
+	readonly parsed: ParsedIdentifier;
+	/** SourceEntry after pin-strip. Null when the registry has no entry. */
+	readonly entry: SourceEntry | null;
+	/** Supersession chain from `entry` forward (entry is element 0). Empty when entry is null. */
+	readonly chain: readonly SourceEntry[];
+	/** Per-corpus live URL for the pin. Null when resolver has none. */
+	readonly liveUrl: string | null;
+	/** Indexed-tier content. Lazily populated only when `@text`/`@quote` is bound. */
+	readonly indexed: IndexedContent | null;
+	readonly annotation: ResolvedAnnotation;
+}
+
+export type ResolvedIdentifierMap = ReadonlyMap<string, ResolvedIdentifier>;
+
+/**
+ * SvelteKit-transport-safe view of `ResolvedIdentifier`. `Date` becomes ISO
+ * string; the `Map` flattens to a `Record`. Round-trip via `toSerializable`/
+ * `fromSerializable` in `@ab/sources/render`.
+ */
+export interface SerializableSourceEntry extends Omit<SourceEntry, 'last_amended_date'> {
+	readonly last_amended_date: string;
+}
+
+export interface SerializableResolvedIdentifier {
+	readonly raw: string;
+	readonly parsed: ParsedIdentifier;
+	readonly entry: SerializableSourceEntry | null;
+	readonly chain: readonly SerializableSourceEntry[];
+	readonly liveUrl: string | null;
+	readonly indexed: IndexedContent | null;
+	readonly annotation: ResolvedAnnotation;
+}
+
+export type SerializableResolvedMap = Record<string, SerializableResolvedIdentifier>;
+
+/** Multi-reference adjacency group per §1.4. */
+export interface AdjacencyGroup {
+	readonly corpus: string;
+	readonly pin: string | null;
+	/** Raw identifiers (with pin) in source order. Length >= 1. */
+	readonly members: readonly string[];
+	/** `'range'` when locator-prefix-equal + last-segment numeric + contiguous; `'list'` otherwise. */
+	readonly shape: 'range' | 'list';
+}
+
+/** Token shape per §3.1; the registry is open via `registerToken`. */
+export type TokenName = `@${string}`;
+
+export type TokenKind = 'identity' | 'content' | 'derived';
+
+export interface TokenContext {
+	readonly resolved: ResolvedIdentifier;
+	readonly mode: RenderMode;
+	/** Adjacency group this identifier belongs to, if any. `@list` consumes this. */
+	readonly group?: AdjacencyGroup;
+	/** Pin literal for `@as-of`; null when the identifier was unpinned. */
+	readonly pin: string | null;
+	/** Resolved-map for `@list` to look up each member's `canonical_short`. */
+	readonly resolvedMap: ResolvedIdentifierMap;
+}
+
+export interface Token {
+	readonly name: TokenName;
+	readonly kind: TokenKind;
+	substitute(ctx: TokenContext): string;
+}
+
+/** Context passed into `batchResolve`. */
+export interface BatchResolveContext {
+	readonly acknowledgments: readonly LessonAcknowledgment[];
+	readonly historicalLens: boolean;
+	/**
+	 * Lesson body. Used only to detect which identifiers have `@text`/`@quote`
+	 * bound so indexed-tier reads stay lazy. `batchResolve` does not parse the
+	 * body for occurrences again; that work happens in `extractIdentifiers`.
+	 */
+	readonly body: string;
+}
+
+/** Per-link state passed into a render-mode handler. */
+export interface LinkRenderContext {
+	/** Raw identifier as written. */
+	readonly raw: string;
+	/** Original Markdown link text (before token substitution). */
+	readonly linkText: string;
+	/** Token-substituted link text. */
+	readonly substituted: string;
+	readonly resolved: ResolvedIdentifier;
+	readonly mode: RenderMode;
+	readonly group?: AdjacencyGroup;
+	/**
+	 * Position in the adjacency group: 0 means first (emit anchor), >0 means
+	 * follow-up (suppressed by the dispatcher when the mode collapses groups).
+	 */
+	readonly groupIndex: number;
+	/** When set, the mode emits the group's combined link text instead of `substituted`. */
+	readonly groupListText?: string;
+	/** Footnote sink (print mode); modes that don't footnote leave it undefined. */
+	readonly footnoteSink?: (text: string) => number;
 }

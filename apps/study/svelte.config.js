@@ -62,6 +62,8 @@ const config = {
 			'@ab/help/*': '../../libs/help/src/*',
 			'@ab/activities': '../../libs/activities/src/index.ts',
 			'@ab/activities/*': '../../libs/activities/src/*',
+			'@ab/sources': '../../libs/sources/src/index.ts',
+			'@ab/sources/*': '../../libs/sources/src/*',
 		},
 		env: {
 			dir: '../../',

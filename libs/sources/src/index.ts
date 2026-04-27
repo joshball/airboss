@@ -14,6 +14,28 @@
 // Side-effect import: registers the `regs` CorpusResolver.
 import './regs/index.ts';
 
+export {
+	__batch_internal__,
+	batchResolve,
+	computeAdjacencyGroups,
+	computeAnnotation,
+	extractIdentifiers,
+	findMatchingAcks,
+	formatListText,
+	fromSerializable,
+	getToken,
+	indexGroupsByMember,
+	listTokens,
+	memberIndex,
+	registerToken,
+	renderDefaultModeLink,
+	renderPlainTextLink,
+	renderPrintLink,
+	renderTtsLink,
+	renderWebLink,
+	substituteTokens,
+	toSerializable,
+} from './render/index.ts';
 export { productionRegistry } from './registry/index.ts';
 export { NULL_REGISTRY } from './registry-stub.ts';
 export * from './types.ts';

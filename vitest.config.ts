@@ -30,6 +30,8 @@ const aliases = {
 	'@ab/activities': resolve('./libs/activities/src/index.ts'),
 	'@ab/hangar-jobs': resolve('./libs/hangar-jobs/src/index.ts'),
 	'@ab/hangar-sync': resolve('./libs/hangar-sync/src/index.ts'),
+	'@ab/sources/registry/__test_helpers__': resolve('./libs/sources/src/registry/__test_helpers__.ts'),
+	'@ab/sources/registry': resolve('./libs/sources/src/registry/index.ts'),
 	'@ab/sources': resolve('./libs/sources/src/index.ts'),
 };
 
