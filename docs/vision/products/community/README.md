@@ -6,10 +6,11 @@ Aviation already has strong community instincts (fly-ins, EAA chapters, flight s
 
 ## Products
 
-| ID | Name                 | Priority | Status |
-| -- | -------------------- | -------- | ------ |
-| prd:com:route-buddy | Route Buddy          | 5        | idea   |
-| prd:com:scenario-of-the-week | Scenario of the Week | 4        | idea   |
-| prd:com:cfi-pairing | CFI Pairing          | 5        | idea   |
-| prd:com:anonymous-mistakes | Anonymous Mistakes   | 4        | idea   |
-| prd:com:local-pilot-map | Local Pilot Map      | 5        | idea   |
+| ID                            | Name                       | Priority | Status |
+| ----------------------------- | -------------------------- | -------- | ------ |
+| prd:com:route-buddy           | Route Buddy                | 5        | idea   |
+| prd:com:scenario-of-the-week  | Scenario of the Week       | 4        | idea   |
+| prd:com:cfi-pairing           | CFI Pairing                | 5        | idea   |
+| prd:com:anonymous-mistakes    | Anonymous Mistakes         | 4        | idea   |
+| prd:com:local-pilot-map       | Local Pilot Map            | 5        | idea   |
+| prd:com:handbook-discussion   | Handbook Discussion + Q&A  | 4        | idea   |
