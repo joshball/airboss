@@ -22,7 +22,7 @@ Companion to:
 | - | --- | --- | --- | --- |
 | 1 | reference-identifier-scheme-validator | [WP](../../work-packages/reference-identifier-scheme-validator/) | #240 (WP), #241 (impl) | ✅ |
 | 2 | reference-source-registry-core | [WP](../../work-packages/reference-source-registry-core/) | #246 | ✅ |
-| 3 | reference-cfr-ingestion-bulk | -- | -- | ⬜ |
+| 3 | reference-cfr-ingestion-bulk | [WP](../../work-packages/reference-cfr-ingestion-bulk/) | #247 | 🟧 |
 | 4 | reference-renderer-runtime | -- | -- | ⬜ |
 | 5 | reference-versioning-tooling | -- | -- | ⬜ |
 | 6 | reference-handbook-ingestion | -- | -- | ⬜ |
@@ -55,11 +55,13 @@ Phase 1 swap: one-line change in `scripts/check.ts` from `NULL_REGISTRY` to `pro
 
 Full eCFR ingestion pipeline. Walks the eCFR XML for:
 
-- Title 14 -- Parts 61, 67, 68, 91, 97, 119, 121, 125, 135, 141, 142, 145
+- Title 14 -- whole Title (every Part the Versioner ships)
 - 49 CFR Part 830 (NTSB)
 - 49 CFR Part 1552 (TSA)
 
-Populates the registry to `pending`. Reviewer promotes batches to `accepted`. After this lands, lessons can use `airboss-ref:regs/...` URLs that resolve.
+Ingestion writes section-level `SourceEntry` records (plus subpart + Part overview entries), records the edition into `EDITIONS`, writes derivatives to `regulations/cfr-<title>/<YYYY-MM-DD>/`, and atomic-batch-promotes the entries to `accepted` under reviewer `phase-3-bulk-ingestion`. Source XML lives in `$AIRBOSS_HANDBOOK_CACHE/regulations/cfr-<title>/<YYYY-MM-DD>/` per ADR 018 (gitignored + dormant LFS plumbing).
+
+After Phase 3 lands, lessons can write `[@cite](airboss-ref:regs/cfr-14/91/103?at=2026)` and the validator resolves it without ERROR.
 
 ### Phase 4 -- reference-renderer-runtime
 
@@ -102,3 +104,4 @@ Phases 5, 6, 7, 8, 10 can run in parallel after Phase 2 lands -- they each unloc
 | 2026-04-27 | 1 | Validator + WP shipped (PRs #240, #241). |
 | 2026-04-27 | -- | Rollout tracker created. |
 | 2026-04-27 | 2 | Registry core + --fix mode shipped (PR #246). |
+| 2026-04-27 | 3 | CFR bulk ingestion WP authored + implementation (PR #247). |

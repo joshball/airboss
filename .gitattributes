@@ -9,3 +9,4 @@
 # Add a new line below for each new content corpus.
 
 handbooks/**/*.pdf filter=lfs diff=lfs merge=lfs -text
+regulations/cfr-*/**/*.xml filter=lfs diff=lfs merge=lfs -text

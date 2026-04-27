@@ -35,3 +35,4 @@ data/sources-snapshot.json
 # These lines block accidental staging; the matching .gitattributes lines
 # carry dormant LFS plumbing for the day this policy flips.
 handbooks/**/*.pdf
+regulations/cfr-*/**/*.xml
