@@ -25,7 +25,7 @@ Companion to:
 | 3 | reference-cfr-ingestion-bulk | [WP](../../work-packages/reference-cfr-ingestion-bulk/) | #247 | ✅ |
 | 4 | reference-renderer-runtime | [WP](../../work-packages/reference-renderer-runtime/) | #249 | 🟧 |
 | 5 | reference-versioning-tooling | [WP](../../work-packages/reference-versioning-tooling/) | -- | 🟨 |
-| 6 | reference-handbook-ingestion | -- | -- | ⬜ |
+| 6 | reference-handbook-ingestion | [WP](../../work-packages/reference-handbook-ingestion/) | (this PR) | 🟧 |
 | 7 | reference-aim-ingestion | -- | -- | ⬜ |
 | 8 | reference-ac-ingestion | -- | -- | ⬜ |
 | 9 | reference-lesson-migration | -- | -- | ⬜ |
@@ -94,9 +94,25 @@ Shipped surface (per [WP](../../work-packages/reference-versioning-tooling/)):
 - Validator row-6 round-trip: a synthetic two-edition-stale lesson produces row-6 WARNING; after `advance` rewrites the pin, the warning clears.
 - 50 new tests in `libs/sources/src/diff/`; 416 total tests in `libs/sources/` pass.
 
-### Phase 6 -- reference-handbook-ingestion
+### Phase 6 -- reference-handbook-ingestion 🟧
 
-PHAK + AFH ingestion (handbooks corpus). Per ADR 018 cache pattern. Distinct from the ADR 016 handbook *reader* (which has its own ingestion landed in PR #242); Phase 6 here is about populating the `airboss-ref:` registry with handbook entries, reusing the ADR 016 ingestion's derivative output where possible.
+PHAK + AFH + AvWX corpus registration. Reuses ADR 016 phase 0 (PR #242) derivative output: that pipeline writes per-handbook `manifest.json` + per-section markdown to `handbooks/<doc>/<faa-dir>/`; Phase 6 reads those manifests and populates the `airboss-ref:` registry with chapter / section / subsection entries.
+
+Shipped surface:
+
+- `libs/sources/src/handbooks/` -- locator parser, citation formatter, FAA URL builder, derivative reader, resolver, ingest CLI.
+- `handbooks` `CorpusResolver` registered via side-effect import in `libs/sources/src/index.ts`.
+- New CLI `bun run handbook-corpus-ingest --doc=<phak|afh|avwx> --edition=<...>` that walks the existing manifest and emits one `SourceEntry` per chapter / section / subsection. Idempotent; re-run is a no-op.
+- 78 new tests in `libs/sources/src/handbooks/`; 494 total tests in `libs/sources/` pass.
+- Real-tree ingest counts: PHAK 850 entries, AFH 531 entries, AvWX 480 entries.
+- Smoke test proves `[@cite](airboss-ref:handbooks/phak/8083-25C/12/3)` resolves with zero ERROR after ingest.
+
+Out of scope and deferred:
+
+- Re-authoring the PDF -> derivative pipeline (PR #242 owns that; Phase 6 is registration-only).
+- Per-paragraph registry entries (paragraph identifiers parse correctly via `parseLocator` and resolve to the containing section, mirroring Phase 3's CFR paragraph treatment).
+- Per-figure / per-table registry entries (figures and tables parse correctly via `parseLocator` but have no `SourceEntry`; the renderer descends to the derivative file when `@text` / `@quote` is bound).
+- Cross-edition aliases (handbooks rarely renumber within a letter revision; new editions ship as new doc slugs entirely, e.g. 8083-25D).
 
 ### Phase 7 -- reference-aim-ingestion
 

@@ -1,0 +1,68 @@
+{
+	"document_slug": "phak",
+	"edition": "FAA-H-8083-25C",
+	"kind": "handbook",
+	"title": "Pilot's Handbook of Aeronautical Knowledge",
+	"publisher": "FAA",
+	"source_url": "https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/faa-h-8083-25c.pdf",
+	"source_checksum": "deadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
+	"fetched_at": "2026-04-27T00:00:00.000000+00:00",
+	"sections": [
+		{
+			"level": "chapter",
+			"code": "1",
+			"ordinal": 1,
+			"parent_code": null,
+			"title": "Introduction To Flying",
+			"faa_page_start": "1-1",
+			"faa_page_end": "1-4",
+			"source_locator": "PHAK Ch 1 (1-1..1-4)",
+			"body_path": "handbooks/phak/FAA-H-8083-25C/01/index.md",
+			"content_hash": "abc123",
+			"has_figures": false,
+			"has_tables": false
+		},
+		{
+			"level": "section",
+			"code": "1.1",
+			"ordinal": 1,
+			"parent_code": "1",
+			"title": "Introduction",
+			"faa_page_start": "1-1",
+			"faa_page_end": "1-1",
+			"source_locator": "PHAK Ch 1 §1 (1-1)",
+			"body_path": "handbooks/phak/FAA-H-8083-25C/01/01-introduction.md",
+			"content_hash": "def456",
+			"has_figures": false,
+			"has_tables": false
+		},
+		{
+			"level": "section",
+			"code": "1.2",
+			"ordinal": 2,
+			"parent_code": "1",
+			"title": "History of Flight",
+			"faa_page_start": "1-2",
+			"faa_page_end": "1-3",
+			"source_locator": "PHAK Ch 1 §2 (1-2..1-3)",
+			"body_path": "handbooks/phak/FAA-H-8083-25C/01/02-history-of-flight.md",
+			"content_hash": "ghi789",
+			"has_figures": false,
+			"has_tables": false
+		},
+		{
+			"level": "subsection",
+			"code": "1.2.1",
+			"ordinal": 1,
+			"parent_code": "1.2",
+			"title": "Transcontinental Air Mail Route",
+			"faa_page_start": "1-3",
+			"faa_page_end": "1-3",
+			"source_locator": "PHAK Ch 1 §2 (1) (1-3)",
+			"body_path": "handbooks/phak/FAA-H-8083-25C/01/02-01-transcontinental-air-mail-route.md",
+			"content_hash": "jkl012",
+			"has_figures": false,
+			"has_tables": false
+		}
+	]
+}

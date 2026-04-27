@@ -13,7 +13,11 @@
 
 // Side-effect import: registers the `regs` CorpusResolver.
 import './regs/index.ts';
+// Side-effect import: registers the `handbooks` CorpusResolver.
+import './handbooks/index.ts';
 
+export { productionRegistry } from './registry/index.ts';
+export { NULL_REGISTRY } from './registry-stub.ts';
 export {
 	__batch_internal__,
 	batchResolve,
@@ -36,6 +40,4 @@ export {
 	substituteTokens,
 	toSerializable,
 } from './render/index.ts';
-export { productionRegistry } from './registry/index.ts';
-export { NULL_REGISTRY } from './registry-stub.ts';
 export * from './types.ts';
