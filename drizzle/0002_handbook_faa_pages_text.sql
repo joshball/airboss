@@ -1,0 +1,6 @@
+ALTER TABLE "study"."handbook_section" DROP CONSTRAINT "handbook_section_faa_pages_check";--> statement-breakpoint
+ALTER TABLE "study"."session_item_result" DROP CONSTRAINT "sir_reason_code_check";--> statement-breakpoint
+ALTER TABLE "study"."handbook_section" ALTER COLUMN "faa_page_start" SET DATA TYPE text;--> statement-breakpoint
+ALTER TABLE "study"."handbook_section" ALTER COLUMN "faa_page_end" SET DATA TYPE text;--> statement-breakpoint
+ALTER TABLE "study"."handbook_section" ADD CONSTRAINT "handbook_section_faa_pages_check" CHECK (("faa_page_start" IS NULL AND "faa_page_end" IS NULL) OR "faa_page_start" IS NOT NULL);--> statement-breakpoint
+ALTER TABLE "study"."session_item_result" ADD CONSTRAINT "sir_reason_code_check" CHECK ("reason_code" IN ('continue_recent_domain', 'continue_due_in_domain', 'continue_unfinished_node', 'strengthen_relearning', 'strengthen_rated_again', 'strengthen_overdue', 'strengthen_low_rep_accuracy', 'strengthen_mastery_drop', 'strengthen_sim_weakness_card', 'strengthen_sim_weakness_rep', 'expand_unstarted_ready', 'expand_unstarted_priority', 'expand_focus_match', 'diversify_unused_domain', 'diversify_cross_domain_apply'));

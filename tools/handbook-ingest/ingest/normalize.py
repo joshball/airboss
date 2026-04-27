@@ -185,6 +185,13 @@ def _resolve_output_path(root: Path, node: OutlineNode) -> Path:
 
 
 def _source_locator(config: HandbookConfig, node: OutlineNode, body: SectionBody) -> str:
+    """Compose the canonical citation string for display.
+
+    The FAA page reference is rendered without a `p.`/`pp.` prefix because
+    the surrounding context already implies "this is a page number" and
+    the prefix interferes with column alignment in the chapter / section
+    list views. Format: `PHAK Ch 12 §9 (12-7)` or `PHAK Ch 12 (12-1..12-26)`.
+    """
     code_parts = node.code.split(".")
     pieces: list[str] = [config.document_slug.upper()]
     pieces.append(f"Ch {code_parts[0]}")
@@ -194,9 +201,9 @@ def _source_locator(config: HandbookConfig, node: OutlineNode, body: SectionBody
         pieces.append(f"({code_parts[2]})")
     if body.faa_page_start is not None:
         if body.faa_page_end and body.faa_page_end != body.faa_page_start:
-            pieces.append(f"(pp. {body.faa_page_start}..{body.faa_page_end})")
+            pieces.append(f"({body.faa_page_start}..{body.faa_page_end})")
         else:
-            pieces.append(f"(p. {body.faa_page_start})")
+            pieces.append(f"({body.faa_page_start})")
     return " ".join(pieces)
 
 
@@ -300,9 +307,15 @@ def _compose_markdown(
     return "\n".join(lines).rstrip() + "\n"
 
 
-def _faa_pages_str(start: int | None, end: int | None) -> str:
+def _faa_pages_str(start: str | None, end: str | None) -> str:
+    """Format the YAML frontmatter `faa_pages` value.
+
+    Input is the printed FAA page reference (e.g. `"12-7"`) for both ends.
+    Empty string when unknown; single-page when start == end (or end is
+    None); range form `<start>..<end>` otherwise.
+    """
     if start is None:
         return ""
     if end is None or end == start:
-        return str(start)
+        return start
     return f"{start}..{end}"

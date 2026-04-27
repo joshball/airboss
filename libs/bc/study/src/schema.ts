@@ -1123,9 +1123,14 @@ export const handbookSection = studySchema.table(
 		/** Citation code: "12", "12.3", "12.3.2". Composed deterministically. */
 		code: text('code').notNull(),
 		title: text('title').notNull(),
-		/** First FAA-printed page. Hyphenated FAA pagination is unrelated; this is the integer prefix. */
-		faaPageStart: integer('faa_page_start'),
-		faaPageEnd: integer('faa_page_end'),
+		/**
+		 * First FAA-printed page reference. Stored as text because FAA pagination
+		 * is hyphenated (`"12-7"` = chapter 12, page 7 within the chapter); a
+		 * future handbook with non-hyphenated pages just stores the bare digit
+		 * string. NULL when the page reference is unknown.
+		 */
+		faaPageStart: text('faa_page_start'),
+		faaPageEnd: text('faa_page_end'),
 		/** Canonical citation string ("PHAK Ch 12 §3 (pp. 12-7..12-9)"). Cached for display. */
 		sourceLocator: text('source_locator').notNull(),
 		/** Section body markdown. Empty on chapter rows. */
@@ -1158,11 +1163,14 @@ export const handbookSection = studySchema.table(
 			),
 		),
 		ordinalNonNegativeCheck: check('handbook_section_ordinal_check', sql.raw(`"ordinal" >= 0`)),
+		// Printed FAA pagination is `<chapter>-<page>` so lexicographic ordering
+		// (`"12-23"` < `"12-9"`) is unsafe. Just enforce the NULL-pair invariant:
+		// either both ends are NULL (page reference unknown) or `faa_page_start`
+		// is set. `faa_page_end` may be NULL when the section ends on its start
+		// page. The within-chapter ordering uses `ordinal`, not page strings.
 		faaPagesConsistentCheck: check(
 			'handbook_section_faa_pages_check',
-			sql.raw(
-				`("faa_page_start" IS NULL AND "faa_page_end" IS NULL) OR ("faa_page_start" IS NOT NULL AND ("faa_page_end" IS NULL OR "faa_page_end" >= "faa_page_start"))`,
-			),
+			sql.raw(`("faa_page_start" IS NULL AND "faa_page_end" IS NULL) OR "faa_page_start" IS NOT NULL`),
 		),
 	}),
 );

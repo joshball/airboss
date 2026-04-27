@@ -40,19 +40,31 @@ _PAGE_NUMBER_PATTERNS = [
 
 @dataclass
 class SectionBody:
+    """Per-section body + FAA page metadata.
+
+    `faa_page_start`/`faa_page_end` are the printed FAA page references
+    (e.g. `"12-7"`), stored verbatim so hyphenated pagination round-trips
+    to the seed. None when the page reference is unknown.
+    """
+
     node: OutlineNode
     body_md: str
-    faa_page_start: int | None
-    faa_page_end: int | None
+    faa_page_start: str | None
+    faa_page_end: str | None
     char_count: int
+
+
+_FAA_HEADER_RE = re.compile(r"^(\d+)-(\d+)\b")
 
 
 def extract_sections(pdf_path: Path, nodes: list[OutlineNode], page_offset: int = 0) -> list[SectionBody]:
     """Extract body text + FAA pagination for every node in `nodes`.
 
-    `page_offset` shifts FAA-printed pages relative to PDF page numbers when
-    the handbook's front matter occupies pages the FAA didn't number (most
-    8083-series handbooks ship a Roman-numeral preface).
+    `page_offset` is honored as a fallback when a page's printed `<chapter>-
+    <page>` header can't be read (mid-figure spreads, full-bleed images).
+    Otherwise, `faa_page_start`/`faa_page_end` carry the printed FAA page
+    reference verbatim (e.g. `"12-1"`) so the seed and reader display match
+    what's typeset on the PDF page.
     """
     bodies: list[SectionBody] = []
     with fitz.open(pdf_path) as doc:
@@ -70,8 +82,8 @@ def extract_sections(pdf_path: Path, nodes: list[OutlineNode], page_offset: int 
                     text_pieces.append(cleaned)
             joined = "\n\n".join(text_pieces)
             body = _normalize_paragraphs(joined)
-            faa_start = _faa_page(node.page_start, page_offset)
-            faa_end = _faa_page(node.page_end, page_offset)
+            faa_start = _read_printed_page_label(doc, node.page_start, page_offset)
+            faa_end = _read_printed_page_label(doc, node.page_end, page_offset)
             bodies.append(
                 SectionBody(
                     node=node,
@@ -84,10 +96,26 @@ def extract_sections(pdf_path: Path, nodes: list[OutlineNode], page_offset: int 
     return bodies
 
 
-def _faa_page(pdf_page: int, page_offset: int) -> int | None:
+def _read_printed_page_label(doc: fitz.Document, pdf_page: int, page_offset: int) -> str | None:
+    """Read the printed FAA page reference (`"12-1"`) from the page header.
+
+    Falls back to the offset-derived integer-as-string when the header
+    can't be parsed (full-bleed image pages occasionally lack a visible
+    page number). Returns None for front-matter pages that precede the
+    page-numbering region.
+    """
+    if pdf_page < 1 or pdf_page > doc.page_count:
+        return None
+    page = doc.load_page(pdf_page - 1)
+    text = page.get_text("text")
+    for line in text.splitlines()[:8]:
+        stripped = line.strip()
+        m = _FAA_HEADER_RE.match(stripped)
+        if m:
+            return f"{m.group(1)}-{m.group(2)}"
     if pdf_page <= page_offset:
         return None
-    return pdf_page - page_offset
+    return str(pdf_page - page_offset)
 
 
 def _detect_chrome_lines(doc: fitz.Document) -> set[str]:

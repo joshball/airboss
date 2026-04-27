@@ -81,8 +81,10 @@ export const handbookManifestSectionSchema = z.object({
 	ordinal: z.number().int().nonnegative(),
 	parent_code: z.string().regex(SECTION_CODE_REGEX).nullable(),
 	title: z.string().min(1),
-	faa_page_start: z.number().int().nonnegative().nullable(),
-	faa_page_end: z.number().int().nonnegative().nullable(),
+	// FAA-printed page references (e.g. `"12-7"`). Stored as text so hyphenated
+	// pagination round-trips intact; bare-digit pages still validate.
+	faa_page_start: z.string().min(1).nullable(),
+	faa_page_end: z.string().min(1).nullable(),
 	source_locator: z.string().min(1),
 	/** Repo-relative path to the per-section markdown file. */
 	body_path: z.string().min(1),

@@ -385,9 +385,15 @@ def _merge_section_nodes_into_outline(
 
     Chapter-level rows already exist in `flat_outline` and `bodies`; this
     function appends one OutlineNode + one SectionBody per emitted section
-    so `write_outputs()` seeds them as `handbook_section` rows. Body text
-    for each section is sliced from the chapter body using the existing
-    chapter-page extractor (no second PDF scan).
+    so `write_outputs()` seeds them as `handbook_section` rows.
+
+    Body slicing: the chapter body markdown is split per-section by walking
+    the section list in order and locating each section heading inside the
+    chapter prose. Each section row gets the slice between its heading and
+    the next sibling/descendant heading; the chapter row keeps the
+    introduction (text before the first L1 heading). A heading miss leaves
+    the row's body empty so the seed still produces the row -- the chapter
+    body remains the fallback for that slice.
     """
     from .sections import SectionBody  # local to avoid circular at module load
 
@@ -409,11 +415,31 @@ def _merge_section_nodes_into_outline(
         chapter_body = body_by_ord.get(chap_ord)
         if chapter_node is None or chapter_body is None:
             continue
-        for idx, node in items:
+
+        # Locate each section heading in the chapter body, walking left-to-
+        # right so headings appear in document order (not TOC order, which
+        # PHAK preserves anyway). Returns parallel list of slice-start
+        # offsets aligned with `items`. A None entry means the heading
+        # didn't resolve in the chapter body.
+        heading_offsets = _locate_section_headings(chapter_body.body_md, items)
+        # End offset for each section is the next sibling/descendant offset
+        # (i.e. the next located heading); end-of-body for the last located.
+        valid_starts = [o for o in heading_offsets if o is not None]
+        first_section_offset = min(valid_starts) if valid_starts else None
+        slices = _slice_chapter_body(chapter_body.body_md, heading_offsets)
+
+        # Trim the chapter row's body to its introduction: everything before
+        # the first located section heading. If no headings located, leave
+        # the chapter body untouched (graceful fallback).
+        if first_section_offset is not None and first_section_offset > 0:
+            chapter_body.body_md = chapter_body.body_md[:first_section_offset].rstrip() + "\n"
+            chapter_body.char_count = len(chapter_body.body_md)
+
+        for (idx, node), section_body_md in zip(items, slices, strict=True):
             code = codes[idx]
             page_start = _page_start_from_anchor(node.page_anchor, chapter_node, config.page_offset)
             page_end = page_start
-            faa_start = _faa_page_value(node.page_anchor)
+            faa_start = _faa_page_label(node.page_anchor)
             parent_code = _parent_code_from(codes, by_chapter[chap_ord], idx, node, chap_ord)
             level_name = "section" if node.level == 1 else "subsection"
             outline_node = OutlineNode(
@@ -429,10 +455,10 @@ def _merge_section_nodes_into_outline(
             new_bodies.append(
                 SectionBody(
                     node=outline_node,
-                    body_md="",  # chapter index.md still owns the full prose in v1
+                    body_md=section_body_md,
                     faa_page_start=faa_start,
                     faa_page_end=faa_start,
-                    char_count=0,
+                    char_count=len(section_body_md),
                 )
             )
     return new_outline, new_bodies
@@ -454,14 +480,147 @@ def _page_start_from_anchor(
     return chapter_node.page_start
 
 
-def _faa_page_value(anchor: str | None) -> int | None:
-    """Pull the integer chapter prefix off a "12-7" anchor (= 12)."""
-    if not anchor or "-" not in anchor:
+def _faa_page_label(anchor: str | None) -> str | None:
+    """Return the printed FAA page anchor verbatim (e.g. `"12-7"`).
+
+    The schema stores `faa_page_start` as text so hyphenated FAA pagination
+    round-trips through the seed unchanged. Returns None when the anchor is
+    missing or malformed (the seed treats that as "page reference unknown").
+    """
+    if not anchor:
         return None
-    chap_str, _ = anchor.split("-", 1)
-    if not chap_str.isdigit():
+    cleaned = anchor.strip()
+    if not cleaned:
         return None
-    return int(chap_str)
+    return cleaned
+
+
+def _locate_section_headings(
+    chapter_body: str, items: list[tuple[int, SectionTreeNode]]
+) -> list[int | None]:
+    """Find each section heading inside the chapter body markdown.
+
+    Walks the chapter body left-to-right while consuming `items` in order.
+    For each section, look for its title as a standalone-on-a-line match
+    starting from the previous section's offset. Returns parallel list of
+    starting character offsets (or None when not found).
+
+    This is intentionally a simple title-match strategy: PHAK's body
+    typesetting renders each section heading as its title text on a line
+    by itself in the extracted plaintext (the chrome-stripping pass in
+    `sections.py` removes everything else). When a future handbook fights
+    that assumption, the fingerprint-aware verifier in `sections_via_toc`
+    can be extended to emit explicit byte offsets and pipe them through.
+    """
+    offsets: list[int | None] = []
+    cursor = 0
+    for _idx, node in items:
+        offset = _find_heading_in_body(chapter_body, node.title, cursor)
+        offsets.append(offset)
+        if offset is not None:
+            cursor = offset + len(node.title)
+    return offsets
+
+
+def _find_heading_in_body(body: str, title: str, start: int) -> int | None:
+    """Locate `title` as a standalone line at-or-after `start` in `body`.
+
+    Tries three forms in order:
+
+    1. Exact / case-insensitive line-anchored match (most PHAK headings).
+    2. Two-line wrapped match: PHAK occasionally wraps a long heading
+       onto two consecutive lines (`"Wind and Pressure Representation on
+       Surface" + "Weather Maps"`); join the line with the next line and
+       compare to the squashed title.
+    3. Whitespace-collapsed prefix match (em-spaces, mid-heading wraps).
+
+    Returns the byte offset of the heading line within `body`, or None.
+    """
+    norm_title = " ".join(title.split())
+    if not norm_title:
+        return None
+    needle_lower = norm_title.lower()
+    title_squashed = needle_lower.replace(" ", "")
+
+    # Form 1: line-anchored exact / case-insensitive scan.
+    line_start = start
+    while line_start < len(body):
+        line_end = body.find("\n", line_start)
+        if line_end == -1:
+            line_end = len(body)
+        line = body[line_start:line_end].strip()
+        if line and (line == norm_title or line.lower() == needle_lower):
+            return line_start
+        line_start = line_end + 1
+
+    # Form 2: two-line wrap. Walk lines and join each with its next line
+    # (and the line after, for three-line wraps); compare squashed forms.
+    line_offsets: list[int] = []
+    line_starts = start
+    while line_starts < len(body):
+        line_offsets.append(line_starts)
+        nxt = body.find("\n", line_starts)
+        if nxt == -1:
+            break
+        line_starts = nxt + 1
+    for i, off in enumerate(line_offsets):
+        line_end = body.find("\n", off)
+        if line_end == -1:
+            line_end = len(body)
+        line = body[off:line_end].strip()
+        if not line:
+            continue
+        # Try joining 1, 2, or 3 consecutive lines.
+        for span in (2, 3):
+            if i + span - 1 >= len(line_offsets):
+                break
+            tail_end_idx = i + span - 1
+            tail_end = body.find("\n", line_offsets[tail_end_idx])
+            if tail_end == -1:
+                tail_end = len(body)
+            joined = body[off:tail_end]
+            squashed = "".join(joined.split()).lower()
+            if squashed == title_squashed:
+                return off
+
+    # Form 3: whitespace-collapsed prefix match.
+    line_start = start
+    while line_start < len(body):
+        line_end = body.find("\n", line_start)
+        if line_end == -1:
+            line_end = len(body)
+        line = body[line_start:line_end].strip()
+        if line:
+            squashed = "".join(line.split()).lower()
+            if squashed.startswith(title_squashed) and len(squashed) <= len(title_squashed) + 3:
+                return line_start
+        line_start = line_end + 1
+    return None
+
+
+def _slice_chapter_body(body: str, offsets: list[int | None]) -> list[str]:
+    """Slice the chapter body using consecutive section offsets.
+
+    For each entry in `offsets`, the slice runs from that offset to the
+    next non-None offset (or end-of-body for the last located section).
+    Entries with `None` offset get an empty string so the section row
+    still seeds.
+    """
+    slices: list[str] = []
+    # Pre-compute the next-non-None offset for each index.
+    n = len(offsets)
+    for i, start in enumerate(offsets):
+        if start is None:
+            slices.append("")
+            continue
+        end = len(body)
+        for j in range(i + 1, n):
+            nxt = offsets[j]
+            if nxt is not None and nxt > start:
+                end = nxt
+                break
+        slices.append(body[start:end].strip() + "\n")
+    return slices
 
 
 def _parent_code_from(

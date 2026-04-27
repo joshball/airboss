@@ -680,8 +680,8 @@ export interface UpsertHandbookSectionInput {
 	ordinal: number;
 	code: string;
 	title: string;
-	faaPageStart: number | null;
-	faaPageEnd: number | null;
+	faaPageStart: string | null;
+	faaPageEnd: string | null;
 	sourceLocator: string;
 	contentMd: string;
 	contentHash: string;
