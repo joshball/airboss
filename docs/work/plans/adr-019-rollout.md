@@ -21,7 +21,7 @@ Companion to:
 | # | Phase | WP | PR | Status |
 | - | --- | --- | --- | --- |
 | 1 | reference-identifier-scheme-validator | [WP](../../work-packages/reference-identifier-scheme-validator/) | #240 (WP), #241 (impl) | ✅ |
-| 2 | reference-source-registry-core | -- | -- | ⬜ |
+| 2 | reference-source-registry-core | [WP](../../work-packages/reference-source-registry-core/) | #246 | ✅ |
 | 3 | reference-cfr-ingestion-bulk | -- | -- | ⬜ |
 | 4 | reference-renderer-runtime | -- | -- | ⬜ |
 | 5 | reference-versioning-tooling | -- | -- | ⬜ |
@@ -101,3 +101,4 @@ Phases 5, 6, 7, 8, 10 can run in parallel after Phase 2 lands -- they each unloc
 | ---- | ----- | ------ |
 | 2026-04-27 | 1 | Validator + WP shipped (PRs #240, #241). |
 | 2026-04-27 | -- | Rollout tracker created. |
+| 2026-04-27 | 2 | Registry core + --fix mode shipped (PR #246). |
