@@ -201,14 +201,32 @@ def _resolve_page_label(
 
 
 def _read_header_at(doc: fitz.Document, pdf_page: int) -> str | None:
-    """Read the FAA-style page header from a single page; None if absent."""
+    """Read the FAA-style page header from a single page; None if absent.
+
+    Different handbooks place the printed `<chap>-<page>` reference in
+    different page chrome positions: PHAK keeps it at the very top of every
+    page; AFH 3C tucks it in the footer as the last text line. We scan both
+    ends and accept the first match. Each window is large enough to clear
+    figure captions or stray decorative spans.
+    """
     if pdf_page < 1 or pdf_page > doc.page_count:
         return None
     page = doc.load_page(pdf_page - 1)
     text = page.get_text("text")
-    for line in text.splitlines()[:8]:
-        stripped = line.strip()
-        m = _FAA_HEADER_RE.match(stripped)
+    lines = [line.strip() for line in text.splitlines() if line.strip()]
+    if not lines:
+        return None
+    # Top window: first 8 non-blank lines (PHAK convention).
+    for line in lines[:8]:
+        m = _FAA_HEADER_RE.match(line)
+        if m:
+            return f"{m.group(1)}-{m.group(2)}"
+    # Bottom window: last 4 non-blank lines (AFH convention; 4 covers a
+    # final figure caption + the page-number footer + any trailing
+    # decorative span without sweeping the chapter-summary closing
+    # paragraph back into the match).
+    for line in lines[-4:]:
+        m = _FAA_HEADER_RE.match(line)
         if m:
             return f"{m.group(1)}-{m.group(2)}"
     return None

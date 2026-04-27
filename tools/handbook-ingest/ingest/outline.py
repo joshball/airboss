@@ -123,7 +123,9 @@ def to_tree(flat: list[OutlineNode]) -> list[OutlineNode]:
     return roots
 
 
-def detect_outline_from_text(pdf_path: Path) -> list[OutlineNode]:
+def detect_outline_from_text(
+    pdf_path: Path, *, skip_pages: set[int] | None = None
+) -> list[OutlineNode]:
     """Scan page text for FAA-style `<chapter>-<page>` headers and infer chapter boundaries.
 
     Each FAA handbook page carries the printed page number in the header /
@@ -144,24 +146,40 @@ def detect_outline_from_text(pdf_path: Path) -> list[OutlineNode]:
     chapter_starts: dict[int, int] = {}
     chapter_titles: dict[int, str] = {}
     chapter_last_seen: dict[int, int] = {}
+    skip = skip_pages or set()
 
     page_header_re = re.compile(r"^(\d+)-\d+\b")
 
     with fitz.open(pdf_path) as doc:
         for page_num in range(doc.page_count):
+            # Skip pages explicitly excluded by the caller (e.g. printed-TOC
+            # pages whose right-column page anchors would otherwise look like
+            # body chapter starts to this scanner).
+            if (page_num + 1) in skip:
+                continue
             page = doc.load_page(page_num)
             text = page.get_text("text")
             chapter_num: int | None = None
-            for line in text.splitlines():
-                stripped = line.strip()
-                if not stripped:
-                    continue
-                m = page_header_re.match(stripped)
+            stripped_lines = [line.strip() for line in text.splitlines() if line.strip()]
+            # Top window: first 8 lines (PHAK convention).
+            for line in stripped_lines[:8]:
+                m = page_header_re.match(line)
                 if m:
                     candidate = int(m.group(1))
                     if 1 <= candidate <= 30:
                         chapter_num = candidate
                         break
+            # Bottom window: last 4 lines (AFH 3C convention; the printed
+            # `<chap>-<page>` reference sits in the footer rather than the
+            # header on every body page).
+            if chapter_num is None:
+                for line in stripped_lines[-4:]:
+                    m = page_header_re.match(line)
+                    if m:
+                        candidate = int(m.group(1))
+                        if 1 <= candidate <= 30:
+                            chapter_num = candidate
+                            break
             if chapter_num is None:
                 continue
             chapter_last_seen[chapter_num] = page_num + 1
@@ -225,15 +243,30 @@ def _clean_title(title: str) -> str:
     return _NORMALISE_WS.sub(" ", title).strip()
 
 
-def _extract_chapter_title(lines: list[str], chapter_num: int, page_header_re: re.Pattern[str]) -> str | None:
-    """Heuristic: scan upward from `Chapter N` collecting Title-Case short lines.
+_CHAPTER_TITLE_INLINE_RE = re.compile(r"^Chapter\s+(\d+)\s*[:—–-]\s*(.+)$", re.IGNORECASE)
 
-    The FAA chapter cover pages place the title above the `Chapter N` sentinel
-    in 1-3 short, mostly-Title-Case lines. We collect those, joining them
-    until we hit a longer body line (the introductory paragraph) or run out.
+
+def _extract_chapter_title(lines: list[str], chapter_num: int, page_header_re: re.Pattern[str]) -> str | None:
+    """Heuristic: derive the chapter title from a cover page.
+
+    Two FAA conventions are in the wild:
+
+    1. **PHAK convention** - the title sits above a standalone `Chapter N`
+       sentinel in 1-3 short, mostly-Title-Case lines. Walk upward from the
+       sentinel collecting those.
+    2. **AFH 3C convention** - the title is inline on the same line as the
+       chapter sentinel, e.g. ``"Chapter 1: Introduction to Flight Training"``.
+       Pull the trailing portion after the colon.
+
+    Returns None when neither convention fires.
     """
     chapter_header_re = re.compile(r"^Chapter\s+(\d+)$", re.IGNORECASE)
     for i in range(len(lines) - 1, -1, -1):
+        # AFH inline form: "Chapter N: Some Title"
+        inline = _CHAPTER_TITLE_INLINE_RE.match(lines[i])
+        if inline and int(inline.group(1)) == chapter_num:
+            return _clean_title(inline.group(2))
+        # PHAK upward-scan form: standalone "Chapter N" with title above.
         cm = chapter_header_re.match(lines[i])
         if not cm or int(cm.group(1)) != chapter_num:
             continue

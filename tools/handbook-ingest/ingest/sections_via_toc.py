@@ -148,7 +148,14 @@ def extract_via_toc(
 
     with fitz.open(pdf_path) as doc:
         toc_lines = _collect_toc_lines(doc, toc_cfg)
-        nodes, warnings = _parse_toc_lines(toc_lines, chapter_ords)
+        # PHAK's TOC repeats the chapter title as the first dotted-leader
+        # entry under each `Chapter N` sentinel; AFH's does not. The parser
+        # honors `repeat_chapter_title_as_first_entry` accordingly so AFH
+        # doesn't accidentally swallow its first real section.
+        repeat_chapter_title = toc_cfg.pattern == "dotted_leader"
+        nodes, warnings = _parse_toc_lines(
+            toc_lines, chapter_ords, repeat_chapter_title=repeat_chapter_title
+        )
         if style_cfg.verify_in_body:
             verify_warnings = _verify_against_body(doc, nodes, chapters, style_cfg, config.page_offset)
             warnings.extend(verify_warnings)
@@ -217,7 +224,20 @@ def _coalesce_toc_lines(lines: list[TocLine]) -> list[TocLine]:
 
 
 def _collect_toc_lines(doc: fitz.Document, toc_cfg: TocConfig) -> list[TocLine]:
-    """Read every TOC page, joining same-y-band spans so column lines stay intact."""
+    """Read every TOC page, joining same-y-band spans so column lines stay intact.
+
+    Two layouts are supported:
+
+    - ``dotted_leader`` (PHAK convention): each TOC line ships its title and
+      the printed page on a single PDF line, separated by leader dots.
+    - ``right_column`` (AFH 3C convention): each TOC entry ships its title in
+      the left column and its page reference in a far-right column, on
+      different (but close) y values. We pair them by y-band and synthesize a
+      ``"title ........ <page>"`` line so the downstream dotted-leader parser
+      (`_parse_toc_lines`) doesn't need to learn a second layout.
+    """
+    if toc_cfg.pattern == "right_column":
+        return _collect_toc_lines_right_column(doc, toc_cfg)
     lines: list[TocLine] = []
     for page_num in range(toc_cfg.page_start, toc_cfg.page_end + 1):
         if page_num < 1 or page_num > doc.page_count:
@@ -237,8 +257,92 @@ def _collect_toc_lines(doc: fitz.Document, toc_cfg: TocConfig) -> list[TocLine]:
     return lines
 
 
+# Page-anchor pattern reused by the right-column collector.
+_RIGHT_COLUMN_PAGE_RE = re.compile(r"^\d{1,3}-\d{1,3}$")
+# Maximum vertical distance (in PDF points) between a title line and its
+# right-column page anchor for the pair to count as the same TOC entry. The
+# AFH 3C TOC offsets the page anchor by ~1.5pt; 6pt is generous without
+# crossing into the next entry, which is typeset ~14pt below.
+_RIGHT_COLUMN_Y_BAND = 6.0
+
+
+def _collect_toc_lines_right_column(doc: fitz.Document, toc_cfg: TocConfig) -> list[TocLine]:
+    """Pair left-column titles with right-column page anchors by y-band.
+
+    Returns one synthetic ``TocLine`` per paired entry whose `text` mimics
+    the dotted-leader form ``"<title> ........ <chap>-<page>"``. Lines whose
+    page anchor can't be located within `_RIGHT_COLUMN_Y_BAND` of any title
+    are dropped (they're typically bookmarks-style chapter headings that the
+    `_CHAPTER_HEADING_RE` parser will pick up separately).
+
+    "Chapter N: Title" lines (no page anchor) pass through untouched so the
+    downstream parser still sees its sentinel.
+    """
+    chapter_heading_re = re.compile(r"^Chapter\s+(\d+)\b", re.IGNORECASE)
+    lines: list[TocLine] = []
+    for page_num in range(toc_cfg.page_start, toc_cfg.page_end + 1):
+        if page_num < 1 or page_num > doc.page_count:
+            continue
+        page = doc.load_page(page_num - 1)
+        page_dict = page.get_text("dict")
+        # Collect all line-level spans on the page with their (x, y, text).
+        raw: list[tuple[float, float, str]] = []
+        for block in page_dict.get("blocks", []):
+            for line in block.get("lines", []):
+                spans = line.get("spans", [])
+                if not spans:
+                    continue
+                text = "".join(s.get("text", "") for s in spans).strip()
+                if not text:
+                    continue
+                bbox = line.get("bbox", (0, 0, 0, 0))
+                raw.append((float(bbox[0]), float(bbox[1]), text))
+        # Split into anchors (right column, page-anchor only) and titles.
+        anchors: list[tuple[float, float, str]] = []
+        titles: list[tuple[float, float, str]] = []
+        for entry in raw:
+            x, y, text = entry
+            if _RIGHT_COLUMN_PAGE_RE.match(text):
+                anchors.append(entry)
+            else:
+                titles.append(entry)
+        used_anchor_idx: set[int] = set()
+        for tx, ty, ttext in titles:
+            chap_m = chapter_heading_re.match(ttext)
+            # Pass chapter sentinels through verbatim; they have no page anchor
+            # and the downstream parser keys off the regex.
+            if chap_m:
+                lines.append(TocLine(text=f"Chapter {int(chap_m.group(1))}", x=tx, page_num=page_num))
+                # Also emit the inline-title form so we can later associate the
+                # chapter title with its body chapter (consumed by the chapter
+                # parser's "first dotted leader after Chapter N" rule).
+                continue
+            # Find the closest unused anchor within the y-band.
+            best: tuple[float, int] | None = None  # (distance, index)
+            for i, (ax, ay, _atext) in enumerate(anchors):
+                if i in used_anchor_idx:
+                    continue
+                if abs(ay - ty) > _RIGHT_COLUMN_Y_BAND:
+                    continue
+                if ax <= tx + 50:  # anchor must be to the right of the title
+                    continue
+                dist = abs(ay - ty)
+                if best is None or dist < best[0]:
+                    best = (dist, i)
+            if best is None:
+                continue
+            used_anchor_idx.add(best[1])
+            page_text = anchors[best[1]][2]
+            synthetic = f"{ttext.rstrip()} ........ {page_text}"
+            lines.append(TocLine(text=synthetic, x=tx, page_num=page_num))
+    return lines
+
+
 def _parse_toc_lines(
-    lines: list[TocLine], known_chapter_ords: set[int]
+    lines: list[TocLine],
+    known_chapter_ords: set[int],
+    *,
+    repeat_chapter_title: bool = True,
 ) -> tuple[list[SectionTreeNode], list[str]]:
     """Two-pass parse: collapse continuation lines, then emit nodes by indent.
 
@@ -246,6 +350,13 @@ def _parse_toc_lines(
     continues the title (no dotted leader) or carries just the dotted-leader
     page reference. We coalesce those into single logical entries before
     emitting nodes so indent-based level inference is stable.
+
+    When `repeat_chapter_title` is True (the PHAK convention), the first
+    dotted-leader entry after a `Chapter N` sentinel is treated as the
+    chapter title repeated and dropped from the section list (the chapter
+    row already exists upstream). When False (AFH 3C convention, where the
+    chapter title is inline on the sentinel line), every dotted-leader
+    entry becomes a section.
     """
     coalesced: list[TocLine] = _coalesce_toc_lines(lines)
     # Now walk coalesced lines, tracking the active chapter and indent stack.
@@ -285,12 +396,17 @@ def _parse_toc_lines(
         title = m_dot.group("title").strip()
         page = m_dot.group("page")
         page_chap = int(page.split("-", 1)[0])
-        # First dotted-leader after a "Chapter N" sentinel is the chapter title;
-        # we don't emit it (chapter-level row already exists).
+        # First dotted-leader after a "Chapter N" sentinel is the chapter
+        # title repeated under the PHAK convention; we drop it because the
+        # chapter-level row already exists upstream. Under the AFH 3C
+        # convention the chapter title is on the sentinel line itself, so
+        # the first dotted-leader is a real section -- we still seed
+        # `chapter_column_x` from it but emit it as a node.
         if chapter_ord is not None and chapter_column_x is None:
             chapter_column_x = line.x
-            i += 1
-            continue
+            if repeat_chapter_title:
+                i += 1
+                continue
         # If we somehow hit an entry whose printed-page chapter differs from the
         # active chapter, switch context (PHAK's Coriolis Force pattern).
         if chapter_ord is None or page_chap != chapter_ord:

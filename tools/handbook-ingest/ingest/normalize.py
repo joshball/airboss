@@ -211,14 +211,20 @@ def _source_locator(config: HandbookConfig, node: OutlineNode, body: SectionBody
 def _strip_cover_residue(body_md: str, chapter_title: str, max_lines: int) -> str:
     """Drop chapter-cover boilerplate from a chapter's body markdown.
 
-    PHAK chapter cover pages render the chapter title twice ("Weather
-    Theory") + a "Chapter N" sentinel + an "Introduction" header before the
-    first body paragraph. Those lines bleed into the chapter index.md as
-    a stutter. We walk the leading lines and drop anything that matches:
+    Two FAA cover-page styles bleed into the chapter index.md:
+
+    - **PHAK style** -- chapter title repeated, a `Chapter N` sentinel, and
+      an `Introduction` header before the first body paragraph.
+    - **AFH 3C style** -- a banner ``"Airplane Flying Handbook (FAA-H-8083-3C)"``,
+      a ``"Chapter N: Title"`` sentinel, and `Introduction`.
+
+    We walk the leading lines and drop anything that matches:
 
     - the chapter title (case-insensitive, fuzzy on whitespace)
-    - any line of `Chapter \\d+`
+    - any line of ``Chapter \\d+`` or ``Chapter \\d+: Anything``
     - the literal `Introduction`
+    - the handbook's full-name banner (anything containing ``Handbook``
+      followed by an FAA document number)
 
     until we hit the first body line, defined as: a line of length > 80,
     OR a line whose first non-whitespace character is lowercase. We cap
@@ -229,8 +235,9 @@ def _strip_cover_residue(body_md: str, chapter_title: str, max_lines: int) -> st
     if not lines:
         return body_md
     norm_title = " ".join(chapter_title.lower().split())
-    chapter_re = re.compile(r"^Chapter\s+\d+\s*$", re.IGNORECASE)
+    chapter_re = re.compile(r"^Chapter\s+\d+(\s*[:—–-].*)?\s*$", re.IGNORECASE)
     intro_literal = re.compile(r"^introduction\s*$", re.IGNORECASE)
+    handbook_banner_re = re.compile(r"\bHandbook\b.*\bFAA-H-\d", re.IGNORECASE)
     keep_idx = 0
     for i, raw in enumerate(lines[:max_lines]):
         line = raw.strip()
@@ -248,6 +255,7 @@ def _strip_cover_residue(body_md: str, chapter_title: str, max_lines: int) -> st
             or norm in norm_title
             or chapter_re.match(line)
             or intro_literal.match(line)
+            or handbook_banner_re.search(line)
         ):
             keep_idx = i + 1
             continue

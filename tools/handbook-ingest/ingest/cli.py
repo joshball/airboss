@@ -83,7 +83,9 @@ def main(
 
     try:
         if config.outline_strategy == "content":
-            flat_outline = detect_outline_from_text(fetch_result.path)
+            flat_outline = detect_outline_from_text(
+                fetch_result.path, skip_pages=_toc_page_set(config)
+            )
         else:
             flat_outline = parse_outline(fetch_result.path)
     except OutlineError as exc:
@@ -365,6 +367,25 @@ def _llm_model() -> str:
     from .sections_via_llm import MODEL
 
     return MODEL
+
+
+def _toc_page_set(config: HandbookConfig) -> set[int]:
+    """PDF page numbers (1-indexed) covered by the printed Table of Contents.
+
+    `outline_strategy: content` re-uses page-text scans to derive chapter
+    boundaries; the printed-TOC pages would trip that scan because they
+    contain right-column page anchors that look like body chapter starts.
+    Returning the TOC's page range here lets the outline detector skip them.
+    Empty when the YAML carries no `toc:` block.
+    """
+    toc_raw = config.raw_yaml.get("toc")
+    if not isinstance(toc_raw, dict):
+        return set()
+    start = toc_raw.get("page_start")
+    end = toc_raw.get("page_end")
+    if not isinstance(start, int) or not isinstance(end, int):
+        return set()
+    return {p for p in range(start, end + 1) if p >= 1}
 
 
 def _redact_toc_config(raw: dict[str, object]) -> dict[str, object]:
