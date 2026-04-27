@@ -119,10 +119,16 @@ Depends on: knowledge-graph (shipped; this WP extends `knowledge_node.references
 
 ### Phase 8: PHAK end-to-end ingestion
 
-- [ ] Author `tools/handbook-ingest/ingest/config/phak.yaml`: source URL, expected page count, page-offset map, figure-prefix conventions, optional outline overrides for sections the FAA outline mangles.
-- [ ] Run the full pipeline: `bun run handbook-ingest phak --edition 8083-25C`. Expect the entire `handbooks/phak/8083-25C/` tree to populate.
+- [x] Author `tools/handbook-ingest/ingest/config/phak.yaml`: source URL, expected page count, page-offset map, figure-prefix conventions, optional outline overrides for sections the FAA outline mangles.
+- [x] Run the full pipeline: `bun run handbook-ingest phak --edition FAA-H-8083-25C`. Expect the entire `handbooks/phak/FAA-H-8083-25C/` tree to populate.
+- [x] **Section-granularity (added 2026-04-27).** Two parallel strategies committed:
+  - **Option 3 (TOC + heading verify, deterministic Python)** in `ingest/sections_via_toc.py`. TOC page range + heading-style fingerprint live in `phak.yaml -> toc` and `-> heading_style`. Same source PDF + same YAML = byte-identical section tree.
+  - **Option 4 (LLM-assisted via Claude)** in `ingest/sections_via_llm.py`. Prompt at `ingest/prompts/section_tree.md` (committed; SHA-256 recorded in manifest). Pinned `claude-sonnet-4-5`, `temperature=0`. Raw responses saved at `<chapter>/_llm_section_tree.json` (committed; PR-reviewable). Requires `ANTHROPIC_API_KEY`.
+  - **Compare** strategy emits a markdown diff report at `tools/handbook-ingest/reports/section-strategy-compare-<doc>-<edition>.md`. Joshua picks per-chapter (or globally) which to trust via `phak.yaml -> section_strategy` and `per_chapter_section_strategy`.
+  - Chapter cover-page residue strip applied via `phak.yaml -> chapter_cover_strip`. PHAK 25C ships chapter index.md without the duplicate "Chapter N / <title> / Introduction" stutter.
+  - **Outcome:** PHAK 25C lands 17 chapters + 418 L1 sections + 415 L2 subsections in `study.handbook_section`. 850 markdown files inline; 0 PDFs staged.
 - [ ] Manual visual review: open each chapter `index.md` and a sampling of section markdown. Spot-check figure renderings, tables, and the manifest. Note any cosmetic gaps or extraction errors as either pipeline bugs (fix here) or chapter-specific overrides in the YAML config.
-- [ ] Commit `handbooks/phak/8083-25C/` -- markdown, figure PNGs, manifest.json (inline derivatives only). Use individual `git add` paths; never `git add -A`. Verify the cached source.pdf was NOT staged: `git status --short | grep -i pdf` should be empty (the `.gitignore` block prevents it). The PDF stays in `$AIRBOSS_HANDBOOK_CACHE/handbooks/phak/8083-25C/source.pdf`.
+- [ ] Commit `handbooks/phak/FAA-H-8083-25C/` -- markdown, figure PNGs, manifest.json (inline derivatives only). Use individual `git add` paths; never `git add -A`. Verify the cached source.pdf was NOT staged: `git status --short | grep -i pdf` should be empty (the `.gitignore` block prevents it). The PDF stays in `$AIRBOSS_HANDBOOK_CACHE/handbooks/phak/FAA-H-8083-25C/source.pdf`.
 
 ### Phase 9: Seed wiring -- `bun run db seed handbooks`
 
