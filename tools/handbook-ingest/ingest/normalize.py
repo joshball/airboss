@@ -235,7 +235,10 @@ def _strip_cover_residue(body_md: str, chapter_title: str, max_lines: int) -> st
     if not lines:
         return body_md
     norm_title = " ".join(chapter_title.lower().split())
-    chapter_re = re.compile(r"^Chapter\s+\d+(\s*[:—–-].*)?\s*$", re.IGNORECASE)
+    chapter_re = re.compile(r"^Chapter\s+\d+(\s*[:,—–-].*)?\s*$", re.IGNORECASE)
+    # Numeric prefix that some bookmark-driven handbooks emit at the top
+    # of the chapter body (e.g. AvWX 28B "5 Heat and Temperature").
+    code_prefix_re = re.compile(r"^\d+(?:\.\d+)*\s+\S")
     intro_literal = re.compile(r"^introduction\s*$", re.IGNORECASE)
     handbook_banner_re = re.compile(r"\bHandbook\b.*\bFAA-H-\d", re.IGNORECASE)
     keep_idx = 0
@@ -250,6 +253,15 @@ def _strip_cover_residue(body_md: str, chapter_title: str, max_lines: int) -> st
         if len(line) > 80 or (first_char and first_char.islower()):
             break
         norm = " ".join(line.lower().split())
+        # Bookmark-style "5 Heat and Temperature" leading chapter line:
+        # accept when the trailing words case-insensitively match the
+        # chapter title.
+        if code_prefix_re.match(line):
+            tail = line.split(None, 1)[1] if " " in line else ""
+            tail_norm = " ".join(tail.lower().split())
+            if tail_norm == norm_title or tail_norm in norm_title:
+                keep_idx = i + 1
+                continue
         if (
             norm == norm_title
             or norm in norm_title

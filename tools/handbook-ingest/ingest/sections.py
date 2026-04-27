@@ -233,9 +233,16 @@ def _read_header_at(doc: fitz.Document, pdf_page: int) -> str | None:
 
 
 def _detect_chrome_lines(doc: fitz.Document) -> set[str]:
-    """Lines that recur across many pages are page chrome; drop them."""
+    """Lines that recur across many pages are page chrome; drop them.
+
+    Samples the entire document (capped at 600 pages so a 2,000-page corpus
+    can't blow up the scan) so per-chapter running banners are caught even
+    when the chapter is short. The recurrence threshold is relative to the
+    sample size with a floor of 5 so a 200-page handbook with ~25-page
+    chapters still drops the banner that appears on every chapter page.
+    """
     counts: dict[str, int] = {}
-    sample = min(doc.page_count, 60)
+    sample = min(doc.page_count, 600)
     for i in range(sample):
         page = doc.load_page(i)
         text = page.get_text("text")
@@ -248,7 +255,7 @@ def _detect_chrome_lines(doc: fitz.Document) -> set[str]:
                 continue
             seen.add(stripped)
             counts[stripped] = counts.get(stripped, 0) + 1
-    threshold = max(3, sample // 4)
+    threshold = max(5, sample // 60)
     return {line for line, count in counts.items() if count >= threshold}
 
 

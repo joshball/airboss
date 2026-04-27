@@ -51,6 +51,9 @@ def parse_outline(pdf_path: Path, *, doc_total_pages: int | None = None) -> list
     with fitz.open(pdf_path) as doc:
         toc = doc.get_toc()
         page_count = doc.page_count
+        last_chapter_last_page = (
+            _find_last_chapter_last_page(doc, toc, page_count) if toc else None
+        )
     if not toc:
         raise OutlineError(
             f"PDF outline missing for {pdf_path}. "
@@ -95,14 +98,87 @@ def parse_outline(pdf_path: Path, *, doc_total_pages: int | None = None) -> list
     if not flat:
         raise OutlineError(f"PDF outline empty after filtering for {pdf_path}.")
 
-    # Second pass: backfill page_end as the next entry's page_start - 1.
+    # Second pass: backfill page_end level-aware. Each node's page_end is
+    # the page-start of the next bookmark whose depth is *less than or
+    # equal to* this node's depth (i.e. the next sibling or aunt) minus 1.
+    # Without the level-aware look-ahead, a chapter would inherit its
+    # first child's page_start, collapsing the chapter range to a single
+    # page.
+    last_chapter_idx: int | None = None
     for i, node in enumerate(flat):
-        next_idx = i + 1
-        if next_idx < len(flat):
-            node.page_end = max(node.page_start, flat[next_idx].page_start - 1)
+        if node.level == "chapter":
+            last_chapter_idx = i
+    for i, node in enumerate(flat):
+        own_depth = _LEVEL_NAMES.index(node.level)
+        next_sibling_or_above_idx: int | None = None
+        for j in range(i + 1, len(flat)):
+            other_depth = _LEVEL_NAMES.index(flat[j].level)
+            if other_depth <= own_depth:
+                next_sibling_or_above_idx = j
+                break
+        if next_sibling_or_above_idx is not None:
+            node.page_end = max(node.page_start, flat[next_sibling_or_above_idx].page_start - 1)
         else:
             node.page_end = doc_total_pages
+    # Cap the last chapter and every node nested under it to the actual
+    # last body page that carried its FAA `<chap>-<page>` header. Pages
+    # beyond it are appendices / glossaries / index that ride on a
+    # different header scheme and would otherwise pollute the chapter
+    # body. When the cap can't be determined (no FAA headers in the doc)
+    # we leave the legacy behavior intact.
+    if last_chapter_last_page is not None and last_chapter_idx is not None:
+        last_chapter = flat[last_chapter_idx]
+        for node in flat[last_chapter_idx:]:
+            if node.page_end > last_chapter_last_page:
+                node.page_end = max(node.page_start, last_chapter_last_page)
+        # Tighten the descendants too -- if any subsection's start page is
+        # past the cap, fall back to the chapter's start so the section
+        # extractor's range never inverts.
+        if last_chapter.page_end < last_chapter.page_start:
+            last_chapter.page_end = last_chapter.page_start
     return flat
+
+
+def _find_last_chapter_last_page(
+    doc: fitz.Document, toc: list[tuple[int, str, int]], page_count: int
+) -> int | None:
+    """Find the last PDF page that carries the LAST chapter's FAA header.
+
+    Walks the document forward from the last top-level bookmark's start
+    page, parsing each page's footer + header for `<chap>-<page>`. The
+    chapter ordinal is taken from the count of depth-1 bookmarks that
+    precede the last one (so AvWX's chapter-28 cap reads `28-N` headers).
+    Returns None when no header is found within the document -- callers
+    fall back to `doc_total_pages`.
+    """
+    chapter_entries = [t for t in toc if t[0] == 1]
+    if not chapter_entries:
+        return None
+    # Prefer the leading numeric prefix on the bookmark title (e.g. "28
+    # Aviation Weather Tools") -- bookmark order doesn't always match
+    # chapter ordinal one-to-one. Fall back to the count of top-level
+    # entries when the title carries no leading code.
+    code_prefix = re.compile(r"^(\d+)\b")
+    last_title = chapter_entries[-1][1].strip()
+    m = code_prefix.match(last_title)
+    last_chapter_ord = int(m.group(1)) if m else len(chapter_entries)
+    last_chapter_start = chapter_entries[-1][2]
+    page_header_re = re.compile(r"^(\d+)-\d+\b")
+    last_seen: int | None = None
+    for pdf_page in range(last_chapter_start, page_count + 1):
+        page = doc.load_page(pdf_page - 1)
+        text = page.get_text("text")
+        nonblank = [line.strip() for line in text.splitlines() if line.strip()]
+        candidates = [*nonblank[:8], *nonblank[-4:]]
+        for line in candidates:
+            m = page_header_re.match(line)
+            if not m:
+                continue
+            chap = int(m.group(1))
+            if chap == last_chapter_ord:
+                last_seen = pdf_page
+                break
+    return last_seen
 
 
 def to_tree(flat: list[OutlineNode]) -> list[OutlineNode]:
@@ -237,10 +313,18 @@ def filter_to_chapter(flat: list[OutlineNode], chapter_code: str) -> list[Outlin
 
 
 _NORMALISE_WS = re.compile(r"\s+")
+# Strip a leading dotted-section code from a bookmark title, e.g.
+# "1 Introduction" -> "Introduction" or "2.2.1.1 Satellite Analysis Branch
+# (SAB)" -> "Satellite Analysis Branch (SAB)". The handbook structure code
+# is already stored separately on the node; carrying it inside `title`
+# duplicates it on every chip, breadcrumb, and page heading.
+_BOOKMARK_CODE_PREFIX = re.compile(r"^\d+(?:\.\d+)*\s+")
 
 
 def _clean_title(title: str) -> str:
-    return _NORMALISE_WS.sub(" ", title).strip()
+    cleaned = _NORMALISE_WS.sub(" ", title).strip()
+    cleaned = _BOOKMARK_CODE_PREFIX.sub("", cleaned, count=1)
+    return cleaned
 
 
 _CHAPTER_TITLE_INLINE_RE = re.compile(r"^Chapter\s+(\d+)\s*[:—–-]\s*(.+)$", re.IGNORECASE)

@@ -1,0 +1,75 @@
+# Aviation Weather Handbook (AvWX)
+#
+# Source: https://www.faa.gov/sites/faa.gov/files/FAA-H-8083-28B.pdf
+# Edition: FAA-H-8083-28B (April 13, 2026 -- current bound edition)
+#
+# Errata: not located on the FAA landing page as of 2026-04-26. The 28B
+# edition is itself a recent revision (Apr 2026), so it is reasonable
+# that no errata sheet exists yet. Tracked for the future
+# `--apply-errata` flow per ADR 020.
+
+document_slug: avwx
+edition: FAA-H-8083-28B
+kind: handbook
+title: "Aviation Weather Handbook"
+publisher: FAA
+source_url: https://www.faa.gov/sites/faa.gov/files/FAA-H-8083-28B.pdf
+expected_pages: 514
+# AvWX 28B body pages typeset the printed `<chap>-<page>` reference on
+# the second non-blank line (the first line is the running chapter
+# banner, e.g. "Chapter 8, Atmospheric Pressure and Altimetry"). Front
+# matter (cover, notice, foreword) sits at pp.1-15 and lacks FAA
+# pagination. The bookmark-driven outline strategy already pins each
+# chapter to its starting PDF page, so page_offset is not load-bearing
+# here -- the printed-page resolver reads the FAA header directly.
+page_offset: 0
+# AvWX 28B ships proper PDF bookmarks (28 chapters, 859 entries deep,
+# levels 1-6). The bookmark strategy produces the right tree without
+# needing a content scan. Levels deeper than 3 (subsubsection) are
+# dropped by parse_outline since the schema caps at chapter / section /
+# subsection.
+outline_strategy: bookmark
+outline_overrides: []
+title_overrides: {}
+figure_prefix_pattern: 'Figure (\d+)-(\d+)\.'
+table_prefix_pattern: 'Table (\d+)-(\d+)\.'
+
+# -----------------------------------------------------------------------------
+# Section-tree extraction
+# -----------------------------------------------------------------------------
+
+# AvWX's PDF bookmarks already carry section + subsection structure with
+# clean dotted codes (`2.2.1.1`). The bookmark-driven outline produces
+# the section tree directly; the TOC parser is unused here. We pin
+# `section_strategy: toc` for symmetry with the other handbooks but the
+# upstream `outline_strategy: bookmark` already produced the section
+# rows. The TOC parser still runs for completeness; if its output
+# duplicates the bookmark tree the merge step picks the bookmark form.
+section_strategy: toc
+per_chapter_section_strategy: {}
+
+# AvWX's printed TOC spans pp.4-15. Used only when section_strategy=toc.
+toc:
+  page_start: 4
+  page_end: 15
+  pattern: right_column
+
+heading_style:
+  body_font_size: 10.0
+  heading_min_size_ratio: 1.10
+  heading_color_hex: '#000000'
+  heading_match_threshold: 0.85
+  verify_in_body: false
+
+llm:
+  chapter_text_max_chars: 60000
+
+# AvWX chapter cover pages typeset a "Chapter N, Title" banner that
+# bleeds into the chapter index.md until stripped. Same shape as PHAK /
+# AFH; the strip recognizes the comma form via the broadened regex.
+chapter_cover_strip:
+  enabled: true
+  max_lines: 6
+
+page_label_walk_back: 5
+chapter_overrides: {}
