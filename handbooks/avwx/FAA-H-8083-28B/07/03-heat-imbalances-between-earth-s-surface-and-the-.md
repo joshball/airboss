@@ -47,17 +47,17 @@ vegetation. The water absorbs heat energy due to the latent heat of vaporization
 ![Figure 7-2. Greenhouse Effect on Nighttime Radiational Cooling 
 7.3 Heat Imbalances Between Earth’s Surface and the Atmosphere 
 The Earth-atmosphere energy balance numbers (see Figure 7-1) indicate that both sensible heat (seven 
-percent) and latent heat (24 percent) processes transfer heat from the Earth’s surface int](/handbooks/avwx/FAA-H-8083-28B/figures/fig-7-3-00-greenhouse-effect-on-nighttime-radiational-cooli.png)
+percent) and latent heat (24 percent) processes transfer heat from the Earth’s surface int](/handbooks/avwx/FAA-H-8083-28B/figures/fig-7-3-1-00-greenhouse-effect-on-nighttime-radiational-cooli.png)
 
 ![Figure 7-3. Development of a Thermal 
 In this manner, convection transports heat from the Earth’s surface into the atmosphere. Because air is a 
 poor conductor of heat (see Table 5-3), convection is much more important than conduction as a heat 
 transport mechanism within the atmosphere. 
  
-Figure 7-4. Example of Conve](/handbooks/avwx/FAA-H-8083-28B/figures/fig-7-3-01-development-of-a-thermal-in-this-manner-convecti.png)
+Figure 7-4. Example of Conve](/handbooks/avwx/FAA-H-8083-28B/figures/fig-7-3-2-00-development-of-a-thermal-in-this-manner-convecti.png)
 
 ![Figure 7-4. Example of Convection in the Atmosphere 
 7.3.2 Latent Heat 
 The phase transition of water and associated latent heat exchanges are largely responsible for transferring 
 the excess heat from the surface of the Earth into its atmosphere. As the Earth’s surface absorbs radiation, 
-some of the heat produced is](/handbooks/avwx/FAA-H-8083-28B/figures/fig-7-3-02-example-of-convection-in-the-atmosphere-7-3-2-la.png)
+some of the heat produced is](/handbooks/avwx/FAA-H-8083-28B/figures/fig-7-3-2-01-example-of-convection-in-the-atmosphere-7-3-2-la.png)

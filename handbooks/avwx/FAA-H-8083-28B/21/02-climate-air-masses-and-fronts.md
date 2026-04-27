@@ -73,4 +73,4 @@ of moist, cold air account for most of the infrequent wintertime cloudiness and 
 21.2 Climate, Air Masses, and Fronts 
 There are a number of factors that influence Arctic climate. Climate of any region, especially in the Arctic, 
 is largely determined by the amount of energy received from the Sun; however, local characteristics of the 
-area, such as mountains and ice](/handbooks/avwx/FAA-H-8083-28B/figures/fig-21-2-00-the-arctic-circle-21-2-climate-air-masses-and-fr.png)
+area, such as mountains and ice](/handbooks/avwx/FAA-H-8083-28B/figures/fig-21-2-1-00-the-arctic-circle-21-2-climate-air-masses-and-fr.png)

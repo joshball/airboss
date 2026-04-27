@@ -30,4 +30,4 @@ An isothermal layer is a layer within the atmosphere where the temperature remai
 ![Figure 5-7. Variation of Mean Daily Temperatures for San Francisco (Maritime) and St. Louis (Continental) 
 5.8 Temperature Variations with Altitude 
 A lapse rate of temperature is defined as a decrease in temperature with height. In Figure 4-2, it was stated 
-that the temperature decreases 6.5 °C/km (3.57 °F/1,000 ft)](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-8-2-00-variation-of-mean-daily-temperatures-for-san-fra.png)
+that the temperature decreases 6.5 °C/km (3.57 °F/1,000 ft)](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-8-1-00-variation-of-mean-daily-temperatures-for-san-fra.png)

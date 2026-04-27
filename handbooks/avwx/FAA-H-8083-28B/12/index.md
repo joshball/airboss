@@ -222,34 +222,34 @@ Surface–6,500 ft (0–2 km)
 Surface–6,500 ft (0–2 km)
 Surface–6,500 ft (0–2 km)
 
-![Figure 12-1. Unsaturated Ascending/Descending Air Parcel Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-00-unsaturated-ascending-descending-air-parcel-exam.png)
+![Figure 12-1. Unsaturated Ascending/Descending Air Parcel Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-2-00-unsaturated-ascending-descending-air-parcel-exam.png)
 
 ![Figure 12-2. Ascending Air Parcel That Becomes Saturated Example 
 In Figure 12-2, at the surface the air parcel has a temperature of 18°C and a dewpoint of 13°C, indicating 
 that it is unsaturated. As the parcel ascends, its temperature decreases at the dry adiabatic lapse rate of 3°C 
-per 1,000 ft, while the dewpoint](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-01-ascending-air-parcel-that-becomes-saturated-exam.png)
+per 1,000 ft, while the dewpoint](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-3-00-ascending-air-parcel-that-becomes-saturated-exam.png)
 
 ![Figure 12-3. Descending Air Parcel Example 
 At 5,000 ft, both the temperature and dewpoint of the air parcel are 6°C, indicating that it is saturated. As 
 the parcel descends, it quickly becomes unsaturated. Its temperature increases 3°C per 1,000 ft, while its 
-dewpoint increases at 0.5°C per 1,000 ft. The temperature](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-02-descending-air-parcel-example-at-5-000-ft-both-t.png)
+dewpoint increases at 0.5°C per 1,000 ft. The temperature](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-3-01-descending-air-parcel-example-at-5-000-ft-both-t.png)
 
 ![Figure 12-4. Orographic Effects Example 
 The air parcel begins with a temperature of 15°C, dewpoint of 10°C, and a relative humidity of 80 percent 
 at 2,000 ft. As the parcel is lifted on the windward slope, the temperature cools at the dry adiabatic lapse 
-rate of 3°C per 1,000 ft, and the dewpoint cools at a rate of](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-03-orographic-effects-example-the-air-parcel-begins.png)
+rate of 3°C per 1,000 ft, and the dewpoint cools at a rate of](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-4-2-00-orographic-effects-example-the-air-parcel-begins.png)
 
 ![Figure 12-5. Frictional Effects 
 12.4.3 Frontal Lift 
 Frontal lift (see Figure 12-6) occurs when the cold, denser air wedges under the warm, less dense air, 
 plowing it upward, and/or the warmer air rides up and over the colder air in a process called overrunning. 
-Clouds and precipitation will form given sufficient li](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-04-frictional-effects-12-4-3-frontal-lift-frontal-l.png)
+Clouds and precipitation will form given sufficient li](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-4-3-00-frictional-effects-12-4-3-frontal-lift-frontal-l.png)
 
 ![Figure 12-6. Frontal Lift 
 12.4.4 Buoyancy 
 Air near the ground can warm at different rates depending on the insular properties of the ground with 
 which it is in contact. A newly plowed field will warm faster than an adjacent lake. These temperature 
-differences result in different densities, allowing the warm air to](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-05-frontal-lift-12-4-4-buoyancy-air-near-the-ground.png)
+differences result in different densities, allowing the warm air to](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-4-3-01-frontal-lift-12-4-4-buoyancy-air-near-the-ground.png)
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-12-00-air-parcel-vertical-motion-characteristics-parce.html">
 <table><caption>Table 12-1. Air Parcel Vertical Motion Characteristics 

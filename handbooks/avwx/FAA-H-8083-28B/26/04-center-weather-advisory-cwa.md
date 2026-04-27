@@ -107,7 +107,7 @@ Phenomenon description
 ![Figure 26-8. CWSU Areas of Responsibility 
 CWAs are valid for up to two hours and may include forecasts of conditions expected to begin within two 
 hours of issuance. If conditions are expected to persist after the advisory’s valid period, a statement to that 
-effect is included in the last line of the text. Additional](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-4-00-cwsu-areas-of-responsibility-cwas-are-valid-for-.png)
+effect is included in the last line of the text. Additional](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-4-2-00-cwsu-areas-of-responsibility-cwas-are-valid-for-.png)
 
 ![Figure 26-9. CWA—Example 
 Table 26-5. Decoding a CWA 
@@ -130,7 +130,7 @@ CWA
 Product type 
 2 
 Phenomenon number (single digit, 1–6) 
-0](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-4-01-cwa-example-table-26-5-decoding-a-cwa-line-conte.png)
+0](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-4-3-00-cwa-example-table-26-5-decoding-a-cwa-line-conte.png)
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-26-4-00-decoding-a-cwa-line-content-description-1-zdv-ar.html">
 <table><caption>Table 26-5. Decoding a CWA 

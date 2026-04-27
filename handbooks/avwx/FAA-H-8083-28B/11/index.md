@@ -219,29 +219,29 @@ dryline retreats westward.
 11.2.2 Air Mass Modification 
 As these air masses move around the Earth, they can begin to acquire different attributes. For example, in 
 winter, an arctic air mass (very cold and dry air) can move over the ocean, picking up some warmth and 
-moisture from the warmer ocean and becom](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-00-air-mass-classification-11-2-2-air-mass-modifica.png)
+moisture from the warmer ocean and becom](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-2-2-00-air-mass-classification-11-2-2-air-mass-modifica.png)
 
-![Figure 11-2. Air Mass Modification—Warm, Moist Air Mass Moving Over a Cold Surface](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-01-air-mass-modification-warm-moist-air-mass-moving.png)
+![Figure 11-2. Air Mass Modification—Warm, Moist Air Mass Moving Over a Cold Surface](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-2-2-01-air-mass-modification-warm-moist-air-mass-moving.png)
 
 ![Figure 11-3. Lake Effect 
 11.3 Fronts 
 Air masses can control the weather for a relatively long time period ranging from days to months. Most 
 weather occurs along the periphery of these air masses at boundaries called fronts. A front is a boundary or 
-transition zone between two air masses. Fronts are classified by wh](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-02-lake-effect-11-3-fronts-air-masses-can-control-t.png)
+transition zone between two air masses. Fronts are classified by wh](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-3-00-lake-effect-11-3-fronts-air-masses-can-control-t.png)
 
-![Figure 11-4. Fronts](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-03-fronts.png)
+![Figure 11-4. Fronts](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-3-01-fronts.png)
 
-![Figure 11-5. Warm Front](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-04-warm-front.png)
+![Figure 11-5. Warm Front](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-3-1-00-warm-front.png)
 
 ![Figure 11-6. Cold Front 
 11.3.3 Stationary Front 
 When the forces of two air masses are relatively equal, the boundary or front that separates them remains 
 stationary and influences the local weather for days. This front is called a stationary front. Stationary frontal 
-slope can vary, but clouds and precipitation wou](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-05-cold-front-11-3-3-stationary-front-when-the-forc.png)
+slope can vary, but clouds and precipitation wou](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-3-3-00-cold-front-11-3-3-stationary-front-when-the-forc.png)
 
-![Figure 11-7. Stationary Front](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-06-stationary-front.png)
+![Figure 11-7. Stationary Front](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-3-3-01-stationary-front.png)
 
-![Figure 11-8. Occluded Front](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-07-occluded-front.png)
+![Figure 11-8. Occluded Front](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-3-4-00-occluded-front.png)
 
 ![Figure 11-9. Wave Cyclone Model—Stage 1 
 A low-pressure wave forms on the front (see Figure 11-10). The front develops a kink where the wave 
@@ -249,29 +249,29 @@ develops. Precipitation develops with the heaviest intensity (dark green) locate
 the front. 
  
 Figure 11-10. Wave Cyclone Model—Stage 2 
-As the wave i](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-08-wave-cyclone-model-stage-1-a-low-pressure-wave-f.png)
+As the wave i](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-4-00-wave-cyclone-model-stage-1-a-low-pressure-wave-f.png)
 
 ![Figure 11-10. Wave Cyclone Model—Stage 2 
 As the wave intensifies, both the cold and warm fronts become better organized (see Figure 11-11). 
  
-3 A wave cyclone should not be confused with the alternative name for a tornado. They are quite different.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-09-wave-cyclone-model-stage-2-as-the-wave-intensifi.png)
+3 A wave cyclone should not be confused with the alternative name for a tornado. They are quite different.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-4-01-wave-cyclone-model-stage-2-as-the-wave-intensifi.png)
 
 ![Figure 11-11. Wave Cyclone Model—Stage 3 
 In the fourth stage, the wave becomes a mature low (see Figure 11-12). The occluded front forms as the 
 cold front overtakes the warm front. 
  
 Figure 11-12. Wave Cyclone Model—Stage 4 
-As the cold front continues advancing on the warm front, the occlusion increases and eventua](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-10-wave-cyclone-model-stage-3-in-the-fourth-stage-t.png)
+As the cold front continues advancing on the warm front, the occlusion increases and eventua](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-4-02-wave-cyclone-model-stage-3-in-the-fourth-stage-t.png)
 
 ![Figure 11-12. Wave Cyclone Model—Stage 4 
 As the cold front continues advancing on the warm front, the occlusion increases and eventually cuts off 
 the supply of warm moist air (see Figure 11-13). This causes the low to gradually dissipate. 
  
-Figure 11-13. Wave Cyclone Model—Stage 5](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-11-wave-cyclone-model-stage-4-as-the-cold-front-con.png)
+Figure 11-13. Wave Cyclone Model—Stage 5](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-4-03-wave-cyclone-model-stage-4-as-the-cold-front-con.png)
 
-![Figure 11-13. Wave Cyclone Model—Stage 5](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-12-wave-cyclone-model-stage-5.png)
+![Figure 11-13. Wave Cyclone Model—Stage 5](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-4-04-wave-cyclone-model-stage-5.png)
 
 ![Figure 11-14. Dryline Example 
 The dryline typically advances eastward during the afternoon and retreats westward at night. However, a 
 strong wave cyclone can sweep the dryline eastward into the Mississippi Valley, or even farther east, 
-regardless of the time of day. Low-level clouds and early morning fog often preva](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-13-dryline-example-the-dryline-typically-advances-e.png)
+regardless of the time of day. Low-level clouds and early morning fog often preva](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-5-00-dryline-example-the-dryline-typically-advances-e.png)

@@ -40,4 +40,4 @@ where mountains and surface heating lift air to saturation. Low-pressure systems
 ![Figure 17-3. A Shear Line and an Induced Trough Caused by a Polar High Pushing into the Subtropics 
 A shear line, also shown in Figure 17-3, results when a semipermanent high splits into two cells, inducing 
 a trough. These shear lines are zones of convergence creating forced upward motion. Consequently, 
-considerable](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-3-2-00-a-shear-line-and-an-induced-trough-caused-by-a-p.png)
+considerable](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-3-1-00-a-shear-line-and-an-induced-trough-caused-by-a-p.png)

@@ -112,19 +112,19 @@ to need a snowplow to remove them, and occasionally hail drifts have been report
 ![Figure 14-1. The Collision-Coalescence or Warm Rain Process 
 The other process is called the ice crystal process. This occurs in colder clouds when both ice crystals and 
 water droplets are present. In this situation, it is easier for water vapor to deposit directly onto the ice crystals 
-so the ice crystals grow at th](/handbooks/avwx/FAA-H-8083-28B/figures/fig-14-00-the-collision-coalescence-or-warm-rain-process-t.png)
+so the ice crystals grow at th](/handbooks/avwx/FAA-H-8083-28B/figures/fig-14-4-1-00-the-collision-coalescence-or-warm-rain-process-t.png)
 
 ![Figure 14-2. Snow Temperature Environment 
 14.4.2 Ice Pellets 
 Ice pellets (sleet) occur when there is a shallow layer aloft with above-freezing temperatures and with a 
 deep layer of below-freezing air based at the surface. As snow falls into the shallow warm layer, the 
-snowflakes partially melt. As the precipitation](/handbooks/avwx/FAA-H-8083-28B/figures/fig-14-01-snow-temperature-environment-14-4-2-ice-pellets-.png)
+snowflakes partially melt. As the precipitation](/handbooks/avwx/FAA-H-8083-28B/figures/fig-14-4-2-00-snow-temperature-environment-14-4-2-ice-pellets-.png)
 
 ![Figure 14-3. Ice Pellets Temperature Environment 
 14.4.3 Freezing Rain 
 Freezing rain occurs when there is a deep layer aloft with above-freezing temperatures and with a shallow 
 layer of below-freezing air at the surface. Ordinarily, air temperatures decrease with increasing altitude, but 
-freezing rain requires a tem](/handbooks/avwx/FAA-H-8083-28B/figures/fig-14-02-ice-pellets-temperature-environment-14-4-3-freez.png)
+freezing rain requires a tem](/handbooks/avwx/FAA-H-8083-28B/figures/fig-14-4-2-01-ice-pellets-temperature-environment-14-4-3-freez.png)
 
 ![Figure 14-4. Freezing Rain Temperature Environment 
 14.4.4 Rain 
@@ -132,15 +132,15 @@ Rain occurs when there is a deep layer of above freezing air based at the surfac
  
 Figure 14-5. Rain Temperature Environment 
 14.4.5 Hail 
-Hail is precipitation in the form of balls or other irregular lumps of ice produced by thunders](/handbooks/avwx/FAA-H-8083-28B/figures/fig-14-03-freezing-rain-temperature-environment-14-4-4-rai.png)
+Hail is precipitation in the form of balls or other irregular lumps of ice produced by thunders](/handbooks/avwx/FAA-H-8083-28B/figures/fig-14-4-4-00-freezing-rain-temperature-environment-14-4-4-rai.png)
 
 ![Figure 14-5. Rain Temperature Environment 
 14.4.5 Hail 
 Hail is precipitation in the form of balls or other irregular lumps of ice produced by thunderstorms. 
 Thunderstorms that are characterized by strong updrafts, large Supercooled Liquid Water Content (SLWC), 
-large cloud-drop sizes, and great vertical height, are f](/handbooks/avwx/FAA-H-8083-28B/figures/fig-14-04-rain-temperature-environment-14-4-5-hail-hail-is.png)
+large cloud-drop sizes, and great vertical height, are f](/handbooks/avwx/FAA-H-8083-28B/figures/fig-14-4-4-01-rain-temperature-environment-14-4-5-hail-hail-is.png)
 
 ![Figure 14-6. Vivian, South Dakota, Record Hailstone 
 Hail is most frequently found in the interior of continents within the mid-latitudes and generally confined 
 to higher elevations within the tropics. In the United States, hail is most common across the Great Plains 
-region east of the Rocky Mountains. Hail is more c](/handbooks/avwx/FAA-H-8083-28B/figures/fig-14-05-vivian-south-dakota-record-hailstone-hail-is-mos.png)
+region east of the Rocky Mountains. Hail is more c](/handbooks/avwx/FAA-H-8083-28B/figures/fig-14-4-5-02-vivian-south-dakota-record-hailstone-hail-is-mos.png)

@@ -80,7 +80,7 @@ Figure 5-1 gives a comparison of Kelvin, Celsius, and Fahrenheit temperature sca
 
 Figure 5-1. Comparison of Kelvin, Celsius, and Fahrenheit Temperature Scales
 
-![Figure 5-1. Comparison of Kelvin, Celsius, and Fahrenheit Temperature Scales](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-5-00-comparison-of-kelvin-celsius-and-fahrenheit-temp.png)
+![Figure 5-1. Comparison of Kelvin, Celsius, and Fahrenheit Temperature Scales](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-5-2-00-comparison-of-kelvin-celsius-and-fahrenheit-temp.png)
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-5-5-00-celsius-temperature-conversion-formulae-from-cel.html">
 <table><caption>Table 5-1. Celsius Temperature Conversion Formulae 

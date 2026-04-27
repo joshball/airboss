@@ -30,10 +30,10 @@ Stability.
 12.4.3 Frontal Lift 
 Frontal lift (see Figure 12-6) occurs when the cold, denser air wedges under the warm, less dense air, 
 plowing it upward, and/or the warmer air rides up and over the colder air in a process called overrunning. 
-Clouds and precipitation will form given sufficient li](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-4-4-00-frictional-effects-12-4-3-frontal-lift-frontal-l.png)
+Clouds and precipitation will form given sufficient li](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-4-3-00-frictional-effects-12-4-3-frontal-lift-frontal-l.png)
 
 ![Figure 12-6. Frontal Lift 
 12.4.4 Buoyancy 
 Air near the ground can warm at different rates depending on the insular properties of the ground with 
 which it is in contact. A newly plowed field will warm faster than an adjacent lake. These temperature 
-differences result in different densities, allowing the warm air to](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-4-4-01-frontal-lift-12-4-4-buoyancy-air-near-the-ground.png)
+differences result in different densities, allowing the warm air to](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-4-3-01-frontal-lift-12-4-4-buoyancy-air-near-the-ground.png)

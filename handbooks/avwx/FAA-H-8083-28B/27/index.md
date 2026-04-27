@@ -2156,9 +2156,9 @@ TES
 
 ![Figure 27-1. Aviation Surface Forecast Example 
  
-Figure 27-2. Aviation Clouds Forecast Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-00-aviation-surface-forecast-example-figure-27-2-av.png)
+Figure 27-2. Aviation Clouds Forecast Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-5-00-aviation-surface-forecast-example-figure-27-2-av.png)
 
-![Figure 27-2. Aviation Clouds Forecast Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-01-aviation-clouds-forecast-example.png)
+![Figure 27-2. Aviation Clouds Forecast Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-5-01-aviation-clouds-forecast-example.png)
 
 ![Figure 27-3. AAWU Flight Advisory and FA Zones—Alaska 
 Table 27-9. AAWU Area Forecast (FA) Zones—Alaska 
@@ -2177,40 +2177,40 @@ Eastern Gulf Coast
 4 
 Koyukuk and Upper Kobuk Valley 
 17 
-Copper](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-02-aawu-flight-advisory-and-fa-zones-alaska-table-2.png)
+Copper](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-6-4-00-aawu-flight-advisory-and-fa-zones-alaska-table-2.png)
 
 ![Figure 27-4. Alaska Flying Weather Example 
 27.7.2 Alaska Surface Forecast 
 The Surface Forecast graphic (see Figure 27-5) illustrates prominent surface features, including sea level 
 pressure, areas of high and low pressure, fronts and troughs, and precipitation. Each forecast shows the 
-surface weather that can be ex](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-03-alaska-flying-weather-example-27-7-2-alaska-surf.png)
+surface weather that can be ex](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-7-1-00-alaska-flying-weather-example-27-7-2-alaska-surf.png)
 
 ![Figure 27-5. Alaska Surface Forecast Example 
 27.7.3 Alaska Icing Forecast 
 The Icing Forecast graphic (see Figure 27-6) provides information about freezing levels and the potential 
 for significant icing at specified valid times. 
-Freezing level heights are blue-filled contours (every 2,000 ft). Areas of isolated (ISO](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-04-alaska-surface-forecast-example-27-7-3-alaska-ic.png)
+Freezing level heights are blue-filled contours (every 2,000 ft). Areas of isolated (ISO](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-7-3-00-alaska-surface-forecast-example-27-7-3-alaska-ic.png)
 
 ![Figure 27-6. Alaska Icing Forecast Example 
 27.7.4 Alaska Turbulence Forecast 
 The Turbulence Forecast graphic (see Figure 27-7) depicts areas of significant turbulence at specified valid 
 times. 
 Areas of isolated (ISOL) moderate (MOD) turbulence are shaded yellow, areas of occasional (OCNL) or 
-continuous (CONS) mode](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-05-alaska-icing-forecast-example-27-7-4-alaska-turb.png)
+continuous (CONS) mode](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-7-4-00-alaska-icing-forecast-example-27-7-4-alaska-turb.png)
 
 ![Figure 27-7. Alaska Turbulence Forecast Example 
 27.7.5 Alaska Convective Outlook 
 The Convective Outlook graphic (see Figure 27-8) is a seasonal product that provides information about 
 convective activity at specific valid times. Each forecast indicates where conditions are favorable for the 
-development of towering](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-06-alaska-turbulence-forecast-example-27-7-5-alaska.png)
+development of towering](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-7-5-00-alaska-turbulence-forecast-example-27-7-5-alaska.png)
 
 ![Figure 27-8. Alaska Convective Outlook 
 27.8 World Area Forecast System (WAFS) 
 ICAO’s WAFS supplies aviation users with global aeronautical meteorological en route forecasts suitable 
 for use in flight-planning systems and flight documentation. 
-Two WAFCs, WAFC Washington and WAFC London, have the responsibility to is](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-07-alaska-convective-outlook-27-8-world-area-foreca.png)
+Two WAFCs, WAFC Washington and WAFC London, have the responsibility to is](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-8-1-00-alaska-convective-outlook-27-8-world-area-foreca.png)
 
-![Figure 27-9. WAFS Wind and Temperature Six-Hour Forecast at FL390—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-08-wafs-wind-and-temperature-six-hour-forecast-at-f.png)
+![Figure 27-9. WAFS Wind and Temperature Six-Hour Forecast at FL390—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-8-1-01-wafs-wind-and-temperature-six-hour-forecast-at-f.png)
 
 ![Figure 27-10. 12-Hour Low-Level SIGWX Chart—Example 
 27.9.1.1 Issuance 
@@ -2220,7 +2220,7 @@ Table 27-10. Low-Level SIGWX Chart Issuance Schedule
   
 Issuance Time 
 ~1720Z 
-~2310Z](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-09-12-hour-low-level-sigwx-chart-example-27-9-1-1-i.png)
+~2310Z](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-1-00-12-hour-low-level-sigwx-chart-example-27-9-1-1-i.png)
 
 ![Figure 27-11. Low-Level SIGWX Chart Symbols 
 27.9.1.2.1 Flying Categories 
@@ -2229,61 +2229,61 @@ VFR areas are not depicted (see Figure 27-12).
  
 Figure 27-12. Low-Level SIGWX Chart Flying Categories—Example 
 27.9.1.2.2 Turbulence 
-Areas](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-10-low-level-sigwx-chart-symbols-27-9-1-2-1-flying-.png)
+Areas](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-1-01-low-level-sigwx-chart-symbols-27-9-1-2-1-flying-.png)
 
 ![Figure 27-12. Low-Level SIGWX Chart Flying Categories—Example 
 27.9.1.2.2 Turbulence 
 Areas of moderate or greater turbulence are enclosed by bold, dashed, brown lines (see Figure 27-13). 
 Turbulence intensities are identified by standard symbols (see Figure 27-11). The vertical extent of 
-turbulence layers is specifie](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-11-low-level-sigwx-chart-flying-categories-example-.png)
+turbulence layers is specifie](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-1-02-low-level-sigwx-chart-flying-categories-example-.png)
 
 ![Figure 27-13. Low-Level SIGWX Chart Turbulence Forecast—Example 
 27.9.1.2.3 Freezing Levels 
 The freezing level at the surface is depicted by a blue, saw-toothed symbol (see Figure 27-14). The surface 
 freezing level separates above-freezing from below-freezing temperatures at the Earth’s surface. 
-Freezing levels abov](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-12-low-level-sigwx-chart-turbulence-forecast-exampl.png)
+Freezing levels abov](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-1-03-low-level-sigwx-chart-turbulence-forecast-exampl.png)
 
-![Figure 27-14. Low-Level SIGWX Chart Freezing Level Forecast—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-13-low-level-sigwx-chart-freezing-level-forecast-ex.png)
+![Figure 27-14. Low-Level SIGWX Chart Freezing Level Forecast—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-1-04-low-level-sigwx-chart-freezing-level-forecast-ex.png)
 
 ![Figure 27-15. Low-Level SIGWX Chart Multiple Freezing Levels—Example 
 In Figure 27-15, areas with multiple freezing levels are located on the below-freezing side of the surface 
 freezing level contour and bounded by the 4,000-ft freezing level. Multiple freezing levels are possible 
-beyond the 4,000-ft freezing level (](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-14-low-level-sigwx-chart-multiple-freezing-levels-e.png)
+beyond the 4,000-ft freezing level (](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-2-00-low-level-sigwx-chart-multiple-freezing-levels-e.png)
 
 ![Figure 27-16. Mid-Level SIGWX Chart—Example 
 27.9.2.1 Issuance 
 The AWC in Kansas City, MO, has the responsibility, as part of the WAFC Washington, to provide global 
 weather forecasts of SIGWX phenomena. The AWC issues a 24-hour Mid-Level SIGWX Chart, four times 
-daily, for the North Atlantic Ocean Region (see Table 2](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-15-mid-level-sigwx-chart-example-27-9-2-1-issuance-.png)
+daily, for the North Atlantic Ocean Region (see Table 2](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-2-01-mid-level-sigwx-chart-example-27-9-2-1-issuance-.png)
 
 ![Figure 27-17. High-Level SIGWX Chart—Example 
 27.9.3.1 Issuance 
 In accordance with the WAFS of ICAO, High-Level SIGWX forecasts are provided for the en route portion 
-of international flights.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-16-high-level-sigwx-chart-example-27-9-3-1-issuance.png)
+of international flights.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-3-00-high-level-sigwx-chart-example-27-9-3-1-issuance.png)
 
 ![Figure 27-18. High-Level SIGWX Chart Turbulence—Examples 
 27.9.3.2.3 Moderate or Severe Icing 
 Moderate or severe icing (outside of thunderstorms) above FL240 is rare and is generally not forecasted on 
 High-Level SIGWX Charts. 
 27.9.3.2.4 Jet Streams 
-A jet stream axis with a wind speed of more than 80 kt is identifie](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-17-high-level-sigwx-chart-turbulence-examples-27-9-.png)
+A jet stream axis with a wind speed of more than 80 kt is identifie](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-3-01-high-level-sigwx-chart-turbulence-examples-27-9-.png)
 
 ![Figure 27-19. High-Level SIGWX Chart Jet Stream—Example 
 27.9.3.2.5 Tropopause Heights 
 Tropopause heights are plotted at selected locations on the chart. They are enclosed by rectangles and 
 plotted in hundreds of feet MSL (see Figure 27-20). Centers of high (H) and low (L) tropopause heights 
-are enclosed by polygons](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-18-high-level-sigwx-chart-jet-stream-example-27-9-3.png)
+are enclosed by polygons](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-3-02-high-level-sigwx-chart-jet-stream-example-27-9-3.png)
 
 ![Figure 27-20. High-Level SIGWX Chart Tropopause Height—Examples 
 27.9.3.2.6 Tropical Cyclones 
 Tropical cyclones (i.e., with surface wind speed 34 kt or greater) are depicted by the symbol in Figure 27-21 
 with the storm’s name positioned adjacent to the symbol. Cumulonimbus clouds meeting chart criteria are 
-identifie](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-19-high-level-sigwx-chart-tropopause-height-example.png)
+identifie](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-3-03-high-level-sigwx-chart-tropopause-height-example.png)
 
 ![Figure 27-21. High-Level SIGWX Chart Tropical Cyclone—Examples 
 27.9.3.2.7 Volcanic Eruption Sites 
 Volcanic eruption sites are identified by a trapezoidal symbol depicted in Figure 27-22. The dot on the base 
-of the trapezoid identifies the location of the volcano. The name of the volcano, its latitude, and its longit](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-20-high-level-sigwx-chart-tropical-cyclone-examples.png)
+of the trapezoid identifies the location of the volcano. The name of the volcano, its latitude, and its longit](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-4-00-high-level-sigwx-chart-tropical-cyclone-examples.png)
 
 ![Figure 27-22. The dot on the base 
 of the trapezoid identifies the location of the volcano. The name of the volcano, its latitude, and its longitude 
@@ -2291,57 +2291,57 @@ are noted adjacent to the symbol.
  
 Figure 27-22. High-Level SIGWX Chart Volcanic Eruption Site—Example 
 27.9.4 Alaska Significant Weather (SIGWX) Charts 
-The Alaska SIG](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-21-the-dot-on-the-base-of-the-trapezoid-identifies-.png)
+The Alaska SIG](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-4-01-the-dot-on-the-base-of-the-trapezoid-identifies-.png)
 
 ![Figure 27-23. Alaska SIGWX Chart—Example 
 27.9.4.1.1 Content 
 27.9.4.1.1.1 Surface Pressure Systems and Fronts 
 Pressure systems and fronts are depicted using standard symbols. Isobars are denoted by solid, thin black 
-lines and labeled with the appropriate pressure in millibars. The central pressure is plotted near th](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-22-alaska-sigwx-chart-example-27-9-4-1-1-content-27.png)
+lines and labeled with the appropriate pressure in millibars. The central pressure is plotted near th](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-4-02-alaska-sigwx-chart-example-27-9-4-1-1-content-27.png)
 
-![Figure 27-24. NDFD Short-Range Surface Prog Forecast—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-23-ndfd-short-range-surface-prog-forecast-example.png)
+![Figure 27-24. NDFD Short-Range Surface Prog Forecast—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-10-00-ndfd-short-range-surface-prog-forecast-example.png)
 
 ![Figure 27-25. Surface Prog Forecast Symbols 
 27.10.1.3 Pressure Systems 
 Pressure systems are depicted by pressure centers, troughs, isobars, drylines, tropical waves, tropical 
 storms, and hurricanes using standard symbols (see Figure 27-25). Isobars are denoted by solid, thin black 
-lines and labeled with the appropr](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-24-surface-prog-forecast-symbols-27-10-1-3-pressure.png)
+lines and labeled with the appropr](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-3-02-nws-surface-analysis-chart-symbols-25-2-3-3-exam.png)
 
 ![Figure 27-26. NWS NCO Model Analyses and Guidance Website 
 27.11.1 Constant Pressure Level Forecasts 
 Constant pressure level forecasts (see Figure 27-27) are just one of the many products produced by NWP 
 models. Constant pressure level forecasts are the computer model’s depiction of select weather (e.g., wind) 
-at a](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-25-nws-nco-model-analyses-and-guidance-website-27-1.png)
+at a](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-11-1-00-nws-nco-model-analyses-and-guidance-website-27-1.png)
 
 ![Figure 27-27. 300 mb Constant Pressure Forecast—Example 
 27.11.1.1 Issuance 
 Constant pressure level forecasts are produced several times a day depending on the model. The NCEP’s 
 GFS model and North American Model (NAM) produce forecasts four times per day, with initial times of 
-00, 06, 12, and 18 UTC. Other higher r](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-26-300-mb-constant-pressure-forecast-example-27-11-.png)
+00, 06, 12, and 18 UTC. Other higher r](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-11-1-01-300-mb-constant-pressure-forecast-example-27-11-.png)
 
 ![Figure 27-28. Day 1 Categorical Convective Outlook Graphic Example 
  
 Figure 27-29. Categorical Outlook Legend for Days 1-3 Convective Outlook Graphic Example 
 27.17.2 Traffic Flow Management (TFM) Convective Forecast (TCF) 
-The TCF is a high-confidence graphical representation of forecasted convection meeting specific](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-27-day-1-categorical-convective-outlook-graphic-exa.png)
+The TCF is a high-confidence graphical representation of forecasted convection meeting specific](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-17-2-00-day-1-categorical-convective-outlook-graphic-exa.png)
 
-![Figure 27-30. TCF Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-28-tcf-example.png)
+![Figure 27-30. TCF Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-17-2-01-tcf-example.png)
 
 ![Figure 27-31. ECFP Example 
 27.17.4 Watch Notification Messages 
 The NWS SPC issues severe weather Watch Notification Messages to provide an area threat alert for the 
 aviation meteorology community to forecast organized severe thunderstorms that may produce tornadoes, 
-large hail, and/or convective damaging winds with](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-29-ecfp-example-27-17-4-watch-notification-messages.png)
+large hail, and/or convective damaging winds with](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-17-3-00-ecfp-example-27-17-4-watch-notification-messages.png)
 
 ![Figure 27-32. Aviation Watch (polygon) Compared to Public Watch (shaded) Example 
 The SPC will issue the SAW after the proposed convective watch area has been collaborated with the 
 impacted NWS WFOs defining the approximate areal outline of the watch. 
-SAWs are nonscheduled, event-driven products valid from the time o](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-30-aviation-watch-polygon-compared-to-public-watch-.png)
+SAWs are nonscheduled, event-driven products valid from the time o](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-17-4-01-aviation-watch-polygon-compared-to-public-watch-.png)
 
 ![Figure 27-33. CIWS and CoSPA 
 27.18 Route Forecast (ROFOR) 
 The ROFOR product is no longer issued by the NWS and has been replaced by the GFA in the Pacific. See 
-Section 28.2 for information on the GFA.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-31-ciws-and-cospa-27-18-route-forecast-rofor-the-ro.png)
+Section 28.2 for information on the GFA.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-17-5-00-ciws-and-cospa-27-18-route-forecast-rofor-the-ro.png)
 
 ![Figure 27-34. Map of NWS WFO’s Area of Responsibility 
 27.19.1 Example 
@@ -2349,7 +2349,7 @@ NWS Boise, ID
 COLD FRONT CURRENTLY OVER SW IDAHO WEST OF THE MAGIC VALLEY. IFR IN HEAVIER 
 RAIN/SNOW SHOWERS BEHIND THE FRONT MOSTLY IN THE MTNS UNTIL THIS EVENING. 
 OTHERWISE, LOW VFR THROUGH TOMORROW WITH ISOLATED SHOWERS INTO THE EVENING. 
-SURF](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-32-map-of-nws-wfo-s-area-of-responsibility-27-19-1-.png)
+SURF](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-19-1-00-map-of-nws-wfo-s-area-of-responsibility-27-19-1-.png)
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-27-00-untitled.html">
 <table><thead><tr><th>There are many wind and temperature aloft forecasts and products produced by the NWS. Each NWP model</th><th></th></tr></thead><tbody><tr><td>(i.e., sometimes referred to as computer models) outputs wind and temperature at multiple levels. The</td><td></td></tr><tr><td>primary output of these forecasts is a gridded binary code format intended for use in flight planning</td><td></td></tr><tr><td>software.</td><td></td></tr></tbody></table>

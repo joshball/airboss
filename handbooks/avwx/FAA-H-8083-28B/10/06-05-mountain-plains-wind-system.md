@@ -33,4 +33,4 @@ the plains.
 ![Figure 10-19. Valley Breeze 
 Pressure gradients develop (along a horizontal reference) with lower pressure over the warmer sloping 
 terrain and higher pressure over the cooler valley. Winds develop in the direction of the PGF. Thus, the 
-wind blows from the valley up the mountain slopes. Air rises over sloping terrain](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-5-00-valley-breeze-pressure-gradients-develop-along-a.png)
+wind blows from the valley up the mountain slopes. Air rises over sloping terrain](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-4-00-valley-breeze-pressure-gradients-develop-along-a.png)

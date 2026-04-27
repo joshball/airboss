@@ -125,7 +125,7 @@ Eastern standard time
 Pacific standard time
 flying eastward from one time zone to another, or perhaps 
 even when flying from the western edge to the eastern edge 
-of the same time zone. Determin](/handbooks/phak/FAA-H-8083-25C/figures/fig-16-03-time-zones-in-the-conterminous-united-states-105.png)
+of the same time zone. Determin](/handbooks/phak/FAA-H-8083-25C/figures/fig-13-03-area-forecast-region-map-2000z-the-forecast-call.png)
 
 ![Figure 16-9. Note the agonic line where magnetic variation is zero.
 Easterly variation

@@ -32,4 +32,4 @@ See Sections 10.6.4, 10.6.5, and 10.6.6 for information on mountain/valley breez
 16.4 Mountain/Valley Fog 
 See Section 18.1.1.1.1.1 for information on mountain/valley fog. 
 16.5 Upslope Fog 
-See Section 18.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-4-00-examples-of-mountain-wave-clouds-16-3-mountain-v.png)
+See Section 18.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-16-3-00-examples-of-mountain-wave-clouds-16-3-mountain-v.png)

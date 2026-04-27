@@ -95,4 +95,4 @@ UPDATES AS SOON AS INFO BECOMES AVAILABLE.
 The United States has two VAACs with responsibilities defined in ICAO Annex 3, Meteorological Service 
 for International Air Navigation. The Washington VAAC is jointly managed by the NESDIS SAB and the 
 NWS NCO. The Anchorage VAAC is managed by the NWS AAWU. 
-The Washington](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-5-00-volcanic-ash-advisory-centers-the-united-states-.png)
+The Washington](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-5-1-00-volcanic-ash-advisory-centers-the-united-states-.png)

@@ -149,23 +149,23 @@ Meters (m)
 30,000 ft 
 9,000 m 
 500 mb 
-1](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-5-00-schematic-of-500-mb-constant-pressure-chart-tabl.png)
+1](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-5-1-00-schematic-of-500-mb-constant-pressure-chart-tabl.png)
 
 ![Figure 25-21. Example of a 500 mb Constant-Pressure Chart 
 Constant pressure level forecasts are used to provide an overview of weather patterns at specified times and 
 pressure altitudes and are the source for wind and temperature aloft forecasts. 
-Pressure patterns cause and characterize much of the weather. Typicall](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-5-01-example-of-a-500-mb-constant-pressure-chart-cons.png)
+Pressure patterns cause and characterize much of the weather. Typicall](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-5-2-00-example-of-a-500-mb-constant-pressure-chart-cons.png)
 
-![Figure 25-22. Skew-T Diagram Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-5-02-skew-t-diagram-example.png)
+![Figure 25-22. Skew-T Diagram Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-5-2-01-skew-t-diagram-example.png)
 
 ![Figure 25-23. Skew-T Diagram—Multiple Freezing Level Example 
 25.3.2.3.2 Cloud Top Example 
 Figure 25-24 is the radiosonde observation from Vandenberg Space Force Base (VSFB), California, for 
 1200 UTC for a typical coastal stratus cloud. 
  
-At about 950 mb, the temperature profile (bold red line) and dewpoint profile](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-5-03-skew-t-diagram-multiple-freezing-level-example-2.png)
+At about 950 mb, the temperature profile (bold red line) and dewpoint profile](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-5-2-02-skew-t-diagram-multiple-freezing-level-example-2.png)
 
-![Figure 25-24. Skew-T Diagram—Cloud Top Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-5-04-skew-t-diagram-cloud-top-example.png)
+![Figure 25-24. Skew-T Diagram—Cloud Top Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-5-2-03-skew-t-diagram-cloud-top-example.png)
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-25-5-00-common-constant-pressure-charts-chart-pressure-a.html">
 <table><caption>Table 25-3. Common Constant-Pressure Charts 

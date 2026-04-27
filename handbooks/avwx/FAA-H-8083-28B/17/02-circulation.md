@@ -197,9 +197,9 @@ highs shift southward during the Northern Hemisphere winter and northward during
 shift, the height and strength of the inversion, and terrain features determine the weather in the subtropical 
 high-pressure belts. 
  
-In the warm Northern Hemisphere, warm land areas te](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-2-00-the-subtropical-highs-shift-southward-during-the.png)
+In the warm Northern Hemisphere, warm land areas te](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-2-1-00-the-subtropical-highs-shift-southward-during-the.png)
 
 ![Figure 17-2. Mean Worldwide Surface Pressure Distribution and Prevailing Winds Throughout the World in January 
 17.2.1.1 Continental Weather 
 Along the west coasts of continents under a subtropical high, the air is stable. The inversion is strongest 
-and lowest where the east side of the subtropical high-pressure area](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-2-01-mean-worldwide-surface-pressure-distribution-and.png)
+and lowest where the east side of the subtropical high-pressure area](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-2-1-01-mean-worldwide-surface-pressure-distribution-and.png)

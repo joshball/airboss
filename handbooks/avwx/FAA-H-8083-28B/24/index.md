@@ -1783,133 +1783,133 @@ imagery, and weather trends (see Figure 24-34)], TAFs, PIREPs, and other aeronau
 
 Figure 24-34. Weather Trends Example at Unalakleet (PAUN), Alaska
 
-![Figure 24-1. METAR/SPECI Coding Format](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-00-metar-speci-coding-format.png)
+![Figure 24-1. METAR/SPECI Coding Format](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-4-3-00-metar-speci-coding-format.png)
 
 ![Figure 24-2. ICAO Continental Codes 
 24.4.3.3 Date and Time of Report 
 METAR KOKC 011955Z AUTO 22015G25KT 180V250 3/4SM R17L/2600FT +TSRA BR OVC010CB 
 18/16 A2992 RMK AO2 TSB25 TS OHD MOV E SLP132 
 The date and time are coded in all reports as follows: the day of the month is the first two digits (01), 
-followed by the](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-01-icao-continental-codes-24-4-3-3-date-and-time-of.png)
+followed by the](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-4-3-01-icao-continental-codes-24-4-3-3-date-and-time-of.png)
 
-![Figure 24-3. Obscuration Effects on Slant Range Visibility](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-02-obscuration-effects-on-slant-range-visibility.png)
+![Figure 24-3. Obscuration Effects on Slant Range Visibility](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-4-3-02-obscuration-effects-on-slant-range-visibility.png)
 
 ![Figure 24-4. METAR/SPECI Sky Condition Coding 
 At manual stations, cumulonimbus (CB) or towering cumulus (TCU) is appended to the associated layer. 
 For example, a scattered layer of towering cumulus at 1,500 ft would be coded SCT015TCU and would be 
-followed by a space if there were additional higher layers to code.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-03-metar-speci-sky-condition-coding-at-manual-stati.png)
+followed by a space if there were additional higher layers to code.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-4-3-03-metar-speci-sky-condition-coding-at-manual-stati.png)
 
-![Figure 24-5. PIREP Coding Format](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-04-pirep-coding-format.png)
+![Figure 24-5. PIREP Coding Format](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-5-1-00-pirep-coding-format.png)
 
 ![Figure 24-6. VAR Form 
 24.5.4 Turbulence Observations 
 Since the 1990s, several innovations have improved the quality and availability of turbulence reports. 
 Automated turbulence reporting systems are common on many commercial aircraft using the Aircraft 
 Meteorological Data Relay (AMDAR) system. 
-Modern commercial ai](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-05-var-form-24-5-4-turbulence-observations-since-th.png)
+Modern commercial ai](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-5-4-00-var-form-24-5-4-turbulence-observations-since-th.png)
 
 ![Figure 24-7. A Plot of AMDAR Reports Received During a 24-Hour Period in 2019 
 24.6 Radar Observations 
 24.6.1 Weather Surveillance Radar—1988 Doppler (WSR-88D) Description 
 Weather radar observations and their resultant images are graphical displays of precipitation and 
-non-precipitation targets detected by weather r](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-06-a-plot-of-amdar-reports-received-during-a-24-hou.png)
+non-precipitation targets detected by weather r](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-6-1-00-a-plot-of-amdar-reports-received-during-a-24-hou.png)
 
 ![Figure 24-8. Locations of WSR-88D Weather Radar in the CONUS 
 Gulf of 
-America](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-07-locations-of-wsr-88d-weather-radar-in-the-conus-.png)
+America](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-6-1-01-locations-of-wsr-88d-weather-radar-in-the-conus-.png)
 
 ![Figure 24-9. WSR-88D Weather Radar Coverage at 3,000 ft AGL, 6,000 ft AGL, and 10,000 ft AGL over the CONUS 
-and Puerto Rico](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-08-wsr-88d-weather-radar-coverage-at-3-000-ft-agl-6.png)
+and Puerto Rico](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-6-1-02-wsr-88d-weather-radar-coverage-at-3-000-ft-agl-6.png)
 
 ![Figure 24-10. Additional Locations of WSR-88D Weather Radar and Coverage Outside of the CONUS 
 24.6.1.2 Coverage 
 Figure 24-9 and Figure 24-10 depict the radar coverage at 3,000 ft AGL, 6,000 ft AGL, and 10,000 ft AGL 
-(i.e., above the height of the radar). *Several WSR-88D radars are located in mountainous areas, such](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-09-additional-locations-of-wsr-88d-weather-radar-an.png)
+(i.e., above the height of the radar). *Several WSR-88D radars are located in mountainous areas, such](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-6-1-03-additional-locations-of-wsr-88d-weather-radar-an.png)
 
-![Figure 24-12. WSR-88D Weather Radar Composite Reflectivity, Single-Site Product Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-10-wsr-88d-weather-radar-composite-reflectivity-sin.png)
+![Figure 24-12. WSR-88D Weather Radar Composite Reflectivity, Single-Site Product Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-6-1-04-wsr-88d-weather-radar-composite-reflectivity-sin.png)
 
 ![Figure 24-13. Creation of a Composite Reflectivity, Single-Site Product 
  
 This Composite Reflectivity shows that in many locations the highest precipitation intensity occurs at an 
 altitude higher than precipitation detected at the elevation of the base elevation angle. 
-Figure 24-14. Weather Radar 0.5° Base Reflectiv](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-11-creation-of-a-composite-reflectivity-single-site.png)
+Figure 24-14. Weather Radar 0.5° Base Reflectiv](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-6-1-05-creation-of-a-composite-reflectivity-single-site.png)
 
 ![Figure 24-14. Weather Radar 0.5° Base Reflectivity (left) versus Composite Reflectivity (right) Comparison 
 24.6.1.5.3 Base Reflectivity 
 The Base Reflectivity product is a display of both the location and intensity of reflectivity data from the 
-lowest elevation angle scan, or 0.5° above the horizon. Base Reflectivity](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-12-weather-radar-0-5-base-reflectivity-left-versus-.png)
+lowest elevation angle scan, or 0.5° above the horizon. Base Reflectivity](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-6-1-06-weather-radar-0-5-base-reflectivity-left-versus-.png)
 
 ![Figure 24-15. TDWR Locations in the CONUS and Puerto Rico 
 .
  
-Figure 24-16. TDWR Coverage](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-13-tdwr-locations-in-the-conus-and-puerto-rico-figu.png)
+Figure 24-16. TDWR Coverage](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-6-2-00-tdwr-locations-in-the-conus-and-puerto-rico-figu.png)
 
-![Figure 24-16. TDWR Coverage](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-14-tdwr-coverage.png)
+![Figure 24-16. TDWR Coverage](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-6-2-01-tdwr-coverage.png)
 
 ![Figure 24-17. GeoColor Satellite Image—U.S. Example 
 24.7.2.2 Visible Imagery 
 Visible imagery (see Figure 24-18) displays reflected sunlight from the Earth’s surface, clouds, and 
 particulate matter in the atmosphere. Visible satellite images, which look like black and white photographs, 
-are derived from the satellit](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-15-geocolor-satellite-image-u-s-example-24-7-2-2-vi.png)
+are derived from the satellit](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-7-2-00-geocolor-satellite-image-u-s-example-24-7-2-2-vi.png)
 
 ![Figure 24-18. Visible Satellite Image—U.S. Example 
 24.7.2.2.1 Visible Image Data Legend 
 The data legend on a visible image displays albedo, or reflectance, expressed as a percentage (see Figure 
 24-19). For example, an albedo of 72 means 72 percent of the sunlight that struck a feature was reflected 
-back to space.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-16-visible-satellite-image-u-s-example-24-7-2-2-1-v.png)
+back to space.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-7-2-01-visible-satellite-image-u-s-example-24-7-2-2-1-v.png)
 
-![Figure 24-20. Infrared (Color) Satellite Image—U.S. Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-17-infrared-color-satellite-image-u-s-example.png)
+![Figure 24-20. Infrared (Color) Satellite Image—U.S. Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-7-2-02-infrared-color-satellite-image-u-s-example.png)
 
 ![Figure 24-21. Unenhanced Infrared (Black and White) Satellite Image—U.S. Example 
 24.7.2.3.1 Infrared Image Data Legends 
 The data legend on an IR image is calibrated to temperature expressed in degrees Celsius (see Figure 24-22 
 and Figure 24-23). The legend may vary based on the satellite image provider. 
  
-The color](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-18-unenhanced-infrared-black-and-white-satellite-im.png)
+The color](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-7-2-03-unenhanced-infrared-black-and-white-satellite-im.png)
 
-![Figure 24-24. Water Vapor Satellite Image—U.S. Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-19-water-vapor-satellite-image-u-s-example.png)
+![Figure 24-24. Water Vapor Satellite Image—U.S. Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-7-2-04-water-vapor-satellite-image-u-s-example.png)
 
 ![Figure 24-26. Weather Balloon and Radiosonde 
 24.8.1.1 Issuance 
 Weather balloons with radiosondes are launched twice a day worldwide from designated locations at around 
 1100 UTC and 2300 UTC (see Figure 24-27). It takes approximately 90 minutes for the balloon to reach 
-an altitude of 100,000 ft. The weather data col](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-20-weather-balloon-and-radiosonde-24-8-1-1-issuance.png)
+an altitude of 100,000 ft. The weather data col](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-8-1-00-weather-balloon-and-radiosonde-24-8-1-1-issuance.png)
 
 ![Figure 24-27. U.S. Radiosonde Network 
 24.9 Aviation Weather Cameras 
 24.9.1 FAA Aviation Weather Camera Network 
 In July 2007 the FAA, under the leadership of Walter Combs, began a program to assist Alaska pilots with 
-their significant needs for weather information. Combs’ passion for safe flight in Alaska provided t](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-21-u-s-radiosonde-network-24-9-aviation-weather-cam.png)
+their significant needs for weather information. Combs’ passion for safe flight in Alaska provided t](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-9-1-00-u-s-radiosonde-network-24-9-aviation-weather-cam.png)
 
 ![Figure 24-28. Map of FAA’s Aviation Weather Camera Network in Alaska, the CONUS, and Canada12 
  
 Figure 24-29. Map of the FAA’s Aviation Weather Camera Network in Hawaii 
  
 12 Canadian camera sites are owned and operated by NAV CANADA, Canada’s civilian air navigation service 
-provider.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-22-map-of-faa-s-aviation-weather-camera-network-in-.png)
+provider.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-9-1-01-map-of-faa-s-aviation-weather-camera-network-in-.png)
 
 ![Figure 24-29. Map of the FAA’s Aviation Weather Camera Network in Hawaii 
  
 12 Canadian camera sites are owned and operated by NAV CANADA, Canada’s civilian air navigation service 
-provider.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-23-map-of-the-faa-s-aviation-weather-camera-network.png)
+provider.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-9-1-02-map-of-the-faa-s-aviation-weather-camera-network.png)
 
 ![Figure 24-30. Sectional Chart Depicting Hyder (4Z7), Alaska Camera Orientations 
  
-Figure 24-31. “Clear Day” Image from the Aviation Weather Camera at Hyder (4Z7), Alaska](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-24-sectional-chart-depicting-hyder-4z7-alaska-camer.png)
+Figure 24-31. “Clear Day” Image from the Aviation Weather Camera at Hyder (4Z7), Alaska](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-9-1-03-sectional-chart-depicting-hyder-4z7-alaska-camer.png)
 
-![Figure 24-31. “Clear Day” Image from the Aviation Weather Camera at Hyder (4Z7), Alaska](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-25-clear-day-image-from-the-aviation-weather-camera.png)
+![Figure 24-31. “Clear Day” Image from the Aviation Weather Camera at Hyder (4Z7), Alaska](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-9-1-04-clear-day-image-from-the-aviation-weather-camera.png)
 
 ![Figure 24-32. Aviation Weather Camera Image at Hyder (4Z7), Alaska 
 24.9.2 Visibility Estimation through Image Analytics (VEIA) 
 VEIA, which is available on the FAA’s Aviation Weather Camera Network, is an algorithm that uses the 
-FAA’s Aviation Weather Camera Network to produce visibility estimates (in statute miles)](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-26-aviation-weather-camera-image-at-hyder-4z7-alask.png)
+FAA’s Aviation Weather Camera Network to produce visibility estimates (in statute miles)](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-9-2-00-aviation-weather-camera-image-at-hyder-4z7-alask.png)
 
 ![Figure 24-33. VEIA Example at Bald Mountain (K7BM) in Colorado 
 24.9.3 Visual Weather Observation System (VWOS) 
 VWOS, which is available on the FAA’s Aviation Weather Camera Network, is an advanced camera system 
-that is comprised of a suite of weather sensors and 360-degree camera images that collectively observe and](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-27-veia-example-at-bald-mountain-k7bm-in-colorado-2.png)
+that is comprised of a suite of weather sensors and 360-degree camera images that collectively observe and](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-9-3-00-veia-example-at-bald-mountain-k7bm-in-colorado-2.png)
 
-![Figure 24-34. Weather Trends Example at Unalakleet (PAUN), Alaska](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-28-weather-trends-example-at-unalakleet-paun-alaska.png)
+![Figure 24-34. Weather Trends Example at Unalakleet (PAUN), Alaska](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-9-4-01-weather-trends-example-at-unalakleet-paun-alaska.png)
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-24-00-speci-criteria-1-wind-shift-wind-direction-chang.html">
 <table><caption>Table 24-2. SPECI Criteria 

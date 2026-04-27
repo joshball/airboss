@@ -1216,9 +1216,9 @@ $$
 
 ![Figure 26-1. AWC SIGMET Areas of Responsibility—CONUS 
  
-Figure 26-2. AWC SIGMET Areas of Responsibility—Atlantic Basin](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-00-awc-sigmet-areas-of-responsibility-conus-figure-.png)
+Figure 26-2. AWC SIGMET Areas of Responsibility—Atlantic Basin](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-2-1-00-awc-sigmet-areas-of-responsibility-conus-figure-.png)
 
-![Figure 26-2. AWC SIGMET Areas of Responsibility—Atlantic Basin](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-01-awc-sigmet-areas-of-responsibility-atlantic-basi.png)
+![Figure 26-2. AWC SIGMET Areas of Responsibility—Atlantic Basin](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-2-1-01-awc-sigmet-areas-of-responsibility-atlantic-basi.png)
 
 ![Figure 26-3. SIGMET Areas of Responsibility—Pacific Basin 
 26.2.2 SIGMET Identification 
@@ -1227,18 +1227,18 @@ U.S. SIGMETs (other than Convective SIGMETs) are assigned a series identifier:
 AWC for the CONUS: 
 o NOVEMBER, OSCAR, PAPA, QUEBEC, ROMEO, UNIFORM, VICTOR, WHISKEY, 
 XRAY, and YANKEE. Note that SIERRA and TANGO are excluded. 
-•](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-02-sigmet-areas-of-responsibility-pacific-basin-26-.png)
+•](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-2-2-00-sigmet-areas-of-responsibility-pacific-basin-26-.png)
 
-![Figure 26-5. AWC Convective SIGMET Areas of Responsibility](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-03-awc-convective-sigmet-areas-of-responsibility.png)
+![Figure 26-5. AWC Convective SIGMET Areas of Responsibility](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-2-4-00-awc-convective-sigmet-areas-of-responsibility.png)
 
-![Figure 26-6. Convective SIGMET—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-04-convective-sigmet-example.png)
+![Figure 26-6. Convective SIGMET—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-2-4-01-convective-sigmet-example.png)
 
-![Figure 26-7. SIGMET Outside the CONUS—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-05-sigmet-outside-the-conus-example.png)
+![Figure 26-7. SIGMET Outside the CONUS—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-2-5-00-sigmet-outside-the-conus-example.png)
 
 ![Figure 26-8. CWSU Areas of Responsibility 
 CWAs are valid for up to two hours and may include forecasts of conditions expected to begin within two 
 hours of issuance. If conditions are expected to persist after the advisory’s valid period, a statement to that 
-effect is included in the last line of the text. Additional](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-06-cwsu-areas-of-responsibility-cwas-are-valid-for-.png)
+effect is included in the last line of the text. Additional](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-4-2-00-cwsu-areas-of-responsibility-cwas-are-valid-for-.png)
 
 ![Figure 26-9. CWA—Example 
 Table 26-5. Decoding a CWA 
@@ -1261,19 +1261,19 @@ CWA
 Product type 
 2 
 Phenomenon number (single digit, 1–6) 
-0](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-07-cwa-example-table-26-5-decoding-a-cwa-line-conte.png)
+0](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-4-3-00-cwa-example-table-26-5-decoding-a-cwa-line-conte.png)
 
 ![Figure 26-10. Volcanic Ash Advisory Centers 
 The United States has two VAACs with responsibilities defined in ICAO Annex 3, Meteorological Service 
 for International Air Navigation. The Washington VAAC is jointly managed by the NESDIS SAB and the 
 NWS NCO. The Anchorage VAAC is managed by the NWS AAWU. 
-The Washington](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-08-volcanic-ash-advisory-centers-the-united-states-.png)
+The Washington](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-5-1-00-volcanic-ash-advisory-centers-the-united-states-.png)
 
 ![Figure 26-11. VAA in Graphical Format 
 26.6 Aviation Tropical Cyclone Advisory (TCA) 
 The aviation TCA is intended to provide tropical cyclone forecast guidance, through 24 hours, for 
 international aviation safety and routing purposes. TCAs are issued by the WMO’s TCAC for all ongoing 
-tropical cyclone activity in the](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-09-vaa-in-graphical-format-26-6-aviation-tropical-c.png)
+tropical cyclone activity in the](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-6-1-00-vaa-in-graphical-format-26-6-aviation-tropical-c.png)
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-26-00-decoding-a-non-convective-sigmet-for-the-conus-l.html">
 <table><caption>Table 26-1. Decoding a Non-Convective SIGMET for the CONUS 

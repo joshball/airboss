@@ -213,47 +213,47 @@ vertical motion while unstable air enhances it.
 13.3.2 Neutral Stability 
 Neutral stability (see Figure 13-2) is the state of a column of air in the atmosphere in which an ascending 
 (or descending) air parcel always has the same temperature (density) as the surrounding environmental air. 
-If the column of air is unsaturated,](/handbooks/avwx/FAA-H-8083-28B/figures/fig-13-00-absolute-stability-example-13-3-2-neutral-stabil.png)
+If the column of air is unsaturated,](/handbooks/avwx/FAA-H-8083-28B/figures/fig-13-3-2-00-absolute-stability-example-13-3-2-neutral-stabil.png)
 
 ![Figure 13-2. Neutral Stability Example 
 13.3.3 Absolute Instability 
 Absolute instability (see Figure 13-3) is the state of a column of air in the atmosphere when it has a 
 superadiabatic lapse rate of temperature (i.e., greater than the dry adiabatic lapse rate). An air parcel 
-displaced vertically would be accelerate](/handbooks/avwx/FAA-H-8083-28B/figures/fig-13-01-neutral-stability-example-13-3-3-absolute-instab.png)
+displaced vertically would be accelerate](/handbooks/avwx/FAA-H-8083-28B/figures/fig-13-3-3-00-neutral-stability-example-13-3-3-absolute-instab.png)
 
 ![Figure 13-3. Absolute Instability Example 
 13.3.4 Conditional Instability 
 Conditional instability (see Figure 13-4) is the state of a column of unsaturated air in the atmosphere when 
 its lapse rate of temperature is less than the dry adiabatic lapse rate but greater than the moist adiabatic 
-lapse rate. An air parcel](/handbooks/avwx/FAA-H-8083-28B/figures/fig-13-02-absolute-instability-example-13-3-4-conditional-.png)
+lapse rate. An air parcel](/handbooks/avwx/FAA-H-8083-28B/figures/fig-13-3-4-00-absolute-instability-example-13-3-4-conditional-.png)
 
 ![Figure 13-4. Conditional Instability Example 
 13.3.5 Summary of Stability Types 
-Figure 13-5 summarizes the possible atmospheric stability types.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-13-03-conditional-instability-example-13-3-5-summary-o.png)
+Figure 13-5 summarizes the possible atmospheric stability types.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-13-3-5-00-conditional-instability-example-13-3-5-summary-o.png)
 
 ![Figure 13-5. Stability Types 
 13.4 Processes That Change Atmospheric Stability 
 Changes in atmospheric stability are inversely related to temperature (density) changes with height 
 (see Figure 13-6). If temperature lapse rates increase, then stability decreases. Conversely, if temperature 
-lapse rates decrease, then st](/handbooks/avwx/FAA-H-8083-28B/figures/fig-13-04-stability-types-13-4-processes-that-change-atmos.png)
+lapse rates decrease, then st](/handbooks/avwx/FAA-H-8083-28B/figures/fig-13-4-00-stability-types-13-4-processes-that-change-atmos.png)
 
 ![Figure 13-6. Temperature Lapse Rate Effects on Stability](/handbooks/avwx/FAA-H-8083-28B/figures/fig-13-05-temperature-lapse-rate-effects-on-stability.png)
 
 ![Figure 13-7. Vertical Motion Effects on Stability 
 A rising column of air will become less stable when air at the bottom has a higher relative humidity than 
-air at the top. As the air moves upward, the bottom becomes saturated first and cools at the lesser moist](/handbooks/avwx/FAA-H-8083-28B/figures/fig-13-06-vertical-motion-effects-on-stability-a-rising-co.png)
+air at the top. As the air moves upward, the bottom becomes saturated first and cools at the lesser moist](/handbooks/avwx/FAA-H-8083-28B/figures/fig-13-4-1-00-vertical-motion-effects-on-stability-a-rising-co.png)
 
 ![Figure 13-8. Diurnal Temperature Variation Effects on Stability 
 13.5 Measurements of Stability 
 Several stability indices and other quantities exist that evaluate atmospheric stability and the potential for 
 convective storms. The most common of these are Lifted Index (LI) and Convective Available Potential 
-Energy (C](/handbooks/avwx/FAA-H-8083-28B/figures/fig-13-07-diurnal-temperature-variation-effects-on-stabili.png)
+Energy (C](/handbooks/avwx/FAA-H-8083-28B/figures/fig-13-4-3-00-diurnal-temperature-variation-effects-on-stabili.png)
 
 ![Figure 13-9. Lifted Index Example 
 13.5.2 Convective Available Potential Energy (CAPE) 
 CAPE is the maximum amount of energy available to an ascending air parcel for convection. CAPE is 
 represented on a sounding by the area enclosed between the environmental temperature profile and the path 
-of a rising air parcel ove](/handbooks/avwx/FAA-H-8083-28B/figures/fig-13-08-lifted-index-example-13-5-2-convective-available.png)
+of a rising air parcel ove](/handbooks/avwx/FAA-H-8083-28B/figures/fig-13-5-1-00-lifted-index-example-13-5-2-convective-available.png)
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-13-00-untitled.html">
 <table><thead><tr><th></th><th>Temperature</th><th></th><th></th><th>Unsaturated</th><th></th><th></th><th>Saturated</th><th></th><th>Stability Type</th><th></th></tr></thead><tbody><tr><td></td><td>Sounding</td><td></td><td></td><td>Parcel</td><td></td><td></td><td>Parcel</td><td></td><td></td><td></td></tr><tr><td>A Unstable Unstable Absolute Instability</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>B</td><td></td><td></td><td>Neutral</td><td></td><td></td><td>Unstable</td><td></td><td></td><td></td><td></td></tr><tr><td>C</td><td></td><td></td><td>Stable</td><td></td><td></td><td>Unstable</td><td></td><td></td><td>Conditional Instability</td><td></td></tr><tr><td>D</td><td></td><td></td><td>Stable</td><td></td><td></td><td>Neutral</td><td></td><td></td><td></td><td></td></tr><tr><td>E</td><td></td><td></td><td>Stable</td><td></td><td></td><td>Stable</td><td></td><td></td><td>Lapse</td><td>Absolute

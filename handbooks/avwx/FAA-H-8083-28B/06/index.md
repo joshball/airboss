@@ -187,23 +187,23 @@ This is equivalent to about 40 times the total worldwide energy consumption per 
 6.2.1 Evaporation 
 Evaporation is the phase transition by which a liquid is changed to a vapor (gas). In meteorology, the 
 substance meteorologists are concerned about the most is water, and the primary source is the ocean. On 
-average, about 120 cm (47 in) is evaporated into the atmos](/handbooks/avwx/FAA-H-8083-28B/figures/fig-6-00-the-hydrologic-cycle-6-2-1-evaporation-evaporati.png)
+average, about 120 cm (47 in) is evaporated into the atmos](/handbooks/avwx/FAA-H-8083-28B/figures/fig-6-2-1-00-the-hydrologic-cycle-6-2-1-evaporation-evaporati.png)
 
 ![Figure 6-2. Temperature Effects on Relative Humidity 
 6.5 Dewpoint 
 Dewpoint is the temperature an air parcel must be cooled at constant pressure and constant water vapor 
 pressure to allow the water vapor in the parcel to condense into water (dew). When this temperature is 
-below 0 °C (32 °F), it is sometimes called t](/handbooks/avwx/FAA-H-8083-28B/figures/fig-6-01-temperature-effects-on-relative-humidity-6-5-dew.png)
+below 0 °C (32 °F), it is sometimes called t](/handbooks/avwx/FAA-H-8083-28B/figures/fig-6-4-00-temperature-effects-on-relative-humidity-6-5-dew.png)
 
 ![Figure 6-3. Temperature-Dewpoint Spread Effect on Relative Humidity 
 Relative humidity depends on the temperature-dewpoint spread. In Figure 6-3, dewpoint is constant, but 
 temperature decreases from left to right. On the left panel relative humidity is 50 percent, indicating that 
-the air parcel could hold twice as mu](/handbooks/avwx/FAA-H-8083-28B/figures/fig-6-02-temperature-dewpoint-spread-effect-on-relative-h.png)
+the air parcel could hold twice as mu](/handbooks/avwx/FAA-H-8083-28B/figures/fig-6-7-00-temperature-dewpoint-spread-effect-on-relative-h.png)
 
 ![Figure 6-4. Latent Heat Transactions When Water Undergoes Phase Transition 
 Heat is exchanged between water and its environment during phase transition. Although the temperature of 
 the environment changes in response, the temperature of the water undergoing the phase transition remains 
-constant until the phase change](/handbooks/avwx/FAA-H-8083-28B/figures/fig-6-03-latent-heat-transactions-when-water-undergoes-ph.png)
+constant until the phase change](/handbooks/avwx/FAA-H-8083-28B/figures/fig-6-7-1-00-latent-heat-transactions-when-water-undergoes-ph.png)
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-6-00-latent-heat-of-water-at-0-c-latent-heat-type-ene.html">
 <table><caption>Table 6-1. Latent Heat of Water at 0 °C 

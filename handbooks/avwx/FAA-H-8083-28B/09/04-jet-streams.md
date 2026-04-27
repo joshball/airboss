@@ -83,24 +83,24 @@ with decreasing strength as one approaches the river’s bank. It can be said th
 Between each of these circulation cells are bands of high and low pressure at the surface. The high-pressure 
 band is located about 30° N/S latitude and at each pole. Low-pressure bands are found at the Equator 
 and 50° to 60° N/S latitude. 
-Usually, fair and dry/hot weather is ass](/handbooks/avwx/FAA-H-8083-28B/figures/fig-9-4-00-earth-circulation-system-between-each-of-these-c.png)
+Usually, fair and dry/hot weather is ass](/handbooks/avwx/FAA-H-8083-28B/figures/fig-9-4-1-00-earth-circulation-system-between-each-of-these-c.png)
 
 ![Figure 9-3. Speed Relative to the Earth’s Axis Versus Latitude 
 The momentum of air as it travels around the Earth is conserved, which means as the air that is over the 
 Equator starts moving toward one of the poles, it keeps its eastward motion constant. The Earth below the 
-air, however, moves slower, as that air tra](/handbooks/avwx/FAA-H-8083-28B/figures/fig-9-4-01-speed-relative-to-the-earth-s-axis-versus-latitu.png)
+air, however, moves slower, as that air tra](/handbooks/avwx/FAA-H-8083-28B/figures/fig-9-4-2-00-speed-relative-to-the-earth-s-axis-versus-latitu.png)
 
 ![Figure 9-4. Three Cell Circulations and Jet Stream Location 
 The 50°–60° N/S region is where the polar jet is located with the subtropical jet located around 30° N 
 (see Figure 9-5). Jet streams vary in height from around flight level (FL) 200 to FL450 and can reach speeds 
-of more than 275 miles per hour (mph) [239 kn](/handbooks/avwx/FAA-H-8083-28B/figures/fig-9-4-02-three-cell-circulations-and-jet-stream-location-.png)
+of more than 275 miles per hour (mph) [239 kn](/handbooks/avwx/FAA-H-8083-28B/figures/fig-9-4-2-01-three-cell-circulations-and-jet-stream-location-.png)
 
 ![Figure 9-5. Illustration of Polar and Subtropical Jet Streams and Their Relative Locations Around the Globe 
 The actual appearance of jet streams results from the complex interaction between many variables, such as 
 the location of high- and low-pressure systems, warm and cold air, and seasonal changes. They meander 
-a](/handbooks/avwx/FAA-H-8083-28B/figures/fig-9-4-03-illustration-of-polar-and-subtropical-jet-stream.png)
+a](/handbooks/avwx/FAA-H-8083-28B/figures/fig-9-4-2-02-illustration-of-polar-and-subtropical-jet-stream.png)
 
 ![Figure 9-6. Jet Stream Wind Speeds 
 The jet stream is often indicated by a line on maps and is displayed this way by television meteorologists. 
 The line generally points to the location of the strongest wind (see Figure 9-6). In reality, jet streams are 
-typically much wider. A jet stream is a region where winds incre](/handbooks/avwx/FAA-H-8083-28B/figures/fig-9-4-04-jet-stream-wind-speeds-the-jet-stream-is-often-i.png)
+typically much wider. A jet stream is a region where winds incre](/handbooks/avwx/FAA-H-8083-28B/figures/fig-9-4-2-03-jet-stream-wind-speeds-the-jet-stream-is-often-i.png)

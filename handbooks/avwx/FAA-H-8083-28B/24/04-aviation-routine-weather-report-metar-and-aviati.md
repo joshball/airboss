@@ -897,21 +897,21 @@ operating, the remark VISNO LOC is coded.
 When automated stations are equipped with a secondary ceiling height indicator and the sensor is
 not operating, the remark CHINO LOC is coded.
 
-![Figure 24-1. METAR/SPECI Coding Format](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-4-00-metar-speci-coding-format.png)
+![Figure 24-1. METAR/SPECI Coding Format](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-4-3-00-metar-speci-coding-format.png)
 
 ![Figure 24-2. ICAO Continental Codes 
 24.4.3.3 Date and Time of Report 
 METAR KOKC 011955Z AUTO 22015G25KT 180V250 3/4SM R17L/2600FT +TSRA BR OVC010CB 
 18/16 A2992 RMK AO2 TSB25 TS OHD MOV E SLP132 
 The date and time are coded in all reports as follows: the day of the month is the first two digits (01), 
-followed by the](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-4-01-icao-continental-codes-24-4-3-3-date-and-time-of.png)
+followed by the](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-4-3-01-icao-continental-codes-24-4-3-3-date-and-time-of.png)
 
-![Figure 24-3. Obscuration Effects on Slant Range Visibility](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-4-02-obscuration-effects-on-slant-range-visibility.png)
+![Figure 24-3. Obscuration Effects on Slant Range Visibility](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-4-3-02-obscuration-effects-on-slant-range-visibility.png)
 
 ![Figure 24-4. METAR/SPECI Sky Condition Coding 
 At manual stations, cumulonimbus (CB) or towering cumulus (TCU) is appended to the associated layer. 
 For example, a scattered layer of towering cumulus at 1,500 ft would be coded SCT015TCU and would be 
-followed by a space if there were additional higher layers to code.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-4-03-metar-speci-sky-condition-coding-at-manual-stati.png)
+followed by a space if there were additional higher layers to code.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-4-3-03-metar-speci-sky-condition-coding-at-manual-stati.png)
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-24-4-00-speci-criteria-1-wind-shift-wind-direction-chang.html">
 <table><caption>Table 24-2. SPECI Criteria 

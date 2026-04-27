@@ -291,7 +291,7 @@ the cloud above and below the freezing layer.
 ![Figure 15-2. Backscattered Energy 
 Targets may include precipitation, clouds, dust, birds, insects, buildings, air mass boundaries, terrain 
 features, wind farms/turbines, etc. Reflectivity is a measurement of the amount of backscattered energy. An 
-echo is the appearance on a radar display of the backscattered energy](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-00-backscattered-energy-targets-may-include-precipi.png)
+echo is the appearance on a radar display of the backscattered energy](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-3-00-backscattered-energy-targets-may-include-precipi.png)
 
 ![Figure 15-3. Wavelengths 
 15.2.5 Attenuation 
@@ -299,79 +299,79 @@ Attenuation is any process that reduces energy within the radar beam. This reduc
 backscattered energy. 
 15.2.5.1 Precipitation Attenuation 
 Precipitation attenuation (see Figure 15-4) is the decrease of the intensity of energy within the radar beam 
-due to](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-01-wavelengths-15-2-5-attenuation-attenuation-is-an.png)
+due to](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-5-00-wavelengths-15-2-5-attenuation-attenuation-is-an.png)
 
 ![Figure 15-4. Precipitation Attenuation 
 Precipitation close to the radar absorbs and scatters energy within the radar beam. Therefore, very little, if 
 any, energy will reach targets beyond the initial area of precipitation. Because of precipitation attenuation, 
-distant targets (i.e., precipitation) may not be display](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-02-precipitation-attenuation-precipitation-close-to.png)
+distant targets (i.e., precipitation) may not be display](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-5-01-precipitation-attenuation-precipitation-close-to.png)
 
 ![Figure 15-5. Precipitation Attenuation versus Wavelength 
 As the wavelength of the radar decreases, the amount of precipitation attenuation increases. 
 The WSR-88D’s 10-cm wavelength is not significantly attenuated by precipitation. However, aircraft 
-radars, which typically have 3-cm wavelengths, have a significant pr](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-03-precipitation-attenuation-versus-wavelength-as-t.png)
+radars, which typically have 3-cm wavelengths, have a significant pr](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-6-00-precipitation-attenuation-versus-wavelength-as-t.png)
 
 ![Figure 15-7. Beam Resolution Comparison Between WSR-88D and Aircraft Weather Radar 
 In the example above, the targets (thunderstorms) are at the same range in azimuths for both the aircraft 
 and WSR-88D radar. At 10 NM, the beam width is small enough for both the WSR-88D and aircraft radar 
-to display the thunderstorms](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-04-beam-resolution-comparison-between-wsr-88d-and-a.png)
+to display the thunderstorms](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-7-00-beam-resolution-comparison-between-wsr-88d-and-a.png)
 
 ![Figure 15-8. Normal Refraction 
 15.2.7.2 Subrefraction 
 Atmospheric conditions are never normal or standard. Sometimes, the density of the atmosphere decreases 
 with height at a more-than-normal rate (actual density is less than normal). When this occurs, the radar 
-beam bends less than normal and climbs skyward. This](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-05-normal-refraction-15-2-7-2-subrefraction-atmosph.png)
+beam bends less than normal and climbs skyward. This](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-7-01-normal-refraction-15-2-7-2-subrefraction-atmosph.png)
 
 ![Figure 15-9. Subrefraction 
 15.2.7.3 Superrefraction 
 Conversely, sometimes the density of the atmosphere decreases with height at a less-than-normal rate 
 (actual density is greater than normal) or even increases with height. When this occurs, the radar beam will 
-bend more than normal toward the Earth’s surface. This](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-06-subrefraction-15-2-7-3-superrefraction-conversel.png)
+bend more than normal toward the Earth’s surface. This](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-7-02-subrefraction-15-2-7-3-superrefraction-conversel.png)
 
 ![Figure 15-10. Superrefraction 
 15.2.7.4 Ducting 
 If the atmospheric condition that causes superrefraction bends the beam equal to, or greater than, the Earth’s 
 curvature, then a condition called ducting (or trapping) occurs (see Figure 15-11). 
-When ducting occurs, the radar beam will hit the surface of the Earth, cau](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-07-superrefraction-15-2-7-4-ducting-if-the-atmosphe.png)
+When ducting occurs, the radar beam will hit the surface of the Earth, cau](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-7-03-superrefraction-15-2-7-4-ducting-if-the-atmosphe.png)
 
 ![Figure 15-11. Ducting 
 15.2.8 Radar Beam Overshooting and Undershooting 
 Radar beam overshooting may occur because the lowest radar beam can be higher than the top of 
 precipitation. This will most likely occur with stratiform precipitation and low-topped convection. For 
-example, at a distance of 124 NM from the radar](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-08-ducting-15-2-8-radar-beam-overshooting-and-under.png)
+example, at a distance of 124 NM from the radar](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-8-00-ducting-15-2-8-radar-beam-overshooting-and-under.png)
 
-![Figure 15-12. Cone of Silence](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-09-cone-of-silence.png)
+![Figure 15-12. Cone of Silence](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-8-01-cone-of-silence.png)
 
 ![Figure 15-13. WSR-88D Weather Radar Beam Blockage on Base Reflectivity Product Example 
 15.2.10 Ground Clutter 
 Ground clutter (see Figure 15-14) is radar echoes’ returns from trees, buildings, or other objects on the 
-ground. It appears as a roughly circular region of high reflectivity at ranges close to the radar. Gr](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-10-wsr-88d-weather-radar-beam-blockage-on-base-refl.png)
+ground. It appears as a roughly circular region of high reflectivity at ranges close to the radar. Gr](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-10-00-wsr-88d-weather-radar-beam-blockage-on-base-refl.png)
 
 ![Figure 15-14. WSR-88D Weather Radar Ground Clutter Example 
 15.2.11 Ghost 
 A ghost (see Figure 15-15) is a diffused echo in apparently clear air caused by a “cloud” of point targets, 
 such as insects, or by refraction returns of the radar beam in truly clear air. 
-The latter case commonly develops at sunset due to supe](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-11-wsr-88d-weather-radar-ground-clutter-example-15-.png)
+The latter case commonly develops at sunset due to supe](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-11-00-wsr-88d-weather-radar-ground-clutter-example-15-.png)
 
 ![Figure 15-15. WSR-88D Weather Radar Ghost Example 
 15.2.12 Angels 
 Angels are echoes caused by a physical phenomenon not discernible by the eye at the radar site. They are 
 usually caused by bats, birds, or insects. Angels typically appear as a donut-shaped echo with low 
-reflectivity values (see Figure 15-16). When an](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-12-wsr-88d-weather-radar-ghost-example-15-2-12-ange.png)
+reflectivity values (see Figure 15-16). When an](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-12-00-wsr-88d-weather-radar-ghost-example-15-2-12-ange.png)
 
 ![Figure 15-16. WSR-88D Weather Radar Angel Example 
 15.2.13 Anomalous Propagation (AP) 
 AP (see Figure 15-17) is an extended pattern of ground echoes caused by superrefraction of the radar beam. 
 Superrefraction causes the radar beam to bend downward and strike the ground. It differs from ground 
-clutter because it can](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-13-wsr-88d-weather-radar-angel-example-15-2-13-anom.png)
+clutter because it can](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-13-00-wsr-88d-weather-radar-angel-example-15-2-13-anom.png)
 
 ![Figure 15-17. WSR-88D Weather Radar AP Example 
 15.2.14 Other Non-Meteorological Phenomena 
 15.2.14.1 Wind Farms 
 Wind farms can affect the return signal of the radar beam. Depending on the proximity of the wind farm to 
-the radar site (generally within 10 NM), wind farm turbines can result in beam blockage, false echo](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-14-wsr-88d-weather-radar-ap-example-15-2-14-other-n.png)
+the radar site (generally within 10 NM), wind farm turbines can result in beam blockage, false echo](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-14-00-wsr-88d-weather-radar-ap-example-15-2-14-other-n.png)
 
-![Figure 15-18. Wind Farms Can Make Benign Echoes Appear as Small Storms](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-15-wind-farms-can-make-benign-echoes-appear-as-smal.png)
+![Figure 15-18. Wind Farms Can Make Benign Echoes Appear as Small Storms](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-14-01-wind-farms-can-make-benign-echoes-appear-as-smal.png)
 
 ![Figure 15-19. Radar Image of Chaff 
 15.2.15 Precipitation 
@@ -381,12 +381,12 @@ known as reflectivity. Reflectivity is determined by:
 • 
 The size of precipitation particles. 
 • 
-The precipitati](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-16-radar-image-of-chaff-15-2-15-precipitation-15-2-.png)
+The precipitati](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-15-00-radar-image-of-chaff-15-2-15-precipitation-15-2-.png)
 
 ![Figure 15-20. Reflectivity Associated with Liquid Targets 
 Larger particles have greater reflectivity than smaller particles. For example, a particle with a 
 1/4-in diameter backscatters the same amount of energy as 64 particles that each have a 1/8-in diameter. 
-Radar images/intensity scales are associated with reflec](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-17-reflectivity-associated-with-liquid-targets-larg.png)
+Radar images/intensity scales are associated with reflec](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-15-01-reflectivity-associated-with-liquid-targets-larg.png)
 
 ![Figure 15-21. WSR-88D Weather Radar Convective Precipitation on the 0.5° Base Reflectivity Product Example 
 15.2.15.1.3 Stratiform Precipitation 
@@ -396,11 +396,11 @@ Widespread in aerial coverage.
 • 
 Weak reflectivity gradients. 
 • 
-Precipitation int](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-18-wsr-88d-weather-radar-convective-precipitation-o.png)
+Precipitation int](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-15-02-wsr-88d-weather-radar-convective-precipitation-o.png)
 
 ![Figure 15-22. WSR-88D Weather Radar Stratiform Precipitation on the 0.5° Base Reflectivity Product Example 
 15.2.15.1.4 Intensity of Snow 
 A radar image cannot reliably be used to determine the intensity of snowfall. However, snowfall rates 
 generally increase with increasing reflectivity. 
 15.2.15.1.5 Bright Band 
-Bri](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-19-wsr-88d-weather-radar-stratiform-precipitation-o.png)
+Bri](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-15-03-wsr-88d-weather-radar-stratiform-precipitation-o.png)

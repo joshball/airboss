@@ -120,23 +120,23 @@ bases and tops are also depicted.
 27.7.2 Alaska Surface Forecast 
 The Surface Forecast graphic (see Figure 27-5) illustrates prominent surface features, including sea level 
 pressure, areas of high and low pressure, fronts and troughs, and precipitation. Each forecast shows the 
-surface weather that can be ex](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-7-00-alaska-flying-weather-example-27-7-2-alaska-surf.png)
+surface weather that can be ex](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-7-1-00-alaska-flying-weather-example-27-7-2-alaska-surf.png)
 
 ![Figure 27-5. Alaska Surface Forecast Example 
 27.7.3 Alaska Icing Forecast 
 The Icing Forecast graphic (see Figure 27-6) provides information about freezing levels and the potential 
 for significant icing at specified valid times. 
-Freezing level heights are blue-filled contours (every 2,000 ft). Areas of isolated (ISO](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-7-01-alaska-surface-forecast-example-27-7-3-alaska-ic.png)
+Freezing level heights are blue-filled contours (every 2,000 ft). Areas of isolated (ISO](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-7-3-00-alaska-surface-forecast-example-27-7-3-alaska-ic.png)
 
 ![Figure 27-6. Alaska Icing Forecast Example 
 27.7.4 Alaska Turbulence Forecast 
 The Turbulence Forecast graphic (see Figure 27-7) depicts areas of significant turbulence at specified valid 
 times. 
 Areas of isolated (ISOL) moderate (MOD) turbulence are shaded yellow, areas of occasional (OCNL) or 
-continuous (CONS) mode](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-7-02-alaska-icing-forecast-example-27-7-4-alaska-turb.png)
+continuous (CONS) mode](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-7-4-00-alaska-icing-forecast-example-27-7-4-alaska-turb.png)
 
 ![Figure 27-7. Alaska Turbulence Forecast Example 
 27.7.5 Alaska Convective Outlook 
 The Convective Outlook graphic (see Figure 27-8) is a seasonal product that provides information about 
 convective activity at specific valid times. Each forecast indicates where conditions are favorable for the 
-development of towering](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-7-03-alaska-turbulence-forecast-example-27-7-5-alaska.png)
+development of towering](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-7-5-00-alaska-turbulence-forecast-example-27-7-5-alaska.png)

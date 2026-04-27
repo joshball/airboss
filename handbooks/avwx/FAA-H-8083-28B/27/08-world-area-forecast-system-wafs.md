@@ -62,6 +62,6 @@ Figure 27-9. WAFS Wind and Temperature Six-Hour Forecast at FL390—Example
 27.8 World Area Forecast System (WAFS) 
 ICAO’s WAFS supplies aviation users with global aeronautical meteorological en route forecasts suitable 
 for use in flight-planning systems and flight documentation. 
-Two WAFCs, WAFC Washington and WAFC London, have the responsibility to is](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-8-00-alaska-convective-outlook-27-8-world-area-foreca.png)
+Two WAFCs, WAFC Washington and WAFC London, have the responsibility to is](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-8-1-00-alaska-convective-outlook-27-8-world-area-foreca.png)
 
-![Figure 27-9. WAFS Wind and Temperature Six-Hour Forecast at FL390—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-8-01-wafs-wind-and-temperature-six-hour-forecast-at-f.png)
+![Figure 27-9. WAFS Wind and Temperature Six-Hour Forecast at FL390—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-8-1-01-wafs-wind-and-temperature-six-hour-forecast-at-f.png)

@@ -68,16 +68,16 @@ meteorologists and others (e.g., 400 mb, 600 mb).
 27.10.1.3 Pressure Systems 
 Pressure systems are depicted by pressure centers, troughs, isobars, drylines, tropical waves, tropical 
 storms, and hurricanes using standard symbols (see Figure 27-25). Isobars are denoted by solid, thin black 
-lines and labeled with the appropr](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-11-00-surface-prog-forecast-symbols-27-10-1-3-pressure.png)
+lines and labeled with the appropr](/handbooks/avwx/FAA-H-8083-28B/figures/fig-25-4-3-02-nws-surface-analysis-chart-symbols-25-2-3-3-exam.png)
 
 ![Figure 27-26. NWS NCO Model Analyses and Guidance Website 
 27.11.1 Constant Pressure Level Forecasts 
 Constant pressure level forecasts (see Figure 27-27) are just one of the many products produced by NWP 
 models. Constant pressure level forecasts are the computer model’s depiction of select weather (e.g., wind) 
-at a](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-11-01-nws-nco-model-analyses-and-guidance-website-27-1.png)
+at a](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-11-1-00-nws-nco-model-analyses-and-guidance-website-27-1.png)
 
 ![Figure 27-27. 300 mb Constant Pressure Forecast—Example 
 27.11.1.1 Issuance 
 Constant pressure level forecasts are produced several times a day depending on the model. The NCEP’s 
 GFS model and North American Model (NAM) produce forecasts four times per day, with initial times of 
-00, 06, 12, and 18 UTC. Other higher r](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-11-02-300-mb-constant-pressure-forecast-example-27-11-.png)
+00, 06, 12, and 18 UTC. Other higher r](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-11-1-01-300-mb-constant-pressure-forecast-example-27-11-.png)

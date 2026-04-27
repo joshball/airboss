@@ -50,7 +50,7 @@ because the warmer air occupies a large volume.
 8.3.1 Volume’s Effects on Density 
 The density of an air parcel varies inversely with its volume. Assuming equal mass, an air parcel with a 
 higher density has a smaller volume than an air parcel with a lower density (see Figure 8-8). 
-The shorter parcel (i.e., the parce](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-3-00-density-is-mass-weight-per-volume-8-3-1-volume-s.png)
+The shorter parcel (i.e., the parce](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-3-1-00-density-is-mass-weight-per-volume-8-3-1-volume-s.png)
 
 ![Figure 8-8. Volume’s Effects on Density 
 8.3.2 Changes in Density 
@@ -58,10 +58,10 @@ In general, the density of an air parcel can be changed by changing its mass, pr
 Boyle’s law says that the density of an ideal gas (ρ, the Greek letter rho) is given by: 
 𝜌= 𝑀𝑃
 𝑅𝑇 
-Where M is the molar mass, P is the pressure, R](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-3-01-volume-s-effects-on-density-8-3-2-changes-in-den.png)
+Where M is the molar mass, P is the pressure, R](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-3-2-00-volume-s-effects-on-density-8-3-2-changes-in-den.png)
 
 ![Figure 8-9. Pressure’s Effects on Density in the Atmosphere 
 8.3.4 Temperature’s Effects on Density 
 Density is inversely related to temperature. Assuming constant mass and pressure, an air parcel with a 
 higher temperature is less dense than an air parcel with a lower temperature (see Figure 8-10). This is 
-because th](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-3-02-pressure-s-effects-on-density-in-the-atmosphere-.png)
+because th](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-3-4-00-pressure-s-effects-on-density-in-the-atmosphere-.png)

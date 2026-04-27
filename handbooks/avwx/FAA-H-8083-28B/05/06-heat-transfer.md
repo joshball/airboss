@@ -140,18 +140,18 @@ illustrates examples of various heat transfer processes.
 ![Figure 5-2. Radiation Example 
 All objects emit (radiate) energy as the heat energy within the object is converted to radiation energy. This 
 transmitted radiation passes through entities such as air, water, or space. Along the way, the radiation can 
-be reflected, which occurs when the wave energy changes direction wh](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-6-00-radiation-example-all-objects-emit-radiate-energ.png)
+be reflected, which occurs when the wave energy changes direction wh](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-6-1-00-radiation-example-all-objects-emit-radiate-energ.png)
 
 ![Figure 5-3. Temperature’s Effect on Radiation Wavelength 
 Some of the solar radiation that reaches the Earth’s surface is radiated back into the atmosphere to become 
 heat energy. Dark-colored objects such as asphalt absorb more of the radiant energy and warm faster than 
-light-colored objects. Dark objects also radiat](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-6-01-temperature-s-effect-on-radiation-wavelength-som.png)
+light-colored objects. Dark objects also radiat](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-6-1-01-temperature-s-effect-on-radiation-wavelength-som.png)
 
 ![Figure 5-4. Solar Zenith Angle 
 5.6.2 Conduction 
 Conduction is the transfer of energy (including heat) by molecular activity from one substance to another 
 in contact with or through a substance. Heat always flows from the warmer substance to the colder 
-substance. The rate of heat transfer is greater with larger temp](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-6-02-solar-zenith-angle-5-6-2-conduction-conduction-i.png)
+substance. The rate of heat transfer is greater with larger temp](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-6-2-00-solar-zenith-angle-5-6-2-conduction-conduction-i.png)
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-5-6-00-heat-thermal-conductivity-of-various-substances-.html">
 <table><caption>Table 5-3. Heat (Thermal) Conductivity of Various Substances 

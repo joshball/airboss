@@ -95,37 +95,37 @@ strong in the right panel; thus, the friction force is doubled.
 PGF is directed across contours/isobars towards lower height/pressure. 
 Figure 10-1. Direction of Pressure Gradient Force 
 Wind speed is directly proportional to the PGF, which itself is directly proportional to the contour/isobar 
-gradient. Closely spaced contours/isobars indicate strong winds, while w](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-3-00-pgf-is-directed-across-contours-isobars-towards-.png)
+gradient. Closely spaced contours/isobars indicate strong winds, while w](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-3-1-00-pgf-is-directed-across-contours-isobars-towards-.png)
 
 ![Figure 10-2. Magnitude of Pressure Gradient Force 
 In Figure 10-2, on the left panel, the contours/isobars are widely spaced apart, PGF is weak, and the wind 
 speed is weak. On the right panel, the contours/isobars are more closely spaced, the PGF is stronger, and 
 the wind speed is stronger. 
-The wind would flow from](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-3-01-magnitude-of-pressure-gradient-force-in-figure-1.png)
+The wind would flow from](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-3-2-00-magnitude-of-pressure-gradient-force-in-figure-1.png)
 
 ![Figure 10-3. Illustration of Coriolis Force 
 A similar apparent force deflects moving particles on the Earth. Because the Earth is spherical, the 
 deflective force is much more complex than the simple turntable example. The principle was first explained 
-by Gaspard-Gustave de Coriolis, and now carries his name—the Cori](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-3-02-illustration-of-coriolis-force-a-similar-apparen.png)
+by Gaspard-Gustave de Coriolis, and now carries his name—the Cori](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-3-2-01-illustration-of-coriolis-force-a-similar-apparen.png)
 
 ![Figure 10-4. Coriolis Force Variations Across the Earth 
 Coriolis force deflects moving objects to the right of their path in the Northern Hemisphere and to the left 
 of their path in the Southern Hemisphere. Coriolis deflection is maximized at the poles and zero at 
-the Equator.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-3-03-coriolis-force-variations-across-the-earth-corio.png)
+the Equator.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-3-2-02-coriolis-force-variations-across-the-earth-corio.png)
 
 ![Figure 10-5. Coriolis Force Magnitude Variations with Wind Speed 
 Coriolis force magnitude is directly proportional to wind speed. In Figure 10-5, wind speed is twice as 
 strong in the right panel; thus, the Coriolis force is doubled. 
 10.3.3 Friction Force 
-Friction between the wind and the terrain surface slows the w](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-3-04-coriolis-force-magnitude-variations-with-wind-sp.png)
+Friction between the wind and the terrain surface slows the w](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-3-3-00-coriolis-force-magnitude-variations-with-wind-sp.png)
 
 ![Figure 10-6. Friction Force Magnitude Variations with Terrain Roughness 
 Friction force magnitude is directly proportional to terrain roughness. Even though the wind speed is the 
 same in both panels in Figure 10-6, the terrain is rougher in the right panel; thus, the friction force is 
 stronger. 
  
-Figure 10-7. Fricti](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-3-05-friction-force-magnitude-variations-with-terrain.png)
+Figure 10-7. Fricti](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-3-3-01-friction-force-magnitude-variations-with-terrain.png)
 
 ![Figure 10-7. Friction Force Magnitude Variations with Wind Speed 
 Friction force magnitude is directly proportional to wind speed. In Figure 10-7, wind speed is twice as 
-strong in the right panel; thus, the friction force is doubled.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-3-06-friction-force-magnitude-variations-with-wind-sp.png)
+strong in the right panel; thus, the friction force is doubled.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-3-3-02-friction-force-magnitude-variations-with-wind-sp.png)
