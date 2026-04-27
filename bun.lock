@@ -74,6 +74,7 @@
         "@ab/auth": "workspace:*",
         "@ab/aviation": "workspace:*",
         "@ab/bc-citations": "workspace:*",
+        "@ab/bc-sim": "workspace:*",
         "@ab/bc-study": "workspace:*",
         "@ab/constants": "workspace:*",
         "@ab/db": "workspace:*",
@@ -133,6 +134,7 @@
       "name": "@ab/bc-study",
       "dependencies": {
         "@ab/auth": "workspace:*",
+        "@ab/bc-sim": "workspace:*",
         "@ab/constants": "workspace:*",
         "@ab/db": "workspace:*",
         "@ab/utils": "workspace:*",

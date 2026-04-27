@@ -23,6 +23,7 @@
 import { createHash } from 'node:crypto';
 import { readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { basename, join, relative, resolve } from 'node:path';
+import { SIM_SCENARIO_NODE_MAPPINGS } from '@ab/constants/sim';
 import {
 	CERT_VALUES,
 	DOMAIN_LABELS,
@@ -416,6 +417,22 @@ function validate(nodes: readonly ParsedNode[]): ValidationResult {
 				relPath: node.relPath,
 				message: `study_priority '${fm.studyPriority}' must be one of: ${STUDY_PRIORITY_VALUES.join(', ')}`,
 			});
+		}
+	}
+
+	// Cross-BC reference check: every nodeId named by SIM_SCENARIO_NODE_MAPPINGS
+	// must resolve to an authored knowledge node. Failing here is a hard error
+	// because the study scheduler will silently no-op on a stale slug -- the
+	// learner gets no lift on cards the sim says they need. See
+	// docs/work-packages/sim-card-mapping/spec.md "Validation".
+	for (const [scenarioId, links] of Object.entries(SIM_SCENARIO_NODE_MAPPINGS)) {
+		for (const link of links) {
+			if (!idToNode.has(link.nodeId)) {
+				errors.push({
+					relPath: '(sim-card-mapping)',
+					message: `SIM_SCENARIO_NODE_MAPPINGS[${scenarioId}] -> '${link.nodeId}' does not resolve to an authored knowledge node`,
+				});
+			}
 		}
 	}
 

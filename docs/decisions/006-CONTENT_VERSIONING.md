@@ -1,4 +1,12 @@
-# 006: Content Versioning and Release Model
+# 006: Content Versioning and Release Model (PARTIALLY SUPERSEDED)
+
+> **Partially superseded 2026-04-26.** The two-tier versioning model (content version + release version) and the immutable-once-published rule survive the pivot and apply broadly. The FAA-approval-as-separate-axis concept is dormant per [ADR 017](017-firc-compliance-dormant.md) -- it returns when a content pack ships and a partner pursues approval.
+>
+> The "students need stability during their course" rationale generalizes to "learners need content stability during whatever they're working on" (a cert track, an event prep, a recurrent block). The student-progress / completion-record migration logic is dormant alongside the broader FIRC course-completion model.
+>
+> **What's still authoritative:** semver for releases, content versioning per-item, never-auto-upgrade-into-unapproved-content (read as "never auto-upgrade content under a learner mid-flow"), patches-vs-minors-vs-majors framing.
+>
+> **What's stale:** the FAA approval workflow, the FIRC student-completion linkage.
 
 Decided 2026-03-25.
 

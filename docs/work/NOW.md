@@ -45,7 +45,7 @@ PRs #17-#184 (everything since the original "Steps 1-6 shipped" snapshot) are ca
 
 ## In flight
 
-Nothing active after the browse-pages refactor ships.
+- **sim-card-mapping** -- closes the loop between sim grading and the spaced-rep scheduler. `SIM_SCENARIO_NODE_MAPPINGS` (typed `Record<SimScenarioIdGraded, ...>`) + `simWeaknessByNode` BC bridge + strengthen-slice scoring lift via `ENGINE_SCORING.STRENGTHEN.SIM_PRESSURE_FACTOR`. Spec: [docs/work-packages/sim-card-mapping/](../work-packages/sim-card-mapping/spec.md).
 
 ## Build Order
 

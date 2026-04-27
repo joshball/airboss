@@ -2,7 +2,10 @@
 
 # 009: Role Model and Registration Policy
 
-Decided 2026-03-27.
+Decided 2026-03-27. Mostly current.
+
+> **Post-pivot note (2026-04-26):** This ADR's role model (`LEARNER` / `AUTHOR` / `OPERATOR` / `ADMIN`) is the current implementation. The "self-registration for FIRC participants on sim/runway" rationale below is FIRC-era; the same self-registration policy now applies to study (and any future learner-facing surface). The ADR-007 four-app stack referenced as "extends" is partially superseded -- see [ADR 007 (partially superseded)](007-AUTH_TOPOLOGY.md). The role definitions and `defaultRole` decision survive.
+
 Extends: [ADR-007 Auth Topology](007-AUTH_TOPOLOGY.md)
 
 ## Context

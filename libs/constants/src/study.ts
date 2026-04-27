@@ -820,6 +820,8 @@ export const SESSION_REASON_CODES = {
 	STRENGTHEN_OVERDUE: 'strengthen_overdue',
 	STRENGTHEN_LOW_REP_ACCURACY: 'strengthen_low_rep_accuracy',
 	STRENGTHEN_MASTERY_DROP: 'strengthen_mastery_drop',
+	STRENGTHEN_SIM_WEAKNESS_CARD: 'strengthen_sim_weakness_card',
+	STRENGTHEN_SIM_WEAKNESS_REP: 'strengthen_sim_weakness_rep',
 	EXPAND_UNSTARTED_READY: 'expand_unstarted_ready',
 	EXPAND_UNSTARTED_PRIORITY: 'expand_unstarted_priority',
 	EXPAND_FOCUS_MATCH: 'expand_focus_match',
@@ -854,6 +856,10 @@ export const SESSION_REASON_CODE_DEFINITIONS: Record<SessionReasonCode, string> 
 		'Your accuracy on reps in this domain has dropped below the threshold. Targeted practice here restores judgment before deeper work.',
 	[SESSION_REASON_CODES.STRENGTHEN_MASTERY_DROP]:
 		'This node crossed back from mastered to not-mastered because the dual-gate (card stability and rep accuracy) slipped. It needs reinforcement.',
+	[SESSION_REASON_CODES.STRENGTHEN_SIM_WEAKNESS_CARD]:
+		'You have been grading low on a sim scenario that exercises this knowledge. Surfacing the card now ties the study queue back to your recent flight evidence.',
+	[SESSION_REASON_CODES.STRENGTHEN_SIM_WEAKNESS_REP]:
+		'A sim scenario tied to this rep has been grading low recently. The rep is here so the judgment behind the maneuver gets practised before the next flight.',
 	[SESSION_REASON_CODES.EXPAND_UNSTARTED_READY]:
 		'All the prerequisite knowledge nodes for this one are mastered. You are ready to learn it.',
 	[SESSION_REASON_CODES.EXPAND_UNSTARTED_PRIORITY]:
@@ -879,6 +885,8 @@ export const SESSION_REASON_CODE_SLICE: Record<SessionReasonCode, SessionSlice> 
 	[SESSION_REASON_CODES.STRENGTHEN_OVERDUE]: SESSION_SLICES.STRENGTHEN,
 	[SESSION_REASON_CODES.STRENGTHEN_LOW_REP_ACCURACY]: SESSION_SLICES.STRENGTHEN,
 	[SESSION_REASON_CODES.STRENGTHEN_MASTERY_DROP]: SESSION_SLICES.STRENGTHEN,
+	[SESSION_REASON_CODES.STRENGTHEN_SIM_WEAKNESS_CARD]: SESSION_SLICES.STRENGTHEN,
+	[SESSION_REASON_CODES.STRENGTHEN_SIM_WEAKNESS_REP]: SESSION_SLICES.STRENGTHEN,
 	[SESSION_REASON_CODES.EXPAND_UNSTARTED_READY]: SESSION_SLICES.EXPAND,
 	[SESSION_REASON_CODES.EXPAND_UNSTARTED_PRIORITY]: SESSION_SLICES.EXPAND,
 	[SESSION_REASON_CODES.EXPAND_FOCUS_MATCH]: SESSION_SLICES.EXPAND,
@@ -895,6 +903,8 @@ export const SESSION_REASON_CODE_LABELS: Record<SessionReasonCode, string> = {
 	[SESSION_REASON_CODES.STRENGTHEN_OVERDUE]: 'Overdue',
 	[SESSION_REASON_CODES.STRENGTHEN_LOW_REP_ACCURACY]: 'Low rep accuracy',
 	[SESSION_REASON_CODES.STRENGTHEN_MASTERY_DROP]: 'Mastery dropping',
+	[SESSION_REASON_CODES.STRENGTHEN_SIM_WEAKNESS_CARD]: 'Recent sim weakness',
+	[SESSION_REASON_CODES.STRENGTHEN_SIM_WEAKNESS_REP]: 'Recent sim weakness',
 	[SESSION_REASON_CODES.EXPAND_UNSTARTED_READY]: 'Prerequisites met',
 	[SESSION_REASON_CODES.EXPAND_UNSTARTED_PRIORITY]: 'Core topic, unstarted',
 	[SESSION_REASON_CODES.EXPAND_FOCUS_MATCH]: 'Matches focus',

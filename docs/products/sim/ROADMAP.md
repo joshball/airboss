@@ -1,46 +1,54 @@
+---
+title: Sim Roadmap
+product: sim
+type: roadmap
+status: current
+date: 2026-04-26
+supersedes: ../../.archive/products/sim/ROADMAP.md
+---
+
 # Sim Roadmap
 
-Feature phases for the sim app. Aligned with [platform roadmap](../../platform/ROADMAP.md).
+Per-phase roadmap for `apps/sim/`. Aligned with [docs/platform/ROADMAP.md](../../platform/ROADMAP.md).
 
-## Current Work
+For the why, see [VISION.md](VISION.md). For shipped + queued features, see [PRD.md](PRD.md). For the canonical spec, see [docs/work-packages/flight-dynamics-sim/spec.md](../../work-packages/flight-dynamics-sim/spec.md).
 
-**Phase 2 -- Sim Core** `[DONE]`
-Next: Phase 3 (Ops Integration) -- see [TASKS.md](TASKS.md)
-Phase index: [features/PHASE2.md](features/PHASE2.md)
+## Where we are
 
-## Phase 2 -- Sim Core `[DONE]`
+Phases 0-6 of the [staged plan](../../work/plans/20260422-flight-dynamics-sim-plan.md) are complete. Phase 7 (3D horizon view) is in flight per [ADR 015](../../decisions/015-sim-surface-loose-coupling.md). Multiple shipped PRs in the 2026-04-25 NOW.md sweep delivered debrief, scrubber, scenario grading, additional scenarios, PA-28 profile, engine sound, annunciator, theme tokens.
 
-Learner-facing course execution. Depends on published content from hangar.
+## Active
 
-| Feature                                          | Size   | Status      |
-| ------------------------------------------------ | ------ | ----------- |
-| [Sim app shell](features/sim-shell/)             | Large  | Implemented |
-| [Discovery](features/discovery/)                 | Large  | Implemented |
-| [Scenario player](features/scenario-player/)     | Large  | Implemented |
-| [Debrief](features/debrief/)                     | Large  | Implemented |
-| [Progress tracking](features/progress-tracking/) | Medium | Implemented |
-| [Knowledge checks](features/knowledge-checks/)   | Medium | Implemented |
+- **Phase 7 -- 3D horizon view.** Surface-loose-coupled per ADR 015. Continuing visual fidelity work; instrument-strip composition refinement.
+- **Cockpit panel extraction.** Per ADR 015 follow-up: extract `CockpitPanel.svelte` from the fat cockpit page so the dual page can render the full panel (not just four gauges).
 
-**Exit criteria:** A learner can log in, complete discovery, play a published scenario, see a debrief, and track progress. FAA time tracking works.
+## Queued
 
-## Phase 3 -- Ops Integration `[NOT STARTED]`
+| Phase | Work                                          | Trigger to start                                                                  |
+| ----- | --------------------------------------------- | --------------------------------------------------------------------------------- |
+| 8     | Cherokee variant aircraft profile             | After Phase 7 stable                                                              |
+| 9     | More scenarios (crosswind, gust front, etc.)  | Continuous; lands as scenarios are authored                                       |
+| 10    | Complex / HP aircraft profile                 | After Cherokee profile proves the multi-profile authoring flow                    |
+| 11    | Glass cockpit profile                         | Likely overlaps with `apps/avionics/` becoming a real surface                     |
+| 12    | Pre-brief surface                             | When VISION's "core loop" needs the brief side built out                          |
 
-After ops foundation exists, sim gets:
+## Future
 
-- Enrollment auto-creation on first login (or ops-managed, TBD by ADR)
-- Certificate display (issued by ops)
-- Progress visible to operators
+- **`apps/avionics/` glass cockpit trainer.** A separate surface that may share components with sim's cockpit page (per ADR 015's "no edits to existing pages -- additive" pattern).
+- **Multiplayer (one pilot + one observer)**. Not before v1 ships.
+- **Recording playback as content.** Pilot's run becomes a teaching artifact for another learner.
 
-## Phase 4 -- Advanced Engine `[NOT STARTED]`
+## What's NOT on the roadmap
 
-Adaptive layer on top of scripted scenarios:
+- **3D scenery / world rendering.** Sim is instruments-first; the horizon is minimal by design.
+- **AI traffic / ATC.**
+- **FAA log credit / anti-cheating machinery.** Out of scope per [PRD.md](PRD.md).
+- **Hardware integration (yokes, rudders, panels).** Browser keyboard / mouse only.
 
-- Student model adaptation (behavior varies based on prior runs)
-- Spaced repetition (resurface missed competencies)
-- Difficulty scaling
+## References
 
-## Phase 5 -- Social + Polish `[NOT STARTED]`
-
-- Greenie board (anonymous, comparative)
-- Multiplayer debrief mode (watch + comment on another learner's tape)
-- Performance analytics for the learner
+- [VISION.md](VISION.md)
+- [PRD.md](PRD.md)
+- [docs/work-packages/flight-dynamics-sim/spec.md](../../work-packages/flight-dynamics-sim/spec.md)
+- [docs/work/plans/20260422-flight-dynamics-sim-plan.md](../../work/plans/20260422-flight-dynamics-sim-plan.md)
+- [ADR 015](../../decisions/015-sim-surface-loose-coupling.md)

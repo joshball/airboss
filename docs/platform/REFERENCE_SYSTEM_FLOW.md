@@ -112,7 +112,7 @@ Every box below is a decision or artifact a human produces. The scripts move dat
 | Registry entry out of date   | Update `libs/aviation/src/sources/registry.ts` with new version + checksum   | Registry tracks the new source version          |
 | Want the verbatim             | `bun run references extract --id <id>` or `--source <source-id>`             | Generated file carries the `VerbatimBlock`      |
 | Yearly refresh                | Download new annual bulk, update registry, run `build`, review `diff`        | PR with the diff, hand-curated paraphrase edits |
-| Tag CFI-review needed         | Triage the ambiguity report, pick correct tag values                         | Updated reference tags                          |
+| Tag author-review needed      | Triage the ambiguity report, pick correct tag values                         | Updated reference tags                          |
 | Orphan references             | Decide: cite in content or delete                                            | Either new wiki-link or removed reference       |
 
 ## Commands
