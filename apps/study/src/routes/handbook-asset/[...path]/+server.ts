@@ -13,8 +13,7 @@
  * `handbooks/` directory; any `..` or absolute fragment is rejected.
  */
 
-import { existsSync, statSync } from 'node:fs';
-import { createReadStream } from 'node:fs';
+import { createReadStream, existsSync, statSync } from 'node:fs';
 import { dirname, extname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { error } from '@sveltejs/kit';
@@ -37,7 +36,7 @@ const CONTENT_TYPES: Record<string, string> = {
 
 export const GET: RequestHandler = async ({ params }) => {
 	const requested = resolve(HANDBOOKS_DIR, params.path);
-	if (!requested.startsWith(HANDBOOKS_DIR + '/') && requested !== HANDBOOKS_DIR) {
+	if (!requested.startsWith(`${HANDBOOKS_DIR}/`) && requested !== HANDBOOKS_DIR) {
 		throw error(404, 'Not found');
 	}
 	if (!existsSync(requested)) throw error(404, 'Not found');

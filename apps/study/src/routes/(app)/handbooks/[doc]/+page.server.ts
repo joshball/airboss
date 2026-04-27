@@ -8,7 +8,7 @@
  */
 
 import { requireAuth } from '@ab/auth';
-import { getHandbookProgress, getReferenceById, getReferenceByDocument, listHandbookChapters } from '@ab/bc-study';
+import { getHandbookProgress, getReferenceByDocument, getReferenceById, listHandbookChapters } from '@ab/bc-study';
 import { QUERY_PARAMS } from '@ab/constants';
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';

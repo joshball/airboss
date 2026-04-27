@@ -85,7 +85,7 @@ export async function seedHandbooks(options: SeedHandbooksOptions = {}): Promise
 		for (const edition of editions) {
 			const manifestPath = resolve(slugDir, edition, 'manifest.json');
 			if (!existsSync(manifestPath)) continue;
-			const refId = await seedEdition(slug, edition, manifestPath, options, summary);
+			const refId = await seedEdition(manifestPath, options, summary);
 			seededReferenceIds.push(refId);
 		}
 		// Wire `superseded_by_id` chains for this document slug (only when we
@@ -101,8 +101,6 @@ export async function seedHandbooks(options: SeedHandbooksOptions = {}): Promise
 }
 
 async function seedEdition(
-	documentSlug: string,
-	edition: string,
 	manifestPath: string,
 	options: SeedHandbooksOptions,
 	summary: SeedHandbooksSummary,

@@ -20,8 +20,8 @@
 
 import {
 	HANDBOOK_READ_STATUS_VALUES,
-	type HandbookReadStatus,
 	HANDBOOK_SECTION_LEVEL_VALUES,
+	type HandbookReadStatus,
 	type HandbookSectionLevel,
 	REFERENCE_KIND_VALUES,
 	REFERENCE_KINDS,

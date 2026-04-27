@@ -1,10 +1,10 @@
 <script lang="ts">
 import { type HandbookReadStatus, ROUTES } from '@ab/constants';
-import { renderMarkdown } from '@ab/utils';
 import HandbookCitingNodesPanel from '@ab/ui/handbooks/HandbookCitingNodesPanel.svelte';
 import HandbookEditionBadge from '@ab/ui/handbooks/HandbookEditionBadge.svelte';
 import HandbookReadProgressControl from '@ab/ui/handbooks/HandbookReadProgressControl.svelte';
 import HandbookSectionNotes from '@ab/ui/handbooks/HandbookSectionNotes.svelte';
+import { renderMarkdown } from '@ab/utils';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();

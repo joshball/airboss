@@ -48,13 +48,13 @@ import {
 	handbookFigure,
 	handbookReadState,
 	handbookSection,
-	knowledgeNode,
 	type KnowledgeNodeRow,
+	knowledgeNode,
 	type NewHandbookFigureRow,
 	type NewHandbookSectionRow,
 	type NewReferenceRow,
-	reference,
 	type ReferenceRow,
+	reference,
 } from './schema';
 
 type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;
@@ -264,10 +264,7 @@ export async function getHandbookChapter(
 }
 
 /** Figures bound to any handbook_section row (chapter or section), ordered. */
-export async function listFiguresForSection(
-	sectionId: string,
-	db: Db = defaultDb,
-): Promise<HandbookFigureRow[]> {
+export async function listFiguresForSection(sectionId: string, db: Db = defaultDb): Promise<HandbookFigureRow[]> {
 	return db
 		.select()
 		.from(handbookFigure)
