@@ -8,6 +8,8 @@ export {
 	generateCardId,
 	generateCardSnoozeId,
 	generateContentCitationId,
+	generateCredentialId,
+	generateGoalId,
 	generateHandbookFigureId,
 	generateHandbookSectionId,
 	generateHangarJobId,
@@ -23,6 +25,9 @@ export {
 	generateSessionItemResultId,
 	generateSimAttemptId,
 	generateStudyPlanId,
+	generateSyllabusId,
+	generateSyllabusNodeId,
+	generateSyllabusNodeLinkId,
 } from './ids';
 export { createLogger, type Logger } from './logger';
 export { escapeHtml, extractImageUrls, normalizeHandbookAssetPath, renderMarkdown } from './markdown';

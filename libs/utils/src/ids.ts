@@ -1,3 +1,10 @@
+import {
+	CREDENTIAL_ID_PREFIX,
+	GOAL_ID_PREFIX,
+	SYLLABUS_ID_PREFIX,
+	SYLLABUS_NODE_ID_PREFIX,
+	SYLLABUS_NODE_LINK_ID_PREFIX,
+} from '@ab/constants';
 import { ulid } from 'ulidx';
 
 /**
@@ -59,3 +66,17 @@ export const generateHangarSyncLogId = (): string => createId('syn');
 
 // Sim BC -- one row per completed flight (Track 5).
 export const generateSimAttemptId = (): string => createId('sat');
+
+// Cert-syllabus-and-goal-composer (ADR 016 phases 1-6). Credential =
+// pilot-cert / instructor-cert / rating / endorsement DAG node; syllabus =
+// authored ACS / PTS / school / personal track; syllabus_node = one row in
+// a syllabus tree; syllabus_node_link = leaf -> knowledge_node edge with
+// weight; goal = learner-owned composition of syllabi + ad-hoc nodes.
+//
+// goal_syllabus and goal_node have composite PKs (goal_id + secondary id),
+// so they don't need their own row id.
+export const generateCredentialId = (): string => createId(CREDENTIAL_ID_PREFIX);
+export const generateSyllabusId = (): string => createId(SYLLABUS_ID_PREFIX);
+export const generateSyllabusNodeId = (): string => createId(SYLLABUS_NODE_ID_PREFIX);
+export const generateSyllabusNodeLinkId = (): string => createId(SYLLABUS_NODE_LINK_ID_PREFIX);
+export const generateGoalId = (): string => createId(GOAL_ID_PREFIX);
