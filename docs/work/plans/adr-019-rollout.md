@@ -23,7 +23,7 @@ Companion to:
 | 1 | reference-identifier-scheme-validator | [WP](../../work-packages/reference-identifier-scheme-validator/) | #240 (WP), #241 (impl) | ✅ |
 | 2 | reference-source-registry-core | [WP](../../work-packages/reference-source-registry-core/) | #246 | ✅ |
 | 3 | reference-cfr-ingestion-bulk | [WP](../../work-packages/reference-cfr-ingestion-bulk/) | #247 | ✅ |
-| 4 | reference-renderer-runtime | [WP](../../work-packages/reference-renderer-runtime/) | (PR pending) | 🟧 |
+| 4 | reference-renderer-runtime | [WP](../../work-packages/reference-renderer-runtime/) | #249 | 🟧 |
 | 5 | reference-versioning-tooling | -- | -- | ⬜ |
 | 6 | reference-handbook-ingestion | -- | -- | ⬜ |
 | 7 | reference-aim-ingestion | -- | -- | ⬜ |
