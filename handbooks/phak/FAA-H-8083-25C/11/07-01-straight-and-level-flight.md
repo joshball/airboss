@@ -38,9 +38,7 @@ Maximu
 m a
 va
 il
-a
 bl
-e
 po
 wer
 Maximum level flight speed

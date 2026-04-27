@@ -29,19 +29,15 @@ indicates the aircraft is registered in the United States.
 Registration marks consist of a series of up to five
 numbers or numbers and letters. In this case, N2631A
 is the registration number assigned to this aircraft.
-2.
 Manufacturer and Model. Indicates the manufacturer,
 make, and model of the aircraft.
-3.
 Aircraft Serial Number. Indicates the manufacturer’s
 serial number assigned to the aircraft, as noted on the
 aircraft data plate.
-4.
 Category. Indicates the category in which the aircraft
 must be operated. In this case, it must be operated
 in accordance with the limitations specified for the
 “NORMAL” category.
-5.
 Authority and Basis for Issuance. Indicates the aircraft
 conforms to its type certificate and is considered in
 condition for safe operation at the time of inspection
@@ -50,7 +46,6 @@ the applicable airworthiness standards are briefly
 noted here and the exemption number given. The word
 “NONE” is entered if no exemption exists.
 
-6.
 Terms and Conditions. Indicates the Airworthiness
 Certificate is in effect indefinitely if the aircraft is
 maintained in accordance with 14 CFR parts 21, 43, and

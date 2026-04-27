@@ -32,7 +32,6 @@ valid for 2 hours. They are numbered sequentially each day
 from 1–99, beginning at 00Z time. If no hazardous weather
 exists, the convective SIGMET is still issued; however, it
 states “CONVECTIVE SIGMET…NONE.”
-Example:
 MKCC WST 221855
 CONVECTIVE SIGMET 20C
 VALID UNTIL 2055Z

@@ -9,5 +9,3 @@ source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/
 ---
 
 # Wingtip Vortices
-
-Wingtip Vortices

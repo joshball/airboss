@@ -37,7 +37,6 @@ Figure 8-3. Effects of nonstandard temperature on an altimeter.
 3,000 foot pressure level
 2,000 foot pressure level
 1,000 foot pressure level
-Sea level
 30°C
 15°C
 0°C

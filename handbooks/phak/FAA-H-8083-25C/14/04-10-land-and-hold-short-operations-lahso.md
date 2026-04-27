@@ -47,8 +47,6 @@ Know landing distance available.
 Be advised by ATC as to why LAHSO are being
 conducted.
 
-L
-C
 Figure 14-16. Two of three parallel runways.
 Figure 14-17. Runway holding position sign and marking for LAHSO.
 Advise ATC if you cannot comply with LAHSO.

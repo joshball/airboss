@@ -9,6 +9,12 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 
 # Transition to Jet-Powered Airplanes
 
+This chapter contains an overview of jet-powered airplane operations. The information contained in this chapter provides a useful
+preparation for, and a supplement to, structured jet airplane qualification training. This chapter provides information on major
+differences a pilot may encounter when transitioning to jet-powered airplanes. The major differences between jet-powered airplanes
+and piston-powered airplanes have been addressed in several distinct areas: differences in aerodynamics, systems, and pilot operating
+procedures. For airplane-specific information, a pilot should refer to the FAA-approved Airplane Flight Manual for that airplane.
+
 ![Figure 16-7. Thrust and power required curves (jet aircraft vs. propeller-driven aircraft). 
 Stalls 
 The stalling characteristics of the swept wing jet airplane can vary considerably from those of the normal straight wing airplane. The 

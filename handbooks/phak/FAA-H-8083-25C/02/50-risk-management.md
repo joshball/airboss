@@ -68,3 +68,8 @@ successful flights. The advanced avionics aircraft offers
 many new capabilities and simplifies the basic flying tasks,
 but only if the pilot is properly trained and all the equipment
 is working as advertised.
+This chapter focused on helping the pilot improve his or
+her ADM skills with the goal of mitigating the risk factors
+associated with flight in both classic and automated aircraft.
+In the end, the discussion is not so much about aircraft, but
+about the people who fly them.

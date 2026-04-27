@@ -27,7 +27,6 @@ lb
 18,000 feet
  1 Square Inch
  1 Square Inch
-Sea level
 Figure 12-4. Atmosphere weights.
 Figure 12-5. Three-cell circulation pattern due to the rotation of
 the Earth.

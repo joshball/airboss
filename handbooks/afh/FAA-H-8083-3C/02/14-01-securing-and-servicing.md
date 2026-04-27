@@ -28,3 +28,9 @@ security locks to further enhance the safety and security of the airplane.
 Hangaring is not without hazards to the airplane. The pilot should ensure that enough space is allocated to the airplane so it is free
 from any impact to the hangar, another aircraft, or vehicle. The airplane should be inspected after hangaring to ensure that no damage
 was imparted on the airplane.
+
+This chapter places emphasis on determining the airworthiness of the airplane, preflight visual inspection, managing risk and pilotavailable resources, safe surface-based operations, and the adherence to and proper use of the AFM/POH and checklists. The pilot
+should ensure that the airplane is in a safe condition for flight, and it meets all the regulatory requirements of 14 CFR part 91. A pilot
+also needs to recognize that flight safety includes proper flight preparation and having the experience to manage the risks associated
+with the expected conditions. An effective and continuous assessment and mitigation of the risks and appropriate utilization of
+resources goes a long way provided the pilot honestly evaluates their ability to act as PIC.

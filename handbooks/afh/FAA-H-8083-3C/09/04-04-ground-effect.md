@@ -19,3 +19,14 @@ This “cushion of air,” however, is imaginary. The apparent increase in airpl
 drag in the ground effect area. It is “borrowed” performance that is repaid when the airplane climbs out of the ground effect area. The
 pilot needs to factor in ground effect when initiating a go-around close to the ground. An attempt to climb prematurely may result in the
 airplane not being able to climb or even maintain altitude at full power.
+Common errors in the performance of go-arounds (rejected landings) are:
+1. Failure to recognize a condition that warrants a rejected landing.
+2. Indecision.
+3. Delay in initiating a go-around.
+4. Failure to apply maximum allowable power in a timely manner.
+5. Abrupt power application.
+6. Improper pitch attitude.
+7. Failure to configure the airplane appropriately.
+8. Attempting to climb out of ground effect prematurely.
+9. Failure to adequately compensate for torque/P factor.
+10. Loss of aircraft control.

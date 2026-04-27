@@ -34,18 +34,6 @@ would be flown.
 
 Figure 16-11. Magnetized portions of the airplane cause the
 compass to deviate from its normal indications.
-N
-W
-S
-E
-N
-W
-S
-E
-N
-W
-S
-E
 Magnetic North
 Magnetic North
 Magnetic North
@@ -55,10 +43,6 @@ For (Magnetic)
 Steer (Compass)
 For (Magnetic
 Steer (Compass)
-E
-W
-N
-S
 Remember, if variation is west, add; if east, subtract. One
 method for remembering whether to add or subtract variation
 is the phrase “east is least (subtract) and west is best (add).”

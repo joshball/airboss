@@ -26,7 +26,6 @@ A continental polar air mass forms over a polar region and
 brings cool, dry air with it. Maritime tropical air masses form
 
 cP
-A
 mP
 mP
 mT

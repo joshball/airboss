@@ -17,10 +17,8 @@ of motion. While straight and level, with the pilot’s eyes
 closed, the instructor pilot smoothly and positively rolls the
 
 night-flight currency and proficiency. Include crosscountry and local operations at various airfields.
-5.
 Ensure that when outside visual references are used,
 they are reliable, fixed points on the Earth’s surface.
-6.
 Avoid sudden head movement, particularly during
 takeoffs, turns, and approaches to landing.
 7.

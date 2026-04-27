@@ -64,11 +64,7 @@ RADIO 3
 NAV
 DOME
 RADIO 4
-G
-F
-B
 Alternator
-B
 Master
 switch
 Pull off
@@ -105,27 +101,9 @@ To radio
 To radio or transponder
 and encoding altimeter
 To radio
-P
-R
-I
-M
-A
-R
 Y
-B
 U
-S
-A
-V
-I
-O
-N
-I
-C
-S
-B
 U
-S
 Low volt out
 Power in
      Sense (+)
@@ -134,19 +112,11 @@ Power in
 Ground
 Starter
 Battery
-A
-L
-T
-B
-A
-T
 + 60
 - 60
 -30
 +30
 A M P
-L
-R
 Battery
 contactor
 Ground service

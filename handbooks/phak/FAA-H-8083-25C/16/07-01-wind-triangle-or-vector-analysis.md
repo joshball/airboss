@@ -24,28 +24,13 @@ complicated instrument flight. The experienced pilot becomes
 
 Heading and airspeed
 Course and groundspeed
-N
-W
-S
-E
-P
-W
-E
 Wind direction and velocity
-N
-S
 Figure 16-20. The wind triangle as is drawn in navigation practice.
 080° heading and 120 knots airspeed
 090° course and 110 knots groundspeed
-N
-W
-S
-E
     Wind at 20°
   direction and
  35 knots velocity
-N
-S
 10°
 Drift Angle
 8° left correction

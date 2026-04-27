@@ -9,9 +9,3 @@ source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/
 ---
 
 # Chapter Summary
-
-Chapter Summary
-This chapter introduces the various classifications of airspace
-and provides information on the requirements to operate in
-such airspace. For further information, consult the AIM and
-14 CFR parts 71, 73, and 91.

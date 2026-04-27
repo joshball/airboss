@@ -14,7 +14,6 @@ source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/
 Radar Observations
 There are four types of radars which provide information
 about precipitation and wind.
-1.
 The WSR-88D NEXRAD radar, commonly called
 Doppler radar, provides in-depth observations that
 inform surrounding communities of impending
@@ -38,7 +37,6 @@ purposes. [Figures 13-2 and 13-3]
 
 Symbol indicates HIWAS
 Figure 13-4. HIWAS availability is shown on sectional chart.
-2.
 FAA terminal Doppler weather radar (TDWR),
 installed at some major airports around the country,
 also aids in providing severe weather alerts and
@@ -46,7 +44,6 @@ warnings to ATC. Terminal radar ensures pilots
 are aware of wind shear, gust fronts, and heavy
 precipitation, all of which are dangerous to arriving
 and departing aircraft.
-3.
 The third type of radar commonly used in the detection
 of precipitation is the FAA airport surveillance radar.
 This radar is used primarily to detect aircraft, but it

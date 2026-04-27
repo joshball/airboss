@@ -49,7 +49,6 @@ landing distance for the aircraft. This graph is an example of
 
 Figure 11-33. Landing distance graph.
   C  –40° –30°  –20° –10°
-0°
 10° 20° 30° 40° 50°
 
 2,800
@@ -62,24 +61,18 @@ Figure 11-33. Landing distance graph.
 
 Outside air temperature
 
-Weight
-
 Wind component      Obstacle
 
 (pounds)
 
 (knots)
  height  (feet)
-F
 –40° –20° 0°
 20° 40°
 60° 80° 100° 120°
 3,500
-3,000
 2,500
-2,000
 1,500
-1,000
        Guide lines not
 applicable for Intermediate
 Tailwind
@@ -89,7 +82,6 @@ Reference line
 Reference line
 Pressure altitude (feet)
 Obstacle heights
-Weight
 (pounds)
 kts
 MPH
@@ -115,11 +107,6 @@ Approach speed
 IAS as tabulated
 Braking
 Maximum
-10,000
-8,000
-6,000
-2,000
-4,000
 S.L.
 ISA
 Figure 11-32. Landing distance table.

@@ -34,7 +34,6 @@ Stress causes concentration and performance problems.
 While the regulations list medical conditions that
 require grounding, stress is not among them. The pilot
 should consider the effects of stress on performance.
-4.
 Alcohol—Have I been drinking within 8 hours?
 Within 24 hours? As little as one ounce of liquor, one
 bottle of beer, or four ounces of wine can impair flying

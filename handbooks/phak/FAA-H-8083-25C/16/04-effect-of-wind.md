@@ -116,14 +116,10 @@ Heading
 TN
 MN
 CN
-T
-H
 -
 °
-M
 H-
 °
-C
 H-
 °
 VAR 10° E

@@ -39,12 +39,9 @@ A through F are explained in the text below.
 Net thrust
 
 Airspeed
-         Aircraft
 drag
 A B
 C D
-E
-F
 Reciprocating
 
 Turboprop

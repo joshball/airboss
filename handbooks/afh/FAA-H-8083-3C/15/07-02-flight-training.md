@@ -29,3 +29,8 @@ b. Emergency descent
 7. Planned Descents
 8. Shutdown Procedures
 9. Postflight Discussion
+Transitioning from a non-turbopropeller airplane to a turbopropeller-powered airplane is discussed in this chapter. The major
+differences are introduced specifically handling, powerplant, and the associated systems. Turbopropeller electrical systems and
+operational considerations are explained to include starting procedures and high temperature considerations. Training considerations
+are also discussed and a sample training syllabus is given to show the topics that a pilot should become proficient in when
+transitioning to a turbopropeller-powered airplane.

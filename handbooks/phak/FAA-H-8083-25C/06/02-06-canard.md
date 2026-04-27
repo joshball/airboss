@@ -32,26 +32,15 @@ more efficient because using the horizontal surface to help
 lift the weight of the aircraft should result in less drag for a
 given amount of lift.
 
-A
 er
-o
-d
 y
-n
-a
-m
-i
-c
  f
 or
 ce
 
 Left rudder
-CG
 Left rudder forward
 
 Y
-a
-w
 Figure 6-15. The effect of left rudder pressure.
 Figure 6-16. Beechcraft Bonanza V35.

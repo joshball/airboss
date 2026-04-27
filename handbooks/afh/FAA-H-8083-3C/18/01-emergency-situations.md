@@ -92,7 +92,6 @@ Glides
 Go-around
  Rejected landings
  Attitude
- Configuration
  Ground effect
  Power
 Ground loop

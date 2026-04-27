@@ -45,7 +45,6 @@ UTC
 7DT)
 N39°28.08 W117°11.72
 LAS VEGAS
-B
 NOTAM FILE RNO
 H–3C, L–9B
 RWY 18–36:H6000X75 (ASPH)
@@ -76,7 +75,6 @@ UTC
 7DT)
 N40°35.94 W116°52.46
 SALT LAKE CITY
-B
 S4
 FUEL 100LL, JET A
 NOTAM FILE RNO
@@ -119,11 +117,5 @@ HELIPAD H2:H60X60 (CONC)
 HELIPORT REMARKS:
 Rwy H1 perimeter lights. ACTIVATE MIRL Rwy 03–21 and Rwy 12–30, and perimeter lgts
 H1—CTAF.
-A
-D
-A
-V
-E
-N
 Figure 1-18. From left to right, a sectional VFR chart, IFR chart, and chart supplement U.S. (formerly Airport/Facility Directory) with
 a sample of a page from the supplement.

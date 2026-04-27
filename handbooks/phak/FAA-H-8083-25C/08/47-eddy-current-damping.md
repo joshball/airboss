@@ -20,8 +20,6 @@ and decreases the oscillations.
 -20
 -40
 -60
-F
 -20
 -40
-C
 Figure 8-39. Outside air temperature (OAT) gauge.

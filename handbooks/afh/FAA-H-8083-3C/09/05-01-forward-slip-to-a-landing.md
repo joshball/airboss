@@ -20,3 +20,12 @@ turn to base. At this point, ongoing evaluation of height takes place. If the ai
 However, the pilot should make a coordinated turn to line up with the final approach course. Once established on a final approach, the
 height above ground should be sufficient to allow the pilot to use a forward slip and establish a suitable approach path to the runway
 aiming point. At the appropriate time, when the round out begins, the pilot removes the forward slip and transitions to a normal landing.
+Common errors with forward slips to a landing:
+1. Incorrect pitch adjustments that result in poor airspeed control.
+2. Reacting to erroneous airspeed indications.
+3. Using excess power while trying to lose altitude.
+4. A slip in the same direction as any crosswind.
+5. Poor glidepath control.
+6. Late transition to a sideslip during landing with crosswinds.
+7. Landing without the longitudinal axis parallel to runway.
+8. Landing off the centerline.

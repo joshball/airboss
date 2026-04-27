@@ -85,7 +85,6 @@ drifting across the landing runway, the airplane made a hard
 landing. The pilot made an error when assessing the flight
 environment.
 Environment
-Aircraft
 A pilot will frequently base decisions on the evaluations of the
 aircraft, such as performance, equipment, or airworthiness.
 During a preflight, a pilot noticed a small amount of oil dripping

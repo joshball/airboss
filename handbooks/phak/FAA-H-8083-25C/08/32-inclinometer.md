@@ -59,24 +59,18 @@ TURN COORDINATOR
 2  MIN.
 D.C.
 ELEC.
-L
-R
 NO  PITCH
 INFORMATION
 TURN COORDINATOR
 2  MIN.
 D.C.
 ELEC.
-L
-R
 NO  PITCH
 INFORMATION
 TURN COORDINATOR
 2  MIN.
 D.C.
 ELEC.
-L
-R
 NO  PITCH
 INFORMATION
 Figure 8-22. If inadequate right rudder is applied in a right turn,

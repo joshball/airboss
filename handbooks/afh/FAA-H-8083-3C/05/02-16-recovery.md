@@ -20,3 +20,10 @@ In the event looking outside does not provide enough situational awareness of th
 instruments to recognize and recover from an upset. To recover from nose-high and nose-low attitudes, the pilot should follow the
 procedures recommended in the AFM/POH. In general, upset recovery procedures are summarized in Figure 5-3.
 Figure 5-3. Upset recovery template.
+
+Common errors associated with upset recoveries include the following:
+1. Incorrect assessment of what kind of upset the airplane is in
+2. Failure to disconnect the wing leveler or autopilot
+3. Failure to unload the airplane, if necessary
+4. Failure to roll in the correct direction
+5. Inappropriate management of the airspeed during the recovery

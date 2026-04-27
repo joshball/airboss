@@ -35,25 +35,15 @@ Volume
 Chapter
 Title
 Code of Federal Regulations
-A
 Definitions and Abbreviations
-B
 Procedural Rules
-C
-Aircraft
-D
 Airmen
-E
 Airspace
-F
 Air Traffic and General Rules
- G
 Air Carriers and Operators for Compensation or Hire: Certification and
 
 Operations
-H
 Schools and Other Certified Agencies
-I
 Airports
 J
 Navigational Facilities
@@ -61,34 +51,20 @@ K
 Administrative Regulations
 L–M
 Reserved
-N
 War Risk Insurance
-A
 Economic Regulations
-B
 Procedural Regulations
-C
 Reserved
-D
 Special Regulations
-E
 Organization
-F
 Policy Statements
-A
 General
-B
 Procedure
-C
 Licensing
-A
 Office of Management and Budget
-B
 Air Transportation Stabilization Board
-I
 II
 III
-V
 VI
 Title 14
 Aeronautics

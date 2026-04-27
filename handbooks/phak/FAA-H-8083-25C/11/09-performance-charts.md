@@ -64,21 +64,13 @@ Figure 11-21. Interpolating charts.
 TAKEOFF DISTANCE
 MAXIMUM WEIGHT 2,400 LB
 Conditions
-Weight
 (lb)
 2,400
 Press
 ALT
 (ft)
 S.L.
-1,000
-2,000
-3,000
-4,000
-5,000
-6,000
 7,000
-8,000
 1,055
 1,165
 1,285
@@ -123,7 +115,6 @@ Total feet
 to clear
 50 ft OBS
 1,810
-2,000
 2,220
 2,480
 2,790
@@ -146,7 +137,6 @@ to clear
 3,990
 - - -
 - - -
-Lift
 off
 AT
 50 ft
@@ -201,7 +191,6 @@ roll
 1,465
 1,620
 1,800
-2,000
 - - -
 1,065
 1,170

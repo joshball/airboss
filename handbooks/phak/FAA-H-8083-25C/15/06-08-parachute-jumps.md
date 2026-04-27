@@ -18,3 +18,7 @@ into Class A, Class B, Class C, or Class D airspace without,
 or in violation of, the terms of an ATC authorization issued
 by the ATC facility having jurisdiction over the airspace.
 (See 14 CFR part 105.)
+This chapter introduces the various classifications of airspace
+and provides information on the requirements to operate in
+such airspace. For further information, consult the AIM and
+14 CFR parts 71, 73, and 91.

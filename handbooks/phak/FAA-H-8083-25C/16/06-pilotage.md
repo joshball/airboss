@@ -51,13 +51,9 @@ be cautious for new structures or changes that have occurred
 since the chart was printed.
 
 INSTRUCTIONS FOR USE
-1.
 Place hole over intersection of true course and true north line.
-2.
 Without changing position rotate plotter until edge is over true course line.
-3.
 From hole follow true north line to curved scale with arrow pointing in direction of flight.
-4.
 Read true course in degrees, on proper scale, over true north line. read scales counter-clockwise.
 SECTIONAL CHART SIDE - 1:500,000
 NAVIGATIONAL FLIGHT PLOTTER
@@ -83,15 +79,9 @@ Bksp
 .
 +/-
 =
-C
-M
-P
 TSD Alt: As Wind Wt. Bal Timer
  Conv: Dist Vol Wt Wx
-A
 Plotter
-B
 Mechanical flight computer
-C
 Electronic flight computer
 Figure 16-18. A plotter (A), the computational and wind side of a mechanical flight computer (E6B) (B), and an electronic flight computer (C).

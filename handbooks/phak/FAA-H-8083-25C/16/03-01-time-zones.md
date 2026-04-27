@@ -22,14 +22,11 @@ west of that meridian is morning, to the east is afternoon.
 Figure 16-4. Meridians and parallels—the basis of measuring time,
 distance, and direction.
 
-L
-o
 ng
 itu
 de
     La
 titud
-e
 
 Equ
 ator
@@ -37,14 +34,10 @@ ator
 Equ
 ator
 °
-N
 
 60°
-N
 45°
-N
 30°
-N
 15°N
 
 15°S
@@ -57,14 +50,10 @@ N
 
 90°N
 °
-N
 
 60°
-N
 45°
-N
 30°
-N
 15°N
 
 15°S
@@ -76,52 +65,32 @@ N
 60°S
 
 90°N
-0°
-W
 5°
-W
-0°
-W
 °W
 90°W
 75°W
 60°
-W
 45°
-W
 °W
 °W
 Pr
 im
-e
-m
 er
 id
 ia
-n
-0°
-W
 5°
-W
-0°
-W
 °W
 90°W
 75°W
 60°
-W
 45°
-W
 °W
 °W
 Pr
 im
-e
-m
 er
 id
 ia
-n
 Figure 16-3. World aeronautical chart.
 The standard practice is to establish a time zone for each
 15° of longitude. This makes a difference of exactly 1 hour

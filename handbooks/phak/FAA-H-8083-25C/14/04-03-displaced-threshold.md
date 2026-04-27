@@ -25,6 +25,4 @@ of the runway and displaced threshold. White arrow heads
 are located across the width of the runway just prior to the
 threshold bar. [Figure 14-6A and B]
 
-A
-B
 Figure 14-5. (A) Relocated runway threshold drawing. (B) Relocated threshold for Runway 36 at Joplin Regional Airport (JLN).

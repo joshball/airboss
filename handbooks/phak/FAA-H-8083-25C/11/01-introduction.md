@@ -9,9 +9,3 @@ source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/
 ---
 
 # Introduction
-
-Introduction
-This chapter discusses the factors that affect aircraft
-performance, which include the aircraft weight, atmospheric
-conditions, runway environment, and the fundamental
-physical laws governing the forces acting on an aircraft.

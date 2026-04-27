@@ -22,11 +22,9 @@ vital to en route operations, as well as forecast information
 for smaller airports that do not have terminal forecasts.
 Area forecasts are typically disseminated in four sections and
 include the following information:
-1.
 Header—gives the location identifier of the source of
 the FA, the date and time of issuance, the valid forecast
 time, and the area of coverage.
-Example:
 DFWC FA 120945
 SYNOPSIS AND VFR CLDS/WX
 SYNOPSIS VALID UNTIL 130400
@@ -42,13 +40,11 @@ of issuance until 0400 hours on the 13th. VFR clouds and
 weather information on this area forecast are valid until 2200
 hours on the 12th and the outlook is valid from 2200Z on the
 12th to 0400Z on the 13th.
-2.
 Precautionary statements—IFR conditions, mountain
 obscurations, and thunderstorm hazards are described
 in this section. Statements made here regarding height
 are given in MSL, and if given otherwise, AGL or
 ceiling (CIG) is noted.
-Example:
 SEE AIRMET SIERRA FOR IFR CONDS AND MTN
 OBSCN.
 TS IMPLY SEV OR GTR TURB SEV ICE LLWS AND
@@ -123,7 +119,6 @@ Irish Hills
 Near Lake
 Mi
 Extrm
-N
 NW
 NE
 SW
@@ -132,7 +127,6 @@ Near Ohio River
 SW
 SE
 West
-N
 Cntrl
 Northern
 Southern
@@ -148,31 +142,23 @@ tains
 SE
 NE
 NW
-A
 l
 on
 g
 
-O
 h
 io
 
-R
 ive
-r
 
 Extrm
 NW
 SWRN
 Southern
-W
 Cntrl
-E
 Cntrl
 N Third
-S
 Third
-N
 ear
  La
 ke
@@ -189,17 +175,13 @@ Allegheny
 Plateau
 NW
 SW
-S
 Cntrl
 NE
 SE
-N
 Cntrl
 Le
-e
 La
 k
-e
 
 On
 ta
@@ -218,7 +200,6 @@ SE
 Coa
 st
 al
- P
 lain
 NE
 SE
@@ -228,14 +209,9 @@ Mtns
 of
 SC
 Co
-a
-s
-t
-a
 l
  Pl
 ai
-n
 
 NW
 Mtns
@@ -267,10 +243,7 @@ Keys
 Lower Keys
 Gulf
 
-S
 tre
-a
-m
 
 Florida Straits
 Coastal
@@ -279,17 +252,10 @@ Catskill
 Mtns
 E Cntrl
 Cape Cod
-C
-o
-a
 st
 al
 
-P
 la
-i
-n
-s
 
 Hudson Valley
 Mohawk
@@ -307,14 +273,9 @@ White Mtns
 NW
 NE
 Coa
-s
-t
-a
 l
-S
 ec
 tio
-n
 SE
 SW
 MN
@@ -496,9 +457,6 @@ North Park
 Rio Grande Valley
 Con
 tin
-e
-n
-t
 al
 Div
 ide
@@ -520,10 +478,6 @@ WY
 Laramie Mtns
 N P
 la
-t
-t
-e
- R
 iv
 er Valley
 SE
@@ -539,15 +493,7 @@ Teton
 Mtns
 Sna
 k
-e
 
-R
-i
-v
-e
-r
-
-V
 al
 le
 y
@@ -567,13 +513,7 @@ Fort Peck Reservoir
 Wind River
 Basin
 E of Cont Dvd
-P
-e
-c
-o
-s
 
-R
 iver
 West of
 Pecos
@@ -599,15 +539,10 @@ Blue River Valley
 Lower
 Republican
 Valley
-C
 h
-e
 y
 enn
-e
  Riv
-e
-r
 
 James
 River
@@ -623,16 +558,11 @@ North of
 Black
 Hills
 Lak
-e
-L
-e
 wi
 s a
 nd
 Fra
 nc
-i
-s
 
 Ca
 se C
@@ -649,15 +579,9 @@ Nebraska
 pan
 Handle
    Pl
-a
 tte
    River
 
-B
-a
-s
-i
-n
 SE
 NE
 CA

@@ -36,10 +36,6 @@ LOAD
 DISTANCE
 OFFSET
 EN ROUTE
-R
-N
-A
-V
 Figure 16-35. Flying an RNAV course.
 Area Navigation Direct Route
 would show approximately 1.0 NM on the DME.) DME is a

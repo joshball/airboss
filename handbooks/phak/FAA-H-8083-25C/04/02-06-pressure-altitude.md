@@ -25,9 +25,7 @@ as well as for assigning flight levels to airplanes operating at
 or above 18,000 feet.
 The pressure altitude can be determined by one of the
 following methods:
-1.
 Setting the barometric scale of the altimeter to 29.92
 and reading the indicated altitude
-2.
 Applying a correction factor to the indicated altitude
 according to the reported altimeter setting

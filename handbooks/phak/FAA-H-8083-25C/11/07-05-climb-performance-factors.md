@@ -75,14 +75,6 @@ of climb (Vy)
 20,000
 18,000
 16,000
-14,000
-12,000
-10,000
-8,000
-6,000
-4,000
-2,000
-Sea level
 Figure 11-10. Absolute and service ceiling.
 Fuel flow/power required (HP)
 Speed
@@ -90,14 +82,10 @@ Reference line
 At a
 ltitu
 de
-A
-B
 Maximum range at L/DMAX
 Maximum endurance at
 minimum power required
 Applicable for a particular
-
-Weight
 
 Altitude
 

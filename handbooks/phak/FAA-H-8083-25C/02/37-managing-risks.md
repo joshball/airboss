@@ -23,21 +23,17 @@ S 	 Seat belts fastened for taxi, takeoff, landing
 Shoulder harness fastened for takeoff, landing
 
 Seat position adjusted and locked in place
-A
 Air vents (location and operation)
 
 All environmental controls (discussed)
 
 Action in case of any passenger discomfort
-F
 Fire extinguisher (location and operation)
-E
 Exit doors (how to secure; how to open)
 
 Emergency evacuation plan
 
 Emergency/survival kit (location and contents)
-T
 Traffic (scanning, spotting, notifying pilot)
 
 Talking, (“sterile flight deck” expectations)

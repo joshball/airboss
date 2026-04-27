@@ -88,7 +88,6 @@ ly spa
 ced iso
 bars me
 an a stee
-p
 pressur
 e grad
 ient a
@@ -104,15 +103,12 @@ ced
  is
 ob
 ar
-s
- m
 ea
 n a
  sh
 allo
 w pre
 ssur
-e
  gra
 dien
 t an
@@ -123,6 +119,5 @@ ely
 gh
 t wi
 nds.
-L
 Figure 12-19. Isobars reveal the pressure gradient of an area of
 high- or low-pressure areas.

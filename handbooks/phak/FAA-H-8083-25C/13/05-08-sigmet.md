@@ -26,7 +26,6 @@ November through Yankee. The first issuance of a SIGMET
 is designated as an Urgent Weather SIGMET (UWS).
 Reissued SIGMETs for the same weather phenomenon are
 sequentially numbered until the weather phenomenon ends.
-Example:
 SFOR WS 100130
 SIGMET ROME02 VALID UNTIL 100530
 OR WA

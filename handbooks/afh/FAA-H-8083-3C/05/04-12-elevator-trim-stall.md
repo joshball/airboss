@@ -36,3 +36,22 @@ approaching a stall, the pilot should apply sufficient forward elevator pressure
 before returning the airplane to the normal climbing attitude. The pilot will need to adjust trim to relieve the heavy control pressures
 and then complete the normal go around procedures and return to the desired flightpath. If taken to the full stall, recovery will require
 a significant nose-down attitude to reduce the AOA below its critical AOA, along with a corresponding significant loss of altitude.
+Common errors in the performance of intentional stalls are:
+1. Failure to adequately clear the area.
+2. Over-reliance on the airspeed indicator and slip-skid indicator while excluding other cues after recovery.
+3. Inadvertent accelerated stall by pulling too fast on the controls during a power-off or power-on stall entry.
+4. Inability to recognize an impending stall condition.
+5. Failure to take timely action to prevent a full stall during the conduct of impending stalls.
+6. Failure to maintain a constant bank angle during turning stalls.
+7. Failure to maintain proper coordination with the rudder throughout the stall and recovery.
+8. Recovering before reaching the critical AOA when practicing the full stall maneuver.
+9. Not disconnecting the wing leveler or autopilot, if equipped, prior to reducing AOA.
+10. Recovery is attempted without recognizing the importance of pitch control and AOA.
+11. Not maintaining a nose down control input until the stall warning is eliminated.
+12. Pilot attempts to level the wings before reducing AOA.
+13. Pilot attempts to recover with power before reducing AOA.
+14. Failure to roll wings level after AOA reduction and stall warning is eliminated.
+15. Inadvertent secondary stall during recovery.
+16. Excessive forward-elevator pressure during recovery resulting in low or negative G load.
+17. Excessive airspeed buildup during recovery.
+18. Losing situational awareness and failing to return to desired flightpath or follow ATC instructions.

@@ -57,7 +57,6 @@ forward so the induction system can take full advantage of
 Figure 7-14. Power output of normally aspirated engine compared
 to a single-stage, two-speed supercharged engine.
 Brake horsepower
-Sea level
 Density altitude
 Two-speed supercharged engine
 High blower

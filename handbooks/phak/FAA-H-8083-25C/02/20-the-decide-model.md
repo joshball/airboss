@@ -22,11 +22,6 @@ with terrain at a local airport in Alabama. The certificated
 airline transport pilot (ATP) received minor injuries and the
 certificated private pilot was not injured. The private pilot
 
-1.
-2.
-3.
-5.
-6.
 The DECIDE model
 Aeronautical Decision-Making
 A. Analytical
@@ -38,7 +33,6 @@ Effect of decision
 Detection
 Situation
 Pilot
-Aircraft
 Enviroment
 External factors
 • Risk or hazard
@@ -58,7 +52,6 @@ Outcome desired
 Take action
 Detection
 Pilot
-Aircraft
 Enviroment
 External factors
 • Risk to flight

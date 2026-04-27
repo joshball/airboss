@@ -81,22 +81,16 @@ Checkpoint
 Checkpoint
 Checkpoint
 Checkpoint
-A
 Class C Airspace
-B
 Class D Airspace
-C
 Tallest obstruction
-D
 Highest elevation E
-F
 Route of flight: Chickasha Airport direct to Guthrie Airport
 True airspeed (TAS)  . . . . . . . . . . . . . . . . . . . . 115 knots
 Winds aloft . . . . . . . . . . . . . . . . . . . . . . . 360° at 10 knots
 Usable fuel  . . . . . . . . . . . . . . . . . . . . . . . . . . . 38 gallons
 Fuel rate  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .8 GPH
 Deviation  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . +2°
-R
 Course line
 
 Figure 16-26. Pilot’s planning sheet and visual flight log.

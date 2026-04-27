@@ -69,10 +69,8 @@ proper spin recovery usually is found to be about 2.5 Gs.
 The load factor during a spin varies with the spin characteristics
 of each aircraft, but is usually found to be slightly above the
 1 G of level flight. There are two reasons for this:
-1.
 Airspeed in a spin is very low, usually within 2 knots
 of the unaccelerated stalling speeds.
-2.
 An aircraft pivots, rather than turns, while it is in a spin.
 High Speed Stalls
 The average light plane is not built to withstand the repeated

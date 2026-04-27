@@ -20,21 +20,9 @@ Figure 7-21. Normal combustion and explosive combustion.
 Explosion
 Normal combustion
 Figure 7-20. Typical starting circuit.
-M
-A
-I
-N
-B
 U
-S
 Starter
 Battery
-A
-L
-T
-B
-A
-T
 Battery
 contactor
 (solenoid)
@@ -46,10 +34,6 @@ relay
 +
 +
 OFF
-L
-R
-B
-S
 Ignition switch
 External
 power plug

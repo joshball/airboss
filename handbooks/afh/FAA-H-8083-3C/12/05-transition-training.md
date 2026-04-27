@@ -23,3 +23,7 @@ Figure 12-16. Sample transition training syllabus.
 The training times indicated in the syllabus are for illustration purposes. Actual times should be based on the capabilities of the pilot.
 The time periods may be minimal for pilots with higher qualifications or increased for pilots who do not meet certification
 requirements or have had little recent flight experience.
+Flying a complex or high-performance airplane requires a pilot to further divide his or her attention during the most critical phases of
+flight: takeoff and landing. The knowledge, judgment, and piloting skills required to fly these airplanes needs to be developed. It is
+essential that adequate training is received to ensure a complete understanding of the systems, their operation (both normal and
+emergency), and operating limitations.

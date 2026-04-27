@@ -9,6 +9,13 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 
 # Energy Management: Mastering Altitude and Airspeed Control
 
+This chapter is all about managing the airplane’s altitude and airspeed using an energy-centered approach. Energy management can
+be defined as the process of planning, monitoring, and controlling altitude and airspeed targets in relation to the airplane’s energy
+state in order to:
+1. Attain and maintain desired vertical flightpath-airspeed profiles.
+2. Detect, correct, and prevent unintentional altitude-airspeed deviations from the desired energy state.
+3. Prevent irreversible deceleration and/or sink rate that results in a crash.
+
 ![Figure 4-2. The energy balance equation. 
 The left side of the energy balance equation represents the airplane’s net energy flow, while the right side reflects matching changes 
 to the energy storage. Thus, changes to the airplane’s total energy affect the left side of the equation, while the right side shows 

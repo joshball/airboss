@@ -23,13 +23,11 @@ METARs are issued on a regularly scheduled basis unless
 significant weather changes have occurred. A special
 METAR (SPECI) can be issued at any time between routine
 METAR reports.
-Example:
 METAR KGGG 161753Z AUTO 14021G26KT 3/4SM
 +TSRA BR BKN008 OVC012CB 18/17 A2970 RMK
 PRESFR
 A typical METAR report contains the following information
 in sequential order:
-1.
 Type of report—there are two types of METAR
 reports. The first is the routine METAR report that is
 transmitted on a regular time interval. The second is
@@ -37,7 +35,6 @@ the aviation selected SPECI. This is a special report
 that can be given at any time to update the METAR for
 rapidly changing weather conditions, aircraft mishaps,
 or other critical information.
-2.
 Station identifier—a four-letter code as established by
 the International Civil Aviation Organization (ICAO).
 In the 48 contiguous states, a unique three-letter
@@ -54,7 +51,6 @@ Station identifiers can be found by calling the FSS, a
 NWS office, or by searching various websites such
 as DUATS and NOAA's Aviation Weather Aviation
 Digital Data Services (ADDS).
-3.
 Date and time of report—depicted in a six-digit group
 (161753Z). The first two digits are the date. The last
 four digits are the time of the METAR/SPECI, which
@@ -62,7 +58,6 @@ is always given in coordinated universal time (UTC).
 A “Z” is appended to the end of the time to denote
 the time is given in Zulu time (UTC) as opposed to
 local time.
-4.
 Modifier—denotes that the METAR/SPECI came from
 an automated source or that the report was corrected. If
 the notation “AUTO” is listed in the METAR/SPECI,
@@ -76,7 +71,6 @@ When the modifier “COR” is used, it identifies a
 corrected report sent out to replace an earlier report
 that contained an error (for example: METAR KGGG
 161753Z COR).
-5.
 Wind—reported with five digits (14021KT) unless
 the speed is greater than 99 knots, in which case the
 wind is reported with six digits. The first three digits
@@ -91,7 +85,6 @@ recorded is provided. If the wind direction varies more
 than 60° and the wind speed is greater than six knots,
 a separate group of numbers, separated by a “V,” will
 indicate the extremes of the wind directions.
-6.
 Visibility—the prevailing visibility (¾ SM) is reported
 in statute miles as denoted by the letters “SM.” It is
 reported in both miles and fractions of miles. At times,
@@ -220,7 +213,6 @@ This translates as occasional lightning in the clouds
 and from cloud to ground. Automated stations also use
 the remarks section to indicate the equipment needs
 maintenance.
-Example:
 METAR KGGG 161753Z AUTO 14021G26KT 3/4SM
 +TSRA BR BKN008 OVC012CB 18/17 A2970 RMK
 PRESFR

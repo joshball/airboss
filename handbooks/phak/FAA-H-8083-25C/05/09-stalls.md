@@ -86,17 +86,9 @@ imposed by the combination of centrifugal force and weight.
 In a turn, the necessary additional lift is acquired by applying
 back pressure to the elevator control. This increases the wing’s
 
-W
-CF
-W
-L
-L
 CF
 CF
-W
-W
-L
-L
+CF
 CF
 Figure 5-38. Forces exerted when pulling out of a dive.
 0 0°
@@ -104,15 +96,12 @@ Figure 5-38. Forces exerted when pulling out of a dive.
 Percent increase in stall speed
  Load factor or “G”
  Bank Angle
-L
-o
 ad
  fa
 ctor
 
 St
 all
- s
 pe
 ed
  in

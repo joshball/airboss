@@ -684,7 +684,6 @@ straight flight without attempting to land until GPS coverage resumes.
 Currently EAL system capabilities do not include detecting and avoiding other aircraft; receiving or reacting to ATC instructions or
 Notices to Airmen (NOTAMs); avoiding military operations areas (MOAs), special use airspace (SUA), Restricted Areas, or
 Temporary Flight Restrictions (TFRs); or turning on aircraft lights.
-Chapter Summary
 This chapter provided general guidance and recommended procedures that may apply to light single-engine airplanes involved in
 certain emergency situations. The information presented is intended to enhance the general knowledge of emergency operations with
 the clear understanding that the manufacturer’s recommended emergency procedures take precedence.
@@ -1626,7 +1625,6 @@ uncoordinated flight to align the fuselage with the direction of travel and mini
 Zero thrust (simulated feather). An engine configuration with a low power setting that simulates a propeller feathered condition.
 G-19
 
-Airplane Flying Handbook (FAA-H-8083-3C)
 Index
 A
 Abnormal engine instrument indication

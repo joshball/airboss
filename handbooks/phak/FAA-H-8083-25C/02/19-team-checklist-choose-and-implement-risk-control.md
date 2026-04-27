@@ -87,7 +87,6 @@ create risks for an inexperienced VFR-only pilot.
 
 launch or continue in less than ideal weather conditions.
 Environment
-Aircraft
 • Consequences: This area presents low risk because the
 
 aircraft is in excellent mechanical condition and Gayle is
@@ -227,7 +226,6 @@ Gayle should file a VFR flight plan, use VFR flight following,
 and call Flight Watch to get weather updates en route. Finally,
 basic functions on her handheld GPS should also be practiced.
 Environment
-Aircraft
 To manage risk associated with any doubts about the aircraft’s
 mechanical condition, Gayle can:
 •  Transfer the risk by using a different airplane.

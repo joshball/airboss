@@ -19,21 +19,9 @@ runway designation, and touchdown markings are obliterated
 and yellow “Xs” are placed at each end of the runway and
 at 1,000-foot intervals.
 
-A
-C
-B
 Figure 14-27. (A) Yellow “X” placed on surface of temporarily closed
 runways. (B) Lighted “X” placed on temporarily closed runways.
 (C) Lighted “X” at night showing a temporarily closed runway.
-G
-B
-G
-G
-B
-B
-G
-B
-G
 Figure 14-26. Holding position marking on a taxiway.
 Location signs—black with yellow inscription and a
 yellow border, no arrows. They are used to identify a

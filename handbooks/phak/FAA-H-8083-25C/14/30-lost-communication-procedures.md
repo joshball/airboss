@@ -42,15 +42,11 @@ Morse Code
 Telephony
 Phonic Pronunciation
 Character
-r
 R0
 q
 Q9
-p
 P8
-o
 O7
-n
 N6
 z
 ZZ
@@ -58,35 +54,24 @@ y
 YY
 x
 XX
-w
 WW
-v
 VV
 u
 UU
-t
 TT
-s
 SS
-r
 RR
 q
 QQ
-p
 PP
-o
 OO
-n
 NN
-m
 MM
-L
 LL
 k
 KK
 j
 JJ
-i
 II
 h
 hH
@@ -94,15 +79,11 @@ g
 GG
 f
 FF
-e
 EE
-d
 DD
-c
 CC
 b
 BB
-a
 AA
 Figure 14-41. Phonetic alphabet.
 easily be aware of your presence when they are expecting

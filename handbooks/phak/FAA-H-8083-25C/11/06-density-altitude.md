@@ -22,49 +22,24 @@ density altitude), aircraft performance increases. Conversely,
 Outside air temperature (OAT)
 Density altitude (feet)
 15,000
-14,000
 13,000
-12,000
 11,000
-10,000
 9,000
-8,000
 7,000
-6,000
-5,000
-4,000
-3,000
-2,000
-1,000
-Sea level
-14,000
 13,000
-12,000
 11,000
-10,000
 9,000       Pressure altitude (feet)
-8,000
 7,000
-6,000
-5,000
-4,000
-3,000
-2,000
-1,000
 -1,000
-Sea level
 -2,000
 -20°
 -10°
-0°
 10°
 20°
 30°
 40°
 0° 10° 20° 30° 40° 50° 60° 70° 80° 90° 100°
 Standard temperature
-C
-F
 Figure 11-4. Density altitude chart.
 as air density decreases (higher density altitude), aircraft
 performance decreases. A decrease in air density means a

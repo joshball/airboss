@@ -15,14 +15,9 @@ Runway Holding Position Sign
 Noncompliance with a runway holding position sign may
 result in the FAA filing a Pilot Deviation against you. A
 
-A
 ×
 ×
-B
 Figure 14-6. (A) Displaced runway threshold drawing. (B) Displaced threshold for Runway 17 at Albuquerque International Airport (ABQ).
-B
-A
-C
 Typical Runway Safety Area
 Figure 14-7. Runway Safety Area.
 Figure 14-9. Runway holding position sign at takeoff end of Runway

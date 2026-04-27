@@ -44,7 +44,6 @@ An airplane can stall at any speed. Angle of attack is a better
 parameter to use to avoid a stall. For a given configuration,
 the airplane always stalls at the same AOA, referred to as
 the critical AOA. This critical AOA does not change with:
-Weight
 Bank angle
 Temperature
 Density altitude

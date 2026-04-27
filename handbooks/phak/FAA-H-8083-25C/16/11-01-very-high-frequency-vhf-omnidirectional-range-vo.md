@@ -65,28 +65,18 @@ D i s t a n c e
   Altitudes
 
 ( M i l e s )
- T
 
 12,000' and below
 
-L
-
 Below 18,000'
 
-H
-
 Below 14,500'
-
-H
 
 Within the conterminous 48 states
 
 only, between 14,500 and 17,999' 	  100
- H
 
 18,000'—FL 450
-
-H
 
 FL 450—60,000'
 

@@ -6,7 +6,7 @@
   "publisher": "FAA",
   "source_url": "https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/faa-h-8083-25c.pdf",
   "source_checksum": "247929cace0ab56b376e683eba540cc4c8f39f199ab35414e8b604e24f395cb7",
-  "fetched_at": "2026-04-27T13:37:57.816596+00:00",
+  "fetched_at": "2026-04-27T14:14:59.416773+00:00",
   "sections": [
     {
       "level": "chapter",
@@ -18,7 +18,7 @@
       "faa_page_end": "1-24",
       "source_locator": "PHAK Ch 1 (1-1..1-24)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/01/index.md",
-      "content_hash": "fff9bb1f98fdd2ed374480a925016a0d0b7fa3d9b9f98f8176d226ba20fa3a0f",
+      "content_hash": "8ffec3b840f086281fcbbd353d847cd566608a7405ce2aed853dfb2b54c5c493",
       "has_figures": true,
       "has_tables": true
     },
@@ -32,7 +32,7 @@
       "faa_page_end": "2-32",
       "source_locator": "PHAK Ch 2 (2-1..2-32)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/02/index.md",
-      "content_hash": "34cefbaba0b463970880f63b9cf2962470ec385a8ac4d0d3dff8df57064d9747",
+      "content_hash": "359babe8ab4701f0e0ec77356bf6cc21d1310a2c374f5de6f88891d6165a6e3e",
       "has_figures": true,
       "has_tables": true
     },
@@ -46,7 +46,7 @@
       "faa_page_end": "3-16",
       "source_locator": "PHAK Ch 3 (3-1..3-16)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/03/index.md",
-      "content_hash": "57f1d54fccc1e1126070899eaec264b12df7b4e33ec982a29a49520f9c3e2ebb",
+      "content_hash": "a46dea539cb9b75b633981d5a4bc8ab6f380b2655c8974fca1f363dca068fd49",
       "has_figures": true,
       "has_tables": true
     },
@@ -60,7 +60,7 @@
       "faa_page_end": "4-10",
       "source_locator": "PHAK Ch 4 (4-1..4-10)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/04/index.md",
-      "content_hash": "79a374c876c4ea6352ed22198c82c0cbda67bd611cfab9cf543a5b1f38813e33",
+      "content_hash": "65f0936b92097f7192dc9c2c716e48946cfa67d946079c0a1c72ef76175d6db7",
       "has_figures": true,
       "has_tables": true
     },
@@ -74,7 +74,7 @@
       "faa_page_end": "5-51",
       "source_locator": "PHAK Ch 5 (5-1..5-51)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/05/index.md",
-      "content_hash": "b568b3361b36ec852bfb250f6c2feae4237c3a766413d06243bcb740ff30769f",
+      "content_hash": "83ebeed6060c08bb1719bc993f9fcff21526739d5b7dd4df110d67406e153aa3",
       "has_figures": true,
       "has_tables": true
     },
@@ -88,7 +88,7 @@
       "faa_page_end": "6-12",
       "source_locator": "PHAK Ch 6 (6-1..6-12)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/06/index.md",
-      "content_hash": "694e246cf548f501c944f4f1d64c086914178af52616982332a4d290c7420468",
+      "content_hash": "a8dc8e94eb36904eafb2a4d59dc7eef9b96ed227c03c40196a100622dfd4be3e",
       "has_figures": true,
       "has_tables": true
     },
@@ -102,7 +102,7 @@
       "faa_page_end": "7-42",
       "source_locator": "PHAK Ch 7 (7-1..7-42)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/07/index.md",
-      "content_hash": "aae5150b4f2277c0c83af63ed446d824cf9a1e725a735d2a79a222fee8bcfeac",
+      "content_hash": "cdc7755227ca1b12536f609b95fdd505a91886a33cd109b5fce928bf5158a5b8",
       "has_figures": true,
       "has_tables": true
     },
@@ -116,7 +116,7 @@
       "faa_page_end": "8-28",
       "source_locator": "PHAK Ch 8 (8-1..8-28)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/08/index.md",
-      "content_hash": "8771a655ea02806a4a3273b6ca2efb7cd19cd8d8b5a51663bdd0b4e6900c7221",
+      "content_hash": "eb7e111143aa50d6f41749c652768917fda09c68821b4f5487fa72eb9f7a09af",
       "has_figures": true,
       "has_tables": true
     },
@@ -130,7 +130,7 @@
       "faa_page_end": "9-14",
       "source_locator": "PHAK Ch 9 (9-1..9-14)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/09/index.md",
-      "content_hash": "e9af0e2c9ea2efff323feefd8bf65de9df88d790de723f5c5206ddabcf8cfbb6",
+      "content_hash": "c9e08656f35279bf3e02616cc86b1f74e362d03ec226765d71482bfd0d4cf5d0",
       "has_figures": true,
       "has_tables": true
     },
@@ -144,7 +144,7 @@
       "faa_page_end": "10-12",
       "source_locator": "PHAK Ch 10 (10-1..10-12)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/10/index.md",
-      "content_hash": "3bbaa4c50c329b5a1c1381621e85cc67893c5bbd8dd2fd28f7c2c92ef2c2ff9f",
+      "content_hash": "99d17d3979f4ba7d9375d5b4ca4e1f9367cc7cf47364c5118fd98faf6e1014c0",
       "has_figures": true,
       "has_tables": true
     },
@@ -158,7 +158,7 @@
       "faa_page_end": "11-28",
       "source_locator": "PHAK Ch 11 (11-1..11-28)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/11/index.md",
-      "content_hash": "5a7639fad6df3b8e4ab59e3cceccd9fa2e75b27b67c49722ed59f560894d43f0",
+      "content_hash": "4241ee9205ffe127e7b4de0d9ac167c7694d5843dd37eff6eb832b3235125d84",
       "has_figures": true,
       "has_tables": true
     },
@@ -172,7 +172,7 @@
       "faa_page_end": "12-26",
       "source_locator": "PHAK Ch 12 (12-1..12-26)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/12/index.md",
-      "content_hash": "555a747d5cdc6b698284b83e8cb782e78be1678588ca23ddf828370a3fb45d10",
+      "content_hash": "618393320d76fc4e477bf154a902aa4d56d586ca3ff85de78746248603d6c9fe",
       "has_figures": true,
       "has_tables": true
     },
@@ -186,7 +186,7 @@
       "faa_page_end": "13-24",
       "source_locator": "PHAK Ch 13 (13-1..13-24)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/13/index.md",
-      "content_hash": "b7ad890db2d87ee16d4b03404b1f1107155ac2ac8e59b15909d237edaef17bfd",
+      "content_hash": "73e7f07674542fdaadfbaae8c3ece0b73c65a7395c6e2e4a0c7710b8715dee6e",
       "has_figures": true,
       "has_tables": true
     },
@@ -200,7 +200,7 @@
       "faa_page_end": "14-40",
       "source_locator": "PHAK Ch 14 (14-1..14-40)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/14/index.md",
-      "content_hash": "14a90f246252aafccee927cf1623cde848c73da3f02b9ee8167865e468515643",
+      "content_hash": "b1b8612b3f10741f8d6582c2625c07d62368bb26aef98fe35ad5e110bd1236d3",
       "has_figures": true,
       "has_tables": true
     },
@@ -214,7 +214,7 @@
       "faa_page_end": "15-12",
       "source_locator": "PHAK Ch 15 (15-1..15-12)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/15/index.md",
-      "content_hash": "d4392408983777b11211c62411ae8507cca3ac9851dae3adfb89188d68e56119",
+      "content_hash": "57129f0228f3af267da15fdaa70d2c5103bd1c86e1668f58776903db3f4cdcb9",
       "has_figures": true,
       "has_tables": true
     },
@@ -228,7 +228,7 @@
       "faa_page_end": "16-35",
       "source_locator": "PHAK Ch 16 (16-1..16-35)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/16/index.md",
-      "content_hash": "47ea6769816773c39e115da243b71ff2938e3624bb85f71ece9f2ffc5f699ec0",
+      "content_hash": "f89d43a7703388f04bd329d67ad1ec7fb580920a0922419dfa6f619523c7bc11",
       "has_figures": true,
       "has_tables": true
     },
@@ -242,7 +242,7 @@
       "faa_page_end": "17-30",
       "source_locator": "PHAK Ch 17 (17-1..17-30)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/17/index.md",
-      "content_hash": "7913daa741edc9fec28fe042c5e36ee72b086b6cc40916bbc43bd068644a7449",
+      "content_hash": "4bf26e65c23587d4c99faced7ba8809bdcd16b7e1a4ef971d9d4a18401006842",
       "has_figures": true,
       "has_tables": true
     },
@@ -256,7 +256,7 @@
       "faa_page_end": "1-1",
       "source_locator": "PHAK Ch 1 §1 (1-1)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/01/01-introduction.md",
-      "content_hash": "da00d4de5f59f5fe2ba322e88a032824bc49928e5829bc9a672acbc69a1a5206",
+      "content_hash": "d2433fe8ade3758ed26d91a8a7f5ebc5e903d5f3ed5b474900abd417d5f31878",
       "has_figures": false,
       "has_tables": false
     },
@@ -396,7 +396,7 @@
       "faa_page_end": "1-7",
       "source_locator": "PHAK Ch 1 §3 (1) (1-7)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/01/03-01-the-code-of-federal-regulations-cfr.md",
-      "content_hash": "1eb4b9acef09e07b6a047befbe25c922ab5777d9bd745c6c97c7837de7ad7ecb",
+      "content_hash": "0fd3d6ccd479a81cc09496b4aaece2e551ebee1f84d245aeb97e0f99ca37851c",
       "has_figures": false,
       "has_tables": false
     },
@@ -522,7 +522,7 @@
       "faa_page_end": "1-11",
       "source_locator": "PHAK Ch 1 §3 (10) (1-11)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/01/03-10-flight-publications.md",
-      "content_hash": "23d1c8641e888b3466e186e4e096c9db65e2634e7c8e5e87b6f33e431c650e55",
+      "content_hash": "5549d9b62a344b41f193e33e0748c26cd53020b3a8fbf459b574dfaf48633bc2",
       "has_figures": false,
       "has_tables": false
     },
@@ -550,7 +550,7 @@
       "faa_page_end": "1-12",
       "source_locator": "PHAK Ch 1 §3 (12) (1-12)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/01/03-12-notices-to-airmen-notams.md",
-      "content_hash": "572e3478c1aec7abbdf728c0542aac6422274091c77fa7d7fd59b8be0998eaa9",
+      "content_hash": "b47870aad69f0d0c104a0322549b71c8c27fd022ec4806ec68a262fbd2998238",
       "has_figures": false,
       "has_tables": false
     },
@@ -914,7 +914,7 @@
       "faa_page_end": "1-24",
       "source_locator": "PHAK Ch 1 §5 (23) (1-24)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/01/05-23-role-of-the-designated-pilot-examiner.md",
-      "content_hash": "13a7a26db685be7e2cc705cacb8ee39881614915750f4fa9b100a0c6a890a8b5",
+      "content_hash": "48bbcad1f13dc8a0ab7df86d18035e363014f2d2a331178ddb1c72c133fe32ba",
       "has_figures": false,
       "has_tables": false
     },
@@ -928,7 +928,7 @@
       "faa_page_end": "1-24",
       "source_locator": "PHAK Ch 1 §5 (24) (1-24)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/01/05-24-chapter-summary.md",
-      "content_hash": "8c2b1ab4ddc2a352f0df20d0d6868deda7adfaf5dcff4d3b684cad6e3fd7ce11",
+      "content_hash": "5395ab49e76132eb8406d4dac57ff14d6610807b1261ad7fdc93ae917d508f1c",
       "has_figures": false,
       "has_tables": false
     },
@@ -942,7 +942,7 @@
       "faa_page_end": "2-1",
       "source_locator": "PHAK Ch 2 §1 (2-1)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/02/01-introduction.md",
-      "content_hash": "49c5701bbada18f758ab226f8ad4c387e1c71ee97b001d0338d10b647c655671",
+      "content_hash": "8fde3b6750b21ec64d82b1090c31fff59e190dd8010bfff3964cbd78a9beaf5b",
       "has_figures": false,
       "has_tables": false
     },
@@ -956,7 +956,7 @@
       "faa_page_end": "2-2",
       "source_locator": "PHAK Ch 2 §2 (2-2)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/02/02-history-of-adm.md",
-      "content_hash": "8385628868d34fd1495fba0d09a4394093f6dcbf9207e92c275197e96fcc84d7",
+      "content_hash": "7fb77c44009f4d85fc168a35a92c4c7ae47f9f007ff61253b089b458f13b0d09",
       "has_figures": false,
       "has_tables": false
     },
@@ -1054,7 +1054,7 @@
       "faa_page_end": "2-8",
       "source_locator": "PHAK Ch 2 §5 (4) (2-8)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/02/05-04-mitigating-risk.md",
-      "content_hash": "925870e2729c8efd9620a1500c2c4131103b28b4f6f19d1ac541f7d528130103",
+      "content_hash": "a553280bcf0a5a7f79b0875f47c495283516a04aea823e04d8f6a61a5a02b3b8",
       "has_figures": false,
       "has_tables": false
     },
@@ -1110,7 +1110,7 @@
       "faa_page_end": "2-9",
       "source_locator": "PHAK Ch 2 §5 (8) (2-9)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/02/05-08-v-environment.md",
-      "content_hash": "1a6812f2e67b4b20f53b02dd3ae42461d3341919c63f112db136f2f7ee05bcdc",
+      "content_hash": "d67fcc3ce04def3812363ee40f11b33603001a5921c42f0b4375a5ec2eee1a17",
       "has_figures": false,
       "has_tables": false
     },
@@ -1292,7 +1292,7 @@
       "faa_page_end": "2-15",
       "source_locator": "PHAK Ch 2 §17 (2-15)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/02/17-pave-checklist-identify-hazards-and-personal-min.md",
-      "content_hash": "1e7043379a65bbfe9acd56f82d137c9848e2f5b1a60938cddb1d2e33af6db559",
+      "content_hash": "beddfc72884efd376af0beaca2ea6bca3d4c4285d39680d3c1fc35e77971c971",
       "has_figures": false,
       "has_tables": false
     },
@@ -1320,7 +1320,7 @@
       "faa_page_end": "2-16",
       "source_locator": "PHAK Ch 2 §19 (2-16)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/02/19-team-checklist-choose-and-implement-risk-control.md",
-      "content_hash": "7429dbb8d8515b341dbaf0bca890093699c835fa9e38de96d097e27efdb051d0",
+      "content_hash": "e904e331ad60bfef66c97698d63fa67dad613bcdeeafad30967b6962245d0fbc",
       "has_figures": false,
       "has_tables": false
     },
@@ -1334,7 +1334,7 @@
       "faa_page_end": "2-18",
       "source_locator": "PHAK Ch 2 §20 (2-18)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/02/20-the-decide-model.md",
-      "content_hash": "e37a9454c8c64542e941e12e6e6a4cfa33a848fafb4e917aac5adfeedf9eec0f",
+      "content_hash": "7745dc6805065da9865a4f6d414f1d00e9fbf5c92831eb3de88de6ae9eded177",
       "has_figures": false,
       "has_tables": false
     },
@@ -1572,7 +1572,7 @@
       "faa_page_end": "2-25",
       "source_locator": "PHAK Ch 2 §37 (2-25)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/02/37-managing-risks.md",
-      "content_hash": "fdf41bad205c3c852953074433c9d66dac60ca7946ac372b9cc8bf2a88988544",
+      "content_hash": "8b96fd2bc11cad586c08dc700738a5d034ab8cd3c111691117bcab413b46695f",
       "has_figures": false,
       "has_tables": false
     },
@@ -1642,7 +1642,7 @@
       "faa_page_end": "2-27",
       "source_locator": "PHAK Ch 2 §42 (2-27)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/02/42-familiarity.md",
-      "content_hash": "f6105aca95081e3ef3eecc30c114a3f2a423f39b1e2d3f9c7c0e70ba81293d28",
+      "content_hash": "fc89acbde479c0ab3c683c06d6f1a638dd5ce4eb95019a1eb4be67a263e1250a",
       "has_figures": false,
       "has_tables": false
     },
@@ -1754,7 +1754,7 @@
       "faa_page_end": "2-31",
       "source_locator": "PHAK Ch 2 §50 (2-31)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/02/50-risk-management.md",
-      "content_hash": "903eeec7bd2966972c97268924429d726da4b450cd13126477eac5e602859793",
+      "content_hash": "9d1846a8438c0d5634b073a06307355414dfacd27d6ef38c3960c75619f7da35",
       "has_figures": false,
       "has_tables": false
     },
@@ -1768,7 +1768,7 @@
       "faa_page_end": "2-32",
       "source_locator": "PHAK Ch 2 §51 (2-32)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/02/51-chapter-summary.md",
-      "content_hash": "bfd1472f91caf6f8eb715402f2967cb800691dec8350f2888e71ce991d372b62",
+      "content_hash": "8147c3b1bb5a25476bb19de2da6b5e99c2856c5e44682b89994b2031f7e00866",
       "has_figures": false,
       "has_tables": false
     },
@@ -1782,7 +1782,7 @@
       "faa_page_end": "3-1",
       "source_locator": "PHAK Ch 3 §1 (3-1)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/03/01-introduction.md",
-      "content_hash": "948acd6f4fe6ad788237e600a0acb99330cc7ef24e9215c41ba3155692fbe23b",
+      "content_hash": "4a40bf94c63e1d0d211e6bbb0ec201c6d64848052dc9e0401154621efe302130",
       "has_figures": false,
       "has_tables": false
     },
@@ -1824,7 +1824,7 @@
       "faa_page_end": "3-2",
       "source_locator": "PHAK Ch 3 §3 (3-2)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/03/03-lift-and-basic-aerodynamics.md",
-      "content_hash": "5bab1f730b07b7bcce83c151efbcb10689b87284ef7b9a1ac257a4ac9feee608",
+      "content_hash": "82c12fdab1d740ba5abfae0da3b15d50450c1ea5a9a5ad6db7e2a73a15f5e711",
       "has_figures": false,
       "has_tables": false
     },
@@ -1894,7 +1894,7 @@
       "faa_page_end": "3-7",
       "source_locator": "PHAK Ch 3 §4 (4) (3-7)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/03/04-04-landing-gear.md",
-      "content_hash": "3191e5804d2fa1da31363a58311129dde60611296a2e5afb6666e5a05e410c90",
+      "content_hash": "75e1cdafaa8212b9b7d10635e0217bc2f2212bb0cc3e14f5acfad8458d48fc1e",
       "has_figures": false,
       "has_tables": false
     },
@@ -2118,7 +2118,7 @@
       "faa_page_end": "3-13",
       "source_locator": "PHAK Ch 3 §8 (3-13)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/03/08-global-positioning-system-gps.md",
-      "content_hash": "e0ad91902a81a0d8258c94e501e8be25d67f65b0f1583b4fbdbb226085b77790",
+      "content_hash": "1bf098169a5f8f3bd37060471a2710abbe0de935f34a3f6af578f214a72b9bdf",
       "has_figures": false,
       "has_tables": false
     },
@@ -2132,7 +2132,7 @@
       "faa_page_end": "3-13",
       "source_locator": "PHAK Ch 3 §9 (3-13)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/03/09-chapter-summary.md",
-      "content_hash": "e6ac985a084129a4e974d19592133d5b87f1048c9c7cfdb0c94e39e784ff624d",
+      "content_hash": "206535b70d625536aafe5a4ddc25bc14e9356b4084fc83dada09c79c34da86aa",
       "has_figures": false,
       "has_tables": false
     },
@@ -2146,7 +2146,7 @@
       "faa_page_end": "4-1",
       "source_locator": "PHAK Ch 4 §1 (4-1)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/04/01-introduction.md",
-      "content_hash": "f4ea1abd2d7f8fc77fff186145baeebc2e03d045cc94c8019f2efc77eb8c1394",
+      "content_hash": "ba76f46a050e7e7551b3090dfbd4ff81b9238b83dd8494e7bf248988285493a5",
       "has_figures": false,
       "has_tables": false
     },
@@ -2216,7 +2216,7 @@
       "faa_page_end": "4-3",
       "source_locator": "PHAK Ch 4 §2 (4) (4-3)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/04/02-04-pressure.md",
-      "content_hash": "b079abf8b5f2d03c330e2bfc3ffa6281960dc31075341155327f150bc17103a2",
+      "content_hash": "4721bbfc40617c67bc34e10cf8277dad52de9d48d892c740bce9f855351fd6b1",
       "has_figures": false,
       "has_tables": false
     },
@@ -2244,7 +2244,7 @@
       "faa_page_end": "4-4",
       "source_locator": "PHAK Ch 4 §2 (6) (4-4)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/04/02-06-pressure-altitude.md",
-      "content_hash": "46380b904394fb3f844c619e140543272b7b7a6e6e1b3cef5d76d48bcdc7403f",
+      "content_hash": "981458b4ca387e85ffd5433ab8034a1673785a5f60cba208b5ccd14a9b9808b5",
       "has_figures": false,
       "has_tables": false
     },
@@ -2370,7 +2370,7 @@
       "faa_page_end": "4-7",
       "source_locator": "PHAK Ch 4 §4 (1) (4-7)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/04/04-01-low-pressure-above.md",
-      "content_hash": "f83dcc39f49b732e72b17336958a951f23f940c7856a98fa5fe12c7bf55b104a",
+      "content_hash": "eace61304ec193a494a41b6a40c9f5f316c8a4673ce70710820700cd5b68c27e",
       "has_figures": false,
       "has_tables": false
     },
@@ -2412,7 +2412,7 @@
       "faa_page_end": "4-8",
       "source_locator": "PHAK Ch 4 §6 (4-8)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/04/06-airfoil-behavior.md",
-      "content_hash": "ea4fe1d190be8c5febb21ff1611ce36fed768541b4160145c1b4e3e0b9808a07",
+      "content_hash": "bd64d967c6622dbc175d0fd552245748a513a1368c1c61c451f84085a23e702f",
       "has_figures": false,
       "has_tables": false
     },
@@ -2426,7 +2426,7 @@
       "faa_page_end": "4-9",
       "source_locator": "PHAK Ch 4 §7 (4-9)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/04/07-a-third-dimension.md",
-      "content_hash": "4b99ede68a1fa428da5a956ab021dd9912eae3b67021b136943620fc752ba04b",
+      "content_hash": "560798d654e37845f517eefc0c789da53da55674214d9ac22a271159f77b7826",
       "has_figures": false,
       "has_tables": false
     },
@@ -2440,7 +2440,7 @@
       "faa_page_end": "4-9",
       "source_locator": "PHAK Ch 4 §8 (4-9)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/04/08-chapter-summary.md",
-      "content_hash": "1d8fe3684bad4fafa8dbc3060cb98ecded0e0d1c88465d920ce01abc03247992",
+      "content_hash": "7d3d69c71eaf74d2c8f8381a14d67e23def95acb9e2d516de848bd0bc83fed9b",
       "has_figures": false,
       "has_tables": false
     },
@@ -2454,7 +2454,7 @@
       "faa_page_end": "5-1",
       "source_locator": "PHAK Ch 5 §1 (5-1)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/05/01-forces-acting-on-the-aircraft.md",
-      "content_hash": "f5acba4053e4886dfb134512443bb2a311e85457339a81769f0098047e15b072",
+      "content_hash": "8077cc98dded9706efbee5e7c476d730de289cf64cd56c4bb9fb2b62a4045fb8",
       "has_figures": false,
       "has_tables": false
     },
@@ -2468,7 +2468,7 @@
       "faa_page_end": "5-2",
       "source_locator": "PHAK Ch 5 §1 (1) (5-2)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/05/01-01-thrust.md",
-      "content_hash": "08c0971c6ff9e065e795454a63794234c0aa4bd3d4f43c06de32428ab8ebec55",
+      "content_hash": "5db3049fc4674cdc7a5b06ca58bb338a064d043eb35bf47e7a79369d97b37949",
       "has_figures": false,
       "has_tables": false
     },
@@ -2482,7 +2482,7 @@
       "faa_page_end": "5-3",
       "source_locator": "PHAK Ch 5 §1 (2) (5-3)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/05/01-02-lift.md",
-      "content_hash": "f7fbe2d14495f588ff78d61926821344388b00cd40896432856a1461c7681931",
+      "content_hash": "2755985a3360eedfac5a5afdf2fab692fdb87644daaad2f7494b66105c87f203",
       "has_figures": false,
       "has_tables": false
     },
@@ -2496,7 +2496,7 @@
       "faa_page_end": "5-5",
       "source_locator": "PHAK Ch 5 §1 (3) (5-5)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/05/01-03-lift-drag-ratio.md",
-      "content_hash": "3c49e38c59441fd9ce37a4e6cd91b23db3a8a498e6ae690e611342d472fa1adf",
+      "content_hash": "a073f1f33f06696395f10f1745097058cc67ef6fc9c65c406fb80eea66cd6c43",
       "has_figures": false,
       "has_tables": false
     },
@@ -2510,7 +2510,7 @@
       "faa_page_end": "5-6",
       "source_locator": "PHAK Ch 5 §1 (4) (5-6)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/05/01-04-drag.md",
-      "content_hash": "1334b70fcb40a7fb86e4398115e4bab51c8d1a594b2bc9ebe32a2c053b88b6f6",
+      "content_hash": "10261169d0641ea2c95fc7a1155855855cd0c2df815436bdc378d3d2ae2aa139",
       "has_figures": false,
       "has_tables": false
     },
@@ -2524,7 +2524,7 @@
       "faa_page_end": "5-6",
       "source_locator": "PHAK Ch 5 §1 (5) (5-6)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/05/01-05-parasite-drag.md",
-      "content_hash": "4a4fadaac165f063a004011499c9eabcdc1e93f1c5f07227a2113b6b53df0f7a",
+      "content_hash": "7fb30ffa74501bd5c613b71ee77b49c10473532820d51d40aba468400fa51714",
       "has_figures": false,
       "has_tables": false
     },
@@ -2538,7 +2538,7 @@
       "faa_page_end": "5-7",
       "source_locator": "PHAK Ch 5 §1 (6) (5-7)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/05/01-06-induced-drag.md",
-      "content_hash": "6a218c0040c1fde2125f3b19f5be733d4e78ab8c7736e1cfc221d5bd45288794",
+      "content_hash": "0cb493f5a844636c503bea6a8d5dd062f58ff0029d24eff5530b691dd5ca8c78",
       "has_figures": false,
       "has_tables": false
     },
@@ -2552,7 +2552,7 @@
       "faa_page_end": "5-8",
       "source_locator": "PHAK Ch 5 §1 (7) (5-8)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/05/01-07-weight.md",
-      "content_hash": "3bfdeffde07ddf313dcfac9d1212e9ab169c6d2cdd996cf0595cbf658e8b51e6",
+      "content_hash": "fb781f1818eef4898892075b863e75fc30df745636edf5b57d58d3a1255f9ec8",
       "has_figures": false,
       "has_tables": false
     },
@@ -2566,7 +2566,7 @@
       "faa_page_end": "5-8",
       "source_locator": "PHAK Ch 5 §2 (5-8)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/05/02-wingtip-vortices.md",
-      "content_hash": "54bd8ee772f70794da777e4dbbccc0cce9b83a7d8918384065ea4dc8e4618cd3",
+      "content_hash": "6ff064413027c69f28b34ef9bba189ef41850892bee48f588e970c180585a584",
       "has_figures": false,
       "has_tables": false
     },
@@ -2580,7 +2580,7 @@
       "faa_page_end": "5-8",
       "source_locator": "PHAK Ch 5 §2 (1) (5-8)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/05/02-01-formation-of-vortices.md",
-      "content_hash": "cb5c4e2ea31f8407908fee0188ba26c4f2a7b79c063d17134ed89eed52d3405b",
+      "content_hash": "336b200dd70f733d44c1abba026ae868fca4db4bc83ed0de40c9ee0a4b48ab7d",
       "has_figures": false,
       "has_tables": false
     },
@@ -2594,7 +2594,7 @@
       "faa_page_end": "5-9",
       "source_locator": "PHAK Ch 5 §2 (2) (5-9)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/05/02-02-avoiding-wake-turbulence.md",
-      "content_hash": "a85fd66d34e1e0e5a4b534564448914c4e2a1a73a2be577742c3d6d3dfe07097",
+      "content_hash": "ae8976923133a053ef4c1a5108a779862feeaad2dfa64d7b1b40c151edefafe7",
       "has_figures": false,
       "has_tables": false
     },
@@ -2608,7 +2608,7 @@
       "faa_page_end": "5-11",
       "source_locator": "PHAK Ch 5 §3 (5-11)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/05/03-ground-effect.md",
-      "content_hash": "e849ac7725255a8020fbb84c0fb3a245d1c075479918563b810f060a06d21ced",
+      "content_hash": "3de6861ab85cb6b308ece8767b9312e6519810106970109e581773388442b2bf",
       "has_figures": false,
       "has_tables": false
     },
@@ -2622,7 +2622,7 @@
       "faa_page_end": "5-12",
       "source_locator": "PHAK Ch 5 §4 (5-12)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/05/04-axes-of-an-aircraft.md",
-      "content_hash": "6c691c2d6c776c7f3783bdc02c92ecd3defd246d675e424540850b4437fb3bef",
+      "content_hash": "bb587ae5061251b91f0837304b36fdd831d115b2fe840b56ab04c949863374e2",
       "has_figures": false,
       "has_tables": false
     },
@@ -2636,7 +2636,7 @@
       "faa_page_end": "5-13",
       "source_locator": "PHAK Ch 5 §5 (5-13)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/05/05-moment-and-moment-arm.md",
-      "content_hash": "fee6a9a89df27cfcd33240460b08e8571acc2b0d1533c64bdc2ee990a5515254",
+      "content_hash": "03e649241786360d1d20833c92f4a653b90f94d9b79af17e2a05d2b45296813f",
       "has_figures": false,
       "has_tables": false
     },
@@ -2650,7 +2650,7 @@
       "faa_page_end": "5-14",
       "source_locator": "PHAK Ch 5 §6 (5-14)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/05/06-aircraft-design-characteristics.md",
-      "content_hash": "bdd501a4bb9c544f85bf053cd0f6f966f3802cfdde815e81278534af31354cbd",
+      "content_hash": "98c99d8882701c4147136ed6320f1c5150fac716f4ef04a4c860706f01271a2a",
       "has_figures": false,
       "has_tables": false
     },
@@ -2664,7 +2664,7 @@
       "faa_page_end": "5-14",
       "source_locator": "PHAK Ch 5 §6 (1) (5-14)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/05/06-01-stability.md",
-      "content_hash": "ab4614f7b0d0c8c8ade413c5eebcf850ab128aea55a54161d87ebef8f49f377c",
+      "content_hash": "b15783fcd2d1e4e01d9c198ce16be55ac2fc9d19074bb07fa3d1b7afd8002a9c",
       "has_figures": false,
       "has_tables": false
     },
@@ -2678,7 +2678,7 @@
       "faa_page_end": "5-14",
       "source_locator": "PHAK Ch 5 §6 (2) (5-14)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/05/06-02-static-stability.md",
-      "content_hash": "fdf378c1b51f955b6c37d5d3859095c790fc79042f51541f5ccda34cfa4f7371",
+      "content_hash": "49c2e047da8bb321ca0842b2e03b3005bbfc5c1aaacb1f3548ee7fbeee3afe9c",
       "has_figures": false,
       "has_tables": false
     },
@@ -2692,7 +2692,7 @@
       "faa_page_end": "5-14",
       "source_locator": "PHAK Ch 5 §6 (3) (5-14)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/05/06-03-dynamic-stability.md",
-      "content_hash": "587b9995d0a33f31cf54d1a108a7777e03885f72530dc4ec4a361a215ebbb737",
+      "content_hash": "22f85cd99008d177878eba4309ac1d1fd51793fc0c2144eca83ce71f9f36c107",
       "has_figures": false,
       "has_tables": false
     },
@@ -2706,7 +2706,7 @@
       "faa_page_end": "5-15",
       "source_locator": "PHAK Ch 5 §6 (4) (5-15)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/05/06-04-longitudinal-stability-pitching.md",
-      "content_hash": "cc0b9e73f58cf65dc46c17f0fce624e0eed32039db6ed2053d3f82a61b2a8839",
+      "content_hash": "bc058c5359f043b17ee55151886660f3bde398616ba27e72f7dcbf645b7d151a",
       "has_figures": false,
       "has_tables": false
     },
@@ -2720,7 +2720,7 @@
       "faa_page_end": "5-17",
       "source_locator": "PHAK Ch 5 §6 (5) (5-17)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/05/06-05-lateral-stability-rolling.md",
-      "content_hash": "514a735d9bc46dfeff5e3b3e9146bf9c04f8863a2a19156187072c792a8b4031",
+      "content_hash": "2300195a581790eae07aec6dc41d879874c287fa0b816d5f9e26b69b7b181045",
       "has_figures": false,
       "has_tables": false
     },
@@ -2734,7 +2734,7 @@
       "faa_page_end": "5-19",
       "source_locator": "PHAK Ch 5 §6 (6) (5-19)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/05/06-06-directional-stability-yawing.md",
-      "content_hash": "963a38980d5e7d8ff288d14ebf0164ef70b6c91575050b73dc02094aa4842bf2",
+      "content_hash": "2634a19faa1262f7fa1dcb9a810bcf432fdf1cc2827d7346171da1d57e6a76d2",
       "has_figures": false,
       "has_tables": false
     },
@@ -2748,7 +2748,7 @@
       "faa_page_end": "5-20",
       "source_locator": "PHAK Ch 5 §6 (7) (5-20)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/05/06-07-free-directional-oscillations-dutch-roll.md",
-      "content_hash": "78b9b63fb586f2e3f3b3b2335875df7a1e317841ddc45e8c19a0fb7a1a6bcfa7",
+      "content_hash": "e7195a2c25e3c03e7ae264d7550a9f0f6019e9158819aec5145289b908206a53",
       "has_figures": false,
       "has_tables": false
     },
@@ -2762,7 +2762,7 @@
       "faa_page_end": "5-20",
       "source_locator": "PHAK Ch 5 §6 (8) (5-20)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/05/06-08-spiral-instability.md",
-      "content_hash": "22e10ff1e08228eaed59a3b5d98d25f5e6f310bd0846bf7771631eba3c47ea1a",
+      "content_hash": "01afbf5c54db920aa067ccc0b0c4556a3bb4df1f50a26bc6c683330b2ff1aeee",
       "has_figures": false,
       "has_tables": false
     },
@@ -2776,7 +2776,7 @@
       "faa_page_end": "5-20",
       "source_locator": "PHAK Ch 5 §7 (5-20)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/05/07-effect-of-wing-planform.md",
-      "content_hash": "3218e1e8d573a5c3e484aeb7b01ca03dd6407a10183fe9385b876ba22beff7a4",
+      "content_hash": "3d890627bea58c3b80af5196afcbc23b0fea464129c80e49ee261632a4ed1162",
       "has_figures": false,
       "has_tables": false
     },
@@ -2790,7 +2790,7 @@
       "faa_page_end": "5-22",
       "source_locator": "PHAK Ch 5 §8 (5-22)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/05/08-aerodynamic-forces-in-flight-maneuvers.md",
-      "content_hash": "2107620acf11a937b7a15fe4ed6947ec3afe16946bf5b06fc04c6d1d955eaec3",
+      "content_hash": "b264af678a249533026479193efd0b08112980d9e82ec2a59d3ebcd2c7784ac8",
       "has_figures": false,
       "has_tables": false
     },
@@ -2804,7 +2804,7 @@
       "faa_page_end": "5-22",
       "source_locator": "PHAK Ch 5 §8 (1) (5-22)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/05/08-01-forces-in-turns.md",
-      "content_hash": "868429b7ced1686380381c4fadd6b72fbe2427545b2313412e8697a3c70dbb93",
+      "content_hash": "34df821e4edecd89ea3b7856787c75629b5526e123a61b7b9ddb6175f7ec7e05",
       "has_figures": false,
       "has_tables": false
     },
@@ -2818,7 +2818,7 @@
       "faa_page_end": "5-23",
       "source_locator": "PHAK Ch 5 §8 (2) (5-23)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/05/08-02-forces-in-climbs.md",
-      "content_hash": "443a07058782eb8a5dd5c196414f80576c9394efe1019bd4afdef98f983c1e70",
+      "content_hash": "63c3db81b2fc39e7ff5d5d8ef3400571d0876c1429ab91c7f224cb183622b7e0",
       "has_figures": false,
       "has_tables": false
     },
@@ -2846,7 +2846,7 @@
       "faa_page_end": "5-25",
       "source_locator": "PHAK Ch 5 §9 (5-25)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/05/09-stalls.md",
-      "content_hash": "40a2e27d8b19584b76585ec699cfe231d102a88019cb25ec79e4043163c7a79b",
+      "content_hash": "e2664665786c12b657ac0050f6479f0bc8c3a80779fac2eddec66b4689cf5c02",
       "has_figures": false,
       "has_tables": false
     },
@@ -2860,7 +2860,7 @@
       "faa_page_end": "5-26",
       "source_locator": "PHAK Ch 5 §10 (5-26)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/05/10-angle-of-attack-indicators.md",
-      "content_hash": "b4c25c0aa187a2b043d90336a2cfb6b5fb34f86405084ad8f0bf497af435ead6",
+      "content_hash": "dccd0705c19ee2ac4e7754bc495ff77c505d3843ba664105726417fbd626df60",
       "has_figures": false,
       "has_tables": false
     },
@@ -2874,7 +2874,7 @@
       "faa_page_end": "5-28",
       "source_locator": "PHAK Ch 5 §11 (5-28)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/05/11-basic-propeller-principles.md",
-      "content_hash": "d76347996aad9a156d05f4e08ebae146ff7bce2554b2d42063d3a14487ee0444",
+      "content_hash": "fcecef8042ab62a4b0282c1defcfeed58b6eba8a7eb1bb68ad55d2990fffe05a",
       "has_figures": false,
       "has_tables": false
     },
@@ -2888,7 +2888,7 @@
       "faa_page_end": "5-30",
       "source_locator": "PHAK Ch 5 §11 (1) (5-30)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/05/11-01-torque-and-p-factor.md",
-      "content_hash": "e2eb4cfbad77f48ba2fa393534f8e0bf84d481aca41688a00a71b1bb1ebe88fc",
+      "content_hash": "f4a88412726792149b1b518931d63f2394ff742594d1261c80e28485db86cc74",
       "has_figures": false,
       "has_tables": false
     },
@@ -2902,7 +2902,7 @@
       "faa_page_end": "5-31",
       "source_locator": "PHAK Ch 5 §11 (2) (5-31)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/05/11-02-torque-reaction.md",
-      "content_hash": "31cb370220576c6ccba3eef452c8e0806aedf622bb008d75445003940371f725",
+      "content_hash": "e3cdca49bfb4b00b73c689a274991f866c377281f875fb22411e645287a6bcaf",
       "has_figures": false,
       "has_tables": false
     },
@@ -2958,7 +2958,7 @@
       "faa_page_end": "5-33",
       "source_locator": "PHAK Ch 5 §12 (5-33)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/05/12-load-factors.md",
-      "content_hash": "07802d500974c2d8e169d31b64e6c64fa02ed7358a8ff77b530ce9b72a905dad",
+      "content_hash": "b7edc17c41bded2a8120d47177424e63f1694bee45ba8c4423923dc1b7341c2d",
       "has_figures": false,
       "has_tables": false
     },
@@ -2972,7 +2972,7 @@
       "faa_page_end": "5-33",
       "source_locator": "PHAK Ch 5 §12 (1) (5-33)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/05/12-01-load-factors-in-aircraft-design.md",
-      "content_hash": "0ec3cab8c7f91fd218686021ea9197732ef2938fb84189be99596a30ad9b8d05",
+      "content_hash": "c4b7440b272cb35658ded538663e52bc6373d7ab415669ea3bb6237a4f5259d6",
       "has_figures": false,
       "has_tables": false
     },
@@ -3000,7 +3000,7 @@
       "faa_page_end": "5-34",
       "source_locator": "PHAK Ch 5 §12 (3) (5-34)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/05/12-03-load-factors-and-stalling-speeds.md",
-      "content_hash": "51adcde153706b6fecc5d57980565f2169276bd0dcb9e2d6f41f966247e7daab",
+      "content_hash": "053dfede1ec44f3997c102b3431b214040a4bd83b69f096558b5239e46d3c4b2",
       "has_figures": false,
       "has_tables": false
     },
@@ -3014,7 +3014,7 @@
       "faa_page_end": "5-36",
       "source_locator": "PHAK Ch 5 §12 (4) (5-36)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/05/12-04-load-factors-and-flight-maneuvers.md",
-      "content_hash": "f8d2ad5908e4d742de1ffb6571a43ca781c97270a3021a01d260d974f04b71f2",
+      "content_hash": "f64deeeac63ef53a8b647e715a59588efdc12f1be7e96316424a912ace3f8081",
       "has_figures": false,
       "has_tables": false
     },
@@ -3070,7 +3070,7 @@
       "faa_page_end": "5-40",
       "source_locator": "PHAK Ch 5 §12 (8) (5-40)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/05/12-08-weight-and-balance.md",
-      "content_hash": "98150142fbc5982c23b09c29e2a42b62401a25f1d23ab2735ed5a1a3cbdd410c",
+      "content_hash": "abc7fba57c93194e394bebad7a8a8e1ff1104558a72cd1117a1dd1359c63b940",
       "has_figures": false,
       "has_tables": false
     },
@@ -3112,7 +3112,7 @@
       "faa_page_end": "5-42",
       "source_locator": "PHAK Ch 5 §12 (11) (5-42)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/05/12-11-effect-of-weight-on-stability-and-controllabilit.md",
-      "content_hash": "313a94f4c62667280515dcde42a92b77bd854dc891f3d121854b298fe5b060d5",
+      "content_hash": "56707d1844e91b433cd058d8a455492330967714d47dc2921d142b94ae93c87d",
       "has_figures": false,
       "has_tables": false
     },
@@ -3168,7 +3168,7 @@
       "faa_page_end": "5-44",
       "source_locator": "PHAK Ch 5 §12 (15) (5-44)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/05/12-15-speed-ranges.md",
-      "content_hash": "deafc686bf7d056ccdacc0245f8368dfdcf518a94531ecdd84992aa34b2dfc99",
+      "content_hash": "95f8958e6028ce9319908b4f76104e1ca4faf648eee057abee004f6009031775",
       "has_figures": false,
       "has_tables": false
     },
@@ -3252,7 +3252,7 @@
       "faa_page_end": "5-46",
       "source_locator": "PHAK Ch 5 §12 (21) (5-46)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/05/12-21-shock-waves.md",
-      "content_hash": "dd6b9e2503e8f1082e5a4dc1c7d254710548933ffcba06cb029871bf48f3bfbe",
+      "content_hash": "81c096c46d1ecfd9864ef82f90929e0a5c9fe6ae7b4152d0d515a288a28af7dc",
       "has_figures": false,
       "has_tables": false
     },
@@ -3294,7 +3294,7 @@
       "faa_page_end": "5-49",
       "source_locator": "PHAK Ch 5 §12 (24) (5-49)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/05/12-24-high-speed-flight-controls.md",
-      "content_hash": "81123e25073b886f45b120ecbd172dbe075541a72955319de278b341a4abcd22",
+      "content_hash": "1cb1f6cb289f862eaaf6d1490716b6f37b4e1b55db5d18bdaa9629029c34f663",
       "has_figures": false,
       "has_tables": false
     },
@@ -3308,7 +3308,7 @@
       "faa_page_end": "5-51",
       "source_locator": "PHAK Ch 5 §12 (25) (5-51)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/05/12-25-chapter-summary.md",
-      "content_hash": "7cbdd81fe32ba1d6845dd12f000559dfa0e7285a9b734cbbf7489878d547ca2f",
+      "content_hash": "e9296a0aa5b6ff6c66ff37d8ff87dfa0683e89205a97e72ed85d102a0b20a740",
       "has_figures": false,
       "has_tables": false
     },
@@ -3322,7 +3322,7 @@
       "faa_page_end": "6-1",
       "source_locator": "PHAK Ch 6 §1 (6-1)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/06/01-introduction.md",
-      "content_hash": "c6b784c9414c8ea766d723f412b7381f7420f93e49d1780f2ed96219852f8858",
+      "content_hash": "bf579ab47ce499514a8783643e9e1c753869a97bfcdf590ec0a1f8fc1e3d564c",
       "has_figures": false,
       "has_tables": false
     },
@@ -3364,7 +3364,7 @@
       "faa_page_end": "6-2",
       "source_locator": "PHAK Ch 6 §2 (2) (6-2)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/06/02-02-primary-flight-controls.md",
-      "content_hash": "5f8beb77a9be41e308b41f50d9c6b002d25f368eff52459ac976ab7a69a2c503",
+      "content_hash": "b5118cbfedb2c6857b6842d234658af76c4251ed8468fc223a80dcd465f40ee0",
       "has_figures": false,
       "has_tables": false
     },
@@ -3378,7 +3378,7 @@
       "faa_page_end": "6-5",
       "source_locator": "PHAK Ch 6 §2 (3) (6-5)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/06/02-03-elevator.md",
-      "content_hash": "600f813030ebcd7d00e7c9b73634aaa5ab6818170025f7a940b4c83782c885f8",
+      "content_hash": "b6d78776c5b19ef8e2413008ae849f175d843aa596c3150d9c175c53fd4c3407",
       "has_figures": false,
       "has_tables": false
     },
@@ -3420,7 +3420,7 @@
       "faa_page_end": "6-7",
       "source_locator": "PHAK Ch 6 §2 (6) (6-7)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/06/02-06-canard.md",
-      "content_hash": "e0ef4abbadc8fae02fa84ec77fac4f78cc2123d1daa3520ffddba993196fbece",
+      "content_hash": "d535c65c012dfd0f1a08a0a5c97153630727e61584121f69b3d7156d39793757",
       "has_figures": false,
       "has_tables": false
     },
@@ -3602,7 +3602,7 @@
       "faa_page_end": "6-12",
       "source_locator": "PHAK Ch 6 §3 (6-12)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/06/03-autopilot.md",
-      "content_hash": "bac879ee167ab15bfb490b8b446f8399f28d0e156c9ce0f2f30f3e32e4d23970",
+      "content_hash": "b91a672eded48bca274e9246b7b1cdca60a87affb07c7a922c605975d46ff54a",
       "has_figures": false,
       "has_tables": false
     },
@@ -3616,7 +3616,7 @@
       "faa_page_end": "6-12",
       "source_locator": "PHAK Ch 6 §4 (6-12)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/06/04-chapter-summary.md",
-      "content_hash": "df6ab1a0b3a7cb4849ae64fe951751217001eb69bfcf7f8184302cc491e6aa32",
+      "content_hash": "c8a42d87a88d1e7078e58587c4e7ba28bd3692b72578699f6f4e1adfb633b1c7",
       "has_figures": false,
       "has_tables": false
     },
@@ -3630,7 +3630,7 @@
       "faa_page_end": "7-1",
       "source_locator": "PHAK Ch 7 §1 (7-1)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/07/01-introduction.md",
-      "content_hash": "7c141553b757657e0c00a6866b4b8dc25271e263a9647bba800bbe9277b406b3",
+      "content_hash": "d32b93c2974d0c5594a817594cb4d44995f274006e91346e6ab87407c00413e1",
       "has_figures": false,
       "has_tables": false
     },
@@ -3672,7 +3672,7 @@
       "faa_page_end": "7-4",
       "source_locator": "PHAK Ch 7 §2 (2) (7-4)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/07/02-02-propeller.md",
-      "content_hash": "c5157c4ec3e57457e75c639228e03e95a00c35d95f7d685dfdf96dcebebaf09d",
+      "content_hash": "a7debf2d084797ca70f727ec0cbc3783e925763b38f72d0016d44298e3877e7f",
       "has_figures": false,
       "has_tables": false
     },
@@ -3728,7 +3728,7 @@
       "faa_page_end": "7-7",
       "source_locator": "PHAK Ch 7 §6 (7-7)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/07/06-induction-systems.md",
-      "content_hash": "e0bc98869507b601e1e7c0c9f0f0f685a8df24ba92f627001d38f64784489687",
+      "content_hash": "28a5299b89e4994c2cad8fe20e249091312247ab3fd1dad00c8c56ec76bc2182",
       "has_figures": false,
       "has_tables": false
     },
@@ -3854,7 +3854,7 @@
       "faa_page_end": "7-12",
       "source_locator": "PHAK Ch 7 §15 (7-12)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/07/15-superchargers.md",
-      "content_hash": "383068d1fde2c51583e235e02759df7b3bd7f53acad5502773552e5caf325bc0",
+      "content_hash": "9e29e068e574af4cdf9d457dc63735638c6494ff379c896b97ad2567495e74aa",
       "has_figures": false,
       "has_tables": false
     },
@@ -3910,7 +3910,7 @@
       "faa_page_end": "7-15",
       "source_locator": "PHAK Ch 7 §19 (7-15)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/07/19-ignition-system.md",
-      "content_hash": "02519fd1c1ae6bb389fc9cb354676b1214b8c9b489e690b6d59d9b967006c54f",
+      "content_hash": "1b279ff9c144b94aa885213cebdf6c8eb81dbf1a7cf5db27354b2cdaa3adbcfd",
       "has_figures": false,
       "has_tables": false
     },
@@ -3980,7 +3980,7 @@
       "faa_page_end": "7-18",
       "source_locator": "PHAK Ch 7 §24 (7-18)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/07/24-combustion.md",
-      "content_hash": "860934e8a482c1b89396566b2195899d5688318047fe73a09af5656e8c81c126",
+      "content_hash": "515621154cf1d84ceb59f7b02c901992638a4583f239279683b20626707f8cb1",
       "has_figures": false,
       "has_tables": false
     },
@@ -4274,7 +4274,7 @@
       "faa_page_end": "7-24",
       "source_locator": "PHAK Ch 7 §45 (7-24)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/07/45-performance-comparison.md",
-      "content_hash": "689259698b49c00c92152eedf1961da6e364deedd294e1a36b908f1d7d09f2d9",
+      "content_hash": "b8c4e665e7dc592e29232eccb713111929fbbb3f57bcb78780148d89ac3f61b5",
       "has_figures": false,
       "has_tables": false
     },
@@ -4358,7 +4358,7 @@
       "faa_page_end": "7-25",
       "source_locator": "PHAK Ch 7 §51 (7-25)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/07/51-fuel-tanks.md",
-      "content_hash": "e96b8525e066e539488b3e5fcc9b2710d0bff3510763e387a46c5c18c70f03a3",
+      "content_hash": "0a5b42d2f990ce97d6808e7d25e979e4bf0a759afe3bbcc74c2883f5be733ce4",
       "has_figures": false,
       "has_tables": false
     },
@@ -4386,7 +4386,7 @@
       "faa_page_end": "7-26",
       "source_locator": "PHAK Ch 7 §53 (7-26)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/07/53-fuel-selectors.md",
-      "content_hash": "a9e8c4432114976ef89b16c076b5a24fba57eaad96eb5a15647c8d90372d1b1f",
+      "content_hash": "fd34cf7e1e7fa05c16176efda1814de2833d0ee856a72cdee3e7b7189c739bbc",
       "has_figures": false,
       "has_tables": false
     },
@@ -4568,7 +4568,7 @@
       "faa_page_end": "7-31",
       "source_locator": "PHAK Ch 7 §66 (7-31)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/07/66-hydraulic-systems.md",
-      "content_hash": "c95baf22e670d0a7ae25960fc1da4ad827fca0b720a41d47cb828df68f3e16cc",
+      "content_hash": "0c946a1d079d51833e775f2a796b3006c2c03d7043bfdc42df3c78a84d60d95f",
       "has_figures": false,
       "has_tables": false
     },
@@ -4652,7 +4652,7 @@
       "faa_page_end": "7-34",
       "source_locator": "PHAK Ch 7 §72 (7-34)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/07/72-pressurized-aircraft.md",
-      "content_hash": "2257e8edc5e2887811280b7047ee9eed77a322989db7f9ddc31602ba4ae510d8",
+      "content_hash": "ada4974e6ce0c64303e0f01171f3f20907b86e0b724625c9bfee1de27304b1c7",
       "has_figures": false,
       "has_tables": false
     },
@@ -4834,7 +4834,7 @@
       "faa_page_end": "7-41",
       "source_locator": "PHAK Ch 7 §85 (7-41)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/07/85-other-anti-ice-and-deice-systems.md",
-      "content_hash": "c56223e524639786e63233cfd30a7d77406c5a3bcd473d6dbdada4d55c7b2b43",
+      "content_hash": "24632d733a0eaf66e5c558134621bace70047eb46e421c1a427cd87593a7b028",
       "has_figures": false,
       "has_tables": false
     },
@@ -4848,7 +4848,7 @@
       "faa_page_end": "7-41",
       "source_locator": "PHAK Ch 7 §86 (7-41)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/07/86-chapter-summary.md",
-      "content_hash": "da42db11e54dd674cc319b458ca61ae2c6faa05104ac63827b47b8afceda3368",
+      "content_hash": "9c25933652564aaa49ed8196d5472f367dad94f7166319403b264da242f14297",
       "has_figures": false,
       "has_tables": false
     },
@@ -4862,7 +4862,7 @@
       "faa_page_end": "8-1",
       "source_locator": "PHAK Ch 8 §1 (8-1)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/08/01-introduction.md",
-      "content_hash": "378a5b7236e43112ce112a3bd67335ba97b30171d7bf36a41cd3e12288f61333",
+      "content_hash": "e5bf5c99d67ec805ea153de0875854637fe94934608eaaf7b186fa8cdf6929ca",
       "has_figures": false,
       "has_tables": false
     },
@@ -4932,7 +4932,7 @@
       "faa_page_end": "8-3",
       "source_locator": "PHAK Ch 8 §2 (4) (8-3)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/08/02-04-principle-of-operation.md",
-      "content_hash": "1ab5e376a94ff9171b60e40ac372261bc4e850634a288ec5c1f654dcec157edd",
+      "content_hash": "6c567c8b91c19b669c6c4efb8097413a87f1b8e4a3cc2f2187fcb30c7bd210dc",
       "has_figures": false,
       "has_tables": false
     },
@@ -4946,7 +4946,7 @@
       "faa_page_end": "8-4",
       "source_locator": "PHAK Ch 8 §2 (5) (8-4)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/08/02-05-effect-of-nonstandard-pressure-and-temperature.md",
-      "content_hash": "ad2f0b56fb8924bd5ad7cdc970155be9d43a651b1c2f5fabac18a63fd4ce8979",
+      "content_hash": "19a4ea4dfa497d37a0ff6d3499fac9da8dcd185b945b357fd4cc69948e616212",
       "has_figures": false,
       "has_tables": false
     },
@@ -4988,7 +4988,7 @@
       "faa_page_end": "8-6",
       "source_locator": "PHAK Ch 8 §2 (8) (8-6)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/08/02-08-types-of-altitude.md",
-      "content_hash": "91bf144b4ae400166f2c083a7d808e84901407b2ac2aa1909254a099d4e2445f",
+      "content_hash": "15c9d77d9507388416b2ed74db0958e9e49939094adba732485b61042e336efd",
       "has_figures": false,
       "has_tables": false
     },
@@ -5030,7 +5030,7 @@
       "faa_page_end": "8-7",
       "source_locator": "PHAK Ch 8 §3 (8-7)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/08/03-principle-of-operation.md",
-      "content_hash": "cb695958acd4386d1199c4f626490f96c4c1d3aa20f0917cffb0a73ac36ccde7",
+      "content_hash": "d6b5a719602588efded137292b0a18bc8885a00d82fc39b79b56200b5a95e45b",
       "has_figures": false,
       "has_tables": false
     },
@@ -5282,7 +5282,7 @@
       "faa_page_end": "8-13",
       "source_locator": "PHAK Ch 8 §21 (8-13)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/08/21-turn-rate-indicator.md",
-      "content_hash": "99ee285eca1cd8a8c704b2acb442d9564f65dbfb32df7461764abe2fb9d2bd4e",
+      "content_hash": "d3d94cec20f3ec533714e0c56905ceef30bc754a15c2a453ed30d5b44280dc24",
       "has_figures": false,
       "has_tables": false
     },
@@ -5436,7 +5436,7 @@
       "faa_page_end": "8-18",
       "source_locator": "PHAK Ch 8 §32 (8-18)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/08/32-inclinometer.md",
-      "content_hash": "dfe70bf76a7105d387ac12831c8e624ffe41772e0962420d0a013bd72eabe1ac",
+      "content_hash": "f5b910ebff15fc05dfe90a5c67125511b4fe33d4421c27eeffdb5043ce622442",
       "has_figures": false,
       "has_tables": false
     },
@@ -5478,7 +5478,7 @@
       "faa_page_end": "8-18",
       "source_locator": "PHAK Ch 8 §35 (8-18)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/08/35-attitude-indicator.md",
-      "content_hash": "694bd186738234823a195e3689da18fdf0a70ae861eff8538fd78d55f0523922",
+      "content_hash": "3f0fbbc200a4a6989c9d1dec7264f5305532a8e2ee5d04c6190047466c9fabd9",
       "has_figures": false,
       "has_tables": false
     },
@@ -5562,7 +5562,7 @@
       "faa_page_end": "8-22",
       "source_locator": "PHAK Ch 8 §41 (8-22)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/08/41-angle-of-attack-indicators.md",
-      "content_hash": "1b49e71cbba531d4cf86dbe22f544a53431d920c8b0197f6e13b0e0662433168",
+      "content_hash": "44e51bcce2fcf528a74c2091d975ca424804040f46d8deb5baf5322221bf7101",
       "has_figures": false,
       "has_tables": false
     },
@@ -5604,7 +5604,7 @@
       "faa_page_end": "8-24",
       "source_locator": "PHAK Ch 8 §44 (8-24)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/08/44-magnetic-compass-induced-errors.md",
-      "content_hash": "15089a919a1e161b150f853d5177f0989320bdd8f71b8c95ebffa4647fc3290d",
+      "content_hash": "046464eeba9d12b737a8199b3dbab1d13636b397f810c3fd8e251dc216306f2f",
       "has_figures": false,
       "has_tables": false
     },
@@ -5646,7 +5646,7 @@
       "faa_page_end": "8-27",
       "source_locator": "PHAK Ch 8 §47 (8-27)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/08/47-eddy-current-damping.md",
-      "content_hash": "d57f916d58ab69fa296d9a2ca63cd13ee6d1a9a8d6ed3926e6620d198bc7c917",
+      "content_hash": "f22edac9a3718cb24016924eb5ac7c633af4ad8f0ffa81b4c67ef4eee2adf1e9",
       "has_figures": false,
       "has_tables": false
     },
@@ -5660,7 +5660,7 @@
       "faa_page_end": "8-28",
       "source_locator": "PHAK Ch 8 §48 (8-28)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/08/48-outside-air-temperature-oat-gauge.md",
-      "content_hash": "7675ae3867fdba24ec2ab90e1bd371e6eeccd4c0fd1490b2dbc732de546826b2",
+      "content_hash": "99805bfe60f974625d0b46f50b36e9547ac4dc588ca22ef3c2f3d5ea2a7a28f4",
       "has_figures": false,
       "has_tables": false
     },
@@ -5674,7 +5674,7 @@
       "faa_page_end": "8-28",
       "source_locator": "PHAK Ch 8 §49 (8-28)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/08/49-chapter-summary.md",
-      "content_hash": "5b77f1952f69c1c37bd38fab4133ae07def97d50f83751686e75b5b59522d84a",
+      "content_hash": "f7906e532cc450586a401beed6ae40adc634c93d8f4b8c02a909f329c803bdbe",
       "has_figures": false,
       "has_tables": false
     },
@@ -5688,7 +5688,7 @@
       "faa_page_end": "9-1",
       "source_locator": "PHAK Ch 9 §1 (9-1)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/09/01-introduction.md",
-      "content_hash": "e65c68aca6a80e425c32366221acbcb1af467eea78dbc510090a1182e4e9c49d",
+      "content_hash": "9e4602af721b33d7094d3b4e3fe8b61d6698e8a64f8d9b4ffe0b90d9559dc6ad",
       "has_figures": false,
       "has_tables": false
     },
@@ -5744,7 +5744,7 @@
       "faa_page_end": "9-2",
       "source_locator": "PHAK Ch 9 §1 (4) (9-2)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/09/01-04-airspeed.md",
-      "content_hash": "f96c0a85fa074ee303cdae157a311e383d356f1c8ac74608b106f40b495e120a",
+      "content_hash": "8f89dda0814cbe3619809ab14f7ab1e10d8490db21a312992ae3cb9704e8424f",
       "has_figures": false,
       "has_tables": false
     },
@@ -5870,7 +5870,7 @@
       "faa_page_end": "9-4",
       "source_locator": "PHAK Ch 9 §1 (13) (9-4)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/09/01-13-systems-description-section-7.md",
-      "content_hash": "bcee67de739885a37dd1d0a2fd65a5e56a7e8539df44f596377cab8f8b688ee6",
+      "content_hash": "b6be1929526366738877efa0545e161f2d93502ea35abe3bed4752a172804c2a",
       "has_figures": false,
       "has_tables": false
     },
@@ -5954,7 +5954,7 @@
       "faa_page_end": "9-7",
       "source_locator": "PHAK Ch 9 §2 (2) (9-7)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/09/02-02-airworthiness-certificate.md",
-      "content_hash": "2ad541235e5cec2257d9d84e1ef2410fcb7e635d813e74449440cc0358dcdc04",
+      "content_hash": "9493ccac8d463dc3419ac8dee369cc8d3e303637483300fb5a580fea3ae3295b",
       "has_figures": false,
       "has_tables": false
     },
@@ -6178,7 +6178,7 @@
       "faa_page_end": "9-12",
       "source_locator": "PHAK Ch 9 §6 (9-12)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/09/06-airworthiness-directives-ads.md",
-      "content_hash": "4fd6401a0af1c6b8139ebf601b0ca77b417193c9a9949ed2136d0838cd20250b",
+      "content_hash": "ff9bf6f6d299bdaaf5a0d3906a0b911dbb0b9e8e8596645a1e5241fa632d7b5c",
       "has_figures": false,
       "has_tables": false
     },
@@ -6192,7 +6192,7 @@
       "faa_page_end": "9-13",
       "source_locator": "PHAK Ch 9 §7 (9-13)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/09/07-aircraft-owner-operator-responsibilities.md",
-      "content_hash": "155485cc89bee4c3c7471ff1f1f1e443dd7a0bbf686a9b4f3f5ad96f34c1f127",
+      "content_hash": "0731d8fc1a8f751a305c7cbbe73fe08679f065751b71818b77203f5497be38f2",
       "has_figures": false,
       "has_tables": false
     },
@@ -6206,7 +6206,7 @@
       "faa_page_end": "9-13",
       "source_locator": "PHAK Ch 9 §8 (9-13)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/09/08-chapter-summary.md",
-      "content_hash": "bab8a541af84c02b21f424b00a7ee64df6d385b56086b3eeeeb3e2bed4bbd3f9",
+      "content_hash": "d193150503a1b9df7fb7e7f0a0fb21a46dc63df1d16bb3afb9dc1d6772f3dddb",
       "has_figures": false,
       "has_tables": false
     },
@@ -6220,7 +6220,7 @@
       "faa_page_end": "10-1",
       "source_locator": "PHAK Ch 10 §1 (10-1)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/10/01-introduction.md",
-      "content_hash": "776d9fac2f86ba01e19cebbd6d086915b84cef49c67b66b9671db480ed223f32",
+      "content_hash": "8bfaf9c50ce216a8799234a24d6654ae733a2250a41ae642000b5fdcd268ff7c",
       "has_figures": false,
       "has_tables": false
     },
@@ -6360,7 +6360,7 @@
       "faa_page_end": "10-5",
       "source_locator": "PHAK Ch 10 §9 (10-5)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/10/09-principles-of-weight-and-balance-computations.md",
-      "content_hash": "700e19f8063d585f60fabb0c96c879c0d6d0bb009bf96baac1fbb5d8872fad19",
+      "content_hash": "adc14a356d3f6720b105633c6ad865bd3079e215ecba206490b023aace7340ae",
       "has_figures": false,
       "has_tables": false
     },
@@ -6374,7 +6374,7 @@
       "faa_page_end": "10-6",
       "source_locator": "PHAK Ch 10 §10 (10-6)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/10/10-weight-and-balance-restrictions.md",
-      "content_hash": "4507124f2f6b19a43f9f717eb83ae4069278743064b547982f39a14c92e7c747",
+      "content_hash": "21897ec529a213385fe0fe3201d6f7726449284ac60903366592b8174d9c9612",
       "has_figures": false,
       "has_tables": false
     },
@@ -6402,7 +6402,7 @@
       "faa_page_end": "10-7",
       "source_locator": "PHAK Ch 10 §12 (10-7)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/10/12-computational-method.md",
-      "content_hash": "6074cbf669718d177bfaa97c27bec572c3b95775f5a59ff021f9e7628c73a62f",
+      "content_hash": "91b9be6af410933c8f00a540f644bdb56fcf82895b28373b33b171d31080b8e2",
       "has_figures": false,
       "has_tables": false
     },
@@ -6416,7 +6416,7 @@
       "faa_page_end": "10-7",
       "source_locator": "PHAK Ch 10 §13 (10-7)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/10/13-graph-method.md",
-      "content_hash": "0b1a1f15e31100602767a697bf84dcfcb4d2459b1b3cfa0798d074d2266247cf",
+      "content_hash": "6ea83b641d21553f33096efb8ea9ecde4e97cc1a88131e699c4bc78cd215bee0",
       "has_figures": false,
       "has_tables": false
     },
@@ -6430,7 +6430,7 @@
       "faa_page_end": "10-9",
       "source_locator": "PHAK Ch 10 §14 (10-9)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/10/14-table-method.md",
-      "content_hash": "5dc6806c8ba6d4735d73b65e4bac31ff71d66f4b7a90a05031a51395fed56aff",
+      "content_hash": "e933a8691c10478872742b3d7b7b498a6dac7c11696112dc4a415eaf8e4cbb1f",
       "has_figures": false,
       "has_tables": false
     },
@@ -6486,7 +6486,7 @@
       "faa_page_end": "10-10",
       "source_locator": "PHAK Ch 10 §18 (10-10)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/10/18-weight-shifting.md",
-      "content_hash": "0efe2cc0e5745daa5dbb0b24c5be40deebc8e7a86fc2cb56ab852c4f1d2136b8",
+      "content_hash": "d9719a8bafa19f6904210cb923ded26f67a8bc6e6a37bcef21be775b22433341",
       "has_figures": false,
       "has_tables": false
     },
@@ -6500,7 +6500,7 @@
       "faa_page_end": "10-11",
       "source_locator": "PHAK Ch 10 §19 (10-11)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/10/19-weight-addition-or-removal.md",
-      "content_hash": "0aa7daf6b8cba16769887a14be9b18356dabf4684b41b508724ba83bd54ec57e",
+      "content_hash": "0037c22cd6bce8dae5d81cba1015b985facef5da86986fb1d83d40eabb640bb7",
       "has_figures": false,
       "has_tables": false
     },
@@ -6514,7 +6514,7 @@
       "faa_page_end": "10-11",
       "source_locator": "PHAK Ch 10 §20 (10-11)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/10/20-chapter-summary.md",
-      "content_hash": "7669e3fdee450cdd7164ac7ed188d442c7f5ee7732a1318377c4c64184aefdb7",
+      "content_hash": "ab6ebc3af0a8e6733f18ab155ed2c4e8614f758633795d658cec3ceb97ae76a9",
       "has_figures": false,
       "has_tables": false
     },
@@ -6528,7 +6528,7 @@
       "faa_page_end": "11-1",
       "source_locator": "PHAK Ch 11 §1 (11-1)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/11/01-introduction.md",
-      "content_hash": "44700fb0fa6de2cb5335a2194591af6592faf03c93f4b6e385103c54002f40c0",
+      "content_hash": "da4b748e29fd1f15bfb4bd41c8d1b0dfcd1048cf08c4d72e281cbcd18a5c1d5d",
       "has_figures": false,
       "has_tables": false
     },
@@ -6542,7 +6542,7 @@
       "faa_page_end": "11-1",
       "source_locator": "PHAK Ch 11 §2 (11-1)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/11/02-importance-of-performance-data.md",
-      "content_hash": "4fa55df45ef96fde9757f3b8fdd7b83f893ae75820b7093617d574f1ac8ec996",
+      "content_hash": "f22d76bcbd034717afcb09afc8e0722fbf6092edf1ecdfc6191bdf65918f1b3a",
       "has_figures": false,
       "has_tables": false
     },
@@ -6570,7 +6570,7 @@
       "faa_page_end": "11-2",
       "source_locator": "PHAK Ch 11 §4 (11-2)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/11/04-atmospheric-pressure.md",
-      "content_hash": "ca534d75771f56684a61a29983b37eecfe7def52256d639381d97d221540b525",
+      "content_hash": "9ee09eb9123654f44134c338261d861a117977c47867d87edaba68e75abf123f",
       "has_figures": false,
       "has_tables": false
     },
@@ -6598,7 +6598,7 @@
       "faa_page_end": "11-3",
       "source_locator": "PHAK Ch 11 §6 (11-3)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/11/06-density-altitude.md",
-      "content_hash": "c27481133c916ecb5783a17c731ad8aced62c608c61061b771ee16cf10f830a7",
+      "content_hash": "b11d46ecd2fd71a41799394d9ca4ee9ff4eca4b887726e35045fee43340a2924",
       "has_figures": false,
       "has_tables": false
     },
@@ -6668,7 +6668,7 @@
       "faa_page_end": "11-5",
       "source_locator": "PHAK Ch 11 §7 (1) (11-5)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/11/07-01-straight-and-level-flight.md",
-      "content_hash": "23747641f18f4cfdc7c7668ebb076ff0433897496aecd0700fd89f932826580d",
+      "content_hash": "67a1ee0ce096ab1b17be64995802c2a9007a147fa152541376a083a8ce7df4b9",
       "has_figures": false,
       "has_tables": false
     },
@@ -6724,7 +6724,7 @@
       "faa_page_end": "11-8",
       "source_locator": "PHAK Ch 11 §7 (5) (11-8)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/11/07-05-climb-performance-factors.md",
-      "content_hash": "01e17af1b763fbd067ff04f3091bfd766a3523ab6df1a03035d4817af0ec9745",
+      "content_hash": "cc462969b03d7457ed997748867e16b53fc9a170c23529497be2eb0c6ba1e059",
       "has_figures": false,
       "has_tables": false
     },
@@ -6752,7 +6752,7 @@
       "faa_page_end": "11-11",
       "source_locator": "PHAK Ch 11 §7 (7) (11-11)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/11/07-07-region-of-reversed-command.md",
-      "content_hash": "57434bf97efa056448101c9c70c1ffe41600a0948eb1ace6f264620ccf59bd84",
+      "content_hash": "b7800dfd254f02ff540eb837338311fe0de067a26f68c1fda247f1b1987b9a28",
       "has_figures": false,
       "has_tables": false
     },
@@ -6850,7 +6850,7 @@
       "faa_page_end": "11-19",
       "source_locator": "PHAK Ch 11 §9 (11-19)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/11/09-performance-charts.md",
-      "content_hash": "56e4dfd03bfe5c36f68e9d41a814660f83a949c600ed1ebe3b1adae6d5691e11",
+      "content_hash": "0c7b6a8f78861a158114bcc13060d7dd93b424ae090e69d300e937f5c9471774",
       "has_figures": false,
       "has_tables": false
     },
@@ -6892,7 +6892,7 @@
       "faa_page_end": "11-20",
       "source_locator": "PHAK Ch 11 §9 (3) (11-20)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/11/09-03-takeoff-charts.md",
-      "content_hash": "d588305a32fd6fc117d466e145032407ef6a5964f43fdb1fd8afa0eb23ec4f4b",
+      "content_hash": "caf3813e06d2956b5d49968ac8749bdacff2ce3ed147a276d2ceecc3f527c935",
       "has_figures": false,
       "has_tables": false
     },
@@ -6906,7 +6906,7 @@
       "faa_page_end": "11-21",
       "source_locator": "PHAK Ch 11 §9 (4) (11-21)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/11/09-04-climb-and-cruise-charts.md",
-      "content_hash": "06e6e4b338b29054e35b969eb5598a02769b5a1f5c0db5dd6c84603f28d704c5",
+      "content_hash": "a35157de0fa94464d927c4c5bab670d15254a60bcc8573e1a7887a31c20438ab",
       "has_figures": false,
       "has_tables": false
     },
@@ -6920,7 +6920,7 @@
       "faa_page_end": "11-25",
       "source_locator": "PHAK Ch 11 §9 (5) (11-25)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/11/09-05-crosswind-and-headwind-component-chart.md",
-      "content_hash": "bfcccb3da98b73eab13c3420ca9a4822f9dac4e91021b09d1f8dbe1d8d68ec92",
+      "content_hash": "cf781c885f59f82153e3404160c7c5c4d76269f36b05c64cb947ba8db614f67d",
       "has_figures": false,
       "has_tables": false
     },
@@ -6934,7 +6934,7 @@
       "faa_page_end": "11-26",
       "source_locator": "PHAK Ch 11 §9 (6) (11-26)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/11/09-06-landing-charts.md",
-      "content_hash": "1d3804d953a2ced7dbb649627919806554bdcc14ad39f9a26a3b1766cbd8ef17",
+      "content_hash": "de06aa9212aafe154179775a7c2a21e680454ea4b4e76f87958ebd4e7e5adbb9",
       "has_figures": false,
       "has_tables": false
     },
@@ -6976,7 +6976,7 @@
       "faa_page_end": "11-28",
       "source_locator": "PHAK Ch 11 §9 (9) (11-28)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/11/09-09-air-carrier-obstacle-clearance-requirements.md",
-      "content_hash": "3c9614102cbded4f64f558ed67d8bd5724624461edea404fecfd1357d6023882",
+      "content_hash": "7a43aad759ce4ccb1064e9cd43decabea7e73f9afcb2021d2676647e994264ec",
       "has_figures": false,
       "has_tables": false
     },
@@ -6990,7 +6990,7 @@
       "faa_page_end": "11-28",
       "source_locator": "PHAK Ch 11 §9 (10) (11-28)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/11/09-10-chapter-summary.md",
-      "content_hash": "16428032f02eb1ea6f560991f3cd6f17918142e3f5b382251308dba59a59fd5f",
+      "content_hash": "73b8bb907bfaf52d35356b4dce9a955ed3b55206f012aaa97ab4c4be1df14e1d",
       "has_figures": false,
       "has_tables": false
     },
@@ -7004,7 +7004,7 @@
       "faa_page_end": "12-1",
       "source_locator": "PHAK Ch 12 §1 (12-1)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/12/01-introduction.md",
-      "content_hash": "7aeb02babb2ccad9d5c5cac40f9944538697a84f2215c151ff870701caf490f7",
+      "content_hash": "143d6a474ee419865e2ab0a3c9d7e0b1a60cf7e09cd7b506d279ad3163bbdfb6",
       "has_figures": false,
       "has_tables": false
     },
@@ -7074,7 +7074,7 @@
       "faa_page_end": "12-3",
       "source_locator": "PHAK Ch 12 §3 (12-3)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/12/03-coriolis-force.md",
-      "content_hash": "7973cb4a99c07e141a45e42f8f742d3e67559a1879446b1bbe181ac4f17c6e27",
+      "content_hash": "de480b65d733443d9e00348583674913079a100855f7886bd3bd8e4a2c856708",
       "has_figures": false,
       "has_tables": false
     },
@@ -7088,7 +7088,7 @@
       "faa_page_end": "12-4",
       "source_locator": "PHAK Ch 12 §4 (12-4)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/12/04-measurement-of-atmosphere-pressure.md",
-      "content_hash": "29ba3e69a9ea54e5a2d8ef3d0db1ced4c0e85a7f97367b68bb40d5f43ee7bc15",
+      "content_hash": "8aa287b6439449af9d9b7a212696461fd8078d30cb03d273e0e6e00f71dcee7d",
       "has_figures": false,
       "has_tables": false
     },
@@ -7102,7 +7102,7 @@
       "faa_page_end": "12-5",
       "source_locator": "PHAK Ch 12 §5 (12-5)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/12/05-altitude-and-atmospheric-pressure.md",
-      "content_hash": "0d024e30cae4851a6a8e0a82f584baba9c3cbb038c2f019852ae3b0c5bc81e5d",
+      "content_hash": "8d2c81663a21d557825f7e5d4d06e64b8a220c9ee366bfc6ba9bd594237db501",
       "has_figures": false,
       "has_tables": false
     },
@@ -7186,7 +7186,7 @@
       "faa_page_end": "12-8",
       "source_locator": "PHAK Ch 12 §8 (3) (12-8)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/12/08-03-effect-of-obstructions-on-wind.md",
-      "content_hash": "9d2b5df8958c0ad7899aab0cd8ce694853661045d3b356066a928c2118313d1a",
+      "content_hash": "a20a6db5f15203c8722d4e50ab1645a847ec413029e2a37f6349191ef4c0c14c",
       "has_figures": false,
       "has_tables": false
     },
@@ -7200,7 +7200,7 @@
       "faa_page_end": "12-11",
       "source_locator": "PHAK Ch 12 §8 (4) (12-11)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/12/08-04-low-level-wind-shear.md",
-      "content_hash": "2220ebb7f452c9de87b7a8522294009dbe1ff8bd0e112a496f3c85c3f76f0389",
+      "content_hash": "5154a88eab66a1b5f4bf5fbc8c05d2e51c513ce49bd00c7daf62f40a0314a248",
       "has_figures": false,
       "has_tables": false
     },
@@ -7284,7 +7284,7 @@
       "faa_page_end": "12-13",
       "source_locator": "PHAK Ch 12 §9 (4) (12-13)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/12/09-04-temperature-dew-point-relationship.md",
-      "content_hash": "41f48a9275ab08284c7a6c15f15b090afbd9fc270accbd19487423f0b70baa06",
+      "content_hash": "2c1311b4256dcf8ebc976fbdf64ee309fc115e1f552c8e8aceeca858251a09d6",
       "has_figures": false,
       "has_tables": false
     },
@@ -7396,7 +7396,7 @@
       "faa_page_end": "12-17",
       "source_locator": "PHAK Ch 12 §10 (12-17)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/12/10-air-masses.md",
-      "content_hash": "975415fd730eab8807547a0026894a0aae749ee13dd0e44f4e87afa391106211",
+      "content_hash": "8aa8f8a32837ee901c4eefc4124ec7e1f8d79dce7020135082a8cba35a6e4198",
       "has_figures": false,
       "has_tables": false
     },
@@ -7690,7 +7690,7 @@
       "faa_page_end": "12-25",
       "source_locator": "PHAK Ch 12 §20 (12-25)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/12/20-engine-water-ingestion.md",
-      "content_hash": "1b428df30d204f62c6a89b586686b9c6eb2c5f797fdd92d03e3af448031e4c33",
+      "content_hash": "c1cc9c05d7bd31d774cd71bf603e577831add1e2e45cb63256c4fe77eb058e2a",
       "has_figures": false,
       "has_tables": false
     },
@@ -7704,7 +7704,7 @@
       "faa_page_end": "12-25",
       "source_locator": "PHAK Ch 12 §21 (12-25)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/12/21-chapter-summary.md",
-      "content_hash": "d1dd2ee8184707074ce95665c34a6c159215c44c8fad1d77335ea408f27a217d",
+      "content_hash": "e20a279803c4e1bc548518558953ad4c49039782657b69243a8cc99044f9c96c",
       "has_figures": false,
       "has_tables": false
     },
@@ -7718,7 +7718,7 @@
       "faa_page_end": "13-1",
       "source_locator": "PHAK Ch 13 §1 (13-1)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/13/01-introduction.md",
-      "content_hash": "03498be1442ddca362f5ccd74d40405bdf90001db08be16341b8fffbdf2a3fe9",
+      "content_hash": "c24cb6c2c380e08ac83eaa34b197cf3d12c33d0b2f9d32936c6e5274e73064c2",
       "has_figures": false,
       "has_tables": false
     },
@@ -7788,7 +7788,7 @@
       "faa_page_end": "13-3",
       "source_locator": "PHAK Ch 13 §2 (4) (13-3)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/13/02-04-radar-observations.md",
-      "content_hash": "7852b4a800f96365d5a4022d7487640f3416dd2696ced285d785456ee05a924a",
+      "content_hash": "c1350332aa7b1a375fa2c9ccfc6267c7736d1a454326944ed0be4dfba3b60102",
       "has_figures": false,
       "has_tables": false
     },
@@ -7900,7 +7900,7 @@
       "faa_page_end": "13-5",
       "source_locator": "PHAK Ch 13 §4 (1) (13-5)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/13/04-01-standard-briefing.md",
-      "content_hash": "86740ba5ae0c09462533d4c13fe82ca9df3fc9f46a017add657d3bd825ae8eed",
+      "content_hash": "502741ef8acfbe2e870fdfa30c749d9ca1c2a80d747b10b4896c156538ac9b02",
       "has_figures": false,
       "has_tables": false
     },
@@ -7956,7 +7956,7 @@
       "faa_page_end": "13-6",
       "source_locator": "PHAK Ch 13 §5 (1) (13-6)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/13/05-01-aviation-routine-weather-report-metar.md",
-      "content_hash": "bfa63d1033e02f1de7ebdf77a00bab957fed1028a26e7453feaabc16a734b885",
+      "content_hash": "4b2ff8c0e78f7a182b1e44c786bac32484e9a2e6822fb3082a74ff09807b7e59",
       "has_figures": false,
       "has_tables": false
     },
@@ -7970,7 +7970,7 @@
       "faa_page_end": "13-8",
       "source_locator": "PHAK Ch 13 §5 (2) (13-8)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/13/05-02-pilot-weather-reports-pireps.md",
-      "content_hash": "70a80aad151e9939f181b24e38b72203a05cb9ea449e8b8c3a49d7bcf0f73808",
+      "content_hash": "2e6ea922529a00e65ee4b470952cd5feb41309e56288ac5b730fa444ae2cbbed",
       "has_figures": false,
       "has_tables": false
     },
@@ -7998,7 +7998,7 @@
       "faa_page_end": "13-9",
       "source_locator": "PHAK Ch 13 §5 (4) (13-9)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/13/05-04-terminal-aerodrome-forecasts-taf.md",
-      "content_hash": "c3579190bf19e6fde4b7dfe1d30d84669b8d92841da18200588bb86aa4cb6dda",
+      "content_hash": "9e963c03c3137ace75655f0e4d9a319f2091f08b1ef9da35b41ffe5a93e586f1",
       "has_figures": false,
       "has_tables": false
     },
@@ -8012,7 +8012,7 @@
       "faa_page_end": "13-10",
       "source_locator": "PHAK Ch 13 §5 (5) (13-10)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/13/05-05-area-forecasts-fa.md",
-      "content_hash": "fb02f1c1599f82a82270dba9d7532a1f5a3fde2b400c71c7ed999b665cd599be",
+      "content_hash": "c822caa38dad4fe3c9315b74cbc8bcf44c583db9ed622dc1b5286f5aee87dcb2",
       "has_figures": false,
       "has_tables": false
     },
@@ -8040,7 +8040,7 @@
       "faa_page_end": "13-11",
       "source_locator": "PHAK Ch 13 §5 (7) (13-11)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/13/05-07-airmet.md",
-      "content_hash": "9b2de3fa68d003e4b61b96ec92b7dc192bed580523121aee4966ba67910184ee",
+      "content_hash": "b074784ee12b3a0a1bd4dd9f0c5595210389971d32e2c3efb5963d7602c3773d",
       "has_figures": false,
       "has_tables": false
     },
@@ -8054,7 +8054,7 @@
       "faa_page_end": "13-12",
       "source_locator": "PHAK Ch 13 §5 (8) (13-12)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/13/05-08-sigmet.md",
-      "content_hash": "78897800e9646349589ea1dfb61cb638f69012398b617127ff35240e65976dd0",
+      "content_hash": "206a81a8abe13ed800e8aa711ba155a529cd369e2ea6bda3d5117b463573a46e",
       "has_figures": false,
       "has_tables": false
     },
@@ -8068,7 +8068,7 @@
       "faa_page_end": "13-12",
       "source_locator": "PHAK Ch 13 §5 (9) (13-12)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/13/05-09-convective-significant-meteorological-informatio.md",
-      "content_hash": "4a7f1d2a5c67c75b8da2835b6ca74dedac9e97a97a5b4d94eda1bdbe1b61dcac",
+      "content_hash": "cdbc5580bf8f5d27dae695d9a786c50c2ddf12a60a03b611bea5539b2c46d0cb",
       "has_figures": false,
       "has_tables": false
     },
@@ -8194,7 +8194,7 @@
       "faa_page_end": "13-18",
       "source_locator": "PHAK Ch 13 §8 (1) (13-18)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/13/08-01-weather-products-age-and-expiration.md",
-      "content_hash": "1ad685c3e094c6d0e79df2e297e082b67d08e4c4e6ce17c96253a7b680ad9b0e",
+      "content_hash": "7f5f89f43a3e287c9baac5fb1f10803aea1488d66e6dd45a76d40a6d9c41715b",
       "has_figures": false,
       "has_tables": false
     },
@@ -8320,7 +8320,7 @@
       "faa_page_end": "13-24",
       "source_locator": "PHAK Ch 13 §8 (10) (13-24)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/13/08-10-pilot-responsibility.md",
-      "content_hash": "84bf4f75fc816bcee39c4e9fcb3b5ee6fecf9fe7172482c2924b5071562acbba",
+      "content_hash": "5e8cf76724cd545e833ec4db96e3af7fbd8aa3220ab3ef5db5d28316c1d98c08",
       "has_figures": false,
       "has_tables": false
     },
@@ -8334,7 +8334,7 @@
       "faa_page_end": "13-24",
       "source_locator": "PHAK Ch 13 §8 (11) (13-24)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/13/08-11-chapter-summary.md",
-      "content_hash": "567aaa9d37e150c27253ce3399f81df0e444025546805533031a41e0f497f2f9",
+      "content_hash": "fad32e72a3eb1951cfc079a92a54a010fed11c1b58f0bf02e8bebbfb93817e28",
       "has_figures": false,
       "has_tables": false
     },
@@ -8348,7 +8348,7 @@
       "faa_page_end": "14-1",
       "source_locator": "PHAK Ch 14 §1 (14-1)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/14/01-introduction.md",
-      "content_hash": "576a52bf53b5b520c619d75d073185891afd8ddc8bc12161e0a674bc89499b5b",
+      "content_hash": "23b7f70887ff4b0ed95b8efa26cbb58971efe5d0edca9ab2cafd8552f0e77b98",
       "has_figures": false,
       "has_tables": false
     },
@@ -8530,7 +8530,7 @@
       "faa_page_end": "14-5",
       "source_locator": "PHAK Ch 14 §4 (3) (14-5)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/14/04-03-displaced-threshold.md",
-      "content_hash": "99462ac298cd2928f376fde3b6fb9bdd8113ab38de8a94241e7f1e7e1cebc972",
+      "content_hash": "ba418b2c2122d7227026b931ee1501d0ab43d08e6ec5acbc83a81e5e877929a5",
       "has_figures": false,
       "has_tables": false
     },
@@ -8572,7 +8572,7 @@
       "faa_page_end": "14-6",
       "source_locator": "PHAK Ch 14 §4 (6) (14-6)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/14/04-06-runway-holding-position-sign.md",
-      "content_hash": "464180ed0df22a389dec3c5dcbc455b7f9a765a1e7e0602dea06f59f71a4a3a0",
+      "content_hash": "71b425758a8ff5ba60b8c1c7abac65c9ed9c1a95a5f035f62ad2719a221208ca",
       "has_figures": false,
       "has_tables": false
     },
@@ -8614,7 +8614,7 @@
       "faa_page_end": "14-8",
       "source_locator": "PHAK Ch 14 §4 (9) (14-8)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/14/04-09-runway-designation-marking.md",
-      "content_hash": "17924b0dc22d8d2064f72bbc5139fcaea1a75a5106931eeb1ee246c0fa7e673e",
+      "content_hash": "7cee0d143ee374abe3febbc5c1f42945b639473669237e4879f123ee2a1a84e6",
       "has_figures": false,
       "has_tables": false
     },
@@ -8628,7 +8628,7 @@
       "faa_page_end": "14-10",
       "source_locator": "PHAK Ch 14 §4 (10) (14-10)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/14/04-10-land-and-hold-short-operations-lahso.md",
-      "content_hash": "9b4e3c23b01afec97bce775d7d3046e9797a2d7cd7c35e3bf26a91444e8df0a7",
+      "content_hash": "951a7add4f2e6d756564638f5cd3f3b2b2a084a55223fe852bc0e90e96e85343",
       "has_figures": false,
       "has_tables": false
     },
@@ -8684,7 +8684,7 @@
       "faa_page_end": "14-12",
       "source_locator": "PHAK Ch 14 §4 (14) (14-12)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/14/04-14-holding-position-signs-and-markings-for-an-instr.md",
-      "content_hash": "02677998fc1f6bbec36436e8c61ba1a9590010c2d1f722dafb1c2186e353ec7f",
+      "content_hash": "57478ea18ca7a1cdf8d9a189db690294d374d1892938984687c5f0d2239e393c",
       "has_figures": false,
       "has_tables": false
     },
@@ -8712,7 +8712,7 @@
       "faa_page_end": "14-14",
       "source_locator": "PHAK Ch 14 §4 (16) (14-14)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/14/04-16-marking-and-lighting-of-permanently-closed-runwa.md",
-      "content_hash": "6ff14ccbf505d2ecdc5175e7e7b17ce284b05ff3fb1e0bc2dd4afd35c06c0c94",
+      "content_hash": "ee022b1bf1d58cc589a9b81f1a5772d6d6f7e4f73008922c46c57cda1264a25c",
       "has_figures": false,
       "has_tables": false
     },
@@ -9048,7 +9048,7 @@
       "faa_page_end": "14-21",
       "source_locator": "PHAK Ch 14 §24 (14-21)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/14/24-example-key-to-traffic-pattern-operations-single.md",
-      "content_hash": "ea18c1e1693cb43f4dce6f31fd895c39803bb63b32bbe1df4b4c4bf8ce029651",
+      "content_hash": "076e9c43d0093135a62fce7adde58e45da23c9fcd30441ce777487e67d2bd63b",
       "has_figures": false,
       "has_tables": false
     },
@@ -9062,7 +9062,7 @@
       "faa_page_end": "14-21",
       "source_locator": "PHAK Ch 14 §25 (14-21)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/14/25-example-key-to-traffic-pattern-operations-parall.md",
-      "content_hash": "7a6032b981158e85bcd81ea6e757730051206a056c526bdf6db6332078fdc056",
+      "content_hash": "4f09e0d21e1c7aae78059afa88b22b195dac225f4dc7e5e0fd4ae769db42b871",
       "has_figures": false,
       "has_tables": false
     },
@@ -9132,7 +9132,7 @@
       "faa_page_end": "14-23",
       "source_locator": "PHAK Ch 14 §30 (14-23)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/14/30-lost-communication-procedures.md",
-      "content_hash": "bb771c9d8ac7e5e82810c6d21e0d8a1f8cb1b522e843b4900dc45d22ba51fac0",
+      "content_hash": "b057c468b4cc7fac87f414ca3be0aaa9900412b64191eef2628fd9011cd3c084",
       "has_figures": false,
       "has_tables": false
     },
@@ -9188,7 +9188,7 @@
       "faa_page_end": "14-25",
       "source_locator": "PHAK Ch 14 §34 (14-25)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/14/34-transponder.md",
-      "content_hash": "c79984c018f9406bca9b92e19b8b4436b307c63850342dd037ae7549bbfc24bf",
+      "content_hash": "1ef2ea5889c2168c9db186bb03165fc30e8bdf42aa3376b1f19e9e66e7e06638",
       "has_figures": false,
       "has_tables": false
     },
@@ -9328,7 +9328,7 @@
       "faa_page_end": "14-28",
       "source_locator": "PHAK Ch 14 §44 (14-28)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/14/44-clearing-procedures.md",
-      "content_hash": "dac41adf861d28d1ddf1b04c65a81a3fee715be926450764111638026a93e6b4",
+      "content_hash": "6f356472b7b075dd5f1dbfb661e47b7f1c914df264f9fead3b61f11aeb0edb84",
       "has_figures": false,
       "has_tables": false
     },
@@ -9538,7 +9538,7 @@
       "faa_page_end": "14-37",
       "source_locator": "PHAK Ch 14 §59 (14-37)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/14/59-pilot-considerations.md",
-      "content_hash": "d7fd671a076988f56348c23b01194ff8dd6bacacb6dcf6db60b6588f84914409",
+      "content_hash": "7ea2108a80b789ae3c0cc2838a8a401b5b9cd4b01e2cfdfe9a0d0e302d720e5b",
       "has_figures": false,
       "has_tables": false
     },
@@ -9552,7 +9552,7 @@
       "faa_page_end": "14-38",
       "source_locator": "PHAK Ch 14 §60 (14-38)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/14/60-chapter-summary.md",
-      "content_hash": "320e107b14a4747f4f7a81f6cd6ba8e7860851b0e31f454e12e420f1bbd7d564",
+      "content_hash": "f454f775bdbe377e30dba1aea828b80b3aa69dc4f2cc24110fe8562e32cbf0eb",
       "has_figures": false,
       "has_tables": false
     },
@@ -9566,7 +9566,7 @@
       "faa_page_end": "15-1",
       "source_locator": "PHAK Ch 15 §1 (15-1)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/15/01-introduction.md",
-      "content_hash": "9ac9f9acb701ea3ee8c41093ab56edef2576940306a327244272add5c2ef1d0f",
+      "content_hash": "42ad99c34cb8159c3c8eb2d52d911ae5d227f3e59fee8146a577ab6bbd4a63c9",
       "has_figures": false,
       "has_tables": false
     },
@@ -10000,7 +10000,7 @@
       "faa_page_end": "15-11",
       "source_locator": "PHAK Ch 15 §6 (8) (15-11)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/15/06-08-parachute-jumps.md",
-      "content_hash": "7c0741374a9508d57aa5ef1bd814754cee5668a58121d98f20bed5ad8bb0ae54",
+      "content_hash": "a1321aec82896595b620bd7d375f5f422ff24c4d2276fd7275c14eea80343e39",
       "has_figures": false,
       "has_tables": false
     },
@@ -10014,7 +10014,7 @@
       "faa_page_end": "15-11",
       "source_locator": "PHAK Ch 15 §7 (15-11)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/15/07-chapter-summary.md",
-      "content_hash": "e1d00c7137d1dbdf134111c22e8498a800af9f1c3bb342d451c398171fc005e8",
+      "content_hash": "33b5f6e3bf70139c30f9611668047d33945eeddce8c0ce00b41975ae0a324033",
       "has_figures": false,
       "has_tables": false
     },
@@ -10028,7 +10028,7 @@
       "faa_page_end": "16-1",
       "source_locator": "PHAK Ch 16 §1 (16-1)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/16/01-introduction.md",
-      "content_hash": "718c315bd94473d6465a4698d35d07e3493adf8c495ffb05c91721dd7cf62d4a",
+      "content_hash": "7297560fa9cbcad04a8a011949856944aafdc3c82e7e13b094b6b3f7a6f8104c",
       "has_figures": false,
       "has_tables": false
     },
@@ -10112,7 +10112,7 @@
       "faa_page_end": "16-3",
       "source_locator": "PHAK Ch 16 §3 (1) (16-3)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/16/03-01-time-zones.md",
-      "content_hash": "0d7660398d6cf4898c7267540e2c40162ead6c1379bec184255be23d9b023f6f",
+      "content_hash": "cd85b4848274b51674a34d646ca73e58330ca6f708b774a97dd464c33510ea85",
       "has_figures": false,
       "has_tables": false
     },
@@ -10126,7 +10126,7 @@
       "faa_page_end": "16-5",
       "source_locator": "PHAK Ch 16 §3 (2) (16-5)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/16/03-02-measurement-of-direction.md",
-      "content_hash": "ec2d325827d1c0ad559c6786519d8abd26a461b656832ec43cfcba3b0dadf776",
+      "content_hash": "cb1b6d3be91144e2609fb6e739477ea7741fbfbb164833845ae290a9d4fb897f",
       "has_figures": false,
       "has_tables": false
     },
@@ -10140,7 +10140,7 @@
       "faa_page_end": "16-6",
       "source_locator": "PHAK Ch 16 §3 (3) (16-6)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/16/03-03-variation.md",
-      "content_hash": "6765e996858dc41ff3567e1308eb3e810323de2dd9875fd467d3827dc3b91362",
+      "content_hash": "56f761b7fab9e138901a745264786becfc47ec55f14aa8e910657e1b72e3478c",
       "has_figures": false,
       "has_tables": false
     },
@@ -10168,7 +10168,7 @@
       "faa_page_end": "16-7",
       "source_locator": "PHAK Ch 16 §3 (5) (16-7)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/16/03-05-magnetic-deviation.md",
-      "content_hash": "6291aa5d98f37bbb4dc81338ec296300c551e708782a43bd36adcdf0e5291786",
+      "content_hash": "48274df5d9a50907b42e3a1e261aa1ecb8e0b4ca91244eca6ad22bfadfbb6295",
       "has_figures": false,
       "has_tables": false
     },
@@ -10196,7 +10196,7 @@
       "faa_page_end": "16-8",
       "source_locator": "PHAK Ch 16 §4 (16-8)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/16/04-effect-of-wind.md",
-      "content_hash": "40b2dc561b3a06fd8afb5040eed828b75f1260606d494d13554b6e31bac903ae",
+      "content_hash": "b6e81c1ac957b63770fbed5f9f19baea1bfe516728c7a584672ad8efa31f3423",
       "has_figures": false,
       "has_tables": false
     },
@@ -10336,7 +10336,7 @@
       "faa_page_end": "16-12",
       "source_locator": "PHAK Ch 16 §6 (16-12)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/16/06-pilotage.md",
-      "content_hash": "ae63eb69cd92abebcda2bad9a9dffaad359512b93b281a368e5ec37f7cc1b0ab",
+      "content_hash": "ab68f0d548f36cbeb7efd0cf7dce9cc716ab0d424192441c2200311784211ac3",
       "has_figures": false,
       "has_tables": false
     },
@@ -10364,7 +10364,7 @@
       "faa_page_end": "16-13",
       "source_locator": "PHAK Ch 16 §7 (1) (16-13)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/16/07-01-wind-triangle-or-vector-analysis.md",
-      "content_hash": "60ce1cc1b192f3211e203502d7067e6e3227eeb5ea63b9119e9d971b12a42933",
+      "content_hash": "185a3057e9b5bc25d612d83e834fdf510978e45b6384ab0ecbb463632cdf5f35",
       "has_figures": false,
       "has_tables": false
     },
@@ -10378,7 +10378,7 @@
       "faa_page_end": "16-14",
       "source_locator": "PHAK Ch 16 §7 (2) (16-14)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/16/07-02-step-1.md",
-      "content_hash": "1dc767d0d3929e47fe8194350f1e42516653c4f45dcb3f644a95ea3c9787893a",
+      "content_hash": "942bc873bf41f3dbcdec1f193ed4da36cd7bf40a8e422ad3a0c8bb59fcf639b3",
       "has_figures": false,
       "has_tables": false
     },
@@ -10420,7 +10420,7 @@
       "faa_page_end": "16-15",
       "source_locator": "PHAK Ch 16 §7 (5) (16-15)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/16/07-05-step-4.md",
-      "content_hash": "97d1a4672bd35c5a5530372984ddb025251c9b21cecafcd0c0222e3048949b52",
+      "content_hash": "20f3165cf18cd6d0cff5b442dab706b8611f3d9ce9687f5d691659b61abe1096",
       "has_figures": false,
       "has_tables": false
     },
@@ -10518,7 +10518,7 @@
       "faa_page_end": "16-18",
       "source_locator": "PHAK Ch 16 §9 (1) (16-18)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/16/09-01-steps-in-charting-the-course.md",
-      "content_hash": "ca3935ea0f807e560f1806c897b936e2f91202e572847052c44ef13831e087cc",
+      "content_hash": "455ea55809eea8e8aa936dc31c08c2bd6acce18406425902d31c437f3e7d6e39",
       "has_figures": false,
       "has_tables": false
     },
@@ -10560,7 +10560,7 @@
       "faa_page_end": "16-22",
       "source_locator": "PHAK Ch 16 §11 (1) (16-22)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/16/11-01-very-high-frequency-vhf-omnidirectional-range-vo.md",
-      "content_hash": "f3012428b0f01e1124309c60eaa750f07a369c7dbf4b8ed79517c99c4feff63c",
+      "content_hash": "48c6899f8cd64120b8074beb58b97b2e01f0bd7fc18e4fc5eb98917995749598",
       "has_figures": false,
       "has_tables": false
     },
@@ -10588,7 +10588,7 @@
       "faa_page_end": "16-23",
       "source_locator": "PHAK Ch 16 §11 (3) (16-23)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/16/11-03-course-deviation-indicator-cdi.md",
-      "content_hash": "43387e82296948265245b416d499412d642efeaf46eeed3fd279f126d4023e80",
+      "content_hash": "67fa6416a3afad1cd70fab1cc556b762b4314f51d3923206b37ef58d445e8f11",
       "has_figures": false,
       "has_tables": false
     },
@@ -10616,7 +10616,7 @@
       "faa_page_end": "16-24",
       "source_locator": "PHAK Ch 16 §11 (5) (16-24)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/16/11-05-radio-magnetic-indicator-rmi.md",
-      "content_hash": "7921af7921b673a992640312e63959a4927960a3e337e45ab0a70f460f369d93",
+      "content_hash": "863936fb3aff71907b3ab9cbe4cc93dea2dc706b1d721524565e05ca06bdc307",
       "has_figures": false,
       "has_tables": false
     },
@@ -10658,7 +10658,7 @@
       "faa_page_end": "16-26",
       "source_locator": "PHAK Ch 16 §11 (8) (16-26)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/16/11-08-time-and-distance-check-from-a-station-using-a-r.md",
-      "content_hash": "e2b99019186db8e914042636e9e031589642714a1fa30f43fb53b4d5f04c0876",
+      "content_hash": "6364a079c75f1a6ab5e93cdb65a983d02bf5fb6fdf1ab5917a08735282fdbfc5",
       "has_figures": false,
       "has_tables": false
     },
@@ -10728,7 +10728,7 @@
       "faa_page_end": "16-27",
       "source_locator": "PHAK Ch 16 §11 (13) (16-27)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/16/11-13-distance-measuring-equipment-dme.md",
-      "content_hash": "353b8c7b1a56fdb4455668c0b41182b1ac4692d831ade9f3e8f78445ad5a9374",
+      "content_hash": "4599e61d9f3a42b1b63b6f3fc6ba5d863d0bce81aef5bd52bd78164532761208",
       "has_figures": false,
       "has_tables": false
     },
@@ -10756,7 +10756,7 @@
       "faa_page_end": "16-29",
       "source_locator": "PHAK Ch 16 §11 (15) (16-29)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/16/11-15-automatic-direction-finder-adf.md",
-      "content_hash": "2837b8d7873dff0a1aeaa33d02a0b4df82d75805280ac93b6b9d1aa131b0af1d",
+      "content_hash": "1d1a4d9fa706a034f31b948e82e45dacf45e056b1eba690f4d9b43a89cce68a0",
       "has_figures": false,
       "has_tables": false
     },
@@ -10770,7 +10770,7 @@
       "faa_page_end": "16-30",
       "source_locator": "PHAK Ch 16 §11 (16) (16-30)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/16/11-16-global-positioning-system.md",
-      "content_hash": "59fb0af6f5f2e6a8939a60c4a0765066264e079e95a087b850704d5e38a44112",
+      "content_hash": "a7166541cd906d829f89284087cdde2fa2e59fa0bf48d8e64fe6b6bf76fa3250",
       "has_figures": false,
       "has_tables": false
     },
@@ -10868,7 +10868,7 @@
       "faa_page_end": "16-34",
       "source_locator": "PHAK Ch 16 §11 (23) (16-34)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/16/11-23-flight-diversion.md",
-      "content_hash": "825e88d105b50d585ed58d0d89c7ac9a524a8c61b2c746f99fed79ce196c3d17",
+      "content_hash": "3b64d1a61886ce95771c3353ffc1b8e926f05b9494c091e7e67be16a86325a72",
       "has_figures": false,
       "has_tables": false
     },
@@ -10882,7 +10882,7 @@
       "faa_page_end": "16-35",
       "source_locator": "PHAK Ch 16 §11 (24) (16-35)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/16/11-24-chapter-summary.md",
-      "content_hash": "ac469936dc83e7325662fea1422f00a9f64a36b658a168e2a01c018bef93c0c8",
+      "content_hash": "22bdbe478b5e07b8fe1e467ec167246c5b083bc6381fdc529b518426422c0a53",
       "has_figures": false,
       "has_tables": false
     },
@@ -10896,7 +10896,7 @@
       "faa_page_end": "17-1",
       "source_locator": "PHAK Ch 17 §1 (17-1)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/17/01-introduction.md",
-      "content_hash": "28e3aa953555651f24528c71061df9f5ee3661c12d51147d89aa1bf320f5e53f",
+      "content_hash": "8910264c9d7f409998ca74506dd10d7e52e0573c9b4aac35d35ac4082e3e6b78",
       "has_figures": false,
       "has_tables": false
     },
@@ -11120,7 +11120,7 @@
       "faa_page_end": "17-8",
       "source_locator": "PHAK Ch 17 §3 (14) (17-8)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/17/03-14-demonstration-of-spatial-disorientation.md",
-      "content_hash": "c5527ebe51f75f6e357a64f83dd80d23fa7cafe49b5b1e72b3e9d0118db33ad7",
+      "content_hash": "b601832ace9672813adc315a12b3b6e2374a143fbcad989597808c202ef84692",
       "has_figures": false,
       "has_tables": false
     },
@@ -11190,7 +11190,7 @@
       "faa_page_end": "17-9",
       "source_locator": "PHAK Ch 17 §3 (19) (17-9)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/17/03-19-reversal-of-motion.md",
-      "content_hash": "8453ee611accb69ef22f8055ee142af5bfd271d27221811d1c63e912e56e423d",
+      "content_hash": "f204bd09e99898d21a0e01e3411d31c441214b99fc7127245909c81bbd2fc095",
       "has_figures": false,
       "has_tables": false
     },
@@ -11344,7 +11344,7 @@
       "faa_page_end": "17-10",
       "source_locator": "PHAK Ch 17 §10 (17-10)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/17/10-how-to-prevent-landing-errors-due-to-optical-ill.md",
-      "content_hash": "9b8d05a9683744c395f0796e249c02ae4625bae5321b7d39aec57cd7c3d46b7b",
+      "content_hash": "ad62916c93042ea23b6b48e76c3e0b1e14513414fd5560f8b16c87cb02cca4d2",
       "has_figures": false,
       "has_tables": false
     },
@@ -11498,7 +11498,7 @@
       "faa_page_end": "17-16",
       "source_locator": "PHAK Ch 17 §21 (17-16)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/17/21-drugs.md",
-      "content_hash": "4cc7c16702746ac58b88fe161cce7df4b37d6d727cfc5163ff6527282e21c0ba",
+      "content_hash": "e0a1c462c01549a0242390c54f96454b9677eb67eca3b026e2bf4575fa9a008b",
       "has_figures": false,
       "has_tables": false
     },
@@ -11610,7 +11610,7 @@
       "faa_page_end": "17-21",
       "source_locator": "PHAK Ch 17 §29 (17-21)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/17/29-central-blind-spot.md",
-      "content_hash": "ca2fdf731e20fefee19323feb96adf2f1c36ffd71457ac205a1d510a4e5f1f5f",
+      "content_hash": "e0234eaddacbce135ac60341de273e4961594fb250b7a33b8121a53920049152",
       "has_figures": false,
       "has_tables": false
     },
@@ -11722,7 +11722,7 @@
       "faa_page_end": "17-25",
       "source_locator": "PHAK Ch 17 §37 (17-25)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/17/37-distance-estimation-and-depth-perception.md",
-      "content_hash": "f1bc9ba801fcfb558dfe3d0d745da9f1d8e60c18448ba8339fdcc1b6fd11187b",
+      "content_hash": "9718d041bf1475a020bb903bbe20dda7baab0d9e560a2304601d42b9f32dcc5c",
       "has_figures": false,
       "has_tables": false
     },
@@ -11890,7 +11890,7 @@
       "faa_page_end": "17-28",
       "source_locator": "PHAK Ch 17 §49 (17-28)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/17/49-enhanced-flight-vision-system.md",
-      "content_hash": "a6d70ee661577952ce23a1d558e1f580d409b9b3c84ea849317c10ed0864c81d",
+      "content_hash": "cb612c2f9c58d91f214a4912a369d374e74da33f3bb75c68ee2a1554836daf02",
       "has_figures": false,
       "has_tables": false
     },
@@ -11904,7 +11904,7 @@
       "faa_page_end": "17-29",
       "source_locator": "PHAK Ch 17 §50 (17-29)",
       "body_path": "handbooks/phak/FAA-H-8083-25C/17/50-chapter-summary.md",
-      "content_hash": "2d16dce5a8d11aca07f8e0b89cc4c74de214367fd0af945c9cadd5d45e55b6e1",
+      "content_hash": "bdd142f27941a3b57bc698e79145989efce4988b5cd2c888f623baf758baf05f",
       "has_figures": false,
       "has_tables": false
     }

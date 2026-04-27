@@ -56,7 +56,6 @@ Convergence Rate (CR) = 4.4°
 T – DP = Temperature Dew Point Spread (TDS)
 TDS ÷ CR = X
 X × 1,000 feet = height of cloud base AGL
-Example:
 85 °F – 71 °F = 14 °F
 14 °F ÷ 4.4 °F = 3.18
 3.18 × 1,000 = 3,180 feet AGL

@@ -39,9 +39,7 @@ With the structural design of aircraft planned to withstand
 only a certain amount of overload, a knowledge of load
 factors has become essential for all pilots. Load factors are
 important for two reasons:
-1.
 It is possible for a pilot to impose a dangerous overload
 on the aircraft structures.
-2.
 An increased load factor increases the stalling speed and
 makes stalls possible at seemingly safe flight speeds.

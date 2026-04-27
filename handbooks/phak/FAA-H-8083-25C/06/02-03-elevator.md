@@ -35,7 +35,6 @@ As mentioned earlier, stability, power, thrustline, and the
 position of the horizontal tail surfaces on the empennage
 are factors in elevator effectiveness controlling pitch. For
 
-CG
 Figure 6-11. Aircraft with a T-tail design at a high AOA and an aft CG.
 example, the horizontal tail surfaces may be attached near
 the lower part of the vertical stabilizer, at the midpoint, or

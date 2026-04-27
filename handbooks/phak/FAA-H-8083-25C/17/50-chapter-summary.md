@@ -9,10 +9,3 @@ source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/
 ---
 
 # Chapter Summary
-
-Chapter Summary
-This chapter provides an introduction to aeromedical factors
-relating to flight activities. More detailed information on
-the subjects discussed in this chapter is available in the
-Aeronautical Information Manual (AIM) and online at www.
-faa.gov.

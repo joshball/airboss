@@ -9,8 +9,3 @@ source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handboo
 ---
 
 # Chapter Summary
-
-Chapter Summary
-The takeoff and initial climb are relatively short phases required for every flight and are often taken for granted, yet 1 out of 5
-accidents occur during this phase and half the mishaps are the result of pilot error. Becoming proficient in and applying the
-techniques and principles discussed in this chapter help pilots reduce their susceptibility to becoming a mishap statistic.

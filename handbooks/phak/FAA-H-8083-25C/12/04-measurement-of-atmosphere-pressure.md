@@ -23,7 +23,6 @@ typically used in a laboratory or weather observation station,
 is not easily transported, and difficult to read.
 
 29.92 "Hg = 1,013.2 mb (hPa) = 14.7 lb/in2
-Sea level
 29.92"  (760 mm)
 Height of mercury
 Atmospheric pressure

@@ -38,7 +38,6 @@ of
 
 An
 gl
-e
 
 -
 °
@@ -46,12 +45,8 @@ CP
 
 at
 ta
-c
 k
-A
-n
 gl
-e
 of
 
 +
@@ -64,10 +59,7 @@ ck
 
 of
 
-A
-n
 gl
-e
 
 +
 °

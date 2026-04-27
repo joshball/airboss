@@ -48,14 +48,7 @@ To/From indicator
 Course deviation scale
 Figure 16-29. VOR indicator.
 OBS
-N
-E
-S
-W
 TO
-N
-A
-V
 Unreliable signal flag
 TO/FROM indicator
 OBS knob

@@ -21,10 +21,8 @@ to have an adverse effect on stability, regardless of location
 
 Down load on tail
 Stronger
-CG
 Down load on tail
 Lighter
-CG
 Center of lift
 Forward CG
 AFT CG

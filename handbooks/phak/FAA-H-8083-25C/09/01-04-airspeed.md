@@ -34,21 +34,9 @@ markings on oil gauge.
 I50
 I00
 °F
-P
-S
-I
 II5
 I00
 OIL
-P
-R
-E
-S
-S
-T
-E
-M
-P
 Minimum
 Maximum
 Normal operating range
@@ -71,7 +59,6 @@ CONTINUOUS
 OPERATION
 BETWEEN 2250
 AND 2350 RPM
-I
 I0
 IN  Hg
 ALg.

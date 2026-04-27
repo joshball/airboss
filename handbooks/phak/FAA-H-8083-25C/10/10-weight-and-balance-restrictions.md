@@ -26,7 +26,6 @@ density altitudes), may require a reduction in weight before
 flight is attempted. Other factors to consider when computing
 
 Item
-Weight
 Arm
 Moment
 Aircraft Empty Weight
@@ -44,7 +43,6 @@ Fuel
 33,750
 Baggage Area 1
 150.0
-12,000
 Total
 3,320
 

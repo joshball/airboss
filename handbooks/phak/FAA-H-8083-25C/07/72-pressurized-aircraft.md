@@ -63,14 +63,6 @@ Figure 7-41. Standard atmospheric pressure chart.
 Altitude (ft)
 Pressure (psi)
 Atmosphere pressure
-Sea level
-2,000
-4,000
-6,000
-8,000
-10,000
-12,000
-14,000
 16,000
 18,000
 20,000
@@ -161,19 +153,13 @@ is designed, a further increase in aircraft altitude will result
 Figure 7-42. Cabin pressurization instruments.
 Cabin rate-of-climb indicator
 Cabin/diﬀerential pressure indicator
-I
-I
 CABIN CLIMB
 THOUSAND FT PER MIN
 .5
 .5
 PSI
 
-C
-A
 BI
-N
-A
 LT
 DIFF
 PRESS

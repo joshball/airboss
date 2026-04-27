@@ -58,10 +58,6 @@ the compass.”
 
 Figure 8-35. A compass correction card shows the deviation
 correction for any heading.
-E
-S
-W
-N
 True north
 Figure 8-34. Utilization of a compass rose aids compensation for
 deviation errors.
@@ -131,90 +127,42 @@ magnetic field, pointing up or down at the dip angle in the
 direction of local Magnetic North. Because the dip angle is
 of no navigational interest, the compass is made so that it can
 
-S
-S
-S
 Di
-p
 ef
 fe
-c
-t
-C
-A
-R
-D
-C
-A
-R
-D
 Left turn
 No error
 Right turn
-D
 ip
- e
 ff
 ec
-t
 DIP
 DIP
 DIP
-B
-N
-N
-N
-C
-A
-R
-D
 Di
-p
 ef
 fe
-c
-t
-C
-A
-R
-D
-D
 ip
- e
 ff
 ec
-t
-D
 ip
- e
 ff
 ec
-t
 Left turn
 No error
 Right turn
-A
 DIP
 DIP
 DIP
-D
 ip
- e
 ff
 ec
-t
 Di
-p
 ef
 fe
-c
-t
 Di
-p
 ef
 fe
-c
-t
 Figure 8-36. Northerly and southerly turning errors.
 rotate only in the horizontal plane. This is done by lowering
 the center of gravity below the pivot point and making the
@@ -270,22 +218,11 @@ south. A mnemonic, or memory jogger, for the effect of
 acceleration error is the word “ANDS” (AccelerationNorth/Deceleration-South) may help you to remember the
 acceleration error. [Figure 8-37] Acceleration causes an
 
-N
-W
-S
-E
 Figure 8-38. Vertical card magnetic compass.
 NORTH
-S
-o
 u
-t
 h
 OBS
-N
-E
-S
-W
 NAV
 GS
 View is from the pilot’s

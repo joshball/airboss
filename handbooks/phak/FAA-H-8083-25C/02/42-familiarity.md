@@ -22,21 +22,9 @@ aircraft and its systems as a risk control measure, but instead as
 a hazard with high risk potential. Discipline is key to success.
 
 OBS
-N
-E
-S
-W
 NAV
 GS
 OBS
-N
-E
-S
-W
-W
-S
-E
-N
 HDG
 XPDR  5537  IDNT  LCL 10:12:34
 VOR 1

@@ -57,7 +57,6 @@ Baggage area 2
 2,300
 2,200
 2,100
-2,000
 1,900
 1,800
 1,700
@@ -66,13 +65,11 @@ Baggage area 2
 2,367
 105.2
 Loaded Aircraft Moment/1,000 (kilogram-millimeters)
-1,000
 1,050
 1,100
 Loaded Airplane Weight (kilograms)
 Loaded Aircraft Moment/1,000 (inch-pounds)
 Loaded  Aircraft Weight (pounds)
-1,000
 1,100
 1,200
 1,300
@@ -91,12 +88,9 @@ Arm 85
 Rear Seats
 Arm 121
 Moment
-Weight
 Moment
-Weight
 Usable Fuel
 Main Wing Tanks Arm 75
-Weight
 Gallons
 Moment
 Moment Limits vs Weight
@@ -114,16 +108,13 @@ or landing)
 85.7
 Forward
 CG Limit
-Weight
 Condition
 AFT
 CG Limit
 Moment
-Weight
 Baggage or 5th
 Seat Occupant
 Arm 140
-Weight
 Maximum
 Moment
 Minimum
@@ -218,7 +209,6 @@ Moment
 1,825
 1,833
 1,840
-Weight
 Maximum
 Moment
 Minimum
@@ -392,7 +382,6 @@ Moment
 2,411
 2,422
 Sample Loading Problem
-Weight
 Moment
  Basic empty weight
 2,015
@@ -408,7 +397,6 @@ Moment
 Empty Weight ~ 2,015
 MOM/ 100 ~ 1,554
 *Oil
-Weight
 Quarts
 Moment
 *Included in basic empty weight

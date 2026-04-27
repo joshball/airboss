@@ -93,3 +93,12 @@ Following touchdown, the learner will ordinarily maintain directional control wh
 hand on the throttles. The instructor resets the flaps and trim and announces when the airplane has been reconfigured. The
 multiengine airplane uses considerably more runway to perform a touch-and-go than a single-engine airplane. A full stop-taxi back
 landing is preferable during initial familiarization. Solo touch-and-goes in twins are strongly discouraged.
+
+Small multiengine airplanes handle much like single-engine airplanes as long as both engines are functioning normally. A competent
+multiengine pilot, however, acquires the additional knowledge, risk mitigation strategies, and practical skills required to fly a
+multiengine airplane in case a loss of thrust from one engine actually occurs. In that case, the pilot will be able to take appropriate
+action leading to a safe outcome. Much of this chapter discussed loss of directional control. How to obtain the best performance with
+an inoperative engine was also described in detail. These two considerations correspond to the red radial line (VMC) and the blue
+radial line (VYSE) on the airspeed indicator. The actions a pilot takes when dealing with stalls, VMC, or best performance vary
+greatly. Understanding these concepts, knowing how to mitigate the risks, and possessing the skills to handle an engine failure in a
+variety of situations, allows a pilot to enjoy the increased performance and safety provided when flying a multiengine airplane.

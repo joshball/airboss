@@ -76,7 +76,6 @@ Max landing weight 4,940 pounds
 Figure 10-11. Sample weight and balance using an aircraft with a
 published zero fuel weight.
 Item
-Weight
 Arm
 Moment
 Licensed empty weight
@@ -111,7 +110,6 @@ Total
 1,648.9
 
 122,086.0
-CG
 
 74.0
 Figure 10-10. Sample weight and balance using a negative.

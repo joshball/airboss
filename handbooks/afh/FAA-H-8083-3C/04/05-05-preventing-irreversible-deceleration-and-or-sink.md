@@ -140,3 +140,10 @@ Irreversible Deceleration and/or Sink Rate
 Unrecoverable depletion of mechanical energy as a result of continuous loss of airspeed and/or altitude coupled with insufficient
 excess power available under a given flight condition. Failure to recover above a certain critical AGL altitude results in the airplane
 hitting the ground regardless of what the pilot does.
+Every pilot is an energy manager—managing energy in the form of altitude and airspeed from takeoff to landing. Proper energy
+management is essential for performing any maneuver as well as for attaining and maintaining desired vertical flightpath and airspeed
+profiles in everyday flying. It is also critical to flight safety since mistakes in managing energy state can contribute to loss of control
+inflight (LOC-I), controlled flight into terrain (CFIT), and approach and landing accidents. The objectives of this chapter are for pilots
+to: 1) gain an understanding of basic energy management concepts; 2) learn the energy role of the controls for managing the
+airplane’s energy state; and 3) develop the ability to identify, assess, and mitigate risks associated with failure to manage the airplane’s
+energy state.

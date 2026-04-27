@@ -14,7 +14,6 @@ How To Prevent Landing Errors Due to Optical
 Illusions
 To prevent these illusions and their potentially hazardous
 consequences, pilots can:
-1.
 Anticipate the possibility of visual illusions during
 approaches to unfamiliar airports, particularly at night
 or in adverse weather conditions. Consult airport
@@ -73,22 +72,17 @@ approach.
 diagrams and the Chart Supplement U.S. (formerly
 Airport/Facility Directory) for information on runway
 slope, terrain, and lighting.
-2.
 Make frequent reference to the altimeter, especially
 during all approaches, day and night.
-3.
 If possible, conduct an aerial visual inspection of
 unfamiliar airports before landing.
-4.
 Use Visual Approach Slope Indicator (VASI) or
 Precision Approach Path Indicator (PAPI) systems
 for a visual reference, or an electronic glideslope,
 whenever they are available.
-5.
 Utilize the visual descent point (VDP) found on many
 nonprecision instrument approach procedure charts.
 
-6.
 Recognize that the chances of being involved in an
 approach accident increase when an emergency or
 other activity distracts from usual procedures.

@@ -50,16 +50,7 @@ NEXRAD
 RAIN
 MIX
 SNOW
-H
-E
-A
-V
 Y
-L
-I
-G
-H
-T
 SIGMET
 AIRMET
 __/__ __:__

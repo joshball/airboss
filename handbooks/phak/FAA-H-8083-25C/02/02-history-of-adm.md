@@ -58,15 +58,9 @@ changes might affect the safe outcome of a flight. The ADM
 process addresses all aspects of decision-making in the flight
 deck and identifies the steps involved in good decision-making.
 Steps for good decision-making are:
-1.
 Identifying personal attitudes hazardous to safe flight
-2.
 Learning behavior modification techniques
-3.
 Learning how to recognize and cope with stress
-4.
 Developing risk assessment skills
-5.
 Using all resources
-6.
 Evaluating the effectiveness of one’s ADM skills

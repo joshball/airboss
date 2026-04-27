@@ -93,9 +93,7 @@ development of the ability to estimate load factors.
 A thorough knowledge of load factors induced by varying
 degrees of bank and the VA aids in the prevention of two of
 the most serious types of accidents:
-1.
 Stalls from steep turns or excessive maneuvering near
 the ground
-2.
 Structural failures during acrobatics or other violent
 maneuvers resulting from loss of control

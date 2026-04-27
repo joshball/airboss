@@ -9,11 +9,3 @@ source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/
 ---
 
 # Introduction
-
-Introduction
-Compliance with the weight and balance limits of any aircraft
-is critical to flight safety. Operating above the maximum
-weight limitation compromises the structural integrity of
-an aircraft and adversely affects its performance. Operation
-with the center of gravity (CG) outside the approved limits
-results in control difficulty.

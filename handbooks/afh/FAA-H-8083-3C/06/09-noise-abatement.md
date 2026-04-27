@@ -24,3 +24,6 @@ to remind pilots to use and comply with noise abatement procedures on departure.
 should ask the tower or air traffic facility for the recommended procedures. In any case, pilots should be considerate of the
 surrounding community while operating their airplane to and from such an airport. This includes operating as quietly, and safely as
 possible.
+The takeoff and initial climb are relatively short phases required for every flight and are often taken for granted, yet 1 out of 5
+accidents occur during this phase and half the mishaps are the result of pilot error. Becoming proficient in and applying the
+techniques and principles discussed in this chapter help pilots reduce their susceptibility to becoming a mishap statistic.

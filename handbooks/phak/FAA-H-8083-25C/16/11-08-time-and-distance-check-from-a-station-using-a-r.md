@@ -25,8 +25,6 @@ method based on the above formula, if a 10° bearing change
 is flown. If the elapsed time for the bearing change is noted
 
 Figure 16-34. Time-distance check formula using a CDI.
-A
-B
 = 60 x minutes flown between bearing change
 degrees of bearing change
 Time to

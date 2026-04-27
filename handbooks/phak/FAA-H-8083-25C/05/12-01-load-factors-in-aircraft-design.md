@@ -63,17 +63,6 @@ Load factor = 2 Gs
 Centrifugal
 force = 1.73 Gs
 Gravity = 1G
-0°
-
-0°
-
-0°
-
-0°
-
-0°
-
-0°
 
 Figure 5-52. Two forces cause load factor during turns.
 00°

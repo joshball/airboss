@@ -26,9 +26,6 @@ be presented with L, C, or R beneath it.
 NC-3, 08 MAR 2012 to 05 APR 2012
 NC-3, 08 MAR 2012 to 05 APR 2012
 Not to be used for navigation
-B
-A
-B
 Runway 13
 Runway 31
 Figure 14-11. (A) Taxiway Bravo location sign collocated with runway/runway intersection holding signs at Sioux Gateway Airport

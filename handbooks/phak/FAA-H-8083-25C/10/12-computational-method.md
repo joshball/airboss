@@ -27,17 +27,13 @@ Weight of rear seat occupants..............350 pounds
 Fuel...........................................................75 gallons
 
 Weight of baggage in area 1....................80 pounds
-1.
 List the weight of the aircraft, occupants, fuel, and
 baggage. Remember that aviation gas (AVGAS)
 weighs 6 pounds per gallon and is used in this
 example.
-2.
 Enter the moment for each item listed. Remember
 “weight x arm = moment.”
-3.
 Find the total weight and total moment.
-4.
 To determine the CG, divide the total moment by the
 total weight.
 NOTE: The weight and balance records for a particular

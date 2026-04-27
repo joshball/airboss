@@ -9,12 +9,3 @@ source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/
 ---
 
 # Introduction
-
-Introduction
-This chapter examines the fundamental physical laws
-governing the forces acting on an aircraft in flight, and
-what effect these natural laws and forces have on the
-performance characteristics of aircraft. To control an aircraft,
-be it an airplane, helicopter, glider, or balloon, the pilot
-must understand the principles involved and learn to use or
-counteract these natural forces.

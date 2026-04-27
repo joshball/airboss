@@ -72,12 +72,7 @@ Height Above Airport in Feet
 1,500
 Reported
 Temp 0 °C
-1,000
 1,500
-2,000
-3,000
-4,000
-5,000
 can be employed: “FROM HOT TO COLD, LOOK OUT
 BELOW.” When the air is warmer than standard, the aircraft
 is higher than the altimeter indicates. Altitude corrections for

@@ -44,13 +44,7 @@ Thrust
 Forward velocity
 Rotational velocity
 bl
-a
-d
-e
-a
-n
 gl
-e
 
 Pi
 tc
@@ -59,13 +53,9 @@ or
 
 at
 ta
-c
 k
 
-A
-n
 gl
-e
 
 of
 Figure 5-44.  Propeller blade angle.
@@ -150,78 +140,29 @@ Figure 5-45. Propeller slippage.
 60 in.
 40 in.
 20 in.
-S
 h
-o
-r
-t
 
-t
-r
-a
-v
-e
 l
-d
-i
-s
-t
-a
-n
-c
-e
 —
-s
 l
-o
-w
 
-s
-p
-e
-e
-d
 —
 
 k
-n
-o
-t
-s
-M
-o
-d
 er
 at
-e
 tr
-a
-v
 el
- d
 is
 ta
 nc
-e
 —
-m
-o
-d
 er
 at
-e
-s
-p
-e
-e
-d
 —
 k
-n
 ot
-s
 
-G
 re
 at
 er
@@ -239,20 +180,14 @@ ig
 h
 sp
 ee
-d
 —
 kn
 ot
-s
 
 ,
 
-r
-p
-m
 2,
 rp
-m
 2,
 0 r
 pm

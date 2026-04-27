@@ -35,7 +35,6 @@ lb
 in-lb
 2,500
 in-lb
-5,000
 in-lb
 Fulcrum
 Datum
@@ -61,7 +60,6 @@ Figure 10-3. Determining moment.
 Aft limit
 Fwd limit
 Datum
-CG
 range
 ( + )
 Arm

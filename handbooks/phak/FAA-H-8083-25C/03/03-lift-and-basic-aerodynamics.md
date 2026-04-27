@@ -34,8 +34,6 @@ Lateral axis
 Longitudinal axis
 Vertical axis
 Figure 3-2. Illustrates the pitch, roll, and yaw motion of the aircraft along the lateral, longitudinal, and vertical axes, respectively.
-Lift
-Weight
 Drag
 Thrust
 Figure 3-1. The four forces.

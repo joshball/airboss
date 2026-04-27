@@ -33,7 +33,6 @@ one weather phenomenon encountered. A PIREP is normally
 transmitted as an individual report but may be appended to
 a surface report. Pilot reports are easily decoded, and most
 contractions used in the reports are self-explanatory.
-Example:
 UA/OV GGG 090025/TM 1450/FL 060/TP C182/SK
 080 OVC/WX FV04SM RA/TA 05/WV 270030KT/TB
 LGT/RM HVY RAIN
@@ -75,7 +74,6 @@ of weather, expected to last less than 1 hour.
 probability of thunderstorms and precipitation
 occurring in the coming hours. This forecast is not
 used for the first 6 hours of the 24-hour forecast.
-Example:
 TAF
 KPIR 111130Z 1112/1212
 TEMPO 1112/1114 5SM BR

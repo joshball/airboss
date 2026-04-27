@@ -29,24 +29,15 @@ M = 0.95
 M = 1.05
 Normal shock wave
 
-S
 u
-p
-e
 rs
-o
 ni
-c
 fl
 ow
 Normal shock wave
 
-S
 u
 pe
-r
-s
-o
 ni
 c f
 low

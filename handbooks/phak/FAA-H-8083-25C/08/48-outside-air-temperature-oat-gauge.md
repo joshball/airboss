@@ -22,3 +22,11 @@ calibration on a circular face. OAT gauges are calibrated in
 degrees °C, °F, or both. An accurate air temperature provides
 the pilot with useful information about temperature lapse rate
 with altitude change. [Figure 8-39]
+Flight instruments enable an aircraft to be operated with
+maximum performance and enhanced safety, especially when
+flying long distances. Manufacturers provide the necessary
+flight instruments, but to use them effectively, pilots need
+to understand how they operate. As a pilot, it is important to
+become very familiar with the operational aspects of the pitotstatic system and associated instruments, the vacuum system
+and associated instruments, the gyroscopic instruments, and
+the magnetic compass.

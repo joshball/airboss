@@ -43,28 +43,15 @@ Figure 11-22. Density altitude chart.
 Outside air temperature
 Approximate density altitude (thousand feet)
 S.L.
-14,000
 13,000
-12,000
 11,000
-10,000
 9,000       Pressure altitude (feet)
-8,000
 7,000
-6,000
-5,000
-4,000
-3,000
-2,000
-1,000
 –1,000
-Sea level
 
 -18 -12° -7° -1° 4° 10° 16° 21° 27° 32° 38°
 
 0° 10° 20° 30° 40° 50° 60° 70° 80° 90° 100°
-F
-C
 Standard temperature
 28.0
 1,824

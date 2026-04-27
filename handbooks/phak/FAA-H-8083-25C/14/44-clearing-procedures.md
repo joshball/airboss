@@ -40,16 +40,13 @@ right, above, and below”).
 Aircraft crossing over
 wake turbulence
 Aircraft altitude is above wake
-C
 Touchdown point
 Aircraft altitude is above wake
 Less than 2500 feet
 WIND
 Parallel Runway Situation
-B
 Touchdown point of larger aircraft
 WIND
-A
 Side view
 Figure 14-47. Vortex avoidance procedures.
 
@@ -156,7 +153,6 @@ pilots use to avoid airborne deviations also work on the ground.
 Pilots should also remain vigilant about vehicle/pedestrian
 deviations
 (V/PDs).
-A
 vehicle
 or
 pedestrian

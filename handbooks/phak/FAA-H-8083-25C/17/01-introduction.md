@@ -9,12 +9,3 @@ source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/
 ---
 
 # Introduction
-
-Introduction
-It is important for a pilot to be aware of the mental and
-physical standards required for the type of flying performed.
-This chapter provides information on medical certification and
-on a variety of aeromedical factors related to flight activities.
-Aeromedical
-Factors
-Chapter 17

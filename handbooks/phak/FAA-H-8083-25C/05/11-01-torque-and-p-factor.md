@@ -16,38 +16,17 @@ To the pilot, “torque” (the left turning tendency of the
 airplane) is made up of four elements that cause or produce
 a twisting or rotating motion around at least one of the
 airplane’s three axes. These four elements are:
-1.
 Torque reaction from engine and propeller
 
-R
-e
-a
-c
 ti
-o
-n
 
-A
-c
-t
-i
-o
-n
 Figure 5-47. Torque reaction.
 Yaw
-F
 or
-c
-e
 
-S
 lips
 trea
-m
 Figure 5-48. Corkscrewing slipstream.
-2.
 Corkscrewing effect of the slipstream
-3.
 Gyroscopic action of the propeller
-4.
 Asymmetric loading of the propeller (P-factor)

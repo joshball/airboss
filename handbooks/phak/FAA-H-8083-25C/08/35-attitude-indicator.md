@@ -33,14 +33,8 @@ I0               I0
 TEST
 STBY PWR
 
-B
-a
-n
 k
-s
-c
 al
-e
 Descending left bank
 I0
    I0

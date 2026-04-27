@@ -21,10 +21,8 @@ For more information on aircraft systems, refer to Chapter
 
 2,400
 2,200
-2,000
 1,800
 1,600
-0°
 20°
 40°
 60°

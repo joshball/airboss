@@ -58,7 +58,6 @@ Total weight
 ∆CG (change of CG)
 Distance weight is shifted
 =
-8,000
 ∆CG
 =
 ∆CG
@@ -67,7 +66,6 @@ Distance weight is shifted
 Example
 Weight to be shifted
 Total weight
- CG
 Distance weight is shifted
 =
 Weight to be shifted
@@ -100,7 +98,6 @@ Distance between weight and old CG
 140 lb
 7,000 lb = ∆CG
 70 in
-CG
 1.4 in aft
 =
 Given:
@@ -128,7 +125,6 @@ Distance between weight and old CG
 =
 ∆CG
 70 in
-CG
 1.2 in forward
 =
 Given:

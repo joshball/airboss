@@ -26,24 +26,18 @@ Nose-up force
 Fixed
 Variable
 Vertical forces acting on an airplane in flight.
-CG
 CL
-Lift
 CG too far aft
 nose-down force
 Insufficient elevator
 If the CG is too far aft, there might not be enough elevator nose-down
 force at the low stall airspeed to get the nose down for recovery.
-Lift
-CG
 CL
 CG too far forward
 nose-up force
 Insufficient elevator
 If the CG is too far forward, there will not be enough elevator
 nose-up force to flare the airplane for landing.
-CG
-Lift
 CL
 Figure 3-3. Center of gravity (CG).
 flight. There are numerous wing designs, sizes, and shapes

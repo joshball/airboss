@@ -34,7 +34,6 @@ are true altitudes.
 Figure 8-5. Vertical speed indicator (VSI).
 VERTICAL SPEED
 THOUSAND FT PER MIN
-P
 OWN
 Diaphragm
 Direct static pressure

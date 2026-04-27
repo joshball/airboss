@@ -23,10 +23,8 @@ corrective action. ADs are used to notify aircraft owners and
 other interested persons of unsafe conditions and to specify
 the conditions under which the product may continue to be
 operated. ADs are divided into two categories:
-1.
 Those of an emergency nature requiring immediate
 compliance prior to further flight
-2.
 Those of a less urgent nature requiring compliance
 within a specified period of time
 ADs are regulatory and shall be complied with unless a
@@ -62,24 +60,20 @@ Figure 9-10. FAA Form 8130-7, Special Airworthiness Certificate.
 UNITED STATES OF AMERICA
 DEPARTMENT OF TRANSPORTATION - FEDERAL AVIATION ADMINISTRATION
 SPECIAL AIRWORTHINESS CERTIFICATE
-A
 CATEGORY/DESIGNATION
 Special Flight Permit
 PURPOSE
 Production Flight Testing or Customer Demonstration
-B
 MANUFACTURER
 NAME
 The Boeing Company
 ADDRESS
 P.O. Box 767, Renton WA 13567
-C
 FLIGHT
 FROM
 N/A
 TO
 N/A
-D
 N- N/A
 SERIAL NO.
 N/A
@@ -87,7 +81,6 @@ BUILDER
 N/A
 MODEL
 N/A
-E
 DATE OF ISSUANCE 01/31/2001
 EXPIRY
 01/31/2001

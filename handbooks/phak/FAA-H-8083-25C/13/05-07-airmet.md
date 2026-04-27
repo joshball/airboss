@@ -30,7 +30,6 @@ the first issuance of the day. Sierra is the AIRMET code used
 to denote IFR and mountain obscuration; Tango is used to
 denote turbulence, strong surface winds, and low-level wind
 shear; and Zulu is used to denote icing and freezing levels.
-Example:
 BOSS WA 211945
 AIRMET SIERRA UPDT 3 FOR IFR AND MTN OBSCN
 VALID UNTIL 220200

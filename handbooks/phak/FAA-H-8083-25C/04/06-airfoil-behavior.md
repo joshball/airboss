@@ -21,11 +21,6 @@ case of symmetrical airfoils. These are seen in high-speed
 aircraft having symmetrical wings, or on symmetrical rotor
 blades for many helicopters whose upper and lower surfaces
 
-v
-o
-r
-t
-e
 x
 
 Tip

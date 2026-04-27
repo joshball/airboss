@@ -39,26 +39,13 @@ taxi. Figure 14-24 shows that the ILS hold sign is located
 on Taxiway Golf and the ILS ladder hold position marking
 is adjacent to the hold sign.
 
-F
-S
-S
-B
-F
-S
-S
-B
-F
-F
-A
 Figure 14-20. Orientation of signs is from left to right in a clockwise manner. Left turn signs are on the left and right turn on the right.
 In this view, the pilot is on Taxiway Bravo.
 Prepare to STOP unless you have been cleared onto
 or across the runway by ATC.
-B
 Figure 14-21. (A) Enhanced taxiway centerline marking. (B) Enhanced taxiway centerline marking and runway holding position marking.
 Enhanced taxiway centerline marking extends 150 feet prior
 to a runway holding position marking. Prepare to STOP.
-A
 
 Figure 14-24. Instrument landing system (ILS) holding position sign
 and marking on Taxiway Golf.

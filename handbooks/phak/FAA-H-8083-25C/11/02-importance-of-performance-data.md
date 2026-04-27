@@ -19,7 +19,6 @@ and landing. The use of this data in flying operations is
 mandatory for safe and efficient operation. Considerable
 knowledge and familiarity of the aircraft can be gained by
 studying this material.
-Aircraft
 Performance
 Chapter 11
 

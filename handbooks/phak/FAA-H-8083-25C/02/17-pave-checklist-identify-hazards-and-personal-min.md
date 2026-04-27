@@ -32,7 +32,6 @@ meteorological conditions (VMC) prior to her arrival. En route
 weather is VMC, but there is an AIRMET Sierra for pockets of
 IMC over mountain ridges along the proposed route of flight.
 EnVironment
-Aircraft
 Although it does not have a panel-mount GPS or weather
 avoidance gear, the aircraft—a C182 Skylane with long-range
 fuel tanks—is in good mechanical condition with no inoperative

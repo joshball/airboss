@@ -60,21 +60,9 @@ Bearings
 I50
 I00
 °F
-P
-S
-I
 II5
 I00
 OIL
-P
-R
-E
-S
-S
-T
-E
-M
-P
 Oil cooler and filter
 Oil pressure relief valve
 Oil filler cap and dipstick

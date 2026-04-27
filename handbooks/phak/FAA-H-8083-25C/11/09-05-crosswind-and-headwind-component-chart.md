@@ -41,12 +41,10 @@ Headwind component
 
 Wi
 nd
- v
 elo
 cit
 y
 10°
-0°
 20°
 30°
 40°
@@ -59,14 +57,6 @@ Figure 11-30. Cruise performance graph.
 20,000
 18,000
 16,000
-14,000
-12,000
-10,000
-8,000
-6,000
-4,000
-2,000
-Sea level
 
 –40° –30° –20° –10° 0°
 10° 20° 30° 40°
@@ -76,7 +66,6 @@ Outside air temperature (°C)
 True airspeed (knots)
  Pressure ALT (feet)
 Associated conditions
-Weight
 3,600 lb. gross weight
 Flaps
 Up

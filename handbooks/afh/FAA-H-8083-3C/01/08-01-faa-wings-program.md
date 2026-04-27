@@ -22,3 +22,6 @@ A pilot may create a WINGS account by logging on to www.faasafety.gov. This acco
 latest information concerning aviation technology and risk mitigation. It provides a means to document targeted skill
 development as a means to increase safety. As an added bonus, participants may receive a discount on certain flight insurance
 policies.
+This chapter discussed some of the concepts and goals of primary and intermediate flight training. It identified and provided
+an explanation of regulatory requirements and the roles of the various entities involved. It also offered recommended techniques to
+be practiced and refined to develop the knowledge, proficiency, and safe habits of a competent pilot.

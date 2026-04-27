@@ -53,18 +53,9 @@ Figure 6-4. Airplane controls, movement, axes of rotation, and
 type of stability.
 Figure 6-5. Adverse yaw is caused by higher drag on the outside
 wing that is producing more lift.
-Lift
 Drag
-Lift
 Drag
-A
-d
-v
-e
-r
 se y
-a
-w
 natural feel. At low airspeeds, the controls usually feel soft
 and sluggish, and the aircraft responds slowly to control
 applications. At higher airspeeds, the controls become
@@ -195,24 +186,18 @@ Rudder/Aileron interconnecting springs
 Rudder deflects with ailerons
 Figure 6-8. Coupled ailerons and rudder.
 Figure 6-9. Flaperons on a Skystar Kitfox MK 7.
-N
 os
-e
 up
 
-T
 ai
 l
 do
-w
-n
 
 Control column
 aft
 Up elevator
 Downward
 aerodynamic force
-CG
 Figure 6-10. The elevator is the primary control for changing the
 pitch attitude of an aircraft.
 example, when the control wheel, or control stick, is moved

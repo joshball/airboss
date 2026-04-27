@@ -37,3 +37,6 @@ airport.
 6. Maintain a constant visual scan for other aircraft.
 7. Be aware that there may be aircraft in the pattern without radios.
 8. Use exterior lights to improve the chances of being seen.
+
+The volume of traffic at an airport can create a hazardous environment. Airport traffic patterns are procedures that improve the flow
+of traffic at an airport and enhance safety when properly executed. Most reported mid-air collisions occur during the final or shortfinal approach leg of the airport traffic pattern.

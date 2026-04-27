@@ -38,79 +38,30 @@ propeller blade designed with the same angle of incidence
 60 in.
 40 in.
 20 in.
-S
 h
-o
-r
-t
 
-t
-r
-a
-v
-e
 l
-d
-i
-s
-t
-a
-n
-c
-e
 —
  sl
-o
-w
-
-s
-p
-e
-e
-d
 
 —
 
 k
-n
-o
-t
-s
 
-M
-o
-d
 er
 at
-e
 tr
-a
-v
 el
- d
 is
 ta
-n
 ce
 —
-m
-o
-d
 er
 at
-e
-s
-p
-e
-e
-d
 —
 k
-n
 ot
-s
 
-G
 re
 at
 er
@@ -120,29 +71,21 @@ el
 dis
 ta
 nc
-e
 —v
 er
 y
 hi
 gh
- s
 pe
 ed
 —
 kn
 ot
-s
 
 ,
 
-r
-p
-m
-
 2,
 rp
-m
 
 2,
 0 r
@@ -165,7 +108,6 @@ CONTINUOUS
 OPERATION
 BETWEEN 2250
 AND 2350 RPM
-I
 I0
 throughout its entire length would be inefficient because as
 airspeed increases in flight, the portion near the hub would

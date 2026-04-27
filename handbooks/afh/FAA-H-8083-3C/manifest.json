@@ -6,7 +6,7 @@
   "publisher": "FAA",
   "source_url": "https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/airplane_handbook/00_afh_full.pdf",
   "source_checksum": "90dda95dcbe992bd798f1932b02b5a02d620d8344565c0516a6917f29dea1f8d",
-  "fetched_at": "2026-04-27T13:53:30.038334+00:00",
+  "fetched_at": "2026-04-27T14:17:54.791480+00:00",
   "sections": [
     {
       "level": "chapter",
@@ -18,7 +18,7 @@
       "faa_page_end": "1-16",
       "source_locator": "AFH Ch 1 (1-1..1-16)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/01/index.md",
-      "content_hash": "178a0f1b59d4d4733ac69586f237ae26d73d4dc3119c942c2d507be5a812436d",
+      "content_hash": "7a4b0a58df6243dcd2593bc25c150d96cbe183280f53bf352ecf6ff3f7b2f15e",
       "has_figures": true,
       "has_tables": false
     },
@@ -32,7 +32,7 @@
       "faa_page_end": "2-24",
       "source_locator": "AFH Ch 2 (2-1..2-24)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/02/index.md",
-      "content_hash": "8dfa46ee3cdaff56603554236d483cb1c253f01e616409e795cf475858cc9fd5",
+      "content_hash": "a0fbed845bf6bfda8d7b1baa50e4859a5df98e0b7dc22f2e539171bbf0ce7c74",
       "has_figures": true,
       "has_tables": false
     },
@@ -46,7 +46,7 @@
       "faa_page_end": "3-25",
       "source_locator": "AFH Ch 3 (3-1..3-25)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/03/index.md",
-      "content_hash": "1c4c5f60764da7430b3ba10798b9ea365e00a6bc4239e63b89550449561c7140",
+      "content_hash": "9814355541d078b719a1fc1478397356e85a9aae7f9d83135a887953f7834874",
       "has_figures": true,
       "has_tables": false
     },
@@ -60,7 +60,7 @@
       "faa_page_end": "4-19",
       "source_locator": "AFH Ch 4 (4-1..4-19)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/04/index.md",
-      "content_hash": "ef09b89ec1a9eddc5a19e9d5fa794dd107938aa93605c3fc927e318aecbad528",
+      "content_hash": "faeb7b9c76547024af36e57df8773c5ec3dfa805e868b6de1bb5fa460518e65d",
       "has_figures": true,
       "has_tables": false
     },
@@ -74,7 +74,7 @@
       "faa_page_end": "5-27",
       "source_locator": "AFH Ch 5 (5-1..5-27)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/05/index.md",
-      "content_hash": "78fe81c34051fdba990ca06a0538e7338f0800ea1355d052f42784c3168b51e4",
+      "content_hash": "fffc605aa07200ca2d503674daf3932990be7da2cfc0a3f49382da5710b3df0e",
       "has_figures": true,
       "has_tables": false
     },
@@ -88,7 +88,7 @@
       "faa_page_end": "6-14",
       "source_locator": "AFH Ch 6 (6-1..6-14)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/06/index.md",
-      "content_hash": "f4c65fda4cbae30aee06b0e16986ea9099b515cfb52a4b21e68c4bc4960ae182",
+      "content_hash": "a4a49a48685cc27235c06635d7a5efafb4b96013431fac5d5f3ee72b36672d7e",
       "has_figures": true,
       "has_tables": false
     },
@@ -102,7 +102,7 @@
       "faa_page_end": "7-18",
       "source_locator": "AFH Ch 7 (7-1..7-18)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/07/index.md",
-      "content_hash": "eb33a3c48966cdfbb2691d7d0e3077d400b7f23d1b316db2b6c0e6e78aa0325b",
+      "content_hash": "60b8befafd5d2ca56086dbab2ae9f51eec6a1a4b07549902618f2b10b706a526",
       "has_figures": false,
       "has_tables": false
     },
@@ -116,7 +116,7 @@
       "faa_page_end": "8-7",
       "source_locator": "AFH Ch 8 (8-1..8-7)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/08/index.md",
-      "content_hash": "a8b813c34f487d52fc849b9aa4c1930b8d16b59ef48257c2aa41fb8d63c395a6",
+      "content_hash": "81c8e1238b1db46f302deed1104a84cdc46f6b65b173ef4a386408d33b0e1f0d",
       "has_figures": false,
       "has_tables": false
     },
@@ -130,7 +130,7 @@
       "faa_page_end": "9-38",
       "source_locator": "AFH Ch 9 (9-1..9-38)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/09/index.md",
-      "content_hash": "9a78ce3aaea59b1eed87960023a75d9517bf158ad4025084616a4571d2c509f1",
+      "content_hash": "4838971499b88471aaf4467d64980273b40bd3493eecfcb7c461b841de36435b",
       "has_figures": true,
       "has_tables": false
     },
@@ -144,7 +144,7 @@
       "faa_page_end": "10-8",
       "source_locator": "AFH Ch 10 (10-1..10-8)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/10/index.md",
-      "content_hash": "354052dbd17359272e0dcbba5c972dde03644b841c9c056995d6db98d727689a",
+      "content_hash": "15e20459a09796c3d964330c3a1246205112cdc60940f6d6c6b5392b3406c73a",
       "has_figures": true,
       "has_tables": false
     },
@@ -158,7 +158,7 @@
       "faa_page_end": "11-14",
       "source_locator": "AFH Ch 11 (11-1..11-14)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/11/index.md",
-      "content_hash": "0c4d69f9203a346b627c4abfcbb426f0e65e0beca58c4ebb3a4ad0fa9e98470e",
+      "content_hash": "c2f8ffaab5cf171ddbf9ce02b594d700395c39b6d211e118f63f83ae45450de2",
       "has_figures": true,
       "has_tables": false
     },
@@ -172,7 +172,7 @@
       "faa_page_end": "12-18",
       "source_locator": "AFH Ch 12 (12-1..12-18)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/12/index.md",
-      "content_hash": "e84d9db5378519dc899b89db271f5cc3e8fc9a56a362931eee07bd0d29833b05",
+      "content_hash": "0add3740fe354f383e62c87be5df2adb5d19ff9403c4aee9643a14927e848fc6",
       "has_figures": false,
       "has_tables": false
     },
@@ -186,7 +186,7 @@
       "faa_page_end": "13-37",
       "source_locator": "AFH Ch 13 (13-1..13-37)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/13/index.md",
-      "content_hash": "f0a493a5a81693d47ee80dedbf01ffa4facb4ba1f074ff3db377380250cdeb1e",
+      "content_hash": "f1b7236fabcf12c6b878db3343d9743f2644f390a74855101837d92613aa2d07",
       "has_figures": true,
       "has_tables": false
     },
@@ -200,7 +200,7 @@
       "faa_page_end": "14-8",
       "source_locator": "AFH Ch 14 (14-1..14-8)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/14/index.md",
-      "content_hash": "401068f300e7ad620bea4aa751d0d821d41d385f153de55fe248f4ce76e3aa39",
+      "content_hash": "a0792ff8741c41941238ce6944c1df064066752c0adc70b042c7dd0a92220cd9",
       "has_figures": false,
       "has_tables": false
     },
@@ -214,7 +214,7 @@
       "faa_page_end": "15-15",
       "source_locator": "AFH Ch 15 (15-1..15-15)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/15/index.md",
-      "content_hash": "3b685299646c4a0e1ac5098f77633bb787b345210a19477e97ff3e9731031dcf",
+      "content_hash": "4613595a0ee1caff1a4cc92c5551b83315378b8ca92a2711fb0acb4f40cdf95a",
       "has_figures": true,
       "has_tables": false
     },
@@ -228,7 +228,7 @@
       "faa_page_end": "16-25",
       "source_locator": "AFH Ch 16 (16-1..16-25)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/16/index.md",
-      "content_hash": "1576d5b3d4503a45b8f2b1ee7e412a8a4ca3fb08b456045a27485b37c9e053a2",
+      "content_hash": "2f7b1df6377d381c090556e886803868ad866fd092cd7795b1ed0bf9eef37f90",
       "has_figures": true,
       "has_tables": false
     },
@@ -242,7 +242,7 @@
       "faa_page_end": "17-15",
       "source_locator": "AFH Ch 17 (17-1..17-15)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/17/index.md",
-      "content_hash": "0167699a179f1f66ba7bd371a52e3e0569c3e1cb8f3c0ad78579336cc74ebe3c",
+      "content_hash": "446f0341a09d9332d05f94311329cf1ff816fb4e8242eaab8e445796cad4f60f",
       "has_figures": false,
       "has_tables": false
     },
@@ -256,7 +256,7 @@
       "faa_page_end": "18-20",
       "source_locator": "AFH Ch 18 (18-1..18-20)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/18/index.md",
-      "content_hash": "8048ce675087446a35022c26e2c8e66ba3fd2fc465d6ee31622cf222bad2527a",
+      "content_hash": "4bf27fbfee6dbc246e48801c5b1e50c9e4779fe8d181b973fc0acc3b8b79e608",
       "has_figures": true,
       "has_tables": false
     },
@@ -270,7 +270,7 @@
       "faa_page_end": "1-1",
       "source_locator": "AFH Ch 1 §1 (1-1)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/01/01-introduction.md",
-      "content_hash": "1c1841e41be5c005ad373361a16085cd418bc0a423c493e611e0376ea309c4f2",
+      "content_hash": "011be8a77d51860f34a9dbdd1ee0583ade4a2f680bbfef50691a172249c9cd92",
       "has_figures": false,
       "has_tables": false
     },
@@ -452,7 +452,7 @@
       "faa_page_end": "1-16",
       "source_locator": "AFH Ch 1 §8 (1) (1-16)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/01/08-01-faa-wings-program.md",
-      "content_hash": "4b28f2d36004bba1018df3ddf10afa6b60e7c32f7696e83aac5c77c1091182c7",
+      "content_hash": "0ae056afb85fe3980f5f996593283d523437b2ec61e2eb8636b0488840849c63",
       "has_figures": false,
       "has_tables": false
     },
@@ -466,7 +466,7 @@
       "faa_page_end": "1-16",
       "source_locator": "AFH Ch 1 §9 (1-16)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/01/09-chapter-summary.md",
-      "content_hash": "95d587fcdea00c67a785c18f631e376889218d953c7a22e2221d2293d6a18296",
+      "content_hash": "83d9690a74a6e01e809ff5ede63ea2110a654303f8bc3913de6c264204345f2a",
       "has_figures": false,
       "has_tables": false
     },
@@ -480,7 +480,7 @@
       "faa_page_end": "2-1",
       "source_locator": "AFH Ch 2 §1 (2-1)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/02/01-introduction.md",
-      "content_hash": "bec124f2ad83d901287b447c6adc30d10c55732fbcb44e81f7899e0bf589238e",
+      "content_hash": "573d49f64f342c4ab71a03d225265f3e0d5fefdf35c21c1ef02977c1652579de",
       "has_figures": false,
       "has_tables": false
     },
@@ -900,7 +900,7 @@
       "faa_page_end": "2-23",
       "source_locator": "AFH Ch 2 §14 (1) (2-23)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/02/14-01-securing-and-servicing.md",
-      "content_hash": "43dc2432cbbdbd0f4b0b5377003c4011c36c9848b46d66280886632a727f6033",
+      "content_hash": "10291b48a3ebd5e28d0550b983df1ab7ec9882ba684118c2354fca23ffb12f9b",
       "has_figures": false,
       "has_tables": false
     },
@@ -914,7 +914,7 @@
       "faa_page_end": "2-24",
       "source_locator": "AFH Ch 2 §15 (2-24)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/02/15-chapter-summary.md",
-      "content_hash": "1eb1d2b38fa8e4a577e13c4b242f15bb19acbe2e8228705f6c5af10686130c58",
+      "content_hash": "85ec99579b96e8c0aaed3efdb3c0a2ad60afc9a6c8c447fdbce3b47897295d28",
       "has_figures": false,
       "has_tables": false
     },
@@ -928,7 +928,7 @@
       "faa_page_end": "3-1",
       "source_locator": "AFH Ch 3 §1 (3-1)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/03/01-introduction.md",
-      "content_hash": "e6b1af5a34ae23cbd4e35424da492c01c7b5e1e9553d5bcb3a8d6893d2d1b14f",
+      "content_hash": "b6a9a76fe67eeddf70111b85cb316cc3df2e0307bb6dd7e6ae7b2e4409256b2c",
       "has_figures": false,
       "has_tables": false
     },
@@ -1040,7 +1040,7 @@
       "faa_page_end": "3-8",
       "source_locator": "AFH Ch 3 §6 (2) (3-8)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/03/06-02-level-flight.md",
-      "content_hash": "ddb95431843814d0a22300a51b4e2b3e9537ead821a88986778e314101e909b4",
+      "content_hash": "dd39baa4c07bcb8fa6841eaf33ab9b66335211dcc3d46d00f3350e175e9e7023",
       "has_figures": false,
       "has_tables": false
     },
@@ -1054,7 +1054,7 @@
       "faa_page_end": "3-8",
       "source_locator": "AFH Ch 3 §6 (3) (3-8)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/03/06-03-common-errors.md",
-      "content_hash": "d6f5fa6fc1c9eae853b74bbf18b02494d6113543de2ca9981ba01cef45564394",
+      "content_hash": "9e81aea72f2b3cf3d3a10679c1ac09fb91e681844a2314c7caf9ec7212af622b",
       "has_figures": false,
       "has_tables": false
     },
@@ -1222,7 +1222,7 @@
       "faa_page_end": "3-23",
       "source_locator": "AFH Ch 3 §11 (1) (3-23)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/03/11-01-gliding-turns.md",
-      "content_hash": "8076e4025362516ae2b29a9fcc71a702818c15b225a22066628ca3eb67d72e0f",
+      "content_hash": "9a7e62c2a6098e9f7c804bf00844be3445ade28b216abe08a692ee184032d1bd",
       "has_figures": false,
       "has_tables": false
     },
@@ -1250,7 +1250,7 @@
       "faa_page_end": "3-25",
       "source_locator": "AFH Ch 3 §12 (3-25)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/03/12-chapter-summary.md",
-      "content_hash": "8336e3e3c095bccb659e2e8c14359954134ed08cb68bcf02110988a44ca303dd",
+      "content_hash": "304175429069482d911de681bc5fbc576f76822ed87aa897faf5f3d1dde80bf7",
       "has_figures": false,
       "has_tables": false
     },
@@ -1264,7 +1264,7 @@
       "faa_page_end": "4-1",
       "source_locator": "AFH Ch 4 §1 (4-1)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/04/01-introduction.md",
-      "content_hash": "c3347401cd5228f35b6e175aee1fe3dfb2d438abea25522d2cb07903b824e91b",
+      "content_hash": "353caa2750657fbb8007465e1e0a448f3c1c81060dd78bcdf7dfa5db32f926c8",
       "has_figures": false,
       "has_tables": false
     },
@@ -1488,7 +1488,7 @@
       "faa_page_end": "4-14",
       "source_locator": "AFH Ch 4 §5 (5) (4-14)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/04/05-05-preventing-irreversible-deceleration-and-or-sink.md",
-      "content_hash": "1300b50abfc7e415cd9930b9c839d8e8bdc7b31c58771efd9c5eef4a36daf3f8",
+      "content_hash": "d0bbbcaf4839b040a05dbdcede42f98be607a66486325d74b7501b64a25dd221",
       "has_figures": false,
       "has_tables": false
     },
@@ -1516,7 +1516,7 @@
       "faa_page_end": "4-19",
       "source_locator": "AFH Ch 4 §7 (4-19)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/04/07-chapter-summary.md",
-      "content_hash": "9b3936b1273d9d286f3d7bba5f8ab80f6210fe1dab7158867583e6bd7feded57",
+      "content_hash": "053cb6f4e62cf206ee078763cce2be850f8b1a5c5d25d13db3da454dc4de677c",
       "has_figures": false,
       "has_tables": false
     },
@@ -1530,7 +1530,7 @@
       "faa_page_end": "5-1",
       "source_locator": "AFH Ch 5 §1 (5-1)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/05/01-introduction.md",
-      "content_hash": "3d6cf16d5d0cb13fe570d881d33a4319255567c699f824273b62d2f0cb301cce",
+      "content_hash": "b49a36bc7bc9936c22e6316a69b1b6951b7fa1af21451b8ed8d4c8cb5e05f2b3",
       "has_figures": false,
       "has_tables": false
     },
@@ -1782,7 +1782,7 @@
       "faa_page_end": "5-6",
       "source_locator": "AFH Ch 5 §2 (16) (5-6)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/05/02-16-recovery.md",
-      "content_hash": "0437fc13d927591b006f60f3e887b6fc1a8a69978b3e8f0a63e2c82f0f5e34b3",
+      "content_hash": "441a5f235538db7acd8d03aa82cc06deb3aeaa050360c1bc2ebedaa0957d6db9",
       "has_figures": false,
       "has_tables": false
     },
@@ -1796,7 +1796,7 @@
       "faa_page_end": "5-7",
       "source_locator": "AFH Ch 5 §2 (17) (5-7)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/05/02-17-common-errors.md",
-      "content_hash": "1712bd8407263faee505c2234a609c5b1f98c75b5986fb38bd6212f8912b7c2e",
+      "content_hash": "3f3b6d9602127921c77b8062a76f24283c7a7f9558e36b52db1fb0eaa8841f86",
       "has_figures": false,
       "has_tables": false
     },
@@ -1922,7 +1922,7 @@
       "faa_page_end": "5-11",
       "source_locator": "AFH Ch 5 §3 (2) (5-11)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/05/03-02-maneuvering-in-slow-flight.md",
-      "content_hash": "c006f1e39fb2673834a59285980e4ea79fbfbf145d6b5f7f2d74fe6fbfc74cd1",
+      "content_hash": "d6bda6d1c5d0337068ca45b1973cde5e6dd0596e296dba43ba388fc47a764f27",
       "has_figures": false,
       "has_tables": false
     },
@@ -1936,7 +1936,7 @@
       "faa_page_end": "5-12",
       "source_locator": "AFH Ch 5 §3 (3) (5-12)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/05/03-03-common-errors.md",
-      "content_hash": "d9b2241458da2523065a8689d568d647931fb8dddd5d8f807d10fe1ede71973e",
+      "content_hash": "6fef12bb3b416050f7b83c8eec9904347ec4d5f2311ff098fd22f68576146d03",
       "has_figures": false,
       "has_tables": false
     },
@@ -2118,7 +2118,7 @@
       "faa_page_end": "5-20",
       "source_locator": "AFH Ch 5 §4 (12) (5-20)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/05/04-12-elevator-trim-stall.md",
-      "content_hash": "9e591960342007441e6b170b5d727f8dd1470fe666466bd574e219eec3fed956",
+      "content_hash": "b48bfcd7d4e2f9f0f53a087af9aabbe9b46a9853d1e65493c4b764929ebefcaa",
       "has_figures": false,
       "has_tables": false
     },
@@ -2132,7 +2132,7 @@
       "faa_page_end": "5-21",
       "source_locator": "AFH Ch 5 §4 (13) (5-21)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/05/04-13-common-errors.md",
-      "content_hash": "19c2ba714dc4d7dee4e68e684c49813c5042e4b4c8bd13eaf17ec94723ed4b36",
+      "content_hash": "ad33e593f8106bfb5b84244af6e615e2c4e93e320d97efe50b0ddf68b60fd013",
       "has_figures": false,
       "has_tables": false
     },
@@ -2230,7 +2230,7 @@
       "faa_page_end": "5-25",
       "source_locator": "AFH Ch 5 §4 (20) (5-25)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/05/04-20-intentional-spins.md",
-      "content_hash": "c68f8245d3c221ec750f0cc719eee55f434cb346df0b43487a86f6ae52b38c75",
+      "content_hash": "a554c77371ac6ab6873c56ac0590054ba38ac27b1173aa9c3e1a18e38727b758",
       "has_figures": false,
       "has_tables": false
     },
@@ -2258,7 +2258,7 @@
       "faa_page_end": "5-26",
       "source_locator": "AFH Ch 5 §4 (22) (5-26)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/05/04-22-common-errors.md",
-      "content_hash": "514ed54afed3c626aa5be5aa3e480efb65b10eff568ff6a019c70377764dd4a7",
+      "content_hash": "e509194d8d8eb4654a72ea5b7fc350f2c5544972b5a41d2b41ba2f35312085cc",
       "has_figures": false,
       "has_tables": false
     },
@@ -2272,7 +2272,7 @@
       "faa_page_end": "5-26",
       "source_locator": "AFH Ch 5 §4 (23) (5-26)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/05/04-23-spiral-dive.md",
-      "content_hash": "001f976943a6eaacf4dfab977c876e8a43df5f366ed2839ef3581299f48387a0",
+      "content_hash": "9977fa33b699cec69ec82cb94785194dd2fb79d356d232e5fb214687814601fe",
       "has_figures": false,
       "has_tables": false
     },
@@ -2286,7 +2286,7 @@
       "faa_page_end": "5-27",
       "source_locator": "AFH Ch 5 §4 (24) (5-27)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/05/04-24-common-errors.md",
-      "content_hash": "428e6a368e6a5fe2e653647ee67fab05de24f6e918b406c85572a95aa325bede",
+      "content_hash": "59442af255a9cb9787faf3f4587780c737e9b4c8f9d7e480faf30fdcd79881b2",
       "has_figures": false,
       "has_tables": false
     },
@@ -2300,7 +2300,7 @@
       "faa_page_end": "5-27",
       "source_locator": "AFH Ch 5 §4 (25) (5-27)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/05/04-25-uprt-summary.md",
-      "content_hash": "b04988b982f19dfe7ecc71c81145b9e617ade94f439e447bde11a039950f1bec",
+      "content_hash": "3612f77aef63b551b57e8a3e556cbeec6f93799832fea26fbe1625e6262f25af",
       "has_figures": false,
       "has_tables": false
     },
@@ -2314,7 +2314,7 @@
       "faa_page_end": "5-27",
       "source_locator": "AFH Ch 5 §5 (5-27)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/05/05-chapter-summary.md",
-      "content_hash": "3be19ccd34e04d7cb6def0c00852bb54f39ffd1b9b3fb767fec97367f916a199",
+      "content_hash": "2049d68b185e236d7f127b10b57f5986f5f38a244d49eb8271e452f8968cbb14",
       "has_figures": false,
       "has_tables": false
     },
@@ -2328,7 +2328,7 @@
       "faa_page_end": "6-1",
       "source_locator": "AFH Ch 6 §1 (6-1)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/06/01-introduction.md",
-      "content_hash": "36c00bf9c82485c5c88950f149f52748e99050a7290c62cfaec891e9fdbc156e",
+      "content_hash": "028d48489eaab46f0d8651338b0da14e61e323de8349f5c09e8a83671881c1b0",
       "has_figures": false,
       "has_tables": false
     },
@@ -2370,7 +2370,7 @@
       "faa_page_end": "6-3",
       "source_locator": "AFH Ch 6 §3 (6-3)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/06/03-normal-takeoff.md",
-      "content_hash": "07620d1474f70cb23af271858e738bd9af6b6c087a1513289f6ad88ed20e983e",
+      "content_hash": "9822ebae246c57fe7c527bfc4b0e8bbd96b40fe247f71f6ed68e21160dd65e77",
       "has_figures": false,
       "has_tables": false
     },
@@ -2384,7 +2384,7 @@
       "faa_page_end": "6-3",
       "source_locator": "AFH Ch 6 §3 (1) (6-3)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/06/03-01-takeoff-roll.md",
-      "content_hash": "e192d76ee41923c6ae6a156af7f06c724913528c12ecad3152f961fcf2537354",
+      "content_hash": "29b19a9911f153e3668889ef9fcb944d3894888d381839c57125032fa5f93a2f",
       "has_figures": false,
       "has_tables": false
     },
@@ -2398,7 +2398,7 @@
       "faa_page_end": "6-4",
       "source_locator": "AFH Ch 6 §3 (2) (6-4)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/06/03-02-lift-off.md",
-      "content_hash": "22db29df5c3a6fce5a1f6584e144f93b548951616f7164227b9cd055aa299e4a",
+      "content_hash": "2ad245cdc7dbc5751ec3ae63be171c2cd5c2faafc9aa7dc55b9f999b2059031a",
       "has_figures": false,
       "has_tables": false
     },
@@ -2412,7 +2412,7 @@
       "faa_page_end": "6-5",
       "source_locator": "AFH Ch 6 §3 (3) (6-5)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/06/03-03-initial-climb.md",
-      "content_hash": "f2c94429feac06ecfcf90981311dc7311f1d93955c3fb11777ae05a13a17e47c",
+      "content_hash": "9a48e1516d4bcabd7bd769ce313cf42185ae7ac57a138aa5f9a627b9a19fa6c7",
       "has_figures": false,
       "has_tables": false
     },
@@ -2426,7 +2426,7 @@
       "faa_page_end": "6-6",
       "source_locator": "AFH Ch 6 §3 (4) (6-6)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/06/03-04-common-errors.md",
-      "content_hash": "6b1a61e1799562db3b1c4038364f56d00c95f1902a3388660ac64218d0ada0d0",
+      "content_hash": "0dc9b1ed327e7cd12202419ebb931c5854c0ea58dbbbc4f557f803f264d17c80",
       "has_figures": false,
       "has_tables": false
     },
@@ -2440,7 +2440,7 @@
       "faa_page_end": "6-6",
       "source_locator": "AFH Ch 6 §4 (6-6)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/06/04-crosswind-takeoff.md",
-      "content_hash": "16e8b75c8b39f4df062c85b7500350a6cd68e58156a5187283fc20da3434d064",
+      "content_hash": "ee1b112042a6d5c06a2e1d18ddff9eefc4100e6f05d715758fb1f2583b26ffc3",
       "has_figures": false,
       "has_tables": false
     },
@@ -2454,7 +2454,7 @@
       "faa_page_end": "6-6",
       "source_locator": "AFH Ch 6 §4 (1) (6-6)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/06/04-01-takeoff-roll.md",
-      "content_hash": "df42cf5680e2fe5dc4ed751fb5fee7ea634bcad5e35708c085547ac0ca6f414d",
+      "content_hash": "76513c2e20edacfe0bf2e569f90b00156030f7c2401791acaba00c6b409be942",
       "has_figures": false,
       "has_tables": false
     },
@@ -2468,7 +2468,7 @@
       "faa_page_end": "6-7",
       "source_locator": "AFH Ch 6 §4 (2) (6-7)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/06/04-02-lift-off.md",
-      "content_hash": "1c3f958dc95a01ae9b2b6f2a369451926cf689a0ffd8be32b194fab8d21266fd",
+      "content_hash": "8ca7893019c0bcb582a0838cf84c9ba8b2e0e9e001f196db3c92f7a0e4d58f6a",
       "has_figures": false,
       "has_tables": false
     },
@@ -2482,7 +2482,7 @@
       "faa_page_end": "6-8",
       "source_locator": "AFH Ch 6 §4 (3) (6-8)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/06/04-03-initial-climb.md",
-      "content_hash": "407f3ae47f41af9f282764ee16ed643f04745994a8ea39f6adcc11c39d7031d1",
+      "content_hash": "9d4d14da7e3308bd6bfa54bc23020be8fbb9b1384bf7ff97abb3eb37f184c909",
       "has_figures": false,
       "has_tables": false
     },
@@ -2524,7 +2524,7 @@
       "faa_page_end": "6-11",
       "source_locator": "AFH Ch 6 §6 (6-11)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/06/06-short-field-takeoff-and-maximum-performance-clim.md",
-      "content_hash": "5c1d86932b3345848d449b137514a729bef4ec5cb82630c033387d725634270f",
+      "content_hash": "3e5c86d126a5adcf07e750bc2bbf41de4c93a74b46216de66079fa99ee3f719a",
       "has_figures": false,
       "has_tables": false
     },
@@ -2538,7 +2538,7 @@
       "faa_page_end": "6-11",
       "source_locator": "AFH Ch 6 §6 (1) (6-11)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/06/06-01-takeoff-roll.md",
-      "content_hash": "40e53ee3c320c74376a009d27a102af5b7885eeb0071e24fc07903965b3093ac",
+      "content_hash": "353f306d52eb6506ebf65aaaac9d98138c3fa760448a585a42ef155c6f61943e",
       "has_figures": false,
       "has_tables": false
     },
@@ -2552,7 +2552,7 @@
       "faa_page_end": "6-12",
       "source_locator": "AFH Ch 6 §6 (2) (6-12)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/06/06-02-lift-off.md",
-      "content_hash": "b82aa2ef896d086595db25d3dc1104406518f8f562b479c71c5175892d28ccd5",
+      "content_hash": "21803b230d78a10350b4337ff6a3a664dbb7dfbb5f936e5d77c1fbf62b2fb331",
       "has_figures": false,
       "has_tables": false
     },
@@ -2566,7 +2566,7 @@
       "faa_page_end": "6-12",
       "source_locator": "AFH Ch 6 §6 (3) (6-12)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/06/06-03-initial-climb.md",
-      "content_hash": "c785c4db613e575e6690cc959c6c87a2b75a19322a5de703e67474daa2b150d9",
+      "content_hash": "aa5a863aaa1228299a5cbdc87ce8b3b1dcbdf6c9af08c986c0e03db3f11999a4",
       "has_figures": false,
       "has_tables": false
     },
@@ -2594,7 +2594,7 @@
       "faa_page_end": "6-13",
       "source_locator": "AFH Ch 6 §7 (6-13)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/06/07-soft-rough-field-takeoff-and-climb.md",
-      "content_hash": "19c516dc0683a4a5deab2267ca2f19226208279bbd37961a0c58a6608c97ee7c",
+      "content_hash": "74e242af64f37bb6f109146d8fcfcb749d8e973a634c5cef25ec1237d59a47e6",
       "has_figures": false,
       "has_tables": false
     },
@@ -2608,7 +2608,7 @@
       "faa_page_end": "6-13",
       "source_locator": "AFH Ch 6 §7 (1) (6-13)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/06/07-01-takeoff-roll.md",
-      "content_hash": "17008e515868af69d1725496207042cb1d608d88b0f728e3d23f05d0c1694879",
+      "content_hash": "91ad56251ce16de2912eed9ee2e066bbef9f6f516c7795f405731b35b687d610",
       "has_figures": false,
       "has_tables": false
     },
@@ -2622,7 +2622,7 @@
       "faa_page_end": "6-13",
       "source_locator": "AFH Ch 6 §7 (2) (6-13)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/06/07-02-lift-off.md",
-      "content_hash": "3a3a1282bb948eaca7cfaafeb11ba01d53f58372dd6a1daa0c0405cf7a142c0d",
+      "content_hash": "e798dc41ab7ad09c682f236c73ad993e178054b53272bfee4e764795bfade1a1",
       "has_figures": false,
       "has_tables": false
     },
@@ -2636,7 +2636,7 @@
       "faa_page_end": "6-13",
       "source_locator": "AFH Ch 6 §7 (3) (6-13)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/06/07-03-initial-climb.md",
-      "content_hash": "3800878e3dab877d5efd883590aef16ab301e1cddec80c2a24f0113e43e2bb9a",
+      "content_hash": "3362624c71061de84fd913e264df51a67f52cf30f9e595be46c97342dc5f176c",
       "has_figures": false,
       "has_tables": false
     },
@@ -2678,7 +2678,7 @@
       "faa_page_end": "6-14",
       "source_locator": "AFH Ch 6 §9 (6-14)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/06/09-noise-abatement.md",
-      "content_hash": "d6b58516041fc85d79663b54c69df610fe5d68c3a80e99bc9bddf86f4e482626",
+      "content_hash": "0ece3541420c89ed51bff1d0dc66f66d418ad27c94c4b167fc24b67da0bf9be7",
       "has_figures": false,
       "has_tables": false
     },
@@ -2692,7 +2692,7 @@
       "faa_page_end": "6-14",
       "source_locator": "AFH Ch 6 §10 (6-14)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/06/10-chapter-summary.md",
-      "content_hash": "1ae2401fac15e0950a437f9db84440d29737bca7aad6f404604b6a776cb59453",
+      "content_hash": "983f7a447b572e1342215a668c3998e00d2c7880b0a29294337ad775a70aac07",
       "has_figures": false,
       "has_tables": false
     },
@@ -2706,7 +2706,7 @@
       "faa_page_end": "7-1",
       "source_locator": "AFH Ch 7 §1 (7-1)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/07/01-introduction.md",
-      "content_hash": "142f295f2c5b54ddc34c849677fd732357a3a113f9d96452c61f72a6b5ad47a7",
+      "content_hash": "6df7859aa794390db6d2ba35d70888a79327a6986162e2a4eeec0473dbfb5a14",
       "has_figures": false,
       "has_tables": false
     },
@@ -2790,7 +2790,7 @@
       "faa_page_end": "7-5",
       "source_locator": "AFH Ch 7 §4 (7-5)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/07/04-rectangular-course.md",
-      "content_hash": "8a572e0622782126321de2094e47e1930da40f5d7c89968612f22fd6ccb37207",
+      "content_hash": "eae4d8159ca6abbd59f011162eb17bdd174a6618f0270efa9794712331ffe05c",
       "has_figures": false,
       "has_tables": false
     },
@@ -2804,7 +2804,7 @@
       "faa_page_end": "7-7",
       "source_locator": "AFH Ch 7 §4 (1) (7-7)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/07/04-01-common-errors.md",
-      "content_hash": "05c8c8508f2607de30dd17d3488c36986c62b39ef076e783ec477e83045d5a66",
+      "content_hash": "4d9dbf9d8091a0a87b71f8001f9b8af138c67b2c09f5b941d35a05929929b9a7",
       "has_figures": false,
       "has_tables": false
     },
@@ -2818,7 +2818,7 @@
       "faa_page_end": "7-7",
       "source_locator": "AFH Ch 7 §5 (7-7)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/07/05-turns-around-a-point.md",
-      "content_hash": "b31e996c44d8c95ce4e116c5efcd916408650537c85b316109fb1d98f14eacc8",
+      "content_hash": "34fd875041737be5e49de8114e243f698f083d87b6215716372ff2dc43845071",
       "has_figures": false,
       "has_tables": false
     },
@@ -2832,7 +2832,7 @@
       "faa_page_end": "7-8",
       "source_locator": "AFH Ch 7 §6 (7-8)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/07/06-s-turns.md",
-      "content_hash": "d4eaff27d876a58943502f59c74ba31b7d399e2e467168a1f8e0ef53b11672d2",
+      "content_hash": "ad8096f3970edf843d17aa3b3db3b1d6ec7f5baa8dad252978e0d15fb8516b4a",
       "has_figures": false,
       "has_tables": false
     },
@@ -2846,7 +2846,7 @@
       "faa_page_end": "7-10",
       "source_locator": "AFH Ch 7 §6 (1) (7-10)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/07/06-01-common-errors.md",
-      "content_hash": "ccab9b6c69e5480030a711abac88984bf82b4926caaf0004ead5c10f5f547b70",
+      "content_hash": "75ce1307f3a2f89fe278919631a678e2ffc4257c339e42afad3df8898dddbf17",
       "has_figures": false,
       "has_tables": false
     },
@@ -2860,7 +2860,7 @@
       "faa_page_end": "7-10",
       "source_locator": "AFH Ch 7 §7 (7-10)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/07/07-elementary-eights.md",
-      "content_hash": "99bb3e4447e3179957e74385e7539b5497d49b80de9c84e98d75e7731ee6f667",
+      "content_hash": "2009540e20c4f0778f988af7bf7bbcca322c5b18897001dbf43942ee5e223680",
       "has_figures": false,
       "has_tables": false
     },
@@ -2874,7 +2874,7 @@
       "faa_page_end": "7-11",
       "source_locator": "AFH Ch 7 §7 (1) (7-11)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/07/07-01-eights-along-a-road.md",
-      "content_hash": "77dd949b72d2b84944c2109f154f5d10a7de452d20a4cf97828273ef7ec608e1",
+      "content_hash": "a8f105ec23931321c5452d1426b6330943e2db9e82c1f7343334317e4e7fc17a",
       "has_figures": false,
       "has_tables": false
     },
@@ -2888,7 +2888,7 @@
       "faa_page_end": "7-12",
       "source_locator": "AFH Ch 7 §7 (2) (7-12)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/07/07-02-eights-across-a-road.md",
-      "content_hash": "9f00a8ae63e4463c25cecaa51e89bb45b2e45522e8dc18b4b515e531c7fc1dd2",
+      "content_hash": "c0828e56f2483da63d7691a87aeff9a330fce4410ad4fed22f894ff32bb0511c",
       "has_figures": false,
       "has_tables": false
     },
@@ -2902,7 +2902,7 @@
       "faa_page_end": "7-13",
       "source_locator": "AFH Ch 7 §7 (3) (7-13)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/07/07-03-eights-around-pylons.md",
-      "content_hash": "d70751f7143571a008905eaafeb6b8d304d7bf082c4241f7f2a7d96c82735647",
+      "content_hash": "20734b75ceecbc371523503e01302ebe689a8451455c9e580549a0faa1100bf8",
       "has_figures": false,
       "has_tables": false
     },
@@ -2958,7 +2958,7 @@
       "faa_page_end": "7-18",
       "source_locator": "AFH Ch 7 §8 (7-18)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/07/08-chapter-summary.md",
-      "content_hash": "a6391ecec217adac523e9280713c27a7bc0741aa49ee7a5a86d9ae6c840ae235",
+      "content_hash": "91959ff1be4172f3fb93212c3db3a707716051a50b725892ea4b446df5898756",
       "has_figures": false,
       "has_tables": false
     },
@@ -2972,7 +2972,7 @@
       "faa_page_end": "8-1",
       "source_locator": "AFH Ch 8 §1 (8-1)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/08/01-introduction.md",
-      "content_hash": "d0b325dd43a735d263028f6cfded26a6ab92ce6ad394aef6096a081d62d6187c",
+      "content_hash": "410c23a970ce0c2b798fb6906ae89e19ba0d2bb911209f269eaef5eca690df14",
       "has_figures": false,
       "has_tables": false
     },
@@ -3028,7 +3028,7 @@
       "faa_page_end": "8-5",
       "source_locator": "AFH Ch 8 §5 (8-5)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/08/05-safety-considerations.md",
-      "content_hash": "4b0e1a0c6a7e441b04863db410513bbc70326d6ba0fced12a4dfe347836f8a20",
+      "content_hash": "2535f275f797f907c70a0a5a3b57c8ec36e820efad4ec8174a237be5ead7a9ad",
       "has_figures": false,
       "has_tables": false
     },
@@ -3042,7 +3042,7 @@
       "faa_page_end": "8-7",
       "source_locator": "AFH Ch 8 §6 (8-7)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/08/06-chapter-summary.md",
-      "content_hash": "03243cc68df2157d4730dbd8c0f021b62e7e88253a52057125cc02c724dd0c26",
+      "content_hash": "16a141824d16dc3aa7ee5558a11ca52077f13429ccf20c5dbaca9bd77076e419",
       "has_figures": false,
       "has_tables": false
     },
@@ -3056,7 +3056,7 @@
       "faa_page_end": "9-1",
       "source_locator": "AFH Ch 9 §1 (9-1)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/09/01-introduction.md",
-      "content_hash": "9d12197f9eabdcdb3c49a5d3ecf76d91d1ff91e094de0213e06ca73efa73fee0",
+      "content_hash": "b06acab99f1c806b1fb09c1e8a41e322208cda2e63370302ee163a6aa6a0e66b",
       "has_figures": false,
       "has_tables": false
     },
@@ -3168,7 +3168,7 @@
       "faa_page_end": "9-8",
       "source_locator": "AFH Ch 9 §3 (6) (9-8)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/09/03-06-round-out-flare.md",
-      "content_hash": "135e04d53c44fdad2dcb9f50d97bbebc5c138e05c4c2de122f82c85cd7a718d1",
+      "content_hash": "f543d5ce2d6095c1c152a549bf2ccad52ae6d467db4980848192f85625664f72",
       "has_figures": false,
       "has_tables": false
     },
@@ -3182,7 +3182,7 @@
       "faa_page_end": "9-9",
       "source_locator": "AFH Ch 9 §3 (7) (9-9)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/09/03-07-touchdown.md",
-      "content_hash": "86cb941ad68097b9e2c7fd0d6b0a592854ad7ff945304ee0daa92f3f19249de7",
+      "content_hash": "8bc1bcac1579a2a601a6dca5614dc8101edc00854ebdaa3543304316e5052335",
       "has_figures": false,
       "has_tables": false
     },
@@ -3196,7 +3196,7 @@
       "faa_page_end": "9-9",
       "source_locator": "AFH Ch 9 §3 (8) (9-9)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/09/03-08-after-landing-roll.md",
-      "content_hash": "971a6f87679b4686efe6aac875a72df07deb4e9c0b22b8751b76a001eaf40cd6",
+      "content_hash": "a5e3987437a101e676d5c490b0cf7b32f7752bbca8f88e9f5955a69020235114",
       "has_figures": false,
       "has_tables": false
     },
@@ -3210,7 +3210,7 @@
       "faa_page_end": "9-10",
       "source_locator": "AFH Ch 9 §3 (9) (9-10)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/09/03-09-common-errors.md",
-      "content_hash": "0e82ff67f301b1e40278fa05a513d11a680f93d363722865a006b5048d4b907c",
+      "content_hash": "725bc0f96a4d93d80746b14240510510c7cd5e0bbad8f98ceede2d21ac526730",
       "has_figures": false,
       "has_tables": false
     },
@@ -3252,7 +3252,7 @@
       "faa_page_end": "9-11",
       "source_locator": "AFH Ch 9 §4 (2) (9-11)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/09/04-02-attitude.md",
-      "content_hash": "6a72918d8d53e155608babf2532bbf37fe8fd07daf8dc26fa793abedf54ef5c6",
+      "content_hash": "4295ab066cc0e283563aead692cffbd8f6814efd32e4fd07150a876496561dd9",
       "has_figures": false,
       "has_tables": false
     },
@@ -3266,7 +3266,7 @@
       "faa_page_end": "9-11",
       "source_locator": "AFH Ch 9 §4 (3) (9-11)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/09/04-03-configuration.md",
-      "content_hash": "66aa94943641f0ef79678c948bd4e094215637936c2a46b498667360f551b933",
+      "content_hash": "71824ea027af3deb9cb0b139b4aa6ccc41ddb16d7e765e912a992e5808544785",
       "has_figures": false,
       "has_tables": false
     },
@@ -3280,7 +3280,7 @@
       "faa_page_end": "9-12",
       "source_locator": "AFH Ch 9 §4 (4) (9-12)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/09/04-04-ground-effect.md",
-      "content_hash": "8d735ac518ed9f9a8f4acce03e1db31bbc79b7388e58e8024137ccc6ef2e83a5",
+      "content_hash": "96a2c259619314240a6f74e80f84db86fd989d9ad6c65dc10e8673dc9a2934cd",
       "has_figures": false,
       "has_tables": false
     },
@@ -3294,7 +3294,7 @@
       "faa_page_end": "9-12",
       "source_locator": "AFH Ch 9 §4 (5) (9-12)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/09/04-05-common-errors.md",
-      "content_hash": "641fc3476d84188707bff097481844796cf39860e9876df295970ca2d927a57f",
+      "content_hash": "8075393cb126e957a140cc8d601578a64fd58335f03ec5765feb38286aba3b10",
       "has_figures": false,
       "has_tables": false
     },
@@ -3322,7 +3322,7 @@
       "faa_page_end": "9-15",
       "source_locator": "AFH Ch 9 §5 (1) (9-15)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/09/05-01-forward-slip-to-a-landing.md",
-      "content_hash": "abcd383b671a277ad04d8803fa05530540e64d4d930e2b5bc52f23d723aa7e61",
+      "content_hash": "d7075080ff4aec14accec95e3fe4eb36889c0cd644ad9158d8e80e744f085912",
       "has_figures": false,
       "has_tables": false
     },
@@ -3336,7 +3336,7 @@
       "faa_page_end": "9-15",
       "source_locator": "AFH Ch 9 §5 (2) (9-15)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/09/05-02-common-errors.md",
-      "content_hash": "5a821255cf4753bffb2266f1c6d950293bfcffeceeef5ad1f3124531912cce98",
+      "content_hash": "940688d710e4d34e1ba5d00656da01c01e6856a94ff82667c7c75b5a4b8bc19b",
       "has_figures": false,
       "has_tables": false
     },
@@ -3420,7 +3420,7 @@
       "faa_page_end": "9-18",
       "source_locator": "AFH Ch 9 §6 (5) (9-18)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/09/06-05-maximum-safe-crosswind-velocities.md",
-      "content_hash": "bdcf570c40d6417eb1bd6a4932236f05ab6353d512c3a54f9d2c5a505fc7be5d",
+      "content_hash": "cc2238a8cd29e6890eff705e50404b0ac936f7e4f9aea4544a8232c630f7dfbc",
       "has_figures": false,
       "has_tables": false
     },
@@ -3434,7 +3434,7 @@
       "faa_page_end": "9-20",
       "source_locator": "AFH Ch 9 §6 (6) (9-20)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/09/06-06-common-errors.md",
-      "content_hash": "e0af79dfa1cba321ab6ef5111db79f6c6033749afcbb25b79ef83a684dc13568",
+      "content_hash": "5ca2834c2bdfb9f9f48e0e9f52ffe0367feaa7898ff06141dc01d017fb070fd3",
       "has_figures": false,
       "has_tables": false
     },
@@ -3462,7 +3462,7 @@
       "faa_page_end": "9-20",
       "source_locator": "AFH Ch 9 §8 (9-20)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/09/08-short-field-approach-and-landing.md",
-      "content_hash": "bc9a2e7a14d1c74e13180d80c1f92c58adcac8af74217879645945dad6bd997a",
+      "content_hash": "259ed18e1ae7c05f77da840831b55abbcc898ccb9cff7a2a4f6d3134eedb9453",
       "has_figures": false,
       "has_tables": false
     },
@@ -3476,7 +3476,7 @@
       "faa_page_end": "9-23",
       "source_locator": "AFH Ch 9 §8 (1) (9-23)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/09/08-01-common-errors.md",
-      "content_hash": "8688b5900f89a7dc1c1ccf79ffd93fe10d32d4187073dcc16445d3e8b403d13d",
+      "content_hash": "df83bbbad5908807003eb00328bf2bb432309ea4e1ccb96a689e782010fadfd6",
       "has_figures": false,
       "has_tables": false
     },
@@ -3490,7 +3490,7 @@
       "faa_page_end": "9-23",
       "source_locator": "AFH Ch 9 §9 (9-23)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/09/09-soft-field-approach-and-landing.md",
-      "content_hash": "1aa811ce15395089763d1da53026907ca4264cdbecafcf90a19644896f3d0ff4",
+      "content_hash": "02585ee71232ec8b7d4c2dab87b5a534821029dad2f3cf72dda0a15bdc4b3427",
       "has_figures": false,
       "has_tables": false
     },
@@ -3504,7 +3504,7 @@
       "faa_page_end": "9-24",
       "source_locator": "AFH Ch 9 §9 (1) (9-24)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/09/09-01-common-errors.md",
-      "content_hash": "a8fa3a995fde00bd49e326b50c17bd665cfa05077ff35d853c1af19bacb90f69",
+      "content_hash": "ec8889af3caa09ad86782ee7b3ca7456664acd98bbb5840092bf8a1227ee0474",
       "has_figures": false,
       "has_tables": false
     },
@@ -3546,7 +3546,7 @@
       "faa_page_end": "9-26",
       "source_locator": "AFH Ch 9 §10 (2) (9-26)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/09/10-02-180-power-off-approach.md",
-      "content_hash": "aafb9fc2424f7ea874b27f30f318b5645f172502811aae31cb3dfbaec5c4bb11",
+      "content_hash": "0e6b79119e0275046bc6c7afa0dd343fe207c9a2faaaebcda2fbbc7d7fd4219a",
       "has_figures": false,
       "has_tables": false
     },
@@ -3560,7 +3560,7 @@
       "faa_page_end": "9-27",
       "source_locator": "AFH Ch 9 §10 (3) (9-27)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/09/10-03-common-errors.md",
-      "content_hash": "af4b265524059fa31e6df2862e6c9112f1b22dcd396f4e45f039515afc55c732",
+      "content_hash": "4ac93dcb9f43f2e1f427308e513ae70a614ec40f5e32ee8c6433b2697d9335ec",
       "has_figures": false,
       "has_tables": false
     },
@@ -3854,7 +3854,7 @@
       "faa_page_end": "9-37",
       "source_locator": "AFH Ch 9 §13 (3) (9-37)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/09/13-03-viscous-hydroplaning.md",
-      "content_hash": "a232d08da413807bdba6cd76beee859a5c063206e00e8953eb112ff5a99ed028",
+      "content_hash": "ca05464680ecaf4aa448016ff87a8e7ca335d8e074fa7889b198065fb2db6116",
       "has_figures": false,
       "has_tables": false
     },
@@ -3868,7 +3868,7 @@
       "faa_page_end": "9-38",
       "source_locator": "AFH Ch 9 §14 (9-38)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/09/14-chapter-summary.md",
-      "content_hash": "a33c3e9a03d70570d4f32af5919a60ed1074770c4added74083c483a327c24dd",
+      "content_hash": "5533fe4a5369c721eec11725f3ad5e6095028a3b18d6153c7351bbc4179d39e7",
       "has_figures": false,
       "has_tables": false
     },
@@ -3882,7 +3882,7 @@
       "faa_page_end": "10-1",
       "source_locator": "AFH Ch 10 §1 (10-1)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/10/01-introduction.md",
-      "content_hash": "5781c4d2b74193d3414fbff90650b29d1f7a0fc322d402c80ff7dabee1a9ef3f",
+      "content_hash": "9348a519f50b21ae6a7c11985528ca4001a033847aec8cdb44ca4f3b2753bfb8",
       "has_figures": false,
       "has_tables": false
     },
@@ -3980,7 +3980,7 @@
       "faa_page_end": "10-6",
       "source_locator": "AFH Ch 10 §5 (10-6)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/10/05-lazy-eight.md",
-      "content_hash": "519ca3353f694e823d19636af7139fceff6de56573a6cab7bb461dbd9abc8b2b",
+      "content_hash": "0fec301987f8c383b07e4011474fd95d1038d12a76c519649eff9e3e6e0d28c0",
       "has_figures": false,
       "has_tables": false
     },
@@ -4008,7 +4008,7 @@
       "faa_page_end": "10-8",
       "source_locator": "AFH Ch 10 §6 (10-8)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/10/06-chapter-summary.md",
-      "content_hash": "eeaaf8119dd20186b825a3836732aa79f7568acc7c488d14b73c2314750f1533",
+      "content_hash": "522d2f201340adf9b47d28f8b3d474ecafe4994ef57ca033f15ac2b72dc8cafe",
       "has_figures": false,
       "has_tables": false
     },
@@ -4022,7 +4022,7 @@
       "faa_page_end": "11-1",
       "source_locator": "AFH Ch 11 §1 (11-1)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/11/01-introduction.md",
-      "content_hash": "a95b0127825f818774de4992fe80ac3f55e06c5bf437cbc0ff570e88956cd9ef",
+      "content_hash": "6ee63f49613d278ee2c724a4ae5576c5aff7f9bcd195e00d7a7822ae1b15ae86",
       "has_figures": false,
       "has_tables": false
     },
@@ -4260,7 +4260,7 @@
       "faa_page_end": "11-8",
       "source_locator": "AFH Ch 11 §9 (11-8)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/11/09-starting-taxiing-and-run-up.md",
-      "content_hash": "959de7733937d0df4f4ab240f54b93880e81b6310a38723898461c98e08cffbe",
+      "content_hash": "57d22ce9586550e551e273585da85c17128c6bb8ce5d773d07e9624b5bc6b006",
       "has_figures": false,
       "has_tables": false
     },
@@ -4274,7 +4274,7 @@
       "faa_page_end": "11-8",
       "source_locator": "AFH Ch 11 §10 (11-8)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/11/10-takeoff-and-climb.md",
-      "content_hash": "8c61405da3fd332eb956dc1cd797f64977c000ee2fdcb8c5554f814d8ec104b8",
+      "content_hash": "e770d95a001208543e6311a8a7e0a9e723a8b986c545fe5c68f63121e2e320ef",
       "has_figures": false,
       "has_tables": false
     },
@@ -4330,7 +4330,7 @@
       "faa_page_end": "11-13",
       "source_locator": "AFH Ch 11 §13 (1) (11-13)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/11/13-01-night-emergencies.md",
-      "content_hash": "d10f256417f186425bf48365ede5848cc6cf01f81d9208bf2b6eced58a4a933d",
+      "content_hash": "28c17522b7bea41945820217cdb654090cc88c3eee269a776d57a5319bd374a4",
       "has_figures": false,
       "has_tables": false
     },
@@ -4344,7 +4344,7 @@
       "faa_page_end": "11-14",
       "source_locator": "AFH Ch 11 §14 (11-14)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/11/14-chapter-summary.md",
-      "content_hash": "50e73c3ee470416aea0297432a07b64fde46acea11c445e7c971160ce2c90afc",
+      "content_hash": "f6f71ed6deb442eea621563216ac488d216ea63818f3da0f9f4274ea2c66d1e8",
       "has_figures": false,
       "has_tables": false
     },
@@ -4358,7 +4358,7 @@
       "faa_page_end": "12-1",
       "source_locator": "AFH Ch 12 §1 (12-1)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/12/01-introduction.md",
-      "content_hash": "1d5f807a5f560533a8ad6e21f88f09d04b84635aa088969c1c51be9b900b1568",
+      "content_hash": "60dd5d55a8712365fe02c9d9527cd5a679ccd9b21bd6466bf67d17b071001162",
       "has_figures": false,
       "has_tables": false
     },
@@ -4666,7 +4666,7 @@
       "faa_page_end": "12-14",
       "source_locator": "AFH Ch 12 §4 (5) (12-14)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/12/04-05-operational-procedures.md",
-      "content_hash": "7d99f2655f281f842de96e60eb81253e63e91b8259c9780d466ad65b92de4344",
+      "content_hash": "4a0d5a2898f5422599f8087e1f5771d51eac5e0b9da605c2a51ca985b7cf30e3",
       "has_figures": false,
       "has_tables": false
     },
@@ -4680,7 +4680,7 @@
       "faa_page_end": "12-16",
       "source_locator": "AFH Ch 12 §4 (6) (12-16)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/12/04-06-takeoff-and-climb.md",
-      "content_hash": "1cd30db7385a5482fe5742f862b5c670f39d0eb8ad8884ffe9a38e3bbaeda330",
+      "content_hash": "8883a765027e72a4ff6dcb4162ef50969fbd8fdd67ddd72ff92812be2a5f70ab",
       "has_figures": false,
       "has_tables": false
     },
@@ -4708,7 +4708,7 @@
       "faa_page_end": "12-17",
       "source_locator": "AFH Ch 12 §5 (12-17)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/12/05-transition-training.md",
-      "content_hash": "d45147467984183f0b0583ded0e6c7ea29d9c23d0bb1bab33967dd8cca8ff930",
+      "content_hash": "9473b34193d44c58d162a4ef14991efb9e56c9d149e04ed4bdc4018a83978617",
       "has_figures": false,
       "has_tables": false
     },
@@ -4722,7 +4722,7 @@
       "faa_page_end": "12-18",
       "source_locator": "AFH Ch 12 §6 (12-18)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/12/06-chapter-summary.md",
-      "content_hash": "9700998239beb17d45f2b9235f6eee60a31b896fbc02ff09527d9e91e7630d0c",
+      "content_hash": "89beca8c9c5b36e3a4e9c0026c5b58c07d6f35b919d637408857d5044159ff32",
       "has_figures": false,
       "has_tables": false
     },
@@ -4736,7 +4736,7 @@
       "faa_page_end": "13-1",
       "source_locator": "AFH Ch 13 §1 (13-1)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/13/01-introduction.md",
-      "content_hash": "746231a88a32201dfc36e323b8523ce05338866eae9437e5e4718f5a85c2247a",
+      "content_hash": "75943c33140212889ff6eb067eb282728187a3c605e00b8948f96d93d3fb317b",
       "has_figures": false,
       "has_tables": false
     },
@@ -5310,7 +5310,7 @@
       "faa_page_end": "13-31",
       "source_locator": "AFH Ch 13 §19 (4) (13-31)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/13/19-04-control.md",
-      "content_hash": "492fa9cc248ada78ae58b7674254a2f5a43b21756e8f44abcfdcf8a655096bbd",
+      "content_hash": "848b49db64c074bb19d7b00bb84358f5af1970932441032e568054b915c630a3",
       "has_figures": false,
       "has_tables": false
     },
@@ -5324,7 +5324,7 @@
       "faa_page_end": "13-31",
       "source_locator": "AFH Ch 13 §19 (5) (13-31)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/13/19-05-configuration.md",
-      "content_hash": "1be14abeaf8a8382f504ac4b4377debed0cc1628622202d477c5a217677bd47e",
+      "content_hash": "d06988f6df0ec0b898d2e9021eff6c2929888983164fae2c1cdbf70e1d99de6f",
       "has_figures": false,
       "has_tables": false
     },
@@ -5394,7 +5394,7 @@
       "faa_page_end": "13-35",
       "source_locator": "AFH Ch 13 §22 (13-35)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/13/22-multiengine-training-considerations.md",
-      "content_hash": "e6c0ae1ec499c65a00d1c82993e5612d665afb8714cd7ca1bd4cd3015e994462",
+      "content_hash": "62696dce23e8ce02acd74089cbf2c955ced93f2b202e547bb3f83211792f6a83",
       "has_figures": false,
       "has_tables": false
     },
@@ -5408,7 +5408,7 @@
       "faa_page_end": "13-37",
       "source_locator": "AFH Ch 13 §23 (13-37)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/13/23-chapter-summary.md",
-      "content_hash": "9a8980a25d129b445a5e192635161efad1cb54aa6ab0aa0268616ee76802ad50",
+      "content_hash": "66b8429f3f4bbb8230b6ca9e8495f59da11f1e7ef10a4a671e2745339d6c1049",
       "has_figures": false,
       "has_tables": false
     },
@@ -5422,7 +5422,7 @@
       "faa_page_end": "14-1",
       "source_locator": "AFH Ch 14 §1 (14-1)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/14/01-introduction.md",
-      "content_hash": "45ab18336fc4f01b691f50da2c6eea71522977eedb4c2ce87e3d5380d6ae6bdf",
+      "content_hash": "1fd8ae8ac853197686a3fc288ec492cba9754ef2639bd5971dfc0a38cf5fe58d",
       "has_figures": false,
       "has_tables": false
     },
@@ -5604,7 +5604,7 @@
       "faa_page_end": "14-4",
       "source_locator": "AFH Ch 14 §13 (14-4)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/14/13-landing.md",
-      "content_hash": "4ae77d0fbd10ac4173fbbf1d7005091fab2dd5bb4b2349c996fdc9ef6127e0e1",
+      "content_hash": "d31ac73388f690aef31e71e3d5dd5b1423d21dee027b7c3dbed29c2078e01293",
       "has_figures": false,
       "has_tables": false
     },
@@ -5618,7 +5618,7 @@
       "faa_page_end": "14-4",
       "source_locator": "AFH Ch 14 §14 (14-4)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/14/14-touchdown.md",
-      "content_hash": "f0ca9e9f4ad1e4aaf1c1d39b2eab4dc191f31bfd8f43462ced78aa71467ea2aa",
+      "content_hash": "96fc3274c253e39d315a2513e5a819fb958db2892441059c85f3974715a6d42a",
       "has_figures": false,
       "has_tables": false
     },
@@ -5730,7 +5730,7 @@
       "faa_page_end": "14-8",
       "source_locator": "AFH Ch 14 §19 (14-8)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/14/19-ground-loop.md",
-      "content_hash": "325e7dfec2dd95b80a756f9d4c7a9b31df80a16ffa4cc27c1dba9fd201bdebeb",
+      "content_hash": "f55cb88890d164d8a53e411efc71c5bd4e2fb3678cf3a746a9908da677ed5194",
       "has_figures": false,
       "has_tables": false
     },
@@ -5744,7 +5744,7 @@
       "faa_page_end": "14-8",
       "source_locator": "AFH Ch 14 §20 (14-8)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/14/20-chapter-summary.md",
-      "content_hash": "f114fd18d800b8239a7c1dcff297350251beeffcc7feca9e476ac859a84a5af2",
+      "content_hash": "7f8e2da85312aa303ccdeb928fc97d186306ffa152b2301f63a381d8331cd4c5",
       "has_figures": false,
       "has_tables": false
     },
@@ -5758,7 +5758,7 @@
       "faa_page_end": "15-1",
       "source_locator": "AFH Ch 15 §1 (15-1)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/15/01-introduction.md",
-      "content_hash": "86c2ed745b2d57d523d8862ce413ed623915edca754cdfae7f2684fe442107c2",
+      "content_hash": "08bda63364a18c4bd3ebfa1eeac59cf29ea01acb0801ad488879366b9492a6e7",
       "has_figures": false,
       "has_tables": false
     },
@@ -5898,7 +5898,7 @@
       "faa_page_end": "15-15",
       "source_locator": "AFH Ch 15 §7 (2) (15-15)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/15/07-02-flight-training.md",
-      "content_hash": "1e7bd57de0687899acd519ab081265d45930838495f98e033b44043e3bf8e63d",
+      "content_hash": "2a40ae75e142bc153dc2168a3c5f2df508f1f1eb9d805805a750ba7e8eda488c",
       "has_figures": false,
       "has_tables": false
     },
@@ -5912,7 +5912,7 @@
       "faa_page_end": "15-15",
       "source_locator": "AFH Ch 15 §8 (15-15)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/15/08-chapter-summary.md",
-      "content_hash": "64349d2d649b77a2a860238a87bdb4136e9271613916e89a063f71cdda0185d4",
+      "content_hash": "9c5d216a4fa228285da4f4d7daa9ff4389b940ad97ff2613eec4c17d82b956bd",
       "has_figures": false,
       "has_tables": false
     },
@@ -5926,7 +5926,7 @@
       "faa_page_end": "16-1",
       "source_locator": "AFH Ch 16 §1 (16-1)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/16/01-introduction.md",
-      "content_hash": "dd593a56853412fb163b2fa54375bc0dbe0885494ff1d730bab9efc19586866b",
+      "content_hash": "25fd0494c1f510364b91698c49b9322200483561d1f76bc4b0bf867492f6bf00",
       "has_figures": false,
       "has_tables": false
     },
@@ -6206,7 +6206,7 @@
       "faa_page_end": "16-12",
       "source_locator": "AFH Ch 16 §16 (1) (16-12)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/16/16-01-v-speeds.md",
-      "content_hash": "f1164c1b81eaa60c601c43b2887d3ca518bb7dd381282a8d0b6b8e7ff1fd5148",
+      "content_hash": "a6cb4bd2ade7b9ed37fbf6feb3865494a5ea02973aac4f3332e79dd1c2d92bb9",
       "has_figures": false,
       "has_tables": false
     },
@@ -6220,7 +6220,7 @@
       "faa_page_end": "16-12",
       "source_locator": "AFH Ch 16 §16 (2) (16-12)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/16/16-02-takeoff-roll.md",
-      "content_hash": "d76b49ec5962d085388fe26a50e975375098ae9bc18e83b81cfd2b0aeca3ba26",
+      "content_hash": "23f481ca4be14fcba9e4e2f076bcaa639ad64b4c8057a148097f07ce14c29897",
       "has_figures": false,
       "has_tables": false
     },
@@ -6248,7 +6248,7 @@
       "faa_page_end": "16-16",
       "source_locator": "AFH Ch 16 §16 (4) (16-16)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/16/16-04-rotation-and-lift-off.md",
-      "content_hash": "475455191e1cab45194e548e9135d2e7023c4a3fe9b0df85e1f5d5f68850cd1b",
+      "content_hash": "fc2dc0eb5497d2335ff6e398afbeabbf9b6b7abb6e42110bb28b3f56fc11634b",
       "has_figures": false,
       "has_tables": false
     },
@@ -6262,7 +6262,7 @@
       "faa_page_end": "16-16",
       "source_locator": "AFH Ch 16 §16 (5) (16-16)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/16/16-05-initial-climb.md",
-      "content_hash": "36518a21d6dd8680997ec054f1d8798443c6660694bf4853b532901efa0d417f",
+      "content_hash": "43febcaa8c5a6f867d5cf7985d868ed40b48c64214d0a0be64bdb1f24d0b85d9",
       "has_figures": false,
       "has_tables": false
     },
@@ -6458,7 +6458,7 @@
       "faa_page_end": "16-25",
       "source_locator": "AFH Ch 16 §19 (2) (16-25)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/16/19-02-configuration-deviation-list.md",
-      "content_hash": "90070638f8357b00f2d6a01570199185d37fabed404ec7d79ac170b55a6e6c0a",
+      "content_hash": "246e32db054df921ab47223eafdde227fea1bf3108c281839c8d360796226e1e",
       "has_figures": false,
       "has_tables": false
     },
@@ -6472,7 +6472,7 @@
       "faa_page_end": "16-25",
       "source_locator": "AFH Ch 16 §20 (16-25)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/16/20-chapter-summary.md",
-      "content_hash": "a11339d184c009ef18582a540c5891cebb88fb61c66d16e1009e822c4635fb4d",
+      "content_hash": "14146a7f02ec2dda51bbc08113bcc81069fcf3ea6189e0dd49d2894ea6eaa37e",
       "has_figures": false,
       "has_tables": false
     },
@@ -6486,7 +6486,7 @@
       "faa_page_end": "17-1",
       "source_locator": "AFH Ch 17 §1 (17-1)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/17/01-introduction.md",
-      "content_hash": "713ecc48d46fbc3e6b901ee608f90a9994ba3ed94cd039748eacb130a185d50e",
+      "content_hash": "f6baaa900be3d5a423e9277f0f75cbc9f506c1e92a1b3542dbd277f162324910",
       "has_figures": false,
       "has_tables": false
     },
@@ -6738,7 +6738,7 @@
       "faa_page_end": "17-12",
       "source_locator": "AFH Ch 17 §9 (5) (17-12)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/17/09-05-taxi.md",
-      "content_hash": "023ad4853be72297197684047c9a642d6a505dc471e65fb0ac500364cf327f9b",
+      "content_hash": "a5a678f7bd94153cb3ef49ca94a4cbb900e155364245bb25e87fef667f088cb4",
       "has_figures": false,
       "has_tables": false
     },
@@ -6752,7 +6752,7 @@
       "faa_page_end": "17-12",
       "source_locator": "AFH Ch 17 §9 (6) (17-12)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/17/09-06-takeoff-and-climb.md",
-      "content_hash": "3facc7484cace29b5ccb379053acaee422ebd09121eb900cabca230a67dab176",
+      "content_hash": "20cfb2a719160d48453c23c5e46be0914e52d43d7c43529a6bb8218a48551a36",
       "has_figures": false,
       "has_tables": false
     },
@@ -6822,7 +6822,7 @@
       "faa_page_end": "17-15",
       "source_locator": "AFH Ch 17 §10 (17-15)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/17/10-key-points.md",
-      "content_hash": "8f1b458c04a511632bfb1618712e7cd8e2f03f69205feb6dd79aaf05e2e22579",
+      "content_hash": "96fedb2e8cb9b9f18265c933c28a2117d07dc18b79e9c88382a8b72a19d72824",
       "has_figures": false,
       "has_tables": false
     },
@@ -6836,7 +6836,7 @@
       "faa_page_end": "17-15",
       "source_locator": "AFH Ch 17 §11 (17-15)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/17/11-chapter-summary.md",
-      "content_hash": "9e96606e426e9324b1a61beada0d460dc66257bcd06ddd55e31ba224c5c9dd73",
+      "content_hash": "02cce074b7d7dce5922559aa27bf425b4b40afa4eacc5ebd865dd53e5ca6e4a1",
       "has_figures": false,
       "has_tables": false
     },
@@ -6850,7 +6850,7 @@
       "faa_page_end": "18-1",
       "source_locator": "AFH Ch 18 §1 (18-1)",
       "body_path": "handbooks/afh/FAA-H-8083-3C/18/01-emergency-situations.md",
-      "content_hash": "8eb5e34abbb7d543aa15f0b8faf2eeadbda2a5962e70009cac3d4a670f34f496",
+      "content_hash": "e5706e7e1a9dfc1a5007c9120fe2406e463a00970a28def808a0a3c3f53c6128",
       "has_figures": false,
       "has_tables": false
     },

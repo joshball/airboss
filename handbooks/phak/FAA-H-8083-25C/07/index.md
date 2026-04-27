@@ -9,6 +9,11 @@ source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/
 
 # Aircraft Systems
 
+This chapter covers the primary systems found on most
+aircraft. These include the engine, propeller, induction,
+ignition, as well as the fuel, lubrication, cooling, electrical,
+landing gear, and environmental control systems.
+
 ![Figure 7-1. Radial engine.
 Opposed cylinders
 Figure 7-2. Horizontally opposed engine.

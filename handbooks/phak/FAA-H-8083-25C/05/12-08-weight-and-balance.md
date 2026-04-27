@@ -51,10 +51,8 @@ be exceeded. The excess weight can overstress the aircraft
 and degrade the performance.
 Aircraft are certificated for weight and balance for two
 principal reasons:
-1.
 The effect of the weight on the aircraft’s primary
 structure and its performance characteristics
-2.
 The effect of the location of this weight on flight
 characteristics, particularly in stall and spin recovery
 and stability

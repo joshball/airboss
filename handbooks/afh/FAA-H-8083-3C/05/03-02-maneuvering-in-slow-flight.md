@@ -24,3 +24,15 @@ To exit the slow flight maneuver, add power. As airspeed and lift increase, appl
 maintain altitude. Maintain coordinated flight, level the wings as necessary, and return to the desired flightpath. As airspeed increases,
 clean up the airplane by retracting flaps and landing gear, if they were extended, and adjust trim as needed. A pilot should anticipate
 the changes to the AOA as the landing gear and flaps are retracted to avoid a stall.
+
+Common errors in the performance of slow flight are:
+1. Failure to adequately clear the area
+2. Inadequate back-elevator pressure as power is reduced, resulting in altitude loss
+3. Excessive back-elevator pressure as power is reduced, resulting in a climb followed by rapid reduction in airspeed
+4. Insufficient right rudder to compensate for left yaw
+5. Fixation on the flight instruments
+6. Failure to anticipate changes in AOA as flaps are extended or retracted
+7. Inadequate power management
+8. Inability to adequately divide attention between airplane control and orientation
+9. Failure to properly trim the airplane
+10. Failure to respond to a stall warning

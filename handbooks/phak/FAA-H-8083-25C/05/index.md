@@ -37,8 +37,6 @@ Aerodynamics
 of Flight
 Chapter 5
 
-Lift
-Weight
 Thrust
 Drag
 Figure 5-1. Relationship of forces acting on an aircraft.
@@ -49,9 +47,7 @@ Flight path
 Relative wind
 Component of weight
 opposed to lift
-Lift
 CL
-CG
 Figure 5-2. Force vectors during a stabilized climb.
 Weight—the combined load of the aircraft itself, the
 crew, the fuel, and the cargo or baggage. Weight is
@@ -196,7 +192,6 @@ Some aircraft have the ability to change the direction of the
 thrust rather than changing the AOA. This is accomplished
 either by pivoting the engines or by vectoring the exhaust
 gases. [Figure 5-4]
-Lift
 The pilot can control the lift. Any time the control yoke
 or stick is moved fore or aft, the AOA is changed. As the
 AOA increases, lift increases (all other factors being equal).
@@ -233,7 +228,6 @@ L/DMAX
 Coefficient of drag (CD)
 Lift/drag
 Angle of attack
-0°
 2°
 4°
 6°
@@ -291,8 +285,6 @@ Total drag
 Indu
 ced
  drag
-p
-a
 ra
 sit
 e d
@@ -549,7 +541,6 @@ at its minimum amount. In figuring the maximum range of
 aircraft, the thrust required to overcome drag is at a minimum
 if drag is at a minimum. The minimum power and maximum
 endurance occur at a different point.
-Weight
 Gravity is the pulling force that tends to draw all bodies to
 the center of the earth. The CG may be considered as a point
 at which all the weight of the aircraft is concentrated. If the
@@ -903,10 +894,6 @@ change in drag and a change in the up or down force on the
 Positive Static Stability
 Neutral Static Stability
 Negative Static Stability
-CG
-CG
-CG
-CG
 Applied
 force
 Applied
@@ -1029,12 +1016,9 @@ a stall. Thus, an aircraft with longitudinal instability becomes
 difficult and sometimes dangerous to fly.
 Static longitudinal stability, or instability in an aircraft, is
 dependent upon three factors:
-1.
 Location of the wing with respect to the CG
-2.
 Location of the horizontal tail surfaces with respect
 to the CG
-3.
 Area or size of the tail surfaces
 In analyzing stability, it should be recalled that a body free
 to rotate always turns about its CG.
@@ -1051,14 +1035,9 @@ tendency to change its fore and aft positions with a change in
 the AOA. The CL tends to move forward with an increase in
 AOA and to move aft with a decrease in AOA. This means
 
-CG
 CL
-CG
 CL
 Figure 5-23. Longitudinal stability.
-CG
-CG
-CG
 Balanced tail load
 Lesser downward tail load
 Greater downward tail load
@@ -1069,13 +1048,7 @@ Figure 5-24. Effect of speed on downwash.
 Normal downwash
 Reduced downwash
 Thrust
-Weight
-CG
-Lift
 Thrust
-Weight
-CG
-Lift
 Figure 5-25. Reduced power allows pitch down.
 that when the AOA of an airfoil is increased, the CL, by
 moving forward, tends to lift the leading edge of the wing
@@ -1129,24 +1102,15 @@ Below center of gravity
 Through center of gravity
 Above center of gravity
 Thrust
-CG
 Thrust
-CG
 Thrust
-CG
 Figure 5-26. Thrust line affects longitudinal stability.
 Cruise power
 Idle power
 Full power
-Lift
 Thrust
-CG
-Lift
 Thrust
-CG
-Lift
 Thrust
-CG
 Figure 5-27. Power changes affect longitudinal stability.
 As this climb continues, the airspeed again decreases, causing
 the downward force on the tail to decrease until the nose
@@ -1258,23 +1222,13 @@ Area
 forward
 of CG
 Area aft of CG
-CG
-CG
- R
 ela
 tiv
 e win
-d
 Y
-a
-w
 
 y
-a
-w
 Figure 5-32. Fuselage and fin for directional stability.
-CG
-CG
 CG centerline
 Figure 5-31. Keel area for lateral stability.
 aircraft’s weight and the pressure of the airflow against the
@@ -1473,12 +1427,8 @@ component
 Vertical
 component
 Resultant load
-Lift
 Total lift
 Total lift
-Weight
-Weight
-Weight
 Figure 5-34. Forces during normal, coordinated turn at constant altitude.
 design is necessary to obtain the best results from these two
 conflicting conditions.
@@ -1678,17 +1628,7 @@ lift
 Centrifugal force
 Horizontal
 lift
-Lift
-Lift
-Lift
-Weight
-Weight
-Weight
 Figure 5-35. Normal, slipping, and skidding turns at a constant altitude.
-L
-L
-L
-L
 Steady climb
 normal lift
 Climb entry
@@ -1696,12 +1636,6 @@ increased lift
 Level flight
 normal lift
 Figure 5-36. Changes in lift during climb entry.
-T
-D
-T
-D
-T
-D
 Steady climb
 forces balanced
 constant speed
@@ -1711,12 +1645,6 @@ speed slowing
 Level flight
 forces balanced
 constant speed
-W
-L
-W
-W
-L
-L
 Figure 5-37. Changes in speed during climb entry.
 the lift. Lift at this moment is now greater than weight and
 starts the aircraft climbing. After the flight path is stabilized
@@ -1856,17 +1784,9 @@ imposed by the combination of centrifugal force and weight.
 In a turn, the necessary additional lift is acquired by applying
 back pressure to the elevator control. This increases the wing’s
 
-W
-CF
-W
-L
-L
 CF
 CF
-W
-W
-L
-L
+CF
 CF
 Figure 5-38. Forces exerted when pulling out of a dive.
 0 0°
@@ -1874,15 +1794,12 @@ Figure 5-38. Forces exerted when pulling out of a dive.
 Percent increase in stall speed
  Load factor or “G”
  Bank Angle
-L
-o
 ad
  fa
 ctor
 
 St
 all
- s
 pe
 ed
  in
@@ -1967,7 +1884,6 @@ An airplane can stall at any speed. Angle of attack is a better
 parameter to use to avoid a stall. For a given configuration,
 the airplane always stalls at the same AOA, referred to as
 the critical AOA. This critical AOA does not change with:
-Weight
 Bank angle
 Temperature
 Density altitude
@@ -2082,13 +1998,7 @@ Thrust
 Forward velocity
 Rotational velocity
 bl
-a
-d
-e
-a
-n
 gl
-e
 
 Pi
 tc
@@ -2097,13 +2007,9 @@ or
 
 at
 ta
-c
 k
 
-A
-n
 gl
-e
 
 of
 Figure 5-44.  Propeller blade angle.
@@ -2188,78 +2094,29 @@ Figure 5-45. Propeller slippage.
 60 in.
 40 in.
 20 in.
-S
 h
-o
-r
-t
 
-t
-r
-a
-v
-e
 l
-d
-i
-s
-t
-a
-n
-c
-e
 —
-s
 l
-o
-w
 
-s
-p
-e
-e
-d
 —
 
 k
-n
-o
-t
-s
-M
-o
-d
 er
 at
-e
 tr
-a
-v
 el
- d
 is
 ta
 nc
-e
 —
-m
-o
-d
 er
 at
-e
-s
-p
-e
-e
-d
 —
 k
-n
 ot
-s
 
-G
 re
 at
 er
@@ -2277,20 +2134,14 @@ ig
 h
 sp
 ee
-d
 —
 kn
 ot
-s
 
 ,
 
-r
-p
-m
 2,
 rp
-m
 2,
 0 r
 pm
@@ -2360,40 +2211,19 @@ To the pilot, “torque” (the left turning tendency of the
 airplane) is made up of four elements that cause or produce
 a twisting or rotating motion around at least one of the
 airplane’s three axes. These four elements are:
-1.
 Torque reaction from engine and propeller
 
-R
-e
-a
-c
 ti
-o
-n
 
-A
-c
-t
-i
-o
-n
 Figure 5-47. Torque reaction.
 Yaw
-F
 or
-c
-e
 
-S
 lips
 trea
-m
 Figure 5-48. Corkscrewing slipstream.
-2.
 Corkscrewing effect of the slipstream
-3.
 Gyroscopic action of the propeller
-4.
 Asymmetric loading of the propeller (P-factor)
 Torque Reaction
 Torque reaction involves Newton’s Third Law of Physics—
@@ -2424,13 +2254,9 @@ more ground friction, or drag, on the left tire than on the right,
 causing a further turning moment to the left. The magnitude
 of this moment is dependent on many variables. Some of
 these variables are:
-1.
 Size and horsepower of engine
-2.
 Size of propeller and the rpm
-3.
 Size of the aircraft
-4.
 Condition of the ground surface
 This yawing moment on the takeoff roll is corrected by the
 pilot’s proper use of the rudder or rudder trim.
@@ -2604,10 +2430,8 @@ With the structural design of aircraft planned to withstand
 only a certain amount of overload, a knowledge of load
 factors has become essential for all pilots. Load factors are
 important for two reasons:
-1.
 It is possible for a pilot to impose a dangerous overload
 on the aircraft structures.
-2.
 An increased load factor increases the stalling speed and
 makes stalls possible at seemingly safe flight speeds.
 Load Factors in Aircraft Design
@@ -2662,17 +2486,6 @@ Load factor = 2 Gs
 Centrifugal
 force = 1.73 Gs
 Gravity = 1G
-0°
-
-0°
-
-0°
-
-0°
-
-0°
-
-0°
 
 Figure 5-52. Two forces cause load factor during turns.
 00°
@@ -2829,10 +2642,8 @@ development of the ability to estimate load factors.
 A thorough knowledge of load factors induced by varying
 degrees of bank and the VA aids in the prevention of two of
 the most serious types of accidents:
-1.
 Stalls from steep turns or excessive maneuvering near
 the ground
-2.
 Structural failures during acrobatics or other violent
 maneuvers resulting from loss of control
 Load Factors and Flight Maneuvers
@@ -2893,10 +2704,8 @@ proper spin recovery usually is found to be about 2.5 Gs.
 The load factor during a spin varies with the spin characteristics
 of each aircraft, but is usually found to be slightly above the
 1 G of level flight. There are two reasons for this:
-1.
 Airspeed in a spin is very low, usually within 2 knots
 of the unaccelerated stalling speeds.
-2.
 An aircraft pivots, rather than turns, while it is in a spin.
 High Speed Stalls
 The average light plane is not built to withstand the repeated
@@ -3262,10 +3071,8 @@ be exceeded. The excess weight can overstress the aircraft
 and degrade the performance.
 Aircraft are certificated for weight and balance for two
 principal reasons:
-1.
 The effect of the weight on the aircraft’s primary
 structure and its performance characteristics
-2.
 The effect of the location of this weight on flight
 characteristics, particularly in stall and spin recovery
 and stability
@@ -3426,10 +3233,8 @@ to have an adverse effect on stability, regardless of location
 
 Down load on tail
 Stronger
-CG
 Down load on tail
 Lighter
-CG
 Center of lift
 Forward CG
 AFT CG
@@ -3617,7 +3422,6 @@ level is 661 knots. At 40,000 feet, where the temperature is
 Possible
 sepa
 ratio
-n
 M = 0.50
 M = 0.72
 M = 0.77
@@ -3625,21 +3429,10 @@ Maximum local velocity is less than sonic
 Critical mach number
 Maximum local velocity equal to sonic
 Normal shock wave
-S
 u
-p
-e
-r
-s
-o
-n
-i
-c
 
 f
 l
-o
-w
 Subsonic
 Figure 5-64. Wing airflow.
 CD (Drag coefficient)
@@ -3828,24 +3621,15 @@ M = 0.95
 M = 1.05
 Normal shock wave
 
-S
 u
-p
-e
 rs
-o
 ni
-c
 fl
 ow
 Normal shock wave
 
-S
 u
 pe
-r
-s
-o
 ni
 c f
 low
@@ -4076,17 +3860,14 @@ Aftflap
 boar
 d win
 g
-O
 ut
 bo
 ard
  win
 g
-   I
 nbo
 ard
 wing
-O
 ut
 bo
 ard
@@ -4100,7 +3881,6 @@ Aileron
 boa
 rd w
 ing
-O
 ut
 bo
 ard
@@ -4198,7 +3978,6 @@ event of complete power unit failure, movement of the control
 surface can be affected by manually controlling the control
 tabs. Moving the control tab upsets the aerodynamic balance,
 which causes the control surface to move.
-Chapter Summary
 In order to sustain an aircraft in flight, a pilot must understand
 how thrust, drag, lift, and weight act on the aircraft. By
 understanding the aerodynamics of flight, how design,

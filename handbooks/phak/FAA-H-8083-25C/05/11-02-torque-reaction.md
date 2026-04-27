@@ -40,13 +40,9 @@ more ground friction, or drag, on the left tire than on the right,
 causing a further turning moment to the left. The magnitude
 of this moment is dependent on many variables. Some of
 these variables are:
-1.
 Size and horsepower of engine
-2.
 Size of propeller and the rpm
-3.
 Size of the aircraft
-4.
 Condition of the ground surface
 This yawing moment on the takeoff roll is corrected by the
 pilot’s proper use of the rudder or rudder trim.

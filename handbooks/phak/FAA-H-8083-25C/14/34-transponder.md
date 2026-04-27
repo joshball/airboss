@@ -33,6 +33,4 @@ the pilot of aircraft “A” would be 1 o’clock. Trafﬁc information
 issued to aircraft “B” would also be given as 12 o’clock, but
 in this case, the pilot of “B” would see trafﬁc at 10 o’clock.
 Wind
-A
-B
 Figure 14-44. Traffic advisories.

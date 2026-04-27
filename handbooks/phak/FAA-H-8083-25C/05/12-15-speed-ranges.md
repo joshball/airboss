@@ -20,7 +20,6 @@ level is 661 knots. At 40,000 feet, where the temperature is
 Possible
 sepa
 ratio
-n
 M = 0.50
 M = 0.72
 M = 0.77
@@ -28,21 +27,10 @@ Maximum local velocity is less than sonic
 Critical mach number
 Maximum local velocity equal to sonic
 Normal shock wave
-S
 u
-p
-e
-r
-s
-o
-n
-i
-c
 
 f
 l
-o
-w
 Subsonic
 Figure 5-64. Wing airflow.
 CD (Drag coefficient)

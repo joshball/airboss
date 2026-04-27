@@ -36,8 +36,6 @@ the needle indicates the rate of altitude change.
 
 Figure 8-6. An IVSI incorporates accelerometers to help the
 instrument immediately indicate changes in vertical speed.
-I
-I
 UP
 DOWN
 .5

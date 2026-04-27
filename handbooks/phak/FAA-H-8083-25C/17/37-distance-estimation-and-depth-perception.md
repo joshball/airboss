@@ -28,9 +28,6 @@ or remain fixed. The rate of apparent movement depends on
 the distance the observer is from the object.
 
 Figure 17-21. Geometric perspective.
-A
-B
-C
 Geometric Perspective
 An object may appear to have a different shape when viewed
 at varying distances and from different angles. Geometric

@@ -19,19 +19,15 @@ period and is updated four times a day at 0000Z, 0600Z,
 1200Z, and 1800Z. The TAF utilizes the same descriptors
 and abbreviations as used in the METAR report. The TAF
 includes the following information in sequential order:
-1.
 Type of report—a TAF can be either a routine forecast
 (TAF) or an amended forecast (TAF AMD).
-2.
 ICAO station identifier—the station identifier is the
 same as that used in a METAR.
-3.
 Date and time of origin—time and date (081125Z)
 of TAF origination is given in the six-number code
 with the first two being the date, the last four being
 the time. Time is always given in UTC as denoted by
 the Z following the time block.
-4.
 Valid period dates and times—The TAF valid period
 (0812/0912) follows the date/time of forecast origin
 group. Scheduled 24 and 30 hour TAFs are issued
@@ -46,7 +42,6 @@ If the end time of a valid period is at midnight UTC,
 it is annotated as 24. For example, a 00Z TAF issued
 on the 9th of the month and valid for 24 hours would
 have a valid period of 0900/0924.
-5.
 Forecast wind—the wind direction and speed forecast
 are coded in a five-digit number group. An example
 would be 15011KT. The first three digits indicate the
@@ -54,7 +49,6 @@ direction of the wind in reference to true north. The
 last two digits state the windspeed in knots appended
 with “KT.” Like the METAR, winds greater than 99
 knots are given in three digits.
-6.
 Forecast visibility—given in statute miles and may
 be in whole numbers or fractions. If the forecast is
 greater than six miles, it is coded as “P6SM.”
@@ -64,11 +58,9 @@ turbulence, severe icing, low-level wind shear, and IFR
 conditions. The final line of the precautionary statement alerts
 the user that heights, for the most part, are MSL. Those that
 are not MSL will state AGL or CIG.
-3.
 Synopsis—gives a brief summary identifying the
 location and movement of pressure systems, fronts,
 and circulation patterns.
-Example:
 SYNOPSIS…LOW PRES TROF 10Z OK/TX PNHDL AREA
 FCST MOV EWD INTO CNTRL-SWRN OK BY 04Z.
 WRMFNT 10Z CNTRL OK-SRN AR-NRN MS FCST LIFT
@@ -81,11 +73,9 @@ front located over central Oklahoma, southern Arkansas, and
 northern Mississippi at 1000Z is forecast to lift northwestward
 into northeastern Oklahoma, northern Arkansas, and extreme
 northern Mississippi by 0400Z.
-4.
 VFR Clouds and Weather—This section lists expected
 sky conditions, visibility, and weather for the next 12
 hours and an outlook for the following 6 hours.
-Example:
 S CNTRL AND SERN TX
 AGL SCT-BKN010. TOPS 030. VIS 3-5SM BR. 14-16Z
 BECMG AGL SCT030. 19Z AGL SCT050.

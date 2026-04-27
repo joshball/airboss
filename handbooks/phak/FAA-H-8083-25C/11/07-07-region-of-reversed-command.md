@@ -56,7 +56,6 @@ Best endurance speed
 Pow
 er re
 quire
-d
 Region of
 reversed
 command

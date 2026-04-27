@@ -37,6 +37,3 @@ opposes the downward force of weight.
 Aerodynamics
 of Flight
 Chapter 5
-
-Lift
-Weight

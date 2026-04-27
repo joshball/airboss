@@ -22,3 +22,7 @@ To counteract the possibility of an uncontrolled turn, the pilot should counter 
 differential braking is essential as tailwheel steering proves inadequate. It is important to note, however, that as corrections begin to
 become apparent, rudder and braking inputs need to be removed promptly to avoid starting yet another departure in the opposite
 direction.
+This chapter focuses on the operational differences between tailwheel and nose-wheel airplanes that occur during ground operations,
+takeoffs, and landings. The chapter covers specific topics, such as landing gear, taxiing, visibility, liftoff, and landing. Comparisons
+are given as to how each react during the takeoff and landing, as well as situations that should be avoided. Pilots who use proper
+rudder control techniques should be able to transition to tailwheel airplanes without too much difficulty.

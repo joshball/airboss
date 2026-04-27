@@ -33,8 +33,6 @@ would be a TC of 245°.
 Figure 16-7. Courses are determined by reference to meridians on
 aeronautical charts.
 Course A to B 065°
-B
-A
 Course B to A 245°
 °
 
@@ -47,57 +45,6 @@ variations on a magnetic compass.
 MN
 TN
 Figure 16-6. Compass rose.
-N
-N
-W
-
-N
-N
-E
-
-N
-E
-N
-
-E
-S
-E
-
-S
-S
-E
-
-S
-S
-W
-
-W
-S
-W
-
-W
-N
-W
-
-N
-
-N
-E
-
-E
-
-S
-E
-
-S
-
-S
-W
-
-W
-
-N
-W
 
 The true heading (TH) is the direction in which the nose of
 the aircraft points during a flight when measured in degrees

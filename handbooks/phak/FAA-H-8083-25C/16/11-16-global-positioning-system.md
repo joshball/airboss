@@ -24,15 +24,7 @@ databases are common features in aircraft GPS receivers.
 
 Figure 16-39. ADF tracking.
 330°
-W
-S
-E
-N
 330°
-W
-S
-E
-N
 340° bearing to station
 The GPS is a satellite radio navigation and time dissemination
 system developed and operated by the U.S. Department of

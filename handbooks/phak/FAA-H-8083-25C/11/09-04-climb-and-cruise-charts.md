@@ -38,41 +38,18 @@ Figure 11-24. Takeoff distance short field charts.
 TAKEOFF DISTANCE
 MAXIMUM WEIGHT 2,400 LB
 Notes     Conditions
-Weight
 (lb)
 2,400
 2,200
-2,000
 Press
 ALT
 (ft)
 S.L.
-1,000
-2,000
-3,000
-4,000
-5,000
-6,000
 7,000
-8,000
 S.L.
-1,000
-2,000
-3,000
-4,000
-5,000
-6,000
 7,000
-8,000
 S.L.
-1,000
-2,000
-3,000
-4,000
-5,000
-6,000
 7,000
-8,000
 
 1,055
 1,165
@@ -166,7 +143,6 @@ to clear
 1,465
 1,620
 1,800
-2,000
 - - -
 1,070
 1,180
@@ -182,7 +158,6 @@ Total feet
 to clear
 50 ft OBS
 1,810
-2,000
 2,220
 2,480
 2,790
@@ -260,7 +235,6 @@ to clear
 2,315
 2,605
 2,950
-Lift
 off
 AT
 50 ft
@@ -355,30 +329,15 @@ Figure 11-23. Takeoff distance graph.
 
 Outside air temperature
 
-Weight
-
 Wind component      Obstacle
 
 (pounds)
 
 (knots)
  height  (feet)
-F
 -40° -20°
-0°
 20° 40°
 60° 80° 100° 120°
-6,000
-5,000
-4,000
-3,000
-2,000
-1,000
-10,000
-8,000
-6,000
-4,000
-2,000
 S.L.
    Guide lines not
 applicable for
@@ -390,7 +349,6 @@ Reference line
 Reference line
 Pressure altitude - feet ISA
 Obstacle heights
-Weight
 pounds
   kts
 MPH
@@ -423,14 +381,6 @@ Figure 11-25. Fuel, time, and distance climb chart.
 20,000
 18,000
 16,000
-14,000
-12,000
-10,000
-8,000
-6,000
-4,000
-2,000
-Sea level
 -40° -30° -20° -10° 0°
 10° 20° 30°   40°C
 
@@ -449,14 +399,10 @@ Press
 ure AL
 T - feet
 Fuel - gallo
-n
-s
 Time -
 minu
 te
-s
 
-D
 istan
 ce - na
 utical m
@@ -465,7 +411,6 @@ Cruise
 Departure
 Figure 11-26. Fuel time distance climb.
 Notes          Conditions
-Weight
 (pounds)
 Rate of
 climb
@@ -482,24 +427,14 @@ Distance
 miles)
 From sea level
 S.L.
-4,000
-8,000
-12,000
 16,000
 20,000
 S.L.
-4,000
-8,000
-12,000
 16,000
 20,000
 S.L.
-4,000
-8,000
-12,000
 16,000
 20,000
-4,000
 3,700
 3,400
 NORMAL CLIMB
@@ -554,9 +489,7 @@ Figure 11-27. Cruise and range performance.
 Notes    Conditions
 ALT
 2,500
-5,000
 7,500
-10,000
 GAL/
 Hour
 9.7
@@ -819,13 +752,6 @@ Fuel
 flow per
 engine
 S.L.
-2,000
-4,000
-6,000
-8,000
-10,000
-12,000
-14,000
 16,000
 2,450
 2,450

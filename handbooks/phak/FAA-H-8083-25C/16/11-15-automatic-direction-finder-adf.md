@@ -51,7 +51,6 @@ Compass Locator
 MH
 
 Under 50
-H
 
 50–1999
        *50
@@ -78,50 +77,27 @@ Figure 16-38. ADF terms.
 Radio station
 N-S
 E-W
-W
-S
-E
-N
-M
-a
 g
-n
 et
 ic
  b
-e
 ar
 in
 g
 to
- s
 ta
 ti
-o
-n
-R
-e
 l
-a
 ti
-v
-e
 
 b
-e
-a
 ri
-n
 g
 Magnetic heading
 Magnetic North
 Figure 16-37. ADF with fixed azimuth and magnetic compass.
 N-S
 E-W
-W
-S
-E
-N
 Some of the ADF dials can be rotated to align the
 azimuth with the aircraft heading; others are fixed with 0°
 representing the nose of the aircraft and 180° representing

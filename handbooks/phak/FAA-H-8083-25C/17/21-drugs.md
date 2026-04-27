@@ -17,12 +17,10 @@ are important to keep in mind. Title 14 of the CFR part 61,
 section 61.53 prohibits acting as pilot-in-command or in any
 other capacity as a required pilot flight crewmember, while
 that person:
-1.
 Knows or has reason to know of any medical condition
 that would make the person unable to meet the
 requirement for the medical certificate necessary for
 the pilot operation, or
-2.
 Is taking medication or receiving other treatment for
 a medical condition that results in the person being
 unable to meet the requirements for the medical
