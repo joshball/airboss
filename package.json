@@ -14,6 +14,7 @@
 		"references": "bun scripts/references.ts",
 		"airboss-ref": "bun scripts/airboss-ref.ts",
 		"cfr-ingest": "bun scripts/cfr-ingest.ts",
+		"download-sources": "bun scripts/download-sources.ts",
 		"setup": "bun scripts/setup.ts",
 		"smoke": "bun scripts/smoke.ts",
 		"themes:emit": "bun scripts/themes/emit.ts",
