@@ -104,8 +104,16 @@ export const handbookManifestWarningSchema = z.object({
 		'table-merge-failed',
 		'table-empty',
 		'cross-reference-unresolved',
+		// Section-strategy warnings emitted by sections_via_toc / sections_via_llm.
+		// `toc` family covers TOC parser issues (orphan entry, indent ambiguity);
+		// `toc-verify` covers heading-fingerprint mismatches between TOC and body;
+		// `llm` covers Claude API errors and malformed responses.
+		'toc',
+		'toc-verify',
+		'llm',
+		'section-strategy',
 	]),
-	section_code: z.string().regex(SECTION_CODE_REGEX).optional(),
+	section_code: z.string().regex(SECTION_CODE_REGEX).nullish(),
 	message: z.string().min(1),
 });
 export type HandbookManifestWarning = z.infer<typeof handbookManifestWarningSchema>;

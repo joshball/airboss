@@ -49,10 +49,19 @@ def write_outputs(
     figure_warnings: list[FigureWarning],
     tables: list[TableRecord],
     table_warnings: list[TableWarning],
+    extraction_metadata: dict[str, object] | None = None,
+    extra_warnings: list[str] | None = None,
 ) -> WriteSummary:
     root = ensure_dir(edition_root(config.document_slug, config.edition))
 
     bodies_by_code = {b.node.code: b for b in bodies}
+    if config.chapter_cover_strip_enabled:
+        for body in bodies:
+            if body.node.level == "chapter":
+                body.body_md = _strip_cover_residue(
+                    body.body_md, body.node.title, config.chapter_cover_strip_max_lines
+                )
+                body.char_count = len(body.body_md)
     figures_by_section: dict[str, list[FigureRecord]] = {}
     for fig in figures:
         figures_by_section.setdefault(fig.section_code, []).append(fig)
@@ -111,12 +120,31 @@ def write_outputs(
         for f in figures
     ]
 
-    manifest_warnings = [
+    manifest_warnings: list[dict[str, object]] = [
         {"code": w.code, "section_code": w.section_code, "message": w.message}
         for w in (*figure_warnings, *table_warnings)
     ]
+    if extra_warnings:
+        # Map structured warning prefixes from the section-strategy modules to
+        # the manifest schema's enumerated codes. The schema now accepts
+        # `toc`, `toc-verify`, `llm`, and `section-strategy`.
+        allowed_codes = {
+            "figure-without-caption",
+            "caption-without-figure",
+            "table-merge-failed",
+            "table-empty",
+            "cross-reference-unresolved",
+            "toc",
+            "toc-verify",
+            "llm",
+            "section-strategy",
+        }
+        for msg in extra_warnings:
+            prefix = msg.split(":", 1)[0].strip() if ":" in msg else ""
+            code = prefix if prefix in allowed_codes else "section-strategy"
+            manifest_warnings.append({"code": code, "section_code": None, "message": msg})
 
-    manifest = {
+    manifest: dict[str, object] = {
         "document_slug": config.document_slug,
         "edition": config.edition,
         "kind": config.kind,
@@ -129,6 +157,8 @@ def write_outputs(
         "figures": manifest_figures,
         "warnings": manifest_warnings,
     }
+    if extraction_metadata:
+        manifest["extraction"] = extraction_metadata
 
     manifest_path = root / "manifest.json"
     manifest_path.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
@@ -168,6 +198,56 @@ def _source_locator(config: HandbookConfig, node: OutlineNode, body: SectionBody
         else:
             pieces.append(f"(p. {body.faa_page_start})")
     return " ".join(pieces)
+
+
+def _strip_cover_residue(body_md: str, chapter_title: str, max_lines: int) -> str:
+    """Drop chapter-cover boilerplate from a chapter's body markdown.
+
+    PHAK chapter cover pages render the chapter title twice ("Weather
+    Theory") + a "Chapter N" sentinel + an "Introduction" header before the
+    first body paragraph. Those lines bleed into the chapter index.md as
+    a stutter. We walk the leading lines and drop anything that matches:
+
+    - the chapter title (case-insensitive, fuzzy on whitespace)
+    - any line of `Chapter \\d+`
+    - the literal `Introduction`
+
+    until we hit the first body line, defined as: a line of length > 80,
+    OR a line whose first non-whitespace character is lowercase. We cap
+    the strip window at `max_lines` so a malformed chapter never eats a
+    paragraph.
+    """
+    lines = body_md.splitlines()
+    if not lines:
+        return body_md
+    norm_title = " ".join(chapter_title.lower().split())
+    chapter_re = re.compile(r"^Chapter\s+\d+\s*$", re.IGNORECASE)
+    intro_literal = re.compile(r"^introduction\s*$", re.IGNORECASE)
+    keep_idx = 0
+    for i, raw in enumerate(lines[:max_lines]):
+        line = raw.strip()
+        if not line:
+            keep_idx = i + 1
+            continue
+        # First body paragraph: long line, OR starts with lowercase, OR ends
+        # with sentence punctuation -- treat as content, stop stripping.
+        first_char = line.lstrip()[:1]
+        if len(line) > 80 or (first_char and first_char.islower()):
+            break
+        norm = " ".join(line.lower().split())
+        if (
+            norm == norm_title
+            or norm in norm_title
+            or chapter_re.match(line)
+            or intro_literal.match(line)
+        ):
+            keep_idx = i + 1
+            continue
+        # Anything else (an unexpected residue line) -- bail out.
+        break
+    if keep_idx == 0:
+        return body_md
+    return "\n".join(lines[keep_idx:]).lstrip("\n")
 
 
 _TITLE_SLUG_PATTERN = re.compile(r"[^a-z0-9]+")

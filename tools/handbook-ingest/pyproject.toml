@@ -15,6 +15,13 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     "ruff==0.6.8",
+    "pytest>=8,<9",
+]
+# Optional: official Anthropic SDK. The pipeline uses raw urllib by default
+# so this dependency is opt-in. Install with `pip install -e .[llm]` if you
+# want the SDK on PATH; the code falls back to urllib when the SDK is absent.
+llm = [
+    "anthropic>=0.40,<1",
 ]
 
 [project.scripts]

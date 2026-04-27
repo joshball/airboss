@@ -7,23 +7,44 @@ Usage:
 
 `<doc>` is the document slug (matches `ingest/config/<doc>.yaml`). Options:
 
-    --edition <e>         Override edition tag (defaults to config edition)
-    --chapter <code>      Restrict to a single chapter (e.g. `12`)
-    --dry-run             Validate without writing files
-    --force               Re-extract even if hashes match
+    --edition <e>             Override edition tag (defaults to config edition)
+    --chapter <code>          Restrict to a single chapter (e.g. `12`)
+    --dry-run                 Validate without writing files
+    --force                   Re-extract even if hashes match
+    --strategy {toc,llm,compare}
+                              Override section-tree strategy. Default = read
+                              from `<doc>.yaml -> section_strategy`. `compare`
+                              runs both strategies and writes a markdown diff
+                              report under `tools/handbook-ingest/reports/`
+                              without seeding the section rows.
 """
 
 from __future__ import annotations
 
+from pathlib import Path
+
 import click
 
-from .config_loader import load_config
+from .config_loader import (
+    SECTION_STRATEGY_LLM,
+    SECTION_STRATEGY_PER_CHAPTER,
+    SECTION_STRATEGY_TOC,
+    HandbookConfig,
+    load_config,
+)
 from .fetch import fetch_pdf
 from .figures import extract_figures
 from .normalize import write_outputs
-from .outline import OutlineError, detect_outline_from_text, filter_to_chapter, parse_outline
+from .outline import OutlineError, OutlineNode, detect_outline_from_text, filter_to_chapter, parse_outline
+from .paths import repo_root
+from .section_tree import SectionTreeNode, derive_codes
 from .sections import extract_sections
+from .sections_compare import compare_strategies
+from .sections_via_llm import LlmKeyMissingError, extract_via_llm
+from .sections_via_toc import extract_via_toc
 from .tables import extract_tables
+
+_STRATEGY_CHOICES = ("toc", "llm", "compare")
 
 
 @click.command(context_settings={"help_option_names": ["-h", "--help"]})
@@ -32,7 +53,20 @@ from .tables import extract_tables
 @click.option("--chapter", default=None, help="Chapter code to restrict to (e.g. `12`).")
 @click.option("--dry-run", is_flag=True, default=False, help="Validate only; no writes.")
 @click.option("--force", is_flag=True, default=False, help="Re-extract even when hashes match.")
-def main(document_slug: str, edition: str | None, chapter: str | None, dry_run: bool, force: bool) -> None:
+@click.option(
+    "--strategy",
+    default=None,
+    type=click.Choice(_STRATEGY_CHOICES, case_sensitive=False),
+    help="Section-tree strategy: toc, llm, or compare. Defaults to YAML config.",
+)
+def main(
+    document_slug: str,
+    edition: str | None,
+    chapter: str | None,
+    dry_run: bool,
+    force: bool,
+    strategy: str | None,
+) -> None:
     """Ingest the handbook identified by `<doc>`."""
     config = load_config(document_slug)
     if edition is not None:
@@ -97,6 +131,89 @@ def main(document_slug: str, edition: str | None, chapter: str | None, dry_run: 
     )
     click.echo(f"  tables: {len(tables)} extracted, {len(table_warnings)} warnings")
 
+    # Section-tree strategy resolution. CLI flag wins over YAML config.
+    effective_strategy = (strategy or config.section_strategy).lower()
+    click.echo(f"  section-tree strategy: {effective_strategy}")
+
+    section_extra_warnings: list[str] = []
+    section_nodes: list[SectionTreeNode] = []
+    extraction_metadata: dict[str, object] = {"section_strategy": {"kind": effective_strategy}}
+
+    chapter_nodes = [n for n in flat_outline if n.level == "chapter"]
+    chapter_bodies_text = {b.node.ordinal: b.body_md for b in bodies if b.node.level == "chapter"}
+
+    if effective_strategy == "compare":
+        compare_result, prompt_sha, in_tok, out_tok, _toc, _llm, toc_warnings, llm_warnings = (
+            _run_compare(config, fetch_result.path, chapter_nodes, chapter_bodies_text)
+        )
+        report_path = _write_compare_report(config, compare_result)
+        click.echo(f"  compare report -> {report_path}")
+        click.echo(f"  llm tokens: in={in_tok} out={out_tok} (prompt sha={prompt_sha[:12]})")
+        if toc_warnings:
+            click.echo(f"  toc warnings: {len(toc_warnings)}")
+        if llm_warnings:
+            click.echo(f"  llm warnings: {len(llm_warnings)}")
+        # Compare mode does not seed section rows; chapter-level only.
+        section_nodes = []
+        extraction_metadata["section_strategy"] = {
+            "kind": "compare",
+            "report_path": str(report_path.relative_to(repo_root())),
+            "llm": {
+                "prompt_sha256": prompt_sha,
+                "input_tokens": in_tok,
+                "output_tokens": out_tok,
+                "model": _llm_model(),
+            },
+        }
+    elif effective_strategy == SECTION_STRATEGY_LLM:
+        try:
+            llm_result = extract_via_llm(
+                config, chapter_nodes, chapter_bodies_text, raw_yaml=config.raw_yaml
+            )
+        except LlmKeyMissingError as exc:
+            click.echo(f"error: {exc}", err=True)
+            raise SystemExit(3) from exc
+        section_nodes = llm_result.nodes
+        section_extra_warnings.extend(llm_result.warnings)
+        extraction_metadata["section_strategy"] = {
+            "kind": SECTION_STRATEGY_LLM,
+            "prompt_sha256": llm_result.prompt_sha256,
+            "model": _llm_model(),
+            "input_tokens": llm_result.input_tokens,
+            "output_tokens": llm_result.output_tokens,
+        }
+    elif effective_strategy == SECTION_STRATEGY_PER_CHAPTER:
+        section_nodes, per_chapter_meta = _run_per_chapter(
+            config, fetch_result.path, chapter_nodes, chapter_bodies_text, section_extra_warnings
+        )
+        extraction_metadata["section_strategy"] = per_chapter_meta
+    else:
+        toc_result = extract_via_toc(
+            fetch_result.path, config, chapter_nodes, raw_yaml=config.raw_yaml
+        )
+        section_nodes = toc_result.nodes
+        section_extra_warnings.extend(toc_result.warnings)
+        extraction_metadata["section_strategy"] = {
+            "kind": SECTION_STRATEGY_TOC,
+            "config": _redact_toc_config(config.raw_yaml),
+        }
+
+    click.echo(
+        f"  section-tree nodes: {len(section_nodes)} "
+        f"({sum(1 for n in section_nodes if n.level == 1)} L1, "
+        f"{sum(1 for n in section_nodes if n.level == 2)} L2, "
+        f"{sum(1 for n in section_nodes if n.level == 3)} L3)"
+    )
+    if section_extra_warnings:
+        click.echo(f"  section-tree warnings: {len(section_extra_warnings)} -- see manifest")
+
+    # Promote section_nodes into the OutlineNode + body list so existing
+    # write_outputs() seeds them as `handbook_section` rows.
+    if section_nodes:
+        flat_outline, bodies = _merge_section_nodes_into_outline(
+            flat_outline, bodies, section_nodes, fetch_result.path, config
+        )
+
     if dry_run:
         click.echo(
             f"dry-run summary: {len(bodies)} sections, {len(figures)} figures, {len(tables)} tables, "
@@ -113,6 +230,8 @@ def main(document_slug: str, edition: str | None, chapter: str | None, dry_run: 
         figure_warnings=figure_warnings,
         tables=tables,
         table_warnings=table_warnings,
+        extraction_metadata=extraction_metadata,
+        extra_warnings=section_extra_warnings,
     )
     click.echo(
         f"  wrote {summary.sections_written} sections, "
@@ -122,11 +241,12 @@ def main(document_slug: str, edition: str | None, chapter: str | None, dry_run: 
     click.echo(f"done: {config.document_slug} {config.edition}")
 
 
-def _override_edition(config, edition: str):  # type: ignore[no-untyped-def]
-    # Recreate the dataclass with a different edition. Frozen dataclass means
-    # we can't mutate; build a new one.
-    from .config_loader import HandbookConfig
+def _override_edition(config: HandbookConfig, edition: str) -> HandbookConfig:
+    """Build a new `HandbookConfig` with the edition overridden.
 
+    The dataclass is frozen; we recreate it. Every field gets carried
+    forward so adding a field above this function doesn't silently drop it.
+    """
     return HandbookConfig(
         document_slug=config.document_slug,
         edition=edition,
@@ -141,4 +261,224 @@ def _override_edition(config, edition: str):  # type: ignore[no-untyped-def]
         table_prefix_pattern=config.table_prefix_pattern,
         outline_strategy=config.outline_strategy,
         title_overrides=config.title_overrides,
+        section_strategy=config.section_strategy,
+        per_chapter_section_strategy=config.per_chapter_section_strategy,
+        chapter_cover_strip_enabled=config.chapter_cover_strip_enabled,
+        chapter_cover_strip_max_lines=config.chapter_cover_strip_max_lines,
+        raw_yaml=config.raw_yaml,
     )
+
+
+def _run_compare(
+    config: HandbookConfig,
+    pdf_path: Path,
+    chapter_nodes: list[OutlineNode],
+    chapter_bodies_text: dict[int, str],
+) -> tuple[
+    object,
+    str,
+    int,
+    int,
+    list[SectionTreeNode],
+    list[SectionTreeNode],
+    list[str],
+    list[str],
+]:
+    toc_result = extract_via_toc(pdf_path, config, chapter_nodes, raw_yaml=config.raw_yaml)
+    try:
+        llm_result = extract_via_llm(config, chapter_nodes, chapter_bodies_text, raw_yaml=config.raw_yaml)
+    except LlmKeyMissingError as exc:
+        click.echo(f"error: {exc}", err=True)
+        raise SystemExit(3) from exc
+
+    chapter_titles = {n.ordinal: n.title for n in chapter_nodes if n.level == "chapter"}
+    compare_result = compare_strategies(toc_result.nodes, llm_result.nodes, chapter_titles)
+    return (
+        compare_result,
+        llm_result.prompt_sha256,
+        llm_result.input_tokens,
+        llm_result.output_tokens,
+        toc_result.nodes,
+        llm_result.nodes,
+        toc_result.warnings,
+        llm_result.warnings,
+    )
+
+
+def _run_per_chapter(
+    config: HandbookConfig,
+    pdf_path: Path,
+    chapter_nodes: list[OutlineNode],
+    chapter_bodies_text: dict[int, str],
+    accumulated_warnings: list[str],
+) -> tuple[list[SectionTreeNode], dict[str, object]]:
+    """Resolve per-chapter strategy from `per_chapter_section_strategy`."""
+    overrides = config.per_chapter_section_strategy
+    if not overrides:
+        raise SystemExit(
+            "per_chapter section_strategy requires `per_chapter_section_strategy` to be populated."
+        )
+    toc_chapters = {ord_ for ord_, kind in overrides.items() if kind == SECTION_STRATEGY_TOC}
+    llm_chapters = {ord_ for ord_, kind in overrides.items() if kind == SECTION_STRATEGY_LLM}
+    nodes: list[SectionTreeNode] = []
+    metadata: dict[str, object] = {"kind": SECTION_STRATEGY_PER_CHAPTER, "overrides": dict(overrides)}
+    if toc_chapters:
+        toc_chap_subset = [c for c in chapter_nodes if c.ordinal in toc_chapters]
+        toc_result = extract_via_toc(pdf_path, config, toc_chap_subset, raw_yaml=config.raw_yaml)
+        nodes.extend(toc_result.nodes)
+        accumulated_warnings.extend(toc_result.warnings)
+    if llm_chapters:
+        llm_chap_subset = [c for c in chapter_nodes if c.ordinal in llm_chapters]
+        llm_bodies = {ord_: chapter_bodies_text[ord_] for ord_ in llm_chapters if ord_ in chapter_bodies_text}
+        try:
+            llm_result = extract_via_llm(
+                config, llm_chap_subset, llm_bodies, raw_yaml=config.raw_yaml
+            )
+        except LlmKeyMissingError as exc:
+            click.echo(f"error: {exc}", err=True)
+            raise SystemExit(3) from exc
+        nodes.extend(llm_result.nodes)
+        accumulated_warnings.extend(llm_result.warnings)
+        metadata["llm"] = {
+            "prompt_sha256": llm_result.prompt_sha256,
+            "model": _llm_model(),
+            "input_tokens": llm_result.input_tokens,
+            "output_tokens": llm_result.output_tokens,
+        }
+    return nodes, metadata
+
+
+def _llm_model() -> str:
+    """Lazily import to avoid loading the LLM module unless needed."""
+    from .sections_via_llm import MODEL
+
+    return MODEL
+
+
+def _redact_toc_config(raw: dict[str, object]) -> dict[str, object]:
+    """Manifest copy of just the TOC + heading_style blocks (no API keys etc.)."""
+    return {
+        "toc": raw.get("toc"),
+        "heading_style": raw.get("heading_style"),
+    }
+
+
+def _write_compare_report(config: HandbookConfig, compare_result: object) -> Path:
+    reports_dir = Path(__file__).resolve().parent.parent / "reports"
+    reports_dir.mkdir(parents=True, exist_ok=True)
+    out_path = (
+        reports_dir / f"section-strategy-compare-{config.document_slug}-{config.edition}.md"
+    )
+    # Local import keeps the report rendering close to its data class.
+    out_path.write_text(compare_result.to_markdown(config), encoding="utf-8")  # type: ignore[attr-defined]
+    return out_path
+
+
+def _merge_section_nodes_into_outline(
+    flat_outline: list[OutlineNode],
+    bodies: list,
+    section_nodes: list[SectionTreeNode],
+    pdf_path: Path,
+    config: HandbookConfig,
+) -> tuple[list[OutlineNode], list]:
+    """Append section / subsection rows derived from `section_nodes`.
+
+    Chapter-level rows already exist in `flat_outline` and `bodies`; this
+    function appends one OutlineNode + one SectionBody per emitted section
+    so `write_outputs()` seeds them as `handbook_section` rows. Body text
+    for each section is sliced from the chapter body using the existing
+    chapter-page extractor (no second PDF scan).
+    """
+    from .sections import SectionBody  # local to avoid circular at module load
+
+    chapter_by_ord = {int(n.code): n for n in flat_outline if n.level == "chapter"}
+    body_by_ord = {b.node.ordinal: b for b in bodies if b.node.level == "chapter"}
+
+    codes = derive_codes(section_nodes)
+
+    new_outline: list[OutlineNode] = list(flat_outline)
+    new_bodies: list = list(bodies)
+
+    # Group nodes per chapter for fallback page-end resolution.
+    by_chapter: dict[int, list[tuple[int, SectionTreeNode]]] = {}
+    for idx, node in enumerate(section_nodes):
+        by_chapter.setdefault(node.chapter_ordinal, []).append((idx, node))
+
+    for chap_ord, items in by_chapter.items():
+        chapter_node = chapter_by_ord.get(chap_ord)
+        chapter_body = body_by_ord.get(chap_ord)
+        if chapter_node is None or chapter_body is None:
+            continue
+        for idx, node in items:
+            code = codes[idx]
+            page_start = _page_start_from_anchor(node.page_anchor, chapter_node, config.page_offset)
+            page_end = page_start
+            faa_start = _faa_page_value(node.page_anchor)
+            parent_code = _parent_code_from(codes, by_chapter[chap_ord], idx, node, chap_ord)
+            level_name = "section" if node.level == 1 else "subsection"
+            outline_node = OutlineNode(
+                level=level_name,
+                code=code,
+                title=node.title,
+                page_start=page_start,
+                page_end=page_end,
+                parent_code=parent_code,
+                ordinal=node.ordinal,
+            )
+            new_outline.append(outline_node)
+            new_bodies.append(
+                SectionBody(
+                    node=outline_node,
+                    body_md="",  # chapter index.md still owns the full prose in v1
+                    faa_page_start=faa_start,
+                    faa_page_end=faa_start,
+                    char_count=0,
+                )
+            )
+    return new_outline, new_bodies
+
+
+def _page_start_from_anchor(
+    anchor: str | None, chapter_node: OutlineNode, page_offset: int
+) -> int:
+    """Resolve a "12-7" anchor to a 1-indexed PDF page; fall back to chapter start."""
+    if not anchor or "-" not in anchor:
+        return chapter_node.page_start
+    chap_str, page_str = anchor.split("-", 1)
+    if not chap_str.isdigit() or not page_str.isdigit():
+        return chapter_node.page_start
+    page_within_chapter = int(page_str)
+    candidate = chapter_node.page_start + page_within_chapter - 1
+    if chapter_node.page_start <= candidate <= chapter_node.page_end:
+        return candidate
+    return chapter_node.page_start
+
+
+def _faa_page_value(anchor: str | None) -> int | None:
+    """Pull the integer chapter prefix off a "12-7" anchor (= 12)."""
+    if not anchor or "-" not in anchor:
+        return None
+    chap_str, _ = anchor.split("-", 1)
+    if not chap_str.isdigit():
+        return None
+    return int(chap_str)
+
+
+def _parent_code_from(
+    codes: dict[int, str],
+    chapter_items: list[tuple[int, SectionTreeNode]],
+    self_idx: int,
+    self_node: SectionTreeNode,
+    chap_ord: int,
+) -> str:
+    """Walk back through this chapter's items to find the strictly-shallower parent."""
+    if self_node.level == 1:
+        return str(chap_ord)
+    for back_idx, back_node in reversed(chapter_items):
+        if back_idx >= self_idx:
+            continue
+        if back_node.level < self_node.level:
+            return codes[back_idx]
+    return str(chap_ord)
+
+
