@@ -39,4 +39,4 @@ RADAR
 ![Figure 15-2. Backscattered Energy 
 Targets may include precipitation, clouds, dust, birds, insects, buildings, air mass boundaries, terrain 
 features, wind farms/turbines, etc. Reflectivity is a measurement of the amount of backscattered energy. An 
-echo is the appearance on a radar display of the backscattered energy](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-4-00-backscattered-energy-targets-may-include-precipi.png)
+echo is the appearance on a radar display of the backscattered energy](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-3-00-backscattered-energy-targets-may-include-precipi.png)

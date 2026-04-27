@@ -44,4 +44,4 @@ spacing.
 PGF is directed across contours/isobars towards lower height/pressure. 
 Figure 10-1. Direction of Pressure Gradient Force 
 Wind speed is directly proportional to the PGF, which itself is directly proportional to the contour/isobar 
-gradient. Closely spaced contours/isobars indicate strong winds, while w](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-2-00-pgf-is-directed-across-contours-isobars-towards-.png)
+gradient. Closely spaced contours/isobars indicate strong winds, while w](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-3-1-00-pgf-is-directed-across-contours-isobars-towards-.png)

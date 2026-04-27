@@ -34,6 +34,7 @@ from .config_loader import (
 )
 from .fetch import fetch_pdf
 from .figures import extract_figures
+from .figures_dedup import deduplicate_figures
 from .normalize import write_outputs
 from .outline import OutlineError, OutlineNode, detect_outline_from_text, filter_to_chapter, parse_outline
 from .paths import repo_root
@@ -132,6 +133,13 @@ def main(
     )
     click.echo(f"  figures: {len(figures)} extracted, {len(figure_warnings)} warnings")
 
+    figures, dedup_meta = deduplicate_figures(figures)
+    if dedup_meta["canonicalized"] > 0:
+        click.echo(
+            f"  figure dedup: {dedup_meta['canonicalized']} redundant files removed, "
+            f"{dedup_meta['freed_bytes']} bytes freed"
+        )
+
     tables, table_warnings = extract_tables(
         fetch_result.path,
         flat_outline,
@@ -147,7 +155,10 @@ def main(
 
     section_extra_warnings: list[str] = []
     section_nodes: list[SectionTreeNode] = []
-    extraction_metadata: dict[str, object] = {"section_strategy": {"kind": effective_strategy}}
+    extraction_metadata: dict[str, object] = {
+        "section_strategy": {"kind": effective_strategy},
+        "figure_dedup": dedup_meta,
+    }
 
     chapter_nodes = [n for n in flat_outline if n.level == "chapter"]
     chapter_bodies_text = {b.node.ordinal: b.body_md for b in bodies if b.node.level == "chapter"}

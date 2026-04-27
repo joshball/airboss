@@ -85,7 +85,7 @@ the air parcel could hold twice as mu](/handbooks/avwx/FAA-H-8083-28B/figures/fi
 ![Figure 6-4. Latent Heat Transactions When Water Undergoes Phase Transition 
 Heat is exchanged between water and its environment during phase transition. Although the temperature of 
 the environment changes in response, the temperature of the water undergoing the phase transition remains 
-constant until the phase change](/handbooks/avwx/FAA-H-8083-28B/figures/fig-6-7-01-latent-heat-transactions-when-water-undergoes-ph.png)
+constant until the phase change](/handbooks/avwx/FAA-H-8083-28B/figures/fig-6-7-1-00-latent-heat-transactions-when-water-undergoes-ph.png)
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-6-7-00-latent-heat-of-water-at-0-c-latent-heat-type-ene.html">
 <table><caption>Table 6-1. Latent Heat of Water at 0 °C 

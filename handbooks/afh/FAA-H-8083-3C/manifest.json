@@ -9278,6 +9278,10 @@
           "verify_in_body": false
         }
       }
+    },
+    "figure_dedup": {
+      "canonicalized": 0,
+      "freed_bytes": 0
     }
   }
 }

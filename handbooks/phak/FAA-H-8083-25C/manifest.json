@@ -12842,7 +12842,7 @@
       "section_code": "8",
       "ordinal": 7,
       "caption": "Figure 8-31. Angle of attack indicators.\nN-S \nE-W \nFigure 8-32. A magnetic compass. The vertical line is called the \nlubber line.\nstate of an airplane is the balance between airspeed, altitude, \ndrag, and thrust and represents how efficiently the airfoil is \noperating.\nCompass Systems\nThe Earth is a huge magnet, spinni",
-      "asset_path": "handbooks/phak/FAA-H-8083-25C/figures/fig-8-07-angle-of-attack-indicators-n-s-e-w-figure-8-32-a.png",
+      "asset_path": "handbooks/phak/FAA-H-8083-25C/figures/fig-5-11-a-variety-of-aoa-indicators-of-the-airfoil-this-.png",
       "width": 1013,
       "height": 341
     },
@@ -13751,7 +13751,7 @@
       "section_code": "16",
       "ordinal": 3,
       "caption": "Figure 16-5. Time zones in the conterminous United States.\n105° \n120° \n90° \n75° \nMountain standard time\nCentral standard time\nEastern standard time\nPacific standard time\nflying eastward from one time zone to another, or perhaps \neven when flying from the western edge to the eastern edge \nof the same time zone. Determin",
-      "asset_path": "handbooks/phak/FAA-H-8083-25C/figures/fig-16-03-time-zones-in-the-conterminous-united-states-105.png",
+      "asset_path": "handbooks/phak/FAA-H-8083-25C/figures/fig-13-03-area-forecast-region-map-2000z-the-forecast-call.png",
       "width": 492,
       "height": 313
     },
@@ -19304,6 +19304,10 @@
           "verify_in_body": true
         }
       }
+    },
+    "figure_dedup": {
+      "canonicalized": 2,
+      "freed_bytes": 262476
     }
   }
 }

@@ -132,39 +132,39 @@ Coriolis deflection. Thus, the wind generally blows from a high-pressure co](/ha
 Air above the land becomes warmer (less dense) than air above the water. This is because land heats up 
 faster than water. Low-level pressure gradients develop with lower pressure over the warmer land and 
 higher pressure over the cooler water. 
-Low-level winds develop in the direction of the](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-02-sea-breeze-air-above-the-land-becomes-warmer-les.png)
+Low-level winds develop in the direction of the](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-1-00-sea-breeze-air-above-the-land-becomes-warmer-les.png)
 
 ![Figure 10-14. Sea Breeze Front 
 A sea breeze front’s position and movement are influenced by coastline shape, low-level wind direction 
 and speed, and temperature difference between land and sea surface. This temperature difference can be 
-affected by the presence of cloud cover over land and the diurnal cycle. The dep](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-03-sea-breeze-front-a-sea-breeze-front-s-position-a.png)
+affected by the presence of cloud cover over land and the diurnal cycle. The dep](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-1-01-sea-breeze-front-a-sea-breeze-front-s-position-a.png)
 
 ![Figure 10-15. Effects of Coastline Shape on a Sea Breeze 
 In Figure 10-15, convergence occurs where sea breezes merge from opposite directions. Stronger lift may 
 be sufficient to initiate showers and thunderstorms if the air mass is sufficiently moist and unstable. 
 10.6.2 Land Breeze 
-A land breeze (see Figure 10-16)](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-04-effects-of-coastline-shape-on-a-sea-breeze-in-fi.png)
+A land breeze (see Figure 10-16)](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-2-00-effects-of-coastline-shape-on-a-sea-breeze-in-fi.png)
 
 ![Figure 10-16. Land Breeze 
 Air above the land becomes cooler (denser) than air above the water due to conduction. This is because 
 land cools faster than water. Low-level pressure gradients develop with higher pressure over the cooler land 
 and lower pressure over the warmer water. 
-Low-level winds develop in the direc](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-05-land-breeze-air-above-the-land-becomes-cooler-de.png)
+Low-level winds develop in the direc](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-3-00-land-breeze-air-above-the-land-becomes-cooler-de.png)
 
 ![Figure 10-17. Lake Breeze 
 As with sea breezes, thunderstorms are favored in the upward motion branch of the lake breeze circulation. 
 This is especially true where breezes from adjacent lakes collide. 
 The strength of the lake breeze circulation is affected by a lake’s depth. A shallow lake (e.g., Lake Erie and 
-Lake](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-06-lake-breeze-as-with-sea-breezes-thunderstorms-ar.png)
+Lake](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-3-01-lake-breeze-as-with-sea-breezes-thunderstorms-ar.png)
 
-![Figure 10-18. Sea Breeze/Lake Breeze Example [National Aeronautics and Space Administration (NASA)]](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-07-sea-breeze-lake-breeze-example-national-aeronaut.png)
+![Figure 10-18. Sea Breeze/Lake Breeze Example [National Aeronautics and Space Administration (NASA)]](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-3-02-sea-breeze-lake-breeze-example-national-aeronaut.png)
 
 ![Figure 10-19. Valley Breeze 
 Pressure gradients develop (along a horizontal reference) with lower pressure over the warmer sloping 
 terrain and higher pressure over the cooler valley. Winds develop in the direction of the PGF. Thus, the 
-wind blows from the valley up the mountain slopes. Air rises over sloping terrain](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-08-valley-breeze-pressure-gradients-develop-along-a.png)
+wind blows from the valley up the mountain slopes. Air rises over sloping terrain](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-4-00-valley-breeze-pressure-gradients-develop-along-a.png)
 
 ![Figure 10-20. Mountain-Plains Wind System 
 Pressure gradients develop (along a horizontal reference) with lower pressure over the warmer sloping 
 terrain and higher pressure over the cooler plains. Winds develop in the direction of the PGF. Thus, the 
-wind blows from the plains up the mountain slopes. There is a weak r](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-09-mountain-plains-wind-system-pressure-gradients-d.png)
+wind blows from the plains up the mountain slopes. There is a weak r](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-6-00-mountain-plains-wind-system-pressure-gradients-d.png)

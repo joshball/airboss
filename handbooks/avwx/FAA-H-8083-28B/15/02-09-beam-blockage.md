@@ -31,4 +31,4 @@ image interpretation.
 ![Figure 15-13. WSR-88D Weather Radar Beam Blockage on Base Reflectivity Product Example 
 15.2.10 Ground Clutter 
 Ground clutter (see Figure 15-14) is radar echoes’ returns from trees, buildings, or other objects on the 
-ground. It appears as a roughly circular region of high reflectivity at ranges close to the radar. Gr](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-9-00-wsr-88d-weather-radar-beam-blockage-on-base-refl.png)
+ground. It appears as a roughly circular region of high reflectivity at ranges close to the radar. Gr](/handbooks/avwx/FAA-H-8083-28B/figures/fig-15-2-10-00-wsr-88d-weather-radar-beam-blockage-on-base-refl.png)

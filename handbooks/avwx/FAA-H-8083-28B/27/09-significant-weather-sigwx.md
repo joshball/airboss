@@ -293,7 +293,7 @@ Table 27-10. Low-Level SIGWX Chart Issuance Schedule
   
 Issuance Time 
 ~1720Z 
-~2310Z](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-00-12-hour-low-level-sigwx-chart-example-27-9-1-1-i.png)
+~2310Z](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-1-00-12-hour-low-level-sigwx-chart-example-27-9-1-1-i.png)
 
 ![Figure 27-11. Low-Level SIGWX Chart Symbols 
 27.9.1.2.1 Flying Categories 
@@ -302,61 +302,61 @@ VFR areas are not depicted (see Figure 27-12).
  
 Figure 27-12. Low-Level SIGWX Chart Flying Categories—Example 
 27.9.1.2.2 Turbulence 
-Areas](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-01-low-level-sigwx-chart-symbols-27-9-1-2-1-flying-.png)
+Areas](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-1-01-low-level-sigwx-chart-symbols-27-9-1-2-1-flying-.png)
 
 ![Figure 27-12. Low-Level SIGWX Chart Flying Categories—Example 
 27.9.1.2.2 Turbulence 
 Areas of moderate or greater turbulence are enclosed by bold, dashed, brown lines (see Figure 27-13). 
 Turbulence intensities are identified by standard symbols (see Figure 27-11). The vertical extent of 
-turbulence layers is specifie](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-02-low-level-sigwx-chart-flying-categories-example-.png)
+turbulence layers is specifie](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-1-02-low-level-sigwx-chart-flying-categories-example-.png)
 
 ![Figure 27-13. Low-Level SIGWX Chart Turbulence Forecast—Example 
 27.9.1.2.3 Freezing Levels 
 The freezing level at the surface is depicted by a blue, saw-toothed symbol (see Figure 27-14). The surface 
 freezing level separates above-freezing from below-freezing temperatures at the Earth’s surface. 
-Freezing levels abov](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-03-low-level-sigwx-chart-turbulence-forecast-exampl.png)
+Freezing levels abov](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-1-03-low-level-sigwx-chart-turbulence-forecast-exampl.png)
 
-![Figure 27-14. Low-Level SIGWX Chart Freezing Level Forecast—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-04-low-level-sigwx-chart-freezing-level-forecast-ex.png)
+![Figure 27-14. Low-Level SIGWX Chart Freezing Level Forecast—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-1-04-low-level-sigwx-chart-freezing-level-forecast-ex.png)
 
 ![Figure 27-15. Low-Level SIGWX Chart Multiple Freezing Levels—Example 
 In Figure 27-15, areas with multiple freezing levels are located on the below-freezing side of the surface 
 freezing level contour and bounded by the 4,000-ft freezing level. Multiple freezing levels are possible 
-beyond the 4,000-ft freezing level (](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-05-low-level-sigwx-chart-multiple-freezing-levels-e.png)
+beyond the 4,000-ft freezing level (](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-2-00-low-level-sigwx-chart-multiple-freezing-levels-e.png)
 
 ![Figure 27-16. Mid-Level SIGWX Chart—Example 
 27.9.2.1 Issuance 
 The AWC in Kansas City, MO, has the responsibility, as part of the WAFC Washington, to provide global 
 weather forecasts of SIGWX phenomena. The AWC issues a 24-hour Mid-Level SIGWX Chart, four times 
-daily, for the North Atlantic Ocean Region (see Table 2](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-06-mid-level-sigwx-chart-example-27-9-2-1-issuance-.png)
+daily, for the North Atlantic Ocean Region (see Table 2](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-2-01-mid-level-sigwx-chart-example-27-9-2-1-issuance-.png)
 
 ![Figure 27-17. High-Level SIGWX Chart—Example 
 27.9.3.1 Issuance 
 In accordance with the WAFS of ICAO, High-Level SIGWX forecasts are provided for the en route portion 
-of international flights.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-07-high-level-sigwx-chart-example-27-9-3-1-issuance.png)
+of international flights.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-3-00-high-level-sigwx-chart-example-27-9-3-1-issuance.png)
 
 ![Figure 27-18. High-Level SIGWX Chart Turbulence—Examples 
 27.9.3.2.3 Moderate or Severe Icing 
 Moderate or severe icing (outside of thunderstorms) above FL240 is rare and is generally not forecasted on 
 High-Level SIGWX Charts. 
 27.9.3.2.4 Jet Streams 
-A jet stream axis with a wind speed of more than 80 kt is identifie](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-08-high-level-sigwx-chart-turbulence-examples-27-9-.png)
+A jet stream axis with a wind speed of more than 80 kt is identifie](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-3-01-high-level-sigwx-chart-turbulence-examples-27-9-.png)
 
 ![Figure 27-19. High-Level SIGWX Chart Jet Stream—Example 
 27.9.3.2.5 Tropopause Heights 
 Tropopause heights are plotted at selected locations on the chart. They are enclosed by rectangles and 
 plotted in hundreds of feet MSL (see Figure 27-20). Centers of high (H) and low (L) tropopause heights 
-are enclosed by polygons](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-09-high-level-sigwx-chart-jet-stream-example-27-9-3.png)
+are enclosed by polygons](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-3-02-high-level-sigwx-chart-jet-stream-example-27-9-3.png)
 
 ![Figure 27-20. High-Level SIGWX Chart Tropopause Height—Examples 
 27.9.3.2.6 Tropical Cyclones 
 Tropical cyclones (i.e., with surface wind speed 34 kt or greater) are depicted by the symbol in Figure 27-21 
 with the storm’s name positioned adjacent to the symbol. Cumulonimbus clouds meeting chart criteria are 
-identifie](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-10-high-level-sigwx-chart-tropopause-height-example.png)
+identifie](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-3-03-high-level-sigwx-chart-tropopause-height-example.png)
 
 ![Figure 27-21. High-Level SIGWX Chart Tropical Cyclone—Examples 
 27.9.3.2.7 Volcanic Eruption Sites 
 Volcanic eruption sites are identified by a trapezoidal symbol depicted in Figure 27-22. The dot on the base 
-of the trapezoid identifies the location of the volcano. The name of the volcano, its latitude, and its longit](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-11-high-level-sigwx-chart-tropical-cyclone-examples.png)
+of the trapezoid identifies the location of the volcano. The name of the volcano, its latitude, and its longit](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-4-00-high-level-sigwx-chart-tropical-cyclone-examples.png)
 
 ![Figure 27-22. The dot on the base 
 of the trapezoid identifies the location of the volcano. The name of the volcano, its latitude, and its longitude 
@@ -364,13 +364,13 @@ are noted adjacent to the symbol.
  
 Figure 27-22. High-Level SIGWX Chart Volcanic Eruption Site—Example 
 27.9.4 Alaska Significant Weather (SIGWX) Charts 
-The Alaska SIG](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-12-the-dot-on-the-base-of-the-trapezoid-identifies-.png)
+The Alaska SIG](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-4-01-the-dot-on-the-base-of-the-trapezoid-identifies-.png)
 
 ![Figure 27-23. Alaska SIGWX Chart—Example 
 27.9.4.1.1 Content 
 27.9.4.1.1.1 Surface Pressure Systems and Fronts 
 Pressure systems and fronts are depicted using standard symbols. Isobars are denoted by solid, thin black 
-lines and labeled with the appropriate pressure in millibars. The central pressure is plotted near th](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-13-alaska-sigwx-chart-example-27-9-4-1-1-content-27.png)
+lines and labeled with the appropriate pressure in millibars. The central pressure is plotted near th](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-9-4-02-alaska-sigwx-chart-example-27-9-4-1-1-content-27.png)
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-27-9-00-low-level-sigwx-chart-issuance-schedule-issuance.html">
 <table><caption>Table 27-10. Low-Level SIGWX Chart Issuance Schedule 

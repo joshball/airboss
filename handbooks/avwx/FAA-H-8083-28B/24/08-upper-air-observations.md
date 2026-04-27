@@ -62,4 +62,4 @@ weather is expected in a region.
 24.8.1.1 Issuance 
 Weather balloons with radiosondes are launched twice a day worldwide from designated locations at around 
 1100 UTC and 2300 UTC (see Figure 24-27). It takes approximately 90 minutes for the balloon to reach 
-an altitude of 100,000 ft. The weather data col](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-8-00-weather-balloon-and-radiosonde-24-8-1-1-issuance.png)
+an altitude of 100,000 ft. The weather data col](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-8-1-00-weather-balloon-and-radiosonde-24-8-1-1-issuance.png)

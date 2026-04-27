@@ -129,14 +129,14 @@ transition zone between two air masses. Fronts are classified by wh](/handbooks/
 
 ![Figure 11-4. Fronts](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-3-01-fronts.png)
 
-![Figure 11-5. Warm Front](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-3-02-warm-front.png)
+![Figure 11-5. Warm Front](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-3-1-00-warm-front.png)
 
 ![Figure 11-6. Cold Front 
 11.3.3 Stationary Front 
 When the forces of two air masses are relatively equal, the boundary or front that separates them remains 
 stationary and influences the local weather for days. This front is called a stationary front. Stationary frontal 
-slope can vary, but clouds and precipitation wou](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-3-03-cold-front-11-3-3-stationary-front-when-the-forc.png)
+slope can vary, but clouds and precipitation wou](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-3-3-00-cold-front-11-3-3-stationary-front-when-the-forc.png)
 
-![Figure 11-7. Stationary Front](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-3-04-stationary-front.png)
+![Figure 11-7. Stationary Front](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-3-3-01-stationary-front.png)
 
-![Figure 11-8. Occluded Front](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-3-05-occluded-front.png)
+![Figure 11-8. Occluded Front](/handbooks/avwx/FAA-H-8083-28B/figures/fig-11-3-4-00-occluded-front.png)

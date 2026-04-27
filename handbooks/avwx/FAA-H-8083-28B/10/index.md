@@ -285,7 +285,7 @@ See Chapter 19, Turbulence, for information on mountain-related turbulence.
 PGF is directed across contours/isobars towards lower height/pressure. 
 Figure 10-1. Direction of Pressure Gradient Force 
 Wind speed is directly proportional to the PGF, which itself is directly proportional to the contour/isobar 
-gradient. Closely spaced contours/isobars indicate strong winds, while w](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-00-pgf-is-directed-across-contours-isobars-towards-.png)
+gradient. Closely spaced contours/isobars indicate strong winds, while w](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-3-1-00-pgf-is-directed-across-contours-isobars-towards-.png)
 
 ![Figure 10-1. Direction of Pressure Gradient Force 
 Wind speed is directly proportional to the PGF, which itself is directly proportional to the contour/isobar 
@@ -296,103 +296,103 @@ mean lighter wind. From a pressure analysis, users can ge](/handbooks/avwx/FAA-H
 In Figure 10-2, on the left panel, the contours/isobars are widely spaced apart, PGF is weak, and the wind 
 speed is weak. On the right panel, the contours/isobars are more closely spaced, the PGF is stronger, and 
 the wind speed is stronger. 
-The wind would flow from](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-02-magnitude-of-pressure-gradient-force-in-figure-1.png)
+The wind would flow from](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-3-2-00-magnitude-of-pressure-gradient-force-in-figure-1.png)
 
 ![Figure 10-3. Illustration of Coriolis Force 
 A similar apparent force deflects moving particles on the Earth. Because the Earth is spherical, the 
 deflective force is much more complex than the simple turntable example. The principle was first explained 
-by Gaspard-Gustave de Coriolis, and now carries his name—the Cori](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-03-illustration-of-coriolis-force-a-similar-apparen.png)
+by Gaspard-Gustave de Coriolis, and now carries his name—the Cori](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-3-2-01-illustration-of-coriolis-force-a-similar-apparen.png)
 
 ![Figure 10-4. Coriolis Force Variations Across the Earth 
 Coriolis force deflects moving objects to the right of their path in the Northern Hemisphere and to the left 
 of their path in the Southern Hemisphere. Coriolis deflection is maximized at the poles and zero at 
-the Equator.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-04-coriolis-force-variations-across-the-earth-corio.png)
+the Equator.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-3-2-02-coriolis-force-variations-across-the-earth-corio.png)
 
 ![Figure 10-5. Coriolis Force Magnitude Variations with Wind Speed 
 Coriolis force magnitude is directly proportional to wind speed. In Figure 10-5, wind speed is twice as 
 strong in the right panel; thus, the Coriolis force is doubled. 
 10.3.3 Friction Force 
-Friction between the wind and the terrain surface slows the w](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-05-coriolis-force-magnitude-variations-with-wind-sp.png)
+Friction between the wind and the terrain surface slows the w](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-3-3-00-coriolis-force-magnitude-variations-with-wind-sp.png)
 
 ![Figure 10-6. Friction Force Magnitude Variations with Terrain Roughness 
 Friction force magnitude is directly proportional to terrain roughness. Even though the wind speed is the 
 same in both panels in Figure 10-6, the terrain is rougher in the right panel; thus, the friction force is 
 stronger. 
  
-Figure 10-7. Fricti](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-06-friction-force-magnitude-variations-with-terrain.png)
+Figure 10-7. Fricti](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-3-3-01-friction-force-magnitude-variations-with-terrain.png)
 
 ![Figure 10-7. Friction Force Magnitude Variations with Wind Speed 
 Friction force magnitude is directly proportional to wind speed. In Figure 10-7, wind speed is twice as 
-strong in the right panel; thus, the friction force is doubled.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-07-friction-force-magnitude-variations-with-wind-sp.png)
+strong in the right panel; thus, the friction force is doubled.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-3-3-02-friction-force-magnitude-variations-with-wind-sp.png)
 
 ![Figure 10-9. This is called the geostrophic wind. 
  
-Figure 10-8. Geostrophic Wind](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-08-this-is-called-the-geostrophic-wind-figure-10-8-.png)
+Figure 10-8. Geostrophic Wind](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-4-00-this-is-called-the-geostrophic-wind-figure-10-8-.png)
 
 ![Figure 10-9. Upper Air Wind Flow 
 10.5 Surface Wind 
 At the surface of the Earth, all three forces come into play. As frictional force slows the wind speed, Coriolis 
 force decreases. However, friction does not affect PGF. PGF and Coriolis force are no longer in balance. 
-The stronger PGF turns the wind at an angle acr](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-09-upper-air-wind-flow-10-5-surface-wind-at-the-sur.png)
+The stronger PGF turns the wind at an angle acr](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-5-00-upper-air-wind-flow-10-5-surface-wind-at-the-sur.png)
 
 ![Figure 10-10. 
  
 Figure 10-10. Surface Wind Forces 
 The angle of surface wind to isobars is about 10° over water, increasing to as high as 45° over rugged 
 terrain. The end result is, in the Northern Hemisphere, the surface wind spirals clockwise and outward from 
-high pressure and counterclockwise and inward into low](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-10-figure-10-10-surface-wind-forces-the-angle-of-su.png)
+high pressure and counterclockwise and inward into low](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-5-01-figure-10-10-surface-wind-forces-the-angle-of-su.png)
 
 ![Figure 10-11. Surface Wind Flow 
 10.6 Local Winds 
 Local winds are small-scale wind field systems driven by diurnal heating or cooling of the ground. Air 
 temperature differences develop over adjacent surfaces. Air in contact with the ground heats during the day 
-and cools at night. Low-level pressure gradients develop](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-11-surface-wind-flow-10-6-local-winds-local-winds-a.png)
+and cools at night. Low-level pressure gradients develop](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-00-surface-wind-flow-10-6-local-winds-local-winds-a.png)
 
 ![Figure 10-12. Local Wind Circulation 
 Low-level winds develop in the direction of the PGF. Coriolis force is insignificant, because the 
 circulation’s dimension (less than 100 mi) and lifespan (less than 12 hours) are too short for significant 
-Coriolis deflection. Thus, the wind generally blows from a high-pressure co](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-12-local-wind-circulation-low-level-winds-develop-i.png)
+Coriolis deflection. Thus, the wind generally blows from a high-pressure co](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-01-local-wind-circulation-low-level-winds-develop-i.png)
 
 ![Figure 10-13. Sea Breeze 
 Air above the land becomes warmer (less dense) than air above the water. This is because land heats up 
 faster than water. Low-level pressure gradients develop with lower pressure over the warmer land and 
 higher pressure over the cooler water. 
-Low-level winds develop in the direction of the](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-13-sea-breeze-air-above-the-land-becomes-warmer-les.png)
+Low-level winds develop in the direction of the](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-1-00-sea-breeze-air-above-the-land-becomes-warmer-les.png)
 
 ![Figure 10-14. Sea Breeze Front 
 A sea breeze front’s position and movement are influenced by coastline shape, low-level wind direction 
 and speed, and temperature difference between land and sea surface. This temperature difference can be 
-affected by the presence of cloud cover over land and the diurnal cycle. The dep](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-14-sea-breeze-front-a-sea-breeze-front-s-position-a.png)
+affected by the presence of cloud cover over land and the diurnal cycle. The dep](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-1-01-sea-breeze-front-a-sea-breeze-front-s-position-a.png)
 
 ![Figure 10-15. Effects of Coastline Shape on a Sea Breeze 
 In Figure 10-15, convergence occurs where sea breezes merge from opposite directions. Stronger lift may 
 be sufficient to initiate showers and thunderstorms if the air mass is sufficiently moist and unstable. 
 10.6.2 Land Breeze 
-A land breeze (see Figure 10-16)](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-15-effects-of-coastline-shape-on-a-sea-breeze-in-fi.png)
+A land breeze (see Figure 10-16)](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-2-00-effects-of-coastline-shape-on-a-sea-breeze-in-fi.png)
 
 ![Figure 10-16. Land Breeze 
 Air above the land becomes cooler (denser) than air above the water due to conduction. This is because 
 land cools faster than water. Low-level pressure gradients develop with higher pressure over the cooler land 
 and lower pressure over the warmer water. 
-Low-level winds develop in the direc](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-16-land-breeze-air-above-the-land-becomes-cooler-de.png)
+Low-level winds develop in the direc](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-3-00-land-breeze-air-above-the-land-becomes-cooler-de.png)
 
 ![Figure 10-17. Lake Breeze 
 As with sea breezes, thunderstorms are favored in the upward motion branch of the lake breeze circulation. 
 This is especially true where breezes from adjacent lakes collide. 
 The strength of the lake breeze circulation is affected by a lake’s depth. A shallow lake (e.g., Lake Erie and 
-Lake](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-17-lake-breeze-as-with-sea-breezes-thunderstorms-ar.png)
+Lake](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-3-01-lake-breeze-as-with-sea-breezes-thunderstorms-ar.png)
 
-![Figure 10-18. Sea Breeze/Lake Breeze Example [National Aeronautics and Space Administration (NASA)]](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-18-sea-breeze-lake-breeze-example-national-aeronaut.png)
+![Figure 10-18. Sea Breeze/Lake Breeze Example [National Aeronautics and Space Administration (NASA)]](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-3-02-sea-breeze-lake-breeze-example-national-aeronaut.png)
 
 ![Figure 10-19. Valley Breeze 
 Pressure gradients develop (along a horizontal reference) with lower pressure over the warmer sloping 
 terrain and higher pressure over the cooler valley. Winds develop in the direction of the PGF. Thus, the 
-wind blows from the valley up the mountain slopes. Air rises over sloping terrain](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-19-valley-breeze-pressure-gradients-develop-along-a.png)
+wind blows from the valley up the mountain slopes. Air rises over sloping terrain](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-4-00-valley-breeze-pressure-gradients-develop-along-a.png)
 
 ![Figure 10-20. Mountain-Plains Wind System 
 Pressure gradients develop (along a horizontal reference) with lower pressure over the warmer sloping 
 terrain and higher pressure over the cooler plains. Winds develop in the direction of the PGF. Thus, the 
-wind blows from the plains up the mountain slopes. There is a weak r](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-20-mountain-plains-wind-system-pressure-gradients-d.png)
+wind blows from the plains up the mountain slopes. There is a weak r](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-6-6-00-mountain-plains-wind-system-pressure-gradients-d.png)
 
 ![Figure 10-21. Mountain Breeze 
 Surface wind flows from the mountain down the sloping terrain into the valley. Air rises over the valley 
@@ -400,10 +400,10 @@ and sinks over the sloping terrain.
 10.7 Adverse Winds 
 10.7.1 Crosswind 
 A crosswind is a wind that has a component directed perpendicularly to the heading of an aircraft 
-(see Figu](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-21-mountain-breeze-surface-wind-flows-from-the-moun.png)
+(see Figu](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-7-1-00-mountain-breeze-surface-wind-flows-from-the-moun.png)
 
 ![Figure 10-22. Crosswind Climb Flightpath 
 10.7.2 Gust 
 A gust is a fluctuation of wind speed with variations of 10 knots (kt) or more between peaks and lulls. 
 Even if the airplane is oriented into the wind, gusts during takeoff and landing cause airspeed fluctuations 
-that can cause problems for pilots. A gust increas](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-22-crosswind-climb-flightpath-10-7-2-gust-a-gust-is.png)
+that can cause problems for pilots. A gust increas](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-7-2-00-crosswind-climb-flightpath-10-7-2-gust-a-gust-is.png)

@@ -51,6 +51,33 @@ const HEARTBEAT_RUN_SECONDS =
 	Math.max(HANDBOOK_SUGGEST_OPEN_SECONDS, HANDBOOK_SUGGEST_TOTAL_SECONDS) +
 	HANDBOOK_HEARTBEAT_INTERVAL_SEC * 4;
 
+/**
+ * Advance the virtual clock in HEARTBEAT_INTERVAL chunks so each tick can fire,
+ * the page's `$effect` reactivity can settle, and any in-flight heartbeat POSTs
+ * can resolve before the next chunk advances. A single big `runFor` can race
+ * against the async fetches inside the tick handler; iterating keeps the page
+ * responsive between increments.
+ */
+async function tickHeartbeatClock(
+	page: import('@playwright/test').Page,
+	totalSeconds: number,
+): Promise<void> {
+	const chunkSeconds = HANDBOOK_HEARTBEAT_INTERVAL_SEC;
+	let elapsed = 0;
+	while (elapsed < totalSeconds) {
+		const advance = Math.min(chunkSeconds, totalSeconds - elapsed);
+		await page.clock.runFor(advance * 1000);
+		elapsed += advance;
+	}
+}
+
+// Tests in this file share the same dev-seed user and the same PHAK §12.9
+// read-state row. They mutate that row (status, notes, comprehended,
+// total_seconds_visible). Running them serially across the whole file removes
+// the cross-describe race where one describe's setStatusViaSegment(read)
+// collides with another's resetReadState. Single-worker for this file.
+test.describe.configure({ mode: 'serial' });
+
 // Helpers --------------------------------------------------------------------
 
 /**
@@ -60,9 +87,13 @@ const HEARTBEAT_RUN_SECONDS =
  * don't affect the tests below.
  */
 async function resetReadState(page: import('@playwright/test').Page): Promise<void> {
-	const rereadResponse = page.waitForResponse((res) => res.request().method() === 'POST');
-	await page.locator('form.reread-form button[type="submit"]').click();
-	await rereadResponse;
+	// The reread form is non-enhanced -- submitting triggers a POST + 303
+	// redirect + GET cycle. Wait for the follow-up nav to settle so the
+	// next assertion sees the reloaded read-state.
+	await Promise.all([
+		page.waitForLoadState('networkidle'),
+		page.locator('form.reread-form button[type="submit"]').click(),
+	]);
 	await expect(page.locator('input[type=radio][name=status][value=unread]')).toBeChecked();
 }
 
@@ -76,12 +107,17 @@ async function setStatusViaSegment(
 	page: import('@playwright/test').Page,
 	value: 'unread' | 'reading' | 'read',
 ): Promise<void> {
-	const response = page.waitForResponse((res) => res.request().method() === 'POST');
-	await page
-		.locator(`input[type=radio][name=status][value=${value}]`)
-		.dispatchEvent('click');
-	await response;
-	await expect(page.locator(`input[type=radio][name=status][value=${value}]`)).toBeChecked();
+	// The segmented control's <input type=radio> is visually hidden
+	// (opacity:0; pointer-events:none); checking via Playwright requires
+	// `force: true`. The radio's onchange fires `form.requestSubmit()`, and
+	// because the form is non-enhanced this triggers a full POST + 303 +
+	// GET cycle. Wait for the network to settle before the next assertion.
+	const radio = page.locator(`input[type=radio][name=status][value=${value}]`);
+	await Promise.all([
+		page.waitForLoadState('networkidle'),
+		radio.check({ force: true }),
+	]);
+	await expect(radio).toBeChecked();
 }
 
 // Test cases -----------------------------------------------------------------
@@ -170,6 +206,7 @@ test.describe('handbook reader: navigation + section rendering', () => {
 });
 
 test.describe('handbook reader: read-state controls', () => {
+
 	test('mark as read persists across reload; re-read resets', async ({ page }) => {
 		const url = ROUTES.HANDBOOK_SECTION(PHAK_DOC, PHAK_CHAPTER_12, PHAK_SECTION_9);
 		await page.goto(url);
@@ -185,16 +222,18 @@ test.describe('handbook reader: read-state controls', () => {
 		// Toggle "Read but didn't get it" -- enabled now that status >= reading.
 		const checkbox = page.locator('input[type=checkbox][name=comprehended]');
 		await expect(checkbox).toBeEnabled();
-		const comprehendResponse = page.waitForResponse((res) => res.request().method() === 'POST');
-		await checkbox.dispatchEvent('click');
-		await comprehendResponse;
+		await Promise.all([
+			page.waitForLoadState('networkidle'),
+			checkbox.check(),
+		]);
 		await page.goto(url);
 		await expect(page.locator('input[type=checkbox][name=comprehended]')).toBeChecked();
 
 		// Re-read clears status + comprehended.
-		const rereadResponse = page.waitForResponse((res) => res.request().method() === 'POST');
-		await page.locator('form.reread-form button[type="submit"]').click();
-		await rereadResponse;
+		await Promise.all([
+			page.waitForLoadState('networkidle'),
+			page.locator('form.reread-form button[type="submit"]').click(),
+		]);
 		await expect(page.locator('input[type=radio][name=status][value=unread]')).toBeChecked();
 		await expect(page.locator('input[type=checkbox][name=comprehended]')).not.toBeChecked();
 	});
@@ -211,24 +250,51 @@ test.describe('handbook reader: read-state controls', () => {
 		await page.goto(url);
 
 		const stamp = `e2e-note-${Date.now()}`;
-		await page.locator('textarea#handbook-notes-md').fill(stamp);
-		const saveResponse = page.waitForResponse((res) => res.request().method() === 'POST');
+		const textarea = page.locator('textarea#handbook-notes-md');
+		// Svelte 5's `bind:value` does not pick up Playwright's fast-fill on
+		// a textarea reliably. Issuing real keyboard input dispatches the
+		// `input` events Svelte's reactive binding listens for, so the form
+		// submit serializes the right `notesMd` payload. Click first to
+		// guarantee focus before the keystrokes flow.
+		await textarea.click();
+		await textarea.press('ControlOrMeta+A');
+		await page.keyboard.press('Delete');
+		await page.keyboard.type(stamp, { delay: 5 });
+		await expect(textarea).toHaveValue(stamp);
+
+		// Form is non-enhanced (no `use:enhance`), so submit POSTs to
+		// `?/set-notes` and the action's `{ ok: true }` return body lands as
+		// the page response. The DB write completes synchronously inside the
+		// action; we just need to wait for the POST to come back before
+		// re-navigating to verify persistence.
+		const postResponse = page.waitForResponse(
+			(res) => res.request().method() === 'POST' && res.url().includes('set-notes'),
+		);
 		await page.getByRole('button', { name: /save notes/i }).click();
-		await saveResponse;
+		await postResponse;
 
 		// Re-navigate (fresh load) to confirm the notes persisted to DB.
 		await page.goto(url);
 		await expect(page.locator('textarea#handbook-notes-md')).toHaveValue(stamp);
 
-		// Cleanup: empty the notes so the next run starts clean.
-		const cleanupResponse = page.waitForResponse((res) => res.request().method() === 'POST');
-		await page.locator('textarea#handbook-notes-md').fill('');
+		// Cleanup: empty the notes so subsequent runs start clean. Click +
+		// keyboard select-all + delete drives the same keyboard-input path
+		// that Svelte's bind:value listens on.
+		const ta = page.locator('textarea#handbook-notes-md');
+		await ta.click();
+		await ta.press('ControlOrMeta+A');
+		await page.keyboard.press('Delete');
+		await expect(ta).toHaveValue('');
+		const cleanupResponse = page.waitForResponse(
+			(res) => res.request().method() === 'POST' && res.url().includes('set-notes'),
+		);
 		await page.getByRole('button', { name: /save notes/i }).click();
 		await cleanupResponse;
 	});
 });
 
 test.describe('handbook reader: heartbeat + suggestion banner', () => {
+
 	test('suggestion banner appears once thresholds met; "Mark as read" flips status', async ({
 		page,
 	}) => {
@@ -249,13 +315,16 @@ test.describe('handbook reader: heartbeat + suggestion banner', () => {
 		// timer so the gate is open by the time the thresholds clear.
 		await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
 
-		await page.clock.runFor(HEARTBEAT_RUN_SECONDS * 1000);
+		await tickHeartbeatClock(page, HEARTBEAT_RUN_SECONDS);
 
 		const banner = page.locator('aside.read-suggestion');
 		await expect(banner).toBeVisible({ timeout: 5_000 });
 
-		// Click "Mark as read" -- form posts to ?/set-status.
-		await banner.getByRole('button', { name: /mark as read/i }).click();
+		// Click "Mark as read" -- form posts to ?/set-status (non-enhanced).
+		await Promise.all([
+			page.waitForLoadState('networkidle'),
+			banner.getByRole('button', { name: /mark as read/i }).click(),
+		]);
 		await expect(page.locator('input[type=radio][name=status][value=read]')).toBeChecked();
 		// Banner dismisses (status === 'read' -> shouldShowReadSuggestion returns
 		// false even before the next reload).
@@ -271,7 +340,7 @@ test.describe('handbook reader: heartbeat + suggestion banner', () => {
 		await page.clock.install({ time: new Date('2026-04-26T13:00:00Z') });
 		await page.goto(url);
 		await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-		await page.clock.runFor(HEARTBEAT_RUN_SECONDS * 1000);
+		await tickHeartbeatClock(page, HEARTBEAT_RUN_SECONDS);
 
 		const banner = page.locator('aside.read-suggestion');
 		await expect(banner).toBeVisible();
@@ -279,7 +348,7 @@ test.describe('handbook reader: heartbeat + suggestion banner', () => {
 		await expect(banner).toHaveCount(0);
 
 		// Tick further; banner stays dismissed for the rest of the session.
-		await page.clock.runFor(HEARTBEAT_RUN_SECONDS * 1000);
+		await tickHeartbeatClock(page, HEARTBEAT_RUN_SECONDS);
 		await expect(banner).toHaveCount(0);
 	});
 });

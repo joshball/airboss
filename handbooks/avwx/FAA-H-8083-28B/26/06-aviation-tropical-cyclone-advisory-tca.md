@@ -75,4 +75,4 @@ websites of the NHC, CPHC, WFO Guam, and WFOs along the Gulf Coast and the East 
 26.6 Aviation Tropical Cyclone Advisory (TCA) 
 The aviation TCA is intended to provide tropical cyclone forecast guidance, through 24 hours, for 
 international aviation safety and routing purposes. TCAs are issued by the WMO’s TCAC for all ongoing 
-tropical cyclone activity in the](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-6-00-vaa-in-graphical-format-26-6-aviation-tropical-c.png)
+tropical cyclone activity in the](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-6-1-00-vaa-in-graphical-format-26-6-aviation-tropical-c.png)

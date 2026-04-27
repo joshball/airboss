@@ -224,43 +224,43 @@ aircraft performance because of the high-density altitude.
 ![Figure 19-1. Convective Turbulence 
 When the air is too dry for cumuliform clouds to form, convective currents can still be active. This is called 
 dry convection, or thermals (see Figure 19-2). A pilot has little or no indication of their presence until 
-encountering the turbulence.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-19-00-convective-turbulence-when-the-air-is-too-dry-fo.png)
+encountering the turbulence.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-19-2-1-00-convective-turbulence-when-the-air-is-too-dry-fo.png)
 
 ![Figure 19-2. Thermals 
 19.2.1.1 Thunderstorms 
 Turbulence is present in all thunderstorms, and severe or extreme turbulence is common. A severe 
 thunderstorm can destroy an aircraft. Gust loads can be severe enough to stall an aircraft at maneuvering 
-speed or to cause structural damage at cruising speed. The strongest](/handbooks/avwx/FAA-H-8083-28B/figures/fig-19-01-thermals-19-2-1-1-thunderstorms-turbulence-is-pr.png)
+speed or to cause structural damage at cruising speed. The strongest](/handbooks/avwx/FAA-H-8083-28B/figures/fig-19-2-1-01-thermals-19-2-1-1-thunderstorms-turbulence-is-pr.png)
 
 ![Figure 19-3. Thunderstorm with Shelf Cloud 
 19.2.2 Mechanical Turbulence 
 Mechanical turbulence is turbulence caused by obstructions to the wind flow, such as trees, buildings, 
 mountains, and so on. Obstructions to the wind flow disrupt smooth wind flow into a complex snarl of 
-eddies (see Figure 19-4). An aircraft fl](/handbooks/avwx/FAA-H-8083-28B/figures/fig-19-02-thunderstorm-with-shelf-cloud-19-2-2-mechanical-.png)
+eddies (see Figure 19-4). An aircraft fl](/handbooks/avwx/FAA-H-8083-28B/figures/fig-19-2-2-00-thunderstorm-with-shelf-cloud-19-2-2-mechanical-.png)
 
 ![Figure 19-4. Mechanical Turbulence 
 The intensity of mechanical turbulence depends on wind speed, surface roughness, size of the obstructions, 
-and stability of the air. The higher the speed and/or the rougher the surface, the greater the turbulence.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-19-03-mechanical-turbulence-the-intensity-of-mechanica.png)
+and stability of the air. The higher the speed and/or the rougher the surface, the greater the turbulence.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-19-2-2-01-mechanical-turbulence-the-intensity-of-mechanica.png)
 
 ![Figure 19-5. Wind Shear Turbulence 
 19.2.3.1 Temperature Inversion 
 A temperature inversion is a layer of the atmosphere in which temperature increases with altitude. 
 Inversions commonly occur within the lowest few thousand feet above ground due to nighttime radiational 
-cooling, along frontal zones, and when cold air](/handbooks/avwx/FAA-H-8083-28B/figures/fig-19-04-wind-shear-turbulence-19-2-3-1-temperature-inver.png)
+cooling, along frontal zones, and when cold air](/handbooks/avwx/FAA-H-8083-28B/figures/fig-19-2-3-00-wind-shear-turbulence-19-2-3-1-temperature-inver.png)
 
 ![Figure 19-6. Wind Shear Turbulence Associated with a Temperature Inversion 
 19.2.3.2 Clear-Air Turbulence (CAT) 
 CAT is defined as sudden severe turbulence occurring in cloudless regions that causes violent buffeting of 
-aircraft. CAT is a higher altitude turbulence (normally above 15,000 ft) particularly between the c](/handbooks/avwx/FAA-H-8083-28B/figures/fig-19-05-wind-shear-turbulence-associated-with-a-temperat.png)
+aircraft. CAT is a higher altitude turbulence (normally above 15,000 ft) particularly between the c](/handbooks/avwx/FAA-H-8083-28B/figures/fig-19-2-3-01-wind-shear-turbulence-associated-with-a-temperat.png)
 
 ![Figure 19-7. Wind Shear Example 
 It is important to remember that wind shear can affect any flight at any altitude (e.g., at upper levels near 
 jet steams or near the ground due to convection). Wind shear can subject an aircraft to violent updrafts and 
-downdrafts, as well as abrupt changes to the horizontal movement o](/handbooks/avwx/FAA-H-8083-28B/figures/fig-19-06-wind-shear-example-it-is-important-to-remember-t.png)
+downdrafts, as well as abrupt changes to the horizontal movement o](/handbooks/avwx/FAA-H-8083-28B/figures/fig-19-2-4-00-wind-shear-example-it-is-important-to-remember-t.png)
 
 ![Figure 19-8. LLWS Example 
 19.2.4.2 Convective Wind Shear 
 See Section 22.7.3 for information on convective wind shear. 
 19.2.5 The Effects of Orographic Winds and Turbulence on Aviation Operations 
 19.2.5.1 High-Altitude Operations 
-Turbine-powered aircraft operating at cruise altitudes above FL180 in the vicinity of](/handbooks/avwx/FAA-H-8083-28B/figures/fig-19-07-llws-example-19-2-4-2-convective-wind-shear-see-.png)
+Turbine-powered aircraft operating at cruise altitudes above FL180 in the vicinity of](/handbooks/avwx/FAA-H-8083-28B/figures/fig-19-2-5-00-llws-example-19-2-4-2-convective-wind-shear-see-.png)

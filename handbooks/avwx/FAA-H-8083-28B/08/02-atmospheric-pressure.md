@@ -106,13 +106,13 @@ Figure 8-6. Reduction of Station Pressure to Sea Level
 8.2.1 Barometer 
 The instrument Torricelli designed to measure pressure was called a barometer. The aneroid barometer is 
 the type most commonly used by meteorologists and the aviation community. 
-Essential features of an aneroid barometer (see Figure 8-2) are a flexible metal cell and the r](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-2-00-air-has-weight-8-2-1-barometer-the-instrument-to.png)
+Essential features of an aneroid barometer (see Figure 8-2) are a flexible metal cell and the r](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-2-1-00-air-has-weight-8-2-1-barometer-the-instrument-to.png)
 
 ![Figure 8-2. Aneroid Barometer 
 8.2.2 Atmospheric Pressure Units 
 Atmospheric pressure is expressed in many ways throughout the world (see Table 8-1). Meteorologists 
 worldwide have long measured atmospheric pressure in millibars (mb or mbar), which denote pressure as 
-a force per square centimeter. However, after the i](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-2-01-aneroid-barometer-8-2-2-atmospheric-pressure-uni.png)
+a force per square centimeter. However, after the i](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-2-2-00-aneroid-barometer-8-2-2-atmospheric-pressure-uni.png)
 
 ![Figure 8-3. Station Pressure 
 The next few sections will examine some factors that influence pressure. 
@@ -120,17 +120,17 @@ The next few sections will examine some factors that influence pressure.
 Atmospheric pressure varies with altitude and the temperature of the air, as well as with other minor 
 influences, such as water vapor. 
 8.2.4.1 Pressure Changes with Altitude 
-As a person m](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-2-02-station-pressure-the-next-few-sections-will-exam.png)
+As a person m](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-2-4-00-station-pressure-the-next-few-sections-will-exam.png)
 
-![Figure 8-4. Air Pressure in the Standard Atmosphere](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-2-03-air-pressure-in-the-standard-atmosphere.png)
+![Figure 8-4. Air Pressure in the Standard Atmosphere](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-2-4-01-air-pressure-in-the-standard-atmosphere.png)
 
 ![Figure 8-5. Temperature’s Effect on Pressure 
 8.2.5 Sea Level Pressure 
 Since pressure varies greatly with altitude, people cannot readily compare station pressures between stations 
 at different altitudes. To make them comparable, they are adjusted to some common level. Mean sea level 
-(MSL) is the most useful common](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-2-04-temperature-s-effect-on-pressure-8-2-5-sea-level.png)
+(MSL) is the most useful common](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-2-5-00-temperature-s-effect-on-pressure-8-2-5-sea-level.png)
 
-![Figure 8-6. Reduction of Station Pressure to Sea Level](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-2-05-reduction-of-station-pressure-to-sea-level.png)
+![Figure 8-6. Reduction of Station Pressure to Sea Level](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-2-5-01-reduction-of-station-pressure-to-sea-level.png)
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-8-2-00-units-of-pressure-units-of-pressure-standard-atm.html">
 <table><caption>Table 8-1. Units of Pressure 

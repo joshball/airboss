@@ -35,4 +35,4 @@ exceed 1,000 J/kg and in extreme cases may exceed 5,000 J/kg.
 13.5.2 Convective Available Potential Energy (CAPE) 
 CAPE is the maximum amount of energy available to an ascending air parcel for convection. CAPE is 
 represented on a sounding by the area enclosed between the environmental temperature profile and the path 
-of a rising air parcel ove](/handbooks/avwx/FAA-H-8083-28B/figures/fig-13-5-2-00-lifted-index-example-13-5-2-convective-available.png)
+of a rising air parcel ove](/handbooks/avwx/FAA-H-8083-28B/figures/fig-13-5-1-00-lifted-index-example-13-5-2-convective-available.png)

@@ -31,10 +31,10 @@ air mass. This situation can occur along a warm front, where a warm air mass ove
 14.4.2 Ice Pellets 
 Ice pellets (sleet) occur when there is a shallow layer aloft with above-freezing temperatures and with a 
 deep layer of below-freezing air based at the surface. As snow falls into the shallow warm layer, the 
-snowflakes partially melt. As the precipitation](/handbooks/avwx/FAA-H-8083-28B/figures/fig-14-4-3-00-snow-temperature-environment-14-4-2-ice-pellets-.png)
+snowflakes partially melt. As the precipitation](/handbooks/avwx/FAA-H-8083-28B/figures/fig-14-4-2-00-snow-temperature-environment-14-4-2-ice-pellets-.png)
 
 ![Figure 14-3. Ice Pellets Temperature Environment 
 14.4.3 Freezing Rain 
 Freezing rain occurs when there is a deep layer aloft with above-freezing temperatures and with a shallow 
 layer of below-freezing air at the surface. Ordinarily, air temperatures decrease with increasing altitude, but 
-freezing rain requires a tem](/handbooks/avwx/FAA-H-8083-28B/figures/fig-14-4-3-01-ice-pellets-temperature-environment-14-4-3-freez.png)
+freezing rain requires a tem](/handbooks/avwx/FAA-H-8083-28B/figures/fig-14-4-2-01-ice-pellets-temperature-environment-14-4-3-freez.png)

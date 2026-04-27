@@ -43,4 +43,4 @@ water vapor (a gas).
 6.2.1 Evaporation 
 Evaporation is the phase transition by which a liquid is changed to a vapor (gas). In meteorology, the 
 substance meteorologists are concerned about the most is water, and the primary source is the ocean. On 
-average, about 120 cm (47 in) is evaporated into the atmos](/handbooks/avwx/FAA-H-8083-28B/figures/fig-6-2-3-00-the-hydrologic-cycle-6-2-1-evaporation-evaporati.png)
+average, about 120 cm (47 in) is evaporated into the atmos](/handbooks/avwx/FAA-H-8083-28B/figures/fig-6-2-1-00-the-hydrologic-cycle-6-2-1-evaporation-evaporati.png)

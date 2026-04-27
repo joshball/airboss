@@ -239,60 +239,60 @@ turbine blades and fuel injectors/igniters. With no air going into the engine, t
 comes to a slow spinning stop by spooling down, and a flameout occurs. As the aircraft exits the ash cloud
 and enters colder temperatures, the cooled, hardened silicas on the turbine blades become dislodged,
 
-![Figure 18-1. Radiation Fog Formation](/handbooks/avwx/FAA-H-8083-28B/figures/fig-18-1-00-radiation-fog-formation.png)
+![Figure 18-1. Radiation Fog Formation](/handbooks/avwx/FAA-H-8083-28B/figures/fig-18-1-1-00-radiation-fog-formation.png)
 
 ![Figure 18-2. Radiation Fog 
 Radiation fog is relatively shallow fog. It may be dense enough to hide the entire sky, or it may conceal 
 only part of the sky. Ground fog is a form of radiation fog that is confined to near ground level. 
-Factors favoring the formation of radiation fog are: 1) a shallow surface layer of re](/handbooks/avwx/FAA-H-8083-28B/figures/fig-18-1-01-radiation-fog-radiation-fog-is-relatively-shallo.png)
+Factors favoring the formation of radiation fog are: 1) a shallow surface layer of re](/handbooks/avwx/FAA-H-8083-28B/figures/fig-18-1-1-01-radiation-fog-radiation-fog-is-relatively-shallo.png)
 
 ![Figure 18-3. Mountain/Valley Fog Formation 
  
 Figure 18-4. Mountain/Valley Fog 
 18.1.1.1.2 Advection Fog 
 Advection fog (see Figure 18-5 and Figure 18-6) forms when moist air moves over a colder surface and the 
-subsequent cooling of that air to below its dewpoint. It is most common along coastal areas but often moves](/handbooks/avwx/FAA-H-8083-28B/figures/fig-18-1-02-mountain-valley-fog-formation-figure-18-4-mounta.png)
+subsequent cooling of that air to below its dewpoint. It is most common along coastal areas but often moves](/handbooks/avwx/FAA-H-8083-28B/figures/fig-18-1-1-02-mountain-valley-fog-formation-figure-18-4-mounta.png)
 
 ![Figure 18-4. Mountain/Valley Fog 
 18.1.1.1.2 Advection Fog 
 Advection fog (see Figure 18-5 and Figure 18-6) forms when moist air moves over a colder surface and the 
 subsequent cooling of that air to below its dewpoint. It is most common along coastal areas but often moves 
-deep into continental areas. At sea, it is ca](/handbooks/avwx/FAA-H-8083-28B/figures/fig-18-1-03-mountain-valley-fog-18-1-1-1-2-advection-fog-adv.png)
+deep into continental areas. At sea, it is ca](/handbooks/avwx/FAA-H-8083-28B/figures/fig-18-1-1-03-mountain-valley-fog-18-1-1-1-2-advection-fog-adv.png)
 
 ![Figure 18-5. Advection Fog Formation 
  
 Figure 18-6. Advection Fog 
 The West Coast of the United States is quite vulnerable to advection fog. This fog frequently forms offshore 
 as a result of cold water and then is carried inland by the wind. It can remain over the water for weeks, 
-advancing over the land during nigh](/handbooks/avwx/FAA-H-8083-28B/figures/fig-18-1-04-advection-fog-formation-figure-18-6-advection-fo.png)
+advancing over the land during nigh](/handbooks/avwx/FAA-H-8083-28B/figures/fig-18-1-1-04-advection-fog-formation-figure-18-6-advection-fo.png)
 
 ![Figure 18-6. Advection Fog 
 The West Coast of the United States is quite vulnerable to advection fog. This fog frequently forms offshore 
 as a result of cold water and then is carried inland by the wind. It can remain over the water for weeks, 
-advancing over the land during night and retreating back over the water the](/handbooks/avwx/FAA-H-8083-28B/figures/fig-18-1-05-advection-fog-the-west-coast-of-the-united-state.png)
+advancing over the land during night and retreating back over the water the](/handbooks/avwx/FAA-H-8083-28B/figures/fig-18-1-1-05-advection-fog-the-west-coast-of-the-united-state.png)
 
 ![Figure 18-7. Upslope Fog Formation 
 18.1.1.1.4 Frontal Fog 
 When warm, moist air is lifted over a front, clouds and precipitation may form. If the cold air below is near 
 its dewpoint, evaporation (or sublimation) from the precipitation may saturate the cold air and form fog 
-(see Figure 18-8). A fog formed in this man](/handbooks/avwx/FAA-H-8083-28B/figures/fig-18-1-06-upslope-fog-formation-18-1-1-1-4-frontal-fog-whe.png)
+(see Figure 18-8). A fog formed in this man](/handbooks/avwx/FAA-H-8083-28B/figures/fig-18-1-1-06-upslope-fog-formation-18-1-1-1-4-frontal-fog-whe.png)
 
 ![Figure 18-8. Frontal Fog Formation 
 18.1.1.1.5 Steam Fog 
 When very cold air moves across relatively warm water, enough moisture may evaporate from the water 
 surface to produce saturation. As the rising water vapor meets the cold air, it immediately recondenses and 
-rises with the air that is being warmed from below.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-18-1-07-frontal-fog-formation-18-1-1-1-5-steam-fog-when-.png)
+rises with the air that is being warmed from below.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-18-1-1-07-frontal-fog-formation-18-1-1-1-5-steam-fog-when-.png)
 
 ![Figure 18-9. Steam Fog Formation 
 18.1.1.1.6 Freezing Fog 
 Freezing fog occurs when the temperature falls to 32°F (0°C) or below. Tiny supercooled liquid water 
 droplets in fog can freeze instantly on exposed surfaces when surface temperatures are at or below freezing. 
-Surfaces that these droplets may freeze on includ](/handbooks/avwx/FAA-H-8083-28B/figures/fig-18-1-08-steam-fog-formation-18-1-1-1-6-freezing-fog-free.png)
+Surfaces that these droplets may freeze on includ](/handbooks/avwx/FAA-H-8083-28B/figures/fig-18-1-1-08-steam-fog-formation-18-1-1-1-6-freezing-fog-free.png)
 
-![Figure 18-10. Freezing Fog](/handbooks/avwx/FAA-H-8083-28B/figures/fig-18-1-09-freezing-fog.png)
+![Figure 18-10. Freezing Fog](/handbooks/avwx/FAA-H-8083-28B/figures/fig-18-1-1-09-freezing-fog.png)
 
 ![Figure 18-11. Haboob 
 18.1.9 Volcanic Ash 
 Volcanic ash is made up of fine particles of rock powder that originate from a volcano and that may remain 
 suspended in the atmosphere for long periods. Severe volcanic eruptions that send ash into the upper 
-atmosphere occur somewhere around the world several times per year.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-18-1-10-haboob-18-1-9-volcanic-ash-volcanic-ash-is-made-.png)
+atmosphere occur somewhere around the world several times per year.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-18-1-9-00-haboob-18-1-9-volcanic-ash-volcanic-ash-is-made-.png)

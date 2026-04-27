@@ -99,19 +99,19 @@ Stability.
 ![Figure 12-4. Orographic Effects Example 
 The air parcel begins with a temperature of 15°C, dewpoint of 10°C, and a relative humidity of 80 percent 
 at 2,000 ft. As the parcel is lifted on the windward slope, the temperature cools at the dry adiabatic lapse 
-rate of 3°C per 1,000 ft, and the dewpoint cools at a rate of](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-4-00-orographic-effects-example-the-air-parcel-begins.png)
+rate of 3°C per 1,000 ft, and the dewpoint cools at a rate of](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-4-2-00-orographic-effects-example-the-air-parcel-begins.png)
 
 ![Figure 12-5. Frictional Effects 
 12.4.3 Frontal Lift 
 Frontal lift (see Figure 12-6) occurs when the cold, denser air wedges under the warm, less dense air, 
 plowing it upward, and/or the warmer air rides up and over the colder air in a process called overrunning. 
-Clouds and precipitation will form given sufficient li](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-4-01-frictional-effects-12-4-3-frontal-lift-frontal-l.png)
+Clouds and precipitation will form given sufficient li](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-4-3-00-frictional-effects-12-4-3-frontal-lift-frontal-l.png)
 
 ![Figure 12-6. Frontal Lift 
 12.4.4 Buoyancy 
 Air near the ground can warm at different rates depending on the insular properties of the ground with 
 which it is in contact. A newly plowed field will warm faster than an adjacent lake. These temperature 
-differences result in different densities, allowing the warm air to](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-4-02-frontal-lift-12-4-4-buoyancy-air-near-the-ground.png)
+differences result in different densities, allowing the warm air to](/handbooks/avwx/FAA-H-8083-28B/figures/fig-12-4-3-01-frontal-lift-12-4-4-buoyancy-air-near-the-ground.png)
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-12-4-00-air-parcel-vertical-motion-characteristics-parce.html">
 <table><caption>Table 12-1. Air Parcel Vertical Motion Characteristics 

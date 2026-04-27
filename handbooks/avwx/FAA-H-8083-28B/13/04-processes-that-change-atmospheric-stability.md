@@ -85,7 +85,7 @@ lapse rates decrease, then st](/handbooks/avwx/FAA-H-8083-28B/figures/fig-13-4-0
 
 ![Figure 13-7. Vertical Motion Effects on Stability 
 A rising column of air will become less stable when air at the bottom has a higher relative humidity than 
-air at the top. As the air moves upward, the bottom becomes saturated first and cools at the lesser moist](/handbooks/avwx/FAA-H-8083-28B/figures/fig-13-4-01-vertical-motion-effects-on-stability-a-rising-co.png)
+air at the top. As the air moves upward, the bottom becomes saturated first and cools at the lesser moist](/handbooks/avwx/FAA-H-8083-28B/figures/fig-13-4-1-00-vertical-motion-effects-on-stability-a-rising-co.png)
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-13-4-00-untitled.html">
 <table><thead><tr><th></th><th>Temperature</th><th></th><th></th><th>Unsaturated</th><th></th><th></th><th>Saturated</th><th></th><th>Stability Type</th><th></th></tr></thead><tbody><tr><td></td><td>Sounding</td><td></td><td></td><td>Parcel</td><td></td><td></td><td>Parcel</td><td></td><td></td><td></td></tr><tr><td>A Unstable Unstable Absolute Instability</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>B</td><td></td><td></td><td>Neutral</td><td></td><td></td><td>Unstable</td><td></td><td></td><td></td><td></td></tr><tr><td>C</td><td></td><td></td><td>Stable</td><td></td><td></td><td>Unstable</td><td></td><td></td><td>Conditional Instability</td><td></td></tr><tr><td>D</td><td></td><td></td><td>Stable</td><td></td><td></td><td>Neutral</td><td></td><td></td><td></td><td></td></tr><tr><td>E</td><td></td><td></td><td>Stable</td><td></td><td></td><td>Stable</td><td></td><td></td><td>Lapse</td><td>Absolute

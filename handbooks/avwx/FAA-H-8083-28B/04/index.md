@@ -202,9 +202,9 @@ Figure 4-2. U.S. Standard Atmosphere Within the Troposphere
 4.4 The Standard Atmosphere 
 Continuous fluctuations of atmospheric properties create problems for engineers and meteorologists who 
 need a fixed standard for reference. To solve this problem, they defined a standard atmosphere that 
-represents an average of conditions](/handbooks/avwx/FAA-H-8083-28B/figures/fig-4-00-vertical-structure-of-the-atmosphere-4-4-the-sta.png)
+represents an average of conditions](/handbooks/avwx/FAA-H-8083-28B/figures/fig-4-4-00-vertical-structure-of-the-atmosphere-4-4-the-sta.png)
 
-![Figure 4-2. U.S. Standard Atmosphere Within the Troposphere](/handbooks/avwx/FAA-H-8083-28B/figures/fig-4-01-u-s-standard-atmosphere-within-the-troposphere.png)
+![Figure 4-2. U.S. Standard Atmosphere Within the Troposphere](/handbooks/avwx/FAA-H-8083-28B/figures/fig-4-4-01-u-s-standard-atmosphere-within-the-troposphere.png)
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-4-00-approximations-of-the-composition-of-a-dry-earth.html">
 <table><caption>Table 4-1. Approximations of the Composition of a Dry Earth’s Atmosphere 

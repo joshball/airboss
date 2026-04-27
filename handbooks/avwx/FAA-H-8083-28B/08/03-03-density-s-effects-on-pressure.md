@@ -32,4 +32,4 @@ In general, the density of an air parcel can be changed by changing its mass, pr
 Boyle’s law says that the density of an ideal gas (ρ, the Greek letter rho) is given by: 
 𝜌= 𝑀𝑃
 𝑅𝑇 
-Where M is the molar mass, P is the pressure, R](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-3-3-00-volume-s-effects-on-density-8-3-2-changes-in-den.png)
+Where M is the molar mass, P is the pressure, R](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-3-2-00-volume-s-effects-on-density-8-3-2-changes-in-den.png)

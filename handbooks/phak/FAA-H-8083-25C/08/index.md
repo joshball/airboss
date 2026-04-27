@@ -126,7 +126,7 @@ state of an airplane is the balance between airspeed, altitude,
 drag, and thrust and represents how efficiently the airfoil is 
 operating.
 Compass Systems
-The Earth is a huge magnet, spinni](/handbooks/phak/FAA-H-8083-25C/figures/fig-8-07-angle-of-attack-indicators-n-s-e-w-figure-8-32-a.png)
+The Earth is a huge magnet, spinni](/handbooks/phak/FAA-H-8083-25C/figures/fig-5-11-a-variety-of-aoa-indicators-of-the-airfoil-this-.png)
 
 ![Figure 8-32. A magnetic compass. The vertical line is called the 
 lubber line.

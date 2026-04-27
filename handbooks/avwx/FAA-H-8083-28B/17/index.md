@@ -410,48 +410,48 @@ highs shift southward during the Northern Hemisphere winter and northward during
 shift, the height and strength of the inversion, and terrain features determine the weather in the subtropical 
 high-pressure belts. 
  
-In the warm Northern Hemisphere, warm land areas te](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-00-the-subtropical-highs-shift-southward-during-the.png)
+In the warm Northern Hemisphere, warm land areas te](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-2-1-00-the-subtropical-highs-shift-southward-during-the.png)
 
 ![Figure 17-1. Mean Worldwide Surface Pressure Distribution and Prevailing Winds Throughout the World in July](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-01-mean-worldwide-surface-pressure-distribution-and.png)
 
 ![Figure 17-2. Mean Worldwide Surface Pressure Distribution and Prevailing Winds Throughout the World in January 
 17.2.1.1 Continental Weather 
 Along the west coasts of continents under a subtropical high, the air is stable. The inversion is strongest 
-and lowest where the east side of the subtropical high-pressure area](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-02-mean-worldwide-surface-pressure-distribution-and.png)
+and lowest where the east side of the subtropical high-pressure area](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-2-1-01-mean-worldwide-surface-pressure-distribution-and.png)
 
 ![Figure 17-3. A Shear Line and an Induced Trough Caused by a Polar High Pushing into the Subtropics 
 A shear line, also shown in Figure 17-3, results when a semipermanent high splits into two cells, inducing 
 a trough. These shear lines are zones of convergence creating forced upward motion. Consequently, 
-considerable](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-03-a-shear-line-and-an-induced-trough-caused-by-a-p.png)
+considerable](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-3-1-00-a-shear-line-and-an-induced-trough-caused-by-a-p.png)
 
 ![Figure 17-4. A TUTT Moves Eastward Across the Hawaiian Islands 
 17.3.3 Tropical Wave 
 Tropical waves (also called easterly waves) are common tropical weather disturbances, normally occurring 
 in the trade wind belt. In the Northern Hemisphere, they usually develop in the southeastern perimeter of 
-subtropical high-pres](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-04-a-tutt-moves-eastward-across-the-hawaiian-island.png)
+subtropical high-pres](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-3-3-00-a-tutt-moves-eastward-across-the-hawaiian-island.png)
 
 ![Figure 17-5. A Northern Hemisphere Easterly Wave Progressing from A–B 
  
 Figure 17-6. Vertical Cross-Section Along Line A–B in Figure 17-5 
 17.3.4 West African Disturbance Line (WADL) 
 On occasion, a line of convection similar to a squall line moves westward off the continent at tropical 
-latitudes into the oceanic tra](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-05-a-northern-hemisphere-easterly-wave-progressing-.png)
+latitudes into the oceanic tra](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-3-4-00-a-northern-hemisphere-easterly-wave-progressing-.png)
 
 ![Figure 17-6. Vertical Cross-Section Along Line A–B in Figure 17-5 
 17.3.4 West African Disturbance Line (WADL) 
 On occasion, a line of convection similar to a squall line moves westward off the continent at tropical 
-latitudes into the oceanic trade winds. In the North Atlantic, this is known as the West African Distur](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-06-vertical-cross-section-along-line-a-b-in-figure-.png)
+latitudes into the oceanic trade winds. In the North Atlantic, this is known as the West African Distur](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-3-4-01-vertical-cross-section-along-line-a-b-in-figure-.png)
 
 ![Figure 17-7. The Tracks of Nearly 150 Years of Tropical Cyclones and Their Strength Weave Across the Globe 
 17.3.5.2 Movement 
 Tropical cyclones in the Northern Hemisphere usually move in a direction between west and northwest 
-while in low latitudes. As these storms move toward the mid-latitudes, they come under the i](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-07-the-tracks-of-nearly-150-years-of-tropical-cyclo.png)
+while in low latitudes. As these storms move toward the mid-latitudes, they come under the i](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-3-5-00-the-tracks-of-nearly-150-years-of-tropical-cyclo.png)
 
 ![Figure 17-8. Radar Image of Hurricane Katrina Observed at New Orleans, Louisiana, on August 29, 2005 
  
-Figure 17-9. Hurricane Andrew Observed by Satellite in 1992](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-08-radar-image-of-hurricane-katrina-observed-at-new.png)
+Figure 17-9. Hurricane Andrew Observed by Satellite in 1992](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-3-5-01-radar-image-of-hurricane-katrina-observed-at-new.png)
 
-![Figure 17-9. Hurricane Andrew Observed by Satellite in 1992](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-09-hurricane-andrew-observed-by-satellite-in-1992.png)
+![Figure 17-9. Hurricane Andrew Observed by Satellite in 1992](/handbooks/avwx/FAA-H-8083-28B/figures/fig-17-3-5-02-hurricane-andrew-observed-by-satellite-in-1992.png)
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-17-00-wind-speed-and-characteristic-house-damage-for-t.html">
 <table><caption>Table 17-1. Wind Speed and Characteristic House Damage for the Saffir-Simpson Hurricane Wind Scale 

@@ -42,4 +42,4 @@ in the polar cell are easterly (polar easterlies).
 9.3 Rotating Earth Circulation System 
 However, since the Earth rotates, the axis is tilted, and there is more land mass in the Northern Hemisphere 
 than in the Southern Hemisphere, the actual global pattern is much more complicated. 
-Instead of](/handbooks/avwx/FAA-H-8083-28B/figures/fig-9-3-00-non-rotating-non-tilted-waterless-earth-circulat.png)
+Instead of](/handbooks/avwx/FAA-H-8083-28B/figures/fig-9-2-00-non-rotating-non-tilted-waterless-earth-circulat.png)

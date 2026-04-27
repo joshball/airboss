@@ -110,21 +110,21 @@ Figure 24-24. Water Vapor Satellite Image—U.S. Example
 24.7.2.2 Visible Imagery 
 Visible imagery (see Figure 24-18) displays reflected sunlight from the Earth’s surface, clouds, and 
 particulate matter in the atmosphere. Visible satellite images, which look like black and white photographs, 
-are derived from the satellit](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-7-00-geocolor-satellite-image-u-s-example-24-7-2-2-vi.png)
+are derived from the satellit](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-7-2-00-geocolor-satellite-image-u-s-example-24-7-2-2-vi.png)
 
 ![Figure 24-18. Visible Satellite Image—U.S. Example 
 24.7.2.2.1 Visible Image Data Legend 
 The data legend on a visible image displays albedo, or reflectance, expressed as a percentage (see Figure 
 24-19). For example, an albedo of 72 means 72 percent of the sunlight that struck a feature was reflected 
-back to space.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-7-01-visible-satellite-image-u-s-example-24-7-2-2-1-v.png)
+back to space.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-7-2-01-visible-satellite-image-u-s-example-24-7-2-2-1-v.png)
 
-![Figure 24-20. Infrared (Color) Satellite Image—U.S. Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-7-02-infrared-color-satellite-image-u-s-example.png)
+![Figure 24-20. Infrared (Color) Satellite Image—U.S. Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-7-2-02-infrared-color-satellite-image-u-s-example.png)
 
 ![Figure 24-21. Unenhanced Infrared (Black and White) Satellite Image—U.S. Example 
 24.7.2.3.1 Infrared Image Data Legends 
 The data legend on an IR image is calibrated to temperature expressed in degrees Celsius (see Figure 24-22 
 and Figure 24-23). The legend may vary based on the satellite image provider. 
  
-The color](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-7-03-unenhanced-infrared-black-and-white-satellite-im.png)
+The color](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-7-2-03-unenhanced-infrared-black-and-white-satellite-im.png)
 
-![Figure 24-24. Water Vapor Satellite Image—U.S. Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-7-04-water-vapor-satellite-image-u-s-example.png)
+![Figure 24-24. Water Vapor Satellite Image—U.S. Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-24-7-2-04-water-vapor-satellite-image-u-s-example.png)

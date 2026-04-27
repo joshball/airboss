@@ -362,47 +362,47 @@ occur within it. Turbulence will be discussed at length in Chapter 19, Turbulenc
 
 Figure 5-9. Sounding with a Temperature Inversion
 
-![Figure 5-1. Comparison of Kelvin, Celsius, and Fahrenheit Temperature Scales](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-00-comparison-of-kelvin-celsius-and-fahrenheit-temp.png)
+![Figure 5-1. Comparison of Kelvin, Celsius, and Fahrenheit Temperature Scales](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-5-2-00-comparison-of-kelvin-celsius-and-fahrenheit-temp.png)
 
 ![Figure 5-2. Radiation Example 
 All objects emit (radiate) energy as the heat energy within the object is converted to radiation energy. This 
 transmitted radiation passes through entities such as air, water, or space. Along the way, the radiation can 
-be reflected, which occurs when the wave energy changes direction wh](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-01-radiation-example-all-objects-emit-radiate-energ.png)
+be reflected, which occurs when the wave energy changes direction wh](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-6-1-00-radiation-example-all-objects-emit-radiate-energ.png)
 
 ![Figure 5-3. Temperature’s Effect on Radiation Wavelength 
 Some of the solar radiation that reaches the Earth’s surface is radiated back into the atmosphere to become 
 heat energy. Dark-colored objects such as asphalt absorb more of the radiant energy and warm faster than 
-light-colored objects. Dark objects also radiat](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-02-temperature-s-effect-on-radiation-wavelength-som.png)
+light-colored objects. Dark objects also radiat](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-6-1-01-temperature-s-effect-on-radiation-wavelength-som.png)
 
 ![Figure 5-4. Solar Zenith Angle 
 5.6.2 Conduction 
 Conduction is the transfer of energy (including heat) by molecular activity from one substance to another 
 in contact with or through a substance. Heat always flows from the warmer substance to the colder 
-substance. The rate of heat transfer is greater with larger temp](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-03-solar-zenith-angle-5-6-2-conduction-conduction-i.png)
+substance. The rate of heat transfer is greater with larger temp](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-6-2-00-solar-zenith-angle-5-6-2-conduction-conduction-i.png)
 
 ![Figure 5-5. Heat Transfer Examples1 
 5.7 Thermal Response 
 Whether by radiation, conduction, convection, or a combination of these, the temperature response to the 
 input (or output) of some specified quantity of heat varies from one substance to another. Specific heat is 
-defined as the measure of heat energy required](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-04-heat-transfer-examples1-5-7-thermal-response-whe.png)
+defined as the measure of heat energy required](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-7-00-heat-transfer-examples1-5-7-thermal-response-whe.png)
 
 ![Figure 5-6. Specific Heat Capacity: Water versus Sand 
 The difference in the specific heat of various materials is one of the primary reasons why the temperature 
 of a body of water, such as a lake or the ocean, is less variable with time than the surface temperature of 
-land. Water heats up more slowly than land durin](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-05-specific-heat-capacity-water-versus-sand-the-dif.png)
+land. Water heats up more slowly than land durin](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-7-01-specific-heat-capacity-water-versus-sand-the-dif.png)
 
 ![Figure 5-7. Variation of Mean Daily Temperatures for San Francisco (Maritime) and St. Louis (Continental) 
 5.8 Temperature Variations with Altitude 
 A lapse rate of temperature is defined as a decrease in temperature with height. In Figure 4-2, it was stated 
-that the temperature decreases 6.5 °C/km (3.57 °F/1,000 ft)](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-06-variation-of-mean-daily-temperatures-for-san-fra.png)
+that the temperature decreases 6.5 °C/km (3.57 °F/1,000 ft)](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-8-1-00-variation-of-mean-daily-temperatures-for-san-fra.png)
 
 ![Figure 5-8. Sounding with an Isothermal Layer 
 5.8.3 Temperature Inversion 
 A temperature inversion, or simply inversion, is a layer in which the temperature increases with altitude. If 
 the base of the inversion is at the surface, it is termed a surface-based inversion. If the base of the inversion 
-is not at the surf](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-07-sounding-with-an-isothermal-layer-5-8-3-temperat.png)
+is not at the surf](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-8-3-00-sounding-with-an-isothermal-layer-5-8-3-temperat.png)
 
-![Figure 5-9. Sounding with a Temperature Inversion](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-08-sounding-with-a-temperature-inversion.png)
+![Figure 5-9. Sounding with a Temperature Inversion](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-8-3-01-sounding-with-a-temperature-inversion.png)
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-5-00-celsius-temperature-conversion-formulae-from-cel.html">
 <table><caption>Table 5-1. Celsius Temperature Conversion Formulae 

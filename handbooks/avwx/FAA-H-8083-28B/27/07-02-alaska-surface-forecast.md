@@ -37,4 +37,4 @@ depicted with the minimum sea level pressure. The mean 12-hour motion of low-pre
 27.7.2 Alaska Surface Forecast 
 The Surface Forecast graphic (see Figure 27-5) illustrates prominent surface features, including sea level 
 pressure, areas of high and low pressure, fronts and troughs, and precipitation. Each forecast shows the 
-surface weather that can be ex](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-7-2-00-alaska-flying-weather-example-27-7-2-alaska-surf.png)
+surface weather that can be ex](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-7-1-00-alaska-flying-weather-example-27-7-2-alaska-surf.png)

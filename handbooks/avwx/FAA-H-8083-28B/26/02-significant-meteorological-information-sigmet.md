@@ -401,9 +401,9 @@ north, 63°/00 minutes west to 16°/50 minutes north, 63°/00 minutes west to 17
 
 ![Figure 26-1. AWC SIGMET Areas of Responsibility—CONUS 
  
-Figure 26-2. AWC SIGMET Areas of Responsibility—Atlantic Basin](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-2-00-awc-sigmet-areas-of-responsibility-conus-figure-.png)
+Figure 26-2. AWC SIGMET Areas of Responsibility—Atlantic Basin](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-2-1-00-awc-sigmet-areas-of-responsibility-conus-figure-.png)
 
-![Figure 26-2. AWC SIGMET Areas of Responsibility—Atlantic Basin](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-2-01-awc-sigmet-areas-of-responsibility-atlantic-basi.png)
+![Figure 26-2. AWC SIGMET Areas of Responsibility—Atlantic Basin](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-2-1-01-awc-sigmet-areas-of-responsibility-atlantic-basi.png)
 
 ![Figure 26-3. SIGMET Areas of Responsibility—Pacific Basin 
 26.2.2 SIGMET Identification 
@@ -412,13 +412,13 @@ U.S. SIGMETs (other than Convective SIGMETs) are assigned a series identifier:
 AWC for the CONUS: 
 o NOVEMBER, OSCAR, PAPA, QUEBEC, ROMEO, UNIFORM, VICTOR, WHISKEY, 
 XRAY, and YANKEE. Note that SIERRA and TANGO are excluded. 
-•](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-2-02-sigmet-areas-of-responsibility-pacific-basin-26-.png)
+•](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-2-2-00-sigmet-areas-of-responsibility-pacific-basin-26-.png)
 
-![Figure 26-5. AWC Convective SIGMET Areas of Responsibility](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-2-03-awc-convective-sigmet-areas-of-responsibility.png)
+![Figure 26-5. AWC Convective SIGMET Areas of Responsibility](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-2-4-00-awc-convective-sigmet-areas-of-responsibility.png)
 
-![Figure 26-6. Convective SIGMET—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-2-04-convective-sigmet-example.png)
+![Figure 26-6. Convective SIGMET—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-2-4-01-convective-sigmet-example.png)
 
-![Figure 26-7. SIGMET Outside the CONUS—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-2-05-sigmet-outside-the-conus-example.png)
+![Figure 26-7. SIGMET Outside the CONUS—Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-26-2-5-00-sigmet-outside-the-conus-example.png)
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-26-2-00-decoding-a-non-convective-sigmet-for-the-conus-l.html">
 <table><caption>Table 26-1. Decoding a Non-Convective SIGMET for the CONUS 

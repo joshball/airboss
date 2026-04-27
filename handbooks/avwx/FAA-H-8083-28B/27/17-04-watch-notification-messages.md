@@ -187,7 +187,7 @@ text of the message will specify the number and area of the cancelled watch.
 27.17.4 Watch Notification Messages 
 The NWS SPC issues severe weather Watch Notification Messages to provide an area threat alert for the 
 aviation meteorology community to forecast organized severe thunderstorms that may produce tornadoes, 
-large hail, and/or convective damaging winds with](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-17-4-00-ecfp-example-27-17-4-watch-notification-messages.png)
+large hail, and/or convective damaging winds with](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-17-3-00-ecfp-example-27-17-4-watch-notification-messages.png)
 
 ![Figure 27-32. Aviation Watch (polygon) Compared to Public Watch (shaded) Example 
 The SPC will issue the SAW after the proposed convective watch area has been collaborated with the 

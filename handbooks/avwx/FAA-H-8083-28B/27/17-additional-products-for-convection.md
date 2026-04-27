@@ -258,20 +258,20 @@ text of the message will specify the number and area of the cancelled watch.
  
 Figure 27-29. Categorical Outlook Legend for Days 1-3 Convective Outlook Graphic Example 
 27.17.2 Traffic Flow Management (TFM) Convective Forecast (TCF) 
-The TCF is a high-confidence graphical representation of forecasted convection meeting specific](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-17-00-day-1-categorical-convective-outlook-graphic-exa.png)
+The TCF is a high-confidence graphical representation of forecasted convection meeting specific](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-17-2-00-day-1-categorical-convective-outlook-graphic-exa.png)
 
-![Figure 27-30. TCF Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-17-01-tcf-example.png)
+![Figure 27-30. TCF Example](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-17-2-01-tcf-example.png)
 
 ![Figure 27-31. ECFP Example 
 27.17.4 Watch Notification Messages 
 The NWS SPC issues severe weather Watch Notification Messages to provide an area threat alert for the 
 aviation meteorology community to forecast organized severe thunderstorms that may produce tornadoes, 
-large hail, and/or convective damaging winds with](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-17-02-ecfp-example-27-17-4-watch-notification-messages.png)
+large hail, and/or convective damaging winds with](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-17-3-00-ecfp-example-27-17-4-watch-notification-messages.png)
 
 ![Figure 27-32. Aviation Watch (polygon) Compared to Public Watch (shaded) Example 
 The SPC will issue the SAW after the proposed convective watch area has been collaborated with the 
 impacted NWS WFOs defining the approximate areal outline of the watch. 
-SAWs are nonscheduled, event-driven products valid from the time o](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-17-03-aviation-watch-polygon-compared-to-public-watch-.png)
+SAWs are nonscheduled, event-driven products valid from the time o](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-17-4-01-aviation-watch-polygon-compared-to-public-watch-.png)
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-27-17-00-decoding-an-aviation-weather-watch-notification-.html">
 <table><caption>Table 27-15. Decoding an Aviation Weather Watch Notification Message 

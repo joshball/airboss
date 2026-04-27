@@ -38,4 +38,4 @@ wings and fuselage to accumulate additional ice.
 ![Figure 20-2. Icing with Mountains 
 The most severe icing occurs above the crests and on the ridges’ windward side. This zone usually extends 
 to about 5,000 ft above the mountaintops but can extend much higher if cumuliform clouds develop. 
-Icing with mountains can be especially hazardous because a pilot may be unable](/handbooks/avwx/FAA-H-8083-28B/figures/fig-20-3-9-00-icing-with-mountains-the-most-severe-icing-occur.png)
+Icing with mountains can be especially hazardous because a pilot may be unable](/handbooks/avwx/FAA-H-8083-28B/figures/fig-20-3-10-00-icing-with-mountains-the-most-severe-icing-occur.png)

@@ -68,20 +68,20 @@ Figure 13-5 summarizes the possible atmospheric stability types.
 13.3.2 Neutral Stability 
 Neutral stability (see Figure 13-2) is the state of a column of air in the atmosphere in which an ascending 
 (or descending) air parcel always has the same temperature (density) as the surrounding environmental air. 
-If the column of air is unsaturated,](/handbooks/avwx/FAA-H-8083-28B/figures/fig-13-3-00-absolute-stability-example-13-3-2-neutral-stabil.png)
+If the column of air is unsaturated,](/handbooks/avwx/FAA-H-8083-28B/figures/fig-13-3-2-00-absolute-stability-example-13-3-2-neutral-stabil.png)
 
 ![Figure 13-2. Neutral Stability Example 
 13.3.3 Absolute Instability 
 Absolute instability (see Figure 13-3) is the state of a column of air in the atmosphere when it has a 
 superadiabatic lapse rate of temperature (i.e., greater than the dry adiabatic lapse rate). An air parcel 
-displaced vertically would be accelerate](/handbooks/avwx/FAA-H-8083-28B/figures/fig-13-3-01-neutral-stability-example-13-3-3-absolute-instab.png)
+displaced vertically would be accelerate](/handbooks/avwx/FAA-H-8083-28B/figures/fig-13-3-3-00-neutral-stability-example-13-3-3-absolute-instab.png)
 
 ![Figure 13-3. Absolute Instability Example 
 13.3.4 Conditional Instability 
 Conditional instability (see Figure 13-4) is the state of a column of unsaturated air in the atmosphere when 
 its lapse rate of temperature is less than the dry adiabatic lapse rate but greater than the moist adiabatic 
-lapse rate. An air parcel](/handbooks/avwx/FAA-H-8083-28B/figures/fig-13-3-02-absolute-instability-example-13-3-4-conditional-.png)
+lapse rate. An air parcel](/handbooks/avwx/FAA-H-8083-28B/figures/fig-13-3-4-00-absolute-instability-example-13-3-4-conditional-.png)
 
 ![Figure 13-4. Conditional Instability Example 
 13.3.5 Summary of Stability Types 
-Figure 13-5 summarizes the possible atmospheric stability types.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-13-3-03-conditional-instability-example-13-3-5-summary-o.png)
+Figure 13-5 summarizes the possible atmospheric stability types.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-13-3-5-00-conditional-instability-example-13-3-5-summary-o.png)

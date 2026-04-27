@@ -45,12 +45,12 @@ Figure 5-9. Sounding with a Temperature Inversion
 ![Figure 5-7. Variation of Mean Daily Temperatures for San Francisco (Maritime) and St. Louis (Continental) 
 5.8 Temperature Variations with Altitude 
 A lapse rate of temperature is defined as a decrease in temperature with height. In Figure 4-2, it was stated 
-that the temperature decreases 6.5 °C/km (3.57 °F/1,000 ft)](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-8-00-variation-of-mean-daily-temperatures-for-san-fra.png)
+that the temperature decreases 6.5 °C/km (3.57 °F/1,000 ft)](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-8-1-00-variation-of-mean-daily-temperatures-for-san-fra.png)
 
 ![Figure 5-8. Sounding with an Isothermal Layer 
 5.8.3 Temperature Inversion 
 A temperature inversion, or simply inversion, is a layer in which the temperature increases with altitude. If 
 the base of the inversion is at the surface, it is termed a surface-based inversion. If the base of the inversion 
-is not at the surf](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-8-01-sounding-with-an-isothermal-layer-5-8-3-temperat.png)
+is not at the surf](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-8-3-00-sounding-with-an-isothermal-layer-5-8-3-temperat.png)
 
-![Figure 5-9. Sounding with a Temperature Inversion](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-8-02-sounding-with-a-temperature-inversion.png)
+![Figure 5-9. Sounding with a Temperature Inversion](/handbooks/avwx/FAA-H-8083-28B/figures/fig-5-8-3-01-sounding-with-a-temperature-inversion.png)

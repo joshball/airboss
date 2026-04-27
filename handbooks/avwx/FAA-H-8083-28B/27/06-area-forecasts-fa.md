@@ -137,7 +137,7 @@ Eastern Gulf Coast
 4 
 Koyukuk and Upper Kobuk Valley 
 17 
-Copper](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-6-00-aawu-flight-advisory-and-fa-zones-alaska-table-2.png)
+Copper](/handbooks/avwx/FAA-H-8083-28B/figures/fig-27-6-4-00-aawu-flight-advisory-and-fa-zones-alaska-table-2.png)
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-27-6-00-fa-issuance-schedule-alaska-utc-1st-issuance-041.html">
 <table><caption>Table 27-8. FA Issuance Schedule 

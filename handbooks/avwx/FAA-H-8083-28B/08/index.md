@@ -274,13 +274,13 @@ from the altimeter, obtain the OAT, and then use a flight computer to compute de
 8.2.1 Barometer 
 The instrument Torricelli designed to measure pressure was called a barometer. The aneroid barometer is 
 the type most commonly used by meteorologists and the aviation community. 
-Essential features of an aneroid barometer (see Figure 8-2) are a flexible metal cell and the r](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-00-air-has-weight-8-2-1-barometer-the-instrument-to.png)
+Essential features of an aneroid barometer (see Figure 8-2) are a flexible metal cell and the r](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-2-1-00-air-has-weight-8-2-1-barometer-the-instrument-to.png)
 
 ![Figure 8-2. Aneroid Barometer 
 8.2.2 Atmospheric Pressure Units 
 Atmospheric pressure is expressed in many ways throughout the world (see Table 8-1). Meteorologists 
 worldwide have long measured atmospheric pressure in millibars (mb or mbar), which denote pressure as 
-a force per square centimeter. However, after the i](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-01-aneroid-barometer-8-2-2-atmospheric-pressure-uni.png)
+a force per square centimeter. However, after the i](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-2-2-00-aneroid-barometer-8-2-2-atmospheric-pressure-uni.png)
 
 ![Figure 8-3. Station Pressure 
 The next few sections will examine some factors that influence pressure. 
@@ -288,23 +288,23 @@ The next few sections will examine some factors that influence pressure.
 Atmospheric pressure varies with altitude and the temperature of the air, as well as with other minor 
 influences, such as water vapor. 
 8.2.4.1 Pressure Changes with Altitude 
-As a person m](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-02-station-pressure-the-next-few-sections-will-exam.png)
+As a person m](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-2-4-00-station-pressure-the-next-few-sections-will-exam.png)
 
-![Figure 8-4. Air Pressure in the Standard Atmosphere](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-03-air-pressure-in-the-standard-atmosphere.png)
+![Figure 8-4. Air Pressure in the Standard Atmosphere](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-2-4-01-air-pressure-in-the-standard-atmosphere.png)
 
 ![Figure 8-5. Temperature’s Effect on Pressure 
 8.2.5 Sea Level Pressure 
 Since pressure varies greatly with altitude, people cannot readily compare station pressures between stations 
 at different altitudes. To make them comparable, they are adjusted to some common level. Mean sea level 
-(MSL) is the most useful common](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-04-temperature-s-effect-on-pressure-8-2-5-sea-level.png)
+(MSL) is the most useful common](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-2-5-00-temperature-s-effect-on-pressure-8-2-5-sea-level.png)
 
-![Figure 8-6. Reduction of Station Pressure to Sea Level](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-05-reduction-of-station-pressure-to-sea-level.png)
+![Figure 8-6. Reduction of Station Pressure to Sea Level](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-2-5-01-reduction-of-station-pressure-to-sea-level.png)
 
 ![Figure 8-7. Density is Mass (Weight) per Volume 
 8.3.1 Volume’s Effects on Density 
 The density of an air parcel varies inversely with its volume. Assuming equal mass, an air parcel with a 
 higher density has a smaller volume than an air parcel with a lower density (see Figure 8-8). 
-The shorter parcel (i.e., the parce](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-06-density-is-mass-weight-per-volume-8-3-1-volume-s.png)
+The shorter parcel (i.e., the parce](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-3-1-00-density-is-mass-weight-per-volume-8-3-1-volume-s.png)
 
 ![Figure 8-8. Volume’s Effects on Density 
 8.3.2 Changes in Density 
@@ -312,44 +312,44 @@ In general, the density of an air parcel can be changed by changing its mass, pr
 Boyle’s law says that the density of an ideal gas (ρ, the Greek letter rho) is given by: 
 𝜌= 𝑀𝑃
 𝑅𝑇 
-Where M is the molar mass, P is the pressure, R](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-07-volume-s-effects-on-density-8-3-2-changes-in-den.png)
+Where M is the molar mass, P is the pressure, R](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-3-2-00-volume-s-effects-on-density-8-3-2-changes-in-den.png)
 
 ![Figure 8-9. Pressure’s Effects on Density in the Atmosphere 
 8.3.4 Temperature’s Effects on Density 
 Density is inversely related to temperature. Assuming constant mass and pressure, an air parcel with a 
 higher temperature is less dense than an air parcel with a lower temperature (see Figure 8-10). This is 
-because th](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-08-pressure-s-effects-on-density-in-the-atmosphere-.png)
+because th](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-3-4-00-pressure-s-effects-on-density-in-the-atmosphere-.png)
 
 ![Figure 8-10. Temperature’s Effects on Density 
 In the atmosphere, temperature has the most effect on density in the horizontal direction; that is, with 
 horizontal changes of location (e.g., New York City versus Miami), temperature has the greatest effect on 
 density. 
 8.3.5 Water Vapor’s Effects on Density 
-Density of](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-09-temperature-s-effects-on-density-in-the-atmosphe.png)
+Density of](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-3-5-00-temperature-s-effects-on-density-in-the-atmosphe.png)
 
 ![Figure 8-11. Water Vapor’s Effects on Density 
 8.4 Altimetry 
 The altimeter is essentially an aneroid barometer. The difference is the scale. The altimeter is graduated to 
 read increments of altitude rather than units of pressure. The standard for graduating the altimeter is the 
-standard atmosphere.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-10-water-vapor-s-effects-on-density-8-4-altimetry-t.png)
+standard atmosphere.](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-3-5-01-water-vapor-s-effects-on-density-8-4-altimetry-t.png)
 
 ![Figure 8-12. In the warm air column, a pilot would fly at an altitude that is higher than the 
 indicated altitude. In the cold air column, the pilot would fly at an altitude lower than the indicated altitude. 
  
 Figure 8-12. True Versus Indicated Altitude 
-Height indicated on the altimeter also changes with changes in](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-11-in-the-warm-air-column-a-pilot-would-fly-at-an-a.png)
+Height indicated on the altimeter also changes with changes in](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-4-1-00-in-the-warm-air-column-a-pilot-would-fly-at-an-a.png)
 
-![Figure 8-13. Pressure Change’s Effects on Altimeter Readings](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-12-pressure-change-s-effects-on-altimeter-readings.png)
+![Figure 8-13. Pressure Change’s Effects on Altimeter Readings](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-4-1-01-pressure-change-s-effects-on-altimeter-readings.png)
 
 ![Figure 8-14. Temperature Change’s Effects on Altimeter Readings 
 Figure 8-14 shows that as a pilot flies from warm to cold air, the altimeter reads too high—the pilot is lower 
 than the altimeter indicates. Over flat terrain, this lower-than-true reading is no great problem; other aircraft 
-in the vicinity are also fly](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-13-temperature-change-s-effects-on-altimeter-readin.png)
+in the vicinity are also fly](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-4-1-02-temperature-change-s-effects-on-altimeter-readin.png)
 
 ![Figure 8-15. High Density Altitude’s Effects on Flight 
 High density altitude also can be a problem at cruising altitude. When air temperature is higher (warmer) 
 than standard atmosphere, the higher density altitude lowers the service ceiling. For example, if temperature 
-at a pressure altitude of 10,000 ft is 20 °C,](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-14-high-density-altitude-s-effects-on-flight-high-d.png)
+at a pressure altitude of 10,000 ft is 20 °C,](/handbooks/avwx/FAA-H-8083-28B/figures/fig-8-4-1-03-high-density-altitude-s-effects-on-flight-high-d.png)
 
 <div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-8-00-units-of-pressure-units-of-pressure-standard-atm.html">
 <table><caption>Table 8-1. Units of Pressure 

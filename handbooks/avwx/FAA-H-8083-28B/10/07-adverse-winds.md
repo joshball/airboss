@@ -58,10 +58,10 @@ and sinks over the sloping terrain.
 10.7 Adverse Winds 
 10.7.1 Crosswind 
 A crosswind is a wind that has a component directed perpendicularly to the heading of an aircraft 
-(see Figu](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-7-00-mountain-breeze-surface-wind-flows-from-the-moun.png)
+(see Figu](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-7-1-00-mountain-breeze-surface-wind-flows-from-the-moun.png)
 
 ![Figure 10-22. Crosswind Climb Flightpath 
 10.7.2 Gust 
 A gust is a fluctuation of wind speed with variations of 10 knots (kt) or more between peaks and lulls. 
 Even if the airplane is oriented into the wind, gusts during takeoff and landing cause airspeed fluctuations 
-that can cause problems for pilots. A gust increas](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-7-01-crosswind-climb-flightpath-10-7-2-gust-a-gust-is.png)
+that can cause problems for pilots. A gust increas](/handbooks/avwx/FAA-H-8083-28B/figures/fig-10-7-2-00-crosswind-climb-flightpath-10-7-2-gust-a-gust-is.png)
