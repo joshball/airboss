@@ -3,7 +3,7 @@ handbook: phak
 edition: FAA-H-8083-25C
 chapter_number: 2
 section_title: Aeronautical Decision-Making
-faa_pages: 40..71
+faa_pages: 2-1..2-32
 source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/faa-h-8083-25c.pdf
 ---
 

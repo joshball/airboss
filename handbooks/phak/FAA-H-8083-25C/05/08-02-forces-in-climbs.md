@@ -3,10 +3,132 @@ handbook: phak
 edition: FAA-H-8083-25C
 chapter_number: 5
 section_title: Forces in Climbs
-faa_pages: '5'
+faa_pages: 5-23
 section_number: 8
 subsection_number: 2
 source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/faa-h-8083-25c.pdf
 ---
 
 # Forces in Climbs
+
+Forces in Climbs
+For all practical purposes, the wing’s lift in a steady state
+normal climb is the same as it is in a steady level flight at the
+same airspeed. Although the aircraft’s flight path changed
+when the climb was established, the AOA of the wing with
+respect to the inclined flight path reverts to practically the
+same values, as does the lift. There is an initial momentary
+change as shown in Figure 5-36. During the transition from
+straight-and-level flight to a climb, a change in lift occurs
+when back elevator pressure is first applied. Raising the
+aircraft’s nose increases the AOA and momentarily increases
+
+Normal turn
+Slipping turn
+Skidding turn
+Centrifugal
+force equals
+horizontal lift
+Centrifugal
+force less than
+horizontal lift
+Centrifugal force
+greater than
+horizontal lift
+Vertical lift
+Vertical lift
+Vertical lift
+Load
+Load
+Load
+Centrifugal
+force
+Horizontal
+lift
+Centrifugal
+force
+Horizontal
+lift
+Centrifugal force
+Horizontal
+lift
+Lift
+Lift
+Lift
+Weight
+Weight
+Weight
+Figure 5-35. Normal, slipping, and skidding turns at a constant altitude.
+L
+L
+L
+L
+Steady climb
+normal lift
+Climb entry
+increased lift
+Level flight
+normal lift
+Figure 5-36. Changes in lift during climb entry.
+T
+D
+T
+D
+T
+D
+Steady climb
+forces balanced
+constant speed
+Climb entry drag
+greater than thrust
+speed slowing
+Level flight
+forces balanced
+constant speed
+W
+L
+W
+W
+L
+L
+Figure 5-37. Changes in speed during climb entry.
+the lift. Lift at this moment is now greater than weight and
+starts the aircraft climbing. After the flight path is stabilized
+on the upward incline, the AOA and lift again revert to about
+the level flight values.
+If the climb is entered with no change in power setting, the
+airspeed gradually diminishes because the thrust required
+to maintain a given airspeed in level flight is insufficient to
+maintain the same airspeed in a climb. When the flight path
+is inclined upward, a component of the aircraft’s weight
+acts in the same direction as, and parallel to, the total drag
+of the aircraft, thereby increasing the total effective drag.
+Consequently, the total effective drag is greater than the
+power, and the airspeed decreases. The reduction in airspeed
+gradually results in a corresponding decrease in drag until
+the total drag (including the component of weight acting
+in the same direction) equals the thrust. [Figure 5-37] Due
+to momentum, the change in airspeed is gradual, varying
+considerably with differences in aircraft size, weight, total
+drag, and other factors. Consequently, the total effective drag
+is greater than the thrust, and the airspeed decreases.
+Generally, the forces of thrust and drag, and lift and weight,
+again become balanced when the airspeed stabilizes but at
+a value lower than in straight-and-level flight at the same
+power setting. Since the aircraft’s weight is acting not only
+downward but rearward with drag while in a climb, additional
+power is required to maintain the same airspeed as in level
+flight. The amount of power depends on the angle of climb.
+When the climb is established steep enough that there is
+insufficient power available, a slower speed results.
+The thrust required for a stabilized climb equals drag plus a
+percentage of weight dependent on the angle of climb. For
+example, a 10° climb would require thrust to equal drag plus
+17 percent of weight. To climb straight up would require
+thrust to equal all of weight and drag. Therefore, the angle
+of climb for climb performance is dependent on the amount
+of excess thrust available to overcome a portion of weight.
+Note that aircraft are able to sustain a climb due to excess
+thrust. When the excess thrust is gone, the aircraft is no
+longer able to climb. At this point, the aircraft has reached
+its “absolute ceiling.”

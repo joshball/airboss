@@ -3,7 +3,7 @@ handbook: phak
 edition: FAA-H-8083-25C
 chapter_number: 9
 section_title: Flight Manuals and Other Documents
-faa_pages: 231..244
+faa_pages: 9-1..9-14
 source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/faa-h-8083-25c.pdf
 ---
 

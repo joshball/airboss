@@ -3,9 +3,38 @@ handbook: phak
 edition: FAA-H-8083-25C
 chapter_number: 11
 section_title: Performance
-faa_pages: '11'
+faa_pages: 11-5
 section_number: 7
 source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/faa-h-8083-25c.pdf
 ---
 
 # Performance
+
+Performance
+Performance is a term used to describe the ability of an
+aircraft to accomplish certain things that make it useful for
+certain purposes. For example, the ability of an aircraft to land
+and take off in a very short distance is an important factor
+to the pilot who operates in and out of short, unimproved
+airfields. The ability to carry heavy loads, fly at high altitudes
+at fast speeds, and/or travel long distances is essential for the
+performance of airline and executive type aircraft.
+The primary factors most affected by performance are the
+takeoff and landing distance, rate of climb, ceiling, payload,
+range, speed, maneuverability, stability, and fuel economy.
+Some of these factors are often directly opposed: for example,
+high speed versus short landing distance, long range versus
+great payload, and high rate of climb versus fuel economy.
+It is the preeminence of one or more of these factors that
+dictates differences between aircraft and explains the high
+degree of specialization found in modern aircraft.
+The various items of aircraft performance result from the
+combination of aircraft and powerplant characteristics. The
+aerodynamic characteristics of the aircraft generally define
+the power and thrust requirements at various conditions of
+flight, while powerplant characteristics generally define the
+power and thrust available at various conditions of flight.
+The matching of the aerodynamic configuration with the
+powerplant is accomplished by the manufacturer to provide
+maximum performance at the specific design condition (e.g.,
+range, endurance, and climb).

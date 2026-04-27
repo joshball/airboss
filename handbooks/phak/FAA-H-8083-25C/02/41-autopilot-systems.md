@@ -3,9 +3,36 @@ handbook: phak
 edition: FAA-H-8083-25C
 chapter_number: 2
 section_title: Autopilot Systems
-faa_pages: '2'
+faa_pages: 2-27
 section_number: 41
 source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/faa-h-8083-25c.pdf
 ---
 
 # Autopilot Systems
+
+Autopilot Systems
+In a single-pilot environment, an autopilot system can greatly
+reduce workload. [Figure 2-23] As a result, the pilot is free
+to focus his or her attention on other flight deck duties. This
+can improve situational awareness and reduce the possibility
+of a CFIT accident. While the addition of an autopilot may
+certainly be considered a risk control measure, the real
+challenge comes in determining the impact of an inoperative
+unit. If the autopilot is known to be inoperative prior to
+departure, this may factor into the evaluation of other risks.
+For example, the pilot may be planning for a VHF
+omnidirectional range (VOR) approach down to minimums
+on a dark night into an unfamiliar airport. In such a case, the
+pilot may have been relying heavily on a functioning autopilot
+capable of flying a coupled approach. This would free the
+pilot to monitor aircraft performance. A malfunctioning
+autopilot could be the single factor that takes this from a
+medium to a serious risk. At this point, an alternative needs
+to be considered. On the other hand, if the autopilot were to
+fail at a critical (high workload) portion of this same flight,
+the pilot must be prepared to take action. Instead of simply
+being an inconvenience, this could quickly turn into an
+emergency if not properly handled. The best way to ensure
+a pilot is prepared for such an event is to carefully study the
+issue prior to departure and determine well in advance how
+an autopilot failure is to be handled.

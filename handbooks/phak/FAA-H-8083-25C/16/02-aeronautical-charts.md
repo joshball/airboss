@@ -3,9 +3,22 @@ handbook: phak
 edition: FAA-H-8083-25C
 chapter_number: 16
 section_title: Aeronautical Charts
-faa_pages: '16'
+faa_pages: 16-2
 section_number: 2
 source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/faa-h-8083-25c.pdf
 ---
 
 # Aeronautical Charts
+
+Aeronautical Charts
+An aeronautical chart is the road map for a pilot flying under
+VFR. The chart provides information that allows pilots to track
+their position and provides available information that enhances
+safety. The three aeronautical charts used by VFR pilots are:
+Sectional
+VFR Terminal Area
+World Aeronautical
+A free catalog listing aeronautical charts and related
+publications including prices and instructions for ordering is
+available at the Aeronautical Navigation Products website:
+www.aeronav.faa.gov.

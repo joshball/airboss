@@ -3,7 +3,7 @@ handbook: phak
 edition: FAA-H-8083-25C
 chapter_number: 5
 section_title: Aerodynamics of Flight
-faa_pages: 98..148
+faa_pages: 5-1..5-51
 source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/faa-h-8083-25c.pdf
 ---
 
