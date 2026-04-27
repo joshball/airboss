@@ -108,7 +108,7 @@ review_status: pending
 
 ## Phase 8 - Real-tree ingestion + rollout doc
 
-- [ ] Run `bun run handbook-corpus-ingest --doc=phak --edition=8083-25C` against the on-disk derivatives. Verify exit 0 and the report shows expected entry count.
+- [ ] Run `bun run ingest handbooks --doc=phak --edition=8083-25C` against the on-disk derivatives. Verify exit 0 and the report shows expected entry count.
 - [ ] Same for `afh/8083-3C` and `avwx/8083-28B`.
 - [ ] Update `docs/work/plans/adr-019-rollout.md` Phase 6 row to ✅ with PR link.
 - [ ] `bun run check` passes; `bun test libs/sources/` passes.

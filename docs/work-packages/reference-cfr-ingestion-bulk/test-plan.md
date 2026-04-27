@@ -31,12 +31,12 @@ All suites use `withTestEntries` / `withTestEditions` / `resetRegistry` from `li
 
 ## Manual smoke (operator)
 
-1. **Fixture ingestion.** `bun run cfr-ingest --fixture=tests/fixtures/cfr/title-14-2026-fixture.xml --out=/tmp/cfr-smoke`. Expect exit 0, derivative tree at `/tmp/cfr-smoke/cfr-14/2026-01-01/` with `manifest.json`, `sections.json`, and per-Part / per-section markdown files.
+1. **Fixture ingestion.** `bun run ingest cfr --fixture=tests/fixtures/cfr/title-14-2026-fixture.xml --out=/tmp/cfr-smoke`. Expect exit 0, derivative tree at `/tmp/cfr-smoke/cfr-14/2026-01-01/` with `manifest.json`, `sections.json`, and per-Part / per-section markdown files.
 2. **Idempotence.** Re-run the same command. Expect "0 entries written, 0 files modified, 0 promotion batches recorded" or equivalent.
-3. **Help.** `bun run cfr-ingest --help`. Expect usage block.
-4. **CI guard.** `CI=true bun run cfr-ingest --edition=2026-01-01`. Expect exit 2 + stderr "CI without --fixture is unsupported" message.
+3. **Help.** `bun run ingest cfr --help`. Expect usage block.
+4. **CI guard.** `CI=true bun run ingest cfr --edition=2026-01-01`. Expect exit 2 + stderr "CI without --fixture is unsupported" message.
 5. **Validator publish gate.** Create a temp lesson at `course/regulations/_smoke.md` with body `[@cite](airboss-ref:regs/cfr-14/91/103?at=2026)`; run `bun run check`. Expect zero ERROR findings (after fixture ingestion has primed the active SOURCES table). Delete the temp file.
-6. **Live eCFR (optional).** With network available and `--fixture=` omitted: `bun run cfr-ingest --edition=2026-01-01`. Expect cache hit on the second run, full ingestion on first run, derivatives committed to `regulations/cfr-14/2026-01-01/`. Bytes are large; only run when actually shipping a real edition.
+6. **Live eCFR (optional).** With network available and `--fixture=` omitted: `bun run ingest cfr --edition=2026-01-01`. Expect cache hit on the second run, full ingestion on first run, derivatives committed to `regulations/cfr-14/2026-01-01/`. Bytes are large; only run when actually shipping a real edition.
 
 ## Edge-case coverage gates
 
@@ -66,7 +66,7 @@ The Title 14 fixture ingestion completes under 200 ms in CI. The derivative writ
 
 - [ ] `bun run check` exits 0 with no errors and no warnings.
 - [ ] `bun test libs/sources/` exits 0; every new test file passes; every Phase 1 + Phase 2 test still passes.
-- [ ] `bun run cfr-ingest --fixture=...` smoke run exits 0 and produces the documented derivative tree.
+- [ ] `bun run ingest cfr --fixture=...` smoke run exits 0 and produces the documented derivative tree.
 - [ ] Fixture-driven `smoke.test.ts` confirms the validator emits zero ERRORs against `airboss-ref:regs/cfr-14/91/103?at=2026`.
 - [ ] No new findings from `/ball-review-full` (or any blocking review run after Phase 3 lands) -- if findings surface, fix per CLAUDE.md "ALWAYS FIX EVERYTHING from a review."
 - [ ] Documented placeholder reviewer ID is referenced in the PR body so the user can re-promote later.

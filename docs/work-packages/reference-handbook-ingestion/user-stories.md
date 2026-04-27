@@ -50,7 +50,7 @@ The subsection locator (`1/2/2`) resolves to manifest code `1.2.2`. The renderer
 bun run handbook-ingest --doc=phak
 
 # Step 2 (Phase 6, new): register into the corpus
-bun run handbook-corpus-ingest --doc=phak --edition=8083-25C
+bun run ingest handbooks --doc=phak --edition=8083-25C
 ```
 
 After step 2, the registry has chapter / section / subsection entries for PHAK 8083-25C. Re-running step 2 is a no-op.

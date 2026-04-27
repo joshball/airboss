@@ -51,13 +51,13 @@ The corpus chosen first is regulations because:
     - `getLiveUrl(id, edition)` returns the eCFR URL (`https://www.ecfr.gov/current/title-14/...` for the current edition; `https://www.ecfr.gov/on/<YYYY-MM-DD>/title-14/...` for past).
     - `getDerivativeContent(id, edition)` reads the in-repo derivative markdown.
     - `getIndexedContent(id, edition)` returns structured section content from the per-edition `sections.json` derivative.
-- An ingestion CLI, exposed via `bun run cfr-ingest [--edition=YYYY-MM-DD] [--fixture=PATH]`, fetches eCFR XML for Title 14 + 49 CFR 830 + 49 CFR 1552 (or reads from a fixture file), caches it under `$AIRBOSS_HANDBOOK_CACHE/regulations/cfr-<title>/<YYYY-MM-DD>/source.xml` per ADR 018, walks the XML, writes derivative markdown + sections.json + manifest.json into `regulations/cfr-<title>/<YYYY-MM-DD>/`, populates the registry to `pending`, and records an atomic batch promotion to `accepted` under reviewer `phase-3-bulk-ingestion`.
+- An ingestion CLI, exposed via `bun run ingest cfr [--edition=YYYY-MM-DD] [--fixture=PATH]`, fetches eCFR XML for Title 14 + 49 CFR 830 + 49 CFR 1552 (or reads from a fixture file), caches it under `$AIRBOSS_HANDBOOK_CACHE/regulations/cfr-<title>/<YYYY-MM-DD>/source.xml` per ADR 018, walks the XML, writes derivative markdown + sections.json + manifest.json into `regulations/cfr-<title>/<YYYY-MM-DD>/`, populates the registry to `pending`, and records an atomic batch promotion to `accepted` under reviewer `phase-3-bulk-ingestion`.
 - The pipeline is **idempotent**. Re-running with the same `--edition=` (a) reuses cached XML, (b) hash-compares regenerated derivatives against on-disk versions and skips writes when content is unchanged, (c) skips re-promotion when the lifecycle is already `accepted`.
 - Section content is committed as derivatives per ADR 018: one `<part>/<section>.md` per section, one per-edition `manifest.json`, one per-edition `sections.json` for the indexed-tier surface.
 - A small Title 14 fixture (`tests/fixtures/cfr/title-14-2026-fixture.xml` -- a few Parts, ~10 sections) ships in the repo so unit + integration tests run without hitting the live eCFR API.
 - Vitest tests cover: `parseLocator` for every accepted locator shape (and rejection messages for malformed input), `formatCitation` for all three styles, `getLiveUrl` for current vs past editions, fixture-driven ingestion (XML in -> SourceEntries + derivatives + batch promotion), idempotence (second run is a no-op), per-section hash compare on regeneration, atomic batch failure handling.
 - A validator smoke test (`libs/sources/src/regs/smoke.test.ts`) inserts `[@cite](airboss-ref:regs/cfr-14/91/103?at=2026)` into a temp lesson, runs `validateReferences`, expects zero ERRORs.
-- `bun run check` exits 0; `bun test libs/sources/` passes; `bun run cfr-ingest --fixture=tests/fixtures/cfr/title-14-2026-fixture.xml` exits 0.
+- `bun run check` exits 0; `bun test libs/sources/` passes; `bun run ingest cfr --fixture=tests/fixtures/cfr/title-14-2026-fixture.xml` exits 0.
 
 ## Scope
 
@@ -274,7 +274,7 @@ This is the test that proves the publish gate works for `regs`.
 | Atomic batch failure rolls back nothing (no half-write) | Vitest unit |
 | Validator zero-ERROR for a real `airboss-ref:regs/...?at=2026` | Vitest integration (`smoke.test.ts`) |
 | Cache miss + network failure exits non-zero | Manual smoke (with network disabled) |
-| `bun run cfr-ingest --fixture=...` exits 0 | Manual smoke |
+| `bun run ingest cfr --fixture=...` exits 0 | Manual smoke |
 | `bun run check` exits 0 | Manual gate |
 | `bun test libs/sources/` passes | Manual gate |
 
