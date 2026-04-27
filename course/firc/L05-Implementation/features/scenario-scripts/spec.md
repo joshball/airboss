@@ -92,8 +92,8 @@ The 43 scenarios must collectively satisfy:
 - [tasks.md](tasks.md) -- all 43 scenarios with dependency order
 - [test-plan.md](test-plan.md) -- validation checklists
 - [template.md](template.md) -- blank template for authors
-- [TickScript type](../../../../libs/types/src/engine-types.ts) -- TypeScript type definition
-- [seed-e2e-demo.ts](../../../../scripts/db/seed-e2e-demo.ts) -- reference implementation (Base-to-Final Overshoot)
+- [TickScript type](../../../../../libs/types/src/engine-types.ts) -- TypeScript type definition
+- [seed-e2e-demo.ts](../../../../../scripts/db/seed-e2e-demo.ts) -- reference implementation (Base-to-Final Overshoot)
 - [COMPETENCY_GRAPH.md](../../COMPETENCY_GRAPH.md) -- competency domains and behaviors
 - [TRACEABILITY_MATRIX.md](../../TRACEABILITY_MATRIX.md) -- FAA topic coverage mapping
 - [COURSE_STRUCTURE.md](../../COURSE_STRUCTURE.md) -- module time allocations

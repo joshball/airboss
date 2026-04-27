@@ -54,7 +54,7 @@ Over time        ->   Track calibration, proficiency trends, where the pilot is 
 
 - **`libs/engine/`** -- scenario tick engine, scoring, student model. Core IP.
 - **Scenario content model** -- ticks, decisions, branches. Already general.
-- **Pre-brief / debrief architecture** -- this is the valuable pedagogy. See [course/L04-Design/references/performance-pilot-integration.md](../../course/L04-Design/references/performance-pilot-integration.md).
+- **Pre-brief / debrief architecture** -- this is the valuable pedagogy. See [course/firc/L04-Design/references/performance-pilot-integration.md](../../course/firc/L04-Design/references/performance-pilot-integration.md).
 - **BC structure** -- most BCs survive (see next section for mapping).
 - **Published content versioning** -- still matters; "which version of a scenario did the pilot run" is still the right question.
 - **Two-tier ID strategy** -- survives unchanged.
@@ -122,7 +122,7 @@ The user is leaning open-source or partially open-source. Worth deciding early b
 
 - `docs/platform/VISION.md` is FIRC-framed. Needs rewrite.
 - `docs/platform/ROADMAP.md` is FIRC-phased. Needs rewrite.
-- `course/L04-Design/ROADMAP.md` is FIRC-curriculum-phased (C0-C4). Most content work still has value but the C4 "FAA submission" phase is deferred indefinitely.
+- `course/firc/L04-Design/ROADMAP.md` is FIRC-curriculum-phased (C0-C4). Most content work still has value but the C4 "FAA submission" phase is deferred indefinitely.
 - Product PRDs under `docs/products/*/PRD.md` need re-scoping.
 - Project name -- "FIRC Boss" no longer fits. The repo has since been renamed to `airboss-firc`; the pilot performance platform lives in `airboss`. Product name needs a new choice.
 - CLAUDE.md FAA-specific rules -- downgrade from "critical rules" to "rules that apply when authoring FIRC-adjacent content."
@@ -162,6 +162,6 @@ The user is leaning open-source or partially open-source. Worth deciding early b
 
 ## References
 
-- Book that catalyzed this: [course/L04-Design/references/performance-pilot-review.md](../../course/L04-Design/references/performance-pilot-review.md)
-- Integration thinking: [course/L04-Design/references/performance-pilot-integration.md](../../course/L04-Design/references/performance-pilot-integration.md)
+- Book that catalyzed this: [course/firc/L04-Design/references/performance-pilot-review.md](../../course/firc/L04-Design/references/performance-pilot-review.md)
+- Integration thinking: [course/firc/L04-Design/references/performance-pilot-integration.md](../../course/firc/L04-Design/references/performance-pilot-integration.md)
 - Chief instructor blocker: see memory `project_chief_instructor`

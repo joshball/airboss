@@ -260,7 +260,7 @@ Modules 2-6 need the same treatment. Each module needs three documents:
 **Module 2 (Instructional Effectiveness & Safety Culture)**
 
 - Topics: A.4, A.10, A.5
-- 8 existing scenarios in [course/L05-Implementation/scenarios/module-2/](../L05-Implementation/scenarios/module-2/)
+- 8 existing scenarios in [course/firc/L05-Implementation/scenarios/module-2/](../L05-Implementation/scenarios/module-2/)
 - L02 research: [A.4](../L02-Knowledge/A.4_Teaching-Safety-Culture/OVERVIEW.md), [A.10](../L02-Knowledge/A.10_Ethics-Professionalism/OVERVIEW.md), [A.5](../L02-Knowledge/A.5_GA-Safety-Trends/OVERVIEW.md)
 - Key challenge: A.4 is vast -- the FOI alone is a textbook. Scope to what the AC asks (build on FOI, don't repeat it). Focus on the interpersonal: reading students, adapting instruction, resisting pressure.
 - A.10 risks becoming a sermon. The scenarios must create genuine ethical dilemmas, not obvious right/wrong choices.
@@ -270,7 +270,7 @@ Modules 2-6 need the same treatment. Each module needs three documents:
 **Module 3 (Loss of Control Lab)**
 
 - Topics: A.11, A.6, A.4 (reinforcement)
-- 8 existing scenarios in [course/L05-Implementation/scenarios/module-3/](../L05-Implementation/scenarios/module-3/)
+- 8 existing scenarios in [course/firc/L05-Implementation/scenarios/module-3/](../L05-Implementation/scenarios/module-3/)
 - L02 research: [A.11](../L02-Knowledge/A.11_LOC-Prevention/OVERVIEW.md), [A.6](../L02-Knowledge/A.6_Pilot-Deviations/OVERVIEW.md)
 - Key challenge: This is the flagship tick-engine module. The base-to-final stall-spin scenario is the most mechanically complex scenario in the course. The lesson flow needs to build toward it -- simpler scenarios first, then the high-stakes ones.
 - A.6 has 95 questions across 9 files and 8 scenarios -- the deepest content of any topic. The lesson flow must manage this volume without overwhelming.
@@ -281,7 +281,7 @@ Modules 2-6 need the same treatment. Each module needs three documents:
 **Module 4 (Airspace, Security, and Compliance)**
 
 - Topics: A.2, A.3, A.13
-- 9+ existing scenarios in [course/L05-Implementation/scenarios/module-4/](../L05-Implementation/scenarios/module-4/)
+- 9+ existing scenarios in [course/firc/L05-Implementation/scenarios/module-4/](../L05-Implementation/scenarios/module-4/)
 - L02 research: [A.2](../L02-Knowledge/A.2_SUA-Airspace-Security/OVERVIEW.md), [A.3](../L02-Knowledge/A.3_TSA-Requirements/OVERVIEW.md), [A.13](../L02-Knowledge/A.13_Student-Remote-Cert/OVERVIEW.md)
 - Key challenge: Making compliance content engaging. The distributed instruction model (COURSE_STRUCTURE.md Module 4 section) is the design innovation here -- 45 min of TSA instruction that "feels like 10 min."
 - A.3 (TSA) changes frequently. Design objectives around the process of checking requirements, not the current requirements themselves.
@@ -291,7 +291,7 @@ Modules 2-6 need the same treatment. Each module needs three documents:
 **Module 5 (Meaningful Evaluations)**
 
 - Topics: A.9, A.7
-- 8 existing scenarios in [course/L05-Implementation/scenarios/module-5/](../L05-Implementation/scenarios/module-5/)
+- 8 existing scenarios in [course/firc/L05-Implementation/scenarios/module-5/](../L05-Implementation/scenarios/module-5/)
 - L02 research: [A.9](../L02-Knowledge/A.9_IPC-Flight-Review/OVERVIEW.md), [A.7](../L02-Knowledge/A.7_FAASTeam-WINGS/OVERVIEW.md)
 - Key challenge: A.9 has rich sub-structure (IPC vs flight review vs considerations). The lesson flow needs to distinguish the evaluation types while showing that the diagnostic skill is the same.
 - A.7 risks being a FAASTeam advertisement. The scenarios should make WINGS useful (build a proficiency plan that uses WINGS), not just explain what WINGS is.
@@ -301,7 +301,7 @@ Modules 2-6 need the same treatment. Each module needs three documents:
 **Module 6 (Integrated Capstone)**
 
 - Topics: All 13 integrated
-- 5 existing scenarios in [course/L05-Implementation/scenarios/module-6/](../L05-Implementation/scenarios/module-6/)
+- 5 existing scenarios in [course/firc/L05-Implementation/scenarios/module-6/](../L05-Implementation/scenarios/module-6/)
 - No L02 research needed (integration, not new content)
 - Key challenge: The capstone must feel different from Modules 1-5. Multi-topic scenarios, "day in the life" format, replay with variation. The improvement delta measurement requires careful scenario selection -- the replayed scenarios must test the same competencies as earlier modules to make comparison valid.
 - The 5 existing scenarios may need expansion. A 2.5-hour module with only 5 scenarios means long scenarios (~30 min each) or significant non-scenario time. Verify the time budget works.

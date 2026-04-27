@@ -10,7 +10,7 @@ status: unread
 
 ## Unified Player Layout
 
-The player layout must be shared across tick scenarios AND instrument scan exercises. The instrument scan spec (course/L05-Implementation/features/instrument-scan/spec.md) defines the constraint: "the UI must be identical to every other scenario type."
+The player layout must be shared across tick scenarios AND instrument scan exercises. The instrument scan spec (course/firc/L05-Implementation/features/instrument-scan/spec.md) defines the constraint: "the UI must be identical to every other scenario type."
 
 ```text
 +------------------------------------------+---------------------+

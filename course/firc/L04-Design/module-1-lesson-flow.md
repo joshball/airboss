@@ -120,7 +120,7 @@ ISE-1.1: Instrument Scan Evaluation   scan exercise     3 min   (framing)
   how the course works. They are -- and they're also
   learning about their own attention limits.
 
-  See: course/L05-Implementation/features/instrument-scan/
+  See: course/firc/L05-Implementation/features/instrument-scan/
 
 ISE-1.1 reveal + framing              debrief           3 min   M1-01
   "You correctly identified the scan skip. You also let

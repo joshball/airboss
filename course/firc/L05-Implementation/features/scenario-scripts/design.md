@@ -201,6 +201,6 @@ Include briefing read time (~1 min) and post-scenario debrief review (~2-3 min) 
 
 - [spec.md](spec.md) -- required fields, quality criteria, FAA rules
 - [template.md](template.md) -- blank template to fill in
-- [TickScript type](../../../../libs/types/src/engine-types.ts) -- TypeScript definition
-- [seed-e2e-demo.ts](../../../../scripts/db/seed-e2e-demo.ts) -- reference implementation
-- [DESIGN_PRINCIPLES.md](../../../platform/DESIGN_PRINCIPLES.md) -- principles 3 (Decisions Under Pressure), 4 (Never a Trick), 5 (Replay is the Product)
+- [TickScript type](../../../../../libs/types/src/engine-types.ts) -- TypeScript definition
+- [seed-e2e-demo.ts](../../../../../scripts/db/seed-e2e-demo.ts) -- reference implementation
+- [DESIGN_PRINCIPLES.md](../../../../../docs/platform/DESIGN_PRINCIPLES.md) -- principles 3 (Decisions Under Pressure), 4 (Never a Trick), 5 (Replay is the Product)

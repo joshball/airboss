@@ -47,12 +47,15 @@ Don't block work for reminders. Surface them briefly at the start, then move on.
 ## Doc Structure
 
 ```text
-course/                 AVIATION KNOWLEDGE (organized by information architecture layers)
-  L01-FAA/              Regulatory foundation (AC 61-83K, CFRs, TCO, submission)
-  L02-Knowledge/        Per-topic aviation research (A.1-A.13)
-  L03-Objectives/       Learning objectives, competency framework
-  L04-Design/           Instructional design, module structure
-  L05-Implementation/   Scenarios, question banks, feature specs
+course/                 AVIATION COURSE CONTENT (surface-agnostic)
+  knowledge/            Post-pivot knowledge graph (atomic ADR-011 nodes, live in apps/study/)
+  regulations/          FAR navigation course (post-pivot, structured walk through Parts 1/61/91/141/135)
+  firc/                 Dormant FIRC-era 5-layer corpus (revives with apps/firc/ -- see course/firc/README.md)
+    L01-FAA/            Regulatory foundation (AC 61-83K, CFRs, TCO, submission)
+    L02-Knowledge/      Per-topic aviation research (A.1-A.13)
+    L03-Objectives/     Learning objectives, competency framework
+    L04-Design/         Instructional design, module structure
+    L05-Implementation/ FIRC scenarios, question banks, feature specs
 
 docs/                   PLATFORM
   platform/             Architecture, vision, design principles, info architecture

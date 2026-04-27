@@ -19,7 +19,7 @@ See companion review: [performance-pilot-review.md](./performance-pilot-review.m
 - **Repetition programs whatever it repeats.** We must design scenarios so the *right* habits get reinforced, and surface errors quickly enough that they don't calcify.
 - **The target state of a refresher is not "know the rules again."** It is "unconscious competence with conscious awareness" -- proficient habits plus an awake monitoring mind.
 
-These should be cross-referenced into [../../../docs/platform/DESIGN_PRINCIPLES.md](../../../docs/platform/DESIGN_PRINCIPLES.md) once we've decided which are durable.
+These should be cross-referenced into [../../../../docs/platform/DESIGN_PRINCIPLES.md](../../../../docs/platform/DESIGN_PRINCIPLES.md) once we've decided which are durable.
 
 ## The book's protocols, mapped to our system
 
@@ -51,7 +51,7 @@ The book is from ~2015 racing-psychology tradition and is missing the last 30 ye
 
 ## Concrete changes to consider (not commitments)
 
-These should be proposed into [../../../docs/platform/IDEAS.md](../../../docs/platform/IDEAS.md) for biweekly review, then promoted into feature specs if they survive.
+These should be proposed into [../../../../docs/platform/IDEAS.md](../../../../docs/platform/IDEAS.md) for biweekly review, then promoted into feature specs if they survive.
 
 1. **Pre-brief / debrief as first-class screens, not afterthoughts.** The scenario is the middle of a three-act structure. Pre-brief states objectives as questions; debrief answers them with the learner's timeline, self-rating, and engine score side-by-side.
 2. **Micro-scenario layer.** Drills. 60-120 seconds. Single decision. Re-runnable. Complements the full scenario.

@@ -85,7 +85,7 @@ Changes flow downward. A change at L01 may require changes at all layers below i
 1. **Domain knowledge** -- what the pilot/instructor must understand (the subject matter itself)
 2. **Instructional knowledge** -- how the instructor teaches it (technique, pedagogy, common student misconceptions). Only relevant for cert tracks that include teaching (CFI, CFII, MEI).
 
-**What lives here:** Per-topic research docs (`course/L02-Knowledge/`), reference-material analysis. Answers "what does a pilot at this cert need to know about X?" without saying how we'll teach it.
+**What lives here:** Per-topic research docs (`course/firc/L02-Knowledge/` for the dormant FIRC corpus; new post-pivot research lives under topical roots like `course/regulations/`, `course/knowledge/`), reference-material analysis. Answers "what does a pilot at this cert need to know about X?" without saying how we'll teach it.
 
 **When it changes:** When aviation technology, regulations, or best practices evolve. ADS-B requirements expand, a new LOC study is published, an aircraft manufacturer issues a service letter. Changes here may or may not require L01 changes (the regulation might stay the same even as the knowledge evolves).
 
@@ -169,7 +169,7 @@ Each objective is:
 - **DB schema** -- `study`, `audit`, `identity`, `hangar`, `published`, `sim` schemas in Drizzle.
 - **Seed data** -- demo scenarios, Abby (the dev-seed test user).
 
-**What lives here:** `apps/`, `libs/`, `course/L05-Implementation/`, `data/`. The code.
+**What lives here:** `apps/`, `libs/`, `course/firc/L05-Implementation/` (dormant FIRC scenarios + question bank), `data/`. The code.
 
 **When it changes:** Constantly. Implementation changes should be driven by L04 decisions, not the reverse. If we find ourselves changing objectives to match what the code can do, we have the dependency backwards.
 
@@ -188,12 +188,15 @@ The critical test: **can I change the delivery method without changing the objec
 ## Where the layers live in the repo
 
 ```text
-course/                            COURSE CONTENT (all 5 layers, organized by cert)
-  L01-FAA/                         Regulatory foundation (AC 61-83K, CFRs, ACS / PTS docs)
-  L02-Knowledge/                   Per-topic research, sub-topics, refs, knowledge nodes
-  L03-Objectives/                  Learning objectives, competencies, goals, prerequisites
-  L04-Design/                      Module structure, activity design, scenario authoring rules
-  L05-Implementation/              Per-cert scenarios, question banks, feature specs
+course/                            COURSE CONTENT (organized by topical scope)
+  knowledge/                       Post-pivot knowledge graph (atomic ADR-011 nodes, live in apps/study)
+  regulations/                     FAR navigation course (post-pivot, surface-agnostic)
+  firc/                            Dormant FIRC-era 5-layer corpus (revives with apps/firc/)
+    L01-FAA/                       Regulatory foundation (AC 61-83K, CFRs, ACS / PTS docs)
+    L02-Knowledge/                 Per-topic research, sub-topics, refs
+    L03-Objectives/                Learning objectives, competencies, goals, prerequisites
+    L04-Design/                    Module structure, activity design, scenario authoring rules
+    L05-Implementation/            FIRC scenarios, question banks, feature specs
 
 docs/                              PLATFORM (not course-specific)
   platform/                        Architecture, design principles, vision, roadmap
@@ -206,7 +209,7 @@ docs/                              PLATFORM (not course-specific)
   work-packages/                   Per-feature spec / tasks / test-plan / design / user-stories
 ```
 
-**The key distinction:** If a spec exists to deliver course content (scenario player, debrief, knowledge checks), it goes in `course/L05-Implementation/`. If it exists because the platform needs infrastructure (auth, themes, DB schema, hangar admin), it goes in `docs/work-packages/` or `docs/products/{app}/`.
+**The key distinction:** If a spec exists to deliver FIRC course content (scenario player, debrief, knowledge checks), it goes in `course/firc/L05-Implementation/` and is dormant until `apps/firc/` migrates. If it exists because the platform needs infrastructure (auth, themes, DB schema, hangar admin), it goes in `docs/work-packages/` or `docs/products/{app}/`. Post-pivot course content lives in topical roots under `course/` (`course/knowledge/`, `course/regulations/`, etc.) -- not in the layered FIRC structure.
 
 This means:
 
