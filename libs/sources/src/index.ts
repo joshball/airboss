@@ -9,5 +9,6 @@
  * the surface exported here.
  */
 
+export { productionRegistry } from './registry/index.ts';
 export { NULL_REGISTRY } from './registry-stub.ts';
 export * from './types.ts';

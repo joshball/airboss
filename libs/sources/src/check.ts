@@ -14,7 +14,7 @@ import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { parseLesson } from './lesson-parser.ts';
 import { isParseError, parseIdentifier } from './parser.ts';
-import { NULL_REGISTRY } from './registry-stub.ts';
+import { productionRegistry } from './registry/index.ts';
 import type { ParsedIdentifier, RegistryReader, ValidationFinding } from './types.ts';
 import { type RuleContext, validateIdentifier } from './validator.ts';
 
@@ -29,8 +29,10 @@ const MARKDOWN_EXTENSION = '.md';
 
 export interface ValidateOptions {
 	/**
-	 * Override the default `NULL_REGISTRY`. Phase 2's registry-core lib will
-	 * pass its real `RegistryReader` here; today only tests use this hook.
+	 * Override the default `productionRegistry`. Phase 2 swapped the default
+	 * from `NULL_REGISTRY` to the real registry; tests that need empty-registry
+	 * semantics pass `{ registry: NULL_REGISTRY }` explicitly (still exported
+	 * from `./registry-stub.ts`).
 	 */
 	readonly registry?: RegistryReader;
 	/**
@@ -58,7 +60,7 @@ export interface ValidateReport {
  * `findings` array.
  */
 export function validateReferences(opts: ValidateOptions = {}): ValidateReport {
-	const registry = opts.registry ?? NULL_REGISTRY;
+	const registry = opts.registry ?? productionRegistry;
 	const cwd = opts.cwd ?? process.cwd();
 	const roots = opts.contentPaths ?? LESSON_CONTENT_PATHS;
 

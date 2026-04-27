@@ -105,15 +105,17 @@ export function validateIdentifier(
 		if (!errorEmitted) {
 			pushFinding('error', 1, 'identifier has empty locator');
 		}
+	} else if (!ctx.registry.isCorpusKnown(parsed.corpus)) {
+		// Row 1 -- corpus is not enumerated in ADR 019 §1.2.
+		// Phase 2 activated: the production registry returns true for every
+		// enumerated corpus (regardless of whether real entries are populated).
+		// `NULL_REGISTRY` still returns false; tests passing the stub explicitly
+		// see this firing for any corpus, which matches Phase 1's row-2 behavior
+		// in spirit (an empty registry rejects everything).
+		if (!errorEmitted) {
+			pushFinding('error', 1, `corpus "${parsed.corpus}" is not enumerated in ADR 019 §1.2`);
+		}
 	}
-
-	// Per the spec: row 1's "corpus is enumerated in §1.2" check is delegated to
-	// the registry via `isCorpusKnown`. While the stub registry returns false for
-	// every corpus (Phase 2 fills it), we don't fail row 1 on that signal alone
-	// today -- the parser already accepts any non-empty corpus, and row 2 (entry
-	// not in registry) is the substantive ERROR for "we don't know this corpus."
-	// Once Phase 2 lands, `isCorpusKnown` becomes the authoritative check; until
-	// then it'd produce a duplicate ERROR with row 2.
 
 	const sourceId = parsed.raw as SourceId;
 
