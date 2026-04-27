@@ -25,6 +25,10 @@ data/sources/**/*.html
 # But KEEP the meta.json files
 !data/sources/**/*.meta.json
 
+# ADR 019 §2.5 -- generated registry snapshot for non-TypeScript consumers.
+# Regenerated per environment via `bun scripts/airboss-ref.ts snapshot`.
+data/sources-snapshot.json
+
 # Source artifact storage policy -- see ADR 018 and docs/platform/STORAGE.md.
 # Source documents (FAA PDFs etc.) live in $AIRBOSS_HANDBOOK_CACHE
 # (default ~/Documents/airboss-handbook-cache/), not the repo.

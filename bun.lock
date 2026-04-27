@@ -179,6 +179,13 @@
         "@ab/utils": "workspace:*",
       },
     },
+    "libs/sources": {
+      "name": "@ab/sources",
+      "dependencies": {
+        "@ab/utils": "workspace:*",
+        "yaml": "^2.8.3",
+      },
+    },
     "libs/themes": {
       "name": "@ab/themes",
       "dependencies": {
@@ -231,6 +238,8 @@
     "@ab/help": ["@ab/help@workspace:libs/help"],
 
     "@ab/sim": ["@ab/sim@workspace:apps/sim"],
+
+    "@ab/sources": ["@ab/sources@workspace:libs/sources"],
 
     "@ab/study": ["@ab/study@workspace:apps/study"],
 

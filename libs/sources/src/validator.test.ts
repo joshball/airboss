@@ -45,6 +45,18 @@ interface FixtureOpts {
 }
 
 function fixtureRegistry(opts: FixtureOpts = {}): RegistryReader {
+	// Derive known corpora from explicit `knownCorpora` plus any corpora
+	// implied by `entries` and `currentAccepted`. Tests that supplied entries
+	// in Phase 1 shouldn't have to also set `knownCorpora` to keep their
+	// row-2/row-3/row-4 expectations after Phase 2's row-1 activation.
+	const derivedKnownCorpora = new Set<string>(opts.knownCorpora ?? []);
+	for (const id of Object.keys(opts.entries ?? {})) {
+		const corpus = id.split(':')[1]?.split('/')[0];
+		if (corpus !== undefined) derivedKnownCorpora.add(corpus);
+	}
+	for (const corpus of Object.keys(opts.currentAccepted ?? {})) {
+		derivedKnownCorpora.add(corpus);
+	}
 	return {
 		hasEntry: (id) => Boolean(opts.entries?.[id]),
 		getEntry: (id) => opts.entries?.[id] ?? null,
@@ -54,7 +66,7 @@ function fixtureRegistry(opts: FixtureOpts = {}): RegistryReader {
 		getEditionDistance: (id, _pin) => opts.editionDistance?.[id] ?? null,
 		walkAliases: (id, _from, _to) => opts.aliases?.[id] ?? [],
 		walkSupersessionChain: (id) => opts.supersessionChains?.[id] ?? [],
-		isCorpusKnown: (corpus) => opts.knownCorpora?.has(corpus) ?? false,
+		isCorpusKnown: (corpus) => derivedKnownCorpora.has(corpus),
 	};
 }
 
@@ -144,12 +156,33 @@ describe('validator row 2 -- entry resolution', () => {
 		expect(findings.filter((f) => f.severity === 'error')).toHaveLength(0);
 	});
 
-	test('V-02b: registry has nothing => row 2 ERROR fires', () => {
+	test('V-02b: registry has corpus enumerated but no entry => row 2 ERROR fires', () => {
+		// Use a fixture that knows the corpus but has no entry for the id.
+		const parsed = parseOrThrow('airboss-ref:regs/cfr-14/91/103?at=2026');
+		const reg = fixtureRegistry({ knownCorpora: new Set(['regs']) });
+		const findings = validateIdentifier(parsed, ctx(reg));
+		const errors = findings.filter((f) => f.severity === 'error');
+		expect(errors.length).toBe(1);
+		expect(errors[0].ruleId).toBe(2);
+	});
+
+	test('V-02c: NULL_REGISTRY (no corpus enumerated) => row 1 ERROR fires (Phase 2 row-1 activation)', () => {
 		const parsed = parseOrThrow('airboss-ref:regs/cfr-14/91/103?at=2026');
 		const findings = validateIdentifier(parsed, ctx(NULL_REGISTRY));
 		const errors = findings.filter((f) => f.severity === 'error');
 		expect(errors.length).toBe(1);
-		expect(errors[0].ruleId).toBe(2);
+		expect(errors[0].ruleId).toBe(1);
+		expect(errors[0].message).toMatch(/not enumerated/);
+	});
+
+	test('V-02d: unknown corpus prefix with productionRegistry-style isCorpusKnown=false => row 1 ERROR', () => {
+		const parsed = parseOrThrow('airboss-ref:not-a-corpus/foo?at=2026');
+		const reg = fixtureRegistry({ knownCorpora: new Set(['regs']) }); // not-a-corpus not enumerated
+		const findings = validateIdentifier(parsed, ctx(reg));
+		const errors = findings.filter((f) => f.severity === 'error');
+		expect(errors.length).toBe(1);
+		expect(errors[0].ruleId).toBe(1);
+		expect(errors[0].message).toMatch(/not-a-corpus/);
 	});
 });
 
@@ -222,9 +255,13 @@ describe('validator row 4 -- lifecycle', () => {
 // ---------------------------------------------------------------------------
 
 describe('validator row 5 -- ?at=unpinned', () => {
-	test('V-05: ?at=unpinned emits WARNING row 5 alongside row-2 ERROR', () => {
+	test('V-05: ?at=unpinned emits WARNING row 5 alongside an ERROR', () => {
 		const parsed = parseOrThrow('airboss-ref:regs/cfr-14/91/103?at=unpinned');
-		const findings = validateIdentifier(parsed, ctx(NULL_REGISTRY));
+		// Use a registry that knows the corpus so we exercise row 5 alongside
+		// row 2 (entry-not-found), matching the "WARNING coexists with ERROR"
+		// pattern. With NULL_REGISTRY post-Phase-2 we'd hit row 1 instead.
+		const reg = fixtureRegistry({ knownCorpora: new Set(['regs']) });
+		const findings = validateIdentifier(parsed, ctx(reg));
 		const warnings = findings.filter((f) => f.severity === 'warning');
 		expect(warnings.find((f) => f.ruleId === 5)).toBeDefined();
 	});
@@ -289,9 +326,11 @@ describe('validator row 8 -- bare URL', () => {
 	test('V-08: bare URL emits NOTICE row 8', () => {
 		const id = 'airboss-ref:regs/cfr-14/91/103?at=2026';
 		const parsed = parseOrThrow(id);
+		// Registry knows `regs` so row 1 doesn't preempt the row-8 NOTICE.
+		const reg = fixtureRegistry({ knownCorpora: new Set(['regs']) });
 		const findings = validateIdentifier(
 			parsed,
-			ctx(NULL_REGISTRY, { raw: id, isBare: true, linkText: null, strippedText: null }),
+			ctx(reg, { raw: id, isBare: true, linkText: null, strippedText: null }),
 		);
 		expect(findings.find((f) => f.ruleId === 8 && f.severity === 'notice')).toBeDefined();
 	});
@@ -457,7 +496,8 @@ describe('validator row 14 -- ack reason slug length', () => {
 describe('validator exactly-one-error + multi-finding ordering', () => {
 	test('V-EX: row 2 ERROR + row 5 WARNING coexist on the same identifier', () => {
 		const parsed = parseOrThrow('airboss-ref:regs/cfr-14/91/103?at=unpinned');
-		const findings = validateIdentifier(parsed, ctx(NULL_REGISTRY));
+		const reg = fixtureRegistry({ knownCorpora: new Set(['regs']) });
+		const findings = validateIdentifier(parsed, ctx(reg));
 		const errors = findings.filter((f) => f.severity === 'error');
 		const warnings = findings.filter((f) => f.severity === 'warning');
 		expect(errors.map((f) => f.ruleId)).toEqual([2]);
@@ -467,9 +507,11 @@ describe('validator exactly-one-error + multi-finding ordering', () => {
 	test('V-EX2: identifier matching multiple ERROR rules emits only the first one', () => {
 		// row 2 (entry not in registry) AND row 4 would apply if the entry were
 		// pending, but since the registry has no entry, row 2 wins. Row 4 cannot
-		// fire because it requires `entry !== null`.
+		// fire because it requires `entry !== null`. Use a registry that knows
+		// `regs` so row 1 doesn't preempt.
 		const parsed = parseOrThrow('airboss-ref:regs/cfr-14/91/103?at=2026');
-		const findings = validateIdentifier(parsed, ctx(NULL_REGISTRY));
+		const reg = fixtureRegistry({ knownCorpora: new Set(['regs']) });
+		const findings = validateIdentifier(parsed, ctx(reg));
 		const errors = findings.filter((f) => f.severity === 'error');
 		expect(errors.length).toBe(1);
 		expect(errors[0].ruleId).toBe(2);

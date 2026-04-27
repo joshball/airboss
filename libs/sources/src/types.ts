@@ -141,6 +141,46 @@ export interface SourceLocation {
 export type RenderMode = 'web' | 'print' | 'tts' | 'plain-text';
 
 // ---------------------------------------------------------------------------
+// Phase 2 -- registry core (ADR 019 §2)
+// ---------------------------------------------------------------------------
+
+/** An edition slug, matching the `?at=` value (e.g. '2026', '2026-09', '2026-09-15'). */
+export type EditionId = string;
+
+/**
+ * Repo-relative path of a lesson file with `.md` stripped (e.g.
+ * `course/regulations/week-04-part-91-general-and-flight-rules/05-preflight-action`).
+ */
+export type LessonId = string;
+
+/**
+ * Per-corpus parsed locator. Phase 2 ships the default no-op resolver which
+ * returns segmented opaque shape. Phase 3+ corpus resolvers may return richer
+ * shapes (CFR returns `{ title, part, section, paragraph }`, etc.) by extending
+ * this discriminated union when their corpus lands.
+ */
+export type ParsedLocator = { readonly kind: 'ok'; readonly segments: readonly string[] };
+
+export interface LocatorError {
+	readonly kind: 'error';
+	readonly message: string;
+}
+
+/**
+ * Indexed-tier content surfaced via `CorpusResolver.getIndexedContent`. Per ADR
+ * 019 §2.5 + §4. Phase 2 returns null from the default resolver; Phase 3+ fill
+ * this in with corpus-specific structured content (CFR section text, AIM
+ * paragraph, AC chapter, etc.).
+ */
+export interface IndexedContent {
+	readonly id: SourceId;
+	readonly edition: EditionId;
+	readonly normalizedText: string;
+	readonly figures?: readonly string[];
+	readonly tables?: readonly string[];
+}
+
+// ---------------------------------------------------------------------------
 // Lesson-parser surface -- ADR 019 §3.4
 // ---------------------------------------------------------------------------
 
