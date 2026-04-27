@@ -5,6 +5,8 @@ feature: cert-syllabus-and-goal-composer
 type: user-stories
 status: unread
 review_status: pending
+amended:
+  - 2026-04-27 -- amended to compose with merged WP #1 (PR #242) and accepted ADR 019 v3
 ---
 
 # User Stories: Cert, Syllabus, and Goal Composer
@@ -44,9 +46,10 @@ review_status: pending
 ## Citations as first-class objects
 
 - As a learner, I want every authored claim to resolve to a real source so I can verify what the system told me.
-- As a learner, I want the same citation reused across nodes, syllabus leaves, cards, and scenarios so an edit to a citation note propagates everywhere it appears.
-- As an author, I want citations to live as their own rows so I can fix a typo in one place and see it everywhere.
-- As an author, I want the citation locator shape to match the source kind (chapter/section for handbooks, title/part/section for CFRs, paragraph for AIM) so I'm not jamming everything into one freeform text field.
+- As a learner, I want the same source (PHAK Ch 12 §3, 14 CFR 61.103, AIM 5-1-7) referenced consistently across nodes, syllabus leaves, cards, and scenarios so my mental map stays coherent across surfaces.
+- As a learner, I want every citation to carry a canonical identifier so the reference is unambiguous, future-proof against handbook editions, and resolvable to a live URL.
+- As an author, I want the citation locator shape to match the source kind (chapter / section for handbooks, title / part / section for CFRs, paragraph for AIM) so I'm not jamming everything into one freeform text field.
+- As an author, I want to optionally label a citation's framing (survey / operational / procedural / regulatory / examiner) so the same source can be cited with the right pedagogical lens per consumer.
 
 ## Authoring syllabi as YAML in repo
 
@@ -101,5 +104,5 @@ review_status: pending
 - As Joshua, I want my returning-CFI rebuild expressed as a single goal with multiple syllabi so the platform models my actual study, not a CFI template.
 - As Joshua, I want the cert dashboard data layer ready in this WP so the follow-on cert-dashboard pages have nothing to invent.
 - As Joshua, I want Area V of PPL ACS authored end-to-end so the WP demonstrates the full round-trip (YAML -> seed -> BC -> rollup) before it merges.
-- As Joshua, I want every existing 30 knowledge nodes' references migrated to citations so I can stop seeing the legacy `{ source, detail, note }` shape in the schema.
+- As Joshua, I want every existing 30 knowledge nodes' references migrated from the legacy `{ source, detail, note }` shape to the structured citation shape that WP #1 introduced, so the schema is uniform.
 - As Joshua, I want my existing study plan's cert_goals converted to a goal automatically so my running setup carries forward.

@@ -5,13 +5,25 @@ feature: cert-syllabus-and-goal-composer
 type: spec
 status: unread
 review_status: pending
+amended:
+  - 2026-04-27 -- amended to compose with merged WP #1 (PR #242) and accepted ADR 019 v3
 ---
 
 # Spec: Cert, Syllabus, and Goal Composer
 
-The second phase of [ADR 016](../../decisions/016-cert-syllabus-goal-model/decision.md): the data layer that turns the knowledge graph into a multi-cert, multi-syllabus, multi-goal learning model. Builds the `citation`, `credential`, `credential_prereq`, `credential_syllabus`, `syllabus`, `syllabus_node`, `syllabus_node_link`, `goal`, `goal_syllabus`, and `goal_node` tables; composes on top of the `reference` and `handbook_section` tables shipped by [handbook-ingestion-and-reader](../handbook-ingestion-and-reader/spec.md); and converts the per-node `relevance` array from authored YAML to a derived cache.
+The second phase of [ADR 016](../../decisions/016-cert-syllabus-goal-model/decision.md): the data layer that turns the knowledge graph into a multi-cert, multi-syllabus, multi-goal learning model. Builds the `credential`, `credential_prereq`, `credential_syllabus`, `syllabus`, `syllabus_node`, `syllabus_node_link`, `goal`, `goal_syllabus`, and `goal_node` tables; seeds `reference` rows for the ACS / PTS / endorsement publications it cites; composes on top of the `reference`, `handbook_section`, and `handbook_figure` tables shipped by [handbook-ingestion-and-reader](../handbook-ingestion-and-reader/spec.md) (PR #242); composes on top of the `airboss-ref:` identifier system established in [ADR 019](../../decisions/019-reference-identifier-system/decision.md) (validator landed in PR #241); and converts the per-node `relevance` array from authored YAML to a derived cache.
 
 Ships ADR 016 phases 1, 2, 3, 4, 5, and 6. Phases 7-9 (cert dashboard pages, lens framework UI, personal goal composer pages) are out of scope here -- their data layers and BC functions land here, but the SvelteKit page work is a follow-on WP.
+
+## Amendment scope (2026-04-27)
+
+This spec was originally authored before WP #1 merged and before ADR 019 was accepted. Three coherent changes reconcile it with what is now on main:
+
+1. **Citation table removed.** WP #1 shipped `StructuredCitation` (a discriminated union on `kind`) as inline JSONB on `knowledge_node.references`. The originally-specified `study.citation` row is duplicative; this WP no longer creates one. Citations live as `StructuredCitation` shapes embedded on `knowledge_node.references` and (newly) `syllabus_node.citations`. The `libs/bc/citations` BC is a separate polymorphic content-to-reference connector for cards/scenarios/regulations and is unaffected.
+2. **`airboss-ref:` composition.** ADR 019 v3 accepts the `airboss-ref:<corpus>/<locator>?at=<edition>` identifier scheme as the canonical citation form. The `acs` corpus is named in ADR 019 §1.2. `syllabus_node` now carries an optional `airboss_ref` column holding the canonical identifier; this WP implements the `acs` corpus resolver against `@ab/sources`.
+3. **Reference table is seeded, not created.** The `study.reference` table was created by WP #1 (drizzle migration `0001_handbook_ingestion.sql`). This WP seeds rows for the ACS / PTS / endorsement publications it cites and consumes the table read-side; it does not redefine it. Edition-vs-errata semantics on those rows follow [ADR 020](../../decisions/020-handbook-edition-and-amendment-policy.md).
+
+The Credential DAG, Goal model, syllabus tree shape, lens framework, ACS K/R/S triad split, PPL ACS Area V pilot transcription, relevance cache rebuild, and study-plan-to-goal migration are unchanged by this amendment.
 
 ## Why this WP exists
 
@@ -28,26 +40,35 @@ This WP is the data substrate. Cert dashboard pages, lens UI, and goal composer 
 
 - [ADR 016 -- Cert, Syllabus, Goal, and the Multi-Lens Learning Model](../../decisions/016-cert-syllabus-goal-model/decision.md). Migration plan rows for phases 1-6 are this WP's contract.
 - [ADR 016 context](../../decisions/016-cert-syllabus-goal-model/context.md) -- why the five-object model.
+- [ADR 019 -- Reference Identifier System](../../decisions/019-reference-identifier-system/decision.md). The `airboss-ref:` URI scheme, `acs` corpus convention (§1.2), and the `@ab/sources` registry/validator/parser this WP composes on.
+- [ADR 020 -- Handbook edition and amendment policy](../../decisions/020-handbook-edition-and-amendment-policy.md). Edition-vs-errata model that applies to the ACS / PTS publications this WP seeds.
 - [Learning Philosophy](../../platform/LEARNING_PHILOSOPHY.md), especially principles 2 (cert as constraint set), 3 (DAG composition), 4 (goal vs course), 5 (mastery rollups), 6 (lenses), 9 (evidence matches knowledge type).
 - [ADR 011 -- Knowledge graph + learning system](../../decisions/011-knowledge-graph-learning-system/decision.md). The graph this WP projects onto.
-- [Handbook Ingestion and Reader spec](../handbook-ingestion-and-reader/spec.md). The `reference`, `handbook_section`, `handbook_figure`, and `handbook_read_state` tables; the discriminated-union `Citation` shape on `knowledge_node.references`; the `resolveCitationUrl` resolver this WP extends.
+- [Handbook Ingestion and Reader spec](../handbook-ingestion-and-reader/spec.md). The `reference`, `handbook_section`, `handbook_figure`, and `handbook_read_state` tables; the discriminated-union `StructuredCitation` shape on `knowledge_node.references`; the `resolveCitationUrl` resolver this WP extends. Shipped on main as PR #242.
 - [Handbook Ingestion and Reader design](../handbook-ingestion-and-reader/design.md). Storage rationale (committed markdown + DB seed), schema rationale (separate tables for distinct lifecycles), citation-upgrade rationale (discriminated union on JSONB).
-- Existing constants this WP retires or repurposes: `CERTS`, `CERT_PREREQUISITES`, `CERT_VALUES`, `CERT_LABELS` in `libs/constants/src/study.ts`; `CERT_APPLICABILITIES` in `libs/constants/src/reference-tags.ts`.
+- [Reference Identifier Scheme Validator spec](../reference-identifier-scheme-validator/spec.md). The `@ab/sources` parser/validator/lesson-parser this WP composes on (shipped Phase 1).
+- `libs/types/src/citation.ts` -- the `LegacyCitation` and `StructuredCitation` types this WP extends.
+- `libs/sources/src/types.ts`, `libs/sources/src/parser.ts`, `libs/sources/src/validator.ts` -- `SourceId`, `ParsedIdentifier`, `RegistryReader` types and parser this WP's `acs` corpus resolver registers against.
+- `libs/bc/citations/src/` -- the pre-existing polymorphic content-citation BC (cards/scenarios -> reference targets). Distinct from the citation primitive WP #2 originally specified; survives unchanged. See "Reconciliation with `libs/bc/citations`" below.
+- Existing constants this WP retires or repurposes: `CERTS`, `CERT_PREREQUISITES`, `CERT_VALUES`, `CERT_LABELS` in `libs/constants/src/study.ts`; `CERT_APPLICABILITIES` in `libs/constants/src/reference-tags.ts`. `REFERENCE_KINDS` from WP #1 stays canonical.
 
 ## In Scope
 
-1. **Citation table.** New `study.citation` row that pairs a `reference_id` with a structured `locator`, a `framing`, and an optional `note`. Independent of where it's used; pointed at via `citation_id` arrays in JSONB on `knowledge_node`, `syllabus_node`, and per-consumer joins where the relationship is stable.
-2. **Migration of `knowledge_node.references` to citations.** Existing freeform `{ source, detail, note }[]` entries become `citation` rows with `kind=other` and the original text in `locator_data.text`. Existing structured handbook citations (from the WP #1 schema-only upgrade) become rows with `kind=handbook` and the locator copied verbatim. The JSONB column on `knowledge_node` becomes an array of `citation_id` strings.
-3. **Citation URL resolver extension.** `resolveCitationUrl(citation, references, handbookSections?)` is extended to handle every reference kind: handbook (delegates to WP #1's resolver), CFR (links eCFR), AC (links FAA AC index), ACS / PTS (links the FAA test-standards page), AIM (links AIM by paragraph), Pilot/Controller Glossary (links PCG by term), NTSB / POH / other (returns `null`; UI renders the freeform note).
-4. **Credential DAG.** New `study.credential`, `study.credential_prereq`, and `study.credential_syllabus` tables. Seeded with every credential user zero is pursuing: private, commercial, atp (the third pilot cert tier the model needs to support), instrument, multi-engine-land, single-engine-land, single-engine-sea, multi-engine-sea, cfi, cfii, mei, meii (multi-instrument-instructor), and the common 14 CFR 61.31 endorsements (complex, high-performance, tailwheel, high-altitude, spin, glass cockpit). Plus `category` and `class` fields per ADR 016.
-5. **Retire `CERT_PREREQUISITES` constant.** Replaced by data in `credential_prereq`. The constant becomes a derived helper `getCertsCoveredBy(credentialId)` that walks the DAG; the existing `CERTS` / `CERT_VALUES` / `CERT_LABELS` constants are kept as a slim authoring shortcut (the four-cert subset the existing study-plan dashboard targets) but route through the DB credential rows for source-of-truth purposes.
-6. **Syllabus tables.** New `study.syllabus`, `study.syllabus_node`, and `study.syllabus_node_link` tables. Tree-shaped `syllabus_node` with `parent_id` self-FK, `level` enum (area / task / element / section), `code` deterministic citation code (`I.A.K1`), and `triad` field (knowledge / risk_management / skill / null) for ACS K/R/S split (per ADR 016's resolved decision: separate leaves for each triad element). Plus authored `required_bloom`, `description`, and `citations` JSONB array of `citation_id`.
-7. **YAML authoring pipeline for syllabi.** `course/syllabi/<slug>/...` directory tree (one YAML file per Area; see Open Question 2) authored as system content, built into the DB via `bun run db seed syllabi`. Idempotent, content-hashed, no rebuild on unchanged files. Validator rejects level-hierarchy violations, dangling `knowledge_node_link` targets, duplicate codes within a syllabus, and parent-child cycles.
-8. **PPL ACS pilot transcription -- Area V "Performance Maneuvers".** Three tasks (Steep Turns; Steep Spirals; Chandelles or whatever Area V's third task is in the current edition), expanded to ~24 K/R/S element leaves, transcribed into the YAML schema as the model-validation pilot. Existing 30 knowledge nodes get `syllabus_node_link` rows authored against the relevant Area V leaves where applicable. Full PPL ACS transcription is iterative human work after this WP merges; the WP ships the schema, validator, seed pipeline, linking guidance, and one Area's worth of authored content.
-9. **Relevance cache rebuild.** Build script walks every active syllabus; per linked `knowledge_node`, accumulates `(cert, bloom, priority)` triples from the syllabus's credential and the leaf's `required_bloom`; deduplicates; writes to `knowledge_node.relevance` (existing JSONB column) as a cache. The authored YAML `relevance` field is dropped from frontmatter via a one-shot script after the syllabi-driven cache is verified equivalent.
-10. **Goal table and goal-aware engine handoff.** New `study.goal`, `study.goal_syllabus`, and `study.goal_node` tables. Existing `study_plan.cert_goals` array converts to `goal` + `goal_syllabus` rows via a one-shot migration. `study_plan` table stays (the engine targeting state); `cert_goals` becomes a derived view computed from the active goal (Open Question 4). The session engine continues to read `study_plan` directly during this WP; a follow-on WP cuts the engine over to read goal-derived filters.
-11. **BC functions.** `libs/bc/study/src/citations.ts`, `credentials.ts`, `syllabi.ts`, `goals.ts`, plus extensions to `handbooks.ts` for the resolver. Mastery rollup at the cert / area / task / element level lives in `credentials.ts` so the cert dashboard follow-on has the substrate it needs. Lens framework type signature lives in `lenses.ts` with two lens implementations (ACS lens, Domain lens); other lenses are typed but not implemented here.
-12. **Constants and routes.** New `CITATION_LOCATOR_KINDS`, `CITATION_FRAMINGS`, `CREDENTIAL_KINDS`, `CREDENTIAL_PREREQ_KINDS`, `CREDENTIAL_CATEGORIES`, `CREDENTIAL_CLASSES`, `SYLLABUS_KINDS`, `SYLLABUS_PRIMACY`, `SYLLABUS_NODE_LEVELS`, `ACS_TRIAD`, `LENS_KINDS`, `GOAL_STATUSES` plus values arrays and labels. Route entries for `/credentials`, `/credentials/[slug]`, `/credentials/[slug]/areas/[area]`, `/goals`, `/goals/new`, `/goals/[id]`, `/goals/[id]/edit` (definitions only -- pages land in follow-on WPs).
+1. **`StructuredCitation` extended with optional `framing`.** The `StructuredCitation` discriminated union in `libs/types/src/citation.ts` (shipped by WP #1) gains an optional `framing` field on every kind: `survey | operational | procedural | regulatory | examiner`. Citations stay as JSONB array entries on `knowledge_node.references` and (newly) on `syllabus_node.citations`; this WP does not introduce a separate `study.citation` table. `framing` is optional for back-compat with WP #1's already-seeded handbook citations.
+2. **Migration of legacy `knowledge_node.references` to `StructuredCitation`.** Existing `LegacyCitation` `{ source, detail, note }[]` entries become `StructuredCitation` entries with the appropriate `kind` (`handbook` when the legacy `source` resolves to a `study.reference` of kind `handbook`; `cfr` / `ac` / `acs` / `aim` etc. when the source matches; `other` as the catch-all). The JSONB column on `knowledge_node` ends up containing only `StructuredCitation` shapes (no `LegacyCitation` survivors). Existing WP #1 structured handbook citations are untouched. A `references_v2_migrated` boolean flag column gates idempotency.
+3. **Citation URL resolver extension.** `resolveCitationUrl(citation, references)` (already in `libs/bc/study/src/handbooks.ts`) is extended to handle every `StructuredCitation.kind` not yet covered: CFR (links eCFR), AC (links FAA AC index), ACS / PTS (links the FAA test-standards page; uses the `airboss-ref:acs/...` identifier when present), AIM (links AIM by paragraph), Pilot/Controller Glossary (links PCG by term), NTSB / POH / other (returns `null`; UI renders the freeform note). Handbook resolution is unchanged.
+4. **`airboss-ref:` composition for syllabus leaves.** Every `syllabus_node` row carries an optional `airboss_ref` text column holding the canonical identifier per ADR 019 §1.2. For ACS leaves the form is `airboss-ref:acs/<cert>/<edition-slug>/area-<n>/task-<x>/element-<n>` (e.g. `airboss-ref:acs/ppl-asel/faa-s-acs-25/area-v/task-a/element-k1`). Validation: must parse via `@ab/sources` parser; corpus must be `acs` for ACS / PTS syllabi; pin must be slug-encoded (no `?at=` since ACS uses publication-ID slug pinning per ADR 019 §1.3). The human-readable `code` field (`V.A.K1`) stays for display; `airboss_ref` is the contract.
+5. **`acs` corpus resolver in `@ab/sources`.** This WP ships the `CorpusResolver` for the `acs` corpus (per ADR 019 §2.2). Implements `parseLocator`, `formatCitation`, `getCurrentEdition`, `getEditions`, `getLiveUrl`, `getDerivativeContent` (`null` until ACS PDF ingestion ships), and `getIndexedContent` (returns the `syllabus_node` row for the resolved ACS identifier). Registered with the registry stub from `libs/sources/src/registry-stub.ts` until Phase 2 of ADR 019 ships the real registry.
+6. **Seed `study.reference` rows for ACS / PTS / endorsement publications.** `study.reference` already exists (WP #1, drizzle migration `0001_handbook_ingestion.sql`). This WP seeds rows for: PPL ACS (current edition, see Open Question 5), IR ACS, CPL ACS, CFI PTS, CFII PTS, MEI PTS, MEII PTS, plus the 14 CFR 61.31 endorsements (`reference.kind='cfr'` for the regulatory basis; the endorsement publications themselves don't have a separate FAA document). Each seeded row uses the `kind` enum from `REFERENCE_KINDS` (already shipped by WP #1: `acs`, `pts`, `cfr`). Edition-vs-errata follows ADR 020.
+7. **Credential DAG.** New `study.credential`, `study.credential_prereq`, and `study.credential_syllabus` tables. Seeded with every credential user zero is pursuing: private, commercial, atp (the third pilot cert tier the model needs to support), instrument, multi-engine-land, single-engine-land, single-engine-sea, multi-engine-sea, cfi, cfii, mei, meii (multi-instrument-instructor), and the common 14 CFR 61.31 endorsements (complex, high-performance, tailwheel, high-altitude, spin, glass cockpit). Plus `category` and `class` fields per ADR 016.
+8. **Retire `CERT_PREREQUISITES` constant.** Replaced by data in `credential_prereq`. The constant becomes a derived helper `getCertsCoveredBy(credentialId)` that walks the DAG; the existing `CERTS` / `CERT_VALUES` / `CERT_LABELS` constants are kept as a slim authoring shortcut (the four-cert subset the existing study-plan dashboard targets) but route through the DB credential rows for source-of-truth purposes.
+9. **Syllabus tables.** New `study.syllabus`, `study.syllabus_node`, and `study.syllabus_node_link` tables. Tree-shaped `syllabus_node` with `parent_id` self-FK, `level` enum (area / task / element / section), `code` deterministic citation code (`I.A.K1`), `airboss_ref` canonical identifier (per item 4), and `triad` field (knowledge / risk_management / skill / null) for ACS K/R/S split (per ADR 016's resolved decision: separate leaves for each triad element). Plus authored `required_bloom`, `description`, and `citations` JSONB array of `StructuredCitation` shapes (matching `knowledge_node.references` post-migration).
+10. **YAML authoring pipeline for syllabi.** `course/syllabi/<slug>/...` directory tree (one YAML file per Area; see Open Question 2) authored as system content, built into the DB via `bun run db seed syllabi`. Idempotent, content-hashed, no rebuild on unchanged files. Validator rejects level-hierarchy violations, dangling `knowledge_node_link` targets, duplicate codes within a syllabus, parent-child cycles, and `airboss_ref` strings that fail to parse via `@ab/sources` parser or whose corpus / locator does not match the syllabus kind.
+11. **PPL ACS pilot transcription -- Area V "Performance Maneuvers".** Three tasks (Steep Turns; Steep Spirals; Chandelles or whatever Area V's third task is in the current edition), expanded to ~24 K/R/S element leaves, transcribed into the YAML schema as the model-validation pilot. Each leaf carries an `airboss_ref` identifier. Existing 30 knowledge nodes get `syllabus_node_link` rows authored against the relevant Area V leaves where applicable. Full PPL ACS transcription is iterative human work after this WP merges; the WP ships the schema, validator, seed pipeline, linking guidance, and one Area's worth of authored content.
+12. **Relevance cache rebuild.** Build script walks every active syllabus; per linked `knowledge_node`, accumulates `(cert, bloom, priority)` triples from the syllabus's credential and the leaf's `required_bloom`; deduplicates; writes to `knowledge_node.relevance` (existing JSONB column) as a cache. The authored YAML `relevance` field is dropped from frontmatter via a one-shot script after the syllabi-driven cache is verified equivalent.
+13. **Goal table and goal-aware engine handoff.** New `study.goal`, `study.goal_syllabus`, and `study.goal_node` tables. Existing `study_plan.cert_goals` array converts to `goal` + `goal_syllabus` rows via a one-shot migration. `study_plan` table stays (the engine targeting state); `cert_goals` becomes a derived view computed from the active goal (Open Question 4). The session engine continues to read `study_plan` directly during this WP; a follow-on WP cuts the engine over to read goal-derived filters.
+14. **BC functions.** `libs/bc/study/src/credentials.ts`, `syllabi.ts`, `goals.ts`, plus extensions to `handbooks.ts` for the resolver. Mastery rollup at the cert / area / task / element level lives in `credentials.ts` so the cert dashboard follow-on has the substrate it needs. Lens framework type signature lives in `lenses.ts` with two lens implementations (ACS lens, Domain lens); other lenses are typed but not implemented here. The `acs` corpus resolver lands in `libs/sources/src/resolvers/acs.ts`.
+15. **Constants and routes.** New `CITATION_FRAMINGS`, `CREDENTIAL_KINDS`, `CREDENTIAL_PREREQ_KINDS`, `CREDENTIAL_CATEGORIES`, `CREDENTIAL_CLASSES`, `SYLLABUS_KINDS`, `SYLLABUS_PRIMACY`, `SYLLABUS_NODE_LEVELS`, `ACS_TRIAD`, `LENS_KINDS`, `GOAL_STATUSES` plus values arrays and labels. Route entries for `/credentials`, `/credentials/[slug]`, `/credentials/[slug]/areas/[area]`, `/goals`, `/goals/new`, `/goals/[id]`, `/goals/[id]/edit` (definitions only -- pages land in follow-on WPs). `CITATION_LOCATOR_KINDS` from the original spec is dropped (the locator shape lives inside `StructuredCitation` per kind, not as a separate enum).
 
 ## Out of Scope (explicit)
 
@@ -67,35 +88,37 @@ This WP is the data substrate. Cert dashboard pages, lens UI, and goal composer 
 │  Authoring (YAML in repo)                                               │
 │   course/knowledge/<slug>/node.md          (existing; relevance dropped)│
 │   course/syllabi/<slug>/areas/...yaml      (NEW; this WP)               │
+│   course/credentials/<slug>.yaml           (NEW; this WP)               │
 │   handbooks/<doc>/<edition>/...md          (from WP #1)                 │
 │       |                                                                 │
 │       v                                                                 │
 │  Build pipeline                                                         │
+│   bun run db seed references               -> ACS/PTS rows on existing  │
+│                                                study.reference table    │
+│   bun run db seed credentials              -> credential, credential_*  │
 │   bun run db seed syllabi                  -> syllabus, syllabus_node,  │
 │                                                syllabus_node_link rows  │
-│   bun run db seed credentials              -> credential, credential_*  │
 │   bun run db build:relevance               -> rebuild cache on          │
 │                                                knowledge_node.relevance │
 │       |                                                                 │
 │       v                                                                 │
 │  DB (study schema)                                                      │
-│   reference (WP #1)                                                     │
+│   reference (WP #1; ACS/PTS rows seeded by this WP)                     │
 │   handbook_section (WP #1)                                              │
-│   citation (NEW)                                                        │
 │   credential (NEW), credential_prereq (NEW), credential_syllabus (NEW)  │
 │   syllabus (NEW), syllabus_node (NEW), syllabus_node_link (NEW)         │
-│   knowledge_node (existing; references column reshaped)                 │
+│   knowledge_node (existing; references uniformly StructuredCitation)    │
 │   goal (NEW), goal_syllabus (NEW), goal_node (NEW)                      │
 │   study_plan (existing; cert_goals stays for now)                       │
 │       |                                                                 │
 │       v                                                                 │
-│  BC (libs/bc/study/src/)                                                │
-│   citations.ts        list / get / resolveCitationUrl extensions        │
+│  BC (libs/bc/study/src/) + @ab/sources                                  │
 │   credentials.ts      DAG walks, mastery rollup at cred/area/task/elt   │
-│   syllabi.ts          tree walks, leaf links, citation lookup           │
+│   syllabi.ts          tree walks, leaf links, StructuredCitation lookup │
 │   goals.ts            CRUD, active-goal resolution, weighted union      │
 │   lenses.ts           Lens type + ACS lens + Domain lens                │
 │   handbooks.ts        resolveCitationUrl extended to all kinds          │
+│   @ab/sources/resolvers/acs.ts  acs corpus resolver (per ADR 019 §2.2)  │
 │       |                                                                 │
 │       v                                                                 │
 │  Routes (defined; pages in follow-on WPs)                               │
@@ -108,40 +131,36 @@ This WP is the data substrate. Cert dashboard pages, lens UI, and goal composer 
 
 All tables in the `study` Postgres schema namespace. IDs use `prefix_ULID` via `@ab/utils createId()`. Drizzle ORM. CHECK constraints follow the existing `inList(...)` pattern.
 
-### study.citation
+### Citations -- inline `StructuredCitation`, not a separate table
 
-Pairs a `reference_id` with a typed locator, framing, and optional note. Independent of where it's used; many things may carry the same citation. Citations live once, get referenced many times.
+WP #1 (PR #242) shipped `StructuredCitation` as a discriminated union on JSONB array entries (`libs/types/src/citation.ts`). This WP keeps that shape and extends it with an optional `framing` field. There is no `study.citation` row; citations live inline on the consumer.
 
-| Column        | Type        | Constraints                                              | Notes                                                                                              |
-| ------------- | ----------- | -------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| id            | text        | PK                                                       | `cit_` prefix.                                                                                     |
-| reference_id  | text        | NOT NULL, FK `study.reference.id` ON DELETE RESTRICT     | Restrict so deleting a reference with citations is loud, not silent.                               |
-| locator_kind  | text        | NOT NULL, CHECK in `CITATION_LOCATOR_KIND_VALUES`        | chapter_section / cfr_section / acs_task / ac_paragraph / aim_paragraph / pcg_term / page / other. |
-| locator_data  | jsonb       | NOT NULL                                                 | Typed by `locator_kind`. Discriminated-union shape (see below).                                    |
-| framing       | text        | NOT NULL, CHECK in `CITATION_FRAMING_VALUES`             | survey / operational / procedural / regulatory / examiner.                                         |
-| note          | text        | NULL                                                     | Optional learner-facing context.                                                                   |
-| seed_origin   | text        | NULL                                                     | Standard project-wide dev-seed marker. NULL on production rows.                                    |
-| created_at    | timestamptz | NOT NULL, DEFAULT now()                                  |                                                                                                    |
-| updated_at    | timestamptz | NOT NULL, DEFAULT now()                                  |                                                                                                    |
-
-Indexes: `(reference_id)` for "all citations against this reference"; `(locator_kind)` for kind-filtered listings.
-
-`locator_data` is a discriminated union. The `locator_kind` column is the discriminator; the JSONB shape narrows accordingly:
+Extension to `libs/types/src/citation.ts`:
 
 ```typescript
-// libs/types/src/citation.ts (extends WP #1's discriminated union)
-export type CitationLocatorData =
-	| { kind: 'chapter_section'; chapter: number; section?: number; subsection?: number; page_start?: string; page_end?: string }
-	| { kind: 'cfr_section'; title: number; part: number; section: string }
-	| { kind: 'acs_task'; area?: string; task?: string; element?: string }
-	| { kind: 'ac_paragraph'; paragraph?: string }
-	| { kind: 'aim_paragraph'; paragraph?: string }
-	| { kind: 'pcg_term'; term: string }
-	| { kind: 'page'; page: string }
-	| { kind: 'other'; text: string };
+// Optional framing on every kind. Empty/undefined means "no framing assigned".
+export type CitationFraming = 'survey' | 'operational' | 'procedural' | 'regulatory' | 'examiner';
+
+// Each variant in StructuredCitation gains an optional `framing?: CitationFraming` field.
+// E.g. the handbook variant becomes:
+{
+  kind: 'handbook';
+  reference_id: string;
+  locator: { chapter: number; section?: number; subsection?: number; page_start?: string; page_end?: string };
+  note?: string;
+  framing?: CitationFraming;
+  /** Canonical airboss-ref: identifier per ADR 019 §1.2; optional for back-compat. */
+  airboss_ref?: string;
+}
 ```
 
-The `kind` discriminator on `locator_data` matches the column's `locator_kind` value. The build script enforces this in validation.
+Same `framing?` and `airboss_ref?` extensions land on every `StructuredCitation` variant (`cfr | ac | acs | pts | aim | pcg | ntsb | poh | other`). Both fields are optional; existing WP #1 seed rows keep validating without modification.
+
+The `airboss_ref` field on a `StructuredCitation` is a denormalization: when present it points at the canonical identifier; the structured locator stays for fast queries (e.g. "all citations of CFR Title 14 Part 91" without parsing identifier strings). Both must agree when both present; the build validator enforces consistency.
+
+#### Reconciliation with `libs/bc/citations`
+
+`libs/bc/citations` is a peer system, NOT the citation primitive WP #2 was originally going to build. It models polymorphic content-to-reference connections (`content_citations` table: `(source_type, source_id) -> (target_type, target_id)`) for cards, scenarios, regulations, knowledge nodes. It is unaffected by this WP and stays as-is. The citation primitive in this WP is the inline `StructuredCitation` shape on `knowledge_node.references` and `syllabus_node.citations`. The two systems coexist; collapsing them is a follow-on cleanup if and only if a real overlap surfaces.
 
 ### study.credential
 
@@ -151,12 +170,12 @@ Umbrella table for pilot certs, instructor certs, ratings, and endorsements.
 | ----------------- | ----------- | ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
 | id                | text        | PK                                                         | `cred_` prefix.                                                                                    |
 | kind              | text        | NOT NULL, CHECK in `CREDENTIAL_KIND_VALUES`                | pilot_cert / instructor_cert / rating / endorsement.                                               |
-| slug              | text        | NOT NULL, UNIQUE                                           | `private`, `commercial`, `atp`, `instrument`, `single-engine-land`, `multi-engine-land`, `cfi`, `cfii`, `mei`, `meii`, `complex`, `high-performance`, `tailwheel`, `high-altitude`, `spin`, etc. |
+| slug              | text        | NOT NULL, UNIQUE                                           | `private`, `cfi`, `instrument`, `complex`, etc. (full list in In Scope above).                     |
 | title             | text        | NOT NULL                                                   | "Private Pilot Certificate"; "Multi-Engine Land Class Rating"; "Complex Endorsement (61.31(e))".   |
-| category          | text        | NOT NULL, CHECK in `CREDENTIAL_CATEGORY_VALUES`            | airplane / rotorcraft / glider / balloon / powered-lift / none. `none` for cross-category creds and most endorsements. |
+| category          | text        | NOT NULL, CHECK in `CREDENTIAL_CATEGORY_VALUES`            | airplane / rotorcraft / glider / balloon / powered-lift / none.                                    |
 | class             | text        | NULL, CHECK in `CREDENTIAL_CLASS_VALUES`                   | single-engine-land / multi-engine-land / single-engine-sea / multi-engine-sea / null (N/A).        |
-| regulatory_basis  | jsonb       | NOT NULL, DEFAULT '[]'                                     | Array of `citation_id` strings pointing at the CFR sections that define this credential (e.g. `["cit_..."]` resolving to 14 CFR 61.103 for private). |
-| status            | text        | NOT NULL, DEFAULT 'active', CHECK in `CREDENTIAL_STATUS_VALUES` | active / archived. Archived = retired by FAA or replaced.                                       |
+| regulatory_basis  | jsonb       | NOT NULL, DEFAULT '[]'                                     | Array of `StructuredCitation` shapes (typically `kind: 'cfr'`) for sections defining this cred.    |
+| status            | text        | NOT NULL, DEFAULT 'active', CHECK in `CREDENTIAL_STATUS_VALUES` | active / archived. Archived = retired by FAA or replaced.                                     |
 | seed_origin       | text        | NULL                                                       |                                                                                                    |
 | created_at        | timestamptz | NOT NULL, DEFAULT now()                                    |                                                                                                    |
 | updated_at        | timestamptz | NOT NULL, DEFAULT now()                                    |                                                                                                    |
@@ -223,12 +242,13 @@ The tree. Areas at the top, then Tasks, then Elements (ACS triad split: separate
 | parent_id       | text        | NULL, FK `study.syllabus_node.id` ON DELETE CASCADE        | NULL for area rows; the area for tasks; the task for elements; the element for subsection rows.    |
 | ordinal         | integer     | NOT NULL                                                   | Stable within-parent sort order.                                                                   |
 | level           | text        | NOT NULL, CHECK in `SYLLABUS_NODE_LEVEL_VALUES`            | area / task / element / section.                                                                   |
-| code            | text        | NOT NULL                                                   | Citation code: `I`, `I.A`, `I.A.K1`, `I.A.S2`. ACS / PTS conventions; free-form for non-ACS.       |
+| code            | text        | NOT NULL                                                   | Human-readable citation code: `I`, `I.A`, `I.A.K1`. ACS / PTS conventions; free-form for non-ACS.  |
+| airboss_ref     | text        | NULL                                                       | Canonical `airboss-ref:` identifier per ADR 019 §1.2. See "airboss-ref composition" below.         |
 | title           | text        | NOT NULL                                                   |                                                                                                    |
 | description     | text        | NULL                                                       | Optional prose. Often the verbatim ACS element text.                                               |
 | triad           | text        | NULL, CHECK in `ACS_TRIAD_VALUES`                          | knowledge / risk_management / skill / null. Set only when `level='element'` for ACS / PTS syllabi. |
 | required_bloom  | text        | NULL, CHECK in `BLOOM_LEVEL_VALUES`                        | The bloom level expected at this leaf. NULL for non-leaf rows. Drives derived `relevance` cache.   |
-| citations       | jsonb       | NOT NULL, DEFAULT '[]'                                     | Array of `citation_id` strings. Same shape `knowledge_node.references` is migrating to.            |
+| citations       | jsonb       | NOT NULL, DEFAULT '[]'                                     | Array of `StructuredCitation` shapes (matching `knowledge_node.references` post-migration).        |
 | is_leaf         | boolean     | NOT NULL                                                   | True when this row has no children. Maintained by the seed.                                        |
 | seed_origin     | text        | NULL                                                       |                                                                                                    |
 | created_at      | timestamptz | NOT NULL, DEFAULT now()                                    |                                                                                                    |
@@ -242,6 +262,7 @@ CHECK consistency:
 - `level IN ('task','element','section')` requires `parent_id IS NOT NULL`.
 - `triad IS NOT NULL` only when `level='element'`.
 - `required_bloom IS NOT NULL` only when `is_leaf=true`.
+- `airboss_ref` (when non-null) must start with `airboss-ref:` literal. Full identifier validation runs at the BC + seed layer via `@ab/sources` parser; the DB CHECK is a syntactic guard only.
 
 Expressed as a single CHECK using `sql.raw()`:
 
@@ -250,7 +271,28 @@ Expressed as a single CHECK using `sql.raw()`:
  OR ("level" IN ('task','element','section') AND "parent_id" IS NOT NULL))
 AND ("triad" IS NULL OR "level" = 'element')
 AND ("required_bloom" IS NULL OR "is_leaf" = true)
+AND ("airboss_ref" IS NULL OR "airboss_ref" LIKE 'airboss-ref:%')
 ```
+
+#### airboss-ref composition
+
+Per ADR 019 §1.2, the `acs` corpus locator form is:
+
+```text
+airboss-ref:acs/<cert>/<edition-slug>/area-<n>/task-<x>/element-<n>
+```
+
+Examples:
+
+```text
+airboss-ref:acs/ppl-asel/faa-s-acs-25/area-v/task-a              # Task-level reference
+airboss-ref:acs/ppl-asel/faa-s-acs-25/area-v/task-a/element-k1   # Element-level reference (K1)
+airboss-ref:acs/cfi-asel/faa-s-acs-25/area-i/task-a/element-r1   # CFI ASEL Area I Task A R1
+```
+
+ACS uses slug-encoded edition (the FAA publication ID); no `?at=` query parameter needed. The `<cert>` component matches the credential slug subset relevant to ACS publications: `ppl-asel`, `ppl-amel`, `ppl-helo`, `ipl` (instrument), `cpl-asel`, `cfi-asel`, `cfii`, etc. The full corpus convention may evolve as more ACS publications are seeded; the parser treats locators opaquely per ADR 019 §1.1, so additions to the convention are non-breaking for the validator.
+
+When the `airboss_ref` column is set, it is the contract; `code` is the human-readable display projection.
 
 ### study.syllabus_node_link
 
@@ -318,28 +360,42 @@ Composite PK `(goal_id, knowledge_node_id)`. Index `(knowledge_node_id)`.
 
 ### Reshape of `knowledge_node.references`
 
-The existing JSONB column changes shape from `{ source, detail, note }[]` (legacy freeform) and the WP #1 discriminated-union schema to a uniform `string[]` of `citation_id` values that point at `study.citation` rows. Migration is one-way; the legacy and structured-but-inline shapes are both rewritten into citation rows + an array of IDs.
+The existing JSONB column already supports both `LegacyCitation` (`{ source, detail, note }`) and `StructuredCitation` (the WP #1 discriminated union). This WP migrates every surviving `LegacyCitation` entry to a `StructuredCitation` so the array becomes uniform. There is no separate `citation` table; entries stay inline.
 
 ```typescript
-// Before (legacy):
+// Before (legacy freeform):
 { source: 'PHAK (FAA-H-8083-25C)', detail: 'Ch 12 §3', note: 'AOA definition' }
 
-// Before (WP #1 structured-on-array):
+// Before (WP #1 structured, already in shape):
 { kind: 'handbook', reference_id: 'ref_phak_8083_25c', locator: { chapter: 12, section: 3 } }
 
-// After (this WP):
-'cit_01J...'  // points at a row in study.citation
+// After (this WP, uniform StructuredCitation with optional framing + airboss_ref):
+{
+  kind: 'handbook',
+  reference_id: 'ref_phak_8083_25c',
+  locator: { chapter: 12, section: 3 },
+  note: 'AOA definition',
+  framing: 'survey',
+  airboss_ref: 'airboss-ref:handbooks/phak/8083-25C/12/3',
+}
 ```
 
-The migration script is part of this WP. It runs once during the seed pipeline; after it finishes, the `references` column shape is `string[]` and a `references_v2_migrated` flag column is set on `knowledge_node`. Re-running the migration is a no-op when the flag is set. (Alternative: a parallel `knowledge_node_citation` join table -- see Open Question 3.)
+The migration script is part of this WP. It runs once during the seed pipeline; after it finishes, every entry on `knowledge_node.references` is a `StructuredCitation` and a `references_v2_migrated` boolean flag column is set on `knowledge_node`. Re-running the migration is a no-op when the flag is set.
+
+For each legacy entry the script:
+
+1. Tries to map `source` (e.g. `"PHAK (FAA-H-8083-25C)"`) onto an existing `study.reference` row by `(kind, document_slug, edition)` heuristics.
+2. Picks a `kind` for the resulting `StructuredCitation` matching the resolved reference (`handbook` for handbooks, `cfr` for 14 CFR, etc.); falls back to `kind: 'other'` with a synthetic reference row when no match exists.
+3. Translates `detail` into the locator shape for that kind (chapter/section for handbooks, title/part/section for CFRs, etc.). When `detail` doesn't parse cleanly, the entry becomes `kind: 'other'` with `locator: { detail: <original-text> }`.
+4. Optionally stamps `framing` (`survey` is the default for handbook, `regulatory` for CFR, `examiner` for ACS / PTS) and `airboss_ref` when the resolved kind has an established corpus convention.
 
 ## Behavior
 
 ### Citation lifecycle
 
-Citations live in `study.citation`. They are created by the build pipeline (when authoring a syllabus YAML or migrating existing node references) and rarely user-edited. The set of citations is mostly stable; new ones land when new authored content references new sources.
+Citations live inline as `StructuredCitation` JSONB entries on `knowledge_node.references` and `syllabus_node.citations`. They are written by the build pipeline (when authoring a syllabus YAML or migrating existing node references) and rarely user-edited. The set of distinct citation shapes is mostly stable; new ones land when authored content references new sources.
 
-The build script computes a content hash per citation `(reference_id, locator_kind, locator_data, framing, note)` and upserts on the hash so re-runs are idempotent.
+The build script normalizes each `StructuredCitation` (lower-cases the `kind`, sorts locator keys, strips empty fields) and upserts the consumer row's JSONB column. Idempotency is per-consumer (per-row content hash on `knowledge_node` / `syllabus_node`), not per-citation, because there is no separate citation row to dedupe against. Two consumers carrying the same citation each carry their own JSONB copy; this is acceptable because the citation shape is small (~150 bytes) and read-side joins always pass through the consumer row anyway.
 
 ### Credential DAG semantics
 
@@ -354,21 +410,19 @@ title: "Private Pilot Certificate"
 category: airplane
 class: null
 regulatory_basis:
-  - reference: 14cfr61
-    locator:
-      kind: cfr_section
-      title: 14
-      part: 61
-      section: "103"
+  - kind: cfr
+    reference: cfr-14
+    locator: { title: 14, part: 61, section: "103" }
     framing: regulatory
     note: "Eligibility requirements for a private pilot certificate."
+    airboss_ref: "airboss-ref:regs/cfr-14/61/103?at=2026"
 prereqs:
   - { slug: student, kind: required }
 syllabi:
-  - { slug: ppl-acs-2024-09, primacy: primary }
+  - { slug: ppl-acs-faa-s-acs-25, primacy: primary }
 ```
 
-The seed pipeline reads each `course/credentials/<slug>.yaml`, upserts a `credential` row, upserts the cited citations, walks the prereqs (validating no cycles via topological sort), and upserts `credential_prereq` and `credential_syllabus` rows.
+The seed pipeline reads each `course/credentials/<slug>.yaml`, upserts the `credential` row, validates each `regulatory_basis` entry as a `StructuredCitation` (and parses any `airboss_ref` via `@ab/sources`), walks the prereqs (validating no cycles via topological sort), and upserts `credential_prereq` and `credential_syllabus` rows. Citations land inline on `credential.regulatory_basis` (JSONB array of `StructuredCitation`); no separate citation row.
 
 ### Syllabus YAML authoring
 
@@ -394,15 +448,21 @@ course/syllabi/ppl-acs-2024-09/
 `manifest.yaml`:
 
 ```yaml
-slug: ppl-acs-2024-09
+slug: ppl-acs-faa-s-acs-25
 kind: acs
 title: "Private Pilot -- Airplane Airman Certification Standards"
-edition: "FAA-S-ACS-6B"     # update to current edition (Open Question 5)
+edition: "FAA-S-ACS-25"     # verify current edition before transcription (Open Question 5)
 edition_published_at: 2024-09-01
 source_url: "https://www.faa.gov/training_testing/testing/acs"
 status: active
+# Seeded reference row this syllabus consumes. Reference table is owned by WP #1.
+reference:
+  document_slug: faa-s-acs-25
+  kind: acs
+  title: "Private Pilot -- Airplane ACS"
+  publisher: FAA
 credentials:
-  - { slug: private, primacy: primary }
+  - { slug: private, primacy: primary, cert: ppl-asel }
 ```
 
 `areas/V-performance-maneuvers.yaml`:
@@ -411,23 +471,30 @@ credentials:
 code: V
 title: "Performance Maneuvers"
 ordinal: 5
+airboss_ref: "airboss-ref:acs/ppl-asel/faa-s-acs-25/area-v"
 tasks:
   - code: A
     title: "Steep Turns"
     ordinal: 1
+    airboss_ref: "airboss-ref:acs/ppl-asel/faa-s-acs-25/area-v/task-a"
     elements:
       - code: K1
         triad: knowledge
         title: "Aerodynamics of steep turns"
         required_bloom: understand
+        airboss_ref: "airboss-ref:acs/ppl-asel/faa-s-acs-25/area-v/task-a/element-k1"
         description: "Aerodynamics associated with steep turns, to include increased load factor, overbank tendency, and maintaining coordinated flight."
         citations:
-          - reference: phak
-            locator: { kind: chapter_section, chapter: 5 }
+          - kind: handbook
+            reference: phak               # resolves to study.reference.document_slug='phak', edition='FAA-H-8083-25C'
+            locator: { chapter: 5 }
             framing: survey
-          - reference: afh
-            locator: { kind: chapter_section, chapter: 9 }
+            airboss_ref: "airboss-ref:handbooks/phak/8083-25C/5"
+          - kind: handbook
+            reference: afh
+            locator: { chapter: 9 }
             framing: operational
+            airboss_ref: "airboss-ref:handbooks/afh/8083-3C/9"
         knowledge_nodes:
           - { slug: aero-four-forces, weight: 0.6 }
           - { slug: aero-load-factor, weight: 1.0 }
@@ -435,13 +502,17 @@ tasks:
         triad: risk_management
         title: "Failure to maintain coordinated flight"
         required_bloom: apply
-        ...
+        airboss_ref: "airboss-ref:acs/ppl-asel/faa-s-acs-25/area-v/task-a/element-r1"
+        # ...
       - code: S1
         triad: skill
         title: "Clear the area, select an altitude that allows the maneuver to be performed no lower than 1,500 feet AGL..."
         required_bloom: apply
-        ...
+        airboss_ref: "airboss-ref:acs/ppl-asel/faa-s-acs-25/area-v/task-a/element-s1"
+        # ...
 ```
+
+Citation entries in YAML follow the `StructuredCitation` shape (the `kind` discriminator is required; `reference` resolves to a `study.reference.document_slug`; `locator` is the per-kind shape from `libs/types/src/citation.ts`). The seed substitutes `reference_id` for the `reference` slug at write time.
 
 Validation (build-time, fail loud):
 
@@ -455,11 +526,17 @@ Validation (build-time, fail loud):
 | Element rows are leaves (no children) and carry `required_bloom`.                                  | error    |
 | `parent_id` consistency (DB CHECK; matches YAML hierarchy).                                        | error    |
 | `knowledge_nodes[].slug` resolves to an existing `knowledge_node.id`.                              | error    |
-| `citations[].reference` resolves to an existing `reference.document_slug`.                         | error    |
-| Citation `locator` shape matches `locator.kind`.                                                   | error    |
+| `citations[].reference` resolves to an existing `study.reference.document_slug`.                   | error    |
+| Citation `locator` shape matches the `kind` discriminator (per `StructuredCitation`).              | error    |
+| Citation `airboss_ref` (when present) parses via `@ab/sources` parser.                             | error    |
+| Citation `airboss_ref` corpus matches the citation `kind` (handbook -> handbooks; cfr -> regs).    | error    |
+| `syllabus_node.airboss_ref` parses via `@ab/sources` parser.                                       | error    |
+| ACS / PTS syllabi -- every element-level row has `airboss_ref` set with corpus `acs`.              | error    |
+| `airboss_ref` denotes a corpus the registry knows (per ADR 019 §1.2).                              | error    |
 | Tree depth never exceeds element / section level.                                                  | error    |
 | No cycles (parent of X must not be a descendant of X).                                             | error    |
 | Element triad is one of K, R, S, or null (per ADR 016 -- separate K1/R1/S1 leaves preferred).      | warning  |
+| `airboss_ref` pin is older than current `accepted` edition by > 1 (per ADR 019 §1.5).              | warning  |
 
 Errors abort the seed; warnings print and continue.
 
@@ -578,26 +655,29 @@ Used by `/credentials/[slug]` and the future cert-dashboard surface. Computed vi
 
 All exports from `libs/bc/study/src/index.ts`. New files:
 
-- `citations.ts` -- citation CRUD + URL resolver extension.
 - `credentials.ts` -- credential DAG walks, mastery rollup, list helpers.
 - `syllabi.ts` -- syllabus tree walks, leaf links, citation lookup.
 - `goals.ts` -- goal CRUD, active-goal resolution, weighted union.
 - `lenses.ts` -- Lens type + ACS lens + Domain lens.
-- `citations.test.ts`, `credentials.test.ts`, `syllabi.test.ts`, `goals.test.ts`, `lenses.test.ts` -- unit coverage.
+- `credentials.test.ts`, `syllabi.test.ts`, `goals.test.ts`, `lenses.test.ts` -- unit coverage.
 
 Extensions:
 
-- `handbooks.ts` -- `resolveCitationUrl` extended for non-handbook kinds.
+- `handbooks.ts` -- `resolveCitationUrl` extended for non-handbook kinds; reverse-lookup `getNodesCitingSection` already lives here from WP #1 and is unchanged.
+
+`libs/sources/src/resolvers/acs.ts` (new file in `@ab/sources`):
+
+- `acsResolver` -- `CorpusResolver` for the `acs` corpus per ADR 019 §2.2. Registered with the registry at lib init.
+
+There is no `citations.ts` BC file because there is no separate citation table. Citation reads are array-of-`StructuredCitation` projections off the consumer rows; helpers live alongside the consumer BC functions (`getCitationsForKnowledgeNode` becomes a method on `knowledge.ts` returning `StructuredCitation[]`; `getCitationsForSyllabusNode` lives in `syllabi.ts`). The `libs/bc/citations` BC (polymorphic content-citation system) is unaffected.
 
 ### Functions
 
 | File             | Function                                  | Signature                                                                                                          |
 | ---------------- | ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| `citations.ts`   | `listCitations`                           | `(db, opts?: { referenceId?: string; locatorKind?: CitationLocatorKind }) -> CitationRow[]`                        |
-| `citations.ts`   | `getCitation`                             | `(db, id: string) -> CitationRow \| null`                                                                          |
-| `citations.ts`   | `getCitationsForKnowledgeNode`            | `(db, knowledgeNodeId: string) -> CitationRow[]`                                                                   |
-| `citations.ts`   | `getCitationsForSyllabusNode`             | `(db, syllabusNodeId: string) -> CitationRow[]`                                                                    |
-| `citations.ts`   | `resolveCitationUrl` (extended)           | `(citation: CitationRow, references: ReferenceRow[], handbookSections?: HandbookSectionRow[]) -> string \| null`   |
+| `knowledge.ts`   | `getCitationsForKnowledgeNode`            | `(db, knowledgeNodeId: string) -> StructuredCitation[]`                                                            |
+| `syllabi.ts`     | `getCitationsForSyllabusNode`             | `(db, syllabusNodeId: string) -> StructuredCitation[]`                                                             |
+| `handbooks.ts`   | `resolveCitationUrl` (extended)           | `(citation: StructuredCitation, references: ReferenceRow[]) -> string \| null` (every kind covered)                |
 | `credentials.ts` | `listCredentials`                         | `(db, opts?: { kind?: CredentialKind; status?: CredentialStatus }) -> CredentialRow[]`                             |
 | `credentials.ts` | `getCredentialBySlug`                     | `(db, slug: string) -> CredentialRow \| null`                                                                      |
 | `credentials.ts` | `getCertsCoveredBy`                       | `(db, credentialId: string) -> string[]` (credential slugs, includes self, recursive over `credential_prereq`)     |
@@ -625,13 +705,12 @@ Extensions:
 | `goals.ts`       | `getDerivedCertGoals`                     | `(db, userId: string) -> string[]` (cert slugs derived from primary goal's syllabi -- backwards-compat for engine) |
 | `lenses.ts`      | `acsLens`                                 | `Lens` (Area -> Task -> Element tree)                                                                              |
 | `lenses.ts`      | `domainLens`                              | `Lens` (Domain -> nodes tree)                                                                                      |
-| `handbooks.ts`   | `resolveCitationUrl` (extended)           | extends WP #1 to handle every `CitationLocatorKind`.                                                               |
 
 ### Build-script-only helpers (not exported from BC barrel)
 
 | File             | Function                                  | Signature                                                                                                          |
 | ---------------- | ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| `citations.ts`   | `upsertCitation`                          | `(db, data: NewCitationRow) -> string`                                                                             |
+| `handbooks.ts`   | `upsertReference` (existing)              | Already shipped by WP #1; consumed here to seed ACS / PTS rows.                                                    |
 | `credentials.ts` | `upsertCredential`                        | `(db, data: NewCredentialRow) -> string`                                                                           |
 | `credentials.ts` | `upsertCredentialPrereq`                  | `(db, data: NewCredentialPrereqRow) -> void`                                                                       |
 | `credentials.ts` | `upsertCredentialSyllabus`                | `(db, data: NewCredentialSyllabusRow) -> void`                                                                     |
@@ -639,10 +718,11 @@ Extensions:
 | `syllabi.ts`     | `upsertSyllabusNode`                      | `(db, data: NewSyllabusNodeRow) -> string`                                                                         |
 | `syllabi.ts`     | `replaceSyllabusNodeLinks`                | `(db, syllabusNodeId: string, links: NewSyllabusNodeLinkRow[]) -> void`                                            |
 | `syllabi.ts`     | `rebuildKnowledgeNodeRelevanceCache`      | `(db, opts?: { dryRun?: boolean }) -> RelevanceCacheReport`                                                        |
+| `syllabi.ts`     | `validateAirbossRefForLeaf`               | `(ref: string, leaf: NewSyllabusNodeRow) -> void` (parses via `@ab/sources`; throws on shape mismatch)             |
 
 ### Errors
 
-`CitationNotFoundError`, `CredentialNotFoundError`, `CredentialPrereqCycleError`, `SyllabusNotFoundError`, `SyllabusValidationError`, `GoalNotFoundError`, `GoalNotPrimaryError`. Match existing BC error-class style.
+`CredentialNotFoundError`, `CredentialPrereqCycleError`, `SyllabusNotFoundError`, `SyllabusValidationError`, `GoalNotFoundError`, `GoalNotPrimaryError`, `AirbossRefValidationError`. Match existing BC error-class style.
 
 ## Routes
 
@@ -673,18 +753,10 @@ GOAL_EDIT: (id: string) => `/goals/${encodeURIComponent(id)}?${QUERY_PARAMS.EDIT
 `libs/constants/src/study.ts` additions (or split into `libs/constants/src/credentials.ts` + `libs/constants/src/syllabi.ts` if `study.ts` is feeling heavy and re-exported from `index.ts`):
 
 ```typescript
-export const CITATION_LOCATOR_KINDS = {
-	CHAPTER_SECTION: 'chapter_section',
-	CFR_SECTION: 'cfr_section',
-	ACS_TASK: 'acs_task',
-	AC_PARAGRAPH: 'ac_paragraph',
-	AIM_PARAGRAPH: 'aim_paragraph',
-	PCG_TERM: 'pcg_term',
-	PAGE: 'page',
-	OTHER: 'other',
-} as const;
-export type CitationLocatorKind = (typeof CITATION_LOCATOR_KINDS)[keyof typeof CITATION_LOCATOR_KINDS];
-export const CITATION_LOCATOR_KIND_VALUES = Object.values(CITATION_LOCATOR_KINDS);
+// Locator-kind enum NOT introduced. The locator shape lives inside the StructuredCitation
+// discriminated union (libs/types/src/citation.ts), keyed off the union's `kind` field
+// (handbook | cfr | ac | acs | pts | aim | pcg | ntsb | poh | other). REFERENCE_KINDS
+// from WP #1 covers the closed enum that matters; per-kind locator shapes live in types.
 
 export const CITATION_FRAMINGS = {
 	SURVEY: 'survey',
@@ -803,7 +875,7 @@ export const GOAL_STATUSES = {
 export type GoalStatus = (typeof GOAL_STATUSES)[keyof typeof GOAL_STATUSES];
 export const GOAL_STATUS_VALUES = Object.values(GOAL_STATUSES);
 
-export const CITATION_ID_PREFIX = 'cit';
+// Citation rows have no separate table -> no `cit_` prefix.
 export const CREDENTIAL_ID_PREFIX = 'cred';
 export const SYLLABUS_ID_PREFIX = 'syl';
 export const SYLLABUS_NODE_ID_PREFIX = 'sln';
@@ -822,9 +894,10 @@ export const GOAL_ID_PREFIX = 'goal';
 
 | Field / surface                                          | Rule                                                                                                       |
 | -------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| `citation.locator_kind`                                  | In `CITATION_LOCATOR_KIND_VALUES`. CHECK.                                                                  |
-| `citation.framing`                                       | In `CITATION_FRAMING_VALUES`. CHECK.                                                                       |
-| `citation.locator_data`                                  | JSONB shape matches `locator_kind` (validated at the BC layer; DB CHECK can't express discriminated-union shape over JSONB). |
+| `StructuredCitation.kind`                                | In `REFERENCE_KIND_VALUES` (from WP #1). Validated at BC + seed.                                            |
+| `StructuredCitation.framing` (optional)                  | NULL or in `CITATION_FRAMING_VALUES`. Validated at BC + seed.                                              |
+| `StructuredCitation.locator`                             | Shape matches `kind` per `libs/types/src/citation.ts`. Validated at BC + seed; DB CHECK can't express it. |
+| `StructuredCitation.airboss_ref` (optional)              | Parses via `@ab/sources` parser; corpus matches `kind` (handbook -> handbooks; cfr -> regs; acs -> acs).   |
 | `credential.kind`                                        | In `CREDENTIAL_KIND_VALUES`. CHECK.                                                                        |
 | `credential.category`                                    | In `CREDENTIAL_CATEGORY_VALUES`. CHECK.                                                                    |
 | `credential.class`                                       | NULL or in `CREDENTIAL_CLASS_VALUES`. CHECK.                                                               |
@@ -847,7 +920,8 @@ export const GOAL_ID_PREFIX = 'goal';
 | `goal_syllabus.weight`                                   | `> 0 AND <= 10.0`. CHECK.                                                                                  |
 | `goal_syllabus (goal_id, syllabus_id)`                   | Composite PK.                                                                                              |
 | `goal_node (goal_id, knowledge_node_id)`                 | Composite PK.                                                                                              |
-| `knowledge_node.references` post-migration               | Every entry must be a string matching `^cit_[A-Z0-9]+$` and resolve to an existing `citation.id`. Build script enforces. |
+| `knowledge_node.references` post-migration               | Every entry is a `StructuredCitation`; no `LegacyCitation` survivors. Build script enforces.               |
+| `syllabus_node.airboss_ref`                              | Starts with `airboss-ref:` (DB CHECK); parses via `@ab/sources` (BC + seed); ACS leaves require it.        |
 
 ## Edge cases
 
@@ -858,7 +932,10 @@ export const GOAL_ID_PREFIX = 'goal';
 - **A goal references a syllabus that gets archived.** The `goal_syllabus` row stays (FK ON DELETE RESTRICT prevents silent removal). The lens that walks the goal sees the syllabus row, notes its archived status, and surfaces a "this syllabus is archived; update your goal" affordance in the UI follow-on.
 - **A goal's primary flag is flipped while another goal's flag is also true.** Partial UNIQUE prevents this at the DB level. The BC `setPrimaryGoal` is transactional: clears every other goal's `is_primary=true` for the user, then sets the target. Race conditions return a constraint-violation error which the BC translates to `GoalAlreadyPrimaryError`.
 - **The migration of `knowledge_node.references` runs twice.** Idempotent: it only mutates rows where `references_v2_migrated=false`. Running on already-migrated rows is a no-op.
-- **A YAML syllabus file references a citation kind not yet supported by `resolveCitationUrl`.** Validation passes (citation kind is closed-enum); the resolver returns `null` for that kind in v1. UI fallback renders the citation note as freeform text. Same pattern WP #1 used for non-handbook kinds.
+- **A YAML syllabus file references a citation kind whose URL resolver returns `null`.** Validation passes (citation kind is closed-enum per `REFERENCE_KINDS`); the resolver returns `null` for kinds without a v1 URL formula. UI fallback renders the citation note as freeform text. Same pattern WP #1 used for non-handbook kinds.
+- **A YAML syllabus references a `study.reference` row that doesn't exist yet (e.g. CFI PTS authored before its reference is seeded).** Hard-fail: the seed aborts with `study.reference document_slug='faa-s-acs-25' not found; seed reference rows before syllabus rows`. The seed pipeline's `references` phase always runs before `syllabi`.
+- **An `airboss_ref` resolves via `@ab/sources` but the corpus's registry stub returns no entry.** Phase 1 of ADR 019 ships `NULL_REGISTRY` (returns nothing). The validator passes when the parser succeeds; registry-resolution warnings are downgraded to NOTICE in this WP because the real registry doesn't ship until ADR 019 Phase 2. The seed records a "registry resolved 0 of N references" line in its build report so the gap is visible.
+- **An `airboss_ref` with `corpus='acs'` parses but the leaf's `airboss_ref` doesn't match the syllabus's edition slug.** Hard-fail: the seed aborts with `airboss_ref edition slug 'faa-s-acs-25' does not match syllabus edition 'FAA-S-ACS-30'; rename the syllabus or fix the identifier`.
 - **Multiple active goals exist; engine asks for primary.** `getPrimaryGoal()` returns the row marked `is_primary=true`. If somehow no goal carries the flag (a state the partial UNIQUE prevents on insert but a pre-migration row could lack), the BC marks the most recently updated `active` goal as primary lazily on first read. Surfaced as a one-time backfill log line.
 - **A credential has zero syllabi.** Permitted -- some endorsements (e.g., spin training) don't have a published syllabus. The cert dashboard surface displays a placeholder ("no syllabus yet -- add one in /goals" or similar; full UX in follow-on).
 - **Pilot transcription Area V uses a knowledge node that gets renamed in `course/knowledge/` after the syllabus YAML is authored.** The seed errors with `knowledge_node 'aero-load-factor-old' referenced by syllabus_node sln_... does not exist; rename or remove`. Fix by either renaming the syllabus YAML to match or migrating the knowledge node back. Hard-fail on dangling references is the right shape.
@@ -892,16 +969,13 @@ The `is_primary` goal drives the session engine's targeting (the cert/syllabus f
 
 For very small syllabi (endorsements), the manifest can carry the full tree inline; the `areas/` directory becomes optional. Validator handles both shapes.
 
-### 3. Citations on `syllabus_node` -- separate join table or JSONB array of citation_ids?
+### 3. Citations on `syllabus_node` -- shape choice
 
-**Recommended: JSONB array of citation_ids on the `syllabus_node` row. Matches how `knowledge_node.references` is being reshaped, which keeps the two consumers consistent.**
+**Resolved by amendment (2026-04-27): inline `StructuredCitation` JSONB array on the `syllabus_node` row, matching `knowledge_node.references` post-migration. No separate `study.citation` table.**
 
-| Option                                            | For                                                                                                              | Against                                                                                                                                |
-| ------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| JSONB array of citation_ids (recommended)         | Matches `knowledge_node` post-migration. One read pattern. Cheap to serialize. GIN index handles reverse queries ("which leaves cite this citation"). | Citation order is stored implicitly by array order; reordering requires an array rewrite (acceptable for this use case).             |
-| Dedicated `syllabus_node_citation` join table     | Foreign-key integrity at the row level. Easier ad-hoc queries on the join (`SELECT ... FROM syllabus_node_citation WHERE citation_id = ?`). | Two patterns for the same conceptual relationship in the same DB. Inconsistency between `knowledge_node` and `syllabus_node`.        |
+The original question asked between "JSONB array of citation_ids" (pointing at a `study.citation` row) and a dedicated join table. The amendment supersedes both: WP #1 shipped `StructuredCitation` as the citation primitive, so citations live inline in the JSONB array directly (no `cit_` row to point at). Reverse queries use a GIN index; reordering requires array rewrite (acceptable). The `libs/bc/citations` polymorphic system stays as a peer for cards/scenarios/regulations.
 
-A separate join table can be added later additively if reverse-query performance ever needs it. The JSONB-with-GIN pattern is good enough for the scale we expect.
+Trade-off: every consumer carrying the same citation duplicates the JSONB shape (~150 bytes). Acceptable at the scale we expect; collapsible to a join table later if duplication becomes a maintenance burden.
 
 ### 4. What happens to `study_plan.cert_goals` after Goal is introduced?
 
@@ -915,11 +989,11 @@ A separate join table can be added later additively if reverse-query performance
 
 ### 5. PPL ACS edition
 
-**Recommended: lock seed data to the currently-published PPL ACS at the moment this WP merges. The user should verify the current edition before the seed lands; spec records `FAA-S-ACS-6B` as a placeholder pending verification.**
+**Recommended: lock seed data to the currently-published PPL ACS at the moment this WP merges. The user should verify the current edition before the seed lands; spec records `FAA-S-ACS-25` as a working placeholder pending verification.**
 
-ACS editions have evolved; the user must confirm at WP author time which edition is current. The seed data becomes correct at that moment; subsequent FAA publication of a new edition produces a new syllabus row (per ADR 016's resolved decision -- a new edition is a new row, not an edit). Goals can opt to migrate.
+ACS editions have evolved; the user must confirm at WP author time which edition is current. The seed data becomes correct at that moment; subsequent FAA publication of a new edition produces a new syllabus row + a new `study.reference` row (per ADR 016's resolved decision and ADR 020's full-edition policy). Goals can opt to migrate. Errata for an existing edition follow ADR 020's errata model on the `reference` row, not a new syllabus row.
 
-If the FAA has published `FAA-S-ACS-15` (a hypothetical successor), spec stays generic ("the current PPL ACS edition at the time the user signs off this WP"); seed data uses whatever the user verifies.
+If the FAA has published a successor (e.g. a hypothetical `FAA-S-ACS-30`), spec stays generic ("the current PPL ACS edition at the time the user signs off this WP"); seed data uses whatever the user verifies. ACS publications use slug-encoded editions per ADR 019 §1.3, so the slug is part of the `airboss_ref` directly.
 
 ### 6. Pilot transcription subset -- which Area to transcribe first?
 
@@ -938,14 +1012,30 @@ Alternates considered:
 | Area I "Preflight Preparation"           | First in the ACS; large variety of K elements.                 | Mostly K elements, weak on R / S. Doesn't exercise the full triad split.                                                 |
 | Area IX "Emergency Operations"           | High-stakes; exercises judgment + skill leaves richly.         | Cross-references many knowledge nodes that aren't authored yet. Linking phase blocks on graph content, not the WP shape. |
 
+### 7. `acs` corpus locator convention -- finalize before ACS YAML transcription begins?
+
+**Recommended: this WP finalizes the `acs` corpus locator convention as `airboss-ref:acs/<cert>/<edition-slug>/area-<n>/task-<x>/element-<n>` per the example in ADR 019 §1.2. ADR 019's "Per-corpus rules defined when the corpus is added" gives this WP the authority to make the call; the convention is documented in spec.md under "airboss-ref composition" and locked before Area V transcription.**
+
+ADR 019 §1.2 names the `acs` corpus and shows an example identifier shape. ADR 019 left "the locator shape it uses, the slug rules, the hierarchy" to the per-corpus WP. This WP is that corpus WP for `acs`. Decisions captured here:
+
+- `<cert>` slug values: `ppl-asel | ppl-amel | ppl-helo | ipl | cpl-asel | cpl-amel | cfi-asel | cfi-amel | cfii | mei | meii | atp-asel | atp-amel`. New cert slugs are added when the corresponding ACS / PTS publication is seeded; not a closed enum.
+- `<edition-slug>` is the FAA publication ID lower-cased and kebab-cased: `faa-s-acs-25` for `FAA-S-ACS-25`. Handles both ACS and PTS naming.
+- `area-<n>` uses lowercase Roman numerals (`area-i`, `area-v`, `area-ix`).
+- `task-<x>` uses lowercase letter (`task-a`, `task-b`).
+- `element-<triad><n>` uses lowercase triad letter + sequential integer (`element-k1`, `element-r1`, `element-s1`). The triad letter doubles as a quick visual triad indicator in the URI.
+
+If a future review surfaces a better shape, the convention is updatable via a follow-on WP (the parser is opaque per ADR 019 §1.1.1; a corpus-internal rewrite is a `silent` alias migration per ADR 019 §6.1).
+
 ## Migration considerations
 
-- **`knowledge_node.references` migration is one-shot.** Runs once via `bun run db migrate:references-to-citations`. After migration, the column shape is a `string[]` of citation_ids. A `references_v2_migrated` boolean flag gates the script. The flag is dropped in a follow-on cleanup once every environment has migrated.
-- **Knowledge-node YAML `relevance` field is dropped.** After the relevance cache rebuild succeeds, a one-shot script (`bun run db migrate:drop-authored-relevance`) removes `relevance:` from every `course/knowledge/<slug>/node.md` frontmatter. The git diff is reviewable; user signs off before the script runs.
+- **`knowledge_node.references` migration is one-shot.** Runs once via `bun run db migrate references-to-structured`. After migration, every entry on the column is a `StructuredCitation` (no `LegacyCitation` survivors). A `references_v2_migrated` boolean flag column gates the script. The flag is dropped in a follow-on cleanup once every environment has migrated.
+- **Knowledge-node YAML `relevance` field is dropped.** After the relevance cache rebuild succeeds, a one-shot script (`bun run db migrate drop-authored-relevance`) removes `relevance:` from every `course/knowledge/<slug>/node.md` frontmatter. The git diff is reviewable; user signs off before the script runs.
 - **Existing `study_plan.cert_goals` migrates to `goal` + `goal_syllabus` rows.** One-shot script. Idempotent via a `study_plan.goal_migrated_at` timestamp column added by this WP and removed in the follow-on cleanup.
 - **`CERT_PREREQUISITES` constant gets a deprecation comment.** No behavior change in this WP; readers continue to use the constant where they do today. The session engine WP follow-on cuts over to `getCertsCoveredBy()`.
-- **Drizzle migration.** Schema additions ship as a single drizzle migration (next sequence number after WP #1's `0010_handbook_ingestion.sql`). One file: `0011_cert_syllabus_goal.sql`. Includes the citation table, credential tables, syllabus tables, goal tables, the `references_v2_migrated` and `goal_migrated_at` flag columns, and the partial UNIQUE indexes.
-- **Seed sequencing.** New `bun run db seed` phases land in this order: `references` (WP #1 seeds reference + handbook_section), `citations` (this WP), `credentials` (this WP), `syllabi` (this WP), `goals` (this WP -- empty; user creates goals in-app). The relevance cache rebuild runs as the last phase before the YAML cleanup script.
+- **Drizzle migration.** Schema additions ship as a single drizzle migration (next sequence number after WP #1's). The migration adds the credential tables, syllabus tables, goal tables, the `references_v2_migrated` and `goal_migrated_at` flag columns, and the partial UNIQUE indexes. There is no `study.citation` table.
+- **Reference rows for ACS / PTS / endorsements are seeded, not created.** `study.reference` ships with WP #1; this WP runs `bun run db seed references` augmented with the ACS / PTS catalog so the table grows by the publications this WP cites. Edition + errata metadata follows ADR 020's policy on the same row.
+- **Seed sequencing.** Phases land in this order: `references` (WP #1 seeds handbook references; this WP appends ACS / PTS / endorsement references), `credentials` (this WP), `syllabi` (this WP), `goals` (this WP -- empty; user creates goals in-app). The relevance cache rebuild runs as the last phase before the YAML cleanup script. The migration of `knowledge_node.references` to `StructuredCitation` runs after all reference rows are seeded so the legacy `source` strings can be matched against real reference rows.
+- **`acs` corpus resolver registration.** `libs/sources/src/resolvers/acs.ts` ships in this WP; resolver registers with `@ab/sources` at lib init. Phase 2 of ADR 019 (`reference-source-registry-core`) provides the real registry; this WP's resolver implements the `CorpusResolver` interface so swapping in the real registry later is a no-op for callers.
 
 ## Risks
 
