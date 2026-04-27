@@ -200,6 +200,30 @@ export const ROUTES = {
 	MEMORY_REVIEW_FOR_NODE: (nodeId: string) =>
 		`/memory/review?${QUERY_PARAMS.NODE_ID}=${encodeURIComponent(nodeId)}` as const,
 
+	// Study -- Credentials (cert-syllabus WP, ADR 016 phases 1-6).
+	// Pages land in a follow-on WP; the route constants ship here so links
+	// from existing surfaces (cert dashboard breadcrumbs, plan wizard) can
+	// reference the eventual destination without inlining strings.
+	CREDENTIALS: '/credentials',
+	CREDENTIAL: (slug: string) => `/credentials/${encodeURIComponent(slug)}` as const,
+	CREDENTIAL_AREA: (slug: string, areaCode: string) =>
+		`/credentials/${encodeURIComponent(slug)}/areas/${encodeURIComponent(areaCode)}` as const,
+	CREDENTIAL_TASK: (slug: string, areaCode: string, taskCode: string) =>
+		`/credentials/${encodeURIComponent(slug)}/areas/${encodeURIComponent(areaCode)}/tasks/${encodeURIComponent(taskCode)}` as const,
+	/**
+	 * Edition-pinned credential URL. Default loader resolves the
+	 * credential's primary syllabus's latest active edition; this variant
+	 * keeps a learner mid-prep on the older edition they started on.
+	 */
+	CREDENTIAL_AT_EDITION: (slug: string, edition: string) =>
+		`/credentials/${encodeURIComponent(slug)}?${QUERY_PARAMS.EDITION}=${encodeURIComponent(edition)}` as const,
+
+	// Study -- Goals (cert-syllabus WP).
+	GOALS: '/goals',
+	GOALS_NEW: '/goals/new',
+	GOAL: (id: string) => `/goals/${encodeURIComponent(id)}` as const,
+	GOAL_EDIT: (id: string) => `/goals/${encodeURIComponent(id)}?${QUERY_PARAMS.EDIT}=1` as const,
+
 	// Study -- Plans + Sessions
 	PLANS: '/plans',
 	PLANS_NEW: '/plans/new',
@@ -285,6 +309,8 @@ export const ROUTES = {
 export const NAV_LABELS = {
 	DASHBOARD: 'Dashboard',
 	PLANS: 'Plans',
+	CREDENTIALS: 'Credentials',
+	GOALS: 'Goals',
 	MEMORY: 'Memory',
 	MEMORY_HOME: 'Overview',
 	MEMORY_BROWSE: 'Browse',
