@@ -8,6 +8,7 @@
 		"check": "bun scripts/check.ts",
 		"test": "bun scripts/test.ts",
 		"db": "bun scripts/db.ts",
+		"handbook-ingest": "bun scripts/handbook-ingest.ts",
 		"references": "bun scripts/references.ts",
 		"airboss-ref": "bun scripts/airboss-ref.ts",
 		"setup": "bun scripts/setup.ts",

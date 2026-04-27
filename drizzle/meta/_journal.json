@@ -8,6 +8,20 @@
       "when": 1777235282430,
       "tag": "0000_initial",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1777240755462,
+      "tag": "0001_handbook_ingestion",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1777294519832,
+      "tag": "0002_handbook_faa_pages_text",
+      "breakpoints": true
     }
   ]
 }

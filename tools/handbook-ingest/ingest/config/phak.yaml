@@ -1,0 +1,103 @@
+# Pilot's Handbook of Aeronautical Knowledge (PHAK)
+#
+# Source: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/faa-h-8083-25c.pdf
+# Edition: FAA-H-8083-25C (2024)
+
+document_slug: phak
+edition: FAA-H-8083-25C
+kind: handbook
+title: "Pilot's Handbook of Aeronautical Knowledge"
+publisher: FAA
+source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/faa-h-8083-25c.pdf
+# `expected_pages` is informational; set after the first ingest run records
+# the actual PDF page count.
+expected_pages: 522
+# Number of pre-numbered pages to skip when mapping PDF page -> FAA-printed
+# page number. PHAK ships a ~20-page Roman-numeral preface; tune after the
+# first run if the printed page numbers in the manifest are off.
+page_offset: 0
+# PHAK 25C ships per-chapter PDFs concatenated together; the bookmark tree
+# lists the file names ("03_phak_ch1.pdf") rather than the chapter titles, so
+# we infer chapter boundaries from page text (the FAA-style `<chapter>-<page>`
+# header on every page) instead of trusting `get_toc()`.
+outline_strategy: content
+# Hand-curated outline overrides for sections the content scan mis-detects.
+# Each entry is { code, level, parent_code, title, page_start, page_end }.
+outline_overrides: []
+# Per-chapter title corrections. The content scan extracts the title above
+# each "Chapter N" sentinel; chapters whose typeset title spans more than
+# the heuristic window (or whose layout buries the title in body text) get
+# the right name applied here.
+title_overrides:
+  "5": "Aerodynamics of Flight"
+  "8": "Flight Instruments"
+# Default patterns are inherited from the loader; override per-handbook only
+# when the FAA changes its captioning convention.
+figure_prefix_pattern: 'Figure (\d+)-(\d+)\.'
+table_prefix_pattern: 'Table (\d+)-(\d+)\.'
+
+# -----------------------------------------------------------------------------
+# Section-tree extraction (Option 3 = TOC, Option 4 = LLM, compare = both)
+# -----------------------------------------------------------------------------
+
+# Default section-tree strategy. `toc` = deterministic Python parser of the
+# printed Table of Contents (sections_via_toc.py). `llm` = Claude-assisted
+# (sections_via_llm.py); requires ANTHROPIC_API_KEY. `per_chapter` = honor
+# per_chapter_section_strategy below.
+section_strategy: toc
+
+# Per-chapter override of the default `section_strategy`. Used only when
+# `section_strategy: per_chapter`. Keys are chapter ordinals (1..N), values
+# are 'toc' or 'llm'. Joshua reads the compare report and fills this in
+# when the LLM strategy wins for a specific chapter.
+per_chapter_section_strategy: {}
+
+# Printed Table of Contents page range (PDF page numbers, not the printed
+# Roman numerals). Determined empirically by inspecting the source PDF;
+# locked here so the parser is reproducible.
+toc:
+  page_start: 6           # PDF page that starts the TOC (printed page vii)
+  page_end: 15            # PDF page that ends the TOC (printed page xvi)
+  pattern: dotted_leader  # for future handbooks with different TOC styles
+
+# Heading-style fingerprint used by sections_via_toc to verify TOC entries
+# against the body PDF. PHAK heading runs are bold red Helvetica at ~12pt;
+# tune body_font_size + heading_min_size_ratio if a future edition restyles.
+heading_style:
+  body_font_size: 10.5
+  heading_min_size_ratio: 1.05  # heading is at least 1.05x body size
+  heading_color_hex: '#ef4144'  # FAA red for PHAK 25C
+  heading_match_threshold: 0.85
+  verify_in_body: true
+
+# LLM-strategy tuning. Per-chapter input cap keeps each Claude call bounded
+# and reproducible. PHAK chapters fit comfortably under 60K chars.
+llm:
+  chapter_text_max_chars: 60000
+
+# Strip the chapter cover-page boilerplate from the chapter markdown body.
+# When enabled, normalize.py strips leading "Chapter N" / chapter-title /
+# "Introduction" lines until the first body paragraph (length > 80 OR
+# starts with a lowercase character).
+chapter_cover_strip:
+  enabled: true
+  max_lines: 6
+
+# How many PDF pages to walk backward from a target page when reading the
+# printed FAA page label. Five pages clears chapter-summary pages that omit
+# the FAA header, multi-page figure spreads, and the trailing glossary stub
+# that ends a handbook. Set to 0 to disable the walk-back (legacy behavior).
+page_label_walk_back: 5
+
+# Per-chapter explicit field overrides. Used when the parser cannot recover
+# a value from the PDF -- e.g. a chapter-summary page that lacks any
+# parseable FAA header within the walk-back window. Today only
+# `faa_page_start` / `faa_page_end` are honored. The PHAK chapter 17 case
+# is now resolved by the content-scan outline detector capping the last
+# chapter at the last page bearing its FAA header, so no override is
+# currently needed for PHAK 25C. Example shape:
+#
+#   chapter_overrides:
+#     17:
+#       faa_page_end: "17-100"
+chapter_overrides: {}

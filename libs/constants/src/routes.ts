@@ -63,6 +63,13 @@ export const QUERY_PARAMS = {
 	PAGE_SIZE: 'size',
 	/** Group-by bucket for the Browse list (one of `BROWSE_GROUP_BY_VALUES`). */
 	GROUP_BY: 'group',
+	/**
+	 * Handbook edition pin. When present on `/handbooks/[doc]/...` routes the
+	 * loader resolves the named edition instead of the latest non-superseded
+	 * one. Used by the "newer edition available" banner so a learner can keep
+	 * reading the older edition without losing their citation context.
+	 */
+	EDITION: 'edition',
 } as const;
 
 export const ROUTES = {
@@ -139,6 +146,31 @@ export const ROUTES = {
 	 * Surface for the "Cited by" panel from the citations work package.
 	 */
 	REFERENCE_DETAIL: (id: string) => `/references/${encodeURIComponent(id)}` as const,
+
+	// Study -- Handbooks (FAA handbook reader; ingested per-edition markdown +
+	// figures committed to `handbooks/<doc>/<edition>/`). Sibling surface to
+	// `/glossary` and `/references`: a reference-shaped read view that other
+	// surfaces (knowledge nodes, citations) link into. See
+	// `docs/work-packages/handbook-ingestion-and-reader/spec.md` and
+	// `docs/decisions/016-cert-syllabus-goal-model/decision.md`.
+	HANDBOOKS: '/handbooks',
+	HANDBOOK: (doc: string) => `/handbooks/${encodeURIComponent(doc)}` as const,
+	HANDBOOK_CHAPTER: (doc: string, chapter: number | string) =>
+		`/handbooks/${encodeURIComponent(doc)}/${encodeURIComponent(String(chapter))}` as const,
+	HANDBOOK_SECTION: (doc: string, chapter: number | string, section: number | string) =>
+		`/handbooks/${encodeURIComponent(doc)}/${encodeURIComponent(String(chapter))}/${encodeURIComponent(String(section))}` as const,
+	/**
+	 * Edition-pinned section URL. Default reader resolves the latest
+	 * non-superseded edition; this variant keeps a learner on a specific
+	 * edition (e.g. citations on a node that pre-dates a re-ingestion).
+	 */
+	HANDBOOK_SECTION_AT_EDITION: (doc: string, chapter: number | string, section: number | string, edition: string) =>
+		`/handbooks/${encodeURIComponent(doc)}/${encodeURIComponent(String(chapter))}/${encodeURIComponent(String(section))}?${QUERY_PARAMS.EDITION}=${encodeURIComponent(edition)}` as const,
+	HANDBOOK_AT_EDITION: (doc: string, edition: string) =>
+		`/handbooks/${encodeURIComponent(doc)}?${QUERY_PARAMS.EDITION}=${encodeURIComponent(edition)}` as const,
+	/** POST endpoint for client heartbeat ticks while reading a section. */
+	HANDBOOK_SECTION_HEARTBEAT: (doc: string, chapter: number | string, section: number | string) =>
+		`/handbooks/${encodeURIComponent(doc)}/${encodeURIComponent(String(chapter))}/${encodeURIComponent(String(section))}/heartbeat` as const,
 
 	// Study -- Help (per-app help content; primitives shared via @ab/help)
 	HELP: '/help',
@@ -261,6 +293,7 @@ export const NAV_LABELS = {
 	REPS: 'Reps',
 	KNOWLEDGE: 'Knowledge',
 	GLOSSARY: 'Glossary',
+	HANDBOOKS: 'Handbooks',
 	CALIBRATION: 'Calibration',
 	HELP: 'Help',
 	HELP_INDEX: 'Help index',

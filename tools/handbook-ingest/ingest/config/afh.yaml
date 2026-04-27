@@ -1,0 +1,75 @@
+# Airplane Flying Handbook (AFH)
+#
+# Source: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/airplane_handbook/00_afh_full.pdf
+# Edition: FAA-H-8083-3C (2021; current bound edition as of 2026-04)
+#
+# Errata: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/AFH_Addendum_(MOSAIC).pdf
+#   (October 2025 MOSAIC addendum -- not applied here per ADR 020;
+#   tracked for the future `--apply-errata` flow.)
+
+document_slug: afh
+edition: FAA-H-8083-3C
+kind: handbook
+title: "Airplane Flying Handbook"
+publisher: FAA
+source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/airplane_handbook/00_afh_full.pdf
+expected_pages: 406
+# AFH chapter cover pages typeset the inline `Chapter N: Title` heading on
+# the same page that carries the FAA `<chap>-<page>` footer (e.g. p22 has
+# both "Chapter 1: Introduction to Flight Training" and the footer "1-1").
+# Front matter occupies pp.1-21; pp.22+ carry FAA pagination.
+page_offset: 0
+# AFH bookmarks are file-name-flavored ("02 - AFH Chapter 1 (Draft 4)") and
+# don't carry chapter titles, so we use the content scanner to derive the
+# chapter tree from the FAA-style page headers in each page footer.
+outline_strategy: content
+outline_overrides: []
+# `_extract_chapter_title` recognizes the AFH inline form ("Chapter N:
+# Title") so most chapters resolve automatically. Title overrides are only
+# needed when the cover page lays out the title in some other shape.
+title_overrides: {}
+figure_prefix_pattern: 'Figure (\d+)-(\d+)\.'
+table_prefix_pattern: 'Table (\d+)-(\d+)\.'
+
+# -----------------------------------------------------------------------------
+# Section-tree extraction
+# -----------------------------------------------------------------------------
+
+section_strategy: toc
+per_chapter_section_strategy: {}
+
+# Printed Table of Contents page range (PDF page numbers).
+# Empirically: AFH 3C TOC spans PDF pp. 10-21 (12 pages).
+toc:
+  page_start: 10
+  page_end: 21
+  # AFH lays out TOC entries with the title in the left column and the page
+  # anchor in a right-margin column on a slightly different y. PHAK's
+  # dotted-leader form does not apply.
+  pattern: right_column
+
+# AFH chapter cover pages typeset the chapter heading in plain (not red)
+# Arial-Bold; section headings inside a chapter are also Arial-Bold but
+# match a different size class. Body verification stays off until the
+# fingerprint is tuned per-chapter; the TOC parse is the source of truth
+# in the meantime. (PHAK's red-Helvetica fingerprint does not apply.)
+heading_style:
+  body_font_size: 10.0
+  heading_min_size_ratio: 1.10
+  heading_color_hex: '#000000'
+  heading_match_threshold: 0.85
+  verify_in_body: false
+
+llm:
+  chapter_text_max_chars: 60000
+
+# AFH chapter cover pages render the chapter title once on the cover and
+# then the content begins on the next page. The strip removes the
+# inline "Chapter N: Title" / "Introduction" sentinel so the chapter
+# index.md doesn't open with a stutter.
+chapter_cover_strip:
+  enabled: true
+  max_lines: 6
+
+page_label_walk_back: 5
+chapter_overrides: {}

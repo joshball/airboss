@@ -1,0 +1,29 @@
+---
+handbook: afh
+edition: FAA-H-8083-3C
+chapter_number: 6
+section_title: Noise Abatement
+faa_pages: 6-14
+section_number: 9
+source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/airplane_handbook/00_afh_full.pdf
+---
+
+# Noise Abatement
+
+Noise Abatement
+Aircraft noise problems are a major concern at many airports throughout the country. Many local communities have pressured
+airports into developing specific operational procedures that help limit aircraft noise while operating over nearby areas. As a result,
+noise abatement procedures have been developed for many of these airports that include standardized profiles and procedures to
+achieve these lower noise goals.
+Airports that have noise abatement procedures provide information to pilots, operators, air carriers, air traffic facilities, and other
+special groups that are applicable to their airport. These procedures are available to the aviation community by various means. Most
+of this information comes from the Chart Supplements, local and regional publications, printed handouts, operator bulletin boards,
+safety briefings, and local air traffic facilities.
+At airports that use noise abatement procedures, reminder signs may be installed at the taxiway hold positions for applicable runways
+to remind pilots to use and comply with noise abatement procedures on departure. Pilots who are unfamiliar with these procedures
+should ask the tower or air traffic facility for the recommended procedures. In any case, pilots should be considerate of the
+surrounding community while operating their airplane to and from such an airport. This includes operating as quietly, and safely as
+possible.
+The takeoff and initial climb are relatively short phases required for every flight and are often taken for granted, yet 1 out of 5
+accidents occur during this phase and half the mishaps are the result of pilot error. Becoming proficient in and applying the
+techniques and principles discussed in this chapter help pilots reduce their susceptibility to becoming a mishap statistic.

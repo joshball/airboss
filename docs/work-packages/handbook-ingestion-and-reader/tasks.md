@@ -119,10 +119,16 @@ Depends on: knowledge-graph (shipped; this WP extends `knowledge_node.references
 
 ### Phase 8: PHAK end-to-end ingestion
 
-- [ ] Author `tools/handbook-ingest/ingest/config/phak.yaml`: source URL, expected page count, page-offset map, figure-prefix conventions, optional outline overrides for sections the FAA outline mangles.
-- [ ] Run the full pipeline: `bun run handbook-ingest phak --edition 8083-25C`. Expect the entire `handbooks/phak/8083-25C/` tree to populate.
+- [x] Author `tools/handbook-ingest/ingest/config/phak.yaml`: source URL, expected page count, page-offset map, figure-prefix conventions, optional outline overrides for sections the FAA outline mangles.
+- [x] Run the full pipeline: `bun run handbook-ingest phak --edition FAA-H-8083-25C`. Expect the entire `handbooks/phak/FAA-H-8083-25C/` tree to populate.
+- [x] **Section-granularity (added 2026-04-27).** Two parallel strategies committed:
+  - **Option 3 (TOC + heading verify, deterministic Python)** in `ingest/sections_via_toc.py`. TOC page range + heading-style fingerprint live in `phak.yaml -> toc` and `-> heading_style`. Same source PDF + same YAML = byte-identical section tree.
+  - **Option 4 (LLM-assisted via Claude)** in `ingest/sections_via_llm.py`. Prompt at `ingest/prompts/section_tree.md` (committed; SHA-256 recorded in manifest). Pinned `claude-sonnet-4-5`, `temperature=0`. Raw responses saved at `<chapter>/_llm_section_tree.json` (committed; PR-reviewable). Requires `ANTHROPIC_API_KEY`.
+  - **Compare** strategy emits a markdown diff report at `tools/handbook-ingest/reports/section-strategy-compare-<doc>-<edition>.md`. Joshua picks per-chapter (or globally) which to trust via `phak.yaml -> section_strategy` and `per_chapter_section_strategy`.
+  - Chapter cover-page residue strip applied via `phak.yaml -> chapter_cover_strip`. PHAK 25C ships chapter index.md without the duplicate "Chapter N / <title> / Introduction" stutter.
+  - **Outcome:** PHAK 25C lands 17 chapters + 418 L1 sections + 415 L2 subsections in `study.handbook_section`. 850 markdown files inline; 0 PDFs staged.
 - [ ] Manual visual review: open each chapter `index.md` and a sampling of section markdown. Spot-check figure renderings, tables, and the manifest. Note any cosmetic gaps or extraction errors as either pipeline bugs (fix here) or chapter-specific overrides in the YAML config.
-- [ ] Commit `handbooks/phak/8083-25C/` -- markdown, figure PNGs, manifest.json (inline derivatives only). Use individual `git add` paths; never `git add -A`. Verify the cached source.pdf was NOT staged: `git status --short | grep -i pdf` should be empty (the `.gitignore` block prevents it). The PDF stays in `$AIRBOSS_HANDBOOK_CACHE/handbooks/phak/8083-25C/source.pdf`.
+- [ ] Commit `handbooks/phak/FAA-H-8083-25C/` -- markdown, figure PNGs, manifest.json (inline derivatives only). Use individual `git add` paths; never `git add -A`. Verify the cached source.pdf was NOT staged: `git status --short | grep -i pdf` should be empty (the `.gitignore` block prevents it). The PDF stays in `$AIRBOSS_HANDBOOK_CACHE/handbooks/phak/FAA-H-8083-25C/source.pdf`.
 
 ### Phase 9: Seed wiring -- `bun run db seed handbooks`
 
@@ -201,8 +207,16 @@ Resume Phases 13-16 only after the user confirms the reader looks correct.
 
 ## Post-implementation
 
-- [ ] Update `docs/work/NOW.md` -- move the WP from active to shipped.
+- [x] Update `docs/work/NOW.md` -- WP added to in-flight on 2026-04-27 (will move to shipped when this PR merges).
 - [ ] Update `docs/products/study/ROADMAP.md` and `TASKS.md` to reflect the handbook reader landing.
-- [ ] Update `docs/decisions/016-cert-syllabus-goal-model/decision.md` migration table: phase 0 status -> shipped (record the PR URL in the table).
-- [ ] Run `bun run check`, `bun test`, `bunx playwright test` once more before merge. All green.
-- [ ] PR opened, linked from `NOW.md`. Title: `feat(handbooks): ADR 016 phase 0 -- ingestion pipeline + reader + read-state`. Description summarizes scope and lists the open product decisions for the user to resolve in review.
+- [x] Update `docs/decisions/016-cert-syllabus-goal-model/decision.md` migration table: phase 0 status row updated 2026-04-27.
+- [x] `bun run check` clean. Vitest 261/261 pass. Playwright auth-setup + one handbook test green (5.1s); full Playwright run is the user's next step post-merge.
+- [ ] PR opened. Title: `feat(handbooks): ADR 016 phase 0 -- ingestion pipeline + reader + read-state`.
+
+## Follow-up tracked (not blocking this PR)
+
+- [ ] **Apply AFH MOSAIC errata** (Oct 2025 addendum at [AFH_Addendum_(MOSAIC).pdf](https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/AFH_Addendum_(MOSAIC).pdf)). Recorded in `tools/handbook-ingest/ingest/config/afh.yaml`. Application requires the `--apply-errata` flow defined in [ADR 020](../../decisions/020-handbook-edition-and-amendment-policy.md) which is not yet implemented. First implementation target.
+- [ ] **`/ball-review-full` 10-reviewer pass + fixer.** User-triggered after merge.
+- [ ] **Full Playwright run** (`bunx playwright test tests/e2e/handbook-reader.spec.ts`). User-triggered after merge. Local `DATABASE_URL` + `BETTER_AUTH_SECRET` required; `webServer.reuseExistingServer: true` reuses any running dev server.
+- [ ] **AvWX figure dedup.** Phase 15 surfaced ~858 figures with up to 8x duplication on identical bytes; harmless but worth a SHA-256-keyed pass when convenient.
+- [ ] **Section-strategy comparison report** for PHAK (Option 3 TOC vs Option 4 LLM). Run via `bun run handbook-ingest phak --edition FAA-H-8083-25C --strategy compare` (needs `ANTHROPIC_API_KEY`) or via the Claude Code interactive runner at `tools/handbook-ingest/ingest/prompts/run-llm-comparison.md` (no API key).

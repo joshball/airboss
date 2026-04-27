@@ -2,9 +2,9 @@ import { expect, test } from '@playwright/test';
 import { ROUTES } from '../../libs/constants/src';
 
 test.describe('dashboard', () => {
-	test('renders Learning Dashboard heading', async ({ page }) => {
+	test('renders Dashboard heading', async ({ page }) => {
 		await page.goto(ROUTES.DASHBOARD);
-		await expect(page.getByRole('heading', { name: 'Learning Dashboard' })).toBeVisible();
+		await expect(page.getByRole('heading', { name: 'Dashboard', level: 1 })).toBeVisible();
 	});
 
 	test('primary nav exposes all surfaces', async ({ page }) => {
@@ -40,7 +40,7 @@ test.describe('dashboard', () => {
 
 	test('logout clears session and returns to login', async ({ page }) => {
 		await page.goto(ROUTES.DASHBOARD);
-		await expect(page.getByRole('heading', { name: 'Learning Dashboard' })).toBeVisible();
+		await expect(page.getByRole('heading', { name: 'Dashboard', level: 1 })).toBeVisible();
 
 		// Logout is POST-only (no UI button today). Build a form in the page
 		// and submit it so cookies flow through the same browser context.

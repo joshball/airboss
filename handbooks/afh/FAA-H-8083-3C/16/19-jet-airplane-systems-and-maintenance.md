@@ -1,0 +1,21 @@
+---
+handbook: afh
+edition: FAA-H-8083-3C
+chapter_number: 16
+section_title: Jet Airplane Systems and Maintenance
+faa_pages: 16-24
+section_number: 19
+source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/airplane_handbook/00_afh_full.pdf
+---
+
+# Jet Airplane Systems and Maintenance
+
+Jet Airplane Systems and Maintenance
+All FAA-certificated jet airplanes are certificated under Title 14 of the Code of Federal Regulations (14 CFR) part 25, which contains
+the airworthiness standards for transport category airplanes. The FAA-certificated jet airplane is a highly sophisticated machine with
+proven levels of performance and guaranteed safety margins. The jet airplane’s performance and safety margins can only be realized,
+however, if the airplane is operated in strict compliance with the procedures and limitations contained in the FAA-approved AFM for
+the particular airplane. Furthermore, in accordance with 14 CFR part 91, section 91.213(a), a turbine-powered airplane does not
+qualify to takeoff with inoperable instruments or equipment installed unless, among other requirements, an approved Minimum
+Equipment List (MEL) exists for that aircraft, and the aircraft is operated under all applicable conditions and limitations contained in
+the MEL (section 91.213(a)(5)).

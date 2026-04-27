@@ -45,7 +45,7 @@ test.describe('smoke: authed routes load', () => {
 			if (msg.type() === 'error') errors.push(msg.text());
 		});
 		await page.goto(ROUTES.DASHBOARD);
-		await expect(page.getByRole('heading', { name: 'Learning Dashboard' })).toBeVisible();
+		await expect(page.getByRole('heading', { name: 'Dashboard', level: 1 })).toBeVisible();
 		expect(errors, `unexpected console errors: ${errors.join('\n')}`).toEqual([]);
 	});
 });

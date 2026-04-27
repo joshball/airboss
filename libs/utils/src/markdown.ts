@@ -39,11 +39,56 @@ function renderInline(text: string): string {
 	// Italic: *text* -> <em>text</em> (run after bold so stars are gone)
 	out = out.replace(/(^|[^*])\*([^*\n]+)\*/g, (_m, lead: string, inner: string) => `${lead}<em>${inner}</em>`);
 	// Links: [text](url) -> <a href="url">text</a>. Only http(s) and relative.
-	out = out.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (_m, label: string, url: string) => {
+	// Negative lookbehind on `!` so image syntax is left for a dedicated pass.
+	out = out.replace(/(^|[^!])\[([^\]]+)\]\(([^)\s]+)\)/g, (_m, lead: string, label: string, url: string) => {
 		const safe = /^(https?:\/\/|\/|#|mailto:)/.test(url) ? url : '#';
-		return `<a href="${safe}">${label}</a>`;
+		return `${lead}<a href="${safe}">${label}</a>`;
 	});
 	return out;
+}
+
+/**
+ * Rewrite `/handbooks/<rest>` to `/handbook-asset/<rest>`. The handbook
+ * markdown corpus stores asset references with the repo-relative `/handbooks/`
+ * prefix; runtime delivery routes through the streaming endpoint at
+ * `/handbook-asset/[...path]`. Other URLs pass through unchanged.
+ */
+function rewriteHandbookAssetUrl(url: string): string {
+	if (url.startsWith('/handbooks/')) return `/handbook-asset/${url.slice('/handbooks/'.length)}`;
+	return url;
+}
+
+/**
+ * Extract every image URL referenced via markdown `![alt](url)` syntax.
+ *
+ * Used by the handbook reader to dedup the manifest's figure list against
+ * figures already rendered inline in the section body. URLs are returned
+ * exactly as authored (no `/handbooks/` -> `/handbook-asset/` rewriting), so
+ * callers can match against either canonical form by passing both through
+ * `normalizeHandbookAssetPath`.
+ */
+export function extractImageUrls(md: string): string[] {
+	const urls: string[] = [];
+	const re = /!\[[\s\S]*?\]\(([^)\s]+)\)/g;
+	let match: RegExpExecArray | null = re.exec(md);
+	while (match !== null) {
+		if (match[1]) urls.push(match[1]);
+		match = re.exec(md);
+	}
+	return urls;
+}
+
+/**
+ * Normalize a handbook asset path to a comparable canonical form by stripping
+ * the optional leading `/handbooks/`, `handbooks/`, `/handbook-asset/`, or
+ * `handbook-asset/` prefix. The resulting path is asset-relative and stable
+ * across both the markdown corpus convention and the runtime serving route.
+ */
+export function normalizeHandbookAssetPath(path: string): string {
+	const trimmed = path.replace(/^\/+/, '');
+	if (trimmed.startsWith('handbooks/')) return trimmed.slice('handbooks/'.length);
+	if (trimmed.startsWith('handbook-asset/')) return trimmed.slice('handbook-asset/'.length);
+	return trimmed;
 }
 
 /**
@@ -78,9 +123,46 @@ export function renderMarkdown(md: string): string {
 		openList = null;
 	};
 
+	// Block-level image markdown -- a line that begins with `![` and whose
+	// `![alt](url)` token may continue across multiple soft-wrapped lines until
+	// the closing `)`. Renders as a `<figure>` so it survives intact regardless
+	// of the surrounding paragraph state and round-trips alt text into a
+	// caption.
+	const tryImageBlock = (start: number): { html: string; consumed: number } | null => {
+		const first = lines[start];
+		if (first === undefined || !first.startsWith('![')) return null;
+		// Greedily collect lines until we close the `)` of the URL group.
+		let buffer = first;
+		let cursor = start;
+		while (!/\]\([^)\s]+\)\s*$/.test(buffer.replace(/\s+$/, ''))) {
+			cursor++;
+			if (cursor >= lines.length) return null;
+			buffer += `\n${lines[cursor]}`;
+		}
+		const match = buffer.match(/^!\[([\s\S]*?)\]\(([^)\s]+)\)\s*$/);
+		if (!match) return null;
+		const [, altRaw = '', urlRaw = ''] = match;
+		const alt = altRaw.replace(/\s+/g, ' ').trim();
+		const url = rewriteHandbookAssetUrl(urlRaw);
+		const safeUrl = /^(https?:\/\/|\/|#)/.test(url) ? url : '#';
+		const safeAlt = escapeHtml(alt);
+		const figure = `<figure class="md-figure"><img src="${safeUrl}" alt="${safeAlt}" loading="lazy" />${alt ? `<figcaption>${safeAlt}</figcaption>` : ''}</figure>`;
+		return { html: figure, consumed: cursor - start + 1 };
+	};
+
 	while (i < lines.length) {
 		const raw = lines[i];
 		const line = raw.replace(/\s+$/, '');
+
+		// Block-level image: `![alt](url)` on its own line. Rendered as <figure>.
+		const imgBlock = line.startsWith('![') ? tryImageBlock(i) : null;
+		if (imgBlock) {
+			closeParagraph();
+			closeList();
+			html.push(imgBlock.html);
+			i += imgBlock.consumed;
+			continue;
+		}
 
 		// Fenced code block.
 		const fenceOpen = line.match(/^```\s*([\w-]*)\s*$/);

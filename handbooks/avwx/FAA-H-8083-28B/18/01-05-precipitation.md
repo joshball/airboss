@@ -1,0 +1,54 @@
+---
+handbook: avwx
+edition: FAA-H-8083-28B
+chapter_number: 18
+section_title: Precipitation
+faa_pages: 18-9
+section_number: 1
+subsection_number: 5
+source_url: https://www.faa.gov/sites/faa.gov/files/FAA-H-8083-28B.pdf
+---
+
+# Precipitation
+
+18.1.2 Mist
+Mist is a visible aggregate of minute water droplets or ice crystals suspended in the atmosphere that reduces
+visibility to less than 7 SM (11 km), but greater than, or equal to, 5/8 SM (1 km). Mist forms a thin grayish
+veil that covers the landscape. It is similar to fog but does not obstruct visibility to the same extent.
+Mist may be considered an intermediate between fog and haze. It has lower relative humidity
+(95 to 99 percent) than fog and does not obstruct visibility to the same extent. However, there is no distinct
+line between any of these categories.
+18.1.3 Haze
+Haze is a suspension in the air of extremely small particles invisible to the naked eye and sufficiently
+numerous to give the air an opalescent appearance. It reduces visibility by scattering the shorter
+wavelengths of light. Haze produces a bluish color when viewed against a dark background and a yellowish
+veil when viewed against a light background. Haze may be distinguished by this same effect from mist,
+which yields only a gray obscuration. Certain haze particles increase in size with increasing relative
+humidity, drastically decreasing visibility. While visibility is a measure of how far one can see, including
+the ability to see the textures and colors therein, haze is the inability to view a similar scene with
+equal clarity.
+Haze occurs in stable air and is usually only a few thousand feet thick but may extend upwards to 15,000 ft
+(4,600 m). A haze layer has a definite ceiling above which in-flight (air-to-air) visibility is unrestricted. At
+or below this level, the slant range (air-to-ground) visibility is poor. Visibility in haze varies greatly,
+depending on whether the pilot is facing into or away from the Sun.
+18.1.4 Smoke
+Smoke is a suspension in the air of small particles produced by combustion due to fires, industrial burning,
+or other sources. It may transition to haze when the particles travel 25–100 mi (40–160 km) or more, the
+larger particles have settled, and others become widely scattered through the atmosphere.
+Not only can smoke reduce visibility to zero, but many of its compounds are highly toxic and/or irritating.
+The most dangerous is carbon monoxide, which can lead to carbon monoxide poisoning, sometimes with
+supporting effects of hydrogen cyanide and phosgene.
+When skies are clear above a surface-based layer of haze or smoke, visibility generally improves during
+the day. Heating during the day may cause convective mixing, spreading the smoke or haze to a higher
+altitude, and decreasing the concentration near the surface. However, the improvement is slower than the
+clearing of fog. Fog evaporates, but haze and smoke must be dispersed by the movement of air. A thick
+layer of clouds above haze or smoke may block sunlight, preventing dissipation. Visibility will improve
+little, if any, during the day.
+18.1.5 Precipitation
+Precipitation is any of the forms of water particles, whether liquid or solid, that fall from the atmosphere
+and reach the ground. Snow, rain, and drizzle are types of precipitation. Heavy snow may reduce visibility
+to zero. Rain seldom reduces surface visibility below 1 mi except in brief, heavy showers.
+Drizzle usually restricts visibility to a greater degree than rain. It forms in stable air, falls from stratiform
+clouds, and is typically accompanied by fog. When drizzle changes to light rain, visibility usually improves
+because the droplet size increases, meaning there are fewer droplets per unit area.
+For more information on precipitation, see Chapter 14, Precipitation.

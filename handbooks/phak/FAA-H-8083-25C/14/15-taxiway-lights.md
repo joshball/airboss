@@ -1,0 +1,16 @@
+---
+handbook: phak
+edition: FAA-H-8083-25C
+chapter_number: 14
+section_title: Taxiway Lights
+faa_pages: 14-19
+section_number: 15
+source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/faa-h-8083-25c.pdf
+---
+
+# Taxiway Lights
+
+Taxiway Lights
+Similar to runway lighting, taxiways also have various lights
+which help pilots identify areas of the taxiway and any
+surrounding runways.

@@ -1,0 +1,57 @@
+<table><caption>Table 26-8. Format of the Space Weather Advisory 
+Format 
+Explanation 
+Examples 
+Communication 
+header 
+Product’s coded identification for 
+the issuing centers. KWNP is the 
+SWPC, LFPW and YMMC are th</caption><thead><tr><th>Format</th><th>Explanation</th><th>Examples</th></tr></thead><tbody><tr><td>Communication
+header</td><td>Product’s coded identification for
+the issuing centers. KWNP is the
+SWPC, LFPW and YMMC are the
+ACFJ, EFKL and EGRR are the
+PECASUS, and ZBBB and UUAG
+are the CRC.
+FNXX01 is for GNSS, FNXX02 is
+for HF COM, FNXX03 is for
+Radiation, and FNXX04 is for
+SATCOM.</td><td>FNXX01 KWNP
+FNXX01 LFPW
+FNXX01 YMMC
+FNXX01 EFKL
+FNXX02 EGRR
+FNXX03 UUAG
+FNXX04 ZBBB</td></tr><tr><td>SWX ADVISORY</td><td>Space Weather (SWX) Advisory.</td><td>SWX ADVISORY</td></tr><tr><td>STATUS:</td><td>Status indicator (optional) for test or
+exercise.</td><td>TEST
+EXER</td></tr><tr><td>DTG:</td><td>Date and time of origin, in
+YYYYMMDD/HHMMZ.</td><td>20190418/0100Z</td></tr><tr><td>SWXC:</td><td>Name of the Space Weather
+Advisory Center (SWXC).</td><td>ACFJ
+PECASUS
+SWPC
+CRC</td></tr><tr><td>ADVISORY NR:</td><td>Advisory number (NR).</td><td>2019/9</td></tr><tr><td>NR RPLC:</td><td>Advisory number being replaced by
+this advisory (optional).</td><td>2019/8</td></tr><tr><td>SWX EFFECT:</td><td>Space weather effect.</td><td>HF COM MOD
+HF COM SEV
+SATCOM MOD
+SATCOM SEV
+GNSS MOD
+GNSS SEV
+RADIATION MOD
+RADIATION SEV</td></tr><tr><td>OBS (or FCST)
+SWX:</td><td>Observed (OBS) or expected
+(FCST) space weather effect
+date/time, location, and altitudes
+(altitudes are only used in the
+radiation advisory).</td><td>18/0100Z EQN W18000-W12000
+18/0100Z HNH HSH E180-W180 ABV
+FL370
+18/0100Z DAYLIGHT SIDE
+18/0100Z NO SWX EXP</td></tr><tr><td>FCST SWX
++6 HR:</td><td>6-hour forecast. Date/time, location,
+and altitudes.</td><td>Same as above</td></tr><tr><td>FCST SWX
++12 HR:</td><td>12-hour forecast. Date/time,
+location, and altitudes.</td><td>Same as above</td></tr><tr><td>FCST SWX
++18 HR:</td><td>18-hour forecast. Date/time,
+location, and altitudes.</td><td>Same as above</td></tr><tr><td>FCST SWX
++24 HR:</td><td>24-hour forecast. Date/time,
+location, and altitudes.</td><td>Same as above</td></tr></tbody></table>

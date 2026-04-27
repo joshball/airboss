@@ -1,0 +1,13 @@
+---
+handbook: phak
+edition: FAA-H-8083-25C
+chapter_number: 1
+section_title: The Role of the FAA
+faa_pages: 1-7
+section_number: 3
+source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/faa-h-8083-25c.pdf
+---
+
+# The Role of the FAA
+
+The Role of the FAA

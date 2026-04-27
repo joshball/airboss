@@ -19,7 +19,10 @@ setup('authenticate learner', async ({ page }) => {
 		page.getByRole('button', { name: /sign in/i }).click(),
 	]);
 
-	await expect(page.getByRole('heading', { name: 'Learning Dashboard' })).toBeVisible();
+	// The dashboard H1 has been "Dashboard" since the dashboard refactor;
+	// older copies of this setup file matched "Learning Dashboard" which no
+	// longer renders. Match either to keep the storage-state capture stable.
+	await expect(page.getByRole('heading', { name: /^(learning )?dashboard$/i, level: 1 })).toBeVisible();
 
 	await page.context().storageState({ path: STORAGE });
 });

@@ -1243,3 +1243,131 @@ export const BROWSE_STATUS_FILTER_LABELS: Record<BrowseStatusFilter, string> = {
 	...CARD_STATUS_LABELS,
 	[BROWSE_STATUS_REMOVED]: 'Removed',
 };
+
+// -------- Handbook ingestion + reader (handbook-ingestion-and-reader WP) --------
+
+/**
+ * Storage discriminator for `study.reference` rows and the structured
+ * `Citation` discriminated union on `knowledge_node.references`. Peer to
+ * `REFERENCE_SOURCE_TYPES` in `reference-tags.ts` (the 5-axis tagging
+ * vocabulary); they overlap deliberately. The cert-syllabus WP collapses
+ * them into one once both lifecycles are stable. See ADR 016 + WP design.
+ */
+export const REFERENCE_KINDS = {
+	HANDBOOK: 'handbook',
+	CFR: 'cfr',
+	AC: 'ac',
+	ACS: 'acs',
+	PTS: 'pts',
+	AIM: 'aim',
+	PCG: 'pcg',
+	NTSB: 'ntsb',
+	POH: 'poh',
+	OTHER: 'other',
+} as const;
+
+export type ReferenceKind = (typeof REFERENCE_KINDS)[keyof typeof REFERENCE_KINDS];
+
+export const REFERENCE_KIND_VALUES = Object.values(REFERENCE_KINDS);
+
+export const REFERENCE_KIND_LABELS: Record<ReferenceKind, string> = {
+	[REFERENCE_KINDS.HANDBOOK]: 'Handbook',
+	[REFERENCE_KINDS.CFR]: 'CFR',
+	[REFERENCE_KINDS.AC]: 'Advisory Circular',
+	[REFERENCE_KINDS.ACS]: 'ACS',
+	[REFERENCE_KINDS.PTS]: 'PTS',
+	[REFERENCE_KINDS.AIM]: 'AIM',
+	[REFERENCE_KINDS.PCG]: 'Pilot/Controller Glossary',
+	[REFERENCE_KINDS.NTSB]: 'NTSB',
+	[REFERENCE_KINDS.POH]: 'POH',
+	[REFERENCE_KINDS.OTHER]: 'Other',
+};
+
+/**
+ * `handbook_section.level`. A section row is one of: a chapter (top-level,
+ * `parent_id IS NULL`), a section (direct child of a chapter), or a
+ * subsection (child of a section).
+ */
+export const HANDBOOK_SECTION_LEVELS = {
+	CHAPTER: 'chapter',
+	SECTION: 'section',
+	SUBSECTION: 'subsection',
+} as const;
+
+export type HandbookSectionLevel = (typeof HANDBOOK_SECTION_LEVELS)[keyof typeof HANDBOOK_SECTION_LEVELS];
+
+export const HANDBOOK_SECTION_LEVEL_VALUES = Object.values(HANDBOOK_SECTION_LEVELS);
+
+export const HANDBOOK_SECTION_LEVEL_LABELS: Record<HandbookSectionLevel, string> = {
+	[HANDBOOK_SECTION_LEVELS.CHAPTER]: 'Chapter',
+	[HANDBOOK_SECTION_LEVELS.SECTION]: 'Section',
+	[HANDBOOK_SECTION_LEVELS.SUBSECTION]: 'Subsection',
+};
+
+/**
+ * `handbook_read_state.status`. Three-state per spec Open Question 4:
+ * `unread` (default; no read-state row exists yet, or the user re-read),
+ * `reading` (heartbeat or first open has fired), `read` (user marked it).
+ *
+ * Plus a separate `comprehended` boolean tracks "read but didn't get it";
+ * see schema docs.
+ */
+export const HANDBOOK_READ_STATUSES = {
+	UNREAD: 'unread',
+	READING: 'reading',
+	READ: 'read',
+} as const;
+
+export type HandbookReadStatus = (typeof HANDBOOK_READ_STATUSES)[keyof typeof HANDBOOK_READ_STATUSES];
+
+export const HANDBOOK_READ_STATUS_VALUES = Object.values(HANDBOOK_READ_STATUSES);
+
+export const HANDBOOK_READ_STATUS_LABELS: Record<HandbookReadStatus, string> = {
+	[HANDBOOK_READ_STATUSES.UNREAD]: 'Unread',
+	[HANDBOOK_READ_STATUSES.READING]: 'Reading',
+	[HANDBOOK_READ_STATUSES.READ]: 'Read',
+};
+
+/** ID prefixes for the handbook tables (composed via `@ab/utils createId`). */
+export const REFERENCE_ID_PREFIX = 'ref';
+export const HANDBOOK_SECTION_ID_PREFIX = 'hbs';
+export const HANDBOOK_FIGURE_ID_PREFIX = 'hbf';
+
+/**
+ * Heartbeat + suggestion-prompt thresholds (spec Open Question 5).
+ *
+ * Defaults are starting numbers; tuning lives in this single file because
+ * no code branches on the number. The reader posts a heartbeat every
+ * `HANDBOOK_HEARTBEAT_INTERVAL_SEC` seconds when the section page is
+ * visible. The "Mark this section as read?" prompt shows once
+ * `open_seconds_in_session >= HANDBOOK_SUGGEST_OPEN_SECONDS` AND
+ * `total_seconds_visible >= HANDBOOK_SUGGEST_TOTAL_SECONDS` AND
+ * (when {@link HANDBOOK_SUGGEST_REQUIRES_SCROLL_END} is true) the user
+ * has reached the bottom of the section.
+ */
+export const HANDBOOK_HEARTBEAT_INTERVAL_SEC = 15;
+export const HANDBOOK_SUGGEST_OPEN_SECONDS = 60;
+export const HANDBOOK_SUGGEST_TOTAL_SECONDS = 90;
+export const HANDBOOK_SUGGEST_REQUIRES_SCROLL_END = true;
+
+/**
+ * Maximum number of buffered heartbeats while the network is offline.
+ * 12 * 15s = ~3 minutes of offline time before the oldest heartbeat is
+ * dropped. Tuning lives here so a future "double the buffer" lands in
+ * one place and the reader-spec test still keys off the constant.
+ */
+export const HANDBOOK_HEARTBEAT_BUFFER = 12;
+
+/**
+ * Minimum heartbeat delta accepted by the server. Anti-flood floor; a
+ * client that posts more often than this is throttled to avoid pathological
+ * counter inflation.
+ */
+export const HANDBOOK_HEARTBEAT_MIN_DELTA_SEC = 5;
+
+/**
+ * Hard cap on per-user notes per section. The BC validator + the DB
+ * CHECK both reference this; the UI surfaces a friendly message when
+ * the user tries to paste a wall of text.
+ */
+export const HANDBOOK_NOTES_MAX_LENGTH = 16384;

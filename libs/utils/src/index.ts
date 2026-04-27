@@ -8,10 +8,13 @@ export {
 	generateCardId,
 	generateCardSnoozeId,
 	generateContentCitationId,
+	generateHandbookFigureId,
+	generateHandbookSectionId,
 	generateHangarJobId,
 	generateHangarJobLogId,
 	generateHangarSyncLogId,
 	generateKnowledgeNodeProgressId,
+	generateReferenceId,
 	generateReviewId,
 	generateReviewSessionId,
 	generateSavedDeckId,
@@ -22,7 +25,7 @@ export {
 	generateStudyPlanId,
 } from './ids';
 export { createLogger, type Logger } from './logger';
-export { escapeHtml, renderMarkdown } from './markdown';
+export { escapeHtml, extractImageUrls, normalizeHandbookAssetPath, renderMarkdown } from './markdown';
 export { narrow } from './narrow';
 export { humanize } from './strings';
 export { MS_PER_DAY, MS_PER_HOUR, MS_PER_MINUTE, MS_PER_SECOND, userStartOfDay } from './time';

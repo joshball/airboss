@@ -1,0 +1,19 @@
+---
+handbook: afh
+edition: FAA-H-8083-3C
+chapter_number: 16
+section_title: Thrust to Thrust Lever Relationship
+faa_pages: 16-2
+section_number: 4
+subsection_number: 2
+source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/airplane_handbook/00_afh_full.pdf
+---
+
+# Thrust to Thrust Lever Relationship
+
+Thrust to Thrust Lever Relationship
+In a jet engine, thrust output changes much more per increment of throttle movement at high engine speeds. If the power setting is
+already high, it normally takes a small amount of movement to change the power output. This is a significant difference for the pilot
+transitioning to jet-powered airplanes. In a situation where significantly more thrust is needed and the jet engine is at low rpm, inching
+the thrust lever forward will have little effect. It this situation, the pilot needs to make a smooth and significant thrust lever position
+change to increase the power.

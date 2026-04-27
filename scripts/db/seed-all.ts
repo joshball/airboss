@@ -7,9 +7,12 @@
  *   1. users      -- better-auth rows for DEV_ACCOUNTS (scripts/db/seed-dev-users.ts)
  *   2. knowledge  -- knowledge_node + knowledge_edge from course/knowledge/**\/node.md
  *                    (scripts/build-knowledge-index.ts, full build)
- *   3. cards      -- study.card rows from inline yaml-cards blocks for every
+ *   3. handbooks  -- reference + handbook_section + handbook_figure rows
+ *                    from the committed handbooks/ tree
+ *                    (scripts/db/seed-handbooks.ts :: seedHandbooks)
+ *   4. cards      -- study.card rows from inline yaml-cards blocks for every
  *                    DEV_ACCOUNTS user (scripts/db/seed-cards.ts :: seedCardsForUser)
- *   4. abby       -- Abby's personal cards / scenarios / plan / sessions /
+ *   5. abby       -- Abby's personal cards / scenarios / plan / sessions /
  *                    reviews. Uses the seed_origin marker so the rows can be
  *                    cleanly removed by `db seed:remove`.
  *
@@ -20,6 +23,7 @@
  *   bun scripts/db/seed-all.ts            # all phases
  *   bun scripts/db/seed-all.ts users      # only users
  *   bun scripts/db/seed-all.ts knowledge  # only knowledge graph build
+ *   bun scripts/db/seed-all.ts handbooks  # only handbook ingestion -> DB
  *   bun scripts/db/seed-all.ts cards      # only card materialization
  *   bun scripts/db/seed-all.ts abby       # only Abby's content
  */
@@ -29,10 +33,11 @@ import { DEV_ACCOUNTS, DEV_DB_URL, DEV_SEED_ORIGIN_TAG, ENV_VARS } from '@ab/con
 import { type AbbySeedCounts, seedAbby } from './seed-abby';
 import { seedCardsForUser } from './seed-cards';
 import { decideSeedGuard } from './seed-guard';
+import { seedHandbooks } from './seed-handbooks';
 
-type Phase = 'users' | 'knowledge' | 'cards' | 'abby';
+type Phase = 'users' | 'knowledge' | 'handbooks' | 'cards' | 'abby';
 
-const PHASES: readonly Phase[] = ['users', 'knowledge', 'cards', 'abby'] as const;
+const PHASES: readonly Phase[] = ['users', 'knowledge', 'handbooks', 'cards', 'abby'] as const;
 const REPO_ROOT = resolve(import.meta.dir, '..', '..');
 
 const ANSI_YELLOW = '[33m';
@@ -59,6 +64,14 @@ async function phaseUsers(): Promise<void> {
 async function phaseKnowledge(): Promise<void> {
 	process.stdout.write('\n=== seed: knowledge ===\n');
 	await runSubprocess(['bun', 'scripts/build-knowledge-index.ts']);
+}
+
+async function phaseHandbooks(): Promise<void> {
+	process.stdout.write('\n=== seed: handbooks ===\n');
+	const summary = await seedHandbooks();
+	process.stdout.write(
+		`  ${summary.editionsProcessed} editions, ${summary.sectionsTouched} sections (${summary.sectionsChanged} changed), ${summary.figuresWritten} figures, ${summary.supersededLinks} superseded links\n`,
+	);
 }
 
 async function phaseCards(): Promise<void> {
@@ -98,6 +111,7 @@ async function phaseAbby(): Promise<void> {
 const PHASE_FNS: Record<Phase, () => Promise<void>> = {
 	users: phaseUsers,
 	knowledge: phaseKnowledge,
+	handbooks: phaseHandbooks,
 	cards: phaseCards,
 	abby: phaseAbby,
 };

@@ -284,7 +284,7 @@ Phased; each phase is independently shippable.
 
 | Phase | Scope | Status |
 | ----- | ----------------------------------------------------------------------------- | ------ |
-| 0 | Handbook ingestion pipeline + reader UI + read-progress (PHAK first); Reference table seeded from ingested handbooks | TBD |
+| 0 | Handbook ingestion pipeline + reader UI + read-progress (PHAK first); Reference table seeded from ingested handbooks | Shipped (in flight; PR pending) -- PHAK + AFH + AvWX ingested at section-granularity; reader live; storage + edition policies in [ADR 018](../018-source-artifact-storage-policy/decision.md) + [ADR 020](../020-handbook-edition-and-amendment-policy.md) |
 | 1 | Citation table; existing node references migrated to structured citations | TBD |
 | 2 | Credential DAG; current `CERTS` + `CERT_PREREQUISITES` retired into derived views | TBD |
 | 3 | Syllabus + SyllabusNode + SyllabusNodeLink tables; YAML authoring pipeline | TBD |

@@ -43,7 +43,7 @@ test.describe('authentication', () => {
 		await page.getByRole('button', { name: /sign in/i }).click();
 
 		await expect(page).toHaveURL((url) => url.pathname === ROUTES.DASHBOARD);
-		await expect(page.getByRole('heading', { name: 'Learning Dashboard' })).toBeVisible();
+		await expect(page.getByRole('heading', { name: 'Dashboard', level: 1 })).toBeVisible();
 	});
 
 	test('safe redirectTo is honored after login', async ({ page }) => {
