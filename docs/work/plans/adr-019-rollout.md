@@ -24,7 +24,7 @@ Companion to:
 | 2 | reference-source-registry-core | [WP](../../work-packages/reference-source-registry-core/) | #246 | ✅ |
 | 3 | reference-cfr-ingestion-bulk | [WP](../../work-packages/reference-cfr-ingestion-bulk/) | #247 | ✅ |
 | 4 | reference-renderer-runtime | [WP](../../work-packages/reference-renderer-runtime/) | #249 | 🟧 |
-| 5 | reference-versioning-tooling | -- | -- | ⬜ |
+| 5 | reference-versioning-tooling | [WP](../../work-packages/reference-versioning-tooling/) | -- | 🟨 |
 | 6 | reference-handbook-ingestion | -- | -- | ⬜ |
 | 7 | reference-aim-ingestion | -- | -- | ⬜ |
 | 8 | reference-ac-ingestion | -- | -- | ⬜ |
@@ -80,9 +80,19 @@ Shipped surface:
 
 Coverage: 366 tests (libs/sources) + 6 tests (apps/study/lib/server/references); all 2393 project tests pass.
 
-### Phase 5 -- reference-versioning-tooling
+### Phase 5 -- reference-versioning-tooling 🟨
 
 The annual rollover diff job. Compares editions in the registry, hash-compares normalized text, auto-advances lesson pins for unchanged sections, emits "needs human review" reports for changed sections.
+
+Shipped surface (per [WP](../../work-packages/reference-versioning-tooling/)):
+
+- `libs/sources/src/diff/` -- pair walker, body hasher, alias resolver, diff orchestrator, lesson rewriter, CLI runners, unified-diff helper.
+- Two new subcommands on `bun run airboss-ref`:
+  - `diff [--corpus=<c>] [--edition-pair=<old>,<new>] [--out=<path>] [--fixture-pair=<a>,<b>]` -- walks edition pairs, partitions into nine `DiffOutcomeKind` values (auto-advance, needs-review, alias-silent / -content / -cross / -split / -merge, missing-old, missing-new), writes JSON report to `data/sources-diff/`, prints stdout summary.
+  - `advance --report=<path>` -- consumes a JSON report, rewrites lesson `?at=` pins for auto-advance candidates. Refuses to run on a dirty git tree. Idempotent.
+- `tests/fixtures/cfr/title-14-2027-fixture.xml` -- a 5-section sibling of the 2026 fixture covering byte-identical (auto-advance) and amended (needs-review) cases.
+- Validator row-6 round-trip: a synthetic two-edition-stale lesson produces row-6 WARNING; after `advance` rewrites the pin, the warning clears.
+- 50 new tests in `libs/sources/src/diff/`; 416 total tests in `libs/sources/` pass.
 
 ### Phase 6 -- reference-handbook-ingestion
 
