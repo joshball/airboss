@@ -12,11 +12,15 @@ import {
 	NODE_LIFECYCLE_LABELS,
 	NODE_MASTERY_GATE_LABELS,
 	type NodeMasteryGate,
+	REFERENCE_KIND_LABELS,
+	REFERENCE_KINDS,
+	type ReferenceKind,
 	ROUTES,
 	STUDY_PRIORITY_LABELS,
 	type StudyPriority,
 } from '@ab/constants';
 import PageHelp from '@ab/help/ui/PageHelp.svelte';
+import { type Citation, isStructuredCitation } from '@ab/types';
 import CitedByPanel, { type CitedByItem } from '@ab/ui/components/CitedByPanel.svelte';
 import { humanize, renderMarkdown } from '@ab/utils';
 import type { PageData } from './$types';
@@ -79,6 +83,96 @@ function renderPhase(body: string | null): string {
 	if (!body) return '';
 	return renderMarkdown(body);
 }
+
+interface CitationDisplay {
+	/** Stable key for the {#each} block. */
+	key: string;
+	/** Primary heading -- "PHAK" / "FAR Part 91" / freeform `source`. */
+	source: string;
+	/** Secondary detail line -- locator string or freeform `detail`. */
+	detail: string;
+	/** Optional commentary -- freeform `note`. */
+	note: string;
+	/** Resolved URL when available; null falls back to plain text. */
+	href: string | null;
+	/** Structured-but-unresolved citations get the "(citation broken)" tag. */
+	broken: boolean;
+	/** Structured kinds get a kind chip; legacy entries don't. */
+	kindLabel: string | null;
+}
+
+/** Format a structured citation's locator into a human-readable suffix. */
+function formatStructuredLocator(citation: Extract<Citation, { kind: ReferenceKind }>): string {
+	switch (citation.kind) {
+		case REFERENCE_KINDS.HANDBOOK: {
+			const parts = [`Ch. ${citation.locator.chapter}`];
+			if (citation.locator.section !== undefined) parts.push(`§${citation.locator.section}`);
+			if (citation.locator.subsection !== undefined) parts.push(`.${citation.locator.subsection}`);
+			if (citation.locator.page_start) {
+				const pages = citation.locator.page_end
+					? `pp. ${citation.locator.page_start}..${citation.locator.page_end}`
+					: `p. ${citation.locator.page_start}`;
+				parts.push(`(${pages})`);
+			}
+			return parts.join(' ');
+		}
+		case REFERENCE_KINDS.CFR:
+			return `${citation.locator.title} CFR ${citation.locator.part}.${citation.locator.section}`;
+		case REFERENCE_KINDS.AC:
+			return citation.locator.paragraph ? `¶${citation.locator.paragraph}` : '';
+		case REFERENCE_KINDS.ACS:
+		case REFERENCE_KINDS.PTS: {
+			const parts: string[] = [];
+			if (citation.locator.area) parts.push(`Area ${citation.locator.area}`);
+			if (citation.locator.task) parts.push(`Task ${citation.locator.task}`);
+			if (citation.locator.element) parts.push(`Element ${citation.locator.element}`);
+			return parts.join(', ');
+		}
+		case REFERENCE_KINDS.AIM:
+			return citation.locator.paragraph ? `¶${citation.locator.paragraph}` : '';
+		case REFERENCE_KINDS.PCG:
+			return citation.locator.term ?? '';
+		case REFERENCE_KINDS.NTSB:
+		case REFERENCE_KINDS.POH:
+		case REFERENCE_KINDS.OTHER:
+			return citation.locator.detail ?? '';
+	}
+}
+
+function toCitationDisplay(entry: PageData['node']['references'][number], index: number): CitationDisplay {
+	const { citation, resolvedUrl } = entry;
+	if (isStructuredCitation(citation)) {
+		const kindLabel = REFERENCE_KIND_LABELS[citation.kind];
+		const detail = formatStructuredLocator(citation);
+		// "Broken" = handbook citation whose `reference_id` failed to resolve.
+		// Non-handbook kinds (cfr, ac, acs, ...) deliberately return null from
+		// the v1 resolver because the per-kind resolvers ship in the cert-
+		// syllabus WP. Those are "future kind, no link yet," not broken.
+		const broken = citation.kind === REFERENCE_KINDS.HANDBOOK && resolvedUrl === null;
+		return {
+			key: `${citation.kind}:${citation.reference_id}:${index}`,
+			source: kindLabel,
+			detail,
+			note: citation.note ?? '',
+			href: resolvedUrl,
+			broken,
+			kindLabel,
+		};
+	}
+	return {
+		key: `legacy:${citation.source}:${citation.detail}:${index}`,
+		source: citation.source,
+		detail: citation.detail,
+		note: citation.note,
+		// Legacy citations never have a URL in v1 (resolver returns null) and
+		// are NOT broken -- they're freeform by design.
+		href: null,
+		broken: false,
+		kindLabel: null,
+	};
+}
+
+const referenceItems = $derived<CitationDisplay[]>(node.references.map(toCitationDisplay));
 
 const citedByItems = $derived<CitedByItem[]>(
 	citedBy.map((c) => ({
@@ -271,15 +365,31 @@ const citedByItems = $derived<CitedByItem[]>(
 		</section>
 	{/if}
 
-	{#if node.references.length > 0}
+	{#if referenceItems.length > 0}
 		<section class="section" aria-label="References">
 			<h2>References</h2>
 			<ul class="refs">
-				{#each node.references as ref (ref.source + ref.detail)}
-					<li>
-						<strong>{ref.source}</strong>
-						{#if ref.detail}
-							<span class="ref-detail">-- {ref.detail}</span>
+				{#each referenceItems as ref (ref.key)}
+					<li class="ref-item">
+						{#if ref.href}
+							<a class="ref-link" href={ref.href}>
+								<strong>{ref.source}</strong>
+								{#if ref.detail}
+									<span class="ref-detail">-- {ref.detail}</span>
+								{/if}
+							</a>
+						{:else}
+							<span>
+								<strong>{ref.source}</strong>
+								{#if ref.detail}
+									<span class="ref-detail">-- {ref.detail}</span>
+								{/if}
+								{#if ref.broken}
+									<span class="ref-broken" title="Citation reference not found in this database.">
+										(citation broken)
+									</span>
+								{/if}
+							</span>
 						{/if}
 						{#if ref.note}
 							<p class="ref-note">{ref.note}</p>
@@ -683,6 +793,29 @@ const citedByItems = $derived<CitedByItem[]>(
 		color: var(--ink-muted);
 		font-size: var(--type-ui-label-size);
 		line-height: 1.45;
+	}
+
+	.ref-link {
+		display: inline-flex;
+		align-items: baseline;
+		gap: var(--space-2xs);
+		color: var(--action-default-hover);
+		text-decoration: none;
+	}
+
+	.ref-link:hover {
+		text-decoration: underline;
+	}
+
+	.ref-link strong {
+		color: inherit;
+	}
+
+	.ref-broken {
+		margin-left: var(--space-xs);
+		color: var(--ink-faint);
+		font-size: var(--type-ui-caption-size);
+		font-style: italic;
 	}
 
 </style>

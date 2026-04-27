@@ -7,9 +7,12 @@ import {
 	type KnowledgeEdgeRow,
 	type KnowledgeNodeRow,
 	lifecycleFromContent,
+	listReferences,
+	resolveCitationUrl,
 	splitContentPhases,
 } from '@ab/bc-study';
 import { CITATION_TARGET_TYPES, KNOWLEDGE_EDGE_TYPES, KNOWLEDGE_PHASE_ORDER, type KnowledgePhase } from '@ab/constants';
+import type { Citation } from '@ab/types';
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
@@ -18,6 +21,19 @@ interface EdgeSummary {
 	edgeType: string;
 	targetExists: boolean;
 	title: string | null;
+}
+
+/**
+ * Citation entry as the page renders it: the original `Citation` plus the
+ * resolved URL. Legacy freeform citations carry `resolvedUrl: null` and render
+ * as plain text. Structured handbook citations whose `reference_id` resolves
+ * carry the `/handbooks/...` URL. Structured handbook citations whose
+ * `reference_id` does not resolve carry `resolvedUrl: null`; the UI flags
+ * those as "(citation broken)" by inspecting the citation's `kind`.
+ */
+export interface ResolvedCitation {
+	citation: Citation;
+	resolvedUrl: string | null;
 }
 
 /** Group edges by KNOWLEDGE_EDGE_TYPES value. Preserves author order. */
@@ -87,6 +103,20 @@ export const load: PageServerLoad = async (event) => {
 	const citedByRows = await getCitedBy(CITATION_TARGET_TYPES.KNOWLEDGE_NODE, node.id);
 	const citedBy: CitationWithSource[] = await resolveCitationSources(citedByRows);
 
+	// Bidirectional citation: resolve every entry in `node.references` to a URL
+	// when possible. v1 only resolves `kind='handbook'` -- legacy freeform and
+	// every other structured kind return null. The reference table is small
+	// (handful of rows v1) so loading it once per request is cheap.
+	// `node.references` is typed as the legacy shape on the column today; the
+	// JSONB column itself accepts both shapes per the spec, so we widen to
+	// `Citation[]` for resolution.
+	const allReferences = await listReferences({ includeSuperseded: true });
+	const rawCitations = node.references as unknown as Citation[];
+	const resolvedReferences: ResolvedCitation[] = rawCitations.map((citation) => ({
+		citation,
+		resolvedUrl: resolveCitationUrl(citation, allReferences),
+	}));
+
 	return {
 		node: {
 			id: node.id,
@@ -101,7 +131,7 @@ export const load: PageServerLoad = async (event) => {
 			modalities: node.modalities,
 			estimatedTimeMinutes: node.estimatedTimeMinutes,
 			reviewTimeMinutes: node.reviewTimeMinutes,
-			references: node.references,
+			references: resolvedReferences,
 			assessmentMethods: node.assessmentMethods,
 			masteryCriteria: node.masteryCriteria,
 		},
