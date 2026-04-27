@@ -1,16 +1,111 @@
 <script lang="ts">
-import { type HandbookReadStatus, ROUTES } from '@ab/constants';
+import {
+	HANDBOOK_HEARTBEAT_BUFFER,
+	HANDBOOK_HEARTBEAT_INTERVAL_SEC,
+	HANDBOOK_READ_STATUSES,
+	type HandbookReadStatus,
+	ROUTES,
+} from '@ab/constants';
 import HandbookCitingNodesPanel from '@ab/ui/handbooks/HandbookCitingNodesPanel.svelte';
 import HandbookEditionBadge from '@ab/ui/handbooks/HandbookEditionBadge.svelte';
 import HandbookReadProgressControl from '@ab/ui/handbooks/HandbookReadProgressControl.svelte';
 import HandbookSectionNotes from '@ab/ui/handbooks/HandbookSectionNotes.svelte';
 import { renderMarkdown } from '@ab/utils';
 import type { PageData } from './$types';
+import { shouldShowReadSuggestion } from './read-suggestion';
 
 let { data }: { data: PageData } = $props();
 
 const bodyMd = $derived(stripFrontmatter(data.section.contentMd));
 const bodyHtml = $derived(renderMarkdown(bodyMd));
+
+// Read-tracking state for the heartbeat tick + suggestion banner. Local-only;
+// the server's authoritative `total_seconds_visible` is the persisted truth.
+// `accumulatedSecondsThisLoad` counts ticks the client has fired this page-
+// load; it adds onto the server's snapshot so cumulative time stays accurate
+// across visits without re-loading the page.
+let openedSecondsInSession = $state(0);
+let accumulatedSecondsThisLoad = $state(0);
+let scrolledToBottom = $state(false);
+let suggestionDismissed = $state(false);
+const totalSecondsVisible = $derived(data.readState.totalSecondsVisible + accumulatedSecondsThisLoad);
+const status = $derived(data.readState.status as HandbookReadStatus);
+const showSuggestion = $derived(
+	shouldShowReadSuggestion({
+		openedSecondsInSession,
+		totalSecondsVisible,
+		scrolledToBottom,
+		status,
+		dismissedThisSession: suggestionDismissed,
+	}),
+);
+
+const heartbeatUrl = $derived(
+	ROUTES.HANDBOOK_SECTION_HEARTBEAT(
+		data.reference.documentSlug,
+		data.chapter.code,
+		data.section.code.split('.').slice(1).join('.'),
+	),
+);
+
+// Buffer of heartbeat deltas the network failed to deliver. The next
+// successful POST drains the buffer in FIFO order; the cap matches
+// HANDBOOK_HEARTBEAT_BUFFER so a long offline stretch doesn't grow
+// unbounded -- the oldest entries are dropped past the cap.
+const pendingDeltas: number[] = [];
+
+async function postHeartbeat(delta: number): Promise<void> {
+	const queue = [...pendingDeltas, delta];
+	pendingDeltas.length = 0;
+	while (queue.length > 0) {
+		const next = queue[0];
+		if (next === undefined) break;
+		try {
+			const response = await fetch(heartbeatUrl, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ delta: next }),
+			});
+			if (!response.ok) throw new Error(`heartbeat failed: ${response.status}`);
+			queue.shift();
+		} catch {
+			// Network or server rejected: re-buffer the unsent tail and bail.
+			// Trim from the front (drop oldest) to honor the cap.
+			const overflow = queue.length - HANDBOOK_HEARTBEAT_BUFFER;
+			const tail = overflow > 0 ? queue.slice(overflow) : queue;
+			pendingDeltas.push(...tail);
+			return;
+		}
+	}
+}
+
+$effect(() => {
+	// Server-rendered page; client tick only runs in the browser.
+	if (typeof window === 'undefined') return;
+
+	function checkScroll(): void {
+		const tolerance = 24;
+		if (window.scrollY + window.innerHeight >= document.body.scrollHeight - tolerance) {
+			scrolledToBottom = true;
+		}
+	}
+	checkScroll();
+	window.addEventListener('scroll', checkScroll, { passive: true });
+
+	function tick(): void {
+		if (document.visibilityState !== 'visible') return;
+		const delta = HANDBOOK_HEARTBEAT_INTERVAL_SEC;
+		openedSecondsInSession += delta;
+		accumulatedSecondsThisLoad += delta;
+		void postHeartbeat(delta);
+	}
+	const interval = window.setInterval(tick, HANDBOOK_HEARTBEAT_INTERVAL_SEC * 1000);
+
+	return () => {
+		window.clearInterval(interval);
+		window.removeEventListener('scroll', checkScroll);
+	};
+});
 
 function stripFrontmatter(md: string): string {
 	if (!md.startsWith('---')) return md;
@@ -22,6 +117,10 @@ function stripFrontmatter(md: string): string {
 function figureUrl(assetPath: string): string {
 	const stripped = assetPath.startsWith('handbooks/') ? assetPath.slice('handbooks/'.length) : assetPath;
 	return `/handbook-asset/${stripped}`;
+}
+
+function dismissSuggestion(): void {
+	suggestionDismissed = true;
 }
 </script>
 
@@ -81,6 +180,21 @@ function figureUrl(assetPath: string): string {
 </div>
 
 <HandbookCitingNodesPanel nodes={data.citingNodes} scope="section" />
+
+{#if showSuggestion}
+	<aside class="read-suggestion" role="status" aria-live="polite">
+		<p class="read-suggestion-prompt">Mark this section as read?</p>
+		<div class="read-suggestion-actions">
+			<form method="POST" action="?/set-status">
+				<input type="hidden" name="status" value={HANDBOOK_READ_STATUSES.READ} />
+				<button type="submit" class="read-suggestion-primary">Mark as read</button>
+			</form>
+			<button type="button" class="read-suggestion-secondary" onclick={dismissSuggestion}>
+				Not yet
+			</button>
+		</div>
+	</aside>
+{/if}
 
 <HandbookReadProgressControl
 	status={data.readState.status as HandbookReadStatus}
@@ -180,5 +294,55 @@ function figureUrl(assetPath: string): string {
 	.inline-figure figcaption {
 		margin-top: var(--space-xs);
 		color: var(--ink-muted);
+	}
+	.read-suggestion {
+		margin-top: var(--space-md);
+		padding: var(--space-sm) var(--space-md);
+		background: var(--surface-raised);
+		border: 1px solid var(--action-default-edge);
+		border-radius: var(--radius-md);
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--space-sm);
+	}
+	.read-suggestion-prompt {
+		margin: 0;
+		color: var(--ink-body);
+		font-weight: var(--font-weight-medium);
+	}
+	.read-suggestion-actions {
+		display: flex;
+		gap: var(--space-xs);
+	}
+	.read-suggestion-actions form {
+		margin: 0;
+	}
+	.read-suggestion-primary {
+		background: var(--action-default);
+		color: var(--action-default-ink);
+		border: 1px solid var(--action-default);
+		border-radius: var(--radius-sm);
+		padding: var(--space-xs) var(--space-sm);
+		cursor: pointer;
+		font-weight: var(--font-weight-medium);
+	}
+	.read-suggestion-primary:hover,
+	.read-suggestion-primary:focus-visible {
+		background: var(--action-default-hover, var(--action-default));
+	}
+	.read-suggestion-secondary {
+		background: none;
+		border: 1px solid var(--edge-default);
+		border-radius: var(--radius-sm);
+		padding: var(--space-xs) var(--space-sm);
+		color: var(--ink-muted);
+		cursor: pointer;
+	}
+	.read-suggestion-secondary:hover,
+	.read-suggestion-secondary:focus-visible {
+		border-color: var(--action-default-edge);
+		color: var(--ink-body);
 	}
 </style>

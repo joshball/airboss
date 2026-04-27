@@ -88,8 +88,14 @@ export const load: PageServerLoad = async (event) => {
 					status: readState.status,
 					comprehended: readState.comprehended,
 					notesMd: readState.notesMd,
+					totalSecondsVisible: readState.totalSecondsVisible,
 				}
-			: { status: HANDBOOK_READ_STATUSES.UNREAD, comprehended: false, notesMd: '' },
+			: {
+					status: HANDBOOK_READ_STATUSES.UNREAD,
+					comprehended: false,
+					notesMd: '',
+					totalSecondsVisible: 0,
+				},
 		citingNodes: citingNodes.map((n) => ({
 			id: n.id,
 			title: n.title,

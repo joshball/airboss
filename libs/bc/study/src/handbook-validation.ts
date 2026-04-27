@@ -266,8 +266,15 @@ export const handbookReadStatusSchema = z.enum(
 	HANDBOOK_READ_STATUS_VALUES as unknown as readonly [HandbookReadStatus, ...HandbookReadStatus[]],
 );
 
+/**
+ * Heartbeat POST body shape. Wire field name is `delta` (seconds since the
+ * client's previous tick). The endpoint enforces the anti-flood floor
+ * `HANDBOOK_HEARTBEAT_MIN_DELTA_SEC` and caps the recorded value at
+ * `HANDBOOK_HEARTBEAT_INTERVAL_SEC * 4` server-side; this schema only
+ * checks shape (positive integer).
+ */
 export const handbookHeartbeatInputSchema = z.object({
-	deltaSeconds: z.number().int().nonnegative(),
+	delta: z.number().int().positive(),
 });
 
 export const handbookNotesInputSchema = z.object({
