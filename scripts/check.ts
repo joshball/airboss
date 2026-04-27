@@ -29,6 +29,9 @@ const biome = await $`bunx biome check .`.nothrow();
 console.log('\nValidating references (schema + wiki-links)...');
 const references = await $`bun scripts/references.ts validate`.nothrow();
 
+console.log('\nValidating reference identifiers (airboss-ref: per ADR 019)...');
+const airbossRef = await $`bun scripts/airboss-ref.ts`.nothrow();
+
 console.log('\nValidating knowledge graph (db build --dry-run)...');
 const knowledge = await $`bun scripts/build-knowledge-index.ts --dry-run`.nothrow();
 
@@ -44,6 +47,7 @@ const failed =
 	svelteCheckHangar.exitCode !== 0 ||
 	biome.exitCode !== 0 ||
 	references.exitCode !== 0 ||
+	airbossRef.exitCode !== 0 ||
 	knowledge.exitCode !== 0 ||
 	themeLint.exitCode !== 0 ||
 	helpIds.exitCode !== 0;
