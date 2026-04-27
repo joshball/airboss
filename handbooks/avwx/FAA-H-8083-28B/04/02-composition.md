@@ -1,0 +1,112 @@
+---
+handbook: avwx
+edition: FAA-H-8083-28B
+chapter_number: 4
+section_title: Composition
+faa_pages: 4-2
+section_number: 2
+source_url: https://www.faa.gov/sites/faa.gov/files/FAA-H-8083-28B.pdf
+---
+
+# Composition
+
+Chapter 4, The Earth’s Atmosphere
+
+4.2 Composition
+The Earth’s atmosphere consists of numerous gases (see Table 4-1) with nitrogen, oxygen, argon, and
+carbon dioxide making up 99.998 percent of all gases. Nitrogen, by far the most common, dilutes oxygen
+and prevents rapid burning at the Earth’s surface. Living things need it to make proteins. Oxygen is used
+by all living things and is essential for respiration. Plants use carbon dioxide to make oxygen. Carbon
+dioxide also acts as a blanket and prevents the escape of heat to outer space.
+Table 4-1. Approximations of the Composition of a Dry Earth’s Atmosphere
+Gas
+Symbol
+Content (by Volume)
+Nitrogen
+N2
+78.081%
+Oxygen
+O2
+20.945%
+Argon
+Ar
+0.932%
+Carbon Dioxide
+CO2
+0.042%
+Neon
+Ne
+18.20 parts per million
+Helium
+He
+5.20 parts per million
+Methane
+CH4
+1.75 parts per million
+Krypton
+Kr
+1.10 parts per million
+Sulfur Dioxide
+SO2
+1.00 parts per million
+Hydrogen
+H2
+0.50 parts per million
+Nitrous Oxide
+N2O
+0.50 parts per million
+Xenon
+Xe
+0.09 parts per million
+Ozone
+O3
+0.07 parts per million
+Nitrogen Dioxide
+NO2
+0.02 parts per million
+Iodine
+I2
+0.01 parts per million
+Carbon Monoxide
+CO
+trace
+Ammonia
+NH3
+trace
+Note: The atmosphere always contains some water vapor in
+amounts varying from trace to about 4 percent by volume. As
+water vapor content increases, the other gases decrease
+proportionately.
+Weather (the state of the atmosphere at any given time and place) strongly influences daily routine as well
+as general life patterns. Virtually all of our activities are affected by weather, but, of all of our endeavors,
+perhaps none more so than aviation.
+
+<div class="handbook-table" data-source="/handbooks/avwx/FAA-H-8083-28B/tables/tbl-4-2-00-approximations-of-the-composition-of-a-dry-earth.html">
+<table><caption>Table 4-1. Approximations of the Composition of a Dry Earth’s Atmosphere 
+Gas 
+Symbol 
+Content (by Volume) 
+Nitrogen 
+N2 
+78.081% 
+Oxygen 
+O2 
+20.945% 
+Argon 
+Ar 
+0.932% 
+Carbon Dioxide 
+CO2 
+0.042%</caption><thead><tr><th></th><th>Gas</th><th></th><th></th><th>Symbol</th><th></th><th></th><th>Content (by Volume)</th><th></th></tr></thead><tbody><tr><td>Nitrogen</td><td></td><td></td><td>N
+2</td><td></td><td></td><td>78.081%</td><td></td><td></td></tr><tr><td>Oxygen</td><td></td><td></td><td>O
+2</td><td></td><td></td><td>20.945%</td><td></td><td></td></tr><tr><td>Argon</td><td></td><td></td><td>Ar</td><td></td><td></td><td>0.932%</td><td></td><td></td></tr><tr><td>Carbon Dioxide</td><td></td><td></td><td>CO
+2</td><td></td><td></td><td>0.042%</td><td></td><td></td></tr><tr><td>Neon</td><td></td><td></td><td>Ne</td><td></td><td></td><td>18.20 parts per million</td><td></td><td></td></tr><tr><td>Helium</td><td></td><td></td><td>He</td><td></td><td></td><td>5.20 parts per million</td><td></td><td></td></tr><tr><td>Methane</td><td></td><td></td><td>CH
+4</td><td></td><td></td><td>1.75 parts per million</td><td></td><td></td></tr><tr><td>Krypton</td><td></td><td></td><td>Kr</td><td></td><td></td><td>1.10 parts per million</td><td></td><td></td></tr><tr><td>Sulfur Dioxide</td><td></td><td></td><td>SO
+2</td><td></td><td></td><td>1.00 parts per million</td><td></td><td></td></tr><tr><td>Hydrogen</td><td></td><td></td><td>H
+2</td><td></td><td></td><td>0.50 parts per million</td><td></td><td></td></tr><tr><td>Nitrous Oxide</td><td></td><td></td><td>N O
+2</td><td></td><td></td><td>0.50 parts per million</td><td></td><td></td></tr><tr><td>Xenon</td><td></td><td></td><td>Xe</td><td></td><td></td><td>0.09 parts per million</td><td></td><td></td></tr><tr><td>Ozone</td><td></td><td></td><td>O
+3</td><td></td><td></td><td>0.07 parts per million</td><td></td><td></td></tr><tr><td>Nitrogen Dioxide</td><td></td><td></td><td>NO
+2</td><td></td><td></td><td>0.02 parts per million</td><td></td><td></td></tr><tr><td>Iodine</td><td></td><td></td><td>I
+2</td><td></td><td></td><td>0.01 parts per million</td><td></td><td></td></tr><tr><td>Carbon Monoxide</td><td></td><td></td><td>CO</td><td></td><td></td><td>trace</td><td></td><td></td></tr><tr><td>Ammonia</td><td></td><td></td><td>NH
+3</td><td></td><td></td><td>trace</td><td></td><td></td></tr><tr><td></td><td>Note: The atmosphere always contains some water vapor in</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>amounts varying from trace to about 4 percent by volume. As</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>water vapor content increases, the other gases decrease</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>proportionately.</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>
+</div>
