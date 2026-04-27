@@ -1288,6 +1288,34 @@ export const REFERENCE_KIND_LABELS: Record<ReferenceKind, string> = {
 };
 
 /**
+ * External-citation URL templates. The `resolveCitationUrl` resolver in
+ * `@ab/bc-study handbooks.ts` consumes these for non-handbook citation kinds.
+ * Centralised here so a URL change (eCFR rebrand, FAA AIM reorganisation)
+ * is a one-file fix.
+ *
+ * Each template is a function from the relevant locator fields to a URL.
+ * Functions return `null` when the locator is too sparse to build a useful
+ * URL (e.g. a CFR citation with no section, an AIM citation with no
+ * paragraph). Callers must check for null and fall back to the kind's
+ * landing page or render no link.
+ */
+export const CITATION_URL_TEMPLATES = {
+	/** eCFR URL for a 14 CFR / 49 CFR section. Title 14 example: 14 CFR 91.103. */
+	CFR: (title: number, part: number, section: string): string =>
+		`https://www.ecfr.gov/current/title-${title}/chapter-I/part-${part}/section-${part}.${encodeURIComponent(section)}`,
+	/** FAA Advisory Circular index. The site has no per-paragraph deep link. */
+	AC_INDEX: 'https://www.faa.gov/regulations_policies/advisory_circulars/',
+	/** FAA test-standards (ACS / PTS) landing page; per-cert URLs live in `@ab/sources` ACS_CERT_LIVE_URLS. */
+	ACS_INDEX: 'https://www.faa.gov/training_testing/testing/acs',
+	/** FAA AIM landing page. Per-paragraph deep links not provided by FAA. */
+	AIM_INDEX: 'https://www.faa.gov/air_traffic/publications/atpubs/aim_html/',
+	/** FAA Pilot/Controller Glossary landing. Per-term deep links not provided. */
+	PCG_INDEX: 'https://www.faa.gov/air_traffic/publications/atpubs/pcg_html/',
+	/** NTSB accident database search landing. */
+	NTSB_INDEX: 'https://www.ntsb.gov/Pages/AviationQueryV2.aspx',
+} as const;
+
+/**
  * `handbook_section.level`. A section row is one of: a chapter (top-level,
  * `parent_id IS NULL`), a section (direct child of a chapter), or a
  * subsection (child of a section).

@@ -47,6 +47,30 @@ export {
 export type { PublicCard, PublicCardCitation } from './cards-public';
 export { composePublicCardCitations, getPublicCard } from './cards-public';
 export type {
+	AreaMasteryRollup,
+	CredentialDagSnapshot,
+	CredentialMasteryRollup,
+	ListCredentialsOptions,
+} from './credentials';
+export {
+	CredentialNotFoundError,
+	CredentialPrereqCycleError,
+	getCertsCoveredBy,
+	getCredentialById,
+	getCredentialBySlug,
+	getCredentialIdsCoveredBy,
+	getCredentialMastery,
+	getCredentialPrereqDag,
+	getCredentialPrereqs,
+	getCredentialPrimarySyllabus,
+	getCredentialSyllabi,
+	listCredentials,
+	upsertCredential,
+	upsertCredentialPrereq,
+	upsertCredentialSyllabus,
+	validateCredentialDag,
+} from './credentials';
+export type {
 	ActivityDay,
 	DashboardFetchers,
 	DashboardPayload,
@@ -77,6 +101,30 @@ export { runEngine } from './engine';
 export type { SubmitFeedbackInput } from './feedback';
 export { FeedbackCommentRequiredError, getLatestFeedback, submitFeedback } from './feedback';
 export { formatNextInterval, formatNextIntervalAbsolute } from './formatters';
+export type { CreateGoalParams, ListGoalsOptions as ListGoalsOpts } from './goals';
+export {
+	addGoalNode,
+	addGoalSyllabus,
+	archiveGoal,
+	createGoal,
+	GoalAlreadyPrimaryError,
+	GoalNotFoundError,
+	GoalNotOwnedError,
+	getActiveGoals,
+	getDerivedCertGoals,
+	getGoalById,
+	getGoalNodes,
+	getGoalNodeUnion,
+	getGoalSyllabi,
+	getOwnedGoal,
+	getPrimaryGoal,
+	listGoals,
+	removeGoalNode,
+	removeGoalSyllabus,
+	setGoalSyllabusWeight,
+	setPrimaryGoal,
+	updateGoal,
+} from './goals';
 export {
 	citationSchema,
 	type HandbookManifest,
@@ -171,6 +219,17 @@ export {
 	splitContentPhases,
 	upsertKnowledgeNode,
 } from './knowledge';
+export type {
+	AcsLensFilters,
+	DomainLensFilters,
+	Lens,
+	LensInput,
+	LensLeaf,
+	LensResult,
+	LensTreeNode,
+	MasteryRollup,
+} from './lenses';
+export { acsLens, computeMasteryRollup, domainLens, LensError } from './lenses';
 export type { CreatePlanInput, UpdatePlanInput } from './plans';
 export {
 	activatePlan,
@@ -258,6 +317,12 @@ export type {
 	CardRow,
 	CardSnoozeRow,
 	CardStateRow,
+	CredentialPrereqRow,
+	CredentialRow,
+	CredentialSyllabusRow,
+	GoalNodeRow,
+	GoalRow,
+	GoalSyllabusRow,
 	HandbookFigureRow,
 	HandbookReadStateRow,
 	HandbookSectionRow,
@@ -269,6 +334,12 @@ export type {
 	NewCardRow,
 	NewCardSnoozeRow,
 	NewCardStateRow,
+	NewCredentialPrereqRow,
+	NewCredentialRow,
+	NewCredentialSyllabusRow,
+	NewGoalNodeRow,
+	NewGoalRow,
+	NewGoalSyllabusRow,
 	NewHandbookFigureRow,
 	NewHandbookReadStateRow,
 	NewHandbookSectionRow,
@@ -283,6 +354,9 @@ export type {
 	NewSessionItemResultRow,
 	NewSessionRow,
 	NewStudyPlanRow,
+	NewSyllabusNodeLinkRow,
+	NewSyllabusNodeRow,
+	NewSyllabusRow,
 	ReferenceRow,
 	ReviewRow,
 	ReviewSessionDeckSpec,
@@ -293,12 +367,21 @@ export type {
 	SessionItemResultRow,
 	SessionRow,
 	StudyPlanRow,
+	SyllabusNodeLinkRow,
+	SyllabusNodeRow,
+	SyllabusRow,
 } from './schema';
 export {
 	card,
 	cardFeedback,
 	cardSnooze,
 	cardState,
+	credential,
+	credentialPrereq,
+	credentialSyllabus,
+	goal,
+	goalNode,
+	goalSyllabus,
 	knowledgeEdge,
 	knowledgeNode,
 	knowledgeNodeProgress,
@@ -310,6 +393,9 @@ export {
 	sessionItemResult,
 	studyPlan,
 	studySchema,
+	syllabus,
+	syllabusNode,
+	syllabusNodeLink,
 } from './schema';
 export type {
 	ItemResultInput,
@@ -375,6 +461,36 @@ export {
 	getRecentReviewsForCard,
 	getReviewStats,
 } from './stats';
+export type {
+	ListSyllabiOptions,
+	RelevanceCacheReport,
+	SyllabusAreaView,
+	SyllabusLeafWithSyllabus,
+	SyllabusTreeNode,
+	SyllabusTreeValidationInput,
+} from './syllabi';
+export {
+	AirbossRefValidationError,
+	buildSyllabusTreeFromRows,
+	getCitationsForSyllabusNode,
+	getKnowledgeNodesForSyllabusLeaf,
+	getSyllabusArea,
+	getSyllabusById,
+	getSyllabusBySlug,
+	getSyllabusLeaves,
+	getSyllabusLeavesForKnowledgeNode,
+	getSyllabusTree,
+	levelIsLeafEligible,
+	listSyllabi,
+	rebuildKnowledgeNodeRelevanceCache,
+	replaceSyllabusNodeLinks,
+	SyllabusNotFoundError,
+	SyllabusValidationError,
+	upsertSyllabus,
+	upsertSyllabusNode,
+	validateAirbossRefForLeaf,
+	validateSyllabusTree,
+} from './syllabi';
 export {
 	cardTagsSchema,
 	cardTextSchema,
