@@ -207,8 +207,16 @@ Resume Phases 13-16 only after the user confirms the reader looks correct.
 
 ## Post-implementation
 
-- [ ] Update `docs/work/NOW.md` -- move the WP from active to shipped.
+- [x] Update `docs/work/NOW.md` -- WP added to in-flight on 2026-04-27 (will move to shipped when this PR merges).
 - [ ] Update `docs/products/study/ROADMAP.md` and `TASKS.md` to reflect the handbook reader landing.
-- [ ] Update `docs/decisions/016-cert-syllabus-goal-model/decision.md` migration table: phase 0 status -> shipped (record the PR URL in the table).
-- [ ] Run `bun run check`, `bun test`, `bunx playwright test` once more before merge. All green.
-- [ ] PR opened, linked from `NOW.md`. Title: `feat(handbooks): ADR 016 phase 0 -- ingestion pipeline + reader + read-state`. Description summarizes scope and lists the open product decisions for the user to resolve in review.
+- [x] Update `docs/decisions/016-cert-syllabus-goal-model/decision.md` migration table: phase 0 status row updated 2026-04-27.
+- [x] `bun run check` clean. Vitest 261/261 pass. Playwright auth-setup + one handbook test green (5.1s); full Playwright run is the user's next step post-merge.
+- [ ] PR opened. Title: `feat(handbooks): ADR 016 phase 0 -- ingestion pipeline + reader + read-state`.
+
+## Follow-up tracked (not blocking this PR)
+
+- [ ] **Apply AFH MOSAIC errata** (Oct 2025 addendum at [AFH_Addendum_(MOSAIC).pdf](https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/AFH_Addendum_(MOSAIC).pdf)). Recorded in `tools/handbook-ingest/ingest/config/afh.yaml`. Application requires the `--apply-errata` flow defined in [ADR 020](../../decisions/020-handbook-edition-and-amendment-policy.md) which is not yet implemented. First implementation target.
+- [ ] **`/ball-review-full` 10-reviewer pass + fixer.** User-triggered after merge.
+- [ ] **Full Playwright run** (`bunx playwright test tests/e2e/handbook-reader.spec.ts`). User-triggered after merge. Local `DATABASE_URL` + `BETTER_AUTH_SECRET` required; `webServer.reuseExistingServer: true` reuses any running dev server.
+- [ ] **AvWX figure dedup.** Phase 15 surfaced ~858 figures with up to 8x duplication on identical bytes; harmless but worth a SHA-256-keyed pass when convenient.
+- [ ] **Section-strategy comparison report** for PHAK (Option 3 TOC vs Option 4 LLM). Run via `bun run handbook-ingest phak --edition FAA-H-8083-25C --strategy compare` (needs `ANTHROPIC_API_KEY`) or via the Claude Code interactive runner at `tools/handbook-ingest/ingest/prompts/run-llm-comparison.md` (no API key).
