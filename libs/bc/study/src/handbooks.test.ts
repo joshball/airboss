@@ -462,7 +462,7 @@ describe('resolveCitationUrl', () => {
 		expect(url).toBeNull();
 	});
 
-	it('returns null for non-handbook structured kinds', async () => {
+	it('resolves a CFR citation to an eCFR URL', async () => {
 		const refs = await listReferences();
 		const url = resolveCitationUrl(
 			{
@@ -472,10 +472,123 @@ describe('resolveCitationUrl', () => {
 			},
 			refs,
 		);
-		expect(url).toBeNull();
+		expect(url).toBe('https://www.ecfr.gov/current/title-14/chapter-I/part-91/section-91.155');
 	});
 
-	it('returns null when reference id does not resolve', async () => {
+	it('resolves an AC citation to the FAA AC index', async () => {
+		const url = resolveCitationUrl(
+			{
+				kind: REFERENCE_KINDS.AC,
+				reference_id: 'ref_ac_61_83k',
+				locator: { paragraph: '5.2' },
+			},
+			[],
+		);
+		expect(url).toBe('https://www.faa.gov/regulations_policies/advisory_circulars/');
+	});
+
+	it('resolves an ACS citation to the test-standards index', async () => {
+		const url = resolveCitationUrl(
+			{
+				kind: REFERENCE_KINDS.ACS,
+				reference_id: 'ref_ppl_acs_25',
+				locator: { area: 'V', task: 'A', element: 'K1' },
+			},
+			[],
+		);
+		expect(url).toBe('https://www.faa.gov/training_testing/testing/acs');
+	});
+
+	it('resolves a PTS citation to the test-standards index', async () => {
+		const url = resolveCitationUrl(
+			{
+				kind: REFERENCE_KINDS.PTS,
+				reference_id: 'ref_cfi_pts',
+				locator: { area: 'I', task: 'A' },
+			},
+			[],
+		);
+		expect(url).toBe('https://www.faa.gov/training_testing/testing/acs');
+	});
+
+	it('resolves an AIM citation to the AIM index', async () => {
+		const url = resolveCitationUrl(
+			{
+				kind: REFERENCE_KINDS.AIM,
+				reference_id: 'ref_aim',
+				locator: { paragraph: '5-1-7' },
+			},
+			[],
+		);
+		expect(url).toBe('https://www.faa.gov/air_traffic/publications/atpubs/aim_html/');
+	});
+
+	it('resolves a PCG citation to the PCG index', async () => {
+		const url = resolveCitationUrl(
+			{
+				kind: REFERENCE_KINDS.PCG,
+				reference_id: 'ref_pcg',
+				locator: { term: 'Aerodynamic Stall' },
+			},
+			[],
+		);
+		expect(url).toBe('https://www.faa.gov/air_traffic/publications/atpubs/pcg_html/');
+	});
+
+	it('returns null for NTSB / POH / other kinds', async () => {
+		expect(
+			resolveCitationUrl({ kind: REFERENCE_KINDS.NTSB, reference_id: 'r', locator: { detail: '...' } }, []),
+		).toBeNull();
+		expect(
+			resolveCitationUrl({ kind: REFERENCE_KINDS.POH, reference_id: 'r', locator: { detail: '...' } }, []),
+		).toBeNull();
+		expect(
+			resolveCitationUrl({ kind: REFERENCE_KINDS.OTHER, reference_id: 'r', locator: { detail: '...' } }, []),
+		).toBeNull();
+	});
+
+	it('routes through @ab/sources getLiveUrl when airboss_ref is set on a non-handbook citation', async () => {
+		const url = resolveCitationUrl(
+			{
+				kind: REFERENCE_KINDS.ACS,
+				reference_id: 'ref_ppl_acs_25',
+				locator: { area: 'V', task: 'A', element: 'K1' },
+				airboss_ref: 'airboss-ref:acs/ppl-asel/faa-s-acs-25/area-v/task-a/element-k1',
+			},
+			[],
+		);
+		// Per-cert ACS landing URL surfaces from the acs corpus resolver.
+		expect(url).toBe('https://www.faa.gov/training_testing/testing/acs/private_airplane');
+	});
+
+	it('falls back to the kind template when airboss_ref is malformed', async () => {
+		const url = resolveCitationUrl(
+			{
+				kind: REFERENCE_KINDS.ACS,
+				reference_id: 'ref_ppl_acs_25',
+				locator: { area: 'V', task: 'A', element: 'K1' },
+				airboss_ref: 'not-an-airboss-ref',
+			},
+			[],
+		);
+		expect(url).toBe('https://www.faa.gov/training_testing/testing/acs');
+	});
+
+	it('handbook citations ignore airboss_ref and route to the in-app reader', async () => {
+		const refs = await listReferences();
+		const url = resolveCitationUrl(
+			{
+				kind: REFERENCE_KINDS.HANDBOOK,
+				reference_id: PHAK_25C_ID,
+				locator: { chapter: 12, section: 3 },
+				airboss_ref: 'airboss-ref:handbooks/phak/8083-25C/12/3',
+			},
+			refs,
+		);
+		expect(url).toBe(ROUTES.HANDBOOK_SECTION(PHAK_SLUG, 12, 3));
+	});
+
+	it('returns null when reference id does not resolve for a handbook citation', async () => {
 		const url = resolveCitationUrl(
 			{
 				kind: REFERENCE_KINDS.HANDBOOK,

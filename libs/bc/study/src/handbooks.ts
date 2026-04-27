@@ -26,6 +26,7 @@
  */
 
 import {
+	CITATION_URL_TEMPLATES,
 	HANDBOOK_HEARTBEAT_INTERVAL_SEC,
 	HANDBOOK_HEARTBEAT_MIN_DELTA_SEC,
 	HANDBOOK_NOTES_MAX_LENGTH,
@@ -36,6 +37,7 @@ import {
 	ROUTES,
 } from '@ab/constants';
 import { db as defaultDb } from '@ab/db';
+import { getCorpusResolver, isParseError, parseIdentifier, type SourceId } from '@ab/sources';
 import type { Citation, StructuredCitation } from '@ab/types';
 import { isHandbookCitation, isStructuredCitation } from '@ab/types';
 import { generateHandbookFigureId, generateHandbookSectionId, generateReferenceId } from '@ab/utils';
@@ -325,18 +327,99 @@ export async function getNodesCitingSection(query: CitingNodesQuery, db: Db = de
 // ---------------------------------------------------------------------------
 
 /**
- * Resolve a structured citation to a URL. v1 only handles `kind === 'handbook'`;
- * every other kind returns `null` so the UI can fall back to "no link
- * available." Legacy freeform citations (no `kind` field) also return `null`.
+ * Resolve a structured citation to a URL.
+ *
+ * Routing rules:
+ *
+ * 1. Handbook citations resolve to the in-app handbook reader route
+ *    (`ROUTES.HANDBOOK_CHAPTER` or `ROUTES.HANDBOOK_SECTION`).
+ * 2. When `airboss_ref` is set, attempt the `@ab/sources` registry's
+ *    per-corpus `getLiveUrl()`. This is the canonical resolution path for
+ *    cross-corpus identifiers per ADR 019. Falls through to the
+ *    kind-specific template on resolver miss so a misregistered identifier
+ *    doesn't strand the user with no link at all.
+ * 3. Otherwise dispatch on `kind` and use the per-kind URL template from
+ *    `CITATION_URL_TEMPLATES`. Kinds without a useful per-locator deep link
+ *    return the index URL; kinds with no public landing page (NTSB, POH,
+ *    other, plus catastrophic missing-locator-data cases) return `null` so
+ *    the UI can render the freeform note instead.
+ *
+ * Legacy freeform citations (no `kind` field) always return `null`.
  */
 export function resolveCitationUrl(citation: Citation, references: ReadonlyArray<ReferenceRow>): string | null {
 	if (!isStructuredCitation(citation)) return null;
-	if (citation.kind !== REFERENCE_KINDS.HANDBOOK) return null;
+
+	// Handbook citations are app-internal: they route to the in-app reader,
+	// NOT to an FAA URL. The airboss_ref delegation deliberately runs AFTER
+	// this handbook check so the in-app route wins for handbook reads.
+	if (citation.kind === REFERENCE_KINDS.HANDBOOK) {
+		return resolveHandbookCitationUrl(citation, references);
+	}
+
+	// `airboss_ref` is the canonical cross-corpus identifier per ADR 019.
+	// Delegate when present; fall through on miss so a stale identifier
+	// doesn't strand the user.
+	if (citation.airboss_ref !== undefined) {
+		const url = resolveAirbossRefUrl(citation.airboss_ref);
+		if (url !== null) return url;
+	}
+
+	switch (citation.kind) {
+		case REFERENCE_KINDS.CFR: {
+			const { title, part, section } = citation.locator;
+			return CITATION_URL_TEMPLATES.CFR(title, part, section);
+		}
+		case REFERENCE_KINDS.AC:
+			return CITATION_URL_TEMPLATES.AC_INDEX;
+		case REFERENCE_KINDS.ACS:
+		case REFERENCE_KINDS.PTS:
+			return CITATION_URL_TEMPLATES.ACS_INDEX;
+		case REFERENCE_KINDS.AIM:
+			return CITATION_URL_TEMPLATES.AIM_INDEX;
+		case REFERENCE_KINDS.PCG:
+			return CITATION_URL_TEMPLATES.PCG_INDEX;
+		case REFERENCE_KINDS.NTSB:
+		case REFERENCE_KINDS.POH:
+		case REFERENCE_KINDS.OTHER:
+			return null;
+		default: {
+			const exhaustive: never = citation;
+			void exhaustive;
+			return null;
+		}
+	}
+}
+
+/**
+ * Handbook-citation routing. Extracted so the main switch in
+ * {@link resolveCitationUrl} stays a single line per kind.
+ */
+function resolveHandbookCitationUrl(
+	citation: Extract<StructuredCitation, { kind: 'handbook' }>,
+	references: ReadonlyArray<ReferenceRow>,
+): string | null {
 	const ref = references.find((r) => r.id === citation.reference_id);
 	if (!ref) return null;
 	const { chapter, section } = citation.locator;
 	if (section === undefined) return ROUTES.HANDBOOK_CHAPTER(ref.documentSlug, chapter);
 	return ROUTES.HANDBOOK_SECTION(ref.documentSlug, chapter, section);
+}
+
+/**
+ * Parse an `airboss-ref:` identifier and dispatch to its corpus resolver's
+ * `getLiveUrl()`. Returns `null` when the identifier is malformed, the corpus
+ * has no registered resolver, or the resolver itself returns null.
+ *
+ * Edition pin defaults to the empty string when no `?at=` is present; the
+ * per-corpus resolver decides what to do with that. Most resolvers (handbooks,
+ * acs) ignore the edition for the live URL; regs uses it for eCFR pinning.
+ */
+function resolveAirbossRefUrl(ref: string): string | null {
+	const parsed = parseIdentifier(ref);
+	if (isParseError(parsed)) return null;
+	const resolver = getCorpusResolver(parsed.corpus);
+	if (resolver === null) return null;
+	return resolver.getLiveUrl(parsed.raw as SourceId, parsed.pin ?? '');
 }
 
 // ---------------------------------------------------------------------------

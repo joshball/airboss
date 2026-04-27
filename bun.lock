@@ -138,6 +138,8 @@
         "@ab/bc-sim": "workspace:*",
         "@ab/constants": "workspace:*",
         "@ab/db": "workspace:*",
+        "@ab/sources": "workspace:*",
+        "@ab/types": "workspace:*",
         "@ab/utils": "workspace:*",
       },
     },
