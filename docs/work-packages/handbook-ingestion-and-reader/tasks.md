@@ -197,13 +197,25 @@ Resume Phases 13-16 only after the user confirms the reader looks correct.
 
 ### Phase 16: e2e Playwright + acceptance review
 
-- [ ] Add `apps/study/tests/handbook-reader.spec.ts` covering: navigate `/handbooks` -> click PHAK -> click Ch 12 -> click §3, verify section renders with figures, mark status `read`, toggle "didn't get it", type notes, navigate to a citing node, navigate back. Includes the heartbeat fast-forward (mock the interval) and the suggestion prompt.
-- [ ] Run `bunx playwright test apps/study/tests/handbook-reader.spec.ts` -- pass.
-- [ ] Run `bun run check` end-to-end -- 0 errors.
-- [ ] Self-review the diff against [test-plan.md](./test-plan.md) -- close every scenario.
-- [ ] Request implementation review via `/ball-review-full`.
+- [x] Add `tests/e2e/handbook-reader.spec.ts` (the project's Playwright suite lives at the repo root under `tests/e2e/`, not `apps/study/tests/`). Covers `/handbooks` -> PHAK card -> Ch 12 -> §9 navigation, body > 500 chars + sticky TOC active highlight + edition badge, status `read` persists across navigation, "didn't get it" toggle, re-read resets, notes save and persist, heartbeat-driven suggestion banner via `page.clock` (mock virtual clock advances `setInterval` ticks), "Not yet" dismissal sticks for the session, AFH + AvWX cross-handbook smoke, chapter-cover residue stripped at `/handbooks/phak/1`. 11 passing scenarios + 1 deferred (`test.skip` on the citing-node click round-trip; no node carries a structured `kind: handbook` citation in the seeded dataset yet).
+- [x] Run `bunx playwright test tests/e2e/handbook-reader.spec.ts` -- 11 passed, 1 skipped, three back-to-back stable runs at ~13s wall.
+- [x] AvWX figure dedup (Phase 15 follow-up). New `tools/handbook-ingest/ingest/figures_dedup.py` runs SHA-256 grouping after `extract_figures` and rewrites `FigureRecord.asset_path` to a single canonical file (deepest `section_code` wins ties). Wired into the CLI between extraction and `write_outputs`; manifest now records `extraction.figure_dedup: { canonicalized, freed_bytes }`. Retro-applied to the existing handbook trees via `python -m ingest.dedup_existing <doc> <edition>` (no PDF re-fetch needed). AvWX 858 -> 290 unique figures (568 redundant deleted, ~154 MB freed); PHAK 236 -> 234 unique (2 deleted, ~256 KB freed); AFH 96 unique already (0 redundant). Unit coverage: `tools/handbook-ingest/tests/test_figures_dedup.py` (4 cases). 30/30 handbook-ingest pytest cases pass.
+- [x] Run `bun run check` end-to-end -- 0 errors, 0 warnings (apart from the pre-existing `apps/sim` `three` import miss, out of scope for this WP).
+- [x] Self-review the diff against [test-plan.md](./test-plan.md) -- coverage table below.
+- [ ] Request implementation review via `/ball-review-full`. **User-triggered.**
 - [ ] Address review findings (every level: critical, major, minor, nit -- ALL of them).
 - [ ] Final manual test pass per [test-plan.md](./test-plan.md).
+
+#### HBK coverage map (Phase 16)
+
+- **HBK-1..HBK-7 (pipeline)** -- pytest in `tools/handbook-ingest/tests/` (sections, sections_compare, sections_via_toc, sections_via_llm, section_tree, figures_dedup -- 30 cases). HBK-2 (unknown handbook id) and HBK-7 (intentionally bad URL) are manual edge cases not automated.
+- **HBK-8..HBK-12 (schema)** -- drizzle migration shape; `scripts/db/seed-handbooks.ts` exercises insert/idempotent/superseded paths. HBK-12 (CHECK violation) is manual psql verification per the test-plan.
+- **HBK-13..HBK-23 (BC)** -- Vitest fixtures in `libs/bc/study/src/handbooks.test.ts`; 231/231 study-bc tests pass.
+- **HBK-24..HBK-29 (UI -- index/handbook/chapter)** -- e2e covers HBK-24, HBK-26, HBK-28 (navigation chain) plus the cross-handbook smoke. HBK-25 + HBK-27 (superseded handling) covered by `seed-handbooks.test.ts` synthetic-edition fixtures. HBK-29 (empty-handbook empty state) is a manual regression check.
+- **HBK-30..HBK-37 (section reader UI)** -- e2e covers HBK-30 (body + figures + TOC + edition badge), HBK-32 (status flip persists), HBK-34 + HBK-35 (comprehended toggle + re-read), HBK-36 (notes save and persist). HBK-31 (TOC anchor scroll), HBK-33 (disabled-when-unread tooltip), HBK-37 (notes overflow message) are manual.
+- **HBK-38..HBK-43 (heartbeat heuristic)** -- e2e covers HBK-40 (banner appears with mocked clock + scroll-to-bottom) and HBK-42 (no auto-advance: state stays at `reading` until the user clicks). HBK-38 + HBK-39 (visible/backgrounded) and HBK-43 (offline replay) are manual. The pure threshold logic is covered by `apps/study/src/routes/(app)/handbooks/[doc]/[chapter]/[section]/read-suggestion.test.ts`.
+- **HBK-44..HBK-47 (bidirectional citation)** -- HBK-44/45/46/47 deferred until a knowledge node carries a structured `kind: handbook` citation. The resolver itself is covered by `libs/bc/study/src/handbooks.test.ts`. The e2e `citing-node link round-trip` is `test.skip` with the deferred-fixture note; the empty-state render is asserted in `citing-nodes panel renders without breaking the page`.
+- **HBK-48..HBK-52 (integration)** -- HBK-48 covered by AFH + AvWX cross-handbook smoke. HBK-49 (manifest counts == DB) verified at seed time (`bun run db seed handbooks` prints counts that match manifest entries). HBK-50 (no regression on `/glossary`, etc.) covered by `tests/e2e/smoke.spec.ts`. HBK-51 + HBK-52 (build validate + fresh-DB migration) are manual gates run on the PR.
 
 ## Post-implementation
 
@@ -218,5 +230,5 @@ Resume Phases 13-16 only after the user confirms the reader looks correct.
 - [ ] **Apply AFH MOSAIC errata** (Oct 2025 addendum at [AFH_Addendum_(MOSAIC).pdf](https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/AFH_Addendum_(MOSAIC).pdf)). Recorded in `tools/handbook-ingest/ingest/config/afh.yaml`. Application requires the `--apply-errata` flow defined in [ADR 020](../../decisions/020-handbook-edition-and-amendment-policy.md) which is not yet implemented. First implementation target.
 - [ ] **`/ball-review-full` 10-reviewer pass + fixer.** User-triggered after merge.
 - [ ] **Full Playwright run** (`bunx playwright test tests/e2e/handbook-reader.spec.ts`). User-triggered after merge. Local `DATABASE_URL` + `BETTER_AUTH_SECRET` required; `webServer.reuseExistingServer: true` reuses any running dev server.
-- [ ] **AvWX figure dedup.** Phase 15 surfaced ~858 figures with up to 8x duplication on identical bytes; harmless but worth a SHA-256-keyed pass when convenient.
+- [x] **AvWX figure dedup.** Closed 2026-04-26 in Phase 16. Pipeline change: `tools/handbook-ingest/ingest/figures_dedup.py` runs after extraction; manifest now records `extraction.figure_dedup`. Numbers: AvWX 858 -> 290 unique (~154 MB freed); PHAK 236 -> 234 unique (~256 KB freed); AFH already deduplicated.
 - [ ] **Section-strategy comparison report** for PHAK (Option 3 TOC vs Option 4 LLM). Run via `bun run handbook-ingest phak --edition FAA-H-8083-25C --strategy compare` (needs `ANTHROPIC_API_KEY`) or via the Claude Code interactive runner at `tools/handbook-ingest/ingest/prompts/run-llm-comparison.md` (no API key).
