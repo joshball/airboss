@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, test } from 'vitest';
 import type { Edition, SourceEntry, SourceId } from '../types.ts';
 import { resetRegistry, withTestEditions, withTestEntries } from './__test_helpers__.ts';
 import type { CorpusResolver } from './corpus-resolver.ts';
-import { registerCorpusResolver } from './corpus-resolver.ts';
+import { __corpus_resolver_internal__ } from './corpus-resolver.ts';
 import {
 	buildReverseIndex,
 	clearReverseIndex,
@@ -22,11 +22,24 @@ import {
 	walkSupersessionChain,
 } from './query.ts';
 
+const registerCorpusResolver = __corpus_resolver_internal__.registerTestResolver;
+
+// This file exercises behavior against no-op default resolvers (Q-13 etc).
+// Wipe the registry so side-effect-imported real resolvers (regs, handbooks,
+// ...) don't leak in; afterEach restores the production snapshot for the
+// next test file. Q-14 calls `registerCorpusResolver` (which mutates the
+// snapshot); save+restore the snapshot around each test to isolate.
+let restoreProductionSnapshot: (() => void) | null = null;
+
 beforeEach(() => {
+	restoreProductionSnapshot = __corpus_resolver_internal__.saveProductionSnapshot();
 	resetRegistry();
+	__corpus_resolver_internal__.wipeToNoOpDefaults();
 });
 
 afterEach(() => {
+	restoreProductionSnapshot?.();
+	restoreProductionSnapshot = null;
 	resetRegistry();
 });
 

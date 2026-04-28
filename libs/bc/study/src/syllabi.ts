@@ -16,7 +16,10 @@
  *   - replaceSyllabusNodeLinks (idempotent re-seed for one leaf)
  *   - validateSyllabusTree (parent-level + cycle + uniqueness)
  *   - validateAirbossRefForLeaf (`@ab/sources`-routed parser check)
- *   - rebuildKnowledgeNodeRelevanceCache (placeholder; full impl in phase 18)
+ *
+ * The relevance-cache rebuild lives at `scripts/db/build-relevance-cache.ts`,
+ * not here -- it's a one-shot script that walks every active syllabus and
+ * writes `knowledge_node.relevance` from the (cert, bloom, priority) triples.
  *
  * The "validate before write" pattern matches credentials.ts: the seed
  * runs validation against the proposed YAML model before issuing inserts,
@@ -27,17 +30,15 @@
 
 import {
 	ACS_TRIAD_VALUES,
-	SYLLABUS_KIND_VALUES,
 	SYLLABUS_NODE_LEVELS,
-	SYLLABUS_STATUSES,
 	type SyllabusKind,
 	type SyllabusNodeLevel,
 	type SyllabusStatus,
 } from '@ab/constants';
 import { db as defaultDb } from '@ab/db';
-import { getCorpusResolver, isParseError, parseIdentifier, type SourceId } from '@ab/sources';
+import { getCorpusResolver, isParseError, parseIdentifier } from '@ab/sources';
 import type { StructuredCitation } from '@ab/types';
-import { and, asc, eq, sql } from 'drizzle-orm';
+import { and, asc, eq } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import {
 	type KnowledgeNodeRow,
@@ -356,8 +357,6 @@ export function validateAirbossRefForLeaf(identifier: string, expectations: { sy
 			);
 		}
 	}
-	// Round-trip the SourceId cast so the type narrows for downstream calls.
-	void (parsed.raw as SourceId);
 }
 
 // ---------------------------------------------------------------------------
@@ -473,9 +472,6 @@ export function validateSyllabusTree(input: SyllabusTreeValidationInput): void {
 			validateAirbossRefForLeaf(row.airbossRef, { syllabusKind });
 		}
 	}
-	// Use the imports we already pulled.
-	void SYLLABUS_KIND_VALUES;
-	void SYLLABUS_STATUSES;
 }
 
 // ---------------------------------------------------------------------------
@@ -571,42 +567,3 @@ export async function replaceSyllabusNodeLinks(
 export function levelIsLeafEligible(level: SyllabusNodeLevel): boolean {
 	return level !== SYLLABUS_NODE_LEVELS.AREA && level !== SYLLABUS_NODE_LEVELS.CHAPTER;
 }
-
-// ---------------------------------------------------------------------------
-// Relevance cache rebuild placeholder (full impl in phase 18)
-// ---------------------------------------------------------------------------
-
-export interface RelevanceCacheReport {
-	processedSyllabi: number;
-	knowledgeNodesUpdated: number;
-	dryRun: boolean;
-}
-
-/**
- * Placeholder for the relevance cache rebuild. The full implementation
- * walks every active syllabus, computes (cert, bloom, priority) triples
- * per linked knowledge node, dedupes, and writes
- * `knowledge_node.relevance`. That work lands in cert-syllabus phase 18
- * where the syllabus YAML pipeline + at least one transcribed area exists.
- *
- * This stub returns a zeroed report so the BC barrel can export a stable
- * symbol now.
- */
-export async function rebuildKnowledgeNodeRelevanceCache(
-	options: { dryRun?: boolean } = {},
-	_db: Db = defaultDb,
-): Promise<RelevanceCacheReport> {
-	const dryRun = options.dryRun ?? false;
-	// Walk syllabi; today returns empty until the YAML pipeline ships.
-	const activeSyllabi = await listSyllabi({ status: SYLLABUS_STATUSES.ACTIVE });
-	return {
-		processedSyllabi: activeSyllabi.length,
-		knowledgeNodesUpdated: 0,
-		dryRun,
-	};
-}
-
-// Drizzle helper for narrowing -- `sql` is imported but unused at the top
-// level when no inline SQL is needed.  Reference here so lint doesn't drop
-// the import (the build helpers might use it later).
-void sql;

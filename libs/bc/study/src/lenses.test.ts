@@ -426,13 +426,13 @@ describe('acsLens', () => {
 		expect(result.rollup.totalLeaves).toBe(0);
 	});
 
-	it('builds a cert -> area -> task -> element tree from the goal syllabi', async () => {
+	it('builds a syllabus -> area -> task -> element tree from the goal syllabi', async () => {
 		const goalRow = (await db.select().from(goal).where(eq(goal.id, GOAL_ID)).limit(1))[0];
 		if (!goalRow) throw new Error('expected seeded goal row');
 		const result = await acsLens(db, TEST_USER_ID, { goal: goalRow });
 		expect(result.tree.length).toBe(1);
 		const cert = result.tree[0];
-		expect(cert?.level).toBe('cert');
+		expect(cert?.level).toBe('syllabus');
 		expect(cert?.children.length).toBe(1);
 		const area = cert?.children[0];
 		expect(area?.level).toBe('area');

@@ -176,7 +176,11 @@ export const createGoalInputSchema = z.object({
 	title: z.string().min(1).max(200),
 	notesMd: z.string().max(16384).default(''),
 	isPrimary: z.boolean().default(false),
-	targetDate: z.string().datetime({ offset: true }).nullable().optional(),
+	targetDate: z
+		.string()
+		.regex(/^\d{4}-\d{2}-\d{2}$/, 'targetDate must be a calendar date in YYYY-MM-DD form')
+		.nullable()
+		.optional(),
 });
 export type CreateGoalInput = z.infer<typeof createGoalInputSchema>;
 
@@ -184,7 +188,11 @@ export const updateGoalInputSchema = z.object({
 	title: z.string().min(1).max(200).optional(),
 	notesMd: z.string().max(16384).optional(),
 	status: z.enum(GOAL_STATUS_VALUES as unknown as readonly [GoalStatus, ...GoalStatus[]]).optional(),
-	targetDate: z.string().datetime({ offset: true }).nullable().optional(),
+	targetDate: z
+		.string()
+		.regex(/^\d{4}-\d{2}-\d{2}$/, 'targetDate must be a calendar date in YYYY-MM-DD form')
+		.nullable()
+		.optional(),
 });
 export type UpdateGoalInput = z.infer<typeof updateGoalInputSchema>;
 

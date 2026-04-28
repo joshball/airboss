@@ -240,7 +240,7 @@ export async function createGoal(params: CreateGoalParams, db: Db = defaultDb): 
 		notesMd: params.notesMd ?? '',
 		status: GOAL_STATUSES.ACTIVE,
 		isPrimary: params.isPrimary ?? false,
-		targetDate: params.targetDate === null ? null : params.targetDate ? new Date(params.targetDate) : null,
+		targetDate: params.targetDate ?? null,
 		seedOrigin: null,
 		createdAt: now,
 		updatedAt: now,
@@ -275,7 +275,7 @@ export async function updateGoal(
 	if (input.notesMd !== undefined) updates.notesMd = input.notesMd;
 	if (input.status !== undefined) updates.status = input.status;
 	if (input.targetDate !== undefined) {
-		updates.targetDate = input.targetDate === null ? null : new Date(input.targetDate);
+		updates.targetDate = input.targetDate;
 	}
 	const [row] = await db.update(goal).set(updates).where(eq(goal.id, existing.id)).returning();
 	if (!row) throw new GoalNotFoundError(goalId);
@@ -405,4 +405,22 @@ export async function removeGoalNode(
 	await db.delete(goalNode).where(and(eq(goalNode.goalId, existing.id), eq(goalNode.knowledgeNodeId, knowledgeNodeId)));
 }
 
-void GoalAlreadyPrimaryError; // exported for callers that pre-validate primary swaps
+/**
+ * Update the weight on an existing goal_node row. Mirrors the shape of
+ * `setGoalSyllabusWeight`; idempotent. Silently no-ops when the
+ * (goal_id, knowledge_node_id) pair has no row -- callers that need
+ * upsert-style behavior should use `addGoalNode`.
+ */
+export async function setGoalNodeWeight(
+	goalId: string,
+	userId: string,
+	knowledgeNodeId: string,
+	weight: number,
+	db: Db = defaultDb,
+): Promise<void> {
+	const existing = await getOwnedGoal(goalId, userId, db);
+	await db
+		.update(goalNode)
+		.set({ weight })
+		.where(and(eq(goalNode.goalId, existing.id), eq(goalNode.knowledgeNodeId, knowledgeNodeId)));
+}

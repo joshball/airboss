@@ -131,11 +131,39 @@ for (const corpus of ENUMERATED_CORPORA) {
 }
 
 /**
+ * Tracks the most-recent "production" registration per corpus. Real
+ * side-effect-imported resolvers (regs, handbooks, acs, pts, aim, ac) call
+ * `registerCorpusResolver` at module-load time, which records them here.
+ *
+ * `__corpus_resolver_internal__.resetToDefaults` restores `RESOLVERS` from
+ * this snapshot, undoing any test-only mock registrations without wiping
+ * the real resolvers.
+ *
+ * Tests that need a clean slate use
+ * `__corpus_resolver_internal__.wipeToNoOpDefaults` for the duration of
+ * the test, paired with `resetToDefaults` in afterEach to restore.
+ */
+const PRODUCTION_SNAPSHOT: Map<string, CorpusResolver> = new Map();
+
+// Eagerly seed the snapshot with the no-op defaults so corpora with no real
+// resolver fall back to the no-op behavior on reset.
+for (const corpus of ENUMERATED_CORPORA) {
+	PRODUCTION_SNAPSHOT.set(corpus, RESOLVERS.get(corpus) as CorpusResolver);
+}
+
+/**
  * Register (or replace) a corpus resolver. Idempotent if `resolver` is the
  * exact same reference as the currently-registered one.
+ *
+ * The registration is recorded in the production snapshot so subsequent
+ * `__corpus_resolver_internal__.resetToDefaults` calls preserve it.
+ * Test-only mock registrations should use
+ * `__corpus_resolver_internal__.registerTestResolver` instead, which does
+ * NOT update the snapshot.
  */
 export function registerCorpusResolver(resolver: CorpusResolver): void {
 	RESOLVERS.set(resolver.corpus, resolver);
+	PRODUCTION_SNAPSHOT.set(resolver.corpus, resolver);
 }
 
 /**
@@ -157,15 +185,58 @@ export function isEnumeratedCorpus(corpus: string): boolean {
 }
 
 /**
- * Test-only: reset every corpus to its default resolver. Production code
- * MUST NOT call this.
+ * Test-only: restore the registry to the last-known "production" snapshot.
+ *
+ * The snapshot is updated by every `registerCorpusResolver` call, so
+ * side-effect-imported real resolvers (regs, handbooks, acs, pts, aim, ac)
+ * are folded in at module-load time. Test-only mock registrations should
+ * use `registerTestResolver` (which does NOT update the snapshot) so this
+ * reset rolls them back without wiping the real resolvers.
+ *
+ * Production code MUST NOT call this.
  */
 export const __corpus_resolver_internal__ = {
 	resetToDefaults(): void {
 		RESOLVERS.clear();
+		for (const [corpus, resolver] of PRODUCTION_SNAPSHOT) {
+			RESOLVERS.set(corpus, resolver);
+		}
+	},
+	/**
+	 * Test-only: register a resolver WITHOUT updating the production
+	 * snapshot. Tests that mock a corpus-resolver mid-test should use
+	 * this so a subsequent `resetToDefaults` can roll them back to the
+	 * real production resolver.
+	 */
+	registerTestResolver(resolver: CorpusResolver): void {
+		RESOLVERS.set(resolver.corpus, resolver);
+	},
+	/**
+	 * Test-only: wipe every corpus to its no-op default resolver, WITHOUT
+	 * touching the production snapshot. Use this in tests that exercise
+	 * the no-op default behavior; pair with `resetToDefaults` in afterEach
+	 * to restore the production registry for the next file.
+	 */
+	wipeToNoOpDefaults(): void {
+		RESOLVERS.clear();
 		for (const corpus of ENUMERATED_CORPORA) {
 			RESOLVERS.set(corpus, makeDefaultResolver(corpus));
 		}
+	},
+	/**
+	 * Test-only: snapshot the current `PRODUCTION_SNAPSHOT` so a test that
+	 * legitimately exercises `registerCorpusResolver` (which mutates the
+	 * snapshot) can roll it back afterwards. Returns a function that
+	 * restores the snapshot when called.
+	 */
+	saveProductionSnapshot(): () => void {
+		const saved = new Map(PRODUCTION_SNAPSHOT);
+		return () => {
+			PRODUCTION_SNAPSHOT.clear();
+			for (const [corpus, resolver] of saved) {
+				PRODUCTION_SNAPSHOT.set(corpus, resolver);
+			}
+		};
 	},
 	listRegistered(): readonly string[] {
 		return Array.from(RESOLVERS.keys());
