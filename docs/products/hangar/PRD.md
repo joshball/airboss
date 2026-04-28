@@ -42,7 +42,7 @@ For the why, see [VISION.md](VISION.md). For the FIRC-era PRD (425 lines of dorm
 
 - Feature work packages: [docs/work-packages/](../../work-packages/) -- co-located spec + tasks + test-plan + design.
 - Session todos: [docs/work/todos/](../../work/todos/) -- per-session, committed with the work.
-- Cross-product roadmap: [docs/platform/ROADMAP.md](../../platform/ROADMAP.md) (currently FIRC-era; rewrite pending).
+- Cross-product roadmap: [docs/platform/ROADMAP.md](../../platform/ROADMAP.md).
 
 ## Dormant
 
