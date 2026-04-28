@@ -13,51 +13,28 @@ import { stat } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { requireRole } from '@ab/auth';
 import { PENDING_DOWNLOAD } from '@ab/aviation';
-import {
-	JOB_KINDS,
-	JOB_STATUSES,
-	type ReferenceSourceType,
-	ROLES,
-	ROUTES,
-	SOURCE_KIND_BY_TYPE,
-	SOURCE_KINDS,
-} from '@ab/constants';
-import { db, hangarJob, hangarSource } from '@ab/db';
+import { getActiveJobForTarget, getSource, listRecentJobsForTarget, REPO_ROOT } from '@ab/bc-hangar';
+import { JOB_KINDS, type ReferenceSourceType, ROLES, ROUTES, SOURCE_KIND_BY_TYPE, SOURCE_KINDS } from '@ab/constants';
 import { enqueueJob } from '@ab/hangar-jobs';
 import { createLogger } from '@ab/utils';
 import { error, fail, isRedirect, redirect } from '@sveltejs/kit';
-import { and, desc, eq, inArray } from 'drizzle-orm';
-import { REPO_ROOT } from '$lib/server/source-jobs';
 import type { Actions, PageServerLoad } from './$types';
 
 const log = createLogger('hangar:source-detail');
 
+const RECENT_JOBS_LIMIT = 10;
+
 export const load: PageServerLoad = async (event) => {
 	const user = requireRole(event, ROLES.AUTHOR, ROLES.OPERATOR, ROLES.ADMIN);
-	const [row] = await db.select().from(hangarSource).where(eq(hangarSource.id, event.params.id)).limit(1);
+	const row = await getSource(event.params.id);
 	if (!row) throw error(404, `source '${event.params.id}' not found`);
 
-	const recentJobs = await db
-		.select()
-		.from(hangarJob)
-		.where(eq(hangarJob.targetId, event.params.id))
-		.orderBy(desc(hangarJob.createdAt))
-		.limit(10);
+	const recentJobs = await listRecentJobsForTarget(event.params.id, RECENT_JOBS_LIMIT);
 
 	// Pre-check: if a job for this source is already queued or running, the
 	// worker will serialise a second submission anyway (see source-jobs.ts).
 	// Surface that fact on the form so the operator doesn't fire-and-wait.
-	const [activeJob] = await db
-		.select()
-		.from(hangarJob)
-		.where(
-			and(
-				eq(hangarJob.targetId, event.params.id),
-				inArray(hangarJob.status, [JOB_STATUSES.QUEUED, JOB_STATUSES.RUNNING]),
-			),
-		)
-		.orderBy(desc(hangarJob.createdAt))
-		.limit(1);
+	const activeJob = await getActiveJobForTarget(event.params.id);
 
 	// On-disk snapshot. Surfaces missing-file / rev-mismatch / size-match state
 	// so the operator knows whether a fetch is needed.
@@ -123,16 +100,7 @@ function buildEnqueue(kind: (typeof JOB_KINDS)[keyof typeof JOB_KINDS]) {
 			// Defense-in-depth: even though the worker serialises by targetId, refuse
 			// to enqueue a second non-terminal job from the form layer so the user
 			// gets a fast, unambiguous error rather than a deferred queue position.
-			const [existing] = await db
-				.select()
-				.from(hangarJob)
-				.where(
-					and(
-						eq(hangarJob.targetId, event.params.id),
-						inArray(hangarJob.status, [JOB_STATUSES.QUEUED, JOB_STATUSES.RUNNING]),
-					),
-				)
-				.limit(1);
+			const existing = await getActiveJobForTarget(event.params.id);
 			if (existing) {
 				return fail(409, {
 					error: `source '${event.params.id}' already has a ${existing.status} ${existing.kind} job (#${existing.id}); wait for it to finish or cancel it first`,

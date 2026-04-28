@@ -7,9 +7,10 @@
  * the id on submit.
  */
 
+import { hangarReference } from '@ab/bc-hangar/schema';
 import { knowledgeNode } from '@ab/bc-study';
 import { REFERENCE_SOURCE_TYPES, SOURCE_TYPE_LABELS } from '@ab/constants';
-import { db as defaultDb, hangarReference } from '@ab/db';
+import { db as defaultDb } from '@ab/db';
 import { and, ilike, or, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 

@@ -15,6 +15,7 @@
  *     by the DB index; duplicate inserts surface as DuplicateCitationError.
  */
 
+import { hangarReference } from '@ab/bc-hangar/schema';
 import { card, knowledgeNode, scenario } from '@ab/bc-study';
 import {
 	CITATION_CONTEXT_MAX_LENGTH,
@@ -28,7 +29,7 @@ import {
 	type CitationTargetType,
 	EXTERNAL_REF_TARGET_DELIMITER,
 } from '@ab/constants';
-import { db as defaultDb, hangarReference } from '@ab/db';
+import { db as defaultDb } from '@ab/db';
 import { generateContentCitationId } from '@ab/utils';
 import { and, eq, inArray } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';

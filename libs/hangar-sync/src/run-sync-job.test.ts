@@ -14,8 +14,8 @@
 
 import type { Reference } from '@ab/aviation';
 import { encodeReferences, encodeSources } from '@ab/aviation';
+import type { HangarReferenceRow, HangarSyncLogRow } from '@ab/bc-hangar/schema';
 import { HANGAR_SYNC_MODES, SYNC_OUTCOMES } from '@ab/constants';
-import type { HangarReferenceRow, HangarSyncLogRow } from '@ab/db';
 import { describe, expect, it } from 'vitest';
 import { commitAndMaybePr } from './commit-and-maybe-pr';
 import type { ProcessCall, ProcessResult, ProcessRunner } from './git';

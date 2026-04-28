@@ -12,6 +12,7 @@
 		"@ab/auth": "workspace:*",
 		"@ab/aviation": "workspace:*",
 		"@ab/bc-citations": "workspace:*",
+		"@ab/bc-hangar": "workspace:*",
 		"@ab/bc-sim": "workspace:*",
 		"@ab/bc-study": "workspace:*",
 		"@ab/constants": "workspace:*",

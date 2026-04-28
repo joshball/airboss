@@ -14,31 +14,20 @@ import { mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { requireRole } from '@ab/auth';
-import { JOB_KINDS, JOB_STATUSES, ROLES, ROUTES, SOURCE_ACTION_LIMITS } from '@ab/constants';
-import { db, hangarJob, hangarSource } from '@ab/db';
+import { getActiveJobForTarget, getSource } from '@ab/bc-hangar';
+import { JOB_KINDS, ROLES, ROUTES, SOURCE_ACTION_LIMITS } from '@ab/constants';
 import { enqueueJob } from '@ab/hangar-jobs';
 import { createLogger } from '@ab/utils';
 import { error, fail, isRedirect, redirect } from '@sveltejs/kit';
-import { and, desc, eq, inArray } from 'drizzle-orm';
 import type { Actions, PageServerLoad } from './$types';
 
 const log = createLogger('hangar:source-upload');
 
 export const load: PageServerLoad = async (event) => {
 	requireRole(event, ROLES.AUTHOR, ROLES.OPERATOR, ROLES.ADMIN);
-	const [source] = await db.select().from(hangarSource).where(eq(hangarSource.id, event.params.id)).limit(1);
+	const source = await getSource(event.params.id);
 	if (!source) throw error(404, `source '${event.params.id}' not found`);
-	const [activeJob] = await db
-		.select()
-		.from(hangarJob)
-		.where(
-			and(
-				eq(hangarJob.targetId, event.params.id),
-				inArray(hangarJob.status, [JOB_STATUSES.QUEUED, JOB_STATUSES.RUNNING]),
-			),
-		)
-		.orderBy(desc(hangarJob.createdAt))
-		.limit(1);
+	const activeJob = await getActiveJobForTarget(event.params.id);
 	return {
 		source: {
 			id: source.id,
@@ -73,21 +62,12 @@ export const actions: Actions = {
 				error: `file exceeds ${SOURCE_ACTION_LIMITS.MAX_UPLOAD_BYTES / (1024 * 1024)} MB limit`,
 			});
 		}
-		const [source] = await db.select().from(hangarSource).where(eq(hangarSource.id, event.params.id)).limit(1);
+		const source = await getSource(event.params.id);
 		if (!source) return fail(404, { error: 'source not found' });
 		if (source.deletedAt) return fail(404, { error: 'source is deleted' });
 
 		// Defense-in-depth busy pre-check (mirrors /sources/[id] form actions).
-		const [existing] = await db
-			.select()
-			.from(hangarJob)
-			.where(
-				and(
-					eq(hangarJob.targetId, event.params.id),
-					inArray(hangarJob.status, [JOB_STATUSES.QUEUED, JOB_STATUSES.RUNNING]),
-				),
-			)
-			.limit(1);
+		const existing = await getActiveJobForTarget(event.params.id);
 		if (existing) {
 			return fail(409, {
 				error: `source '${event.params.id}' already has a ${existing.status} ${existing.kind} job (#${existing.id}); wait for it to finish or cancel it first`,

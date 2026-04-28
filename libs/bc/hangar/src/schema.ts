@@ -30,16 +30,16 @@ import {
 	SOURCE_TYPE_VALUES,
 	SYNC_OUTCOME_VALUES,
 } from '@ab/constants';
+import { timestamps } from '@ab/db';
 import { sql } from 'drizzle-orm';
 import { boolean, check, index, integer, jsonb, pgSchema, text, timestamp } from 'drizzle-orm/pg-core';
-import { timestamps } from './columns';
 
 /** Render a string array as a SQL `IN (...)` value list. */
 const inList = (values: readonly string[]) => values.map((v) => `'${v.replace(/'/g, "''")}'`).join(', ');
 
 /**
  * Shape of the `media` jsonb column on `hangar.source` (wp-hangar-non-textual).
- * Mirrors `SourceMedia` in `@ab/aviation`; duplicated here so `@ab/db` stays
+ * Mirrors `SourceMedia` in `@ab/aviation`; duplicated here so the schema stays
  * free of any `@ab/aviation` dependency.
  */
 export interface HangarSourceMedia {

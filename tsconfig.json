@@ -42,6 +42,8 @@
 			"@ab/bc-sim/*": ["libs/bc/sim/src/*"],
 			"@ab/bc-citations": ["libs/bc/citations/src/index.ts"],
 			"@ab/bc-citations/*": ["libs/bc/citations/src/*"],
+			"@ab/bc-hangar": ["libs/bc/hangar/src/index.ts"],
+			"@ab/bc-hangar/*": ["libs/bc/hangar/src/*"],
 			"@ab/aviation": ["libs/aviation/src/index.ts"],
 			"@ab/aviation/*": ["libs/aviation/src/*"],
 			"@ab/help": ["libs/help/src/index.ts"],

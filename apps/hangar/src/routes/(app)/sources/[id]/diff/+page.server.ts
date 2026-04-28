@@ -11,33 +11,21 @@
  */
 
 import { requireRole } from '@ab/auth';
+import { getLatestCompleteJobForTarget, getSource } from '@ab/bc-hangar';
 import { JOB_KINDS, ROLES, ROUTES } from '@ab/constants';
-import { db, hangarJob, hangarSource } from '@ab/db';
 import { enqueueJob } from '@ab/hangar-jobs';
 import { createLogger } from '@ab/utils';
 import { error, fail, isRedirect, redirect } from '@sveltejs/kit';
-import { and, desc, eq } from 'drizzle-orm';
 import type { Actions, PageServerLoad } from './$types';
 
 const log = createLogger('hangar:source-diff');
 
 export const load: PageServerLoad = async (event) => {
 	requireRole(event, ROLES.AUTHOR, ROLES.OPERATOR, ROLES.ADMIN);
-	const [source] = await db.select().from(hangarSource).where(eq(hangarSource.id, event.params.id)).limit(1);
+	const source = await getSource(event.params.id);
 	if (!source) throw error(404, `source '${event.params.id}' not found`);
 
-	const [latestDiff] = await db
-		.select()
-		.from(hangarJob)
-		.where(
-			and(
-				eq(hangarJob.kind, JOB_KINDS.DIFF_SOURCE),
-				eq(hangarJob.targetId, event.params.id),
-				eq(hangarJob.status, 'complete'),
-			),
-		)
-		.orderBy(desc(hangarJob.finishedAt))
-		.limit(1);
+	const latestDiff = await getLatestCompleteJobForTarget(JOB_KINDS.DIFF_SOURCE, event.params.id);
 
 	const diffResult = latestDiff?.result as { text?: string; lines?: number } | null;
 	const diffText = typeof diffResult?.text === 'string' ? diffResult.text : null;

@@ -1,7 +1,7 @@
 import { requireRole } from '@ab/auth';
+import { getUser, listRecentUserAudits, listRecentUserSessions } from '@ab/bc-hangar';
 import { ROLES } from '@ab/constants';
 import { error } from '@sveltejs/kit';
-import { getUser, listRecentUserAudits, listRecentUserSessions } from '$lib/server/users';
 import type { PageServerLoad } from './$types';
 
 /**

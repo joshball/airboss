@@ -1,9 +1,9 @@
 import { requireRole } from '@ab/auth';
+import { listSources } from '@ab/bc-hangar';
 import { JOB_KINDS, QUERY_PARAMS, type ReferenceSourceType, ROLES, ROUTES, SOURCE_TYPE_VALUES } from '@ab/constants';
 import { enqueueJob } from '@ab/hangar-jobs';
 import { narrow } from '@ab/utils';
 import { fail, isRedirect, redirect } from '@sveltejs/kit';
-import { listSources } from '$lib/server/registry';
 import type { Actions, PageServerLoad } from './$types';
 
 const PAGE_SIZE = 25;

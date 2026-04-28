@@ -15,13 +15,11 @@ import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { requireRole } from '@ab/auth';
 import { PENDING_DOWNLOAD } from '@ab/aviation';
+import { getLatestCompleteJobByKind, listLiveSources, listRunningJobs, REPO_ROOT } from '@ab/bc-hangar';
 import { JOB_KINDS, ROLES, ROUTES } from '@ab/constants';
-import { db, hangarJob, hangarSource } from '@ab/db';
 import { enqueueJob } from '@ab/hangar-jobs';
 import { createLogger } from '@ab/utils';
 import { fail, isRedirect, redirect } from '@sveltejs/kit';
-import { and, desc, eq, isNull } from 'drizzle-orm';
-import { REPO_ROOT } from '$lib/server/source-jobs';
 import type { Actions, PageServerLoad } from './$types';
 
 const log = createLogger('hangar:sources-flow');
@@ -74,15 +72,11 @@ async function loadAviationCounts(): Promise<{ referenceCount: number; verbatimC
 export const load: PageServerLoad = async (event) => {
 	requireRole(event, ROLES.AUTHOR, ROLES.OPERATOR, ROLES.ADMIN);
 
-	const rows = await db.select().from(hangarSource).where(isNull(hangarSource.deletedAt)).orderBy(hangarSource.id);
+	const rows = await listLiveSources();
 
 	// Find the most recent running/queued job per sourceId so the diagram can
 	// animate the arrows that connect to active work.
-	const activeJobs = await db
-		.select()
-		.from(hangarJob)
-		.where(eq(hangarJob.status, 'running'))
-		.orderBy(desc(hangarJob.startedAt));
+	const activeJobs = await listRunningJobs();
 
 	const activeByTarget = new Map<string, { id: string; kind: string }>();
 	for (const job of activeJobs) {
@@ -91,19 +85,8 @@ export const load: PageServerLoad = async (event) => {
 		}
 	}
 
-	const [latestValidate] = await db
-		.select()
-		.from(hangarJob)
-		.where(and(eq(hangarJob.kind, JOB_KINDS.VALIDATE_REFERENCES), eq(hangarJob.status, 'complete')))
-		.orderBy(desc(hangarJob.finishedAt))
-		.limit(1);
-
-	const [latestScan] = await db
-		.select()
-		.from(hangarJob)
-		.where(and(eq(hangarJob.kind, JOB_KINDS.FETCH_SOURCE), eq(hangarJob.status, 'complete')))
-		.orderBy(desc(hangarJob.finishedAt))
-		.limit(1);
+	const latestValidate = await getLatestCompleteJobByKind(JOB_KINDS.VALIDATE_REFERENCES);
+	const latestScan = await getLatestCompleteJobByKind(JOB_KINDS.FETCH_SOURCE);
 
 	const manifest = await loadManifestSummary();
 	const aviation = await loadAviationCounts();

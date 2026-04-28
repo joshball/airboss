@@ -20,14 +20,15 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { AUDIT_OPS, auditWrite } from '@ab/audit';
 import { AUDIT_TARGETS, type ReferenceSourceType, SOURCE_KIND_BY_TYPE, SOURCE_KINDS } from '@ab/constants';
-import { db, type HangarSourceRow, hangarSource } from '@ab/db';
+import { db } from '@ab/db';
 import type { JobContext, JobHandler } from '@ab/hangar-jobs';
 import { eq } from 'drizzle-orm';
+import { type HangarSourceRow, hangarSource } from './schema';
 import { handleBinaryVisualFetch, type SectionalFetchHooks } from './source-fetch';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-/** Three ascents: src/lib/server/ -> src/lib/ -> src/ -> app root -> repo root. */
-export const REPO_ROOT = resolve(HERE, '..', '..', '..', '..', '..');
+/** Four ascents: libs/bc/hangar/src/ -> libs/bc/hangar/ -> libs/bc/ -> libs/ -> repo root. */
+export const REPO_ROOT = resolve(HERE, '..', '..', '..', '..');
 
 /** Shape a subprocess runner produces; aligns with the smaller of the Bun + node APIs. */
 export interface SpawnResult {

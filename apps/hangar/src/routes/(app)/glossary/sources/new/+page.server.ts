@@ -1,10 +1,14 @@
 import { requireRole } from '@ab/auth';
+import {
+	createSource,
+	EMPTY_SOURCE_INITIAL,
+	getSource,
+	sourceFormDataToInitial,
+	validateSourceForm,
+} from '@ab/bc-hangar';
 import { ROLES, ROUTES } from '@ab/constants';
 import { createLogger } from '@ab/utils';
 import { fail, redirect } from '@sveltejs/kit';
-import { createSource, getSource } from '$lib/server/registry';
-import { sourceFormDataToInitial, validateSourceForm } from '$lib/server/source-form';
-import { EMPTY_SOURCE_INITIAL } from '$lib/server/source-form-types';
 import type { Actions, PageServerLoad } from './$types';
 
 const log = createLogger('hangar:sources-new');
