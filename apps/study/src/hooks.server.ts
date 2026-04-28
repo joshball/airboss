@@ -11,9 +11,17 @@ import type { Handle, HandleServerError } from '@sveltejs/kit';
 import { building, dev } from '$app/environment';
 import { auth } from '$lib/server/auth';
 import { rewriteSetCookieDomain } from '$lib/server/cookies';
+import { maybeRunDiscovery } from '$lib/server/discovery';
 
 const log = createLogger('study');
 const errorHandler = createErrorHandler({ logger: log });
+
+// Fire-and-forget errata discovery scan at startup. Non-blocking; freshness-
+// gated so the common case is a single sentinel read. See WP
+// `apply-errata-and-afh-mosaic` phase R7.
+if (!building) {
+	void maybeRunDiscovery();
+}
 
 const REQUEST_ID_PATTERN = /^[a-zA-Z0-9_-]{1,64}$/;
 const REQUEST_ID_HEADER = 'x-request-id';
