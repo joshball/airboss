@@ -1,0 +1,15 @@
+# NTSB accident reports (umbrella row).
+#
+# The NTSB report archive is per-report, not per-edition; this row is the
+# generic landing for legacy citations that didn't carry a specific report
+# ID. ADR 019 §1.2 (NTSB corpus) describes per-report identifiers
+# (`airboss-ref:ntsb/<NTSB-ID>`); when those land via Phase 10, individual
+# reports get their own rows.
+
+references:
+  - slug: ntsb
+    kind: ntsb
+    edition: archive
+    title: NTSB accident reports (archive)
+    publisher: NTSB
+    url: https://www.ntsb.gov/Pages/AviationQuery.aspx

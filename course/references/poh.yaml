@@ -1,0 +1,14 @@
+# Pilot Operating Handbook / Aircraft Flight Manual (umbrella row).
+#
+# A POH is per-aircraft (often per tail number, even). This row is the
+# generic landing for legacy citations to "the POH" without a specific
+# aircraft -- the citation's locator carries the section/chapter detail.
+# When per-aircraft authoring lands (Phase 10 `pohs` corpus), each model
+# gets its own row keyed by manufacturer + model + edition.
+
+references:
+  - slug: poh-afm
+    kind: poh
+    edition: aircraft-specific
+    title: Pilot Operating Handbook / Aircraft Flight Manual
+    publisher: Aircraft manufacturer

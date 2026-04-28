@@ -1,0 +1,21 @@
+# Aeronautical Information Manual (AIM) and Pilot/Controller Glossary (PCG).
+#
+# Both are continuously edited by the FAA -- there is no fixed edition tag,
+# so `current` is the canonical pin. The AIM is republished biannually;
+# the PCG ships as Appendix 1 of the AIM but is treated as a separate
+# corpus per ADR 019 §1.2.
+
+references:
+  - slug: aim
+    kind: aim
+    edition: current
+    title: Aeronautical Information Manual
+    publisher: FAA
+    url: https://www.faa.gov/air_traffic/publications/atpubs/aim_html/
+
+  - slug: pcg
+    kind: pcg
+    edition: current
+    title: Pilot/Controller Glossary
+    publisher: FAA
+    url: https://www.faa.gov/air_traffic/publications/atpubs/pcg_html/
