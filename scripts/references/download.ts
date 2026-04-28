@@ -21,9 +21,9 @@
  */
 
 import { resolve } from 'node:path';
+import { handleBinaryVisualFetch, type SectionalFetchOutcome } from '@ab/bc-hangar';
 import { JOB_KINDS, JOB_STATUSES } from '@ab/constants';
 import type { JobContext, JobProgress } from '@ab/hangar-jobs';
-import { handleBinaryVisualFetch, type SectionalFetchOutcome } from '../../apps/hangar/src/lib/server/source-fetch';
 
 const REPO_ROOT = resolve(import.meta.dirname ?? import.meta.dir, '..', '..');
 

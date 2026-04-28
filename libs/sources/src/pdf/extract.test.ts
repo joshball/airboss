@@ -9,7 +9,8 @@
  * cache at $AIRBOSS_HANDBOOK_CACHE.
  */
 
-import { join } from 'node:path';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import {
 	__resetAvailabilityCache,
@@ -20,7 +21,7 @@ import {
 	PdftotextNotInstalledError,
 } from './extract.ts';
 
-const FIXTURE = join(import.meta.dir, '../../../../tests/fixtures/pdf/sample.pdf');
+const FIXTURE = join(dirname(fileURLToPath(import.meta.url)), '../../../../tests/fixtures/pdf/sample.pdf');
 
 describe('extractPdf', () => {
 	it('extracts both pages of the fixture', () => {

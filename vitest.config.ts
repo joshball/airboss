@@ -22,6 +22,8 @@ const aliases = {
 	'@ab/bc-study': resolve('./libs/bc/study/src/index.ts'),
 	'@ab/bc-sim/persistence': resolve('./libs/bc/sim/src/persistence.ts'),
 	'@ab/bc-sim': resolve('./libs/bc/sim/src/index.ts'),
+	'@ab/bc-hangar/schema': resolve('./libs/bc/hangar/src/schema.ts'),
+	'@ab/bc-hangar': resolve('./libs/bc/hangar/src/index.ts'),
 	'@ab/aviation/sources': resolve('./libs/aviation/src/sources/index.ts'),
 	'@ab/aviation/ui/ReferenceText.svelte': resolve('./libs/aviation/src/ui/ReferenceText.svelte'),
 	'@ab/aviation': resolve('./libs/aviation/src/index.ts'),

@@ -139,7 +139,7 @@ type SyllabusNodeYamlBase = {
 	children: SyllabusNodeYamlBase[];
 };
 
-export const syllabusNodeYamlSchema: z.ZodType<SyllabusNodeYamlBase> = z.lazy(() =>
+export const syllabusNodeYamlSchema: z.ZodType<SyllabusNodeYamlBase, z.ZodTypeDef, unknown> = z.lazy(() =>
 	z.object({
 		level: z.enum(SYLLABUS_NODE_LEVEL_VALUES as unknown as readonly [SyllabusNodeLevel, ...SyllabusNodeLevel[]]),
 		code: z.string().min(1),

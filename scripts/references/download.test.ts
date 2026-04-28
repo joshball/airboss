@@ -14,6 +14,7 @@ import { describe, expect, it, vi } from 'vitest';
 vi.mock('@ab/db', () => ({
 	db: {},
 	hangarSource: {},
+	timestamps: () => ({}),
 }));
 vi.mock('@ab/audit', () => ({
 	AUDIT_OPS: { CREATE: 'create', UPDATE: 'update', DELETE: 'delete' },
@@ -26,7 +27,7 @@ vi.mock('@ab/audit', () => ({
 	auditWrite: vi.fn(async () => {}),
 }));
 
-import type { SectionalFetchOutcome } from '../../apps/hangar/src/lib/server/source-fetch';
+import type { SectionalFetchOutcome } from '@ab/bc-hangar';
 import { runDownloadCli } from './download';
 
 function captureIo() {
