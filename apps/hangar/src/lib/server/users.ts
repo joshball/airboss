@@ -53,7 +53,6 @@ export interface UserDirectoryRow {
 
 export interface UserSessionRow {
 	id: string;
-	token: string;
 	ipAddress: string | null;
 	userAgent: string | null;
 	createdAt: Date;
@@ -209,7 +208,6 @@ export async function listRecentUserSessions(
 	const rows = await db
 		.select({
 			id: bauthSession.id,
-			token: bauthSession.token,
 			ipAddress: bauthSession.ipAddress,
 			userAgent: bauthSession.userAgent,
 			createdAt: bauthSession.createdAt,

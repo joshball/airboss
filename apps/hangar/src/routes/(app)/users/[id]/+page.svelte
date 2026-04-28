@@ -1,6 +1,5 @@
 <script lang="ts">
 import { ROLE_LABELS, ROUTES } from '@ab/constants';
-import Banner from '@ab/ui/components/Banner.svelte';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
@@ -51,8 +50,6 @@ function truncate(value: string | null, max: number): string {
 		</div>
 	</header>
 
-	<Banner tone="info">Editing coming in a follow-up.</Banner>
-
 	<section aria-labelledby="profile-heading" class="card">
 		<h2 id="profile-heading">Profile</h2>
 		<dl class="meta">
@@ -84,7 +81,7 @@ function truncate(value: string | null, max: number): string {
 				<table>
 					<thead>
 						<tr>
-							<th scope="col">Token</th>
+							<th scope="col">Session ID</th>
 							<th scope="col">IP</th>
 							<th scope="col">User agent</th>
 							<th scope="col">Created</th>
@@ -94,7 +91,7 @@ function truncate(value: string | null, max: number): string {
 					<tbody>
 						{#each data.sessions as session (session.id)}
 							<tr>
-								<td class="mono">{truncate(session.token, 12)}</td>
+								<td class="mono">{truncate(session.id, 12)}</td>
 								<td class="mono">{session.ipAddress ?? '-'}</td>
 								<td class="mono ua" title={session.userAgent ?? ''}>{truncate(session.userAgent, 64)}</td>
 								<td class="mono">{formatDateTime(session.createdAt)}</td>
