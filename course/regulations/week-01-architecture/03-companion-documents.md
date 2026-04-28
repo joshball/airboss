@@ -257,6 +257,6 @@ Third of four foundation lessons in Week 1. After this you know: the structural 
 - AIM live: [faa.gov/air_traffic/publications/atpubs/aim_html](https://www.faa.gov/air_traffic/publications/atpubs/aim_html)
 - ACs live: [faa.gov/regulations_policies/advisory_circulars](https://www.faa.gov/regulations_policies/advisory_circulars/)
 - Chief Counsel letters: [faa.gov/about/office_org/headquarters_offices/agc](https://www.faa.gov/about/office_org/headquarters_offices/agc/)
-- NTSB Part 830: [ecfr.gov/current/title-49/subtitle-B/chapter-VIII/part-830](https://www.ecfr.gov/current/title-49/subtitle-B/chapter-VIII/part-830)
+- NTSB Part 830: [ecfr.gov/current/title-49/subtitle-B/chapter-VIII/part-830](airboss-ref:regs/cfr-49/830?at=2026)
 - [Week 8: Companion documents](../week-08-companion-documents/overview.md) -- this same material treated more deeply later
 - [references/README.md](../references/README.md) -- the master index

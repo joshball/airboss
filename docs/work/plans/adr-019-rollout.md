@@ -28,7 +28,7 @@ Companion to:
 | 6 | reference-handbook-ingestion | [WP](../../work-packages/reference-handbook-ingestion/) | #251 | ✅ |
 | 7 | reference-aim-ingestion | [WP](../../work-packages/reference-aim-ingestion/) | #251 (WP), #261 (this PR -- Lane B end-to-end) | 🟧 |
 | 8 | reference-ac-ingestion | -- | #261 | ✅ |
-| 9 | reference-lesson-migration | -- | -- | ⬜ |
+| 9 | reference-lesson-migration | -- | (this PR) | 🟧 |
 | 10 | reference-irregular-corpora | -- | -- | ⬜ |
 
 ## Per-phase notes
@@ -151,9 +151,27 @@ Out of scope and deferred:
 
 AC catalog ingestion. Full text where licensing permits. After this, lessons can cite `airboss-ref:ac/61-65/j`.
 
-### Phase 9 -- reference-lesson-migration
+### Phase 9 -- reference-lesson-migration 🟧
 
-One-pass migration of pre-ADR-019 lessons (Week 1 + 2 capstones currently use plain eCFR URLs / prose citations). Per ADR 019 §9 rules: parse existing eCFR URLs, generate identifiers, pin to the year of the lesson's last meaningful edit (read from git log), interactive review for ambiguous cases.
+One-pass migration of pre-ADR-019 lessons (Week 1 + 2 capstones use plain eCFR URLs / prose citations). Per ADR 019 §9 rules: parse existing eCFR URLs, generate identifiers, pin to the year of the lesson's last meaningful edit (read from git log), interactive review for ambiguous cases.
+
+Shipped surface (this PR):
+
+- `scripts/migrate-lessons.ts` -- per-lesson eCFR URL discovery + rewrite. Walks the configured lesson roots, finds Markdown links whose URL matches `https://www.ecfr.gov/current/...`, maps each to the corresponding `airboss-ref:regs/...` identifier, and rewrites the link's URL in place. Pin = the year of the lesson's most recent commit (from `git log --follow --pretty=%aI`); fallback = the corpus's current accepted edition (`2026`).
+- `libs/sources/src/bootstrap.ts` -- runtime registry hydration from on-disk derivatives. Reads `regulations/cfr-<title>/<edition>/manifest.json` + `sections.json`, synthesizes per-Part + per-Section `SourceEntry` records, registers editions, atomic-batch promotes to `accepted` under reviewer `phase-9-bootstrap`. Idempotent. Wired into `validateReferences` so `bun run airboss-ref` resolves migrated identifiers in the validator without requiring a fresh ingest pass at every check. Bootstrap is opt-out via `bootstrap: false` for tests passing an explicit registry.
+- `libs/sources/src/bootstrap.test.ts` -- five unit tests covering empty-tree, single-edition, idempotence, multi-edition (Title 14 + Title 49), and partial-fixture skip.
+- ADR 019 §9 scope choices: catalog-index URLs (Title 14 root, AIM html catalog, AC index, Chief Counsel index) have no `airboss-ref:` mapping (§1.2 requires at least a Part for `regs`); the migrator surfaces them in the skipped list and leaves them as plain links. Bare-prose section citations (`§91.103`, `61.51(b)(1)`) stay as prose per ADR 019 §9 ("the migration tool offers a 'leave as prose' option") -- promoting prose mentions to identifiers is per-lesson editorial work that a future pass can handle one lesson at a time.
+
+Migration inventory:
+
+| Status          | Count | Notes                                                                                                                                    |
+| --------------- | ----- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| Migrated        |     3 | `https://www.ecfr.gov/.../part-91` x2 -> `airboss-ref:regs/cfr-14/91?at=2026`; `.../part-830` x1 -> `airboss-ref:regs/cfr-49/830?at=2026` |
+| Skipped         |     4 | `https://www.ecfr.gov/current/title-14` (Title-only; no Part/Section to pin to)                                                          |
+| Lessons touched |     3 | `01-title-14-shape.md`, `02-how-to-read-a-citation.md`, `03-companion-documents.md`                                                      |
+| Lessons scanned |    25 | All `course/regulations/**/*.md`                                                                                                         |
+
+Bare-prose citation handling: hundreds of `§91.103`-style mentions across all 25 lessons stay as prose. They're typically explanatory or categorical ("the §91.103 family of rules", "Subpart B", "91.155 - 91.159"). Mechanical rewrites would mis-pin or over-link these; promotion to identifiers is editorial.
 
 ### Phase 10 -- reference-irregular-corpora
 
@@ -181,3 +199,4 @@ Phases 5, 6, 7, 8, 10 can run in parallel after Phase 2 lands -- they each unloc
 | 2026-04-28 | 8 | Lane C landed: AC corpus module (`libs/sources/src/ac/`) -- locator, resolver, citation, URL, derivative-reader, ingest. URI shape `airboss-ref:ac/<doc>/<rev>` with `?at=YYYY-MM-DD`; unrevisioned ACs rejected per §1.2. Live ingest produced 9 ACs (00-6B, 120-71B, 25-7D, 61-65J, 61-83J, 61-98D, 90-66C, 91-21.1D, 91-79A); 3 skipped with explicit reasons (60-22 + 91-92 unrevisioned, 150/5210-7D slash-style not yet supported). Wired through `bun run sources register ac`. Smoke tests cover AC alone + cross-corpus (ac + regs in one lesson). |
 | 2026-04-28 | 7 | Lane B landed: AIM source-PDF ingestion end-to-end. New `libs/sources/src/aim/extract.ts` (TOC-driven PDF parser) + `source-ingest.ts` (orchestrator: discover -> extract -> write derivatives -> register). `bun run sources register aim --cache=<path>` now drives the full pipeline; existing `runAimIngest` manifest-walk path unchanged. Live ingest of AIM 2026-04 (732 pages): 744 SourceEntries (10 chapters / 37 sections / 396 paragraphs / 3 appendices / 298 glossary entries); 2 glossary entries skipped (CLASS E AIRSPACE, VISUAL APPROACH SLOPE INDICATOR -- column-wrap layouts emptied bodies). Derivative tree (~4.2 MB) committed inline per ADR 018. Smoke tests cover AIM alone (section), AIM paragraph, and cross-corpus (aim + regs). |
 | 2026-04-28 | 10 | Lane D landed: ACS corpus PPL-ASEL slice (`libs/sources/src/acs/` adds `derivative-reader.ts`, `ingest.ts`, `smoke.test.ts`). URI shape `airboss-ref:acs/<cert>/<edition>/area-<roman>/task-<letter>/element-<triad><ord>` per ADR 019 §1.2; ingest writes per-task body markdown to `<repo>/acs/<cert>/<edition>/area-<roman>/task-<letter>.md` with element bodies sliced out by code (`PA.I.A.K1`) on resolve. Live ingest produced 1 publication (`ppl-asel/faa-s-acs-6c`) + 12 areas + 61 tasks + 529 elements = 603 entries; promoted under `phase-9-acs-ingestion`. Other ACS cert families (FAA-S-ACS-7/8/11/25) parse and skip with explicit reasons until Open Question 7 (final ACS locator convention) resolves or a sibling lane wires them in. Wired through `bun run sources register acs`. Smoke tests cover ACS task + ACS element + cross-corpus (acs + regs in one lesson). |
+| 2026-04-28 | 9 | Phase 9 lesson migration shipped (this PR). New `scripts/migrate-lessons.ts` rewrites eCFR-URL Markdown links to `airboss-ref:regs/...` URIs pinned to the lesson's most recent commit year; bare-prose section citations stay as prose per ADR 019 §9. New `libs/sources/src/bootstrap.ts` hydrates the runtime `regs` registry from on-disk `manifest.json` + `sections.json` (synthesizes Part-level entries, registers editions, atomic-batch promotes to `accepted` under `phase-9-bootstrap`); wired into `validateReferences` so migrated identifiers resolve cleanly without an explicit ingest step at every check. Inventory: 3 identifiers migrated across 3 lessons (Week 1: title-14-shape, citation, companion-documents); 4 catalog-index URLs (Title 14 root) skipped with explicit reasons; 25 lessons scanned. `bun run airboss-ref` post-migration: 25 lessons / 3 identifiers / 0 findings. |
