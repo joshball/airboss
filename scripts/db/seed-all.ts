@@ -10,9 +10,13 @@
  *   3. handbooks  -- reference + handbook_section + handbook_figure rows
  *                    from the committed handbooks/ tree
  *                    (scripts/db/seed-handbooks.ts :: seedHandbooks)
- *   4. cards      -- study.card rows from inline yaml-cards blocks for every
+ *   4. references -- non-handbook reference rows (ACS / PTS / companion
+ *                    guide) from course/references/*.yaml. Cert-syllabus WP.
+ *   5. credentials -- credential / credential_prereq / credential_syllabus
+ *                    rows from course/credentials/*.yaml. Cert-syllabus WP.
+ *   6. cards      -- study.card rows from inline yaml-cards blocks for every
  *                    DEV_ACCOUNTS user (scripts/db/seed-cards.ts :: seedCardsForUser)
- *   5. abby       -- Abby's personal cards / scenarios / plan / sessions /
+ *   7. abby       -- Abby's personal cards / scenarios / plan / sessions /
  *                    reviews. Uses the seed_origin marker so the rows can be
  *                    cleanly removed by `db seed:remove`.
  *
@@ -32,12 +36,22 @@ import { resolve } from 'node:path';
 import { DEV_ACCOUNTS, DEV_DB_URL, DEV_SEED_ORIGIN_TAG, ENV_VARS } from '@ab/constants';
 import { type AbbySeedCounts, seedAbby } from './seed-abby';
 import { seedCardsForUser } from './seed-cards';
+import { seedCredentials } from './seed-credentials';
 import { decideSeedGuard } from './seed-guard';
 import { seedHandbooks } from './seed-handbooks';
+import { seedReferences } from './seed-references';
 
-type Phase = 'users' | 'knowledge' | 'handbooks' | 'cards' | 'abby';
+type Phase = 'users' | 'knowledge' | 'handbooks' | 'references' | 'credentials' | 'cards' | 'abby';
 
-const PHASES: readonly Phase[] = ['users', 'knowledge', 'handbooks', 'cards', 'abby'] as const;
+const PHASES: readonly Phase[] = [
+	'users',
+	'knowledge',
+	'handbooks',
+	'references',
+	'credentials',
+	'cards',
+	'abby',
+] as const;
 const REPO_ROOT = resolve(import.meta.dir, '..', '..');
 
 const ANSI_YELLOW = '[33m';
@@ -71,6 +85,20 @@ async function phaseHandbooks(): Promise<void> {
 	const summary = await seedHandbooks();
 	process.stdout.write(
 		`  ${summary.editionsProcessed} editions, ${summary.sectionsTouched} sections (${summary.sectionsChanged} changed), ${summary.figuresWritten} figures, ${summary.supersededLinks} superseded links\n`,
+	);
+}
+
+async function phaseReferences(): Promise<void> {
+	process.stdout.write('\n=== seed: references ===\n');
+	const summary = await seedReferences();
+	process.stdout.write(`  ${summary.rowsUpserted} non-handbook reference rows from ${summary.filesRead} file(s)\n`);
+}
+
+async function phaseCredentials(): Promise<void> {
+	process.stdout.write('\n=== seed: credentials ===\n');
+	const summary = await seedCredentials();
+	process.stdout.write(
+		`  ${summary.credentialsUpserted} credentials, ${summary.prereqsUpserted} prereqs, ${summary.syllabusLinksUpserted} syllabus links (${summary.syllabusLinksSkipped} skipped pending syllabi)\n`,
 	);
 }
 
@@ -112,6 +140,8 @@ const PHASE_FNS: Record<Phase, () => Promise<void>> = {
 	users: phaseUsers,
 	knowledge: phaseKnowledge,
 	handbooks: phaseHandbooks,
+	references: phaseReferences,
+	credentials: phaseCredentials,
 	cards: phaseCards,
 	abby: phaseAbby,
 };
