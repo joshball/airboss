@@ -20,7 +20,9 @@
  */
 
 import {
+	CARD_STATUSES,
 	MS_PER_DAY,
+	REVIEW_BATCH_SIZE,
 	SNOOZE_DURATION_DAYS,
 	SNOOZE_REASONS,
 	SNOOZE_REASONS_REQUIRING_COMMENT,
@@ -373,8 +375,16 @@ export async function getReplacementCard(
 		})
 		.from(cardState)
 		.innerJoin(card, and(eq(card.id, cardState.cardId), eq(card.userId, cardState.userId)))
-		.where(and(eq(card.userId, opts.userId), eq(card.domain, opts.domain), sql`"due_at" <= ${now.toISOString()}`))
-		.orderBy(cardState.dueAt);
+		.where(
+			and(
+				eq(card.userId, opts.userId),
+				eq(card.domain, opts.domain),
+				eq(card.status, CARD_STATUSES.ACTIVE),
+				sql`"due_at" <= ${now.toISOString()}`,
+			),
+		)
+		.orderBy(cardState.dueAt)
+		.limit(REVIEW_BATCH_SIZE);
 
 	for (const row of dueRows) {
 		if (!excludeIds.has(row.cardId)) {
@@ -383,13 +393,22 @@ export async function getReplacementCard(
 	}
 
 	// Leg 2: same-domain, never reviewed. `card_state.state = 'new'` marks
-	// untouched cards.
+	// untouched cards. Filter by `card.status = 'active'` so suspended/archived
+	// cards don't sneak through as replacements.
 	const newRows = await db
 		.select({ cardId: card.id })
 		.from(cardState)
 		.innerJoin(card, and(eq(card.id, cardState.cardId), eq(card.userId, cardState.userId)))
-		.where(and(eq(card.userId, opts.userId), eq(card.domain, opts.domain), eq(cardState.state, 'new')))
-		.orderBy(card.createdAt);
+		.where(
+			and(
+				eq(card.userId, opts.userId),
+				eq(card.domain, opts.domain),
+				eq(card.status, CARD_STATUSES.ACTIVE),
+				eq(cardState.state, 'new'),
+			),
+		)
+		.orderBy(card.createdAt)
+		.limit(REVIEW_BATCH_SIZE);
 
 	for (const row of newRows) {
 		if (!excludeIds.has(row.cardId)) {
