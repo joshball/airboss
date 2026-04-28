@@ -3,7 +3,7 @@ title: 'Test plan: Avionics App Scaffold'
 product: avionics
 feature: avionics-app-scaffold
 type: test-plan
-status: unread
+status: done
 review_status: done
 ---
 

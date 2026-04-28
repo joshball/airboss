@@ -3,7 +3,7 @@ title: 'Tasks: Avionics App Scaffold'
 product: avionics
 feature: avionics-app-scaffold
 type: tasks
-status: unread
+status: done
 review_status: done
 ---
 

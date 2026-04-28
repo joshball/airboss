@@ -2,6 +2,11 @@
 
 Single entry point for "what should I work on?" in airboss. Refresh date: 2026-04-28.
 
+## Just shipped (2026-04-28 -- avionics surface)
+
+- **Avionics surface born end-to-end -- 9 PRs in one session.** New `apps/avionics/` SvelteKit app on port 9630 (`avionics.airboss.test`), `libs/bc/avionics/` BC, full route set (`/`, `/pfd`, `/mfd`, `/scan`, `/aircraft`), five SVG PFD instruments (Attitude, Airspeed tape, Altitude tape, Heading, VSI) driven by sliders + keyboard with rAF-eased rendering, V-speeds sourced from the selected aircraft's FDM (C172 today, PA28 plumbed via the aircraft selector), avionics theme tokens for both light and dark, polished MFD/Scan placeholders. PRs #288 (WP docs), #291 (Wave 1 contract), #292 (extract-sim-instruments rewrite), #293 (theme tokens), #294 (app shell), #295 (themes pre-hydration fix surfaced mid-build), #297 (Wave 3 surface), #301 (Wave 4 instruments), #303 (Wave 5 polish + review_status flip). Also wired into `bun run dev` (no-arg parallel mode + single-app), `bun run check`, `bun run setup` /etc/hosts probe, and the shared theme-picker server.
+- **Avionics WP closed.** All five docs at `docs/products/avionics/work-packages/avionics-app-scaffold/` flipped `status: done` after manual smoke (PFD verified visually).
+
 ## Just shipped (2026-04-28 sweep)
 
 - **Five Wave-1 work packages from the 2026-04-27 12-axis review now closed.** Consolidated and shipped:
