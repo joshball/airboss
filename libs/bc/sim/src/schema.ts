@@ -19,16 +19,16 @@
 
 import { bauthUser } from '@ab/auth/schema';
 import { SCHEMAS } from '@ab/constants';
+import { timestamps } from '@ab/db';
 import type { InferInsertModel, InferSelectModel } from 'drizzle-orm';
 import { index, jsonb, pgSchema, real, text, timestamp } from 'drizzle-orm/pg-core';
-import { timestamps } from './columns';
 
 export const simSchema = pgSchema(SCHEMAS.SIM);
 
 /**
  * Shape of the `grade` jsonb column. Mirrors `GradeReport` in `@ab/bc-sim`;
- * duplicated here so `@ab/db` stays free of any `@ab/bc-sim` dependency
- * (BC stays pure-physics; persistence lives in the db lib).
+ * duplicated here so the schema stays free of a `@ab/bc-sim` runtime
+ * dependency (BC stays pure-physics; persistence lives alongside the schema).
  */
 export interface SimAttemptGrade {
 	total: number;
@@ -42,7 +42,7 @@ export interface SimAttemptGrade {
 
 /**
  * Shape of the `tape` jsonb column. Mirrors `ReplayTape` in `@ab/bc-sim`.
- * `unknown` here keeps `@ab/db` independent of the tape format; the BC
+ * `unknown` here keeps the schema independent of the tape format; the BC
  * owns parsing/validating on the read path via `parseTape`.
  */
 export type SimAttemptTape = unknown;

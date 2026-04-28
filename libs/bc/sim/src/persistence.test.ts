@@ -7,7 +7,7 @@
  */
 
 import { bauthUser } from '@ab/auth/schema';
-import { db, simAttempt } from '@ab/db';
+import { db } from '@ab/db';
 import { generateAuthId } from '@ab/utils';
 import { eq } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
@@ -21,6 +21,7 @@ import {
 } from './persistence';
 import type { ReplayTape } from './replay/types';
 import { EFATO_SCENARIO } from './scenarios/efato';
+import { simAttempt } from './schema';
 import type { ScenarioRunResult } from './types';
 
 const TEST_USER_ID = generateAuthId();

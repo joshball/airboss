@@ -18,8 +18,7 @@ describe('extractIdentifiers', () => {
 	});
 
 	it('keeps two links with different pins', () => {
-		const body =
-			'[@short](airboss-ref:regs/cfr-14/91/103?at=2026) vs [@short](airboss-ref:regs/cfr-14/91/103?at=2027)';
+		const body = '[@short](airboss-ref:regs/cfr-14/91/103?at=2026) vs [@short](airboss-ref:regs/cfr-14/91/103?at=2027)';
 		expect(extractIdentifiers(body)).toEqual([
 			'airboss-ref:regs/cfr-14/91/103?at=2026',
 			'airboss-ref:regs/cfr-14/91/103?at=2027',
@@ -52,7 +51,7 @@ But [@cite](airboss-ref:regs/cfr-14/91/107?at=2026).
 	});
 
 	it('skips identifiers inside inline code', () => {
-		const body = 'See \`airboss-ref:regs/cfr-14/91/103?at=2026\` for the literal.';
+		const body = 'See `airboss-ref:regs/cfr-14/91/103?at=2026` for the literal.';
 		expect(extractIdentifiers(body)).toEqual([]);
 	});
 

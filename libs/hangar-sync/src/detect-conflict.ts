@@ -17,7 +17,7 @@
  * unlikely, but the check is cheap, explicit, and auditable so it stays.
  */
 
-import type { HangarSyncLogRow } from '@ab/db';
+import type { HangarSyncLogRow } from '@ab/bc-hangar/schema';
 import type { ConflictEntry, ConflictReport } from './types';
 
 export interface ConflictInputs {

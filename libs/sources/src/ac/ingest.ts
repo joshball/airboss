@@ -25,7 +25,7 @@
  */
 
 import { createHash } from 'node:crypto';
-import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { join } from 'node:path';
 import { extractPdf, findEffectiveDate } from '../pdf/index.ts';
@@ -106,7 +106,9 @@ function resolveDocAndRevision(
 ): { docNumber: string; revision: string } | { skip: string } {
 	const edition = dm.edition;
 	if (edition === 'current' || edition.length === 0) {
-		return { skip: `${cacheDocDir}: edition='${edition}' -- unrevisioned ACs are rejected by ADR 019 §1.2 validator (skip)` };
+		return {
+			skip: `${cacheDocDir}: edition='${edition}' -- unrevisioned ACs are rejected by ADR 019 §1.2 validator (skip)`,
+		};
 	}
 
 	// Pull the trailing letter as revision.

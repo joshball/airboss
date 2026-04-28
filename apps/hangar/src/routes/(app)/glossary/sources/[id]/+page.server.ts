@@ -1,10 +1,17 @@
 import { requireRole } from '@ab/auth';
+import {
+	getSource,
+	NotFoundError,
+	RevConflictError,
+	type SourceFormInitial,
+	softDeleteSource,
+	sourceFormDataToInitial,
+	updateSource,
+	validateSourceForm,
+} from '@ab/bc-hangar';
 import { type ReferenceSourceType, ROLES, ROUTES, SOURCE_KIND_BY_TYPE, SOURCE_KINDS } from '@ab/constants';
 import { createLogger } from '@ab/utils';
 import { error, fail, redirect } from '@sveltejs/kit';
-import { getSource, NotFoundError, RevConflictError, softDeleteSource, updateSource } from '$lib/server/registry';
-import { sourceFormDataToInitial, validateSourceForm } from '$lib/server/source-form';
-import type { SourceFormInitial } from '$lib/server/source-form-types';
 import type { Actions, PageServerLoad } from './$types';
 
 const log = createLogger('hangar:sources-detail');

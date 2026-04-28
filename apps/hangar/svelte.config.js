@@ -54,6 +54,8 @@ const config = {
 			'@ab/hangar-jobs/*': '../../libs/hangar-jobs/src/*',
 			'@ab/hangar-sync': '../../libs/hangar-sync/src/index.ts',
 			'@ab/hangar-sync/*': '../../libs/hangar-sync/src/*',
+			'@ab/bc-hangar': '../../libs/bc/hangar/src/index.ts',
+			'@ab/bc-hangar/*': '../../libs/bc/hangar/src/*',
 			'@ab/help': '../../libs/help/src/index.ts',
 			'@ab/help/*': '../../libs/help/src/*',
 		},

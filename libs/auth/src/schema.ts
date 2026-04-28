@@ -7,7 +7,8 @@
  * does not support PostgreSQL schema namespaces.
  */
 
-import { boolean, jsonb, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
+import { AUTH_RATE_LIMIT } from '@ab/constants';
+import { bigint, boolean, integer, jsonb, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 
 export const bauthUser = pgTable('bauth_user', {
 	id: text('id').primaryKey(),
@@ -65,4 +66,31 @@ export const bauthVerification = pgTable('bauth_verification', {
 	expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
 	createdAt: timestamp('created_at', { withTimezone: true }).notNull(),
 	updatedAt: timestamp('updated_at', { withTimezone: true }).notNull(),
+});
+
+/**
+ * Rate-limit storage for better-auth.
+ *
+ * Populated by better-auth itself when `rateLimit.storage = 'database'`
+ * (see `createAuth` in `./server.ts`). The fields exactly match the shape
+ * the better-auth core expects (`key`, `count`, `lastRequest`); this Drizzle
+ * declaration exists so:
+ *
+ *   1. drizzle-kit generates the migration that creates the table; and
+ *   2. tests can read the rows directly to prove that rate-limit state is
+ *      persisted in Postgres (not just in process memory).
+ *
+ * `lastRequest` stores a JS millisecond timestamp (`Date.now()` -- well
+ * within the safe-integer range, so `mode: 'number'` is correct).
+ *
+ * The JS property names (`key`, `count`, `lastRequest`) match better-auth's
+ * default field keys; the column names use snake_case to match the rest of
+ * the schema. Renaming the JS property would force a `fields` override on
+ * the better-auth side, which silently breaks the drizzle-adapter lookup.
+ */
+export const bauthRateLimit = pgTable(AUTH_RATE_LIMIT.TABLE_NAME, {
+	id: text('id').primaryKey(),
+	key: text('key').notNull().unique(),
+	count: integer('count').notNull(),
+	lastRequest: bigint('last_request', { mode: 'number' }).notNull(),
 });

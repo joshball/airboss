@@ -27,7 +27,7 @@ import { generateAuthId, generateCardId, generateReviewId, generateScenarioId } 
 import { eq } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { getCalibration, getCalibrationPointCount, getCalibrationTrend } from './calibration';
-import { card, cardState, review, scenario, session, sessionItemResult, studyPlan } from './schema';
+import { card, cardState, review, scenario, scenarioOption, session, sessionItemResult, studyPlan } from './schema';
 import { seedRepAttempt } from './test-support';
 
 const TEST_USER_ID = generateAuthId();
@@ -161,8 +161,8 @@ async function seedReview(
 
 /**
  * Seed a rep-attempt. Needs a scenario row to join to for the domain lookup.
- * The scenario `options` blob has to satisfy the shape CHECK (2-5 options
- * with one correct), so we ship a minimal 2-option payload.
+ * Inserts a minimal 2-option scenario via the relational `scenario_option`
+ * table so the partial UNIQUE on the correct option holds.
  */
 async function seedScenario(userId: string, domain: string): Promise<string> {
 	const id = generateScenarioId();
@@ -171,10 +171,6 @@ async function seedScenario(userId: string, domain: string): Promise<string> {
 		userId,
 		title: `scenario ${id}`,
 		situation: 'situation',
-		options: [
-			{ id: 'a', text: 'a', isCorrect: true, outcome: 'o', whyNot: '' },
-			{ id: 'b', text: 'b', isCorrect: false, outcome: 'o', whyNot: 'wn' },
-		],
 		teachingPoint: 'tp',
 		domain,
 		difficulty: 'beginner',
@@ -186,6 +182,10 @@ async function seedScenario(userId: string, domain: string): Promise<string> {
 		status: 'active',
 		createdAt: new Date(),
 	});
+	await db.insert(scenarioOption).values([
+		{ id: `${id}__a`, scenarioId: id, text: 'a', isCorrect: true, outcome: 'o', whyNot: '', position: 0 },
+		{ id: `${id}__b`, scenarioId: id, text: 'b', isCorrect: false, outcome: 'o', whyNot: 'wn', position: 1 },
+	]);
 	return id;
 }
 

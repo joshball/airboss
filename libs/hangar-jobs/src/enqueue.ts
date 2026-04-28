@@ -7,8 +7,9 @@
  */
 
 import { AUDIT_OPS, auditWrite } from '@ab/audit';
+import { type HangarJobLogRow, type HangarJobRow, hangarJob, hangarJobLog } from '@ab/bc-hangar/schema';
 import { AUDIT_TARGETS, JOB_STATUSES, type JobKind } from '@ab/constants';
-import { db as defaultDb, type HangarJobLogRow, type HangarJobRow, hangarJob, hangarJobLog } from '@ab/db';
+import { db as defaultDb } from '@ab/db';
 import { generateHangarJobId, generateHangarJobLogId } from '@ab/utils';
 import { and, asc, desc, eq, gt, inArray, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';

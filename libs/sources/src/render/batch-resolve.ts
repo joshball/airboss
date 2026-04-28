@@ -34,10 +34,7 @@ import { computeAnnotation, findMatchingAcks } from './annotations.ts';
  * lesson's acknowledgments and historical-lens flag in `ctx` driving the
  * per-id annotation.
  */
-export async function batchResolve(
-	ids: readonly string[],
-	ctx: BatchResolveContext,
-): Promise<ResolvedIdentifierMap> {
+export async function batchResolve(ids: readonly string[], ctx: BatchResolveContext): Promise<ResolvedIdentifierMap> {
 	const map = new Map<string, ResolvedIdentifier>();
 	if (ids.length === 0) return map;
 

@@ -12,24 +12,15 @@
  *   const slug = findAcsEditionSlug(doc.pages.slice(0, 3)); // cover-page heuristic
  */
 
-export type {
-	ExtractOptions,
-	ExtractedDocument,
-	ExtractedPage,
-	PageRange,
-	PdfMetadata,
-} from './types.ts';
-
 export {
-	PdfExtractionError,
-	PdfNotFoundError,
-	PdftotextNotInstalledError,
 	__resetAvailabilityCache,
 	extractPdf,
 	extractPdfPages,
 	extractPdfText,
+	PdfExtractionError,
+	PdfNotFoundError,
+	PdftotextNotInstalledError,
 } from './extract.ts';
-
 export {
 	findAcSlug,
 	findAcsEditionSlug,
@@ -37,3 +28,10 @@ export {
 	findEffectiveDate,
 	findHandbookEditionSlug,
 } from './identify.ts';
+export type {
+	ExtractedDocument,
+	ExtractedPage,
+	ExtractOptions,
+	PageRange,
+	PdfMetadata,
+} from './types.ts';

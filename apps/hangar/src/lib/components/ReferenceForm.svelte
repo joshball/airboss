@@ -1,4 +1,5 @@
 <script lang="ts">
+import type { ReferenceFormInitial } from '@ab/bc-hangar';
 import {
 	AVIATION_TOPIC_LABELS,
 	AVIATION_TOPIC_VALUES,
@@ -14,7 +15,6 @@ import {
 	SOURCE_TYPE_VALUES,
 } from '@ab/constants';
 import MarkdownPreview from '$lib/components/MarkdownPreview.svelte';
-import type { ReferenceFormInitial } from '$lib/server/reference-form-types';
 
 /**
  * Shared form body for create (/glossary/new) + edit (/glossary/[id]).

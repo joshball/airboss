@@ -19,13 +19,7 @@
 
 import { spawnSync } from 'node:child_process';
 import { existsSync } from 'node:fs';
-import type {
-	ExtractOptions,
-	ExtractedDocument,
-	ExtractedPage,
-	PageRange,
-	PdfMetadata,
-} from './types.ts';
+import type { ExtractedDocument, ExtractedPage, ExtractOptions, PageRange, PdfMetadata } from './types.ts';
 
 // ---------------------------------------------------------------------------
 // Errors
@@ -96,9 +90,7 @@ export function __resetAvailabilityCache(): void {
 function readPdfInfo(source: string, binary: string): { pageCount: number; metadata: PdfMetadata } {
 	// `pdfinfo` lives next to `pdftotext`. Reuse the override convention for
 	// simplicity: same path with the last segment swapped.
-	const pdfinfoBinary = binary.endsWith('pdftotext')
-		? binary.slice(0, -'pdftotext'.length) + 'pdfinfo'
-		: 'pdfinfo';
+	const pdfinfoBinary = binary.endsWith('pdftotext') ? `${binary.slice(0, -'pdftotext'.length)}pdfinfo` : 'pdfinfo';
 	const result = spawnSync(pdfinfoBinary, [source], { encoding: 'utf-8' });
 	if (result.status !== 0) {
 		throw new PdfExtractionError(source, `pdfinfo exited ${result.status ?? 'null'}: ${result.stderr ?? ''}`);
@@ -183,10 +175,7 @@ function runPdftotext(source: string, firstPage: number, lastPage: number, opts:
 	args.push(source, '-'); // output to stdout
 	const result = spawnSync(binary, args, { encoding: 'utf-8', maxBuffer: 256 * 1024 * 1024 });
 	if (result.status !== 0) {
-		throw new PdfExtractionError(
-			source,
-			`pdftotext exited ${result.status ?? 'null'}: ${result.stderr ?? ''}`,
-		);
+		throw new PdfExtractionError(source, `pdftotext exited ${result.status ?? 'null'}: ${result.stderr ?? ''}`);
 	}
 	return result.stdout ?? '';
 }

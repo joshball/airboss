@@ -109,6 +109,14 @@ export { UNUSUAL_ATTITUDES_SCENARIO } from './scenarios/unusual-attitudes';
 export { UNUSUAL_ATTITUDES_NOSE_LO_SCENARIO } from './scenarios/unusual-attitudes-nose-lo';
 export { VACUUM_FAILURE_SCENARIO } from './scenarios/vacuum-failure';
 export { VMC_INTO_IMC_SCENARIO } from './scenarios/vmc-into-imc';
+export {
+	type NewSimAttemptRow,
+	type SimAttemptGrade,
+	type SimAttemptRow,
+	type SimAttemptTape,
+	simAttempt,
+	simSchema,
+} from './schema';
 export type {
 	AircraftConfig,
 	FdmInputs,

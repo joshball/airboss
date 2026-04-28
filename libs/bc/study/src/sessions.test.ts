@@ -34,7 +34,7 @@ import {
 } from '@ab/utils';
 import { and, eq } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { type ScenarioOption, scenario, session, sessionItemResult, studyPlan } from './schema';
+import { type ScenarioOption, scenario, scenarioOption, session, sessionItemResult, studyPlan } from './schema';
 import { recordItemResult } from './sessions';
 
 const TEST_USER_ID = generateAuthId();
@@ -67,8 +67,8 @@ afterAll(async () => {
 
 function twoOptions(): ScenarioOption[] {
 	return [
-		{ id: 'opt0', text: 'A', isCorrect: false },
-		{ id: 'opt1', text: 'B', isCorrect: true },
+		{ id: 'opt0', text: 'A', isCorrect: false, outcome: 'wrong', whyNot: 'incorrect' },
+		{ id: 'opt1', text: 'B', isCorrect: true, outcome: 'right', whyNot: '' },
 	];
 }
 
@@ -102,7 +102,6 @@ async function seedRepSlot(opts: { reasonDetail?: string | null }): Promise<{
 		userId: TEST_USER_ID,
 		title: 'Test',
 		situation: 'Sit',
-		options: twoOptions(),
 		teachingPoint: 'tp',
 		domain: DOMAINS.AERODYNAMICS,
 		difficulty: DIFFICULTIES.INTERMEDIATE,
@@ -111,6 +110,17 @@ async function seedRepSlot(opts: { reasonDetail?: string | null }): Promise<{
 		status: SCENARIO_STATUSES.ACTIVE,
 		createdAt: now,
 	});
+	await db.insert(scenarioOption).values(
+		twoOptions().map((o, idx) => ({
+			id: `${scenarioId}__${o.id}`,
+			scenarioId,
+			text: o.text,
+			isCorrect: o.isCorrect,
+			outcome: o.outcome,
+			whyNot: o.whyNot,
+			position: idx,
+		})),
+	);
 
 	const sessionId = generateSessionId();
 	await db.insert(session).values({
@@ -171,13 +181,14 @@ describe('recordItemResult (rep slot)', () => {
 			reasonDetail: 'Accuracy 0% over last attempts',
 		});
 
+		const chosenOptionId = `${scenarioId}__opt0`;
 		const row = await recordItemResult(sessionId, TEST_USER_ID, {
 			slotIndex: 0,
 			itemKind: SESSION_ITEM_KINDS.REP,
 			slice: SESSION_SLICES.STRENGTHEN,
 			reasonCode: SESSION_REASON_CODES.STRENGTHEN_LOW_REP_ACCURACY,
 			scenarioId,
-			chosenOption: 'opt0',
+			chosenOptionId,
 			isCorrect: false,
 			confidence: CONFIDENCE_LEVELS.UNCERTAIN,
 			answerMs: 2,
@@ -185,7 +196,7 @@ describe('recordItemResult (rep slot)', () => {
 		});
 
 		expect(row.scenarioId).toBe(scenarioId);
-		expect(row.chosenOption).toBe('opt0');
+		expect(row.chosenOptionId).toBe(chosenOptionId);
 		expect(row.isCorrect).toBe(false);
 		expect(row.confidence).toBe(CONFIDENCE_LEVELS.UNCERTAIN);
 		expect(row.answerMs).toBe(2);

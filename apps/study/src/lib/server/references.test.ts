@@ -35,7 +35,11 @@ function mockResolver(corpus: string, urls: Record<string, string>): CorpusResol
 			return { kind: 'ok', segments: locator.split('/') };
 		},
 		formatCitation(entry, style) {
-			return style === 'short' ? entry.canonical_short : style === 'formal' ? entry.canonical_formal : entry.canonical_title;
+			return style === 'short'
+				? entry.canonical_short
+				: style === 'formal'
+					? entry.canonical_formal
+					: entry.canonical_title;
 		},
 		getCurrentEdition() {
 			return '2026';
@@ -68,9 +72,11 @@ describe('loadLessonReferences', () => {
 
 	it('resolves identifiers and serializes for transport', async () => {
 		const e = makeEntry({ id: 'airboss-ref:regs/cfr-14/91/103' as SourceId });
-		registerCorpusResolver(mockResolver('regs', {
-			[e.id]: 'https://www.ecfr.gov/.../section-91.103',
-		}));
+		registerCorpusResolver(
+			mockResolver('regs', {
+				[e.id]: 'https://www.ecfr.gov/.../section-91.103',
+			}),
+		);
 
 		await withTestEntries({ [e.id]: e }, async () => {
 			const body = 'Per [@cite](airboss-ref:regs/cfr-14/91/103?at=2026), the PIC...';
@@ -84,9 +90,11 @@ describe('loadLessonReferences', () => {
 
 	it('round-trips through substituteTokens to yield the expected HTML', async () => {
 		const e = makeEntry({ id: 'airboss-ref:regs/cfr-14/91/103' as SourceId });
-		registerCorpusResolver(mockResolver('regs', {
-			[e.id]: 'https://www.ecfr.gov/.../section-91.103',
-		}));
+		registerCorpusResolver(
+			mockResolver('regs', {
+				[e.id]: 'https://www.ecfr.gov/.../section-91.103',
+			}),
+		);
 
 		await withTestEntries({ [e.id]: e }, async () => {
 			const body = 'Per [@cite](airboss-ref:regs/cfr-14/91/103?at=2026), the PIC...';
@@ -101,9 +109,11 @@ describe('loadLessonReferences', () => {
 
 	it('honors mode override', async () => {
 		const e = makeEntry({ id: 'airboss-ref:regs/cfr-14/91/103' as SourceId });
-		registerCorpusResolver(mockResolver('regs', {
-			[e.id]: 'https://www.ecfr.gov/.../section-91.103',
-		}));
+		registerCorpusResolver(
+			mockResolver('regs', {
+				[e.id]: 'https://www.ecfr.gov/.../section-91.103',
+			}),
+		);
 
 		await withTestEntries({ [e.id]: e }, async () => {
 			const body = '[@cite](airboss-ref:regs/cfr-14/91/103?at=2026)';
@@ -134,9 +144,11 @@ describe('loadLessonReferences', () => {
 
 	it('forwards historicalLens flag', async () => {
 		const e = makeEntry({ id: 'airboss-ref:regs/cfr-14/91/103' as SourceId });
-		registerCorpusResolver(mockResolver('regs', {
-			[e.id]: 'X',
-		}));
+		registerCorpusResolver(
+			mockResolver('regs', {
+				[e.id]: 'X',
+			}),
+		);
 		await withTestEntries({ [e.id]: e }, async () => {
 			const body = '[@cite](airboss-ref:regs/cfr-14/91/103?at=2026)';
 			const out = await loadLessonReferences(body, [], { historicalLens: true });

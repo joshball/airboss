@@ -10,6 +10,7 @@
  * The resulting payload is JSON-safe; SvelteKit transports it.
  */
 
+import type { LessonAcknowledgment } from '@ab/sources';
 import {
 	batchResolve,
 	extractIdentifiers,
@@ -17,7 +18,6 @@ import {
 	type SerializableResolvedMap,
 	toSerializable,
 } from '@ab/sources';
-import type { LessonAcknowledgment } from '@ab/sources';
 
 export interface LoadedLessonReferences {
 	readonly body: string;

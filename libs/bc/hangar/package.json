@@ -1,14 +1,20 @@
 {
-	"name": "@ab/hangar-sync",
+	"name": "@ab/bc-hangar",
 	"private": true,
 	"type": "module",
+	"exports": {
+		".": "./src/index.ts",
+		"./*": "./src/*.ts",
+		"./package.json": "./package.json"
+	},
 	"dependencies": {
 		"@ab/audit": "workspace:*",
+		"@ab/auth": "workspace:*",
 		"@ab/aviation": "workspace:*",
-		"@ab/bc-hangar": "workspace:*",
 		"@ab/constants": "workspace:*",
 		"@ab/db": "workspace:*",
 		"@ab/hangar-jobs": "workspace:*",
+		"@ab/hangar-sync": "workspace:*",
 		"@ab/utils": "workspace:*"
 	}
 }

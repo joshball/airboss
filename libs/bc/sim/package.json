@@ -8,6 +8,7 @@
 		"./package.json": "./package.json"
 	},
 	"dependencies": {
+		"@ab/auth": "workspace:*",
 		"@ab/constants": "workspace:*",
 		"@ab/db": "workspace:*",
 		"@ab/utils": "workspace:*"

@@ -1,6 +1,6 @@
 import { db as defaultDb } from '@ab/db';
 import { generateAuditLogId } from '@ab/utils';
-import { desc, eq } from 'drizzle-orm';
+import { count, desc, eq, gte } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import { type AuditLogRow, type AuditOp, auditLog } from './schema';
 
@@ -58,4 +58,13 @@ export async function auditRecent(
 			? base.where(eq(auditLog.targetId, input.targetId))
 			: base.where(eq(auditLog.targetType, input.targetType));
 	return filtered.orderBy(desc(auditLog.timestamp)).limit(limit);
+}
+
+/**
+ * Count audit rows whose timestamp is at or after `since`. Used by the hangar
+ * admin home for a "recent activity in the last N hours" tile.
+ */
+export async function countAuditEntriesSince(since: Date, db: Db = defaultDb): Promise<number> {
+	const rows = await db.select({ c: count() }).from(auditLog).where(gte(auditLog.timestamp, since));
+	return Number(rows[0]?.c ?? 0);
 }

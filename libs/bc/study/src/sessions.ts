@@ -136,7 +136,11 @@ export interface ItemResultInput {
 	 * live on session_item_result directly -- there is no separate attempt
 	 * row.
 	 */
-	chosenOption?: string | null;
+	/**
+	 * Renamed from `chosenOption` after scenario-options-relational
+	 * migration. Stores the id of the picked `scenario_option` row.
+	 */
+	chosenOptionId?: string | null;
 	isCorrect?: boolean | null;
 	confidence?: ConfidenceLevel | null;
 	answerMs?: number | null;
@@ -693,7 +697,7 @@ export async function commitSession(
 				reviewId: null,
 				skipKind: null,
 				reasonDetail: item.reasonDetail ?? null,
-				chosenOption: null,
+				chosenOptionId: null,
 				isCorrect: null,
 				confidence: null,
 				answerMs: null,
@@ -868,7 +872,7 @@ export async function recordItemResult(
 	if (result.reviewId !== undefined) updateSet.reviewId = result.reviewId;
 	if (result.skipKind !== undefined) updateSet.skipKind = result.skipKind;
 	if (result.reasonDetail !== undefined) updateSet.reasonDetail = result.reasonDetail;
-	if (result.chosenOption !== undefined) updateSet.chosenOption = result.chosenOption;
+	if (result.chosenOptionId !== undefined) updateSet.chosenOptionId = result.chosenOptionId;
 	if (result.isCorrect !== undefined) updateSet.isCorrect = result.isCorrect;
 	if (result.confidence !== undefined) updateSet.confidence = result.confidence;
 	if (result.answerMs !== undefined) updateSet.answerMs = result.answerMs;
@@ -896,7 +900,7 @@ export async function recordItemResult(
 			reviewId: result.reviewId ?? null,
 			skipKind: result.skipKind ?? null,
 			reasonDetail: result.reasonDetail ?? null,
-			chosenOption: result.chosenOption ?? null,
+			chosenOptionId: result.chosenOptionId ?? null,
 			isCorrect: result.isCorrect ?? null,
 			confidence: result.confidence ?? null,
 			answerMs: result.answerMs ?? null,

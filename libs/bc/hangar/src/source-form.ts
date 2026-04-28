@@ -6,8 +6,8 @@
 import { type ReferenceSourceType, SOURCE_KIND_BY_TYPE, SOURCE_KINDS } from '@ab/constants';
 import type { z } from 'zod';
 import { type FieldErrors, getString, parseJsonObject, zodIssuesToFieldErrors } from './form-helpers';
+import { sourceSchema } from './form-schemas';
 import type { SourceInput } from './registry';
-import { sourceSchema } from './schemas';
 import type { SourceFormInitial } from './source-form-types';
 
 export function sourceFormDataToInitial(form: FormData): SourceFormInitial {

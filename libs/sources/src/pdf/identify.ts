@@ -133,7 +133,7 @@ function scanForEffectiveDate(text: string): string | null {
 		}
 	}
 	// "Effective[ Date]: M/D/YY[YY]" or "Effective: M-D-YY[YY]"
-	const effectiveNumeric = /Effective(?:\s+Date)?:?\s+(\d{1,2})[\/-](\d{1,2})[\/-](\d{2,4})/i;
+	const effectiveNumeric = /Effective(?:\s+Date)?:?\s+(\d{1,2})[/-](\d{1,2})[/-](\d{2,4})/i;
 	const m2 = text.match(effectiveNumeric);
 	if (m2 !== null) {
 		const iso = parseNumericDate(m2[1], m2[2], m2[3]);
@@ -143,7 +143,7 @@ function scanForEffectiveDate(text: string): string | null {
 	// standardized AC header. Match only when "AC No" appears nearby (within
 	// 200 chars) to avoid false positives on non-AC docs that happen to have
 	// a "Date:" string on the cover.
-	const acDateRe = /\bDate:\s+(\d{1,2})[\/-](\d{1,2})[\/-](\d{2,4})/g;
+	const acDateRe = /\bDate:\s+(\d{1,2})[/-](\d{1,2})[/-](\d{2,4})/g;
 	for (const m of text.matchAll(acDateRe)) {
 		const start = m.index ?? 0;
 		const window = text.slice(Math.max(0, start - 200), start + 200);

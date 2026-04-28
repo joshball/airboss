@@ -1,4 +1,5 @@
 import { requireRole } from '@ab/auth';
+import { listReferences } from '@ab/bc-hangar';
 import {
 	type AviationTopic,
 	type CertApplicability,
@@ -17,7 +18,6 @@ import {
 import { enqueueJob } from '@ab/hangar-jobs';
 import { narrow } from '@ab/utils';
 import { fail, isRedirect, redirect } from '@sveltejs/kit';
-import { listReferences } from '$lib/server/registry';
 import type { Actions, PageServerLoad } from './$types';
 
 const PAGE_SIZE = 25;

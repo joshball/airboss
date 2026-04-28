@@ -76,7 +76,12 @@ export async function seedRepAttempt(opts: {
 	userId: string;
 	scenarioId: string;
 	isCorrect: boolean;
-	chosenOption?: string;
+	/**
+	 * Id of the chosen option row in `scenario_option`. Defaults to `null`
+	 * (the test cares about the rollup, not the specific option). Set when a
+	 * test asserts on the `chosenOptionId` value of the resulting slot.
+	 */
+	chosenOptionId?: string | null;
 	confidence?: number | null;
 	answerMs?: number | null;
 	completedAt?: Date;
@@ -119,7 +124,7 @@ export async function seedRepAttempt(opts: {
 		reviewId: null,
 		skipKind: null,
 		reasonDetail: null,
-		chosenOption: opts.chosenOption ?? (opts.isCorrect ? 'a' : 'b'),
+		chosenOptionId: opts.chosenOptionId ?? null,
 		isCorrect: opts.isCorrect,
 		confidence: opts.confidence ?? null,
 		answerMs: opts.answerMs ?? null,

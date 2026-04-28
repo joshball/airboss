@@ -43,6 +43,7 @@
         "@ab/audit": "workspace:*",
         "@ab/auth": "workspace:*",
         "@ab/aviation": "workspace:*",
+        "@ab/bc-hangar": "workspace:*",
         "@ab/constants": "workspace:*",
         "@ab/db": "workspace:*",
         "@ab/hangar-jobs": "workspace:*",
@@ -73,6 +74,7 @@
         "@ab/activities": "workspace:*",
         "@ab/auth": "workspace:*",
         "@ab/aviation": "workspace:*",
+        "@ab/bc-hangar": "workspace:*",
         "@ab/bc-sim": "workspace:*",
         "@ab/bc-study": "workspace:*",
         "@ab/constants": "workspace:*",
@@ -112,9 +114,23 @@
         "smol-toml": "^1.6.1",
       },
     },
+    "libs/bc/hangar": {
+      "name": "@ab/bc-hangar",
+      "dependencies": {
+        "@ab/audit": "workspace:*",
+        "@ab/auth": "workspace:*",
+        "@ab/aviation": "workspace:*",
+        "@ab/constants": "workspace:*",
+        "@ab/db": "workspace:*",
+        "@ab/hangar-jobs": "workspace:*",
+        "@ab/hangar-sync": "workspace:*",
+        "@ab/utils": "workspace:*",
+      },
+    },
     "libs/bc/sim": {
       "name": "@ab/bc-sim",
       "dependencies": {
+        "@ab/auth": "workspace:*",
         "@ab/constants": "workspace:*",
         "@ab/db": "workspace:*",
         "@ab/utils": "workspace:*",
@@ -138,7 +154,6 @@
     "libs/db": {
       "name": "@ab/db",
       "dependencies": {
-        "@ab/auth": "workspace:*",
         "@ab/constants": "workspace:*",
         "@ab/utils": "workspace:*",
       },
@@ -147,6 +162,7 @@
       "name": "@ab/hangar-jobs",
       "dependencies": {
         "@ab/audit": "workspace:*",
+        "@ab/bc-hangar": "workspace:*",
         "@ab/constants": "workspace:*",
         "@ab/db": "workspace:*",
         "@ab/utils": "workspace:*",
@@ -157,6 +173,7 @@
       "dependencies": {
         "@ab/audit": "workspace:*",
         "@ab/aviation": "workspace:*",
+        "@ab/bc-hangar": "workspace:*",
         "@ab/constants": "workspace:*",
         "@ab/db": "workspace:*",
         "@ab/hangar-jobs": "workspace:*",
@@ -211,6 +228,8 @@
     "@ab/auth": ["@ab/auth@workspace:libs/auth"],
 
     "@ab/aviation": ["@ab/aviation@workspace:libs/aviation"],
+
+    "@ab/bc-hangar": ["@ab/bc-hangar@workspace:libs/bc/hangar"],
 
     "@ab/bc-sim": ["@ab/bc-sim@workspace:libs/bc/sim"],
 

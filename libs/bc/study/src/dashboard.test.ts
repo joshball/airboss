@@ -36,7 +36,7 @@ import {
 	type PanelResult,
 	type RecentActivity,
 } from './dashboard';
-import { card, cardState, review, scenario, session, sessionItemResult, studyPlan } from './schema';
+import { card, cardState, review, scenario, scenarioOption, session, sessionItemResult, studyPlan } from './schema';
 import { seedRepAttempt } from './test-support';
 
 /** Shared user for tests that don't mutate shared state destructively. */
@@ -175,10 +175,6 @@ async function seedScenario(userId: string, domain: string): Promise<string> {
 		userId,
 		title: `sc ${id}`,
 		situation: 'Flying along, something happens.',
-		options: [
-			{ id: 'a', text: 'Do thing A', isCorrect: true, outcome: 'Good', whyNot: '' },
-			{ id: 'b', text: 'Do thing B', isCorrect: false, outcome: 'Bad', whyNot: 'Bad because' },
-		],
 		teachingPoint: 'Teaching point goes here',
 		domain,
 		difficulty: DIFFICULTIES.INTERMEDIATE,
@@ -190,6 +186,18 @@ async function seedScenario(userId: string, domain: string): Promise<string> {
 		status: SCENARIO_STATUSES.ACTIVE,
 		createdAt: new Date(),
 	});
+	await db.insert(scenarioOption).values([
+		{ id: `${id}__a`, scenarioId: id, text: 'Do thing A', isCorrect: true, outcome: 'Good', whyNot: '', position: 0 },
+		{
+			id: `${id}__b`,
+			scenarioId: id,
+			text: 'Do thing B',
+			isCorrect: false,
+			outcome: 'Bad',
+			whyNot: 'Bad because',
+			position: 1,
+		},
+	]);
 	return id;
 }
 

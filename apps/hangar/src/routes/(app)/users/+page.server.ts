@@ -1,6 +1,6 @@
 import { requireRole } from '@ab/auth';
+import { countUsersByRole, listUsers, USERS_LIST_LIMIT } from '@ab/bc-hangar';
 import { QUERY_PARAMS, ROLES } from '@ab/constants';
-import { countUsersByRole, listUsers, USERS_LIST_LIMIT } from '$lib/server/users';
 import type { PageServerLoad } from './$types';
 
 /**

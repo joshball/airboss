@@ -24,18 +24,14 @@ import type {
 import { computeAdjacencyGroups, indexGroupsByMember, memberIndex } from './adjacency.ts';
 import { renderDefaultModeLink } from './modes/default.ts';
 import { renderPlainTextLink } from './modes/plain-text.ts';
-import { renderPrintLink, type PrintFootnoteSink } from './modes/print.ts';
+import { type PrintFootnoteSink, renderPrintLink } from './modes/print.ts';
 import { renderTtsLink } from './modes/tts.ts';
 import { renderWebLink } from './modes/web.ts';
 import { getToken } from './tokens.ts';
 
 const INLINE_LINK_REGEX = /\[([^\]\n]*)\]\((airboss-ref:[^)\s]+)\)/g;
 
-export function substituteTokens(
-	body: string,
-	resolved: ResolvedIdentifierMap,
-	mode: RenderMode = 'web',
-): string {
+export function substituteTokens(body: string, resolved: ResolvedIdentifierMap, mode: RenderMode = 'web'): string {
 	const groups = computeAdjacencyGroups(body);
 	const groupIndex = indexGroupsByMember(groups);
 
@@ -183,9 +179,8 @@ function buildLinkRenderContext(input: BuildLinkContextInput): LinkRenderContext
 	const { match, resolved, resolvedMap, mode, group, footnoteSink } = input;
 	const idx = group !== undefined ? memberIndex(group, match.url) : 0;
 	const substituted = substituteLinkText(match.linkText, resolved, resolvedMap, group, mode);
-	const groupListText = group !== undefined && group.members.length > 1
-		? buildGroupListText(group, resolvedMap)
-		: undefined;
+	const groupListText =
+		group !== undefined && group.members.length > 1 ? buildGroupListText(group, resolvedMap) : undefined;
 
 	return {
 		raw: match.url,

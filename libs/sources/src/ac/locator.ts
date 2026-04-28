@@ -44,12 +44,16 @@ export function parseAcLocator(locator: string): ParsedLocator | LocatorError {
 		return err('ac locator missing doc number');
 	}
 	if (!DOC_NUMBER_PATTERN.test(docNumber)) {
-		return err(`ac locator doc number "${docNumber}" is malformed (expected digits with dots/dashes, e.g. "61-65" or "91-21.1")`);
+		return err(
+			`ac locator doc number "${docNumber}" is malformed (expected digits with dots/dashes, e.g. "61-65" or "91-21.1")`,
+		);
 	}
 
 	const revision = segments[1] ?? '';
 	if (revision.length === 0) {
-		return err(`ac locator missing revision (expected "${docNumber}/<revision>" e.g. "${docNumber}/j") -- unrevisioned ACs are rejected per ADR 019 §1.2`);
+		return err(
+			`ac locator missing revision (expected "${docNumber}/<revision>" e.g. "${docNumber}/j") -- unrevisioned ACs are rejected per ADR 019 §1.2`,
+		);
 	}
 	if (!REVISION_PATTERN.test(revision)) {
 		return err(`ac locator revision "${revision}" is malformed (expected single lowercase letter)`);

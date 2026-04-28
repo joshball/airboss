@@ -19,16 +19,10 @@ import {
 	type ReferencePhaseOfFlight,
 	type ReferenceSourceType,
 } from '@ab/constants';
-import {
-	db as defaultDb,
-	escapeLikePattern,
-	type HangarReferenceRow,
-	type HangarSourceRow,
-	hangarReference,
-	hangarSource,
-} from '@ab/db';
+import { db as defaultDb, escapeLikePattern } from '@ab/db';
 import { and, asc, count, desc, eq, ilike, isNull, or, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
+import { type HangarReferenceRow, type HangarSourceRow, hangarReference, hangarSource } from './schema';
 
 type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;
 
@@ -160,6 +154,33 @@ export async function listReferences(
 
 export async function getReference(id: string, db: Db = defaultDb): Promise<HangarReferenceRow | undefined> {
 	const [row] = await db.select().from(hangarReference).where(eq(hangarReference.id, id)).limit(1);
+	return row;
+}
+
+/** Subset of the reference row used by the study reference detail page. */
+export interface ReferenceSummaryRow {
+	id: string;
+	displayName: string;
+	paraphrase: string;
+	tags: Record<string, unknown>;
+}
+
+/**
+ * Slim projection used by `/references/[id]` in `apps/study`. Fetches the
+ * presentational fields only (no audit columns, no soft-delete filter) so
+ * the BC owns the SELECT shape and the route stays free of Drizzle.
+ */
+export async function getReferenceSummary(id: string, db: Db = defaultDb): Promise<ReferenceSummaryRow | undefined> {
+	const [row] = await db
+		.select({
+			id: hangarReference.id,
+			displayName: hangarReference.displayName,
+			paraphrase: hangarReference.paraphrase,
+			tags: hangarReference.tags,
+		})
+		.from(hangarReference)
+		.where(eq(hangarReference.id, id))
+		.limit(1);
 	return row;
 }
 

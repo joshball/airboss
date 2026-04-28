@@ -12,12 +12,12 @@
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import {
-	PdfNotFoundError,
-	PdftotextNotInstalledError,
 	__resetAvailabilityCache,
 	extractPdf,
 	extractPdfPages,
 	extractPdfText,
+	PdfNotFoundError,
+	PdftotextNotInstalledError,
 } from './extract.ts';
 
 const FIXTURE = join(import.meta.dir, '../../../../tests/fixtures/pdf/sample.pdf');
@@ -59,9 +59,7 @@ describe('extractPdf', () => {
 	});
 
 	it('rejects out-of-bounds page ranges', () => {
-		expect(() => extractPdf(FIXTURE, { firstPage: 5, lastPage: 5 })).toThrow(
-			/page range 5\.\.5 is out of bounds/,
-		);
+		expect(() => extractPdf(FIXTURE, { firstPage: 5, lastPage: 5 })).toThrow(/page range 5\.\.5 is out of bounds/);
 		expect(() => extractPdf(FIXTURE, { firstPage: 2, lastPage: 1 })).toThrow();
 	});
 
@@ -71,9 +69,7 @@ describe('extractPdf', () => {
 
 	it('throws PdftotextNotInstalledError when binary is missing', () => {
 		__resetAvailabilityCache();
-		expect(() => extractPdf(FIXTURE, { binary: '/no/such/binary/pdftotext' })).toThrow(
-			PdftotextNotInstalledError,
-		);
+		expect(() => extractPdf(FIXTURE, { binary: '/no/such/binary/pdftotext' })).toThrow(PdftotextNotInstalledError);
 		__resetAvailabilityCache();
 	});
 

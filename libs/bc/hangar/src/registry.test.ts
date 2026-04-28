@@ -6,7 +6,7 @@
  */
 
 import { bauthUser } from '@ab/auth/schema';
-import { db, hangarReference, hangarSource } from '@ab/db';
+import { db } from '@ab/db';
 import { generateAuthId } from '@ab/utils';
 import { eq } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
@@ -24,6 +24,7 @@ import {
 	updateReference,
 	updateSource,
 } from './registry';
+import { hangarReference, hangarSource } from './schema';
 
 const TEST_USER_ID = generateAuthId();
 const TEST_EMAIL = `hangar-registry-test-${TEST_USER_ID}@airboss.test`;

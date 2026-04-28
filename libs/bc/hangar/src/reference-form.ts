@@ -16,9 +16,9 @@ import {
 	splitCommaList,
 	zodIssuesToFieldErrors,
 } from './form-helpers';
+import { referenceSchema } from './form-schemas';
 import type { ReferenceFormInitial } from './reference-form-types';
 import type { ReferenceInput } from './registry';
-import { referenceSchema } from './schemas';
 
 export function formDataToInitial(form: FormData): ReferenceFormInitial {
 	return {

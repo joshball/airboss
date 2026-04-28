@@ -18,7 +18,16 @@
  */
 
 import { bauthAccount, bauthUser } from '@ab/auth/schema';
-import { card, cardState, review, scenario, session, sessionItemResult, studyPlan } from '@ab/bc-study/schema';
+import {
+	card,
+	cardState,
+	review,
+	scenario,
+	scenarioOption,
+	session,
+	sessionItemResult,
+	studyPlan,
+} from '@ab/bc-study/schema';
 import { fsrsInitialState } from '@ab/bc-study/srs';
 import {
 	BETTER_AUTH_PROVIDERS,
@@ -228,31 +237,36 @@ async function seedAbbyScenarios(databaseUrl: string, userId: string): Promise<I
 		for (const s of ABBY_SCENARIOS) {
 			const id = generateScenarioId();
 			const now = new Date();
-			const options = s.options.map((o) => ({
-				id: o.letter,
-				text: o.text,
-				isCorrect: o.isCorrect,
-				outcome: o.outcome,
-				whyNot: o.whyNot,
-			}));
-			await db.insert(scenario).values({
-				id,
-				userId,
-				title: s.title,
-				situation: s.situation,
-				options,
-				teachingPoint: s.teachingPoint,
-				domain: s.domain,
-				difficulty: s.difficulty,
-				phaseOfFlight: s.phaseOfFlight,
-				sourceType: CONTENT_SOURCES.PERSONAL,
-				sourceRef: null,
-				nodeId: s.nodeId,
-				isEditable: true,
-				regReferences: s.regReferences,
-				status: SCENARIO_STATUSES.ACTIVE,
-				seedOrigin: DEV_SEED_ORIGIN_TAG,
-				createdAt: now,
+			await db.transaction(async (tx) => {
+				await tx.insert(scenario).values({
+					id,
+					userId,
+					title: s.title,
+					situation: s.situation,
+					teachingPoint: s.teachingPoint,
+					domain: s.domain,
+					difficulty: s.difficulty,
+					phaseOfFlight: s.phaseOfFlight,
+					sourceType: CONTENT_SOURCES.PERSONAL,
+					sourceRef: null,
+					nodeId: s.nodeId,
+					isEditable: true,
+					regReferences: s.regReferences,
+					status: SCENARIO_STATUSES.ACTIVE,
+					seedOrigin: DEV_SEED_ORIGIN_TAG,
+					createdAt: now,
+				});
+				await tx.insert(scenarioOption).values(
+					s.options.map((o, idx) => ({
+						id: `${id}__${o.letter}`,
+						scenarioId: id,
+						text: o.text,
+						isCorrect: o.isCorrect,
+						outcome: o.outcome,
+						whyNot: o.whyNot,
+						position: idx,
+					})),
+				);
 			});
 			inserted.push({ id, domain: s.domain, options: [...s.options], nodeId: s.nodeId });
 		}
@@ -553,7 +567,7 @@ async function seedAbbySessions(
 							reviewId,
 							skipKind: null,
 							reasonDetail: null,
-							chosenOption: null,
+							chosenOptionId: null,
 							isCorrect: null,
 							confidence: planItem.confidence,
 							answerMs: 8000,
@@ -581,7 +595,7 @@ async function seedAbbySessions(
 							reviewId: null,
 							skipKind: null,
 							reasonDetail: null,
-							chosenOption: planItem.chosenLetter,
+							chosenOptionId: `${planItem.scenarioId}__${planItem.chosenLetter}`,
 							isCorrect: planItem.isCorrect ?? null,
 							confidence: planItem.confidence,
 							answerMs: 22000,

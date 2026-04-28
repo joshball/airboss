@@ -13,27 +13,16 @@
  */
 
 import { requireAuth } from '@ab/auth';
+import { getReferenceSummary } from '@ab/bc-hangar';
 import { type CitationWithSource, getCitedBy, resolveCitationSources } from '@ab/bc-study';
 import { CITATION_TARGET_TYPES, REFERENCE_SOURCE_TYPES, SOURCE_TYPE_LABELS } from '@ab/constants';
-import { db, hangarReference } from '@ab/db';
 import { error } from '@sveltejs/kit';
-import { eq } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async (event) => {
 	requireAuth(event);
 
-	const [row] = await db
-		.select({
-			id: hangarReference.id,
-			displayName: hangarReference.displayName,
-			paraphrase: hangarReference.paraphrase,
-			tags: hangarReference.tags,
-		})
-		.from(hangarReference)
-		.where(eq(hangarReference.id, event.params.id))
-		.limit(1);
-
+	const row = await getReferenceSummary(event.params.id);
 	if (!row) error(404, { message: 'Reference not found' });
 
 	// Both regulation_node and ac_reference target hangar.reference; bucket

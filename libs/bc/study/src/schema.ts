@@ -64,8 +64,6 @@ import {
 	REVIEW_SESSION_STATUS_VALUES,
 	REVIEW_SESSION_STATUSES,
 	SAVED_DECK_LABEL_MAX_LENGTH,
-	SCENARIO_OPTIONS_MAX,
-	SCENARIO_OPTIONS_MIN,
 	SCENARIO_STATUS_VALUES,
 	SCENARIO_STATUSES,
 	SCHEMAS,
@@ -95,6 +93,7 @@ import {
 	boolean,
 	check,
 	date,
+	foreignKey,
 	index,
 	integer,
 	jsonb,
@@ -104,6 +103,7 @@ import {
 	smallint,
 	text,
 	timestamp,
+	unique,
 	uniqueIndex,
 } from 'drizzle-orm/pg-core';
 
@@ -363,6 +363,13 @@ export const card = studySchema.table(
 		// contrib extension available in the airboss dev container).
 		cardFrontTrgmIdx: index('card_front_trgm_idx').using('gin', sql`"front" gin_trgm_ops`),
 		cardBackTrgmIdx: index('card_back_trgm_idx').using('gin', sql`"back" gin_trgm_ops`),
+		// (id, user_id) UNIQUE backs the composite FK from `card_state` so that
+		// `card_state.user_id` is structurally locked to the owning card's
+		// `user_id`. `id` alone is already PRIMARY KEY; the (id, user_id) tuple
+		// is functionally equivalent in uniqueness terms but lets Postgres
+		// enforce REFERENCES (id, user_id) on dependent tables. See
+		// docs/work-packages/card-state-fk-tightening/spec.md.
+		cardIdUserUnique: unique('card_id_user_unique').on(t.id, t.userId),
 		cardTypeCheck: check('card_type_check', sql.raw(`"card_type" IN (${inList(CARD_TYPE_VALUES)})`)),
 		sourceTypeCheck: check('card_source_type_check', sql.raw(`"source_type" IN (${inList(CONTENT_SOURCE_VALUES)})`)),
 		statusCheck: check('card_status_check', sql.raw(`"status" IN (${inList(CARD_STATUS_VALUES)})`)),
@@ -428,12 +435,15 @@ export const review = studySchema.table(
 export const cardState = studySchema.table(
 	'card_state',
 	{
-		cardId: text('card_id')
-			.notNull()
-			.references(() => card.id, { onDelete: 'cascade' }),
-		userId: text('user_id')
-			.notNull()
-			.references(() => bauthUser.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
+		// (card_id, user_id) is governed by a composite FK in the table extras
+		// below: REFERENCES card(id, user_id) ON DELETE CASCADE. The composite
+		// FK locks `user_id` to the owning card's `user_id` at the storage
+		// layer -- they cannot drift. A separate FK on `user_id` to bauth_user
+		// is unnecessary because deleting a user already cascades through
+		// `card.user_id -> bauth_user`, which in turn cascades to card_state
+		// via the composite FK. See docs/work-packages/card-state-fk-tightening.
+		cardId: text('card_id').notNull(),
+		userId: text('user_id').notNull(),
 		stability: real('stability').notNull(),
 		difficulty: real('difficulty').notNull(),
 		state: text('state').notNull(),
@@ -461,6 +471,15 @@ export const cardState = studySchema.table(
 	},
 	(t) => ({
 		pk: primaryKey({ columns: [t.cardId, t.userId] }),
+		// Composite FK enforcing card_state.(card_id, user_id) === card.(id, user_id).
+		// Backed by `card_id_user_unique` on the parent table.
+		cardOwnerFk: foreignKey({
+			columns: [t.cardId, t.userId],
+			foreignColumns: [card.id, card.userId],
+			name: 'card_state_card_owner_fk',
+		})
+			.onDelete('cascade')
+			.onUpdate('cascade'),
 		cardStateUserDueIdx: index('card_state_user_due_idx').on(t.userId, t.dueAt),
 		// Partial index on mastered rows only. `getMasteredCount`, `getDomainBreakdown`,
 		// `getNodeMastery`, and `getNodeMasteryMap` all filter on
@@ -486,10 +505,12 @@ export type CardStateRow = typeof cardState.$inferSelect;
 export type NewCardStateRow = typeof cardState.$inferInsert;
 
 /**
- * Option on a decision-rep scenario. Always stored as an element of the
- * `scenario.options` JSONB array. `whyNot` is required when isCorrect is
- * false (enforced by validation + BC guards; a DB CHECK on a JSONB array
- * element adds noise without being airtight).
+ * Option on a decision-rep scenario. Authored values live in the relational
+ * `study.scenario_option` table (per scenario-options-relational WP). The
+ * shape below is the BC-level read/write DTO -- the value bag the BC accepts
+ * when creating a scenario and the shape it returns when loading one. The DB
+ * row uses `scenario_option.id` as the surrogate key, which is the same
+ * value carried in this DTO.
  */
 export interface ScenarioOption {
 	id: string;
@@ -504,6 +525,10 @@ export interface ScenarioOption {
  * `/reps` flow -- read situation, pick an option, see the outcome and
  * teaching point. Shares `source_type` / `source_ref` / `is_editable` with
  * cards for future course/import integration.
+ *
+ * Options live in the sibling `scenario_option` table so each option
+ * has a stable id, FK target for `session_item_result.chosen_option_id`,
+ * and a DB-level "exactly one correct" constraint.
  */
 export const scenario = studySchema.table(
 	'scenario',
@@ -514,7 +539,6 @@ export const scenario = studySchema.table(
 			.references(() => bauthUser.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
 		title: text('title').notNull(),
 		situation: text('situation').notNull(),
-		options: jsonb('options').$type<ScenarioOption[]>().notNull(),
 		teachingPoint: text('teaching_point').notNull(),
 		domain: text('domain').notNull(),
 		difficulty: text('difficulty').notNull(),
@@ -557,21 +581,66 @@ export const scenario = studySchema.table(
 			sql.raw(`"source_type" IN (${inList(CONTENT_SOURCE_VALUES)})`),
 		),
 		statusCheck: check('scenario_status_check', sql.raw(`"status" IN (${inList(SCENARIO_STATUS_VALUES)})`)),
-		// Shape guard: `options` must be a jsonb array with 2..5 elements.
-		// Option id uniqueness and "exactly one correct" are enforced by
-		// `newScenarioSchema` + the BC's `createScenario` -- not here. The
-		// BC is the only write path; a jsonb-aggregate CHECK for id
-		// uniqueness adds noise without being airtight across future
-		// migrations. If a bypass ever appears, add the CHECK then.
-		optionsShapeCheck: check(
-			'scenario_options_shape_check',
-			sql.raw(
-				`jsonb_typeof("options") = 'array'
-				 AND jsonb_array_length("options") BETWEEN ${SCENARIO_OPTIONS_MIN} AND ${SCENARIO_OPTIONS_MAX}`,
-			),
+	}),
+);
+
+/**
+ * Authored options on a decision-rep scenario. One row per option. `id` is
+ * carried as a surrogate key (the same value the JSONB column used to carry)
+ * so historical attempt rows that reference an option id keep resolving.
+ *
+ * Invariants enforced at the storage layer (per scenario-options-relational WP):
+ *
+ *   - exactly one option per scenario where `is_correct = true`
+ *     (partial unique index `scenario_option_correct_unique`)
+ *   - option count per scenario lives at the BC layer (validation.ts) since
+ *     "between SCENARIO_OPTIONS_MIN and MAX" is a multi-row aggregate the
+ *     write path enforces. The lower bound is also gated by the BC -- the
+ *     table itself permits any number of rows so downstream tooling
+ *     (authoring drafts, partial imports) can hold an in-progress scenario.
+ *   - `(scenario_id, position)` is unique so the option order is stable.
+ *   - `why_not` is required (non-empty) for incorrect options, optional for
+ *     the correct one. Enforced by a CHECK below.
+ */
+export const scenarioOption = studySchema.table(
+	'scenario_option',
+	{
+		id: text('id').primaryKey(),
+		scenarioId: text('scenario_id')
+			.notNull()
+			.references(() => scenario.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
+		text: text('text').notNull(),
+		isCorrect: boolean('is_correct').notNull(),
+		outcome: text('outcome').notNull(),
+		/**
+		 * Required (non-empty) when `is_correct = false`. Optional for the
+		 * correct option (authors can leave a note but empty is allowed).
+		 */
+		whyNot: text('why_not').notNull().default(''),
+		/** 0-based position within the scenario; preserves authored order. */
+		position: smallint('position').notNull(),
+	},
+	(t) => ({
+		scenarioOptionScenarioPositionUnique: uniqueIndex('scenario_option_scenario_position_unique').on(
+			t.scenarioId,
+			t.position,
+		),
+		// Partial UNIQUE: enforces "exactly one correct option per scenario" at
+		// the DB layer. The BC enforces "at least one" via validation.ts (a
+		// scenario with zero options is rejected by the engine read path
+		// regardless), so the partial index suffices.
+		scenarioOptionCorrectUnique: uniqueIndex('scenario_option_correct_unique')
+			.on(t.scenarioId)
+			.where(sql`is_correct = true`),
+		whyNotRequiredCheck: check(
+			'scenario_option_why_not_required_check',
+			sql`("is_correct" = true) OR (length(trim("why_not")) > 0)`,
 		),
 	}),
 );
+
+export type ScenarioOptionRow = typeof scenarioOption.$inferSelect;
+export type NewScenarioOptionRow = typeof scenarioOption.$inferInsert;
 
 export type ScenarioRow = typeof scenario.$inferSelect;
 export type NewScenarioRow = typeof scenario.$inferInsert;
@@ -696,6 +765,10 @@ export const session = studySchema.table(
 	(t) => ({
 		sessionUserStartedIdx: index('session_user_started_idx').on(t.userId, t.startedAt),
 		sessionPlanStartedIdx: index('session_plan_started_idx').on(t.planId, t.startedAt),
+		// (id, user_id) UNIQUE backs the composite FK from `session_item_result`
+		// so that the slot row's `user_id` is structurally locked to the owning
+		// session's `user_id`. Same pattern as `card_id_user_unique` above.
+		sessionIdUserUnique: unique('session_id_user_unique').on(t.id, t.userId),
 		modeCheck: check('session_mode_check', sql.raw(`"mode" IN (${inList(SESSION_MODE_VALUES)})`)),
 		focusOverrideCheck: check(
 			'session_focus_override_check',
@@ -724,18 +797,21 @@ export const sessionItemResult = studySchema.table(
 	'session_item_result',
 	{
 		id: text('id').primaryKey(),
-		sessionId: text('session_id')
-			.notNull()
-			.references(() => session.id, { onDelete: 'cascade' }),
 		/**
-		 * Denormalized for per-user aggregate queries (streak). FK is required
-		 * so the column cannot drift from `session.user_id`; the write path in
-		 * `sessions.ts` keeps the two consistent and the FK enforces it at the
-		 * storage layer. `cascade` matches every other user-scoped table.
+		 * (session_id, user_id) is governed by a composite FK in the table
+		 * extras below: REFERENCES session(id, user_id) ON DELETE CASCADE. The
+		 * composite FK locks `user_id` to the owning session's `user_id` at
+		 * the storage layer -- the two cannot drift. A separate FK on
+		 * `user_id` to bauth_user is unnecessary because deleting a user
+		 * already cascades through `session.user_id -> bauth_user`, which in
+		 * turn cascades to session_item_result via the composite FK.
+		 *
+		 * The denormalized `user_id` column stays for aggregate-query
+		 * locality (per-user streak / activity reads avoid a join through
+		 * session). See docs/work-packages/card-state-fk-tightening.
 		 */
-		userId: text('user_id')
-			.notNull()
-			.references(() => bauthUser.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
+		sessionId: text('session_id').notNull(),
+		userId: text('user_id').notNull(),
 		slotIndex: smallint('slot_index').notNull(),
 		itemKind: text('item_kind').notNull(),
 		slice: text('slice').notNull(),
@@ -765,8 +841,12 @@ export const sessionItemResult = studySchema.table(
 		 * slots that haven't been completed yet. Not NOT NULL on the table
 		 * because a rep slot is inserted at session commit time before the user
 		 * answers it.
+		 *
+		 * `chosen_option_id` is a FK to `scenario_option.id` (per
+		 * scenario-options-relational WP); historical attempts carrying a now-
+		 * deleted option id keep their row but the FK clears via `set null`.
 		 */
-		chosenOption: text('chosen_option'),
+		chosenOptionId: text('chosen_option_id').references(() => scenarioOption.id, { onDelete: 'set null' }),
 		isCorrect: boolean('is_correct'),
 		confidence: smallint('confidence'),
 		answerMs: integer('answer_ms'),
@@ -776,6 +856,16 @@ export const sessionItemResult = studySchema.table(
 		seedOrigin: text('seed_origin'),
 	},
 	(t) => ({
+		// Composite FK enforcing session_item_result.(session_id, user_id)
+		// === session.(id, user_id). Backed by `session_id_user_unique` on
+		// the parent table.
+		sessionOwnerFk: foreignKey({
+			columns: [t.sessionId, t.userId],
+			foreignColumns: [session.id, session.userId],
+			name: 'session_item_result_session_owner_fk',
+		})
+			.onDelete('cascade')
+			.onUpdate('cascade'),
 		// UNIQUE on (session_id, slot_index) backs the atomic UPSERT in
 		// `recordItemResult` -- the enforcement for ADR 012's session-slot
 		// idempotency claim. Without this, two concurrent submits can both
