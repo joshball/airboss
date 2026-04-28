@@ -9,7 +9,7 @@ review_status: pending
 
 # Spec: Avionics App Scaffold
 
-Stand up `apps/avionics/` as the airboss glass-cockpit surface, provision `libs/bc/avionics/` as its bounded context, and ship a single demo feature -- a Primary Flight Display (PFD) with attitude, airspeed tape, altitude tape, heading bug, and VSI -- driven by interactive controls (sliders / keyboard). The point is to prove the surface is alive and that the gestural feel of a tape-style glass display is right. It is not a flight simulator.
+Stand up `apps/avionics/` as the airboss glass-cockpit surface, provision `libs/bc/avionics/` as its bounded context, and ship the surface's first set of routes: a home page that lists every demo, a Primary Flight Display (PFD) demo (the headline feature), and polished placeholder pages for the next two products (MFD, instrument scan trainer) plus an aircraft selector. The PFD is driven by interactive controls (sliders, keyboard) and reads V-speeds from the currently selected aircraft's FDM. The point is to prove the surface is alive, the navigation is real, and the gestural feel of a tape-style glass display is right. It is not a flight simulator.
 
 This is the formal birth of the `avionics` surface per [docs/platform/MULTI_PRODUCT_ARCHITECTURE.md](../../../../platform/MULTI_PRODUCT_ARCHITECTURE.md). It does not block any downstream feature; it is platform groundwork so the next avionics feature (real PFD attached to an aircraft model, EFIS scan trainer, partial-panel drills) lands on shaped infrastructure.
 
@@ -22,14 +22,14 @@ This is the formal birth of the `avionics` surface per [docs/platform/MULTI_PROD
   - `svelte.config.js` with the same CSP block (defense-in-depth, auto-nonce, hashed pre-hydration script via `@ab/themes`)
   - `vite.config.ts` binding to `127.0.0.1` with `allowedHosts = [HOSTS.AVIONICS]`
   - `tsconfig.json` extending `.svelte-kit/tsconfig.json`
-  - `app.html` with `data-app-id="avionics"`, `data-theme="sim/glass"`, `data-appearance="dark"` (avionics is dark-only per [Design](design.md#why-reuse-simglass-not-fork-it))
+  - `app.html` with `data-app-id="avionics"`. The default `data-theme` and `data-appearance` are hydrated by the same `@ab/themes` pre-hydration script every other app uses; avionics participates in the full light/dark theme system (see [Theme](#theme) below).
   - `static/favicon.svg`
 - `src/app.d.ts` -- `App.Locals` mirrors sim's exactly (`session`, `user`, `requestId`, `appearance`, `theme`)
 - `src/hooks.server.ts` -- copy of sim's: request-id, session hydration from cross-subdomain `bauth_session_token` cookie, theme-pre-hydration `transformPageChunk`. Anonymous visits remain functional.
 - `src/lib/server/auth.ts` and `src/lib/server/cookies.ts` -- mirror sim
 - Root `+layout.server.ts` -- mirror sim: hydrate appearance/theme/auth, expose `studyLoginUrl` for the unauthenticated banner
-- Root `+layout.svelte` -- mirror sim: load `@ab/themes/generated/tokens.css`, render the chrome strip with `airboss / avionics` brand label and the theme picker (will be locked-dark by the `sim/glass` theme rules), render the auth banner for anonymous visits
-- Home page (`/`) -- the PFD demo (see PFD section below)
+- Root `+layout.svelte` -- mirror sim: load `@ab/themes/generated/tokens.css`, render the chrome strip with `airboss / avionics` brand label and a fully functional theme picker (light + dark, no surface-level lock), render the auth banner for anonymous visits
+- Home page (`/`) -- index of every avionics demo (see [Routes](#routes) and [Home page](#home-page-content) below)
 
 ### BC layer
 
@@ -47,9 +47,12 @@ This is the formal birth of the `avionics` surface per [docs/platform/MULTI_PROD
 
 - `libs/constants/src/ports.ts`: `AVIONICS: 9630`
 - `libs/constants/src/hosts.ts`: `HOSTS.AVIONICS = 'avionics.airboss.test'`, `HOST_PREFIXES.AVIONICS = 'avionics'`
-- `libs/constants/src/routes.ts`: avionics block
-  - `AVIONICS_HOME: '/'`
-  - `AVIONICS_PFD: '/pfd'` -- the PFD demo lives here; `/` redirects to it via `+page.ts` so the home URL reads naturally and the demo gets a stable named route
+- `libs/constants/src/routes.ts`: avionics block (alphabetical with the existing app blocks)
+  - `AVIONICS_HOME: '/'` -- the surface index
+  - `AVIONICS_PFD: '/pfd'` -- the headline demo
+  - `AVIONICS_MFD: '/mfd'` -- the Multi-Function Display placeholder (shipping with this WP as a polished "coming soon" page so the home link is real, not dead)
+  - `AVIONICS_SCAN: '/scan'` -- the instrument scan trainer placeholder (same shape as MFD)
+  - `AVIONICS_AIRCRAFT: '/aircraft'` -- aircraft selector (currently lists C172 only; the route exists so the affordance is real and the second aircraft drops in cleanly)
 - `libs/constants/src/schemas.ts`: `AVIONICS: 'avionics'`
 - No new `AUDIT_TARGETS` -- the demo writes nothing
 
@@ -61,9 +64,67 @@ This is the formal birth of the `avionics` surface per [docs/platform/MULTI_PROD
 - Workspace `package.json` -- `apps/avionics` and `libs/bc/avionics` discovered automatically via the existing `apps/*` and `libs/bc/*` workspace globs (no edit required, but verify)
 - Biome / `tsconfig.json` -- inherit project config, no per-app override
 
+### Home page content
+
+`/` is the surface index, not a redirect. It lists every avionics demo as a card with a one-line description and a `href` to the demo's route. The card grid is the affordance that makes the avionics surface feel like a product line, not a single page. Cards are constructed from `ROUTES.AVIONICS_*` constants. The home page is anonymous-OK and dark-or-light correct (token-driven).
+
+| Card                   | Route                      | Description shown on the card                                                          |
+| ---------------------- | -------------------------- | -------------------------------------------------------------------------------------- |
+| Primary Flight Display | `ROUTES.AVIONICS_PFD`      | Glass PFD demo: attitude, airspeed tape, altitude tape, heading, VSI. Drives by slider |
+| Multi-Function Display | `ROUTES.AVIONICS_MFD`      | Coming soon. Map page, traffic, weather, system pages -- the right side of the panel   |
+| Instrument Scan        | `ROUTES.AVIONICS_SCAN`     | Coming soon. Drill the cross-check sweep across the six instruments                    |
+| Aircraft               | `ROUTES.AVIONICS_AIRCRAFT` | Pick the aircraft the avionics surface is configured for. Currently: C172              |
+
+### Placeholder pages (`/mfd`, `/scan`)
+
+Each placeholder ships as a real, polished page -- not a stub. Layout matches the rest of the surface (chrome, theme picker, auth banner). The body explains what an MFD or scan trainer is, why it lives on the avionics surface, and why it isn't built yet. Prose is final-draft, not lorem ipsum. A small "back to avionics" link returns to `/`.
+
+The point is that a learner clicking through the home page never lands on a 404 or a half-finished page; the surface looks like a product line that has more coming, not a half-built scaffold.
+
+### Aircraft selector (`/aircraft`)
+
+`/aircraft` lists every aircraft `@ab/bc-sim` exposes via `getAircraftConfig()` / `AIRCRAFT_REGISTRY`. Today that is C172 (and PA28 as a sibling FDM, but only C172 is a *user-selectable* avionics aircraft for this WP -- the affordance exists; the second aircraft is plumbing for the next WP). The page shows the currently selected aircraft, lists the alternatives (disabled, with "coming soon"), and writes the selection to a cookie / preference key the layout reads.
+
+The selected aircraft is exposed as `data.selectedAircraftId: SimAircraftId` from the root `+layout.server.ts` (default `SIM_AIRCRAFT_IDS.C172` when nothing is set). Every avionics page reads it; the PFD reads V-speeds against it. The cookie is set by a small `POST /aircraft` form action (mirroring how `POST /theme` works today).
+
+This is a real, narrow piece of state. It exists so the second aircraft -- when it is added to the avionics surface -- drops in cleanly without restructuring routes or the PFD's data flow.
+
+### V-speeds: source from the selected aircraft's FDM
+
+V-speed values for the airspeed tape's arc bands (white, green, yellow, red) come from the currently selected aircraft's FDM config in `@ab/bc-sim`. The FDM stores them in m/s; the avionics layer converts to knots at the boundary.
+
+| V-speed | Source field on `AircraftConfig` | Tape role                                                  |
+| ------- | -------------------------------- | ---------------------------------------------------------- |
+| Vs0     | `vS0` (m/s)                      | Bottom of white arc (flap-extended stall, full flaps)      |
+| Vs1     | `vS1` (m/s)                      | Bottom of green arc (clean stall)                          |
+| Vfe     | `vFe` (m/s)                      | Top of white arc (max flap-extended speed)                 |
+| Vno     | `vNo` (m/s)                      | Bottom of yellow arc (max structural cruising)             |
+| Vne     | `vNe` (m/s)                      | Red line (never-exceed)                                    |
+
+The PFD reads the config via `getAircraftConfig(selectedAircraftId)` exported from `@ab/bc-sim`. A small helper inside `apps/avionics/src/lib/pfd/airspeed-arcs.ts` derives the arc bands (in knots) from the config:
+
+```typescript
+import type { AircraftConfig } from '@ab/bc-sim';
+
+export interface AirspeedArcBands {
+  whiteStartKt: number;  // Vs0
+  whiteEndKt: number;    // Vfe
+  greenStartKt: number;  // Vs1
+  greenEndKt: number;    // Vno
+  yellowEndKt: number;   // Vne
+  redLineKt: number;     // Vne
+}
+
+export function arcBandsFromConfig(cfg: AircraftConfig): AirspeedArcBands { /* ... */ }
+```
+
+The metres-per-second to knots conversion factor lives in `libs/constants/src/units.ts` (or wherever existing unit constants live -- if there is no shared module, this WP adds one entry: `MPS_TO_KNOTS`). No magic numbers in `airspeed-arcs.ts`.
+
+Future-aircraft note: when the second aircraft (PA28 or other) is wired into the avionics surface, no PFD code changes. Each FDM exports its own V-speed set; the PFD reads from whichever aircraft is currently selected. The C172 today, PA28 next, others later -- the data flow is already set up for it.
+
 ### PFD demo
 
-The home page (`/pfd`, with `/` redirecting) renders a single full-bleed PFD and a small input-control strip below it. No persistence, no auth-gating beyond what every avionics page inherits.
+`/pfd` renders a full-bleed PFD plus a small input-control strip below it. No persistence, no auth-gating beyond what every avionics page inherits.
 
 #### Instruments on screen
 
@@ -143,7 +204,9 @@ Everything below is explicitly NOT part of this WP. None of these items are TODO
 | Multiplayer / shared-cockpit                                      | No data path defined; surface-typed apps don't share state today                                                                                                                                                                                                                                                                                                       |
 | Scenario engine for avionics drills                               | A drill engine is a real BC feature with grading, persistence, and replay. The Phase-0 scaffold doesn't try to invent it; it lands as its own WP after the PFD's component shapes settle.                                                                                                                                                                              |
 | Persistence (sessions, attempts, scoring tables)                  | No avionics drill exists yet to score                                                                                                                                                                                                                                                                                                                                  |
-| MFD (Multi-Function Display) sibling page                         | One demo surface is the minimum to prove the avionics app is alive. MFD is its own WP whenever the first MFD-driving product ships.                                                                                                                                                                                                                                    |
+| Real MFD content (map, traffic, weather, system pages)            | The MFD route exists as a polished placeholder so the home page link is real. Real content lands with the MFD WP once a product feature drives it. The placeholder is in scope; the MFD product is not.                                                                                                                                                                |
+| Real scan trainer drill (graded cross-check sequences)            | The `/scan` route exists as a polished placeholder. The graded drill -- with timing, target dwell, and scoring -- is its own WP, triggered by the first scan-trainer product feature.                                                                                                                                                                                  |
+| Multi-aircraft selection (PA28 enabled, others)                   | The `/aircraft` route exists and reads the registry. PA28 is shown as "coming soon" because the avionics surface needs UX validation against one aircraft first. Enabling a second aircraft is a follow-on task that adds no new route, only an entry to the selectable list.                                                                                          |
 | Failure-mode rendering (red X over instruments, comparator flags) | The fault model belongs to the sim BC and would couple sim faults into avionics. Lands when avionics consumes sim's `DisplayState` (which already exists in `libs/bc/sim/src/faults/`).                                                                                                                                                                                |
 | Promote PFD components to `libs/activities/pfd/`                  | The right move once the components are stable across two consumers (avionics MFD, or sim glass-cockpit overlay), per "create when needed, not before". Not an action now; not a TODO.                                                                                                                                                                                  |
 | Accessibility-grade screen-reader semantics for synthetic vision  | Documented limitation. A glass-PFD has no meaningful text-equivalent representation. Keyboard control is in scope; alternate audio/haptic representations are a research WP of their own.                                                                                                                                                                              |
@@ -159,11 +222,11 @@ Everything below is explicitly NOT part of this WP. None of these items are TODO
 2. **Different product surface.** Sim is "fly the plane through scenarios"; avionics is "learn the panel". The home page, navigation, and content shape diverge.
 3. **Surface-typed monorepo principle.** Apps group by rendering surface, not by content. A glass cockpit is its own surface.
 
-### Why reuse `sim/glass` theme rather than fork
+### Theme: avionics participates in the full light + dark theme system
 
-The `sim/glass` theme already encodes the dark-only, deep-black-panel, indicator-yellow-pointer aesthetic an avionics surface wants. Forking now means duplicating tokens with no concrete divergence pressure. When avionics needs a divergent token (e.g., G1000 cyan vs. Garmin G3000 white pointer), we fork to `avionics/g1000` (or similar) at that point. Until then, one theme keeps both surfaces in tune.
+Avionics does not lock the theme picker. The picker on `/avionics/*` is fully functional, the same as on `/study/*` and `/hangar/*`. A learner who prefers light, gets light; a learner who prefers dark, gets dark; a learner on auto, follows the system.
 
-The theme resolver's existing route-safety lock for `/sim/*` will need to know about `/avionics/*` too, or `sim/glass` needs to be permitted as a free choice for avionics routes. [Design](design.md#theme-resolver-route-lock) covers the chosen path.
+This reverses the earlier surface-locked-dark idea. The PFD must look correct in both appearances. Glass-cockpit aesthetics typically assume dark, but a light variant is a real design constraint of this WP -- not a future concern. The PFD never ships hex colors; every color comes through theme tokens, and the light theme uses the same instrument structure with token-driven recoloring. [Design](design.md#pfd-rendering-light-and-dark) covers the token map.
 
 ### BC scaffold now, not later
 
@@ -180,19 +243,27 @@ Per the user's note and the project's "create when needed, not before" rule, the
 
 ## Routes
 
-| Route         | Method | Auth            | Purpose                                        |
-| ------------- | ------ | --------------- | ---------------------------------------------- |
-| `/`           | GET    | Anonymous OK    | Redirects to `/pfd`                            |
-| `/pfd`        | GET    | Anonymous OK    | The PFD demo                                   |
-| `/api/auth/*` | any    | per better-auth | Cross-subdomain session bridge (mirrors sim)   |
-| `/theme`      | POST   | Anonymous OK    | Theme-preference cookie endpoint (mirrors sim) |
-| `/appearance` | POST   | Anonymous OK    | Appearance-preference endpoint (mirrors sim)   |
+| Route         | Method | Auth            | Purpose                                                                                              |
+| ------------- | ------ | --------------- | ---------------------------------------------------------------------------------------------------- |
+| `/`           | GET    | Anonymous OK    | Surface index. Cards link to every demo route                                                        |
+| `/pfd`        | GET    | Anonymous OK    | The PFD demo (headline)                                                                              |
+| `/mfd`        | GET    | Anonymous OK    | Polished placeholder explaining what an MFD is and what is coming                                    |
+| `/scan`       | GET    | Anonymous OK    | Polished placeholder explaining what the instrument scan trainer is and what is coming               |
+| `/aircraft`   | GET    | Anonymous OK    | Aircraft selector (currently lists C172; PA28 disabled with "coming soon")                           |
+| `/aircraft`   | POST   | Anonymous OK    | Form action: write `selectedAircraftId` cookie                                                       |
+| `/api/auth/*` | any    | per better-auth | Cross-subdomain session bridge (mirrors sim)                                                         |
+| `/theme`      | POST   | Anonymous OK    | Theme-preference cookie endpoint (mirrors sim)                                                       |
+| `/appearance` | POST   | Anonymous OK    | Appearance-preference endpoint (mirrors sim)                                                         |
 
 All paths constructed via `ROUTES.AVIONICS_*`. No inline path strings in any file.
 
 ## Auth
 
-Mirror `apps/sim/`: anonymous visits work, the sign-in banner offers a cross-subdomain link to study, the role gate is absent (no role-restricted features yet). The PFD demo is freely viewable so the user can show it without setting up a dev account.
+Mirror `apps/sim/`: anonymous visits work, the sign-in banner offers a cross-subdomain link to study, the role gate is absent (no role-restricted features yet). Every avionics route is freely viewable so the user can show the surface without setting up a dev account.
+
+### Cookie scope (cross-subdomain)
+
+Session cookies are read with `Domain=.airboss.test` so the same `bauth_session_token` issued at `study.airboss.test` is recognised at `avionics.airboss.test`. This is the same cookie scope sim and hangar already use. The WP does not introduce new auth -- it copies sim's cookie helpers (`apps/sim/src/lib/server/cookies.ts`) verbatim, which already encode the cross-subdomain `Domain` value. Avionics does not host login; users sign in once on study and the session bridges to every other airboss subdomain.
 
 ## Data model
 
@@ -200,7 +271,9 @@ No tables. Schema namespace `avionics` reserved.
 
 ## Theme
 
-`sim/glass` (dark, deep black panel). The theme picker on the chrome appears locked because the resolver forces dark on `/avionics/*`. The lock messaging is the same one the picker already shows on `/sim/*`.
+Avionics participates in the full airboss light + dark theme system. The theme picker on `/avionics/*` is fully functional -- not locked. The PFD's instruments must look correct in both appearances; this is a real design constraint of the WP, covered in [Design](design.md#pfd-rendering-light-and-dark). All colors flow through theme tokens; no hex anywhere in the PFD components.
+
+For the demo, `sim/glass` is one option among the regular set. A future `avionics/*` theme variant may ship if avionics develops divergence pressure from sim's design tokens, but it is not part of this WP.
 
 ## Developer setup
 
@@ -221,9 +294,9 @@ bun run dev                 # multi-spawn study + sim + hangar + avionics
 | Risk                                                 | Mitigation                                                                                                                                                                           |
 | ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `requestAnimationFrame` loop leaks across navigation | The loop is owned by a `.svelte.ts` module that registers a `$effect` cleanup; navigating off `/pfd` cancels the rAF                                                                 |
-| Theme picker confuses the user when it's locked      | The locked variant already renders an explanatory chip; sim does this today. Reuse without modification.                                                                             |
+| PFD looks bad in the light theme                     | The light variant is part of acceptance. Token-driven recoloring is required; the test plan exercises both appearances explicitly.                                                   |
 | SVG performance on lower-end laptops at 60fps        | SVG is fast enough for 5 instruments at 60fps. If a profile shows otherwise, fallback to Canvas is a one-component rewrite per instrument; the design doc covers the migration path. |
-| Avionics + sim accidentally fork the dark theme      | One theme today (`sim/glass`); fork only on concrete divergence pressure                                                                                                             |
+| Placeholder pages feel unfinished                    | Placeholder prose is final-draft, not lorem ipsum. The page describes what is coming and why. The acceptance walks each placeholder for tone.                                        |
 | Schema-namespace `avionics` reserved but never used  | Acceptable. Reservation is cheap; collision-avoidance pays for itself the first time a table lands.                                                                                  |
 
 ## References
@@ -232,4 +305,5 @@ bun run dev                 # multi-spawn study + sim + hangar + avionics
 - [docs/work-packages/hangar-scaffold/spec.md](../../../../work-packages/hangar-scaffold/spec.md) -- the prior surface-app scaffold WP this one mirrors
 - [docs/work-packages/extract-sim-instruments/spec.md](../../../../work-packages/extract-sim-instruments/spec.md) -- the deferred WP whose trigger is "avionics app created"; resolved in [design.md](design.md#deferred-extract-sim-instruments-resolution)
 - [apps/sim/svelte.config.js](../../../../../apps/sim/svelte.config.js) -- the canonical surface-app shell
-- [libs/themes/sim/glass/index.ts](../../../../../libs/themes/sim/glass/index.ts) -- the theme this WP reuses
+- [libs/bc/sim/src/fdm/c172.ts](../../../../../libs/bc/sim/src/fdm/c172.ts) -- the C172 `AircraftConfig` the PFD reads V-speeds from
+- [libs/bc/sim/src/fdm/aircraft-registry.ts](../../../../../libs/bc/sim/src/fdm/aircraft-registry.ts) -- `getAircraftConfig()` / `AIRCRAFT_REGISTRY`

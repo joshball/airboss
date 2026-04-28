@@ -45,14 +45,20 @@ Land the typed contract surface first so every later phase imports clean names.
 - [ ] `libs/constants/src/ports.ts` -- add `AVIONICS: 9630`
 - [ ] `libs/constants/src/hosts.ts` -- add `HOSTS.AVIONICS`, `HOST_PREFIXES.AVIONICS`
 - [ ] `libs/constants/src/schemas.ts` -- add `AVIONICS: 'avionics'` plus a docblock matching the existing entries' style
-- [ ] `libs/constants/src/routes.ts` -- new "Avionics" block: `AVIONICS_HOME: '/'`, `AVIONICS_PFD: '/pfd'`. Ordered alphabetically with the existing app blocks.
+- [ ] `libs/constants/src/routes.ts` -- new "Avionics" block, ordered alphabetically with the existing app blocks. Entries:
+  - `AVIONICS_HOME: '/'` (surface index)
+  - `AVIONICS_PFD: '/pfd'` (PFD demo)
+  - `AVIONICS_MFD: '/mfd'` (placeholder)
+  - `AVIONICS_SCAN: '/scan'` (placeholder)
+  - `AVIONICS_AIRCRAFT: '/aircraft'` (aircraft selector)
+- [ ] If `libs/constants/src/units.ts` does not exist, create it with `MPS_TO_KNOTS = 1.943_844_492` (used by avionics for FDM-config -> knots conversion). If it exists, add the constant there.
 - [ ] Verify `libs/constants/src/index.ts` re-exports the new constants (it already wildcards each file -- confirm)
 - [ ] Root `tsconfig.json` -- add `@ab/bc-avionics` and `@ab/bc-avionics/*` path entries next to `@ab/bc-sim`
 - [ ] `apps/study/svelte.config.js` -- alias `@ab/bc-avionics` and `@ab/bc-avionics/*`
 - [ ] `apps/sim/svelte.config.js` -- alias `@ab/bc-avionics` and `@ab/bc-avionics/*`
 - [ ] `apps/hangar/svelte.config.js` -- alias `@ab/bc-avionics` and `@ab/bc-avionics/*`
 - [ ] `bun run check` -- clean
-- [ ] Commit: `chore(constants): reserve avionics host/port/schema/routes`
+- [ ] Commit: `chore(constants): reserve avionics host/port/schema/routes + MPS_TO_KNOTS`
 
 ## Phase 2 -- BC scaffold
 
@@ -74,36 +80,61 @@ Stand up the empty avionics app proving auth, theme, chrome, and dev wiring.
 - [ ] `apps/avionics/vite.config.ts` -- mirror sim's, swap `HOSTS.SIM` for `HOSTS.AVIONICS`
 - [ ] `apps/avionics/tsconfig.json` -- mirror sim's
 - [ ] `apps/avionics/static/favicon.svg` -- copy sim's for now (a per-app favicon is its own polish task)
-- [ ] `apps/avionics/src/app.html` -- copy sim's; change `data-app-id="avionics"` and the `<title>airboss avionics</title>`. Keep `data-theme="sim/glass"` and `data-appearance="dark"`.
+- [ ] `apps/avionics/src/app.html` -- copy sim's; change `data-app-id="avionics"` and the `<title>airboss avionics</title>`. Do NOT hardcode `data-theme` / `data-appearance`; the pre-hydration script writes them based on the user's preference (avionics participates in the full light/dark theme system).
 - [ ] `apps/avionics/src/app.d.ts` -- copy sim's (`App.Locals` identical)
 - [ ] `apps/avionics/src/lib/server/auth.ts` -- copy sim's
-- [ ] `apps/avionics/src/lib/server/cookies.ts` -- copy sim's
+- [ ] `apps/avionics/src/lib/server/cookies.ts` -- copy sim's verbatim (already encodes the `Domain=.airboss.test` cross-subdomain scope)
 - [ ] `apps/avionics/src/hooks.server.ts` -- copy sim's; only the docblock changes ("avionics hooks" instead of "sim hooks")
-- [ ] `apps/avionics/src/routes/+layout.server.ts` -- copy sim's (already surfaces `studyLoginUrl`, `appearance`, `theme`, `isAuthenticated`)
-- [ ] `apps/avionics/src/routes/+layout.svelte` -- copy sim's; change brand label to `airboss / avionics`. Keep auth banner. Keep theme picker (it'll lock automatically once Phase 4 wires the resolver).
-- [ ] `apps/avionics/src/routes/+page.svelte` -- placeholder (will be replaced in Phase 5). For now: `<a href={ROUTES.AVIONICS_PFD}>Open PFD</a>` so manual smoke-test passes
-- [ ] `apps/avionics/src/routes/+page.ts` -- 302 redirect to `ROUTES.AVIONICS_PFD` (the spec calls for `/` -> `/pfd`)
+- [ ] `apps/avionics/src/routes/+layout.server.ts` -- copy sim's (already surfaces `studyLoginUrl`, `appearance`, `theme`, `isAuthenticated`); add `selectedAircraftId` resolution from a cookie (default `SIM_AIRCRAFT_IDS.C172`)
+- [ ] `apps/avionics/src/routes/+layout.svelte` -- copy sim's; change brand label to `airboss / avionics`. Keep auth banner. Keep theme picker fully functional (no lock).
+- [ ] `apps/avionics/src/routes/+page.svelte` -- placeholder (will be replaced in Phase 5 with the real card grid). For now: a stub `<h1>` so the app renders.
+- [ ] `apps/avionics/src/routes/+page.ts` -- empty load (no redirect; `/` is the home page, not a redirect target)
 - [ ] `scripts/dev.ts` -- add `avionics` entry to `DEV_URLS`
 - [ ] `scripts/check.ts` -- add an `svelte-check` run for `apps/avionics/`
 - [ ] `bun install` -- pick up the new app
 - [ ] `bun run check` -- clean
-- [ ] Manual smoke: add `127.0.0.1 avionics.airboss.test` to `/etc/hosts`, run `bun run dev avionics`, visit `https://avionics.airboss.test`, expect redirect to `/pfd` (Phase 5 will fill that route -- for now confirm the route exists in `ROUTES` and the empty SvelteKit shell renders)
+- [ ] Manual smoke: add `127.0.0.1 avionics.airboss.test` to `/etc/hosts`, run `bun run dev avionics`, visit `https://avionics.airboss.test`, expect the placeholder `/` to render in both light and dark appearance (toggle via the picker)
 - [ ] Commit: `feat(avionics): scaffold app shell with auth, theme, chrome`
 
-## Phase 4 -- Theme resolver lock
+## Phase 4 -- Avionics theme tokens (light + dark)
 
-Before the PFD ships, make sure `sim/glass` is forced on `/avionics/*` and the picker reads "locked" the same way it does on `/sim/*`.
+The PFD must look correct in both appearances. This phase lands the tokens before any instrument component reads them.
 
-- [ ] Inspect `libs/themes/resolve.ts`'s current `/sim/*` handling
-- [ ] Generalise per the [Design](design.md#theme-resolver-route-lock) recommendation A: introduce a registry of "surfaces locked to a specific theme + appearance". Sim/glass entry covers both `/sim/*` and `/avionics/*`. Each entry carries the route prefix, theme id, forced appearance, and the lock-explanation message id.
-- [ ] Update unit tests in `libs/themes/__tests__/` to cover both prefixes
-- [ ] Verify `apps/sim/` behaviour unchanged (regression test on the existing sim picker-locked path)
+- [ ] Inspect the existing `sim/glass` token set; note any `--sim-pointer` / `--sim-arc-*` tokens
+- [ ] Add `--avionics-sky`, `--avionics-ground`, `--avionics-pointer`, `--avionics-arc-white`, `--avionics-arc-green`, `--avionics-arc-yellow`, `--avionics-arc-red` to the global theme token set, defined for both light and dark appearances. Values per the table in [design.md](design.md#pfd-rendering-light-and-dark).
+- [ ] Regenerate `libs/themes/generated/tokens.css`
+- [ ] Update or add a contract test in `libs/themes/__tests__/` that asserts every `--avionics-*` token is present in both appearances
 - [ ] `bun run check` -- clean
-- [ ] Commit: `feat(themes): generalise route lock to cover avionics + sim`
+- [ ] Commit: `feat(themes): add avionics token roles for light + dark`
 
-## Phase 5 -- PFD shell
+## Phase 5 -- Home page, placeholder pages, aircraft selector
 
-Land the page, the layout, the slider strip, and the rAF loop. No instruments yet -- just the chrome that holds them.
+The full route surface lands before the PFD so the home page links are real on day one.
+
+### 5a. Home page (card grid)
+
+- [ ] `apps/avionics/src/routes/+page.svelte` -- replace the Phase 3 stub with the card grid. Cards link to `ROUTES.AVIONICS_PFD`, `ROUTES.AVIONICS_MFD`, `ROUTES.AVIONICS_SCAN`, `ROUTES.AVIONICS_AIRCRAFT`. Each card has a heading and a one-line description. All copy final-draft. Token-driven; no hex.
+- [ ] `apps/avionics/src/routes/+page.ts` -- empty load (no redirect)
+
+### 5b. MFD placeholder
+
+- [ ] `apps/avionics/src/routes/mfd/+page.svelte` -- polished placeholder. Layout: page title "Multi-Function Display", a paragraph explaining what an MFD is (map, traffic, weather, system pages) and how it complements the PFD, a "coming soon" section listing planned slices (map page, traffic, weather), a "back to avionics" link to `ROUTES.AVIONICS_HOME`. Copy is final-draft, not lorem ipsum. Token-driven.
+- [ ] `apps/avionics/src/routes/mfd/+page.ts` -- empty load
+
+### 5c. Scan trainer placeholder
+
+- [ ] `apps/avionics/src/routes/scan/+page.svelte` -- polished placeholder. Layout: page title "Instrument Scan", a paragraph explaining the cross-check sweep across the six instruments and why a glass surface needs its own scan trainer (different scan pattern from round-dial), a "coming soon" section describing what the scored drill will look like (target dwell, sequence checks, calibration to learner pace), a "back to avionics" link. Final-draft copy.
+- [ ] `apps/avionics/src/routes/scan/+page.ts` -- empty load
+
+### 5d. Aircraft selector
+
+- [ ] `apps/avionics/src/routes/aircraft/+page.svelte` -- list aircraft from `listAircraftConfigs()` / `AIRCRAFT_REGISTRY` (from `@ab/bc-sim`). Show C172 as selectable (radio or button); show PA28 (and any other entries) as disabled with "coming soon" note. Display the currently selected aircraft prominently. Form submits to the page action.
+- [ ] `apps/avionics/src/routes/aircraft/+page.server.ts` -- form action that writes the `avionics_selected_aircraft` cookie (scoped to `Domain=avionics.airboss.test` -- per-app, not cross-subdomain). Validate the submitted id is a member of `SIM_AIRCRAFT_IDS` and is in the allow-list (today: only C172).
+- [ ] Update `apps/avionics/src/routes/+layout.server.ts` to read the cookie and expose `selectedAircraftId` on the page data; default `SIM_AIRCRAFT_IDS.C172`.
+
+### 5e. PFD shell (no instruments yet)
+
+Land the PFD page, the layout, the slider strip, and the rAF loop. No instruments yet -- just the chrome that holds them.
 
 - [ ] `apps/avionics/src/lib/pfd/pfd-types.ts` -- local view types: `PfdInputBindings`, `PfdEasingConfig`
 - [ ] `apps/avionics/src/lib/pfd/pfd-tick.svelte.ts` -- rAF loop, per-channel critically-damped low-pass, easing constants object documented as the "feel" surface, visibility-API pause, `$effect`-based cleanup
@@ -111,19 +142,20 @@ Land the page, the layout, the slider strip, and the rAF loop. No instruments ye
 - [ ] `apps/avionics/src/lib/pfd/PfdInputs.svelte` -- slider strip with the six inputs from the [spec](spec.md#inputs). Use `@ab/ui` form primitives.
 - [ ] `apps/avionics/src/lib/pfd/PfdKeyboardLegend.svelte` -- `?`-toggled overlay; copy the structure from `apps/sim/src/lib/panels/KeyboardCheatsheet.svelte`, swap the bindings.
 - [ ] Wire keyboard handlers in `Pfd.svelte` for the bindings in [spec.md](spec.md#inputs); reuse `apps/sim/src/lib/control-handler.ts`-style approach where it fits but live inside the avionics app for now
-- [ ] `apps/avionics/src/routes/pfd/+page.svelte` -- renders `<Pfd />` full-bleed
-- [ ] `apps/avionics/src/routes/pfd/+page.ts` -- nothing to fetch; export an empty load if needed for the layout
-- [ ] `apps/avionics/src/routes/+page.ts` -- update from Phase 3 placeholder to a real `redirect(302, ROUTES.AVIONICS_PFD)`
+- [ ] `apps/avionics/src/routes/pfd/+page.svelte` -- renders `<Pfd />` full-bleed; reads `selectedAircraftId` from page data and passes it to `<Pfd>` (for V-speed sourcing in Phase 6)
+- [ ] `apps/avionics/src/routes/pfd/+page.ts` -- empty load
 - [ ] `bun run check` -- clean
-- [ ] Manual smoke: visit `/pfd`, see the empty grid, confirm sliders move, confirm `?` toggles legend, confirm keyboard shortcuts wiggle the bound state values (verify via browser devtools $state inspection)
-- [ ] Commit: `feat(avionics): PFD shell with input strip + rAF loop`
+- [ ] Manual smoke: visit `/`, click each card, confirm every route renders. Visit `/pfd`, see the empty grid, confirm sliders move, confirm `?` toggles legend, confirm keyboard shortcuts wiggle the bound state values. Visit `/aircraft`, confirm C172 is selected by default and the cookie persists across reloads.
+- [ ] Commit: `feat(avionics): home grid, MFD/scan placeholders, aircraft selector, PFD shell`
 
 ## Phase 6 -- Instruments
 
 One instrument per task. Each compiles, types clean, renders against current bindings, and ships green-arc/yellow-arc/red-line where the instrument calls for it. Order by dependency-of-debugging: attitude first (it's the centerpiece), then airspeed (most arc complexity), then altitude (rolled counter is the trickiest readout), then heading, then VSI.
 
 - [ ] `apps/avionics/src/lib/pfd/AttitudeIndicator.svelte` -- pitch ladder every 5deg, labels every 10, sky-blue/ground-brown halves with the horizon line, bank pointer arc with 10/20/30/45/60 ticks. Props: `pitchDeg: number`, `rollDeg: number`. SVG only. All colors via theme tokens.
-- [ ] `apps/avionics/src/lib/pfd/AirspeedTape.svelte` -- vertical tape, current value boxed at center, arc bands (white = flap-extended range, green = normal, yellow = caution, red = Vne) drawn against the tape edge. Props: `airspeedKnots: number`. The arc-band ranges live in a local constants file (`apps/avionics/src/lib/pfd/airspeed-arcs.ts`); a real-aircraft V-speeds set is out of scope -- the demo uses illustrative values that look right.
+- [ ] `apps/avionics/src/lib/pfd/airspeed-arcs.ts` -- export `AirspeedArcBands` interface and `arcBandsFromConfig(cfg: AircraftConfig): AirspeedArcBands`. Reads `vS0`, `vS1`, `vFe`, `vNo`, `vNe` from the config (m/s) and converts to knots using `MPS_TO_KNOTS` from `@ab/constants`. No magic numbers; no aircraft-specific hardcodes.
+- [ ] `apps/avionics/src/lib/pfd/AirspeedTape.svelte` -- vertical tape, current value boxed at center, arc bands (white = flap-extended range Vs0..Vfe, green = normal Vs1..Vno, yellow = caution Vno..Vne, red line = Vne) drawn against the tape edge. Props: `airspeedKnots: number`, `arcs: AirspeedArcBands`. The component is aircraft-agnostic; the band positions come from the prop.
+- [ ] `apps/avionics/src/lib/pfd/Pfd.svelte` -- import `getAircraftConfig` from `@ab/bc-sim` and `arcBandsFromConfig` from the local module; resolve `arcs` from the page-data `selectedAircraftId` and pass to `<AirspeedTape arcs={...} />`.
 - [ ] `apps/avionics/src/lib/pfd/AltitudeTape.svelte` -- vertical tape, hundreds at the digits, thousands rendered as a rolled-counter (use a translateY on a stack of digits clipped by an aperture). Props: `altitudeFeet: number`.
 - [ ] `apps/avionics/src/lib/pfd/HeadingIndicator.svelte` -- horizontal compass strip across the bottom, current heading boxed at top-center, cardinal labels at N/E/S/W, ticks every 10deg with major label every 30deg. Props: `headingDegMag: number`.
 - [ ] `apps/avionics/src/lib/pfd/VsiIndicator.svelte` -- vertical strip, +/-2000 fpm scale with major ticks at 1000 fpm, current pointer animates smoothly. Props: `verticalSpeedFpm: number`.

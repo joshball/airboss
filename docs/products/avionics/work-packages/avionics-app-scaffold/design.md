@@ -21,26 +21,40 @@ Three forces argue against folding avionics into `apps/sim/`:
 2. **Product-shape divergence.** Sim is a flight-scenario runner -- a list of scenarios on the home page, a cockpit per scenario, a debrief, a history. Avionics is a panel-trainer -- a list of panels on the home page (eventually), a study mode per panel, scan drills. The information architecture barely overlaps.
 3. **Architecture doc says so.** [MULTI_PRODUCT_ARCHITECTURE.md](../../../../platform/MULTI_PRODUCT_ARCHITECTURE.md) commits to surface-typed apps. Folding here is the precedent we'd later regret.
 
-### Why reuse `sim/glass`, not fork it
+### Theme: avionics is light + dark, not surface-locked
 
-`sim/glass` already encodes:
+Avionics participates in the full airboss theme system. The picker on `/avionics/*` is the same picker `/study/*` and `/hangar/*` use. No surface-locked theme registry, no forced appearance. A learner who likes light gets light; dark gets dark; auto follows the system.
 
-- Dark-only with appearance lock
-- Deep-black instrument backgrounds
-- Indicator-yellow pointer / cyan accent role tokens
-- Mono-dense chrome
-- A layout slot named `cockpit` that maps the chrome strip plus full-bleed instrument area
+This reverses an earlier design that proposed locking `/avionics/*` to `sim/glass` dark via a generalised route-prefix registry. The earlier reasoning was "glass cockpits are dark". The new reasoning is "airboss is one product to a learner moving between surfaces, and the theme picker is part of the platform identity". Locking the picker on a per-surface basis fragments that identity and gates an accessibility/preference choice behind a route.
 
-These are exactly the avionics surface's needs today. Forking now duplicates tokens with zero concrete divergence pressure. The first time avionics needs a token sim shouldn't have (e.g., a G1000-cyan that sim's panel doesn't want), we fork to `avionics/g1000` and the divergence is small and meaningful. Until then, one theme keeps both surfaces in tune; design changes to either ripple consistently.
+### PFD rendering: light and dark
 
-### Theme resolver route lock
+The PFD must render correctly in both appearances. This is non-negotiable acceptance for the WP. Glass-cockpit aesthetics typically assume dark, but a token-driven instrument is appearance-agnostic by construction. Every visible color in the PFD comes through a theme token; the same SVG structure recolors in light vs dark via `currentColor` and `var(--token)` references. No hex.
 
-`libs/themes/resolve.ts` (or wherever the route-safety lock is implemented for `/sim/*`) needs to recognise `/avionics/*` paths and force `sim/glass` + dark appearance the same way. Two implementation paths:
+The token map the PFD reads:
 
-- **A. Generalise the lock.** Replace the `/sim/*` test with a "surfaces that lock to `sim/glass`" registry. Cleanest, costs one config edit when a new locked surface appears.
-- **B. Add `/avionics/*` to the existing predicate.** Smaller diff today, costs another edit at every future locked surface.
+| Role                   | Dark appearance reads from        | Light appearance reads from                       |
+| ---------------------- | --------------------------------- | ------------------------------------------------- |
+| Instrument backplate   | `--surface-panel` (deep black)    | `--surface-panel` (light grey)                    |
+| Sky half (attitude)    | `--avionics-sky` (steel blue)     | `--avionics-sky` (lighter steel blue)             |
+| Ground half (attitude) | `--avionics-ground` (warm brown)  | `--avionics-ground` (lighter warm brown)          |
+| Pitch ladder lines     | `--ink-body`                      | `--ink-body`                                      |
+| Pointer / readout box  | `--avionics-pointer` (yellow)     | `--avionics-pointer` (deeper yellow for contrast) |
+| Tape minor ticks       | `--ink-muted`                     | `--ink-muted`                                     |
+| ASI white arc          | `--avionics-arc-white`            | `--avionics-arc-white`                            |
+| ASI green arc          | `--avionics-arc-green`            | `--avionics-arc-green`                            |
+| ASI yellow arc         | `--avionics-arc-yellow`           | `--avionics-arc-yellow`                           |
+| ASI red line           | `--avionics-arc-red`              | `--avionics-arc-red`                              |
 
-Pick A. The registry lives next to the existing predicate; one entry per locked surface. Implementation lands in this WP since the demo isn't viable without it.
+The `--avionics-*` tokens are added to the global theme token set in this WP (one entry per role per appearance). They live alongside the existing `--surface-*` and `--ink-*` tokens; the light/dark branch is handled by the theme system the same way every other token already is. The PFD components reference token names only; the theme defines the values.
+
+If the existing `sim/glass` theme already exports a usable `--sim-pointer`, `--sim-arc-*`, etc., this WP renames them to `--avionics-*` (or aliases) so the PFD doesn't read `--sim-*` from a non-sim surface. Decision recorded in tasks.md Phase 4.
+
+### Theme picker: no per-surface lock, including for avionics
+
+The earlier "generalise the route lock" plan is dropped. If sim is genuinely the only surface that should force a specific appearance (a separate question outside this WP's scope), the existing `/sim/*` predicate can stay as it is -- but avionics will not be added to it.
+
+This removes one task from the WP (the resolver work) and removes one test scenario (the locked-picker check). The picker's existing locked-state UI continues to exist for sim; avionics never triggers it.
 
 ## BC layer
 
@@ -81,6 +95,50 @@ None of these is a TODO inside this WP. Each is a follow-on WP triggered by its 
 
 `Attitude`, `AirData`, `NavData` are split because they correspond to physical sensor groups in real aircraft (AHRS / ADC / VHF nav radio + GPS). The split survives whatever the demo does because real avionics products will read whatever sensor groups they need. Plain data, no functions, structured-clone-safe so a future worker boundary doesn't have to retrofit.
 
+## Routes and surface shape
+
+### Why a card-grid home page, not a redirect
+
+An earlier draft made `/` redirect straight to `/pfd`. That hides the surface. A learner clicking through from `https://avionics.airboss.test` should see the full product line, even when most of it is "coming soon". The card grid is cheap to build, gives the home URL a real identity, and turns every future route addition into "list one more card" rather than "rethink the home page".
+
+### Why placeholder pages, not 404s or "TODO"
+
+`/mfd` and `/scan` are reachable from the home page, so they cannot be missing routes. Two failure modes the WP avoids:
+
+1. **Dead links.** The home card grid lists MFD; clicking it must land somewhere. A 404 makes the surface read as half-built.
+2. **Lorem placeholders.** A page that says "TODO" or shows fake content reads as unfinished. The placeholders are real prose explaining the product: what an MFD does, what a scan trainer does, why each lives on the avionics surface, what a learner can expect when it ships. That tone is the difference between "unfinished demo" and "first slice of a product line".
+
+The placeholder pages compose the same chrome, layout, and theme tokens as the PFD. They are not a different design language.
+
+### Aircraft selector lives at `/aircraft`, even with one aircraft
+
+User answer: pin the demo to the current aircraft FDM (C172). Two paths considered:
+
+- **A. No `/aircraft` route; hardcode C172 everywhere in the avionics app.** Smallest code today, biggest retrofit when the second aircraft lands. Every PFD reference to V-speeds is a hardcode that has to be ripped up.
+- **B. Build the `/aircraft` route, the cookie, the layout-server hydration, and the `selectedAircraftId` state. List C172 only.** More code today; zero retrofit when the second aircraft lands. The PFD already reads V-speeds against the selected aircraft.
+
+Pick B. The affordance is the load-bearing piece. C172 is what is *selectable* today; the second aircraft (PA28 -- already an FDM in `@ab/bc-sim`) lands as a one-line change to the selectable list, not a structural refactor.
+
+### V-speeds: source from the selected aircraft's FDM, not avionics-local constants
+
+The V-speed numbers (Vs0, Vs1, Vfe, Vno, Vne) are aircraft truth, not avionics presentation. They live with the FDM. `@ab/bc-sim` already exports `C172_CONFIG`, `PA28_CONFIG`, `getAircraftConfig()`, and `AIRCRAFT_REGISTRY`. The PFD imports `getAircraftConfig` and reads V-speeds from the resolved config.
+
+Three options weighed:
+
+- **A. Re-export the V-speed numbers from `@ab/bc-sim` as a separate constants module** (e.g., `C172_V_SPEEDS = { vS0: 33, ... }` in knots). Concrete and easy to import, but duplicates data that already lives in `AircraftConfig`.
+- **B. Read directly from `getAircraftConfig(id)` in `@ab/bc-sim`.** No duplication; the FDM is the source of truth; the boundary is a one-call import. The conversion m/s -> knots is a single helper.
+- **C. Extract V-speeds into `libs/constants/src/aircraft.ts`.** Decouples them from the FDM, but the FDM uses them too -- now there are two sources of truth.
+
+Pick **B**. Source of truth stays in the FDM (where the physics consumes it). The PFD imports `getAircraftConfig` from `@ab/bc-sim` and uses one shared `MPS_TO_KNOTS` constant for the unit conversion at the boundary.
+
+This pattern is also what the future "PFD coupled to FDM" feature will use when it streams telemetry from a running scenario. The data path is already shaped right.
+
+### Cross-subdomain auth cookie
+
+Confirmed: avionics reads the same `bauth_session_token` cookie sim reads, scoped to `Domain=.airboss.test`. No new auth surface, no new cookie, no per-app session bridging. This is the established pattern; avionics inherits it by copying sim's `lib/server/cookies.ts` and `hooks.server.ts` verbatim.
+
+The aircraft-selection cookie (`avionics_selected_aircraft` or similar) is *not* cross-subdomain -- it is per-app. Sim and avionics may diverge on which aircraft they consider "current". Sim already pins per-scenario; avionics pins per-user-preference. Different shape, different cookie scope (`Domain=avionics.airboss.test` only). Documented here so the cookie scope decision is explicit, not implicit.
+
 ## PFD rendering
 
 ### SVG vs Canvas vs WebGL
@@ -116,30 +174,32 @@ The recommendation includes the upgrade path: any single instrument can be reimp
 apps/avionics/src/lib/pfd/
   Pfd.svelte                   layout shell, owns the rAF tick + slider state
   AttitudeIndicator.svelte     pitch ladder + bank pointer
-  AirspeedTape.svelte          vertical tape + boxed readout
+  AirspeedTape.svelte          vertical tape + boxed readout (reads arc bands from selected aircraft)
   AltitudeTape.svelte          vertical tape + rolled-counter readout
   HeadingIndicator.svelte      horizontal compass strip
   VsiIndicator.svelte          vertical pointer +/-2000 fpm
   PfdInputs.svelte             slider strip
   PfdKeyboardLegend.svelte     `?`-toggled cheatsheet
+  airspeed-arcs.ts             arcBandsFromConfig(cfg) -- m/s -> knots conversion
   pfd-tick.svelte.ts           rAF loop + easing constants
   pfd-types.ts                 local view types (input bindings, easing config)
 ```
 
 Each instrument takes scalar props (pitch, bank, airspeed, ...), no objects, no callbacks. They're pure renderers: identical inputs always produce identical SVG. That's the property that makes promotion to `libs/activities/pfd/` clean later.
 
+`AirspeedTape.svelte` additionally takes an `arcs: AirspeedArcBands` prop computed by `arcBandsFromConfig` from the selected aircraft's `AircraftConfig`. The component itself stays a pure renderer; only the values change with aircraft.
+
 ### Theme tokens used
 
-The PFD reads only role tokens defined in `sim/glass`:
+The PFD reads only role tokens. Layered from most-shared to most-specific:
 
-- `--surface-page` background
-- `--surface-panel` instrument backplate
-- `--ink-body` digit color
-- `--ink-muted` minor labels
-- `--sim-pointer` pointer fill (yellow)
-- `--sim-arc-green`, `--sim-arc-yellow`, `--sim-arc-red`, `--sim-arc-white` -- airspeed arc bands
+- Platform: `--surface-page`, `--surface-panel`, `--ink-body`, `--ink-muted`
+- Avionics-specific: `--avionics-sky`, `--avionics-ground`, `--avionics-pointer`
+- Avionics arc bands: `--avionics-arc-white`, `--avionics-arc-green`, `--avionics-arc-yellow`, `--avionics-arc-red`
 
-If `sim/glass` is missing a token (e.g., a sky-blue for the attitude indicator's upper half, ground-brown for the lower), the WP adds it to the `sim` slot of `sim/glass` and regenerates `tokens.css`. No inline hex anywhere in PFD components. The contract-test in `libs/themes/__tests__/contract.ts` enforces this.
+Both light and dark appearances define every `--avionics-*` token. The contract-test in `libs/themes/__tests__/contract.ts` enforces presence in both. No inline hex anywhere in PFD components.
+
+If `sim/glass` shipped legacy `--sim-pointer` / `--sim-arc-*` tokens, this WP adds the `--avionics-*` aliases (or renames -- see tasks.md Phase 4) so a non-sim surface never reads a `--sim-` token.
 
 ## Why this is "demo-grade", not foundational
 
