@@ -553,12 +553,13 @@ describe('resolveCitationUrl', () => {
 				kind: REFERENCE_KINDS.ACS,
 				reference_id: 'ref_ppl_acs_25',
 				locator: { area: 'V', task: 'A', element: 'K1' },
-				airboss_ref: 'airboss-ref:acs/ppl-asel/faa-s-acs-25/area-v/task-a/element-k1',
+				airboss_ref: 'airboss-ref:acs/ppl-airplane-6c/area-05/task-a/elem-k01',
 			},
 			[],
 		);
-		// Per-cert ACS landing URL surfaces from the acs corpus resolver.
-		expect(url).toBe('https://www.faa.gov/training_testing/testing/acs/private_airplane');
+		// Per-publication ACS PDF URL surfaces from the acs corpus resolver
+		// after the cert-syllabus WP's locked Q7 format change.
+		expect(url).toBe('https://www.faa.gov/training_testing/testing/acs/private_airplane_acs_6.pdf');
 	});
 
 	it('falls back to the kind template when airboss_ref is malformed', async () => {

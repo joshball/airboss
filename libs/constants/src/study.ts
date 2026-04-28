@@ -1305,7 +1305,7 @@ export const CITATION_URL_TEMPLATES = {
 		`https://www.ecfr.gov/current/title-${title}/chapter-I/part-${part}/section-${part}.${encodeURIComponent(section)}`,
 	/** FAA Advisory Circular index. The site has no per-paragraph deep link. */
 	AC_INDEX: 'https://www.faa.gov/regulations_policies/advisory_circulars/',
-	/** FAA test-standards (ACS / PTS) landing page; per-cert URLs live in `@ab/sources` ACS_CERT_LIVE_URLS. */
+	/** FAA test-standards (ACS / PTS) landing page; per-publication URLs live in `@ab/sources` ACS_PUBLICATION_LIVE_URLS. */
 	ACS_INDEX: 'https://www.faa.gov/training_testing/testing/acs',
 	/** FAA AIM landing page. Per-paragraph deep links not provided by FAA. */
 	AIM_INDEX: 'https://www.faa.gov/air_traffic/publications/atpubs/aim_html/',

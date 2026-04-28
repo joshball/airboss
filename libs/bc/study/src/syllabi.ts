@@ -332,18 +332,27 @@ export function validateAirbossRefForLeaf(identifier: string, expectations: { sy
 			`airboss-ref corpus "${parsed.corpus}" is not enumerated in ADR 019 §1.2`,
 		);
 	}
-	if (expectations.syllabusKind === 'acs' || expectations.syllabusKind === 'pts') {
+	if (expectations.syllabusKind === 'acs') {
 		if (parsed.corpus !== 'acs') {
-			throw new AirbossRefValidationError(
-				identifier,
-				`ACS / PTS leaves require the "acs" corpus; got "${parsed.corpus}"`,
-			);
+			throw new AirbossRefValidationError(identifier, `ACS leaves require the "acs" corpus; got "${parsed.corpus}"`);
 		}
 		const locResult = resolver.parseLocator(parsed.locator);
 		if (locResult.kind !== 'ok') {
 			throw new AirbossRefValidationError(
 				identifier,
 				`airboss-ref locator does not parse for the acs corpus: ${locResult.message}`,
+			);
+		}
+	}
+	if (expectations.syllabusKind === 'pts') {
+		if (parsed.corpus !== 'pts') {
+			throw new AirbossRefValidationError(identifier, `PTS leaves require the "pts" corpus; got "${parsed.corpus}"`);
+		}
+		const locResult = resolver.parseLocator(parsed.locator);
+		if (locResult.kind !== 'ok') {
+			throw new AirbossRefValidationError(
+				identifier,
+				`airboss-ref locator does not parse for the pts corpus: ${locResult.message}`,
 			);
 		}
 	}

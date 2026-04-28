@@ -37,7 +37,7 @@ import {
 describe('validateAirbossRefForLeaf', () => {
 	it('accepts a well-formed acs identifier on an acs syllabus', () => {
 		expect(() =>
-			validateAirbossRefForLeaf('airboss-ref:acs/ppl-asel/faa-s-acs-25/area-v/task-a/element-k1', {
+			validateAirbossRefForLeaf('airboss-ref:acs/ppl-airplane-6c/area-05/task-a/elem-k01', {
 				syllabusKind: 'acs',
 			}),
 		).not.toThrow();
@@ -63,7 +63,7 @@ describe('validateAirbossRefForLeaf', () => {
 
 	it('rejects acs identifier whose locator does not parse', () => {
 		expect(() =>
-			validateAirbossRefForLeaf('airboss-ref:acs/ppl-asel/faa-s-acs-25/area-v/task-a/element-x9', {
+			validateAirbossRefForLeaf('airboss-ref:acs/ppl-airplane-6c/area-05/task-a/elem-x09', {
 				syllabusKind: 'acs',
 			}),
 		).toThrowError(AirbossRefValidationError);
@@ -125,7 +125,7 @@ describe('validateSyllabusTree', () => {
 				triad: 'knowledge',
 				requiredBloom: 'understand',
 				isLeaf: true,
-				airbossRef: 'airboss-ref:acs/ppl-asel/faa-s-acs-25/area-i/task-a/element-k1',
+				airbossRef: 'airboss-ref:acs/ppl-airplane-6c/area-01/task-a/elem-k01',
 			}),
 		];
 		expect(() => validateSyllabusTree({ syllabusId: SYL_ID, syllabusKind: 'acs', rows })).not.toThrow();
@@ -204,7 +204,7 @@ describe('validateSyllabusTree', () => {
 				triad: null,
 				requiredBloom: 'understand',
 				isLeaf: true,
-				airbossRef: 'airboss-ref:acs/ppl-asel/faa-s-acs-25/area-i/task-a/element-k1',
+				airbossRef: 'airboss-ref:acs/ppl-airplane-6c/area-01/task-a/elem-k01',
 			}),
 		];
 		expect(() => validateSyllabusTree({ syllabusId: SYL_ID, syllabusKind: 'acs', rows })).toThrowError(
@@ -402,7 +402,7 @@ beforeAll(async () => {
 			triad: 'knowledge',
 			requiredBloom: 'understand',
 			isLeaf: true,
-			airbossRef: 'airboss-ref:acs/ppl-asel/faa-s-acs-25/area-v/task-a/element-k1',
+			airbossRef: 'airboss-ref:acs/ppl-airplane-6c/area-05/task-a/elem-k01',
 			citations: [],
 			contentHash: null,
 			seedOrigin: SUITE_TAG,

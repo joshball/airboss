@@ -16,6 +16,6 @@ import { ACS_RESOLVER } from './resolver.ts';
 registerCorpusResolver(ACS_RESOLVER);
 
 export { formatAcsCitation } from './citation.ts';
-export { ACS_CERT_SLUGS, formatAcsLocator, parseAcsLocator } from './locator.ts';
+export { ACS_PUBLICATION_SLUGS, formatAcsLocator, parseAcsLocator } from './locator.ts';
 export { ACS_CORPUS, ACS_RESOLVER } from './resolver.ts';
-export { ACS_CERT_LIVE_URLS, ACS_TEST_STANDARDS_INDEX_URL, getAcsLiveUrl } from './url.ts';
+export { ACS_PUBLICATION_LIVE_URLS, ACS_TEST_STANDARDS_INDEX_URL, getAcsLiveUrl } from './url.ts';

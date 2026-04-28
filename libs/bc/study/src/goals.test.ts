@@ -182,7 +182,7 @@ beforeAll(async () => {
 			triad: 'knowledge',
 			requiredBloom: 'understand',
 			isLeaf: true,
-			airbossRef: 'airboss-ref:acs/ppl-asel/faa-s-acs-25/area-v/task-a/element-k1',
+			airbossRef: 'airboss-ref:acs/ppl-airplane-6c/area-05/task-a/elem-k01',
 			citations: [],
 			contentHash: null,
 			seedOrigin: SUITE_TAG,
