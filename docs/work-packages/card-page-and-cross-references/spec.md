@@ -1,6 +1,6 @@
 ---
 title: 'card-page-and-cross-references'
-status: deferred
+status: done
 size: medium
 depends_on: []
 created: 2026-04-24
@@ -9,6 +9,16 @@ trigger: A user wants to share a single card publicly (the original ask behind t
 ---
 
 # Card Page and Cross-References
+
+## Verdict (2026-04-28)
+
+**Status:** done
+
+**Rationale:** Both halves shipped on main. The public route lives at `apps/study/src/routes/cards/[id]/+page.server.ts` and `+page.svelte`, deliberately outside the `(app)` group so the auth guard does not apply. `getPublicCard` and `composePublicCardCitations` are exported from `libs/bc/study/src/cards-public.ts`, with active-only enforcement and no scheduling internals leaking. `getCardCrossReferences` is implemented at `libs/bc/study/src/card-cross-references.ts` and consumed by the owner-detail `Cross-references` panel at `apps/study/src/routes/(app)/memory/[id]/+page.svelte:628`. `ROUTES.CARD_PUBLIC` is defined at `libs/constants/src/routes.ts:135`, the share button + toast on `/memory/<id>` is wired (line 417 `definition` text confirms), and PR #128 (review-sessions Resume + public card page + cross-refs panel, Bundle B) closed item 4 from the SMI walkthrough. Out-of-scope items (plan-to-card enrollment UI, public comments) remain correctly out-of-scope.
+
+**Trigger to revisit (if deferred):** N/A.
+
+**Next action (if promote/fold):** N/A. Spec marked done; the Plans / Reps cross-ref rows ship as honest empty states, ready to populate when their data sources land per the spec's build-sequencing note.
 
 ## One-sentence summary
 

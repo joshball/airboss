@@ -63,8 +63,8 @@ references:
     note: >-
       ILS components, accuracy specifications, and operational
       considerations.
-  - source: TERPS (FAA Order 8260.3)
-    detail: ILS procedure design criteria
+  - source: FAA Order 8260.3
+    detail: ILS procedure design criteria (TERPS)
     note: >-
       The design spec; rarely consulted by line pilots but explains
       why the approach has the geometry it does.

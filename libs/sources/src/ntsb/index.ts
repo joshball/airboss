@@ -18,4 +18,10 @@ registerCorpusResolver(NTSB_RESOLVER);
 export { formatNtsbCitation } from './citation.ts';
 export { formatNtsbLocator, parseNtsbLocator } from './locator.ts';
 export { NTSB_CORPUS, NTSB_RESOLVER } from './resolver.ts';
+export {
+	NTSB_SEED_REVIEWER_ID,
+	type NtsbSeedOptions,
+	type NtsbSeedReport,
+	seedNtsbFromManifest,
+} from './seed.ts';
 export { getNtsbLiveUrl } from './url.ts';

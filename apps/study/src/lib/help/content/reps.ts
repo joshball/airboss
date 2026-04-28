@@ -10,14 +10,14 @@
  * landing page is for and how the stats connect to the rest of the app.
  */
 
-import { APP_SURFACES, HELP_KINDS } from '@ab/constants';
+import { APP_SURFACES, HELP_KINDS, ROUTES } from '@ab/constants';
 import type { HelpPage } from '@ab/help';
 
 export const reps: HelpPage = {
 	id: 'reps',
 	title: 'Decision Reps',
 	summary: 'What the reps landing page shows: scenario counts, accuracy by domain, and the three entry points.',
-	documents: '/reps',
+	documents: ROUTES.REPS,
 	tags: {
 		appSurface: [APP_SURFACES.REPS],
 		helpKind: HELP_KINDS.REFERENCE,

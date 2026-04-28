@@ -11,7 +11,7 @@
  * keep them stable.
  */
 
-import { APP_SURFACES, HELP_KINDS } from '@ab/constants';
+import { APP_SURFACES, HELP_KINDS, ROUTES } from '@ab/constants';
 import type { HelpPage } from '@ab/help';
 
 export const memoryBrowse: HelpPage = {
@@ -19,7 +19,7 @@ export const memoryBrowse: HelpPage = {
 	title: 'Memory browse',
 	summary:
 		'What the browse view is for, the four filters (Domain / Type / Source / Status), and the status lifecycle that decides whether a card is schedulable.',
-	documents: '/memory/browse',
+	documents: ROUTES.MEMORY_BROWSE,
 	tags: {
 		appSurface: [APP_SURFACES.MEMORY],
 		helpKind: HELP_KINDS.REFERENCE,

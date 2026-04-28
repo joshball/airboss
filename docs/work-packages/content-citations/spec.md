@@ -1,6 +1,6 @@
 ---
 title: 'content-citations'
-status: deferred
+status: done
 size: large
 depends_on: []
 created: 2026-04-24
@@ -9,6 +9,16 @@ trigger: ADR 019 phase 10 expands beyond ACS (e.g. NTSB or Chief Counsel ingest 
 ---
 
 # Content Citations
+
+## Verdict (2026-04-28)
+
+**Status:** done
+
+**Rationale:** The polymorphic table, BC, picker, and renders all shipped. `study.content_citations` lives at `libs/bc/study/src/citations/schema.ts` with the soft-polymorphism shape from product decision 1, plus `source_type` / `target_type` CHECK constraints, the `(source_type, source_id, target_type, target_id)` unique index, and partial indexes for the `card` source and `regulation_node` target hot paths. Constants `CITATION_SOURCE_TYPES` (card / rep / scenario / node), `CITATION_TARGET_TYPES` (regulation_node / ac_reference / external_ref / knowledge_node), `CITATION_CONTEXT_MAX_LENGTH`, `CITATION_FRAMINGS`, and `EXTERNAL_REF_TARGET_DELIMITER` live in `libs/constants/src/citations.ts`. BC at `libs/bc/study/src/citations/citations.ts` plus a covering test suite. PR #127 (content-citations table + shared picker + card editor wiring, Bundle C) and PR #278 (folded `libs/bc/citations` into `bc-study`) closed item 1 from the SMI walkthrough. The trigger has effectively fired: PR #309 shipped Phase 10 first slice (orders + NTSB resolvers) on 2026-04-28 and the cert-syllabus migration to `StructuredCitation` (PR #299 / phase 17) drove the polymorphic consumer the trigger anticipated.
+
+**Trigger to revisit (if deferred):** N/A.
+
+**Next action (if promote/fold):** N/A. Spec marked done. Out-of-scope follow-ups (auto-backfill body-scan, inline `{cite:}` markdown, public discovery surfaces) remain explicit deferrals in the spec body and would each be a fresh WP if a concrete need arises.
 
 ## One-sentence summary
 

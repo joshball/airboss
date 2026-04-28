@@ -16,9 +16,8 @@ import {
 	CONTENT_SOURCE_LABELS,
 	CONTENT_SOURCE_VALUES,
 	type ContentSource,
-	DOMAIN_LABELS,
 	DOMAIN_VALUES,
-	type Domain,
+	domainLabel,
 	QUERY_PARAMS,
 	ROUTES,
 } from '@ab/constants';
@@ -79,10 +78,6 @@ function dismissCreatedBanner(): void {
 function shortenFront(text: string, max = 60): string {
 	if (text.length <= max) return text;
 	return `${text.slice(0, max).trimEnd()}...`;
-}
-
-function domainLabel(slug: string): string {
-	return (DOMAIN_LABELS as Record<Domain, string>)[slug as Domain] ?? humanize(slug);
 }
 
 function cardTypeLabel(slug: string): string {

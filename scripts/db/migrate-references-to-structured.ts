@@ -457,7 +457,23 @@ export function reshapeLegacyCitation(legacy: LegacyCitation): ReshapedCitation 
 		};
 	}
 
-	// 9. Fallback: kind = other
+	// 9. Specific `other` publications with stable identities. These are
+	// authored in `course/references/other-publications.yaml`; matching here
+	// emits the same `(slug, edition)` pair the seed uses, so the migration
+	// resolves against the authored row instead of upserting a synthetic.
+	const specific = matchSpecificOtherPublication(source);
+	if (specific !== null) {
+		return {
+			resolved: specific,
+			citation: {
+				kind: 'other',
+				locator: detail.length > 0 ? { detail } : {},
+				...(noteOrUndefined !== undefined ? { note: noteOrUndefined } : {}),
+			},
+		};
+	}
+
+	// 10. Fallback: kind = other
 	const slug = slugifySource(source);
 	const resolved: ResolvedReference = {
 		kind: REFERENCE_KINDS.OTHER,
@@ -473,6 +489,80 @@ export function reshapeLegacyCitation(legacy: LegacyCitation): ReshapedCitation 
 			...(noteOrUndefined !== undefined ? { note: noteOrUndefined } : {}),
 		},
 	};
+}
+
+/**
+ * Recognise a specific non-FAA-handbook / non-CFR publication by its
+ * canonical source string and return a `ResolvedReference` whose
+ * `(documentSlug, edition)` pair matches the authored row in
+ * `course/references/other-publications.yaml`. Returns `null` when no
+ * recognizer fires, letting the generic fallback take over.
+ */
+function matchSpecificOtherPublication(source: string): ResolvedReference | null {
+	// AOPA Air Safety Institute -- canonical form for the AOPA cluster.
+	// Knowledge nodes have been normalised to this exact string; the
+	// recognizer is an additional defence so future variants resolve too.
+	if (/\bAOPA\b/i.test(source)) {
+		return {
+			kind: REFERENCE_KINDS.OTHER,
+			documentSlug: 'aopa-air-safety-institute',
+			edition: 'current',
+			title: 'AOPA Air Safety Institute',
+			url: 'https://www.aopa.org/training-and-safety/air-safety-institute',
+		};
+	}
+	// FAA-P-8740-NN pilot safety brochures. Slug is per-brochure; this
+	// recognizer covers `FAA-P-8740-36` (Aviation Decision Making) which is
+	// the only one currently cited. Future brochures get their own row.
+	const safetyBrochureMatch = source.match(/\bFAA-P-8740-(\d+)\b/i);
+	if (safetyBrochureMatch !== null) {
+		const number = safetyBrochureMatch[1];
+		return {
+			kind: REFERENCE_KINDS.OTHER,
+			documentSlug: `faa-p-8740-${number}`,
+			edition: 'unspecified',
+			title: `FAA-P-8740-${number}`,
+		};
+	}
+	// FAA Order 8260.3 (TERPS).
+	if (/\bFAA\s+Order\s+8260\.3\b/i.test(source)) {
+		return {
+			kind: REFERENCE_KINDS.OTHER,
+			documentSlug: 'faa-order-8260-3',
+			edition: '8260.3C',
+			title: 'United States Standard for Terminal Instrument Procedures (TERPS)',
+			url: 'https://www.faa.gov/regulations_policies/orders_notices?searchedQuery=8260.3',
+		};
+	}
+	// FAA approach plates (per-airport).
+	if (/\bApproach plates\b/i.test(source)) {
+		return {
+			kind: REFERENCE_KINDS.OTHER,
+			documentSlug: 'faa-approach-plates',
+			edition: 'current',
+			title: 'FAA Approach Plates (per-airport)',
+			url: 'https://www.faa.gov/air_traffic/flight_info/aeronav/digital_products/',
+		};
+	}
+	// Jeppesen / FAA aeronautical charts.
+	if (/\bJeppesen\b/i.test(source) && /\bcharts?\b/i.test(source)) {
+		return {
+			kind: REFERENCE_KINDS.OTHER,
+			documentSlug: 'jeppesen-faa-charts',
+			edition: 'current',
+			title: 'Jeppesen and FAA aeronautical charts',
+		};
+	}
+	// Rogers, D. F. -- "The Possible 'Impossible' Turn" (AIAA, 1995).
+	if (/\bRogers,\s*D\.\s*F\.?\b/i.test(source)) {
+		return {
+			kind: REFERENCE_KINDS.OTHER,
+			documentSlug: 'rogers-d-f',
+			edition: '1995',
+			title: "The Possible 'Impossible' Turn (AIAA Journal of Aircraft, 1995)",
+		};
+	}
+	return null;
 }
 
 // ---------------------------------------------------------------------------
@@ -545,16 +635,21 @@ export async function migrateReferencesToStructured(
 		const key = cacheKey(resolved.documentSlug, resolved.edition);
 		const cached = referenceCache.get(key);
 		if (cached !== undefined) return cached.id;
-		// upsertReference is idempotent at the (document_slug, edition)
-		// uniqueness key. If the seed has already created a real row with
-		// the same identity we will land on its id; otherwise the migration
-		// creates a synthetic row stamped with `seed_origin`.
+		// If the seed has already created a real row with the same identity,
+		// return its id without re-upserting -- otherwise the migration
+		// would clobber publisher / url / title authored by the seed.
 		const before = await db
 			.select({ id: reference.id })
 			.from(reference)
 			.where(and(eq(reference.documentSlug, resolved.documentSlug), eq(reference.edition, resolved.edition)))
 			.limit(1);
-		const isFreshlyCreated = before.length === 0;
+		const existing = before[0];
+		if (existing !== undefined) {
+			referenceCache.set(key, { id: existing.id });
+			return existing.id;
+		}
+		// No row yet: upsert a synthetic stamped with `seed_origin` so it
+		// remains distinguishable from authored rows.
 		const row = await upsertReference(
 			{
 				kind: resolved.kind,
@@ -562,13 +657,11 @@ export async function migrateReferencesToStructured(
 				edition: resolved.edition,
 				title: resolved.title,
 				url: resolved.url ?? null,
-				// Only stamp seed_origin on rows the migration creates fresh; an
-				// existing real row keeps whatever the seed wrote.
-				seedOrigin: isFreshlyCreated ? MIGRATION_SEED_ORIGIN : null,
+				seedOrigin: MIGRATION_SEED_ORIGIN,
 			},
 			db,
 		);
-		if (isFreshlyCreated) report.syntheticReferencesCreated += 1;
+		report.syntheticReferencesCreated += 1;
 		referenceCache.set(key, { id: row.id });
 		return row.id;
 	};

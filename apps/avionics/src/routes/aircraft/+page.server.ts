@@ -22,6 +22,7 @@ import {
 	AVIONICS_AIRCRAFT_COOKIE,
 	AVIONICS_SELECTABLE_AIRCRAFT,
 	HOSTS,
+	SECONDS_PER_YEAR,
 	SIM_AIRCRAFT_IDS,
 	type SimAircraftId,
 } from '@ab/constants';
@@ -31,8 +32,6 @@ import type { Actions } from './$types';
 
 const VALID_AIRCRAFT_IDS = new Set<string>(Object.values(SIM_AIRCRAFT_IDS));
 const SELECTABLE_AIRCRAFT_IDS = new Set<SimAircraftId>(AVIONICS_SELECTABLE_AIRCRAFT);
-
-const SECONDS_PER_YEAR = 60 * 60 * 24 * 365;
 
 export const actions: Actions = {
 	default: async ({ request, cookies }) => {

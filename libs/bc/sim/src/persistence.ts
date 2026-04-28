@@ -12,7 +12,7 @@
  * line.
  */
 
-import { SIM_BIAS } from '@ab/constants';
+import { MS_PER_DAY, SIM_BIAS } from '@ab/constants';
 import { db as defaultDb } from '@ab/db/connection';
 import { generateSimAttemptId } from '@ab/utils';
 import { and, desc, eq, gte, isNotNull } from 'drizzle-orm';
@@ -193,7 +193,7 @@ export async function getRecentSimWeakness(
 	options: GetRecentSimWeaknessOptions = {},
 	db: Db = defaultDb,
 ): Promise<ReadonlyArray<SimWeaknessSignal>> {
-	const since = options.since ?? new Date(Date.now() - SIM_BIAS.DEFAULT_WINDOW_DAYS * 24 * 60 * 60 * 1000);
+	const since = options.since ?? new Date(Date.now() - SIM_BIAS.DEFAULT_WINDOW_DAYS * MS_PER_DAY);
 	const maxPerScenario = options.maxAttemptsPerScenario ?? SIM_BIAS.DEFAULT_MAX_ATTEMPTS_PER_SCENARIO;
 	const poorThreshold = options.poorThreshold ?? SIM_BIAS.POOR_THRESHOLD;
 

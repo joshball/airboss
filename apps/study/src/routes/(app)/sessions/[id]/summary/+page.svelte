@@ -1,7 +1,6 @@
 <script lang="ts">
 import {
-	DOMAIN_LABELS,
-	type Domain,
+	domainLabel,
 	ROUTES,
 	SESSION_MODE_LABELS,
 	SESSION_SLICE_LABELS,
@@ -17,17 +16,6 @@ let { data }: { data: PageData } = $props();
 const summary = $derived(data.summary);
 const accuracyPct = $derived(summary.attempted === 0 ? 0 : Math.round((summary.correct / summary.attempted) * 100));
 const skipTotal = $derived(summary.skippedByKind.today + summary.skippedByKind.topic + summary.skippedByKind.permanent);
-
-function humanize(slug: string): string {
-	return slug
-		.split(/[-_]/)
-		.map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-		.join(' ');
-}
-
-function domainLabel(slug: string): string {
-	return (DOMAIN_LABELS as Record<string, string>)[slug] ?? humanize(slug);
-}
 </script>
 
 <svelte:head>
@@ -101,7 +89,7 @@ function domainLabel(slug: string): string {
 			<h2>Domains touched</h2>
 			<ul class="pills">
 				{#each summary.domainsTouched as d (d)}
-					<li>{domainLabel(d as Domain)}</li>
+					<li>{domainLabel(d)}</li>
 				{/each}
 			</ul>
 		</article>

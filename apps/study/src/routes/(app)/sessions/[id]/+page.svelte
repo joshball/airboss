@@ -1,8 +1,7 @@
 <script lang="ts">
 import {
 	type ConfidenceLevel,
-	DOMAIN_LABELS,
-	type Domain,
+	domainLabel,
 	QUERY_PARAMS,
 	REVIEW_RATINGS,
 	ROUTES,
@@ -72,10 +71,6 @@ $effect(() => {
 	url.searchParams.set(QUERY_PARAMS.ITEM, String(item));
 	replaceState(url, page.state);
 });
-
-function domainLabel(slug: string): string {
-	return (DOMAIN_LABELS as Record<Domain, string>)[slug as Domain] ?? humanize(slug);
-}
 
 function reasonLabel(code: SessionReasonCode): string {
 	return SESSION_REASON_CODE_LABELS[code] ?? humanize(code);

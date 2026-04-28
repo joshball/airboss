@@ -10,7 +10,7 @@
  * them stable.
  */
 
-import { APP_SURFACES, HELP_KINDS } from '@ab/constants';
+import { APP_SURFACES, HELP_KINDS, ROUTES } from '@ab/constants';
 import type { HelpPage } from '@ab/help';
 
 export const memoryDashboard: HelpPage = {
@@ -18,7 +18,7 @@ export const memoryDashboard: HelpPage = {
 	title: 'Memory dashboard',
 	summary:
 		"What the memory overview shows: due counts, today's progress, streak, active cards, state groupings, and the per-domain breakdown.",
-	documents: '/memory',
+	documents: ROUTES.MEMORY,
 	tags: {
 		appSurface: [APP_SURFACES.MEMORY],
 		helpKind: HELP_KINDS.REFERENCE,

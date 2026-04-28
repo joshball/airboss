@@ -18,4 +18,10 @@ registerCorpusResolver(ORDERS_RESOLVER);
 export { formatOrdersCitation } from './citation.ts';
 export { formatOrdersLocator, parseOrdersLocator } from './locator.ts';
 export { ORDERS_CORPUS, ORDERS_RESOLVER } from './resolver.ts';
+export {
+	ORDERS_SEED_REVIEWER_ID,
+	type OrdersSeedOptions,
+	type OrdersSeedReport,
+	seedOrdersFromManifest,
+} from './seed.ts';
 export { getOrdersLiveUrl } from './url.ts';

@@ -12,9 +12,8 @@ import {
 	CONTENT_SOURCE_LABELS,
 	CONTENT_SOURCES,
 	type ContentSource,
-	DOMAIN_LABELS,
 	DOMAIN_VALUES,
-	type Domain,
+	domainLabel,
 	QUERY_PARAMS,
 	REVIEW_RATINGS,
 	REVIEW_SESSION_STATUSES,
@@ -151,10 +150,6 @@ async function startEdit() {
 
 function confirmDiscardEdit() {
 	editing = false;
-}
-
-function domainLabel(slug: string): string {
-	return (DOMAIN_LABELS as Record<Domain, string>)[slug as Domain] ?? humanize(slug);
 }
 
 function cardTypeLabel(slug: string): string {

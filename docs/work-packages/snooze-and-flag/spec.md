@@ -1,6 +1,6 @@
 ---
 title: 'snooze-and-flag'
-status: deferred
+status: done
 size: large
 depends_on: [review-flow-v2 (shares review chrome)]
 created: 2026-04-24
@@ -9,6 +9,16 @@ trigger: review-flow-v2 unblocks (locked or shipped), AND the next SMI walkthrou
 ---
 
 # Snooze and Flag
+
+## Verdict (2026-04-28)
+
+**Status:** done
+
+**Rationale:** The full substrate shipped on main. `study.card_snooze` and `study.card_feedback` tables exist in `libs/bc/study/src/schema.ts` (around line 1098). BC functions `snoozeCard`, `removeCard`, `restoreCard`, `restoreCardByCard`, `getReplacementCard`, and `submitFeedback` are exported from `libs/bc/study/src/index.ts`. Constants `SNOOZE_REASONS`, `SNOOZE_DURATION_LEVEL_VALUES`, `CARD_FEEDBACK_SIGNAL_VALUES`, and `SNOOZE_REASONS_REQUIRING_COMMENT` live in `libs/constants/src/study.ts`. The review UI ships `libs/ui/src/components/SnoozeReasonPopover.svelte` with covering tests, plus per-card feedback pills via PR #138. PR #135 (snooze plus flag substrate, browse Removed filter, return-to-detail link) and PR #138 close items 10 and 11. Browse Removed filter and Restore are live. Out-of-scope items (Hangar author-review queue, taxonomy reassignment) remain correctly deferred and are not part of this WP.
+
+**Trigger to revisit (if deferred):** N/A. The Hangar-side author-review queue is a separate WP whose trigger is "Hangar grows a moderation surface" and belongs in a Hangar work package, not here.
+
+**Next action (if promote/fold):** N/A. Spec marked done; the Hangar moderation queue should be a fresh WP when its trigger fires.
 
 ## One-sentence summary
 

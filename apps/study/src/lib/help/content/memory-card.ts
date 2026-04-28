@@ -13,7 +13,7 @@
  * per-stat anchors below.
  */
 
-import { APP_SURFACES, HELP_KINDS } from '@ab/constants';
+import { APP_SURFACES, HELP_KINDS, ROUTES } from '@ab/constants';
 import type { HelpPage } from '@ab/help';
 
 export const memoryCard: HelpPage = {
@@ -21,7 +21,7 @@ export const memoryCard: HelpPage = {
 	title: 'Memory card detail',
 	summary:
 		'What every badge and stat on the card detail page means: domain, type, lifecycle, source, and the FSRS schedule numbers.',
-	documents: '/memory/[id]',
+	documents: ROUTES.MEMORY_CARD_PATTERN,
 	tags: {
 		appSurface: [APP_SURFACES.MEMORY],
 		helpKind: HELP_KINDS.REFERENCE,

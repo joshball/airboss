@@ -7,6 +7,7 @@
  * unknown id, every malformed payload, and every non-string.
  */
 
+import { SECONDS_PER_DAY, SECONDS_PER_YEAR } from '@ab/constants';
 import type { Cookies } from '@sveltejs/kit';
 import { describe, expect, it } from 'vitest';
 import '../core/defaults/airboss-default/index';
@@ -108,7 +109,7 @@ describe('createThemeEndpoint', () => {
 		const opts = store.get(THEME_COOKIE)?.options;
 		expect(typeof opts?.maxAge).toBe('number');
 		// One year ± a day's slack -- exact constant lives in `@ab/constants`.
-		expect((opts?.maxAge ?? 0) >= 60 * 60 * 24 * 360).toBe(true);
+		expect((opts?.maxAge ?? 0) >= SECONDS_PER_YEAR - SECONDS_PER_DAY).toBe(true);
 	});
 });
 

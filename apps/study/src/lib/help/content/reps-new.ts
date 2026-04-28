@@ -6,7 +6,7 @@
  * subject.
  */
 
-import { APP_SURFACES, HELP_KINDS } from '@ab/constants';
+import { APP_SURFACES, HELP_KINDS, ROUTES } from '@ab/constants';
 import type { HelpPage } from '@ab/help';
 
 export const repsNew: HelpPage = {
@@ -14,7 +14,7 @@ export const repsNew: HelpPage = {
 	title: 'Author a new scenario',
 	summary:
 		'How to write a good decision rep: field-by-field, the 2-5 option rule, and what a useful teaching point looks like.',
-	documents: '/reps/new',
+	documents: ROUTES.REPS_NEW,
 	tags: {
 		appSurface: [APP_SURFACES.REPS],
 		helpKind: HELP_KINDS.HOW_TO,
