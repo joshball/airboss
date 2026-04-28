@@ -7,8 +7,8 @@
 import { HANDBOOK_AMENDMENT_BADGE_LABEL, HANDBOOK_ERRATA_PATCH_KINDS } from '@ab/constants';
 import { cleanup, fireEvent, render, screen } from '@testing-library/svelte';
 import { afterEach, describe, expect, it } from 'vitest';
-import type { ErrataEntryDisplay } from '../src/handbooks/ErrataEntry.svelte';
 import AmendmentPanel from '../src/handbooks/AmendmentPanel.svelte';
+import type { ErrataEntryDisplay } from '../src/handbooks/ErrataEntry.svelte';
 
 afterEach(() => {
 	cleanup();
