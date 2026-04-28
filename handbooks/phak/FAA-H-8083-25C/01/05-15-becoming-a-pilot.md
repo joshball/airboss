@@ -56,3 +56,9 @@ knowledge areas, flight maneuvers, and accrued the required
 amount of flight hours, the CFI endorses the student pilot
 logbook, which allows the student pilot to take the written
 and practical tests for pilot certification.
+
+> Paragraph revised by FAA erratum (target page 1-21). The replacement text below supersedes the matching paragraph; the sidecar `.errata.md` records the FAA-published wording verbatim.
+
+• Sport Pilot, see subpart J
+• Recreational Pilot, see subpart D
+• Private Pilot, see subpart E

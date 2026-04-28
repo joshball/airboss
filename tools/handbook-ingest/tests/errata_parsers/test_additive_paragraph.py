@@ -1,8 +1,9 @@
 """Unit tests for the additive-paragraph errata parser.
 
 The cached AFH MOSAIC addendum PDF is the canonical fixture. PHAK
-MOSAIC is verified during integration once cached. Synthetic strings
-exercise edge cases (unknown layout, mismatched chapter anchors).
+MOSAIC uses a different layout (see ``test_bullet_edits.py``).
+Synthetic strings exercise edge cases (unknown layout, mismatched
+chapter anchors).
 """
 
 from __future__ import annotations
@@ -31,22 +32,9 @@ AFH_MOSAIC_PATH = Path(
     )
 )
 
-PHAK_MOSAIC_PATH = Path(
-    os.path.expanduser(
-        '~/Documents/airboss-handbook-cache/handbooks/phak/FAA-H-8083-25C/PHAK_Addendum_MOSAIC.pdf'
-    )
-)
-
 AFH_ERRATA = ErrataConfig(
     id='mosaic',
     source_url='https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/AFH_Addendum_(MOSAIC).pdf',
-    published_at='2025-10-20',
-    parser='additive-paragraph',
-)
-
-PHAK_ERRATA = ErrataConfig(
-    id='mosaic',
-    source_url='https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/PHAK_Addendum_(MOSAIC).pdf',
     published_at='2025-10-20',
     parser='additive-paragraph',
 )
@@ -104,13 +92,6 @@ def test_afh_mosaic_includes_append_paragraph() -> None:
     patches = parser.parse(AFH_MOSAIC_PATH, AFH_ERRATA)
     appends = [p for p in patches if p.kind == PATCH_KIND_APPEND_PARAGRAPH]
     assert appends, f"expected append_paragraph patches; got {[p.kind for p in patches]}"
-
-
-@pytest.mark.skipif(not PHAK_MOSAIC_PATH.is_file(), reason="PHAK MOSAIC PDF not cached")
-def test_parse_phak_mosaic_yields_patches() -> None:
-    parser = AdditiveParagraphParser()
-    patches = parser.parse(PHAK_MOSAIC_PATH, PHAK_ERRATA)
-    assert len(patches) >= 1, f"expected >=1 PHAK patches; got {len(patches)}"
 
 
 def test_get_parser_returns_additive_paragraph() -> None:

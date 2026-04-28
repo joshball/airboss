@@ -8,6 +8,7 @@ import {
 	SOURCE_TYPE_LABELS,
 	SOURCE_TYPE_VALUES,
 } from '@ab/constants';
+import { untrack } from 'svelte';
 
 /** Shared form body for /glossary/sources/new + /glossary/sources/[id]. */
 
@@ -28,8 +29,10 @@ let {
 const FORMATS = ['xml', 'pdf', 'html', 'txt', 'json', 'csv', 'geotiff-zip'] as const;
 
 // Local state tracks the user's current type pick so the non-textual panel
-// toggles responsively before submit.
-let currentType = $state(initial.type);
+// toggles responsively before submit. The form intentionally captures the
+// prop value at mount and lets the user edit; untrack tells Svelte that the
+// initial-only read is deliberate.
+let currentType = $state(untrack(() => initial.type));
 const currentKind = $derived(SOURCE_KIND_BY_TYPE[currentType as ReferenceSourceType] ?? SOURCE_KINDS.TEXT);
 const isBinaryVisual = $derived(currentKind === SOURCE_KINDS.BINARY_VISUAL);
 

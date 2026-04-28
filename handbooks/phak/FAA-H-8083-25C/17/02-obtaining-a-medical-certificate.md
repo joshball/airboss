@@ -113,3 +113,11 @@ be considered for special issuance. If you can present
 satisfactory medical documentation to the FAA that your
 condition is stable, the chances are good that you will be
 able to qualify for an Authorization.
+
+> Paragraph revised by FAA erratum (target page 17-2). The replacement text below supersedes the matching paragraph; the sidecar `.errata.md` records the FAA-published wording verbatim.
+
+Pilots exercising sport pilot privileges may hold either a medical certificate or a valid state
+driver's license, or neither, depending on the category of aircraft being operated. Regardless
+of whether a medical certificate or driver's license is required, 14 CFR 61.53 requires every
+pilot not to act as a crewmember if they know, or have reason to know, of any medical
+condition that would make them unable to operate the aircraft in a safe manner.

@@ -10,7 +10,7 @@
 import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { DISCOVERY_CACHE, DISCOVERY_LAYOUT_HINTS, DISCOVERY_STATUSES } from '@ab/constants';
+import { DISCOVERY_CACHE, DISCOVERY_STATUSES } from '@ab/constants';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { ALL_HANDBOOK_SLUGS, getCatalogueEntry } from './catalogue';
 import { runDiscoverErrata } from './run';

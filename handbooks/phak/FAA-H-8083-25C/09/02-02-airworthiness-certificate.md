@@ -70,3 +70,12 @@ When purchasing an aircraft classified as other than Standard,
 it is recommended that the local FSDO be contacted for an
 explanation of the pertinent airworthiness requirements and
 the limitations of such a certificate.
+
+> Paragraph revised by FAA erratum (target page 9-8). The replacement text below supersedes the matching paragraph; the sidecar `.errata.md` records the FAA-published wording verbatim.
+
+A Special Airworthiness Certificate is issued for all aircraft certificated in other than the
+Standard classifications, such as Experimental, Restricted, Limited, Provisional, and light-
+sport category aircraft. Light-sport category aircraft receive a pink special airworthiness
+certificate. When purchasing an aircraft classified as other than Standard, it is recommended
+that the local FSDO be contacted for an explanation of the pertinent airworthiness
+requirements and the limitations of such a certificate.

@@ -54,3 +54,12 @@ may also be purchased from the Superintendent of Documents
 or GPO bookstores. Most airport fixed-base operators and flight
 schools carry a variety of government publications and charts,
 as well as commercially published materials.
+
+> Paragraph revised by FAA erratum (target page 1-23). The replacement text below supersedes the matching paragraph; the sidecar `.errata.md` records the FAA-published wording verbatim.
+
+• A medical certificate (not required for glider or balloon), a Student Pilot Certificate,
+and a pilot logbook endorsed by a flight instructor for solo, solo cross-country
+(airplane and rotorcraft), and for the make and model aircraft to be used for the
+practical test (sport pilot applicants must have a valid US driver's license, a valid
+medical certificate, or comply with BasicMed, except for glider or balloon
+privileges.)
