@@ -152,14 +152,14 @@ git clone https://github.com/joshball/airboss
 
 # Run the handbook ingestion pipeline -- it auto-creates the cache and downloads from FAA.
 cd airboss
-bun run handbook-ingest phak --edition 8083-25C
+bun run sources extract handbooks phak --edition 8083-25C
 ```
 
 The cache lives at `~/Documents/airboss-handbook-cache/` by default. Override via env var:
 
 ```bash
 export AIRBOSS_HANDBOOK_CACHE=/path/to/somewhere/else
-bun run handbook-ingest phak --edition 8083-25C
+bun run sources extract handbooks phak --edition 8083-25C
 ```
 
 If/when Flavor D is flipped to real LFS later:

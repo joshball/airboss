@@ -51,7 +51,7 @@ review_status: pending
 
 **Acceptance:**
 
-- `bun run ingest cfr --edition=2026-01-01` (with network) or `--fixture=<path>` (without network) runs end-to-end.
+- `bun run sources register cfr --edition=2026-01-01` (with network) or `--fixture=<path>` (without network) runs end-to-end.
 - The pipeline reports per-step progress and a summary.
 - Re-running with the same edition is a no-op.
 

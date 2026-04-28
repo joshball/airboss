@@ -62,7 +62,7 @@ The appendix locator (`appendix-1`) resolves to the appendix's manifest entry; t
 bun run aim-ingest --edition=2026-09
 
 # Step 2 (Phase 7, this WP): register into the corpus
-bun run ingest aim --edition=2026-09
+bun run sources register aim --edition=2026-09
 ```
 
 After step 2, the registry has chapter / section / paragraph / glossary / appendix entries for AIM 2026-09. Re-running step 2 is a no-op.

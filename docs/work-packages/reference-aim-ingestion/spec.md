@@ -15,7 +15,7 @@ The corpus covered is the FAA Aeronautical Information Manual:
 
 - **AIM** -- Aeronautical Information Manual, FAA's official guide to flight procedures and ATC. Continuous-edition stream pinned at year-month (`?at=2026-09`); the FAA publishes change cycles roughly twice a year.
 
-A hand-authored fixture under `tests/fixtures/aim/aim-fixture/aim/2026-09/` provides the manifest + body files the tests run against. When the FAA publishes a new edition, an operator runs the ingestion pipeline (a follow-up to ADR 016 phase 0, separate from this WP) to populate `aim/<YYYY-MM>/` derivatives, then runs `bun run ingest aim --edition=<YYYY-MM>` to register them.
+A hand-authored fixture under `tests/fixtures/aim/aim-fixture/aim/2026-09/` provides the manifest + body files the tests run against. When the FAA publishes a new edition, an operator runs the ingestion pipeline (a follow-up to ADR 016 phase 0, separate from this WP) to populate `aim/<YYYY-MM>/` derivatives, then runs `bun run sources register aim --edition=<YYYY-MM>` to register them.
 
 Phase 7 is **paragraph / glossary-entry / appendix level**. Sub-paragraph identifiers within an AIM paragraph (rare; AIM doesn't use the same `(a)(1)(i)` lettering CFR does) are out of scope -- the ADR 019 §1.2 "AIM" spec stops at paragraph granularity.
 
@@ -49,13 +49,13 @@ The corpus is chosen third (after `regs` + `handbooks`) because:
     - `getLiveUrl(id, edition)` returns the FAA AIM landing URL (`https://www.faa.gov/air_traffic/publications/atpubs/`). FAA does not deep-link individual paragraphs; the resolver returns the doc-level URL.
     - `getDerivativeContent(id, edition)` reads the in-repo derivative markdown for the paragraph / section / chapter / glossary entry / appendix.
     - `getIndexedContent(id, edition)` returns structured content from the per-edition `manifest.json` (title + body).
-- An ingest CLI, exposed via `bun run ingest aim [--edition=2026-09] [--out=...]`, walks an existing derivative tree and populates the registry. The CLI does NOT re-fetch source bytes; it reads `aim/<edition>/manifest.json` and emits one `SourceEntry` per chapter / section / paragraph / glossary entry / appendix. Idempotent: re-running with the same args is a no-op.
+- An ingest CLI, exposed via `bun run sources register aim [--edition=2026-09] [--out=...]`, walks an existing derivative tree and populates the registry. The CLI does NOT re-fetch source bytes; it reads `aim/<edition>/manifest.json` and emits one `SourceEntry` per chapter / section / paragraph / glossary entry / appendix. Idempotent: re-running with the same args is a no-op.
 - The pipeline is **idempotent**. Re-running with the same `--edition=` (a) reads the existing manifest, (b) skips re-writing entries already in the registry, (c) skips re-promotion when the lifecycle is already `accepted`.
 - Section content is not generated -- the operator's source-ingestion pipeline (out of scope for this WP) writes it. Phase 7 only registers entries pointing at the existing files.
 - A small fixture AIM tree (`tests/fixtures/aim/aim-fixture/aim/2026-09/manifest.json` + a few markdown files) ships in the repo so unit + integration tests run without depending on a real AIM derivative tree.
 - Vitest tests cover: `parseLocator` for every accepted locator shape (and rejection messages for malformed input), `formatCitation` for all three styles, `getLiveUrl` for paragraph / chapter / glossary / appendix, fixture-driven ingestion (manifest.json -> SourceEntries + batch promotion), idempotence (second run is a no-op), atomic batch failure handling.
 - A validator smoke test (`libs/sources/src/aim/smoke.test.ts`) inserts `[@cite](airboss-ref:aim/5-1-7?at=2026-09)` into a temp lesson, runs `validateReferences`, expects zero ERRORs.
-- `bun run check` exits 0; `bun test libs/sources/` passes; `bun run ingest aim` exits 0 against the fixture derivatives.
+- `bun run check` exits 0; `bun test libs/sources/` passes; `bun run sources register aim` exits 0 against the fixture derivatives.
 
 ## Out of scope
 

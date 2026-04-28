@@ -264,7 +264,7 @@ tools/handbook-ingest/
   README.md
   ingest/
     __init__.py
-    cli.py                (`bun run handbook-ingest <doc> --edition <e>` shells to `python -m ingest`)
+    cli.py                (`bun run sources extract handbooks <doc> --edition <e>` shells to `python -m ingest`)
     fetch.py              (download from FAA URL, checksum)
     outline.py            (PDF outline -> chapter/section/subsection tree)
     sections.py           (per-section text via fitz; layout-aware extraction)
@@ -280,13 +280,13 @@ tools/handbook-ingest/
 CLI:
 
 ```text
-bun run handbook-ingest phak --edition 8083-25C
-bun run handbook-ingest phak --edition 8083-25C --chapter 12     # single-chapter rerun
-bun run handbook-ingest phak --edition 8083-25C --dry-run        # validate only; no writes
-bun run handbook-ingest phak --edition 8083-25C --force          # re-extract even if hashes match
+bun run sources extract handbooks phak --edition 8083-25C
+bun run sources extract handbooks phak --edition 8083-25C --chapter 12     # single-chapter rerun
+bun run sources extract handbooks phak --edition 8083-25C --dry-run        # validate only; no writes
+bun run sources extract handbooks phak --edition 8083-25C --force          # re-extract even if hashes match
 ```
 
-(The `bun run handbook-ingest` script in the monorepo root `package.json` shells out to `python -m ingest` from `tools/handbook-ingest/`. Bun is the dispatcher; Python is the runtime. This keeps the developer entry point uniform.)
+(The `bun run sources extract handbooks` script in the monorepo root `package.json` shells out to `python -m ingest` from `tools/handbook-ingest/`. Bun is the dispatcher; Python is the runtime. This keeps the developer entry point uniform.)
 
 Output trees (per [ADR 018](../../decisions/018-source-artifact-storage-policy/decision.md) and [STORAGE.md](../../platform/STORAGE.md)):
 
@@ -550,7 +550,7 @@ HANDBOOK_SECTION_AT_EDITION: (doc: string, chapter: number | string, section: nu
 - **Network partition while heartbeat fires.** Client buffers up to N heartbeats (`HANDBOOK_HEARTBEAT_BUFFER = 12`, ~3 minutes at 15s) and replays on reconnect. Past the buffer cap, the oldest heartbeats are dropped.
 - **Two browser tabs open on the same section.** Each tab heartbeats independently; the server sees both and adds. Acceptable inflation; user knows they had two tabs open.
 - **Newer edition published between read and re-visit.** Reading 25B and 25C exists -> `superseded_by_id` is set on 25B. Reader shows the banner. The user's read-state for 25B sections persists; opening the same section in 25C creates a fresh row. A "carry my read-state forward" feature is deferred (open as a future ADR if real friction shows up).
-- **Handbook exists but has zero ingested sections.** Reference row is present; chapter list renders an empty state with "ingestion incomplete; rerun `bun run handbook-ingest <doc>`."
+- **Handbook exists but has zero ingested sections.** Reference row is present; chapter list renders an empty state with "ingestion incomplete; rerun `bun run sources extract handbooks <doc>`."
 - **A node's structured citation references a `reference_id` that no longer exists.** The reverse query skips the row; the resolver returns `null`. The build script warns at validation time. The detail UI on the node renders the freeform `note` if present, otherwise a faded "(citation broken)" tag.
 - **Heartbeat throttle collision with browser background-tab throttling.** The `document.visibilityState !== 'visible'` gate already blocks heartbeats from background tabs, so the OS-level setInterval throttle is moot.
 

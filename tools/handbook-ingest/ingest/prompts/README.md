@@ -22,7 +22,7 @@ diff on those files; any drift is the model, not the pipeline.
 ## To tweak
 
 1. Edit `section_tree.md`.
-2. Re-run the pipeline: `bun run handbook-ingest phak --edition FAA-H-8083-25C --strategy llm --force`.
+2. Re-run the pipeline: `bun run sources extract handbooks phak --edition FAA-H-8083-25C --strategy llm --force`.
 3. Inspect the new `_llm_section_tree.json` files (one per chapter).
 4. Diff vs the previous version: `git diff handbooks/phak/FAA-H-8083-25C/**/_llm_section_tree.json`.
 5. Commit the prompt change + the regenerated trees together. Don't ship one

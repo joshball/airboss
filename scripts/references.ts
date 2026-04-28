@@ -9,19 +9,14 @@
  *   bun run references <command> --help     # detailed help for one command
  */
 
+import { run } from './lib/spawn';
+
 const args = process.argv.slice(2);
 const positional = args.filter((a) => !a.startsWith('-'));
 const command = positional[0];
 const passthrough = args.slice(args.indexOf(command ?? '') + 1).filter((a) => a !== '--help' && a !== '-h');
 const flags = new Set(args.filter((a) => a.startsWith('-')));
 const wantsHelp = flags.has('--help') || flags.has('-h');
-
-async function run(cmd: string[]): Promise<void> {
-	console.log(`> ${cmd.join(' ')}`);
-	const proc = Bun.spawn(cmd, { stdio: ['inherit', 'inherit', 'inherit'] });
-	const code = await proc.exited;
-	if (code !== 0) process.exit(code);
-}
 
 // ---------------------------------------------------------------------------
 // Help

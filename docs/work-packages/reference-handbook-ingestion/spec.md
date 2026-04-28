@@ -50,13 +50,13 @@ The corpus is chosen second (after `regs`) because:
     - `getLiveUrl(id, edition)` returns the FAA handbook URL (`https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/<doc-slug>/`). FAA does not deep-link individual chapters, so the resolver returns the doc-level URL with a chapter anchor where the `manifest.json` records one. Source-PDF URL falls back from `manifest.source_url` when present.
     - `getDerivativeContent(id, edition)` reads the in-repo derivative markdown for the chapter / section / subsection.
     - `getIndexedContent(id, edition)` returns structured content from the per-edition `manifest.json` (title + body + figure list + table list).
-- An ingest CLI, exposed via `bun run ingest handbooks [--doc=phak] [--edition=8083-25C] [--out=...]`, walks the existing derivative tree and populates the registry. The CLI does NOT re-fetch source bytes; it reads `handbooks/<slug>/<edition>/manifest.json` and emits one `SourceEntry` per chapter / section / subsection. Idempotent: re-running with the same args is a no-op.
+- An ingest CLI, exposed via `bun run sources register handbooks [--doc=phak] [--edition=8083-25C] [--out=...]`, walks the existing derivative tree and populates the registry. The CLI does NOT re-fetch source bytes; it reads `handbooks/<slug>/<edition>/manifest.json` and emits one `SourceEntry` per chapter / section / subsection. Idempotent: re-running with the same args is a no-op.
 - The pipeline is **idempotent**. Re-running with the same `--doc=` + `--edition=` (a) reads the existing manifest, (b) skips re-writing entries already in the registry, (c) skips re-promotion when the lifecycle is already `accepted`.
 - Section content is not re-written -- ADR 016 phase 0 already wrote it. Phase 6 only registers entries pointing at the existing files.
 - A small fixture handbook tree (`tests/fixtures/handbooks/phak-fixture/manifest.json` + 1-2 markdown files) ships in the repo so unit + integration tests run without depending on the full PHAK derivative tree.
 - Vitest tests cover: `parseLocator` for every accepted locator shape (and rejection messages for malformed input), `formatCitation` for all three styles, `getLiveUrl` for chapter / section, fixture-driven ingestion (manifest.json -> SourceEntries + batch promotion), idempotence (second run is a no-op), atomic batch failure handling.
 - A validator smoke test (`libs/sources/src/handbooks/smoke.test.ts`) inserts `[@cite](airboss-ref:handbooks/phak/8083-25C/12/3)` into a temp lesson, runs `validateReferences`, expects zero ERRORs.
-- `bun run check` exits 0; `bun test libs/sources/` passes; `bun run ingest handbooks` exits 0 against the on-disk derivatives for all three handbooks.
+- `bun run check` exits 0; `bun test libs/sources/` passes; `bun run sources register handbooks` exits 0 against the on-disk derivatives for all three handbooks.
 
 ## Out of scope
 

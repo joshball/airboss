@@ -24,14 +24,14 @@ install only if you want the official client on PATH):
 pip install -e .[llm]
 ```
 
-The Bun root `package.json` exposes `bun run handbook-ingest` which shells
+The Bun root `package.json` exposes `bun run sources extract handbooks` which shells
 to `python -m ingest` from this directory; you don't need to source the
 venv to run it (the script does it).
 
 ## CLI
 
 ```bash
-bun run handbook-ingest <doc> --edition <e> [options]
+bun run sources extract handbooks <doc> --edition <e> [options]
 ```
 
 Options:
@@ -52,25 +52,25 @@ Examples:
 
 ```bash
 # Default (reads section_strategy from phak.yaml)
-bun run handbook-ingest phak --edition FAA-H-8083-25C
+bun run sources extract handbooks phak --edition FAA-H-8083-25C
 
 # Single chapter
-bun run handbook-ingest phak --edition FAA-H-8083-25C --chapter 12
+bun run sources extract handbooks phak --edition FAA-H-8083-25C --chapter 12
 
 # Validate only
-bun run handbook-ingest phak --edition FAA-H-8083-25C --dry-run
+bun run sources extract handbooks phak --edition FAA-H-8083-25C --dry-run
 
 # Force re-extract ignoring cached hashes
-bun run handbook-ingest phak --edition FAA-H-8083-25C --force
+bun run sources extract handbooks phak --edition FAA-H-8083-25C --force
 
 # Explicit TOC strategy (Option 3, deterministic Python)
-bun run handbook-ingest phak --edition FAA-H-8083-25C --strategy toc
+bun run sources extract handbooks phak --edition FAA-H-8083-25C --strategy toc
 
 # LLM strategy (Option 4, Claude-assisted; requires ANTHROPIC_API_KEY)
-bun run handbook-ingest phak --edition FAA-H-8083-25C --strategy llm
+bun run sources extract handbooks phak --edition FAA-H-8083-25C --strategy llm
 
 # Compare both, write a markdown diff under reports/, do not seed sections
-bun run handbook-ingest phak --edition FAA-H-8083-25C --strategy compare
+bun run sources extract handbooks phak --edition FAA-H-8083-25C --strategy compare
 ```
 
 ## Section-tree strategies

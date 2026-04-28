@@ -190,7 +190,7 @@ The walker recurses Title -> Chapter -> Part -> Subpart -> Section. The `AMDDATE
 
 **Question:** Should `cfr-ingest` be a single script or a family (`cfr-ingest`, `cfr-promote`, `cfr-validate`)?
 
-**Chosen:** One script: `bun run ingest cfr`. Flags: `--edition=<YYYY-MM-DD>` (override default of "today"), `--fixture=<path>` (read XML from local file instead of network), `--out=<path>` (override default derivative root), `--help`. The script orchestrates fetch -> walk -> normalize -> write -> populate -> promote in one pass.
+**Chosen:** One script: `bun run sources register cfr`. Flags: `--edition=<YYYY-MM-DD>` (override default of "today"), `--fixture=<path>` (read XML from local file instead of network), `--out=<path>` (override default derivative root), `--help`. The script orchestrates fetch -> walk -> normalize -> write -> populate -> promote in one pass.
 
 **Why:**
 

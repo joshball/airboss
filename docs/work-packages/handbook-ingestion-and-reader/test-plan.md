@@ -25,25 +25,25 @@ Manual acceptance tests for [spec.md](./spec.md). Prefix `HBK-`.
 
 ## Pipeline
 
-### HBK-1: `bun run handbook-ingest --help` lists supported handbooks
+### HBK-1: `bun run sources extract handbooks --help` lists supported handbooks
 
-1. Run `bun run handbook-ingest --help`.
+1. Run `bun run sources extract handbooks --help`.
 2. **Expected:** CLI usage summary lists every supported handbook config (`phak`, `afh`, `avwx`) and the flags (`--edition`, `--chapter`, `--dry-run`, `--force`).
 
 ### HBK-2: Pipeline rejects unknown handbook id
 
-1. Run `bun run handbook-ingest mystery --edition 2099`.
+1. Run `bun run sources extract handbooks mystery --edition 2099`.
 2. **Expected:** Error: "no config for handbook 'mystery' under tools/handbook-ingest/ingest/config/". Exit non-zero. No files written.
 
 ### HBK-3: Dry-run validates without writing
 
-1. Run `bun run handbook-ingest phak --edition 8083-25C --dry-run`.
+1. Run `bun run sources extract handbooks phak --edition 8083-25C --dry-run`.
 2. **Expected:** Pipeline runs through fetch + outline + sections + figures + tables. Reports a summary line per chapter. No files written under `handbooks/phak/8083-25C/`. Exit 0.
 
 ### HBK-4: Full ingestion writes the expected tree
 
 1. Remove a single chapter from `handbooks/phak/8083-25C/` (e.g., `12/`) to simulate a regression.
-2. Run `bun run handbook-ingest phak --edition 8083-25C`.
+2. Run `bun run sources extract handbooks phak --edition 8083-25C`.
 3. **Expected:** Chapter 12 directory recreated. Section markdown files present with frontmatter. Figures present in `handbooks/phak/8083-25C/figures/`. Tables present in `tables/`. `manifest.json` updated.
 4. Diff vs main: the regenerated tree matches what was committed (no spurious churn).
 
@@ -62,7 +62,7 @@ Manual acceptance tests for [spec.md](./spec.md). Prefix `HBK-`.
 ### HBK-7: Outline failure aborts cleanly
 
 1. Configure the PHAK config with an intentionally wrong PDF URL (returns a non-PDF body).
-2. Run `bun run handbook-ingest phak --edition 8083-25C`.
+2. Run `bun run sources extract handbooks phak --edition 8083-25C`.
 3. **Expected:** Pipeline aborts with a clear error referencing the fetched body and the expected mime/format. Exit non-zero. No partial tree written.
 
 ---

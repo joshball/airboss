@@ -84,7 +84,7 @@ JSONB column FKs aren't a thing in Postgres. Validation lives in the seed (`bun 
 
 PyMuPDF (`fitz`) is the canonical layout-aware PDF text extractor. Equivalent JS libraries (pdf.js, pdf2json) lose layout fidelity on multi-column FAA handbooks. The pipeline runs locally, on demand, and writes markdown files; it does not run in production. The cost of a Python toolchain is paid by the author who runs the pipeline (Joshua, today). Every other developer just sees the committed markdown.
 
-The Bun-as-dispatcher pattern (`bun run handbook-ingest <doc>` shells out to `python -m ingest`) keeps the dev entry point uniform and lets the script be invoked the same way as any other monorepo task.
+The Bun-as-dispatcher pattern (`bun run sources extract handbooks <doc>` shells out to `python -m ingest`) keeps the dev entry point uniform and lets the script be invoked the same way as any other monorepo task.
 
 Alternatives considered:
 

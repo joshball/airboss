@@ -102,7 +102,7 @@ Shipped surface:
 
 - `libs/sources/src/handbooks/` -- locator parser, citation formatter, FAA URL builder, derivative reader, resolver, ingest CLI.
 - `handbooks` `CorpusResolver` registered via side-effect import in `libs/sources/src/index.ts`.
-- New CLI `bun run ingest handbooks --doc=<phak|afh|avwx> --edition=<...>` that walks the existing manifest and emits one `SourceEntry` per chapter / section / subsection. Idempotent; re-run is a no-op.
+- New CLI `bun run sources register handbooks --doc=<phak|afh|avwx> --edition=<...>` that walks the existing manifest and emits one `SourceEntry` per chapter / section / subsection. Idempotent; re-run is a no-op.
 - 78 new tests in `libs/sources/src/handbooks/`; 494 total tests in `libs/sources/` pass.
 - Real-tree ingest counts: PHAK 850 entries, AFH 531 entries, AvWX 480 entries.
 - Smoke test proves `[@cite](airboss-ref:handbooks/phak/8083-25C/12/3)` resolves with zero ERROR after ingest.
@@ -166,4 +166,4 @@ Phases 5, 6, 7, 8, 10 can run in parallel after Phase 2 lands -- they each unloc
 | 2026-04-27 | 6 | Handbook corpus shipped (PR #251). |
 | 2026-04-27 | 7 | AIM corpus WP authored + implementation (this PR). |
 | 2026-04-27 | -- | Downloader fix: corrected URLs (AC 120-71B, AC 91.21-1D, ACS path), browser User-Agent, eCFR per-title `latest_amended_on` auto-detect, descriptive cached filenames + `source.<ext>` symlink, HEAD-then-skip cache check, `--verify` audit mode (follow-up to PR #253). |
-| 2026-04-27 | -- | Unified ingest dispatcher: `scripts/ingest.ts` replaces `cfr-ingest.ts` / `handbook-corpus-ingest.ts` / `aim-corpus-ingest.ts`. Single entry point `bun run ingest <corpus>` with `--all`, `--help`, and per-corpus `--help`; per-corpus runner code in `libs/sources/src/<corpus>/ingest.ts` is unchanged. |
+| 2026-04-27 | -- | Unified ingest dispatcher: `scripts/sources/register.ts` replaces `cfr-ingest.ts` / `handbook-corpus-ingest.ts` / `aim-corpus-ingest.ts`. Single entry point `bun run sources register <corpus>` with `--all`, `--help`, and per-corpus `--help`; per-corpus runner code in `libs/sources/src/<corpus>/ingest.ts` is unchanged. |
