@@ -57,7 +57,7 @@ Plus a memory entry (`project_firc_compliance_dormant`) so future sessions surfa
 - The new VISION/PRD describe what hangar actually is post-pivot. A reader doesn't have to mentally subtract dormant FAA machinery to understand the live surface.
 - The compliance schema stays. `audit.audit_log` and content-versioning columns continue to do their cross-cutting job for non-FIRC content; nothing breaks.
 - Inbound links from session-scoped docs (`docs/work/todos/*`, `docs/work/reviews/*`) point at archived paths. Those docs are session-scoped and not worth backfilling.
-- [docs/platform/ROADMAP.md](../platform/ROADMAP.md) is still FIRC-phased and references archived hangar docs; PIVOT.md flagged it for rewrite. Out of scope for this ADR.
+- [docs/platform/ROADMAP.md](../platform/ROADMAP.md) was FIRC-phased when this ADR was written; it was rewritten in PR #234 to the post-pivot per-area, time-horizon shape. The archived FIRC roadmap lives at [.archive/platform/ROADMAP.md](../.archive/platform/ROADMAP.md).
 
 **On reawakening:**
 

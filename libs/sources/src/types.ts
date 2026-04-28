@@ -193,6 +193,8 @@ export type ParsedLocator = {
 	readonly pts?: ParsedPtsLocator;
 	/** AIM payload populated by Phase 7's `parseAimLocator`. */
 	readonly aim?: ParsedAimLocator;
+	/** AC payload populated by Phase 8's `parseAcLocator`. */
+	readonly ac?: ParsedAcLocator;
 };
 
 /**
@@ -321,6 +323,37 @@ export interface ParsedAimLocator {
 	readonly glossarySlug?: string;
 	/** Appendix number as written (e.g. `'1'`); mutually exclusive with chapter/section/paragraph. */
 	readonly appendix?: string;
+}
+
+/**
+ * Structured Advisory Circular locator surfaced by `parseAcLocator` in
+ * `libs/sources/src/ac/locator.ts`. Source of truth: ADR 019 §1.2 ("AC")
+ * plus the WP at `docs/work-packages/reference-ac-ingestion/`.
+ *
+ * Locator shape:
+ *
+ *   <doc-number>/<revision>                                whole AC at this revision
+ *   <doc-number>/<revision>/section-<n>                    section within the revision
+ *   <doc-number>/<revision>/change-<n>                     Change <n> issued against revision
+ *
+ * Doc number is the FAA's catalog number (`61-65`, `91-21.1`, `00-6`); digits,
+ * dots, and dashes only. Revision is a lowercase ASCII letter (`j`, `b`, `d`).
+ * Per ADR 019 §1.2, an unrevisioned `ac/<doc-number>` is rejected by the
+ * validator -- the locator parser enforces this by failing on missing revision.
+ *
+ * Pin format: `?at=YYYY-MM-DD` -- the publication date of the revision (or the
+ * Change-issuance date). A new revision letter is a new doc slug entirely; pin
+ * advances forward when a Change is issued against the same revision.
+ */
+export interface ParsedAcLocator {
+	/** AC doc number as written in the locator (e.g. `'61-65'`, `'91-21.1'`). */
+	readonly docNumber: string;
+	/** Revision letter, lowercased (e.g. `'j'`). */
+	readonly revision: string;
+	/** Section number as written (e.g. `'3'`); mutually exclusive with `change`. */
+	readonly section?: string;
+	/** Change number as written (e.g. `'2'`); mutually exclusive with `section`. */
+	readonly change?: string;
 }
 
 export interface LocatorError {

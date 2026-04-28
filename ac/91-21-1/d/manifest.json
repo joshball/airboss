@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "corpus": "ac",
+  "doc_slug": "91-21-1",
+  "doc_number": "91-21.1",
+  "revision": "d",
+  "title": "AC 91.21-1D - Use of Portable Electronic Devices Aboard Aircraft",
+  "publisher": "FAA",
+  "publication_date": "2017-10-27",
+  "source_url": "https://www.faa.gov/documentLibrary/media/Advisory_Circular/AC_91.21-1D.pdf",
+  "source_sha256": "7cc4ee1da7cec1f66bf4c6d50407675be1b9ec99c77c7ddfc27a25ca674e7c0e",
+  "fetched_at": "2026-04-27T21:20:46.050Z",
+  "page_count": 11,
+  "body_path": "ac/91-21-1/d/document.md",
+  "body_sha256": "6f7f2b2a94470e5f603fcdf01a66c6ea0986f292cdb7dff3244f5d870a90c53c",
+  "sections": [],
+  "changes": []
+}

@@ -19,6 +19,8 @@ import {
 	PORTS,
 	SCHEMAS,
 } from '@ab/constants';
+import { confirmOrAbort } from './lib/prompt';
+import { run } from './lib/spawn';
 
 const CONTAINER = 'airboss-db';
 const DB_URL = process.env[ENV_VARS.DATABASE_URL] ?? DEV_DB_URL;
@@ -37,13 +39,6 @@ const passthroughFlags = args.filter(
 	(a) => a.startsWith('-') && a !== '--help' && a !== '-h' && a !== '--force' && a !== '-f',
 );
 
-async function run(cmd: string[]): Promise<void> {
-	console.log(`> ${cmd.join(' ')}`);
-	const proc = Bun.spawn(cmd, { stdio: ['inherit', 'inherit', 'inherit'] });
-	const code = await proc.exited;
-	if (code !== 0) process.exit(code);
-}
-
 async function query(sql: string): Promise<string> {
 	const proc = Bun.spawn(['docker', 'exec', CONTAINER, 'psql', '-U', DB_USER, '-d', DB_NAME, '-t', '-A', '-c', sql], {
 		stdout: 'pipe',
@@ -54,14 +49,6 @@ async function query(sql: string): Promise<string> {
 	return text.trim();
 }
 
-async function prompt(message: string): Promise<string> {
-	process.stdout.write(message);
-	for await (const line of console) {
-		return line;
-	}
-	return '';
-}
-
 function assertLocalDb(): void {
 	if (isProd() || !DEV_DB_HOST_PATTERN.test(DB_URL)) {
 		console.error('Refusing to mutate DB: DATABASE_URL does not point at a local dev database');
@@ -69,18 +56,9 @@ function assertLocalDb(): void {
 	}
 }
 
-async function confirmOrAbort(message: string): Promise<void> {
-	if (force) return;
-	const answer = await prompt(`${message} [y/N] `);
-	if (answer.trim().toLowerCase() !== 'y') {
-		console.log('Aborted.');
-		process.exit(0);
-	}
-}
-
 async function doReset(): Promise<void> {
 	assertLocalDb();
-	await confirmOrAbort(`This will DROP and recreate "${DB_NAME}", then run the full seed. Continue?`);
+	await confirmOrAbort(`This will DROP and recreate "${DB_NAME}", then run the full seed. Continue?`, { force });
 	// Terminate any lingering connections so DROP DATABASE doesn't fail with
 	// "database is being accessed by other users" (leftover drizzle-studio,
 	// crashed dev processes, abandoned postgres.js pools, etc.).
@@ -147,6 +125,7 @@ async function doResetStudy(): Promise<void> {
 	assertLocalDb();
 	await confirmOrAbort(
 		'This will TRUNCATE study.card, study.card_state, study.review, then re-materialize course cards. Continue?',
+		{ force },
 	);
 	await run(['bun', 'scripts/db/reset-study.ts']);
 	await run(['bun', 'scripts/db/seed-all.ts', 'cards']);

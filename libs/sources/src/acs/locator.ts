@@ -50,6 +50,32 @@ export const ACS_PUBLICATION_SLUGS: readonly string[] = [
 	'atp-airplane-11a', // ATP -- Airplane (FAA-S-ACS-11A, Apr 2024)
 ];
 
+/**
+ * Convert a roman-numeral area ordinal (as printed in ACS PDFs, e.g. `I`,
+ * `IX`, `XII`) into the locked-Q7 2-digit zero-padded numeric form (`01`,
+ * `09`, `12`). Returns null when the input is not a recognised roman numeral
+ * within the bounds the ACS uses (the FAA's largest area count is 14 for
+ * the CFI ACS).
+ */
+export function romanToPaddedOrdinal(roman: string): string | null {
+	const upper = roman.toUpperCase();
+	if (!/^[IVX]+$/.test(upper)) return null;
+	const values: Record<string, number> = { I: 1, V: 5, X: 10 };
+	let total = 0;
+	let prev = 0;
+	for (let i = upper.length - 1; i >= 0; i -= 1) {
+		const ch = upper[i];
+		if (ch === undefined) return null;
+		const v = values[ch];
+		if (v === undefined) return null;
+		if (v < prev) total -= v;
+		else total += v;
+		prev = v;
+	}
+	if (total <= 0 || total > 99) return null;
+	return String(total).padStart(2, '0');
+}
+
 const SLUG_PATTERN = /^[a-z0-9][a-z0-9-]+[a-z0-9]$/;
 const AREA_PATTERN = /^area-(\d{2})$/;
 const TASK_PATTERN = /^task-([a-z])$/;

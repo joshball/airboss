@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "corpus": "ac",
+  "doc_slug": "61-65",
+  "doc_number": "61-65",
+  "revision": "j",
+  "title": "AC 61-65J",
+  "publisher": "FAA",
+  "publication_date": "2024-10-30",
+  "source_url": "https://www.faa.gov/documentLibrary/media/Advisory_Circular/AC_61-65J.pdf",
+  "source_sha256": "856e6e69528540c3dd721f117ace5ff39345e4d5970cb0be4febac24f2c5782c",
+  "fetched_at": "2026-04-27T21:20:42.160Z",
+  "page_count": 57,
+  "body_path": "ac/61-65/j/document.md",
+  "body_sha256": "934cbd9b39e004b0069a1e2f8f79a48862281b5dbc738e87b6e482d19509748d",
+  "sections": [],
+  "changes": []
+}

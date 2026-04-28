@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "corpus": "ac",
+  "doc_slug": "61-83",
+  "doc_number": "61-83",
+  "revision": "j",
+  "title": "AC 61-83J",
+  "publisher": "FAA",
+  "publication_date": "1997-08-04",
+  "source_url": "https://www.faa.gov/documentLibrary/media/Advisory_Circular/AC_61-83J.pdf",
+  "source_sha256": "bc809701ecf9b83a582242a731bdae9393716a14e55aa9b1b52b82bebf975541",
+  "fetched_at": "2026-04-27T21:20:42.657Z",
+  "page_count": 57,
+  "body_path": "ac/61-83/j/document.md",
+  "body_sha256": "d63abe05fe8df9dda9c4d92b26f7e82640124bf60ef1a014b4a2b3827e1fbe45",
+  "sections": [],
+  "changes": []
+}

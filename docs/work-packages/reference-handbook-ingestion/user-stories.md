@@ -47,10 +47,10 @@ The subsection locator (`1/2/2`) resolves to manifest code `1.2.2`. The renderer
 
 ```bash
 # Step 1 (PR #242, unchanged): fetch + extract
-bun run handbook-ingest --doc=phak
+bun run sources extract handbooks --doc=phak
 
 # Step 2 (Phase 6, new): register into the corpus
-bun run ingest handbooks --doc=phak --edition=8083-25C
+bun run sources register handbooks --doc=phak --edition=8083-25C
 ```
 
 After step 2, the registry has chapter / section / subsection entries for PHAK 8083-25C. Re-running step 2 is a no-op.

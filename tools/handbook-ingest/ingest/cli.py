@@ -2,7 +2,7 @@
 
 Usage:
 
-    bun run handbook-ingest <doc> [options]
+    bun run sources extract handbooks <doc> [options]
     python -m ingest <doc> [options]
 
 `<doc>` is the document slug (matches `ingest/config/<doc>.yaml`). Options:

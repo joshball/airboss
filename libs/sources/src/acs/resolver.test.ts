@@ -78,12 +78,16 @@ describe('ACS_RESOLVER', () => {
 		expect(ACS_RESOLVER.getLiveUrl('airboss-ref:acs/' as SourceId, 'ppl-airplane-6c')).toBeNull();
 	});
 
-	it('getDerivativeContent returns null (ACS PDF ingestion ships in a follow-on)', () => {
-		expect(ACS_RESOLVER.getDerivativeContent(ELEMENT_ID, 'ppl-airplane-6c')).toBeNull();
+	it('getDerivativeContent returns null when no manifest exists for the requested slug', () => {
+		// `cfi-airplane-25` is not the slice we ingest at this seed layer -- the
+		// slice ships only the PPL publication we actually have on disk. Asking
+		// for a SourceId carrying an un-ingested slug returns null. Real-tree
+		// resolution is exercised by the smoke test in `smoke.test.ts`.
+		expect(ACS_RESOLVER.getDerivativeContent(CFI_ELEMENT_ID, 'cfi-airplane-25')).toBeNull();
 	});
 
-	it('getIndexedContent returns null (ACS PDF ingestion ships in a follow-on)', async () => {
-		expect(await ACS_RESOLVER.getIndexedContent(ELEMENT_ID, 'ppl-airplane-6c')).toBeNull();
+	it('getIndexedContent returns null when no manifest exists for the requested slug', async () => {
+		expect(await ACS_RESOLVER.getIndexedContent(CFI_ELEMENT_ID, 'cfi-airplane-25')).toBeNull();
 	});
 
 	it('getCurrentEdition returns max edition across acs corpus', () => {

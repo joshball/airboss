@@ -34,6 +34,8 @@
 
 import { resolve } from 'node:path';
 import { DEV_ACCOUNTS, DEV_DB_URL, DEV_SEED_ORIGIN_TAG, ENV_VARS } from '@ab/constants';
+import { prompt } from '../lib/prompt';
+import { runOrThrow } from '../lib/spawn';
 import { type AbbySeedCounts, seedAbby } from './seed-abby';
 import { seedCardsForUser } from './seed-cards';
 import { seedCredentials } from './seed-credentials';
@@ -74,22 +76,14 @@ function isPhase(value: string): value is Phase {
 	return (PHASES as readonly string[]).includes(value);
 }
 
-async function runSubprocess(cmd: string[]): Promise<void> {
-	const proc = Bun.spawn(cmd, { cwd: REPO_ROOT, stdio: ['inherit', 'inherit', 'inherit'] });
-	const code = await proc.exited;
-	if (code !== 0) {
-		throw new Error(`subprocess failed (exit ${code}): ${cmd.join(' ')}`);
-	}
-}
-
 async function phaseUsers(): Promise<void> {
 	process.stdout.write('\n=== seed: users ===\n');
-	await runSubprocess(['bun', 'scripts/db/seed-dev-users.ts']);
+	await runOrThrow(['bun', 'scripts/db/seed-dev-users.ts'], { cwd: REPO_ROOT });
 }
 
 async function phaseKnowledge(): Promise<void> {
 	process.stdout.write('\n=== seed: knowledge ===\n');
-	await runSubprocess(['bun', 'scripts/build-knowledge-index.ts']);
+	await runOrThrow(['bun', 'scripts/build-knowledge-index.ts'], { cwd: REPO_ROOT });
 }
 
 async function phaseHandbooks(): Promise<void> {
@@ -177,12 +171,6 @@ const PHASE_FNS: Record<Phase, () => Promise<void>> = {
 	cards: phaseCards,
 	abby: phaseAbby,
 };
-
-async function prompt(message: string): Promise<string> {
-	process.stdout.write(message);
-	for await (const line of console) return line;
-	return '';
-}
 
 async function enforceGuard(target: string | undefined): Promise<void> {
 	const databaseUrl = process.env[ENV_VARS.DATABASE_URL] ?? DEV_DB_URL;

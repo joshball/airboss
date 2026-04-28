@@ -1,0 +1,3739 @@
+{
+  "schema_version": 1,
+  "corpus": "acs",
+  "slug": "ppl-airplane-6c",
+  "title": "Private Pilot for Airplane Category ACS",
+  "publisher": "FAA",
+  "publication_date": "2023-11-01",
+  "source_url": "https://www.faa.gov/training_testing/testing/acs/private_airplane_acs_6.pdf",
+  "source_sha256": "46ed6625723b0b7f37b3274cdb5170519f88baf28aec1f925286ef24909ea824",
+  "fetched_at": "2026-04-27T21:20:47.864Z",
+  "page_count": 87,
+  "areas": [
+    {
+      "area": "01",
+      "title": "Preflight Preparation",
+      "tasks": [
+        {
+          "task": "a",
+          "title": "Pilot Qualifications",
+          "body_path": "acs/ppl-airplane-6c/area-01/task-a.md",
+          "body_sha256": "e7d934ba34e4a4e7b1321f5a83837e5c67e6f3a870b7070749b2a5c52ecc343a",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "PA.I.A.K1",
+              "title": "Certification requirements, recent flight experience, and recordkeeping."
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "PA.I.A.K2",
+              "title": "Privileges and limitations."
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "PA.I.A.K3",
+              "title": "Medical certificates: class, expiration, privileges, temporary disqualifications."
+            },
+            {
+              "triad": "k",
+              "ordinal": "04",
+              "code": "PA.I.A.K4",
+              "title": "Documents required to exercise private pilot privileges."
+            },
+            {
+              "triad": "k",
+              "ordinal": "05",
+              "code": "PA.I.A.K5",
+              "title": "Part 68 BasicMed privileges and limitations."
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "PA.I.A.R1",
+              "title": "Proficiency versus currency."
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "PA.I.A.R2",
+              "title": "Flying unfamiliar aircraft or operating with unfamiliar flight display systems and avionics."
+            },
+            {
+              "triad": "s",
+              "ordinal": "01",
+              "code": "PA.I.A.S1",
+              "title": "Apply requirements to act as pilot-in-command (PIC) under Visual Flight Rules (VFR) in a scenario"
+            }
+          ]
+        },
+        {
+          "task": "b",
+          "title": "Airworthiness Requirements",
+          "body_path": "acs/ppl-airplane-6c/area-01/task-b.md",
+          "body_sha256": "54a773df5675820f691108a11bd5a0f454564582b1b8c9d956fec3ec9efe93ec",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "PA.I.B.K1",
+              "title": "General airworthiness requirements and compliance for airplanes, including:"
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "PA.I.B.K2",
+              "title": "Pilot-performed preventive maintenance."
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "PA.I.B.K3",
+              "title": "Equipment requirements for day and night VFR flight, including:"
+            }
+          ]
+        },
+        {
+          "task": "c",
+          "title": "Weather Information",
+          "body_path": "acs/ppl-airplane-6c/area-01/task-c.md",
+          "body_sha256": "e743a0994a094e75554447667498a75bcfe5710ca4e7c8fc815bfce8279ae7ae",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "PA.I.C.K1",
+              "title": "Sources of weather data (e.g., National Weather Service, Flight Service) for flight planning purposes."
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "PA.I.C.K2",
+              "title": "Acceptable weather products and resources required for preflight planning, current and forecast"
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "PA.I.C.K3",
+              "title": "Meteorology applicable to the departure, en route, alternate, and destination under visual flight"
+            }
+          ]
+        },
+        {
+          "task": "d",
+          "title": "Cross-Country Flight Planning",
+          "body_path": "acs/ppl-airplane-6c/area-01/task-d.md",
+          "body_sha256": "64d44e0bc748ea01994915ddd452d6376dec8f182a8021bf31e4981b1f3bfde9",
+          "elements": []
+        },
+        {
+          "task": "e",
+          "title": "National Airspace System",
+          "body_path": "acs/ppl-airplane-6c/area-01/task-e.md",
+          "body_sha256": "a0cc8dd4cab39c0a92408d8995912f71e85738e74397fde8b447e76d9317c2fc",
+          "elements": []
+        },
+        {
+          "task": "f",
+          "title": "Performance and Limitations",
+          "body_path": "acs/ppl-airplane-6c/area-01/task-f.md",
+          "body_sha256": "320c3790311faea8891e9db1c9f382ed89a9a12ee0cc9b7be14e61dbe3740c97",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "PA.I.F.K1",
+              "title": "Elements related to performance and limitations by explaining the use of charts, tables, and data to"
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "PA.I.F.K2",
+              "title": "Factors affecting performance, including:"
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "PA.I.F.K3",
+              "title": "Aerodynamics."
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "PA.I.F.R1",
+              "title": "Use of performance charts, tables, and data."
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "PA.I.F.R2",
+              "title": "Airplane limitations."
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "PA.I.F.R3",
+              "title": "Possible differences between calculated performance and actual performance."
+            }
+          ]
+        },
+        {
+          "task": "g",
+          "title": "Operation of Systems",
+          "body_path": "acs/ppl-airplane-6c/area-01/task-g.md",
+          "body_sha256": "a48574cf1e3947ac988593c01313ed9f159e3457c11600ca2057ac24a0393d32",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "PA.I.G.K1",
+              "title": "Airplane systems, including:"
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "PA.I.G.K2",
+              "title": "Indications of and procedures for managing system abnormalities or failures."
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "PA.I.G.R1",
+              "title": "Detection of system malfunctions or failures."
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "PA.I.G.R2",
+              "title": "Management of a system failure."
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "PA.I.G.R3",
+              "title": "Monitoring and management of automated systems."
+            },
+            {
+              "triad": "s",
+              "ordinal": "01",
+              "code": "PA.I.G.S1",
+              "title": "Operate at least three of the systems listed in K1a through K1l appropriately."
+            },
+            {
+              "triad": "s",
+              "ordinal": "02",
+              "code": "PA.I.G.S2",
+              "title": "Complete the appropriate checklist(s)."
+            }
+          ]
+        },
+        {
+          "task": "h",
+          "title": "Human Factors",
+          "body_path": "acs/ppl-airplane-6c/area-01/task-h.md",
+          "body_sha256": "aace2531ae126faba9318becd5ad8115215a57b6efe39bedc7abeff8a91f0a93",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "PA.I.H.K1",
+              "title": "Symptoms, recognition, causes, effects, and corrective actions associated with aeromedical and"
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "PA.I.H.K2",
+              "title": "Regulations regarding use of alcohol and drugs."
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "PA.I.H.K3",
+              "title": "Effects of alcohol, drugs, and over-the-counter medications."
+            },
+            {
+              "triad": "k",
+              "ordinal": "04",
+              "code": "PA.I.H.K4",
+              "title": "Aeronautical Decision-Making (ADM) to include using Crew Resource Management (CRM) or Single-"
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "PA.I.H.R1",
+              "title": "Aeromedical and physiological issues."
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "PA.I.H.R2",
+              "title": "Hazardous attitudes."
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "PA.I.H.R3",
+              "title": "Distractions, task prioritization, loss of situational awareness, or disorientation."
+            },
+            {
+              "triad": "r",
+              "ordinal": "04",
+              "code": "PA.I.H.R4",
+              "title": "Confirmation and expectation bias."
+            },
+            {
+              "triad": "s",
+              "ordinal": "01",
+              "code": "PA.I.H.S1",
+              "title": "Associate the symptoms and effects for at least three of the conditions listed in K1a through K1l with"
+            },
+            {
+              "triad": "s",
+              "ordinal": "02",
+              "code": "PA.I.H.S2",
+              "title": "Perform self-assessment, including fitness for flight and personal minimums, for actual flight or a"
+            }
+          ]
+        },
+        {
+          "task": "i",
+          "title": "Water and Seaplane Characteristics, Seaplane Bases, Maritime Rules, and Aids to Marine",
+          "body_path": "acs/ppl-airplane-6c/area-01/task-i.md",
+          "body_sha256": "bb07a86aea46d593626f58ea331a559d64779a66484244a648747cd78df84dff",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "PA.I.I.K1",
+              "title": "The characteristics of a water surface as affected by features, such as:"
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "PA.I.I.K2",
+              "title": "Float and hull construction, and its effect on seaplane performance."
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "PA.I.I.K3",
+              "title": "Causes of porpoising and skipping, and the pilot action needed to prevent or correct these"
+            },
+            {
+              "triad": "k",
+              "ordinal": "04",
+              "code": "PA.I.I.K4",
+              "title": "How to locate and identify seaplane bases on charts or in directories."
+            },
+            {
+              "triad": "k",
+              "ordinal": "05",
+              "code": "PA.I.I.K5",
+              "title": "Operating restrictions at various bases."
+            },
+            {
+              "triad": "k",
+              "ordinal": "06",
+              "code": "PA.I.I.K6",
+              "title": "Right-of-way, steering, and sailing rules pertinent to seaplane operation."
+            },
+            {
+              "triad": "k",
+              "ordinal": "07",
+              "code": "PA.I.I.K7",
+              "title": "Marine navigation aids, such as buoys, beacons, lights, sound signals, and range markers."
+            },
+            {
+              "triad": "k",
+              "ordinal": "08",
+              "code": "PA.I.I.K8",
+              "title": "Naval vessel protection zones."
+            },
+            {
+              "triad": "k",
+              "ordinal": "09",
+              "code": "PA.I.I.K9",
+              "title": "No wake zones."
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "PA.I.I.R1",
+              "title": "Local conditions."
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "PA.I.I.R2",
+              "title": "Impact of marine traffic."
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "PA.I.I.R3",
+              "title": "Right-of-way and sailing rules pertinent to seaplane operations."
+            },
+            {
+              "triad": "r",
+              "ordinal": "04",
+              "code": "PA.I.I.R4",
+              "title": "Limited services and assistance available at seaplane bases."
+            },
+            {
+              "triad": "s",
+              "ordinal": "01",
+              "code": "PA.I.I.S1",
+              "title": "Assess the water surface characteristics for the proposed flight."
+            },
+            {
+              "triad": "s",
+              "ordinal": "02",
+              "code": "PA.I.I.S2",
+              "title": "Identify restrictions at local seaplane bases."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": "02",
+      "title": "Preflight Procedures",
+      "tasks": [
+        {
+          "task": "a",
+          "title": "Preflight Assessment",
+          "body_path": "acs/ppl-airplane-6c/area-02/task-a.md",
+          "body_sha256": "2a4e9acf541ac7438e9a82d6fdfa9064fc91f866b1057760a4d6c919d49df0ae",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "PA.II.A.K1",
+              "title": "Pilot self-assessment."
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "PA.II.A.K2",
+              "title": "Determining that the airplane to be used is appropriate and airworthy."
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "PA.II.A.K3",
+              "title": "Airplane preflight inspection, including:"
+            },
+            {
+              "triad": "k",
+              "ordinal": "04",
+              "code": "PA.II.A.K4",
+              "title": "Environmental factors, including weather, terrain, route selection, and obstructions."
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "PA.II.A.R1",
+              "title": "Pilot."
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "PA.II.A.R2",
+              "title": "Aircraft."
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "PA.II.A.R3",
+              "title": "Environment (e.g., weather, airports, airspace, terrain, obstacles)."
+            },
+            {
+              "triad": "r",
+              "ordinal": "04",
+              "code": "PA.II.A.R4",
+              "title": "External pressures."
+            },
+            {
+              "triad": "r",
+              "ordinal": "05",
+              "code": "PA.II.A.R5",
+              "title": "Aviation security concerns."
+            },
+            {
+              "triad": "s",
+              "ordinal": "01",
+              "code": "PA.II.A.S1",
+              "title": "Inspect the airplane with reference to an appropriate checklist."
+            },
+            {
+              "triad": "s",
+              "ordinal": "02",
+              "code": "PA.II.A.S2",
+              "title": "Verify the airplane is in condition for safe flight and conforms to its type design."
+            },
+            {
+              "triad": "s",
+              "ordinal": "03",
+              "code": "PA.II.A.S3",
+              "title": "Perform self-assessment."
+            },
+            {
+              "triad": "s",
+              "ordinal": "04",
+              "code": "PA.II.A.S4",
+              "title": "Continue to assess the environment for safe flight."
+            }
+          ]
+        },
+        {
+          "task": "b",
+          "title": "Flight Deck Management",
+          "body_path": "acs/ppl-airplane-6c/area-02/task-b.md",
+          "body_sha256": "58a1fecbb0d79d3d7063f6faec2872d06594d5d0c74b4ec19459d07d91789c2b",
+          "elements": []
+        },
+        {
+          "task": "c",
+          "title": "Engine Starting",
+          "body_path": "acs/ppl-airplane-6c/area-02/task-c.md",
+          "body_sha256": "fe1cbb5b6bace2a83a5868f210761e638e2055b8e688f7b3b670572c578af176",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "PA.II.C.K1",
+              "title": "Starting under various conditions."
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "PA.II.C.K2",
+              "title": "Starting the engine(s) by use of external power."
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "PA.II.C.K3",
+              "title": "Limitations associated with starting."
+            },
+            {
+              "triad": "k",
+              "ordinal": "04",
+              "code": "PA.II.C.K4",
+              "title": "Conditions leading to and procedures for an aborted start."
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "PA.II.C.R1",
+              "title": "Propeller safety."
+            },
+            {
+              "triad": "s",
+              "ordinal": "01",
+              "code": "PA.II.C.S1",
+              "title": "Position the airplane properly considering structures, other aircraft, wind, and the safety of nearby"
+            },
+            {
+              "triad": "s",
+              "ordinal": "02",
+              "code": "PA.II.C.S2",
+              "title": "Complete the appropriate checklist(s)."
+            }
+          ]
+        },
+        {
+          "task": "d",
+          "title": "Taxiing (ASEL, AMEL)",
+          "body_path": "acs/ppl-airplane-6c/area-02/task-d.md",
+          "body_sha256": "45be1f0cd73d9c7261757d9a25ab6c540b048df84aee35ff1188b0160534220d",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "PA.II.D.K1",
+              "title": "Current airport aeronautical references and information resources such as the Chart Supplement,"
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "PA.II.D.K2",
+              "title": "Taxi instructions/clearances."
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "PA.II.D.K3",
+              "title": "Airport markings, signs, and lights."
+            },
+            {
+              "triad": "k",
+              "ordinal": "04",
+              "code": "PA.II.D.K4",
+              "title": "Visual indicators for wind."
+            },
+            {
+              "triad": "k",
+              "ordinal": "05",
+              "code": "PA.II.D.K5",
+              "title": "Aircraft lighting, as appropriate."
+            },
+            {
+              "triad": "k",
+              "ordinal": "06",
+              "code": "PA.II.D.K6",
+              "title": "Procedures for:"
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "PA.II.D.R1",
+              "title": "Activities and distractions."
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "PA.II.D.R2",
+              "title": "Confirmation or expectation bias as related to taxi instructions."
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "PA.II.D.R3",
+              "title": "A taxi route or departure runway change."
+            },
+            {
+              "triad": "r",
+              "ordinal": "04",
+              "code": "PA.II.D.R4",
+              "title": "Runway incursion."
+            },
+            {
+              "triad": "s",
+              "ordinal": "01",
+              "code": "PA.II.D.S1",
+              "title": "Receive and correctly read back clearances/instructions, if applicable."
+            },
+            {
+              "triad": "s",
+              "ordinal": "02",
+              "code": "PA.II.D.S2",
+              "title": "Use an airport diagram or taxi chart during taxi, if published, and maintain situational awareness."
+            },
+            {
+              "triad": "s",
+              "ordinal": "03",
+              "code": "PA.II.D.S3",
+              "title": "Position the flight controls for the existing wind, if applicable."
+            },
+            {
+              "triad": "s",
+              "ordinal": "04",
+              "code": "PA.II.D.S4",
+              "title": "Complete the appropriate checklist(s)."
+            },
+            {
+              "triad": "s",
+              "ordinal": "05",
+              "code": "PA.II.D.S5",
+              "title": "Perform a brake check immediately after the airplane begins moving."
+            },
+            {
+              "triad": "s",
+              "ordinal": "06",
+              "code": "PA.II.D.S6",
+              "title": "Maintain positive control of the airplane during ground operations by controlling direction and speed"
+            },
+            {
+              "triad": "s",
+              "ordinal": "07",
+              "code": "PA.II.D.S7",
+              "title": "Comply with airport/taxiway markings, signals, and air traffic control (ATC) clearances and instructions."
+            },
+            {
+              "triad": "s",
+              "ordinal": "08",
+              "code": "PA.II.D.S8",
+              "title": "Position the airplane properly relative to hold lines."
+            }
+          ]
+        },
+        {
+          "task": "e",
+          "title": "Taxiing and Sailing (ASES, AMES)",
+          "body_path": "acs/ppl-airplane-6c/area-02/task-e.md",
+          "body_sha256": "c3848bc8ed332b4bf976e52b275917483c45b6b34119306a7c025e5034a3b92b",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "PA.II.E.K1",
+              "title": "Airport information resources, including Chart Supplements, airport diagram, and appropriate"
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "PA.II.E.K2",
+              "title": "Taxi instructions/clearances."
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "PA.II.E.K3",
+              "title": "Airport/seaplane base markings, signs, and lights."
+            },
+            {
+              "triad": "k",
+              "ordinal": "04",
+              "code": "PA.II.E.K4",
+              "title": "Visual indicators for wind."
+            },
+            {
+              "triad": "k",
+              "ordinal": "05",
+              "code": "PA.II.E.K5",
+              "title": "Airplane lighting."
+            },
+            {
+              "triad": "k",
+              "ordinal": "06",
+              "code": "PA.II.E.K6",
+              "title": "Procedures for:"
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "PA.II.E.R1",
+              "title": "Activities and distractions."
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "PA.II.E.R2",
+              "title": "Porpoising and skipping."
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "PA.II.E.R3",
+              "title": "Low visibility taxi and sailing operations."
+            },
+            {
+              "triad": "r",
+              "ordinal": "04",
+              "code": "PA.II.E.R4",
+              "title": "Other aircraft, vessels, and hazards."
+            },
+            {
+              "triad": "r",
+              "ordinal": "05",
+              "code": "PA.II.E.R5",
+              "title": "Confirmation or expectation bias as related to taxi instructions."
+            },
+            {
+              "triad": "s",
+              "ordinal": "01",
+              "code": "PA.II.E.S1",
+              "title": "Receive and correctly read back clearances/instructions, if applicable."
+            },
+            {
+              "triad": "s",
+              "ordinal": "02",
+              "code": "PA.II.E.S2",
+              "title": "Use an appropriate airport diagram or taxi chart, if published."
+            },
+            {
+              "triad": "s",
+              "ordinal": "03",
+              "code": "PA.II.E.S3",
+              "title": "Comply with seaplane base/airport/taxiway markings, signals, and signs."
+            },
+            {
+              "triad": "s",
+              "ordinal": "04",
+              "code": "PA.II.E.S4",
+              "title": "Depart the dock/mooring buoy or beach/ramp in a safe manner, considering wind, current, traffic, and"
+            },
+            {
+              "triad": "s",
+              "ordinal": "05",
+              "code": "PA.II.E.S5",
+              "title": "Complete the appropriate checklist(s)."
+            },
+            {
+              "triad": "s",
+              "ordinal": "06",
+              "code": "PA.II.E.S6",
+              "title": "Position the flight controls, flaps, doors, water rudders, and power correctly for the existing conditions"
+            },
+            {
+              "triad": "s",
+              "ordinal": "07",
+              "code": "PA.II.E.S7",
+              "title": "Exhibit procedures for steering and maneuvering while maintaining proper situational awareness"
+            },
+            {
+              "triad": "s",
+              "ordinal": "08",
+              "code": "PA.II.E.S8",
+              "title": "Plan and follow the most favorable taxi or sailing course for current conditions."
+            }
+          ]
+        },
+        {
+          "task": "f",
+          "title": "Before Takeoff Check",
+          "body_path": "acs/ppl-airplane-6c/area-02/task-f.md",
+          "body_sha256": "138cabe9b3dcf6c5b09a818941f23d40b11bf1513ab450fbcee045b301dd0399",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "PA.II.F.K1",
+              "title": "Purpose of before takeoff checklist items, including:"
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "PA.II.F.R1",
+              "title": "Division of attention while conducting before takeoff checks."
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "PA.II.F.R2",
+              "title": "Unexpected runway changes by air traffic control (ATC)."
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "PA.II.F.R3",
+              "title": "Wake turbulence."
+            },
+            {
+              "triad": "r",
+              "ordinal": "04",
+              "code": "PA.II.F.R4",
+              "title": "Potential powerplant failure during takeoff or other malfunction considering operational factors such as"
+            },
+            {
+              "triad": "s",
+              "ordinal": "01",
+              "code": "PA.II.F.S1",
+              "title": "Review takeoff performance."
+            },
+            {
+              "triad": "s",
+              "ordinal": "02",
+              "code": "PA.II.F.S2",
+              "title": "Complete the appropriate checklist(s)."
+            },
+            {
+              "triad": "s",
+              "ordinal": "03",
+              "code": "PA.II.F.S3",
+              "title": "Position the airplane appropriately considering wind direction and the presence of any aircraft, vessels,"
+            },
+            {
+              "triad": "s",
+              "ordinal": "04",
+              "code": "PA.II.F.S4",
+              "title": "Divide attention inside and outside the flight deck."
+            },
+            {
+              "triad": "s",
+              "ordinal": "05",
+              "code": "PA.II.F.S5",
+              "title": "Verify that engine parameters and airplane configuration are suitable."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": "03",
+      "title": "Airport and Seaplane Base Operations",
+      "tasks": [
+        {
+          "task": "a",
+          "title": "Communications, Light Signals, and Runway Lighting Systems",
+          "body_path": "acs/ppl-airplane-6c/area-03/task-a.md",
+          "body_sha256": "882fb3049ecde7e12c74c2c2b57fdfdccfc9b44344804cfff4f62189342e1e9b",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "PA.III.A.K1",
+              "title": "How to obtain appropriate radio frequencies."
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "PA.III.A.K2",
+              "title": "Proper radio communication procedures and air traffic control (ATC) phraseology."
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "PA.III.A.K3",
+              "title": "ATC light signal recognition."
+            },
+            {
+              "triad": "k",
+              "ordinal": "04",
+              "code": "PA.III.A.K4",
+              "title": "Appropriate use of transponder(s)."
+            },
+            {
+              "triad": "k",
+              "ordinal": "05",
+              "code": "PA.III.A.K5",
+              "title": "Lost communication procedures."
+            },
+            {
+              "triad": "k",
+              "ordinal": "06",
+              "code": "PA.III.A.K6",
+              "title": "Equipment issues that could cause loss of communication."
+            },
+            {
+              "triad": "k",
+              "ordinal": "07",
+              "code": "PA.III.A.K7",
+              "title": "Radar assistance."
+            },
+            {
+              "triad": "k",
+              "ordinal": "08",
+              "code": "PA.III.A.K8",
+              "title": "National Transportation Safety Board (NTSB) accident/incident reporting."
+            },
+            {
+              "triad": "k",
+              "ordinal": "09",
+              "code": "PA.III.A.K9",
+              "title": "Runway Status Lighting Systems."
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "PA.III.A.R1",
+              "title": "Communication."
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "PA.III.A.R2",
+              "title": "Deciding if and when to declare an emergency."
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "PA.III.A.R3",
+              "title": "[Archived]"
+            },
+            {
+              "triad": "r",
+              "ordinal": "04",
+              "code": "PA.III.A.R4",
+              "title": "Use of non-standard phraseology."
+            },
+            {
+              "triad": "s",
+              "ordinal": "01",
+              "code": "PA.III.A.S1",
+              "title": "Select and activate appropriate frequencies."
+            },
+            {
+              "triad": "s",
+              "ordinal": "02",
+              "code": "PA.III.A.S2",
+              "title": "Transmit using standard phraseology and procedures as specified in the Aeronautical Information"
+            },
+            {
+              "triad": "s",
+              "ordinal": "03",
+              "code": "PA.III.A.S3",
+              "title": "Acknowledge radio communications and comply with ATC instructions or as directed by the evaluator."
+            }
+          ]
+        },
+        {
+          "task": "b",
+          "title": "Traffic Patterns",
+          "body_path": "acs/ppl-airplane-6c/area-03/task-b.md",
+          "body_sha256": "f481b633cc82459fb7e3d91e5cb3d0f29d827ffba6d351d62d3ceafb18597a9d",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "PA.III.B.K1",
+              "title": "Towered and nontowered airport operations."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": "04",
+      "title": "Takeoffs, Landings, and Go-Arounds",
+      "tasks": [
+        {
+          "task": "a",
+          "title": "Normal Takeoff and Climb",
+          "body_path": "acs/ppl-airplane-6c/area-04/task-a.md",
+          "body_sha256": "45858373506f3ee407a7eb84c2e75e0925e39a4219cfa9973b0c43d0b5c8c1d4",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "PA.IV.A.K1",
+              "title": "Effects of atmospheric conditions, including wind, on takeoff and climb performance."
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "PA.IV.A.K2",
+              "title": "Best angle of climb speed (VX) and best rate of climb speed (VY)."
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "PA.IV.A.K3",
+              "title": "Appropriate airplane configuration."
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "PA.IV.A.R1",
+              "title": "Selection of runway or takeoff path based on aircraft performance and limitations, available distance,"
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "PA.IV.A.R2",
+              "title": "Effects of:"
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "PA.IV.A.R3",
+              "title": "Abnormal operations, including planning for:"
+            },
+            {
+              "triad": "r",
+              "ordinal": "04",
+              "code": "PA.IV.A.R4",
+              "title": "Collision hazards."
+            },
+            {
+              "triad": "r",
+              "ordinal": "05",
+              "code": "PA.IV.A.R5",
+              "title": "Low altitude maneuvering, including stall, spin, or controlled flight into terrain (CFIT)."
+            },
+            {
+              "triad": "r",
+              "ordinal": "06",
+              "code": "PA.IV.A.R6",
+              "title": "Distractions, task prioritization, loss of situational awareness, or disorientation."
+            },
+            {
+              "triad": "r",
+              "ordinal": "07",
+              "code": "PA.IV.A.R7",
+              "title": "Runway incursion."
+            },
+            {
+              "triad": "s",
+              "ordinal": "01",
+              "code": "PA.IV.A.S1",
+              "title": "Complete the appropriate checklist(s)."
+            },
+            {
+              "triad": "s",
+              "ordinal": "02",
+              "code": "PA.IV.A.S2",
+              "title": "Make radio calls as appropriate."
+            },
+            {
+              "triad": "s",
+              "ordinal": "03",
+              "code": "PA.IV.A.S3",
+              "title": "Verify assigned/correct runway or takeoff path."
+            },
+            {
+              "triad": "s",
+              "ordinal": "04",
+              "code": "PA.IV.A.S4",
+              "title": "Determine wind direction with or without visible wind direction indicators."
+            }
+          ]
+        },
+        {
+          "task": "b",
+          "title": "Normal Approach and Landing",
+          "body_path": "acs/ppl-airplane-6c/area-04/task-b.md",
+          "body_sha256": "14aba5b8dadde0042eadb89455d8af7a6fe2a51607f65ad9ca9d8d7a2a240e3b",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "PA.IV.B.K1",
+              "title": "A stabilized approach, including energy management concepts."
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "PA.IV.B.K2",
+              "title": "Effects of atmospheric conditions, including wind, on approach and landing performance."
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "PA.IV.B.K3",
+              "title": "Wind correction techniques on approach and landing."
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "PA.IV.B.R1",
+              "title": "Selection of runway/landing surface, approach path, and touchdown area based on pilot capability,"
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "PA.IV.B.R2",
+              "title": "Effects of:"
+            }
+          ]
+        },
+        {
+          "task": "c",
+          "title": "Soft-Field Takeoff and Climb (ASEL)",
+          "body_path": "acs/ppl-airplane-6c/area-04/task-c.md",
+          "body_sha256": "a6b8656934e1d6fec194b470712a587cc2b837c4d948a55a67a1cf38025f705e",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "PA.IV.C.K1",
+              "title": "Effects of atmospheric conditions, including wind, on takeoff and climb performance."
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "PA.IV.C.K2",
+              "title": "Best angle of climb speed (VX) and best rate of climb speed (VY)."
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "PA.IV.C.K3",
+              "title": "Appropriate airplane configuration."
+            }
+          ]
+        },
+        {
+          "task": "d",
+          "title": "Soft-Field Approach and Landing (ASEL)",
+          "body_path": "acs/ppl-airplane-6c/area-04/task-d.md",
+          "body_sha256": "9ec9a0ceb4cdc3b7a0ce6bd20b25ccd7bd0e8267500238237a56de72a46cb656",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "PA.IV.D.K1",
+              "title": "A stabilized approach, including energy management concepts."
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "PA.IV.D.K2",
+              "title": "Effects of atmospheric conditions, including wind, on approach and landing performance."
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "PA.IV.D.K3",
+              "title": "Wind correction techniques on approach and landing."
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "PA.IV.D.R1",
+              "title": "Selection of runway based on pilot capability, airplane performance and limitations, available distance,"
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "PA.IV.D.R2",
+              "title": "Effects of:"
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "PA.IV.D.R3",
+              "title": "Planning for:"
+            },
+            {
+              "triad": "r",
+              "ordinal": "04",
+              "code": "PA.IV.D.R4",
+              "title": "Collision hazards."
+            },
+            {
+              "triad": "r",
+              "ordinal": "05",
+              "code": "PA.IV.D.R5",
+              "title": "Low altitude maneuvering, including stall, spin, or controlled flight into terrain (CFIT)."
+            },
+            {
+              "triad": "r",
+              "ordinal": "06",
+              "code": "PA.IV.D.R6",
+              "title": "Distractions, task prioritization, loss of situational awareness, or disorientation."
+            },
+            {
+              "triad": "s",
+              "ordinal": "01",
+              "code": "PA.IV.D.S1",
+              "title": "Complete the appropriate checklist(s)."
+            },
+            {
+              "triad": "s",
+              "ordinal": "02",
+              "code": "PA.IV.D.S2",
+              "title": "Make radio calls as appropriate."
+            },
+            {
+              "triad": "s",
+              "ordinal": "03",
+              "code": "PA.IV.D.S3",
+              "title": "Ensure the airplane is aligned with the correct/assigned runway."
+            }
+          ]
+        },
+        {
+          "task": "e",
+          "title": "Short-Field Takeoff and Maximum Performance Climb (ASEL, AMEL)",
+          "body_path": "acs/ppl-airplane-6c/area-04/task-e.md",
+          "body_sha256": "bd8ebafa76a3707b015574e8d4b604cf5b3293a1b2870f7b8f3ce4a70147e4e3",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "PA.IV.E.K1",
+              "title": "Effects of atmospheric conditions, including wind, on takeoff and climb performance."
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "PA.IV.E.K2",
+              "title": "Best angle of climb speed (VX) and best rate of climb speed (VY)."
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "PA.IV.E.K3",
+              "title": "Appropriate airplane configuration."
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "PA.IV.E.R1",
+              "title": "Selection of runway based on pilot capability, airplane performance and limitations, available distance,"
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "PA.IV.E.R2",
+              "title": "Effects of:"
+            }
+          ]
+        },
+        {
+          "task": "f",
+          "title": "Short-Field Approach and Landing (ASEL, AMEL)",
+          "body_path": "acs/ppl-airplane-6c/area-04/task-f.md",
+          "body_sha256": "b1f39f8d57512c45b106a79a65b17427af77f45d3d989bd4c3c5ccd3c06eab89",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "PA.IV.F.K1",
+              "title": "A stabilized approach, including energy management concepts."
+            }
+          ]
+        },
+        {
+          "task": "g",
+          "title": "Confined Area Takeoff and Maximum Performance Climb (ASES, AMES)",
+          "body_path": "acs/ppl-airplane-6c/area-04/task-g.md",
+          "body_sha256": "1afcaebfb0f53a7f429e3b9a71e08260ffe2c874e686aadc7ed46cbb6f47bcba",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "PA.IV.G.K1",
+              "title": "Effects of atmospheric conditions, including wind, on takeoff and climb performance."
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "PA.IV.G.K2",
+              "title": "Best angle of climb speed (VX) and best rate of climb speed (VY)."
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "PA.IV.G.K3",
+              "title": "Appropriate airplane configuration."
+            },
+            {
+              "triad": "k",
+              "ordinal": "04",
+              "code": "PA.IV.G.K4",
+              "title": "Effects of water surface."
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "PA.IV.G.R1",
+              "title": "Selection of takeoff path based on pilot capability, airplane performance and limitations, available"
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "PA.IV.G.R2",
+              "title": "Effects of:"
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "PA.IV.G.R3",
+              "title": "Abnormal operations, including planning for:"
+            },
+            {
+              "triad": "r",
+              "ordinal": "04",
+              "code": "PA.IV.G.R4",
+              "title": "Collision hazards."
+            },
+            {
+              "triad": "r",
+              "ordinal": "05",
+              "code": "PA.IV.G.R5",
+              "title": "Low altitude maneuvering, including stall, spin, or controlled flight into terrain (CFIT)."
+            },
+            {
+              "triad": "r",
+              "ordinal": "06",
+              "code": "PA.IV.G.R6",
+              "title": "Distractions, task prioritization, loss of situational awareness, or disorientation."
+            },
+            {
+              "triad": "s",
+              "ordinal": "01",
+              "code": "PA.IV.G.S1",
+              "title": "Complete the appropriate checklist(s)."
+            },
+            {
+              "triad": "s",
+              "ordinal": "02",
+              "code": "PA.IV.G.S2",
+              "title": "Make radio calls as appropriate."
+            },
+            {
+              "triad": "s",
+              "ordinal": "03",
+              "code": "PA.IV.G.S3",
+              "title": "Verify assigned/correct takeoff path."
+            },
+            {
+              "triad": "s",
+              "ordinal": "04",
+              "code": "PA.IV.G.S4",
+              "title": "Determine wind direction with or without visible wind direction indicators."
+            }
+          ]
+        },
+        {
+          "task": "h",
+          "title": "Confined Area Approach and Landing (ASES, AMES)",
+          "body_path": "acs/ppl-airplane-6c/area-04/task-h.md",
+          "body_sha256": "247be2595f8f98c693dfaf0e89641a4e0425647365692abcea47742fa2d0d679",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "PA.IV.H.K1",
+              "title": "A stabilized approach, including energy management concepts."
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "PA.IV.H.K2",
+              "title": "Effects of atmospheric conditions, including wind, on approach and landing performance."
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "PA.IV.H.K3",
+              "title": "Wind correction techniques on approach and landing."
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "PA.IV.H.R1",
+              "title": "Selection of approach path and touchdown area based on pilot capability, airplane performance and"
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "PA.IV.H.R2",
+              "title": "Effects of:"
+            }
+          ]
+        },
+        {
+          "task": "i",
+          "title": "Glassy Water Takeoff and Climb (ASES, AMES)",
+          "body_path": "acs/ppl-airplane-6c/area-04/task-i.md",
+          "body_sha256": "2ac16a0c93b9e92d3e57ccda35834b2835512586ace384f66199eff74dce786b",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "PA.IV.I.K1",
+              "title": "Effects of atmospheric conditions, including wind, on takeoff and climb performance."
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "PA.IV.I.K2",
+              "title": "Best angle of climb speed (VX) and best rate of climb speed (VY)."
+            }
+          ]
+        },
+        {
+          "task": "j",
+          "title": "Glassy Water Approach and Landing (ASES, AMES)",
+          "body_path": "acs/ppl-airplane-6c/area-04/task-j.md",
+          "body_sha256": "c2de928d51df914af57b1641ee2925eb1af248e72867f0f1e1599960a21977bd",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "PA.IV.J.K1",
+              "title": "A stabilized approach, including energy management concepts."
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "PA.IV.J.K2",
+              "title": "Effects of atmospheric conditions, including wind, on approach and landing performance."
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "PA.IV.J.K3",
+              "title": "When and why glassy water techniques are used."
+            },
+            {
+              "triad": "k",
+              "ordinal": "04",
+              "code": "PA.IV.J.K4",
+              "title": "How a glassy water approach and landing is executed."
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "PA.IV.J.R1",
+              "title": "Selection of approach path and touchdown area based on pilot capability, airplane performance and"
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "PA.IV.J.R2",
+              "title": "Water surface/condition."
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "PA.IV.J.R3",
+              "title": "Planning for a go-around and rejected landing."
+            },
+            {
+              "triad": "r",
+              "ordinal": "04",
+              "code": "PA.IV.J.R4",
+              "title": "Collision hazards."
+            },
+            {
+              "triad": "r",
+              "ordinal": "05",
+              "code": "PA.IV.J.R5",
+              "title": "Low altitude maneuvering, including stall, spin, or controlled flight into terrain (CFIT)."
+            },
+            {
+              "triad": "r",
+              "ordinal": "06",
+              "code": "PA.IV.J.R6",
+              "title": "Distractions, task prioritization, loss of situational awareness, or disorientation."
+            },
+            {
+              "triad": "r",
+              "ordinal": "07",
+              "code": "PA.IV.J.R7",
+              "title": "Gear position in an amphibious airplane."
+            },
+            {
+              "triad": "s",
+              "ordinal": "01",
+              "code": "PA.IV.J.S1",
+              "title": "Complete the appropriate checklist(s)."
+            },
+            {
+              "triad": "s",
+              "ordinal": "02",
+              "code": "PA.IV.J.S2",
+              "title": "Make radio calls as appropriate."
+            },
+            {
+              "triad": "s",
+              "ordinal": "03",
+              "code": "PA.IV.J.S3",
+              "title": "Scan the landing area for traffic and obstructions."
+            },
+            {
+              "triad": "s",
+              "ordinal": "04",
+              "code": "PA.IV.J.S4",
+              "title": "Select a proper approach and landing path considering the landing surface, visual attitude references,"
+            },
+            {
+              "triad": "s",
+              "ordinal": "05",
+              "code": "PA.IV.J.S5",
+              "title": "Establish the recommended approach and landing configuration, airspeed, and trim, and adjust pitch"
+            },
+            {
+              "triad": "s",
+              "ordinal": "06",
+              "code": "PA.IV.J.S6",
+              "title": "Maintain manufacturer’s published approach airspeed or in its absence not more than 1.3 VSO, +10/-5"
+            },
+            {
+              "triad": "s",
+              "ordinal": "07",
+              "code": "PA.IV.J.S7",
+              "title": "Make smooth, timely, and correct power and control adjustments to maintain proper pitch attitude and"
+            },
+            {
+              "triad": "s",
+              "ordinal": "08",
+              "code": "PA.IV.J.S8",
+              "title": "Contact the water in a proper pitch attitude, and slow to idle taxi speed."
+            },
+            {
+              "triad": "s",
+              "ordinal": "09",
+              "code": "PA.IV.J.S9",
+              "title": "Maintain directional control throughout the approach and landing."
+            }
+          ]
+        },
+        {
+          "task": "k",
+          "title": "Rough Water Takeoff and Climb (ASES, AMES)",
+          "body_path": "acs/ppl-airplane-6c/area-04/task-k.md",
+          "body_sha256": "5f5aa92f64e3db7f8e99ed9b9cc788ffb30b0d599f3c6a06c568f294297adaa8",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "PA.IV.K.K1",
+              "title": "Effects of atmospheric conditions, including wind, on takeoff and climb performance."
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "PA.IV.K.K2",
+              "title": "Best angle of climb speed (VX) and best rate of climb speed (VY)."
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "PA.IV.K.K3",
+              "title": "Appropriate airplane configuration."
+            },
+            {
+              "triad": "k",
+              "ordinal": "04",
+              "code": "PA.IV.K.K4",
+              "title": "Appropriate use of rough water takeoff and climb technique."
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "PA.IV.K.R1",
+              "title": "Selection of takeoff path based on pilot capability, airplane performance and limitations, available"
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "PA.IV.K.R2",
+              "title": "Effects of:"
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "PA.IV.K.R3",
+              "title": "Abnormal operations, including planning for:"
+            },
+            {
+              "triad": "r",
+              "ordinal": "04",
+              "code": "PA.IV.K.R4",
+              "title": "Collision hazards."
+            },
+            {
+              "triad": "r",
+              "ordinal": "05",
+              "code": "PA.IV.K.R5",
+              "title": "Low altitude maneuvering, including stall, spin, or controlled flight into terrain (CFIT)."
+            },
+            {
+              "triad": "r",
+              "ordinal": "06",
+              "code": "PA.IV.K.R6",
+              "title": "Distractions, task prioritization, loss of situational awareness, or disorientation."
+            },
+            {
+              "triad": "r",
+              "ordinal": "07",
+              "code": "PA.IV.K.R7",
+              "title": "Gear position in an amphibious airplane."
+            },
+            {
+              "triad": "s",
+              "ordinal": "01",
+              "code": "PA.IV.K.S1",
+              "title": "Complete the appropriate checklist(s)."
+            },
+            {
+              "triad": "s",
+              "ordinal": "02",
+              "code": "PA.IV.K.S2",
+              "title": "Make radio calls as appropriate."
+            },
+            {
+              "triad": "s",
+              "ordinal": "03",
+              "code": "PA.IV.K.S3",
+              "title": "Verify assigned/correct takeoff path."
+            },
+            {
+              "triad": "s",
+              "ordinal": "04",
+              "code": "PA.IV.K.S4",
+              "title": "Determine wind direction with or without visible wind direction indicators."
+            },
+            {
+              "triad": "s",
+              "ordinal": "05",
+              "code": "PA.IV.K.S5",
+              "title": "Position flight controls and configure the airplane for the existing conditions."
+            }
+          ]
+        },
+        {
+          "task": "l",
+          "title": "Rough Water Approach and Landing (ASES, AMES)",
+          "body_path": "acs/ppl-airplane-6c/area-04/task-l.md",
+          "body_sha256": "85d64aef135cb0ff8bfa068bbcaf00acb3d564033b8cdda60554b1ae3cd81803",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "PA.IV.L.K1",
+              "title": "A stabilized approach, including energy management concepts."
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "PA.IV.L.K2",
+              "title": "Effects of atmospheric conditions, including wind, on approach and landing performance."
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "PA.IV.L.K3",
+              "title": "Wind correction techniques on approach and landing."
+            },
+            {
+              "triad": "k",
+              "ordinal": "04",
+              "code": "PA.IV.L.K4",
+              "title": "When and why rough water techniques are used."
+            },
+            {
+              "triad": "k",
+              "ordinal": "05",
+              "code": "PA.IV.L.K5",
+              "title": "How to perform a proper rough water approach and landing."
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "PA.IV.L.R1",
+              "title": "Selection of approach path and touchdown area based on pilot capability, airplane performance and"
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "PA.IV.L.R2",
+              "title": "Effects of:"
+            }
+          ]
+        },
+        {
+          "task": "m",
+          "title": "Forward Slip to a Landing (ASEL, ASES)",
+          "body_path": "acs/ppl-airplane-6c/area-04/task-m.md",
+          "body_sha256": "955e36d09c705b745496fc810655125a77e820b4f8f9d093e3100a79bfb487e8",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "PA.IV.M.K1",
+              "title": "Concepts of energy management during a forward slip approach."
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "PA.IV.M.K2",
+              "title": "Effects of atmospheric conditions, including wind, on approach and landing performance."
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "PA.IV.M.K3",
+              "title": "Wind correction techniques during forward slip."
+            },
+            {
+              "triad": "k",
+              "ordinal": "04",
+              "code": "PA.IV.M.K4",
+              "title": "When and why a forward slip approach is used during an approach."
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "PA.IV.M.R1",
+              "title": "Selection of runway/landing surface, approach path, and touchdown area based on pilot capability,"
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "PA.IV.M.R2",
+              "title": "Effects of:"
+            }
+          ]
+        },
+        {
+          "task": "n",
+          "title": "Go-Around/Rejected Landing",
+          "body_path": "acs/ppl-airplane-6c/area-04/task-n.md",
+          "body_sha256": "bbba3c16c0368fc3d3e3276d876f782e45a330f1233b0ba6b7c9e189ba514871",
+          "elements": []
+        }
+      ]
+    },
+    {
+      "area": "05",
+      "title": "Performance Maneuvers and Ground Reference Maneuvers",
+      "tasks": [
+        {
+          "task": "a",
+          "title": "Steep Turns",
+          "body_path": "acs/ppl-airplane-6c/area-05/task-a.md",
+          "body_sha256": "33dafa1dda7905c6d1e6c2eefa383c165b9a51975f845b0b9b6a16a161a78681",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "PA.V.A.K1",
+              "title": "How to conduct a proper steep turn."
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "PA.V.A.K2",
+              "title": "Aerodynamics associated with steep turns, including:"
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "PA.V.A.R1",
+              "title": "Division of attention between aircraft control and orientation."
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "PA.V.A.R2",
+              "title": "Collision hazards."
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "PA.V.A.R3",
+              "title": "Low altitude maneuvering, including stall, spin, or controlled flight into terrain (CFIT)."
+            },
+            {
+              "triad": "r",
+              "ordinal": "04",
+              "code": "PA.V.A.R4",
+              "title": "Distractions, task prioritization, loss of situational awareness, or disorientation."
+            },
+            {
+              "triad": "r",
+              "ordinal": "05",
+              "code": "PA.V.A.R5",
+              "title": "Uncoordinated flight."
+            },
+            {
+              "triad": "s",
+              "ordinal": "01",
+              "code": "PA.V.A.S1",
+              "title": "Clear the area."
+            },
+            {
+              "triad": "s",
+              "ordinal": "02",
+              "code": "PA.V.A.S2",
+              "title": "Establish the manufacturer's recommended airspeed; or if one is not available, an airspeed not to"
+            },
+            {
+              "triad": "s",
+              "ordinal": "03",
+              "code": "PA.V.A.S3",
+              "title": "Roll into a coordinated 360° steep turn with approximately a 45° bank."
+            },
+            {
+              "triad": "s",
+              "ordinal": "04",
+              "code": "PA.V.A.S4",
+              "title": "Perform the Task in the opposite direction, as specified by evaluator."
+            },
+            {
+              "triad": "s",
+              "ordinal": "05",
+              "code": "PA.V.A.S5",
+              "title": "Maintain the entry altitude ±100 feet, airspeed ±10 knots, bank ±5°, and roll out on the entry heading"
+            }
+          ]
+        },
+        {
+          "task": "b",
+          "title": "Ground Reference Maneuvers",
+          "body_path": "acs/ppl-airplane-6c/area-05/task-b.md",
+          "body_sha256": "61ab7adc59bb0333e7e9ff517f1f314c92b7503a97347c9f07e3b31bfe86295f",
+          "elements": []
+        }
+      ]
+    },
+    {
+      "area": "06",
+      "title": "Navigation",
+      "tasks": [
+        {
+          "task": "a",
+          "title": "Pilotage and Dead Reckoning",
+          "body_path": "acs/ppl-airplane-6c/area-06/task-a.md",
+          "body_sha256": "8b2a1bc94b413f0741089a45b6d4351d2e72c78ad13cbd3e36e1a96f31d75b82",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "PA.VI.A.K1",
+              "title": "Pilotage and dead reckoning."
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "PA.VI.A.K2",
+              "title": "Magnetic compass errors."
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "PA.VI.A.K3",
+              "title": "Topography."
+            },
+            {
+              "triad": "k",
+              "ordinal": "04",
+              "code": "PA.VI.A.K4",
+              "title": "Selection of appropriate:"
+            },
+            {
+              "triad": "k",
+              "ordinal": "05",
+              "code": "PA.VI.A.K5",
+              "title": "Plotting a course, including:"
+            },
+            {
+              "triad": "k",
+              "ordinal": "06",
+              "code": "PA.VI.A.K6",
+              "title": "Power setting selection."
+            },
+            {
+              "triad": "k",
+              "ordinal": "07",
+              "code": "PA.VI.A.K7",
+              "title": "Planned calculations versus actual results and required corrections."
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "PA.VI.A.R1",
+              "title": "Collision hazards."
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "PA.VI.A.R2",
+              "title": "Distractions, task prioritization, loss of situational awareness, or disorientation."
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "PA.VI.A.R3",
+              "title": "Unplanned fuel/power consumption, if applicable."
+            },
+            {
+              "triad": "s",
+              "ordinal": "01",
+              "code": "PA.VI.A.S1",
+              "title": "Prepare and use a flight log."
+            },
+            {
+              "triad": "s",
+              "ordinal": "02",
+              "code": "PA.VI.A.S2",
+              "title": "Navigate by pilotage."
+            },
+            {
+              "triad": "s",
+              "ordinal": "03",
+              "code": "PA.VI.A.S3",
+              "title": "Navigate by means of pre-computed headings, groundspeeds, elapsed time, and reference to"
+            },
+            {
+              "triad": "s",
+              "ordinal": "04",
+              "code": "PA.VI.A.S4",
+              "title": "Use the magnetic direction indicator in navigation, including turns to headings."
+            },
+            {
+              "triad": "s",
+              "ordinal": "05",
+              "code": "PA.VI.A.S5",
+              "title": "Verify position within three nautical miles of the flight-planned route."
+            }
+          ]
+        },
+        {
+          "task": "b",
+          "title": "Navigation Systems and Radar Services",
+          "body_path": "acs/ppl-airplane-6c/area-06/task-b.md",
+          "body_sha256": "39a56164aaca5114dc32a3e01c7ca8f3f5a15fb9b817110033ff4b28ff6a49fb",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "PA.VI.B.K1",
+              "title": "Ground-based navigation (identification, orientation, course determination, equipment, tests,"
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "PA.VI.B.K2",
+              "title": "Satellite-based navigation (e.g., equipment, regulations, authorized use of databases, and Receiver"
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "PA.VI.B.K3",
+              "title": "Radar assistance to visual flight rules (VFR) aircraft (e.g., operations, equipment, available services,"
+            },
+            {
+              "triad": "k",
+              "ordinal": "04",
+              "code": "PA.VI.B.K4",
+              "title": "Transponder (Mode(s) A, C, and S) and Automatic Dependent Surveillance-Broadcast (ADS-B)."
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "PA.VI.B.R1",
+              "title": "Management of automated navigation and autoflight systems."
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "PA.VI.B.R2",
+              "title": "Distractions, task prioritization, loss of situational awareness, or disorientation."
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "PA.VI.B.R3",
+              "title": "Limitations of the navigation system in use."
+            },
+            {
+              "triad": "r",
+              "ordinal": "04",
+              "code": "PA.VI.B.R4",
+              "title": "Loss of a navigation signal."
+            },
+            {
+              "triad": "r",
+              "ordinal": "05",
+              "code": "PA.VI.B.R5",
+              "title": "Use of an electronic flight bag (EFB), if used."
+            },
+            {
+              "triad": "s",
+              "ordinal": "01",
+              "code": "PA.VI.B.S1",
+              "title": "Use an airborne electronic navigation system."
+            },
+            {
+              "triad": "s",
+              "ordinal": "02",
+              "code": "PA.VI.B.S2",
+              "title": "Determine the airplane’s position using the navigation system."
+            },
+            {
+              "triad": "s",
+              "ordinal": "03",
+              "code": "PA.VI.B.S3",
+              "title": "Intercept and track a given course, radial, or bearing."
+            },
+            {
+              "triad": "s",
+              "ordinal": "04",
+              "code": "PA.VI.B.S4",
+              "title": "Recognize and describe the indication of station or waypoint passage."
+            },
+            {
+              "triad": "s",
+              "ordinal": "05",
+              "code": "PA.VI.B.S5",
+              "title": "Recognize signal loss or interference and take appropriate action, if applicable."
+            },
+            {
+              "triad": "s",
+              "ordinal": "06",
+              "code": "PA.VI.B.S6",
+              "title": "Use proper communication procedures when utilizing radar services."
+            },
+            {
+              "triad": "s",
+              "ordinal": "07",
+              "code": "PA.VI.B.S7",
+              "title": "Maintain the selected altitude, ±200 feet and heading, ±15°."
+            }
+          ]
+        },
+        {
+          "task": "c",
+          "title": "Diversion",
+          "body_path": "acs/ppl-airplane-6c/area-06/task-c.md",
+          "body_sha256": "88a181b752ae514dd4155a8e3533285ce8b958bfcba3cc9c47c4693fc096b89a",
+          "elements": []
+        },
+        {
+          "task": "d",
+          "title": "Lost Procedures",
+          "body_path": "acs/ppl-airplane-6c/area-06/task-d.md",
+          "body_sha256": "eb68ed87d0e062899f9b5e43c1da6786bde1d511499f89cbb5ad5f2b2c793adb",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "PA.VI.D.K1",
+              "title": "Methods to determine position."
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "PA.VI.D.K2",
+              "title": "Assistance available if lost (e.g., radar services, communication procedures)."
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "PA.VI.D.R1",
+              "title": "Collision hazards."
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "PA.VI.D.R2",
+              "title": "Distractions, task prioritization, loss of situational awareness, or disorientation."
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "PA.VI.D.R3",
+              "title": "Recording times over waypoints."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": "07",
+      "title": "Slow Flight and Stalls",
+      "tasks": [
+        {
+          "task": "a",
+          "title": "Maneuvering During Slow Flight",
+          "body_path": "acs/ppl-airplane-6c/area-07/task-a.md",
+          "body_sha256": "f4a5acc29f054a24a0ff857033b86e1ccdbabeb7a5f4a87d574528553f42a1ac",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "PA.VII.A.K1",
+              "title": "Aerodynamics associated with slow flight in various airplane configurations, including the relationship"
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "PA.VII.A.R1",
+              "title": "Inadvertent slow flight and flight with a stall warning, which could lead to loss of control."
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "PA.VII.A.R2",
+              "title": "Range and limitations of stall warning indicators (e.g., aircraft buffet, stall horn, etc.)."
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "PA.VII.A.R3",
+              "title": "Uncoordinated flight."
+            },
+            {
+              "triad": "r",
+              "ordinal": "04",
+              "code": "PA.VII.A.R4",
+              "title": "Effect of environmental elements on airplane performance (e.g., turbulence, microbursts, and high-"
+            },
+            {
+              "triad": "r",
+              "ordinal": "05",
+              "code": "PA.VII.A.R5",
+              "title": "Collision hazards."
+            },
+            {
+              "triad": "r",
+              "ordinal": "06",
+              "code": "PA.VII.A.R6",
+              "title": "Distractions, task prioritization, loss of situational awareness, or disorientation."
+            },
+            {
+              "triad": "s",
+              "ordinal": "01",
+              "code": "PA.VII.A.S1",
+              "title": "Clear the area."
+            },
+            {
+              "triad": "s",
+              "ordinal": "02",
+              "code": "PA.VII.A.S2",
+              "title": "Select an entry altitude that allows the Task to be completed no lower than 1,500 feet above ground"
+            },
+            {
+              "triad": "s",
+              "ordinal": "03",
+              "code": "PA.VII.A.S3",
+              "title": "Establish and maintain an airspeed at which any further increase in angle of attack, increase in load"
+            },
+            {
+              "triad": "s",
+              "ordinal": "04",
+              "code": "PA.VII.A.S4",
+              "title": "Accomplish coordinated straight-and-level flight, turns, climbs, and descents with the aircraft"
+            },
+            {
+              "triad": "s",
+              "ordinal": "05",
+              "code": "PA.VII.A.S5",
+              "title": "Maintain the specified altitude, ±100 feet; specified heading, ±10°; airspeed, +10/-0 knots; and"
+            }
+          ]
+        },
+        {
+          "task": "b",
+          "title": "Power-Off Stalls",
+          "body_path": "acs/ppl-airplane-6c/area-07/task-b.md",
+          "body_sha256": "6b32afa19f97d7e1a97d308429a65af6ca59f59a154b81b84cdda65c126fd3d6",
+          "elements": []
+        },
+        {
+          "task": "c",
+          "title": "Power-On Stalls",
+          "body_path": "acs/ppl-airplane-6c/area-07/task-c.md",
+          "body_sha256": "35bd8876d57c8458643355ff424ba71c873ad12ad656650e4cdba3cb97364be8",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "PA.VII.C.K1",
+              "title": "Aerodynamics associated with stalls in various airplane configurations, including the relationship"
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "PA.VII.C.K2",
+              "title": "Stall characteristics as they relate to airplane design, and recognition impending stall and full stall"
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "PA.VII.C.K3",
+              "title": "Factors and situations that can lead to a power-on stall and actions that can be taken to prevent it."
+            },
+            {
+              "triad": "k",
+              "ordinal": "04",
+              "code": "PA.VII.C.K4",
+              "title": "Fundamentals of stall recovery."
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "PA.VII.C.R1",
+              "title": "Factors and situations that could lead to an inadvertent power-on stall, spin, and loss of control."
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "PA.VII.C.R2",
+              "title": "Range and limitations of stall warning indicators (e.g., aircraft buffet, stall horn, etc.)."
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "PA.VII.C.R3",
+              "title": "Stall warning(s) during normal operations."
+            },
+            {
+              "triad": "r",
+              "ordinal": "04",
+              "code": "PA.VII.C.R4",
+              "title": "Stall recovery procedure."
+            },
+            {
+              "triad": "r",
+              "ordinal": "05",
+              "code": "PA.VII.C.R5",
+              "title": "Secondary stalls, accelerated stalls, elevator trim stalls, and cross-control stalls."
+            },
+            {
+              "triad": "r",
+              "ordinal": "06",
+              "code": "PA.VII.C.R6",
+              "title": "Effect of environmental elements on airplane performance related to power-on stalls (e.g., turbulence,"
+            },
+            {
+              "triad": "r",
+              "ordinal": "07",
+              "code": "PA.VII.C.R7",
+              "title": "Collision hazards."
+            },
+            {
+              "triad": "r",
+              "ordinal": "08",
+              "code": "PA.VII.C.R8",
+              "title": "Distractions, task prioritization, loss of situational awareness, or disorientation."
+            },
+            {
+              "triad": "s",
+              "ordinal": "01",
+              "code": "PA.VII.C.S1",
+              "title": "Clear the area."
+            },
+            {
+              "triad": "s",
+              "ordinal": "02",
+              "code": "PA.VII.C.S2",
+              "title": "Select an entry altitude that allows the Task to be completed no lower than 1,500 feet above ground"
+            },
+            {
+              "triad": "s",
+              "ordinal": "03",
+              "code": "PA.VII.C.S3",
+              "title": "Establish the takeoff, departure, or cruise configuration, as specified by the evaluator, and maintain"
+            },
+            {
+              "triad": "s",
+              "ordinal": "04",
+              "code": "PA.VII.C.S4",
+              "title": "Set power (as assigned by the evaluator) to no less than 65 percent power."
+            },
+            {
+              "triad": "s",
+              "ordinal": "05",
+              "code": "PA.VII.C.S5",
+              "title": "Transition smoothly from the takeoff or departure attitude to the pitch attitude that induces a stall."
+            },
+            {
+              "triad": "s",
+              "ordinal": "06",
+              "code": "PA.VII.C.S6",
+              "title": "Maintain a specified heading, ±10° if in straight flight; maintain a specified angle of bank not to exceed"
+            },
+            {
+              "triad": "s",
+              "ordinal": "07",
+              "code": "PA.VII.C.S7",
+              "title": "Acknowledge cues of the impending stall and then recover promptly after a full stall occurs."
+            }
+          ]
+        },
+        {
+          "task": "d",
+          "title": "Spin Awareness",
+          "body_path": "acs/ppl-airplane-6c/area-07/task-d.md",
+          "body_sha256": "dae5c58b1b757f7ff85bc7174596a4bdc50b7ec1c3135899c5c463e01eb575f8",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "PA.VII.D.K1",
+              "title": "Aerodynamics associated with spins in various airplane configurations, including the relationship"
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "PA.VII.D.K2",
+              "title": "What causes a spin and how to identify the entry, incipient, and developed phases of a spin."
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "PA.VII.D.K3",
+              "title": "Spin recovery procedure."
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "PA.VII.D.R1",
+              "title": "Factors and situations that could lead to inadvertent spin and loss of control."
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "PA.VII.D.R2",
+              "title": "Range and limitations of stall warning indicators (e.g., aircraft buffet, stall horn, etc.)."
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "PA.VII.D.R3",
+              "title": "Spin recovery procedure."
+            },
+            {
+              "triad": "r",
+              "ordinal": "04",
+              "code": "PA.VII.D.R4",
+              "title": "Effect of environmental elements on airplane performance related to spins (e.g., turbulence,"
+            },
+            {
+              "triad": "r",
+              "ordinal": "05",
+              "code": "PA.VII.D.R5",
+              "title": "Collision hazards."
+            },
+            {
+              "triad": "r",
+              "ordinal": "06",
+              "code": "PA.VII.D.R6",
+              "title": "Distractions, task prioritization, loss of situational awareness, or disorientation."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": "08",
+      "title": "Basic Instrument Maneuvers",
+      "tasks": [
+        {
+          "task": "a",
+          "title": "Straight-and-Level Flight",
+          "body_path": "acs/ppl-airplane-6c/area-08/task-a.md",
+          "body_sha256": "9aa040c20ff720df67201ff5ab44418e992636a43c2781c44d734b52506a7c17",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "PA.VIII.A.K1",
+              "title": "Flight instruments as they relate to:"
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "PA.VIII.A.R1",
+              "title": "Instrument flying hazards, including failure to maintain visual flight rules (VFR), spatial disorientation,"
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "PA.VIII.A.R2",
+              "title": "When to seek assistance or declare an emergency in a deteriorating situation."
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "PA.VIII.A.R3",
+              "title": "Collision hazards."
+            },
+            {
+              "triad": "r",
+              "ordinal": "04",
+              "code": "PA.VIII.A.R4",
+              "title": "Distractions, task prioritization, loss of situational awareness, or disorientation."
+            },
+            {
+              "triad": "r",
+              "ordinal": "05",
+              "code": "PA.VIII.A.R5",
+              "title": "Fixation and omission."
+            },
+            {
+              "triad": "r",
+              "ordinal": "06",
+              "code": "PA.VIII.A.R6",
+              "title": "Instrument Interpretation."
+            },
+            {
+              "triad": "r",
+              "ordinal": "07",
+              "code": "PA.VIII.A.R7",
+              "title": "Control application solely by reference to instruments."
+            },
+            {
+              "triad": "r",
+              "ordinal": "08",
+              "code": "PA.VIII.A.R8",
+              "title": "Trimming the aircraft."
+            },
+            {
+              "triad": "s",
+              "ordinal": "01",
+              "code": "PA.VIII.A.S1",
+              "title": "Maintain straight-and-level flight using proper instrument cross-check and interpretation, and"
+            },
+            {
+              "triad": "s",
+              "ordinal": "02",
+              "code": "PA.VIII.A.S2",
+              "title": "Maintain altitude ±200 feet, heading ±20°, and airspeed ±10 knots."
+            }
+          ]
+        },
+        {
+          "task": "b",
+          "title": "Constant Airspeed Climbs",
+          "body_path": "acs/ppl-airplane-6c/area-08/task-b.md",
+          "body_sha256": "4ba1f8866dc5eac4d8985a9587426f7cba40d098797767d00ad101b1ff081fb8",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "PA.VIII.B.K1",
+              "title": "Flight instruments as they relate to:"
+            }
+          ]
+        },
+        {
+          "task": "c",
+          "title": "Constant Airspeed Descents",
+          "body_path": "acs/ppl-airplane-6c/area-08/task-c.md",
+          "body_sha256": "dedbab43b6ea8a124ba40ca571807d77f72e798d6a35dc4dfdbb79ff1ad34514",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "PA.VIII.C.K1",
+              "title": "Flight instruments as they relate to:"
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "PA.VIII.C.R1",
+              "title": "Instrument flying hazards, including failure to maintain visual flight rules (VFR), spatial disorientation,"
+            }
+          ]
+        },
+        {
+          "task": "d",
+          "title": "Turns to Headings",
+          "body_path": "acs/ppl-airplane-6c/area-08/task-d.md",
+          "body_sha256": "6dec08bfc3b26cea24331bab1f5eb0f5c63a00bb0252e57f4bc88a8eec79db19",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "PA.VIII.D.K1",
+              "title": "Flight instruments as they relate to:"
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "PA.VIII.D.R1",
+              "title": "Instrument flying hazards, including failure to maintain visual flight rules (VFR), spatial disorientation,"
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "PA.VIII.D.R2",
+              "title": "When to seek assistance or declare an emergency in a deteriorating situation."
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "PA.VIII.D.R3",
+              "title": "Collision hazards."
+            },
+            {
+              "triad": "r",
+              "ordinal": "04",
+              "code": "PA.VIII.D.R4",
+              "title": "Distractions, task prioritization, loss of situational awareness, or disorientation."
+            },
+            {
+              "triad": "r",
+              "ordinal": "05",
+              "code": "PA.VIII.D.R5",
+              "title": "Fixation and omission."
+            },
+            {
+              "triad": "r",
+              "ordinal": "06",
+              "code": "PA.VIII.D.R6",
+              "title": "Instrument Interpretation."
+            },
+            {
+              "triad": "r",
+              "ordinal": "07",
+              "code": "PA.VIII.D.R7",
+              "title": "Control application solely by reference to instruments."
+            }
+          ]
+        },
+        {
+          "task": "e",
+          "title": "Recovery from Unusual Flight Attitudes",
+          "body_path": "acs/ppl-airplane-6c/area-08/task-e.md",
+          "body_sha256": "4e440fbb5c84c5c426f82448b532502e11022575a777f3067ab4c665ba719284",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "PA.VIII.E.K1",
+              "title": "Prevention of unusual attitudes, including flight causal, physiological, and environmental factors, and"
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "PA.VIII.E.K2",
+              "title": "Procedures for recovery from unusual attitudes in flight."
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "PA.VIII.E.K3",
+              "title": "Procedures available to safely regain visual meteorological conditions (VMC) after flight into"
+            },
+            {
+              "triad": "k",
+              "ordinal": "04",
+              "code": "PA.VIII.E.K4",
+              "title": "Appropriate use of automation, if applicable."
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "PA.VIII.E.R1",
+              "title": "Situations that could lead to loss of control in-flight (LOC-I) or unusual attitudes in-flight (e.g., stress,"
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "PA.VIII.E.R2",
+              "title": "[Archived]"
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "PA.VIII.E.R3",
+              "title": "Collision hazards."
+            },
+            {
+              "triad": "r",
+              "ordinal": "04",
+              "code": "PA.VIII.E.R4",
+              "title": "Distractions, task prioritization, loss of situational awareness, or disorientation."
+            },
+            {
+              "triad": "r",
+              "ordinal": "05",
+              "code": "PA.VIII.E.R5",
+              "title": "Interpreting flight instruments."
+            },
+            {
+              "triad": "r",
+              "ordinal": "06",
+              "code": "PA.VIII.E.R6",
+              "title": "[Archived]"
+            },
+            {
+              "triad": "r",
+              "ordinal": "07",
+              "code": "PA.VIII.E.R7",
+              "title": "Operating envelope considerations."
+            },
+            {
+              "triad": "r",
+              "ordinal": "08",
+              "code": "PA.VIII.E.R8",
+              "title": "Control input errors, inducing undesired aircraft attitudes."
+            },
+            {
+              "triad": "r",
+              "ordinal": "09",
+              "code": "PA.VIII.E.R9",
+              "title": "Assessment of the unusual attitude."
+            },
+            {
+              "triad": "r",
+              "ordinal": "10",
+              "code": "PA.VIII.E.R10",
+              "title": "Control application solely by reference to instruments."
+            }
+          ]
+        },
+        {
+          "task": "f",
+          "title": "Radio Communications, Navigation Systems/Facilities, and Radar Services",
+          "body_path": "acs/ppl-airplane-6c/area-08/task-f.md",
+          "body_sha256": "4eebab8af8a73d32975d4d55153cb4d1ff82364e712a31b4727ffb0dca2fbee1",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "PA.VIII.F.K1",
+              "title": "Operating communications equipment, including identifying and selecting radio frequencies,"
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "PA.VIII.F.K2",
+              "title": "Operating navigation equipment, including functions and displays, and following bearings, radials, or"
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "PA.VIII.F.K3",
+              "title": "Air traffic control facilities and services."
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "PA.VIII.F.R1",
+              "title": "When to seek assistance or declare an emergency in a deteriorating situation."
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "PA.VIII.F.R2",
+              "title": "Using available resources (e.g., automation, ATC, and flight deck planning aids)."
+            },
+            {
+              "triad": "s",
+              "ordinal": "01",
+              "code": "PA.VIII.F.S1",
+              "title": "Maintain airplane control while selecting proper communications frequencies, identifying the"
+            },
+            {
+              "triad": "s",
+              "ordinal": "02",
+              "code": "PA.VIII.F.S2",
+              "title": "Comply with ATC instructions."
+            },
+            {
+              "triad": "s",
+              "ordinal": "03",
+              "code": "PA.VIII.F.S3",
+              "title": "[Archived]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": "09",
+      "title": "Emergency Operations",
+      "tasks": [
+        {
+          "task": "a",
+          "title": "Emergency Descent",
+          "body_path": "acs/ppl-airplane-6c/area-09/task-a.md",
+          "body_sha256": "df3b32a76697e94db50fe9606f5dd6d43e4f0035bb02ecb610868b4f2c90500f",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "PA.IX.A.K1",
+              "title": "Situations that would require an emergency descent (e.g., depressurization, smoke, or engine fire)."
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "PA.IX.A.K2",
+              "title": "Immediate action items and emergency procedures."
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "PA.IX.A.K3",
+              "title": "Airspeed, including airspeed limitations."
+            },
+            {
+              "triad": "k",
+              "ordinal": "04",
+              "code": "PA.IX.A.K4",
+              "title": "Aircraft performance and limitations."
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "PA.IX.A.R1",
+              "title": "Altitude, wind, terrain, obstructions, gliding distance, and available landing distance considerations."
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "PA.IX.A.R2",
+              "title": "Collision hazards."
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "PA.IX.A.R3",
+              "title": "Configuring the airplane."
+            },
+            {
+              "triad": "r",
+              "ordinal": "04",
+              "code": "PA.IX.A.R4",
+              "title": "Distractions, task prioritization, loss of situational awareness, or disorientation."
+            },
+            {
+              "triad": "s",
+              "ordinal": "01",
+              "code": "PA.IX.A.S1",
+              "title": "Clear the area."
+            },
+            {
+              "triad": "s",
+              "ordinal": "02",
+              "code": "PA.IX.A.S2",
+              "title": "Establish and maintain the appropriate airspeed and configuration appropriate to the scenario"
+            },
+            {
+              "triad": "s",
+              "ordinal": "03",
+              "code": "PA.IX.A.S3",
+              "title": "Maintain orientation, divide attention appropriately, and plan and execute a smooth recovery."
+            },
+            {
+              "triad": "s",
+              "ordinal": "04",
+              "code": "PA.IX.A.S4",
+              "title": "Use bank angle between 30° and 45° to maintain positive load factors during the descent."
+            },
+            {
+              "triad": "s",
+              "ordinal": "05",
+              "code": "PA.IX.A.S5",
+              "title": "Maintain appropriate airspeed +0/-10 knots, and level off at a specified altitude ±100 feet."
+            },
+            {
+              "triad": "s",
+              "ordinal": "06",
+              "code": "PA.IX.A.S6",
+              "title": "Complete the appropriate checklist(s)."
+            },
+            {
+              "triad": "s",
+              "ordinal": "07",
+              "code": "PA.IX.A.S7",
+              "title": "Make radio calls as appropriate."
+            },
+            {
+              "triad": "s",
+              "ordinal": "08",
+              "code": "PA.IX.A.S8",
+              "title": "Use single-pilot resource management (SRM) or crew resource management (CRM), as appropriate."
+            }
+          ]
+        },
+        {
+          "task": "b",
+          "title": "Emergency Approach and Landing (Simulated) (ASEL, ASES)",
+          "body_path": "acs/ppl-airplane-6c/area-09/task-b.md",
+          "body_sha256": "1119d582cd8595f7948d10b800d9c8fd327c9149448456b7629d99e9c4bad0d1",
+          "elements": []
+        },
+        {
+          "task": "c",
+          "title": "Systems and Equipment Malfunctions",
+          "body_path": "acs/ppl-airplane-6c/area-09/task-c.md",
+          "body_sha256": "1a0bc14792c4c06e109d9c9231907d69c1849a2de1925ef176ed77fcd7508ac7",
+          "elements": []
+        },
+        {
+          "task": "d",
+          "title": "Emergency Equipment and Survival Gear",
+          "body_path": "acs/ppl-airplane-6c/area-09/task-d.md",
+          "body_sha256": "b2051d42e7caa076b86d4cdae30dc3537722b183a1d6e4f5fb941cc290419f9f",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "PA.IX.D.K1",
+              "title": "Emergency Locator Transmitter (ELT) operations, limitations, and testing requirements."
+            }
+          ]
+        },
+        {
+          "task": "e",
+          "title": "Engine Failure During Takeoff Before VMC (Simulated) (AMEL, AMES)",
+          "body_path": "acs/ppl-airplane-6c/area-09/task-e.md",
+          "body_sha256": "abde3b178884cc6ba8093701432c91c94226d7a6697fd2bd076132ed59a54110",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "PA.IX.E.K1",
+              "title": "Factors affecting minimum control airspeed with an inoperative engine (VMC)."
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "PA.IX.E.K2",
+              "title": "VMC (red line) and best single-engine rate of climb airspeed (VYSE) (blue line)."
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "PA.IX.E.K3",
+              "title": "Accelerate/stop distance."
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "PA.IX.E.R1",
+              "title": "Potential engine failure during takeoff."
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "PA.IX.E.R2",
+              "title": "Configuring the airplane."
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "PA.IX.E.R3",
+              "title": "Distractions, task prioritization, loss of situational awareness, or disorientation."
+            }
+          ]
+        },
+        {
+          "task": "f",
+          "title": "Engine Failure After Liftoff (Simulated) (AMEL, AMES)",
+          "body_path": "acs/ppl-airplane-6c/area-09/task-f.md",
+          "body_sha256": "f31d5bd4e47bfe0f263cd85a3a526a0ff9a08680223edd7554dc7bec7f6f4ba2",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "PA.IX.F.K1",
+              "title": "Factors affecting minimum controllable speed (VMC)."
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "PA.IX.F.K2",
+              "title": "VMC (red line), VYSE (blue line), and safe single-engine speed (VSSE)."
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "PA.IX.F.K3",
+              "title": "Accelerate/stop and accelerate/go distances."
+            },
+            {
+              "triad": "k",
+              "ordinal": "04",
+              "code": "PA.IX.F.K4",
+              "title": "How to identify, verify, feather, and secure an inoperative engine."
+            },
+            {
+              "triad": "k",
+              "ordinal": "05",
+              "code": "PA.IX.F.K5",
+              "title": "Importance of drag reduction, including propeller feathering, gear and flap retraction, the"
+            },
+            {
+              "triad": "k",
+              "ordinal": "06",
+              "code": "PA.IX.F.K6",
+              "title": "Simulated propeller feathering and the evaluator’s zero-thrust procedures and responsibilities."
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "PA.IX.F.R1",
+              "title": "Potential engine failure after lift-off."
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "PA.IX.F.R2",
+              "title": "Collision hazards."
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "PA.IX.F.R3",
+              "title": "Configuring the airplane."
+            },
+            {
+              "triad": "r",
+              "ordinal": "04",
+              "code": "PA.IX.F.R4",
+              "title": "Low altitude maneuvering, including stall, spin, or controlled flight into terrain (CFIT)."
+            },
+            {
+              "triad": "r",
+              "ordinal": "05",
+              "code": "PA.IX.F.R5",
+              "title": "Distractions, task prioritization, loss of situational awareness, or disorientation."
+            },
+            {
+              "triad": "s",
+              "ordinal": "01",
+              "code": "PA.IX.F.S1",
+              "title": "Promptly recognize an engine failure, maintain control, and use appropriate emergency procedures."
+            },
+            {
+              "triad": "s",
+              "ordinal": "02",
+              "code": "PA.IX.F.S2",
+              "title": "Establish VYSE; if obstructions are present, establish best single-engine angle of climb speed (VXSE) or"
+            },
+            {
+              "triad": "s",
+              "ordinal": "03",
+              "code": "PA.IX.F.S3",
+              "title": "Reduce drag by retracting landing gear and flaps in accordance with the manufacturer’s guidance."
+            },
+            {
+              "triad": "s",
+              "ordinal": "04",
+              "code": "PA.IX.F.S4",
+              "title": "Simulate feathering the propeller on the inoperative engine (evaluator should then establish zero thrust"
+            },
+            {
+              "triad": "s",
+              "ordinal": "05",
+              "code": "PA.IX.F.S5",
+              "title": "Use flight controls in the proper combination as recommended by the manufacturer, or as required to"
+            },
+            {
+              "triad": "s",
+              "ordinal": "06",
+              "code": "PA.IX.F.S6",
+              "title": "Monitor the operating engine and aircraft systems and make adjustments as necessary."
+            }
+          ]
+        },
+        {
+          "task": "g",
+          "title": "Approach and Landing with an Inoperative Engine (Simulated)(AMEL, AMES)",
+          "body_path": "acs/ppl-airplane-6c/area-09/task-g.md",
+          "body_sha256": "9a2209b8545a5e98fc9aea74b8cb32d03f5792f014078d3032dad7cb4a12a2cc",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "PA.IX.G.K1",
+              "title": "Factors affecting minimum controllable speed (VMC)."
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "PA.IX.G.K2",
+              "title": "VMC (red line) and best single-engine rate of climb airspeed (VYSE) (blue line)."
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "PA.IX.G.K3",
+              "title": "How to identify, verify, feather, and secure an inoperative engine."
+            },
+            {
+              "triad": "k",
+              "ordinal": "04",
+              "code": "PA.IX.G.K4",
+              "title": "Importance of drag reduction, including propeller feathering, gear and flap retraction, the"
+            },
+            {
+              "triad": "k",
+              "ordinal": "05",
+              "code": "PA.IX.G.K5",
+              "title": "Applicant responsibilities during simulated feathering."
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "PA.IX.G.R1",
+              "title": "Potential engine failure inflight or during an approach."
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "PA.IX.G.R2",
+              "title": "Collision hazards."
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "PA.IX.G.R3",
+              "title": "Configuring the airplane."
+            },
+            {
+              "triad": "r",
+              "ordinal": "04",
+              "code": "PA.IX.G.R4",
+              "title": "Low altitude maneuvering, including stall, spin, or controlled flight into terrain (CFIT)."
+            },
+            {
+              "triad": "r",
+              "ordinal": "05",
+              "code": "PA.IX.G.R5",
+              "title": "Distractions, task prioritization, loss of situational awareness, or disorientation."
+            },
+            {
+              "triad": "r",
+              "ordinal": "06",
+              "code": "PA.IX.G.R6",
+              "title": "Possible single-engine go-around."
+            },
+            {
+              "triad": "s",
+              "ordinal": "01",
+              "code": "PA.IX.G.S1",
+              "title": "Promptly recognize an engine failure and maintain positive aircraft control."
+            },
+            {
+              "triad": "s",
+              "ordinal": "02",
+              "code": "PA.IX.G.S2",
+              "title": "Set the engine controls, reduce drag, identify and verify the inoperative engine, and simulate"
+            },
+            {
+              "triad": "s",
+              "ordinal": "03",
+              "code": "PA.IX.G.S3",
+              "title": "Use flight controls in the proper combination as recommended by the manufacturer, or as required to"
+            },
+            {
+              "triad": "s",
+              "ordinal": "04",
+              "code": "PA.IX.G.S4",
+              "title": "Follow the manufacturer’s recommended emergency procedures and complete the appropriate"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": "10",
+      "title": "Multiengine Operations",
+      "tasks": [
+        {
+          "task": "a",
+          "title": "Maneuvering with One Engine Inoperative (AMEL, AMES)",
+          "body_path": "acs/ppl-airplane-6c/area-10/task-a.md",
+          "body_sha256": "29501562f89db3d396238e79e41181eb3886e5e9558d0d464f11e33a71f1fa06",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "PA.X.A.K1",
+              "title": "Factors affecting minimum controllable speed (VMC)."
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "PA.X.A.K2",
+              "title": "VMC (red line) and best single-engine rate of climb airspeed (VYSE) (blue line)."
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "PA.X.A.K3",
+              "title": "How to identify, verify, feather, and secure an inoperative engine."
+            },
+            {
+              "triad": "k",
+              "ordinal": "04",
+              "code": "PA.X.A.K4",
+              "title": "Importance of drag reduction, including propeller feathering, gear and flap retraction, the"
+            },
+            {
+              "triad": "k",
+              "ordinal": "05",
+              "code": "PA.X.A.K5",
+              "title": "Feathering, securing, unfeathering, and restarting."
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "PA.X.A.R1",
+              "title": "Potential engine failure during flight."
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "PA.X.A.R2",
+              "title": "Collision hazards."
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "PA.X.A.R3",
+              "title": "Configuring the airplane."
+            },
+            {
+              "triad": "r",
+              "ordinal": "04",
+              "code": "PA.X.A.R4",
+              "title": "Low altitude maneuvering, including stall, spin, or controlled flight into terrain (CFIT)."
+            },
+            {
+              "triad": "r",
+              "ordinal": "05",
+              "code": "PA.X.A.R5",
+              "title": "Distractions, task prioritization, loss of situational awareness, or disorientation."
+            },
+            {
+              "triad": "s",
+              "ordinal": "01",
+              "code": "PA.X.A.S1",
+              "title": "Recognize an engine failure, maintain control, use manufacturer’s memory item procedures, and use"
+            },
+            {
+              "triad": "s",
+              "ordinal": "02",
+              "code": "PA.X.A.S2",
+              "title": "Set the engine controls, identify and verify the inoperative engine, and feather the appropriate"
+            },
+            {
+              "triad": "s",
+              "ordinal": "03",
+              "code": "PA.X.A.S3",
+              "title": "Use flight controls in the proper combination as recommended by the manufacturer, or as required to"
+            },
+            {
+              "triad": "s",
+              "ordinal": "04",
+              "code": "PA.X.A.S4",
+              "title": "Attempt to determine and resolve the reason for the engine failure."
+            },
+            {
+              "triad": "s",
+              "ordinal": "05",
+              "code": "PA.X.A.S5",
+              "title": "Secure the inoperative engine and monitor the operating engine and make necessary adjustments."
+            },
+            {
+              "triad": "s",
+              "ordinal": "06",
+              "code": "PA.X.A.S6",
+              "title": "Restart the inoperative engine using manufacturer’s restart procedures."
+            },
+            {
+              "triad": "s",
+              "ordinal": "07",
+              "code": "PA.X.A.S7",
+              "title": "Maintain altitude ±100 feet or minimum sink rate if applicable, airspeed ±10 knots, and selected"
+            },
+            {
+              "triad": "s",
+              "ordinal": "08",
+              "code": "PA.X.A.S8",
+              "title": "Complete the appropriate checklist(s)."
+            }
+          ]
+        },
+        {
+          "task": "b",
+          "title": "VMC Demonstration (AMEL, AMES)",
+          "body_path": "acs/ppl-airplane-6c/area-10/task-b.md",
+          "body_sha256": "7654ec8c8edcf19fbe1935456173a3ffb7b9579a7b7502daa17315ca87800870",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "PA.X.B.K1",
+              "title": "Factors affecting VMC and how VMC differs from stall speed (VS)."
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "PA.X.B.K2",
+              "title": "VMC (red line), VYSE (blue line), and safe single-engine speed (VSSE)."
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "PA.X.B.K3",
+              "title": "Cause of loss of directional control at airspeeds below VMC."
+            },
+            {
+              "triad": "k",
+              "ordinal": "04",
+              "code": "PA.X.B.K4",
+              "title": "Proper procedures for maneuver entry and safe recovery."
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "PA.X.B.R1",
+              "title": "Configuring the airplane."
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "PA.X.B.R2",
+              "title": "Maneuvering with one engine inoperative."
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "PA.X.B.R3",
+              "title": "Distractions, task prioritization, loss of situational awareness, or disorientation."
+            },
+            {
+              "triad": "s",
+              "ordinal": "01",
+              "code": "PA.X.B.S1",
+              "title": "Configure the airplane in accordance with the manufacturer’s recommendations, in the absence of the"
+            },
+            {
+              "triad": "s",
+              "ordinal": "02",
+              "code": "PA.X.B.S2",
+              "title": "Establish a single-engine climb attitude with the airspeed at approximately 10 knots above VSSE."
+            },
+            {
+              "triad": "s",
+              "ordinal": "03",
+              "code": "PA.X.B.S3",
+              "title": "Establish a bank angle not to exceed 5° toward the operating engine, as required for best performance"
+            },
+            {
+              "triad": "s",
+              "ordinal": "04",
+              "code": "PA.X.B.S4",
+              "title": "Increase the pitch attitude slowly to reduce the airspeed at approximately 1 knot per second while"
+            },
+            {
+              "triad": "s",
+              "ordinal": "05",
+              "code": "PA.X.B.S5",
+              "title": "Recognize and recover at the first indication of loss of directional control, stall warning, or buffet."
+            },
+            {
+              "triad": "s",
+              "ordinal": "06",
+              "code": "PA.X.B.S6",
+              "title": "Recover promptly by simultaneously reducing power sufficiently on the operating engine, decreasing"
+            },
+            {
+              "triad": "s",
+              "ordinal": "07",
+              "code": "PA.X.B.S7",
+              "title": "Recover within 20° of entry heading."
+            }
+          ]
+        },
+        {
+          "task": "c",
+          "title": "One Engine Inoperative (Simulated) (solely by Reference to Instruments) During Straight-and-",
+          "body_path": "acs/ppl-airplane-6c/area-10/task-c.md",
+          "body_sha256": "40b6ec338232299019ce4fbd1865ad17e2ce503e3451bd21b76731d658abd4f5",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "PA.X.C.K1",
+              "title": "Procedures used if engine failure occurs during straight-and-level flight and turns while on instruments."
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "PA.X.C.R1",
+              "title": "Identification of the inoperative engine."
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "PA.X.C.R2",
+              "title": "Inability to climb or maintain altitude with an inoperative engine."
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "PA.X.C.R3",
+              "title": "Low altitude maneuvering, including stall, spin, or controlled flight into terrain (CFIT)."
+            },
+            {
+              "triad": "r",
+              "ordinal": "04",
+              "code": "PA.X.C.R4",
+              "title": "Distractions, task prioritization, loss of situational awareness, or disorientation."
+            },
+            {
+              "triad": "r",
+              "ordinal": "05",
+              "code": "PA.X.C.R5",
+              "title": "Fuel management during single-engine operation."
+            },
+            {
+              "triad": "s",
+              "ordinal": "01",
+              "code": "PA.X.C.S1",
+              "title": "Promptly recognize an engine failure and maintain positive aircraft control."
+            },
+            {
+              "triad": "s",
+              "ordinal": "02",
+              "code": "PA.X.C.S2",
+              "title": "Set the engine controls, reduce drag, identify and verify the inoperative engine, and simulate"
+            },
+            {
+              "triad": "s",
+              "ordinal": "03",
+              "code": "PA.X.C.S3",
+              "title": "Establish the best engine-inoperative airspeed and trim the airplane."
+            },
+            {
+              "triad": "s",
+              "ordinal": "04",
+              "code": "PA.X.C.S4",
+              "title": "Use flight controls in the proper combination as recommended by the manufacturer, or as required to"
+            },
+            {
+              "triad": "s",
+              "ordinal": "05",
+              "code": "PA.X.C.S5",
+              "title": "Verify the prescribed checklist procedures used for securing the inoperative engine."
+            },
+            {
+              "triad": "s",
+              "ordinal": "06",
+              "code": "PA.X.C.S6",
+              "title": "Attempt to determine and resolve the reason for the engine failure."
+            },
+            {
+              "triad": "s",
+              "ordinal": "07",
+              "code": "PA.X.C.S7",
+              "title": "Monitor engine functions and make necessary adjustments."
+            },
+            {
+              "triad": "s",
+              "ordinal": "08",
+              "code": "PA.X.C.S8",
+              "title": "Maintain the specified altitude ±100 feet or minimum sink rate if applicable, airspeed ±10 knots, and"
+            },
+            {
+              "triad": "s",
+              "ordinal": "09",
+              "code": "PA.X.C.S9",
+              "title": "Assess the aircraft’s performance capability and decide an appropriate action to ensure a safe landing."
+            },
+            {
+              "triad": "s",
+              "ordinal": "10",
+              "code": "PA.X.C.S10",
+              "title": "Avoid loss of airplane control or attempted flight contrary to the engine-inoperative operating limitations"
+            },
+            {
+              "triad": "s",
+              "ordinal": "11",
+              "code": "PA.X.C.S11",
+              "title": "Use single-pilot resource management (SRM) or crew resource management (CRM), as appropriate."
+            }
+          ]
+        },
+        {
+          "task": "d",
+          "title": "Instrument Approach and Landing with an Inoperative Engine (Simulated) (AMEL, AMES)",
+          "body_path": "acs/ppl-airplane-6c/area-10/task-d.md",
+          "body_sha256": "33eb972bf6078e966d47abaf2687b6435cf7273a2029c8fc4142884d38c0bb0c",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "PA.X.D.K1",
+              "title": "Instrument approach procedures with one engine inoperative."
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "PA.X.D.R1",
+              "title": "Potential engine failure during approach and landing."
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "PA.X.D.R2",
+              "title": "Collision hazards."
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "PA.X.D.R3",
+              "title": "Configuring the airplane."
+            },
+            {
+              "triad": "r",
+              "ordinal": "04",
+              "code": "PA.X.D.R4",
+              "title": "Low altitude maneuvering, including stall, spin, or controlled flight into terrain (CFIT)."
+            },
+            {
+              "triad": "r",
+              "ordinal": "05",
+              "code": "PA.X.D.R5",
+              "title": "Distractions, task prioritization, loss of situational awareness, or disorientation."
+            },
+            {
+              "triad": "r",
+              "ordinal": "06",
+              "code": "PA.X.D.R6",
+              "title": "Performing a go-around/rejected landing with an engine failure."
+            },
+            {
+              "triad": "s",
+              "ordinal": "01",
+              "code": "PA.X.D.S1",
+              "title": "Promptly recognize an engine failure and maintain positive aircraft control."
+            },
+            {
+              "triad": "s",
+              "ordinal": "02",
+              "code": "PA.X.D.S2",
+              "title": "Set the engine controls, reduce drag, identify and verify the inoperative engine, and simulate"
+            },
+            {
+              "triad": "s",
+              "ordinal": "03",
+              "code": "PA.X.D.S3",
+              "title": "Use flight controls in the proper combination as recommended by the manufacturer, or as required to"
+            },
+            {
+              "triad": "s",
+              "ordinal": "04",
+              "code": "PA.X.D.S4",
+              "title": "Follow the manufacturer’s recommended emergency procedures and complete the appropriate"
+            },
+            {
+              "triad": "s",
+              "ordinal": "05",
+              "code": "PA.X.D.S5",
+              "title": "Monitor the operating engine and aircraft systems and make adjustments as necessary."
+            },
+            {
+              "triad": "s",
+              "ordinal": "06",
+              "code": "PA.X.D.S6",
+              "title": "Request and follow an actual or a simulated air traffic control (ATC) clearance for an instrument"
+            },
+            {
+              "triad": "s",
+              "ordinal": "07",
+              "code": "PA.X.D.S7",
+              "title": "Maintain altitude ±100 feet or minimum sink rate if applicable, airspeed ±10 knots, and selected"
+            },
+            {
+              "triad": "s",
+              "ordinal": "08",
+              "code": "PA.X.D.S8",
+              "title": "Establish a rate of descent that ensures arrival at the minimum descent altitude (MDA) or decision"
+            },
+            {
+              "triad": "s",
+              "ordinal": "09",
+              "code": "PA.X.D.S9",
+              "title": "On final approach segment, maintain vertical (as applicable) and lateral guidance within ¾-scale"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": "11",
+      "title": "Night Operations",
+      "tasks": [
+        {
+          "task": "a",
+          "title": "Night Operations",
+          "body_path": "acs/ppl-airplane-6c/area-11/task-a.md",
+          "body_sha256": "89992a139aecfb4af478f3967fa901eb713820bb3129de60a4aa515f82575729",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "PA.XI.A.K1",
+              "title": "Physiological aspects of vision related to night flying."
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "PA.XI.A.K2",
+              "title": "Lighting systems identifying airports, runways, taxiways and obstructions, as well as pilot controlled"
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "PA.XI.A.K3",
+              "title": "Airplane equipment and lighting requirements for night operations."
+            },
+            {
+              "triad": "k",
+              "ordinal": "04",
+              "code": "PA.XI.A.K4",
+              "title": "Personal equipment essential for night flight."
+            },
+            {
+              "triad": "k",
+              "ordinal": "05",
+              "code": "PA.XI.A.K5",
+              "title": "Night orientation, navigation, chart reading techniques and methods for maintaining night vision"
+            },
+            {
+              "triad": "k",
+              "ordinal": "06",
+              "code": "PA.XI.A.K6",
+              "title": "Night taxi operations."
+            },
+            {
+              "triad": "k",
+              "ordinal": "07",
+              "code": "PA.XI.A.K7",
+              "title": "Interpretation of traffic position and direction based solely on position lights."
+            },
+            {
+              "triad": "k",
+              "ordinal": "08",
+              "code": "PA.XI.A.K8",
+              "title": "Visual illusions at night."
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "PA.XI.A.R1",
+              "title": "Collision hazards."
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "PA.XI.A.R2",
+              "title": "Distractions, task prioritization, loss of situational awareness, or disorientation."
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "PA.XI.A.R3",
+              "title": "Effect of visual illusions and night adaptation during all phases of night flying."
+            },
+            {
+              "triad": "r",
+              "ordinal": "04",
+              "code": "PA.XI.A.R4",
+              "title": "Runway incursion."
+            },
+            {
+              "triad": "r",
+              "ordinal": "05",
+              "code": "PA.XI.A.R5",
+              "title": "Night currency versus proficiency."
+            },
+            {
+              "triad": "r",
+              "ordinal": "06",
+              "code": "PA.XI.A.R6",
+              "title": "Weather considerations specific to night operations."
+            },
+            {
+              "triad": "r",
+              "ordinal": "07",
+              "code": "PA.XI.A.R7",
+              "title": "Inoperative equipment."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": "12",
+      "title": "Postflight Procedures",
+      "tasks": [
+        {
+          "task": "a",
+          "title": "After Landing, Parking, and Securing (ASEL, AMEL)",
+          "body_path": "acs/ppl-airplane-6c/area-12/task-a.md",
+          "body_sha256": "20b1ffac5a42b567980ef6b180624e75449e6a9af43277a99c31ae57a213b125",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "PA.XII.A.K1",
+              "title": "Airplane shutdown, securing, and postflight inspection."
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "PA.XII.A.K2",
+              "title": "Documenting in-flight/postflight discrepancies."
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "PA.XII.A.R1",
+              "title": "Activities and distractions."
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "PA.XII.A.R2",
+              "title": "[Archived]"
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "PA.XII.A.R3",
+              "title": "Airport specific security procedures."
+            },
+            {
+              "triad": "r",
+              "ordinal": "04",
+              "code": "PA.XII.A.R4",
+              "title": "Disembarking passengers safely on the ramp and monitoring passenger movement while on the ramp."
+            },
+            {
+              "triad": "s",
+              "ordinal": "01",
+              "code": "PA.XII.A.S1",
+              "title": "[Archived]"
+            },
+            {
+              "triad": "s",
+              "ordinal": "02",
+              "code": "PA.XII.A.S2",
+              "title": "Park in an appropriate area, considering the safety of nearby persons and property."
+            },
+            {
+              "triad": "s",
+              "ordinal": "03",
+              "code": "PA.XII.A.S3",
+              "title": "Complete the appropriate checklist(s)."
+            },
+            {
+              "triad": "s",
+              "ordinal": "04",
+              "code": "PA.XII.A.S4",
+              "title": "Conduct a postflight inspection and document discrepancies and servicing requirements, if any."
+            },
+            {
+              "triad": "s",
+              "ordinal": "05",
+              "code": "PA.XII.A.S5",
+              "title": "Secure the airplane."
+            }
+          ]
+        },
+        {
+          "task": "b",
+          "title": "Seaplane Post-Landing Procedures (ASES, AMES)",
+          "body_path": "acs/ppl-airplane-6c/area-12/task-b.md",
+          "body_sha256": "4b1bdad7875ab9510e6539dc49cfda40339b0e23e74cd22b8c7c9fce651406d8",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "PA.XII.B.K1",
+              "title": "Mooring."
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "PA.XII.B.K2",
+              "title": "Docking."
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "PA.XII.B.K3",
+              "title": "Anchoring."
+            },
+            {
+              "triad": "k",
+              "ordinal": "04",
+              "code": "PA.XII.B.K4",
+              "title": "Beaching/ramping."
+            },
+            {
+              "triad": "k",
+              "ordinal": "05",
+              "code": "PA.XII.B.K5",
+              "title": "Postflight inspection, recording of in-flight/postflight discrepancies."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

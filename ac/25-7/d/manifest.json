@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "corpus": "ac",
+  "doc_slug": "25-7",
+  "doc_number": "25-7",
+  "revision": "d",
+  "title": "AC 25-7D, Flight Test Guide for Certification of Transport Category Airplanes",
+  "publisher": "FAA",
+  "publication_date": "2018-05-04",
+  "source_url": "https://www.faa.gov/documentLibrary/media/Advisory_Circular/AC_25-7D.pdf",
+  "source_sha256": "47dcb52c8ea7b74e1a2a58c5f9ebae38b5798f863fdfb4c93ca6a7fc74b9defe",
+  "fetched_at": "2026-04-27T21:20:46.766Z",
+  "page_count": 481,
+  "body_path": "ac/25-7/d/document.md",
+  "body_sha256": "73d858e1c5c2e41fdcf8b97751b9f604badf13e9a9b53e16576f9a28b03f46ea",
+  "sections": [],
+  "changes": []
+}
