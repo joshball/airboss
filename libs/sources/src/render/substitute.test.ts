@@ -1,5 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { __corpus_resolver_internal__, registerCorpusResolver } from '../registry/corpus-resolver.ts';
+import { __corpus_resolver_internal__ } from '../registry/corpus-resolver.ts';
+
+const registerCorpusResolver = __corpus_resolver_internal__.registerTestResolver;
 import { resetRegistry, withTestEntries } from '../registry/__test_helpers__.ts';
 import type { CorpusResolver, IndexedContent, SourceEntry, SourceId } from '../types.ts';
 import { batchResolve } from './batch-resolve.ts';
