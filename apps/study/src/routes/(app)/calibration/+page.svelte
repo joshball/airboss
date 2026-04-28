@@ -11,6 +11,7 @@ import {
 	ROUTES,
 	SESSION_MODES,
 } from '@ab/constants';
+import Button from '@ab/ui/components/Button.svelte';
 import { humanize } from '@ab/utils';
 import type { PageData } from './$types';
 
@@ -239,8 +240,8 @@ const interpretation = $derived(
 			</p>
 			<p class="fine">Minimum for useful data: ~25 confidence-rated answers spanning at least 3 of the 5 confidence buckets.</p>
 			<div class="actions">
-				<a class="btn primary" href={ROUTES.MEMORY_REVIEW}>Start a review</a>
-				<a class="btn secondary" href={ROUTES.SESSION_START}>Start a rep session</a>
+				<Button variant="primary" href={ROUTES.MEMORY_REVIEW}>Start a review</Button>
+				<Button variant="secondary" href={ROUTES.SESSION_START}>Start a rep session</Button>
 			</div>
 		</article>
 	{:else}
@@ -274,9 +275,9 @@ const interpretation = $derived(
 			<article class="interpretation-card" aria-label="Calibration interpretation">
 				<p>{interpretation}</p>
 				{#if bucketsWithGap.length > 0}
-					<a class="btn primary" href={`${ROUTES.SESSION_START}?${QUERY_PARAMS.SESSION_MODE}=${SESSION_MODES.STRENGTHEN}`}>
+					<Button variant="primary" href={`${ROUTES.SESSION_START}?${QUERY_PARAMS.SESSION_MODE}=${SESSION_MODES.STRENGTHEN}`}>
 						Start a Strengthen session
-					</a>
+					</Button>
 				{/if}
 			</article>
 		{/if}
@@ -924,41 +925,6 @@ const interpretation = $derived(
 		gap: var(--space-sm);
 		flex-wrap: wrap;
 		justify-content: center;
-	}
-
-	.btn {
-		padding: var(--space-sm) var(--space-xl);
-		font-size: var(--type-definition-body-size);
-		font-weight: 600;
-		border-radius: var(--radius-md);
-		border: 1px solid transparent;
-		cursor: pointer;
-		text-decoration: none;
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		gap: var(--space-sm);
-		transition: background var(--motion-fast),
-			border-color var(--motion-fast);
-	}
-
-	.btn.primary {
-		background: var(--action-default);
-		color: var(--ink-inverse);
-	}
-
-	.btn.primary:hover {
-		background: var(--action-default-hover);
-	}
-
-	.btn.secondary {
-		background: var(--surface-sunken);
-		color: var(--ink-body);
-		border-color: var(--edge-strong);
-	}
-
-	.btn.secondary:hover {
-		background: var(--edge-default);
 	}
 
 	@media (max-width: 480px) {

@@ -12,6 +12,7 @@ import {
 	SAVED_DECK_LABEL_MAX_LENGTH,
 } from '@ab/constants';
 import PageHelp from '@ab/help/ui/PageHelp.svelte';
+import Button from '@ab/ui/components/Button.svelte';
 import ConfirmAction from '@ab/ui/components/ConfirmAction.svelte';
 import InfoTip from '@ab/ui/components/InfoTip.svelte';
 import StatTile from '@ab/ui/components/StatTile.svelte';
@@ -156,9 +157,9 @@ function percent(n: number, total: number): number {
 			<p class="sub">Cards you've written; the algorithm schedules reviews.</p>
 		</div>
 		<nav class="quick" aria-label="Quick actions">
-			<a class="btn ghost" href={ROUTES.MEMORY_BROWSE}>Browse</a>
-			<a class="btn secondary" href={ROUTES.MEMORY_NEW}>New card</a>
-			<a class="btn primary" href={ROUTES.MEMORY_REVIEW}>Start review</a>
+			<Button variant="ghost" href={ROUTES.MEMORY_BROWSE}>Browse</Button>
+			<Button variant="secondary" href={ROUTES.MEMORY_NEW}>New card</Button>
+			<Button variant="primary" href={ROUTES.MEMORY_REVIEW}>Start review</Button>
 		</nav>
 	</header>
 
@@ -206,10 +207,10 @@ function percent(n: number, total: number): number {
 									/>
 								</label>
 								<div class="rename-actions">
-									<button type="submit" class="btn primary sm">{SAVED_DECK_COPY.RENAME_SAVE}</button>
-									<button type="button" class="btn ghost sm" onclick={cancelRename}>
+									<Button type="submit" variant="primary" size="sm">{SAVED_DECK_COPY.RENAME_SAVE}</Button>
+									<Button variant="ghost" size="sm" onclick={cancelRename}>
 										{SAVED_DECK_COPY.RENAME_CANCEL}
-									</button>
+									</Button>
 								</div>
 								{#if renameErrorHash === deck.deckHash && renameError}
 									<p class="form-error" id="rename-error-{deck.deckHash}" role="alert">{renameError}</p>
@@ -231,14 +232,14 @@ function percent(n: number, total: number): number {
 									</div>
 								</a>
 								<div class="deck-actions">
-									<button
-										type="button"
-										class="btn ghost sm"
+									<Button
+										variant="ghost"
+										size="sm"
 										onclick={() => openRename(deck.deckHash)}
-										aria-label="{SAVED_DECK_COPY.RENAME_TRIGGER} {deckName(deck)}"
+										ariaLabel="{SAVED_DECK_COPY.RENAME_TRIGGER} {deckName(deck)}"
 									>
 										{SAVED_DECK_COPY.RENAME_TRIGGER}
-									</button>
+									</Button>
 									<ConfirmAction
 										formAction="?/deleteDeck"
 										triggerVariant="ghost"
@@ -606,11 +607,6 @@ function percent(n: number, total: number): number {
 		color: var(--ink-faint);
 	}
 
-	.btn.sm {
-		padding: var(--space-2xs) var(--space-sm);
-		font-size: var(--font-size-sm);
-	}
-
 	.form-error {
 		margin: 0;
 		font-size: var(--font-size-sm);
@@ -818,45 +814,4 @@ function percent(n: number, total: number): number {
 		font-weight: 500;
 	}
 
-	.btn {
-		padding: var(--space-sm) var(--space-lg);
-		font-size: var(--font-size-body);
-		font-weight: 600;
-		border-radius: var(--radius-md);
-		border: 1px solid transparent;
-		cursor: pointer;
-		text-decoration: none;
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		transition: background var(--motion-fast), border-color var(--motion-fast);
-	}
-
-	.btn.primary {
-		background: var(--action-default);
-		color: var(--ink-inverse);
-	}
-
-	.btn.primary:hover {
-		background: var(--action-default-hover);
-	}
-
-	.btn.secondary {
-		background: var(--surface-sunken);
-		color: var(--ink-body);
-		border-color: var(--edge-strong);
-	}
-
-	.btn.secondary:hover {
-		background: var(--edge-default);
-	}
-
-	.btn.ghost {
-		background: transparent;
-		color: var(--ink-muted);
-	}
-
-	.btn.ghost:hover {
-		background: var(--surface-sunken);
-	}
 </style>
