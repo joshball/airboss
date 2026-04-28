@@ -3,7 +3,7 @@ title: 'User stories: Avionics App Scaffold'
 product: avionics
 feature: avionics-app-scaffold
 type: user-stories
-status: unread
+status: done
 review_status: done
 ---
 

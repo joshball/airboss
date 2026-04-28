@@ -2,9 +2,9 @@
  * Theme picker -- server surface.
  *
  * Single source of truth for the cookie name, the parser, and the POST
- * endpoint factory. All three apps (study, sim, hangar) wire their `/theme`
- * handler with `createThemeEndpoint()` so the safety contract -- registry
- * validation, max-age, SameSite, Path -- can never drift between apps.
+ * endpoint factory. All four apps (study, sim, hangar, avionics) wire their
+ * `/theme` handler with `createThemeEndpoint()` so the safety contract --
+ * registry validation, max-age, SameSite, Path -- can never drift between apps.
  *
  * The cookie / parser / safety helpers live in `../resolve.ts` (kept there
  * because they're used by both client and server during resolution); this
@@ -12,8 +12,9 @@
  * endpoint factory + the per-request cookie reader for `hooks.server.ts`.
  *
  * The override rule (`/sim/*` -> `sim/glass`, `sim/glass` forces dark) lives
- * inside `resolveThemeSelection` -- not here. The endpoint just records the
- * user's preference; resolution happens at render time via the resolver.
+ * inside `resolveThemeSelection` -- not here. Avionics intentionally does NOT
+ * lock its theme; it participates in the full light/dark picker. The endpoint
+ * just records the user's preference; resolution happens at render time.
  */
 
 import { SECONDS_PER_YEAR } from '@ab/constants';

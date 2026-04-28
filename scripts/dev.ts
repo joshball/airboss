@@ -225,7 +225,9 @@ function printHelp(): void {
 	console.log('Examples:');
 	console.log('  bun run dev              Spawn every app in parallel');
 	console.log('  bun run dev study        Spawn only the study app');
+	console.log('  bun run dev sim          Spawn only the sim app');
 	console.log('  bun run dev hangar       Spawn only the hangar app');
+	console.log('  bun run dev avionics     Spawn only the avionics app');
 }
 
 /**

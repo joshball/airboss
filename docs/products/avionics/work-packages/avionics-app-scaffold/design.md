@@ -3,7 +3,7 @@ title: 'Design: Avionics App Scaffold'
 product: avionics
 feature: avionics-app-scaffold
 type: design
-status: unread
+status: done
 review_status: done
 ---
 
