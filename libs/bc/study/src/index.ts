@@ -240,6 +240,7 @@ export {
 	getCardsForNode,
 	getCertAndDomainMatrix,
 	getCertProgress,
+	getCitationsForKnowledgeNode,
 	getDomainCertMatrix,
 	getNodeMastery,
 	getNodeMasteryMap,

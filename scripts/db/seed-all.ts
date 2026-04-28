@@ -14,6 +14,11 @@
  *                    guide) from course/references/*.yaml. Cert-syllabus WP.
  *   5. credentials -- credential / credential_prereq / credential_syllabus
  *                    rows from course/credentials/*.yaml. Cert-syllabus WP.
+ *   5b. migrate-references -- reshape every legacy LegacyCitation entry on
+ *                    knowledge_node.references into a uniform
+ *                    StructuredCitation, resolving against the seeded
+ *                    `study.reference` registry. Idempotent on
+ *                    `references_v2_migrated`. Cert-syllabus WP phase 17.
  *   6. cards      -- study.card rows from inline yaml-cards blocks for every
  *                    DEV_ACCOUNTS user (scripts/db/seed-cards.ts :: seedCardsForUser)
  *   7. abby       -- Abby's personal cards / scenarios / plan / sessions /
@@ -36,6 +41,7 @@ import { resolve } from 'node:path';
 import { DEV_ACCOUNTS, DEV_DB_URL, DEV_SEED_ORIGIN_TAG, ENV_VARS } from '@ab/constants';
 import { prompt } from '../lib/prompt';
 import { runOrThrow } from '../lib/spawn';
+import { migrateReferencesToStructured } from './migrate-references-to-structured';
 import { type AbbySeedCounts, seedAbby } from './seed-abby';
 import { seedCardsForUser } from './seed-cards';
 import { seedCredentials } from './seed-credentials';
@@ -52,6 +58,7 @@ type Phase =
 	| 'credentials'
 	| 'syllabi'
 	| 'credential-syllabi'
+	| 'migrate-references'
 	| 'cards'
 	| 'abby';
 
@@ -63,6 +70,7 @@ const PHASES: readonly Phase[] = [
 	'credentials',
 	'syllabi',
 	'credential-syllabi',
+	'migrate-references',
 	'cards',
 	'abby',
 ] as const;
@@ -126,6 +134,21 @@ async function phaseCredentialSyllabi(): Promise<void> {
 	);
 }
 
+async function phaseMigrateReferences(): Promise<void> {
+	// Reshape every legacy LegacyCitation entry on `knowledge_node.references`
+	// into a uniform StructuredCitation, resolving each entry against the now-
+	// seeded `study.reference` registry. Idempotent on `references_v2_migrated`;
+	// re-runs are no-ops once every row is flipped to true.
+	process.stdout.write('\n=== seed: migrate references -> StructuredCitation ===\n');
+	const report = await migrateReferencesToStructured();
+	process.stdout.write(
+		`  scanned ${report.rowsScanned}, already-migrated ${report.rowsAlreadyMigrated}, migrated ${report.rowsMigrated}\n`,
+	);
+	process.stdout.write(
+		`  citations reshaped ${report.citationsReshaped}, already-structured ${report.citationsAlreadyStructured}, synthetic refs created ${report.syntheticReferencesCreated}\n`,
+	);
+}
+
 async function phaseCards(): Promise<void> {
 	process.stdout.write('\n=== seed: cards ===\n');
 	for (const account of DEV_ACCOUNTS) {
@@ -168,6 +191,7 @@ const PHASE_FNS: Record<Phase, () => Promise<void>> = {
 	credentials: phaseCredentials,
 	syllabi: phaseSyllabi,
 	'credential-syllabi': phaseCredentialSyllabi,
+	'migrate-references': phaseMigrateReferences,
 	cards: phaseCards,
 	abby: phaseAbby,
 };

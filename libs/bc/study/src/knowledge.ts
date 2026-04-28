@@ -31,6 +31,7 @@ import {
 	type StudyPriority,
 } from '@ab/constants';
 import { db as defaultDb } from '@ab/db/connection';
+import { isStructuredCitation, type StructuredCitation } from '@ab/types';
 import { generateKnowledgeNodeProgressId } from '@ab/utils';
 import { and, asc, count, eq, inArray, isNotNull, isNull, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
@@ -352,6 +353,41 @@ export async function getCardsForNode(
 		.where(and(eq(card.nodeId, nodeId), eq(card.userId, userId)))
 		.orderBy(asc(card.createdAt));
 	return rows.map((r) => ({ card: r.card, state: r.state }));
+}
+
+/**
+ * Inline `StructuredCitation` array on a knowledge_node row's `references`
+ * JSONB column. Returns the empty array when the node has no references or
+ * doesn't exist.
+ *
+ * Read-side narrowing: rows whose `references_v2_migrated = false` may still
+ * carry mixed `LegacyCitation` + `StructuredCitation` entries on the same
+ * column (the migration script in `scripts/db/migrate-references-to-structured.ts`
+ * is what flips the flag to true). To keep downstream consumers (cert
+ * dashboard, lens views, citation chips) on a uniform contract, this helper
+ * filters out any legacy entries via the `isStructuredCitation` type guard.
+ * Once the migration runs against every row the filter becomes a no-op.
+ *
+ * Mirrors `getCitationsForSyllabusNode` in `syllabi.ts`.
+ */
+export async function getCitationsForKnowledgeNode(
+	knowledgeNodeId: string,
+	db: Db = defaultDb,
+): Promise<StructuredCitation[]> {
+	const rows = await db
+		.select({ references: knowledgeNode.references })
+		.from(knowledgeNode)
+		.where(eq(knowledgeNode.id, knowledgeNodeId))
+		.limit(1);
+	const row = rows[0];
+	if (!row) return [];
+	// Drizzle's `$type<LegacyCitation[]>` on the column is a compile-time hint
+	// for the pre-migration shape. Post-migration the same JSONB column holds
+	// `StructuredCitation` entries; the runtime guard `isStructuredCitation`
+	// is the source of truth on read paths. Cast through `unknown` so the
+	// guard's `Citation` parameter shape is satisfied across both eras.
+	const entries = (row.references ?? []) as unknown as readonly Parameters<typeof isStructuredCitation>[0][];
+	return entries.filter(isStructuredCitation);
 }
 
 /** Look up node rows for a set of ids. Used by link rendering. */
