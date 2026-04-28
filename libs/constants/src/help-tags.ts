@@ -25,6 +25,7 @@ export const APP_SURFACES = {
 	KNOWLEDGE: 'knowledge',
 	SESSION: 'session',
 	PLANS: 'plans',
+	CREDENTIALS: 'credentials',
 	GLOBAL: 'global',
 } as const;
 
@@ -40,6 +41,7 @@ export const APP_SURFACE_LABELS: Record<AppSurface, string> = {
 	[APP_SURFACES.KNOWLEDGE]: 'Knowledge',
 	[APP_SURFACES.SESSION]: 'Session',
 	[APP_SURFACES.PLANS]: 'Plans',
+	[APP_SURFACES.CREDENTIALS]: 'Credentials',
 	[APP_SURFACES.GLOBAL]: 'Global',
 };
 
