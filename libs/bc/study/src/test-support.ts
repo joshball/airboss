@@ -23,7 +23,7 @@ import {
 	SESSION_REASON_CODES,
 	SESSION_SLICES,
 } from '@ab/constants';
-import { db } from '@ab/db';
+import { db } from '@ab/db/connection';
 import { generateSessionId, generateSessionItemResultId, generateStudyPlanId } from '@ab/utils';
 import { and, desc, eq } from 'drizzle-orm';
 import { session, sessionItemResult, studyPlan } from './schema';

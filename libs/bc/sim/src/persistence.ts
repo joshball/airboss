@@ -13,7 +13,7 @@
  */
 
 import { SIM_BIAS } from '@ab/constants';
-import { db as defaultDb } from '@ab/db';
+import { db as defaultDb } from '@ab/db/connection';
 import { generateSimAttemptId } from '@ab/utils';
 import { and, desc, eq, gte, isNotNull } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';

@@ -21,7 +21,7 @@
  */
 
 import { AUTH_RATE_LIMIT, BETTER_AUTH_ENDPOINTS, ENV_VARS, ROUTES } from '@ab/constants';
-import { db } from '@ab/db';
+import { db } from '@ab/db/connection';
 import { eq, like } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { bauthAccount, bauthRateLimit, bauthSession, bauthUser } from './schema';

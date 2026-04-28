@@ -46,7 +46,7 @@ import {
 	syllabusNodeLink,
 } from '@ab/bc-study';
 import { BLOOM_LEVELS, type BloomLevel, STUDY_PRIORITIES, type StudyPriority, SYLLABUS_STATUSES } from '@ab/constants';
-import { db } from '@ab/db';
+import { db } from '@ab/db/connection';
 import type { RelevanceEntry } from '@ab/types';
 import { eq, sql } from 'drizzle-orm';
 

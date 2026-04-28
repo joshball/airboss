@@ -6,7 +6,7 @@
 
 import { bauthUser } from '@ab/auth/schema';
 import { SAVED_DECK_LABEL_MAX_LENGTH } from '@ab/constants';
-import { db } from '@ab/db';
+import { db } from '@ab/db/connection';
 import { generateAuthId, generateReviewSessionId } from '@ab/utils';
 import { and, eq } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';

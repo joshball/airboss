@@ -16,7 +16,7 @@
 import { mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { db } from '@ab/db';
+import { db } from '@ab/db/connection';
 import { eq } from 'drizzle-orm';
 import { afterAll, describe, expect, it } from 'vitest';
 import { handbookFigure, handbookSection, reference } from '../../libs/bc/study/src/schema';

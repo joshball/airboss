@@ -20,7 +20,7 @@ import {
 	type SimScenarioIdGraded,
 	type SimScenarioNodeLink,
 } from '@ab/constants';
-import { db as defaultDb } from '@ab/db';
+import { db as defaultDb } from '@ab/db/connection';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 
 type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;

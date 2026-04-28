@@ -42,6 +42,7 @@
       "dependencies": {
         "@ab/auth": "workspace:*",
         "@ab/bc-avionics": "workspace:*",
+        "@ab/bc-sim": "workspace:*",
         "@ab/constants": "workspace:*",
         "@ab/db": "workspace:*",
         "@ab/utils": "workspace:*",

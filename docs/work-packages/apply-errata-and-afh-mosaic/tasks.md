@@ -17,7 +17,7 @@ Phased plan. Each phase ends with `bun run check` clean and a commit.
 - R3: shipped (`feat(study/schema): handbook_section_errata table + BC functions`)
 - R4: shipped (`feat(handbook-ingest): apply-errata pipeline (--apply-errata + --reapply-errata)`)
 - R5: AFH portion shipped (`feat(content/afh): apply MOSAIC addendum`); PHAK portion deferred (different layout requires a new `bullet-edits` parser archetype, captured in IDEAS.md and PHAK YAML comment)
-- R6: deferred (reader UI: AmendmentPanel + ErrataEntry + diff utility + +page.svelte wiring)
+- R6: shipped (reader UI: AmendmentPanel + ErrataEntry + LCS word-diff utility wired into +page.svelte; e2e spec authored and `.skip()` until the e2e seed inserts errata rows -- see R6 task block).
 - R7: deferred (discovery: 17-handbook catalogue, scrape, GH issue, launchd cron, dispatcher banner)
 - R8: ADR 020 amendment shipped; IDEAS.md follow-ups captured; hangar PRD update covered via IDEAS.md (hangar PRD dormant per project memory)
 - R9: deferred (full test-plan walk + ball-review-full + PR follow-up review)
@@ -151,19 +151,27 @@ Lands first. Zero behavior change. Subsequent phases consume the new shape.
 
 ### 11. AmendmentPanel component
 
-- [ ] Create `libs/ui/src/handbook/AmendmentPanel.svelte` and `ErrataEntry.svelte` per [design.md](design.md) Component structure.
-- [ ] Diff utility: prefer existing if any; otherwise add `libs/utils/src/text-diff.ts` (LCS word diff, ~50 lines, no new deps). Unit tests for the diff utility.
-- [ ] Style with existing handbook tokens. No new tokens unless absolutely necessary.
-- [ ] Storybook entry if Storybook is wired up; otherwise a small dev-only test page under `apps/study/src/routes/dev/`.
-- [ ] Run `bun run check` — 0 errors.
-- [ ] Commit: `feat(ui/handbook): AmendmentPanel + ErrataEntry`
+- [x] Create `libs/ui/src/handbooks/AmendmentPanel.svelte` and `ErrataEntry.svelte` per [design.md](design.md) Component structure. Files live under `handbooks/` (plural, matching the existing project convention) rather than `handbook/`.
+- [x] Diff utility: added `libs/utils/src/text-diff.ts` (LCS word diff, no new deps) plus unit tests.
+- [x] Style with existing handbook tokens. No new tokens introduced.
+- [ ] Storybook entry if Storybook is wired up; otherwise a small dev-only test page under `apps/study/src/routes/dev/`. Deferred -- Storybook is not wired in airboss; the vitest component tests cover the rendering contract.
+- [x] Run `bun run check` on the changed files -- 0 errors introduced. (Workspace `bun run check` carries pre-existing errors unrelated to this work.)
+- [x] Commit: `feat(ui/handbooks): ErrataEntry component` + `feat(ui/handbooks): AmendmentPanel component`.
 
 ### 12. Wire into reader
 
-- [ ] `apps/study/src/routes/(app)/handbooks/[doc]/[chapter]/[section]/+page.server.ts`: load errata via `listErrataForSection`. Pass to page.
-- [ ] `+page.svelte`: render `AmendmentPanel` when `errata.length > 0`. Position in section header per design.
-- [ ] Visual verification in reader for one AFH section + one PHAK section.
-- [ ] Commit: `feat(study/reader): amendment badge + diff panel`
+- [x] `apps/study/src/routes/(app)/handbooks/[doc]/[chapter]/[section]/+page.server.ts`: loads errata via `listErrataForSection` -> `formatErrataForDisplay`. Passes `data.errata` to the page.
+- [x] `+page.svelte`: mounts `AmendmentPanel` in the section header. The component renders nothing for an empty list, so no conditional in the page template.
+- [ ] Visual verification in reader for one AFH section + one PHAK section. Pending: blocked on the e2e seed gap below; the manual test surfaces once `bun db seed --apply-errata` runs against the dev DB.
+- [x] Commit: `feat(study/reader): mount AmendmentPanel for sections with applied errata`.
+
+### 12a. E2e spec + seed wiring
+
+- [x] Author `tests/e2e/handbook-amendment.spec.ts` with the badge -> click -> FAA source URL contract. Currently `.skip()` because the e2e seed (`tests/e2e/global.setup.ts` + the dev-seed dump) does not insert `study.handbook_section_errata` rows.
+- [ ] Wire errata fixtures into the e2e seed. Two viable paths:
+  1. Extend `tests/e2e/global.setup.ts` to call `insertErrataRows` against the seeded section ids using parsed `.errata.md` fixtures under `handbooks/afh/.../*.errata.md`.
+  2. Re-run `bun run sources extract handbooks afh --apply-errata mosaic` against the dev-seed database before the Playwright dump is captured.
+- [ ] Once the seed inserts errata rows, drop the `.skip()` calls in `handbook-amendment.spec.ts`. The contract is fixed; the unskip is one line.
 
 ## Phase R7: Discovery
 

@@ -29,7 +29,7 @@ import {
 	REFERENCE_KINDS,
 	ROUTES,
 } from '@ab/constants';
-import { db } from '@ab/db';
+import { db } from '@ab/db/connection';
 import type { LegacyCitation, StructuredCitation } from '@ab/types';
 import { generateAuthId, generateHandbookFigureId, generateHandbookSectionId, generateReferenceId } from '@ab/utils';
 import { eq } from 'drizzle-orm';

@@ -12,7 +12,8 @@
 import { auditLog } from '@ab/audit';
 import { bauthSession, bauthUser } from '@ab/auth';
 import { ROLE_VALUES, type Role } from '@ab/constants';
-import { db as defaultDb, escapeLikePattern } from '@ab/db';
+import { escapeLikePattern } from '@ab/db';
+import { db as defaultDb } from '@ab/db/connection';
 import { and, asc, desc, eq, ilike, max, or, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 

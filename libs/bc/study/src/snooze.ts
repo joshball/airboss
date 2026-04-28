@@ -29,7 +29,7 @@ import {
 	type SnoozeDurationLevel,
 	type SnoozeReason,
 } from '@ab/constants';
-import { db as defaultDb } from '@ab/db';
+import { db as defaultDb } from '@ab/db/connection';
 import { generateCardSnoozeId } from '@ab/utils';
 import { and, desc, eq, gt, isNull, or, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';

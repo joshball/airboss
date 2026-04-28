@@ -13,7 +13,7 @@
 import { bauthUser } from '@ab/auth/schema';
 import { savedDeck } from '@ab/bc-study';
 import { SAVED_DECK_LABEL_MAX_LENGTH } from '@ab/constants';
-import { db } from '@ab/db';
+import { db } from '@ab/db/connection';
 import { generateAuthId } from '@ab/utils';
 import type { ActionFailure } from '@sveltejs/kit';
 import { isHttpError, isRedirect } from '@sveltejs/kit';

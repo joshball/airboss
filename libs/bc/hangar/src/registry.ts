@@ -19,7 +19,8 @@ import {
 	type ReferencePhaseOfFlight,
 	type ReferenceSourceType,
 } from '@ab/constants';
-import { db as defaultDb, escapeLikePattern } from '@ab/db';
+import { escapeLikePattern } from '@ab/db';
+import { db as defaultDb } from '@ab/db/connection';
 import { and, asc, count, desc, eq, ilike, isNull, or, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import { type HangarReferenceRow, type HangarSourceRow, hangarReference, hangarSource } from './schema';

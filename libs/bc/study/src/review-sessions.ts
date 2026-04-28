@@ -18,7 +18,7 @@ import {
 	REVIEW_SESSION_STATUSES,
 	type ReviewSessionStatus,
 } from '@ab/constants';
-import { db as defaultDb } from '@ab/db';
+import { db as defaultDb } from '@ab/db/connection';
 import { generateReviewSessionId } from '@ab/utils';
 import { and, count, desc, eq, inArray, isNotNull, lt, max } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';

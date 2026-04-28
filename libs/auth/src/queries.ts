@@ -4,7 +4,7 @@
  * against the auth table -- they ask `@ab/auth` for the count.
  */
 
-import { db as defaultDb } from '@ab/db';
+import { db as defaultDb } from '@ab/db/connection';
 import { count } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import { bauthUser } from './schema';

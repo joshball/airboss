@@ -5,7 +5,7 @@
  * on failure.
  */
 
-import { db as defaultDb } from '@ab/db';
+import { db as defaultDb } from '@ab/db/connection';
 import { count, isNull } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import { hangarJob, hangarReference, hangarSource } from './schema';

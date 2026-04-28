@@ -28,7 +28,7 @@ import {
 	type CitationTargetType,
 	EXTERNAL_REF_TARGET_DELIMITER,
 } from '@ab/constants';
-import { db as defaultDb } from '@ab/db';
+import { db as defaultDb } from '@ab/db/connection';
 import { generateContentCitationId } from '@ab/utils';
 import { and, eq, inArray } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';

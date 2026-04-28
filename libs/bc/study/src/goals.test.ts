@@ -7,7 +7,7 @@
 
 import { bauthUser } from '@ab/auth/schema';
 import { CREDENTIAL_STATUSES, GOAL_STATUSES, SYLLABUS_PRIMACY, SYLLABUS_STATUSES } from '@ab/constants';
-import { db } from '@ab/db';
+import { db } from '@ab/db/connection';
 import {
 	generateAuthId,
 	generateCredentialId,

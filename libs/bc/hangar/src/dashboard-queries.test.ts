@@ -7,7 +7,7 @@
 
 import { bauthUser } from '@ab/auth/schema';
 import { JOB_KINDS, JOB_STATUSES, REFERENCE_SOURCE_TYPES } from '@ab/constants';
-import { db } from '@ab/db';
+import { db } from '@ab/db/connection';
 import { generateAuthId, generateHangarJobId } from '@ab/utils';
 import { eq, inArray } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';

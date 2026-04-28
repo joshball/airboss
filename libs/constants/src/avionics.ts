@@ -8,6 +8,8 @@
  * `avionics.airboss.test` subdomain.
  */
 
+import { SIM_AIRCRAFT_IDS, type SimAircraftId } from './sim';
+
 /**
  * Per-app cookie that records the learner's selected aircraft id.
  * Scoped to `Domain=avionics.airboss.test`, not cross-subdomain --
@@ -25,3 +27,18 @@ export const AVIONICS_STORAGE_KEYS = {
 	 */
 	AUTH_BANNER_DISMISSED: 'airboss.avionics.authBannerDismissed',
 } as const;
+
+/**
+ * Aircraft that are user-selectable on the avionics surface today.
+ *
+ * The aircraft selector page lists every entry from the sim BC's
+ * `AIRCRAFT_REGISTRY` for affordance, but only ids in this allow-list
+ * write to the `AVIONICS_AIRCRAFT_COOKIE`. Other registry members are
+ * shown as "coming soon" until their FDM has been validated against
+ * the avionics PFD instrument shapes.
+ *
+ * The C172 ships first because the PFD's airspeed-arc bands have been
+ * tuned against its V-speeds. PA28 (and any future aircraft) lands by
+ * adding its id here -- no other code change is required.
+ */
+export const AVIONICS_SELECTABLE_AIRCRAFT: readonly SimAircraftId[] = [SIM_AIRCRAFT_IDS.C172] as const;

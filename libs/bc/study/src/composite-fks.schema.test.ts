@@ -23,7 +23,7 @@ import {
 	SESSION_REASON_CODES,
 	SESSION_SLICES,
 } from '@ab/constants';
-import { db } from '@ab/db';
+import { db } from '@ab/db/connection';
 import {
 	generateAuthId,
 	generateCardId,

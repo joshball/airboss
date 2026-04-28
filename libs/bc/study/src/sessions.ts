@@ -44,7 +44,7 @@ import {
 	STUDY_PRIORITIES,
 	type StudyPriority,
 } from '@ab/constants';
-import { db as defaultDb } from '@ab/db';
+import { db as defaultDb } from '@ab/db/connection';
 import { generateSessionId, generateSessionItemResultId } from '@ab/utils';
 import { and, desc, eq, gte, inArray, isNotNull, isNull, lt, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';

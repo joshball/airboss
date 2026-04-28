@@ -109,14 +109,13 @@ export { UNUSUAL_ATTITUDES_SCENARIO } from './scenarios/unusual-attitudes';
 export { UNUSUAL_ATTITUDES_NOSE_LO_SCENARIO } from './scenarios/unusual-attitudes-nose-lo';
 export { VACUUM_FAILURE_SCENARIO } from './scenarios/vacuum-failure';
 export { VMC_INTO_IMC_SCENARIO } from './scenarios/vmc-into-imc';
-export {
-	type NewSimAttemptRow,
-	type SimAttemptGrade,
-	type SimAttemptRow,
-	type SimAttemptTape,
-	simAttempt,
-	simSchema,
-} from './schema';
+// Schema (`simAttempt`, `simSchema`, row types) lives at `./schema` and is
+// reachable via the deep import `@ab/bc-sim/schema`. It is intentionally
+// not re-exported from this index: the schema imports `timestamps` from
+// `@ab/db`, which previously dragged server-side wiring into every
+// client bundle that imported a value from `@ab/bc-sim` (cockpit /
+// horizon / dual / window pages). Persistence helpers follow the same
+// rule -- import them from `@ab/bc-sim/persistence`.
 export type {
 	AircraftConfig,
 	FdmInputs,

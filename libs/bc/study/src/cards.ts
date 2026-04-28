@@ -19,7 +19,8 @@ import {
 	REVIEW_BATCH_SIZE,
 	SNOOZE_REASONS,
 } from '@ab/constants';
-import { db as defaultDb, escapeLikePattern } from '@ab/db';
+import { escapeLikePattern } from '@ab/db';
+import { db as defaultDb } from '@ab/db/connection';
 import { generateCardId } from '@ab/utils';
 import { and, asc, desc, eq, ilike, inArray, isNull, lte, or, type SQL, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';

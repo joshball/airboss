@@ -9,7 +9,7 @@
 
 import { hangarReference } from '@ab/bc-hangar/schema';
 import { REFERENCE_SOURCE_TYPES, SOURCE_TYPE_LABELS } from '@ab/constants';
-import { db as defaultDb } from '@ab/db';
+import { db as defaultDb } from '@ab/db/connection';
 import { and, ilike, or, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import { knowledgeNode } from '../schema';
