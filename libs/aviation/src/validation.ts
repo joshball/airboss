@@ -28,6 +28,7 @@ import {
 	FLIGHT_RULES_VALUES,
 	KNOWLEDGE_KIND_VALUES,
 	KNOWLEDGE_KINDS,
+	MS_PER_YEAR,
 	PHASE_REQUIRING_SOURCE_TYPES,
 	REFERENCE_BANNED_KEYWORDS,
 	REFERENCE_KEYWORD_MAX_COUNT,
@@ -53,7 +54,7 @@ export interface ValidationResult {
 	warnings: readonly ValidationIssue[];
 }
 
-const STALE_REVIEW_MS = 365 * 24 * 60 * 60 * 1000;
+const STALE_REVIEW_MS = MS_PER_YEAR;
 
 // -------- layer 1: reference data --------
 

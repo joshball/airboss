@@ -1,6 +1,6 @@
 <script lang="ts">
 import type { DashboardStats, PanelResult } from '@ab/bc-study';
-import { DOMAIN_LABELS, ROUTES } from '@ab/constants';
+import { domainLabel, ROUTES } from '@ab/constants';
 import Button from '@ab/ui/components/Button.svelte';
 import PanelShell from '@ab/ui/components/PanelShell.svelte';
 
@@ -25,10 +25,6 @@ const topDomains = $derived(
 		.slice(0, 3),
 );
 const moreCount = $derived((value?.domains ?? []).filter((d) => d.due > 0).length - topDomains.length);
-
-function domainLabel(slug: string): string {
-	return (DOMAIN_LABELS as Record<string, string>)[slug] ?? slug;
-}
 
 function domainHref(slug: string): string {
 	return `${ROUTES.MEMORY_BROWSE}?domain=${encodeURIComponent(slug)}`;

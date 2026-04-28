@@ -5,8 +5,7 @@ import {
 	CITATION_SOURCE_LABELS,
 	CITATION_SOURCE_TYPES,
 	type CitationSourceType,
-	DOMAIN_LABELS,
-	type Domain,
+	domainLabel,
 	KNOWLEDGE_PHASE_LABELS,
 	type KnowledgePhase,
 	NODE_LIFECYCLE_LABELS,
@@ -51,10 +50,6 @@ function citedByHref(type: CitationSourceType, id: string): string | null {
 
 function sourceTypeLabel(type: CitationSourceType): string {
 	return CITATION_SOURCE_LABELS[type];
-}
-
-function domainLabel(slug: string): string {
-	return (DOMAIN_LABELS as Record<Domain, string>)[slug as Domain] ?? humanize(slug);
 }
 
 function phaseLabel(phase: string): string {
