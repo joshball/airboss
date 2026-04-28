@@ -135,7 +135,6 @@ Feature lifecycle is driven by shared skills:
 
 **Project rules:**
 
-- **Go slowly.** One feature at a time. Test it. Then move on. No parallel features.
 - **Nothing merges without a manual test plan.** User tests every feature by hand before it ships.
 - **Feature dirs** hold spec, user stories, design, tasks, test-plan, review notes. Co-located at `docs/work-packages/{feature}/`.
 - **Update docs with the work.** Feature spec, TASKS.md, PRD.md, ROADMAP.md -- all updated as part of shipping, not after.
@@ -165,6 +164,8 @@ Feature lifecycle is driven by shared skills:
 
 ## Critical Rules
 
+- **Ensure features are finished completly** - always notify of status and list all remaining work, including punted.
+- **Do work in worktrees and in parallel if possible** - always work on worktrees. Be carefule cleaning up (ensure all is committed). and try and orchestrate work in parallel if possible.
 - **No `any`.** No magic strings. No implicit types.
 - **All literal values in `libs/constants/`.** Enums, routes, ports, config.
 - **All routes go through `ROUTES` in `libs/constants/src/routes.ts`.** Never write a path string inline. Static routes are string constants. Routes with parameters are typed functions.
