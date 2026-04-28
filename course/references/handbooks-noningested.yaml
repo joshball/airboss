@@ -1,0 +1,53 @@
+# FAA handbooks referenced by airboss content but not yet ingested via the
+# `handbooks/` derivative pipeline (ADR 018 cache pattern).
+#
+# `handbooks/` currently ingests PHAK, AFH, AvWx. Other handbooks are
+# referenced from knowledge nodes; without authored reference rows here,
+# the citation migration upserts synthetic fallbacks. Once any of these
+# is ingested, the corresponding YAML entry can be removed -- the
+# handbook ingestion seed will own its row.
+#
+# Editions match what scripts/db/migrate-references-to-structured.ts uses
+# as defaults so `(slug, edition)` matches and the migration finds the
+# authored row instead of upserting a synthetic.
+
+references:
+  - slug: aih
+    kind: handbook
+    edition: FAA-H-8083-9B
+    title: Aviation Instructor's Handbook
+    publisher: FAA
+    url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/aviation_instructors_handbook
+
+  - slug: ifh
+    kind: handbook
+    edition: FAA-H-8083-15B
+    title: Instrument Flying Handbook
+    publisher: FAA
+    url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/instrument_flying_handbook
+
+  - slug: iph
+    kind: handbook
+    edition: FAA-H-8083-16B
+    title: Instrument Procedures Handbook
+    publisher: FAA
+    url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/instrument_procedures_handbook
+
+  - slug: faa-h-8083-2
+    kind: handbook
+    edition: FAA-H-8083-2A
+    title: Risk Management Handbook
+    publisher: FAA
+    url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/risk_management_handbook
+
+  # AFH 3B was the prior edition. Knowledge nodes still reference it
+  # explicitly in `source` strings; rather than rewrite every node to 3C
+  # (which would risk dangling chapter references; AFH reorganizes across
+  # editions), keep both editions authored so citations resolve cleanly
+  # until a content audit promotes them.
+  - slug: afh
+    kind: handbook
+    edition: FAA-H-8083-3B
+    title: Airplane Flying Handbook (prior edition)
+    publisher: FAA
+    url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/airplane_handbook
