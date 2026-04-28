@@ -11,7 +11,10 @@ test.describe('dashboard', () => {
 		await page.goto(ROUTES.DASHBOARD);
 		const nav = page.getByRole('navigation', { name: 'Primary' });
 		await expect(nav.getByRole('link', { name: 'Dashboard' })).toHaveAttribute('aria-current', 'page');
-		await expect(nav.getByRole('link', { name: 'Memory' })).toBeVisible();
+		// Memory is a `<details><summary>` disclosure group. `<summary>` has no
+		// stable cross-browser ARIA role (Chromium exposes it without role),
+		// so locate it by tag/text instead of role.
+		await expect(nav.locator('summary').filter({ hasText: 'Memory' })).toBeVisible();
 		await expect(nav.getByRole('link', { name: 'Reps' })).toBeVisible();
 		await expect(nav.getByRole('link', { name: 'Calibration' })).toBeVisible();
 	});
@@ -25,7 +28,11 @@ test.describe('dashboard', () => {
 		await page.goto(ROUTES.DASHBOARD);
 		const nav = page.getByRole('navigation', { name: 'Primary' });
 
-		await nav.getByRole('link', { name: 'Memory' }).click();
+		// Memory is a `<details>` menu; expand the summary first then click
+		// the Overview menu item that targets ROUTES.MEMORY. `<summary>` is
+		// not reliably exposed via role in Chromium, so click by tag/text.
+		await nav.locator('summary').filter({ hasText: 'Memory' }).click();
+		await nav.getByRole('menuitem', { name: 'Overview' }).click();
 		await expect(page).toHaveURL((url) => url.pathname === ROUTES.MEMORY);
 
 		await nav.getByRole('link', { name: 'Reps' }).click();

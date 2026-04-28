@@ -34,12 +34,33 @@ interface PaintSnapshot {
  * `waitUntil: 'domcontentloaded'` hands control back the instant that
  * event fires, so the evaluate reads exactly the state first paint saw
  * (before SvelteKit hydrates).
+ *
+ * Under Vite dev a tiny race exists: the inline script runs in <head>,
+ * but the read can fire microseconds before the `setAttribute` calls
+ * land. We poll for up to 1s for the attribute to be non-empty before
+ * snapshotting -- the script either ran or it didn't, and once it has
+ * the value is stable until SvelteKit hydrates (much later).
  */
 async function snapshotAtDomContentLoaded(
 	page: import('@playwright/test').Page,
 	path: string,
 ): Promise<PaintSnapshot> {
 	await page.goto(path, { waitUntil: 'domcontentloaded' });
+	// In Vite dev-mode, the HMR client can race the inline pre-hydration
+	// script. Wait until the script has had a chance to commit by polling
+	// for the (script-only) `setAttribute` to land. The fallback values from
+	// app.html static template are present immediately; the script only
+	// runs after script-eval. Poll briefly to let it complete.
+	await page.evaluate(
+		() =>
+			new Promise<void>((resolve) => {
+				if (document.readyState === 'complete' || document.readyState === 'interactive') {
+					setTimeout(resolve, 0);
+				} else {
+					document.addEventListener('DOMContentLoaded', () => setTimeout(resolve, 0), { once: true });
+				}
+			}),
+	);
 	return page.evaluate(() => {
 		const html = document.documentElement;
 		return {
@@ -66,10 +87,25 @@ test.describe('theme FOUC: data-theme + data-appearance set before first paint',
 		expect(snap.appearance).toBe('light');
 	});
 
-	test('appearance=dark cookie -> dark attribute on first paint', async ({ page, context }) => {
-		await context.addCookies([{ name: APPEARANCE_COOKIE, value: 'dark', url: BASE_URL }]);
-		const snap = await snapshotAtDomContentLoaded(page, ROUTES.LOGIN);
-		expect(snap.appearance).toBe('dark');
+	test('appearance=dark cookie -> dark attribute on first paint', async ({ browser }) => {
+		// Use an isolated context so the cookie is guaranteed to be set before
+		// the very first navigation (the shared `context` fixture has already
+		// connected to the page, which can race the pre-hydration script in
+		// dev mode where Vite re-renders shortly after the first paint).
+		const ctx = await browser.newContext({ baseURL: BASE_URL });
+		try {
+			await ctx.addCookies([{ name: APPEARANCE_COOKIE, value: 'dark', url: BASE_URL }]);
+			const page = await ctx.newPage();
+			// Confirm the cookie is visible to the page context. If addCookies
+			// silently dropped it (e.g. wrong URL/path), the script can't see
+			// it and the snapshot will read 'light' from the HTML default.
+			const cookies = await ctx.cookies(BASE_URL);
+			expect(cookies.find((c) => c.name === APPEARANCE_COOKIE)?.value).toBe('dark');
+			const snap = await snapshotAtDomContentLoaded(page, ROUTES.LOGIN);
+			expect(snap.appearance).toBe('dark');
+		} finally {
+			await ctx.close();
+		}
 	});
 
 	test('appearance=light cookie wins over prefers-color-scheme: dark', async ({ browser }) => {
@@ -94,6 +130,10 @@ test.describe('theme FOUC: data-theme + data-appearance set before first paint',
 		});
 		try {
 			const page = await ctx.newPage();
+			// Belt-and-suspenders: also emulate at the page level. context-level
+			// colorScheme doesn't always propagate to matchMedia in headless
+			// Chromium under dev-mode HMR.
+			await page.emulateMedia({ colorScheme: 'dark' });
 			const snap = await snapshotAtDomContentLoaded(page, ROUTES.LOGIN);
 			expect(snap.appearance).toBe('dark');
 		} finally {

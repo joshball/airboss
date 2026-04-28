@@ -20,8 +20,10 @@ test.describe('knowledge learn stepper deep-linking', () => {
 		// Phase heading reflects the deep-linked step.
 		await expect(page.getByRole('heading', { name: /verify/i, level: 2 })).toBeVisible();
 
-		// Stepper button for Verify carries aria-current="step".
-		const verifyButton = page.getByRole('button', { name: /verify/i });
+		// Stepper button for Verify carries aria-current="step". Match by the
+		// stepper's class (.steps) to scope to the stepper buttons, then by
+		// .step-name text which is the phase's plain label.
+		const verifyButton = page.locator('ol.steps button.step', { has: page.locator('.step-name', { hasText: 'Verify' }) });
 		await expect(verifyButton).toHaveAttribute('aria-current', 'step');
 	});
 
@@ -35,12 +37,19 @@ test.describe('knowledge learn stepper deep-linking', () => {
 	});
 
 	test('clicking a phase button updates the URL via replaceState', async ({ page }) => {
-		await page.goto(ROUTES.KNOWLEDGE_LEARN(NODE_SLUG));
-		// Default lands on Context (first phase in KNOWLEDGE_PHASE_ORDER).
+		// Anchor on Context explicitly via `?step=context`. The default
+		// (no-param) load falls back to `progress.lastPhase` for resume,
+		// which prior tests in this suite have advanced past. The
+		// replaceState behavior under test is independent of which phase
+		// we start from.
+		await page.goto(`${ROUTES.KNOWLEDGE_LEARN(NODE_SLUG)}?${QUERY_PARAMS.STEP}=${KNOWLEDGE_PHASES.CONTEXT}`);
 		await expect(page.getByRole('heading', { name: /context/i, level: 2 })).toBeVisible();
 
-		// Navigate to Reveal; URL should reflect the named slug.
-		await page.getByRole('button', { name: /reveal/i }).click();
+		// Navigate to Reveal; URL should reflect the named slug. Match by the
+		// `.step-name` span text inside the stepper button to isolate the
+		// click target from any "reveal" content inside the phase body.
+		const revealButton = page.locator('ol.steps button.step', { has: page.locator('.step-name', { hasText: 'Reveal' }) });
+		await revealButton.click();
 		await expect(page).toHaveURL(new RegExp(`${QUERY_PARAMS.STEP}=${KNOWLEDGE_PHASES.REVEAL}`));
 		await expect(page.getByRole('heading', { name: /reveal/i, level: 2 })).toBeVisible();
 	});
