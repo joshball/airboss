@@ -18,6 +18,7 @@ Phased plan. Each phase ends with `bun run check` clean and a commit.
 - R4: shipped (`feat(handbook-ingest): apply-errata pipeline (--apply-errata + --reapply-errata)`)
 - R5: AFH portion shipped (`feat(content/afh): apply MOSAIC addendum`); PHAK portion deferred (different layout requires a new `bullet-edits` parser archetype, captured in IDEAS.md and PHAK YAML comment)
 - R6: shipped (reader UI: AmendmentPanel + ErrataEntry + LCS word-diff utility wired into +page.svelte; e2e spec authored and `.skip()` until the e2e seed inserts errata rows -- see R6 task block).
+- R6.12a: shipped (e2e seed via `tests/e2e/seed-errata.ts` covers all three patch kinds against AFH §1.2 / §1.8 / §2.2; `tests/e2e/handbook-amendment.spec.ts` unskipped and passing; R6 theme-lint debt closed in AmendmentPanel + ErrataEntry).
 - R7: shipped (discovery: 17-handbook catalogue, page-scrape, freshness gate, dismissal stop-list, dispatcher banner, server startup hook, download piggyback, weekly launchd plist + install/uninstall, GH-issue auto-open with idempotency, Python subprocess metadata bridge).
 - R8: ADR 020 amendment shipped; IDEAS.md follow-ups captured; hangar PRD update covered via IDEAS.md (hangar PRD dormant per project memory)
 - R9: deferred (full test-plan walk + ball-review-full + PR follow-up review)
@@ -168,10 +169,8 @@ Lands first. Zero behavior change. Subsequent phases consume the new shape.
 ### 12a. E2e spec + seed wiring
 
 - [x] Author `tests/e2e/handbook-amendment.spec.ts` with the badge -> click -> FAA source URL contract. Currently `.skip()` because the e2e seed (`tests/e2e/global.setup.ts` + the dev-seed dump) does not insert `study.handbook_section_errata` rows.
-- [ ] Wire errata fixtures into the e2e seed. Two viable paths:
-  1. Extend `tests/e2e/global.setup.ts` to call `insertErrataRows` against the seeded section ids using parsed `.errata.md` fixtures under `handbooks/afh/.../*.errata.md`.
-  2. Re-run `bun run sources extract handbooks afh --apply-errata mosaic` against the dev-seed database before the Playwright dump is captured.
-- [ ] Once the seed inserts errata rows, drop the `.skip()` calls in `handbook-amendment.spec.ts`. The contract is fixed; the unskip is one line.
+- [x] Wire errata fixtures into the e2e seed. Implemented via path (1): added `tests/e2e/seed-errata.ts` that calls `insertErrataRows` against AFH §1.2 (`replace_paragraph`), §1.8 (`add_subsection`), and §2.2 (`append_paragraph`) -- all three patch kinds covered. `tests/e2e/global.setup.ts` invokes it as a setup test.
+- [x] `.skip()` calls dropped in `handbook-amendment.spec.ts`. Both cases pass (open/expand/diff + no-badge path); a `toPass` retry guards the open-click against pre-hydration. R6 theme-lint violations (4) closed in the same pass: removed stale grandfather entries from `tools/theme-lint/ignore.txt` and replaced `--surface-default` / `--signal-info-wash-hover` / hardcoded `120ms` with valid tokens (`--surface-panel`, `--surface-raised`, `var(--motion-fast)`).
 
 ## Phase R7: Discovery
 
