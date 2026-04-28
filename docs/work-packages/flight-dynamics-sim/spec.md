@@ -75,7 +75,7 @@ PR #126. Primary flight controls spring-center when released; throttle uses hold
 
 ### Work-in-flight at this spec's authoring
 
-PR #128 merged (Bundle B, study surface). The sim backlog at [docs/products/sim/TASKS.md](../../products/sim/TASKS.md) lists the phases this spec covers.
+PR #128 merged (Bundle B, study surface). The sim phasing this spec covers is tracked in [docs/products/sim/ROADMAP.md](../../products/sim/ROADMAP.md); the FIRC-era pre-pivot backlog is preserved at [.archive/products/sim/TASKS.md](../../.archive/products/sim/TASKS.md).
 
 ## Data model
 
@@ -362,7 +362,7 @@ Genuine open questions (flag for user before Phase 2 starts, but not blocking Ph
 - Staged plan: [docs/work/plans/20260422-flight-dynamics-sim-plan.md](../../work/plans/20260422-flight-dynamics-sim-plan.md)
 - Research log: [docs/work/todos/20260422-flight-dynamics-sim-research.md](../../work/todos/20260422-flight-dynamics-sim-research.md)
 - Orchestration: [docs/work/plans/20260424-sim-orchestration.md](../../work/plans/20260424-sim-orchestration.md)
-- Sim backlog: [docs/products/sim/TASKS.md](../../products/sim/TASKS.md)
+- Sim roadmap: [docs/products/sim/ROADMAP.md](../../products/sim/ROADMAP.md) (FIRC-era backlog archived at [.archive/products/sim/TASKS.md](../../.archive/products/sim/TASKS.md))
 - Pivot framing: [docs/platform/PIVOT.md](../../platform/PIVOT.md)
 - Surface architecture: [docs/platform/MULTI_PRODUCT_ARCHITECTURE.md](../../platform/MULTI_PRODUCT_ARCHITECTURE.md)
 - Design principles: [docs/platform/DESIGN_PRINCIPLES.md](../../platform/DESIGN_PRINCIPLES.md)
