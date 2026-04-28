@@ -9,6 +9,7 @@
 
 import { requireAuth } from '@ab/auth';
 import {
+	formatErrataForDisplay,
 	getHandbookSection,
 	getNodesCitingSection,
 	getReadState,
@@ -16,6 +17,7 @@ import {
 	getReferenceById,
 	HandbookValidationError,
 	handbookReadStatusSchema,
+	listErrataForSection,
 	markAsReread,
 	setComprehended,
 	setNotes,
@@ -44,6 +46,13 @@ export const load: PageServerLoad = async (event) => {
 		chapter: Number(chapterCode),
 		section: Number(sectionCode),
 	});
+
+	// Errata applied to this section (newest first). The reader's
+	// AmendmentPanel renders nothing when this list is empty, so we
+	// always pass the array through -- the component decides visibility.
+	// See ADR 020 + docs/work-packages/apply-errata-and-afh-mosaic/spec.md.
+	const errataRows = await listErrataForSection(view.section.id);
+	const errata = errataRows.map(formatErrataForDisplay);
 
 	const latest = ref.supersededById ? await getReferenceById(ref.supersededById).catch(() => null) : null;
 
@@ -101,6 +110,7 @@ export const load: PageServerLoad = async (event) => {
 			title: n.title,
 			domain: n.domain,
 		})),
+		errata,
 	};
 };
 
