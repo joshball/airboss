@@ -1,7 +1,3 @@
 # Theme-lint grandfather list.
 # Each line: <file>:<line>:<rule>. Populated by `bun tools/theme-lint/bin.ts --fix-ignore`.
 # Entries drop out as packages #5 and #7 migrate call sites.
-libs/ui/src/handbooks/AmendmentPanel.svelte:112:unknown-token
-libs/ui/src/handbooks/AmendmentPanel.svelte:95:raw-duration
-libs/ui/src/handbooks/AmendmentPanel.svelte:99:unknown-token
-libs/ui/src/handbooks/ErrataEntry.svelte:112:unknown-token

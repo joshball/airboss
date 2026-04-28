@@ -92,12 +92,12 @@ function toggle(): void {
 		font-size: var(--font-size-sm);
 		font-weight: var(--font-weight-medium);
 		cursor: pointer;
-		transition: background-color 120ms ease;
+		transition: background-color var(--motion-fast) ease;
 	}
 
 	.badge:hover,
 	.badge:focus-visible {
-		background: var(--signal-info-wash-hover, var(--surface-raised));
+		background: var(--surface-raised);
 		outline: 2px solid transparent;
 		outline-offset: 2px;
 		box-shadow: 0 0 0 2px var(--action-default-edge, currentColor);
@@ -109,7 +109,7 @@ function toggle(): void {
 		justify-content: center;
 		min-width: 1.5em;
 		padding: 0 var(--space-2xs);
-		background: var(--surface-default);
+		background: var(--surface-panel);
 		border-radius: var(--radius-pill, var(--radius-sm));
 		color: var(--ink-body);
 		font-size: var(--font-size-xs);

@@ -109,7 +109,7 @@ function formatPublishedDate(iso: string): string {
 <style>
 	.errata-entry {
 		padding: var(--space-sm) var(--space-md);
-		background: var(--surface-default);
+		background: var(--surface-panel);
 		border: 1px solid var(--edge-default);
 		border-radius: var(--radius-md);
 		display: flex;

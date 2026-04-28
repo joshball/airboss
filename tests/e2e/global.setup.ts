@@ -1,7 +1,7 @@
 import { expect, test as setup } from '@playwright/test';
 import { mkdir } from 'node:fs/promises';
 import { dirname } from 'node:path';
-import { DEV_ACCOUNTS, DEV_PASSWORD, ROUTES } from '../../libs/constants/src';
+import { DEV_ACCOUNTS, DEV_DB_URL, DEV_PASSWORD, ENV_VARS, ROUTES } from '../../libs/constants/src';
 
 const STORAGE = 'tests/e2e/.auth/learner.json';
 
@@ -25,4 +25,16 @@ setup('authenticate learner', async ({ page }) => {
 	await expect(page.getByRole('heading', { name: /^(learning )?dashboard$/i, level: 1 })).toBeVisible();
 
 	await page.context().storageState({ path: STORAGE });
+});
+
+// Errata fixtures for the handbook amendment panel spec. The dev-seed
+// pipeline doesn't run the apply-errata Python flow, so the table is empty
+// without this hook. See R6.12a in the apply-errata-and-afh-mosaic WP.
+setup('seed handbook errata fixtures', async () => {
+	if (!process.env[ENV_VARS.DATABASE_URL]) {
+		process.env[ENV_VARS.DATABASE_URL] = DEV_DB_URL;
+	}
+	const { seedErrataFixtures } = await import('./seed-errata');
+	const inserted = await seedErrataFixtures();
+	expect(inserted).toBeGreaterThanOrEqual(3);
 });
