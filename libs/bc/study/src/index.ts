@@ -463,7 +463,6 @@ export {
 } from './stats';
 export type {
 	ListSyllabiOptions,
-	RelevanceCacheReport,
 	SyllabusAreaView,
 	SyllabusLeafWithSyllabus,
 	SyllabusTreeNode,
@@ -482,7 +481,6 @@ export {
 	getSyllabusTree,
 	levelIsLeafEligible,
 	listSyllabi,
-	rebuildKnowledgeNodeRelevanceCache,
 	replaceSyllabusNodeLinks,
 	SyllabusNotFoundError,
 	SyllabusValidationError,
