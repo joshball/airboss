@@ -91,11 +91,15 @@ describe('ACS_RESOLVER', () => {
 		expect(ACS_RESOLVER.getLiveUrl('airboss-ref:acs/' as SourceId, 'faa-s-acs-25')).toBeNull();
 	});
 
-	it('getDerivativeContent returns null (ACS PDF ingestion ships in a follow-on)', () => {
+	it('getDerivativeContent returns null when no manifest exists for the requested edition', () => {
+		// `faa-s-acs-25` is not the slice we ingest -- the slice ships only the
+		// PPL ACS edition we actually have on disk. Asking for an un-ingested
+		// edition returns null. Real-tree resolution is exercised by the smoke
+		// test in `smoke.test.ts`.
 		expect(ACS_RESOLVER.getDerivativeContent(ELEMENT_ID, 'faa-s-acs-25')).toBeNull();
 	});
 
-	it('getIndexedContent returns null (ACS PDF ingestion ships in a follow-on)', async () => {
+	it('getIndexedContent returns null when no manifest exists for the requested edition', async () => {
 		expect(await ACS_RESOLVER.getIndexedContent(ELEMENT_ID, 'faa-s-acs-25')).toBeNull();
 	});
 

@@ -13,11 +13,12 @@
  */
 
 import { HELP as AC_HELP, runRegisterAc } from './register/ac';
+import { HELP as ACS_HELP, runRegisterAcs } from './register/acs';
 import { HELP as AIM_HELP, runRegisterAim } from './register/aim';
 import { HELP as CFR_HELP, runRegisterCfr } from './register/cfr';
 import { HELP as HANDBOOKS_HELP, runRegisterHandbooks } from './register/handbooks';
 
-export type RegisterCorpus = 'cfr' | 'handbooks' | 'aim' | 'ac';
+export type RegisterCorpus = 'cfr' | 'handbooks' | 'aim' | 'ac' | 'acs';
 
 export interface RegisterSpec {
 	readonly run: (argv: readonly string[]) => Promise<number>;
@@ -29,6 +30,7 @@ export const REGISTER_SUBCOMMANDS: Readonly<Record<RegisterCorpus, RegisterSpec>
 	handbooks: { run: runRegisterHandbooks, help: HANDBOOKS_HELP },
 	aim: { run: runRegisterAim, help: AIM_HELP },
 	ac: { run: runRegisterAc, help: AC_HELP },
+	acs: { run: runRegisterAcs, help: ACS_HELP },
 };
 
 const REGISTER_NAMES = Object.keys(REGISTER_SUBCOMMANDS) as readonly RegisterCorpus[];
