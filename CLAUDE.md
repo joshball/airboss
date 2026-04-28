@@ -117,6 +117,7 @@ Read the relevant pattern doc before writing code in that area:
 - **Scenario engine / tick loop / scoring / replay:** [docs/agents/reference-engine-patterns.md](docs/agents/reference-engine-patterns.md)
 - **Constants / DB schema / scripts / monorepo setup:** [docs/agents/reference-sveltekit-patterns.md](docs/agents/reference-sveltekit-patterns.md)
 - **Citations / cross-references (mounting picker, chips, cited-by panel on a new surface):** [docs/agents/reference-citations-pattern.md](docs/agents/reference-citations-pattern.md)
+- **Source ingestion / handbook section extraction (prompt strategy, paste-to-Claude flow):** [docs/agents/section-extraction-prompt-strategy.md](docs/agents/section-extraction-prompt-strategy.md)
 - **Before writing any page / BC / component / schema:** [docs/agents/common-pitfalls.md](docs/agents/common-pitfalls.md)
 - **New feature? Author work package:** `/ball-wp-spec`
 - **Ready to build? Phased implementation:** `/ball-wp-build`

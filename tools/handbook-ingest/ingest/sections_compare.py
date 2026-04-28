@@ -1,13 +1,26 @@
-"""Diff TOC and LLM section trees per chapter and emit a markdown report.
+"""Diff TOC and prompt-flow section trees per chapter and emit a markdown report.
 
-The user reads the report and decides per-chapter (or globally) which
-strategy to trust. The decision is captured in `phak.yaml` as
-`section_strategy: toc | llm | per_chapter` with optional
-`per_chapter_override: { 1: toc, 12: llm, ... }`.
+The two trees compared are:
 
-Determinism: same inputs (same TOC tree, same LLM tree) = byte-identical
-report. Sort everything; never iterate dicts in insertion order; pin
-section ordering by `(chapter_ordinal, level, ordinal-walk)`.
+- `toc` -- produced by `sections_via_toc.py` (deterministic Python parser
+  of the printed Table of Contents).
+- prompt flow -- produced by `sections_via_sidecar.py` reading the per-
+  chapter `_llm_section_tree.json` files written by sub-agents during the
+  paste-driven prompt run. These nodes carry `provenance == "prompt"`.
+
+This module is provenance-agnostic: it expects two `list[SectionTreeNode]`
+inputs, sorts them, and renders a per-chapter agreement table. The user
+reads the report and decides per-chapter (or globally) which strategy to
+trust; the decision is captured in `<doc>.yaml -> section_strategy`.
+
+The column / variable names in this file still say `llm_*` because the
+markdown report's headings are stable across the API-path -> prompt-path
+migration; renaming would churn every committed comparison report. The
+data is the prompt flow's output regardless.
+
+Determinism: same inputs = byte-identical report. Sort everything; never
+iterate dicts in insertion order; pin section ordering by
+`(chapter_ordinal, level, ordinal-walk)`.
 """
 
 from __future__ import annotations

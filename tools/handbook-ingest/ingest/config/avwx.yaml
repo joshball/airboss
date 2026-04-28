@@ -45,8 +45,9 @@ table_prefix_pattern: 'Table (\d+)-(\d+)\.'
 # upstream `outline_strategy: bookmark` already produced the section
 # rows. The TOC parser still runs for completeness; if its output
 # duplicates the bookmark tree the merge step picks the bookmark form.
+# See docs/agents/section-extraction-prompt-strategy.md for the prompt /
+# compare strategies.
 section_strategy: toc
-per_chapter_section_strategy: {}
 
 # AvWX's printed TOC spans pp.4-15. Used only when section_strategy=toc.
 toc:
@@ -61,7 +62,7 @@ heading_style:
   heading_match_threshold: 0.85
   verify_in_body: false
 
-llm:
+prompt:
   chapter_text_max_chars: 60000
 
 # AvWX chapter cover pages typeset a "Chapter N, Title" banner that

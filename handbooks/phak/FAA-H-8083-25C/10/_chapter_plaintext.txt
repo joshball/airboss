@@ -1,0 +1,1300 @@
+Compliance with the weight and balance limits of any aircraft
+is critical to flight safety. Operating above the maximum
+weight limitation compromises the structural integrity of
+an aircraft and adversely affects its performance. Operation
+with the center of gravity (CG) outside the approved limits
+results in control difficulty.
+Weight Control
+As discussed in Chapter 5, Aerodynamics of Flight, weight
+is the force with which gravity attracts a body toward the
+center of the Earth. It is a product of the mass of a body and
+the acceleration acting on the body. Weight is a major factor
+in aircraft construction and operation and demands respect
+from all pilots.
+The force of gravity continuously attempts to pull an aircraft
+down toward Earth. The force of lift is the only force that
+counteracts weight and sustains an aircraft in flight. The
+amount of lift produced by an airfoil is limited by the airfoil
+design, angle of attack (AOA), airspeed, and air density. To
+assure that the lift generated is sufficient to counteract weight,
+loading an aircraft beyond the manufacturer’s recommended
+weight must be avoided. If the weight is greater than the lift
+generated, the aircraft may be incapable of flight.
+Weight and Balance
+Chapter 10
+
+Lateral unbalance will cause wing heaviness.
+Empty
+Full
+Excess baggage
+Longitudinal unbalance will cause
+either nose or tail heaviness.
+Figure 10-1. Lateral and longitudinal unbalance.
+Effects of Weight
+Any item aboard an aircraft that increases the total weight is
+undesirable for performance. Manufacturers attempt to make
+an aircraft as light as possible without sacrificing strength
+or safety.
+The pilot should always be aware of the consequences of
+overloading. An overloaded aircraft may not be able to leave
+the ground, or if it does become airborne, it may exhibit
+unexpected and unusually poor flight characteristics. If not
+properly loaded, the initial indication of poor performance
+usually takes place during takeoff.
+Excessive weight reduces the flight performance in almost
+every respect. For example, the most important performance
+deficiencies of an overloaded aircraft are:
+Higher takeoff speed
+Longer takeoff run
+Reduced rate and angle of climb
+Lower maximum altitude
+Shorter range
+Reduced cruising speed
+Reduced maneuverability
+Higher stalling speed
+Higher approach and landing speed
+Longer landing roll
+Excessive weight on the nose wheel or tail wheel
+The pilot must be knowledgeable about the effect of weight
+on the performance of the particular aircraft being flown.
+Preflight planning should include a check of performance
+charts to determine if the aircraft’s weight may contribute
+to hazardous flight operations. Excessive weight in itself
+reduces the safety margins available to the pilot and becomes
+even more hazardous when other performance-reducing
+factors are combined with excess weight. The pilot must
+also consider the consequences of an overweight aircraft if
+an emergency condition arises. If an engine fails on takeoff
+or airframe ice forms at low altitude, it is usually too late to
+reduce an aircraft’s weight to keep it in the air.
+Weight Changes
+The operating weight of an aircraft can be changed by
+simply altering the fuel load. Gasoline has considerable
+weight—6 pounds per gallon. Thirty gallons of fuel may
+weigh more than one passenger. If a pilot lowers airplane
+weight by reducing fuel, the resulting decrease in the range
+of the airplane must be taken into consideration during flight
+planning. During flight, fuel burn is normally the only weight
+change that takes place. As fuel is used, an aircraft becomes
+lighter and performance is improved.
+Changes of fixed equipment have a major effect upon the
+weight of an aircraft. The installation of extra radios or
+instruments, as well as repairs or modifications, may also
+affect the weight of an aircraft.
+Balance, Stability, and Center of Gravity
+Balance refers to the location of the CG of an aircraft, and is
+important to stability and safety in flight. The CG is a point
+at which the aircraft would balance if it were suspended at
+that point.
+The primary concern in balancing an aircraft is the fore
+and aft location of the CG along the longitudinal axis. The
+CG is not necessarily a fixed point; its location depends on
+the distribution of weight in the aircraft. As variable load
+items are shifted or expended, there is a resultant shift in
+CG location. The distance between the forward and back
+limits for the position of the center for gravity or CG range
+is certified for an aircraft by the manufacturer. The pilot
+should realize that if the CG is displaced too far forward
+on the longitudinal axis, a nose-heavy condition will
+result. Conversely, if the CG is displaced too far aft on the
+longitudinal axis, a tail heavy condition results. It is possible
+that the pilot could not control the aircraft if the CG location
+produced an unstable condition. [Figure 10-1]
+Location of the CG with reference to the lateral axis is also
+important. For each item of weight existing to the left of
+
+the fuselage centerline, there is an equal weight existing at
+a corresponding location on the right. This may be upset
+by unbalanced lateral loading. The position of the lateral
+CG is not computed in all aircraft, but the pilot must be
+aware that adverse effects arise as a result of a laterally
+unbalanced condition. In an airplane, lateral unbalance occurs
+if the fuel load is mismanaged by supplying the engine(s)
+unevenly from tanks on one side of the airplane. The pilot
+can compensate for the resulting wing-heavy condition by
+adjusting the trim or by holding a constant control pressure.
+This action places the aircraft controls in an out-of-streamline
+condition, increases drag, and results in decreased operating
+efficiency. Since lateral balance is addressed when needed in
+the aircraft flight manual (AFM) and longitudinal balance is
+more critical, further reference to balance in this handbook
+means longitudinal location of the CG.
+Flying an aircraft that is out of balance can produce increased
+pilot fatigue with obvious effects on the safety and efficiency
+of flight. The pilot’s natural correction for longitudinal
+unbalance is a change of trim to remove the excessive control
+pressure. Excessive trim, however, has the effect of reducing
+not only aerodynamic efficiency but also primary control
+travel distance in the direction the trim is applied.
+Effects of Adverse Balance
+Adverse balance conditions affect flight characteristics in
+much the same manner as those mentioned for an excess
+weight condition. It is vital to comply with weight and
+balance limits established for all aircraft. Operating above
+the maximum weight limitation compromises the structural
+integrity of the aircraft and can adversely affect performance.
+Stability and control are also affected by improper balance.
+Stability
+Loading in a nose-heavy condition causes problems in
+controlling and raising the nose, especially during takeoff
+and landing. Loading in a tail heavy condition has a serious
+effect upon longitudinal stability, and reduces the capability
+to recover from stalls and spins. Tail heavy loading also
+produces very light control forces, another undesirable
+characteristic. This makes it easy for the pilot to inadvertently
+overstress an aircraft.
+Stability and Center of Gravity
+Limits for the location of the CG are established by the
+manufacturer. These are the fore and aft limits beyond
+which the CG should not be located for flight. These limits
+are published for each aircraft in the Type Certificate Data
+Sheet (TCDS), or aircraft specification and the AFM or
+pilot’s operating handbook (POH). If the CG is not within the
+allowable limits after loading, it will be necessary to relocate
+some items before flight is attempted.
+The forward CG limit is often established at a location that
+is determined by the landing characteristics of an aircraft.
+During landing, one of the most critical phases of flight,
+exceeding the forward CG limit may result in excessive loads
+on the nosewheel, a tendency to nose over on tailwheel type
+airplanes, decreased performance, higher stalling speeds, and
+higher control forces.
+Control
+In extreme cases, a CG location that is beyond the forward
+limit may result in nose heaviness, making it difficult or
+impossible to flare for landing. Manufacturers purposely
+place the forward CG limit as far rearward as possible to
+aid pilots in avoiding damage when landing. In addition to
+decreased static and dynamic longitudinal stability, other
+undesirable effects caused by a CG location aft of the
+allowable range may include extreme control difficulty,
+violent stall characteristics, and very light control forces
+which make it easy to overstress an aircraft inadvertently.
+A restricted forward CG limit is also specified to assure
+that sufficient elevator/control deflection is available at
+minimum airspeed. When structural limitations do not limit
+the forward CG position, it is located at the position where
+full-up elevator/control deflection is required to obtain a high
+AOA for landing.
+The aft CG limit is the most rearward position at which the
+CG can be located for the most critical maneuver or operation.
+As the CG moves aft, a less stable condition occurs, which
+decreases the ability of the aircraft to right itself after
+maneuvering or turbulence.
+For some aircraft, both fore and aft CG limits may be
+specified to vary as gross weight changes. They may also
+be changed for certain operations, such as acrobatic flight,
+retraction of the landing gear, or the installation of special
+loads and devices that change the flight characteristics.
+The actual location of the CG can be altered by many variable
+factors and is usually controlled by the pilot. Placement of
+baggage and cargo items determines the CG location. The
+assignment of seats to passengers can also be used as a means
+of obtaining a favorable balance. If an aircraft is tail heavy,
+it is only logical to place heavy passengers in forward seats.
+Fuel burn can also affect the CG based on the location of the
+fuel tanks. For example, most small aircraft carry fuel in the
+wings very near the CG and burning off fuel has little effect
+on the loaded CG.
+
+Management of Weight and Balance Control
+Title 14 of the Code of Federal Regulations (14 CFR) part 23,
+section 23.23 requires establishment of the ranges of weights
+and CGs within which an aircraft may be operated safely. The
+manufacturer provides this information, which is included in
+the approved AFM, TCDS, or aircraft specifications.
+While there are no specified requirements for a pilot operating
+under 14 CFR part 91 to conduct weight and balance
+calculations prior to each flight, 14 CFR part 91, section
+91.9 requires the pilot in command (PIC) to comply with the
+operating limits in the approved AFM. These limits include
+the weight and balance of the aircraft. To enable pilots to
+make weight and balance computations, charts and graphs
+are provided in the approved AFM.
+Weight and balance control should be a matter of concern to
+all pilots. The pilot controls loading and fuel management
+(the two variable factors that can change both total weight
+and CG location) of a particular aircraft. The aircraft owner
+or operator should make certain that up-to-date information
+is available for pilot use, and should ensure that appropriate
+entries are made in the records when repairs or modifications
+have been accomplished. The removal or addition of
+equipment results in changes to the CG.
+Weight changes must be accounted for and the proper
+notations made in weight and balance records. The
+equipment list must be updated, if appropriate. Without such
+information, the pilot has no foundation upon which to base
+the necessary calculations and decisions.
+Standard parts with negligible weight or the addition of minor
+items of equipment such as nuts, bolts, washers, rivets, and
+similar standard parts of negligible weight on fixed-wing
+aircraft do not require a weight and balance check. The
+following criteria for negligible weight change is outlined
+in Advisory Circular (AC) 43.13-1 (as revised), Methods
+Techniques and Practices—Aircraft Inspection and Repair:
+One pound or less for an aircraft whose weight empty
+is less than 5,000 pounds
+Two pounds or less for aircraft with an empty weight
+of more than 5,000 pounds to 50,000 pounds
+Five pounds or less for aircraft with an empty weight
+of more than 50,000 pounds
+Negligible CG change is any change of less than 0.05 percent
+Mean Aerodynamic Chord (MAC) for fixed-wing aircraft
+or 0.2 percent for rotary wing aircraft. MAC is the average
+distance from the leading edge to the trailing edge of the
+wing. Exceeding these limits would require a weight and
+balance check.
+Before any flight, the pilot should determine the weight
+and balance condition of the aircraft. Simple and orderly
+procedures based on sound principles have been devised
+by the manufacturer for the determination of loading
+conditions. The pilot uses these procedures and exercises
+good judgment when determining weight and balance. In
+many modern aircraft, it is not possible to fill all seats,
+baggage compartments, and fuel tanks, and still remain within
+the approved weight and balance limits. If the maximum
+passenger load is carried, the pilot must often reduce the fuel
+load or reduce the amount of baggage.
+14 CFR part 125 requires aircraft with 20 or more seats
+or maximum payload capacity of 6,000 pounds or more
+to be weighed every 36 calendar months. Multi-engine
+aircraft operated under 14 CFR part 135 are also required
+to be weighed every 36 months. Aircraft operated under 14
+CFR part 135 are exempt from the 36 month requirement
+if operated under a weight and balance system approved in
+the operations specifications of the certificate holder. For
+additional information on approved weight and balance
+control programs for operations under parts 121 and 135,
+reference the current edition of AC 120-27, Aircraft Weight
+and Balance Control. AC 43.13-l, Acceptable Methods,
+Techniques and Practices—Aircraft Inspection and Repair
+also requires that the aircraft mechanic ensure that the weight
+and balance data in the aircraft records is current and accurate
+after a 100-hour or annual inspection.
+Terms and Definitions
+The pilot should be familiar with the appropriate terms
+regarding weight and balance. The following list of terms
+and their definitions is standardized, and knowledge of these
+terms aids the pilot to better understand weight and balance
+calculations of any aircraft. Terms defined by the General
+Aviation Manufacturers Association (GAMA) as industry
+standard are marked in the titles with GAMA.
+Arm (moment arm)—the horizontal distance in inches
+from the reference datum line to the CG of an item.
+The algebraic sign is plus (+) if measured aft of the
+datum and minus (–) if measured forward of the datum.
+Basic empty weight (GAMA)—the standard empty
+weight plus the weight of optional and special
+equipment that have been installed.
+Center of gravity (CG)—the point about which an
+aircraft would balance if it were possible to suspend it
+at that point. It is the mass center of the aircraft or the
+theoretical point at which the entire weight of the aircraft
+is assumed to be concentrated. It may be expressed in
+inches from the reference datum or in percent of MAC.
+The CG is a three-dimensional point with longitudinal,
+lateral, and vertical positioning in the aircraft.
+
+CG limits—the specified forward and aft points within
+which the CG must be located during flight. These
+limits are indicated on pertinent aircraft specifications.
+CG range—the distance between the forward and aft
+CG limits indicated on pertinent aircraft specifications.
+Datum (reference datum)—an imaginary vertical
+plane or line from which all measurements of arm are
+taken. The datum is established by the manufacturer.
+Once the datum has been selected, all moment arms
+and the location of CG range are measured from this
+point.
+Delta—a Greek letter expressed by the symbol r to
+indicate a change of values. As an example, rCG
+indicates a change (or movement) of the CG.
+Floor load limit—the maximum weight the floor
+can sustain per square inch/foot as provided by the
+manufacturer.
+Fuel load—the expendable part of the load of the
+aircraft. It includes only usable fuel, not fuel required
+to fill the lines or that which remains trapped in the
+tank sumps.
+Licensed empty weight—the empty weight that
+consists of the airframe, engine(s), unusable fuel, and
+undrainable oil plus standard and optional equipment
+as specified in the equipment list. Some manufacturers
+used this term prior to GAMA standardization.
+Maximum landing weight—the greatest weight that
+an aircraft is normally allowed to have at landing.
+Maximum ramp weight—the total weight of a loaded
+aircraft including all fuel. It is greater than the takeoff
+weight due to the fuel that will be burned during the
+taxi and run-up operations. Ramp weight may also be
+referred to as taxi weight.
+Maximum takeoff weight—the maximum allowable
+weight for takeoff.
+Maximum weight—the maximum authorized weight
+of the aircraft and all of its equipment as specified in
+the TCDS for the aircraft.
+Maximum zero fuel weight (GAMA)—the maximum
+weight, exclusive of usable fuel.
+Mean aerodynamic chord (MAC)—the average
+distance from the leading edge to the trailing edge of
+the wing.
+Moment—the product of the weight of an item
+multiplied by its arm. Moments are expressed in
+pound-inches (in-lb). Total moment is the weight of
+the airplane multiplied by the distance between the
+datum and the CG.
+Moment index (or index)—a moment divided by a
+constant such as 100, 1,000, or 10,000. The purpose
+of using a moment index is to simplify weight and
+balance computations of aircraft where heavy items
+and long arms result in large, unmanageable numbers.
+Payload (GAMA)—the weight of occupants, cargo,
+and baggage.
+Standard empty weight (GAMA)—aircraft weight
+that consists of the airframe, engines, and all items of
+operating equipment that have fixed locations and are
+permanently installed in the aircraft, including fixed
+ballast, hydraulic fluid, unusable fuel, and full engine
+oil.
+Standard weights—established weights for numerous
+items involved in weight and balance computations.
+These weights should not be used if actual weights
+are available. Some of the standard weights are:
+
+Gasoline.................................................. 6 lb/US gal
+
+Jet A, Jet A-1....................................... 6.8 lb/US gal
+
+Jet B......................................................6.5 lb/US gal
+
+Oil.........................................................7.5 lb/US gal
+
+Water.................................................. 8.35 lb/US gal
+Station—a location in the aircraft that is identified by
+a number designating its distance in inches from the
+datum. The datum is, therefore, identified as station
+zero. An item located at station +50 would have an
+arm of 50 inches.
+Useful load—the weight of the pilot, copilot,
+passengers, baggage, usable fuel, and drainable oil.
+It is the basic empty weight subtracted from the
+maximum allowable gross weight. This term applies
+to general aviation (GA) aircraft only.
+Principles of Weight and Balance Computations
+It is imperative that all pilots understand the basic principles
+of weight and balance determination. The following methods
+of computation can be applied to any object or vehicle for
+which weight and balance information is essential.
+By determining the weight of the empty aircraft and adding
+the weight of everything loaded on the aircraft, a total weight
+can be determined—a simple concept. A greater problem,
+particularly if the basic principles of weight and balance are
+not understood, is distributing this weight in such a manner
+that the entire mass of the loaded aircraft is balanced around
+a point (CG) that must be located within specified limits.
+The point at which an aircraft balances can be determined by
+locating the CG, which is, as stated in the definitions of terms,
+
+lb
+lb
+lb
+25"
+50"
+100"
+2,500
+in-lb
+2,500
+in-lb
+in-lb
+Fulcrum
+Datum
+ 100 x 25 = 2,500
+ 50 x 50 = 2,500
+
+Total = 5,000
+Wt x Arm = Moment
+(lb) x (in) = (in-lb)
+Figure 10-4. Establishing a balance.
+lb
+100"
+Moment = 5,000 in-lb
+Fulcrum
+Datum
+Wt x Arm = Moment
+(lb) x (in) = (in-lb)
+50 x 100 = 5,000
+Note:  The datum is assumed to be
+
+located at the fulcrum.
+Figure 10-3. Determining moment.
+Aft limit
+Fwd limit
+Datum
+range
+( + )
+Arm
+( – )
+Arm
+( + ) Arm 70"
+Moment = 700 in-lb
+Sta 0                           Sta 70
+10 lb
+Figure 10-2. Weight and balance.
+the imaginary point at which all the weight is concentrated.
+To provide the necessary balance between longitudinal
+stability and elevator control, the CG is usually located
+slightly forward of the center of lift. This loading condition
+causes a nose-down tendency in flight, which is desirable
+during flight at a high AOA and slow speeds.
+As mentioned earlier, a safe zone within which the balance
+point (CG) must fall is called the CG range. The extremities
+of the range are called the forward CG limits and aft CG
+limits. These limits are usually specified in inches, along the
+longitudinal axis of the airplane, measured from a reference
+point called a datum reference. The datum is an arbitrary
+point, established by aircraft designers that may vary in
+location between different aircraft. [Figure 10-2]
+The distance from the datum to any component part or any
+object loaded on the aircraft is called the arm. When the
+object or component is located aft of the datum, it is measured
+in positive inches; if located forward of the datum, it is
+measured as negative inches or minus inches. The location
+of the object or part is often referred to as the station. If
+the weight of any object or component is multiplied by the
+distance from the datum (arm), the product is the moment.
+The moment is the measurement of the gravitational force
+that causes a tendency of the weight to rotate about a point
+or axis and is expressed in inch-pounds (in-lb).
+To illustrate, assume a weight of 50 pounds is placed on
+the board at a station or point 100 inches from the datum.
+The downward force of the weight can be determined by
+multiplying 50 pounds by 100 inches, which produces a
+moment of 5,000 in-lb. [Figure 10-3]
+To establish a balance, a total of 5,000 in-lb must be applied
+to the other end of the board. Any combination of weight
+and distance which, when multiplied, produces a 5,000 inlb moment will balance the board. For example (illustrated
+in Figure 10-4), if a 100-pound weight is placed at a point
+(station) 25 inches from the datum, and another 50-pound
+weight is placed at a point (station) 50 inches from the datum,
+the sum of the product of the two weights and their distances
+total a moment of 5,000 in-lb, which will balance the board.
+Weight and Balance Restrictions
+An aircraft’s weight and balance restrictions should be
+closely followed. The loading conditions and empty weight
+of a particular aircraft may differ from that found in the
+AFM/POH because modifications or equipment changes
+may have been made. Sample loading problems in the
+AFM/POH are intended for guidance only; therefore, each
+aircraft must be treated separately. Although an aircraft is
+certified for a specified maximum gross takeoff weight, it
+may not safely take off at this weight under all conditions.
+Conditions that affect takeoff and climb performance, such as
+high elevations, high temperatures, and high humidity (high
+density altitudes), may require a reduction in weight before
+flight is attempted. Other factors to consider when computing
+
+Item
+Arm
+Moment
+Aircraft Empty Weight
+2,100
+78.3
+164,430
+Front Seat Occupants
+85.0
+28,900
+Rear Seat Occupants
+121.0
+42,350
+Fuel
+75.0
+33,750
+Baggage Area 1
+150.0
+Total
+3,320
+
+281,430
+281,430 ÷ 3,320 = 84.8
+Figure 10-5. Example of weight and balance computations.
+Sample Loading Problem
+Weight (lb)
+Moment
+(in-lb/1,000)
+1. Basic empty weight (Use data pertaining
+
+to aircraft as it is presently equipped)
+
+includes unusable fuel and full oil
+2. Usable fuel (At 6 lb/gal)
+
+Standard tanks (40 gal maximum)
+
+Long range tanks (50 gal maximum)
+
+Integral tanks (62 gal maximum)
+
+Integral reduced fuel (42 gal)
+3. Pilot and front passenger (Station 34
+
+to 46)
+4. Rear passengers
+5. Baggage area 1 or passenger on child’s
+
+seat (Station 82 to 108, 120 lb maximum)
+6.  Baggage area 2
+
+(Station 108 to 142, 50 lb maximum)
+7.  Weight and moment
+1,467
+57.3
+11.5
+
+12.7
+21.8
+1.9
+2,367
+105.2
+Figure 10-6. Weight and balance data.
+weight and balance distribution prior to takeoff are runway
+length, runway surface, runway slope, surface wind, and the
+presence of obstacles. These factors may require a reduction
+in or redistribution of weight prior to flight.
+Some aircraft are designed so that it is difficult to load them
+in a manner that places the CG out of limits. These are
+usually small aircraft with the seats, fuel, and baggage areas
+located near the CG limit. Pilots must be aware that while
+within CG limits these aircraft can be overloaded in weight.
+Other aircraft can be loaded in such a manner that they will
+be out of CG limits even though the useful load has not been
+exceeded. Because of the effects of an out-of-balance or
+overweight condition, a pilot should always be sure that an
+aircraft is properly loaded.
+Determining Loaded Weight and CG
+There are various methods for determining the loaded weight
+and CG of an aircraft. There is the computational method as
+well as methods that utilize graphs and tables provided by
+the aircraft manufacturer.
+Computational Method
+The following is an example of the computational method
+involving the application of basic math functions.
+Aircraft Allowances:
+
+Maximum gross weight......................3,400 pounds
+
+CG range.............................................78–86 inches
+Given:
+
+Weight of front seat occupants.............340 pounds
+
+Weight of rear seat occupants..............350 pounds
+
+Fuel...........................................................75 gallons
+
+Weight of baggage in area 1....................80 pounds
+List the weight of the aircraft, occupants, fuel, and
+baggage. Remember that aviation gas (AVGAS)
+weighs 6 pounds per gallon and is used in this
+example.
+Enter the moment for each item listed. Remember
+“weight x arm = moment.”
+Find the total weight and total moment.
+To determine the CG, divide the total moment by the
+total weight.
+NOTE: The weight and balance records for a particular
+aircraft provide the empty weight and moment, as well as the
+information on the arm distance. [Figure 10-5]
+The total loaded weight of 3,320 pounds does not exceed
+the maximum gross weight of 3,400 pounds, and the CG of
+84.8 is within the 78–86 inch range; therefore, the aircraft is
+loaded within limits.
+Graph Method
+Another method for determining the loaded weight and CG is
+the use of graphs provided by the manufacturers. To simplify
+calculations, the moment may sometimes be divided by 100,
+1,000, or 10,000. [Figures 10-6, 10-7, and 10-8]
+Front seat occupants....................................340 pounds
+Rear seat occupants.......................................300 pounds
+Fuel	.................................................................40 gallons
+Baggage area 1................................................20 pounds
+The same steps should be followed in the graph method as
+were used in the computational method except the graphs
+provided will calculate the moments and allow the pilot to
+determine if the aircraft is loaded within limits. To determine
+the moment using the loading graph, find the weight and draw
+a line straight across until it intercepts the item for which the
+moment is to be calculated. Then draw a line straight down
+to determine the moment. (The red line on the loading graph
+in Figure 10-7 represents the moment for the pilot and front
+passenger. All other moments were determined the same
+
+12.7
+Load Moment/1,000 (kilogram-millimeters)
+Load Weight (kilograms)
+Load Moment/1,000 (inch-pounds)
+Load  Weight (pounds)
+ Maximum Usable Fuel
+    * Standard tanks
+   ** Long range tanks
+  *** Internal tanks
+Pilot & front passenger
+Rear passengers
+Baggage area 1 or
+passenger on child’s seat
+Fuel (6 lb/gal; 0.72 kg/liter)
+62 gal***(234.7 liters)
+Baggage area 2
+60 gal (227.1 liters)
+50 gal**(189.3 liters)
+42 gal reduced***(159 liters)
+40 gal*(189.3 liters)
+30 gal (113.6 liters)
+20 gal (75.7 liters)
+10 gal (37.9 liters)
+2,400
+2,300
+2,200
+2,100
+1,900
+1,800
+1,700
+1,600
+1,500
+2,367
+105.2
+Loaded Aircraft Moment/1,000 (kilogram-millimeters)
+1,050
+1,100
+Loaded Airplane Weight (kilograms)
+Loaded Aircraft Moment/1,000 (inch-pounds)
+Loaded  Aircraft Weight (pounds)
+1,100
+1,200
+1,300
+Utility category
+Normal
+category
+Figure 10-8. CG moment envelope.
+Figure 10-7. Loading graph.
+
+OIL
+FUEL TANK
+FUEL TANK
+Occupants
+Front Seat
+Arm 85
+Rear Seats
+Arm 121
+Moment
+Moment
+Usable Fuel
+Main Wing Tanks Arm 75
+Gallons
+Moment
+Moment Limits vs Weight
+Moment limits are based on the following weight and
+center of gravity limit data (landing gear down).
+2,950 lb (takeoff
+or landing)
+2,525 lb
+2,475 lb or less
+82.1
+77.5
+77.0
+84.7
+85.7
+85.7
+Forward
+CG Limit
+Condition
+AFT
+CG Limit
+Moment
+Baggage or 5th
+Seat Occupant
+Arm 140
+Maximum
+Moment
+Minimum
+Moment
+1,800
+1,808
+1,817
+1,825
+1,834
+1,843
+1,851
+1,860
+1,868
+1,877
+1,885
+1,894
+1,903
+1,911
+1,920
+1,928
+1,937
+1,945
+1,954
+1,963
+1,971
+1,980
+1,988
+1,997
+2,005
+2,014
+2,023
+2,031
+2,040
+2,048
+2,100
+2,110
+2,120
+2,130
+2,140
+2,150
+2,160
+2,170
+2,180
+2,190
+2,200
+2,210
+2,220
+2,230
+2,240
+2,250
+2,260
+2,270
+2,280
+2,290
+2,300
+2,310
+2,320
+2,330
+2,340
+2,350
+2,360
+2,370
+2,380
+2,390
+1,617
+1,625
+1,632
+1,640
+1,648
+1,656
+1,663
+1,671
+1,679
+1,686
+1,694
+1,702
+1,709
+1,717
+1,725
+1,733
+1,740
+1,748
+1,756
+1,763
+1,771
+1,779
+1,786
+1,794
+1,802
+1,810
+1,817
+1,825
+1,833
+1,840
+Maximum
+Moment
+Minimum
+Moment
+2,057
+2,065
+2,074
+2,083
+2,091
+2,100
+2,108
+2,117
+2,125
+2,134
+2,143
+2,151
+2,160
+2,168
+2,176
+2,184
+2,192
+2,200
+2,208
+2,216
+2,224
+2,232
+2,239
+2,247
+2,255
+2,263
+2,271
+2,279
+2,287
+2,295
+2,303
+2,311
+2,319
+2,326
+2,334
+2,342
+2,350
+2,358
+2,366
+2,374
+2,381
+2,389
+2,397
+2,405
+2,413
+2,421
+2,426
+2,436
+2,444
+2,452
+3,460
+2,468
+2,475
+2,483
+2,491
+2,499
+2,400
+2,410
+2,420
+2,430
+2,440
+2,450
+2,460
+2,470
+2,480
+2,490
+2,500
+2,510
+2,520
+2,530
+2,540
+2,550
+2,560
+2,570
+2,580
+2,590
+2,600
+2,610
+2,620
+2,630
+2,640
+2,650
+2,660
+2,670
+2,680
+2,690
+2,700
+2,710
+2,720
+2,730
+2,740
+2,750
+2,760
+2,770
+2,780
+2,790
+2,800
+2,810
+2,820
+2,830
+2,840
+2,850
+2,860
+2,870
+2,880
+2,890
+2,900
+2,910
+2,920
+2,930
+2,940
+2,950
+1,848
+1,856
+1,863
+1,871
+1,879
+1,887
+1,894
+1,092
+1,911
+1,921
+1,932
+1,942
+1,953
+1,963
+1,974
+1,984
+1,995
+2,005
+2,016
+2,026
+2,037
+2,048
+2,058
+2,069
+2,080
+2,090
+2,101
+2,112
+2,123
+2,133
+2,144
+2,155
+2,166
+2,177
+2,188
+2,199
+2,210
+2,221
+2,232
+2,243
+2,254
+2,265
+2,276
+2,287
+2,298
+2,309
+2,320
+2,332
+2,343
+2,354
+2,365
+2,377
+2,388
+2,399
+2,411
+2,422
+Sample Loading Problem
+Moment
+ Basic empty weight
+2,015
+1,554
+ Fuel main tanks (44 gal)
+*Front seat passengers
+*Rear seat passengers
+ Baggage
+ Total
+2,799
+2,278/100
+* Interpolate or, as in this case, add appropriate numbers.
+Empty Weight ~ 2,015
+MOM/ 100 ~ 1,554
+*Oil
+Quarts
+Moment
+*Included in basic empty weight
+BAGGAGE AREA
+SEATING AREA
+Figure 10-9. Loading schedule placard.
+way.) Once this has been done for each item, total the weight
+and moments and draw a line for both weight and moment
+on the CG envelope graph. If the lines intersect within the
+envelope, the aircraft is loaded within limits. In this sample
+loading problem, the aircraft is loaded within limits.
+Table Method
+The table method applies the same principles as the
+computational and graph methods. The information
+and limitations are contained in tables provided by the
+manufacturer. Figure 10-9 is an example of a table and a
+
+Item
+             Weight    Arm
+Moment
+Basic empty weight
+  Front seat occupants
+3rd & 4th seat occupants
+forward facing
+5th & 6th seat occupants
+Nose baggage
+Aft baggage
+Subtotal
+Fuel
+Subtotal ramp weight
+* Less fuel for start,
+taxi, and takeoff
+Subtotal
+takeoff weight
+Less fuel to destination
+Actual landing weight
+*Fuel for start, taxi, and takeoff is normally 24 pounds.
+       3,230
+   4,240
+   5,062
+     −24
+   5,038
+    −450
+   4,588
+292,315.0
+    29,815.0
+    44,100.0
+    31,400.0
+    1,000.0
+4,575.0
+  403,205.0
+    92,886.0
+  496,091.0
+−2,712.0
+493,379.0
+     −50,850.0
+
+442,529.0
+     CG 90.5
+        89.0
+      126.0
+      157.0
+        10.0
+      183.0
+  CG 95.1
+      113.0
+  CG 98.0
+      113.0
+  CG 97.9
+      113.0
+  CG 96.5
+Zero fuel weight max 4,400 pounds
+Ramp weight max 5,224 pounds
+Max landing weight 4,940 pounds
+Figure 10-11. Sample weight and balance using an aircraft with a
+published zero fuel weight.
+Item
+Arm
+Moment
+Licensed empty weight
+1,011.9
+68.6
+69,393.0
+Oil (6 quarts)
+11.0
+−31.0
+−341.0
+Fuel (18 gallons)
+108.0
+84.0
+9,072.0
+Fuel, auxiliary (18 gallons)
+108.0
+84.0
+9,072.0
+Pilot
+170.0
+81.0
+13,770.0
+Passenger
+170.0
+81.0
+13,770.0
+Baggage
+70.0
+105.0
+7,350.0
+Total
+1,648.9
+
+122,086.0
+
+74.0
+Figure 10-10. Sample weight and balance using a negative.
+weight and balance calculation based on that table. In this
+problem, the total weight of 2,799 pounds and moment of
+2,278/100 are within the limits of the table.
+Computations With a Negative Arm
+Figure 10-10 is a sample of weight and balance computation
+using an aircraft with a negative arm. It is important to
+remember that a positive times a negative equals a negative,
+and a negative would be subtracted from the total moments.
+Computations With Zero Fuel Weight
+Figure 10-11 is a sample of weight and balance computation
+using an aircraft with a zero fuel weight. In this example,
+the total weight of the aircraft less fuel is 4,240 pounds,
+which is under the zero fuel weight of 4,400 pounds. If the
+total weight of the aircraft without fuel had exceeded 4,400
+pounds, passengers or cargo would have needed to be reduced
+to bring the weight at or below the max zero fuel weight.
+Shifting, Adding, and Removing Weight
+A pilot must be able to solve any problems accurately that
+involve the shift, addition, or removal of weight. For example,
+the pilot may load the aircraft within the allowable takeoff
+weight limit, then find that the CG limit has been exceeded.
+The most satisfactory solution to this problem is to shift
+baggage, passengers, or both. The pilot should be able to
+determine the minimum load shift needed to make the aircraft
+safe for flight. Pilots should be able to determine if shifting a
+load to a new location will correct an out-of-limit condition.
+There are some standardized calculations that can help make
+these determinations.
+Weight Shifting
+When weight is shifted from one location to another, the
+total weight of the aircraft is unchanged. The total moments,
+however, do change in relation and proportion to the
+direction and distance the weight is moved. When weight is
+moved forward, the total moments decrease; when weight
+is moved aft, total moments increase. The moment change
+is proportional to the amount of weight moved. Since many
+aircraft have forward and aft baggage compartments, weight
+may be shifted from one to the other to change the CG. If
+starting with a known aircraft weight, CG, and total moments,
+calculate the new CG (after the weight shift) by dividing the
+new total moments by the total aircraft weight.
+To determine the new total moments, find out how many
+moments are gained or lost when the weight is shifted.
+Assume that 100 pounds has been shifted from station 30 to
+station 150. This movement increases the total moments of
+the aircraft by 12,000 in-lb.
+Moment when
+at station 150
+= 100 lb x 150 in	= 15,000 in-lb
+Moment when
+at station 30
+= 100 lb x 30 in = 3,000 in-lb
+Moment change  	= [15,000 – 3,000] = 12,000 in-lb
+By adding the moment change to the original moment (or
+subtracting if the weight has been moved forward instead of
+aft), the new total moments are obtained. Then determine the
+new CG by dividing the new moments by the total weight:
+Total moments =
+616,000 in-lb + 12,000 in-lb = 628,000 in-lb
+CG = 628,000 in-lb = 78.5 in
+                                      8,000 lb
+The shift has caused the CG to shift to station 78.5.
+
+Example
+The change of CG is added to (or subtracted from when appropriate)
+the original CG to determine the new CG:
+77 + 1.5 = 78.5 inches aft of datum
+
+The shifting weight proportion formula can also be used to determine
+how much weight must be shifted to achieve a particular shift of the CG.
+The following problem illustrates a solution of this type.
+Weight shifted
+Total weight
+∆CG (change of CG)
+Distance weight is shifted
+=
+∆CG
+=
+∆CG
+1.5 in
+=
+Example
+Weight to be shifted
+Total weight
+Distance weight is shifted
+=
+Weight to be shifted
+7,800 lb
+Weight to be shifted
+1.0 in
+120 in
+=
+65 lb
+=
+Given:
+Aircraft total weight . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 7,800 lb
+CG station. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .  81.5 in
+Aft CG limit . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .  80.5 in
+
+Determine how much cargo must be shifted from the aft cargo compartment at station 150 to the forward cargo compartment at station 30 to
+move the CG to exactly the aft limit.
+
+Solution:
+Example
+Added weight
+New total weight
+∆CG
+Distance between weight and old CG
+∆CG
+150 in − 80 in
+=
+140 lb
+6,860 lb + 140 lb =
+140 lb
+7,000 lb = ∆CG
+70 in
+1.4 in aft
+=
+Given:
+Aircraft total weight . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 6,860 lb
+CG station. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 80.0 in
+
+Determine the location of the CG if 140 pounds of baggage is added to
+station 150.
+
+Solution:
+Add ∆CG to old CG
+New CG = 80 in + 1.4 in = 81.4 in
+Example
+Weight removed
+New total weight
+∆CG
+Distance between weight and old CG
+∆CG
+150 in − 80 in
+=
+100 lb
+6,100 lb − 100 lb =
+100 lb
+6,000 lb
+=
+∆CG
+70 in
+1.2 in forward
+=
+Given:
+Aircraft total weight . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 6,100 lb
+CG station. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 80.0 in
+
+Determine the location of the CG if 100 pounds is removed from
+station 150.
+
+Solution:
+Subtract ∆CG from old CG
+New CG = 80 in − 1.2 in = 78.8 in
+A simpler solution may be obtained by using a computer
+or calculator and a proportional formula. This can be done
+because the CG will shift a distance that is proportional to
+the distance the weight is shifted.
+Weight Addition or Removal
+In many instances, the weight and balance of the aircraft will
+be changed by the addition or removal of weight. When this
+happens, a new CG must be calculated and checked against
+the limitations to see if the location is acceptable. This type
+of weight and balance problem is commonly encountered
+when the aircraft burns fuel in flight, thereby reducing the
+weight located at the fuel tanks. Most small aircraft are
+designed with the fuel tanks positioned close to the CG;
+therefore, the consumption of fuel does not affect the CG to
+any great extent.
+The addition or removal of cargo presents a CG change
+problem that must be calculated before flight. The problem
+may always be solved by calculations involving total
+moments. A typical problem may involve the calculation
+of a new CG for an aircraft which, when loaded and ready
+for flight, receives some additional cargo or passengers just
+before departure time.
+In the previous examples, the rCG is either added or
+subtracted from the old CG. Deciding which to accomplish is
+best handled by mentally calculating which way the CG will
+shift for the particular weight change. If the CG is shifting
+aft, the rCG is added to the old CG; if the CG is shifting
+forward, the rCG is subtracted from the old CG.
+Operating an aircraft within the weight and balance limits
+is critical to flight safety. Pilots must ensure that the CG is
+and remains within approved limits throughout all phases of
+a flight. For additional information on weight, balance, CG,
+and aircraft stability refer to the FAA handbook appropriate
+to the specific aircraft category.

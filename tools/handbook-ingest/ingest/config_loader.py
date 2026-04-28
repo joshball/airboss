@@ -14,16 +14,19 @@ import yaml
 
 from .paths import config_dir
 
-# Section-tree extraction strategy selector. Drives sections_via_toc.py vs
-# sections_via_llm.py vs (toc, with chapter-cover-strip applied) sections.py.
+# Section-tree extraction strategy selector.
+#
+# - `toc`     -- deterministic Python parser of the printed Table of Contents
+#                (`sections_via_toc.py`). Default for all shipped handbooks.
+# - `prompt`  -- emit a self-contained prompt set under `prompts-out/`; the
+#                user pastes the orchestrator into a fresh Claude Code session
+#                and sub-agents fan out one-per-chapter. No API key.
+# - `compare` -- read the per-chapter sidecars produced by the prompt flow,
+#                run the TOC strategy, render a markdown diff report.
 SECTION_STRATEGY_TOC = "toc"
-SECTION_STRATEGY_LLM = "llm"
-SECTION_STRATEGY_PER_CHAPTER = "per_chapter"
-SECTION_STRATEGY_VALUES = (
-    SECTION_STRATEGY_TOC,
-    SECTION_STRATEGY_LLM,
-    SECTION_STRATEGY_PER_CHAPTER,
-)
+SECTION_STRATEGY_PROMPT = "prompt"
+SECTION_STRATEGY_COMPARE = "compare"
+VALID_STRATEGIES = frozenset({SECTION_STRATEGY_TOC, SECTION_STRATEGY_PROMPT, SECTION_STRATEGY_COMPARE})
 
 # How far back from a target PDF page to walk while looking for a parseable
 # FAA page header before falling back to `pdf_page - page_offset`. Five pages
@@ -35,6 +38,14 @@ PAGE_LABEL_WALK_BACK_DEFAULT = 5
 # YAML typos fail loud (KeyError) rather than silently silencing later parser
 # fixes. Each value is a printed FAA page reference verbatim, e.g. "17-100".
 CHAPTER_OVERRIDE_KEYS = frozenset({"faa_page_start", "faa_page_end"})
+
+# Default for `prompt.chapter_text_max_chars`. Cap input to ~60K chars so
+# every per-chapter prompt fits comfortably in a sub-agent's context budget.
+DEFAULT_CHAPTER_TEXT_MAX_CHARS = 60000
+
+
+class ConfigError(ValueError):
+    """Raised when a YAML config carries an invalid or removed setting."""
 
 
 @dataclass(frozen=True)
@@ -60,14 +71,12 @@ class HandbookConfig:
     # or wrong title. Keyed by chapter number (string in YAML); applied after
     # the content scan in detect_outline_from_text.
     title_overrides: dict[str, str] = field(default_factory=dict)
-    # Section-tree extraction strategy. `toc` = Option 3 (deterministic Python),
-    # `llm` = Option 4 (Claude-assisted), `per_chapter` = honor per_chapter_override.
-    # Default = `toc` (deterministic). See `phak.yaml` for the per-chapter override
-    # shape.
+    # Section-tree extraction strategy. See module-level docstring for the
+    # set of valid values; default = `toc` (deterministic).
     section_strategy: str = SECTION_STRATEGY_TOC
-    # Per-chapter override for `section_strategy`. Keyed by chapter ordinal
-    # (string in YAML). Used when `section_strategy = per_chapter`.
-    per_chapter_section_strategy: dict[int, str] = field(default_factory=dict)
+    # Per-chapter input cap for the `prompt` strategy's plaintext sidecar.
+    # Truncates from the END so the chapter head is always intact.
+    chapter_text_max_chars: int = DEFAULT_CHAPTER_TEXT_MAX_CHARS
     # Strip the chapter cover-page boilerplate (the "Chapter N" sentinel and
     # the title repeated above the introduction) from the chapter markdown.
     # See `normalize._strip_cover_residue` for the heuristic.
@@ -83,7 +92,7 @@ class HandbookConfig:
     # printed FAA page label. 0 disables the walk-back (the legacy behavior).
     page_label_walk_back: int = PAGE_LABEL_WALK_BACK_DEFAULT
     # Raw YAML payload, exposed so strategy modules can read their own blocks
-    # (`toc`, `heading_style`, `llm`) without each one re-parsing the file.
+    # (`toc`, `heading_style`, `prompt`) without each one re-parsing the file.
     raw_yaml: dict[str, object] = field(default_factory=dict)
 
 
@@ -98,39 +107,69 @@ def load_config(document_slug: str) -> HandbookConfig:
     cover_strip_raw = raw.get("chapter_cover_strip") or {}
     if not isinstance(cover_strip_raw, dict):
         cover_strip_raw = {}
+
     section_strategy = str(raw.get("section_strategy", SECTION_STRATEGY_TOC))
-    if section_strategy not in SECTION_STRATEGY_VALUES:
-        raise ValueError(
-            f"Invalid section_strategy {section_strategy!r} in {config_path}. "
-            f"Must be one of {SECTION_STRATEGY_VALUES!r}."
-        )
-    per_chapter_raw = raw.get("per_chapter_section_strategy") or {}
-    if not isinstance(per_chapter_raw, dict):
-        per_chapter_raw = {}
-    per_chapter: dict[int, str] = {}
-    for k, v in per_chapter_raw.items():
-        kk = int(k)
-        vv = str(v)
-        if vv not in (SECTION_STRATEGY_TOC, SECTION_STRATEGY_LLM):
-            raise ValueError(
-                f"per_chapter_section_strategy[{k}]={v!r} in {config_path} must be 'toc' or 'llm'."
+    if section_strategy not in VALID_STRATEGIES:
+        if section_strategy == "llm":
+            raise ConfigError(
+                f"{config_path}: section_strategy: llm has been removed. "
+                f"Rename to `prompt` (no API key required). "
+                f"See docs/agents/section-extraction-prompt-strategy.md."
             )
-        per_chapter[kk] = vv
+        if section_strategy == "per_chapter":
+            raise ConfigError(
+                f"{config_path}: section_strategy: per_chapter has been removed. "
+                f"Use `toc`, `prompt`, or `compare` for the whole handbook. "
+                f"See docs/agents/section-extraction-prompt-strategy.md."
+            )
+        raise ConfigError(
+            f"{config_path}: unknown section_strategy {section_strategy!r}. "
+            f"Valid: {sorted(VALID_STRATEGIES)}."
+        )
+
+    if "per_chapter_section_strategy" in raw:
+        raise ConfigError(
+            f"{config_path}: `per_chapter_section_strategy` has been removed. "
+            f"The per-chapter strategy mix is no longer supported; pick a single "
+            f"`section_strategy` for the whole handbook. Delete the field. "
+            f"See docs/agents/section-extraction-prompt-strategy.md."
+        )
+
+    prompt_raw = raw.get("prompt")
+    if prompt_raw is None and "llm" in raw:
+        raise ConfigError(
+            f"{config_path}: the `llm:` config block has been renamed to `prompt:`. "
+            f"Rename the YAML key (the `chapter_text_max_chars` field is unchanged). "
+            f"See docs/agents/section-extraction-prompt-strategy.md."
+        )
+    if prompt_raw is None:
+        prompt_raw = {}
+    if not isinstance(prompt_raw, dict):
+        raise ConfigError(
+            f"{config_path}: the `prompt:` block must be a mapping (got "
+            f"{type(prompt_raw).__name__})."
+        )
+    chapter_text_max_chars_raw = prompt_raw.get("chapter_text_max_chars", DEFAULT_CHAPTER_TEXT_MAX_CHARS)
+    if not isinstance(chapter_text_max_chars_raw, int) or chapter_text_max_chars_raw <= 0:
+        raise ConfigError(
+            f"{config_path}: prompt.chapter_text_max_chars must be a positive int "
+            f"(got {chapter_text_max_chars_raw!r})."
+        )
 
     chapter_overrides_raw = raw.get("chapter_overrides") or {}
     if not isinstance(chapter_overrides_raw, dict):
-        raise ValueError(
+        raise ConfigError(
             f"chapter_overrides in {config_path} must be a mapping, got {type(chapter_overrides_raw).__name__}."
         )
     chapter_overrides: dict[int, dict[str, str]] = {}
     for k, v in chapter_overrides_raw.items():
         if not isinstance(v, dict):
-            raise ValueError(
+            raise ConfigError(
                 f"chapter_overrides[{k}] in {config_path} must be a mapping of field -> value."
             )
         unknown = set(v.keys()) - CHAPTER_OVERRIDE_KEYS
         if unknown:
-            raise ValueError(
+            raise ConfigError(
                 f"chapter_overrides[{k}] in {config_path} has unknown keys {sorted(unknown)!r}; "
                 f"allowed keys: {sorted(CHAPTER_OVERRIDE_KEYS)!r}."
             )
@@ -139,7 +178,7 @@ def load_config(document_slug: str) -> HandbookConfig:
     walk_back_raw = raw.get("page_label_walk_back", PAGE_LABEL_WALK_BACK_DEFAULT)
     walk_back = int(walk_back_raw)
     if walk_back < 0:
-        raise ValueError(
+        raise ConfigError(
             f"page_label_walk_back in {config_path} must be >= 0 (got {walk_back})."
         )
 
@@ -158,7 +197,7 @@ def load_config(document_slug: str) -> HandbookConfig:
         outline_strategy=raw.get("outline_strategy", "bookmark"),
         title_overrides={str(k): str(v) for k, v in (raw.get("title_overrides") or {}).items()},
         section_strategy=section_strategy,
-        per_chapter_section_strategy=per_chapter,
+        chapter_text_max_chars=int(chapter_text_max_chars_raw),
         chapter_cover_strip_enabled=bool(cover_strip_raw.get("enabled", False)),
         chapter_cover_strip_max_lines=int(cover_strip_raw.get("max_lines", 6)),
         chapter_overrides=chapter_overrides,
