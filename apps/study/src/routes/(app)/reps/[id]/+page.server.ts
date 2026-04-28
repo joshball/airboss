@@ -28,9 +28,10 @@ import {
 	DuplicateCitationError,
 	deleteCitation,
 	getCitationsOf,
+	getRecentAttemptsForScenario,
+	getScenario,
 	resolveCitationTargets,
-} from '@ab/bc-citations';
-import { getRecentAttemptsForScenario, getScenario } from '@ab/bc-study';
+} from '@ab/bc-study';
 import { CITATION_SOURCE_TYPES, CITATION_TARGET_VALUES, type CitationTargetType } from '@ab/constants';
 import { createLogger } from '@ab/utils';
 import { error, fail } from '@sveltejs/kit';

@@ -4,7 +4,7 @@
  * `content_citations` is a polymorphic table: any content surface (card, rep,
  * scenario, knowledge node) can cite any reference (regulation node, AC,
  * external URL, knowledge node). The enums here are the allow-list that the
- * application layer validates before insert (see the `@ab/bc-citations`
+ * application layer validates before insert (see the bc-study citations
  * guards). DB-level CHECK constraints mirror the same values so a direct SQL
  * path can't drift.
  */

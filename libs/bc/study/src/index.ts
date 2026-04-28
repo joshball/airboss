@@ -1,4 +1,6 @@
-// Study BC -- spaced repetition, cards, reviews, scenarios, calibration.
+// Study BC -- spaced repetition, cards, reviews, scenarios, calibration,
+// and the polymorphic content-citation surface (folded in from the former
+// citations package; see docs/work-packages/bc-citations-coupling/).
 
 export type {
 	CalibrationBucket,
@@ -46,6 +48,29 @@ export {
 } from './cards';
 export type { PublicCard, PublicCardCitation } from './cards-public';
 export { composePublicCardCitations, getPublicCard } from './cards-public';
+export {
+	CitationNotFoundError,
+	CitationSourceNotFoundError,
+	CitationTargetNotFoundError,
+	CitationValidationError,
+	type CitationWithSource,
+	type CitationWithTarget,
+	type ContentCitationRow,
+	type CreateCitationInput,
+	contentCitation,
+	createCitation,
+	DuplicateCitationError,
+	deleteCitation,
+	getCitationsOf,
+	getCitedBy,
+	type NewContentCitationRow,
+	type RegulationSearchResult,
+	resolveCitationSources,
+	resolveCitationTargets,
+	searchAcReferences,
+	searchKnowledgeNodes,
+	searchRegulationNodes,
+} from './citations';
 export type {
 	AreaMasteryRollup,
 	CredentialDagSnapshot,

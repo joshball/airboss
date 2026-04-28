@@ -13,7 +13,7 @@
  */
 
 import { requireAuth } from '@ab/auth';
-import { type CitationWithSource, getCitedBy, resolveCitationSources } from '@ab/bc-citations';
+import { type CitationWithSource, getCitedBy, resolveCitationSources } from '@ab/bc-study';
 import { CITATION_TARGET_TYPES, REFERENCE_SOURCE_TYPES, SOURCE_TYPE_LABELS } from '@ab/constants';
 import { db, hangarReference } from '@ab/db';
 import { error } from '@sveltejs/kit';

@@ -4,7 +4,7 @@
 	Used by both the owner-only `/memory/<id>` editor (with the [x] remove
 	button) and the public `/cards/<id>` page (read-only). The component takes
 	a normalised `items` shape so callers don't have to leak the
-	`@ab/bc-citations` row shape into `@ab/ui` (which would be a layering
+	bc-study citation row shape into `@ab/ui` (which would be a layering
 	inversion: ui depends on constants only, not on bcs).
 
 	When `editable` is true and `removeAction` is provided, each chip renders

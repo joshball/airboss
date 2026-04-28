@@ -15,7 +15,6 @@
  *     by the DB index; duplicate inserts surface as DuplicateCitationError.
  */
 
-import { card, knowledgeNode, scenario } from '@ab/bc-study';
 import {
 	CITATION_CONTEXT_MAX_LENGTH,
 	CITATION_SOURCE_LABELS,
@@ -32,6 +31,7 @@ import { db as defaultDb, hangarReference } from '@ab/db';
 import { generateContentCitationId } from '@ab/utils';
 import { and, eq, inArray } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
+import { card, knowledgeNode, scenario } from '../schema';
 import { type ContentCitationRow, contentCitation } from './schema';
 
 type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;

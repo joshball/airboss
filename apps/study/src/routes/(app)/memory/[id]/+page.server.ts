@@ -1,5 +1,7 @@
 import { requireAuth } from '@ab/auth';
 import {
+	CardNotEditableError,
+	CardNotFoundError,
 	CitationNotFoundError,
 	CitationSourceNotFoundError,
 	CitationTargetNotFoundError,
@@ -8,15 +10,11 @@ import {
 	createCitation,
 	DuplicateCitationError,
 	deleteCitation,
-	getCitationsOf,
-	resolveCitationTargets,
-} from '@ab/bc-citations';
-import {
-	CardNotEditableError,
-	CardNotFoundError,
 	getCard,
 	getCardCrossReferences,
+	getCitationsOf,
 	getRecentReviewsForCard,
+	resolveCitationTargets,
 	setCardStatus,
 	updateCard,
 	updateCardSchema,

@@ -199,9 +199,8 @@ libs/
   help/           Help library + page-help drawer subsystem
   sources/        Source render pipeline, regs/handbook resolvers
   bc/
-    study/        Spaced rep, cards, reviews, scenarios, calibration
+    study/        Spaced rep, cards, reviews, scenarios, calibration, content citations
     sim/          Sim BC -- physics, scenarios, replay, grading, persistence
-    citations/    Cross-content citations + cited-by surface
   hangar-jobs/    Generic job queue infra used by the hangar app
   hangar-sync/    TOML mirror sync engine (DB <-> seed files)
   constants/      Enums, routes, ports, config
@@ -237,7 +236,7 @@ See [docs/platform/MULTI_PRODUCT_ARCHITECTURE.md](docs/platform/MULTI_PRODUCT_AR
 
 - **Always use `@ab/*` path aliases for cross-lib imports.** Never relative paths across lib boundaries.
 - **Intra-lib relative imports are fine.**
-- Path aliases: `@ab/constants`, `@ab/types`, `@ab/db`, `@ab/auth`, `@ab/audit`, `@ab/themes`, `@ab/ui`, `@ab/utils`, `@ab/bc-study`, `@ab/bc-sim`, `@ab/bc-citations`, `@ab/aviation`, `@ab/activities`, `@ab/help`, `@ab/sources`, `@ab/hangar-jobs`, `@ab/hangar-sync`.
+- Path aliases: `@ab/constants`, `@ab/types`, `@ab/db`, `@ab/auth`, `@ab/audit`, `@ab/themes`, `@ab/ui`, `@ab/utils`, `@ab/bc-study`, `@ab/bc-sim`, `@ab/aviation`, `@ab/activities`, `@ab/help`, `@ab/sources`, `@ab/hangar-jobs`, `@ab/hangar-sync`.
 
 ## Svelte 5
 

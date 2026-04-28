@@ -9,12 +9,12 @@
  * Per spec:
  *   - Active cards only (suspended + archived -> 404).
  *   - No scheduling internals leak.
- *   - Citations are composed here from `@ab/bc-citations`; the policy of
- *     "external links only on the public page" lives in `composePublicCardCitations`.
+ *   - Citations are composed here from the bc-study citations API; the policy
+ *     of "external links only on the public page" lives in
+ *     `composePublicCardCitations`.
  */
 
-import { getCitationsOf, resolveCitationTargets } from '@ab/bc-citations';
-import { composePublicCardCitations, getPublicCard } from '@ab/bc-study';
+import { composePublicCardCitations, getCitationsOf, getPublicCard, resolveCitationTargets } from '@ab/bc-study';
 import { CITATION_SOURCE_TYPES } from '@ab/constants';
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';

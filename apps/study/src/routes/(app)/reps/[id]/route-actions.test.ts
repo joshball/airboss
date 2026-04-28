@@ -9,8 +9,7 @@
  */
 
 import { bauthUser } from '@ab/auth/schema';
-import { contentCitation } from '@ab/bc-citations';
-import { createScenario, scenario } from '@ab/bc-study';
+import { contentCitation, createScenario, scenario } from '@ab/bc-study';
 import {
 	CITATION_SOURCE_TYPES,
 	CITATION_TARGET_TYPES,
