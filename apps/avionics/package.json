@@ -1,0 +1,17 @@
+{
+	"name": "@ab/avionics",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"dev": "vite dev --port 9630",
+		"build": "vite build",
+		"preview": "vite preview"
+	},
+	"dependencies": {
+		"@ab/auth": "workspace:*",
+		"@ab/bc-avionics": "workspace:*",
+		"@ab/constants": "workspace:*",
+		"@ab/db": "workspace:*",
+		"@ab/utils": "workspace:*"
+	}
+}
