@@ -15,6 +15,8 @@ import {
 	SCENARIO_OPTIONS_MIN,
 } from '@ab/constants';
 import PageHelp from '@ab/help/ui/PageHelp.svelte';
+import Button from '@ab/ui/components/Button.svelte';
+import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import { humanize } from '@ab/utils';
 import { enhance } from '$app/forms';
 import type { ActionData } from './$types';
@@ -98,16 +100,17 @@ function difficultyLabel(slug: string): string {
 </svelte:head>
 
 <section class="page">
-	<header class="hd">
-		<div>
-			<div class="title-row">
-				<h1>New scenario</h1>
-				<PageHelp pageId="reps-new" />
-			</div>
-			<p class="sub">Write a micro-decision: 2-3 sentences of situation, 2-5 options, exactly one correct.</p>
-		</div>
-		<a class="back" href={ROUTES.REPS_BROWSE}>Browse</a>
-	</header>
+	<PageHeader
+		title="New scenario"
+		subtitle="Write a micro-decision: 2-3 sentences of situation, 2-5 options, exactly one correct."
+	>
+		{#snippet titleSuffix()}
+			<PageHelp pageId="reps-new" />
+		{/snippet}
+		{#snippet actions()}
+			<Button variant="ghost" href={ROUTES.REPS_BROWSE}>Browse</Button>
+		{/snippet}
+	</PageHeader>
 
 	{#if fieldErrors._}
 		<div class="error" role="alert">{fieldErrors._}</div>
@@ -335,46 +338,6 @@ function difficultyLabel(slug: string): string {
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-xl);
-	}
-
-	.hd {
-		display: flex;
-		align-items: flex-start;
-		justify-content: space-between;
-		gap: var(--space-lg);
-	}
-
-	.title-row {
-		display: flex;
-		align-items: center;
-		gap: var(--space-sm);
-		flex-wrap: wrap;
-	}
-
-	h1 {
-		margin: 0;
-		font-size: var(--type-heading-2-size);
-		letter-spacing: -0.02em;
-		color: var(--ink-body);
-	}
-
-	.sub {
-		margin: var(--space-2xs) 0 0;
-		color: var(--ink-subtle);
-		font-size: var(--type-definition-body-size);
-	}
-
-	.back {
-		color: var(--ink-muted);
-		text-decoration: none;
-		font-size: var(--type-ui-label-size);
-		padding: var(--space-xs) var(--space-md);
-		border: 1px solid var(--edge-strong);
-		border-radius: var(--radius-sm);
-	}
-
-	.back:hover {
-		background: var(--surface-sunken);
 	}
 
 	.error {

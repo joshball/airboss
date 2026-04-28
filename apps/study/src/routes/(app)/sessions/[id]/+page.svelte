@@ -14,8 +14,11 @@ import {
 	type SessionReasonCode,
 	type SessionSlice,
 } from '@ab/constants';
+import Button from '@ab/ui/components/Button.svelte';
 import ConfidenceSlider from '@ab/ui/components/ConfidenceSlider.svelte';
 import ConfirmAction from '@ab/ui/components/ConfirmAction.svelte';
+import EmptyState from '@ab/ui/components/EmptyState.svelte';
+import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import { humanize } from '@ab/utils';
 import { enhance } from '$app/forms';
 import { replaceState } from '$app/navigation';
@@ -83,12 +86,11 @@ function sliceLabel(slice: SessionSlice): string {
 </svelte:head>
 
 <section class="page">
-	<header class="hd">
-		<div>
-			<h1>Session in progress</h1>
-			<p class="sub">Item {currentNum} of {total} -- {completedCount} done</p>
-		</div>
-		<nav class="quick">
+	<PageHeader
+		title="Session in progress"
+		subtitle={`Item ${currentNum} of ${total} -- ${completedCount} done`}
+	>
+		{#snippet actions()}
 			<ConfirmAction
 				formAction="?/finish"
 				triggerVariant="ghost"
@@ -97,8 +99,8 @@ function sliceLabel(slice: SessionSlice): string {
 				label="Finish early"
 				confirmLabel="End session now"
 			/>
-		</nav>
-	</header>
+		{/snippet}
+	</PageHeader>
 
 	<div class="progress" aria-label="Session progress" role="progressbar" aria-valuemin="0" aria-valuemax={total} aria-valuenow={completedCount} aria-valuetext="{completedCount} of {total} done">
 		<span class="progress-fill" style="width: {total === 0 ? 0 : Math.round((completedCount / total) * 100)}%"></span>
@@ -117,13 +119,13 @@ function sliceLabel(slice: SessionSlice): string {
 	{/if}
 
 	{#if !current}
-		<article class="empty">
-			<h2>All items resolved</h2>
-			<p class="muted">Finish to see your summary.</p>
-			<form method="post" action="?/finish" use:enhance>
-				<button type="submit" class="btn primary">Show summary</button>
-			</form>
-		</article>
+		<EmptyState title="All items resolved" body="Finish to see your summary.">
+			{#snippet actions()}
+				<form method="post" action="?/finish" use:enhance>
+					<Button variant="primary" type="submit">Show summary</Button>
+				</form>
+			{/snippet}
+		</EmptyState>
 	{:else if current && hydrated}
 		<article class="item-card">
 			<div class="item-head">
@@ -300,15 +302,18 @@ function sliceLabel(slice: SessionSlice): string {
 			<p class="skip-hint">Topic + permanent skips can be reactivated from the plan detail page.</p>
 		</article>
 	{:else if current}
-		<article class="empty">
-			<h2>This item is unavailable</h2>
-			<p class="muted">The underlying {current.itemKind} may have been deleted. Skip to move on.</p>
-			<form method="post" action="?/skip" use:enhance>
-				<input type="hidden" name="slotIndex" value={current.slotIndex} />
-				<input type="hidden" name="skipKind" value={SESSION_SKIP_KINDS.TODAY} />
-				<button type="submit" class="btn secondary">Skip</button>
-			</form>
-		</article>
+		<EmptyState
+			title="This item is unavailable"
+			body={`The underlying ${current.itemKind} may have been deleted. Skip to move on.`}
+		>
+			{#snippet actions()}
+				<form method="post" action="?/skip" use:enhance>
+					<input type="hidden" name="slotIndex" value={current.slotIndex} />
+					<input type="hidden" name="skipKind" value={SESSION_SKIP_KINDS.TODAY} />
+					<Button variant="secondary" type="submit">Skip</Button>
+				</form>
+			{/snippet}
+		</EmptyState>
 	{/if}
 
 	{#if skippedConfidence}
@@ -321,25 +326,6 @@ function sliceLabel(slice: SessionSlice): string {
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-lg);
-	}
-
-	.hd {
-		display: flex;
-		justify-content: space-between;
-		align-items: flex-start;
-		gap: var(--space-lg);
-	}
-
-	h1 {
-		margin: 0;
-		font-size: var(--font-size-xl);
-		color: var(--ink-body);
-	}
-
-	.sub {
-		margin: var(--space-2xs) 0 0;
-		color: var(--ink-subtle);
-		font-size: var(--font-size-sm);
 	}
 
 	.progress {
@@ -549,23 +535,6 @@ function sliceLabel(slice: SessionSlice): string {
 		font-size: var(--font-size-xs);
 		color: var(--ink-subtle);
 		text-align: right;
-	}
-
-	.empty {
-		background: var(--ink-inverse);
-		border: 1px solid var(--edge-default);
-		border-radius: var(--radius-lg);
-		padding: var(--space-2xl);
-		text-align: center;
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-md);
-		align-items: center;
-	}
-
-	.empty h2 {
-		margin: 0;
-		font-size: var(--font-size-lg);
 	}
 
 	.muted {

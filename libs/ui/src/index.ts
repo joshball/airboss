@@ -32,6 +32,7 @@ export type { FilterChipDef, FilterChipsProps } from './components/FilterChips.s
 export type { PagerProps } from './components/Pager.svelte';
 export type { RadioGroupOrientation, RadioOption } from './components/RadioGroup.svelte';
 export type { ResultSummaryProps } from './components/ResultSummary.svelte';
+export type { ScoreCardSize } from './components/ScoreCard.svelte';
 export type { SelectOption, SelectSize } from './components/Select.svelte';
 export type { SpinnerSize, SpinnerTone } from './components/Spinner.svelte';
 export type { StatTileTone } from './components/StatTile.svelte';

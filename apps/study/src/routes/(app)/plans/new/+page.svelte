@@ -19,6 +19,7 @@ import {
 	SESSION_MODE_VALUES,
 	type SessionMode,
 } from '@ab/constants';
+import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import { enhance } from '$app/forms';
 import type { ActionData } from './$types';
 
@@ -75,12 +76,10 @@ const skipPreview = $derived([...selectedSkip].sort().map((d) => domainLabel(d))
 </svelte:head>
 
 <section class="page">
-	<header class="hd">
-		<div>
-			<h1>New study plan</h1>
-			<p class="sub">Pick goals, focus areas, and session length. Activating this plan archives any existing one.</p>
-		</div>
-	</header>
+	<PageHeader
+		title="New study plan"
+		subtitle="Pick goals, focus areas, and session length. Activating this plan archives any existing one."
+	/>
 
 	<form
 		method="post"
@@ -253,19 +252,6 @@ const skipPreview = $derived([...selectedSkip].sort().map((d) => domainLabel(d))
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-xl);
-	}
-
-	h1 {
-		margin: 0;
-		font-size: var(--type-heading-1-size);
-		letter-spacing: -0.02em;
-		color: var(--ink-body);
-	}
-
-	.sub {
-		margin: var(--space-2xs) 0 0;
-		color: var(--ink-subtle);
-		font-size: var(--type-definition-body-size);
 	}
 
 	.wizard {

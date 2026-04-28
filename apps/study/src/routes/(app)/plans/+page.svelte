@@ -14,6 +14,9 @@ import {
 	SESSION_MODE_LABELS,
 	type SessionMode,
 } from '@ab/constants';
+import Button from '@ab/ui/components/Button.svelte';
+import EmptyState from '@ab/ui/components/EmptyState.svelte';
+import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import { replaceState } from '$app/navigation';
 import { page } from '$app/state';
 import type { PageData } from './$types';
@@ -65,20 +68,20 @@ function fmt(date: Date): string {
 </svelte:head>
 
 <section class="page">
-	<header class="hd">
-		<div>
-			<h1>Study plans</h1>
-			<p class="sub">What you're studying. One active plan drives each session.</p>
-		</div>
-		<nav class="quick" aria-label="Quick actions">
+	<PageHeader
+		title="Study plans"
+		subtitle="What you're studying. One active plan drives each session."
+		actionsLabel="Quick actions"
+	>
+		{#snippet actions()}
 			{#if active}
-				<a class="btn secondary" href={ROUTES.PLAN(active.id)}>Edit plan</a>
-				<a class="btn primary" href={ROUTES.SESSION_START}>Start session</a>
+				<Button variant="secondary" href={ROUTES.PLAN(active.id)}>Edit plan</Button>
+				<Button variant="primary" href={ROUTES.SESSION_START}>Start session</Button>
 			{:else}
-				<a class="btn primary" href={ROUTES.PLANS_NEW}>New plan</a>
+				<Button variant="primary" href={ROUTES.PLANS_NEW}>New plan</Button>
 			{/if}
-		</nav>
-	</header>
+		{/snippet}
+	</PageHeader>
 
 	<div class="tabs" role="tablist" aria-label="Plan lists">
 		<button
@@ -152,14 +155,14 @@ function fmt(date: Date): string {
 				</dl>
 			</article>
 		{:else}
-			<article class="plan-card empty">
-				<h2>No active plan yet</h2>
-				<p class="muted">
-					Create your first plan: pick certifications you're working toward, focus domains, session length. You
-					can edit it anytime.
-				</p>
-				<a class="btn primary" href={ROUTES.PLANS_NEW}>Create plan</a>
-			</article>
+			<EmptyState
+				title="No active plan yet"
+				body="Create your first plan: pick certifications you're working toward, focus domains, session length. You can edit it anytime."
+			>
+				{#snippet actions()}
+					<Button variant="primary" href={ROUTES.PLANS_NEW}>Create plan</Button>
+				{/snippet}
+			</EmptyState>
 		{/if}
 	{:else if archivedCount > 0}
 		<article class="card-list">
@@ -177,12 +180,10 @@ function fmt(date: Date): string {
 			</ul>
 		</article>
 	{:else}
-		<article class="plan-card empty">
-			<h2>No archived plans</h2>
-			<p class="muted">
-				Archived plans appear here when you replace your active plan. You haven't archived any plans yet.
-			</p>
-		</article>
+		<EmptyState
+			title="No archived plans"
+			body="Archived plans appear here when you replace your active plan. You haven't archived any plans yet."
+		/>
 	{/if}
 </section>
 
@@ -191,33 +192,6 @@ function fmt(date: Date): string {
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-xl);
-	}
-
-	.hd {
-		display: flex;
-		justify-content: space-between;
-		align-items: flex-start;
-		gap: var(--space-lg);
-		flex-wrap: wrap;
-	}
-
-	h1 {
-		margin: 0;
-		font-size: var(--type-heading-1-size);
-		letter-spacing: -0.02em;
-		color: var(--ink-body);
-	}
-
-	.sub {
-		margin: var(--space-2xs) 0 0;
-		color: var(--ink-subtle);
-		font-size: var(--type-definition-body-size);
-	}
-
-	.quick {
-		display: flex;
-		gap: var(--space-sm);
-		flex-wrap: wrap;
 	}
 
 	.tabs {
@@ -282,11 +256,6 @@ function fmt(date: Date): string {
 	.plan-card.active {
 		border-color: var(--action-default-edge);
 		background: var(--action-default-wash);
-	}
-
-	.plan-card.empty {
-		text-align: center;
-		align-items: center;
 	}
 
 	.plan-head {
@@ -407,36 +376,4 @@ function fmt(date: Date): string {
 		align-items: center;
 	}
 
-	.btn {
-		padding: var(--space-sm) var(--space-lg);
-		font-size: var(--type-definition-body-size);
-		font-weight: 600;
-		border-radius: var(--radius-md);
-		border: 1px solid transparent;
-		cursor: pointer;
-		text-decoration: none;
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		transition: background var(--motion-fast), border-color var(--motion-fast);
-	}
-
-	.btn.primary {
-		background: var(--action-default);
-		color: var(--ink-inverse);
-	}
-
-	.btn.primary:hover {
-		background: var(--action-default-hover);
-	}
-
-	.btn.secondary {
-		background: var(--surface-sunken);
-		color: var(--ink-body);
-		border-color: var(--edge-strong);
-	}
-
-	.btn.secondary:hover {
-		background: var(--edge-default);
-	}
 </style>

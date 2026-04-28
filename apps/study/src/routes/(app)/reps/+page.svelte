@@ -1,6 +1,9 @@
 <script lang="ts">
 import { domainLabel, REP_DASHBOARD_WINDOW_DAYS, ROUTES } from '@ab/constants';
 import PageHelp from '@ab/help/ui/PageHelp.svelte';
+import Button from '@ab/ui/components/Button.svelte';
+import EmptyState from '@ab/ui/components/EmptyState.svelte';
+import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import StatTile from '@ab/ui/components/StatTile.svelte';
 import type { PageData } from './$types';
 
@@ -23,40 +26,36 @@ function bar(value: number): number {
 </svelte:head>
 
 <section class="page">
-	<header class="hd">
-		<div>
-			<div class="title-row">
-				<h1>Decision Reps</h1>
-				<PageHelp pageId="reps" />
-			</div>
-			<p class="sub">Read a situation. Pick a call. See what happens. 60 seconds at a time.</p>
-		</div>
-		<nav class="quick" aria-label="Quick actions">
-			<a class="btn ghost" href={ROUTES.REPS_BROWSE}>Browse</a>
-			<a class="btn secondary" href={ROUTES.REPS_NEW}>New scenario</a>
+	<PageHeader
+		title="Decision Reps"
+		subtitle="Read a situation. Pick a call. See what happens. 60 seconds at a time."
+		actionsLabel="Quick actions"
+	>
+		{#snippet titleSuffix()}
+			<PageHelp pageId="reps" />
+		{/snippet}
+		{#snippet actions()}
+			<Button variant="ghost" href={ROUTES.REPS_BROWSE}>Browse</Button>
+			<Button variant="secondary" href={ROUTES.REPS_NEW}>New scenario</Button>
 			{#if hasScenarios}
-				<a class="btn primary" href={ROUTES.SESSION_START}>Start session</a>
+				<Button variant="primary" href={ROUTES.SESSION_START}>Start session</Button>
 			{:else}
-				<button
-					class="btn primary"
-					type="button"
-					disabled
-					title="Write a scenario first to enable sessions."
-					aria-describedby="start-session-hint"
-				>
+				<Button variant="primary" disabled ariaLabel="Write a scenario first to enable sessions.">
 					Start session
-				</button>
-				<span id="start-session-hint" class="visually-hidden">Write a scenario first to enable sessions.</span>
+				</Button>
 			{/if}
-		</nav>
-	</header>
+		{/snippet}
+	</PageHeader>
 
 	{#if !hasScenarios}
-		<article class="empty" role="status">
-			<h2>No scenarios yet</h2>
-			<p>Write your first one -- title, 2-3 sentences of context, 2-5 options, and the teaching point.</p>
-			<a class="btn primary" href={ROUTES.REPS_NEW}>Create your first scenario</a>
-		</article>
+		<EmptyState
+			title="No scenarios yet"
+			body="Write your first one -- title, 2-3 sentences of context, 2-5 options, and the teaching point."
+		>
+			{#snippet actions()}
+				<Button variant="primary" href={ROUTES.REPS_NEW}>Create your first scenario</Button>
+			{/snippet}
+		</EmptyState>
 	{:else}
 		<div class="grid">
 			<StatTile
@@ -134,64 +133,6 @@ function bar(value: number): number {
 		gap: var(--space-xl);
 	}
 
-	.hd {
-		display: flex;
-		justify-content: space-between;
-		align-items: flex-start;
-		gap: var(--space-lg);
-		flex-wrap: wrap;
-	}
-
-	.title-row {
-		display: flex;
-		align-items: center;
-		gap: var(--space-sm);
-		flex-wrap: wrap;
-	}
-
-	h1 {
-		margin: 0;
-		font-size: var(--font-size-2xl);
-		letter-spacing: -0.02em;
-		color: var(--ink-body);
-	}
-
-	.sub {
-		margin: var(--space-2xs) 0 0;
-		color: var(--ink-subtle);
-		font-size: var(--font-size-body);
-	}
-
-	.quick {
-		display: flex;
-		gap: var(--space-sm);
-		flex-wrap: wrap;
-	}
-
-	.empty {
-		background: var(--ink-inverse);
-		border: 1px dashed var(--edge-strong);
-		border-radius: var(--radius-lg);
-		padding: var(--space-2xl) var(--space-xl);
-		text-align: center;
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-md);
-		align-items: center;
-	}
-
-	.empty h2 {
-		margin: 0;
-		color: var(--ink-body);
-		font-size: var(--font-size-xl);
-	}
-
-	.empty p {
-		margin: 0;
-		color: var(--ink-subtle);
-		max-width: 28rem;
-	}
-
 	.grid {
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -199,18 +140,6 @@ function bar(value: number): number {
 	}
 
 	/* StatTile provides its own styling; the grid just lays them out. */
-
-	.visually-hidden {
-		position: absolute;
-		width: 1px;
-		height: 1px;
-		padding: 0;
-		margin: -1px;
-		overflow: hidden;
-		clip: rect(0, 0, 0, 0);
-		white-space: nowrap;
-		border: 0;
-	}
 
 	.card-list {
 		background: var(--ink-inverse);
@@ -298,50 +227,4 @@ function bar(value: number): number {
 		margin: 0;
 	}
 
-	.btn {
-		padding: var(--space-sm) var(--space-lg);
-		font-size: var(--font-size-body);
-		font-weight: 600;
-		border-radius: var(--radius-md);
-		border: 1px solid transparent;
-		cursor: pointer;
-		text-decoration: none;
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		transition: background var(--motion-fast), border-color var(--motion-fast);
-	}
-
-	.btn.primary {
-		background: var(--action-default);
-		color: var(--ink-inverse);
-	}
-
-	.btn.primary:hover {
-		background: var(--action-default-hover);
-	}
-
-	.btn.primary:disabled {
-		background: var(--ink-faint);
-		cursor: not-allowed;
-	}
-
-	.btn.secondary {
-		background: var(--surface-sunken);
-		color: var(--ink-body);
-		border-color: var(--edge-strong);
-	}
-
-	.btn.secondary:hover {
-		background: var(--edge-default);
-	}
-
-	.btn.ghost {
-		background: transparent;
-		color: var(--ink-muted);
-	}
-
-	.btn.ghost:hover {
-		background: var(--surface-sunken);
-	}
 </style>

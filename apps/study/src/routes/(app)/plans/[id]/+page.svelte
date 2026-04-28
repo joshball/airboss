@@ -22,7 +22,9 @@ import {
 } from '@ab/constants';
 import type { ActionFailure } from '@ab/types';
 import Banner from '@ab/ui/components/Banner.svelte';
+import Button from '@ab/ui/components/Button.svelte';
 import ConfirmAction from '@ab/ui/components/ConfirmAction.svelte';
+import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import { enhance } from '$app/forms';
 import { page } from '$app/state';
 import type { ActionData, PageData } from './$types';
@@ -81,18 +83,15 @@ const skippableDomains = $derived(DOMAIN_VALUES.filter((d: Domain) => !focusSet.
 </svelte:head>
 
 <section class="page">
-	<header class="hd">
-		<div>
-			<h1>{plan.title}</h1>
-			<p class="sub">
-				<span class="badge" class:active={isActive}>{PLAN_STATUS_LABELS[plan.status as PlanStatus]}</span>
-				{#if isActive}<a class="link" href={ROUTES.SESSION_START}>Start a session</a>{/if}
-			</p>
-		</div>
-		<nav class="quick">
-			<a class="btn ghost" href={ROUTES.PLANS}>Back to plans</a>
-		</nav>
-	</header>
+	<PageHeader title={plan.title}>
+		{#snippet subtitleSnippet()}
+			<span class="badge" class:active={isActive}>{PLAN_STATUS_LABELS[plan.status as PlanStatus]}</span>
+			{#if isActive}<a class="link" href={ROUTES.SESSION_START}>Start a session</a>{/if}
+		{/snippet}
+		{#snippet actions()}
+			<Button variant="ghost" href={ROUTES.PLANS}>Back to plans</Button>
+		{/snippet}
+	</PageHeader>
 
 	{#if createdBannerShown}
 		<Banner tone="info" dismissible onDismiss={() => (createdBannerShown = false)}>
@@ -257,29 +256,6 @@ const skippableDomains = $derived(DOMAIN_VALUES.filter((d: Domain) => !focusSet.
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-xl);
-	}
-
-	.hd {
-		display: flex;
-		justify-content: space-between;
-		align-items: flex-start;
-		gap: var(--space-lg);
-		flex-wrap: wrap;
-	}
-
-	h1 {
-		margin: 0;
-		font-size: var(--type-heading-1-size);
-		color: var(--ink-body);
-	}
-
-	.sub {
-		margin: var(--space-2xs) 0 0;
-		color: var(--ink-subtle);
-		font-size: var(--type-definition-body-size);
-		display: flex;
-		gap: var(--space-md);
-		align-items: center;
 	}
 
 	.badge {
@@ -461,12 +437,4 @@ const skippableDomains = $derived(DOMAIN_VALUES.filter((d: Domain) => !focusSet.
 		cursor: not-allowed;
 	}
 
-	.btn.ghost {
-		background: transparent;
-		color: var(--ink-muted);
-	}
-
-	.btn.ghost:hover {
-		background: var(--surface-sunken);
-	}
 </style>

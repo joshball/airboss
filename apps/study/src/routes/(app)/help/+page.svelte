@@ -1,6 +1,8 @@
 <script lang="ts">
 import { APP_SURFACE_LABELS, APP_SURFACE_VALUES, type AppSurface, ROUTES } from '@ab/constants';
 import type { HelpPage } from '@ab/help';
+import EmptyState from '@ab/ui/components/EmptyState.svelte';
+import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
@@ -31,22 +33,20 @@ function groupBySurface(
 </svelte:head>
 
 <section class="page">
-	<header class="hd">
-		<h1>Help</h1>
-		<p class="sub">
-			How airboss works, and how to get the most out of it. {data.pages.length}
-			page{data.pages.length === 1 ? '' : 's'}.
-		</p>
-	</header>
+	<PageHeader
+		title="Help"
+		subtitle={`How airboss works, and how to get the most out of it. ${data.pages.length} page${data.pages.length === 1 ? '' : 's'}.`}
+	/>
 
 	{#if data.pages.length === 0}
-		<div class="empty">
-			<h2>No help pages yet</h2>
-			<p>Help pages are still being authored. The aviation glossary search above works today.</p>
-			<p class="hint">
-				Press <kbd>/</kbd> or <kbd>Cmd+K</kbd> to search the reference library.
-			</p>
-		</div>
+		<EmptyState title="No help pages yet">
+			{#snippet bodySnippet()}
+				<p>Help pages are still being authored. The aviation glossary search above works today.</p>
+				<p class="hint">
+					Press <kbd>/</kbd> or <kbd>Cmd+K</kbd> to search the reference library.
+				</p>
+			{/snippet}
+		</EmptyState>
 	{:else}
 		{#each grouped as group (group.surface)}
 			<section class="group" aria-labelledby={`group-${group.surface}`}>
@@ -76,42 +76,7 @@ function groupBySurface(
 		gap: var(--space-xl);
 	}
 
-	.hd h1 {
-		margin: 0;
-		font-size: var(--type-heading-2-size);
-		letter-spacing: -0.02em;
-	}
-
-	.sub {
-		margin: var(--space-2xs) 0 0;
-		color: var(--ink-muted);
-	}
-
-	.empty {
-		border: 1px dashed var(--edge-strong);
-		border-radius: var(--radius-lg);
-		padding: var(--space-2xl) var(--space-xl);
-		text-align: center;
-		color: var(--ink-muted);
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		gap: var(--space-md);
-	}
-
-	.empty h2 {
-		margin: 0;
-		font-size: var(--type-reading-lead-size);
-		color: var(--ink-body);
-	}
-
-	.empty p {
-		margin: 0;
-		max-width: 38rem;
-		line-height: 1.55;
-	}
-
-	.empty .hint {
+	.hint {
 		font-size: var(--type-ui-label-size);
 	}
 
