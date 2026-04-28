@@ -7,7 +7,7 @@
  */
 
 import { bauthUser } from '@ab/auth/schema';
-import { db } from '@ab/db';
+import { db } from '@ab/db/connection';
 import { generateAuthId } from '@ab/utils';
 import { eq } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';

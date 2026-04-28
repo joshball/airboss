@@ -43,7 +43,7 @@ import {
 	SOURCE_KIND_BY_TYPE,
 	SOURCE_KINDS,
 } from '@ab/constants';
-import { db } from '@ab/db';
+import { db } from '@ab/db/connection';
 import type { JobContext } from '@ab/hangar-jobs';
 import { createLogger } from '@ab/utils';
 import { eq } from 'drizzle-orm';

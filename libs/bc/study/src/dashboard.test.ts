@@ -23,7 +23,7 @@ import {
 	SCENARIO_STATUSES,
 	WEAK_AREA_MIN_DATA_POINTS,
 } from '@ab/constants';
-import { db } from '@ab/db';
+import { db } from '@ab/db/connection';
 import { generateAuthId, generateCardId, generateReviewId, generateScenarioId } from '@ab/utils';
 import { eq } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';

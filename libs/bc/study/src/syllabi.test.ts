@@ -5,7 +5,7 @@
 
 import { bauthUser } from '@ab/auth/schema';
 import { SYLLABUS_NODE_LEVELS, SYLLABUS_STATUSES } from '@ab/constants';
-import { db } from '@ab/db';
+import { db } from '@ab/db/connection';
 import { generateAuthId, generateSyllabusId, generateSyllabusNodeId, generateSyllabusNodeLinkId } from '@ab/utils';
 import { eq } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';

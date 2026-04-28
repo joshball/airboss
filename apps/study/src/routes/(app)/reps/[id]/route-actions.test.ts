@@ -18,7 +18,7 @@ import {
 	EXTERNAL_REF_TARGET_DELIMITER,
 	PHASES_OF_FLIGHT,
 } from '@ab/constants';
-import { db } from '@ab/db';
+import { db } from '@ab/db/connection';
 import { generateAuthId, generateContentCitationId, generateScenarioId } from '@ab/utils';
 import type { ActionFailure } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';

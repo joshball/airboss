@@ -8,7 +8,7 @@
 
 import { bauthUser } from '@ab/auth/schema';
 import { CREDENTIAL_PREREQ_KINDS, CREDENTIAL_STATUSES, SYLLABUS_PRIMACY, SYLLABUS_STATUSES } from '@ab/constants';
-import { db } from '@ab/db';
+import { db } from '@ab/db/connection';
 import {
 	generateAuthId,
 	generateCredentialId,

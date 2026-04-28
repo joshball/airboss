@@ -4,7 +4,7 @@
  * dev Postgres so the COUNT runs against the real table shape.
  */
 
-import { db } from '@ab/db';
+import { db } from '@ab/db/connection';
 import { generateAuthId } from '@ab/utils';
 import { eq, inArray } from 'drizzle-orm';
 import { afterAll, describe, expect, it } from 'vitest';

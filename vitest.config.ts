@@ -11,6 +11,7 @@ const aliases = {
 	'@ab/constants/env': resolve('./libs/constants/src/env.ts'),
 	'@ab/constants': resolve('./libs/constants/src/index.ts'),
 	'@ab/types': resolve('./libs/types/src/index.ts'),
+	'@ab/db/connection': resolve('./libs/db/src/connection.ts'),
 	'@ab/db': resolve('./libs/db/src/index.ts'),
 	'@ab/auth/schema': resolve('./libs/auth/src/schema.ts'),
 	'@ab/auth': resolve('./libs/auth/src/index.ts'),

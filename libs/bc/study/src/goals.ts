@@ -30,7 +30,7 @@
  */
 
 import { GOAL_STATUSES, type GoalStatus, SYLLABUS_PRIMACY } from '@ab/constants';
-import { db as defaultDb } from '@ab/db';
+import { db as defaultDb } from '@ab/db/connection';
 import { generateGoalId } from '@ab/utils';
 import { and, eq, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';

@@ -30,7 +30,7 @@ import {
 	STUDY_PRIORITIES,
 	type StudyPriority,
 } from '@ab/constants';
-import { db as defaultDb } from '@ab/db';
+import { db as defaultDb } from '@ab/db/connection';
 import { generateKnowledgeNodeProgressId } from '@ab/utils';
 import { and, asc, count, eq, inArray, isNotNull, isNull, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';

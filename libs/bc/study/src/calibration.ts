@@ -28,7 +28,7 @@ import {
 	REVIEW_RATINGS,
 	SESSION_ITEM_KINDS,
 } from '@ab/constants';
-import { db as defaultDb } from '@ab/db';
+import { db as defaultDb } from '@ab/db/connection';
 import { and, desc, eq, gte, isNotNull, isNull, lte, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import { card, review, scenario, sessionItemResult } from './schema';

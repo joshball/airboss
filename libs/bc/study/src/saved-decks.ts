@@ -13,7 +13,7 @@
  */
 
 import { SAVED_DECK_LABEL_MAX_LENGTH } from '@ab/constants';
-import { db as defaultDb } from '@ab/db';
+import { db as defaultDb } from '@ab/db/connection';
 import { generateSavedDeckId } from '@ab/utils';
 import { and, eq } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';

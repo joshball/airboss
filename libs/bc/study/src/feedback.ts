@@ -8,7 +8,7 @@
  */
 
 import { CARD_FEEDBACK_SIGNALS_REQUIRING_COMMENT, type CardFeedbackSignal } from '@ab/constants';
-import { db as defaultDb } from '@ab/db';
+import { db as defaultDb } from '@ab/db/connection';
 import { generateCardFeedbackId } from '@ab/utils';
 import { and, desc, eq } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
