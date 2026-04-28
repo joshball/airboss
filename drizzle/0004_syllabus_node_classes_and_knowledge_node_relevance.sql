@@ -1,3 +1,0 @@
-ALTER TABLE "study"."knowledge_node" ADD COLUMN "relevance" jsonb DEFAULT '[]'::jsonb NOT NULL;--> statement-breakpoint
-ALTER TABLE "study"."syllabus_node" ADD COLUMN "classes" jsonb;--> statement-breakpoint
-ALTER TABLE "study"."syllabus_node" ADD CONSTRAINT "syllabus_node_classes_check" CHECK ("classes" IS NULL OR (jsonb_typeof("classes") = 'array' AND jsonb_array_length("classes") > 0 AND "classes" <@ '["asel", "amel", "ases", "ames"]'::jsonb));

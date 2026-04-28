@@ -12,6 +12,6 @@ export { type EmailMessage, magicLinkEmail, resetPasswordEmail, sendEmail, verif
 // Logout
 export { clearSessionCookies } from './logout';
 // Read-only Drizzle schemas for better-auth tables
-export { bauthAccount, bauthSession, bauthUser, bauthVerification } from './schema';
+export { bauthAccount, bauthRateLimit, bauthSession, bauthUser, bauthVerification } from './schema';
 // Server-side auth factory
 export { type Auth, createAuth } from './server';

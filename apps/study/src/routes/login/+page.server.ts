@@ -30,7 +30,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 };
 
 export const actions: Actions = {
-	default: async ({ request, cookies, url, locals }) => {
+	default: async ({ request, cookies, url, locals, getClientAddress }) => {
 		const formData = await request.formData();
 		const email = formData.get('email');
 		const password = formData.get('password');
@@ -40,11 +40,30 @@ export const actions: Actions = {
 		}
 
 		try {
+			// Forward to better-auth's HTTP handler. Better-auth's rate
+			// limiter is wired into the router's `onRequest` hook, which
+			// only runs for requests dispatched through `auth.handler` -- a
+			// direct `auth.api.*` call bypasses it.
+			//
+			// We propagate the live client IP via `x-forwarded-for` so the
+			// rate limiter buckets per-user instead of per-process. The
+			// previous synthetic Request omitted forwarded-IP headers
+			// entirely, so `getIp()` fell back to `127.0.0.1` for every
+			// caller and one attacker could lock out the whole user base
+			// from a single rate-limit bucket. Origin / Cookie /
+			// Sec-Fetch-* are intentionally NOT forwarded -- the user
+			// already cleared SvelteKit's CSRF gate to reach this action,
+			// and re-running better-auth's origin check on an internal
+			// forward would just trip on values it has no reason to see.
+			const headers = new Headers({
+				'content-type': 'application/json',
+				'x-forwarded-for': getClientAddress(),
+			});
 			const authRequest = new Request(
 				`${AUTH_INTERNAL_ORIGIN}${ROUTES.API_AUTH}${BETTER_AUTH_ENDPOINTS.SIGN_IN_EMAIL}`,
 				{
 					method: 'POST',
-					headers: { 'Content-Type': 'application/json' },
+					headers,
 					body: JSON.stringify({ email, password }),
 				},
 			);
@@ -52,7 +71,13 @@ export const actions: Actions = {
 
 			if (!authResponse.ok) {
 				const data = (await authResponse.json().catch(() => null)) as { message?: string } | null;
-				return fail(401, {
+				if (authResponse.status === 429) {
+					return fail(429, {
+						error: 'Too many sign-in attempts. Please wait a moment and try again.',
+						email,
+					});
+				}
+				return fail(authResponse.status === 401 ? 401 : 400, {
 					error: data?.message ?? 'Invalid email or password',
 					email,
 				});
