@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "corpus": "ac",
+  "doc_slug": "90-66",
+  "doc_number": "90-66",
+  "revision": "c",
+  "title": "AC 90-66C",
+  "publisher": "FAA",
+  "publication_date": "2023-06-06",
+  "source_url": "https://www.faa.gov/documentLibrary/media/Advisory_Circular/AC_90-66C.pdf",
+  "source_sha256": "3ced94d15f8e79835a848a9db3ffe3341b635f96bfb7d3375d6412b4b4a113e0",
+  "fetched_at": "2026-04-27T21:20:43.804Z",
+  "page_count": 28,
+  "body_path": "ac/90-66/c/document.md",
+  "body_sha256": "86604d52a1abe0f8a25eb6fb053e5b68e500e8a90e2a736af44ea7ac481c0132",
+  "sections": [],
+  "changes": []
+}

@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "corpus": "ac",
+  "doc_slug": "61-98",
+  "doc_number": "61-98",
+  "revision": "d",
+  "title": "AC 61-98D",
+  "publisher": "FAA",
+  "publication_date": "2018-04-30",
+  "source_url": "https://www.faa.gov/documentLibrary/media/Advisory_Circular/AC_61-98D.pdf",
+  "source_sha256": "7d5ac5600f980b635447540b59b7866fe426cfc28bf7dfe0c2d05858af5e3402",
+  "fetched_at": "2026-04-27T21:20:43.205Z",
+  "page_count": 49,
+  "body_path": "ac/61-98/d/document.md",
+  "body_sha256": "c3971469cacd685b177c71a2b69ea2ade729194c5e49c650840b0ce7fb748a39",
+  "sections": [],
+  "changes": []
+}
