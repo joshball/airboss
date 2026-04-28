@@ -41,7 +41,7 @@ FAA errata for handbooks typically come as:
 
 - A small PDF (1-10 pages) titled `errata-FAA-H-8083-25C-<date>.pdf` or similar.
 - Format: each erratum is a triplet of `(page reference, original text, replacement text)`. Sometimes a paragraph-level rewrite, sometimes a single-word correction, occasionally a figure replacement.
-- Cumulative across the lifespan of an edition (so the most recent errata sheet supersedes earlier ones for the same edition).
+- Errata may be **incremental** (each new sheet adds different content; addendum B does not re-state addendum A) or **cumulative** (the latest sheet supersedes earlier sheets for the same edition). Both occur in FAA practice. The model handles both: `errata` is an ordered list keyed by `id`, applied in `published_at` order; `--reapply-errata` reapplies the full list. See the Revisions section at the bottom of this ADR for the dated clarification.
 - Distributed via the same FAA handbook page that serves the bound PDF, but as a separate URL (e.g., `https://www.faa.gov/.../PHAK_FAA-H-8083-25C-errata.pdf`).
 
 The FAA does NOT republish the bound PDF when errata are issued. The bound PDF stays at the original-publication SHA-256 forever. The errata sheet is the delta.
@@ -281,3 +281,16 @@ The following are explicitly not addressed by this ADR:
 - [HANDBOOK_INGESTION_STRATEGIES.md](../platform/HANDBOOK_INGESTION_STRATEGIES.md) -- TOC vs LLM extraction strategies.
 - [STORAGE.md](../platform/STORAGE.md) -- the three-tier storage policy.
 - [handbook-ingestion-and-reader spec](../work-packages/handbook-ingestion-and-reader/spec.md) -- the WP that ingests handbooks.
+- [apply-errata-and-afh-mosaic spec](../work-packages/apply-errata-and-afh-mosaic/spec.md) -- the WP that ships the apply pipeline + AFH MOSAIC + the discovery surface.
+
+## Revisions
+
+### 2026-04-28
+
+Clarify the errata cadence model. The original wording on the "What an FAA errata looks like in practice" line described errata as "cumulative across the lifespan of an edition." Research during the `apply-errata-and-afh-mosaic` work package found this is incomplete:
+
+- PHAK 25B's three sequential addenda (A, B, C) were **incremental**: addendum B does not re-state addendum A's content. To carry the edition forward to its current state, all three must be applied.
+- The October 2025 MOSAIC addenda for AFH 3C and PHAK 25C are **stand-alone single-issue addenda**, not part of a sequence.
+- Other handbooks may use **cumulative** addenda where a later sheet supersedes earlier ones.
+
+The data model already handles all three shapes: `errata` is an ordered list keyed by `id`, applied in `published_at` order; `--reapply-errata` iterates the whole list; the `published_at` field is the sort key. No schema change. The wording in the section above ("What an FAA errata looks like in practice") was tightened to reflect this. Cross-referenced from `docs/work-packages/apply-errata-and-afh-mosaic/spec.md` ADR amendment subsection.

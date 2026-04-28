@@ -107,9 +107,24 @@ chapter_overrides: {}
 # --apply-errata <id>`. See ADR 020 for the cumulative-vs-incremental
 # policy and `docs/work-packages/apply-errata-and-afh-mosaic/` for the
 # parser layout taxonomy.
+#
+# PHAK MOSAIC layout note: the PHAK October 2025 addendum uses a
+# different structural form than AFH MOSAIC. AFH MOSAIC's "In Chapter
+# N: Title, the following <subsection|paragraph> will be ..." pattern
+# is replaced by PHAK's "The following will be revised in Chapter 1,
+# Introduction to Flying, X section, ..." pattern with bullet-level
+# edits ("in the first set of bullets on page Y-Z, the bullet that
+# states ..."). The additive-paragraph parser raises a clear
+# UnknownErrataLayoutError when run against this PDF; a separate
+# parser archetype is required (tracked in IDEAS.md). The entry below
+# is configured but apply will refuse until that parser lands.
 errata:
   - id: mosaic
     source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/PHAK_Addendum_(MOSAIC).pdf
     published_at: '2025-10-20'
+    # Parser placeholder: when the bullet-level layout parser ships,
+    # change this to its registered name (e.g. `bullet-edits`). Keeps
+    # the entry discoverable to discovery scans (R7) without
+    # mis-applying with the wrong parser.
     parser: additive-paragraph
 
