@@ -7,9 +7,9 @@ export default defineConfig({
 		'./libs/auth/src/schema.ts',
 		'./libs/bc/study/src/schema.ts',
 		'./libs/bc/study/src/citations/schema.ts',
+		'./libs/bc/hangar/src/schema.ts',
+		'./libs/bc/sim/src/schema.ts',
 		'./libs/audit/src/schema.ts',
-		'./libs/db/src/hangar.ts',
-		'./libs/db/src/sim.ts',
 	],
 	// 'public' is the Postgres default (home for better-auth's bauth_* tables);
 	// the rest come from the SCHEMAS constant so additions stay in one place.

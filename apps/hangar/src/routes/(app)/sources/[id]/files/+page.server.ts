@@ -12,6 +12,7 @@
 import { readdir, readFile, stat, unlink } from 'node:fs/promises';
 import { dirname, relative, resolve } from 'node:path';
 import { requireRole } from '@ab/auth';
+import { getSource, REPO_ROOT } from '@ab/bc-hangar';
 import {
 	EXTENSION_TO_PREVIEW_KIND,
 	PREVIEW_KINDS,
@@ -22,12 +23,9 @@ import {
 	SOURCE_KIND_BY_TYPE,
 	SOURCE_KINDS,
 } from '@ab/constants';
-import { db, hangarSource } from '@ab/db';
 import { MarkdownParseError, type MdNode, parseMarkdown } from '@ab/help';
 import { createLogger } from '@ab/utils';
 import { error, fail, redirect } from '@sveltejs/kit';
-import { eq } from 'drizzle-orm';
-import { REPO_ROOT } from '$lib/server/source-jobs';
 import type { Actions, PageServerLoad } from './$types';
 
 const log = createLogger('hangar:source-files');
@@ -109,7 +107,7 @@ async function buildEntry(full: string, displayName: string, isArchive: boolean)
 
 export const load: PageServerLoad = async (event) => {
 	const user = requireRole(event, ROLES.AUTHOR, ROLES.OPERATOR, ROLES.ADMIN);
-	const [source] = await db.select().from(hangarSource).where(eq(hangarSource.id, event.params.id)).limit(1);
+	const source = await getSource(event.params.id);
 	if (!source) throw error(404, `source '${event.params.id}' not found`);
 	const kind = SOURCE_KIND_BY_TYPE[source.type as ReferenceSourceType] ?? SOURCE_KINDS.TEXT;
 	const sourcesRoot = resolve(REPO_ROOT, 'data', 'sources');
@@ -211,7 +209,7 @@ export const actions: Actions = {
 		if (name.includes('/') || name.includes('\\') || name.includes('..')) {
 			return fail(400, { error: 'invalid filename' });
 		}
-		const [source] = await db.select().from(hangarSource).where(eq(hangarSource.id, event.params.id)).limit(1);
+		const source = await getSource(event.params.id);
 		if (!source) return fail(404, { error: 'source not found' });
 
 		// Never allow deleting the primary binary; only archived versions.

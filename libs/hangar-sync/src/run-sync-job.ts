@@ -22,6 +22,14 @@
 import { AUDIT_OPS, auditWrite } from '@ab/audit';
 import type { Reference, Source } from '@ab/aviation';
 import {
+	type HangarReferenceRow,
+	type HangarSourceRow,
+	type HangarSyncLogRow,
+	hangarReference,
+	hangarSource,
+	hangarSyncLog,
+} from '@ab/bc-hangar/schema';
+import {
 	AUDIT_TARGETS,
 	ENV_VARS,
 	getEnv,
@@ -31,15 +39,7 @@ import {
 	SYNC_OUTCOMES,
 	type SyncOutcome,
 } from '@ab/constants';
-import {
-	db as defaultDb,
-	type HangarReferenceRow,
-	type HangarSourceRow,
-	type HangarSyncLogRow,
-	hangarReference,
-	hangarSource,
-	hangarSyncLog,
-} from '@ab/db';
+import { db as defaultDb } from '@ab/db';
 import type { JobContext } from '@ab/hangar-jobs';
 import { generateHangarSyncLogId } from '@ab/utils';
 import { and, desc, eq, isNull, sql } from 'drizzle-orm';

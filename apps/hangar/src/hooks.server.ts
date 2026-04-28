@@ -1,3 +1,4 @@
+import { hangarJobHandlers } from '@ab/bc-hangar';
 import { ROUTES, type Role } from '@ab/constants';
 import { recoverOrphanedRunning, startWorker, type WorkerHandle } from '@ab/hangar-jobs';
 import {
@@ -12,7 +13,6 @@ import type { Handle, HandleServerError } from '@sveltejs/kit';
 import { building, dev } from '$app/environment';
 import { auth } from '$lib/server/auth';
 import { rewriteSetCookieDomain } from '$lib/server/cookies';
-import { hangarJobHandlers } from '$lib/server/jobs';
 
 const log = createLogger('hangar');
 const errorHandler = createErrorHandler({ logger: log });

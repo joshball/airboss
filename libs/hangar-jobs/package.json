@@ -4,6 +4,7 @@
 	"type": "module",
 	"dependencies": {
 		"@ab/audit": "workspace:*",
+		"@ab/bc-hangar": "workspace:*",
 		"@ab/constants": "workspace:*",
 		"@ab/db": "workspace:*",
 		"@ab/utils": "workspace:*"

@@ -1,4 +1,5 @@
 <script lang="ts">
+import type { SourceFormInitial } from '@ab/bc-hangar';
 import {
 	type ReferenceSourceType,
 	SECTIONAL_CADENCE_DAYS,
@@ -7,7 +8,6 @@ import {
 	SOURCE_TYPE_LABELS,
 	SOURCE_TYPE_VALUES,
 } from '@ab/constants';
-import type { SourceFormInitial } from '$lib/server/source-form-types';
 
 /** Shared form body for /glossary/sources/new + /glossary/sources/[id]. */
 

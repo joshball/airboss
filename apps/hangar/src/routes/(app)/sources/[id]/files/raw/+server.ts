@@ -13,11 +13,9 @@ import { createReadStream } from 'node:fs';
 import { stat } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { requireRole } from '@ab/auth';
+import { getSource, REPO_ROOT } from '@ab/bc-hangar';
 import { QUERY_PARAMS, type ReferenceSourceType, ROLES, SOURCE_KIND_BY_TYPE, SOURCE_KINDS } from '@ab/constants';
-import { db, hangarSource } from '@ab/db';
 import { error } from '@sveltejs/kit';
-import { eq } from 'drizzle-orm';
-import { REPO_ROOT } from '$lib/server/source-jobs';
 import type { RequestHandler } from './$types';
 
 /** Map common preview extensions to a streamable content-type. */
@@ -50,7 +48,7 @@ export const GET: RequestHandler = async (event) => {
 	// authoritative guard, but rejecting these early gives clearer errors.
 	if (name.includes('..') || name.includes('\\')) throw error(400, 'invalid filename');
 
-	const [source] = await db.select().from(hangarSource).where(eq(hangarSource.id, event.params.id)).limit(1);
+	const source = await getSource(event.params.id);
 	if (!source) throw error(404, `source '${event.params.id}' not found`);
 
 	const sourcesRoot = resolve(REPO_ROOT, 'data', 'sources');

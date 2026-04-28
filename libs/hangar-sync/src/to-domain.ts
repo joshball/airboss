@@ -7,7 +7,7 @@
  */
 
 import type { Reference, ReferenceTags, Source, SourceCitation, VerbatimBlock } from '@ab/aviation';
-import type { HangarReferenceRow, HangarSourceRow } from '@ab/db';
+import type { HangarReferenceRow, HangarSourceRow } from '@ab/bc-hangar/schema';
 
 function toCitations(raw: readonly Record<string, unknown>[]): readonly SourceCitation[] {
 	return raw.map((entry) => {

@@ -13,13 +13,14 @@
  */
 
 import { SIM_BIAS } from '@ab/constants';
-import { db as defaultDb, type SimAttemptRow, simAttempt } from '@ab/db';
+import { db as defaultDb } from '@ab/db';
 import { generateSimAttemptId } from '@ab/utils';
 import { and, desc, eq, gte, isNotNull } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import { parseTape, serializeTape } from './replay/tape';
 import type { ReplayTape } from './replay/types';
 import type { GradeReport } from './scenarios/grading';
+import { type SimAttemptRow, simAttempt } from './schema';
 import type { ScenarioRunResult } from './types';
 
 type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;

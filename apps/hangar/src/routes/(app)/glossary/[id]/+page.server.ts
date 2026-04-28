@@ -1,16 +1,17 @@
 import { requireRole } from '@ab/auth';
-import { ROLES, ROUTES } from '@ab/constants';
-import { createLogger } from '@ab/utils';
-import { error, fail, redirect } from '@sveltejs/kit';
-import { formDataToInitial, validateReferenceForm } from '$lib/server/reference-form';
-import type { ReferenceFormInitial } from '$lib/server/reference-form-types';
 import {
+	formDataToInitial,
 	getReference,
 	NotFoundError,
+	type ReferenceFormInitial,
 	RevConflictError,
 	softDeleteReference,
 	updateReference,
-} from '$lib/server/registry';
+	validateReferenceForm,
+} from '@ab/bc-hangar';
+import { ROLES, ROUTES } from '@ab/constants';
+import { createLogger } from '@ab/utils';
+import { error, fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 
 const log = createLogger('hangar:glossary-detail');

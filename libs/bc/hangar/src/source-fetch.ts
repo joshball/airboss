@@ -43,10 +43,11 @@ import {
 	SOURCE_KIND_BY_TYPE,
 	SOURCE_KINDS,
 } from '@ab/constants';
-import { db, type HangarSourceEdition, type HangarSourceMedia, type HangarSourceRow, hangarSource } from '@ab/db';
+import { db } from '@ab/db';
 import type { JobContext } from '@ab/hangar-jobs';
 import { createLogger } from '@ab/utils';
 import { eq } from 'drizzle-orm';
+import { type HangarSourceEdition, type HangarSourceMedia, type HangarSourceRow, hangarSource } from './schema';
 
 const log = createLogger('hangar:source-fetch');
 

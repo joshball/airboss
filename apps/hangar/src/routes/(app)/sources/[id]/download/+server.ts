@@ -10,16 +10,14 @@ import { createReadStream } from 'node:fs';
 import { stat } from 'node:fs/promises';
 import { basename, resolve } from 'node:path';
 import { requireRole } from '@ab/auth';
+import { getSource, REPO_ROOT } from '@ab/bc-hangar';
 import { type ReferenceSourceType, ROLES, SOURCE_KIND_BY_TYPE, SOURCE_KINDS } from '@ab/constants';
-import { db, hangarSource } from '@ab/db';
 import { error } from '@sveltejs/kit';
-import { eq } from 'drizzle-orm';
-import { REPO_ROOT } from '$lib/server/source-jobs';
 import type { RequestHandler } from './$types';
 
 export const GET: RequestHandler = async (event) => {
 	requireRole(event, ROLES.AUTHOR, ROLES.OPERATOR, ROLES.ADMIN);
-	const [row] = await db.select().from(hangarSource).where(eq(hangarSource.id, event.params.id)).limit(1);
+	const row = await getSource(event.params.id);
 	if (!row) throw error(404, `source '${event.params.id}' not found`);
 	const kind = SOURCE_KIND_BY_TYPE[row.type as ReferenceSourceType];
 	if (kind !== SOURCE_KINDS.BINARY_VISUAL) {

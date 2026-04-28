@@ -1,10 +1,14 @@
 import { requireRole } from '@ab/auth';
+import {
+	createReference,
+	EMPTY_REFERENCE_INITIAL,
+	formDataToInitial,
+	getReference,
+	validateReferenceForm,
+} from '@ab/bc-hangar';
 import { ROLES, ROUTES } from '@ab/constants';
 import { createLogger } from '@ab/utils';
 import { fail, redirect } from '@sveltejs/kit';
-import { formDataToInitial, validateReferenceForm } from '$lib/server/reference-form';
-import { EMPTY_REFERENCE_INITIAL } from '$lib/server/reference-form-types';
-import { createReference, getReference } from '$lib/server/registry';
 import type { Actions, PageServerLoad } from './$types';
 
 const log = createLogger('hangar:glossary-new');

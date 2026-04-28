@@ -17,8 +17,9 @@
  */
 
 import { AUDIT_OPS, auditWrite } from '@ab/audit';
+import { hangarJob, hangarJobLog } from '@ab/bc-hangar/schema';
 import { AUDIT_TARGETS, JOB_LOG_STREAMS, JOB_STATUSES } from '@ab/constants';
-import { db as defaultDb, hangarJob, hangarJobLog } from '@ab/db';
+import { db as defaultDb } from '@ab/db';
 import { generateHangarJobLogId } from '@ab/utils';
 import { and, asc, eq, inArray, isNotNull, isNull, notInArray, or } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';

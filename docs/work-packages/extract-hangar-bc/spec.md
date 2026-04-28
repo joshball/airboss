@@ -1,5 +1,5 @@
 ---
-status: deferred
+status: done
 trigger: after the 2026-04-27 fix PR merges; tracked as the next architecture cleanup before any net-new hangar feature
 source: 2026-04-27 architecture + backend reviews
 ---
