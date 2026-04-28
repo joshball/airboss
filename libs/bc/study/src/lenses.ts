@@ -29,7 +29,7 @@ import { type BloomLevel, DOMAIN_LABELS, type Domain } from '@ab/constants';
 import { eq, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import type { GoalRow, KnowledgeNodeRow, SyllabusNodeRow } from './schema';
-import { goalSyllabus, knowledgeNode, syllabusNode, syllabusNodeLink } from './schema';
+import { goalSyllabus, knowledgeNode, syllabus, syllabusNode, syllabusNodeLink } from './schema';
 
 type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;
 
@@ -66,11 +66,30 @@ export interface LensLeaf {
 	title: string;
 	requiredBloom: BloomLevel | null;
 	mastery: { mastered: boolean; covered: boolean };
+	/**
+	 * True when the leaf has zero `syllabus_node_link` rows -- the lens emits
+	 * a placeholder so the rollup counts the leaf as "uncovered." Consumers
+	 * (cert dashboard) use this flag to render the leaf as a stub rather than
+	 * a real knowledge-node card. The placeholder's `knowledgeNodeId` is the
+	 * empty string.
+	 */
+	placeholder?: boolean;
 }
 
 export interface LensTreeNode {
 	id: string;
-	level: 'cert' | 'area' | 'task' | 'element' | 'domain' | 'phase' | 'handbook' | 'chapter' | 'section' | 'node';
+	level:
+		| 'syllabus'
+		| 'cert'
+		| 'area'
+		| 'task'
+		| 'element'
+		| 'domain'
+		| 'phase'
+		| 'handbook'
+		| 'chapter'
+		| 'section'
+		| 'node';
 	title: string;
 	rollup: MasteryRollup;
 	children: LensTreeNode[];
@@ -221,6 +240,16 @@ export const acsLens: Lens<AcsLensFilters> = async (db, userId, input) => {
 	}
 	const syllabusIds = goalSyllabi.map((s) => s.syllabusId);
 	const syllabusWeights = new Map(goalSyllabi.map((s) => [s.syllabusId, s.weight] as const));
+	const syllabusRows = await db
+		.select({ id: syllabus.id, slug: syllabus.slug, title: syllabus.title })
+		.from(syllabus)
+		.where(
+			sql`${syllabus.id} IN (${sql.join(
+				syllabusIds.map((id) => sql`${id}`),
+				sql`, `,
+			)})`,
+		);
+	const syllabusTitles = new Map(syllabusRows.map((s) => [s.id, { title: s.title, slug: s.slug }] as const));
 	const allNodes: SyllabusNodeRow[] = await db
 		.select()
 		.from(syllabusNode)
@@ -290,7 +319,17 @@ export const acsLens: Lens<AcsLensFilters> = async (db, userId, input) => {
 	const tree: LensTreeNode[] = [];
 	for (const [syllabusId, nodes] of nodesBySyllabus) {
 		const goalWeight = syllabusWeights.get(syllabusId) ?? 1.0;
-		const root = buildAcsSyllabusTree(nodes, leafMastery, linksByLeaf, goalWeight, filters);
+		const meta = syllabusTitles.get(syllabusId);
+		const root = buildAcsSyllabusTree(
+			syllabusId,
+			meta?.title ?? syllabusId,
+			meta?.slug ?? syllabusId,
+			nodes,
+			leafMastery,
+			linksByLeaf,
+			goalWeight,
+			filters,
+		);
 		if (root !== null) {
 			tree.push(root);
 			collectLensLeaves(root, allLensLeaves, allRollupLeaves);
@@ -305,6 +344,9 @@ export const acsLens: Lens<AcsLensFilters> = async (db, userId, input) => {
 };
 
 function buildAcsSyllabusTree(
+	_syllabusId: string,
+	syllabusTitle: string,
+	syllabusSlug: string,
 	nodes: ReadonlyArray<SyllabusNodeRow>,
 	leafMastery: (nodeIds: ReadonlyArray<string>) => NodeMastery,
 	linksByLeaf: Map<string, Array<{ nodeId: string; weight: number }>>,
@@ -320,11 +362,14 @@ function buildAcsSyllabusTree(
 	}
 	const roots = (childrenByParent.get(null) ?? []).sort((a, b) => a.ordinal - b.ordinal);
 	if (roots.length === 0) return null;
-	// One synthetic cert-level root wrapping every area in this syllabus.
-	const certNode: LensTreeNode = {
-		id: nodes[0]?.syllabusId ?? '',
-		level: 'cert',
-		title: nodes[0]?.syllabusId ?? '',
+	// One synthetic syllabus-level root wrapping every area in this syllabus.
+	// Carries the syllabus's display title (not its id) so consumers render
+	// human-readable section headings. The id is the syllabus slug for stable
+	// URL composition.
+	const syllabusRootNode: LensTreeNode = {
+		id: syllabusSlug,
+		level: 'syllabus',
+		title: syllabusTitle,
 		rollup: emptyRollup(),
 		children: [],
 	};
@@ -335,11 +380,11 @@ function buildAcsSyllabusTree(
 		}
 		if (!nodeMatchesClassFilter(area, filters)) continue;
 		const areaNode = buildAcsSubtree(area, childrenByParent, leafMastery, linksByLeaf, goalWeight, filters);
-		certNode.children.push(areaNode);
+		syllabusRootNode.children.push(areaNode);
 		appendRollupSource(areaNode, rollupBuckets);
 	}
-	certNode.rollup = computeMasteryRollup(rollupBuckets);
-	return certNode;
+	syllabusRootNode.rollup = computeMasteryRollup(rollupBuckets);
+	return syllabusRootNode;
 }
 
 /**
@@ -379,7 +424,9 @@ function buildAcsSubtree(
 			mastery,
 		}));
 		// If no links, still surface the leaf as a placeholder so the rollup
-		// counts it as "uncovered."
+		// counts it as "uncovered." The `placeholder: true` flag lets
+		// consumers (cert dashboard) detect uncovered leaves without
+		// string-matching the id suffix.
 		if (lensLeaves.length === 0) {
 			lensLeaves.push({
 				id: `${node.id}:placeholder`,
@@ -387,6 +434,7 @@ function buildAcsSubtree(
 				title: leafTitle,
 				requiredBloom: (node.requiredBloom as BloomLevel | null) ?? null,
 				mastery,
+				placeholder: true,
 			});
 		}
 		const weightedLeaves = lensLeaves.map((leaf) => ({

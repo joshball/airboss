@@ -15,6 +15,6 @@ import { PTS_RESOLVER } from './resolver.ts';
 registerCorpusResolver(PTS_RESOLVER);
 
 export { formatPtsCitation } from './citation.ts';
-export { formatPtsLocator, parsePtsLocator, PTS_PUBLICATION_SLUGS } from './locator.ts';
+export { formatPtsLocator, PTS_PUBLICATION_SLUGS, parsePtsLocator } from './locator.ts';
 export { PTS_CORPUS, PTS_RESOLVER } from './resolver.ts';
 export { getPtsLiveUrl, PTS_PUBLICATION_LIVE_URLS, PTS_TEST_STANDARDS_INDEX_URL } from './url.ts';

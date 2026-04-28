@@ -377,12 +377,16 @@ export async function getCredentialMastery(
 		leafState.set(leaf.id, { covered: anyCovered, mastered: allMastered });
 	}
 
-	// Climb to area level.
+	// Climb to area level. The walker indexes by id (Map lookup) rather than
+	// scanning the `nodes` array per ancestor step -- scaling matters for
+	// future credentials with thousands of leaves (CFI). For a 600-leaf ACS
+	// the saved work is small but the asymptotic shape is right.
 	const parentById = new Map(nodes.map((n) => [n.id, n.parentId] as const));
+	const nodesById = new Map(nodes.map((n) => [n.id, n] as const));
 	function ancestorAreaId(leafId: string): string | null {
 		let cur: string | null | undefined = leafId;
 		while (cur !== undefined && cur !== null) {
-			const node = nodes.find((n) => n.id === cur);
+			const node = nodesById.get(cur);
 			if (node === undefined) return null;
 			if (node.level === 'area') return node.id;
 			cur = parentById.get(node.id) ?? null;

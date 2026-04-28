@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, test } from 'vitest';
+import { afterEach, beforeEach, describe, expect, test } from 'vitest';
 import type { SourceEntry, SourceId } from '../types.ts';
 import type { CorpusResolver } from './corpus-resolver.ts';
 import {
@@ -10,7 +10,20 @@ import {
 	registerCorpusResolver,
 } from './corpus-resolver.ts';
 
+// This file exercises the no-op default behavior of the registry, including
+// CR-04 which calls `registerCorpusResolver` (which updates the production
+// snapshot). To keep the snapshot clean for other files in the same bun-test
+// process, save it before each test and restore it afterwards.
+let restoreProductionSnapshot: (() => void) | null = null;
+
+beforeEach(() => {
+	restoreProductionSnapshot = __corpus_resolver_internal__.saveProductionSnapshot();
+	__corpus_resolver_internal__.wipeToNoOpDefaults();
+});
+
 afterEach(() => {
+	restoreProductionSnapshot?.();
+	restoreProductionSnapshot = null;
 	__corpus_resolver_internal__.resetToDefaults();
 });
 

@@ -1,4 +1,5 @@
 #!/usr/bin/env bun
+
 /**
  * Study plan -> Goal migration (cert-syllabus WP phase 22c).
  *
@@ -40,8 +41,8 @@
  *   bun scripts/db/migrate-study-plans-to-goals.ts --dry-run
  */
 
-import { GOAL_STATUSES, SYLLABUS_PRIMACY } from '@ab/constants';
 import { credential, credentialSyllabus, goal, goalSyllabus, studyPlan, syllabus } from '@ab/bc-study';
+import { GOAL_STATUSES, SYLLABUS_PRIMACY } from '@ab/constants';
 import { db as defaultDb } from '@ab/db';
 import { generateGoalId } from '@ab/utils';
 import { and, eq } from 'drizzle-orm';
