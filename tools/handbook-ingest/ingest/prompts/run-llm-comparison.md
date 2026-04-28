@@ -1,4 +1,13 @@
-# Run the LLM section-extraction strategy via Claude Code
+# Run the LLM section-extraction strategy via Claude Code (FAA handbooks)
+
+**Scope:** FAA handbooks only (PHAK, AFH, AvWX, IFH, IPH, ...). The prompt
+hard-codes the handbook layout (`handbooks/<doc>/<edition>/<NN>/`), the
+two-axis `<doc>` + `<edition>` path, the handbook section-tree contract
+(chapter -> section -> subsection, max 3 levels, printed-page anchors
+like `12-7`), and the `bun run sources extract handbooks` pipeline. **Not
+applicable to CFRs / ACs / ACS / AIM** -- those have different structures
+(Title/Part/Section, URL anchors, no "chapter plaintext") and need their
+own runner doc + section-tree prompt when LLM extraction is wanted there.
 
 This prompt is the no-API-key alternative to `sections_via_llm.py`. Run it
 inside a fresh Claude Code session (or paste it as a user message). It uses
@@ -17,7 +26,27 @@ compare`).
 - The handbook has already been ingested with the TOC strategy, so each
   `handbooks/<doc>/<edition>/<chapter>/` directory exists with an
   `index.md` plus the per-section markdown files.
+- The Python venv is installed: from the repo root,
+  `python3 -m venv tools/handbook-ingest/.venv && source tools/handbook-ingest/.venv/bin/activate && pip install -e 'tools/handbook-ingest[dev]'`.
+  The dispatcher (`bun run sources extract handbooks`) auto-uses this venv.
 - Working directory: the airboss repo root (or this worktree's root).
+
+## How to run
+
+1. Open a **fresh Claude Code session** in the airboss repo root (do not
+   reuse a session that has unrelated context loaded).
+2. Copy the prompt block below (between the fenced lines), substitute
+   `<doc>` + `<edition>` for your target handbook (PHAK = `phak` +
+   `FAA-H-8083-25C`), and paste as the first user message.
+3. Let it run. ~17 chapters for PHAK; one chapter per turn unless the
+   session batches. Expect 15-30 min interactive.
+4. The session will end with a per-chapter agreement summary and a verdict
+   on whether to keep the current default strategy. The full report lives
+   at `tools/handbook-ingest/reports/section-strategy-compare-<doc>-<edition>.md`.
+
+Why a fresh session: the prompt is long and the per-chapter loop is
+context-heavy; reusing a session that already has unrelated work loaded
+risks token-budget interference and noisy outputs.
 
 ## Prompt to paste into Claude Code
 
