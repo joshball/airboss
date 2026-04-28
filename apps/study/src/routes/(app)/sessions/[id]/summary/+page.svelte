@@ -1,5 +1,12 @@
 <script lang="ts">
-import { domainLabel, ROUTES, SESSION_MODE_LABELS, SESSION_SLICE_LABELS, type SessionMode, type SessionSlice } from '@ab/constants';
+import {
+	domainLabel,
+	ROUTES,
+	SESSION_MODE_LABELS,
+	SESSION_SLICE_LABELS,
+	type SessionMode,
+	type SessionSlice,
+} from '@ab/constants';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
@@ -7,7 +14,6 @@ let { data }: { data: PageData } = $props();
 const summary = $derived(data.summary);
 const accuracyPct = $derived(summary.attempted === 0 ? 0 : Math.round((summary.correct / summary.attempted) * 100));
 const skipTotal = $derived(summary.skippedByKind.today + summary.skippedByKind.topic + summary.skippedByKind.permanent);
-
 </script>
 
 <svelte:head>

@@ -1,11 +1,5 @@
 <script lang="ts">
-import {
-	domainLabel,
-	KNOWLEDGE_PHASE_LABELS,
-	type KnowledgePhase,
-	QUERY_PARAMS,
-	ROUTES,
-} from '@ab/constants';
+import { domainLabel, KNOWLEDGE_PHASE_LABELS, type KnowledgePhase, QUERY_PARAMS, ROUTES } from '@ab/constants';
 import PageHelp from '@ab/help/ui/PageHelp.svelte';
 import Banner from '@ab/ui/components/Banner.svelte';
 import { humanize, renderMarkdown } from '@ab/utils';
@@ -110,7 +104,6 @@ function selectPhase(phase: KnowledgePhase): void {
 function phaseLabel(phase: string): string {
 	return (KNOWLEDGE_PHASE_LABELS as Record<KnowledgePhase, string>)[phase as KnowledgePhase] ?? humanize(phase);
 }
-
 </script>
 
 <svelte:head>
