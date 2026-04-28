@@ -95,6 +95,7 @@ const KNOWN_PREFIXES: ReadonlyArray<RegExp> = [
 	/^--table-(header-bg|header-ink|row-edge|row-bg-hover|row-bg-selected)$/,
 	/^--underline-offset-[a-z0-9]+$/,
 	/^--sim-[a-z0-9-]+$/,
+	/^--avionics-[a-z0-9-]+$/,
 ];
 
 function isKnownToken(name: string, known: Set<string>): boolean {
