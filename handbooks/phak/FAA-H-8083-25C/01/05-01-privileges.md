@@ -28,3 +28,18 @@ all conditions which require endorsement, e.g., flight which requires communicat
 aircraft for which the pilot does not hold a category/class rating, etc.).
 Figure 1-21. Example endorsement for a recreational pilot to conduct solo flights for the purpose of determining an additional certificate
 or rating.
+
+> Paragraph revised by FAA erratum (target page 1-16). The replacement text below supersedes the matching paragraph; the sidecar `.errata.md` records the FAA-published wording verbatim.
+
+Operate as pilot in command of an aircraft
+that complies with 14 CFR part 61, section 61.316.
+
+> Paragraph revised by FAA erratum (target page 1-16). The replacement text below supersedes the matching paragraph; the sidecar `.errata.md` records the FAA-published wording verbatim.
+
+Carry a passenger (maximum two
+occupants) and share expenses (fuel, oil, airport expenses, and aircraft rental).
+
+> Paragraph added by FAA erratum (target page 1-16).
+
+(night operations are prohibited unless training and endorsement is received, per 14
+CFR part 61, section 61.329)

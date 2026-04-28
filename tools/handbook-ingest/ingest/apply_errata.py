@@ -113,11 +113,11 @@ def apply_errata(
     errata = _resolve_errata(config, errata_id)
     pdf_path, pdf_sha, fetched_at = _download_errata_pdf(config, errata)
 
-    manifest_path = edition_root(config.document_slug, config.edition) / 'manifest.json'
+    manifest_path = edition_root(config.document_slug, config.edition) / "manifest.json"
     manifest = _load_manifest(manifest_path)
 
     existing = _find_manifest_errata_entry(manifest, errata_id)
-    if existing is not None and existing.get('applied_at') and not force:
+    if existing is not None and existing.get("applied_at") and not force:
         return ApplyResult(
             errata_id=errata_id,
             source_url=errata.source_url,
@@ -125,7 +125,7 @@ def apply_errata(
             pdf_sha256=pdf_sha,
             applied_sections=[],
             parser_name=errata.parser,
-            applied_at=str(existing['applied_at']),
+            applied_at=str(existing["applied_at"]),
             fetched_at=fetched_at,
             skipped_already_applied=True,
         )
@@ -200,33 +200,33 @@ def emit_apply_record_json(result: ApplyResult, *, doc_slug: str, edition: str) 
     Python apply layer doesn't need a Postgres connection.
     """
     payload = {
-        'document_slug': doc_slug,
-        'edition': edition,
-        'errata_id': result.errata_id,
-        'source_url': result.source_url,
-        'parser': result.parser_name,
-        'pdf_sha256': result.pdf_sha256,
-        'applied_at': result.applied_at,
-        'fetched_at': result.fetched_at,
-        'skipped_already_applied': result.skipped_already_applied,
-        'sections': [
+        "document_slug": doc_slug,
+        "edition": edition,
+        "errata_id": result.errata_id,
+        "source_url": result.source_url,
+        "parser": result.parser_name,
+        "pdf_sha256": result.pdf_sha256,
+        "applied_at": result.applied_at,
+        "fetched_at": result.fetched_at,
+        "skipped_already_applied": result.skipped_already_applied,
+        "sections": [
             {
-                'section_code': s.section_code,
-                'section_path': s.section_path,
-                'chapter': s.chapter,
-                'target_page': s.target_page,
-                'patch_kind': s.patch_kind,
-                'section_anchor': s.section_anchor,
-                'new_heading': s.new_heading,
-                'original_text': s.original_text,
-                'replacement_text': s.replacement_text,
-                'content_hash': s.new_content_hash,
-                'errata_note_path': s.errata_note_path,
+                "section_code": s.section_code,
+                "section_path": s.section_path,
+                "chapter": s.chapter,
+                "target_page": s.target_page,
+                "patch_kind": s.patch_kind,
+                "section_anchor": s.section_anchor,
+                "new_heading": s.new_heading,
+                "original_text": s.original_text,
+                "replacement_text": s.replacement_text,
+                "content_hash": s.new_content_hash,
+                "errata_note_path": s.errata_note_path,
             }
             for s in result.applied_sections
         ],
     }
-    sys.stdout.write(json.dumps(payload, ensure_ascii=False) + '\n')
+    sys.stdout.write(json.dumps(payload, ensure_ascii=False) + "\n")
 
 
 # ---------------------------------------------------------------------------
@@ -240,22 +240,17 @@ def _resolve_errata(config: HandbookConfig, errata_id: str) -> ErrataConfig:
             return entry
     available = [e.id for e in config.errata]
     raise ErrataApplyError(
-        f"No errata with id {errata_id!r} configured for {config.document_slug} "
-        f"in YAML. Available: {available}."
+        f"No errata with id {errata_id!r} configured for {config.document_slug} " f"in YAML. Available: {available}."
     )
 
 
-def _download_errata_pdf(
-    config: HandbookConfig, errata: ErrataConfig
-) -> tuple[Path, str, str]:
+def _download_errata_pdf(config: HandbookConfig, errata: ErrataConfig) -> tuple[Path, str, str]:
     """Resolve / download the errata PDF into the cache; return (path, sha256, fetched_at)."""
-    cache_dir = ensure_dir(
-        cache_edition_root(config.document_slug, config.edition) / '_errata'
-    )
+    cache_dir = ensure_dir(cache_edition_root(config.document_slug, config.edition) / "_errata")
     # Common cached filenames (the user often pre-downloads with FAA's
     # exact filename, e.g. "AFH_Addendum_MOSAIC.pdf"). We probe a few
     # conventions before falling back to URL fetch.
-    target = cache_dir / f'{errata.id}.pdf'
+    target = cache_dir / f"{errata.id}.pdf"
     if target.is_file():
         sha = _sha256_of(target)
         return target, sha, datetime.now(tz=UTC).isoformat()
@@ -263,7 +258,7 @@ def _download_errata_pdf(
     # Attempt: filename matches FAA's `<TOKEN>_Addendum_(MOSAIC).pdf` form
     # already in the cache (manual download by the user).
     cache_root_dir = cache_edition_root(config.document_slug, config.edition)
-    for candidate in cache_root_dir.glob(f'*{errata.id}*.pdf'):
+    for candidate in cache_root_dir.glob(f"*{errata.id}*.pdf"):
         sha = _sha256_of(candidate)
         # Hard-link / copy to canonical name so subsequent runs find it
         # at the standard path.
@@ -271,10 +266,8 @@ def _download_errata_pdf(
         return target, sha, datetime.now(tz=UTC).isoformat()
 
     # Fall back to URL fetch.
-    request = urllib.request.Request(
-        errata.source_url, headers={'User-Agent': 'airboss-handbook-ingest/0.1'}
-    )
-    with urllib.request.urlopen(request) as response, target.open('wb') as fh:
+    request = urllib.request.Request(errata.source_url, headers={"User-Agent": "airboss-handbook-ingest/0.1"})
+    with urllib.request.urlopen(request) as response, target.open("wb") as fh:
         while True:
             chunk = response.read(1024 * 1024)
             if not chunk:
@@ -286,7 +279,7 @@ def _download_errata_pdf(
 
 def _sha256_of(path: Path) -> str:
     h = hashlib.sha256()
-    with path.open('rb') as fh:
+    with path.open("rb") as fh:
         while True:
             chunk = fh.read(1024 * 1024)
             if not chunk:
@@ -301,17 +294,15 @@ def _load_manifest(manifest_path: Path) -> dict[str, object]:
             f"Manifest not found at {manifest_path}. Run `bun run sources extract handbooks "
             f"<doc>` first; --apply-errata only works against an extracted edition."
         )
-    return json.loads(manifest_path.read_text(encoding='utf-8'))
+    return json.loads(manifest_path.read_text(encoding="utf-8"))
 
 
-def _find_manifest_errata_entry(
-    manifest: dict[str, object], errata_id: str
-) -> dict[str, object] | None:
-    raw = manifest.get('errata')
+def _find_manifest_errata_entry(manifest: dict[str, object], errata_id: str) -> dict[str, object] | None:
+    raw = manifest.get("errata")
     if not isinstance(raw, list):
         return None
     for entry in raw:
-        if isinstance(entry, dict) and entry.get('id') == errata_id:
+        if isinstance(entry, dict) and entry.get("id") == errata_id:
             return entry
     return None
 
@@ -322,19 +313,19 @@ def _cleanup_existing_errata_files(
     manifest: dict[str, object],
 ) -> None:
     """Delete sidecar `.errata.md` notes for the erratum being --force re-applied."""
-    raw = manifest.get('errata')
+    raw = manifest.get("errata")
     if not isinstance(raw, list):
         return
     for entry in raw:
-        if not isinstance(entry, dict) or entry.get('id') != errata_id:
+        if not isinstance(entry, dict) or entry.get("id") != errata_id:
             continue
-        sections_patched = entry.get('sections_patched')
+        sections_patched = entry.get("sections_patched")
         if not isinstance(sections_patched, list):
             continue
         for sec in sections_patched:
             if not isinstance(sec, dict):
                 continue
-            note_rel = sec.get('errata_note_path')
+            note_rel = sec.get("errata_note_path")
             if isinstance(note_rel, str):
                 # Defensive: the path is repo-relative; resolve against cwd.
                 from .paths import repo_root
@@ -351,20 +342,20 @@ def _apply_one_patch(
 ) -> AppliedSection:
     """Locate the section, edit its markdown, write the sidecar note."""
     section_path = _locate_section_markdown(config, patch)
-    raw = section_path.read_text(encoding='utf-8')
+    raw = section_path.read_text(encoding="utf-8")
     frontmatter, body = _split_frontmatter(raw)
     section_code = _section_code_from_frontmatter(frontmatter, patch)
 
     new_body, original_text = _apply_patch_to_body(body, patch)
     new_raw = _join_frontmatter(frontmatter) + new_body
-    section_path.write_text(new_raw, encoding='utf-8')
+    section_path.write_text(new_raw, encoding="utf-8")
 
-    new_hash = hashlib.sha256(new_raw.encode('utf-8')).hexdigest()
+    new_hash = hashlib.sha256(new_raw.encode("utf-8")).hexdigest()
 
     # Sidecar errata note: `<section>.errata.md` next to the section file.
-    note_path = section_path.with_name(section_path.stem + '.errata.md')
+    note_path = section_path.with_name(section_path.stem + ".errata.md")
     note_text = _compose_errata_note(errata, patch, original_text)
-    note_path.write_text(note_text, encoding='utf-8')
+    note_path.write_text(note_text, encoding="utf-8")
 
     return AppliedSection(
         section_code=section_code,
@@ -400,24 +391,22 @@ def _locate_section_markdown(config: HandbookConfig, patch: ErrataPatch) -> Path
     # convention. Score the most specific part (after the last colon)
     # so subsection files outscore parent-section files when both
     # contain the parent words.
-    target_specific = _normalize_anchor(patch.section_anchor.rsplit(':', 1)[-1])
+    target_specific = _normalize_anchor(patch.section_anchor.rsplit(":", 1)[-1])
     target_parent_norm = (
-        _normalize_anchor(patch.section_anchor.rsplit(':', 1)[0])
-        if ':' in patch.section_anchor
-        else None
+        _normalize_anchor(patch.section_anchor.rsplit(":", 1)[0]) if ":" in patch.section_anchor else None
     )
 
     # Build a section_number -> file map by reading each candidate's
     # frontmatter once. Used to resolve the parent of colon-delimited
     # anchors so subsection candidates inherit a parent-match bonus.
     md_files: list[tuple[Path, dict[str, object]]] = []
-    for md_path in sorted(chapter_dir.glob('*.md')):
-        if md_path.name == 'index.md':
+    for md_path in sorted(chapter_dir.glob("*.md")):
+        if md_path.name == "index.md":
             continue
-        if md_path.suffix == '.md' and md_path.stem.endswith('.errata'):
+        if md_path.suffix == ".md" and md_path.stem.endswith(".errata"):
             continue
         try:
-            text = md_path.read_text(encoding='utf-8')
+            text = md_path.read_text(encoding="utf-8")
         except OSError:
             continue
         fm, _ = _split_frontmatter(text)
@@ -426,18 +415,18 @@ def _locate_section_markdown(config: HandbookConfig, patch: ErrataPatch) -> Path
     parent_section_number: int | None = None
     if target_parent_norm:
         for _path, fm in md_files:
-            title = fm.get('section_title')
+            title = fm.get("section_title")
             if not isinstance(title, str):
                 continue
             if _normalize_anchor(title) == target_parent_norm:
-                sn = fm.get('section_number')
+                sn = fm.get("section_number")
                 if isinstance(sn, int):
                     parent_section_number = sn
                     break
 
     candidates: list[tuple[int, Path, dict[str, object]]] = []  # (score, path, fm)
     for md_path, fm in md_files:
-        title = fm.get('section_title')
+        title = fm.get("section_title")
         if not isinstance(title, str):
             continue
         title_norm = _normalize_anchor(title)
@@ -445,8 +434,8 @@ def _locate_section_markdown(config: HandbookConfig, patch: ErrataPatch) -> Path
         specific_score = _anchor_score(title_norm, target_specific)
         score = max(full_score, specific_score)
         if parent_section_number is not None:
-            sn = fm.get('section_number')
-            ssn = fm.get('subsection_number')
+            sn = fm.get("section_number")
+            ssn = fm.get("subsection_number")
             if isinstance(sn, int) and sn == parent_section_number and isinstance(ssn, int):
                 # Subsection under the named parent: strong tie-break bonus.
                 score += 50
@@ -470,13 +459,18 @@ def _locate_section_markdown(config: HandbookConfig, patch: ErrataPatch) -> Path
     if len(page_matches) == 1:
         return page_matches[0][1]
     if len(page_matches) > 1:
-        # Still ambiguous: give up.
-        names = [str(p) for _s, p, _f in page_matches]
-        raise ErrataApplyError(
-            f"Ambiguous section anchor {patch.section_anchor!r} (page {patch.target_page}) matched "
-            f"{len(names)} files with equal score: {names}. Tighten the anchor or add a "
-            f"frontmatter override."
-        )
+        # Same title, same page: pick the earliest subsection. PHAK MOSAIC
+        # hits this when two siblings share the same `section_title:`
+        # (e.g. "Limitations:" appears under Sport Pilot subsection_number=2
+        # and again under Recreational Pilot subsection_number=5; both
+        # claim faa_pages 1-17). The earlier subsection is the one
+        # listed first in the chapter and therefore the one the FAA
+        # addendum refers to when it does not name the parent pilot
+        # type. Document this as a positional fallback so authors can
+        # later add a `chapter_overrides` entry if a future addendum
+        # targets the later sibling.
+        page_matches.sort(key=lambda c: _subsection_sort_key(c[2]))
+        return page_matches[0][1]
     # No file has the target page in frontmatter; fall through to the
     # ambiguity error below.
     names = [str(p) for _s, p, _f in top]
@@ -487,9 +481,23 @@ def _locate_section_markdown(config: HandbookConfig, patch: ErrataPatch) -> Path
     )
 
 
+def _subsection_sort_key(fm: dict[str, object]) -> tuple[int, int]:
+    """Key for sorting same-title siblings by document order.
+
+    Returns ``(section_number, subsection_number)`` with sentinels for
+    missing fields so the ordering is stable across heterogeneous
+    frontmatter shapes.
+    """
+    sn = fm.get("section_number")
+    ssn = fm.get("subsection_number")
+    section_n = sn if isinstance(sn, int) else 9999
+    subsection_n = ssn if isinstance(ssn, int) else 9999
+    return (section_n, subsection_n)
+
+
 def _page_in_frontmatter(fm: dict[str, object], target_page: str) -> bool:
     """Return True when the section's frontmatter `faa_pages` contains target_page."""
-    raw = fm.get('faa_pages')
+    raw = fm.get("faa_pages")
     if raw is None:
         return False
     text = str(raw)
@@ -500,13 +508,13 @@ def _page_in_frontmatter(fm: dict[str, object], target_page: str) -> bool:
     if target_page in text:
         return True
     # Range form: <start>..<end>; same-chapter only.
-    range_match = re.match(r'(\d+-\d+)\.\.(\d+-\d+)', text.strip())
+    range_match = re.match(r"(\d+-\d+)\.\.(\d+-\d+)", text.strip())
     if range_match:
         start, end = range_match.groups()
         try:
-            tc, tp = (int(x) for x in target_page.split('-'))
-            sc, sp = (int(x) for x in start.split('-'))
-            ec, ep = (int(x) for x in end.split('-'))
+            tc, tp = (int(x) for x in target_page.split("-"))
+            sc, sp = (int(x) for x in start.split("-"))
+            ec, ep = (int(x) for x in end.split("-"))
         except ValueError:
             return False
         if tc == sc == ec and sp <= tp <= ep:
@@ -516,10 +524,10 @@ def _page_in_frontmatter(fm: dict[str, object], target_page: str) -> bool:
 
 def _normalize_anchor(text: str) -> str:
     """Lowercase + collapse whitespace + strip common chrome."""
-    return re.sub(r'\s+', ' ', text).strip().lower()
+    return re.sub(r"\s+", " ", text).strip().lower()
 
 
-_STOPWORDS = frozenset({'the', 'of', 'and', 'a', 'an', 'to', 'for', 'in', 'on'})
+_STOPWORDS = frozenset({"the", "of", "and", "a", "an", "to", "for", "in", "on"})
 
 
 def _anchor_score(haystack: str, needle: str) -> int:
@@ -539,8 +547,8 @@ def _anchor_score(haystack: str, needle: str) -> int:
     """
     if haystack == needle:
         return 1000
-    h_words = {w for w in re.findall(r'[a-z0-9]+', haystack) if w not in _STOPWORDS}
-    n_words = {w for w in re.findall(r'[a-z0-9]+', needle) if w not in _STOPWORDS}
+    h_words = {w for w in re.findall(r"[a-z0-9]+", haystack) if w not in _STOPWORDS}
+    n_words = {w for w in re.findall(r"[a-z0-9]+", needle) if w not in _STOPWORDS}
     if not h_words or not n_words:
         return 0
     overlap = len(h_words & n_words)
@@ -562,13 +570,13 @@ def _split_frontmatter(raw: str) -> tuple[dict[str, object], str]:
     Returns (frontmatter_dict, body_string). Body retains its leading
     blank line so re-joining round-trips byte-stable.
     """
-    if not raw.startswith('---\n'):
+    if not raw.startswith("---\n"):
         return {}, raw
-    end_marker = raw.find('\n---\n', 4)
+    end_marker = raw.find("\n---\n", 4)
     if end_marker == -1:
         return {}, raw
     fm_text = raw[4:end_marker]
-    body = raw[end_marker + 5:]  # past \n---\n
+    body = raw[end_marker + 5 :]  # past \n---\n
     fm = yaml.safe_load(fm_text) or {}
     if not isinstance(fm, dict):
         fm = {}
@@ -577,22 +585,16 @@ def _split_frontmatter(raw: str) -> tuple[dict[str, object], str]:
 
 def _join_frontmatter(fm: dict[str, object]) -> str:
     if not fm:
-        return ''
-    return (
-        '---\n'
-        + yaml.safe_dump(fm, sort_keys=False, allow_unicode=True, default_flow_style=False)
-        + '---\n'
-    )
+        return ""
+    return "---\n" + yaml.safe_dump(fm, sort_keys=False, allow_unicode=True, default_flow_style=False) + "---\n"
 
 
-def _section_code_from_frontmatter(
-    fm: dict[str, object], patch: ErrataPatch
-) -> str:
+def _section_code_from_frontmatter(fm: dict[str, object], patch: ErrataPatch) -> str:
     """Compose `<chapter>.<section>` code from frontmatter when possible."""
-    chapter_num = fm.get('chapter_number')
-    section_num = fm.get('section_number')
+    chapter_num = fm.get("chapter_number")
+    section_num = fm.get("section_number")
     if isinstance(chapter_num, int) and isinstance(section_num, int):
-        return f'{chapter_num}.{section_num}'
+        return f"{chapter_num}.{section_num}"
     if isinstance(chapter_num, int):
         return str(chapter_num)
     return patch.chapter
@@ -605,20 +607,19 @@ def _apply_patch_to_body(body: str, patch: ErrataPatch) -> tuple[str, str | None
     """
     if patch.kind == PATCH_KIND_ADD_SUBSECTION:
         # Append a new H2 subsection at the end of the section body.
-        new = body.rstrip('\n')
+        new = body.rstrip("\n")
         new += (
-            f'\n\n## {patch.new_heading}\n\n'
-            f'> Added by FAA erratum (target page {patch.target_page}). '
-            f'See sidecar `.errata.md` for citation.\n\n'
-            f'{patch.replacement_text}\n'
+            f"\n\n## {patch.new_heading}\n\n"
+            f"> Added by FAA erratum (target page {patch.target_page}). "
+            f"See sidecar `.errata.md` for citation.\n\n"
+            f"{patch.replacement_text}\n"
         )
         return new, None
 
     if patch.kind == PATCH_KIND_APPEND_PARAGRAPH:
-        new = body.rstrip('\n')
+        new = body.rstrip("\n")
         new += (
-            f'\n\n> Paragraph added by FAA erratum (target page {patch.target_page}).\n\n'
-            f'{patch.replacement_text}\n'
+            f"\n\n> Paragraph added by FAA erratum (target page {patch.target_page}).\n\n" f"{patch.replacement_text}\n"
         )
         return new, None
 
@@ -637,46 +638,44 @@ def _apply_patch_to_body(body: str, patch: ErrataPatch) -> tuple[str, str | None
                 pass
             else:
                 return new, patch.original_text
-        new = body.rstrip('\n')
+        new = body.rstrip("\n")
         new += (
-            f'\n\n> Paragraph revised by FAA erratum (target page {patch.target_page}). '
-            f'The replacement text below supersedes the matching paragraph; the '
-            f'sidecar `.errata.md` records the FAA-published wording verbatim.\n\n'
-            f'{patch.replacement_text}\n'
+            f"\n\n> Paragraph revised by FAA erratum (target page {patch.target_page}). "
+            f"The replacement text below supersedes the matching paragraph; the "
+            f"sidecar `.errata.md` records the FAA-published wording verbatim.\n\n"
+            f"{patch.replacement_text}\n"
         )
         return new, None
 
     raise ErrataApplyError(f"Unknown patch_kind: {patch.kind!r}")
 
 
-def _compose_errata_note(
-    errata: ErrataConfig, patch: ErrataPatch, original_text: str | None
-) -> str:
+def _compose_errata_note(errata: ErrataConfig, patch: ErrataPatch, original_text: str | None) -> str:
     """Sidecar `<section>.errata.md` with full audit metadata."""
     lines = [
-        '---',
-        f'errata_id: {errata.id}',
-        f'source_url: {errata.source_url}',
-        f'published_at: {errata.published_at}',
-        f'parser: {errata.parser}',
-        f'patch_kind: {patch.kind}',
-        f'target_anchor: {patch.section_anchor!r}',
-        f'target_page: {patch.target_page}',
+        "---",
+        f"errata_id: {errata.id}",
+        f"source_url: {errata.source_url}",
+        f"published_at: {errata.published_at}",
+        f"parser: {errata.parser}",
+        f"patch_kind: {patch.kind}",
+        f"target_anchor: {patch.section_anchor!r}",
+        f"target_page: {patch.target_page}",
     ]
     if patch.new_heading:
-        lines.append(f'new_heading: {patch.new_heading!r}')
-    lines.append('---')
-    lines.append('')
-    lines.append('## Replacement text')
-    lines.append('')
+        lines.append(f"new_heading: {patch.new_heading!r}")
+    lines.append("---")
+    lines.append("")
+    lines.append("## Replacement text")
+    lines.append("")
     lines.append(patch.replacement_text)
     if original_text:
-        lines.append('')
-        lines.append('## Original text')
-        lines.append('')
+        lines.append("")
+        lines.append("## Original text")
+        lines.append("")
         lines.append(original_text)
-    lines.append('')
-    return '\n'.join(lines)
+    lines.append("")
+    return "\n".join(lines)
 
 
 def _update_manifest(
@@ -690,43 +689,37 @@ def _update_manifest(
     applied_sections: list[AppliedSection],
 ) -> None:
     """Insert / update the manifest's `errata[]` entry for this erratum."""
-    raw_list = manifest.get('errata')
-    errata_list: list[dict[str, object]] = (
-        list(raw_list) if isinstance(raw_list, list) else []
-    )
+    raw_list = manifest.get("errata")
+    errata_list: list[dict[str, object]] = list(raw_list) if isinstance(raw_list, list) else []
     # Filter out any prior entry for this id (force re-apply path).
-    errata_list = [
-        e for e in errata_list if not (isinstance(e, dict) and e.get('id') == errata.id)
-    ]
+    errata_list = [e for e in errata_list if not (isinstance(e, dict) and e.get("id") == errata.id)]
     sections_patched = [
         {
-            'section_code': s.section_code,
-            'section_path': s.section_path,
-            'chapter': s.chapter,
-            'target_page': s.target_page,
-            'patch_kind': s.patch_kind,
-            'section_anchor': s.section_anchor,
-            'new_heading': s.new_heading,
-            'content_hash': s.new_content_hash,
-            'errata_note_path': s.errata_note_path,
+            "section_code": s.section_code,
+            "section_path": s.section_path,
+            "chapter": s.chapter,
+            "target_page": s.target_page,
+            "patch_kind": s.patch_kind,
+            "section_anchor": s.section_anchor,
+            "new_heading": s.new_heading,
+            "content_hash": s.new_content_hash,
+            "errata_note_path": s.errata_note_path,
         }
         for s in applied_sections
     ]
     errata_list.append(
         {
-            'id': errata.id,
-            'source_url': errata.source_url,
-            'published_at': errata.published_at,
-            'sha256': pdf_sha,
-            'fetched_at': fetched_at,
-            'applied_at': applied_at,
-            'parser': errata.parser,
-            'sections_patched': sections_patched,
+            "id": errata.id,
+            "source_url": errata.source_url,
+            "published_at": errata.published_at,
+            "sha256": pdf_sha,
+            "fetched_at": fetched_at,
+            "applied_at": applied_at,
+            "parser": errata.parser,
+            "sections_patched": sections_patched,
         }
     )
     # Sort by published_at so the manifest is stable across re-applies.
-    errata_list.sort(key=lambda e: str(e.get('published_at', '')))
-    manifest['errata'] = errata_list
-    manifest_path.write_text(
-        json.dumps(manifest, indent=2, ensure_ascii=False) + '\n', encoding='utf-8'
-    )
+    errata_list.sort(key=lambda e: str(e.get("published_at", "")))
+    manifest["errata"] = errata_list
+    manifest_path.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")

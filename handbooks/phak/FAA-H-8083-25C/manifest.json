@@ -19309,5 +19309,249 @@
       "canonicalized": 2,
       "freed_bytes": 262476
     }
-  }
+  },
+  "errata": [
+    {
+      "id": "mosaic",
+      "source_url": "https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/PHAK_Addendum_(MOSAIC).pdf",
+      "published_at": "2025-10-20",
+      "sha256": "1670b8454eb22c644a723b3f61a94daff3857c0d94710d6b5961fe29c0999b63",
+      "fetched_at": "2026-04-28T18:13:55.900013+00:00",
+      "applied_at": "2026-04-28T18:13:56.118948+00:00",
+      "parser": "bullet-edits",
+      "sections_patched": [
+        {
+          "section_code": "1.4",
+          "section_path": "handbooks/phak/FAA-H-8083-25C/01/04-aircraft-classifications-and-ultralight-vehicles.md",
+          "chapter": "01",
+          "target_page": "1-15",
+          "patch_kind": "replace_paragraph",
+          "section_anchor": "Aircraft Classifications and Ultralight Vehicles",
+          "new_heading": null,
+          "content_hash": "cac9e078091b04b112e381d66315732761c3d85b080437c7f58741dad4b127d8",
+          "errata_note_path": "handbooks/phak/FAA-H-8083-25C/01/04-aircraft-classifications-and-ultralight-vehicles.errata.md"
+        },
+        {
+          "section_code": "1.5",
+          "section_path": "handbooks/phak/FAA-H-8083-25C/01/05-pilot-certifications.md",
+          "chapter": "01",
+          "target_page": "1-16",
+          "patch_kind": "replace_paragraph",
+          "section_anchor": "Pilot Certifications",
+          "new_heading": null,
+          "content_hash": "a16da3f79e9124e21d26d09200a623d13b570498466b5ba5ed9ac2779bc0138d",
+          "errata_note_path": "handbooks/phak/FAA-H-8083-25C/01/05-pilot-certifications.errata.md"
+        },
+        {
+          "section_code": "1.5",
+          "section_path": "handbooks/phak/FAA-H-8083-25C/01/05-pilot-certifications.md",
+          "chapter": "01",
+          "target_page": "1-16",
+          "patch_kind": "append_paragraph",
+          "section_anchor": "Pilot Certifications",
+          "new_heading": null,
+          "content_hash": "945468ac52395a13a4c88a97d536c9958c7c7da8b0faf1edcaa77d5fa928354e",
+          "errata_note_path": "handbooks/phak/FAA-H-8083-25C/01/05-pilot-certifications.errata.md"
+        },
+        {
+          "section_code": "1.5",
+          "section_path": "handbooks/phak/FAA-H-8083-25C/01/05-pilot-certifications.md",
+          "chapter": "01",
+          "target_page": "1-16",
+          "patch_kind": "replace_paragraph",
+          "section_anchor": "Pilot Certifications",
+          "new_heading": null,
+          "content_hash": "6224cb3204d366caee1463fc79251866cd8f4cc64203d5cd3f5dbd18aedc55e5",
+          "errata_note_path": "handbooks/phak/FAA-H-8083-25C/01/05-pilot-certifications.errata.md"
+        },
+        {
+          "section_code": "1.5",
+          "section_path": "handbooks/phak/FAA-H-8083-25C/01/05-01-privileges.md",
+          "chapter": "01",
+          "target_page": "1-16",
+          "patch_kind": "replace_paragraph",
+          "section_anchor": "Privileges",
+          "new_heading": null,
+          "content_hash": "5a57deeb42ad4a0f028ae07a438956256206aa8d03f6d14d3b51879f56ce6e00",
+          "errata_note_path": "handbooks/phak/FAA-H-8083-25C/01/05-01-privileges.errata.md"
+        },
+        {
+          "section_code": "1.5",
+          "section_path": "handbooks/phak/FAA-H-8083-25C/01/05-01-privileges.md",
+          "chapter": "01",
+          "target_page": "1-16",
+          "patch_kind": "replace_paragraph",
+          "section_anchor": "Privileges",
+          "new_heading": null,
+          "content_hash": "804b0eaafe2be7f42cf955001c7eed9af384894f936f7bf407393fe4bb97d497",
+          "errata_note_path": "handbooks/phak/FAA-H-8083-25C/01/05-01-privileges.errata.md"
+        },
+        {
+          "section_code": "1.5",
+          "section_path": "handbooks/phak/FAA-H-8083-25C/01/05-01-privileges.md",
+          "chapter": "01",
+          "target_page": "1-16",
+          "patch_kind": "append_paragraph",
+          "section_anchor": "Privileges",
+          "new_heading": null,
+          "content_hash": "d5422386a9570ebd1505d4e02117d2c3c09ec1061528da50dd40c6f59bbb0c56",
+          "errata_note_path": "handbooks/phak/FAA-H-8083-25C/01/05-01-privileges.errata.md"
+        },
+        {
+          "section_code": "1.5",
+          "section_path": "handbooks/phak/FAA-H-8083-25C/01/05-02-limitations.md",
+          "chapter": "01",
+          "target_page": "1-17",
+          "patch_kind": "append_paragraph",
+          "section_anchor": "Limitations",
+          "new_heading": null,
+          "content_hash": "4088463e9c6268b9f48166ac6786f68097f402326ba8abeae095334c8857acf6",
+          "errata_note_path": "handbooks/phak/FAA-H-8083-25C/01/05-02-limitations.errata.md"
+        },
+        {
+          "section_code": "1.5",
+          "section_path": "handbooks/phak/FAA-H-8083-25C/01/05-02-limitations.md",
+          "chapter": "01",
+          "target_page": "1-17",
+          "patch_kind": "replace_paragraph",
+          "section_anchor": "Limitations",
+          "new_heading": null,
+          "content_hash": "47f1e8de578c1b523a728a2174c277bd2d37256dbef13369fdae462350db1e5e",
+          "errata_note_path": "handbooks/phak/FAA-H-8083-25C/01/05-02-limitations.errata.md"
+        },
+        {
+          "section_code": "1.5",
+          "section_path": "handbooks/phak/FAA-H-8083-25C/01/05-14-medical-certification-requirements.md",
+          "chapter": "01",
+          "target_page": "1-20",
+          "patch_kind": "replace_paragraph",
+          "section_anchor": "The Student Pilot: Basic Requirements: Medical Certification Requirements",
+          "new_heading": null,
+          "content_hash": "e0a2332b09b92591c6707cae771a92046f0823e522be4472d8422fdbdd25b05e",
+          "errata_note_path": "handbooks/phak/FAA-H-8083-25C/01/05-14-medical-certification-requirements.errata.md"
+        },
+        {
+          "section_code": "1.5",
+          "section_path": "handbooks/phak/FAA-H-8083-25C/01/05-14-medical-certification-requirements.md",
+          "chapter": "01",
+          "target_page": "1-20",
+          "patch_kind": "replace_paragraph",
+          "section_anchor": "The Student Pilot: Basic Requirements: Medical Certification Requirements",
+          "new_heading": null,
+          "content_hash": "cd625fcd66be6db356e4b220f0c0131a343ee2d0fdf437253c45b1d0239b6c31",
+          "errata_note_path": "handbooks/phak/FAA-H-8083-25C/01/05-14-medical-certification-requirements.errata.md"
+        },
+        {
+          "section_code": "1.5",
+          "section_path": "handbooks/phak/FAA-H-8083-25C/01/05-15-becoming-a-pilot.md",
+          "chapter": "01",
+          "target_page": "1-21",
+          "patch_kind": "replace_paragraph",
+          "section_anchor": "Becoming a Pilot",
+          "new_heading": null,
+          "content_hash": "38c29aa13d4f0371157bed614c2ca4f8bd38501597fa72568041198614111d8a",
+          "errata_note_path": "handbooks/phak/FAA-H-8083-25C/01/05-15-becoming-a-pilot.errata.md"
+        },
+        {
+          "section_code": "1.5",
+          "section_path": "handbooks/phak/FAA-H-8083-25C/01/05-20-when-to-take-the-practical-test.md",
+          "chapter": "01",
+          "target_page": "1-23",
+          "patch_kind": "replace_paragraph",
+          "section_anchor": "Knowledge and Skill Tests: Practical Test: When to Take the Practical Test",
+          "new_heading": null,
+          "content_hash": "e01a593e54fd8afe11d8796d5395f0b9beb0266ea14b730a43b1678a667994cb",
+          "errata_note_path": "handbooks/phak/FAA-H-8083-25C/01/05-20-when-to-take-the-practical-test.errata.md"
+        },
+        {
+          "section_code": "3.1",
+          "section_path": "handbooks/phak/FAA-H-8083-25C/03/01-introduction.md",
+          "chapter": "03",
+          "target_page": "3-1",
+          "patch_kind": "replace_paragraph",
+          "section_anchor": "Introduction",
+          "new_heading": null,
+          "content_hash": "1cf5ca530949ebda2e246ecfdf6958e48d906cabfd3fe9e6d5ac1facff6d9698",
+          "errata_note_path": "handbooks/phak/FAA-H-8083-25C/03/01-introduction.errata.md"
+        },
+        {
+          "section_code": "3.2",
+          "section_path": "handbooks/phak/FAA-H-8083-25C/03/02-aircraft-design-certification-and-airworthiness.md",
+          "chapter": "03",
+          "target_page": "3-2",
+          "patch_kind": "replace_paragraph",
+          "section_anchor": "Aircraft Design, Certification, and Airworthiness",
+          "new_heading": null,
+          "content_hash": "662f167fcd87d5db9f0bb9d178995900a44d378fffb7f163de85538923963140",
+          "errata_note_path": "handbooks/phak/FAA-H-8083-25C/03/02-aircraft-design-certification-and-airworthiness.errata.md"
+        },
+        {
+          "section_code": "3.2",
+          "section_path": "handbooks/phak/FAA-H-8083-25C/03/02-01-a-note-about-light-sport-aircraft.md",
+          "chapter": "03",
+          "target_page": "3-2",
+          "patch_kind": "replace_paragraph",
+          "section_anchor": "Aircraft Design, Certification, and Airworthiness: A Note About Light Sport Aircraft",
+          "new_heading": null,
+          "content_hash": "ccf59ba6f0d3444c94a53a79de9e56377229c0d30ca820279c243b177f287564",
+          "errata_note_path": "handbooks/phak/FAA-H-8083-25C/03/02-01-a-note-about-light-sport-aircraft.errata.md"
+        },
+        {
+          "section_code": "6.1",
+          "section_path": "handbooks/phak/FAA-H-8083-25C/06/01-introduction.md",
+          "chapter": "06",
+          "target_page": "6-1",
+          "patch_kind": "replace_paragraph",
+          "section_anchor": "Introduction",
+          "new_heading": null,
+          "content_hash": "5083d4c199ab0edbaa5e76e2cd2facf77b45008cf30ef94db92391e9f3831eb8",
+          "errata_note_path": "handbooks/phak/FAA-H-8083-25C/06/01-introduction.errata.md"
+        },
+        {
+          "section_code": "6.1",
+          "section_path": "handbooks/phak/FAA-H-8083-25C/06/01-introduction.md",
+          "chapter": "06",
+          "target_page": "6-2",
+          "patch_kind": "replace_paragraph",
+          "section_anchor": "Introduction",
+          "new_heading": null,
+          "content_hash": "ff8581fdf9c94b2199b2915614fd1bc606ce5b26caff4b97c7a4f23b509dee34",
+          "errata_note_path": "handbooks/phak/FAA-H-8083-25C/06/01-introduction.errata.md"
+        },
+        {
+          "section_code": "9.2",
+          "section_path": "handbooks/phak/FAA-H-8083-25C/09/02-02-airworthiness-certificate.md",
+          "chapter": "09",
+          "target_page": "9-8",
+          "patch_kind": "replace_paragraph",
+          "section_anchor": "Aircraft Documents: Airworthiness Certificate",
+          "new_heading": null,
+          "content_hash": "2b3f7b069dfacf41341d2fca5028d9385c6bfa7c8f080380d7cf329be008f673",
+          "errata_note_path": "handbooks/phak/FAA-H-8083-25C/09/02-02-airworthiness-certificate.errata.md"
+        },
+        {
+          "section_code": "9.5",
+          "section_path": "handbooks/phak/FAA-H-8083-25C/09/05-02-examples-of-preventive-maintenance.md",
+          "chapter": "09",
+          "target_page": "9-12",
+          "patch_kind": "replace_paragraph",
+          "section_anchor": "Preventive Maintenance: Examples of Preventive Maintenance",
+          "new_heading": null,
+          "content_hash": "aa81d6a4c70352454276268677147c7c444224f3258d5c3a7ecc63a77a335df7",
+          "errata_note_path": "handbooks/phak/FAA-H-8083-25C/09/05-02-examples-of-preventive-maintenance.errata.md"
+        },
+        {
+          "section_code": "17.2",
+          "section_path": "handbooks/phak/FAA-H-8083-25C/17/02-obtaining-a-medical-certificate.md",
+          "chapter": "17",
+          "target_page": "17-2",
+          "patch_kind": "replace_paragraph",
+          "section_anchor": "Obtaining a Medical Certificate",
+          "new_heading": null,
+          "content_hash": "b30be41cbb582a58066f4134e250edcb2c48740c0de22d50fb26267688687f0e",
+          "errata_note_path": "handbooks/phak/FAA-H-8083-25C/17/02-obtaining-a-medical-certificate.errata.md"
+        }
+      ]
+    }
+  ]
 }
