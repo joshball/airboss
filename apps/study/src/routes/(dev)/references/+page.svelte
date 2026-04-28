@@ -65,18 +65,18 @@ let { data }: { data: PageData } = $props();
 		padding: var(--space-xs) var(--space-sm);
 		border-radius: var(--radius-sm);
 		background: var(--surface-muted);
-		color: var(--ink-default);
+		color: var(--ink-body);
 		text-decoration: none;
-		font-size: 0.875rem;
+		font-size: var(--font-size-sm);
 	}
 	.mode-nav a.active {
-		background: var(--surface-accent);
-		color: var(--ink-on-accent);
+		background: var(--action-link);
+		color: var(--action-link-ink);
 	}
 	.fixture {
 		margin-bottom: var(--space-xl);
 		padding: var(--space-md);
-		border: 1px solid var(--border-default);
+		border: 1px solid var(--edge-default);
 		border-radius: var(--radius-md);
 	}
 	.fixture h2 {
@@ -84,17 +84,17 @@ let { data }: { data: PageData } = $props();
 	}
 	.meta {
 		color: var(--ink-muted);
-		font-size: 0.875rem;
+		font-size: var(--font-size-sm);
 		margin-bottom: var(--space-sm);
 	}
 	.rendered {
 		padding: var(--space-md);
-		background: var(--surface-default);
+		background: var(--surface-page);
 		border-radius: var(--radius-sm);
 		white-space: pre-wrap;
 	}
 	.rendered :global(.ab-ref) {
-		color: var(--ink-link);
+		color: var(--action-link);
 	}
 	.rendered :global(.ab-ref-annotation) {
 		font-size: var(--font-size-sm);
