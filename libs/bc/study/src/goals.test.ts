@@ -35,6 +35,7 @@ import {
 	listGoals,
 	removeGoalNode,
 	removeGoalSyllabus,
+	setGoalNodeWeight,
 	setPrimaryGoal,
 	updateGoal,
 } from './goals';
@@ -397,6 +398,24 @@ describe('addGoalNode / removeGoalNode / getGoalNodes', () => {
 		await removeGoalNode(g.id, TEST_USER_ID, ADHOC_NODE_ID);
 		rows = await getGoalNodes(g.id);
 		expect(rows.length).toBe(0);
+	});
+});
+
+describe('setGoalNodeWeight', () => {
+	it('updates the weight on an existing goal_node row without touching notes', async () => {
+		const g = await createGoal({ userId: TEST_USER_ID, title: 'weight test', notesMd: '', isPrimary: false });
+		await addGoalNode(g.id, TEST_USER_ID, { knowledgeNodeId: ADHOC_NODE_ID, weight: 1.0, notes: 'original notes' });
+		await setGoalNodeWeight(g.id, TEST_USER_ID, ADHOC_NODE_ID, 0.25);
+		const rows = await getGoalNodes(g.id);
+		expect(rows.length).toBe(1);
+		expect(rows[0]?.weight).toBeCloseTo(0.25);
+		expect(rows[0]?.notes).toBe('original notes');
+	});
+
+	it('throws when the goal is not owned by the user', async () => {
+		const g = await createGoal({ userId: TEST_USER_ID, title: 'owner test', notesMd: '', isPrimary: false });
+		await addGoalNode(g.id, TEST_USER_ID, { knowledgeNodeId: ADHOC_NODE_ID, weight: 1.0, notes: '' });
+		await expect(setGoalNodeWeight(g.id, 'auth_other-user', ADHOC_NODE_ID, 0.5)).rejects.toThrow(GoalNotOwnedError);
 	});
 });
 

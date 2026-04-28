@@ -405,4 +405,22 @@ export async function removeGoalNode(
 	await db.delete(goalNode).where(and(eq(goalNode.goalId, existing.id), eq(goalNode.knowledgeNodeId, knowledgeNodeId)));
 }
 
-void GoalAlreadyPrimaryError; // exported for callers that pre-validate primary swaps
+/**
+ * Update the weight on an existing goal_node row. Mirrors the shape of
+ * `setGoalSyllabusWeight`; idempotent. Silently no-ops when the
+ * (goal_id, knowledge_node_id) pair has no row -- callers that need
+ * upsert-style behavior should use `addGoalNode`.
+ */
+export async function setGoalNodeWeight(
+	goalId: string,
+	userId: string,
+	knowledgeNodeId: string,
+	weight: number,
+	db: Db = defaultDb,
+): Promise<void> {
+	const existing = await getOwnedGoal(goalId, userId, db);
+	await db
+		.update(goalNode)
+		.set({ weight })
+		.where(and(eq(goalNode.goalId, existing.id), eq(goalNode.knowledgeNodeId, knowledgeNodeId)));
+}

@@ -121,6 +121,7 @@ export {
 	listGoals,
 	removeGoalNode,
 	removeGoalSyllabus,
+	setGoalNodeWeight,
 	setGoalSyllabusWeight,
 	setPrimaryGoal,
 	updateGoal,
