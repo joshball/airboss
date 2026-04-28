@@ -4,15 +4,15 @@ import {
 	searchAcReferences,
 	searchKnowledgeNodes,
 	searchRegulationNodes,
-} from '@ab/bc-citations';
+} from '@ab/bc-study';
 import { CITATION_TARGET_TYPES, type CitationTargetType, QUERY_PARAMS } from '@ab/constants';
 import { error, json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 
 /**
  * Citation picker search endpoint. Reads `target` + `q` from the query
- * string and dispatches to the per-target-type search helper in
- * `@ab/bc-citations`. Returns `{ results: RegulationSearchResult[] }`.
+ * string and dispatches to the per-target-type search helper in the
+ * bc-study citations module. Returns `{ results: RegulationSearchResult[] }`.
  *
  * External refs are not searched (the picker collects URL + title inline),
  * so the endpoint returns an empty result set for them.

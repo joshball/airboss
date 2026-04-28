@@ -6,11 +6,12 @@
  *   - No scheduler internals leak (no stability, difficulty, due-at).
  *   - `source_ref` is not exposed; only the high-level `source_type` label is.
  *
- * Citations are owned by `@ab/bc-citations`; the route layer composes the
- * citation read with `getPublicCard`. We expose `PublicCardCitation` as the
- * stable wire shape and a `composePublicCardCitations` helper that takes the
- * resolved citations and projects the public-safe subset (no createdBy,
- * no scheduling internals, no internal hrefs).
+ * Citations are part of bc-study (folded in from the former bc-citations
+ * package); the route layer composes the citation read with `getPublicCard`.
+ * We expose `PublicCardCitation` as the stable wire shape and a
+ * `composePublicCardCitations` helper that takes the resolved citations and
+ * projects the public-safe subset (no createdBy, no scheduling internals,
+ * no internal hrefs).
  */
 
 import {
@@ -44,7 +45,7 @@ export interface PublicCard {
 	domain: Domain;
 	cardType: CardType;
 	sourceType: ContentSource;
-	/** Authored citations rendered below the content. Hydrated by the route layer from `@ab/bc-citations`. */
+	/** Authored citations rendered below the content. Hydrated by the route layer via the bc-study citations API. */
 	citations: PublicCardCitation[];
 }
 
@@ -77,8 +78,9 @@ export function composePublicCardCitations(
  * of the identity projection exposed here.
  *
  * The returned `citations` array is empty -- the route layer hydrates it
- * from `@ab/bc-citations`. Doing the import here would create a cycle
- * (citations -> study -> citations).
+ * via the bc-study citations API (`getCitationsOf`, `resolveCitationTargets`).
+ * Keeping the hydration in the route layer mirrors how scenario / rep / node
+ * pages compose their citation reads.
  */
 export async function getPublicCard(cardId: string, db: Db = defaultDb): Promise<PublicCard | null> {
 	const [row] = await db

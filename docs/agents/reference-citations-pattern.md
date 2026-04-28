@@ -2,7 +2,7 @@
 
 How the polymorphic content-citation graph is wired. Read this before mounting citations on a new content surface or adding a new source/target type.
 
-Shipped as work package [content-citations](../work-packages/content-citations/spec.md). Code lives in [libs/bc/citations/](../../libs/bc/citations), the picker / chips / cited-by panel in [libs/ui/src/components/](../../libs/ui/src/components), and constants in [libs/constants/src/citations.ts](../../libs/constants/src/citations.ts).
+Shipped as work package [content-citations](../work-packages/content-citations/spec.md); folded into bc-study by [bc-citations-coupling](../work-packages/bc-citations-coupling/spec.md). Code lives in [libs/bc/study/src/citations/](../../libs/bc/study/src/citations), the picker / chips / cited-by panel in [libs/ui/src/components/](../../libs/ui/src/components), and constants in [libs/constants/src/citations.ts](../../libs/constants/src/citations.ts).
 
 Related docs:
 
@@ -11,11 +11,11 @@ Related docs:
 
 ## Overview
 
-One table, `study.content_citations`, connects any content row (card / rep / scenario / knowledge node) to any reference (regulation node / advisory circular / external URL / knowledge node). The fabric is symmetric: source-side reads power "citations on this card", target-side reads power "cited by" panels on regulation and knowledge-node detail pages. The data model is polymorphic with soft FKs; the `@ab/bc-citations` BC is the only write gate, and it validates source ownership and target existence before insert.
+One table, `study.content_citations`, connects any content row (card / rep / scenario / knowledge node) to any reference (regulation node / advisory circular / external URL / knowledge node). The fabric is symmetric: source-side reads power "citations on this card", target-side reads power "cited by" panels on regulation and knowledge-node detail pages. The data model is polymorphic with soft FKs; the `@ab/bc-study` BC is the only write gate, and it validates source ownership and target existence before insert.
 
 ## Data model
 
-Schema: [libs/bc/citations/src/schema.ts](../../libs/bc/citations/src/schema.ts). Migration: [drizzle/0004_content_citations.sql](../../drizzle/0004_content_citations.sql).
+Schema: [libs/bc/study/src/citations/schema.ts](../../libs/bc/study/src/citations/schema.ts). Migration: [drizzle/0004_content_citations.sql](../../drizzle/0004_content_citations.sql).
 
 Source x target matrix (from [libs/constants/src/citations.ts](../../libs/constants/src/citations.ts)):
 
@@ -53,7 +53,7 @@ IDs use the `ccit_` prefix via [generateContentCitationId](../../libs/utils/src/
 
 ## API surface
 
-`@ab/bc-citations` barrel: [libs/bc/citations/src/index.ts](../../libs/bc/citations/src/index.ts).
+Citation exports re-emitted from the `@ab/bc-study` barrel: [libs/bc/study/src/citations/index.ts](../../libs/bc/study/src/citations/index.ts).
 
 | Export                         | Purpose                                                                                |
 | ------------------------------ | -------------------------------------------------------------------------------------- |
@@ -105,7 +105,7 @@ Adding citations to a new authoring surface is five wires: a load, an enrich, an
 ### 1. Server load -- read + enrich
 
 ```typescript
-import { type CitationWithTarget, getCitationsOf, resolveCitationTargets } from '@ab/bc-citations';
+import { type CitationWithTarget, getCitationsOf, resolveCitationTargets } from '@ab/bc-study';
 import { CITATION_SOURCE_TYPES } from '@ab/constants';
 
 export const load: PageServerLoad = async (event) => {
@@ -190,24 +190,13 @@ const citedBy: CitationWithSource[] = await resolveCitationSources(citedByRows);
 
 Project to `CitedByItem` with the route mapped per source type (card -> memory, rep/scenario -> reps, node -> knowledge), then render `<CitedByPanel items={...} />`.
 
-## The bc-study to bc-citations cycle
+## Why citations live in bc-study
 
-`@ab/bc-citations` already imports from `@ab/bc-study` (it reads `card`, `scenario`, `knowledgeNode` schemas to verify source ownership). If `@ab/bc-study` then imported back from `@ab/bc-citations`, you get a cycle.
+Citations were originally extracted into a sibling `libs/bc/citations` package, but its only domain was three ownership predicates over study tables (`cardExistsForUser`, `knowledgeNodeExists`, `scenarioExistsForUser`) and the `content_citations` row already lives in the `study` Postgres schema. Per [bc-citations-coupling](../work-packages/bc-citations-coupling/spec.md) the package was folded into bc-study; the citation BC functions live in [libs/bc/study/src/citations/](../../libs/bc/study/src/citations) and are re-exported from the `@ab/bc-study` barrel so route imports stay clean.
 
-The fix is a structural-shape composer that lives in the BC that needs to project the citation. Pattern: [libs/bc/study/src/cards-public.ts:58](../../libs/bc/study/src/cards-public.ts) defines `composePublicCardCitations`, which takes the resolved citation shape as a structural type, not as `CitationWithTarget`:
+If a future BC needs citation reads of its own (a third consumer with its own domain), that's the trigger to extract a real citations BC -- with policies, link-rot, and audit -- not just three ownership lookups.
 
-```typescript
-export function composePublicCardCitations(
-  resolved: ReadonlyArray<{
-    citation: { id: string };
-    target: { type: CitationTargetType; label: string; detail?: string; href?: string };
-  }>,
-): PublicCardCitation[] { ... }
-```
-
-The route layer is the integrator: it calls `getCitationsOf` + `resolveCitationTargets` from `@ab/bc-citations`, then `composePublicCardCitations` from `@ab/bc-study`, never letting the two BCs reference each other across the cycle. See [apps/study/src/routes/cards/[id]/+page.server.ts](../../apps/study/src/routes/cards/%5Bid%5D/+page.server.ts) for the canonical wiring.
-
-When a new BC needs to expose citations on its own surface (e.g. a future `bc/scenarios/` projection), follow the same shape: take the structural input in the consuming BC and integrate at the route layer.
+The public-card composer in [libs/bc/study/src/cards-public.ts](../../libs/bc/study/src/cards-public.ts) (`composePublicCardCitations`) keeps citation projection out of the BC core: the route layer hydrates citations via `getCitationsOf` / `resolveCitationTargets`, then calls the composer to project the public-safe shape. Same structural-input pattern still applies if a future surface needs its own projection helper.
 
 ## Constants
 
@@ -222,12 +211,12 @@ The picker route lives at `ROUTES.API_CITATIONS_SEARCH` in [libs/constants/src/r
 
 ## Testing
 
-Unit tests for the pure mapping logic (delimiter round-trip, URL validation, missing-target branches) live in [libs/bc/citations/src/citations.test.ts](../../libs/bc/citations/src/citations.test.ts) using a fake DB that returns canned rows. Use the same shape when adding tests for new source or target types -- DB-touching paths (ownership lookups, the unique-violation surface) are covered by integration tests against the real Postgres fixture.
+Unit tests for the pure mapping logic (delimiter round-trip, URL validation, missing-target branches) live in [libs/bc/study/src/citations/citations.test.ts](../../libs/bc/study/src/citations/citations.test.ts) using a fake DB that returns canned rows. Use the same shape when adding tests for new source or target types -- DB-touching paths (ownership lookups, the unique-violation surface) are covered by integration tests against the real Postgres fixture.
 
 The picker has a DOM contract test in [libs/ui/\_\_tests\_\_/CitationPicker.svelte.test.ts](../../libs/ui/__tests__/CitationPicker.svelte.test.ts) (closed gating, tab structure when open).
 
 ## Open items
 
-- **Knowledge-node source ownership is open in v1.** `verifySourceOwnership` for `CITATION_SOURCE_TYPES.NODE` accepts any authenticated user (see [citations.ts:164](../../libs/bc/citations/src/citations.ts)). Per-node ACLs land with the node-editor work.
+- **Knowledge-node source ownership is open in v1.** `verifySourceOwnership` for `CITATION_SOURCE_TYPES.NODE` accepts any authenticated user (see [citations.ts:164](../../libs/bc/study/src/citations/citations.ts)). Per-node ACLs land with the node-editor work.
 - **No public citation discovery.** The "most-cited regulations" / leaderboard surfaces are explicitly out of scope per [content-citations/spec.md](../work-packages/content-citations/spec.md). Add as a follow-up WP if coverage data shows we need it.
 - **No auto-backfill.** Existing card bodies are not regex-scanned for `14 CFR X.Y` patterns. Manual citation only; out of scope per the same spec.

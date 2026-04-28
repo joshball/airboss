@@ -7,11 +7,11 @@
  * the id on submit.
  */
 
-import { knowledgeNode } from '@ab/bc-study';
 import { REFERENCE_SOURCE_TYPES, SOURCE_TYPE_LABELS } from '@ab/constants';
 import { db as defaultDb, hangarReference } from '@ab/db';
 import { and, ilike, or, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
+import { knowledgeNode } from '../schema';
 
 type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;
 

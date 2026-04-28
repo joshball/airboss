@@ -6,7 +6,7 @@ export default defineConfig({
 	schema: [
 		'./libs/auth/src/schema.ts',
 		'./libs/bc/study/src/schema.ts',
-		'./libs/bc/citations/src/schema.ts',
+		'./libs/bc/study/src/citations/schema.ts',
 		'./libs/audit/src/schema.ts',
 		'./libs/db/src/hangar.ts',
 		'./libs/db/src/sim.ts',

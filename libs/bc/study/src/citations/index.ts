@@ -1,4 +1,7 @@
-// Citations BC -- polymorphic content-to-reference connections.
+// Citations -- polymorphic content-to-reference connections.
+// Folded into bc-study because content_citations lives in the study Postgres
+// schema and the ownership predicates target study tables. See work package
+// docs/work-packages/bc-citations-coupling/.
 
 export {
 	CitationNotFoundError,
@@ -16,5 +19,5 @@ export {
 	resolveCitationSources,
 	resolveCitationTargets,
 } from './citations';
-export { type ContentCitationRow, contentCitation, type NewContentCitationRow, studySchema } from './schema';
+export { type ContentCitationRow, contentCitation, type NewContentCitationRow } from './schema';
 export { type RegulationSearchResult, searchAcReferences, searchKnowledgeNodes, searchRegulationNodes } from './search';

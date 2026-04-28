@@ -7,22 +7,21 @@
  * `source_type` / `target_type` enumerate which table the paired id points at
  * but no per-type FK exists, because (B) nullable-FK fan-out and (C) per-type
  * tables both lose the symmetric "cited by" query surface the spec requires.
- * The application layer (`@ab/bc-citations`) is the write gate -- it verifies
- * the row exists and is owned before inserting.
+ * The application layer (the citation BC functions) is the write gate -- it
+ * verifies the row exists and is owned before inserting.
  *
  * Schema placement: the table lives in the existing `study` Postgres schema
  * so migrations flow through the same drizzle output as cards / scenarios /
- * knowledge nodes. If the citation set later needs its own schema we can
- * migrate without reshaping the polymorphism.
+ * knowledge nodes. The `studySchema` Drizzle namespace is reused from the
+ * sibling `../schema.ts` so we don't redeclare it here.
  */
 
 import { bauthUser } from '@ab/auth/schema';
-import { CITATION_SOURCE_VALUES, CITATION_TARGET_VALUES, SCHEMAS } from '@ab/constants';
+import { CITATION_SOURCE_VALUES, CITATION_TARGET_VALUES } from '@ab/constants';
 import { timestamps } from '@ab/db';
 import { sql } from 'drizzle-orm';
-import { check, index, pgSchema, text, uniqueIndex } from 'drizzle-orm/pg-core';
-
-export const studySchema = pgSchema(SCHEMAS.STUDY);
+import { check, index, text, uniqueIndex } from 'drizzle-orm/pg-core';
+import { studySchema } from '../schema';
 
 function inList(values: readonly string[]): string {
 	return values.map((v) => `'${v.replace(/'/g, "''")}'`).join(', ');

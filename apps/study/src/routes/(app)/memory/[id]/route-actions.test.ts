@@ -2,7 +2,7 @@
  * Route-action tests for `/memory/[id]` -- the card editor.
  *
  * Covers the form-action layer for `?/addCitation` and `?/removeCitation` that
- * the BC tests in `libs/bc/citations/` don't reach. The BC layer is exercised
+ * the BC tests in `libs/bc/study/src/citations/` don't reach. The BC layer is exercised
  * for ownership + validation + duplicates already; this file pins down the
  * route action's form parsing, error -> ActionFailure mapping, and the
  * ownership 404 surface that distinguishes `CitationNotFoundError` from a
@@ -15,8 +15,7 @@
  */
 
 import { bauthUser } from '@ab/auth/schema';
-import { contentCitation } from '@ab/bc-citations';
-import { card, cardState } from '@ab/bc-study';
+import { card, cardState, contentCitation } from '@ab/bc-study';
 import {
 	CARD_STATES,
 	CARD_STATUSES,

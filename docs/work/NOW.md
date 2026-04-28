@@ -51,7 +51,6 @@ Captured as part of the review-fix PR. Each has an explicit trigger condition; n
 | Work package                                                                                                          | Trigger                                                              |
 | --------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
 | [extract-hangar-bc](../work-packages/extract-hangar-bc/spec.md)                                                       | Block any net-new hangar feature                                     |
-| [bc-citations-coupling](../work-packages/bc-citations-coupling/spec.md)                                               | Next review of citation surface                                      |
 | [route-style-extraction](../work-packages/route-style-extraction/spec.md)                                             | Next major UI overhaul                                               |
 | [extract-sim-instruments](../work-packages/extract-sim-instruments/spec.md)                                           | When `apps/avionics/` is created                                     |
 | [auth-rate-limit](../work-packages/auth-rate-limit/spec.md)                                                           | Before opening signups beyond invite circle                          |

@@ -6,7 +6,7 @@
 	back to the citing source when it exists, and the optional context note.
 	Used by `/knowledge/<slug>` and `/references/<id>` so the row HTML/CSS lives
 	in one place. The component takes a normalised `items` shape so callers
-	don't have to leak `@ab/bc-citations` row shapes into `@ab/ui` (ui depends
+	don't have to leak bc-study citation row shapes into `@ab/ui` (ui depends
 	on constants only, not on bcs).
 -->
 <script lang="ts">

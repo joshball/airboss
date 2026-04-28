@@ -1,6 +1,7 @@
 import { requireAuth } from '@ab/auth';
-import { type CitationWithSource, getCitedBy, resolveCitationSources } from '@ab/bc-citations';
 import {
+	type CitationWithSource,
+	getCitedBy,
 	getNodeMastery,
 	getNodesByIds,
 	getNodeView,
@@ -8,6 +9,7 @@ import {
 	type KnowledgeNodeRow,
 	lifecycleFromContent,
 	listReferences,
+	resolveCitationSources,
 	resolveCitationUrl,
 	splitContentPhases,
 } from '@ab/bc-study';
