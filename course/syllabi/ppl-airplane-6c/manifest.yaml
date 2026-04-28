@@ -1,0 +1,16 @@
+slug: ppl-airplane-6c
+kind: acs
+title: Private Pilot -- Airplane Airman Certification Standards
+edition: FAA-S-ACS-6C
+edition_pin: 2023-11
+reference_slug: ppl-airplane-acs-6c
+status: active
+source_url: https://www.faa.gov/training_testing/testing/acs/private_airplane_acs_6.pdf
+notes: |
+  Verbatim transcription of Area V (Performance Maneuvers and Ground
+  Reference Maneuvers) from FAA-S-ACS-6C, published November 2023.
+  Other areas land in follow-on PRs.
+
+  Area V has two tasks: A (Steep Turns) and B (Ground Reference
+  Maneuvers). Tasks like Chandelles and Lazy Eights are CPL/CFI scope,
+  not PPL.

@@ -40,8 +40,18 @@ import { seedCredentials } from './seed-credentials';
 import { decideSeedGuard } from './seed-guard';
 import { seedHandbooks } from './seed-handbooks';
 import { seedReferences } from './seed-references';
+import { seedSyllabi } from './seed-syllabi';
 
-type Phase = 'users' | 'knowledge' | 'handbooks' | 'references' | 'credentials' | 'cards' | 'abby';
+type Phase =
+	| 'users'
+	| 'knowledge'
+	| 'handbooks'
+	| 'references'
+	| 'credentials'
+	| 'syllabi'
+	| 'credential-syllabi'
+	| 'cards'
+	| 'abby';
 
 const PHASES: readonly Phase[] = [
 	'users',
@@ -49,6 +59,8 @@ const PHASES: readonly Phase[] = [
 	'handbooks',
 	'references',
 	'credentials',
+	'syllabi',
+	'credential-syllabi',
 	'cards',
 	'abby',
 ] as const;
@@ -102,6 +114,24 @@ async function phaseCredentials(): Promise<void> {
 	);
 }
 
+async function phaseSyllabi(): Promise<void> {
+	process.stdout.write('\n=== seed: syllabi ===\n');
+	const summary = await seedSyllabi();
+	process.stdout.write(
+		`  ${summary.syllabiUpserted} syllabi, ${summary.nodesUpserted} nodes, ${summary.linksUpserted} knowledge-graph links (${summary.linksSkipped} skipped)\n`,
+	);
+}
+
+async function phaseCredentialSyllabi(): Promise<void> {
+	// Re-run the credential seed AFTER syllabi land so credential_syllabus
+	// rows the first credential pass deferred can resolve.
+	process.stdout.write('\n=== seed: credential <-> syllabus links ===\n');
+	const summary = await seedCredentials();
+	process.stdout.write(
+		`  ${summary.syllabusLinksUpserted} resolved (${summary.syllabusLinksSkipped} still pending syllabi authoring)\n`,
+	);
+}
+
 async function phaseCards(): Promise<void> {
 	process.stdout.write('\n=== seed: cards ===\n');
 	for (const account of DEV_ACCOUNTS) {
@@ -142,6 +172,8 @@ const PHASE_FNS: Record<Phase, () => Promise<void>> = {
 	handbooks: phaseHandbooks,
 	references: phaseReferences,
 	credentials: phaseCredentials,
+	syllabi: phaseSyllabi,
+	'credential-syllabi': phaseCredentialSyllabi,
 	cards: phaseCards,
 	abby: phaseAbby,
 };
