@@ -26,8 +26,8 @@ Companion to:
 | 4 | reference-renderer-runtime | [WP](../../work-packages/reference-renderer-runtime/) | #249 | 🟧 |
 | 5 | reference-versioning-tooling | [WP](../../work-packages/reference-versioning-tooling/) | -- | 🟨 |
 | 6 | reference-handbook-ingestion | [WP](../../work-packages/reference-handbook-ingestion/) | #251 | ✅ |
-| 7 | reference-aim-ingestion | [WP](../../work-packages/reference-aim-ingestion/) | (this PR) | 🟧 |
-| 8 | reference-ac-ingestion | -- | (this PR) | 🟧 |
+| 7 | reference-aim-ingestion | [WP](../../work-packages/reference-aim-ingestion/) | #251 (WP), #261 (this PR -- Lane B end-to-end) | 🟧 |
+| 8 | reference-ac-ingestion | -- | #261 | ✅ |
 | 9 | reference-lesson-migration | -- | -- | ⬜ |
 | 10 | reference-irregular-corpora | -- | -- | ⬜ |
 
@@ -114,11 +114,21 @@ Out of scope and deferred:
 - Per-figure / per-table registry entries (figures and tables parse correctly via `parseLocator` but have no `SourceEntry`; the renderer descends to the derivative file when `@text` / `@quote` is bound).
 - Cross-edition aliases (handbooks rarely renumber within a letter revision; new editions ship as new doc slugs entirely, e.g. 8083-25D).
 
-### Phase 7 -- reference-aim-ingestion
+### Phase 7 -- reference-aim-ingestion 🟧
 
-AIM ingestion. After this, lessons can cite `airboss-ref:aim/5-1-7?at=2026-09`.
+AIM ingestion. After this, lessons can cite `airboss-ref:aim/5-1-7?at=2026-04`.
 
-Lands the third real corpus (`aim`) into the registry, after Phase 3's `regs` and Phase 6's `handbooks`. Live AIM source-document ingestion (PDF / HTML -> markdown derivatives) is **out of scope** for this WP -- that's a separate operator pipeline (a follow-up to ADR 016 phase 0). Phase 7 ships the resolver + ingest CLI + a hand-authored fixture so the registration path is exercised end-to-end without depending on live extraction.
+Lane B (this PR) extends the original Phase 7 scaffolding (resolver + locator + manifest-walk ingest, originally landed against a hand-authored fixture) with the **live PDF -> derivatives -> registry** pipeline. The cached AIM PDF at `$AIRBOSS_HANDBOOK_CACHE/aim/<edition>/source.pdf` is now the input; running `bun run sources register aim --cache=...` extracts the structured tree and registers entries in one command.
+
+Shipped surface:
+
+- `libs/sources/src/aim/extract.ts` -- PDF -> structured `ExtractedAim` tree. TOC-driven parser: locates the AIM Table of Contents, parses `Chapter N. Title` / `Section M. Title` / `N-M-K. Title` entries (handling multi-line title wrap), then walks the body to capture paragraph text between headings. Glossary entries (uppercase term followed by U+2212) and appendices come from the body walk.
+- `libs/sources/src/aim/source-ingest.ts` -- orchestrator. Discovers cached PDFs, calls `extractAim`, writes the manifest + per-entry markdown files in the layout `derivative-reader.ts` expects (`aim/<edition>/chapter-N/section-M/paragraph-K.md`, `glossary/<slug>.md`, `appendix-N.md`), then calls `runAimIngest` to register entries.
+- Existing `runAimIngest` (manifest-walk) is unchanged; it continues to work against fixture trees and is the registration step the new orchestrator delegates to.
+- `bun run sources register aim --cache=<path>` triggers the source-ingest path; `--edition=<YYYY-MM>` alone keeps the legacy manifest-walk path.
+- Smoke tests cover AIM-alone (section-level), AIM-paragraph (full hierarchy), and cross-corpus (AIM + regs in one lesson, both validate clean).
+
+First real-tree run: AIM 2026-04 (FAA aim.pdf, 732 pages) -> 10 chapters, 37 sections, 396 paragraphs, 3 appendices, 298 glossary entries = **744 SourceEntries** registered, 2 glossary entries skipped (`CLASS E AIRSPACE` and `VISUAL APPROACH SLOPE INDICATOR` - column-wrap layouts that emptied their bodies). Derivative tree (~4.2 MB) committed inline per ADR 018.
 
 Locator shapes covered (per ADR 019 §1.2):
 
@@ -132,10 +142,10 @@ airboss-ref:aim/appendix-<N>?at=YYYY-MM
 
 Out of scope and deferred:
 
-- Live AIM source-document ingestion (operator action, separate pipeline).
 - Per-glossary-term structured content beyond the title and body markdown.
 - Sub-paragraph identifiers (the ADR 019 §1.2 "AIM" spec stops at paragraph granularity).
 - Cross-edition aliases (Phase 5's diff job catches silent paragraph rewrites).
+- Chapter / section overview prose in the body (the heading line is captured but the body extractor does not yet bucket the inter-paragraph chapter intro into the chapter's `index.md`; the existing files are placeholder titles).
 
 ### Phase 8 -- reference-ac-ingestion
 
@@ -169,4 +179,5 @@ Phases 5, 6, 7, 8, 10 can run in parallel after Phase 2 lands -- they each unloc
 | 2026-04-27 | -- | Unified ingest dispatcher: `scripts/sources/register.ts` replaces `cfr-ingest.ts` / `handbook-corpus-ingest.ts` / `aim-corpus-ingest.ts`. Single entry point `bun run sources register <corpus>` with `--all`, `--help`, and per-corpus `--help`; per-corpus runner code in `libs/sources/src/<corpus>/ingest.ts` is unchanged. |
 | 2026-04-28 | 3 | Lane A landed: CFR Title 14 (226 parts, 6,328 sections at edition `2026-04-22`) + Title 49 aviation slice (parts 1552 + 830, 22 sections at `2026-04-20`). Structural index (`manifest.json` + `sections.json`) committed; per-section body markdown gitignored per ADR 018 scale-tier exception. PR #260. |
 | 2026-04-28 | 8 | Lane C landed: AC corpus module (`libs/sources/src/ac/`) -- locator, resolver, citation, URL, derivative-reader, ingest. URI shape `airboss-ref:ac/<doc>/<rev>` with `?at=YYYY-MM-DD`; unrevisioned ACs rejected per §1.2. Live ingest produced 9 ACs (00-6B, 120-71B, 25-7D, 61-65J, 61-83J, 61-98D, 90-66C, 91-21.1D, 91-79A); 3 skipped with explicit reasons (60-22 + 91-92 unrevisioned, 150/5210-7D slash-style not yet supported). Wired through `bun run sources register ac`. Smoke tests cover AC alone + cross-corpus (ac + regs in one lesson). |
+| 2026-04-28 | 7 | Lane B landed: AIM source-PDF ingestion end-to-end. New `libs/sources/src/aim/extract.ts` (TOC-driven PDF parser) + `source-ingest.ts` (orchestrator: discover -> extract -> write derivatives -> register). `bun run sources register aim --cache=<path>` now drives the full pipeline; existing `runAimIngest` manifest-walk path unchanged. Live ingest of AIM 2026-04 (732 pages): 744 SourceEntries (10 chapters / 37 sections / 396 paragraphs / 3 appendices / 298 glossary entries); 2 glossary entries skipped (CLASS E AIRSPACE, VISUAL APPROACH SLOPE INDICATOR -- column-wrap layouts emptied bodies). Derivative tree (~4.2 MB) committed inline per ADR 018. Smoke tests cover AIM alone (section), AIM paragraph, and cross-corpus (aim + regs). |
 | 2026-04-28 | 10 | Lane D landed: ACS corpus PPL-ASEL slice (`libs/sources/src/acs/` adds `derivative-reader.ts`, `ingest.ts`, `smoke.test.ts`). URI shape `airboss-ref:acs/<cert>/<edition>/area-<roman>/task-<letter>/element-<triad><ord>` per ADR 019 §1.2; ingest writes per-task body markdown to `<repo>/acs/<cert>/<edition>/area-<roman>/task-<letter>.md` with element bodies sliced out by code (`PA.I.A.K1`) on resolve. Live ingest produced 1 publication (`ppl-asel/faa-s-acs-6c`) + 12 areas + 61 tasks + 529 elements = 603 entries; promoted under `phase-9-acs-ingestion`. Other ACS cert families (FAA-S-ACS-7/8/11/25) parse and skip with explicit reasons until Open Question 7 (final ACS locator convention) resolves or a sibling lane wires them in. Wired through `bun run sources register acs`. Smoke tests cover ACS task + ACS element + cross-corpus (acs + regs in one lesson). |

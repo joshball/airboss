@@ -1,0 +1,47 @@
+# Aircraft Arresting Systems
+
+a. Certain airports are equipped with a means of
+rapidly stopping military aircraft on a runway. This
+equipment, normally referred to as EMERGENCY
+ARRESTING GEAR, generally consists of pendant
+cables supported over the runway surface by rubber
+“donuts.” Although most devices are located in the
+overrun areas, a few of these arresting systems have
+cables stretched over the operational areas near the
+ends of a runway.
+b. Arresting cables which cross over a runway
+require special markings on the runway to identify
+the cable location. These markings consist of 10 feet
+diameter solid circles painted “identification yellow,” 30 feet on center, perpendicular to the runway
+centerline across the entire runway width. Additional
+details are contained in AC 150/5220-9, Aircraft
+Arresting Systems for Joint Civil/Military Airports.
+
+NOTE-
+Aircraft operations on the runway are not restricted by the
+installation of aircraft arresting devices.
+
+c. Engineered Materials Arresting Systems
+(EMAS). EMAS, which is constructed of high
+energy-absorbing materials of selected strength, is
+located in the safety area beyond the end of the
+runway. EMAS will be marked with yellow chevrons.
+EMAS is designed to crush under the weight of
+commercial aircraft and will exert deceleration forces
+on the landing gear. These systems do not affect the
+normal landing and takeoff of airplanes. More
+information concerning EMAS is in AC
+150/5220-22, Engineered Materials Arresting Systems (EMAS) for Aircraft Overruns.
+NOTE-
+EMAS may be located as close as 35 feet beyond the end of
+the runway. Aircraft and ground vehicles should never taxi
+or drive across the EMAS or beyond the end of the runway
+if EMAS is present.
+
+FIG 2-3-42
+
+Engineered Materials Arresting System (EMAS)
+
+2-3-30
+
+Airport Marking Aids and Signs

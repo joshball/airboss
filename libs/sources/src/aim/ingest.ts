@@ -223,8 +223,19 @@ export async function runAimIngest(args: IngestArgs): Promise<IngestReport> {
 // ---------------------------------------------------------------------------
 
 const USAGE = `usage:
-  bun run aim-corpus-ingest --edition=<YYYY-MM> [--out=<path>]
-  bun run aim-corpus-ingest --help
+  bun run sources register aim --edition=<YYYY-MM> [--out=<path>]
+  bun run sources register aim [--cache=<path>] [--out=<path>] [--edition=<YYYY-MM>]
+  bun run sources register aim --help
+
+Two modes:
+
+  Manifest-walk (default when --cache is omitted): reads an existing
+  derivative tree at <out>/<edition>/manifest.json and registers entries.
+  Requires --edition=<YYYY-MM>.
+
+  Source-ingest (when --cache is supplied): walks the AIM PDF cache, extracts
+  each cached PDF, writes the derivative tree, then registers entries.
+  --edition is optional and restricts to a single edition.
 `;
 
 const EDITION_PATTERN = /^[0-9]{4}-(0[1-9]|1[0-2])$/;
@@ -232,27 +243,33 @@ const EDITION_PATTERN = /^[0-9]{4}-(0[1-9]|1[0-2])$/;
 export interface CliArgs {
 	readonly edition: string | null;
 	readonly derivativeRoot: string;
+	readonly cacheRoot: string | null;
 	readonly help: boolean;
 }
 
 export function parseCliArgs(argv: readonly string[]): CliArgs | { error: string } {
 	let edition: string | null = null;
 	let derivativeRoot = join(process.cwd(), 'aim');
+	let cacheRoot: string | null = null;
 	let help = false;
 
 	for (const arg of argv) {
 		if (arg === '--help' || arg === '-h') help = true;
 		else if (arg.startsWith('--edition=')) edition = arg.slice('--edition='.length);
 		else if (arg.startsWith('--out=')) derivativeRoot = arg.slice('--out='.length);
+		else if (arg.startsWith('--cache=')) cacheRoot = arg.slice('--cache='.length);
 		else return { error: `unknown argument: ${arg}` };
 	}
 
-	return { edition, derivativeRoot, help };
+	return { edition, derivativeRoot, cacheRoot, help };
 }
 
 /**
  * CLI entry point. Returns exit code. Never throws on user-facing errors;
  * unexpected exceptions propagate.
+ *
+ * When `--cache=` is present, dispatches to the source-PDF ingest pipeline
+ * (`runAimSourceIngest`). Otherwise the legacy manifest-walk path runs.
  */
 export async function runIngestCli(argv: readonly string[]): Promise<number> {
 	const parsed = parseCliArgs(argv);
@@ -266,8 +283,15 @@ export async function runIngestCli(argv: readonly string[]): Promise<number> {
 		return 0;
 	}
 
+	// Source-ingest mode
+	if (parsed.cacheRoot !== null) {
+		const { runSourceIngestCli } = await import('./source-ingest.ts');
+		// Re-pass argv to source CLI (it understands --cache, --out, --edition).
+		return runSourceIngestCli(argv);
+	}
+
 	if (parsed.edition === null) {
-		process.stderr.write(`aim-corpus-ingest: --edition= required\n${USAGE}`);
+		process.stderr.write(`aim-corpus-ingest: --edition= required (or pass --cache= to ingest from PDF)\n${USAGE}`);
 		return 2;
 	}
 	if (!EDITION_PATTERN.test(parsed.edition)) {

@@ -1,0 +1,11 @@
+# Reporting Bird Strikes
+
+Pilots are urged to report any bird or other wildlife
+strike using FAA Form 5200-7, Bird/Other Wildlife
+Strike Report (Appendix 1). Additional forms are
+available at any FSS; at any FAA Regional Office or
+at https://www.faa.gov/airports/airport_safety/
+wildlife/. The data derived from these reports are used
+to develop standards to cope with this potential
+hazard to aircraft and for documentation of necessary
+habitat control on airports.

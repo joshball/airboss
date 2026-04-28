@@ -1,0 +1,54 @@
+# Flights Over Charted U.S. Wildlife Refuges, Parks, and Forest Service Areas
+
+Refuges, Parks, and Forest Service Areas
+a. The landing of aircraft is prohibited on lands or
+waters administered by the National Park Service,
+U.S. Fish and Wildlife Service, or U.S. Forest Service
+without authorization from the respective agency.
+Exceptions include:
+1. When forced to land due to an emergency
+beyond the control of the operator;
+2. At officially designated landing sites; or
+3. An approved official business of the Federal
+Government.
+b. Pilots are requested to maintain a minimum
+altitude of 2,000 feet above the surface of the
+following: National Parks, Monuments, Seashores,
+
+7-4-2
+
+Lakeshores, Recreation Areas and Scenic Riverways
+administered by the National Park Service, National
+Wildlife Refuges, Big Game Refuges, Game Ranges
+and Wildlife Ranges administered by the U.S. Fish
+and Wildlife Service, and Wilderness and Primitive
+areas administered by the U.S. Forest Service.
+NOTE-
+FAA Advisory Circular AC 91-36, Visual Flight
+Rules (VFR) Flight Near Noise-Sensitive Areas, defines
+the surface of a national park area (including parks,
+forests, primitive areas, wilderness areas, recreational
+areas, national seashores, national monuments, national
+lakeshores, and national wildlife refuge and range areas)
+as: the highest terrain within 2,000 feet laterally of the
+route of flight, or the upper-most rim of a canyon or valley.
+
+c. Federal statutes prohibit certain types of flight
+activity and/or provide altitude restrictions over
+designated U.S. Wildlife Refuges, Parks, and Forest
+Service Areas. These designated areas, for example:
+Boundary Waters Canoe Wilderness Areas,
+Minnesota; Haleakala National Park, Hawaii;
+Yosemite National Park, California; and Grand
+Canyon National Park, Arizona, are charted on
+Sectional Charts.
+d. Federal regulations also prohibit airdrops by
+parachute or other means of persons, cargo, or objects
+from aircraft on lands administered by the three
+agencies without authorization from the respective
+agency. Exceptions include:
+1. Emergencies involving the safety of human
+life; or
+2. Threat of serious property loss.
+
+Bird Hazards and Flight Over National Refuges, Parks, and Forests

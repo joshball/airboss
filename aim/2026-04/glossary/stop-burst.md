@@ -1,0 +1,3 @@
+# STOP BURST
+
+(See STOP STREAM.)
