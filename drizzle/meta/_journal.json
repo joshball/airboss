@@ -36,6 +36,13 @@
       "when": 1777336755837,
       "tag": "0004_syllabus_node_classes_and_knowledge_node_relevance",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1777376731212,
+      "tag": "0005_0427_review_schema_fixes",
+      "breakpoints": true
     }
   ]
 }

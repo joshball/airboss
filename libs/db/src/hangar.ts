@@ -21,9 +21,21 @@
  */
 
 import { bauthUser } from '@ab/auth/schema';
-import { SCHEMAS } from '@ab/constants';
-import { boolean, index, integer, jsonb, pgSchema, text, timestamp } from 'drizzle-orm/pg-core';
+import {
+	HANGAR_SYNC_MODE_VALUES,
+	JOB_KIND_VALUES,
+	JOB_LOG_STREAM_VALUES,
+	JOB_STATUS_VALUES,
+	SCHEMAS,
+	SOURCE_TYPE_VALUES,
+	SYNC_OUTCOME_VALUES,
+} from '@ab/constants';
+import { sql } from 'drizzle-orm';
+import { boolean, check, index, integer, jsonb, pgSchema, text, timestamp } from 'drizzle-orm/pg-core';
 import { timestamps } from './columns';
+
+/** Render a string array as a SQL `IN (...)` value list. */
+const inList = (values: readonly string[]) => values.map((v) => `'${v.replace(/'/g, "''")}'`).join(', ');
 
 /**
  * Shape of the `media` jsonb column on `hangar.source` (wp-hangar-non-textual).
@@ -91,8 +103,10 @@ export const hangarReference = hangarSchema.table(
 		...timestamps(),
 	},
 	(t) => ({
-		refDirtyIdx: index('hangar_reference_dirty_idx').on(t.dirty),
+		// Partial: dirty rows are the only ones the sync service queries.
+		refDirtyIdx: index('hangar_reference_dirty_idx').on(t.dirty).where(sql`${t.dirty} = true`),
 		refUpdatedIdx: index('hangar_reference_updated_idx').on(t.updatedAt),
+		refLiveIdx: index('hangar_reference_live_idx').on(t.id).where(sql`${t.deletedAt} IS NULL`),
 	}),
 );
 
@@ -138,7 +152,10 @@ export const hangarSource = hangarSchema.table(
 	},
 	(t) => ({
 		sourceTypeIdx: index('hangar_source_type_idx').on(t.type),
-		sourceDirtyIdx: index('hangar_source_dirty_idx').on(t.dirty),
+		// Partial: dirty rows are the only ones the sync service queries.
+		sourceDirtyIdx: index('hangar_source_dirty_idx').on(t.dirty).where(sql`${t.dirty} = true`),
+		sourceLiveIdx: index('hangar_source_live_idx').on(t.id).where(sql`${t.deletedAt} IS NULL`),
+		sourceTypeCheck: check('hangar_source_type_check', sql.raw(`"type" IN (${inList(SOURCE_TYPE_VALUES)})`)),
 	}),
 );
 
@@ -179,6 +196,14 @@ export const hangarSyncLog = hangarSchema.table(
 	(t) => ({
 		syncActorIdx: index('hangar_sync_log_actor_idx').on(t.actorId, t.startedAt),
 		syncOutcomeIdx: index('hangar_sync_log_outcome_idx').on(t.outcome, t.startedAt),
+		syncKindCheck: check(
+			'hangar_sync_log_kind_check',
+			sql.raw(`"kind" IN (${inList(HANGAR_SYNC_MODE_VALUES)})`),
+		),
+		syncOutcomeCheck: check(
+			'hangar_sync_log_outcome_check',
+			sql.raw(`"outcome" IN (${inList(SYNC_OUTCOME_VALUES)})`),
+		),
 	}),
 );
 
@@ -214,6 +239,8 @@ export const hangarJob = hangarSchema.table(
 		jobKindIdx: index('hangar_job_kind_idx').on(t.kind, t.createdAt),
 		jobTargetIdx: index('hangar_job_target_idx').on(t.targetType, t.targetId, t.createdAt),
 		jobActorIdx: index('hangar_job_actor_idx').on(t.actorId, t.createdAt),
+		jobStatusCheck: check('hangar_job_status_check', sql.raw(`"status" IN (${inList(JOB_STATUS_VALUES)})`)),
+		jobKindCheck: check('hangar_job_kind_check', sql.raw(`"kind" IN (${inList(JOB_KIND_VALUES)})`)),
 	}),
 );
 
@@ -235,6 +262,10 @@ export const hangarJobLog = hangarSchema.table(
 	},
 	(t) => ({
 		jobLogJobIdx: index('hangar_job_log_job_idx').on(t.jobId, t.seq),
+		jobLogStreamCheck: check(
+			'hangar_job_log_stream_check',
+			sql.raw(`"stream" IN (${inList(JOB_LOG_STREAM_VALUES)})`),
+		),
 	}),
 );
 

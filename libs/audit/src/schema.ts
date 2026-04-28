@@ -16,8 +16,12 @@
  */
 
 import { bauthUser } from '@ab/auth/schema';
-import { SCHEMAS } from '@ab/constants';
-import { index, jsonb, pgSchema, text, timestamp } from 'drizzle-orm/pg-core';
+import { AUDIT_TARGET_VALUES, SCHEMAS } from '@ab/constants';
+import { sql } from 'drizzle-orm';
+import { check, index, jsonb, pgSchema, text, timestamp } from 'drizzle-orm/pg-core';
+
+/** Render a string array as a SQL `IN (...)` value list. */
+const inList = (values: readonly string[]) => values.map((v) => `'${v.replace(/'/g, "''")}'`).join(', ');
 
 export const auditSchema = pgSchema(SCHEMAS.AUDIT);
 
@@ -64,6 +68,11 @@ export const auditLog = auditSchema.table(
 	(t) => ({
 		auditActorIdx: index('audit_log_actor_idx').on(t.actorId, t.timestamp),
 		auditTargetIdx: index('audit_log_target_idx').on(t.targetType, t.targetId, t.timestamp),
+		opCheck: check('audit_log_op_check', sql.raw(`"op" IN (${inList(AUDIT_OP_VALUES)})`)),
+		targetTypeCheck: check(
+			'audit_log_target_type_check',
+			sql.raw(`"target_type" IN (${inList(AUDIT_TARGET_VALUES)})`),
+		),
 	}),
 );
 

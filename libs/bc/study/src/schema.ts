@@ -215,9 +215,11 @@ export const knowledgeNode = studySchema.table(
 		authorId: text('author_id').references(() => bauthUser.id, { onDelete: 'set null', onUpdate: 'cascade' }),
 		/**
 		 * Authoring lifecycle -- skeleton / started / complete. Derived from
-		 * phase coverage by `build-knowledge-index.ts` and persisted so read
-		 * paths can filter on it without recomputing. Nullable for existing
-		 * rows during the migration window; the seed back-fills on next run.
+		 * phase coverage in `content_md`. Mirrored on every write by
+		 * `upsertKnowledgeNode` (calling `lifecycleFromContent`) so the
+		 * indexed column tracks the authored markdown without read-path
+		 * recomputation. Nullable for existing rows during the migration
+		 * window; the seed back-fills on next run.
 		 */
 		lifecycle: text('lifecycle').default(NODE_LIFECYCLES.SKELETON),
 		/**
@@ -302,6 +304,7 @@ export const knowledgeEdge = studySchema.table(
 		 */
 		targetExists: boolean('target_exists').notNull().default(false),
 		createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+		seedOrigin: text('seed_origin'),
 	},
 	(t) => ({
 		pk: primaryKey({ columns: [t.fromNodeId, t.toNodeId, t.edgeType] }),
