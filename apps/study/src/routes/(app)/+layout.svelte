@@ -100,6 +100,7 @@ const memoryNewActive = $derived(page.url.pathname.startsWith(ROUTES.MEMORY_NEW)
 const repsActive = $derived(page.url.pathname.startsWith(ROUTES.REPS));
 const credentialsActive = $derived(page.url.pathname.startsWith(ROUTES.CREDENTIALS));
 const lensActive = $derived(page.url.pathname.startsWith('/lens'));
+const goalsActive = $derived(page.url.pathname.startsWith(ROUTES.GOALS));
 const knowledgeActive = $derived(page.url.pathname.startsWith(ROUTES.KNOWLEDGE));
 const glossaryActive = $derived(page.url.pathname.startsWith(ROUTES.GLOSSARY));
 const handbooksActive = $derived(page.url.pathname.startsWith(ROUTES.HANDBOOKS));
@@ -219,6 +220,7 @@ function handleMemoryItemClick() {
 		<a href={ROUTES.PLANS} aria-current={plansActive ? 'page' : undefined}>{NAV_LABELS.PLANS}</a>
 		<a href={ROUTES.CREDENTIALS} aria-current={credentialsActive ? 'page' : undefined}>{NAV_LABELS.CREDENTIALS}</a>
 		<a href={ROUTES.LENS_HANDBOOK} aria-current={lensActive ? 'page' : undefined}>{NAV_LABELS.LENS}</a>
+		<a href={ROUTES.GOALS} aria-current={goalsActive ? 'page' : undefined}>{NAV_LABELS.GOALS}</a>
 		<details class="nav-menu" bind:this={memoryMenu} onfocusout={handleMemoryMenuBlur}>
 			<summary aria-haspopup="menu" aria-current={memoryActive ? 'page' : undefined}>
 				<span>{NAV_LABELS.MEMORY}</span>
