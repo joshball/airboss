@@ -1,6 +1,6 @@
 ---
 status: done
-trigger: shipped 2026-04-28 -- option 2 (fold into bc-study)
+shipped: PR #278 (2026-04-28) -- option 2 (fold into bc-study)
 source: 2026-04-27 architecture review
 ---
 

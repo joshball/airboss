@@ -1,10 +1,13 @@
 ---
 status: deferred
 trigger: when the next memory-review UX overhaul lands, OR if production traces show ABANDONED session rows growing from prefetch traffic
+folded_into: docs/work-packages/review-flow-v2/spec.md
 source: 2026-04-27 correctness review
 ---
 
 # Memory review: load -> action conversion
+
+> **Folded into [review-flow-v2](../review-flow-v2/spec.md).** The load-to-action conversion is part of the broader review-screen overhaul; when review-flow-v2 ships it should pull in this scope (action-only entry, prefetch e2e test). Kept here as the canonical scope reference until that WP runs.
 
 ## Problem
 

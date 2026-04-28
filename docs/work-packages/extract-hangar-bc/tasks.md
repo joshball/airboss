@@ -1,5 +1,7 @@
 # Tasks: extract `libs/bc/hangar/`
 
+Status: done. Shipped via PR #284 (2026-04-28).
+
 Status legend: `[x]` done, `[ ]` pending.
 
 ## Schema move
