@@ -280,23 +280,40 @@ A separate work package -- `handbook-ingestion-and-reader` -- carries the engine
 
 ## Migration plan
 
-Phased; each phase is independently shippable.
+Phased; each phase is independently shippable. Status refreshed 2026-04-27 against shipped PRs. The fine-grained 24-phase split for the actual cert-syllabus implementation work lives in [`docs/work-packages/cert-syllabus-and-goal-composer/tasks.md`](../../work-packages/cert-syllabus-and-goal-composer/tasks.md); this table is the ADR-level rollup.
 
-| Phase | Scope | Status |
-| ----- | ----------------------------------------------------------------------------- | ------ |
-| 0 | Handbook ingestion pipeline + reader UI + read-progress (PHAK first); Reference table seeded from ingested handbooks | Shipped (in flight; PR pending) -- PHAK + AFH + AvWX ingested at section-granularity; reader live; storage + edition policies in [ADR 018](../018-source-artifact-storage-policy/decision.md) + [ADR 020](../020-handbook-edition-and-amendment-policy.md) |
-| 1 | Citation table; existing node references migrated to structured citations | TBD |
-| 2 | Credential DAG; current `CERTS` + `CERT_PREREQUISITES` retired into derived views | TBD |
-| 3 | Syllabus + SyllabusNode + SyllabusNodeLink tables; YAML authoring pipeline | TBD |
-| 4 | PPL ACS transcribed (K/R/S as separate leaves); existing 30 nodes wired in via SyllabusNodeLink; AFH + AvWX ingested | TBD |
-| 5 | Relevance cache rebuild; authored relevance arrays dropped from YAML | TBD |
-| 6 | Goal table; existing study plans converted (cert_goals -> GoalSyllabus rows) | TBD |
-| 7 | Cert dashboard surface (ACS lens) | TBD |
-| 8 | Lens framework + handbook lens + weakness lens | TBD |
-| 9 | Personal goal composer | TBD |
-| 10 | Remaining syllabi: IR ACS, CPL ACS, CFI PTS, CFII PTS, MEI, endorsements; IFH + IPH ingested | Ongoing |
+| Phase | Scope                                                                                                                  | Status                                                                                                                                                    |
+| ----- | ---------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 0     | Handbook ingestion pipeline + reader UI + read-progress (PHAK first); Reference table seeded from ingested handbooks   | Shipped (PRs #242, #243) -- PHAK + AFH + AvWX at section-granularity; storage + edition policies in ADR 018 + ADR 020                                     |
+| 1     | Citation table; existing node references migrated to structured citations                                              | Partial -- `StructuredCitation` inline on `knowledge_node.references` + `syllabus_node.citations`; node migration WP P17 pending                          |
+| 2     | Credential DAG; current `CERTS` + `CERT_PREREQUISITES` retired into derived views                                      | Partial -- schema + Credential BC shipped (PRs #248, #254); credential YAML authoring + seed (WP Phase 14) pending                                        |
+| 3     | Syllabus + SyllabusNode + SyllabusNodeLink tables; YAML authoring pipeline                                             | Partial -- schema + Syllabus BC shipped (PRs #248, #254); YAML schema + seed pipeline (WP Phase 15) pending                                               |
+| 4     | PPL ACS transcribed (K/R/S as separate leaves); existing 30 nodes wired in via SyllabusNodeLink; AFH + AvWX ingested   | Partial -- ACS reference seed + `acs` resolver shipped (PR #254 / WP P8); AFH + AvWX via Phase 0; PPL ACS Area V (WP P16) pending                         |
+| 5     | Relevance cache rebuild; authored relevance arrays dropped from YAML                                                   | Pending -- WP P18, P19. (PR #217 already replaced array with `minimum_cert` + `study_priority`; Phase 5 is the rebuild + drop)                            |
+| 6     | Goal table; existing study plans converted (cert_goals -> GoalSyllabus rows)                                           | Partial -- schema + Goal BC shipped (PRs #248, #254); `study_plan.cert_goals` -> goal migration (WP Phase 20) pending                                     |
+| 7     | Cert dashboard surface (ACS lens)                                                                                      | Pending -- page-level work, follow-on to the data-layer WP                                                                                                |
+| 8     | Lens framework + handbook lens + weakness lens                                                                         | Partial -- lens framework data layer shipped (PR #254 / WP Phase 13); handbook + weakness lens UI pending                                                 |
+| 9     | Personal goal composer                                                                                                 | Pending -- page-level work, follow-on to the data-layer WP                                                                                                |
+| 10    | Remaining syllabi: IR ACS, CPL ACS, CFI PTS, CFII PTS, MEI, endorsements; IFH + IPH ingested                           | Ongoing                                                                                                                                                   |
 
 Phase 0 lands first because Phase 1 needs the handbook structure to point at and the reader has standalone learner value (the user can read PHAK in-app immediately, even before any cert dashboard exists). Phase 10 is bounded transcription + ingestion work, not a research project. PPL ACS is ~200 task leaves which expand to ~600 K/R/S element leaves; the full set across the certs and ratings user zero is pursuing is on the order of 4000 element leaves.
+
+**WP -> ADR phase mapping** (for tracing PR work back to ADR phases):
+
+| WP phases | ADR phase                              | Status            |
+| --------- | -------------------------------------- | ----------------- |
+| 0-7       | 1, 2, 3, 6 (schema + contract)         | Shipped (PR #248) |
+| 8         | 4 (ACS resolver)                       | Shipped (PR #254) |
+| 9, 10, 12 | 2, 3, 6 (BCs)                          | Shipped (PR #254) |
+| 11        | 1 (citation read helper)               | Shipped (PR #254) |
+| 13        | 8 (lens framework data)                | Shipped (PR #254) |
+| 14        | 2 (credential YAML + seed)             | Pending           |
+| 15        | 3 (syllabus YAML pipeline)             | Pending           |
+| 16        | 4 (PPL ACS Area V)                     | Pending           |
+| 17        | 1 (existing-node references migration) | Pending           |
+| 18, 19    | 5 (relevance cache rebuild + drop)     | Pending           |
+| 20        | 6 (study_plan -> goal migration)       | Pending           |
+| 21-24     | (build / docs / acceptance)            | Pending           |
 
 ## Constants and naming
 
