@@ -42,12 +42,9 @@ function groupBySurface(
 	{#if data.pages.length === 0}
 		<div class="empty">
 			<h2>No help pages yet</h2>
-			<p>
-				The help library is live but no authored content has been registered. Phase 2 of the help-library work
-				package (wp-help-library-content) ships the seven first-pass pages.
-			</p>
+			<p>Help pages are still being authored. The aviation glossary search above works today.</p>
 			<p class="hint">
-				Search still works for the aviation reference library -- press <kbd>/</kbd> or <kbd>Cmd+K</kbd>.
+				Press <kbd>/</kbd> or <kbd>Cmd+K</kbd> to search the reference library.
 			</p>
 		</div>
 	{:else}

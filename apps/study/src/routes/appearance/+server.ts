@@ -1,3 +1,4 @@
+import { dev } from '$app/environment';
 import { SECONDS_PER_YEAR } from '@ab/constants';
 import { APPEARANCE_COOKIE, isAppearancePreference } from '@ab/themes';
 import { error, json } from '@sveltejs/kit';
@@ -29,7 +30,8 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 		maxAge: SECONDS_PER_YEAR,
 		sameSite: 'lax',
 		httpOnly: false,
-		secure: false,
+		// Production over HTTPS sets `secure`; dev (HTTP localhost) cannot.
+		secure: !dev,
 	});
 	return json({ ok: true, value });
 };

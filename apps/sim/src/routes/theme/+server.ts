@@ -9,6 +9,7 @@
  * whether to honor it on a given path.
  */
 
+import { dev } from '$app/environment';
 import { createThemeEndpoint } from '@ab/themes';
 
-export const POST = createThemeEndpoint();
+export const POST = createThemeEndpoint({ dev });

@@ -6,6 +6,7 @@
  * exactly the duplication the picker extraction was meant to prevent.
  */
 
+import { dev } from '$app/environment';
 import { createThemeEndpoint } from '@ab/themes';
 
-export const POST = createThemeEndpoint();
+export const POST = createThemeEndpoint({ dev });

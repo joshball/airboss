@@ -1,8 +1,8 @@
+import { dev } from '$app/environment';
+import { SECONDS_PER_YEAR } from '@ab/constants';
 import { APPEARANCE_COOKIE, isAppearancePreference } from '@ab/themes';
 import { error, json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-
-const YEAR_SECONDS = 60 * 60 * 24 * 365;
 
 /**
  * Persist the user's appearance preference for hangar.
@@ -24,10 +24,11 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 	}
 	cookies.set(APPEARANCE_COOKIE, value, {
 		path: '/',
-		maxAge: YEAR_SECONDS,
+		maxAge: SECONDS_PER_YEAR,
 		sameSite: 'lax',
 		httpOnly: false,
-		secure: false,
+		// Production over HTTPS sets `secure`; dev (HTTP localhost) cannot.
+		secure: !dev,
 	});
 	return json({ ok: true, value });
 };

@@ -7,6 +7,7 @@
  * attributes (Path=/, Max-Age=1y, SameSite=Lax) can't drift between apps.
  */
 
+import { dev } from '$app/environment';
 import { createThemeEndpoint } from '@ab/themes';
 
-export const POST = createThemeEndpoint();
+export const POST = createThemeEndpoint({ dev });

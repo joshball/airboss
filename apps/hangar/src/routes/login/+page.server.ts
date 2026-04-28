@@ -18,7 +18,8 @@ function isSafeRedirect(path: string): boolean {
 
 export const load: PageServerLoad = async ({ locals }) => {
 	if (locals.session) {
-		redirect(302, ROUTES.HOME);
+		// 303 keeps redirect codes uniform with the action below.
+		redirect(303, ROUTES.HOME);
 	}
 	return {};
 };

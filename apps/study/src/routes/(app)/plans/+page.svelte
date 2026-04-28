@@ -179,7 +179,9 @@ function fmt(date: Date): string {
 	{:else}
 		<article class="plan-card empty">
 			<h2>No archived plans</h2>
-			<p class="muted">Plans you archive will appear here. Archiving keeps a plan's history without deleting it.</p>
+			<p class="muted">
+				Archived plans appear here when you replace your active plan. You haven't archived any plans yet.
+			</p>
 		</article>
 	{/if}
 </section>

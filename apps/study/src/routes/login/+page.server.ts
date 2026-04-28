@@ -20,7 +20,11 @@ function isSafeRedirect(path: string): boolean {
 
 export const load: PageServerLoad = async ({ locals }) => {
 	if (locals.session) {
-		redirect(302, ROUTES.HOME);
+		// 303 keeps the redirect-status story uniform with the action-side
+		// `redirect(303, ...)` below; both are POST/GET-after-mutation in
+		// shape (we just authenticated the session) and 303 is the right
+		// "here is the resource for that submission" code.
+		redirect(303, ROUTES.HOME);
 	}
 	return {};
 };

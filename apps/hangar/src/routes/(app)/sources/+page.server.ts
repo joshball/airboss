@@ -19,7 +19,7 @@ import { JOB_KINDS, ROLES, ROUTES } from '@ab/constants';
 import { db, hangarJob, hangarSource } from '@ab/db';
 import { enqueueJob } from '@ab/hangar-jobs';
 import { createLogger } from '@ab/utils';
-import { fail, redirect } from '@sveltejs/kit';
+import { fail, isRedirect, redirect } from '@sveltejs/kit';
 import { and, desc, eq, isNull } from 'drizzle-orm';
 import { REPO_ROOT } from '$lib/server/source-jobs';
 import type { Actions, PageServerLoad } from './$types';
@@ -190,7 +190,7 @@ async function enqueueGlobalAction(
 		});
 		redirect(303, ROUTES.HANGAR_JOB_DETAIL(job.id));
 	} catch (err) {
-		if (err && typeof err === 'object' && 'status' in err && 'location' in err) throw err;
+		if (isRedirect(err)) throw err;
 		log.error(
 			`enqueue ${kind} failed`,
 			{ requestId: event.locals.requestId, userId: user.id },
