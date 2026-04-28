@@ -29,6 +29,10 @@ describe('productionRegistry integration', () => {
 		expect(productionRegistry.isCorpusKnown('regs')).toBe(true);
 		expect(productionRegistry.isCorpusKnown('aim')).toBe(true);
 		expect(productionRegistry.isCorpusKnown('handbooks')).toBe(true);
+		// Phase 10 first slice: orders + ntsb resolvers register via side-effect
+		// import from the lib root.
+		expect(productionRegistry.isCorpusKnown('orders')).toBe(true);
+		expect(productionRegistry.isCorpusKnown('ntsb')).toBe(true);
 	});
 
 	test('PR-02: isCorpusKnown returns false for non-enumerated', () => {

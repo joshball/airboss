@@ -23,6 +23,10 @@ import './pts/index.ts';
 import './aim/index.ts';
 // Side-effect import: registers the `ac` CorpusResolver.
 import './ac/index.ts';
+// Side-effect import: registers the `orders` CorpusResolver (Phase 10).
+import './orders/index.ts';
+// Side-effect import: registers the `ntsb` CorpusResolver (Phase 10).
+import './ntsb/index.ts';
 
 export {
 	type BootstrapOptions,
