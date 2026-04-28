@@ -25,11 +25,12 @@
  *   - `docs/work-packages/reference-aim-ingestion/`
  */
 
+import { runIngestCli as runAcIngestCli } from '@ab/sources/ac';
 import { runIngestCli as runAimIngestCli } from '@ab/sources/aim';
 import { runIngestCli as runHandbooksIngestCli } from '@ab/sources/handbooks';
 import { runIngestCli as runRegsIngestCli } from '@ab/sources/regs';
 
-export type Subcommand = 'cfr' | 'handbooks' | 'aim';
+export type Subcommand = 'cfr' | 'handbooks' | 'aim' | 'ac';
 
 export interface SubcommandSpec {
 	readonly run: (argv: readonly string[]) => Promise<number>;
@@ -64,6 +65,16 @@ export const SUBCOMMANDS: Readonly<Record<Subcommand, SubcommandSpec>> = {
   Register entries from an existing AIM derivative tree into the @ab/sources
   registry. Does NOT fetch source PDFs or extract markdown -- the operator
   source pipeline is a separate follow-up to ADR 016 phase 0.
+`,
+	},
+	ac: {
+		run: runAcIngestCli,
+		help: `bun run ingest ac [--cache=<path>] [--out=<path>]
+
+  Walk the AC cache (default $AIRBOSS_HANDBOOK_CACHE/ac/), extract each PDF,
+  write per-AC manifest + body markdown under <repo>/ac/, and register entries
+  into the @ab/sources registry. The downloader populates the cache; this
+  script reads it and is idempotent.
 `,
 	},
 };

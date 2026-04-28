@@ -19,6 +19,8 @@ import './handbooks/index.ts';
 import './acs/index.ts';
 // Side-effect import: registers the `aim` CorpusResolver.
 import './aim/index.ts';
+// Side-effect import: registers the `ac` CorpusResolver.
+import './ac/index.ts';
 
 export { isParseError, parseIdentifier } from './parser.ts';
 export { getCorpusResolver, productionRegistry } from './registry/index.ts';
