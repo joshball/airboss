@@ -289,5 +289,8 @@ This is lesson 3 of week 2. We disambiguated currency, recency, and proficiency,
 
 - Knowledge graph: [reg-currency-vs-proficiency](../../knowledge/regulations/currency-vs-proficiency/node.md)
 - Live source: [Part 61](airboss-ref:regs/cfr-14/61?at=2026)
+- Live source: [flight review](airboss-ref:regs/cfr-14/61/56?at=2026)
+- Live source: [recent flight experience](airboss-ref:regs/cfr-14/61/57?at=2026)
+- Live source: [PIC proficiency check](airboss-ref:regs/cfr-14/61/58?at=2026)
 - Companion: AC 61-98 (currency and the flight review)
 - Companion: AC 61-65 (endorsement formats; relevant when documenting recency or training in lieu of an IPC)

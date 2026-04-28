@@ -264,6 +264,11 @@ This is lesson 2 of week 2. We zoomed in on the parallel aero-experience section
 
 - Knowledge graph: [reg-currency-vs-proficiency](../../knowledge/regulations/currency-vs-proficiency/node.md)
 - Live source: [Part 61](airboss-ref:regs/cfr-14/61?at=2026)
-- Companion: [§61.51](airboss-ref:regs/cfr-14/61?at=2026) (logging) -- read alongside §61.109 / §61.129 / §61.159
+- Live source: [private aeronautical experience](airboss-ref:regs/cfr-14/61/109?at=2026)
+- Live source: [commercial aeronautical experience](airboss-ref:regs/cfr-14/61/129?at=2026)
+- Live source: [ATP aeronautical experience](airboss-ref:regs/cfr-14/61/159?at=2026)
+- Live source: [pilot logbooks](airboss-ref:regs/cfr-14/61/51?at=2026)
+- Live source: [cross-country definitions](airboss-ref:regs/cfr-14/61/1?at=2026)
+- Live source: [R-ATP carve-out](airboss-ref:regs/cfr-14/61/160?at=2026)
 - Chief Counsel: Hicks (2010) -- canonical interpretation of §61.51(e)(1)(ii) sole-manipulator PIC
 - Chief Counsel: Mangiamele (2009) -- §61.113(c) cost-sharing (relevant when commercial-track pilots ask if cost-sharing flights count toward the 50 cross-country PIC under §61.129)

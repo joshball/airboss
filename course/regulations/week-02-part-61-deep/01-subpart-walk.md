@@ -316,5 +316,11 @@ This is lesson 1 of week 2. It gave you the structural map of Part 61. The remai
 
 - Knowledge graph: [reg-currency-vs-proficiency](../../knowledge/regulations/currency-vs-proficiency/node.md), [reg-pilot-privileges-limitations](../../knowledge/regulations/pilot-privileges-limitations/node.md)
 - Live source: [Part 61](airboss-ref:regs/cfr-14/61?at=2026)
+- Live source: [definitions](airboss-ref:regs/cfr-14/61/1?at=2026)
+- Live source: [endorsements (HP, complex, tailwheel, high-altitude)](airboss-ref:regs/cfr-14/61/31?at=2026)
+- Live source: [pilot logbooks](airboss-ref:regs/cfr-14/61/51?at=2026)
+- Live source: [flight review](airboss-ref:regs/cfr-14/61/56?at=2026)
+- Live source: [recent flight experience](airboss-ref:regs/cfr-14/61/57?at=2026)
+- Live source: [private privileges](airboss-ref:regs/cfr-14/61/113?at=2026)
 - Forward reference: Week 3, [week-03-part-61-cfi/](../week-03-part-61-cfi/) -- subpart H deep-dive
 - Companion: AC 61-65 (the endorsement bible)
