@@ -1,5 +1,5 @@
 import { requireRole } from '@ab/auth';
-import { JOB_KIND_VALUES, JOB_STATUS_VALUES, type JobKind, type JobStatus, ROLES } from '@ab/constants';
+import { JOB_KIND_VALUES, JOB_STATUS_VALUES, type JobKind, type JobStatus, QUERY_PARAMS, ROLES } from '@ab/constants';
 import { listJobs } from '@ab/hangar-jobs';
 import { narrow } from '@ab/utils';
 import type { PageServerLoad } from './$types';
@@ -9,8 +9,8 @@ const LIMIT = 100;
 export const load: PageServerLoad = async (event) => {
 	requireRole(event, ROLES.AUTHOR, ROLES.OPERATOR, ROLES.ADMIN);
 	const { url } = event;
-	const kind = narrow<JobKind>(url.searchParams.get('kind'), JOB_KIND_VALUES);
-	const status = narrow<JobStatus>(url.searchParams.get('status'), JOB_STATUS_VALUES);
+	const kind = narrow<JobKind>(url.searchParams.get(QUERY_PARAMS.KIND), JOB_KIND_VALUES);
+	const status = narrow<JobStatus>(url.searchParams.get(QUERY_PARAMS.STATUS), JOB_STATUS_VALUES);
 
 	const rows = await listJobs({ kind, status, limit: LIMIT });
 

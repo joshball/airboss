@@ -247,7 +247,7 @@ function backdropKeydown(event: KeyboardEvent): void {
 		width: 100%;
 		border: 0;
 		outline: none;
-		font-size: 1rem;
+		font-size: var(--font-size-base);
 		padding: 0.5rem 0;
 		background: transparent;
 		color: inherit;
@@ -274,7 +274,7 @@ function backdropKeydown(event: KeyboardEvent): void {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		font-size: 0.75rem;
+		font-size: var(--font-size-xs);
 		text-transform: uppercase;
 		letter-spacing: 0.08em;
 		color: var(--ink-muted);
@@ -286,7 +286,7 @@ function backdropKeydown(event: KeyboardEvent): void {
 		background: var(--surface-sunken);
 		border-radius: var(--radius-pill);
 		padding: 0 0.5rem;
-		font-size: 0.6875rem;
+		font-size: var(--font-size-xs);
 	}
 
 	.bucket ul {
@@ -328,7 +328,7 @@ function backdropKeydown(event: KeyboardEvent): void {
 	}
 
 	.tag {
-		font-size: 0.6875rem;
+		font-size: var(--font-size-xs);
 		text-transform: uppercase;
 		letter-spacing: 0.06em;
 		color: var(--ink-muted);
@@ -336,11 +336,11 @@ function backdropKeydown(event: KeyboardEvent): void {
 
 	.title {
 		font-weight: var(--font-weight-semibold);
-		font-size: 0.9375rem;
+		font-size: var(--font-size-base);
 	}
 
 	.snippet {
-		font-size: 0.8125rem;
+		font-size: var(--font-size-sm);
 		color: var(--ink-muted);
 		overflow: hidden;
 		text-overflow: ellipsis;
@@ -350,7 +350,7 @@ function backdropKeydown(event: KeyboardEvent): void {
 	.hint,
 	.empty-hint {
 		margin: 0.5rem 0 0;
-		font-size: 0.8125rem;
+		font-size: var(--font-size-sm);
 		color: var(--ink-subtle);
 	}
 
@@ -363,7 +363,7 @@ function backdropKeydown(event: KeyboardEvent): void {
 		gap: 1rem;
 		border-top: 1px solid var(--edge-default);
 		padding: 0.5rem 1rem;
-		font-size: 0.75rem;
+		font-size: var(--font-size-xs);
 		color: var(--ink-muted);
 	}
 
@@ -372,7 +372,7 @@ function backdropKeydown(event: KeyboardEvent): void {
 		border-bottom-width: 2px;
 		border-radius: var(--radius-xs);
 		padding: 0 0.25rem;
-		font-size: 0.6875rem;
+		font-size: var(--font-size-xs);
 		font-family: var(--font-family-mono);
 		background: var(--surface-sunken);
 	}

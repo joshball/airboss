@@ -101,14 +101,14 @@ const hitsById = $derived.by(() => {
 
 	.hd h1 {
 		margin: 0;
-		font-size: 1.5rem;
+		font-size: var(--font-size-xl);
 		letter-spacing: -0.02em;
 	}
 
 	.sub {
 		margin: 0.25rem 0 0;
 		color: var(--ink-muted);
-		font-size: 0.9375rem;
+		font-size: var(--font-size-base);
 	}
 
 	.layout {
@@ -146,7 +146,7 @@ const hitsById = $derived.by(() => {
 
 	.empty h2 {
 		margin: 0;
-		font-size: 1.125rem;
+		font-size: var(--font-size-lg);
 		color: var(--ink-body);
 	}
 
@@ -157,13 +157,13 @@ const hitsById = $derived.by(() => {
 	}
 
 	.empty .hint {
-		font-size: 0.875rem;
+		font-size: var(--font-size-sm);
 		color: var(--ink-subtle);
 	}
 
 	code {
 		font-family: var(--font-family-mono);
-		font-size: 0.8125rem;
+		font-size: var(--font-size-sm);
 		background: var(--surface-sunken);
 		padding: 0.0625rem 0.375rem;
 		border-radius: var(--radius-xs);

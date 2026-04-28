@@ -51,7 +51,7 @@ let {
 		border-radius: var(--radius-sm);
 		color: var(--ink-muted);
 		text-decoration: none;
-		font-size: 0.875rem;
+		font-size: var(--font-size-sm);
 		line-height: 1.4;
 		border-left: 2px solid transparent;
 	}

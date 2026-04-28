@@ -13,7 +13,7 @@ import { createReadStream } from 'node:fs';
 import { stat } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { requireRole } from '@ab/auth';
-import { type ReferenceSourceType, ROLES, SOURCE_KIND_BY_TYPE, SOURCE_KINDS } from '@ab/constants';
+import { QUERY_PARAMS, type ReferenceSourceType, ROLES, SOURCE_KIND_BY_TYPE, SOURCE_KINDS } from '@ab/constants';
 import { db, hangarSource } from '@ab/db';
 import { error } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
@@ -44,7 +44,7 @@ function extensionOf(filename: string): string {
 export const GET: RequestHandler = async (event) => {
 	requireRole(event, ROLES.AUTHOR, ROLES.OPERATOR, ROLES.ADMIN);
 
-	const name = event.url.searchParams.get('name');
+	const name = event.url.searchParams.get(QUERY_PARAMS.NAME);
 	if (!name || name.length === 0) throw error(400, 'missing ?name=');
 	// Reject obvious path-escape patterns. The resolve() check below is the
 	// authoritative guard, but rejecting these early gives clearer errors.

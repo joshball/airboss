@@ -14,8 +14,8 @@ export const load: PageServerLoad = async (event) => {
 
 	const search = url.searchParams.get(QUERY_PARAMS.SEARCH)?.trim() ?? '';
 	const type = narrow<ReferenceSourceType>(url.searchParams.get(QUERY_PARAMS.SOURCE), SOURCE_TYPE_VALUES);
-	const format = url.searchParams.get('format') ?? null;
-	const dirtyOnly = url.searchParams.get('dirty') === '1';
+	const format = url.searchParams.get(QUERY_PARAMS.FORMAT) ?? null;
+	const dirtyOnly = url.searchParams.get(QUERY_PARAMS.DIRTY) === '1';
 	const pageRaw = Number.parseInt(url.searchParams.get(QUERY_PARAMS.PAGE) ?? '1', 10);
 	const pageNum = Number.isFinite(pageRaw) && pageRaw >= 1 ? pageRaw : 1;
 	const offset = (pageNum - 1) * PAGE_SIZE;

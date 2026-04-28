@@ -4,9 +4,9 @@
  * Gesture-started, shares the cockpit's mute flag, stops on scenario outcome.
  */
 
-export { AltitudeAlert } from './altitude-alert.svelte';
-export { ApDisconnect } from './ap-disconnect.svelte';
+export { AltitudeAlert } from './altitude-alert';
+export { ApDisconnect } from './ap-disconnect';
 export { type CaptionEntry, captionStore } from './audio-captions.svelte';
-export { FlapMotor } from './flap-motor.svelte';
-export { GearWarning } from './gear-warning.svelte';
-export { MarkerBeacon } from './marker-beacon.svelte';
+export { FlapMotor } from './flap-motor';
+export { GearWarning } from './gear-warning';
+export { MarkerBeacon } from './marker-beacon';

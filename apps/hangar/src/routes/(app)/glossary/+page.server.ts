@@ -28,9 +28,9 @@ export const load: PageServerLoad = async (event) => {
 
 	const search = url.searchParams.get(QUERY_PARAMS.SEARCH)?.trim() ?? '';
 	const sourceType = narrow<ReferenceSourceType>(url.searchParams.get(QUERY_PARAMS.SOURCE), SOURCE_TYPE_VALUES);
-	const knowledgeKind = narrow<KnowledgeKind>(url.searchParams.get('kind'), KNOWLEDGE_KIND_VALUES);
-	const flightRules = narrow<FlightRules>(url.searchParams.get('rules'), FLIGHT_RULES_VALUES);
-	const dirtyOnly = url.searchParams.get('dirty') === '1';
+	const knowledgeKind = narrow<KnowledgeKind>(url.searchParams.get(QUERY_PARAMS.KIND), KNOWLEDGE_KIND_VALUES);
+	const flightRules = narrow<FlightRules>(url.searchParams.get(QUERY_PARAMS.RULES), FLIGHT_RULES_VALUES);
+	const dirtyOnly = url.searchParams.get(QUERY_PARAMS.DIRTY) === '1';
 
 	const pageRaw = Number.parseInt(url.searchParams.get(QUERY_PARAMS.PAGE) ?? '1', 10);
 	const pageNum = Number.isFinite(pageRaw) && pageRaw >= 1 ? pageRaw : 1;

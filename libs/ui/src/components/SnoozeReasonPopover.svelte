@@ -279,7 +279,7 @@ $effect(() => {
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-md);
-		box-shadow: var(--shadow-lg, 0 10px 30px rgba(0, 0, 0, 0.2));
+		box-shadow: var(--shadow-lg);
 	}
 
 	.hd {

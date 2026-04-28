@@ -94,17 +94,17 @@ let { data }: { data: PageData } = $props();
 		white-space: pre-wrap;
 	}
 	.rendered :global(.ab-ref) {
-		color: var(--ink-link, #0366d6);
+		color: var(--ink-link);
 	}
 	.rendered :global(.ab-ref-annotation) {
-		font-size: 0.875em;
+		font-size: var(--font-size-sm);
 		color: var(--ink-muted);
 		font-style: italic;
-		margin-left: 0.25em;
+		margin-left: var(--space-xs);
 	}
 	.rendered :global(.ab-ref-footnotes) {
 		margin-top: var(--space-md);
-		font-size: 0.875em;
+		font-size: var(--font-size-sm);
 		color: var(--ink-muted);
 	}
 </style>

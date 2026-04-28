@@ -1,5 +1,5 @@
 import { requireRole } from '@ab/auth';
-import { ROLES } from '@ab/constants';
+import { QUERY_PARAMS, ROLES } from '@ab/constants';
 import { getJob, readJobLog } from '@ab/hangar-jobs';
 import { error, json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
@@ -21,7 +21,7 @@ export const GET: RequestHandler = async (event) => {
 	const job = await getJob(event.params.id);
 	if (!job) throw error(404, 'job not found');
 
-	const sinceRaw = event.url.searchParams.get('sinceSeq');
+	const sinceRaw = event.url.searchParams.get(QUERY_PARAMS.SINCE_SEQ);
 	const sinceSeq = sinceRaw !== null ? Number.parseInt(sinceRaw, 10) : -1;
 	const since = Number.isFinite(sinceSeq) ? sinceSeq : -1;
 

@@ -40,7 +40,7 @@ let {
 	}
 
 	.label {
-		font-size: 0.75rem;
+		font-size: var(--font-size-xs);
 		font-weight: 600;
 		color: var(--ink-muted);
 		text-transform: uppercase;

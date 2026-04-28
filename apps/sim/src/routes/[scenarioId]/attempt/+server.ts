@@ -6,7 +6,7 @@
  * TAPE message arrives. Anonymous requests are rejected with 401 --
  * the authenticated session cookie attribution is the entire point of
  * this endpoint; sessionStorage is the fallback for unauthenticated
- * runs (see `apps/sim/src/lib/tape-store.svelte.ts`).
+ * runs (see `apps/sim/src/lib/tape-store.ts`).
  *
  * Tape + grade are best-effort: the BC's `recordSimAttempt` accepts
  * `null` for both (e.g. aborted runs that produced no frames; scenarios

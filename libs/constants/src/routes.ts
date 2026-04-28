@@ -70,6 +70,26 @@ export const QUERY_PARAMS = {
 	 * reading the older edition without losing their citation context.
 	 */
 	EDITION: 'edition',
+
+	// Targeted, per-route keys (added 2026-04-27 to satisfy the no-magic-string rule).
+	/** Post-login redirect target. */
+	REDIRECT_TO: 'redirectTo',
+	/** Polling cursor for /jobs/[id]/log. */
+	SINCE_SEQ: 'sinceSeq',
+	/** Citation picker `target` param (regulation / ac / handbook). */
+	TARGET: 'target',
+	/** Hangar /jobs filter: job kind. */
+	KIND: 'kind',
+	/** Hangar /glossary filter: rule set. */
+	RULES: 'rules',
+	/** Hangar /glossary filter: format. */
+	FORMAT: 'format',
+	/** Hangar /glossary filter: dirty rows only. */
+	DIRTY: 'dirty',
+	/** Filename param on /sources/[id]/files/raw. */
+	NAME: 'name',
+	/** Render-mode override on /references dev page. */
+	MODE: 'mode',
 } as const;
 
 export const ROUTES = {
