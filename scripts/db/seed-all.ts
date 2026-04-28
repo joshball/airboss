@@ -46,8 +46,18 @@
 
 import { resolve } from 'node:path';
 import { DEV_ACCOUNTS, DEV_DB_URL, DEV_SEED_ORIGIN_TAG, ENV_VARS } from '@ab/constants';
+import { seedAsrsFromManifest } from '@ab/sources/asrs/seed';
+import { seedFormsFromManifest } from '@ab/sources/forms/seed';
+import { seedInfoFromManifest } from '@ab/sources/info/seed';
+import { seedInterpFromManifest } from '@ab/sources/interp/seed';
 import { seedNtsbFromManifest } from '@ab/sources/ntsb/seed';
 import { seedOrdersFromManifest } from '@ab/sources/orders/seed';
+import { seedPlatesFromManifest } from '@ab/sources/plates/seed';
+import { seedPohsFromManifest } from '@ab/sources/pohs/seed';
+import { seedSafoFromManifest } from '@ab/sources/safo/seed';
+import { seedSectionalsFromManifest } from '@ab/sources/sectionals/seed';
+import { seedStatutesFromManifest } from '@ab/sources/statutes/seed';
+import { seedTcdsFromManifest } from '@ab/sources/tcds/seed';
 import { prompt } from '../lib/prompt';
 import { runOrThrow } from '../lib/spawn';
 import { migrateReferencesToStructured } from './migrate-references-to-structured';
@@ -147,26 +157,43 @@ async function phaseCredentialSyllabi(): Promise<void> {
 
 async function phaseReferenceCorpusSeed(): Promise<void> {
 	// Manifest-driven registry seeding for the small / irregular corpora that
-	// don't have a derivative-tree ingestion pipeline yet (orders, ntsb). Each
-	// corpus's `seedXFromManifest` reads `libs/sources/src/<corpus>/manifest.yaml`
-	// and patches `__sources_internal__` + `__editions_internal__` so authored
+	// don't have a derivative-tree ingestion pipeline yet. Each corpus's
+	// `seedXFromManifest` reads `libs/sources/src/<corpus>/manifest.yaml` and
+	// patches `__sources_internal__` + `__editions_internal__` so authored
 	// `airboss-ref:<corpus>/...` URLs resolve clean during the migrate-references
 	// pass that follows. Idempotent: re-runs leave the registry unchanged.
-	process.stdout.write('\n=== seed: reference corpus (orders + ntsb) ===\n');
-	const orders = await seedOrdersFromManifest();
-	process.stdout.write(
-		`  orders: ${orders.entriesRegistered} registered (${orders.entriesAlreadyAccepted} already accepted), ${orders.editionsRegistered} editions, ${orders.skipReasons.length} skipped\n`,
-	);
-	for (const reason of orders.skipReasons) {
-		process.stdout.write(`    skip: ${reason}\n`);
+	process.stdout.write('\n=== seed: reference corpus (irregular corpora) ===\n');
+	const seeders: ReadonlyArray<readonly [string, () => Promise<CorpusSeedReport>]> = [
+		['orders', seedOrdersFromManifest],
+		['ntsb', seedNtsbFromManifest],
+		['interp', seedInterpFromManifest],
+		['pohs', seedPohsFromManifest],
+		['sectionals', seedSectionalsFromManifest],
+		['plates', seedPlatesFromManifest],
+		['statutes', seedStatutesFromManifest],
+		['forms', seedFormsFromManifest],
+		['info', seedInfoFromManifest],
+		['safo', seedSafoFromManifest],
+		['tcds', seedTcdsFromManifest],
+		['asrs', seedAsrsFromManifest],
+	] as const;
+	for (const [name, run] of seeders) {
+		const report = await run();
+		const padded = name.padEnd(11);
+		process.stdout.write(
+			`  ${padded}: ${report.entriesRegistered} registered (${report.entriesAlreadyAccepted} already accepted), ${report.editionsRegistered} editions, ${report.skipReasons.length} skipped\n`,
+		);
+		for (const reason of report.skipReasons) {
+			process.stdout.write(`    skip: ${reason}\n`);
+		}
 	}
-	const ntsb = await seedNtsbFromManifest();
-	process.stdout.write(
-		`  ntsb:   ${ntsb.entriesRegistered} registered (${ntsb.entriesAlreadyAccepted} already accepted), ${ntsb.editionsRegistered} editions, ${ntsb.skipReasons.length} skipped\n`,
-	);
-	for (const reason of ntsb.skipReasons) {
-		process.stdout.write(`    skip: ${reason}\n`);
-	}
+}
+
+interface CorpusSeedReport {
+	readonly entriesRegistered: number;
+	readonly entriesAlreadyAccepted: number;
+	readonly editionsRegistered: number;
+	readonly skipReasons: readonly string[];
 }
 
 async function phaseMigrateReferences(): Promise<void> {

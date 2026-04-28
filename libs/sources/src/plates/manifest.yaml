@@ -1,0 +1,60 @@
+# Approach plate manifest -- registry seeding source
+#
+# Source of truth: ADR 019 §1.2 ("Plates") + §2.6 (registry population).
+# Loaded by `seedPlatesFromManifest` in `seed.ts`.
+#
+# Locator shape: `<airport-id>/<procedure-slug>` (e.g. `KAPA/ils-rwy-35R`).
+# Editions follow the 28-day TPP cycle and are stored as `YYYY-MM-DD`
+# publication dates.
+#
+# Adding a plate:
+#   - id: `<ICAO>/<procedure-slug>`. Procedure slug is lowercase kebab-case
+#     but may include uppercase runway suffixes (35R, 28L, 09C).
+#   - canonical_short / canonical_formal / canonical_title per ADR 019 §3.1.
+#   - editions: at least one entry. id is the publication date.
+
+plates:
+  # Centennial -- ILS or LOC RWY 35R (standard busy GA airport approach).
+  - id: KAPA/ils-rwy-35R
+    canonical_short: KAPA ILS RWY 35R
+    canonical_formal: Centennial Airport (KAPA) ILS or LOC RWY 35R
+    canonical_title: KAPA ILS RWY 35R
+    editions:
+      - id: '2026-03-19'
+        lifecycle: accepted
+
+  # San Francisco -- ILS RWY 28R, the canonical big-airport ILS.
+  - id: KSFO/ils-rwy-28R
+    canonical_short: KSFO ILS RWY 28R
+    canonical_formal: San Francisco International (KSFO) ILS or LOC RWY 28R
+    canonical_title: KSFO ILS RWY 28R
+    editions:
+      - id: '2026-03-19'
+        lifecycle: accepted
+
+  # JFK -- ILS RWY 22L.
+  - id: KJFK/ils-rwy-22L
+    canonical_short: KJFK ILS RWY 22L
+    canonical_formal: John F. Kennedy International (KJFK) ILS or LOC RWY 22L
+    canonical_title: KJFK ILS RWY 22L
+    editions:
+      - id: '2026-03-19'
+        lifecycle: accepted
+
+  # KAPA airport diagram.
+  - id: KAPA/airport-diagram
+    canonical_short: KAPA Airport Diagram
+    canonical_formal: Centennial Airport (KAPA) Airport Diagram
+    canonical_title: KAPA Airport Diagram
+    editions:
+      - id: '2026-03-19'
+        lifecycle: accepted
+
+  # KSFO airport diagram.
+  - id: KSFO/airport-diagram
+    canonical_short: KSFO Airport Diagram
+    canonical_formal: San Francisco International (KSFO) Airport Diagram
+    canonical_title: KSFO Airport Diagram
+    editions:
+      - id: '2026-03-19'
+        lifecycle: accepted

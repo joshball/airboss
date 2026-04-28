@@ -1,0 +1,32 @@
+# Safety Alerts for Operators (SAFO) manifest -- registry seeding source
+#
+# Source of truth: ADR 019 §1.2 ("SAFO") + §2.6 (registry population).
+# Loaded by `seedSafoFromManifest` in `seed.ts`.
+#
+# Locator shape: 5-digit `<YY><sequence>` id, e.g. `23004` = 2023 sequence 004.
+# SAFOs are immutable post-publication; no `?at=` pin is required.
+
+safo:
+  - id: '21002'
+    canonical_short: SAFO 21002
+    canonical_formal: FAA Safety Alert for Operators 21002
+    canonical_title: FAA SAFO 21002
+    editions:
+      - id: '2021'
+        lifecycle: accepted
+
+  - id: '22004'
+    canonical_short: SAFO 22004
+    canonical_formal: FAA Safety Alert for Operators 22004
+    canonical_title: FAA SAFO 22004
+    editions:
+      - id: '2022'
+        lifecycle: accepted
+
+  - id: '23001'
+    canonical_short: SAFO 23001
+    canonical_formal: FAA Safety Alert for Operators 23001
+    canonical_title: FAA SAFO 23001
+    editions:
+      - id: '2023'
+        lifecycle: accepted

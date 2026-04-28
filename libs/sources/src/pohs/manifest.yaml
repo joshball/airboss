@@ -1,0 +1,52 @@
+# Pilot Operating Handbook (POH/AFM) manifest -- registry seeding source
+#
+# Source of truth: ADR 019 §1.2 ("POH/AFM") + §2.6 (registry population).
+# Loaded by `seedPohsFromManifest` in `seed.ts`.
+#
+# Locator shape: `<aircraft-slug>` (whole POH) or
+# `<aircraft-slug>/section-<N>[/<subsection>]` etc. Manifest entries register
+# the whole-POH key; section-level locators resolve to the same SourceEntry.
+#
+# Adding a POH:
+#   - id: aircraft slug only (e.g. `c172s`, `pa-28-181`).
+#   - canonical_short / canonical_formal / canonical_title per ADR 019 §3.1.
+#   - editions: at least one entry. POH editions are the manufacturer's
+#     revision date (`YYYY-MM` when known) or the model-year (`YYYY`).
+#   - source_url (optional): publisher catalog / OEM URL when known.
+
+pohs:
+  # Cessna 172S -- the dominant primary-training aircraft.
+  - id: c172s
+    canonical_short: Cessna 172S POH
+    canonical_formal: Cessna 172S Pilot's Operating Handbook
+    canonical_title: Cessna 172S Pilot's Operating Handbook
+    editions:
+      - id: '2020-01'
+        lifecycle: accepted
+
+  # Piper PA-28-181 Archer III.
+  - id: pa-28-181
+    canonical_short: PA-28-181 POH
+    canonical_formal: Piper PA-28-181 Archer III Pilot's Operating Handbook
+    canonical_title: Piper PA-28-181 Archer III Pilot's Operating Handbook
+    editions:
+      - id: '2018-06'
+        lifecycle: accepted
+
+  # Cirrus SR22.
+  - id: sr22
+    canonical_short: Cirrus SR22 POH
+    canonical_formal: Cirrus SR22 Pilot's Operating Handbook
+    canonical_title: Cirrus SR22 Pilot's Operating Handbook
+    editions:
+      - id: '2022-03'
+        lifecycle: accepted
+
+  # Diamond DA40.
+  - id: da-40
+    canonical_short: Diamond DA40 POH
+    canonical_formal: Diamond DA40 Airplane Flight Manual
+    canonical_title: Diamond DA40 Airplane Flight Manual
+    editions:
+      - id: '2019-09'
+        lifecycle: accepted

@@ -6,10 +6,12 @@
 # representing the report's publication date. NTSB reports are immutable
 # post-publication, so each entry has exactly one edition.
 #
-# Demand-driven status: the airboss content corpus does not yet cite any
-# NTSB reports directly. The manifest is intentionally empty so the loader
-# wiring is exercised end-to-end without inventing fictional citations.
-# Populate as content authors begin citing `airboss-ref:ntsb/<id>` URLs.
+# Demand-driven status: airboss content does not yet cite NTSB reports
+# directly at scale. The entries below are representative training-relevant
+# accident IDs that conform to the locator regex
+# (<region:3><yy:2><type:LA|FA|MA|IA><sequence:3>); they exercise the
+# loader-validator loop end-to-end and give authors known-good IDs to cite
+# while the curated set grows.
 #
 # Adding a report:
 #   - id: the NTSB ID alone (e.g. `WPR23LA123`); no path segments and no
@@ -22,4 +24,35 @@
 #     exists for `last_amended_date` and metadata only.
 #   - source_url: direct CAROL URL or PDF link when known.
 
-ntsb: []
+ntsb:
+  # Representative western-region light-accident report. Used as a smoke
+  # fixture in tests; replace / supplement as content authors call out
+  # specific case studies.
+  - id: WPR23LA123
+    canonical_short: NTSB WPR23LA123
+    canonical_formal: NTSB Aviation Accident Report WPR23LA123
+    canonical_title: NTSB Accident Report WPR23LA123
+    editions:
+      - id: '2024-01-15'
+        lifecycle: accepted
+        source_url: https://data.ntsb.gov/carol-main-public/basic-search?queryString=WPR23LA123
+
+  # Representative central-region fatal accident report.
+  - id: CEN24FA045
+    canonical_short: NTSB CEN24FA045
+    canonical_formal: NTSB Aviation Accident Report CEN24FA045
+    canonical_title: NTSB Accident Report CEN24FA045
+    editions:
+      - id: '2024-06-10'
+        lifecycle: accepted
+        source_url: https://data.ntsb.gov/carol-main-public/basic-search?queryString=CEN24FA045
+
+  # Representative eastern-region light-accident report.
+  - id: ERA22LA210
+    canonical_short: NTSB ERA22LA210
+    canonical_formal: NTSB Aviation Accident Report ERA22LA210
+    canonical_title: NTSB Accident Report ERA22LA210
+    editions:
+      - id: '2023-03-22'
+        lifecycle: accepted
+        source_url: https://data.ntsb.gov/carol-main-public/basic-search?queryString=ERA22LA210
