@@ -1,9 +1,11 @@
 ---
 title: 'review-flow-v2'
-status: draft
+status: deferred
 size: small
 depends_on: [help-system Wave 1 merged]
 created: 2026-04-24
+deferred_at: 2026-04-28
+trigger: Next manual SMI walkthrough surfaces the same review-screen friction (items 7-9, 12-13, 16) again, OR review-flow chrome blocks snooze-and-flag from shipping cleanly. At that point, lock the four product decisions in this spec and run /ball-wp-spec for a v2 pass.
 ---
 
 # Review Flow v2

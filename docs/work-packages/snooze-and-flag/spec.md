@@ -1,9 +1,11 @@
 ---
 title: 'snooze-and-flag'
-status: draft
+status: deferred
 size: large
 depends_on: [review-flow-v2 (shares review chrome)]
 created: 2026-04-24
+deferred_at: 2026-04-28
+trigger: review-flow-v2 unblocks (locked or shipped), AND the next SMI walkthrough re-raises items 10 / 11 (snooze duration UI, mid-session replacement). At that point, run /ball-wp-spec to lock product decisions and ship the substrate.
 ---
 
 # Snooze and Flag

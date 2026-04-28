@@ -1,9 +1,11 @@
 ---
 title: 'content-citations'
-status: draft
+status: deferred
 size: large
 depends_on: []
 created: 2026-04-24
+deferred_at: 2026-04-28
+trigger: ADR 019 phase 10 expands beyond ACS (e.g. NTSB or Chief Counsel ingest lands), OR the cert-syllabus surface needs polymorphic citations across cards / reps / scenarios / nodes in one schema. With ADR 019 phases 1-9 shipped, the cross-content citation surface is now feasible; defer until a concrete consumer demands it. At that point, run /ball-wp-spec referencing ADR 019 §3 (inline syntax) and bc-citations.
 ---
 
 # Content Citations

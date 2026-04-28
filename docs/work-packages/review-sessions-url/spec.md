@@ -1,9 +1,11 @@
 ---
 title: 'review-sessions-url'
-status: draft
+status: deferred
 size: medium
 depends_on: [review-flow-v2 (shares review chrome)]
 created: 2026-04-24
+deferred_at: 2026-04-28
+trigger: A user actually loses a session and asks for resume / share / redo, OR review-flow-v2 ships and the URL shape is the next obvious gap. At that point, run /ball-wp-spec to lock the resume vs share vs redo intent split (item 18) and design the URL grammar.
 ---
 
 # Review Sessions URL

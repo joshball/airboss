@@ -1,9 +1,11 @@
 ---
 title: 'card-page-and-cross-references'
-status: draft
+status: deferred
 size: medium
 depends_on: []
 created: 2026-04-24
+deferred_at: 2026-04-28
+trigger: A user wants to share a single card publicly (the original ask behind the card-detail vs card-page split), OR the cross-reference panel becomes a blocker for the cited-by surface across content types. At that point, run /ball-wp-spec to settle owner-only vs public surface scope.
 ---
 
 # Card Page and Cross-References

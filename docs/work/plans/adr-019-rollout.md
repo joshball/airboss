@@ -2,6 +2,8 @@
 
 Tracks the implementation of [ADR 019 -- Reference Identifier System](../../decisions/019-reference-identifier-system/decision.md) across all 10 phases. One row per phase. Updated as each phase ships.
 
+Status as of 2026-04-28: phases 1-9 are shipped on `main` across PRs #240, #241, #246, #247, #249, #250, #251, #252, #260, #261, #266, #268, #276. Phase 10 (irregular corpora) is demand-driven; Lane D shipped the PPL-ASEL ACS slice (#266) but the rest of Phase 10 sits idle until a use case lands.
+
 Companion to:
 
 - [ADR 019 §8](../../decisions/019-reference-identifier-system/decision.md) -- the phase plan itself
@@ -22,14 +24,14 @@ Companion to:
 | - | --- | --- | --- | --- |
 | 1 | reference-identifier-scheme-validator | [WP](../../work-packages/reference-identifier-scheme-validator/) | #240 (WP), #241 (impl) | ✅ |
 | 2 | reference-source-registry-core | [WP](../../work-packages/reference-source-registry-core/) | #246 | ✅ |
-| 3 | reference-cfr-ingestion-bulk | [WP](../../work-packages/reference-cfr-ingestion-bulk/) | #247 | ✅ |
-| 4 | reference-renderer-runtime | [WP](../../work-packages/reference-renderer-runtime/) | #249 | 🟧 |
-| 5 | reference-versioning-tooling | [WP](../../work-packages/reference-versioning-tooling/) | -- | 🟨 |
+| 3 | reference-cfr-ingestion-bulk | [WP](../../work-packages/reference-cfr-ingestion-bulk/) | #247, #260 (Lane A) | ✅ |
+| 4 | reference-renderer-runtime | [WP](../../work-packages/reference-renderer-runtime/) | #249 | ✅ |
+| 5 | reference-versioning-tooling | [WP](../../work-packages/reference-versioning-tooling/) | #250 | ✅ |
 | 6 | reference-handbook-ingestion | [WP](../../work-packages/reference-handbook-ingestion/) | #251 | ✅ |
-| 7 | reference-aim-ingestion | [WP](../../work-packages/reference-aim-ingestion/) | #251 (WP), #261 (this PR -- Lane B end-to-end) | 🟧 |
-| 8 | reference-ac-ingestion | -- | #261 | ✅ |
-| 9 | reference-lesson-migration | -- | (this PR) | 🟧 |
-| 10 | reference-irregular-corpora | -- | -- | ⬜ |
+| 7 | reference-aim-ingestion | [WP](../../work-packages/reference-aim-ingestion/) | #252 (Lane B scaffolding), #268 (live PDF pipeline) | ✅ |
+| 8 | reference-ac-ingestion | -- | #261 (Lane C) | ✅ |
+| 9 | reference-lesson-migration | -- | #276 | ✅ |
+| 10 | reference-irregular-corpora | -- | #266 (Lane D -- PPL-ASEL ACS slice) | 🟧 |
 
 ## Per-phase notes
 
@@ -63,7 +65,7 @@ Ingestion writes section-level `SourceEntry` records (plus subpart + Part overvi
 
 After Phase 3 lands, lessons can write `[@cite](airboss-ref:regs/cfr-14/91/103?at=2026)` and the validator resolves it without ERROR.
 
-### Phase 4 -- reference-renderer-runtime 🟧
+### Phase 4 -- reference-renderer-runtime ✅
 
 Renderer at `libs/sources/src/render/` (the `@ab/sources/render` API), plus a SvelteKit server-load helper and Svelte 5 component in `apps/study/`. Resolves identifiers at render time, performs token substitution, applies adjacency-merge per §1.4, attaches acknowledgment annotations per §3.4 + §6.3, and emits the §3.1 render-mode surface.
 
@@ -80,7 +82,7 @@ Shipped surface:
 
 Coverage: 366 tests (libs/sources) + 6 tests (apps/study/lib/server/references); all 2393 project tests pass.
 
-### Phase 5 -- reference-versioning-tooling 🟨
+### Phase 5 -- reference-versioning-tooling ✅
 
 The annual rollover diff job. Compares editions in the registry, hash-compares normalized text, auto-advances lesson pins for unchanged sections, emits "needs human review" reports for changed sections.
 
@@ -94,7 +96,7 @@ Shipped surface (per [WP](../../work-packages/reference-versioning-tooling/)):
 - Validator row-6 round-trip: a synthetic two-edition-stale lesson produces row-6 WARNING; after `advance` rewrites the pin, the warning clears.
 - 50 new tests in `libs/sources/src/diff/`; 416 total tests in `libs/sources/` pass.
 
-### Phase 6 -- reference-handbook-ingestion 🟧
+### Phase 6 -- reference-handbook-ingestion ✅
 
 PHAK + AFH + AvWX corpus registration. Reuses ADR 016 phase 0 (PR #242) derivative output: that pipeline writes per-handbook `manifest.json` + per-section markdown to `handbooks/<doc>/<faa-dir>/`; Phase 6 reads those manifests and populates the `airboss-ref:` registry with chapter / section / subsection entries.
 
@@ -114,7 +116,7 @@ Out of scope and deferred:
 - Per-figure / per-table registry entries (figures and tables parse correctly via `parseLocator` but have no `SourceEntry`; the renderer descends to the derivative file when `@text` / `@quote` is bound).
 - Cross-edition aliases (handbooks rarely renumber within a letter revision; new editions ship as new doc slugs entirely, e.g. 8083-25D).
 
-### Phase 7 -- reference-aim-ingestion 🟧
+### Phase 7 -- reference-aim-ingestion ✅
 
 AIM ingestion. After this, lessons can cite `airboss-ref:aim/5-1-7?at=2026-04`.
 
@@ -151,7 +153,7 @@ Out of scope and deferred:
 
 AC catalog ingestion. Full text where licensing permits. After this, lessons can cite `airboss-ref:ac/61-65/j`.
 
-### Phase 9 -- reference-lesson-migration 🟧
+### Phase 9 -- reference-lesson-migration ✅
 
 One-pass migration of pre-ADR-019 lessons (Week 1 + 2 capstones use plain eCFR URLs / prose citations). Per ADR 019 §9 rules: parse existing eCFR URLs, generate identifiers, pin to the year of the lesson's last meaningful edit (read from git log), interactive review for ambiguous cases.
 
@@ -173,9 +175,18 @@ Migration inventory:
 
 Bare-prose citation handling: hundreds of `§91.103`-style mentions across all 25 lessons stay as prose. They're typically explanatory or categorical ("the §91.103 family of rules", "Subpart B", "91.155 - 91.159"). Mechanical rewrites would mis-pin or over-link these; promotion to identifiers is editorial.
 
-### Phase 10 -- reference-irregular-corpora
+### Phase 10 -- reference-irregular-corpora 🟧
 
 Per-corpus WPs for everything that doesn't have a clean bulk-ingestion target: NTSB Board orders, Chief Counsel letters, FAA Orders, sectionals, plates, ACS/PTS, FAA forms, InFOs, SAFOs, TCDS, ASRS reports. Each ships its own resolver + bulk-fetch or hand-curated catalog.
+
+Lane D (PR #266) shipped the first slice: ACS PPL-ASEL end-to-end (1 publication / 12 areas / 61 tasks / 529 elements = 603 entries). Other ACS cert families (FAA-S-ACS-7/8/11/25) parse and skip with explicit reasons until the locator-convention question is closed; remaining ACS slices land when the syllabus surface needs them.
+
+Status of the rest of Phase 10 corpora: demand-driven. No active WPs. Triggers per corpus:
+
+- NTSB Board orders + Chief Counsel letters -- when a lesson cites them and the `unknown:` escape hatch is the blocker.
+- FAA Orders -- when an enforcement-action lesson needs Order 2150.3 or 8900.1 cross-references.
+- Sectionals + plates -- when `apps/spatial/` ships its first map surface.
+- FAA forms / InFOs / SAFOs / TCDS / ASRS -- when a lesson or a hangar surface cites them.
 
 ## Critical-path observations
 
@@ -200,3 +211,4 @@ Phases 5, 6, 7, 8, 10 can run in parallel after Phase 2 lands -- they each unloc
 | 2026-04-28 | 7 | Lane B landed: AIM source-PDF ingestion end-to-end. New `libs/sources/src/aim/extract.ts` (TOC-driven PDF parser) + `source-ingest.ts` (orchestrator: discover -> extract -> write derivatives -> register). `bun run sources register aim --cache=<path>` now drives the full pipeline; existing `runAimIngest` manifest-walk path unchanged. Live ingest of AIM 2026-04 (732 pages): 744 SourceEntries (10 chapters / 37 sections / 396 paragraphs / 3 appendices / 298 glossary entries); 2 glossary entries skipped (CLASS E AIRSPACE, VISUAL APPROACH SLOPE INDICATOR -- column-wrap layouts emptied bodies). Derivative tree (~4.2 MB) committed inline per ADR 018. Smoke tests cover AIM alone (section), AIM paragraph, and cross-corpus (aim + regs). |
 | 2026-04-28 | 10 | Lane D landed: ACS corpus PPL-ASEL slice (`libs/sources/src/acs/` adds `derivative-reader.ts`, `ingest.ts`, `smoke.test.ts`). URI shape `airboss-ref:acs/<cert>/<edition>/area-<roman>/task-<letter>/element-<triad><ord>` per ADR 019 §1.2; ingest writes per-task body markdown to `<repo>/acs/<cert>/<edition>/area-<roman>/task-<letter>.md` with element bodies sliced out by code (`PA.I.A.K1`) on resolve. Live ingest produced 1 publication (`ppl-asel/faa-s-acs-6c`) + 12 areas + 61 tasks + 529 elements = 603 entries; promoted under `phase-9-acs-ingestion`. Other ACS cert families (FAA-S-ACS-7/8/11/25) parse and skip with explicit reasons until Open Question 7 (final ACS locator convention) resolves or a sibling lane wires them in. Wired through `bun run sources register acs`. Smoke tests cover ACS task + ACS element + cross-corpus (acs + regs in one lesson). |
 | 2026-04-28 | 9 | Phase 9 lesson migration shipped (this PR). New `scripts/migrate-lessons.ts` rewrites eCFR-URL Markdown links to `airboss-ref:regs/...` URIs pinned to the lesson's most recent commit year; bare-prose section citations stay as prose per ADR 019 §9. New `libs/sources/src/bootstrap.ts` hydrates the runtime `regs` registry from on-disk `manifest.json` + `sections.json` (synthesizes Part-level entries, registers editions, atomic-batch promotes to `accepted` under `phase-9-bootstrap`); wired into `validateReferences` so migrated identifiers resolve cleanly without an explicit ingest step at every check. Inventory: 3 identifiers migrated across 3 lessons (Week 1: title-14-shape, citation, companion-documents); 4 catalog-index URLs (Title 14 root) skipped with explicit reasons; 25 lessons scanned. `bun run airboss-ref` post-migration: 25 lessons / 3 identifiers / 0 findings. |
+| 2026-04-28 | -- | Loose-ends sweep: rollout tracker refreshed against shipped PRs. Phases 4 / 5 / 6 / 7 / 9 flipped to ✅ (all merged on main); Phase 10 marked 🟧 with concrete per-corpus triggers; Phase 8 already ✅. PR refs added (#260, #266, #268, #276). |

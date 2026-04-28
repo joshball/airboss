@@ -1,10 +1,13 @@
 # Now
 
-Single entry point for "what should I work on?" in airboss. Refresh date: 2026-04-27 (evening).
+Single entry point for "what should I work on?" in airboss. Refresh date: 2026-04-28.
 
 ## Just shipped (2026-04-25 -> 2026-04-28 sweep)
 
-The week was dominated by the reference identifier system (ADR 019), the cert-syllabus data layer (ADR 016), and the post-pivot documentation reset.
+The week was dominated by the reference identifier system (ADR 019, **phases 1-9 all on main**), the cert-syllabus data layer (ADR 016, **all 24 WP phases shipped across PRs #248, #254, #264, #270, #274**), and the post-pivot documentation reset.
+
+- **ADR 019 phases 1-9 fully shipped.** `@ab/sources` lib + validator (#241), registry + `--fix` (#246), CFR ingestion (#247, #260), renderer runtime (#249), versioning + diff job (#250), handbook corpus (#251), AIM corpus + live PDF pipeline (#252, #268), AC corpus (#261), ACS PPL-ASEL slice (#266), lesson migration (#276). Phase 10 (irregular corpora) is demand-driven; per-corpus triggers documented in [adr-019-rollout.md](plans/adr-019-rollout.md#phase-10----reference-irregular-corpora-).
+- **Cert-syllabus + goal composer WP done end-to-end.** PRs #248 (contract + schema, phases 0-7), #254 (BC + ACS resolver, phases 8-13), #264 (seed + transcription + WP P17 reference migration, phases 14-21), #270 (Gate A relevance live + Gate B YAML strip + study_plan -> goal migration, phase 22), #274 (final review pass via /ball-review-full + fixer, phases 23-24). ADR 016 phase table refreshed. Surface work (cert dashboard, lens UI, goal composer pages) is the remaining post-data-layer build.
 
 - **ADR 019 reference-identifier system, phases 1-7 + Lane A (CFR structural index) on main.** New `@ab/sources` lib at `libs/sources/`. Validator, registry core + `--fix` mode, CFR bulk ingestion, renderer runtime, versioning + diff job, handbook corpus, AIM corpus. Lane A landed the CFR Title 14 (226 parts / 6,328 sections) + Title 49 aviation slice (parts 1552 + 830, 22 sections) structural index, plus the ADR 018 amendment formalizing the scale-tier exception (>1k derivatives -> commit `manifest.json` + `sections.json` only; bodies regenerate from cached XML). PRs #241, #246, #247, #249, #250, #251, #252, #260.
 - **Shared PDF extractor + AC date-detection POC + unified ingest dispatcher.** `libs/sources/src/pdf/`, AC corpus date logic, single `bun run ingest <corpus>` entry point. PRs #257, #258, #259.
@@ -23,26 +26,27 @@ The week was dominated by the reference identifier system (ADR 019), the cert-sy
 
 ## In flight
 
-- **ADR 019 Lane C -- AC corpus.** Branch `feat/regs-ac-corpus-lane-c`. Working-tree shows `libs/sources/src/types.ts` modified and an empty `libs/sources/src/ac/` directory; the ingest pipeline is being filled in. AC date detection POC already merged via #258.
-- **ADR 019 Lane D -- ACS corpus.** `libs/sources/src/acs/` exists with resolver, locator, citation, URL helpers; `ingest.ts` and `cache.ts` not yet present. Cert-syllabus WP PR 2 (#254) seeded the ACS resolver under `@ab/bc-study` so syllabus_node `airboss_ref` columns can resolve, but the bulk ACS ingest into the registry is the remaining work.
-- **ADR 019 Lane B -- AIM.** Already shipped via #252. (Listed here only because PR #260's body claims Lane B is unblocked-but-unbuilt; the lib code is on main.)
-- **Cert-syllabus + goal composer WP PR 3+ of N.** Phases 14+ (cert dashboard surface, lens framework UI, personal goal composer pages) -- the data layer landed in #248 + #254; the SvelteKit page work is the next chunk.
-- **FAR navigation course Weeks 2-10.** Per `course/regulations/CHANGELOG.md`, Week 1 is fully authored; Weeks 2 (Part 61 deep), 3 (CFI), 4-6 (Part 91), 7 (141 + 135), 8 (companion docs), 9 (enforcement), 10 (capstone) await authoring. Two sibling capstones (friend-flight-review, ppl-applies-for-ir) deferred until they can be authored against `airboss-ref:` syntax in one pass.
-- **Two follow-up PRs from the 2026-04-24 SMI walkthrough handoff that never happened:**
-  - **Small-fixes Cluster G** (items 2, 6, 17, 23 from the walkthrough feedback). Punch list lives in [`docs/work/handoffs/20260424-session-state-smi-walkthrough.md`](handoffs/20260424-session-state-smi-walkthrough.md).
-  - **Magic-strings fix PR.** Audit catalogued 30+ literals + 40+ enum-bypassing strings against existing `@ab/constants` exports. Pure mechanical swaps. Audit at [`docs/work/reviews/20260424-magic-strings-audit.md`](reviews/20260424-magic-strings-audit.md).
+- **Cert-syllabus surface work (post-data-layer).** Cert dashboard (ACS lens, ADR 016 phase 7), handbook + weakness lens UI (phase 8), personal goal composer (phase 9). The data layer is done; these are SvelteKit page chunks.
+- **FAR navigation course Weeks 2-10.** Per `course/regulations/CHANGELOG.md`, Week 1 is fully authored; Weeks 2 (Part 61 deep), 3 (CFI), 4-6 (Part 91), 7 (141 + 135), 8 (companion docs), 9 (enforcement), 10 (capstone) await authoring. Two sibling capstones (friend-flight-review, ppl-applies-for-ir) deferred until they can be authored against `airboss-ref:` syntax in one pass. Now unblocked since `airboss-ref:` lessons round-trip cleanly through the validator + renderer.
+- **Magic-strings fix PR.** Audit catalogued 30+ literals + 40+ enum-bypassing strings against existing `@ab/constants` exports. Pure mechanical swaps. Audit at [`docs/work/reviews/20260424-magic-strings-audit.md`](reviews/20260424-magic-strings-audit.md). Hasn't shipped; still applicable.
 
-## Five draft work packages waiting on a decision
+## Recently closed (no longer active)
 
-Authored 2026-04-25 from the SMI walkthrough triage; status `draft`, no movement since. Per CLAUDE.md "no undecided considerations for future work", each needs a verdict: spec it now (`/ball-wp-spec`), schedule it, or drop.
+- **Cluster G small-fixes** (items 2, 6, 17, 23) shipped via PR #106 ("small SMI walkthrough fixes -- badges, nav, question clarity, browse stats"). Source todo file [archived](.archive/todos/20260424-02-smi-walkthrough-feedback.md) lists all 17 closing PRs.
+- **ADR 019 phases 1-9** all on main (see "Just shipped" above).
+- **Cert-syllabus + goal composer WP** all 24 phases shipped across 5 PRs.
 
-| Work package                                                                                          | Cluster | Origin                                |
-| ----------------------------------------------------------------------------------------------------- | ------- | ------------------------------------- |
-| [review-flow-v2](../work-packages/review-flow-v2/spec.md)                                             | B       | review-flow UX (items 7-9, 12-13, 16) |
-| [snooze-and-flag](../work-packages/snooze-and-flag/spec.md)                                           | C       | snooze + question quality (10, 11)    |
-| [review-sessions-url](../work-packages/review-sessions-url/spec.md)                                   | D       | URL + state for sessions (15, 18)     |
-| [card-page-and-cross-references](../work-packages/card-page-and-cross-references/spec.md)             | E       | card-page + cross-refs (item 4 + new) |
-| [content-citations](../work-packages/content-citations/spec.md)                                       | F       | broad polymorphic citations (item 1)  |
+## Five draft work packages -- now deferred
+
+Authored 2026-04-25 from the SMI walkthrough triage. As of 2026-04-28, all five flipped to `status: deferred` with explicit triggers in their frontmatter (per CLAUDE.md "no undecided considerations for future work"). Each will be re-spec'd via `/ball-wp-spec` when its trigger fires.
+
+| Work package                                                                              | Cluster | Trigger                                                                   |
+| ----------------------------------------------------------------------------------------- | ------- | ------------------------------------------------------------------------- |
+| [review-flow-v2](../work-packages/review-flow-v2/spec.md)                                 | B       | Next walkthrough re-raises items 7-9, 12-13, 16 (review-screen friction)  |
+| [snooze-and-flag](../work-packages/snooze-and-flag/spec.md)                               | C       | review-flow-v2 unblocks AND a walkthrough re-raises items 10, 11          |
+| [review-sessions-url](../work-packages/review-sessions-url/spec.md)                       | D       | A user actually loses a session and asks for resume / share / redo        |
+| [card-page-and-cross-references](../work-packages/card-page-and-cross-references/spec.md) | E       | A user wants to share a single card publicly OR cited-by surface blocks   |
+| [content-citations](../work-packages/content-citations/spec.md)                           | F       | ADR 019 phase 10 expands beyond ACS OR cert-syllabus needs polymorphic    |
 
 ## Deferred work packages from the 2026-04-27 12-axis review
 
@@ -63,16 +67,16 @@ Captured as part of the review-fix PR. Each has an explicit trigger condition; n
 
 Original MVP build order (Steps 1-6) shipped between PRs #1-#16. The active build order today is:
 
-| Step | Work                                                    | Status                                                                         |
-| ---- | ------------------------------------------------------- | ------------------------------------------------------------------------------ |
-| 7    | Scale knowledge graph to ~500 nodes                     | Ongoing (16 sim-mapped nodes via #232; cumulative count not centrally tracked) |
-| 8    | Manual test passes (user zero) for the six MVP features | Pending                                                                        |
-| --   | ADR 019 Lane B -- AIM corpus                            | Shipped (#252)                                                                 |
-| --   | ADR 019 Lane C -- AC corpus                             | In flight (current branch)                                                     |
-| --   | ADR 019 Lane D -- ACS corpus                            | Resolver shipped (#254); bulk ingest pending                                   |
-| --   | Cert-syllabus + goal composer WP PR 3+ of N             | Pending                                                                        |
-| --   | FAR navigation course Weeks 2-10                        | Pending (Week 1 shipped #237)                                                  |
-| --   | FIRC migration as `apps/firc/`                          | Deferred (post-MVP-proven)                                                     |
+| Step | Work                                                     | Status                                                                               |
+| ---- | -------------------------------------------------------- | ------------------------------------------------------------------------------------ |
+| 7    | Scale knowledge graph to ~500 nodes                      | Ongoing (16 sim-mapped nodes via #232; cumulative count not centrally tracked)       |
+| 8    | Manual test passes (user zero) for the six MVP features  | Pending                                                                              |
+| --   | ADR 019 phases 1-9 (validator -> ingest -> migration)    | Shipped (PRs #241, #246, #247, #249, #250, #251, #252, #260, #261, #266, #268, #276) |
+| --   | ADR 019 phase 10 -- irregular corpora (NTSB, CC, etc.)   | Demand-driven; ACS PPL-ASEL slice shipped (#266); rest deferred per trigger          |
+| --   | Cert-syllabus + goal composer WP (data layer)            | Shipped (PRs #248, #254, #264, #270, #274)                                           |
+| --   | Cert-syllabus surface work (dashboard + lens + composer) | Pending (ADR 016 phases 7-9)                                                         |
+| --   | FAR navigation course Weeks 2-10                         | Pending (Week 1 shipped #237; now unblocked by airboss-ref: round-trip)              |
+| --   | FIRC migration as `apps/firc/`                           | Deferred (post-MVP-proven)                                                           |
 
 ## Next
 
@@ -89,23 +93,20 @@ The original MVP roadmap is done in code; the human-side work and the post-MVP b
 
    The 2026-04-25 walkthrough plan at [`docs/work/walkthroughs/20260425/PLAN.md`](walkthroughs/20260425/PLAN.md) audited each test plan against current main and pruned dead steps; that's the doc to walk from, not the raw test plans.
 
-2. **Decide the five draft work packages above.** Spec / schedule / drop, one verdict per package.
+2. **Cert-syllabus surface work.** ADR 016 phases 7-9 (cert dashboard, lens UI, goal composer pages). Data layer is done; this is the SvelteKit page chunk.
 
-3. **Ship the two stalled SMI follow-up PRs** (Cluster G small fixes + magic-strings sweep). Both have punch lists ready.
+3. **Ship the magic-strings sweep PR.** Punch list at [`docs/work/reviews/20260424-magic-strings-audit.md`](reviews/20260424-magic-strings-audit.md). Pure mechanical swaps against existing `@ab/constants` exports.
 
-4. **Resolve ADR 016's phase table.** Nine "Order" cells are TBD; PRs #248 + #254 shipped phases 0-13 of the WP without an ADR refresh. Sequence the rest before WP PR 3 lands so the next cert-syllabus PR doesn't compound on a stale plan.
+4. **Author Week 2 of the regulations course (Part 61 deep)**, now unblocked by the `airboss-ref:` round-trip. The course and the graph reinforce each other and are best authored as a pair.
 
-5. **Author Week 2 of the regulations course (Part 61 deep)**, when knowledge-graph authoring rotates into "regulations" domain. The course and the graph reinforce each other and are best authored as a pair.
-
-6. **Decide CFR XML storage.** Open question in [`reference-extraction-pipeline/tasks.md`](../work-packages/reference-extraction-pipeline/tasks.md): commit, LFS, or external? ADR-shaped product call.
+5. **Decide CFR XML storage.** Open question in [`reference-extraction-pipeline/tasks.md`](../work-packages/reference-extraction-pipeline/tasks.md): commit, LFS, or external? ADR-shaped product call.
 
 ## Pending infra cleanup
 
-- **ADR 016 phase table.** [`decision.md:288-296`](../decisions/016-cert-syllabus-goal-model/decision.md#L288-L296) lists 9 phase rows, every "Order" cell `TBD`. Phases 0-13 of the WP have shipped; the table needs refresh before WP PR 3 lands.
 - **`review_status` flips** on each work package's `review.md` -- agent-controlled field that hasn't been flipped to `done` on the newer packages.
-- **`feat/sim-reps-wiring` branch** -- 2 days idle, no upstream tracking. Decide: rebase + finish, or delete.
-- **`wip/2026-04-25-safety-net` branch** -- 35h idle. Check what's in it; keep or delete.
-- **23 `.claude/worktrees/agent-*` paths** -- belong to other agents, all locked to live PIDs. Will release naturally as agents finish; run `/audit-worktrees` if you want the inventory.
+- **`feat/sim-reps-wiring` branch** -- check status; rebase + finish, or delete.
+- **`wip/2026-04-25-safety-net` branch** -- check what's in it; keep or delete.
+- **`.claude/worktrees/agent-*` paths** -- belong to other agents, all locked to live PIDs. Will release naturally as agents finish; run `/audit-worktrees` if you want the inventory.
 
 ## Links
 
