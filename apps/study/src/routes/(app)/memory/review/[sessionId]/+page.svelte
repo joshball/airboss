@@ -22,6 +22,7 @@ import {
 	type SnoozeReason,
 } from '@ab/constants';
 import PageHelp from '@ab/help/ui/PageHelp.svelte';
+import Button from '@ab/ui/components/Button.svelte';
 import InfoTip from '@ab/ui/components/InfoTip.svelte';
 import JumpToCardPopover, { type JumpCardStatus } from '@ab/ui/components/JumpToCardPopover.svelte';
 import KbdHint from '@ab/ui/components/KbdHint.svelte';
@@ -457,9 +458,9 @@ async function submitFeedbackForm(event: SubmitEvent) {
 				<p class="summary">No cards due right now. Come back later or write more cards.</p>
 			{/if}
 			<div class="actions">
-				<a class="btn ghost" href={ROUTES.DASHBOARD}>Back to dashboard</a>
-				<a class="btn secondary" href={ROUTES.MEMORY_NEW}>New card</a>
-				<a class="btn primary" href={ROUTES.MEMORY_REVIEW}>Start a fresh run</a>
+				<Button variant="ghost" href={ROUTES.DASHBOARD}>Back to dashboard</Button>
+				<Button variant="secondary" href={ROUTES.MEMORY_NEW}>New card</Button>
+				<Button variant="primary" href={ROUTES.MEMORY_REVIEW}>Start a fresh run</Button>
 			</div>
 		</article>
 	{:else}
@@ -549,9 +550,9 @@ async function submitFeedbackForm(event: SubmitEvent) {
 				</div>
 			{/if}
 			<div class="reveal-row">
-				<button
-					type="button"
-					class="btn primary wide"
+				<Button
+					variant="primary"
+					size="lg"
 					onclick={() => {
 						if (needsConfidence && confidence === null) skipConfidence();
 						else reveal();
@@ -559,7 +560,7 @@ async function submitFeedbackForm(event: SubmitEvent) {
 				>
 					Show answer
 					<span class="kbd">Enter</span>
-				</button>
+				</Button>
 				<InfoTip
 					term="Show answer"
 					definition="Recall first, then check. Active recall builds retention; rereading the back first does not."
@@ -628,9 +629,9 @@ async function submitFeedbackForm(event: SubmitEvent) {
 							<span class="feedback-error" role="alert">{feedbackError}</span>
 						{/if}
 						<div class="feedback-actions">
-							<button
-								type="button"
-								class="btn ghost btn-small"
+							<Button
+								variant="ghost"
+								size="sm"
 								onclick={() => {
 									feedbackSignal = null;
 									feedbackComment = '';
@@ -638,10 +639,10 @@ async function submitFeedbackForm(event: SubmitEvent) {
 								}}
 							>
 								Cancel
-							</button>
-							<button type="submit" class="btn primary btn-small" disabled={feedbackSubmitting}>
+							</Button>
+							<Button type="submit" variant="primary" size="sm" disabled={feedbackSubmitting}>
 								{feedbackSubmitting ? 'Saving...' : 'Save feedback'}
-							</button>
+							</Button>
 						</div>
 					</label>
 				{:else if feedbackSignal === CARD_FEEDBACK_SIGNALS.LIKE}
@@ -1220,6 +1221,7 @@ async function submitFeedbackForm(event: SubmitEvent) {
 	.reveal-row {
 		display: flex;
 		align-items: center;
+		justify-content: center;
 		gap: var(--space-sm);
 	}
 
@@ -1279,67 +1281,6 @@ async function submitFeedbackForm(event: SubmitEvent) {
 
 	.rating-4 .rating-label {
 		color: var(--action-default-hover);
-	}
-
-	.btn {
-		padding: var(--space-sm) var(--space-xl);
-		font-size: var(--font-size-body);
-		font-weight: 600;
-		border-radius: var(--radius-lg);
-		border: 1px solid transparent;
-		cursor: pointer;
-		text-decoration: none;
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		gap: var(--space-sm);
-		transition:
-			background var(--motion-fast),
-			border-color var(--motion-fast);
-	}
-
-	.btn:focus-visible {
-		outline: none;
-		box-shadow: 0 0 0 3px var(--focus-ring);
-	}
-
-	.btn.primary {
-		background: var(--action-default);
-		color: var(--ink-inverse);
-	}
-
-	.btn.primary:hover {
-		background: var(--action-default-hover);
-	}
-
-	.btn.secondary {
-		background: var(--surface-sunken);
-		color: var(--ink-body);
-		border-color: var(--edge-strong);
-	}
-
-	.btn.secondary:hover {
-		background: var(--edge-default);
-	}
-
-	.btn.ghost {
-		background: transparent;
-		color: var(--ink-muted);
-	}
-
-	.btn.ghost:hover {
-		background: var(--surface-sunken);
-	}
-
-	.btn.wide {
-		align-self: center;
-		padding: var(--space-md) var(--space-2xl);
-		font-size: var(--font-size-base);
-	}
-
-	.btn-small {
-		padding: var(--space-2xs) var(--space-md);
-		font-size: var(--font-size-sm);
 	}
 
 	.kbd {

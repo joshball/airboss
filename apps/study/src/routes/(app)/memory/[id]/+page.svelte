@@ -22,6 +22,7 @@ import {
 	ROUTES,
 } from '@ab/constants';
 import PageHelp from '@ab/help/ui/PageHelp.svelte';
+import Button from '@ab/ui/components/Button.svelte';
 import CitationChips, { type CitationChipItem } from '@ab/ui/components/CitationChips.svelte';
 import CitationPicker, { type CitationPickerSelection } from '@ab/ui/components/CitationPicker.svelte';
 import ConfirmAction from '@ab/ui/components/ConfirmAction.svelte';
@@ -375,10 +376,10 @@ async function handleCitationSelect(selection: CitationPickerSelection): Promise
 				<input type="text" name="tags" disabled={saving} value={editValues.tags?.join?.(', ') ?? tagsString} />
 			</label>
 			<div class="actions">
-				<button type="button" class="btn ghost" onclick={confirmDiscardEdit} disabled={saving}>Cancel</button>
-				<button type="submit" class="btn primary" disabled={saving}>
+				<Button variant="ghost" onclick={confirmDiscardEdit} disabled={saving}>Cancel</Button>
+				<Button type="submit" variant="primary" disabled={saving}>
 					{saving ? 'Saving...' : 'Save changes'}
-				</button>
+				</Button>
 			</div>
 		</form>
 	{:else}
@@ -405,12 +406,12 @@ async function handleCitationSelect(selection: CitationPickerSelection): Promise
 			<div class="row action-row">
 				<div class="primary-actions">
 					{#if card.isEditable}
-						<button type="button" class="btn secondary" onclick={startEdit}>Edit</button>
+						<Button variant="secondary" onclick={startEdit}>Edit</Button>
 					{:else}
 						<span class="note">This card is read-only (source: {humanize(card.sourceType)}).</span>
 					{/if}
 					<span class="action-wrap">
-						<button type="button" class="btn secondary" onclick={sharePublicLink}>Share</button>
+						<Button variant="secondary" onclick={sharePublicLink}>Share</Button>
 						<InfoTip
 							term="Share"
 							definition="Copies the public card link ({ROUTES.CARD_PUBLIC(card.id)}). Only the question and answer are visible on the public page; scheduling internals stay private."
@@ -418,7 +419,7 @@ async function handleCitationSelect(selection: CitationPickerSelection): Promise
 							helpSection="share"
 						/>
 					</span>
-					<a class="btn ghost" href={publicCardPath} target="_blank" rel="noopener noreferrer">Open public view</a>
+					<Button variant="ghost" href={publicCardPath} target="_blank">Open public view</Button>
 				</div>
 				<div class="inline-form">
 					{#if card.status === CARD_STATUSES.ACTIVE}
@@ -471,15 +472,14 @@ async function handleCitationSelect(selection: CitationPickerSelection): Promise
 									};
 								}}
 							>
-								<button
+								<Button
 									type="submit"
-									class="btn secondary"
-									name="status"
-									value={CARD_STATUSES.ACTIVE}
+									variant="secondary"
 									disabled={statusUpdating}
 								>
 									{statusUpdating ? '...' : 'Reactivate'}
-								</button>
+								</Button>
+								<input type="hidden" name="status" value={CARD_STATUSES.ACTIVE} />
 							</form>
 							<InfoTip
 								term="Reactivate"
@@ -516,9 +516,11 @@ async function handleCitationSelect(selection: CitationPickerSelection): Promise
 	<article class="content">
 		<div class="citations-header">
 			<h2>Citations</h2>
-			<button type="button" class="btn secondary citations-add" onclick={() => (citationPickerOpen = true)}>
-				+ Cite a reference
-			</button>
+			<span class="citations-add">
+				<Button variant="secondary" onclick={() => (citationPickerOpen = true)}>
+					+ Cite a reference
+				</Button>
+			</span>
 		</div>
 		{#if citationError}
 			<div class="error" role="alert">{citationError}</div>
@@ -1154,64 +1156,6 @@ async function handleCitationSelect(selection: CitationPickerSelection): Promise
 
 	.reviews tr:last-child td {
 		border-bottom: none;
-	}
-
-	.btn {
-		padding: var(--space-sm) var(--space-lg);
-		font-size: var(--type-definition-body-size);
-		font-weight: 600;
-		border-radius: var(--radius-md);
-		border: 1px solid transparent;
-		cursor: pointer;
-		text-decoration: none;
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		transition: background var(--motion-fast), border-color var(--motion-fast);
-	}
-
-	.btn.primary {
-		background: var(--action-default);
-		color: var(--ink-inverse);
-	}
-
-	.btn.primary:hover:not(:disabled) {
-		background: var(--action-default-hover);
-	}
-
-	.btn.secondary {
-		background: var(--surface-sunken);
-		color: var(--ink-body);
-		border-color: var(--edge-strong);
-	}
-
-	.btn.secondary:hover:not(:disabled) {
-		background: var(--edge-default);
-	}
-
-	.btn.ghost {
-		background: transparent;
-		color: var(--ink-muted);
-	}
-
-	.btn.ghost:hover {
-		background: var(--surface-sunken);
-	}
-
-	.btn.danger {
-		background: var(--ink-inverse);
-		color: var(--action-hazard-hover);
-		border-color: var(--action-hazard-edge);
-	}
-
-	.btn.danger:hover:not(:disabled) {
-		background: var(--action-hazard-wash);
-		border-color: var(--action-hazard-edge);
-	}
-
-	.btn:disabled {
-		opacity: 0.6;
-		cursor: not-allowed;
 	}
 
 	.citations-header {

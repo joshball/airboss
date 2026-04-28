@@ -25,6 +25,8 @@ let {
 	variant = 'primary',
 	size = 'md',
 	href,
+	target,
+	rel,
 	type = 'button',
 	disabled = false,
 	loading = false,
@@ -37,6 +39,17 @@ let {
 	variant?: ButtonVariant;
 	size?: ButtonSize;
 	href?: string;
+	/**
+	 * Anchor target. Only meaningful when `href` is set. When set to
+	 * `_blank`, `rel` defaults to `noopener noreferrer` to avoid the
+	 * reverse-tabnabbing leak (callers can override).
+	 */
+	target?: '_self' | '_blank' | '_parent' | '_top';
+	/**
+	 * Anchor `rel`. Only meaningful when `href` is set. When `target` is
+	 * `_blank` and `rel` is not provided, defaults to `noopener noreferrer`.
+	 */
+	rel?: string;
 	type?: ButtonType;
 	disabled?: boolean;
 	loading?: boolean;
@@ -48,6 +61,7 @@ let {
 } = $props();
 
 const isDisabled = $derived(disabled || loading);
+const resolvedRel = $derived(rel ?? (target === '_blank' ? 'noopener noreferrer' : undefined));
 </script>
 
 {#if href !== undefined}
@@ -56,6 +70,8 @@ const isDisabled = $derived(disabled || loading);
 		class:full={fullWidth}
 		class:is-disabled={isDisabled}
 		href={isDisabled ? undefined : href}
+		target={target}
+		rel={resolvedRel}
 		aria-disabled={isDisabled ? 'true' : undefined}
 		aria-label={ariaLabel}
 		tabindex={isDisabled ? -1 : undefined}
