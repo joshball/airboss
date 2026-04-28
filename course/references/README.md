@@ -13,4 +13,15 @@ Each YAML carries:
 - `publisher` -- defaults to `FAA`.
 - `url` -- live URL to the FAA-published PDF or landing page.
 
+## Files
+
+- `acs-pts.yaml` -- per-cert ACS and PTS publications.
+- `advisory-circulars.yaml` -- AC NN-NN editions.
+- `aim-pcg.yaml` -- Aeronautical Information Manual + Pilot/Controller Glossary.
+- `cfr-titles.yaml` -- 14 CFR parts.
+- `handbooks-noningested.yaml` -- FAA handbooks referenced from knowledge nodes but not yet ingested via the `handbooks/` derivative pipeline.
+- `ntsb.yaml` -- NTSB accident-reports umbrella row.
+- `poh.yaml` -- POH / AFM umbrella row.
+- `other-publications.yaml` -- non-FAA-handbook / non-CFR publications cited from knowledge nodes (AOPA ASI, FAA-P-8740-36, FAA Order 8260.3 / TERPS, approach plates, Jeppesen charts, Rogers AIAA paper, plus the `generic-acs` / `generic-pts` umbrella fallbacks).
+
 The seed step is idempotent on `(document_slug, edition)` -- re-running with no changes is a no-op.

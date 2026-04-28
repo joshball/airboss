@@ -35,8 +35,8 @@ references:
   - source: AIM
     detail: 5-4 -- Arrival Procedures
     note: Approach procedure components, segment definitions.
-  - source: TERPS (FAA Order 8260.3)
-    detail: United States Standard for Terminal Instrument Procedures
+  - source: FAA Order 8260.3
+    detail: United States Standard for Terminal Instrument Procedures (TERPS)
     note: The design spec; rarely consulted by line pilots but explains why approaches look the way they do.
 
 assessable: true

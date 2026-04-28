@@ -1,0 +1,72 @@
+# Non-FAA-handbook / non-CFR publications cited from knowledge nodes.
+# Authoring rows here clears the synthetic `seed_origin` marker the
+# `migrate-references-to-structured` migration would otherwise stamp on
+# fallback rows it generates from `kind: other` source strings.
+#
+# `(slug, edition)` pairs MUST match what
+# `scripts/db/migrate-references-to-structured.ts` emits in
+# `matchSpecificOtherPublication` for the citation to resolve here
+# instead of upserting a synthetic. The two ACS / PTS umbrella rows
+# match the migration's `generic-acs` / `generic-pts` fallback for the
+# bare "ACS" / "PTS" / "ACS / PTS standards" citations that don't carry
+# a specific edition tag yet.
+
+references:
+  - slug: aopa-air-safety-institute
+    kind: other
+    edition: current
+    title: AOPA Air Safety Institute
+    publisher: AOPA
+    url: https://www.aopa.org/training-and-safety/air-safety-institute
+
+  - slug: faa-p-8740-36
+    kind: other
+    edition: unspecified
+    title: Aviation Decision Making (FAA-P-8740-36)
+    publisher: FAA
+
+  - slug: faa-order-8260-3
+    kind: other
+    edition: 8260.3C
+    title: United States Standard for Terminal Instrument Procedures (TERPS)
+    publisher: FAA
+    url: https://www.faa.gov/regulations_policies/orders_notices?searchedQuery=8260.3
+
+  - slug: faa-approach-plates
+    kind: other
+    edition: current
+    title: FAA Approach Plates (per-airport)
+    publisher: FAA
+    url: https://www.faa.gov/air_traffic/flight_info/aeronav/digital_products/
+
+  - slug: jeppesen-faa-charts
+    kind: other
+    edition: current
+    title: Jeppesen and FAA aeronautical charts
+    publisher: Jeppesen / FAA
+
+  - slug: rogers-d-f
+    kind: other
+    edition: '1995'
+    title: The Possible 'Impossible' Turn (AIAA Journal of Aircraft, 1995)
+    publisher: AIAA
+
+  # Umbrella rows for legacy "ACS" / "PTS" citations that don't yet
+  # specify which cert. The migration's ACS / PTS recognizer routes to
+  # these slugs; authoring them here clears their synthetic marker.
+  # When a node citation is updated to a specific cert (e.g. private
+  # ACS FAA-S-ACS-6C), it will resolve to the matching row in
+  # acs-pts.yaml and bypass the umbrella.
+  - slug: generic-acs
+    kind: acs
+    edition: unspecified
+    title: Airman Certification Standards (unspecified cert)
+    publisher: FAA
+    url: https://www.faa.gov/training_testing/testing/acs
+
+  - slug: generic-pts
+    kind: pts
+    edition: unspecified
+    title: Practical Test Standards (unspecified cert)
+    publisher: FAA
+    url: https://www.faa.gov/training_testing/testing/acs
