@@ -33,6 +33,18 @@ describe('productionRegistry integration', () => {
 		// import from the lib root.
 		expect(productionRegistry.isCorpusKnown('orders')).toBe(true);
 		expect(productionRegistry.isCorpusKnown('ntsb')).toBe(true);
+		// Phase 10 next slice: the 10 irregular-corpora resolvers also
+		// register via side-effect import from the lib root.
+		expect(productionRegistry.isCorpusKnown('interp')).toBe(true);
+		expect(productionRegistry.isCorpusKnown('pohs')).toBe(true);
+		expect(productionRegistry.isCorpusKnown('sectionals')).toBe(true);
+		expect(productionRegistry.isCorpusKnown('plates')).toBe(true);
+		expect(productionRegistry.isCorpusKnown('statutes')).toBe(true);
+		expect(productionRegistry.isCorpusKnown('forms')).toBe(true);
+		expect(productionRegistry.isCorpusKnown('info')).toBe(true);
+		expect(productionRegistry.isCorpusKnown('safo')).toBe(true);
+		expect(productionRegistry.isCorpusKnown('tcds')).toBe(true);
+		expect(productionRegistry.isCorpusKnown('asrs')).toBe(true);
 	});
 
 	test('PR-02: isCorpusKnown returns false for non-enumerated', () => {

@@ -70,6 +70,8 @@ export const ENUMERATED_CORPORA: readonly string[] = [
 	'forms',
 	'tcds',
 	'asrs',
+	'info',
+	'safo',
 ];
 
 /**
