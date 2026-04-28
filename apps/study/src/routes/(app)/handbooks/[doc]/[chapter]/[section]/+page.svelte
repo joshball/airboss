@@ -6,6 +6,7 @@ import {
 	type HandbookReadStatus,
 	ROUTES,
 } from '@ab/constants';
+import AmendmentPanel from '@ab/ui/handbooks/AmendmentPanel.svelte';
 import HandbookCitingNodesPanel from '@ab/ui/handbooks/HandbookCitingNodesPanel.svelte';
 import HandbookEditionBadge from '@ab/ui/handbooks/HandbookEditionBadge.svelte';
 import HandbookReadProgressControl from '@ab/ui/handbooks/HandbookReadProgressControl.svelte';
@@ -151,6 +152,7 @@ function dismissSuggestion(): void {
 		<HandbookEditionBadge edition={data.reference.edition} />
 	</h1>
 	<p class="locator">{data.section.sourceLocator}</p>
+	<AmendmentPanel entries={data.errata} />
 </header>
 
 <div class="reader">
