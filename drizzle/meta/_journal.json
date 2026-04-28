@@ -43,6 +43,13 @@
       "when": 1777376731212,
       "tag": "0005_0427_review_schema_fixes",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1777381837082,
+      "tag": "0006_striped_jetstream",
+      "breakpoints": true
     }
   ]
 }

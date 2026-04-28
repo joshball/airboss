@@ -45,6 +45,7 @@ import {
 	GOAL_STATUSES,
 	GOAL_SYLLABUS_WEIGHT_MAX,
 	GOAL_SYLLABUS_WEIGHT_MIN,
+	HANDBOOK_ERRATA_PATCH_KIND_VALUES,
 	HANDBOOK_NOTES_MAX_LENGTH,
 	HANDBOOK_READ_STATUS_VALUES,
 	HANDBOOK_READ_STATUSES,
@@ -1274,6 +1275,93 @@ export const handbookFigure = studySchema.table(
 			'handbook_figure_dimensions_check',
 			sql.raw(`("width" IS NULL OR "width" > 0) AND ("height" IS NULL OR "height" > 0)`),
 		),
+	}),
+);
+
+/**
+ * Per-section record of an FAA-published amendment (errata) applied to
+ * the section content. One row per (section, erratum). Drives the
+ * reader's amendment badge + diff panel.
+ *
+ * `original_text` is NULL when `patch_kind = 'add_subsection'` (the
+ * erratum inserts an entirely new subsection). `replacement_text`
+ * always carries the FAA's exact wording so the reader can render a
+ * verbatim diff and the audit trail survives content_md regeneration.
+ *
+ * Cascade on section delete: amendments belong to their section. When
+ * a section is replaced (edition cycle, hash change), the old amendments
+ * drop with it and the apply-errata pipeline re-inserts on next run.
+ *
+ * See [ADR 020](../../../../docs/decisions/020-handbook-edition-and-amendment-policy.md)
+ * and the `apply-errata-and-afh-mosaic` work package.
+ */
+export const handbookSectionErrata = studySchema.table(
+	'handbook_section_errata',
+	{
+		id: text('id').primaryKey(),
+		sectionId: text('section_id')
+			.notNull()
+			.references(() => handbookSection.id, { onDelete: 'cascade' }),
+		/** Erratum identifier (matches the YAML `errata[].id`, e.g. `mosaic`). */
+		errataId: text('errata_id').notNull(),
+		/** The FAA URL the erratum was downloaded from. Stored for citation. */
+		sourceUrl: text('source_url').notNull(),
+		/** When the FAA published the erratum (ISO date). */
+		publishedAt: text('published_at').notNull(),
+		/** When the apply pipeline ran. */
+		appliedAt: timestamp('applied_at', { withTimezone: true }).notNull().defaultNow(),
+		/** See {@link HANDBOOK_ERRATA_PATCH_KINDS}. */
+		patchKind: text('patch_kind').notNull(),
+		/**
+		 * Human-readable section anchor the erratum names (e.g. "Preflight
+		 * Assessment of the Aircraft"). Nullable because the apply pipeline
+		 * may resolve the section by `sectionId` alone in some cases.
+		 */
+		targetAnchor: text('target_anchor'),
+		/**
+		 * Printed FAA page reference (`<chapter>-<page>`, e.g. "2-4"). NOT
+		 * the PDF page integer; that's a different beast.
+		 */
+		targetPage: text('target_page').notNull(),
+		/**
+		 * Verbatim original text being replaced. NULL when the patch kind
+		 * is `add_subsection` (no original to replace).
+		 */
+		originalText: text('original_text'),
+		replacementText: text('replacement_text').notNull(),
+		createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+	},
+	(t) => ({
+		// One row per (section, erratum) pair: prevents double-apply. The
+		// `--force` re-apply path deletes-then-inserts inside one transaction.
+		bySectionErratum: uniqueIndex('handbook_section_errata_section_errata_idx').on(t.sectionId, t.errataId),
+		// Reader query: "show me amendments for this section, newest first."
+		bySectionApplied: index('handbook_section_errata_section_applied_idx').on(t.sectionId, t.appliedAt),
+		patchKindCheck: check(
+			'handbook_section_errata_patch_kind_check',
+			sql.raw(`"patch_kind" IN (${inList(HANDBOOK_ERRATA_PATCH_KIND_VALUES)})`),
+		),
+		// add_subsection patches have no original text; non-add kinds must.
+		// (We allow original_text to remain NULL for non-add kinds during
+		// the parse-only path, where the apply pipeline backfills it from
+		// the section markdown at apply time. The CHECK enforces only the
+		// inverse: if patch_kind = 'add_subsection', original_text IS NULL.)
+		addSubsectionOriginalCheck: check(
+			'handbook_section_errata_add_subsection_check',
+			sql.raw(`("patch_kind" <> 'add_subsection') OR ("original_text" IS NULL)`),
+		),
+		// Page anchor must look like "<chapter>-<page>" with both halves digit-only.
+		targetPageShapeCheck: check(
+			'handbook_section_errata_target_page_check',
+			sql.raw(`"target_page" ~ '^[0-9]+-[0-9]+$'`),
+		),
+		// Replacement text is non-empty.
+		replacementNonEmptyCheck: check(
+			'handbook_section_errata_replacement_nonempty_check',
+			sql.raw(`length(trim("replacement_text")) > 0`),
+		),
+		// Source URL must be HTTPS.
+		sourceUrlHttpsCheck: check('handbook_section_errata_source_url_check', sql.raw(`"source_url" LIKE 'https://%'`)),
 	}),
 );
 

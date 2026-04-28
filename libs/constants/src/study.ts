@@ -1364,6 +1364,7 @@ export const HANDBOOK_READ_STATUS_LABELS: Record<HandbookReadStatus, string> = {
 export const REFERENCE_ID_PREFIX = 'ref';
 export const HANDBOOK_SECTION_ID_PREFIX = 'hbs';
 export const HANDBOOK_FIGURE_ID_PREFIX = 'hbf';
+export const HANDBOOK_SECTION_ERRATA_ID_PREFIX = 'hbe';
 
 /**
  * Heartbeat + suggestion-prompt thresholds (spec Open Question 5).
@@ -1403,3 +1404,42 @@ export const HANDBOOK_HEARTBEAT_MIN_DELTA_SEC = 5;
  * the user tries to paste a wall of text.
  */
 export const HANDBOOK_NOTES_MAX_LENGTH = 16384;
+
+/**
+ * `handbook_section_errata.patch_kind`. Each kind shapes how the apply
+ * pipeline edits the section markdown and how the reader UI frames the
+ * change. The Python parser layer mirrors these constants in
+ * `tools/handbook-ingest/ingest/handbooks/base.py` (PATCH_KIND_*).
+ *
+ * - `add_subsection`: the FAA inserts a new subsection inside an
+ *   existing section. The patch carries the new subsection heading
+ *   plus its body; the reader frames it as added (no original column).
+ * - `append_paragraph`: a new paragraph is appended at the end of a
+ *   section (or after a named anchor in it). Reader shows "added".
+ * - `replace_paragraph`: an existing paragraph is rewritten. The reader
+ *   diffs original against replacement.
+ *
+ * See ADR 020 (handbook edition + amendment policy) and the
+ * `apply-errata-and-afh-mosaic` work package for the parser taxonomy.
+ */
+export const HANDBOOK_ERRATA_PATCH_KINDS = {
+	ADD_SUBSECTION: 'add_subsection',
+	APPEND_PARAGRAPH: 'append_paragraph',
+	REPLACE_PARAGRAPH: 'replace_paragraph',
+} as const;
+
+export type HandbookErrataPatchKind = (typeof HANDBOOK_ERRATA_PATCH_KINDS)[keyof typeof HANDBOOK_ERRATA_PATCH_KINDS];
+
+export const HANDBOOK_ERRATA_PATCH_KIND_VALUES = Object.values(HANDBOOK_ERRATA_PATCH_KINDS);
+
+export const HANDBOOK_ERRATA_PATCH_KIND_LABELS: Record<HandbookErrataPatchKind, string> = {
+	[HANDBOOK_ERRATA_PATCH_KINDS.ADD_SUBSECTION]: 'Subsection added',
+	[HANDBOOK_ERRATA_PATCH_KINDS.APPEND_PARAGRAPH]: 'Paragraph added',
+	[HANDBOOK_ERRATA_PATCH_KINDS.REPLACE_PARAGRAPH]: 'Paragraph revised',
+};
+
+/**
+ * Visual label for the reader's amendment badge. The user picked
+ * `Amended` during work-package scoping (vs Updated / Errata / Changed).
+ */
+export const HANDBOOK_AMENDMENT_BADGE_LABEL = 'Amended';
