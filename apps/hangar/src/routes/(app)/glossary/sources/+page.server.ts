@@ -2,7 +2,7 @@ import { requireRole } from '@ab/auth';
 import { JOB_KINDS, QUERY_PARAMS, type ReferenceSourceType, ROLES, ROUTES, SOURCE_TYPE_VALUES } from '@ab/constants';
 import { enqueueJob } from '@ab/hangar-jobs';
 import { narrow } from '@ab/utils';
-import { fail, redirect } from '@sveltejs/kit';
+import { fail, isRedirect, redirect } from '@sveltejs/kit';
 import { listSources } from '$lib/server/registry';
 import type { Actions, PageServerLoad } from './$types';
 
@@ -14,8 +14,8 @@ export const load: PageServerLoad = async (event) => {
 
 	const search = url.searchParams.get(QUERY_PARAMS.SEARCH)?.trim() ?? '';
 	const type = narrow<ReferenceSourceType>(url.searchParams.get(QUERY_PARAMS.SOURCE), SOURCE_TYPE_VALUES);
-	const format = url.searchParams.get('format') ?? null;
-	const dirtyOnly = url.searchParams.get('dirty') === '1';
+	const format = url.searchParams.get(QUERY_PARAMS.FORMAT) ?? null;
+	const dirtyOnly = url.searchParams.get(QUERY_PARAMS.DIRTY) === '1';
 	const pageRaw = Number.parseInt(url.searchParams.get(QUERY_PARAMS.PAGE) ?? '1', 10);
 	const pageNum = Number.isFinite(pageRaw) && pageRaw >= 1 ? pageRaw : 1;
 	const offset = (pageNum - 1) * PAGE_SIZE;
@@ -64,7 +64,7 @@ export const actions: Actions = {
 			});
 			redirect(303, ROUTES.HANGAR_JOB_DETAIL(job.id));
 		} catch (err) {
-			if (err && typeof err === 'object' && 'status' in err && 'location' in err) throw err;
+			if (isRedirect(err)) throw err;
 			return fail(500, { error: err instanceof Error ? err.message : 'failed to enqueue sync job' });
 		}
 	},

@@ -123,7 +123,7 @@ let {
 
 	h3 {
 		margin: 0;
-		font-size: 0.75rem;
+		font-size: var(--font-size-xs);
 		font-weight: 700;
 		text-transform: uppercase;
 		letter-spacing: 0.08em;
@@ -143,7 +143,7 @@ let {
 		justify-content: space-between;
 		gap: 0.5rem;
 		padding: 0.25rem 0;
-		font-size: 0.8125rem;
+		font-size: var(--font-size-sm);
 		color: var(--ink-body);
 	}
 

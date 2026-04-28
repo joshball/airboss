@@ -31,7 +31,7 @@ import HeadingIndicator from '$lib/instruments/HeadingIndicator.svelte';
 import Tachometer from '$lib/instruments/Tachometer.svelte';
 import TurnCoordinator from '$lib/instruments/TurnCoordinator.svelte';
 import Vsi from '$lib/instruments/Vsi.svelte';
-import { loadGrade, loadTape } from '$lib/tape-store.svelte';
+import { loadGrade, loadTape } from '$lib/tape-store';
 import type { PageData } from './$types';
 import IdealPathOverlay from './IdealPathOverlay.svelte';
 import InputTrace from './InputTrace.svelte';

@@ -178,9 +178,15 @@ export async function upsertKnowledgeNode(row: NewKnowledgeNodeRow, db: Db = def
 			ELSE ${knowledgeNode.version} + 1
 		END`;
 
+	// Persist `lifecycle` on every write so the indexed column tracks the
+	// authored content. Reads hit the column directly (see listNodesWithFacets);
+	// the JS `lifecycleFromContent` is the single source of truth and is
+	// mirrored here so the column never drifts.
+	const lifecycle = lifecycleFromContent(row.contentMd ?? '');
+
 	const [inserted] = await db
 		.insert(knowledgeNode)
-		.values(row)
+		.values({ ...row, lifecycle })
 		.onConflictDoUpdate({
 			target: knowledgeNode.id,
 			// Update every author-controlled field; createdAt is preserved so
@@ -204,6 +210,7 @@ export async function upsertKnowledgeNode(row: NewKnowledgeNodeRow, db: Db = def
 				contentMd: row.contentMd,
 				contentHash: nextHash,
 				version: nextVersion,
+				lifecycle,
 				updatedAt: new Date(),
 			},
 		})
@@ -433,8 +440,9 @@ export function splitContentPhases(contentMd: string): Record<string, string | n
  * libs/constants/src/study.ts.
  *
  * `priority` is an exact match against `studyPriority` (critical / standard /
- * stretch). Lifecycle is in-memory because it's still derived from content
- * markdown rather than persisted -- see `lifecycleFromContent`.
+ * stretch). Lifecycle is read from the persisted `knowledge_node.lifecycle`
+ * column; writers mirror it via `lifecycleFromContent` on every upsert so the
+ * indexed column tracks the authored markdown.
  */
 export interface ListNodesFilters {
 	cert?: Cert;
@@ -483,13 +491,17 @@ export async function listNodesWithFacets(
 	filters: ListNodesFilters = {},
 	db: Db = defaultDb,
 ): Promise<{ rows: KnowledgeNodeListRow[]; facets: KnowledgeFacetCounts }> {
+	// Read the persisted `lifecycle` column rather than re-parsing `content_md`
+	// for every node. Writers (upsertKnowledgeNode) keep the column in sync via
+	// `lifecycleFromContent`, so the indexed column is the source of truth on
+	// the read path.
 	const dbRows = await db
 		.select({
 			id: knowledgeNode.id,
 			title: knowledgeNode.title,
 			domain: knowledgeNode.domain,
 			estimatedTimeMinutes: knowledgeNode.estimatedTimeMinutes,
-			contentMd: knowledgeNode.contentMd,
+			lifecycle: knowledgeNode.lifecycle,
 			minimumCert: knowledgeNode.minimumCert,
 			studyPriority: knowledgeNode.studyPriority,
 		})
@@ -497,13 +509,12 @@ export async function listNodesWithFacets(
 		.orderBy(asc(knowledgeNode.domain), asc(knowledgeNode.title));
 
 	const enriched = dbRows.map((row): KnowledgeNodeListRow => {
-		const lifecycle = lifecycleFromContent(row.contentMd ?? '');
 		return {
 			id: row.id,
 			title: row.title,
 			domain: row.domain,
 			estimatedTimeMinutes: row.estimatedTimeMinutes ?? null,
-			lifecycle,
+			lifecycle: (row.lifecycle ?? 'skeleton') as 'skeleton' | 'started' | 'complete',
 			minimumCert: (row.minimumCert as Cert | null) ?? null,
 			studyPriority: (row.studyPriority as StudyPriority | null) ?? null,
 		};

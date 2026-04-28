@@ -1,5 +1,7 @@
 <script lang="ts">
+import { ROUTES } from '@ab/constants';
 import HandbookCard from '@ab/ui/handbooks/HandbookCard.svelte';
+import { dev } from '$app/environment';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
@@ -15,10 +17,17 @@ let { data }: { data: PageData } = $props();
 </header>
 
 {#if data.references.length === 0}
-	<p class="empty">
-		No handbooks ingested yet. Run <code>bun run sources extract handbooks phak</code> followed by
-		<code>bun run db seed handbooks</code>.
-	</p>
+	<div class="empty">
+		<p>
+			No handbooks yet. Handbooks are added by your administrator -- check back, or browse
+			<a href={ROUTES.KNOWLEDGE}>the knowledge graph</a> in the meantime.
+		</p>
+		{#if dev}
+			<p class="dev-hint">
+				Dev: run <code>bun run sources extract handbooks phak</code> then <code>bun run db seed handbooks</code>.
+			</p>
+		{/if}
+	</div>
 {:else}
 	<ul class="grid">
 		{#each data.references as ref (ref.id)}

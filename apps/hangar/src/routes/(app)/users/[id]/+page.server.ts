@@ -6,12 +6,13 @@ import type { PageServerLoad } from './$types';
 
 /**
  * Read-only detail view for a single user. Shows the basic identity card,
- * the most recent N sessions (token + ip + ua + timestamps), and the
+ * the most recent N sessions (id + ip + ua + timestamps), and the
  * most recent M audit rows the user authored. No edit affordances yet.
  *
  * Gated to ADMIN-only -- matches the floor on `/users`. User session +
  * audit data is sensitive enough that AUTHOR/OPERATOR roles shouldn't
- * see it.
+ * see it. The session token is NEVER shipped client-side; the row id
+ * is the handle for any future revoke action.
  */
 export const load: PageServerLoad = async (event) => {
 	requireRole(event, ROLES.ADMIN);
@@ -35,7 +36,6 @@ export const load: PageServerLoad = async (event) => {
 		},
 		sessions: sessions.map((s) => ({
 			id: s.id,
-			token: s.token,
 			ipAddress: s.ipAddress,
 			userAgent: s.userAgent,
 			createdAt: s.createdAt.toISOString(),

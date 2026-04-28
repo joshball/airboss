@@ -40,7 +40,7 @@ let { refs }: { refs: readonly ExternalRef[] | undefined } = $props();
 
 	.refs h2 {
 		margin: 0 0 var(--space-sm);
-		font-size: 1.125rem;
+		font-size: var(--font-size-lg);
 		font-weight: var(--font-weight-semibold);
 		color: var(--ink-body);
 	}
@@ -84,7 +84,7 @@ let { refs }: { refs: readonly ExternalRef[] | undefined } = $props();
 		display: inline-block;
 		padding: 0 0.375rem;
 		border-radius: var(--radius-xs);
-		font-size: 0.6875rem;
+		font-size: var(--font-size-xs);
 		font-weight: var(--font-weight-semibold);
 		text-transform: uppercase;
 		letter-spacing: 0.05em;
@@ -100,13 +100,13 @@ let { refs }: { refs: readonly ExternalRef[] | undefined } = $props();
 
 	.note {
 		margin: 0.125rem 0 0;
-		font-size: 0.875rem;
+		font-size: var(--font-size-sm);
 		color: var(--ink-muted);
 	}
 
 	.url {
 		margin: 0;
-		font-size: 0.8125rem;
+		font-size: var(--font-size-sm);
 		word-break: break-all;
 	}
 

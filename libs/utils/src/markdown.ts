@@ -28,6 +28,17 @@ export function escapeHtml(s: string): string {
 	return s.replace(/[&<>"']/g, (c) => HTML_ESCAPES[c] ?? c);
 }
 
+/**
+ * Escape a value for safe interpolation inside a double-quoted HTML attribute.
+ * Mirrors the helper in libs/sources/src/render/modes/web.ts; kept local so
+ * this BC-free renderer doesn't need a cross-lib import. The protocol allow-list
+ * already filters `javascript:` etc.; this layer ensures a URL containing `"`
+ * cannot break out of the `href=`/`src=` attribute and inject an event handler.
+ */
+function escapeAttr(s: string): string {
+	return s.replace(/[&<>"']/g, (c) => HTML_ESCAPES[c] ?? c);
+}
+
 // Inline replacements are applied in order, each on an already-html-escaped
 // string. We keep the set intentionally small.
 function renderInline(text: string): string {
@@ -42,7 +53,7 @@ function renderInline(text: string): string {
 	// Negative lookbehind on `!` so image syntax is left for a dedicated pass.
 	out = out.replace(/(^|[^!])\[([^\]]+)\]\(([^)\s]+)\)/g, (_m, lead: string, label: string, url: string) => {
 		const safe = /^(https?:\/\/|\/|#|mailto:)/.test(url) ? url : '#';
-		return `${lead}<a href="${safe}">${label}</a>`;
+		return `${lead}<a href="${escapeAttr(safe)}">${label}</a>`;
 	});
 	return out;
 }
@@ -145,8 +156,10 @@ export function renderMarkdown(md: string): string {
 		const alt = altRaw.replace(/\s+/g, ' ').trim();
 		const url = rewriteHandbookAssetUrl(urlRaw);
 		const safeUrl = /^(https?:\/\/|\/|#)/.test(url) ? url : '#';
+		const safeAttrUrl = escapeAttr(safeUrl);
+		const safeAttrAlt = escapeAttr(alt);
 		const safeAlt = escapeHtml(alt);
-		const figure = `<figure class="md-figure"><img src="${safeUrl}" alt="${safeAlt}" loading="lazy" />${alt ? `<figcaption>${safeAlt}</figcaption>` : ''}</figure>`;
+		const figure = `<figure class="md-figure"><img src="${safeAttrUrl}" alt="${safeAttrAlt}" loading="lazy" />${alt ? `<figcaption>${safeAlt}</figcaption>` : ''}</figure>`;
 		return { html: figure, consumed: cursor - start + 1 };
 	};
 

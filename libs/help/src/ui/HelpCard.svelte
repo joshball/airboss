@@ -77,11 +77,11 @@ let {
 	header {
 		font-weight: var(--font-weight-semibold);
 		margin-bottom: 0.375rem;
-		font-size: 0.9375rem;
+		font-size: var(--font-size-base);
 	}
 
 	.body {
-		font-size: 0.9375rem;
+		font-size: var(--font-size-base);
 		line-height: 1.55;
 	}
 </style>

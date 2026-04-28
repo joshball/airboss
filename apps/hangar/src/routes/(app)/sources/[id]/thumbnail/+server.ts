@@ -32,9 +32,17 @@ export const GET: RequestHandler = async (event) => {
 	}
 
 	const abs = resolve(REPO_ROOT, row.media.thumbnailPath);
+	// Defense-in-depth: refuse any path that escapes data/sources/. The DB
+	// column is operator-supplied (fetch worker stores it); a future bug or
+	// hand-edit could drop a `..` segment. Mirrors the guard in
+	// /sources/[id]/files/raw/+server.ts.
+	const sourcesRoot = resolve(REPO_ROOT, 'data', 'sources');
+	if (!(abs === sourcesRoot || abs.startsWith(`${sourcesRoot}/`))) {
+		throw error(400, `thumbnail path is outside data/sources/: ${abs}`);
+	}
 	try {
 		const s = await stat(abs);
-		if (!s.isFile()) throw new Error('thumbnail is not a file');
+		if (!s.isFile()) throw new Error(`thumbnail is not a file: ${abs}`);
 		if (s.size === 0) return new Response(null, { status: 204 });
 	} catch {
 		return new Response(null, { status: 204 });

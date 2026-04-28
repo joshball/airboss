@@ -6,7 +6,7 @@
  * TAPE message arrives. Anonymous requests are rejected with 401 --
  * the authenticated session cookie attribution is the entire point of
  * this endpoint; sessionStorage is the fallback for unauthenticated
- * runs (see `apps/sim/src/lib/tape-store.svelte.ts`).
+ * runs (see `apps/sim/src/lib/tape-store.ts`).
  *
  * Tape + grade are best-effort: the BC's `recordSimAttempt` accepts
  * `null` for both (e.g. aborted runs that produced no frames; scenarios
@@ -15,45 +15,48 @@
 
 import type { GradeReport } from '@ab/bc-sim';
 import { recordSimAttempt } from '@ab/bc-sim/persistence';
-import { SIM_SCENARIO_ID_VALUES, type SimScenarioId } from '@ab/constants';
+import { SIM_SCENARIO_ID_VALUES, SIM_SCENARIO_OUTCOME_VALUES, type SimScenarioId } from '@ab/constants';
 import { error, json } from '@sveltejs/kit';
+import { z } from 'zod';
 import type { RequestHandler } from './$types';
 
-interface AttemptPayload {
-	scenarioId: string;
-	result: {
-		scenarioId: string;
-		outcome: string;
-		elapsedSeconds: number;
-		peakAltitudeAgl: number;
-		maxAlpha: number;
-		reason: string;
-	};
-	tape: unknown;
-	grade: {
-		total: number;
-		components: ReadonlyArray<{ kind: string; weight: number; score: number; summary?: string }>;
-	} | null;
-}
+/** Defensive caps so a malicious payload can't store unbounded text or arrays. */
+const REASON_MAX_LENGTH = 200;
+const GRADE_COMPONENT_MAX = 32;
+const GRADE_SUMMARY_MAX = 200;
+
+const attemptResultSchema = z.object({
+	scenarioId: z.string().min(1),
+	outcome: z.enum(SIM_SCENARIO_OUTCOME_VALUES as readonly [string, ...string[]]),
+	elapsedSeconds: z.number().finite().nonnegative(),
+	peakAltitudeAgl: z.number().finite(),
+	maxAlpha: z.number().finite(),
+	reason: z.string().max(REASON_MAX_LENGTH),
+});
+
+const gradeComponentSchema = z.object({
+	kind: z.string().min(1).max(64),
+	weight: z.number().finite(),
+	score: z.number().finite(),
+	summary: z.string().max(GRADE_SUMMARY_MAX).optional(),
+});
+
+const gradeSchema = z
+	.object({
+		total: z.number().finite(),
+		components: z.array(gradeComponentSchema).max(GRADE_COMPONENT_MAX),
+	})
+	.nullable();
+
+const attemptPayloadSchema = z.object({
+	scenarioId: z.string().min(1),
+	result: attemptResultSchema,
+	tape: z.unknown(),
+	grade: gradeSchema,
+});
 
 function isSimScenarioId(value: string): value is SimScenarioId {
 	return (SIM_SCENARIO_ID_VALUES as readonly string[]).includes(value);
-}
-
-function isAttemptPayload(value: unknown): value is AttemptPayload {
-	if (typeof value !== 'object' || value === null) return false;
-	const v = value as Record<string, unknown>;
-	if (typeof v.scenarioId !== 'string') return false;
-	const r = v.result;
-	if (typeof r !== 'object' || r === null) return false;
-	const result = r as Record<string, unknown>;
-	if (typeof result.outcome !== 'string') return false;
-	if (typeof result.reason !== 'string') return false;
-	if (typeof result.elapsedSeconds !== 'number') return false;
-	if (typeof result.peakAltitudeAgl !== 'number') return false;
-	if (typeof result.maxAlpha !== 'number') return false;
-	// tape + grade are nullable; deeper validation happens in the BC.
-	return true;
 }
 
 export const POST: RequestHandler = async ({ params, request, locals }) => {
@@ -70,35 +73,35 @@ export const POST: RequestHandler = async ({ params, request, locals }) => {
 	} catch {
 		throw error(400, 'Body must be valid JSON');
 	}
-	if (!isAttemptPayload(body)) {
+	const parsed = attemptPayloadSchema.safeParse(body);
+	if (!parsed.success) {
 		throw error(400, 'Payload missing required fields');
 	}
-	if (body.scenarioId !== params.scenarioId) {
+	const payload = parsed.data;
+	if (payload.scenarioId !== params.scenarioId) {
 		throw error(400, 'scenarioId in payload does not match URL');
 	}
 
 	const tape =
-		body.tape && typeof body.tape === 'object' ? (body.tape as Parameters<typeof recordSimAttempt>[0]['tape']) : null;
-	// Cast at the boundary: the route's structural validator (above)
-	// confirms the component shape matches; the BC's `evaluateGrading`
-	// is what populates these rows in the first place, so narrowing
-	// `kind: string` -> `GradingComponentKind` here is a no-op.
-	const grade = (body.grade ?? null) as GradeReport | null;
+		payload.tape && typeof payload.tape === 'object'
+			? (payload.tape as Parameters<typeof recordSimAttempt>[0]['tape'])
+			: null;
+	// Cast at the boundary: Zod confirmed the structural shape; component
+	// `kind` strings are narrowed to GradingComponentKind by the BC. The
+	// worker is browser code and is therefore not trusted -- the schema
+	// above is what enforces the contract.
+	const grade = (payload.grade ?? null) as GradeReport | null;
 
 	const row = await recordSimAttempt({
 		userId: locals.user.id,
-		scenarioId: body.scenarioId,
+		scenarioId: payload.scenarioId,
 		result: {
-			scenarioId: body.scenarioId,
-			// Outcome is stored as text in the row; the BC validates against
-			// SIM_SCENARIO_OUTCOMES at the call site -- here we trust the
-			// caller because the cockpit page produced it from a worker
-			// message we control end-to-end.
-			outcome: body.result.outcome as Parameters<typeof recordSimAttempt>[0]['result']['outcome'],
-			elapsedSeconds: body.result.elapsedSeconds,
-			peakAltitudeAgl: body.result.peakAltitudeAgl,
-			maxAlpha: body.result.maxAlpha,
-			reason: body.result.reason,
+			scenarioId: payload.scenarioId,
+			outcome: payload.result.outcome as Parameters<typeof recordSimAttempt>[0]['result']['outcome'],
+			elapsedSeconds: payload.result.elapsedSeconds,
+			peakAltitudeAgl: payload.result.peakAltitudeAgl,
+			maxAlpha: payload.result.maxAlpha,
+			reason: payload.result.reason,
 		},
 		tape,
 		grade,

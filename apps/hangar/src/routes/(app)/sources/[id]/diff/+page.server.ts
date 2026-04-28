@@ -15,7 +15,7 @@ import { JOB_KINDS, ROLES, ROUTES } from '@ab/constants';
 import { db, hangarJob, hangarSource } from '@ab/db';
 import { enqueueJob } from '@ab/hangar-jobs';
 import { createLogger } from '@ab/utils';
-import { error, fail, redirect } from '@sveltejs/kit';
+import { error, fail, isRedirect, redirect } from '@sveltejs/kit';
 import { and, desc, eq } from 'drizzle-orm';
 import type { Actions, PageServerLoad } from './$types';
 
@@ -68,7 +68,7 @@ export const actions: Actions = {
 			});
 			redirect(303, ROUTES.HANGAR_JOB_DETAIL(job.id));
 		} catch (err) {
-			if (err && typeof err === 'object' && 'status' in err && 'location' in err) throw err;
+			if (isRedirect(err)) throw err;
 			log.error(
 				'enqueue diff failed',
 				{ requestId: event.locals.requestId, userId: user.id },
@@ -90,7 +90,7 @@ export const actions: Actions = {
 			});
 			redirect(303, ROUTES.HANGAR_JOB_DETAIL(job.id));
 		} catch (err) {
-			if (err && typeof err === 'object' && 'status' in err && 'location' in err) throw err;
+			if (isRedirect(err)) throw err;
 			log.error(
 				'commit diff sync failed',
 				{ requestId: event.locals.requestId, userId: user.id },

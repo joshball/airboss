@@ -119,20 +119,20 @@ $effect(() => {
 
 	.page-head h1 {
 		margin: 0 0 0.25rem;
-		font-size: 1.75rem;
+		font-size: var(--font-size-2xl);
 		letter-spacing: -0.02em;
 	}
 
 	.summary {
 		margin: 0;
 		color: var(--ink-muted);
-		font-size: 1rem;
+		font-size: var(--font-size-base);
 		line-height: 1.5;
 	}
 
 	.documents {
 		margin: 0.5rem 0 0;
-		font-size: 0.8125rem;
+		font-size: var(--font-size-sm);
 		color: var(--ink-subtle);
 	}
 
@@ -141,7 +141,7 @@ $effect(() => {
 		padding: 0.0625rem 0.375rem;
 		border-radius: var(--radius-xs);
 		font-family: var(--font-family-mono);
-		font-size: 0.8125rem;
+		font-size: var(--font-size-sm);
 	}
 
 	@media (max-width: 640px) { /* --ab-breakpoint-md */

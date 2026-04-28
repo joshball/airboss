@@ -34,3 +34,6 @@ export const AUDIT_TARGETS = {
 } as const;
 
 export type AuditTarget = (typeof AUDIT_TARGETS)[keyof typeof AUDIT_TARGETS];
+
+/** Allow-list values used by the DB CHECK constraint on `audit_log.target_type`. */
+export const AUDIT_TARGET_VALUES: readonly AuditTarget[] = Object.values(AUDIT_TARGETS);

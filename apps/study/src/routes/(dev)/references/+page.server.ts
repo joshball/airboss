@@ -14,9 +14,9 @@
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { type RenderMode, type SerializableResolvedMap } from '@ab/sources';
+import { QUERY_PARAMS } from '@ab/constants';
+import type { LessonAcknowledgment, RenderMode, SerializableResolvedMap, SourceEntry, SourceId } from '@ab/sources';
 import { __sources_internal__ } from '@ab/sources/registry';
-import type { LessonAcknowledgment, SourceEntry, SourceId } from '@ab/sources';
 import { parse as parseYaml } from 'yaml';
 import { loadLessonReferences } from '$lib/server/references';
 import type { PageServerLoad } from './$types';
@@ -195,7 +195,7 @@ function pickMode(raw: string | null): RenderMode {
 
 export const load: PageServerLoad = async ({ url }) => {
 	ensurePrimed();
-	const mode = pickMode(url.searchParams.get('mode'));
+	const mode = pickMode(url.searchParams.get(QUERY_PARAMS.MODE));
 	const slugs = ['happy-path', 'adjacency', 'acknowledgment'];
 	const fixtures = await Promise.all(slugs.map((slug) => loadFixture(slug, mode)));
 	return {

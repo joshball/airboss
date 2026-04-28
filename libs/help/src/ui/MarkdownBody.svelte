@@ -156,7 +156,7 @@ function resolveWikilink(pageId: string): { href: string; resolved: boolean } {
 
 <style>
 	.md-body {
-		font-size: 1rem;
+		font-size: var(--font-size-base);
 		line-height: 1.6;
 		color: var(--ink-body);
 	}
@@ -168,18 +168,18 @@ function resolveWikilink(pageId: string): { href: string; resolved: boolean } {
 	}
 
 	.md-body :global(.md-h2) {
-		font-size: 1.25rem;
+		font-size: var(--font-size-lg);
 		font-weight: var(--font-weight-semibold);
 		scroll-margin-top: 4rem;
 	}
 
 	.md-body :global(.md-h3) {
-		font-size: 1.0625rem;
+		font-size: var(--font-size-base);
 		font-weight: var(--font-weight-semibold);
 	}
 
 	.md-body :global(.md-h4) {
-		font-size: 1rem;
+		font-size: var(--font-size-base);
 		font-weight: var(--font-weight-semibold);
 		color: var(--ink-muted);
 	}
@@ -204,7 +204,7 @@ function resolveWikilink(pageId: string): { href: string; resolved: boolean } {
 		padding: 0.0625rem 0.375rem;
 		border-radius: var(--radius-xs);
 		font-family: var(--font-family-mono);
-		font-size: 0.875em;
+		font-size: var(--font-size-sm);
 	}
 
 	.md-body :global(.md-link) {
@@ -228,7 +228,7 @@ function resolveWikilink(pageId: string): { href: string; resolved: boolean } {
 	.md-body :global(.md-external-icon) {
 		display: inline-block;
 		margin-left: 0.15em;
-		font-size: 0.8em;
+		font-size: var(--font-size-sm);
 		color: var(--ink-subtle);
 	}
 
@@ -237,7 +237,7 @@ function resolveWikilink(pageId: string): { href: string; resolved: boolean } {
 		margin-left: 0.375rem;
 		padding: 0 0.375rem;
 		border-radius: var(--radius-xs);
-		font-size: 0.6875rem;
+		font-size: var(--font-size-xs);
 		font-weight: var(--font-weight-semibold);
 		text-transform: uppercase;
 		letter-spacing: 0.05em;
@@ -281,7 +281,7 @@ function resolveWikilink(pageId: string): { href: string; resolved: boolean } {
 	.md-body :global(.md-table) {
 		width: 100%;
 		border-collapse: collapse;
-		font-size: 0.9375rem;
+		font-size: var(--font-size-base);
 	}
 
 	.md-body :global(.md-table th),
@@ -325,7 +325,7 @@ function resolveWikilink(pageId: string): { href: string; resolved: boolean } {
 		margin: 0;
 		padding: 0.75rem 1rem;
 		font-family: var(--font-family-mono);
-		font-size: 0.875rem;
+		font-size: var(--font-size-sm);
 		overflow-x: auto;
 	}
 
@@ -374,7 +374,7 @@ function resolveWikilink(pageId: string): { href: string; resolved: boolean } {
 
 	.md-body :global(.md-figure figcaption) {
 		margin-top: 0.375rem;
-		font-size: 0.875rem;
+		font-size: var(--font-size-sm);
 		color: var(--ink-muted);
 		text-align: center;
 	}

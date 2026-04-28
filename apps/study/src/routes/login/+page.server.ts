@@ -1,4 +1,4 @@
-import { AUTH_INTERNAL_ORIGIN, BETTER_AUTH_ENDPOINTS, ROUTES } from '@ab/constants';
+import { AUTH_INTERNAL_ORIGIN, BETTER_AUTH_ENDPOINTS, QUERY_PARAMS, ROUTES } from '@ab/constants';
 import { createLogger } from '@ab/utils';
 import { fail, redirect } from '@sveltejs/kit';
 import { auth } from '$lib/server/auth';
@@ -20,7 +20,11 @@ function isSafeRedirect(path: string): boolean {
 
 export const load: PageServerLoad = async ({ locals }) => {
 	if (locals.session) {
-		redirect(302, ROUTES.HOME);
+		// 303 keeps the redirect-status story uniform with the action-side
+		// `redirect(303, ...)` below; both are POST/GET-after-mutation in
+		// shape (we just authenticated the session) and 303 is the right
+		// "here is the resource for that submission" code.
+		redirect(303, ROUTES.HOME);
 	}
 	return {};
 };
@@ -63,7 +67,7 @@ export const actions: Actions = {
 			return fail(500, { error: 'Sign-in failed, please try again', email });
 		}
 
-		const rawRedirect = url.searchParams.get('redirectTo') ?? '';
+		const rawRedirect = url.searchParams.get(QUERY_PARAMS.REDIRECT_TO) ?? '';
 		redirect(303, isSafeRedirect(rawRedirect) ? rawRedirect : ROUTES.HOME);
 	},
 };

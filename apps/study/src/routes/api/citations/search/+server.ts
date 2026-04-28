@@ -5,7 +5,7 @@ import {
 	searchKnowledgeNodes,
 	searchRegulationNodes,
 } from '@ab/bc-citations';
-import { CITATION_TARGET_TYPES, type CitationTargetType } from '@ab/constants';
+import { CITATION_TARGET_TYPES, type CitationTargetType, QUERY_PARAMS } from '@ab/constants';
 import { error, json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 
@@ -22,8 +22,8 @@ export const GET: RequestHandler = async (event) => {
 	requireAuth(event);
 
 	const url = event.url;
-	const target = url.searchParams.get('target');
-	const q = url.searchParams.get('q') ?? '';
+	const target = url.searchParams.get(QUERY_PARAMS.TARGET);
+	const q = url.searchParams.get(QUERY_PARAMS.SEARCH) ?? '';
 
 	if (!target) throw error(400, 'missing target');
 

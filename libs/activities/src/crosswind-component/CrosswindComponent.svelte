@@ -491,7 +491,7 @@ function tickEnd(angleDeg: number): { x: number; y: number } {
 	}
 
 	.cardinal {
-		font-size: 14px;
+		font-size: var(--font-size-sm);
 		font-weight: 600;
 		fill: var(--ink-muted);
 	}
@@ -509,7 +509,7 @@ function tickEnd(angleDeg: number): { x: number; y: number } {
 	}
 
 	.runway-label {
-		font-size: 11px;
+		font-size: var(--font-size-xs);
 		font-weight: 700;
 		fill: var(--surface-sunken);
 	}
@@ -529,7 +529,7 @@ function tickEnd(angleDeg: number): { x: number; y: number } {
 		stroke: var(--surface-panel);
 		stroke-width: 3;
 		cursor: grab;
-		transition: r 0.15s ease;
+		transition: r var(--motion-fast);
 	}
 
 	.wind-handle.dragging {
@@ -577,7 +577,7 @@ function tickEnd(angleDeg: number): { x: number; y: number } {
 		border: 1px solid var(--edge-default);
 		border-radius: var(--radius-md);
 		padding: var(--space-lg) var(--space-xl);
-		font-size: 0.9rem;
+		font-size: var(--font-size-sm);
 	}
 
 	.readout hr {
@@ -595,12 +595,12 @@ function tickEnd(angleDeg: number): { x: number; y: number } {
 	}
 
 	.readout-row.big {
-		font-size: 1rem;
+		font-size: var(--font-size-base);
 	}
 
 	.readout-row.big .value {
 		font-weight: 700;
-		font-size: 1.15rem;
+		font-size: var(--font-size-lg);
 	}
 
 	.label {
@@ -620,7 +620,7 @@ function tickEnd(angleDeg: number): { x: number; y: number } {
 		display: inline-block;
 		margin-left: var(--space-sm);
 		padding: 0.1rem 0.45rem;
-		font-size: 0.7rem;
+		font-size: var(--font-size-xs);
 		font-weight: 700;
 		letter-spacing: 0.04em;
 		color: var(--action-hazard);
@@ -631,7 +631,7 @@ function tickEnd(angleDeg: number): { x: number; y: number } {
 
 	.formula {
 		font-family: var(--font-family-mono);
-		font-size: 0.8rem;
+		font-size: var(--font-size-sm);
 		color: var(--ink-strong);
 		line-height: 1.55;
 	}
@@ -655,7 +655,7 @@ function tickEnd(angleDeg: number): { x: number; y: number } {
 	}
 
 	.control-label {
-		font-size: 0.85rem;
+		font-size: var(--font-size-sm);
 		color: var(--ink-strong);
 		font-weight: 500;
 	}

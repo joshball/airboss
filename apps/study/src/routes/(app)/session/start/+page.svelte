@@ -397,7 +397,7 @@ function depthLabel(slug: DepthPreference): string {
 											/>
 										</span>
 										{#if item.reasonDetail}
-											<span class="detail">— {item.reasonDetail}</span>
+											<span class="detail">-- {item.reasonDetail}</span>
 										{/if}
 										{#if item.kind === SESSION_ITEM_KINDS.NODE_START}
 											<a class="id id-link" href={ROUTES.KNOWLEDGE_SLUG(item.nodeId)}>{item.nodeId}</a>

@@ -41,6 +41,8 @@ export interface FlowState {
 </script>
 
 <script lang="ts">
+import { ROUTES } from '@ab/constants';
+
 interface Props {
 	state: FlowState;
 	actions?: Snippet;
@@ -258,7 +260,7 @@ $effect(() => {
 		</article>
 		<article class="tile" aria-labelledby="glossary-h" bind:this={glossaryTileEl}>
 			<h2 id="glossary-h" class="tile-title">Glossary render</h2>
-			<p class="muted">Edit in <a href="/glossary">/glossary</a></p>
+			<p class="muted">Edit in <a href={ROUTES.HANGAR_GLOSSARY}>/glossary</a></p>
 		</article>
 	</div>
 

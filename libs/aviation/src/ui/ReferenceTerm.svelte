@@ -145,7 +145,7 @@ function truncate(text: string, max: number): string {
 		display: flex;
 		flex-direction: column;
 		gap: 0.375rem;
-		font-size: 0.875rem;
+		font-size: var(--font-size-sm);
 		font-weight: 400;
 		white-space: normal;
 	}
@@ -167,7 +167,7 @@ function truncate(text: string, max: number): string {
 	}
 
 	.chip {
-		font-size: 0.6875rem;
+		font-size: var(--font-size-xs);
 		padding: 0.0625rem 0.375rem;
 		border-radius: var(--radius-pill);
 		background: var(--surface-sunken);
@@ -177,7 +177,7 @@ function truncate(text: string, max: number): string {
 	}
 
 	.pop-hint {
-		font-size: 0.6875rem;
+		font-size: var(--font-size-xs);
 		color: var(--ink-subtle);
 	}
 </style>

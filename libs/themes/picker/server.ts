@@ -53,11 +53,23 @@ export function readThemeFromCookies(cookies: Cookies): ThemePreference {
  * emit pipeline didn't generate CSS for.
  *
  * Cookie attributes mirror the appearance cookie: `Path=/; Max-Age=1y;
- * SameSite=Lax; HttpOnly=false; Secure=false`. `httpOnly=false` is
- * intentional -- the pre-hydration script reads it via `document.cookie`
- * to set `data-theme` before SvelteKit hydrates.
+ * SameSite=Lax; HttpOnly=false`. `httpOnly=false` is intentional -- the
+ * pre-hydration script reads it via `document.cookie` to set `data-theme`
+ * before SvelteKit hydrates. The `secure` flag is on in prod and off in
+ * dev so HTTP localhost still works during development.
  */
-export function createThemeEndpoint(): RequestHandler {
+export interface CreateThemeEndpointOptions {
+	/**
+	 * When true, omit the `Secure` cookie attribute (dev / HTTP-localhost).
+	 * Pass `dev` from `$app/environment` at the call site so prod always
+	 * gets `Secure=true`. Defaults to false (i.e. `Secure=true`) so a
+	 * caller that forgets to pass this errs on the safe side.
+	 */
+	dev?: boolean;
+}
+
+export function createThemeEndpoint(options: CreateThemeEndpointOptions = {}): RequestHandler {
+	const secure = !options.dev;
 	return async ({ request, cookies }) => {
 		let payload: unknown;
 		try {
@@ -74,7 +86,7 @@ export function createThemeEndpoint(): RequestHandler {
 			maxAge: SECONDS_PER_YEAR,
 			sameSite: 'lax',
 			httpOnly: false,
-			secure: false,
+			secure,
 		});
 		return json({ ok: true, value });
 	};

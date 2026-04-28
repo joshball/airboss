@@ -84,7 +84,7 @@ function handleKey(event: KeyboardEvent): void {
 
 	h2 {
 		margin: 0 0 0.75rem;
-		font-size: 1.125rem;
+		font-size: var(--font-size-lg);
 		font-weight: var(--font-weight-semibold);
 		color: var(--ink-body);
 	}
@@ -110,13 +110,13 @@ function handleKey(event: KeyboardEvent): void {
 
 	.chevron {
 		color: var(--ink-muted);
-		font-size: 0.875rem;
+		font-size: var(--font-size-sm);
 		width: 1ch;
 		display: inline-block;
 	}
 
 	.body {
-		font-size: 1rem;
+		font-size: var(--font-size-base);
 		line-height: 1.6;
 		color: var(--ink-body);
 		white-space: pre-wrap;

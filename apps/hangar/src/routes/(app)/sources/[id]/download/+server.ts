@@ -30,9 +30,16 @@ export const GET: RequestHandler = async (event) => {
 	}
 
 	const archivePath = resolve(REPO_ROOT, 'data', 'sources', row.type, row.id, row.edition.effectiveDate, 'chart.zip');
+	// Defense-in-depth: refuse any path that escapes data/sources/. Each path
+	// segment is row-derived but `row.type` / `row.id` / `row.edition.effectiveDate`
+	// could in principle carry a `..` segment from a buggy ingest path.
+	const sourcesRoot = resolve(REPO_ROOT, 'data', 'sources');
+	if (!(archivePath === sourcesRoot || archivePath.startsWith(`${sourcesRoot}/`))) {
+		throw error(400, `archive path is outside data/sources/: ${archivePath}`);
+	}
 	try {
 		const s = await stat(archivePath);
-		if (!s.isFile()) throw new Error('archive path is not a file');
+		if (!s.isFile()) throw new Error(`archive path is not a file: ${archivePath}`);
 	} catch {
 		throw error(404, `archive not on disk at ${archivePath}`);
 	}

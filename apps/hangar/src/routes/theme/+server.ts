@@ -7,5 +7,6 @@
  */
 
 import { createThemeEndpoint } from '@ab/themes';
+import { dev } from '$app/environment';
 
-export const POST = createThemeEndpoint();
+export const POST = createThemeEndpoint({ dev });

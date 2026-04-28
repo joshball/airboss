@@ -84,14 +84,14 @@ function sliceLabel(slice: SessionSlice): string {
 </script>
 
 <svelte:head>
-	<title>Session — airboss</title>
+	<title>Session -- airboss</title>
 </svelte:head>
 
 <section class="page">
 	<header class="hd">
 		<div>
 			<h1>Session in progress</h1>
-			<p class="sub">Item {currentNum} of {total} · {completedCount} done</p>
+			<p class="sub">Item {currentNum} of {total} -- {completedCount} done</p>
 		</div>
 		<nav class="quick">
 			<ConfirmAction
@@ -105,7 +105,7 @@ function sliceLabel(slice: SessionSlice): string {
 		</nav>
 	</header>
 
-	<div class="progress" aria-label="Session progress" role="progressbar" aria-valuemin="0" aria-valuemax={total} aria-valuenow={completedCount}>
+	<div class="progress" aria-label="Session progress" role="progressbar" aria-valuemin="0" aria-valuemax={total} aria-valuenow={completedCount} aria-valuetext="{completedCount} of {total} done">
 		<span class="progress-fill" style="width: {total === 0 ? 0 : Math.round((completedCount / total) * 100)}%"></span>
 	</div>
 
@@ -134,7 +134,7 @@ function sliceLabel(slice: SessionSlice): string {
 			<div class="item-head">
 				<span class="slice-badge">{sliceLabel(current.slice as SessionSlice)}</span>
 				<span class="reason">{reasonLabel(current.reasonCode as SessionReasonCode)}</span>
-				{#if current.reasonDetail}<span class="reason-detail">— {current.reasonDetail}</span>{/if}
+				{#if current.reasonDetail}<span class="reason-detail">-- {current.reasonDetail}</span>{/if}
 			</div>
 
 			{#if hydrated.kind === SESSION_ITEM_KINDS.CARD}

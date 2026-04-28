@@ -188,10 +188,21 @@ Feature lifecycle is driven by shared skills:
 ```text
 apps/
   study/          SvelteKit -- quiz, reps, spaced rep, calibration (active)
+  sim/            SvelteKit -- decision-rep micro-scenarios + flight sim (scaffolded)
+  hangar/         SvelteKit -- content authoring, source ingest, admin (scaffolded)
 libs/
   auth/           Identity, sessions, permissions
+  audit/          Cross-cutting audit log (audit_log schema)
+  aviation/       Aviation reference registry, sources, glossary
+  activities/     Domain-coupled visual components (Crosswind, ...)
+  help/           Help library + page-help drawer subsystem
+  sources/        Source render pipeline, regs/handbook resolvers
   bc/
     study/        Spaced rep, cards, reviews, scenarios, calibration
+    sim/          Sim BC -- physics, scenarios, replay, grading, persistence
+    citations/    Cross-content citations + cited-by surface
+  hangar-jobs/    Generic job queue infra used by the hangar app
+  hangar-sync/    TOML mirror sync engine (DB <-> seed files)
   constants/      Enums, routes, ports, config
   db/             Shared Drizzle connection (PostgreSQL)
   themes/         Design tokens, theme definitions
@@ -200,6 +211,16 @@ libs/
   utils/          ID generators, helpers
 ```
 
+Other top-level dirs:
+
+- `course/` -- aviation course content (knowledge graph, regulations, dormant FIRC corpus)
+- `data/` -- developer-local cache root for source bytes (per ADR 018)
+- `handbooks/` `regulations/` -- structural indexes for FAA handbooks and CFR titles
+- `tools/` -- python ingest, theme-lint, theme-codemod
+- `tests/` -- Playwright e2e suite
+- `drizzle/` -- generated SQL migrations + meta
+- `scripts/` -- bun-driven CLI dispatchers (`db`, `sources`, `references`, `setup`, ...)
+
 **Future surface apps** (created when needed, not before):
 
 - `spatial/` -- route, airport, airspace, map-based products
@@ -207,7 +228,6 @@ libs/
 - `reflect/` -- journals, heatmaps, tracking
 - `avionics/` -- glass cockpit trainer
 - `firc/` -- FIRC course (migrated from airboss-firc after study MVP proven)
-- `hangar/` -- content authoring + admin
 - `runway/` -- public site
 
 See [docs/platform/MULTI_PRODUCT_ARCHITECTURE.md](docs/platform/MULTI_PRODUCT_ARCHITECTURE.md) for the full surface taxonomy and build order.
@@ -216,7 +236,7 @@ See [docs/platform/MULTI_PRODUCT_ARCHITECTURE.md](docs/platform/MULTI_PRODUCT_AR
 
 - **Always use `@ab/*` path aliases for cross-lib imports.** Never relative paths across lib boundaries.
 - **Intra-lib relative imports are fine.**
-- Path aliases: `@ab/constants`, `@ab/types`, `@ab/db`, `@ab/auth`, `@ab/themes`, `@ab/ui`, `@ab/utils`, `@ab/bc-study`, `@ab/bc-sim`, `@ab/aviation`, `@ab/activities`, `@ab/help`.
+- Path aliases: `@ab/constants`, `@ab/types`, `@ab/db`, `@ab/auth`, `@ab/audit`, `@ab/themes`, `@ab/ui`, `@ab/utils`, `@ab/bc-study`, `@ab/bc-sim`, `@ab/bc-citations`, `@ab/aviation`, `@ab/activities`, `@ab/help`, `@ab/sources`, `@ab/hangar-jobs`, `@ab/hangar-sync`.
 
 ## Svelte 5
 

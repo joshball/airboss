@@ -74,7 +74,7 @@ function handleWindowKey(event: KeyboardEvent): void {
 		background: var(--surface-panel);
 		color: var(--ink-muted);
 		font: inherit;
-		font-size: 0.875rem;
+		font-size: var(--font-size-sm);
 		cursor: pointer;
 	}
 
@@ -89,12 +89,12 @@ function handleWindowKey(event: KeyboardEvent): void {
 	}
 
 	.glyph {
-		font-size: 0.9375rem;
+		font-size: var(--font-size-base);
 	}
 
 	.hint {
 		margin-left: 0.25rem;
-		font-size: 0.6875rem;
+		font-size: var(--font-size-xs);
 		font-family: var(--font-family-mono);
 		border: 1px solid var(--edge-default);
 		border-bottom-width: 2px;

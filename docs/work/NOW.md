@@ -44,6 +44,22 @@ Authored 2026-04-25 from the SMI walkthrough triage; status `draft`, no movement
 | [card-page-and-cross-references](../work-packages/card-page-and-cross-references/spec.md)             | E       | card-page + cross-refs (item 4 + new) |
 | [content-citations](../work-packages/content-citations/spec.md)                                       | F       | broad polymorphic citations (item 1)  |
 
+## Deferred work packages from the 2026-04-27 12-axis review
+
+Captured as part of the review-fix PR. Each has an explicit trigger condition; none survives as an undecided "future consideration" per CLAUDE.md.
+
+| Work package                                                                                                          | Trigger                                                              |
+| --------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| [extract-hangar-bc](../work-packages/extract-hangar-bc/spec.md)                                                       | Block any net-new hangar feature                                     |
+| [bc-citations-coupling](../work-packages/bc-citations-coupling/spec.md)                                               | Next review of citation surface                                      |
+| [route-style-extraction](../work-packages/route-style-extraction/spec.md)                                             | Next major UI overhaul                                               |
+| [extract-sim-instruments](../work-packages/extract-sim-instruments/spec.md)                                           | When `apps/avionics/` is created                                     |
+| [auth-rate-limit](../work-packages/auth-rate-limit/spec.md)                                                           | Before opening signups beyond invite circle                          |
+| [scenario-options-relational](../work-packages/scenario-options-relational/spec.md)                                   | When scenario authoring tooling lands                                |
+| [sim-scenario-table](../work-packages/sim-scenario-table/spec.md)                                                     | When sim manifests move into hangar                                  |
+| [card-state-fk-tightening](../work-packages/card-state-fk-tightening/spec.md)                                         | Next study schema migration window                                   |
+| [memory-review-load-as-action](../work-packages/memory-review-load-as-action/spec.md)                                 | Next memory-review UX overhaul                                       |
+
 ## Build Order
 
 Original MVP build order (Steps 1-6) shipped between PRs #1-#16. The active build order today is:

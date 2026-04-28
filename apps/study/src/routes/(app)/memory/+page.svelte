@@ -166,7 +166,7 @@ function percent(n: number, total: number): number {
 		<a class="resume-tile" href={ROUTES.MEMORY_REVIEW_SESSION(resumable.id)}>
 			<div class="resume-label">Resume your last run</div>
 			<div class="resume-sub">{formatResumeSub(resumable)}</div>
-			<div class="resume-cta">Continue -&gt;</div>
+			<div class="resume-cta">Continue</div>
 		</a>
 	{/if}
 

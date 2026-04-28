@@ -429,13 +429,17 @@ export async function getCalibrationPageData(
 	};
 
 	// ---- Trend (previously getCalibrationTrend). ----
+	// Cumulative reading: each day's bucket counts every point with
+	// `occurredAt <= dayEnd`. Matches the docstring on `getCalibrationTrend`
+	// (the standalone helper) and what users expect from a calibration sparkline:
+	// score-to-date, not "what happened only inside this window's slice."
 	const endOfToday = endOfUtcDay(now);
 	const windowStart = startOfUtcDay(new Date(endOfToday.getTime() - (days - 1) * MS_PER_DAY));
 	const trend: CalibrationTrendPoint[] = [];
 	for (let i = 0; i < days; i++) {
 		const dayEnd = endOfUtcDay(new Date(windowStart.getTime() + i * MS_PER_DAY));
 		const dayKey = dayEnd.toISOString().slice(0, 10);
-		const contributing = points.filter((p) => p.occurredAt >= windowStart && p.occurredAt <= dayEnd);
+		const contributing = points.filter((p) => p.occurredAt <= dayEnd);
 		const dayBuckets = bucket(contributing);
 		trend.push({
 			date: dayKey,

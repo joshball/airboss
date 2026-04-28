@@ -213,6 +213,7 @@ export async function updatePlan(
 		.set(update)
 		.where(and(eq(studyPlan.id, planId), eq(studyPlan.userId, userId)))
 		.returning();
+	if (!updated) throw new PlanNotFoundError(planId, userId);
 
 	return updated;
 }
@@ -226,6 +227,7 @@ export async function archivePlan(planId: string, userId: string, db: Db = defau
 		.set({ status: PLAN_STATUSES.ARCHIVED, updatedAt: new Date() })
 		.where(and(eq(studyPlan.id, planId), eq(studyPlan.userId, userId)))
 		.returning();
+	if (!updated) throw new PlanNotFoundError(planId, userId);
 	return updated;
 }
 
