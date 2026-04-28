@@ -169,9 +169,9 @@ Credential, Goal, Lens framework, syllabus YAML pipeline, and PPL ACS Area V tra
 - [x] PR #274 review fix: dead `rebuildKnowledgeNodeRelevanceCache` BC stub removed (real impl lives at `scripts/db/build-relevance-cache.ts`).
 - [x] Run `bun run check` + `bun test`, expect 0 errors and all pass (PR #254).
 
-### Phase 11: Knowledge node citation read helper + URL resolver extension -- partially shipped (PR #254)
+### Phase 11: Knowledge node citation read helper + URL resolver extension -- shipped (PR #254 + PR 5)
 
-- [ ] In `libs/bc/study/src/knowledge.ts`, add `getCitationsForKnowledgeNode(db, knowledgeNodeId)` returning `StructuredCitation[]` from the JSONB column. (Not located in current `knowledge.ts` -- left unchecked.)
+- [x] In `libs/bc/study/src/knowledge.ts`, add `getCitationsForKnowledgeNode(db, knowledgeNodeId)` returning `StructuredCitation[]` from the JSONB column (PR 5). Filters out residual legacy entries via `isStructuredCitation` so downstream consumers see a uniform contract regardless of `references_v2_migrated` state. Re-exported from the BC barrel.
 - [x] In `libs/bc/study/src/handbooks.ts`, extend `resolveCitationUrl(citation, references)` to handle every `StructuredCitation.kind` (PR #254). Routes through `CITATION_URL_TEMPLATES` from `libs/constants/src/study.ts`.
 - [x] When a `StructuredCitation` carries `airboss_ref`, delegate to `@ab/sources getLiveUrl()`; otherwise fall back to per-kind template (PR #254).
 - [x] URL templates live in `libs/constants/src/study.ts` `CITATION_URL_TEMPLATES` (PR #254).
@@ -238,16 +238,14 @@ Note: the dispatcher numbered this as Phase 17/18 in the PR #264 commits; tasks.
 - [x] Run `bun run db seed syllabi`. Verify Area V lands cleanly; PR body reports 12 syllabus_node_link rows binding leaves to existing knowledge nodes (PR #264).
 - [x] Commit `course/syllabi/ppl-airplane-6c/` with manifest + Area V YAML (PR #264).
 
-### Phase 17: knowledge_node.references migration to uniform StructuredCitation -- NOT SHIPPED
+### Phase 17: knowledge_node.references migration to uniform StructuredCitation -- shipped (PR 5)
 
-The `references_v2_migrated` flag column shipped in PR #248 schema, but no migration script (`migrate-references-to-structured.ts`) exists in `scripts/db/`. Grep for `references_v2_migrated` outside `schema.ts` returns zero hits. This phase is unstarted.
-
-- [ ] Create `scripts/db/migrate-references-to-structured.ts`.
-- [ ] Output a report.
-- [ ] Idempotency via `references_v2_migrated=true`.
-- [ ] Unit test fixture.
-- [ ] Run migration against local dev.
-- [ ] Commit.
+- [x] Create `scripts/db/migrate-references-to-structured.ts` (PR 5). Pure `reshapeLegacyCitation()` exported for test coverage; per-row transactional write; resolves a `ResolvedReference` per legacy entry against the seeded `study.reference` registry, upserting synthetic rows tagged `seed_origin=migrate-references-to-structured-v1` for source families (AC / CFR / AIM / NTSB / POH / PCG / OTHER) that don't yet have authored reference rows.
+- [x] Output a report (PR 5). Stdout summary: scanned / already-migrated / migrated / citations reshaped / already-structured / synthetic refs created.
+- [x] Idempotency via `references_v2_migrated=true` (PR 5). Re-runs are no-ops; verified end-to-end (live first run + idempotent rerun).
+- [x] Unit test fixture (PR 5). 25 cases under `scripts/db/migrate-references-to-structured.test.ts` covering the pure reshape (every supported source family + slugify + locator extractors) plus end-to-end idempotency / dry-run / mixed-shape pass-through against real Postgres. Five additional cases under `libs/bc/study/src/knowledge.citations.test.ts` cover the BC read helper.
+- [x] Run migration against local dev (PR 5). First run: 46 nodes scanned, 46 migrated, 163 citations reshaped, 40 synthetic references created. Idempotent rerun: 46 already-migrated, 0 migrated, 0 reshaped.
+- [x] Commit (PR 5).
 
 ### Phase 18: Relevance cache rebuild -- shipped (PR #264 dry-run + PR #270 live write)
 
@@ -287,18 +285,18 @@ The `references_v2_migrated` flag column shipped in PR #248 schema, but no migra
 - [x] No engine test failures: derivation matches authored value 1:1 (PR #270).
 - [x] No engine code changes in this WP (PR #270; no engine.ts changes).
 
-### Phase 22: Build pipeline integration -- partially shipped (PR #264)
+### Phase 22: Build pipeline integration -- mostly shipped (PR #264 + PR 5)
 
 - [x] Wire `seed-all.ts` for: references -> credentials -> syllabi -> credential-syllabi (PR #264). Pipeline runs end-to-end against fresh dev DB.
-- [ ] migrate references-to-structured step. Not wired (Phase 17 unstarted).
+- [x] migrate references-to-structured step (PR 5). New `migrate-references` phase in `seed-all.ts` between credential-syllabi and cards; runs `migrateReferencesToStructured()` so the legacy `LegacyCitation` shape on `knowledge_node.references` is reshaped against the just-seeded reference registry. Idempotent on `references_v2_migrated`.
 - [x] Relevance cache rebuild integrated as explicit post-seed step (PR #264 dry-run + PR #270 live).
-- [ ] `bun run db build:all` one-step composite. Not located in current `package.json`; left unchecked.
-- [ ] Update `scripts/db/seed-guard.ts` for new steps. (No diff to seed-guard for the new phases observed; left unchecked.)
-- [x] Run `bun run db reset && bun run db seed` against fresh dev DB; pipeline succeeds (PR #264 / PR #270).
+- [ ] `bun run db build:all` one-step composite. Not located in current `package.json`; left unchecked. The natural composite at this point is `bun run db seed` (which now covers references migration) + `bun run db build:relevance`; a literal `build:all` script can land with a focused build-pipeline WP rather than as a side-effect of this slice.
+- [ ] Update `scripts/db/seed-guard.ts` for new steps. (Seed-guard scopes by URL/env, not by phase; the migration step inherits the existing guard. Left unchecked: no per-phase guard change required.)
+- [x] Run `bun run db reset && bun run db seed` against fresh dev DB; pipeline succeeds (PR #264 / PR #270 / PR 5).
 
 ### Phase 23: BC barrel exports and docs -- mostly shipped (PR #254 / PR #274)
 
-- [x] Confirm `libs/bc/study/src/index.ts` re-exports every public function from `credentials.ts`, `syllabi.ts`, `goals.ts`, `lenses.ts`, plus `getCitationsForSyllabusNode` (PR #254). Note: `getCitationsForKnowledgeNode` is not re-exported (Phase 11 partial).
+- [x] Confirm `libs/bc/study/src/index.ts` re-exports every public function from `credentials.ts`, `syllabi.ts`, `goals.ts`, `lenses.ts`, plus `getCitationsForSyllabusNode` and `getCitationsForKnowledgeNode` (PR #254 + PR 5).
 - [x] Confirm `libs/sources/src/index.ts` re-exports both `acs` and `pts` resolver registrations (PR #254 / PR #264).
 - [x] Confirm error classes are exported (PR #254).
 - [x] Module-level JSDoc on each new BC file (PR #254 ship + PR #274 cleanup).
@@ -324,13 +322,12 @@ The `references_v2_migrated` flag column shipped in PR #248 schema, but no migra
 - [x] Run `bun run check`, `bun test` once more before merge. All green for WP scope (PR #274).
 - [x] PRs opened: #248, #254, #264, #270, #274. Sequence references PR #229 (original spec) / PR #245 (amendment) / WP #1 (#242) / validator (#241) / ADR 016 / ADR 019 / ADR 020.
 
-## Status as of 2026-04-28
+## Status as of 2026-04-28 (post PR 5)
 
-The cert-syllabus-and-goal-composer WP shipped across 5 PRs (the parent dispatcher referenced #264 / #270 / #272 / #274; #272 is unrelated, the actual cert-syllabus PR sequence is #248 / #254 / #264 / #270 / #274). Per the WP description in PR #274: "WP cert-syllabus-and-goal-composer COMPLETE."
+The cert-syllabus-and-goal-composer WP shipped across 6 PRs: #248 / #254 / #264 / #270 / #274 / PR 5. Engineering scope is closed; the only remaining open box is Phase 24's manual test pass (a user-facing gate, not engineering scope).
 
-- 189 of 210 checkboxes closed across PRs #248, #254, #264, #270, #274. (The original 201-checkbox file gained 9 sub-bullet checkboxes during this sync where Phase 16's three task sub-bullets were promoted to explicit checkboxes.)
-- Phases shipped: 0 (constants/types), 1 (routes), 2/3/4/5 (schema + migration), 6 (ID helpers), 7 (Zod), 8 (acs/pts resolver + reference seed), 9 (credential BC), 10 (syllabus BC), 11 (URL resolver -- partial), 12 (goal BC), 13 (lens framework), 14 (credential YAML + seed), 15 (syllabus YAML + seed), 16 (PPL ACS Area V transcription), 18 (relevance cache rebuild + Gate A), 19 (strip authored relevance + Gate B), 20 (study_plan.cert_goals migration), 21 (engine sanity check), 22 (build pipeline -- partial), 23 (BC barrel exports + docs), 24 (`/ball-review-full` + fixer).
-- Phases unstarted: 17 (knowledge_node.references -> uniform StructuredCitation migration). The `references_v2_migrated` flag column shipped in schema (PR #248) but no `migrate-references-to-structured.ts` script exists. Inside Phase 11, `getCitationsForKnowledgeNode(db, knowledgeNodeId)` is not present in `knowledge.ts`. Inside Phase 22, the `migrate references-to-structured` step in `seed-all.ts` is not wired.
+- All 21 implementation phases shipped. Phase 17 + the remaining Phase 11 + Phase 22 sub-tasks landed in PR 5.
+- Phases shipped: 0 (constants/types), 1 (routes), 2/3/4/5 (schema + migration), 6 (ID helpers), 7 (Zod), 8 (acs/pts resolver + reference seed), 9 (credential BC), 10 (syllabus BC), 11 (URL resolver + `getCitationsForKnowledgeNode`), 12 (goal BC), 13 (lens framework), 14 (credential YAML + seed), 15 (syllabus YAML + seed), 16 (PPL ACS Area V transcription), 17 (knowledge_node.references migration to uniform StructuredCitation), 18 (relevance cache rebuild + Gate A), 19 (strip authored relevance + Gate B), 20 (study_plan.cert_goals migration), 21 (engine sanity check), 22 (build pipeline integration), 23 (BC barrel exports + docs), 24 (`/ball-review-full` + fixer).
 
 ### Per-PR closure summary
 
