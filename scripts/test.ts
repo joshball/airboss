@@ -9,17 +9,11 @@
  */
 
 import { existsSync } from 'node:fs';
+import { run } from './lib/spawn';
 
 const args = process.argv.slice(2);
 const first = args[0];
 const helpFlags = new Set(['help', '-h', '--help']);
-
-async function run(cmd: string[]): Promise<void> {
-	console.log(`> ${cmd.join(' ')}`);
-	const proc = Bun.spawn(cmd, { stdio: ['inherit', 'inherit', 'inherit'] });
-	const code = await proc.exited;
-	if (code !== 0) process.exit(code);
-}
 
 // Ensure every SvelteKit app has its generated `.svelte-kit/tsconfig.json`
 // before vitest traverses app tests (each app's `tsconfig.json` extends it).

@@ -102,7 +102,7 @@ Shipped surface:
 
 - `libs/sources/src/handbooks/` -- locator parser, citation formatter, FAA URL builder, derivative reader, resolver, ingest CLI.
 - `handbooks` `CorpusResolver` registered via side-effect import in `libs/sources/src/index.ts`.
-- New CLI `bun run ingest handbooks --doc=<phak|afh|avwx> --edition=<...>` that walks the existing manifest and emits one `SourceEntry` per chapter / section / subsection. Idempotent; re-run is a no-op.
+- New CLI `bun run sources register handbooks --doc=<phak|afh|avwx> --edition=<...>` that walks the existing manifest and emits one `SourceEntry` per chapter / section / subsection. Idempotent; re-run is a no-op.
 - 78 new tests in `libs/sources/src/handbooks/`; 494 total tests in `libs/sources/` pass.
 - Real-tree ingest counts: PHAK 850 entries, AFH 531 entries, AvWX 480 entries.
 - Smoke test proves `[@cite](airboss-ref:handbooks/phak/8083-25C/12/3)` resolves with zero ERROR after ingest.
@@ -166,6 +166,6 @@ Phases 5, 6, 7, 8, 10 can run in parallel after Phase 2 lands -- they each unloc
 | 2026-04-27 | 6 | Handbook corpus shipped (PR #251). |
 | 2026-04-27 | 7 | AIM corpus WP authored + implementation (this PR). |
 | 2026-04-27 | -- | Downloader fix: corrected URLs (AC 120-71B, AC 91.21-1D, ACS path), browser User-Agent, eCFR per-title `latest_amended_on` auto-detect, descriptive cached filenames + `source.<ext>` symlink, HEAD-then-skip cache check, `--verify` audit mode (follow-up to PR #253). |
-| 2026-04-27 | -- | Unified ingest dispatcher: `scripts/ingest.ts` replaces `cfr-ingest.ts` / `handbook-corpus-ingest.ts` / `aim-corpus-ingest.ts`. Single entry point `bun run ingest <corpus>` with `--all`, `--help`, and per-corpus `--help`; per-corpus runner code in `libs/sources/src/<corpus>/ingest.ts` is unchanged. |
+| 2026-04-27 | -- | Unified ingest dispatcher: `scripts/sources/register.ts` replaces `cfr-ingest.ts` / `handbook-corpus-ingest.ts` / `aim-corpus-ingest.ts`. Single entry point `bun run sources register <corpus>` with `--all`, `--help`, and per-corpus `--help`; per-corpus runner code in `libs/sources/src/<corpus>/ingest.ts` is unchanged. |
 | 2026-04-28 | 3 | Lane A landed: CFR Title 14 (226 parts, 6,328 sections at edition `2026-04-22`) + Title 49 aviation slice (parts 1552 + 830, 22 sections at `2026-04-20`). Structural index (`manifest.json` + `sections.json`) committed; per-section body markdown gitignored per ADR 018 scale-tier exception. PR #260. |
-| 2026-04-28 | 8 | Lane C landed: AC corpus module (`libs/sources/src/ac/`) -- locator, resolver, citation, URL, derivative-reader, ingest. URI shape `airboss-ref:ac/<doc>/<rev>` with `?at=YYYY-MM-DD`; unrevisioned ACs rejected per §1.2. Live ingest produced 9 ACs (00-6B, 120-71B, 25-7D, 61-65J, 61-83J, 61-98D, 90-66C, 91-21.1D, 91-79A); 3 skipped with explicit reasons (60-22 + 91-92 unrevisioned, 150/5210-7D slash-style not yet supported). Smoke tests cover AC alone + cross-corpus (ac + regs in one lesson). |
+| 2026-04-28 | 8 | Lane C landed: AC corpus module (`libs/sources/src/ac/`) -- locator, resolver, citation, URL, derivative-reader, ingest. URI shape `airboss-ref:ac/<doc>/<rev>` with `?at=YYYY-MM-DD`; unrevisioned ACs rejected per §1.2. Live ingest produced 9 ACs (00-6B, 120-71B, 25-7D, 61-65J, 61-83J, 61-98D, 90-66C, 91-21.1D, 91-79A); 3 skipped with explicit reasons (60-22 + 91-92 unrevisioned, 150/5210-7D slash-style not yet supported). Wired through `bun run sources register ac`. Smoke tests cover AC alone + cross-corpus (ac + regs in one lesson). |

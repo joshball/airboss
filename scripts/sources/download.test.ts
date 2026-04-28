@@ -1,17 +1,18 @@
 /**
- * Tests for the `download-sources` CLI plan + arg parsing. No live network calls.
+ * Tests for the `bun run sources download` CLI plan + arg parsing. No live
+ * network calls.
  *
  * The streaming download path is not exercised here; doing so reliably needs
  * either a fixture HTTP server or the live FAA / eCFR endpoints (flaky). A
  * smoke test that downloads ONE small file is opt-in via `AIRBOSS_E2E_DOWNLOAD=1`
- * (see `bun run download-sources --corpus=ac --dry-run` for the URL plan).
+ * (see `bun run sources download --corpus=ac --dry-run` for the URL plan).
  */
 
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { __download_internal__, runDownloadSources } from './download-sources';
+import { __download_internal__, runDownloadSources } from './download';
 
 const {
 	parseArgs,

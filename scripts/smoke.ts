@@ -11,6 +11,7 @@
 
 import { readdirSync } from 'node:fs';
 import { join } from 'node:path';
+import { run } from './lib/spawn';
 
 const SMOKE_DIR = join(import.meta.dir, 'smoke');
 
@@ -23,13 +24,6 @@ function listSmokes(): string[] {
 		.filter((name) => name.endsWith('.ts'))
 		.map((name) => name.slice(0, -3))
 		.sort();
-}
-
-async function run(cmd: string[]): Promise<void> {
-	console.log(`> ${cmd.join(' ')}`);
-	const proc = Bun.spawn(cmd, { stdio: ['inherit', 'inherit', 'inherit'] });
-	const code = await proc.exited;
-	if (code !== 0) process.exit(code);
 }
 
 function printAvailable(): void {

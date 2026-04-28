@@ -6,7 +6,7 @@ Claude Code's existing model access; no `ANTHROPIC_API_KEY` env var needed.
 
 The output is byte-comparable to what `sections_via_llm.py` writes, so the
 generated `_llm_section_tree.json` files can drop straight into the
-existing compare pipeline (`bun run handbook-ingest <doc> --strategy
+existing compare pipeline (`bun run sources extract handbooks <doc> --strategy
 compare`).
 
 ## Prerequisites
@@ -64,7 +64,7 @@ real list; do not hardcode 17):
 After every chapter is written:
 
 6. Run the existing compare pipeline to produce the markdown report:
-     bun run handbook-ingest <doc> --edition <edition> --strategy compare
+     bun run sources extract handbooks <doc> --edition <edition> --strategy compare
    This rebuilds
    tools/handbook-ingest/reports/section-strategy-compare-<doc>-<edition>.md
    from the freshly-written `_llm_section_tree.json` files plus the TOC

@@ -116,13 +116,13 @@ The Python ingestion pipeline (`tools/handbook-ingest/`) gains an `--apply-errat
 
 ```bash
 # Initial ingestion of the bound edition (already supported):
-bun run handbook-ingest phak --edition FAA-H-8083-25C
+bun run sources extract handbooks phak --edition FAA-H-8083-25C
 
 # When new errata is published, fetch + apply:
-bun run handbook-ingest phak --edition FAA-H-8083-25C --apply-errata https://www.faa.gov/.../PHAK-25C-errata-2026-08.pdf
+bun run sources extract handbooks phak --edition FAA-H-8083-25C --apply-errata https://www.faa.gov/.../PHAK-25C-errata-2026-08.pdf
 
 # Re-apply all known errata for this edition (deterministic re-run):
-bun run handbook-ingest phak --edition FAA-H-8083-25C --reapply-errata
+bun run sources extract handbooks phak --edition FAA-H-8083-25C --reapply-errata
 ```
 
 `--apply-errata <url>`:
@@ -195,7 +195,7 @@ For each handbook, the FAA's handbook page (e.g., `https://www.faa.gov/regulatio
 
 ### How to verify errata are applied
 
-`manifest.json`'s `errata` array is the truth. To confirm: `bun run handbook-ingest phak --edition FAA-H-8083-25C --verify-errata` (planned, not yet implemented). Pipeline checks every entry in `manifest.errata` against the cached PDFs, recomputes section content hashes, confirms they match the post-errata version. Output: clean, OR list of mismatches.
+`manifest.json`'s `errata` array is the truth. To confirm: `bun run sources extract handbooks phak --edition FAA-H-8083-25C --verify-errata` (planned, not yet implemented). Pipeline checks every entry in `manifest.errata` against the cached PDFs, recomputes section content hashes, confirms they match the post-errata version. Output: clean, OR list of mismatches.
 
 ### When the FAA publishes a new edition
 
@@ -242,7 +242,7 @@ Considered for v1. Rejected because the cert-syllabus WP and the citation-precis
 This ADR is forward-looking. PHAK 25C has been ingested without errata applied (Phase 8 of the handbook-ingestion-and-reader WP, 2026-04-27). The first errata application is a one-time follow-up:
 
 1. Identify any published errata sheets for PHAK 25C (FAA's PHAK page).
-2. Run `bun run handbook-ingest phak --edition FAA-H-8083-25C --apply-errata <url>` for each.
+2. Run `bun run sources extract handbooks phak --edition FAA-H-8083-25C --apply-errata <url>` for each.
 3. Commit the regenerated section markdown + manifest update.
 4. Re-seed: `bun run db seed handbooks`.
 
