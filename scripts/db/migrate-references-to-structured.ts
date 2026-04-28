@@ -49,7 +49,7 @@
  */
 
 import { CITATION_FRAMINGS, type CitationFraming, REFERENCE_KINDS, type ReferenceKind } from '@ab/constants';
-import { db as defaultDb } from '@ab/db';
+import { db as defaultDb } from '@ab/db/connection';
 import type { LegacyCitation, StructuredCitation } from '@ab/types';
 import { isStructuredCitation } from '@ab/types';
 import { and, eq } from 'drizzle-orm';
