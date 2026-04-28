@@ -18,11 +18,11 @@ Phased plan. Each phase ends with `bun run check` clean and a commit.
 - R4: shipped (`feat(handbook-ingest): apply-errata pipeline (--apply-errata + --reapply-errata)`)
 - R5: AFH portion shipped (`feat(content/afh): apply MOSAIC addendum`); PHAK portion deferred (different layout requires a new `bullet-edits` parser archetype, captured in IDEAS.md and PHAK YAML comment)
 - R6: shipped (reader UI: AmendmentPanel + ErrataEntry + LCS word-diff utility wired into +page.svelte; e2e spec authored and `.skip()` until the e2e seed inserts errata rows -- see R6 task block).
-- R7: deferred (discovery: 17-handbook catalogue, scrape, GH issue, launchd cron, dispatcher banner)
+- R7: shipped (discovery: 17-handbook catalogue, page-scrape, freshness gate, dismissal stop-list, dispatcher banner, server startup hook, download piggyback, weekly launchd plist + install/uninstall, GH-issue auto-open with idempotency, Python subprocess metadata bridge).
 - R8: ADR 020 amendment shipped; IDEAS.md follow-ups captured; hangar PRD update covered via IDEAS.md (hangar PRD dormant per project memory)
 - R9: deferred (full test-plan walk + ball-review-full + PR follow-up review)
 
-A follow-up PR will pick up R5 PHAK portion, R6, R7, and R9.
+A follow-up PR will pick up R5 PHAK portion, R9, and any R7 polish surfaced by `/ball-review-full`.
 
 ## Pre-flight
 
