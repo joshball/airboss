@@ -240,7 +240,7 @@ export async function createGoal(params: CreateGoalParams, db: Db = defaultDb): 
 		notesMd: params.notesMd ?? '',
 		status: GOAL_STATUSES.ACTIVE,
 		isPrimary: params.isPrimary ?? false,
-		targetDate: params.targetDate === null ? null : params.targetDate ? new Date(params.targetDate) : null,
+		targetDate: params.targetDate ?? null,
 		seedOrigin: null,
 		createdAt: now,
 		updatedAt: now,
@@ -275,7 +275,7 @@ export async function updateGoal(
 	if (input.notesMd !== undefined) updates.notesMd = input.notesMd;
 	if (input.status !== undefined) updates.status = input.status;
 	if (input.targetDate !== undefined) {
-		updates.targetDate = input.targetDate === null ? null : new Date(input.targetDate);
+		updates.targetDate = input.targetDate;
 	}
 	const [row] = await db.update(goal).set(updates).where(eq(goal.id, existing.id)).returning();
 	if (!row) throw new GoalNotFoundError(goalId);

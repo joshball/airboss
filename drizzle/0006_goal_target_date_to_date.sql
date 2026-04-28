@@ -1,0 +1,1 @@
+ALTER TABLE "study"."goal" ALTER COLUMN "target_date" SET DATA TYPE date;
