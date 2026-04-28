@@ -52,17 +52,17 @@ The week was dominated by the reference identifier system (ADR 019, **phases 1-9
 - **ADR 019 phases 1-9** all on main (see "Just shipped" above).
 - **Cert-syllabus + goal composer WP** all 24 phases shipped across 5 PRs.
 
-## Five draft work packages -- now deferred
+## Five draft work packages -- all shipped
 
-Authored 2026-04-25 from the SMI walkthrough triage. As of 2026-04-28, all five flipped to `status: deferred` with explicit triggers in their frontmatter (per CLAUDE.md "no undecided considerations for future work"). Each will be re-spec'd via `/ball-wp-spec` when its trigger fires.
+Authored 2026-04-25 from the SMI walkthrough triage and originally listed as deferred. Verdict pass on 2026-04-28 (PR #311) found that every one of them had already shipped during the redesign sprint. Each spec now carries a `status: done` frontmatter and a verdict block citing the shipping PRs.
 
-| Work package                                                                              | Cluster | Trigger                                                                   |
-| ----------------------------------------------------------------------------------------- | ------- | ------------------------------------------------------------------------- |
-| [review-flow-v2](../work-packages/review-flow-v2/spec.md)                                 | B       | Next walkthrough re-raises items 7-9, 12-13, 16 (review-screen friction)  |
-| [snooze-and-flag](../work-packages/snooze-and-flag/spec.md)                               | C       | review-flow-v2 unblocks AND a walkthrough re-raises items 10, 11          |
-| [review-sessions-url](../work-packages/review-sessions-url/spec.md)                       | D       | A user actually loses a session and asks for resume / share / redo        |
-| [card-page-and-cross-references](../work-packages/card-page-and-cross-references/spec.md) | E       | A user wants to share a single card publicly OR cited-by surface blocks   |
-| [content-citations](../work-packages/content-citations/spec.md)                           | F       | ADR 019 phase 10 expands beyond ACS OR cert-syllabus needs polymorphic    |
+| Work package                                                                              | Cluster | Shipping evidence                                                                                              |
+| ----------------------------------------------------------------------------------------- | ------- | -------------------------------------------------------------------------------------------------------------- |
+| [review-flow-v2](../work-packages/review-flow-v2/spec.md)                                 | B       | Chicklets, two-line ratings, undo, confidence-adjust, help chicklet (PRs #138, #49, #169)                      |
+| [snooze-and-flag](../work-packages/snooze-and-flag/spec.md)                               | C       | `card_snooze` + `card_feedback` tables, full BC, `SnoozeReasonPopover`, Browse `Removed` (PRs #135, #138)      |
+| [review-sessions-url](../work-packages/review-sessions-url/spec.md)                       | D       | Resume + Redo + Share (`SharePopover`, deck-hash encoder, `memory_review_session`) (PRs #154, #159)            |
+| [card-page-and-cross-references](../work-packages/card-page-and-cross-references/spec.md) | E       | Public `cards/[id]` route, `getPublicCard`, `getCardCrossReferences` panel (PR #128)                           |
+| [content-citations](../work-packages/content-citations/spec.md)                           | F       | Polymorphic `study.content_citations` table + BC + picker; trigger fired via PRs #299, #309 (PR #127, #278)    |
 
 ## Deferred work packages from the 2026-04-27 12-axis review
 
