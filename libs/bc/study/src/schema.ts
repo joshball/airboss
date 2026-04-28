@@ -94,6 +94,7 @@ import {
 	boolean,
 	check,
 	date,
+	foreignKey,
 	index,
 	integer,
 	jsonb,
@@ -362,6 +363,13 @@ export const card = studySchema.table(
 		// contrib extension available in the airboss dev container).
 		cardFrontTrgmIdx: index('card_front_trgm_idx').using('gin', sql`"front" gin_trgm_ops`),
 		cardBackTrgmIdx: index('card_back_trgm_idx').using('gin', sql`"back" gin_trgm_ops`),
+		// (id, user_id) UNIQUE backs the composite FK from `card_state` so that
+		// `card_state.user_id` is structurally locked to the owning card's
+		// `user_id`. `id` alone is already PRIMARY KEY; the (id, user_id) tuple
+		// is functionally equivalent in uniqueness terms but lets Postgres
+		// enforce REFERENCES (id, user_id) on dependent tables. See
+		// docs/work-packages/card-state-fk-tightening/spec.md.
+		cardIdUserUnique: uniqueIndex('card_id_user_unique').on(t.id, t.userId),
 		cardTypeCheck: check('card_type_check', sql.raw(`"card_type" IN (${inList(CARD_TYPE_VALUES)})`)),
 		sourceTypeCheck: check('card_source_type_check', sql.raw(`"source_type" IN (${inList(CONTENT_SOURCE_VALUES)})`)),
 		statusCheck: check('card_status_check', sql.raw(`"status" IN (${inList(CARD_STATUS_VALUES)})`)),
@@ -427,12 +435,15 @@ export const review = studySchema.table(
 export const cardState = studySchema.table(
 	'card_state',
 	{
-		cardId: text('card_id')
-			.notNull()
-			.references(() => card.id, { onDelete: 'cascade' }),
-		userId: text('user_id')
-			.notNull()
-			.references(() => bauthUser.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
+		// (card_id, user_id) is governed by a composite FK in the table extras
+		// below: REFERENCES card(id, user_id) ON DELETE CASCADE. The composite
+		// FK locks `user_id` to the owning card's `user_id` at the storage
+		// layer -- they cannot drift. A separate FK on `user_id` to bauth_user
+		// is unnecessary because deleting a user already cascades through
+		// `card.user_id -> bauth_user`, which in turn cascades to card_state
+		// via the composite FK. See docs/work-packages/card-state-fk-tightening.
+		cardId: text('card_id').notNull(),
+		userId: text('user_id').notNull(),
 		stability: real('stability').notNull(),
 		difficulty: real('difficulty').notNull(),
 		state: text('state').notNull(),
@@ -460,6 +471,15 @@ export const cardState = studySchema.table(
 	},
 	(t) => ({
 		pk: primaryKey({ columns: [t.cardId, t.userId] }),
+		// Composite FK enforcing card_state.(card_id, user_id) === card.(id, user_id).
+		// Backed by `card_id_user_unique` on the parent table.
+		cardOwnerFk: foreignKey({
+			columns: [t.cardId, t.userId],
+			foreignColumns: [card.id, card.userId],
+			name: 'card_state_card_owner_fk',
+		})
+			.onDelete('cascade')
+			.onUpdate('cascade'),
 		cardStateUserDueIdx: index('card_state_user_due_idx').on(t.userId, t.dueAt),
 		// Partial index on mastered rows only. `getMasteredCount`, `getDomainBreakdown`,
 		// `getNodeMastery`, and `getNodeMasteryMap` all filter on
@@ -695,6 +715,10 @@ export const session = studySchema.table(
 	(t) => ({
 		sessionUserStartedIdx: index('session_user_started_idx').on(t.userId, t.startedAt),
 		sessionPlanStartedIdx: index('session_plan_started_idx').on(t.planId, t.startedAt),
+		// (id, user_id) UNIQUE backs the composite FK from `session_item_result`
+		// so that the slot row's `user_id` is structurally locked to the owning
+		// session's `user_id`. Same pattern as `card_id_user_unique` above.
+		sessionIdUserUnique: uniqueIndex('session_id_user_unique').on(t.id, t.userId),
 		modeCheck: check('session_mode_check', sql.raw(`"mode" IN (${inList(SESSION_MODE_VALUES)})`)),
 		focusOverrideCheck: check(
 			'session_focus_override_check',
@@ -723,18 +747,21 @@ export const sessionItemResult = studySchema.table(
 	'session_item_result',
 	{
 		id: text('id').primaryKey(),
-		sessionId: text('session_id')
-			.notNull()
-			.references(() => session.id, { onDelete: 'cascade' }),
 		/**
-		 * Denormalized for per-user aggregate queries (streak). FK is required
-		 * so the column cannot drift from `session.user_id`; the write path in
-		 * `sessions.ts` keeps the two consistent and the FK enforces it at the
-		 * storage layer. `cascade` matches every other user-scoped table.
+		 * (session_id, user_id) is governed by a composite FK in the table
+		 * extras below: REFERENCES session(id, user_id) ON DELETE CASCADE. The
+		 * composite FK locks `user_id` to the owning session's `user_id` at
+		 * the storage layer -- the two cannot drift. A separate FK on
+		 * `user_id` to bauth_user is unnecessary because deleting a user
+		 * already cascades through `session.user_id -> bauth_user`, which in
+		 * turn cascades to session_item_result via the composite FK.
+		 *
+		 * The denormalized `user_id` column stays for aggregate-query
+		 * locality (per-user streak / activity reads avoid a join through
+		 * session). See docs/work-packages/card-state-fk-tightening.
 		 */
-		userId: text('user_id')
-			.notNull()
-			.references(() => bauthUser.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
+		sessionId: text('session_id').notNull(),
+		userId: text('user_id').notNull(),
 		slotIndex: smallint('slot_index').notNull(),
 		itemKind: text('item_kind').notNull(),
 		slice: text('slice').notNull(),
@@ -775,6 +802,16 @@ export const sessionItemResult = studySchema.table(
 		seedOrigin: text('seed_origin'),
 	},
 	(t) => ({
+		// Composite FK enforcing session_item_result.(session_id, user_id)
+		// === session.(id, user_id). Backed by `session_id_user_unique` on
+		// the parent table.
+		sessionOwnerFk: foreignKey({
+			columns: [t.sessionId, t.userId],
+			foreignColumns: [session.id, session.userId],
+			name: 'session_item_result_session_owner_fk',
+		})
+			.onDelete('cascade')
+			.onUpdate('cascade'),
 		// UNIQUE on (session_id, slot_index) backs the atomic UPSERT in
 		// `recordItemResult` -- the enforcement for ADR 012's session-slot
 		// idempotency claim. Without this, two concurrent submits can both
