@@ -57,6 +57,13 @@
       "when": 1777382258187,
       "tag": "0007_card_state_fk_tightening",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1777382823036,
+      "tag": "0008_scenario_options_relational",
+      "breakpoints": true
     }
   ]
 }

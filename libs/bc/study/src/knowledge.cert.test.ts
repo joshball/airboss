@@ -145,7 +145,6 @@ async function seedRepsForNode(
 			userId: TEST_USER_ID,
 			scenarioId: sc.id,
 			isCorrect: i < correctCount,
-			chosenOption: i < correctCount ? 'a' : 'b',
 			completedAt: new Date(base + i),
 		});
 	}

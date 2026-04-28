@@ -229,7 +229,7 @@ function sliceLabel(slice: SessionSlice): string {
 							{#each repView.options as opt (opt.id)}
 								<button
 									type="submit"
-									name="chosenOption"
+									name="chosenOptionId"
 									value={opt.id}
 									class="btn option"
 									disabled={loading}

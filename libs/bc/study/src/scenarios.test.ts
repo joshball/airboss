@@ -26,6 +26,7 @@ import {
 	getRepAccuracy,
 	getRepDashboard,
 	getRepStats,
+	getScenarioOptions,
 	getScenarios,
 	InvalidOptionError,
 	ScenarioNotAttemptableError,
@@ -179,7 +180,8 @@ describe('createScenario -- validation', () => {
 		const created = await createScenario(makeInput());
 		expect(created.id.startsWith('rep_')).toBe(true);
 		expect(created.userId).toBe(TEST_USER_ID);
-		expect(created.options).toHaveLength(3);
+		const options = await getScenarioOptions(created.id);
+		expect(options).toHaveLength(3);
 		expect(created.status).toBe(SCENARIO_STATUSES.ACTIVE);
 		expect(created.sourceType).toBe(CONTENT_SOURCES.PERSONAL);
 		expect(created.isEditable).toBe(true);
@@ -316,17 +318,22 @@ describe('getNextScenarios -- priority', () => {
 });
 
 describe('submitAttempt -- correctness resolution', () => {
+	// `createScenario` namespaces option ids as `${scenario_id}__${authoredId}`
+	// so authored letters ("a", "b") stay collision-free on a single PK column.
+	// Tests that pass an option id to `submitAttempt` build it the same way.
+	const optId = (scenarioId: string, letter: string): string => `${scenarioId}__${letter}`;
+
 	it('resolves isCorrect=true when the chosen option is the correct one', async () => {
 		const sc = await createScenario(makeInput());
-		const attempt = await submitAttempt({ scenarioId: sc.id, userId: TEST_USER_ID, chosenOption: 'b' });
+		const attempt = await submitAttempt({ scenarioId: sc.id, userId: TEST_USER_ID, chosenOptionId: optId(sc.id, 'b') });
 		expect(attempt.isCorrect).toBe(true);
-		expect(attempt.chosenOption).toBe('b');
+		expect(attempt.chosenOptionId).toBe(optId(sc.id, 'b'));
 		expect(attempt.scenarioId).toBe(sc.id);
 	});
 
 	it('resolves isCorrect=false when the chosen option is an incorrect one', async () => {
 		const sc = await createScenario(makeInput());
-		const attempt = await submitAttempt({ scenarioId: sc.id, userId: TEST_USER_ID, chosenOption: 'a' });
+		const attempt = await submitAttempt({ scenarioId: sc.id, userId: TEST_USER_ID, chosenOptionId: optId(sc.id, 'a') });
 		expect(attempt.isCorrect).toBe(false);
 	});
 
@@ -335,7 +342,7 @@ describe('submitAttempt -- correctness resolution', () => {
 		const attempt = await submitAttempt({
 			scenarioId: sc.id,
 			userId: TEST_USER_ID,
-			chosenOption: 'b',
+			chosenOptionId: optId(sc.id, 'b'),
 			confidence: 4,
 			answerMs: 3_500,
 		});
@@ -345,23 +352,27 @@ describe('submitAttempt -- correctness resolution', () => {
 
 	it('raises InvalidOptionError when the chosen option id is not on the scenario', async () => {
 		const sc = await createScenario(makeInput());
-		await expect(submitAttempt({ scenarioId: sc.id, userId: TEST_USER_ID, chosenOption: 'z' })).rejects.toBeInstanceOf(
-			InvalidOptionError,
-		);
+		await expect(
+			submitAttempt({ scenarioId: sc.id, userId: TEST_USER_ID, chosenOptionId: optId(sc.id, 'z') }),
+		).rejects.toBeInstanceOf(InvalidOptionError);
 	});
 
 	it('raises ScenarioNotFoundError when the scenario belongs to another user', async () => {
 		await expect(
-			submitAttempt({ scenarioId: 'rep_does-not-exist', userId: TEST_USER_ID, chosenOption: 'b' }),
+			submitAttempt({
+				scenarioId: 'rep_does-not-exist',
+				userId: TEST_USER_ID,
+				chosenOptionId: 'rep_does-not-exist__b',
+			}),
 		).rejects.toBeInstanceOf(ScenarioNotFoundError);
 	});
 
 	it('raises ScenarioNotAttemptableError when the scenario is archived', async () => {
 		const sc = await createScenario(makeInput());
 		await setScenarioStatus(sc.id, TEST_USER_ID, SCENARIO_STATUSES.ARCHIVED);
-		await expect(submitAttempt({ scenarioId: sc.id, userId: TEST_USER_ID, chosenOption: 'b' })).rejects.toBeInstanceOf(
-			ScenarioNotAttemptableError,
-		);
+		await expect(
+			submitAttempt({ scenarioId: sc.id, userId: TEST_USER_ID, chosenOptionId: optId(sc.id, 'b') }),
+		).rejects.toBeInstanceOf(ScenarioNotAttemptableError);
 	});
 
 	it('is a pure validator -- repeated calls never touch the DB', async () => {
@@ -371,8 +382,8 @@ describe('submitAttempt -- correctness resolution', () => {
 		// and never grow the underlying table.
 		const sc = await createScenario(makeInput());
 		const before = await db.select().from(sessionItemResult).where(eq(sessionItemResult.scenarioId, sc.id));
-		const a1 = await submitAttempt({ scenarioId: sc.id, userId: TEST_USER_ID, chosenOption: 'b' });
-		const a2 = await submitAttempt({ scenarioId: sc.id, userId: TEST_USER_ID, chosenOption: 'b' });
+		const a1 = await submitAttempt({ scenarioId: sc.id, userId: TEST_USER_ID, chosenOptionId: optId(sc.id, 'b') });
+		const a2 = await submitAttempt({ scenarioId: sc.id, userId: TEST_USER_ID, chosenOptionId: optId(sc.id, 'b') });
 		expect(a1).toEqual(a2);
 		const after = await db.select().from(sessionItemResult).where(eq(sessionItemResult.scenarioId, sc.id));
 		expect(after.length).toBe(before.length);
@@ -380,8 +391,12 @@ describe('submitAttempt -- correctness resolution', () => {
 
 	it('resolves distinct outcomes for different chosen options', async () => {
 		const sc = await createScenario(makeInput());
-		const correct = await submitAttempt({ scenarioId: sc.id, userId: TEST_USER_ID, chosenOption: 'b' });
-		const incorrect = await submitAttempt({ scenarioId: sc.id, userId: TEST_USER_ID, chosenOption: 'a' });
+		const correct = await submitAttempt({ scenarioId: sc.id, userId: TEST_USER_ID, chosenOptionId: optId(sc.id, 'b') });
+		const incorrect = await submitAttempt({
+			scenarioId: sc.id,
+			userId: TEST_USER_ID,
+			chosenOptionId: optId(sc.id, 'a'),
+		});
 		expect(correct.isCorrect).toBe(true);
 		expect(incorrect.isCorrect).toBe(false);
 	});

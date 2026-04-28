@@ -505,10 +505,12 @@ export type CardStateRow = typeof cardState.$inferSelect;
 export type NewCardStateRow = typeof cardState.$inferInsert;
 
 /**
- * Option on a decision-rep scenario. Always stored as an element of the
- * `scenario.options` JSONB array. `whyNot` is required when isCorrect is
- * false (enforced by validation + BC guards; a DB CHECK on a JSONB array
- * element adds noise without being airtight).
+ * Option on a decision-rep scenario. Authored values live in the relational
+ * `study.scenario_option` table (per scenario-options-relational WP). The
+ * shape below is the BC-level read/write DTO -- the value bag the BC accepts
+ * when creating a scenario and the shape it returns when loading one. The DB
+ * row uses `scenario_option.id` as the surrogate key, which is the same
+ * value carried in this DTO.
  */
 export interface ScenarioOption {
 	id: string;
@@ -523,6 +525,10 @@ export interface ScenarioOption {
  * `/reps` flow -- read situation, pick an option, see the outcome and
  * teaching point. Shares `source_type` / `source_ref` / `is_editable` with
  * cards for future course/import integration.
+ *
+ * Options live in the sibling `scenario_option` table so each option
+ * has a stable id, FK target for `session_item_result.chosen_option_id`,
+ * and a DB-level "exactly one correct" constraint.
  */
 export const scenario = studySchema.table(
 	'scenario',
@@ -533,7 +539,6 @@ export const scenario = studySchema.table(
 			.references(() => bauthUser.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
 		title: text('title').notNull(),
 		situation: text('situation').notNull(),
-		options: jsonb('options').$type<ScenarioOption[]>().notNull(),
 		teachingPoint: text('teaching_point').notNull(),
 		domain: text('domain').notNull(),
 		difficulty: text('difficulty').notNull(),
@@ -576,21 +581,66 @@ export const scenario = studySchema.table(
 			sql.raw(`"source_type" IN (${inList(CONTENT_SOURCE_VALUES)})`),
 		),
 		statusCheck: check('scenario_status_check', sql.raw(`"status" IN (${inList(SCENARIO_STATUS_VALUES)})`)),
-		// Shape guard: `options` must be a jsonb array with 2..5 elements.
-		// Option id uniqueness and "exactly one correct" are enforced by
-		// `newScenarioSchema` + the BC's `createScenario` -- not here. The
-		// BC is the only write path; a jsonb-aggregate CHECK for id
-		// uniqueness adds noise without being airtight across future
-		// migrations. If a bypass ever appears, add the CHECK then.
-		optionsShapeCheck: check(
-			'scenario_options_shape_check',
-			sql.raw(
-				`jsonb_typeof("options") = 'array'
-				 AND jsonb_array_length("options") BETWEEN ${SCENARIO_OPTIONS_MIN} AND ${SCENARIO_OPTIONS_MAX}`,
-			),
+	}),
+);
+
+/**
+ * Authored options on a decision-rep scenario. One row per option. `id` is
+ * carried as a surrogate key (the same value the JSONB column used to carry)
+ * so historical attempt rows that reference an option id keep resolving.
+ *
+ * Invariants enforced at the storage layer (per scenario-options-relational WP):
+ *
+ *   - exactly one option per scenario where `is_correct = true`
+ *     (partial unique index `scenario_option_correct_unique`)
+ *   - option count per scenario lives at the BC layer (validation.ts) since
+ *     "between SCENARIO_OPTIONS_MIN and MAX" is a multi-row aggregate the
+ *     write path enforces. The lower bound is also gated by the BC -- the
+ *     table itself permits any number of rows so downstream tooling
+ *     (authoring drafts, partial imports) can hold an in-progress scenario.
+ *   - `(scenario_id, position)` is unique so the option order is stable.
+ *   - `why_not` is required (non-empty) for incorrect options, optional for
+ *     the correct one. Enforced by a CHECK below.
+ */
+export const scenarioOption = studySchema.table(
+	'scenario_option',
+	{
+		id: text('id').primaryKey(),
+		scenarioId: text('scenario_id')
+			.notNull()
+			.references(() => scenario.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
+		text: text('text').notNull(),
+		isCorrect: boolean('is_correct').notNull(),
+		outcome: text('outcome').notNull(),
+		/**
+		 * Required (non-empty) when `is_correct = false`. Optional for the
+		 * correct option (authors can leave a note but empty is allowed).
+		 */
+		whyNot: text('why_not').notNull().default(''),
+		/** 0-based position within the scenario; preserves authored order. */
+		position: smallint('position').notNull(),
+	},
+	(t) => ({
+		scenarioOptionScenarioPositionUnique: uniqueIndex('scenario_option_scenario_position_unique').on(
+			t.scenarioId,
+			t.position,
+		),
+		// Partial UNIQUE: enforces "exactly one correct option per scenario" at
+		// the DB layer. The BC enforces "at least one" via validation.ts (a
+		// scenario with zero options is rejected by the engine read path
+		// regardless), so the partial index suffices.
+		scenarioOptionCorrectUnique: uniqueIndex('scenario_option_correct_unique')
+			.on(t.scenarioId)
+			.where(sql`is_correct = true`),
+		whyNotRequiredCheck: check(
+			'scenario_option_why_not_required_check',
+			sql`("is_correct" = true) OR (length(trim("why_not")) > 0)`,
 		),
 	}),
 );
+
+export type ScenarioOptionRow = typeof scenarioOption.$inferSelect;
+export type NewScenarioOptionRow = typeof scenarioOption.$inferInsert;
 
 export type ScenarioRow = typeof scenario.$inferSelect;
 export type NewScenarioRow = typeof scenario.$inferInsert;
@@ -791,8 +841,12 @@ export const sessionItemResult = studySchema.table(
 		 * slots that haven't been completed yet. Not NOT NULL on the table
 		 * because a rep slot is inserted at session commit time before the user
 		 * answers it.
+		 *
+		 * `chosen_option_id` is a FK to `scenario_option.id` (per
+		 * scenario-options-relational WP); historical attempts carrying a now-
+		 * deleted option id keep their row but the FK clears via `set null`.
 		 */
-		chosenOption: text('chosen_option'),
+		chosenOptionId: text('chosen_option_id').references(() => scenarioOption.id, { onDelete: 'set null' }),
 		isCorrect: boolean('is_correct'),
 		confidence: smallint('confidence'),
 		answerMs: integer('answer_ms'),
