@@ -5,14 +5,12 @@ import {
 	CALIBRATION_TREND_WINDOW_DAYS,
 	CONFIDENCE_LEVEL_LABELS,
 	type ConfidenceLevel,
-	DOMAIN_LABELS,
-	type Domain,
+	domainLabel,
 	QUERY_PARAMS,
 	ROUTES,
 	SESSION_MODES,
 } from '@ab/constants';
 import Button from '@ab/ui/components/Button.svelte';
-import { humanize } from '@ab/utils';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
@@ -21,10 +19,6 @@ const calibration = $derived(data.calibration);
 const trend = $derived(data.trend);
 const pointCount = $derived(data.pointCount);
 const hasData = $derived(pointCount > 0);
-
-function domainLabel(slug: string): string {
-	return (DOMAIN_LABELS as Record<Domain, string>)[slug as Domain] ?? humanize(slug);
-}
 
 function confidenceLabel(level: ConfidenceLevel): string {
 	return CONFIDENCE_LEVEL_LABELS[level];

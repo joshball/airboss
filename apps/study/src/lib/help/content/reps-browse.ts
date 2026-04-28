@@ -6,14 +6,14 @@
  * successful /reps/new submission.
  */
 
-import { APP_SURFACES, HELP_KINDS } from '@ab/constants';
+import { APP_SURFACES, HELP_KINDS, ROUTES } from '@ab/constants';
 import type { HelpPage } from '@ab/help';
 
 export const repsBrowse: HelpPage = {
 	id: 'reps-browse',
 	title: 'Browse scenarios',
 	summary: 'How the reps browse page works: filters, paging, row details, and the catalog-level actions.',
-	documents: '/reps/browse',
+	documents: ROUTES.REPS_BROWSE,
 	tags: {
 		appSurface: [APP_SURFACES.REPS],
 		helpKind: HELP_KINDS.REFERENCE,

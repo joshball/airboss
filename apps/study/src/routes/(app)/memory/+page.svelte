@@ -2,8 +2,7 @@
 import { summarizeDeckSpec } from '@ab/bc-study';
 import {
 	CARD_STATES,
-	DOMAIN_LABELS,
-	type Domain,
+	domainLabel,
 	MASTERY_STABILITY_DAYS,
 	QUERY_PARAMS,
 	REVIEW_SESSION_STATUSES,
@@ -16,7 +15,6 @@ import Button from '@ab/ui/components/Button.svelte';
 import ConfirmAction from '@ab/ui/components/ConfirmAction.svelte';
 import InfoTip from '@ab/ui/components/InfoTip.svelte';
 import StatTile from '@ab/ui/components/StatTile.svelte';
-import { humanize } from '@ab/utils';
 import type { ActionData, PageData } from './$types';
 
 const STATE_TIPS: Record<'new' | 'learning' | 'review' | 'relearning', { label: string; definition: string }> = {
@@ -106,10 +104,6 @@ function formatResumeSub(sub: { status: string; currentIndex: number; totalCards
 	const label = sub.status === REVIEW_SESSION_STATUSES.ABANDONED ? 'Stale run' : 'In progress';
 	if (sub.totalCards === 0) return `${label} -- empty deck`;
 	return `${label} -- ${sub.currentIndex} of ${sub.totalCards} reviewed${remaining > 0 ? `, ${remaining} to go` : ''}`;
-}
-
-function domainLabel(slug: string): string {
-	return (DOMAIN_LABELS as Record<Domain, string>)[slug as Domain] ?? humanize(slug);
 }
 
 /**

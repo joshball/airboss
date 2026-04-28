@@ -11,6 +11,7 @@ import {
 	DOMAIN_LABELS,
 	DOMAIN_VALUES,
 	type Domain,
+	domainLabel,
 	MAX_SESSION_LENGTH,
 	MIN_SESSION_LENGTH,
 	ROUTES,
@@ -57,10 +58,6 @@ function toggleSkip(d: string, checked: boolean) {
 	if (checked) next.add(d);
 	else next.delete(d);
 	selectedSkip = next;
-}
-
-function domainLabel(slug: string): string {
-	return (DOMAIN_LABELS as Record<string, string>)[slug] ?? slug;
 }
 
 function certLabel(slug: string): string {

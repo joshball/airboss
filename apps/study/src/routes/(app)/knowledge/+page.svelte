@@ -5,9 +5,8 @@ import {
 	CERT_LABELS,
 	CERT_VALUES,
 	type Cert,
-	DOMAIN_LABELS,
 	DOMAIN_VALUES,
-	type Domain,
+	domainLabel,
 	NODE_LIFECYCLE_LABELS,
 	NODE_LIFECYCLE_VALUES,
 	type NodeLifecycle,
@@ -46,9 +45,6 @@ const facets = $derived(data.facets);
 
 const hasActiveFilters = $derived(Boolean(filters.domain || filters.cert || filters.priority || filters.lifecycle));
 
-function domainLabel(slug: string): string {
-	return (DOMAIN_LABELS as Record<Domain, string>)[slug as Domain] ?? humanize(slug);
-}
 function lifecycleLabel(slug: string): string {
 	return (NODE_LIFECYCLE_LABELS as Record<NodeLifecycle, string>)[slug as NodeLifecycle] ?? humanize(slug);
 }

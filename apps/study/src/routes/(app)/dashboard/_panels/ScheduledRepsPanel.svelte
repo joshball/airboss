@@ -1,6 +1,6 @@
 <script lang="ts">
 import type { PanelResult, RepBacklog } from '@ab/bc-study';
-import { DOMAIN_LABELS, ROUTES } from '@ab/constants';
+import { domainLabel, ROUTES } from '@ab/constants';
 import Button from '@ab/ui/components/Button.svelte';
 import PanelShell from '@ab/ui/components/PanelShell.svelte';
 
@@ -19,10 +19,6 @@ const totalActive = $derived(value?.totalActive ?? 0);
 const unattempted = $derived(value?.unattempted ?? 0);
 const topDomains = $derived((value?.byDomain ?? []).slice(0, 3));
 const moreCount = $derived((value?.byDomain ?? []).length - topDomains.length);
-
-function domainLabel(slug: string): string {
-	return (DOMAIN_LABELS as Record<string, string>)[slug] ?? slug;
-}
 
 function domainHref(slug: string): string {
 	return `${ROUTES.REPS_BROWSE}?domain=${encodeURIComponent(slug)}`;

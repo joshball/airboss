@@ -1,7 +1,6 @@
 <script lang="ts">
 import {
-	DOMAIN_LABELS,
-	type Domain,
+	domainLabel,
 	KNOWLEDGE_PHASE_LABELS,
 	type KnowledgePhase,
 	QUERY_PARAMS,
@@ -112,9 +111,6 @@ function phaseLabel(phase: string): string {
 	return (KNOWLEDGE_PHASE_LABELS as Record<KnowledgePhase, string>)[phase as KnowledgePhase] ?? humanize(phase);
 }
 
-function domainLabel(slug: string): string {
-	return (DOMAIN_LABELS as Record<Domain, string>)[slug as Domain] ?? humanize(slug);
-}
 </script>
 
 <svelte:head>

@@ -5,9 +5,8 @@ import {
 	DIFFICULTY_LABELS,
 	DIFFICULTY_VALUES,
 	type Difficulty,
-	DOMAIN_LABELS,
 	DOMAIN_VALUES,
-	type Domain,
+	domainLabel,
 	PHASE_OF_FLIGHT_LABELS,
 	PHASE_OF_FLIGHT_VALUES,
 	type PhaseOfFlight,
@@ -83,10 +82,6 @@ function removeOption(index: number) {
 
 function setCorrect(index: number) {
 	options = options.map((o, i) => ({ ...o, isCorrect: i === index }));
-}
-
-function domainLabel(slug: string): string {
-	return (DOMAIN_LABELS as Record<Domain, string>)[slug as Domain] ?? humanize(slug);
 }
 
 function phaseLabel(slug: string): string {

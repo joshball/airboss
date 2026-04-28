@@ -11,7 +11,7 @@
  * link to from per-field InfoTips.
  */
 
-import { APP_SURFACES, HELP_KINDS } from '@ab/constants';
+import { APP_SURFACES, HELP_KINDS, ROUTES } from '@ab/constants';
 import type { HelpPage } from '@ab/help';
 
 export const memoryNew: HelpPage = {
@@ -19,7 +19,7 @@ export const memoryNew: HelpPage = {
 	title: 'New memory card',
 	summary:
 		'How to author a memory card that spaced repetition can actually work with: one fact, tight front, tight back, the right domain and tags.',
-	documents: '/memory/new',
+	documents: ROUTES.MEMORY_NEW,
 	tags: {
 		appSurface: [APP_SURFACES.MEMORY],
 		helpKind: HELP_KINDS.HOW_TO,

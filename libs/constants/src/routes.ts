@@ -124,6 +124,12 @@ export const ROUTES = {
 	MEMORY_NEW: '/memory/new',
 	MEMORY_BROWSE: '/memory/browse',
 	MEMORY_CARD: (id: string) => `/memory/${id}` as const,
+	/**
+	 * Path pattern for the memory-card detail surface, used by help-page
+	 * `documents:` metadata where the route is referenced as a shape rather
+	 * than navigated to. Runtime navigation still uses `MEMORY_CARD(id)`.
+	 */
+	MEMORY_CARD_PATTERN: '/memory/[id]',
 	/** Detail page with the inline edit-mode flag set. */
 	MEMORY_CARD_EDIT: (id: string) => `/memory/${encodeURIComponent(id)}?${QUERY_PARAMS.EDIT}=1` as const,
 	/**
