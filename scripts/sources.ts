@@ -23,11 +23,12 @@
  *   - `scripts/README.sources.md` -- operator runbook
  */
 
+import { maybePrintBanner } from './sources/discover/banner';
 import { runDownloadSources } from './sources/download/index';
 
 // `register` and `extract` are loaded lazily so the `download` command does
 // not pull in `@ab/sources/*` (and its `fast-xml-parser` etc. transitive deps)
-// just to fetch a PDF.
+// just to fetch a PDF. `discover-errata` is loaded lazily for the same reason.
 
 // ---------------------------------------------------------------------------
 // Help (mirrors db.ts / references.ts: a what/why/how/links block per command)
@@ -87,6 +88,24 @@ const COMMAND_HELP: Record<string, CommandHelp> = {
 			'docs/work-packages/reference-aim-ingestion/',
 		],
 	},
+	'discover-errata': {
+		summary: 'Scan FAA handbook parent pages for newly-published errata / addenda',
+		what: `Crawls the FAA parent page for each of the 17 catalogued handbooks (per WP \`apply-errata-and-afh-mosaic\` research), classifies each PDF link as an errata-shape candidate, and persists state under \`<cache>/discovery/handbooks/<slug>.json\`. New candidates are reported in \`<cache>/discovery/_pending.md\` and (when \`GH_TOKEN\` is set) auto-opened as GitHub issues, idempotently.
+
+  bun run sources discover-errata
+  bun run sources discover-errata --doc=phak,afh
+  bun run sources discover-errata --force                  # bypass freshness gate
+  bun run sources discover-errata --dry-run                # skip GH API calls`,
+		why: 'There is no FAA RSS, API, or structured changelog for handbook errata (research dossier section 1). Page-scraping the parent page is the only signal. Discovery surfaces all 17 handbooks even though only a subset are ingested; non-ingested books emit `signal-only` records so we know when to onboard.',
+		how: 'Reads per-handbook discovery URL + dismissal/applied lists from the Python ingestion side via subprocess JSON (`python -m ingest.discovery_meta`). Scrape uses the same User-Agent as the downloader. State is cache-side only; never committed. Freshness-gated to one run per 7 days (overridable with `--force`).',
+		links: [
+			'scripts/sources/discover/',
+			'scripts/sources/discover/run.ts',
+			'tools/handbook-ingest/ingest/discovery_meta.py',
+			'docs/work-packages/apply-errata-and-afh-mosaic/research/errata-discovery.md',
+			'docs/decisions/020-handbook-edition-and-amendment-policy.md',
+		],
+	},
 	extract: {
 		summary: 'Run a source-extraction pipeline (currently: handbooks Python TOC + LLM strategies)',
 		what: `Currently routes to a single sub-pipeline: \`handbooks\`, which dispatches to \`python -m ingest\` from \`tools/handbook-ingest/\`.
@@ -141,6 +160,7 @@ interface CommandGroup {
 const COMMAND_GROUPS: readonly CommandGroup[] = [
 	{ label: 'Source bytes', commands: ['download'] },
 	{ label: 'Derivative ingestion', commands: ['register', 'extract'] },
+	{ label: 'Discovery', commands: ['discover-errata'] },
 	{ label: 'Utility', commands: ['help'] },
 ];
 
@@ -178,6 +198,7 @@ export async function runSourcesDispatcher(argv: readonly string[]): Promise<num
 
 	if (head === undefined) {
 		printIndex();
+		maybePrintBanner();
 		return 0;
 	}
 
@@ -190,6 +211,11 @@ export async function runSourcesDispatcher(argv: readonly string[]): Promise<num
 		printIndex();
 		return 0;
 	}
+
+	// Banner runs once per dispatcher invocation, before the command output, so
+	// pending-review counts surface even when the user is running an unrelated
+	// subcommand. Suppressible via `AIRBOSS_QUIET=1`.
+	maybePrintBanner();
 
 	switch (head) {
 		case 'download': {
@@ -214,6 +240,10 @@ export async function runSourcesDispatcher(argv: readonly string[]): Promise<num
 				return 0;
 			}
 			return await runExtractDispatcher(rest);
+		}
+		case 'discover-errata': {
+			const { runDiscoverErrata } = await import('./sources/discover');
+			return await runDiscoverErrata({ argv: rest });
 		}
 		default: {
 			console.error(`Unknown command: ${head}\n`);
