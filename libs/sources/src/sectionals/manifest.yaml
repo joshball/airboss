@@ -1,0 +1,62 @@
+# VFR sectional chart manifest -- registry seeding source
+#
+# Source of truth: ADR 019 §1.2 ("Sectionals") + §2.6 (registry population).
+# Loaded by `seedSectionalsFromManifest` in `seed.ts`.
+#
+# Locator shape: `<chart-name>` (lowercase kebab-case from the FAA's VFR
+# sectional catalog). Editions follow the NACO 56-day cycle and are stored
+# as `YYYY-MM-DD` publication dates.
+#
+# Adding a sectional:
+#   - id: chart name slug (e.g. `denver`, `los-angeles`, `new-york`).
+#   - canonical_short / canonical_formal / canonical_title per ADR 019 §3.1.
+#   - editions: at least one entry. id is the publication date in YYYY-MM-DD.
+
+sectionals:
+  - id: denver
+    canonical_short: Denver Sectional
+    canonical_formal: Denver VFR Sectional Chart
+    canonical_title: Denver VFR Sectional
+    editions:
+      - id: '2026-03-19'
+        lifecycle: accepted
+
+  - id: los-angeles
+    canonical_short: Los Angeles Sectional
+    canonical_formal: Los Angeles VFR Sectional Chart
+    canonical_title: Los Angeles VFR Sectional
+    editions:
+      - id: '2026-03-19'
+        lifecycle: accepted
+
+  - id: new-york
+    canonical_short: New York Sectional
+    canonical_formal: New York VFR Sectional Chart
+    canonical_title: New York VFR Sectional
+    editions:
+      - id: '2026-03-19'
+        lifecycle: accepted
+
+  - id: seattle
+    canonical_short: Seattle Sectional
+    canonical_formal: Seattle VFR Sectional Chart
+    canonical_title: Seattle VFR Sectional
+    editions:
+      - id: '2026-03-19'
+        lifecycle: accepted
+
+  - id: kansas-city
+    canonical_short: Kansas City Sectional
+    canonical_formal: Kansas City VFR Sectional Chart
+    canonical_title: Kansas City VFR Sectional
+    editions:
+      - id: '2026-03-19'
+        lifecycle: accepted
+
+  - id: miami
+    canonical_short: Miami Sectional
+    canonical_formal: Miami VFR Sectional Chart
+    canonical_title: Miami VFR Sectional
+    editions:
+      - id: '2026-03-19'
+        lifecycle: accepted

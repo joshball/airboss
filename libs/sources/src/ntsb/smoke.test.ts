@@ -2,15 +2,9 @@
  * Phase 10 next slice -- ntsb corpus smoke test.
  *
  * Publish-gate proof: with the ntsb manifest seeded, an `airboss-ref:ntsb/...`
- * URL in a lesson resolves with zero ERROR findings.
- *
- * Demand-driven status: the bundled manifest currently ships empty because
- * the airboss content corpus does not yet cite NTSB reports. The smoke test
- * therefore writes a temporary manifest with a representative NTSB ID,
- * seeds against it, and validates a lesson that cites the same ID. This
- * proves the loader-validator loop end-to-end without authoring fictional
- * citations into the bundled manifest. When real NTSB citations land, this
- * test will additionally exercise the bundled manifest path.
+ * URL in a lesson resolves with zero ERROR findings. Exercises both the
+ * bundled manifest path (representative IDs) and a custom-manifest path
+ * for explicitness.
  */
 
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
@@ -82,5 +76,31 @@ A relevant accident is [@cite](airboss-ref:ntsb/WPR23LA123).
 		const errors = report.findings.filter((f) => f.severity === 'error');
 		expect(errors).toEqual([]);
 		expect(report.identifiersFound).toBe(1);
+	});
+
+	it('validates a lesson citing a bundled-manifest NTSB ID with zero ERRORs', async () => {
+		const seedReport = await seedNtsbFromManifest();
+		expect(seedReport.entriesRegistered).toBeGreaterThan(0);
+
+		const lessonsDir = join(lessonRoot, 'course', 'regulations');
+		mkdirSync(lessonsDir, { recursive: true });
+		const lessonContent = `---
+title: NTSB bundled smoke
+week: 1
+section_order: "01"
+---
+
+A relevant accident is [@cite](airboss-ref:ntsb/CEN24FA045).
+`;
+		writeFileSync(join(lessonsDir, 'ntsb-bundled-smoke.md'), lessonContent, 'utf-8');
+
+		const report = validateReferences({
+			registry: productionRegistry,
+			contentPaths: ['course/regulations'],
+			cwd: lessonRoot,
+		});
+
+		const errors = report.findings.filter((f) => f.severity === 'error');
+		expect(errors).toEqual([]);
 	});
 });

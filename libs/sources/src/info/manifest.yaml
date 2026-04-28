@@ -1,0 +1,40 @@
+# Information for Operators (InFO) manifest -- registry seeding source
+#
+# Source of truth: ADR 019 §1.2 ("InFO") + §2.6 (registry population).
+# Loaded by `seedInfoFromManifest` in `seed.ts`.
+#
+# Locator shape: 5-digit `<YY><sequence>` id, e.g. `21010` = 2021 sequence 010.
+# InFOs are immutable post-publication; no `?at=` pin is required.
+#
+# Adding an InFO:
+#   - id: 5 digits (2-digit year + 3-digit sequence).
+#   - canonical_short / canonical_formal / canonical_title per ADR 019 §3.1.
+#   - editions: a single entry whose id is the publication date (`YYYY-MM-DD`
+#     when known) or year (`YYYY`).
+
+info:
+  # Representative recent InFO -- exercises the loader; replace as content
+  # authors call out specific items.
+  - id: '21010'
+    canonical_short: InFO 21010
+    canonical_formal: FAA Information for Operators 21010
+    canonical_title: FAA InFO 21010
+    editions:
+      - id: '2021'
+        lifecycle: accepted
+
+  - id: '22008'
+    canonical_short: InFO 22008
+    canonical_formal: FAA Information for Operators 22008
+    canonical_title: FAA InFO 22008
+    editions:
+      - id: '2022'
+        lifecycle: accepted
+
+  - id: '23006'
+    canonical_short: InFO 23006
+    canonical_formal: FAA Information for Operators 23006
+    canonical_title: FAA InFO 23006
+    editions:
+      - id: '2023'
+        lifecycle: accepted

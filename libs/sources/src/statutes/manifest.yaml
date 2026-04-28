@@ -1,0 +1,55 @@
+# Federal statutes (US Code) manifest -- registry seeding source
+#
+# Source of truth: ADR 019 §1.2 ("Statutes") + §2.6 (registry population).
+# Loaded by `seedStatutesFromManifest` in `seed.ts`.
+#
+# Locator shape: `<title>/<section>[/<subsection>]`. `<title>` is
+# `usc-<title-number>` (e.g. `usc-49`). `<section>` and `<subsection>` are
+# decimal / lowercase identifiers respectively.
+#
+# Adding a statute:
+#   - id: `usc-<N>/<section>` (no leading prefix or `?at=` pin).
+#   - canonical_short / canonical_formal / canonical_title per ADR 019 §3.1.
+#   - editions: at least one entry. id is the public-law year (`YYYY`) or
+#     the US Code revision date.
+
+statutes:
+  # 49 USC § 40103 -- Sovereignty and use of airspace.
+  - id: usc-49/40103
+    canonical_short: 49 USC § 40103
+    canonical_formal: 49 U.S.C. § 40103, Sovereignty and Use of Airspace
+    canonical_title: Sovereignty and Use of Airspace
+    editions:
+      - id: '2018'
+        lifecycle: accepted
+        source_url: https://www.govinfo.gov/app/details/USCODE-2018-title49
+
+  # 49 USC § 44102 -- Aircraft registration: requirements.
+  - id: usc-49/44102
+    canonical_short: 49 USC § 44102
+    canonical_formal: 49 U.S.C. § 44102, Aircraft Registration Requirements
+    canonical_title: Aircraft Registration Requirements
+    editions:
+      - id: '2018'
+        lifecycle: accepted
+        source_url: https://www.govinfo.gov/app/details/USCODE-2018-title49
+
+  # 49 USC § 44701 -- General Aviation Safety.
+  - id: usc-49/44701
+    canonical_short: 49 USC § 44701
+    canonical_formal: 49 U.S.C. § 44701, General Requirements for Aviation Safety
+    canonical_title: General Requirements for Aviation Safety
+    editions:
+      - id: '2018'
+        lifecycle: accepted
+        source_url: https://www.govinfo.gov/app/details/USCODE-2018-title49
+
+  # 49 USC § 44703 -- Airman certificates.
+  - id: usc-49/44703
+    canonical_short: 49 USC § 44703
+    canonical_formal: 49 U.S.C. § 44703, Airman Certificates
+    canonical_title: Airman Certificates
+    editions:
+      - id: '2018'
+        lifecycle: accepted
+        source_url: https://www.govinfo.gov/app/details/USCODE-2018-title49

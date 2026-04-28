@@ -13,4 +13,10 @@ registerCorpusResolver(INTERP_RESOLVER);
 export { formatInterpCitation } from './citation.ts';
 export { formatInterpLocator, parseInterpLocator } from './locator.ts';
 export { INTERP_CORPUS, INTERP_RESOLVER } from './resolver.ts';
+export {
+	INTERP_SEED_REVIEWER_ID,
+	type InterpSeedOptions,
+	type InterpSeedReport,
+	seedInterpFromManifest,
+} from './seed.ts';
 export { getInterpLiveUrl } from './url.ts';

@@ -1,0 +1,69 @@
+# Legal interpretations manifest -- registry seeding source
+#
+# Source of truth: ADR 019 §1.2 ("Legal interpretations") + §2.6 (registry
+# population). Loaded by `seedInterpFromManifest` in `seed.ts`.
+#
+# Each entry produces one `SourceEntry` keyed at
+# `airboss-ref:interp/<authority>/<slug>` plus one or more `Edition` records.
+# Authors typically do not pin interp references with `?at=`; the edition
+# exists for `last_amended_date` and metadata only.
+#
+# Adding an interpretation:
+#   - id: the locator portion (`<authority>/<slug>`), no `airboss-ref:`
+#     prefix. `<authority>` is `chief-counsel` or `ntsb`.
+#     - chief-counsel: slug is `<author>-<YYYY>` kebab-case
+#     - ntsb: slug is the kebab-cased case name (e.g. `administrator-v-lobeiko`)
+#   - canonical_short / canonical_formal / canonical_title per ADR 019 §3.1.
+#   - editions: at least one entry with the publication year as `id`.
+#   - source_url (optional): direct PDF / case page URL.
+
+interp:
+  # Chief Counsel letter on compensation/hire (cited in ATP / commercial training).
+  - id: chief-counsel/mangiamele-2009
+    canonical_short: Mangiamele (2009)
+    canonical_formal: FAA Chief Counsel Interpretation, Mangiamele (2009)
+    canonical_title: Mangiamele -- Compensation or Hire Interpretation
+    editions:
+      - id: '2009'
+        lifecycle: accepted
+        source_url: https://www.faa.gov/about/office_org/headquarters_offices/agc/practice_areas/regulations/interpretations/
+
+  # Walker (2017) -- flight-instructor logging interpretation.
+  - id: chief-counsel/walker-2017
+    canonical_short: Walker (2017)
+    canonical_formal: FAA Chief Counsel Interpretation, Walker (2017)
+    canonical_title: Walker -- Flight Instructor Logging Interpretation
+    editions:
+      - id: '2017'
+        lifecycle: accepted
+        source_url: https://www.faa.gov/about/office_org/headquarters_offices/agc/practice_areas/regulations/interpretations/
+
+  # Hicks (2009) -- biennial flight review applicability.
+  - id: chief-counsel/hicks-2009
+    canonical_short: Hicks (2009)
+    canonical_formal: FAA Chief Counsel Interpretation, Hicks (2009)
+    canonical_title: Hicks -- Flight Review Applicability Interpretation
+    editions:
+      - id: '2009'
+        lifecycle: accepted
+        source_url: https://www.faa.gov/about/office_org/headquarters_offices/agc/practice_areas/regulations/interpretations/
+
+  # Burleson (2014) -- safety pilot logging.
+  - id: chief-counsel/burleson-2014
+    canonical_short: Burleson (2014)
+    canonical_formal: FAA Chief Counsel Interpretation, Burleson (2014)
+    canonical_title: Burleson -- Safety Pilot Logging Interpretation
+    editions:
+      - id: '2014'
+        lifecycle: accepted
+        source_url: https://www.faa.gov/about/office_org/headquarters_offices/agc/practice_areas/regulations/interpretations/
+
+  # Administrator v. Lobeiko -- NTSB Board Order frequently cited in
+  # enforcement / certificate-action discussion.
+  - id: ntsb/administrator-v-lobeiko
+    canonical_short: Lobeiko
+    canonical_formal: Administrator v. Lobeiko (NTSB Board Order)
+    canonical_title: Administrator v. Lobeiko
+    editions:
+      - id: '2007'
+        lifecycle: accepted

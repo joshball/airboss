@@ -1,0 +1,60 @@
+# FAA forms manifest -- registry seeding source
+#
+# Source of truth: ADR 019 §1.2 ("Forms") + §2.6 (registry population).
+# Loaded by `seedFormsFromManifest` in `seed.ts`.
+#
+# Locator shape: `<form-number>` (FAA catalog form, e.g. `8710-1`, `8500-9`).
+#
+# Adding a form:
+#   - id: form number (digits, optional `-N` suffix, optional trailing letter).
+#   - canonical_short / canonical_formal / canonical_title per ADR 019 §3.1.
+#   - editions: at least one entry. id is the form's revision tag (`YYYY-MM`).
+
+forms:
+  # FAA Form 8710-1 -- Airman Certificate and/or Rating Application.
+  - id: 8710-1
+    canonical_short: FAA 8710-1
+    canonical_formal: FAA Form 8710-1, Airman Certificate and/or Rating Application
+    canonical_title: Airman Certificate and/or Rating Application
+    editions:
+      - id: '2017-08'
+        lifecycle: accepted
+
+  # FAA Form 8500-9 -- Application for Medical Certificate. (Aerospace
+  # medical examiners use IACRA / MedXPress; the paper form 8500-9 is the
+  # canonical reference cite.)
+  - id: 8500-9
+    canonical_short: FAA 8500-9
+    canonical_formal: FAA Form 8500-9, Application for Medical Certificate
+    canonical_title: Application for Medical Certificate
+    editions:
+      - id: '2018-04'
+        lifecycle: accepted
+
+  # FAA Form 7711-1 -- Certificate of Waiver or Authorization Application.
+  - id: 7711-1
+    canonical_short: FAA 7711-1
+    canonical_formal: FAA Form 7711-1, Certificate of Waiver or Authorization Application
+    canonical_title: Certificate of Waiver or Authorization Application
+    editions:
+      - id: '2019-09'
+        lifecycle: accepted
+
+  # FAA Form 8060-4 -- Temporary Airman Certificate.
+  - id: 8060-4
+    canonical_short: FAA 8060-4
+    canonical_formal: FAA Form 8060-4, Temporary Airman Certificate
+    canonical_title: Temporary Airman Certificate
+    editions:
+      - id: '2017-08'
+        lifecycle: accepted
+
+  # FAA Form 8400-3 -- Application for an Airman Certificate
+  # and/or Rating (Aircraft Dispatcher).
+  - id: 8400-3
+    canonical_short: FAA 8400-3
+    canonical_formal: FAA Form 8400-3, Application for an Airman Certificate (Aircraft Dispatcher)
+    canonical_title: Application for an Airman Certificate (Aircraft Dispatcher)
+    editions:
+      - id: '2016-12'
+        lifecycle: accepted

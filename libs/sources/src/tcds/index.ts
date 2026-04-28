@@ -10,4 +10,10 @@ registerCorpusResolver(TCDS_RESOLVER);
 export { formatTcdsCitation } from './citation.ts';
 export { formatTcdsLocator, parseTcdsLocator } from './locator.ts';
 export { TCDS_CORPUS, TCDS_RESOLVER } from './resolver.ts';
+export {
+	seedTcdsFromManifest,
+	TCDS_SEED_REVIEWER_ID,
+	type TcdsSeedOptions,
+	type TcdsSeedReport,
+} from './seed.ts';
 export { getTcdsLiveUrl } from './url.ts';
