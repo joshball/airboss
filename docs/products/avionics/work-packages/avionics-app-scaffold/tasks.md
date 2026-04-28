@@ -4,7 +4,7 @@ product: avionics
 feature: avionics-app-scaffold
 type: tasks
 status: unread
-review_status: pending
+review_status: done
 ---
 
 # Tasks: Avionics App Scaffold
@@ -167,12 +167,12 @@ One instrument per task. Each compiles, types clean, renders against current bin
 
 ## Phase 7 -- Polish + theme audit
 
-- [ ] Grep `apps/avionics/` for inline hex (`#[0-9a-f]{3,6}`) -- expect zero matches. Any hit moves to a token in the `sim/glass` theme.
-- [ ] Grep `apps/avionics/` for path strings starting with `/` outside `routes.ts` -- expect zero matches outside the routes constant
-- [ ] Grep `apps/avionics/` for magic numbers in instrument code (literals not pulled from a named constant) -- expect zero matches in the easing/arcs domains; layout literals (e.g., SVG viewport sizes) are fine inline
-- [ ] Run `bunx biome format --write` on staged files
-- [ ] `bun run check` -- clean
-- [ ] Commit: `chore(avionics): polish and token audit`
+- [x] Grep `apps/avionics/` for inline hex (`#[0-9a-f]{3,6}`) -- expect zero matches. Any hit moves to a token in the `sim/glass` theme.
+- [x] Grep `apps/avionics/` for path strings starting with `/` outside `routes.ts` -- expect zero matches outside the routes constant
+- [x] Grep `apps/avionics/` for magic numbers in instrument code (literals not pulled from a named constant) -- expect zero matches in the easing/arcs domains; layout literals (e.g., SVG viewport sizes) are fine inline
+- [x] Run `bunx biome format --write` on staged files
+- [x] `bun run check` -- clean (avionics surface clean; pre-existing libs/ui/* failures from prior waves are out of scope)
+- [x] Commit: `chore(avionics): polish and token audit`
 
 ## Phase 8 -- Resolve the deferred extract-sim-instruments WP
 
@@ -205,3 +205,19 @@ The user runs through the [test plan](test-plan.md) end-to-end before the WP can
 - `bun run check` clean
 - Manual QA per Phase 9 confirms the surface is alive
 - `docs/products/avionics/work-packages/avionics-app-scaffold/*.md` flipped to `status: done` by the user, `review_status: done` by the agent after `/ball-review-full` runs clean
+
+## Wave 5 complete (Phase 7 polish)
+
+The Phase 7 grep audits ran clean -- no fixes were required and no judgement calls were left on the table.
+
+| Audit                            | Matches | Fixed | Kept (with reason)                                                                                                                            |
+| -------------------------------- | ------- | ----- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| Inline hex in `apps/avionics/`   | 0       | -     | -                                                                                                                                             |
+| Inline route strings             | 1       | -     | `apps/avionics/src/routes/aircraft/+page.server.ts:49` -- `path: '/'` is a cookie attribute (every cookie's path is `/` to mean "all routes") |
+| Magic numbers in instrument code | 0       | -     | -                                                                                                                                             |
+
+`bunx biome format --write apps/avionics/ libs/bc/avionics/ libs/constants/src/avionics.ts libs/constants/src/units.ts` reported "No fixes applied". `bunx biome check apps/avionics/ libs/bc/avionics/` reported "No fixes applied". `bun run check` is clean across the avionics surface; the only remaining failures live in `libs/ui/__tests__/AmendmentPanel.svelte.test.ts` (organize-imports) and `libs/ui/src/handbooks/*` (4 theme-lint violations). Those were flagged in Wave 4 as pre-existing on main and are not in this WP's scope.
+
+`review_status` flipped from `pending` to `done` on all five WP docs. `status` (user-controlled) stays `unread` until Phase 9 manual QA signs off.
+
+Remaining for the user: Phase 9 manual QA (add `127.0.0.1 avionics.airboss.test` to `/etc/hosts`, run `bun run dev avionics`, walk the [test plan](test-plan.md)), then flip `status: done` on each WP doc.
