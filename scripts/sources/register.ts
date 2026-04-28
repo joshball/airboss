@@ -12,11 +12,12 @@
  *   - `docs/work-packages/reference-aim-ingestion/`
  */
 
+import { HELP as AC_HELP, runRegisterAc } from './register/ac';
 import { HELP as AIM_HELP, runRegisterAim } from './register/aim';
 import { HELP as CFR_HELP, runRegisterCfr } from './register/cfr';
 import { HELP as HANDBOOKS_HELP, runRegisterHandbooks } from './register/handbooks';
 
-export type RegisterCorpus = 'cfr' | 'handbooks' | 'aim';
+export type RegisterCorpus = 'cfr' | 'handbooks' | 'aim' | 'ac';
 
 export interface RegisterSpec {
 	readonly run: (argv: readonly string[]) => Promise<number>;
@@ -27,6 +28,7 @@ export const REGISTER_SUBCOMMANDS: Readonly<Record<RegisterCorpus, RegisterSpec>
 	cfr: { run: runRegisterCfr, help: CFR_HELP },
 	handbooks: { run: runRegisterHandbooks, help: HANDBOOKS_HELP },
 	aim: { run: runRegisterAim, help: AIM_HELP },
+	ac: { run: runRegisterAc, help: AC_HELP },
 };
 
 const REGISTER_NAMES = Object.keys(REGISTER_SUBCOMMANDS) as readonly RegisterCorpus[];

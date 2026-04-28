@@ -27,7 +27,7 @@ Companion to:
 | 5 | reference-versioning-tooling | [WP](../../work-packages/reference-versioning-tooling/) | -- | 🟨 |
 | 6 | reference-handbook-ingestion | [WP](../../work-packages/reference-handbook-ingestion/) | #251 | ✅ |
 | 7 | reference-aim-ingestion | [WP](../../work-packages/reference-aim-ingestion/) | (this PR) | 🟧 |
-| 8 | reference-ac-ingestion | -- | -- | ⬜ |
+| 8 | reference-ac-ingestion | -- | (this PR) | 🟧 |
 | 9 | reference-lesson-migration | -- | -- | ⬜ |
 | 10 | reference-irregular-corpora | -- | -- | ⬜ |
 
@@ -167,3 +167,5 @@ Phases 5, 6, 7, 8, 10 can run in parallel after Phase 2 lands -- they each unloc
 | 2026-04-27 | 7 | AIM corpus WP authored + implementation (this PR). |
 | 2026-04-27 | -- | Downloader fix: corrected URLs (AC 120-71B, AC 91.21-1D, ACS path), browser User-Agent, eCFR per-title `latest_amended_on` auto-detect, descriptive cached filenames + `source.<ext>` symlink, HEAD-then-skip cache check, `--verify` audit mode (follow-up to PR #253). |
 | 2026-04-27 | -- | Unified ingest dispatcher: `scripts/sources/register.ts` replaces `cfr-ingest.ts` / `handbook-corpus-ingest.ts` / `aim-corpus-ingest.ts`. Single entry point `bun run sources register <corpus>` with `--all`, `--help`, and per-corpus `--help`; per-corpus runner code in `libs/sources/src/<corpus>/ingest.ts` is unchanged. |
+| 2026-04-28 | 3 | Lane A landed: CFR Title 14 (226 parts, 6,328 sections at edition `2026-04-22`) + Title 49 aviation slice (parts 1552 + 830, 22 sections at `2026-04-20`). Structural index (`manifest.json` + `sections.json`) committed; per-section body markdown gitignored per ADR 018 scale-tier exception. PR #260. |
+| 2026-04-28 | 8 | Lane C landed: AC corpus module (`libs/sources/src/ac/`) -- locator, resolver, citation, URL, derivative-reader, ingest. URI shape `airboss-ref:ac/<doc>/<rev>` with `?at=YYYY-MM-DD`; unrevisioned ACs rejected per §1.2. Live ingest produced 9 ACs (00-6B, 120-71B, 25-7D, 61-65J, 61-83J, 61-98D, 90-66C, 91-21.1D, 91-79A); 3 skipped with explicit reasons (60-22 + 91-92 unrevisioned, 150/5210-7D slash-style not yet supported). Wired through `bun run sources register ac`. Smoke tests cover AC alone + cross-corpus (ac + regs in one lesson). |

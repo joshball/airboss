@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "fetched_at": "2026-04-28T00:48:29.228Z",
+  "entries": [
+    {
+      "doc_slug": "00-6",
+      "doc_number": "00-6",
+      "revision": "b",
+      "title": "AC 00-6B - Aviation Weather",
+      "publication_date": "2016-08-23",
+      "manifest_path": "ac/00-6/b/manifest.json"
+    },
+    {
+      "doc_slug": "120-71",
+      "doc_number": "120-71",
+      "revision": "b",
+      "title": "AC 120-71B - Standard Operating Procedures and Pilot Monitoring Duties for Flight Deck Crewmembers",
+      "publication_date": "2017-01-10",
+      "manifest_path": "ac/120-71/b/manifest.json"
+    },
+    {
+      "doc_slug": "25-7",
+      "doc_number": "25-7",
+      "revision": "d",
+      "title": "AC 25-7D, Flight Test Guide for Certification of Transport Category Airplanes",
+      "publication_date": "2018-05-04",
+      "manifest_path": "ac/25-7/d/manifest.json"
+    },
+    {
+      "doc_slug": "61-65",
+      "doc_number": "61-65",
+      "revision": "j",
+      "title": "AC 61-65J",
+      "publication_date": "2024-10-30",
+      "manifest_path": "ac/61-65/j/manifest.json"
+    },
+    {
+      "doc_slug": "61-83",
+      "doc_number": "61-83",
+      "revision": "j",
+      "title": "AC 61-83J",
+      "publication_date": "1997-08-04",
+      "manifest_path": "ac/61-83/j/manifest.json"
+    },
+    {
+      "doc_slug": "61-98",
+      "doc_number": "61-98",
+      "revision": "d",
+      "title": "AC 61-98D",
+      "publication_date": "2018-04-30",
+      "manifest_path": "ac/61-98/d/manifest.json"
+    },
+    {
+      "doc_slug": "90-66",
+      "doc_number": "90-66",
+      "revision": "c",
+      "title": "AC 90-66C",
+      "publication_date": "2023-06-06",
+      "manifest_path": "ac/90-66/c/manifest.json"
+    },
+    {
+      "doc_slug": "91-21-1",
+      "doc_number": "91-21.1",
+      "revision": "d",
+      "title": "AC 91.21-1D - Use of Portable Electronic Devices Aboard Aircraft",
+      "publication_date": "2017-10-27",
+      "manifest_path": "ac/91-21-1/d/manifest.json"
+    },
+    {
+      "doc_slug": "91-79",
+      "doc_number": "91-79",
+      "revision": "a",
+      "title": "AC 91-79A - Mitigating the Risks of a Runway Overrun Upon Landing",
+      "publication_date": "2014-09-17",
+      "manifest_path": "ac/91-79/a/manifest.json"
+    }
+  ]
+}

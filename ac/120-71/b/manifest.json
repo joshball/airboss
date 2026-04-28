@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "corpus": "ac",
+  "doc_slug": "120-71",
+  "doc_number": "120-71",
+  "revision": "b",
+  "title": "AC 120-71B - Standard Operating Procedures and Pilot Monitoring Duties for Flight Deck Crewmembers",
+  "publisher": "FAA",
+  "publication_date": "2017-01-10",
+  "source_url": "https://www.faa.gov/documentLibrary/media/Advisory_Circular/AC_120-71B.pdf",
+  "source_sha256": "5cec8425626e7f5bed41eb1e9ff24e8119585469a9b76d2361e6536be2264855",
+  "fetched_at": "2026-04-27T21:20:45.554Z",
+  "page_count": 34,
+  "body_path": "ac/120-71/b/document.md",
+  "body_sha256": "53f1740d51a176432ddf77addf636cd0c44dbb55452f10fedb0257c8d3de8925",
+  "sections": [],
+  "changes": []
+}

@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "corpus": "ac",
+  "doc_slug": "91-79",
+  "doc_number": "91-79",
+  "revision": "a",
+  "title": "AC 91-79A - Mitigating the Risks of a Runway Overrun Upon Landing",
+  "publisher": "FAA",
+  "publication_date": "2014-09-17",
+  "source_url": "https://www.faa.gov/documentLibrary/media/Advisory_Circular/AC_91-79A.pdf",
+  "source_sha256": "58bc03b66e96f875189b48f0c81a063aa9a441c4eb3d3a9b3c710f9c97c227bd",
+  "fetched_at": "2026-04-27T21:20:44.458Z",
+  "page_count": 39,
+  "body_path": "ac/91-79/a/document.md",
+  "body_sha256": "29a43d9eba4701577713ca8813b23912378ff69a48a6dbd88cef65b17fe16999",
+  "sections": [],
+  "changes": []
+}
