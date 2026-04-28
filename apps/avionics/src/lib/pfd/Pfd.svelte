@@ -1,23 +1,33 @@
 <script lang="ts">
 /**
- * PFD shell. Owns the rAF loop, the keyboard handlers, and the
- * placeholder grid that the real instruments fill in a later wave.
+ * PFD shell. Owns the rAF loop, the keyboard handlers, and the grid that
+ * mounts the five PFD instruments.
  *
- * Layout follows the conventional G1000-style PFD: airspeed tape on
- * the left, attitude indicator filling the middle, altitude tape and
- * VSI on the right, heading strip across the bottom. Each cell is a
- * `<div class="pfd-slot">` with a label naming the instrument that
- * lands there; the slot sizes match the eventual SVG viewports.
+ * Layout follows the conventional G1000-style PFD: airspeed tape on the
+ * left, attitude indicator filling the middle, altitude tape and VSI on
+ * the right, heading strip across the bottom.
  *
- * `selectedAircraftId` is propagated as a prop today and consumed by
- * later instrument waves for V-speed sourcing -- threading it through
- * now keeps the contract stable.
+ * V-speeds for the airspeed tape come from the currently selected
+ * aircraft's FDM config, converted to knots in `arcBandsFromConfig`.
+ *
+ * Tick-state field naming note: the rAF loop exposes `bankDeg` and
+ * `headingDeg`; the AttitudeIndicator and HeadingIndicator props are
+ * `rollDeg` and `headingDegMag` (matching the BC `Attitude` / `NavData`
+ * shape). The mapping happens at the prop boundary in this file -- we
+ * don't rename the tick state to keep Wave 3's loop untouched.
  */
 
+import { getAircraftConfig } from '@ab/bc-sim';
 import type { SimAircraftId } from '@ab/constants';
+import AirspeedTape from './AirspeedTape.svelte';
+import AltitudeTape from './AltitudeTape.svelte';
+import AttitudeIndicator from './AttitudeIndicator.svelte';
+import { arcBandsFromConfig } from './airspeed-arcs';
+import HeadingIndicator from './HeadingIndicator.svelte';
 import PfdInputs from './PfdInputs.svelte';
 import PfdKeyboardLegend from './PfdKeyboardLegend.svelte';
 import { applyPfdKeyboardEvent, attachPfdTickLoop, DEFAULT_PFD_BINDINGS, PfdTickState } from './pfd-tick.svelte';
+import VsiIndicator from './VsiIndicator.svelte';
 
 let {
 	selectedAircraftId,
@@ -25,17 +35,16 @@ let {
 	selectedAircraftId: SimAircraftId;
 } = $props();
 
-// `selectedAircraftId` is read here so the prop is consumed -- Wave 4
-// uses it for V-speed sourcing on the airspeed tape. Surfacing it on
-// the shell today keeps the contract stable across waves.
-const _aircraftId = $derived(selectedAircraftId);
-
 const tick = new PfdTickState();
 const bindings = DEFAULT_PFD_BINDINGS;
 let legendOpen = $state(false);
 
 const HELP_KEY = '?';
 const RESET_KEY = '0';
+
+// Arc bands derive from the selected aircraft. When the user picks a
+// different aircraft, this re-derives without remounting the tape.
+const arcs = $derived(arcBandsFromConfig(getAircraftConfig(selectedAircraftId)));
 
 $effect(() => attachPfdTickLoop(tick));
 
@@ -69,22 +78,22 @@ function closeLegend(): void {
 }
 </script>
 
-<div class="pfd-frame" data-aircraft={_aircraftId}>
+<div class="pfd-frame" data-aircraft={selectedAircraftId}>
 	<div class="pfd-grid" aria-label="Primary Flight Display">
 		<div class="pfd-slot slot-asi">
-			<span class="slot-label">Airspeed</span>
+			<AirspeedTape airspeedKnots={tick.rendered.airspeedKnots} {arcs} />
 		</div>
 		<div class="pfd-slot slot-attitude">
-			<span class="slot-label">Attitude</span>
+			<AttitudeIndicator pitchDeg={tick.rendered.pitchDeg} rollDeg={tick.rendered.bankDeg} />
 		</div>
 		<div class="pfd-slot slot-alt">
-			<span class="slot-label">Altitude</span>
+			<AltitudeTape altitudeFeet={tick.rendered.altitudeFeet} />
 		</div>
 		<div class="pfd-slot slot-vsi">
-			<span class="slot-label">VSI</span>
+			<VsiIndicator verticalSpeedFpm={tick.rendered.verticalSpeedFpm} />
 		</div>
 		<div class="pfd-slot slot-heading">
-			<span class="slot-label">Heading</span>
+			<HeadingIndicator headingDegMag={tick.rendered.headingDeg} />
 		</div>
 	</div>
 
@@ -124,12 +133,10 @@ function closeLegend(): void {
 
 	.pfd-slot {
 		display: flex;
-		align-items: center;
-		justify-content: center;
-		border: 1px dashed var(--edge-strong);
-		border-radius: var(--radius-sm);
-		background: var(--surface-panel);
-		min-height: 80px;
+		align-items: stretch;
+		justify-content: stretch;
+		min-height: 0;
+		min-width: 0;
 	}
 
 	.slot-asi {
@@ -139,7 +146,6 @@ function closeLegend(): void {
 	.slot-attitude {
 		grid-area: attitude;
 		min-height: 320px;
-		background: var(--surface-panel);
 	}
 
 	.slot-alt {
@@ -153,13 +159,5 @@ function closeLegend(): void {
 	.slot-heading {
 		grid-area: heading;
 		min-height: 64px;
-	}
-
-	.slot-label {
-		font-family: var(--font-family-mono);
-		font-size: var(--font-size-xs);
-		text-transform: uppercase;
-		letter-spacing: var(--letter-spacing-caps);
-		color: var(--ink-muted);
 	}
 </style>
