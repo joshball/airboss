@@ -1,7 +1,7 @@
-import { dev } from '$app/environment';
 import { SECONDS_PER_YEAR } from '@ab/constants';
 import { APPEARANCE_COOKIE, isAppearancePreference } from '@ab/themes';
 import { error, json } from '@sveltejs/kit';
+import { dev } from '$app/environment';
 import type { RequestHandler } from './$types';
 
 /**

@@ -69,10 +69,7 @@ export const auditLog = auditSchema.table(
 		auditActorIdx: index('audit_log_actor_idx').on(t.actorId, t.timestamp),
 		auditTargetIdx: index('audit_log_target_idx').on(t.targetType, t.targetId, t.timestamp),
 		opCheck: check('audit_log_op_check', sql.raw(`"op" IN (${inList(AUDIT_OP_VALUES)})`)),
-		targetTypeCheck: check(
-			'audit_log_target_type_check',
-			sql.raw(`"target_type" IN (${inList(AUDIT_TARGET_VALUES)})`),
-		),
+		targetTypeCheck: check('audit_log_target_type_check', sql.raw(`"target_type" IN (${inList(AUDIT_TARGET_VALUES)})`)),
 	}),
 );
 

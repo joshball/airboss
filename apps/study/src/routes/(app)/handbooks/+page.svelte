@@ -1,7 +1,7 @@
 <script lang="ts">
-import { dev } from '$app/environment';
 import { ROUTES } from '@ab/constants';
 import HandbookCard from '@ab/ui/handbooks/HandbookCard.svelte';
+import { dev } from '$app/environment';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();

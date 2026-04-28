@@ -196,14 +196,8 @@ export const hangarSyncLog = hangarSchema.table(
 	(t) => ({
 		syncActorIdx: index('hangar_sync_log_actor_idx').on(t.actorId, t.startedAt),
 		syncOutcomeIdx: index('hangar_sync_log_outcome_idx').on(t.outcome, t.startedAt),
-		syncKindCheck: check(
-			'hangar_sync_log_kind_check',
-			sql.raw(`"kind" IN (${inList(HANGAR_SYNC_MODE_VALUES)})`),
-		),
-		syncOutcomeCheck: check(
-			'hangar_sync_log_outcome_check',
-			sql.raw(`"outcome" IN (${inList(SYNC_OUTCOME_VALUES)})`),
-		),
+		syncKindCheck: check('hangar_sync_log_kind_check', sql.raw(`"kind" IN (${inList(HANGAR_SYNC_MODE_VALUES)})`)),
+		syncOutcomeCheck: check('hangar_sync_log_outcome_check', sql.raw(`"outcome" IN (${inList(SYNC_OUTCOME_VALUES)})`)),
 	}),
 );
 
@@ -262,10 +256,7 @@ export const hangarJobLog = hangarSchema.table(
 	},
 	(t) => ({
 		jobLogJobIdx: index('hangar_job_log_job_idx').on(t.jobId, t.seq),
-		jobLogStreamCheck: check(
-			'hangar_job_log_stream_check',
-			sql.raw(`"stream" IN (${inList(JOB_LOG_STREAM_VALUES)})`),
-		),
+		jobLogStreamCheck: check('hangar_job_log_stream_check', sql.raw(`"stream" IN (${inList(JOB_LOG_STREAM_VALUES)})`)),
 	}),
 );
 

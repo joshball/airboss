@@ -15,11 +15,7 @@
 
 import type { GradeReport } from '@ab/bc-sim';
 import { recordSimAttempt } from '@ab/bc-sim/persistence';
-import {
-	SIM_SCENARIO_ID_VALUES,
-	SIM_SCENARIO_OUTCOME_VALUES,
-	type SimScenarioId,
-} from '@ab/constants';
+import { SIM_SCENARIO_ID_VALUES, SIM_SCENARIO_OUTCOME_VALUES, type SimScenarioId } from '@ab/constants';
 import { error, json } from '@sveltejs/kit';
 import { z } from 'zod';
 import type { RequestHandler } from './$types';

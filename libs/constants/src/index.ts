@@ -1,4 +1,4 @@
-export { AUDIT_TARGETS, AUDIT_TARGET_VALUES, type AuditTarget } from './audit';
+export { AUDIT_TARGET_VALUES, AUDIT_TARGETS, type AuditTarget } from './audit';
 export {
 	BETTER_AUTH_COOKIES,
 	BETTER_AUTH_ENDPOINTS,
