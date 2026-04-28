@@ -195,6 +195,10 @@ export type ParsedLocator = {
 	readonly aim?: ParsedAimLocator;
 	/** AC payload populated by Phase 8's `parseAcLocator`. */
 	readonly ac?: ParsedAcLocator;
+	/** FAA Orders payload populated by Phase 10's `parseOrdersLocator`. */
+	readonly orders?: ParsedOrdersLocator;
+	/** NTSB payload populated by Phase 10's `parseNtsbLocator`. */
+	readonly ntsb?: ParsedNtsbLocator;
 };
 
 /**
@@ -354,6 +358,75 @@ export interface ParsedAcLocator {
 	readonly section?: string;
 	/** Change number as written (e.g. `'2'`); mutually exclusive with `section`. */
 	readonly change?: string;
+}
+
+/**
+ * Structured FAA Orders locator surfaced by `parseOrdersLocator` in
+ * `libs/sources/src/orders/locator.ts`. Source of truth: ADR 019 §1.2
+ * ("FAA Orders").
+ *
+ * Locator shape (Phase 10 first slice):
+ *
+ *   <authority>/<order-number>                               whole order
+ *   <authority>/<order-number>/vol-<N>                       volume
+ *   <authority>/<order-number>/vol-<N>/ch-<N>                volume + chapter
+ *   <authority>/<order-number>/ch-<N>                        chapter (single-volume orders)
+ *   <authority>/<order-number>/par-<N(.N(.N))>               paragraph (TERPS-style hierarchical)
+ *
+ * Authority is `faa` for now -- ADR 019 anticipates other authorities
+ * (`dot`, `tsa`) joining when content demand surfaces. Order number is
+ * the FAA's catalog number with optional dotted-suffix revision letter
+ * (`2150-3`, `8900-1`, `8260-3C`, `8000-373`).
+ *
+ * Pin format: `?at=YYYY-MM` or `?at=YYYY` -- the publication or amendment
+ * date. Amendments are integral to the order; pin advances when an order's
+ * amendment changes meaningful content.
+ */
+export interface ParsedOrdersLocator {
+	/** Issuing authority (currently always `'faa'`). */
+	readonly authority: string;
+	/** Order number as written (e.g. `'2150-3'`, `'8900-1'`, `'8260-3C'`). */
+	readonly orderNumber: string;
+	/** Volume number as written (e.g. `'5'`); only set when the locator includes `vol-<N>`. */
+	readonly volume?: string;
+	/** Chapter number as written (e.g. `'1'`); only set when the locator includes `ch-<N>`. */
+	readonly chapter?: string;
+	/** Paragraph reference as written (e.g. `'5.2.1'`); only set when the locator includes `par-<...>`. */
+	readonly paragraph?: string;
+}
+
+/**
+ * Structured NTSB report locator surfaced by `parseNtsbLocator` in
+ * `libs/sources/src/ntsb/locator.ts`. Source of truth: ADR 019 §1.2
+ * ("NTSB reports").
+ *
+ * Locator shape:
+ *
+ *   <ntsb-id>                                                whole report (default = final)
+ *   <ntsb-id>/<section>                                      named section
+ *
+ * NTSB ID format: `<region><YY><type><sequence>` -- 3-letter region
+ * (e.g. `WPR`, `CEN`, `ANC`, `ERA`), 2-digit year, 2-letter type
+ * (`LA`/`FA`/`MA`/`IA`), 3-digit sequence (e.g. `WPR23LA123`,
+ * `CEN24FA045`). The ID is the immutable artifact identifier; no `?at=`
+ * pin is required because reports are not amended after publication.
+ *
+ * Section is one of `factual`, `probable-cause`, `recommendations`,
+ * `dockets`, `final` (default). Names are kebab-case lowercase.
+ */
+export interface ParsedNtsbLocator {
+	/** NTSB ID as written (preserved case). Validated against the regional+yyyy+type+seq pattern. */
+	readonly ntsbId: string;
+	/** 3-letter region prefix, uppercased (e.g. `'WPR'`). */
+	readonly region: string;
+	/** 2-digit year, as written (e.g. `'23'`). */
+	readonly year: string;
+	/** 2-letter type code, uppercased (`'LA'`/`'FA'`/`'MA'`/`'IA'`). */
+	readonly type: string;
+	/** 3-digit sequence number, as written (e.g. `'123'`). */
+	readonly sequence: string;
+	/** Section name (e.g. `'factual'`); omitted means "whole report" (= final). */
+	readonly section?: string;
 }
 
 export interface LocatorError {
