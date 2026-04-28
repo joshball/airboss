@@ -38,6 +38,7 @@ import { credentials } from './content/credentials';
 import { dashboard } from './content/dashboard';
 import { focusDomains } from './content/focus-domains';
 import { gettingStarted } from './content/getting-started';
+import { goals } from './content/goals';
 import { keyboardShortcuts } from './content/keyboard-shortcuts';
 import { knowledgeGraph } from './content/knowledge-graph';
 import { lens } from './content/lens';
@@ -66,6 +67,7 @@ export const studyHelpPages: readonly HelpPage[] = [
 	repsSession,
 	sessionStart,
 	focusDomains,
+	goals,
 	calibration,
 	credentials,
 	knowledgeGraph,
