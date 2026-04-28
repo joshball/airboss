@@ -146,3 +146,102 @@ export const SECTIONAL_URL_PLACEHOLDERS = {
 	EDITION_DATE: '{edition-date}',
 	REGION: '{region}',
 } as const;
+
+// ---------------------------------------------------------------------------
+// Errata discovery (WP `apply-errata-and-afh-mosaic`, phase R7)
+// ---------------------------------------------------------------------------
+
+/**
+ * Cache-side layout for the discovery surface. All paths are relative to the
+ * resolved cache root (default `~/Documents/airboss-handbook-cache/`, override
+ * via `AIRBOSS_HANDBOOK_CACHE`). The dispatcher reads/writes through these
+ * constants so swapping the layout later is a single edit.
+ */
+export const DISCOVERY_CACHE = {
+	/** Top-level discovery directory under the cache root. */
+	DIR: 'discovery',
+	/** Per-handbook state JSON directory: `<cache>/discovery/handbooks/`. */
+	HANDBOOKS_DIR: 'discovery/handbooks',
+	/** Aggregated last-run sentinel (freshness check). */
+	LAST_RUN_FILE: 'discovery/_last_run.json',
+	/** Human-review markdown report aggregated across handbooks. */
+	PENDING_REPORT_FILE: 'discovery/_pending.md',
+} as const;
+
+/**
+ * Freshness gate. Discovery is event-driven, episodic; the FAA's published
+ * cadence is years between events for most handbooks (see research dossier
+ * Section 5). A weekly window is overkill but cheap; a 7-day skip lets the
+ * dev-server hook + download piggyback fire cheaply on every invocation.
+ */
+export const DISCOVERY_FRESHNESS_MS = 7 * 24 * 60 * 60 * 1000;
+
+/** GitHub label applied to auto-opened issues. Single label keeps idempotency simple. */
+export const DISCOVERY_GITHUB_LABEL = 'errata';
+
+/** Issue title template; `<N>` is replaced with the candidate count at write time. */
+export const DISCOVERY_GITHUB_TITLE_PREFIX = 'errata: candidate detected';
+
+/**
+ * Manual DRS search URL template. Discovery emits this alongside every
+ * candidate so the user can sanity-check against the FAA's authoritative
+ * portal before applying. `{q}` is the URL-encoded query string.
+ *
+ * The DRS portal does not expose a documented JSON API (research dossier
+ * Section 1); the link is a courtesy redirect into the human-facing search.
+ */
+export const DRS_SEARCH_URL_TEMPLATE = 'https://drs.faa.gov/browse/?q={q}';
+
+/**
+ * Layout-hint values reported per candidate. Best-effort classification from
+ * filename heuristics; does not gate the apply pipeline. `unknown` is the
+ * default when no pattern in the catalogue matches.
+ */
+export const DISCOVERY_LAYOUT_HINTS = {
+	ADDENDUM: 'addendum',
+	ERRATA: 'errata',
+	SUMMARY_OF_CHANGES: 'summary_of_changes',
+	CHANGE: 'change',
+	UNKNOWN: 'unknown',
+} as const;
+
+export type DiscoveryLayoutHint = (typeof DISCOVERY_LAYOUT_HINTS)[keyof typeof DISCOVERY_LAYOUT_HINTS];
+
+export const DISCOVERY_LAYOUT_HINT_VALUES: readonly DiscoveryLayoutHint[] = Object.values(DISCOVERY_LAYOUT_HINTS);
+
+/**
+ * Per-candidate tier flag. `actionable` candidates target a handbook airboss
+ * has a plugin for (so an `--apply-errata` path exists once a parser lands);
+ * `signal-only` candidates target unonboarded handbooks (we know an addendum
+ * was published but we don't ingest the book yet).
+ */
+export const DISCOVERY_TIERS = {
+	ACTIONABLE: 'actionable',
+	SIGNAL_ONLY: 'signal-only',
+} as const;
+
+export type DiscoveryTier = (typeof DISCOVERY_TIERS)[keyof typeof DISCOVERY_TIERS];
+
+export const DISCOVERY_TIER_VALUES: readonly DiscoveryTier[] = Object.values(DISCOVERY_TIERS);
+
+/**
+ * Per-candidate status. Drives report ordering and idempotency (an `applied`
+ * or `dismissed` candidate is suppressed from the next run's report).
+ */
+export const DISCOVERY_STATUSES = {
+	CANDIDATE: 'candidate',
+	APPLIED: 'applied',
+	DISMISSED: 'dismissed',
+	WITHDRAWN: 'withdrawn',
+	UNMATCHED: 'unmatched',
+} as const;
+
+export type DiscoveryStatus = (typeof DISCOVERY_STATUSES)[keyof typeof DISCOVERY_STATUSES];
+
+export const DISCOVERY_STATUS_VALUES: readonly DiscoveryStatus[] = Object.values(DISCOVERY_STATUSES);
+
+/** Env var that suppresses the dispatcher banner ("N unreviewed candidates"). */
+export const DISCOVERY_QUIET_ENV = 'AIRBOSS_QUIET';
+
+/** Env var carrying the GitHub token used by `gh issue create`. */
+export const DISCOVERY_GITHUB_TOKEN_ENV = 'GH_TOKEN';

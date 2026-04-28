@@ -82,3 +82,9 @@ chapter_overrides: {}
 # rather than "field missing". See ADR 020.
 errata: []
 
+# Discovery dismissal stop-list. Each entry silences a candidate that
+# `bun run sources discover-errata` would otherwise re-flag every week.
+# Schema: at least one of `url` or `sha256`; optional `reason` is a
+# free-form audit note.
+dismissed_errata: []
+

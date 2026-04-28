@@ -17,6 +17,7 @@ from .afh import AfhHandbook
 from .avwx import AvwxHandbook
 from .base import (
     ErrataConfig,
+    ErrataDismissal,
     ErrataPatch,
     HandbookPlugin,
     UnknownHandbookError,
@@ -49,6 +50,7 @@ def get_handbook(slug: str) -> HandbookPlugin:
 __all__ = [
     'REGISTRY',
     'ErrataConfig',
+    'ErrataDismissal',
     'ErrataPatch',
     'HandbookPlugin',
     'UnknownHandbookError',

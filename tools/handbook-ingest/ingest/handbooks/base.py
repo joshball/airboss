@@ -90,6 +90,27 @@ class ErrataConfig:
     parser: str
 
 
+@dataclass(frozen=True)
+class ErrataDismissal:
+    """One entry from the YAML ``dismissed_errata:`` list, post-load.
+
+    A dismissal silences a discovery candidate the user has reviewed and
+    decided is not real (a duplicate URL, a misclassified PDF, an artifact
+    that turned out to be unrelated). Discovery uses these as a stop-list:
+    matching candidates stay in `dismissed` status across re-runs and
+    never re-open the GitHub issue.
+
+    A dismissal entry must specify either ``url`` or ``sha256`` (or both);
+    the YAML loader rejects entries with neither. ``reason`` is a free-form
+    note retained for audit; the discovery dispatcher prints it next to the
+    dismissed candidate in the report.
+    """
+
+    url: str | None
+    sha256: str | None
+    reason: str
+
+
 class HandbookPlugin(ABC):
     """Base class for per-handbook plugins.
 

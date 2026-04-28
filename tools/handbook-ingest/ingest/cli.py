@@ -619,6 +619,7 @@ def _override_edition(config: HandbookConfig, edition: str) -> HandbookConfig:
         chapter_overrides=config.chapter_overrides,
         page_label_walk_back=config.page_label_walk_back,
         errata=config.errata,
+        dismissed_errata=config.dismissed_errata,
         raw_yaml=config.raw_yaml,
     )
 
