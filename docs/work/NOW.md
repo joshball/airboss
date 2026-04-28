@@ -2,6 +2,13 @@
 
 Single entry point for "what should I work on?" in airboss. Refresh date: 2026-04-28.
 
+## Just shipped (2026-04-28 -- ADR 016 phases 7-9: cert-syllabus surface complete)
+
+- **Cert dashboard (phase 7).** New `/credentials` index, `/credentials/[slug]` detail with mastery rollup + prereq snippet + supplemental syllabi, and `/credentials/[slug]/areas/[areaCode]` drill with K/R/S element badges, citations, and linked knowledge nodes. Edition pinning honoured via `?edition=`. Pure read-only consumer of `@ab/bc-study`. PR #321.
+- **Lens UI (phase 8).** New `/lens/handbook` (index + doc view + chapter view with citing knowledge nodes from `getNodesCitingSection`) and `/lens/weakness` (severity buckets via `getWeakAreas`, normalised score / 3, thresholds severe 0.70 / moderate 0.40 / mild 0.15). Domain-level v1; node-level ranking with miscalibration / overdue / low_accuracy / never_attempted reasons documented as a follow-on if the domain rollup is insufficient in real use. PR #323.
+- **Goal composer (phase 9).** New `/goals` index, `/goals/new` create, and `/goals/[id]` detail with `?edit=1` toggle. Ten form actions (update / setStatus / makePrimary / archive / addSyllabus / removeSyllabus / setSyllabusWeight / addNode / removeNode / setNodeWeight). Inline syllabus + node pickers (from `listNodesWithFacets`); modal-with-filter-chips picker captured as a follow-on if the inline scales poorly. PR #324.
+- **Magic-strings sweep PR shipped earlier in the same session.** Help routes + 17 domainLabel sites + 5 MS_PER_DAY stragglers. PR #312.
+
 ## Just shipped (2026-04-28 -- avionics surface)
 
 - **Avionics surface born end-to-end -- 9 PRs in one session.** New `apps/avionics/` SvelteKit app on port 9630 (`avionics.airboss.test`), `libs/bc/avionics/` BC, full route set (`/`, `/pfd`, `/mfd`, `/scan`, `/aircraft`), five SVG PFD instruments (Attitude, Airspeed tape, Altitude tape, Heading, VSI) driven by sliders + keyboard with rAF-eased rendering, V-speeds sourced from the selected aircraft's FDM (C172 today, PA28 plumbed via the aircraft selector), avionics theme tokens for both light and dark, polished MFD/Scan placeholders. PRs #288 (WP docs), #291 (Wave 1 contract), #292 (extract-sim-instruments rewrite), #293 (theme tokens), #294 (app shell), #295 (themes pre-hydration fix surfaced mid-build), #297 (Wave 3 surface), #301 (Wave 4 instruments), #303 (Wave 5 polish + review_status flip). Also wired into `bun run dev` (no-arg parallel mode + single-app), `bun run check`, `bun run setup` /etc/hosts probe, and the shared theme-picker server.
@@ -41,10 +48,14 @@ The week was dominated by the reference identifier system (ADR 019, **phases 1-9
 
 ## In flight
 
-- **Cert-syllabus surface work (post-data-layer).** Cert dashboard (ACS lens, ADR 016 phase 7), handbook + weakness lens UI (phase 8), personal goal composer (phase 9). The data layer is done; these are SvelteKit page chunks.
 - **FAR navigation course Weeks 2-10.** Per `course/regulations/CHANGELOG.md`, Week 1 is fully authored; Weeks 2 (Part 61 deep), 3 (CFI), 4-6 (Part 91), 7 (141 + 135), 8 (companion docs), 9 (enforcement), 10 (capstone) await authoring. Two sibling capstones (friend-flight-review, ppl-applies-for-ir) deferred until they can be authored against `airboss-ref:` syntax in one pass. Now unblocked since `airboss-ref:` lessons round-trip cleanly through the validator + renderer.
-- **Magic-strings fix PR.** Audit catalogued 30+ literals + 40+ enum-bypassing strings against existing `@ab/constants` exports. Pure mechanical swaps. Audit at [`docs/work/reviews/20260424-magic-strings-audit.md`](reviews/20260424-magic-strings-audit.md). Hasn't shipped; still applicable.
 - **[extract-sim-instruments](../work-packages/extract-sim-instruments/spec.md)** -- the avionics surface now exists (PRs #291, #294, #297) and the PFD components live in `apps/avionics/src/lib/pfd/`. WP rewritten in PR #292 to track the new trigger ("second consumer of the PFD set"). Lib promotion to `libs/activities/pfd/` has not happened yet; on watch, ready to fire when the second consumer materialises.
+
+## Follow-ons captured from the cert-syllabus surface ship (2026-04-28)
+
+- **Node-level weakness lens.** Domain-level shipped in PR #323; per-node ranking with the four reason kinds (miscalibration / overdue / low_accuracy / never_attempted) earns its keep when the domain bucket proves too coarse. Trigger: a real walkthrough where the domain row points at "weather" but the actionable gap is one specific node.
+- **Modal node-picker.** Goal composer ships an inline select with up to 25 candidates. A modal with filter chips (domain / cert / lifecycle) + search becomes the right shape when a user can't find a node from the 25-candidate inline list. Trigger: walkthrough friction.
+- **Engine cutover to read goal-derived filters.** The session engine still reads `study_plan` to drive selection. Cutting it over to `getGoalNodeUnion` + `getDerivedCertGoals` is the next ADR 016 phase past 9.
 
 ## Recently closed (no longer active)
 
@@ -87,7 +98,7 @@ Original MVP build order (Steps 1-6) shipped between PRs #1-#16. The active buil
 | --   | ADR 019 phases 1-9 (validator -> ingest -> migration)    | Shipped (PRs #241, #246, #247, #249, #250, #251, #252, #260, #261, #266, #268, #276) |
 | --   | ADR 019 phase 10 -- irregular corpora (NTSB, CC, etc.)   | Demand-driven; ACS PPL-ASEL slice shipped (#266); rest deferred per trigger          |
 | --   | Cert-syllabus + goal composer WP (data layer)            | Shipped (PRs #248, #254, #264, #270, #274)                                           |
-| --   | Cert-syllabus surface work (dashboard + lens + composer) | Pending (ADR 016 phases 7-9)                                                         |
+| --   | Cert-syllabus surface work (dashboard + lens + composer) | Shipped (PRs #321, #323, #324 -- ADR 016 phases 7-9 complete)                        |
 | --   | FAR navigation course Weeks 2-10                         | Pending (Week 1 shipped #237; now unblocked by airboss-ref: round-trip)              |
 | --   | FIRC migration as `apps/firc/`                           | Deferred (post-MVP-proven)                                                           |
 
@@ -106,13 +117,11 @@ The original MVP roadmap is done in code; the human-side work and the post-MVP b
 
    The 2026-04-25 walkthrough plan at [`docs/work/walkthroughs/20260425/PLAN.md`](walkthroughs/20260425/PLAN.md) audited each test plan against current main and pruned dead steps; that's the doc to walk from, not the raw test plans.
 
-2. **Cert-syllabus surface work.** ADR 016 phases 7-9 (cert dashboard, lens UI, goal composer pages). Data layer is done; this is the SvelteKit page chunk.
+2. **Author Week 2 of the regulations course (Part 61 deep)**, now unblocked by the `airboss-ref:` round-trip. The course and the graph reinforce each other and are best authored as a pair.
 
-3. **Ship the magic-strings sweep PR.** Punch list at [`docs/work/reviews/20260424-magic-strings-audit.md`](reviews/20260424-magic-strings-audit.md). Pure mechanical swaps against existing `@ab/constants` exports.
+3. **Decide CFR XML storage.** Open question in [`reference-extraction-pipeline/tasks.md`](../work-packages/reference-extraction-pipeline/tasks.md): commit, LFS, or external? ADR-shaped product call.
 
-4. **Author Week 2 of the regulations course (Part 61 deep)**, now unblocked by the `airboss-ref:` round-trip. The course and the graph reinforce each other and are best authored as a pair.
-
-5. **Decide CFR XML storage.** Open question in [`reference-extraction-pipeline/tasks.md`](../work-packages/reference-extraction-pipeline/tasks.md): commit, LFS, or external? ADR-shaped product call.
+4. **Engine cutover to goal-derived filters.** Now that the goal composer ships, route the session engine through `getGoalNodeUnion` + `getDerivedCertGoals` instead of reading `study_plan.cert_goals` directly.
 
 ## Pending infra cleanup
 
