@@ -1,0 +1,162 @@
+# Taxiway Markings
+
+a. General. All taxiways should have centerline
+markings and runway holding position markings
+whenever they intersect a runway. Taxiway edge
+markings are present whenever there is a need to
+separate the taxiway from a pavement that is not
+intended for aircraft use or to delineate the edge of the
+taxiway. Taxiways may also have shoulder markings
+and holding position markings for Instrument
+Landing System (ILS) critical areas and taxiway/
+taxiway intersection markings.
+REFERENCE-
+AIM Paragraph 2-3-5 , Holding Position Markings
+
+b. Taxiway Centerline.
+1. Normal Centerline. The taxiway centerline
+is a single continuous yellow line, 6 inches (15 cm) to
+12 inches (30 cm) in width. This provides a visual cue
+to permit taxiing along a designated path. Ideally, the
+aircraft should be kept centered over this line during
+taxi. However, being centered on the taxiway
+centerline does not guarantee wingtip clearance with
+other aircraft or other objects.
+
+Airport Marking Aids and Signs
+
+1. Continuous Markings. These consist of a
+continuous double yellow line, with each line being
+at least 6 inches (15 cm) in width spaced 6 inches
+(15 cm) apart. They are used to define the taxiway
+edge from the shoulder or some other abutting paved
+surface not intended for use by aircraft.
+2. Dashed Markings. These markings are
+used when there is an operational need to define the
+edge of a taxiway or taxilane on a paved surface
+where the adjoining pavement to the taxiway edge is
+intended for use by aircraft (for example, an apron).
+Dashed taxiway edge markings consist of a broken
+double yellow line, with each line being at least 6
+inches (15 cm) in width, spaced 6 inches (15 cm)
+apart (edge to edge). These lines are 15 feet (4.5 m)
+in length with 25 foot (7.5 m) gaps. (See FIG 2-3-9.)
+d. Taxi Shoulder Markings. Taxiways, holding
+bays, and aprons are sometimes provided with paved
+shoulders to prevent blast and water erosion.
+Although shoulders may have the appearance of full
+strength pavement, they are not intended for use by
+aircraft and may be unable to support an aircraft.
+Usually the taxiway edge marking will define this
+area. Where conditions exist such as islands or
+taxiway curves that may cause confusion as to which
+side of the edge stripe is for use by aircraft, taxiway
+shoulder markings may be used to indicate the
+pavement is unusable. Taxiway shoulder markings
+are yellow. (See FIG 2-3-10.)
+
+2-3-7
+
+
+FIG 2-3-6
+
+Markings for Blast Pad or Stopway or Taxiway Preceding a Displaced Threshold
+
+2-3-8
+
+Airport Marking Aids and Signs
+
+
+FIG 2-3-7
+
+Markings for Blast Pads and Stopways
+
+Airport Marking Aids and Signs
+
+2-3-9
+
+
+FIG 2-3-8
+
+Enhanced Taxiway Centerline
+
+centerline, and signs indicating turns to the right
+being on the right side of the centerline. (See
+FIG 2-3-11.)
+FIG 2-3-10
+
+Taxi Shoulder Markings
+
+RUNWAY
+
+PAVEMENT EDGE
+
+YELLOW STRIPES
+
+TAXIWAY EDGE
+MARKINGS
+
+FIG 2-3-9
+
+Dashed Markings
+
+DOUBLE
+YELLOW
+LINES
+
+TAXIWAY EDGE
+MARKINGS
+CONTINUOUS
+
+TAXIWAY EDGE
+MARKINGS
+DASHED
+
+e. Surface Painted Taxiway Direction
+Signs. Surface painted taxiway direction signs have
+a yellow background with a black inscription, and are
+provided when it is not possible to provide taxiway
+direction signs at intersections, or when necessary to
+supplement such signs. These markings are located
+adjacent to the centerline with signs indicating turns
+to the left being on the left side of the taxiway
+
+2-3-10
+
+f. Surface Painted Location Signs. Surface
+painted location signs have a black background with
+a yellow inscription. When necessary, these markings
+are used to supplement location signs located along
+side the taxiway and assist the pilot in confirming the
+designation of the taxiway on which the aircraft is
+located. These markings are located on the right side
+of the centerline. (See FIG 2-3-11.)
+g. Geographic Position Markings. These markings are located at points along low visibility taxi
+routes designated in the airport’s Surface Movement
+Guidance Control System (SMGCS) plan. They are
+used to identify the location of taxiing aircraft during
+low visibility operations. Low visibility operations
+are those that occur when the runway visible
+range (RVR) is below 1200 feet (360m). They are
+positioned to the left of the taxiway centerline in the
+direction of taxiing. (See FIG 2-3-12.) The
+geographic position marking is a circle comprised of
+an outer black ring contiguous to a white ring with a
+pink circle in the middle. When installed on asphalt
+or other dark-colored pavements, the white ring and
+the black ring are reversed (i.e., the white ring
+becomes the outer ring and the black ring becomes the
+inner ring). It is designated with either a number or a
+number and letter. The number corresponds to the
+consecutive position of the marking on the route.
+
+Airport Marking Aids and Signs
+
+
+FIG 2-3-11
+
+Surface Painted Signs
+
+Airport Marking Aids and Signs
+
+2-3-11

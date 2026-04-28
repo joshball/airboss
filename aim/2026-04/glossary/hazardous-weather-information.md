@@ -1,0 +1,11 @@
+# HAZARDOUS WEATHER INFORMATION
+
+Summary of significant meteorological information
+(SIGMET/WS), convective significant meteorological information (convective SIGMET/WST), urgent
+pilot weather reports (urgent PIREP/UUA), center
+weather advisories (CWA), airmen’s meteorological
+information (AIRMET/WA) and any other weather
+such as isolated thunderstorms that are rapidly
+developing and increasing in intensity, or low
+ceilings and visibilities that are becoming widespread which is considered significant and are not
+included in a current hazardous weather advisory.

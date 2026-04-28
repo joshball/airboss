@@ -1,0 +1,79 @@
+# Runway Condition Reports
+
+a. Aircraft braking coefficient is dependent upon
+the surface friction between the tires on the aircraft
+wheels and the pavement surface. Less friction means
+less aircraft braking coefficient and less aircraft
+braking response.
+b. Runway condition code (RwyCC) values range
+from 1 (poor) to 6 (dry). For frozen contaminants on
+runway surfaces, a runway condition code reading of
+4 indicates the level when braking deceleration or
+directional control is between good and medium.
+NOTE-
+A RwyCC of “0” is used to delineate a braking action
+report of NIL and is prohibited from being reported in a
+FICON NOTAM.
+
+c. Airport management should conduct runway
+condition assessments on wet runways or runways
+covered with compacted snow and/or ice.
+1. Numerical readings may be obtained by using
+the Runway Condition Assessment Matrix (RCAM).
+The RCAM provides the airport operator with data to
+complete the report that includes the following:
+(a) Runway(s) in use
+(b) Time of the assessment
+(c) Runway condition codes for each zone
+(touchdown, mid-point, roll-out)
+
+Airport Operations
+
+
+(d) Pilot-reported braking action report (if
+available)
+(e) The contaminant (for example, wet snow,
+dry snow, slush, ice, etc.)
+2. Assessments for each zone (see 4-3-9c1(c))
+will be issued in the direction of takeoff and landing
+on the runway, ranging from “1” to “6” to describe
+contaminated surfaces.
+NOTE-
+A RwyCC of “0” is used to delineate a braking action
+report of NIL and is prohibited from being reported in a
+FICON NOTAM.
+
+3. When any 1 or more runway condition codes
+are reported as less than 6, airport management must
+notify ATC for dissemination to pilots.
+4. Controllers will not issue runway condition
+codes when all 3 segments of a runway are reporting
+values of 6.
+d. When runway condition code reports are
+provided by airport management, the ATC facility
+providing approach control or local airport advisory
+must provide the report to all pilots.
+e. Pilots should use runway condition code
+information with other knowledge including aircraft
+performance characteristics, type, and weight,
+previous experience, wind conditions, and aircraft
+tire type (such as bias ply vs. radial constructed) to
+determine runway suitability.
+f. The Runway Condition Assessment Matrix
+identifies the descriptive terms “good,” “good to
+medium,” “medium,” “medium to poor,” “poor,” and
+“nil” used in braking action reports.
+REFERENCE-
+Advisory Circular AC 91-79A (Revision 1), Mitigating the Risks of a
+Runway Overrun Upon Landing, Appendix 1
+
+4-3-13
+
+
+FIG 4-3-7
+
+Runway Condition Assessment Matrix (RCAM)
+
+4-3-14
+
+Airport Operations

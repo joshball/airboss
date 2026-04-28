@@ -26,6 +26,16 @@ export {
 	readManifest,
 } from './derivative-reader.ts';
 export {
+	type ExtractAimArgs,
+	type ExtractedAim,
+	type ExtractedAppendix,
+	type ExtractedChapter,
+	type ExtractedGlossaryEntry,
+	type ExtractedParagraph,
+	type ExtractedSection,
+	extractAim,
+} from './extract.ts';
+export {
 	type CliArgs,
 	type IngestArgs,
 	type IngestReport,
@@ -42,4 +52,14 @@ export {
 	getAimDerivativeRoot,
 	setAimDerivativeRoot,
 } from './resolver.ts';
+export {
+	PHASE_7_SOURCE_REVIEWER_ID,
+	parseSourceCliArgs,
+	runAimSourceIngest,
+	runSourceIngestCli,
+	type SourceCliArgs,
+	type SourceIngestArgs,
+	type SourceIngestReport,
+	writeAimDerivatives,
+} from './source-ingest.ts';
 export { AIM_LIVE_URL, getAimLiveUrl } from './url.ts';

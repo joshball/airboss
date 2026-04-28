@@ -1,0 +1,32 @@
+# General
+
+a. The roles and responsibilities of the pilot and
+controller for effective participation in the ATC
+system are contained in several documents. Pilot
+responsibilities are in the CFRs and the air traffic
+controllers’ are in the FAA Order JO 7110.65,
+Air Traffic Control, and supplemental FAA directives. Additional and supplemental information for
+pilots can be found in the current Aeronautical
+Information Manual (AIM), Notices to Airmen,
+Advisory Circulars and aeronautical charts. Since
+there are many other excellent publications produced
+by nongovernment organizations, as well as other
+government organizations, with various updating
+cycles, questions concerning the latest or most
+current material can be resolved by cross-checking
+with the above mentioned documents.
+b. The pilot-in-command of an aircraft is directly
+responsible for, and is the final authority as to the safe
+operation of that aircraft. In an emergency requiring
+immediate action, the pilot-in-command may
+deviate from any rule in the General Subpart A and
+Flight Rules Subpart B in accordance with 14 CFR
+Section 91.3.
+
+or phases of flight. More detailed explanations are
+contained in other portions of this publication, the
+appropriate CFRs, ACs and similar publications. The
+information provided is an overview of the principles
+involved and is not meant as an interpretation of the
+rules nor is it intended to extend or diminish
+responsibilities.

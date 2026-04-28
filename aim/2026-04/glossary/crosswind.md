@@ -1,0 +1,58 @@
+# CROSSWIND
+
+a. When used concerning the traffic pattern, the
+word means “crosswind leg.”
+(See TRAFFIC PATTERN.)
+
+
+b. When used concerning wind conditions, the
+word means a wind not parallel to the runway or the
+path of an aircraft.
+(See CROSSWIND COMPONENT.)
+
+CROSSWIND COMPONENT- The wind component measured in knots at 90 degrees to the
+longitudinal axis of the runway.
+CRUISE- Used in an ATC clearance to authorize a
+pilot to conduct flight at any altitude from the
+minimum IFR altitude up to and including the
+altitude specified in the clearance. The pilot may
+level off at any intermediate altitude within this block
+of airspace. Climb/descent within the block is to be
+made at the discretion of the pilot. However, once the
+pilot starts descent and verbally reports leaving an
+altitude in the block, he/she may not return to that
+altitude without additional ATC clearance. Further, it
+is approval for the pilot to proceed to and make an
+approach at destination airport and can be used in
+conjunction with:
+a. An airport clearance limit at locations with a
+standard/special instrument approach procedure. The
+CFRs require that if an instrument letdown to an
+airport is necessary, the pilot shall make the letdown
+in accordance with a standard/special instrument
+approach procedure for that airport, or
+b. An airport clearance limit at locations that are
+within/below/outside controlled airspace and without a standard/special instrument approach
+procedure. Such a clearance is NOT AUTHORIZATION for the pilot to descend under IFR conditions
+below the applicable minimum IFR altitude nor does
+it imply that ATC is exercising control over aircraft
+in Class G airspace; however, it provides a means for
+the aircraft to proceed to destination airport, descend,
+and land in accordance with applicable CFRs
+governing VFR flight operations. Also, this provides
+search and rescue protection until such time as the
+IFR flight plan is closed.
+(See INSTRUMENT APPROACH
+PROCEDURE.)
+
+CRUISE CLIMB- A climb technique employed by
+aircraft, usually at a constant power setting, resulting
+in an increase of altitude as the aircraft weight
+decreases.
+CRUISING ALTITUDE- An altitude or flight level
+maintained during en route level flight. This is a
+
+constant altitude and should not be confused with a
+cruise clearance.
+(See ALTITUDE.)
+(See ICAO term CRUISING LEVEL.)
