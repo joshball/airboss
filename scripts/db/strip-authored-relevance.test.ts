@@ -119,8 +119,7 @@ describe('stripAuthoredRelevance', () => {
 	});
 
 	it('respects --dry-run by leaving files untouched on disk', () => {
-		const withRelevance =
-			'---\nid: aero-foo\ntitle: Foo\nrelevance:\n  - cert: private\n---\n\nbody\n';
+		const withRelevance = '---\nid: aero-foo\ntitle: Foo\nrelevance:\n  - cert: private\n---\n\nbody\n';
 		const root = makeTmpKnowledgeRoot({ 'aero/foo/node.md': withRelevance });
 		const report = stripAuthoredRelevance({ root, dryRun: true });
 		expect(report.modified).toBe(1);
