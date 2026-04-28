@@ -8,6 +8,8 @@ import {
 	type SessionMode,
 	type SessionSlice,
 } from '@ab/constants';
+import Button from '@ab/ui/components/Button.svelte';
+import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
@@ -33,16 +35,15 @@ function domainLabel(slug: string): string {
 </svelte:head>
 
 <section class="page">
-	<header class="hd">
-		<div>
-			<h1>Session complete</h1>
-			<p class="sub">Mode: {SESSION_MODE_LABELS[summary.session.mode as SessionMode]}</p>
-		</div>
-		<nav class="quick">
-			<a class="btn ghost" href={ROUTES.DASHBOARD}>Back to dashboard</a>
-			<a class="btn primary" href={ROUTES.SESSION_START}>Another session</a>
-		</nav>
-	</header>
+	<PageHeader
+		title="Session complete"
+		subtitle={`Mode: ${SESSION_MODE_LABELS[summary.session.mode as SessionMode]}`}
+	>
+		{#snippet actions()}
+			<Button variant="ghost" href={ROUTES.DASHBOARD}>Back to dashboard</Button>
+			<Button variant="primary" href={ROUTES.SESSION_START}>Another session</Button>
+		{/snippet}
+	</PageHeader>
 
 	<div class="grid">
 		<article class="tile">
@@ -142,32 +143,6 @@ function domainLabel(slug: string): string {
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-xl);
-	}
-
-	.hd {
-		display: flex;
-		justify-content: space-between;
-		align-items: flex-start;
-		gap: var(--space-lg);
-		flex-wrap: wrap;
-	}
-
-	h1 {
-		margin: 0;
-		font-size: var(--type-heading-1-size);
-		letter-spacing: -0.02em;
-		color: var(--ink-body);
-	}
-
-	.sub {
-		margin: var(--space-2xs) 0 0;
-		color: var(--ink-subtle);
-		font-size: var(--type-definition-body-size);
-	}
-
-	.quick {
-		display: flex;
-		gap: var(--space-sm);
 	}
 
 	.grid {
@@ -364,21 +339,4 @@ function domainLabel(slug: string): string {
 		justify-content: center;
 	}
 
-	.btn.primary {
-		background: var(--action-default);
-		color: var(--ink-inverse);
-	}
-
-	.btn.primary:hover {
-		background: var(--action-default-hover);
-	}
-
-	.btn.ghost {
-		background: transparent;
-		color: var(--ink-muted);
-	}
-
-	.btn.ghost:hover {
-		background: var(--surface-sunken);
-	}
 </style>

@@ -1,6 +1,7 @@
 <script lang="ts">
 import { summarizeDeckSpec } from '@ab/bc-study';
 import { QUERY_PARAMS, REVIEW_SESSION_STATUSES, ROUTES } from '@ab/constants';
+import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
@@ -35,10 +36,7 @@ function formatProgress(currentIndex: number, totalCards: number, status: string
 
 {#if prompt}
 	<section class="page">
-		<header class="hd">
-			<h1>Resume your run?</h1>
-			<p class="sub">{summarizeDeckSpec(prompt.deckSpec)}</p>
-		</header>
+		<PageHeader title="Resume your run?" subtitle={summarizeDeckSpec(prompt.deckSpec)} />
 
 		<article class="card">
 			<div class="card-row">
@@ -93,19 +91,6 @@ function formatProgress(currentIndex: number, totalCards: number, status: string
 		max-width: 32rem;
 		margin: 0 auto;
 		padding: var(--space-2xl) var(--space-lg);
-	}
-
-	.hd h1 {
-		margin: 0;
-		font-size: var(--font-size-xl);
-		letter-spacing: -0.02em;
-		color: var(--ink-body);
-	}
-
-	.sub {
-		margin: var(--space-2xs) 0 0;
-		color: var(--ink-subtle);
-		font-size: var(--font-size-body);
 	}
 
 	.card {

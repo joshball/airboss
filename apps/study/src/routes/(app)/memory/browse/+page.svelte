@@ -28,10 +28,13 @@ import type { BrowseListGroup } from '@ab/ui/components/BrowseList.svelte';
 import BrowseList from '@ab/ui/components/BrowseList.svelte';
 import BrowseListItem from '@ab/ui/components/BrowseListItem.svelte';
 import BrowseViewControls from '@ab/ui/components/BrowseViewControls.svelte';
+import Button from '@ab/ui/components/Button.svelte';
+import EmptyState from '@ab/ui/components/EmptyState.svelte';
 import FilterCard from '@ab/ui/components/FilterCard.svelte';
 import type { FilterChipDef } from '@ab/ui/components/FilterChips.svelte';
 import FilterChips from '@ab/ui/components/FilterChips.svelte';
 import InfoTip from '@ab/ui/components/InfoTip.svelte';
+import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import Pager from '@ab/ui/components/Pager.svelte';
 import ResultSummary from '@ab/ui/components/ResultSummary.svelte';
 import { buildQuery, humanize } from '@ab/utils';
@@ -260,19 +263,17 @@ const groups = $derived.by<BrowseListGroup<CardRow>[]>(() => {
 </svelte:head>
 
 <section class="page">
-	<header class="hd">
-		<div>
-			<div class="title-row">
-				<h1>Browse</h1>
-				<PageHelp pageId="memory-browse" />
-			</div>
-			<p class="sub">
-				Every memory card on your account -- the ones you've authored and the ones seeded from course material.
-				Filter, search, and click any card to edit it.
-			</p>
-		</div>
-		<a class="btn primary" href={ROUTES.MEMORY_NEW}>New card</a>
-	</header>
+	<PageHeader
+		title="Browse"
+		subtitle="Every memory card on your account -- the ones you've authored and the ones seeded from course material. Filter, search, and click any card to edit it."
+	>
+		{#snippet titleSuffix()}
+			<PageHelp pageId="memory-browse" />
+		{/snippet}
+		{#snippet actions()}
+			<Button variant="primary" href={ROUTES.MEMORY_NEW}>New card</Button>
+		{/snippet}
+	</PageHeader>
 
 	{#if createdCard}
 		<Banner tone="success" dismissible onDismiss={dismissCreatedBanner}>
@@ -401,15 +402,19 @@ const groups = $derived.by<BrowseListGroup<CardRow>[]>(() => {
 	/>
 
 	{#if cards.length === 0}
-		<div class="empty">
-			{#if hasActiveFilters}
-				<p>No cards match these filters.</p>
-				<a class="btn ghost" href={ROUTES.MEMORY_BROWSE}>Clear filters</a>
-			{:else}
-				<p>Your deck is empty. Capture your first card while you study.</p>
-				<a class="btn primary" href={ROUTES.MEMORY_NEW}>Create your first card</a>
-			{/if}
-		</div>
+		{#if hasActiveFilters}
+			<EmptyState title="No cards match these filters." body="Clear the active filters to see every card again.">
+				{#snippet actions()}
+					<Button variant="ghost" href={ROUTES.MEMORY_BROWSE}>Clear filters</Button>
+				{/snippet}
+			</EmptyState>
+		{:else}
+			<EmptyState title="Your deck is empty." body="Capture your first card while you study.">
+				{#snippet actions()}
+					<Button variant="primary" href={ROUTES.MEMORY_NEW}>Create your first card</Button>
+				{/snippet}
+			</EmptyState>
+		{/if}
 	{:else}
 		<BrowseList {groups}>
 			{#snippet item(c)}
@@ -465,33 +470,6 @@ const groups = $derived.by<BrowseListGroup<CardRow>[]>(() => {
 		gap: var(--space-xl);
 	}
 
-	.hd {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: var(--space-lg);
-	}
-
-	.title-row {
-		display: flex;
-		align-items: center;
-		gap: var(--space-sm);
-	}
-
-	h1 {
-		margin: 0;
-		font-size: var(--type-heading-2-size);
-		letter-spacing: -0.02em;
-		color: var(--ink-body);
-	}
-
-	.sub {
-		margin: var(--space-2xs) 0 0;
-		color: var(--ink-subtle);
-		font-size: var(--type-definition-body-size);
-		max-width: 70ch;
-	}
-
 	.banner-link {
 		color: var(--action-default-hover);
 		font-weight: 600;
@@ -501,19 +479,6 @@ const groups = $derived.by<BrowseListGroup<CardRow>[]>(() => {
 
 	.banner-link:hover {
 		text-decoration: underline;
-	}
-
-	.empty {
-		background: var(--ink-inverse);
-		border: 1px dashed var(--edge-strong);
-		border-radius: var(--radius-lg);
-		padding: var(--space-2xl) var(--space-xl);
-		text-align: center;
-		color: var(--ink-subtle);
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		gap: var(--space-lg);
 	}
 
 	.card-front {

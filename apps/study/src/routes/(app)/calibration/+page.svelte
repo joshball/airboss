@@ -12,6 +12,9 @@ import {
 	SESSION_MODES,
 } from '@ab/constants';
 import Button from '@ab/ui/components/Button.svelte';
+import EmptyState from '@ab/ui/components/EmptyState.svelte';
+import PageHeader from '@ab/ui/components/PageHeader.svelte';
+import ScoreCard from '@ab/ui/components/ScoreCard.svelte';
 import { humanize } from '@ab/utils';
 import type { PageData } from './$types';
 
@@ -224,52 +227,51 @@ const interpretation = $derived(
 </svelte:head>
 
 <section class="page">
-	<header class="hd">
-		<div>
-			<h1>Calibration</h1>
-			<p class="sub">Where your confidence matches your accuracy -- and where it doesn't.</p>
-		</div>
-	</header>
+	<PageHeader
+		title="Calibration"
+		subtitle="Where your confidence matches your accuracy -- and where it doesn't."
+	/>
 
 	{#if !hasData}
-		<article class="empty" role="status">
-			<h2>Not enough data yet</h2>
-			<p>
-				Calibration builds from the confidence ratings you give during card reviews and rep sessions. Rate your
-				confidence when the slider appears, and the page fills in as you go.
-			</p>
-			<p class="fine">Minimum for useful data: ~25 confidence-rated answers spanning at least 3 of the 5 confidence buckets.</p>
-			<div class="actions">
+		<EmptyState title="Not enough data yet">
+			{#snippet bodySnippet()}
+				<p>
+					Calibration builds from the confidence ratings you give during card reviews and rep sessions. Rate your
+					confidence when the slider appears, and the page fills in as you go.
+				</p>
+				<p class="fine">Minimum for useful data: ~25 confidence-rated answers spanning at least 3 of the 5 confidence buckets.</p>
+			{/snippet}
+			{#snippet actions()}
 				<Button variant="primary" href={ROUTES.MEMORY_REVIEW}>Start a review</Button>
 				<Button variant="secondary" href={ROUTES.SESSION_START}>Start a rep session</Button>
-			</div>
-		</article>
+			{/snippet}
+		</EmptyState>
 	{:else}
-		<article class="score-card">
-			<div class="score-main">
-				<div class="score-label">Calibration score</div>
-				<div class="score-value">
-					{#if calibration.score === null}
-						--
-					{:else}
-						{calibration.score.toFixed(2)}
-					{/if}
-				</div>
-				<div class="score-sub">
-					1.00 = perfect; 0.00 = maximally miscalibrated
-				</div>
-			</div>
-			<dl class="score-meta">
-				<div>
-					<dt>Data points</dt>
-					<dd>{pointCount}</dd>
-				</div>
-				<div>
-					<dt>Domains with data</dt>
-					<dd>{calibration.domains.length}</dd>
-				</div>
-			</dl>
-		</article>
+		<ScoreCard
+			label="Calibration score"
+			size="lg"
+			sub="1.00 = perfect; 0.00 = maximally miscalibrated"
+		>
+			{#snippet valueSnippet()}
+				{#if calibration.score === null}
+					--
+				{:else}
+					{calibration.score.toFixed(2)}
+				{/if}
+			{/snippet}
+			{#snippet meta()}
+				<dl class="score-meta">
+					<div>
+						<dt>Data points</dt>
+						<dd>{pointCount}</dd>
+					</div>
+					<div>
+						<dt>Domains with data</dt>
+						<dd>{calibration.domains.length}</dd>
+					</div>
+				</dl>
+			{/snippet}
+		</ScoreCard>
 
 		{#if interpretation}
 			<article class="interpretation-card" aria-label="Calibration interpretation">
@@ -413,79 +415,7 @@ const interpretation = $derived(
 		gap: var(--space-xl);
 	}
 
-	.hd h1 {
-		margin: 0;
-		font-size: var(--type-heading-1-size);
-		letter-spacing: -0.02em;
-		color: var(--ink-body);
-	}
-
-	.sub {
-		margin: var(--space-2xs) 0 0;
-		color: var(--ink-muted);
-		font-size: var(--type-definition-body-size);
-	}
-
-	.empty {
-		background: var(--ink-inverse);
-		border: 1px solid var(--edge-default);
-		border-radius: var(--radius-lg);
-		padding: var(--space-2xl);
-		text-align: center;
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-md);
-		align-items: center;
-	}
-
-	.empty h2 {
-		margin: 0;
-		font-size: var(--type-heading-1-size);
-		color: var(--ink-body);
-	}
-
-	.empty p {
-		margin: 0;
-		color: var(--ink-muted);
-		max-width: 36rem;
-	}
-
 	.fine {
-		font-size: var(--type-ui-label-size);
-		color: var(--ink-subtle);
-	}
-
-	.score-card {
-		background: var(--ink-inverse);
-		border: 1px solid var(--edge-default);
-		border-radius: var(--radius-lg);
-		padding: var(--space-xl);
-		display: flex;
-		flex-wrap: wrap;
-		align-items: flex-end;
-		gap: var(--space-xl);
-	}
-
-	.score-main {
-		flex: 1 1 16rem;
-	}
-
-	.score-label {
-		font-size: var(--type-ui-caption-size);
-		font-weight: 600;
-		color: var(--ink-subtle);
-		text-transform: uppercase;
-		letter-spacing: var(--letter-spacing-caps);
-	}
-
-	.score-value {
-		font-size: var(--font-size-2xl);
-		font-weight: 700;
-		color: var(--ink-body);
-		line-height: 1.1;
-	}
-
-	.score-sub {
 		font-size: var(--type-ui-label-size);
 		color: var(--ink-subtle);
 	}
@@ -930,10 +860,6 @@ const interpretation = $derived(
 	@media (max-width: 480px) {
 		.bar-label {
 			flex: 0 0 4rem;
-		}
-
-		.score-value {
-			font-size: var(--font-size-2xl);
 		}
 	}
 </style>

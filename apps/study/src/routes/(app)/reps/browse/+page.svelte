@@ -22,9 +22,12 @@ import type { BrowseListGroup } from '@ab/ui/components/BrowseList.svelte';
 import BrowseList from '@ab/ui/components/BrowseList.svelte';
 import BrowseListItem from '@ab/ui/components/BrowseListItem.svelte';
 import BrowseViewControls from '@ab/ui/components/BrowseViewControls.svelte';
+import Button from '@ab/ui/components/Button.svelte';
+import EmptyState from '@ab/ui/components/EmptyState.svelte';
 import FilterCard from '@ab/ui/components/FilterCard.svelte';
 import type { FilterChipDef } from '@ab/ui/components/FilterChips.svelte';
 import FilterChips from '@ab/ui/components/FilterChips.svelte';
+import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import Pager from '@ab/ui/components/Pager.svelte';
 import ResultSummary from '@ab/ui/components/ResultSummary.svelte';
 import { buildQuery, humanize } from '@ab/utils';
@@ -203,16 +206,17 @@ const groups = $derived.by<BrowseListGroup<ScenarioRow>[]>(() => {
 </svelte:head>
 
 <section class="page">
-	<header class="hd">
-		<div>
-			<div class="title-row">
-				<h1>Browse</h1>
-				<PageHelp pageId="reps-browse" />
-			</div>
-			<p class="sub">Your decision-rep scenarios. Search, filter by domain, difficulty, or phase, and click to edit.</p>
-		</div>
-		<a class="btn primary" href={ROUTES.REPS_NEW}>New scenario</a>
-	</header>
+	<PageHeader
+		title="Browse"
+		subtitle="Your decision-rep scenarios. Search, filter by domain, difficulty, or phase, and click to edit."
+	>
+		{#snippet titleSuffix()}
+			<PageHelp pageId="reps-browse" />
+		{/snippet}
+		{#snippet actions()}
+			<Button variant="primary" href={ROUTES.REPS_NEW}>New scenario</Button>
+		{/snippet}
+	</PageHeader>
 
 	{#if createdScenario}
 		<Banner tone="success" dismissible onDismiss={dismissCreatedBanner}>
@@ -315,15 +319,19 @@ const groups = $derived.by<BrowseListGroup<ScenarioRow>[]>(() => {
 	/>
 
 	{#if scenarios.length === 0}
-		<div class="empty">
-			{#if hasActiveFilters}
-				<p>No scenarios match these filters.</p>
-				<a class="btn ghost" href={ROUTES.REPS_BROWSE}>Clear filters</a>
-			{:else}
-				<p>No scenarios yet. Write your first one and the rep flow will start picking it up.</p>
-				<a class="btn primary" href={ROUTES.REPS_NEW}>Create your first scenario</a>
-			{/if}
-		</div>
+		{#if hasActiveFilters}
+			<EmptyState title="No scenarios match these filters." body="Clear the active filters to see every scenario again.">
+				{#snippet actions()}
+					<Button variant="ghost" href={ROUTES.REPS_BROWSE}>Clear filters</Button>
+				{/snippet}
+			</EmptyState>
+		{:else}
+			<EmptyState title="No scenarios yet." body="Write your first one and the rep flow will start picking it up.">
+				{#snippet actions()}
+					<Button variant="primary" href={ROUTES.REPS_NEW}>Create your first scenario</Button>
+				{/snippet}
+			</EmptyState>
+		{/if}
 	{:else}
 		<BrowseList {groups}>
 			{#snippet item(s)}
@@ -379,33 +387,6 @@ const groups = $derived.by<BrowseListGroup<ScenarioRow>[]>(() => {
 		align-items: center;
 		gap: var(--space-sm);
 		flex-wrap: wrap;
-	}
-
-	h1 {
-		margin: 0;
-		font-size: var(--type-heading-2-size);
-		letter-spacing: -0.02em;
-		color: var(--ink-body);
-	}
-
-	.sub {
-		margin: var(--space-2xs) 0 0;
-		color: var(--ink-subtle);
-		font-size: var(--type-definition-body-size);
-		max-width: 70ch;
-	}
-
-	.empty {
-		background: var(--ink-inverse);
-		border: 1px dashed var(--edge-strong);
-		border-radius: var(--radius-lg);
-		padding: var(--space-2xl) var(--space-xl);
-		text-align: center;
-		color: var(--ink-subtle);
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		gap: var(--space-lg);
 	}
 
 	.card-head {
@@ -494,36 +475,4 @@ const groups = $derived.by<BrowseListGroup<ScenarioRow>[]>(() => {
 		border-color: var(--action-default-edge);
 	}
 
-	.btn {
-		padding: var(--space-sm) var(--space-lg);
-		font-size: var(--type-definition-body-size);
-		font-weight: 600;
-		border-radius: var(--radius-md);
-		border: 1px solid transparent;
-		cursor: pointer;
-		text-decoration: none;
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		transition: background var(--motion-fast), border-color var(--motion-fast);
-	}
-
-	.btn.primary {
-		background: var(--action-default);
-		color: var(--ink-inverse);
-	}
-
-	.btn.primary:hover {
-		background: var(--action-default-hover);
-	}
-
-	.btn.ghost {
-		background: transparent;
-		color: var(--ink-muted);
-		border-color: transparent;
-	}
-
-	.btn.ghost:hover {
-		background: var(--surface-sunken);
-	}
 </style>

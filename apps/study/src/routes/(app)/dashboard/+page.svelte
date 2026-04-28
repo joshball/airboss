@@ -1,5 +1,6 @@
 <script lang="ts">
 import PageHelp from '@ab/help/ui/PageHelp.svelte';
+import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import ActivityPanel from './_panels/ActivityPanel.svelte';
 import CalibrationPanel from './_panels/CalibrationPanel.svelte';
 import CertProgressPanel from './_panels/CertProgressPanel.svelte';

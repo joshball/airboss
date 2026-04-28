@@ -25,6 +25,7 @@ import BrowseViewControls from '@ab/ui/components/BrowseViewControls.svelte';
 import FilterCard from '@ab/ui/components/FilterCard.svelte';
 import type { FilterChipDef } from '@ab/ui/components/FilterChips.svelte';
 import FilterChips from '@ab/ui/components/FilterChips.svelte';
+import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import Pager from '@ab/ui/components/Pager.svelte';
 import ResultSummary from '@ab/ui/components/ResultSummary.svelte';
 import { buildQuery, humanize } from '@ab/utils';
@@ -171,18 +172,14 @@ const groups = $derived.by<BrowseListGroup<NodeRow>[]>(() => {
 </svelte:head>
 
 <section class="page">
-	<header class="hd">
-		<div>
-			<div class="title-row">
-				<h1>Knowledge</h1>
-				<PageHelp pageId="knowledge-graph" />
-			</div>
-			<p class="sub">
-				The aviation knowledge graph. {total} node{total === 1 ? '' : 's'}; group by domain, cert, priority, or
-				lifecycle, or browse flat.
-			</p>
-		</div>
-	</header>
+	<PageHeader
+		title="Knowledge"
+		subtitle={`The aviation knowledge graph. ${total} node${total === 1 ? '' : 's'}; group by domain, cert, priority, or lifecycle, or browse flat.`}
+	>
+		{#snippet titleSuffix()}
+			<PageHelp pageId="knowledge-graph" />
+		{/snippet}
+	</PageHeader>
 
 	<FilterCard resetHref={ROUTES.KNOWLEDGE} ariaLabel="Filter nodes">
 		{#snippet hidden()}
@@ -312,27 +309,6 @@ const groups = $derived.by<BrowseListGroup<NodeRow>[]>(() => {
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-xl);
-	}
-
-	.title-row {
-		display: flex;
-		align-items: center;
-		gap: var(--space-sm);
-		flex-wrap: wrap;
-	}
-
-	.hd h1 {
-		margin: 0;
-		font-size: var(--type-heading-2-size);
-		letter-spacing: -0.02em;
-		color: var(--ink-body);
-	}
-
-	.sub {
-		margin: var(--space-2xs) 0 0;
-		color: var(--ink-subtle);
-		font-size: var(--type-definition-body-size);
-		max-width: 70ch;
 	}
 
 	.empty {

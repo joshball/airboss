@@ -15,6 +15,7 @@ import PageHelp from '@ab/help/ui/PageHelp.svelte';
 import Button from '@ab/ui/components/Button.svelte';
 import ConfirmAction from '@ab/ui/components/ConfirmAction.svelte';
 import InfoTip from '@ab/ui/components/InfoTip.svelte';
+import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import StatTile from '@ab/ui/components/StatTile.svelte';
 import { humanize } from '@ab/utils';
 import type { ActionData, PageData } from './$types';
@@ -148,20 +149,20 @@ function percent(n: number, total: number): number {
 </svelte:head>
 
 <section class="page">
-	<header class="hd">
-		<div>
-			<div class="title-row">
-				<h1>Memory</h1>
-				<PageHelp pageId="memory-dashboard" />
-			</div>
-			<p class="sub">Cards you've written; the algorithm schedules reviews.</p>
-		</div>
-		<nav class="quick" aria-label="Quick actions">
+	<PageHeader
+		title="Memory"
+		subtitle="Cards you've written; the algorithm schedules reviews."
+		actionsLabel="Quick actions"
+	>
+		{#snippet titleSuffix()}
+			<PageHelp pageId="memory-dashboard" />
+		{/snippet}
+		{#snippet actions()}
 			<Button variant="ghost" href={ROUTES.MEMORY_BROWSE}>Browse</Button>
 			<Button variant="secondary" href={ROUTES.MEMORY_NEW}>New card</Button>
 			<Button variant="primary" href={ROUTES.MEMORY_REVIEW}>Start review</Button>
-		</nav>
-	</header>
+		{/snippet}
+	</PageHeader>
 
 	{#if resumable}
 		<a class="resume-tile" href={ROUTES.MEMORY_REVIEW_SESSION(resumable.id)}>
@@ -421,39 +422,6 @@ function percent(n: number, total: number): number {
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-xl);
-	}
-
-	.hd {
-		display: flex;
-		justify-content: space-between;
-		align-items: flex-start;
-		gap: var(--space-lg);
-		flex-wrap: wrap;
-	}
-
-	.title-row {
-		display: flex;
-		align-items: center;
-		gap: var(--space-sm);
-	}
-
-	h1 {
-		margin: 0;
-		font-size: var(--font-size-2xl);
-		letter-spacing: -0.02em;
-		color: var(--ink-body);
-	}
-
-	.sub {
-		margin: var(--space-2xs) 0 0;
-		color: var(--ink-subtle);
-		font-size: var(--font-size-body);
-	}
-
-	.quick {
-		display: flex;
-		gap: var(--space-sm);
-		flex-wrap: wrap;
 	}
 
 	.grid {

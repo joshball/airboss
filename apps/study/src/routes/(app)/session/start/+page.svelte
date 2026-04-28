@@ -28,6 +28,7 @@ import Banner from '@ab/ui/components/Banner.svelte';
 import Button from '@ab/ui/components/Button.svelte';
 import Drawer from '@ab/ui/components/Drawer.svelte';
 import InfoTip from '@ab/ui/components/InfoTip.svelte';
+import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import { humanize } from '@ab/utils';
 import { enhance } from '$app/forms';
 import { goto } from '$app/navigation';
@@ -165,22 +166,21 @@ function depthLabel(slug: DepthPreference): string {
 </svelte:head>
 
 <section class="page">
-	<header class="hd">
-		<div>
-			<div class="title-row">
-				<h1>Start a session</h1>
-				<PageHelp pageId="session-start" />
-			</div>
-			{#if preview}
-				<p class="sub">{preview.items.length} items queued. Review the plan, then start.</p>
-			{:else if data.needsPlan}
-				<p class="sub">Pick a plan to get started -- you'll be in a scenario in one click.</p>
-			{/if}
-		</div>
-		<nav class="quick">
+	<PageHeader
+		title="Start a session"
+		subtitle={preview
+			? `${preview.items.length} items queued. Review the plan, then start.`
+			: data.needsPlan
+				? "Pick a plan to get started -- you'll be in a scenario in one click."
+				: undefined}
+	>
+		{#snippet titleSuffix()}
+			<PageHelp pageId="session-start" />
+		{/snippet}
+		{#snippet actions()}
 			<Button variant="ghost" href={ROUTES.DASHBOARD}>Cancel</Button>
-		</nav>
-	</header>
+		{/snippet}
+	</PageHeader>
 
 	{#if data.needsPlan}
 		{#if presetError}
@@ -446,27 +446,6 @@ function depthLabel(slug: DepthPreference): string {
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-xl);
-	}
-
-	.hd {
-		display: flex;
-		justify-content: space-between;
-		align-items: flex-start;
-		gap: var(--space-lg);
-		flex-wrap: wrap;
-	}
-
-	h1 {
-		margin: 0;
-		font-size: var(--type-heading-1-size);
-		letter-spacing: -0.02em;
-		color: var(--ink-body);
-	}
-
-	.sub {
-		margin: var(--space-2xs) 0 0;
-		color: var(--ink-subtle);
-		font-size: var(--type-definition-body-size);
 	}
 
 	/* Preset gallery */
@@ -902,13 +881,6 @@ function depthLabel(slug: DepthPreference): string {
 		outline: 2px solid var(--focus-ring);
 		outline-offset: 2px;
 		border-radius: var(--radius-sm);
-	}
-
-	.title-row {
-		display: flex;
-		align-items: center;
-		gap: var(--space-sm);
-		flex-wrap: wrap;
 	}
 
 	.kind-wrap,

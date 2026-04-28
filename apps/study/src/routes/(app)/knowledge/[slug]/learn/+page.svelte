@@ -9,6 +9,7 @@ import {
 } from '@ab/constants';
 import PageHelp from '@ab/help/ui/PageHelp.svelte';
 import Banner from '@ab/ui/components/Banner.svelte';
+import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import { humanize, renderMarkdown } from '@ab/utils';
 import { replaceState } from '$app/navigation';
 import { page } from '$app/state';
@@ -130,13 +131,14 @@ function domainLabel(slug: string): string {
 		<span>Learn</span>
 	</nav>
 
-	<header class="hd">
-		<div class="title-row">
-			<h1>{node.title}</h1>
+	<PageHeader
+		title={node.title}
+		subtitle={`Guided walkthrough of the seven-phase content model. ${domainLabel(node.domain)}.`}
+	>
+		{#snippet titleSuffix()}
 			<PageHelp pageId="knowledge-graph" />
-		</div>
-		<p class="sub">Guided walkthrough of the seven-phase content model. {domainLabel(node.domain)}.</p>
-	</header>
+		{/snippet}
+	</PageHeader>
 
 	<section class="progress" aria-label="Progress">
 		<div class="progress-head">
@@ -247,26 +249,6 @@ function domainLabel(slug: string): string {
 
 	.crumb a:hover {
 		text-decoration: underline;
-	}
-
-	.title-row {
-		display: flex;
-		align-items: center;
-		gap: var(--space-sm);
-		flex-wrap: wrap;
-	}
-
-	.hd h1 {
-		margin: 0;
-		font-size: var(--font-size-xl);
-		letter-spacing: -0.02em;
-		color: var(--ink-body);
-	}
-
-	.sub {
-		margin: var(--space-2xs) 0 0;
-		color: var(--ink-subtle);
-		font-size: var(--font-size-body);
 	}
 
 	.progress {

@@ -1,5 +1,7 @@
 <script lang="ts">
 import { CONCEPT_GROUP_LABELS, ROUTES } from '@ab/constants';
+import EmptyState from '@ab/ui/components/EmptyState.svelte';
+import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
@@ -10,20 +12,20 @@ let { data }: { data: PageData } = $props();
 </svelte:head>
 
 <section class="page">
-	<header class="hd">
-		<p class="crumb"><a href={ROUTES.HELP}>Help</a> / Concepts</p>
-		<h1>Concepts</h1>
-		<p class="sub">
-			The ideas airboss is built on -- learning science, platform architecture, and aviation doctrine. {data.totalCount}
-			concept page{data.totalCount === 1 ? '' : 's'}.
-		</p>
-	</header>
+	<PageHeader
+		title="Concepts"
+		subtitle={`The ideas airboss is built on -- learning science, platform architecture, and aviation doctrine. ${data.totalCount} concept page${data.totalCount === 1 ? '' : 's'}.`}
+	>
+		{#snippet eyebrowSnippet()}
+			<a href={ROUTES.HELP}>Help</a> / Concepts
+		{/snippet}
+	</PageHeader>
 
 	{#if data.groups.length === 0}
-		<div class="empty">
-			<h2>No concept pages registered</h2>
-			<p>The concept library is empty. Ten foundational pages ship as Phase 2 of session-legibility-and-help-expansion.</p>
-		</div>
+		<EmptyState
+			title="No concept pages registered"
+			body="The concept library is empty. Ten foundational pages ship as Phase 2 of session-legibility-and-help-expansion."
+		/>
 	{:else}
 		{#each data.groups as group (group.group)}
 			<section class="group" aria-labelledby={`group-${group.group}`}>
@@ -48,49 +50,6 @@ let { data }: { data: PageData } = $props();
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-xl);
-	}
-
-	.crumb {
-		margin: 0 0 var(--space-xs);
-		font-size: var(--type-ui-label-size);
-		color: var(--ink-muted);
-	}
-
-	.crumb a {
-		color: inherit;
-		text-decoration: none;
-	}
-
-	.crumb a:hover {
-		color: var(--ink-body);
-		text-decoration: underline;
-	}
-
-	.hd h1 {
-		margin: 0;
-		font-size: var(--type-heading-2-size);
-		letter-spacing: -0.02em;
-	}
-
-	.sub {
-		margin: var(--space-2xs) 0 0;
-		color: var(--ink-muted);
-		max-width: 48rem;
-		line-height: 1.5;
-	}
-
-	.empty {
-		border: 1px dashed var(--edge-strong);
-		border-radius: var(--radius-lg);
-		padding: var(--space-2xl) var(--space-xl);
-		text-align: center;
-		color: var(--ink-muted);
-	}
-
-	.empty h2 {
-		margin: 0 0 var(--space-md);
-		font-size: var(--type-reading-lead-size);
-		color: var(--ink-body);
 	}
 
 	.group h2 {
