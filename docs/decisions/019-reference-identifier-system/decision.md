@@ -176,7 +176,15 @@ ACS uses slug-encoded edition (the publication ID, e.g. `faa-s-acs-25`). No `?at
 
 #### FAA forms (`forms`), InFOs (`info`), SAFOs (`safo`), TCDS (`tcds`), ASRS (`asrs`)
 
-Each gets its own corpus and resolver. Per-corpus rules defined when the corpus is added.
+```text
+airboss-ref:forms/faa-8710-1?at=2024                    FAA Form 8710-1 (airman cert app)
+airboss-ref:info/22002?at=2022                          InFO 22002
+airboss-ref:safo/23004?at=2023                          SAFO 23004
+airboss-ref:tcds/A4EA/rev-29?at=2023                    Type Certificate Data Sheet A4EA, rev 29
+airboss-ref:asrs/1234567?at=2024                        ASRS report by ACN
+```
+
+Each gets its own corpus and resolver. Per-corpus rules (locator shape, edition convention) finalized when the corpus's WP lands; the examples above show the expected shape.
 
 ### 1.3 Edition pinning
 
@@ -795,19 +803,19 @@ The migration tool itself is a Phase 9 WP deliverable; this ADR specifies the ru
 
 Before this ADR moves to `accepted`:
 
-- [ ] §1 covers each corpus listed in §1.2 with at least one example identifier per corpus.
-- [ ] §1.5 lists every validation case with a tier assignment (ERROR / WARNING / NOTICE).
-- [ ] §2.3 specifies the `@ab/sources` query API as a named list of TypeScript function signatures.
-- [ ] §2.4 specifies the lifecycle state machine with all 5 states (`draft`, `pending`, `accepted`, `retired`, `superseded`) and transition rules.
-- [ ] §3.1 lists every render mode in the table; no row says "TBD".
-- [ ] §4 has exactly 5 tier rows.
-- [ ] STORAGE.md updated to match §4.
-- [ ] §5 (versioning workflow) does not reference `last_verified`, `verification_due`, `references_pinned_to`.
-- [ ] §6 specifies behavior for: silent alias, content-change alias, cross-section alias, split alias, merge alias, supersession with ack, supersession marked historical, cascade resolution.
-- [ ] §8 lists CFR ingestion (phase 3) before renderer (phase 4).
-- [ ] §10 has zero rows with weaker triggers than "when X ships" or "when Y is requested" or "DROPPED".
-- [ ] [revisit.md](revisit.md) exists and lists every deferred item with a concrete trigger and a path to action.
-- [ ] No occurrence of `TBD`, `???`, `tbd` in this document.
+- [x] §1 covers each corpus listed in §1.2 with at least one example identifier per corpus.
+- [x] §1.5 lists every validation case with a tier assignment (ERROR / WARNING / NOTICE).
+- [x] §2.3 specifies the `@ab/sources` query API as a named list of TypeScript function signatures.
+- [x] §2.4 specifies the lifecycle state machine with all 5 states (`draft`, `pending`, `accepted`, `retired`, `superseded`) and transition rules.
+- [x] §3.1 lists every render mode in the table; no row says "TBD".
+- [x] §4 has exactly 5 tier rows.
+- [x] STORAGE.md updated to match §4.
+- [x] §5 (versioning workflow) does not reference `last_verified`, `verification_due`, `references_pinned_to`.
+- [x] §6 specifies behavior for: silent alias, content-change alias, cross-section alias, split alias, merge alias, supersession with ack, supersession marked historical, cascade resolution.
+- [x] §8 lists CFR ingestion (phase 3) before renderer (phase 4).
+- [x] §10 has zero rows with weaker triggers than "when X ships" or "when Y is requested" or "DROPPED".
+- [x] [revisit.md](revisit.md) exists and lists every deferred item with a concrete trigger and a path to action.
+- [x] No occurrence of `TBD`, `???`, `tbd` in this document.
 
 ## 12. Worked example -- happy path
 

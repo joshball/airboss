@@ -1,14 +1,18 @@
 # Storage policy
 
-This is the canonical rule for where content artifacts live in the airboss repo. Established by [ADR 018](../decisions/018-source-artifact-storage-policy/decision.md). Every new content corpus follows it.
+This is the canonical rule for where content artifacts live in the airboss repo. Established by [ADR 018](../decisions/018-source-artifact-storage-policy/decision.md) and extended to five tiers by [ADR 019 §4](../decisions/019-reference-identifier-system/decision.md). Every new content corpus follows it.
 
-## The three tiers
+## The five tiers
 
-| Tier                      | What it is                                                                                                              | Where                                                                  | Tracked how                                    | Renders to user? |
-| ------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- | ---------------------------------------------- | ---------------- |
-| **Source documents**      | The original artifact published by an outside authority. Bytes are kept locally for re-extraction; not in the repo.     | `$AIRBOSS_HANDBOOK_CACHE/<corpus>/<doc>/<edition>/source.<ext>`        | Local cache + gitignore + LFS plumbing dormant | No               |
-| **Extracted derivatives** | What the ingestion pipeline produces from the source: markdown, images, tables, transcripts, the manifest.              | Alongside the corpus root inside the repo                              | Inline git                                     | Yes (after seed) |
-| **Generated artifacts**   | What the seed pipeline produces from the derivatives: DB rows, search indexes, computed graph data.                     | Postgres / app runtime                                                 | Not in repo at all                             | Yes (live)       |
+| Tier                      | What it is                                                                                                                                    | Where                                                           | Tracked how                                    | Renders to user? |
+| ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- | ---------------------------------------------- | ---------------- |
+| **Source documents**      | The original artifact published by an outside authority. Bytes are kept locally for re-extraction; not in the repo.                           | `$AIRBOSS_HANDBOOK_CACHE/<corpus>/<doc>/<edition>/source.<ext>` | Local cache + gitignore + LFS plumbing dormant | No               |
+| **Extracted derivatives** | What the ingestion pipeline produces from the source: markdown, images, tables, transcripts, the manifest.                                    | Alongside the corpus root inside the repo                       | Inline git                                     | Yes (after seed) |
+| **Indexed**               | Structured DB rows that mirror derivatives (sections, paragraphs, figures, tables) so resolvers can serve them at render time.                | Postgres                                                        | Not in repo; rebuilt from derivatives          | Yes (live)       |
+| **Computed**              | Embeddings, full-text indexes, knowledge graph edges, cross-corpus joins. Per-artifact dependency contracts (per ADR 019 §4.1) drive rebuild. | Postgres (different tables)                                     | Not in repo; rebuilt on dependency change      | Yes (live)       |
+| **Generated artifacts**   | User-state computations (mastery scores, leaderboards, recommendations) produced from interaction.                                            | Postgres / app runtime                                          | Not in repo at all                             | Yes (live)       |
+
+ADR 018 originally framed this as three tiers (source / derivative / generated). ADR 019 split the in-DB layer into **indexed** (structural mirror of derivatives), **computed** (cross-artifact derived data with explicit invalidation), and **generated** (user-state). The mapping is additive: nothing about the source / derivative tiers changed; the DB-resident tiers were named explicitly so invalidation contracts have somewhere to attach.
 
 ## Cache location
 
