@@ -180,6 +180,17 @@ export interface AcsLensFilters {
 	areaCodes?: string[];
 	taskCodes?: string[];
 	elementCodes?: string[];
+	/**
+	 * Airplane class scope. When set to a non-empty array, internal nodes whose
+	 * `classes` column is set are filtered to those that intersect with this
+	 * array. Class-agnostic nodes (`classes IS NULL`) always pass. Useful when
+	 * a goal targets a class-restricted credential (e.g. MEI = AMEL/AMES tasks
+	 * within CFI Airplane ACS-25).
+	 *
+	 * Values are members of `AIRPLANE_CLASS_VALUES` (`asel`/`amel`/`ases`/`ames`).
+	 * Empty / undefined = no filtering.
+	 */
+	classes?: string[];
 }
 
 /**
@@ -322,12 +333,28 @@ function buildAcsSyllabusTree(
 		if (filters.areaCodes !== undefined && filters.areaCodes.length > 0 && !filters.areaCodes.includes(area.code)) {
 			continue;
 		}
+		if (!nodeMatchesClassFilter(area, filters)) continue;
 		const areaNode = buildAcsSubtree(area, childrenByParent, leafMastery, linksByLeaf, goalWeight, filters);
 		certNode.children.push(areaNode);
 		appendRollupSource(areaNode, rollupBuckets);
 	}
 	certNode.rollup = computeMasteryRollup(rollupBuckets);
 	return certNode;
+}
+
+/**
+ * True when a syllabus_node passes the lens's `classes` filter. Class-agnostic
+ * rows (`classes IS NULL`) always pass; class-tagged rows pass when their
+ * tags intersect the filter array. Empty / undefined filter = pass.
+ */
+function nodeMatchesClassFilter(node: SyllabusNodeRow, filters: AcsLensFilters): boolean {
+	if (filters.classes === undefined || filters.classes.length === 0) return true;
+	const nodeClasses = node.classes;
+	if (nodeClasses === null || nodeClasses === undefined) return true;
+	for (const cls of nodeClasses) {
+		if (filters.classes.includes(cls)) return true;
+	}
+	return false;
 }
 
 function buildAcsSubtree(
@@ -375,15 +402,16 @@ function buildAcsSubtree(
 			leaves: lensLeaves,
 		};
 	}
-	// Internal node: filter children by task/element codes, then aggregate.
+	// Internal node: filter children by task/element codes + class scoping,
+	// then aggregate.
 	const filteredChildren = children.filter((c) => {
 		if (c.level === 'task' && filters.taskCodes !== undefined && filters.taskCodes.length > 0) {
-			return filters.taskCodes.includes(c.code);
+			if (!filters.taskCodes.includes(c.code)) return false;
 		}
 		if (c.level === 'element' && filters.elementCodes !== undefined && filters.elementCodes.length > 0) {
-			return filters.elementCodes.includes(c.code);
+			if (!filters.elementCodes.includes(c.code)) return false;
 		}
-		return true;
+		return nodeMatchesClassFilter(c, filters);
 	});
 	const childNodes = filteredChildren.map((c) =>
 		buildAcsSubtree(c, childrenByParent, leafMastery, linksByLeaf, goalWeight, filters),

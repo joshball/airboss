@@ -513,6 +513,13 @@ describe('getKnowledgeNodesForSyllabusLeaf', () => {
 		expect(links[0]?.node.id).toBe(KN_NODE_ID);
 		expect(links[0]?.weight).toBeCloseTo(0.8);
 	});
+
+	it('passes class-agnostic leaves through every class filter', async () => {
+		// K1_ID's syllabus_node has classes=null. Any class filter must let it
+		// pass.
+		const links = await getKnowledgeNodesForSyllabusLeaf(K1_ID, { classes: ['amel', 'ames'] });
+		expect(links.length).toBe(1);
+	});
 });
 
 describe('getSyllabusLeavesForKnowledgeNode', () => {
@@ -521,6 +528,11 @@ describe('getSyllabusLeavesForKnowledgeNode', () => {
 		expect(rows.length).toBe(1);
 		expect(rows[0]?.leaf.id).toBe(K1_ID);
 		expect(rows[0]?.syllabus.id).toBe(SYL_ID);
+	});
+
+	it('passes class-agnostic leaves through every class filter', async () => {
+		const rows = await getSyllabusLeavesForKnowledgeNode(KN_NODE_ID, { classes: ['asel'] });
+		expect(rows.length).toBe(1);
 	});
 });
 
@@ -682,5 +694,115 @@ describe('rebuildKnowledgeNodeRelevanceCache (placeholder)', () => {
 		const report = await rebuildKnowledgeNodeRelevanceCache({ dryRun: true });
 		expect(report.dryRun).toBe(true);
 		expect(report.knowledgeNodesUpdated).toBe(0);
+	});
+});
+
+describe('syllabus_node.classes column (Phase 14 schema delta)', () => {
+	it('accepts NULL (class-agnostic, the common case)', async () => {
+		const id = generateSyllabusNodeId();
+		const now = new Date();
+		await upsertSyllabusNode({
+			id,
+			syllabusId: SYL_ID,
+			parentId: null,
+			level: 'area',
+			ordinal: 200,
+			code: `${SUITE_TOKEN}-classes-null`,
+			title: 'class-agnostic area',
+			description: '',
+			triad: null,
+			requiredBloom: null,
+			isLeaf: false,
+			airbossRef: null,
+			citations: [],
+			classes: null,
+			contentHash: null,
+			seedOrigin: SUITE_TAG,
+			createdAt: now,
+			updatedAt: now,
+		});
+		const rows = await db.select().from(syllabusNode).where(eq(syllabusNode.id, id));
+		expect(rows[0]?.classes).toBeNull();
+	});
+
+	it('accepts a non-empty subset of AIRPLANE_CLASS_VALUES', async () => {
+		const id = generateSyllabusNodeId();
+		const now = new Date();
+		await upsertSyllabusNode({
+			id,
+			syllabusId: SYL_ID,
+			parentId: null,
+			level: 'area',
+			ordinal: 201,
+			code: `${SUITE_TOKEN}-classes-amel-ames`,
+			title: 'AMEL/AMES-only task',
+			description: '',
+			triad: null,
+			requiredBloom: null,
+			isLeaf: false,
+			airbossRef: null,
+			citations: [],
+			classes: ['amel', 'ames'],
+			contentHash: null,
+			seedOrigin: SUITE_TAG,
+			createdAt: now,
+			updatedAt: now,
+		});
+		const rows = await db.select().from(syllabusNode).where(eq(syllabusNode.id, id));
+		expect(rows[0]?.classes).toStrictEqual(['amel', 'ames']);
+	});
+
+	it('rejects an empty array (use NULL for class-agnostic)', async () => {
+		const id = generateSyllabusNodeId();
+		const now = new Date();
+		await expect(
+			upsertSyllabusNode({
+				id,
+				syllabusId: SYL_ID,
+				parentId: null,
+				level: 'area',
+				ordinal: 202,
+				code: `${SUITE_TOKEN}-classes-empty`,
+				title: 'empty classes',
+				description: '',
+				triad: null,
+				requiredBloom: null,
+				isLeaf: false,
+				airbossRef: null,
+				citations: [],
+				classes: [],
+				contentHash: null,
+				seedOrigin: SUITE_TAG,
+				createdAt: now,
+				updatedAt: now,
+			}),
+		).rejects.toThrow();
+	});
+
+	it('rejects a value outside AIRPLANE_CLASS_VALUES', async () => {
+		const id = generateSyllabusNodeId();
+		const now = new Date();
+		await expect(
+			upsertSyllabusNode({
+				id,
+				syllabusId: SYL_ID,
+				parentId: null,
+				level: 'area',
+				ordinal: 203,
+				code: `${SUITE_TOKEN}-classes-bogus`,
+				title: 'bogus class',
+				description: '',
+				triad: null,
+				requiredBloom: null,
+				isLeaf: false,
+				airbossRef: null,
+				citations: [],
+				classes: ['helicopter'],
+				contentHash: null,
+				seedOrigin: SUITE_TAG,
+				createdAt: now,
+				updatedAt: now,
+			}),
+		).rejects.toThrow();
 	});
 });

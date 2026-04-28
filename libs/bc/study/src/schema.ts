@@ -18,6 +18,7 @@
 import { bauthUser } from '@ab/auth/schema';
 import {
 	ACS_TRIAD_VALUES,
+	AIRPLANE_CLASS_VALUES,
 	BLOOM_LEVEL_VALUES,
 	CARD_FEEDBACK_SIGNAL_VALUES,
 	CARD_STATE_VALUES,
@@ -86,7 +87,7 @@ import {
 	SYLLABUS_STATUSES,
 } from '@ab/constants';
 import { timestamps } from '@ab/db';
-import type { StructuredCitation } from '@ab/types';
+import type { RelevanceEntry, StructuredCitation } from '@ab/types';
 import { sql } from 'drizzle-orm';
 import {
 	type AnyPgColumn,
@@ -109,6 +110,17 @@ export const studySchema = pgSchema(SCHEMAS.STUDY);
 /** Serialize a list of text values into a SQL `IN (...)` fragment for CHECK. */
 function inList(values: readonly string[]): string {
 	return values.map((v) => `'${v.replace(/'/g, "''")}'`).join(', ');
+}
+
+/**
+ * Serialize a list of text values into a JSON array literal for embedding in
+ * a CHECK constraint that uses jsonb containment (`<@`) to validate enum
+ * membership. Single quotes are escaped at the SQL layer (the result is
+ * embedded between single quotes).
+ */
+function jsonStringArray(values: readonly string[]): string {
+	const escaped = values.map((v) => `"${v.replace(/"/g, '\\"').replace(/'/g, "''")}"`);
+	return `[${escaped.join(', ')}]`;
 }
 
 /**
@@ -218,6 +230,18 @@ export const knowledgeNode = studySchema.table(
 		 * informational; a follow-on cleanup can drop it.
 		 */
 		referencesV2Migrated: boolean('references_v2_migrated').notNull().default(false),
+		/**
+		 * Derived cache of `(cert, bloom, priority)` triples. Rebuilt from
+		 * authored syllabi by `bun run db build:relevance`; never authored
+		 * directly. Empty default so existing rows materialize as zero-relevance
+		 * before the first rebuild lands. The YAML frontmatter `relevance:`
+		 * field is dropped from `course/knowledge/<slug>/node.md` once the
+		 * cache rebuild is verified equivalent (cert-syllabus WP phase 22).
+		 *
+		 * Highest-bloom-wins per `(node, cert)` pair after dedup. Read by the
+		 * existing dashboard / lens code unchanged from the authored shape.
+		 */
+		relevance: jsonb('relevance').$type<RelevanceEntry[]>().notNull().default([]),
 		...timestamps(),
 	},
 	(t) => ({
@@ -1568,6 +1592,17 @@ export const syllabusNode = studySchema.table(
 		 */
 		citations: jsonb('citations').$type<StructuredCitation[]>().notNull().default([]),
 		/**
+		 * Airplane-class scoping for ACS / PTS rows that the FAA tags with a
+		 * parenthetical class restriction (e.g.
+		 * `Task A. Maneuvering with One Engine Inoperative (AMEL, AMES)`).
+		 * NULL = class-agnostic (the row applies to every class for this
+		 * credential category, the common case). Non-null = a non-empty
+		 * subset of {@link AIRPLANE_CLASSES}. The lens framework filters by
+		 * this column when a goal targets a class-specific credential
+		 * (e.g. MEI = AMEL/AMES tasks within CFI Airplane ACS-25).
+		 */
+		classes: jsonb('classes').$type<string[]>(),
+		/**
 		 * SHA-256 of the YAML node entry (canonicalized). Drives idempotent
 		 * seed: an unchanged node entry is a no-op.
 		 */
@@ -1619,6 +1654,19 @@ export const syllabusNode = studySchema.table(
 			sql.raw(`"airboss_ref" IS NULL OR "airboss_ref" LIKE 'airboss-ref:%'`),
 		),
 		ordinalNonNegativeCheck: check('syllabus_node_ordinal_check', sql.raw(`"ordinal" >= 0`)),
+		// Class scoping: NULL or every element drawn from AIRPLANE_CLASS_VALUES.
+		// Non-empty when set; empty array would be ambiguous with NULL and is
+		// rejected to keep the "this row applies to every class" semantics
+		// consistent. Postgres CHECK can't carry a subquery, so we test
+		// containment: the class array is a subset of the canonical class
+		// array (which contains every legal value exactly once). `<@` is
+		// jsonb's "contained-by" operator.
+		classesCheck: check(
+			'syllabus_node_classes_check',
+			sql.raw(
+				`"classes" IS NULL OR (jsonb_typeof("classes") = 'array' AND jsonb_array_length("classes") > 0 AND "classes" <@ '${jsonStringArray(AIRPLANE_CLASS_VALUES)}'::jsonb)`,
+			),
+		),
 	}),
 );
 

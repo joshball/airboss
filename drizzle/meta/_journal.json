@@ -29,6 +29,13 @@
       "when": 1777315974456,
       "tag": "0003_cert_syllabus_goal",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1777336755837,
+      "tag": "0004_syllabus_node_classes_and_knowledge_node_relevance",
+      "breakpoints": true
     }
   ]
 }
