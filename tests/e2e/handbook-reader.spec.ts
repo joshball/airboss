@@ -81,19 +81,47 @@ test.describe.configure({ mode: 'serial' });
 // Helpers --------------------------------------------------------------------
 
 /**
+ * Wait for a SvelteKit non-enhanced form action POST to complete.
+ *
+ * Non-enhanced forms post to `<page>?/<action>` and SvelteKit responds with
+ * the rendered page (200). The browser navigates to that response. We wait
+ * for both the POST response (DB write committed) AND the navigation to
+ * settle (window URL + DOM rendered, load event fired). Without both, a
+ * subsequent `page.goto` collides with the in-flight nav and aborts with
+ * ERR_ABORTED or "Navigation interrupted by another navigation".
+ *
+ * The matcher pins on both method=POST and the action URL fragment so
+ * concurrent heartbeat POSTs and other background traffic don't false-
+ * trigger the response wait.
+ */
+async function waitForFormAction(
+	page: import('@playwright/test').Page,
+	actionName: string,
+	trigger: () => Promise<void>,
+): Promise<void> {
+	const responsePromise = page.waitForResponse(
+		(res) => res.request().method() === 'POST' && res.url().includes(`?/${actionName}`),
+	);
+	const urlPromise = page.waitForURL((u) => u.search.includes(`/${actionName}`), { timeout: 10_000 });
+	await trigger();
+	await Promise.all([responsePromise, urlPromise]);
+	await page.waitForLoadState('load');
+}
+
+/**
  * Reset the learner's read-state for the section to a known baseline
  * (status=unread, comprehended=false). The "Re-read this section" button
  * performs exactly this transition; notes are preserved per spec but they
  * don't affect the tests below.
  */
 async function resetReadState(page: import('@playwright/test').Page): Promise<void> {
-	// The reread form is non-enhanced -- submitting triggers a POST + 303
-	// redirect + GET cycle. Wait for the follow-up nav to settle so the
-	// next assertion sees the reloaded read-state.
-	await Promise.all([
-		page.waitForLoadState('networkidle'),
-		page.locator('form.reread-form button[type="submit"]').click(),
-	]);
+	// The reread form is non-enhanced -- submitting POSTs to
+	// `?/mark-reread` and SvelteKit returns 200 with the re-rendered page.
+	// Wait for that POST to land before the next assertion; a `networkidle`
+	// wait would also drag in the in-page heartbeat POSTs and stall.
+	await waitForFormAction(page, 'mark-reread', async () => {
+		await page.locator('form.reread-form button[type="submit"]').click();
+	});
 	await expect(page.locator('input[type=radio][name=status][value=unread]')).toBeChecked();
 }
 
@@ -109,14 +137,13 @@ async function setStatusViaSegment(
 ): Promise<void> {
 	// The segmented control's <input type=radio> is visually hidden
 	// (opacity:0; pointer-events:none); checking via Playwright requires
-	// `force: true`. The radio's onchange fires `form.requestSubmit()`, and
-	// because the form is non-enhanced this triggers a full POST + 303 +
-	// GET cycle. Wait for the network to settle before the next assertion.
+	// `force: true`. The radio's onchange fires `form.requestSubmit()`,
+	// posting to `?/set-status`. Match the action POST by URL fragment so
+	// in-flight heartbeat POSTs don't false-trigger.
 	const radio = page.locator(`input[type=radio][name=status][value=${value}]`);
-	await Promise.all([
-		page.waitForLoadState('networkidle'),
-		radio.check({ force: true }),
-	]);
+	await waitForFormAction(page, 'set-status', async () => {
+		await radio.check({ force: true });
+	});
 	await expect(radio).toBeChecked();
 }
 
@@ -217,23 +244,32 @@ test.describe('handbook reader: read-state controls', () => {
 
 		// Re-navigate (fresh server-load) and confirm the status persisted to DB.
 		await page.goto(url);
+		// Wait for hydration before driving the checkbox: the form action
+		// onchange handler that calls `form.requestSubmit()` is wired up only
+		// after Svelte 5 hydrates. Without this wait, `check()` toggles the
+		// DOM `checked` flag but no submit fires, and the test times out
+		// waiting for the action POST.
+		await page.waitForLoadState('networkidle');
 		await expect(page.locator('input[type=radio][name=status][value=read]')).toBeChecked();
 
 		// Toggle "Read but didn't get it" -- enabled now that status >= reading.
+		// Wait for the action POST to complete and the page to re-render
+		// before reloading; `waitForURL` against the action search fragment
+		// is unreliable here because the URL may already match the predicate
+		// before the form submit fires. `waitForFormAction` matches the
+		// outbound POST so the wait can't false-trigger on stale state.
 		const checkbox = page.locator('input[type=checkbox][name=comprehended]');
 		await expect(checkbox).toBeEnabled();
-		// SvelteKit form-action POST followed by SvelteKit's own redirect/load.
-		// Wait until the URL settles back on the section path (not `?/...`)
-		// before doing our own navigation, otherwise `page.goto` races with
-		// the in-flight action redirect.
-		await checkbox.check();
-		await page.waitForURL((u) => u.pathname === url && !u.search.includes('/set-comprehended'));
+		await waitForFormAction(page, 'set-comprehended', async () => {
+			await checkbox.check();
+		});
 		await page.goto(url);
 		await expect(page.locator('input[type=checkbox][name=comprehended]')).toBeChecked();
 
 		// Re-read clears status + comprehended. Same wait pattern.
-		await page.locator('form.reread-form button[type="submit"]').click();
-		await page.waitForURL((u) => u.pathname === url && !u.search.includes('/reread'));
+		await waitForFormAction(page, 'mark-reread', async () => {
+			await page.locator('form.reread-form button[type="submit"]').click();
+		});
 		await expect(page.locator('input[type=radio][name=status][value=unread]')).toBeChecked();
 		await expect(page.locator('input[type=checkbox][name=comprehended]')).not.toBeChecked();
 	});

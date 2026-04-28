@@ -4,7 +4,7 @@
  */
 
 import { HANDBOOK_ERRATA_PATCH_KINDS } from '@ab/constants';
-import { cleanup, render, screen } from '@testing-library/svelte';
+import { cleanup, render } from '@testing-library/svelte';
 import { afterEach, describe, expect, it } from 'vitest';
 import ErrataEntry, { type ErrataEntryDisplay } from '../src/handbooks/ErrataEntry.svelte';
 
