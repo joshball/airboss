@@ -303,6 +303,7 @@ def _override_edition(config: HandbookConfig, edition: str) -> HandbookConfig:
         chapter_cover_strip_max_lines=config.chapter_cover_strip_max_lines,
         chapter_overrides=config.chapter_overrides,
         page_label_walk_back=config.page_label_walk_back,
+        errata=config.errata,
         raw_yaml=config.raw_yaml,
     )
 
