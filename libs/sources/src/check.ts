@@ -12,6 +12,7 @@
 
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
+import { hydrateRegsFromDerivatives } from './bootstrap.ts';
 import { parseLesson } from './lesson-parser.ts';
 import { isParseError, parseIdentifier } from './parser.ts';
 import { productionRegistry } from './registry/index.ts';
@@ -45,6 +46,17 @@ export interface ValidateOptions {
 	 * this to isolate fixture corpora.
 	 */
 	readonly cwd?: string;
+	/**
+	 * Whether to hydrate the runtime registry from on-disk derivatives before
+	 * validating. Defaults to `true` when the caller uses the default
+	 * `productionRegistry`; tests that pass an explicit `registry` (e.g.
+	 * `NULL_REGISTRY` or fixture-primed registry) keep the default `false`
+	 * so they don't surprise-promote real corpora into the test process.
+	 *
+	 * Phase 9 adds the regs-corpus bootstrap; future phases extend it to other
+	 * corpora.
+	 */
+	readonly bootstrap?: boolean;
 }
 
 export interface ValidateReport {
@@ -63,6 +75,13 @@ export function validateReferences(opts: ValidateOptions = {}): ValidateReport {
 	const registry = opts.registry ?? productionRegistry;
 	const cwd = opts.cwd ?? process.cwd();
 	const roots = opts.contentPaths ?? LESSON_CONTENT_PATHS;
+	// Hydrate by default only when the caller is using the production registry
+	// and didn't opt out. Tests passing `registry: NULL_REGISTRY` (or any other
+	// explicit registry) keep the registry untouched.
+	const shouldBootstrap = opts.bootstrap ?? opts.registry === undefined;
+	if (shouldBootstrap) {
+		hydrateRegsFromDerivatives({ cwd });
+	}
 
 	const findings: ValidationFinding[] = [];
 	let filesScanned = 0;

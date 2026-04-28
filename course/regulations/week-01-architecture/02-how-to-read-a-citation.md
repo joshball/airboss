@@ -210,5 +210,5 @@ This is the second of four foundation lessons in Week 1. The first ([01-title-14
 ## Related
 
 - Live source: [eCFR Title 14](https://www.ecfr.gov/current/title-14)
-- Live source: [eCFR Part 91](https://www.ecfr.gov/current/title-14/chapter-I/subchapter-F/part-91)
+- Live source: [eCFR Part 91](airboss-ref:regs/cfr-14/91?at=2026)
 - Drill bank: [drills.md](drills.md)
