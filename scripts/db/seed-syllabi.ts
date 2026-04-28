@@ -27,32 +27,32 @@ import { readFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
-	ACS_TRIAD_VALUES,
-	type ACSTriad,
-	BLOOM_LEVEL_VALUES,
-	type BloomLevel,
-	SYLLABUS_KIND_VALUES,
-	type SyllabusKind,
-	SYLLABUS_NODE_LEVELS,
-	SYLLABUS_STATUS_VALUES,
-	type SyllabusStatus,
-} from '@ab/constants';
-import { db } from '@ab/db';
-import {
 	knowledgeNode,
 	type NewSyllabusNodeLinkRow,
+	replaceSyllabusNodeLinks,
 	syllabus,
 	syllabusNode,
 	upsertSyllabus,
 	upsertSyllabusNode,
 	validateAirbossRefForLeaf,
-	replaceSyllabusNodeLinks,
 } from '@ab/bc-study';
-import { reference } from '../../libs/bc/study/src/schema';
+import {
+	ACS_TRIAD_VALUES,
+	type ACSTriad,
+	BLOOM_LEVEL_VALUES,
+	type BloomLevel,
+	SYLLABUS_KIND_VALUES,
+	SYLLABUS_NODE_LEVELS,
+	SYLLABUS_STATUS_VALUES,
+	type SyllabusKind,
+	type SyllabusStatus,
+} from '@ab/constants';
+import { db } from '@ab/db';
 import { generateSyllabusId, generateSyllabusNodeId, generateSyllabusNodeLinkId } from '@ab/utils';
 import { eq } from 'drizzle-orm';
 import { parse } from 'yaml';
 import { z } from 'zod';
+import { reference } from '../../libs/bc/study/src/schema';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = resolve(HERE, '..', '..');
