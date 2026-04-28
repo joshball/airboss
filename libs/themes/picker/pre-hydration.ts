@@ -11,14 +11,23 @@
  * coding the list in three `app.html` files would let the lists drift
  * silently away from `listThemes()`. The fix:
  *
- *   1. `bun themes:emit` walks `listThemes()` and writes
- *      `libs/themes/generated/pre-hydration.js` -- the script body ready
- *      to drop into a `<script>` tag.
- *   2. The same step writes `libs/themes/generated/pre-hydration.ts` --
- *      a typed module exporting the script body string and the SHA-256
- *      CSP hash. `svelte.config.js` imports the hash; `hooks.server.ts`
- *      imports the body and substitutes it into `<script>%theme-pre-hydration%</script>`
- *      via `transformPageChunk`.
+ *   `bun themes:emit` walks `listThemes()` and writes
+ *   `libs/themes/generated/pre-hydration.ts` -- a typed module exporting
+ *   the script body string and the SHA-256 CSP hash.
+ *   `svelte.config.js` imports the hash; `hooks.server.ts` imports the
+ *   body and substitutes it into `<script>%theme-pre-hydration%</script>`
+ *   via `transformPageChunk`.
+ *
+ *   We previously also emitted a sibling `pre-hydration.js` carrying the
+ *   raw script body for direct inlining. Nothing imported it, and vite's
+ *   bare-specifier resolution preferred the `.js` over the `.ts` for
+ *   `@ab/themes/generated/pre-hydration`, so each app's hooks ended up
+ *   importing the side-effecting raw script and seeing `undefined` for
+ *   the named export -- breaking FOUC mitigation under a strict CSP and
+ *   short-circuiting hydration on every sim page (the inline body
+ *   serialized as `undefined`, the CSP hash no longer matched, the
+ *   browser blocked the script, and the `<div id="app">` never mounted).
+ *   The `.js` is no longer emitted.
  *
  * Build-time codegen (chosen over a Vite plugin) because it keeps the
  * generated artifact in source control. The CI determinism check that
@@ -137,5 +146,11 @@ export function injectPreHydrationScript(html: string, scriptBody: string): stri
 	// only swaps the first occurrence (the comment), leaving the real
 	// script tag's `%theme-pre-hydration%` intact and the script never
 	// runs. replaceAll fixes both occurrences.
-	return html.replaceAll(PRE_HYDRATION_PLACEHOLDER, scriptBody);
+	//
+	// Function callback (not a literal replacement string): a literal
+	// would let `$&`, `$1`, `$$`, etc. inside the script body trigger
+	// `String.prototype.replaceAll`'s special-pattern substitution and
+	// silently mangle the body. The callback path treats the body as
+	// opaque -- byte-for-byte identical to the source.
+	return html.replaceAll(PRE_HYDRATION_PLACEHOLDER, () => scriptBody);
 }
