@@ -18,7 +18,7 @@ from pathlib import Path
 
 import yaml
 
-from .handbooks.base import ErrataConfig
+from .handbooks.base import ErrataConfig, ErrataDismissal
 from .paths import config_dir
 
 # Section-tree extraction strategy selector.
@@ -103,6 +103,11 @@ class HandbookConfig:
     # Validation rules: id is kebab-case 3-32 chars; source_url is HTTPS;
     # published_at is ISO 8601 date; parser names a registered layout.
     errata: list[ErrataConfig] = field(default_factory=list)
+    # Discovery dismissal stop-list. Each entry silences a discovery
+    # candidate the user reviewed and decided is not a real errata. The
+    # discovery dispatcher reads this list to mark matching candidates as
+    # `dismissed` across re-runs (idempotent; no GitHub issue re-open).
+    dismissed_errata: list[ErrataDismissal] = field(default_factory=list)
     # Raw YAML payload, exposed so strategy modules can read their own blocks
     # (`toc`, `heading_style`, `prompt`) without each one re-parsing the file.
     raw_yaml: dict[str, object] = field(default_factory=dict)
@@ -195,6 +200,7 @@ def load_config(document_slug: str) -> HandbookConfig:
         )
 
     errata = _load_errata_list(raw.get("errata"), config_path)
+    dismissed_errata = _load_dismissed_errata_list(raw.get("dismissed_errata"), config_path)
 
     return HandbookConfig(
         document_slug=raw["document_slug"],
@@ -217,6 +223,7 @@ def load_config(document_slug: str) -> HandbookConfig:
         chapter_overrides=chapter_overrides,
         page_label_walk_back=walk_back,
         errata=errata,
+        dismissed_errata=dismissed_errata,
         raw_yaml=raw,
     )
 
@@ -296,4 +303,53 @@ def _load_errata_list(raw: object, config_path: Path) -> list[ErrataConfig]:
         )
     # Order by published_at so apply-pipeline iteration is deterministic.
     out.sort(key=lambda e: e.published_at)
+    return out
+
+
+_SHA256_PATTERN = re.compile(r'^[0-9a-f]{64}$')
+
+
+def _load_dismissed_errata_list(raw: object, config_path: Path) -> list[ErrataDismissal]:
+    """Parse and validate the YAML ``dismissed_errata:`` list.
+
+    Each entry must specify ``url`` and/or ``sha256``; entries with neither
+    are rejected (silent dismissals would be invisible from the YAML side).
+    ``reason`` is a free-form note retained for audit and surfaced in the
+    discovery report so future readers see why the entry was suppressed.
+    """
+    if raw is None:
+        return []
+    if not isinstance(raw, list):
+        raise ValueError(
+            f"dismissed_errata in {config_path} must be a list; "
+            f"got {type(raw).__name__}."
+        )
+    out: list[ErrataDismissal] = []
+    for idx, entry in enumerate(raw):
+        if not isinstance(entry, dict):
+            raise ValueError(
+                f"dismissed_errata[{idx}] in {config_path} must be a mapping; "
+                f"got {type(entry).__name__}."
+            )
+        url_raw = entry.get('url')
+        sha_raw = entry.get('sha256')
+        url = str(url_raw) if url_raw is not None else None
+        sha256 = str(sha_raw) if sha_raw is not None else None
+        if url is None and sha256 is None:
+            raise ValueError(
+                f"dismissed_errata[{idx}] in {config_path} must specify "
+                f"`url`, `sha256`, or both."
+            )
+        if url is not None and not url.startswith('https://'):
+            raise ValueError(
+                f"dismissed_errata[{idx}].url={url!r} in {config_path} "
+                f"must be HTTPS."
+            )
+        if sha256 is not None and not _SHA256_PATTERN.match(sha256):
+            raise ValueError(
+                f"dismissed_errata[{idx}].sha256={sha256!r} in {config_path} "
+                f"must be a hex SHA-256 (64 lowercase hex chars)."
+            )
+        reason = str(entry.get('reason', '')).strip()
+        out.append(ErrataDismissal(url=url, sha256=sha256, reason=reason))
     return out

@@ -87,3 +87,15 @@ errata:
     published_at: '2025-10-20'
     parser: additive-paragraph
 
+# Discovery dismissal stop-list. Each entry silences a candidate that
+# `bun run sources discover-errata` would otherwise re-flag every week.
+# Schema: at least one of `url` or `sha256`; optional `reason` is a
+# free-form audit note. Dismissal is honored across re-runs; the
+# discovery dispatcher will not re-open a GitHub issue for the URL.
+#
+# Example:
+#   dismissed_errata:
+#     - url: https://www.faa.gov/some/path/press-release.pdf
+#       reason: "press release, not an errata"
+dismissed_errata: []
+

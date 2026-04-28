@@ -350,6 +350,31 @@ type HandbookCatalogueEntry = {
 };
 ```
 
+## Discovery dismissal (false-positive suppression)
+
+Per-handbook YAML configs grow a sibling `dismissed_errata:` list in addition to the existing `errata:` list. A dismissal is the user's "I reviewed this candidate, it is not a real errata, do not surface it again" signal. Because YAML is the single declarative source of truth for what a handbook knows about, dismissals belong there too.
+
+Schema (one-line edit closes a candidate forever):
+
+```yaml
+dismissed_errata:
+  - url: https://www.faa.gov/.../press-release.pdf
+    reason: "press release, not an errata"
+  - sha256: "<64-char hex>"
+    reason: "duplicate of phak addendum a, different URL"
+```
+
+Validation rules (enforced by `_load_dismissed_errata_list` in `tools/handbook-ingest/ingest/config_loader.py`):
+
+| Field    | Rule                                                                |
+| -------- | ------------------------------------------------------------------- |
+| `url`    | Optional, must be HTTPS when present                                |
+| `sha256` | Optional, must be 64 lowercase hex chars when present               |
+| Anchor   | Each entry must specify `url`, `sha256`, or both (neither is invalid) |
+| `reason` | Optional free-form note retained for audit                          |
+
+The discovery dispatcher reads these via the Python subprocess JSON interface (`python -m ingest.discovery_meta`). On every run, dismissed URLs force-set the candidate's status to `dismissed` and suppress GitHub-issue creation. SHA-256 dismissal is a forward-looking hook (not yet wired through to the scrape, since we cannot HEAD-fetch every parent-page link without amplifying network cost); the field is reserved so a future `--check-hashes` mode can compare the dismissal hash to the candidate's content.
+
 ## Discovery state file
 
 `<cache>/discovery/handbooks/<doc>.json`:

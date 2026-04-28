@@ -93,5 +93,26 @@ export async function runDownloadSources(opts: RunOptions = {}): Promise<number>
 	printSummary(results, cacheRoot, args.dryRun);
 
 	const totalErrors = results.reduce((acc, r) => acc + r.errors, 0);
+
+	// Piggyback errata discovery on a successful download. Skipped on dry-run
+	// (no real download happened) and on verify-only runs (which return earlier
+	// above). The freshness gate inside discovery suppresses repeat scans
+	// within the 7-day window, so this is effectively free in the common case.
+	if (!args.dryRun && totalErrors === 0) {
+		await maybeRunDiscoveryPiggyback(cacheRoot);
+	}
+
 	return totalErrors > 0 ? 1 : 0;
+}
+
+async function maybeRunDiscoveryPiggyback(cacheRoot: string): Promise<void> {
+	try {
+		const { runDiscoverErrata } = await import('../discover');
+		await runDiscoverErrata({ cacheRoot, argv: [] });
+	} catch (error) {
+		// Discovery is opportunistic on the download path; do not fail the
+		// download because the scan blew up.
+		const msg = error instanceof Error ? error.message : String(error);
+		console.warn(`discover-errata (piggyback): skipped due to error: ${msg}`);
+	}
 }
