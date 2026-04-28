@@ -17,22 +17,16 @@
  */
 export interface Attitude {
 	/** Pitch angle in degrees (nose-up positive). */
-	pitch: number;
+	pitchDeg: number;
 	/** Roll / bank angle in degrees (right wing down positive). */
-	roll: number;
+	rollDeg: number;
 	/**
-	 * Yaw angle in degrees relative to a scenario-local reference (0..359).
-	 * Optional because the PFD's bottom heading strip is driven from
-	 * `NavData.headingDegMag` today; yaw arrives when a real AHRS feed lands.
+	 * Slip/skid indicator, range -1..+1 (0 = coordinated, positive = ball
+	 * right, negative = ball left). Reserved -- not rendered yet. Carried on
+	 * the type so the slider/FDM source can populate it without churning
+	 * the contract when the inclinometer lands.
 	 */
-	yaw?: number;
-	/**
-	 * Source channel. Locked to `'AHRS'` today; reserved as a discriminant
-	 * for future synthetic-vision overlays that may inject pitch/roll from
-	 * a different sensor (radar altimeter cross-check, GPS-derived attitude
-	 * for low-cost panels, etc).
-	 */
-	source: 'AHRS';
+	slipBall: number;
 }
 
 /**
@@ -43,57 +37,42 @@ export interface Attitude {
  */
 export interface AirData {
 	/** Indicated airspeed (knots). The boxed digit on the airspeed tape. */
-	indicatedAirspeedKt: number;
-	/**
-	 * True airspeed (knots). Optional today: the PFD's airspeed tape
-	 * shows IAS only. TAS lands when the air-data computer surface is real.
-	 */
-	trueAirspeedKt?: number;
+	indicatedAirspeedKnots: number;
 	/** Pressure altitude (feet MSL) -- the value rendered on the altitude tape. */
-	altitudeFt: number;
+	pressureAltitudeFeet: number;
 	/** Vertical speed (feet per minute, positive up). */
 	verticalSpeedFpm: number;
 	/**
 	 * Outside air temperature (Celsius). Optional; lands when the PFD
 	 * shows a temp readout.
 	 */
-	oat?: number;
-	/**
-	 * Source channel. Locked to `'ADC'` today; reserved as a discriminant
-	 * for future fallback paths (GPS-derived altitude when the static port
-	 * fails, etc).
-	 */
-	source: 'ADC';
+	outsideAirTempC?: number;
 }
 
 /**
  * Navigation reading. Sourced today from PFD slider input; in a later
  * coupling it comes from the navigation radio (VOR/ILS) or GPS receiver
- * channel. The `source` discriminant lets downstream consumers tell the
- * two apart -- a CDI behaves differently when it's tracking a localizer
- * versus a GPS course.
+ * channel.
  */
 export interface NavData {
 	/** Magnetic heading (0..359 degrees). The boxed digit on the heading strip. */
 	headingDegMag: number;
 	/**
-	 * Ground track (degrees true). Optional; differs from heading when
-	 * there's wind. Lands when the PFD wires a ground-track diamond on
-	 * the heading strip.
+	 * True heading (degrees). Optional; differs from magnetic heading by
+	 * local magnetic variation. Lands when a true-vs-magnetic toggle is
+	 * wired on the PFD.
 	 */
-	groundTrackDeg?: number;
-	/** Ground speed (knots). Optional; lands with the ground-track diamond. */
-	groundSpeedKt?: number;
-	/** Aircraft latitude (decimal degrees). Optional; reserved for MFD map. */
-	positionLat?: number;
-	/** Aircraft longitude (decimal degrees). Optional; reserved for MFD map. */
-	positionLon?: number;
+	headingDegTrue?: number;
 	/**
-	 * Source channel. `'NavRadio'` for VOR/ILS-driven readings;
-	 * `'GPS'` for satnav-driven readings. The CDI rendering and
-	 * cross-track tolerances change between the two.
+	 * Selected course on the CDI / OBS (degrees). Optional; reserved for
+	 * the CDI/HSI work in later waves.
 	 */
-	source: 'NavRadio' | 'GPS';
+	courseSelectDeg?: number;
+	/**
+	 * Cross-track error (nautical miles). Optional; reserved for the CDI
+	 * deflection rendering in later waves.
+	 */
+	crossTrackErrorNm?: number;
 }
 
 /**
@@ -106,11 +85,4 @@ export interface AvionicsTelemetry {
 	attitude: Attitude;
 	airData: AirData;
 	navData: NavData;
-	/**
-	 * Wall-clock timestamp (milliseconds since the Unix epoch) at which
-	 * this snapshot was produced. Lets downstream consumers (replay,
-	 * scan-trainer grading) align telemetry frames against external
-	 * events without inventing a per-channel clock.
-	 */
-	timestampMs: number;
 }
