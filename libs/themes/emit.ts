@@ -18,6 +18,8 @@
 import { Z_INDEX } from '@ab/constants';
 import type {
 	AppearanceMode,
+	AvionicsThemeBlock,
+	AvionicsTokens,
 	Chrome,
 	ControlTokens,
 	DerivedPalette,
@@ -54,6 +56,7 @@ interface ResolvedTheme {
 	typography: TypographyPack;
 	control: ControlTokens;
 	sim?: SimTokens;
+	avionics?: AvionicsThemeBlock;
 }
 
 /** Walk `extends` chain; later entries win on merge. */
@@ -66,6 +69,7 @@ function resolveTheme(theme: Theme): ResolvedTheme {
 			typography: theme.typography,
 			control: theme.control,
 			sim: theme.sim,
+			avionics: theme.avionics,
 		};
 	}
 	const parent = resolveTheme(getTheme(theme.extends));
@@ -79,6 +83,7 @@ function resolveTheme(theme: Theme): ResolvedTheme {
 		typography: theme.typography ?? parent.typography,
 		control: theme.control ?? parent.control,
 		sim: theme.sim ?? parent.sim,
+		avionics: theme.avionics ?? parent.avionics,
 	};
 }
 
@@ -432,6 +437,19 @@ function simBlock(sim: SimTokens): string[] {
 	return lines;
 }
 
+function avionicsBlock(avionics: AvionicsTokens): string[] {
+	const lines: string[] = [];
+	const push = (name: string, value: string) => lines.push(`\t${name}: ${value};`);
+	push('--avionics-sky', avionics.sky);
+	push('--avionics-ground', avionics.ground);
+	push('--avionics-pointer', avionics.pointer);
+	push('--avionics-arc-white', avionics.arc.white);
+	push('--avionics-arc-green', avionics.arc.green);
+	push('--avionics-arc-yellow', avionics.arc.yellow);
+	push('--avionics-arc-red', avionics.arc.red);
+	return lines;
+}
+
 function chromeBlock(chrome: Chrome): string[] {
 	const lines: string[] = [];
 	const push = (name: string, value: string) => lines.push(`\t${name}: ${value};`);
@@ -464,6 +482,7 @@ export function themeToCss(theme: Theme, appearance: AppearanceMode): string {
 		throw new Error(`Theme ${theme.id} has no palette for appearance ${appearance}`);
 	}
 	const isDark = appearance === 'dark';
+	const avionics = resolved.avionics ? (isDark ? resolved.avionics.dark : resolved.avionics.light) : undefined;
 	const lines = [
 		...paletteBlock(palette, isDark),
 		...typographyBlock(resolved.typography),
@@ -471,6 +490,7 @@ export function themeToCss(theme: Theme, appearance: AppearanceMode): string {
 		...controlsAtomicBlock(),
 		...controlTokensBlock(resolved.control),
 		...(resolved.sim ? simBlock(resolved.sim) : []),
+		...(avionics ? avionicsBlock(avionics) : []),
 	];
 	const selector = `[data-theme="${theme.id}"][data-appearance="${appearance}"]`;
 	return `${selector} {\n${lines.join('\n')}\n}\n`;

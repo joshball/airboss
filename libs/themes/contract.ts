@@ -304,6 +304,46 @@ export interface SimTokens {
 }
 
 // ---------------------------------------------------------------------
+// Avionics tokens (PFD / MFD instrument roles, light + dark)
+// ---------------------------------------------------------------------
+
+/**
+ * Avionics-surface tokens.
+ *
+ * Unlike `sim`, avionics is a global token set: every theme contributes
+ * a value per role per appearance so the avionics PFD renders correctly
+ * inside any theme the picker exposes. The roles match the table in
+ * `docs/products/avionics/work-packages/avionics-app-scaffold/design.md`
+ * under "PFD rendering: light and dark":
+ *
+ *   - sky / ground -- attitude indicator horizon halves
+ *   - pointer      -- attitude bank pointer + readout-box accent
+ *   - arc.white    -- ASI Vs0..Vfe band (flap operating range)
+ *   - arc.green    -- ASI Vs1..Vno band (normal operating)
+ *   - arc.yellow   -- ASI Vno..Vne band (caution)
+ *   - arc.red      -- ASI Vne line (never-exceed)
+ *
+ * Values are emitted as `--avionics-sky`, `--avionics-ground`,
+ * `--avionics-pointer`, `--avionics-arc-{white,green,yellow,red}`.
+ */
+export interface AvionicsTokens {
+	sky: string;
+	ground: string;
+	pointer: string;
+	arc: {
+		white: string;
+		green: string;
+		yellow: string;
+		red: string;
+	};
+}
+
+export interface AvionicsThemeBlock {
+	light: AvionicsTokens;
+	dark: AvionicsTokens;
+}
+
+// ---------------------------------------------------------------------
 // Chrome + component overrides
 // ---------------------------------------------------------------------
 
@@ -357,6 +397,15 @@ export interface Theme {
 	control: ControlTokens;
 	/** Populated only by sim-surface themes. Package #7 fills. */
 	sim?: SimTokens;
+	/**
+	 * Avionics PFD/MFD token roles. Defined on the base theme
+	 * (`airboss/default`); descendants inherit via the `extends` chain
+	 * unless they override. Optional on the contract to keep the
+	 * registry lenient for synthetic test fixtures, but every theme that
+	 * ships from this lib MUST resolve a value for both appearances --
+	 * the `avionics` contract test asserts coverage at runtime.
+	 */
+	avionics?: AvionicsThemeBlock;
 	componentTokens?: Partial<ComponentTokens>;
 	vocabulary?: AppVocabulary;
 }

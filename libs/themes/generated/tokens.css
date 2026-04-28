@@ -326,6 +326,13 @@
 	--input-error-disabled-bg: var(--disabled-surface);
 	--input-error-disabled-ink: var(--disabled-ink);
 	--input-error-ring: var(--action-hazard);
+	--avionics-sky: #9bb4c8;
+	--avionics-ground: #a08365;
+	--avionics-pointer: #c69a00;
+	--avionics-arc-white: #3a3a3a;
+	--avionics-arc-green: #1a8a47;
+	--avionics-arc-yellow: #a87c00;
+	--avionics-arc-red: #b22e29;
 }
 
 [data-theme="airboss/default"][data-appearance="light"] {
@@ -649,6 +656,13 @@
 	--input-error-disabled-bg: var(--disabled-surface);
 	--input-error-disabled-ink: var(--disabled-ink);
 	--input-error-ring: var(--action-hazard);
+	--avionics-sky: #9bb4c8;
+	--avionics-ground: #a08365;
+	--avionics-pointer: #c69a00;
+	--avionics-arc-white: #3a3a3a;
+	--avionics-arc-green: #1a8a47;
+	--avionics-arc-yellow: #a87c00;
+	--avionics-arc-red: #b22e29;
 }
 
 [data-theme="airboss/default"][data-appearance="dark"] {
@@ -972,6 +986,13 @@
 	--input-error-disabled-bg: var(--disabled-surface);
 	--input-error-disabled-ink: var(--disabled-ink);
 	--input-error-ring: var(--action-hazard);
+	--avionics-sky: #3b7bb5;
+	--avionics-ground: #7a4e25;
+	--avionics-pointer: #ffe270;
+	--avionics-arc-white: #eaeaea;
+	--avionics-arc-green: #2fb856;
+	--avionics-arc-yellow: #e9c53c;
+	--avionics-arc-red: #e0443e;
 }
 
 [data-theme="sim/glass"][data-appearance="dark"] {
@@ -1347,6 +1368,13 @@
 	--sim-banner-success-border: #1f6a3a;
 	--sim-readout-warning-bg: rgba(224, 68, 62, 0.12);
 	--sim-muted-state-bg: rgba(224, 68, 62, 0.08);
+	--avionics-sky: #3b7bb5;
+	--avionics-ground: #7a4e25;
+	--avionics-pointer: #ffe270;
+	--avionics-arc-white: #eaeaea;
+	--avionics-arc-green: #2fb856;
+	--avionics-arc-yellow: #e9c53c;
+	--avionics-arc-red: #e0443e;
 }
 
 [data-theme="study/flightdeck"][data-appearance="light"] {
@@ -1670,6 +1698,13 @@
 	--input-error-disabled-bg: var(--disabled-surface);
 	--input-error-disabled-ink: var(--disabled-ink);
 	--input-error-ring: var(--action-hazard);
+	--avionics-sky: #9bb4c8;
+	--avionics-ground: #a08365;
+	--avionics-pointer: #c69a00;
+	--avionics-arc-white: #3a3a3a;
+	--avionics-arc-green: #1a8a47;
+	--avionics-arc-yellow: #a87c00;
+	--avionics-arc-red: #b22e29;
 }
 
 [data-theme="study/flightdeck"][data-appearance="dark"] {
@@ -1993,6 +2028,13 @@
 	--input-error-disabled-bg: var(--disabled-surface);
 	--input-error-disabled-ink: var(--disabled-ink);
 	--input-error-ring: var(--action-hazard);
+	--avionics-sky: #3b7bb5;
+	--avionics-ground: #7a4e25;
+	--avionics-pointer: #ffe270;
+	--avionics-arc-white: #eaeaea;
+	--avionics-arc-green: #2fb856;
+	--avionics-arc-yellow: #e9c53c;
+	--avionics-arc-red: #e0443e;
 }
 
 [data-theme="study/sectional"][data-appearance="light"] {
@@ -2316,6 +2358,13 @@
 	--input-error-disabled-bg: var(--disabled-surface);
 	--input-error-disabled-ink: var(--disabled-ink);
 	--input-error-ring: var(--action-hazard);
+	--avionics-sky: #9bb4c8;
+	--avionics-ground: #a08365;
+	--avionics-pointer: #c69a00;
+	--avionics-arc-white: #3a3a3a;
+	--avionics-arc-green: #1a8a47;
+	--avionics-arc-yellow: #a87c00;
+	--avionics-arc-red: #b22e29;
 }
 
 [data-theme="study/sectional"][data-appearance="dark"] {
@@ -2639,6 +2688,13 @@
 	--input-error-disabled-bg: var(--disabled-surface);
 	--input-error-disabled-ink: var(--disabled-ink);
 	--input-error-ring: var(--action-hazard);
+	--avionics-sky: #3b7bb5;
+	--avionics-ground: #7a4e25;
+	--avionics-pointer: #ffe270;
+	--avionics-arc-white: #eaeaea;
+	--avionics-arc-green: #2fb856;
+	--avionics-arc-yellow: #e9c53c;
+	--avionics-arc-red: #e0443e;
 }
 
 :root, [data-theme] {

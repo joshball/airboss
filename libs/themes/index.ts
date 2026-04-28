@@ -16,6 +16,8 @@
 
 export type {
 	AppearanceMode,
+	AvionicsThemeBlock,
+	AvionicsTokens,
 	Chrome,
 	DerivedPalette,
 	InteractiveStates,

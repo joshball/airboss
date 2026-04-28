@@ -119,6 +119,68 @@ describe('emitAllThemes', () => {
 		}
 	});
 
+	it('emits every --avionics-* token in every (theme, appearance) block', () => {
+		const css = emitAllThemes();
+		const requiredTokens = [
+			'--avionics-sky',
+			'--avionics-ground',
+			'--avionics-pointer',
+			'--avionics-arc-white',
+			'--avionics-arc-green',
+			'--avionics-arc-yellow',
+			'--avionics-arc-red',
+		];
+
+		// Split out each `[data-theme=...][data-appearance=...] { ... }`
+		// block and assert it carries every avionics token. The `:root`
+		// fallback block is also checked because elements outside any
+		// `[data-theme]` ancestor resolve against it (notably <body>
+		// before hydration).
+		const blockPattern = /(?::root|\[data-theme="[^"]+"\]\[data-appearance="[^"]+"\])\s*\{([^}]*)\}/g;
+		const blocks: Array<{ selector: string; body: string }> = [];
+		for (const match of css.matchAll(blockPattern)) {
+			const fullMatch = match[0];
+			const selector = fullMatch.slice(0, fullMatch.indexOf('{')).trim();
+			blocks.push({ selector, body: match[1] });
+		}
+
+		// Filter to per-(theme, appearance) blocks plus the bare `:root`
+		// fallback (skip `:root, [data-theme]` z-index/motion blocks --
+		// those are non-themed and don't carry avionics tokens).
+		const themedBlocks = blocks.filter((b) => b.selector.startsWith('[data-theme=') || b.selector === ':root');
+
+		expect(themedBlocks.length).toBeGreaterThan(0);
+
+		for (const block of themedBlocks) {
+			for (const token of requiredTokens) {
+				expect(block.body, `${block.selector} missing ${token}`).toContain(`${token}:`);
+			}
+		}
+	});
+
+	it('avionics light + dark resolve to different sky / ground / pointer values', () => {
+		// Sanity: values must actually differ per appearance, otherwise
+		// the contract is satisfied trivially with all-same hex.
+		const css = emitAllThemes();
+		const blockPattern = /\[data-theme="airboss\/default"\]\[data-appearance="(light|dark)"\]\s*\{([^}]*)\}/g;
+		const captured: Record<string, Record<string, string>> = {};
+		for (const match of css.matchAll(blockPattern)) {
+			const appearance = match[1];
+			const body = match[2];
+			const tokens: Record<string, string> = {};
+			for (const tokenName of ['--avionics-sky', '--avionics-ground', '--avionics-pointer']) {
+				const tokenMatch = new RegExp(`${tokenName}:\\s*([^;]+);`).exec(body);
+				if (tokenMatch) tokens[tokenName] = tokenMatch[1].trim();
+			}
+			captured[appearance] = tokens;
+		}
+		expect(captured.light).toBeDefined();
+		expect(captured.dark).toBeDefined();
+		for (const tokenName of ['--avionics-sky', '--avionics-ground', '--avionics-pointer']) {
+			expect(captured.light[tokenName]).not.toBe(captured.dark[tokenName]);
+		}
+	});
+
 	it('emits no --ab-sim-* aliases (Option A retired the legacy-alias block)', () => {
 		const css = emitAllThemes();
 		expect(css).not.toMatch(/--ab-sim-/);
