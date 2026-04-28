@@ -14,6 +14,13 @@
  *                    guide) from course/references/*.yaml. Cert-syllabus WP.
  *   5. credentials -- credential / credential_prereq / credential_syllabus
  *                    rows from course/credentials/*.yaml. Cert-syllabus WP.
+ *   5a. reference-corpus-seed -- manifest-driven registry seeding for the
+ *                    small / irregular corpora that have no derivative-tree
+ *                    ingestion pipeline yet (orders, ntsb). Reads
+ *                    libs/sources/src/<corpus>/manifest.yaml and patches the
+ *                    in-process `@ab/sources` registry so authored
+ *                    `airboss-ref:orders/...` and `airboss-ref:ntsb/...`
+ *                    URLs validate clean. ADR 019 §1.2, §2.6.
  *   5b. migrate-references -- reshape every legacy LegacyCitation entry on
  *                    knowledge_node.references into a uniform
  *                    StructuredCitation, resolving against the seeded
@@ -39,6 +46,8 @@
 
 import { resolve } from 'node:path';
 import { DEV_ACCOUNTS, DEV_DB_URL, DEV_SEED_ORIGIN_TAG, ENV_VARS } from '@ab/constants';
+import { seedNtsbFromManifest } from '@ab/sources/ntsb/seed';
+import { seedOrdersFromManifest } from '@ab/sources/orders/seed';
 import { prompt } from '../lib/prompt';
 import { runOrThrow } from '../lib/spawn';
 import { migrateReferencesToStructured } from './migrate-references-to-structured';
@@ -58,6 +67,7 @@ type Phase =
 	| 'credentials'
 	| 'syllabi'
 	| 'credential-syllabi'
+	| 'reference-corpus-seed'
 	| 'migrate-references'
 	| 'cards'
 	| 'abby';
@@ -70,6 +80,7 @@ const PHASES: readonly Phase[] = [
 	'credentials',
 	'syllabi',
 	'credential-syllabi',
+	'reference-corpus-seed',
 	'migrate-references',
 	'cards',
 	'abby',
@@ -134,6 +145,30 @@ async function phaseCredentialSyllabi(): Promise<void> {
 	);
 }
 
+async function phaseReferenceCorpusSeed(): Promise<void> {
+	// Manifest-driven registry seeding for the small / irregular corpora that
+	// don't have a derivative-tree ingestion pipeline yet (orders, ntsb). Each
+	// corpus's `seedXFromManifest` reads `libs/sources/src/<corpus>/manifest.yaml`
+	// and patches `__sources_internal__` + `__editions_internal__` so authored
+	// `airboss-ref:<corpus>/...` URLs resolve clean during the migrate-references
+	// pass that follows. Idempotent: re-runs leave the registry unchanged.
+	process.stdout.write('\n=== seed: reference corpus (orders + ntsb) ===\n');
+	const orders = await seedOrdersFromManifest();
+	process.stdout.write(
+		`  orders: ${orders.entriesRegistered} registered (${orders.entriesAlreadyAccepted} already accepted), ${orders.editionsRegistered} editions, ${orders.skipReasons.length} skipped\n`,
+	);
+	for (const reason of orders.skipReasons) {
+		process.stdout.write(`    skip: ${reason}\n`);
+	}
+	const ntsb = await seedNtsbFromManifest();
+	process.stdout.write(
+		`  ntsb:   ${ntsb.entriesRegistered} registered (${ntsb.entriesAlreadyAccepted} already accepted), ${ntsb.editionsRegistered} editions, ${ntsb.skipReasons.length} skipped\n`,
+	);
+	for (const reason of ntsb.skipReasons) {
+		process.stdout.write(`    skip: ${reason}\n`);
+	}
+}
+
 async function phaseMigrateReferences(): Promise<void> {
 	// Reshape every legacy LegacyCitation entry on `knowledge_node.references`
 	// into a uniform StructuredCitation, resolving each entry against the now-
@@ -191,6 +226,7 @@ const PHASE_FNS: Record<Phase, () => Promise<void>> = {
 	credentials: phaseCredentials,
 	syllabi: phaseSyllabi,
 	'credential-syllabi': phaseCredentialSyllabi,
+	'reference-corpus-seed': phaseReferenceCorpusSeed,
 	'migrate-references': phaseMigrateReferences,
 	cards: phaseCards,
 	abby: phaseAbby,

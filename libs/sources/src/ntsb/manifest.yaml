@@ -1,0 +1,25 @@
+# NTSB report manifest -- registry seeding source
+#
+# Source of truth: ADR 019 §1.2 (`ntsb` shape) + §2.6 (registry population).
+# Loaded by `seedNtsbFromManifest` in `seed.ts`. Each entry produces one
+# `SourceEntry` keyed at `airboss-ref:ntsb/<ntsb-id>` plus a single `Edition`
+# representing the report's publication date. NTSB reports are immutable
+# post-publication, so each entry has exactly one edition.
+#
+# Demand-driven status: the airboss content corpus does not yet cite any
+# NTSB reports directly. The manifest is intentionally empty so the loader
+# wiring is exercised end-to-end without inventing fictional citations.
+# Populate as content authors begin citing `airboss-ref:ntsb/<id>` URLs.
+#
+# Adding a report:
+#   - id: the NTSB ID alone (e.g. `WPR23LA123`); no path segments and no
+#     `?at=` pin (NTSB reports do not use editions).
+#   - canonical_short / canonical_formal / canonical_title: per ADR 019 §3.1
+#     citation token vocabulary. `canonical_short` is typically the NTSB ID
+#     itself; `canonical_formal` adds the report's location + date.
+#   - editions: a single entry whose `id` is the publication date in
+#     `YYYY-MM-DD` form. Authors do not pin NTSB references; the edition
+#     exists for `last_amended_date` and metadata only.
+#   - source_url: direct CAROL URL or PDF link when known.
+
+ntsb: []
