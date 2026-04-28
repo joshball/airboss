@@ -16,7 +16,7 @@ let { data }: { data: PageData } = $props();
 
 {#if data.references.length === 0}
 	<p class="empty">
-		No handbooks ingested yet. Run <code>bun run handbook-ingest phak</code> followed by
+		No handbooks ingested yet. Run <code>bun run sources extract handbooks phak</code> followed by
 		<code>bun run db seed handbooks</code>.
 	</p>
 {:else}

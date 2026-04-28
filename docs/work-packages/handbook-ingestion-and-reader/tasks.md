@@ -100,7 +100,7 @@ Depends on: knowledge-graph (shipped; this WP extends `knowledge_node.references
 - [ ] Create `tools/handbook-ingest/` directory.
 - [ ] Write `pyproject.toml` with deps: `pymupdf`, `beautifulsoup4`, `lxml`, `pillow`, `click`, `pyyaml`, `ruff`. Pin via `requirements.txt` or `uv.lock` -- whichever is the project convention.
 - [ ] Add `tools/handbook-ingest/README.md` documenting CLI + config layout.
-- [ ] Add `bun run handbook-ingest` script entry in the root `package.json` that shells to `python -m ingest` from `tools/handbook-ingest/`.
+- [ ] Add `bun run sources extract handbooks` script entry in the root `package.json` that shells to `python -m ingest` from `tools/handbook-ingest/`.
 - [ ] Scaffold the Python module layout: `ingest/__init__.py`, `ingest/cli.py`, `ingest/fetch.py`, `ingest/outline.py`, `ingest/sections.py`, `ingest/figures.py`, `ingest/tables.py`, `ingest/normalize.py`, `ingest/config/`.
 - [ ] Add `.gitignore` rules: `tools/handbook-ingest/.venv/`, `__pycache__/`. The repo-root `.gitignore` already blocks `handbooks/**/*.pdf` per [ADR 018](../../decisions/018-source-artifact-storage-policy/decision.md); source PDFs live in the developer-local cache (`$AIRBOSS_HANDBOOK_CACHE`, default `~/Documents/airboss-handbook-cache/`), not the repo.
 - [ ] Implement `cli.py` with the click subcommand layout (`<doc> --edition <e> [--chapter N] [--dry-run] [--force]`).
@@ -115,12 +115,12 @@ Depends on: knowledge-graph (shipped; this WP extends `knowledge_node.references
 - [ ] Implement `tables.py` -- detect rectangular grids via fitz's structure detection; emit HTML using `<table><thead><tr><th>...` ... merge tables that span page breaks (same column count + caption continuation).
 - [ ] Implement `normalize.py` -- compose per-section markdown with frontmatter `(handbook, edition, chapter_number, section_number, section_title, faa_pages, source_url)`. Inject figure references inline at their caption position. Emit a `manifest.json` per `<doc>/<edition>/` with `{ source_url, source_checksum, fetched_at, references[], chapters[], sections[], figures[], hashes[] }`.
 - [ ] Implement edition-locked output: each run writes under `handbooks/<doc>/<edition>/`; pre-existing trees for other editions are untouched.
-- [ ] Run `bun run handbook-ingest phak --edition 8083-25C --dry-run` against a local PHAK PDF -- expect a clean validation summary, no errors. Commit (`feat(handbook-ingest): sections + figures + tables + normalize`).
+- [ ] Run `bun run sources extract handbooks phak --edition 8083-25C --dry-run` against a local PHAK PDF -- expect a clean validation summary, no errors. Commit (`feat(handbook-ingest): sections + figures + tables + normalize`).
 
 ### Phase 8: PHAK end-to-end ingestion
 
 - [x] Author `tools/handbook-ingest/ingest/config/phak.yaml`: source URL, expected page count, page-offset map, figure-prefix conventions, optional outline overrides for sections the FAA outline mangles.
-- [x] Run the full pipeline: `bun run handbook-ingest phak --edition FAA-H-8083-25C`. Expect the entire `handbooks/phak/FAA-H-8083-25C/` tree to populate.
+- [x] Run the full pipeline: `bun run sources extract handbooks phak --edition FAA-H-8083-25C`. Expect the entire `handbooks/phak/FAA-H-8083-25C/` tree to populate.
 - [x] **Section-granularity (added 2026-04-27).** Two parallel strategies committed:
   - **Option 3 (TOC + heading verify, deterministic Python)** in `ingest/sections_via_toc.py`. TOC page range + heading-style fingerprint live in `phak.yaml -> toc` and `-> heading_style`. Same source PDF + same YAML = byte-identical section tree.
   - **Option 4 (LLM-assisted via Claude)** in `ingest/sections_via_llm.py`. Prompt at `ingest/prompts/section_tree.md` (committed; SHA-256 recorded in manifest). Pinned `claude-sonnet-4-5`, `temperature=0`. Raw responses saved at `<chapter>/_llm_section_tree.json` (committed; PR-reviewable). Requires `ANTHROPIC_API_KEY`.
@@ -231,4 +231,4 @@ Resume Phases 13-16 only after the user confirms the reader looks correct.
 - [ ] **`/ball-review-full` 10-reviewer pass + fixer.** User-triggered after merge.
 - [ ] **Full Playwright run** (`bunx playwright test tests/e2e/handbook-reader.spec.ts`). User-triggered after merge. Local `DATABASE_URL` + `BETTER_AUTH_SECRET` required; `webServer.reuseExistingServer: true` reuses any running dev server.
 - [x] **AvWX figure dedup.** Closed 2026-04-26 in Phase 16. Pipeline change: `tools/handbook-ingest/ingest/figures_dedup.py` runs after extraction; manifest now records `extraction.figure_dedup`. Numbers: AvWX 858 -> 290 unique (~154 MB freed); PHAK 236 -> 234 unique (~256 KB freed); AFH already deduplicated.
-- [ ] **Section-strategy comparison report** for PHAK (Option 3 TOC vs Option 4 LLM). Run via `bun run handbook-ingest phak --edition FAA-H-8083-25C --strategy compare` (needs `ANTHROPIC_API_KEY`) or via the Claude Code interactive runner at `tools/handbook-ingest/ingest/prompts/run-llm-comparison.md` (no API key).
+- [ ] **Section-strategy comparison report** for PHAK (Option 3 TOC vs Option 4 LLM). Run via `bun run sources extract handbooks phak --edition FAA-H-8083-25C --strategy compare` (needs `ANTHROPIC_API_KEY`) or via the Claude Code interactive runner at `tools/handbook-ingest/ingest/prompts/run-llm-comparison.md` (no API key).

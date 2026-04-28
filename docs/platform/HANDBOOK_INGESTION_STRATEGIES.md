@@ -146,7 +146,7 @@ The seeder reads this and uses the corresponding tree per chapter.
 
 ## Empirical findings — PHAK FAA-H-8083-25C run
 
-From the 2026-04-27 ingestion (`bun run handbook-ingest phak --edition FAA-H-8083-25C --strategy toc`):
+From the 2026-04-27 ingestion (`bun run sources extract handbooks phak --edition FAA-H-8083-25C --strategy toc`):
 
 - **17 chapters** ingested cleanly. Outline parsing failed zero chapters.
 - **418 L1 sections** extracted from TOC. Verification passed on >95%; ~20 entries fell back to chapter-only with warnings.
@@ -175,7 +175,7 @@ LLM strategy: not yet executed live. The pipeline is wired and tested with mocks
 ### TOC
 
 1. Edit `tools/handbook-ingest/ingest/sections_via_toc.py` (parser logic) or `tools/handbook-ingest/ingest/config/<handbook>.yaml` (per-handbook config).
-2. Run `bun run handbook-ingest <doc> --edition <edition> --strategy toc --force`.
+2. Run `bun run sources extract handbooks <doc> --edition <edition> --strategy toc --force`.
 3. Inspect the diff: section markdown files, manifest.
 4. If satisfied, commit. Otherwise iterate.
 

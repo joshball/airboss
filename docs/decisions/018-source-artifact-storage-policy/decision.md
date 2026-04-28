@@ -138,7 +138,7 @@ CFR corpora violate that assumption. Title 14 alone produces ~6,300 per-section 
 The exception:
 
 - **Commit:** `manifest.json` (corpus-level audit + `sourceSha256`) and `sections.json` (the structural index: per-section `id`, `canonical_short`, `canonical_title`, `last_amended_date`, `body_path`, `body_sha256`). This is the registry's source of truth and the audit trail.
-- **Gitignore:** the per-section body markdown (`regulations/cfr-*/**/*.md`). Bodies are computed -- they regenerate deterministically from the cached XML by re-running `bun run ingest cfr`. The `body_sha256` recorded in `sections.json` validates regeneration retroactively.
+- **Gitignore:** the per-section body markdown (`regulations/cfr-*/**/*.md`). Bodies are computed -- they regenerate deterministically from the cached XML by re-running `bun run sources register cfr`. The `body_sha256` recorded in `sections.json` validates regeneration retroactively.
 - **Threshold for applying this exception:** > ~1,000 derivative files per corpus version. Below that, default rule applies (commit everything).
 
 This is consistent with the policy's intent ("audit trail is the SHA, not the bytes"). For CFR, the audit trail moves from the body file's git history to `body_sha256` in the committed `sections.json`. Greppability moves from the repo to the app -- the registry exposes section bodies via query, which is where developers actually consume them.
