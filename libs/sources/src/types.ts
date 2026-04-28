@@ -199,6 +199,26 @@ export type ParsedLocator = {
 	readonly orders?: ParsedOrdersLocator;
 	/** NTSB payload populated by Phase 10's `parseNtsbLocator`. */
 	readonly ntsb?: ParsedNtsbLocator;
+	/** Legal interpretations payload populated by Phase 10's `parseInterpLocator`. */
+	readonly interp?: ParsedInterpLocator;
+	/** Pilot Operating Handbooks payload populated by Phase 10's `parsePohsLocator`. */
+	readonly pohs?: ParsedPohsLocator;
+	/** Sectional charts payload populated by Phase 10's `parseSectionalsLocator`. */
+	readonly sectionals?: ParsedSectionalsLocator;
+	/** Approach plates payload populated by Phase 10's `parsePlatesLocator`. */
+	readonly plates?: ParsedPlatesLocator;
+	/** Federal statutes payload populated by Phase 10's `parseStatutesLocator`. */
+	readonly statutes?: ParsedStatutesLocator;
+	/** FAA forms payload populated by Phase 10's `parseFormsLocator`. */
+	readonly forms?: ParsedFormsLocator;
+	/** Information for Operators payload populated by Phase 10's `parseInfoLocator`. */
+	readonly info?: ParsedInfoLocator;
+	/** Safety Alerts for Operators payload populated by Phase 10's `parseSafoLocator`. */
+	readonly safo?: ParsedSafoLocator;
+	/** Type Certificate Data Sheets payload populated by Phase 10's `parseTcdsLocator`. */
+	readonly tcds?: ParsedTcdsLocator;
+	/** Aviation Safety Reporting System payload populated by Phase 10's `parseAsrsLocator`. */
+	readonly asrs?: ParsedAsrsLocator;
 };
 
 /**
@@ -427,6 +447,213 @@ export interface ParsedNtsbLocator {
 	readonly sequence: string;
 	/** Section name (e.g. `'factual'`); omitted means "whole report" (= final). */
 	readonly section?: string;
+}
+
+/**
+ * Structured legal interpretations locator surfaced by `parseInterpLocator`
+ * in `libs/sources/src/interp/locator.ts`. Source of truth: ADR 019 §1.2
+ * ("Legal interpretations").
+ *
+ * Locator shape (Phase 10 first slice):
+ *
+ *   chief-counsel/<author-year>                     e.g. mangiamele-2009, walker-2017
+ *   ntsb/<case-name>                                e.g. administrator-v-lobeiko
+ *   ntsb/<case-name>?ea=<order-number>              EA-order disambiguation
+ *
+ * The `?ea=` query param is part of the URL but stripped before the parser
+ * sees the locator; callers carrying an EA discriminator should pass it
+ * separately via `eaOrder`.
+ */
+export interface ParsedInterpLocator {
+	/** Issuing authority (`'chief-counsel'` or `'ntsb'`). */
+	readonly authority: 'chief-counsel' | 'ntsb';
+	/** For chief-counsel: author surname (lowercased kebab). For ntsb: case name (kebab). */
+	readonly slug: string;
+	/** Author surname; only populated for `chief-counsel`. */
+	readonly author?: string;
+	/** 4-digit issuance year; only populated for `chief-counsel`. */
+	readonly year?: string;
+	/** EA order number disambiguator (if the caller pre-stripped `?ea=` and re-passed it). */
+	readonly eaOrder?: string;
+}
+
+/**
+ * Structured Pilot Operating Handbook locator surfaced by `parsePohsLocator`
+ * in `libs/sources/src/pohs/locator.ts`. Source of truth: ADR 019 §1.2
+ * ("POH/AFM").
+ *
+ * Locator shape (Phase 10 first slice):
+ *
+ *   <aircraft-slug>                                            whole POH
+ *   <aircraft-slug>/<section>                                  section (e.g. section-2)
+ *   <aircraft-slug>/<section>/<subsection>                     subsection (e.g. vne)
+ *   <aircraft-slug>/emergency/<procedure>                      emergency procedure
+ *
+ * Aircraft slug is lowercase kebab-case (`c172s`, `pa-28-181`, `sr22`).
+ * Section may be `section-<N>` or the literal `emergency`.
+ */
+export interface ParsedPohsLocator {
+	/** Aircraft slug as written (e.g. `'c172s'`, `'pa-28-181'`). */
+	readonly aircraftSlug: string;
+	/** Section component (e.g. `'section-2'`); the literal `'emergency'` is captured here. */
+	readonly section?: string;
+	/** Subsection / sub-tag (e.g. `'vne'`); only set when the locator includes a third segment. */
+	readonly subsection?: string;
+	/** Emergency procedure slug (e.g. `'engine-fire'`); only set when section === `'emergency'`. */
+	readonly emergencyProcedure?: string;
+}
+
+/**
+ * Structured sectional chart locator surfaced by `parseSectionalsLocator` in
+ * `libs/sources/src/sectionals/locator.ts`. Source of truth: ADR 019 §1.2
+ * ("Sectionals").
+ *
+ * Locator shape:
+ *
+ *   <chart-name>                              e.g. denver, los-angeles, seattle
+ *
+ * Pin format: `?at=YYYY-MM-DD` (NACO 56-day cycle date).
+ */
+export interface ParsedSectionalsLocator {
+	/** Chart name as written (e.g. `'denver'`). Lowercase kebab-case. */
+	readonly chartName: string;
+}
+
+/**
+ * Structured approach-plate locator surfaced by `parsePlatesLocator` in
+ * `libs/sources/src/plates/locator.ts`. Source of truth: ADR 019 §1.2
+ * ("Plates").
+ *
+ * Locator shape:
+ *
+ *   <airport-id>/<procedure-slug>             e.g. KAPA/ils-rwy-35R, KSFO/airport-diagram
+ *
+ * Airport ID is uppercase 3-4 char ICAO style. Procedure slug is lowercase
+ * kebab-case but may include uppercase runway suffixes (e.g. `35R`, `28L`).
+ *
+ * Pin format: `?at=YYYY-MM-DD` (28-day TPP cycle).
+ */
+export interface ParsedPlatesLocator {
+	/** Airport ID as written (uppercase, e.g. `'KAPA'`). */
+	readonly airportId: string;
+	/** Procedure slug as written (e.g. `'ils-rwy-35R'`, `'airport-diagram'`). */
+	readonly procedureSlug: string;
+}
+
+/**
+ * Structured federal-statutes locator surfaced by `parseStatutesLocator` in
+ * `libs/sources/src/statutes/locator.ts`. Source of truth: ADR 019 §1.2
+ * ("Statutes").
+ *
+ * Locator shape:
+ *
+ *   <title>/<section>                         e.g. usc-49/40103
+ *   <title>/<section>/<subsection>            e.g. usc-49/44102/a
+ *
+ * Title format: `usc-<title-number>` (e.g. `usc-49`, `usc-14`).
+ */
+export interface ParsedStatutesLocator {
+	/** Title slug as written (e.g. `'usc-49'`). */
+	readonly title: string;
+	/** Title number extracted from the slug (e.g. `'49'`). */
+	readonly titleNumber: string;
+	/** Section number as written (e.g. `'40103'`). */
+	readonly section: string;
+	/** Subsection identifier as written (e.g. `'a'`); only set when present. */
+	readonly subsection?: string;
+}
+
+/**
+ * Structured FAA-forms locator surfaced by `parseFormsLocator` in
+ * `libs/sources/src/forms/locator.ts`. Source of truth: ADR 019 §1.2
+ * ("Forms").
+ *
+ * Locator shape:
+ *
+ *   <form-number>                             e.g. 8710-1, 8500-9
+ *
+ * Form numbers use the FAA's catalog form (digits + dashes, optional
+ * trailing letter). Pin format: `?at=YYYY-MM` for the rev tag.
+ */
+export interface ParsedFormsLocator {
+	/** Form number as written (e.g. `'8710-1'`). */
+	readonly formNumber: string;
+}
+
+/**
+ * Structured Information for Operators locator surfaced by `parseInfoLocator`
+ * in `libs/sources/src/info/locator.ts`. Source of truth: ADR 019 §1.2
+ * ("InFO").
+ *
+ * Locator shape:
+ *
+ *   <info-id>                                 5-digit id (year + sequence), e.g. 21010
+ *
+ * The first 2 digits are the year (e.g. `21` -> 2021); the last 3 are the
+ * sequence within that year.
+ */
+export interface ParsedInfoLocator {
+	/** InFO id as written, 5 digits (e.g. `'21010'`). */
+	readonly infoId: string;
+	/** 2-digit year prefix (e.g. `'21'`). */
+	readonly year: string;
+	/** 3-digit within-year sequence (e.g. `'010'`). */
+	readonly sequence: string;
+}
+
+/**
+ * Structured Safety Alerts for Operators locator surfaced by
+ * `parseSafoLocator` in `libs/sources/src/safo/locator.ts`. Source of
+ * truth: ADR 019 §1.2 ("SAFO").
+ *
+ * Locator shape:
+ *
+ *   <safo-id>                                 5-digit id (year + sequence), e.g. 23004
+ *
+ * Same shape as `info` (year + sequence). Distinct corpus because SAFO is a
+ * regulatory category separate from InFO.
+ */
+export interface ParsedSafoLocator {
+	/** SAFO id as written, 5 digits (e.g. `'23004'`). */
+	readonly safoId: string;
+	/** 2-digit year prefix (e.g. `'23'`). */
+	readonly year: string;
+	/** 3-digit within-year sequence (e.g. `'004'`). */
+	readonly sequence: string;
+}
+
+/**
+ * Structured Type Certificate Data Sheet locator surfaced by
+ * `parseTcdsLocator` in `libs/sources/src/tcds/locator.ts`. Source of
+ * truth: ADR 019 §1.2 ("TCDS").
+ *
+ * Locator shape:
+ *
+ *   <tcds-number>                             FAA catalog number, e.g. 3a12, a00009ch
+ *
+ * TCDS numbers are lowercase alphanumeric; FAA's catalog mixes letters
+ * and digits in arbitrary order. The locator preserves the exact form.
+ */
+export interface ParsedTcdsLocator {
+	/** TCDS number as written (lowercase, e.g. `'3a12'`, `'a00009ch'`). */
+	readonly tcdsNumber: string;
+}
+
+/**
+ * Structured Aviation Safety Reporting System (ASRS) report locator
+ * surfaced by `parseAsrsLocator` in `libs/sources/src/asrs/locator.ts`.
+ * Source of truth: ADR 019 §1.2 ("ASRS").
+ *
+ * Locator shape:
+ *
+ *   <acn>                                     7-digit ACN, e.g. 1234567
+ *
+ * The Accession Number (ACN) is NASA's monotonically-increasing report id.
+ * ASRS reports are immutable after publication so no `?at=` pin is used.
+ */
+export interface ParsedAsrsLocator {
+	/** ACN as written, 7 digits (e.g. `'1234567'`). */
+	readonly acn: string;
 }
 
 export interface LocatorError {
