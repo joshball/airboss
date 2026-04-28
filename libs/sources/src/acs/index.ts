@@ -27,6 +27,6 @@ export type {
 export { readAcsManifest, readCorpusIndex } from './derivative-reader.ts';
 export type { CliArgs, IngestArgs, IngestReport } from './ingest.ts';
 export { PHASE_9_REVIEWER_ID, parseCliArgs, runAcsIngest, runIngestCli } from './ingest.ts';
-export { ACS_CERT_SLUGS, formatAcsLocator, parseAcsLocator } from './locator.ts';
+export { ACS_PUBLICATION_SLUGS, formatAcsLocator, parseAcsLocator } from './locator.ts';
 export { ACS_CORPUS, ACS_RESOLVER, getAcsDerivativeRoot, setAcsDerivativeRoot } from './resolver.ts';
-export { ACS_CERT_LIVE_URLS, ACS_TEST_STANDARDS_INDEX_URL, getAcsLiveUrl } from './url.ts';
+export { ACS_PUBLICATION_LIVE_URLS, ACS_TEST_STANDARDS_INDEX_URL, getAcsLiveUrl } from './url.ts';

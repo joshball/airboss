@@ -2,58 +2,62 @@ import { describe, expect, it } from 'vitest';
 import type { ParsedAcsLocator } from '../types.ts';
 import { formatAcsLocator, parseAcsLocator } from './locator.ts';
 
+// Test format reflects the cert-syllabus WP's locked Q7 resolution
+// (2026-04-27): publication-slug locators with 2-digit zero-padding on
+// areas + element ordinals, `elem-` (not `element-`) prefix on element
+// segments. The slug collapses cert+category+edition into one token.
+
 describe('parseAcsLocator', () => {
 	it('parses a whole-publication locator', () => {
-		const result = parseAcsLocator('ppl-asel/faa-s-acs-25');
+		const result = parseAcsLocator('ppl-airplane-6c');
 		expect(result.kind).toBe('ok');
 		if (result.kind !== 'ok') return;
-		expect(result.acs).toEqual({ cert: 'ppl-asel', edition: 'faa-s-acs-25' });
+		expect(result.acs).toEqual({ slug: 'ppl-airplane-6c' });
 	});
 
 	it('parses an area locator', () => {
-		const result = parseAcsLocator('ppl-asel/faa-s-acs-25/area-v');
+		const result = parseAcsLocator('ppl-airplane-6c/area-05');
 		expect(result.kind).toBe('ok');
 		if (result.kind !== 'ok') return;
-		expect(result.acs).toEqual({ cert: 'ppl-asel', edition: 'faa-s-acs-25', area: 'v' });
+		expect(result.acs).toEqual({ slug: 'ppl-airplane-6c', area: '05' });
 	});
 
 	it('parses a task locator', () => {
-		const result = parseAcsLocator('ppl-asel/faa-s-acs-25/area-v/task-a');
+		const result = parseAcsLocator('ppl-airplane-6c/area-05/task-a');
 		expect(result.kind).toBe('ok');
 		if (result.kind !== 'ok') return;
-		expect(result.acs).toEqual({ cert: 'ppl-asel', edition: 'faa-s-acs-25', area: 'v', task: 'a' });
+		expect(result.acs).toEqual({ slug: 'ppl-airplane-6c', area: '05', task: 'a' });
 	});
 
 	it('parses a knowledge element locator', () => {
-		const result = parseAcsLocator('ppl-asel/faa-s-acs-25/area-v/task-a/element-k1');
+		const result = parseAcsLocator('ppl-airplane-6c/area-05/task-a/elem-k01');
 		expect(result.kind).toBe('ok');
 		if (result.kind !== 'ok') return;
 		expect(result.acs).toEqual({
-			cert: 'ppl-asel',
-			edition: 'faa-s-acs-25',
-			area: 'v',
+			slug: 'ppl-airplane-6c',
+			area: '05',
 			task: 'a',
 			elementTriad: 'k',
-			elementOrdinal: '1',
+			elementOrdinal: '01',
 		});
 	});
 
 	it('parses a risk-management element locator', () => {
-		const result = parseAcsLocator('cfi-asel/faa-s-acs-25/area-i/task-a/element-r2');
+		const result = parseAcsLocator('cfi-airplane-25/area-01/task-a/elem-r02');
 		expect(result.kind).toBe('ok');
 		if (result.kind !== 'ok') return;
-		expect(result.acs).toMatchObject({ elementTriad: 'r', elementOrdinal: '2' });
+		expect(result.acs).toMatchObject({ elementTriad: 'r', elementOrdinal: '02' });
 	});
 
 	it('parses a skill element locator', () => {
-		const result = parseAcsLocator('ppl-asel/faa-s-acs-25/area-v/task-a/element-s3');
+		const result = parseAcsLocator('ppl-airplane-6c/area-05/task-a/elem-s03');
 		expect(result.kind).toBe('ok');
 		if (result.kind !== 'ok') return;
-		expect(result.acs).toMatchObject({ elementTriad: 's', elementOrdinal: '3' });
+		expect(result.acs).toMatchObject({ elementTriad: 's', elementOrdinal: '03' });
 	});
 
-	it('parses two-digit element ordinals', () => {
-		const result = parseAcsLocator('cfi-asel/faa-s-acs-25/area-ii/task-b/element-k12');
+	it('parses two-digit element ordinals up to 99', () => {
+		const result = parseAcsLocator('cfi-airplane-25/area-02/task-b/elem-k12');
 		expect(result.kind).toBe('ok');
 		if (result.kind !== 'ok') return;
 		expect(result.acs).toMatchObject({ elementOrdinal: '12' });
@@ -64,46 +68,54 @@ describe('parseAcsLocator', () => {
 		expect(result.kind).toBe('error');
 	});
 
-	it('rejects unknown cert slug', () => {
-		const result = parseAcsLocator('made-up-cert/faa-s-acs-25');
+	it('rejects unknown publication slug', () => {
+		const result = parseAcsLocator('made-up-publication-99');
 		expect(result.kind).toBe('error');
 		if (result.kind !== 'error') return;
-		expect(result.message).toContain('cert');
+		expect(result.message).toContain('not a registered publication');
 	});
 
-	it('rejects malformed edition slug', () => {
-		const result = parseAcsLocator('ppl-asel/2024-09-private');
+	it('rejects single-digit (non-padded) area ordinal', () => {
+		const result = parseAcsLocator('ppl-airplane-6c/area-5');
 		expect(result.kind).toBe('error');
 		if (result.kind !== 'error') return;
-		expect(result.message).toContain('edition');
+		expect(result.message).toContain('zero-padding');
 	});
 
-	it('rejects malformed area segment', () => {
-		const result = parseAcsLocator('ppl-asel/faa-s-acs-25/area-5');
+	it('rejects roman-numeral area ordinal (the pre-Q7 PR2 format)', () => {
+		const result = parseAcsLocator('ppl-airplane-6c/area-v');
 		expect(result.kind).toBe('error');
-		if (result.kind !== 'error') return;
-		expect(result.message).toContain('area');
 	});
 
-	it('rejects malformed task segment', () => {
-		const result = parseAcsLocator('ppl-asel/faa-s-acs-25/area-v/task-AA');
+	it('rejects malformed task segment (multi-letter)', () => {
+		const result = parseAcsLocator('ppl-airplane-6c/area-05/task-aa');
 		expect(result.kind).toBe('error');
 		if (result.kind !== 'error') return;
 		expect(result.message).toContain('task');
 	});
 
-	it('rejects malformed element segment (unknown triad)', () => {
-		const result = parseAcsLocator('ppl-asel/faa-s-acs-25/area-v/task-a/element-x1');
+	it('rejects element segment using the pre-Q7 `element-` prefix', () => {
+		const result = parseAcsLocator('ppl-airplane-6c/area-05/task-a/element-k1');
 		expect(result.kind).toBe('error');
 	});
 
-	it('rejects element segment without ordinal', () => {
-		const result = parseAcsLocator('ppl-asel/faa-s-acs-25/area-v/task-a/element-k');
+	it('rejects element segment without 2-digit ordinal', () => {
+		const result = parseAcsLocator('ppl-airplane-6c/area-05/task-a/elem-k1');
+		expect(result.kind).toBe('error');
+	});
+
+	it('rejects element segment with unknown triad letter', () => {
+		const result = parseAcsLocator('ppl-airplane-6c/area-05/task-a/elem-x01');
+		expect(result.kind).toBe('error');
+	});
+
+	it('rejects element segment with no ordinal', () => {
+		const result = parseAcsLocator('ppl-airplane-6c/area-05/task-a/elem-k');
 		expect(result.kind).toBe('error');
 	});
 
 	it('rejects extra segments after element', () => {
-		const result = parseAcsLocator('ppl-asel/faa-s-acs-25/area-v/task-a/element-k1/extra');
+		const result = parseAcsLocator('ppl-airplane-6c/area-05/task-a/elem-k01/extra');
 		expect(result.kind).toBe('error');
 		if (result.kind !== 'error') return;
 		expect(result.message).toContain('unexpected segments');
@@ -113,24 +125,22 @@ describe('parseAcsLocator', () => {
 describe('formatAcsLocator', () => {
 	it('round-trips through parse', () => {
 		const cases: ParsedAcsLocator[] = [
-			{ cert: 'ppl-asel', edition: 'faa-s-acs-25' },
-			{ cert: 'ppl-asel', edition: 'faa-s-acs-25', area: 'v' },
-			{ cert: 'ppl-asel', edition: 'faa-s-acs-25', area: 'v', task: 'a' },
+			{ slug: 'ppl-airplane-6c' },
+			{ slug: 'ppl-airplane-6c', area: '05' },
+			{ slug: 'ppl-airplane-6c', area: '05', task: 'a' },
 			{
-				cert: 'ppl-asel',
-				edition: 'faa-s-acs-25',
-				area: 'v',
+				slug: 'ppl-airplane-6c',
+				area: '05',
 				task: 'a',
 				elementTriad: 'k',
-				elementOrdinal: '1',
+				elementOrdinal: '01',
 			},
 			{
-				cert: 'cfi-asel',
-				edition: 'faa-s-acs-25',
-				area: 'iii',
+				slug: 'cfi-airplane-25',
+				area: '03',
 				task: 'b',
 				elementTriad: 'r',
-				elementOrdinal: '7',
+				elementOrdinal: '07',
 			},
 		];
 		for (const c of cases) {
@@ -145,12 +155,11 @@ describe('formatAcsLocator', () => {
 	it('truncates output when intermediate fields are missing', () => {
 		// area set but task missing -> stops at area
 		const formatted = formatAcsLocator({
-			cert: 'ppl-asel',
-			edition: 'faa-s-acs-25',
-			area: 'v',
+			slug: 'ppl-airplane-6c',
+			area: '05',
 			elementTriad: 'k',
-			elementOrdinal: '1',
+			elementOrdinal: '01',
 		});
-		expect(formatted).toBe('ppl-asel/faa-s-acs-25/area-v');
+		expect(formatted).toBe('ppl-airplane-6c/area-05');
 	});
 });

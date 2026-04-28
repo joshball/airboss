@@ -1,69 +1,85 @@
 /**
- * ACS / PTS corpus locator parser.
+ * ACS corpus locator parser.
  *
- * Source of truth: ADR 019 §1.2 ("ACS") + the WP at
- * `docs/work-packages/cert-syllabus-and-goal-composer/`.
+ * Source of truth: ADR 019 §1.2 + the cert-syllabus WP's locked Q7 format.
  *
- * Accepts the shapes ADR 019 §1.2 documents for the `acs` corpus:
+ * Locator shape (post-Q7-resolution, locked 2026-04-27):
  *
- *   <cert>/<edition>                                            whole publication
- *   <cert>/<edition>/area-<roman>                               area
- *   <cert>/<edition>/area-<roman>/task-<letter>                 task
- *   <cert>/<edition>/area-<roman>/task-<letter>/element-<k|r|s><ord>   element
+ *   <slug>                                                    whole publication
+ *   <slug>/area-<NN>                                          area
+ *   <slug>/area-<NN>/task-<x>                                 task
+ *   <slug>/area-<NN>/task-<x>/elem-<triad><NN>                element
  *
- * The K/R/S element prefix is the ACS triad (Knowledge / Risk management /
- * Skill); the parser explicitly preserves both the triad letter and the
- * ordinal so downstream BC code can present them separately.
+ * Where:
  *
- * NOTE: Open Question 7 of the cert-syllabus WP (final ACS locator
- * convention) is still pending; this implementation pins to ADR 019 §1.2's
- * example. If the convention resolves differently, the parser updates here
- * without breaking the parser-locator type's `segments` consumers.
+ * - `<slug>` is the cert+class+edition slug (e.g. `ppl-airplane-6c`,
+ *   `cfi-airplane-25`). One slug per FAA publication. The category and
+ *   edition collapse into the slug; class scope (when present) lives on
+ *   `syllabus_node.classes`, not in the locator. This matches the FAA's
+ *   reality: PPL Airplane is one ACS-6C document covering ASEL + AMEL;
+ *   class-restricted tasks (e.g. AMEL/AMES-only Maneuvering with One
+ *   Engine Inoperative) are tagged on individual rows.
+ * - `<NN>` for area is a 2-digit zero-padded number (`area-05`, `area-13`).
+ * - `<x>` for task is a single lowercase letter (`task-a`, `task-g`).
+ * - `<triad>` is `k`, `r`, or `s` (Knowledge / Risk management / Skill).
+ * - `<NN>` for element is a 2-digit zero-padded number (`elem-k01`,
+ *   `elem-s10`).
+ *
+ * The locked format is belt-and-suspenders with the slug-encoded edition:
+ * an authored identifier always also carries `?at=YYYY-MM` (the publication
+ * month) per the cert-syllabus WP's reading of ADR 019 §1.3. The parser
+ * doesn't enforce `?at=` (the upstream `parseIdentifier` strips it before
+ * calling here); callers that require a pin enforce it at the seed layer.
  */
 
 import type { LocatorError, ParsedAcsLocator, ParsedLocator } from '../types.ts';
 
 /**
- * Enumerated ACS / PTS cert slugs. Mirrors the credential slugs used by the
- * cert-syllabus WP for ACS-publishing certs. Adding a new ACS cert here is
- * non-breaking; the parser rejects unknown cert slugs to catch typos at the
- * earliest layer.
+ * Enumerated ACS publication slugs. Format: `<cert-and-category>-<edition>`,
+ * kebab-case lowercase. The corpus name (`acs`) is the prefix; this slug
+ * never carries an `acs-` prefix itself.
+ *
+ * Adding a new publication is non-breaking; the parser rejects unknown
+ * slugs to catch typos at the earliest layer.
  */
-export const ACS_CERT_SLUGS: readonly string[] = [
-	'ppl-asel',
-	'ppl-amel',
-	'ppl-ases',
-	'ppl-ames',
-	'ppl-helo',
-	'ppl-glider',
-	'ipl', // Instrument-airplane (instrument rating)
-	'ipl-helo',
-	'cpl-asel',
-	'cpl-amel',
-	'cpl-ases',
-	'cpl-ames',
-	'cpl-helo',
-	'atp-amel',
-	'atp-asel',
-	'cfi-asel',
-	'cfi-amel',
-	'cfi-helo',
-	'cfii-asel',
-	'cfii-amel',
-	'cfii-helo',
-	'mei',
-	'meii',
+export const ACS_PUBLICATION_SLUGS: readonly string[] = [
+	'ppl-airplane-6c', // Private Pilot -- Airplane (FAA-S-ACS-6C, Nov 2023)
+	'ir-airplane-8c', // Instrument Rating -- Airplane (FAA-S-ACS-8C, Nov 2023)
+	'cpl-airplane-7b', // Commercial Pilot -- Airplane (FAA-S-ACS-7B, Nov 2023)
+	'cfi-airplane-25', // CFI -- Airplane (FAA-S-ACS-25, Nov 2023; covers ASEL/AMEL/ASES/AMES, includes MEI scope)
+	'atp-airplane-11a', // ATP -- Airplane (FAA-S-ACS-11A, Apr 2024)
 ];
 
 /**
- * ACS / PTS edition slug pattern. The FAA publication ID format is
- * `faa-s-<series>-<number>` (e.g. `faa-s-acs-25`, `faa-s-acs-6b`). Slug-
- * encoded; the parser compares lowercased.
+ * Convert a roman-numeral area ordinal (as printed in ACS PDFs, e.g. `I`,
+ * `IX`, `XII`) into the locked-Q7 2-digit zero-padded numeric form (`01`,
+ * `09`, `12`). Returns null when the input is not a recognised roman numeral
+ * within the bounds the ACS uses (the FAA's largest area count is 14 for
+ * the CFI ACS).
  */
-const EDITION_PATTERN = /^faa-s-[a-z0-9]+(-[a-z0-9]+){1,3}$/;
-const AREA_PATTERN = /^area-([ivxlcdm]+)$/;
+export function romanToPaddedOrdinal(roman: string): string | null {
+	const upper = roman.toUpperCase();
+	if (!/^[IVX]+$/.test(upper)) return null;
+	const values: Record<string, number> = { I: 1, V: 5, X: 10 };
+	let total = 0;
+	let prev = 0;
+	for (let i = upper.length - 1; i >= 0; i -= 1) {
+		const ch = upper[i];
+		if (ch === undefined) return null;
+		const v = values[ch];
+		if (v === undefined) return null;
+		if (v < prev) total -= v;
+		else total += v;
+		prev = v;
+	}
+	if (total <= 0 || total > 99) return null;
+	return String(total).padStart(2, '0');
+}
+
+const SLUG_PATTERN = /^[a-z0-9][a-z0-9-]+[a-z0-9]$/;
+const AREA_PATTERN = /^area-(\d{2})$/;
 const TASK_PATTERN = /^task-([a-z])$/;
-const ELEMENT_PATTERN = /^element-([krs])([1-9][0-9]?)$/;
+const ELEMENT_PATTERN = /^elem-([krs])(\d{2})$/;
 
 function err(message: string): LocatorError {
 	return { kind: 'error', message };
@@ -71,7 +87,8 @@ function err(message: string): LocatorError {
 
 /**
  * Parse an `acs` corpus locator. Input is the segment after
- * `airboss-ref:acs/`, with `?at=...` already stripped.
+ * `airboss-ref:acs/`, with `?at=...` already stripped by the upstream
+ * `parseIdentifier`.
  */
 export function parseAcsLocator(locator: string): ParsedLocator | LocatorError {
 	if (locator.length === 0) {
@@ -80,46 +97,45 @@ export function parseAcsLocator(locator: string): ParsedLocator | LocatorError {
 
 	const segments = locator.split('/');
 
-	const cert = segments[0] ?? '';
-	if (cert.length === 0) {
-		return err('acs locator missing cert slug');
+	const slug = segments[0] ?? '';
+	if (slug.length === 0) {
+		return err('acs locator missing publication slug');
 	}
-	if (!ACS_CERT_SLUGS.includes(cert)) {
-		return err(`acs locator cert "${cert}" is not one of: ${ACS_CERT_SLUGS.join(', ')}`);
+	if (!SLUG_PATTERN.test(slug)) {
+		return err(`acs locator slug "${slug}" is malformed (expected lowercase kebab-case)`);
 	}
-
-	const edition = segments[1] ?? '';
-	if (edition.length === 0) {
-		return err(`acs locator missing edition (e.g. "${cert}/faa-s-acs-25")`);
-	}
-	if (!EDITION_PATTERN.test(edition)) {
-		return err(`acs locator edition "${edition}" is malformed (expected e.g. "faa-s-acs-25")`);
+	if (!ACS_PUBLICATION_SLUGS.includes(slug)) {
+		return err(
+			`acs locator slug "${slug}" is not a registered publication; one of: ${ACS_PUBLICATION_SLUGS.join(', ')}`,
+		);
 	}
 
-	// Whole publication: <cert>/<edition>
-	if (segments.length === 2) {
-		const acs: ParsedAcsLocator = { cert, edition };
+	// Whole publication: <slug>
+	if (segments.length === 1) {
+		const acs: ParsedAcsLocator = { slug };
 		return { kind: 'ok', segments, acs };
 	}
 
-	// Area: <cert>/<edition>/area-<roman>
-	const areaSeg = segments[2] ?? '';
+	// Area: <slug>/area-<NN>
+	const areaSeg = segments[1] ?? '';
 	const areaMatch = AREA_PATTERN.exec(areaSeg);
 	if (areaMatch === null) {
-		return err(`acs locator area segment "${areaSeg}" is malformed (expected "area-<roman>" e.g. "area-v")`);
+		return err(
+			`acs locator area segment "${areaSeg}" is malformed (expected "area-NN" with 2-digit zero-padding, e.g. "area-05")`,
+		);
 	}
 	const area = areaMatch[1];
 	if (area === undefined) {
-		return err(`acs locator area segment "${areaSeg}" is malformed (no roman numeral captured)`);
+		return err(`acs locator area segment "${areaSeg}" is malformed (no ordinal captured)`);
 	}
 
-	if (segments.length === 3) {
-		const acs: ParsedAcsLocator = { cert, edition, area };
+	if (segments.length === 2) {
+		const acs: ParsedAcsLocator = { slug, area };
 		return { kind: 'ok', segments, acs };
 	}
 
-	// Task: <cert>/<edition>/area-<roman>/task-<letter>
-	const taskSeg = segments[3] ?? '';
+	// Task: <slug>/area-<NN>/task-<x>
+	const taskSeg = segments[2] ?? '';
 	const taskMatch = TASK_PATTERN.exec(taskSeg);
 	if (taskMatch === null) {
 		return err(`acs locator task segment "${taskSeg}" is malformed (expected "task-<letter>" e.g. "task-a")`);
@@ -129,17 +145,17 @@ export function parseAcsLocator(locator: string): ParsedLocator | LocatorError {
 		return err(`acs locator task segment "${taskSeg}" is malformed (no letter captured)`);
 	}
 
-	if (segments.length === 4) {
-		const acs: ParsedAcsLocator = { cert, edition, area, task };
+	if (segments.length === 3) {
+		const acs: ParsedAcsLocator = { slug, area, task };
 		return { kind: 'ok', segments, acs };
 	}
 
-	// Element: <cert>/<edition>/area-<roman>/task-<letter>/element-<triad><ord>
-	const elementSeg = segments[4] ?? '';
+	// Element: <slug>/area-<NN>/task-<x>/elem-<triad><NN>
+	const elementSeg = segments[3] ?? '';
 	const elementMatch = ELEMENT_PATTERN.exec(elementSeg);
 	if (elementMatch === null) {
 		return err(
-			`acs locator element segment "${elementSeg}" is malformed (expected "element-<k|r|s><ord>" e.g. "element-k1")`,
+			`acs locator element segment "${elementSeg}" is malformed (expected "elem-<k|r|s>NN" with 2-digit zero-padding, e.g. "elem-k01")`,
 		);
 	}
 	const triadLetter = elementMatch[1] as 'k' | 'r' | 's' | undefined;
@@ -148,13 +164,12 @@ export function parseAcsLocator(locator: string): ParsedLocator | LocatorError {
 		return err(`acs locator element segment "${elementSeg}" is malformed (triad or ordinal missing)`);
 	}
 
-	if (segments.length > 5) {
-		return err(`acs locator has unexpected segments after element: "${segments.slice(5).join('/')}"`);
+	if (segments.length > 4) {
+		return err(`acs locator has unexpected segments after element: "${segments.slice(4).join('/')}"`);
 	}
 
 	const acs: ParsedAcsLocator = {
-		cert,
-		edition,
+		slug,
 		area,
 		task,
 		elementTriad: triadLetter,
@@ -169,12 +184,12 @@ export function parseAcsLocator(locator: string): ParsedLocator | LocatorError {
  * tests that need to derive a locator from a triad of fields.
  */
 export function formatAcsLocator(parsed: ParsedAcsLocator): string {
-	const parts: string[] = [parsed.cert, parsed.edition];
+	const parts: string[] = [parsed.slug];
 	if (parsed.area === undefined) return parts.join('/');
 	parts.push(`area-${parsed.area}`);
 	if (parsed.task === undefined) return parts.join('/');
 	parts.push(`task-${parsed.task}`);
 	if (parsed.elementTriad === undefined || parsed.elementOrdinal === undefined) return parts.join('/');
-	parts.push(`element-${parsed.elementTriad}${parsed.elementOrdinal}`);
+	parts.push(`elem-${parsed.elementTriad}${parsed.elementOrdinal}`);
 	return parts.join('/');
 }

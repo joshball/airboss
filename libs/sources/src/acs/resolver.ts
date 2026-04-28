@@ -42,17 +42,17 @@ export function getAcsDerivativeRoot(): string {
 }
 
 /**
- * Per-publication manifest cache. Keyed on `<cert>|<edition>|<root>`. Tests
+ * Per-publication manifest cache. Keyed on `<slug>|<root>`. Tests
  * reset via `__acs_resolver_internal__.clearManifestCache`.
  */
 const _manifestCache: Map<string, AcsManifestFile> = new Map();
 
-function loadManifestCached(cert: string, edition: string, root: string): AcsManifestFile | null {
-	const key = `${cert}|${edition}|${root}`;
+function loadManifestCached(slug: string, root: string): AcsManifestFile | null {
+	const key = `${slug}|${root}`;
 	const cached = _manifestCache.get(key);
 	if (cached !== undefined) return cached;
 	try {
-		const m = readAcsManifest(root, cert, edition);
+		const m = readAcsManifest(root, slug);
 		_manifestCache.set(key, m);
 		return m;
 	} catch {
@@ -139,8 +139,8 @@ export const ACS_RESOLVER: CorpusResolver = {
 		const parsed = parseAcsLocator(locator);
 		if (parsed.kind !== 'ok' || parsed.acs === undefined) return null;
 
-		const { cert, edition, area, task, elementTriad, elementOrdinal } = parsed.acs;
-		const manifest = loadManifestCached(cert, edition, _derivativeRoot);
+		const { slug, area, task, elementTriad, elementOrdinal } = parsed.acs;
+		const manifest = loadManifestCached(slug, _derivativeRoot);
 		if (manifest === null) return null;
 
 		// Whole publication: return the manifest title (the body is split

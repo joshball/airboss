@@ -189,6 +189,8 @@ export type ParsedLocator = {
 	readonly handbooks?: ParsedHandbooksLocator;
 	/** ACS payload populated by `parseAcsLocator` (cert-syllabus WP). */
 	readonly acs?: ParsedAcsLocator;
+	/** PTS payload populated by `parsePtsLocator` (cert-syllabus WP). */
+	readonly pts?: ParsedPtsLocator;
 	/** AIM payload populated by Phase 7's `parseAimLocator`. */
 	readonly aim?: ParsedAimLocator;
 	/** AC payload populated by Phase 8's `parseAcLocator`. */
@@ -240,39 +242,61 @@ export interface ParsedHandbooksLocator {
 }
 
 /**
- * Structured ACS / PTS locator surfaced by `parseAcsLocator` in
+ * Structured ACS locator surfaced by `parseAcsLocator` in
  * `libs/sources/src/acs/locator.ts`. Source of truth: ADR 019 §1.2 ("ACS")
- * plus the WP at `docs/work-packages/cert-syllabus-and-goal-composer/`.
+ * plus the cert-syllabus WP's locked Q7 format.
  *
- * Locator shape -- pinned to ADR 019 §1.2's documented convention:
+ * Locator shape (locked 2026-04-27):
  *
- *   <cert>/<edition>                                            whole publication
- *   <cert>/<edition>/area-<n>                                   area
- *   <cert>/<edition>/area-<n>/task-<x>                          task
- *   <cert>/<edition>/area-<n>/task-<x>/element-<triad><ord>     element
+ *   <slug>                                                    whole publication
+ *   <slug>/area-<NN>                                          area
+ *   <slug>/area-<NN>/task-<x>                                 task
+ *   <slug>/area-<NN>/task-<x>/elem-<triad><NN>                element
  *
- * `<n>` is a roman-numeral lowercased (e.g. `area-v`); `<x>` is a
- * lowercased letter (e.g. `task-a`); element names always carry the K/R/S
- * triad prefix followed by the ordinal (e.g. `element-k1`, `element-r2`,
- * `element-s3`).
+ * `<slug>` collapses cert+category+edition into one publication slug
+ * (e.g. `ppl-airplane-6c`, `cfi-airplane-25`). Area + element ordinals are
+ * 2-digit zero-padded; task is a single lowercase letter; element prefix
+ * is `elem-` (not `element-`) carrying the K/R/S triad letter.
  *
- * Open Question 7 (final ACS locator convention) is still pending. This
- * parser implements ADR 019 §1.2's example exactly; if the convention
- * resolves differently the parser updates here without breaking callers
- * that only consume `segments`.
+ * The `at=YYYY-MM` pin (parsed by the upstream `parseIdentifier`) is
+ * belt-and-suspenders with the slug-encoded edition.
  */
 export interface ParsedAcsLocator {
-	/** Cert slug -- `ppl-asel`, `cfi-asel`, etc. Lowercase kebab-case. */
-	readonly cert: string;
-	/** Edition slug -- `faa-s-acs-25`, etc. Lowercase. */
-	readonly edition: string;
-	/** Area roman numeral, lowercased (e.g. `'v'` for Area V). */
+	/** Publication slug -- e.g. `ppl-airplane-6c`, `cfi-airplane-25`. Lowercase kebab-case. */
+	readonly slug: string;
+	/** Area ordinal as written (2-digit zero-padded, e.g. `'05'`). */
 	readonly area?: string;
 	/** Task letter, lowercased (e.g. `'a'`). */
 	readonly task?: string;
 	/** Element triad: `'k'`, `'r'`, or `'s'`. Always present when `elementOrdinal` is set. */
 	readonly elementTriad?: 'k' | 'r' | 's';
-	/** Element ordinal as written (`'1'`, `'2'`, ...). */
+	/** Element ordinal as written (2-digit zero-padded, e.g. `'01'`). */
+	readonly elementOrdinal?: string;
+}
+
+/**
+ * Structured PTS locator surfaced by `parsePtsLocator` in
+ * `libs/sources/src/pts/locator.ts`. Source of truth: cert-syllabus WP's
+ * locked Q7 format. PTS is ACS's predecessor; CFII (FAA-S-8081-9E) and a
+ * handful of other practical-test standards still publish in this format.
+ * PTS does NOT split K/R/S elements -- each task has a flat list of
+ * Objectives identified by ordinal alone.
+ *
+ * Locator shape:
+ *
+ *   <slug>                                       whole publication
+ *   <slug>/area-<NN>                             area of operation
+ *   <slug>/area-<NN>/task-<x>                    task
+ *   <slug>/area-<NN>/task-<x>/elem-<NN>          objective / element (no triad)
+ */
+export interface ParsedPtsLocator {
+	/** Publication slug -- e.g. `cfii-airplane-9e`. Lowercase kebab-case. */
+	readonly slug: string;
+	/** Area ordinal as written (2-digit zero-padded, e.g. `'05'`). */
+	readonly area?: string;
+	/** Task letter, lowercased (e.g. `'a'`). */
+	readonly task?: string;
+	/** Element ordinal as written (2-digit zero-padded, e.g. `'01'`). No triad. */
 	readonly elementOrdinal?: string;
 }
 

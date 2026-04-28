@@ -339,3 +339,46 @@ export const SYLLABUS_ID_PREFIX = 'syl';
 export const SYLLABUS_NODE_ID_PREFIX = 'sln';
 export const SYLLABUS_NODE_LINK_ID_PREFIX = 'snl';
 export const GOAL_ID_PREFIX = 'goal';
+
+/**
+ * Airplane class scoping for `syllabus_node.classes`. Closed enum mirrored by
+ * a DB CHECK over the JSONB array values.
+ *
+ * Reality: the FAA publishes one ACS per cert+category (e.g. PPL Airplane is a
+ * single ACS-6C document covering ASEL + AMEL; CFI Airplane ACS-25 covers all
+ * four classes ASEL/AMEL/ASES/AMES). Class scope lives on individual tasks,
+ * parsed from FAA's parenthetical class tags (e.g.
+ * `Task A. Maneuvering with One Engine Inoperative (AMEL, AMES)`).
+ *
+ * `syllabus_node.classes` is NULL for class-agnostic rows (most knowledge and
+ * risk-management elements; areas / tasks that apply to every class) and is a
+ * non-empty array of these slugs for class-restricted rows. The lens framework
+ * filters by class when a goal targets a class-specific credential.
+ *
+ * - `asel`: airplane single-engine land
+ * - `amel`: airplane multi-engine land
+ * - `ases`: airplane single-engine sea
+ * - `ames`: airplane multi-engine sea
+ *
+ * Helicopter / glider / etc. are not in this enum -- they get their own ACS
+ * documents (separate syllabi) with their own class scoping. If a future
+ * publication needs intra-doc class scoping for non-airplane categories, the
+ * enum extends explicitly.
+ */
+export const AIRPLANE_CLASSES = {
+	ASEL: 'asel',
+	AMEL: 'amel',
+	ASES: 'ases',
+	AMES: 'ames',
+} as const;
+
+export type AirplaneClass = (typeof AIRPLANE_CLASSES)[keyof typeof AIRPLANE_CLASSES];
+
+export const AIRPLANE_CLASS_VALUES: readonly AirplaneClass[] = Object.values(AIRPLANE_CLASSES);
+
+export const AIRPLANE_CLASS_LABELS: Record<AirplaneClass, string> = {
+	[AIRPLANE_CLASSES.ASEL]: 'ASEL',
+	[AIRPLANE_CLASSES.AMEL]: 'AMEL',
+	[AIRPLANE_CLASSES.ASES]: 'ASES',
+	[AIRPLANE_CLASSES.AMES]: 'AMES',
+};

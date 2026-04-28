@@ -2,33 +2,40 @@
  * Phase 10 (slice) -- ACS corpus ingestion.
  *
  * Source of truth: ADR 019 §1.2 ("ACS"), §2.4 (atomic batch promotion), §2.6
- * (registry population).
+ * (registry population), cert-syllabus WP locked Q7 (2026-04-27).
  *
- * Slice scope: PPL-ASEL (`ppl-asel` / `faa-s-acs-6` family) only. The
- * downloader populates `~/Documents/airboss-handbook-cache/acs/<faa-doc>/<edition>/`
- * for every cert family the project tracks; this ingest walks only the entries
- * that map to a known cert slug and skips the rest with explicit reasons. The
- * registered cert slugs and the ACS publication ids they map to are listed in
- * `ACS_CACHE_DOC_TO_CERT` below; adding a new cert family is one entry there.
+ * Slice scope: PPL Airplane (`ppl-airplane-6c` / `faa-s-acs-6` family) only.
+ * The downloader populates `~/Documents/airboss-handbook-cache/acs/<faa-doc>/<edition>/`
+ * for every publication the project tracks; this ingest walks only the
+ * entries that map to a registered publication slug and skips the rest with
+ * explicit reasons. The mapping from detected ACS edition slug to locked
+ * publication slug lives in `ACS_DETECTED_EDITION_TO_SLUG` below; adding a
+ * new publication is one entry there plus the matching `ACS_PUBLICATION_SLUGS`
+ * + URL + per-slug code-prefix entries.
  *
  * Steps per ACS found in the cache (and matched against the slice):
  *
  *   1. Walk `<cache>/acs/<faa-doc>/<edition-on-disk>/manifest.json` (downloader output).
  *   2. Run `extractPdf` on the ACS PDF; detect the canonical edition slug (e.g.
  *      `faa-s-acs-6c`) from the cover and the effective date.
- *   3. Parse the body into Areas of Operation -> Tasks -> Elements using the
+ *   3. Map the detected edition slug to a locked publication slug
+ *      (`faa-s-acs-6c` -> `ppl-airplane-6c`). Skip with explicit reason when
+ *      no mapping is registered.
+ *   4. Parse the body into Areas of Operation -> Tasks -> Elements using the
  *      heading + element-code regex pack defined here. ACS PDFs are highly
  *      regular: each task block is bounded by `Task <letter>. <title>` and the
  *      element bullets carry deterministic codes (`PA.I.C.K3`, `PA.I.C.K3a`,
  *      etc.) which encode (Area, Task, Triad, Ordinal) directly.
- *   4. Write derivative tree under `<repo>/acs/<cert>/<edition>/`:
+ *   5. Write derivative tree under `<repo>/acs/<slug>/`:
  *        - `manifest.json`                                 per-publication manifest
- *        - `area-<roman>/task-<letter>.md`                 per-task body markdown
- *   5. Append an entry to corpus-level `<repo>/acs/index.json`.
- *   6. Insert one `SourceEntry` per ACS publication + per Area + per Task + per
+ *        - `area-<NN>/task-<letter>.md`                    per-task body markdown
+ *      `<NN>` is the 2-digit zero-padded numeric area ordinal (locked Q7).
+ *   6. Append an entry to corpus-level `<repo>/acs/index.json`.
+ *   7. Insert one `SourceEntry` per ACS publication + per Area + per Task + per
  *      Element into the active SOURCES table; insert one `Edition` per
- *      ingested (id, publication_date) into EDITIONS.
- *   7. Record an atomic batch promotion `pending -> accepted` under
+ *      ingested (id, publication_date) into EDITIONS. SourceIds use the
+ *      locked Q7 format: `airboss-ref:acs/<slug>/area-<NN>/task-<x>/elem-<TNN>`.
+ *   8. Record an atomic batch promotion `pending -> accepted` under
  *      `PHASE_9_REVIEWER_ID`. Skip when entries are already accepted.
  *
  * Idempotent: re-running with the same `--cache=` and `--out=` is a no-op.
@@ -55,44 +62,45 @@ import type {
 	AcsManifestFile,
 	AcsManifestTask,
 } from './derivative-reader.ts';
-import { ACS_CERT_SLUGS } from './locator.ts';
+import { ACS_PUBLICATION_SLUGS, romanToPaddedOrdinal } from './locator.ts';
 
 export const PHASE_9_REVIEWER_ID = 'phase-9-acs-ingestion';
 
 const CORPUS = 'acs';
 
 /**
- * Map from the downloader's cache doc-slug (e.g. `faa-s-acs-6`) to the cert
- * slug used in the locator scheme. The downloader stores the FAA publication
- * id verbatim; the locator uses cert slugs. A given cert slug always maps to
- * a single FAA doc family, but a doc family can map to several cert slugs
- * (the PPL ACS, FAA-S-ACS-6, covers ASEL / AMEL / ASES / AMES). The slice
- * ships only PPL-ASEL; siblings within a doc family are deferred until
- * Open Question 7 (final ACS locator convention) resolves or a lesson
- * actually needs them.
+ * Map from the detected ACS edition slug (the canonical FAA edition id parsed
+ * off the PDF cover, e.g. `faa-s-acs-6c`) to the locked-Q7 publication slug
+ * used everywhere downstream. Per the cert-syllabus WP locked Q7 (2026-04-27),
+ * cert + category + edition collapse into one publication slug per FAA
+ * publication. The PPL ACS-6C is one publication covering both ASEL + AMEL;
+ * class-restricted tasks are tagged via `syllabus_node.classes`, not via the
+ * locator. The slice ships only `ppl-airplane-6c`; siblings parse but skip
+ * with an explicit reason until a sibling lane wires them in.
  */
-const ACS_CACHE_DOC_TO_CERT: Readonly<Record<string, readonly string[]>> = {
-	'faa-s-acs-6': ['ppl-asel'],
-	// Other doc families parse but are skipped with an explicit reason. Add
-	// them here once a sibling lane lands them (commercial, instrument, CFI).
-	// 'faa-s-acs-7': ['cpl-asel'],
-	// 'faa-s-acs-8': ['ipl'],
-	// 'faa-s-acs-25': ['cfi-asel'],
-	// 'faa-s-acs-11': ['atp-amel'],
+const ACS_DETECTED_EDITION_TO_SLUG: Readonly<Record<string, string>> = {
+	'faa-s-acs-6c': 'ppl-airplane-6c',
+	// Other publications parse but are skipped with an explicit reason. Add
+	// them here once a sibling lane lands them.
+	// 'faa-s-acs-7b': 'cpl-airplane-7b',
+	// 'faa-s-acs-8c': 'ir-airplane-8c',
+	// 'faa-s-acs-25': 'cfi-airplane-25',
+	// 'faa-s-acs-11a': 'atp-airplane-11a',
 };
 
 /**
- * Per-cert FAA code prefix that begins every K/R/S element id within a given
- * cert's ACS. PPL Airplane uses `PA.`. The prefix lives in the ACS body next
- * to every code (`PA.I.C.K3`); we use it to anchor the element regex so the
- * parser cannot confuse, say, the Table-of-Contents reference list with an
- * actual element bullet.
+ * Per-publication-slug FAA code prefix that begins every K/R/S element id
+ * within a given ACS. PPL Airplane uses `PA.`; CFI uses `FA.`; etc. The
+ * prefix lives in the ACS body next to every code (`PA.I.C.K3`); we use it
+ * to anchor the element regex so the parser cannot confuse, say, the
+ * Table-of-Contents reference list with an actual element bullet.
  */
-const ACS_CERT_CODE_PREFIX: Readonly<Record<string, string>> = {
-	'ppl-asel': 'PA',
-	'ppl-amel': 'PA',
-	'ppl-ases': 'PA',
-	'ppl-ames': 'PA',
+const ACS_SLUG_CODE_PREFIX: Readonly<Record<string, string>> = {
+	'ppl-airplane-6c': 'PA',
+	'ir-airplane-8c': 'IR',
+	'cpl-airplane-7b': 'CA',
+	'cfi-airplane-25': 'FA',
+	'atp-airplane-11a': 'AA',
 };
 
 export interface IngestArgs {
@@ -101,12 +109,12 @@ export interface IngestArgs {
 	/** Path to the in-repo derivative root (default `<cwd>/acs`). */
 	readonly derivativeRoot: string;
 	/**
-	 * Optional cert filter -- only ingest these cert slugs. Default: every cert
-	 * registered in `ACS_CACHE_DOC_TO_CERT`. Useful for the smoke test which
-	 * may want to constrain scope, and for operator runs that are testing a
-	 * single cert.
+	 * Optional publication-slug filter -- only ingest these publication slugs.
+	 * Default: every slug registered in `ACS_DETECTED_EDITION_TO_SLUG`. Useful
+	 * for the smoke test which may want to constrain scope, and for operator
+	 * runs that are testing a single publication.
 	 */
-	readonly certs?: readonly string[];
+	readonly slugs?: readonly string[];
 }
 
 export interface IngestReport {
@@ -126,10 +134,10 @@ export interface IngestReport {
 }
 
 interface CachedAcsPublication {
-	/** Cert slug (locator-side, e.g. `'ppl-asel'`). */
-	readonly cert: string;
 	/** FAA doc-family slug from the cache directory (e.g. `'faa-s-acs-6'`). */
 	readonly cacheDocSlug: string;
+	/** Edition directory name from the cache (e.g. `'current'`). */
+	readonly cacheEditionDir: string;
 	/** Absolute path to the PDF. */
 	readonly pdfPath: string;
 	readonly downloaderManifest: DownloaderManifest;
@@ -172,10 +180,14 @@ function readDownloaderManifest(path: string): DownloaderManifest {
 }
 
 /**
- * Walk the cache and collect every ACS publication that maps to a known cert
- * slug. Other entries are recorded with explicit skip reasons.
+ * Walk the cache and collect every ACS PDF available for ingestion. The
+ * cache stores publications under `<cacheRoot>/acs/<faa-doc>/<edition-dir>/`;
+ * we collect each `(doc, edition-dir)` pair that has a valid downloader
+ * manifest + PDF on disk. Mapping to the locked publication slug happens
+ * after PDF extraction (the detected edition slug from the cover is the key
+ * into `ACS_DETECTED_EDITION_TO_SLUG`).
  */
-function discoverCachedAcs(cacheRoot: string, allowedCerts: ReadonlySet<string>): DiscoveryResult {
+function discoverCachedAcs(cacheRoot: string): DiscoveryResult {
 	const root = join(cacheRoot, 'acs');
 	if (!existsSync(root)) return { publications: [], skipped: [] };
 	const publications: CachedAcsPublication[] = [];
@@ -183,15 +195,6 @@ function discoverCachedAcs(cacheRoot: string, allowedCerts: ReadonlySet<string>)
 	for (const docDir of readdirSync(root)) {
 		const docPath = join(root, docDir);
 		if (!statSync(docPath).isDirectory()) continue;
-		const certs = ACS_CACHE_DOC_TO_CERT[docDir];
-		if (certs === undefined) {
-			skipped.push(
-				`acs/${docDir}: doc family is not yet wired to a cert slug -- deferred until Open Question 7 resolves or a lesson cites it (skip)`,
-			);
-			continue;
-		}
-		// Each cert in this doc family iterates the same PDF for the slice;
-		// per-class differentiation (ASEL vs AMEL) is a follow-up.
 		for (const editionDir of readdirSync(docPath)) {
 			const editionPath = join(docPath, editionDir);
 			if (!statSync(editionPath).isDirectory()) continue;
@@ -212,22 +215,12 @@ function discoverCachedAcs(cacheRoot: string, allowedCerts: ReadonlySet<string>)
 				skipped.push(`acs/${docDir}/${editionDir}: PDF not found at ${dm.source_filename} (skip)`);
 				continue;
 			}
-			for (const cert of certs) {
-				if (!allowedCerts.has(cert)) {
-					skipped.push(`acs/${docDir}/${editionDir}: cert '${cert}' not in --certs filter (skip)`);
-					continue;
-				}
-				if (!ACS_CERT_SLUGS.includes(cert)) {
-					skipped.push(`acs/${docDir}/${editionDir}: cert '${cert}' not in ACS_CERT_SLUGS (skip)`);
-					continue;
-				}
-				publications.push({
-					cert,
-					cacheDocSlug: docDir,
-					pdfPath,
-					downloaderManifest: dm,
-				});
-			}
+			publications.push({
+				cacheDocSlug: docDir,
+				cacheEditionDir: editionDir,
+				pdfPath,
+				downloaderManifest: dm,
+			});
 		}
 	}
 	return { publications, skipped };
@@ -363,7 +356,7 @@ function parseAcsBody(doc: ExtractedDocument, codePrefix: string): readonly Pars
 		const elementMatch = elementCodeRe.exec(line);
 		if (elementMatch !== null) {
 			const triadLetter = elementMatch[3].toLowerCase() as 'k' | 'r' | 's';
-			const ordinal = elementMatch[4];
+			const rawOrdinal = elementMatch[4];
 			const subLetter = elementMatch[5];
 			const remainder = elementMatch[6].trim();
 			// Parent elements (`PA.I.C.K3`) are the registry units. Sub-lettered
@@ -371,8 +364,13 @@ function parseAcsBody(doc: ExtractedDocument, codePrefix: string): readonly Pars
 			// produce their own SourceEntry -- the locator scheme stops at the
 			// triad+ordinal level.
 			if (subLetter !== undefined) continue;
-			if (Number.parseInt(ordinal, 10) > 99) continue;
-			const code = `${codePrefix}.${elementMatch[1]}.${elementMatch[2]}.${elementMatch[3]}${ordinal}`;
+			const ordinalNum = Number.parseInt(rawOrdinal, 10);
+			if (ordinalNum > 99) continue;
+			// Locked Q7: 2-digit zero-padded element ordinals.
+			const ordinal = String(ordinalNum).padStart(2, '0');
+			// The PDF prints unpadded ordinals (`PA.I.C.K3`); the `code` field
+			// preserves the printed form for in-body element extraction.
+			const code = `${codePrefix}.${elementMatch[1]}.${elementMatch[2]}.${elementMatch[3]}${rawOrdinal}`;
 			const title = remainder.length > 0 ? truncateTitle(remainder) : `${triadLetter.toUpperCase()}${ordinal}`;
 			active.elements.push({ triad: triadLetter, ordinal, code, title });
 		}
@@ -452,8 +450,8 @@ function truncateTitle(s: string): string {
 // ---------------------------------------------------------------------------
 
 interface SourceEntryBuildArgs {
-	readonly cert: string;
-	readonly edition: string;
+	readonly slug: string;
+	readonly editionSlug: string;
 	readonly publicationDate: Date;
 	readonly title: string;
 	readonly canonicalShortPrefix: string;
@@ -461,8 +459,8 @@ interface SourceEntryBuildArgs {
 }
 
 function publicationEntry(args: SourceEntryBuildArgs): SourceEntry {
-	const id = `airboss-ref:${CORPUS}/${args.cert}/${args.edition}` as SourceId;
-	const upper = args.edition.toUpperCase();
+	const id = `airboss-ref:${CORPUS}/${args.slug}` as SourceId;
+	const upper = args.editionSlug.toUpperCase();
 	return {
 		id,
 		corpus: CORPUS,
@@ -474,14 +472,15 @@ function publicationEntry(args: SourceEntryBuildArgs): SourceEntry {
 	};
 }
 
-function areaEntry(args: SourceEntryBuildArgs & { area: string; areaTitle: string }): SourceEntry {
-	const id = `airboss-ref:${CORPUS}/${args.cert}/${args.edition}/area-${args.area}` as SourceId;
-	const upperRoman = args.area.toUpperCase();
+function areaEntry(
+	args: SourceEntryBuildArgs & { areaPadded: string; areaRomanUpper: string; areaTitle: string },
+): SourceEntry {
+	const id = `airboss-ref:${CORPUS}/${args.slug}/area-${args.areaPadded}` as SourceId;
 	return {
 		id,
 		corpus: CORPUS,
-		canonical_short: `${args.canonicalShortPrefix} Area ${upperRoman}`,
-		canonical_formal: `${args.canonicalFormalPrefix}, Area of Operation ${upperRoman}: ${args.areaTitle}`,
+		canonical_short: `${args.canonicalShortPrefix} Area ${args.areaRomanUpper}`,
+		canonical_formal: `${args.canonicalFormalPrefix}, Area of Operation ${args.areaRomanUpper}: ${args.areaTitle}`,
 		canonical_title: args.areaTitle,
 		last_amended_date: args.publicationDate,
 		lifecycle: 'pending',
@@ -490,20 +489,20 @@ function areaEntry(args: SourceEntryBuildArgs & { area: string; areaTitle: strin
 
 function taskEntry(
 	args: SourceEntryBuildArgs & {
-		readonly area: string;
+		readonly areaPadded: string;
+		readonly areaRomanUpper: string;
 		readonly areaTitle: string;
 		readonly task: string;
 		readonly taskTitle: string;
 	},
 ): SourceEntry {
-	const id = `airboss-ref:${CORPUS}/${args.cert}/${args.edition}/area-${args.area}/task-${args.task}` as SourceId;
-	const upperRoman = args.area.toUpperCase();
+	const id = `airboss-ref:${CORPUS}/${args.slug}/area-${args.areaPadded}/task-${args.task}` as SourceId;
 	const upperTask = args.task.toUpperCase();
 	return {
 		id,
 		corpus: CORPUS,
-		canonical_short: `${args.canonicalShortPrefix} ${upperRoman}.${upperTask}`,
-		canonical_formal: `${args.canonicalFormalPrefix}, Area ${upperRoman} Task ${upperTask}: ${args.taskTitle}`,
+		canonical_short: `${args.canonicalShortPrefix} ${args.areaRomanUpper}.${upperTask}`,
+		canonical_formal: `${args.canonicalFormalPrefix}, Area ${args.areaRomanUpper} Task ${upperTask}: ${args.taskTitle}`,
 		canonical_title: args.taskTitle,
 		last_amended_date: args.publicationDate,
 		lifecycle: 'pending',
@@ -512,21 +511,21 @@ function taskEntry(
 
 function elementEntry(
 	args: SourceEntryBuildArgs & {
-		readonly area: string;
+		readonly areaPadded: string;
+		readonly areaRomanUpper: string;
 		readonly task: string;
 		readonly element: ParsedElement;
 	},
 ): SourceEntry {
 	const id =
-		`airboss-ref:${CORPUS}/${args.cert}/${args.edition}/area-${args.area}/task-${args.task}/element-${args.element.triad}${args.element.ordinal}` as SourceId;
-	const upperRoman = args.area.toUpperCase();
+		`airboss-ref:${CORPUS}/${args.slug}/area-${args.areaPadded}/task-${args.task}/elem-${args.element.triad}${args.element.ordinal}` as SourceId;
 	const upperTask = args.task.toUpperCase();
 	const upperTriad = args.element.triad.toUpperCase();
 	return {
 		id,
 		corpus: CORPUS,
-		canonical_short: `${args.canonicalShortPrefix} ${upperRoman}.${upperTask}.${upperTriad}${args.element.ordinal}`,
-		canonical_formal: `${args.canonicalFormalPrefix}, Area ${upperRoman} Task ${upperTask} Element ${upperTriad}${args.element.ordinal}`,
+		canonical_short: `${args.canonicalShortPrefix} ${args.areaRomanUpper}.${upperTask}.${upperTriad}${args.element.ordinal}`,
+		canonical_formal: `${args.canonicalFormalPrefix}, Area ${args.areaRomanUpper} Task ${upperTask} Element ${upperTriad}${args.element.ordinal}`,
 		canonical_title: args.element.title,
 		last_amended_date: args.publicationDate,
 		lifecycle: 'pending',
@@ -534,31 +533,43 @@ function elementEntry(
 }
 
 // ---------------------------------------------------------------------------
-// Cert -> canonical-name pieces (per-cert title strings).
+// Slug -> canonical-name pieces (per-publication title strings).
 // ---------------------------------------------------------------------------
 
-interface CertNames {
+interface SlugNames {
 	readonly canonicalShortPrefix: string;
 	readonly canonicalFormalPrefix: string;
 }
 
-const CERT_NAMES: Readonly<Record<string, CertNames>> = {
-	'ppl-asel': {
+const SLUG_NAMES: Readonly<Record<string, SlugNames>> = {
+	'ppl-airplane-6c': {
 		canonicalShortPrefix: 'PPL ACS',
-		canonicalFormalPrefix: 'Private Pilot -- Airplane (ASEL) ACS',
+		canonicalFormalPrefix: 'Private Pilot -- Airplane ACS',
 	},
-	'ppl-amel': {
-		canonicalShortPrefix: 'PPL ACS',
-		canonicalFormalPrefix: 'Private Pilot -- Airplane (AMEL) ACS',
+	'ir-airplane-8c': {
+		canonicalShortPrefix: 'IR ACS',
+		canonicalFormalPrefix: 'Instrument Rating -- Airplane ACS',
+	},
+	'cpl-airplane-7b': {
+		canonicalShortPrefix: 'CPL ACS',
+		canonicalFormalPrefix: 'Commercial Pilot -- Airplane ACS',
+	},
+	'cfi-airplane-25': {
+		canonicalShortPrefix: 'CFI ACS',
+		canonicalFormalPrefix: 'CFI -- Airplane ACS',
+	},
+	'atp-airplane-11a': {
+		canonicalShortPrefix: 'ATP ACS',
+		canonicalFormalPrefix: 'ATP -- Airplane ACS',
 	},
 };
 
-function getCertNames(cert: string): CertNames {
-	const names = CERT_NAMES[cert];
+function getSlugNames(slug: string): SlugNames {
+	const names = SLUG_NAMES[slug];
 	if (names !== undefined) return names;
 	return {
-		canonicalShortPrefix: `${cert.toUpperCase()} ACS`,
-		canonicalFormalPrefix: `${cert.toUpperCase()} ACS`,
+		canonicalShortPrefix: `${slug.toUpperCase()} ACS`,
+		canonicalFormalPrefix: `${slug.toUpperCase()} ACS`,
 	};
 }
 
@@ -571,8 +582,8 @@ function getCertNames(cert: string): CertNames {
  * derivatives, populates the registry. Idempotent.
  */
 export async function runAcsIngest(args: IngestArgs): Promise<IngestReport> {
-	const allowedCerts = new Set<string>(args.certs ?? Object.values(ACS_CACHE_DOC_TO_CERT).flat());
-	const discovery = discoverCachedAcs(args.cacheRoot, allowedCerts);
+	const allowedSlugs = new Set<string>(args.slugs ?? Object.values(ACS_DETECTED_EDITION_TO_SLUG));
+	const discovery = discoverCachedAcs(args.cacheRoot);
 	const cached = discovery.publications;
 	const skipReasons: string[] = [...discovery.skipped];
 	let publicationsIngested = 0;
@@ -603,11 +614,34 @@ export async function runAcsIngest(args: IngestArgs): Promise<IngestReport> {
 
 			const editionFromCover = findAcsEditionSlug(coverPages);
 			if (editionFromCover === null) {
-				skipReasons.push(`acs/${pub.cacheDocSlug}: could not detect ACS edition slug on cover (skip)`);
+				skipReasons.push(
+					`acs/${pub.cacheDocSlug}/${pub.cacheEditionDir}: could not detect ACS edition slug on cover (skip)`,
+				);
 				publicationsSkipped += 1;
 				continue;
 			}
-			const edition = editionFromCover.toLowerCase(); // e.g. 'faa-s-acs-6c'
+			const editionSlug = editionFromCover.toLowerCase(); // e.g. 'faa-s-acs-6c'
+
+			const slug = ACS_DETECTED_EDITION_TO_SLUG[editionSlug];
+			if (slug === undefined) {
+				skipReasons.push(
+					`acs/${pub.cacheDocSlug}/${pub.cacheEditionDir}: detected edition '${editionSlug}' is not yet wired to a publication slug -- add to ACS_DETECTED_EDITION_TO_SLUG (skip)`,
+				);
+				publicationsSkipped += 1;
+				continue;
+			}
+			if (!allowedSlugs.has(slug)) {
+				skipReasons.push(`acs/${pub.cacheDocSlug}/${pub.cacheEditionDir}: slug '${slug}' not in --slug filter (skip)`);
+				publicationsSkipped += 1;
+				continue;
+			}
+			if (!ACS_PUBLICATION_SLUGS.includes(slug)) {
+				skipReasons.push(
+					`acs/${pub.cacheDocSlug}/${pub.cacheEditionDir}: slug '${slug}' not in ACS_PUBLICATION_SLUGS (skip)`,
+				);
+				publicationsSkipped += 1;
+				continue;
+			}
 
 			// ACS cover pages often print only month + year (`November 2023`)
 			// without a day. `findEffectiveDate` requires day + month + year; fall
@@ -617,27 +651,31 @@ export async function runAcsIngest(args: IngestArgs): Promise<IngestReport> {
 			const publicationIso = detectedDate ?? new Date(fallbackDate).toISOString().slice(0, 10);
 			const publicationDate = new Date(publicationIso);
 			if (Number.isNaN(publicationDate.getTime())) {
-				skipReasons.push(`acs/${pub.cacheDocSlug}: could not derive publication date (skip)`);
+				skipReasons.push(`acs/${pub.cacheDocSlug}/${pub.cacheEditionDir}: could not derive publication date (skip)`);
 				publicationsSkipped += 1;
 				continue;
 			}
 
-			const codePrefix = ACS_CERT_CODE_PREFIX[pub.cert] ?? null;
+			const codePrefix = ACS_SLUG_CODE_PREFIX[slug] ?? null;
 			if (codePrefix === null) {
-				skipReasons.push(`acs/${pub.cacheDocSlug}: no element-code prefix registered for cert '${pub.cert}' (skip)`);
+				skipReasons.push(
+					`acs/${pub.cacheDocSlug}/${pub.cacheEditionDir}: no element-code prefix registered for slug '${slug}' (skip)`,
+				);
 				publicationsSkipped += 1;
 				continue;
 			}
 
 			const blocks = parseAcsBody(doc, codePrefix);
 			if (blocks.length === 0) {
-				skipReasons.push(`acs/${pub.cacheDocSlug}: parsed 0 task blocks -- heading regexes did not match (skip)`);
+				skipReasons.push(
+					`acs/${pub.cacheDocSlug}/${pub.cacheEditionDir}: parsed 0 task blocks -- heading regexes did not match (skip)`,
+				);
 				publicationsSkipped += 1;
 				continue;
 			}
 
 			const titleFromMeta = (doc.metadata?.title ?? '').trim();
-			const title = titleFromMeta.length > 0 ? titleFromMeta : `${getCertNames(pub.cert).canonicalFormalPrefix}`;
+			const title = titleFromMeta.length > 0 ? titleFromMeta : `${getSlugNames(slug).canonicalFormalPrefix}`;
 
 			// Group blocks by area (ordered as encountered).
 			const byArea: Map<string, { areaTitle: string; tasks: ParsedTaskBlock[] }> = new Map();
@@ -652,18 +690,18 @@ export async function runAcsIngest(args: IngestArgs): Promise<IngestReport> {
 				}
 			}
 
-			const certNames = getCertNames(pub.cert);
+			const slugNames = getSlugNames(slug);
 			const baseEntryArgs: SourceEntryBuildArgs = {
-				cert: pub.cert,
-				edition,
+				slug,
+				editionSlug,
 				publicationDate,
 				title,
-				canonicalShortPrefix: certNames.canonicalShortPrefix,
-				canonicalFormalPrefix: certNames.canonicalFormalPrefix,
+				canonicalShortPrefix: slugNames.canonicalShortPrefix,
+				canonicalFormalPrefix: slugNames.canonicalFormalPrefix,
 			};
 
 			// Write task body files + assemble the manifest's areas list.
-			const docDir = join(args.derivativeRoot, pub.cert, edition);
+			const docDir = join(args.derivativeRoot, slug);
 			ensureDir(docDir);
 
 			const manifestAreas: AcsManifestArea[] = [];
@@ -675,19 +713,30 @@ export async function runAcsIngest(args: IngestArgs): Promise<IngestReport> {
 			for (const area of areaOrder) {
 				const areaData = byArea.get(area);
 				if (areaData === undefined) continue;
+				const areaPadded = romanToPaddedOrdinal(area);
+				if (areaPadded === null) {
+					// Defensive: parser already validates roman shape, but if the area
+					// somehow exceeds 99 we drop with an explicit reason.
+					skipReasons.push(
+						`acs/${pub.cacheDocSlug}/${pub.cacheEditionDir}: area '${area}' could not be converted to a 2-digit ordinal (skip area)`,
+					);
+					continue;
+				}
+				const areaRomanUpper = area.toUpperCase();
 				const manifestTasks: AcsManifestTask[] = [];
 				localEntries.push(
 					areaEntry({
 						...baseEntryArgs,
-						area,
+						areaPadded,
+						areaRomanUpper,
 						areaTitle: areaData.areaTitle,
 					}),
 				);
 				for (const block of areaData.tasks) {
 					const bodyText = block.bodyLines.join('\n');
 					const bodySha = sha256(bodyText);
-					const repoRelativeBody = `acs/${pub.cert}/${edition}/area-${area}/task-${block.task}.md`;
-					const absBody = join(args.derivativeRoot, pub.cert, edition, `area-${area}`, `task-${block.task}.md`);
+					const repoRelativeBody = `acs/${slug}/area-${areaPadded}/task-${block.task}.md`;
+					const absBody = join(args.derivativeRoot, slug, `area-${areaPadded}`, `task-${block.task}.md`);
 					ensureDir(dirname(absBody));
 					writeFileSync(absBody, `${bodyText}\n`, 'utf-8');
 
@@ -709,7 +758,8 @@ export async function runAcsIngest(args: IngestArgs): Promise<IngestReport> {
 					localEntries.push(
 						taskEntry({
 							...baseEntryArgs,
-							area,
+							areaPadded,
+							areaRomanUpper,
 							areaTitle: areaData.areaTitle,
 							task: block.task,
 							taskTitle: block.taskTitle,
@@ -720,7 +770,8 @@ export async function runAcsIngest(args: IngestArgs): Promise<IngestReport> {
 						localEntries.push(
 							elementEntry({
 								...baseEntryArgs,
-								area,
+								areaPadded,
+								areaRomanUpper,
 								task: block.task,
 								element: el,
 							}),
@@ -728,7 +779,7 @@ export async function runAcsIngest(args: IngestArgs): Promise<IngestReport> {
 					}
 				}
 				manifestAreas.push({
-					area,
+					area: areaPadded,
 					title: areaData.areaTitle,
 					tasks: manifestTasks,
 				});
@@ -737,8 +788,7 @@ export async function runAcsIngest(args: IngestArgs): Promise<IngestReport> {
 			const manifest: AcsManifestFile = {
 				schema_version: 1,
 				corpus: 'acs',
-				cert: pub.cert,
-				edition,
+				slug,
 				title,
 				publisher: 'FAA',
 				publication_date: detectedDate,
@@ -753,11 +803,12 @@ export async function runAcsIngest(args: IngestArgs): Promise<IngestReport> {
 
 			// Apply registry patch + count freshly-ingested entries.
 			let publicationCounted = false;
+			const idPrefix = `airboss-ref:${CORPUS}/${slug}`;
 			for (const entry of localEntries) {
 				const overlay = getEntryLifecycle(entry.id);
 				const existing = sourcesPatch[entry.id];
 				if (existing !== undefined && overlay === 'accepted') {
-					if (entry.id.endsWith(`/${edition}`)) {
+					if (entry.id === idPrefix) {
 						publicationsAlreadyAccepted += 1;
 						publicationCounted = true;
 					}
@@ -765,17 +816,17 @@ export async function runAcsIngest(args: IngestArgs): Promise<IngestReport> {
 				}
 				sourcesPatch[entry.id] = entry;
 				entriesToPromote.push(entry.id);
-				const tail = entry.id.slice(`airboss-ref:${CORPUS}/${pub.cert}/${edition}`.length);
+				const tail = entry.id.slice(idPrefix.length);
 				if (tail.length === 0) {
 					if (!publicationCounted) {
 						publicationsIngested += 1;
 						publicationCounted = true;
 					}
-				} else if (/^\/area-[a-z]+$/.test(tail)) {
+				} else if (/^\/area-\d{2}$/.test(tail)) {
 					areasIngested += 1;
-				} else if (/^\/area-[a-z]+\/task-[a-z]$/.test(tail)) {
+				} else if (/^\/area-\d{2}\/task-[a-z]$/.test(tail)) {
 					tasksIngested += 1;
-				} else if (/^\/area-[a-z]+\/task-[a-z]\/element-[krs][0-9]+$/.test(tail)) {
+				} else if (/^\/area-\d{2}\/task-[a-z]\/elem-[krs]\d{2}$/.test(tail)) {
 					elementsIngested += 1;
 				}
 
@@ -792,14 +843,13 @@ export async function runAcsIngest(args: IngestArgs): Promise<IngestReport> {
 			}
 
 			indexEntries.push({
-				cert: pub.cert,
-				edition,
+				slug,
 				title,
 				publication_date: detectedDate,
-				manifest_path: `acs/${pub.cert}/${edition}/manifest.json`,
+				manifest_path: `acs/${slug}/manifest.json`,
 			});
 		} catch (e) {
-			skipReasons.push(`acs/${pub.cacheDocSlug}/${pub.cert}: extraction failed -- ${(e as Error).message}`);
+			skipReasons.push(`acs/${pub.cacheDocSlug}/${pub.cacheEditionDir}: extraction failed -- ${(e as Error).message}`);
 			publicationsSkipped += 1;
 		}
 	}
@@ -825,7 +875,7 @@ export async function runAcsIngest(args: IngestArgs): Promise<IngestReport> {
 	const corpusIndex: AcsCorpusIndex = {
 		schema_version: 1,
 		fetched_at: new Date().toISOString(),
-		entries: indexEntries.sort((a, b) => `${a.cert}/${a.edition}`.localeCompare(`${b.cert}/${b.edition}`)),
+		entries: indexEntries.sort((a, b) => a.slug.localeCompare(b.slug)),
 	};
 	const indexPath = join(args.derivativeRoot, 'index.json');
 	writeFileSync(indexPath, `${JSON.stringify(corpusIndex, null, 2)}\n`, 'utf-8');
@@ -852,22 +902,22 @@ export async function runAcsIngest(args: IngestArgs): Promise<IngestReport> {
 // ---------------------------------------------------------------------------
 
 const USAGE = `usage:
-  bun run sources register acs [--cache=<path>] [--out=<path>] [--cert=<slug>]
+  bun run sources register acs [--cache=<path>] [--out=<path>] [--slug=<slug>]
   bun run sources register acs --help
 
   Walk the ACS cache (default: $AIRBOSS_HANDBOOK_CACHE/acs/ or
   ~/Documents/airboss-handbook-cache/acs/), extract each PDF, write derivatives
   to <repo>/acs/, and register entries into the @ab/sources registry.
 
-  --cert=<slug> may be repeated (or comma-separated) to limit the run to a
-  subset of registered cert slugs. Defaults to every cert wired in
-  ACS_CACHE_DOC_TO_CERT (currently: ppl-asel only).
+  --slug=<slug> may be repeated (or comma-separated) to limit the run to a
+  subset of registered publication slugs. Defaults to every slug wired in
+  ACS_DETECTED_EDITION_TO_SLUG (currently: ppl-airplane-6c only).
 `;
 
 export interface CliArgs {
 	readonly cacheRoot: string;
 	readonly derivativeRoot: string;
-	readonly certs: readonly string[] | null;
+	readonly slugs: readonly string[] | null;
 	readonly help: boolean;
 }
 
@@ -878,17 +928,17 @@ function defaultCacheRoot(): string {
 export function parseCliArgs(argv: readonly string[]): CliArgs | { error: string } {
 	let cacheRoot = defaultCacheRoot();
 	let derivativeRoot = join(process.cwd(), 'acs');
-	const certsAccum: string[] = [];
+	const slugsAccum: string[] = [];
 	let help = false;
 
 	for (const arg of argv) {
 		if (arg === '--help' || arg === '-h') help = true;
 		else if (arg.startsWith('--cache=')) cacheRoot = arg.slice('--cache='.length);
 		else if (arg.startsWith('--out=')) derivativeRoot = arg.slice('--out='.length);
-		else if (arg.startsWith('--cert=')) {
-			for (const part of arg.slice('--cert='.length).split(',')) {
+		else if (arg.startsWith('--slug=')) {
+			for (const part of arg.slice('--slug='.length).split(',')) {
 				const trimmed = part.trim();
-				if (trimmed.length > 0) certsAccum.push(trimmed);
+				if (trimmed.length > 0) slugsAccum.push(trimmed);
 			}
 		} else return { error: `unknown argument: ${arg}` };
 	}
@@ -896,7 +946,7 @@ export function parseCliArgs(argv: readonly string[]): CliArgs | { error: string
 	return {
 		cacheRoot,
 		derivativeRoot,
-		certs: certsAccum.length === 0 ? null : certsAccum,
+		slugs: slugsAccum.length === 0 ? null : slugsAccum,
 		help,
 	};
 }
@@ -919,7 +969,7 @@ export async function runIngestCli(argv: readonly string[]): Promise<number> {
 	const report = await runAcsIngest({
 		cacheRoot: parsed.cacheRoot,
 		derivativeRoot: parsed.derivativeRoot,
-		certs: parsed.certs ?? undefined,
+		slugs: parsed.slugs ?? undefined,
 	});
 
 	process.stdout.write(

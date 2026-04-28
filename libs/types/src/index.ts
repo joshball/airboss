@@ -10,3 +10,4 @@ export {
 	type StructuredCitation,
 	type StructuredCitationCommon,
 } from './citation';
+export type { RelevanceEntry } from './relevance';

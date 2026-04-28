@@ -193,7 +193,7 @@ beforeAll(async () => {
 			triad: 'knowledge',
 			requiredBloom: 'understand',
 			isLeaf: true,
-			airbossRef: 'airboss-ref:acs/ppl-asel/faa-s-acs-25/area-v/task-a/element-k1',
+			airbossRef: 'airboss-ref:acs/ppl-airplane-6c/area-05/task-a/elem-k01',
 			citations: [],
 			contentHash: null,
 			seedOrigin: SUITE_TAG,
@@ -212,7 +212,7 @@ beforeAll(async () => {
 			triad: 'risk_management',
 			requiredBloom: 'apply',
 			isLeaf: true,
-			airbossRef: 'airboss-ref:acs/ppl-asel/faa-s-acs-25/area-v/task-a/element-r1',
+			airbossRef: 'airboss-ref:acs/ppl-airplane-6c/area-05/task-a/elem-r01',
 			citations: [],
 			contentHash: null,
 			seedOrigin: SUITE_TAG,
@@ -231,7 +231,7 @@ beforeAll(async () => {
 			triad: 'skill',
 			requiredBloom: 'apply',
 			isLeaf: true,
-			airbossRef: 'airboss-ref:acs/ppl-asel/faa-s-acs-25/area-v/task-a/element-s1',
+			airbossRef: 'airboss-ref:acs/ppl-airplane-6c/area-05/task-a/elem-s01',
 			citations: [],
 			contentHash: null,
 			seedOrigin: SUITE_TAG,
@@ -469,6 +469,68 @@ describe('acsLens', () => {
 		// Only K1 element passes.
 		expect(task?.children.length).toBe(1);
 		expect(task?.children[0]?.title).toBe('Aerodynamics of steep turns');
+	});
+
+	it('class-agnostic nodes pass every class filter (default)', async () => {
+		// The seeded fixture has classes=null on every node; any class filter
+		// must let every row through.
+		const goalRow = (await db.select().from(goal).where(eq(goal.id, GOAL_ID)).limit(1))[0];
+		if (!goalRow) throw new Error('expected seeded goal row');
+		const result = await acsLens(db, TEST_USER_ID, {
+			goal: goalRow,
+			filters: { classes: ['amel', 'ames'] },
+		});
+		expect(result.tree[0]?.children.length).toBe(1); // area passes
+		expect(result.tree[0]?.children[0]?.children.length).toBe(1); // task passes
+	});
+
+	it('classes filter excludes class-tagged nodes that do not intersect', async () => {
+		// Insert a sibling task tagged AMEL/AMES only (the FAA's "Maneuvering
+		// with One Engine Inoperative" pattern), then verify the ASEL filter
+		// excludes it.
+		const now = new Date();
+		const TASK_B_ID = generateSyllabusNodeId();
+		await db.insert(syllabusNode).values([
+			{
+				id: TASK_B_ID,
+				syllabusId: PPL_SYL_ID,
+				parentId: AREA_V_ID,
+				level: 'task',
+				ordinal: 2,
+				code: `${SUITE_TOKEN}-V.B-mei`,
+				title: 'Maneuvering with One Engine Inoperative',
+				description: '',
+				triad: null,
+				requiredBloom: null,
+				isLeaf: false,
+				airbossRef: null,
+				citations: [],
+				classes: ['amel', 'ames'],
+				contentHash: null,
+				seedOrigin: SUITE_TAG,
+				createdAt: now,
+				updatedAt: now,
+			},
+		]);
+		try {
+			const goalRow = (await db.select().from(goal).where(eq(goal.id, GOAL_ID)).limit(1))[0];
+			if (!goalRow) throw new Error('expected seeded goal row');
+			const aselResult = await acsLens(db, TEST_USER_ID, {
+				goal: goalRow,
+				filters: { classes: ['asel'] },
+			});
+			const aselTaskCount = aselResult.tree[0]?.children[0]?.children.length ?? 0;
+			expect(aselTaskCount).toBe(1); // class-agnostic task A passes; AMEL/AMES task B excluded.
+
+			const meiResult = await acsLens(db, TEST_USER_ID, {
+				goal: goalRow,
+				filters: { classes: ['amel'] },
+			});
+			const meiTaskCount = meiResult.tree[0]?.children[0]?.children.length ?? 0;
+			expect(meiTaskCount).toBe(2); // class-agnostic + AMEL/AMES task both pass.
+		} finally {
+			await db.delete(syllabusNode).where(eq(syllabusNode.id, TASK_B_ID));
+		}
 	});
 });
 

@@ -5,16 +5,17 @@
  * `airboss-ref:acs/...` URL in a lesson resolves with zero ERROR findings.
  * Before this slice landed, the same URL would have triggered row-2 ERROR
  * (entry not in registry); the test below is the proof that ACS Lane D
- * closed the gate for PPL-ASEL ACS references.
+ * closed the gate for PPL Airplane ACS references under the cert-syllabus
+ * WP locked-Q7 locator format.
  *
  * Also covers cross-corpus resolution: a single lesson cites both
  * `airboss-ref:acs/...` AND `airboss-ref:regs/...`; both must validate clean
  * after their respective ingests run, proving the corpus resolvers compose
  * without stepping on each other.
  *
- * Slice scope: PPL-ASEL only. Other certs are skipped with explicit reasons
- * by the ingest until Open Question 7 (final ACS locator convention)
- * resolves.
+ * Slice scope: `ppl-airplane-6c` only. Other publications are skipped with
+ * explicit reasons by the ingest until additional slug mappings are wired
+ * into `ACS_DETECTED_EDITION_TO_SLUG`.
  */
 
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
@@ -52,7 +53,7 @@ async function ingestRealAcsCorpus(): Promise<void> {
 	await runAcsIngest({ cacheRoot, derivativeRoot: ACS_DERIVATIVE_ROOT });
 }
 
-describe('phase-10 ACS validator smoke (PPL-ASEL slice)', () => {
+describe('phase-10 ACS validator smoke (ppl-airplane-6c slice)', () => {
 	it('validates a lesson citing an ACS task with zero ERRORs', async () => {
 		await ingestRealAcsCorpus();
 
@@ -66,7 +67,7 @@ section_order: "01"
 
 # ACS task smoke test
 
-Pilot Qualifications is covered in [@cite](airboss-ref:acs/ppl-asel/faa-s-acs-6c/area-i/task-a).
+Pilot Qualifications is covered in [@cite](airboss-ref:acs/ppl-airplane-6c/area-01/task-a).
 `;
 		writeFileSync(join(lessonsDir, 'acs-task.md'), lessonContent, 'utf-8');
 
@@ -93,7 +94,7 @@ section_order: "01"
 ---
 
 The recordkeeping requirement is captured in
-[@cite](airboss-ref:acs/ppl-asel/faa-s-acs-6c/area-i/task-a/element-k1).
+[@cite](airboss-ref:acs/ppl-airplane-6c/area-01/task-a/elem-k01).
 `;
 		writeFileSync(join(lessonsDir, 'acs-element.md'), lessonContent, 'utf-8');
 
@@ -132,7 +133,7 @@ section_order: "01"
 ---
 
 The pilot-qualification standard is in
-[@cite](airboss-ref:acs/ppl-asel/faa-s-acs-6c/area-i/task-a); the underlying
+[@cite](airboss-ref:acs/ppl-airplane-6c/area-01/task-a); the underlying
 regulation is [@cite](airboss-ref:regs/cfr-14/61/3?at=2026).
 `;
 		writeFileSync(join(lessonsDir, 'cross-corpus.md'), lessonContent, 'utf-8');

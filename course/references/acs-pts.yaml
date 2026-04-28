@@ -1,0 +1,49 @@
+references:
+  - slug: ppl-airplane-acs-6c
+    kind: acs
+    edition: FAA-S-ACS-6C
+    title: Private Pilot -- Airplane Airman Certification Standards
+    publisher: FAA
+    url: https://www.faa.gov/training_testing/testing/acs/private_airplane_acs_6.pdf
+
+  - slug: ir-airplane-acs-8c
+    kind: acs
+    edition: FAA-S-ACS-8C
+    title: Instrument Rating -- Airplane Airman Certification Standards
+    publisher: FAA
+    url: https://www.faa.gov/training_testing/testing/acs/instrument_rating_airplane_acs_8.pdf
+
+  - slug: cpl-airplane-acs-7b
+    kind: acs
+    edition: FAA-S-ACS-7B
+    title: Commercial Pilot -- Airplane Airman Certification Standards
+    publisher: FAA
+    url: https://www.faa.gov/training_testing/testing/acs/commercial_airplane_acs_7.pdf
+
+  - slug: cfi-airplane-acs-25
+    kind: acs
+    edition: FAA-S-ACS-25
+    title: Flight Instructor -- Airplane Airman Certification Standards
+    publisher: FAA
+    url: https://www.faa.gov/training_testing/testing/acs/cfi_airplane_acs_25.pdf
+
+  - slug: cfii-airplane-pts-9e
+    kind: pts
+    edition: FAA-S-8081-9E
+    title: Flight Instructor Instrument (Airplane / Helicopter) Practical Test Standards
+    publisher: FAA
+    url: https://www.faa.gov/training_testing/testing/acs/cfi_instrument_pts_9.pdf
+
+  - slug: atp-airplane-acs-11a
+    kind: acs
+    edition: FAA-S-ACS-11A
+    title: Airline Transport Pilot and Type Rating -- Airplane Airman Certification Standards
+    publisher: FAA
+    url: https://www.faa.gov/training_testing/testing/acs/atp_airplane_acs_11.pdf
+
+  - slug: faa-g-acs-2-companion-guide
+    kind: other
+    edition: FAA-G-ACS-2
+    title: Airman Certification Standards Companion Guide for Pilots
+    publisher: FAA
+    url: https://www.faa.gov/training_testing/testing/acs/media/faa_g_acs_2.pdf

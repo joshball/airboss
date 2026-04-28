@@ -225,20 +225,37 @@ export async function getCitationsForSyllabusNode(
 	return row?.citations ?? [];
 }
 
+/**
+ * Optional class scoping for the leaf-graph traversals. Class-agnostic leaves
+ * (`classes IS NULL`) always pass; class-tagged leaves pass when their tags
+ * intersect the filter array. Empty / undefined filter = pass.
+ *
+ * Values are members of `AIRPLANE_CLASS_VALUES` (`asel`/`amel`/`ases`/`ames`).
+ */
+export interface ClassFilterOptions {
+	classes?: readonly string[];
+}
+
 /** Forward query: knowledge nodes linked to a syllabus leaf, with link weight. */
 export async function getKnowledgeNodesForSyllabusLeaf(
 	syllabusNodeId: string,
+	options: ClassFilterOptions = {},
 	db: Db = defaultDb,
 ): Promise<Array<{ node: KnowledgeNodeRow; weight: number }>> {
 	const rows = await db
 		.select({
 			node: knowledgeNode,
 			weight: syllabusNodeLink.weight,
+			leafClasses: syllabusNode.classes,
 		})
 		.from(syllabusNodeLink)
+		.innerJoin(syllabusNode, eq(syllabusNode.id, syllabusNodeLink.syllabusNodeId))
 		.innerJoin(knowledgeNode, eq(knowledgeNode.id, syllabusNodeLink.knowledgeNodeId))
 		.where(eq(syllabusNodeLink.syllabusNodeId, syllabusNodeId));
-	return rows.map((r) => ({ node: r.node, weight: r.weight }));
+	const classFilter = options.classes ?? [];
+	return rows
+		.filter((r) => leafPassesClassFilter(r.leafClasses, classFilter))
+		.map((r) => ({ node: r.node, weight: r.weight }));
 }
 
 export interface SyllabusLeafWithSyllabus {
@@ -255,6 +272,7 @@ export interface SyllabusLeafWithSyllabus {
  */
 export async function getSyllabusLeavesForKnowledgeNode(
 	knowledgeNodeId: string,
+	options: ClassFilterOptions = {},
 	db: Db = defaultDb,
 ): Promise<SyllabusLeafWithSyllabus[]> {
 	const rows = await db
@@ -267,7 +285,20 @@ export async function getSyllabusLeavesForKnowledgeNode(
 		.innerJoin(syllabusNode, eq(syllabusNode.id, syllabusNodeLink.syllabusNodeId))
 		.innerJoin(syllabus, eq(syllabus.id, syllabusNode.syllabusId))
 		.where(eq(syllabusNodeLink.knowledgeNodeId, knowledgeNodeId));
-	return rows.map((r) => ({ leaf: r.leaf, syllabus: r.syllabus, weight: r.weight }));
+	const classFilter = options.classes ?? [];
+	return rows
+		.filter((r) => leafPassesClassFilter(r.leaf.classes, classFilter))
+		.map((r) => ({ leaf: r.leaf, syllabus: r.syllabus, weight: r.weight }));
+}
+
+/** True when a leaf's `classes` column is null OR intersects the filter array. */
+function leafPassesClassFilter(leafClasses: readonly string[] | null, filter: readonly string[]): boolean {
+	if (filter.length === 0) return true;
+	if (leafClasses === null) return true;
+	for (const cls of leafClasses) {
+		if (filter.includes(cls)) return true;
+	}
+	return false;
 }
 
 // ---------------------------------------------------------------------------
@@ -301,18 +332,27 @@ export function validateAirbossRefForLeaf(identifier: string, expectations: { sy
 			`airboss-ref corpus "${parsed.corpus}" is not enumerated in ADR 019 §1.2`,
 		);
 	}
-	if (expectations.syllabusKind === 'acs' || expectations.syllabusKind === 'pts') {
+	if (expectations.syllabusKind === 'acs') {
 		if (parsed.corpus !== 'acs') {
-			throw new AirbossRefValidationError(
-				identifier,
-				`ACS / PTS leaves require the "acs" corpus; got "${parsed.corpus}"`,
-			);
+			throw new AirbossRefValidationError(identifier, `ACS leaves require the "acs" corpus; got "${parsed.corpus}"`);
 		}
 		const locResult = resolver.parseLocator(parsed.locator);
 		if (locResult.kind !== 'ok') {
 			throw new AirbossRefValidationError(
 				identifier,
 				`airboss-ref locator does not parse for the acs corpus: ${locResult.message}`,
+			);
+		}
+	}
+	if (expectations.syllabusKind === 'pts') {
+		if (parsed.corpus !== 'pts') {
+			throw new AirbossRefValidationError(identifier, `PTS leaves require the "pts" corpus; got "${parsed.corpus}"`);
+		}
+		const locResult = resolver.parseLocator(parsed.locator);
+		if (locResult.kind !== 'ok') {
+			throw new AirbossRefValidationError(
+				identifier,
+				`airboss-ref locator does not parse for the pts corpus: ${locResult.message}`,
 			);
 		}
 	}
@@ -487,6 +527,7 @@ export async function upsertSyllabusNode(input: NewSyllabusNodeRow, db: Db = def
 				isLeaf: input.isLeaf,
 				airbossRef: input.airbossRef,
 				citations: input.citations,
+				classes: input.classes,
 				contentHash: input.contentHash,
 				seedOrigin: input.seedOrigin,
 				updatedAt: new Date(),

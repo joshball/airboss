@@ -17,6 +17,8 @@ import './regs/index.ts';
 import './handbooks/index.ts';
 // Side-effect import: registers the `acs` CorpusResolver.
 import './acs/index.ts';
+// Side-effect import: registers the `pts` CorpusResolver.
+import './pts/index.ts';
 // Side-effect import: registers the `aim` CorpusResolver.
 import './aim/index.ts';
 // Side-effect import: registers the `ac` CorpusResolver.

@@ -1,11 +1,16 @@
 /**
  * Phase 10 (slice) -- read ACS derivatives.
  *
- * The on-disk shape (per ADR 018; mirrors `libs/sources/src/ac/derivative-reader.ts`):
+ * The on-disk shape (per ADR 018; mirrors `libs/sources/src/ac/derivative-reader.ts`,
+ * adopting the cert-syllabus WP's locked Q7 locator format):
  *
- *   acs/index.json                                            corpus-level catalog
- *   acs/<cert>/<edition>/manifest.json                        per-publication manifest
- *   acs/<cert>/<edition>/area-<roman>/task-<letter>.md        per-task body markdown
+ *   acs/index.json                                                    corpus-level catalog
+ *   acs/<slug>/manifest.json                                          per-publication manifest
+ *   acs/<slug>/area-<NN>/task-<letter>.md                             per-task body markdown
+ *
+ * Where `<slug>` is the locked publication slug (e.g. `ppl-airplane-6c`)
+ * and `<NN>` is the 2-digit zero-padded area ordinal. Cert + edition
+ * collapse into the slug per the locked Q7 resolution.
  *
  * The task body file is the unit of derivative storage for the slice -- one
  * file per Task, holding the full task block (References, Objective, Note,
@@ -16,27 +21,26 @@
  * `@text` token is bound to an element identifier.
  *
  * The corpus-level `acs/index.json` is the audit-trail / discovery surface:
- * one entry per ingested (cert, edition) pair, with publication date +
+ * one entry per ingested publication slug, with publication date +
  * source_sha256. The resolver consults it to enumerate the corpus without
  * walking the directory tree.
  *
- * Source of truth: ADR 019 §1.2 (`acs` URI shape), ADR 018 (storage policy).
+ * Source of truth: ADR 019 §1.2 (`acs` URI shape), ADR 018 (storage policy),
+ * cert-syllabus WP locked Q7 (2026-04-27).
  */
 
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 /**
- * Per-publication manifest. One file per (cert, edition) pair under
- * `acs/<cert>/<edition>/manifest.json`.
+ * Per-publication manifest. One file per publication slug under
+ * `acs/<slug>/manifest.json`.
  */
 export interface AcsManifestFile {
 	readonly schema_version: 1;
 	readonly corpus: 'acs';
-	/** Cert slug (matches `ACS_CERT_SLUGS` in `locator.ts`). E.g. `'ppl-asel'`. */
-	readonly cert: string;
-	/** Edition slug (`faa-s-acs-6c` etc.). Lowercase. */
-	readonly edition: string;
+	/** Publication slug (matches `ACS_PUBLICATION_SLUGS` in `locator.ts`). E.g. `'ppl-airplane-6c'`. */
+	readonly slug: string;
 	/** Title from the ACS cover page. */
 	readonly title: string;
 	/** Publisher (always "FAA" for ACSs). */
@@ -53,7 +57,7 @@ export interface AcsManifestFile {
 }
 
 export interface AcsManifestArea {
-	/** Roman numeral, lowercased (e.g. `'v'` for Area V). */
+	/** 2-digit zero-padded area ordinal (e.g. `'05'` for Area V). */
 	readonly area: string;
 	/** Area title from the heading (e.g. `'Preflight Preparation'`). */
 	readonly title: string;
@@ -75,7 +79,7 @@ export interface AcsManifestTask {
 export interface AcsManifestElement {
 	/** Triad letter -- `'k'`, `'r'`, or `'s'`. */
 	readonly triad: 'k' | 'r' | 's';
-	/** Ordinal (`'1'`, `'2'`, ...). Sub-lettered children (`PA.I.C.K3a`) collapse into the parent's body. */
+	/** 2-digit zero-padded ordinal (`'01'`, `'02'`, ...). Sub-lettered children (`PA.I.C.K3a`) collapse into the parent's body. */
 	readonly ordinal: string;
 	/** Full code as printed in the PDF (`PA.I.C.K3`). Useful for in-body element-extraction. */
 	readonly code: string;
@@ -84,7 +88,7 @@ export interface AcsManifestElement {
 }
 
 /**
- * Corpus-level `acs/index.json`. Lists every ingested (cert, edition) pair so
+ * Corpus-level `acs/index.json`. Lists every ingested publication slug so
  * the resolver can enumerate without filesystem walking.
  */
 export interface AcsCorpusIndex {
@@ -94,8 +98,7 @@ export interface AcsCorpusIndex {
 }
 
 export interface AcsCorpusIndexEntry {
-	readonly cert: string;
-	readonly edition: string;
+	readonly slug: string;
 	readonly title: string;
 	readonly publication_date: string | null;
 	readonly manifest_path: string;
@@ -123,11 +126,11 @@ export function readCorpusIndex(root: string): AcsCorpusIndex | null {
 }
 
 /**
- * Read a per-publication manifest at `<root>/<cert>/<edition>/manifest.json`.
+ * Read a per-publication manifest at `<root>/<slug>/manifest.json`.
  * Throws when the file is missing or required fields are absent.
  */
-export function readAcsManifest(root: string, cert: string, edition: string): AcsManifestFile {
-	const path = join(root, cert, edition, 'manifest.json');
+export function readAcsManifest(root: string, slug: string): AcsManifestFile {
+	const path = join(root, slug, 'manifest.json');
 	if (!existsSync(path)) {
 		throw new Error(`acs manifest not found: ${path}`);
 	}
@@ -142,8 +145,7 @@ export function readAcsManifest(root: string, cert: string, edition: string): Ac
 	const required: readonly (keyof AcsManifestFile)[] = [
 		'schema_version',
 		'corpus',
-		'cert',
-		'edition',
+		'slug',
 		'title',
 		'source_url',
 		'source_sha256',
