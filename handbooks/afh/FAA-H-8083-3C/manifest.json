@@ -9283,5 +9283,95 @@
       "canonicalized": 0,
       "freed_bytes": 0
     }
-  }
+  },
+  "errata": [
+    {
+      "id": "mosaic",
+      "source_url": "https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/AFH_Addendum_(MOSAIC).pdf",
+      "published_at": "2025-10-20",
+      "sha256": "9970b94215d752d1496e77b6c0233d592220ecc262f8d9c951f079f7587e3fcd",
+      "fetched_at": "2026-04-28T13:22:22.147345+00:00",
+      "applied_at": "2026-04-28T13:22:22.215356+00:00",
+      "parser": "additive-paragraph",
+      "sections_patched": [
+        {
+          "section_code": "1.2",
+          "section_path": "handbooks/afh/FAA-H-8083-3C/01/02-role-of-the-faa.md",
+          "chapter": "01",
+          "target_page": "1-4",
+          "patch_kind": "replace_paragraph",
+          "section_anchor": "Role of the FAA",
+          "new_heading": null,
+          "content_hash": "f1d922d4454c96448d9b780b7652de19dd69cac3022d1689a9b2cd29b0c13f0d",
+          "errata_note_path": "handbooks/afh/FAA-H-8083-3C/01/02-role-of-the-faa.errata.md"
+        },
+        {
+          "section_code": "1.8",
+          "section_path": "handbooks/afh/FAA-H-8083-3C/01/08-continuing-education.md",
+          "chapter": "01",
+          "target_page": "1-16",
+          "patch_kind": "add_subsection",
+          "section_anchor": "Continuing Education",
+          "new_heading": "Pilot Certificate Privileges & Limitations",
+          "content_hash": "59b2cb27953180bb14f519316100bcc50b55c4fcd01492b89d3d88601aec149e",
+          "errata_note_path": "handbooks/afh/FAA-H-8083-3C/01/08-continuing-education.errata.md"
+        },
+        {
+          "section_code": "2.2",
+          "section_path": "handbooks/afh/FAA-H-8083-3C/02/02-preflight-assessment-of-the-aircraft.md",
+          "chapter": "02",
+          "target_page": "2-4",
+          "patch_kind": "add_subsection",
+          "section_anchor": "Preflight Assessment of the Aircraft",
+          "new_heading": "Light-sport Category Aircraft Maintenance",
+          "content_hash": "05460791e3f603561b85f5ba27b8d9f7330cec89e448a0029e82898f337cbe20",
+          "errata_note_path": "handbooks/afh/FAA-H-8083-3C/02/02-preflight-assessment-of-the-aircraft.errata.md"
+        },
+        {
+          "section_code": "2.2",
+          "section_path": "handbooks/afh/FAA-H-8083-3C/02/02-preflight-assessment-of-the-aircraft.md",
+          "chapter": "02",
+          "target_page": "2-12",
+          "patch_kind": "append_paragraph",
+          "section_anchor": "Preflight Assessment of the Aircraft, Engine, and Propeller",
+          "new_heading": null,
+          "content_hash": "c62e78632ce7c445a18fcd82e1f14ebe0f05a7d4ad1e195839e15d0bc20dc885",
+          "errata_note_path": "handbooks/afh/FAA-H-8083-3C/02/02-preflight-assessment-of-the-aircraft.errata.md"
+        },
+        {
+          "section_code": "4.5",
+          "section_path": "handbooks/afh/FAA-H-8083-3C/04/05-mitigating-risks-from-mismanagement-of-energy.md",
+          "chapter": "04",
+          "target_page": "4-17",
+          "patch_kind": "add_subsection",
+          "section_anchor": "Mitigating Risks from Mismanagement of Energy",
+          "new_heading": "High-Drag Low-Mass Airplanes",
+          "content_hash": "a0abad49cb4b76e3ae5aaa09dad83e982dd828487d0cd84c40b63fa8046640f4",
+          "errata_note_path": "handbooks/afh/FAA-H-8083-3C/04/05-mitigating-risks-from-mismanagement-of-energy.errata.md"
+        },
+        {
+          "section_code": "6.2",
+          "section_path": "handbooks/afh/FAA-H-8083-3C/06/02-prior-to-takeoff.md",
+          "chapter": "06",
+          "target_page": "6-1",
+          "patch_kind": "append_paragraph",
+          "section_anchor": "Prior to Takeoff",
+          "new_heading": null,
+          "content_hash": "4eac6283e172559a82cb460004710b9916fd5abbc0cad2dd7cf99c9abb8589dd",
+          "errata_note_path": "handbooks/afh/FAA-H-8083-3C/06/02-prior-to-takeoff.errata.md"
+        },
+        {
+          "section_code": "6.4",
+          "section_path": "handbooks/afh/FAA-H-8083-3C/06/04-01-takeoff-roll.md",
+          "chapter": "06",
+          "target_page": "6-7",
+          "patch_kind": "append_paragraph",
+          "section_anchor": "Crosswind Takeoff: Takeoff Roll",
+          "new_heading": null,
+          "content_hash": "4c568431aaef240c3843ee09a6488fd06722063d7b58f7df4f3e80722df07e17",
+          "errata_note_path": "handbooks/afh/FAA-H-8083-3C/06/04-01-takeoff-roll.errata.md"
+        }
+      ]
+    }
+  ]
 }

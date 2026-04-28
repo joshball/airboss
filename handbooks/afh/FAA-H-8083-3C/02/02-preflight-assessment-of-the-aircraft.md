@@ -67,3 +67,309 @@ markings, or any combination thereof (14 CFR part 91, section 91.9)
 ⦁ Current weight and balance data
 ⦁ Compass correction card, if required under applicable airworthiness standards
 ⦁ External data plate (14 CFR part 45, section 45.11)
+
+## Light-sport Category Aircraft Maintenance
+
+> Added by FAA erratum (target page 2-4). See sidecar `.errata.md` for citation.
+
+Light-sport category airplanes should be treated with the same level of care as any standard
+airworthiness certificated airplane; however, there are some differences in who may inspect
+or maintain these aircraft. Light-sport category aircraft may be maintained and inspected
+by:
+1. A repairman (light-sport category aircraft) with a Maintenance rating; or
+2. An FAA-certificated Mechanic with Airframe and Powerplant (A&P) ratings; or
+3. An appropriately rated repair station; or
+4. The holder of a sport pilot certificate may perform preventive maintenance on a light-
+sport category aircraft owned or operated by that pilot.
+Light-sport category aircraft must have a condition inspection performed annually, in
+accordance with inspection procedures developed by the aircraft manufacturer. Additionally,
+between required inspections, maintenance must be performed to repair any discrepancies
+found on the aircraft. Maintenance on light-sport category aircraft must be performed in
+accordance with 14 CFR part 43. The aircraft maintenance manual includes the specific
+information for repair and maintenance on inspections, repair, and authorization for repairs
+and maintenance.
+Aircraft owners are responsible to ensure that maintenance and inspection record entries are
+made and maintained for the aircraft.
+Major repairs and major alterations may be performed on the aircraft if the repair or
+alteration is authorized by the manufacturer. A major repair or major alteration may only be
+performed in accordance with maintenance and inspection procedures developed by the
+aircraft manufacturer. If a major repair or major alteration is performed on a product
+produced under an FAA approval (e.g., engine, propeller) that is installed on a light-sport
+category aircraft, the repair or alteration may only be approved by an FAA-certificated
+mechanic with an Inspection Authorization (IA), using FAA-approved data, and recorded on
+FAA Form 337.
+Manufacturers of light-sport category aircraft may issue safety directives informing owners
+of safety-of-flight issues for the aircraft. Compliance with manufacturer-issued safety
+directives is not mandatory, but highly recommended. Compliance with airworthiness
+directives that are applicable to the aircraft, or any product or part installed on the aircraft,
+is mandatory.
+Light-sport category aircraft owners should comply with:
+• Safety directives (alerts, bulletins, and notifications) issued by the light-sport
+category aircraft manufacturer
+• Safety alerts (immediate action)
+• Service bulletins (recommending future action)
+• Safety notifications (informational)
+
+> Paragraph added by FAA erratum (target page 2-12).
+
+Many light sport category certificated airplanes are equipped with water-cooled engines.
+These airplanes may be tightly cowled, which reduces drag. A liquid-cooled engine
+minimizes the need for cylinder cooling inlets, which further reduces drag and improves
+performance. Preflighting this system requires that the radiator, coolant hoses, and
+expansion tank are checked for condition, freedom from leaks, and coolant level
+requirements.
+
+## Light-sport Category Aircraft Maintenance
+
+> Added by FAA erratum (target page 2-4). See sidecar `.errata.md` for citation.
+
+Light-sport category airplanes should be treated with the same level of care as any standard
+airworthiness certificated airplane; however, there are some differences in who may inspect
+or maintain these aircraft. Light-sport category aircraft may be maintained and inspected
+by:
+1. A repairman (light-sport category aircraft) with a Maintenance rating; or
+2. An FAA-certificated Mechanic with Airframe and Powerplant (A&P) ratings; or
+3. An appropriately rated repair station; or
+4. The holder of a sport pilot certificate may perform preventive maintenance on a light-
+sport category aircraft owned or operated by that pilot.
+Light-sport category aircraft must have a condition inspection performed annually, in
+accordance with inspection procedures developed by the aircraft manufacturer. Additionally,
+between required inspections, maintenance must be performed to repair any discrepancies
+found on the aircraft. Maintenance on light-sport category aircraft must be performed in
+accordance with 14 CFR part 43. The aircraft maintenance manual includes the specific
+information for repair and maintenance on inspections, repair, and authorization for repairs
+and maintenance.
+Aircraft owners are responsible to ensure that maintenance and inspection record entries are
+made and maintained for the aircraft.
+Major repairs and major alterations may be performed on the aircraft if the repair or
+alteration is authorized by the manufacturer. A major repair or major alteration may only be
+performed in accordance with maintenance and inspection procedures developed by the
+aircraft manufacturer. If a major repair or major alteration is performed on a product
+produced under an FAA approval (e.g., engine, propeller) that is installed on a light-sport
+category aircraft, the repair or alteration may only be approved by an FAA-certificated
+mechanic with an Inspection Authorization (IA), using FAA-approved data, and recorded on
+FAA Form 337.
+Manufacturers of light-sport category aircraft may issue safety directives informing owners
+of safety-of-flight issues for the aircraft. Compliance with manufacturer-issued safety
+directives is not mandatory, but highly recommended. Compliance with airworthiness
+directives that are applicable to the aircraft, or any product or part installed on the aircraft,
+is mandatory.
+Light-sport category aircraft owners should comply with:
+• Safety directives (alerts, bulletins, and notifications) issued by the light-sport
+category aircraft manufacturer
+• Safety alerts (immediate action)
+• Service bulletins (recommending future action)
+• Safety notifications (informational)
+
+> Paragraph added by FAA erratum (target page 2-12).
+
+Many light sport category certificated airplanes are equipped with water-cooled engines.
+These airplanes may be tightly cowled, which reduces drag. A liquid-cooled engine
+minimizes the need for cylinder cooling inlets, which further reduces drag and improves
+performance. Preflighting this system requires that the radiator, coolant hoses, and
+expansion tank are checked for condition, freedom from leaks, and coolant level
+requirements.
+
+## Light-sport Category Aircraft Maintenance
+
+> Added by FAA erratum (target page 2-4). See sidecar `.errata.md` for citation.
+
+Light-sport category airplanes should be treated with the same level of care as any standard
+airworthiness certificated airplane; however, there are some differences in who may inspect
+or maintain these aircraft. Light-sport category aircraft may be maintained and inspected
+by:
+1. A repairman (light-sport category aircraft) with a Maintenance rating; or
+2. An FAA-certificated Mechanic with Airframe and Powerplant (A&P) ratings; or
+3. An appropriately rated repair station; or
+4. The holder of a sport pilot certificate may perform preventive maintenance on a light-
+sport category aircraft owned or operated by that pilot.
+Light-sport category aircraft must have a condition inspection performed annually, in
+accordance with inspection procedures developed by the aircraft manufacturer. Additionally,
+between required inspections, maintenance must be performed to repair any discrepancies
+found on the aircraft. Maintenance on light-sport category aircraft must be performed in
+accordance with 14 CFR part 43. The aircraft maintenance manual includes the specific
+information for repair and maintenance on inspections, repair, and authorization for repairs
+and maintenance.
+Aircraft owners are responsible to ensure that maintenance and inspection record entries are
+made and maintained for the aircraft.
+Major repairs and major alterations may be performed on the aircraft if the repair or
+alteration is authorized by the manufacturer. A major repair or major alteration may only be
+performed in accordance with maintenance and inspection procedures developed by the
+aircraft manufacturer. If a major repair or major alteration is performed on a product
+produced under an FAA approval (e.g., engine, propeller) that is installed on a light-sport
+category aircraft, the repair or alteration may only be approved by an FAA-certificated
+mechanic with an Inspection Authorization (IA), using FAA-approved data, and recorded on
+FAA Form 337.
+Manufacturers of light-sport category aircraft may issue safety directives informing owners
+of safety-of-flight issues for the aircraft. Compliance with manufacturer-issued safety
+directives is not mandatory, but highly recommended. Compliance with airworthiness
+directives that are applicable to the aircraft, or any product or part installed on the aircraft,
+is mandatory.
+Light-sport category aircraft owners should comply with:
+• Safety directives (alerts, bulletins, and notifications) issued by the light-sport
+category aircraft manufacturer
+• Safety alerts (immediate action)
+• Service bulletins (recommending future action)
+• Safety notifications (informational)
+
+> Paragraph added by FAA erratum (target page 2-12).
+
+Many light sport category certificated airplanes are equipped with water-cooled engines.
+These airplanes may be tightly cowled, which reduces drag. A liquid-cooled engine
+minimizes the need for cylinder cooling inlets, which further reduces drag and improves
+performance. Preflighting this system requires that the radiator, coolant hoses, and
+expansion tank are checked for condition, freedom from leaks, and coolant level
+requirements.
+
+## Light-sport Category Aircraft Maintenance
+
+> Added by FAA erratum (target page 2-4). See sidecar `.errata.md` for citation.
+
+Light-sport category airplanes should be treated with the same level of care as any standard
+airworthiness certificated airplane; however, there are some differences in who may inspect
+or maintain these aircraft. Light-sport category aircraft may be maintained and inspected
+by:
+1. A repairman (light-sport category aircraft) with a Maintenance rating; or
+2. An FAA-certificated Mechanic with Airframe and Powerplant (A&P) ratings; or
+3. An appropriately rated repair station; or
+4. The holder of a sport pilot certificate may perform preventive maintenance on a light-
+sport category aircraft owned or operated by that pilot.
+Light-sport category aircraft must have a condition inspection performed annually, in
+accordance with inspection procedures developed by the aircraft manufacturer. Additionally,
+between required inspections, maintenance must be performed to repair any discrepancies
+found on the aircraft. Maintenance on light-sport category aircraft must be performed in
+accordance with 14 CFR part 43. The aircraft maintenance manual includes the specific
+information for repair and maintenance on inspections, repair, and authorization for repairs
+and maintenance.
+Aircraft owners are responsible to ensure that maintenance and inspection record entries are
+made and maintained for the aircraft.
+Major repairs and major alterations may be performed on the aircraft if the repair or
+alteration is authorized by the manufacturer. A major repair or major alteration may only be
+performed in accordance with maintenance and inspection procedures developed by the
+aircraft manufacturer. If a major repair or major alteration is performed on a product
+produced under an FAA approval (e.g., engine, propeller) that is installed on a light-sport
+category aircraft, the repair or alteration may only be approved by an FAA-certificated
+mechanic with an Inspection Authorization (IA), using FAA-approved data, and recorded on
+FAA Form 337.
+Manufacturers of light-sport category aircraft may issue safety directives informing owners
+of safety-of-flight issues for the aircraft. Compliance with manufacturer-issued safety
+directives is not mandatory, but highly recommended. Compliance with airworthiness
+directives that are applicable to the aircraft, or any product or part installed on the aircraft,
+is mandatory.
+Light-sport category aircraft owners should comply with:
+• Safety directives (alerts, bulletins, and notifications) issued by the light-sport
+category aircraft manufacturer
+• Safety alerts (immediate action)
+• Service bulletins (recommending future action)
+• Safety notifications (informational)
+
+> Paragraph added by FAA erratum (target page 2-12).
+
+Many light sport category certificated airplanes are equipped with water-cooled engines.
+These airplanes may be tightly cowled, which reduces drag. A liquid-cooled engine
+minimizes the need for cylinder cooling inlets, which further reduces drag and improves
+performance. Preflighting this system requires that the radiator, coolant hoses, and
+expansion tank are checked for condition, freedom from leaks, and coolant level
+requirements.
+
+## Light-sport Category Aircraft Maintenance
+
+> Added by FAA erratum (target page 2-4). See sidecar `.errata.md` for citation.
+
+Light-sport category airplanes should be treated with the same level of care as any standard
+airworthiness certificated airplane; however, there are some differences in who may inspect
+or maintain these aircraft. Light-sport category aircraft may be maintained and inspected
+by:
+1. A repairman (light-sport category aircraft) with a Maintenance rating; or
+2. An FAA-certificated Mechanic with Airframe and Powerplant (A&P) ratings; or
+3. An appropriately rated repair station; or
+4. The holder of a sport pilot certificate may perform preventive maintenance on a light-
+sport category aircraft owned or operated by that pilot.
+Light-sport category aircraft must have a condition inspection performed annually, in
+accordance with inspection procedures developed by the aircraft manufacturer. Additionally,
+between required inspections, maintenance must be performed to repair any discrepancies
+found on the aircraft. Maintenance on light-sport category aircraft must be performed in
+accordance with 14 CFR part 43. The aircraft maintenance manual includes the specific
+information for repair and maintenance on inspections, repair, and authorization for repairs
+and maintenance.
+Aircraft owners are responsible to ensure that maintenance and inspection record entries are
+made and maintained for the aircraft.
+Major repairs and major alterations may be performed on the aircraft if the repair or
+alteration is authorized by the manufacturer. A major repair or major alteration may only be
+performed in accordance with maintenance and inspection procedures developed by the
+aircraft manufacturer. If a major repair or major alteration is performed on a product
+produced under an FAA approval (e.g., engine, propeller) that is installed on a light-sport
+category aircraft, the repair or alteration may only be approved by an FAA-certificated
+mechanic with an Inspection Authorization (IA), using FAA-approved data, and recorded on
+FAA Form 337.
+Manufacturers of light-sport category aircraft may issue safety directives informing owners
+of safety-of-flight issues for the aircraft. Compliance with manufacturer-issued safety
+directives is not mandatory, but highly recommended. Compliance with airworthiness
+directives that are applicable to the aircraft, or any product or part installed on the aircraft,
+is mandatory.
+Light-sport category aircraft owners should comply with:
+• Safety directives (alerts, bulletins, and notifications) issued by the light-sport
+category aircraft manufacturer
+• Safety alerts (immediate action)
+• Service bulletins (recommending future action)
+• Safety notifications (informational)
+
+> Paragraph added by FAA erratum (target page 2-12).
+
+Many light sport category certificated airplanes are equipped with water-cooled engines.
+These airplanes may be tightly cowled, which reduces drag. A liquid-cooled engine
+minimizes the need for cylinder cooling inlets, which further reduces drag and improves
+performance. Preflighting this system requires that the radiator, coolant hoses, and
+expansion tank are checked for condition, freedom from leaks, and coolant level
+requirements.
+
+## Light-sport Category Aircraft Maintenance
+
+> Added by FAA erratum (target page 2-4). See sidecar `.errata.md` for citation.
+
+Light-sport category airplanes should be treated with the same level of care as any standard
+airworthiness certificated airplane; however, there are some differences in who may inspect
+or maintain these aircraft. Light-sport category aircraft may be maintained and inspected
+by:
+1. A repairman (light-sport category aircraft) with a Maintenance rating; or
+2. An FAA-certificated Mechanic with Airframe and Powerplant (A&P) ratings; or
+3. An appropriately rated repair station; or
+4. The holder of a sport pilot certificate may perform preventive maintenance on a light-
+sport category aircraft owned or operated by that pilot.
+Light-sport category aircraft must have a condition inspection performed annually, in
+accordance with inspection procedures developed by the aircraft manufacturer. Additionally,
+between required inspections, maintenance must be performed to repair any discrepancies
+found on the aircraft. Maintenance on light-sport category aircraft must be performed in
+accordance with 14 CFR part 43. The aircraft maintenance manual includes the specific
+information for repair and maintenance on inspections, repair, and authorization for repairs
+and maintenance.
+Aircraft owners are responsible to ensure that maintenance and inspection record entries are
+made and maintained for the aircraft.
+Major repairs and major alterations may be performed on the aircraft if the repair or
+alteration is authorized by the manufacturer. A major repair or major alteration may only be
+performed in accordance with maintenance and inspection procedures developed by the
+aircraft manufacturer. If a major repair or major alteration is performed on a product
+produced under an FAA approval (e.g., engine, propeller) that is installed on a light-sport
+category aircraft, the repair or alteration may only be approved by an FAA-certificated
+mechanic with an Inspection Authorization (IA), using FAA-approved data, and recorded on
+FAA Form 337.
+Manufacturers of light-sport category aircraft may issue safety directives informing owners
+of safety-of-flight issues for the aircraft. Compliance with manufacturer-issued safety
+directives is not mandatory, but highly recommended. Compliance with airworthiness
+directives that are applicable to the aircraft, or any product or part installed on the aircraft,
+is mandatory.
+Light-sport category aircraft owners should comply with:
+• Safety directives (alerts, bulletins, and notifications) issued by the light-sport
+category aircraft manufacturer
+• Safety alerts (immediate action)
+• Service bulletins (recommending future action)
+• Safety notifications (informational)
+
+> Paragraph added by FAA erratum (target page 2-12).
+
+Many light sport category certificated airplanes are equipped with water-cooled engines.
+These airplanes may be tightly cowled, which reduces drag. A liquid-cooled engine
+minimizes the need for cylinder cooling inlets, which further reduces drag and improves
+performance. Preflighting this system requires that the radiator, coolant hoses, and
+expansion tank are checked for condition, freedom from leaks, and coolant level
+requirements.
