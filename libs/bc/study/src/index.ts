@@ -175,6 +175,23 @@ export {
 	setNotes,
 	setReadStatus,
 } from './handbooks';
+// Handbook errata (apply-errata-and-afh-mosaic WP).
+export type {
+	ErrataDisplay,
+	ErrataInsert,
+	HandbookSectionErrataRow,
+} from './handbooks-errata';
+export {
+	countSectionsByErratumId,
+	deleteErrataByErratumId,
+	ErrataValidationError,
+	formatErrataForDisplay,
+	hasErrata,
+	insertErrataRows,
+	listErrataForSection,
+	newErrataId,
+	validateErrataInsert,
+} from './handbooks-errata';
 export type {
 	CertAndDomainMatrix,
 	CertProgress,
@@ -383,6 +400,7 @@ export {
 	goal,
 	goalNode,
 	goalSyllabus,
+	handbookSectionErrata,
 	knowledgeEdge,
 	knowledgeNode,
 	knowledgeNodeProgress,

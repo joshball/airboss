@@ -41,6 +41,12 @@ from pathlib import Path
 
 import click
 
+from .apply_errata import (
+    ErrataApplyError,
+    apply_errata,
+    emit_apply_record_json,
+    reapply_all_errata,
+)
 from .chapter_plaintext import write_chapter_sidecars
 from .config_loader import (
     SECTION_STRATEGY_COMPARE,
@@ -54,6 +60,7 @@ from .config_loader import (
 from .fetch import fetch_pdf
 from .figures import extract_figures
 from .figures_dedup import deduplicate_figures
+from .handbooks import HandbookPlugin, UnknownHandbookError, get_handbook
 from .normalize import write_outputs
 from .outline import OutlineError, OutlineNode, detect_outline_from_text, filter_to_chapter, parse_outline
 from .paths import relative_to_repo
@@ -90,6 +97,26 @@ _STRATEGY_CHOICES = tuple(sorted(VALID_STRATEGIES))
     default=False,
     help="Skip writing archive/<run-id>/ for --strategy prompt (default is to archive).",
 )
+@click.option(
+    "--apply-errata",
+    "apply_errata_id",
+    default=None,
+    help=(
+        "Apply one named erratum from the YAML errata: list (e.g. `mosaic`). "
+        "Skips the full extract pipeline; only edits already-extracted section "
+        "markdown + manifest.json. Future: hangar UI wraps this command via dispatcher."
+    ),
+)
+@click.option(
+    "--reapply-errata",
+    is_flag=True,
+    default=False,
+    help=(
+        "Re-apply every erratum in the YAML errata: list, in published_at order. "
+        "Idempotent unless --force is passed. "
+        "Future: hangar UI wraps this command via dispatcher."
+    ),
+)
 def main(
     document_slug: str,
     edition: str | None,
@@ -97,6 +124,8 @@ def main(
     dry_run: bool,
     force: bool,
     strategy: str | None,
+    apply_errata_id: str | None,
+    reapply_errata: bool,
     no_archive: bool,
 ) -> None:
     """Ingest the handbook identified by `<doc>`."""
@@ -105,8 +134,55 @@ def main(
     except ConfigError as exc:
         click.echo(f"error: {exc}", err=True)
         raise SystemExit(2) from exc
+
     if edition is not None:
         config = _override_edition(config, edition)
+
+    if apply_errata_id is not None or reapply_errata:
+        if apply_errata_id is not None and reapply_errata:
+            click.echo(
+                "error: pass either --apply-errata <id> OR --reapply-errata, not both.",
+                err=True,
+            )
+            raise SystemExit(2)
+        try:
+            plugin: HandbookPlugin = get_handbook(document_slug)
+        except UnknownHandbookError as exc:
+            click.echo(f"error: {exc}", err=True)
+            raise SystemExit(2) from exc
+        click.echo(
+            f"handbook-ingest apply-errata: {config.document_slug} edition {config.edition}"
+        )
+        try:
+            if reapply_errata:
+                results = reapply_all_errata(config=config, plugin=plugin, force=force)
+            else:
+                # `apply_errata_id` is non-None on this branch.
+                assert apply_errata_id is not None
+                results = [apply_errata(
+                    config=config,
+                    plugin=plugin,
+                    errata_id=apply_errata_id,
+                    force=force,
+                )]
+        except ErrataApplyError as exc:
+            click.echo(f"error: {exc}", err=True)
+            raise SystemExit(2) from exc
+        for result in results:
+            if result.skipped_already_applied:
+                click.echo(
+                    f"  errata id={result.errata_id!r} already applied at "
+                    f"{result.applied_at} -- skipped (use --force to re-apply)."
+                )
+            else:
+                click.echo(
+                    f"  errata id={result.errata_id!r}: applied "
+                    f"{len(result.applied_sections)} patch(es)."
+                )
+            emit_apply_record_json(
+                result, doc_slug=config.document_slug, edition=config.edition
+            )
+        return
 
     effective_strategy = (strategy or config.section_strategy).lower()
 
@@ -542,6 +618,7 @@ def _override_edition(config: HandbookConfig, edition: str) -> HandbookConfig:
         chapter_cover_strip_max_lines=config.chapter_cover_strip_max_lines,
         chapter_overrides=config.chapter_overrides,
         page_label_walk_back=config.page_label_walk_back,
+        errata=config.errata,
         raw_yaml=config.raw_yaml,
     )
 

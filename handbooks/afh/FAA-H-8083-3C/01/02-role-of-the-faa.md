@@ -68,3 +68,75 @@ flight rules (IFR), and as previously discussed aircraft maintenance, and preven
 alterations.
 
 Figure 1-5. Example of some of the required standard or supplemental and optional equipment for an aircraft.
+
+> Paragraph revised by FAA erratum (target page 1-4). The replacement text below supersedes the matching paragraph; the sidecar `.errata.md` records the FAA-published wording verbatim.
+
+While 14 CFR part 91, section 91.205 outlines the minimum equipment required for flight,
+the Airplane Flight Manual/Pilot’s Operating Handbook (AFM/POH) lists the equipment
+required for the airplane to be airworthy. The equipment list found in the AFM/POH is
+developed during the airplane certification process. This list identifies those items that are
+required for airworthiness, optional equipment installed in addition to the required
+equipment, and any supplemental items or appliances. Since aircraft can vary significantly in
+performance, equipment, systems, and construction, pilots should seek a flight instructor with
+experience in the make and model of airplane and familiarize themselves with the airplane’s
+POH for detailed and specific information prior to flight.
+
+> Paragraph revised by FAA erratum (target page 1-4). The replacement text below supersedes the matching paragraph; the sidecar `.errata.md` records the FAA-published wording verbatim.
+
+While 14 CFR part 91, section 91.205 outlines the minimum equipment required for flight,
+the Airplane Flight Manual/Pilot’s Operating Handbook (AFM/POH) lists the equipment
+required for the airplane to be airworthy. The equipment list found in the AFM/POH is
+developed during the airplane certification process. This list identifies those items that are
+required for airworthiness, optional equipment installed in addition to the required
+equipment, and any supplemental items or appliances. Since aircraft can vary significantly in
+performance, equipment, systems, and construction, pilots should seek a flight instructor with
+experience in the make and model of airplane and familiarize themselves with the airplane’s
+POH for detailed and specific information prior to flight.
+
+> Paragraph revised by FAA erratum (target page 1-4). The replacement text below supersedes the matching paragraph; the sidecar `.errata.md` records the FAA-published wording verbatim.
+
+While 14 CFR part 91, section 91.205 outlines the minimum equipment required for flight,
+the Airplane Flight Manual/Pilot’s Operating Handbook (AFM/POH) lists the equipment
+required for the airplane to be airworthy. The equipment list found in the AFM/POH is
+developed during the airplane certification process. This list identifies those items that are
+required for airworthiness, optional equipment installed in addition to the required
+equipment, and any supplemental items or appliances. Since aircraft can vary significantly in
+performance, equipment, systems, and construction, pilots should seek a flight instructor with
+experience in the make and model of airplane and familiarize themselves with the airplane’s
+POH for detailed and specific information prior to flight.
+
+> Paragraph revised by FAA erratum (target page 1-4). The replacement text below supersedes the matching paragraph; the sidecar `.errata.md` records the FAA-published wording verbatim.
+
+While 14 CFR part 91, section 91.205 outlines the minimum equipment required for flight,
+the Airplane Flight Manual/Pilot’s Operating Handbook (AFM/POH) lists the equipment
+required for the airplane to be airworthy. The equipment list found in the AFM/POH is
+developed during the airplane certification process. This list identifies those items that are
+required for airworthiness, optional equipment installed in addition to the required
+equipment, and any supplemental items or appliances. Since aircraft can vary significantly in
+performance, equipment, systems, and construction, pilots should seek a flight instructor with
+experience in the make and model of airplane and familiarize themselves with the airplane’s
+POH for detailed and specific information prior to flight.
+
+> Paragraph revised by FAA erratum (target page 1-4). The replacement text below supersedes the matching paragraph; the sidecar `.errata.md` records the FAA-published wording verbatim.
+
+While 14 CFR part 91, section 91.205 outlines the minimum equipment required for flight,
+the Airplane Flight Manual/Pilot’s Operating Handbook (AFM/POH) lists the equipment
+required for the airplane to be airworthy. The equipment list found in the AFM/POH is
+developed during the airplane certification process. This list identifies those items that are
+required for airworthiness, optional equipment installed in addition to the required
+equipment, and any supplemental items or appliances. Since aircraft can vary significantly in
+performance, equipment, systems, and construction, pilots should seek a flight instructor with
+experience in the make and model of airplane and familiarize themselves with the airplane’s
+POH for detailed and specific information prior to flight.
+
+> Paragraph revised by FAA erratum (target page 1-4). The replacement text below supersedes the matching paragraph; the sidecar `.errata.md` records the FAA-published wording verbatim.
+
+While 14 CFR part 91, section 91.205 outlines the minimum equipment required for flight,
+the Airplane Flight Manual/Pilot’s Operating Handbook (AFM/POH) lists the equipment
+required for the airplane to be airworthy. The equipment list found in the AFM/POH is
+developed during the airplane certification process. This list identifies those items that are
+required for airworthiness, optional equipment installed in addition to the required
+equipment, and any supplemental items or appliances. Since aircraft can vary significantly in
+performance, equipment, systems, and construction, pilots should seek a flight instructor with
+experience in the make and model of airplane and familiarize themselves with the airplane’s
+POH for detailed and specific information prior to flight.

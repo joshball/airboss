@@ -46,6 +46,8 @@ regulations/cfr-*/**/*.xml
 # body_sha256 audit trail). Bodies regenerate deterministically from the
 # cached XML via `bun run ingest cfr`. See ADR 018 (scale exception).
 regulations/cfr-*/**/*.md
+.ball-coord/
+
 # Per-section meta.json carries body_sha256 + last_amended_date that already
 # live in the parent edition's sections.json; ingestion writes them locally
 # but they're redundant for commit purposes.

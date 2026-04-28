@@ -75,3 +75,15 @@ chapter_cover_strip:
 
 page_label_walk_back: 5
 chapter_overrides: {}
+
+# Declarative errata list. Each entry is one FAA-published amendment to
+# this edition, applied via `bun run sources extract handbooks afh
+# --apply-errata <id>`. See ADR 020 for the cumulative-vs-incremental
+# policy and `docs/work-packages/apply-errata-and-afh-mosaic/` for the
+# parser layout taxonomy.
+errata:
+  - id: mosaic
+    source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/AFH_Addendum_(MOSAIC).pdf
+    published_at: '2025-10-20'
+    parser: additive-paragraph
+

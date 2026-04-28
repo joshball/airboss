@@ -3,15 +3,22 @@
 Each handbook has a config file at `ingest/config/<doc>.yaml` that pins the
 source URL, edition tag, optional page-offset map, and optional outline
 overrides for sections the FAA's PDF outline mangles.
+
+The `errata:` list (post-WP `apply-errata-and-afh-mosaic`) is the
+declarative source of truth for FAA-published amendments to a handbook
+edition. Each entry names the parser layout the engine should dispatch
+to. See ADR 020 for the cumulative-vs-incremental policy.
 """
 
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass, field
 from pathlib import Path
 
 import yaml
 
+from .handbooks.base import ErrataConfig
 from .paths import config_dir
 
 # Section-tree extraction strategy selector.
@@ -91,6 +98,11 @@ class HandbookConfig:
     # How many PDF pages to walk backward from a target page when reading the
     # printed FAA page label. 0 disables the walk-back (the legacy behavior).
     page_label_walk_back: int = PAGE_LABEL_WALK_BACK_DEFAULT
+    # Declarative errata list. Each entry is one FAA-published amendment to
+    # this edition; the apply pipeline iterates this in `published_at` order.
+    # Validation rules: id is kebab-case 3-32 chars; source_url is HTTPS;
+    # published_at is ISO 8601 date; parser names a registered layout.
+    errata: list[ErrataConfig] = field(default_factory=list)
     # Raw YAML payload, exposed so strategy modules can read their own blocks
     # (`toc`, `heading_style`, `prompt`) without each one re-parsing the file.
     raw_yaml: dict[str, object] = field(default_factory=dict)
@@ -182,6 +194,8 @@ def load_config(document_slug: str) -> HandbookConfig:
             f"page_label_walk_back in {config_path} must be >= 0 (got {walk_back})."
         )
 
+    errata = _load_errata_list(raw.get("errata"), config_path)
+
     return HandbookConfig(
         document_slug=raw["document_slug"],
         edition=raw["edition"],
@@ -202,9 +216,84 @@ def load_config(document_slug: str) -> HandbookConfig:
         chapter_cover_strip_max_lines=int(cover_strip_raw.get("max_lines", 6)),
         chapter_overrides=chapter_overrides,
         page_label_walk_back=walk_back,
+        errata=errata,
         raw_yaml=raw,
     )
 
 
 def resolve_config_path(document_slug: str) -> Path:
     return config_dir() / f"{document_slug}.yaml"
+
+
+_ERRATA_ID_PATTERN = re.compile(r'^[a-z0-9]+(?:-[a-z0-9]+)*$')
+_ISO_DATE_PATTERN = re.compile(r'^\d{4}-\d{2}-\d{2}$')
+
+
+def _load_errata_list(raw: object, config_path: Path) -> list[ErrataConfig]:
+    """Parse and validate the YAML `errata:` list.
+
+    Returns an empty list when the field is absent (backward-compatible
+    with pre-WP YAML configs). Validates each entry per the rules in
+    spec.md Validation table:
+
+    - id: kebab-case, 3-32 chars, unique within the list
+    - source_url: HTTPS
+    - published_at: ISO 8601 date
+    - parser: registered layout name (the membership check happens at
+      apply time so this loader stays decoupled from the parser registry).
+    """
+    if raw is None:
+        return []
+    if not isinstance(raw, list):
+        raise ValueError(
+            f"errata in {config_path} must be a list; got {type(raw).__name__}."
+        )
+    seen_ids: set[str] = set()
+    out: list[ErrataConfig] = []
+    for idx, entry in enumerate(raw):
+        if not isinstance(entry, dict):
+            raise ValueError(
+                f"errata[{idx}] in {config_path} must be a mapping; got {type(entry).__name__}."
+            )
+        required = ('id', 'source_url', 'published_at', 'parser')
+        missing = [k for k in required if k not in entry]
+        if missing:
+            raise ValueError(
+                f"errata[{idx}] in {config_path} is missing required keys: {missing}."
+            )
+        eid = str(entry['id'])
+        if not _ERRATA_ID_PATTERN.match(eid) or not (3 <= len(eid) <= 32):
+            raise ValueError(
+                f"errata[{idx}].id={eid!r} in {config_path} must be kebab-case, 3-32 chars."
+            )
+        if eid in seen_ids:
+            raise ValueError(
+                f"errata[{idx}].id={eid!r} in {config_path} duplicates an earlier entry."
+            )
+        seen_ids.add(eid)
+        url = str(entry['source_url'])
+        if not url.startswith('https://'):
+            raise ValueError(
+                f"errata[{idx}].source_url={url!r} in {config_path} must be HTTPS."
+            )
+        published_at = str(entry['published_at'])
+        if not _ISO_DATE_PATTERN.match(published_at):
+            raise ValueError(
+                f"errata[{idx}].published_at={published_at!r} in {config_path} must be ISO 8601 date."
+            )
+        parser = str(entry['parser'])
+        if not parser.strip():
+            raise ValueError(
+                f"errata[{idx}].parser in {config_path} must be a non-empty layout name."
+            )
+        out.append(
+            ErrataConfig(
+                id=eid,
+                source_url=url,
+                published_at=published_at,
+                parser=parser,
+            )
+        )
+    # Order by published_at so apply-pipeline iteration is deterministic.
+    out.sort(key=lambda e: e.published_at)
+    return out

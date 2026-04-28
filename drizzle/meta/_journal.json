@@ -50,6 +50,13 @@
       "when": 1777381347673,
       "tag": "0006_goal_target_date_to_date",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1777381837082,
+      "tag": "0007_striped_jetstream",
+      "breakpoints": true
     }
   ]
 }
