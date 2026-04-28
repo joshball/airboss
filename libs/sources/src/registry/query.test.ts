@@ -1,10 +1,8 @@
 import { afterEach, beforeEach, describe, expect, test } from 'vitest';
 import type { Edition, SourceEntry, SourceId } from '../types.ts';
 import { resetRegistry, withTestEditions, withTestEntries } from './__test_helpers__.ts';
-import { __corpus_resolver_internal__ } from './corpus-resolver.ts';
 import type { CorpusResolver } from './corpus-resolver.ts';
-
-const registerCorpusResolver = __corpus_resolver_internal__.registerTestResolver;
+import { __corpus_resolver_internal__ } from './corpus-resolver.ts';
 import {
 	buildReverseIndex,
 	clearReverseIndex,
@@ -23,6 +21,8 @@ import {
 	stripPin,
 	walkSupersessionChain,
 } from './query.ts';
+
+const registerCorpusResolver = __corpus_resolver_internal__.registerTestResolver;
 
 // This file exercises behavior against no-op default resolvers (Q-13 etc).
 // Wipe the registry so side-effect-imported real resolvers (regs, handbooks,

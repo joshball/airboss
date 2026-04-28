@@ -35,8 +35,6 @@
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { type BloomLevel, BLOOM_LEVELS, type StudyPriority, STUDY_PRIORITIES, SYLLABUS_STATUSES } from '@ab/constants';
-import { db } from '@ab/db';
 import {
 	credential,
 	credentialPrereq,
@@ -47,6 +45,8 @@ import {
 	syllabusNode,
 	syllabusNodeLink,
 } from '@ab/bc-study';
+import { BLOOM_LEVELS, type BloomLevel, STUDY_PRIORITIES, type StudyPriority, SYLLABUS_STATUSES } from '@ab/constants';
+import { db } from '@ab/db';
 import type { RelevanceEntry } from '@ab/types';
 import { eq, sql } from 'drizzle-orm';
 

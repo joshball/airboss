@@ -6,6 +6,7 @@
  */
 
 import { bauthUser } from '@ab/auth/schema';
+import { credential, credentialSyllabus, goal, goalSyllabus, studyPlan, syllabus } from '@ab/bc-study';
 import {
 	CREDENTIAL_STATUSES,
 	DEPTH_PREFERENCES,
@@ -15,12 +16,11 @@ import {
 	SYLLABUS_PRIMACY,
 	SYLLABUS_STATUSES,
 } from '@ab/constants';
-import { credential, credentialSyllabus, goal, goalSyllabus, studyPlan, syllabus } from '@ab/bc-study';
 import { db } from '@ab/db';
 import { generateAuthId, generateCredentialId, generateStudyPlanId, generateSyllabusId } from '@ab/utils';
 import { eq } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { migrateStudyPlansToGoals, MIGRATION_SEED_ORIGIN } from './migrate-study-plans-to-goals';
+import { MIGRATION_SEED_ORIGIN, migrateStudyPlansToGoals } from './migrate-study-plans-to-goals';
 
 const SUITE_TAG = `migrate-plans-test-${Date.now()}-${Math.floor(Math.random() * 1_000_000)}`;
 const SUITE_TOKEN = Math.floor(Math.random() * 0x100_000_000)
@@ -228,7 +228,7 @@ beforeAll(async () => {
 
 	// Pre-existing manual primary goal for USER_HAS_PRIMARY.
 	await db.insert(goal).values({
-		id: 'goal_test_existing_primary_' + SUITE_TOKEN,
+		id: `goal_test_existing_primary_${SUITE_TOKEN}`,
 		userId: USER_HAS_PRIMARY,
 		title: 'Pre-existing primary',
 		notesMd: '',

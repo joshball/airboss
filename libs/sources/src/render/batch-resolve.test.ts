@@ -1,16 +1,10 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { resetRegistry, withTestEntries } from '../registry/__test_helpers__.ts';
 import { __corpus_resolver_internal__ } from '../registry/corpus-resolver.ts';
+import type { CorpusResolver, IndexedContent, LessonAcknowledgment, SourceEntry, SourceId } from '../types.ts';
+import { __batch_internal__, batchResolve } from './batch-resolve.ts';
 
 const registerCorpusResolver = __corpus_resolver_internal__.registerTestResolver;
-import { resetRegistry, withTestEditions, withTestEntries } from '../registry/__test_helpers__.ts';
-import type {
-	CorpusResolver,
-	IndexedContent,
-	LessonAcknowledgment,
-	SourceEntry,
-	SourceId,
-} from '../types.ts';
-import { batchResolve, __batch_internal__ } from './batch-resolve.ts';
 
 function makeEntry(overrides: Partial<SourceEntry> & Pick<SourceEntry, 'id'>): SourceEntry {
 	return {
@@ -27,11 +21,14 @@ function makeEntry(overrides: Partial<SourceEntry> & Pick<SourceEntry, 'id'>): S
 	};
 }
 
-function makeMockResolver(corpus: string, opts: {
-	liveUrl?: string;
-	indexed?: IndexedContent | null;
-	indexedReadCount?: { value: number };
-}): CorpusResolver {
+function makeMockResolver(
+	corpus: string,
+	opts: {
+		liveUrl?: string;
+		indexed?: IndexedContent | null;
+		indexedReadCount?: { value: number };
+	},
+): CorpusResolver {
 	return {
 		corpus,
 		parseLocator(locator) {
@@ -73,11 +70,13 @@ describe('batchResolve', () => {
 	it('resolves a known entry without reading indexed content (no @text/@quote in body)', async () => {
 		const entry = makeEntry({ id: 'airboss-ref:regs/cfr-14/91/103' as SourceId });
 		const reads = { value: 0 };
-		registerCorpusResolver(makeMockResolver('regs', {
-			liveUrl: 'https://www.ecfr.gov/...',
-			indexed: { id: entry.id, edition: '2026', normalizedText: 'BODY' },
-			indexedReadCount: reads,
-		}));
+		registerCorpusResolver(
+			makeMockResolver('regs', {
+				liveUrl: 'https://www.ecfr.gov/...',
+				indexed: { id: entry.id, edition: '2026', normalizedText: 'BODY' },
+				indexedReadCount: reads,
+			}),
+		);
 
 		await withTestEntries({ [entry.id]: entry }, async () => {
 			const body = '[@cite](airboss-ref:regs/cfr-14/91/103?at=2026)';
@@ -98,11 +97,13 @@ describe('batchResolve', () => {
 		const entry = makeEntry({ id: 'airboss-ref:regs/cfr-14/91/103' as SourceId });
 		const indexed: IndexedContent = { id: entry.id, edition: '2026', normalizedText: 'BODY' };
 		const reads = { value: 0 };
-		registerCorpusResolver(makeMockResolver('regs', {
-			liveUrl: 'X',
-			indexed,
-			indexedReadCount: reads,
-		}));
+		registerCorpusResolver(
+			makeMockResolver('regs', {
+				liveUrl: 'X',
+				indexed,
+				indexedReadCount: reads,
+			}),
+		);
 
 		await withTestEntries({ [entry.id]: entry }, async () => {
 			const body = '[@text](airboss-ref:regs/cfr-14/91/103?at=2026)';
@@ -143,20 +144,17 @@ describe('batchResolve', () => {
 		});
 		registerCorpusResolver(makeMockResolver('interp', {}));
 
-		await withTestEntries(
-			{ [original.id]: original, [successor.id]: successor },
-			async () => {
-				const map = await batchResolve(['airboss-ref:interp/walker-2017'], {
-					acknowledgments: [],
-					historicalLens: false,
-					body: '',
-				});
-				const r = map.get('airboss-ref:interp/walker-2017');
-				expect(r?.chain.length).toBe(2);
-				expect(r?.chain[0]?.id).toBe(original.id);
-				expect(r?.chain[1]?.id).toBe(successor.id);
-			},
-		);
+		await withTestEntries({ [original.id]: original, [successor.id]: successor }, async () => {
+			const map = await batchResolve(['airboss-ref:interp/walker-2017'], {
+				acknowledgments: [],
+				historicalLens: false,
+				body: '',
+			});
+			const r = map.get('airboss-ref:interp/walker-2017');
+			expect(r?.chain.length).toBe(2);
+			expect(r?.chain[0]?.id).toBe(original.id);
+			expect(r?.chain[1]?.id).toBe(successor.id);
+		});
 	});
 
 	it('detects cross-corpus chain in annotation', async () => {
@@ -172,19 +170,16 @@ describe('batchResolve', () => {
 		});
 		registerCorpusResolver(makeMockResolver('regs', {}));
 
-		await withTestEntries(
-			{ [original.id]: original, [successor.id]: successor },
-			async () => {
-				const map = await batchResolve(['airboss-ref:regs/cfr-14/91/103?at=2026'], {
-					acknowledgments: [],
-					historicalLens: false,
-					body: '',
-				});
-				const r = map.get('airboss-ref:regs/cfr-14/91/103?at=2026');
-				expect(r?.annotation.kind).toBe('cross-corpus');
-				expect(r?.annotation.text).toContain('icao');
-			},
-		);
+		await withTestEntries({ [original.id]: original, [successor.id]: successor }, async () => {
+			const map = await batchResolve(['airboss-ref:regs/cfr-14/91/103?at=2026'], {
+				acknowledgments: [],
+				historicalLens: false,
+				body: '',
+			});
+			const r = map.get('airboss-ref:regs/cfr-14/91/103?at=2026');
+			expect(r?.annotation.kind).toBe('cross-corpus');
+			expect(r?.annotation.text).toContain('icao');
+		});
 	});
 
 	it('forwards acks into the annotation cascade', async () => {

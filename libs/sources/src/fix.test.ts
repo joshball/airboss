@@ -4,11 +4,11 @@ import { join } from 'node:path';
 import { afterEach, beforeEach, describe, expect, test } from 'vitest';
 import { applyFixes, runFixCli } from './fix.ts';
 import { resetRegistry } from './registry/__test_helpers__.ts';
-import { __corpus_resolver_internal__ } from './registry/corpus-resolver.ts';
 import type { CorpusResolver } from './registry/corpus-resolver.ts';
+import { __corpus_resolver_internal__ } from './registry/corpus-resolver.ts';
+import type { RegistryReader } from './types.ts';
 
 const registerCorpusResolver = __corpus_resolver_internal__.registerTestResolver;
-import type { RegistryReader } from './types.ts';
 
 let workDir: string;
 

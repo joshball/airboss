@@ -1,12 +1,12 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { __corpus_resolver_internal__ } from '../registry/corpus-resolver.ts';
-
-const registerCorpusResolver = __corpus_resolver_internal__.registerTestResolver;
 import { resetRegistry, withTestEntries } from '../registry/__test_helpers__.ts';
+import { __corpus_resolver_internal__ } from '../registry/corpus-resolver.ts';
 import type { CorpusResolver, IndexedContent, SourceEntry, SourceId } from '../types.ts';
 import { batchResolve } from './batch-resolve.ts';
 import { extractIdentifiers } from './extract.ts';
 import { substituteTokens } from './substitute.ts';
+
+const registerCorpusResolver = __corpus_resolver_internal__.registerTestResolver;
 
 function makeEntry(overrides: Partial<SourceEntry> & Pick<SourceEntry, 'id'>): SourceEntry {
 	return {
@@ -23,14 +23,22 @@ function makeEntry(overrides: Partial<SourceEntry> & Pick<SourceEntry, 'id'>): S
 	};
 }
 
-function mockResolver(corpus: string, urls: Record<string, string>, indexed?: Record<string, IndexedContent>): CorpusResolver {
+function mockResolver(
+	corpus: string,
+	urls: Record<string, string>,
+	indexed?: Record<string, IndexedContent>,
+): CorpusResolver {
 	return {
 		corpus,
 		parseLocator(locator) {
 			return { kind: 'ok', segments: locator.split('/') };
 		},
 		formatCitation(entry, style) {
-			return style === 'short' ? entry.canonical_short : style === 'formal' ? entry.canonical_formal : entry.canonical_title;
+			return style === 'short'
+				? entry.canonical_short
+				: style === 'formal'
+					? entry.canonical_formal
+					: entry.canonical_title;
 		},
 		getCurrentEdition() {
 			return '2026';
@@ -145,31 +153,28 @@ describe('substituteTokens -- web mode', () => {
 			canonical_short: 'Smith (2030)',
 		});
 		registerCorpusResolver(mockResolver('interp', {}));
-		await withTestEntries(
-			{ [target.id]: target, [superseder.id]: superseder },
-			async () => {
-				const body = '[Walker letter](airboss-ref:interp/walker-2017)';
-				const ids = extractIdentifiers(body);
-				const resolved = await batchResolve(ids, {
-					acknowledgments: [
-						{
-							target: target.id,
-							superseder: superseder.id,
-							historical: false,
-							reason: 'original-intact',
-							note: 'narrows',
-						},
-					],
-					historicalLens: false,
-					body,
-				});
-				const out = substituteTokens(body, resolved, 'web');
-				expect(out).toContain('class="ab-ref-annotation ab-ref-covered"');
-				expect(out).toContain('acknowledged');
-				expect(out).toContain('Smith (2030)');
-				expect(out).toContain('title="narrows"');
-			},
-		);
+		await withTestEntries({ [target.id]: target, [superseder.id]: superseder }, async () => {
+			const body = '[Walker letter](airboss-ref:interp/walker-2017)';
+			const ids = extractIdentifiers(body);
+			const resolved = await batchResolve(ids, {
+				acknowledgments: [
+					{
+						target: target.id,
+						superseder: superseder.id,
+						historical: false,
+						reason: 'original-intact',
+						note: 'narrows',
+					},
+				],
+				historicalLens: false,
+				body,
+			});
+			const out = substituteTokens(body, resolved, 'web');
+			expect(out).toContain('class="ab-ref-annotation ab-ref-covered"');
+			expect(out).toContain('acknowledged');
+			expect(out).toContain('Smith (2030)');
+			expect(out).toContain('title="narrows"');
+		});
 	});
 
 	it('leaves non-airboss-ref links untouched', async () => {
@@ -301,7 +306,8 @@ describe('substituteTokens -- forward-compatible modes', () => {
 		const long = makeEntry({
 			id: 'airboss-ref:regs/cfr-14/91/103' as SourceId,
 			canonical_short: '§91.103',
-			canonical_title: 'A very long title that is clearly going to exceed eighty characters when combined with the section symbol',
+			canonical_title:
+				'A very long title that is clearly going to exceed eighty characters when combined with the section symbol',
 		});
 		await withTestEntries({ [long.id]: long }, async () => {
 			const body = '[@cite](airboss-ref:regs/cfr-14/91/103?at=2026)';
