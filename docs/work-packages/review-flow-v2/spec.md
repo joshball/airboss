@@ -1,6 +1,6 @@
 ---
 title: 'review-flow-v2'
-status: deferred
+status: done
 size: small
 depends_on: [help-system Wave 1 merged]
 created: 2026-04-24
@@ -9,6 +9,16 @@ trigger: Next manual SMI walkthrough surfaces the same review-screen friction (i
 ---
 
 # Review Flow v2
+
+## Verdict (2026-04-28)
+
+**Status:** done
+
+**Rationale:** The full scope of this spec already shipped on main. `REVIEW_RATING_LABELS` is defined in `libs/constants/src/study.ts:279` and consumed by `apps/study/src/routes/(app)/memory/review/[sessionId]/+page.svelte`. The shipped review chrome has clickable confidence chicklets, two-line rating buttons, the help chicklet near the counter, and the confidence-adjust path on reveal (`adjustingConfidence` state plus a "click to adjust" affordance at lines 70 and 594 of the review page). PR #138 (review chrome chicklets, two-line ratings, snooze popover, feedback pills), PR #49 (rating undo), and PR #169 (jump-to-card dropdown plus "No idea" confidence label) close items 7-9, 12-13, 16 from the SMI walkthrough. The folded `memory-review-load-as-action` WP also points here, with no remaining gap.
+
+**Trigger to revisit (if deferred):** N/A. Future review-screen friction surfaced in a fresh walkthrough should open a new WP rather than reopen this one.
+
+**Next action (if promote/fold):** N/A. Spec marked done; leave as a historical reference for the design decisions encoded in PR #138.
 
 ## One-sentence summary
 
