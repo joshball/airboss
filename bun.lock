@@ -114,6 +114,15 @@
         "smol-toml": "^1.6.1",
       },
     },
+    "libs/bc/avionics": {
+      "name": "@ab/bc-avionics",
+      "dependencies": {
+        "@ab/auth": "workspace:*",
+        "@ab/constants": "workspace:*",
+        "@ab/db": "workspace:*",
+        "@ab/utils": "workspace:*",
+      },
+    },
     "libs/bc/hangar": {
       "name": "@ab/bc-hangar",
       "dependencies": {
@@ -228,6 +237,8 @@
     "@ab/auth": ["@ab/auth@workspace:libs/auth"],
 
     "@ab/aviation": ["@ab/aviation@workspace:libs/aviation"],
+
+    "@ab/bc-avionics": ["@ab/bc-avionics@workspace:libs/bc/avionics"],
 
     "@ab/bc-hangar": ["@ab/bc-hangar@workspace:libs/bc/hangar"],
 
