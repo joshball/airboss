@@ -17,10 +17,10 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { validateReferences } from '../check.ts';
-import { runIngest as runRegsIngest } from '../regs/ingest.ts';
-import { setRegsDerivativeRoot } from '../regs/resolver.ts';
 import { resetRegistry } from '../registry/__test_helpers__.ts';
 import { productionRegistry } from '../registry/index.ts';
+import { runIngest as runRegsIngest } from '../regs/ingest.ts';
+import { setRegsDerivativeRoot } from '../regs/resolver.ts';
 import { runAcIngest } from './ingest.ts';
 import { setAcDerivativeRoot } from './resolver.ts';
 

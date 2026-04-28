@@ -64,8 +64,6 @@ import {
 	REVIEW_SESSION_STATUS_VALUES,
 	REVIEW_SESSION_STATUSES,
 	SAVED_DECK_LABEL_MAX_LENGTH,
-	SCENARIO_OPTIONS_MAX,
-	SCENARIO_OPTIONS_MIN,
 	SCENARIO_STATUS_VALUES,
 	SCENARIO_STATUSES,
 	SCHEMAS,
@@ -105,6 +103,7 @@ import {
 	smallint,
 	text,
 	timestamp,
+	unique,
 	uniqueIndex,
 } from 'drizzle-orm/pg-core';
 
@@ -370,7 +369,7 @@ export const card = studySchema.table(
 		// is functionally equivalent in uniqueness terms but lets Postgres
 		// enforce REFERENCES (id, user_id) on dependent tables. See
 		// docs/work-packages/card-state-fk-tightening/spec.md.
-		cardIdUserUnique: uniqueIndex('card_id_user_unique').on(t.id, t.userId),
+		cardIdUserUnique: unique('card_id_user_unique').on(t.id, t.userId),
 		cardTypeCheck: check('card_type_check', sql.raw(`"card_type" IN (${inList(CARD_TYPE_VALUES)})`)),
 		sourceTypeCheck: check('card_source_type_check', sql.raw(`"source_type" IN (${inList(CONTENT_SOURCE_VALUES)})`)),
 		statusCheck: check('card_status_check', sql.raw(`"status" IN (${inList(CARD_STATUS_VALUES)})`)),
@@ -769,7 +768,7 @@ export const session = studySchema.table(
 		// (id, user_id) UNIQUE backs the composite FK from `session_item_result`
 		// so that the slot row's `user_id` is structurally locked to the owning
 		// session's `user_id`. Same pattern as `card_id_user_unique` above.
-		sessionIdUserUnique: uniqueIndex('session_id_user_unique').on(t.id, t.userId),
+		sessionIdUserUnique: unique('session_id_user_unique').on(t.id, t.userId),
 		modeCheck: check('session_mode_check', sql.raw(`"mode" IN (${inList(SESSION_MODE_VALUES)})`)),
 		focusOverrideCheck: check(
 			'session_focus_override_check',

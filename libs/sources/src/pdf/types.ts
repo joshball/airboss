@@ -62,6 +62,4 @@ export interface ExtractOptions {
 }
 
 /** Range descriptor for `extractPdfPages`. Inclusive on both ends. */
-export type PageRange =
-	| { readonly first: number; readonly last: number }
-	| readonly number[];
+export type PageRange = { readonly first: number; readonly last: number } | readonly number[];

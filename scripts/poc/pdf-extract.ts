@@ -16,12 +16,7 @@
  * 6. Performance: how long does a real-world AC take to extract?
  */
 
-import {
-	extractPdf,
-	findAcSlug,
-	findAnyEditionSlug,
-	findEffectiveDate,
-} from '@ab/sources/pdf';
+import { extractPdf, findAcSlug, findAnyEditionSlug, findEffectiveDate } from '@ab/sources/pdf';
 
 const TARGET = '/Users/joshua/Documents/airboss-handbook-cache/ac/ac-61-65-j/J/AC_61-65J.pdf';
 
