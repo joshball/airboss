@@ -14,6 +14,7 @@ import {
 	createReference,
 	createSource,
 	getReference,
+	getReferenceSummary,
 	getSource,
 	listReferences,
 	listSources,
@@ -209,5 +210,40 @@ describe('registry -- sources', () => {
 		await createSource(sourceInput(id), TEST_USER_ID);
 		const fetched = await getSource(id);
 		expect(fetched?.id).toBe(id);
+	});
+});
+
+describe('getReferenceSummary -- slim projection for /references/[id]', () => {
+	it('returns id, displayName, paraphrase, tags only', async () => {
+		const id = refId('summary');
+		const created = await createReference(referenceInput(id), TEST_USER_ID);
+		// Make sure a non-summary field exists on the row so we can assert
+		// the summary projection drops it.
+		expect(created.aliases.length).toBeGreaterThan(0);
+
+		const summary = await getReferenceSummary(id);
+		expect(summary).toBeDefined();
+		expect(summary?.id).toBe(id);
+		expect(summary?.displayName).toBe(id);
+		expect(summary?.paraphrase).toBe('initial body');
+		expect(summary?.tags).toBeDefined();
+
+		// The slim projection must not include audit/lifecycle columns.
+		const keys = Object.keys(summary ?? {}).sort();
+		expect(keys).toEqual(['displayName', 'id', 'paraphrase', 'tags']);
+	});
+
+	it('returns undefined for a missing id', async () => {
+		const summary = await getReferenceSummary(`${ID_PREFIX}-ref-does-not-exist`);
+		expect(summary).toBeUndefined();
+	});
+
+	it('returns the row even if soft-deleted (no deletedAt filter on the projection)', async () => {
+		const id = refId('summary-deleted');
+		const created = await createReference(referenceInput(id), TEST_USER_ID);
+		await softDeleteReference({ id, rev: created.rev }, TEST_USER_ID);
+
+		const summary = await getReferenceSummary(id);
+		expect(summary?.id).toBe(id);
 	});
 });
