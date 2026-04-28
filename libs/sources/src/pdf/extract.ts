@@ -260,15 +260,15 @@ export function extractPdfText(source: string, opts: ExtractOptions = {}): strin
  * (`{ first, last }`) or a list of page numbers (e.g. `[1, 3, 5]`).
  */
 export function extractPdfPages(source: string, range: PageRange, opts: ExtractOptions = {}): readonly ExtractedPage[] {
-	if (Array.isArray(range)) {
-		// Non-contiguous: one subprocess per page (rare; fine for cover-page scraping).
-		const pages: ExtractedPage[] = [];
-		for (const n of range) {
-			const doc = extractPdf(source, { ...opts, firstPage: n, lastPage: n });
-			if (doc.pages[0] !== undefined) pages.push(doc.pages[0]);
-		}
-		return pages;
+	if ('first' in range && 'last' in range) {
+		const doc = extractPdf(source, { ...opts, firstPage: range.first, lastPage: range.last });
+		return doc.pages;
 	}
-	const doc = extractPdf(source, { ...opts, firstPage: range.first, lastPage: range.last });
-	return doc.pages;
+	// Non-contiguous: one subprocess per page (rare; fine for cover-page scraping).
+	const pages: ExtractedPage[] = [];
+	for (const n of range) {
+		const doc = extractPdf(source, { ...opts, firstPage: n, lastPage: n });
+		if (doc.pages[0] !== undefined) pages.push(doc.pages[0]);
+	}
+	return pages;
 }

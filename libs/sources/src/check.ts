@@ -10,7 +10,7 @@
  * entry-point for ad-hoc runs.
  */
 
-import { readdirSync, readFileSync, statSync } from 'node:fs';
+import { type Dirent, readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { hydrateRegsFromDerivatives } from './bootstrap.ts';
 import { parseLesson } from './lesson-parser.ts';
@@ -188,7 +188,7 @@ function* walkMarkdownFiles(root: string): Generator<string> {
 	while (stack.length > 0) {
 		const current = stack.pop();
 		if (current === undefined) break;
-		let entries: ReturnType<typeof readdirSync>;
+		let entries: Dirent[];
 		try {
 			entries = readdirSync(current, { withFileTypes: true });
 		} catch {

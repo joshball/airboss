@@ -11,7 +11,7 @@
  * per process.
  */
 
-import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
+import { type Dirent, existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, sep } from 'node:path';
 import { LESSON_CONTENT_PATHS } from '../check.ts';
 import { parseLesson } from '../lesson-parser.ts';
@@ -90,7 +90,7 @@ export function walkSupersessionChain(id: SourceId): readonly SourceEntry[] {
 	while (cursor !== undefined && chain.length < MAX_CHAIN_DEPTH) {
 		if (visited.has(cursor)) break; // cycle
 		visited.add(cursor);
-		const entry = getSources()[cursor];
+		const entry: SourceEntry | undefined = getSources()[cursor];
 		if (entry === undefined) break;
 		chain.push(entry);
 		cursor = entry.superseded_by;
@@ -110,7 +110,7 @@ export function isSupersessionChainBroken(id: SourceId): boolean {
 	while (cursor !== undefined) {
 		if (visited.has(cursor)) return false; // cycle is not "broken"
 		visited.add(cursor);
-		const entry = sources[cursor];
+		const entry: SourceEntry | undefined = sources[cursor];
 		if (entry === undefined) return true;
 		cursor = entry.superseded_by;
 	}
@@ -293,7 +293,7 @@ function* walkMarkdownFiles(root: string): Generator<string> {
 	while (stack.length > 0) {
 		const current = stack.pop();
 		if (current === undefined) break;
-		let entries: ReturnType<typeof readdirSync>;
+		let entries: Dirent[];
 		try {
 			entries = readdirSync(current, { withFileTypes: true });
 		} catch {
