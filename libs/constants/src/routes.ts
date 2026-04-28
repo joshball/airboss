@@ -250,6 +250,14 @@ export const ROUTES = {
 	GOAL: (id: string) => `/goals/${encodeURIComponent(id)}` as const,
 	GOAL_EDIT: (id: string) => `/goals/${encodeURIComponent(id)}?${QUERY_PARAMS.EDIT}=1` as const,
 
+	// Study -- Lens UI (lens-ui WP, ADR 016 phase 8).
+	LENS_HANDBOOK: '/lens/handbook',
+	LENS_HANDBOOK_DOC: (doc: string) => `/lens/handbook/${encodeURIComponent(doc)}` as const,
+	LENS_HANDBOOK_CHAPTER: (doc: string, chapter: string | number) =>
+		`/lens/handbook/${encodeURIComponent(doc)}/${encodeURIComponent(String(chapter))}` as const,
+	LENS_WEAKNESS: '/lens/weakness',
+	LENS_WEAKNESS_BUCKET: (severity: string) => `/lens/weakness/${encodeURIComponent(severity)}` as const,
+
 	// Study -- Plans + Sessions
 	PLANS: '/plans',
 	PLANS_NEW: '/plans/new',
@@ -347,6 +355,9 @@ export const NAV_LABELS = {
 	PLANS: 'Plans',
 	CREDENTIALS: 'Credentials',
 	GOALS: 'Goals',
+	LENS: 'Lens',
+	LENS_HANDBOOK: 'Handbook lens',
+	LENS_WEAKNESS: 'Weakness lens',
 	MEMORY: 'Memory',
 	MEMORY_HOME: 'Overview',
 	MEMORY_BROWSE: 'Browse',
