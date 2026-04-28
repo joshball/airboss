@@ -1,5 +1,6 @@
 import type { Theme } from '../../../contract';
 import { registerTheme } from '../../../registry';
+import { avionics } from './avionics';
 import { chrome } from './chrome';
 import { control } from './control';
 import { palette as paletteDark } from './palette.dark';
@@ -24,6 +25,7 @@ export const airbossDefault: Theme = {
 	typography,
 	chrome,
 	control,
+	avionics,
 };
 
 registerTheme(airbossDefault);
