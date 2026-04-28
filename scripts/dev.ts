@@ -25,6 +25,7 @@ const DEV_URLS: Record<string, string> = {
 	study: `https://${HOSTS.STUDY}`,
 	sim: `https://${HOSTS.SIM}`,
 	hangar: `https://${HOSTS.HANGAR}`,
+	avionics: `https://${HOSTS.AVIONICS}`,
 };
 
 const REPO_ROOT = resolve(import.meta.dir, '..');

@@ -5,7 +5,7 @@ import { existsSync } from 'node:fs';
 // before svelte-check reads each app's local tsconfig (which `extends` it).
 // `svelte-kit sync` is idempotent and cheap; running it up-front makes a
 // fresh worktree self-bootstrap instead of failing the first `bun run check`.
-const SVELTE_APPS = ['apps/study', 'apps/sim', 'apps/hangar'] as const;
+const SVELTE_APPS = ['apps/study', 'apps/sim', 'apps/hangar', 'apps/avionics'] as const;
 for (const app of SVELTE_APPS) {
 	const generated = `${app}/.svelte-kit/tsconfig.json`;
 	if (!existsSync(generated)) {
@@ -22,6 +22,9 @@ const svelteCheckSim = await $`cd apps/sim && bunx svelte-check --tsconfig ./tsc
 
 console.log('\nRunning svelte-check (hangar)...');
 const svelteCheckHangar = await $`cd apps/hangar && bunx svelte-check --tsconfig ./tsconfig.json`.nothrow();
+
+console.log('\nRunning svelte-check (avionics)...');
+const svelteCheckAvionics = await $`cd apps/avionics && bunx svelte-check --tsconfig ./tsconfig.json`.nothrow();
 
 console.log('\nRunning biome...');
 const biome = await $`bunx biome check .`.nothrow();
@@ -45,6 +48,7 @@ const failed =
 	svelteCheck.exitCode !== 0 ||
 	svelteCheckSim.exitCode !== 0 ||
 	svelteCheckHangar.exitCode !== 0 ||
+	svelteCheckAvionics.exitCode !== 0 ||
 	biome.exitCode !== 0 ||
 	references.exitCode !== 0 ||
 	airbossRef.exitCode !== 0 ||

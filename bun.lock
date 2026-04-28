@@ -37,6 +37,16 @@
         "zod": "^3.25.36",
       },
     },
+    "apps/avionics": {
+      "name": "@ab/avionics",
+      "dependencies": {
+        "@ab/auth": "workspace:*",
+        "@ab/bc-avionics": "workspace:*",
+        "@ab/constants": "workspace:*",
+        "@ab/db": "workspace:*",
+        "@ab/utils": "workspace:*",
+      },
+    },
     "apps/hangar": {
       "name": "@ab/hangar",
       "dependencies": {
@@ -237,6 +247,8 @@
     "@ab/auth": ["@ab/auth@workspace:libs/auth"],
 
     "@ab/aviation": ["@ab/aviation@workspace:libs/aviation"],
+
+    "@ab/avionics": ["@ab/avionics@workspace:apps/avionics"],
 
     "@ab/bc-avionics": ["@ab/bc-avionics@workspace:libs/bc/avionics"],
 

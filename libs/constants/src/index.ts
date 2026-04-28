@@ -9,6 +9,7 @@ export {
 	type BetterAuthProvider,
 	DB_ADAPTER_PROVIDER,
 } from './auth';
+export { AVIONICS_AIRCRAFT_COOKIE, AVIONICS_STORAGE_KEYS } from './avionics';
 export {
 	CITATION_CONTEXT_MAX_LENGTH,
 	CITATION_FRAMING_LABELS,
