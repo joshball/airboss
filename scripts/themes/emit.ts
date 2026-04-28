@@ -4,9 +4,11 @@
  *
  * Outputs:
  *   `libs/themes/generated/tokens.css`         -- role tokens + per-theme blocks
- *   `libs/themes/generated/pre-hydration.js`   -- inline script body for app.html
  *   `libs/themes/generated/pre-hydration.ts`   -- typed module exporting the
- *                                                 script body + its CSP hash
+ *                                                 inline script body + its CSP
+ *                                                 hash; consumed by each app's
+ *                                                 `hooks.server.ts` and
+ *                                                 `svelte.config.js`
  *
  * Determinism is required: two back-to-back runs must produce
  * byte-identical output. The registry sorts themes alphabetically and
@@ -17,6 +19,17 @@
  *
  * A pre-commit / CI check runs this and fails if the committed output
  * drifts.
+ *
+ * NOTE: a sibling `pre-hydration.js` was emitted historically as a
+ * standalone script body for direct inlining. It was never imported (the
+ * `.ts` module above carries the same body via `PRE_HYDRATION_SCRIPT`)
+ * and, worse, vite's bare-specifier resolution preferred the `.js` over
+ * the `.ts` for `@ab/themes/generated/pre-hydration` -- so each app's
+ * `hooks.server.ts` was importing the side-effecting raw script and
+ * getting `undefined` for the named export. Result: CSP-blocked inline
+ * `<script>undefined</script>` on every page. The `.js` is no longer
+ * emitted; do not reintroduce it without renaming so the named-export
+ * module is the only candidate the resolver sees.
  */
 
 import { $ } from 'bun';
@@ -26,7 +39,6 @@ import { buildPreHydrationCspHash, buildPreHydrationScript, emitAllThemes } from
 
 const generatedDir = resolve(import.meta.dir, '../../libs/themes/generated');
 const tokensPath = resolve(generatedDir, 'tokens.css');
-const scriptPath = resolve(generatedDir, 'pre-hydration.js');
 const modulePath = resolve(generatedDir, 'pre-hydration.ts');
 
 mkdirSync(dirname(tokensPath), { recursive: true });
@@ -36,9 +48,6 @@ writeFileSync(tokensPath, css, 'utf8');
 console.log(`emitted ${css.length.toLocaleString()} bytes → ${tokensPath}`);
 
 const scriptBody = buildPreHydrationScript();
-writeFileSync(scriptPath, scriptBody, 'utf8');
-console.log(`emitted ${scriptBody.length.toLocaleString()} bytes → ${scriptPath}`);
-
 const cspHash = await buildPreHydrationCspHash(scriptBody);
 const moduleSource = `/**
  * GENERATED FILE -- do not edit by hand.
