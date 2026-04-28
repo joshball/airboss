@@ -1,0 +1,16 @@
+{
+	"name": "@ab/bc-avionics",
+	"private": true,
+	"type": "module",
+	"exports": {
+		".": "./src/index.ts",
+		"./*": "./src/*.ts",
+		"./package.json": "./package.json"
+	},
+	"dependencies": {
+		"@ab/auth": "workspace:*",
+		"@ab/constants": "workspace:*",
+		"@ab/db": "workspace:*",
+		"@ab/utils": "workspace:*"
+	}
+}

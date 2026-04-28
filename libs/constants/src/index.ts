@@ -509,3 +509,4 @@ export {
 	SECONDS_PER_YEAR,
 } from './time';
 export { Z_INDEX, type ZIndexTier } from './ui';
+export { MPS_TO_KNOTS } from './units';

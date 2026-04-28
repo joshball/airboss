@@ -46,6 +46,8 @@ const config = {
 			'@ab/db/*': '../../libs/db/src/*',
 			'@ab/bc-sim': '../../libs/bc/sim/src/index.ts',
 			'@ab/bc-sim/*': '../../libs/bc/sim/src/*',
+			'@ab/bc-avionics': '../../libs/bc/avionics/src/index.ts',
+			'@ab/bc-avionics/*': '../../libs/bc/avionics/src/*',
 		},
 		env: {
 			dir: '../../',

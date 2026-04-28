@@ -1,4 +1,5 @@
 export const HOSTS = {
+	AVIONICS: 'avionics.airboss.test',
 	STUDY: 'study.airboss.test',
 	SIM: 'sim.airboss.test',
 	HANGAR: 'hangar.airboss.test',
@@ -19,6 +20,7 @@ export const MAIL_FROM_NOREPLY = `airboss <noreply@${MAIL_DOMAIN_PROD}>` as cons
  * prod, only the root domain swaps.
  */
 export const HOST_PREFIXES = {
+	AVIONICS: 'avionics',
 	STUDY: 'study',
 	SIM: 'sim',
 	HANGAR: 'hangar',

@@ -24,6 +24,11 @@
  *   `libs/bc/sim/src/schema.ts` with the same WP). Future spaced-rep
  *   integration reads this to bias the scheduler when a sim drill grades
  *   poorly.
+ * - `AVIONICS`: reserved for the avionics BC's persistence tables. The
+ *   Phase-0 PFD scaffold is in-memory only (slider-driven `AvionicsTelemetry`),
+ *   so no tables exist yet. The namespace is reserved here so the eventual
+ *   scan-trainer drill, MFD page state, and any avionics-specific attempt
+ *   tables land under `avionics.*` without colliding with sim's `sim.*` rows.
  */
 export const SCHEMAS = {
 	IDENTITY: 'identity',
@@ -31,6 +36,7 @@ export const SCHEMAS = {
 	STUDY: 'study',
 	HANGAR: 'hangar',
 	SIM: 'sim',
+	AVIONICS: 'avionics',
 } as const;
 
 export type SchemaName = (typeof SCHEMAS)[keyof typeof SCHEMAS];
