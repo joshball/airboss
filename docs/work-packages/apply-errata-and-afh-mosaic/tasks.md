@@ -16,7 +16,7 @@ Phased plan. Each phase ends with `bun run check` clean and a commit.
 - R2: shipped (`feat(handbook-ingest): additive-paragraph errata parser + YAML errata list`)
 - R3: shipped (`feat(study/schema): handbook_section_errata table + BC functions`)
 - R4: shipped (`feat(handbook-ingest): apply-errata pipeline (--apply-errata + --reapply-errata)`)
-- R5: AFH portion shipped (`feat(content/afh): apply MOSAIC addendum`); PHAK portion deferred (different layout requires a new `bullet-edits` parser archetype, captured in IDEAS.md and PHAK YAML comment)
+- R5: shipped. AFH portion (`feat(content/afh): apply MOSAIC addendum`) + PHAK portion (`feat(handbook-errata): bullet-edits parser archetype + PHAK MOSAIC apply`). The PHAK MOSAIC layout is now handled by the new `bullet-edits` parser archetype; 21 patches land across 13 sections (chapters 1, 3, 6, 9, 17). The apply pipeline gained a sibling-section positional tie-break for shared titles like `Limitations:` (Sport Pilot vs Recreational Pilot), and the bullet-edits parser broadens colon-delimited parent anchors when a bullet does not name its own subsection.
 - R6: shipped (reader UI: AmendmentPanel + ErrataEntry + LCS word-diff utility wired into +page.svelte; e2e spec authored and `.skip()` until the e2e seed inserts errata rows -- see R6 task block).
 - R6.12a: shipped (e2e seed via `tests/e2e/seed-errata.ts` covers all three patch kinds against AFH §1.2 / §1.8 / §2.2; `tests/e2e/handbook-amendment.spec.ts` unskipped and passing; R6 theme-lint debt closed in AmendmentPanel + ErrataEntry).
 - R7: shipped (discovery: 17-handbook catalogue, page-scrape, freshness gate, dismissal stop-list, dispatcher banner, server startup hook, download piggyback, weekly launchd plist + install/uninstall, GH-issue auto-open with idempotency, Python subprocess metadata bridge).
@@ -142,11 +142,16 @@ Lands first. Zero behavior change. Subsequent phases consume the new shape.
 
 ### 10. PHAK MOSAIC
 
-- [ ] Download PHAK MOSAIC PDF if not already cached: `bun run sources download` should pull it once YAML is in place.
-- [ ] Run `bun run sources extract handbooks phak --apply-errata mosaic`.
-- [ ] Manually verify per-section markdown for one patched section.
-- [ ] Visual verification in reader.
-- [ ] Commit: `feat(content/phak): apply MOSAIC addendum`.
+- [x] Download PHAK MOSAIC PDF if not already cached: cached at `~/Documents/airboss-handbook-cache/handbooks/phak/FAA-H-8083-25C/_errata/mosaic.pdf`.
+- [x] Author the `bullet-edits` parser archetype (PHAK MOSAIC layout differs from AFH MOSAIC; comma-delimited anchors + bullet-level edits + list reorderings + a removal directive). Lives at `tools/handbook-ingest/ingest/errata_parsers/bullet_edits.py`.
+- [x] Map every PHAK MOSAIC edit onto one of the existing three patch kinds (`replace_paragraph`, `append_paragraph`, `add_subsection`); the removal directive uses a `REMOVAL_SENTINEL` replacement so the schema's non-empty constraint stays satisfied.
+- [x] Add unit tests in `tools/handbook-ingest/tests/errata_parsers/test_bullet_edits.py` (PDF fixture + helper-function coverage + UnknownErrataLayoutError paths). 14 new tests, full suite 115 passing.
+- [x] Update `tools/handbook-ingest/ingest/config/phak.yaml` to point the MOSAIC entry at `parser: bullet-edits`.
+- [x] Extend the apply pipeline's `_locate_section_markdown` with a sibling-section positional tie-break: when same-title siblings (e.g. `Limitations:` under Sport Pilot subsection 5.2 and Recreational Pilot subsection 5.5) both claim the patch's `target_page`, prefer the earlier subsection (document order). Documented inline in `apply_errata.py`.
+- [x] Run `bun run sources extract handbooks phak --apply-errata mosaic`. Result: 21 patches applied across 13 sections (chapters 1, 3, 6, 9, 17), manifest updated, sidecar `.errata.md` files written.
+- [x] Manually verify per-section markdown for one patched section: spot-checked `01/05-pilot-certifications.md` (Rotorcraft state-change + new helicopter bullet) and `03/02-01-a-note-about-light-sport-aircraft.md` (whole-section replace).
+- [ ] Visual verification in reader. Pending: blocked on the same e2e seed gap as R5 AFH; surfaces once `bun db seed --apply-errata` runs against the dev DB.
+- [x] Commit: `feat(handbook-errata): bullet-edits parser archetype + PHAK MOSAIC apply (R5 PHAK)`.
 
 ## Phase R6: Reader UI (amendment badge + diff panel)
 

@@ -43,7 +43,7 @@ Airplane: 20 hours
 Powered Parachute: 12 hours
 Weight-Shift Control (Trikes): 20 hours
 Glider: 10 hours
-Rotorcraft (gyroplane only): 20 hours
+Rotorcraft Gyroplane: 20 hours
 Lighter-Than-Air: 20 hours (airship) or 7 hours
 (balloon)
 To earn a Sport Pilot Certificate, one must:
@@ -57,3 +57,13 @@ Hold a current and valid driver’s license as evidence
 of medical eligibility
 When operating as a sport pilot, some of the following
 privileges and limitations may apply.
+
+> Paragraph added by FAA erratum (target page 1-16).
+
+- Rotorcraft Helicopter
+– Simplified Flight Controls:  30 hours.
+
+> Paragraph revised by FAA erratum (target page 1-16). The replacement text below supersedes the matching paragraph; the sidecar `.errata.md` records the FAA-published wording verbatim.
+
+Hold a valid US driver's license, a valid
+medical certificate, or comply with BasicMed, except for glider or balloon privileges.

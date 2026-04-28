@@ -176,3 +176,13 @@ issued a special airworthiness certificate in the LSA category.
 for maintenance privileges.) 14 CFR part 43, appendix A,
 contains a list of the operations that are considered to be
 preventive maintenance.
+
+> Paragraph revised by FAA erratum (target page 9-12). The replacement text below supersedes the matching paragraph; the sidecar `.errata.md` records the FAA-published wording verbatim.
+
+Certificated pilots, excluding student pilots, sport pilots, and recreational pilots, may
+perform preventive maintenance on any aircraft that is owned or operated by them provided
+that the aircraft is not used in air carrier service and does not qualify under 14 CFR parts
+121, 129, or 135. A pilot holding a sport pilot certificate may perform preventive
+maintenance on an aircraft owned or operated by that pilot if that aircraft is issued a special
+airworthiness certificate in light sport category aircraft. 14 CFR part 43, appendix A,
+contains a list of the operations that are considered to be preventive maintenance.

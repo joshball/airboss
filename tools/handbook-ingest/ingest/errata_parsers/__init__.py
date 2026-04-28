@@ -14,9 +14,11 @@ from __future__ import annotations
 
 from .additive_paragraph import AdditiveParagraphParser
 from .base import ErrataParser, UnknownErrataLayoutError
+from .bullet_edits import BulletEditsParser
 
 PARSERS: dict[str, type[ErrataParser]] = {
     'additive-paragraph': AdditiveParagraphParser,
+    'bullet-edits': BulletEditsParser,
 }
 
 
@@ -34,6 +36,7 @@ def get_parser(name: str) -> ErrataParser:
 __all__ = [
     'PARSERS',
     'AdditiveParagraphParser',
+    'BulletEditsParser',
     'ErrataParser',
     'UnknownErrataLayoutError',
     'get_parser',

@@ -1,16 +1,14 @@
 ---
-handbook: phak
-edition: FAA-H-8083-25C
-chapter_number: 3
-section_title: Introduction
-faa_pages: 3-1
-section_number: 1
-source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/faa-h-8083-25c.pdf
+errata_id: mosaic
+source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/PHAK_Addendum_(MOSAIC).pdf
+published_at: 2025-10-20
+parser: bullet-edits
+patch_kind: replace_paragraph
+target_anchor: 'Introduction'
+target_page: 3-1
 ---
 
-# Introduction
-
-> Paragraph revised by FAA erratum (target page 3-1). The replacement text below supersedes the matching paragraph; the sidecar `.errata.md` records the FAA-published wording verbatim.
+## Replacement text
 
 An aircraft is a device that is used, or intended to be used, for flight according to the current
 Title 14 of the Code of Federal Regulations (14 CFR) part 1, Definitions and Abbreviations.
