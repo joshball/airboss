@@ -96,9 +96,11 @@ function fillDevAccount(accountEmail: string) {
 							</button>
 						{/each}
 					</div>
-					<p class="dev-hint">
-						password: <code>{DEV_PASSWORD}</code>
-					</p>
+					<!--
+						Dev-account buttons pre-fill the password field on click; we
+						deliberately don't print the password to screen so it's not
+						trained as a normal place for credentials to live.
+					-->
 				</section>
 			{/if}
 		</section>
@@ -211,19 +213,4 @@ function fillDevAccount(accountEmail: string) {
 		letter-spacing: var(--type-ui-caption-tracking);
 	}
 
-	.dev-hint {
-		margin: var(--space-sm) 0 0;
-		font-size: var(--type-ui-caption-size);
-		color: var(--ink-faint);
-		text-align: center;
-	}
-
-	.dev-hint code {
-		background: var(--surface-sunken);
-		padding: 0 var(--space-2xs);
-		border-radius: var(--radius-sm);
-		font-family: var(--font-family-mono);
-		font-size: var(--type-ui-caption-size);
-		color: var(--ink-muted);
-	}
 </style>

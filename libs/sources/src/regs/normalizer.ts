@@ -116,8 +116,18 @@ function sectionId(raw: RawSection): SourceId {
 	return `airboss-ref:regs/cfr-${raw.title}/${raw.part}/${raw.section}` as SourceId;
 }
 
+/**
+ * Strict ISO 8601 date format check. ECMA-262's `Date` constructor accepts
+ * arbitrary input (two-digit years, locale-dependent formats); a malformed
+ * CFR amended-date attribute could be silently coerced into a wrong year.
+ * Restrict the input to `YYYY-MM-DD` (or `YYYY-MM-DDThh:mm:ssZ` shape)
+ * before parsing.
+ */
+const ISO_DATE_PATTERN = /^\d{4}-\d{2}-\d{2}(T\d{2}:\d{2}:\d{2}(\.\d+)?(Z|[+-]\d{2}:\d{2})?)?$/;
+
 function parseLastAmended(rawDate: string | null, fallback: Date): Date {
 	if (rawDate === null) return fallback;
+	if (!ISO_DATE_PATTERN.test(rawDate)) return fallback;
 	const parsed = new Date(rawDate);
 	if (Number.isNaN(parsed.getTime())) return fallback;
 	return parsed;
