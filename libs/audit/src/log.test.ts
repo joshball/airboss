@@ -13,7 +13,7 @@
  */
 
 import { AUDIT_TARGETS } from '@ab/constants';
-import { db } from '@ab/db';
+import { db } from '@ab/db/connection';
 import { eq } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { auditRecent, auditWrite, countAuditEntriesSince } from './log';

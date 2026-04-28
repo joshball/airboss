@@ -11,7 +11,7 @@
  */
 
 import { CITATION_FRAMINGS } from '@ab/constants';
-import { db } from '@ab/db';
+import { db } from '@ab/db/connection';
 import type { LegacyCitation, StructuredCitation } from '@ab/types';
 import { inArray } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
