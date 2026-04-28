@@ -129,6 +129,22 @@ audio/phak/8083-25C/12-3/
 
 6. `git lfs install` is **not** a developer prerequisite under Flavor D. The `.gitattributes` filter does nothing without the LFS extension installed, and that's fine -- nothing matches the filter anyway. README documents `git lfs install` as a *future* prerequisite for the day the policy flips.
 
+## Scale-tier exception: high-cardinality derivative corpora
+
+The default rule ("derivatives are committed") assumes derivative count is in the same order of magnitude as source count -- a 700-page handbook produces ~30 chapter markdown files plus a few hundred figure PNGs. Reviewable, greppable, useful as repo content.
+
+CFR corpora violate that assumption. Title 14 alone produces ~6,300 per-section markdown files (one per `§`), Title 49 adds more, and the full FAA-relevant cross-title sweep would push past 15,000. That number is not greppable in any useful way -- developers don't read regulations by greping for `§91.103` across a 13K-file tree, they query the registry. Committing the bodies inflates clone size without buying anything the registry doesn't already provide.
+
+The exception:
+
+- **Commit:** `manifest.json` (corpus-level audit + `sourceSha256`) and `sections.json` (the structural index: per-section `id`, `canonical_short`, `canonical_title`, `last_amended_date`, `body_path`, `body_sha256`). This is the registry's source of truth and the audit trail.
+- **Gitignore:** the per-section body markdown (`regulations/cfr-*/**/*.md`). Bodies are computed -- they regenerate deterministically from the cached XML by re-running `bun run ingest cfr`. The `body_sha256` recorded in `sections.json` validates regeneration retroactively.
+- **Threshold for applying this exception:** > ~1,000 derivative files per corpus version. Below that, default rule applies (commit everything).
+
+This is consistent with the policy's intent ("audit trail is the SHA, not the bytes"). For CFR, the audit trail moves from the body file's git history to `body_sha256` in the committed `sections.json`. Greppability moves from the repo to the app -- the registry exposes section bodies via query, which is where developers actually consume them.
+
+Trigger to revisit: if a second contributor joins, regeneration of 13K files on every fresh clone becomes friction worth re-evaluating against committing the bodies (or flipping the corpus to LFS).
+
 ## Trade-offs accepted
 
 - **No reproducibility on a new machine without re-fetching from FAA.** If the FAA replaces an edition's URL or removes it, that edition is unrecoverable on a fresh clone unless Joshua has kept a copy somewhere outside the cache. Mitigation: Joshua manually archives source PDFs to a personal cloud (iCloud/Dropbox/etc.) when an edition is published. This is an ops practice, not enforced by the repo.
