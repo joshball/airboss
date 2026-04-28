@@ -44,7 +44,14 @@ import {
 	sql,
 } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
-import { type ScenarioOption, type ScenarioRow, scenario, sessionItemResult } from './schema';
+import {
+	type ScenarioOption,
+	type ScenarioOptionRow,
+	type ScenarioRow,
+	scenario,
+	scenarioOption,
+	sessionItemResult,
+} from './schema';
 import { newScenarioSchema, submitAttemptSchema } from './validation';
 
 type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;
@@ -75,9 +82,9 @@ export class ScenarioNotAttemptableError extends Error {
 export class InvalidOptionError extends Error {
 	constructor(
 		public readonly scenarioId: string,
-		public readonly chosenOption: string,
+		public readonly chosenOptionId: string,
 	) {
-		super(`Option ${chosenOption} is not valid for scenario ${scenarioId}`);
+		super(`Option ${chosenOptionId} is not valid for scenario ${scenarioId}`);
 		this.name = 'InvalidOptionError';
 	}
 }
@@ -92,6 +99,16 @@ export class SourceRefRequiredError extends Error {
 		super('source_ref is required when source_type is not personal');
 		this.name = 'SourceRefRequiredError';
 	}
+}
+
+/**
+ * Scenario plus its authored options, in `position` order. Returned by
+ * `getScenarioWithOptions`, `getScenariosWithOptions`, and `createScenario`
+ * so callers reading a scenario for display always see the options together.
+ */
+export interface ScenarioWithOptions {
+	scenario: ScenarioRow;
+	options: ScenarioOptionRow[];
 }
 
 export interface CreateScenarioInput {
@@ -130,7 +147,8 @@ export interface ScenarioFilters {
 export interface SubmitAttemptInput {
 	scenarioId: string;
 	userId: string;
-	chosenOption: string;
+	/** Id of the option the learner picked. Must match a `scenario_option.id`. */
+	chosenOptionId: string;
 	/**
 	 * Accepts a raw `number | null` rather than `ConfidenceLevel` so callers
 	 * can pass zod's widened return type without a cast; the BC narrows via
@@ -171,7 +189,11 @@ export interface RepStats {
 
 /**
  * Create a new scenario. Runs the options validation described in the spec
- * plus the BC-level guards (sourceRef required for non-personal).
+ * plus the BC-level guards (sourceRef required for non-personal). Writes the
+ * scenario row and its options atomically in one transaction; the partial
+ * UNIQUE on `scenario_option(scenario_id) WHERE is_correct = true` plus the
+ * `(scenario_id, position)` UNIQUE backstop the BC validation at the storage
+ * layer.
  */
 export async function createScenario(input: CreateScenarioInput, db: Db = defaultDb): Promise<ScenarioRow> {
 	const parsed = newScenarioSchema.parse({
@@ -197,33 +219,50 @@ export async function createScenario(input: CreateScenarioInput, db: Db = defaul
 	const now = new Date();
 	const id = generateScenarioId();
 
-	const [inserted] = await db
-		.insert(scenario)
-		.values({
-			id,
-			userId: input.userId,
-			title: parsed.title,
-			situation: parsed.situation,
-			// zod's enum widens to string; newScenarioSchema guarantees membership.
-			options: parsed.options as ScenarioOption[],
-			teachingPoint: parsed.teachingPoint,
-			domain: parsed.domain as Domain,
-			difficulty: parsed.difficulty as Difficulty,
-			phaseOfFlight: (parsed.phaseOfFlight ?? null) as PhaseOfFlight | null,
-			sourceType,
-			sourceRef: parsed.sourceRef ?? null,
-			nodeId: input.nodeId ?? null,
-			// Defaults to true for personal content, false for non-personal,
-			// matching the cards BC. Non-personal content is either imported
-			// or course-authored and should not be edited downstream.
-			isEditable: parsed.isEditable ?? sourceType === CONTENT_SOURCES.PERSONAL,
-			regReferences: parsed.regReferences ?? [],
-			status: SCENARIO_STATUSES.ACTIVE,
-			createdAt: now,
-		})
-		.returning();
+	return await db.transaction(async (tx) => {
+		const [inserted] = await tx
+			.insert(scenario)
+			.values({
+				id,
+				userId: input.userId,
+				title: parsed.title,
+				situation: parsed.situation,
+				teachingPoint: parsed.teachingPoint,
+				domain: parsed.domain as Domain,
+				difficulty: parsed.difficulty as Difficulty,
+				phaseOfFlight: (parsed.phaseOfFlight ?? null) as PhaseOfFlight | null,
+				sourceType,
+				sourceRef: parsed.sourceRef ?? null,
+				nodeId: input.nodeId ?? null,
+				// Defaults to true for personal content, false for non-personal,
+				// matching the cards BC. Non-personal content is either imported
+				// or course-authored and should not be edited downstream.
+				isEditable: parsed.isEditable ?? sourceType === CONTENT_SOURCES.PERSONAL,
+				regReferences: parsed.regReferences ?? [],
+				status: SCENARIO_STATUSES.ACTIVE,
+				createdAt: now,
+			})
+			.returning();
 
-	return inserted;
+		// Namespace the option PK by scenario so authored ids ('a','b','c'
+		// across many scenarios) stay collision-free on a single PK column.
+		// The pre-migration JSONB blobs used the same letter ids per scenario;
+		// the 0008 migration backfills with the same `${scenario_id}__${id}`
+		// rule so historical chosen_option text values resolve correctly via
+		// the FK rewrite.
+		const optionsToInsert = (parsed.options as ScenarioOption[]).map((o, idx) => ({
+			id: `${inserted.id}__${o.id}`,
+			scenarioId: inserted.id,
+			text: o.text,
+			isCorrect: o.isCorrect,
+			outcome: o.outcome,
+			whyNot: o.whyNot,
+			position: idx,
+		}));
+		await tx.insert(scenarioOption).values(optionsToInsert);
+
+		return inserted;
+	});
 }
 
 /**
@@ -388,7 +427,9 @@ export async function getScenariosFacetCounts(
 	};
 }
 
-/** Load a single scenario by id scoped to the caller. */
+/** Load a single scenario by id scoped to the caller. Returns the bare
+ * scenario row without options. Use `getScenarioWithOptions` when the caller
+ * needs the option list (rep render, attempt validation by app code). */
 export async function getScenario(scenarioId: string, userId: string, db: Db = defaultDb): Promise<ScenarioRow | null> {
 	const [row] = await db
 		.select()
@@ -396,6 +437,49 @@ export async function getScenario(scenarioId: string, userId: string, db: Db = d
 		.where(and(eq(scenario.id, scenarioId), eq(scenario.userId, userId)))
 		.limit(1);
 	return row ?? null;
+}
+
+/** Load every option row for a scenario, ordered by `position` ascending. */
+export async function getScenarioOptions(scenarioId: string, db: Db = defaultDb): Promise<ScenarioOptionRow[]> {
+	return await db
+		.select()
+		.from(scenarioOption)
+		.where(eq(scenarioOption.scenarioId, scenarioId))
+		.orderBy(asc(scenarioOption.position));
+}
+
+/**
+ * Load a scenario plus its authored options in `position` order. Returns
+ * `null` when the scenario does not exist for the caller. The companion to
+ * `getScenario` for screens that render the options (rep view, browse
+ * detail) without making the caller juggle two BC calls.
+ */
+export async function getScenarioWithOptions(
+	scenarioId: string,
+	userId: string,
+	db: Db = defaultDb,
+): Promise<ScenarioWithOptions | null> {
+	const sc = await getScenario(scenarioId, userId, db);
+	if (!sc) return null;
+	const options = await getScenarioOptions(scenarioId, db);
+	return { scenario: sc, options };
+}
+
+/**
+ * Bulk loader: option counts per scenario id. Backs the browse list which
+ * shows "N options" without needing the option text. Single GROUP BY query
+ * so callers don't fan out N requests.
+ */
+export async function getScenarioOptionCounts(scenarioIds: string[], db: Db = defaultDb): Promise<Map<string, number>> {
+	const result = new Map<string, number>();
+	if (scenarioIds.length === 0) return result;
+	const rows = await db
+		.select({ scenarioId: scenarioOption.scenarioId, c: count() })
+		.from(scenarioOption)
+		.where(inArray(scenarioOption.scenarioId, scenarioIds))
+		.groupBy(scenarioOption.scenarioId);
+	for (const r of rows) result.set(r.scenarioId, Number(r.c));
+	return result;
 }
 
 /**
@@ -474,7 +558,7 @@ export async function getNextScenarios(
  */
 export interface RepAttemptOutcome {
 	scenarioId: string;
-	chosenOption: string;
+	chosenOptionId: string;
 	isCorrect: boolean;
 	confidence: number | null;
 	answerMs: number | null;
@@ -499,7 +583,7 @@ export interface RepAttemptOutcome {
 export async function submitAttempt(input: SubmitAttemptInput, db: Db = defaultDb): Promise<RepAttemptOutcome> {
 	const parsed = submitAttemptSchema.parse({
 		scenarioId: input.scenarioId,
-		chosenOption: input.chosenOption,
+		chosenOptionId: input.chosenOptionId,
 		confidence: input.confidence,
 		answerMs: input.answerMs,
 	});
@@ -514,13 +598,21 @@ export async function submitAttempt(input: SubmitAttemptInput, db: Db = defaultD
 		throw new ScenarioNotAttemptableError(parsed.scenarioId, sc.status);
 	}
 
-	const options = sc.options ?? [];
-	const chosen = options.find((o) => o.id === parsed.chosenOption);
-	if (!chosen) throw new InvalidOptionError(parsed.scenarioId, parsed.chosenOption);
+	// Look the option up directly by id + scenario_id. The (scenario_id,
+	// position) UNIQUE plus the partial UNIQUE on is_correct=true keep the
+	// option set clean; we read just the row we need. The scenario_id
+	// predicate is the authorization guard -- a chosen_option_id from
+	// another scenario won't match here.
+	const [chosen] = await db
+		.select({ id: scenarioOption.id, isCorrect: scenarioOption.isCorrect })
+		.from(scenarioOption)
+		.where(and(eq(scenarioOption.id, parsed.chosenOptionId), eq(scenarioOption.scenarioId, parsed.scenarioId)))
+		.limit(1);
+	if (!chosen) throw new InvalidOptionError(parsed.scenarioId, parsed.chosenOptionId);
 
 	return {
 		scenarioId: parsed.scenarioId,
-		chosenOption: parsed.chosenOption,
+		chosenOptionId: parsed.chosenOptionId,
 		isCorrect: chosen.isCorrect,
 		confidence: parsed.confidence ?? null,
 		answerMs: parsed.answerMs ?? null,

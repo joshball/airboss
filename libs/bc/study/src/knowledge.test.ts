@@ -255,7 +255,10 @@ async function seedAttachedRepsAndAttempts(nodeId: string, attemptCount: number,
 			userId: TEST_USER_ID,
 			scenarioId: sc.id,
 			isCorrect: i < correctCount,
-			chosenOption: i < correctCount ? 'a' : 'b',
+			// chosenOptionId stays null -- the assertion is on the isCorrect
+			// rollup, not the picked option, and seeding a real
+			// scenario_option for every attempt is bookkeeping the test does
+			// not need.
 			completedAt: new Date(now + i),
 		});
 	}

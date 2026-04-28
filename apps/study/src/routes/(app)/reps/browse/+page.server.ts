@@ -1,5 +1,11 @@
 import { requireAuth } from '@ab/auth';
-import { getScenario, getScenarios, getScenariosCount, getScenariosFacetCounts } from '@ab/bc-study';
+import {
+	getScenario,
+	getScenarioOptionCounts,
+	getScenarios,
+	getScenariosCount,
+	getScenariosFacetCounts,
+} from '@ab/bc-study';
 import {
 	BROWSE_PAGE_SIZE,
 	BROWSE_PAGE_SIZE_VALUES,
@@ -75,12 +81,13 @@ export const load: PageServerLoad = async (event) => {
 		if (found) createdScenario = { id: found.id, title: found.title };
 	}
 
-	// Strip `options.isCorrect|outcome|whyNot` and `teachingPoint` so a learner
-	// can't peek at the answer via view-source. Only the option count surfaces
-	// on the card.
+	// Strip `teachingPoint` so a learner can't peek at the answer via
+	// view-source. Only the option count surfaces on the card; option text
+	// and isCorrect bits stay server-side.
+	const optionCounts = await getScenarioOptionCounts(visible.map((s) => s.id));
 	const visibleForClient = visible.map((s) => {
-		const { options, teachingPoint: _teachingPoint, ...rest } = s;
-		return { ...rest, optionsCount: options.length };
+		const { teachingPoint: _teachingPoint, ...rest } = s;
+		return { ...rest, optionsCount: optionCounts.get(s.id) ?? 0 };
 	});
 
 	return {

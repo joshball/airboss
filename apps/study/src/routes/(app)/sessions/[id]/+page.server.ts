@@ -5,6 +5,7 @@ import {
 	completeSession,
 	getCard,
 	getScenario,
+	getScenarioWithOptions,
 	getSession,
 	getSessionItemResult,
 	getSessionItemResults,
@@ -103,16 +104,16 @@ export const load: PageServerLoad = async (event) => {
 			};
 		}
 	} else if (current?.itemKind === SESSION_ITEM_KINDS.REP && current.scenarioId) {
-		const row = await getScenario(current.scenarioId, user.id);
+		const row = await getScenarioWithOptions(current.scenarioId, user.id);
 		if (row) {
 			hydrated = {
 				kind: 'rep',
-				title: row.title,
-				situation: row.situation,
+				title: row.scenario.title,
+				situation: row.scenario.situation,
 				options: row.options.map((o) => ({ id: o.id, text: o.text })),
-				teachingPoint: row.teachingPoint,
-				domain: row.domain,
-				regReferences: row.regReferences ?? [],
+				teachingPoint: row.scenario.teachingPoint,
+				domain: row.scenario.domain,
+				regReferences: row.scenario.regReferences ?? [],
 			};
 		}
 	} else if (current?.itemKind === SESSION_ITEM_KINDS.NODE_START && current.nodeId) {
@@ -275,7 +276,7 @@ export const actions: Actions = {
 		const slotIndexResult = requireInt(form, 'slotIndex');
 		if (!slotIndexResult.ok) return fail(400, { error: slotIndexResult.error });
 		const slotIndex = slotIndexResult.value;
-		const chosenOption = String(form.get('chosenOption') ?? '');
+		const chosenOptionId = String(form.get('chosenOptionId') ?? form.get('chosenOption') ?? '');
 		const confidenceRaw = form.get('confidence');
 		const answerMsRaw = form.get('answerMs');
 
@@ -286,7 +287,7 @@ export const actions: Actions = {
 
 		const parsed = submitAttemptSchema.safeParse({
 			scenarioId: slot.scenarioId,
-			chosenOption,
+			chosenOptionId,
 			confidence: confidenceRaw == null || confidenceRaw === '' ? null : Number(confidenceRaw),
 			answerMs: answerMsRaw == null || answerMsRaw === '' ? null : Number(answerMsRaw),
 		});
@@ -302,7 +303,7 @@ export const actions: Actions = {
 			const att = await submitAttempt({
 				scenarioId: slot.scenarioId,
 				userId: user.id,
-				chosenOption: parsed.data.chosenOption,
+				chosenOptionId: parsed.data.chosenOptionId,
 				confidence: confidenceValue,
 				answerMs: parsed.data.answerMs,
 			});
@@ -314,13 +315,13 @@ export const actions: Actions = {
 				slice: slot.slice,
 				reasonCode: slot.reasonCode,
 				scenarioId: slot.scenarioId,
-				chosenOption: att.chosenOption,
+				chosenOptionId: att.chosenOptionId,
 				isCorrect: att.isCorrect,
 				confidence: att.confidence as ConfidenceLevel | null,
 				answerMs: att.answerMs,
 				reasonDetail: slot.reasonDetail,
 			});
-			return { success: true as const, isCorrect: att.isCorrect, chosenOption: att.chosenOption };
+			return { success: true as const, isCorrect: att.isCorrect, chosenOptionId: att.chosenOptionId };
 		} catch (err) {
 			if (err instanceof ScenarioNotFoundError || err instanceof ScenarioNotAttemptableError) {
 				await recordItemResult(event.params.id, user.id, {

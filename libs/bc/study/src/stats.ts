@@ -339,7 +339,7 @@ export async function getMasteredCount(userId: string, db: Db = defaultDb): Prom
 /** Summary row for the scenario-detail recent-attempts panel. */
 export type RecentAttemptRow = Pick<
 	SessionItemResultRow,
-	'id' | 'isCorrect' | 'chosenOption' | 'confidence' | 'answerMs' | 'completedAt'
+	'id' | 'isCorrect' | 'chosenOptionId' | 'confidence' | 'answerMs' | 'completedAt'
 >;
 
 /**
@@ -359,7 +359,7 @@ export async function getRecentAttemptsForScenario(
 		.select({
 			id: sessionItemResult.id,
 			isCorrect: sessionItemResult.isCorrect,
-			chosenOption: sessionItemResult.chosenOption,
+			chosenOptionId: sessionItemResult.chosenOptionId,
 			confidence: sessionItemResult.confidence,
 			answerMs: sessionItemResult.answerMs,
 			completedAt: sessionItemResult.completedAt,

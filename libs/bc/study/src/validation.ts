@@ -162,7 +162,12 @@ export type NewScenarioInput = z.infer<typeof newScenarioSchema>;
 
 export const submitAttemptSchema = z.object({
 	scenarioId: z.string().trim().min(1),
-	chosenOption: z.string().trim().min(1).max(50),
+	/**
+	 * Id of the option the learner picked. Renamed from `chosenOption` after
+	 * the scenario_options-relational migration: now an FK to
+	 * `scenario_option.id`, not free text.
+	 */
+	chosenOptionId: z.string().trim().min(1).max(50),
 	confidence: confidenceSchema.nullish(),
 	answerMs: z.number().int().min(0).nullish(),
 });
