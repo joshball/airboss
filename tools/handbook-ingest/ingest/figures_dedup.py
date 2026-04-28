@@ -69,7 +69,7 @@ def deduplicate_figures(records: list[FigureRecord]) -> tuple[list[FigureRecord]
     canonicalized = 0
     freed_bytes = 0
 
-    for sha, indexes in groups.items():
+    for _sha, indexes in groups.items():
         if len(indexes) <= 1:
             canonical_index_for[indexes[0]] = indexes[0]
             continue

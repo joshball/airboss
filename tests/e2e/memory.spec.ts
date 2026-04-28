@@ -14,9 +14,11 @@ test.describe('memory', () => {
 	test('dashboard renders tiles and quick actions', async ({ page }) => {
 		await page.goto(ROUTES.MEMORY);
 		await expect(page.getByRole('heading', { name: 'Memory', exact: true })).toBeVisible();
-		await expect(page.getByRole('link', { name: 'New card' })).toBeVisible();
-		await expect(page.getByRole('link', { name: 'Browse' })).toBeVisible();
-		await expect(page.getByRole('link', { name: 'Start review' })).toBeVisible();
+		await expect(page.getByRole('link', { name: 'New card', exact: true })).toBeVisible();
+		// `exact: true` to skip the StatTile aria-label "Reviewed today: 0, browse active cards"
+		// which also matches the loose `name: 'Browse'`.
+		await expect(page.getByRole('link', { name: 'Browse', exact: true })).toBeVisible();
+		await expect(page.getByRole('link', { name: 'Start review', exact: true })).toBeVisible();
 	});
 
 	test('creates a card via /memory/new and lands on detail', async ({ page }) => {
@@ -77,8 +79,9 @@ test.describe('memory', () => {
 	test('review route loads (may be empty or show a due card)', async ({ page }) => {
 		await page.goto(ROUTES.MEMORY_REVIEW);
 		// Valid states: "All caught up." (no cards due), "Show answer" button (phase=front), or a rating button (phase=answer).
+		// Scope away the InfoTip trigger ("Learn more about Show answer") which also matches /show answer/i.
 		const caughtUp = page.getByRole('heading', { name: /all caught up/i });
-		const showAnswer = page.getByRole('button', { name: /show answer/i });
+		const showAnswer = page.locator('button:not([data-testid="infotip-trigger"])').filter({ hasText: /show answer/i }).first();
 		const ratingBtn = page.locator('button[data-rating]').first();
 		await expect(caughtUp.or(showAnswer).or(ratingBtn)).toBeVisible();
 	});

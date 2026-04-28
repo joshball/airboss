@@ -132,5 +132,10 @@ export async function buildPreHydrationCspHash(scriptBody: string): Promise<stri
 export const PRE_HYDRATION_PLACEHOLDER = '%theme-pre-hydration%';
 
 export function injectPreHydrationScript(html: string, scriptBody: string): string {
-	return html.replace(PRE_HYDRATION_PLACEHOLDER, () => scriptBody);
+	// replaceAll, not replace: app.html mentions the placeholder in a
+	// comment block above the actual `<script>` tag. `replace(string, ...)`
+	// only swaps the first occurrence (the comment), leaving the real
+	// script tag's `%theme-pre-hydration%` intact and the script never
+	// runs. replaceAll fixes both occurrences.
+	return html.replaceAll(PRE_HYDRATION_PLACEHOLDER, scriptBody);
 }

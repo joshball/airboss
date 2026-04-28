@@ -222,18 +222,18 @@ test.describe('handbook reader: read-state controls', () => {
 		// Toggle "Read but didn't get it" -- enabled now that status >= reading.
 		const checkbox = page.locator('input[type=checkbox][name=comprehended]');
 		await expect(checkbox).toBeEnabled();
-		await Promise.all([
-			page.waitForLoadState('networkidle'),
-			checkbox.check(),
-		]);
+		// SvelteKit form-action POST followed by SvelteKit's own redirect/load.
+		// Wait until the URL settles back on the section path (not `?/...`)
+		// before doing our own navigation, otherwise `page.goto` races with
+		// the in-flight action redirect.
+		await checkbox.check();
+		await page.waitForURL((u) => u.pathname === url && !u.search.includes('/set-comprehended'));
 		await page.goto(url);
 		await expect(page.locator('input[type=checkbox][name=comprehended]')).toBeChecked();
 
-		// Re-read clears status + comprehended.
-		await Promise.all([
-			page.waitForLoadState('networkidle'),
-			page.locator('form.reread-form button[type="submit"]').click(),
-		]);
+		// Re-read clears status + comprehended. Same wait pattern.
+		await page.locator('form.reread-form button[type="submit"]').click();
+		await page.waitForURL((u) => u.pathname === url && !u.search.includes('/reread'));
 		await expect(page.locator('input[type=radio][name=status][value=unread]')).toBeChecked();
 		await expect(page.locator('input[type=checkbox][name=comprehended]')).not.toBeChecked();
 	});
@@ -257,9 +257,14 @@ test.describe('handbook reader: read-state controls', () => {
 		// submit serializes the right `notesMd` payload. Click first to
 		// guarantee focus before the keystrokes flow.
 		await textarea.click();
+		// Wait for the textarea to be the focused element before clearing/typing.
+		// Svelte 5 may re-bind on initial paint; a stray re-render can swallow
+		// leading keystrokes. Locking on focus before typing avoids that race.
+		await expect(textarea).toBeFocused();
 		await textarea.press('ControlOrMeta+A');
 		await page.keyboard.press('Delete');
-		await page.keyboard.type(stamp, { delay: 5 });
+		await expect(textarea).toHaveValue('');
+		await page.keyboard.type(stamp, { delay: 25 });
 		await expect(textarea).toHaveValue(stamp);
 
 		// Form is non-enhanced (no `use:enhance`), so submit POSTs to
