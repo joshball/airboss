@@ -152,17 +152,18 @@ Land the PFD page, the layout, the slider strip, and the rAF loop. No instrument
 
 One instrument per task. Each compiles, types clean, renders against current bindings, and ships green-arc/yellow-arc/red-line where the instrument calls for it. Order by dependency-of-debugging: attitude first (it's the centerpiece), then airspeed (most arc complexity), then altitude (rolled counter is the trickiest readout), then heading, then VSI.
 
-- [ ] `apps/avionics/src/lib/pfd/AttitudeIndicator.svelte` -- pitch ladder every 5deg, labels every 10, sky-blue/ground-brown halves with the horizon line, bank pointer arc with 10/20/30/45/60 ticks. Props: `pitchDeg: number`, `rollDeg: number`. SVG only. All colors via theme tokens.
-- [ ] `apps/avionics/src/lib/pfd/airspeed-arcs.ts` -- export `AirspeedArcBands` interface and `arcBandsFromConfig(cfg: AircraftConfig): AirspeedArcBands`. Reads `vS0`, `vS1`, `vFe`, `vNo`, `vNe` from the config (m/s) and converts to knots using `MPS_TO_KNOTS` from `@ab/constants`. No magic numbers; no aircraft-specific hardcodes.
-- [ ] `apps/avionics/src/lib/pfd/AirspeedTape.svelte` -- vertical tape, current value boxed at center, arc bands (white = flap-extended range Vs0..Vfe, green = normal Vs1..Vno, yellow = caution Vno..Vne, red line = Vne) drawn against the tape edge. Props: `airspeedKnots: number`, `arcs: AirspeedArcBands`. The component is aircraft-agnostic; the band positions come from the prop.
-- [ ] `apps/avionics/src/lib/pfd/Pfd.svelte` -- import `getAircraftConfig` from `@ab/bc-sim` and `arcBandsFromConfig` from the local module; resolve `arcs` from the page-data `selectedAircraftId` and pass to `<AirspeedTape arcs={...} />`.
-- [ ] `apps/avionics/src/lib/pfd/AltitudeTape.svelte` -- vertical tape, hundreds at the digits, thousands rendered as a rolled-counter (use a translateY on a stack of digits clipped by an aperture). Props: `altitudeFeet: number`.
-- [ ] `apps/avionics/src/lib/pfd/HeadingIndicator.svelte` -- horizontal compass strip across the bottom, current heading boxed at top-center, cardinal labels at N/E/S/W, ticks every 10deg with major label every 30deg. Props: `headingDegMag: number`.
-- [ ] `apps/avionics/src/lib/pfd/VsiIndicator.svelte` -- vertical strip, +/-2000 fpm scale with major ticks at 1000 fpm, current pointer animates smoothly. Props: `verticalSpeedFpm: number`.
-- [ ] `apps/avionics/src/lib/pfd/Pfd.svelte` -- replace the five placeholder cells with the real instruments. Bindings flow: `<PfdInputs>` -> `$state` targets -> `pfd-tick.svelte.ts` rendered values -> instrument props.
-- [ ] `bun run check` -- clean after every instrument; final pass after the full integration
+- [x] `tools/theme-lint/rules.ts` -- register `--avionics-*` token vocab via `KNOWN_PREFIXES` so PFD components can reference the theme tokens without theme-lint failing.
+- [x] `apps/avionics/src/lib/pfd/AttitudeIndicator.svelte` -- pitch ladder every 5deg, labels every 10, sky-blue/ground-brown halves with the horizon line, bank pointer arc with 10/20/30/45/60 ticks. Props: `pitchDeg: number`, `rollDeg: number`. SVG only. All colors via theme tokens.
+- [x] `apps/avionics/src/lib/pfd/airspeed-arcs.ts` -- export `AirspeedArcBands` interface and `arcBandsFromConfig(cfg: AircraftConfig): AirspeedArcBands`. Reads `vS0`, `vS1`, `vFe`, `vNo`, `vNe` from the config (m/s) and converts to knots using `MPS_TO_KNOTS` from `@ab/constants`. No magic numbers; no aircraft-specific hardcodes.
+- [x] `apps/avionics/src/lib/pfd/AirspeedTape.svelte` -- vertical tape, current value boxed at center, arc bands (white = flap-extended range Vs0..Vfe, green = normal Vs1..Vno, yellow = caution Vno..Vne, red line = Vne) drawn against the tape edge. Props: `airspeedKnots: number`, `arcs: AirspeedArcBands`. The component is aircraft-agnostic; the band positions come from the prop.
+- [x] `apps/avionics/src/lib/pfd/Pfd.svelte` -- import `getAircraftConfig` from `@ab/bc-sim` and `arcBandsFromConfig` from the local module; resolve `arcs` from the page-data `selectedAircraftId` and pass to `<AirspeedTape arcs={...} />`.
+- [x] `apps/avionics/src/lib/pfd/AltitudeTape.svelte` -- vertical tape, hundreds at the digits, thousands rendered as a rolled-counter (use a translateY on a stack of digits clipped by an aperture). Props: `altitudeFeet: number`.
+- [x] `apps/avionics/src/lib/pfd/HeadingIndicator.svelte` -- horizontal compass strip across the bottom, current heading boxed at top-center, cardinal labels at N/E/S/W, ticks every 10deg with major label every 30deg. Props: `headingDegMag: number`.
+- [x] `apps/avionics/src/lib/pfd/VsiIndicator.svelte` -- vertical strip, +/-2000 fpm scale with major ticks at 1000 fpm, current pointer animates smoothly. Props: `verticalSpeedFpm: number`.
+- [x] `apps/avionics/src/lib/pfd/Pfd.svelte` -- replace the five placeholder cells with the real instruments. Bindings flow: `<PfdInputs>` -> `$state` targets -> `pfd-tick.svelte.ts` rendered values -> instrument props.
+- [x] `bun run check` -- clean after every instrument; final pass after the full integration (clean modulo pre-existing libs/ui handbooks tests)
 - [ ] Manual smoke: drag every slider, confirm every instrument responds, confirm the rAF easing makes movement feel smooth (no stair-stepping), confirm the keyboard shortcuts work
-- [ ] Commit per instrument: `feat(avionics): {instrument} component`. Final commit: `feat(avionics): wire PFD instruments + tick loop`
+- [x] Commit per instrument: `feat(avionics): {instrument} component`. Final commit: `feat(avionics): wire PFD instruments + tick loop`
 
 ## Phase 7 -- Polish + theme audit
 
