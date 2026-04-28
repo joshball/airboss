@@ -160,6 +160,16 @@ The user is leaning open-source or partially open-source. Worth deciding early b
 7. **Decide on app collapse** -- 3 apps or 4? ADR-001 revisit.
 8. **Pick a public v1 target** -- self-imposed deadline to replace the business pressure that's no longer there.
 
+## What's shipped since (post-2026-04-14)
+
+This doc is preserved as the proposal. The actions called out above have largely landed; the live state is the source of truth, not this list.
+
+- Step 3 (new VISION.md) and step 4 (new ROADMAP.md) shipped in PR #234 (post-pivot doc sweep).
+- Step 6 (archive FIRC-specific planning) shipped via PRs #231 + #234. Archive lives at `docs/.archive/products/` and `docs/.archive/platform/` (the originally-proposed `docs/.archive/firc-era/` namespace was consolidated into `docs/.archive/products/` to mirror live `docs/products/`).
+- Step 7 (app collapse) decided in [MULTI_PRODUCT_ARCHITECTURE.md](MULTI_PRODUCT_ARCHITECTURE.md): surface-typed apps (study, sim, hangar today; spatial / audio / reflect / avionics / firc / runway as products demand them).
+- Open question 7 (FIRC content pack as dormant): formalized in [ADR 017](../decisions/017-firc-compliance-dormant.md).
+- Steps 1, 2, 5, 8 and open questions 1-6, 8 are still open.
+
 ## References
 
 - Book that catalyzed this: [course/firc/L04-Design/references/performance-pilot-review.md](../../course/firc/L04-Design/references/performance-pilot-review.md)
