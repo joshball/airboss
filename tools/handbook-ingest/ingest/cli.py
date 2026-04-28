@@ -11,12 +11,28 @@ Usage:
     --chapter <code>          Restrict to a single chapter (e.g. `12`)
     --dry-run                 Validate without writing files
     --force                   Re-extract even if hashes match
-    --strategy {toc,llm,compare}
+    --strategy {toc,prompt,compare}
                               Override section-tree strategy. Default = read
-                              from `<doc>.yaml -> section_strategy`. `compare`
-                              runs both strategies and writes a markdown diff
-                              report under `tools/handbook-ingest/reports/`
-                              without seeding the section rows.
+                              from `<doc>.yaml -> section_strategy`.
+                                * toc     -- deterministic Python parser of
+                                             the printed Table of Contents.
+                                * prompt  -- emit a prompt set under
+                                             tools/handbook-ingest/prompts-out/
+                                             that the user pastes into a
+                                             fresh Claude Code session
+                                             (no API key). Stops after
+                                             writing prompts.
+                                * compare -- read the prompt-flow JSONs +
+                                             model-self-reports and diff
+                                             against the TOC strategy.
+    --no-archive              Skip writing archive/<run-id>/ for prompt runs.
+
+Verbose narration: every phase prints WHAT it does, WHY, and HOW. The user
+should never be confused about which phase is running or what file it
+produced.
+
+See docs/agents/section-extraction-prompt-strategy.md for the full
+prompt-flow walkthrough.
 """
 
 from __future__ import annotations
@@ -31,10 +47,13 @@ from .apply_errata import (
     emit_apply_record_json,
     reapply_all_errata,
 )
+from .chapter_plaintext import write_chapter_sidecars
 from .config_loader import (
-    SECTION_STRATEGY_LLM,
-    SECTION_STRATEGY_PER_CHAPTER,
+    SECTION_STRATEGY_COMPARE,
+    SECTION_STRATEGY_PROMPT,
     SECTION_STRATEGY_TOC,
+    VALID_STRATEGIES,
+    ConfigError,
     HandbookConfig,
     load_config,
 )
@@ -44,15 +63,20 @@ from .figures_dedup import deduplicate_figures
 from .handbooks import HandbookPlugin, UnknownHandbookError, get_handbook
 from .normalize import write_outputs
 from .outline import OutlineError, OutlineNode, detect_outline_from_text, filter_to_chapter, parse_outline
-from .paths import repo_root
+from .paths import relative_to_repo
+from .prompt_emit import emit_prompts, out_dir_for, read_meta
 from .section_tree import SectionTreeNode, derive_codes
 from .sections import extract_sections
 from .sections_compare import compare_strategies
-from .sections_via_llm import LlmKeyMissingError, extract_via_llm
+from .sections_via_sidecar import (
+    SidecarMalformedError,
+    SidecarMissingError,
+    load_chapter_sidecars,
+)
 from .sections_via_toc import extract_via_toc
 from .tables import extract_tables
 
-_STRATEGY_CHOICES = ("toc", "llm", "compare")
+_STRATEGY_CHOICES = tuple(sorted(VALID_STRATEGIES))
 
 
 @click.command(context_settings={"help_option_names": ["-h", "--help"]})
@@ -65,7 +89,13 @@ _STRATEGY_CHOICES = ("toc", "llm", "compare")
     "--strategy",
     default=None,
     type=click.Choice(_STRATEGY_CHOICES, case_sensitive=False),
-    help="Section-tree strategy: toc, llm, or compare. Defaults to YAML config.",
+    help="Section-tree strategy. Defaults to YAML config.",
+)
+@click.option(
+    "--no-archive",
+    is_flag=True,
+    default=False,
+    help="Skip writing archive/<run-id>/ for --strategy prompt (default is to archive).",
 )
 @click.option(
     "--apply-errata",
@@ -96,15 +126,15 @@ def main(
     strategy: str | None,
     apply_errata_id: str | None,
     reapply_errata: bool,
+    no_archive: bool,
 ) -> None:
     """Ingest the handbook identified by `<doc>`."""
     try:
-        plugin: HandbookPlugin = get_handbook(document_slug)
-    except UnknownHandbookError as exc:
+        config = load_config(document_slug)
+    except ConfigError as exc:
         click.echo(f"error: {exc}", err=True)
         raise SystemExit(2) from exc
 
-    config = load_config(document_slug)
     if edition is not None:
         config = _override_edition(config, edition)
 
@@ -115,6 +145,11 @@ def main(
                 err=True,
             )
             raise SystemExit(2)
+        try:
+            plugin: HandbookPlugin = get_handbook(document_slug)
+        except UnknownHandbookError as exc:
+            click.echo(f"error: {exc}", err=True)
+            raise SystemExit(2) from exc
         click.echo(
             f"handbook-ingest apply-errata: {config.document_slug} edition {config.edition}"
         )
@@ -149,31 +184,21 @@ def main(
             )
         return
 
-    click.echo(f"handbook-ingest: {config.document_slug} edition {config.edition}")
-    click.echo(f"  source URL: {config.source_url}")
-    # Plugin object is reserved for upcoming errata orchestration. Reading
-    # `slug` here keeps the import live during extract without wiring per-book
-    # quirks (none exist today).
-    assert plugin.slug == document_slug, (
-        f"plugin slug mismatch: registered {plugin.slug!r} vs requested {document_slug!r}"
-    )
+    effective_strategy = (strategy or config.section_strategy).lower()
 
-    fetch_result = fetch_pdf(config, force=force)
-    click.echo(
-        f"  fetched: {fetch_result.path} ({fetch_result.size_bytes} bytes, "
-        f"sha256 {fetch_result.sha256[:12]}...)"
-    )
+    if effective_strategy == SECTION_STRATEGY_PROMPT and dry_run:
+        click.echo(
+            "error: --dry-run is not supported with --strategy prompt; "
+            "use --strategy toc --dry-run for outline validation.",
+            err=True,
+        )
+        raise SystemExit(2)
 
-    try:
-        if config.outline_strategy == "content":
-            flat_outline = detect_outline_from_text(
-                fetch_result.path, skip_pages=_toc_page_set(config)
-            )
-        else:
-            flat_outline = parse_outline(fetch_result.path)
-    except OutlineError as exc:
-        click.echo(f"error: {exc}", err=True)
-        raise SystemExit(2) from exc
+    _print_run_banner(config, effective_strategy)
+
+    fetch_result = _phase_fetch(config, force=force)
+
+    flat_outline = _phase_outline(config, fetch_result.path)
 
     if config.title_overrides:
         for node in flat_outline:
@@ -184,8 +209,6 @@ def main(
     if chapter is not None:
         flat_outline = filter_to_chapter(flat_outline, chapter)
         click.echo(f"  outline filtered to chapter `{chapter}`: {len(flat_outline)} nodes")
-    else:
-        click.echo(f"  outline: {len(flat_outline)} nodes")
 
     section_result = extract_sections(
         fetch_result.path,
@@ -206,6 +229,266 @@ def main(
         if not dry_run:
             raise SystemExit(2)
 
+    chapter_nodes = [n for n in flat_outline if n.level == "chapter"]
+    chapter_bodies_only = [b for b in bodies if b.node.level == "chapter"]
+
+    if effective_strategy == SECTION_STRATEGY_PROMPT:
+        _run_prompt_strategy(
+            config,
+            chapter_nodes,
+            chapter_bodies_only,
+            source_pdf_sha256=fetch_result.sha256,
+            archive=not no_archive,
+        )
+        return
+
+    if effective_strategy == SECTION_STRATEGY_COMPARE:
+        _run_compare_strategy(
+            config,
+            fetch_result_sha256=fetch_result.sha256,
+            pdf_path=fetch_result.path,
+            chapter_nodes=chapter_nodes,
+        )
+        return
+
+    # Default: TOC strategy. Continue into the legacy seed/manifest path.
+    _run_toc_strategy(
+        config,
+        fetch_result=fetch_result,
+        flat_outline=flat_outline,
+        bodies=bodies,
+        section_label_warnings=section_label_warnings,
+        chapter_nodes=chapter_nodes,
+        dry_run=dry_run,
+    )
+
+
+def _print_run_banner(config: HandbookConfig, effective_strategy: str) -> None:
+    """One-line run banner + strategy reason, before any phase output."""
+    reasons = {
+        SECTION_STRATEGY_TOC: "deterministic Python parser of the printed TOC; no API calls",
+        SECTION_STRATEGY_PROMPT: "no API calls; emits prompt set for paste-into-Claude flow",
+        SECTION_STRATEGY_COMPARE: "reads prompt-flow JSON + runs TOC strategy; renders diff report",
+    }
+    click.echo(f"handbook-ingest: {config.document_slug} edition {config.edition}")
+    click.echo(
+        f"  strategy: {effective_strategy} ({reasons.get(effective_strategy, 'unknown')})"
+    )
+
+
+def _phase_fetch(config: HandbookConfig, *, force: bool):
+    click.echo("")
+    click.echo("PHASE -- fetch source PDF")
+    click.echo(f"  WHAT: download / read-from-cache the source PDF for "
+               f"{config.document_slug} {config.edition}.")
+    click.echo("  WHY:  every downstream step (plaintext, prompts, JSON) is "
+               "anchored to the bytes of this specific PDF. Cache + checksum")
+    click.echo("        guarantees re-runs use the same source.")
+    click.echo("  HOW:  read $AIRBOSS_HANDBOOK_CACHE/handbooks/<doc>/<edition>/source.pdf;")
+    click.echo("        download from source_url if missing or sha256 mismatch.")
+    click.echo(f"  source URL: {config.source_url}")
+    fetch_result = fetch_pdf(config, force=force)
+    click.echo(
+        f"  -> {relative_to_repo_or_path(fetch_result.path)} "
+        f"({fetch_result.size_bytes} bytes, sha256 {fetch_result.sha256[:12]}...)"
+    )
+    return fetch_result
+
+
+def _phase_outline(config: HandbookConfig, pdf_path: Path) -> list[OutlineNode]:
+    click.echo("")
+    click.echo("PHASE -- parse outline")
+    click.echo("  WHAT: derive the chapter / section tree from the PDF.")
+    click.echo("  WHY:  every other phase iterates chapter-by-chapter; the outline")
+    click.echo("        is the source of truth for chapter ordinals + page ranges.")
+    click.echo(f"  HOW:  {config.outline_strategy} strategy "
+               f"(`bookmark` reads PyMuPDF get_toc(); `content` scans page text).")
+    try:
+        if config.outline_strategy == "content":
+            flat_outline = detect_outline_from_text(
+                pdf_path, skip_pages=_toc_page_set(config)
+            )
+        else:
+            flat_outline = parse_outline(pdf_path)
+    except OutlineError as exc:
+        click.echo(f"error: {exc}", err=True)
+        raise SystemExit(2) from exc
+    click.echo(f"  -> {len(flat_outline)} outline nodes")
+    return flat_outline
+
+
+def _run_prompt_strategy(
+    config: HandbookConfig,
+    chapter_nodes: list[OutlineNode],
+    chapter_bodies_only,
+    *,
+    source_pdf_sha256: str,
+    archive: bool,
+) -> None:
+    """Emit the per-run prompt set + chapter sidecars; stop short of seeding."""
+    click.echo("")
+    click.echo("PHASE -- write chapter plaintext sidecars")
+    click.echo("  WHAT: produce _chapter_plaintext.txt for each chapter directory.")
+    click.echo("  WHY:  the agent that runs the section-extraction prompt reads")
+    click.echo("        the sidecar verbatim. Same bytes for every re-run regardless")
+    click.echo("        of which agent / model is processing the prompt.")
+    click.echo("  HOW:  PyMuPDF page-by-page output (extract_sections); truncated to")
+    click.echo(f"        {config.chapter_text_max_chars} chars from the END so the head")
+    click.echo("        of the chapter is always intact.")
+    sidecars = write_chapter_sidecars(config, chapter_bodies_only)
+    for sc in sidecars:
+        click.echo(f"  -> {relative_to_repo(sc.path)} ({sc.char_count} chars)")
+    click.echo(f"  {len(sidecars)} sidecars written.")
+
+    click.echo("")
+    click.echo("PHASE -- emit prompt set")
+    click.echo("  WHAT: render the orchestrator + per-chapter prompts + parameters /")
+    click.echo("        contract / config snapshots into the run directory.")
+    click.echo("  WHY:  every input that shapes the agent's output is committed alongside")
+    click.echo("        the output. A reviewer can read the exact bytes that produced")
+    click.echo("        any committed _llm_section_tree.json.")
+    click.echo("  HOW:  substitute placeholders in tools/.../section-extraction/{chapter,")
+    click.echo("        orchestrator}.md; copy parameters.md + section_tree.md verbatim.")
+    result = emit_prompts(
+        config,
+        chapter_nodes=chapter_nodes,
+        chapter_bodies=chapter_bodies_only,
+        sidecars=sidecars,
+        source_pdf_sha256=source_pdf_sha256,
+        archive=archive,
+    )
+    for path in sorted(result.out_dir.iterdir()):
+        click.echo(f"  -> {relative_to_repo(path)}")
+    if result.archive_dir is not None:
+        click.echo(f"  -> archived to {relative_to_repo(result.archive_dir)}/")
+    click.echo(f"  {result.files_written} files written"
+               f"{' + archived' if result.archive_dir else ' (no archive)'}.")
+
+    click.echo("")
+    click.echo("PHASE -- handoff")
+    click.echo("  This run does NOT seed manifest rows; the prompt strategy is two-step.")
+    click.echo("  Section JSON files do not yet exist. Render the compare report only")
+    click.echo("  after the agent has populated them.")
+    click.echo("")
+    click.echo("  NEXT STEP (manual):")
+    click.echo("    1. Open a FRESH Claude Code session in this repo (NOT this session;")
+    click.echo("       the orchestrator is meant for a separate paste-driven session so")
+    click.echo("       the no-key story holds and parent context isn't burned).")
+    click.echo("    2. Paste the contents of:")
+    click.echo(f"         {relative_to_repo(result.out_dir / '_run.md')}")
+    click.echo("    3. Wait for the sub-agents to finish writing")
+    click.echo(f"         handbooks/{config.document_slug}/{config.edition}/<NN>/_llm_section_tree.json")
+    click.echo("       and")
+    click.echo(f"         handbooks/{config.document_slug}/{config.edition}/<NN>/_model_self_report.txt")
+    click.echo("    4. Then run:")
+    click.echo(
+        f"         bun run sources extract handbooks {config.document_slug} "
+        f"--edition {config.edition} --strategy compare"
+    )
+    click.echo("")
+    archive_note = "; archived" if result.archive_dir else "; not archived (--no-archive)"
+    click.echo(f"done. (run-id: {result.run_id}{archive_note})")
+
+
+def _run_compare_strategy(
+    config: HandbookConfig,
+    *,
+    fetch_result_sha256: str,
+    pdf_path: Path,
+    chapter_nodes: list[OutlineNode],
+) -> None:
+    """Read prompt-flow sidecars, run TOC strategy, render comparison report."""
+    click.echo("")
+    click.echo("PHASE -- verify source PDF SHA-256 against the prompt-run record")
+    click.echo("  WHAT: compare the cached PDF's SHA-256 with meta.json.source_pdf_sha256.")
+    click.echo("  WHY:  if the PDF bytes changed since the prompt run, the JSONs were")
+    click.echo("        produced against stale text and the comparison would be wrong.")
+    click.echo(f"  HOW:  read {relative_to_repo(out_dir_for(config))}/meta.json; require match.")
+    try:
+        meta = read_meta(config)
+    except FileNotFoundError as exc:
+        click.echo(f"error: {exc}", err=True)
+        click.echo(
+            f"  hint: run `bun run sources extract handbooks {config.document_slug} "
+            f"--edition {config.edition} --strategy prompt` first.",
+            err=True,
+        )
+        raise SystemExit(2) from exc
+    expected_sha = meta.get("source_pdf_sha256")
+    if not isinstance(expected_sha, str):
+        click.echo("error: meta.json missing `source_pdf_sha256`; rerun --strategy prompt.", err=True)
+        raise SystemExit(2)
+    if expected_sha != fetch_result_sha256:
+        click.echo(
+            f"error: source PDF SHA-256 mismatch. meta.json records "
+            f"{expected_sha[:12]}..., but the cached PDF is {fetch_result_sha256[:12]}.... "
+            f"The JSONs were produced against stale bytes; re-run --strategy prompt.",
+            err=True,
+        )
+        raise SystemExit(2)
+    click.echo(f"  -> match ({fetch_result_sha256[:12]}...)")
+
+    click.echo("")
+    click.echo("PHASE -- read per-chapter prompt outputs")
+    click.echo("  WHAT: load _llm_section_tree.json + _model_self_report.txt for each chapter.")
+    click.echo("  WHY:  the prompt flow's outputs are the LLM-side of the comparison.")
+    click.echo("        Hard-fail on missing or malformed files (no skip-with-warning).")
+    click.echo("  HOW:  walk chapters in ordinal order; raise SidecarMissingError /")
+    click.echo("        SidecarMalformedError on any anomaly.")
+    try:
+        sidecar_load = load_chapter_sidecars(config, chapter_nodes)
+    except (SidecarMissingError, SidecarMalformedError) as exc:
+        click.echo(f"error: {exc}", err=True)
+        click.echo(
+            f"  hint: re-paste {relative_to_repo(out_dir_for(config) / '_run.md')} "
+            f"into a fresh Claude Code session.",
+            err=True,
+        )
+        raise SystemExit(2) from exc
+    click.echo(
+        f"  -> {len(sidecar_load.chapters)} chapter sidecars read; "
+        f"{sum(len(c.nodes) for c in sidecar_load.chapters)} total entries."
+    )
+    if sidecar_load.model_self_reports:
+        unique_models = sorted({m for m in sidecar_load.model_self_reports.values()})
+        click.echo(f"  models self-reported: {', '.join(unique_models)}")
+
+    click.echo("")
+    click.echo("PHASE -- run TOC strategy")
+    click.echo("  WHAT: extract the section tree from the printed Table of Contents.")
+    click.echo("  WHY:  the deterministic Python parse is the comparison baseline.")
+    click.echo("  HOW:  sections_via_toc.py against the chapter list from the outline.")
+    toc_result = extract_via_toc(pdf_path, config, chapter_nodes, raw_yaml=config.raw_yaml)
+    click.echo(f"  -> {len(toc_result.nodes)} TOC nodes; {len(toc_result.warnings)} warnings.")
+
+    click.echo("")
+    click.echo("PHASE -- render comparison report")
+    click.echo("  WHAT: diff the two trees per chapter and write a markdown report.")
+    click.echo("  WHY:  the user reads the report and decides which strategy to trust.")
+    click.echo("  HOW:  greedy title-match within (chapter, level); markdown table + diff.")
+    chapter_titles = {n.ordinal: n.title for n in chapter_nodes}
+    compare_result = compare_strategies(toc_result.nodes, sidecar_load.all_nodes, chapter_titles)
+    report_path = _write_compare_report(config, compare_result)
+    click.echo(f"  -> {relative_to_repo(report_path)}")
+    click.echo("done.")
+
+
+def _run_toc_strategy(
+    config: HandbookConfig,
+    *,
+    fetch_result,
+    flat_outline: list[OutlineNode],
+    bodies,
+    section_label_warnings: list[str],
+    chapter_nodes: list[OutlineNode],
+    dry_run: bool,
+) -> None:
+    """Legacy seed/manifest path: TOC strategy emits + write_outputs."""
+    click.echo("")
+    click.echo("PHASE -- extract figures + tables")
+    click.echo("  WHAT: pull figure images + table HTML from the PDF.")
+    click.echo("  WHY:  the seed needs them inline; the reader surfaces them later.")
+    click.echo("  HOW:  PyMuPDF page-by-page; figures dedup; tables HTML serialize.")
     figures, figure_warnings = extract_figures(
         fetch_result.path,
         flat_outline,
@@ -213,15 +496,13 @@ def main(
         config.edition,
         figure_pattern=config.figure_prefix_pattern,
     )
-    click.echo(f"  figures: {len(figures)} extracted, {len(figure_warnings)} warnings")
-
+    click.echo(f"  -> figures: {len(figures)} extracted, {len(figure_warnings)} warnings")
     figures, dedup_meta = deduplicate_figures(figures)
     if dedup_meta["canonicalized"] > 0:
         click.echo(
             f"  figure dedup: {dedup_meta['canonicalized']} redundant files removed, "
             f"{dedup_meta['freed_bytes']} bytes freed"
         )
-
     tables, table_warnings = extract_tables(
         fetch_result.path,
         flat_outline,
@@ -229,80 +510,28 @@ def main(
         config.edition,
         table_pattern=config.table_prefix_pattern,
     )
-    click.echo(f"  tables: {len(tables)} extracted, {len(table_warnings)} warnings")
+    click.echo(f"  -> tables: {len(tables)} extracted, {len(table_warnings)} warnings")
 
-    # Section-tree strategy resolution. CLI flag wins over YAML config.
-    effective_strategy = (strategy or config.section_strategy).lower()
-    click.echo(f"  section-tree strategy: {effective_strategy}")
-
+    click.echo("")
+    click.echo("PHASE -- run TOC strategy")
+    click.echo("  WHAT: extract the section tree from the printed Table of Contents.")
+    click.echo("  WHY:  the deterministic parse seeds chapter / section / subsection rows.")
+    click.echo("  HOW:  sections_via_toc.py reads the YAML toc: block + heading_style.")
     section_extra_warnings: list[str] = []
-    section_nodes: list[SectionTreeNode] = []
     extraction_metadata: dict[str, object] = {
-        "section_strategy": {"kind": effective_strategy},
+        "section_strategy": {"kind": SECTION_STRATEGY_TOC},
         "figure_dedup": dedup_meta,
     }
-
-    chapter_nodes = [n for n in flat_outline if n.level == "chapter"]
-    chapter_bodies_text = {b.node.ordinal: b.body_md for b in bodies if b.node.level == "chapter"}
-
-    if effective_strategy == "compare":
-        compare_result, prompt_sha, in_tok, out_tok, _toc, _llm, toc_warnings, llm_warnings = (
-            _run_compare(config, fetch_result.path, chapter_nodes, chapter_bodies_text)
-        )
-        report_path = _write_compare_report(config, compare_result)
-        click.echo(f"  compare report -> {report_path}")
-        click.echo(f"  llm tokens: in={in_tok} out={out_tok} (prompt sha={prompt_sha[:12]})")
-        if toc_warnings:
-            click.echo(f"  toc warnings: {len(toc_warnings)}")
-        if llm_warnings:
-            click.echo(f"  llm warnings: {len(llm_warnings)}")
-        # Compare mode does not seed section rows; chapter-level only.
-        section_nodes = []
-        extraction_metadata["section_strategy"] = {
-            "kind": "compare",
-            "report_path": str(report_path.relative_to(repo_root())),
-            "llm": {
-                "prompt_sha256": prompt_sha,
-                "input_tokens": in_tok,
-                "output_tokens": out_tok,
-                "model": _llm_model(),
-            },
-        }
-    elif effective_strategy == SECTION_STRATEGY_LLM:
-        try:
-            llm_result = extract_via_llm(
-                config, chapter_nodes, chapter_bodies_text, raw_yaml=config.raw_yaml
-            )
-        except LlmKeyMissingError as exc:
-            click.echo(f"error: {exc}", err=True)
-            raise SystemExit(3) from exc
-        section_nodes = llm_result.nodes
-        section_extra_warnings.extend(llm_result.warnings)
-        extraction_metadata["section_strategy"] = {
-            "kind": SECTION_STRATEGY_LLM,
-            "prompt_sha256": llm_result.prompt_sha256,
-            "model": _llm_model(),
-            "input_tokens": llm_result.input_tokens,
-            "output_tokens": llm_result.output_tokens,
-        }
-    elif effective_strategy == SECTION_STRATEGY_PER_CHAPTER:
-        section_nodes, per_chapter_meta = _run_per_chapter(
-            config, fetch_result.path, chapter_nodes, chapter_bodies_text, section_extra_warnings
-        )
-        extraction_metadata["section_strategy"] = per_chapter_meta
-    else:
-        toc_result = extract_via_toc(
-            fetch_result.path, config, chapter_nodes, raw_yaml=config.raw_yaml
-        )
-        section_nodes = toc_result.nodes
-        section_extra_warnings.extend(toc_result.warnings)
-        extraction_metadata["section_strategy"] = {
-            "kind": SECTION_STRATEGY_TOC,
-            "config": _redact_toc_config(config.raw_yaml),
-        }
+    toc_result = extract_via_toc(fetch_result.path, config, chapter_nodes, raw_yaml=config.raw_yaml)
+    section_nodes: list[SectionTreeNode] = toc_result.nodes
+    section_extra_warnings.extend(toc_result.warnings)
+    extraction_metadata["section_strategy"] = {
+        "kind": SECTION_STRATEGY_TOC,
+        "config": _redact_toc_config(config.raw_yaml),
+    }
 
     click.echo(
-        f"  section-tree nodes: {len(section_nodes)} "
+        f"  -> section-tree nodes: {len(section_nodes)} "
         f"({sum(1 for n in section_nodes if n.level == 1)} L1, "
         f"{sum(1 for n in section_nodes if n.level == 2)} L2, "
         f"{sum(1 for n in section_nodes if n.level == 3)} L3)"
@@ -312,20 +541,24 @@ def main(
     if section_label_warnings:
         click.echo(f"  page-label warnings: {len(section_label_warnings)} -- see manifest")
 
-    # Promote section_nodes into the OutlineNode + body list so existing
-    # write_outputs() seeds them as `handbook_section` rows.
     if section_nodes:
         flat_outline, bodies = _merge_section_nodes_into_outline(
             flat_outline, bodies, section_nodes, fetch_result.path, config
         )
 
     if dry_run:
+        click.echo("")
         click.echo(
             f"dry-run summary: {len(bodies)} sections, {len(figures)} figures, {len(tables)} tables, "
             f"{len(figure_warnings) + len(table_warnings)} warnings"
         )
         return
 
+    click.echo("")
+    click.echo("PHASE -- write outputs (markdown + manifest)")
+    click.echo("  WHAT: serialize the chapter / section markdown + figures/tables + manifest.json.")
+    click.echo("  WHY:  the seed loads these files; the reader serves them.")
+    click.echo("  HOW:  normalize.write_outputs writes the in-repo derivative tree.")
     summary = write_outputs(
         config=config,
         fetch_result=fetch_result,
@@ -339,11 +572,24 @@ def main(
         extra_warnings=[*section_extra_warnings, *section_label_warnings],
     )
     click.echo(
-        f"  wrote {summary.sections_written} sections, "
+        f"  -> wrote {summary.sections_written} sections, "
         f"{summary.figures_written} figures, {summary.tables_written} tables; "
         f"manifest -> {summary.manifest_path}"
     )
     click.echo(f"done: {config.document_slug} {config.edition}")
+
+
+def relative_to_repo_or_path(path: Path) -> str:
+    """Return repo-relative path when possible; absolute path otherwise.
+
+    Used in narration so cached PDFs (which live OUTSIDE the repo per ADR
+    018) print as their absolute path while in-repo derivatives print
+    relative.
+    """
+    try:
+        return relative_to_repo(path)
+    except ValueError:
+        return str(path)
 
 
 def _override_edition(config: HandbookConfig, edition: str) -> HandbookConfig:
@@ -367,7 +613,7 @@ def _override_edition(config: HandbookConfig, edition: str) -> HandbookConfig:
         outline_strategy=config.outline_strategy,
         title_overrides=config.title_overrides,
         section_strategy=config.section_strategy,
-        per_chapter_section_strategy=config.per_chapter_section_strategy,
+        chapter_text_max_chars=config.chapter_text_max_chars,
         chapter_cover_strip_enabled=config.chapter_cover_strip_enabled,
         chapter_cover_strip_max_lines=config.chapter_cover_strip_max_lines,
         chapter_overrides=config.chapter_overrides,
@@ -375,92 +621,6 @@ def _override_edition(config: HandbookConfig, edition: str) -> HandbookConfig:
         errata=config.errata,
         raw_yaml=config.raw_yaml,
     )
-
-
-def _run_compare(
-    config: HandbookConfig,
-    pdf_path: Path,
-    chapter_nodes: list[OutlineNode],
-    chapter_bodies_text: dict[int, str],
-) -> tuple[
-    object,
-    str,
-    int,
-    int,
-    list[SectionTreeNode],
-    list[SectionTreeNode],
-    list[str],
-    list[str],
-]:
-    toc_result = extract_via_toc(pdf_path, config, chapter_nodes, raw_yaml=config.raw_yaml)
-    try:
-        llm_result = extract_via_llm(config, chapter_nodes, chapter_bodies_text, raw_yaml=config.raw_yaml)
-    except LlmKeyMissingError as exc:
-        click.echo(f"error: {exc}", err=True)
-        raise SystemExit(3) from exc
-
-    chapter_titles = {n.ordinal: n.title for n in chapter_nodes if n.level == "chapter"}
-    compare_result = compare_strategies(toc_result.nodes, llm_result.nodes, chapter_titles)
-    return (
-        compare_result,
-        llm_result.prompt_sha256,
-        llm_result.input_tokens,
-        llm_result.output_tokens,
-        toc_result.nodes,
-        llm_result.nodes,
-        toc_result.warnings,
-        llm_result.warnings,
-    )
-
-
-def _run_per_chapter(
-    config: HandbookConfig,
-    pdf_path: Path,
-    chapter_nodes: list[OutlineNode],
-    chapter_bodies_text: dict[int, str],
-    accumulated_warnings: list[str],
-) -> tuple[list[SectionTreeNode], dict[str, object]]:
-    """Resolve per-chapter strategy from `per_chapter_section_strategy`."""
-    overrides = config.per_chapter_section_strategy
-    if not overrides:
-        raise SystemExit(
-            "per_chapter section_strategy requires `per_chapter_section_strategy` to be populated."
-        )
-    toc_chapters = {ord_ for ord_, kind in overrides.items() if kind == SECTION_STRATEGY_TOC}
-    llm_chapters = {ord_ for ord_, kind in overrides.items() if kind == SECTION_STRATEGY_LLM}
-    nodes: list[SectionTreeNode] = []
-    metadata: dict[str, object] = {"kind": SECTION_STRATEGY_PER_CHAPTER, "overrides": dict(overrides)}
-    if toc_chapters:
-        toc_chap_subset = [c for c in chapter_nodes if c.ordinal in toc_chapters]
-        toc_result = extract_via_toc(pdf_path, config, toc_chap_subset, raw_yaml=config.raw_yaml)
-        nodes.extend(toc_result.nodes)
-        accumulated_warnings.extend(toc_result.warnings)
-    if llm_chapters:
-        llm_chap_subset = [c for c in chapter_nodes if c.ordinal in llm_chapters]
-        llm_bodies = {ord_: chapter_bodies_text[ord_] for ord_ in llm_chapters if ord_ in chapter_bodies_text}
-        try:
-            llm_result = extract_via_llm(
-                config, llm_chap_subset, llm_bodies, raw_yaml=config.raw_yaml
-            )
-        except LlmKeyMissingError as exc:
-            click.echo(f"error: {exc}", err=True)
-            raise SystemExit(3) from exc
-        nodes.extend(llm_result.nodes)
-        accumulated_warnings.extend(llm_result.warnings)
-        metadata["llm"] = {
-            "prompt_sha256": llm_result.prompt_sha256,
-            "model": _llm_model(),
-            "input_tokens": llm_result.input_tokens,
-            "output_tokens": llm_result.output_tokens,
-        }
-    return nodes, metadata
-
-
-def _llm_model() -> str:
-    """Lazily import to avoid loading the LLM module unless needed."""
-    from .sections_via_llm import MODEL
-
-    return MODEL
 
 
 def _toc_page_set(config: HandbookConfig) -> set[int]:

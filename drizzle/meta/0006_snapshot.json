@@ -1,5 +1,5 @@
 {
-  "id": "218ce509-fa7b-47de-8dc8-b586dabac1df",
+  "id": "78248b30-2fad-4405-ae6e-ffc114bdace2",
   "prevId": "978e01c2-97e0-43a2-9900-65b133a5b035",
   "version": "7",
   "dialect": "postgresql",
@@ -1600,7 +1600,7 @@
         },
         "target_date": {
           "name": "target_date",
-          "type": "timestamp with time zone",
+          "type": "date",
           "primaryKey": false,
           "notNull": false
         },
@@ -2436,172 +2436,6 @@
         "handbook_section_faa_pages_check": {
           "name": "handbook_section_faa_pages_check",
           "value": "(\"faa_page_start\" IS NULL AND \"faa_page_end\" IS NULL) OR \"faa_page_start\" IS NOT NULL"
-        }
-      },
-      "isRLSEnabled": false
-    },
-    "study.handbook_section_errata": {
-      "name": "handbook_section_errata",
-      "schema": "study",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "text",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "section_id": {
-          "name": "section_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "errata_id": {
-          "name": "errata_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "source_url": {
-          "name": "source_url",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "published_at": {
-          "name": "published_at",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "applied_at": {
-          "name": "applied_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "patch_kind": {
-          "name": "patch_kind",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "target_anchor": {
-          "name": "target_anchor",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "target_page": {
-          "name": "target_page",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "original_text": {
-          "name": "original_text",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "replacement_text": {
-          "name": "replacement_text",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {
-        "handbook_section_errata_section_errata_idx": {
-          "name": "handbook_section_errata_section_errata_idx",
-          "columns": [
-            {
-              "expression": "section_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "errata_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": true,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "handbook_section_errata_section_applied_idx": {
-          "name": "handbook_section_errata_section_applied_idx",
-          "columns": [
-            {
-              "expression": "section_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "applied_at",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {
-        "handbook_section_errata_section_id_handbook_section_id_fk": {
-          "name": "handbook_section_errata_section_id_handbook_section_id_fk",
-          "tableFrom": "handbook_section_errata",
-          "tableTo": "handbook_section",
-          "schemaTo": "study",
-          "columnsFrom": [
-            "section_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {
-        "handbook_section_errata_patch_kind_check": {
-          "name": "handbook_section_errata_patch_kind_check",
-          "value": "\"patch_kind\" IN ('add_subsection', 'append_paragraph', 'replace_paragraph')"
-        },
-        "handbook_section_errata_add_subsection_check": {
-          "name": "handbook_section_errata_add_subsection_check",
-          "value": "(\"patch_kind\" <> 'add_subsection') OR (\"original_text\" IS NULL)"
-        },
-        "handbook_section_errata_target_page_check": {
-          "name": "handbook_section_errata_target_page_check",
-          "value": "\"target_page\" ~ '^[0-9]+-[0-9]+$'"
-        },
-        "handbook_section_errata_replacement_nonempty_check": {
-          "name": "handbook_section_errata_replacement_nonempty_check",
-          "value": "length(trim(\"replacement_text\")) > 0"
-        },
-        "handbook_section_errata_source_url_check": {
-          "name": "handbook_section_errata_source_url_check",
-          "value": "\"source_url\" LIKE 'https://%'"
         }
       },
       "isRLSEnabled": false

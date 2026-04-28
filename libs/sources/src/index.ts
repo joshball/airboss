@@ -24,6 +24,12 @@ import './aim/index.ts';
 // Side-effect import: registers the `ac` CorpusResolver.
 import './ac/index.ts';
 
+export {
+	type BootstrapOptions,
+	type BootstrapReport,
+	hydrateRegsFromDerivatives,
+	PHASE_9_BOOTSTRAP_REVIEWER_ID,
+} from './bootstrap.ts';
 export { isParseError, parseIdentifier } from './parser.ts';
 export { getCorpusResolver, productionRegistry } from './registry/index.ts';
 export { NULL_REGISTRY } from './registry-stub.ts';

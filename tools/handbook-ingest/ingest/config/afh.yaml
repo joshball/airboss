@@ -35,8 +35,10 @@ table_prefix_pattern: 'Table (\d+)-(\d+)\.'
 # Section-tree extraction
 # -----------------------------------------------------------------------------
 
+# `toc` = deterministic Python parser; `prompt` = paste-and-run Claude Code
+# flow; `compare` = diff the prompt JSONs against TOC. See
+# docs/agents/section-extraction-prompt-strategy.md.
 section_strategy: toc
-per_chapter_section_strategy: {}
 
 # Printed Table of Contents page range (PDF page numbers).
 # Empirically: AFH 3C TOC spans PDF pp. 10-21 (12 pages).
@@ -60,7 +62,7 @@ heading_style:
   heading_match_threshold: 0.85
   verify_in_body: false
 
-llm:
+prompt:
   chapter_text_max_chars: 60000
 
 # AFH chapter cover pages render the chapter title once on the cover and

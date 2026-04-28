@@ -204,4 +204,4 @@ After this week, every regulation we look at will have a structural address you 
 
 - Knowledge graph (TBD when authored): `reg-title-14-architecture` -- proposed node capturing the structural hierarchy
 - Live source: [14 CFR (eCFR)](https://www.ecfr.gov/current/title-14)
-- Live source: [Part 91](https://www.ecfr.gov/current/title-14/chapter-I/subchapter-F/part-91)
+- Live source: [Part 91](airboss-ref:regs/cfr-14/91?at=2026)

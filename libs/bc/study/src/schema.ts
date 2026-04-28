@@ -94,6 +94,7 @@ import {
 	type AnyPgColumn,
 	boolean,
 	check,
+	date,
 	index,
 	integer,
 	jsonb,
@@ -1821,8 +1822,12 @@ export const goal = studySchema.table(
 		notesMd: text('notes_md').notNull().default(''),
 		status: text('status').notNull().default(GOAL_STATUSES.ACTIVE),
 		isPrimary: boolean('is_primary').notNull().default(false),
-		/** Free-form target date authored by the learner ("2026-12-31"). NULL = no target. */
-		targetDate: timestamp('target_date', { withTimezone: true }),
+		/**
+		 * Free-form target date authored by the learner ("2026-12-31"). NULL = no
+		 * target. Stored as a `date` (calendar day, no time component) so the
+		 * value renders consistently across time zones.
+		 */
+		targetDate: date('target_date', { mode: 'string' }),
 		seedOrigin: text('seed_origin'),
 		...timestamps(),
 	},

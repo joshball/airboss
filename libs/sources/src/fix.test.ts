@@ -5,8 +5,10 @@ import { afterEach, beforeEach, describe, expect, test } from 'vitest';
 import { applyFixes, runFixCli } from './fix.ts';
 import { resetRegistry } from './registry/__test_helpers__.ts';
 import type { CorpusResolver } from './registry/corpus-resolver.ts';
-import { registerCorpusResolver } from './registry/corpus-resolver.ts';
+import { __corpus_resolver_internal__ } from './registry/corpus-resolver.ts';
 import type { RegistryReader } from './types.ts';
+
+const registerCorpusResolver = __corpus_resolver_internal__.registerTestResolver;
 
 let workDir: string;
 

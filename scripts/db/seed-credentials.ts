@@ -26,20 +26,6 @@ import { readFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
-	CREDENTIAL_CATEGORY_VALUES,
-	type CredentialCategory,
-	type CredentialClass,
-	CREDENTIAL_CLASS_VALUES,
-	CREDENTIAL_KIND_VALUES,
-	type CredentialKind,
-	CREDENTIAL_PREREQ_KIND_VALUES,
-	type CredentialPrereqKind,
-	CREDENTIAL_STATUSES,
-	SYLLABUS_PRIMACY_VALUES,
-	type SyllabusPrimacy,
-} from '@ab/constants';
-import { db } from '@ab/db';
-import {
 	type CredentialRow,
 	credential,
 	type SyllabusRow,
@@ -49,6 +35,20 @@ import {
 	upsertCredentialSyllabus,
 	validateCredentialDag,
 } from '@ab/bc-study';
+import {
+	CREDENTIAL_CATEGORY_VALUES,
+	CREDENTIAL_CLASS_VALUES,
+	CREDENTIAL_KIND_VALUES,
+	CREDENTIAL_PREREQ_KIND_VALUES,
+	CREDENTIAL_STATUSES,
+	type CredentialCategory,
+	type CredentialClass,
+	type CredentialKind,
+	type CredentialPrereqKind,
+	SYLLABUS_PRIMACY_VALUES,
+	type SyllabusPrimacy,
+} from '@ab/constants';
+import { db } from '@ab/db';
 import type { StructuredCitation } from '@ab/types';
 import { generateCredentialId } from '@ab/utils';
 import { parse } from 'yaml';
@@ -253,4 +253,3 @@ if (import.meta.main) {
 		process.exit(1);
 	});
 }
-

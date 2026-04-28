@@ -81,14 +81,14 @@ describe('validateReferences (integration)', () => {
 		expect(notices.length).toBeGreaterThan(0);
 	});
 
-	test('C-04: real `course/regulations` walk in the repo -> 0 identifiers (no airboss-ref: URLs today)', () => {
+	test('C-04: real `course/regulations` walk in the repo -> 0 ERROR findings', () => {
 		const report = validateReferences();
-		// At time of writing, no `course/regulations/` lesson cites an
-		// airboss-ref: URL. The walk should find zero identifiers and zero
-		// validator findings (lesson-parser-internal findings are also zero).
-		expect(report.identifiersFound).toBe(0);
-		const validatorFindings = report.findings.filter((f) => f.ruleId >= 0);
-		expect(validatorFindings).toHaveLength(0);
+		// Phase 9 migrated three lesson links to `airboss-ref:regs/...` URIs;
+		// every migrated identifier resolves cleanly via the bootstrap-loaded
+		// regs registry, so the validator finds identifiers but produces zero
+		// ERRORs.
+		const errors = report.findings.filter((f) => f.severity === 'error');
+		expect(errors).toHaveLength(0);
 	});
 });
 

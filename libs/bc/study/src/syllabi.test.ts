@@ -22,7 +22,6 @@ import {
 	getSyllabusTree,
 	levelIsLeafEligible,
 	listSyllabi,
-	rebuildKnowledgeNodeRelevanceCache,
 	replaceSyllabusNodeLinks,
 	SyllabusNotFoundError,
 	SyllabusValidationError,
@@ -686,14 +685,6 @@ describe('upsertSyllabus / upsertSyllabusNode', () => {
 		});
 		const rows = await db.select().from(syllabusNode).where(eq(syllabusNode.id, id));
 		expect(rows[0]?.title).toBe('updated');
-	});
-});
-
-describe('rebuildKnowledgeNodeRelevanceCache (placeholder)', () => {
-	it('returns a zero report; full impl ships in phase 18', async () => {
-		const report = await rebuildKnowledgeNodeRelevanceCache({ dryRun: true });
-		expect(report.dryRun).toBe(true);
-		expect(report.knowledgeNodesUpdated).toBe(0);
 	});
 });
 
