@@ -40,6 +40,7 @@ import { focusDomains } from './content/focus-domains';
 import { gettingStarted } from './content/getting-started';
 import { keyboardShortcuts } from './content/keyboard-shortcuts';
 import { knowledgeGraph } from './content/knowledge-graph';
+import { lens } from './content/lens';
 import { memoryBrowse } from './content/memory-browse';
 import { memoryCard } from './content/memory-card';
 import { memoryDashboard } from './content/memory-dashboard';
@@ -68,6 +69,7 @@ export const studyHelpPages: readonly HelpPage[] = [
 	calibration,
 	credentials,
 	knowledgeGraph,
+	lens,
 	keyboardShortcuts,
 	conceptFsrs,
 	conceptSpacedRep,

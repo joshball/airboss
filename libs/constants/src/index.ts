@@ -83,6 +83,13 @@ export {
 	type SyllabusNodeLevel,
 	type SyllabusPrimacy,
 	type SyllabusStatus,
+	WEAKNESS_BUCKET_LIMIT,
+	WEAKNESS_INDEX_LIMIT,
+	WEAKNESS_SEVERITY,
+	WEAKNESS_SEVERITY_LABELS,
+	WEAKNESS_SEVERITY_THRESHOLDS,
+	WEAKNESS_SEVERITY_VALUES,
+	type WeaknessSeverity,
 } from './credentials';
 export {
 	DB_CONNECT_TIMEOUT_MS,

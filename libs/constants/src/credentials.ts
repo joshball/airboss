@@ -297,6 +297,47 @@ export const LENS_KIND_LABELS: Record<LensKind, string> = {
 };
 
 /**
+ * Weakness severity buckets for the weakness lens.
+ *
+ * - `severe`: top priority -- highest weakness score; surface first.
+ * - `moderate`: secondary -- material gap, not critical.
+ * - `mild`: backlog -- worth addressing eventually.
+ *
+ * Scores below the `mild` threshold are not surfaced. Threshold values
+ * live in `WEAKNESS_SEVERITY_THRESHOLDS`.
+ */
+export const WEAKNESS_SEVERITY = {
+	SEVERE: 'severe',
+	MODERATE: 'moderate',
+	MILD: 'mild',
+} as const;
+
+export type WeaknessSeverity = (typeof WEAKNESS_SEVERITY)[keyof typeof WEAKNESS_SEVERITY];
+
+export const WEAKNESS_SEVERITY_VALUES: readonly WeaknessSeverity[] = Object.values(WEAKNESS_SEVERITY);
+
+export const WEAKNESS_SEVERITY_LABELS: Record<WeaknessSeverity, string> = {
+	[WEAKNESS_SEVERITY.SEVERE]: 'Severe',
+	[WEAKNESS_SEVERITY.MODERATE]: 'Moderate',
+	[WEAKNESS_SEVERITY.MILD]: 'Mild',
+};
+
+/**
+ * Score cutoffs for severity buckets. Score is in [0, 1] (clamped).
+ * Default semantics: severe >= 0.70, moderate >= 0.40, mild >= 0.15;
+ * below 0.15 is not surfaced.
+ */
+export const WEAKNESS_SEVERITY_THRESHOLDS: Record<WeaknessSeverity, number> = {
+	[WEAKNESS_SEVERITY.SEVERE]: 0.7,
+	[WEAKNESS_SEVERITY.MODERATE]: 0.4,
+	[WEAKNESS_SEVERITY.MILD]: 0.15,
+};
+
+/** Top-N caps for the weakness lens index page (per bucket) and bucket page. */
+export const WEAKNESS_INDEX_LIMIT = 10;
+export const WEAKNESS_BUCKET_LIMIT = 100;
+
+/**
  * `goal.status` values. Closed enum mirrored by a DB CHECK.
  *
  * - `active`: in pursuit; the engine will target nodes inside this goal's

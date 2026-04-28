@@ -26,6 +26,7 @@ export const APP_SURFACES = {
 	SESSION: 'session',
 	PLANS: 'plans',
 	CREDENTIALS: 'credentials',
+	LENS: 'lens',
 	GLOBAL: 'global',
 } as const;
 
@@ -42,6 +43,7 @@ export const APP_SURFACE_LABELS: Record<AppSurface, string> = {
 	[APP_SURFACES.SESSION]: 'Session',
 	[APP_SURFACES.PLANS]: 'Plans',
 	[APP_SURFACES.CREDENTIALS]: 'Credentials',
+	[APP_SURFACES.LENS]: 'Lens',
 	[APP_SURFACES.GLOBAL]: 'Global',
 };
 
