@@ -35,6 +35,7 @@ from .config_loader import (
 from .fetch import fetch_pdf
 from .figures import extract_figures
 from .figures_dedup import deduplicate_figures
+from .handbooks import HandbookPlugin, UnknownHandbookError, get_handbook
 from .normalize import write_outputs
 from .outline import OutlineError, OutlineNode, detect_outline_from_text, filter_to_chapter, parse_outline
 from .paths import repo_root
@@ -69,12 +70,24 @@ def main(
     strategy: str | None,
 ) -> None:
     """Ingest the handbook identified by `<doc>`."""
+    try:
+        plugin: HandbookPlugin = get_handbook(document_slug)
+    except UnknownHandbookError as exc:
+        click.echo(f"error: {exc}", err=True)
+        raise SystemExit(2) from exc
+
     config = load_config(document_slug)
     if edition is not None:
         config = _override_edition(config, edition)
 
     click.echo(f"handbook-ingest: {config.document_slug} edition {config.edition}")
     click.echo(f"  source URL: {config.source_url}")
+    # Plugin object is reserved for upcoming errata orchestration. Reading
+    # `slug` here keeps the import live during R1 without wiring per-book
+    # quirks (none exist today; future R2+ will route through `plugin`).
+    assert plugin.slug == document_slug, (
+        f"plugin slug mismatch: registered {plugin.slug!r} vs requested {document_slug!r}"
+    )
 
     fetch_result = fetch_pdf(config, force=force)
     click.echo(

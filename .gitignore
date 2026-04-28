@@ -46,3 +46,4 @@ regulations/cfr-*/**/*.xml
 # body_sha256 audit trail). Bodies regenerate deterministically from the
 # cached XML via `bun run ingest cfr`. See ADR 018 (scale exception).
 regulations/cfr-*/**/*.md
+.ball-coord/
