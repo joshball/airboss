@@ -1,6 +1,7 @@
 ---
-status: deferred
+status: active
 trigger: when PFD components have a second consumer (sim glass-cockpit overlay, avionics MFD, or another tape-style instrument page)
+note: original trigger ("when apps/avionics/ exists") fired via PRs #291, #294, #297; WP rewritten in PR #292 to track the second-consumer trigger. The lib promotion to `libs/activities/pfd/` has NOT happened yet.
 source: 2026-04-27 architecture review
 resolved_by: docs/products/avionics/work-packages/avionics-app-scaffold/
 ---

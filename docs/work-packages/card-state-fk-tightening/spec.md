@@ -1,5 +1,6 @@
 ---
-status: deferred
+status: done
+shipped: PR #284 (2026-04-28)
 trigger: as part of the next study schema migration window
 source: 2026-04-27 schema review
 ---

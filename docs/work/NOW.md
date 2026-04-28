@@ -2,7 +2,17 @@
 
 Single entry point for "what should I work on?" in airboss. Refresh date: 2026-04-28.
 
-## Just shipped (2026-04-25 -> 2026-04-28 sweep)
+## Just shipped (2026-04-28 sweep)
+
+- **Five Wave-1 work packages from the 2026-04-27 12-axis review now closed.** Consolidated and shipped:
+  - [extract-hangar-bc](../work-packages/extract-hangar-bc/spec.md) -- shipped via PR #284. ~2,400 lines moved into `libs/bc/hangar/`; routes are now thin shells; `@ab/db` is infra-only.
+  - [bc-citations-coupling](../work-packages/bc-citations-coupling/spec.md) -- shipped via PR #278 (option 2: folded into `bc-study`). Speculative-extracted citations BC retired; functions now under `libs/bc/study/src/citations/`.
+  - [card-state-fk-tightening](../work-packages/card-state-fk-tightening/spec.md) -- shipped via PR #284. Composite ownership FKs on `card_state` and `session_item_result`.
+  - [scenario-options-relational](../work-packages/scenario-options-relational/spec.md) -- shipped via PR #284. `scenario.options` JSONB promoted to `study.scenario_option` table; `chosen_option` re-keyed to FK.
+  - [auth-rate-limit](../work-packages/auth-rate-limit/spec.md) -- shipped via PR #284. `createAuth` now configures DB-backed rate limit; login passes real client headers; account lockout policy in place.
+- **Sim scenario routes unblocked (cockpit / horizon / dual / window).** PR #295 (themes pre-hydration `.js` shadowed the `.ts` module on bare imports) and PR #298 (postgres driver no longer leaking into client bundles) together fixed the 500/blank renders on the four sim scenario pages.
+
+## Just shipped (2026-04-25 -> 2026-04-27 sweep)
 
 The week was dominated by the reference identifier system (ADR 019, **phases 1-9 all on main**), the cert-syllabus data layer (ADR 016, **all 24 WP phases shipped across PRs #248, #254, #264, #270, #274**), and the post-pivot documentation reset.
 
@@ -29,6 +39,7 @@ The week was dominated by the reference identifier system (ADR 019, **phases 1-9
 - **Cert-syllabus surface work (post-data-layer).** Cert dashboard (ACS lens, ADR 016 phase 7), handbook + weakness lens UI (phase 8), personal goal composer (phase 9). The data layer is done; these are SvelteKit page chunks.
 - **FAR navigation course Weeks 2-10.** Per `course/regulations/CHANGELOG.md`, Week 1 is fully authored; Weeks 2 (Part 61 deep), 3 (CFI), 4-6 (Part 91), 7 (141 + 135), 8 (companion docs), 9 (enforcement), 10 (capstone) await authoring. Two sibling capstones (friend-flight-review, ppl-applies-for-ir) deferred until they can be authored against `airboss-ref:` syntax in one pass. Now unblocked since `airboss-ref:` lessons round-trip cleanly through the validator + renderer.
 - **Magic-strings fix PR.** Audit catalogued 30+ literals + 40+ enum-bypassing strings against existing `@ab/constants` exports. Pure mechanical swaps. Audit at [`docs/work/reviews/20260424-magic-strings-audit.md`](reviews/20260424-magic-strings-audit.md). Hasn't shipped; still applicable.
+- **[extract-sim-instruments](../work-packages/extract-sim-instruments/spec.md)** -- the avionics surface now exists (PRs #291, #294, #297) and the PFD components live in `apps/avionics/src/lib/pfd/`. WP rewritten in PR #292 to track the new trigger ("second consumer of the PFD set"). Lib promotion to `libs/activities/pfd/` has not happened yet; on watch, ready to fire when the second consumer materialises.
 
 ## Recently closed (no longer active)
 
@@ -52,16 +63,13 @@ Authored 2026-04-25 from the SMI walkthrough triage. As of 2026-04-28, all five 
 
 Captured as part of the review-fix PR. Each has an explicit trigger condition; none survives as an undecided "future consideration" per CLAUDE.md.
 
-| Work package                                                                                                          | Trigger                                                              |
-| --------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
-| [extract-hangar-bc](../work-packages/extract-hangar-bc/spec.md)                                                       | Block any net-new hangar feature                                     |
-| [route-style-extraction](../work-packages/route-style-extraction/spec.md)                                             | Next major UI overhaul                                               |
-| [extract-sim-instruments](../work-packages/extract-sim-instruments/spec.md)                                           | When `apps/avionics/` is created                                     |
-| [auth-rate-limit](../work-packages/auth-rate-limit/spec.md)                                                           | Before opening signups beyond invite circle                          |
-| [scenario-options-relational](../work-packages/scenario-options-relational/spec.md)                                   | When scenario authoring tooling lands                                |
-| [sim-scenario-table](../work-packages/sim-scenario-table/spec.md)                                                     | When sim manifests move into hangar                                  |
-| [card-state-fk-tightening](../work-packages/card-state-fk-tightening/spec.md)                                         | Next study schema migration window                                   |
-| [memory-review-load-as-action](../work-packages/memory-review-load-as-action/spec.md)                                 | Next memory-review UX overhaul                                       |
+Wave 1 (5 packages) shipped 2026-04-28 via PRs #278 + #284 -- see "Just shipped" above. Remaining gated work:
+
+| Work package                                                                          | Trigger                                                               |
+| ------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| [route-style-extraction](../work-packages/route-style-extraction/spec.md)             | Next major UI overhaul                                                |
+| [sim-scenario-table](../work-packages/sim-scenario-table/spec.md)                     | When sim manifests move into hangar                                   |
+| [memory-review-load-as-action](../work-packages/memory-review-load-as-action/spec.md) | Folded into [review-flow-v2](../work-packages/review-flow-v2/spec.md) |
 
 ## Build Order
 
@@ -104,7 +112,6 @@ The original MVP roadmap is done in code; the human-side work and the post-MVP b
 ## Pending infra cleanup
 
 - **`review_status` flips** on each work package's `review.md` -- agent-controlled field that hasn't been flipped to `done` on the newer packages.
-- **`feat/sim-reps-wiring` branch** -- check status; rebase + finish, or delete.
 - **`wip/2026-04-25-safety-net` branch** -- check what's in it; keep or delete.
 - **`.claude/worktrees/agent-*` paths** -- belong to other agents, all locked to live PIDs. Will release naturally as agents finish; run `/audit-worktrees` if you want the inventory.
 

@@ -1,5 +1,6 @@
 ---
-status: deferred
+status: done
+shipped: PR #284 (2026-04-28)
 trigger: when scenario authoring tooling lands, OR when a third use of `chosen_option` appears
 source: 2026-04-27 schema review
 ---

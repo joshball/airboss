@@ -1,5 +1,6 @@
 ---
-status: deferred
+status: done
+shipped: PR #284 (2026-04-28)
 trigger: before public/non-allowlisted signups are enabled, OR if observed brute-force traffic
 source: 2026-04-27 security review
 ---
