@@ -1,10 +1,12 @@
-"""Shared section-tree contract for the TOC and LLM strategies.
+"""Shared section-tree contract for the TOC and prompt-flow strategies.
 
-Both `sections_via_toc.py` (Option 3) and `sections_via_llm.py` (Option 4)
-emit a flat list of `SectionTreeNode` records keyed off a chapter ordinal.
-The compare script (`sections_compare.py`) diffs the two trees per chapter;
-the per-chapter strategy resolved in `phak.yaml` decides which list seeds
-the `handbook_section` rows.
+`sections_via_toc.py` (deterministic Python parser) and
+`sections_via_sidecar.py` (reads the per-chapter JSON written by sub-agents
+during the paste-driven prompt run) both emit a flat list of
+`SectionTreeNode` records keyed off a chapter ordinal. The compare script
+(`sections_compare.py`) diffs the two trees per chapter; the section
+strategy resolved in `<doc>.yaml -> section_strategy` decides which list
+seeds the `handbook_section` rows.
 
 A node in the tree carries:
 
@@ -15,9 +17,9 @@ A node in the tree carries:
                             None at level 1
 - `page_anchor`         -- "12-7" style FAA-printed page reference, or None
 - `ordinal`             -- within-parent sort order, 1-indexed
-- `provenance`          -- "toc" | "llm" -- which strategy produced this row
+- `provenance`          -- "toc" | "prompt" -- which strategy produced the row
 - `confidence`          -- optional 0..1 score (TOC verify Levenshtein,
-                            LLM-side currently always 1.0)
+                            prompt-flow currently always 1.0)
 
 Determinism: both strategies sort the emitted list by
 `(chapter_ordinal, ordinal-walk)` so re-runs produce stable diffs.
@@ -31,7 +33,7 @@ from typing import Literal
 # Strategy provenance. Kept here (not in `constants` lib) because both Python
 # extractors emit it and the TS side never sees it.
 STRATEGY_TOC: Literal["toc"] = "toc"
-STRATEGY_LLM: Literal["llm"] = "llm"
+STRATEGY_PROMPT: Literal["prompt"] = "prompt"
 
 # Code derivation. Both strategies build the deterministic dotted citation
 # code from chapter_ordinal + the within-parent ordinal walk; this helper is

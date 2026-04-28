@@ -1,62 +1,60 @@
-# Section-tree extraction prompt
+# Section-tree extraction prompts
 
-This prompt extracts the section / sub-section tree from FAA handbook
-chapter plaintext. Used by `ingest/sections_via_llm.py` (Option 4 in the
-parallel-strategies bake-off; see the worktree handbook-ingestion-and-reader
-work package).
+This directory holds the prompt material for the section-extraction flow.
 
-## Reproducibility
+## What's here
 
-Same prompt + same input + temperature=0 + same pinned model =
-~identical output (within the model's bounds).
+| File                                 | Role                                                                                               |
+| ------------------------------------ | -------------------------------------------------------------------------------------------------- |
+| `section_tree.md`                    | The strict-JSON output contract. Snapshotted into each per-run dir as `_section_tree_contract.md`. |
+| `section-extraction/`                | The four templates emitted into `prompts-out/<doc>/<edition>/out/` per run.                        |
+| `section-extraction/parameters.md`   | Sub-agent rules (single source of truth; orchestrator links here).                                 |
+| `section-extraction/orchestrator.md` | Paste target for the user's fresh Claude Code session.                                             |
+| `section-extraction/chapter.md`      | Per-chapter prompt template (placeholder substitution only).                                       |
+| `section-extraction/run_readme.md`   | README skeleton emitted into each run dir.                                                         |
 
-The prompt's SHA-256 is recorded in `manifest.json` under
-`extraction.section_strategy.llm.prompt_sha256` so future runs know which
-prompt produced any given tree.
+## How the prompt strategy runs
 
-The raw model response per chapter is saved at
-`handbooks/<doc>/<edition>/<chapter>/_llm_section_tree.json` (committed,
-PR-reviewable). Re-running with the same prompt should produce a no-op git
-diff on those files; any drift is the model, not the pipeline.
+See `docs/agents/section-extraction-prompt-strategy.md` for the full
+walkthrough. Short version:
 
-## To tweak
+1. `bun run sources extract handbooks <doc> --edition <ed> --strategy prompt`
+   emits `tools/handbook-ingest/prompts-out/<doc>/<ed>/out/` and stops.
+2. The user opens a fresh Claude Code session in the airboss repo root
+   and pastes `out/_run.md` as the first message.
+3. Sub-agents fan out one-per-chapter and write
+   `handbooks/<doc>/<ed>/<NN>/_llm_section_tree.json` plus
+   `handbooks/<doc>/<ed>/<NN>/_model_self_report.txt`.
+4. `bun run sources extract handbooks <doc> --edition <ed> --strategy compare`
+   reads those files and renders the comparison report.
+
+No `ANTHROPIC_API_KEY` is involved at any step. The fresh CC session
+provides the model.
+
+## Tweaking `section_tree.md`
+
+This file is the JSON contract every sub-agent obeys. Edits propagate to
+the next prompt run via the `_section_tree_contract.md` snapshot in
+`prompts-out/.../out/`.
 
 1. Edit `section_tree.md`.
-2. Re-run the pipeline: `bun run sources extract handbooks phak --edition FAA-H-8083-25C --strategy llm --force`.
-3. Inspect the new `_llm_section_tree.json` files (one per chapter).
-4. Diff vs the previous version: `git diff handbooks/phak/FAA-H-8083-25C/**/_llm_section_tree.json`.
-5. Commit the prompt change + the regenerated trees together. Don't ship one
-   without the other.
-
-## Model
-
-Pinned in `sections_via_llm.py`:
-
-- `MODEL = "claude-sonnet-4-5"`
-- `TEMPERATURE = 0.0`
-- `MAX_TOKENS = 4096`
-- `ANTHROPIC_API_VERSION = "2023-06-01"`
-
-Sonnet is the right balance for the ~17 chapter calls per handbook (cheap
-enough; smart enough for FAA prose). Bumping the model is a deliberate
-edit; ship the model change + regenerated trees in the same commit.
-
-## Cost estimate
-
-PHAK 17 chapters x ~5K tokens input + ~1K tokens output. With current
-Sonnet pricing this lands around $0.30 per full re-run. Well-bounded for
-a manual content workflow.
+2. Re-run the prompt strategy:
+   `bun run sources extract handbooks phak --edition FAA-H-8083-25C --strategy prompt`.
+3. Paste the new `out/_run.md` into a fresh Claude Code session.
+4. Run `--strategy compare` and inspect the generated report.
+5. Commit the prompt change + regenerated `_llm_section_tree.json` files +
+   the new `archive/<run-id>/` snapshot together.
 
 ## Format note: Python `str.format` braces
 
-The prompt is loaded via `Path.read_text()` and consumed with
-`prompt_template.format(title=..., plaintext=...)`. To embed a literal
-`{` in the rendered output (the `{` and `}` inside the JSON example block)
-the markdown source uses `{{` / `}}`. If you edit the JSON example,
-preserve the doubled braces; otherwise `format()` will raise.
+The chapter / orchestrator / run-readme templates are loaded via
+`Path.read_text()` and consumed with `text.format(...)`. To embed a
+literal `{` in the rendered output (e.g. inside a JSON example block) the
+markdown source must use `{{` / `}}`. `parameters.md` and `section_tree.md`
+are copied verbatim (no `.format()` call), so they don't need escaping.
 
 ## Why JSON, not tools?
 
-We want the raw response text on disk for diffing. A tool-call shape would
-hide the model's structured output behind the SDK. Strict-JSON-out + a
-defensive parser is the simpler audit story.
+We want the raw response text on disk for diffing. A tool-call shape
+would hide the model's structured output behind the SDK. Strict-JSON-out +
+a defensive parser is the simpler audit story.
