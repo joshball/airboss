@@ -78,7 +78,7 @@ export const GET: RequestHandler = async (event) => {
 	let size: number;
 	try {
 		const s = await stat(full);
-		if (!s.isFile()) throw new Error('not a file');
+		if (!s.isFile()) throw new Error(`not a file: ${full}`);
 		size = s.size;
 	} catch {
 		throw error(404, `file not found: ${name}`);

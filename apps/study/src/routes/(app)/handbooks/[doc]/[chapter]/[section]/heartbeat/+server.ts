@@ -27,7 +27,7 @@ import {
 	handbookHeartbeatInputSchema,
 	recordHeartbeat,
 } from '@ab/bc-study';
-import { HANDBOOK_HEARTBEAT_MIN_DELTA_SEC, QUERY_PARAMS } from '@ab/constants';
+import { HANDBOOK_HEARTBEAT_INTERVAL_SEC, HANDBOOK_HEARTBEAT_MIN_DELTA_SEC, QUERY_PARAMS } from '@ab/constants';
 import { error, json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 
@@ -49,6 +49,14 @@ export const POST: RequestHandler = async (event) => {
 
 	if (delta < HANDBOOK_HEARTBEAT_MIN_DELTA_SEC) {
 		return json({ error: `Heartbeat delta below minimum (${HANDBOOK_HEARTBEAT_MIN_DELTA_SEC}s).` }, { status: 400 });
+	}
+	// Reject implausible deltas at the route boundary instead of relying on
+	// the BC clamp -- the cap is the same value the BC uses, but rejecting
+	// at the edge means a scripted caller cannot consume a DB write per
+	// arbitrarily-large posted delta.
+	const HEARTBEAT_MAX_DELTA_SEC = HANDBOOK_HEARTBEAT_INTERVAL_SEC * 4;
+	if (delta > HEARTBEAT_MAX_DELTA_SEC) {
+		return json({ error: `Heartbeat delta above maximum (${HEARTBEAT_MAX_DELTA_SEC}s).` }, { status: 400 });
 	}
 
 	const documentSlug = event.params.doc;

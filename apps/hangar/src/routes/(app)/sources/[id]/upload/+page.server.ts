@@ -10,7 +10,7 @@
  * uploads fail with a 413-shaped response.
  */
 
-import { mkdtemp, writeFile } from 'node:fs/promises';
+import { mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { requireRole } from '@ab/auth';
@@ -18,7 +18,7 @@ import { JOB_KINDS, JOB_STATUSES, ROLES, ROUTES, SOURCE_ACTION_LIMITS } from '@a
 import { db, hangarJob, hangarSource } from '@ab/db';
 import { enqueueJob } from '@ab/hangar-jobs';
 import { createLogger } from '@ab/utils';
-import { error, fail, redirect } from '@sveltejs/kit';
+import { error, fail, isRedirect, redirect } from '@sveltejs/kit';
 import { and, desc, eq, inArray } from 'drizzle-orm';
 import type { Actions, PageServerLoad } from './$types';
 
@@ -94,11 +94,19 @@ export const actions: Actions = {
 			});
 		}
 
+		// Use a fixed in-tmpdir filename so a malicious `Content-Disposition`
+		// header (`filename="../../../../etc/cron.d/evil"`) cannot escape `dir`
+		// via path traversal. The original filename is carried as job payload
+		// metadata where the worker uses it for extension detection only.
 		const dir = await mkdtemp(join(tmpdir(), 'airboss-hangar-upload-'));
-		const tempPath = join(dir, file.name);
+		const tempPath = join(dir, 'upload.bin');
 		const buffer = new Uint8Array(await file.arrayBuffer());
 		await writeFile(tempPath, buffer);
 
+		// Wrap the enqueue in a try/finally so a failed enqueue (DB blip,
+		// worker outage) doesn't leak the staged temp directory. The worker
+		// owns cleanup once enqueueJob returns.
+		let enqueued = false;
 		try {
 			const job = await enqueueJob({
 				kind: JOB_KINDS.UPLOAD_SOURCE,
@@ -113,15 +121,23 @@ export const actions: Actions = {
 					version: typeof version === 'string' ? version : undefined,
 				},
 			});
+			enqueued = true;
 			redirect(303, ROUTES.HANGAR_JOB_DETAIL(job.id));
 		} catch (err) {
-			if (err && typeof err === 'object' && 'status' in err && 'location' in err) throw err;
+			if (isRedirect(err)) throw err;
 			log.error(
 				'enqueue upload failed',
 				{ requestId: event.locals.requestId, userId: user.id },
 				err instanceof Error ? err : undefined,
 			);
 			return fail(500, { error: err instanceof Error ? err.message : 'failed to enqueue upload job' });
+		} finally {
+			if (!enqueued) {
+				await rm(dir, { recursive: true, force: true }).catch(() => {
+					// Cleanup is best-effort; the worker has its own boot-time
+					// orphan-temp sweeper as a safety net.
+				});
+			}
 		}
 	},
 };

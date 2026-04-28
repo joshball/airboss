@@ -51,6 +51,7 @@ export const SIM_SCENARIO_OUTCOMES = {
 } as const;
 
 export type SimScenarioOutcome = (typeof SIM_SCENARIO_OUTCOMES)[keyof typeof SIM_SCENARIO_OUTCOMES];
+export const SIM_SCENARIO_OUTCOME_VALUES: readonly SimScenarioOutcome[] = Object.values(SIM_SCENARIO_OUTCOMES);
 
 /**
  * FDM integrator configuration.
