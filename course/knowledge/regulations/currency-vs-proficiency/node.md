@@ -32,7 +32,7 @@ references:
   - source: FAA-P-8740-36
     detail: Proficiency and the Private Pilot
     note: FAA safety brochure on proficiency beyond legal currency.
-  - source: AOPA ASI
+  - source: AOPA Air Safety Institute
     detail: Currency vs. proficiency resources
     note: Case studies and proficiency planning templates.
 

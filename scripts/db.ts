@@ -20,7 +20,7 @@ import {
 	SCHEMAS,
 } from '@ab/constants';
 import { confirmOrAbort } from './lib/prompt';
-import { run } from './lib/spawn';
+import { run, runOrThrow } from './lib/spawn';
 
 const CONTAINER = 'airboss-db';
 const DB_URL = process.env[ENV_VARS.DATABASE_URL] ?? DEV_DB_URL;
@@ -158,6 +158,38 @@ async function doSeedCheck(): Promise<void> {
 
 async function doBuild(): Promise<void> {
 	await run(['bun', 'scripts/build-knowledge-index.ts', ...passthroughFlags]);
+}
+
+interface BuildAllPhase {
+	readonly name: string;
+	readonly cmd: readonly string[];
+}
+
+const BUILD_ALL_PHASES: readonly BuildAllPhase[] = [
+	// Knowledge graph must rebuild before relevance: relevance walks
+	// `knowledge_node` rows and writes back to them, so the graph has to
+	// reflect the current authored state first.
+	{ name: 'knowledge', cmd: ['bun', 'scripts/build-knowledge-index.ts'] },
+	{ name: 'relevance', cmd: ['bun', 'scripts/db/build-relevance-cache.ts'] },
+];
+
+async function doBuildAll(): Promise<void> {
+	const summaries: Array<{ name: string; ms: number }> = [];
+	const startedAt = Date.now();
+	for (const phase of BUILD_ALL_PHASES) {
+		console.log('');
+		console.log(`=== build-all: ${phase.name} ===`);
+		console.log(`> ${phase.cmd.join(' ')}`);
+		const phaseStart = Date.now();
+		await runOrThrow(phase.cmd);
+		const ms = Date.now() - phaseStart;
+		summaries.push({ name: phase.name, ms });
+	}
+	const totalMs = Date.now() - startedAt;
+	console.log('');
+	console.log('=== build-all: summary ===');
+	for (const s of summaries) console.log(`  ${s.name.padEnd(12)} ${(s.ms / 1000).toFixed(2)}s`);
+	console.log(`  ${'total'.padEnd(12)} ${(totalMs / 1000).toFixed(2)}s`);
 }
 
 async function doNew(): Promise<void> {
@@ -303,6 +335,17 @@ const COMMAND_HELP: Record<string, CommandHelp> = {
 		how: 'Drops + creates the DB via `docker exec psql`, pushes the Drizzle schema, then delegates to `scripts/db/seed-all.ts` with no sub-target (all phases).',
 		links: ['scripts/db/seed-all.ts', 'libs/constants/src/dev.ts (DEV_DB_HOST_PATTERN guards against prod)'],
 	},
+	'build-all': {
+		summary: 'Run every authored-content build step in dependency order',
+		what: 'Composite that runs each "build" phase in dependency order, idempotently:\n\n  1. knowledge   -- scripts/build-knowledge-index.ts (parses course/knowledge/**/node.md, validates the graph, upserts knowledge_node + knowledge_edge, rewrites course/knowledge/graph-index.md)\n  2. relevance   -- scripts/db/build-relevance-cache.ts (walks every active syllabus, accumulates (cert, bloom, priority) per linked knowledge node, writes to knowledge_node.relevance JSONB)\n\nPrints `=== build-all: <phase> ===` headers per phase and a final per-phase timing summary. Each phase is a live write (no --dry-run).',
+		why: 'After authoring changes (new node.md files, edited frontmatter, syllabus link edits) a developer wants one command that derives every downstream artifact, in the right order, without remembering which scripts to run. `seed` covers ingest from authored content; `build-all` covers derivations from already-seeded inputs.',
+		how: 'The name is intentionally hyphenated -- not `build:all` -- because this is a standalone composite, not a sub-target of `build`. Phases are defined in the `BUILD_ALL_PHASES` table in scripts/db.ts; add a phase by appending an entry. Each phase shells out via `runOrThrow`, so a phase failure aborts the composite with a non-zero exit and the failing phase name in the error.',
+		links: [
+			'scripts/build-knowledge-index.ts',
+			'scripts/db/build-relevance-cache.ts',
+			'docs/decisions/011-knowledge-graph-learning-system/decision.md',
+		],
+	},
 	build: {
 		summary: 'Build knowledge graph from course/knowledge/**/node.md',
 		what: 'Runs `scripts/build-knowledge-index.ts`. Parses every `course/knowledge/**/node.md`, validates the graph (required fields, DAG on `requires`, duplicate id detection, unknown H2 detection, edge resolution), upserts `knowledge_node` and `knowledge_edge` rows, and rewrites `course/knowledge/graph-index.md`.\n\n  bun run db build                   # full build\n  bun run db build --dry-run         # validate only, no DB writes\n  bun run db build --json            # machine-readable build summary on stdout\n  bun run db build --fail-on-coverage # non-zero if any node is lifecycle=skeleton',
@@ -376,7 +419,7 @@ const COMMAND_GROUPS: readonly CommandGroup[] = [
 	{ label: 'Container lifecycle', commands: ['up', 'down'] },
 	{ label: 'Schema', commands: ['push', 'generate', 'migrate'] },
 	{ label: 'Data + content', commands: ['seed', 'seed:check', 'seed:remove', 'reset', 'reset-study'] },
-	{ label: 'Knowledge authoring', commands: ['new', 'build'] },
+	{ label: 'Knowledge authoring', commands: ['new', 'build', 'build-all'] },
 	{ label: 'Utility', commands: ['help'] },
 ];
 
@@ -422,6 +465,7 @@ const handlers: Record<string, () => Promise<void> | void> = {
 	reset: doReset,
 	'reset-study': doResetStudy,
 	build: doBuild,
+	'build-all': doBuildAll,
 	new: doNew,
 };
 

@@ -57,7 +57,7 @@ references:
     note: >-
       VFR-into-IMC and CFIT are linked failure modes; AC 61-134 covers
       both with operational guidance.
-  - source: AOPA Air Safety Institute / FAA Safety Team
+  - source: AOPA Air Safety Institute
     detail: VFR into IMC -- safety publications and training videos
     note: >-
       Operational guidance and accident-derived training points.

@@ -63,7 +63,7 @@ references:
       Defines tolerances the candidate's scan must support: heading within
       10 degrees, altitude within 100 feet, airspeed within 10 KIAS during
       basic instrument maneuvers.
-  - source: AOPA / FAA Safety Team materials
+  - source: AOPA Air Safety Institute
     detail: Spatial disorientation training, scan breakdown
     note: >-
       Synthesises the cognitive failure modes -- fixation, omission, and

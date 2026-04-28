@@ -1,6 +1,6 @@
 ---
 title: 'review-sessions-url'
-status: deferred
+status: done
 size: medium
 depends_on: [review-flow-v2 (shares review chrome)]
 created: 2026-04-24
@@ -9,6 +9,16 @@ trigger: A user actually loses a session and asks for resume / share / redo, OR 
 ---
 
 # Review Sessions URL
+
+## Verdict (2026-04-28)
+
+**Status:** done
+
+**Rationale:** All three layers (Resume, Redo, Share) shipped on main. Layer (a): `study.memory_review_session` table at `libs/bc/study/src/schema.ts:981` with `deck_hash`, `deck_spec`, `card_id_list`, `current_index`, `status`, and the `(user_id, deck_hash, status)` index. Route constant `ROUTES.MEMORY_REVIEW_SESSION` exists at `libs/constants/src/routes.ts:123` and the resolver lives at `apps/study/src/routes/(app)/memory/review/[sessionId]/+page.server.ts`. The dashboard "Resume your last run" tile renders at `apps/study/src/routes/(app)/memory/+page.svelte:168`. Layer (b): the deck encoder, deck-hash derivation, saved-decks overlay, and the `Resume your run? / Start fresh` choose-prompt at `apps/study/src/routes/(app)/memory/review/+page.svelte` shipped via PR #159. Layer (c): `SharePopover` ships at `libs/ui/src/components/SharePopover.svelte` and is wired into the review page (line 738) with `Copy card link` plus `Report this card` via PR #154. Item 15's jump-to-card dropdown shipped in PR #169. The deferred trigger has effectively fired and the substrate is on main.
+
+**Trigger to revisit (if deferred):** N/A.
+
+**Next action (if promote/fold):** N/A. Spec marked done. Future bookmarkable / cross-user share scope is out-of-scope per the original spec and would be a fresh WP.
 
 ## One-sentence summary
 

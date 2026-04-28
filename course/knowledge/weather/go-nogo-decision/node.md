@@ -34,7 +34,7 @@ references:
   - source: PHAK (FAA-H-8083-25C)
     detail: Chapter 2 -- Aeronautical Decision-Making
     note: DECIDE, PAVE, IMSAFE frameworks applied to weather calls.
-  - source: AOPA ASI
+  - source: AOPA Air Safety Institute
     detail: Weather-related safety resources
     note: Case studies and decision-making tools.
   - source: FAA-H-8083-2A

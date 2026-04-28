@@ -171,7 +171,7 @@ describe('reshapeLegacyCitation', () => {
 		expect(result.citation.framing).toBe(CITATION_FRAMINGS.OPERATIONAL);
 	});
 
-	it('other: unrecognised source -> kind=other, slug derived from source', () => {
+	it('other: AOPA Air Safety Institute -> stable slug + edition + url', () => {
 		const result = reshapeLegacyCitation({
 			source: 'AOPA Air Safety Institute',
 			detail: 'Stall awareness',
@@ -179,6 +179,81 @@ describe('reshapeLegacyCitation', () => {
 		});
 		expect(result.resolved.kind).toBe(REFERENCE_KINDS.OTHER);
 		expect(result.resolved.documentSlug).toBe('aopa-air-safety-institute');
+		expect(result.resolved.edition).toBe('current');
+		expect(result.resolved.url).toContain('aopa.org');
+		expect(result.citation.kind).toBe('other');
+	});
+
+	it('other: AOPA variants all resolve to the canonical AOPA ASI slug', () => {
+		const variants = ['AOPA ASI', 'AOPA / FAA Safety Team materials', 'AOPA Air Safety Institute / FAA Safety Team'];
+		for (const variant of variants) {
+			const result = reshapeLegacyCitation({ source: variant, detail: '', note: '' });
+			expect(result.resolved.documentSlug).toBe('aopa-air-safety-institute');
+			expect(result.resolved.edition).toBe('current');
+		}
+	});
+
+	it('other: FAA-P-8740-36 -> stable slug per brochure number', () => {
+		const result = reshapeLegacyCitation({
+			source: 'FAA-P-8740-36',
+			detail: 'Proficiency and the Private Pilot',
+			note: '',
+		});
+		expect(result.resolved.documentSlug).toBe('faa-p-8740-36');
+		expect(result.resolved.edition).toBe('unspecified');
+		expect(result.citation.kind).toBe('other');
+	});
+
+	it('other: FAA Order 8260.3 -> faa-order-8260-3 with TERPS title', () => {
+		const result = reshapeLegacyCitation({
+			source: 'FAA Order 8260.3',
+			detail: 'United States Standard for Terminal Instrument Procedures',
+			note: '',
+		});
+		expect(result.resolved.documentSlug).toBe('faa-order-8260-3');
+		expect(result.resolved.edition).toBe('8260.3C');
+		expect(result.resolved.title).toContain('TERPS');
+	});
+
+	it('other: Approach plates -> faa-approach-plates', () => {
+		const result = reshapeLegacyCitation({
+			source: 'Approach plates (specific airport)',
+			detail: '',
+			note: '',
+		});
+		expect(result.resolved.documentSlug).toBe('faa-approach-plates');
+		expect(result.resolved.edition).toBe('current');
+	});
+
+	it('other: Jeppesen / FAA charts -> jeppesen-faa-charts', () => {
+		const result = reshapeLegacyCitation({
+			source: 'Jeppesen / FAA charts',
+			detail: '',
+			note: '',
+		});
+		expect(result.resolved.documentSlug).toBe('jeppesen-faa-charts');
+		expect(result.resolved.edition).toBe('current');
+	});
+
+	it('other: Rogers, D. F. -> rogers-d-f with 1995 edition', () => {
+		const result = reshapeLegacyCitation({
+			source: 'Rogers, D. F.',
+			detail: 'Impossible Turn',
+			note: '',
+		});
+		expect(result.resolved.documentSlug).toBe('rogers-d-f');
+		expect(result.resolved.edition).toBe('1995');
+	});
+
+	it('other: unrecognised source -> kind=other, slug derived from source', () => {
+		const result = reshapeLegacyCitation({
+			source: 'Some niche publication',
+			detail: '',
+			note: '',
+		});
+		expect(result.resolved.kind).toBe(REFERENCE_KINDS.OTHER);
+		expect(result.resolved.documentSlug).toBe('some-niche-publication');
+		expect(result.resolved.edition).toBe('unspecified');
 		expect(result.citation.kind).toBe('other');
 	});
 

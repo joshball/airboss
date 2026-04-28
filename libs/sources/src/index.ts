@@ -27,6 +27,17 @@ import './ac/index.ts';
 import './orders/index.ts';
 // Side-effect import: registers the `ntsb` CorpusResolver (Phase 10).
 import './ntsb/index.ts';
+// Side-effect imports: register the Phase 10 next-slice irregular corpora resolvers.
+import './interp/index.ts';
+import './pohs/index.ts';
+import './sectionals/index.ts';
+import './plates/index.ts';
+import './statutes/index.ts';
+import './forms/index.ts';
+import './info/index.ts';
+import './safo/index.ts';
+import './tcds/index.ts';
+import './asrs/index.ts';
 
 export {
 	type BootstrapOptions,

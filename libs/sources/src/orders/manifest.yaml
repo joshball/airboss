@@ -1,0 +1,91 @@
+# FAA Orders manifest -- registry seeding source
+#
+# Source of truth: ADR 019 §1.2 (`orders` shape) + §2.6 (registry population).
+# Loaded by `seedOrdersFromManifest` in `seed.ts`. Each entry produces one
+# `SourceEntry` keyed at `airboss-ref:orders/<authority>/<order-number>` plus
+# one or more `Edition` records keyed by the `?at=YYYY-MM` (or `?at=YYYY`) pin
+# authors will use.
+#
+# Adding an order:
+#   - id: the locator portion (`<authority>/<order-number>`), no `airboss-ref:`
+#     prefix and no `?at=` pin. Example: `faa/2150-3`.
+#   - canonical_short: short citation form (e.g. `FAA Order 2150.3`).
+#   - canonical_formal: long form including the order title.
+#   - canonical_title: the title alone.
+#   - editions: one entry per known publication / amendment date the corpus
+#     should accept as a pin. `id` matches the `?at=` value authors will
+#     write; `lifecycle` is `accepted` for promoted editions, `pending` for
+#     unverified entries.
+#   - source_url (optional): direct PDF link when known. Resolver's URL
+#     formula provides a search-page fallback when omitted.
+#
+# Order numbers preserve FAA's dotted-vs-dashed convention as written on
+# faa.gov; the dotted form (`2150.3`, `8260.3C`) appears in citations, the
+# dashed form (`2150-3`, `8260-3C`) is used in locators.
+
+orders:
+  # Compliance and Enforcement Program -- the canonical compliance reference,
+  # cited from CFR Part 13 / Part 91 enforcement discussions.
+  - id: faa/2150-3
+    canonical_short: FAA Order 2150.3
+    canonical_formal: FAA Order 2150.3, FAA Compliance and Enforcement Program
+    canonical_title: FAA Compliance and Enforcement Program
+    editions:
+      - id: '2018-04'
+        lifecycle: accepted
+        source_url: https://www.faa.gov/regulations_policies/orders_notices/index.cfm/go/document.information/documentID/1034395
+
+  # United States Standard for Terminal Instrument Procedures (TERPS) --
+  # foundation for IAP design; cited heavily in instrument-rating content.
+  - id: faa/8260-3
+    canonical_short: FAA Order 8260.3
+    canonical_formal: FAA Order 8260.3, United States Standard for Terminal Instrument Procedures (TERPS)
+    canonical_title: United States Standard for Terminal Instrument Procedures (TERPS)
+    editions:
+      - id: '2024-08'
+        lifecycle: accepted
+        source_url: https://www.faa.gov/regulations_policies/orders_notices/index.cfm/go/document.information/documentID/1041964
+
+  # Flight Procedures and Airspace -- companion to TERPS for procedure
+  # development and airspace-design references.
+  - id: faa/8260-19
+    canonical_short: FAA Order 8260.19
+    canonical_formal: FAA Order 8260.19, Flight Procedures and Airspace
+    canonical_title: Flight Procedures and Airspace
+    editions:
+      - id: '2017'
+        lifecycle: accepted
+
+  # Flight Standards Information Management System (FSIMS) -- ASI handbook;
+  # cited from CFI / FIRC content discussing inspector roles, certification
+  # standards, and Part 61/91/135 oversight.
+  - id: faa/8900-1
+    canonical_short: FAA Order 8900.1
+    canonical_formal: FAA Order 8900.1, Flight Standards Information Management System (FSIMS)
+    canonical_title: Flight Standards Information Management System
+    editions:
+      # FSIMS is continuously revised by change packages; pin to the year so
+      # authors can write `?at=2026` without chasing change numbers.
+      - id: '2026'
+        lifecycle: accepted
+        source_url: https://fsims.faa.gov/
+
+  # Civil Use of Unmanned Aircraft Systems (UAS) -- referenced from
+  # Part 107 / UAS-adjacent training material.
+  - id: faa/8000-373
+    canonical_short: FAA Order 8000.373
+    canonical_formal: FAA Order 8000.373, Federal Aviation Administration Compliance Philosophy
+    canonical_title: FAA Compliance Philosophy
+    editions:
+      - id: '2015-06'
+        lifecycle: accepted
+
+  # Continuous Lower Energy, Emissions, and Noise (CLEEN) -- environmental
+  # ops; cited from sustainability and Part 121/135 ops material.
+  - id: faa/8260-58
+    canonical_short: FAA Order 8260.58
+    canonical_formal: FAA Order 8260.58, United States Standard for Performance Based Navigation (PBN) Instrument Procedure Design
+    canonical_title: United States Standard for Performance Based Navigation Instrument Procedure Design
+    editions:
+      - id: '2024-08'
+        lifecycle: accepted
