@@ -4,7 +4,7 @@ product: avionics
 feature: avionics-app-scaffold
 type: user-stories
 status: unread
-review_status: pending
+review_status: done
 ---
 
 # User stories: Avionics App Scaffold

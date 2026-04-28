@@ -4,7 +4,7 @@ product: avionics
 feature: avionics-app-scaffold
 type: test-plan
 status: unread
-review_status: pending
+review_status: done
 ---
 
 # Test plan: Avionics App Scaffold

@@ -4,7 +4,7 @@ product: avionics
 feature: avionics-app-scaffold
 type: design
 status: unread
-review_status: pending
+review_status: done
 ---
 
 # Design: Avionics App Scaffold
