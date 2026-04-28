@@ -12,7 +12,7 @@
 
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { db } from '@ab/db';
+import { db } from '@ab/db/connection';
 import { sql } from 'drizzle-orm';
 
 const argPath = process.argv[2];

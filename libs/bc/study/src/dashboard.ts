@@ -27,7 +27,7 @@ import {
 	WEAK_AREA_MIN_DATA_POINTS,
 	WEAK_AREA_WINDOW_DAYS,
 } from '@ab/constants';
-import { db as defaultDb } from '@ab/db';
+import { db as defaultDb } from '@ab/db/connection';
 import { createLogger } from '@ab/utils';
 import { aliasedTable, and, count, eq, gte, isNotNull, isNull, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';

@@ -48,7 +48,7 @@ import {
 	SYLLABUS_PRIMACY_VALUES,
 	type SyllabusPrimacy,
 } from '@ab/constants';
-import { db } from '@ab/db';
+import { db } from '@ab/db/connection';
 import type { StructuredCitation } from '@ab/types';
 import { generateCredentialId } from '@ab/utils';
 import { parse } from 'yaml';

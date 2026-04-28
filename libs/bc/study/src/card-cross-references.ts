@@ -7,7 +7,7 @@
  * the panel renders the full IA with honest empty states (per spec).
  */
 
-import { db as defaultDb } from '@ab/db';
+import { db as defaultDb } from '@ab/db/connection';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import { type CardSessionRef, getSessionsForCard } from './review-sessions';
 

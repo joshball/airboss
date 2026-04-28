@@ -16,7 +16,7 @@ import {
 	type PlanStatus,
 	type SessionMode,
 } from '@ab/constants';
-import { db as defaultDb } from '@ab/db';
+import { db as defaultDb } from '@ab/db/connection';
 import { generateStudyPlanId } from '@ab/utils';
 import { and, desc, eq } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';

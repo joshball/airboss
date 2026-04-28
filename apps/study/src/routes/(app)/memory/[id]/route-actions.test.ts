@@ -26,7 +26,7 @@ import {
 	DOMAINS,
 	EXTERNAL_REF_TARGET_DELIMITER,
 } from '@ab/constants';
-import { db } from '@ab/db';
+import { db } from '@ab/db/connection';
 import { generateAuthId, generateCardId, generateContentCitationId } from '@ab/utils';
 import type { ActionFailure } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';

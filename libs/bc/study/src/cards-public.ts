@@ -22,7 +22,7 @@ import {
 	type ContentSource,
 	type Domain,
 } from '@ab/constants';
-import { db as defaultDb } from '@ab/db';
+import { db as defaultDb } from '@ab/db/connection';
 import { and, eq } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import { card } from './schema';

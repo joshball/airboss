@@ -43,7 +43,7 @@
 
 import { credential, credentialSyllabus, goal, goalSyllabus, studyPlan, syllabus } from '@ab/bc-study';
 import { GOAL_STATUSES, SYLLABUS_PRIMACY } from '@ab/constants';
-import { db as defaultDb } from '@ab/db';
+import { db as defaultDb } from '@ab/db/connection';
 import { generateGoalId } from '@ab/utils';
 import { and, eq } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';

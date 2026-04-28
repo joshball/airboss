@@ -30,7 +30,7 @@ import {
 	QUERY_PARAMS,
 	REVIEW_SESSION_STATUSES,
 } from '@ab/constants';
-import { db } from '@ab/db';
+import { db } from '@ab/db/connection';
 import { generateAuthId, generateCardId, generateReviewSessionId } from '@ab/utils';
 import { type ActionFailure, isRedirect, type Redirect } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';

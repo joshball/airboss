@@ -39,7 +39,7 @@ import {
 	SYNC_OUTCOMES,
 	type SyncOutcome,
 } from '@ab/constants';
-import { db as defaultDb } from '@ab/db';
+import { db as defaultDb } from '@ab/db/connection';
 import type { JobContext } from '@ab/hangar-jobs';
 import { generateHangarSyncLogId } from '@ab/utils';
 import { and, desc, eq, isNull, sql } from 'drizzle-orm';

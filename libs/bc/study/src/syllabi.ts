@@ -35,7 +35,7 @@ import {
 	type SyllabusNodeLevel,
 	type SyllabusStatus,
 } from '@ab/constants';
-import { db as defaultDb } from '@ab/db';
+import { db as defaultDb } from '@ab/db/connection';
 import { getCorpusResolver, isParseError, parseIdentifier } from '@ab/sources';
 import type { StructuredCitation } from '@ab/types';
 import { and, asc, eq } from 'drizzle-orm';

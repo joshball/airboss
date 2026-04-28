@@ -16,7 +16,7 @@ import { resolve } from 'node:path';
 import { AUDIT_OPS, auditWrite } from '@ab/audit';
 import { computeFileHash } from '@ab/aviation/sources';
 import { AUDIT_TARGETS, SOURCE_ACTION_LIMITS } from '@ab/constants';
-import { db as defaultDb } from '@ab/db';
+import { db as defaultDb } from '@ab/db/connection';
 import type { JobContext, JobHandler } from '@ab/hangar-jobs';
 import { and, eq } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';

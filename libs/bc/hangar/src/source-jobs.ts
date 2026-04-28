@@ -20,7 +20,7 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { AUDIT_OPS, auditWrite } from '@ab/audit';
 import { AUDIT_TARGETS, type ReferenceSourceType, SOURCE_KIND_BY_TYPE, SOURCE_KINDS } from '@ab/constants';
-import { db } from '@ab/db';
+import { db } from '@ab/db/connection';
 import type { JobContext, JobHandler } from '@ab/hangar-jobs';
 import { eq } from 'drizzle-orm';
 import { type HangarSourceRow, hangarSource } from './schema';

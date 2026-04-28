@@ -16,7 +16,7 @@ import {
 	SYLLABUS_PRIMACY,
 	SYLLABUS_STATUSES,
 } from '@ab/constants';
-import { db } from '@ab/db';
+import { db } from '@ab/db/connection';
 import { generateAuthId, generateCredentialId, generateStudyPlanId, generateSyllabusId } from '@ab/utils';
 import { eq } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';

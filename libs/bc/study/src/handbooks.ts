@@ -36,7 +36,7 @@ import {
 	REFERENCE_KINDS,
 	ROUTES,
 } from '@ab/constants';
-import { db as defaultDb } from '@ab/db';
+import { db as defaultDb } from '@ab/db/connection';
 import { getCorpusResolver, isParseError, parseIdentifier, type SourceId } from '@ab/sources';
 import type { Citation, StructuredCitation } from '@ab/types';
 import { isHandbookCitation, isStructuredCitation } from '@ab/types';

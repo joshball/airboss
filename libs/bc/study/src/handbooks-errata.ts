@@ -17,7 +17,7 @@ import {
 	HANDBOOK_SECTION_ERRATA_ID_PREFIX,
 	type HandbookErrataPatchKind,
 } from '@ab/constants';
-import { db as defaultDb } from '@ab/db';
+import { db as defaultDb } from '@ab/db/connection';
 import { createId } from '@ab/utils';
 import { desc, eq, sql } from 'drizzle-orm';
 import { handbookSectionErrata } from './schema';

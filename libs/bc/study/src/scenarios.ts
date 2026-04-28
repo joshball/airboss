@@ -25,7 +25,8 @@ import {
 	type ScenarioStatus,
 	SESSION_ITEM_KINDS,
 } from '@ab/constants';
-import { db as defaultDb, escapeLikePattern } from '@ab/db';
+import { escapeLikePattern } from '@ab/db';
+import { db as defaultDb } from '@ab/db/connection';
 import { generateScenarioId, userStartOfDay } from '@ab/utils';
 import {
 	aliasedTable,

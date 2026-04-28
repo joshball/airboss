@@ -18,7 +18,7 @@ import {
 	REVIEW_RATINGS,
 	REVIEW_SESSION_STATUSES,
 } from '@ab/constants';
-import { db } from '@ab/db';
+import { db } from '@ab/db/connection';
 import { generateAuthId, generateCardId, generateReviewId, generateReviewSessionId } from '@ab/utils';
 import { eq, inArray } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
