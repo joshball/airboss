@@ -25,7 +25,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 };
 
 export const actions: Actions = {
-	default: async ({ request, cookies, url, locals }) => {
+	default: async ({ request, cookies, url, locals, getClientAddress }) => {
 		const formData = await request.formData();
 		const email = formData.get('email');
 		const password = formData.get('password');
@@ -35,11 +35,22 @@ export const actions: Actions = {
 		}
 
 		try {
+			// Forward to better-auth's HTTP handler. We propagate the live
+			// client IP via `x-forwarded-for` so the rate limiter buckets
+			// per-user instead of per-process. See the matching
+			// study/login action for the full rationale (rate-limit lives
+			// in the router's onRequest hook, so direct `auth.api.*` calls
+			// bypass it; and the previous synthetic Request omitted IP
+			// headers entirely, so every user shared one bucket).
+			const headers = new Headers({
+				'content-type': 'application/json',
+				'x-forwarded-for': getClientAddress(),
+			});
 			const authRequest = new Request(
 				`${AUTH_INTERNAL_ORIGIN}${ROUTES.API_AUTH}${BETTER_AUTH_ENDPOINTS.SIGN_IN_EMAIL}`,
 				{
 					method: 'POST',
-					headers: { 'Content-Type': 'application/json' },
+					headers,
 					body: JSON.stringify({ email, password }),
 				},
 			);
@@ -47,7 +58,13 @@ export const actions: Actions = {
 
 			if (!authResponse.ok) {
 				const data = (await authResponse.json().catch(() => null)) as { message?: string } | null;
-				return fail(401, {
+				if (authResponse.status === 429) {
+					return fail(429, {
+						error: 'Too many sign-in attempts. Please wait a moment and try again.',
+						email,
+					});
+				}
+				return fail(authResponse.status === 401 ? 401 : 400, {
 					error: data?.message ?? 'Invalid email or password',
 					email,
 				});
