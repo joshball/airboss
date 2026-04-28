@@ -54,6 +54,8 @@ const config = {
 			'@ab/bc-study/*': '../../libs/bc/study/src/*',
 			'@ab/bc-sim': '../../libs/bc/sim/src/index.ts',
 			'@ab/bc-sim/*': '../../libs/bc/sim/src/*',
+			'@ab/bc-avionics': '../../libs/bc/avionics/src/index.ts',
+			'@ab/bc-avionics/*': '../../libs/bc/avionics/src/*',
 			'@ab/bc-hangar': '../../libs/bc/hangar/src/index.ts',
 			'@ab/bc-hangar/*': '../../libs/bc/hangar/src/*',
 			'@ab/audit': '../../libs/audit/src/index.ts',

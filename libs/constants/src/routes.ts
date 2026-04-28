@@ -256,6 +256,16 @@ export const ROUTES = {
 		`/sessions/${encodeURIComponent(id)}?${QUERY_PARAMS.ITEM}=${itemIndex}` as const,
 	SESSION_SUMMARY: (id: string) => `/sessions/${id}/summary` as const,
 
+	// Avionics (apps/avionics) -- glass-cockpit PFD trainer. Served from its
+	// own host (avionics.airboss.test), so these paths are relative to that
+	// origin. Surface-typed sibling to sim/study/hangar; renders tape-style
+	// glass instruments rather than sim's round-dial set.
+	AVIONICS_HOME: '/',
+	AVIONICS_PFD: '/pfd',
+	AVIONICS_MFD: '/mfd',
+	AVIONICS_SCAN: '/scan',
+	AVIONICS_AIRCRAFT: '/aircraft',
+
 	// Sim (apps/sim) -- flight dynamics prototype. Sim is served from its own
 	// host (sim.airboss.test), so these paths are relative to that origin.
 	SIM_HOME: '/',
