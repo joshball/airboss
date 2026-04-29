@@ -46,9 +46,13 @@ PAGE_LABEL_WALK_BACK_DEFAULT = 5
 # fixes. Each value is a printed FAA page reference verbatim, e.g. "17-100".
 CHAPTER_OVERRIDE_KEYS = frozenset({"faa_page_start", "faa_page_end"})
 
-# Default for `prompt.chapter_text_max_chars`. Cap input to ~60K chars so
-# every per-chapter prompt fits comfortably in a sub-agent's context budget.
-DEFAULT_CHAPTER_TEXT_MAX_CHARS = 60000
+# NOTE: `prompt.chapter_text_max_chars` has no module-level default.
+# The value is empirical (longest chapter * 1.2, rounded up to next 25K) and
+# must be set explicitly in any handbook YAML configured for
+# `section_strategy: prompt`. A silent default would re-introduce the
+# Phase-1 truncation bug that ate the back half of 11/17 phak chapters.
+# See docs/work-packages/section-extraction-contract-v2/spec.md.
+# Use tools/handbook-ingest/measure_chapter_sizes.py to size the cap.
 
 
 class ConfigError(ValueError):
@@ -130,8 +134,10 @@ class HandbookConfig:
     # set of valid values; default = `toc` (deterministic).
     section_strategy: str = SECTION_STRATEGY_TOC
     # Per-chapter input cap for the `prompt` strategy's plaintext sidecar.
-    # Truncates from the END so the chapter head is always intact.
-    chapter_text_max_chars: int = DEFAULT_CHAPTER_TEXT_MAX_CHARS
+    # Truncates from the END so the chapter head is always intact. Required
+    # when `section_strategy == prompt`; ignored otherwise (None is fine).
+    # No silent default -- see the module-level note above.
+    chapter_text_max_chars: int | None = None
     # Strip the chapter cover-page boilerplate (the "Chapter N" sentinel and
     # the title repeated above the introduction) from the chapter markdown.
     # See `normalize._strip_cover_residue` for the heuristic.
@@ -214,8 +220,19 @@ def load_config(document_slug: str) -> HandbookConfig:
             f"{config_path}: the `prompt:` block must be a mapping (got "
             f"{type(prompt_raw).__name__})."
         )
-    chapter_text_max_chars_raw = prompt_raw.get("chapter_text_max_chars", DEFAULT_CHAPTER_TEXT_MAX_CHARS)
-    if not isinstance(chapter_text_max_chars_raw, int) or chapter_text_max_chars_raw <= 0:
+    chapter_text_max_chars_raw = prompt_raw.get("chapter_text_max_chars")
+    if chapter_text_max_chars_raw is None:
+        # Required for prompt-mode handbooks; optional for toc/compare since
+        # the cap is unused when no per-chapter sidecar is written.
+        if section_strategy == SECTION_STRATEGY_PROMPT:
+            raise ConfigError(
+                f"{config_path}: prompt.chapter_text_max_chars is required when "
+                f"section_strategy is `prompt`. Measure with "
+                f"tools/handbook-ingest/measure_chapter_sizes.py and set the cap "
+                f"to longest_chapter * 1.2 rounded up to the next 25K. See "
+                f"docs/work-packages/section-extraction-contract-v2/spec.md."
+            )
+    elif not isinstance(chapter_text_max_chars_raw, int) or chapter_text_max_chars_raw <= 0:
         raise ConfigError(
             f"{config_path}: prompt.chapter_text_max_chars must be a positive int "
             f"(got {chapter_text_max_chars_raw!r})."
@@ -283,7 +300,9 @@ def load_config(document_slug: str) -> HandbookConfig:
         outline_strategy=raw.get("outline_strategy", "bookmark"),
         title_overrides={str(k): str(v) for k, v in (raw.get("title_overrides") or {}).items()},
         section_strategy=section_strategy,
-        chapter_text_max_chars=int(chapter_text_max_chars_raw),
+        chapter_text_max_chars=(
+            int(chapter_text_max_chars_raw) if chapter_text_max_chars_raw is not None else None
+        ),
         chapter_cover_strip_enabled=bool(cover_strip_raw.get("enabled", False)),
         chapter_cover_strip_max_lines=int(cover_strip_raw.get("max_lines", 6)),
         chapter_overrides=chapter_overrides,
