@@ -47,7 +47,7 @@ Per project rule, every feature is hand-tested before ship. This plan covers aut
 
 - [ ] AC build: 12 plans, each `corpus: 'ac'`, flat dest path matches `<root>/ac/<doc-id>.pdf`.
 - [ ] ACS build: 5 plans, flat dest at `<root>/acs/<doc-id>.pdf`.
-- [ ] AIM build: 1 PDF plan + 72 section plans (ch0..ch11) + 5 appendix plans = 78 plans total.
+- [ ] AIM build: 1 PDF plan + 48 section plans (ch0..ch11 per `sections_per_chapter`) + 5 appendix plans = 54 plans total.
 - [ ] Regs build: per filtered-parts entry as before.
 - [ ] PHAK build (chapter_pdfs.index_url variant): 1 whole-doc + 17 chapter + 4 ancillary plans. Each chapter plan has the resolved final-PDF URL.
 - [ ] AFH build (chapter_pdfs.direct_pattern variant): 1 whole-doc + N chapter plans built directly from the pattern, no scrape needed.
@@ -80,7 +80,7 @@ Per project rule, every feature is hand-tested before ship. This plan covers aut
 - [ ] Write a manifest with `chapters[]` populated; read it back; round-trip equal.
 - [ ] Read a manifest written before this WP (no `chapters[]` field): does not throw; `chapters` defaults to empty array.
 - [ ] Concurrent write attempt: tmp-file pattern means only one write completes; the other can be detected via temp file collision (tolerate via retry, not error).
-- [ ] AIM manifest: write with 72 sections, read back, all locators (chapter, section, paragraph_count) preserved.
+- [ ] AIM manifest: write with 48 sections, read back, all locators (chapter, section, paragraph_count) preserved.
 
 ### URL verifier
 
@@ -162,9 +162,9 @@ These require network access. Not in CI; run manually before merge.
 
 - [ ] Wipe AIM cache. Run `bun run sources download aim`. Expect:
   - 1 bundled PDF
-  - 72 section HTML files (`chap00_section_01.html` for ch0 General Information; `chap01_section_01.html` through `chap11_section_06.html` for ch1-ch11)
+  - 48 section HTML files (per `sections_per_chapter` empirical counts; `chap00_section_01.html` for ch0 through `chap11_section_08.html` for ch11 last section)
   - 5 appendix HTML files
-  - 1 manifest with `primary` + `sections[]` (72) + `appendices[]` (5)
+  - 1 manifest with `primary` + `sections[]` (48) + `appendices[]` (5)
 - [ ] Inspect `aim/chap07_section_03.html` content; verify it includes paragraph "7-3-1. Effect of Cold Temperature".
 - [ ] Inspect `aim/appendix_03.html`; verify it includes the acronym table contents (look for known acronyms like "AAWU", "AAS", "AAM").
 - [ ] Run extraction (when AIM extraction lands); verify section tree is built.

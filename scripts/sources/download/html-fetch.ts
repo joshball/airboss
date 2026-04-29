@@ -55,7 +55,10 @@ async function downloadHtmlOnce(url: string, destPath: string, opts: HtmlDownloa
 		response = await fetchImpl(finalUrl, {
 			signal: controller.signal,
 			redirect: 'manual',
-			headers: { 'User-Agent': USER_AGENT, Accept: 'text/html' },
+			// FAA returns 406 for `Accept: text/html` on some HTML files (chap0_info_eoc.html,
+			// some appendices). Use `*/*` to match curl's default behavior, then validate the
+			// returned Content-Type ourselves below.
+			headers: { 'User-Agent': USER_AGENT, Accept: '*/*' },
 		});
 	} finally {
 		clearTimeout(timer);

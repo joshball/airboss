@@ -26,6 +26,19 @@ target: spec.md + design.md + tasks.md + test-plan.md
 > 11. **Phase 7 vs Phase 6 dependency clarified.** Inventory walks the download-manifest tier, not extraction status. Phase 7 does NOT depend on Phase 6. Documented in design.md.
 > 12. **Fixture budget set: 5 MB per file, 50 MB total.** Test-plan §Test data fixtures updated. PHAK ch1 chapter PDF (~5 MB) is the natural unit-test fixture.
 
+## Post-merge implementation findings (2026-04-29 manual test pass)
+
+After PR #337 merged, manual operator tests surfaced bugs that need follow-up beyond the AIM count reconciliation already landed:
+
+- **(fixed in cleanup PR)** `verify-urls.ts:28` had an unused `loadRegsConfig` import. `bun run check` failed.
+- **(fixed in cleanup PR)** `scrape.test.ts` had a formatter-violating multi-line `expect`. `bun run check` failed.
+- **(fixed in cleanup PR)** `html-fetch.ts` sent `Accept: text/html`, which the FAA's CDN returns 406 for on certain URLs (chap0_info_eoc.html, some appendices). Changed to `Accept: */*` to match curl's default behavior; we still validate the returned `Content-Type` ourselves.
+- **(fixed in cleanup PR)** `aim.yaml` `sections_per_chapter` was `[1, 9, 5, 7, 14, 6, 5, 7, 1, 4, 7, 6]` (78 plans). Correct array per empirical curl probe of the per-chapter TOC stubs is `[1, 2, 3, 5, 7, 6, 5, 7, 1, 1, 2, 8]` (54 plans). The original WP-authoring probe had read the AIM master nav dropdown (which lists every paragraph across the whole AIM) and miscounted per-chapter section files. Spec, design, tasks, test-plan all updated to the empirical truth.
+- **(known follow-up bug)** `html-fetch.ts` does not implement HEAD-cache idempotency. PDF re-runs are zero-network; HTML re-runs always re-fetch (53 of 54 AIM files re-fetched on the second download). Spec acceptance only required PDF idempotency, but HTML should follow the same pattern. Separate fix PR.
+- **(known follow-up bug)** `python -m ingest phak --strategy prompt --chapter 7` errors with "sidecar count (17) does not match chapter count (1)". The chapter-PDF mode emits sidecars for all chapters but the prompt-strategy CLI only wants one when filtered. The unfiltered run works fine. Separate fix PR.
+- **(operator action)** `bun run sources verify-urls` reports 7 of 8 `handbooks-extras.yaml` URLs are 404. These were stale before this WP -- migrated as-is from the pre-existing TS arrays. Operator updates the YAML with current FAA URLs.
+- **WP correctness goal achieved.** PHAK ch7 chapter-PDF sidecar is 156 KB (vs old 60K cap), contains all 5 expected literals (`Turbine Engines`, `Fuel Systems`, `Oxygen Systems`, `Pressurized Aircraft`, `Chapter Summary`), ends cleanly at the chapter's last sentence. The whole point of the WP works.
+
 # Review: Chapter source ingestion
 
 Self-review pass on the four-doc work package. Same lens as #326: where would a future implementer get stuck, where is the contract ambiguous, where did I leave a "decide later" hole?
