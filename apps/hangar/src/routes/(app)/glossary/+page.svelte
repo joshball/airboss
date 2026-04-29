@@ -16,6 +16,8 @@ import {
 } from '@ab/constants';
 import Banner from '@ab/ui/components/Banner.svelte';
 import Button from '@ab/ui/components/Button.svelte';
+import EmptyState from '@ab/ui/components/EmptyState.svelte';
+import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import { enhance } from '$app/forms';
 import { replaceState } from '$app/navigation';
 import { page } from '$app/state';
@@ -95,12 +97,11 @@ function formatDate(iso: string): string {
 </svelte:head>
 
 <section class="page">
-	<header class="hd">
-		<div>
-			<h1>Glossary</h1>
-			<p class="sub">{data.total} reference{data.total === 1 ? '' : 's'} in the registry.</p>
-		</div>
-		<div class="actions">
+	<PageHeader
+		title="Glossary"
+		subtitle={`${data.total} reference${data.total === 1 ? '' : 's'} in the registry.`}
+	>
+		{#snippet actions()}
 			<a class="btn secondary" href={ROUTES.HANGAR_GLOSSARY_NEW}>New reference</a>
 			<form method="POST" action="?/syncAll" use:enhance={() => {
 				syncing = true;
@@ -120,8 +121,8 @@ function formatDate(iso: string): string {
 					Sync all pending{data.dirtyCount > 0 ? ` (${data.dirtyCount})` : ''}
 				</Button>
 			</form>
-		</div>
-	</header>
+		{/snippet}
+	</PageHeader>
 
 	{#if form?.error}
 		<Banner tone="danger">{form.error}</Banner>
@@ -176,13 +177,15 @@ function formatDate(iso: string): string {
 	</section>
 
 	{#if data.references.length === 0}
-		<p class="empty">
-			{#if data.filters.search || data.filters.sourceType || data.filters.knowledgeKind || data.filters.flightRules || data.filters.dirtyOnly}
-				No references match the current filters.
-			{:else}
-				No references yet. <a href={ROUTES.HANGAR_GLOSSARY_NEW}>Add one</a>.
-			{/if}
-		</p>
+		{#if data.filters.search || data.filters.sourceType || data.filters.knowledgeKind || data.filters.flightRules || data.filters.dirtyOnly}
+			<EmptyState title="No matches" body="No references match the current filters." />
+		{:else}
+			<EmptyState title="No references yet">
+				{#snippet bodySnippet()}
+					<p>No references yet. <a href={ROUTES.HANGAR_GLOSSARY_NEW}>Add one</a>.</p>
+				{/snippet}
+			</EmptyState>
+		{/if}
 	{:else}
 		<div class="table-wrap">
 			<table>
@@ -258,33 +261,6 @@ function formatDate(iso: string): string {
 		gap: var(--space-xl);
 		padding-top: var(--space-lg);
 		padding-bottom: var(--space-2xl);
-	}
-
-	.hd {
-		display: flex;
-		justify-content: space-between;
-		align-items: flex-start;
-		gap: var(--space-lg);
-		flex-wrap: wrap;
-	}
-
-	h1 {
-		margin: 0;
-		font-size: var(--type-heading-1-size);
-		color: var(--ink-body);
-	}
-
-	.sub {
-		margin: var(--space-2xs) 0 0;
-		color: var(--ink-muted);
-		font-size: var(--type-ui-label-size);
-	}
-
-	.actions {
-		display: flex;
-		gap: var(--space-sm);
-		flex-wrap: wrap;
-		align-items: center;
 	}
 
 	.btn {
@@ -369,20 +345,6 @@ function formatDate(iso: string): string {
 
 	.dirty-toggle input {
 		accent-color: var(--action-default);
-	}
-
-	.empty {
-		color: var(--ink-muted);
-		font-style: italic;
-		padding: var(--space-xl);
-		text-align: center;
-		background: var(--surface-raised);
-		border: 1px solid var(--edge-default);
-		border-radius: var(--radius-md);
-	}
-
-	.empty a {
-		color: var(--link-default);
 	}
 
 	.table-wrap {

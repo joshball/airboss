@@ -3,6 +3,8 @@ import { getScenario } from '@ab/bc-sim';
 import { ROUTES, SIM_SCENARIO_ID_VALUES, type SimScenarioId } from '@ab/constants';
 import type { Tone } from '@ab/themes';
 import Badge from '@ab/ui/components/Badge.svelte';
+import EmptyState from '@ab/ui/components/EmptyState.svelte';
+import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import {
 	formatAbsoluteDate,
 	formatElapsed,
@@ -70,16 +72,16 @@ const rows = $derived.by<readonly AttemptRow[]>(() => {
 </svelte:head>
 
 <main>
-	<header>
-		<h1>Flight history</h1>
-		<p class="subtitle">Your most recent sim attempts, newest first.</p>
-	</header>
+	<PageHeader title="Flight history" subtitle="Your most recent sim attempts, newest first." />
 
 	{#if rows.length === 0}
-		<section class="empty" data-testid="history-empty">
-			<p>No flights yet -- fly a scenario to see your history.</p>
-			<a class="cta" href={ROUTES.SIM_HOME}>Browse scenarios</a>
-		</section>
+		<div data-testid="history-empty">
+			<EmptyState title="No flights yet" body="Fly a scenario to see your history.">
+				{#snippet actions()}
+					<a class="cta" href={ROUTES.SIM_HOME}>Browse scenarios</a>
+				{/snippet}
+			</EmptyState>
+		</div>
 	{:else}
 		<section class="table-wrap" aria-label="Recent sim attempts">
 			<table>
@@ -122,37 +124,6 @@ const rows = $derived.by<readonly AttemptRow[]>(() => {
 		max-width: 960px;
 		margin: 0 auto;
 		padding: var(--space-2xl) var(--space-xl);
-	}
-
-	header {
-		margin-bottom: var(--space-xl);
-	}
-
-	h1 {
-		margin: 0 0 var(--space-2xs) 0;
-		font-size: var(--font-size-2xl);
-	}
-
-	.subtitle {
-		margin: 0;
-		color: var(--ink-muted);
-	}
-
-	.empty {
-		padding: var(--space-2xl);
-		border: 1px dashed var(--edge-default);
-		border-radius: var(--radius-md);
-		background: var(--surface-panel);
-		text-align: center;
-		color: var(--ink-muted);
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-md);
-		align-items: center;
-	}
-
-	.empty p {
-		margin: 0;
 	}
 
 	.cta {

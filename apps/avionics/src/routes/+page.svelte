@@ -1,5 +1,6 @@
 <script lang="ts">
 import { ROUTES } from '@ab/constants';
+import PageHeader from '@ab/ui/components/PageHeader.svelte';
 
 interface AvionicsCard {
 	href: string;

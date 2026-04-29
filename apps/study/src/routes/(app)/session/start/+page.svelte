@@ -27,6 +27,7 @@ import PageHelp from '@ab/help/ui/PageHelp.svelte';
 import Banner from '@ab/ui/components/Banner.svelte';
 import Button from '@ab/ui/components/Button.svelte';
 import Drawer from '@ab/ui/components/Drawer.svelte';
+import EmptyState from '@ab/ui/components/EmptyState.svelte';
 import InfoTip from '@ab/ui/components/InfoTip.svelte';
 import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import { humanize } from '@ab/utils';
@@ -344,14 +345,15 @@ function depthLabel(slug: DepthPreference): string {
 		</article>
 
 		{#if preview.items.length === 0}
-			<article class="empty">
-				<h2>Nothing to study yet</h2>
-				<p class="muted">Add cards or scenarios first, or wait for the knowledge graph to populate.</p>
-				<div class="row">
+			<EmptyState
+				title="Nothing to study yet"
+				body="Add cards or scenarios first, or wait for the knowledge graph to populate."
+			>
+				{#snippet actions()}
 					<Button variant="secondary" href={ROUTES.MEMORY_NEW}>New card</Button>
 					<Button variant="secondary" href={ROUTES.REPS_NEW}>New scenario</Button>
-				</div>
-			</article>
+				{/snippet}
+			</EmptyState>
 		{:else}
 			<SessionLegend />
 
@@ -687,23 +689,6 @@ function depthLabel(slug: DepthPreference): string {
 	}
 
 	/* Existing in-plan UI */
-	.empty {
-		background: var(--surface-raised);
-		border: 1px solid var(--edge-default);
-		border-radius: var(--radius-md);
-		padding: var(--space-2xl);
-		text-align: center;
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-md);
-		align-items: center;
-	}
-
-	.empty h2 {
-		margin: 0;
-		font-size: var(--type-reading-lead-size);
-	}
-
 	.controls {
 		background: var(--surface-raised);
 		border: 1px solid var(--edge-default);
@@ -895,14 +880,4 @@ function depthLabel(slug: DepthPreference): string {
 		gap: var(--space-sm);
 	}
 
-	.row {
-		display: flex;
-		gap: var(--space-sm);
-	}
-
-	.muted {
-		color: var(--ink-faint);
-		margin: 0;
-		font-size: var(--type-ui-label-size);
-	}
 </style>

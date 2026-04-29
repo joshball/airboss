@@ -1,5 +1,7 @@
 <script lang="ts">
 import { JOB_KIND_VALUES, JOB_STATUS_VALUES, JOB_STATUSES, type JobKind, type JobStatus, ROUTES } from '@ab/constants';
+import EmptyState from '@ab/ui/components/EmptyState.svelte';
+import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import { invalidateAll, replaceState } from '$app/navigation';
 import { page } from '$app/state';
 import type { PageData } from './$types';
@@ -79,12 +81,10 @@ function formatDuration(startedAt: string | null, finishedAt: string | null): st
 </svelte:head>
 
 <section class="page">
-	<header class="hd">
-		<h1>Jobs</h1>
-		<p class="sub">
-			Last {data.limit} entries in the hangar job queue. Live jobs refresh every second.
-		</p>
-	</header>
+	<PageHeader
+		title="Jobs"
+		subtitle={`Last ${data.limit} entries in the hangar job queue. Live jobs refresh every second.`}
+	/>
 
 	<section class="filter-bar" aria-label="Filter jobs">
 		<div class="field">
@@ -109,13 +109,15 @@ function formatDuration(startedAt: string | null, finishedAt: string | null): st
 	</section>
 
 	{#if data.jobs.length === 0}
-		<p class="empty">
-			{#if data.filters.kind || data.filters.status}
-				No jobs match the current filters.
-			{:else}
-				No jobs yet. Sync a dirty reference from <a href={ROUTES.HANGAR_GLOSSARY}>Glossary</a> to enqueue one.
-			{/if}
-		</p>
+		{#if data.filters.kind || data.filters.status}
+			<EmptyState title="No matches" body="No jobs match the current filters." />
+		{:else}
+			<EmptyState title="No jobs yet">
+				{#snippet bodySnippet()}
+					<p>Sync a dirty reference from <a href={ROUTES.HANGAR_GLOSSARY}>Glossary</a> to enqueue one.</p>
+				{/snippet}
+			</EmptyState>
+		{/if}
 	{:else}
 		<div class="table-wrap">
 			<table>
@@ -176,18 +178,6 @@ function formatDuration(startedAt: string | null, finishedAt: string | null): st
 		padding-bottom: var(--space-2xl);
 	}
 
-	h1 {
-		margin: 0;
-		color: var(--ink-body);
-		font-size: var(--type-heading-1-size);
-	}
-
-	.sub {
-		margin: var(--space-2xs) 0 0;
-		color: var(--ink-muted);
-		font-size: var(--type-ui-label-size);
-	}
-
 	.filter-bar {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
@@ -225,20 +215,6 @@ function formatDuration(startedAt: string | null, finishedAt: string | null): st
 	.field select:focus-visible {
 		outline: 2px solid var(--focus-ring);
 		outline-offset: 1px;
-	}
-
-	.empty {
-		color: var(--ink-muted);
-		font-style: italic;
-		padding: var(--space-xl);
-		text-align: center;
-		background: var(--surface-raised);
-		border: 1px solid var(--edge-default);
-		border-radius: var(--radius-md);
-	}
-
-	.empty a {
-		color: var(--link-default);
 	}
 
 	.table-wrap {

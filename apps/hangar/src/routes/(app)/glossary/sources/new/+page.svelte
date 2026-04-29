@@ -1,6 +1,7 @@
 <script lang="ts">
 import { ROUTES } from '@ab/constants';
 import Button from '@ab/ui/components/Button.svelte';
+import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import SourceForm from '$lib/components/SourceForm.svelte';
 import type { ActionData, PageData } from './$types';
 
@@ -16,12 +17,13 @@ const formError = $derived(form?.formError ?? null);
 </svelte:head>
 
 <section class="page">
-	<header class="hd">
-		<h1>New source</h1>
-		<p class="sub">
-			<a href={ROUTES.HANGAR_GLOSSARY_SOURCES}>&larr; Back to sources</a>
-		</p>
-	</header>
+	<PageHeader title="New source">
+		{#snippet subtitleSnippet()}
+			<p>
+				<a href={ROUTES.HANGAR_GLOSSARY_SOURCES}>&larr; Back to sources</a>
+			</p>
+		{/snippet}
+	</PageHeader>
 
 	<form method="POST" class="form">
 		<SourceForm {initial} {fieldErrors} {formError} mode="create" />
@@ -39,26 +41,6 @@ const formError = $derived(form?.formError ?? null);
 		gap: var(--space-xl);
 		padding-top: var(--space-lg);
 		padding-bottom: var(--space-2xl);
-	}
-
-	h1 {
-		margin: 0;
-		color: var(--ink-body);
-		font-size: var(--type-heading-1-size);
-	}
-
-	.sub {
-		margin: var(--space-2xs) 0 0;
-		font-size: var(--type-ui-label-size);
-	}
-
-	.sub a {
-		color: var(--link-default);
-		text-decoration: none;
-	}
-
-	.sub a:hover {
-		color: var(--link-hover);
 	}
 
 	.form {

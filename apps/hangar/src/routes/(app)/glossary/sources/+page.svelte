@@ -2,6 +2,8 @@
 import { QUERY_PARAMS, type ReferenceSourceType, ROUTES, SOURCE_TYPE_LABELS, SOURCE_TYPE_VALUES } from '@ab/constants';
 import Banner from '@ab/ui/components/Banner.svelte';
 import Button from '@ab/ui/components/Button.svelte';
+import EmptyState from '@ab/ui/components/EmptyState.svelte';
+import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import { enhance } from '$app/forms';
 import { replaceState } from '$app/navigation';
 import { page } from '$app/state';
@@ -70,12 +72,11 @@ function nextPageHref(): string {
 </svelte:head>
 
 <section class="page">
-	<header class="hd">
-		<div>
-			<h1>Sources</h1>
-			<p class="sub">{data.total} source{data.total === 1 ? '' : 's'} in the registry.</p>
-		</div>
-		<div class="actions">
+	<PageHeader
+		title="Sources"
+		subtitle={`${data.total} source${data.total === 1 ? '' : 's'} in the registry.`}
+	>
+		{#snippet actions()}
 			<a class="btn secondary" href={ROUTES.HANGAR_GLOSSARY_SOURCES_NEW}>New source</a>
 			<form method="POST" action="?/syncAll" use:enhance={() => {
 				syncing = true;
@@ -95,8 +96,8 @@ function nextPageHref(): string {
 					Sync all pending{data.dirtyCount > 0 ? ` (${data.dirtyCount})` : ''}
 				</Button>
 			</form>
-		</div>
-	</header>
+		{/snippet}
+	</PageHeader>
 
 	{#if form?.error}
 		<Banner tone="danger">{form.error}</Banner>
@@ -138,13 +139,15 @@ function nextPageHref(): string {
 	</section>
 
 	{#if data.sources.length === 0}
-		<p class="empty">
-			{#if data.filters.search || data.filters.type || data.filters.format || data.filters.dirtyOnly}
-				No sources match the current filters.
-			{:else}
-				No sources yet. <a href={ROUTES.HANGAR_GLOSSARY_SOURCES_NEW}>Add one</a>.
-			{/if}
-		</p>
+		{#if data.filters.search || data.filters.type || data.filters.format || data.filters.dirtyOnly}
+			<EmptyState title="No matches" body="No sources match the current filters." />
+		{:else}
+			<EmptyState title="No sources yet">
+				{#snippet bodySnippet()}
+					<p>No sources yet. <a href={ROUTES.HANGAR_GLOSSARY_SOURCES_NEW}>Add one</a>.</p>
+				{/snippet}
+			</EmptyState>
+		{/if}
 	{:else}
 		<div class="table-wrap">
 			<table>
@@ -214,33 +217,6 @@ function nextPageHref(): string {
 		gap: var(--space-xl);
 		padding-top: var(--space-lg);
 		padding-bottom: var(--space-2xl);
-	}
-
-	.hd {
-		display: flex;
-		justify-content: space-between;
-		align-items: flex-start;
-		gap: var(--space-lg);
-		flex-wrap: wrap;
-	}
-
-	h1 {
-		margin: 0;
-		font-size: var(--type-heading-1-size);
-		color: var(--ink-body);
-	}
-
-	.sub {
-		margin: var(--space-2xs) 0 0;
-		color: var(--ink-muted);
-		font-size: var(--type-ui-label-size);
-	}
-
-	.actions {
-		display: flex;
-		gap: var(--space-sm);
-		flex-wrap: wrap;
-		align-items: center;
 	}
 
 	.btn {
@@ -325,20 +301,6 @@ function nextPageHref(): string {
 
 	.dirty-toggle input {
 		accent-color: var(--action-default);
-	}
-
-	.empty {
-		color: var(--ink-muted);
-		font-style: italic;
-		padding: var(--space-xl);
-		text-align: center;
-		background: var(--surface-raised);
-		border: 1px solid var(--edge-default);
-		border-radius: var(--radius-md);
-	}
-
-	.empty a {
-		color: var(--link-default);
 	}
 
 	.table-wrap {

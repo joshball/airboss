@@ -1,5 +1,7 @@
 <script lang="ts">
 import { ROUTES } from '@ab/constants';
+import EmptyState from '@ab/ui/components/EmptyState.svelte';
+import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import HandbookChapterListItem from '@ab/ui/handbooks/HandbookChapterListItem.svelte';
 import HandbookEditionBadge from '@ab/ui/handbooks/HandbookEditionBadge.svelte';
 import type { PageData } from './$types';
@@ -11,19 +13,22 @@ let { data }: { data: PageData } = $props();
 	<title>{data.reference.title} -- airboss</title>
 </svelte:head>
 
-<header class="page-header">
-	<nav aria-label="Breadcrumb">
-		<a href={ROUTES.HANDBOOKS}>Handbooks</a> &raquo; <span>{data.reference.title}</span>
-	</nav>
-	<h1>
-		{data.reference.title}
+<PageHeader title={data.reference.title}>
+	{#snippet eyebrowSnippet()}
+		<nav aria-label="Breadcrumb">
+			<a href={ROUTES.HANDBOOKS}>Handbooks</a> &raquo; <span>{data.reference.title}</span>
+		</nav>
+	{/snippet}
+	{#snippet titleSuffix()}
 		<HandbookEditionBadge edition={data.reference.edition} />
-	</h1>
-	<p class="counts">
-		{data.progress.readSections} read &middot; {data.progress.readingSections} reading &middot;
-		{data.progress.unreadSections} unread of {data.progress.totalSections} sections
-	</p>
-</header>
+	{/snippet}
+	{#snippet subtitleSnippet()}
+		<p class="counts">
+			{data.progress.readSections} read &middot; {data.progress.readingSections} reading &middot;
+			{data.progress.unreadSections} unread of {data.progress.totalSections} sections
+		</p>
+	{/snippet}
+</PageHeader>
 
 {#if data.reference.supersededByEdition}
 	<div class="banner" role="alert">
@@ -34,7 +39,7 @@ let { data }: { data: PageData } = $props();
 {/if}
 
 {#if data.chapters.length === 0}
-	<p class="empty">No chapters ingested yet for this edition.</p>
+	<EmptyState title="No chapters yet" body="No chapters ingested yet for this edition." />
 {:else}
 	<ul class="chapter-list">
 		{#each data.chapters as chapter (chapter.id)}
@@ -52,24 +57,6 @@ let { data }: { data: PageData } = $props();
 {/if}
 
 <style>
-	.page-header {
-		margin-bottom: var(--space-lg);
-	}
-	.page-header nav {
-		color: var(--ink-muted);
-		margin-bottom: var(--space-xs);
-	}
-	.page-header nav a {
-		color: inherit;
-	}
-	.page-header h1 {
-		margin: 0 0 var(--space-xs) 0;
-		font-size: var(--font-size-2xl);
-		font-weight: var(--font-weight-bold);
-		display: flex;
-		align-items: center;
-		gap: var(--space-sm);
-	}
 	.counts {
 		margin: 0;
 		color: var(--ink-muted);
@@ -88,8 +75,5 @@ let { data }: { data: PageData } = $props();
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-xs);
-	}
-	.empty {
-		color: var(--ink-muted);
 	}
 </style>

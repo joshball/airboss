@@ -1,6 +1,7 @@
 <script lang="ts">
 import { CITATION_SOURCE_LABELS, CITATION_SOURCE_TYPES, type CitationSourceType, ROUTES } from '@ab/constants';
 import CitedByPanel, { type CitedByItem } from '@ab/ui/components/CitedByPanel.svelte';
+import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
@@ -42,13 +43,14 @@ const citedByItems = $derived<CitedByItem[]>(
 </svelte:head>
 
 <section class="page">
-	<header class="hd">
-		<h1>{reference.displayName}</h1>
-		<div class="sub">
-			<span class="kind">{reference.sourceLabel}</span>
-			<span class="id">{reference.id}</span>
-		</div>
-	</header>
+	<PageHeader title={reference.displayName}>
+		{#snippet subtitleSnippet()}
+			<div class="sub">
+				<span class="kind">{reference.sourceLabel}</span>
+				<span class="id">{reference.id}</span>
+			</div>
+		{/snippet}
+	</PageHeader>
 
 	<section class="body" aria-label="Paraphrase">
 		<h2>Paraphrase</h2>
@@ -65,19 +67,6 @@ const citedByItems = $derived<CitedByItem[]>(
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-xl);
-	}
-
-	.hd {
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-2xs);
-	}
-
-	.hd h1 {
-		margin: 0;
-		font-size: var(--type-heading-2-size);
-		letter-spacing: -0.02em;
-		color: var(--ink-body);
 	}
 
 	.sub {

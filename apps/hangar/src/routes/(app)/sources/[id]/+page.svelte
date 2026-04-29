@@ -2,6 +2,7 @@
 import { ROUTES, SOURCE_KINDS } from '@ab/constants';
 import Banner from '@ab/ui/components/Banner.svelte';
 import Button from '@ab/ui/components/Button.svelte';
+import EmptyState from '@ab/ui/components/EmptyState.svelte';
 import SourcePreviewTile from '$lib/components/SourcePreviewTile.svelte';
 import type { ActionData, PageData } from './$types';
 
@@ -187,7 +188,7 @@ const checksumMatchesOnDisk = $derived(
 	<section aria-labelledby="history-h">
 		<h2 id="history-h">Recent jobs</h2>
 		{#if data.recentJobs.length === 0}
-			<p class="empty">No jobs have run against this source yet.</p>
+			<EmptyState title="No jobs yet" body="No jobs have run against this source yet." />
 		{:else}
 			<ul class="job-list">
 				{#each data.recentJobs as job (job.id)}
@@ -398,15 +399,6 @@ const checksumMatchesOnDisk = $derived(
 	.edit-hint a { color: var(--link-default); }
 
 	.muted { color: var(--ink-muted); font-size: var(--type-ui-label-size); }
-
-	.empty {
-		color: var(--ink-muted);
-		padding: var(--space-lg);
-		text-align: center;
-		background: var(--surface-panel);
-		border: 1px solid var(--edge-default);
-		border-radius: var(--radius-md);
-	}
 
 	.job-list {
 		list-style: none;

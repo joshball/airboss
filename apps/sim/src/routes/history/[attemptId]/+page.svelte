@@ -2,6 +2,8 @@
 import { getScenario } from '@ab/bc-sim';
 import { ROUTES, SIM_SCENARIO_ID_VALUES, type SimScenarioId } from '@ab/constants';
 import Badge from '@ab/ui/components/Badge.svelte';
+import EmptyState from '@ab/ui/components/EmptyState.svelte';
+import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import {
 	formatAbsoluteDate,
 	formatElapsed,
@@ -33,17 +35,19 @@ const tone = $derived(outcomeTone(attempt.outcome));
 </svelte:head>
 
 <main>
-	<nav class="back" aria-label="Breadcrumb">
-		<a href={ROUTES.SIM_HISTORY}>&larr; Back to history</a>
-	</nav>
-
-	<header>
-		<h1>{scenarioTitle}</h1>
-		<p class="meta">
-			<Badge {tone} size="sm">{formatOutcomeLabel(attempt.outcome)}</Badge>
-			<span class="reason">{attempt.reason}</span>
-		</p>
-	</header>
+	<PageHeader title={scenarioTitle}>
+		{#snippet eyebrowSnippet()}
+			<nav aria-label="Breadcrumb">
+				<a href={ROUTES.SIM_HISTORY}>&larr; Back to history</a>
+			</nav>
+		{/snippet}
+		{#snippet subtitleSnippet()}
+			<p class="meta">
+				<Badge {tone} size="sm">{formatOutcomeLabel(attempt.outcome)}</Badge>
+				<span class="reason">{attempt.reason}</span>
+			</p>
+		{/snippet}
+	</PageHeader>
 
 	<section class="summary" aria-label="Attempt summary">
 		<dl>
@@ -75,7 +79,10 @@ const tone = $derived(outcomeTone(attempt.outcome));
 	<section class="components" aria-label="Grade breakdown">
 		<h2>Grade breakdown</h2>
 		{#if components.length === 0}
-			<p class="empty">This scenario has no grading components, or grading was unavailable for this run.</p>
+			<EmptyState
+				title="No grade breakdown"
+				body="This scenario has no grading components, or grading was unavailable for this run."
+			/>
 		{:else}
 			<ul>
 				{#each components as component, idx (`${component.kind}-${idx}`)}
@@ -103,31 +110,6 @@ const tone = $derived(outcomeTone(attempt.outcome));
 		max-width: 720px;
 		margin: 0 auto;
 		padding: var(--space-2xl) var(--space-xl);
-	}
-
-	.back {
-		margin-bottom: var(--space-md);
-	}
-
-	.back a {
-		color: var(--ink-muted);
-		text-decoration: none;
-		font-size: var(--font-size-sm);
-	}
-
-	.back a:hover,
-	.back a:focus-visible {
-		color: var(--action-default);
-		text-decoration: underline;
-	}
-
-	header {
-		margin-bottom: var(--space-xl);
-	}
-
-	h1 {
-		margin: 0 0 var(--space-2xs) 0;
-		font-size: var(--font-size-2xl);
 	}
 
 	.meta {
@@ -252,8 +234,4 @@ const tone = $derived(outcomeTone(attempt.outcome));
 		font-size: var(--font-size-sm);
 	}
 
-	.empty {
-		color: var(--ink-muted);
-		margin: 0;
-	}
 </style>

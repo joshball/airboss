@@ -2,6 +2,8 @@
 import { ROUTES } from '@ab/constants';
 import Banner from '@ab/ui/components/Banner.svelte';
 import Button from '@ab/ui/components/Button.svelte';
+import EmptyState from '@ab/ui/components/EmptyState.svelte';
+import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import type { ActionData, PageData } from './$types';
 
 let { data, form }: { data: PageData; form: ActionData } = $props();
@@ -50,15 +52,14 @@ const lines = $derived(data.diffText ? data.diffText.split('\n').map(classifyLin
 		<span class="current">Diff</span>
 	</nav>
 
-	<header class="hd">
-		<div>
-			<h1>Diff</h1>
-			<p class="sub">
+	<PageHeader title="Diff">
+		{#snippet subtitleSnippet()}
+			<p>
 				Verbatim delta for <span class="mono">{data.source.id}</span> -- run after Fetch or Upload to review what
 				changed before committing.
 			</p>
-		</div>
-		<div class="hd-actions">
+		{/snippet}
+		{#snippet actions()}
 			<form method="POST" action="?/enqueue">
 				<Button type="submit" variant="primary" size="sm">Run diff now</Button>
 			</form>
@@ -67,8 +68,8 @@ const lines = $derived(data.diffText ? data.diffText.split('\n').map(classifyLin
 					Commit this diff
 				</Button>
 			</form>
-		</div>
-	</header>
+		{/snippet}
+	</PageHeader>
 
 	{#if formError}
 		<Banner tone="danger">{formError}</Banner>
@@ -90,7 +91,7 @@ const lines = $derived(data.diffText ? data.diffText.split('\n').map(classifyLin
 		<pre class="diff-body" aria-label="Diff output">{#each lines as line, index (index)}<span class="line k-{line.kind}">{line.text}
 </span>{/each}</pre>
 	{:else if data.latestDiff}
-		<p class="empty">The latest diff is empty. Nothing has changed since the last commit.</p>
+		<EmptyState title="No changes" body="The latest diff is empty. Nothing has changed since the last commit." />
 	{/if}
 </section>
 
@@ -115,33 +116,6 @@ const lines = $derived(data.diffText ? data.diffText.split('\n').map(classifyLin
 	.crumbs a:hover { text-decoration: underline; }
 	.crumbs .current { color: var(--ink-body); }
 
-	.hd {
-		display: flex;
-		justify-content: space-between;
-		align-items: flex-start;
-		gap: var(--space-lg);
-		flex-wrap: wrap;
-	}
-
-	.hd h1 {
-		margin: 0;
-		font-size: var(--type-heading-1-size);
-		color: var(--ink-body);
-	}
-
-	.sub {
-		margin: var(--space-2xs) 0 0;
-		color: var(--ink-muted);
-		font-size: var(--type-ui-label-size);
-	}
-
-	.hd-actions {
-		display: flex;
-		gap: var(--space-sm);
-		align-items: center;
-		flex-wrap: wrap;
-	}
-
 	.status {
 		margin: 0;
 		color: var(--ink-muted);
@@ -150,15 +124,6 @@ const lines = $derived(data.diffText ? data.diffText.split('\n').map(classifyLin
 
 	.status a { color: var(--link-default); text-decoration: none; }
 	.status a:hover { text-decoration: underline; }
-
-	.empty {
-		color: var(--ink-muted);
-		padding: var(--space-xl);
-		text-align: center;
-		background: var(--surface-panel);
-		border: 1px solid var(--edge-default);
-		border-radius: var(--radius-md);
-	}
 
 	.diff-body {
 		background: var(--surface-page);

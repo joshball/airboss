@@ -4,7 +4,9 @@ Single entry point for "what should I work on?" in airboss. Refresh date: 2026-0
 
 ## Just shipped (2026-04-29 -- PFD promoted to libs/activities, sim is second consumer)
 
-- **[extract-sim-instruments](../work-packages/extract-sim-instruments/spec.md) closed.** PFD component set (`AttitudeIndicator`, `AirspeedTape`, `AltitudeTape`, `HeadingIndicator`, `VsiIndicator`, `Pfd`, `PfdInputs`, `PfdKeyboardLegend`, `pfd-tick.svelte.ts`, `airspeed-arcs.ts`, `pfd-types.ts`) `git mv`'d from `apps/avionics/src/lib/pfd/` to `libs/activities/src/pfd/`. Avionics rewired to import from `@ab/activities/pfd/Pfd.svelte`; sim mounted the Glass PFD demo at `/glass-pfd` (`ROUTES.SIM_GLASS_PFD`) as the second consumer that triggered the move. No barrel; subpath imports follow the existing `crosswind-component/` convention.
+- **[extract-sim-instruments](../work-packages/extract-sim-instruments/spec.md) closed.** PFD component set (`AttitudeIndicator`, `AirspeedTape`, `AltitudeTape`, `HeadingIndicator`, `VsiIndicator`, `Pfd`, `PfdInputs`, `PfdKeyboardLegend`, `pfd-tick.svelte.ts`, `airspeed-arcs.ts`, `pfd-types.ts`) `git mv`'d from `apps/avionics/src/lib/pfd/` to `libs/activities/src/pfd/`. Avionics rewired to import from `@ab/activities/pfd/Pfd.svelte`; sim mounted the Glass PFD demo at `/glass-pfd` (`ROUTES.SIM_GLASS_PFD`) as the second consumer that triggered the move. No barrel; subpath imports follow the existing `crosswind-component/` convention. PR #328.
+- **FAR navigation course Week 2 (Part 61 deep) authored.** Three new lessons (~1,065 lines added): §61.56 flight-review deep-dive + four equivalents, §61.57(c-e) IFR currency state machine + safety-pilot rules, §61.23 + Part 67 + BasicMed two-cycle structure. CHANGELOG and NOW.md drift fixed. PR #329.
+- **`PageHeader` / `EmptyState` / `ScoreCard` adopted across 27 routes.** Mechanical adoption pass on top of the primitives PR #315 shipped. Net -507 lines (785 deletions of duplicated header/empty/stat blocks, 278 insertions of primitive imports + snippet wiring). Inventory at `docs/work-packages/route-style-extraction/INVENTORY.md` documents every mechanical migration and ~30 documented Skip residuals (each with a structural reason -- structured badges below title, tab-strips inside header, runner-chrome distinct from PageHeader). [route-style-extraction](../work-packages/route-style-extraction/spec.md) WP trigger sharpened to name the residual classes; stays deferred for the dashboard refresh.
 
 ## Just shipped (2026-04-28 -- ADR 016 phases 7-9: cert-syllabus surface complete)
 
@@ -84,11 +86,11 @@ Captured as part of the review-fix PR. Each has an explicit trigger condition; n
 
 Wave 1 (5 packages) shipped 2026-04-28 via PRs #278 + #284 -- see "Just shipped" above. Remaining gated work:
 
-| Work package                                                                          | Trigger                                                               |
-| ------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
-| [route-style-extraction](../work-packages/route-style-extraction/spec.md)             | Next major UI overhaul                                                |
-| [sim-scenario-table](../work-packages/sim-scenario-table/spec.md)                     | When sim manifests move into hangar                                   |
-| [memory-review-load-as-action](../work-packages/memory-review-load-as-action/spec.md) | Folded into [review-flow-v2](../work-packages/review-flow-v2/spec.md) |
+| Work package                                                                          | Trigger                                                                                          |
+| ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| [route-style-extraction](../work-packages/route-style-extraction/spec.md)             | Dashboard refresh (residuals: structured-badges-below-title, tab-strip-in-header, runner-chrome) |
+| [sim-scenario-table](../work-packages/sim-scenario-table/spec.md)                     | When sim manifests move into hangar                                                              |
+| [memory-review-load-as-action](../work-packages/memory-review-load-as-action/spec.md) | Folded into [review-flow-v2](../work-packages/review-flow-v2/spec.md)                            |
 
 ## Build Order
 

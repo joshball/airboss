@@ -1,5 +1,6 @@
 <script lang="ts">
 import { type HandbookReadStatus, ROUTES } from '@ab/constants';
+import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import HandbookCitingNodesPanel from '@ab/ui/handbooks/HandbookCitingNodesPanel.svelte';
 import HandbookEditionBadge from '@ab/ui/handbooks/HandbookEditionBadge.svelte';
 import HandbookReadProgressControl from '@ab/ui/handbooks/HandbookReadProgressControl.svelte';
@@ -44,18 +45,21 @@ function figureUrl(assetPath: string): string {
 	<title>{data.chapter.title} -- {data.reference.title}</title>
 </svelte:head>
 
-<header class="page-header">
-	<nav aria-label="Breadcrumb">
-		<a href={ROUTES.HANDBOOKS}>Handbooks</a> &raquo;
-		<a href={ROUTES.HANDBOOK(data.reference.documentSlug)}>{data.reference.title}</a> &raquo;
-		<span>Ch {data.chapter.code}</span>
-	</nav>
-	<h1>
-		Chapter {data.chapter.code}: {data.chapter.title}
+<PageHeader title={`Chapter ${data.chapter.code}: ${data.chapter.title}`}>
+	{#snippet eyebrowSnippet()}
+		<nav aria-label="Breadcrumb">
+			<a href={ROUTES.HANDBOOKS}>Handbooks</a> &raquo;
+			<a href={ROUTES.HANDBOOK(data.reference.documentSlug)}>{data.reference.title}</a> &raquo;
+			<span>Ch {data.chapter.code}</span>
+		</nav>
+	{/snippet}
+	{#snippet titleSuffix()}
 		<HandbookEditionBadge edition={data.reference.edition} />
-	</h1>
-	<p class="locator">{data.chapter.sourceLocator}</p>
-</header>
+	{/snippet}
+	{#snippet subtitleSnippet()}
+		<p class="locator">{data.chapter.sourceLocator}</p>
+	{/snippet}
+</PageHeader>
 
 {#if data.reference.supersededByEdition}
 	<div class="banner" role="alert">
@@ -108,24 +112,6 @@ function figureUrl(assetPath: string): string {
 <HandbookSectionNotes notesMd={data.readState.notesMd} formAction="?/set-notes" />
 
 <style>
-	.page-header {
-		margin-bottom: var(--space-lg);
-	}
-	.page-header nav {
-		color: var(--ink-muted);
-		margin-bottom: var(--space-xs);
-	}
-	.page-header nav a {
-		color: inherit;
-	}
-	.page-header h1 {
-		margin: 0 0 var(--space-xs) 0;
-		font-size: var(--font-size-2xl);
-		font-weight: var(--font-weight-bold);
-		display: flex;
-		align-items: center;
-		gap: var(--space-sm);
-	}
 	.locator {
 		margin: 0;
 		color: var(--ink-muted);
