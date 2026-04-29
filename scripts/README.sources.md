@@ -2,13 +2,30 @@
 
 Single dispatcher for every developer task that touches a source corpus (CFR, AIM, ACs, ACS, FAA handbooks). Replaces the three pre-2026-04-27 top-level scripts (`download-sources`, `ingest`, `handbook-ingest`).
 
-See [ADR 018](../docs/decisions/018-source-artifact-storage-policy/decision.md), [ADR 021](../docs/decisions/021-source-cache-flat-naming/decision.md) (cache flat naming), and [docs/platform/STORAGE.md](../docs/platform/STORAGE.md) for the storage policy this script implements.
+See [ADR 018](../docs/decisions/018-source-artifact-storage-policy/decision.md), [ADR 021](../docs/decisions/021-source-cache-flat-naming/decision.md) (cache flat naming), [ADR 022](../docs/decisions/022-chapter-source-ingestion/decision.md) (chapter source ingestion), and [docs/platform/STORAGE.md](../docs/platform/STORAGE.md) for the storage policy this script implements.
+
+## YAML config (single source of truth)
+
+URL inventories live at `scripts/sources/config/`. When the FAA rotates a URL, edit the YAML; no code change required.
+
+| File                          | What                                                              |
+| ----------------------------- | ----------------------------------------------------------------- |
+| `ac.yaml`                     | 12 Advisory Circulars                                             |
+| `acs.yaml`                    | 5 Airman Certification Standards                                  |
+| `aim.yaml`                    | Bundled PDF + section + appendix HTML (72 sections + 5 appendices)|
+| `regs.yaml`                   | eCFR base + per-title list (14, 49)                               |
+| `handbooks-extras.yaml`       | 8 whole-doc-only handbooks (Class C)                              |
+| `handbooks/<slug>.yaml`       | Per-handbook config (whole_doc + chapter_pdfs + ancillaries)      |
+
+The Python ingest tool (`tools/handbook-ingest/`) reads from the same `handbooks/<slug>.yaml` files.
 
 ## Commands
 
 | Command                       | What                                                                                  |
 | ----------------------------- | ------------------------------------------------------------------------------------- |
-| `sources download`            | Fetch source bytes (CFR XML, AIM, ACs, ACS, optional handbook extras) into the cache  |
+| `sources download`            | Fetch source bytes (CFR XML, AIM, ACs, ACS, handbooks) into the cache                 |
+| `sources verify-urls`         | HEAD-check every configured URL (network); reports 404s with structured remediation   |
+| `sources inventory`           | Regenerate `docs/sources/INVENTORY.md` from YAML config + cache manifests             |
 | `sources register <corpus>`   | Walk a derivative tree and register entries in the `@ab/sources` registry             |
 | `sources extract <pipeline>`  | Run a source-extraction pipeline (currently: `handbooks` Python TOC + LLM strategies) |
 
@@ -42,17 +59,18 @@ bun run sources download --no-color                     # disable ANSI color in 
 
 ### What it fetches
 
-| Corpus     | What                                                      | Destination (per ADR 021)                                                    |
-| ---------- | --------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| regs       | 14 CFR (full) + 49 CFR §830 + 49 CFR §1552 from eCFR XML  | `<root>/regulations/cfr-<title>/<YYYY-MM-DD>.xml` (`-parts-<f>` if filtered) |
-| aim        | Aeronautical Information Manual PDF                       | `<root>/aim/<YYYY-MM>.pdf`                                                   |
-| ac         | 12 frequently-cited Advisory Circulars (PDF)              | `<root>/ac/<doc-id>.pdf` (flat, one per AC)                                  |
-| acs        | 5 Airman Certification Standards (PDF)                    | `<root>/acs/<doc-id>.pdf` (flat, one per ACS)                                |
-| handbooks  | (opt-in) 8 additional FAA handbooks (8083-2/9/15/16/...)  | `<root>/handbooks/<slug>/<slug>.pdf` (per-edition dir for errata co-loc)     |
+| Corpus    | What                                                                        | Destination (per ADR 021 + ADR 022)                                                 |
+| --------- | --------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| regs      | 14 CFR (full) + 49 CFR §830 + 49 CFR §1552 from eCFR XML                    | `<root>/regulations/cfr-<title>/<YYYY-MM-DD>.xml` (`-parts-<f>` if filtered)        |
+| aim       | Bundled AIM PDF + 72 chapter section HTML + 5 appendix HTML                 | `<root>/aim/aim.pdf`, `chap<CC>_section_<SS>.html`, `appendix_<NN>.html`            |
+| ac        | 12 frequently-cited Advisory Circulars (PDF)                                | `<root>/ac/<doc-id>.pdf` (flat, one per AC)                                         |
+| acs       | 5 Airman Certification Standards (PDF)                                      | `<root>/acs/<doc-id>.pdf` (flat, one per ACS)                                       |
+| handbooks | Per-handbook config: whole-doc + chapter PDFs + ancillaries (Class A1/A2/C) | `<root>/handbooks/<slug>/<edition>/<edition>{,-ch<NN>,-front,-glossary,-index}.pdf` |
+| handbooks | (opt-in via `--include-handbooks-extras`) 8 whole-doc-only handbooks        | `<root>/handbooks/<slug>/<slug>.pdf`                                                |
 
-A per-corpus `manifest.json` (or per-edition for handbooks, with `primary` + `errata[]`) lives alongside the bytes.
+A per-corpus `manifest.json` (or per-edition for handbooks, with `primary` + `chapters[]` + `ancillary[]` + `errata[]`) lives alongside the bytes.
 
-PHAK / AFH / AvWX are already cached by the handbook ingestion pipeline; they are intentionally NOT re-fetched by this command.
+Whole-doc PDFs are kept alongside chapter PDFs (additive, not replacement) -- the whole-doc is the cross-chapter reference + the only source of front matter when the publisher doesn't split it.
 
 ### eCFR edition dates auto-detected
 

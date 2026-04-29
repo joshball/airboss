@@ -68,7 +68,9 @@ Options:
 ## Per-handbook config
 
 Each handbook has a YAML at
-`$REPO_ROOT/tools/handbook-ingest/ingest/config/<doc>.yaml`. It pins:
+`$REPO_ROOT/scripts/sources/config/handbooks/<doc>.yaml` (consolidated by
+[ADR 022](../decisions/022-chapter-source-ingestion/decision.md); the same
+file is read by the TS downloader and the Python ingest tool). It pins:
 
 - `source_url`, `expected_pages`, `page_offset` (PDF page 1 vs printed
   page 1-1).

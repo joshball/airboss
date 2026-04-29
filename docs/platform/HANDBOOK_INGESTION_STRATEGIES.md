@@ -174,7 +174,7 @@ LLM strategy: not yet executed live. The pipeline is wired and tested with mocks
 
 ### TOC
 
-1. Edit `tools/handbook-ingest/ingest/sections_via_toc.py` (parser logic) or `tools/handbook-ingest/ingest/config/<handbook>.yaml` (per-handbook config).
+1. Edit `tools/handbook-ingest/ingest/sections_via_toc.py` (parser logic) or `scripts/sources/config/handbooks/<handbook>.yaml` (per-handbook config; consolidated by ADR 022).
 2. Run `bun run sources extract handbooks <doc> --edition <edition> --strategy toc --force`.
 3. Inspect the diff: section markdown files, manifest.
 4. If satisfied, commit. Otherwise iterate.
