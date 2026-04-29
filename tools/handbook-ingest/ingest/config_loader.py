@@ -56,6 +56,44 @@ class ConfigError(ValueError):
 
 
 @dataclass(frozen=True)
+class WholeDocConfig:
+    """Whole-doc PDF source (the bundled handbook PDF)."""
+
+    url: str
+    filename: str
+
+
+@dataclass(frozen=True)
+class AncillarySpec:
+    """One ancillary PDF (front, toc, glossary, index, appendix) the publisher
+    distributes alongside per-chapter PDFs."""
+
+    kind: str
+    url: str
+    appendix_id: str | None = None
+
+
+@dataclass(frozen=True)
+class ChapterPdfsConfig:
+    """Per-handbook chapter-PDF distribution. Two variants:
+
+    - Direct pattern: `direct_pattern` is a URL template with `{N}` (chapter
+      ordinal) and `{NN}` (zero-padded `N + file_ordinal_offset`).
+    - Two-hop scrape: `index_url` + `chapter_page_pattern` (substring with
+      `{N}`) describes the publisher's per-chapter HTML page layout; the
+      scraper finds chapter pages by ordinal-prefix-match and reads the
+      single .pdf link out of each.
+    """
+
+    chapter_count: int
+    direct_pattern: str | None = None
+    index_url: str | None = None
+    chapter_page_pattern: str | None = None
+    file_ordinal_offset: int = 0
+    ancillary: list[AncillarySpec] = field(default_factory=list)
+
+
+@dataclass(frozen=True)
 class HandbookConfig:
     """Static config describing a handbook + edition."""
 
@@ -65,6 +103,16 @@ class HandbookConfig:
     publisher: str
     kind: str
     source_url: str
+    # Per chapter-source-ingestion WP: optional whole-doc descriptor (when
+    # present, supersedes `source_url` for download-side use). The TS
+    # downloader reads `whole_doc.url`; legacy code reads `source_url`. Both
+    # must point at the same URL.
+    whole_doc: WholeDocConfig | None = None
+    # Optional per-chapter PDF distribution. None = Class C (whole-doc only,
+    # page-range slicing for section extraction).
+    chapter_pdfs: ChapterPdfsConfig | None = None
+    # Operator stop-list: URL substrings to skip even if the publisher serves them.
+    excluded_assets: list[str] = field(default_factory=list)
     expected_pages: int | None = None
     page_offset: int = 0
     outline_overrides: list[dict[str, object]] = field(default_factory=list)
@@ -201,6 +249,21 @@ def load_config(document_slug: str) -> HandbookConfig:
 
     errata = _load_errata_list(raw.get("errata"), config_path)
     dismissed_errata = _load_dismissed_errata_list(raw.get("dismissed_errata"), config_path)
+    whole_doc = _load_whole_doc(raw.get("whole_doc"), config_path)
+    chapter_pdfs = _load_chapter_pdfs(raw.get("chapter_pdfs"), config_path)
+    excluded_assets_raw = raw.get("excluded_assets", [])
+    if not isinstance(excluded_assets_raw, list):
+        raise ConfigError(
+            f"{config_path}: excluded_assets must be a list (got {type(excluded_assets_raw).__name__})."
+        )
+
+    # source_url is required by legacy callers; if the YAML omits it we fall
+    # back to whole_doc.url so the migration path is safe.
+    source_url = raw.get("source_url")
+    if source_url is None and whole_doc is not None:
+        source_url = whole_doc.url
+    if source_url is None:
+        raise ConfigError(f"{config_path}: must specify source_url or whole_doc.url.")
 
     return HandbookConfig(
         document_slug=raw["document_slug"],
@@ -208,7 +271,10 @@ def load_config(document_slug: str) -> HandbookConfig:
         title=raw["title"],
         publisher=raw.get("publisher", "FAA"),
         kind=raw.get("kind", "handbook"),
-        source_url=raw["source_url"],
+        source_url=source_url,
+        whole_doc=whole_doc,
+        chapter_pdfs=chapter_pdfs,
+        excluded_assets=[str(s) for s in excluded_assets_raw],
         expected_pages=raw.get("expected_pages"),
         page_offset=raw.get("page_offset", 0),
         outline_overrides=list(raw.get("outline_overrides", [])),
@@ -230,6 +296,93 @@ def load_config(document_slug: str) -> HandbookConfig:
 
 def resolve_config_path(document_slug: str) -> Path:
     return config_dir() / f"{document_slug}.yaml"
+
+
+_VALID_ANCILLARY_KINDS = frozenset({"front", "toc", "glossary", "index", "appendix"})
+
+
+def _load_whole_doc(raw: object, config_path: Path) -> WholeDocConfig | None:
+    if raw is None:
+        return None
+    if not isinstance(raw, dict):
+        raise ConfigError(
+            f"{config_path}: whole_doc must be a mapping (got {type(raw).__name__})."
+        )
+    url = raw.get("url")
+    filename = raw.get("filename")
+    if not isinstance(url, str) or not url.startswith("https://"):
+        raise ConfigError(f"{config_path}: whole_doc.url must be an HTTPS URL.")
+    if not isinstance(filename, str) or not filename:
+        raise ConfigError(f"{config_path}: whole_doc.filename must be a non-empty string.")
+    return WholeDocConfig(url=url, filename=filename)
+
+
+def _load_chapter_pdfs(raw: object, config_path: Path) -> ChapterPdfsConfig | None:
+    if raw is None:
+        return None
+    if not isinstance(raw, dict):
+        raise ConfigError(
+            f"{config_path}: chapter_pdfs must be a mapping (got {type(raw).__name__})."
+        )
+    chapter_count_raw = raw.get("chapter_count")
+    if not isinstance(chapter_count_raw, int) or chapter_count_raw <= 0:
+        raise ConfigError(
+            f"{config_path}: chapter_pdfs.chapter_count must be a positive int "
+            f"(got {chapter_count_raw!r})."
+        )
+    direct_pattern = raw.get("direct_pattern")
+    index_url = raw.get("index_url")
+    chapter_page_pattern = raw.get("chapter_page_pattern")
+    if direct_pattern is not None and (index_url is not None or chapter_page_pattern is not None):
+        raise ConfigError(
+            f"{config_path}: chapter_pdfs cannot mix direct_pattern with index_url/chapter_page_pattern."
+        )
+    if direct_pattern is None and index_url is None:
+        raise ConfigError(
+            f"{config_path}: chapter_pdfs must specify either direct_pattern or index_url + chapter_page_pattern."
+        )
+    if index_url is not None and not isinstance(chapter_page_pattern, str):
+        raise ConfigError(
+            f"{config_path}: chapter_pdfs.chapter_page_pattern is required when index_url is set."
+        )
+    file_ordinal_offset_raw = raw.get("file_ordinal_offset", 0)
+    if not isinstance(file_ordinal_offset_raw, int) or file_ordinal_offset_raw < 0:
+        raise ConfigError(
+            f"{config_path}: chapter_pdfs.file_ordinal_offset must be a non-negative int."
+        )
+    ancillary_raw = raw.get("ancillary", [])
+    if not isinstance(ancillary_raw, list):
+        raise ConfigError(
+            f"{config_path}: chapter_pdfs.ancillary must be a list (got {type(ancillary_raw).__name__})."
+        )
+    ancillary: list[AncillarySpec] = []
+    for idx, entry in enumerate(ancillary_raw):
+        if not isinstance(entry, dict):
+            raise ConfigError(
+                f"{config_path}: chapter_pdfs.ancillary[{idx}] must be a mapping."
+            )
+        kind = entry.get("kind")
+        if kind not in _VALID_ANCILLARY_KINDS:
+            raise ConfigError(
+                f"{config_path}: chapter_pdfs.ancillary[{idx}].kind={kind!r} -- "
+                f"valid: {sorted(_VALID_ANCILLARY_KINDS)}."
+            )
+        url = entry.get("url")
+        if not isinstance(url, str) or not url.startswith("https://"):
+            raise ConfigError(
+                f"{config_path}: chapter_pdfs.ancillary[{idx}].url must be an HTTPS URL."
+            )
+        appendix_id_raw = entry.get("appendix_id")
+        appendix_id = str(appendix_id_raw) if appendix_id_raw is not None else None
+        ancillary.append(AncillarySpec(kind=kind, url=url, appendix_id=appendix_id))
+    return ChapterPdfsConfig(
+        chapter_count=chapter_count_raw,
+        direct_pattern=str(direct_pattern) if direct_pattern is not None else None,
+        index_url=str(index_url) if index_url is not None else None,
+        chapter_page_pattern=str(chapter_page_pattern) if chapter_page_pattern is not None else None,
+        file_ordinal_offset=file_ordinal_offset_raw,
+        ancillary=ancillary,
+    )
 
 
 _ERRATA_ID_PATTERN = re.compile(r'^[a-z0-9]+(?:-[a-z0-9]+)*$')

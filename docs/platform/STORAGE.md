@@ -1,6 +1,6 @@
 # Storage policy
 
-This is the canonical rule for where content artifacts live in the airboss repo. Established by [ADR 018](../decisions/018-source-artifact-storage-policy/decision.md), extended to five tiers by [ADR 019 §4](../decisions/019-reference-identifier-system/decision.md), and revised for cache filename layout by [ADR 021](../decisions/021-source-cache-flat-naming/decision.md). Every new content corpus follows it.
+This is the canonical rule for where content artifacts live in the airboss repo. Established by [ADR 018](../decisions/018-source-artifact-storage-policy/decision.md), extended to five tiers by [ADR 019 §4](../decisions/019-reference-identifier-system/decision.md), revised for cache filename layout by [ADR 021](../decisions/021-source-cache-flat-naming/decision.md), and extended for chapter / section / appendix assets by [ADR 022](../decisions/022-chapter-source-ingestion/decision.md). Every new content corpus follows it.
 
 ## The five tiers
 
@@ -24,11 +24,19 @@ Cache layout (per ADR 021, flat naming):
 $AIRBOSS_HANDBOOK_CACHE/
   handbooks/
     phak/FAA-H-8083-25C/
-      FAA-H-8083-25C.pdf                       <- 74 MB FAA-fetched
+      FAA-H-8083-25C.pdf                       <- 74 MB FAA-fetched (whole-doc, kept)
+      FAA-H-8083-25C-ch01.pdf                  <- chapter PDFs, zero-padded ordinals
+      FAA-H-8083-25C-ch07.pdf                     (per ADR 022; PHAK Class A1 = no ancillaries)
+      FAA-H-8083-25C-ch17.pdf
       FAA-H-8083-25C-errata-mosaic.pdf         <- co-located errata
-      manifest.json                            <- per-edition (primary + errata[])
+      manifest.json                            <- per-edition (primary + chapters[] + ancillary[] + errata[])
     afh/FAA-H-8083-3C/
-      FAA-H-8083-3C.pdf                        <- 261 MB FAA-fetched
+      FAA-H-8083-3C.pdf                        <- 261 MB FAA-fetched (whole-doc)
+      FAA-H-8083-3C-ch01.pdf                   <- 18 chapter PDFs (Class A2: direct pattern)
+      FAA-H-8083-3C-ch18.pdf
+      FAA-H-8083-3C-front.pdf                  <- ancillaries (front, glossary, index)
+      FAA-H-8083-3C-glossary.pdf
+      FAA-H-8083-3C-index.pdf
       manifest.json
   ac/
     ac-61-65-j.pdf                             <- one PDF per AC, flat
@@ -38,8 +46,12 @@ $AIRBOSS_HANDBOOK_CACHE/
     faa-s-acs-6.pdf
     manifest.json
   aim/
-    2026-04.pdf
-    manifest.json
+    aim.pdf                                    <- bundled (kept alongside HTML)
+    chap00_section_01.html                     <- 72 section files (ch0 + 71)
+    chap07_section_03.html                        zero-padded; sort correctly
+    appendix_01.html                           <- 5 appendix files
+    appendix_05.html
+    manifest.json                              <- primary + sections[] + appendices[]
   regulations/cfr-14/
     2026-04-22.xml                             <- full title
     manifest.json

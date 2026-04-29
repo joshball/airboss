@@ -8,6 +8,38 @@ edition: FAA-H-8083-25C
 kind: handbook
 title: "Pilot's Handbook of Aeronautical Knowledge"
 publisher: FAA
+
+# -----------------------------------------------------------------------------
+# Source download (TS downloader)
+# -----------------------------------------------------------------------------
+
+# Whole-doc PDF (kept alongside chapter PDFs for cross-chapter reference).
+whole_doc:
+  url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/faa-h-8083-25c.pdf
+  filename: FAA-H-8083-25C.pdf
+
+# Per-chapter PDFs. PHAK is Class A1 (chapter PDFs available, NO separately-
+# distributed ancillaries -- the whole-doc bundles front matter, glossary,
+# and index). Verified empirically 2026-04-29.
+#
+# Two-hop scrape: the FAA's PHAK index page lists per-chapter HTML pages
+# (chapter-1-introduction-flying, chapter-7-aircraft-systems, etc.); each
+# chapter page contains exactly one .pdf link. The scraper finds chapter
+# pages by ordinal-prefix match (`chapter-{N}-`) ignoring slug content; PHAK
+# uses inconsistent kebab slugs so prefix-match is more resilient than a
+# slug list.
+chapter_pdfs:
+  index_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/phak
+  chapter_page_pattern: chapter-{N}-
+  chapter_count: 17
+  ancillary: []   # PHAK does not publish front/toc/glossary/index as separate PDFs
+
+# URL-substring patterns the downloader skips even if the publisher serves
+# them. Default empty; documented for future use.
+excluded_assets: []
+
+# Legacy field used by the Python ingest tool when whole_doc is absent.
+# Kept here for backward-compatibility with code that hasn't migrated.
 source_url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/faa-h-8083-25c.pdf
 # `expected_pages` is informational; set after the first ingest run records
 # the actual PDF page count.

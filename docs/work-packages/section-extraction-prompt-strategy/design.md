@@ -111,7 +111,12 @@ tools/handbook-ingest/prompts-out/<doc>/<edition>/
 
 ```text
 handbooks/<doc>/<edition>/<NN>/
-  _chapter_plaintext.txt            # PyMuPDF-extracted body, capped at chapter_text_max_chars
+  _chapter_plaintext.txt            # PyMuPDF-extracted body
+                                    #   * Class A handbooks (PHAK, AFH, ...) post ADR 022:
+                                    #     extracted from per-chapter PDF; no cap applies.
+                                    #   * Class C handbooks (AVWX, IFH, AMT, seaplane):
+                                    #     extracted from whole-doc PDF page range, capped at
+                                    #     chapter_text_max_chars (per-handbook in YAML).
   _llm_section_tree.json            # written by the agent that processes the chapter prompt
   index.md                          # (existing)
   <NN>-*.md                         # (existing)

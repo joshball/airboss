@@ -12,6 +12,40 @@ edition: FAA-H-8083-3C
 kind: handbook
 title: "Airplane Flying Handbook"
 publisher: FAA
+
+# -----------------------------------------------------------------------------
+# Source download (TS downloader)
+# -----------------------------------------------------------------------------
+
+# Whole-doc PDF (kept alongside chapter PDFs for cross-chapter reference).
+whole_doc:
+  url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/airplane_handbook/00_afh_full.pdf
+  filename: FAA-H-8083-3C.pdf
+
+# Per-chapter PDFs. AFH is Class A2 (chapter PDFs + separately-distributed
+# ancillaries: front matter, glossary, index). Direct URL pattern -- the
+# publisher's airplane_handbook/ index links chapter PDFs directly.
+#
+# AFH file-ordinal sequence: front=01, ch1=02, ch2=03, ..., chN = N+1, then
+# glossary=20, index=21. The {N} placeholder is the chapter ordinal (1..18);
+# {NN} is the zero-padded file ordinal (chapter ordinal + file_ordinal_offset).
+chapter_pdfs:
+  direct_pattern: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/airplane_handbook/{NN}_afh_ch{N}.pdf
+  chapter_count: 18
+  file_ordinal_offset: 1
+  ancillary:
+    - kind: front
+      url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/airplane_handbook/01_afh_front.pdf
+    - kind: glossary
+      url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/airplane_handbook/20_afh_glossary.pdf
+    - kind: index
+      url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/airplane_handbook/21_afh_index.pdf
+
+# URL-substring patterns the downloader skips even if the publisher serves
+# them. Default empty; documented for future use.
+excluded_assets: []
+
+# Legacy field used by the Python ingest tool when whole_doc is absent.
 source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/airplane_handbook/00_afh_full.pdf
 expected_pages: 406
 # AFH chapter cover pages typeset the inline `Chapter N: Title` heading on

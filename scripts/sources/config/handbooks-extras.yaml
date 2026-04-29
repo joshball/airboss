@@ -1,0 +1,46 @@
+# Handbook extras (whole-doc only, no chapter splits available).
+#
+# Eight handbooks the downloader fetches when --include-handbooks-extras is set.
+# These are all Class C handbooks (whole-doc only) per the chapter-source-ingestion
+# spec; the publisher does not ship per-chapter PDFs for any of them.
+#
+# Class A handbooks (PHAK, AFH, IPH, helicopter, glider, balloon, instructors)
+# live in `handbooks/<slug>.yaml` -- they get the full whole-doc + chapter-PDF
+# treatment. AVWX (Class C with chapter-PDFs unavailable) lives in `handbooks/`
+# alongside the others for symmetry.
+
+base_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation
+
+entries:
+  - doc_id: faa-h-8083-2
+    edition: null
+    url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/risk_management_handbook.pdf
+    filename: risk_management_handbook.pdf
+  - doc_id: faa-h-8083-9
+    edition: null
+    url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/aviation_instructors_handbook.pdf
+    filename: aviation_instructors_handbook.pdf
+  - doc_id: faa-h-8083-15
+    edition: null
+    url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/instrument_flying_handbook.pdf
+    filename: instrument_flying_handbook.pdf
+  - doc_id: faa-h-8083-16
+    edition: null
+    url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/instrument_procedures_handbook.pdf
+    filename: instrument_procedures_handbook.pdf
+  - doc_id: faa-h-8083-27
+    edition: null
+    url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/sport_pilot_handbook.pdf
+    filename: sport_pilot_handbook.pdf
+  - doc_id: faa-h-8083-30
+    edition: null
+    url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/amt_general_handbook.pdf
+    filename: amt_general_handbook.pdf
+  - doc_id: faa-h-8083-32
+    edition: null
+    url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/amt_powerplant_handbook.pdf
+    filename: amt_powerplant_handbook.pdf
+  - doc_id: faa-h-8083-34
+    edition: null
+    url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/risk_management_handbook_for_ga_pilots.pdf
+    filename: risk_management_handbook_for_ga_pilots.pdf

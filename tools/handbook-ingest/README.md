@@ -39,8 +39,30 @@ Options:
 | `--no-archive`      | Skip writing `archive/<run-id>/` for `--strategy prompt` runs             |
 
 `<doc>` is the document slug (`phak`, `afh`, `avwx`, etc.); the per-document
-config in `ingest/config/<doc>.yaml` carries the source URL, edition tag,
-TOC page range, heading-style fingerprint, and section-strategy default.
+config in `scripts/sources/config/handbooks/<doc>.yaml` (post chapter-source-
+ingestion WP / ADR 022) carries the source URL, edition tag, TOC page range,
+heading-style fingerprint, and section-strategy default. The same YAML is
+the TS downloader's source of truth.
+
+## Chapter-PDF mode
+
+When the handbook YAML carries a `chapter_pdfs` block (PHAK / AFH / IPH /
+helicopter / glider / balloon / instructors) AND chapter PDFs have been
+downloaded into the source cache, the prompt-strategy sidecar text is
+extracted from each chapter PDF directly. No truncation cap applies in
+this mode -- chapter PDFs are already the right unit of input. The pre-WP
+60K cap that silently dropped the back half of 11 of 17 PHAK chapters is
+bypassed entirely.
+
+When chapter PDFs are NOT yet downloaded (or the YAML omits `chapter_pdfs`,
+i.e. Class C handbooks AVWX / IFH / AMT / seaplane), the legacy whole-doc +
+page-range path runs and the cap applies (raised to a per-handbook value
+in the YAML; see `prompt.chapter_text_max_chars`).
+
+The boundary contract for `chapter_plaintext.py` keeps the chapter-mode
+branch as one early-return at the top of `write_chapter_sidecars`; the
+existing whole-doc path lives inside `_build_from_whole_doc_with_page_ranges`
+and is owned by the `section-extraction-contract-v2` WP.
 
 Examples:
 

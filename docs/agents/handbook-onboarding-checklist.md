@@ -26,7 +26,7 @@ Decisions to make before touching code.
 | -------------------------------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------ |
 | Is the document already in scope?                  | `course/` dir, `docs/platform/MULTI_PRODUCT_ARCHITECTURE.md`          | Whether to onboard at all                        |
 | Does the FAA offer chapter-level downloads?        | The FAA's index page for the doc                                       | Cache layout (whole-doc vs chapter PDFs vs HTML) |
-| What's the slug?                                   | `tools/handbook-ingest/ingest/config/` (existing slugs)               | YAML filename, cache directory                   |
+| What's the slug?                                   | `scripts/sources/config/handbooks/` (existing slugs)                  | YAML filename, cache directory                   |
 | Edition tag?                                       | The PDF's title page or FAA's URL                                      | YAML field, cache directory                      |
 | Page offset (PDF page 1 vs printed 1-1)?           | Open the PDF, count cover/copyright pages                              | YAML `page_offset`                               |
 | Outline strategy?                                  | Try `bookmark` first; if PDF outline is empty/wrong, use `content`    | YAML `outline_strategy`                          |
@@ -47,13 +47,13 @@ Three classes of FAA publication:
 | Chapter PDFs           | Chapter PDFs (+ optional whole-doc)  | TOC + LLM on per-chapter plaintext (no cap)                | PHAK, AFH, IPH, helicopter, glider, balloon, instructors  |
 | Chapter HTML           | Chapter HTML                         | HTML parse (deterministic) + LLM backstop                  | AIM                                                       |
 
-Chapter-source ingestion is in flight as a work package. Until it lands, all handbooks use the whole-PDF path. For new handbooks added before chapter-source-ingestion ships, default to whole-PDF mode and raise `chapter_text_max_chars` as needed.
+Chapter-source ingestion is implemented (per [ADR 022](../decisions/022-chapter-source-ingestion/decision.md)). When the YAML carries a `chapter_pdfs` block AND the chapter PDFs are downloaded, section extraction runs on per-chapter plaintext directly with no truncation cap. Whole-doc handbooks (Class C: AVWX, IFH, AMT, seaplane) still use the page-range slicing path with the `prompt.chapter_text_max_chars` cap (raised per-handbook in YAML).
 
 ## 3. The checklist
 
 ### Step 1. Create the YAML config
 
-Path: `$REPO_ROOT/tools/handbook-ingest/ingest/config/<doc>.yaml`
+Path: `$REPO_ROOT/scripts/sources/config/handbooks/<doc>.yaml` (single source of truth shared by the TS downloader and the Python ingest tool, per [ADR 022](../decisions/022-chapter-source-ingestion/decision.md))
 
 Required fields: `document_slug`, `edition`, `title`, `publisher`, `kind`, `source_url`, `expected_pages`, `page_offset`, `outline_strategy`, `section_strategy`, `chapter_text_max_chars`.
 
@@ -76,7 +76,7 @@ chapter_text_max_chars: 80000
 Verify by listing alongside siblings:
 
 ```bash
-ls $REPO_ROOT/tools/handbook-ingest/ingest/config/
+ls $REPO_ROOT/scripts/sources/config/handbooks/
 ```
 
 ### Step 2. Verify the source URL
