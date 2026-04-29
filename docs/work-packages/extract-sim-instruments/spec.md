@@ -1,7 +1,8 @@
 ---
-status: deferred
+status: active
+started: 2026-04-29
 trigger: when PFD components have a second consumer (sim glass-cockpit overlay, avionics MFD, or another tape-style instrument page)
-note: original trigger ("when apps/avionics/ exists") fired via PRs #291, #294, #297; WP rewritten in PR #292 to track the second-consumer trigger. The lib promotion to `libs/activities/pfd/` has NOT happened yet. Status flipped from `active` to `deferred` because the spec body explicitly says "don't pre-promote ... move when -- and only when -- a second consumer materialises", which is the project's `deferred` semantics ("gated on a real future event"). No `tracking` / `gated` / `awaiting_trigger` convention exists in this repo; sibling deferred specs (content-citations, card-page-and-cross-references, memory-review-load-as-action) use this exact shape for "ready when the trigger fires".
+note: original trigger ("when apps/avionics/ exists") fired via PRs #291, #294, #297; WP rewritten in PR #292 to track the second-consumer trigger. Trigger fired 2026-04-29 -- sim is mounting a Glass PFD demo as the second consumer, so the lib promotion to `libs/activities/pfd/` is now in flight. Sibling specs (content-citations, card-page-and-cross-references, memory-review-load-as-action) use the same `deferred -> active -> done` lifecycle for trigger-gated work.
 source: 2026-04-27 architecture review
 resolved_by: docs/products/avionics/work-packages/avionics-app-scaffold/
 ---
