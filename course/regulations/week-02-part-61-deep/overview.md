@@ -1,8 +1,8 @@
 ---
 week: 2
 title: Part 61 -- the pilot (certificates and currency)
-status: skeleton
-last_verified: 2026-04-26
+status: authored
+last_verified: 2026-04-29
 ---
 
 # Week 2 -- Part 61, the pilot
@@ -31,7 +31,7 @@ The pilot side of "the pilot / the flight / the operation." This week is deep. H
 
 ## Authoring status
 
-Skeleton. Lessons not yet written.
+Authored 2026-04-29. All six lesson files plus drills and oral are complete and follow the [DESIGN.md](../DESIGN.md) lesson template (Common Misreadings included on every lesson; `airboss-ref:` citations throughout).
 
 ## Knowledge graph hooks
 
@@ -40,7 +40,7 @@ Existing nodes:
 - [reg-currency-vs-proficiency](../../knowledge/regulations/currency-vs-proficiency/node.md)
 - [reg-pilot-privileges-limitations](../../knowledge/regulations/pilot-privileges-limitations/node.md)
 
-To be authored:
+To be authored (deferred -- the lesson content is sufficient for course flow; nodes are atomic-fact extractions for spaced rep):
 
 - reg-flight-review-61-56
 - reg-passenger-currency-61-57a

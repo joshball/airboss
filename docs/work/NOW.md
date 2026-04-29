@@ -52,7 +52,7 @@ The week was dominated by the reference identifier system (ADR 019, **phases 1-9
 
 ## In flight
 
-- **FAR navigation course Weeks 2-10.** Per `course/regulations/CHANGELOG.md`, Week 1 is fully authored; Weeks 2 (Part 61 deep), 3 (CFI), 4-6 (Part 91), 7 (141 + 135), 8 (companion docs), 9 (enforcement), 10 (capstone) await authoring. Two sibling capstones (friend-flight-review, ppl-applies-for-ir) deferred until they can be authored against `airboss-ref:` syntax in one pass. Now unblocked since `airboss-ref:` lessons round-trip cleanly through the validator + renderer.
+- **FAR navigation course Weeks 3-10.** Per `course/regulations/CHANGELOG.md`, Weeks 1 and 2 are fully authored (Week 2 shipped 2026-04-29 -- 6 lessons + drills + oral on Part 61). Weeks 3 (CFI), 4-6 (Part 91), 7 (141 + 135), 8 (companion docs), 9 (enforcement), 10 (capstone) await authoring. Two sibling capstones (friend-flight-review, ppl-applies-for-ir) deferred until they can be authored against `airboss-ref:` syntax in one pass.
 
 ## Follow-ons captured from the cert-syllabus surface ship (2026-04-28)
 
@@ -102,7 +102,7 @@ Original MVP build order (Steps 1-6) shipped between PRs #1-#16. The active buil
 | --   | ADR 019 phase 10 -- irregular corpora (NTSB, CC, etc.)   | Demand-driven; ACS PPL-ASEL slice shipped (#266); rest deferred per trigger          |
 | --   | Cert-syllabus + goal composer WP (data layer)            | Shipped (PRs #248, #254, #264, #270, #274)                                           |
 | --   | Cert-syllabus surface work (dashboard + lens + composer) | Shipped (PRs #321, #323, #324 -- ADR 016 phases 7-9 complete)                        |
-| --   | FAR navigation course Weeks 2-10                         | Pending (Week 1 shipped #237; now unblocked by airboss-ref: round-trip)              |
+| --   | FAR navigation course Weeks 3-10                         | Pending (Weeks 1+2 authored; airboss-ref: round-trip clean)                          |
 | --   | FIRC migration as `apps/firc/`                           | Deferred (post-MVP-proven)                                                           |
 
 ## Next
