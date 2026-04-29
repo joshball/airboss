@@ -48,6 +48,8 @@ const config = {
 			'@ab/bc-sim/*': '../../libs/bc/sim/src/*',
 			'@ab/bc-avionics': '../../libs/bc/avionics/src/index.ts',
 			'@ab/bc-avionics/*': '../../libs/bc/avionics/src/*',
+			'@ab/activities': '../../libs/activities/src/index.ts',
+			'@ab/activities/*': '../../libs/activities/src/*',
 		},
 		env: {
 			dir: '../../',
