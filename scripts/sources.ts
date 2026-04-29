@@ -124,6 +124,36 @@ const COMMAND_HELP: Record<string, CommandHelp> = {
 			'docs/work-packages/handbook-ingestion-and-reader/',
 		],
 	},
+	'verify-urls': {
+		summary: 'HEAD-check every source-corpus URL against the live publisher (no downloads)',
+		what: `Walks every YAML config under \`scripts/sources/config/\` and HEADs every URL: AC, ACS, AIM (whole-doc + 72 sections + 5 appendices), regulations (per-title), handbooks (whole-doc + chapter PDFs + ancillaries). For two-hop handbooks the index page is re-scraped and chapter URLs validated. AIM section count is also probed: a section beyond the configured count returning 200 is a hard error with copy-pasteable remediation.
+
+  bun run sources verify-urls
+
+NOT in CI -- network dependent. Operator runs this before a release or
+after a suspected FAA URL rotation.`,
+		why: 'Hardcoded URLs in YAML are deterministic and auditable, but the FAA does rotate URLs occasionally. The verifier closes the gap: HEAD every URL, surface 404s + section-count drift loudly with structured remediation pointing at the YAML field.',
+		how: 'Same User-Agent + retry policy as the downloader. Exit 0 when every URL returns 2xx; exit 1 with a structured error block otherwise.',
+		links: [
+			'scripts/sources/verify-urls.ts',
+			'scripts/sources/config/',
+			'docs/decisions/022-chapter-source-ingestion/decision.md',
+		],
+	},
+	inventory: {
+		summary: 'Regenerate docs/sources/INVENTORY.md from YAML config + cache manifests',
+		what: `Walks every YAML config + every cache manifest and emits a per-corpus markdown report. The output is idempotent: same input bytes = same output bytes. One timestamp at the top; no timestamps inside section bodies. Per-corpus tables show doc name, source URL, cache filename, SHA-256 (12-char prefix), and last-fetched date.
+
+  bun run sources inventory                    # writes docs/sources/INVENTORY.md
+  bun run sources inventory --help             # show flags`,
+		why: 'The inventory is the human-readable index of every byte the project pulls from publishers. Operators git-diff INVENTORY.md to see what changed across cache regenerations. Regenerable + sortedstable means the diff stays small even when one doc rotates.',
+		how: "Reads YAML configs via the same loader the downloader uses. Reads cache manifests via the manifest module. SHA-256 prefix is 12 hex chars (matches git's full-prefix convention).",
+		links: [
+			'scripts/sources/inventory.ts',
+			'docs/sources/INVENTORY.md',
+			'docs/decisions/022-chapter-source-ingestion/decision.md',
+		],
+	},
 	help: {
 		summary: 'Show the command index (or detailed help for one command)',
 		what: '`bun run sources help` prints the index. `bun run sources <command> --help` prints a what/why/how/links block. `bun run sources <command> <subcommand> --help` defers to the per-subcommand help (e.g. `bun run sources register cfr --help`).',
@@ -158,7 +188,7 @@ interface CommandGroup {
 }
 
 const COMMAND_GROUPS: readonly CommandGroup[] = [
-	{ label: 'Source bytes', commands: ['download'] },
+	{ label: 'Source bytes', commands: ['download', 'verify-urls', 'inventory'] },
 	{ label: 'Derivative ingestion', commands: ['register', 'extract'] },
 	{ label: 'Discovery', commands: ['discover-errata'] },
 	{ label: 'Utility', commands: ['help'] },
@@ -244,6 +274,22 @@ export async function runSourcesDispatcher(argv: readonly string[]): Promise<num
 		case 'discover-errata': {
 			const { runDiscoverErrata } = await import('./sources/discover');
 			return await runDiscoverErrata({ argv: rest });
+		}
+		case 'verify-urls': {
+			if (rest.includes('--help') || rest.includes('-h')) {
+				printCommandHelp('verify-urls');
+				return 0;
+			}
+			const { runVerifyUrls } = await import('./sources/verify-urls');
+			return await runVerifyUrls();
+		}
+		case 'inventory': {
+			if (rest.includes('--help') || rest.includes('-h')) {
+				printCommandHelp('inventory');
+				return 0;
+			}
+			const { runInventory } = await import('./sources/inventory');
+			return await runInventory();
 		}
 		default: {
 			console.error(`Unknown command: ${head}\n`);
