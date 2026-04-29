@@ -125,10 +125,16 @@ Flags:
 Cache root:
   $AIRBOSS_HANDBOOK_CACHE (default: ~/Documents/airboss-handbook-cache/)
 
-Per-doc layout:
-  <root>/<corpus>/<doc>/<edition>/<descriptive>.<ext>
-  <root>/<corpus>/<doc>/<edition>/source.<ext>      (symlink for new corpora)
-  <root>/<corpus>/<doc>/<edition>/manifest.json
+Layout (per ADR 021):
+  <root>/handbooks/<slug>/<edition>/<edition>.pdf
+  <root>/handbooks/<slug>/<edition>/<edition>-errata-<id>.pdf
+  <root>/handbooks/<slug>/<edition>/manifest.json
+  <root>/ac/<doc-id>.pdf                            (one per AC, flat)
+  <root>/acs/<doc-id>.pdf                           (one per ACS, flat)
+  <root>/aim/<edition>.pdf                          (one per AIM edition)
+  <root>/regulations/cfr-<title>/<edition>.xml      (full title)
+  <root>/regulations/cfr-<title>/<edition>-parts-<filter>.xml
+  <root>/<flat-corpus>/manifest.json                (per-corpus index)
 
 Idempotent: HEAD-checks each URL and skips files where content-length matches
 the cached size and (etag matches OR last-modified has not advanced past the

@@ -94,7 +94,7 @@ review_status: pending
 
 - [ ] Create `libs/sources/src/regs/cache.ts`:
     - `resolveCacheRoot(): string` -- reads `process.env.AIRBOSS_HANDBOOK_CACHE` or defaults to `path.join(homedir(), 'Documents/airboss-handbook-cache')`. Creates the directory tree on demand.
-    - `cacheXmlPath(title, editionDate): string` -- builds `<cacheRoot>/regulations/cfr-<title>/<editionDate>/source.xml`.
+    - `cacheXmlPath(title, editionDate): string` -- builds `<cacheRoot>/regulations/cfr-<title>/<editionDate>.xml` (per ADR 021); filtered fetches use `<editionDate>-parts-<filter>.xml`.
     - `fetchEcfrXml(title, editionDate, opts): Promise<{ xml: string; sourceUrl: string; sourceSha256: string }>` -- if the cache file exists, read it; otherwise fetch from the eCFR Versioner endpoint, write to cache, compute SHA-256, return.
     - `loadFixtureXml(fixturePath): { xml: string; sourceUrl: string; sourceSha256: string }` -- reads a fixture from disk; `sourceUrl` is `file://<absolute-path>`.
 - [ ] Create `libs/sources/src/regs/cache.test.ts`:

@@ -201,10 +201,12 @@ tools/handbook-ingest/prompts-out/<doc>/<edition>/
   out/                         (mutable; the paste target for --strategy prompt)
   archive/<run-id>/            (frozen snapshot per run; archive-by-default)
 
-# On the developer's laptop (cached, gitignored):
+# On the developer's laptop (cached, gitignored; per ADR 021):
 $AIRBOSS_HANDBOOK_CACHE/handbooks/<doc>/<edition>/
-  source.pdf                   (FAA-fetched; default cache root
-                                ~/Documents/airboss-handbook-cache/)
+  <edition>.pdf                       (FAA-fetched primary; default cache root
+                                       ~/Documents/airboss-handbook-cache/)
+  <edition>-errata-<id>.pdf           (co-located errata, when applicable)
+  manifest.json                       (per-edition; primary + errata[])
 ```
 
 The pipeline auto-creates the cache directory on first run and re-uses the

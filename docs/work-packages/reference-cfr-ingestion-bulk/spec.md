@@ -51,7 +51,7 @@ The corpus chosen first is regulations because:
     - `getLiveUrl(id, edition)` returns the eCFR URL (`https://www.ecfr.gov/current/title-14/...` for the current edition; `https://www.ecfr.gov/on/<YYYY-MM-DD>/title-14/...` for past).
     - `getDerivativeContent(id, edition)` reads the in-repo derivative markdown.
     - `getIndexedContent(id, edition)` returns structured section content from the per-edition `sections.json` derivative.
-- An ingestion CLI, exposed via `bun run sources register cfr [--edition=YYYY-MM-DD] [--fixture=PATH]`, fetches eCFR XML for Title 14 + 49 CFR 830 + 49 CFR 1552 (or reads from a fixture file), caches it under `$AIRBOSS_HANDBOOK_CACHE/regulations/cfr-<title>/<YYYY-MM-DD>/source.xml` per ADR 018, walks the XML, writes derivative markdown + sections.json + manifest.json into `regulations/cfr-<title>/<YYYY-MM-DD>/`, populates the registry to `pending`, and records an atomic batch promotion to `accepted` under reviewer `phase-3-bulk-ingestion`.
+- An ingestion CLI, exposed via `bun run sources register cfr [--edition=YYYY-MM-DD] [--fixture=PATH]`, fetches eCFR XML for Title 14 + 49 CFR 830 + 49 CFR 1552 (or reads from a fixture file), caches it under `$AIRBOSS_HANDBOOK_CACHE/regulations/cfr-<title>/<YYYY-MM-DD>.xml` per ADR 021 (filename layout supersedes ADR 018), walks the XML, writes derivative markdown + sections.json + manifest.json into `regulations/cfr-<title>/<YYYY-MM-DD>/`, populates the registry to `pending`, and records an atomic batch promotion to `accepted` under reviewer `phase-3-bulk-ingestion`.
 - The pipeline is **idempotent**. Re-running with the same `--edition=` (a) reuses cached XML, (b) hash-compares regenerated derivatives against on-disk versions and skips writes when content is unchanged, (c) skips re-promotion when the lifecycle is already `accepted`.
 - Section content is committed as derivatives per ADR 018: one `<part>/<section>.md` per section, one per-edition `manifest.json`, one per-edition `sections.json` for the indexed-tier surface.
 - A small Title 14 fixture (`tests/fixtures/cfr/title-14-2026-fixture.xml` -- a few Parts, ~10 sections) ships in the repo so unit + integration tests run without hitting the live eCFR API.
@@ -182,7 +182,7 @@ regulations/
       1552/...
 ```
 
-(Cache shape per STORAGE.md is the mirror, sans derivative files: `$AIRBOSS_HANDBOOK_CACHE/regulations/cfr-14/2026-01-01/source.xml`.)
+(Cache shape per STORAGE.md (ADR 021 layout): `$AIRBOSS_HANDBOOK_CACHE/regulations/cfr-14/2026-01-01.xml` for the full title; filtered fetches use `<edition>-parts-<filter>.xml`.)
 
 ### Indexed-tier `sections.json` shape
 
@@ -309,8 +309,8 @@ This is the test that proves the publish gate works for `regs`.
 Ratified during this spec; not deferred:
 
 - The `regs` resolver registers itself by side effect when `libs/sources/src/regs/index.ts` is imported. The Phase 2 lib's `index.ts` adds an import line so the resolver is wired by default for any consumer importing `@ab/sources`. The Phase 2 test helper `resetRegistry()` calls `__corpus_resolver_internal__.resetToDefaults()` which restores the no-op default; tests that need the real resolver re-import `@ab/sources/regs` in their `beforeEach`.
-- The cache file lives at `$AIRBOSS_HANDBOOK_CACHE/regulations/cfr-<title>/<YYYY-MM-DD>/source.xml` regardless of whether the user provides `--fixture=` (the fixture path bypasses cache entirely; the manifest's `source_url` records the fixture path in that branch).
+- The cache file lives at `$AIRBOSS_HANDBOOK_CACHE/regulations/cfr-<title>/<YYYY-MM-DD>.xml` (per ADR 021) regardless of whether the user provides `--fixture=` (the fixture path bypasses cache entirely; the manifest's `source_url` records the fixture path in that branch).
 - The `cfr-ingest` script refuses to run when `process.env.CI === 'true'` AND `--fixture=` is not provided. Live ingestion is an operator action, not a CI action; CI may run fixture-driven ingestion for tests.
-- Per-edition `manifest.json` and `sections.json` are committed inline in the repo (per ADR 018). The cached `source.xml` is NOT committed (per ADR 018 + .gitignore + dormant LFS plumbing).
+- Per-edition `manifest.json` and `sections.json` are committed inline in the repo (per ADR 018). The cached XML is NOT committed (per ADR 018 + .gitignore + dormant LFS plumbing).
 - The placeholder reviewer ID `'phase-3-bulk-ingestion'` is a string constant defined in `libs/sources/src/regs/ingest.ts`. The PR body documents this so the user can re-promote under his own reviewer ID later by running `recordDePromotion` + `recordPromotion`.
 - Edition slugs are calendar years (`'2026'`). The `published_date` on the `Edition` record is the eCFR snapshot date (`new Date('2026-01-01')`). Both are populated by ingestion; the calendar year is what authors write in `?at=`.

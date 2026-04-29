@@ -153,7 +153,7 @@ From the 2026-04-27 ingestion (`bun run sources extract handbooks phak --edition
 - **415 L2 subsections** extracted. Verification looser (font fingerprint less distinctive at L2); ~40 warnings.
 - **236 figures** bound to captions across chapters. ~388 figure/table extraction warnings, mostly from PDF chrome (decorative headers/footers caught as figures without "Figure N-N." captions). Acceptable v1 noise; tunable by tightening `figure_min_area_pixels` in config.
 - **209 HTML tables** extracted. 4 warnings on grids that decoded to all-blank cells (false positives from ruled boxes around section headings).
-- **Source PDF**: 74 MB, SHA-256 `247929cace0ab56b...`, cached at `~/Documents/airboss-handbook-cache/handbooks/phak/FAA-H-8083-25C/source.pdf` per ADR 018.
+- **Source PDF**: 74 MB, SHA-256 `247929cace0ab56b...`, cached at `~/Documents/airboss-handbook-cache/handbooks/phak/FAA-H-8083-25C/FAA-H-8083-25C.pdf` per ADR 021 (supersedes ADR 018's filename layout).
 - **Determinism check**: re-ran with `--force`. Zero `content_hash` deltas. Only `manifest.fetched_at` changed.
 
 LLM strategy: not yet executed live. The pipeline is wired and tested with mocks. Expected output similar (same prompt + same input). Comparison report generation requires a live LLM run.

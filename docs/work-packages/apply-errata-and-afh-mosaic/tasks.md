@@ -142,7 +142,7 @@ Lands first. Zero behavior change. Subsequent phases consume the new shape.
 
 ### 10. PHAK MOSAIC
 
-- [x] Download PHAK MOSAIC PDF if not already cached: cached at `~/Documents/airboss-handbook-cache/handbooks/phak/FAA-H-8083-25C/_errata/mosaic.pdf`.
+- [x] Download PHAK MOSAIC PDF if not already cached: cached at `~/Documents/airboss-handbook-cache/handbooks/phak/FAA-H-8083-25C/FAA-H-8083-25C-errata-mosaic.pdf` (per ADR 021).
 - [x] Author the `bullet-edits` parser archetype (PHAK MOSAIC layout differs from AFH MOSAIC; comma-delimited anchors + bullet-level edits + list reorderings + a removal directive). Lives at `tools/handbook-ingest/ingest/errata_parsers/bullet_edits.py`.
 - [x] Map every PHAK MOSAIC edit onto one of the existing three patch kinds (`replace_paragraph`, `append_paragraph`, `add_subsection`); the removal directive uses a `REMOVAL_SENTINEL` replacement so the schema's non-empty constraint stays satisfied.
 - [x] Add unit tests in `tools/handbook-ingest/tests/errata_parsers/test_bullet_edits.py` (PDF fixture + helper-function coverage + UnknownErrataLayoutError paths). 14 new tests, full suite 115 passing.

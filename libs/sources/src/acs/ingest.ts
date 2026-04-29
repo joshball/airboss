@@ -5,17 +5,19 @@
  * (registry population), cert-syllabus WP locked Q7 (2026-04-27).
  *
  * Slice scope: PPL Airplane (`ppl-airplane-6c` / `faa-s-acs-6` family) only.
- * The downloader populates `~/Documents/airboss-handbook-cache/acs/<faa-doc>/<edition>/`
- * for every publication the project tracks; this ingest walks only the
- * entries that map to a registered publication slug and skips the rest with
- * explicit reasons. The mapping from detected ACS edition slug to locked
- * publication slug lives in `ACS_DETECTED_EDITION_TO_SLUG` below; adding a
- * new publication is one entry there plus the matching `ACS_PUBLICATION_SLUGS`
- * + URL + per-slug code-prefix entries.
+ * Per ADR 021 the downloader populates `~/Documents/airboss-handbook-cache/acs/`
+ * with one flat `<doc-id>.pdf` per publication and a single
+ * `acs/manifest.json` per-corpus index; this ingest walks only the entries
+ * that map to a registered publication slug and skips the rest with explicit
+ * reasons. The mapping from detected ACS edition slug to locked publication
+ * slug lives in `ACS_DETECTED_EDITION_TO_SLUG` below; adding a new publication
+ * is one entry there plus the matching `ACS_PUBLICATION_SLUGS` + URL +
+ * per-slug code-prefix entries.
  *
  * Steps per ACS found in the cache (and matched against the slice):
  *
- *   1. Walk `<cache>/acs/<faa-doc>/<edition-on-disk>/manifest.json` (downloader output).
+ *   1. Read `<cache>/acs/manifest.json` (per-corpus index, ADR 021); each
+ *      entry points at a flat `<cache>/acs/<doc-id>.pdf`.
  *   2. Run `extractPdf` on the ACS PDF; detect the canonical edition slug (e.g.
  *      `faa-s-acs-6c`) from the cover and the effective date.
  *   3. Map the detected edition slug to a locked publication slug
@@ -45,7 +47,7 @@
  */
 
 import { createHash } from 'node:crypto';
-import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { dirname, join } from 'node:path';
 import type { ExtractedDocument, ExtractedPage } from '../pdf/index.ts';
@@ -104,7 +106,7 @@ const ACS_SLUG_CODE_PREFIX: Readonly<Record<string, string>> = {
 };
 
 export interface IngestArgs {
-	/** Path to the cache root containing `acs/<faa-doc>/<edition>/<filename>.pdf` + downloader manifest. */
+	/** Path to the cache root containing `acs/<doc-id>.pdf` + per-corpus `acs/manifest.json` (ADR 021). */
 	readonly cacheRoot: string;
 	/** Path to the in-repo derivative root (default `<cwd>/acs`). */
 	readonly derivativeRoot: string;
@@ -134,10 +136,8 @@ export interface IngestReport {
 }
 
 interface CachedAcsPublication {
-	/** FAA doc-family slug from the cache directory (e.g. `'faa-s-acs-6'`). */
+	/** FAA doc-family slug from the manifest (e.g. `'faa-s-acs-6'`). */
 	readonly cacheDocSlug: string;
-	/** Edition directory name from the cache (e.g. `'current'`). */
-	readonly cacheEditionDir: string;
 	/** Absolute path to the PDF. */
 	readonly pdfPath: string;
 	readonly downloaderManifest: DownloaderManifest;
@@ -151,7 +151,7 @@ interface DiscoveryResult {
 interface DownloaderManifest {
 	readonly corpus: string;
 	readonly doc: string;
-	readonly edition: string;
+	readonly edition: string | null;
 	readonly source_url: string;
 	readonly source_filename: string;
 	readonly source_sha256: string;
@@ -159,69 +159,87 @@ interface DownloaderManifest {
 	readonly last_modified?: string;
 }
 
-function readDownloaderManifest(path: string): DownloaderManifest {
+interface CorpusManifestFile {
+	readonly schema_version: number;
+	readonly corpus: string;
+	readonly entries: readonly Partial<DownloaderManifest>[];
+}
+
+function readCorpusManifest(path: string): CorpusManifestFile {
 	const raw = readFileSync(path, 'utf-8');
-	const parsed = JSON.parse(raw) as Partial<DownloaderManifest>;
+	const parsed = JSON.parse(raw) as Partial<CorpusManifestFile>;
+	if (!Array.isArray(parsed.entries)) {
+		throw new Error(`per-corpus manifest at ${path} missing entries[] array`);
+	}
+	return {
+		schema_version: typeof parsed.schema_version === 'number' ? parsed.schema_version : 1,
+		corpus: typeof parsed.corpus === 'string' ? parsed.corpus : 'acs',
+		entries: parsed.entries,
+	};
+}
+
+function validateEntry(entry: Partial<DownloaderManifest>, manifestPath: string): DownloaderManifest {
 	const required: readonly (keyof DownloaderManifest)[] = [
 		'corpus',
 		'doc',
-		'edition',
 		'source_url',
 		'source_filename',
 		'source_sha256',
 		'fetched_at',
 	];
 	for (const key of required) {
-		if (parsed[key] === undefined) {
-			throw new Error(`downloader manifest at ${path} missing required field: ${String(key)}`);
+		if (entry[key] === undefined) {
+			throw new Error(`per-corpus manifest at ${manifestPath} has entry missing required field: ${String(key)}`);
 		}
 	}
-	return parsed as DownloaderManifest;
+	if (!('edition' in entry)) {
+		throw new Error(`per-corpus manifest at ${manifestPath} has entry missing edition field`);
+	}
+	return entry as DownloaderManifest;
 }
 
 /**
- * Walk the cache and collect every ACS PDF available for ingestion. The
- * cache stores publications under `<cacheRoot>/acs/<faa-doc>/<edition-dir>/`;
- * we collect each `(doc, edition-dir)` pair that has a valid downloader
- * manifest + PDF on disk. Mapping to the locked publication slug happens
+ * Walk the cache and collect every ACS PDF available for ingestion. Per ADR
+ * 021, the downloader writes a single per-corpus manifest at
+ * `<cache>/acs/manifest.json` with one entry per cached ACS; the PDFs sit
+ * alongside as `<doc-id>.pdf`. Mapping to the locked publication slug happens
  * after PDF extraction (the detected edition slug from the cover is the key
  * into `ACS_DETECTED_EDITION_TO_SLUG`).
  */
 function discoverCachedAcs(cacheRoot: string): DiscoveryResult {
 	const root = join(cacheRoot, 'acs');
 	if (!existsSync(root)) return { publications: [], skipped: [] };
+	const manifestPath = join(root, 'manifest.json');
+	if (!existsSync(manifestPath)) {
+		return { publications: [], skipped: [`acs/manifest.json: per-corpus manifest not found (skip)`] };
+	}
+	let parsed: CorpusManifestFile;
+	try {
+		parsed = readCorpusManifest(manifestPath);
+	} catch (e) {
+		return { publications: [], skipped: [`acs/manifest.json: invalid manifest -- ${(e as Error).message} (skip)`] };
+	}
+
 	const publications: CachedAcsPublication[] = [];
 	const skipped: string[] = [];
-	for (const docDir of readdirSync(root)) {
-		const docPath = join(root, docDir);
-		if (!statSync(docPath).isDirectory()) continue;
-		for (const editionDir of readdirSync(docPath)) {
-			const editionPath = join(docPath, editionDir);
-			if (!statSync(editionPath).isDirectory()) continue;
-			const downloaderManifestPath = join(editionPath, 'manifest.json');
-			if (!existsSync(downloaderManifestPath)) {
-				skipped.push(`acs/${docDir}/${editionDir}: no downloader manifest (skip)`);
-				continue;
-			}
-			let dm: DownloaderManifest;
-			try {
-				dm = readDownloaderManifest(downloaderManifestPath);
-			} catch (e) {
-				skipped.push(`acs/${docDir}/${editionDir}: invalid downloader manifest -- ${(e as Error).message} (skip)`);
-				continue;
-			}
-			const pdfPath = join(editionPath, dm.source_filename);
-			if (!existsSync(pdfPath)) {
-				skipped.push(`acs/${docDir}/${editionDir}: PDF not found at ${dm.source_filename} (skip)`);
-				continue;
-			}
-			publications.push({
-				cacheDocSlug: docDir,
-				cacheEditionDir: editionDir,
-				pdfPath,
-				downloaderManifest: dm,
-			});
+	for (const raw of parsed.entries) {
+		let dm: DownloaderManifest;
+		try {
+			dm = validateEntry(raw, manifestPath);
+		} catch (e) {
+			skipped.push(`acs/manifest.json: invalid entry -- ${(e as Error).message} (skip)`);
+			continue;
 		}
+		const pdfPath = join(root, dm.source_filename);
+		if (!existsSync(pdfPath)) {
+			skipped.push(`acs/${dm.doc}: PDF not found at ${dm.source_filename} (skip)`);
+			continue;
+		}
+		publications.push({
+			cacheDocSlug: dm.doc,
+			pdfPath,
+			downloaderManifest: dm,
+		});
 	}
 	return { publications, skipped };
 }
@@ -614,9 +632,7 @@ export async function runAcsIngest(args: IngestArgs): Promise<IngestReport> {
 
 			const editionFromCover = findAcsEditionSlug(coverPages);
 			if (editionFromCover === null) {
-				skipReasons.push(
-					`acs/${pub.cacheDocSlug}/${pub.cacheEditionDir}: could not detect ACS edition slug on cover (skip)`,
-				);
+				skipReasons.push(`acs/${pub.cacheDocSlug}: could not detect ACS edition slug on cover (skip)`);
 				publicationsSkipped += 1;
 				continue;
 			}
@@ -625,20 +641,18 @@ export async function runAcsIngest(args: IngestArgs): Promise<IngestReport> {
 			const slug = ACS_DETECTED_EDITION_TO_SLUG[editionSlug];
 			if (slug === undefined) {
 				skipReasons.push(
-					`acs/${pub.cacheDocSlug}/${pub.cacheEditionDir}: detected edition '${editionSlug}' is not yet wired to a publication slug -- add to ACS_DETECTED_EDITION_TO_SLUG (skip)`,
+					`acs/${pub.cacheDocSlug}: detected edition '${editionSlug}' is not yet wired to a publication slug -- add to ACS_DETECTED_EDITION_TO_SLUG (skip)`,
 				);
 				publicationsSkipped += 1;
 				continue;
 			}
 			if (!allowedSlugs.has(slug)) {
-				skipReasons.push(`acs/${pub.cacheDocSlug}/${pub.cacheEditionDir}: slug '${slug}' not in --slug filter (skip)`);
+				skipReasons.push(`acs/${pub.cacheDocSlug}: slug '${slug}' not in --slug filter (skip)`);
 				publicationsSkipped += 1;
 				continue;
 			}
 			if (!ACS_PUBLICATION_SLUGS.includes(slug)) {
-				skipReasons.push(
-					`acs/${pub.cacheDocSlug}/${pub.cacheEditionDir}: slug '${slug}' not in ACS_PUBLICATION_SLUGS (skip)`,
-				);
+				skipReasons.push(`acs/${pub.cacheDocSlug}: slug '${slug}' not in ACS_PUBLICATION_SLUGS (skip)`);
 				publicationsSkipped += 1;
 				continue;
 			}
@@ -651,25 +665,21 @@ export async function runAcsIngest(args: IngestArgs): Promise<IngestReport> {
 			const publicationIso = detectedDate ?? new Date(fallbackDate).toISOString().slice(0, 10);
 			const publicationDate = new Date(publicationIso);
 			if (Number.isNaN(publicationDate.getTime())) {
-				skipReasons.push(`acs/${pub.cacheDocSlug}/${pub.cacheEditionDir}: could not derive publication date (skip)`);
+				skipReasons.push(`acs/${pub.cacheDocSlug}: could not derive publication date (skip)`);
 				publicationsSkipped += 1;
 				continue;
 			}
 
 			const codePrefix = ACS_SLUG_CODE_PREFIX[slug] ?? null;
 			if (codePrefix === null) {
-				skipReasons.push(
-					`acs/${pub.cacheDocSlug}/${pub.cacheEditionDir}: no element-code prefix registered for slug '${slug}' (skip)`,
-				);
+				skipReasons.push(`acs/${pub.cacheDocSlug}: no element-code prefix registered for slug '${slug}' (skip)`);
 				publicationsSkipped += 1;
 				continue;
 			}
 
 			const blocks = parseAcsBody(doc, codePrefix);
 			if (blocks.length === 0) {
-				skipReasons.push(
-					`acs/${pub.cacheDocSlug}/${pub.cacheEditionDir}: parsed 0 task blocks -- heading regexes did not match (skip)`,
-				);
+				skipReasons.push(`acs/${pub.cacheDocSlug}: parsed 0 task blocks -- heading regexes did not match (skip)`);
 				publicationsSkipped += 1;
 				continue;
 			}
@@ -718,7 +728,7 @@ export async function runAcsIngest(args: IngestArgs): Promise<IngestReport> {
 					// Defensive: parser already validates roman shape, but if the area
 					// somehow exceeds 99 we drop with an explicit reason.
 					skipReasons.push(
-						`acs/${pub.cacheDocSlug}/${pub.cacheEditionDir}: area '${area}' could not be converted to a 2-digit ordinal (skip area)`,
+						`acs/${pub.cacheDocSlug}: area '${area}' could not be converted to a 2-digit ordinal (skip area)`,
 					);
 					continue;
 				}
@@ -849,7 +859,7 @@ export async function runAcsIngest(args: IngestArgs): Promise<IngestReport> {
 				manifest_path: `acs/${slug}/manifest.json`,
 			});
 		} catch (e) {
-			skipReasons.push(`acs/${pub.cacheDocSlug}/${pub.cacheEditionDir}: extraction failed -- ${(e as Error).message}`);
+			skipReasons.push(`acs/${pub.cacheDocSlug}: extraction failed -- ${(e as Error).message}`);
 			publicationsSkipped += 1;
 		}
 	}

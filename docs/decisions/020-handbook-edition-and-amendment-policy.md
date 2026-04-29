@@ -57,9 +57,10 @@ $AIRBOSS_HANDBOOK_CACHE/
   handbooks/
     phak/
       FAA-H-8083-25C/
-        source.pdf                          <- bound edition (74 MB; immutable)
-        errata-2026-01-15.pdf               <- errata sheet 1 (cached; immutable)
-        errata-2026-08-22.pdf               <- errata sheet 2 (if/when published)
+        FAA-H-8083-25C.pdf                          <- bound edition (74 MB; immutable)
+        FAA-H-8083-25C-errata-mosaic.pdf            <- errata sheet 1 (cached; immutable)
+        FAA-H-8083-25C-errata-addendum-a.pdf        <- errata sheet 2 (if/when published)
+        manifest.json                               <- per-edition (primary + errata[]; ADR 021)
 ```
 
 In-repo (committed):

@@ -1,8 +1,8 @@
 """Download + checksum the source PDF for a handbook edition.
 
-Per ADR 018 (source artifact storage policy, Flavor D) the source PDF lives in
-the developer-local cache at
-`$AIRBOSS_HANDBOOK_CACHE/handbooks/<doc>/<edition>/source.pdf` (default
+Per ADR 021 (source cache flat naming, supersedes ADR 018's filename layout)
+the source PDF lives in the developer-local cache at
+`$AIRBOSS_HANDBOOK_CACHE/handbooks/<doc>/<edition>/<edition>.pdf` (default
 `~/Documents/airboss-handbook-cache/...`), **not** in the repo. The repo-root
 `.gitignore` blocks accidental staging; the matching `.gitattributes` LFS
 filter line is dormant plumbing for the day the policy flips.
@@ -39,7 +39,7 @@ def fetch_pdf(config: HandbookConfig, *, force: bool = False) -> FetchResult:
     """Resolve / download the source PDF into the developer-local cache.
 
     The PDF lands at
-    `$AIRBOSS_HANDBOOK_CACHE/handbooks/<doc>/<edition>/source.pdf`
+    `$AIRBOSS_HANDBOOK_CACHE/handbooks/<doc>/<edition>/<edition>.pdf`
     (default cache root: `~/Documents/airboss-handbook-cache/`). If the file
     already exists in the cache, we re-use it (no network round trip) and
     record its current SHA-256. `force=True` re-downloads even when cached.
@@ -48,7 +48,7 @@ def fetch_pdf(config: HandbookConfig, *, force: bool = False) -> FetchResult:
     as-stored checksum.
     """
     target_dir = ensure_dir(cache_edition_root(config.document_slug, config.edition))
-    target = target_dir / "source.pdf"
+    target = target_dir / f"{config.edition}.pdf"
     if target.is_file() and not force:
         sha = _sha256_of(target)
         return FetchResult(

@@ -112,7 +112,7 @@ Backstop for the dev-server "run if older than 7 days" check.
 When `bun run sources extract handbooks <doc> --apply-errata <url>` runs:
 
 1. Resolves `<url>` against the YAML `errata:` list. If absent, refuses (errata must be declaratively recorded first).
-2. Downloads the errata PDF to `<cache>/handbooks/<doc>/<edition>/_errata/<id>.pdf` using the standard cache fetch (HEAD-cached, SHA-256 computed).
+2. Downloads the errata PDF to `<cache>/handbooks/<doc>/<edition>/<edition>-errata-<id>.pdf` using the standard cache fetch (HEAD-cached, SHA-256 computed). Per ADR 021, errata co-locate with the primary -- no `_errata/` subdirectory.
 3. Records SHA + `fetched_at` in `manifest.json -> errata[].sha256`, `fetched_at`.
 4. Dispatches to the handbook plugin's `parse_errata(pdf_path, errata_entry)` method. The plugin returns `list[ErrataPatch]` (typed dataclass: `kind`, `chapter`, `section_anchor`, `target_page`, `original_text`, `replacement_text`).
 5. For each patch:

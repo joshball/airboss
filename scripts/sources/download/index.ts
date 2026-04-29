@@ -31,7 +31,7 @@ import {
 } from './plans';
 
 export type { CliArgs } from './args';
-export type { Manifest } from './manifest';
+export type { CorpusManifestFile, HandbookManifestFile, ManifestEntry } from './manifest';
 export type { DownloadPlan } from './plans';
 export { type RunOptions, runDownloadSources } from './run';
 export type { CorpusResult, VerifyRow } from './summary';

@@ -6,7 +6,8 @@
  *
  * Steps per AC found in the cache:
  *
- *   1. Walk `<cache>/ac/<doc-slug>/<rev>/manifest.json` (downloader output).
+ *   1. Read `<cache>/ac/manifest.json` (per-corpus index, ADR 021); each entry
+ *      points at a flat `<cache>/ac/<doc-id>.pdf`.
  *   2. Run `extractPdf` on the AC PDF; confirm cover-page slug + detect the
  *      effective date.
  *   3. Write derivative tree under `<repo>/ac/<doc-slug>/<rev>/`:
@@ -25,7 +26,7 @@
  */
 
 import { createHash } from 'node:crypto';
-import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { join } from 'node:path';
 import { extractPdf, findEffectiveDate } from '../pdf/index.ts';
@@ -42,7 +43,7 @@ const DOC_SHORT = 'AC';
 const DOC_FORMAL_PREFIX = 'FAA Advisory Circular';
 
 export interface IngestArgs {
-	/** Path to the cache root containing `ac/<doc-slug>/<rev>/<filename>.pdf` + downloader manifest. */
+	/** Path to the cache root containing `ac/<doc-id>.pdf` + per-corpus `ac/manifest.json` (ADR 021). */
 	readonly cacheRoot: string;
 	/** Path to the in-repo derivative root (default `<cwd>/ac`). */
 	readonly derivativeRoot: string;
@@ -74,7 +75,7 @@ interface DiscoveryResult {
 interface DownloaderManifest {
 	readonly corpus: string;
 	readonly doc: string;
-	readonly edition: string;
+	readonly edition: string | null;
 	readonly source_url: string;
 	readonly source_filename: string;
 	readonly source_sha256: string;
@@ -85,14 +86,14 @@ interface DownloaderManifest {
 /**
  * Resolve the canonical doc number and revision letter from the downloader's
  * manifest. The downloader's `edition` field is authoritative: it preserves
- * the FAA's edition string (e.g. `J`, `1D`, `7D`) verbatim. The doc number is
- * everything before the trailing letter.
+ * the FAA's edition string (e.g. `J`, `1D`, `7D`) verbatim, or `null` for
+ * unrevisioned ACs. The doc number is recovered from `dm.doc` (a slug like
+ * `ac-61-65-j` or `ac-91-21-1d`).
  *
  * Cases:
- *   edition='J'   doc='61-65'      -> docNumber='61-65'   rev='j'
- *   edition='1D'  doc='91-21.1'    -> docNumber='91-21.1' rev='d'  (the '1' is the doc's trailing component, not the revision)
- *   edition='7D'  doc='150-5210-7' -> docNumber='150/5210-7' rev='d'  (the '7' is the sub-document number)
- *   edition='current' (no revision) -> null  (caller skips with reason)
+ *   edition='J'   doc='ac-61-65-j'   -> docNumber='61-65'   rev='j'
+ *   edition='1D'  doc='ac-91-21-1d'  -> docNumber='91-21.1' rev='d'  (the '1' is the doc's trailing component, not the revision)
+ *   edition=null  doc='ac-91-92'     -> null  (caller skips: unrevisioned ACs rejected by ADR 019 §1.2)
  *
  * The 'edition' field encodes "the rest of the AC name after the doc number".
  * When it's a single letter, that's the revision. When it's `<digits><letter>`,
@@ -100,41 +101,39 @@ interface DownloaderManifest {
  * tucked into the edition for filesystem layout purposes -- we put it back
  * onto the doc number and treat the trailing letter as the revision.
  */
-function resolveDocAndRevision(
-	dm: DownloaderManifest,
-	cacheDocDir: string,
-): { docNumber: string; revision: string } | { skip: string } {
+function resolveDocAndRevision(dm: DownloaderManifest): { docNumber: string; revision: string } | { skip: string } {
 	const edition = dm.edition;
-	if (edition === 'current' || edition.length === 0) {
+	const slug = dm.doc;
+	if (edition === null || edition === undefined || edition.length === 0) {
 		return {
-			skip: `${cacheDocDir}: edition='${edition}' -- unrevisioned ACs are rejected by ADR 019 §1.2 validator (skip)`,
+			skip: `${slug}: edition is null -- unrevisioned ACs are rejected by ADR 019 §1.2 validator (skip)`,
 		};
 	}
 
 	// Pull the trailing letter as revision.
 	const m = /^([0-9-_.]*)([A-Za-z])$/.exec(edition);
 	if (m === null) {
-		return { skip: `${cacheDocDir}: edition='${edition}' has no trailing revision letter (skip)` };
+		return { skip: `${slug}: edition='${edition}' has no trailing revision letter (skip)` };
 	}
 	const editionDigitsTail = m[1] ?? '';
 	const revLetter = m[2];
 	if (revLetter === undefined) {
-		return { skip: `${cacheDocDir}: edition='${edition}' parse error (skip)` };
+		return { skip: `${slug}: edition='${edition}' parse error (skip)` };
 	}
 
-	// The downloader doc-dir is `ac-<doc-number-with-dots-as-dashes>-<edition-lowercased>`.
+	// `dm.doc` is `ac-<doc-number-with-dots-as-dashes>-<edition-lowercased>`.
 	// Strip the `ac-` prefix and the trailing edition to recover the doc number's
 	// filesystem-safe form. Then convert filesystem dashes back to the FAA's
 	// canonical separators (dots for the last group when needed; slash is left
 	// out because FAA slash-style ACs (e.g. 150/5210-7) are not yet supported
 	// by the locator scheme -- they get skipped here for a follow-up WP).
-	if (!cacheDocDir.startsWith('ac-')) {
-		return { skip: `${cacheDocDir}: directory does not start with 'ac-' (skip)` };
+	if (!slug.startsWith('ac-')) {
+		return { skip: `${slug}: doc slug does not start with 'ac-' (skip)` };
 	}
 	const editionLower = edition.toLowerCase();
-	const tail = cacheDocDir.slice('ac-'.length);
+	const tail = slug.slice('ac-'.length);
 	if (!tail.endsWith(`-${editionLower}`)) {
-		return { skip: `${cacheDocDir}: directory tail does not match edition suffix '-${editionLower}' (skip)` };
+		return { skip: `${slug}: doc slug tail does not match edition suffix '-${editionLower}' (skip)` };
 	}
 	const docDigits = tail.slice(0, tail.length - editionLower.length - 1);
 
@@ -152,80 +151,99 @@ function resolveDocAndRevision(
 	// of slash-style AC series (a follow-up WP).
 	if (/^[0-9]{3}-[0-9]{4}/.test(docNumber)) {
 		return {
-			skip: `${cacheDocDir}: doc number '${docNumber}' looks like FAA slash-style (e.g. 150/5210-7) -- not yet supported by ac/ locator (skip)`,
+			skip: `${slug}: doc number '${docNumber}' looks like FAA slash-style (e.g. 150/5210-7) -- not yet supported by ac/ locator (skip)`,
 		};
 	}
 
 	return { docNumber, revision: revLetter.toLowerCase() };
 }
 
-function readDownloaderManifest(path: string): DownloaderManifest {
+interface CorpusManifestFile {
+	readonly schema_version: number;
+	readonly corpus: string;
+	readonly entries: readonly Partial<DownloaderManifest>[];
+}
+
+function readCorpusManifest(path: string): CorpusManifestFile {
 	const raw = readFileSync(path, 'utf-8');
-	const parsed = JSON.parse(raw) as Partial<DownloaderManifest>;
+	const parsed = JSON.parse(raw) as Partial<CorpusManifestFile>;
+	if (!Array.isArray(parsed.entries)) {
+		throw new Error(`per-corpus manifest at ${path} missing entries[] array`);
+	}
+	return {
+		schema_version: typeof parsed.schema_version === 'number' ? parsed.schema_version : 1,
+		corpus: typeof parsed.corpus === 'string' ? parsed.corpus : 'ac',
+		entries: parsed.entries,
+	};
+}
+
+function validateEntry(entry: Partial<DownloaderManifest>, manifestPath: string): DownloaderManifest {
 	const required: readonly (keyof DownloaderManifest)[] = [
 		'corpus',
 		'doc',
-		'edition',
 		'source_url',
 		'source_filename',
 		'source_sha256',
 		'fetched_at',
 	];
 	for (const key of required) {
-		if (parsed[key] === undefined) {
-			throw new Error(`downloader manifest at ${path} missing required field: ${String(key)}`);
+		if (entry[key] === undefined) {
+			throw new Error(`per-corpus manifest at ${manifestPath} has entry missing required field: ${String(key)}`);
 		}
 	}
-	return parsed as DownloaderManifest;
+	// `edition` may legitimately be null for unrevisioned ACs.
+	if (!('edition' in entry)) {
+		throw new Error(`per-corpus manifest at ${manifestPath} has entry missing edition field`);
+	}
+	return entry as DownloaderManifest;
 }
 
 /**
- * Walk the cache and collect every AC ready for ingestion. The downloader
- * places each AC under `<cache>/ac/<doc-dir>/<edition-as-on-disk>/{<filename>.pdf,manifest.json}`.
- * The downloader manifest's `edition` field is authoritative for the revision.
+ * Walk the cache and collect every AC ready for ingestion. Per ADR 021, the
+ * downloader writes a single per-corpus manifest at `<cache>/ac/manifest.json`
+ * with one entry per cached AC; the PDFs sit alongside as `<doc-id>.pdf`.
  */
 function discoverCachedAcs(cacheRoot: string): DiscoveryResult {
 	const acRoot = join(cacheRoot, 'ac');
 	if (!existsSync(acRoot)) return { acs: [], skipped: [] };
+	const manifestPath = join(acRoot, 'manifest.json');
+	if (!existsSync(manifestPath)) {
+		return { acs: [], skipped: [`ac/manifest.json: per-corpus manifest not found (skip)`] };
+	}
+	let parsed: CorpusManifestFile;
+	try {
+		parsed = readCorpusManifest(manifestPath);
+	} catch (e) {
+		return { acs: [], skipped: [`ac/manifest.json: invalid manifest -- ${(e as Error).message} (skip)`] };
+	}
+
 	const acs: CachedAc[] = [];
 	const skipped: string[] = [];
-	for (const docDir of readdirSync(acRoot)) {
-		const docPath = join(acRoot, docDir);
-		if (!statSync(docPath).isDirectory()) continue;
-		// Each doc-dir contains one or more edition subdirs; each holds a manifest.
-		for (const revDir of readdirSync(docPath)) {
-			const revPath = join(docPath, revDir);
-			if (!statSync(revPath).isDirectory()) continue;
-			const downloaderManifestPath = join(revPath, 'manifest.json');
-			if (!existsSync(downloaderManifestPath)) {
-				skipped.push(`${docDir}/${revDir}: no downloader manifest (skip)`);
-				continue;
-			}
-			let dm: DownloaderManifest;
-			try {
-				dm = readDownloaderManifest(downloaderManifestPath);
-			} catch (e) {
-				skipped.push(`${docDir}/${revDir}: invalid downloader manifest -- ${(e as Error).message} (skip)`);
-				continue;
-			}
-			const resolved = resolveDocAndRevision(dm, docDir);
-			if ('skip' in resolved) {
-				skipped.push(resolved.skip);
-				continue;
-			}
-			const pdfPath = join(revPath, dm.source_filename);
-			if (!existsSync(pdfPath)) {
-				skipped.push(`${docDir}/${revDir}: PDF not found at ${dm.source_filename} (skip)`);
-				continue;
-			}
-			acs.push({
-				docSlug: resolved.docNumber.replace(/\./g, '-'),
-				docNumber: resolved.docNumber,
-				revision: resolved.revision,
-				pdfPath,
-				downloaderManifest: dm,
-			});
+	for (const raw of parsed.entries) {
+		let dm: DownloaderManifest;
+		try {
+			dm = validateEntry(raw, manifestPath);
+		} catch (e) {
+			skipped.push(`ac/manifest.json: invalid entry -- ${(e as Error).message} (skip)`);
+			continue;
 		}
+		const resolved = resolveDocAndRevision(dm);
+		if ('skip' in resolved) {
+			skipped.push(resolved.skip);
+			continue;
+		}
+		const pdfPath = join(acRoot, dm.source_filename);
+		if (!existsSync(pdfPath)) {
+			skipped.push(`${dm.doc}: PDF not found at ${dm.source_filename} (skip)`);
+			continue;
+		}
+		acs.push({
+			docSlug: resolved.docNumber.replace(/\./g, '-'),
+			docNumber: resolved.docNumber,
+			revision: resolved.revision,
+			pdfPath,
+			downloaderManifest: dm,
+		});
 	}
 	return { acs, skipped };
 }

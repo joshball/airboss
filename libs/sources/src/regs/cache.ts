@@ -1,9 +1,11 @@
 /**
  * Phase 3 -- source cache for the eCFR Versioner XML.
  *
- * Source of truth: ADR 018 (storage policy) + STORAGE.md. The cache root is
+ * Source of truth: ADR 021 (cache flat naming) + STORAGE.md. The cache root is
  * `$AIRBOSS_HANDBOOK_CACHE` (default `~/Documents/airboss-handbook-cache/`).
- * Cache layout: `<root>/regulations/cfr-<title>/<YYYY-MM-DD>/source.xml`.
+ * Cache layout: `<root>/regulations/cfr-<title>/<YYYY-MM-DD>.xml` for full
+ * titles, or `<root>/regulations/cfr-<title>/<YYYY-MM-DD>-parts-<filter>.xml`
+ * for filtered fetches.
  *
  * The cache is read-through: the first ingestion run for an edition fetches
  * the XML from the eCFR Versioner endpoint and writes it to the cache; later
@@ -57,8 +59,11 @@ export function resolveCacheRoot(): string {
 /** Build the full cache path for a given title + edition date. */
 export function cacheXmlPath(title: '14' | '49', editionDate: string, partFilter?: ReadonlySet<string>): string {
 	const root = resolveCacheRoot();
-	const partSlug = partFilter !== undefined ? `parts-${[...partFilter].sort().join('-')}` : 'full';
-	return join(root, 'regulations', `cfr-${title}`, editionDate, `${partSlug}.xml`);
+	const filename =
+		partFilter === undefined || partFilter.size === 0
+			? `${editionDate}.xml`
+			: `${editionDate}-parts-${[...partFilter].sort().join('-')}.xml`;
+	return join(root, 'regulations', `cfr-${title}`, filename);
 }
 
 /**

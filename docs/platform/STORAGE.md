@@ -1,16 +1,16 @@
 # Storage policy
 
-This is the canonical rule for where content artifacts live in the airboss repo. Established by [ADR 018](../decisions/018-source-artifact-storage-policy/decision.md) and extended to five tiers by [ADR 019 §4](../decisions/019-reference-identifier-system/decision.md). Every new content corpus follows it.
+This is the canonical rule for where content artifacts live in the airboss repo. Established by [ADR 018](../decisions/018-source-artifact-storage-policy/decision.md), extended to five tiers by [ADR 019 §4](../decisions/019-reference-identifier-system/decision.md), and revised for cache filename layout by [ADR 021](../decisions/021-source-cache-flat-naming/decision.md). Every new content corpus follows it.
 
 ## The five tiers
 
-| Tier                      | What it is                                                                                                                                    | Where                                                           | Tracked how                                    | Renders to user? |
-| ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- | ---------------------------------------------- | ---------------- |
-| **Source documents**      | The original artifact published by an outside authority. Bytes are kept locally for re-extraction; not in the repo.                           | `$AIRBOSS_HANDBOOK_CACHE/<corpus>/<doc>/<edition>/source.<ext>` | Local cache + gitignore + LFS plumbing dormant | No               |
-| **Extracted derivatives** | What the ingestion pipeline produces from the source: markdown, images, tables, transcripts, the manifest.                                    | Alongside the corpus root inside the repo                       | Inline git                                     | Yes (after seed) |
-| **Indexed**               | Structured DB rows that mirror derivatives (sections, paragraphs, figures, tables) so resolvers can serve them at render time.                | Postgres                                                        | Not in repo; rebuilt from derivatives          | Yes (live)       |
-| **Computed**              | Embeddings, full-text indexes, knowledge graph edges, cross-corpus joins. Per-artifact dependency contracts (per ADR 019 §4.1) drive rebuild. | Postgres (different tables)                                     | Not in repo; rebuilt on dependency change      | Yes (live)       |
-| **Generated artifacts**   | User-state computations (mastery scores, leaderboards, recommendations) produced from interaction.                                            | Postgres / app runtime                                          | Not in repo at all                             | Yes (live)       |
+| Tier                      | What it is                                                                                                                                    | Where                                                            | Tracked how                                    | Renders to user? |
+| ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------- | ---------------------------------------------- | ---------------- |
+| **Source documents**      | The original artifact published by an outside authority. Bytes are kept locally for re-extraction; not in the repo.                           | `$AIRBOSS_HANDBOOK_CACHE/<corpus>/...` (flat layout per ADR 021) | Local cache + gitignore + LFS plumbing dormant | No               |
+| **Extracted derivatives** | What the ingestion pipeline produces from the source: markdown, images, tables, transcripts, the manifest.                                    | Alongside the corpus root inside the repo                        | Inline git                                     | Yes (after seed) |
+| **Indexed**               | Structured DB rows that mirror derivatives (sections, paragraphs, figures, tables) so resolvers can serve them at render time.                | Postgres                                                         | Not in repo; rebuilt from derivatives          | Yes (live)       |
+| **Computed**              | Embeddings, full-text indexes, knowledge graph edges, cross-corpus joins. Per-artifact dependency contracts (per ADR 019 §4.1) drive rebuild. | Postgres (different tables)                                      | Not in repo; rebuilt on dependency change      | Yes (live)       |
+| **Generated artifacts**   | User-state computations (mastery scores, leaderboards, recommendations) produced from interaction.                                            | Postgres / app runtime                                           | Not in repo at all                             | Yes (live)       |
 
 ADR 018 originally framed this as three tiers (source / derivative / generated). ADR 019 split the in-DB layer into **indexed** (structural mirror of derivatives), **computed** (cross-artifact derived data with explicit invalidation), and **generated** (user-state). The mapping is additive: nothing about the source / derivative tiers changed; the DB-resident tiers were named explicitly so invalidation contracts have somewhere to attach.
 
@@ -18,27 +18,37 @@ ADR 018 originally framed this as three tiers (source / derivative / generated).
 
 Source documents live in a developer-local cache directory outside the repo. Default: `~/Documents/airboss-handbook-cache/`. Overridable via the `AIRBOSS_HANDBOOK_CACHE` env var.
 
-Cache layout mirrors the in-repo derivative tree:
+Cache layout (per ADR 021, flat naming):
 
 ```text
 $AIRBOSS_HANDBOOK_CACHE/
   handbooks/
-    phak/
-      8083-25C/
-        source.pdf                   <- 74 MB FAA-fetched
-    afh/
-      8083-3C/
-        source.pdf                   <- 261 MB FAA-fetched
-  regulations/ac/
-    61-65/
-      source.pdf
+    phak/FAA-H-8083-25C/
+      FAA-H-8083-25C.pdf                       <- 74 MB FAA-fetched
+      FAA-H-8083-25C-errata-mosaic.pdf         <- co-located errata
+      manifest.json                            <- per-edition (primary + errata[])
+    afh/FAA-H-8083-3C/
+      FAA-H-8083-3C.pdf                        <- 261 MB FAA-fetched
+      manifest.json
+  ac/
+    ac-61-65-j.pdf                             <- one PDF per AC, flat
+    ac-91-21-1d.pdf
+    manifest.json                              <- per-corpus index
+  acs/
+    faa-s-acs-6.pdf
+    manifest.json
   aim/
-    2025-09/
-      source.pdf
+    2026-04.pdf
+    manifest.json
+  regulations/cfr-14/
+    2026-04-22.xml                             <- full title
+    manifest.json
+  regulations/cfr-49/
+    2026-04-20-parts-830.xml                   <- filtered
+    2026-04-20-parts-1552.xml
+    manifest.json
   audio/
-    phak/
-      8083-25C/12-3/
-        source.wav
+    phak/8083-25C/12-3.wav                     <- future audio surface
 ```
 
 The cache is **not in the repo**. It is not gitignored because it lives outside the repo entirely. Each ingestion pipeline auto-creates its own subdirectory in the cache on first run, downloads the source from the publisher's URL, and re-uses it on subsequent runs.
@@ -72,7 +82,7 @@ audio/phak/8083-25C/12-3/
 
 `.gitattributes` carries an LFS filter line for every source-document corpus. Today this line is dormant because `.gitignore` prevents matching files from ever being staged. The line is in place so the future flip to real LFS storage (if/when triggered) is a one-line `.gitignore` removal, not a re-architecture.
 
-Walk-through of `git add handbooks/phak/8083-25C/source.pdf` today:
+Walk-through of `git add handbooks/phak/FAA-H-8083-25C/FAA-H-8083-25C.pdf` today:
 
 1. **gitignore check.** `.gitignore` matches `handbooks/**/*.pdf`. Git refuses to stage the file. Pipeline stops.
 2. **`.gitattributes` filter check.** Never reached.
@@ -98,7 +108,7 @@ When an ingestion WP for a new corpus lands:
    ```text
    <corpus-root>/**/*.<source-ext>
    ```
-4. Pipeline writes source to `$AIRBOSS_HANDBOOK_CACHE/<corpus-root>/<doc-slug>/<edition-tag>/source.<ext>`.
+4. Pipeline writes source to the cache per ADR 021: handbooks at `$AIRBOSS_HANDBOOK_CACHE/<corpus-root>/<doc-slug>/<edition-tag>/<edition-tag>.<ext>` (per-edition dir, primary + errata co-located); flat corpora at `$AIRBOSS_HANDBOOK_CACHE/<corpus-root>/<doc-id>.<ext>` with a per-corpus `manifest.json`.
 5. Pipeline writes derivatives inline at `<corpus-root>/<doc-slug>/<edition-tag>/...` in the repo.
 6. Seed pipeline reads inline derivatives and writes DB rows.
 7. Update this doc's per-corpus table with a one-line entry.
@@ -141,7 +151,7 @@ The flip itself, when triggered:
 
 1. Choose an LFS storage target (GitHub Free LFS, GitHub paid, self-hosted, S3-backed, etc.).
 2. Remove the corpus's gitignore line.
-3. `git add <corpus>/<doc>/<edition>/source.<ext>` -- the dormant `.gitattributes` filter activates, files go through LFS clean filter, pointer files get committed.
+3. `git add <corpus>/<doc>/<edition>/<edition>.<ext>` (or the flat-corpus equivalent) -- the dormant `.gitattributes` filter activates, files go through LFS clean filter, pointer files get committed.
 4. `git push` uploads bytes to the LFS server.
 5. Update this STORAGE.md doc to reflect the new storage location.
 6. Document the LFS server endpoint in the README.
@@ -178,5 +188,6 @@ git lfs fetch --recent  # later, when you do need them
 
 ## Related
 
-- [ADR 018](../decisions/018-source-artifact-storage-policy/decision.md) -- the decision and alternatives.
+- [ADR 018](../decisions/018-source-artifact-storage-policy/decision.md) -- the original three-tier decision (cache filename layout superseded by ADR 021).
+- [ADR 021](../decisions/021-source-cache-flat-naming/decision.md) -- cache flat naming + per-corpus manifests.
 - [handbook-ingestion-and-reader/spec.md](../work-packages/handbook-ingestion-and-reader/spec.md) -- first WP to land under this policy.

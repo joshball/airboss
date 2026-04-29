@@ -10,10 +10,10 @@
  * Source of truth: ADR 019 §1.2 ("AIM"), ADR 018 (derivative storage), and
  * `docs/work-packages/reference-aim-ingestion/`.
  *
- * Cache layout (input):
+ * Cache layout (input, per ADR 021):
  *
- *   $AIRBOSS_HANDBOOK_CACHE/aim/<edition>/source.pdf       (or named pdf)
- *   $AIRBOSS_HANDBOOK_CACHE/aim/<edition>/manifest.json    downloader manifest
+ *   $AIRBOSS_HANDBOOK_CACHE/aim/<edition>.pdf
+ *   $AIRBOSS_HANDBOOK_CACHE/aim/manifest.json    per-corpus index, one entry per edition
  *
  * Derivative layout (output) -- consumed by `derivative-reader.ts`:
  *
@@ -26,7 +26,7 @@
  */
 
 import { createHash } from 'node:crypto';
-import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { join } from 'node:path';
 import type { ManifestEntry, ManifestFile } from './derivative-reader.ts';
@@ -51,9 +51,26 @@ interface DownloaderManifest {
 	readonly last_modified?: string;
 }
 
-function readDownloaderManifest(path: string): DownloaderManifest {
+interface CorpusManifestFile {
+	readonly schema_version: number;
+	readonly corpus: string;
+	readonly entries: readonly Partial<DownloaderManifest>[];
+}
+
+function readCorpusManifest(path: string): CorpusManifestFile {
 	const raw = readFileSync(path, 'utf-8');
-	const parsed = JSON.parse(raw) as Partial<DownloaderManifest>;
+	const parsed = JSON.parse(raw) as Partial<CorpusManifestFile>;
+	if (!Array.isArray(parsed.entries)) {
+		throw new Error(`per-corpus manifest at ${path} missing entries[] array`);
+	}
+	return {
+		schema_version: typeof parsed.schema_version === 'number' ? parsed.schema_version : 1,
+		corpus: typeof parsed.corpus === 'string' ? parsed.corpus : 'aim',
+		entries: parsed.entries,
+	};
+}
+
+function validateEntry(entry: Partial<DownloaderManifest>, manifestPath: string): DownloaderManifest {
 	const required: readonly (keyof DownloaderManifest)[] = [
 		'corpus',
 		'doc',
@@ -64,11 +81,11 @@ function readDownloaderManifest(path: string): DownloaderManifest {
 		'fetched_at',
 	];
 	for (const key of required) {
-		if (parsed[key] === undefined) {
-			throw new Error(`downloader manifest at ${path} missing required field: ${String(key)}`);
+		if (entry[key] === undefined) {
+			throw new Error(`per-corpus manifest at ${manifestPath} has entry missing required field: ${String(key)}`);
 		}
 	}
-	return parsed as DownloaderManifest;
+	return entry as DownloaderManifest;
 }
 
 interface CachedAim {
@@ -79,33 +96,36 @@ interface CachedAim {
 
 /**
  * Walk the AIM cache and return every available edition. The downloader writes
- * one directory per edition: `<cache>/aim/<edition>/manifest.json` + the PDF.
+ * a single per-corpus index at `<cache>/aim/manifest.json` with one entry per
+ * cached edition; the PDFs sit alongside as `<edition>.pdf`.
  */
 function discoverCachedAim(cacheRoot: string): { editions: CachedAim[]; skipped: string[] } {
 	const aimRoot = join(cacheRoot, 'aim');
 	if (!existsSync(aimRoot)) return { editions: [], skipped: [] };
+	const manifestPath = join(aimRoot, 'manifest.json');
+	if (!existsSync(manifestPath)) {
+		return { editions: [], skipped: [`aim/manifest.json: per-corpus manifest not found (skip)`] };
+	}
+	let parsed: CorpusManifestFile;
+	try {
+		parsed = readCorpusManifest(manifestPath);
+	} catch (e) {
+		return { editions: [], skipped: [`aim/manifest.json: invalid manifest -- ${(e as Error).message} (skip)`] };
+	}
+
 	const editions: CachedAim[] = [];
 	const skipped: string[] = [];
-	for (const editionDir of readdirSync(aimRoot)) {
-		const editionPath = join(aimRoot, editionDir);
-		if (!statSync(editionPath).isDirectory()) continue;
-		const downloaderManifestPath = join(editionPath, 'manifest.json');
-		if (!existsSync(downloaderManifestPath)) {
-			skipped.push(`${editionDir}: no downloader manifest (skip)`);
-			continue;
-		}
+	for (const raw of parsed.entries) {
 		let dm: DownloaderManifest;
 		try {
-			dm = readDownloaderManifest(downloaderManifestPath);
+			dm = validateEntry(raw, manifestPath);
 		} catch (e) {
-			skipped.push(`${editionDir}: invalid downloader manifest -- ${(e as Error).message} (skip)`);
+			skipped.push(`aim/manifest.json: invalid entry -- ${(e as Error).message} (skip)`);
 			continue;
 		}
-		// Prefer the named PDF, fall back to source.pdf (which is a symlink).
-		const candidatePdfs = [join(editionPath, dm.source_filename), join(editionPath, 'source.pdf')];
-		const pdfPath = candidatePdfs.find((p) => existsSync(p));
-		if (pdfPath === undefined) {
-			skipped.push(`${editionDir}: PDF not found (looked for ${dm.source_filename}, source.pdf) (skip)`);
+		const pdfPath = join(aimRoot, dm.source_filename);
+		if (!existsSync(pdfPath)) {
+			skipped.push(`${dm.edition}: PDF not found at ${dm.source_filename} (skip)`);
 			continue;
 		}
 		editions.push({ edition: dm.edition, pdfPath, downloaderManifest: dm });

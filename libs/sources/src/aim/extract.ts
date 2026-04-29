@@ -4,7 +4,7 @@
  * Source of truth: ADR 019 §1.2 ("AIM"), ADR 018 (derivative storage), and the
  * WP at `docs/work-packages/reference-aim-ingestion/`.
  *
- * Reads a cached AIM PDF (typically `~/Documents/airboss-handbook-cache/aim/<edition>/source.pdf`)
+ * Reads a cached AIM PDF (per ADR 021, `~/Documents/airboss-handbook-cache/aim/<edition>.pdf`)
  * and produces a structured tree of chapters / sections / paragraphs /
  * glossary entries / appendices that the existing AIM derivative-reader can
  * consume.
