@@ -62,8 +62,15 @@ heading_style:
   heading_match_threshold: 0.85
   verify_in_body: false
 
+# Per-chapter input cap for the plaintext sidecar the sub-agent reads.
+# Sized to fit the longest chapter with 20% headroom (rounded up to next
+# 25K). AFH FAA-H-8083-3C longest is ch18 Emergency Procedures at 165,187
+# chars; cap is 200,000. Driven by the section-extraction-contract-v2
+# truncation fix (Phase 1) -- the prior 60K cap truncated 7 of 18
+# chapters. Re-measure with tools/handbook-ingest/measure_chapter_sizes.py
+# if a future edition restyles.
 prompt:
-  chapter_text_max_chars: 60000
+  chapter_text_max_chars: 200000
 
 # AFH chapter cover pages render the chapter title once on the cover and
 # then the content begins on the next page. The strip removes the

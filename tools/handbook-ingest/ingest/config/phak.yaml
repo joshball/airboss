@@ -68,9 +68,15 @@ heading_style:
   verify_in_body: true
 
 # Prompt-strategy tuning. Per-chapter input cap for the plaintext sidecar
-# the sub-agent reads; PHAK chapters fit comfortably under 60K chars.
+# the sub-agent reads. Sized to fit the longest chapter with 20% headroom
+# (rounded up to next 25K). PHAK FAA-H-8083-25C longest is ch05
+# Aerodynamics of Flight at 191,637 chars; cap is 250,000. Driven by the
+# section-extraction-contract-v2 truncation fix (Phase 1) -- the prior
+# 60K cap silently truncated 11 of 17 chapters mid-content. Re-measure
+# with tools/handbook-ingest/measure_chapter_sizes.py if a future
+# edition restyles.
 prompt:
-  chapter_text_max_chars: 60000
+  chapter_text_max_chars: 250000
 
 # Strip the chapter cover-page boilerplate from the chapter markdown body.
 # When enabled, normalize.py strips leading "Chapter N" / chapter-title /

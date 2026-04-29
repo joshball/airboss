@@ -62,8 +62,16 @@ heading_style:
   heading_match_threshold: 0.85
   verify_in_body: false
 
+# Per-chapter input cap for the plaintext sidecar the sub-agent reads.
+# Sized to fit the longest chapter with 20% headroom (rounded up to next
+# 25K). AvWX FAA-H-8083-28B longest is ch27 Forecasts at 117,953 chars;
+# cap is 150,000. Driven by the section-extraction-contract-v2 truncation
+# fix (Phase 1) -- the prior 60K cap truncated 3 of 28 chapters
+# (ch03 Overview, ch24 Observations, ch27 Forecasts). Re-measure with
+# tools/handbook-ingest/measure_chapter_sizes.py if a future edition
+# restyles.
 prompt:
-  chapter_text_max_chars: 60000
+  chapter_text_max_chars: 150000
 
 # AvWX chapter cover pages typeset a "Chapter N, Title" banner that
 # bleeds into the chapter index.md until stripped. Same shape as PHAK /
