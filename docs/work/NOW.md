@@ -1,6 +1,10 @@
 # Now
 
-Single entry point for "what should I work on?" in airboss. Refresh date: 2026-04-28.
+Single entry point for "what should I work on?" in airboss. Refresh date: 2026-04-29.
+
+## Just shipped (2026-04-29 -- PFD promoted to libs/activities, sim is second consumer)
+
+- **[extract-sim-instruments](../work-packages/extract-sim-instruments/spec.md) closed.** PFD component set (`AttitudeIndicator`, `AirspeedTape`, `AltitudeTape`, `HeadingIndicator`, `VsiIndicator`, `Pfd`, `PfdInputs`, `PfdKeyboardLegend`, `pfd-tick.svelte.ts`, `airspeed-arcs.ts`, `pfd-types.ts`) `git mv`'d from `apps/avionics/src/lib/pfd/` to `libs/activities/src/pfd/`. Avionics rewired to import from `@ab/activities/pfd/Pfd.svelte`; sim mounted the Glass PFD demo at `/glass-pfd` (`ROUTES.SIM_GLASS_PFD`) as the second consumer that triggered the move. No barrel; subpath imports follow the existing `crosswind-component/` convention.
 
 ## Just shipped (2026-04-28 -- ADR 016 phases 7-9: cert-syllabus surface complete)
 
@@ -49,7 +53,6 @@ The week was dominated by the reference identifier system (ADR 019, **phases 1-9
 ## In flight
 
 - **FAR navigation course Weeks 2-10.** Per `course/regulations/CHANGELOG.md`, Week 1 is fully authored; Weeks 2 (Part 61 deep), 3 (CFI), 4-6 (Part 91), 7 (141 + 135), 8 (companion docs), 9 (enforcement), 10 (capstone) await authoring. Two sibling capstones (friend-flight-review, ppl-applies-for-ir) deferred until they can be authored against `airboss-ref:` syntax in one pass. Now unblocked since `airboss-ref:` lessons round-trip cleanly through the validator + renderer.
-- **[extract-sim-instruments](../work-packages/extract-sim-instruments/spec.md)** -- the avionics surface now exists (PRs #291, #294, #297) and the PFD components live in `apps/avionics/src/lib/pfd/`. WP rewritten in PR #292 to track the new trigger ("second consumer of the PFD set"). Lib promotion to `libs/activities/pfd/` has not happened yet; on watch, ready to fire when the second consumer materialises.
 
 ## Follow-ons captured from the cert-syllabus surface ship (2026-04-28)
 
