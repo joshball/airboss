@@ -235,7 +235,7 @@ Scope and legal posture:
 The ingestion pipeline:
 
 ```text
-1. Fetch     official FAA PDF + checksum, store under handbooks/<doc>/<edition>/source.pdf
+1. Fetch     official FAA PDF + checksum, store under handbooks/<doc>/<edition>/<edition>.pdf
 2. Outline   extract embedded PDF outline -> chapter / section / sub-section tree
 3. Text      per-section text via PyMuPDF (fitz); preserves layout reliably
 4. Figures   per-page image extraction; figure caption pattern ("Figure 12-7.")

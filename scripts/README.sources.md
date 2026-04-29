@@ -2,7 +2,7 @@
 
 Single dispatcher for every developer task that touches a source corpus (CFR, AIM, ACs, ACS, FAA handbooks). Replaces the three pre-2026-04-27 top-level scripts (`download-sources`, `ingest`, `handbook-ingest`).
 
-See [ADR 018](../docs/decisions/018-source-artifact-storage-policy/decision.md) and [docs/platform/STORAGE.md](../docs/platform/STORAGE.md) for the storage policy this script implements.
+See [ADR 018](../docs/decisions/018-source-artifact-storage-policy/decision.md), [ADR 021](../docs/decisions/021-source-cache-flat-naming/decision.md) (cache flat naming), and [docs/platform/STORAGE.md](../docs/platform/STORAGE.md) for the storage policy this script implements.
 
 ## Commands
 
@@ -42,13 +42,15 @@ bun run sources download --no-color                     # disable ANSI color in 
 
 ### What it fetches
 
-| Corpus     | What                                                      | Destination                                                              |
-| ---------- | --------------------------------------------------------- | ------------------------------------------------------------------------ |
-| regs       | 14 CFR (full) + 49 CFR §830 + 49 CFR §1552 from eCFR XML  | `<root>/regulations/cfr-<title>/<YYYY-MM-DD>/<slug>.xml`                 |
-| aim        | Aeronautical Information Manual PDF                       | `<root>/aim/<YYYY-MM>/aim-<YYYY-MM>.pdf` (+ `source.pdf` symlink)        |
-| ac         | 12 frequently-cited Advisory Circulars (PDF)              | `<root>/ac/<ac-id>/<edition>/AC_<id>.pdf` (+ `source.pdf` symlink)       |
-| acs        | 5 Airman Certification Standards (PDF)                    | `<root>/acs/<acs-id>/<edition>/<original_name>.pdf` (+ symlink)          |
-| handbooks  | (opt-in) 8 additional FAA handbooks (8083-2/9/15/16/...)  | `<root>/handbooks/<doc>/<edition>/source.pdf`                            |
+| Corpus     | What                                                      | Destination (per ADR 021)                                                    |
+| ---------- | --------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| regs       | 14 CFR (full) + 49 CFR §830 + 49 CFR §1552 from eCFR XML  | `<root>/regulations/cfr-<title>/<YYYY-MM-DD>.xml` (`-parts-<f>` if filtered) |
+| aim        | Aeronautical Information Manual PDF                       | `<root>/aim/<YYYY-MM>.pdf`                                                   |
+| ac         | 12 frequently-cited Advisory Circulars (PDF)              | `<root>/ac/<doc-id>.pdf` (flat, one per AC)                                  |
+| acs        | 5 Airman Certification Standards (PDF)                    | `<root>/acs/<doc-id>.pdf` (flat, one per ACS)                                |
+| handbooks  | (opt-in) 8 additional FAA handbooks (8083-2/9/15/16/...)  | `<root>/handbooks/<slug>/<slug>.pdf` (per-edition dir for errata co-loc)     |
+
+A per-corpus `manifest.json` (or per-edition for handbooks, with `primary` + `errata[]`) lives alongside the bytes.
 
 PHAK / AFH / AvWX are already cached by the handbook ingestion pipeline; they are intentionally NOT re-fetched by this command.
 
@@ -58,9 +60,7 @@ The eCFR Versioner only serves snapshots for dates that exist in its amendment h
 
 ### Filename convention
 
-New corpora (`aim`, `ac`, `acs`) write a descriptive filename echoing the doc slug, e.g. `<root>/ac/ac-61-65-j/J/AC_61-65J.pdf`. A `source.pdf` symlink in the same directory points at the descriptive file so existing readers that look for `source.<ext>` continue to work.
-
-`regs` and `handbooks` keep `source.<ext>` as the primary filename for compatibility with the existing readers in `libs/sources/src/regs/cache.ts` and `libs/sources/src/handbooks/derivative-reader.ts`. The manifest still records `source_filename` so a later migration is mechanical.
+Per ADR 021, every corpus writes a self-describing filename echoing the doc id or edition. AC, ACS, and AIM are flat (one PDF per doc directly under the corpus dir). Handbooks keep a per-edition directory so errata can co-locate as `<edition>-errata-<id>.pdf`. Regs flatten the per-edition dir, distinguishing full vs. filtered title fetches via the `-parts-<filter>` filename infix. No `source.<ext>` shim, no symlinks.
 
 ### Output coloring
 
@@ -80,21 +80,27 @@ FAA servers return 403 for requests without a recognizable User-Agent. The scrip
 
 ### Idempotence -- HEAD before download
 
-Per-doc `manifest.json` is written next to each cached source file:
+Per ADR 021, AC, ACS, AIM, and regs use a per-corpus `<corpus>/manifest.json` (per-title for regs) with an `entries[]` array. Handbooks use a per-edition `manifest.json` with `primary` + `errata[]`. One entry per doc/edition records the audit trail:
 
 ```json
 {
-  "corpus": "regs",
-  "doc": "cfr-14-full",
-  "edition": "2026-04-22",
-  "source_url": "https://www.ecfr.gov/api/versioner/v1/full/2026-04-22/title-14.xml",
-  "source_filename": "full.xml",
-  "source_sha256": "abc123...",
-  "size_bytes": 31872491,
-  "fetched_at": "2026-04-27T17:42:00Z",
-  "last_modified": "Wed, 22 Apr 2026 12:00:00 GMT",
-  "etag": "\"deadbeef\"",
-  "schema_version": 1
+  "schema_version": 1,
+  "corpus": "ac",
+  "entries": [
+    {
+      "corpus": "ac",
+      "doc": "ac-61-65-j",
+      "edition": "J",
+      "source_url": "https://www.faa.gov/.../AC_61-65J.pdf",
+      "source_filename": "ac-61-65-j.pdf",
+      "source_sha256": "abc123...",
+      "size_bytes": 1872491,
+      "fetched_at": "2026-04-27T17:42:00Z",
+      "last_modified": "Wed, 22 Apr 2026 12:00:00 GMT",
+      "etag": "\"deadbeef\"",
+      "schema_version": 1
+    }
+  ]
 }
 ```
 
@@ -153,7 +159,7 @@ bun run sources register <corpus> --help
 
 Routes to the per-corpus `runIngestCli` exported from `@ab/sources/<corpus>`. Each corpus owns its arg parsing, validation, and execution. Adding a new corpus is a single import + one entry in the dispatcher map.
 
-CFR live ingest hits the eCFR Versioner API and caches under `$AIRBOSS_HANDBOOK_CACHE/regulations/cfr-<title>/<edition>/`. CI runs MUST pass `--fixture=` -- live network ingest is an operator action. Handbook + AIM register existing on-disk derivatives produced by the extraction pipeline.
+CFR live ingest hits the eCFR Versioner API and caches under `$AIRBOSS_HANDBOOK_CACHE/regulations/cfr-<title>/<edition>.xml` (per ADR 021). CI runs MUST pass `--fixture=` -- live network ingest is an operator action. Handbook + AIM register existing on-disk derivatives produced by the extraction pipeline.
 
 See:
 

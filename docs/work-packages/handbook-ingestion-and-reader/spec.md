@@ -35,7 +35,7 @@ ADR 016 phase 0 is the contract. This spec implements it.
 
 ## In Scope
 
-1. **Ingestion pipeline (Python).** Fetch FAA PDFs, extract structure via PDF outline, per-section text via PyMuPDF (`fitz`), per-page images bound to figure captions, table detection -> HTML, normalize each section into markdown with frontmatter `(handbook, edition, chapter_number, section_number, section_title, faa_pages, source_url)`. Edition-locked output: a new edition produces a new tree under `<root>/<doc>/<edition>/`; old editions stay. Source PDF is cached locally outside the repo at `$AIRBOSS_HANDBOOK_CACHE/handbooks/<doc>/<edition>/source.pdf` per [ADR 018](../../decisions/018-source-artifact-storage-policy/decision.md).
+1. **Ingestion pipeline (Python).** Fetch FAA PDFs, extract structure via PDF outline, per-section text via PyMuPDF (`fitz`), per-page images bound to figure captions, table detection -> HTML, normalize each section into markdown with frontmatter `(handbook, edition, chapter_number, section_number, section_title, faa_pages, source_url)`. Edition-locked output: a new edition produces a new tree under `<root>/<doc>/<edition>/`; old editions stay. Source PDF is cached locally outside the repo at `$AIRBOSS_HANDBOOK_CACHE/handbooks/<doc>/<edition>/<edition>.pdf` per [ADR 018](../../decisions/018-source-artifact-storage-policy/decision.md) (filename layout per [ADR 021](../../decisions/021-source-cache-flat-naming/decision.md)).
 2. **Storage tree.** Top-level `handbooks/` directory holds inline derivatives only (per-section markdown + figure images + tables + manifest.json). Source PDFs live in the developer-local cache (default `~/Documents/airboss-handbook-cache/`, override via `AIRBOSS_HANDBOOK_CACHE`), not the repo. Layout follows the three-tier rule in [docs/platform/STORAGE.md](../../platform/STORAGE.md): the source PDF is cached + gitignored (LFS plumbing in `.gitattributes` is dormant for the future flip); markdown / figures / tables / manifest.json are inline derivatives; DB rows are generated artifacts that live in Postgres.
 3. **DB schema.** New `study.reference`, `study.handbook_section`, `study.handbook_figure`, `study.handbook_read_state` tables. Drizzle ORM only; CHECK constraints mirror existing patterns; IDs use `prefix_ULID` via `@ab/utils createId()`.
 4. **BC functions.** `libs/bc/study/src/handbooks.ts` -- list handbooks, list sections per handbook/chapter, get section by locator, list nodes that cite a section (reverse query over the `knowledge_node.references` JSONB), record + read read-state, render markdown to HTML through the existing references pipeline.
@@ -328,12 +328,12 @@ Local cache (NOT in repo; default `~/Documents/airboss-handbook-cache/`, overrid
 ```text
 $AIRBOSS_HANDBOOK_CACHE/
   handbooks/
-    phak/8083-25C/source.pdf             # 74 MB FAA-fetched
-    afh/8083-3C/source.pdf               # 261 MB FAA-fetched
-    avwx/8083-28/source.pdf              # FAA-fetched
+    phak/FAA-H-8083-25C/FAA-H-8083-25C.pdf       # 74 MB FAA-fetched
+    afh/FAA-H-8083-3C/FAA-H-8083-3C.pdf          # 261 MB FAA-fetched
+    avwx/FAA-H-8083-28B/FAA-H-8083-28B.pdf       # FAA-fetched
 ```
 
-The cached `source.pdf` is canonical for re-extraction. The pipeline writes it once (downloaded from `source_url`) and re-uses it on subsequent runs. Re-extraction (improved cropping, table fix, etc.) reads from the cached bytes; no internet round-trip after the first pull. The audit trail lives in `manifest.json` via `(source_url, source_sha256, fetched_at)`. The text the reader renders is the per-section markdown, which *is* the canonical extracted text -- there is no separate plaintext blob alongside the markdown.
+The cached `<edition>.pdf` is canonical for re-extraction. The pipeline writes it once (downloaded from `source_url`) and re-uses it on subsequent runs. Re-extraction (improved cropping, table fix, etc.) reads from the cached bytes; no internet round-trip after the first pull. The audit trail lives in `manifest.json` via `(source_url, source_sha256, fetched_at)`. The text the reader renders is the per-section markdown, which *is* the canonical extracted text -- there is no separate plaintext blob alongside the markdown.
 
 Section markdown shape:
 
@@ -560,7 +560,7 @@ The five questions below were originally posed as Open Questions for the user to
 
 ### 1. Storage location -- top-level `handbooks/` (resolved)
 
-**Resolved: top-level `handbooks/` for inline derivatives only. Source PDFs live in `$AIRBOSS_HANDBOOK_CACHE/handbooks/<doc>/<edition>/source.pdf` (developer-local cache, default `~/Documents/airboss-handbook-cache/`) per [ADR 018](../../decisions/018-source-artifact-storage-policy/decision.md). LFS plumbing in `.gitattributes` is dormant; `.gitignore` blocks PDFs from staging. Derivatives (markdown, figures, tables, manifest.json) are inline.**
+**Resolved: top-level `handbooks/` for inline derivatives only. Source PDFs live in `$AIRBOSS_HANDBOOK_CACHE/handbooks/<doc>/<edition>/<edition>.pdf` (developer-local cache, default `~/Documents/airboss-handbook-cache/`) per [ADR 018](../../decisions/018-source-artifact-storage-policy/decision.md) (filename layout per [ADR 021](../../decisions/021-source-cache-flat-naming/decision.md)). LFS plumbing in `.gitattributes` is dormant; `.gitignore` blocks PDFs from staging. Derivatives (markdown, figures, tables, manifest.json) are inline.**
 
 | Option                | For                                                                                                                                    | Against                                                                                                |
 | --------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |

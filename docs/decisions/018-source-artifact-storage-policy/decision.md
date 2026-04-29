@@ -9,6 +9,8 @@ supersedes: null
 
 # ADR 018: Source artifact storage policy
 
+> **Superseded by [ADR 021](../021-source-cache-flat-naming/decision.md) as of 2026-04-29 -- this ADR's cache filename layout is replaced; the three-tier policy (cache / inline / generated) still stands.**
+
 ## Decision
 
 Airboss adopts a three-tier storage rule for content artifacts. Source documents (FAA PDFs, AC PDFs, audio masters, etc.) are kept in a **developer-local cache directory outside the repo**, with **LFS plumbing left in place** so the storage decision can flip later without breaking commit history. Extracted derivatives stay inline. Generated artifacts stay out of the repo.

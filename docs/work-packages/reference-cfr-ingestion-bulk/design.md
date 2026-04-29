@@ -108,7 +108,7 @@ The walker recurses Title -> Chapter -> Part -> Subpart -> Section. The `AMDDATE
 
 **Why:**
 
-- Mirrors the cache layout per ADR 018 (`$AIRBOSS_HANDBOOK_CACHE/regulations/cfr-14/<YYYY-MM-DD>/source.xml`). Cache shape and derivative shape match; no surprise.
+- Mirrors the cache layout per ADR 021 (`$AIRBOSS_HANDBOOK_CACHE/regulations/cfr-14/<YYYY-MM-DD>.xml`). Per-edition derivative dir holds the rendered markdown; the cache holds the flat XML next to a per-title `manifest.json`.
 - Per-edition directory groups files that share a fate: when Phase 5 advances `2026 -> 2027`, the new edition's directory is a fresh sibling of `2026-01-01/`. Diff-friendly.
 - `<part>/<section>.md` (e.g. `91/91-103.md`) makes section files trivially greppable by Part. The renderer's path resolution is `regulations/cfr-14/2026-01-01/91/91-103.md`; the resolver builds this from the `SourceId`.
 

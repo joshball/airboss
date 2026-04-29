@@ -174,7 +174,7 @@ Default behavior of `bun run sources extract handbooks phak --strategy prompt`:
 Default behavior of `bun run sources extract handbooks phak --strategy compare`:
 
 ```text
-1. Fetch / cache PDF (verifies source.pdf SHA matches the cache).
+1. Fetch / cache PDF (verifies <edition>.pdf SHA matches the cache).
 2. Read meta.json from prompts-out/<doc>/<edition>/out/.
 3. If meta.json.source_sha256 != fetch_result.sha256, fail loudly:
      "PDF changed since the last prompt run. Re-run with --strategy prompt."
@@ -203,9 +203,9 @@ PHASE 1/4 — fetch source PDF
   WHY:  every downstream step (plaintext, prompts, JSON) is anchored to
         the bytes of this specific PDF. Cache + checksum guarantees
         re-runs use the same source.
-  HOW:  read $AIRBOSS_HANDBOOK_CACHE/handbooks/phak/FAA-H-8083-25C/source.pdf;
+  HOW:  read $AIRBOSS_HANDBOOK_CACHE/handbooks/phak/FAA-H-8083-25C/FAA-H-8083-25C.pdf;
         download from source_url if missing or sha256 mismatch.
-  -> source.pdf 32881212 bytes sha256 247929cace0a... (cached)
+  -> FAA-H-8083-25C.pdf 32881212 bytes sha256 247929cace0a... (cached)
 
 PHASE 2/4 — extract chapter plaintext sidecars
   WHAT: produce _chapter_plaintext.txt for each chapter directory.
@@ -493,7 +493,7 @@ Unit tests:
   - `out/` contains all expected files (`_run.md`, `_parameters.md`, `_section_tree_contract.md`, `_config.yaml`, `meta.json`, `README.md`, N per-chapter prompts).
   - `meta.json` template SHA-256s match the actual file hashes in `out/`.
   - `meta.json.config.config_yaml_sha256` matches the SHA-256 of `out/_config.yaml`.
-  - `meta.json.source_pdf_sha256` matches the cached `source.pdf`.
+  - `meta.json.source_pdf_sha256` matches the cached `<edition>.pdf`.
   - Re-running overwrites `out/` (not appends), and produces a fresh `archive/<run-id>/` snapshot.
   - `--no-archive` skips the `archive/<run-id>/` write.
   - Two runs in the same minute produce `archive/<run-id>/` and `archive/<run-id>-2/`.

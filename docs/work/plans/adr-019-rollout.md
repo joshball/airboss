@@ -120,7 +120,7 @@ Out of scope and deferred:
 
 AIM ingestion. After this, lessons can cite `airboss-ref:aim/5-1-7?at=2026-04`.
 
-Lane B (this PR) extends the original Phase 7 scaffolding (resolver + locator + manifest-walk ingest, originally landed against a hand-authored fixture) with the **live PDF -> derivatives -> registry** pipeline. The cached AIM PDF at `$AIRBOSS_HANDBOOK_CACHE/aim/<edition>/source.pdf` is now the input; running `bun run sources register aim --cache=...` extracts the structured tree and registers entries in one command.
+Lane B (this PR) extends the original Phase 7 scaffolding (resolver + locator + manifest-walk ingest, originally landed against a hand-authored fixture) with the **live PDF -> derivatives -> registry** pipeline. The cached AIM PDF at `$AIRBOSS_HANDBOOK_CACHE/aim/<edition>.pdf` (per ADR 021) is now the input; running `bun run sources register aim --cache=...` extracts the structured tree and registers entries in one command.
 
 Shipped surface:
 

@@ -333,9 +333,9 @@ The Python and TS sides communicate via subprocess + stdout JSON, not a shared l
 `scripts/sources/download/handbooks.ts` (new or extension of existing handbook download):
 
 - Reads a catalogue of ~17 handbook source URLs (defined in `scripts/sources/download/handbooks-catalogue.ts` to keep the URL list out of code paths).
-- HEAD-cached download per book into `<cache>/handbooks/<slug>/<edition>/source.pdf`.
-- Reads each handbook's YAML `errata:` list (where YAML exists) and downloads each errata PDF into `<cache>/handbooks/<slug>/<edition>/_errata/<id>.pdf`.
-- For handbooks without a YAML config (the 14 not-yet-ingested), still downloads `source.pdf` using minimal metadata in the catalogue.
+- HEAD-cached download per book into `<cache>/handbooks/<slug>/<edition>/<edition>.pdf` (per ADR 021).
+- Reads each handbook's YAML `errata:` list (where YAML exists) and downloads each errata PDF into `<cache>/handbooks/<slug>/<edition>/<edition>-errata-<id>.pdf` (co-located with the primary, no `_errata/` subdir).
+- For handbooks without a YAML config (the 14 not-yet-ingested), still downloads the primary `<edition>.pdf` using minimal metadata in the catalogue.
 
 Catalogue entry shape:
 
