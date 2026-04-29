@@ -81,6 +81,34 @@ def test_chapter_mode_falls_back_when_pdfs_missing(tmp_path: Path, monkeypatch) 
     assert extractor_calls == []
 
 
+def test_chapter_mode_honors_chapter_filter(tmp_path: Path, monkeypatch) -> None:
+    """When --chapter filter narrows chapter_bodies upstream, chapter-PDF mode
+    emits sidecars only for the requested chapter ordinals -- not all cached
+    chapter PDFs. Bug regression: emitting 17 sidecars for a 1-chapter request
+    crashed emit_prompts with 'sidecar count does not match chapter count'."""
+    monkeypatch.setenv("AIRBOSS_HANDBOOK_CACHE", str(tmp_path / "cache"))
+    monkeypatch.setattr(paths_module, "repo_root", lambda: tmp_path)
+    monkeypatch.setattr(
+        cp,
+        "_extract_pdf_plaintext",
+        lambda path: f"Body of {path.name}\n",
+    )
+    config = _make_config_with_chapter_pdfs(chapter_count=3)
+    cache_dir = tmp_path / "cache" / "handbooks" / config.document_slug / config.edition
+    cache_dir.mkdir(parents=True)
+    for n in range(1, 4):
+        (cache_dir / f"{config.edition}-ch{n:02d}.pdf").write_bytes(b"PDF")
+
+    # Construct a single chapter body for ch2 (simulating --chapter 2 upstream filter).
+    from types import SimpleNamespace
+
+    body_ch2 = SimpleNamespace(node=SimpleNamespace(level="chapter", ordinal=2))
+    sidecars = write_chapter_sidecars(config, chapter_bodies=[body_ch2])
+
+    # Only ch2's sidecar should be written, not ch1 or ch3.
+    assert [sc.chapter_ordinal for sc in sidecars] == [2]
+
+
 def test_chapter_mode_skipped_when_no_chapter_pdfs_config(tmp_path: Path, monkeypatch) -> None:
     """Class C handbooks (chapter_pdfs is None) always use whole-doc mode."""
     monkeypatch.setenv("AIRBOSS_HANDBOOK_CACHE", str(tmp_path / "cache"))
