@@ -1,8 +1,9 @@
 ---
-status: active
+status: done
 started: 2026-04-29
+shipped: 2026-04-29
 trigger: when PFD components have a second consumer (sim glass-cockpit overlay, avionics MFD, or another tape-style instrument page)
-note: original trigger ("when apps/avionics/ exists") fired via PRs #291, #294, #297; WP rewritten in PR #292 to track the second-consumer trigger. Trigger fired 2026-04-29 -- sim is mounting a Glass PFD demo as the second consumer, so the lib promotion to `libs/activities/pfd/` is now in flight. Sibling specs (content-citations, card-page-and-cross-references, memory-review-load-as-action) use the same `deferred -> active -> done` lifecycle for trigger-gated work.
+note: original trigger ("when apps/avionics/ exists") fired via PRs #291, #294, #297; WP rewritten in PR #292 to track the second-consumer trigger. Trigger fired 2026-04-29 -- sim mounted a Glass PFD demo at /glass-pfd as the second consumer, and the PFD set was promoted to `libs/activities/src/pfd/` in the same PR. Sibling specs (content-citations, card-page-and-cross-references, memory-review-load-as-action) use the same `deferred -> active -> done` lifecycle for trigger-gated work.
 source: 2026-04-27 architecture review
 resolved_by: docs/products/avionics/work-packages/avionics-app-scaffold/
 ---
@@ -54,6 +55,17 @@ Mechanical work in the new lib:
 - Sim's round-dial instruments (`apps/sim/src/lib/instruments/`, `apps/sim/src/lib/horizon/`, `apps/sim/src/lib/panels/`) stay in `apps/sim/`. They have one consumer (sim) and a different visual language (round-dial vs. tape glass). Promoting them is a separate decision with its own trigger.
 - No redesign. The components ship as-is; visual changes are a downstream WP if needed.
 - No new features. This is move-and-rewire only.
+
+## Shipped
+
+2026-04-29 -- promotion landed in a single PR (`feat(activities,sim): promote PFD to libs + mount in sim`):
+
+- All eleven files (`AttitudeIndicator`, `AirspeedTape`, `AltitudeTape`, `HeadingIndicator`, `VsiIndicator`, `Pfd`, `PfdInputs`, `PfdKeyboardLegend`, `pfd-tick.svelte.ts`, `airspeed-arcs.ts`, `pfd-types.ts`) `git mv`'d from `apps/avionics/src/lib/pfd/` to `libs/activities/src/pfd/`.
+- Package shape: extended the existing `@ab/activities` package with a `pfd/` subdir, mirroring the `crosswind-component/` convention. No barrel; consumers import direct component paths via `@ab/activities/pfd/Pfd.svelte`.
+- Avionics rewired to import from `@ab/activities/pfd/Pfd.svelte`; `@ab/activities` alias added to `apps/avionics/svelte.config.js`.
+- Sim mounted the second consumer at `ROUTES.SIM_GLASS_PFD` (`/glass-pfd`); `@ab/activities` alias added to `apps/sim/svelte.config.js`; a "Demos" section on the sim home page links to it. Defaults to `SIM_AIRCRAFT_IDS.C172` since sim doesn't currently surface a selected aircraft.
+- Theme-lint stayed clean (vocab already had `--avionics-*` from PR #301).
+- `bun run check` clean on touched files; pre-existing `three` and `fast-xml-parser` missing-dep errors unrelated to this WP.
 
 ## Resolved by
 
