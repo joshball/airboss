@@ -18,6 +18,23 @@ const scenarios = $derived(data.scenarios);
 		</p>
 	</header>
 
+	<section class="demos">
+		<h2>Demos</h2>
+		<ul>
+			<li>
+				<a href={ROUTES.SIM_GLASS_PFD}>
+					<div class="card-head">
+						<strong>Glass PFD demo</strong>
+						<span class="label">Instruments</span>
+					</div>
+					<p class="tagline">
+						Tape-style primary flight display, sliders + keyboard. Same component avionics ships.
+					</p>
+				</a>
+			</li>
+		</ul>
+	</section>
+
 	<section class="scenarios">
 		<h2>Scenarios</h2>
 		{#if scenarios.length === 0}
@@ -68,12 +85,14 @@ const scenarios = $derived(data.scenarios);
 		color: var(--ink-muted);
 	}
 
-	.scenarios h2 {
+	.scenarios h2,
+	.demos h2 {
 		margin-bottom: var(--space-md);
 		font-size: var(--font-size-lg);
 	}
 
-	.scenarios ul {
+	.scenarios ul,
+	.demos ul {
 		list-style: none;
 		padding: 0;
 		margin: 0;
@@ -81,7 +100,12 @@ const scenarios = $derived(data.scenarios);
 		gap: var(--space-md);
 	}
 
-	.scenarios li a {
+	.demos {
+		margin-bottom: var(--space-xl);
+	}
+
+	.scenarios li a,
+	.demos li a {
 		display: block;
 		padding: var(--space-lg) var(--space-xl);
 		border: 1px solid var(--edge-default);
@@ -92,7 +116,9 @@ const scenarios = $derived(data.scenarios);
 	}
 
 	.scenarios li a:hover,
-	.scenarios li a:focus-visible {
+	.scenarios li a:focus-visible,
+	.demos li a:hover,
+	.demos li a:focus-visible {
 		border-color: var(--action-default);
 	}
 
@@ -104,18 +130,21 @@ const scenarios = $derived(data.scenarios);
 		margin-bottom: var(--space-2xs);
 	}
 
-	.scenarios li a strong {
+	.scenarios li a strong,
+	.demos li a strong {
 		font-size: var(--font-size-lg);
 	}
 
-	.scenarios li a .label {
+	.scenarios li a .label,
+	.demos li a .label {
 		font-size: var(--font-size-xs);
 		color: var(--action-default);
 		text-transform: uppercase;
 		letter-spacing: var(--letter-spacing-caps);
 	}
 
-	.scenarios li a .tagline {
+	.scenarios li a .tagline,
+	.demos li a .tagline {
 		margin: 0;
 		color: var(--ink-body);
 		font-size: var(--font-size-body);

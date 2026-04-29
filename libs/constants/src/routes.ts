@@ -291,6 +291,14 @@ export const ROUTES = {
 	SIM_SCENARIO_DUAL: (id: SimScenarioId) => `/${id}/dual` as const,
 	/** Windowed surface: 3D horizon full-bleed with the instrument panel overlaid. */
 	SIM_SCENARIO_WINDOW: (id: SimScenarioId) => `/${id}/window` as const,
+	/**
+	 * Glass PFD demo -- mounts the shared `@ab/activities/pfd/Pfd.svelte`
+	 * primary flight display inside sim's chrome. Sim is the second
+	 * consumer of the PFD set after avionics; the components live in
+	 * `libs/activities/src/pfd/` per the extract-sim-instruments work
+	 * package.
+	 */
+	SIM_GLASS_PFD: '/glass-pfd',
 	/** Sim history dashboard -- recent attempts for the authenticated learner. */
 	SIM_HISTORY: '/history',
 	/** Per-attempt detail view; includes the full per-component grade breakdown. */
