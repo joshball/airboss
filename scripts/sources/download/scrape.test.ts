@@ -102,9 +102,7 @@ describe('resolveChapterUrls', () => {
 				headers: { 'Content-Type': 'text/html' },
 			});
 		};
-		await expect(resolveChapterUrls(indexUrl, 'chapter-{N}-', 2, fakeFetch)).rejects.toThrow(
-			/no chapter 2 link found/,
-		);
+		await expect(resolveChapterUrls(indexUrl, 'chapter-{N}-', 2, fakeFetch)).rejects.toThrow(/no chapter 2 link found/);
 	});
 
 	it('rejects a pagePattern missing the {N} placeholder', async () => {

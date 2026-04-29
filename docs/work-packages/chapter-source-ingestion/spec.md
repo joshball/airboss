@@ -73,22 +73,24 @@ AIM is published continuously (no formal edition cycle). Three-tier publisher la
 
 AIM section count per chapter (probed 2026-04-29):
 
+Counts re-verified empirically 2026-04-29 by curl against each `chap_<N>.html` TOC stub during the implementation manual-test pass. The original WP-authoring probe had read the AIM site's master nav dropdown (which lists every paragraph across the whole AIM) and miscounted per-chapter section files. These are the real per-chapter section counts.
+
 | Chapter | Sections | Notes |
 | --- | --- | --- |
 | 0. General Information | 1 | "Explanation of Changes" -- cached as `chap00_section_01.html`, source URL `chap0_info_eoc.html` (publisher's irregular form for ch0). |
-| 1. Air Navigation | 9 | |
-| 2. Aeronautical Lighting | 5 | |
-| 3. Airspace | 7 | |
-| 4. Air Traffic Control | 14 | |
+| 1. Air Navigation | 2 | |
+| 2. Aeronautical Lighting | 3 | |
+| 3. Airspace | 5 | |
+| 4. Air Traffic Control | 7 | |
 | 5. Air Traffic Procedures | 6 | |
 | 6. Emergency Procedures | 5 | |
 | 7. Safety of Flight | 7 | |
-| 8. Medical Facts for Pilots | 1 | Verified empirically: ch8 has one section with 8 paragraphs (8-1-1 through 8-1-8 covering fitness, altitude effects, hyperventilation, CO poisoning, illusions, aerobatic flight, judgment). The publisher's chapter structure puts everything medical under a single section -- this is a real publisher choice, not an error in our count. |
-| 9. Aeronautical Charts | 4 | |
-| 10. Helicopter Operations | 7 | |
-| 11. Unmanned Aircraft Systems | 6 | |
+| 8. Medical Facts for Pilots | 1 | Empirically verified: ch8 has one section with 8 paragraphs (8-1-1 through 8-1-8 covering fitness, altitude effects, hyperventilation, CO poisoning, illusions, aerobatic flight, judgment). Publisher's chapter structure puts all medical content under one section. |
+| 9. Aeronautical Charts | 1 | |
+| 10. Helicopter Operations | 2 | |
+| 11. Unmanned Aircraft Systems | 8 | |
 
-Total AIM cache: 72 section files (71 + ch0) + 5 appendix files + 1 bundled PDF. Section counts re-verified by the URL verifier (§9) on every download run; mismatch = hard error pointing at config with copy-pasteable replacement value.
+Total AIM cache: 48 section files + 5 appendix files + 1 bundled PDF = 54 cached items. Section counts re-verified by the URL verifier (§9) on every download run; mismatch = hard error pointing at config with copy-pasteable replacement value.
 
 YAML representation:
 
@@ -97,7 +99,7 @@ chapter_html:
   section_url_pattern: https://www.faa.gov/air_traffic/publications/atpubs/aim_html/chap{C}_section_{S}.html
   section_filename_pattern: chap{CC}_section_{SS}.html
   chapter_count: 12   # 0 through 11
-  sections_per_chapter: [1, 9, 5, 7, 14, 6, 5, 7, 1, 4, 7, 6]   # indexed 0..11
+  sections_per_chapter: [1, 2, 3, 5, 7, 6, 5, 7, 1, 1, 2, 8]   # indexed 0..11
   # Chapter 0 has an irregular source URL (chap0_info_eoc.html, not chap0_section_1.html).
   # The downloader treats this as a special-case URL override.
   chapter_0_section_url_override: https://www.faa.gov/air_traffic/publications/atpubs/aim_html/chap0_info_eoc.html
@@ -208,7 +210,7 @@ Class C handbooks keep the existing page-range slicing pipeline.
      chapter_count: 12   # ch0 (General Information) through ch11 (UAS)
      # Hardcoded section count per chapter; the URL verifier checks reality matches this.
      # Index 0 = ch0 (General Information / Explanation of Changes), index 11 = ch11.
-     sections_per_chapter: [1, 9, 5, 7, 14, 6, 5, 7, 1, 4, 7, 6]
+     sections_per_chapter: [1, 2, 3, 5, 7, 6, 5, 7, 1, 1, 2, 8]
      # ch0 has an irregular publisher URL (chap0_info_eoc.html, not chap0_section_1.html).
      chapter_0_section_url_override: https://www.faa.gov/air_traffic/publications/atpubs/aim_html/chap0_info_eoc.html
    appendix_html:
@@ -231,7 +233,7 @@ Class C handbooks keep the existing page-range slicing pipeline.
    handbooks/<slug>/<edition>/manifest.json
 
    aim/aim.pdf                                                         # bundled (kept)
-   aim/chap<CC>_section_<SS>.html                                      # 72 section files (ch0 + 71)
+   aim/chap<CC>_section_<SS>.html                                      # 48 section files (ch0 + ch1-ch11)
    aim/appendix_<NN>.html                                              # 5 appendix files
    aim/manifest.json
    ```
@@ -257,7 +259,7 @@ Class C handbooks keep the existing page-range slicing pipeline.
      YAML: scripts/sources/config/aim.yaml chapter_html.sections_per_chapter[4] = 14
      actual: 15 sections found at https://www.faa.gov/.../chap_4.html
      suggested edit (replace the array literal):
-       sections_per_chapter: [1, 9, 5, 7, 15, 6, 5, 7, 1, 4, 7, 6]
+       sections_per_chapter: [1, 2, 3, 5, 8, 6, 5, 7, 1, 1, 2, 8]
    ```
 
    Same shape for 404s: which file, which field, what to set it to.
@@ -321,7 +323,7 @@ Class C handbooks keep the existing page-range slicing pipeline.
 - `bun run sources download avwx` produces the whole-doc PDF only -- no chapter entries in the manifest.
 - `bun run sources download aim` produces:
   - 1 bundled PDF (`aim.pdf`)
-  - 72 section HTML files (`chap00_section_01.html` for ch0 General Information; `chap01_section_01.html` through `chap11_section_06.html` for ch1-ch11)
+  - 48 section HTML files (per `sections_per_chapter` empirical counts; `chap00_section_01.html` for ch0 General Information through `chap11_section_08.html` for ch11 last section)
   - 5 appendix HTML files (`appendix_01.html` through `appendix_05.html`)
   - 1 corpus manifest with `primary` + `sections[]` + `appendices[]`
 - `bun run sources download <any>` re-run against the post-download cache makes zero PDF/HTML body downloads. HEAD requests expected.
@@ -346,7 +348,7 @@ Per project rule, every feature is hand-tested before ship.
 4. Delete `FAA-H-8083-25C-ch07.pdf` from cache. Re-run -- expect exactly one download (ch7), all others HEAD hits.
 5. Repeat 2-4 for `afh` (direct, no two-hop), `iph`, `helicopter`, `glider`, `balloon`, `instructors`.
 6. Run `bun run sources download avwx` -- whole-doc only, no chapter entries. `bun run sources extract handbooks avwx --strategy prompt` -- still uses page-range slicing (Class C path), confirms 60K cap still applies for whole-doc handbooks.
-7. Run `bun run sources download aim`. Walk `aim/`: 72 section files (ch0 General Information + 71 for ch1-ch11) + 5 appendix files + 1 PDF. Manifest's `sections[]` indexed by chapter+section pair. `chap07_section_03.html` content includes a known paragraph (`7-3-1. Effect of Cold Temperature`).
+7. Run `bun run sources download aim`. Walk `aim/`: 48 section files (per `sections_per_chapter`) + 5 appendix files + 1 PDF. Manifest's `sections[]` indexed by chapter+section pair. `chap07_section_03.html` content includes a known paragraph (`7-3-1. Effect of Cold Temperature`).
 8. Run `bun run sources verify-urls` -- zero 404s.
 9. Run `bun run sources inventory` -- emits `docs/sources/INVENTORY.md`. Open it, verify entries are sorted, every URL is clickable, SHA-256 prefixes are present.
 10. Run `bun run sources extract handbooks phak --strategy prompt`. Verify ch 7 sidecar is full (no 60K cap), contains all 5 expected literal strings.

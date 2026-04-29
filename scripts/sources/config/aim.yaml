@@ -26,9 +26,13 @@ chapter_html:
   section_filename_pattern: chap{CC}_section_{SS}.html
   # Chapters 0..11 (chapter 0 = "General Information / Explanation of Changes").
   chapter_count: 12
-  # Indexed 0..11; index 0 = ch0. Verified empirically 2026-04-29 against the
-  # publisher; the URL verifier re-checks reality on every run.
-  sections_per_chapter: [1, 9, 5, 7, 14, 6, 5, 7, 1, 4, 7, 6]
+  # Indexed 0..11; index 0 = ch0. Re-verified by curl against the publisher
+  # 2026-04-29 (download-time probe found the earlier counts were wrong; they
+  # were derived from the master nav dropdown which lists all paragraphs across
+  # all chapters, not per-chapter section counts). Real per-chapter section
+  # files exposed at chap{C}_section_{S}.html: 48 sections total.
+  # The URL verifier re-checks reality on every run.
+  sections_per_chapter: [1, 2, 3, 5, 7, 6, 5, 7, 1, 1, 2, 8]
   # Chapter 0 has an irregular publisher URL (chap0_info_eoc.html, NOT
   # chap0_section_1.html). The downloader special-cases this entry.
   chapter_0_section_url_override: https://www.faa.gov/air_traffic/publications/atpubs/aim_html/chap0_info_eoc.html

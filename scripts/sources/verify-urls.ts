@@ -25,7 +25,6 @@ import {
 	loadAimConfig,
 	loadHandbookConfig,
 	loadHandbooksExtrasConfig,
-	loadRegsConfig,
 } from './config/loader';
 import { headRequest } from './download/http';
 import { resolveChapterUrls } from './download/scrape';

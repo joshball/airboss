@@ -164,7 +164,7 @@ Extend handbook configs at `scripts/sources/config/handbooks/<slug>.yaml` (post-
 - [ ] Delete `FAA-H-8083-25C-ch07.pdf` from cache. Re-run. Expect exactly one download.
 - [ ] Repeat for `afh`, `iph`, `helicopter`, `glider`, `balloon`, `instructors`. (Operator can defer the long-tail handbooks if scope is too big; minimum required: PHAK + AFH + IPH for v1.)
 - [ ] Run `bun run sources download avwx`. Expect whole-doc only.
-- [ ] Run `bun run sources download aim`. Expect 72 sections (ch0 + 71 for ch1-ch11) + 5 appendices + bundled PDF.
+- [ ] Run `bun run sources download aim`. Expect 48 sections (per `sections_per_chapter` empirical counts) + 5 appendices + bundled PDF.
 - [ ] Run `bun run sources verify-urls`. Expect zero 404s.
 - [ ] Run `bun run sources inventory`. Verify `docs/sources/INVENTORY.md` is generated, sorted, every URL is clickable.
 - [ ] Re-run `bun run sources inventory`. Expect byte-equal output.

@@ -63,7 +63,7 @@ Empirical finding (verified 2026-04-29): AIM chapter HTML pages are JS-collapsib
 
 If we cached chapter pages, we'd cache the wrong thing. The TOC stub is derivative info -- `ls aim/*.html` and the filename ordering already gives us the section list.
 
-Cost: 72 section files (ch0 General Information + 71 for ch1-ch11) instead of 12 chapter files. Worth it because:
+Cost: 48 section files (per empirical `sections_per_chapter` count, including ch0) instead of 12 chapter files. Worth it because:
 
 - Each section file IS the parseable unit. h4 paragraph IDs (`7-1-1`, `7-1-2`) are FAA-canonical citation locators, exposed directly.
 - Regenerating one section after an FAA edit is one HTTP request, not 1/12th of a chapter re-download.
