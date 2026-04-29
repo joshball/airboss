@@ -1,6 +1,6 @@
 # Now
 
-Single entry point for "what should I work on?" in airboss. Refresh date: 2026-04-29.
+Single entry point for "what should I work on?" in airboss. Refresh date: 2026-04-29 (late).
 
 ## Just shipped (2026-04-29 -- PFD promoted to libs/activities, sim is second consumer)
 
@@ -56,11 +56,103 @@ The week was dominated by the reference identifier system (ADR 019, **phases 1-9
 
 - **FAR navigation course Weeks 3-10.** Per `course/regulations/CHANGELOG.md`, Weeks 1 and 2 are fully authored (Week 2 shipped 2026-04-29 -- 6 lessons + drills + oral on Part 61). Weeks 3 (CFI), 4-6 (Part 91), 7 (141 + 135), 8 (companion docs), 9 (enforcement), 10 (capstone) await authoring. Two sibling capstones (friend-flight-review, ppl-applies-for-ir) deferred until they can be authored against `airboss-ref:` syntax in one pass.
 
+## ADR 016 status (post-2026-04-28 ship)
+
+Phases 0-9 all on main. The ADR phase table in [decision.md](../decisions/016-cert-syllabus-goal-model/decision.md#migration-plan) reflects this. Only phase 10 -- ongoing iterative transcription of remaining ACS/PTS/endorsement syllabi -- remains as documented work, and it is by design not a single deliverable.
+
+The three transparent scope decisions called out at ship time (PRs #321 / #323 / #324) live as named follow-ons below. Each has a build plan; each has a trigger; none survive as an undecided "future consideration" per CLAUDE.md.
+
 ## Follow-ons captured from the cert-syllabus surface ship (2026-04-28)
 
-- **Node-level weakness lens.** Domain-level shipped in PR #323; per-node ranking with the four reason kinds (miscalibration / overdue / low_accuracy / never_attempted) earns its keep when the domain bucket proves too coarse. Trigger: a real walkthrough where the domain row points at "weather" but the actionable gap is one specific node.
-- **Modal node-picker.** Goal composer ships an inline select with up to 25 candidates. A modal with filter chips (domain / cert / lifecycle) + search becomes the right shape when a user can't find a node from the 25-candidate inline list. Trigger: walkthrough friction.
-- **Engine cutover to read goal-derived filters.** The session engine still reads `study_plan` to drive selection. Cutting it over to `getGoalNodeUnion` + `getDerivedCertGoals` is the next ADR 016 phase past 9.
+### Follow-on 1 -- Node-level weakness lens
+
+**What shipped (PR #323):** `/lens/weakness` ranks at the domain level via the existing `getWeakAreas` BC. Three reason kinds (`card-accuracy`, `rep-accuracy`, `overdue`). Severity buckets via score-normalised thresholds.
+
+**What's missing:** per-node ranking with four reason kinds (`miscalibration`, `overdue`, `low_accuracy`, `never_attempted`). The spec called this out as the ideal v2 shape.
+
+**Trigger:** a real walkthrough where the domain row points at "weather" but the actionable gap is one specific node, and the user can't drill from domain -> node without leaving the lens.
+
+**Plan when triggered:**
+
+| Step | Work                                                                                                                                                                                                                                                                                                 | Where                                           |
+| ---- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
+| 1    | New BC fn `getWeakNodes(userId, severity?, limit?, db?, now?) -> Promise<WeakNode[]>` (node-level analog)                                                                                                                                                                                            | `libs/bc/study/src/dashboard.ts`                |
+| 2    | New types `WeakNode { nodeId, score, severity, reasons }` and `WeakNodeReason` discriminated union                                                                                                                                                                                                   | same file                                       |
+| 3    | Reasons: `miscalibration` (per-node cal point delta vs target retention; from `confidence_calibration_point`); `overdue` (from `card_state.dueAt` join `card.nodeId`); `low_accuracy` (per-node card-rating roll-up); `never_attempted` (`knowledge_node` rows with no card or rep activity by user) | new SQL in `dashboard.ts`                       |
+| 4    | Constants `WEAKNESS_NODE_SIGNAL_KINDS` + `WEAKNESS_NODE_SIGNAL_WEIGHTS` (defaults captured in lens-ui spec)                                                                                                                                                                                          | `libs/constants/src/credentials.ts`             |
+| 5    | Refactor `/lens/weakness` to use `getWeakNodes` (domain rollup becomes a derived view from node-level)                                                                                                                                                                                               | `apps/study/src/routes/(app)/lens/weakness/...` |
+| 6    | Severity-bucket page renders per-node rows with reason chips + drill-to-node CTA                                                                                                                                                                                                                     | same                                            |
+| 7    | Vitest unit tests for `getWeakNodes` against seeded data (Abby's dev seed)                                                                                                                                                                                                                           | `libs/bc/study/src/dashboard.test.ts`           |
+| 8    | Existing Playwright e2e in `tests/e2e/lens-ui.spec.ts` expanded with node-row assertions                                                                                                                                                                                                             | `tests/e2e/lens-ui.spec.ts`                     |
+
+**Estimated scope:** medium. One BC function with four signal queries, one constants block, one page rewrite, tests. Roughly a day if the seed data exposes all four signal kinds; iterative if signals need shaping.
+
+**Out of scope:** changing the existing `getWeakAreas` BC (kept as the dashboard fast-path); per-node calibration math beyond what `confidence_calibration_point` already exposes; goal-aware filters (deferred to follow-on 3).
+
+### Follow-on 2 -- Modal node-picker for the goal composer
+
+**What shipped (PR #324):** `/goals/[id]?edit=1` exposes an inline `<select>` listing up to 25 not-yet-added knowledge nodes from `listNodesWithFacets`. No filter chips, no search, no preview.
+
+**What's missing:** the spec's preferred modal-with-filter-chips picker (a) for scaling beyond 25 candidates and (b) for matching the citation-picker idiom already used elsewhere.
+
+**Trigger:** walkthrough friction. Specifically: the user can't find a node from the 25-candidate inline list, OR the user routinely scrolls past the dropdown to a different surface to copy a node id.
+
+**Plan when triggered:**
+
+| Step | Work                                                                                                                   | Where                                                    |
+| ---- | ---------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
+| 1    | Reuse `Dialog.svelte` (already used by ConfirmAction) for the modal shell                                              | -------------------------------------------------------- |
+| 2    | New `NodePicker.svelte` -- left rail filter chips (Domain, Cert, Lifecycle), right rail results, top-bar text search   | `libs/ui/src/components/NodePicker.svelte` (new)         |
+| 3    | Loader call uses `listNodesWithFacets({ domain?, cert?, lifecycle? })` already shipped; pagination via existing facets | same                                                     |
+| 4    | Search debounced 200ms; client-side substring match on title (small graph, server filtering not needed yet)            | same                                                     |
+| 5    | Wire `NodePicker` into the goal-detail edit mode in place of the current `<select>`                                    | `apps/study/src/routes/(app)/goals/[id]/+page.svelte`    |
+| 6    | Form-action submit unchanged (`?/addNode` with `knowledgeNodeId`); the picker just produces the id                     | `apps/study/src/routes/(app)/goals/[id]/+page.server.ts` |
+| 7    | Promote pattern for reuse if the lens-ui follow-on or the cert-dashboard ever needs the same picker                    | re-export `NodePicker` from `libs/ui`                    |
+| 8    | E2E: open picker, type 3 chars, click first result, confirm row appears on goal                                        | `tests/e2e/goal-composer.spec.ts`                        |
+
+**Estimated scope:** small to medium. The shape (filter chips + search + result list inside a Dialog) is well-trodden in the codebase via `CitationPicker`. Most of the work is wiring + styling. Roughly half a day.
+
+**Out of scope:** server-side full-text search (the graph fits in memory for the foreseeable future); bulk multi-select (single-add per click matches v1; bulk earns its keep when batch-curating goals from a weak-areas walkthrough lands).
+
+### Follow-on 3 -- Engine cutover to goal-derived filters (next ADR 016 phase)
+
+**What shipped (PRs #270, #324):** the goal model is the source of truth for "what the learner is pursuing." `study_plan.cert_goals` -> `goal_syllabus` migration ran. `getDerivedCertGoals(userId)` returns the cert-slug projection of the primary goal. `getGoalNodeUnion(goalId)` returns the union of nodes a goal targets.
+
+**What's missing:** the session engine (`libs/bc/study/src/engine.ts`) still reads `study_plan.cert_goals` directly. The "primary" goal designation drives no rep selection; the dashboard reads goals but the rep loop does not.
+
+**Trigger:** ready now (no walkthrough gating needed). The cutover unblocks the goal composer being usable for actual study sessions, not just bookkeeping.
+
+**Plan:**
+
+This deserves a proper work package authored via `/ball-wp-spec` rather than an inline plan, because it touches the engine's selection contract. Sketch:
+
+| Phase | Scope                                                                                                                                                           | Key files                                               |
+| ----- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+| 1     | Spec WP `engine-goal-cutover` -- contract changes, dual-read window, telemetry, rollback plan                                                                   | `docs/work-packages/engine-goal-cutover/`               |
+| 2     | New BC fn `getActiveTargetingFilters(userId)` returns `{ certGoals, focusDomains, skipDomains, depthPreference }` -- reads goal first, falls back to study_plan | `libs/bc/study/src/sessions.ts` or new `targeting.ts`   |
+| 3     | Engine `pickContinue` / `pickStrengthen` / `pickExpand` / `pickDiversify` switch from reading `study_plan` to reading the targeting helper                      | `libs/bc/study/src/engine.ts`                           |
+| 4     | Dual-read: when `getPrimaryGoal` returns non-null, prefer goal-derived; otherwise fall back to study_plan (compatibility)                                       | targeting helper                                        |
+| 5     | Once a study_plan -> goal sync rule is decided, drop the `cert_goals` column read from the engine entirely (kept on the table for one release as a safety net)  | engine.ts                                               |
+| 6     | Remove `cert_goals` column from `study_plan` after one stable release (deferred to a final cleanup PR)                                                          | drizzle migration                                       |
+| 7     | Ports the existing engine test suite forward; adds new tests for the goal-driven path                                                                           | `libs/bc/study/src/engine.test.ts`                      |
+| 8     | E2E: create goal -> add syllabus -> set primary -> start session -> verify scenario picks come from the goal's union                                            | `tests/e2e/goal-composer.spec.ts` extension OR new spec |
+
+**Estimated scope:** medium to large. The engine selection logic is mature and well-tested; the cutover is a contract migration with a dual-read safety net rather than a green-field write. Carve into 2-3 PRs (BC helper + engine read + study_plan column drop). Roughly 3-5 days authored carefully.
+
+**Out of scope of follow-on 3:**
+
+- Per-leaf evidence-kind gating (ADR 016 mentions S leaves needing scenario evidence; that's a separate engine improvement, not this cutover).
+- Plan UI changes -- `study_plan` rows stay; the user's plans page keeps working until the column drop in phase 6.
+- Multi-goal targeting (the engine reads the primary goal only; multi-goal weighting is its own design problem).
+
+## Suggested next-up sequencing
+
+| Order | Item                                                                 | Reason                                                                              |
+| ----- | -------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| 1     | Manual test passes on the three new surfaces (#321 / #323 / #324)    | The build pushed merges ahead of testing; close the loop before adding more.        |
+| 2     | Follow-on 3 (engine cutover) WP authored                             | Unlocks the goal composer for actual study, not just bookkeeping. Trigger is ready. |
+| 3     | FAR navigation course Week 3 (CFI) authored                          | Slow burn; proceeds in parallel with the rest.                                      |
+| 4     | Follow-ons 1 + 2 deferred until a real walkthrough surfaces friction | Doing them speculatively risks wrong shape; let usage drive.                        |
 
 ## Recently closed (no longer active)
 
@@ -72,13 +164,13 @@ The week was dominated by the reference identifier system (ADR 019, **phases 1-9
 
 Authored 2026-04-25 from the SMI walkthrough triage and originally listed as deferred. Verdict pass on 2026-04-28 (PR #311) found that every one of them had already shipped during the redesign sprint. Each spec now carries a `status: done` frontmatter and a verdict block citing the shipping PRs.
 
-| Work package                                                                              | Cluster | Shipping evidence                                                                                              |
-| ----------------------------------------------------------------------------------------- | ------- | -------------------------------------------------------------------------------------------------------------- |
-| [review-flow-v2](../work-packages/review-flow-v2/spec.md)                                 | B       | Chicklets, two-line ratings, undo, confidence-adjust, help chicklet (PRs #138, #49, #169)                      |
-| [snooze-and-flag](../work-packages/snooze-and-flag/spec.md)                               | C       | `card_snooze` + `card_feedback` tables, full BC, `SnoozeReasonPopover`, Browse `Removed` (PRs #135, #138)      |
-| [review-sessions-url](../work-packages/review-sessions-url/spec.md)                       | D       | Resume + Redo + Share (`SharePopover`, deck-hash encoder, `memory_review_session`) (PRs #154, #159)            |
-| [card-page-and-cross-references](../work-packages/card-page-and-cross-references/spec.md) | E       | Public `cards/[id]` route, `getPublicCard`, `getCardCrossReferences` panel (PR #128)                           |
-| [content-citations](../work-packages/content-citations/spec.md)                           | F       | Polymorphic `study.content_citations` table + BC + picker; trigger fired via PRs #299, #309 (PR #127, #278)    |
+| Work package                                                                              | Cluster | Shipping evidence                                                                                           |
+| ----------------------------------------------------------------------------------------- | ------- | ----------------------------------------------------------------------------------------------------------- |
+| [review-flow-v2](../work-packages/review-flow-v2/spec.md)                                 | B       | Chicklets, two-line ratings, undo, confidence-adjust, help chicklet (PRs #138, #49, #169)                   |
+| [snooze-and-flag](../work-packages/snooze-and-flag/spec.md)                               | C       | `card_snooze` + `card_feedback` tables, full BC, `SnoozeReasonPopover`, Browse `Removed` (PRs #135, #138)   |
+| [review-sessions-url](../work-packages/review-sessions-url/spec.md)                       | D       | Resume + Redo + Share (`SharePopover`, deck-hash encoder, `memory_review_session`) (PRs #154, #159)         |
+| [card-page-and-cross-references](../work-packages/card-page-and-cross-references/spec.md) | E       | Public `cards/[id]` route, `getPublicCard`, `getCardCrossReferences` panel (PR #128)                        |
+| [content-citations](../work-packages/content-citations/spec.md)                           | F       | Polymorphic `study.content_citations` table + BC + picker; trigger fired via PRs #299, #309 (PR #127, #278) |
 
 ## Deferred work packages from the 2026-04-27 12-axis review
 
@@ -100,12 +192,12 @@ Original MVP build order (Steps 1-6) shipped between PRs #1-#16. The active buil
 | ---- | -------------------------------------------------------- | ------------------------------------------------------------------------------------ |
 | 7    | Scale knowledge graph to ~500 nodes                      | Ongoing (16 sim-mapped nodes via #232; cumulative count not centrally tracked)       |
 | 8    | Manual test passes (user zero) for the six MVP features  | Pending                                                                              |
-| --   | ADR 019 phases 1-9 (validator -> ingest -> migration)    | Shipped (PRs #241, #246, #247, #249, #250, #251, #252, #260, #261, #266, #268, #276) |
-| --   | ADR 019 phase 10 -- irregular corpora (NTSB, CC, etc.)   | Demand-driven; ACS PPL-ASEL slice shipped (#266); rest deferred per trigger          |
-| --   | Cert-syllabus + goal composer WP (data layer)            | Shipped (PRs #248, #254, #264, #270, #274)                                           |
-| --   | Cert-syllabus surface work (dashboard + lens + composer) | Shipped (PRs #321, #323, #324 -- ADR 016 phases 7-9 complete)                        |
-| --   | FAR navigation course Weeks 3-10                         | Pending (Weeks 1+2 authored; airboss-ref: round-trip clean)                          |
-| --   | FIRC migration as `apps/firc/`                           | Deferred (post-MVP-proven)                                                           |
+| ---- | ADR 019 phases 1-9 (validator -> ingest -> migration)    | Shipped (PRs #241, #246, #247, #249, #250, #251, #252, #260, #261, #266, #268, #276) |
+| ---- | ADR 019 phase 10 -- irregular corpora (NTSB, CC, etc.)   | Demand-driven; ACS PPL-ASEL slice shipped (#266); rest deferred per trigger          |
+| ---- | Cert-syllabus + goal composer WP (data layer)            | Shipped (PRs #248, #254, #264, #270, #274)                                           |
+| ---- | Cert-syllabus surface work (dashboard + lens + composer) | Shipped (PRs #321, #323, #324 -- ADR 016 phases 7-9 complete)                        |
+| ---- | FAR navigation course Weeks 3-10                         | Pending (Weeks 1+2 authored; airboss-ref: round-trip clean)                          |
+| ---- | FIRC migration as `apps/firc/`                           | Deferred (post-MVP-proven)                                                           |
 
 ## Next
 
