@@ -156,11 +156,16 @@ describe('buildPlans', () => {
 			expect(p.url).toContain('/2026-04-27/');
 			expect(p.edition).toBe('2026-04-27');
 			expect(p.destPath.startsWith(tempRoot)).toBe(true);
-			expect(p.writeSourceSymlink).toBe(false);
 		}
+		// Flat regs layout (per ADR 021): full title and partial titles share
+		// the same per-title directory, distinguished by filename infix.
+		const t14 = plans.find((p) => p.doc === 'cfr-14-full');
+		expect(t14?.destPath.endsWith('regulations/cfr-14/2026-04-27.xml')).toBe(true);
+		const t49a = plans.find((p) => p.doc === 'cfr-49-parts-830');
+		expect(t49a?.destPath.endsWith('regulations/cfr-49/2026-04-27-parts-830.xml')).toBe(true);
 	});
 
-	it('produces a single aim plan with the canonical URL and descriptive filename', async () => {
+	it('produces a single aim plan with the canonical URL and flat dest path', async () => {
 		const args = parseArgs(['--corpus=aim']);
 		const plans = await buildPlans(args, tempRoot);
 		expect(plans).toHaveLength(1);
@@ -170,18 +175,19 @@ describe('buildPlans', () => {
 		expect(aim.corpus).toBe('aim');
 		expect(aim.url).toBe(AIM_PDF_URL);
 		expect(aim.edition).toBe(currentMonthEdition());
-		expect(aim.destPath.endsWith(`aim-${currentMonthEdition()}.pdf`)).toBe(true);
-		expect(aim.writeSourceSymlink).toBe(true);
+		// Flat AIM layout (per ADR 021): one PDF per edition directly under aim/.
+		expect(aim.destPath.endsWith(`aim/${currentMonthEdition()}.pdf`)).toBe(true);
 	});
 
-	it('produces one plan per AC target with descriptive filenames', async () => {
+	it('produces one plan per AC target with flat dest paths', async () => {
 		const args = parseArgs(['--corpus=ac']);
 		const plans = await buildPlans(args, tempRoot);
 		expect(plans).toHaveLength(AC_TARGETS.length);
 		expect(plans.every((p) => p.corpus === 'ac' && p.extension === 'pdf')).toBe(true);
-		expect(plans.every((p) => p.writeSourceSymlink === true)).toBe(true);
-		// Descriptive filename ends with the AC PDF name, not 'source.pdf'.
-		expect(plans.every((p) => p.destPath.endsWith('.pdf') && !p.destPath.endsWith('source.pdf'))).toBe(true);
+		// Flat AC layout (per ADR 021): one PDF per AC directly under ac/.
+		for (const p of plans) {
+			expect(p.destPath.endsWith(`ac/${p.doc}.pdf`)).toBe(true);
+		}
 	});
 
 	it('uses verified URLs (no fallbacks)', async () => {
@@ -213,9 +219,11 @@ describe('buildPlans', () => {
 		const withExtras = await buildPlans(parseArgs(['--corpus=handbooks', '--include-handbooks-extras']), tempRoot);
 		expect(withExtras.length).toBeGreaterThan(0);
 		expect(withExtras.every((p) => p.corpus === 'handbooks')).toBe(true);
-		// Handbooks keep `source.pdf` for compatibility with the existing reader.
-		expect(withExtras.every((p) => p.destPath.endsWith('source.pdf'))).toBe(true);
-		expect(withExtras.every((p) => p.writeSourceSymlink === false)).toBe(true);
+		// Per-edition handbook layout (per ADR 021): the slug already encodes
+		// the edition, so the dir and the filename are both `<doc>`.
+		for (const p of withExtras) {
+			expect(p.destPath.endsWith(`handbooks/${p.doc}/${p.doc}.pdf`)).toBe(true);
+		}
 	});
 });
 
@@ -384,29 +392,27 @@ describe('manifest skip behavior (HEAD-then-skip)', () => {
 		const args = parseArgs(['--corpus=ac', '--edition-date=2026-04-22']);
 		const plans = await buildPlans(args, tempRoot);
 
-		// Pre-cache every AC target so no real fetch is needed for downloads.
-		for (const plan of plans) {
-			const dir = join(tempRoot, plan.corpus, plan.doc, plan.edition);
-			mkdirSync(dir, { recursive: true });
-			const filename = plan.destPath.split('/').pop() ?? 'source.pdf';
+		// Pre-cache every AC target with the per-corpus manifest layout (ADR 021).
+		const acRoot = join(tempRoot, 'ac');
+		mkdirSync(acRoot, { recursive: true });
+		const entries = plans.map((plan) => {
+			const filename = plan.destPath.split('/').pop() ?? `${plan.doc}.pdf`;
 			const bytes = Buffer.from(`cached ${plan.doc}`);
-			writeFileSync(join(dir, filename), bytes);
-			writeFileSync(
-				join(dir, 'manifest.json'),
-				JSON.stringify({
-					corpus: plan.corpus,
-					doc: plan.doc,
-					edition: plan.edition,
-					source_url: plan.url,
-					source_filename: filename,
-					source_sha256: 'deadbeef',
-					size_bytes: bytes.byteLength,
-					fetched_at: '2026-04-20T00:00:00Z',
-					last_modified: 'Mon, 20 Apr 2026 12:00:00 GMT',
-					schema_version: 1,
-				}),
-			);
-		}
+			writeFileSync(join(acRoot, filename), bytes);
+			return {
+				corpus: plan.corpus,
+				doc: plan.doc,
+				edition: plan.edition,
+				source_url: plan.url,
+				source_filename: filename,
+				source_sha256: 'deadbeef',
+				size_bytes: bytes.byteLength,
+				fetched_at: '2026-04-20T00:00:00Z',
+				last_modified: 'Mon, 20 Apr 2026 12:00:00 GMT',
+				schema_version: 1,
+			};
+		});
+		writeFileSync(join(acRoot, 'manifest.json'), JSON.stringify({ schema_version: 1, corpus: 'ac', entries }));
 
 		// Fake fetch returns HEAD with matching content-length and same last-modified.
 		const fakeFetch: typeof fetch = async (input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
@@ -451,27 +457,34 @@ describe('manifest skip behavior (HEAD-then-skip)', () => {
 		const args = parseArgs(['--corpus=ac', '--edition-date=2026-04-22']);
 		const plans = await buildPlans(args, tempRoot);
 
-		// Pre-cache only the first AC plan with stale size.
+		// Pre-cache only the first AC plan with stale size. Per-corpus manifest
+		// layout (ADR 021): one manifest.json under ac/ with one entry per doc.
 		const [first] = plans;
 		expect(first).toBeDefined();
 		if (first === undefined) return;
-		const firstDir = join(tempRoot, first.corpus, first.doc, first.edition);
-		mkdirSync(firstDir, { recursive: true });
-		const filename = first.destPath.split('/').pop() ?? 'source.pdf';
-		writeFileSync(join(firstDir, filename), Buffer.from('old'));
+		const acRoot = join(tempRoot, 'ac');
+		mkdirSync(acRoot, { recursive: true });
+		const filename = first.destPath.split('/').pop() ?? `${first.doc}.pdf`;
+		writeFileSync(join(acRoot, filename), Buffer.from('old'));
 		writeFileSync(
-			join(firstDir, 'manifest.json'),
+			join(acRoot, 'manifest.json'),
 			JSON.stringify({
-				corpus: first.corpus,
-				doc: first.doc,
-				edition: first.edition,
-				source_url: first.url,
-				source_filename: filename,
-				source_sha256: 'old',
-				size_bytes: 3,
-				fetched_at: '2026-01-01T00:00:00Z',
-				last_modified: 'Wed, 01 Jan 2026 00:00:00 GMT',
 				schema_version: 1,
+				corpus: 'ac',
+				entries: [
+					{
+						corpus: first.corpus,
+						doc: first.doc,
+						edition: first.edition,
+						source_url: first.url,
+						source_filename: filename,
+						source_sha256: 'old',
+						size_bytes: 3,
+						fetched_at: '2026-01-01T00:00:00Z',
+						last_modified: 'Wed, 01 Jan 2026 00:00:00 GMT',
+						schema_version: 1,
+					},
+				],
 			}),
 		);
 

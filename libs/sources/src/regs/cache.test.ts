@@ -27,12 +27,12 @@ describe('resolveCacheRoot', () => {
 
 describe('cacheXmlPath', () => {
 	it('builds the full-Title path', () => {
-		expect(cacheXmlPath('14', '2026-01-01')).toBe(join(tmpRoot, 'regulations/cfr-14/2026-01-01/full.xml'));
+		expect(cacheXmlPath('14', '2026-01-01')).toBe(join(tmpRoot, 'regulations/cfr-14/2026-01-01.xml'));
 	});
 
 	it('encodes partFilter into the file name', () => {
 		expect(cacheXmlPath('49', '2026-01-01', new Set(['830', '1552']))).toBe(
-			join(tmpRoot, 'regulations/cfr-49/2026-01-01/parts-1552-830.xml'),
+			join(tmpRoot, 'regulations/cfr-49/2026-01-01-parts-1552-830.xml'),
 		);
 	});
 });

@@ -34,7 +34,9 @@ from ingest.handbooks.base import (
 )
 
 PHAK_MOSAIC_PATH = Path(
-    os.path.expanduser("~/Documents/airboss-handbook-cache/handbooks/phak/FAA-H-8083-25C/_errata/mosaic.pdf")
+    os.path.expanduser(
+        "~/Documents/airboss-handbook-cache/handbooks/phak/FAA-H-8083-25C/FAA-H-8083-25C-errata-mosaic.pdf"
+    )
 )
 
 PHAK_ERRATA = ErrataConfig(
