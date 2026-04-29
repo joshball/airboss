@@ -205,9 +205,12 @@ Class C handbooks keep the existing page-range slicing pipeline.
    chapter_html:
      section_url_pattern: https://www.faa.gov/air_traffic/publications/atpubs/aim_html/chap{C}_section_{S}.html
      section_filename_pattern: chap{CC}_section_{SS}.html   # zero-padded on disk
-     chapter_count: 11
+     chapter_count: 12   # ch0 (General Information) through ch11 (UAS)
      # Hardcoded section count per chapter; the URL verifier checks reality matches this.
-     sections_per_chapter: [9, 5, 7, 14, 6, 5, 7, 1, 4, 7, 6]
+     # Index 0 = ch0 (General Information / Explanation of Changes), index 11 = ch11.
+     sections_per_chapter: [1, 9, 5, 7, 14, 6, 5, 7, 1, 4, 7, 6]
+     # ch0 has an irregular publisher URL (chap0_info_eoc.html, not chap0_section_1.html).
+     chapter_0_section_url_override: https://www.faa.gov/air_traffic/publications/atpubs/aim_html/chap0_info_eoc.html
    appendix_html:
      url_pattern: https://www.faa.gov/air_traffic/publications/atpubs/aim_html/appendix_{N}.html
      filename_pattern: appendix_{NN}.html
@@ -228,7 +231,7 @@ Class C handbooks keep the existing page-range slicing pipeline.
    handbooks/<slug>/<edition>/manifest.json
 
    aim/aim.pdf                                                         # bundled (kept)
-   aim/chap<CC>_section_<SS>.html                                      # 71 section files
+   aim/chap<CC>_section_<SS>.html                                      # 72 section files (ch0 + 71)
    aim/appendix_<NN>.html                                              # 5 appendix files
    aim/manifest.json
    ```
@@ -318,7 +321,7 @@ Class C handbooks keep the existing page-range slicing pipeline.
 - `bun run sources download avwx` produces the whole-doc PDF only -- no chapter entries in the manifest.
 - `bun run sources download aim` produces:
   - 1 bundled PDF (`aim.pdf`)
-  - 71 section HTML files (`chap01_section_01.html` through `chap11_section_06.html`)
+  - 72 section HTML files (`chap00_section_01.html` for ch0 General Information; `chap01_section_01.html` through `chap11_section_06.html` for ch1-ch11)
   - 5 appendix HTML files (`appendix_01.html` through `appendix_05.html`)
   - 1 corpus manifest with `primary` + `sections[]` + `appendices[]`
 - `bun run sources download <any>` re-run against the post-download cache makes zero PDF/HTML body downloads. HEAD requests expected.
@@ -343,7 +346,7 @@ Per project rule, every feature is hand-tested before ship.
 4. Delete `FAA-H-8083-25C-ch07.pdf` from cache. Re-run -- expect exactly one download (ch7), all others HEAD hits.
 5. Repeat 2-4 for `afh` (direct, no two-hop), `iph`, `helicopter`, `glider`, `balloon`, `instructors`.
 6. Run `bun run sources download avwx` -- whole-doc only, no chapter entries. `bun run sources extract handbooks avwx --strategy prompt` -- still uses page-range slicing (Class C path), confirms 60K cap still applies for whole-doc handbooks.
-7. Run `bun run sources download aim`. Walk `aim/`: 71 section files + 5 appendix files + 1 PDF. Manifest's `sections[]` indexed by chapter+section pair. `chap07_section_03.html` content includes a known paragraph (`7-3-1. Effect of Cold Temperature`).
+7. Run `bun run sources download aim`. Walk `aim/`: 72 section files (ch0 General Information + 71 for ch1-ch11) + 5 appendix files + 1 PDF. Manifest's `sections[]` indexed by chapter+section pair. `chap07_section_03.html` content includes a known paragraph (`7-3-1. Effect of Cold Temperature`).
 8. Run `bun run sources verify-urls` -- zero 404s.
 9. Run `bun run sources inventory` -- emits `docs/sources/INVENTORY.md`. Open it, verify entries are sorted, every URL is clickable, SHA-256 prefixes are present.
 10. Run `bun run sources extract handbooks phak --strategy prompt`. Verify ch 7 sidecar is full (no 60K cap), contains all 5 expected literal strings.

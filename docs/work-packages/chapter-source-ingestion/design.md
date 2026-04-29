@@ -63,10 +63,10 @@ Empirical finding (verified 2026-04-29): AIM chapter HTML pages are JS-collapsib
 
 If we cached chapter pages, we'd cache the wrong thing. The TOC stub is derivative info -- `ls aim/*.html` and the filename ordering already gives us the section list.
 
-Cost: 71 section files instead of 11 chapter files. Worth it because:
+Cost: 72 section files (ch0 General Information + 71 for ch1-ch11) instead of 12 chapter files. Worth it because:
 
 - Each section file IS the parseable unit. h4 paragraph IDs (`7-1-1`, `7-1-2`) are FAA-canonical citation locators, exposed directly.
-- Regenerating one section after an FAA edit is one HTTP request, not 1/11th of a chapter re-download.
+- Regenerating one section after an FAA edit is one HTTP request, not 1/12th of a chapter re-download.
 - ETags are per-file. Per-section change detection > per-chapter.
 
 ## Why AIM appendices are single-file and chapters aren't
@@ -89,12 +89,12 @@ Other Class A handbooks (AFH, IPH, helicopter, glider, balloon, instructors) lin
 chapter_pdfs:
   # Direct: one URL pattern, substitute chapter ordinal
   direct_pattern: https://www.faa.gov/.../{NN}_afh_ch{N}.pdf
-  chapter_count: 11
+  chapter_count: 18    # AFH actually has 18 chapters (verified 2026-04-29)
 
 # OR (two-hop)
 chapter_pdfs:
   index_url: https://www.faa.gov/.../phak
-  chapter_page_pattern: /regulationspolicies/.../chapter-{N}-{slug}
+  chapter_page_pattern: chapter-{N}-
   chapter_count: 17
 ```
 

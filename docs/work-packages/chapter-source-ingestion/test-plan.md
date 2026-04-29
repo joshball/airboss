@@ -35,7 +35,7 @@ Per project rule, every feature is hand-tested before ship. This plan covers aut
 
 - [ ] Load `scripts/sources/config/ac.yaml`; assert 12 entries; assert each entry's `url` matches the pre-migration `AC_TARGETS` value.
 - [ ] Load `scripts/sources/config/acs.yaml`; assert 5 entries.
-- [ ] Load `scripts/sources/config/aim.yaml`; assert `whole_doc.url` matches pre-migration `AIM_PDF_URL`; assert `chapter_html.chapter_count == 11`; assert `appendix_html.appendix_count == 5`; assert `sections_per_chapter` length is 11.
+- [ ] Load `scripts/sources/config/aim.yaml`; assert `whole_doc.url` matches pre-migration `AIM_PDF_URL`; assert `chapter_html.chapter_count == 12` (ch0..ch11); assert `appendix_html.appendix_count == 5`; assert `sections_per_chapter` length is 12; assert `chapter_0_section_url_override` is present.
 - [ ] Load `scripts/sources/config/regs.yaml`; assert ECFR base URL and titles 14, 49.
 - [ ] Load `scripts/sources/config/handbooks-extras.yaml`; assert 8 entries.
 - [ ] Malformed YAML: missing required field surfaces structured error pointing at field name.
@@ -47,7 +47,7 @@ Per project rule, every feature is hand-tested before ship. This plan covers aut
 
 - [ ] AC build: 12 plans, each `corpus: 'ac'`, flat dest path matches `<root>/ac/<doc-id>.pdf`.
 - [ ] ACS build: 5 plans, flat dest at `<root>/acs/<doc-id>.pdf`.
-- [ ] AIM build: 1 PDF plan + 71 section plans + 5 appendix plans = 77 plans total.
+- [ ] AIM build: 1 PDF plan + 72 section plans (ch0..ch11) + 5 appendix plans = 78 plans total.
 - [ ] Regs build: per filtered-parts entry as before.
 - [ ] PHAK build (chapter_pdfs.index_url variant): 1 whole-doc + 17 chapter + 4 ancillary plans. Each chapter plan has the resolved final-PDF URL.
 - [ ] AFH build (chapter_pdfs.direct_pattern variant): 1 whole-doc + N chapter plans built directly from the pattern, no scrape needed.
@@ -80,7 +80,7 @@ Per project rule, every feature is hand-tested before ship. This plan covers aut
 - [ ] Write a manifest with `chapters[]` populated; read it back; round-trip equal.
 - [ ] Read a manifest written before this WP (no `chapters[]` field): does not throw; `chapters` defaults to empty array.
 - [ ] Concurrent write attempt: tmp-file pattern means only one write completes; the other can be detected via temp file collision (tolerate via retry, not error).
-- [ ] AIM manifest: write with 71 sections, read back, all locators (chapter, section, paragraph_count) preserved.
+- [ ] AIM manifest: write with 72 sections, read back, all locators (chapter, section, paragraph_count) preserved.
 
 ### URL verifier
 
@@ -137,15 +137,15 @@ These require network access. Not in CI; run manually before merge.
 - [ ] Run `bun run sources download phak`. Expect:
   - 1 whole-doc PDF
   - 17 chapter PDFs (`FAA-H-8083-25C-ch01.pdf` through `FAA-H-8083-25C-ch17.pdf`)
-  - 4 ancillary PDFs (front, toc, glossary, index -- count adjusted to PHAK's actual ancillaries)
-  - 1 manifest with `primary` + `chapters[]` (17 entries) + `ancillary[]` (4 entries) + `errata[]` (carried over from previous state if any)
+  - 0 ancillary PDFs (PHAK is Class A1: no separately-distributed ancillaries; verified empirically)
+  - 1 manifest with `primary` + `chapters[]` (17 entries) + `ancillary[]` (empty) + `errata[]` (carried over from previous state if any)
 - [ ] Re-run download. Expect zero PDF bodies fetched. HEAD requests OK.
 - [ ] Delete `FAA-H-8083-25C-ch07.pdf`. Re-run. Expect exactly one download.
 - [ ] Run `bun run sources extract handbooks phak --strategy prompt`. Expect 17 chapter sidecars. Assert ch 7 sidecar contains the 5 expected literals. Assert no sidecar at the 60K cap.
 
 ### AFH end-to-end
 
-- [ ] Wipe AFH cache. Run `bun run sources download afh`. Expect whole-doc + 11 chapters + ancillaries.
+- [ ] Wipe AFH cache. Run `bun run sources download afh`. Expect whole-doc + 18 chapters + 3 ancillaries (front, glossary, index).
 - [ ] Re-run, expect zero PDF bodies fetched.
 - [ ] Run extraction; verify chapter-PDF mode is active (sidecars are not page-sliced).
 
@@ -162,9 +162,9 @@ These require network access. Not in CI; run manually before merge.
 
 - [ ] Wipe AIM cache. Run `bun run sources download aim`. Expect:
   - 1 bundled PDF
-  - 71 section HTML files (`chap01_section_01.html` through `chap11_section_06.html`)
+  - 72 section HTML files (`chap00_section_01.html` for ch0 General Information; `chap01_section_01.html` through `chap11_section_06.html` for ch1-ch11)
   - 5 appendix HTML files
-  - 1 manifest with `primary` + `sections[]` (71) + `appendices[]` (5)
+  - 1 manifest with `primary` + `sections[]` (72) + `appendices[]` (5)
 - [ ] Inspect `aim/chap07_section_03.html` content; verify it includes paragraph "7-3-1. Effect of Cold Temperature".
 - [ ] Inspect `aim/appendix_03.html`; verify it includes the acronym table contents (look for known acronyms like "AAWU", "AAS", "AAM").
 - [ ] Run extraction (when AIM extraction lands); verify section tree is built.
