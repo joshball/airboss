@@ -284,7 +284,7 @@ def _phase_fetch(config: HandbookConfig, *, force: bool):
     click.echo("  WHY:  every downstream step (plaintext, prompts, JSON) is "
                "anchored to the bytes of this specific PDF. Cache + checksum")
     click.echo("        guarantees re-runs use the same source.")
-    click.echo("  HOW:  read $AIRBOSS_HANDBOOK_CACHE/handbooks/<doc>/<edition>/source.pdf;")
+    click.echo("  HOW:  read $AIRBOSS_HANDBOOK_CACHE/handbooks/<doc>/<edition>/<edition>.pdf;")
     click.echo("        download from source_url if missing or sha256 mismatch.")
     click.echo(f"  source URL: {config.source_url}")
     fetch_result = fetch_pdf(config, force=force)

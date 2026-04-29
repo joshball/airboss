@@ -63,7 +63,12 @@ def cache_handbooks_root() -> Path:
 
 
 def cache_edition_root(document_slug: str, edition: str) -> Path:
-    """Cache directory for a single (document_slug, edition) source.pdf."""
+    """Cache directory for a single (document_slug, edition).
+
+    Holds the primary `<edition>.pdf`, any `<edition>-errata-<id>.pdf`
+    co-located alongside it, and the per-edition `manifest.json`. Per
+    ADR 021.
+    """
     return cache_handbooks_root() / document_slug / edition
 
 

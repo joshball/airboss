@@ -5,7 +5,8 @@ through this module. The orchestrator:
 
 1. Resolves the erratum config from `<doc>.yaml -> errata[]`.
 2. Downloads (cache-aware) the errata PDF into
-   `<cache>/handbooks/<doc>/<edition>/_errata/<id>.pdf`.
+   `<cache>/handbooks/<doc>/<edition>/<edition>-errata-<id>.pdf`,
+   co-located with the primary PDF (per ADR 021).
 3. Dispatches to the handbook plugin's `parse_errata`, which delegates
    to the layout-keyed parser registry by default.
 4. For each :class:`ErrataPatch`, locates the affected section markdown
@@ -245,23 +246,25 @@ def _resolve_errata(config: HandbookConfig, errata_id: str) -> ErrataConfig:
 
 
 def _download_errata_pdf(config: HandbookConfig, errata: ErrataConfig) -> tuple[Path, str, str]:
-    """Resolve / download the errata PDF into the cache; return (path, sha256, fetched_at)."""
-    cache_dir = ensure_dir(cache_edition_root(config.document_slug, config.edition) / "_errata")
-    # Common cached filenames (the user often pre-downloads with FAA's
-    # exact filename, e.g. "AFH_Addendum_MOSAIC.pdf"). We probe a few
-    # conventions before falling back to URL fetch.
-    target = cache_dir / f"{errata.id}.pdf"
+    """Resolve / download the errata PDF into the cache; return (path, sha256, fetched_at).
+
+    Per ADR 021, the errata PDF is co-located with the primary as
+    `<edition>-errata-<id>.pdf`, no `_errata/` subdirectory.
+    """
+    cache_dir = ensure_dir(cache_edition_root(config.document_slug, config.edition))
+    target = cache_dir / f"{config.edition}-errata-{errata.id}.pdf"
     if target.is_file():
         sha = _sha256_of(target)
         return target, sha, datetime.now(tz=UTC).isoformat()
 
     # Attempt: filename matches FAA's `<TOKEN>_Addendum_(MOSAIC).pdf` form
-    # already in the cache (manual download by the user).
-    cache_root_dir = cache_edition_root(config.document_slug, config.edition)
-    for candidate in cache_root_dir.glob(f"*{errata.id}*.pdf"):
+    # already in the cache (manual download by the user). Skip the canonical
+    # target itself; only consider differently-named siblings.
+    for candidate in cache_dir.glob(f"*{errata.id}*.pdf"):
+        if candidate.resolve() == target.resolve():
+            continue
         sha = _sha256_of(candidate)
-        # Hard-link / copy to canonical name so subsequent runs find it
-        # at the standard path.
+        # Copy to canonical name so subsequent runs find it at the standard path.
         target.write_bytes(candidate.read_bytes())
         return target, sha, datetime.now(tz=UTC).isoformat()
 
