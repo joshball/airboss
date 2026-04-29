@@ -1,18 +1,23 @@
 /**
  * Cache-freshness check for the source downloader.
  *
- * Decision tree:
+ * Decision tree (ordered: stronger signals first):
  *
  *   no manifest                         -> stale (download)
  *   no cached file                      -> stale (download)
  *   cached size != manifest size        -> stale (download)
  *   HEAD failed                         -> stale (download)
  *   HEAD non-2xx                        -> stale (download)
- *   HEAD content-length disagrees       -> stale (download)
  *   etag matches                        -> fresh (skip)
  *   last-modified did not advance       -> fresh (skip)
+ *   HEAD content-length disagrees       -> stale (download)
  *   content-length matches, no metadata -> fresh (skip; trust size)
  *   otherwise                           -> stale (download)
+ *
+ * Etag/Last-Modified are the strongest freshness signals; check them before
+ * content-length. Some publishers (FAA HTML files via Bun's fetch) report
+ * content-length values that don't match the actual body bytes. When etag
+ * matches, the bytes are unchanged regardless.
  *
  * `--force-refresh` short-circuits this entire check at the executor level.
  */
@@ -53,14 +58,11 @@ export async function evaluateFreshness(
 		return { fresh: false, reason: `HEAD HTTP ${head.status}`, head };
 	}
 
-	if (head.contentLength !== null && head.contentLength !== cachedSize) {
-		return {
-			fresh: false,
-			reason: `content-length drift (head=${head.contentLength}, cached=${cachedSize})`,
-			head,
-		};
-	}
-
+	// Etag and Last-Modified are the strongest freshness signals -- check them
+	// first. Some publishers (FAA HTML files) advertise content-length values
+	// that don't match the actual body bytes (e.g. content-length=20 for a 33 KB
+	// chunked-transfer response). When etag matches, the bytes are unchanged
+	// regardless of what content-length says.
 	const etagMatch =
 		head.etag !== null && manifest.etag !== undefined && manifest.etag.length > 0 && head.etag === manifest.etag;
 	const lastModNotAdvanced =
@@ -71,6 +73,15 @@ export async function evaluateFreshness(
 
 	if (etagMatch || lastModNotAdvanced) {
 		return { fresh: true, reason: etagMatch ? 'etag match' : 'last-modified unchanged', head };
+	}
+
+	// No etag/last-modified match. Fall back to content-length comparison.
+	if (head.contentLength !== null && head.contentLength !== cachedSize) {
+		return {
+			fresh: false,
+			reason: `content-length drift (head=${head.contentLength}, cached=${cachedSize})`,
+			head,
+		};
 	}
 
 	// No etag/last-modified comparison possible but content-length matches and

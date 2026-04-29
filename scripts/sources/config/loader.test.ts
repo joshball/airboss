@@ -48,16 +48,16 @@ describe('loadAimConfig', () => {
 		expect(aim.continuous_edition).toBe(true);
 		expect(aim.whole_doc.url).toBe('https://www.faa.gov/air_traffic/publications/media/aim.pdf');
 		expect(aim.chapter_html.chapter_count).toBe(12);
-		expect(aim.chapter_html.sections_per_chapter).toEqual([1, 9, 5, 7, 14, 6, 5, 7, 1, 4, 7, 6]);
+		expect(aim.chapter_html.sections_per_chapter).toEqual([1, 2, 3, 5, 7, 6, 5, 7, 1, 1, 2, 8]);
 		expect(aim.chapter_html.chapter_0_section_url_override).toBe(
 			'https://www.faa.gov/air_traffic/publications/atpubs/aim_html/chap0_info_eoc.html',
 		);
 		expect(aim.appendix_html.appendix_count).toBe(5);
 	});
-	it('total section count is 72 (1 + 9 + 5 + 7 + 14 + 6 + 5 + 7 + 1 + 4 + 7 + 6)', () => {
+	it('total section count is 48 (1 + 2 + 3 + 5 + 7 + 6 + 5 + 7 + 1 + 1 + 2 + 8)', () => {
 		const aim = loadAimConfig();
 		const total = aim.chapter_html.sections_per_chapter.reduce((a, b) => a + b, 0);
-		expect(total).toBe(72);
+		expect(total).toBe(48);
 	});
 });
 
