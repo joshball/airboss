@@ -1,6 +1,8 @@
 <script lang="ts">
 import { QUERY_PARAMS, ROLE_LABELS, ROLE_VALUES, ROUTES, type Role } from '@ab/constants';
 import Banner from '@ab/ui/components/Banner.svelte';
+import EmptyState from '@ab/ui/components/EmptyState.svelte';
+import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import { replaceState } from '$app/navigation';
 import { page } from '$app/state';
 import type { PageData } from './$types';
@@ -78,12 +80,7 @@ function formatLastSeen(iso: string | null): string {
 </svelte:head>
 
 <section class="page">
-	<header class="hd">
-		<div>
-			<h1>Users</h1>
-			<p class="sub">{countSummary}</p>
-		</div>
-	</header>
+	<PageHeader title="Users" subtitle={countSummary} />
 
 	<Banner tone="info">
 		User editing coming soon -- this is a read-only view for now.
@@ -103,13 +100,11 @@ function formatLastSeen(iso: string | null): string {
 	</section>
 
 	{#if data.users.length === 0}
-		<p class="empty">
-			{#if data.filters.search}
-				No users match {`"${data.filters.search}"`}.
-			{:else}
-				No users yet.
-			{/if}
-		</p>
+		{#if data.filters.search}
+			<EmptyState title="No matches" body={`No users match "${data.filters.search}".`} />
+		{:else}
+			<EmptyState title="No users yet" />
+		{/if}
 	{:else}
 		{#if data.truncated}
 			<p class="muted">Showing the first {data.limit} users. Refine the search to narrow the list.</p>
@@ -166,26 +161,6 @@ function formatLastSeen(iso: string | null): string {
 		padding-bottom: var(--space-2xl);
 	}
 
-	.hd {
-		display: flex;
-		justify-content: space-between;
-		align-items: flex-start;
-		gap: var(--space-lg);
-		flex-wrap: wrap;
-	}
-
-	h1 {
-		margin: 0;
-		font-size: var(--type-heading-1-size);
-		color: var(--ink-body);
-	}
-
-	.sub {
-		margin: var(--space-2xs) 0 0;
-		color: var(--ink-muted);
-		font-size: var(--type-ui-label-size);
-	}
-
 	.filter-bar {
 		display: grid;
 		grid-template-columns: minmax(0, 1fr);
@@ -227,15 +202,6 @@ function formatLastSeen(iso: string | null): string {
 		border-color: var(--input-default-hover-border);
 	}
 
-	.empty {
-		color: var(--ink-muted);
-		font-style: italic;
-		padding: var(--space-xl);
-		text-align: center;
-		background: var(--surface-raised);
-		border: 1px solid var(--edge-default);
-		border-radius: var(--radius-md);
-	}
 
 	.table-wrap {
 		overflow-x: auto;

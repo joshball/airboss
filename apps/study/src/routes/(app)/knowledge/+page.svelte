@@ -21,6 +21,7 @@ import type { BrowseListGroup } from '@ab/ui/components/BrowseList.svelte';
 import BrowseList from '@ab/ui/components/BrowseList.svelte';
 import BrowseListItem from '@ab/ui/components/BrowseListItem.svelte';
 import BrowseViewControls from '@ab/ui/components/BrowseViewControls.svelte';
+import EmptyState from '@ab/ui/components/EmptyState.svelte';
 import FilterCard from '@ab/ui/components/FilterCard.svelte';
 import type { FilterChipDef } from '@ab/ui/components/FilterChips.svelte';
 import FilterChips from '@ab/ui/components/FilterChips.svelte';
@@ -254,14 +255,19 @@ const groups = $derived.by<BrowseListGroup<NodeRow>[]>(() => {
 	/>
 
 	{#if nodes.length === 0}
-		<div class="empty">
-			{#if hasActiveFilters}
-				<p>No knowledge nodes match these filters.</p>
-				<a class="btn ghost" href={ROUTES.KNOWLEDGE}>Clear filters</a>
-			{:else}
-				<p>No knowledge nodes yet. Author one with <code>bun run knowledge:new</code>, then build.</p>
-			{/if}
-		</div>
+		{#if hasActiveFilters}
+			<EmptyState title="No matches" body="No knowledge nodes match these filters.">
+				{#snippet actions()}
+					<a class="btn ghost" href={ROUTES.KNOWLEDGE}>Clear filters</a>
+				{/snippet}
+			</EmptyState>
+		{:else}
+			<EmptyState title="No knowledge nodes yet">
+				{#snippet bodySnippet()}
+					<p>Author one with <code>bun run knowledge:new</code>, then build.</p>
+				{/snippet}
+			</EmptyState>
+		{/if}
 	{:else}
 		<BrowseList {groups}>
 			{#snippet item(n)}
@@ -305,19 +311,6 @@ const groups = $derived.by<BrowseListGroup<NodeRow>[]>(() => {
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-xl);
-	}
-
-	.empty {
-		background: var(--ink-inverse);
-		border: 1px dashed var(--edge-strong);
-		border-radius: var(--radius-lg);
-		padding: var(--space-2xl) var(--space-xl);
-		text-align: center;
-		color: var(--ink-subtle);
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		gap: var(--space-lg);
 	}
 
 	.card-head {

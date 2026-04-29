@@ -1,6 +1,7 @@
 <script lang="ts">
 import ReferenceText from '@ab/aviation/ui/ReferenceText.svelte';
 import { ROUTES } from '@ab/constants';
+import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
@@ -20,10 +21,11 @@ const related = $derived(data.related);
 		<span>{reference.displayName}</span>
 	</nav>
 
-	<header class="hd">
-		<h1>{reference.displayName}</h1>
-		<span class="id">{reference.id}</span>
-	</header>
+	<PageHeader title={reference.displayName}>
+		{#snippet subtitleSnippet()}
+			<span class="id">{reference.id}</span>
+		{/snippet}
+	</PageHeader>
 
 	<div class="tags">
 		<span class="chip source">{reference.tags.sourceType}</span>
@@ -113,20 +115,6 @@ const related = $derived(data.related);
 		color: inherit;
 		text-decoration: none;
 		border-bottom: 1px dotted currentColor;
-	}
-
-	.hd {
-		display: flex;
-		justify-content: space-between;
-		align-items: baseline;
-		flex-wrap: wrap;
-		gap: var(--space-md);
-	}
-
-	.hd h1 {
-		margin: 0;
-		font-size: var(--type-heading-2-size);
-		letter-spacing: -0.02em;
 	}
 
 	.id {

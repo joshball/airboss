@@ -1,5 +1,6 @@
 <script lang="ts">
 import { ROUTES } from '@ab/constants';
+import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
@@ -10,10 +11,7 @@ let { data }: { data: PageData } = $props();
 </svelte:head>
 
 <section class="page">
-	<header class="hd">
-		<h1>Hangar</h1>
-		<p class="sub">Admin surface for content, people, and system operations.</p>
-	</header>
+	<PageHeader title="Hangar" subtitle="Admin surface for content, people, and system operations." />
 
 	<div class="tile-grid">
 		<article class="tile" aria-labelledby="tile-content-h">
@@ -94,18 +92,6 @@ let { data }: { data: PageData } = $props();
 		gap: var(--space-xl);
 		padding-top: var(--space-lg);
 		padding-bottom: var(--space-2xl);
-	}
-
-	.hd h1 {
-		margin: 0;
-		font-size: var(--type-heading-1-size);
-		color: var(--ink-body);
-	}
-
-	.sub {
-		margin: var(--space-2xs) 0 0;
-		color: var(--ink-muted);
-		font-size: var(--type-ui-label-size);
 	}
 
 	.tile-grid {

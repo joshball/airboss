@@ -22,6 +22,7 @@ import {
 	validateTapeHash,
 } from '@ab/bc-sim';
 import { ROUTES, SIM_FEET_PER_METER, SIM_KNOTS_PER_METER_PER_SECOND, SIM_SCENARIO_OUTCOMES } from '@ab/constants';
+import EmptyState from '@ab/ui/components/EmptyState.svelte';
 import { onMount } from 'svelte';
 import Altimeter from '$lib/instruments/Altimeter.svelte';
 import Asi from '$lib/instruments/Asi.svelte';
@@ -167,11 +168,14 @@ function onScrubKey(event: KeyboardEvent): void {
 	{#if !mounted}
 		<p class="status">Loading tape...</p>
 	{:else if tape === null}
-		<section class="empty" role="status">
-			<h2>No flight on record.</h2>
-			<p>Fly the scenario in the cockpit first; the debrief is built from the replay tape.</p>
-			<button type="button" onclick={backToCockpit}>Open cockpit</button>
-		</section>
+		<EmptyState
+			title="No flight on record."
+			body="Fly the scenario in the cockpit first; the debrief is built from the replay tape."
+		>
+			{#snippet actions()}
+				<button type="button" onclick={backToCockpit}>Open cockpit</button>
+			{/snippet}
+		</EmptyState>
 	{:else if validation && !validation.matches}
 		<section class="stale" role="alert">
 			<h2>Scenario has changed since you flew it.</h2>
@@ -333,9 +337,7 @@ function onScrubKey(event: KeyboardEvent): void {
 				</article>
 			</section>
 		{:else}
-			<section class="empty" role="status">
-				<p>No frames were recorded -- the run aborted before the first snapshot fired.</p>
-			</section>
+			<EmptyState title="No frames recorded" body="The run aborted before the first snapshot fired." />
 		{/if}
 
 		<button type="button" class="run-again" onclick={backToCockpit}>Run again</button>
@@ -367,7 +369,6 @@ function onScrubKey(event: KeyboardEvent): void {
 		font-size: var(--font-size-lg);
 	}
 	.status,
-	.empty,
 	.stale,
 	.summary,
 	.scrubber,

@@ -1,5 +1,7 @@
 <script lang="ts">
 import { PREVIEW_KINDS, ROUTES } from '@ab/constants';
+import EmptyState from '@ab/ui/components/EmptyState.svelte';
+import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import CsvPreview from '$lib/components/preview/CsvPreview.svelte';
 import GeotiffPreview from '$lib/components/preview/GeotiffPreview.svelte';
 import JpegPreview from '$lib/components/preview/JpegPreview.svelte';
@@ -61,22 +63,25 @@ function truncate(text: string | null, max = 20_000): string {
 		<span class="current">Files</span>
 	</nav>
 
-	<header class="hd">
-		<div>
-			<h1>Files</h1>
-			<p class="sub">
+	<PageHeader title="Files">
+		{#snippet subtitleSnippet()}
+			<p>
 				<code class="mono">{data.dir}/</code>
 				<span>-- {data.entries.length} file{data.entries.length === 1 ? '' : 's'}</span>
 			</p>
-		</div>
-	</header>
+		{/snippet}
+	</PageHeader>
 
 	{#if formError}
 		<p class="banner danger">{formError}</p>
 	{/if}
 
 	{#if data.entries.length === 0}
-		<p class="empty">No files under <code>{data.dir}/</code> for this source yet. Try the <em>Fetch</em> or <em>Upload</em> action.</p>
+		<EmptyState title="No files yet">
+			{#snippet bodySnippet()}
+				<p>No files under <code>{data.dir}/</code> for this source yet. Try the <em>Fetch</em> or <em>Upload</em> action.</p>
+			{/snippet}
+		</EmptyState>
 	{:else}
 		<ul class="files" aria-label="Files for {data.source.id}">
 			{#each data.entries as file (file.name)}
@@ -178,18 +183,6 @@ function truncate(text: string | null, max = 20_000): string {
 	.crumbs a:hover { text-decoration: underline; }
 	.crumbs .current { color: var(--ink-body); }
 
-	.hd h1 {
-		margin: 0;
-		font-size: var(--type-heading-1-size);
-		color: var(--ink-body);
-	}
-
-	.sub {
-		margin: var(--space-2xs) 0 0;
-		color: var(--ink-muted);
-		font-size: var(--type-ui-label-size);
-	}
-
 	.banner.danger {
 		background: var(--signal-danger-wash);
 		color: var(--signal-danger);
@@ -197,15 +190,6 @@ function truncate(text: string | null, max = 20_000): string {
 		border-radius: var(--radius-md);
 		padding: var(--space-sm) var(--space-md);
 		margin: 0;
-	}
-
-	.empty {
-		color: var(--ink-muted);
-		padding: var(--space-xl);
-		text-align: center;
-		background: var(--surface-panel);
-		border: 1px solid var(--edge-default);
-		border-radius: var(--radius-md);
 	}
 
 	.files {

@@ -3,6 +3,7 @@ import { ROUTES } from '@ab/constants';
 import Banner from '@ab/ui/components/Banner.svelte';
 import Button from '@ab/ui/components/Button.svelte';
 import FormStack from '@ab/ui/components/FormStack.svelte';
+import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import type { ActionData, PageData } from './$types';
 
 let { data, form }: { data: PageData; form: ActionData } = $props();
@@ -30,14 +31,15 @@ const isBusy = $derived(data.activeJob !== null);
 		<span class="current">Upload</span>
 	</nav>
 
-	<header class="hd">
-		<h1>Upload new version</h1>
-		<p class="sub">
-			Replacing the binary for <span class="mono">{data.source.id}</span>
-			-- current version: <span class="mono">{data.source.version}</span>.
-			Size limit {maxMiB} MiB.
-		</p>
-	</header>
+	<PageHeader title="Upload new version">
+		{#snippet subtitleSnippet()}
+			<p>
+				Replacing the binary for <span class="mono">{data.source.id}</span>
+				-- current version: <span class="mono">{data.source.version}</span>.
+				Size limit {maxMiB} MiB.
+			</p>
+		{/snippet}
+	</PageHeader>
 
 	{#if data.activeJob}
 		<Banner tone="warning" title="This source has a running operation">
@@ -100,18 +102,6 @@ const isBusy = $derived(data.activeJob !== null);
 	.crumbs a { color: var(--link-default); text-decoration: none; }
 	.crumbs a:hover { text-decoration: underline; }
 	.crumbs .current { color: var(--ink-body); }
-
-	h1 {
-		margin: 0;
-		font-size: var(--type-heading-1-size);
-		color: var(--ink-body);
-	}
-
-	.sub {
-		margin: var(--space-2xs) 0 0;
-		color: var(--ink-muted);
-		font-size: var(--type-ui-label-size);
-	}
 
 	.field {
 		display: flex;

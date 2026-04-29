@@ -2,6 +2,8 @@
 import { type ReferenceSourceType, ROUTES, SOURCE_TYPE_LABELS } from '@ab/constants';
 import Banner from '@ab/ui/components/Banner.svelte';
 import Button from '@ab/ui/components/Button.svelte';
+import EmptyState from '@ab/ui/components/EmptyState.svelte';
+import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import FlowDiagram from '$lib/components/FlowDiagram.svelte';
 import type { ActionData, PageData } from './$types';
 
@@ -46,12 +48,7 @@ function formatDate(iso: string | null): string {
 </svelte:head>
 
 <section class="page">
-	<header class="hd">
-		<div>
-			<h1>Sources</h1>
-			<p class="sub">Reference-system operations. Every affordance below is live.</p>
-		</div>
-	</header>
+	<PageHeader title="Sources" subtitle="Reference-system operations. Every affordance below is live." />
 
 	{#if formError}
 		<Banner tone="danger">{formError}</Banner>
@@ -107,7 +104,7 @@ function formatDate(iso: string | null): string {
 		</div>
 
 		{#if data.sources.length === 0}
-			<p class="empty">No sources registered yet.</p>
+			<EmptyState title="No sources registered yet" />
 		{:else}
 			<div class="table-wrap">
 				<table>
@@ -166,18 +163,6 @@ function formatDate(iso: string | null): string {
 		gap: var(--space-xl);
 		padding-top: var(--space-lg);
 		padding-bottom: var(--space-2xl);
-	}
-
-	.hd h1 {
-		margin: 0;
-		font-size: var(--type-heading-1-size);
-		color: var(--ink-body);
-	}
-
-	.sub {
-		margin: var(--space-2xs) 0 0;
-		color: var(--ink-muted);
-		font-size: var(--type-ui-label-size);
 	}
 
 	.status-panel {
@@ -252,15 +237,6 @@ function formatDate(iso: string | null): string {
 	}
 
 	.inline-link:hover { text-decoration: underline; }
-
-	.empty {
-		color: var(--ink-muted);
-		padding: var(--space-xl);
-		text-align: center;
-		background: var(--surface-panel);
-		border: 1px solid var(--edge-default);
-		border-radius: var(--radius-md);
-	}
 
 	.table-wrap {
 		overflow-x: auto;

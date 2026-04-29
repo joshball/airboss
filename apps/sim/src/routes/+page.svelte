@@ -1,5 +1,7 @@
 <script lang="ts">
 import { ROUTES } from '@ab/constants';
+import EmptyState from '@ab/ui/components/EmptyState.svelte';
+import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
@@ -11,12 +13,10 @@ const scenarios = $derived(data.scenarios);
 </svelte:head>
 
 <main>
-	<header>
-		<h1>Flight Dynamics Sim</h1>
-		<p class="subtitle">
-			Hand-rolled C172 FDM. Feel the controls, practice the stall recovery, learn by flying.
-		</p>
-	</header>
+	<PageHeader
+		title="Flight Dynamics Sim"
+		subtitle="Hand-rolled C172 FDM. Feel the controls, practice the stall recovery, learn by flying."
+	/>
 
 	<section class="demos">
 		<h2>Demos</h2>
@@ -38,7 +38,7 @@ const scenarios = $derived(data.scenarios);
 	<section class="scenarios">
 		<h2>Scenarios</h2>
 		{#if scenarios.length === 0}
-			<p class="empty">No scenarios available yet.</p>
+			<EmptyState title="No scenarios available yet" />
 		{:else}
 			<ul>
 				{#each scenarios as scenario (scenario.id)}
@@ -69,20 +69,6 @@ const scenarios = $derived(data.scenarios);
 		max-width: 720px;
 		margin: 0 auto;
 		padding: var(--space-2xl) var(--space-xl);
-	}
-
-	header {
-		margin-bottom: var(--space-2xl);
-	}
-
-	h1 {
-		margin: 0 0 var(--space-2xs) 0;
-		font-size: var(--font-size-2xl);
-	}
-
-	.subtitle {
-		margin: 0;
-		color: var(--ink-muted);
 	}
 
 	.scenarios h2,
@@ -154,12 +140,6 @@ const scenarios = $derived(data.scenarios);
 		margin: var(--space-2xs) 0 0;
 		color: var(--ink-muted);
 		font-size: var(--font-size-sm);
-	}
-
-	.empty {
-		color: var(--ink-muted);
-		font-size: var(--font-size-body);
-		margin: 0;
 	}
 
 	footer {

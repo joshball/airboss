@@ -1,5 +1,7 @@
 <script lang="ts">
 import { ROUTES } from '@ab/constants';
+import EmptyState from '@ab/ui/components/EmptyState.svelte';
+import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import HandbookCard from '@ab/ui/handbooks/HandbookCard.svelte';
 import { dev } from '$app/environment';
 import type { PageData } from './$types';
@@ -11,23 +13,25 @@ let { data }: { data: PageData } = $props();
 	<title>Handbooks -- airboss</title>
 </svelte:head>
 
-<header class="page-header">
-	<h1>Handbooks</h1>
-	<p>Read FAA handbooks in-app. Track per-section progress; jump to citing knowledge nodes.</p>
-</header>
+<PageHeader
+	title="Handbooks"
+	subtitle="Read FAA handbooks in-app. Track per-section progress; jump to citing knowledge nodes."
+/>
 
 {#if data.references.length === 0}
-	<div class="empty">
-		<p>
-			No handbooks yet. Handbooks are added by your administrator -- check back, or browse
-			<a href={ROUTES.KNOWLEDGE}>the knowledge graph</a> in the meantime.
-		</p>
-		{#if dev}
-			<p class="dev-hint">
-				Dev: run <code>bun run sources extract handbooks phak</code> then <code>bun run db seed handbooks</code>.
+	<EmptyState title="No handbooks yet">
+		{#snippet bodySnippet()}
+			<p>
+				Handbooks are added by your administrator -- check back, or browse
+				<a href={ROUTES.KNOWLEDGE}>the knowledge graph</a> in the meantime.
 			</p>
-		{/if}
-	</div>
+			{#if dev}
+				<p class="dev-hint">
+					Dev: run <code>bun run sources extract handbooks phak</code> then <code>bun run db seed handbooks</code>.
+				</p>
+			{/if}
+		{/snippet}
+	</EmptyState>
 {:else}
 	<ul class="grid">
 		{#each data.references as ref (ref.id)}
@@ -44,18 +48,6 @@ let { data }: { data: PageData } = $props();
 {/if}
 
 <style>
-	.page-header {
-		margin-bottom: var(--space-lg);
-	}
-	.page-header h1 {
-		margin: 0 0 var(--space-xs) 0;
-		font-size: var(--font-size-2xl);
-		font-weight: var(--font-weight-bold);
-	}
-	.page-header p {
-		margin: 0;
-		color: var(--ink-muted);
-	}
 	.grid {
 		list-style: none;
 		padding: 0;
@@ -64,10 +56,7 @@ let { data }: { data: PageData } = $props();
 		gap: var(--space-sm);
 		grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
 	}
-	.empty {
-		color: var(--ink-muted);
-	}
-	.empty code {
+	.dev-hint code {
 		background: var(--surface-sunken);
 		padding: 0 var(--space-2xs);
 		border-radius: var(--radius-sm);

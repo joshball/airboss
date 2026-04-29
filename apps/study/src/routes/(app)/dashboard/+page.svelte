@@ -25,14 +25,15 @@ const stamp = `${loadedAt.getFullYear()}-${String(loadedAt.getMonth() + 1).padSt
 </svelte:head>
 
 <section class="page">
-	<header class="hd">
-		<p class="eyebrow">Study // dashboard</p>
-		<div class="title-row">
-			<h1>Dashboard</h1>
+	<PageHeader
+		eyebrow="Study // dashboard"
+		title="Dashboard"
+		subtitle="Where you are. What slipped. What&apos;s next."
+	>
+		{#snippet titleSuffix()}
 			<PageHelp pageId="dashboard" />
-			<p class="sub">Where you are. What slipped. What&apos;s next.</p>
-		</div>
-	</header>
+		{/snippet}
+	</PageHeader>
 
 	<div class="grid">
 		<div class="col left">
@@ -73,46 +74,6 @@ const stamp = `${loadedAt.getFullYear()}-${String(loadedAt.getMonth() + 1).padSt
 		gap: var(--space-md);
 		min-height: 0;
 		overflow: hidden;
-	}
-
-	.hd {
-		display: flex;
-		flex-direction: column;
-		align-items: flex-start;
-		gap: var(--space-2xs);
-		padding: 0 var(--space-2xs);
-	}
-
-	.eyebrow {
-		margin: 0;
-		color: var(--ink-faint);
-		font-size: var(--type-ui-caption-size);
-		font-family: var(--font-family-mono);
-		letter-spacing: var(--letter-spacing-caps);
-		text-transform: uppercase;
-	}
-
-	.title-row {
-		display: flex;
-		align-items: baseline;
-		flex-wrap: wrap;
-		gap: var(--space-sm) var(--space-lg);
-	}
-
-	h1 {
-		margin: 0;
-		font-size: var(--type-heading-2-size);
-		font-weight: var(--type-heading-2-weight);
-		letter-spacing: var(--type-heading-2-tracking);
-		color: var(--ink-body);
-	}
-
-	.sub {
-		margin: 0;
-		color: var(--ink-muted);
-		font-size: var(--type-ui-label-size);
-		line-height: var(--type-ui-label-line-height);
-		max-width: 30rem;
 	}
 
 	.grid {
@@ -259,10 +220,6 @@ const stamp = `${loadedAt.getFullYear()}-${String(loadedAt.getMonth() + 1).padSt
 			grid-column: 1 / -1;
 			grid-row: 5;
 		}
-
-		.sub {
-			max-width: none;
-		}
 	}
 
 	@media (max-width: 900px) {
@@ -270,10 +227,6 @@ const stamp = `${loadedAt.getFullYear()}-${String(loadedAt.getMonth() + 1).padSt
 			grid-template-columns: minmax(0, 1fr);
 			grid-template-rows: auto;
 			gap: var(--space-lg);
-		}
-
-		.sub {
-			max-width: none;
 		}
 
 		.hero,
@@ -287,10 +240,6 @@ const stamp = `${loadedAt.getFullYear()}-${String(loadedAt.getMonth() + 1).padSt
 		.calibration {
 			grid-column: 1;
 			grid-row: auto;
-		}
-
-		h1 {
-			font-size: var(--type-heading-3-size);
 		}
 	}
 </style>

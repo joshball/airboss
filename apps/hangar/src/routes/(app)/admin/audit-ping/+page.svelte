@@ -1,6 +1,8 @@
 <script lang="ts">
 import Banner from '@ab/ui/components/Banner.svelte';
 import Button from '@ab/ui/components/Button.svelte';
+import EmptyState from '@ab/ui/components/EmptyState.svelte';
+import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import { enhance } from '$app/forms';
 import type { ActionData, PageData } from './$types';
 
@@ -13,14 +15,15 @@ let submitting = $state(false);
 </svelte:head>
 
 <section class="page">
-	<header class="hd">
-		<h1>Audit ping</h1>
-		<p class="sub">
-			Scaffold-era heartbeat. Clicking below writes one
-			<code>audit.audit_log</code> row tagged <code>hangar.ping</code>
-			and the table refreshes.
-		</p>
-	</header>
+	<PageHeader title="Audit ping">
+		{#snippet subtitleSnippet()}
+			<p>
+				Scaffold-era heartbeat. Clicking below writes one
+				<code>audit.audit_log</code> row tagged <code>hangar.ping</code>
+				and the table refreshes.
+			</p>
+		{/snippet}
+	</PageHeader>
 
 	{#if form?.ok}
 		<Banner tone="success">Ping recorded. Reload to see it in the log.</Banner>
@@ -47,7 +50,11 @@ let submitting = $state(false);
 	<section class="card">
 		<h2>Recent audit events</h2>
 		{#if data.audits.length === 0}
-			<p class="empty">No <code>hangar.ping</code> rows yet. Click the button above.</p>
+			<EmptyState title="No ping events yet">
+				{#snippet bodySnippet()}
+					<p>No <code>hangar.ping</code> rows yet. Click the button above.</p>
+				{/snippet}
+			</EmptyState>
 		{:else}
 			<table class="audit-table">
 				<thead>
@@ -80,17 +87,6 @@ let submitting = $state(false);
 		gap: var(--space-xl);
 	}
 
-	.hd h1 {
-		margin: 0 0 var(--space-xs);
-		font-size: var(--type-heading-1-size);
-		color: var(--ink-body);
-	}
-
-	.sub {
-		margin: 0;
-		color: var(--ink-muted);
-	}
-
 	.card {
 		background: var(--surface-raised);
 		border: 1px solid var(--edge-default);
@@ -105,11 +101,6 @@ let submitting = $state(false);
 		margin: 0;
 		font-size: var(--type-reading-lead-size);
 		color: var(--ink-body);
-	}
-
-	.empty {
-		color: var(--ink-muted);
-		font-style: italic;
 	}
 
 	.audit-table {

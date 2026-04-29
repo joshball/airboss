@@ -1,5 +1,6 @@
 <script lang="ts">
 import { ROLE_LABELS, ROUTES } from '@ab/constants';
+import EmptyState from '@ab/ui/components/EmptyState.svelte';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
@@ -75,7 +76,7 @@ function truncate(value: string | null, max: number): string {
 	<section aria-labelledby="sessions-heading" class="card">
 		<h2 id="sessions-heading">Recent sessions</h2>
 		{#if data.sessions.length === 0}
-			<p class="empty">No sessions on record.</p>
+			<EmptyState title="No sessions" body="No sessions on record." />
 		{:else}
 			<div class="table-wrap">
 				<table>
@@ -107,7 +108,7 @@ function truncate(value: string | null, max: number): string {
 	<section aria-labelledby="audits-heading" class="card">
 		<h2 id="audits-heading">Recent audit activity</h2>
 		{#if data.audits.length === 0}
-			<p class="empty">No audit rows for this user.</p>
+			<EmptyState title="No audit activity" body="No audit rows for this user." />
 		{:else}
 			<div class="table-wrap">
 				<table>
@@ -252,12 +253,6 @@ function truncate(value: string | null, max: number): string {
 		font-size: var(--type-ui-label-size);
 	}
 
-	.empty {
-		color: var(--ink-muted);
-		font-style: italic;
-		padding: var(--space-md);
-		margin: 0;
-	}
 
 	.table-wrap {
 		overflow-x: auto;
