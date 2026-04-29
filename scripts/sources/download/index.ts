@@ -7,6 +7,13 @@
  * internal namespace -- it exists for the test suite.
  */
 
+import {
+	loadAcConfig,
+	loadAcsConfig,
+	loadAimConfig,
+	loadHandbooksExtrasConfig,
+	loadRegsConfig,
+} from '../config/loader';
 import { ALL_CORPORA, type Corpus, isCorpus, parseArgs } from './args';
 import {
 	_setCachedTitlesForTest,
@@ -19,16 +26,7 @@ import {
 import { evaluateFreshness } from './freshness';
 import { headRequest } from './http';
 import { manifestPathFor } from './manifest';
-import {
-	AC_TARGETS,
-	ACS_TARGETS,
-	AIM_PDF_URL,
-	buildEcfrUrl,
-	buildPlans,
-	currentMonthEdition,
-	HANDBOOKS_EXTRAS_TARGETS,
-	USER_AGENT,
-} from './plans';
+import { buildEcfrUrl, buildPlans, currentMonthEdition, USER_AGENT } from './plans';
 
 export type { CliArgs } from './args';
 export type { CorpusManifestFile, HandbookManifestFile, ManifestEntry } from './manifest';
@@ -53,10 +51,11 @@ export const __download_internal__ = {
 	fetchEcfrTitles,
 	latestAmendedOnFor,
 	_setCachedTitlesForTest,
-	AC_TARGETS,
-	ACS_TARGETS,
-	HANDBOOKS_EXTRAS_TARGETS,
-	AIM_PDF_URL,
+	loadAcConfig,
+	loadAcsConfig,
+	loadAimConfig,
+	loadHandbooksExtrasConfig,
+	loadRegsConfig,
 	USER_AGENT,
 	ECFR_TITLES_URL,
 };

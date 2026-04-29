@@ -1,0 +1,23 @@
+# Regulations (CFR via eCFR) URL inventory.
+#
+# We pull two CFR titles via the eCFR Versioner API:
+#   - Title 14: aviation regulations (full title)
+#   - Title 49: NTSB / TSA (filtered to specific parts)
+#
+# The eCFR base URLs are operator endpoints (not "URLs to download"); the
+# downloader uses them to query per-title `latest_amended_on` and to build
+# per-edition full-XML URLs.
+
+ecfr_base: https://www.ecfr.gov/api/versioner/v1/full
+ecfr_titles_url: https://www.ecfr.gov/api/versioner/v1/titles.json
+
+titles:
+  - title: '14'
+    # Full title (no part filter).
+    parts: []
+  - title: '49'
+    # Filtered to 49 CFR Part 830 (aircraft accident reporting).
+    parts: ['830']
+  - title: '49'
+    # Filtered to 49 CFR Part 1552 (TSA flight training security).
+    parts: ['1552']

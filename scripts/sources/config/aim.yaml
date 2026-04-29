@@ -1,0 +1,44 @@
+# Aeronautical Information Manual (AIM) URL inventory.
+#
+# AIM is published continuously (no formal edition cycle). The publisher's
+# layout is three-tier:
+#
+#   - Bundled PDF (whole-doc, archival)
+#   - Section HTML (one file per chapter+section pair, the content unit;
+#     ~360 KB each, semantic <h4 class="paragraph-title" id="C-S-P">)
+#   - Appendix HTML (one file per appendix, single-file content; 29-166 KB)
+#
+# Chapter HTML stubs (`/aim_html/chap_<N>.html`) are NOT cached -- they are
+# JS-collapsible TOC pages, derivative info regenerable from the section list.
+#
+# Total cached AIM artifacts: 1 PDF + 72 section HTML files (ch0 + 71 across
+# ch1-ch11) + 5 appendix HTML files = 78 files.
+
+continuous_edition: true
+
+whole_doc:
+  url: https://www.faa.gov/air_traffic/publications/media/aim.pdf
+  filename: aim.pdf
+
+chapter_html:
+  section_url_pattern: https://www.faa.gov/air_traffic/publications/atpubs/aim_html/chap{C}_section_{S}.html
+  # Cache filenames are zero-padded so `ls` sorts correctly.
+  section_filename_pattern: chap{CC}_section_{SS}.html
+  # Chapters 0..11 (chapter 0 = "General Information / Explanation of Changes").
+  chapter_count: 12
+  # Indexed 0..11; index 0 = ch0. Verified empirically 2026-04-29 against the
+  # publisher; the URL verifier re-checks reality on every run.
+  sections_per_chapter: [1, 9, 5, 7, 14, 6, 5, 7, 1, 4, 7, 6]
+  # Chapter 0 has an irregular publisher URL (chap0_info_eoc.html, NOT
+  # chap0_section_1.html). The downloader special-cases this entry.
+  chapter_0_section_url_override: https://www.faa.gov/air_traffic/publications/atpubs/aim_html/chap0_info_eoc.html
+
+appendix_html:
+  url_pattern: https://www.faa.gov/air_traffic/publications/atpubs/aim_html/appendix_{N}.html
+  filename_pattern: appendix_{NN}.html
+  appendix_count: 5
+
+# URL-substring patterns the downloader skips even if the publisher serves them.
+# Documented field; default empty. Use for stale "Latest Errata" duplicates,
+# pre-superseded addenda, etc.
+excluded_assets: []

@@ -73,8 +73,15 @@ def cache_edition_root(document_slug: str, edition: str) -> Path:
 
 
 def config_dir() -> Path:
-    """Per-handbook YAML configs."""
-    return Path(__file__).resolve().parent / "config"
+    """Per-handbook YAML configs.
+
+    Per the chapter-source-ingestion WP (2026-04-29), all source-corpus YAML
+    is consolidated under `scripts/sources/config/` (single source of truth
+    shared by both the TS downloader and the Python ingest tool). This
+    helper points at `scripts/sources/config/handbooks/` so the Python
+    loader reads from the same files the downloader writes against.
+    """
+    return repo_root() / "scripts" / "sources" / "config" / "handbooks"
 
 
 def ensure_dir(path: Path) -> Path:

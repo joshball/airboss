@@ -13,6 +13,23 @@ edition: FAA-H-8083-28B
 kind: handbook
 title: "Aviation Weather Handbook"
 publisher: FAA
+
+# -----------------------------------------------------------------------------
+# Source download (TS downloader)
+# -----------------------------------------------------------------------------
+
+# Whole-doc PDF only -- AVWX is Class C (no per-chapter PDFs published).
+whole_doc:
+  url: https://www.faa.gov/sites/faa.gov/files/FAA-H-8083-28B.pdf
+  filename: FAA-H-8083-28B.pdf
+
+# No `chapter_pdfs` key -- publisher offers no chapter assets.
+
+# URL-substring patterns the downloader skips even if the publisher serves
+# them. Default empty; documented for future use.
+excluded_assets: []
+
+# Legacy field used by the Python ingest tool when whole_doc is absent.
 source_url: https://www.faa.gov/sites/faa.gov/files/FAA-H-8083-28B.pdf
 expected_pages: 514
 # AvWX 28B body pages typeset the printed `<chap>-<page>` reference on

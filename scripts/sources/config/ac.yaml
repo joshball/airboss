@@ -1,0 +1,71 @@
+# Advisory Circulars (AC) URL inventory.
+#
+# Single source of truth for the per-AC download list. The TS loader at
+# `scripts/sources/config/loader.ts` reads this file at runtime; the
+# downloader emits one DownloadPlan per entry.
+#
+# When the FAA rotates an AC URL or releases a new revision, edit this file
+# (no code change required) and re-run `bun run sources verify-urls`.
+#
+# Schema:
+#   base_url:  prefix common to every entry's URL (informational only;
+#              entries carry their full URL explicitly so a one-off oddly-
+#              named filename doesn't have to encode the prefix).
+#   entries:   list of `{ doc_id, edition, url, filename }`.
+#     doc_id:  lowercase kebab-case `ac-<number>[-<revision>]`.
+#     edition: revision letter (string), or null when the AC has no revision.
+#     url:     canonical absolute https URL.
+#     filename: publisher-side filename (used for cache filename + manifest).
+
+base_url: https://www.faa.gov/documentLibrary/media/Advisory_Circular
+
+entries:
+  - doc_id: ac-00-6-b
+    edition: B
+    url: https://www.faa.gov/documentLibrary/media/Advisory_Circular/AC_00-6B.pdf
+    filename: AC_00-6B.pdf
+  - doc_id: ac-60-22
+    edition: null
+    url: https://www.faa.gov/documentLibrary/media/Advisory_Circular/AC_60-22.pdf
+    filename: AC_60-22.pdf
+  - doc_id: ac-61-65-j
+    edition: J
+    url: https://www.faa.gov/documentLibrary/media/Advisory_Circular/AC_61-65J.pdf
+    filename: AC_61-65J.pdf
+  - doc_id: ac-61-83-j
+    edition: J
+    url: https://www.faa.gov/documentLibrary/media/Advisory_Circular/AC_61-83J.pdf
+    filename: AC_61-83J.pdf
+  - doc_id: ac-61-98-d
+    edition: D
+    url: https://www.faa.gov/documentLibrary/media/Advisory_Circular/AC_61-98D.pdf
+    filename: AC_61-98D.pdf
+  - doc_id: ac-90-66-c
+    edition: C
+    url: https://www.faa.gov/documentLibrary/media/Advisory_Circular/AC_90-66C.pdf
+    filename: AC_90-66C.pdf
+  - doc_id: ac-91-79-a
+    edition: A
+    url: https://www.faa.gov/documentLibrary/media/Advisory_Circular/AC_91-79A.pdf
+    filename: AC_91-79A.pdf
+  - doc_id: ac-91-92
+    edition: null
+    url: https://www.faa.gov/documentLibrary/media/Advisory_Circular/AC_91-92.pdf
+    filename: AC_91-92.pdf
+  - doc_id: ac-120-71-b
+    edition: B
+    url: https://www.faa.gov/documentLibrary/media/Advisory_Circular/AC_120-71B.pdf
+    filename: AC_120-71B.pdf
+  # AC 91-21-1D uses a dot between 91 and 21 in the publisher's filename, not a dash.
+  - doc_id: ac-91-21-1d
+    edition: 1D
+    url: https://www.faa.gov/documentLibrary/media/Advisory_Circular/AC_91.21-1D.pdf
+    filename: AC_91.21-1D.pdf
+  - doc_id: ac-25-7-d
+    edition: D
+    url: https://www.faa.gov/documentLibrary/media/Advisory_Circular/AC_25-7D.pdf
+    filename: AC_25-7D.pdf
+  - doc_id: ac-150-5210-7d
+    edition: 7D
+    url: https://www.faa.gov/documentLibrary/media/Advisory_Circular/AC_150_5210-7D.pdf
+    filename: AC_150_5210-7D.pdf

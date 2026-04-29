@@ -15,13 +15,14 @@ import { dim, green, red, yellow } from '../../lib/colors';
 import { describeError } from '../../lib/error';
 import type { CliArgs } from './args';
 import { evaluateFreshness } from './freshness';
+import { downloadHtmlFile } from './html-fetch';
 import { downloadFile, headRequest } from './http';
 import { type ManifestEntry, readManifestEntry, writeManifestEntry } from './manifest';
 import { type DownloadPlan, SCHEMA_VERSION } from './plans';
 import type { CorpusResult, VerifyRow } from './summary';
 
 export async function executePlan(plan: DownloadPlan, args: CliArgs, result: CorpusResult): Promise<void> {
-	const label = `${plan.corpus}/${plan.doc}@${plan.edition ?? 'flat'}`;
+	const label = describePlan(plan);
 
 	if (args.dryRun) {
 		console.log(`  ${dim('[dry-run]')} ${label}`);
@@ -47,7 +48,10 @@ export async function executePlan(plan: DownloadPlan, args: CliArgs, result: Cor
 
 	console.log(`  fetching ${label}`);
 	try {
-		const outcome = await downloadFile(plan.url, plan.destPath, { verbose: args.verbose });
+		const outcome =
+			plan.extension === 'html'
+				? await downloadHtmlFile(plan.url, plan.destPath, { verbose: args.verbose })
+				: await downloadFile(plan.url, plan.destPath, { verbose: args.verbose });
 		const entry: ManifestEntry = {
 			corpus: plan.corpus,
 			doc: plan.doc,
@@ -71,11 +75,28 @@ export async function executePlan(plan: DownloadPlan, args: CliArgs, result: Cor
 	}
 }
 
+function describePlan(plan: DownloadPlan): string {
+	const base = `${plan.corpus}/${plan.doc}@${plan.edition ?? 'flat'}`;
+	if (plan.kind === 'chapter-pdf' && plan.ordinal !== null) {
+		return `${base} ch${String(plan.ordinal).padStart(2, '0')}`;
+	}
+	if (plan.kind === 'ancillary-pdf' && plan.ancillaryKind !== null) {
+		return `${base} ${plan.ancillaryKind}`;
+	}
+	if (plan.kind === 'aim-section' && plan.ordinal !== null && plan.section !== null) {
+		return `${base} ch${String(plan.ordinal).padStart(2, '0')}-s${String(plan.section).padStart(2, '0')}`;
+	}
+	if (plan.kind === 'aim-appendix' && plan.ordinal !== null) {
+		return `${base} appendix-${String(plan.ordinal).padStart(2, '0')}`;
+	}
+	return base;
+}
+
 export async function runVerify(plans: readonly DownloadPlan[]): Promise<{ rows: VerifyRow[]; ok: boolean }> {
 	const rows: VerifyRow[] = [];
 	let ok = true;
 	for (const plan of plans) {
-		const label = `${plan.corpus}/${plan.doc}@${plan.edition ?? 'flat'}`;
+		const label = describePlan(plan);
 		const manifest = readManifestEntry(plan);
 		try {
 			const head = await headRequest(plan.url);

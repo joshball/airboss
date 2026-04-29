@@ -1,0 +1,28 @@
+# Airman Certification Standards (ACS) URL inventory.
+#
+# Single source of truth for the per-ACS download list. See `ac.yaml` for the
+# schema. Edit + re-verify when the FAA publishes a new ACS revision.
+
+base_url: https://www.faa.gov/training_testing/testing/acs
+
+entries:
+  - doc_id: faa-s-acs-6
+    edition: null
+    url: https://www.faa.gov/training_testing/testing/acs/private_airplane_acs_6.pdf
+    filename: private_airplane_acs_6.pdf
+  - doc_id: faa-s-acs-8
+    edition: null
+    url: https://www.faa.gov/training_testing/testing/acs/instrument_rating_airplane_acs_8.pdf
+    filename: instrument_rating_airplane_acs_8.pdf
+  - doc_id: faa-s-acs-7
+    edition: null
+    url: https://www.faa.gov/training_testing/testing/acs/commercial_airplane_acs_7.pdf
+    filename: commercial_airplane_acs_7.pdf
+  - doc_id: faa-s-acs-11
+    edition: null
+    url: https://www.faa.gov/training_testing/testing/acs/atp_airplane_acs_11.pdf
+    filename: atp_airplane_acs_11.pdf
+  - doc_id: faa-s-acs-25
+    edition: null
+    url: https://www.faa.gov/training_testing/testing/acs/cfi_airplane_acs_25.pdf
+    filename: cfi_airplane_acs_25.pdf

@@ -18,16 +18,21 @@ const {
 	parseArgs,
 	buildPlans,
 	buildEcfrUrl,
-	currentMonthEdition,
 	headRequest,
 	latestAmendedOnFor,
 	_setCachedTitlesForTest,
-	AC_TARGETS,
-	ACS_TARGETS,
-	AIM_PDF_URL,
+	loadAcConfig,
+	loadAcsConfig,
+	loadAimConfig,
+	loadHandbooksExtrasConfig,
 	USER_AGENT,
 	ECFR_TITLES_URL,
 } = __download_internal__;
+
+const AC_TARGETS = loadAcConfig().entries;
+const ACS_TARGETS = loadAcsConfig().entries;
+const AIM_PDF_URL = loadAimConfig().whole_doc.url;
+const HANDBOOKS_EXTRAS_TARGETS = loadHandbooksExtrasConfig().entries;
 
 const FIXED_TITLES = {
 	titles: [
@@ -165,18 +170,32 @@ describe('buildPlans', () => {
 		expect(t49a?.destPath.endsWith('regulations/cfr-49/2026-04-27-parts-830.xml')).toBe(true);
 	});
 
-	it('produces a single aim plan with the canonical URL and flat dest path', async () => {
+	it('produces an AIM plan set: bundled PDF + 72 sections + 5 appendices', async () => {
 		const args = parseArgs(['--corpus=aim']);
 		const plans = await buildPlans(args, tempRoot);
-		expect(plans).toHaveLength(1);
-		const [aim] = plans;
+		// 1 bundled PDF + 72 section HTML files (ch0 + 71) + 5 appendix HTML files
+		expect(plans).toHaveLength(1 + 72 + 5);
+		const aim = plans.find((p) => p.kind === 'whole-doc');
 		expect(aim).toBeDefined();
 		if (aim === undefined) return;
 		expect(aim.corpus).toBe('aim');
 		expect(aim.url).toBe(AIM_PDF_URL);
-		expect(aim.edition).toBe(currentMonthEdition());
-		// Flat AIM layout (per ADR 021): one PDF per edition directly under aim/.
-		expect(aim.destPath.endsWith(`aim/${currentMonthEdition()}.pdf`)).toBe(true);
+		// Flat AIM layout (per ADR 022): bundled PDF directly under aim/.
+		expect(aim.destPath.endsWith('aim/aim.pdf')).toBe(true);
+
+		const sections = plans.filter((p) => p.kind === 'aim-section');
+		expect(sections).toHaveLength(72);
+		// Chapter 0 section 1 uses the irregular publisher URL override.
+		const ch0 = sections.find((p) => p.ordinal === 0 && p.section === 1);
+		expect(ch0?.url).toContain('chap0_info_eoc.html');
+		// Cache filename uses zero-padded ordinals.
+		expect(ch0?.destPath.endsWith('aim/chap00_section_01.html')).toBe(true);
+
+		const appendices = plans.filter((p) => p.kind === 'aim-appendix');
+		expect(appendices).toHaveLength(5);
+		const a3 = appendices.find((p) => p.ordinal === 3);
+		expect(a3?.url).toContain('appendix_3.html');
+		expect(a3?.destPath.endsWith('aim/appendix_03.html')).toBe(true);
 	});
 
 	it('produces one plan per AC target with flat dest paths', async () => {
@@ -213,15 +232,78 @@ describe('buildPlans', () => {
 		expect(plans.every((p) => p.corpus === 'acs')).toBe(true);
 	});
 
-	it('skips handbooks unless --include-handbooks-extras', async () => {
-		const without = await buildPlans(parseArgs(['--corpus=handbooks']), tempRoot);
-		expect(without).toHaveLength(0);
-		const withExtras = await buildPlans(parseArgs(['--corpus=handbooks', '--include-handbooks-extras']), tempRoot);
-		expect(withExtras.length).toBeGreaterThan(0);
-		expect(withExtras.every((p) => p.corpus === 'handbooks')).toBe(true);
-		// Per-edition handbook layout (per ADR 021): the slug already encodes
-		// the edition, so the dir and the filename are both `<doc>`.
-		for (const p of withExtras) {
+	// Stub resolver for two-hop scrapes -- the test must NOT hit the live
+	// publisher. Returns one synthetic resolved entry per chapter ordinal.
+	const stubResolveChapterUrls = async (indexUrl: string, _pagePattern: string, chapterCount: number) => {
+		const out: { ordinal: number; pageUrl: string; pdfUrl: string }[] = [];
+		for (let n = 1; n <= chapterCount; n += 1) {
+			out.push({
+				ordinal: n,
+				pageUrl: `${indexUrl}/chapter-${n}-stub`,
+				pdfUrl: `${indexUrl}/chapter-${n}/file.pdf`,
+			});
+		}
+		return out;
+	};
+
+	it('emits per-handbook plans (whole-doc + chapters + ancillaries) for configured handbooks', async () => {
+		const plans = await buildPlans(parseArgs(['--corpus=handbooks']), tempRoot, {
+			resolveChapterUrls: stubResolveChapterUrls,
+		});
+		// Per-handbook configs at scripts/sources/config/handbooks/<slug>.yaml.
+		// At minimum PHAK + AFH + AVWX are present after this WP. Each emits
+		// at least one whole-doc plan; PHAK emits 17 chapters; AFH emits 18
+		// chapters + 3 ancillaries.
+		expect(plans.length).toBeGreaterThan(0);
+		expect(plans.every((p) => p.corpus === 'handbooks')).toBe(true);
+		const wholeDocs = plans.filter((p) => p.kind === 'whole-doc');
+		expect(wholeDocs.length).toBeGreaterThan(0);
+		for (const p of wholeDocs) {
+			// Per ADR 021: handbooks live at `handbooks/<slug>/<edition>/<filename>`.
+			expect(p.destPath).toContain(`handbooks/${p.doc}/${p.edition}/`);
+		}
+		// PHAK: two-hop scrape emits 17 chapter-pdf plans + 0 ancillaries.
+		const phakChapters = plans.filter((p) => p.doc === 'phak' && p.kind === 'chapter-pdf');
+		expect(phakChapters).toHaveLength(17);
+		// Ordinals 1..17 in order.
+		expect(phakChapters.map((p) => p.ordinal)).toEqual(Array.from({ length: 17 }, (_, i) => i + 1));
+		// Cache filenames are zero-padded.
+		const ch7 = phakChapters.find((p) => p.ordinal === 7);
+		expect(ch7?.destPath.endsWith('FAA-H-8083-25C-ch07.pdf')).toBe(true);
+		// chapter_page_url populated for two-hop.
+		expect(ch7?.chapterPageUrl).toContain('chapter-7-');
+		const phakAncillaries = plans.filter((p) => p.doc === 'phak' && p.kind === 'ancillary-pdf');
+		expect(phakAncillaries).toHaveLength(0);
+		// AFH: direct pattern emits 18 chapters + 3 ancillaries.
+		const afhChapters = plans.filter((p) => p.doc === 'afh' && p.kind === 'chapter-pdf');
+		expect(afhChapters).toHaveLength(18);
+		// AFH file_ordinal_offset=1: ch1 is `02_afh_ch1.pdf`, ch2 is `03_afh_ch2.pdf`.
+		const afh1 = afhChapters.find((p) => p.ordinal === 1);
+		expect(afh1?.url).toContain('/02_afh_ch1.pdf');
+		const afh2 = afhChapters.find((p) => p.ordinal === 2);
+		expect(afh2?.url).toContain('/03_afh_ch2.pdf');
+		// chapter_page_url is null for direct-pattern handbooks.
+		expect(afh1?.chapterPageUrl).toBeNull();
+		const afhAncillaries = plans.filter((p) => p.doc === 'afh' && p.kind === 'ancillary-pdf');
+		expect(afhAncillaries).toHaveLength(3);
+		expect(new Set(afhAncillaries.map((a) => a.ancillaryKind))).toEqual(new Set(['front', 'glossary', 'index']));
+		// AVWX: Class C (no chapter_pdfs); whole-doc only.
+		const avwxPlans = plans.filter((p) => p.doc === 'avwx');
+		expect(avwxPlans).toHaveLength(1);
+		expect(avwxPlans[0]?.kind).toBe('whole-doc');
+	});
+
+	it('adds handbooks-extras whole-doc-only plans when --include-handbooks-extras is set', async () => {
+		const baseline = await buildPlans(parseArgs(['--corpus=handbooks']), tempRoot, {
+			resolveChapterUrls: stubResolveChapterUrls,
+		});
+		const withExtras = await buildPlans(parseArgs(['--corpus=handbooks', '--include-handbooks-extras']), tempRoot, {
+			resolveChapterUrls: stubResolveChapterUrls,
+		});
+		expect(withExtras.length).toBeGreaterThan(baseline.length);
+		const extraOnly = withExtras.filter((p) => !baseline.some((b) => b.url === p.url));
+		expect(extraOnly).toHaveLength(HANDBOOKS_EXTRAS_TARGETS.length);
+		for (const p of extraOnly) {
 			expect(p.destPath.endsWith(`handbooks/${p.doc}/${p.doc}.pdf`)).toBe(true);
 		}
 	});
