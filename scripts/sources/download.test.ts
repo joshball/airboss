@@ -170,11 +170,11 @@ describe('buildPlans', () => {
 		expect(t49a?.destPath.endsWith('regulations/cfr-49/2026-04-27-parts-830.xml')).toBe(true);
 	});
 
-	it('produces an AIM plan set: bundled PDF + 72 sections + 5 appendices', async () => {
+	it('produces an AIM plan set: bundled PDF + 48 sections + 5 appendices', async () => {
 		const args = parseArgs(['--corpus=aim']);
 		const plans = await buildPlans(args, tempRoot);
-		// 1 bundled PDF + 72 section HTML files (ch0 + 71) + 5 appendix HTML files
-		expect(plans).toHaveLength(1 + 72 + 5);
+		// 1 bundled PDF + 48 section HTML files (per sections_per_chapter empirical counts) + 5 appendix HTML files
+		expect(plans).toHaveLength(1 + 48 + 5);
 		const aim = plans.find((p) => p.kind === 'whole-doc');
 		expect(aim).toBeDefined();
 		if (aim === undefined) return;
@@ -184,7 +184,7 @@ describe('buildPlans', () => {
 		expect(aim.destPath.endsWith('aim/aim.pdf')).toBe(true);
 
 		const sections = plans.filter((p) => p.kind === 'aim-section');
-		expect(sections).toHaveLength(72);
+		expect(sections).toHaveLength(48);
 		// Chapter 0 section 1 uses the irregular publisher URL override.
 		const ch0 = sections.find((p) => p.ordinal === 0 && p.section === 1);
 		expect(ch0?.url).toContain('chap0_info_eoc.html');

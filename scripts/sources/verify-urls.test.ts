@@ -53,7 +53,7 @@ function makeFakeFetch(opts: { failingUrlSubstring?: string } = {}): typeof fetc
 		// the AIM section-count check passes.
 		const m = url.match(/chap(\d+)_section_(\d+)\.html/);
 		if (m !== null) {
-			const counts = [1, 9, 5, 7, 14, 6, 5, 7, 1, 4, 7, 6];
+			const counts = [1, 2, 3, 5, 7, 6, 5, 7, 1, 1, 2, 8];
 			const c = Number.parseInt(m[1] ?? '0', 10);
 			const s = Number.parseInt(m[2] ?? '0', 10);
 			if (s > (counts[c] ?? 0)) return new Response('', { status: 404 });
