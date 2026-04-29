@@ -58,6 +58,15 @@ def write_chapter_sidecars(
     from the END so the head of the chapter is always intact.
     """
     cap = config.chapter_text_max_chars
+    if cap is None:
+        # config_loader enforces this for section_strategy==prompt; a None
+        # here means a caller (or a unit test) constructed a HandbookConfig
+        # without going through load_config and forgot the cap. Fail loud
+        # rather than silently truncate.
+        raise ValueError(
+            "chapter_text_max_chars is required when writing chapter sidecars; "
+            "set it on the handbook config."
+        )
     written: list[ChapterPlaintextSidecar] = []
     for body in chapter_bodies:
         if body.node.level != "chapter":

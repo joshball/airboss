@@ -17,7 +17,6 @@ import pytest
 
 from ingest import paths as paths_module
 from ingest.config_loader import (
-    DEFAULT_CHAPTER_TEXT_MAX_CHARS,
     SECTION_STRATEGY_PROMPT,
     SECTION_STRATEGY_TOC,
     ConfigError,
@@ -124,14 +123,28 @@ def test_prompt_block_populates_chapter_text_max_chars(
     assert config.chapter_text_max_chars == 12345
 
 
-def test_default_chapter_text_max_chars_when_block_missing(
+def test_chapter_text_max_chars_is_none_for_toc_when_block_missing(
     tmp_path: Path, monkeypatch
 ) -> None:
     body = _VALID_HEADER + "section_strategy: toc\n"
     _seed_yaml(tmp_path, "test", body, monkeypatch)
     config = load_config("test")
     assert config.section_strategy == SECTION_STRATEGY_TOC
-    assert config.chapter_text_max_chars == DEFAULT_CHAPTER_TEXT_MAX_CHARS
+    # toc / compare don't write sidecars, so the cap is unused -- None is correct.
+    assert config.chapter_text_max_chars is None
+
+
+def test_chapter_text_max_chars_required_for_prompt_strategy(
+    tmp_path: Path, monkeypatch
+) -> None:
+    body = _VALID_HEADER + "section_strategy: prompt\n"
+    _seed_yaml(tmp_path, "test", body, monkeypatch)
+    with pytest.raises(ConfigError) as excinfo:
+        load_config("test")
+    msg = str(excinfo.value)
+    assert "chapter_text_max_chars is required" in msg
+    assert "section_strategy is `prompt`" in msg
+    assert "measure_chapter_sizes.py" in msg
 
 
 def test_invalid_chapter_text_max_chars_raises(
