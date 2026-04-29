@@ -80,6 +80,14 @@ def write_chapter_sidecars(
     if config.chapter_pdfs is not None:
         chapter_pdf_paths = _list_cached_chapter_pdfs(config)
         if chapter_pdf_paths:
+            # Honor the --chapter filter: only emit sidecars for the chapters
+            # the caller actually asked about. chapter_bodies has been filtered
+            # upstream (cli.py:filter_to_chapter), so its ordinals are the
+            # authoritative list. Skip the filter only when chapter_bodies is
+            # empty (whole-doc mode never produced bodies, e.g. some test paths).
+            wanted_ordinals = {b.node.ordinal for b in chapter_bodies if b.node.level == "chapter"}
+            if wanted_ordinals:
+                chapter_pdf_paths = {n: p for n, p in chapter_pdf_paths.items() if n in wanted_ordinals}
             return _build_from_chapter_pdfs(config, chapter_pdf_paths)
     return _build_from_whole_doc_with_page_ranges(config, chapter_bodies)
 
