@@ -36,9 +36,16 @@ describe('loadAcsConfig', () => {
 });
 
 describe('loadHandbooksExtrasConfig', () => {
-	it('loads 8 entries (matches the pre-WP HANDBOOKS_EXTRAS_TARGETS array)', () => {
+	it('loads 4 entries (8083-2, -9, -15, -16 with verified URLs as of 2026-04-29)', () => {
 		const ex = loadHandbooksExtrasConfig();
-		expect(ex.entries).toHaveLength(8);
+		// Originally 8 entries from HANDBOOKS_EXTRAS_TARGETS; 4 were dropped on
+		// 2026-04-29 because their canonical URLs returned 404 against the FAA
+		// CDN and search did not find current canonical PDFs. The verifier catches
+		// stale URLs at HEAD time, so the YAML stays a deterministic source-of-
+		// truth. Add entries back when current URLs are identified.
+		expect(ex.entries).toHaveLength(4);
+		const ids = ex.entries.map((e) => e.doc_id).sort();
+		expect(ids).toEqual(['faa-h-8083-15', 'faa-h-8083-16', 'faa-h-8083-2', 'faa-h-8083-9']);
 	});
 });
 
