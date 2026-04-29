@@ -16,13 +16,12 @@ import { describeError } from '../../lib/error';
 import type { CliArgs } from './args';
 import { evaluateFreshness } from './freshness';
 import { downloadFile, headRequest } from './http';
-import { type Manifest, readManifest, writeManifest } from './manifest';
+import { type ManifestEntry, readManifestEntry, writeManifestEntry } from './manifest';
 import { type DownloadPlan, SCHEMA_VERSION } from './plans';
 import type { CorpusResult, VerifyRow } from './summary';
-import { ensureSourceSymlink } from './symlink';
 
 export async function executePlan(plan: DownloadPlan, args: CliArgs, result: CorpusResult): Promise<void> {
-	const label = `${plan.corpus}/${plan.doc}@${plan.edition}`;
+	const label = `${plan.corpus}/${plan.doc}@${plan.edition ?? 'flat'}`;
 
 	if (args.dryRun) {
 		console.log(`  ${dim('[dry-run]')} ${label}`);
@@ -32,7 +31,7 @@ export async function executePlan(plan: DownloadPlan, args: CliArgs, result: Cor
 	}
 
 	if (!args.forceRefresh) {
-		const existing = readManifest(plan);
+		const existing = readManifestEntry(plan);
 		const decision = await evaluateFreshness(plan, existing);
 		if (decision.fresh && existing !== null) {
 			if (args.verbose) {
@@ -49,8 +48,7 @@ export async function executePlan(plan: DownloadPlan, args: CliArgs, result: Cor
 	console.log(`  fetching ${label}`);
 	try {
 		const outcome = await downloadFile(plan.url, plan.destPath, { verbose: args.verbose });
-		ensureSourceSymlink(plan);
-		const manifest: Manifest = {
+		const entry: ManifestEntry = {
 			corpus: plan.corpus,
 			doc: plan.doc,
 			edition: plan.edition,
@@ -63,7 +61,7 @@ export async function executePlan(plan: DownloadPlan, args: CliArgs, result: Cor
 			...(outcome.etag !== null ? { etag: outcome.etag } : {}),
 			schema_version: SCHEMA_VERSION,
 		};
-		writeManifest(plan, manifest);
+		writeManifestEntry(plan, entry);
 		result.files += 1;
 		result.bytes += outcome.bytes;
 		console.log(`    ${green('ok')} ${formatBytes(outcome.bytes)} sha256=${outcome.sha256.slice(0, 12)}...`);
@@ -77,8 +75,8 @@ export async function runVerify(plans: readonly DownloadPlan[]): Promise<{ rows:
 	const rows: VerifyRow[] = [];
 	let ok = true;
 	for (const plan of plans) {
-		const label = `${plan.corpus}/${plan.doc}@${plan.edition}`;
-		const manifest = readManifest(plan);
+		const label = `${plan.corpus}/${plan.doc}@${plan.edition ?? 'flat'}`;
+		const manifest = readManifestEntry(plan);
 		try {
 			const head = await headRequest(plan.url);
 			const cacheHit =

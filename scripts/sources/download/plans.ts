@@ -4,6 +4,15 @@
  * The per-corpus targets (`AC_TARGETS`, `ACS_TARGETS`, `HANDBOOKS_EXTRAS_TARGETS`,
  * `AIM_PDF_URL`) are the verified URL list. When the FAA rotates a PDF URL,
  * edit the entry here and re-run `bun run sources download --verify`.
+ *
+ * Cache layout (per ADR 021, supersedes ADR 018's filename layout):
+ *
+ *   handbooks/<slug>/<edition>/<edition>.pdf
+ *   ac/<doc-id>.pdf
+ *   acs/<doc-id>.pdf
+ *   aim/<edition>.pdf
+ *   regulations/cfr-<title>/<edition>.xml                     (full)
+ *   regulations/cfr-<title>/<edition>-parts-<filter>.xml      (filtered)
  */
 
 import { join } from 'node:path';
@@ -30,7 +39,7 @@ export interface RegsTarget {
 export interface PdfTarget {
 	readonly corpus: 'aim' | 'ac' | 'acs' | 'handbooks';
 	readonly doc: string;
-	readonly edition: string;
+	readonly edition: string | null;
 	readonly url: string;
 	readonly filename: string;
 }
@@ -38,12 +47,10 @@ export interface PdfTarget {
 export interface DownloadPlan {
 	readonly corpus: Corpus;
 	readonly doc: string;
-	readonly edition: string;
+	readonly edition: string | null;
 	readonly url: string;
 	readonly destPath: string;
 	readonly extension: 'pdf' | 'xml';
-	/** When true, also create a `source.<ext>` symlink alongside the descriptive filename. */
-	readonly writeSourceSymlink: boolean;
 }
 
 const AC_BASE = 'https://www.faa.gov/documentLibrary/media/Advisory_Circular';
@@ -89,7 +96,7 @@ export const HANDBOOKS_EXTRAS_TARGETS: readonly PdfTarget[] = [
 
 function mkAc(number: string, revision: string, filename: string): PdfTarget {
 	const docId = revision.length > 0 ? `ac-${number}-${revision}`.toLowerCase() : `ac-${number}`.toLowerCase();
-	const edition = revision.length > 0 ? revision : 'current';
+	const edition = revision.length > 0 ? revision : null;
 	return {
 		corpus: 'ac',
 		doc: docId,
@@ -103,7 +110,7 @@ function mkAcs(docId: string, filename: string): PdfTarget {
 	return {
 		corpus: 'acs',
 		doc: docId,
-		edition: 'current',
+		edition: null,
 		url: `${ACS_BASE}/${filename}`,
 		filename,
 	};
@@ -113,7 +120,7 @@ function mkHbk(docId: string, filename: string): PdfTarget {
 	return {
 		corpus: 'handbooks',
 		doc: docId,
-		edition: 'current',
+		edition: null,
 		url: `${HANDBOOKS_BASE}/${filename}`,
 		filename,
 	};
@@ -138,30 +145,26 @@ export async function buildPlans(args: CliArgs, root: string, opts: BuildPlansOp
 
 	if (args.corpora.has('aim')) {
 		const edition = currentMonthEdition();
-		const filename = `aim-${edition}.pdf`;
 		plans.push({
 			corpus: 'aim',
 			doc: 'aim',
 			edition,
 			url: AIM_PDF_URL,
-			destPath: join(root, 'aim', edition, filename),
+			destPath: join(root, 'aim', `${edition}.pdf`),
 			extension: 'pdf',
-			writeSourceSymlink: true,
 		});
 	}
 
 	if (args.corpora.has('ac')) {
-		for (const t of AC_TARGETS) plans.push(pdfTargetToPlan(t, root, true));
+		for (const t of AC_TARGETS) plans.push(pdfTargetToPlan(t, root));
 	}
 
 	if (args.corpora.has('acs')) {
-		for (const t of ACS_TARGETS) plans.push(pdfTargetToPlan(t, root, true));
+		for (const t of ACS_TARGETS) plans.push(pdfTargetToPlan(t, root));
 	}
 
 	if (args.corpora.has('handbooks') && args.includeHandbooksExtras) {
-		// Handbooks have an existing reader (libs/sources/src/handbooks/derivative-reader.ts)
-		// that reads source.<ext>; keep that filename here for compatibility.
-		for (const t of HANDBOOKS_EXTRAS_TARGETS) plans.push(pdfTargetToPlan(t, root, false));
+		for (const t of HANDBOOKS_EXTRAS_TARGETS) plans.push(pdfTargetToPlan(t, root));
 	}
 
 	return plans;
@@ -187,16 +190,14 @@ function buildRegsPlan(target: RegsTarget, root: string): DownloadPlan {
 			? `parts-${[...target.partFilter].sort().join('-')}`
 			: 'full';
 	const url = buildEcfrUrl(target);
-	// Regs has an existing reader (libs/sources/src/regs/cache.ts) that expects
-	// source.xml; keep that as the primary filename to avoid breaking ingestion.
+	const filename = partSlug === 'full' ? `${target.editionDate}.xml` : `${target.editionDate}-${partSlug}.xml`;
 	return {
 		corpus: 'regs',
 		doc: `cfr-${target.title}-${partSlug}`,
 		edition: target.editionDate,
 		url,
-		destPath: join(root, 'regulations', `cfr-${target.title}`, target.editionDate, `${partSlug}.xml`),
+		destPath: join(root, 'regulations', `cfr-${target.title}`, filename),
 		extension: 'xml',
-		writeSourceSymlink: false,
 	};
 }
 
@@ -208,18 +209,33 @@ export function buildEcfrUrl(target: RegsTarget): string {
 	return `${base}?${params.toString()}`;
 }
 
-function pdfTargetToPlan(t: PdfTarget, root: string, writeSourceSymlink: boolean): DownloadPlan {
-	const editionSlug = t.edition.length > 0 ? t.edition : 'current';
-	const filename = writeSourceSymlink ? t.filename : 'source.pdf';
-	const destPath = join(root, t.corpus, t.doc, editionSlug, filename);
+/**
+ * Build a download plan for a flat-corpus PDF target (AC, ACS, AIM, handbooks
+ * extras). Per ADR 021:
+ *
+ *   - AC, ACS: flat at `<corpus>/<doc-id>.pdf` (no edition dir).
+ *   - Handbooks: per-edition dir at `handbooks/<slug>/<slug>.pdf` (slug already
+ *     encodes the edition; the dir exists so errata can co-locate).
+ *
+ * AIM is built inline in `buildPlans` (single-document corpus, slightly
+ * different path).
+ */
+function pdfTargetToPlan(t: PdfTarget, root: string): DownloadPlan {
+	let destPath: string;
+	if (t.corpus === 'handbooks') {
+		// Slug already encodes the edition for this URL; re-use it as the dir.
+		destPath = join(root, 'handbooks', t.doc, `${t.doc}.pdf`);
+	} else {
+		// AC, ACS: flat at `<corpus>/<doc-id>.pdf`.
+		destPath = join(root, t.corpus, `${t.doc}.pdf`);
+	}
 	return {
 		corpus: t.corpus,
 		doc: t.doc,
-		edition: editionSlug,
+		edition: t.edition,
 		url: t.url,
 		destPath,
 		extension: 'pdf',
-		writeSourceSymlink,
 	};
 }
 

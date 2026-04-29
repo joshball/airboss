@@ -21,7 +21,7 @@ import { existsSync, statSync } from 'node:fs';
 import { describeError } from '../../lib/error';
 import { isLaterHttpDate } from '../../lib/http-date';
 import { type HeadResult, headRequest } from './http';
-import type { Manifest } from './manifest';
+import type { ManifestEntry } from './manifest';
 import type { DownloadPlan } from './plans';
 
 export interface FreshnessDecision {
@@ -32,7 +32,7 @@ export interface FreshnessDecision {
 
 export async function evaluateFreshness(
 	plan: DownloadPlan,
-	manifest: Manifest | null,
+	manifest: ManifestEntry | null,
 	fetchImpl: typeof fetch = globalThis.fetch,
 ): Promise<FreshnessDecision> {
 	if (manifest === null) return { fresh: false, reason: 'no manifest', head: null };
