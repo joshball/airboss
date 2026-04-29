@@ -104,19 +104,22 @@ def _build_from_whole_doc_with_page_ranges(
     above and refactored the body into this named function.
     """
     cap = config.chapter_text_max_chars
-    if cap is None:
-        # config_loader enforces this for section_strategy==prompt; a None
-        # here means a caller (or a unit test) constructed a HandbookConfig
-        # without going through load_config and forgot the cap. Fail loud
-        # rather than silently truncate.
-        raise ValueError(
-            "chapter_text_max_chars is required when writing chapter sidecars; "
-            "set it on the handbook config."
-        )
     written: list[ChapterPlaintextSidecar] = []
     for body in chapter_bodies:
         if body.node.level != "chapter":
             continue
+        if cap is None:
+            # config_loader enforces this for section_strategy==prompt; a None
+            # here means a caller (or a unit test) constructed a HandbookConfig
+            # without going through load_config and forgot the cap. Fail loud
+            # rather than silently truncate. Checked inside the loop so an
+            # empty chapter_bodies list (no work to do) returns [] cleanly --
+            # used by both the chapter-PDF fallback path and Class C handbooks
+            # (chapter_pdfs=None) when the prompt strategy is not configured.
+            raise ValueError(
+                "chapter_text_max_chars is required when writing chapter sidecars; "
+                "set it on the handbook config."
+            )
         text = body.body_md or ""
         if len(text) > cap:
             text = text[:cap]
