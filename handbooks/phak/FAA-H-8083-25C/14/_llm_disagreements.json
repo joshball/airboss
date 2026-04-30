@@ -1,0 +1,289 @@
+[
+  {
+    "type": "level_mismatch",
+    "title": "Visual Approach Slope Indicator (VASI)",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "14-16" },
+    "body_says": { "level": 2, "parent_title": "Visual Glideslope Indicators", "page_anchor": "14-16" },
+    "reason": "VASI is a kind of visual glideslope indicator; body presents it as a subsection example under the 'Visual Glideslope Indicators' heading."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Other Glidepath Systems",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "14-16" },
+    "body_says": { "level": 2, "parent_title": "Visual Glideslope Indicators", "page_anchor": "14-16" },
+    "reason": "Section enumerates non-VASI visual glidepath alternatives (PAPI, tri-color, pulsating); body groups it as a sibling subsection of VASI under 'Visual Glideslope Indicators'."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Runway End Identifier Lights (REIL)",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "14-17" },
+    "body_says": { "level": 2, "parent_title": "Runway Lighting", "page_anchor": "14-17" },
+    "reason": "REIL is one of the runway lighting subsystems introduced under the 'Runway Lighting' parent heading."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Runway Edge Lights",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "14-17" },
+    "body_says": { "level": 2, "parent_title": "Runway Lighting", "page_anchor": "14-17" },
+    "reason": "Runway edge lights are a category of runway lighting introduced under the 'Runway Lighting' parent."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "In-Runway Lighting",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "14-18" },
+    "body_says": { "level": 2, "parent_title": "Runway Lighting", "page_anchor": "14-18" },
+    "reason": "In-runway lighting (RCLS, TDZL, taxiway lead-off/on lights, LAHSO lights) is a runway lighting subcategory."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Omnidirectional",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "14-19" },
+    "body_says": { "level": 2, "parent_title": "Taxiway Lights", "page_anchor": "14-19" },
+    "reason": "Omnidirectional taxiway lights are described as the first type under the 'Taxiway Lights' parent heading."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Clearance Bar Lights",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "14-19" },
+    "body_says": { "level": 2, "parent_title": "Taxiway Lights", "page_anchor": "14-19" },
+    "reason": "Clearance bar lights are a taxiway lighting subtype."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Runway Guard Lights",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "14-19" },
+    "body_says": { "level": 2, "parent_title": "Taxiway Lights", "page_anchor": "14-19" },
+    "reason": "Runway guard lights are installed at taxiway/runway intersections and grouped under the 'Taxiway Lights' parent."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Stop Bar Lights",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "14-19" },
+    "body_says": { "level": 2, "parent_title": "Taxiway Lights", "page_anchor": "14-19" },
+    "reason": "Stop bar lights are taxiway-installed runway-guard lights, grouped under the 'Taxiway Lights' parent."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Example: Key to Traffic Pattern Operations— Single Runway",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "14-21" },
+    "body_says": { "level": 2, "parent_title": "Traffic Patterns", "page_anchor": "14-21" },
+    "reason": "Worked example illustrating the 'Traffic Patterns' parent section."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Example: Key to Traffic Pattern Operations— Parallel Runways",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "14-21" },
+    "body_says": { "level": 2, "parent_title": "Traffic Patterns", "page_anchor": "14-21" },
+    "reason": "Worked example illustrating the 'Traffic Patterns' parent section."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Radio License",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "14-22" },
+    "body_says": { "level": 2, "parent_title": "Radio Communications", "page_anchor": "14-22" },
+    "reason": "Subsection introduced as part of the 'Radio Communications' topic."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Radio Equipment",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "14-22" },
+    "body_says": { "level": 2, "parent_title": "Radio Communications", "page_anchor": "14-22" },
+    "reason": "Subsection of 'Radio Communications'."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Using Proper Radio Procedures",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "14-22" },
+    "body_says": { "level": 2, "parent_title": "Radio Communications", "page_anchor": "14-22" },
+    "reason": "Subsection of 'Radio Communications'."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Lost Communication Procedures",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "14-23" },
+    "body_says": { "level": 2, "parent_title": "Radio Communications", "page_anchor": "14-23" },
+    "reason": "Subsection of 'Radio Communications' covering radio failure handling."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Primary Radar",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "14-24" },
+    "body_says": { "level": 2, "parent_title": "Air Traffic Control (ATC) Services", "page_anchor": "14-24" },
+    "reason": "Radar subsection introduced under 'Air Traffic Control (ATC) Services' as part of the services overview."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "ATC Radar Beacon System (ATCRBS)",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "14-24" },
+    "body_says": { "level": 2, "parent_title": "Air Traffic Control (ATC) Services", "page_anchor": "14-24" },
+    "reason": "Subsection of 'Air Traffic Control (ATC) Services'."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Transponder",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "14-25" },
+    "body_says": { "level": 2, "parent_title": "Air Traffic Control (ATC) Services", "page_anchor": "14-25" },
+    "reason": "Subsection of 'Air Traffic Control (ATC) Services' (airborne component of secondary surveillance radar)."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Automatic Dependent Surveillance– Broadcast (ADS-B)",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "14-26" },
+    "body_says": { "level": 2, "parent_title": "Air Traffic Control (ATC) Services", "page_anchor": "14-26" },
+    "reason": "ADS-B is presented as a surveillance technology subsection of 'Air Traffic Control (ATC) Services'."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Radar Traffic Advisories",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "14-26" },
+    "body_says": { "level": 2, "parent_title": "Air Traffic Control (ATC) Services", "page_anchor": "14-26" },
+    "reason": "Subsection of 'Air Traffic Control (ATC) Services' covering radar advisory service."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Vortex Generation",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "14-26" },
+    "body_says": { "level": 2, "parent_title": "Wake Turbulence", "page_anchor": "14-26" },
+    "reason": "Vortex generation is the first subsection of the 'Wake Turbulence' parent topic."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Terminal Area",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "14-27" },
+    "body_says": { "level": 3, "parent_title": "Vortex Strength", "page_anchor": "14-27" },
+    "reason": "Terminal Area is a subsection of the 'Vortex Strength' subsection within the 'Wake Turbulence' chapter section; flattened to L3 to match contract's level-3 cap."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "En Route",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "14-27" },
+    "body_says": { "level": 3, "parent_title": "Vortex Strength", "page_anchor": "14-27" },
+    "reason": "Sibling of 'Terminal Area' under the 'Vortex Strength' subsection of 'Wake Turbulence'."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Vortex Behavior",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "14-27" },
+    "body_says": { "level": 2, "parent_title": "Wake Turbulence", "page_anchor": "14-27" },
+    "reason": "Subsection of 'Wake Turbulence' describing vortex behavior characteristics."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Vortex Avoidance Procedures",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "14-28" },
+    "body_says": { "level": 2, "parent_title": "Wake Turbulence", "page_anchor": "14-28" },
+    "reason": "Subsection of 'Wake Turbulence' enumerating wake avoidance procedures."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Clearing Procedures",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "14-28" },
+    "body_says": { "level": 2, "parent_title": "Collision Avoidance", "page_anchor": "14-28" },
+    "reason": "First subsection under the 'Collision Avoidance' parent topic."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Causal Factors of Runway Incursions",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "14-32" },
+    "body_says": { "level": 2, "parent_title": "Runway Incursion Avoidance", "page_anchor": "14-32" },
+    "reason": "Subsection of 'Runway Incursion Avoidance' covering the three major causal areas."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Runway Confusion",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "14-32" },
+    "body_says": { "level": 2, "parent_title": "Runway Incursion Avoidance", "page_anchor": "14-32" },
+    "reason": "Body explicitly identifies runway confusion as a subset of runway incursions."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Causal Factors of Runway Confusion",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "14-32" },
+    "body_says": { "level": 2, "parent_title": "Runway Incursion Avoidance", "page_anchor": "14-32" },
+    "reason": "Subsection elaborating causes of runway confusion under the 'Runway Incursion Avoidance' parent."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "ATC Instructions—“Hold Short”",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "14-33" },
+    "body_says": { "level": 2, "parent_title": "ATC Instructions", "page_anchor": "14-33" },
+    "reason": "Hold-short instructions are one of the four 'ATC Instructions—...' sub-flavors documented under the parent 'ATC Instructions' heading."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "ATC Instructions—Explicit Runway Crossing",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "14-34" },
+    "body_says": { "level": 2, "parent_title": "ATC Instructions", "page_anchor": "14-34" },
+    "reason": "Sub-flavor of the 'ATC Instructions' parent section."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "ATC Instructions—“Line Up and Wait” (LUAW)",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "14-34" },
+    "body_says": { "level": 2, "parent_title": "ATC Instructions", "page_anchor": "14-34" },
+    "reason": "Sub-flavor of the 'ATC Instructions' parent section."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "ATC Instructions—“Runway Shortened”",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "14-35" },
+    "body_says": { "level": 2, "parent_title": "ATC Instructions", "page_anchor": "14-35" },
+    "reason": "Sub-flavor of the 'ATC Instructions' parent section."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Incidents",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "14-36" },
+    "body_says": { "level": 2, "parent_title": "Engineered Materials Arresting Systems (EMAS)", "page_anchor": "14-36" },
+    "reason": "Lists EMAS-arrested overrun incidents under the 'Engineered Materials Arresting Systems (EMAS)' parent."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "EMAS Installations and Information",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "14-37" },
+    "body_says": { "level": 2, "parent_title": "Engineered Materials Arresting Systems (EMAS)", "page_anchor": "14-37" },
+    "reason": "Subsection of the EMAS parent describing installation counts and reference materials."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Pilot Considerations",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "14-37" },
+    "body_says": { "level": 2, "parent_title": "Engineered Materials Arresting Systems (EMAS)", "page_anchor": "14-37" },
+    "reason": "Pilot guidance subsection under the 'Engineered Materials Arresting Systems (EMAS)' parent."
+  },
+  {
+    "type": "missing_in_body",
+    "title": "Best Practices to See and Avoid Pilot Deviations (PDs)",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "14-31" },
+    "body_says": { "level": 1, "parent_title": null, "page_anchor": "14-30" },
+    "reason": "TOC parser conflated the bullet-list label 'Best practices to see and avoid:' (page 14-30, a list-item heading followed by colon and bullets) with the standalone body heading 'Pilot Deviations (PDs)' that follows it. The composite TOC title does not appear verbatim in the body; emitted only the real body heading 'Pilot Deviations (PDs)'."
+  },
+  {
+    "type": "extra_in_toc",
+    "title": "Pilot Deviations (PDs)",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "14-30" },
+    "body_says": { "level": 1, "parent_title": null, "page_anchor": "14-30" },
+    "reason": "Body heading 'Pilot Deviations (PDs)' appears at line 2016 (page 14-30) as a standalone L1 section after 'Collision Avoidance'; TOC checklist did not list it as a distinct entry."
+  },
+  {
+    "type": "extra_in_toc",
+    "title": "Vortex Strength",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "14-27" },
+    "body_says": { "level": 2, "parent_title": "Wake Turbulence", "page_anchor": "14-27" },
+    "reason": "Body heading 'Vortex Strength' appears at line 1765 between 'Vortex Generation' and 'Terminal Area'; missing from TOC checklist. Emitted as L2 child of 'Wake Turbulence'."
+  },
+  {
+    "type": "extra_in_toc",
+    "title": "Training Operations",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "14-30" },
+    "body_says": { "level": 2, "parent_title": "Collision Avoidance", "page_anchor": "14-30" },
+    "reason": "Body heading 'Training Operations' appears at line 1940 (page 14-30) under 'Collision Avoidance'; missing from TOC checklist."
+  },
+  {
+    "type": "extra_in_toc",
+    "title": "Scanning Techniques for Traffic Avoidance",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "14-30" },
+    "body_says": { "level": 2, "parent_title": "Collision Avoidance", "page_anchor": "14-30" },
+    "reason": "Body heading 'Scanning Techniques for Traffic Avoidance' appears at line 1960 (page 14-30) under 'Collision Avoidance'; missing from TOC checklist."
+  }
+]

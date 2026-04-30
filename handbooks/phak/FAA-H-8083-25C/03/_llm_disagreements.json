@@ -1,0 +1,72 @@
+[
+  {
+    "type": "extra_in_toc",
+    "title": "Alternate Types of Wings",
+    "toc_says": { "level": null, "parent_title": null, "page_anchor": null },
+    "body_says": { "level": 3, "parent_title": "Wings", "page_anchor": "3-5" },
+    "reason": "Body has a real heading 'Alternate Types of Wings' on page 3-5 that the TOC parser did not list; emitted as L3 child of Wings since the prose continues the wing discussion."
+  },
+  {
+    "type": "extra_in_toc",
+    "title": "Monocoque",
+    "toc_says": { "level": null, "parent_title": null, "page_anchor": null },
+    "body_says": { "level": 2, "parent_title": "Types of Aircraft Construction", "page_anchor": "3-8" },
+    "reason": "Body has a real 'Monocoque' heading between Truss Structure and Semimonocoque that the TOC parser missed."
+  },
+  {
+    "type": "extra_in_toc",
+    "title": "Composite Materials in Aircraft",
+    "toc_says": { "level": null, "parent_title": null, "page_anchor": null },
+    "body_says": { "level": 3, "parent_title": "Composite Construction", "page_anchor": "3-9" },
+    "reason": "Body has a 'Composite Materials in Aircraft' heading the TOC parser did not list; emitted as L3 child of Composite Construction."
+  },
+  {
+    "type": "extra_in_toc",
+    "title": "Performance Instruments",
+    "toc_says": { "level": null, "parent_title": null, "page_anchor": null },
+    "body_says": { "level": 2, "parent_title": "Instrumentation: Moving into the Future", "page_anchor": "3-12" },
+    "reason": "Body has a 'Performance Instruments' heading parallel to Control / Navigation Instruments that the TOC parser missed."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "History",
+    "toc_says": { "level": 2, "parent_title": "Types of Aircraft Construction", "page_anchor": "3-9" },
+    "body_says": { "level": 3, "parent_title": "Composite Construction", "page_anchor": "3-9" },
+    "reason": "TOC flattened Composite Construction subsections to L2 siblings; body nests History under Composite Construction."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Advantages of Composites",
+    "toc_says": { "level": 2, "parent_title": "Types of Aircraft Construction", "page_anchor": "3-10" },
+    "body_says": { "level": 3, "parent_title": "Composite Construction", "page_anchor": "3-10" },
+    "reason": "TOC flattened Composite Construction subsections to L2 siblings; body nests Advantages of Composites under Composite Construction."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Disadvantages of Composites",
+    "toc_says": { "level": 2, "parent_title": "Types of Aircraft Construction", "page_anchor": "3-10" },
+    "body_says": { "level": 3, "parent_title": "Composite Construction", "page_anchor": "3-10" },
+    "reason": "TOC flattened Composite Construction subsections to L2 siblings; body nests Disadvantages of Composites under Composite Construction."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Fluid Spills on Composites",
+    "toc_says": { "level": 2, "parent_title": "Types of Aircraft Construction", "page_anchor": "3-11" },
+    "body_says": { "level": 3, "parent_title": "Composite Construction", "page_anchor": "3-11" },
+    "reason": "TOC flattened Composite Construction subsections to L2 siblings; body nests Fluid Spills on Composites under Composite Construction."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Lightning Strike Protection",
+    "toc_says": { "level": 2, "parent_title": "Types of Aircraft Construction", "page_anchor": "3-11" },
+    "body_says": { "level": 3, "parent_title": "Composite Construction", "page_anchor": "3-11" },
+    "reason": "TOC flattened Composite Construction subsections to L2 siblings; body nests Lightning Strike Protection under Composite Construction."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "The Future of Composites",
+    "toc_says": { "level": 2, "parent_title": "Types of Aircraft Construction", "page_anchor": "3-12" },
+    "body_says": { "level": 3, "parent_title": "Composite Construction", "page_anchor": "3-12" },
+    "reason": "TOC flattened Composite Construction subsections to L2 siblings; body nests The Future of Composites under Composite Construction."
+  }
+]

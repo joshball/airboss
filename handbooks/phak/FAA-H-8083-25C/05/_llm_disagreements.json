@@ -1,0 +1,240 @@
+[
+  {
+    "type": "extra_in_toc",
+    "title": "Form Drag",
+    "toc_says": { "level": null, "parent_title": null, "page_anchor": null },
+    "body_says": { "level": 3, "parent_title": "Parasite Drag", "page_anchor": "5-6" },
+    "reason": "TOC missed Form Drag as a body-text subheading under Parasite Drag."
+  },
+  {
+    "type": "extra_in_toc",
+    "title": "Interference Drag",
+    "toc_says": { "level": null, "parent_title": null, "page_anchor": null },
+    "body_says": { "level": 3, "parent_title": "Parasite Drag", "page_anchor": "5-6" },
+    "reason": "TOC missed Interference Drag as a body-text subheading under Parasite Drag."
+  },
+  {
+    "type": "extra_in_toc",
+    "title": "Skin Friction Drag",
+    "toc_says": { "level": null, "parent_title": null, "page_anchor": null },
+    "body_says": { "level": 3, "parent_title": "Parasite Drag", "page_anchor": "5-6" },
+    "reason": "TOC missed Skin Friction Drag as a body-text subheading under Parasite Drag."
+  },
+  {
+    "type": "extra_in_toc",
+    "title": "Dihedral",
+    "toc_says": { "level": null, "parent_title": null, "page_anchor": null },
+    "body_says": { "level": 3, "parent_title": "Lateral Stability (Rolling)", "page_anchor": "5-18" },
+    "reason": "TOC missed Dihedral as a body-text subheading under Lateral Stability (Rolling)."
+  },
+  {
+    "type": "extra_in_toc",
+    "title": "Sweepback and Wing Location",
+    "toc_says": { "level": null, "parent_title": null, "page_anchor": null },
+    "body_says": { "level": 3, "parent_title": "Lateral Stability (Rolling)", "page_anchor": "5-18" },
+    "reason": "TOC missed Sweepback and Wing Location as a body-text subheading under Lateral Stability (Rolling)."
+  },
+  {
+    "type": "extra_in_toc",
+    "title": "Keel Effect and Weight Distribution",
+    "toc_says": { "level": null, "parent_title": null, "page_anchor": null },
+    "body_says": { "level": 3, "parent_title": "Lateral Stability (Rolling)", "page_anchor": "5-18" },
+    "reason": "TOC missed Keel Effect and Weight Distribution as a body-text subheading under Lateral Stability (Rolling)."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Torque Reaction",
+    "toc_says": { "level": 2, "parent_title": "Basic Propeller Principles", "page_anchor": "5-31" },
+    "body_says": { "level": 3, "parent_title": "Torque and P-Factor", "page_anchor": "5-31" },
+    "reason": "Body text nests Torque Reaction as a sub-element of Torque and P-Factor (one of the four enumerated elements), not as a sibling."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Corkscrew Effect",
+    "toc_says": { "level": 2, "parent_title": "Basic Propeller Principles", "page_anchor": "5-31" },
+    "body_says": { "level": 3, "parent_title": "Torque and P-Factor", "page_anchor": "5-31" },
+    "reason": "Body text nests Corkscrew Effect under Torque and P-Factor as one of the four torque elements."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Gyroscopic Action",
+    "toc_says": { "level": 2, "parent_title": "Basic Propeller Principles", "page_anchor": "5-31" },
+    "body_says": { "level": 3, "parent_title": "Torque and P-Factor", "page_anchor": "5-31" },
+    "reason": "Body text nests Gyroscopic Action under Torque and P-Factor as one of the four torque elements."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Asymmetric Loading (P-Factor)",
+    "toc_says": { "level": 2, "parent_title": "Basic Propeller Principles", "page_anchor": "5-32" },
+    "body_says": { "level": 3, "parent_title": "Torque and P-Factor", "page_anchor": "5-32" },
+    "reason": "Body text nests Asymmetric Loading (P-Factor) under Torque and P-Factor as one of the four torque elements."
+  },
+  {
+    "type": "extra_in_toc",
+    "title": "Turns",
+    "toc_says": { "level": null, "parent_title": null, "page_anchor": null },
+    "body_says": { "level": 3, "parent_title": "Load Factors and Flight Maneuvers", "page_anchor": "5-36" },
+    "reason": "TOC missed Turns as a body-text subheading under Load Factors and Flight Maneuvers."
+  },
+  {
+    "type": "extra_in_toc",
+    "title": "Stalls",
+    "toc_says": { "level": null, "parent_title": null, "page_anchor": null },
+    "body_says": { "level": 3, "parent_title": "Load Factors and Flight Maneuvers", "page_anchor": "5-36" },
+    "reason": "TOC missed the second occurrence of Stalls (a subheading under Load Factors and Flight Maneuvers, distinct from the L1 Stalls section)."
+  },
+  {
+    "type": "extra_in_toc",
+    "title": "Spins",
+    "toc_says": { "level": null, "parent_title": null, "page_anchor": null },
+    "body_says": { "level": 3, "parent_title": "Load Factors and Flight Maneuvers", "page_anchor": "5-36" },
+    "reason": "TOC missed Spins as a body-text subheading under Load Factors and Flight Maneuvers."
+  },
+  {
+    "type": "extra_in_toc",
+    "title": "High Speed Stalls",
+    "toc_says": { "level": null, "parent_title": null, "page_anchor": null },
+    "body_says": { "level": 3, "parent_title": "Load Factors and Flight Maneuvers", "page_anchor": "5-36" },
+    "reason": "TOC missed High Speed Stalls as a body-text subheading under Load Factors and Flight Maneuvers."
+  },
+  {
+    "type": "extra_in_toc",
+    "title": "Chandelles and Lazy Eights",
+    "toc_says": { "level": null, "parent_title": null, "page_anchor": null },
+    "body_says": { "level": 3, "parent_title": "Load Factors and Flight Maneuvers", "page_anchor": "5-36" },
+    "reason": "TOC missed Chandelles and Lazy Eights as a body-text subheading under Load Factors and Flight Maneuvers."
+  },
+  {
+    "type": "extra_in_toc",
+    "title": "Rough Air",
+    "toc_says": { "level": null, "parent_title": null, "page_anchor": null },
+    "body_says": { "level": 3, "parent_title": "Load Factors and Flight Maneuvers", "page_anchor": "5-37" },
+    "reason": "TOC missed Rough Air as a body-text subheading under Load Factors and Flight Maneuvers."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Weight and Balance",
+    "toc_says": { "level": 2, "parent_title": "Load Factors", "page_anchor": "5-40" },
+    "body_says": { "level": 1, "parent_title": null, "page_anchor": "5-40" },
+    "reason": "Body presents Weight and Balance as a top-level chapter section with its own subsections (Effect of Weight on Flight Performance, etc.), not a child of Load Factors."
+  },
+  {
+    "type": "parent_mismatch",
+    "title": "Effect of Weight on Flight Performance",
+    "toc_says": { "level": 2, "parent_title": "Load Factors", "page_anchor": "5-42" },
+    "body_says": { "level": 2, "parent_title": "Weight and Balance", "page_anchor": "5-42" },
+    "reason": "Body nests this subsection under Weight and Balance, which is its own L1 in body text."
+  },
+  {
+    "type": "parent_mismatch",
+    "title": "Effect of Weight on Aircraft Structure",
+    "toc_says": { "level": 2, "parent_title": "Load Factors", "page_anchor": "5-42" },
+    "body_says": { "level": 2, "parent_title": "Weight and Balance", "page_anchor": "5-42" },
+    "reason": "Body nests this subsection under Weight and Balance."
+  },
+  {
+    "type": "parent_mismatch",
+    "title": "Effect of Weight on Stability and Controllability",
+    "toc_says": { "level": 2, "parent_title": "Load Factors", "page_anchor": "5-42" },
+    "body_says": { "level": 2, "parent_title": "Weight and Balance", "page_anchor": "5-42" },
+    "reason": "Body nests this subsection under Weight and Balance."
+  },
+  {
+    "type": "parent_mismatch",
+    "title": "Effect of Load Distribution",
+    "toc_says": { "level": 2, "parent_title": "Load Factors", "page_anchor": "5-43" },
+    "body_says": { "level": 2, "parent_title": "Weight and Balance", "page_anchor": "5-43" },
+    "reason": "Body nests this subsection under Weight and Balance."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "High Speed Flight",
+    "toc_says": { "level": 2, "parent_title": "Load Factors", "page_anchor": "5-44" },
+    "body_says": { "level": 1, "parent_title": null, "page_anchor": "5-44" },
+    "reason": "Body presents High Speed Flight as a top-level chapter section that owns Subsonic Versus Supersonic Flow, Speed Ranges, Mach Number, Boundary Layer, Shock Waves, Sweepback, Mach Buffet Boundaries, and High Speed Flight Controls."
+  },
+  {
+    "type": "parent_mismatch",
+    "title": "Subsonic Versus Supersonic Flow",
+    "toc_says": { "level": 2, "parent_title": "Load Factors", "page_anchor": "5-44" },
+    "body_says": { "level": 2, "parent_title": "High Speed Flight", "page_anchor": "5-44" },
+    "reason": "Body nests this under High Speed Flight."
+  },
+  {
+    "type": "parent_mismatch",
+    "title": "Speed Ranges",
+    "toc_says": { "level": 2, "parent_title": "Load Factors", "page_anchor": "5-44" },
+    "body_says": { "level": 2, "parent_title": "High Speed Flight", "page_anchor": "5-44" },
+    "reason": "Body nests this under High Speed Flight."
+  },
+  {
+    "type": "parent_mismatch",
+    "title": "Mach Number Versus Airspeed",
+    "toc_says": { "level": 2, "parent_title": "Load Factors", "page_anchor": "5-45" },
+    "body_says": { "level": 2, "parent_title": "High Speed Flight", "page_anchor": "5-45" },
+    "reason": "Body nests this under High Speed Flight."
+  },
+  {
+    "type": "parent_mismatch",
+    "title": "Boundary Layer",
+    "toc_says": { "level": 2, "parent_title": "Load Factors", "page_anchor": "5-46" },
+    "body_says": { "level": 2, "parent_title": "High Speed Flight", "page_anchor": "5-46" },
+    "reason": "Body nests this under High Speed Flight."
+  },
+  {
+    "type": "parent_mismatch",
+    "title": "Laminar Boundary Layer Flow",
+    "toc_says": { "level": 2, "parent_title": "Load Factors", "page_anchor": "5-46" },
+    "body_says": { "level": 2, "parent_title": "High Speed Flight", "page_anchor": "5-46" },
+    "reason": "Body nests this under High Speed Flight."
+  },
+  {
+    "type": "parent_mismatch",
+    "title": "Turbulent Boundary Layer Flow",
+    "toc_says": { "level": 2, "parent_title": "Load Factors", "page_anchor": "5-46" },
+    "body_says": { "level": 2, "parent_title": "High Speed Flight", "page_anchor": "5-46" },
+    "reason": "Body nests this under High Speed Flight."
+  },
+  {
+    "type": "parent_mismatch",
+    "title": "Boundary Layer Separation",
+    "toc_says": { "level": 2, "parent_title": "Load Factors", "page_anchor": "5-46" },
+    "body_says": { "level": 2, "parent_title": "High Speed Flight", "page_anchor": "5-46" },
+    "reason": "Body nests this under High Speed Flight."
+  },
+  {
+    "type": "parent_mismatch",
+    "title": "Shock Waves",
+    "toc_says": { "level": 2, "parent_title": "Load Factors", "page_anchor": "5-46" },
+    "body_says": { "level": 2, "parent_title": "High Speed Flight", "page_anchor": "5-46" },
+    "reason": "Body nests this under High Speed Flight."
+  },
+  {
+    "type": "parent_mismatch",
+    "title": "Sweepback",
+    "toc_says": { "level": 2, "parent_title": "Load Factors", "page_anchor": "5-48" },
+    "body_says": { "level": 2, "parent_title": "High Speed Flight", "page_anchor": "5-48" },
+    "reason": "Body nests this under High Speed Flight."
+  },
+  {
+    "type": "parent_mismatch",
+    "title": "Mach Buffet Boundaries",
+    "toc_says": { "level": 2, "parent_title": "Load Factors", "page_anchor": "5-49" },
+    "body_says": { "level": 2, "parent_title": "High Speed Flight", "page_anchor": "5-49" },
+    "reason": "Body nests this under High Speed Flight."
+  },
+  {
+    "type": "parent_mismatch",
+    "title": "High Speed Flight Controls",
+    "toc_says": { "level": 2, "parent_title": "Load Factors", "page_anchor": "5-49" },
+    "body_says": { "level": 2, "parent_title": "High Speed Flight", "page_anchor": "5-49" },
+    "reason": "Body nests this under High Speed Flight."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Chapter Summary",
+    "toc_says": { "level": 2, "parent_title": "Load Factors", "page_anchor": "5-51" },
+    "body_says": { "level": 1, "parent_title": null, "page_anchor": "5-51" },
+    "reason": "Chapter Summary is the chapter's closing top-level section per the contract's INCLUDE rule, not a child of Load Factors."
+  }
+]

@@ -15,24 +15,24 @@
   },
   {
     "title": "Types of Airports",
-    "level": 1,
+    "level": 2,
     "page_anchor": "14-2",
     "line_offset": 63,
-    "parent_title": null
+    "parent_title": "Airport Categories"
   },
   {
     "title": "Towered Airport",
     "level": 2,
     "page_anchor": "14-2",
     "line_offset": 77,
-    "parent_title": "Types of Airports"
+    "parent_title": "Airport Categories"
   },
   {
     "title": "Nontowered Airport",
     "level": 2,
     "page_anchor": "14-2",
     "line_offset": 89,
-    "parent_title": "Types of Airports"
+    "parent_title": "Airport Categories"
   },
   {
     "title": "Sources for Airport Data",
@@ -191,7 +191,7 @@
   {
     "title": "Temporarily Closed Runways and Taxiways",
     "level": 2,
-    "page_anchor": "14-14",
+    "page_anchor": "14-15",
     "line_offset": 785,
     "parent_title": "Airport Markings and Signs"
   },
@@ -225,115 +225,115 @@
   },
   {
     "title": "Approach Light Systems",
-    "level": 2,
+    "level": 1,
     "page_anchor": "14-16",
     "line_offset": 876,
-    "parent_title": "Airport Lighting"
+    "parent_title": null
   },
   {
     "title": "Visual Glideslope Indicators",
-    "level": 2,
+    "level": 1,
     "page_anchor": "14-16",
     "line_offset": 885,
-    "parent_title": "Airport Lighting"
+    "parent_title": null
   },
   {
     "title": "Visual Approach Slope Indicator (VASI)",
     "level": 2,
     "page_anchor": "14-16",
     "line_offset": 891,
-    "parent_title": "Airport Lighting"
+    "parent_title": "Visual Glideslope Indicators"
   },
   {
     "title": "Other Glidepath Systems",
     "level": 2,
     "page_anchor": "14-16",
     "line_offset": 909,
-    "parent_title": "Airport Lighting"
+    "parent_title": "Visual Glideslope Indicators"
   },
   {
     "title": "Runway Lighting",
-    "level": 2,
+    "level": 1,
     "page_anchor": "14-17",
     "line_offset": 962,
-    "parent_title": "Airport Lighting"
+    "parent_title": null
   },
   {
     "title": "Runway End Identifier Lights (REIL)",
-    "level": 3,
+    "level": 2,
     "page_anchor": "14-17",
     "line_offset": 966,
     "parent_title": "Runway Lighting"
   },
   {
     "title": "Runway Edge Lights",
-    "level": 3,
+    "level": 2,
     "page_anchor": "14-17",
     "line_offset": 973,
     "parent_title": "Runway Lighting"
   },
   {
     "title": "In-Runway Lighting",
-    "level": 3,
+    "level": 2,
     "page_anchor": "14-18",
     "line_offset": 1000,
     "parent_title": "Runway Lighting"
   },
   {
     "title": "Control of Airport Lighting",
-    "level": 2,
+    "level": 1,
     "page_anchor": "14-18",
     "line_offset": 1041,
-    "parent_title": "Airport Lighting"
+    "parent_title": null
   },
   {
     "title": "Taxiway Lights",
-    "level": 2,
+    "level": 1,
     "page_anchor": "14-19",
     "line_offset": 1066,
-    "parent_title": "Airport Lighting"
+    "parent_title": null
   },
   {
     "title": "Omnidirectional",
-    "level": 3,
+    "level": 2,
     "page_anchor": "14-19",
     "line_offset": 1070,
     "parent_title": "Taxiway Lights"
   },
   {
     "title": "Clearance Bar Lights",
-    "level": 3,
+    "level": 2,
     "page_anchor": "14-19",
     "line_offset": 1077,
     "parent_title": "Taxiway Lights"
   },
   {
     "title": "Runway Guard Lights",
-    "level": 3,
+    "level": 2,
     "page_anchor": "14-19",
     "line_offset": 1084,
     "parent_title": "Taxiway Lights"
   },
   {
     "title": "Stop Bar Lights",
-    "level": 3,
+    "level": 2,
     "page_anchor": "14-19",
     "line_offset": 1097,
     "parent_title": "Taxiway Lights"
   },
   {
     "title": "Obstruction Lights",
-    "level": 2,
+    "level": 1,
     "page_anchor": "14-19",
     "line_offset": 1110,
-    "parent_title": "Airport Lighting"
+    "parent_title": null
   },
   {
     "title": "New Lighting Technologies",
-    "level": 2,
+    "level": 1,
     "page_anchor": "14-19",
     "line_offset": 1128,
-    "parent_title": "Airport Lighting"
+    "parent_title": null
   },
   {
     "title": "Wind Direction Indicators",
@@ -527,7 +527,7 @@
   {
     "title": "Runway Incursion Avoidance",
     "level": 1,
-    "page_anchor": "14-30",
+    "page_anchor": "14-31",
     "line_offset": 2074,
     "parent_title": null
   },
@@ -554,45 +554,45 @@
   },
   {
     "title": "ATC Instructions",
-    "level": 2,
-    "page_anchor": "14-32",
+    "level": 1,
+    "page_anchor": "14-33",
     "line_offset": 2228,
-    "parent_title": "Runway Incursion Avoidance"
+    "parent_title": null
   },
   {
     "title": "ATC Instructions—“Hold Short”",
     "level": 2,
-    "page_anchor": "14-32",
+    "page_anchor": "14-33",
     "line_offset": 2255,
-    "parent_title": "Runway Incursion Avoidance"
+    "parent_title": "ATC Instructions"
   },
   {
     "title": "ATC Instructions—Explicit Runway Crossing",
     "level": 2,
     "page_anchor": "14-34",
     "line_offset": 2319,
-    "parent_title": "Runway Incursion Avoidance"
+    "parent_title": "ATC Instructions"
   },
   {
     "title": "ATC Instructions—“Line Up and Wait” (LUAW)",
     "level": 2,
     "page_anchor": "14-34",
     "line_offset": 2336,
-    "parent_title": "Runway Incursion Avoidance"
+    "parent_title": "ATC Instructions"
   },
   {
     "title": "ATC Instructions—“Runway Shortened”",
     "level": 2,
     "page_anchor": "14-35",
     "line_offset": 2411,
-    "parent_title": "Runway Incursion Avoidance"
+    "parent_title": "ATC Instructions"
   },
   {
     "title": "Pre-Landing, Landing, and After-Landing",
-    "level": 2,
+    "level": 1,
     "page_anchor": "14-35",
     "line_offset": 2438,
-    "parent_title": "Runway Incursion Avoidance"
+    "parent_title": null
   },
   {
     "title": "Engineered Materials Arresting Systems (EMAS)",
@@ -611,21 +611,21 @@
   {
     "title": "EMAS Installations and Information",
     "level": 2,
-    "page_anchor": "14-36",
+    "page_anchor": "14-37",
     "line_offset": 2531,
     "parent_title": "Engineered Materials Arresting Systems (EMAS)"
   },
   {
     "title": "Pilot Considerations",
     "level": 2,
-    "page_anchor": "14-36",
+    "page_anchor": "14-37",
     "line_offset": 2573,
     "parent_title": "Engineered Materials Arresting Systems (EMAS)"
   },
   {
     "title": "Chapter Summary",
     "level": 1,
-    "page_anchor": "14-37",
+    "page_anchor": "14-38",
     "line_offset": 2615,
     "parent_title": null
   }

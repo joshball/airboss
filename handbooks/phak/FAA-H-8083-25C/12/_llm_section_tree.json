@@ -22,52 +22,52 @@
   },
   {
     "title": "Atmospheric Circulation",
-    "level": 1,
-    "page_anchor": "12-2",
+    "level": 2,
+    "page_anchor": "12-3",
     "line_offset": 113,
-    "parent_title": null
+    "parent_title": "Atmosphere"
   },
   {
     "title": "Atmospheric Pressure",
-    "level": 1,
+    "level": 2,
     "page_anchor": "12-3",
     "line_offset": 143,
-    "parent_title": null
+    "parent_title": "Atmosphere"
   },
   {
     "title": "Coriolis Force",
-    "level": 2,
+    "level": 1,
     "page_anchor": "12-3",
     "line_offset": 165,
-    "parent_title": "Atmospheric Pressure"
+    "parent_title": null
   },
   {
     "title": "Measurement of Atmosphere Pressure",
-    "level": 2,
+    "level": 1,
     "page_anchor": "12-4",
     "line_offset": 235,
-    "parent_title": "Atmospheric Pressure"
+    "parent_title": null
   },
   {
     "title": "Altitude and Atmospheric Pressure",
-    "level": 2,
+    "level": 1,
     "page_anchor": "12-5",
     "line_offset": 324,
-    "parent_title": "Atmospheric Pressure"
+    "parent_title": null
   },
   {
     "title": "Altitude and Flight",
-    "level": 2,
+    "level": 1,
     "page_anchor": "12-6",
     "line_offset": 395,
-    "parent_title": "Atmospheric Pressure"
+    "parent_title": null
   },
   {
     "title": "Altitude and the Human Body",
-    "level": 2,
+    "level": 1,
     "page_anchor": "12-6",
     "line_offset": 409,
-    "parent_title": "Atmospheric Pressure"
+    "parent_title": null
   },
   {
     "title": "Wind and Currents",
@@ -218,10 +218,10 @@
   },
   {
     "title": "Flight Toward an Approaching Warm Front",
-    "level": 3,
+    "level": 2,
     "page_anchor": "12-19",
     "line_offset": 1421,
-    "parent_title": "Warm Front"
+    "parent_title": "Fronts"
   },
   {
     "title": "Cold Front",
@@ -232,17 +232,17 @@
   },
   {
     "title": "Fast-Moving Cold Front",
-    "level": 3,
+    "level": 2,
     "page_anchor": "12-20",
     "line_offset": 1482,
-    "parent_title": "Cold Front"
+    "parent_title": "Fronts"
   },
   {
     "title": "Flight Toward an Approaching Cold Front",
-    "level": 3,
+    "level": 2,
     "page_anchor": "12-20",
     "line_offset": 1498,
-    "parent_title": "Cold Front"
+    "parent_title": "Fronts"
   },
   {
     "title": "Comparison of Cold and Warm Fronts",
@@ -274,80 +274,80 @@
   },
   {
     "title": "Thunderstorms",
-    "level": 1,
+    "level": 2,
     "page_anchor": "12-22",
     "line_offset": 1776,
-    "parent_title": null
+    "parent_title": "Fronts"
   },
   {
     "title": "Hazards",
     "level": 2,
     "page_anchor": "12-23",
     "line_offset": 1836,
-    "parent_title": "Thunderstorms"
+    "parent_title": "Fronts"
   },
   {
     "title": "Squall Line",
-    "level": 2,
+    "level": 1,
     "page_anchor": "12-23",
     "line_offset": 1842,
-    "parent_title": "Thunderstorms"
+    "parent_title": null
   },
   {
     "title": "Tornadoes",
-    "level": 2,
+    "level": 1,
     "page_anchor": "12-23",
     "line_offset": 1852,
-    "parent_title": "Thunderstorms"
+    "parent_title": null
   },
   {
     "title": "Turbulence",
-    "level": 2,
-    "page_anchor": "12-23",
+    "level": 1,
+    "page_anchor": "12-24",
     "line_offset": 1887,
-    "parent_title": "Thunderstorms"
+    "parent_title": null
   },
   {
     "title": "Icing",
-    "level": 2,
+    "level": 1,
     "page_anchor": "12-24",
     "line_offset": 1906,
-    "parent_title": "Thunderstorms"
+    "parent_title": null
   },
   {
     "title": "Hail",
-    "level": 2,
+    "level": 1,
     "page_anchor": "12-25",
     "line_offset": 1928,
-    "parent_title": "Thunderstorms"
+    "parent_title": null
   },
   {
     "title": "Ceiling and Visibility",
-    "level": 2,
+    "level": 1,
     "page_anchor": "12-25",
     "line_offset": 1946,
-    "parent_title": "Thunderstorms"
+    "parent_title": null
   },
   {
     "title": "Effect on Altimeters",
-    "level": 2,
+    "level": 1,
     "page_anchor": "12-25",
     "line_offset": 1954,
-    "parent_title": "Thunderstorms"
+    "parent_title": null
   },
   {
     "title": "Lightning",
-    "level": 2,
+    "level": 1,
     "page_anchor": "12-25",
     "line_offset": 1962,
-    "parent_title": "Thunderstorms"
+    "parent_title": null
   },
   {
     "title": "Engine Water Ingestion",
-    "level": 2,
+    "level": 1,
     "page_anchor": "12-25",
     "line_offset": 1976,
-    "parent_title": "Thunderstorms"
+    "parent_title": null
   },
   {
     "title": "Chapter Summary",

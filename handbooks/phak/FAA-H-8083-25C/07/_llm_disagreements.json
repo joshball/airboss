@@ -1,0 +1,338 @@
+[
+  {
+    "type": "level_mismatch",
+    "title": "Fixed-Pitch Propeller",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "7-5" },
+    "body_says": { "level": 3, "parent_title": "Propeller", "page_anchor": "7-5" },
+    "reason": "Body text under Propeller introduces 'Small aircraft are equipped with either one of two types of propellers: fixed-pitch or adjustable-pitch' immediately preceding this heading, indicating it is a child of Propeller."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Adjustable-Pitch Propeller",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "7-6" },
+    "body_says": { "level": 3, "parent_title": "Propeller", "page_anchor": "7-6" },
+    "reason": "Same nesting under Propeller as Fixed-Pitch Propeller; sibling under Propeller, not under Powerplant."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Superchargers",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "7-12" },
+    "body_says": { "level": 2, "parent_title": "Superchargers and Turbosuperchargers", "page_anchor": "7-12" },
+    "reason": "Body text introduces both supercharger and turbosupercharger under the umbrella heading 'Superchargers and Turbosuperchargers'; Superchargers is a child of that umbrella."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Turbosuperchargers",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "7-13" },
+    "body_says": { "level": 2, "parent_title": "Superchargers and Turbosuperchargers", "page_anchor": "7-13" },
+    "reason": "Sibling of Superchargers under the umbrella heading; body's umbrella heading immediately precedes both subsections."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "System Operation",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "7-14" },
+    "body_says": { "level": 2, "parent_title": "Superchargers and Turbosuperchargers", "page_anchor": "7-14" },
+    "reason": "Body content of System Operation discusses turbocharger waste-gate behavior; it is a subsection of the Superchargers and Turbosuperchargers umbrella, not a peer."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "High Altitude Performance",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "7-14" },
+    "body_says": { "level": 2, "parent_title": "Superchargers and Turbosuperchargers", "page_anchor": "7-14" },
+    "reason": "Discusses turbocharger waste-gate behavior at altitude; subsection of the Superchargers and Turbosuperchargers umbrella."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Types of Turbine Engines",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "7-20" },
+    "body_says": { "level": 2, "parent_title": "Turbine Engines", "page_anchor": "7-20" },
+    "reason": "Body text under Turbine Engines introduces 'Turbine engines are classified according to the type of compressors they use' immediately preceding this heading."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Turbojet",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "7-20" },
+    "body_says": { "level": 3, "parent_title": "Types of Turbine Engines", "page_anchor": "7-20" },
+    "reason": "Types of Turbine Engines explicitly enumerates 'turbojet, turboprop, turbofan, and turboshaft' as the four types; each is a child of Types of Turbine Engines."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Turboprop",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "7-21" },
+    "body_says": { "level": 3, "parent_title": "Types of Turbine Engines", "page_anchor": "7-21" },
+    "reason": "Sibling of Turbojet under Types of Turbine Engines per body enumeration."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Turbofan",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "7-21" },
+    "body_says": { "level": 3, "parent_title": "Types of Turbine Engines", "page_anchor": "7-21" },
+    "reason": "Sibling of Turbojet under Types of Turbine Engines per body enumeration."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Turboshaft",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "7-21" },
+    "body_says": { "level": 3, "parent_title": "Types of Turbine Engines", "page_anchor": "7-21" },
+    "reason": "Sibling of Turbojet under Types of Turbine Engines per body enumeration."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Turbine Engine Instruments",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "7-22" },
+    "body_says": { "level": 2, "parent_title": "Turbine Engines", "page_anchor": "7-22" },
+    "reason": "Subsection of Turbine Engines covering instruments unique to turbine engines."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Engine Pressure Ratio (EPR)",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "7-22" },
+    "body_says": { "level": 3, "parent_title": "Turbine Engine Instruments", "page_anchor": "7-22" },
+    "reason": "Specific instrument; child of Turbine Engine Instruments."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Exhaust Gas Temperature (EGT)",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "7-22" },
+    "body_says": { "level": 3, "parent_title": "Turbine Engine Instruments", "page_anchor": "7-22" },
+    "reason": "Specific instrument; child of Turbine Engine Instruments."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Torquemeter",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "7-22" },
+    "body_says": { "level": 3, "parent_title": "Turbine Engine Instruments", "page_anchor": "7-22" },
+    "reason": "Specific instrument; child of Turbine Engine Instruments."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "N1 Indicator",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "7-23" },
+    "body_says": { "level": 3, "parent_title": "Turbine Engine Instruments", "page_anchor": "7-23" },
+    "reason": "Specific instrument; child of Turbine Engine Instruments."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "N2 Indicator",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "7-23" },
+    "body_says": { "level": 3, "parent_title": "Turbine Engine Instruments", "page_anchor": "7-23" },
+    "reason": "Specific instrument; child of Turbine Engine Instruments."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Turbine Engine Operational Considerations",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "7-23" },
+    "body_says": { "level": 2, "parent_title": "Turbine Engines", "page_anchor": "7-23" },
+    "reason": "Body explicitly enumerates the operational considerations as 'engine temperature limits, foreign object damage, hot start, compressor stall, and flameout'; subsection of Turbine Engines."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Engine Temperature Limitations",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "7-23" },
+    "body_says": { "level": 3, "parent_title": "Turbine Engine Operational Considerations", "page_anchor": "7-23" },
+    "reason": "Listed in Turbine Engine Operational Considerations enumeration; child."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Thrust Variations",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "7-23" },
+    "body_says": { "level": 3, "parent_title": "Turbine Engine Operational Considerations", "page_anchor": "7-23" },
+    "reason": "Operational consideration child."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Foreign Object Damage (FOD)",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "7-23" },
+    "body_says": { "level": 3, "parent_title": "Turbine Engine Operational Considerations", "page_anchor": "7-23" },
+    "reason": "Operational consideration child."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Turbine Engine Hot/Hung Start",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "7-23" },
+    "body_says": { "level": 3, "parent_title": "Turbine Engine Operational Considerations", "page_anchor": "7-23" },
+    "reason": "Operational consideration child."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Compressor Stalls",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "7-23" },
+    "body_says": { "level": 3, "parent_title": "Turbine Engine Operational Considerations", "page_anchor": "7-23" },
+    "reason": "Operational consideration child."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Flameout",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "7-24" },
+    "body_says": { "level": 3, "parent_title": "Turbine Engine Operational Considerations", "page_anchor": "7-24" },
+    "reason": "Operational consideration child."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Performance Comparison",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "7-24" },
+    "body_says": { "level": 2, "parent_title": "Turbine Engines", "page_anchor": "7-24" },
+    "reason": "Body compares reciprocating vs turbine engines as a closing subsection of Turbine Engines."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Fuel Systems",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "7-25" },
+    "body_says": { "level": 2, "parent_title": "Airframe Systems", "page_anchor": "7-25" },
+    "reason": "Body text under Airframe Systems explicitly states 'Fuel, electrical, hydraulic, and oxygen systems make up the airframe systems'; Fuel Systems is a child of Airframe Systems."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Gravity-Feed System",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "7-25" },
+    "body_says": { "level": 3, "parent_title": "Fuel Systems", "page_anchor": "7-25" },
+    "reason": "Body lists 'Two common classifications apply to fuel systems in small aircraft: gravity-feed and fuel-pump systems'; child of Fuel Systems."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Fuel-Pump System",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "7-25" },
+    "body_says": { "level": 3, "parent_title": "Fuel Systems", "page_anchor": "7-25" },
+    "reason": "Sibling of Gravity-Feed System under Fuel Systems."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Fuel Primer",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "7-25" },
+    "body_says": { "level": 3, "parent_title": "Fuel Systems", "page_anchor": "7-25" },
+    "reason": "Body says 'Both gravity-feed and fuel-pump systems may incorporate a fuel primer into the system'; component of Fuel Systems."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Fuel Tanks",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "7-25" },
+    "body_says": { "level": 3, "parent_title": "Fuel Systems", "page_anchor": "7-25" },
+    "reason": "Component of Fuel Systems."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Fuel Gauges",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "7-26" },
+    "body_says": { "level": 3, "parent_title": "Fuel Systems", "page_anchor": "7-26" },
+    "reason": "Component of Fuel Systems."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Fuel Selectors",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "7-26" },
+    "body_says": { "level": 3, "parent_title": "Fuel Systems", "page_anchor": "7-26" },
+    "reason": "Component of Fuel Systems."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Fuel Strainers, Sumps, and Drains",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "7-27" },
+    "body_says": { "level": 3, "parent_title": "Fuel Systems", "page_anchor": "7-27" },
+    "reason": "Component of Fuel Systems."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Fuel Grades",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "7-27" },
+    "body_says": { "level": 3, "parent_title": "Fuel Systems", "page_anchor": "7-27" },
+    "reason": "Aspect of Fuel Systems."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Fuel Contamination",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "7-27" },
+    "body_says": { "level": 3, "parent_title": "Fuel Systems", "page_anchor": "7-27" },
+    "reason": "Aspect of Fuel Systems."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Fuel System Icing",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "7-28" },
+    "body_says": { "level": 3, "parent_title": "Fuel Systems", "page_anchor": "7-28" },
+    "reason": "Aspect of Fuel Systems."
+  },
+  {
+    "type": "parent_mismatch",
+    "title": "Prevention Procedures",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "7-28" },
+    "body_says": { "level": 3, "parent_title": "Fuel System Icing", "page_anchor": "7-28" },
+    "reason": "Body discusses anti-icing additives for fuel system; Prevention Procedures is a sub-topic of Fuel System Icing, not a peer of Fuel Systems."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Refueling Procedures",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "7-29" },
+    "body_says": { "level": 3, "parent_title": "Fuel Systems", "page_anchor": "7-29" },
+    "reason": "Procedure for the Fuel Systems family."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Heating System",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "7-29" },
+    "body_says": { "level": 2, "parent_title": "Airframe Systems", "page_anchor": "7-29" },
+    "reason": "Heating is a subsection of Airframe Systems alongside Fuel/Electrical/Hydraulic/Oxygen."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Fuel Fired Heaters",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "7-29" },
+    "body_says": { "level": 3, "parent_title": "Heating System", "page_anchor": "7-29" },
+    "reason": "One of the heater types listed under Heating System."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Exhaust Heating Systems",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "7-29" },
+    "body_says": { "level": 3, "parent_title": "Heating System", "page_anchor": "7-29" },
+    "reason": "Heater type child of Heating System."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Combustion Heater Systems",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "7-29" },
+    "body_says": { "level": 3, "parent_title": "Heating System", "page_anchor": "7-29" },
+    "reason": "Heater type child of Heating System."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Bleed Air Heating Systems",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "7-30" },
+    "body_says": { "level": 3, "parent_title": "Heating System", "page_anchor": "7-30" },
+    "reason": "Heater type child of Heating System."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Electrical System",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "7-30" },
+    "body_says": { "level": 2, "parent_title": "Airframe Systems", "page_anchor": "7-30" },
+    "reason": "Listed in Airframe Systems intro paragraph alongside Fuel/Hydraulic/Oxygen."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Hydraulic Systems",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "7-31" },
+    "body_says": { "level": 2, "parent_title": "Airframe Systems", "page_anchor": "7-31" },
+    "reason": "Listed in Airframe Systems intro paragraph."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Tricycle Landing Gear",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "7-33" },
+    "body_says": { "level": 2, "parent_title": "Landing Gear", "page_anchor": "7-33" },
+    "reason": "Subsection of Landing Gear."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Tailwheel Landing Gear",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "7-33" },
+    "body_says": { "level": 2, "parent_title": "Landing Gear", "page_anchor": "7-33" },
+    "reason": "Subsection of Landing Gear."
+  },
+  {
+    "type": "extra_in_toc",
+    "title": "Diluter-Demand Oxygen Systems",
+    "toc_says": { "level": null, "parent_title": null, "page_anchor": null },
+    "body_says": { "level": 2, "parent_title": "Oxygen Systems", "page_anchor": "7-38" },
+    "reason": "Body text contains a 'Diluter-Demand Oxygen Systems' heading at line 3464 that the TOC parser missed; emitted as L2 child of Oxygen Systems."
+  }
+]

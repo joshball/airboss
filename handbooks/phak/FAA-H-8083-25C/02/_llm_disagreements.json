@@ -1,0 +1,219 @@
+[
+  {
+    "type": "level_mismatch",
+    "title": "P = Pilot in Command (PIC)",
+    "toc_says": { "level": 2, "parent_title": "Hazard and Risk", "page_anchor": "2-8" },
+    "body_says": { "level": 3, "parent_title": "The PAVE Checklist", "page_anchor": "2-8" },
+    "reason": "TOC promoted PAVE letter items to L2 siblings of The PAVE Checklist; body text introduces P/A/V/E as the four checklist categories under the PAVE Checklist heading."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "A = Aircraft",
+    "toc_says": { "level": 2, "parent_title": "Hazard and Risk", "page_anchor": "2-8" },
+    "body_says": { "level": 3, "parent_title": "The PAVE Checklist", "page_anchor": "2-8" },
+    "reason": "TOC flattened to L2; body nests Aircraft as one of the four PAVE categories under The PAVE Checklist."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "V = EnVironment",
+    "toc_says": { "level": 2, "parent_title": "Hazard and Risk", "page_anchor": "2-9" },
+    "body_says": { "level": 3, "parent_title": "The PAVE Checklist", "page_anchor": "2-9" },
+    "reason": "TOC flattened to L2; body nests enVironment under The PAVE Checklist."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "E = External Pressures",
+    "toc_says": { "level": 2, "parent_title": "Hazard and Risk", "page_anchor": "2-9" },
+    "body_says": { "level": 3, "parent_title": "The PAVE Checklist", "page_anchor": "2-9" },
+    "reason": "TOC flattened to L2; body nests External Pressures under The PAVE Checklist."
+  },
+  {
+    "type": "extra_in_toc",
+    "title": "Managing External Pressures",
+    "toc_says": { "level": null, "parent_title": null, "page_anchor": null },
+    "body_says": { "level": 3, "parent_title": "The PAVE Checklist", "page_anchor": "2-10" },
+    "reason": "TOC missed this body heading at 2-10 immediately following the E = External Pressures bullets; emitted as L3 under The PAVE Checklist."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "The Plan",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "2-14" },
+    "body_says": { "level": 2, "parent_title": "The 5 Ps Check", "page_anchor": "2-14" },
+    "reason": "TOC promoted all five Ps to L1; body text states the 5 Ps Check consists of Plan, Plane, Pilot, Passengers, Programming as its five subsections."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "The Plane",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "2-14" },
+    "body_says": { "level": 2, "parent_title": "The 5 Ps Check", "page_anchor": "2-14" },
+    "reason": "TOC flattened to L1; body nests under The 5 Ps Check."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "The Pilot",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "2-14" },
+    "body_says": { "level": 2, "parent_title": "The 5 Ps Check", "page_anchor": "2-14" },
+    "reason": "TOC flattened to L1; body nests under The 5 Ps Check."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "The Passengers",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "2-14" },
+    "body_says": { "level": 2, "parent_title": "The 5 Ps Check", "page_anchor": "2-14" },
+    "reason": "TOC flattened to L1; body nests under The 5 Ps Check."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "The Programming",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "2-15" },
+    "body_says": { "level": 2, "parent_title": "The 5 Ps Check", "page_anchor": "2-15" },
+    "reason": "TOC flattened to L1; body nests under The 5 Ps Check."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "PAVE Checklist: Identify Hazards and Personal Minimums",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "2-15" },
+    "body_says": { "level": 2, "parent_title": "Perceive, Process, Perform (3P) Model", "page_anchor": "2-15" },
+    "reason": "TOC flattened to L1; body presents PAVE/CARE/TEAM as the three subordinate steps of the 3P model (Perceive, Process, Perform)."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "CARE Checklist: Review Hazards and Evaluate Risks",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "2-16" },
+    "body_says": { "level": 2, "parent_title": "Perceive, Process, Perform (3P) Model", "page_anchor": "2-16" },
+    "reason": "TOC flattened to L1; body nests under the 3P Model."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "TEAM Checklist: Choose and Implement Risk Controls",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "2-16" },
+    "body_says": { "level": 2, "parent_title": "Perceive, Process, Perform (3P) Model", "page_anchor": "2-16" },
+    "reason": "TOC flattened to L1; body nests under the 3P Model."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Detect (the Problem)",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "2-20" },
+    "body_says": { "level": 2, "parent_title": "The DECIDE Model", "page_anchor": "2-20" },
+    "reason": "TOC promoted all six DECIDE steps to L1; body presents them as the six subordinate steps of The DECIDE Model."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Estimate (the Need To React)",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "2-20" },
+    "body_says": { "level": 2, "parent_title": "The DECIDE Model", "page_anchor": "2-20" },
+    "reason": "TOC flattened to L1; body nests under The DECIDE Model."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Choose (a Course of Action)",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "2-20" },
+    "body_says": { "level": 2, "parent_title": "The DECIDE Model", "page_anchor": "2-20" },
+    "reason": "TOC flattened to L1; body nests under The DECIDE Model."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Identify (Solutions)",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "2-20" },
+    "body_says": { "level": 2, "parent_title": "The DECIDE Model", "page_anchor": "2-20" },
+    "reason": "TOC flattened to L1; body nests under The DECIDE Model."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Do (the Necessary Actions)",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "2-20" },
+    "body_says": { "level": 2, "parent_title": "The DECIDE Model", "page_anchor": "2-20" },
+    "reason": "TOC flattened to L1; body nests under The DECIDE Model."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Evaluate (the Effect of the Action)",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "2-20" },
+    "body_says": { "level": 2, "parent_title": "The DECIDE Model", "page_anchor": "2-20" },
+    "reason": "TOC flattened to L1; body nests under The DECIDE Model."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Automatic Decision-Making",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "2-21" },
+    "body_says": { "level": 2, "parent_title": "Decision-Making in a Dynamic Environment", "page_anchor": "2-21" },
+    "reason": "TOC flattened to L1; body presents Automatic Decision-Making as the named approach within the broader Dynamic Environment section."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Internal Resources",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "2-23" },
+    "body_says": { "level": 2, "parent_title": "Use of Resources", "page_anchor": "2-23" },
+    "reason": "TOC flattened to L1; body splits Use of Resources into Internal and External Resources subsections."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "External Resources",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "2-23" },
+    "body_says": { "level": 2, "parent_title": "Use of Resources", "page_anchor": "2-23" },
+    "reason": "TOC flattened to L1; body nests under Use of Resources."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Obstacles to Maintaining Situational Awareness",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "2-24" },
+    "body_says": { "level": 2, "parent_title": "Situational Awareness", "page_anchor": "2-24" },
+    "reason": "TOC flattened to L1; body nests directly under Situational Awareness."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Results of the Study",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "2-27" },
+    "body_says": { "level": 2, "parent_title": "Automation", "page_anchor": "2-27" },
+    "reason": "TOC flattened to L1; body presents Results of the Study as the outcome of the automation study introduced under Automation."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Autopilot Systems",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "2-27" },
+    "body_says": { "level": 2, "parent_title": "Equipment Use", "page_anchor": "2-27" },
+    "reason": "TOC flattened to L1; body nests under Equipment Use."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Familiarity",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "2-27" },
+    "body_says": { "level": 2, "parent_title": "Equipment Use", "page_anchor": "2-27" },
+    "reason": "TOC flattened to L1; body nests under Equipment Use."
+  },
+  {
+    "type": "extra_in_toc",
+    "title": "Reinforcement of Onboard Suites",
+    "toc_says": { "level": null, "parent_title": null, "page_anchor": null },
+    "body_says": { "level": 1, "parent_title": null, "page_anchor": "2-29" },
+    "reason": "TOC missed this body heading at 2-29 between Respect for Onboard Systems and Getting Beyond Rote Workmanship."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Information Management",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "2-30" },
+    "body_says": { "level": 2, "parent_title": "Managing Aircraft Automation", "page_anchor": "2-30" },
+    "reason": "TOC flattened to L1; body explicitly identifies Information, Automation, and Risk Management as the three flight management skills under Managing Aircraft Automation."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Enhanced Situational Awareness",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "2-30" },
+    "body_says": { "level": 2, "parent_title": "Managing Aircraft Automation", "page_anchor": "2-30" },
+    "reason": "TOC flattened to L1; body nests under Managing Aircraft Automation."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Automation Management",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "2-31" },
+    "body_says": { "level": 2, "parent_title": "Managing Aircraft Automation", "page_anchor": "2-31" },
+    "reason": "TOC flattened to L1; body nests under Managing Aircraft Automation as one of the three key flight management skills."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Risk Management",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "2-31" },
+    "body_says": { "level": 2, "parent_title": "Managing Aircraft Automation", "page_anchor": "2-31" },
+    "reason": "TOC flattened to L1; the second Risk Management heading at 2-31 is the third of the three flight management skills under Managing Aircraft Automation (distinct from the L1 Risk Management at 2-3)."
+  }
+]

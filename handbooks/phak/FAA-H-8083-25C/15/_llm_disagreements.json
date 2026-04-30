@@ -1,0 +1,58 @@
+[
+  {
+    "type": "extra_in_toc",
+    "title": "Parachute Jump Aircraft Operations",
+    "toc_says": null,
+    "body_says": { "level": 2, "parent_title": "Other Airspace Areas", "page_anchor": "15-6" },
+    "reason": "Body heading on page 15-6 grouped under Other Airspace Areas; TOC parser missed it."
+  },
+  {
+    "type": "extra_in_toc",
+    "title": "Class A",
+    "toc_says": null,
+    "body_says": { "level": 3, "parent_title": "Operating Rules and Pilot/Equipment Requirements", "page_anchor": "15-9" },
+    "reason": "Body subsection heading inside Operating Rules listing per-class operational requirements; TOC parser missed it."
+  },
+  {
+    "type": "extra_in_toc",
+    "title": "Class B",
+    "toc_says": null,
+    "body_says": { "level": 3, "parent_title": "Operating Rules and Pilot/Equipment Requirements", "page_anchor": "15-9" },
+    "reason": "Body subsection heading inside Operating Rules listing per-class operational requirements; TOC parser missed it."
+  },
+  {
+    "type": "extra_in_toc",
+    "title": "Class C",
+    "toc_says": null,
+    "body_says": { "level": 3, "parent_title": "Operating Rules and Pilot/Equipment Requirements", "page_anchor": "15-9" },
+    "reason": "Body subsection heading inside Operating Rules listing per-class operational requirements; TOC parser missed it."
+  },
+  {
+    "type": "extra_in_toc",
+    "title": "Class D",
+    "toc_says": null,
+    "body_says": { "level": 3, "parent_title": "Operating Rules and Pilot/Equipment Requirements", "page_anchor": "15-10" },
+    "reason": "Body subsection heading inside Operating Rules listing per-class operational requirements; TOC parser missed it."
+  },
+  {
+    "type": "extra_in_toc",
+    "title": "Class E",
+    "toc_says": null,
+    "body_says": { "level": 3, "parent_title": "Operating Rules and Pilot/Equipment Requirements", "page_anchor": "15-10" },
+    "reason": "Body subsection heading inside Operating Rules listing per-class operational requirements; TOC parser missed it."
+  },
+  {
+    "type": "extra_in_toc",
+    "title": "Class G",
+    "toc_says": null,
+    "body_says": { "level": 3, "parent_title": "Operating Rules and Pilot/Equipment Requirements", "page_anchor": "15-10" },
+    "reason": "Body subsection heading inside Operating Rules listing per-class operational requirements; TOC parser missed it."
+  },
+  {
+    "type": "extra_in_toc",
+    "title": "Uncontrolled Airspace",
+    "toc_says": null,
+    "body_says": { "level": 2, "parent_title": "Air Traffic Control and the National Airspace System", "page_anchor": "15-11" },
+    "reason": "Second occurrence of Uncontrolled Airspace as a body heading on page 15-11, distinct from the L1 Uncontrolled Airspace section earlier in the chapter; TOC parser missed it."
+  }
+]

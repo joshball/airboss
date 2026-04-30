@@ -1,0 +1,121 @@
+[
+  {
+    "type": "extra_in_toc",
+    "title": "Airplane Flight Manuals (AFM)",
+    "toc_says": { "level": null, "parent_title": null, "page_anchor": null },
+    "body_says": { "level": 1, "parent_title": null, "page_anchor": "9-1" },
+    "reason": "Body text has 'Airplane Flight Manuals (AFM)' as a top-level heading at line 11; TOC parser missed it and parented all of its subsections (Preliminary Pages, General, Limitations, etc.) under 'Introduction' instead."
+  },
+  {
+    "type": "parent_mismatch",
+    "title": "Preliminary Pages",
+    "toc_says": { "level": 2, "parent_title": "Introduction", "page_anchor": "9-2" },
+    "body_says": { "level": 2, "parent_title": "Airplane Flight Manuals (AFM)", "page_anchor": "9-2" },
+    "reason": "Body nests AFM/POH sections under 'Airplane Flight Manuals (AFM)', not 'Introduction'."
+  },
+  {
+    "type": "parent_mismatch",
+    "title": "General (Section 1)",
+    "toc_says": { "level": 2, "parent_title": "Introduction", "page_anchor": "9-2" },
+    "body_says": { "level": 2, "parent_title": "Airplane Flight Manuals (AFM)", "page_anchor": "9-2" },
+    "reason": "AFM/POH 'Section 1' belongs to the AFM heading, not Introduction."
+  },
+  {
+    "type": "parent_mismatch",
+    "title": "Limitations (Section 2)",
+    "toc_says": { "level": 2, "parent_title": "Introduction", "page_anchor": "9-2" },
+    "body_says": { "level": 2, "parent_title": "Airplane Flight Manuals (AFM)", "page_anchor": "9-2" },
+    "reason": "AFM/POH 'Section 2' belongs to the AFM heading, not Introduction."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Airspeed",
+    "toc_says": { "level": 2, "parent_title": "Introduction", "page_anchor": "9-2" },
+    "body_says": { "level": 3, "parent_title": "Limitations (Section 2)", "page_anchor": "9-2" },
+    "reason": "Body lists 'Airspeed' as a sub-topic under 'Limitations (Section 2)' along with Powerplant, Weight and Loading Distribution, Flight Limits, Placards; TOC flattened it to L2 under Introduction."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Powerplant",
+    "toc_says": { "level": 2, "parent_title": "Introduction", "page_anchor": "9-3" },
+    "body_says": { "level": 3, "parent_title": "Limitations (Section 2)", "page_anchor": "9-3" },
+    "reason": "Body nests 'Powerplant' under 'Limitations (Section 2)'."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Weight and Loading Distribution",
+    "toc_says": { "level": 2, "parent_title": "Introduction", "page_anchor": "9-3" },
+    "body_says": { "level": 3, "parent_title": "Limitations (Section 2)", "page_anchor": "9-3" },
+    "reason": "Body nests 'Weight and Loading Distribution' under 'Limitations (Section 2)'."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Flight Limits",
+    "toc_says": { "level": 2, "parent_title": "Introduction", "page_anchor": "9-4" },
+    "body_says": { "level": 3, "parent_title": "Limitations (Section 2)", "page_anchor": "9-4" },
+    "reason": "Body nests 'Flight Limits' under 'Limitations (Section 2)'."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Placards",
+    "toc_says": { "level": 2, "parent_title": "Introduction", "page_anchor": "9-4" },
+    "body_says": { "level": 3, "parent_title": "Limitations (Section 2)", "page_anchor": "9-4" },
+    "reason": "Body nests 'Placards' under 'Limitations (Section 2)'."
+  },
+  {
+    "type": "parent_mismatch",
+    "title": "Emergency Procedures (Section 3)",
+    "toc_says": { "level": 2, "parent_title": "Introduction", "page_anchor": "9-4" },
+    "body_says": { "level": 2, "parent_title": "Airplane Flight Manuals (AFM)", "page_anchor": "9-4" },
+    "reason": "AFM/POH 'Section 3' belongs to the AFM heading, not Introduction."
+  },
+  {
+    "type": "parent_mismatch",
+    "title": "Normal Procedures (Section 4)",
+    "toc_says": { "level": 2, "parent_title": "Introduction", "page_anchor": "9-4" },
+    "body_says": { "level": 2, "parent_title": "Airplane Flight Manuals (AFM)", "page_anchor": "9-4" },
+    "reason": "AFM/POH 'Section 4' belongs to the AFM heading, not Introduction."
+  },
+  {
+    "type": "parent_mismatch",
+    "title": "Performance (Section 5)",
+    "toc_says": { "level": 2, "parent_title": "Introduction", "page_anchor": "9-4" },
+    "body_says": { "level": 2, "parent_title": "Airplane Flight Manuals (AFM)", "page_anchor": "9-4" },
+    "reason": "AFM/POH 'Section 5' belongs to the AFM heading, not Introduction."
+  },
+  {
+    "type": "parent_mismatch",
+    "title": "Weight and Balance/Equipment List (Section 6)",
+    "toc_says": { "level": 2, "parent_title": "Introduction", "page_anchor": "9-4" },
+    "body_says": { "level": 2, "parent_title": "Airplane Flight Manuals (AFM)", "page_anchor": "9-4" },
+    "reason": "AFM/POH 'Section 6' belongs to the AFM heading, not Introduction."
+  },
+  {
+    "type": "parent_mismatch",
+    "title": "Systems Description (Section 7)",
+    "toc_says": { "level": 2, "parent_title": "Introduction", "page_anchor": "9-4" },
+    "body_says": { "level": 2, "parent_title": "Airplane Flight Manuals (AFM)", "page_anchor": "9-4" },
+    "reason": "AFM/POH 'Section 7' belongs to the AFM heading, not Introduction."
+  },
+  {
+    "type": "parent_mismatch",
+    "title": "Handling, Service, and Maintenance (Section 8)",
+    "toc_says": { "level": 2, "parent_title": "Introduction", "page_anchor": "9-5" },
+    "body_says": { "level": 2, "parent_title": "Airplane Flight Manuals (AFM)", "page_anchor": "9-5" },
+    "reason": "AFM/POH 'Section 8' belongs to the AFM heading, not Introduction."
+  },
+  {
+    "type": "parent_mismatch",
+    "title": "Supplements (Section 9)",
+    "toc_says": { "level": 2, "parent_title": "Introduction", "page_anchor": "9-5" },
+    "body_says": { "level": 2, "parent_title": "Airplane Flight Manuals (AFM)", "page_anchor": "9-5" },
+    "reason": "AFM/POH 'Section 9' belongs to the AFM heading, not Introduction."
+  },
+  {
+    "type": "parent_mismatch",
+    "title": "Safety Tips (Section 10)",
+    "toc_says": { "level": 2, "parent_title": "Introduction", "page_anchor": "9-6" },
+    "body_says": { "level": 2, "parent_title": "Airplane Flight Manuals (AFM)", "page_anchor": "9-6" },
+    "reason": "AFM/POH 'Section 10' belongs to the AFM heading, not Introduction."
+  }
+]
