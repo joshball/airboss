@@ -3,7 +3,7 @@ title: 'Spec: Cert, Syllabus, and Goal Composer'
 product: study
 feature: cert-syllabus-and-goal-composer
 type: spec
-status: unread
+status: shipped
 review_status: pending
 amended:
   - 2026-04-27 -- amended to compose with merged WP #1 (PR #242) and accepted ADR 019 v3

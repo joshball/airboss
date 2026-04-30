@@ -1,6 +1,6 @@
 {
-  "id": "a1608159-d532-401e-8fb7-5c15f400a9c4",
-  "prevId": "30252951-fafb-44fd-a4d3-d08f9abc4bca",
+  "id": "a63ab94e-1dc4-4469-bb06-6cbd527fc69d",
+  "prevId": "a1608159-d532-401e-8fb7-5c15f400a9c4",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -3396,6 +3396,13 @@
           "primaryKey": false,
           "notNull": false
         },
+        "subjects": {
+          "name": "subjects",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'{}'::text[]"
+        },
         "superseded_by_id": {
           "name": "superseded_by_id",
           "type": "text",
@@ -3513,6 +3520,10 @@
         "reference_edition_length_check": {
           "name": "reference_edition_length_check",
           "value": "char_length(\"edition\") BETWEEN 1 AND 64"
+        },
+        "reference_subjects_values_check": {
+          "name": "reference_subjects_values_check",
+          "value": "\"subjects\" <@ ARRAY['regulations', 'weather', 'navigation', 'communications', 'airspace', 'aerodynamics', 'performance', 'weight-balance', 'aircraft-systems', 'flight-instruments', 'procedures', 'human-factors', 'medical', 'certification', 'maintenance', 'airports', 'emergencies', 'training-ops']::text[]"
         }
       },
       "isRLSEnabled": false

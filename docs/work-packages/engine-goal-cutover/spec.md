@@ -3,7 +3,7 @@ title: 'Spec: Engine Goal Cutover'
 product: study
 feature: engine-goal-cutover
 type: spec
-status: unread
+status: shipped
 review_status: pending
 ---
 

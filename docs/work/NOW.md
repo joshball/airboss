@@ -1,6 +1,19 @@
 # Now
 
-Single entry point for "what should I work on?" in airboss. Refresh date: 2026-04-30 (FAR navigation course content-complete).
+Single entry point for "what should I work on?" in airboss. Refresh date: 2026-04-30 (hangar-audit-explorer + cockpit-panel + encoded-text family + WP status flips).
+
+## Just shipped (2026-04-30 -- hangar admin audit explorer)
+
+- **[hangar-audit-explorer](../work-packages/hangar-audit-explorer/spec.md) shipped (PR #365).** Cross-cutting audit explorer at `/admin/audit` + `/admin/audit/[id]`. Pure read consumer of `audit.audit_log`. New BC reads (`listAuditEntries`, `getAuditEntry`, `searchActorIds`) cursor-paginate / join the actor / typeahead. Filter bar UI (actor, target type/id, op, time-window chips), side-by-side jsonb panes on the detail page. Hangar dashboard's System -> Audit tile retargeted; audit-ping retirement is a separate follow-up cleanup WP. Spec frontmatter `status: shipped`.
+- **CockpitPanel promoted to `libs/activities/cockpit-panel/` (PR #364).** Sim is the second consumer; matches the PFD promotion pattern from #328. 10 components moved (Altimeter, AnnunciatorStrip, Asi, AttitudeIndicator, CockpitPanel, HeadingIndicator, Tachometer, TurnCoordinator, Vsi, plus a `cluster/` subdir).
+- **Encoded-text family kicked off (PR #369).** New `course/weather/` and `course/notams/` skeletons + the wx scenario engine vision. Both anchor the broader encoded-text pedagogy ladder (decode -> understand -> triage) called out in memory: `project_encoded_text_family.md`. PRDs at `docs/vision/products/pre-flight/notam-triage/` + `weather-scenario-engine/`.
+- **WP `status:` frontmatter flips.** Three WPs whose code shipped without a spec-status flip: `evidence-kind-gating` (#361), `engine-goal-cutover` (#353), `cert-syllabus-and-goal-composer` (#248/254/264/270/274). All flipped to `status: shipped`.
+
+## Just shipped (2026-04-30 -- doc + audit reconciliation)
+
+- **Citations pattern doc refreshed** ([`docs/agents/reference-citations-pattern.md`](../agents/reference-citations-pattern.md)). Six stale refs corrected against current main: migration repointed from the retired `drizzle/0004_content_citations.sql` to the consolidated `drizzle/0000_initial.sql`; five `:line` references updated where files moved during intervening refactors. PR #358.
+- **Magic-strings audit reconciled** ([`docs/work/reviews/20260424-magic-strings-audit.md`](reviews/20260424-magic-strings-audit.md)). Triaged ~20 items against current main; only the lifecycle literals in `libs/bc/study/src/knowledge.ts` (`lifecycleFromContent` return type + `?? 'skeleton'` fallback) were genuinely open. Replaced with `NODE_LIFECYCLES.{SKELETON,STARTED,COMPLETE}`. Audit doc gets a `Reconciliation 2026-04-30` table at the bottom showing each item's disposition (closed by PR #312, closed by post-pivot taxonomy migration, closed by ADR 014, closed by z-index tokens, closed by this PR, deliberately left). One item left: `SLICE_HELP_SECTION` value literals are help-fragment IDs that shadow `SESSION_SLICES.*` values by convention; coupling them would conflate two parallel vocabularies. PR #360.
+- **`canonicalize` opt-in unordered-array keys** ([`libs/bc/study/src/deck-spec.ts`](../../libs/bc/study/src/deck-spec.ts)). Lifted hardcoded `if (last === 'tags')` to a module-scope `UNORDERED_ARRAY_KEYS` set so future deck-spec fields opt in without growing new branches. Behaviour for `tags` unchanged. PR #358.
 
 ## Just shipped (2026-04-30 -- evidence-kind-gating WP)
 
@@ -9,14 +22,14 @@ Single entry point for "what should I work on?" in airboss. Refresh date: 2026-0
 ## Just shipped (2026-04-30 -- FAR navigation course Weeks 3-10 + 2 sibling capstones)
 
 - **FAR navigation course is content-complete.** All 10 weeks authored. All 4 sibling capstone orals authored. Authored across one work package PR (#349, merged) and one content PR (#350, the omnibus). Authoring approach: parallel sub-agents per week, exclusive directory ownership, phased dispatch.
-  - Week 3 -- Part 61 CFI (subpart H, endorsements, FOI): 5 lessons + drills + oral (~1,931 lines)
-  - Week 4 -- Part 91 general + flight rules: 6 lessons + drills + oral (Week 4 lessons 03-06 + drills + oral authored inline by the dispatcher after content-filter blocks on the sub-agent return path)
-  - Week 5 -- Part 91 equipment + maintenance: 5 lessons + drills + oral (~2,863 lines, "very deep" treatment)
-  - Week 6 -- Part 91 special ops + integration: 5 lessons + drills + oral (~1,911 lines)
-  - Week 7 -- Parts 141/135: 4 lessons + drills + oral (~1,244 lines, "cursory" literacy treatment)
-  - Week 8 -- Companion documents (AIM, AC, Chief Counsel, 49 CFR): 5 lessons + drills + oral (~1,839 lines)
-  - Week 9 -- Enforcement + NTSB Part 830: 6 lessons + drills + oral (~2,738 lines)
-  - Week 10 -- Capstone + 2 new sibling capstone orals (`friend-flight-review.md`, `ppl-applies-for-ir.md`): 3 lessons + drills + oral + 2 capstones (~691 lines + 59KB capstones)
+  - Week 3 -- Part 61 CFI (subpart H, endorsements, FOI): 6 files (5 lessons + overview) + drills + oral (~1,931 lines)
+  - Week 4 -- Part 91 general + flight rules: 7 files (6 lessons + overview) + drills + oral (Week 4 lessons 03-06 + drills + oral authored inline by the dispatcher after content-filter blocks on the sub-agent return path)
+  - Week 5 -- Part 91 equipment + maintenance: 6 files (5 lessons + overview) + drills + oral (~2,863 lines, "very deep" treatment)
+  - Week 6 -- Part 91 special ops + integration: 6 files (5 lessons + overview) + drills + oral (~1,911 lines)
+  - Week 7 -- Parts 141/135: 5 files (4 lessons + overview) + drills + oral (~1,244 lines, "cursory" literacy treatment)
+  - Week 8 -- Companion documents (AIM, AC, Chief Counsel, 49 CFR): 6 files (5 lessons + overview) + drills + oral (~1,839 lines)
+  - Week 9 -- Enforcement + NTSB Part 830: 7 files (6 lessons + overview) + drills + oral (~2,738 lines)
+  - Week 10 -- Capstone + 2 new sibling capstone orals (`friend-flight-review.md`, `ppl-applies-for-ir.md`): 4 files (3 lessons + overview) + drills + oral + 2 capstones (~691 lines + 59KB capstones). Two existing capstone orals (`gear-up-night-ifr.md` from Week 1 era, `night-ifr-passenger.md` from #235) bring the total to 4/4 sibling capstones.
   - All citations use `airboss-ref:` URI syntax per ADR 019. Validator (`bun scripts/references.ts validate`) clean, 0 errors.
   - CHANGELOG status table flipped to "Authored" for all 10 weeks; capstones flipped to 4/4.
 
@@ -77,8 +90,8 @@ The week was dominated by the reference identifier system (ADR 019, **phases 1-9
 
 ## In flight
 
-- *(FAR navigation course Weeks 3-10 and 2 sibling capstones moved to "Just shipped 2026-04-30".)*
-- **[hangar-audit-explorer](../work-packages/hangar-audit-explorer/spec.md) (2026-04-30).** Cross-cutting audit explorer at `/admin/audit` + `/admin/audit/[id]`. Pure read consumer of `audit.audit_log`. New BC reads (`listAuditEntries`, `getAuditEntry`, `searchActorIds`) cursor-paginate / join the actor / typeahead. Filter bar UI (actor, target type/id, op, time-window chips), side-by-side jsonb panes on the detail page. Hangar dashboard's System -> Audit tile retargeted; audit-ping retirement is a separate follow-up cleanup WP. PR open; manual test plan walks Joshua through the surface before flip-to-shipped.
+- **[evidence-kind-data-layer](../work-packages/evidence-kind-data-layer/spec.md) (2026-04-30).** Authored to close the `not_applicable` shims that `evidence-kind-gating` (#361) shipped: today `calculation`, `demonstration`, and `teaching` gates return `not_applicable` because there's no `card.kind`, no `scenario.assessment_methods`, and no `teaching-exercise` `SESSION_ITEM_KIND`. WP plans the schema + seeds + assessment-method writes that make the four-kind partition real. Spec authored (#367); `status: unread`, awaiting sign-off + implementation.
+- **[hangar-users-editing](../work-packages/hangar-users-editing/spec.md) (2026-04-30).** Ratified alongside cockpit-panel + audit-explorer in #362. Spec on disk; `status: unread`, awaiting sign-off + implementation. The other two from that ratification batch (cockpit-panel, audit-explorer) shipped same day; this one is the lone holdout.
 - **[section-extraction-contract-v2](../work-packages/section-extraction-contract-v2/spec.md) Phase 3 GREENLIT (2026-04-30).** Decision driven by the regenerated compare report against PR #355 artifacts: 485 parent-mismatches and 317 level-mismatches across 17 chapters, 15 of 17 chapters with parent-diff > 10, ch 7 with 86 of 88 TOC entries flagged L1. Systematic TOC over-flattening; LLM nesting consistently matches body text. See [tasks.md Phase 3](../work-packages/section-extraction-contract-v2/tasks.md) for the metric table and full reasoning. Phase 3 implementation is a separate PR following this WP closure.
 
 ## ADR 016 status (post-2026-04-28 ship)
@@ -139,47 +152,24 @@ The three transparent scope decisions called out at ship time (PRs #321 / #323 /
 
 **Out of scope:** server-side full-text search (the graph fits in memory for the foreseeable future); bulk multi-select (single-add per click matches v1; bulk earns its keep when batch-curating goals from a weak-areas walkthrough lands).
 
-### Follow-on 3 -- Engine cutover to goal-derived filters (next ADR 016 phase)
+### Follow-on 3 -- Engine cutover to goal-derived filters (shipped)
 
-**Status (2026-04-29):** in flight as WP [`engine-goal-cutover`](../work-packages/engine-goal-cutover/spec.md). The dual-read helper, telemetry, plan-UI redirect, and drop-migration are staged; the column drop ships in a follow-up PR after the 14-day telemetry trigger fires.
+**Status (2026-04-30):** shipped via PR #353. The dual-read helper [`getEngineTargeting`](../../libs/bc/study/src/engine-targeting.ts) reads cert / focus / skip from the user's primary goal when present and falls back to legacy `study_plan` columns when not, with structured-log telemetry per `previewSession` call. Plan UI redirects to the goal composer; `createPlan` / `updatePlan` reject non-empty cert input via `PlanCertGoalsDeprecatedError`. The staged drop migration sits in the WP directory and lands after `bun run db check engine-targeting-source --window=14d` reports `READY TO DROP` (14 consecutive days with zero legacy reads).
 
-**What shipped (PRs #270, #324):** the goal model is the source of truth for "what the learner is pursuing." `study_plan.cert_goals` -> `goal_syllabus` migration ran. `getDerivedCertGoals(userId)` returns the cert-slug projection of the primary goal. `getGoalNodeUnion(goalId)` returns the union of nodes a goal targets.
+**Spec:** [`engine-goal-cutover`](../work-packages/engine-goal-cutover/spec.md) (PR #345 spec, PR #353 implementation).
 
-**What's missing:** the session engine (`libs/bc/study/src/engine.ts`) still reads `study_plan.cert_goals` directly. The "primary" goal designation drives no rep selection; the dashboard reads goals but the rep loop does not.
+**Out of scope of this cutover (now or never):**
 
-**Trigger:** ready now (no walkthrough gating needed). The cutover unblocks the goal composer being usable for actual study sessions, not just bookkeeping.
-
-**Plan:**
-
-This deserves a proper work package authored via `/ball-wp-spec` rather than an inline plan, because it touches the engine's selection contract. Sketch:
-
-| Phase | Scope                                                                                                                                                           | Key files                                               |
-| ----- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
-| 1     | Spec WP `engine-goal-cutover` -- contract changes, dual-read window, telemetry, rollback plan                                                                   | `docs/work-packages/engine-goal-cutover/`               |
-| 2     | New BC fn `getActiveTargetingFilters(userId)` returns `{ certGoals, focusDomains, skipDomains, depthPreference }` -- reads goal first, falls back to study_plan | `libs/bc/study/src/sessions.ts` or new `targeting.ts`   |
-| 3     | Engine `pickContinue` / `pickStrengthen` / `pickExpand` / `pickDiversify` switch from reading `study_plan` to reading the targeting helper                      | `libs/bc/study/src/engine.ts`                           |
-| 4     | Dual-read: when `getPrimaryGoal` returns non-null, prefer goal-derived; otherwise fall back to study_plan (compatibility)                                       | targeting helper                                        |
-| 5     | Once a study_plan -> goal sync rule is decided, drop the `cert_goals` column read from the engine entirely (kept on the table for one release as a safety net)  | engine.ts                                               |
-| 6     | Remove `cert_goals` column from `study_plan` after one stable release (deferred to a final cleanup PR)                                                          | drizzle migration                                       |
-| 7     | Ports the existing engine test suite forward; adds new tests for the goal-driven path                                                                           | `libs/bc/study/src/engine.test.ts`                      |
-| 8     | E2E: create goal -> add syllabus -> set primary -> start session -> verify scenario picks come from the goal's union                                            | `tests/e2e/goal-composer.spec.ts` extension OR new spec |
-
-**Estimated scope:** medium to large. The engine selection logic is mature and well-tested; the cutover is a contract migration with a dual-read safety net rather than a green-field write. Carve into 2-3 PRs (BC helper + engine read + study_plan column drop). Roughly 3-5 days authored carefully.
-
-**Out of scope of follow-on 3:**
-
-- Per-leaf evidence-kind gating (ADR 016 mentions S leaves needing scenario evidence; that's a separate engine improvement, not this cutover).
-- Plan UI changes -- `study_plan` rows stay; the user's plans page keeps working until the column drop in phase 6.
-- Multi-goal targeting (the engine reads the primary goal only; multi-goal weighting is its own design problem).
+- Per-leaf evidence-kind gating -- shipped separately as [`evidence-kind-gating`](../work-packages/evidence-kind-gating/spec.md).
+- Multi-goal targeting (the engine reads the primary goal only; multi-goal weighting is its own design problem when it earns its keep).
 
 ## Suggested next-up sequencing
 
-| Order | Item                                                                 | Reason                                                                              |
-| ----- | -------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
-| 1     | Manual test passes on the three new surfaces (#321 / #323 / #324)    | The build pushed merges ahead of testing; close the loop before adding more.        |
-| 2     | Follow-on 3 (engine cutover) WP authored                             | Unlocks the goal composer for actual study, not just bookkeeping. Trigger is ready. |
-| 3     | FAR navigation course Week 3 (CFI) authored                          | Slow burn; proceeds in parallel with the rest.                                      |
-| 4     | Follow-ons 1 + 2 deferred until a real walkthrough surfaces friction | Doing them speculatively risks wrong shape; let usage drive.                        |
+| Order | Item                                                                  | Reason                                                                         |
+| ----- | --------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| 1     | Manual test passes on the cert-syllabus surfaces (#321 / #323 / #324) | The build pushed merges ahead of testing; close the loop before adding more.   |
+| 2     | Confirm engine-cutover telemetry trigger fires (`READY TO DROP`)      | Triggers the `study_plan.cert_goals` column drop migration follow-up to #353.  |
+| 3     | Follow-ons 1 + 2 deferred until a real walkthrough surfaces friction  | Doing them speculatively risks wrong shape; let usage drive.                   |
 
 ## Recently closed (no longer active)
 
@@ -242,11 +232,9 @@ The original MVP roadmap is done in code; the human-side work and the post-MVP b
 
    The 2026-04-25 walkthrough plan at [`docs/work/walkthroughs/20260425/PLAN.md`](walkthroughs/20260425/PLAN.md) audited each test plan against current main and pruned dead steps; that's the doc to walk from, not the raw test plans.
 
-2. **Author Week 2 of the regulations course (Part 61 deep)**, now unblocked by the `airboss-ref:` round-trip. The course and the graph reinforce each other and are best authored as a pair.
+2. **Drop `study_plan.cert_goals` after the engine-cutover telemetry trigger fires.** PR #353 shipped the dual-read; the staged drop migration sits in [`engine-goal-cutover/`](../work-packages/engine-goal-cutover/spec.md) and lands when `bun run db check engine-targeting-source --window=14d` reports `READY TO DROP`.
 
 3. **Decide CFR XML storage.** Open question in [`reference-extraction-pipeline/tasks.md`](../work-packages/reference-extraction-pipeline/tasks.md): commit, LFS, or external? ADR-shaped product call.
-
-4. **Engine cutover to goal-derived filters.** Now that the goal composer ships, route the session engine through `getGoalNodeUnion` + `getDerivedCertGoals` instead of reading `study_plan.cert_goals` directly.
 
 ## Pending infra cleanup
 
