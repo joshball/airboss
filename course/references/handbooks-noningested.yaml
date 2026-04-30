@@ -18,6 +18,7 @@ references:
     title: Aviation Instructor's Handbook
     publisher: FAA
     url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/aviation_instructors_handbook
+    subjects: [training-ops, human-factors]
 
   - slug: ifh
     kind: handbook
@@ -25,6 +26,7 @@ references:
     title: Instrument Flying Handbook
     publisher: FAA
     url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/instrument_flying_handbook
+    subjects: [procedures, navigation, flight-instruments]
 
   - slug: iph
     kind: handbook
@@ -32,6 +34,7 @@ references:
     title: Instrument Procedures Handbook
     publisher: FAA
     url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/instrument_procedures_handbook
+    subjects: [procedures, navigation, flight-instruments]
 
   - slug: faa-h-8083-2
     kind: handbook
@@ -39,6 +42,7 @@ references:
     title: Risk Management Handbook
     publisher: FAA
     url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/risk_management_handbook
+    subjects: [human-factors]
 
   # AFH 3B was the prior edition. Knowledge nodes still reference it
   # explicitly in `source` strings; rather than rewrite every node to 3C
@@ -51,3 +55,4 @@ references:
     title: Airplane Flying Handbook (prior edition)
     publisher: FAA
     url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/airplane_handbook
+    subjects: [procedures, aerodynamics, training-ops]

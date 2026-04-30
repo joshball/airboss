@@ -12,3 +12,4 @@ references:
     edition: aircraft-specific
     title: Pilot Operating Handbook / Aircraft Flight Manual
     publisher: Aircraft manufacturer
+    subjects: [aircraft-systems, performance]

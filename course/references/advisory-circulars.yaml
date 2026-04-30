@@ -18,18 +18,21 @@ references:
     edition: AC 00-6B
     title: Aviation Weather
     publisher: FAA
+    subjects: [weather]
 
   - slug: ac-00-24
     kind: ac
     edition: AC 00-24C
     title: Thunderstorms
     publisher: FAA
+    subjects: [weather, emergencies]
 
   - slug: ac-00-45
     kind: ac
     edition: AC 00-45H
     title: Aviation Weather Services
     publisher: FAA
+    subjects: [weather]
 
   # ---------- AC 60 series (airmen / training) -----------------------------
 
@@ -38,6 +41,7 @@ references:
     edition: AC 60-22
     title: Aeronautical Decision Making
     publisher: FAA
+    subjects: [human-factors]
 
   # ---------- AC 61 series (airmen) ----------------------------------------
 
@@ -46,36 +50,42 @@ references:
     edition: AC 61-27C
     title: Instrument Flying Handbook (legacy AC superseded by FAA-H-8083-15)
     publisher: FAA
+    subjects: [procedures, navigation, flight-instruments]
 
   - slug: ac-61-67
     kind: ac
     edition: AC 61-67C
     title: Stall and Spin Awareness Training
     publisher: FAA
+    subjects: [aerodynamics, emergencies]
 
   - slug: ac-61-83
     kind: ac
     edition: AC 61-83K
     title: Nationally Scheduled, FAA-Approved, Industry-Conducted Flight Instructor Refresher Course
     publisher: FAA
+    subjects: [training-ops]
 
   - slug: ac-61-84
     kind: ac
     edition: AC 61-84B
     title: Role of Preflight Preparation
     publisher: FAA
+    subjects: [procedures]
 
   - slug: ac-61-98
     kind: ac
     edition: AC 61-98D
     title: Currency Requirements and Guidance for the Flight Review and Instrument Proficiency Check
     publisher: FAA
+    subjects: [regulations, certification]
 
   - slug: ac-61-134
     kind: ac
     edition: AC 61-134
     title: General Aviation Controlled Flight Into Terrain Awareness
     publisher: FAA
+    subjects: [human-factors, navigation]
 
   # ---------- AC 90 series (operations) ------------------------------------
 
@@ -84,12 +94,14 @@ references:
     edition: AC 90-66C
     title: Non-Towered Airport Flight Operations
     publisher: FAA
+    subjects: [airports, communications, procedures]
 
   - slug: ac-90-100
     kind: ac
     edition: AC 90-100A
     title: U.S. Terminal and En Route Area Navigation (RNAV) Operations
     publisher: FAA
+    subjects: [navigation, procedures]
 
   # ---------- AC 91 series (general operating) -----------------------------
 
@@ -98,27 +110,32 @@ references:
     edition: AC 91-23A
     title: Pilot's Weight and Balance Handbook
     publisher: FAA
+    subjects: [weight-balance, performance]
 
   - slug: ac-91-44
     kind: ac
     edition: AC 91-44A
     title: Operational and Maintenance Practices for Emergency Locator Transmitters and Receivers
     publisher: FAA
+    subjects: [aircraft-systems, emergencies]
 
   - slug: ac-91-74
     kind: ac
     edition: AC 91-74B
     title: Pilot Guide -- Flight in Icing Conditions
     publisher: FAA
+    subjects: [weather, emergencies]
 
   - slug: ac-91-75
     kind: ac
     edition: AC 91-75
     title: Attitude Indicator
     publisher: FAA
+    subjects: [flight-instruments]
 
   - slug: ac-91-79
     kind: ac
     edition: AC 91-79B
     title: Mitigating the Risks of a Runway Overrun Upon Landing
     publisher: FAA
+    subjects: [procedures, performance, airports]

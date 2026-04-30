@@ -20,7 +20,7 @@ import { existsSync, readdirSync, statSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { REFERENCE_KIND_VALUES, type ReferenceKind } from '@ab/constants';
+import { AVIATION_TOPIC_VALUES, type AviationTopic, REFERENCE_KIND_VALUES, type ReferenceKind } from '@ab/constants';
 import { parse } from 'yaml';
 import { z } from 'zod';
 import { upsertReference } from '../../libs/bc/study/src/handbooks';
@@ -40,6 +40,14 @@ const referenceEntrySchema = z.object({
 	title: z.string().min(1),
 	publisher: z.string().optional(),
 	url: z.string().url().optional(),
+	// Required: every authored reference must declare 1..3 aviation-topic
+	// subjects so the library index can group it. Validator enforces enum
+	// membership; the CHECK constraint on `study.reference.subjects` is the
+	// safety net at the DB layer.
+	subjects: z
+		.array(z.enum(AVIATION_TOPIC_VALUES as [AviationTopic, ...AviationTopic[]]))
+		.min(1)
+		.max(3),
 });
 
 const referencesFileSchema = z.object({
@@ -88,6 +96,7 @@ export async function seedReferences(options: SeedReferencesOptions = {}): Promi
 				title: entry.title,
 				publisher: entry.publisher ?? 'FAA',
 				url: entry.url ?? null,
+				subjects: entry.subjects,
 				seedOrigin: options.seedOrigin ?? null,
 			});
 			summary.rowsUpserted += 1;

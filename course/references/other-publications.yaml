@@ -18,12 +18,14 @@ references:
     title: AOPA Air Safety Institute
     publisher: AOPA
     url: https://www.aopa.org/training-and-safety/air-safety-institute
+    subjects: [human-factors, training-ops]
 
   - slug: faa-p-8740-36
     kind: other
     edition: unspecified
     title: Aviation Decision Making (FAA-P-8740-36)
     publisher: FAA
+    subjects: [human-factors]
 
   - slug: faa-order-8260-3
     kind: other
@@ -31,6 +33,7 @@ references:
     title: United States Standard for Terminal Instrument Procedures (TERPS)
     publisher: FAA
     url: https://www.faa.gov/regulations_policies/orders_notices?searchedQuery=8260.3
+    subjects: [procedures, navigation]
 
   - slug: faa-approach-plates
     kind: other
@@ -38,18 +41,21 @@ references:
     title: FAA Approach Plates (per-airport)
     publisher: FAA
     url: https://www.faa.gov/air_traffic/flight_info/aeronav/digital_products/
+    subjects: [procedures, navigation, airports]
 
   - slug: jeppesen-faa-charts
     kind: other
     edition: current
     title: Jeppesen and FAA aeronautical charts
     publisher: Jeppesen / FAA
+    subjects: [navigation, airspace]
 
   - slug: rogers-d-f
     kind: other
     edition: '1995'
     title: The Possible 'Impossible' Turn (AIAA Journal of Aircraft, 1995)
     publisher: AIAA
+    subjects: [emergencies, aerodynamics]
 
   # Umbrella rows for legacy "ACS" / "PTS" citations that don't yet
   # specify which cert. The migration's ACS / PTS recognizer routes to
@@ -63,6 +69,7 @@ references:
     title: Airman Certification Standards (unspecified cert)
     publisher: FAA
     url: https://www.faa.gov/training_testing/testing/acs
+    subjects: [certification]
 
   - slug: generic-pts
     kind: pts
@@ -70,3 +77,4 @@ references:
     title: Practical Test Standards (unspecified cert)
     publisher: FAA
     url: https://www.faa.gov/training_testing/testing/acs
+    subjects: [certification]
