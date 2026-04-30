@@ -21,15 +21,48 @@
  * accepts area / task / element code filters and the Domain lens accepts
  * domain-slug filters.
  *
+ * Per the evidence-kind-gating WP each leaf carries a richer
+ * `LensLeafMastery` shape (per-kind gates + missing-kinds) so consumers can
+ * surface "you have recall down but need a scenario" without re-walking. The
+ * existing `mastered: boolean` and `covered: boolean` fields keep their
+ * names; the new fields are additive.
+ *
  * See ADR 016 phase 6 + the cert-syllabus WP spec for the framework
- * rationale.
+ * rationale, and `docs/work-packages/evidence-kind-gating/` for the per-kind
+ * extension.
  */
 
-import { type BloomLevel, DOMAIN_LABELS, type Domain } from '@ab/constants';
-import { eq, sql } from 'drizzle-orm';
+import {
+	type ACSTriad,
+	ASSESSMENT_METHOD_VALUES,
+	type AssessmentMethod,
+	type BloomLevel,
+	type CertApplicability,
+	DEFAULT_TRIAD_EVIDENCE_CERT,
+	DOMAIN_LABELS,
+	type Domain,
+	NODE_MASTERY_GATES,
+} from '@ab/constants';
+import { eq, inArray } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
+import {
+	credentialSlugToCertApplicability,
+	type GateState,
+	getLeafMasteryStateMap,
+	getNodeEvidenceStateMap,
+	type LeafMasteryState,
+	type NodeEvidenceState,
+} from './mastery';
 import type { GoalRow, KnowledgeNodeRow, SyllabusNodeRow } from './schema';
-import { goalSyllabus, knowledgeNode, syllabus, syllabusNode, syllabusNodeLink } from './schema';
+import {
+	credential,
+	credentialSyllabus,
+	goalSyllabus,
+	knowledgeNode,
+	syllabus,
+	syllabusNode,
+	syllabusNodeLink,
+} from './schema';
 
 type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;
 
@@ -58,6 +91,33 @@ export interface MasteryRollup {
 	 */
 	masteryFraction: number;
 	coverageFraction: number;
+	/**
+	 * Per-evidence-kind aggregate across the rollup's input leaves
+	 * (evidence-kind-gating WP). For each kind that any leaf required:
+	 *   - `required`: how many leaves listed this kind in `requiredKinds`.
+	 *   - `passing`: how many of those leaves had this kind aggregate to
+	 *     `pass` in `byEvidenceKind`.
+	 * Lets follow-on UI surface "12 of 18 skill leaves have scenario
+	 * evidence" without re-walking the leaf set. Empty when the input
+	 * leaves do not carry a `requiredKinds` field (legacy callers).
+	 */
+	byEvidenceKind: Partial<Record<AssessmentMethod, { required: number; passing: number }>>;
+}
+
+/**
+ * Per-leaf mastery payload exposed by the lens. `mastered` and `covered`
+ * keep their existing names; the additional fields are additive (consumers
+ * that ignore them keep working). When the lens cannot compute per-kind
+ * gates (e.g. a leaf with no triad / required kinds), the new fields
+ * collapse to empty arrays / records and the legacy `mastered` boolean
+ * still drives the rollup.
+ */
+export interface LensLeafMastery {
+	mastered: boolean;
+	covered: boolean;
+	requiredKinds: readonly AssessmentMethod[];
+	byEvidenceKind: Partial<Record<AssessmentMethod, GateState>>;
+	missingKinds: readonly AssessmentMethod[];
 }
 
 export interface LensLeaf {
@@ -65,7 +125,7 @@ export interface LensLeaf {
 	knowledgeNodeId: string;
 	title: string;
 	requiredBloom: BloomLevel | null;
-	mastery: { mastered: boolean; covered: boolean };
+	mastery: LensLeafMastery;
 	/**
 	 * True when the leaf has zero `syllabus_node_link` rows -- the lens emits
 	 * a placeholder so the rollup counts the leaf as "uncovered." Consumers
@@ -126,36 +186,29 @@ export class LensError extends Error {
 // Mastery utilities
 // ---------------------------------------------------------------------------
 
-interface NodeMastery {
+/**
+ * Loose mastery shape accepted by `computeMasteryRollup`. The rollup math
+ * needs `mastered` + `covered`; the per-kind aggregate is computed only
+ * when the input also carries `requiredKinds` + `byEvidenceKind` (the full
+ * `LensLeafMastery` shape). Pure unit tests can pass the lighter shape;
+ * the lens code paths pass the full shape.
+ */
+type RollupMasteryInput = {
 	mastered: boolean;
 	covered: boolean;
-}
-
-/**
- * Pull per-node mastery flags for an arbitrary set of node ids in one
- * round-trip. Wraps `getNodeMasteryMap` from knowledge.ts so lens callers
- * don't need to import the larger snapshot type.
- *
- * Imported lazily so this module doesn't bring in the full knowledge BC at
- * eager-import time (the lens framework is consumed by route handlers that
- * may already be hot-pathing a different BC slice).
- */
-async function fetchNodeMastery(userId: string, nodeIds: readonly string[], db: Db): Promise<Map<string, NodeMastery>> {
-	const out = new Map<string, NodeMastery>();
-	if (nodeIds.length === 0) return out;
-	const { getNodeMasteryMap } = await import('./knowledge');
-	const snapshots = await getNodeMasteryMap(userId, [...nodeIds], db);
-	for (const [nodeId, snap] of snapshots) {
-		out.set(nodeId, { mastered: snap.mastered, covered: snap.mastered || snap.inProgress });
-	}
-	return out;
-}
+	requiredKinds?: readonly AssessmentMethod[];
+	byEvidenceKind?: Partial<Record<AssessmentMethod, GateState>>;
+};
 
 /**
  * Compute the weighted rollup over a set of leaves. Pure given the leaf
- * mastery + weight inputs.
+ * mastery + weight inputs. Aggregates per-evidence-kind counts when the
+ * inputs carry the richer `LensLeafMastery` shape so consumers can render
+ * "scenario evidence on N of M required leaves" without re-walking.
  */
-export function computeMasteryRollup(leaves: ReadonlyArray<{ mastery: NodeMastery; weight: number }>): MasteryRollup {
+export function computeMasteryRollup(
+	leaves: ReadonlyArray<{ mastery: RollupMasteryInput; weight: number }>,
+): MasteryRollup {
 	if (leaves.length === 0) {
 		return {
 			totalLeaves: 0,
@@ -163,6 +216,7 @@ export function computeMasteryRollup(leaves: ReadonlyArray<{ mastery: NodeMaster
 			masteredLeaves: 0,
 			masteryFraction: 0,
 			coverageFraction: 0,
+			byEvidenceKind: {},
 		};
 	}
 	let covered = 0;
@@ -170,6 +224,7 @@ export function computeMasteryRollup(leaves: ReadonlyArray<{ mastery: NodeMaster
 	let weightSum = 0;
 	let masteryWeighted = 0;
 	let coverageWeighted = 0;
+	const byEvidenceKind: Partial<Record<AssessmentMethod, { required: number; passing: number }>> = {};
 	for (const leaf of leaves) {
 		const w = leaf.weight;
 		weightSum += w;
@@ -181,6 +236,18 @@ export function computeMasteryRollup(leaves: ReadonlyArray<{ mastery: NodeMaster
 			mastered += 1;
 			masteryWeighted += w;
 		}
+		const required = leaf.mastery.requiredKinds;
+		if (required !== undefined) {
+			const perKind = leaf.mastery.byEvidenceKind ?? {};
+			for (const kind of required) {
+				const existing = byEvidenceKind[kind] ?? { required: 0, passing: 0 };
+				existing.required += 1;
+				if (perKind[kind] === NODE_MASTERY_GATES.PASS) {
+					existing.passing += 1;
+				}
+				byEvidenceKind[kind] = existing;
+			}
+		}
 	}
 	return {
 		totalLeaves: leaves.length,
@@ -188,6 +255,28 @@ export function computeMasteryRollup(leaves: ReadonlyArray<{ mastery: NodeMaster
 		masteredLeaves: mastered,
 		masteryFraction: weightSum === 0 ? 0 : masteryWeighted / weightSum,
 		coverageFraction: weightSum === 0 ? 0 : coverageWeighted / weightSum,
+		byEvidenceKind,
+	};
+}
+
+function emptyLeafMastery(): LensLeafMastery {
+	return {
+		mastered: false,
+		covered: false,
+		requiredKinds: [],
+		byEvidenceKind: {},
+		missingKinds: [],
+	};
+}
+
+function leafMasteryFromLeafState(state: LeafMasteryState | undefined): LensLeafMastery {
+	if (state === undefined) return emptyLeafMastery();
+	return {
+		mastered: state.mastered,
+		covered: state.covered,
+		requiredKinds: state.requiredKinds,
+		byEvidenceKind: state.byEvidenceKind,
+		missingKinds: state.missingKinds,
 	};
 }
 
@@ -222,6 +311,12 @@ export interface AcsLensFilters {
  *
  * Returns the empty result when the goal is null (anonymous browse) or when
  * the goal has no syllabi attached.
+ *
+ * Per evidence-kind-gating: each leaf's mastery flows through
+ * `getLeafMasteryStateMap`, decomposed by `AssessmentMethod`. The
+ * `CertApplicability` mapping is resolved per syllabus by walking
+ * `credential_syllabus -> credential.slug`; syllabi without an attached
+ * credential fall back to {@link DEFAULT_TRIAD_EVIDENCE_CERT}.
  */
 export const acsLens: Lens<AcsLensFilters> = async (db, userId, input) => {
 	if (input.goal === null) {
@@ -243,25 +338,74 @@ export const acsLens: Lens<AcsLensFilters> = async (db, userId, input) => {
 	const syllabusRows = await db
 		.select({ id: syllabus.id, slug: syllabus.slug, title: syllabus.title })
 		.from(syllabus)
-		.where(
-			sql`${syllabus.id} IN (${sql.join(
-				syllabusIds.map((id) => sql`${id}`),
-				sql`, `,
-			)})`,
-		);
+		.where(inArray(syllabus.id, syllabusIds));
 	const syllabusTitles = new Map(syllabusRows.map((s) => [s.id, { title: s.title, slug: s.slug }] as const));
 	const allNodes: SyllabusNodeRow[] = await db
 		.select()
 		.from(syllabusNode)
-		.where(
-			sql`${syllabusNode.syllabusId} IN (${sql.join(
-				syllabusIds.map((id) => sql`${id}`),
-				sql`, `,
-			)})`,
-		);
+		.where(inArray(syllabusNode.syllabusId, syllabusIds));
 
-	// Pull every leaf -> knowledge_node link in those syllabi.
+	// Resolve each syllabus's CertApplicability via its primary credential.
+	// Syllabi without any credential fall back to the default mapping. We pick
+	// the lexicographically lowest slug when a syllabus is reachable from
+	// multiple credentials -- a stable tiebreaker; the cert-syllabus WP keeps
+	// 1:1 in practice.
+	const credentialJoinRows =
+		syllabusIds.length === 0
+			? []
+			: await db
+					.select({ syllabusId: credentialSyllabus.syllabusId, credentialSlug: credential.slug })
+					.from(credentialSyllabus)
+					.innerJoin(credential, eq(credential.id, credentialSyllabus.credentialId))
+					.where(inArray(credentialSyllabus.syllabusId, syllabusIds));
+	const certBySyllabus = new Map<string, CertApplicability>();
+	for (const row of credentialJoinRows) {
+		const existing = certBySyllabus.get(row.syllabusId);
+		if (existing === undefined) {
+			certBySyllabus.set(row.syllabusId, credentialSlugToCertApplicability(row.credentialSlug));
+			continue;
+		}
+		// Tiebreak: prefer the slug whose CertApplicability maps to a stricter
+		// (non-default) applicability. The default ALL is the loosest fallback;
+		// a real cert slug should win over it.
+		const candidate = credentialSlugToCertApplicability(row.credentialSlug);
+		if (existing === DEFAULT_TRIAD_EVIDENCE_CERT && candidate !== DEFAULT_TRIAD_EVIDENCE_CERT) {
+			certBySyllabus.set(row.syllabusId, candidate);
+		}
+	}
+
+	// Pull every leaf -> knowledge_node link in those syllabi. Compute the
+	// leaf-mastery state in batch per syllabus (the cert mapping varies by
+	// syllabus so we run one batch per cert applicability).
 	const leafIds = allNodes.filter((n) => n.isLeaf).map((n) => n.id);
+	const leafBySyllabus = new Map<string, string[]>();
+	const syllabusByLeaf = new Map<string, string>();
+	for (const n of allNodes) {
+		if (!n.isLeaf) continue;
+		const list = leafBySyllabus.get(n.syllabusId) ?? [];
+		list.push(n.id);
+		leafBySyllabus.set(n.syllabusId, list);
+		syllabusByLeaf.set(n.id, n.syllabusId);
+	}
+
+	const leafStateMap = new Map<string, LeafMasteryState>();
+	if (leafIds.length > 0) {
+		// Group leaf ids by their cert applicability for batched mastery calls.
+		const leavesByCert = new Map<CertApplicability, string[]>();
+		for (const [syllabusId, ids] of leafBySyllabus) {
+			const cert = certBySyllabus.get(syllabusId) ?? DEFAULT_TRIAD_EVIDENCE_CERT;
+			const list = leavesByCert.get(cert) ?? [];
+			list.push(...ids);
+			leavesByCert.set(cert, list);
+		}
+		for (const [cert, ids] of leavesByCert) {
+			const stateMap = await getLeafMasteryStateMap(userId, ids, cert, db);
+			for (const [leafId, state] of stateMap) {
+				leafStateMap.set(leafId, state);
+			}
+		}
+	}
+
 	const linkRows =
 		leafIds.length === 0
 			? []
@@ -272,15 +416,8 @@ export const acsLens: Lens<AcsLensFilters> = async (db, userId, input) => {
 						linkWeight: syllabusNodeLink.weight,
 					})
 					.from(syllabusNodeLink)
-					.where(
-						sql`${syllabusNodeLink.syllabusNodeId} IN (${sql.join(
-							leafIds.map((id) => sql`${id}`),
-							sql`, `,
-						)})`,
-					);
+					.where(inArray(syllabusNodeLink.syllabusNodeId, leafIds));
 
-	const knowledgeNodeIds = [...new Set(linkRows.map((r) => r.knowledgeNodeId))];
-	const masteryByNode = await fetchNodeMastery(userId, knowledgeNodeIds, db);
 	const linksByLeaf = new Map<string, Array<{ nodeId: string; weight: number }>>();
 	for (const r of linkRows) {
 		const list = linksByLeaf.get(r.leafId) ?? [];
@@ -288,25 +425,8 @@ export const acsLens: Lens<AcsLensFilters> = async (db, userId, input) => {
 		linksByLeaf.set(r.leafId, list);
 	}
 
-	// Project mastery per leaf.
-	function leafMastery(nodeIds: ReadonlyArray<string>): NodeMastery {
-		if (nodeIds.length === 0) return { mastered: false, covered: false };
-		let allMastered = true;
-		let anyCovered = false;
-		for (const id of nodeIds) {
-			const m = masteryByNode.get(id);
-			if (m === undefined) {
-				allMastered = false;
-				continue;
-			}
-			if (m.covered) anyCovered = true;
-			if (!m.mastered) allMastered = false;
-		}
-		return { mastered: allMastered, covered: anyCovered };
-	}
-
 	const allLensLeaves: LensLeaf[] = [];
-	const allRollupLeaves: Array<{ mastery: NodeMastery; weight: number }> = [];
+	const allRollupLeaves: Array<{ mastery: LensLeafMastery; weight: number }> = [];
 
 	// Group nodes by syllabus.
 	const nodesBySyllabus = new Map<string, SyllabusNodeRow[]>();
@@ -325,7 +445,7 @@ export const acsLens: Lens<AcsLensFilters> = async (db, userId, input) => {
 			meta?.title ?? syllabusId,
 			meta?.slug ?? syllabusId,
 			nodes,
-			leafMastery,
+			leafStateMap,
 			linksByLeaf,
 			goalWeight,
 			filters,
@@ -348,7 +468,7 @@ function buildAcsSyllabusTree(
 	syllabusTitle: string,
 	syllabusSlug: string,
 	nodes: ReadonlyArray<SyllabusNodeRow>,
-	leafMastery: (nodeIds: ReadonlyArray<string>) => NodeMastery,
+	leafStateMap: Map<string, LeafMasteryState>,
 	linksByLeaf: Map<string, Array<{ nodeId: string; weight: number }>>,
 	goalWeight: number,
 	filters: AcsLensFilters,
@@ -373,13 +493,13 @@ function buildAcsSyllabusTree(
 		rollup: emptyRollup(),
 		children: [],
 	};
-	const rollupBuckets: Array<{ mastery: NodeMastery; weight: number }> = [];
+	const rollupBuckets: Array<{ mastery: LensLeafMastery; weight: number }> = [];
 	for (const area of roots) {
 		if (filters.areaCodes !== undefined && filters.areaCodes.length > 0 && !filters.areaCodes.includes(area.code)) {
 			continue;
 		}
 		if (!nodeMatchesClassFilter(area, filters)) continue;
-		const areaNode = buildAcsSubtree(area, childrenByParent, leafMastery, linksByLeaf, goalWeight, filters);
+		const areaNode = buildAcsSubtree(area, childrenByParent, leafStateMap, linksByLeaf, goalWeight, filters);
 		syllabusRootNode.children.push(areaNode);
 		appendRollupSource(areaNode, rollupBuckets);
 	}
@@ -405,7 +525,7 @@ function nodeMatchesClassFilter(node: SyllabusNodeRow, filters: AcsLensFilters):
 function buildAcsSubtree(
 	node: SyllabusNodeRow,
 	childrenByParent: Map<string | null, SyllabusNodeRow[]>,
-	leafMastery: (nodeIds: ReadonlyArray<string>) => NodeMastery,
+	leafStateMap: Map<string, LeafMasteryState>,
 	linksByLeaf: Map<string, Array<{ nodeId: string; weight: number }>>,
 	goalWeight: number,
 	filters: AcsLensFilters,
@@ -414,7 +534,7 @@ function buildAcsSubtree(
 	if (node.isLeaf || children.length === 0) {
 		// Leaf row.
 		const links = linksByLeaf.get(node.id) ?? [];
-		const mastery = leafMastery(links.map((l) => l.nodeId));
+		const mastery = leafMasteryFromLeafState(leafStateMap.get(node.id));
 		const leafTitle = node.title;
 		const lensLeaves: LensLeaf[] = links.map((l) => ({
 			id: `${node.id}:${l.nodeId}`,
@@ -462,9 +582,9 @@ function buildAcsSubtree(
 		return nodeMatchesClassFilter(c, filters);
 	});
 	const childNodes = filteredChildren.map((c) =>
-		buildAcsSubtree(c, childrenByParent, leafMastery, linksByLeaf, goalWeight, filters),
+		buildAcsSubtree(c, childrenByParent, leafStateMap, linksByLeaf, goalWeight, filters),
 	);
-	const rollupBuckets: Array<{ mastery: NodeMastery; weight: number }> = [];
+	const rollupBuckets: Array<{ mastery: LensLeafMastery; weight: number }> = [];
 	for (const child of childNodes) appendRollupSource(child, rollupBuckets);
 	return {
 		id: node.id,
@@ -492,7 +612,7 @@ function levelToLensLevel(level: string): LensTreeNode['level'] {
 	}
 }
 
-function appendRollupSource(node: LensTreeNode, into: Array<{ mastery: NodeMastery; weight: number }>): void {
+function appendRollupSource(node: LensTreeNode, into: Array<{ mastery: LensLeafMastery; weight: number }>): void {
 	if (node.leaves !== undefined) {
 		for (const leaf of node.leaves) {
 			into.push({ mastery: leaf.mastery, weight: 1 });
@@ -505,7 +625,7 @@ function appendRollupSource(node: LensTreeNode, into: Array<{ mastery: NodeMaste
 function collectLensLeaves(
 	node: LensTreeNode,
 	leafSink: LensLeaf[],
-	rollupSink: Array<{ mastery: NodeMastery; weight: number }>,
+	rollupSink: Array<{ mastery: LensLeafMastery; weight: number }>,
 ): void {
 	if (node.leaves !== undefined) {
 		for (const leaf of node.leaves) {
@@ -524,6 +644,7 @@ function emptyRollup(): MasteryRollup {
 		masteredLeaves: 0,
 		masteryFraction: 0,
 		coverageFraction: 0,
+		byEvidenceKind: {},
 	};
 }
 
@@ -544,6 +665,11 @@ export interface DomainLensFilters {
  * AND `goal_node` ad-hoc entries; same node-union semantic as `getGoalNodeUnion`
  * in goals.ts.
  *
+ * Domain leaves are knowledge nodes (no syllabus_node, no `triad`). Per the
+ * evidence-kind-gating WP, the required-kind set for a domain leaf is
+ * derived from the node's `assessment_methods` array via
+ * {@link nodeAssessmentMethodsToRequiredKinds}.
+ *
  * Returns the empty result when the goal is null.
  */
 export const domainLens: Lens<DomainLensFilters> = async (db, userId, input) => {
@@ -559,18 +685,10 @@ export const domainLens: Lens<DomainLensFilters> = async (db, userId, input) => 
 
 	let knowledgeNodeRows: KnowledgeNodeRow[] = [];
 	if (union.knowledgeNodeIds.length > 0) {
-		knowledgeNodeRows = await db
-			.select()
-			.from(knowledgeNode)
-			.where(
-				sql`${knowledgeNode.id} IN (${sql.join(
-					union.knowledgeNodeIds.map((id) => sql`${id}`),
-					sql`, `,
-				)})`,
-			);
+		knowledgeNodeRows = await db.select().from(knowledgeNode).where(inArray(knowledgeNode.id, union.knowledgeNodeIds));
 	}
 
-	const masteryByNode = await fetchNodeMastery(userId, union.knowledgeNodeIds, db);
+	const evidenceByNode = await getNodeEvidenceStateMap(userId, union.knowledgeNodeIds, db);
 
 	// Group by domain.
 	const buckets = new Map<string, KnowledgeNodeRow[]>();
@@ -583,7 +701,7 @@ export const domainLens: Lens<DomainLensFilters> = async (db, userId, input) => 
 
 	const tree: LensTreeNode[] = [];
 	const allLeaves: LensLeaf[] = [];
-	const rollupBuckets: Array<{ mastery: NodeMastery; weight: number }> = [];
+	const rollupBuckets: Array<{ mastery: LensLeafMastery; weight: number }> = [];
 
 	for (const domain of [...buckets.keys()].sort()) {
 		if (filters.domains !== undefined && filters.domains.length > 0 && !filters.domains.includes(domain as Domain)) {
@@ -591,9 +709,11 @@ export const domainLens: Lens<DomainLensFilters> = async (db, userId, input) => 
 		}
 		const nodes = buckets.get(domain) ?? [];
 		const domainLeaves: LensLeaf[] = [];
-		const domainBuckets: Array<{ mastery: NodeMastery; weight: number }> = [];
+		const domainBuckets: Array<{ mastery: LensLeafMastery; weight: number }> = [];
 		for (const n of nodes) {
-			const mastery = masteryByNode.get(n.id) ?? { mastered: false, covered: false };
+			const evidence = evidenceByNode.get(n.id);
+			const requiredKinds = nodeAssessmentMethodsToRequiredKinds(n.assessmentMethods);
+			const mastery = computeDomainLeafMastery(evidence, requiredKinds);
 			const weight = union.weights[n.id] ?? 1.0;
 			const leaf: LensLeaf = {
 				id: n.id,
@@ -624,3 +744,96 @@ export const domainLens: Lens<DomainLensFilters> = async (db, userId, input) => 
 		leaves: allLeaves,
 	};
 };
+
+// ---------------------------------------------------------------------------
+// Domain-leaf required-kind derivation
+// ---------------------------------------------------------------------------
+
+const ASSESSMENT_METHOD_VALUE_SET: ReadonlySet<string> = new Set(ASSESSMENT_METHOD_VALUES);
+
+/**
+ * Map a `knowledge_node.assessment_methods` array to the required-kind set
+ * for the domain lens. The column is a free-form string array per schema
+ * (`jsonb<string[]>`); we narrow to known `AssessmentMethod` values and
+ * drop unknown entries. Empty / null arrays produce no required kinds (the
+ * leaf is then masterable via "any evidence" semantic, matching the
+ * domain-lens reading where the node hasn't declared a method).
+ *
+ * Per spec (Phase 7, Open Q follow-on): the mapping is 1:1 -- each declared
+ * method becomes a required kind. Knowledge nodes that declare both
+ * `recall` and `calculation` require both gates to pass; nodes that
+ * declare only `scenario` require the scenario gate. Alternatives are not
+ * inferred -- a content author who wants "scenario OR demonstration" must
+ * use the syllabus side (triad mapping) to express it.
+ */
+export function nodeAssessmentMethodsToRequiredKinds(
+	methods: readonly string[] | null | undefined,
+): readonly AssessmentMethod[] {
+	if (methods === null || methods === undefined) return [];
+	const out: AssessmentMethod[] = [];
+	for (const m of methods) {
+		if (ASSESSMENT_METHOD_VALUE_SET.has(m)) {
+			out.push(m as AssessmentMethod);
+		}
+	}
+	return out;
+}
+
+/**
+ * Compute a `LensLeafMastery` for a domain-lens leaf (a single knowledge
+ * node, no syllabus_node). The leaf is mastered when every kind declared in
+ * the node's `assessment_methods` aggregates to `pass`. With zero declared
+ * kinds, the leaf falls back to the loosest "any evidence" semantic so
+ * legacy nodes (no methods authored) still flow through.
+ */
+function computeDomainLeafMastery(
+	evidence: NodeEvidenceState | undefined,
+	requiredKinds: readonly AssessmentMethod[],
+): LensLeafMastery {
+	if (evidence === undefined) {
+		return { ...emptyLeafMastery(), requiredKinds };
+	}
+	const byEvidenceKind: Partial<Record<AssessmentMethod, GateState>> = {};
+	let anyEvidence = false;
+	for (const kind of ASSESSMENT_METHOD_VALUES) {
+		const gate = evidence[kind];
+		byEvidenceKind[kind] = gate;
+		if (gate !== NODE_MASTERY_GATES.NOT_APPLICABLE) anyEvidence = true;
+	}
+
+	if (requiredKinds.length === 0) {
+		// Defensive fallback for nodes with no authored assessment methods:
+		// the leaf is "covered" when any evidence exists, "mastered" when
+		// the evidence reaches `pass` somewhere -- preserves the legacy
+		// `/knowledge` browse semantic.
+		const anyPass = ASSESSMENT_METHOD_VALUES.some((k) => evidence[k] === NODE_MASTERY_GATES.PASS);
+		return {
+			mastered: anyPass,
+			covered: anyEvidence,
+			requiredKinds: [],
+			byEvidenceKind,
+			missingKinds: [],
+		};
+	}
+
+	const missingKinds: AssessmentMethod[] = [];
+	let mastered = true;
+	for (const kind of requiredKinds) {
+		const gate = evidence[kind];
+		if (gate !== NODE_MASTERY_GATES.PASS) {
+			missingKinds.push(kind);
+			mastered = false;
+		}
+	}
+	return {
+		mastered,
+		covered: anyEvidence,
+		requiredKinds,
+		byEvidenceKind,
+		missingKinds,
+	};
+}
+
+// `ACSTriad` is exported here for follow-on UI surfaces that need the type
+// without pulling `@ab/constants` directly when reading lens output.
+export type { ACSTriad };
