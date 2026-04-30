@@ -123,13 +123,20 @@ export {
 	summarizeDeckSpec,
 } from './deck-spec';
 export { runEngine } from './engine';
+export type { EngineTargeting, EngineTargetingSnapshot } from './engine-targeting';
+export {
+	emitEngineTargetingTelemetry,
+	getEngineTargeting,
+	getEngineTargetingSnapshot,
+} from './engine-targeting';
 export type { SubmitFeedbackInput } from './feedback';
 export { FeedbackCommentRequiredError, getLatestFeedback, submitFeedback } from './feedback';
 export { formatNextInterval, formatNextIntervalAbsolute } from './formatters';
-export type { CreateGoalParams, ListGoalsOptions as ListGoalsOpts } from './goals';
+export type { ApplyCertGoalsResult, CreateGoalParams, ListGoalsOptions as ListGoalsOpts } from './goals';
 export {
 	addGoalNode,
 	addGoalSyllabus,
+	applyCertGoalsToPrimaryGoal,
 	archiveGoal,
 	createGoal,
 	GoalAlreadyPrimaryError,
@@ -138,15 +145,21 @@ export {
 	getActiveGoals,
 	getDerivedCertGoals,
 	getGoalById,
+	getGoalFocusDomains,
 	getGoalNodes,
 	getGoalNodeUnion,
+	getGoalSkipDomains,
+	getGoalSkipNodes,
 	getGoalSyllabi,
 	getOwnedGoal,
 	getPrimaryGoal,
 	listGoals,
 	removeGoalNode,
 	removeGoalSyllabus,
+	setGoalFocusDomains,
 	setGoalNodeWeight,
+	setGoalSkipDomains,
+	setGoalSkipNodes,
 	setGoalSyllabusWeight,
 	setPrimaryGoal,
 	updateGoal,
@@ -287,6 +300,7 @@ export {
 	getPlan,
 	getPlans,
 	NoActivePlanError,
+	PlanCertGoalsDeprecatedError,
 	PlanNotFoundError,
 	removeSkipDomain,
 	removeSkipNode,

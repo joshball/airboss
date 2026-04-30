@@ -6,6 +6,7 @@ import {
 	archivePlan,
 	DomainOverlapError,
 	getPlan,
+	getPrimaryGoal,
 	KnowledgeNodeNotFoundError,
 	PlanNotFoundError,
 	removeSkipDomain,
@@ -13,8 +14,6 @@ import {
 	updatePlan,
 } from '@ab/bc-study';
 import {
-	CERT_VALUES,
-	type Cert,
 	DEFAULT_SESSION_MODE,
 	DEPTH_PREFERENCE_VALUES,
 	type DepthPreference,
@@ -40,7 +39,8 @@ export const load: PageServerLoad = async (event) => {
 	const user = requireAuth(event);
 	const plan = await getPlan(event.params.id, user.id);
 	if (!plan) throw error(404, { message: 'Plan not found' });
-	return { plan };
+	const primaryGoal = await getPrimaryGoal(user.id);
+	return { plan, primaryGoalId: primaryGoal?.id ?? null };
 };
 
 export const actions: Actions = {
@@ -50,17 +50,15 @@ export const actions: Actions = {
 
 		const form = await request.formData();
 		const title = String(form.get('title') ?? '').trim();
-		const certGoalsRaw = form.getAll('certGoals').map((v) => String(v));
 		const focusDomainsRaw = form.getAll('focusDomains').map((v) => String(v));
 		const skipDomainsRaw = form.getAll('skipDomains').map((v) => String(v));
 		const depthRaw = String(form.get('depthPreference') ?? 'working');
 		const modeRaw = String(form.get('defaultMode') ?? DEFAULT_SESSION_MODE);
 		const lengthRaw = String(form.get('sessionLength') ?? '10');
 
-		const certGoals: Cert[] = certGoalsRaw.filter((v): v is Cert => CERT_VALUES.includes(v as Cert));
-		// Empty certGoals is a first-class plan state (ADR 012). Authors who want
-		// a cert-agnostic plan check the "General practice" option in the form.
-
+		// Cert intent moved to the goal model post engine-goal-cutover. The plan
+		// edit page no longer surfaces cert chooser controls; a banner directs
+		// the learner to the goal composer instead.
 		const focusDomains: Domain[] = focusDomainsRaw.filter((v): v is Domain => DOMAIN_VALUES.includes(v as Domain));
 		const skipDomains: Domain[] = skipDomainsRaw.filter((v): v is Domain => DOMAIN_VALUES.includes(v as Domain));
 
@@ -72,7 +70,6 @@ export const actions: Actions = {
 		try {
 			await updatePlan(params.id, user.id, {
 				title: title.length > 0 ? title : undefined,
-				certGoals,
 				focusDomains,
 				skipDomains,
 				depthPreference: coerceEnum<DepthPreference>(depthRaw, DEPTH_PREFERENCE_VALUES as DepthPreference[], 'working'),

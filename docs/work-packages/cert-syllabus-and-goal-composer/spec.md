@@ -981,6 +981,8 @@ Trade-off: every consumer carrying the same citation duplicates the JSONB shape 
 
 **Recommended: keep `cert_goals` as a derived view (computed via `getDerivedCertGoals(userId)` in the BC, surfaced on `study_plan` reads as a virtual column) for backwards compatibility with the existing session engine. Drop the column entirely in a follow-on WP that cuts the engine over to read goal-derived filters directly.**
 
+**Resolution:** the follow-on lives at [`docs/work-packages/engine-goal-cutover/`](../engine-goal-cutover/spec.md). It introduces a `getEngineTargeting(userId)` helper, switches `previewSession` to read from the helper, and stages a drop migration gated on a 14-day telemetry trigger. The dual-read window keeps the engine resolving goal-first with plan fallback so no learner is stuck on stale state.
+
 | Option                                                       | For                                                                                                              | Against                                                                                                                                |
 | ------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
 | Derived view, deprecated, removed in follow-on (recommended) | Zero-risk migration -- the engine keeps reading `cert_goals` and gets the same data. Removal is a clean follow-on. | Two paths to "what is this user studying for" until the follow-on lands. Mitigated by clear deprecation comment.                      |

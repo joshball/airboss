@@ -694,6 +694,15 @@ export const studyPlan = studySchema.table(
 			.references(() => bauthUser.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
 		title: text('title').notNull(),
 		status: text('status').notNull().default(PLAN_STATUSES.ACTIVE),
+		/**
+		 * @deprecated Scheduled for drop after engine cutover trigger fires
+		 * (`engine-goal-cutover` WP, Open Question (d): 14 consecutive days
+		 * with zero `source='plan'` reads). Post-cutover the engine reads cert
+		 * goals from the user's primary `goal` -> `goal_syllabus` projection
+		 * via `getEngineTargeting(userId)`. The column survives the dual-read
+		 * window so legacy users without a primary goal still resolve. New
+		 * `createPlan` / `updatePlan` callers cannot supply a non-empty value.
+		 */
 		certGoals: jsonb('cert_goals').$type<Cert[]>().notNull().default([]),
 		focusDomains: jsonb('focus_domains').$type<Domain[]>().notNull().default([]),
 		skipDomains: jsonb('skip_domains').$type<Domain[]>().notNull().default([]),
@@ -1918,6 +1927,17 @@ export const goal = studySchema.table(
 		 * value renders consistently across time zones.
 		 */
 		targetDate: date('target_date', { mode: 'string' }),
+		/**
+		 * Engine targeting fields. Owned by the goal post engine-goal-cutover so
+		 * the engine reads "what to study" + "what to focus / skip" from a single
+		 * source. NULL was rejected in favor of NOT NULL DEFAULT [] to keep the
+		 * read path branch-free; an empty list means "no narrowing." Backfilled
+		 * from each user's active study_plan by `scripts/db/backfill-goal-targeting.ts`
+		 * during the cutover.
+		 */
+		focusDomains: jsonb('focus_domains').$type<Domain[]>().notNull().default([]),
+		skipDomains: jsonb('skip_domains').$type<Domain[]>().notNull().default([]),
+		skipNodes: jsonb('skip_nodes').$type<string[]>().notNull().default([]),
 		seedOrigin: text('seed_origin'),
 		...timestamps(),
 	},

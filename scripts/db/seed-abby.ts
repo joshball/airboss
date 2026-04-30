@@ -276,6 +276,35 @@ async function seedAbbyScenarios(databaseUrl: string, userId: string): Promise<I
 	}
 }
 
+/**
+ * Materialize abby's primary goal so the engine targeting helper resolves
+ * `source='goal'` for her after the engine-goal-cutover. Mirrors the cert
+ * filter she previously had on `study_plan.cert_goals`. Idempotent: a
+ * second invocation upserts the existing goal_syllabus rows. Skipped when
+ * the PPL credential or its primary syllabus has not been seeded yet --
+ * the operator should run `bun run db seed credentials` first in that
+ * case (the standard `seed-all` order does this).
+ */
+async function seedAbbyGoal(databaseUrl: string, userId: string): Promise<void> {
+	const { applyCertGoalsToPrimaryGoal } = await import('@ab/bc-study');
+	const client = postgres(databaseUrl);
+	const db = drizzle(client);
+	try {
+		await applyCertGoalsToPrimaryGoal(
+			userId,
+			[CERTS.PPL],
+			{
+				goalTitle: PLAN_TITLE,
+				focusDomains: [DOMAINS.AIRSPACE, DOMAINS.WEATHER, DOMAINS.EMERGENCY_PROCEDURES],
+				skipDomains: [],
+			},
+			db,
+		);
+	} finally {
+		await client.end();
+	}
+}
+
 async function seedAbbyPlan(databaseUrl: string, userId: string): Promise<string> {
 	const client = postgres(databaseUrl);
 	const db = drizzle(client);
@@ -293,7 +322,11 @@ async function seedAbbyPlan(databaseUrl: string, userId: string): Promise<string
 			userId,
 			title: PLAN_TITLE,
 			status: PLAN_STATUSES.ACTIVE,
-			certGoals: [CERTS.PPL],
+			// Cert intent moved to the goal model post engine-goal-cutover. The
+			// column survives the dual-read window for legacy reads but receives
+			// no new writes; abby's PPL intent is materialized as a primary
+			// `goal` + `goal_syllabus` rows in `seedAbbyGoal` below.
+			certGoals: [],
 			focusDomains: [DOMAINS.AIRSPACE, DOMAINS.WEATHER, DOMAINS.EMERGENCY_PROCEDURES],
 			skipDomains: [],
 			skipNodes: [],
@@ -623,6 +656,7 @@ export async function seedAbby(): Promise<AbbySeedCounts> {
 	const cards = await seedAbbyCards(databaseUrl, userId);
 	const scenarios = await seedAbbyScenarios(databaseUrl, userId);
 	const planId = await seedAbbyPlan(databaseUrl, userId);
+	await seedAbbyGoal(databaseUrl, userId);
 	const { sessionsInserted, reviewsInserted, sessionItemResultsInserted } = await seedAbbySessions(
 		databaseUrl,
 		userId,

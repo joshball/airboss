@@ -1,5 +1,6 @@
 import { requireAuth } from '@ab/auth';
 import {
+	applyCertGoalsToPrimaryGoal,
 	createPlan,
 	DuplicateActivePlanError,
 	getActivePlan,
@@ -129,13 +130,26 @@ export const actions: Actions = {
 			await createPlan({
 				userId: user.id,
 				title: preset.label,
-				certGoals: preset.certGoals,
 				focusDomains: preset.focusDomains,
 				skipDomains: preset.skipDomains,
 				depthPreference: preset.depthPreference,
 				sessionLength: preset.sessionLength,
 				defaultMode: preset.defaultMode,
 			});
+
+			// Cert intent now lives on the user's primary goal (engine-goal-cutover).
+			// The preset's `certGoals` were the old plan-level cert filter; route
+			// them through the goal model so the engine sees them on the very next
+			// `previewSession`. Empty `certGoals` (general-practice presets like
+			// "Quick reps") map to a primary goal with no syllabi -- the helper
+			// still creates a placeholder goal so the user has a primary on file.
+			if (preset.certGoals.length > 0) {
+				await applyCertGoalsToPrimaryGoal(user.id, preset.certGoals, {
+					goalTitle: preset.label,
+					focusDomains: preset.focusDomains,
+					skipDomains: preset.skipDomains,
+				});
+			}
 
 			const { session } = await startSession(user.id, { mode: preset.defaultMode });
 			throw redirect(303, ROUTES.SESSION(session.id));

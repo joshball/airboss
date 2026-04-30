@@ -156,6 +156,50 @@ async function doSeedCheck(): Promise<void> {
 	await run(['bun', 'scripts/db/seed-check.ts']);
 }
 
+/**
+ * `bun run db backfill <target>` -- maintenance scripts that mutate DB
+ * rows under controlled conditions. Each target is a script in
+ * `scripts/db/backfill-*.ts`. Listed targets:
+ *
+ *   goal-targeting  -- copy plan focus / skip lists onto each user's goals
+ *                       (engine-goal-cutover phase 1).
+ */
+const BACKFILL_TARGETS: Record<string, readonly string[]> = {
+	'goal-targeting': ['bun', 'scripts/db/backfill-goal-targeting.ts'],
+};
+
+async function doBackfill(): Promise<void> {
+	const target = subTarget;
+	if (!target || !(target in BACKFILL_TARGETS)) {
+		console.error(`Usage: bun run db backfill <${Object.keys(BACKFILL_TARGETS).join('|')}>`);
+		process.exit(1);
+	}
+	const cmd = [...BACKFILL_TARGETS[target], ...passthroughFlags];
+	await run(cmd);
+}
+
+/**
+ * `bun run db check <target>` -- read-only diagnostics that surface
+ * dual-read drift, backfill orphans, and source counters during the
+ * engine-goal-cutover dual-read window. Each target is a script in
+ * `scripts/db/check-*.ts`.
+ */
+const CHECK_TARGETS: Record<string, readonly string[]> = {
+	'plan-goal-drift': ['bun', 'scripts/db/check-plan-goal-drift.ts'],
+	'goal-targeting-backfill': ['bun', 'scripts/db/check-goal-targeting-backfill.ts'],
+	'engine-targeting-source': ['bun', 'scripts/db/check-engine-targeting-source.ts'],
+};
+
+async function doCheck(): Promise<void> {
+	const target = subTarget;
+	if (!target || !(target in CHECK_TARGETS)) {
+		console.error(`Usage: bun run db check <${Object.keys(CHECK_TARGETS).join('|')}>`);
+		process.exit(1);
+	}
+	const cmd = [...CHECK_TARGETS[target], ...passthroughFlags];
+	await run(cmd);
+}
+
 async function doBuild(): Promise<void> {
 	await run(['bun', 'scripts/build-knowledge-index.ts', ...passthroughFlags]);
 }
@@ -378,6 +422,39 @@ const COMMAND_HELP: Record<string, CommandHelp> = {
 		why: 'For ad-hoc queries, quick inspection, or SQL that is too awkward for drizzle-kit studio.',
 		how: 'Requires the container to be running (`bun run db up` first).',
 	},
+	backfill: {
+		summary: 'Run a maintenance backfill (engine-goal-cutover phase 1 etc.)',
+		what:
+			'Runs a backfill script under controlled conditions. Sub-targets:\n\n' +
+			"  goal-targeting    Copy plan focus / skip lists onto each user's active goals.\n" +
+			'                     Idempotent; goals already curated are skipped.\n\n' +
+			'Flags pass through to the underlying script (e.g. `--dry-run`, `--json`).\n\n' +
+			'  bun run db backfill goal-targeting\n' +
+			'  bun run db backfill goal-targeting --dry-run',
+		why: 'Schema migrations only land additive columns; backfilling derived state is a separate, idempotent script. Co-locating each backfill under one command keeps them discoverable without polluting the top-level dispatcher.',
+		how: 'Each target is a script in `scripts/db/backfill-*.ts`. The dispatcher passes any unrecognized CLI flags straight through.',
+		links: ['scripts/db/backfill-goal-targeting.ts', 'docs/work-packages/engine-goal-cutover/'],
+	},
+	check: {
+		summary: 'Run a read-only diagnostic (engine-goal-cutover dual-read window)',
+		what:
+			'Runs a read-only diagnostic. Sub-targets:\n\n' +
+			'  plan-goal-drift              Users whose primary goal projects to a different cert set than study_plan.cert_goals.\n' +
+			'  goal-targeting-backfill      Active study_plans with non-empty cert_goals that fall back to source=plan (no primary goal).\n' +
+			'  engine-targeting-source      Tally engine-targeting log lines by source; reports READY TO DROP after N clean days.\n\n' +
+			'Flags pass through to the underlying script (e.g. `--json`, `--window=14d`).\n\n' +
+			'  bun run db check plan-goal-drift\n' +
+			'  bun run db check goal-targeting-backfill\n' +
+			'  cat prod.log | bun run db check engine-targeting-source --window=14d',
+		why: 'The cutover ships behind a dual-read window; these checks surface the drift, the migration orphans, and the trigger-readiness counter without mutating data.',
+		how: 'Each target is a script in `scripts/db/check-*.ts`. Read-only; safe to run in any environment.',
+		links: [
+			'scripts/db/check-plan-goal-drift.ts',
+			'scripts/db/check-goal-targeting-backfill.ts',
+			'scripts/db/check-engine-targeting-source.ts',
+			'docs/work-packages/engine-goal-cutover/',
+		],
+	},
 	help: {
 		summary: 'Show the command index (or detailed help for one command)',
 		what: '`bun run db help` prints the index of every command with its one-line summary. `bun run db <command> --help` prints a what/why/how/links block for that command only.',
@@ -420,6 +497,7 @@ const COMMAND_GROUPS: readonly CommandGroup[] = [
 	{ label: 'Schema', commands: ['push', 'generate', 'migrate'] },
 	{ label: 'Data + content', commands: ['seed', 'seed:check', 'seed:remove', 'reset', 'reset-study'] },
 	{ label: 'Knowledge authoring', commands: ['new', 'build', 'build-all'] },
+	{ label: 'Maintenance', commands: ['backfill', 'check'] },
 	{ label: 'Utility', commands: ['help'] },
 ];
 
@@ -467,6 +545,8 @@ const handlers: Record<string, () => Promise<void> | void> = {
 	build: doBuild,
 	'build-all': doBuildAll,
 	new: doNew,
+	backfill: doBackfill,
+	check: doCheck,
 };
 
 if (wantsHelp) {
