@@ -4,10 +4,20 @@
  * the inline `ConfirmAction` two-step. Uses the shared `Dialog` primitive for
  * focus-trap / escape / scrim semantics.
  *
- * Ported from airboss-firc. Snippet-based body; no hardcoded prose. Supports
- * JS-callback mode (`onconfirm`) and form-action mode (`formAction`). Form
- * action mode is preferred when the confirm triggers a server mutation because
- * it degrades without JS.
+ * Snippet-based body; no hardcoded prose. Supports JS-callback mode
+ * (`onconfirm`) and form-action mode (`formAction`). Form action mode is
+ * preferred when the confirm triggers a server mutation because it degrades
+ * without JS.
+ *
+ * Optional `typedConfirmation` gates Confirm behind the user typing an exact
+ * string (e.g. the target user's email). Used by hangar admin-write surfaces
+ * to bind the action to its target -- the admin reads the identity into
+ * working memory before submitting. Pattern from GitHub repo-delete.
+ *
+ * `dangerLevel` is the contract for callers that think in admin-write terms
+ * (`caution` = recoverable, `danger` = destructive). It maps to the lower-
+ * level `variant` prop. Either prop can drive the styling; `dangerLevel`
+ * wins when both are set.
  */
 
 import type { Snippet } from 'svelte';
@@ -22,6 +32,17 @@ interface Props {
 	confirmLabel?: string;
 	cancelLabel?: string;
 	variant?: 'primary' | 'danger';
+	/**
+	 * Action severity, used by hangar admin-write surfaces. Maps to `variant`
+	 * (`caution` -> `primary`, `danger` -> `danger`). When set, takes
+	 * precedence over `variant`.
+	 */
+	dangerLevel?: 'caution' | 'danger';
+	/**
+	 * When set, the Confirm button is disabled until the user types `expected`
+	 * exactly. Use to bind ban / revoke-style actions to their target user.
+	 */
+	typedConfirmation?: { label: string; expected: string };
 	/** Optional form-action to POST when Confirm is clicked. */
 	formAction?: string;
 	formMethod?: 'GET' | 'POST';
@@ -37,15 +58,36 @@ const {
 	confirmLabel = 'Confirm',
 	cancelLabel = 'Cancel',
 	variant = 'primary',
+	dangerLevel,
+	typedConfirmation,
 	formAction,
 	formMethod = 'POST',
 	hiddenFields,
 	children,
 }: Props = $props();
 
+let typedValue = $state('');
+
+const effectiveVariant = $derived<'primary' | 'danger'>(
+	dangerLevel === 'danger' ? 'danger' : dangerLevel === 'caution' ? 'primary' : variant,
+);
+
+const confirmDisabled = $derived(typedConfirmation !== undefined && typedValue !== typedConfirmation.expected);
+
 function handleConfirmClick() {
+	if (confirmDisabled) return;
 	onconfirm?.();
 }
+
+function handleFormSubmit(event: SubmitEvent) {
+	if (confirmDisabled) {
+		event.preventDefault();
+	}
+}
+
+$effect(() => {
+	if (!open) typedValue = '';
+});
 </script>
 
 <Dialog {open} onClose={oncancel} size="sm" ariaLabel={title}>
@@ -56,6 +98,18 @@ function handleConfirmClick() {
 	{#snippet body()}
 		<div class="content">
 			{@render children()}
+			{#if typedConfirmation}
+				<label class="typed-gate">
+					<span class="typed-gate-label">{typedConfirmation.label}</span>
+					<input
+						type="text"
+						class="typed-gate-input"
+						bind:value={typedValue}
+						autocomplete="off"
+						spellcheck="false"
+					/>
+				</label>
+			{/if}
 		</div>
 	{/snippet}
 
@@ -64,21 +118,35 @@ function handleConfirmClick() {
 			{cancelLabel}
 		</Button>
 		{#if formAction}
-			<form method={formMethod} action={formAction} class="confirm-form">
+			<form
+				method={formMethod}
+				action={formAction}
+				class="confirm-form"
+				onsubmit={handleFormSubmit}
+			>
 				{#if hiddenFields}
 					{#each Object.entries(hiddenFields) as [k, v] (k)}
 						<input type="hidden" name={k} value={v} />
 					{/each}
 				{/if}
-				<Button type="submit" variant={variant === 'danger' ? 'danger' : 'primary'} size="sm">
+				{#if typedConfirmation}
+					<input type="hidden" name="confirmedTarget" value={typedValue} />
+				{/if}
+				<Button
+					type="submit"
+					variant={effectiveVariant}
+					size="sm"
+					disabled={confirmDisabled}
+				>
 					{confirmLabel}
 				</Button>
 			</form>
 		{:else}
 			<Button
-				variant={variant === 'danger' ? 'danger' : 'primary'}
+				variant={effectiveVariant}
 				size="sm"
 				onclick={handleConfirmClick}
+				disabled={confirmDisabled}
 			>
 				{confirmLabel}
 			</Button>
@@ -101,5 +169,32 @@ function handleConfirmClick() {
 	.confirm-form {
 		margin: 0;
 		display: inline-flex;
+	}
+
+	.typed-gate {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-2xs);
+		margin-top: var(--space-md);
+	}
+
+	.typed-gate-label {
+		color: var(--ink-body);
+		font-size: var(--type-ui-label-size);
+		font-weight: var(--font-weight-medium);
+	}
+
+	.typed-gate-input {
+		padding: var(--space-xs) var(--space-sm);
+		border: 1px solid var(--input-default-border);
+		border-radius: var(--radius-sm);
+		background: var(--input-default-bg);
+		color: var(--ink-body);
+		font: inherit;
+	}
+
+	.typed-gate-input:focus {
+		outline: 2px solid var(--focus-ring);
+		outline-offset: 1px;
 	}
 </style>
