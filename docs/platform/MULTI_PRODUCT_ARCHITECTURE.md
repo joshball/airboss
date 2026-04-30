@@ -14,6 +14,8 @@ decided_from: ./MULTI_PRODUCT_ARCHITECTURE_OPTIONS.md
 
 Products are grouped by rendering surface -- what they need from the platform technically -- not by content theme. A weather quiz and a regulation quiz both live in `study/` because they share card UI and spaced rep infrastructure. A route map and an airport card both live in `spatial/` because they share map rendering and aeronautical data.
 
+> **Note on terminology:** This doc uses "product" loosely -- it predates the [Product Taxonomy](PRODUCT_TAXONOMY.md), which distinguishes **products** (full user-facing systems, e.g. ground school, sim, avionics) from **features** (pieces of a product, e.g. lens, goals, cert dashboard) from **surface apps** (code-organization units in `apps/`). Many things called "products" below are really features. The architecture decision is sound; the language is imprecise. See [PRODUCT_TAXONOMY.md](PRODUCT_TAXONOMY.md) for the current distinction.
+
 **Separate repo.** The pilot performance platform lives in `joshball/airboss`. FIRC stays in `joshball/airboss-firc`. They share no code dependencies -- patterns were copied, not linked.
 
 See [MULTI_PRODUCT_ARCHITECTURE_OPTIONS.md](MULTI_PRODUCT_ARCHITECTURE_OPTIONS.md) for the full options analysis.

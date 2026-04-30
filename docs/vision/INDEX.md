@@ -4,6 +4,8 @@ This is the daydreaming room. A collection of product ideas at various stages --
 
 Every product lives at `products/{category}/{product-name}/PRD.md` with structured frontmatter. The index below is manually maintained, but the frontmatter in each PRD is the source of truth.
 
+> **Heads up: terminology drift.** This index calls every entry a "product." As of 2026-04-30, that term is overloaded -- under the [Product Taxonomy](../platform/PRODUCT_TAXONOMY.md), most entries here are *features* (pieces of a larger product like ground school) or *feature patterns*, not products. Examples: "Spaced Memory Items" is a feature of ground school. "Avionics Trainer" is the avionics product. "Approach Rehearsal" is a feature pattern that might live in sim or in ground school. Reclassification of this index is deferred (no public face yet, low pressure). Until then, treat the entries as an **idea bank**, not as a list of products.
+
 ## Categories
 
 | Folder           | Theme                                                                |
