@@ -19,6 +19,7 @@ references:
     title: 14 CFR Part 14 -- Rules implementing the Equal Access to Justice Act
     publisher: FAA
     url: https://www.ecfr.gov/current/title-14/part-14
+    subjects: [regulations]
 
   - slug: 14cfr23
     kind: cfr
@@ -26,6 +27,7 @@ references:
     title: 14 CFR Part 23 -- Airworthiness Standards (Normal Category Airplanes)
     publisher: FAA
     url: https://www.ecfr.gov/current/title-14/part-23
+    subjects: [regulations, aircraft-systems]
 
   - slug: 14cfr61
     kind: cfr
@@ -33,6 +35,7 @@ references:
     title: 14 CFR Part 61 -- Certification (Pilots, Flight Instructors, Ground Instructors)
     publisher: FAA
     url: https://www.ecfr.gov/current/title-14/part-61
+    subjects: [regulations, certification]
 
   - slug: 14cfr68
     kind: cfr
@@ -40,6 +43,7 @@ references:
     title: 14 CFR Part 68 -- BasicMed
     publisher: FAA
     url: https://www.ecfr.gov/current/title-14/part-68
+    subjects: [regulations, medical]
 
   - slug: 14cfr71
     kind: cfr
@@ -47,6 +51,7 @@ references:
     title: 14 CFR Part 71 -- Designation of Class A, B, C, D, and E Airspace Areas
     publisher: FAA
     url: https://www.ecfr.gov/current/title-14/part-71
+    subjects: [regulations, airspace]
 
   - slug: 14cfr73
     kind: cfr
@@ -54,6 +59,7 @@ references:
     title: 14 CFR Part 73 -- Special Use Airspace
     publisher: FAA
     url: https://www.ecfr.gov/current/title-14/part-73
+    subjects: [regulations, airspace]
 
   - slug: 14cfr91
     kind: cfr
@@ -61,6 +67,7 @@ references:
     title: 14 CFR Part 91 -- General Operating and Flight Rules
     publisher: FAA
     url: https://www.ecfr.gov/current/title-14/part-91
+    subjects: [regulations, procedures]
 
   - slug: 14cfr135
     kind: cfr
@@ -68,6 +75,7 @@ references:
     title: 14 CFR Part 135 -- Operating Requirements (Commuter and On-Demand)
     publisher: FAA
     url: https://www.ecfr.gov/current/title-14/part-135
+    subjects: [regulations, procedures]
 
   - slug: 14cfr141
     kind: cfr
@@ -75,6 +83,7 @@ references:
     title: 14 CFR Part 141 -- Pilot Schools
     publisher: FAA
     url: https://www.ecfr.gov/current/title-14/part-141
+    subjects: [regulations, certification, training-ops]
 
   # ---------- Title 49 (Transportation) ------------------------------------
 
@@ -84,6 +93,7 @@ references:
     title: 49 CFR Part 830 -- Notification and Reporting of Aircraft Accidents (NTSB)
     publisher: NTSB
     url: https://www.ecfr.gov/current/title-49/part-830
+    subjects: [regulations, emergencies]
 
   - slug: 49cfr1552
     kind: cfr
@@ -91,3 +101,4 @@ references:
     title: 49 CFR Part 1552 -- Flight Schools (TSA Alien Flight Student Program)
     publisher: TSA
     url: https://www.ecfr.gov/current/title-49/part-1552
+    subjects: [regulations, training-ops]

@@ -25,7 +25,7 @@ const percentRead = $derived(
 );
 </script>
 
-<a class="handbook-card" href={ROUTES.HANDBOOK(documentSlug)}>
+<a class="handbook-card" href={ROUTES.LIBRARY_DOC(documentSlug)}>
 	<div class="header">
 		<h3>{title}</h3>
 		<span class="edition" title="Edition">{edition}</span>

@@ -51,6 +51,7 @@ function buildFixture(slugSuffix: string, edition: string, contentHash: string):
 		publisher: 'FAA',
 		source_url: 'https://example.com/test.pdf',
 		fetched_at: '2026-04-26T00:00:00.000+00:00',
+		subjects: ['training-ops'],
 		sections: [
 			{
 				level: 'chapter',

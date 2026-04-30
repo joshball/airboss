@@ -41,7 +41,7 @@ import { getCorpusResolver, isParseError, parseIdentifier, type SourceId } from 
 import type { Citation, StructuredCitation } from '@ab/types';
 import { isHandbookCitation, isStructuredCitation } from '@ab/types';
 import { generateHandbookFigureId, generateHandbookSectionId, generateReferenceId } from '@ab/utils';
-import { and, asc, eq, isNull, sql } from 'drizzle-orm';
+import { and, asc, eq, inArray, isNull, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import {
 	type HandbookFigureRow,
@@ -332,7 +332,7 @@ export async function getNodesCitingSection(query: CitingNodesQuery, db: Db = de
  * Routing rules:
  *
  * 1. Handbook citations resolve to the in-app handbook reader route
- *    (`ROUTES.HANDBOOK_CHAPTER` or `ROUTES.HANDBOOK_SECTION`).
+ *    (`ROUTES.LIBRARY_CHAPTER` or `ROUTES.LIBRARY_SECTION`).
  * 2. When `airboss_ref` is set, attempt the `@ab/sources` registry's
  *    per-corpus `getLiveUrl()`. This is the canonical resolution path for
  *    cross-corpus identifiers per ADR 019. Falls through to the
@@ -401,8 +401,8 @@ function resolveHandbookCitationUrl(
 	const ref = references.find((r) => r.id === citation.reference_id);
 	if (!ref) return null;
 	const { chapter, section } = citation.locator;
-	if (section === undefined) return ROUTES.HANDBOOK_CHAPTER(ref.documentSlug, chapter);
-	return ROUTES.HANDBOOK_SECTION(ref.documentSlug, chapter, section);
+	if (section === undefined) return ROUTES.LIBRARY_CHAPTER(ref.documentSlug, chapter);
+	return ROUTES.LIBRARY_SECTION(ref.documentSlug, chapter, section);
 }
 
 /**
@@ -488,6 +488,31 @@ export async function getHandbookProgress(
 	}
 	const unreadSections = Math.max(0, totalSections - readSections - readingSections);
 	return { totalSections, readSections, readingSections, unreadSections, comprehendedSections };
+}
+
+/**
+ * Bulk readability probe over a set of references. Returns the set of
+ * reference ids that have at least one non-chapter `handbook_section` row,
+ * which is the criterion the library index uses to flag "Read in-app" cards.
+ *
+ * Single query so the `/library` page load is one round-trip per N references
+ * rather than N. Empty input short-circuits so callers don't have to.
+ */
+export async function getReadableReferenceIds(
+	referenceIds: readonly string[],
+	db: Db = defaultDb,
+): Promise<Set<string>> {
+	if (referenceIds.length === 0) return new Set();
+	const rows = await db
+		.selectDistinct({ referenceId: handbookSection.referenceId })
+		.from(handbookSection)
+		.where(
+			and(
+				inArray(handbookSection.referenceId, [...referenceIds]),
+				sql`${handbookSection.level} <> ${HANDBOOK_SECTION_LEVELS.CHAPTER}`,
+			),
+		);
+	return new Set(rows.map((r) => r.referenceId));
 }
 
 // ---------------------------------------------------------------------------
@@ -716,11 +741,13 @@ export interface UpsertReferenceInput {
 	title: string;
 	publisher?: string;
 	url?: string | null;
+	subjects?: readonly string[];
 	seedOrigin?: string | null;
 }
 
 /** Insert or update a `reference` row; returns the post-write row. */
 export async function upsertReference(input: UpsertReferenceInput, db: Db = defaultDb): Promise<ReferenceRow> {
+	const subjects = [...(input.subjects ?? [])];
 	const values: NewReferenceRow = {
 		id: generateReferenceId(),
 		kind: input.kind,
@@ -729,6 +756,7 @@ export async function upsertReference(input: UpsertReferenceInput, db: Db = defa
 		title: input.title,
 		publisher: input.publisher ?? 'FAA',
 		url: input.url ?? null,
+		subjects,
 		seedOrigin: input.seedOrigin ?? null,
 	};
 
@@ -742,6 +770,7 @@ export async function upsertReference(input: UpsertReferenceInput, db: Db = defa
 				title: input.title,
 				publisher: input.publisher ?? 'FAA',
 				url: input.url ?? null,
+				subjects,
 				seedOrigin: input.seedOrigin ?? null,
 				updatedAt: new Date(),
 			},

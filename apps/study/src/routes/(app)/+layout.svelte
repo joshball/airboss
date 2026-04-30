@@ -103,7 +103,7 @@ const lensActive = $derived(page.url.pathname.startsWith('/lens'));
 const goalsActive = $derived(page.url.pathname.startsWith(ROUTES.GOALS));
 const knowledgeActive = $derived(page.url.pathname.startsWith(ROUTES.KNOWLEDGE));
 const glossaryActive = $derived(page.url.pathname.startsWith(ROUTES.GLOSSARY));
-const handbooksActive = $derived(page.url.pathname.startsWith(ROUTES.HANDBOOKS));
+const libraryActive = $derived(page.url.pathname.startsWith(ROUTES.LIBRARY));
 const helpActive = $derived(page.url.pathname.startsWith(ROUTES.HELP));
 const helpConceptsActive = $derived(page.url.pathname.startsWith(ROUTES.HELP_CONCEPTS));
 const helpIndexActive = $derived(helpActive && !helpConceptsActive);
@@ -267,7 +267,7 @@ function handleDocumentPointerDown(event: PointerEvent) {
 		<a href={ROUTES.REPS} aria-current={repsActive ? 'page' : undefined}>{NAV_LABELS.REPS}</a>
 		<a href={ROUTES.KNOWLEDGE} aria-current={knowledgeActive ? 'page' : undefined}>{NAV_LABELS.KNOWLEDGE}</a>
 		<a href={ROUTES.GLOSSARY} aria-current={glossaryActive ? 'page' : undefined}>{NAV_LABELS.GLOSSARY}</a>
-			<a href={ROUTES.HANDBOOKS} aria-current={handbooksActive ? 'page' : undefined}>{NAV_LABELS.HANDBOOKS}</a>
+			<a href={ROUTES.LIBRARY} aria-current={libraryActive ? 'page' : undefined}>{NAV_LABELS.LIBRARY}</a>
 		<a href={ROUTES.CALIBRATION} aria-current={calibrationActive ? 'page' : undefined}>{NAV_LABELS.CALIBRATION}</a>
 		<details class="nav-menu" bind:this={helpMenu} onfocusout={handleHelpMenuBlur}>
 			<summary aria-haspopup="menu" aria-current={helpActive ? 'page' : undefined}>

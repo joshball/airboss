@@ -7,6 +7,7 @@
   "source_url": "https://www.faa.gov/sites/faa.gov/files/FAA-H-8083-28B.pdf",
   "source_checksum": "2a87e4a5613e2a8e060aaf83a95dfc55b61b0e576f5b783df9fdcebe62da62c3",
   "fetched_at": "2026-04-27T14:12:02.742396+00:00",
+  "subjects": ["weather"],
   "sections": [
     {
       "level": "chapter",

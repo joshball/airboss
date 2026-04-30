@@ -19,6 +19,7 @@ import { bauthUser } from '@ab/auth/schema';
 import {
 	ACS_TRIAD_VALUES,
 	AIRPLANE_CLASS_VALUES,
+	AVIATION_TOPIC_VALUES,
 	BLOOM_LEVEL_VALUES,
 	CARD_FEEDBACK_SIGNAL_VALUES,
 	CARD_STATE_VALUES,
@@ -1224,6 +1225,17 @@ export const reference = studySchema.table(
 		publisher: text('publisher').notNull().default('FAA'),
 		url: text('url'),
 		/**
+		 * Aviation-topic axis values describing what subject(s) the reference
+		 * covers. Powers the subject-grouped browse view at `/library`. Closed
+		 * vocabulary; see {@link AVIATION_TOPIC_VALUES}. Author-supplied during
+		 * seed (`course/references/*.yaml` `subjects:` field, or the handbook
+		 * `manifest.json` `subjects:` field). 1..3 entries are typical; the
+		 * library index cross-lists a reference once per subject. The CHECK
+		 * constraint enforces enum membership; a 1..3 cap is enforced at the
+		 * seed validator (zod).
+		 */
+		subjects: text('subjects').array().notNull().default(sql`'{}'::text[]`),
+		/**
 		 * Set when a newer edition exists. The reader surfaces "newer edition
 		 * available" when this points to a non-archived row; resolvers continue
 		 * to honor citations against the older edition so historical links
@@ -1253,6 +1265,15 @@ export const reference = studySchema.table(
 			sql.raw(`"document_slug" ~ '^[a-z0-9][a-z0-9-]{1,30}[a-z0-9]$'`),
 		),
 		editionLengthCheck: check('reference_edition_length_check', sql.raw(`char_length("edition") BETWEEN 1 AND 64`)),
+		// Every subject string must be a valid AVIATION_TOPIC value. `<@` is the
+		// "is contained by" operator on text[]: a subset comparison against the
+		// whitelist ARRAY. Empty arrays satisfy `<@` trivially (the empty set is
+		// a subset of every set), so the CHECK is permissive for legacy rows
+		// pre-backfill; the seed validator enforces the 1..3 cap on author input.
+		subjectsValuesCheck: check(
+			'reference_subjects_values_check',
+			sql.raw(`"subjects" <@ ARRAY[${inList(AVIATION_TOPIC_VALUES)}]::text[]`),
+		),
 	}),
 );
 

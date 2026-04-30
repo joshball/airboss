@@ -12,6 +12,7 @@ references:
     title: Aeronautical Information Manual
     publisher: FAA
     url: https://www.faa.gov/air_traffic/publications/atpubs/aim_html/
+    subjects: [procedures, communications, navigation]
 
   - slug: pcg
     kind: pcg
@@ -19,3 +20,4 @@ references:
     title: Pilot/Controller Glossary
     publisher: FAA
     url: https://www.faa.gov/air_traffic/publications/atpubs/pcg_html/
+    subjects: [communications]

@@ -154,6 +154,7 @@ def write_outputs(
         "source_url": fetch_result.url,
         "source_checksum": fetch_result.sha256,
         "fetched_at": fetch_result.fetched_at,
+        "subjects": list(config.subjects),
         "sections": manifest_sections,
         "figures": manifest_figures,
         "warnings": manifest_warnings,

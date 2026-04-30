@@ -7,6 +7,7 @@
   "source_url": "https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/faa-h-8083-25c.pdf",
   "source_checksum": "247929cace0ab56b376e683eba540cc4c8f39f199ab35414e8b604e24f395cb7",
   "fetched_at": "2026-04-27T14:14:59.416773+00:00",
+  "subjects": ["aerodynamics", "aircraft-systems", "weather"],
   "sections": [
     {
       "level": "chapter",

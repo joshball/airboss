@@ -16,7 +16,7 @@ let { data }: { data: PageData } = $props();
 <PageHeader title={data.reference.title}>
 	{#snippet eyebrowSnippet()}
 		<nav aria-label="Breadcrumb">
-			<a href={ROUTES.HANDBOOKS}>Handbooks</a> &raquo; <span>{data.reference.title}</span>
+			<a href={ROUTES.LIBRARY}>Library</a> &raquo; <span>{data.reference.title}</span>
 		</nav>
 	{/snippet}
 	{#snippet titleSuffix()}
@@ -34,7 +34,7 @@ let { data }: { data: PageData } = $props();
 	<div class="banner" role="alert">
 		<strong>Newer edition available.</strong>
 		You're reading {data.reference.edition}; the latest is
-		<a href={ROUTES.HANDBOOK(data.reference.documentSlug)}>{data.reference.supersededByEdition}</a>.
+		<a href={ROUTES.LIBRARY_DOC(data.reference.documentSlug)}>{data.reference.supersededByEdition}</a>.
 	</div>
 {/if}
 

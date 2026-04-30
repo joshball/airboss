@@ -1445,6 +1445,8 @@ export const CITATION_URL_TEMPLATES = {
 	/** eCFR URL for a 14 CFR / 49 CFR section. Title 14 example: 14 CFR 91.103. */
 	CFR: (title: number, part: number, section: string): string =>
 		`https://www.ecfr.gov/current/title-${title}/chapter-I/part-${part}/section-${part}.${encodeURIComponent(section)}`,
+	/** eCFR URL for an entire CFR part (no section locator). Title 14 example: 14 CFR Part 91. */
+	CFR_PART: (title: number, part: number): string => `https://www.ecfr.gov/current/title-${title}/part-${part}`,
 	/** FAA Advisory Circular index. The site has no per-paragraph deep link. */
 	AC_INDEX: 'https://www.faa.gov/regulations_policies/advisory_circulars/',
 	/** FAA test-standards (ACS / PTS) landing page; per-publication URLs live in `@ab/sources` ACS_PUBLICATION_LIVE_URLS. */
@@ -1455,7 +1457,103 @@ export const CITATION_URL_TEMPLATES = {
 	PCG_INDEX: 'https://www.faa.gov/air_traffic/publications/atpubs/pcg_html/',
 	/** NTSB accident database search landing. */
 	NTSB_INDEX: 'https://www.ntsb.gov/Pages/AviationQueryV2.aspx',
+	/** FAA aviation handbook index landing for handbooks not yet ingested in-app. */
+	HANDBOOK_INDEX: 'https://www.faa.gov/regulations_policies/handbooks_manuals/aviation',
 } as const;
+
+/**
+ * CFR slug parser: `14cfr91` -> `{ title: 14, part: 91 }`. Returns null when
+ * the slug doesn't match the canonical shape used in `course/references/`.
+ * Exported so the library index page can build an eCFR URL without reaching
+ * for the YAML `url:` field.
+ */
+function parseCfrSlug(slug: string): { title: number; part: number } | null {
+	const match = slug.match(/^(\d+)cfr(\d+)$/);
+	if (!match) return null;
+	const title = Number.parseInt(match[1] ?? '', 10);
+	const part = Number.parseInt(match[2] ?? '', 10);
+	if (!Number.isFinite(title) || !Number.isFinite(part)) return null;
+	return { title, part };
+}
+
+/**
+ * Build the external URL for a `study.reference` row. Single source of truth
+ * for the library index card link target so a kind change or URL scheme rebrand
+ * is a one-file fix.
+ *
+ * Resolution order:
+ *
+ * 1. Kind-specific deterministic URL (CFR slug -> eCFR part URL).
+ * 2. Authored YAML `url:` fallback when present.
+ * 3. Per-kind index landing URL.
+ * 4. `null` when the kind has no public landing (POH umbrella, freeform `other`
+ *    with no `url:`).
+ *
+ * Handbooks intentionally return `null`: handbooks are read in-app, not on
+ * faa.gov. The library index card uses `null` here as the signal to render
+ * the in-app reader link instead of an external link.
+ */
+export function externalUrlForReference(
+	kind: ReferenceKind,
+	slug: string,
+	_edition: string,
+	fallbackUrl: string | null,
+): string | null {
+	switch (kind) {
+		case REFERENCE_KINDS.HANDBOOK:
+			return null;
+		case REFERENCE_KINDS.CFR: {
+			const parsed = parseCfrSlug(slug);
+			if (parsed !== null) return CITATION_URL_TEMPLATES.CFR_PART(parsed.title, parsed.part);
+			return fallbackUrl;
+		}
+		case REFERENCE_KINDS.AC:
+			return fallbackUrl ?? CITATION_URL_TEMPLATES.AC_INDEX;
+		case REFERENCE_KINDS.ACS:
+		case REFERENCE_KINDS.PTS:
+			return fallbackUrl ?? CITATION_URL_TEMPLATES.ACS_INDEX;
+		case REFERENCE_KINDS.AIM:
+			return fallbackUrl ?? CITATION_URL_TEMPLATES.AIM_INDEX;
+		case REFERENCE_KINDS.PCG:
+			return fallbackUrl ?? CITATION_URL_TEMPLATES.PCG_INDEX;
+		case REFERENCE_KINDS.NTSB:
+			return fallbackUrl ?? CITATION_URL_TEMPLATES.NTSB_INDEX;
+		case REFERENCE_KINDS.POH:
+			// POH is per-aircraft. The umbrella row has no public landing.
+			return fallbackUrl;
+		case REFERENCE_KINDS.OTHER:
+			return fallbackUrl;
+		default: {
+			const exhaustive: never = kind;
+			void exhaustive;
+			return fallbackUrl;
+		}
+	}
+}
+
+/**
+ * State-filter values for the `/library` index page. `all` shows every
+ * reference, `in-app` shows only references whose body has been ingested into
+ * `study.handbook_section`, `external` shows only references that link out.
+ */
+export const LIBRARY_STATES = {
+	ALL: 'all',
+	IN_APP: 'in-app',
+	EXTERNAL: 'external',
+} as const;
+
+export type LibraryState = (typeof LIBRARY_STATES)[keyof typeof LIBRARY_STATES];
+
+export const LIBRARY_STATE_VALUES: readonly LibraryState[] = Object.values(LIBRARY_STATES);
+
+export const LIBRARY_STATE_LABELS: Record<LibraryState, string> = {
+	[LIBRARY_STATES.ALL]: 'All',
+	[LIBRARY_STATES.IN_APP]: 'Read in-app',
+	[LIBRARY_STATES.EXTERNAL]: 'External',
+};
+
+/** localStorage key for the per-subject expand/collapse state on `/library`. */
+export const LIBRARY_EXPANDED_SUBJECTS_KEY = 'library:expanded-subjects';
 
 /**
  * `handbook_section.level`. A section row is one of: a chapter (top-level,

@@ -42,6 +42,7 @@ import { goals } from './content/goals';
 import { keyboardShortcuts } from './content/keyboard-shortcuts';
 import { knowledgeGraph } from './content/knowledge-graph';
 import { lens } from './content/lens';
+import { library } from './content/library';
 import { memoryBrowse } from './content/memory-browse';
 import { memoryCard } from './content/memory-card';
 import { memoryDashboard } from './content/memory-dashboard';
@@ -72,6 +73,7 @@ export const studyHelpPages: readonly HelpPage[] = [
 	credentials,
 	knowledgeGraph,
 	lens,
+	library,
 	keyboardShortcuts,
 	conceptFsrs,
 	conceptSpacedRep,
