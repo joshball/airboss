@@ -372,6 +372,12 @@ export const ROUTES = {
 	HANGAR_ADMIN_AUDIT: '/admin/audit',
 	/** Detail view for one `audit_log` row. ADMIN-only. */
 	HANGAR_ADMIN_AUDIT_DETAIL: (id: string) => `/admin/audit/${encodeURIComponent(id)}` as const,
+	/**
+	 * JSON typeahead endpoint for the actor filter on `/admin/audit`. ADMIN-only.
+	 * Lives under `/api/` (not `/admin/audit/`) to avoid shadowing the
+	 * `/admin/audit/[id]` detail route with a static segment.
+	 */
+	HANGAR_API_AUDIT_ACTORS: '/api/audit-actors',
 	/** Form-action id for the sync-all-pending button. */
 	HANGAR_SYNC_ACTION: '?/syncAll',
 } as const;
