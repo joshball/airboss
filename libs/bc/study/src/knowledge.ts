@@ -20,6 +20,7 @@ import {
 	type Domain,
 	KNOWLEDGE_EDGE_TYPES,
 	type KnowledgeEdgeType,
+	NODE_LIFECYCLES,
 	NODE_MASTERY_GATES,
 	type NodeLifecycle,
 	type NodeMasteryGate,
@@ -404,7 +405,7 @@ export async function getNodesByIds(ids: readonly string[], db: Db = defaultDb):
  * started / complete lifecycle. Kept in the BC so UI, build script, and tests
  * all resolve lifecycle the same way.
  */
-export function lifecycleFromContent(contentMd: string): 'skeleton' | 'started' | 'complete' {
+export function lifecycleFromContent(contentMd: string): NodeLifecycle {
 	const phaseLabels = new Set(['context', 'problem', 'discover', 'reveal', 'practice', 'connect', 'verify']);
 	const found = new Set<string>();
 	for (const line of contentMd.split(/\r?\n/)) {
@@ -413,9 +414,9 @@ export function lifecycleFromContent(contentMd: string): 'skeleton' | 'started' 
 		const label = m[1].trim().toLowerCase();
 		if (phaseLabels.has(label)) found.add(label);
 	}
-	if (found.size === 0) return 'skeleton';
-	if (found.size >= phaseLabels.size) return 'complete';
-	return 'started';
+	if (found.size === 0) return NODE_LIFECYCLES.SKELETON;
+	if (found.size >= phaseLabels.size) return NODE_LIFECYCLES.COMPLETE;
+	return NODE_LIFECYCLES.STARTED;
 }
 
 /**
@@ -550,7 +551,7 @@ export async function listNodesWithFacets(
 			title: row.title,
 			domain: row.domain,
 			estimatedTimeMinutes: row.estimatedTimeMinutes ?? null,
-			lifecycle: (row.lifecycle ?? 'skeleton') as 'skeleton' | 'started' | 'complete',
+			lifecycle: (row.lifecycle ?? NODE_LIFECYCLES.SKELETON) as NodeLifecycle,
 			minimumCert: (row.minimumCert as Cert | null) ?? null,
 			studyPriority: (row.studyPriority as StudyPriority | null) ?? null,
 		};
