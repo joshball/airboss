@@ -1,5 +1,7 @@
 # Magic Strings + Numbers Audit
 
+> **Status (2026-04-30):** Fully reconciled. See [Reconciliation 2026-04-30](#reconciliation-2026-04-30) at the bottom of this file. The original audit body is preserved below for traceability; the reconciliation table is the source of truth for what's open vs closed.
+
 Read-only scan of `apps/study/src`, `libs/bc/**`, `libs/ui/src`, `libs/help/src`. Scope and rule source: `CLAUDE.md` "Critical Rules" (no magic strings, no magic numbers; all literal values in `libs/constants/`; all routes through `ROUTES`).
 
 ## Summary
@@ -280,3 +282,40 @@ One-line replacements across 4 files; pure cosmetic. Do last, as a cleanup commi
 - **Phase 4 (engine scoring):** new `libs/constants/src/engine.ts` + `libs/bc/study/src/engine.ts`.
 - **Phase 5 (z-index):** `libs/themes/src/tokens.ts` or `libs/constants/src/ui.ts` + all 9 z-index sites.
 - **Phase 6 (domainLabel sweep):** `apps/study/src/routes/(app)/{reps/[id]/+page.svelte, reps/browse/+page.svelte, session/start/+page.svelte, memory/review/+page.svelte}`.
+
+## Reconciliation 2026-04-30
+
+Triaged each item against current main (`96a21308`). Most items were closed by intervening work. Two genuinely-open items in `libs/bc/study/src/knowledge.ts` (`lifecycleFromContent` return type and the `?? 'skeleton'` fallback) were closed in this PR.
+
+### Closed by this PR
+
+- **`'skeleton' | 'started' | 'complete'` in `libs/bc/study/src/knowledge.ts`** -- `lifecycleFromContent` return type narrowed to `NodeLifecycle`; the three `return 'skeleton' | 'started' | 'complete'` literals replaced with `NODE_LIFECYCLES.{SKELETON,STARTED,COMPLETE}`. The `row.lifecycle ?? 'skeleton'` fallback at line 553 now reads `row.lifecycle ?? NODE_LIFECYCLES.SKELETON`. Added `NODE_LIFECYCLES` to the existing `@ab/constants` import block.
+
+### Closed by prior PRs
+
+- **`'card' | 'rep' | 'node_start'` (engine, sessions, session-start, test-support)** -- Engine and sessions BCs fully migrated to `SESSION_ITEM_KINDS.{CARD,REP,NODE_START}` + `SessionItemKind`. `apps/study/src/routes/(app)/session/start/+page.svelte` keys `KIND_DEFINITIONS` / `KIND_LABELS` / `KIND_HELP` via the constant. CSS `[data-kind=...]` selectors retain string literals (CSS cannot interpolate JS constants); the writer side emits the constant value.
+- **`'today'` skip-kind defaults in `apps/study/src/routes/(app)/sessions/[id]/+page.server.ts`** -- All three sites use `SESSION_SKIP_KINDS.TODAY`; raw form value is validated against `SESSION_SKIP_KIND_VALUES`.
+- **`'relearning'` card state in `libs/bc/study/src/engine.ts`** -- All three sites use `CARD_STATES.RELEARNING`.
+- **`'core' | 'supporting' | 'elective'` priority literals** -- Migrated to `STUDY_PRIORITIES` taxonomy across `libs/bc/study/src/{engine,sessions}.ts`. (The audit's `RELEVANCE_PRIORITIES` was renamed to `STUDY_PRIORITIES` during the post-pivot study taxonomy work.) Sites use `STUDY_PRIORITIES.CRITICAL`, `STUDY_PRIORITIES.STANDARD`, etc.
+- **`'pass' | 'fail' | 'insufficient_data' | 'not_applicable'` in `apps/study/src/routes/(app)/knowledge/[slug]/+page.svelte`** -- `NODE_MASTERY_GATE_LABELS` exists in `libs/constants/src/study.ts`; `gateLabel` collapses to a lookup.
+- **`'skeleton' | 'started' | 'complete'` (KnowledgeNodeListRow type) in `libs/bc/study/src/knowledge.ts:441`** -- Interface field is `lifecycle: NodeLifecycle`.
+- **FSRS rating literals `1 | 2` in `libs/bc/study/src/engine.ts`** -- All three sites use `REVIEW_RATINGS.{AGAIN,HARD}`.
+- **`'mixed'` default session mode in `apps/study/src/routes/(app)/plans/**`** -- All three plan routes use `DEFAULT_SESSION_MODE` from `@ab/constants`.
+- **Help `documents:` paths in `apps/study/src/lib/help/content/*.ts`** -- Closed by PR #312. All six files use `ROUTES.{SESSION_START,MEMORY_REVIEW,DASHBOARD,KNOWLEDGE,CALIBRATION}`.
+- **Local `TABS` object on `apps/study/src/routes/(app)/plans/+page.svelte`** -- Replaced with `PLAN_STATUSES.{ACTIVE,ARCHIVED}` and `type PlanTab = Extract<PlanStatus, 'active' | 'archived'>`.
+- **Inline duration literals (30+ sites)** -- `libs/constants/src/time.ts` exists; all 30+ sites consume `MS_PER_DAY`, `MS_PER_WEEK`, `MS_PER_YEAR`, `SECONDS_PER_YEAR`. `STALE_REVIEW_MS = MS_PER_YEAR` retained as a semantic alias in `libs/help/src/validation.ts`. `apps/study/src/routes/appearance/+server.ts` uses `SECONDS_PER_YEAR`.
+- **Engine scoring weights in `libs/bc/study/src/engine.ts`** -- `ENGINE_SCORING` namespaced object exists in `libs/constants/src/engine.ts`; engine.ts routes all weights/thresholds through it (per ADR 014). The only remaining numeric literal is the PRNG hash constant `0x6d2b79f5`, which is a cryptographic mixing constant and not domain tuning.
+- **`z-index` ladder (9 sites)** -- All migrated to `var(--z-sticky)`, `var(--z-modal)`, `var(--z-dropdown)`, `var(--z-popover)`, `var(--z-command-palette)` tokens across `libs/ui/**`, `libs/help/**`, `apps/study/src/routes/(app)/+layout.svelte`, `dashboard/_panels/MapPanel.svelte`.
+- **`ratingLabels` + keyboard keys** -- `REVIEW_RATING_LABELS` exists in `@ab/constants` and is consumed by `apps/study/src/routes/(app)/memory/review/[sessionId]/+page.svelte`. The original `memory/review/+page.svelte:63-68` no longer exists in that form; the route was restructured to `[sessionId]`.
+- **`coerceEnum` `'mixed'` default literal** -- `DEFAULT_SESSION_MODE` constant is the third arg to `coerceEnum` everywhere in `apps/study/src/routes/(app)/plans/**`.
+- **`domainLabel` duplication** -- All four sites (`reps/[id]`, `reps/browse`, `session/start`, `memory/review`) import and call `domainLabel(...)` from `@ab/constants`. Closed by PR #312.
+
+### Deliberately left
+
+- **`SLICE_HELP_SECTION` slice-value literals in `apps/study/src/routes/(app)/session/start/+page.svelte:56-66`** -- The map keys already use `SESSION_SLICES.*`. The values are help-page fragment IDs that happen to coincide with the slice-value strings. Replacing the values with `SESSION_SLICES.*` would couple the help-fragment vocabulary to the engine vocabulary; today they're parallel by convention. The doc comment on the constant pins this coupling. Low leverage; revisit if a slice gets renamed.
+
+### Verification
+
+- `bun run check` clean.
+- `bun run test` -- 3545 tests pass (299 files).
+- Grep confirms every flagged literal returns only the constant definition or test fixtures, not call-site usage.
