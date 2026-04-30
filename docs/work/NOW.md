@@ -1,6 +1,20 @@
 # Now
 
-Single entry point for "what should I work on?" in airboss. Refresh date: 2026-04-29 (late, ADR 019 phase 10 fully shipped + §11 acceptance ticked).
+Single entry point for "what should I work on?" in airboss. Refresh date: 2026-04-30 (FAR navigation course content-complete).
+
+## Just shipped (2026-04-30 -- FAR navigation course Weeks 3-10 + 2 sibling capstones)
+
+- **FAR navigation course is content-complete.** All 10 weeks authored. All 4 sibling capstone orals authored. Authored across one work package PR (#349, merged) and one content PR (#350, the omnibus). Authoring approach: parallel sub-agents per week, exclusive directory ownership, phased dispatch.
+  - Week 3 -- Part 61 CFI (subpart H, endorsements, FOI): 5 lessons + drills + oral (~1,931 lines)
+  - Week 4 -- Part 91 general + flight rules: 6 lessons + drills + oral (Week 4 lessons 03-06 + drills + oral authored inline by the dispatcher after content-filter blocks on the sub-agent return path)
+  - Week 5 -- Part 91 equipment + maintenance: 5 lessons + drills + oral (~2,863 lines, "very deep" treatment)
+  - Week 6 -- Part 91 special ops + integration: 5 lessons + drills + oral (~1,911 lines)
+  - Week 7 -- Parts 141/135: 4 lessons + drills + oral (~1,244 lines, "cursory" literacy treatment)
+  - Week 8 -- Companion documents (AIM, AC, Chief Counsel, 49 CFR): 5 lessons + drills + oral (~1,839 lines)
+  - Week 9 -- Enforcement + NTSB Part 830: 6 lessons + drills + oral (~2,738 lines)
+  - Week 10 -- Capstone + 2 new sibling capstone orals (`friend-flight-review.md`, `ppl-applies-for-ir.md`): 3 lessons + drills + oral + 2 capstones (~691 lines + 59KB capstones)
+  - All citations use `airboss-ref:` URI syntax per ADR 019. Validator (`bun scripts/references.ts validate`) clean, 0 errors.
+  - CHANGELOG status table flipped to "Authored" for all 10 weeks; capstones flipped to 4/4.
 
 ## Just shipped (2026-04-29 -- chapter-source-ingestion WP closed, ADR 022)
 
@@ -59,7 +73,7 @@ The week was dominated by the reference identifier system (ADR 019, **phases 1-9
 
 ## In flight
 
-- **FAR navigation course Weeks 3-10.** Per `course/regulations/CHANGELOG.md`, Weeks 1 and 2 are fully authored (Week 2 shipped 2026-04-29 -- 6 lessons + drills + oral on Part 61). Weeks 3 (CFI), 4-6 (Part 91), 7 (141 + 135), 8 (companion docs), 9 (enforcement), 10 (capstone) await authoring. Two sibling capstones (friend-flight-review, ppl-applies-for-ir) deferred until they can be authored against `airboss-ref:` syntax in one pass.
+- *(FAR navigation course Weeks 3-10 and 2 sibling capstones moved to "Just shipped 2026-04-30".)*
 
 ## ADR 016 status (post-2026-04-28 ship)
 
@@ -202,7 +216,7 @@ Original MVP build order (Steps 1-6) shipped between PRs #1-#16. The active buil
 | ---- | ADR 019 §11 acceptance criteria audit                    | Shipped (PR #319 -- 13/13 boxes addressed)                                           |
 | ---- | Cert-syllabus + goal composer WP (data layer)            | Shipped (PRs #248, #254, #264, #270, #274)                                           |
 | ---- | Cert-syllabus surface work (dashboard + lens + composer) | Shipped (PRs #321, #323, #324 -- ADR 016 phases 7-9 complete)                        |
-| ---- | FAR navigation course Weeks 3-10                         | Pending (Weeks 1+2 authored; airboss-ref: round-trip clean)                          |
+| ---- | FAR navigation course Weeks 3-10                         | Shipped (PRs #349 work-package, #350 content -- all 10 weeks + 4 capstones authored) |
 | ---- | FIRC migration as `apps/firc/`                           | Deferred (post-MVP-proven)                                                           |
 
 ## Next
