@@ -36,6 +36,7 @@ import { join } from 'node:path';
 /** Directory globs (under repo root) that host `HelpPage` object literals. */
 const HELP_CONTENT_ROOTS: readonly string[] = [
 	'apps/study/src/lib/help/content',
+	'apps/hangar/src/lib/help/content',
 	// Future apps register their pages here. Each entry is a directory of
 	// `.ts` files, each file exporting one `HelpPage`.
 ];

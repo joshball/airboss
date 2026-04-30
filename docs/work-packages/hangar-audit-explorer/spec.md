@@ -3,9 +3,10 @@ title: 'Spec: Hangar Audit Explorer'
 product: hangar
 feature: hangar-audit-explorer
 type: spec
-status: draft
+status: shipped
 review_status: pending
 created: 2026-04-30
+shipped: 2026-04-30
 ---
 
 # Spec: Hangar Audit Explorer

@@ -49,6 +49,7 @@ import { helpRegistry, validateHelpPages } from '@ab/help';
 // Bun (which doesn't read Vite alias config), we re-import the content
 // list directly from its relative path here. Future apps add their
 // own call.
+import { hangarHelpPages } from '../../apps/hangar/src/lib/help/pages';
 import { studyHelpPages } from '../../apps/study/src/lib/help/pages';
 import { discoverSvelteFiles } from '../validate-help-ids/discover';
 import { extractHelpIdRefs } from '../validate-help-ids/extract';
@@ -56,6 +57,7 @@ import { readExistingGenerated } from './extract';
 import { scanContent } from './scan';
 
 helpRegistry.registerPages('study', studyHelpPages);
+helpRegistry.registerPages('hangar', hangarHelpPages);
 
 const REPO_ROOT = resolve(import.meta.dirname, '..', '..');
 
