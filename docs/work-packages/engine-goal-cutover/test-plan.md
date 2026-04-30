@@ -11,6 +11,24 @@ review_status: pending
 
 Manual acceptance tests for [spec.md](./spec.md). Prefix `EGC-`.
 
+## Implementation status (2026-04-29)
+
+Automated coverage delivered with the cutover PR:
+
+- `libs/bc/study/src/engine-targeting.test.ts` (10 specs / 29 expects, all passing) covers EGC-10..15 + EGC-13 disagreement detection + EGC-14 primary-goal switch.
+- `libs/bc/study/src/goals.test.ts` + `sessions.test.ts` regression suites continue to pass after the cutover (45 specs across the three files).
+- Grep gate documented in spec.md verified post-cutover: only `engine-targeting.ts` references `plan.certGoals` / `plan.focusDomains` / `plan.skipDomains` / `plan.skipNodes` directly; `sessions.ts` references the same names only inside a comment.
+
+Tests still left for the human verifier (UI / e2e / production-log scenarios):
+
+- EGC-1..3 (psql column-shape inspection -- run after `bun run db push`).
+- EGC-20..25 (`previewSession` integration via the running app for abby's seed user).
+- EGC-30..31 (plan-creation UX redirect; the agent could not exercise the SvelteKit form action manually).
+- EGC-40..43 (telemetry log-line + drift-script + backfill-check + source-counter live runs).
+- EGC-50..52 (drop-trigger checker + drop migration application; gated on the 14-day window).
+- EGC-60 (rollback dry-run via `git revert`).
+- EGC-71..73 (cert dashboard / goal composer / audit-log cross-checks).
+
 ## Setup
 
 - Study app running at `localhost:9600`.

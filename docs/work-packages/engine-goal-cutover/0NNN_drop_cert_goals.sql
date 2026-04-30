@@ -1,0 +1,30 @@
+-- engine-goal-cutover phase 9: drop study_plan.cert_goals.
+--
+-- DO NOT APPLY UNTIL TELEMETRY TRIGGER FIRES.
+--
+-- This migration removes the legacy cert filter column. It is gated on
+-- the dual-read trigger condition: 14 consecutive days where every
+-- `previewSession` call resolves with `source='goal'` or `source='empty'`
+-- (zero `source='plan'` reads). Verify with:
+--
+--   bun run db check engine-targeting-source --window=14d
+--
+-- Workflow when applying:
+--   1. Confirm the trigger script reports READY TO DROP.
+--   2. Move (or copy) this file into `drizzle/` with a real ordinal
+--      (e.g. drizzle/0002_drop_cert_goals.sql) and append a journal
+--      entry via `bunx drizzle-kit generate` -- DO NOT hand-edit
+--      `drizzle/meta/_journal.json`.
+--   3. Apply against staging: `bun run db migrate`. Verify previewSession
+--      resolves cleanly (source='goal' or source='empty' only).
+--   4. Apply against production during a maintenance window.
+--   5. Ship the Phase 10 cleanup PR (drop getDerivedCertGoals shim,
+--      remove EnginePlan.certGoals if no remaining caller, update WP
+--      status fields).
+--
+-- The drop is one-way. Rollback would require restoring `cert_goals`
+-- from the latest migration snapshot AND re-running
+-- `migrate-study-plans-to-goals` in reverse, which is not supported.
+-- Triple-check the trigger before applying.
+
+ALTER TABLE "study"."study_plan" DROP COLUMN "cert_goals";

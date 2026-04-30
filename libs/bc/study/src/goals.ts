@@ -29,11 +29,12 @@
  * See cert-syllabus WP spec + ADR 016 phase 6 for the model rationale.
  */
 
-import { GOAL_STATUSES, type GoalStatus, SYLLABUS_PRIMACY } from '@ab/constants';
+import { type Cert, type Domain, GOAL_STATUSES, type GoalStatus, SYLLABUS_PRIMACY } from '@ab/constants';
 import { db as defaultDb } from '@ab/db/connection';
 import { generateGoalId } from '@ab/utils';
 import { and, eq, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
+import { CredentialNotFoundError, getCredentialBySlug, getCredentialPrimarySyllabus } from './credentials';
 import type {
 	AddGoalNodeInput,
 	AddGoalSyllabusInput,
@@ -423,4 +424,157 @@ export async function setGoalNodeWeight(
 		.update(goalNode)
 		.set({ weight })
 		.where(and(eq(goalNode.goalId, existing.id), eq(goalNode.knowledgeNodeId, knowledgeNodeId)));
+}
+
+// ---------------------------------------------------------------------------
+// Goal targeting fields -- engine-goal-cutover
+// ---------------------------------------------------------------------------
+
+/**
+ * Read the goal's `focus_domains` array. Empty array means "no narrowing"
+ * (engine sees the full domain pool).
+ */
+export async function getGoalFocusDomains(goalId: string, db: Db = defaultDb): Promise<Domain[]> {
+	const row = await getGoalById(goalId, db);
+	return row.focusDomains;
+}
+
+/** Read the goal's `skip_domains` array. */
+export async function getGoalSkipDomains(goalId: string, db: Db = defaultDb): Promise<Domain[]> {
+	const row = await getGoalById(goalId, db);
+	return row.skipDomains;
+}
+
+/** Read the goal's `skip_nodes` array. */
+export async function getGoalSkipNodes(goalId: string, db: Db = defaultDb): Promise<string[]> {
+	const row = await getGoalById(goalId, db);
+	return row.skipNodes;
+}
+
+/**
+ * Set the goal's `focus_domains` list. Owned-goal check enforces caller
+ * authorization. Domains are not validated against `DOMAIN_VALUES` here --
+ * the type system enforces shape, and the BC trusts its caller; the route
+ * layer is the right place to coerce raw form input.
+ */
+export async function setGoalFocusDomains(
+	goalId: string,
+	userId: string,
+	domains: readonly Domain[],
+	db: Db = defaultDb,
+): Promise<void> {
+	const existing = await getOwnedGoal(goalId, userId, db);
+	await db
+		.update(goal)
+		.set({ focusDomains: [...domains], updatedAt: new Date() })
+		.where(eq(goal.id, existing.id));
+}
+
+/** Set the goal's `skip_domains` list. */
+export async function setGoalSkipDomains(
+	goalId: string,
+	userId: string,
+	domains: readonly Domain[],
+	db: Db = defaultDb,
+): Promise<void> {
+	const existing = await getOwnedGoal(goalId, userId, db);
+	await db
+		.update(goal)
+		.set({ skipDomains: [...domains], updatedAt: new Date() })
+		.where(eq(goal.id, existing.id));
+}
+
+/** Set the goal's `skip_nodes` list. */
+export async function setGoalSkipNodes(
+	goalId: string,
+	userId: string,
+	nodes: readonly string[],
+	db: Db = defaultDb,
+): Promise<void> {
+	const existing = await getOwnedGoal(goalId, userId, db);
+	await db
+		.update(goal)
+		.set({ skipNodes: [...nodes], updatedAt: new Date() })
+		.where(eq(goal.id, existing.id));
+}
+
+/**
+ * Result of `applyCertGoalsToPrimaryGoal`.
+ *
+ * `skippedCerts` lists the cert slugs that could not be linked because
+ * either the credential or its primary syllabus was missing. The caller
+ * should surface these so the operator can finish seeding credentials.
+ */
+export interface ApplyCertGoalsResult {
+	goalId: string;
+	created: boolean;
+	skippedCerts: readonly string[];
+}
+
+/**
+ * Apply a list of cert slugs to the user's primary goal, creating one
+ * if none exists. Each slug is resolved through
+ * `getCredentialBySlug -> getCredentialPrimarySyllabus`; the resulting
+ * `goal_syllabus` rows are upserted via `addGoalSyllabus` so the call is
+ * idempotent on re-run.
+ *
+ * Replaces the legacy "write to `study_plan.cert_goals`" path. Used by
+ * write-through callers (preset start, dev seed) that need to install
+ * cert intent without forcing the learner through the goal-composer
+ * flow. Plan-edit pages redirect to the goal composer instead and never
+ * call this helper.
+ */
+export async function applyCertGoalsToPrimaryGoal(
+	userId: string,
+	certs: readonly Cert[],
+	options: { goalTitle?: string; focusDomains?: readonly Domain[]; skipDomains?: readonly Domain[] } = {},
+	db: Db = defaultDb,
+): Promise<ApplyCertGoalsResult> {
+	let primary = await getPrimaryGoal(userId, db);
+	let created = false;
+	if (primary === null) {
+		primary = await createGoal(
+			{
+				userId,
+				title: options.goalTitle ?? 'Study goal',
+				notesMd: '',
+				isPrimary: true,
+			},
+			db,
+		);
+		created = true;
+	}
+
+	// Apply optional targeting fields to the primary goal in a single
+	// update so the helper is the only writer for these columns on this
+	// path. Empty arrays are valid -- they unset narrowing.
+	const targetingPatch: Partial<{ focusDomains: Domain[]; skipDomains: Domain[]; updatedAt: Date }> = {};
+	if (options.focusDomains !== undefined) targetingPatch.focusDomains = [...options.focusDomains];
+	if (options.skipDomains !== undefined) targetingPatch.skipDomains = [...options.skipDomains];
+	if (Object.keys(targetingPatch).length > 0) {
+		targetingPatch.updatedAt = new Date();
+		await db.update(goal).set(targetingPatch).where(eq(goal.id, primary.id));
+	}
+
+	const skippedCerts: string[] = [];
+	for (const certSlug of certs) {
+		let cred: Awaited<ReturnType<typeof getCredentialBySlug>>;
+		try {
+			cred = await getCredentialBySlug(certSlug, db);
+		} catch (err) {
+			if (err instanceof CredentialNotFoundError) {
+				skippedCerts.push(certSlug);
+				continue;
+			}
+			throw err;
+		}
+		const syllabus = await getCredentialPrimarySyllabus(cred.id, db);
+		if (syllabus === null) {
+			skippedCerts.push(certSlug);
+			continue;
+		}
+		await addGoalSyllabus(primary.id, userId, { syllabusId: syllabus.id, weight: 1.0 }, db);
+	}
+
+	return { goalId: primary.id, created, skippedCerts };
 }

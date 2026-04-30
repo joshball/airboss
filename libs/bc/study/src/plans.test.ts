@@ -20,6 +20,7 @@ import {
 	getPlan,
 	getPlans,
 	NoActivePlanError,
+	PlanCertGoalsDeprecatedError,
 	PlanNotFoundError,
 	removeSkipNode,
 	updatePlan,
@@ -63,12 +64,12 @@ afterAll(async () => {
 
 describe('createPlan', () => {
 	it('creates an active plan with defaults filled in', async () => {
-		const p = await createPlan({
-			userId: TEST_USER_ID,
-			certGoals: [CERTS.PPL, CERTS.IR],
-		});
+		// Cert intent moved to the goal model post engine-goal-cutover; the
+		// plan no longer accepts certGoals input. The column survives the
+		// dual-read window with a forced empty value.
+		const p = await createPlan({ userId: TEST_USER_ID });
 		expect(p.status).toBe(PLAN_STATUSES.ACTIVE);
-		expect(p.certGoals).toEqual([CERTS.PPL, CERTS.IR]);
+		expect(p.certGoals).toEqual([]);
 		expect(p.defaultMode).toBe(SESSION_MODES.MIXED);
 		expect(p.depthPreference).toBe(DEPTH_PREFERENCES.WORKING);
 		expect(p.sessionLength).toBeGreaterThanOrEqual(3);
@@ -78,8 +79,8 @@ describe('createPlan', () => {
 	});
 
 	it('second create archives the first', async () => {
-		const first = await createPlan({ userId: TEST_USER_ID, certGoals: [CERTS.PPL] });
-		const second = await createPlan({ userId: TEST_USER_ID, certGoals: [CERTS.CFI] });
+		const first = await createPlan({ userId: TEST_USER_ID });
+		const second = await createPlan({ userId: TEST_USER_ID });
 		expect(second.status).toBe(PLAN_STATUSES.ACTIVE);
 		const firstRefetched = await getPlan(first.id, TEST_USER_ID);
 		expect(firstRefetched?.status).toBe(PLAN_STATUSES.ARCHIVED);
@@ -93,15 +94,24 @@ describe('createPlan', () => {
 		await archivePlan(p.id, TEST_USER_ID);
 	});
 
-	it('creates a cert-agnostic plan with focus domains', async () => {
+	it('creates a plan with focus domains', async () => {
 		const p = await createPlan({
 			userId: TEST_USER_ID,
-			certGoals: [],
 			focusDomains: [DOMAINS.WEATHER],
 		});
 		expect(p.certGoals).toEqual([]);
 		expect(p.focusDomains).toEqual([DOMAINS.WEATHER]);
 		await archivePlan(p.id, TEST_USER_ID);
+	});
+
+	it('rejects non-empty certGoals with PlanCertGoalsDeprecatedError', async () => {
+		// engine-goal-cutover: cert intent lives on the goal model. The
+		// guard is defensive -- the route layer no longer surfaces a cert
+		// chooser, but a stale caller (test fixture, dev script) can still
+		// trip it.
+		await expect(createPlan({ userId: TEST_USER_ID, certGoals: [CERTS.PPL] })).rejects.toBeInstanceOf(
+			PlanCertGoalsDeprecatedError,
+		);
 	});
 });
 
@@ -114,14 +124,14 @@ describe('getActivePlan', () => {
 
 describe('updatePlan', () => {
 	it('patches focus_domains in place', async () => {
-		const p = await createPlan({ userId: TEST_USER_ID, certGoals: [CERTS.PPL] });
+		const p = await createPlan({ userId: TEST_USER_ID });
 		const updated = await updatePlan(p.id, TEST_USER_ID, { focusDomains: [DOMAINS.WEATHER] });
 		expect(updated.focusDomains).toEqual([DOMAINS.WEATHER]);
 		await archivePlan(p.id, TEST_USER_ID);
 	});
 
 	it('rejects overlapping focus and skip', async () => {
-		const p = await createPlan({ userId: TEST_USER_ID, certGoals: [CERTS.PPL], focusDomains: [DOMAINS.WEATHER] });
+		const p = await createPlan({ userId: TEST_USER_ID, focusDomains: [DOMAINS.WEATHER] });
 		await expect(updatePlan(p.id, TEST_USER_ID, { skipDomains: [DOMAINS.WEATHER] })).rejects.toThrow();
 		await archivePlan(p.id, TEST_USER_ID);
 	});
@@ -135,7 +145,7 @@ describe('updatePlan', () => {
 
 describe('skip-list mutations', () => {
 	it('addSkipNode is idempotent', async () => {
-		const p = await createPlan({ userId: TEST_USER_ID, certGoals: [CERTS.PPL] });
+		const p = await createPlan({ userId: TEST_USER_ID });
 		const a = await addSkipNode(p.id, TEST_USER_ID, TEST_NODE_ID);
 		const b = await addSkipNode(p.id, TEST_USER_ID, TEST_NODE_ID);
 		expect(a.skipNodes).toEqual([TEST_NODE_ID]);
@@ -144,7 +154,7 @@ describe('skip-list mutations', () => {
 	});
 
 	it('addSkipNode rejects unknown node ids', async () => {
-		const p = await createPlan({ userId: TEST_USER_ID, certGoals: [CERTS.PPL] });
+		const p = await createPlan({ userId: TEST_USER_ID });
 		await expect(addSkipNode(p.id, TEST_USER_ID, 'does-not-exist-in-graph')).rejects.toBeInstanceOf(
 			KnowledgeNodeNotFoundError,
 		);
@@ -154,7 +164,6 @@ describe('skip-list mutations', () => {
 	it('addSkipDomain drops the domain from focus_domains if present', async () => {
 		const p = await createPlan({
 			userId: TEST_USER_ID,
-			certGoals: [CERTS.PPL],
 			focusDomains: [DOMAINS.WEATHER, DOMAINS.REGULATIONS],
 		});
 		const updated = await addSkipDomain(p.id, TEST_USER_ID, DOMAINS.WEATHER);
@@ -166,7 +175,6 @@ describe('skip-list mutations', () => {
 	it('removeSkipNode removes the requested id', async () => {
 		const p = await createPlan({
 			userId: TEST_USER_ID,
-			certGoals: [CERTS.PPL],
 			skipNodes: ['a', 'b', 'c'],
 		});
 		const updated = await removeSkipNode(p.id, TEST_USER_ID, 'b');
@@ -177,7 +185,7 @@ describe('skip-list mutations', () => {
 
 describe('archivePlan + activatePlan', () => {
 	it('archive removes active status; activate restores it', async () => {
-		const p = await createPlan({ userId: TEST_USER_ID, certGoals: [CERTS.PPL] });
+		const p = await createPlan({ userId: TEST_USER_ID });
 		const archived = await archivePlan(p.id, TEST_USER_ID);
 		expect(archived.status).toBe(PLAN_STATUSES.ARCHIVED);
 		expect(await getActivePlan(TEST_USER_ID)).toBeNull();
@@ -188,9 +196,9 @@ describe('archivePlan + activatePlan', () => {
 	});
 
 	it('activate archives other active plans', async () => {
-		const first = await createPlan({ userId: TEST_USER_ID, certGoals: [CERTS.PPL] });
+		const first = await createPlan({ userId: TEST_USER_ID });
 		await archivePlan(first.id, TEST_USER_ID);
-		const second = await createPlan({ userId: TEST_USER_ID, certGoals: [CERTS.CFI] });
+		const second = await createPlan({ userId: TEST_USER_ID });
 		// Activating the first archives the second.
 		await activatePlan(first.id, TEST_USER_ID);
 		const activeNow = await getActivePlan(TEST_USER_ID);
@@ -203,9 +211,9 @@ describe('archivePlan + activatePlan', () => {
 
 describe('getPlans', () => {
 	it('lists all plans regardless of status', async () => {
-		const p1 = await createPlan({ userId: TEST_USER_ID, certGoals: [CERTS.PPL] });
+		const p1 = await createPlan({ userId: TEST_USER_ID });
 		await archivePlan(p1.id, TEST_USER_ID);
-		const p2 = await createPlan({ userId: TEST_USER_ID, certGoals: [CERTS.IR] });
+		const p2 = await createPlan({ userId: TEST_USER_ID });
 		const plans = await getPlans(TEST_USER_ID);
 		const ids = plans.map((p) => p.id);
 		expect(ids).toContain(p1.id);

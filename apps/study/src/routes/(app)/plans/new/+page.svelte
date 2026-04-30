@@ -1,8 +1,5 @@
 <script lang="ts">
 import {
-	CERT_LABELS,
-	CERT_VALUES,
-	type Cert,
 	DEFAULT_SESSION_LENGTH,
 	DEFAULT_SESSION_MODE,
 	DEPTH_PREFERENCE_LABELS,
@@ -34,18 +31,10 @@ let submitting = $state(false);
 const seedFormValues = form?.values;
 
 let title = $state<string>((seedFormValues?.title as string | undefined) ?? '');
-let selectedCerts = $state<Set<string>>(new Set((seedFormValues?.certGoals ?? []) as string[]));
 let selectedFocus = $state<Set<string>>(new Set((seedFormValues?.focusDomains ?? []) as string[]));
 let selectedSkip = $state<Set<string>>(new Set((seedFormValues?.skipDomains ?? []) as string[]));
 let depthPreference = $state<DepthPreference>('working');
 let defaultMode = $state<SessionMode>(DEFAULT_SESSION_MODE);
-
-function toggleCert(cert: string, checked: boolean) {
-	const next = new Set(selectedCerts);
-	if (checked) next.add(cert);
-	else next.delete(cert);
-	selectedCerts = next;
-}
 
 function toggleFocus(d: string, checked: boolean) {
 	const next = new Set(selectedFocus);
@@ -61,12 +50,7 @@ function toggleSkip(d: string, checked: boolean) {
 	selectedSkip = next;
 }
 
-function certLabel(slug: string): string {
-	return (CERT_LABELS as Record<string, string>)[slug] ?? slug;
-}
-
 // Preview: sorted labels so the summary is stable regardless of click order.
-const certPreview = $derived([...selectedCerts].sort().map((c) => certLabel(c)));
 const focusPreview = $derived([...selectedFocus].sort().map((d) => domainLabel(d)));
 const skipPreview = $derived([...selectedSkip].sort().map((d) => domainLabel(d)));
 </script>
@@ -78,7 +62,7 @@ const skipPreview = $derived([...selectedSkip].sort().map((d) => domainLabel(d))
 <section class="page">
 	<PageHeader
 		title="New study plan"
-		subtitle="Pick goals, focus areas, and session length. Activating this plan archives any existing one."
+		subtitle="Set your session shape -- focus, length, mode. After saving you'll pick what you're studying for in the goal composer."
 	/>
 
 	<form
@@ -101,30 +85,10 @@ const skipPreview = $derived([...selectedSkip].sort().map((d) => domainLabel(d))
 			<input type="text" name="title" placeholder="Default Plan" maxlength="200" bind:value={title} />
 		</fieldset>
 
-		<fieldset>
-			<legend>Certifications you're studying toward</legend>
-			<p class="help">
-				Pick one or more, or leave all unchecked for general practice across every domain. Items shown will be scoped
-				to the selected certs.
-			</p>
-			<div class="choice-row">
-				{#each CERT_VALUES as cert (cert)}
-					<label class="choice">
-						<input
-							type="checkbox"
-							name="certGoals"
-							value={cert}
-							checked={selectedCerts.has(cert)}
-							onchange={(e) => toggleCert(cert, (e.currentTarget as HTMLInputElement).checked)}
-						/>
-						<span>{CERT_LABELS[cert as Cert]}</span>
-					</label>
-				{/each}
-			</div>
-			<p class="help subtle">
-				No cert selected = cert-agnostic plan (general practice, no filter). Matches the "Quick reps" preset shape.
-			</p>
-		</fieldset>
+		<p class="cert-note">
+			Cert intent (PPL, IR, ...) is set on your goal, not your plan. After you save this plan you'll land on the goal
+			composer to pick what you're studying for.
+		</p>
 
 		<fieldset>
 			<legend>Focus domains (optional)</legend>
@@ -212,8 +176,8 @@ const skipPreview = $derived([...selectedSkip].sort().map((d) => domainLabel(d))
 					<dd>{title.trim().length > 0 ? title : 'Default Plan'}</dd>
 				</div>
 				<div>
-					<dt>Cert goals</dt>
-					<dd>{certPreview.length > 0 ? certPreview.join(', ') : 'General practice (no cert filter)'}</dd>
+					<dt>Cert intent</dt>
+					<dd>Set on the goal (next step)</dd>
 				</div>
 				<div>
 					<dt>Focus domains</dt>
@@ -284,10 +248,15 @@ const skipPreview = $derived([...selectedSkip].sort().map((d) => domainLabel(d))
 		font-size: var(--type-ui-label-size);
 	}
 
-	.help.subtle {
-		color: var(--ink-faint);
-		font-size: var(--font-size-xs);
-		font-style: italic;
+	.cert-note {
+		margin: 0;
+		padding: var(--space-sm) var(--space-md);
+		background: var(--surface-muted);
+		border: 1px solid var(--edge-default);
+		border-left: 3px solid var(--action-default);
+		border-radius: var(--radius-md);
+		color: var(--ink-subtle);
+		font-size: var(--type-ui-label-size);
 	}
 
 	.preview {

@@ -4,7 +4,7 @@ product: study
 feature: engine-goal-cutover
 type: tasks
 status: unread
-review_status: pending
+review_status: done
 ---
 
 # Tasks: Engine Goal Cutover
@@ -15,19 +15,19 @@ Depends on: cert-syllabus-and-goal-composer (shipped; provides `goal`, `goal_syl
 
 ## Pre-flight
 
-- [ ] Read `docs/decisions/016-cert-syllabus-goal-model/decision.md`, especially phase 6.
-- [ ] Read `docs/platform/LEARNING_PHILOSOPHY.md`, principles 4 and 5.
-- [ ] Read `docs/work-packages/cert-syllabus-and-goal-composer/spec.md`, item 13 + Open Question 4.
-- [ ] Read `libs/bc/study/src/sessions.ts:180-260, 580-660`. Confirm the call-sites grep (Phase 3) covers every read of `plan.certGoals`.
-- [ ] Read `libs/bc/study/src/goals.ts` end-to-end. Confirm `getPrimaryGoal`, `getDerivedCertGoals`, `getGoalNodeUnion`, `setPrimaryGoal` shapes.
-- [ ] Read `libs/bc/study/src/plans.ts`. Confirm `createPlan` / `updatePlan` shape; identify the page-action call sites.
-- [ ] Read `libs/bc/study/src/schema.ts:690-740` (study_plan), `:1620-1690` (goal). Confirm the goal table shape; note absence of focus_domains / skip_domains / skip_nodes columns.
-- [ ] Read `apps/study/src/routes/(app)/plans/new/+page.server.ts` and `apps/study/src/routes/(app)/plans/[id]/+page.server.ts`. Map every place `cert_goals` is written.
-- [ ] Read `docs/work/NOW.md` "Follow-on 3" sketch end-to-end.
-- [ ] Read `docs/work-packages/cert-dashboard/spec.md` for the goal-read pattern that's already on main.
-- [ ] Read this WP's spec.md. Confirm Open Questions (a)-(e) resolved by user before writing code.
-- [ ] Verify DB is running (OrbStack postgres on port 5435).
-- [ ] Verify `bun run check` passes on a clean main as the baseline.
+- [x] Read `docs/decisions/016-cert-syllabus-goal-model/decision.md`, especially phase 6.
+- [x] Read `docs/platform/LEARNING_PHILOSOPHY.md`, principles 4 and 5.
+- [x] Read `docs/work-packages/cert-syllabus-and-goal-composer/spec.md`, item 13 + Open Question 4.
+- [x] Read `libs/bc/study/src/sessions.ts:180-260, 580-660`. Confirm the call-sites grep (Phase 3) covers every read of `plan.certGoals`.
+- [x] Read `libs/bc/study/src/goals.ts` end-to-end. Confirm `getPrimaryGoal`, `getDerivedCertGoals`, `getGoalNodeUnion`, `setPrimaryGoal` shapes.
+- [x] Read `libs/bc/study/src/plans.ts`. Confirm `createPlan` / `updatePlan` shape; identify the page-action call sites.
+- [x] Read `libs/bc/study/src/schema.ts:690-740` (study_plan), `:1620-1690` (goal). Confirm the goal table shape; note absence of focus_domains / skip_domains / skip_nodes columns.
+- [x] Read `apps/study/src/routes/(app)/plans/new/+page.server.ts` and `apps/study/src/routes/(app)/plans/[id]/+page.server.ts`. Map every place `cert_goals` is written.
+- [x] Read `docs/work/NOW.md` "Follow-on 3" sketch end-to-end.
+- [x] Read `docs/work-packages/cert-dashboard/spec.md` for the goal-read pattern that's already on main.
+- [x] Read this WP's spec.md. Confirm Open Questions (a)-(e) resolved by user before writing code.
+- [x] Verify DB is running (OrbStack postgres on port 5435).
+- [x] Verify `bun run check` passes on a clean main as the baseline (pre-existing fast-xml-parser / three errors unrelated to this WP).
 
 ## Implementation
 

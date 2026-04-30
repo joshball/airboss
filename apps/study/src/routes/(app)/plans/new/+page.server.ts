@@ -1,8 +1,6 @@
 import { requireAuth } from '@ab/auth';
-import { createPlan } from '@ab/bc-study';
+import { createPlan, getPrimaryGoal } from '@ab/bc-study';
 import {
-	CERT_VALUES,
-	type Cert,
 	DEFAULT_SESSION_MODE,
 	DEPTH_PREFERENCE_VALUES,
 	type DepthPreference,
@@ -31,19 +29,16 @@ export const actions: Actions = {
 
 		const form = await request.formData();
 		const title = String(form.get('title') ?? '').trim();
-		const certGoalsRaw = form.getAll('certGoals').map((v) => String(v));
 		const focusDomainsRaw = form.getAll('focusDomains').map((v) => String(v));
 		const skipDomainsRaw = form.getAll('skipDomains').map((v) => String(v));
 		const depthRaw = String(form.get('depthPreference') ?? 'working');
 		const modeRaw = String(form.get('defaultMode') ?? DEFAULT_SESSION_MODE);
 		const lengthRaw = String(form.get('sessionLength') ?? '10');
 
-		const certGoals: Cert[] = certGoalsRaw.filter((v): v is Cert => CERT_VALUES.includes(v as Cert));
-		// Empty certGoals is a first-class plan state (ADR 012): a cert-agnostic
-		// plan just means the engine runs without a cert filter. The UI surfaces
-		// an explicit "General practice, no specific cert" option alongside the
-		// cert checkboxes so authors can opt into this deliberately.
-
+		// Cert intent moved to the goal model post engine-goal-cutover. The
+		// plan UI no longer surfaces a cert chooser; after the plan is saved
+		// the learner is redirected to the goal composer to pick what they're
+		// studying for. The plan owns session shape only.
 		const focusDomains: Domain[] = focusDomainsRaw.filter((v): v is Domain => DOMAIN_VALUES.includes(v as Domain));
 		const skipDomains: Domain[] = skipDomainsRaw.filter((v): v is Domain => DOMAIN_VALUES.includes(v as Domain));
 
@@ -54,7 +49,7 @@ export const actions: Actions = {
 		if (overlap.length > 0) {
 			return fail(400, {
 				error: 'A domain can be in focus or skip, not both.',
-				values: { title, certGoals: certGoalsRaw, focusDomains: focusDomainsRaw, skipDomains: skipDomainsRaw },
+				values: { title, focusDomains: focusDomainsRaw, skipDomains: skipDomainsRaw },
 			});
 		}
 
@@ -70,12 +65,10 @@ export const actions: Actions = {
 		);
 		const defaultMode = coerceEnum<SessionMode>(modeRaw, SESSION_MODE_VALUES as SessionMode[], DEFAULT_SESSION_MODE);
 
-		let planId: string;
 		try {
-			const row = await createPlan({
+			await createPlan({
 				userId: user.id,
 				title: title.length > 0 ? title : undefined,
-				certGoals,
 				focusDomains,
 				skipDomains,
 				skipNodes: [],
@@ -83,7 +76,6 @@ export const actions: Actions = {
 				sessionLength,
 				defaultMode,
 			});
-			planId = row.id;
 		} catch (err) {
 			log.error(
 				'createPlan threw',
@@ -92,12 +84,14 @@ export const actions: Actions = {
 			);
 			return fail(500, {
 				error: 'Could not create plan. Try again.',
-				values: { title, certGoals: certGoalsRaw, focusDomains: focusDomainsRaw, skipDomains: skipDomainsRaw },
+				values: { title, focusDomains: focusDomainsRaw, skipDomains: skipDomainsRaw },
 			});
 		}
 
-		// Land on the plan detail with `?created=1` so the page can surface a
-		// success banner. Confirmation, not guesswork -- see DESIGN_PRINCIPLES.md #7.
-		throw redirect(303, `${ROUTES.PLAN(planId)}?created=1`);
+		// Land on the goal composer so the learner can pick cert intent.
+		// If they already have a primary goal, edit it; otherwise create one.
+		const primary = await getPrimaryGoal(user.id);
+		const target = primary ? ROUTES.GOAL_EDIT(primary.id) : ROUTES.GOALS_NEW;
+		throw redirect(303, target);
 	},
 } satisfies Actions;

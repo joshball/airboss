@@ -60,6 +60,7 @@ import {
 	type EngineRepCandidate,
 	runEngine,
 } from './engine';
+import { type EngineTargeting, emitEngineTargetingTelemetry, getEngineTargetingSnapshot } from './engine-targeting';
 import { getNodeMasteryMap } from './knowledge';
 import { addSkipDomain, addSkipNode, getActivePlan, NoActivePlanError } from './plans';
 import { setScenarioStatus } from './scenarios';
@@ -189,16 +190,26 @@ export interface SessionSummary {
 
 // ---------- Helpers ----------
 
-function planRowToEnginePlan(row: StudyPlanRow): EnginePlan {
+/**
+ * Compose the engine's `EnginePlan` shape from the resolved targeting +
+ * the active plan row. The targeting helper owns cert / focus / skip;
+ * the plan row contributes only `id`, `userId`, and the session-shape
+ * fields the engine still keys off (`depthPreference`, `sessionLength`).
+ *
+ * Pre-cutover this function read every field off the plan row directly.
+ * Post-cutover learner intent comes from the goal model -- see
+ * `engine-targeting.ts` for the resolution rules.
+ */
+function targetingToEnginePlan(plan: StudyPlanRow, targeting: EngineTargeting): EnginePlan {
 	return {
-		id: row.id,
-		userId: row.userId,
-		certGoals: row.certGoals,
-		focusDomains: row.focusDomains,
-		skipDomains: row.skipDomains,
-		skipNodes: row.skipNodes,
-		depthPreference: row.depthPreference as EnginePlan['depthPreference'],
-		sessionLength: row.sessionLength,
+		id: plan.id,
+		userId: plan.userId,
+		certGoals: targeting.certs,
+		focusDomains: targeting.focusDomains,
+		skipDomains: targeting.skipDomains,
+		skipNodes: targeting.skipNodes,
+		depthPreference: targeting.depthPreference,
+		sessionLength: plan.sessionLength,
 	};
 }
 
@@ -593,6 +604,15 @@ export async function previewSession(
 	const plan = await getActivePlan(userId, db);
 	if (!plan) throw new NoActivePlanError(userId);
 
+	// Targeting comes from the user's primary goal (post engine-goal-cutover);
+	// the plan still owns session shape (mode, length, depth). We resolve
+	// targeting once per preview and emit the dual-read telemetry so the
+	// trigger condition for dropping `study_plan.cert_goals` can be verified
+	// from production logs.
+	const targetingSnapshot = await getEngineTargetingSnapshot(userId, db);
+	emitEngineTargetingTelemetry(userId, targetingSnapshot);
+	const targeting = targetingSnapshot.targeting;
+
 	const mode = options.mode ?? (plan.defaultMode as SessionMode);
 	const focus = options.focus ?? null;
 	const cert = options.cert ?? null;
@@ -606,8 +626,10 @@ export async function previewSession(
 		simWeaknessByNode(userId, {}, db),
 	]);
 
-	const certFilter: readonly Cert[] = cert ? [cert] : plan.certGoals;
-	const focusFilter: readonly Domain[] = focus ? [focus] : plan.focusDomains;
+	// Per-call manual overrides win over both goal and plan, matching the
+	// pre-cutover precedence (`options.cert ?? plan.certGoals[0]`).
+	const certFilter: readonly Cert[] = cert ? [cert] : targeting.certs;
+	const focusFilter: readonly Domain[] = focus ? [focus] : targeting.focusDomains;
 
 	// Materialise the Map<string, number> into a plain Record so the engine
 	// stays free of Map mutation concerns. Empty record when the user has no
@@ -618,8 +640,8 @@ export async function previewSession(
 	const filters: EnginePoolFilters = {
 		certFilter,
 		focusFilter,
-		skipDomains: plan.skipDomains,
-		skipNodes: plan.skipNodes,
+		skipDomains: targeting.skipDomains,
+		skipNodes: targeting.skipNodes,
 		recentDomains,
 		domainFrequencyLast30Days,
 		activeDomainsLast7Days,
@@ -630,7 +652,7 @@ export async function previewSession(
 
 	const preview: EnginePreview = await runEngine(
 		{
-			plan: planRowToEnginePlan(plan),
+			plan: targetingToEnginePlan(plan, targeting),
 			mode,
 			filters,
 			sessionLength,

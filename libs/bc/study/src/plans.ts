@@ -69,10 +69,31 @@ export class DomainOverlapError extends Error {
 	}
 }
 
+/**
+ * Raised when a `createPlan` / `updatePlan` caller supplies a non-empty
+ * `certGoals` array post engine-goal-cutover. Cert intent now lives on
+ * the user's primary `goal`; the plan only carries session-shape fields.
+ * Callers should redirect the learner to the goal composer instead of
+ * writing through here.
+ */
+export class PlanCertGoalsDeprecatedError extends Error {
+	constructor() {
+		super('study_plan.cert_goals is deprecated; use the goal composer to set cert intent. See engine-goal-cutover WP.');
+		this.name = 'PlanCertGoalsDeprecatedError';
+	}
+}
+
 export interface CreatePlanInput {
 	userId: string;
 	title?: string;
-	certGoals: readonly Cert[];
+	/**
+	 * @deprecated Cert intent moved to the goal model
+	 * (`engine-goal-cutover` WP). Passing a non-empty array throws
+	 * `PlanCertGoalsDeprecatedError`. The field is kept on the input shape
+	 * for the dual-read window so legacy callers compile until the column
+	 * drops; new callers must omit it or pass `[]`.
+	 */
+	certGoals?: readonly Cert[];
 	focusDomains?: readonly Domain[];
 	skipDomains?: readonly Domain[];
 	skipNodes?: readonly string[];
@@ -83,6 +104,10 @@ export interface CreatePlanInput {
 
 export interface UpdatePlanInput {
 	title?: string;
+	/**
+	 * @deprecated See {@link CreatePlanInput.certGoals}. A non-empty value
+	 * throws `PlanCertGoalsDeprecatedError`.
+	 */
 	certGoals?: readonly Cert[];
 	focusDomains?: readonly Domain[];
 	skipDomains?: readonly Domain[];
@@ -99,9 +124,17 @@ export interface UpdatePlanInput {
  * backstop.
  */
 export async function createPlan(input: CreatePlanInput, db: Db = defaultDb): Promise<StudyPlanRow> {
+	// engine-goal-cutover: cert intent moved to the goal model. The
+	// column survives during the dual-read window for legacy reads, but
+	// new writes can't populate it -- the goal composer is the only
+	// authoring surface for cert intent post-cutover.
+	if (input.certGoals !== undefined && input.certGoals.length > 0) {
+		throw new PlanCertGoalsDeprecatedError();
+	}
+
 	const parsed = createPlanSchema.parse({
 		title: input.title,
-		certGoals: input.certGoals,
+		certGoals: [],
 		focusDomains: input.focusDomains ?? [],
 		skipDomains: input.skipDomains ?? [],
 		skipNodes: input.skipNodes ?? [],
@@ -124,7 +157,8 @@ export async function createPlan(input: CreatePlanInput, db: Db = defaultDb): Pr
 			userId: input.userId,
 			title: parsed.title ?? 'Default Plan',
 			status: PLAN_STATUSES.ACTIVE,
-			certGoals: parsed.certGoals as Cert[],
+			// cert_goals always [] post-cutover -- see PlanCertGoalsDeprecatedError above.
+			certGoals: [] as Cert[],
 			focusDomains: (parsed.focusDomains ?? []) as Domain[],
 			skipDomains: (parsed.skipDomains ?? []) as Domain[],
 			skipNodes: parsed.skipNodes ?? [],
@@ -181,6 +215,12 @@ export async function updatePlan(
 	patch: UpdatePlanInput,
 	db: Db = defaultDb,
 ): Promise<StudyPlanRow> {
+	// engine-goal-cutover: see createPlan above. Patch callers can omit
+	// certGoals or pass `[]`; a non-empty value is a programming bug post-cutover.
+	if (patch.certGoals !== undefined && patch.certGoals.length > 0) {
+		throw new PlanCertGoalsDeprecatedError();
+	}
+
 	const parsed = updatePlanSchema.parse(patch);
 
 	const existing = await getPlan(planId, userId, db);

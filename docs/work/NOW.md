@@ -135,6 +135,8 @@ The three transparent scope decisions called out at ship time (PRs #321 / #323 /
 
 ### Follow-on 3 -- Engine cutover to goal-derived filters (next ADR 016 phase)
 
+**Status (2026-04-29):** in flight as WP [`engine-goal-cutover`](../work-packages/engine-goal-cutover/spec.md). The dual-read helper, telemetry, plan-UI redirect, and drop-migration are staged; the column drop ships in a follow-up PR after the 14-day telemetry trigger fires.
+
 **What shipped (PRs #270, #324):** the goal model is the source of truth for "what the learner is pursuing." `study_plan.cert_goals` -> `goal_syllabus` migration ran. `getDerivedCertGoals(userId)` returns the cert-slug projection of the primary goal. `getGoalNodeUnion(goalId)` returns the union of nodes a goal targets.
 
 **What's missing:** the session engine (`libs/bc/study/src/engine.ts`) still reads `study_plan.cert_goals` directly. The "primary" goal designation drives no rep selection; the dashboard reads goals but the rep loop does not.

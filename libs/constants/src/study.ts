@@ -728,6 +728,31 @@ export const PLAN_STATUS_LABELS: Record<PlanStatus, string> = {
 	[PLAN_STATUSES.ARCHIVED]: 'Archived',
 };
 
+// -------- Engine targeting -- engine-goal-cutover --------
+
+/**
+ * Source label for `getEngineTargeting` reads. Used by the dual-read
+ * window's structured-log telemetry and surfaced to the trigger-checker
+ * script. Once the legacy `study_plan.cert_goals` column drops, only
+ * `goal` and `empty` should ever appear in production logs.
+ *
+ * - `goal`: targeting derived from the user's primary goal + goal_syllabus.
+ * - `plan`: legacy fallback -- user has no primary goal but does have an
+ *   active study_plan with non-empty cert_goals. Removed once the trigger
+ *   condition fires (14 consecutive days with zero `plan` reads).
+ * - `empty`: user has neither a primary goal nor an active plan. Engine
+ *   sees an empty cert filter and falls through to the all-cert pool.
+ */
+export const ENGINE_TARGETING_SOURCES = {
+	GOAL: 'goal',
+	PLAN: 'plan',
+	EMPTY: 'empty',
+} as const;
+
+export type EngineTargetingSource = (typeof ENGINE_TARGETING_SOURCES)[keyof typeof ENGINE_TARGETING_SOURCES];
+
+export const ENGINE_TARGETING_SOURCE_VALUES = Object.values(ENGINE_TARGETING_SOURCES);
+
 // -------- Session engine modes + slices --------
 
 export const SESSION_MODES = {

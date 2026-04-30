@@ -1,8 +1,5 @@
 <script lang="ts">
 import {
-	CERT_LABELS,
-	CERT_VALUES,
-	type Cert,
 	DEPTH_PREFERENCE_LABELS,
 	DEPTH_PREFERENCE_VALUES,
 	type DepthPreference,
@@ -70,12 +67,16 @@ $effect(() => {
 let sessionLength = $state<number>(data.plan.sessionLength);
 let submitting = $state(false);
 
-const certSet = $derived(new Set<string>(plan.certGoals));
 const focusSet = $derived(new Set<string>(plan.focusDomains));
 const skipSet = $derived(new Set<string>(plan.skipDomains));
 
 const focusableDomains = $derived(DOMAIN_VALUES.filter((d: Domain) => !skipSet.has(d)));
 const skippableDomains = $derived(DOMAIN_VALUES.filter((d: Domain) => !focusSet.has(d)));
+
+// engine-goal-cutover: cert intent lives on the user's primary goal now.
+// The banner below points the learner at the goal composer (existing
+// primary -> edit; otherwise -> create-new flow).
+const goalLink = $derived(data.primaryGoalId ? ROUTES.GOAL_EDIT(data.primaryGoalId) : ROUTES.GOALS_NEW);
 </script>
 
 <svelte:head>
@@ -126,18 +127,14 @@ const skippableDomains = $derived(DOMAIN_VALUES.filter((d: Domain) => !focusSet.
 			<input type="text" name="title" value={plan.title} maxlength="200" />
 		</fieldset>
 
-		<fieldset>
-			<legend>Certifications</legend>
-			<p class="muted">Leave all unchecked for a cert-agnostic plan (general practice, no cert filter).</p>
-			<div class="choice-row">
-				{#each CERT_VALUES as cert (cert)}
-					<label class="choice">
-						<input type="checkbox" name="certGoals" value={cert} checked={certSet.has(cert)} />
-						<span>{CERT_LABELS[cert as Cert]}</span>
-					</label>
-				{/each}
-			</div>
-		</fieldset>
+		<aside class="cert-note">
+			<p>
+				Cert intent (PPL, IR, ...) lives on your primary goal now -- not the plan. Edit it in the goal composer.
+			</p>
+			<a class="cert-note-link" href={goalLink}>
+				{data.primaryGoalId ? 'Edit primary goal' : 'Set up your goal'}
+			</a>
+		</aside>
 
 		<fieldset>
 			<legend>Focus domains</legend>
@@ -435,6 +432,34 @@ const skippableDomains = $derived(DOMAIN_VALUES.filter((d: Domain) => !focusSet.
 	.btn.primary:disabled {
 		opacity: 0.6;
 		cursor: not-allowed;
+	}
+
+	.cert-note {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-xs);
+		padding: var(--space-sm) var(--space-md);
+		background: var(--surface-muted);
+		border: 1px solid var(--edge-default);
+		border-left: 3px solid var(--action-default);
+		border-radius: var(--radius-md);
+	}
+
+	.cert-note p {
+		margin: 0;
+		color: var(--ink-subtle);
+		font-size: var(--type-ui-label-size);
+	}
+
+	.cert-note-link {
+		color: var(--action-default-hover);
+		font-weight: 600;
+		text-decoration: none;
+		font-size: var(--type-ui-label-size);
+	}
+
+	.cert-note-link:hover {
+		text-decoration: underline;
 	}
 
 </style>
