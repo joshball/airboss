@@ -32,6 +32,11 @@ Each sub-agent MUST return exactly one status line to the parent:
 - Failure:
   `error: {one-sentence reason}`
 
+Specific error formats the contract requires:
+
+- Sidecar SHA-256 mismatch: `error: sidecar SHA-256 mismatch -- expected <expected>, got <observed>`
+- Coverage shortfall (the last entry's page anchor is more than one page short of the chapter's last printed page): `error: incomplete coverage -- last anchor at <anchor>, expected on-or-after <last_page>`
+
 The parent collates these into a final summary report listing which
 chapters succeeded, which failed, total entries written, and which models
 the sub-agents self-reported.

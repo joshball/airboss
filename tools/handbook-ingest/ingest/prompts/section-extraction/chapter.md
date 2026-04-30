@@ -63,15 +63,24 @@ Do NOT echo the JSON back to the parent; the section tree lives on disk.
 
 1. Compute `shasum -a 256 {sidecar_path}` (or equivalent) and compare to
    `{sidecar_sha256}`. On mismatch, return the error status line above.
-2. Read `{contract_path}` to load the JSON output specification.
+2. Read `{contract_path}` to load the JSON output specification. The
+   contract opens with a `CONTRACT VERSION:` line; the current version is
+   `2`. Apply every rule in that file -- entry shape, page-anchor handling,
+   boilerplate inclusion, hierarchy preference, coverage self-check, and
+   the difficult-cases catalog.
 3. Read `{sidecar_path}` (the chapter plaintext).
 4. Apply the contract to produce the section tree array. Use only
    headings that appear verbatim in the sidecar text. Do not invent.
    Page anchors should match the printed FAA format (e.g. `12-7`).
-5. Write the JSON to `{output_path}` (one trailing newline; no markdown
+5. Run the contract's coverage self-check. The chapter's printed page
+   range is `{page_range}`. If your last entry's page anchor is more
+   than one printed page short of the chapter's last page, return
+   `error: incomplete coverage -- last anchor at <anchor>, expected
+   on-or-after <last_page>` instead of writing JSON.
+6. Write the JSON to `{output_path}` (one trailing newline; no markdown
    fencing).
-6. Write `handbooks/{document_slug}/{edition}/{chapter_ordinal_padded}/_model_self_report.txt`
+7. Write `handbooks/{document_slug}/{edition}/{chapter_ordinal_padded}/_model_self_report.txt`
    containing the model name you self-report running on.
-7. Return the success status line with the entry count.
+8. Return the success status line with the entry count.
 
 Begin.
