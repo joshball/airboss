@@ -1,4 +1,11 @@
-export { AUDIT_TARGET_VALUES, AUDIT_TARGETS, type AuditTarget } from './audit';
+export {
+	AUDIT_TARGET_VALUES,
+	AUDIT_TARGETS,
+	type AuditTarget,
+	HANGAR_USER_OP_SUBKIND_VALUES,
+	HANGAR_USER_OP_SUBKINDS,
+	type HangarUserOpSubkind,
+} from './audit';
 export {
 	AUTH_RATE_LIMIT,
 	BETTER_AUTH_COOKIES,

@@ -31,9 +31,37 @@ export const AUDIT_TARGETS = {
 	HANGAR_SOURCE_EDITION_DRIFT: 'hangar.source.edition-drift',
 	/** wp-hangar-non-textual: thumbnail generated successfully at ingest. */
 	HANGAR_SOURCE_THUMBNAIL_GENERATED: 'hangar.source.thumbnail-generated',
+	/**
+	 * Edits to a `bauth_user` row from the hangar admin surface (role assign,
+	 * ban / unban, session revoke). The op-distinguishing kind is carried in
+	 * `metadata.subKind` from the closed `HANGAR_USER_OP_SUBKINDS` set below.
+	 */
+	HANGAR_USER: 'hangar.user',
 } as const;
 
 export type AuditTarget = (typeof AUDIT_TARGETS)[keyof typeof AUDIT_TARGETS];
 
 /** Allow-list values used by the DB CHECK constraint on `audit_log.target_type`. */
 export const AUDIT_TARGET_VALUES: readonly AuditTarget[] = Object.values(AUDIT_TARGETS);
+
+/**
+ * Op-distinguishing sub-kind for `AUDIT_TARGETS.HANGAR_USER` audit rows.
+ * Carried in `metadata.subKind` so the audit schema's `op` enum stays tight
+ * (`update` / `action`) while still allowing fine-grained filters in queries
+ * (e.g. `metadata->>'subKind' = 'ban'`).
+ */
+export const HANGAR_USER_OP_SUBKINDS = {
+	/** Admin set the target user's `role` column. `op = update`. */
+	ROLE_ASSIGN: 'role-assign',
+	/** Admin flipped `banned` to `true` (with reason / optional expiry). `op = update`. */
+	BAN: 'ban',
+	/** Admin flipped `banned` to `false`. `op = update`. */
+	UNBAN: 'unban',
+	/** Admin revoked a single session for the target user. `op = action`. */
+	SESSION_REVOKE: 'session-revoke',
+	/** Admin revoked every session for the target user. `op = action`. */
+	SESSION_REVOKE_ALL: 'session-revoke-all',
+} as const;
+
+export type HangarUserOpSubkind = (typeof HANGAR_USER_OP_SUBKINDS)[keyof typeof HANGAR_USER_OP_SUBKINDS];
+export const HANGAR_USER_OP_SUBKIND_VALUES: readonly HangarUserOpSubkind[] = Object.values(HANGAR_USER_OP_SUBKINDS);
