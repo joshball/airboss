@@ -151,8 +151,8 @@ async function setStatusViaSegment(
 
 test.describe('handbook reader: navigation + section rendering', () => {
 	test('PHAK card -> chapter list -> chapter -> section', async ({ page }) => {
-		await page.goto(ROUTES.HANDBOOKS);
-		await expect(page.getByRole('heading', { name: 'Handbooks' })).toBeVisible();
+		await page.goto(ROUTES.LIBRARY);
+		await expect(page.getByRole('heading', { name: 'Library' })).toBeVisible();
 
 		// Click the PHAK card -- the card is a link wrapping the title.
 		const phakCard = page.locator(`a[href="${ROUTES.LIBRARY_DOC(PHAK_DOC)}"]`).first();

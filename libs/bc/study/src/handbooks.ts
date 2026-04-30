@@ -332,7 +332,7 @@ export async function getNodesCitingSection(query: CitingNodesQuery, db: Db = de
  * Routing rules:
  *
  * 1. Handbook citations resolve to the in-app handbook reader route
- *    (`ROUTES.HANDBOOK_CHAPTER` or `ROUTES.HANDBOOK_SECTION`).
+ *    (`ROUTES.LIBRARY_CHAPTER` or `ROUTES.LIBRARY_SECTION`).
  * 2. When `airboss_ref` is set, attempt the `@ab/sources` registry's
  *    per-corpus `getLiveUrl()`. This is the canonical resolution path for
  *    cross-corpus identifiers per ADR 019. Falls through to the

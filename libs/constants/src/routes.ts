@@ -220,32 +220,6 @@ export const ROUTES = {
 	LIBRARY_SECTION_HEARTBEAT: (doc: string, chapter: number | string, section: number | string) =>
 		`/library/${encodeURIComponent(doc)}/${encodeURIComponent(String(chapter))}/${encodeURIComponent(String(section))}/heartbeat` as const,
 
-	// Legacy `/handbooks` aliases. Kept as constants so external callers
-	// (and the markdown-asset rewrite path in `libs/utils/src/markdown.ts`,
-	// which uses `/handbooks/` literally) don't drift. Internal callers must
-	// migrate to LIBRARY*; the SvelteKit catch-all under
-	// `apps/study/src/routes/(app)/handbooks/` 308-redirects requests to the
-	// new `/library` paths.
-	/** @deprecated use ROUTES.LIBRARY */
-	HANDBOOKS: '/handbooks',
-	/** @deprecated use ROUTES.LIBRARY_DOC */
-	HANDBOOK: (doc: string) => `/handbooks/${encodeURIComponent(doc)}` as const,
-	/** @deprecated use ROUTES.LIBRARY_CHAPTER */
-	HANDBOOK_CHAPTER: (doc: string, chapter: number | string) =>
-		`/handbooks/${encodeURIComponent(doc)}/${encodeURIComponent(String(chapter))}` as const,
-	/** @deprecated use ROUTES.LIBRARY_SECTION */
-	HANDBOOK_SECTION: (doc: string, chapter: number | string, section: number | string) =>
-		`/handbooks/${encodeURIComponent(doc)}/${encodeURIComponent(String(chapter))}/${encodeURIComponent(String(section))}` as const,
-	/** @deprecated use ROUTES.LIBRARY_SECTION_AT_EDITION */
-	HANDBOOK_SECTION_AT_EDITION: (doc: string, chapter: number | string, section: number | string, edition: string) =>
-		`/handbooks/${encodeURIComponent(doc)}/${encodeURIComponent(String(chapter))}/${encodeURIComponent(String(section))}?${QUERY_PARAMS.EDITION}=${encodeURIComponent(edition)}` as const,
-	/** @deprecated use ROUTES.LIBRARY_AT_EDITION */
-	HANDBOOK_AT_EDITION: (doc: string, edition: string) =>
-		`/handbooks/${encodeURIComponent(doc)}?${QUERY_PARAMS.EDITION}=${encodeURIComponent(edition)}` as const,
-	/** @deprecated use ROUTES.LIBRARY_SECTION_HEARTBEAT */
-	HANDBOOK_SECTION_HEARTBEAT: (doc: string, chapter: number | string, section: number | string) =>
-		`/handbooks/${encodeURIComponent(doc)}/${encodeURIComponent(String(chapter))}/${encodeURIComponent(String(section))}/heartbeat` as const,
-
 	// Study -- Help (per-app help content; primitives shared via @ab/help)
 	HELP: '/help',
 	HELP_CONCEPTS: '/help/concepts',

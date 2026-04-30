@@ -14,6 +14,7 @@ import {
 	type ReferenceKind,
 	ROUTES,
 } from '@ab/constants';
+import PageHelp from '@ab/help/ui/PageHelp.svelte';
 import EmptyState from '@ab/ui/components/EmptyState.svelte';
 import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import LibraryCard from '@ab/ui/library/LibraryCard.svelte';
@@ -183,7 +184,11 @@ async function clearKindFilter(): Promise<void> {
 <PageHeader
 	title="Library"
 	subtitle="Browse references by topic. Read FAA handbooks in-app; external references open in a new tab."
-/>
+>
+	{#snippet titleSuffix()}
+		<PageHelp pageId="library" />
+	{/snippet}
+</PageHeader>
 
 {#if data.cards.length === 0}
 	<EmptyState title="No references yet">
