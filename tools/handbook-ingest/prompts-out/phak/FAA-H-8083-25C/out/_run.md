@@ -1,17 +1,14 @@
 # Section-extraction orchestrator -- phak FAA-H-8083-25C
 
-You are running in a **FRESH Claude Code session** that the user has opened
-specifically to fan out section-extraction sub-agents for the
-`phak` handbook (FAA-H-8083-25C). Do NOT confuse this with the
-airboss session that emitted these prompts; that session must not Agent-
-dispatch this orchestrator (the no-key flow requires the user's own
-paste-driven session, and the airboss session would burn its own context).
+You are about to fan out section-extraction sub-agents for the
+`phak` handbook (FAA-H-8083-25C). Dispatch the sub-agents per the
+rules in `_parameters.md` and let them write their outputs.
 
-If you were dispatched as a sub-agent from the emitting airboss session,
-STOP. Tell the user to open a fresh Claude Code window in the airboss repo
-root and paste the `_run.md` file from
-`tools/handbook-ingest/prompts-out/phak/FAA-H-8083-25C/out/_run.md`
-as the first user message there.
+This file can be invoked any way the user chooses: pasted into a fresh
+Claude Code window, piped via `claude < _run.md`, or read-and-executed
+on instruction in any session. Whatever brought you here, the work is
+the same -- run the dispatches and stop short of seeding (the orchestrator
+is a two-step flow; humans run `bun run sources extract` afterward).
 
 ## Read first
 
