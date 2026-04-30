@@ -20,7 +20,6 @@ Phases 0-6 of the [staged plan](../../work/plans/20260422-flight-dynamics-sim-pl
 ## Active
 
 - **Phase 7 -- 3D horizon view.** Surface-loose-coupled per ADR 015. Continuing visual fidelity work; instrument-strip composition refinement.
-- **Cockpit panel extraction.** Per ADR 015 follow-up: extract `CockpitPanel.svelte` from the fat cockpit page so the dual page can render the full panel (not just four gauges).
 
 ## Queued
 

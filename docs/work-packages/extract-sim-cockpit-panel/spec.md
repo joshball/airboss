@@ -1,5 +1,6 @@
 ---
-status: active
+status: shipped
+shipped_in: https://github.com/joshball/airboss/pull/364
 trigger: fired -- CockpitPanel has three sim consumers (cockpit, dual, window) and is the natural surface to share with future avionics / instructor / replay-theatre pages
 source: ADR 015 follow-up note
 related:
@@ -72,13 +73,13 @@ Boundary discussion -- including the design tradeoff between "panel only" vs "pa
 
 ## Consumers rewired
 
-| Consumer                                                  | Before                                                                       | After                                                                                       |
-| --------------------------------------------------------- | ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
-| `apps/sim/src/routes/[scenarioId]/+page.svelte`           | `import CockpitPanel from '$lib/cockpit/CockpitPanel.svelte'`                | `import CockpitPanel from '@ab/activities/cockpit-panel/CockpitPanel.svelte'`               |
-| `apps/sim/src/routes/[scenarioId]/dual/+page.svelte`      | `import CockpitPanel from '$lib/cockpit/CockpitPanel.svelte'`                | `import CockpitPanel from '@ab/activities/cockpit-panel/CockpitPanel.svelte'`               |
-| `apps/sim/src/routes/[scenarioId]/window/+page.svelte`    | `import CockpitPanel from '$lib/cockpit/CockpitPanel.svelte'`                | `import CockpitPanel from '@ab/activities/cockpit-panel/CockpitPanel.svelte'`               |
-| `apps/sim/src/routes/_dev/instruments/+page.svelte`       | `import EngineCluster from '$lib/instruments/cluster/EngineCluster.svelte'` | `import EngineCluster from '@ab/activities/cockpit-panel/cluster/EngineCluster.svelte'`     |
-| `apps/sim/src/routes/[scenarioId]/debrief/+page.svelte`   | `import EngineCluster from '$lib/instruments/cluster/EngineCluster.svelte'` | `import EngineCluster from '@ab/activities/cockpit-panel/cluster/EngineCluster.svelte'`     |
+| Consumer                                                | Before                                                                      | After                                                                                   |
+| ------------------------------------------------------- | --------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| `apps/sim/src/routes/[scenarioId]/+page.svelte`         | `import CockpitPanel from '$lib/cockpit/CockpitPanel.svelte'`               | `import CockpitPanel from '@ab/activities/cockpit-panel/CockpitPanel.svelte'`           |
+| `apps/sim/src/routes/[scenarioId]/dual/+page.svelte`    | `import CockpitPanel from '$lib/cockpit/CockpitPanel.svelte'`               | `import CockpitPanel from '@ab/activities/cockpit-panel/CockpitPanel.svelte'`           |
+| `apps/sim/src/routes/[scenarioId]/window/+page.svelte`  | `import CockpitPanel from '$lib/cockpit/CockpitPanel.svelte'`               | `import CockpitPanel from '@ab/activities/cockpit-panel/CockpitPanel.svelte'`           |
+| `apps/sim/src/routes/_dev/instruments/+page.svelte`     | `import EngineCluster from '$lib/instruments/cluster/EngineCluster.svelte'` | `import EngineCluster from '@ab/activities/cockpit-panel/cluster/EngineCluster.svelte'` |
+| `apps/sim/src/routes/[scenarioId]/debrief/+page.svelte` | `import EngineCluster from '$lib/instruments/cluster/EngineCluster.svelte'` | `import EngineCluster from '@ab/activities/cockpit-panel/cluster/EngineCluster.svelte'` |
 
 `@ab/activities` is already aliased in `apps/sim/svelte.config.js` (added by PR #328). No new alias work.
 
