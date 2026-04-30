@@ -1,0 +1,3010 @@
+{
+  "schema_version": 1,
+  "corpus": "acs",
+  "slug": "atp-airplane-11a",
+  "title": "Airline Transport Pilot and Type Rating for Airplane Category ACS",
+  "publisher": "FAA",
+  "publication_date": "2023-11-01",
+  "source_url": "https://www.faa.gov/training_testing/testing/acs/atp_airplane_acs_11.pdf",
+  "source_sha256": "ed2d5a2ba31de3ed00b9f8f6f60b255573df96879ddc851f7597093a13e9705a",
+  "fetched_at": "2026-04-27T21:20:50.403Z",
+  "page_count": 84,
+  "areas": [
+    {
+      "area": "01",
+      "title": "Preflight Preparation",
+      "tasks": [
+        {
+          "task": "a",
+          "title": "Operation of Systems",
+          "body_path": "acs/atp-airplane-11a/area-01/task-a.md",
+          "body_sha256": "3cab12d5a4d6041661ac04125cf954ab4b7b33a35e8b6046fec7ed0e500eb72c",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "AA.I.A.K1",
+              "title": "Landing gear–extension/retraction system(s), indicators, float devices, brakes, antiskid, tires, nose-"
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "AA.I.A.K2",
+              "title": "Powerplant–controls and indications, induction system, carburetor and fuel injection, turbocharging,"
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "AA.I.A.K3",
+              "title": "Propellers–type, controls, feathering/unfeathering, auto-feather, negative torque sensing,"
+            },
+            {
+              "triad": "k",
+              "ordinal": "04",
+              "code": "AA.I.A.K4",
+              "title": "Fuel system–capacity, drains, pumps, controls, indicators, cross-feeding, transferring, jettisoning, fuel"
+            },
+            {
+              "triad": "k",
+              "ordinal": "05",
+              "code": "AA.I.A.K5",
+              "title": "Oil system–capacity, allowable types of oil, quantities, and indicators."
+            },
+            {
+              "triad": "k",
+              "ordinal": "06",
+              "code": "AA.I.A.K6",
+              "title": "Hydraulic system–capacity, pumps, pressure, reservoirs, allowable types of fluid, and regulators."
+            },
+            {
+              "triad": "k",
+              "ordinal": "07",
+              "code": "AA.I.A.K7",
+              "title": "Electrical system–alternators, generators, batteries, circuit breakers and protection devices, controls,"
+            },
+            {
+              "triad": "k",
+              "ordinal": "08",
+              "code": "AA.I.A.K8",
+              "title": "Pneumatic and environmental systems–heating, cooling, ventilation, oxygen, pressurization, supply for"
+            },
+            {
+              "triad": "k",
+              "ordinal": "09",
+              "code": "AA.I.A.K9",
+              "title": "Avionics and communications–autopilot, flight director, Electronic Flight Instrument Systems (EFIS),"
+            },
+            {
+              "triad": "k",
+              "ordinal": "10",
+              "code": "AA.I.A.K10",
+              "title": "Ice protection–anti-ice, deice, pitot-static system protection, turbine inlet, propeller, windshield, airfoil"
+            },
+            {
+              "triad": "k",
+              "ordinal": "11",
+              "code": "AA.I.A.K11",
+              "title": "Crewmember and passenger equipment–oxygen system, survival gear, emergency exits, evacuation"
+            },
+            {
+              "triad": "k",
+              "ordinal": "12",
+              "code": "AA.I.A.K12",
+              "title": "Flight controls–ailerons, elevator(s), rudder(s), control tabs, control boost/augmentation systems, flaps,"
+            },
+            {
+              "triad": "k",
+              "ordinal": "13",
+              "code": "AA.I.A.K13",
+              "title": "Pitot-static system–associated instruments and the power source for those flight instruments."
+            }
+          ]
+        },
+        {
+          "task": "b",
+          "title": "Performance and Limitations",
+          "body_path": "acs/atp-airplane-11a/area-01/task-b.md",
+          "body_sha256": "03212aa911745aeb67267f0ba08e7efd16c83bb4763958d1a86d2a41068f6ef4",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "AA.I.B.K1",
+              "title": "Elements related to performance and limitations by explaining the use of charts, tables, and data to"
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "AA.I.B.K2",
+              "title": "How to determine the following, as applicable to the class sought:"
+            }
+          ]
+        },
+        {
+          "task": "c",
+          "title": "Weather Information (ATP)",
+          "body_path": "acs/atp-airplane-11a/area-01/task-c.md",
+          "body_sha256": "dc7eb1c2a30dd376ce02b17b850da5cfe0235c750f6efeeea3a1288a0189dc90",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "AA.I.C.K1",
+              "title": "Sources of weather data (e.g., National Weather Service, Flight Service) for flight planning purposes."
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "AA.I.C.K2",
+              "title": "Acceptable weather products and resources required for preflight planning, current and forecast"
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "AA.I.C.K3",
+              "title": "Meteorology applicable to the departure, en route, alternate, and destination for flights conducted"
+            }
+          ]
+        },
+        {
+          "task": "d",
+          "title": "High-Altitude Aerodynamics (ATP) (AMEL, AMES)",
+          "body_path": "acs/atp-airplane-11a/area-01/task-d.md",
+          "body_sha256": "78d9c5d3f7c73a9a6b4ad74199a766cba708fb61cefed2a41f0c79b998d4d254",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "AA.I.D.K1",
+              "title": "Aerodynamics of large transport category airplanes, including flight characteristics of swept wing"
+            }
+          ]
+        },
+        {
+          "task": "e",
+          "title": "Air Carrier Operations (ATP) (AMEL, AMES)",
+          "body_path": "acs/atp-airplane-11a/area-01/task-e.md",
+          "body_sha256": "595e5f57bef9cf1698084272a7a9a33cab251bae75a963576c11b52e2ad723e5",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "AA.I.E.K1",
+              "title": "Turbine engines, thrust reversing systems, and system malfunctions."
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "AA.I.E.K2",
+              "title": "Airplane automation components (e.g., flight director, autopilot), their relationship to each other, and"
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "AA.I.E.K3",
+              "title": "Advanced navigation equipment (e.g., FMS, Required Navigation Performance (RNP), ADS-B, EFB,"
+            },
+            {
+              "triad": "k",
+              "ordinal": "04",
+              "code": "AA.I.E.K4",
+              "title": "Flightpath warning systems (e.g., Traffic Alert and Collision Avoidance Systems (TCAS), Terrain"
+            },
+            {
+              "triad": "k",
+              "ordinal": "05",
+              "code": "AA.I.E.K5",
+              "title": "Altitudes and conditions that require the use of oxygen masks."
+            },
+            {
+              "triad": "k",
+              "ordinal": "06",
+              "code": "AA.I.E.K6",
+              "title": "Causes and recognition of cabin pressure loss."
+            }
+          ]
+        },
+        {
+          "task": "f",
+          "title": "Human Factors (ATP)",
+          "body_path": "acs/atp-airplane-11a/area-01/task-f.md",
+          "body_sha256": "e35d02ead876b4726a6ec40d121b04fa1e783a6fdcd84dbb0bc977b28427df95",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "AA.I.F.K1",
+              "title": "Causes, effects, recognition, and corrective actions associated with aeromedical and physiological"
+            }
+          ]
+        },
+        {
+          "task": "g",
+          "title": "The Code of Federal Regulations (CFR) (ATP)",
+          "body_path": "acs/atp-airplane-11a/area-01/task-g.md",
+          "body_sha256": "2e8762fdafa172b0a676a9b7f70438c477a4f31ee5f0a31384044ccb5a72a6a8",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "AA.I.G.K1",
+              "title": "14 CFR part 61, subparts A, B, and G."
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "AA.I.G.K2",
+              "title": "14 CFR part 91 subparts A, B, C, F, G, H."
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "AA.I.G.K3",
+              "title": "14 CFR part 117 (AMEL, AMES)."
+            },
+            {
+              "triad": "k",
+              "ordinal": "04",
+              "code": "AA.I.G.K4",
+              "title": "14 CFR part 121 subparts A, G, K, M, O, T, U, V (AMEL, AMES)."
+            }
+          ]
+        },
+        {
+          "task": "h",
+          "title": "Water and Seaplane Characteristics, Seaplane Bases, Maritime Rules, and Aids to Marine",
+          "body_path": "acs/atp-airplane-11a/area-01/task-h.md",
+          "body_sha256": "6b3353b104be1024c655043fc97a5529f15d2e757b2a039dd93b8f2f9a306abf",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "AA.I.H.K1",
+              "title": "The characteristics of a water surface as affected by features, such as:"
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "AA.I.H.K2",
+              "title": "Float and hull construction, and its effect on seaplane performance."
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "AA.I.H.K3",
+              "title": "Causes of porpoising and skipping, and the pilot action needed to prevent or correct these"
+            },
+            {
+              "triad": "k",
+              "ordinal": "04",
+              "code": "AA.I.H.K4",
+              "title": "How to locate and identify seaplane bases on charts or in directories."
+            },
+            {
+              "triad": "k",
+              "ordinal": "05",
+              "code": "AA.I.H.K5",
+              "title": "Operating restrictions at various bases."
+            },
+            {
+              "triad": "k",
+              "ordinal": "06",
+              "code": "AA.I.H.K6",
+              "title": "Right-of-way, steering, and sailing rules pertinent to seaplane operation."
+            },
+            {
+              "triad": "k",
+              "ordinal": "07",
+              "code": "AA.I.H.K7",
+              "title": "Marine navigation aids, such as buoys, beacons, lights, sound signals, and range markers."
+            },
+            {
+              "triad": "k",
+              "ordinal": "08",
+              "code": "AA.I.H.K8",
+              "title": "Naval vessel protection zones."
+            },
+            {
+              "triad": "k",
+              "ordinal": "09",
+              "code": "AA.I.H.K9",
+              "title": "No wake zones."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": "02",
+      "title": "Preflight Procedures",
+      "tasks": [
+        {
+          "task": "a",
+          "title": "Preflight Assessment",
+          "body_path": "acs/atp-airplane-11a/area-02/task-a.md",
+          "body_sha256": "5061442d97956bd3d29ef7683eed95fabcb684923e3d8714b85520d6aca68af5",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "AA.II.A.K1",
+              "title": "Pilot self-assessment."
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "AA.II.A.K2",
+              "title": "Determining that the aircraft to be used is appropriate, airworthy, and in a condition for safe flight by"
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "AA.II.A.K3",
+              "title": "Preventive maintenance that can be performed by the pilot or other designated crewmember."
+            },
+            {
+              "triad": "k",
+              "ordinal": "04",
+              "code": "AA.II.A.K4",
+              "title": "Aircraft preflight inspection, including:"
+            },
+            {
+              "triad": "k",
+              "ordinal": "05",
+              "code": "AA.II.A.K5",
+              "title": "Environmental factors, including weather, terrain, route selection, and obstructions."
+            },
+            {
+              "triad": "k",
+              "ordinal": "06",
+              "code": "AA.II.A.K6",
+              "title": "Requirements for current and appropriate navigation data."
+            },
+            {
+              "triad": "k",
+              "ordinal": "07",
+              "code": "AA.II.A.K7",
+              "title": "Operations specifications, management specifications, or letters of authorization applying to a"
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "AA.II.A.R1",
+              "title": "Human performance factors."
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "AA.II.A.R2",
+              "title": "Inoperative equipment discovered prior to flight."
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "AA.II.A.R3",
+              "title": "Environment (e.g., weather, airports, airspace, terrain, obstacles)."
+            },
+            {
+              "triad": "r",
+              "ordinal": "04",
+              "code": "AA.II.A.R4",
+              "title": "External pressures."
+            },
+            {
+              "triad": "r",
+              "ordinal": "05",
+              "code": "AA.II.A.R5",
+              "title": "Aviation security concerns."
+            }
+          ]
+        },
+        {
+          "task": "b",
+          "title": "Powerplant Start",
+          "body_path": "acs/atp-airplane-11a/area-02/task-b.md",
+          "body_sha256": "c4e722ef4ebe95faee3df2ad7699233415fdbeaba9801ff3258efb1cc84a43ee",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "AA.II.B.K1",
+              "title": "Normal and abnormal powerplant start procedures and limitations, including the use of an auxiliary"
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "AA.II.B.K2",
+              "title": "Starting under various conditions."
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "AA.II.B.K3",
+              "title": "Malfunctions during powerplant start, procedures to address the malfunction, and any associated"
+            },
+            {
+              "triad": "k",
+              "ordinal": "04",
+              "code": "AA.II.B.K4",
+              "title": "Coordinating and communicating with ground personnel for powerplant start, if applicable."
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "AA.II.B.R1",
+              "title": "Malfunctions during powerplant start."
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "AA.II.B.R2",
+              "title": "Propeller and turbine powerplant safety."
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "AA.II.B.R3",
+              "title": "Managing situations where specific instructions or checklist items are not published."
+            },
+            {
+              "triad": "r",
+              "ordinal": "04",
+              "code": "AA.II.B.R4",
+              "title": "Personnel, vehicles, vessels, foreign object debris, and other aircraft in the vicinity during powerplant"
+            },
+            {
+              "triad": "s",
+              "ordinal": "01",
+              "code": "AA.II.B.S1",
+              "title": "Ensure the ground safety procedures are followed during the before-start, start, and after-start phases."
+            },
+            {
+              "triad": "s",
+              "ordinal": "02",
+              "code": "AA.II.B.S2",
+              "title": "Use appropriate ground crew personnel during the start procedures (if applicable)."
+            }
+          ]
+        },
+        {
+          "task": "c",
+          "title": "Taxiing (ASEL, AMEL)",
+          "body_path": "acs/atp-airplane-11a/area-02/task-c.md",
+          "body_sha256": "55d626e5c46b5e0ec9bd7e915de1cdf7d85235a89143c902510c7b89b6d70f83",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "AA.II.C.K1",
+              "title": "Current airport aeronautical references and information resources such as the Chart Supplement,"
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "AA.II.C.K2",
+              "title": "Taxi instructions/clearances, including published taxi routes."
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "AA.II.C.K3",
+              "title": "Airport markings, signs, and lights."
+            },
+            {
+              "triad": "k",
+              "ordinal": "04",
+              "code": "AA.II.C.K4",
+              "title": "Appropriate aircraft lighting for day and night operations."
+            },
+            {
+              "triad": "k",
+              "ordinal": "05",
+              "code": "AA.II.C.K5",
+              "title": "Push-back procedures, if applicable."
+            },
+            {
+              "triad": "k",
+              "ordinal": "06",
+              "code": "AA.II.C.K6",
+              "title": "Appropriate flight deck activities prior to taxi, including route planning, identifying the location of Hot"
+            },
+            {
+              "triad": "k",
+              "ordinal": "07",
+              "code": "AA.II.C.K7",
+              "title": "Communications at towered and nontowered airports."
+            },
+            {
+              "triad": "k",
+              "ordinal": "08",
+              "code": "AA.II.C.K8",
+              "title": "Entering or crossing runways."
+            },
+            {
+              "triad": "k",
+              "ordinal": "09",
+              "code": "AA.II.C.K9",
+              "title": "Night taxi operations."
+            },
+            {
+              "triad": "k",
+              "ordinal": "10",
+              "code": "AA.II.C.K10",
+              "title": "Low visibility taxi operations and techniques used to avoid disorientation."
+            },
+            {
+              "triad": "k",
+              "ordinal": "11",
+              "code": "AA.II.C.K11",
+              "title": "Single-Engine taxi procedures for (AMEL)."
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "AA.II.C.R1",
+              "title": "Distractions, task prioritization, loss of situational awareness, or disorientation."
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "AA.II.C.R2",
+              "title": "Confirmation or expectation bias as related to taxi instructions."
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "AA.II.C.R3",
+              "title": "A taxi route or departure runway change."
+            },
+            {
+              "triad": "r",
+              "ordinal": "04",
+              "code": "AA.II.C.R4",
+              "title": "Partial completion of checklist(s)."
+            },
+            {
+              "triad": "r",
+              "ordinal": "05",
+              "code": "AA.II.C.R5",
+              "title": "Low visibility taxi operations."
+            },
+            {
+              "triad": "r",
+              "ordinal": "06",
+              "code": "AA.II.C.R6",
+              "title": "Runway incursion."
+            },
+            {
+              "triad": "s",
+              "ordinal": "01",
+              "code": "AA.II.C.S1",
+              "title": "Receive/record taxi instructions, read back/acknowledge taxi clearances, and review taxi routes on the"
+            },
+            {
+              "triad": "s",
+              "ordinal": "02",
+              "code": "AA.II.C.S2",
+              "title": "Use an appropriate airport diagram or taxi chart, if published."
+            }
+          ]
+        },
+        {
+          "task": "d",
+          "title": "Taxiing and Sailing (ASES, AMES)",
+          "body_path": "acs/atp-airplane-11a/area-02/task-d.md",
+          "body_sha256": "c29450e2e1bbbc5dc2032394d91602a1e01f66a8cf09490d3e16e35729539ec0",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "AA.II.D.K1",
+              "title": "Current airport/seaplane base aeronautical references and information resources, including Chart"
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "AA.II.D.K2",
+              "title": "Taxi instructions/clearances, if applicable."
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "AA.II.D.K3",
+              "title": "Airport/seaplane base markings, signs, and lights."
+            },
+            {
+              "triad": "k",
+              "ordinal": "04",
+              "code": "AA.II.D.K4",
+              "title": "Appropriate aircraft lighting for day and night operations."
+            },
+            {
+              "triad": "k",
+              "ordinal": "05",
+              "code": "AA.II.D.K5",
+              "title": "Sailing elements and techniques and when sailing should be used."
+            },
+            {
+              "triad": "k",
+              "ordinal": "06",
+              "code": "AA.II.D.K6",
+              "title": "Considerations for determining the most favorable sailing course."
+            },
+            {
+              "triad": "k",
+              "ordinal": "07",
+              "code": "AA.II.D.K7",
+              "title": "Airport/seaplane base procedures, including:"
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "AA.II.D.R1",
+              "title": "Distractions, task prioritization, loss of situational awareness, or disorientation."
+            }
+          ]
+        },
+        {
+          "task": "e",
+          "title": "Before Takeoff Checks",
+          "body_path": "acs/atp-airplane-11a/area-02/task-e.md",
+          "body_sha256": "85a00f4838bf6e5f28705dd52b503550b1013d79276d3a17c7055ff8e57f077a",
+          "elements": []
+        }
+      ]
+    },
+    {
+      "area": "03",
+      "title": "Takeoffs and Landings",
+      "tasks": [
+        {
+          "task": "a",
+          "title": "Normal Takeoff and Climb",
+          "body_path": "acs/atp-airplane-11a/area-03/task-a.md",
+          "body_sha256": "5015a65b746ead503394912e11e354b42ff96f6c2951c525ae33a86e1faae75e",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "AA.III.A.K1",
+              "title": "Effects of atmospheric conditions, including wind, on takeoff and climb performance."
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "AA.III.A.K2",
+              "title": "Appropriate V-speeds for takeoff and climb."
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "AA.III.A.K3",
+              "title": "Appropriate aircraft configuration and power setting for takeoff and climb."
+            },
+            {
+              "triad": "k",
+              "ordinal": "04",
+              "code": "AA.III.A.K4",
+              "title": "Runway markings and lighting."
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "AA.III.A.R1",
+              "title": "Selection of a runway, or runway intersection, based on aircraft limitations, available distance, surface"
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "AA.III.A.R2",
+              "title": "Wake turbulence."
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "AA.III.A.R3",
+              "title": "Abnormal operations, including planning for:"
+            },
+            {
+              "triad": "r",
+              "ordinal": "04",
+              "code": "AA.III.A.R4",
+              "title": "Configuring or setting the aircraft (e.g., trim, flaps, autobrakes, etc.)."
+            },
+            {
+              "triad": "r",
+              "ordinal": "05",
+              "code": "AA.III.A.R5",
+              "title": "Collision hazards."
+            },
+            {
+              "triad": "r",
+              "ordinal": "06",
+              "code": "AA.III.A.R6",
+              "title": "Low altitude maneuvering, including stall, spin, or controlled flight into terrain (CFIT)."
+            },
+            {
+              "triad": "r",
+              "ordinal": "07",
+              "code": "AA.III.A.R7",
+              "title": "Distractions, task prioritization, loss of situational awareness, or disorientation."
+            },
+            {
+              "triad": "s",
+              "ordinal": "01",
+              "code": "AA.III.A.S1",
+              "title": "Coordinate with crew, if applicable, and complete the appropriate checklist(s) prior to takeoff in a timely"
+            },
+            {
+              "triad": "s",
+              "ordinal": "02",
+              "code": "AA.III.A.S2",
+              "title": "Make radio calls as appropriate."
+            },
+            {
+              "triad": "s",
+              "ordinal": "03",
+              "code": "AA.III.A.S3",
+              "title": "Verify assigned/correct runway (ASEL, AMEL) or takeoff path (ASES, AMES)."
+            },
+            {
+              "triad": "s",
+              "ordinal": "04",
+              "code": "AA.III.A.S4",
+              "title": "Verify the airplane is configured for takeoff."
+            },
+            {
+              "triad": "s",
+              "ordinal": "05",
+              "code": "AA.III.A.S5",
+              "title": "Position the flight controls for the existing wind, if applicable."
+            },
+            {
+              "triad": "s",
+              "ordinal": "06",
+              "code": "AA.III.A.S6",
+              "title": "Clear the area, taxi into takeoff position, and align the airplane on the runway centerline (ASEL, AMEL)"
+            }
+          ]
+        },
+        {
+          "task": "b",
+          "title": "Normal Approach and Landing",
+          "body_path": "acs/atp-airplane-11a/area-03/task-b.md",
+          "body_sha256": "9a7afa6dfd1f1e2626453d4913209f0dee5fd8aa122dfb1cc976d17046090c85",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "AA.III.B.K1",
+              "title": "A stabilized approach, including energy management concepts."
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "AA.III.B.K2",
+              "title": "Effects of atmospheric conditions, including wind, on approach and landing performance."
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "AA.III.B.K3",
+              "title": "Wind correction techniques on approach and landing."
+            },
+            {
+              "triad": "k",
+              "ordinal": "04",
+              "code": "AA.III.B.K4",
+              "title": "Runway markings and lighting."
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "AA.III.B.R1",
+              "title": "Selection of a runway or approach path and touchdown area based on aircraft limitations, available"
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "AA.III.B.R2",
+              "title": "Wake turbulence."
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "AA.III.B.R3",
+              "title": "Go-around/rejected landing."
+            }
+          ]
+        },
+        {
+          "task": "c",
+          "title": "Glassy Water Takeoff and Climb (ASES, AMES)",
+          "body_path": "acs/atp-airplane-11a/area-03/task-c.md",
+          "body_sha256": "68eb19ed2ca787210574542fff3ea11194f32c440c9eefc19131acf6f97adfe2",
+          "elements": []
+        },
+        {
+          "task": "d",
+          "title": "Glassy Water Approach and Landing (ASES, AMES)",
+          "body_path": "acs/atp-airplane-11a/area-03/task-d.md",
+          "body_sha256": "4ca061329f48a0020c2d5f2785059083862e59c84a06de17b252a3236f986698",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "AA.III.D.K1",
+              "title": "A stabilized approach, including energy management concepts."
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "AA.III.D.K2",
+              "title": "Effects of atmospheric conditions, including wind, on approach and landing performance."
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "AA.III.D.K3",
+              "title": "Wind correction techniques on approach and landing."
+            },
+            {
+              "triad": "k",
+              "ordinal": "04",
+              "code": "AA.III.D.K4",
+              "title": "When and why glassy water techniques are used."
+            },
+            {
+              "triad": "k",
+              "ordinal": "05",
+              "code": "AA.III.D.K5",
+              "title": "How a glassy water approach and landing is executed."
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "AA.III.D.R1",
+              "title": "Selection of the approach path and touchdown area based on aircraft limitations, available distance,"
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "AA.III.D.R2",
+              "title": "Go-around/rejected landing."
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "AA.III.D.R3",
+              "title": "Collision hazards."
+            },
+            {
+              "triad": "r",
+              "ordinal": "04",
+              "code": "AA.III.D.R4",
+              "title": "Low altitude maneuvering, including stall, spin, or controlled flight into terrain (CFIT)."
+            },
+            {
+              "triad": "r",
+              "ordinal": "05",
+              "code": "AA.III.D.R5",
+              "title": "Distractions, task prioritization, loss of situational awareness, or disorientation."
+            },
+            {
+              "triad": "r",
+              "ordinal": "06",
+              "code": "AA.III.D.R6",
+              "title": "Gear position in an amphibious airplane."
+            },
+            {
+              "triad": "s",
+              "ordinal": "01",
+              "code": "AA.III.D.S1",
+              "title": "Coordinate with crew, if applicable, and complete the appropriate checklist(s)."
+            },
+            {
+              "triad": "s",
+              "ordinal": "02",
+              "code": "AA.III.D.S2",
+              "title": "Make radio calls as appropriate."
+            },
+            {
+              "triad": "s",
+              "ordinal": "03",
+              "code": "AA.III.D.S3",
+              "title": "Ensure that the landing gear and water rudders are retracted, if applicable."
+            },
+            {
+              "triad": "s",
+              "ordinal": "04",
+              "code": "AA.III.D.S4",
+              "title": "Consider the landing surface, visual attitude references, water depth, and collision hazards and select"
+            },
+            {
+              "triad": "s",
+              "ordinal": "05",
+              "code": "AA.III.D.S5",
+              "title": "Establish the recommended approach and landing configuration, airspeed, and trim, and adjust pitch"
+            },
+            {
+              "triad": "s",
+              "ordinal": "06",
+              "code": "AA.III.D.S6",
+              "title": "Maintain a stabilized approach and recommended airspeed, ±5 knots."
+            }
+          ]
+        },
+        {
+          "task": "e",
+          "title": "Rough Water Takeoff and Climb (ASES, AMES)",
+          "body_path": "acs/atp-airplane-11a/area-03/task-e.md",
+          "body_sha256": "8d8d8c36ec91ce4ad684c0ea49f972377e6f97a0f6ece27c955e1cfdaab7b95e",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "AA.III.E.K1",
+              "title": "Effects of atmospheric conditions, including wind, on takeoff and climb performance."
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "AA.III.E.K2",
+              "title": "Appropriate power settings and V-speeds for takeoff and climb."
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "AA.III.E.K3",
+              "title": "Appropriate airplane configuration."
+            },
+            {
+              "triad": "k",
+              "ordinal": "04",
+              "code": "AA.III.E.K4",
+              "title": "Appropriate use of rough water takeoff and climb technique."
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "AA.III.E.R1",
+              "title": "Selection of the takeoff path based on aircraft limitations, available distance, surface conditions, and"
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "AA.III.E.R2",
+              "title": "Abnormal operations, including planning for:"
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "AA.III.E.R3",
+              "title": "Collision hazards."
+            },
+            {
+              "triad": "r",
+              "ordinal": "04",
+              "code": "AA.III.E.R4",
+              "title": "Low altitude maneuvering, including stall, spin, or controlled flight into terrain (CFIT)."
+            },
+            {
+              "triad": "r",
+              "ordinal": "05",
+              "code": "AA.III.E.R5",
+              "title": "Distractions, task prioritization, loss of situational awareness, or disorientation."
+            },
+            {
+              "triad": "r",
+              "ordinal": "06",
+              "code": "AA.III.E.R6",
+              "title": "Gear position in an amphibious airplane."
+            },
+            {
+              "triad": "s",
+              "ordinal": "01",
+              "code": "AA.III.E.S1",
+              "title": "Coordinate with crew, if applicable, and complete the appropriate checklist(s) prior to takeoff in a timely"
+            },
+            {
+              "triad": "s",
+              "ordinal": "02",
+              "code": "AA.III.E.S2",
+              "title": "Make radio calls as appropriate."
+            },
+            {
+              "triad": "s",
+              "ordinal": "03",
+              "code": "AA.III.E.S3",
+              "title": "Position the flight controls for the existing wind, if applicable."
+            },
+            {
+              "triad": "s",
+              "ordinal": "04",
+              "code": "AA.III.E.S4",
+              "title": "Verify the airplane is configured for takeoff."
+            },
+            {
+              "triad": "s",
+              "ordinal": "05",
+              "code": "AA.III.E.S5",
+              "title": "Clear the area; select appropriate takeoff path considering surface conditions and collision hazards."
+            }
+          ]
+        },
+        {
+          "task": "f",
+          "title": "Rough Water Approach and Landing (ASES, AMES)",
+          "body_path": "acs/atp-airplane-11a/area-03/task-f.md",
+          "body_sha256": "331b350c2e577dc2a13f470e9ef55fe4a59a5f9c76216695b4d941030237a77c",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "AA.III.F.K1",
+              "title": "A stabilized approach, including energy management concepts."
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "AA.III.F.K2",
+              "title": "Effects of atmospheric conditions, including wind, on approach and landing performance."
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "AA.III.F.K3",
+              "title": "Wind correction techniques on approach and landing."
+            },
+            {
+              "triad": "k",
+              "ordinal": "04",
+              "code": "AA.III.F.K4",
+              "title": "When and why rough water techniques are used."
+            },
+            {
+              "triad": "k",
+              "ordinal": "05",
+              "code": "AA.III.F.K5",
+              "title": "How to perform a proper rough water approach and landing."
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "AA.III.F.R1",
+              "title": "Selection of the approach path and touchdown area based on airplane limitations, available distance,"
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "AA.III.F.R2",
+              "title": "Go-around/rejected landing."
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "AA.III.F.R3",
+              "title": "Collision hazards."
+            },
+            {
+              "triad": "r",
+              "ordinal": "04",
+              "code": "AA.III.F.R4",
+              "title": "Low altitude maneuvering, including stall, spin, or controlled flight into terrain (CFIT)."
+            },
+            {
+              "triad": "r",
+              "ordinal": "05",
+              "code": "AA.III.F.R5",
+              "title": "Distractions, task prioritization, loss of situational awareness, or disorientation."
+            },
+            {
+              "triad": "r",
+              "ordinal": "06",
+              "code": "AA.III.F.R6",
+              "title": "Gear position in an amphibious airplane."
+            }
+          ]
+        },
+        {
+          "task": "g",
+          "title": "Confined Area Takeoff and Maximum Performance Climb (ASES, AMES)",
+          "body_path": "acs/atp-airplane-11a/area-03/task-g.md",
+          "body_sha256": "f593428c8737b81ad70d84e66db760874948d87be2dcfb9a6ef019a507829d7b",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "AA.III.G.K1",
+              "title": "Effects of atmospheric conditions, including wind, on takeoff and climb performance."
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "AA.III.G.K2",
+              "title": "Appropriate power settings and V-speeds for takeoff and climb."
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "AA.III.G.K3",
+              "title": "Appropriate airplane configuration."
+            },
+            {
+              "triad": "k",
+              "ordinal": "04",
+              "code": "AA.III.G.K4",
+              "title": "Effects of water surface."
+            },
+            {
+              "triad": "k",
+              "ordinal": "05",
+              "code": "AA.III.G.K5",
+              "title": "Available techniques for confined-area takeoff and climb."
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "AA.III.G.R1",
+              "title": "Selection of the takeoff path based on airplane limitations, available distance, surface conditions, and"
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "AA.III.G.R2",
+              "title": "Abnormal operations, including planning for:"
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "AA.III.G.R3",
+              "title": "Collision hazards."
+            },
+            {
+              "triad": "r",
+              "ordinal": "04",
+              "code": "AA.III.G.R4",
+              "title": "Low altitude maneuvering, including stall, spin, or controlled flight into terrain (CFIT)."
+            }
+          ]
+        },
+        {
+          "task": "h",
+          "title": "Confined Area Approach and Landing (ASES, AMES)",
+          "body_path": "acs/atp-airplane-11a/area-03/task-h.md",
+          "body_sha256": "7a2af76bfe8971fcaad3fdcd724e0d67c05c2340880252a91612215f480db254",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "AA.III.H.K1",
+              "title": "A stabilized approach, including energy management concepts."
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "AA.III.H.K2",
+              "title": "Effects of atmospheric conditions, including wind, on approach and landing performance."
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "AA.III.H.K3",
+              "title": "Available techniques for confined-area approach and landing."
+            }
+          ]
+        },
+        {
+          "task": "i",
+          "title": "Rejected Takeoff",
+          "body_path": "acs/atp-airplane-11a/area-03/task-i.md",
+          "body_sha256": "e24d26a0b988c418b6289b6135c1b1ee099769a926f4a65dedb9146335c44b13",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "AA.III.I.K1",
+              "title": "Conditions and situations that could warrant a rejected takeoff (e.g., takeoff warning systems,"
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "AA.III.I.K2",
+              "title": "Safety considerations following a rejected takeoff."
+            }
+          ]
+        },
+        {
+          "task": "j",
+          "title": "Go-Around/Rejected Landing",
+          "body_path": "acs/atp-airplane-11a/area-03/task-j.md",
+          "body_sha256": "ac8a0e91f43dbeb8ff1aacd310dc07248228b23b4bdb2d00578fced0187f021a",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "AA.III.J.K1",
+              "title": "A stabilized approach, including energy management concepts."
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "AA.III.J.K2",
+              "title": "Effects of atmospheric conditions, including wind and density altitude, on a go-around or rejected"
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "AA.III.J.K3",
+              "title": "Wind correction techniques on takeoff/departure and approach/landing."
+            },
+            {
+              "triad": "k",
+              "ordinal": "04",
+              "code": "AA.III.J.K4",
+              "title": "Situations and considerations on approach that could require a go-around/rejected landing, including"
+            },
+            {
+              "triad": "k",
+              "ordinal": "05",
+              "code": "AA.III.J.K5",
+              "title": "Go-around/rejected landing procedures, the importance of a timely decision, and appropriate airspeed/"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": "04",
+      "title": "In-flight Maneuvers",
+      "tasks": [
+        {
+          "task": "a",
+          "title": "Steep Turns",
+          "body_path": "acs/atp-airplane-11a/area-04/task-a.md",
+          "body_sha256": "7342a8a7beefea11b5672580f3914a7739493a2dd71c28f3c278f56d09f8bbca",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "AA.IV.A.K1",
+              "title": "Energy management concepts."
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "AA.IV.A.K2",
+              "title": "Aerodynamics associated with steep turns, including:"
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "AA.IV.A.R1",
+              "title": "Spatial disorientation when conducting a steep turn while flying by reference to instruments."
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "AA.IV.A.R2",
+              "title": "Collision hazards including aircraft and terrain."
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "AA.IV.A.R3",
+              "title": "Low altitude maneuvering, including stall, spin, or controlled flight into terrain (CFIT)."
+            },
+            {
+              "triad": "r",
+              "ordinal": "04",
+              "code": "AA.IV.A.R4",
+              "title": "Distractions, task prioritization, loss of situational awareness, or disorientation."
+            },
+            {
+              "triad": "r",
+              "ordinal": "05",
+              "code": "AA.IV.A.R5",
+              "title": "Uncoordinated flight."
+            },
+            {
+              "triad": "s",
+              "ordinal": "01",
+              "code": "AA.IV.A.S1",
+              "title": "Select an entry altitude that allows the Task to be completed no lower than 3,000 feet above ground"
+            },
+            {
+              "triad": "s",
+              "ordinal": "02",
+              "code": "AA.IV.A.S2",
+              "title": "Establish the manufacturer's recommended airspeed; or if one is not available, an airspeed not to"
+            },
+            {
+              "triad": "s",
+              "ordinal": "03",
+              "code": "AA.IV.A.S3",
+              "title": "Establish at least a 45° bank solely by reference to instruments and make a coordinated steep turn of"
+            },
+            {
+              "triad": "s",
+              "ordinal": "04",
+              "code": "AA.IV.A.S4",
+              "title": "Perform the Task in the opposite direction, as specified by evaluator."
+            },
+            {
+              "triad": "s",
+              "ordinal": "05",
+              "code": "AA.IV.A.S5",
+              "title": "Make smooth pitch, bank, and power adjustments as needed."
+            },
+            {
+              "triad": "s",
+              "ordinal": "06",
+              "code": "AA.IV.A.S6",
+              "title": "Maintain the entry altitude ±100 feet, airspeed ±10 knots, bank ±5°, and roll out on the specified"
+            },
+            {
+              "triad": "s",
+              "ordinal": "07",
+              "code": "AA.IV.A.S7",
+              "title": "Avoid any indication of an impending stall, abnormal flight attitude, or exceeding any structural or"
+            }
+          ]
+        },
+        {
+          "task": "b",
+          "title": "Recovery from Unusual Flight Attitudes",
+          "body_path": "acs/atp-airplane-11a/area-04/task-b.md",
+          "body_sha256": "5862bfac707223ab6abd4d6fbc09cb86d8aee79bfe46f6d5d7bded81c12a8abe",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "AA.IV.B.K1",
+              "title": "Procedures for recovery from unusual flight attitudes."
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "AA.IV.B.K2",
+              "title": "Unusual flight attitude causal factors, including physiological factors, system and equipment failures,"
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "AA.IV.B.K3",
+              "title": "The operating envelope and structural limitations for the aircraft."
+            },
+            {
+              "triad": "k",
+              "ordinal": "04",
+              "code": "AA.IV.B.K4",
+              "title": "Effects of engine location, wing design, and other specific design characteristics that could affect"
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "AA.IV.B.R1",
+              "title": "Situations that could lead to loss of control in-flight (LOC-I) or unusual attitudes in-flight (e.g., stress,"
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "AA.IV.B.R2",
+              "title": "[Archived]"
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "AA.IV.B.R3",
+              "title": "Operating envelope considerations."
+            },
+            {
+              "triad": "r",
+              "ordinal": "04",
+              "code": "AA.IV.B.R4",
+              "title": "Interpreting flight instruments."
+            },
+            {
+              "triad": "r",
+              "ordinal": "05",
+              "code": "AA.IV.B.R5",
+              "title": "Assessment of the unusual attitude."
+            },
+            {
+              "triad": "r",
+              "ordinal": "06",
+              "code": "AA.IV.B.R6",
+              "title": "Control input errors, inducing undesired aircraft attitudes."
+            },
+            {
+              "triad": "r",
+              "ordinal": "07",
+              "code": "AA.IV.B.R7",
+              "title": "Control application solely by reference to instruments."
+            },
+            {
+              "triad": "r",
+              "ordinal": "08",
+              "code": "AA.IV.B.R8",
+              "title": "Collision hazards."
+            },
+            {
+              "triad": "r",
+              "ordinal": "09",
+              "code": "AA.IV.B.R9",
+              "title": "Distractions, task prioritization, loss of situational awareness, or disorientation."
+            },
+            {
+              "triad": "s",
+              "ordinal": "01",
+              "code": "AA.IV.B.S1",
+              "title": "Use proper instrument cross-check and interpretation to identify an unusual attitude (including both"
+            }
+          ]
+        },
+        {
+          "task": "c",
+          "title": "Specific Flight Characteristics",
+          "body_path": "acs/atp-airplane-11a/area-04/task-c.md",
+          "body_sha256": "330dafabf2f4e8f52319b6e3c8148443569b5cf5bb9483ecf047adf17c1ab37c",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "AA.IV.C.K1",
+              "title": "All specific flight and performance characteristics associated with the aircraft."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": "05",
+      "title": "Stall Prevention",
+      "tasks": [
+        {
+          "task": "a",
+          "title": "Partial Flap Configuration Stall Prevention",
+          "body_path": "acs/atp-airplane-11a/area-05/task-a.md",
+          "body_sha256": "b712f7b460bd8aa67dfc8299216e6c33e4ac48ea3cfb517df92e3e25145777ff",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "AA.V.A.K1",
+              "title": "Aerodynamics associated with stalls in a partial flap configuration, including the relationship between"
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "AA.V.A.K2",
+              "title": "Stall characteristics as they relate to airplane design, and recognition impending stall and full stall"
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "AA.V.A.K3",
+              "title": "Factors and situations that can lead to a stall during takeoff or while on approach and actions that can"
+            },
+            {
+              "triad": "k",
+              "ordinal": "04",
+              "code": "AA.V.A.K4",
+              "title": "Effects of autoflight, flight envelope protection in normal and degraded modes, and unexpected"
+            },
+            {
+              "triad": "k",
+              "ordinal": "05",
+              "code": "AA.V.A.K5",
+              "title": "Fundamentals of stall recovery."
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "AA.V.A.R1",
+              "title": "Factors and situations that could lead to an inadvertent stall, spin, and loss of control during takeoff or"
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "AA.V.A.R2",
+              "title": "Range and limitations of stall warning indicators (e.g., aircraft buffet, stall horn, stick shaker, etc.)."
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "AA.V.A.R3",
+              "title": "Stall warning awareness."
+            },
+            {
+              "triad": "r",
+              "ordinal": "04",
+              "code": "AA.V.A.R4",
+              "title": "Stall recovery procedure."
+            },
+            {
+              "triad": "r",
+              "ordinal": "05",
+              "code": "AA.V.A.R5",
+              "title": "Secondary stalls, accelerated stalls, elevator trim stalls, and cross-control stalls."
+            },
+            {
+              "triad": "r",
+              "ordinal": "06",
+              "code": "AA.V.A.R6",
+              "title": "Effect of environmental elements on aircraft performance while in a partial flap configuration as it"
+            },
+            {
+              "triad": "r",
+              "ordinal": "07",
+              "code": "AA.V.A.R7",
+              "title": "Collision hazards including aircraft and terrain."
+            },
+            {
+              "triad": "r",
+              "ordinal": "08",
+              "code": "AA.V.A.R8",
+              "title": "Distractions, task prioritization, loss of situational awareness, or disorientation."
+            },
+            {
+              "triad": "s",
+              "ordinal": "01",
+              "code": "AA.V.A.S1",
+              "title": "Clear the area and select an entry altitude that allows the recovery to be completed no lower than"
+            },
+            {
+              "triad": "s",
+              "ordinal": "02",
+              "code": "AA.V.A.S2",
+              "title": "[Archived]"
+            }
+          ]
+        },
+        {
+          "task": "b",
+          "title": "Clean Configuration Stall Prevention",
+          "body_path": "acs/atp-airplane-11a/area-05/task-b.md",
+          "body_sha256": "4cbda83831f95e765268bd01211655d7acaf107303b5b1b55dcc368668407831",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "AA.V.B.K1",
+              "title": "Aerodynamics associated with stalls in a clean configuration, including the relationship between angle"
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "AA.V.B.K2",
+              "title": "Stall characteristics as they relate to airplane design, and recognition impending stall and full stall"
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "AA.V.B.K3",
+              "title": "Factors and situations that can lead to a stall during cruise flight and actions that can be taken to"
+            },
+            {
+              "triad": "k",
+              "ordinal": "04",
+              "code": "AA.V.B.K4",
+              "title": "Effects of autoflight, flight envelope protection in normal and degraded modes, and unexpected"
+            },
+            {
+              "triad": "k",
+              "ordinal": "05",
+              "code": "AA.V.B.K5",
+              "title": "Fundamentals of stall recovery."
+            },
+            {
+              "triad": "k",
+              "ordinal": "06",
+              "code": "AA.V.B.K6",
+              "title": "Effects of altitude on performance (e.g., thrust available) and flight control effectiveness during a"
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "AA.V.B.R1",
+              "title": "Factors and situations that could lead to an inadvertent stall, spin, and loss of control during cruise"
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "AA.V.B.R2",
+              "title": "Range and limitations of stall warning indicators (e.g., aircraft buffet, stall horn, stick shaker, etc.)."
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "AA.V.B.R3",
+              "title": "Stall warning awareness."
+            },
+            {
+              "triad": "r",
+              "ordinal": "04",
+              "code": "AA.V.B.R4",
+              "title": "Stall recovery procedure."
+            },
+            {
+              "triad": "r",
+              "ordinal": "05",
+              "code": "AA.V.B.R5",
+              "title": "Secondary stalls, accelerated stalls, elevator trim stalls, and cross-control stalls."
+            }
+          ]
+        },
+        {
+          "task": "c",
+          "title": "Landing Configuration Stall Prevention",
+          "body_path": "acs/atp-airplane-11a/area-05/task-c.md",
+          "body_sha256": "d5729fb1d0cbebed5de07531a6f00d882d019be318ac2fb2f80d14c39d962522",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "AA.V.C.K1",
+              "title": "Aerodynamics associated with stalls in the landing configuration, including the relationship between"
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "AA.V.C.K2",
+              "title": "Stall characteristics as they relate to airplane design, and recognition impending stall and full stall"
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "AA.V.C.K3",
+              "title": "Factors and situations that can lead to a stall when configured for landing and actions that can be"
+            },
+            {
+              "triad": "k",
+              "ordinal": "04",
+              "code": "AA.V.C.K4",
+              "title": "Effects of autoflight, flight envelope protection in normal and degraded modes, and unexpected"
+            },
+            {
+              "triad": "k",
+              "ordinal": "05",
+              "code": "AA.V.C.K5",
+              "title": "Fundamentals of stall recovery."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": "06",
+      "title": "Instrument Procedures",
+      "tasks": [
+        {
+          "task": "a",
+          "title": "Instrument Takeoff",
+          "body_path": "acs/atp-airplane-11a/area-06/task-a.md",
+          "body_sha256": "02aa02ef0d2308a22ac072b58671d951b70062ee3a27c42b8592f1125d7a93b7",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "AA.VI.A.K1",
+              "title": "Operational factors that could affect an instrument takeoff (e.g., runway length, runway lighting,"
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "AA.VI.A.R1",
+              "title": "Selection of a runway based on aircraft performance and limitations, available distance, surface"
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "AA.VI.A.R2",
+              "title": "Wake turbulence."
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "AA.VI.A.R3",
+              "title": "Abnormal operations, including planning for:"
+            },
+            {
+              "triad": "r",
+              "ordinal": "04",
+              "code": "AA.VI.A.R4",
+              "title": "Collision hazards."
+            },
+            {
+              "triad": "r",
+              "ordinal": "05",
+              "code": "AA.VI.A.R5",
+              "title": "Low altitude maneuvering, including stall, spin, or controlled flight into terrain (CFIT)."
+            },
+            {
+              "triad": "r",
+              "ordinal": "06",
+              "code": "AA.VI.A.R6",
+              "title": "Distractions, task prioritization, loss of situational awareness, or disorientation."
+            },
+            {
+              "triad": "s",
+              "ordinal": "01",
+              "code": "AA.VI.A.S1",
+              "title": "Coordinate with crew, if applicable, and complete the appropriate checklist(s) prior to takeoff in a timely"
+            },
+            {
+              "triad": "s",
+              "ordinal": "02",
+              "code": "AA.VI.A.S2",
+              "title": "Properly set the applicable avionics and flight instruments prior to initiating the takeoff."
+            },
+            {
+              "triad": "s",
+              "ordinal": "03",
+              "code": "AA.VI.A.S3",
+              "title": "Make radio calls as appropriate."
+            },
+            {
+              "triad": "s",
+              "ordinal": "04",
+              "code": "AA.VI.A.S4",
+              "title": "Verify assigned/correct runway (ASEL, AMEL) or takeoff path (ASES, AMES)."
+            },
+            {
+              "triad": "s",
+              "ordinal": "05",
+              "code": "AA.VI.A.S5",
+              "title": "Position the flight controls for the existing wind, if applicable."
+            },
+            {
+              "triad": "s",
+              "ordinal": "06",
+              "code": "AA.VI.A.S6",
+              "title": "Clear the area, taxi into takeoff position, and align the airplane on the runway centerline (ASEL, AMEL)"
+            },
+            {
+              "triad": "s",
+              "ordinal": "07",
+              "code": "AA.VI.A.S7",
+              "title": "Perform an instrument takeoff with instrument meteorological conditions (IMC) simulated at or before"
+            },
+            {
+              "triad": "s",
+              "ordinal": "08",
+              "code": "AA.VI.A.S8",
+              "title": "Maintain centerline (ASEL, AMEL) and proper flight control inputs during the takeoff roll."
+            }
+          ]
+        },
+        {
+          "task": "b",
+          "title": "Departure Procedures",
+          "body_path": "acs/atp-airplane-11a/area-06/task-b.md",
+          "body_sha256": "20fa16965fce8c0c8ecc305d19e1b3ef12c3313925810951f6c33b3291392b31",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "AA.VI.B.K1",
+              "title": "Takeoff minimums; (Obstacle) Departure Procedure (ODP), including Visual Climb over the Airport"
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "AA.VI.B.K2",
+              "title": "Use of a Flight Management System (FMS) or Global Positioning System (GPS) to follow a DP."
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "AA.VI.B.K3",
+              "title": "Pilot/controller responsibilities, communication procedures, and ATC services available to pilots."
+            },
+            {
+              "triad": "k",
+              "ordinal": "04",
+              "code": "AA.VI.B.K4",
+              "title": "Two-way radio communication failure procedures after takeoff."
+            },
+            {
+              "triad": "k",
+              "ordinal": "05",
+              "code": "AA.VI.B.K5",
+              "title": "Ground-based and satellite-based navigation systems (orientation, course determination, equipment,"
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "AA.VI.B.R1",
+              "title": "Following published procedures and required climb gradients or ATC Instructions."
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "AA.VI.B.R2",
+              "title": "Limitations of air traffic avoidance equipment and use of see and avoid techniques."
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "AA.VI.B.R3",
+              "title": "Automation management."
+            },
+            {
+              "triad": "s",
+              "ordinal": "01",
+              "code": "AA.VI.B.S1",
+              "title": "Select the appropriate instrument departure procedure. Then select, identify (as necessary), and use"
+            },
+            {
+              "triad": "s",
+              "ordinal": "02",
+              "code": "AA.VI.B.S2",
+              "title": "Program the FMS prior to departure and set avionics, including flight director and autopilot controls, as"
+            }
+          ]
+        },
+        {
+          "task": "c",
+          "title": "Arrival Procedures",
+          "body_path": "acs/atp-airplane-11a/area-06/task-c.md",
+          "body_sha256": "171462bc0ec92a0371a3f0d43aade1822b5f22446022cd458c7a901de0108817",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "AA.VI.C.K1",
+              "title": "Standard Terminal Arrival (STAR) charts, U.S. Terminal Procedures Publications, and IFR En Route"
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "AA.VI.C.K2",
+              "title": "Use of a Flight Management System (FMS) or GPS to follow a STAR."
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "AA.VI.C.K3",
+              "title": "Pilot/controller responsibilities, communication procedures, and ATC services available to pilots."
+            },
+            {
+              "triad": "k",
+              "ordinal": "04",
+              "code": "AA.VI.C.K4",
+              "title": "Two-way radio communication failure procedures during an arrival."
+            },
+            {
+              "triad": "k",
+              "ordinal": "05",
+              "code": "AA.VI.C.K5",
+              "title": "Ground-based and satellite-based navigation systems (orientation, course determination, equipment,"
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "AA.VI.C.R1",
+              "title": "ATC communications and compliance with published procedures."
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "AA.VI.C.R2",
+              "title": "Limitations of traffic avoidance equipment."
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "AA.VI.C.R3",
+              "title": "Responsibility to use \"see and avoid\" techniques when possible."
+            },
+            {
+              "triad": "r",
+              "ordinal": "04",
+              "code": "AA.VI.C.R4",
+              "title": "Automation management."
+            },
+            {
+              "triad": "r",
+              "ordinal": "05",
+              "code": "AA.VI.C.R5",
+              "title": "ATC instructions that modify an arrival or discontinue/resume the aircraft's lateral or vertical navigation"
+            }
+          ]
+        },
+        {
+          "task": "d",
+          "title": "Non-precision Approaches",
+          "body_path": "acs/atp-airplane-11a/area-06/task-d.md",
+          "body_sha256": "462fcf55a43b18e7cccc3f2826f8d27135d288fd0d6cd3bbbf3fc152a6c015c9",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "AA.VI.D.K1",
+              "title": "Procedures and limitations associated with a non-precision approach, including the differences"
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "AA.VI.D.K2",
+              "title": "Navigation system displays and annunciations, modes of operation, and Required Navigation"
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "AA.VI.D.K3",
+              "title": "Ground-based and satellite-based navigation systems (orientation, course determination, equipment,"
+            },
+            {
+              "triad": "k",
+              "ordinal": "04",
+              "code": "AA.VI.D.K4",
+              "title": "A stabilized approach, including energy management concepts."
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "AA.VI.D.R1",
+              "title": "Deviating from the assigned approach procedure."
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "AA.VI.D.R2",
+              "title": "Selecting a navigation frequency."
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "AA.VI.D.R3",
+              "title": "Management of automated navigation and autoflight systems."
+            }
+          ]
+        },
+        {
+          "task": "e",
+          "title": "Precision Approaches",
+          "body_path": "acs/atp-airplane-11a/area-06/task-e.md",
+          "body_sha256": "086305cce68b62f03ccbdd0d8cb9363672e6685cea7668fcb4833463be723b08",
+          "elements": []
+        },
+        {
+          "task": "f",
+          "title": "Landing from a Precision Approach",
+          "body_path": "acs/atp-airplane-11a/area-06/task-f.md",
+          "body_sha256": "c507704c1dc8c5222659f459bf01869542f1d01cc4721369e35d07648b058d28",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "AA.VI.F.K1",
+              "title": "Elements related to the pilot’s responsibilities, and the environmental, operational, and meteorological"
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "AA.VI.F.K2",
+              "title": "Approach lighting systems and runway and taxiway signs, markings, and lighting."
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "AA.VI.F.R1",
+              "title": "Selection of an approach procedure and runway based on aircraft limitations, available distance,"
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "AA.VI.F.R2",
+              "title": "Wake turbulence."
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "AA.VI.F.R3",
+              "title": "[Archived]"
+            },
+            {
+              "triad": "r",
+              "ordinal": "04",
+              "code": "AA.VI.F.R4",
+              "title": "Collision hazards."
+            },
+            {
+              "triad": "r",
+              "ordinal": "05",
+              "code": "AA.VI.F.R5",
+              "title": "Low altitude maneuvering, including stall, spin, or controlled flight into terrain (CFIT)."
+            },
+            {
+              "triad": "r",
+              "ordinal": "06",
+              "code": "AA.VI.F.R6",
+              "title": "Distractions, task prioritization, loss of situational awareness, or disorientation."
+            },
+            {
+              "triad": "r",
+              "ordinal": "07",
+              "code": "AA.VI.F.R7",
+              "title": "Attempting to land from an unstable approach."
+            },
+            {
+              "triad": "r",
+              "ordinal": "08",
+              "code": "AA.VI.F.R8",
+              "title": "Flying below the glidepath."
+            },
+            {
+              "triad": "r",
+              "ordinal": "09",
+              "code": "AA.VI.F.R9",
+              "title": "Transitioning from instrument to visual references for landing."
+            },
+            {
+              "triad": "r",
+              "ordinal": "10",
+              "code": "AA.VI.F.R10",
+              "title": "Missed Approach."
+            },
+            {
+              "triad": "r",
+              "ordinal": "11",
+              "code": "AA.VI.F.R11",
+              "title": "Land and hold short operations (LAHSO)."
+            }
+          ]
+        },
+        {
+          "task": "g",
+          "title": "Circling Approach",
+          "body_path": "acs/atp-airplane-11a/area-06/task-g.md",
+          "body_sha256": "40aeefefbc1f6101d05579cac7240866080fa253941e93b70f1f707d27b92d95",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "AA.VI.G.K1",
+              "title": "Elements related to circling approach procedures and limitations, including approach categories and"
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "AA.VI.G.R1",
+              "title": "Prescribed circling approach procedures."
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "AA.VI.G.R2",
+              "title": "Executing a circling approach at night or with marginal visibility."
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "AA.VI.G.R3",
+              "title": "Losing visual contact with an identifiable part of the airport."
+            },
+            {
+              "triad": "r",
+              "ordinal": "04",
+              "code": "AA.VI.G.R4",
+              "title": "Management of automated navigation and autoflight systems."
+            },
+            {
+              "triad": "r",
+              "ordinal": "05",
+              "code": "AA.VI.G.R5",
+              "title": "Control of altitude, airspeed, and distance while circling."
+            },
+            {
+              "triad": "r",
+              "ordinal": "06",
+              "code": "AA.VI.G.R6",
+              "title": "Low altitude maneuvering, including stall, spin, or controlled flight into terrain (CFIT)."
+            },
+            {
+              "triad": "r",
+              "ordinal": "07",
+              "code": "AA.VI.G.R7",
+              "title": "Executing a missed approach after the MAP while circling."
+            },
+            {
+              "triad": "s",
+              "ordinal": "01",
+              "code": "AA.VI.G.S1",
+              "title": "Comply with the circling approach procedure considering turbulence, windshear, and the maneuvering"
+            },
+            {
+              "triad": "s",
+              "ordinal": "02",
+              "code": "AA.VI.G.S2",
+              "title": "Confirm the direction of traffic and adhere to all restrictions and instructions issued by ATC or the"
+            },
+            {
+              "triad": "s",
+              "ordinal": "03",
+              "code": "AA.VI.G.S3",
+              "title": "Coordinate with crew, if applicable, and complete the appropriate checklist(s) in a timely manner."
+            }
+          ]
+        },
+        {
+          "task": "h",
+          "title": "Landing from a Circling Approach",
+          "body_path": "acs/atp-airplane-11a/area-06/task-h.md",
+          "body_sha256": "333a3f407d824adaf53f9601272dcdfbb4843c3eda9cb0686d70a8086ac3f63a",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "AA.VI.H.K1",
+              "title": "Elements related to the pilot’s responsibilities, and the environmental, operational, and meteorological"
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "AA.VI.H.K2",
+              "title": "Approach lighting systems and runway and taxiway signs, markings, and lighting."
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "AA.VI.H.R1",
+              "title": "Selection of an approach procedure and runway based on aircraft limitations, available distance,"
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "AA.VI.H.R2",
+              "title": "Wake turbulence."
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "AA.VI.H.R3",
+              "title": "[Archived]"
+            },
+            {
+              "triad": "r",
+              "ordinal": "04",
+              "code": "AA.VI.H.R4",
+              "title": "Collision hazards."
+            },
+            {
+              "triad": "r",
+              "ordinal": "05",
+              "code": "AA.VI.H.R5",
+              "title": "Low altitude maneuvering, including stall, spin, or controlled flight into terrain (CFIT)."
+            },
+            {
+              "triad": "r",
+              "ordinal": "06",
+              "code": "AA.VI.H.R6",
+              "title": "Distractions, task prioritization, loss of situational awareness, or disorientation."
+            },
+            {
+              "triad": "r",
+              "ordinal": "07",
+              "code": "AA.VI.H.R7",
+              "title": "Attempting to land from an unstable approach."
+            },
+            {
+              "triad": "r",
+              "ordinal": "08",
+              "code": "AA.VI.H.R8",
+              "title": "Missed Approach."
+            },
+            {
+              "triad": "r",
+              "ordinal": "09",
+              "code": "AA.VI.H.R9",
+              "title": "Land and hold short operations (LAHSO)."
+            },
+            {
+              "triad": "s",
+              "ordinal": "01",
+              "code": "AA.VI.H.S1",
+              "title": "Keep the airport environment in sight and remain within the circling approach radius applicable to the"
+            }
+          ]
+        },
+        {
+          "task": "i",
+          "title": "Missed Approaches",
+          "body_path": "acs/atp-airplane-11a/area-06/task-i.md",
+          "body_sha256": "954d9329ba8558e25433d44eefe1517d9e766fec01fbe474c98ec5c05161b169",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "AA.VI.I.K1",
+              "title": "Elements related to missed approach procedures, including reference to standby or backup"
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "AA.VI.I.K2",
+              "title": "Limitations associated with standard instrument approaches, including while using an FMS or"
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "AA.VI.I.R1",
+              "title": "Deviations from prescribed procedures or ATC instructions."
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "AA.VI.I.R2",
+              "title": "Holding, diverting, or electing to fly the approach again."
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "AA.VI.I.R3",
+              "title": "Aircraft configuration during an approach and missed approach."
+            },
+            {
+              "triad": "r",
+              "ordinal": "04",
+              "code": "AA.VI.I.R4",
+              "title": "Factors that might lead to executing a missed approach procedure before the MAP or to a go-around"
+            },
+            {
+              "triad": "r",
+              "ordinal": "05",
+              "code": "AA.VI.I.R5",
+              "title": "Management of automated navigation and autoflight systems."
+            }
+          ]
+        },
+        {
+          "task": "j",
+          "title": "Holding Procedures",
+          "body_path": "acs/atp-airplane-11a/area-06/task-j.md",
+          "body_sha256": "9292bf1746763b5bdecda8edc7c4c743465827d13aae1a867640fb2a359eff66",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "AA.VI.J.K1",
+              "title": "Elements related to holding procedures, including reporting criteria, appropriate speeds, and"
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "AA.VI.J.K2",
+              "title": "Determining holding endurance based upon factors, including an expect further clearance (EFC) time,"
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "AA.VI.J.K3",
+              "title": "When to declare minimum fuel or a fuel-related emergency."
+            },
+            {
+              "triad": "k",
+              "ordinal": "04",
+              "code": "AA.VI.J.K4",
+              "title": "Use of automation for holding, including autopilot and flight management systems, if equipped."
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "AA.VI.J.R1",
+              "title": "Recalculating fuel reserves if assigned an unanticipated expect further clearance (EFC) time."
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "AA.VI.J.R2",
+              "title": "Scenarios and circumstances that could result in minimum fuel or the need to declare an emergency."
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "AA.VI.J.R3",
+              "title": "Scenarios that could lead to holding, including deteriorating weather at the planned destination."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": "07",
+      "title": "Emergency Operations",
+      "tasks": [
+        {
+          "task": "a",
+          "title": "Emergency Procedures",
+          "body_path": "acs/atp-airplane-11a/area-07/task-a.md",
+          "body_sha256": "3a5d8beec953be1f21dd480e42bd675c4883c9f17aa21f21efc9d5440c195d7c",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "AA.VII.A.K1",
+              "title": "Declaring an emergency and selection of a suitable airport or landing location."
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "AA.VII.A.K2",
+              "title": "Situations that would require an emergency descent (e.g., depressurization, smoke, or engine fire)."
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "AA.VII.A.K3",
+              "title": "Causes of inflight fire or smoke."
+            },
+            {
+              "triad": "k",
+              "ordinal": "04",
+              "code": "AA.VII.A.K4",
+              "title": "Airplane decompression."
+            },
+            {
+              "triad": "k",
+              "ordinal": "05",
+              "code": "AA.VII.A.K5",
+              "title": "When an emergency evacuation may be necessary."
+            },
+            {
+              "triad": "k",
+              "ordinal": "06",
+              "code": "AA.VII.A.K6",
+              "title": "Actions required if icing conditions exceed the capabilities of the aircraft."
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "AA.VII.A.R1",
+              "title": "Selection of the procedures or checklists to follow in an emergency."
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "AA.VII.A.R2",
+              "title": "Multiple failures or system abnormalities."
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "AA.VII.A.R3",
+              "title": "Altitude, wind, terrain, and obstruction considerations in an emergency."
+            },
+            {
+              "triad": "r",
+              "ordinal": "04",
+              "code": "AA.VII.A.R4",
+              "title": "Distractions, task prioritization, loss of situational awareness, or disorientation."
+            },
+            {
+              "triad": "s",
+              "ordinal": "01",
+              "code": "AA.VII.A.S1",
+              "title": "Explain or describe an emergency procedure for a situation(s) presented by the evaluator."
+            },
+            {
+              "triad": "s",
+              "ordinal": "02",
+              "code": "AA.VII.A.S2",
+              "title": "Use proper procedures for an emergency situation(s) presented by the evaluator, such as:"
+            },
+            {
+              "triad": "s",
+              "ordinal": "03",
+              "code": "AA.VII.A.S3",
+              "title": "Fly by reference to standby flight instruments, backup instrumentation, or partial panel, if applicable"
+            },
+            {
+              "triad": "s",
+              "ordinal": "04",
+              "code": "AA.VII.A.S4",
+              "title": "Coordinate with crew, if applicable, and complete the appropriate checklist(s) in a timely manner."
+            },
+            {
+              "triad": "s",
+              "ordinal": "05",
+              "code": "AA.VII.A.S5",
+              "title": "Communicate with air traffic control (ATC) and the evaluator, as appropriate for the situation."
+            }
+          ]
+        },
+        {
+          "task": "b",
+          "title": "Powerplant Failure During Takeoff",
+          "body_path": "acs/atp-airplane-11a/area-07/task-b.md",
+          "body_sha256": "5dd2ce862506f9f8c58f70e77382f35b96b5c9027661add7aa7b79f7c7c27836",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "AA.VII.B.K1",
+              "title": "The procedures used during a powerplant(s) failure on takeoff, the appropriate reference airspeeds,"
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "AA.VII.B.K2",
+              "title": "Operational considerations, including: airplane performance (e.g., sideslip, bank angle, rudder"
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "AA.VII.B.R1",
+              "title": "Planning for a potential powerplant failure during takeoff considering operational factors (e.g., takeoff"
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "AA.VII.B.R2",
+              "title": "Briefing the plan for a powerplant failure during takeoff, in a crew environment."
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "AA.VII.B.R3",
+              "title": "Selection of the procedures or checklists to follow in an emergency."
+            },
+            {
+              "triad": "r",
+              "ordinal": "04",
+              "code": "AA.VII.B.R4",
+              "title": "Identifying the inoperative engine (AMEL, AMES)."
+            },
+            {
+              "triad": "r",
+              "ordinal": "05",
+              "code": "AA.VII.B.R5",
+              "title": "Inability to climb or maintain altitude with an inoperative powerplant (AMEL, AMES)."
+            },
+            {
+              "triad": "r",
+              "ordinal": "06",
+              "code": "AA.VII.B.R6",
+              "title": "Altitude, wind, terrain, and obstruction considerations in an emergency."
+            },
+            {
+              "triad": "r",
+              "ordinal": "07",
+              "code": "AA.VII.B.R7",
+              "title": "Low altitude maneuvering, including stall, spin, or controlled flight into terrain (CFIT)."
+            },
+            {
+              "triad": "r",
+              "ordinal": "08",
+              "code": "AA.VII.B.R8",
+              "title": "Distractions, task prioritization, loss of situational awareness, or disorientation."
+            },
+            {
+              "triad": "s",
+              "ordinal": "01",
+              "code": "AA.VII.B.S1",
+              "title": "Following the powerplant failure, maintain positive airplane control and adjust the powerplant controls"
+            },
+            {
+              "triad": "s",
+              "ordinal": "02",
+              "code": "AA.VII.B.S2",
+              "title": "Establish a power-off descent approximately straight-ahead if the powerplant failure occurs after"
+            },
+            {
+              "triad": "s",
+              "ordinal": "03",
+              "code": "AA.VII.B.S3",
+              "title": "Continue the takeoff if the (simulated) powerplant failure occurs at a point where the airplane can"
+            },
+            {
+              "triad": "s",
+              "ordinal": "04",
+              "code": "AA.VII.B.S4",
+              "title": "After establishing a climb, maintain the desired airspeed, ±5 knots. Use flight controls in the proper"
+            },
+            {
+              "triad": "s",
+              "ordinal": "05",
+              "code": "AA.VII.B.S5",
+              "title": "Maintain the appropriate heading, ±5°, when powerplant failure occurs (AMEL, AMES)."
+            },
+            {
+              "triad": "s",
+              "ordinal": "06",
+              "code": "AA.VII.B.S6",
+              "title": "Coordinate with crew, if applicable, and complete the appropriate checklist(s) following the powerplant"
+            }
+          ]
+        },
+        {
+          "task": "c",
+          "title": "Powerplant Failure (Simulated) (ASEL, ASES)",
+          "body_path": "acs/atp-airplane-11a/area-07/task-c.md",
+          "body_sha256": "1fa9b9f7ebe3bcc993d61c5090e4e796fb74e5f0b9d20e3d2645b65200b07efe",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "AA.VII.C.K1",
+              "title": "Immediate action items and emergency procedures for a forced landing."
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "AA.VII.C.K2",
+              "title": "Airspeed, including:"
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "AA.VII.C.K3",
+              "title": "Effects of atmospheric conditions on emergency approach and landing."
+            },
+            {
+              "triad": "k",
+              "ordinal": "04",
+              "code": "AA.VII.C.K4",
+              "title": "A stabilized approach, including energy management concepts."
+            },
+            {
+              "triad": "k",
+              "ordinal": "05",
+              "code": "AA.VII.C.K5",
+              "title": "Emergency Locator Transmitters (ELTs) and other emergency locating devices."
+            },
+            {
+              "triad": "k",
+              "ordinal": "06",
+              "code": "AA.VII.C.K6",
+              "title": "Air traffic control (ATC) services to aircraft in distress."
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "AA.VII.C.R1",
+              "title": "Altitude, wind, terrain, obstructions, gliding distance, and available landing distance considerations."
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "AA.VII.C.R2",
+              "title": "Following or changing the planned flightpath to the selected landing area."
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "AA.VII.C.R3",
+              "title": "Collision hazards."
+            },
+            {
+              "triad": "r",
+              "ordinal": "04",
+              "code": "AA.VII.C.R4",
+              "title": "Configuring the airplane."
+            },
+            {
+              "triad": "r",
+              "ordinal": "05",
+              "code": "AA.VII.C.R5",
+              "title": "Low altitude maneuvering, including stall, spin, or controlled flight into terrain (CFIT)."
+            },
+            {
+              "triad": "r",
+              "ordinal": "06",
+              "code": "AA.VII.C.R6",
+              "title": "Distractions, task prioritization, loss of situational awareness, or disorientation."
+            },
+            {
+              "triad": "r",
+              "ordinal": "07",
+              "code": "AA.VII.C.R7",
+              "title": "A powerplant failure in Instrument Meteorological Conditions (IMC)."
+            },
+            {
+              "triad": "s",
+              "ordinal": "01",
+              "code": "AA.VII.C.S1",
+              "title": "Recognize the powerplant failure."
+            },
+            {
+              "triad": "s",
+              "ordinal": "02",
+              "code": "AA.VII.C.S2",
+              "title": "Determine the cause for the simulated powerplant failure (if altitude permits) and if a restart is a viable"
+            },
+            {
+              "triad": "s",
+              "ordinal": "03",
+              "code": "AA.VII.C.S3",
+              "title": "Maintain positive control throughout the maneuver."
+            },
+            {
+              "triad": "s",
+              "ordinal": "04",
+              "code": "AA.VII.C.S4",
+              "title": "Establish and maintain the recommended best glide airspeed, ±5 knots."
+            }
+          ]
+        },
+        {
+          "task": "d",
+          "title": "Inflight Powerplant(s) Failure and Restart (AMEL, AMES)",
+          "body_path": "acs/atp-airplane-11a/area-07/task-d.md",
+          "body_sha256": "ef47c06ea93ee8cddfee68677551968eaa33abed5e3c61db11a4719c90901474",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "AA.VII.D.K1",
+              "title": "Flight characteristics and controllability associated with maneuvering the airplane with powerplant(s)"
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "AA.VII.D.K2",
+              "title": "Powerplant restart procedures and conditions where a restart attempt is appropriate."
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "AA.VII.D.R1",
+              "title": "Powerplant(s) failure."
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "AA.VII.D.R2",
+              "title": "Methods for handling a powerplant failure or a powerplant restart."
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "AA.VII.D.R3",
+              "title": "Diagnosis of the cause of the powerplant failure."
+            },
+            {
+              "triad": "r",
+              "ordinal": "04",
+              "code": "AA.VII.D.R4",
+              "title": "Collision hazards."
+            },
+            {
+              "triad": "r",
+              "ordinal": "05",
+              "code": "AA.VII.D.R5",
+              "title": "Configuring the airplane."
+            },
+            {
+              "triad": "r",
+              "ordinal": "06",
+              "code": "AA.VII.D.R6",
+              "title": "Factors and situations that could lead to an inadvertent stall, spin, and loss of control with an inflight"
+            },
+            {
+              "triad": "r",
+              "ordinal": "07",
+              "code": "AA.VII.D.R7",
+              "title": "Distractions, task prioritization, loss of situational awareness, or disorientation."
+            },
+            {
+              "triad": "s",
+              "ordinal": "01",
+              "code": "AA.VII.D.S1",
+              "title": "Recognize and correctly identify powerplant(s) failure, complete memory items (if applicable), and"
+            },
+            {
+              "triad": "s",
+              "ordinal": "02",
+              "code": "AA.VII.D.S2",
+              "title": "Coordinate with crew, if applicable, and complete the appropriate emergency procedures and"
+            },
+            {
+              "triad": "s",
+              "ordinal": "03",
+              "code": "AA.VII.D.S3",
+              "title": "Use flight controls in the proper combination as recommended by the manufacturer, or as required to"
+            },
+            {
+              "triad": "s",
+              "ordinal": "04",
+              "code": "AA.VII.D.S4",
+              "title": "Determine the cause for the powerplant(s) failure and if a restart is a viable option."
+            }
+          ]
+        },
+        {
+          "task": "e",
+          "title": "Approach and Landing with a Powerplant Failure (Simulated) (AMEL, AMES)",
+          "body_path": "acs/atp-airplane-11a/area-07/task-e.md",
+          "body_sha256": "0df1e8476c6493799a370af901ee72d5ce0b7315252d5bf34e6160b178789604",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "AA.VII.E.K1",
+              "title": "Flight characteristics and controllability associated with maneuvering to a landing with inoperative"
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "AA.VII.E.K2",
+              "title": "Go-around/rejected landing procedures with a powerplant failure."
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "AA.VII.E.K3",
+              "title": "How to determine a suitable airport."
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "AA.VII.E.R1",
+              "title": "Planning for a powerplant failure inflight or during an approach."
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "AA.VII.E.R2",
+              "title": "Collision hazards."
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "AA.VII.E.R3",
+              "title": "Configuring the airplane."
+            },
+            {
+              "triad": "r",
+              "ordinal": "04",
+              "code": "AA.VII.E.R4",
+              "title": "Low altitude maneuvering, including stall, spin, or controlled flight into terrain (CFIT)."
+            },
+            {
+              "triad": "r",
+              "ordinal": "05",
+              "code": "AA.VII.E.R5",
+              "title": "Distractions, task prioritization, loss of situational awareness, or disorientation."
+            },
+            {
+              "triad": "r",
+              "ordinal": "06",
+              "code": "AA.VII.E.R6",
+              "title": "Performing a go-around/rejected landing with a powerplant failure."
+            },
+            {
+              "triad": "s",
+              "ordinal": "01",
+              "code": "AA.VII.E.S1",
+              "title": "Recognize and correctly identify powerplant(s) failure, complete memory items (if applicable), and"
+            },
+            {
+              "triad": "s",
+              "ordinal": "02",
+              "code": "AA.VII.E.S2",
+              "title": "Coordinate with crew, if applicable, and complete the appropriate emergency procedures and"
+            },
+            {
+              "triad": "s",
+              "ordinal": "03",
+              "code": "AA.VII.E.S3",
+              "title": "Use flight controls and configure the aircraft as required to maintain best performance or as"
+            },
+            {
+              "triad": "s",
+              "ordinal": "04",
+              "code": "AA.VII.E.S4",
+              "title": "Maintain the operating powerplant(s) within acceptable operating limits."
+            },
+            {
+              "triad": "s",
+              "ordinal": "05",
+              "code": "AA.VII.E.S5",
+              "title": "Communicate with air traffic control (ATC) and the evaluator, as appropriate for the situation."
+            }
+          ]
+        },
+        {
+          "task": "f",
+          "title": "Precision Approach (Manually Flown) with a Powerplant Failure (Simulated) (AMEL, AMES)",
+          "body_path": "acs/atp-airplane-11a/area-07/task-f.md",
+          "body_sha256": "ec48327cea0c3916f3d25680cbd85d3b5eb41b359bb1d5ddf3943ab7ecca8d8d",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "AA.VII.F.K1",
+              "title": "Flight characteristics and controllability associated with maneuvering to a landing with inoperative"
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "AA.VII.F.K2",
+              "title": "Missed approach considerations with a powerplant failure."
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "AA.VII.F.K3",
+              "title": "How to determine a suitable airport."
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "AA.VII.F.R1",
+              "title": "Planning for a powerplant failure inflight or during an approach."
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "AA.VII.F.R2",
+              "title": "Collision hazards."
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "AA.VII.F.R3",
+              "title": "Configuring the airplane."
+            },
+            {
+              "triad": "r",
+              "ordinal": "04",
+              "code": "AA.VII.F.R4",
+              "title": "Low altitude maneuvering, including stall, spin, or controlled flight into terrain (CFIT)."
+            },
+            {
+              "triad": "r",
+              "ordinal": "05",
+              "code": "AA.VII.F.R5",
+              "title": "Distractions, task prioritization, loss of situational awareness, or disorientation."
+            },
+            {
+              "triad": "r",
+              "ordinal": "06",
+              "code": "AA.VII.F.R6",
+              "title": "Landing with a powerplant failure."
+            },
+            {
+              "triad": "r",
+              "ordinal": "07",
+              "code": "AA.VII.F.R7",
+              "title": "Missed approach with a powerplant failure."
+            }
+          ]
+        },
+        {
+          "task": "g",
+          "title": "Landing from a No Flap or a Nonstandard Flap Approach",
+          "body_path": "acs/atp-airplane-11a/area-07/task-g.md",
+          "body_sha256": "8cf3f3eac43f9d2aa76cc7f1a2d1b69d8d1fa666fd85dd4afc506313996a93f7",
+          "elements": []
+        }
+      ]
+    },
+    {
+      "area": "08",
+      "title": "Postflight Procedures",
+      "tasks": [
+        {
+          "task": "a",
+          "title": "After Landing, Parking, and Securing (ASEL, AMEL)",
+          "body_path": "acs/atp-airplane-11a/area-08/task-a.md",
+          "body_sha256": "3eb22328555c7ab2cd9dbf31a45446545cce38f354b9e37fcb32a021b3ad5537",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "AA.VIII.A.K1",
+              "title": "Parking, shutdown, securing, and postflight inspection."
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "AA.VIII.A.K2",
+              "title": "Documenting in-flight/postflight discrepancies."
+            },
+            {
+              "triad": "r",
+              "ordinal": "01",
+              "code": "AA.VIII.A.R1",
+              "title": "Activities and distractions."
+            },
+            {
+              "triad": "r",
+              "ordinal": "02",
+              "code": "AA.VIII.A.R2",
+              "title": "[Archived]"
+            },
+            {
+              "triad": "r",
+              "ordinal": "03",
+              "code": "AA.VIII.A.R3",
+              "title": "Propeller, turbofan inlet, and exhaust safety."
+            },
+            {
+              "triad": "r",
+              "ordinal": "04",
+              "code": "AA.VIII.A.R4",
+              "title": "Airport specific security procedures."
+            },
+            {
+              "triad": "r",
+              "ordinal": "05",
+              "code": "AA.VIII.A.R5",
+              "title": "Disembarking passengers safely on the ramp and monitoring passenger movement while on the ramp."
+            },
+            {
+              "triad": "s",
+              "ordinal": "01",
+              "code": "AA.VIII.A.S1",
+              "title": "Use runway incursion avoidance procedures, if applicable."
+            },
+            {
+              "triad": "s",
+              "ordinal": "02",
+              "code": "AA.VIII.A.S2",
+              "title": "Comply with air traffic control (ATC) or evaluator instructions and make radio calls as appropriate."
+            },
+            {
+              "triad": "s",
+              "ordinal": "03",
+              "code": "AA.VIII.A.S3",
+              "title": "Coordinate with crew, if applicable, and complete the appropriate checklist(s) after clearing the runway."
+            },
+            {
+              "triad": "s",
+              "ordinal": "04",
+              "code": "AA.VIII.A.S4",
+              "title": "Park at the gate or in an appropriate area, considering the safety of nearby persons and property."
+            },
+            {
+              "triad": "s",
+              "ordinal": "05",
+              "code": "AA.VIII.A.S5",
+              "title": "Conduct a postflight inspection and document discrepancies and servicing requirements, if any."
+            },
+            {
+              "triad": "s",
+              "ordinal": "06",
+              "code": "AA.VIII.A.S6",
+              "title": "Secure the airplane."
+            }
+          ]
+        },
+        {
+          "task": "b",
+          "title": "Seaplane Post-Landing Procedures (ASES, AMES)",
+          "body_path": "acs/atp-airplane-11a/area-08/task-b.md",
+          "body_sha256": "cfce143b63bf571d12a9d4de8a67ebc66430491c1ae81b931466e2b44c4a6994",
+          "elements": [
+            {
+              "triad": "k",
+              "ordinal": "01",
+              "code": "AA.VIII.B.K1",
+              "title": "Mooring."
+            },
+            {
+              "triad": "k",
+              "ordinal": "02",
+              "code": "AA.VIII.B.K2",
+              "title": "Docking."
+            },
+            {
+              "triad": "k",
+              "ordinal": "03",
+              "code": "AA.VIII.B.K3",
+              "title": "Anchoring."
+            },
+            {
+              "triad": "k",
+              "ordinal": "04",
+              "code": "AA.VIII.B.K4",
+              "title": "Beaching/ramping."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

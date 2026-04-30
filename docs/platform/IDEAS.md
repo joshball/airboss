@@ -1,5 +1,7 @@
 # Ideas
 
+## Last reviewed: 2026-04-30 (auto-sweep, no triage)
+
 Ideas, approaches, and insights that might shape the course or platform. This is the intake funnel -- everything lands here first. Good ideas get promoted to [DESIGN_PRINCIPLES.md](DESIGN_PRINCIPLES.md) or feature specs. Bad ideas get archived with a reason.
 
 ## How This Works
