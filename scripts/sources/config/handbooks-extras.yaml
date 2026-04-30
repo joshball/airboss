@@ -11,13 +11,17 @@
 #
 # URLs verified 2026-04-29 by HEAD against faa.gov.
 #
-# REMOVED 2026-04-29 (URLs returned 404 against the canonical paths previously
-# stored here; could not find current canonical PDFs via search):
-#   - faa-h-8083-27 Sport Pilot Handbook
-#   - faa-h-8083-30 AMT General Handbook
-#   - faa-h-8083-32 AMT Powerplant Handbook
-#   - faa-h-8083-34 Risk Management Handbook for GA Pilots
-# When a current URL is identified, add the entry back here. The verifier
+# Re-added 2026-04-29 after follow-up search:
+#   - faa-h-8083-30 AMT General Handbook (30B at amtg_handbook.pdf)
+#   - faa-h-8083-32 AMT Powerplant Handbook (32B at amt_powerplant_handbook.pdf)
+#
+# Confirmed dropped (no current canonical whole-doc PDF on the FAA
+# Aviation Handbooks & Manuals index page):
+#   - faa-h-8083-27 Sport Pilot Handbook (publication retired; not on
+#     /regulations_policies/handbooks_manuals/aviation index)
+#   - faa-h-8083-34 Risk Management Handbook for GA Pilots (retired and
+#     superseded by FAA-H-8083-2A; not on the FAA aviation index)
+# When current URLs surface, add the entries back here. The verifier
 # (`bun run sources verify-urls`) catches stale URLs at HEAD time, so this
 # YAML stays a deterministic source-of-truth.
 
@@ -40,3 +44,11 @@ entries:
     edition: '16B'
     url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/instrument_procedures_handbook/FAA-H-8083-16B.pdf
     filename: FAA-H-8083-16B.pdf
+  - doc_id: faa-h-8083-30
+    edition: '30B'
+    url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/amtg_handbook.pdf
+    filename: amtg_handbook.pdf
+  - doc_id: faa-h-8083-32
+    edition: '32B'
+    url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/amt_powerplant_handbook.pdf
+    filename: amt_powerplant_handbook.pdf

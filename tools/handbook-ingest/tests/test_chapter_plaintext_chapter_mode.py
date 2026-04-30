@@ -128,6 +128,7 @@ def test_chapter_mode_skipped_when_no_chapter_pdfs_config(tmp_path: Path, monkey
         publisher="FAA",
         kind="handbook",
         source_url="https://example.invalid/x.pdf",
+        chapter_text_max_chars=100,
     )
     sidecars = write_chapter_sidecars(config, chapter_bodies=[])
     assert sidecars == []
