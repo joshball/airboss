@@ -521,6 +521,7 @@ export async function upsertSyllabusNode(input: NewSyllabusNodeRow, db: Db = def
 				triad: input.triad,
 				requiredBloom: input.requiredBloom,
 				isLeaf: input.isLeaf,
+				requiresTeaching: input.requiresTeaching,
 				airbossRef: input.airbossRef,
 				citations: input.citations,
 				classes: input.classes,

@@ -59,7 +59,7 @@ Pure read-only consumer of the existing BC. No new schema, no new BC functions, 
 - **Full prereq DAG visualisation.** The detail page shows immediate prereqs only (one-hop). A DAG visualiser is a separate WP if the simple list doesn't suffice.
 - **Edition diff surface.** When the FAA publishes a new ACS, the loader keeps the learner on the pinned edition. A "what changed" diff viewer between editions is a follow-on WP gated on a real second edition publishing.
 - **Authoring.** ACS / PTS / endorsement transcription work continues per ADR 016 phase 10; this WP just renders whatever the BC returns.
-- **CFI / instructor-cert evidence-kind gating.** ADR 016 phase 8 records the data shape; this WP does not enforce "S leaf needs scenario evidence." Filter UI for evidence kind is deferred.
+- **CFI / instructor-cert evidence-kind gating.** ADR 016 phase 8 records the data shape; this WP does not enforce "S leaf needs scenario evidence." Filter UI for evidence kind is deferred. The data layer shipped via [evidence-kind-gating](../evidence-kind-gating/spec.md) -- `getCredentialMastery` already returns `byEvidenceKind` per area + per credential and `missingKinds` per leaf via `acsLens`. The follow-on is purely the UI: a missing-kinds chip on each leaf and an evidence-kind filter on the area drill. Captured in NOW.md "Up next" so it doesn't get lost; spec authoring when the user schedules it.
 - **Mobile-specific layouts.** Desktop-first per the rest of the study app.
 
 ## BC reads consumed (no new functions)
