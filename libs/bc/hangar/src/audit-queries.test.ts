@@ -10,12 +10,12 @@
  * a small dedicated dataset; `afterAll` deletes the inserted rows.
  */
 
-import { auditLog, AUDIT_OPS, type AuditOp } from '@ab/audit';
+import { AUDIT_OPS, type AuditOp, auditLog } from '@ab/audit';
 import { bauthUser } from '@ab/auth/schema';
 import { AUDIT_LIST_DEFAULT_LIMIT, AUDIT_LIST_HARD_CAP, AUDIT_TARGETS, ROLES } from '@ab/constants';
 import { db } from '@ab/db/connection';
 import { generateAuditLogId, generateAuthId } from '@ab/utils';
-import { eq, inArray } from 'drizzle-orm';
+import { inArray } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import {
 	AUDIT_ACTOR_SYSTEM,

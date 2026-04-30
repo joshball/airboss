@@ -27,6 +27,8 @@ export const APP_SURFACES = {
 	PLANS: 'plans',
 	CREDENTIALS: 'credentials',
 	LENS: 'lens',
+	/** Hangar admin app surfaces (sources, jobs, users, audit). */
+	HANGAR: 'hangar',
 	GLOBAL: 'global',
 } as const;
 
@@ -44,6 +46,7 @@ export const APP_SURFACE_LABELS: Record<AppSurface, string> = {
 	[APP_SURFACES.PLANS]: 'Plans',
 	[APP_SURFACES.CREDENTIALS]: 'Credentials',
 	[APP_SURFACES.LENS]: 'Lens',
+	[APP_SURFACES.HANGAR]: 'Hangar',
 	[APP_SURFACES.GLOBAL]: 'Global',
 };
 

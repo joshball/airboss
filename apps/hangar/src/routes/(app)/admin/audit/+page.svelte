@@ -9,6 +9,7 @@ import {
 	QUERY_PARAMS,
 	ROUTES,
 } from '@ab/constants';
+import PageHelp from '@ab/help/ui/PageHelp.svelte';
 import EmptyState from '@ab/ui/components/EmptyState.svelte';
 import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import { goto, replaceState } from '$app/navigation';
@@ -257,7 +258,11 @@ const hasFiltersBeyondWindow = $derived(
 </svelte:head>
 
 <section class="page">
-	<PageHeader title="Audit log" subtitle={filterSummary} />
+	<PageHeader title="Audit log" subtitle={filterSummary}>
+		{#snippet titleSuffix()}
+			<PageHelp pageId="audit" />
+		{/snippet}
+	</PageHeader>
 
 	<section class="filter-bar" aria-label="Filter audit events">
 		<div class="row">

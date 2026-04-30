@@ -17,8 +17,8 @@
 import { requireRole } from '@ab/auth';
 import { type AuditFilters, listAuditEntries, searchActorIds } from '@ab/bc-hangar';
 import { AUDIT_LIST_DEFAULT_LIMIT, ROLES } from '@ab/constants';
-import { decodeAuditFilters } from './filters';
 import type { PageServerLoad } from './$types';
+import { decodeAuditFilters } from './filters';
 
 export const load: PageServerLoad = async (event) => {
 	requireRole(event, ROLES.ADMIN);

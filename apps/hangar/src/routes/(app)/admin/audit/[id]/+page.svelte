@@ -1,5 +1,6 @@
 <script lang="ts">
 import { QUERY_PARAMS, ROUTES } from '@ab/constants';
+import PageHelp from '@ab/help/ui/PageHelp.svelte';
 import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import type { PageData } from './$types';
 
@@ -97,7 +98,11 @@ async function copyToClipboard(key: 'before' | 'after' | 'metadata' | 'id', text
 		<span class="crumb-current mono">{entry.id}</span>
 	</nav>
 
-	<PageHeader title="Audit event" subtitle={`${entry.op} -- ${entry.targetType}${entry.targetId ? ` -- ${entry.targetId}` : ''}`} />
+	<PageHeader title="Audit event" subtitle={`${entry.op} -- ${entry.targetType}${entry.targetId ? ` -- ${entry.targetId}` : ''}`}>
+		{#snippet titleSuffix()}
+			<PageHelp pageId="audit" />
+		{/snippet}
+	</PageHeader>
 
 	<dl class="meta">
 		<div class="meta-row">
