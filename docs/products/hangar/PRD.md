@@ -22,8 +22,8 @@ For the why, see [VISION.md](VISION.md). For what's queued next, see [ROADMAP.md
 | `/sources/[id]`     | Source detail + filesystem browser                                                                 | [hangar-sources-v1](../../work-packages/hangar-sources-v1/spec.md)         |
 | `/glossary`         | Term registry: definitions, citations, knowledge-kind taxonomy                                     | [hangar-non-textual](../../work-packages/hangar-non-textual/spec.md)       |
 | `/glossary/[id]`    | Term detail + edit                                                                                 | [hangar-non-textual](../../work-packages/hangar-non-textual/spec.md)       |
-| `/users`            | Read-only user list (ADMIN-only): name, email, role, last seen, banned                             | --                                                                         |
-| `/users/[id]`       | Read-only user detail (ADMIN-only): sessions + audit by actor                                      | --                                                                         |
+| `/users`            | User list (ADMIN-only): name, email, role, last seen, banned                                       | --                                                                         |
+| `/users/[id]`       | User detail (ADMIN-only): role picker, ban / unban, session revoke, sessions + audit               | [hangar-users-editing](../../work-packages/hangar-users-editing/spec.md)   |
 | `/jobs`             | Background-job log with 1Hz live polling                                                           | [hangar-registry](../../work-packages/hangar-registry/spec.md)             |
 | `/admin/audit-ping` | Scaffold-era heartbeat -- diagnostic only; System -> Audit dashboard tile points at `/admin/audit` | [hangar-scaffold](../../work-packages/hangar-scaffold/spec.md)             |
 | `/admin/audit`      | Cross-cutting audit explorer (ADMIN-only): filter by actor / target / op / time window, paginate   | [hangar-audit-explorer](../../work-packages/hangar-audit-explorer/spec.md) |
@@ -32,13 +32,13 @@ For the why, see [VISION.md](VISION.md). For what's queued next, see [ROADMAP.md
 
 ## In flight or imminent
 
-| Item                                                          | State       | Notes                                                                                                                    |
-| ------------------------------------------------------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------ |
-| Retire `/admin/audit-ping`                                    | Not started | Cleanup: drop the route + decide on `AUDIT_TARGETS.HANGAR_PING` once a real BC write surface emits its own audit rows.   |
-| `/users` editing (role assignment, ban/unban, session revoke) | Not started | First admin-write surface. Should follow dual-gate pattern: load + every form action `requireRole(ADMIN)`.               |
-| Invite flow                                                   | Not started | Email infra exists in `libs/auth/src/email/`. Onboard: Better Auth invite token, email send, accept route on study side. |
-| Scenarios authoring                                           | Not scoped  | Will follow the scenario tick model from `airboss-firc/libs/engine/`. Stand up only after engine migrates.               |
-| Cards authoring                                               | Not scoped  | Cards (study) are seeded today; admin authoring UI is downstream of stable card spec.                                    |
+| Item                        | State       | Notes                                                                                                                                                                       |
+| --------------------------- | ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Retire `/admin/audit-ping`  | Not started | Cleanup: drop the route + decide on `AUDIT_TARGETS.HANGAR_PING` once a real BC write surface emits its own audit rows. Unblocked: hangar-users-editing emits audit rows.    |
+| Hangar Playwright e2e infra | Not started | Tracked at [hangar-e2e-infrastructure](../../work-packages/hangar-e2e-infrastructure/spec.md). Prerequisite for the deferred audit-explorer + users-editing e2e suites.     |
+| Invite flow                 | Not started | Email infra exists in `libs/auth/src/email/`. Onboard: Better Auth invite token, email send, accept route on study side.                                                    |
+| Scenarios authoring         | Not scoped  | Will follow the scenario tick model from `airboss-firc/libs/engine/`. Stand up only after engine migrates.                                                                  |
+| Cards authoring             | Not scoped  | Cards (study) are seeded today; admin authoring UI is downstream of stable card spec.                                                                                       |
 
 ## Tracking
 
