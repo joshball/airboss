@@ -25,9 +25,11 @@
  */
 
 import {
+	type AssessmentMethod,
 	CREDENTIAL_PREREQ_KINDS,
 	type CredentialKind,
 	type CredentialStatus,
+	NODE_MASTERY_GATES,
 	SYLLABUS_PRIMACY,
 	type SyllabusKind,
 	type SyllabusStatus,
@@ -35,6 +37,7 @@ import {
 import { db as defaultDb } from '@ab/db/connection';
 import { and, eq, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
+import { credentialSlugToCertApplicability, getLeafMasteryStateMap, type LeafMasteryState } from './mastery';
 import {
 	type CredentialPrereqRow,
 	type CredentialRow,
@@ -48,7 +51,6 @@ import {
 	type SyllabusRow,
 	syllabus,
 	syllabusNode,
-	syllabusNodeLink,
 } from './schema';
 
 type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;
@@ -263,6 +265,13 @@ export interface AreaMasteryRollup {
 	totalLeaves: number;
 	coveredLeaves: number;
 	masteredLeaves: number;
+	/**
+	 * Per-evidence-kind aggregate across the area's leaves. Counts the leaves
+	 * whose required-kind set includes each kind, broken down by whether that
+	 * kind aggregated to `pass`. Lets the cert dashboard render "Area V:
+	 * scenario evidence missing on 3 of 8 skill leaves" without re-walking.
+	 */
+	byEvidenceKind: Partial<Record<AssessmentMethod, { required: number; passing: number }>>;
 }
 
 export interface CredentialMasteryRollup {
@@ -272,6 +281,11 @@ export interface CredentialMasteryRollup {
 	totalLeaves: number;
 	coveredLeaves: number;
 	masteredLeaves: number;
+	/**
+	 * Per-evidence-kind aggregate across every leaf in the credential's
+	 * primary syllabus. Same shape as `AreaMasteryRollup.byEvidenceKind`.
+	 */
+	byEvidenceKind: Partial<Record<AssessmentMethod, { required: number; passing: number }>>;
 	areas: AreaMasteryRollup[];
 }
 
@@ -304,6 +318,7 @@ export async function getCredentialMastery(
 			totalLeaves: 0,
 			coveredLeaves: 0,
 			masteredLeaves: 0,
+			byEvidenceKind: {},
 			areas: [],
 		};
 	}
@@ -323,59 +338,28 @@ export async function getCredentialMastery(
 			totalLeaves: 0,
 			coveredLeaves: 0,
 			masteredLeaves: 0,
+			byEvidenceKind: {},
 			areas: nodes
 				.filter((n) => n.level === 'area')
-				.map((a) => ({ areaCode: a.code, areaTitle: a.title, totalLeaves: 0, coveredLeaves: 0, masteredLeaves: 0 })),
+				.map((a) => ({
+					areaCode: a.code,
+					areaTitle: a.title,
+					totalLeaves: 0,
+					coveredLeaves: 0,
+					masteredLeaves: 0,
+					byEvidenceKind: {},
+				})),
 		};
 	}
 
-	// Pull every (leaf, knowledge_node) link plus the per-node mastery state
-	// in one round-trip so the rollup is O(leaves) in memory after.
-	const linkRows = await db
-		.select({
-			leafId: syllabusNodeLink.syllabusNodeId,
-			knowledgeNodeId: syllabusNodeLink.knowledgeNodeId,
-		})
-		.from(syllabusNodeLink)
-		.where(
-			sql`${syllabusNodeLink.syllabusNodeId} IN (${sql.join(
-				leafIds.map((id) => sql`${id}`),
-				sql`, `,
-			)})`,
-		);
-
-	const knowledgeNodeIds = [...new Set(linkRows.map((r) => r.knowledgeNodeId))];
-	const masteryByNode = await fetchKnowledgeNodeMastery(userId, knowledgeNodeIds, db);
-
-	// Group links by leaf.
-	const linksByLeaf = new Map<string, string[]>();
-	for (const row of linkRows) {
-		const existing = linksByLeaf.get(row.leafId) ?? [];
-		existing.push(row.knowledgeNodeId);
-		linksByLeaf.set(row.leafId, existing);
-	}
-
-	// Compute per-leaf mastery + coverage.
-	const leafState = new Map<string, { covered: boolean; mastered: boolean }>();
-	for (const leaf of nodes.filter((n) => n.isLeaf)) {
-		const links = linksByLeaf.get(leaf.id) ?? [];
-		if (links.length === 0) {
-			leafState.set(leaf.id, { covered: false, mastered: false });
-			continue;
-		}
-		let allMastered = true;
-		let anyCovered = false;
-		for (const nodeId of links) {
-			const m = masteryByNode.get(nodeId);
-			if (m === undefined) {
-				allMastered = false;
-				continue;
-			}
-			if (m.touched) anyCovered = true;
-			if (!m.mastered) allMastered = false;
-		}
-		leafState.set(leaf.id, { covered: anyCovered, mastered: allMastered });
-	}
+	// Per evidence-kind-gating: leaf mastery now flows through `isLeafMastered`,
+	// which decomposes per-kind gates and applies the credential's
+	// CertApplicability mapping (instructor / ATP tighten K to recall +
+	// scenario; everything else keeps recall-only K). The richer state
+	// surfaces missingKinds + byEvidenceKind so the cert dashboard can show
+	// "you have recall down but need a scenario" without re-walking.
+	const cert = credentialSlugToCertApplicability(cred.slug);
+	const leafStateMap = await getLeafMasteryStateMap(userId, leafIds, cert, db);
 
 	// Climb to area level. The walker indexes by id (Map lookup) rather than
 	// scanning the `nodes` array per ancestor step -- scaling matters for
@@ -402,23 +386,31 @@ export async function getCredentialMastery(
 			totalLeaves: 0,
 			coveredLeaves: 0,
 			masteredLeaves: 0,
+			byEvidenceKind: {},
 		});
 	}
 
 	let totalLeaves = 0;
 	let coveredLeaves = 0;
 	let masteredLeaves = 0;
-	for (const [leafId, state] of leafState) {
+	const credentialByKind: Partial<Record<AssessmentMethod, { required: number; passing: number }>> = {};
+
+	for (const leafId of leafIds) {
+		const state = leafStateMap.get(leafId);
+		const leaf = state ?? defaultLeafState(leafId);
 		totalLeaves += 1;
-		if (state.covered) coveredLeaves += 1;
-		if (state.mastered) masteredLeaves += 1;
+		if (leaf.covered) coveredLeaves += 1;
+		if (leaf.mastered) masteredLeaves += 1;
+		bumpByKind(credentialByKind, leaf);
+
 		const areaId = ancestorAreaId(leafId);
 		if (areaId === null) continue;
 		const area = areaRollup.get(areaId);
 		if (area === undefined) continue;
 		area.totalLeaves += 1;
-		if (state.covered) area.coveredLeaves += 1;
-		if (state.mastered) area.masteredLeaves += 1;
+		if (leaf.covered) area.coveredLeaves += 1;
+		if (leaf.mastered) area.masteredLeaves += 1;
+		bumpByKind(area.byEvidenceKind, leaf);
 	}
 
 	return {
@@ -428,42 +420,34 @@ export async function getCredentialMastery(
 		totalLeaves,
 		coveredLeaves,
 		masteredLeaves,
+		byEvidenceKind: credentialByKind,
 		areas: [...areaRollup.values()].sort((a, b) => a.areaCode.localeCompare(b.areaCode)),
 	};
 }
 
-interface NodeMasterySnapshot {
-	mastered: boolean;
-	touched: boolean;
+function defaultLeafState(leafId: string): LeafMasteryState {
+	return {
+		leafId,
+		mastered: false,
+		covered: false,
+		requiredKinds: [],
+		byEvidenceKind: {},
+		missingKinds: [],
+	};
 }
 
-/**
- * Pull per-node mastery flags for an arbitrary set of node ids in one
- * round-trip. Returns a map keyed on node id.
- *
- * Reuses the same dual-gate definition as
- * `libs/bc/study/src/knowledge.ts:getNodeMasteryMap`. Inlined here (not
- * imported) because the credential rollup needs only the boolean flags --
- * importing the larger snapshot type would surface unrelated fields and
- * couple BC modules unnecessarily.
- */
-async function fetchKnowledgeNodeMastery(
-	userId: string,
-	nodeIds: readonly string[],
-	db: Db,
-): Promise<Map<string, NodeMasterySnapshot>> {
-	const out = new Map<string, NodeMasterySnapshot>();
-	if (nodeIds.length === 0) return out;
-	const ids = [...nodeIds];
-
-	// We delegate to knowledge.ts's existing batched query via a re-import
-	// at runtime; that module owns the gate math.
-	const { getNodeMasteryMap } = await import('./knowledge');
-	const snapshots = await getNodeMasteryMap(userId, ids, db);
-	for (const [nodeId, snap] of snapshots) {
-		out.set(nodeId, { mastered: snap.mastered, touched: snap.inProgress || snap.mastered });
+function bumpByKind(
+	target: Partial<Record<AssessmentMethod, { required: number; passing: number }>>,
+	leaf: LeafMasteryState,
+): void {
+	for (const kind of leaf.requiredKinds) {
+		const existing = target[kind] ?? { required: 0, passing: 0 };
+		existing.required += 1;
+		if (leaf.byEvidenceKind[kind] === NODE_MASTERY_GATES.PASS) {
+			existing.passing += 1;
+		}
+		target[kind] = existing;
 	}
-	return out;
 }
 
 // ---------------------------------------------------------------------------
