@@ -158,6 +158,27 @@ export {
 	UnbanUserInputSchema,
 } from './user-write-schemas';
 export {
+	type AdminAuthApi,
+	type AdminAuthBundle,
+	assertNotLastAdmin,
+	assertSelfTargetAllowed,
+	type BanUserActionInput,
+	BetterAuthApiError,
+	banUserAction,
+	expiresAtToBanExpiresIn,
+	LastAdminError,
+	type RevokeAllUserSessionsInput,
+	type RevokeUserSessionInput,
+	revokeAllUserSessions,
+	revokeUserSession,
+	SelfTargetForbiddenError,
+	type SelfTargetGuardOp,
+	type SetUserRoleInput,
+	setUserRole,
+	type UnbanUserActionInput,
+	unbanUserAction,
+} from './user-writes';
+export {
 	buildUserSearchWhere,
 	countUserSessions,
 	countUsersByRole,
