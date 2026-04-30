@@ -15,7 +15,7 @@ One table, `study.content_citations`, connects any content row (card / rep / sce
 
 ## Data model
 
-Schema: [libs/bc/study/src/citations/schema.ts](../../libs/bc/study/src/citations/schema.ts). Migration: [drizzle/0004_content_citations.sql](../../drizzle/0004_content_citations.sql).
+Schema: [libs/bc/study/src/citations/schema.ts](../../libs/bc/study/src/citations/schema.ts). Table + indexes folded into the consolidated [drizzle/0000_initial.sql](../../drizzle/0000_initial.sql) (search `study"."content_citations`).
 
 Source x target matrix (from [libs/constants/src/citations.ts](../../libs/constants/src/citations.ts)):
 
@@ -123,7 +123,7 @@ export const load: PageServerLoad = async (event) => {
 
 ### 2. Server actions -- add + remove
 
-Catch each typed error and map to the matching `fail` / `error` per the table above. Copy the shape directly from [memory/[id]/+page.server.ts:156](../../apps/study/src/routes/(app)/memory/[id]/+page.server.ts) -- the `addCitation` and `removeCitation` actions there are the canonical pattern.
+Catch each typed error and map to the matching `fail` / `error` per the table above. Copy the shape directly from [memory/[id]/+page.server.ts:154](../../apps/study/src/routes/(app)/memory/[id]/+page.server.ts) -- the `addCitation` and `removeCitation` actions there are the canonical pattern.
 
 Two non-obvious rules:
 
@@ -181,7 +181,7 @@ async function handleSelect(s: CitationPickerSelection): Promise<void> {
 
 ### 4. Cited-by panel on a target page
 
-For a new target type's detail page, mirror [knowledge/[slug]/+page.server.ts:87](../../apps/study/src/routes/(app)/knowledge/%5Bslug%5D/+page.server.ts) or [references/[id]/+page.server.ts](../../apps/study/src/routes/(app)/references/%5Bid%5D/+page.server.ts).
+For a new target type's detail page, mirror [knowledge/[slug]/+page.server.ts:105](../../apps/study/src/routes/(app)/knowledge/%5Bslug%5D/+page.server.ts) or [references/[id]/+page.server.ts:36](../../apps/study/src/routes/(app)/references/%5Bid%5D/+page.server.ts).
 
 ```typescript
 const citedByRows = await getCitedBy(CITATION_TARGET_TYPES.KNOWLEDGE_NODE, node.id);
@@ -207,7 +207,7 @@ All citation vocabulary lives in [libs/constants/src/citations.ts](../../libs/co
 - `CITATION_CONTEXT_MAX_LENGTH` (500)
 - `EXTERNAL_REF_TARGET_DELIMITER` (`|`)
 
-The picker route lives at `ROUTES.API_CITATIONS_SEARCH` in [libs/constants/src/routes.ts:82](../../libs/constants/src/routes.ts).
+The picker route lives at `ROUTES.API_CITATIONS_SEARCH` in [libs/constants/src/routes.ts:109](../../libs/constants/src/routes.ts).
 
 ## Testing
 
@@ -217,6 +217,6 @@ The picker has a DOM contract test in [libs/ui/\_\_tests\_\_/CitationPicker.svel
 
 ## Open items
 
-- **Knowledge-node source ownership is open in v1.** `verifySourceOwnership` for `CITATION_SOURCE_TYPES.NODE` accepts any authenticated user (see [citations.ts:164](../../libs/bc/study/src/citations/citations.ts)). Per-node ACLs land with the node-editor work.
+- **Knowledge-node source ownership is open in v1.** `verifySourceOwnership` for `CITATION_SOURCE_TYPES.NODE` accepts any authenticated user (see [citations.ts:165](../../libs/bc/study/src/citations/citations.ts)). Per-node ACLs land with the node-editor work.
 - **No public citation discovery.** The "most-cited regulations" / leaderboard surfaces are explicitly out of scope per [content-citations/spec.md](../work-packages/content-citations/spec.md). Add as a follow-up WP if coverage data shows we need it.
 - **No auto-backfill.** Existing card bodies are not regex-scanned for `14 CFR X.Y` patterns. Manual citation only; out of scope per the same spec.
