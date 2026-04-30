@@ -34,10 +34,22 @@ export class DeckSpecDecodeError extends Error {
 // ---------- Canonical JSON ----------
 
 /**
+ * Keys whose array value is treated as unordered for canonicalisation. Arrays
+ * at these keys are sorted ascending (string-comparator) so two inputs with
+ * the same set of values land on the same canonical JSON. Any other array
+ * keeps its input order. Future filter dimensions opt in by adding the key
+ * here -- the canonicaliser does not grow new branches.
+ *
+ * The match is on the immediate parent key name, so a field literally named
+ * `tags` (or any other key listed) anywhere in the tree inherits the rule.
+ */
+const UNORDERED_ARRAY_KEYS: ReadonlySet<string> = new Set(['tags']);
+
+/**
  * Serialize a deck spec to canonical JSON. Properties are emitted in
- * alphabetical key order, `undefined` fields are dropped, and the only
- * unordered array we currently support (`tags`) is sorted ascending so two
- * inputs with the same set of tags produce the same string.
+ * alphabetical key order, `undefined` fields are dropped, and arrays whose
+ * key is in {@link UNORDERED_ARRAY_KEYS} are sorted ascending so two inputs
+ * with the same set of values produce the same string.
  *
  * Top-level `domain` is normalized so the empty string collapses to `null`
  * (the schema's "all domains" sentinel). Without this, two specs that
@@ -49,20 +61,15 @@ export class DeckSpecDecodeError extends Error {
  * only required `domain`). This walker handles arbitrary nested objects /
  * arrays so future filter dimensions added to the spec land canonically
  * without code changes here.
- *
- * NOTE: the `tags`-is-unordered rule is keyed on the immediate parent key
- * name, so any future field literally named `tags` anywhere in the tree
- * inherits the sort. Document this constraint when adding new dimensions.
  */
 function canonicalize(value: unknown, path: readonly string[] = []): unknown {
 	if (value === null) return null;
 	if (Array.isArray(value)) {
 		const items = value.map((item, idx) => canonicalize(item, [...path, String(idx)]));
-		// `tags` is the one array whose ordering is not semantic. Other arrays
-		// (e.g. an explicit ordered card_id_list, were one to land here) keep
-		// their input order.
+		// Arrays at unordered keys (see UNORDERED_ARRAY_KEYS) sort ascending;
+		// every other array keeps its input order.
 		const last = path.at(-1);
-		if (last === 'tags') {
+		if (last !== undefined && UNORDERED_ARRAY_KEYS.has(last)) {
 			return [...items].sort((a, b) => {
 				if (typeof a === 'string' && typeof b === 'string') return a < b ? -1 : a > b ? 1 : 0;
 				return 0;
