@@ -2,7 +2,7 @@
 
 Tracks the implementation of [ADR 019 -- Reference Identifier System](../../decisions/019-reference-identifier-system/decision.md) across all 10 phases. One row per phase. Updated as each phase ships.
 
-Status as of 2026-04-28: phases 1-9 are shipped on `main` across PRs #240, #241, #246, #247, #249, #250, #251, #252, #260, #261, #266, #268, #276. Phase 10 (irregular corpora) is demand-driven; Lane D shipped the PPL-ASEL ACS slice (#266) but the rest of Phase 10 sits idle until a use case lands.
+Status as of 2026-04-29: every phase is shipped. Phases 1-9 across PRs #240, #241, #246, #247, #249, #250, #251, #252, #260, #261, #266, #268, #276. Phase 10 across PRs #309 (orders + ntsb resolvers), #316 (orders + ntsb seeding), #318 (10 more resolvers: interp/pohs/sectionals/plates/statutes/forms/info/safo/tcds/asrs), #322 (seeding for 11 of 12 corpora; asrs deliberately empty by design). §11 acceptance criteria audited and ticked in PR #319 (13/13 boxes addressed). ADR 019 frontmatter is now `status: accepted`.
 
 Companion to:
 
@@ -31,7 +31,7 @@ Companion to:
 | 7 | reference-aim-ingestion | [WP](../../work-packages/reference-aim-ingestion/) | #252 (Lane B scaffolding), #268 (live PDF pipeline) | ✅ |
 | 8 | reference-ac-ingestion | -- | #261 (Lane C) | ✅ |
 | 9 | reference-lesson-migration | -- | #276 | ✅ |
-| 10 | reference-irregular-corpora | -- | #266 (Lane D -- PPL-ASEL ACS slice) | 🟧 |
+| 10 | reference-irregular-corpora | -- | #266 (ACS PPL-ASEL), #309 + #316 (orders + ntsb), #318 + #322 (10 more corpora + seed) | ✅ |
 
 ## Per-phase notes
 
@@ -175,18 +175,18 @@ Migration inventory:
 
 Bare-prose citation handling: hundreds of `§91.103`-style mentions across all 25 lessons stay as prose. They're typically explanatory or categorical ("the §91.103 family of rules", "Subpart B", "91.155 - 91.159"). Mechanical rewrites would mis-pin or over-link these; promotion to identifiers is editorial.
 
-### Phase 10 -- reference-irregular-corpora 🟧
+### Phase 10 -- reference-irregular-corpora ✅
 
-Per-corpus WPs for everything that doesn't have a clean bulk-ingestion target: NTSB Board orders, Chief Counsel letters, FAA Orders, sectionals, plates, ACS/PTS, FAA forms, InFOs, SAFOs, TCDS, ASRS reports. Each ships its own resolver + bulk-fetch or hand-curated catalog.
+Per-corpus resolvers + manifest seeding for every irregular corpus: NTSB reports, Chief Counsel letters / NTSB Board orders (`interp`), FAA Orders, POHs, sectionals, plates, statutes, FAA forms, InFOs, SAFOs, TCDS, ASRS, plus the ACS/PTS slices already shipped in Lane D (PR #266).
 
-Lane D (PR #266) shipped the first slice: ACS PPL-ASEL end-to-end (1 publication / 12 areas / 61 tasks / 529 elements = 603 entries). Other ACS cert families (FAA-S-ACS-7/8/11/25) parse and skip with explicit reasons until the locator-convention question is closed; remaining ACS slices land when the syllabus surface needs them.
+Shipped:
 
-Status of the rest of Phase 10 corpora: demand-driven. No active WPs. Triggers per corpus:
+- PR #309 -- orders + ntsb first-slice resolvers (locator + URL formula + citation + resolver registration; +61 tests).
+- PR #316 -- orders + ntsb registry seeding (orders manifest with 6 FAA Orders; ntsb scaffolded; smoke tests).
+- PR #318 -- 10 more first-slice resolvers (interp, pohs, sectionals, plates, statutes, forms, info, safo, tcds, asrs); +272 tests; caught + fixed `info`/`safo` missing from `ENUMERATED_CORPORA`.
+- PR #322 -- seeding for 11 corpora (interp/pohs/sectionals/plates/statutes/forms/info/safo/tcds + ntsb populated). asrs deliberately empty: ASRS has 2M+ reports; cherry-picking ACNs is content-curation, populated when authors cite specific reports.
 
-- NTSB Board orders + Chief Counsel letters -- when a lesson cites them and the `unknown:` escape hatch is the blocker.
-- FAA Orders -- when an enforcement-action lesson needs Order 2150.3 or 8900.1 cross-references.
-- Sectionals + plates -- when `apps/spatial/` ships its first map surface.
-- FAA forms / InFOs / SAFOs / TCDS / ASRS -- when a lesson or a hangar surface cites them.
+Total Phase 10 footprint: 12 corpora resolved, 11 seeded, ~390 new tests across the lane.
 
 ## Critical-path observations
 
@@ -212,3 +212,6 @@ Phases 5, 6, 7, 8, 10 can run in parallel after Phase 2 lands -- they each unloc
 | 2026-04-28 | 10 | Lane D landed: ACS corpus PPL-ASEL slice (`libs/sources/src/acs/` adds `derivative-reader.ts`, `ingest.ts`, `smoke.test.ts`). URI shape `airboss-ref:acs/<cert>/<edition>/area-<roman>/task-<letter>/element-<triad><ord>` per ADR 019 §1.2; ingest writes per-task body markdown to `<repo>/acs/<cert>/<edition>/area-<roman>/task-<letter>.md` with element bodies sliced out by code (`PA.I.A.K1`) on resolve. Live ingest produced 1 publication (`ppl-asel/faa-s-acs-6c`) + 12 areas + 61 tasks + 529 elements = 603 entries; promoted under `phase-9-acs-ingestion`. Other ACS cert families (FAA-S-ACS-7/8/11/25) parse and skip with explicit reasons until Open Question 7 (final ACS locator convention) resolves or a sibling lane wires them in. Wired through `bun run sources register acs`. Smoke tests cover ACS task + ACS element + cross-corpus (acs + regs in one lesson). |
 | 2026-04-28 | 9 | Phase 9 lesson migration shipped (this PR). New `scripts/migrate-lessons.ts` rewrites eCFR-URL Markdown links to `airboss-ref:regs/...` URIs pinned to the lesson's most recent commit year; bare-prose section citations stay as prose per ADR 019 §9. New `libs/sources/src/bootstrap.ts` hydrates the runtime `regs` registry from on-disk `manifest.json` + `sections.json` (synthesizes Part-level entries, registers editions, atomic-batch promotes to `accepted` under `phase-9-bootstrap`); wired into `validateReferences` so migrated identifiers resolve cleanly without an explicit ingest step at every check. Inventory: 3 identifiers migrated across 3 lessons (Week 1: title-14-shape, citation, companion-documents); 4 catalog-index URLs (Title 14 root) skipped with explicit reasons; 25 lessons scanned. `bun run airboss-ref` post-migration: 25 lessons / 3 identifiers / 0 findings. |
 | 2026-04-28 | -- | Loose-ends sweep: rollout tracker refreshed against shipped PRs. Phases 4 / 5 / 6 / 7 / 9 flipped to ✅ (all merged on main); Phase 10 marked 🟧 with concrete per-corpus triggers; Phase 8 already ✅. PR refs added (#260, #266, #268, #276). |
+| 2026-04-29 | 10 | Phase 10 closed. PR #309 (orders + ntsb resolvers), #316 (orders + ntsb seeding), #318 (10 more resolvers), #322 (seeding for 11 corpora; asrs deliberately empty). 12 corpora resolved, 11 seeded, ~390 new tests. Phase flipped 🟧 → ✅. |
+| 2026-04-29 | -- | §11 acceptance criteria audited (PR #319): 11 boxes already met, 2 fixed (§1.2 corpus examples, STORAGE.md tier expansion), 0 deferred. ADR 019 frontmatter `status: accepted`. |
+| 2026-04-29 | 5 | Phase 5 `tasks.md` reconciled with live code (PR #320). Implementation was already on main from PR #250; this flipped 13 B-task checkboxes + 2 C-task checkboxes to `[x]`. |

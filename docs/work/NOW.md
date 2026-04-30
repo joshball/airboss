@@ -1,6 +1,6 @@
 # Now
 
-Single entry point for "what should I work on?" in airboss. Refresh date: 2026-04-29 (late).
+Single entry point for "what should I work on?" in airboss. Refresh date: 2026-04-29 (late, ADR 019 phase 10 fully shipped + §11 acceptance ticked).
 
 ## Just shipped (2026-04-29 -- chapter-source-ingestion WP closed, ADR 022)
 
@@ -198,7 +198,8 @@ Original MVP build order (Steps 1-6) shipped between PRs #1-#16. The active buil
 | 7    | Scale knowledge graph to ~500 nodes                      | Ongoing (16 sim-mapped nodes via #232; cumulative count not centrally tracked)       |
 | 8    | Manual test passes (user zero) for the six MVP features  | Pending                                                                              |
 | ---- | ADR 019 phases 1-9 (validator -> ingest -> migration)    | Shipped (PRs #241, #246, #247, #249, #250, #251, #252, #260, #261, #266, #268, #276) |
-| ---- | ADR 019 phase 10 -- irregular corpora (NTSB, CC, etc.)   | Demand-driven; ACS PPL-ASEL slice shipped (#266); rest deferred per trigger          |
+| ---- | ADR 019 phase 10 -- irregular corpora (NTSB, CC, etc.)   | Shipped (PRs #309, #316, #318, #322 -- 12 corpora resolved + seeded; asrs empty)     |
+| ---- | ADR 019 §11 acceptance criteria audit                    | Shipped (PR #319 -- 13/13 boxes addressed)                                           |
 | ---- | Cert-syllabus + goal composer WP (data layer)            | Shipped (PRs #248, #254, #264, #270, #274)                                           |
 | ---- | Cert-syllabus surface work (dashboard + lens + composer) | Shipped (PRs #321, #323, #324 -- ADR 016 phases 7-9 complete)                        |
 | ---- | FAR navigation course Weeks 3-10                         | Pending (Weeks 1+2 authored; airboss-ref: round-trip clean)                          |
@@ -229,7 +230,7 @@ The original MVP roadmap is done in code; the human-side work and the post-MVP b
 
 - **`review_status` flips** on each work package's `review.md` -- agent-controlled field that hasn't been flipped to `done` on the newer packages.
 - **`wip/2026-04-25-safety-net` branch** -- check what's in it; keep or delete.
-- **`.claude/worktrees/agent-*` paths** -- belong to other agents, all locked to live PIDs. Will release naturally as agents finish; run `/audit-worktrees` if you want the inventory.
+- **`.claude/worktrees/agent-*` paths** -- locked to live PIDs from other agents. Will release naturally as agents finish; run `/audit-worktrees` for the current inventory.
 
 ## Links
 
