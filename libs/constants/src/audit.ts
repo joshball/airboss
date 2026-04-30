@@ -37,3 +37,50 @@ export type AuditTarget = (typeof AUDIT_TARGETS)[keyof typeof AUDIT_TARGETS];
 
 /** Allow-list values used by the DB CHECK constraint on `audit_log.target_type`. */
 export const AUDIT_TARGET_VALUES: readonly AuditTarget[] = Object.values(AUDIT_TARGETS);
+
+/**
+ * Preset time-window options for the hangar audit explorer filter bar.
+ *
+ *   - `1h` / `24h` / `7d` / `30d`: rolling lookback from `now()`.
+ *   - `all`: no time bound.
+ *   - `custom`: caller supplies explicit `from` / `to` ISO datetimes.
+ *
+ * The default applied when no `window` / `from` / `to` query params are
+ * present is {@link AUDIT_WINDOW_DEFAULT}.
+ */
+export const AUDIT_WINDOWS = {
+	HOUR_1: '1h',
+	HOUR_24: '24h',
+	DAY_7: '7d',
+	DAY_30: '30d',
+	ALL: 'all',
+	CUSTOM: 'custom',
+} as const;
+
+export type AuditWindow = (typeof AUDIT_WINDOWS)[keyof typeof AUDIT_WINDOWS];
+
+export const AUDIT_WINDOW_VALUES: readonly AuditWindow[] = Object.values(AUDIT_WINDOWS);
+
+/** Default time window when no explicit `window` / `from` / `to` is supplied. */
+export const AUDIT_WINDOW_DEFAULT: AuditWindow = AUDIT_WINDOWS.HOUR_24;
+
+/** Human-readable labels for the chip group in the filter bar. */
+export const AUDIT_WINDOW_LABELS: Record<AuditWindow, string> = {
+	[AUDIT_WINDOWS.HOUR_1]: '1h',
+	[AUDIT_WINDOWS.HOUR_24]: '24h',
+	[AUDIT_WINDOWS.DAY_7]: '7d',
+	[AUDIT_WINDOWS.DAY_30]: '30d',
+	[AUDIT_WINDOWS.ALL]: 'all',
+	[AUDIT_WINDOWS.CUSTOM]: 'custom',
+};
+
+/**
+ * Default page size for `listAuditEntries`. Matches the spec's "default 50".
+ */
+export const AUDIT_LIST_DEFAULT_LIMIT = 50;
+
+/** Hard cap on `listAuditEntries` page size. Spec section "In Scope" #6. */
+export const AUDIT_LIST_HARD_CAP = 200;
+
+/** Cap on `searchActorIds` typeahead results. */
+export const AUDIT_ACTOR_SEARCH_LIMIT = 20;

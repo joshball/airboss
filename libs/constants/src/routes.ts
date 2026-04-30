@@ -90,6 +90,24 @@ export const QUERY_PARAMS = {
 	NAME: 'name',
 	/** Render-mode override on /references dev page. */
 	MODE: 'mode',
+
+	// Hangar /admin/audit filters (audit-explorer WP).
+	/** Resolved actor user id (hangar audit explorer). */
+	AUDIT_ACTOR: 'actor',
+	/** `audit_log.target_type` exact match. */
+	AUDIT_TARGET_TYPE: 'targetType',
+	/** `audit_log.target_id` exact match. */
+	AUDIT_TARGET_ID: 'targetId',
+	/** `audit_log.op` exact match. */
+	AUDIT_OP: 'op',
+	/** Inclusive lower bound on `audit_log.timestamp` (ISO datetime). */
+	AUDIT_FROM: 'from',
+	/** Inclusive upper bound on `audit_log.timestamp` (ISO datetime). */
+	AUDIT_TO: 'to',
+	/** Time-window preset: one of AUDIT_WINDOW_VALUES. */
+	AUDIT_WINDOW: 'window',
+	/** Cursor pagination token: `${timestampISO}::${id}`. */
+	AUDIT_CURSOR: 'cursor',
 } as const;
 
 export const ROUTES = {
@@ -350,6 +368,10 @@ export const ROUTES = {
 	HANGAR_USER_DETAIL: (id: string) => `/users/${encodeURIComponent(id)}` as const,
 	/** Scaffold-era audit heartbeat demo, kept as an admin diagnostic. */
 	HANGAR_ADMIN_AUDIT_PING: '/admin/audit-ping',
+	/** Cross-cutting audit explorer (audit-explorer WP). ADMIN-only. */
+	HANGAR_ADMIN_AUDIT: '/admin/audit',
+	/** Detail view for one `audit_log` row. ADMIN-only. */
+	HANGAR_ADMIN_AUDIT_DETAIL: (id: string) => `/admin/audit/${encodeURIComponent(id)}` as const,
 	/** Form-action id for the sync-all-pending button. */
 	HANGAR_SYNC_ACTION: '?/syncAll',
 } as const;
