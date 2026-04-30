@@ -64,12 +64,14 @@ export const QUERY_PARAMS = {
 	/** Group-by bucket for the Browse list (one of `BROWSE_GROUP_BY_VALUES`). */
 	GROUP_BY: 'group',
 	/**
-	 * Handbook edition pin. When present on `/handbooks/[doc]/...` routes the
-	 * loader resolves the named edition instead of the latest non-superseded
-	 * one. Used by the "newer edition available" banner so a learner can keep
+	 * Edition pin. When present on `/library/[doc]/...` routes the loader
+	 * resolves the named edition instead of the latest non-superseded one.
+	 * Used by the "newer edition available" banner so a learner can keep
 	 * reading the older edition without losing their citation context.
 	 */
 	EDITION: 'edition',
+	/** Library index state filter (`all` | `in-app` | `external`). */
+	LIBRARY_STATE: 'state',
 
 	// Targeted, per-route keys (added 2026-04-27 to satisfy the no-magic-string rule).
 	/** Post-login redirect target. */
@@ -191,28 +193,56 @@ export const ROUTES = {
 	 */
 	REFERENCE_DETAIL: (id: string) => `/references/${encodeURIComponent(id)}` as const,
 
-	// Study -- Handbooks (FAA handbook reader; ingested per-edition markdown +
-	// figures committed to `handbooks/<doc>/<edition>/`). Sibling surface to
+	// Study -- Library (the user-facing reference browse + reader surface).
+	// Hosts the in-app handbook reader (per-edition markdown + figures committed
+	// to `handbooks/<doc>/<edition>/`) plus the subject-grouped index over every
+	// `study.reference` row, regardless of kind. Sibling surface to
 	// `/glossary` and `/references`: a reference-shaped read view that other
 	// surfaces (knowledge nodes, citations) link into. See
 	// `docs/work-packages/handbook-ingestion-and-reader/spec.md` and
 	// `docs/decisions/016-cert-syllabus-goal-model/decision.md`.
-	HANDBOOKS: '/handbooks',
-	HANDBOOK: (doc: string) => `/handbooks/${encodeURIComponent(doc)}` as const,
-	HANDBOOK_CHAPTER: (doc: string, chapter: number | string) =>
-		`/handbooks/${encodeURIComponent(doc)}/${encodeURIComponent(String(chapter))}` as const,
-	HANDBOOK_SECTION: (doc: string, chapter: number | string, section: number | string) =>
-		`/handbooks/${encodeURIComponent(doc)}/${encodeURIComponent(String(chapter))}/${encodeURIComponent(String(section))}` as const,
+	LIBRARY: '/library',
+	LIBRARY_DOC: (doc: string) => `/library/${encodeURIComponent(doc)}` as const,
+	LIBRARY_CHAPTER: (doc: string, chapter: number | string) =>
+		`/library/${encodeURIComponent(doc)}/${encodeURIComponent(String(chapter))}` as const,
+	LIBRARY_SECTION: (doc: string, chapter: number | string, section: number | string) =>
+		`/library/${encodeURIComponent(doc)}/${encodeURIComponent(String(chapter))}/${encodeURIComponent(String(section))}` as const,
 	/**
 	 * Edition-pinned section URL. Default reader resolves the latest
 	 * non-superseded edition; this variant keeps a learner on a specific
 	 * edition (e.g. citations on a node that pre-dates a re-ingestion).
 	 */
+	LIBRARY_SECTION_AT_EDITION: (doc: string, chapter: number | string, section: number | string, edition: string) =>
+		`/library/${encodeURIComponent(doc)}/${encodeURIComponent(String(chapter))}/${encodeURIComponent(String(section))}?${QUERY_PARAMS.EDITION}=${encodeURIComponent(edition)}` as const,
+	LIBRARY_AT_EDITION: (doc: string, edition: string) =>
+		`/library/${encodeURIComponent(doc)}?${QUERY_PARAMS.EDITION}=${encodeURIComponent(edition)}` as const,
+	/** POST endpoint for client heartbeat ticks while reading a section. */
+	LIBRARY_SECTION_HEARTBEAT: (doc: string, chapter: number | string, section: number | string) =>
+		`/library/${encodeURIComponent(doc)}/${encodeURIComponent(String(chapter))}/${encodeURIComponent(String(section))}/heartbeat` as const,
+
+	// Legacy `/handbooks` aliases. Kept as constants so external callers
+	// (and the markdown-asset rewrite path in `libs/utils/src/markdown.ts`,
+	// which uses `/handbooks/` literally) don't drift. Internal callers must
+	// migrate to LIBRARY*; the SvelteKit catch-all under
+	// `apps/study/src/routes/(app)/handbooks/` 308-redirects requests to the
+	// new `/library` paths.
+	/** @deprecated use ROUTES.LIBRARY */
+	HANDBOOKS: '/handbooks',
+	/** @deprecated use ROUTES.LIBRARY_DOC */
+	HANDBOOK: (doc: string) => `/handbooks/${encodeURIComponent(doc)}` as const,
+	/** @deprecated use ROUTES.LIBRARY_CHAPTER */
+	HANDBOOK_CHAPTER: (doc: string, chapter: number | string) =>
+		`/handbooks/${encodeURIComponent(doc)}/${encodeURIComponent(String(chapter))}` as const,
+	/** @deprecated use ROUTES.LIBRARY_SECTION */
+	HANDBOOK_SECTION: (doc: string, chapter: number | string, section: number | string) =>
+		`/handbooks/${encodeURIComponent(doc)}/${encodeURIComponent(String(chapter))}/${encodeURIComponent(String(section))}` as const,
+	/** @deprecated use ROUTES.LIBRARY_SECTION_AT_EDITION */
 	HANDBOOK_SECTION_AT_EDITION: (doc: string, chapter: number | string, section: number | string, edition: string) =>
 		`/handbooks/${encodeURIComponent(doc)}/${encodeURIComponent(String(chapter))}/${encodeURIComponent(String(section))}?${QUERY_PARAMS.EDITION}=${encodeURIComponent(edition)}` as const,
+	/** @deprecated use ROUTES.LIBRARY_AT_EDITION */
 	HANDBOOK_AT_EDITION: (doc: string, edition: string) =>
 		`/handbooks/${encodeURIComponent(doc)}?${QUERY_PARAMS.EDITION}=${encodeURIComponent(edition)}` as const,
-	/** POST endpoint for client heartbeat ticks while reading a section. */
+	/** @deprecated use ROUTES.LIBRARY_SECTION_HEARTBEAT */
 	HANDBOOK_SECTION_HEARTBEAT: (doc: string, chapter: number | string, section: number | string) =>
 		`/handbooks/${encodeURIComponent(doc)}/${encodeURIComponent(String(chapter))}/${encodeURIComponent(String(section))}/heartbeat` as const,
 
@@ -402,7 +432,7 @@ export const NAV_LABELS = {
 	REPS: 'Reps',
 	KNOWLEDGE: 'Knowledge',
 	GLOSSARY: 'Glossary',
-	HANDBOOKS: 'Handbooks',
+	LIBRARY: 'Library',
 	CALIBRATION: 'Calibration',
 	HELP: 'Help',
 	HELP_INDEX: 'Help index',
