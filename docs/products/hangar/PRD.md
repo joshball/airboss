@@ -15,24 +15,26 @@ For the why, see [VISION.md](VISION.md). For what's queued next, see [ROADMAP.md
 
 ## Shipped
 
-| Surface             | What it does                                                                                    | Spec                                                                 |
-| ------------------- | ----------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
-| `/` dashboard       | Three tiles -- Content, People, System -- with live counts                                      | --                                                                   |
-| `/sources`          | Reference-document pipeline: register, fetch, extract, diff, validate                           | [hangar-sources-v1](../../work-packages/hangar-sources-v1/spec.md)   |
-| `/sources/[id]`     | Source detail + filesystem browser                                                              | [hangar-sources-v1](../../work-packages/hangar-sources-v1/spec.md)   |
-| `/glossary`         | Term registry: definitions, citations, knowledge-kind taxonomy                                  | [hangar-non-textual](../../work-packages/hangar-non-textual/spec.md) |
-| `/glossary/[id]`    | Term detail + edit                                                                              | [hangar-non-textual](../../work-packages/hangar-non-textual/spec.md) |
-| `/users`            | Read-only user list (ADMIN-only): name, email, role, last seen, banned                          | --                                                                   |
-| `/users/[id]`       | Read-only user detail (ADMIN-only): sessions + audit by actor                                   | --                                                                   |
-| `/jobs`             | Background-job log with 1Hz live polling                                                        | [hangar-registry](../../work-packages/hangar-registry/spec.md)       |
-| `/admin/audit-ping` | Scaffold-era heartbeat -- kept as System -> Audit destination until a real audit explorer lands | [hangar-scaffold](../../work-packages/hangar-scaffold/spec.md)       |
-| Auth gate           | Layout-level `requireRole(AUTHOR                                                                | OPERATOR                                                             |
+| Surface             | What it does                                                                                       | Spec                                                                       |
+| ------------------- | -------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| `/` dashboard       | Three tiles -- Content, People, System -- with live counts                                         | --                                                                         |
+| `/sources`          | Reference-document pipeline: register, fetch, extract, diff, validate                              | [hangar-sources-v1](../../work-packages/hangar-sources-v1/spec.md)         |
+| `/sources/[id]`     | Source detail + filesystem browser                                                                 | [hangar-sources-v1](../../work-packages/hangar-sources-v1/spec.md)         |
+| `/glossary`         | Term registry: definitions, citations, knowledge-kind taxonomy                                     | [hangar-non-textual](../../work-packages/hangar-non-textual/spec.md)       |
+| `/glossary/[id]`    | Term detail + edit                                                                                 | [hangar-non-textual](../../work-packages/hangar-non-textual/spec.md)       |
+| `/users`            | Read-only user list (ADMIN-only): name, email, role, last seen, banned                             | --                                                                         |
+| `/users/[id]`       | Read-only user detail (ADMIN-only): sessions + audit by actor                                      | --                                                                         |
+| `/jobs`             | Background-job log with 1Hz live polling                                                           | [hangar-registry](../../work-packages/hangar-registry/spec.md)             |
+| `/admin/audit-ping` | Scaffold-era heartbeat -- diagnostic only; System -> Audit dashboard tile points at `/admin/audit` | [hangar-scaffold](../../work-packages/hangar-scaffold/spec.md)             |
+| `/admin/audit`      | Cross-cutting audit explorer (ADMIN-only): filter by actor / target / op / time window, paginate   | [hangar-audit-explorer](../../work-packages/hangar-audit-explorer/spec.md) |
+| `/admin/audit/[id]` | Detail view: actor card, side-by-side before/after jsonb panes, metadata, cross-links              | [hangar-audit-explorer](../../work-packages/hangar-audit-explorer/spec.md) |
+| Auth gate           | Layout-level `requireRole(AUTHOR                                                                   | OPERATOR                                                                   |
 
 ## In flight or imminent
 
 | Item                                                          | State       | Notes                                                                                                                    |
 | ------------------------------------------------------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------ |
-| Real audit explorer                                           | Not started | Replaces audit-ping as the System -> Audit destination. Filter by actor / target / op / window.                          |
+| Retire `/admin/audit-ping`                                    | Not started | Cleanup: drop the route + decide on `AUDIT_TARGETS.HANGAR_PING` once a real BC write surface emits its own audit rows.   |
 | `/users` editing (role assignment, ban/unban, session revoke) | Not started | First admin-write surface. Should follow dual-gate pattern: load + every form action `requireRole(ADMIN)`.               |
 | Invite flow                                                   | Not started | Email infra exists in `libs/auth/src/email/`. Onboard: Better Auth invite token, email send, accept route on study side. |
 | Scenarios authoring                                           | Not scoped  | Will follow the scenario tick model from `airboss-firc/libs/engine/`. Stand up only after engine migrates.               |

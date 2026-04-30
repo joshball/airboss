@@ -2,6 +2,10 @@
 
 Single entry point for "what should I work on?" in airboss. Refresh date: 2026-04-30 (FAR navigation course content-complete).
 
+## Just shipped (2026-04-30 -- evidence-kind-gating WP)
+
+- **[evidence-kind-gating](../work-packages/evidence-kind-gating/spec.md) shipped.** Per-cert triad mapping (`TRIAD_EVIDENCE_REQUIREMENTS` keyed by `CertApplicability`) + `requires_teaching` flag on `syllabus_node` + new `mastery.ts` BC primitive (`getNodeEvidenceState`, `isLeafMastered`, `aggregateLeafKindStates`). Rollups in `getCredentialMastery`, `acsLens`, and `domainLens` now decompose mastery per `AssessmentMethod` and surface `missingKinds` so the cert dashboard can render "you have recall down but need a scenario" without re-walking. Hard cutover: existing `mastered: boolean` keeps name + meaning; new fields are additive. Achievable scope shipped: `recall` and `scenario` gates compute against the live schema; `calculation`, `demonstration`, and `teaching` return `not_applicable` until backing data ships (no `card.kind`, no `scenario.assessment_methods`, no `teaching-exercise` SESSION_ITEM_KIND today -- richer partition is a follow-on data WP). YAML element schema now accepts `requires_teaching: true`; CFI ACS-25 transcription stays incremental.
+
 ## Just shipped (2026-04-30 -- FAR navigation course Weeks 3-10 + 2 sibling capstones)
 
 - **FAR navigation course is content-complete.** All 10 weeks authored. All 4 sibling capstone orals authored. Authored across one work package PR (#349, merged) and one content PR (#350, the omnibus). Authoring approach: parallel sub-agents per week, exclusive directory ownership, phased dispatch.
@@ -74,6 +78,7 @@ The week was dominated by the reference identifier system (ADR 019, **phases 1-9
 ## In flight
 
 - *(FAR navigation course Weeks 3-10 and 2 sibling capstones moved to "Just shipped 2026-04-30".)*
+- **[hangar-audit-explorer](../work-packages/hangar-audit-explorer/spec.md) (2026-04-30).** Cross-cutting audit explorer at `/admin/audit` + `/admin/audit/[id]`. Pure read consumer of `audit.audit_log`. New BC reads (`listAuditEntries`, `getAuditEntry`, `searchActorIds`) cursor-paginate / join the actor / typeahead. Filter bar UI (actor, target type/id, op, time-window chips), side-by-side jsonb panes on the detail page. Hangar dashboard's System -> Audit tile retargeted; audit-ping retirement is a separate follow-up cleanup WP. PR open; manual test plan walks Joshua through the surface before flip-to-shipped.
 - **[section-extraction-contract-v2](../work-packages/section-extraction-contract-v2/spec.md) Phase 3 GREENLIT (2026-04-30).** Decision driven by the regenerated compare report against PR #355 artifacts: 485 parent-mismatches and 317 level-mismatches across 17 chapters, 15 of 17 chapters with parent-diff > 10, ch 7 with 86 of 88 TOC entries flagged L1. Systematic TOC over-flattening; LLM nesting consistently matches body text. See [tasks.md Phase 3](../work-packages/section-extraction-contract-v2/tasks.md) for the metric table and full reasoning. Phase 3 implementation is a separate PR following this WP closure.
 
 ## ADR 016 status (post-2026-04-28 ship)

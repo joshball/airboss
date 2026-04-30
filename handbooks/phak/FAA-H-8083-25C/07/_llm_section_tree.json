@@ -1,625 +1,625 @@
 [
-	{
-		"title": "Introduction",
-		"level": 1,
-		"page_anchor": "7-1",
-		"line_offset": 4,
-		"parent_title": null
-	},
-	{
-		"title": "Powerplant",
-		"level": 1,
-		"page_anchor": "7-1",
-		"line_offset": 9,
-		"parent_title": null
-	},
-	{
-		"title": "Reciprocating Engines",
-		"level": 2,
-		"page_anchor": "7-2",
-		"line_offset": 22,
-		"parent_title": "Powerplant"
-	},
-	{
-		"title": "Propeller",
-		"level": 1,
-		"page_anchor": "7-4",
-		"line_offset": 216,
-		"parent_title": null
-	},
-	{
-		"title": "Fixed-Pitch Propeller",
-		"level": 2,
-		"page_anchor": "7-5",
-		"line_offset": 424,
-		"parent_title": "Propeller"
-	},
-	{
-		"title": "Adjustable-Pitch Propeller",
-		"level": 2,
-		"page_anchor": "7-6",
-		"line_offset": 498,
-		"parent_title": "Propeller"
-	},
-	{
-		"title": "Propeller Overspeed in Piston Engine Aircraft",
-		"level": 2,
-		"page_anchor": "7-7",
-		"line_offset": 608,
-		"parent_title": "Propeller"
-	},
-	{
-		"title": "Induction Systems",
-		"level": 1,
-		"page_anchor": "7-7",
-		"line_offset": 657,
-		"parent_title": null
-	},
-	{
-		"title": "Carburetor Systems",
-		"level": 2,
-		"page_anchor": "7-8",
-		"line_offset": 728,
-		"parent_title": "Induction Systems"
-	},
-	{
-		"title": "Carburetor Icing",
-		"level": 2,
-		"page_anchor": "7-9",
-		"line_offset": 780,
-		"parent_title": "Induction Systems"
-	},
-	{
-		"title": "Mixture Control",
-		"level": 2,
-		"page_anchor": "7-9",
-		"line_offset": 819,
-		"parent_title": "Induction Systems"
-	},
-	{
-		"title": "Carburetor Heat",
-		"level": 2,
-		"page_anchor": "7-10",
-		"line_offset": 937,
-		"parent_title": "Induction Systems"
-	},
-	{
-		"title": "Carburetor Air Temperature Gauge",
-		"level": 2,
-		"page_anchor": "7-11",
-		"line_offset": 965,
-		"parent_title": "Induction Systems"
-	},
-	{
-		"title": "Outside Air Temperature Gauge",
-		"level": 2,
-		"page_anchor": "7-11",
-		"line_offset": 982,
-		"parent_title": "Induction Systems"
-	},
-	{
-		"title": "Fuel Injection Systems",
-		"level": 2,
-		"page_anchor": "7-11",
-		"line_offset": 988,
-		"parent_title": "Induction Systems"
-	},
-	{
-		"title": "Superchargers and Turbosuperchargers",
-		"level": 1,
-		"page_anchor": "7-12",
-		"line_offset": 1042,
-		"parent_title": null
-	},
-	{
-		"title": "Superchargers",
-		"level": 2,
-		"page_anchor": "7-12",
-		"line_offset": 1071,
-		"parent_title": "Superchargers and Turbosuperchargers"
-	},
-	{
-		"title": "Turbosuperchargers",
-		"level": 2,
-		"page_anchor": "7-13",
-		"line_offset": 1154,
-		"parent_title": "Superchargers and Turbosuperchargers"
-	},
-	{
-		"title": "System Operation",
-		"level": 3,
-		"page_anchor": "7-14",
-		"line_offset": 1236,
-		"parent_title": "Turbosuperchargers"
-	},
-	{
-		"title": "High Altitude Performance",
-		"level": 3,
-		"page_anchor": "7-14",
-		"line_offset": 1278,
-		"parent_title": "Turbosuperchargers"
-	},
-	{
-		"title": "Ignition System",
-		"level": 1,
-		"page_anchor": "7-15",
-		"line_offset": 1304,
-		"parent_title": null
-	},
-	{
-		"title": "Oil Systems",
-		"level": 1,
-		"page_anchor": "7-16",
-		"line_offset": 1404,
-		"parent_title": null
-	},
-	{
-		"title": "Engine Cooling Systems",
-		"level": 1,
-		"page_anchor": "7-17",
-		"line_offset": 1472,
-		"parent_title": null
-	},
-	{
-		"title": "Exhaust Systems",
-		"level": 1,
-		"page_anchor": "7-18",
-		"line_offset": 1537,
-		"parent_title": null
-	},
-	{
-		"title": "Starting System",
-		"level": 1,
-		"page_anchor": "7-18",
-		"line_offset": 1568,
-		"parent_title": null
-	},
-	{
-		"title": "Combustion",
-		"level": 1,
-		"page_anchor": "7-18",
-		"line_offset": 1599,
-		"parent_title": null
-	},
-	{
-		"title": "Full Authority Digital Engine Control (FADEC)",
-		"level": 1,
-		"page_anchor": "7-20",
-		"line_offset": 1709,
-		"parent_title": null
-	},
-	{
-		"title": "Turbine Engines",
-		"level": 1,
-		"page_anchor": "7-20",
-		"line_offset": 1750,
-		"parent_title": null
-	},
-	{
-		"title": "Types of Turbine Engines",
-		"level": 2,
-		"page_anchor": "7-20",
-		"line_offset": 1765,
-		"parent_title": "Turbine Engines"
-	},
-	{
-		"title": "Turbojet",
-		"level": 3,
-		"page_anchor": "7-20",
-		"line_offset": 1780,
-		"parent_title": "Types of Turbine Engines"
-	},
-	{
-		"title": "Turboprop",
-		"level": 3,
-		"page_anchor": "7-21",
-		"line_offset": 1814,
-		"parent_title": "Types of Turbine Engines"
-	},
-	{
-		"title": "Turbofan",
-		"level": 3,
-		"page_anchor": "7-21",
-		"line_offset": 1829,
-		"parent_title": "Types of Turbine Engines"
-	},
-	{
-		"title": "Turboshaft",
-		"level": 3,
-		"page_anchor": "7-21",
-		"line_offset": 1845,
-		"parent_title": "Types of Turbine Engines"
-	},
-	{
-		"title": "Turbine Engine Instruments",
-		"level": 2,
-		"page_anchor": "7-22",
-		"line_offset": 1876,
-		"parent_title": "Turbine Engines"
-	},
-	{
-		"title": "Engine Pressure Ratio (EPR)",
-		"level": 3,
-		"page_anchor": "7-22",
-		"line_offset": 1886,
-		"parent_title": "Turbine Engine Instruments"
-	},
-	{
-		"title": "Exhaust Gas Temperature (EGT)",
-		"level": 3,
-		"page_anchor": "7-22",
-		"line_offset": 1898,
-		"parent_title": "Turbine Engine Instruments"
-	},
-	{
-		"title": "Torquemeter",
-		"level": 3,
-		"page_anchor": "7-22",
-		"line_offset": 1912,
-		"parent_title": "Turbine Engine Instruments"
-	},
-	{
-		"title": "N1 Indicator",
-		"level": 3,
-		"page_anchor": "7-23",
-		"line_offset": 1928,
-		"parent_title": "Turbine Engine Instruments"
-	},
-	{
-		"title": "N2 Indicator",
-		"level": 3,
-		"page_anchor": "7-23",
-		"line_offset": 1935,
-		"parent_title": "Turbine Engine Instruments"
-	},
-	{
-		"title": "Turbine Engine Operational Considerations",
-		"level": 2,
-		"page_anchor": "7-23",
-		"line_offset": 1941,
-		"parent_title": "Turbine Engines"
-	},
-	{
-		"title": "Engine Temperature Limitations",
-		"level": 3,
-		"page_anchor": "7-23",
-		"line_offset": 1947,
-		"parent_title": "Turbine Engine Operational Considerations"
-	},
-	{
-		"title": "Thrust Variations",
-		"level": 3,
-		"page_anchor": "7-23",
-		"line_offset": 1951,
-		"parent_title": "Turbine Engine Operational Considerations"
-	},
-	{
-		"title": "Foreign Object Damage (FOD)",
-		"level": 3,
-		"page_anchor": "7-23",
-		"line_offset": 1960,
-		"parent_title": "Turbine Engine Operational Considerations"
-	},
-	{
-		"title": "Turbine Engine Hot/Hung Start",
-		"level": 3,
-		"page_anchor": "7-23",
-		"line_offset": 1976,
-		"parent_title": "Turbine Engine Operational Considerations"
-	},
-	{
-		"title": "Compressor Stalls",
-		"level": 3,
-		"page_anchor": "7-23",
-		"line_offset": 1986,
-		"parent_title": "Turbine Engine Operational Considerations"
-	},
-	{
-		"title": "Flameout",
-		"level": 3,
-		"page_anchor": "7-24",
-		"line_offset": 2029,
-		"parent_title": "Turbine Engine Operational Considerations"
-	},
-	{
-		"title": "Performance Comparison",
-		"level": 2,
-		"page_anchor": "7-24",
-		"line_offset": 2059,
-		"parent_title": "Turbine Engines"
-	},
-	{
-		"title": "Airframe Systems",
-		"level": 1,
-		"page_anchor": "7-25",
-		"line_offset": 2139,
-		"parent_title": null
-	},
-	{
-		"title": "Fuel Systems",
-		"level": 2,
-		"page_anchor": "7-25",
-		"line_offset": 2142,
-		"parent_title": "Airframe Systems"
-	},
-	{
-		"title": "Gravity-Feed System",
-		"level": 3,
-		"page_anchor": "7-25",
-		"line_offset": 2149,
-		"parent_title": "Fuel Systems"
-	},
-	{
-		"title": "Fuel-Pump System",
-		"level": 3,
-		"page_anchor": "7-25",
-		"line_offset": 2159,
-		"parent_title": "Fuel Systems"
-	},
-	{
-		"title": "Fuel Primer",
-		"level": 3,
-		"page_anchor": "7-25",
-		"line_offset": 2167,
-		"parent_title": "Fuel Systems"
-	},
-	{
-		"title": "Fuel Tanks",
-		"level": 3,
-		"page_anchor": "7-25",
-		"line_offset": 2179,
-		"parent_title": "Fuel Systems"
-	},
-	{
-		"title": "Fuel Gauges",
-		"level": 3,
-		"page_anchor": "7-26",
-		"line_offset": 2275,
-		"parent_title": "Fuel Systems"
-	},
-	{
-		"title": "Fuel Selectors",
-		"level": 3,
-		"page_anchor": "7-26",
-		"line_offset": 2289,
-		"parent_title": "Fuel Systems"
-	},
-	{
-		"title": "Fuel Strainers, Sumps, and Drains",
-		"level": 3,
-		"page_anchor": "7-27",
-		"line_offset": 2333,
-		"parent_title": "Fuel Systems"
-	},
-	{
-		"title": "Fuel Grades",
-		"level": 3,
-		"page_anchor": "7-27",
-		"line_offset": 2354,
-		"parent_title": "Fuel Systems"
-	},
-	{
-		"title": "Fuel Contamination",
-		"level": 3,
-		"page_anchor": "7-27",
-		"line_offset": 2400,
-		"parent_title": "Fuel Systems"
-	},
-	{
-		"title": "Fuel System Icing",
-		"level": 3,
-		"page_anchor": "7-28",
-		"line_offset": 2449,
-		"parent_title": "Fuel Systems"
-	},
-	{
-		"title": "Prevention Procedures",
-		"level": 3,
-		"page_anchor": "7-28",
-		"line_offset": 2497,
-		"parent_title": "Fuel Systems"
-	},
-	{
-		"title": "Refueling Procedures",
-		"level": 3,
-		"page_anchor": "7-29",
-		"line_offset": 2516,
-		"parent_title": "Fuel Systems"
-	},
-	{
-		"title": "Heating System",
-		"level": 2,
-		"page_anchor": "7-29",
-		"line_offset": 2548,
-		"parent_title": "Airframe Systems"
-	},
-	{
-		"title": "Fuel Fired Heaters",
-		"level": 3,
-		"page_anchor": "7-29",
-		"line_offset": 2556,
-		"parent_title": "Heating System"
-	},
-	{
-		"title": "Exhaust Heating Systems",
-		"level": 3,
-		"page_anchor": "7-29",
-		"line_offset": 2579,
-		"parent_title": "Heating System"
-	},
-	{
-		"title": "Combustion Heater Systems",
-		"level": 3,
-		"page_anchor": "7-29",
-		"line_offset": 2594,
-		"parent_title": "Heating System"
-	},
-	{
-		"title": "Bleed Air Heating Systems",
-		"level": 3,
-		"page_anchor": "7-30",
-		"line_offset": 2643,
-		"parent_title": "Heating System"
-	},
-	{
-		"title": "Electrical System",
-		"level": 2,
-		"page_anchor": "7-30",
-		"line_offset": 2655,
-		"parent_title": "Airframe Systems"
-	},
-	{
-		"title": "Hydraulic Systems",
-		"level": 2,
-		"page_anchor": "7-31",
-		"line_offset": 2788,
-		"parent_title": "Airframe Systems"
-	},
-	{
-		"title": "Landing Gear",
-		"level": 1,
-		"page_anchor": "7-33",
-		"line_offset": 2986,
-		"parent_title": null
-	},
-	{
-		"title": "Tricycle Landing Gear",
-		"level": 2,
-		"page_anchor": "7-33",
-		"line_offset": 3001,
-		"parent_title": "Landing Gear"
-	},
-	{
-		"title": "Tailwheel Landing Gear",
-		"level": 2,
-		"page_anchor": "7-33",
-		"line_offset": 3020,
-		"parent_title": "Landing Gear"
-	},
-	{
-		"title": "Fixed and Retractable Landing Gear",
-		"level": 2,
-		"page_anchor": "7-34",
-		"line_offset": 3044,
-		"parent_title": "Landing Gear"
-	},
-	{
-		"title": "Brakes",
-		"level": 2,
-		"page_anchor": "7-34",
-		"line_offset": 3053,
-		"parent_title": "Landing Gear"
-	},
-	{
-		"title": "Pressurized Aircraft",
-		"level": 1,
-		"page_anchor": "7-34",
-		"line_offset": 3059,
-		"parent_title": null
-	},
-	{
-		"title": "Oxygen Systems",
-		"level": 1,
-		"page_anchor": "7-36",
-		"line_offset": 3359,
-		"parent_title": null
-	},
-	{
-		"title": "Oxygen Masks",
-		"level": 2,
-		"page_anchor": "7-38",
-		"line_offset": 3430,
-		"parent_title": "Oxygen Systems"
-	},
-	{
-		"title": "Cannula",
-		"level": 2,
-		"page_anchor": "7-38",
-		"line_offset": 3451,
-		"parent_title": "Oxygen Systems"
-	},
-	{
-		"title": "Diluter-Demand Oxygen Systems",
-		"level": 2,
-		"page_anchor": "7-38",
-		"line_offset": 3464,
-		"parent_title": "Oxygen Systems"
-	},
-	{
-		"title": "Pressure-Demand Oxygen Systems",
-		"level": 2,
-		"page_anchor": "7-38",
-		"line_offset": 3475,
-		"parent_title": "Oxygen Systems"
-	},
-	{
-		"title": "Continuous-Flow Oxygen System",
-		"level": 2,
-		"page_anchor": "7-38",
-		"line_offset": 3490,
-		"parent_title": "Oxygen Systems"
-	},
-	{
-		"title": "Electrical Pulse-Demand Oxygen System",
-		"level": 2,
-		"page_anchor": "7-38",
-		"line_offset": 3501,
-		"parent_title": "Oxygen Systems"
-	},
-	{
-		"title": "Pulse Oximeters",
-		"level": 2,
-		"page_anchor": "7-39",
-		"line_offset": 3519,
-		"parent_title": "Oxygen Systems"
-	},
-	{
-		"title": "Servicing of Oxygen Systems",
-		"level": 2,
-		"page_anchor": "7-39",
-		"line_offset": 3534,
-		"parent_title": "Oxygen Systems"
-	},
-	{
-		"title": "Anti-Ice and Deice Systems",
-		"level": 1,
-		"page_anchor": "7-40",
-		"line_offset": 3562,
-		"parent_title": null
-	},
-	{
-		"title": "Airfoil Anti-Ice and Deice",
-		"level": 2,
-		"page_anchor": "7-40",
-		"line_offset": 3577,
-		"parent_title": "Anti-Ice and Deice Systems"
-	},
-	{
-		"title": "Windscreen Anti-Ice",
-		"level": 2,
-		"page_anchor": "7-40",
-		"line_offset": 3655,
-		"parent_title": "Anti-Ice and Deice Systems"
-	},
-	{
-		"title": "Propeller Anti-Ice",
-		"level": 2,
-		"page_anchor": "7-40",
-		"line_offset": 3673,
-		"parent_title": "Anti-Ice and Deice Systems"
-	},
-	{
-		"title": "Other Anti-Ice and Deice Systems",
-		"level": 2,
-		"page_anchor": "7-41",
-		"line_offset": 3691,
-		"parent_title": "Anti-Ice and Deice Systems"
-	},
-	{
-		"title": "Chapter Summary",
-		"level": 1,
-		"page_anchor": "7-41",
-		"line_offset": 3701,
-		"parent_title": null
-	}
+  {
+    "title": "Introduction",
+    "level": 1,
+    "page_anchor": "7-1",
+    "line_offset": 4,
+    "parent_title": null
+  },
+  {
+    "title": "Powerplant",
+    "level": 1,
+    "page_anchor": "7-1",
+    "line_offset": 9,
+    "parent_title": null
+  },
+  {
+    "title": "Reciprocating Engines",
+    "level": 2,
+    "page_anchor": "7-2",
+    "line_offset": 22,
+    "parent_title": "Powerplant"
+  },
+  {
+    "title": "Propeller",
+    "level": 2,
+    "page_anchor": "7-4",
+    "line_offset": 216,
+    "parent_title": "Powerplant"
+  },
+  {
+    "title": "Fixed-Pitch Propeller",
+    "level": 3,
+    "page_anchor": "7-5",
+    "line_offset": 424,
+    "parent_title": "Propeller"
+  },
+  {
+    "title": "Adjustable-Pitch Propeller",
+    "level": 3,
+    "page_anchor": "7-6",
+    "line_offset": 498,
+    "parent_title": "Propeller"
+  },
+  {
+    "title": "Propeller Overspeed in Piston Engine Aircraft",
+    "level": 1,
+    "page_anchor": "7-7",
+    "line_offset": 608,
+    "parent_title": null
+  },
+  {
+    "title": "Induction Systems",
+    "level": 1,
+    "page_anchor": "7-7",
+    "line_offset": 657,
+    "parent_title": null
+  },
+  {
+    "title": "Carburetor Systems",
+    "level": 1,
+    "page_anchor": "7-8",
+    "line_offset": 728,
+    "parent_title": null
+  },
+  {
+    "title": "Carburetor Icing",
+    "level": 1,
+    "page_anchor": "7-9",
+    "line_offset": 780,
+    "parent_title": null
+  },
+  {
+    "title": "Mixture Control",
+    "level": 1,
+    "page_anchor": "7-9",
+    "line_offset": 819,
+    "parent_title": null
+  },
+  {
+    "title": "Carburetor Heat",
+    "level": 1,
+    "page_anchor": "7-10",
+    "line_offset": 937,
+    "parent_title": null
+  },
+  {
+    "title": "Carburetor Air Temperature Gauge",
+    "level": 1,
+    "page_anchor": "7-11",
+    "line_offset": 965,
+    "parent_title": null
+  },
+  {
+    "title": "Outside Air Temperature Gauge",
+    "level": 1,
+    "page_anchor": "7-11",
+    "line_offset": 982,
+    "parent_title": null
+  },
+  {
+    "title": "Fuel Injection Systems",
+    "level": 1,
+    "page_anchor": "7-11",
+    "line_offset": 988,
+    "parent_title": null
+  },
+  {
+    "title": "Superchargers and Turbosuperchargers",
+    "level": 1,
+    "page_anchor": "7-12",
+    "line_offset": 1042,
+    "parent_title": null
+  },
+  {
+    "title": "Superchargers",
+    "level": 2,
+    "page_anchor": "7-12",
+    "line_offset": 1071,
+    "parent_title": "Superchargers and Turbosuperchargers"
+  },
+  {
+    "title": "Turbosuperchargers",
+    "level": 2,
+    "page_anchor": "7-13",
+    "line_offset": 1154,
+    "parent_title": "Superchargers and Turbosuperchargers"
+  },
+  {
+    "title": "System Operation",
+    "level": 2,
+    "page_anchor": "7-14",
+    "line_offset": 1236,
+    "parent_title": "Superchargers and Turbosuperchargers"
+  },
+  {
+    "title": "High Altitude Performance",
+    "level": 2,
+    "page_anchor": "7-14",
+    "line_offset": 1278,
+    "parent_title": "Superchargers and Turbosuperchargers"
+  },
+  {
+    "title": "Ignition System",
+    "level": 1,
+    "page_anchor": "7-15",
+    "line_offset": 1304,
+    "parent_title": null
+  },
+  {
+    "title": "Oil Systems",
+    "level": 1,
+    "page_anchor": "7-16",
+    "line_offset": 1404,
+    "parent_title": null
+  },
+  {
+    "title": "Engine Cooling Systems",
+    "level": 1,
+    "page_anchor": "7-17",
+    "line_offset": 1472,
+    "parent_title": null
+  },
+  {
+    "title": "Exhaust Systems",
+    "level": 1,
+    "page_anchor": "7-18",
+    "line_offset": 1537,
+    "parent_title": null
+  },
+  {
+    "title": "Starting System",
+    "level": 1,
+    "page_anchor": "7-18",
+    "line_offset": 1568,
+    "parent_title": null
+  },
+  {
+    "title": "Combustion",
+    "level": 1,
+    "page_anchor": "7-18",
+    "line_offset": 1599,
+    "parent_title": null
+  },
+  {
+    "title": "Full Authority Digital Engine Control (FADEC)",
+    "level": 1,
+    "page_anchor": "7-20",
+    "line_offset": 1709,
+    "parent_title": null
+  },
+  {
+    "title": "Turbine Engines",
+    "level": 1,
+    "page_anchor": "7-20",
+    "line_offset": 1750,
+    "parent_title": null
+  },
+  {
+    "title": "Types of Turbine Engines",
+    "level": 2,
+    "page_anchor": "7-20",
+    "line_offset": 1765,
+    "parent_title": "Turbine Engines"
+  },
+  {
+    "title": "Turbojet",
+    "level": 3,
+    "page_anchor": "7-20",
+    "line_offset": 1780,
+    "parent_title": "Types of Turbine Engines"
+  },
+  {
+    "title": "Turboprop",
+    "level": 3,
+    "page_anchor": "7-21",
+    "line_offset": 1814,
+    "parent_title": "Types of Turbine Engines"
+  },
+  {
+    "title": "Turbofan",
+    "level": 3,
+    "page_anchor": "7-21",
+    "line_offset": 1829,
+    "parent_title": "Types of Turbine Engines"
+  },
+  {
+    "title": "Turboshaft",
+    "level": 3,
+    "page_anchor": "7-21",
+    "line_offset": 1845,
+    "parent_title": "Types of Turbine Engines"
+  },
+  {
+    "title": "Turbine Engine Instruments",
+    "level": 2,
+    "page_anchor": "7-22",
+    "line_offset": 1876,
+    "parent_title": "Turbine Engines"
+  },
+  {
+    "title": "Engine Pressure Ratio (EPR)",
+    "level": 3,
+    "page_anchor": "7-22",
+    "line_offset": 1886,
+    "parent_title": "Turbine Engine Instruments"
+  },
+  {
+    "title": "Exhaust Gas Temperature (EGT)",
+    "level": 3,
+    "page_anchor": "7-22",
+    "line_offset": 1898,
+    "parent_title": "Turbine Engine Instruments"
+  },
+  {
+    "title": "Torquemeter",
+    "level": 3,
+    "page_anchor": "7-22",
+    "line_offset": 1912,
+    "parent_title": "Turbine Engine Instruments"
+  },
+  {
+    "title": "N1 Indicator",
+    "level": 3,
+    "page_anchor": "7-23",
+    "line_offset": 1928,
+    "parent_title": "Turbine Engine Instruments"
+  },
+  {
+    "title": "N2 Indicator",
+    "level": 3,
+    "page_anchor": "7-23",
+    "line_offset": 1935,
+    "parent_title": "Turbine Engine Instruments"
+  },
+  {
+    "title": "Turbine Engine Operational Considerations",
+    "level": 2,
+    "page_anchor": "7-23",
+    "line_offset": 1941,
+    "parent_title": "Turbine Engines"
+  },
+  {
+    "title": "Engine Temperature Limitations",
+    "level": 3,
+    "page_anchor": "7-23",
+    "line_offset": 1947,
+    "parent_title": "Turbine Engine Operational Considerations"
+  },
+  {
+    "title": "Thrust Variations",
+    "level": 3,
+    "page_anchor": "7-23",
+    "line_offset": 1951,
+    "parent_title": "Turbine Engine Operational Considerations"
+  },
+  {
+    "title": "Foreign Object Damage (FOD)",
+    "level": 3,
+    "page_anchor": "7-23",
+    "line_offset": 1960,
+    "parent_title": "Turbine Engine Operational Considerations"
+  },
+  {
+    "title": "Turbine Engine Hot/Hung Start",
+    "level": 3,
+    "page_anchor": "7-23",
+    "line_offset": 1976,
+    "parent_title": "Turbine Engine Operational Considerations"
+  },
+  {
+    "title": "Compressor Stalls",
+    "level": 3,
+    "page_anchor": "7-23",
+    "line_offset": 1986,
+    "parent_title": "Turbine Engine Operational Considerations"
+  },
+  {
+    "title": "Flameout",
+    "level": 3,
+    "page_anchor": "7-24",
+    "line_offset": 2029,
+    "parent_title": "Turbine Engine Operational Considerations"
+  },
+  {
+    "title": "Performance Comparison",
+    "level": 2,
+    "page_anchor": "7-24",
+    "line_offset": 2059,
+    "parent_title": "Turbine Engines"
+  },
+  {
+    "title": "Airframe Systems",
+    "level": 1,
+    "page_anchor": "7-25",
+    "line_offset": 2139,
+    "parent_title": null
+  },
+  {
+    "title": "Fuel Systems",
+    "level": 2,
+    "page_anchor": "7-25",
+    "line_offset": 2142,
+    "parent_title": "Airframe Systems"
+  },
+  {
+    "title": "Gravity-Feed System",
+    "level": 3,
+    "page_anchor": "7-25",
+    "line_offset": 2149,
+    "parent_title": "Fuel Systems"
+  },
+  {
+    "title": "Fuel-Pump System",
+    "level": 3,
+    "page_anchor": "7-25",
+    "line_offset": 2159,
+    "parent_title": "Fuel Systems"
+  },
+  {
+    "title": "Fuel Primer",
+    "level": 3,
+    "page_anchor": "7-25",
+    "line_offset": 2167,
+    "parent_title": "Fuel Systems"
+  },
+  {
+    "title": "Fuel Tanks",
+    "level": 3,
+    "page_anchor": "7-25",
+    "line_offset": 2179,
+    "parent_title": "Fuel Systems"
+  },
+  {
+    "title": "Fuel Gauges",
+    "level": 3,
+    "page_anchor": "7-26",
+    "line_offset": 2275,
+    "parent_title": "Fuel Systems"
+  },
+  {
+    "title": "Fuel Selectors",
+    "level": 3,
+    "page_anchor": "7-26",
+    "line_offset": 2289,
+    "parent_title": "Fuel Systems"
+  },
+  {
+    "title": "Fuel Strainers, Sumps, and Drains",
+    "level": 3,
+    "page_anchor": "7-27",
+    "line_offset": 2333,
+    "parent_title": "Fuel Systems"
+  },
+  {
+    "title": "Fuel Grades",
+    "level": 3,
+    "page_anchor": "7-27",
+    "line_offset": 2354,
+    "parent_title": "Fuel Systems"
+  },
+  {
+    "title": "Fuel Contamination",
+    "level": 3,
+    "page_anchor": "7-27",
+    "line_offset": 2400,
+    "parent_title": "Fuel Systems"
+  },
+  {
+    "title": "Fuel System Icing",
+    "level": 3,
+    "page_anchor": "7-28",
+    "line_offset": 2449,
+    "parent_title": "Fuel Systems"
+  },
+  {
+    "title": "Prevention Procedures",
+    "level": 3,
+    "page_anchor": "7-28",
+    "line_offset": 2497,
+    "parent_title": "Fuel System Icing"
+  },
+  {
+    "title": "Refueling Procedures",
+    "level": 3,
+    "page_anchor": "7-29",
+    "line_offset": 2516,
+    "parent_title": "Fuel Systems"
+  },
+  {
+    "title": "Heating System",
+    "level": 2,
+    "page_anchor": "7-29",
+    "line_offset": 2548,
+    "parent_title": "Airframe Systems"
+  },
+  {
+    "title": "Fuel Fired Heaters",
+    "level": 3,
+    "page_anchor": "7-29",
+    "line_offset": 2556,
+    "parent_title": "Heating System"
+  },
+  {
+    "title": "Exhaust Heating Systems",
+    "level": 3,
+    "page_anchor": "7-29",
+    "line_offset": 2579,
+    "parent_title": "Heating System"
+  },
+  {
+    "title": "Combustion Heater Systems",
+    "level": 3,
+    "page_anchor": "7-29",
+    "line_offset": 2594,
+    "parent_title": "Heating System"
+  },
+  {
+    "title": "Bleed Air Heating Systems",
+    "level": 3,
+    "page_anchor": "7-30",
+    "line_offset": 2643,
+    "parent_title": "Heating System"
+  },
+  {
+    "title": "Electrical System",
+    "level": 2,
+    "page_anchor": "7-30",
+    "line_offset": 2655,
+    "parent_title": "Airframe Systems"
+  },
+  {
+    "title": "Hydraulic Systems",
+    "level": 2,
+    "page_anchor": "7-31",
+    "line_offset": 2788,
+    "parent_title": "Airframe Systems"
+  },
+  {
+    "title": "Landing Gear",
+    "level": 1,
+    "page_anchor": "7-33",
+    "line_offset": 2986,
+    "parent_title": null
+  },
+  {
+    "title": "Tricycle Landing Gear",
+    "level": 2,
+    "page_anchor": "7-33",
+    "line_offset": 3001,
+    "parent_title": "Landing Gear"
+  },
+  {
+    "title": "Tailwheel Landing Gear",
+    "level": 2,
+    "page_anchor": "7-33",
+    "line_offset": 3020,
+    "parent_title": "Landing Gear"
+  },
+  {
+    "title": "Fixed and Retractable Landing Gear",
+    "level": 2,
+    "page_anchor": "7-34",
+    "line_offset": 3044,
+    "parent_title": "Landing Gear"
+  },
+  {
+    "title": "Brakes",
+    "level": 2,
+    "page_anchor": "7-34",
+    "line_offset": 3053,
+    "parent_title": "Landing Gear"
+  },
+  {
+    "title": "Pressurized Aircraft",
+    "level": 1,
+    "page_anchor": "7-34",
+    "line_offset": 3059,
+    "parent_title": null
+  },
+  {
+    "title": "Oxygen Systems",
+    "level": 1,
+    "page_anchor": "7-37",
+    "line_offset": 3359,
+    "parent_title": null
+  },
+  {
+    "title": "Oxygen Masks",
+    "level": 2,
+    "page_anchor": "7-38",
+    "line_offset": 3430,
+    "parent_title": "Oxygen Systems"
+  },
+  {
+    "title": "Cannula",
+    "level": 2,
+    "page_anchor": "7-38",
+    "line_offset": 3451,
+    "parent_title": "Oxygen Systems"
+  },
+  {
+    "title": "Diluter-Demand Oxygen Systems",
+    "level": 2,
+    "page_anchor": "7-38",
+    "line_offset": 3464,
+    "parent_title": "Oxygen Systems"
+  },
+  {
+    "title": "Pressure-Demand Oxygen Systems",
+    "level": 2,
+    "page_anchor": "7-38",
+    "line_offset": 3475,
+    "parent_title": "Oxygen Systems"
+  },
+  {
+    "title": "Continuous-Flow Oxygen System",
+    "level": 2,
+    "page_anchor": "7-38",
+    "line_offset": 3490,
+    "parent_title": "Oxygen Systems"
+  },
+  {
+    "title": "Electrical Pulse-Demand Oxygen System",
+    "level": 2,
+    "page_anchor": "7-38",
+    "line_offset": 3501,
+    "parent_title": "Oxygen Systems"
+  },
+  {
+    "title": "Pulse Oximeters",
+    "level": 2,
+    "page_anchor": "7-39",
+    "line_offset": 3519,
+    "parent_title": "Oxygen Systems"
+  },
+  {
+    "title": "Servicing of Oxygen Systems",
+    "level": 2,
+    "page_anchor": "7-39",
+    "line_offset": 3534,
+    "parent_title": "Oxygen Systems"
+  },
+  {
+    "title": "Anti-Ice and Deice Systems",
+    "level": 1,
+    "page_anchor": "7-40",
+    "line_offset": 3562,
+    "parent_title": null
+  },
+  {
+    "title": "Airfoil Anti-Ice and Deice",
+    "level": 2,
+    "page_anchor": "7-40",
+    "line_offset": 3577,
+    "parent_title": "Anti-Ice and Deice Systems"
+  },
+  {
+    "title": "Windscreen Anti-Ice",
+    "level": 2,
+    "page_anchor": "7-41",
+    "line_offset": 3655,
+    "parent_title": "Anti-Ice and Deice Systems"
+  },
+  {
+    "title": "Propeller Anti-Ice",
+    "level": 2,
+    "page_anchor": "7-41",
+    "line_offset": 3673,
+    "parent_title": "Anti-Ice and Deice Systems"
+  },
+  {
+    "title": "Other Anti-Ice and Deice Systems",
+    "level": 2,
+    "page_anchor": "7-41",
+    "line_offset": 3691,
+    "parent_title": "Anti-Ice and Deice Systems"
+  },
+  {
+    "title": "Chapter Summary",
+    "level": 1,
+    "page_anchor": "7-41",
+    "line_offset": 3701,
+    "parent_title": null
+  }
 ]

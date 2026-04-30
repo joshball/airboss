@@ -220,7 +220,7 @@ Per-node mastery already exists (dual-gate: card stability AND rep accuracy). Ro
 
 - **Internal node of any lens** = aggregate of its children. Default aggregator: weighted average where weights are leaf priority. Critical leaves count more.
 - **Coverage** = (mastered leaves / total leaves). Reported alongside mastery so a 90%-of-30%-covered cert reads differently from 90%-of-100%.
-- **Required evidence** = the assessment methods declared on each linked node. A leaf is mastered when *all required evidence kinds* clear their thresholds. CFI leaves typically require teaching-exercise evidence; PPL leaves typically don't.
+- **Required evidence** = the assessment methods declared on each linked node. A leaf is mastered when *all required evidence kinds* clear their thresholds. CFI leaves typically require teaching-exercise evidence; PPL leaves typically don't. Shipped via [evidence-kind-gating WP](../../work-packages/evidence-kind-gating/spec.md): per-cert triad mapping in `TRIAD_EVIDENCE_REQUIREMENTS`, `requires_teaching` flag on `syllabus_node`, per-kind decomposition surfaces through `getCredentialMastery`, `acsLens`, and `domainLens`.
 - **Goal progress** = weighted union across the goal's syllabi + ad-hoc nodes.
 
 ## Handbook ingestion and reader

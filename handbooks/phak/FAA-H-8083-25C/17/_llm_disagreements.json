@@ -1,0 +1,296 @@
+[
+  {
+    "type": "level_mismatch",
+    "title": "Vestibular Illusions",
+    "toc_says": { "level": 2, "parent_title": "Health and Physiological Factors Affecting Pilot Performance", "page_anchor": "17-7" },
+    "body_says": { "level": 3, "parent_title": "Spatial Disorientation and Illusions", "page_anchor": "17-7" },
+    "reason": "Body text nests Vestibular Illusions under Spatial Disorientation and Illusions; would-be L4 children (The Leans, Coriolis, etc.) are flattened to L3 per the contract's level cap."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Visual Illusions",
+    "toc_says": { "level": 2, "parent_title": "Health and Physiological Factors Affecting Pilot Performance", "page_anchor": "17-8" },
+    "body_says": { "level": 3, "parent_title": "Spatial Disorientation and Illusions", "page_anchor": "17-8" },
+    "reason": "Body text nests Visual Illusions under Spatial Disorientation and Illusions, parallel to Vestibular Illusions; flattened with its L4 children to L3 per cap."
+  },
+  {
+    "type": "extra_in_toc",
+    "title": "The Leans",
+    "toc_says": { "level": null, "parent_title": null, "page_anchor": null },
+    "body_says": { "level": 3, "parent_title": "Spatial Disorientation and Illusions", "page_anchor": "17-7" },
+    "reason": "Body text has The Leans as a sub-heading under Vestibular Illusions; TOC missed it. Flattened to L3 per cap with parent set to enclosing L2."
+  },
+  {
+    "type": "extra_in_toc",
+    "title": "Coriolis Illusion",
+    "toc_says": { "level": null, "parent_title": null, "page_anchor": null },
+    "body_says": { "level": 3, "parent_title": "Spatial Disorientation and Illusions", "page_anchor": "17-7" },
+    "reason": "Body sub-heading under Vestibular Illusions; TOC missed it."
+  },
+  {
+    "type": "extra_in_toc",
+    "title": "Graveyard Spiral",
+    "toc_says": { "level": null, "parent_title": null, "page_anchor": null },
+    "body_says": { "level": 3, "parent_title": "Spatial Disorientation and Illusions", "page_anchor": "17-7" },
+    "reason": "Body sub-heading under Vestibular Illusions; TOC missed it."
+  },
+  {
+    "type": "extra_in_toc",
+    "title": "Somatogravic Illusion",
+    "toc_says": { "level": null, "parent_title": null, "page_anchor": null },
+    "body_says": { "level": 3, "parent_title": "Spatial Disorientation and Illusions", "page_anchor": "17-7" },
+    "reason": "Body sub-heading under Vestibular Illusions; TOC missed it."
+  },
+  {
+    "type": "extra_in_toc",
+    "title": "Inversion Illusion",
+    "toc_says": { "level": null, "parent_title": null, "page_anchor": null },
+    "body_says": { "level": 3, "parent_title": "Spatial Disorientation and Illusions", "page_anchor": "17-8" },
+    "reason": "Body sub-heading under Vestibular Illusions; TOC missed it."
+  },
+  {
+    "type": "extra_in_toc",
+    "title": "Elevator Illusion",
+    "toc_says": { "level": null, "parent_title": null, "page_anchor": null },
+    "body_says": { "level": 3, "parent_title": "Spatial Disorientation and Illusions", "page_anchor": "17-8" },
+    "reason": "Body sub-heading under Vestibular Illusions; TOC missed it."
+  },
+  {
+    "type": "extra_in_toc",
+    "title": "False Horizon (under Visual Illusions)",
+    "toc_says": { "level": null, "parent_title": null, "page_anchor": null },
+    "body_says": { "level": 3, "parent_title": "Spatial Disorientation and Illusions", "page_anchor": "17-8" },
+    "reason": "Body sub-heading under Visual Illusions; TOC missed it. (A second False Horizon appears later under Night Vision Illusions.)"
+  },
+  {
+    "type": "extra_in_toc",
+    "title": "Autokinesis (under Visual Illusions)",
+    "toc_says": { "level": null, "parent_title": null, "page_anchor": null },
+    "body_says": { "level": 3, "parent_title": "Spatial Disorientation and Illusions", "page_anchor": "17-8" },
+    "reason": "Body sub-heading under Visual Illusions; TOC missed it. (A second Autokinesis appears later under Night Vision Illusions.)"
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Optical Illusions",
+    "toc_says": { "level": 2, "parent_title": "Health and Physiological Factors Affecting Pilot Performance", "page_anchor": "17-10" },
+    "body_says": { "level": 1, "parent_title": null, "page_anchor": "17-10" },
+    "reason": "Body presents Optical Illusions as a top-level chapter section that umbrellas the runway/terrain/water/haze/fog/ground-lighting illusions; TOC's flattening of these to L1 immediately after suggests Optical Illusions itself is the L1 break."
+  },
+  {
+    "type": "parent_mismatch",
+    "title": "Runway Width Illusion",
+    "toc_says": { "level": 2, "parent_title": "Health and Physiological Factors Affecting Pilot Performance", "page_anchor": "17-10" },
+    "body_says": { "level": 2, "parent_title": "Optical Illusions", "page_anchor": "17-10" },
+    "reason": "Body groups Runway Width Illusion under the Optical Illusions umbrella, not under Health and Physiological Factors."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Runway and Terrain Slopes Illusion",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "17-10" },
+    "body_says": { "level": 2, "parent_title": "Optical Illusions", "page_anchor": "17-10" },
+    "reason": "Body groups this as a sub-illusion under Optical Illusions; TOC promoted it to L1."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Featureless Terrain Illusion",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "17-10" },
+    "body_says": { "level": 2, "parent_title": "Optical Illusions", "page_anchor": "17-10" },
+    "reason": "Same systematic issue: TOC promoted Optical Illusions sub-items to L1."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Water Refraction",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "17-10" },
+    "body_says": { "level": 2, "parent_title": "Optical Illusions", "page_anchor": "17-10" },
+    "reason": "Same systematic issue."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Haze",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "17-10" },
+    "body_says": { "level": 2, "parent_title": "Optical Illusions", "page_anchor": "17-10" },
+    "reason": "Same systematic issue."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Fog",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "17-10" },
+    "body_says": { "level": 2, "parent_title": "Optical Illusions", "page_anchor": "17-10" },
+    "reason": "Same systematic issue."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Ground Lighting Illusions",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "17-10" },
+    "body_says": { "level": 2, "parent_title": "Optical Illusions", "page_anchor": "17-10" },
+    "reason": "Same systematic issue."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "How To Prevent Landing Errors Due to Optical Illusions",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "17-10" },
+    "body_says": { "level": 2, "parent_title": "Optical Illusions", "page_anchor": "17-10" },
+    "reason": "Same systematic issue: prevention guidance is part of the Optical Illusions section."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Hydraulic Fluid",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "17-13" },
+    "body_says": { "level": 2, "parent_title": "Exposure to Chemicals", "page_anchor": "17-13" },
+    "reason": "Body presents Hydraulic Fluid, Engine Oil, and Fuel as MSDS first-aid sub-cases under Exposure to Chemicals; TOC flattened them to L1."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Engine Oil",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "17-14" },
+    "body_says": { "level": 2, "parent_title": "Exposure to Chemicals", "page_anchor": "17-14" },
+    "reason": "Same systematic issue with Exposure to Chemicals sub-cases."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Fuel",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "17-14" },
+    "body_says": { "level": 2, "parent_title": "Exposure to Chemicals", "page_anchor": "17-14" },
+    "reason": "Same systematic issue."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Photopic Vision",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "17-20" },
+    "body_says": { "level": 2, "parent_title": "Vision Types", "page_anchor": "17-19" },
+    "reason": "Body lists Photopic, Mesopic, and Scotopic as the three Vision Types; TOC promoted the three to L1."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Mesopic Vision",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "17-21" },
+    "body_says": { "level": 2, "parent_title": "Vision Types", "page_anchor": "17-21" },
+    "reason": "Same systematic issue with Vision Types children."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Scotopic Vision",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "17-21" },
+    "body_says": { "level": 2, "parent_title": "Vision Types", "page_anchor": "17-21" },
+    "reason": "Same systematic issue."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Night Blind Spot",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "17-22" },
+    "body_says": { "level": 2, "parent_title": "Night Vision", "page_anchor": "17-22" },
+    "reason": "Body groups Night Blind Spot, Dark Adaptation, Scanning Techniques, Night Vision Protection, and Self-Imposed Stress under Night Vision."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Dark Adaptation",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "17-23" },
+    "body_says": { "level": 2, "parent_title": "Night Vision", "page_anchor": "17-23" },
+    "reason": "Same systematic issue with Night Vision children."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Scanning Techniques",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "17-23" },
+    "body_says": { "level": 2, "parent_title": "Night Vision", "page_anchor": "17-23" },
+    "reason": "Same systematic issue."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Night Vision Protection",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "17-23" },
+    "body_says": { "level": 2, "parent_title": "Night Vision", "page_anchor": "17-23" },
+    "reason": "Same systematic issue. Night Vision Protection itself has its own L3 children (Sunglasses, Oxygen Supply, etc.)."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Self-Imposed Stress",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "17-25" },
+    "body_says": { "level": 2, "parent_title": "Night Vision", "page_anchor": "17-25" },
+    "reason": "Body keeps Self-Imposed Stress within the Night Vision discussion as a continuation; its sub-stressors all relate to night vision degradation."
+  },
+  {
+    "type": "extra_in_toc",
+    "title": "Sunglasses",
+    "toc_says": { "level": null, "parent_title": null, "page_anchor": null },
+    "body_says": { "level": 3, "parent_title": "Night Vision Protection", "page_anchor": "17-24" },
+    "reason": "Body sub-heading under Night Vision Protection; TOC missed it. Same pattern: Oxygen Supply, High Intensity Lighting, Flightdeck Lighting, Airfield Precautions."
+  },
+  {
+    "type": "extra_in_toc",
+    "title": "Drugs (under Self-Imposed Stress)",
+    "toc_says": { "level": null, "parent_title": null, "page_anchor": null },
+    "body_says": { "level": 3, "parent_title": "Self-Imposed Stress", "page_anchor": "17-25" },
+    "reason": "Body sub-heading; TOC missed all six Self-Imposed Stress sub-stressors (Drugs, Exhaustion, Poor Physical Conditioning, Alcohol, Tobacco, Hypoglycemia and Nutritional Deficiency). This is a second occurrence of 'Drugs' distinct from the L1 medication section earlier."
+  },
+  {
+    "type": "extra_in_toc",
+    "title": "Motion Parallax",
+    "toc_says": { "level": null, "parent_title": null, "page_anchor": null },
+    "body_says": { "level": 2, "parent_title": "Distance Estimation and Depth Perception", "page_anchor": "17-25" },
+    "reason": "Body sub-heading under Distance Estimation and Depth Perception; TOC missed it. Same for Geometric Perspective and Aerial Perspective."
+  },
+  {
+    "type": "extra_in_toc",
+    "title": "Autokinesis (under Night Vision Illusions)",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "17-26" },
+    "body_says": { "level": 2, "parent_title": "Night Vision Illusions", "page_anchor": "17-26" },
+    "reason": "TOC has Autokinesis at L1; body nests it (and False Horizon, Reversible Perspective, Size-Distance, Fascination, Flicker Vertigo, Night Landing Illusions) under Night Vision Illusions."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "False Horizon (under Night Vision Illusions)",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "17-26" },
+    "body_says": { "level": 2, "parent_title": "Night Vision Illusions", "page_anchor": "17-26" },
+    "reason": "Same systematic issue with Night Vision Illusions children."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Reversible Perspective Illusion",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "17-26" },
+    "body_says": { "level": 2, "parent_title": "Night Vision Illusions", "page_anchor": "17-26" },
+    "reason": "Same systematic issue."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Size-Distance Illusion",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "17-27" },
+    "body_says": { "level": 2, "parent_title": "Night Vision Illusions", "page_anchor": "17-27" },
+    "reason": "Same systematic issue."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Fascination (Fixation)",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "17-27" },
+    "body_says": { "level": 2, "parent_title": "Night Vision Illusions", "page_anchor": "17-27" },
+    "reason": "Same systematic issue."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Flicker Vertigo",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "17-27" },
+    "body_says": { "level": 2, "parent_title": "Night Vision Illusions", "page_anchor": "17-27" },
+    "reason": "Same systematic issue."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Night Landing Illusions",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "17-27" },
+    "body_says": { "level": 2, "parent_title": "Night Vision Illusions", "page_anchor": "17-27" },
+    "reason": "Same systematic issue."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Synthetic Vision System",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "17-28" },
+    "body_says": { "level": 2, "parent_title": "Enhanced Night Vision Systems", "page_anchor": "17-28" },
+    "reason": "Body presents SVS and EFVS as the two systems described under Enhanced Night Vision Systems; TOC promoted both to L1."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Enhanced Flight Vision System",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "17-28" },
+    "body_says": { "level": 2, "parent_title": "Enhanced Night Vision Systems", "page_anchor": "17-28" },
+    "reason": "Same systematic issue with Enhanced Night Vision Systems children."
+  }
+]

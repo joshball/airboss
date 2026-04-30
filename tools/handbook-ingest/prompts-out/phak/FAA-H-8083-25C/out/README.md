@@ -1,7 +1,7 @@
 # Section-extraction prompt run -- phak FAA-H-8083-25C
 
-Run-id: `20260430-0105` (UTC). Generated at: `2026-04-30T01:05:56Z`.
-Repository SHA: `acc11d8f8fd90e6f2898dce6ddeb6e9e6cda36c5`.
+Run-id: `20260430-1349` (UTC). Generated at: `2026-04-30T13:49:42Z`.
+Repository SHA: `471e4da3145a45a8cc8ca9a67cb1669d808c1d4d`.
 
 ## What this run is
 
@@ -61,10 +61,10 @@ to archive every run.)
 
 | Template               | SHA-256                       |
 | ---------------------- | ----------------------------- |
-| `parameters.md`        | `98382dc434abff47c11794e2c662fd918d1076c2941918fcc9626bd44ace0ca0`      |
-| `section_tree.md`      | `e33a1cf32fbd77f6176701c3bdf0fa7e7f7d7f47a66bd9882c7c8d5ef13c06ab`    |
+| `parameters.md`        | `dbc9ce5a5da82828629df64d61404bbd7675ba84dae0d3fee28a124138298088`      |
+| `section_tree.md`      | `d8f6232a32cbe277cb295063e38727cdc586c9dec8be8915f4e519107d13d263`    |
 | `orchestrator.md`      | `21b7e9afaf62f136b6df84e71d4c61a8e94d3b2d3494d9fcced9c86291732d2f`    |
-| `chapter.md`           | `5f228948ada23f12c2985c9ab0f0337a8b5464fce980058f59184605f40e107a`         |
+| `chapter.md`           | `7057819c8f45abecbd961ac9571deb92cfa828f120020eee9748b043417fcf6f`         |
 | `run_readme.md`        | `a1d2f860ef2cff522af1856ec463d5222582b1f54bcb53bd513deb495ffce68d`      |
 
 A reviewer can verify that this directory's `_parameters.md`,

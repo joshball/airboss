@@ -74,7 +74,7 @@ let { data }: { data: PageData } = $props();
 				<div class="stat">
 					<dt>Audit (last {data.auditWindowHours}h)</dt>
 					<dd>
-						<a class="stat-link" href={ROUTES.HANGAR_ADMIN_AUDIT_PING}>
+						<a class="stat-link" href={ROUTES.HANGAR_ADMIN_AUDIT}>
 							<span class="stat-value">{data.counts.recentAudits}</span>
 							<span class="stat-affordance" aria-hidden="true">Open -&gt;</span>
 						</a>

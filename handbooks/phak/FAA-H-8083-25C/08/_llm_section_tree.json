@@ -344,10 +344,10 @@
   },
   {
     "title": "Instrument Check",
-    "level": 3,
+    "level": 2,
     "page_anchor": "8-22",
     "line_offset": 2029,
-    "parent_title": "Remote Indicating Compass"
+    "parent_title": "Gyroscopic Flight Instruments"
   },
   {
     "title": "Angle of Attack Indicators",
@@ -422,7 +422,7 @@
   {
     "title": "Oscillation Error",
     "level": 3,
-    "page_anchor": "8-26",
+    "page_anchor": "8-27",
     "line_offset": 2603,
     "parent_title": "Magnetic Compass Induced Errors"
   },

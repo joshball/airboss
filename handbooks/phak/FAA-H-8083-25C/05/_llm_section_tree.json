@@ -36,15 +36,15 @@
   },
   {
     "title": "Parasite Drag",
-    "level": 3,
+    "level": 2,
     "page_anchor": "5-5",
     "line_offset": 428,
-    "parent_title": "Drag"
+    "parent_title": "Forces Acting on the Aircraft"
   },
   {
     "title": "Form Drag",
     "level": 3,
-    "page_anchor": "5-5",
+    "page_anchor": "5-6",
     "line_offset": 436,
     "parent_title": "Parasite Drag"
   },
@@ -64,50 +64,50 @@
   },
   {
     "title": "Induced Drag",
-    "level": 3,
-    "page_anchor": "5-6",
+    "level": 2,
+    "page_anchor": "5-7",
     "line_offset": 504,
-    "parent_title": "Drag"
+    "parent_title": "Forces Acting on the Aircraft"
   },
   {
     "title": "Weight",
     "level": 2,
-    "page_anchor": "5-7",
+    "page_anchor": "5-8",
     "line_offset": 582,
     "parent_title": "Forces Acting on the Aircraft"
   },
   {
     "title": "Wingtip Vortices",
     "level": 1,
-    "page_anchor": "5-7",
+    "page_anchor": "5-8",
     "line_offset": 609,
     "parent_title": null
   },
   {
     "title": "Formation of Vortices",
     "level": 2,
-    "page_anchor": "5-7",
+    "page_anchor": "5-8",
     "line_offset": 610,
     "parent_title": "Wingtip Vortices"
   },
   {
     "title": "Avoiding Wake Turbulence",
     "level": 2,
-    "page_anchor": "5-8",
+    "page_anchor": "5-9",
     "line_offset": 642,
     "parent_title": "Wingtip Vortices"
   },
   {
     "title": "Ground Effect",
     "level": 1,
-    "page_anchor": "5-10",
+    "page_anchor": "5-11",
     "line_offset": 735,
     "parent_title": null
   },
   {
     "title": "Axes of an Aircraft",
     "level": 1,
-    "page_anchor": "5-11",
+    "page_anchor": "5-12",
     "line_offset": 857,
     "parent_title": null
   },
@@ -121,30 +121,30 @@
   {
     "title": "Aircraft Design Characteristics",
     "level": 1,
-    "page_anchor": "5-13",
+    "page_anchor": "5-14",
     "line_offset": 972,
     "parent_title": null
   },
   {
     "title": "Stability",
     "level": 2,
-    "page_anchor": "5-13",
+    "page_anchor": "5-14",
     "line_offset": 986,
     "parent_title": "Aircraft Design Characteristics"
   },
   {
     "title": "Static Stability",
-    "level": 3,
-    "page_anchor": "5-13",
+    "level": 2,
+    "page_anchor": "5-14",
     "line_offset": 1002,
-    "parent_title": "Stability"
+    "parent_title": "Aircraft Design Characteristics"
   },
   {
     "title": "Dynamic Stability",
-    "level": 3,
+    "level": 2,
     "page_anchor": "5-14",
     "line_offset": 1019,
-    "parent_title": "Stability"
+    "parent_title": "Aircraft Design Characteristics"
   },
   {
     "title": "Longitudinal Stability (Pitching)",
@@ -164,7 +164,7 @@
     "title": "Dihedral",
     "level": 3,
     "page_anchor": "5-18",
-    "line_offset": 1261,
+    "line_offset": 1274,
     "parent_title": "Lateral Stability (Rolling)"
   },
   {
@@ -190,24 +190,24 @@
   },
   {
     "title": "Free Directional Oscillations (Dutch Roll)",
-    "level": 3,
+    "level": 2,
     "page_anchor": "5-20",
     "line_offset": 1419,
-    "parent_title": "Directional Stability (Yawing)"
+    "parent_title": "Aircraft Design Characteristics"
   },
   {
     "title": "Spiral Instability",
-    "level": 3,
+    "level": 2,
     "page_anchor": "5-20",
     "line_offset": 1442,
-    "parent_title": "Directional Stability (Yawing)"
+    "parent_title": "Aircraft Design Characteristics"
   },
   {
     "title": "Effect of Wing Planform",
-    "level": 2,
+    "level": 1,
     "page_anchor": "5-20",
     "line_offset": 1482,
-    "parent_title": "Aircraft Design Characteristics"
+    "parent_title": null
   },
   {
     "title": "Aerodynamic Forces in Flight Maneuvers",
@@ -260,35 +260,35 @@
   },
   {
     "title": "Torque and P-Factor",
-    "level": 1,
+    "level": 2,
     "page_anchor": "5-30",
     "line_offset": 2523,
-    "parent_title": null
+    "parent_title": "Basic Propeller Principles"
   },
   {
     "title": "Torque Reaction",
-    "level": 2,
+    "level": 3,
     "page_anchor": "5-31",
     "line_offset": 2581,
     "parent_title": "Torque and P-Factor"
   },
   {
     "title": "Corkscrew Effect",
-    "level": 2,
+    "level": 3,
     "page_anchor": "5-31",
     "line_offset": 2620,
     "parent_title": "Torque and P-Factor"
   },
   {
     "title": "Gyroscopic Action",
-    "level": 2,
+    "level": 3,
     "page_anchor": "5-31",
     "line_offset": 2642,
     "parent_title": "Torque and P-Factor"
   },
   {
     "title": "Asymmetric Loading (P-Factor)",
-    "level": 2,
+    "level": 3,
     "page_anchor": "5-32",
     "line_offset": 2698,
     "parent_title": "Torque and P-Factor"
@@ -372,24 +372,24 @@
   },
   {
     "title": "Vg Diagram",
-    "level": 1,
+    "level": 2,
     "page_anchor": "5-37",
     "line_offset": 3215,
-    "parent_title": null
+    "parent_title": "Load Factors"
   },
   {
     "title": "Rate of Turn",
-    "level": 1,
+    "level": 2,
     "page_anchor": "5-38",
     "line_offset": 3321,
-    "parent_title": null
+    "parent_title": "Load Factors"
   },
   {
     "title": "Radius of Turn",
-    "level": 1,
+    "level": 2,
     "page_anchor": "5-39",
     "line_offset": 3426,
-    "parent_title": null
+    "parent_title": "Load Factors"
   },
   {
     "title": "Weight and Balance",
@@ -463,24 +463,24 @@
   },
   {
     "title": "Laminar Boundary Layer Flow",
-    "level": 3,
+    "level": 2,
     "page_anchor": "5-46",
     "line_offset": 4068,
-    "parent_title": "Boundary Layer"
+    "parent_title": "High Speed Flight"
   },
   {
     "title": "Turbulent Boundary Layer Flow",
-    "level": 3,
+    "level": 2,
     "page_anchor": "5-46",
     "line_offset": 4076,
-    "parent_title": "Boundary Layer"
+    "parent_title": "High Speed Flight"
   },
   {
     "title": "Boundary Layer Separation",
-    "level": 3,
+    "level": 2,
     "page_anchor": "5-46",
     "line_offset": 4085,
-    "parent_title": "Boundary Layer"
+    "parent_title": "High Speed Flight"
   },
   {
     "title": "Shock Waves",

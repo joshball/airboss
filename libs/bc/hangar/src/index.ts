@@ -2,6 +2,22 @@
 // Owns the `hangar.*` schema and every Drizzle query that touches it.
 
 export {
+	type ActorSearchHit,
+	AUDIT_ACTOR_SYSTEM,
+	type AuditEntriesPage,
+	type AuditEntryDetail,
+	type AuditEntryRow,
+	type AuditFilters,
+	buildAuditWhere,
+	clampAuditLimit,
+	type DecodedAuditCursor,
+	decodeAuditCursor,
+	encodeAuditCursor,
+	getAuditEntry,
+	listAuditEntries,
+	searchActorIds,
+} from './audit-queries';
+export {
 	countAllJobs,
 	countLiveReferences,
 	countLiveSources,

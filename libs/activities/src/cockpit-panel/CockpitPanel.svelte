@@ -18,15 +18,15 @@
 
 import type { DisplayState, FdmTruthState } from '@ab/bc-sim';
 import { SIM_FEET_PER_METER, SIM_KNOTS_PER_METER_PER_SECOND } from '@ab/constants';
-import Altimeter from '$lib/instruments/Altimeter.svelte';
-import Asi from '$lib/instruments/Asi.svelte';
-import AttitudeIndicator from '$lib/instruments/AttitudeIndicator.svelte';
-import EngineCluster from '$lib/instruments/cluster/EngineCluster.svelte';
-import HeadingIndicator from '$lib/instruments/HeadingIndicator.svelte';
-import Tachometer from '$lib/instruments/Tachometer.svelte';
-import TurnCoordinator from '$lib/instruments/TurnCoordinator.svelte';
-import Vsi from '$lib/instruments/Vsi.svelte';
-import AnnunciatorStrip from '$lib/panels/AnnunciatorStrip.svelte';
+import Altimeter from './Altimeter.svelte';
+import AnnunciatorStrip from './AnnunciatorStrip.svelte';
+import Asi from './Asi.svelte';
+import AttitudeIndicator from './AttitudeIndicator.svelte';
+import EngineCluster from './cluster/EngineCluster.svelte';
+import HeadingIndicator from './HeadingIndicator.svelte';
+import Tachometer from './Tachometer.svelte';
+import TurnCoordinator from './TurnCoordinator.svelte';
+import Vsi from './Vsi.svelte';
 
 interface Props {
 	/** Truth state for AGL + alpha + scenario time readouts. Null before first snapshot. */

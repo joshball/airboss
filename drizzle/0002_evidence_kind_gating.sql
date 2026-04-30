@@ -1,0 +1,2 @@
+ALTER TABLE "study"."syllabus_node" ADD COLUMN "requires_teaching" boolean DEFAULT false NOT NULL;--> statement-breakpoint
+ALTER TABLE "study"."syllabus_node" ADD CONSTRAINT "syllabus_node_requires_teaching_triad_check" CHECK ("requires_teaching" = false OR "triad" IS NOT NULL);

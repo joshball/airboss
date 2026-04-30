@@ -31,6 +31,7 @@ from difflib import SequenceMatcher
 
 from .config_loader import HandbookConfig
 from .section_tree import SectionTreeNode
+from .sections_via_sidecar import Disagreement
 
 # Title-similarity floor for matching cross-strategy. Two tactics produce
 # the same heading text most of the time; allow minor whitespace and
@@ -78,6 +79,11 @@ class ChapterAgreement:
 class CompareResult:
     chapters: list[ChapterAgreement]
     generated_at: str
+    disagreements: dict[int, list[Disagreement]] = field(default_factory=dict)
+    """Per-chapter LLM-vs-TOC disagreements loaded from `_llm_disagreements.json`
+    files (Phase 3 of section-extraction-contract-v2). Keyed by chapter
+    ordinal; missing keys mean either the file was absent or the chapter
+    fully agreed with the TOC checklist. Empty dict before Phase 3."""
 
     def to_markdown(self, config: HandbookConfig) -> str:
         title = f"# {config.document_slug.upper()} {config.edition} section-tree comparison"
@@ -96,11 +102,53 @@ class CompareResult:
                 f"| {ch.toc_total} | {ch.llm_total} | {ch.agreement} | {notes} |"
             )
         lines.append("")
+        if self.disagreements:
+            lines.extend(self._render_disagreements_digest())
         lines.append("## Per-chapter detail")
         lines.append("")
         for ch in self.chapters:
             lines.extend(self._render_chapter(ch))
         return "\n".join(lines).rstrip() + "\n"
+
+    def _render_disagreements_digest(self) -> list[str]:
+        """Aggregate disagreements across chapters, grouped by type."""
+        lines: list[str] = []
+        lines.append("## Disagreements digest")
+        lines.append("")
+        lines.append(
+            "Per-chapter LLM-vs-TOC disagreements emitted by sub-agents during the "
+            "prompt run (Phase 3 of section-extraction-contract-v2). Use these as "
+            "training signal for TOC parser improvements -- each type maps to a "
+            "specific parser bug class."
+        )
+        lines.append("")
+        # Aggregate counts by type across all chapters.
+        type_counts: dict[str, int] = {}
+        total = 0
+        for entries in self.disagreements.values():
+            for d in entries:
+                type_counts[d.type] = type_counts.get(d.type, 0) + 1
+                total += 1
+        lines.append(f"**Total disagreements:** {total} across {len(self.disagreements)} chapter(s).")
+        lines.append("")
+        lines.append("| Type | Count |")
+        lines.append("| ---- | ----- |")
+        for t in sorted(type_counts.keys()):
+            lines.append(f"| `{t}` | {type_counts[t]} |")
+        lines.append("")
+        # Per-chapter rollup.
+        lines.append("### Per-chapter disagreements")
+        lines.append("")
+        for chap_ord in sorted(self.disagreements.keys()):
+            entries = self.disagreements[chap_ord]
+            if not entries:
+                continue
+            lines.append(f"**Chapter {chap_ord}** -- {len(entries)} disagreement(s):")
+            lines.append("")
+            for d in entries:
+                lines.append(f"- `{d.type}`: {d.title!r} -- {d.reason}")
+            lines.append("")
+        return lines
 
     @staticmethod
     def _summary_notes(ch: ChapterAgreement) -> str:

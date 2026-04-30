@@ -191,3 +191,103 @@ def _entries_to_nodes(
         rows.append((line_offset, level, node))
     rows.sort(key=lambda r: (r[0], r[1]))
     return [r[2] for r in rows]
+
+
+# ---------------------------------------------------------------------------
+# Disagreements loader (Phase 3 of section-extraction-contract-v2)
+# ---------------------------------------------------------------------------
+
+DISAGREEMENTS_FILENAME = "_llm_disagreements.json"
+"""Per-chapter disagreement file emitted by sub-agents that disagree with
+the TOC parser checklist embedded in their prompt."""
+
+_VALID_DISAGREEMENT_TYPES = frozenset({
+    "level_mismatch",
+    "parent_mismatch",
+    "missing_in_body",
+    "extra_in_toc",
+    "anchor_mismatch",
+})
+
+
+@dataclass(frozen=True)
+class Disagreement:
+    """One LLM-vs-TOC disagreement entry from `_llm_disagreements.json`."""
+
+    chapter_ordinal: int
+    type: str
+    title: str
+    toc_says: dict[str, Any]
+    body_says: dict[str, Any]
+    reason: str
+
+
+def load_chapter_disagreements(
+    config: HandbookConfig,
+    chapter_ordinal: int,
+) -> list[Disagreement]:
+    """Read `_llm_disagreements.json` for one chapter.
+
+    Returns an empty list when the file is absent (not every chapter has
+    disagreements; the sub-agent skips the file when it agrees with the
+    TOC checklist or the checklist was empty).
+
+    Hard-fails on malformed JSON or invalid entry shape -- the file's
+    presence is meant as structured signal, not free-form notes; if the
+    sub-agent emitted something we can't parse, the user re-pastes that
+    chapter's prompt.
+    """
+    chap_dir = edition_root(config.document_slug, config.edition) / f"{chapter_ordinal:02d}"
+    path = chap_dir / DISAGREEMENTS_FILENAME
+    if not path.is_file():
+        return []
+    try:
+        raw = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        raise SidecarMalformedError(
+            f"chapter {chapter_ordinal}: {path} is not valid JSON: {exc}. "
+            f"Re-paste this chapter's prompt and re-run --strategy compare."
+        ) from exc
+    if not isinstance(raw, list):
+        raise SidecarMalformedError(
+            f"chapter {chapter_ordinal}: {path} must be a JSON array; "
+            f"got {type(raw).__name__}."
+        )
+    out: list[Disagreement] = []
+    for idx, entry in enumerate(raw):
+        if not isinstance(entry, dict):
+            raise SidecarMalformedError(
+                f"chapter {chapter_ordinal}: {path} entry {idx} must be an object; "
+                f"got {type(entry).__name__}."
+            )
+        type_raw = entry.get("type")
+        if type_raw not in _VALID_DISAGREEMENT_TYPES:
+            raise SidecarMalformedError(
+                f"chapter {chapter_ordinal}: {path} entry {idx} has invalid "
+                f"`type` ({type_raw!r}); must be one of {sorted(_VALID_DISAGREEMENT_TYPES)}."
+            )
+        title_raw = entry.get("title")
+        if not isinstance(title_raw, str) or not title_raw.strip():
+            raise SidecarMalformedError(
+                f"chapter {chapter_ordinal}: {path} entry {idx} missing/empty `title`."
+            )
+        toc_says = entry.get("toc_says") or {}
+        body_says = entry.get("body_says") or {}
+        if not isinstance(toc_says, dict) or not isinstance(body_says, dict):
+            raise SidecarMalformedError(
+                f"chapter {chapter_ordinal}: {path} entry {idx} `toc_says` and "
+                f"`body_says` must be objects."
+            )
+        reason_raw = entry.get("reason", "")
+        reason = str(reason_raw).strip() if reason_raw is not None else ""
+        out.append(
+            Disagreement(
+                chapter_ordinal=chapter_ordinal,
+                type=str(type_raw),
+                title=title_raw.strip(),
+                toc_says=dict(toc_says),
+                body_says=dict(body_says),
+                reason=reason,
+            )
+        )
+    return out

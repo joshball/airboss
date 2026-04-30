@@ -1,4 +1,4 @@
-CONTRACT VERSION: 3
+CONTRACT VERSION: 4
 
 You extract the section structure of FAA handbook chapter content.
 
@@ -71,9 +71,13 @@ DIFFICULT CASES -- patterns observed in FAA handbooks:
 - **Numeric-prefix headings.** Some chapters number their L2 headings ("7.1 Powerplant", "7.2 Propeller"). STRIP the numeric prefix from `title` (emit `"Powerplant"`, not `"7.1 Powerplant"`); preserve order via line_offset.
 - **All-caps callouts that are not headings.** Captions ("FIGURE 7-12"), table titles ("TABLE 7-3"), and sidebar headers ("WARNING") look like headings but are not. Do NOT emit.
 
-DISAGREEMENTS (defined here; emit machinery lands separately):
+DISAGREEMENTS -- mutual review with the deterministic TOC parser:
 
-A future revision of the per-chapter prompt may pass you a per-chapter checklist derived from a deterministic table-of-contents parser. When that prompt arrives you will emit a SECOND file `_llm_disagreements.json` next to the section tree, with this shape:
+The per-chapter prompt now includes a "TOC parser checklist" section: the deterministic Python TOC parser's view of THIS chapter's structure, rendered as a markdown checklist. The TOC parser is deterministic but limited -- it tends to over-flatten subsections to L1 and miss real body-text headings that aren't in the printed TOC.
+
+Use the checklist as a CHECKLIST, not as truth. For each TOC entry, verify the heading exists verbatim in body text; if it does, emit it (your hierarchy preference rules apply -- the body text's nesting wins over the TOC's flatness). Find any body headings the TOC missed; emit them too.
+
+When you disagree with the TOC parser's structure, ALSO emit a SECOND file `_llm_disagreements.json` next to the section tree, with this shape:
 
 ```json
 [
@@ -81,10 +85,20 @@ A future revision of the per-chapter prompt may pass you a per-chapter checklist
     "type": "level_mismatch | parent_mismatch | missing_in_body | extra_in_toc | anchor_mismatch",
     "title": "<the heading in question>",
     "toc_says": { "level": 1, "parent_title": null, "page_anchor": "7-1" },
-    "body_says": { "level": 1, "parent_title": null, "page_anchor": "7-1" },
+    "body_says": { "level": 2, "parent_title": "Powerplant", "page_anchor": "7-1" },
     "reason": "<one-sentence explanation, e.g. 'TOC promoted Fixed-Pitch Propeller to L1; body text nests it under Propeller'>"
   }
 ]
 ```
 
-When the per-chapter prompt does NOT include a TOC checklist, do NOT write `_llm_disagreements.json`. The current per-chapter prompt does not include one; ignore this section for this run.
+Disagreement types:
+
+- `level_mismatch` -- the TOC says level X; the body text shows level Y. Most common: TOC flattened a subsection.
+- `parent_mismatch` -- the TOC's `parent_title` differs from the body text's. Often a side-effect of `level_mismatch` rolling up wrong.
+- `missing_in_body` -- the TOC entry's title does NOT appear in body text verbatim. Either a TOC parsing artifact or a heading the FAA dropped.
+- `extra_in_toc` -- a body-text heading the TOC didn't list. The LLM included it; the disagreement is informational ("TOC missed this").
+- `anchor_mismatch` -- both trees have the entry but disagree on the page anchor. Body is authoritative.
+
+Cap the disagreements file at 50 entries per chapter -- summarize systematic issues, don't enumerate every line. If the TOC checklist is empty (the TOC parser found zero entries for this chapter, e.g. early-onboarding), do NOT write `_llm_disagreements.json`; emit only the section tree.
+
+If the per-chapter prompt does NOT include a TOC checklist (the chapter dispatch shipped with an empty `{toc_checklist}` substitution), do NOT write `_llm_disagreements.json`; you have nothing to disagree with.

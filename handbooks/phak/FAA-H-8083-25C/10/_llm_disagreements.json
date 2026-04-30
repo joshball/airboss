@@ -1,0 +1,79 @@
+[
+  {
+    "type": "level_mismatch",
+    "title": "Effects of Weight",
+    "toc_says": { "level": 2, "parent_title": "Weight Control", "page_anchor": "10-2" },
+    "body_says": { "level": 2, "parent_title": "Weight Control", "page_anchor": "10-2" },
+    "reason": "TOC and body agree -- L2 under Weight Control. Included for completeness."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Stability",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "10-3" },
+    "body_says": { "level": 2, "parent_title": "Effects of Adverse Balance", "page_anchor": "10-3" },
+    "reason": "Effects of Adverse Balance opens by previewing 'Stability and control are also affected by improper balance', then immediately presents Stability and Control as the two aspects. Body nests them under Effects of Adverse Balance."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Control",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "10-3" },
+    "body_says": { "level": 2, "parent_title": "Effects of Adverse Balance", "page_anchor": "10-3" },
+    "reason": "Same parent grouping as Stability -- the two aspects of adverse balance previewed by the parent paragraph."
+  },
+  {
+    "type": "extra_in_toc",
+    "title": "Stability and Center of Gravity",
+    "toc_says": { "level": null, "parent_title": null, "page_anchor": null },
+    "body_says": { "level": 2, "parent_title": "Effects of Adverse Balance", "page_anchor": "10-3" },
+    "reason": "Body-text heading at line 161 between Stability and Control sections; TOC parser missed it. Emitted as L2 sibling of Stability/Control under Effects of Adverse Balance."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Computational Method",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "10-7" },
+    "body_says": { "level": 2, "parent_title": "Determining Loaded Weight and CG", "page_anchor": "10-7" },
+    "reason": "Determining Loaded Weight and CG explicitly enumerates computational, graph, and table methods as its three approaches; body nests them as children."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Graph Method",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "10-7" },
+    "body_says": { "level": 2, "parent_title": "Determining Loaded Weight and CG", "page_anchor": "10-7" },
+    "reason": "Same parent grouping -- second of the three methods enumerated under Determining Loaded Weight and CG."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Table Method",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "10-9" },
+    "body_says": { "level": 2, "parent_title": "Determining Loaded Weight and CG", "page_anchor": "10-9" },
+    "reason": "Same parent grouping -- third of the three methods enumerated under Determining Loaded Weight and CG."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Computations With a Negative Arm",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "10-10" },
+    "body_says": { "level": 2, "parent_title": "Determining Loaded Weight and CG", "page_anchor": "10-10" },
+    "reason": "Continues the methods discussion (negative-arm variant of the table method using Figure 10-10); fits as a sub-case under Determining Loaded Weight and CG."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Computations With Zero Fuel Weight",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "10-10" },
+    "body_says": { "level": 2, "parent_title": "Determining Loaded Weight and CG", "page_anchor": "10-10" },
+    "reason": "Continues the methods discussion (zero-fuel-weight variant using Figure 10-11); fits as a sub-case under Determining Loaded Weight and CG."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Weight Shifting",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "10-10" },
+    "body_says": { "level": 2, "parent_title": "Shifting, Adding, and Removing Weight", "page_anchor": "10-10" },
+    "reason": "Body presents Weight Shifting and Weight Addition or Removal as the two cases under Shifting, Adding, and Removing Weight."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Weight Addition or Removal",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "10-11" },
+    "body_says": { "level": 2, "parent_title": "Shifting, Adding, and Removing Weight", "page_anchor": "10-11" },
+    "reason": "Same parent grouping -- second case under Shifting, Adding, and Removing Weight."
+  }
+]

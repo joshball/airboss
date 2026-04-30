@@ -1,5 +1,5 @@
 {
-  "id": "1e15cb62-d0c0-4229-9658-19361dd741b7",
+  "id": "30252951-fafb-44fd-a4d3-d08f9abc4bca",
   "prevId": "cdc8aa4f-2398-4aae-beb3-e9152a533aff",
   "version": "7",
   "dialect": "postgresql",
@@ -5273,6 +5273,13 @@
           "primaryKey": false,
           "notNull": false
         },
+        "requires_teaching": {
+          "name": "requires_teaching",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
         "created_at": {
           "name": "created_at",
           "type": "timestamp with time zone",
@@ -5466,6 +5473,10 @@
         "syllabus_node_ordinal_check": {
           "name": "syllabus_node_ordinal_check",
           "value": "\"ordinal\" >= 0"
+        },
+        "syllabus_node_requires_teaching_triad_check": {
+          "name": "syllabus_node_requires_teaching_triad_check",
+          "value": "\"requires_teaching\" = false OR \"triad\" IS NOT NULL"
         },
         "syllabus_node_classes_check": {
           "name": "syllabus_node_classes_check",
@@ -6938,7 +6949,7 @@
         },
         "audit_log_target_type_check": {
           "name": "audit_log_target_type_check",
-          "value": "\"target_type\" IN ('hangar.ping', 'hangar.reference', 'hangar.source', 'hangar.sync', 'hangar.job', 'hangar.source.edition-resolved', 'hangar.source.edition-drift', 'hangar.source.thumbnail-generated', 'hangar.user')"
+          "value": "\"target_type\" IN ('hangar.ping', 'hangar.reference', 'hangar.source', 'hangar.sync', 'hangar.job', 'hangar.source.edition-resolved', 'hangar.source.edition-drift', 'hangar.source.thumbnail-generated')"
         }
       },
       "isRLSEnabled": false

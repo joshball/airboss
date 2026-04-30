@@ -36,13 +36,13 @@ Recent sim weakness lifts the study cards / reps tied to the knowledge each scen
 
 ## In flight or imminent
 
-| Item                                                                  | State              | Notes                                                                                                                    |
-| --------------------------------------------------------------------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------ |
-| Cockpit panel extraction (`CockpitPanel.svelte`)                      | Queued             | Per ADR 015 follow-up. Lets the dual page render the full panel, not just four primary gauges.                            |
-| Phase 7 horizon view continuation                                     | In flight          | 3D horizon visual fidelity, instrument-strip overlay tuning.                                                              |
-| Additional aircraft profiles                                          | Backlog            | Cherokee variants, complex/HP, glass.                                                                                     |
-| More scenarios                                                        | Backlog            | Crosswind landing, gust front, microburst, mountain wave, ridge soaring, ditching.                                       |
-| Anti-cheating / engagement integrity                                  | Out of scope (v1)  | The FIRC-era PRD specified extensive anti-cheating (engagement timing, rate limits, evidence hash, AFK flag, honeypots). Not load-bearing for a no-FAA-credit pilot performance platform. Revisit only if a FIRC pack ships. |
+| Item                                             | State             | Notes                                                                                                                                                                                                                        |
+| ------------------------------------------------ | ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Cockpit panel extraction (`CockpitPanel.svelte`) | Shipped           | Promoted to `libs/activities/cockpit-panel/` per [extract-sim-cockpit-panel](../../work-packages/extract-sim-cockpit-panel/spec.md). Five sim consumers import from `@ab/activities`.                                        |
+| Phase 7 horizon view continuation                | In flight         | 3D horizon visual fidelity, instrument-strip overlay tuning.                                                                                                                                                                 |
+| Additional aircraft profiles                     | Backlog           | Cherokee variants, complex/HP, glass.                                                                                                                                                                                        |
+| More scenarios                                   | Backlog           | Crosswind landing, gust front, microburst, mountain wave, ridge soaring, ditching.                                                                                                                                           |
+| Anti-cheating / engagement integrity             | Out of scope (v1) | The FIRC-era PRD specified extensive anti-cheating (engagement timing, rate limits, evidence hash, AFK flag, honeypots). Not load-bearing for a no-FAA-credit pilot performance platform. Revisit only if a FIRC pack ships. |
 
 ## Out of scope (intentionally)
 

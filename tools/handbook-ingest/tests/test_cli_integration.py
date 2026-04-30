@@ -107,6 +107,7 @@ def integration_setup(tmp_path: Path, monkeypatch) -> tuple:
         chapter_nodes=chapters,
         chapter_bodies=bodies,
         sidecars=sidecars,
+        pdf_path=Path("/nonexistent.pdf"),
         source_pdf_sha256=fake_pdf_sha,
     )
     return fake_root, config, chapters, bodies, sidecars, result, fake_pdf_sha
@@ -253,6 +254,7 @@ def test_archive_no_archive_round_trip(tmp_path: Path, monkeypatch) -> None:
         chapter_nodes=chapters,
         chapter_bodies=bodies,
         sidecars=sidecars,
+        pdf_path=Path("/nonexistent.pdf"),
         source_pdf_sha256="00" * 32,
         archive=False,
     )

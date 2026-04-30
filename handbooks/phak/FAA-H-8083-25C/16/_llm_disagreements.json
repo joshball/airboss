@@ -1,0 +1,72 @@
+[
+  {
+    "type": "level_mismatch",
+    "title": "Step 1",
+    "toc_says": { "level": 2, "parent_title": "Dead Reckoning", "page_anchor": "16-14" },
+    "body_says": { "level": 3, "parent_title": "Wind Triangle or Vector Analysis", "page_anchor": "16-14" },
+    "reason": "Body text nests Step 1-4 under 'Wind Triangle or Vector Analysis' as the construction sequence; TOC flattened them to siblings of that heading."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Step 2",
+    "toc_says": { "level": 2, "parent_title": "Dead Reckoning", "page_anchor": "16-15" },
+    "body_says": { "level": 3, "parent_title": "Wind Triangle or Vector Analysis", "page_anchor": "16-15" },
+    "reason": "Body text nests Step 1-4 under 'Wind Triangle or Vector Analysis' as the construction sequence; TOC flattened them to siblings of that heading."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Step 3",
+    "toc_says": { "level": 2, "parent_title": "Dead Reckoning", "page_anchor": "16-15" },
+    "body_says": { "level": 3, "parent_title": "Wind Triangle or Vector Analysis", "page_anchor": "16-15" },
+    "reason": "Body text nests Step 1-4 under 'Wind Triangle or Vector Analysis' as the construction sequence; TOC flattened them to siblings of that heading."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Step 4",
+    "toc_says": { "level": 2, "parent_title": "Dead Reckoning", "page_anchor": "16-15" },
+    "body_says": { "level": 3, "parent_title": "Wind Triangle or Vector Analysis", "page_anchor": "16-15" },
+    "reason": "Body text nests Step 1-4 under 'Wind Triangle or Vector Analysis' as the construction sequence; TOC flattened them to siblings of that heading."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Rate of Intercept",
+    "toc_says": { "level": 2, "parent_title": "Ground-Based Navigation", "page_anchor": "16-27" },
+    "body_says": { "level": 3, "parent_title": "Course Intercept", "page_anchor": "16-27" },
+    "reason": "Body text introduces Rate of Intercept and Angle of Intercept as the two factors expanded inside Course Intercept; TOC flattened them to siblings."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Angle of Intercept",
+    "toc_says": { "level": 2, "parent_title": "Ground-Based Navigation", "page_anchor": "16-27" },
+    "body_says": { "level": 3, "parent_title": "Course Intercept", "page_anchor": "16-27" },
+    "reason": "Body text introduces Rate of Intercept and Angle of Intercept as the two factors expanded inside Course Intercept; TOC flattened them to siblings."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Selective Availability",
+    "toc_says": { "level": 2, "parent_title": "Ground-Based Navigation", "page_anchor": "16-31" },
+    "body_says": { "level": 3, "parent_title": "Global Positioning System", "page_anchor": "16-31" },
+    "reason": "Body text continues the GPS discussion; Selective Availability is a sub-topic of GPS, not a sibling of it."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "VFR Use of GPS",
+    "toc_says": { "level": 2, "parent_title": "Ground-Based Navigation", "page_anchor": "16-32" },
+    "body_says": { "level": 3, "parent_title": "Global Positioning System", "page_anchor": "16-32" },
+    "reason": "VFR Use of GPS is a use-case subsection of the Global Positioning System discussion; TOC promoted it to a sibling."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "RAIM Capability",
+    "toc_says": { "level": 2, "parent_title": "Ground-Based Navigation", "page_anchor": "16-32" },
+    "body_says": { "level": 3, "parent_title": "Global Positioning System", "page_anchor": "16-32" },
+    "reason": "RAIM Capability is one of the critical concerns in VFR use of GPS introduced in the preceding paragraph; sub-topic of the GPS section."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Tips for Using GPS for VFR Operations",
+    "toc_says": { "level": 2, "parent_title": "Ground-Based Navigation", "page_anchor": "16-33" },
+    "body_says": { "level": 3, "parent_title": "Global Positioning System", "page_anchor": "16-33" },
+    "reason": "Tips list directly continues the GPS sub-discussion before VFR Waypoints returns to the broader Ground-Based Navigation level."
+  }
+]

@@ -29,52 +29,45 @@
   },
   {
     "title": "Hypoxic Hypoxia",
-    "level": 3,
+    "level": 2,
     "page_anchor": "17-3",
     "line_offset": 163,
-    "parent_title": "Hypoxia"
-  },
-  {
-    "title": "Dangers of Transporting Dry Ice",
-    "level": 3,
-    "page_anchor": "17-3",
-    "line_offset": 177,
-    "parent_title": "Hypoxia"
+    "parent_title": "Health and Physiological Factors Affecting Pilot Performance"
   },
   {
     "title": "Hypemic Hypoxia",
-    "level": 3,
+    "level": 2,
     "page_anchor": "17-3",
     "line_offset": 200,
-    "parent_title": "Hypoxia"
+    "parent_title": "Health and Physiological Factors Affecting Pilot Performance"
   },
   {
     "title": "Stagnant Hypoxia",
-    "level": 3,
+    "level": 2,
     "page_anchor": "17-3",
     "line_offset": 218,
-    "parent_title": "Hypoxia"
+    "parent_title": "Health and Physiological Factors Affecting Pilot Performance"
   },
   {
     "title": "Histotoxic Hypoxia",
-    "level": 3,
+    "level": 2,
     "page_anchor": "17-4",
     "line_offset": 251,
-    "parent_title": "Hypoxia"
+    "parent_title": "Health and Physiological Factors Affecting Pilot Performance"
   },
   {
     "title": "Symptoms of Hypoxia",
-    "level": 3,
+    "level": 2,
     "page_anchor": "17-4",
     "line_offset": 260,
-    "parent_title": "Hypoxia"
+    "parent_title": "Health and Physiological Factors Affecting Pilot Performance"
   },
   {
     "title": "Treatment of Hypoxia",
-    "level": 3,
+    "level": 2,
     "page_anchor": "17-4",
     "line_offset": 294,
-    "parent_title": "Hypoxia"
+    "parent_title": "Health and Physiological Factors Affecting Pilot Performance"
   },
   {
     "title": "Hyperventilation",
@@ -109,42 +102,42 @@
     "level": 3,
     "page_anchor": "17-7",
     "line_offset": 538,
-    "parent_title": "Vestibular Illusions"
+    "parent_title": "Spatial Disorientation and Illusions"
   },
   {
     "title": "Coriolis Illusion",
     "level": 3,
     "page_anchor": "17-7",
     "line_offset": 551,
-    "parent_title": "Vestibular Illusions"
+    "parent_title": "Spatial Disorientation and Illusions"
   },
   {
     "title": "Graveyard Spiral",
     "level": 3,
     "page_anchor": "17-7",
     "line_offset": 567,
-    "parent_title": "Vestibular Illusions"
+    "parent_title": "Spatial Disorientation and Illusions"
   },
   {
     "title": "Somatogravic Illusion",
     "level": 3,
     "page_anchor": "17-7",
     "line_offset": 582,
-    "parent_title": "Vestibular Illusions"
+    "parent_title": "Spatial Disorientation and Illusions"
   },
   {
     "title": "Inversion Illusion",
     "level": 3,
     "page_anchor": "17-8",
     "line_offset": 603,
-    "parent_title": "Vestibular Illusions"
+    "parent_title": "Spatial Disorientation and Illusions"
   },
   {
     "title": "Elevator Illusion",
     "level": 3,
     "page_anchor": "17-8",
     "line_offset": 609,
-    "parent_title": "Vestibular Illusions"
+    "parent_title": "Spatial Disorientation and Illusions"
   },
   {
     "title": "Visual Illusions",
@@ -158,28 +151,28 @@
     "level": 3,
     "page_anchor": "17-8",
     "line_offset": 622,
-    "parent_title": "Visual Illusions"
+    "parent_title": "Spatial Disorientation and Illusions"
   },
   {
     "title": "Autokinesis",
     "level": 3,
     "page_anchor": "17-8",
     "line_offset": 630,
-    "parent_title": "Visual Illusions"
+    "parent_title": "Spatial Disorientation and Illusions"
   },
   {
     "title": "Postural Considerations",
-    "level": 3,
+    "level": 2,
     "page_anchor": "17-8",
     "line_offset": 636,
-    "parent_title": "Spatial Disorientation and Illusions"
+    "parent_title": "Health and Physiological Factors Affecting Pilot Performance"
   },
   {
     "title": "Demonstration of Spatial Disorientation",
-    "level": 3,
+    "level": 2,
     "page_anchor": "17-8",
     "line_offset": 649,
-    "parent_title": "Spatial Disorientation and Illusions"
+    "parent_title": "Health and Physiological Factors Affecting Pilot Performance"
   },
   {
     "title": "Diving or Rolling Beyond the Vertical Plane",
@@ -190,10 +183,10 @@
   },
   {
     "title": "Coping with Spatial Disorientation",
-    "level": 3,
+    "level": 2,
     "page_anchor": "17-9",
     "line_offset": 690,
-    "parent_title": "Spatial Disorientation and Illusions"
+    "parent_title": "Health and Physiological Factors Affecting Pilot Performance"
   },
   {
     "title": "Climbing While Accelerating",
@@ -232,157 +225,157 @@
   },
   {
     "title": "Optical Illusions",
-    "level": 3,
+    "level": 1,
     "page_anchor": "17-10",
     "line_offset": 790,
-    "parent_title": "Spatial Disorientation and Illusions"
+    "parent_title": null
   },
   {
     "title": "Runway Width Illusion",
-    "level": 3,
+    "level": 2,
     "page_anchor": "17-10",
     "line_offset": 801,
     "parent_title": "Optical Illusions"
   },
   {
     "title": "Runway and Terrain Slopes Illusion",
-    "level": 3,
+    "level": 2,
     "page_anchor": "17-10",
     "line_offset": 811,
     "parent_title": "Optical Illusions"
   },
   {
     "title": "Featureless Terrain Illusion",
-    "level": 3,
+    "level": 2,
     "page_anchor": "17-10",
     "line_offset": 817,
     "parent_title": "Optical Illusions"
   },
   {
     "title": "Water Refraction",
-    "level": 3,
+    "level": 2,
     "page_anchor": "17-10",
     "line_offset": 824,
     "parent_title": "Optical Illusions"
   },
   {
     "title": "Haze",
-    "level": 3,
+    "level": 2,
     "page_anchor": "17-10",
     "line_offset": 828,
     "parent_title": "Optical Illusions"
   },
   {
     "title": "Fog",
-    "level": 3,
+    "level": 2,
     "page_anchor": "17-10",
     "line_offset": 840,
     "parent_title": "Optical Illusions"
   },
   {
     "title": "Ground Lighting Illusions",
-    "level": 3,
+    "level": 2,
     "page_anchor": "17-10",
     "line_offset": 844,
     "parent_title": "Optical Illusions"
   },
   {
     "title": "How To Prevent Landing Errors Due to Optical Illusions",
-    "level": 3,
+    "level": 2,
     "page_anchor": "17-10",
     "line_offset": 851,
     "parent_title": "Optical Illusions"
   },
   {
     "title": "Motion Sickness",
-    "level": 2,
+    "level": 1,
     "page_anchor": "17-12",
     "line_offset": 973,
-    "parent_title": "Health and Physiological Factors Affecting Pilot Performance"
+    "parent_title": null
   },
   {
     "title": "Carbon Monoxide (CO) Poisoning",
-    "level": 2,
+    "level": 1,
     "page_anchor": "17-12",
     "line_offset": 995,
-    "parent_title": "Health and Physiological Factors Affecting Pilot Performance"
+    "parent_title": null
   },
   {
     "title": "Stress",
-    "level": 2,
+    "level": 1,
     "page_anchor": "17-12",
     "line_offset": 1021,
-    "parent_title": "Health and Physiological Factors Affecting Pilot Performance"
+    "parent_title": null
   },
   {
     "title": "Fatigue",
-    "level": 2,
+    "level": 1,
     "page_anchor": "17-13",
     "line_offset": 1052,
-    "parent_title": "Health and Physiological Factors Affecting Pilot Performance"
+    "parent_title": null
   },
   {
     "title": "Exposure to Chemicals",
-    "level": 2,
+    "level": 1,
     "page_anchor": "17-13",
     "line_offset": 1124,
-    "parent_title": "Health and Physiological Factors Affecting Pilot Performance"
+    "parent_title": null
   },
   {
     "title": "Hydraulic Fluid",
-    "level": 3,
+    "level": 2,
     "page_anchor": "17-13",
     "line_offset": 1143,
     "parent_title": "Exposure to Chemicals"
   },
   {
     "title": "Engine Oil",
-    "level": 3,
+    "level": 2,
     "page_anchor": "17-14",
     "line_offset": 1167,
     "parent_title": "Exposure to Chemicals"
   },
   {
     "title": "Fuel",
-    "level": 3,
+    "level": 2,
     "page_anchor": "17-14",
     "line_offset": 1189,
     "parent_title": "Exposure to Chemicals"
   },
   {
     "title": "Dehydration and Heatstroke",
-    "level": 2,
+    "level": 1,
     "page_anchor": "17-14",
     "line_offset": 1217,
-    "parent_title": "Health and Physiological Factors Affecting Pilot Performance"
+    "parent_title": null
   },
   {
     "title": "Alcohol",
-    "level": 2,
+    "level": 1,
     "page_anchor": "17-15",
     "line_offset": 1338,
-    "parent_title": "Health and Physiological Factors Affecting Pilot Performance"
+    "parent_title": null
   },
   {
     "title": "Drugs",
-    "level": 2,
+    "level": 1,
     "page_anchor": "17-15",
     "line_offset": 1397,
-    "parent_title": "Health and Physiological Factors Affecting Pilot Performance"
+    "parent_title": null
   },
   {
     "title": "Altitude-Induced Decompression Sickness (DCS)",
-    "level": 2,
+    "level": 1,
     "page_anchor": "17-18",
     "line_offset": 1681,
-    "parent_title": "Health and Physiological Factors Affecting Pilot Performance"
+    "parent_title": null
   },
   {
     "title": "DCS After Scuba Diving",
-    "level": 3,
+    "level": 1,
     "page_anchor": "17-18",
     "line_offset": 1724,
-    "parent_title": "Altitude-Induced Decompression Sickness (DCS)"
+    "parent_title": null
   },
   {
     "title": "Vision in Flight",
@@ -393,77 +386,77 @@
   },
   {
     "title": "Vision Types",
-    "level": 2,
-    "page_anchor": "17-20",
+    "level": 1,
+    "page_anchor": "17-19",
     "line_offset": 1901,
-    "parent_title": "Vision in Flight"
+    "parent_title": null
   },
   {
     "title": "Photopic Vision",
-    "level": 3,
-    "page_anchor": "17-20",
+    "level": 2,
+    "page_anchor": "17-19",
     "line_offset": 1905,
     "parent_title": "Vision Types"
   },
   {
     "title": "Mesopic Vision",
-    "level": 3,
-    "page_anchor": "17-20",
+    "level": 2,
+    "page_anchor": "17-21",
     "line_offset": 1928,
     "parent_title": "Vision Types"
   },
   {
     "title": "Scotopic Vision",
-    "level": 3,
-    "page_anchor": "17-20",
+    "level": 2,
+    "page_anchor": "17-21",
     "line_offset": 1937,
     "parent_title": "Vision Types"
   },
   {
     "title": "Central Blind Spot",
-    "level": 2,
+    "level": 1,
     "page_anchor": "17-21",
     "line_offset": 1948,
-    "parent_title": "Vision in Flight"
+    "parent_title": null
   },
   {
     "title": "Empty-Field Myopia",
-    "level": 2,
+    "level": 1,
     "page_anchor": "17-22",
     "line_offset": 2012,
-    "parent_title": "Vision in Flight"
+    "parent_title": null
   },
   {
     "title": "Night Vision",
-    "level": 2,
+    "level": 1,
     "page_anchor": "17-22",
     "line_offset": 2021,
-    "parent_title": "Vision in Flight"
+    "parent_title": null
   },
   {
     "title": "Night Blind Spot",
-    "level": 3,
+    "level": 2,
     "page_anchor": "17-22",
     "line_offset": 2028,
     "parent_title": "Night Vision"
   },
   {
     "title": "Dark Adaptation",
-    "level": 3,
+    "level": 2,
     "page_anchor": "17-23",
     "line_offset": 2057,
     "parent_title": "Night Vision"
   },
   {
     "title": "Scanning Techniques",
-    "level": 3,
+    "level": 2,
     "page_anchor": "17-23",
     "line_offset": 2071,
     "parent_title": "Night Vision"
   },
   {
     "title": "Night Vision Protection",
-    "level": 3,
+    "level": 2,
     "page_anchor": "17-23",
     "line_offset": 2097,
     "parent_title": "Night Vision"
@@ -508,7 +501,7 @@
     "level": 2,
     "page_anchor": "17-25",
     "line_offset": 2221,
-    "parent_title": "Vision in Flight"
+    "parent_title": "Night Vision"
   },
   {
     "title": "Drugs",
@@ -554,112 +547,112 @@
   },
   {
     "title": "Distance Estimation and Depth Perception",
-    "level": 2,
+    "level": 1,
     "page_anchor": "17-25",
     "line_offset": 2282,
-    "parent_title": "Vision in Flight"
+    "parent_title": null
   },
   {
     "title": "Motion Parallax",
-    "level": 3,
+    "level": 2,
     "page_anchor": "17-25",
     "line_offset": 2289,
     "parent_title": "Distance Estimation and Depth Perception"
   },
   {
     "title": "Geometric Perspective",
-    "level": 3,
+    "level": 2,
     "page_anchor": "17-26",
     "line_offset": 2304,
     "parent_title": "Distance Estimation and Depth Perception"
   },
   {
     "title": "Aerial Perspective",
-    "level": 3,
+    "level": 2,
     "page_anchor": "17-26",
     "line_offset": 2323,
     "parent_title": "Distance Estimation and Depth Perception"
   },
   {
     "title": "Binocular Cues",
-    "level": 3,
+    "level": 1,
     "page_anchor": "17-26",
     "line_offset": 2336,
-    "parent_title": "Distance Estimation and Depth Perception"
+    "parent_title": null
   },
   {
     "title": "Night Vision Illusions",
-    "level": 2,
+    "level": 1,
     "page_anchor": "17-26",
     "line_offset": 2345,
-    "parent_title": "Vision in Flight"
+    "parent_title": null
   },
   {
     "title": "Autokinesis",
-    "level": 3,
+    "level": 2,
     "page_anchor": "17-26",
     "line_offset": 2349,
     "parent_title": "Night Vision Illusions"
   },
   {
     "title": "False Horizon",
-    "level": 3,
+    "level": 2,
     "page_anchor": "17-26",
     "line_offset": 2361,
     "parent_title": "Night Vision Illusions"
   },
   {
     "title": "Reversible Perspective Illusion",
-    "level": 3,
+    "level": 2,
     "page_anchor": "17-26",
     "line_offset": 2368,
     "parent_title": "Night Vision Illusions"
   },
   {
     "title": "Size-Distance Illusion",
-    "level": 3,
+    "level": 2,
     "page_anchor": "17-27",
     "line_offset": 2382,
     "parent_title": "Night Vision Illusions"
   },
   {
     "title": "Fascination (Fixation)",
-    "level": 3,
+    "level": 2,
     "page_anchor": "17-27",
     "line_offset": 2386,
     "parent_title": "Night Vision Illusions"
   },
   {
     "title": "Flicker Vertigo",
-    "level": 3,
+    "level": 2,
     "page_anchor": "17-27",
     "line_offset": 2395,
     "parent_title": "Night Vision Illusions"
   },
   {
     "title": "Night Landing Illusions",
-    "level": 3,
+    "level": 2,
     "page_anchor": "17-27",
     "line_offset": 2402,
     "parent_title": "Night Vision Illusions"
   },
   {
     "title": "Enhanced Night Vision Systems",
-    "level": 2,
+    "level": 1,
     "page_anchor": "17-27",
     "line_offset": 2435,
-    "parent_title": "Vision in Flight"
+    "parent_title": null
   },
   {
     "title": "Synthetic Vision System",
-    "level": 3,
+    "level": 2,
     "page_anchor": "17-28",
     "line_offset": 2447,
     "parent_title": "Enhanced Night Vision Systems"
   },
   {
     "title": "Enhanced Flight Vision System",
-    "level": 3,
+    "level": 2,
     "page_anchor": "17-28",
     "line_offset": 2479,
     "parent_title": "Enhanced Night Vision Systems"

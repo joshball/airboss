@@ -5,7 +5,14 @@
  */
 
 import { bauthUser } from '@ab/auth/schema';
-import { CREDENTIAL_STATUSES, GOAL_STATUSES, SYLLABUS_PRIMACY, SYLLABUS_STATUSES } from '@ab/constants';
+import {
+	ASSESSMENT_METHODS,
+	CREDENTIAL_STATUSES,
+	GOAL_STATUSES,
+	NODE_MASTERY_GATES,
+	SYLLABUS_PRIMACY,
+	SYLLABUS_STATUSES,
+} from '@ab/constants';
 import { db } from '@ab/db/connection';
 import {
 	generateAuthId,
@@ -17,7 +24,7 @@ import {
 } from '@ab/utils';
 import { eq } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { acsLens, computeMasteryRollup, domainLens } from './lenses';
+import { acsLens, computeMasteryRollup, domainLens, nodeAssessmentMethodsToRequiredKinds } from './lenses';
 import {
 	credential,
 	credentialSyllabus,
@@ -68,6 +75,68 @@ describe('computeMasteryRollup', () => {
 		const r = computeMasteryRollup([{ mastery: { mastered: true, covered: true }, weight: 0 }]);
 		expect(r.masteryFraction).toBe(0);
 		expect(r.coverageFraction).toBe(0);
+	});
+
+	it('emits an empty byEvidenceKind for legacy-shaped leaves (no requiredKinds)', () => {
+		const r = computeMasteryRollup([{ mastery: { mastered: true, covered: true }, weight: 1 }]);
+		expect(r.byEvidenceKind).toEqual({});
+	});
+
+	it('aggregates byEvidenceKind from leaves carrying the richer LensLeafMastery shape', () => {
+		const r = computeMasteryRollup([
+			{
+				mastery: {
+					mastered: true,
+					covered: true,
+					requiredKinds: [ASSESSMENT_METHODS.RECALL],
+					byEvidenceKind: { [ASSESSMENT_METHODS.RECALL]: NODE_MASTERY_GATES.PASS },
+					missingKinds: [],
+				},
+				weight: 1,
+			},
+			{
+				mastery: {
+					mastered: false,
+					covered: true,
+					requiredKinds: [ASSESSMENT_METHODS.SCENARIO],
+					byEvidenceKind: { [ASSESSMENT_METHODS.SCENARIO]: NODE_MASTERY_GATES.INSUFFICIENT_DATA },
+					missingKinds: [ASSESSMENT_METHODS.SCENARIO],
+				},
+				weight: 1,
+			},
+			{
+				mastery: {
+					mastered: false,
+					covered: false,
+					requiredKinds: [ASSESSMENT_METHODS.SCENARIO, ASSESSMENT_METHODS.RECALL],
+					byEvidenceKind: {},
+					missingKinds: [ASSESSMENT_METHODS.SCENARIO, ASSESSMENT_METHODS.RECALL],
+				},
+				weight: 1,
+			},
+		]);
+		// recall: 2 leaves required it; 1 passed.
+		expect(r.byEvidenceKind[ASSESSMENT_METHODS.RECALL]).toEqual({ required: 2, passing: 1 });
+		// scenario: 2 leaves required it; 0 passed.
+		expect(r.byEvidenceKind[ASSESSMENT_METHODS.SCENARIO]).toEqual({ required: 2, passing: 0 });
+	});
+});
+
+describe('nodeAssessmentMethodsToRequiredKinds', () => {
+	it('returns an empty array for null / undefined', () => {
+		expect(nodeAssessmentMethodsToRequiredKinds(null)).toEqual([]);
+		expect(nodeAssessmentMethodsToRequiredKinds(undefined)).toEqual([]);
+		expect(nodeAssessmentMethodsToRequiredKinds([])).toEqual([]);
+	});
+
+	it('narrows recognised assessment-method strings into AssessmentMethod values', () => {
+		const out = nodeAssessmentMethodsToRequiredKinds([ASSESSMENT_METHODS.RECALL, ASSESSMENT_METHODS.SCENARIO]);
+		expect(out).toEqual([ASSESSMENT_METHODS.RECALL, ASSESSMENT_METHODS.SCENARIO]);
+	});
+
+	it('drops unknown method strings without throwing', () => {
+		const out = nodeAssessmentMethodsToRequiredKinds(['not-a-real-method', ASSESSMENT_METHODS.RECALL]);
+		expect(out).toEqual([ASSESSMENT_METHODS.RECALL]);
 	});
 });
 
@@ -447,6 +516,32 @@ describe('acsLens', () => {
 		expect(result.rollup.masteredLeaves).toBe(0);
 	});
 
+	it('surfaces per-kind requiredKinds + missingKinds on each leaf (evidence-kind-gating)', async () => {
+		const goalRow = (await db.select().from(goal).where(eq(goal.id, GOAL_ID)).limit(1))[0];
+		if (!goalRow) throw new Error('expected seeded goal row');
+		const result = await acsLens(db, TEST_USER_ID, { goal: goalRow });
+		// User has zero evidence on any leaf -> requiredKinds is the triad's
+		// required set, missingKinds is the same set, byEvidenceKind is empty.
+		const k1Leaf = result.leaves.find((l) => l.title === 'Aerodynamics of steep turns');
+		const r1Leaf = result.leaves.find((l) => l.title === 'Failure to maintain coordinated flight');
+		const s1Leaf = result.leaves.find((l) => l.title === 'Demonstrate steep turns');
+		expect(k1Leaf?.mastery.requiredKinds).toEqual([ASSESSMENT_METHODS.RECALL]);
+		expect(k1Leaf?.mastery.missingKinds).toEqual([ASSESSMENT_METHODS.RECALL]);
+		expect(r1Leaf?.mastery.requiredKinds).toEqual([ASSESSMENT_METHODS.SCENARIO]);
+		expect(r1Leaf?.mastery.missingKinds).toEqual([ASSESSMENT_METHODS.SCENARIO]);
+		// Skill leaf: alternatives [demonstration] OR [scenario]; both are
+		// surfaced as required across the alternatives.
+		expect(new Set(s1Leaf?.mastery.requiredKinds ?? [])).toEqual(
+			new Set([ASSESSMENT_METHODS.DEMONSTRATION, ASSESSMENT_METHODS.SCENARIO]),
+		);
+		// missingKinds points at the cheapest alternative path -- one of the
+		// inner all-of groups, not the whole required set.
+		expect((s1Leaf?.mastery.missingKinds ?? []).length).toBe(1);
+		// Rollup byEvidenceKind aggregates required counts across the leaf set.
+		expect(result.rollup.byEvidenceKind[ASSESSMENT_METHODS.RECALL]?.required).toBe(1);
+		expect(result.rollup.byEvidenceKind[ASSESSMENT_METHODS.SCENARIO]?.required).toBeGreaterThanOrEqual(1);
+	});
+
 	it('respects areaCodes filter', async () => {
 		const goalRow = (await db.select().from(goal).where(eq(goal.id, GOAL_ID)).limit(1))[0];
 		if (!goalRow) throw new Error('expected seeded goal row');
@@ -562,5 +657,34 @@ describe('domainLens', () => {
 		});
 		expect(result.tree.map((d) => d.id)).toEqual(['domain:aerodynamics']);
 		expect(result.rollup.totalLeaves).toBe(2); // KN_AERO + KN_RM
+	});
+
+	it('derives required kinds for a domain leaf from the node assessment_methods', async () => {
+		// KN_AERO has assessmentMethods=[]; KN_SKILL has assessmentMethods=[];
+		// for the test we update one node to declare 'recall' so the lens
+		// surfaces it as a required kind.
+		await db
+			.update(knowledgeNode)
+			.set({ assessmentMethods: [ASSESSMENT_METHODS.RECALL] })
+			.where(eq(knowledgeNode.id, KN_AERO_ID));
+		try {
+			const goalRow = (await db.select().from(goal).where(eq(goal.id, GOAL_ID)).limit(1))[0];
+			if (!goalRow) throw new Error('expected seeded goal row');
+			const result = await domainLens(db, TEST_USER_ID, {
+				goal: goalRow,
+				filters: { domains: ['aerodynamics'] },
+			});
+			const aeroLeaf = result.leaves.find((l) => l.id === KN_AERO_ID);
+			expect(aeroLeaf?.mastery.requiredKinds).toEqual([ASSESSMENT_METHODS.RECALL]);
+			// User has no card evidence -> recall not passed -> missing.
+			expect(aeroLeaf?.mastery.missingKinds).toEqual([ASSESSMENT_METHODS.RECALL]);
+			// Node-level byEvidenceKind reflects the per-kind state across all
+			// known assessment methods, including the one we declared.
+			expect(aeroLeaf?.mastery.byEvidenceKind[ASSESSMENT_METHODS.RECALL]).toBe(NODE_MASTERY_GATES.NOT_APPLICABLE);
+			// Rollup byEvidenceKind counts the required kind once.
+			expect(result.rollup.byEvidenceKind[ASSESSMENT_METHODS.RECALL]?.required).toBeGreaterThanOrEqual(1);
+		} finally {
+			await db.update(knowledgeNode).set({ assessmentMethods: [] }).where(eq(knowledgeNode.id, KN_AERO_ID));
+		}
 	});
 });

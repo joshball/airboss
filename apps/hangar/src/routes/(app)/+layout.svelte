@@ -15,6 +15,10 @@ import ThemeProvider from '@ab/themes/ThemeProvider.svelte';
 import type { Snippet } from 'svelte';
 import { page } from '$app/state';
 import Nav from '$lib/components/Nav.svelte';
+// Module-eval side-effect: register hangar-app help pages on first import.
+// Required so `<PageHelp pageId="audit">` and the help-id validator both
+// see the same set of authored pages.
+import '$lib/help/register';
 import type { LayoutData } from './$types';
 
 let { data, children }: { data: LayoutData; children: Snippet } = $props();

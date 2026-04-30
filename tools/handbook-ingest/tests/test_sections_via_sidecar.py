@@ -14,9 +14,11 @@ from ingest import paths as paths_module
 from ingest.config_loader import HandbookConfig
 from ingest.outline import OutlineNode
 from ingest.sections_via_sidecar import (
+    DISAGREEMENTS_FILENAME,
     PROMPT_PROVENANCE,
     SidecarMalformedError,
     SidecarMissingError,
+    load_chapter_disagreements,
     load_chapter_sidecars,
 )
 
@@ -183,3 +185,120 @@ def test_l3_clamped_to_l2(tmp_path: Path, monkeypatch) -> None:
     )
     result = load_chapter_sidecars(config, [_chapter_node(1)])
     assert result.chapters[0].nodes[0].level == 2
+
+
+# ---------------------------------------------------------------------------
+# Disagreements loader (Phase 3)
+# ---------------------------------------------------------------------------
+
+
+def _seed_disagreements(
+    repo_root: Path, config: HandbookConfig, ordinal: int, payload
+) -> Path:
+    chap_dir = (
+        repo_root
+        / "handbooks"
+        / config.document_slug
+        / config.edition
+        / f"{ordinal:02d}"
+    )
+    chap_dir.mkdir(parents=True, exist_ok=True)
+    path = chap_dir / DISAGREEMENTS_FILENAME
+    path.write_text(json.dumps(payload), encoding="utf-8")
+    return path
+
+
+def test_disagreements_returns_empty_when_file_absent(tmp_path: Path, monkeypatch) -> None:
+    monkeypatch.setattr(paths_module, "repo_root", lambda: tmp_path)
+    config = _make_config()
+    out = load_chapter_disagreements(config, chapter_ordinal=1)
+    assert out == []
+
+
+def test_disagreements_loads_valid_payload(tmp_path: Path, monkeypatch) -> None:
+    monkeypatch.setattr(paths_module, "repo_root", lambda: tmp_path)
+    config = _make_config()
+    _seed_disagreements(
+        tmp_path,
+        config,
+        7,
+        [
+            {
+                "type": "level_mismatch",
+                "title": "Fixed-Pitch Propeller",
+                "toc_says": {"level": 1, "parent_title": None, "page_anchor": "7-5"},
+                "body_says": {"level": 2, "parent_title": "Propeller", "page_anchor": "7-5"},
+                "reason": "TOC promoted to L1; body nests under Propeller.",
+            },
+            {
+                "type": "missing_in_body",
+                "title": "Carburetor Air Temperature Gauge",
+                "toc_says": {"level": 1, "parent_title": None, "page_anchor": "7-11"},
+                "body_says": {},
+                "reason": "TOC entry not present in body text.",
+            },
+        ],
+    )
+    out = load_chapter_disagreements(config, chapter_ordinal=7)
+    assert len(out) == 2
+    assert out[0].type == "level_mismatch"
+    assert out[0].title == "Fixed-Pitch Propeller"
+    assert out[0].toc_says == {"level": 1, "parent_title": None, "page_anchor": "7-5"}
+    assert out[0].body_says["parent_title"] == "Propeller"
+    assert out[1].type == "missing_in_body"
+
+
+def test_disagreements_rejects_invalid_type(tmp_path: Path, monkeypatch) -> None:
+    monkeypatch.setattr(paths_module, "repo_root", lambda: tmp_path)
+    config = _make_config()
+    _seed_disagreements(
+        tmp_path,
+        config,
+        7,
+        [
+            {
+                "type": "made_up_type",
+                "title": "X",
+                "toc_says": {},
+                "body_says": {},
+                "reason": "",
+            }
+        ],
+    )
+    with pytest.raises(SidecarMalformedError) as excinfo:
+        load_chapter_disagreements(config, chapter_ordinal=7)
+    assert "invalid `type`" in str(excinfo.value)
+
+
+def test_disagreements_rejects_missing_title(tmp_path: Path, monkeypatch) -> None:
+    monkeypatch.setattr(paths_module, "repo_root", lambda: tmp_path)
+    config = _make_config()
+    _seed_disagreements(
+        tmp_path,
+        config,
+        7,
+        [{"type": "level_mismatch", "title": "", "toc_says": {}, "body_says": {}}],
+    )
+    with pytest.raises(SidecarMalformedError) as excinfo:
+        load_chapter_disagreements(config, chapter_ordinal=7)
+    assert "missing/empty `title`" in str(excinfo.value)
+
+
+def test_disagreements_rejects_non_array(tmp_path: Path, monkeypatch) -> None:
+    monkeypatch.setattr(paths_module, "repo_root", lambda: tmp_path)
+    config = _make_config()
+    _seed_disagreements(tmp_path, config, 7, {"not": "an array"})
+    with pytest.raises(SidecarMalformedError) as excinfo:
+        load_chapter_disagreements(config, chapter_ordinal=7)
+    assert "must be a JSON array" in str(excinfo.value)
+
+
+def test_disagreements_rejects_malformed_json(tmp_path: Path, monkeypatch) -> None:
+    monkeypatch.setattr(paths_module, "repo_root", lambda: tmp_path)
+    config = _make_config()
+    chap_dir = tmp_path / "handbooks" / config.document_slug / config.edition / "07"
+    chap_dir.mkdir(parents=True)
+    (chap_dir / DISAGREEMENTS_FILENAME).write_text("{not valid json", encoding="utf-8")
+    with pytest.raises(SidecarMalformedError) as excinfo:
+        load_chapter_disagreements(config, chapter_ordinal=7)
+    assert "is not valid JSON" in str(excinfo.value)

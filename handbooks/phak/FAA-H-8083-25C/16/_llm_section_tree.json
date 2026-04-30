@@ -43,52 +43,52 @@
   },
   {
     "title": "Time Zones",
-    "level": 1,
+    "level": 2,
     "page_anchor": "16-3",
     "line_offset": 96,
-    "parent_title": null
+    "parent_title": "Latitude and Longitude (Meridians and Parallels)"
   },
   {
     "title": "Measurement of Direction",
-    "level": 1,
+    "level": 2,
     "page_anchor": "16-5",
     "line_offset": 282,
-    "parent_title": null
+    "parent_title": "Latitude and Longitude (Meridians and Parallels)"
   },
   {
     "title": "Variation",
     "level": 2,
     "page_anchor": "16-6",
     "line_offset": 511,
-    "parent_title": "Measurement of Direction"
+    "parent_title": "Latitude and Longitude (Meridians and Parallels)"
   },
   {
     "title": "Magnetic Variation",
     "level": 2,
     "page_anchor": "16-7",
     "line_offset": 642,
-    "parent_title": "Measurement of Direction"
+    "parent_title": "Latitude and Longitude (Meridians and Parallels)"
   },
   {
     "title": "Magnetic Deviation",
     "level": 2,
     "page_anchor": "16-7",
     "line_offset": 650,
-    "parent_title": "Measurement of Direction"
+    "parent_title": "Latitude and Longitude (Meridians and Parallels)"
   },
   {
     "title": "Deviation",
     "level": 2,
-    "page_anchor": "16-7",
+    "page_anchor": "16-8",
     "line_offset": 746,
-    "parent_title": "Measurement of Direction"
+    "parent_title": "Latitude and Longitude (Meridians and Parallels)"
   },
   {
     "title": "Effect of Wind",
-    "level": 2,
+    "level": 1,
     "page_anchor": "16-8",
     "line_offset": 795,
-    "parent_title": "Measurement of Direction"
+    "parent_title": null
   },
   {
     "title": "Basic Calculations",
@@ -175,9 +175,37 @@
     "parent_title": "Dead Reckoning"
   },
   {
+    "title": "Step 1",
+    "level": 3,
+    "page_anchor": "16-14",
+    "line_offset": 1373,
+    "parent_title": "Wind Triangle or Vector Analysis"
+  },
+  {
+    "title": "Step 2",
+    "level": 3,
+    "page_anchor": "16-15",
+    "line_offset": 1443,
+    "parent_title": "Wind Triangle or Vector Analysis"
+  },
+  {
+    "title": "Step 3",
+    "level": 3,
+    "page_anchor": "16-15",
+    "line_offset": 1446,
+    "parent_title": "Wind Triangle or Vector Analysis"
+  },
+  {
+    "title": "Step 4",
+    "level": 3,
+    "page_anchor": "16-15",
+    "line_offset": 1453,
+    "parent_title": "Wind Triangle or Vector Analysis"
+  },
+  {
     "title": "Flight Planning",
     "level": 1,
-    "page_anchor": "16-16",
+    "page_anchor": "16-17",
     "line_offset": 1612,
     "parent_title": null
   },
@@ -211,24 +239,24 @@
   },
   {
     "title": "Charting the Course",
-    "level": 2,
+    "level": 1,
     "page_anchor": "16-18",
     "line_offset": 1689,
-    "parent_title": "Flight Planning"
+    "parent_title": null
   },
   {
     "title": "Steps in Charting the Course",
-    "level": 3,
+    "level": 2,
     "page_anchor": "16-18",
     "line_offset": 1703,
     "parent_title": "Charting the Course"
   },
   {
     "title": "Filing a VFR Flight Plan",
-    "level": 2,
+    "level": 1,
     "page_anchor": "16-21",
     "line_offset": 1972,
-    "parent_title": "Flight Planning"
+    "parent_title": null
   },
   {
     "title": "Ground-Based Navigation",
@@ -246,80 +274,80 @@
   },
   {
     "title": "Using the VOR",
-    "level": 3,
+    "level": 2,
     "page_anchor": "16-23",
     "line_offset": 2207,
-    "parent_title": "Very High Frequency (VHF) Omnidirectional Range (VOR)"
+    "parent_title": "Ground-Based Navigation"
   },
   {
     "title": "Course Deviation Indicator (CDI)",
-    "level": 3,
+    "level": 2,
     "page_anchor": "16-23",
     "line_offset": 2218,
-    "parent_title": "Very High Frequency (VHF) Omnidirectional Range (VOR)"
+    "parent_title": "Ground-Based Navigation"
   },
   {
     "title": "Horizontal Situation Indicator",
-    "level": 3,
+    "level": 2,
     "page_anchor": "16-24",
     "line_offset": 2295,
-    "parent_title": "Very High Frequency (VHF) Omnidirectional Range (VOR)"
+    "parent_title": "Ground-Based Navigation"
   },
   {
     "title": "Radio Magnetic Indicator (RMI)",
-    "level": 3,
+    "level": 2,
     "page_anchor": "16-24",
     "line_offset": 2326,
-    "parent_title": "Very High Frequency (VHF) Omnidirectional Range (VOR)"
+    "parent_title": "Ground-Based Navigation"
   },
   {
     "title": "Tracking With VOR",
-    "level": 3,
+    "level": 2,
     "page_anchor": "16-25",
     "line_offset": 2563,
-    "parent_title": "Very High Frequency (VHF) Omnidirectional Range (VOR)"
+    "parent_title": "Ground-Based Navigation"
   },
   {
     "title": "Tips on Using the VOR",
-    "level": 3,
+    "level": 2,
     "page_anchor": "16-26",
     "line_offset": 2635,
-    "parent_title": "Very High Frequency (VHF) Omnidirectional Range (VOR)"
+    "parent_title": "Ground-Based Navigation"
   },
   {
     "title": "Time and Distance Check From a Station Using a RMI",
-    "level": 3,
+    "level": 2,
     "page_anchor": "16-26",
     "line_offset": 2675,
-    "parent_title": "Very High Frequency (VHF) Omnidirectional Range (VOR)"
+    "parent_title": "Ground-Based Navigation"
   },
   {
     "title": "Time and Distance Check From a Station Using a CDI",
-    "level": 3,
+    "level": 2,
     "page_anchor": "16-27",
     "line_offset": 2720,
-    "parent_title": "Very High Frequency (VHF) Omnidirectional Range (VOR)"
+    "parent_title": "Ground-Based Navigation"
   },
   {
     "title": "Course Intercept",
-    "level": 3,
+    "level": 2,
     "page_anchor": "16-27",
     "line_offset": 2734,
-    "parent_title": "Very High Frequency (VHF) Omnidirectional Range (VOR)"
+    "parent_title": "Ground-Based Navigation"
   },
   {
     "title": "Rate of Intercept",
     "level": 3,
     "page_anchor": "16-27",
     "line_offset": 2739,
-    "parent_title": "Very High Frequency (VHF) Omnidirectional Range (VOR)"
+    "parent_title": "Course Intercept"
   },
   {
     "title": "Angle of Intercept",
     "level": 3,
     "page_anchor": "16-27",
     "line_offset": 2749,
-    "parent_title": "Very High Frequency (VHF) Omnidirectional Range (VOR)"
+    "parent_title": "Course Intercept"
   },
   {
     "title": "Distance Measuring Equipment (DME)",
@@ -359,14 +387,14 @@
   {
     "title": "VFR Use of GPS",
     "level": 3,
-    "page_anchor": "16-31",
+    "page_anchor": "16-32",
     "line_offset": 3244,
     "parent_title": "Global Positioning System"
   },
   {
     "title": "RAIM Capability",
     "level": 3,
-    "page_anchor": "16-31",
+    "page_anchor": "16-32",
     "line_offset": 3264,
     "parent_title": "Global Positioning System"
   },
@@ -379,24 +407,24 @@
   },
   {
     "title": "VFR Waypoints",
-    "level": 3,
+    "level": 2,
     "page_anchor": "16-33",
     "line_offset": 3368,
-    "parent_title": "Global Positioning System"
+    "parent_title": "Ground-Based Navigation"
   },
   {
     "title": "Lost Procedures",
-    "level": 1,
-    "page_anchor": "16-33",
+    "level": 2,
+    "page_anchor": "16-34",
     "line_offset": 3427,
-    "parent_title": null
+    "parent_title": "Ground-Based Navigation"
   },
   {
     "title": "Flight Diversion",
-    "level": 1,
+    "level": 2,
     "page_anchor": "16-34",
     "line_offset": 3455,
-    "parent_title": null
+    "parent_title": "Ground-Based Navigation"
   },
   {
     "title": "Chapter Summary",

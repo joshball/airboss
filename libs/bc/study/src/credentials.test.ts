@@ -611,6 +611,19 @@ describe('getCredentialMastery', () => {
 		expect(result.areas.length).toBe(1);
 		expect(result.areas[0]?.totalLeaves).toBe(2);
 	});
+
+	it('byEvidenceKind aggregate counts required + passing leaves per kind', async () => {
+		// Continues from the previous test's seed: PRIVATE_ID has a K leaf
+		// (requires recall) and an R leaf (requires scenario), no evidence
+		// from the test user. Expect each kind to show up with required=1,
+		// passing=0 in the credential rollup.
+		const result = await getCredentialMastery(TEST_USER_ID, PRIVATE_ID);
+		expect(result.byEvidenceKind.recall).toEqual({ required: 1, passing: 0 });
+		expect(result.byEvidenceKind.scenario).toEqual({ required: 1, passing: 0 });
+		const area = result.areas[0];
+		expect(area?.byEvidenceKind.recall).toEqual({ required: 1, passing: 0 });
+		expect(area?.byEvidenceKind.scenario).toEqual({ required: 1, passing: 0 });
+	});
 });
 
 describe('upsert helpers', () => {

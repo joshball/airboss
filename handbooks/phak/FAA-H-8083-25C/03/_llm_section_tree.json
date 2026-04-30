@@ -79,7 +79,7 @@
   {
     "title": "Subcomponents",
     "level": 1,
-    "page_anchor": "3-7",
+    "page_anchor": "3-8",
     "line_offset": 409,
     "parent_title": null
   },
@@ -197,10 +197,10 @@
   },
   {
     "title": "Global Positioning System (GPS)",
-    "level": 3,
+    "level": 1,
     "page_anchor": "3-13",
     "line_offset": 886,
-    "parent_title": "Navigation Instruments"
+    "parent_title": null
   },
   {
     "title": "Chapter Summary",
