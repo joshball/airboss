@@ -29,6 +29,7 @@ RULES:
 - Level 1 = top-level section under the chapter (e.g. "Aerodynamic Forces").
 - Level 2 = subsection (e.g. "Lift", "Drag" under "Aerodynamic Forces").
 - Level 3 = sub-subsection (rare; use only when the prose actually distinguishes them).
+- **Levels are capped at 3.** Valid values for `level` are exactly `1`, `2`, or `3`. Never emit `4` or deeper. If the body text nests a fourth tier (e.g. a chapter has L1 "Spatial Disorientation" -> L2 "Vestibular Illusions" -> would-be L3 children "The Leans", "Coriolis Illusion", and would-be L4 grandchildren), flatten the tail to L3: emit the leaf items at level 3 with `parent_title` set to the most meaningful enclosing L2 heading. Do NOT promote them to L2 just to escape the cap; the L1/L2/L3 spine should still match the body's outermost structure.
 - For level 2+, set parent_title to the title of the most recent strictly-shallower heading.
 - Sort by line_offset ascending.
 - Output JSON only. No markdown fencing. No explanation.
