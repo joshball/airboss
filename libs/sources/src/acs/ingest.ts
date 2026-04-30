@@ -77,17 +77,17 @@ const CORPUS = 'acs';
  * cert + category + edition collapse into one publication slug per FAA
  * publication. The PPL ACS-6C is one publication covering both ASEL + AMEL;
  * class-restricted tasks are tagged via `syllabus_node.classes`, not via the
- * locator. The slice ships only `ppl-airplane-6c`; siblings parse but skip
- * with an explicit reason until a sibling lane wires them in.
+ * locator. All five FAA airplane-track ACS publications cached today are
+ * wired here; the corresponding publication slugs are registered in
+ * `ACS_PUBLICATION_SLUGS` (locator), `ACS_SLUG_CODE_PREFIX` (this file),
+ * `SLUG_NAMES` (this file), and `ACS_PUBLICATION_LIVE_URLS` (url.ts).
  */
 const ACS_DETECTED_EDITION_TO_SLUG: Readonly<Record<string, string>> = {
 	'faa-s-acs-6c': 'ppl-airplane-6c',
-	// Other publications parse but are skipped with an explicit reason. Add
-	// them here once a sibling lane lands them.
-	// 'faa-s-acs-7b': 'cpl-airplane-7b',
-	// 'faa-s-acs-8c': 'ir-airplane-8c',
-	// 'faa-s-acs-25': 'cfi-airplane-25',
-	// 'faa-s-acs-11a': 'atp-airplane-11a',
+	'faa-s-acs-7b': 'cpl-airplane-7b',
+	'faa-s-acs-8c': 'ir-airplane-8c',
+	'faa-s-acs-25': 'cfi-airplane-25',
+	'faa-s-acs-11a': 'atp-airplane-11a',
 };
 
 /**
@@ -921,7 +921,8 @@ const USAGE = `usage:
 
   --slug=<slug> may be repeated (or comma-separated) to limit the run to a
   subset of registered publication slugs. Defaults to every slug wired in
-  ACS_DETECTED_EDITION_TO_SLUG (currently: ppl-airplane-6c only).
+  ACS_DETECTED_EDITION_TO_SLUG (currently: ppl-airplane-6c, cpl-airplane-7b,
+  ir-airplane-8c, cfi-airplane-25, atp-airplane-11a).
 `;
 
 export interface CliArgs {
