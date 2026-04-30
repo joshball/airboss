@@ -1,0 +1,464 @@
+[
+  {
+    "title": "Introduction",
+    "level": 1,
+    "page_anchor": "8-1",
+    "line_offset": 2,
+    "parent_title": null
+  },
+  {
+    "title": "Pitot-Static Flight Instruments",
+    "level": 1,
+    "page_anchor": "8-1",
+    "line_offset": 13,
+    "parent_title": null
+  },
+  {
+    "title": "Impact Pressure Chamber and Lines",
+    "level": 2,
+    "page_anchor": "8-2",
+    "line_offset": 44,
+    "parent_title": "Pitot-Static Flight Instruments"
+  },
+  {
+    "title": "Static Pressure Chamber and Lines",
+    "level": 2,
+    "page_anchor": "8-2",
+    "line_offset": 83,
+    "parent_title": "Pitot-Static Flight Instruments"
+  },
+  {
+    "title": "Altimeter",
+    "level": 2,
+    "page_anchor": "8-3",
+    "line_offset": 127,
+    "parent_title": "Pitot-Static Flight Instruments"
+  },
+  {
+    "title": "Principle of Operation",
+    "level": 3,
+    "page_anchor": "8-3",
+    "line_offset": 159,
+    "parent_title": "Altimeter"
+  },
+  {
+    "title": "Effect of Nonstandard Pressure and Temperature",
+    "level": 3,
+    "page_anchor": "8-4",
+    "line_offset": 208,
+    "parent_title": "Altimeter"
+  },
+  {
+    "title": "Setting the Altimeter",
+    "level": 3,
+    "page_anchor": "8-5",
+    "line_offset": 388,
+    "parent_title": "Altimeter"
+  },
+  {
+    "title": "Altimeter Operation",
+    "level": 3,
+    "page_anchor": "8-6",
+    "line_offset": 519,
+    "parent_title": "Altimeter"
+  },
+  {
+    "title": "Types of Altitude",
+    "level": 3,
+    "page_anchor": "8-6",
+    "line_offset": 552,
+    "parent_title": "Altimeter"
+  },
+  {
+    "title": "Instrument Check",
+    "level": 3,
+    "page_anchor": "8-7",
+    "line_offset": 622,
+    "parent_title": "Altimeter"
+  },
+  {
+    "title": "Vertical Speed Indicator (VSI)",
+    "level": 2,
+    "page_anchor": "8-7",
+    "line_offset": 634,
+    "parent_title": "Pitot-Static Flight Instruments"
+  },
+  {
+    "title": "Principle of Operation",
+    "level": 3,
+    "page_anchor": "8-7",
+    "line_offset": 640,
+    "parent_title": "Vertical Speed Indicator (VSI)"
+  },
+  {
+    "title": "Instrument Check",
+    "level": 3,
+    "page_anchor": "8-8",
+    "line_offset": 717,
+    "parent_title": "Vertical Speed Indicator (VSI)"
+  },
+  {
+    "title": "Airspeed Indicator (ASI)",
+    "level": 2,
+    "page_anchor": "8-8",
+    "line_offset": 727,
+    "parent_title": "Pitot-Static Flight Instruments"
+  },
+  {
+    "title": "Airspeed Indicator Markings",
+    "level": 3,
+    "page_anchor": "8-9",
+    "line_offset": 862,
+    "parent_title": "Airspeed Indicator (ASI)"
+  },
+  {
+    "title": "Other Airspeed Limitations",
+    "level": 3,
+    "page_anchor": "8-9",
+    "line_offset": 910,
+    "parent_title": "Airspeed Indicator (ASI)"
+  },
+  {
+    "title": "Instrument Check",
+    "level": 3,
+    "page_anchor": "8-10",
+    "line_offset": 958,
+    "parent_title": "Airspeed Indicator (ASI)"
+  },
+  {
+    "title": "Blockage of the Pitot-Static System",
+    "level": 2,
+    "page_anchor": "8-10",
+    "line_offset": 963,
+    "parent_title": "Pitot-Static Flight Instruments"
+  },
+  {
+    "title": "Blocked Pitot System",
+    "level": 3,
+    "page_anchor": "8-10",
+    "line_offset": 971,
+    "parent_title": "Blockage of the Pitot-Static System"
+  },
+  {
+    "title": "Blocked Static System",
+    "level": 3,
+    "page_anchor": "8-11",
+    "line_offset": 1047,
+    "parent_title": "Blockage of the Pitot-Static System"
+  },
+  {
+    "title": "Electronic Flight Display (EFD)",
+    "level": 1,
+    "page_anchor": "8-12",
+    "line_offset": 1153,
+    "parent_title": null
+  },
+  {
+    "title": "Airspeed Tape",
+    "level": 2,
+    "page_anchor": "8-12",
+    "line_offset": 1173,
+    "parent_title": "Electronic Flight Display (EFD)"
+  },
+  {
+    "title": "Attitude Indicator",
+    "level": 2,
+    "page_anchor": "8-13",
+    "line_offset": 1191,
+    "parent_title": "Electronic Flight Display (EFD)"
+  },
+  {
+    "title": "Altimeter",
+    "level": 2,
+    "page_anchor": "8-13",
+    "line_offset": 1199,
+    "parent_title": "Electronic Flight Display (EFD)"
+  },
+  {
+    "title": "Vertical Speed Indicator (VSI)",
+    "level": 2,
+    "page_anchor": "8-13",
+    "line_offset": 1205,
+    "parent_title": "Electronic Flight Display (EFD)"
+  },
+  {
+    "title": "Heading Indicator",
+    "level": 2,
+    "page_anchor": "8-13",
+    "line_offset": 1209,
+    "parent_title": "Electronic Flight Display (EFD)"
+  },
+  {
+    "title": "Turn Indicator",
+    "level": 2,
+    "page_anchor": "8-13",
+    "line_offset": 1216,
+    "parent_title": "Electronic Flight Display (EFD)"
+  },
+  {
+    "title": "Tachometer",
+    "level": 2,
+    "page_anchor": "8-13",
+    "line_offset": 1222,
+    "parent_title": "Electronic Flight Display (EFD)"
+  },
+  {
+    "title": "Slip/Skid Indicator",
+    "level": 2,
+    "page_anchor": "8-13",
+    "line_offset": 1229,
+    "parent_title": "Electronic Flight Display (EFD)"
+  },
+  {
+    "title": "Turn Rate Indicator",
+    "level": 2,
+    "page_anchor": "8-13",
+    "line_offset": 1233,
+    "parent_title": "Electronic Flight Display (EFD)"
+  },
+  {
+    "title": "Air Data Computer (ADC)",
+    "level": 2,
+    "page_anchor": "8-14",
+    "line_offset": 1310,
+    "parent_title": "Electronic Flight Display (EFD)"
+  },
+  {
+    "title": "Trend Vectors",
+    "level": 2,
+    "page_anchor": "8-14",
+    "line_offset": 1332,
+    "parent_title": "Electronic Flight Display (EFD)"
+  },
+  {
+    "title": "Gyroscopic Flight Instruments",
+    "level": 1,
+    "page_anchor": "8-15",
+    "line_offset": 1406,
+    "parent_title": null
+  },
+  {
+    "title": "Gyroscopic Principles",
+    "level": 2,
+    "page_anchor": "8-15",
+    "line_offset": 1414,
+    "parent_title": "Gyroscopic Flight Instruments"
+  },
+  {
+    "title": "Rigidity in Space",
+    "level": 3,
+    "page_anchor": "8-15",
+    "line_offset": 1432,
+    "parent_title": "Gyroscopic Principles"
+  },
+  {
+    "title": "Precession",
+    "level": 3,
+    "page_anchor": "8-15",
+    "line_offset": 1445,
+    "parent_title": "Gyroscopic Principles"
+  },
+  {
+    "title": "Sources of Power",
+    "level": 2,
+    "page_anchor": "8-16",
+    "line_offset": 1481,
+    "parent_title": "Gyroscopic Flight Instruments"
+  },
+  {
+    "title": "Turn Indicators",
+    "level": 2,
+    "page_anchor": "8-16",
+    "line_offset": 1524,
+    "parent_title": "Gyroscopic Flight Instruments"
+  },
+  {
+    "title": "Turn-and-Slip Indicator",
+    "level": 3,
+    "page_anchor": "8-16",
+    "line_offset": 1536,
+    "parent_title": "Turn Indicators"
+  },
+  {
+    "title": "Turn Coordinator",
+    "level": 3,
+    "page_anchor": "8-17",
+    "line_offset": 1597,
+    "parent_title": "Turn Indicators"
+  },
+  {
+    "title": "Inclinometer",
+    "level": 3,
+    "page_anchor": "8-18",
+    "line_offset": 1665,
+    "parent_title": "Turn Indicators"
+  },
+  {
+    "title": "Yaw String",
+    "level": 3,
+    "page_anchor": "8-18",
+    "line_offset": 1688,
+    "parent_title": "Turn Indicators"
+  },
+  {
+    "title": "Instrument Check",
+    "level": 3,
+    "page_anchor": "8-18",
+    "line_offset": 1696,
+    "parent_title": "Turn Indicators"
+  },
+  {
+    "title": "Attitude Indicator",
+    "level": 2,
+    "page_anchor": "8-18",
+    "line_offset": 1702,
+    "parent_title": "Gyroscopic Flight Instruments"
+  },
+  {
+    "title": "Heading Indicator",
+    "level": 2,
+    "page_anchor": "8-19",
+    "line_offset": 1841,
+    "parent_title": "Gyroscopic Flight Instruments"
+  },
+  {
+    "title": "Attitude and Heading Reference System (AHRS)",
+    "level": 2,
+    "page_anchor": "8-20",
+    "line_offset": 1910,
+    "parent_title": "Gyroscopic Flight Instruments"
+  },
+  {
+    "title": "The Flux Gate Compass System",
+    "level": 2,
+    "page_anchor": "8-20",
+    "line_offset": 1922,
+    "parent_title": "Gyroscopic Flight Instruments"
+  },
+  {
+    "title": "Remote Indicating Compass",
+    "level": 2,
+    "page_anchor": "8-21",
+    "line_offset": 1957,
+    "parent_title": "Gyroscopic Flight Instruments"
+  },
+  {
+    "title": "Instrument Check",
+    "level": 3,
+    "page_anchor": "8-22",
+    "line_offset": 2029,
+    "parent_title": "Remote Indicating Compass"
+  },
+  {
+    "title": "Angle of Attack Indicators",
+    "level": 1,
+    "page_anchor": "8-22",
+    "line_offset": 2036,
+    "parent_title": null
+  },
+  {
+    "title": "Compass Systems",
+    "level": 1,
+    "page_anchor": "8-23",
+    "line_offset": 2077,
+    "parent_title": null
+  },
+  {
+    "title": "Magnetic Compass",
+    "level": 2,
+    "page_anchor": "8-23",
+    "line_offset": 2087,
+    "parent_title": "Compass Systems"
+  },
+  {
+    "title": "Magnetic Compass Induced Errors",
+    "level": 2,
+    "page_anchor": "8-24",
+    "line_offset": 2271,
+    "parent_title": "Compass Systems"
+  },
+  {
+    "title": "Variation",
+    "level": 3,
+    "page_anchor": "8-24",
+    "line_offset": 2275,
+    "parent_title": "Magnetic Compass Induced Errors"
+  },
+  {
+    "title": "Deviation",
+    "level": 3,
+    "page_anchor": "8-24",
+    "line_offset": 2303,
+    "parent_title": "Magnetic Compass Induced Errors"
+  },
+  {
+    "title": "Dip Errors",
+    "level": 3,
+    "page_anchor": "8-25",
+    "line_offset": 2384,
+    "parent_title": "Magnetic Compass Induced Errors"
+  },
+  {
+    "title": "Northerly Turning Errors",
+    "level": 3,
+    "page_anchor": "8-26",
+    "line_offset": 2519,
+    "parent_title": "Magnetic Compass Induced Errors"
+  },
+  {
+    "title": "Southerly Turning Errors",
+    "level": 3,
+    "page_anchor": "8-26",
+    "line_offset": 2533,
+    "parent_title": "Magnetic Compass Induced Errors"
+  },
+  {
+    "title": "Acceleration Error",
+    "level": 3,
+    "page_anchor": "8-26",
+    "line_offset": 2546,
+    "parent_title": "Magnetic Compass Induced Errors"
+  },
+  {
+    "title": "Oscillation Error",
+    "level": 3,
+    "page_anchor": "8-26",
+    "line_offset": 2603,
+    "parent_title": "Magnetic Compass Induced Errors"
+  },
+  {
+    "title": "The Vertical Card Magnetic Compass",
+    "level": 2,
+    "page_anchor": "8-27",
+    "line_offset": 2610,
+    "parent_title": "Compass Systems"
+  },
+  {
+    "title": "Lags or Leads",
+    "level": 3,
+    "page_anchor": "8-27",
+    "line_offset": 2619,
+    "parent_title": "The Vertical Card Magnetic Compass"
+  },
+  {
+    "title": "Eddy Current Damping",
+    "level": 3,
+    "page_anchor": "8-27",
+    "line_offset": 2623,
+    "parent_title": "The Vertical Card Magnetic Compass"
+  },
+  {
+    "title": "Outside Air Temperature (OAT) Gauge",
+    "level": 1,
+    "page_anchor": "8-28",
+    "line_offset": 2651,
+    "parent_title": null
+  },
+  {
+    "title": "Chapter Summary",
+    "level": 1,
+    "page_anchor": "8-28",
+    "line_offset": 2663,
+    "parent_title": null
+  }
+]

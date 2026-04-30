@@ -1,0 +1,359 @@
+[
+  {
+    "title": "Introduction",
+    "level": 1,
+    "page_anchor": "12-1",
+    "line_offset": 4,
+    "parent_title": null
+  },
+  {
+    "title": "Atmosphere",
+    "level": 1,
+    "page_anchor": "12-2",
+    "line_offset": 60,
+    "parent_title": null
+  },
+  {
+    "title": "Composition of the Atmosphere",
+    "level": 2,
+    "page_anchor": "12-2",
+    "line_offset": 73,
+    "parent_title": "Atmosphere"
+  },
+  {
+    "title": "Atmospheric Circulation",
+    "level": 1,
+    "page_anchor": "12-2",
+    "line_offset": 113,
+    "parent_title": null
+  },
+  {
+    "title": "Atmospheric Pressure",
+    "level": 1,
+    "page_anchor": "12-3",
+    "line_offset": 143,
+    "parent_title": null
+  },
+  {
+    "title": "Coriolis Force",
+    "level": 2,
+    "page_anchor": "12-3",
+    "line_offset": 165,
+    "parent_title": "Atmospheric Pressure"
+  },
+  {
+    "title": "Measurement of Atmosphere Pressure",
+    "level": 2,
+    "page_anchor": "12-4",
+    "line_offset": 235,
+    "parent_title": "Atmospheric Pressure"
+  },
+  {
+    "title": "Altitude and Atmospheric Pressure",
+    "level": 2,
+    "page_anchor": "12-5",
+    "line_offset": 324,
+    "parent_title": "Atmospheric Pressure"
+  },
+  {
+    "title": "Altitude and Flight",
+    "level": 2,
+    "page_anchor": "12-6",
+    "line_offset": 395,
+    "parent_title": "Atmospheric Pressure"
+  },
+  {
+    "title": "Altitude and the Human Body",
+    "level": 2,
+    "page_anchor": "12-6",
+    "line_offset": 409,
+    "parent_title": "Atmospheric Pressure"
+  },
+  {
+    "title": "Wind and Currents",
+    "level": 1,
+    "page_anchor": "12-7",
+    "line_offset": 430,
+    "parent_title": null
+  },
+  {
+    "title": "Wind Patterns",
+    "level": 2,
+    "page_anchor": "12-7",
+    "line_offset": 441,
+    "parent_title": "Wind and Currents"
+  },
+  {
+    "title": "Convective Currents",
+    "level": 2,
+    "page_anchor": "12-7",
+    "line_offset": 472,
+    "parent_title": "Wind and Currents"
+  },
+  {
+    "title": "Effect of Obstructions on Wind",
+    "level": 2,
+    "page_anchor": "12-8",
+    "line_offset": 512,
+    "parent_title": "Wind and Currents"
+  },
+  {
+    "title": "Low-Level Wind Shear",
+    "level": 2,
+    "page_anchor": "12-11",
+    "line_offset": 638,
+    "parent_title": "Wind and Currents"
+  },
+  {
+    "title": "Wind and Pressure Representation on Surface Weather Maps",
+    "level": 2,
+    "page_anchor": "12-12",
+    "line_offset": 760,
+    "parent_title": "Wind and Currents"
+  },
+  {
+    "title": "Atmospheric Stability",
+    "level": 1,
+    "page_anchor": "12-12",
+    "line_offset": 809,
+    "parent_title": null
+  },
+  {
+    "title": "Inversion",
+    "level": 2,
+    "page_anchor": "12-13",
+    "line_offset": 852,
+    "parent_title": "Atmospheric Stability"
+  },
+  {
+    "title": "Moisture and Temperature",
+    "level": 2,
+    "page_anchor": "12-13",
+    "line_offset": 872,
+    "parent_title": "Atmospheric Stability"
+  },
+  {
+    "title": "Relative Humidity",
+    "level": 2,
+    "page_anchor": "12-13",
+    "line_offset": 898,
+    "parent_title": "Atmospheric Stability"
+  },
+  {
+    "title": "Temperature/Dew Point Relationship",
+    "level": 2,
+    "page_anchor": "12-13",
+    "line_offset": 910,
+    "parent_title": "Atmospheric Stability"
+  },
+  {
+    "title": "Methods by Which Air Reaches the Saturation Point",
+    "level": 2,
+    "page_anchor": "12-14",
+    "line_offset": 967,
+    "parent_title": "Atmospheric Stability"
+  },
+  {
+    "title": "Dew and Frost",
+    "level": 2,
+    "page_anchor": "12-15",
+    "line_offset": 986,
+    "parent_title": "Atmospheric Stability"
+  },
+  {
+    "title": "Fog",
+    "level": 2,
+    "page_anchor": "12-15",
+    "line_offset": 1002,
+    "parent_title": "Atmospheric Stability"
+  },
+  {
+    "title": "Clouds",
+    "level": 2,
+    "page_anchor": "12-15",
+    "line_offset": 1042,
+    "parent_title": "Atmospheric Stability"
+  },
+  {
+    "title": "Ceiling",
+    "level": 2,
+    "page_anchor": "12-17",
+    "line_offset": 1157,
+    "parent_title": "Atmospheric Stability"
+  },
+  {
+    "title": "Visibility",
+    "level": 2,
+    "page_anchor": "12-17",
+    "line_offset": 1167,
+    "parent_title": "Atmospheric Stability"
+  },
+  {
+    "title": "Precipitation",
+    "level": 2,
+    "page_anchor": "12-17",
+    "line_offset": 1176,
+    "parent_title": "Atmospheric Stability"
+  },
+  {
+    "title": "Air Masses",
+    "level": 1,
+    "page_anchor": "12-17",
+    "line_offset": 1219,
+    "parent_title": null
+  },
+  {
+    "title": "Fronts",
+    "level": 1,
+    "page_anchor": "12-18",
+    "line_offset": 1263,
+    "parent_title": null
+  },
+  {
+    "title": "Warm Front",
+    "level": 2,
+    "page_anchor": "12-18",
+    "line_offset": 1285,
+    "parent_title": "Fronts"
+  },
+  {
+    "title": "Flight Toward an Approaching Warm Front",
+    "level": 3,
+    "page_anchor": "12-19",
+    "line_offset": 1421,
+    "parent_title": "Warm Front"
+  },
+  {
+    "title": "Cold Front",
+    "level": 2,
+    "page_anchor": "12-20",
+    "line_offset": 1445,
+    "parent_title": "Fronts"
+  },
+  {
+    "title": "Fast-Moving Cold Front",
+    "level": 3,
+    "page_anchor": "12-20",
+    "line_offset": 1482,
+    "parent_title": "Cold Front"
+  },
+  {
+    "title": "Flight Toward an Approaching Cold Front",
+    "level": 3,
+    "page_anchor": "12-20",
+    "line_offset": 1498,
+    "parent_title": "Cold Front"
+  },
+  {
+    "title": "Comparison of Cold and Warm Fronts",
+    "level": 2,
+    "page_anchor": "12-20",
+    "line_offset": 1522,
+    "parent_title": "Fronts"
+  },
+  {
+    "title": "Wind Shifts",
+    "level": 2,
+    "page_anchor": "12-21",
+    "line_offset": 1630,
+    "parent_title": "Fronts"
+  },
+  {
+    "title": "Stationary Front",
+    "level": 2,
+    "page_anchor": "12-21",
+    "line_offset": 1639,
+    "parent_title": "Fronts"
+  },
+  {
+    "title": "Occluded Front",
+    "level": 2,
+    "page_anchor": "12-21",
+    "line_offset": 1646,
+    "parent_title": "Fronts"
+  },
+  {
+    "title": "Thunderstorms",
+    "level": 1,
+    "page_anchor": "12-22",
+    "line_offset": 1776,
+    "parent_title": null
+  },
+  {
+    "title": "Hazards",
+    "level": 2,
+    "page_anchor": "12-23",
+    "line_offset": 1836,
+    "parent_title": "Thunderstorms"
+  },
+  {
+    "title": "Squall Line",
+    "level": 2,
+    "page_anchor": "12-23",
+    "line_offset": 1842,
+    "parent_title": "Thunderstorms"
+  },
+  {
+    "title": "Tornadoes",
+    "level": 2,
+    "page_anchor": "12-23",
+    "line_offset": 1852,
+    "parent_title": "Thunderstorms"
+  },
+  {
+    "title": "Turbulence",
+    "level": 2,
+    "page_anchor": "12-23",
+    "line_offset": 1887,
+    "parent_title": "Thunderstorms"
+  },
+  {
+    "title": "Icing",
+    "level": 2,
+    "page_anchor": "12-24",
+    "line_offset": 1906,
+    "parent_title": "Thunderstorms"
+  },
+  {
+    "title": "Hail",
+    "level": 2,
+    "page_anchor": "12-25",
+    "line_offset": 1928,
+    "parent_title": "Thunderstorms"
+  },
+  {
+    "title": "Ceiling and Visibility",
+    "level": 2,
+    "page_anchor": "12-25",
+    "line_offset": 1946,
+    "parent_title": "Thunderstorms"
+  },
+  {
+    "title": "Effect on Altimeters",
+    "level": 2,
+    "page_anchor": "12-25",
+    "line_offset": 1954,
+    "parent_title": "Thunderstorms"
+  },
+  {
+    "title": "Lightning",
+    "level": 2,
+    "page_anchor": "12-25",
+    "line_offset": 1962,
+    "parent_title": "Thunderstorms"
+  },
+  {
+    "title": "Engine Water Ingestion",
+    "level": 2,
+    "page_anchor": "12-25",
+    "line_offset": 1976,
+    "parent_title": "Thunderstorms"
+  },
+  {
+    "title": "Chapter Summary",
+    "level": 1,
+    "page_anchor": "12-25",
+    "line_offset": 1988,
+    "parent_title": null
+  }
+]

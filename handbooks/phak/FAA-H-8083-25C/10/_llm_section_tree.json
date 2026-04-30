@@ -1,0 +1,163 @@
+[
+  {
+    "title": "Introduction",
+    "level": 1,
+    "page_anchor": "10-1",
+    "line_offset": 2,
+    "parent_title": null
+  },
+  {
+    "title": "Weight Control",
+    "level": 1,
+    "page_anchor": "10-1",
+    "line_offset": 9,
+    "parent_title": null
+  },
+  {
+    "title": "Effects of Weight",
+    "level": 1,
+    "page_anchor": "10-2",
+    "line_offset": 36,
+    "parent_title": null
+  },
+  {
+    "title": "Weight Changes",
+    "level": 1,
+    "page_anchor": "10-2",
+    "line_offset": 84,
+    "parent_title": null
+  },
+  {
+    "title": "Balance, Stability, and Center of Gravity",
+    "level": 1,
+    "page_anchor": "10-2",
+    "line_offset": 98,
+    "parent_title": null
+  },
+  {
+    "title": "Effects of Adverse Balance",
+    "level": 1,
+    "page_anchor": "10-3",
+    "line_offset": 144,
+    "parent_title": null
+  },
+  {
+    "title": "Stability",
+    "level": 2,
+    "page_anchor": "10-3",
+    "line_offset": 152,
+    "parent_title": "Effects of Adverse Balance"
+  },
+  {
+    "title": "Stability and Center of Gravity",
+    "level": 2,
+    "page_anchor": "10-3",
+    "line_offset": 161,
+    "parent_title": "Effects of Adverse Balance"
+  },
+  {
+    "title": "Control",
+    "level": 2,
+    "page_anchor": "10-3",
+    "line_offset": 177,
+    "parent_title": "Effects of Adverse Balance"
+  },
+  {
+    "title": "Management of Weight and Balance Control",
+    "level": 1,
+    "page_anchor": "10-4",
+    "line_offset": 216,
+    "parent_title": null
+  },
+  {
+    "title": "Terms and Definitions",
+    "level": 1,
+    "page_anchor": "10-4",
+    "line_offset": 293,
+    "parent_title": null
+  },
+  {
+    "title": "Principles of Weight and Balance Computations",
+    "level": 1,
+    "page_anchor": "10-5",
+    "line_offset": 426,
+    "parent_title": null
+  },
+  {
+    "title": "Weight and Balance Restrictions",
+    "level": 1,
+    "page_anchor": "10-6",
+    "line_offset": 532,
+    "parent_title": null
+  },
+  {
+    "title": "Determining Loaded Weight and CG",
+    "level": 1,
+    "page_anchor": "10-7",
+    "line_offset": 639,
+    "parent_title": null
+  },
+  {
+    "title": "Computational Method",
+    "level": 2,
+    "page_anchor": "10-7",
+    "line_offset": 644,
+    "parent_title": "Determining Loaded Weight and CG"
+  },
+  {
+    "title": "Graph Method",
+    "level": 2,
+    "page_anchor": "10-7",
+    "line_offset": 681,
+    "parent_title": "Determining Loaded Weight and CG"
+  },
+  {
+    "title": "Table Method",
+    "level": 2,
+    "page_anchor": "10-9",
+    "line_offset": 1259,
+    "parent_title": "Determining Loaded Weight and CG"
+  },
+  {
+    "title": "Computations With a Negative Arm",
+    "level": 2,
+    "page_anchor": "10-10",
+    "line_offset": 1374,
+    "parent_title": "Determining Loaded Weight and CG"
+  },
+  {
+    "title": "Computations With Zero Fuel Weight",
+    "level": 2,
+    "page_anchor": "10-10",
+    "line_offset": 1379,
+    "parent_title": "Determining Loaded Weight and CG"
+  },
+  {
+    "title": "Shifting, Adding, and Removing Weight",
+    "level": 1,
+    "page_anchor": "10-10",
+    "line_offset": 1387,
+    "parent_title": null
+  },
+  {
+    "title": "Weight Shifting",
+    "level": 2,
+    "page_anchor": "10-10",
+    "line_offset": 1399,
+    "parent_title": "Shifting, Adding, and Removing Weight"
+  },
+  {
+    "title": "Weight Addition or Removal",
+    "level": 2,
+    "page_anchor": "10-11",
+    "line_offset": 1538,
+    "parent_title": "Shifting, Adding, and Removing Weight"
+  },
+  {
+    "title": "Chapter Summary",
+    "level": 1,
+    "page_anchor": "10-11",
+    "line_offset": 1562,
+    "parent_title": null
+  }
+]

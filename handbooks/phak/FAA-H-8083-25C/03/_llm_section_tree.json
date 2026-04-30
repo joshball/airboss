@@ -1,0 +1,212 @@
+[
+  {
+    "title": "Introduction",
+    "level": 1,
+    "page_anchor": "3-1",
+    "line_offset": 2,
+    "parent_title": null
+  },
+  {
+    "title": "Aircraft Design, Certification, and Airworthiness",
+    "level": 1,
+    "page_anchor": "3-2",
+    "line_offset": 27,
+    "parent_title": null
+  },
+  {
+    "title": "A Note About Light Sport Aircraft",
+    "level": 2,
+    "page_anchor": "3-2",
+    "line_offset": 67,
+    "parent_title": "Aircraft Design, Certification, and Airworthiness"
+  },
+  {
+    "title": "Lift and Basic Aerodynamics",
+    "level": 1,
+    "page_anchor": "3-2",
+    "line_offset": 105,
+    "parent_title": null
+  },
+  {
+    "title": "Major Components",
+    "level": 1,
+    "page_anchor": "3-3",
+    "line_offset": 169,
+    "parent_title": null
+  },
+  {
+    "title": "Fuselage",
+    "level": 2,
+    "page_anchor": "3-3",
+    "line_offset": 175,
+    "parent_title": "Major Components"
+  },
+  {
+    "title": "Wings",
+    "level": 2,
+    "page_anchor": "3-3",
+    "line_offset": 186,
+    "parent_title": "Major Components"
+  },
+  {
+    "title": "Alternate Types of Wings",
+    "level": 3,
+    "page_anchor": "3-5",
+    "line_offset": 277,
+    "parent_title": "Wings"
+  },
+  {
+    "title": "Empennage",
+    "level": 2,
+    "page_anchor": "3-6",
+    "line_offset": 310,
+    "parent_title": "Major Components"
+  },
+  {
+    "title": "Landing Gear",
+    "level": 2,
+    "page_anchor": "3-7",
+    "line_offset": 346,
+    "parent_title": "Major Components"
+  },
+  {
+    "title": "The Powerplant",
+    "level": 2,
+    "page_anchor": "3-7",
+    "line_offset": 364,
+    "parent_title": "Major Components"
+  },
+  {
+    "title": "Subcomponents",
+    "level": 1,
+    "page_anchor": "3-7",
+    "line_offset": 409,
+    "parent_title": null
+  },
+  {
+    "title": "Types of Aircraft Construction",
+    "level": 1,
+    "page_anchor": "3-8",
+    "line_offset": 444,
+    "parent_title": null
+  },
+  {
+    "title": "Truss Structure",
+    "level": 2,
+    "page_anchor": "3-8",
+    "line_offset": 448,
+    "parent_title": "Types of Aircraft Construction"
+  },
+  {
+    "title": "Monocoque",
+    "level": 2,
+    "page_anchor": "3-8",
+    "line_offset": 466,
+    "parent_title": "Types of Aircraft Construction"
+  },
+  {
+    "title": "Semimonocoque",
+    "level": 2,
+    "page_anchor": "3-9",
+    "line_offset": 484,
+    "parent_title": "Types of Aircraft Construction"
+  },
+  {
+    "title": "Composite Construction",
+    "level": 2,
+    "page_anchor": "3-9",
+    "line_offset": 500,
+    "parent_title": "Types of Aircraft Construction"
+  },
+  {
+    "title": "History",
+    "level": 3,
+    "page_anchor": "3-9",
+    "line_offset": 501,
+    "parent_title": "Composite Construction"
+  },
+  {
+    "title": "Composite Materials in Aircraft",
+    "level": 3,
+    "page_anchor": "3-9",
+    "line_offset": 517,
+    "parent_title": "Composite Construction"
+  },
+  {
+    "title": "Disadvantages of Composites",
+    "level": 3,
+    "page_anchor": "3-10",
+    "line_offset": 578,
+    "parent_title": "Composite Construction"
+  },
+  {
+    "title": "Advantages of Composites",
+    "level": 3,
+    "page_anchor": "3-10",
+    "line_offset": 626,
+    "parent_title": "Composite Construction"
+  },
+  {
+    "title": "Fluid Spills on Composites",
+    "level": 3,
+    "page_anchor": "3-11",
+    "line_offset": 765,
+    "parent_title": "Composite Construction"
+  },
+  {
+    "title": "Lightning Strike Protection",
+    "level": 3,
+    "page_anchor": "3-11",
+    "line_offset": 778,
+    "parent_title": "Composite Construction"
+  },
+  {
+    "title": "The Future of Composites",
+    "level": 3,
+    "page_anchor": "3-12",
+    "line_offset": 811,
+    "parent_title": "Composite Construction"
+  },
+  {
+    "title": "Instrumentation: Moving into the Future",
+    "level": 1,
+    "page_anchor": "3-12",
+    "line_offset": 820,
+    "parent_title": null
+  },
+  {
+    "title": "Performance Instruments",
+    "level": 2,
+    "page_anchor": "3-12",
+    "line_offset": 844,
+    "parent_title": "Instrumentation: Moving into the Future"
+  },
+  {
+    "title": "Control Instruments",
+    "level": 2,
+    "page_anchor": "3-13",
+    "line_offset": 860,
+    "parent_title": "Instrumentation: Moving into the Future"
+  },
+  {
+    "title": "Navigation Instruments",
+    "level": 2,
+    "page_anchor": "3-13",
+    "line_offset": 868,
+    "parent_title": "Instrumentation: Moving into the Future"
+  },
+  {
+    "title": "Global Positioning System (GPS)",
+    "level": 3,
+    "page_anchor": "3-13",
+    "line_offset": 886,
+    "parent_title": "Navigation Instruments"
+  },
+  {
+    "title": "Chapter Summary",
+    "level": 1,
+    "page_anchor": "3-13",
+    "line_offset": 902,
+    "parent_title": null
+  }
+]

@@ -1,0 +1,198 @@
+[
+  {
+    "title": "Introduction",
+    "level": 1,
+    "page_anchor": "6-1",
+    "line_offset": 2,
+    "parent_title": null
+  },
+  {
+    "title": "Flight Control Systems",
+    "level": 1,
+    "page_anchor": "6-2",
+    "line_offset": 95,
+    "parent_title": null
+  },
+  {
+    "title": "Primary Flight Controls",
+    "level": 1,
+    "page_anchor": "6-2",
+    "line_offset": 105,
+    "parent_title": null
+  },
+  {
+    "title": "Ailerons",
+    "level": 2,
+    "page_anchor": "6-3",
+    "line_offset": 182,
+    "parent_title": "Primary Flight Controls"
+  },
+  {
+    "title": "Adverse Yaw",
+    "level": 3,
+    "page_anchor": "6-3",
+    "line_offset": 197,
+    "parent_title": "Ailerons"
+  },
+  {
+    "title": "Differential Ailerons",
+    "level": 3,
+    "page_anchor": "6-4",
+    "line_offset": 261,
+    "parent_title": "Ailerons"
+  },
+  {
+    "title": "Frise-Type Ailerons",
+    "level": 3,
+    "page_anchor": "6-4",
+    "line_offset": 270,
+    "parent_title": "Ailerons"
+  },
+  {
+    "title": "Coupled Ailerons and Rudder",
+    "level": 3,
+    "page_anchor": "6-4",
+    "line_offset": 284,
+    "parent_title": "Ailerons"
+  },
+  {
+    "title": "Flaperons",
+    "level": 3,
+    "page_anchor": "6-5",
+    "line_offset": 329,
+    "parent_title": "Ailerons"
+  },
+  {
+    "title": "Elevator",
+    "level": 2,
+    "page_anchor": "6-5",
+    "line_offset": 340,
+    "parent_title": "Primary Flight Controls"
+  },
+  {
+    "title": "T-Tail",
+    "level": 3,
+    "page_anchor": "6-6",
+    "line_offset": 371,
+    "parent_title": "Elevator"
+  },
+  {
+    "title": "Stabilator",
+    "level": 2,
+    "page_anchor": "6-6",
+    "line_offset": 474,
+    "parent_title": "Primary Flight Controls"
+  },
+  {
+    "title": "Canard",
+    "level": 2,
+    "page_anchor": "6-6",
+    "line_offset": 492,
+    "parent_title": "Primary Flight Controls"
+  },
+  {
+    "title": "Rudder",
+    "level": 2,
+    "page_anchor": "6-7",
+    "line_offset": 541,
+    "parent_title": "Primary Flight Controls"
+  },
+  {
+    "title": "V-Tail",
+    "level": 3,
+    "page_anchor": "6-8",
+    "line_offset": 557,
+    "parent_title": "Rudder"
+  },
+  {
+    "title": "Secondary Flight Controls",
+    "level": 1,
+    "page_anchor": "6-8",
+    "line_offset": 574,
+    "parent_title": null
+  },
+  {
+    "title": "Flaps",
+    "level": 2,
+    "page_anchor": "6-8",
+    "line_offset": 577,
+    "parent_title": "Secondary Flight Controls"
+  },
+  {
+    "title": "Leading Edge Devices",
+    "level": 2,
+    "page_anchor": "6-9",
+    "line_offset": 627,
+    "parent_title": "Secondary Flight Controls"
+  },
+  {
+    "title": "Trim Tabs",
+    "level": 3,
+    "page_anchor": "6-9",
+    "line_offset": 658,
+    "parent_title": "Trim Systems"
+  },
+  {
+    "title": "Spoilers",
+    "level": 2,
+    "page_anchor": "6-10",
+    "line_offset": 712,
+    "parent_title": "Secondary Flight Controls"
+  },
+  {
+    "title": "Trim Systems",
+    "level": 2,
+    "page_anchor": "6-10",
+    "line_offset": 727,
+    "parent_title": "Secondary Flight Controls"
+  },
+  {
+    "title": "Balance Tabs",
+    "level": 3,
+    "page_anchor": "6-11",
+    "line_offset": 753,
+    "parent_title": "Trim Systems"
+  },
+  {
+    "title": "Servo Tabs",
+    "level": 3,
+    "page_anchor": "6-11",
+    "line_offset": 769,
+    "parent_title": "Trim Systems"
+  },
+  {
+    "title": "Antiservo Tabs",
+    "level": 3,
+    "page_anchor": "6-11",
+    "line_offset": 782,
+    "parent_title": "Trim Systems"
+  },
+  {
+    "title": "Ground Adjustable Tabs",
+    "level": 3,
+    "page_anchor": "6-11",
+    "line_offset": 795,
+    "parent_title": "Trim Systems"
+  },
+  {
+    "title": "Adjustable Stabilizer",
+    "level": 3,
+    "page_anchor": "6-12",
+    "line_offset": 817,
+    "parent_title": "Trim Systems"
+  },
+  {
+    "title": "Autopilot",
+    "level": 1,
+    "page_anchor": "6-12",
+    "line_offset": 827,
+    "parent_title": null
+  },
+  {
+    "title": "Chapter Summary",
+    "level": 1,
+    "page_anchor": "6-12",
+    "line_offset": 855,
+    "parent_title": null
+  }
+]
