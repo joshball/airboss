@@ -64,15 +64,25 @@ const slugSchema = z
 	.max(64)
 	.regex(/^[a-z0-9][a-z0-9-]*[a-z0-9]$/);
 
-const elementSchema = z.object({
-	code: z.string().min(1),
-	triad: z.enum(ACS_TRIAD_VALUES as [ACSTriad, ...ACSTriad[]]),
-	ordinal: z.number().int().nonnegative(),
-	required_bloom: z.enum(BLOOM_LEVEL_VALUES as [BloomLevel, ...BloomLevel[]]),
-	title: z.string().min(1),
-	description: z.string().min(1),
-	airboss_ref: z.string().min(1),
-});
+const elementSchema = z
+	.object({
+		code: z.string().min(1),
+		triad: z.enum(ACS_TRIAD_VALUES as [ACSTriad, ...ACSTriad[]]),
+		ordinal: z.number().int().nonnegative(),
+		required_bloom: z.enum(BLOOM_LEVEL_VALUES as [BloomLevel, ...BloomLevel[]]),
+		title: z.string().min(1),
+		description: z.string().min(1),
+		airboss_ref: z.string().min(1),
+		// Per the evidence-kind-gating WP: when set on a CFI element the leaf's
+		// required-kind set stacks `teaching` on top of the triad mapping.
+		// Validation guards against `requires_teaching=true` on a non-element /
+		// triad-null row (the YAML schema enforces triad presence on elements,
+		// so the rejection only fires on hand-edited bad rows).
+		requires_teaching: z.boolean().optional(),
+	})
+	.refine((e) => !(e.requires_teaching === true && e.triad === undefined), {
+		message: 'requires_teaching=true is only allowed on element rows with a triad set',
+	});
 
 const taskSchema = z.object({
 	code: z.string().min(1),
@@ -333,6 +343,7 @@ async function seedOneArea(
 				triad: elem.triad,
 				requiredBloom: elem.required_bloom,
 				isLeaf: true,
+				requiresTeaching: elem.requires_teaching ?? false,
 				airbossRef: elem.airboss_ref,
 				citations: [],
 				// Element-level rows inherit the parent task's class scope when
