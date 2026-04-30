@@ -10,6 +10,7 @@
  * brake / auto-coordinate).
  */
 
+import CockpitPanel from '@ab/activities/cockpit-panel/CockpitPanel.svelte';
 import {
 	C172_CONFIG,
 	type DisplayState,
@@ -32,7 +33,6 @@ import {
 import { onDestroy, onMount, untrack } from 'svelte';
 import { browser } from '$app/environment';
 import { postAttempt } from '$lib/attempt-client';
-import CockpitPanel from '$lib/cockpit/CockpitPanel.svelte';
 import ControlInput from '$lib/cockpit/ControlInput.svelte';
 import type { SpecialAction } from '$lib/control-handler';
 import { EngineSound } from '$lib/engine-sound';

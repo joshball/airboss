@@ -17,16 +17,16 @@
  * `sim.airboss.test/_dev/instruments` only.
  */
 
+import Altimeter from '@ab/activities/cockpit-panel/Altimeter.svelte';
+import Asi from '@ab/activities/cockpit-panel/Asi.svelte';
+import AttitudeIndicator from '@ab/activities/cockpit-panel/AttitudeIndicator.svelte';
+import EngineCluster from '@ab/activities/cockpit-panel/cluster/EngineCluster.svelte';
+import HeadingIndicator from '@ab/activities/cockpit-panel/HeadingIndicator.svelte';
+import Tachometer from '@ab/activities/cockpit-panel/Tachometer.svelte';
+import TurnCoordinator from '@ab/activities/cockpit-panel/TurnCoordinator.svelte';
+import Vsi from '@ab/activities/cockpit-panel/Vsi.svelte';
 import { applyFaults, type DisplayState, type FaultActivation } from '@ab/bc-sim';
 import { SIM_FAULT_KINDS, SIM_FAULT_LABELS, SIM_FLAP_NOTCHES, type SimFaultKind } from '@ab/constants';
-import Altimeter from '$lib/instruments/Altimeter.svelte';
-import Asi from '$lib/instruments/Asi.svelte';
-import AttitudeIndicator from '$lib/instruments/AttitudeIndicator.svelte';
-import EngineCluster from '$lib/instruments/cluster/EngineCluster.svelte';
-import HeadingIndicator from '$lib/instruments/HeadingIndicator.svelte';
-import Tachometer from '$lib/instruments/Tachometer.svelte';
-import TurnCoordinator from '$lib/instruments/TurnCoordinator.svelte';
-import Vsi from '$lib/instruments/Vsi.svelte';
 
 interface Preset {
 	id: string;

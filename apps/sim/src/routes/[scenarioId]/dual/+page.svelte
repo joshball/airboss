@@ -14,11 +14,11 @@
  * dual surface focuses on the visual + input loop.
  */
 
+import CockpitPanel from '@ab/activities/cockpit-panel/CockpitPanel.svelte';
 import type { DisplayState, FdmInputs, FdmTruthState } from '@ab/bc-sim';
 import { ROUTES, SIM_KEYBINDING_ACTIONS, SIM_WORKER_MESSAGES } from '@ab/constants';
 import { onDestroy, onMount, untrack } from 'svelte';
 import { browser } from '$app/environment';
-import CockpitPanel from '$lib/cockpit/CockpitPanel.svelte';
 import ControlInput from '$lib/cockpit/ControlInput.svelte';
 import type { SpecialAction } from '$lib/control-handler';
 import FdmWorker from '$lib/fdm-worker.ts?worker';
