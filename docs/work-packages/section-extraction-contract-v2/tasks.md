@@ -47,16 +47,38 @@ Tasks:
 - [x] `CONTRACT VERSION: 2` field added; bumped to `3` in PR #355.
 - [x] `bun run check` clean; pytest 123 passing.
 
-## Phase 3 -- Mutual-reviewer framing (TOC checklist + disagreements) -- DEFERRED, decision pending
+## Phase 3 -- Mutual-reviewer framing (TOC checklist + disagreements) -- GREENLIT (2026-04-30)
 
-**Status:** deferred pending review of the PR #355 compare report. Phase 4 ran without Phase 3 (per the data-driven scoping decision documented in spec §"Coordination"). Re-evaluate after reading the report.
+**Decision:** ship Phase 3 as planned. The compare report from PR #355 (regenerated 2026-04-30 against the committed v3 artifacts) shows systematic informative disagreement that justifies the surgery.
 
-**Decision criteria** (read the PR #355 compare report against these):
+**Evidence from the compare report:**
 
-- If the report shows the LLM and TOC parser already agree on most entries (low "TOC only" + low "LLM only" + low level/parent mismatch), Phase 3's TOC-checklist machinery has marginal value. **Defer Phase 3** with a documented trigger (e.g. "open Phase 3 when the next handbook surfaces > N% disagreement" or "open Phase 3 if a section-tree consumer needs structured disagreement metadata").
-- If the report shows systematic disagreement (TOC over-flattening across many chapters, LLM-only finds that look like real headings, hierarchy mismatches the LLM got right) AND that disagreement would be valuable as feedback to the deterministic TOC parser, **ship Phase 3** as planned below.
+| Metric                                     | Value     | Reading                                                                                                          |
+| ------------------------------------------ | --------- | ---------------------------------------------------------------------------------------------------------------- |
+| Total LLM entries                          | 913       | Up from v1's 559 (PR #355 confirmed).                                                                            |
+| Total TOC nodes                            | 833       | Reasonable parse coverage.                                                                                       |
+| Total parent-mismatches across 17 chapters | **485**   | LLM nests; TOC over-flattens. Systematic.                                                                        |
+| Total level-mismatches across 17 chapters  | **317**   | Same root cause -- TOC promotes subsections to L1.                                                               |
+| Chapters with parent-diff > 10             | **15/17** | This is the rule, not the exception.                                                                             |
+| Total LLM-only entries                     | 92        | Real body headings the printed TOC omits (e.g. ch 1's "Civil Aeronautics Act of 1938").                          |
+| Worst case: ch 7 (Aircraft Systems)        | 86/88 L1  | TOC says everything is L1; LLM correctly nests subsections under Powerplant / Induction / Fuel / etc.            |
 
-**If Phase 3 is greenlit, the planned work is:**
+**Decision criteria applied:**
+
+- ✅ **TOC over-flattening across many chapters** -- 15/17 chapters with parent-diff > 10; ch 7 is the extreme (86/88 L1 in TOC).
+- ✅ **LLM-only finds that look like real headings** -- 92 across the run; spot-checks confirm they're real body-text headings the printed TOC simply doesn't include.
+- ✅ **Hierarchy mismatches the LLM got right** -- the LLM's nesting matches the printed body structure; TOC's flatness is a printed-formatting artifact.
+- ✅ **Disagreement is valuable as feedback** -- each disagreement type maps cleanly to a TOC parser bug class (heading-style fingerprint, indentation recognition, body-verify pass).
+
+**Why Phase 3 ships now (vs deferred):**
+
+With 800+ structural disagreements going unaddressed, every future handbook ingest will have the same gap. Phase 3 turns the disagreements into structured signal that:
+
+1. Surfaces in the compare report (humans can read systematic patterns).
+2. Could later drive automated TOC parser improvements (each disagreement type → a specific parser bug class).
+3. Closes the loop on the mutual-reviewer framing the WP set out to build.
+
+**The planned work:**
 
 Touches:
 
