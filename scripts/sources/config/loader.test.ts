@@ -36,16 +36,25 @@ describe('loadAcsConfig', () => {
 });
 
 describe('loadHandbooksExtrasConfig', () => {
-	it('loads 4 entries (8083-2, -9, -15, -16 with verified URLs as of 2026-04-29)', () => {
+	it('loads 6 entries (8083-2, -9, -15, -16, -30, -32 with verified URLs as of 2026-04-29)', () => {
 		const ex = loadHandbooksExtrasConfig();
 		// Originally 8 entries from HANDBOOKS_EXTRAS_TARGETS; 4 were dropped on
-		// 2026-04-29 because their canonical URLs returned 404 against the FAA
-		// CDN and search did not find current canonical PDFs. The verifier catches
-		// stale URLs at HEAD time, so the YAML stays a deterministic source-of-
-		// truth. Add entries back when current URLs are identified.
-		expect(ex.entries).toHaveLength(4);
+		// 2026-04-29 because their canonical URLs returned 404. Follow-up search
+		// recovered 8083-30 (AMT General) and 8083-32 (AMT Powerplant) under
+		// /regulations_policies/handbooks_manuals/aviation/. 8083-27 (Sport Pilot)
+		// and 8083-34 (Risk Management for GA) remain dropped -- they are no
+		// longer on the FAA aviation handbooks index. The verifier catches stale
+		// URLs at HEAD time, so the YAML stays a deterministic source-of-truth.
+		expect(ex.entries).toHaveLength(6);
 		const ids = ex.entries.map((e) => e.doc_id).sort();
-		expect(ids).toEqual(['faa-h-8083-15', 'faa-h-8083-16', 'faa-h-8083-2', 'faa-h-8083-9']);
+		expect(ids).toEqual([
+			'faa-h-8083-15',
+			'faa-h-8083-16',
+			'faa-h-8083-2',
+			'faa-h-8083-30',
+			'faa-h-8083-32',
+			'faa-h-8083-9',
+		]);
 	});
 });
 
