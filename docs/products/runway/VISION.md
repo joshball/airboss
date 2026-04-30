@@ -11,7 +11,7 @@ supersedes: ../../.archive/products/runway/VISION.md
 
 The public-facing surface for airboss. Where someone who isn't logged in can land, learn what the platform is, see free content, and (eventually) sign up.
 
-**Status: deferred.** No `apps/runway/` exists today. The platform is single-user (Joshua, see [user_profile memory entry]) and has no public face. Runway becomes a real surface when:
+**Status: deferred.** No `apps/runway/` exists today. The platform is single-user (Joshua, the founding user) and has no public face. Runway becomes a real surface when:
 
 1. v1 launch milestone is hit and the project goes public, OR
 2. Open-source release per [PIVOT.md](../../platform/PIVOT.md)'s open-core posture decides on hosting + landing-page direction, OR

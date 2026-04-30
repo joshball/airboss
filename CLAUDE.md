@@ -162,6 +162,7 @@ Feature lifecycle is driven by shared skills:
 - **Tables over paragraphs.** Lists with attributes become tables.
 - **Link, don't inline.** Reference other docs, don't copy content between files.
 - **Name things first.** Propose names and boundaries before writing code.
+- **Lint exemptions.** Files under `docs/.archive/**` and the global memory file (`~/.claude/projects/.../memory/MEMORY.md`) are exempt from markdownlint MD025/MD041 (multiple-H1 / first-line-H1) rules; both contain aggregated content where multiple H1s are intentional.
 
 ## Critical Rules
 
