@@ -75,7 +75,9 @@ Three writes; one surface. Plus the audit + confirmation contract that future ad
 
 5. **Session revoke UI** -- the existing sessions table gains a "Revoke" column with a button per row. Clicking opens the confirmation modal (typed-confirmation gate). Submit hits `?/revokeSession` with the session id. Above the table, a "Revoke all sessions" button (typed-confirmation gate, count in the modal copy) hits `?/revokeAllSessions`. After revoke, the page reloads the load function, sessions list shrinks accordingly.
 
-6. **Confirmation modal component** -- `libs/ui/src/components/ConfirmAction.svelte`. Snippet-based (decision (d)). Props: `open`, `title`, `body` snippet, `confirmText`, `dangerLevel: 'caution' | 'danger'`, optional `typedConfirmation: { label: string; expected: string }`. Emits `cancel` / `confirm` events. Wraps a SvelteKit `<form>` so the action button is the form's submit and posts the form when the typed confirmation matches `expected`. The component lives in `libs/ui/` because the dual-gate pattern (audit + confirmation) will be reused on every future admin-write surface (sources delete, references delete, jobs cancel, future sim flag-overrides, ...).
+6. **Confirmation modal component** -- `libs/ui/src/components/ConfirmDialog.svelte` (extending the existing file). Snippet-based (decision (d)). Props: `open`, `title`, `body` snippet, `confirmText`, `dangerLevel: 'caution' | 'danger'`, optional `typedConfirmation: { label: string; expected: string }`. Emits `cancel` / `confirm` events. Wraps a SvelteKit `<form>` so the action button is the form's submit and posts the form when the typed confirmation matches `expected`. The component lives in `libs/ui/` because the dual-gate pattern (audit + confirmation) will be reused on every future admin-write surface (sources delete, references delete, jobs cancel, future sim flag-overrides, ...).
+
+   > **Build-phase correction (2026-04-30):** the spec originally named this component `ConfirmAction.svelte`. During build we discovered that name was already in use by an inline two-step affordance (5 active consumers in `apps/study/`). The reusable modal lives at `ConfirmDialog.svelte` instead, which already exists in `libs/ui/` (snippet-based, form-aware, modal-shaped) and gets extended additively with the `typedConfirmation` and `dangerLevel` props this WP needs. The existing `ConfirmAction.svelte` is left untouched.
 
 7. **AUDIT_TARGETS additions** -- `HANGAR_USER` (`hangar.user`) added to `libs/constants/src/audit.ts`. The five operations all share `targetType = HANGAR_USER`; the operation kind is captured by `op` + `metadata.subKind` (decision (a)).
 
@@ -165,7 +167,7 @@ Three writes; one surface. Plus the audit + confirmation contract that future ad
 │      Zod schemas: SetRoleInput, BanUserInput, UnbanUserInput,           │
 │                   RevokeSessionInput, RevokeAllSessionsInput            │
 │                                                                         │
-│    libs/ui/src/components/ConfirmAction.svelte (new, reusable)          │
+│    libs/ui/src/components/ConfirmDialog.svelte (extended additively)    │
 │      typed-confirmation gate, dangerLevel, snippet body,                │
 │      wraps form, emits cancel/confirm                                   │
 │                                                                         │
@@ -316,7 +318,7 @@ All ten drafting-phase questions resolved in favour of the recommended options. 
 - **(a) Audit target + op shape:** single `AUDIT_TARGETS.HANGAR_USER` target, existing `AUDIT_OPS.UPDATE` / `AUDIT_OPS.ACTION`, op-distinguishing kind in `metadata.subKind` from a closed `HANGAR_USER_OP_SUBKINDS` set. Keeps the audit op enum tight (matches the audit-ping precedent and the schema comment in `libs/audit/src/schema.ts`).
 - **(b) Confirmation gate on role change:** none. Role change is recoverable, picker requires explicit Save. Trigger to revisit: misclicks become a real issue -> add a simple modal.
 - **(c) Confirmation gate style:** typed-confirmation (admin types target user email) for ban / revoke / revoke-all; simple modal (no typed gate) on unban. Binds the action to the target.
-- **(d) Modal component location:** `libs/ui/src/components/ConfirmAction.svelte` from day one. Snippet-based body, wraps the SvelteKit `<form>`. Every future admin-write surface reuses it.
+- **(d) Modal component location:** `libs/ui/src/components/ConfirmDialog.svelte` (extending the existing file). Snippet-based body, wraps the SvelteKit `<form>`. Every future admin-write surface reuses it. (Build-phase correction: originally named `ConfirmAction.svelte`; renamed to avoid colliding with the existing inline two-step `ConfirmAction.svelte` widely used in study.)
 - **(e) BC write module location:** new file `libs/bc/hangar/src/user-writes.ts` (sibling to `users.ts`). Read/write split clean; `users.ts` stays read-only.
 - **(f) Ban duration:** optional expiry; default permanent (no expiry). UI offers a date picker for `expiresAt`. Pass-through to better-auth's `banExpires`; better-auth handles auto-unban at expiry on the next sign-in attempt.
 - **(g) Self-target guards:** hard-block self role-change and self-ban; allow self session-revoke (single + bulk). Self-demote-out-of-admin is an irreversible foot-gun on a single-admin platform; self-revoke is useful (kill stale device).

@@ -10,6 +10,9 @@ export {
 	AUDIT_WINDOWS,
 	type AuditTarget,
 	type AuditWindow,
+	HANGAR_USER_OP_SUBKIND_VALUES,
+	HANGAR_USER_OP_SUBKINDS,
+	type HangarUserOpSubkind,
 } from './audit';
 export {
 	AUTH_RATE_LIMIT,

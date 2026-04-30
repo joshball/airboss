@@ -110,9 +110,10 @@ Depends on: `extract-hangar-bc` (shipped; gives `libs/bc/hangar/src/users.ts`). 
   - [ ] Audit with `op: AUDIT_OPS.ACTION`, `subKind: 'session-revoke'`, `metadata.revokedSessionId: input.sessionId`.
   - [ ] Return `{ revokedSessionId: input.sessionId }`.
 - [ ] Implement `revokeAllUserSessions(input, db)`:
-  - [ ] Read existing session count via `listRecentUserSessions` (or a dedicated count helper -- add `countUserSessions` if useful) for the metadata.
+  - [ ] **Build-phase note (2026-04-30):** better-auth's `revokeUserSessions` returns `{ success: boolean }`, NOT a count. We count BEFORE the revoke. Add a tiny `countUserSessions(targetUserId, db)` helper in `users.ts` (or compute from `listRecentUserSessions` if it returns all sessions for the target). Fire-and-forget the revoke itself; the count is informational only and lands in `metadata.revokedCount`.
+  - [ ] Compute `revokedCount` via `countUserSessions(targetUserId, db)` BEFORE calling the admin plugin.
   - [ ] `auth.api.revokeUserSessions({ body: { userId }, headers })`.
-  - [ ] Detect `revokedOwn`: if any of the revoked sessions is the actor's current session (compare against `event.locals.session.id` -- threaded through as input), set the flag.
+  - [ ] Detect `revokedOwn`: if the actor's current session id (threaded in via input from `event.locals.session.id`) was among the pre-revoke session list, set the flag.
   - [ ] Audit with `op: AUDIT_OPS.ACTION`, `subKind: 'session-revoke-all'`, `metadata.revokedCount: count`.
   - [ ] Return `{ revokedCount: count, revokedOwn: boolean }`.
 - [ ] Author `user-writes.test.ts`:
@@ -138,9 +139,11 @@ Depends on: `extract-hangar-bc` (shipped; gives `libs/bc/hangar/src/users.ts`). 
   - [ ] On `revokeAllSessions` success when `revokedOwn`: `redirect(303, ROUTES.LOGIN)` so the now-invalid session is replaced.
 - [ ] Run `bun run check`. Commit.
 
-### Phase 6: ConfirmAction component
+### Phase 6: ConfirmDialog component
 
-- [ ] Create `libs/ui/src/components/ConfirmAction.svelte`. Svelte 5 runes; snippet-based body; no `<slot>`.
+> **Build-phase correction (2026-04-30):** spec originally named this component `ConfirmAction.svelte`. The reusable modal extends the existing `libs/ui/src/components/ConfirmDialog.svelte` instead, because `ConfirmAction.svelte` is already taken by an inline two-step affordance with 5 active consumers in `apps/study/`. The existing `ConfirmDialog.svelte` is snippet-based, form-aware, and modal-shaped (90% of the spec's contract); we extend it additively with `typedConfirmation` and `dangerLevel`. The existing theme-tokens test must keep passing. The existing `ConfirmAction.svelte` is left untouched.
+
+- [ ] Extend `libs/ui/src/components/ConfirmDialog.svelte` additively. Svelte 5 runes; snippet-based body; no `<slot>`. Existing props/behaviors stay backwards-compatible.
 - [ ] Props (`$props`):
   - [ ] `open: boolean` (bindable -- caller drives open/close)
   - [ ] `title: string`
@@ -158,22 +161,22 @@ Depends on: `extract-hangar-bc` (shipped; gives `libs/bc/hangar/src/users.ts`). 
 - [ ] Backdrop click: closes only when not in mid-typing the confirmation gate (the typed gate defends against click-out as well).
 - [ ] Style: tokens only; `dangerLevel='danger'` highlights the confirm button with `--signal-warning` family. Match `card` / `badge.banned` palette already in `apps/hangar/src/routes/(app)/users/[id]/+page.svelte`.
 - [ ] Re-export from `libs/ui/src/index.ts` (or whatever the `@ab/ui` re-export pattern is).
-- [ ] Author Vitest mounts test (`ConfirmAction.test.ts`) covering: open/close, typed-confirmation enables submit only on match, `oncancel` fires on Esc + cancel-button + backdrop, focus trap, snippet body renders.
+- [ ] Author Vitest mounts test (`ConfirmDialog.svelte.test.ts`) covering: open/close, typed-confirmation enables submit only on match, `oncancel` fires on Esc + cancel-button + backdrop, focus trap, snippet body renders. Keep the existing theme-tokens test for `ConfirmDialog.svelte` passing.
 - [ ] Run `bun test libs/ui/`. Run `bun run check`. Commit.
 
 ### Phase 7: Detail page UI
 
 - [ ] Edit `apps/hangar/src/routes/(app)/users/[id]/+page.svelte`:
-  - [ ] Import `ConfirmAction`, `ROLE_VALUES`, `ROLE_LABELS`, `ROUTES`, `enhance` from `$app/forms`.
+  - [ ] Import `ConfirmDialog`, `ROLE_VALUES`, `ROLE_LABELS`, `ROUTES`, `enhance` from `$app/forms`.
   - [ ] Add a `Role` card section above the existing Profile card:
     - [ ] `<form method="post" action={ROUTES.HANGAR_USER_SET_ROLE_ACTION} use:enhance>` with a `<select>` populated from `ROLE_VALUES`. Default to `data.user.role`. "Save" button disabled until selection differs.
     - [ ] On success, render a transient toast / notice region.
   - [ ] Add a `Ban / unban` card:
-    - [ ] When `data.user.banned === false`: a "Ban user" button that opens a `ConfirmAction` modal with `dangerLevel='danger'`, `typedConfirmation: { label: 'Type the user email to confirm', expected: data.user.email }`. Modal body has `<textarea name="reason" required>` and `<input type="datetime-local" name="expiresAt">`. Form action: `ROUTES.HANGAR_USER_BAN_ACTION`.
+    - [ ] When `data.user.banned === false`: a "Ban user" button that opens a `ConfirmDialog` modal with `dangerLevel='danger'`, `typedConfirmation: { label: 'Type the user email to confirm', expected: data.user.email }`. Modal body has `<textarea name="reason" required>` and `<input type="datetime-local" name="expiresAt">`. Form action: `ROUTES.HANGAR_USER_BAN_ACTION`.
     - [ ] When `data.user.banned === true`: an "Unban user" button that opens a simpler `ConfirmAction` modal with `dangerLevel='caution'` and no typed gate. Form action: `ROUTES.HANGAR_USER_UNBAN_ACTION`. Body: "Unbanning lets the user sign in again. They will need to sign in fresh -- existing sessions were already invalidated by the original ban."
   - [ ] Modify the sessions table:
-    - [ ] Add a "Revoke" column. Per row, a "Revoke" button that opens a `ConfirmAction` modal with `dangerLevel='danger'` + typed gate. Hidden `<input name="sessionId" value={session.id}>` carries the id.
-    - [ ] Above the table, "Revoke all sessions" button (only when count > 0). Opens a `ConfirmAction` with body copy "This will sign out the user from all N devices. They must sign in again on each."
+    - [ ] Add a "Revoke" column. Per row, a "Revoke" button that opens a `ConfirmDialog` modal with `dangerLevel='danger'` + typed gate. Hidden `<input name="sessionId" value={session.id}>` carries the id.
+    - [ ] Above the table, "Revoke all sessions" button (only when count > 0). Opens a `ConfirmDialog` with body copy "This will sign out the user from all N devices. They must sign in again on each."
   - [ ] All form submissions use `use:enhance` to prevent full-page reload + handle the success toast / error message.
   - [ ] Bind one shared `dialogOpen` state for the modal + a derived `dialogIntent` so only one modal is open at a time.
 - [ ] Run `bun run check`. Commit.
@@ -207,7 +210,7 @@ Depends on: `extract-hangar-bc` (shipped; gives `libs/bc/hangar/src/users.ts`). 
 - [ ] Update `docs/work/NOW.md`: add this WP to "recently closed" once merged.
 - [ ] Cross-link from `docs/work-packages/extract-hangar-bc/spec.md` Out of Scope -> link to this WP.
 - [ ] Update `libs/constants/src/routes.ts` comment block above `HANGAR_USERS` -- the deferred-editing note is now stale; mark editing as shipped here.
-- [ ] If the typed-confirmation pattern is reusable beyond hangar, mention `ConfirmAction` in `docs/agents/best-practices.md` or `docs/agents/common-pitfalls.md` so future agents reach for it instead of inventing inline modals. (Skip if the doc layout doesn't have a fit.)
+- [ ] If the typed-confirmation pattern is reusable beyond hangar, mention `ConfirmDialog` in `docs/agents/best-practices.md` or `docs/agents/common-pitfalls.md` so future agents reach for it instead of inventing inline modals. (Skip if the doc layout doesn't have a fit.)
 - [ ] Commit docs.
 
 ## Verification

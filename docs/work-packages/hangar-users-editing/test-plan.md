@@ -336,8 +336,25 @@ These are the most important tests in the plan -- the audit contract is load-bea
 1. Visit `/admin/audit-ping`. Click Ping. Verify it still writes a row.
 2. **Expected:** unchanged behavior. The `AUDIT_TARGETS` enum gained a value but didn't change existing values.
 
-### HUE-92: `bun run check` and full test suite pass
+### HUE-92: `bun run check` and unit suite pass
 
 1. `bun run check` -> 0 errors, 0 warnings.
-2. `bun test` -> all green.
-3. `bun run test:e2e` -> all green.
+2. `bunx vitest run` -> all green. The hangar BC user-writes test (`libs/bc/hangar/src/user-writes.test.ts`) covers self-target / last-admin / better-auth-throw / audit-emission paths for all five operations. The ConfirmDialog test (`libs/ui/__tests__/ConfirmDialog.svelte.test.ts`) covers the typed-gate disabled / enabled / form-action mode.
+3. `bun run test:e2e` -> green for the existing study-app suite. Hangar Playwright coverage is deferred (see "Coverage matrix" below).
+
+---
+
+## Coverage matrix
+
+- **BC writes** -- self-target / last-admin / better-auth-throw / audit-emission, all 5 ops. Covered by `libs/bc/hangar/src/user-writes.test.ts` (Vitest).
+- **Modal contract** -- typed-gate disabled / enabled / form-action mode / dangerLevel mapping. Covered by `libs/ui/__tests__/ConfirmDialog.svelte.test.ts` (Vitest).
+- **Form action wiring** -- Zod validation, fail() shape, redirect on self-revoke-all. Covered by manual scenarios HUE-1 .. HUE-92 in this file.
+- **End-to-end flows** -- real-browser typed-gate + login-blocked + revoke-induced logout. Covered by manual scenarios HUE-1 .. HUE-92 in this file.
+
+## Deferred automation
+
+**Hangar Playwright e2e infrastructure does not exist on this branch.** `playwright.config.ts` targets the study app only -- single project, single auth state (learner), single dev server. Adding admin-authed hangar specs would require: a hangar `global.setup`, a hangar admin auth seed, a separate Playwright project, and dev-server orchestration to boot hangar alongside study.
+
+That work is bigger than the e2e specs themselves and out of scope for this WP. Tracked as a follow-up: **`hangar-e2e-infrastructure`** -- author the Playwright project + admin seed + dev orchestration so this WP, the audit-explorer WP, and every future hangar admin-write WP can ship browser-level e2e coverage without per-WP infrastructure work.
+
+Until that follow-up lands, the hangar manual test plans (this file + `hangar-audit-explorer/test-plan.md`) carry the integration coverage. BC + component unit tests carry the security-critical paths.

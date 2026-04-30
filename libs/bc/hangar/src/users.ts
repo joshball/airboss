@@ -46,6 +46,16 @@ export interface UserDirectoryRow {
 	name: string;
 	role: Role | null;
 	banned: boolean;
+	/**
+	 * Reason text saved on `bauth_user.banReason` when an admin bans the user.
+	 * Null when not banned, or when the ban came in pre-WP without a reason.
+	 */
+	banReason: string | null;
+	/**
+	 * Optional expiry on `bauth_user.banExpires`. Null = permanent. Better-auth
+	 * lifts the ban automatically at sign-in once the expiry has passed.
+	 */
+	banExpires: Date | null;
 	createdAt: Date;
 	updatedAt: Date;
 	/** Most recent `bauth_session.created_at` for this user; null if none. */
@@ -115,6 +125,8 @@ export async function listUsers(options: ListUsersOptions = {}, db: Db = default
 			name: bauthUser.name,
 			role: bauthUser.role,
 			banned: bauthUser.banned,
+			banReason: bauthUser.banReason,
+			banExpires: bauthUser.banExpires,
 			createdAt: bauthUser.createdAt,
 			updatedAt: bauthUser.updatedAt,
 			lastSeenAt: lastSeen.lastSeenAt,
@@ -131,6 +143,8 @@ export async function listUsers(options: ListUsersOptions = {}, db: Db = default
 		name: row.name,
 		role: narrowRole(row.role),
 		banned: row.banned === true,
+		banReason: row.banReason ?? null,
+		banExpires: row.banExpires ?? null,
 		createdAt: row.createdAt,
 		updatedAt: row.updatedAt,
 		lastSeenAt: row.lastSeenAt ?? null,
@@ -179,6 +193,8 @@ export async function getUser(id: string, db: Db = defaultDb): Promise<UserDirec
 			name: bauthUser.name,
 			role: bauthUser.role,
 			banned: bauthUser.banned,
+			banReason: bauthUser.banReason,
+			banExpires: bauthUser.banExpires,
 			createdAt: bauthUser.createdAt,
 			updatedAt: bauthUser.updatedAt,
 			lastSeenAt: lastSeen.lastSeenAt,
@@ -195,10 +211,25 @@ export async function getUser(id: string, db: Db = defaultDb): Promise<UserDirec
 		name: row.name,
 		role: narrowRole(row.role),
 		banned: row.banned === true,
+		banReason: row.banReason ?? null,
+		banExpires: row.banExpires ?? null,
 		createdAt: row.createdAt,
 		updatedAt: row.updatedAt,
 		lastSeenAt: row.lastSeenAt ?? null,
 	};
+}
+
+/**
+ * Count of `bauth_session` rows currently held for a user. Used by the
+ * revoke-all-sessions BC helper to populate `metadata.revokedCount`
+ * before calling better-auth (which returns `{ success }`, not a count).
+ */
+export async function countUserSessions(userId: string, db: Db = defaultDb): Promise<number> {
+	const [row] = await db
+		.select({ c: sql<number>`count(*)::int` })
+		.from(bauthSession)
+		.where(eq(bauthSession.userId, userId));
+	return row?.c ?? 0;
 }
 
 export async function listRecentUserSessions(
