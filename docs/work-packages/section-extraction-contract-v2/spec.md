@@ -252,6 +252,26 @@ Acceptance test for the contract change. After this WP lands:
 4. Verify: zero chapters hit the truncation cap; ch 7 entry count is in the 80-100 range; every entry has a `page_anchor`; `disagreements` arrays surface the TOC over-flattening pattern.
 5. Replace the existing `_llm_section_tree.json` files in `handbooks/phak/FAA-H-8083-25C/<NN>/` with the new artifacts.
 
+### 12. v3 amendment (post-landing observations)
+
+The phak FAA-H-8083-25C re-run under v2 surfaced two real-world failure modes the v2 contract did not yet handle. Both became contract-version-3 amendments shipped alongside the run (PR #355). These are corrections to the contract based on observed handbook structure, not workarounds.
+
+**v3.1 -- trailing figure-only pages tolerated by the coverage check.**
+
+v2's coverage rule required the last entry's page anchor to be on or after the chapter's last printed page. Reality: FAA chapters frequently end body text mid-page and devote the trailing pages to full-page figure plates with no headings of any kind. PHAK ch 03 ends at 3-13 with figures on 3-14..3-16; ch 14 ends at 14-37 with figures on 14-38..14-40. Both tripped a false-positive `incomplete coverage` error under v2.
+
+v3 amends the coverage self-check to inspect the trailing pages: if they contain only figure callouts ("FIGURE 7-12"), table titles, captions, or blank space (no body-text headings), the shortfall is acceptable -- proceed to write JSON. Real input truncation is still caught: a missed body-text heading on the trailing pages still hard-fails. Source: [tools/handbook-ingest/ingest/prompts/section_tree.md](../../../tools/handbook-ingest/ingest/prompts/section_tree.md) "COVERAGE" section.
+
+**v3.2 -- explicit level cap at 3.**
+
+v2 listed L1/L2/L3 definitions and called L3 "rare; use only when the prose actually distinguishes them" but did not state outright that levels 4+ are forbidden. PHAK ch 17's first-pass output emitted 44/95 entries at level 4 (deep nesting under "Vestibular Illusions" and "Visual Illusions") because the body text legitimately had four nesting tiers. The compare validator hard-rejected the file.
+
+v3 adds an explicit cap line right after the level definitions: **valid values for `level` are exactly 1, 2, or 3; never 4 or deeper.** When body text nests a fourth tier, flatten the leaves to L3 with `parent_title` set to the most meaningful enclosing L2 heading. The amendment includes a worked example (Spatial Disorientation -> Vestibular Illusions -> The Leans / Coriolis Illusion / etc. lands at L3, not L4) and warns against the obvious wrong fix (promoting leaves to L2 to escape the cap). Source: [tools/handbook-ingest/ingest/prompts/section_tree.md](../../../tools/handbook-ingest/ingest/prompts/section_tree.md) levels list.
+
+**Run audit-trail note.**
+
+The v3 amendments were patched in place into the live emitted prompts during the run, then ch 03 / 14 / 17 were re-dispatched against v3. The chapters that succeeded on first dispatch (01, 02, 04-13, 15, 16) ran against v2 prompts; ch 03 / 14 / 17 ran against v3. The committed prompts under `tools/handbook-ingest/prompts-out/phak/FAA-H-8083-25C/out/` are the v3 versions. `meta.json` for the run still records the v2 template SHA at emit time. The JSON outputs themselves are valid v3 shape regardless of which prompt produced them; a future re-run from the v3 source-of-truth produces the same result. This is a one-time drift -- future contract changes go through a fresh re-emit before dispatch.
+
 ## Out of Scope (explicit)
 
 - **Chapter-source ingestion.** Per-chapter PDF / HTML downloads. Owned by `chapter-source-ingestion` WP. This WP works on whole-PDF mode by raising the cap.
