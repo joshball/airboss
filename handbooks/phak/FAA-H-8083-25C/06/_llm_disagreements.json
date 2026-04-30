@@ -1,0 +1,156 @@
+[
+  {
+    "type": "level_mismatch",
+    "title": "Elevator",
+    "toc_says": { "level": 2, "parent_title": "Flight Control Systems", "page_anchor": "6-5" },
+    "body_says": { "level": 3, "parent_title": "Primary Flight Controls", "page_anchor": "6-5" },
+    "reason": "TOC promotes Elevator to a sibling of Primary Flight Controls; body nests it as a primary-control type within Primary Flight Controls."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "T-Tail",
+    "toc_says": { "level": 2, "parent_title": "Flight Control Systems", "page_anchor": "6-6" },
+    "body_says": { "level": 3, "parent_title": "Primary Flight Controls", "page_anchor": "6-6" },
+    "reason": "Body discusses T-Tail as a configuration variant within the Elevator subsection; flattened to L3 under Primary Flight Controls per the cap-at-3 rule."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Stabilator",
+    "toc_says": { "level": 2, "parent_title": "Flight Control Systems", "page_anchor": "6-7" },
+    "body_says": { "level": 3, "parent_title": "Primary Flight Controls", "page_anchor": "6-7" },
+    "reason": "Stabilator is a primary-control surface type discussed within Primary Flight Controls; body nesting wins."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Canard",
+    "toc_says": { "level": 2, "parent_title": "Flight Control Systems", "page_anchor": "6-7" },
+    "body_says": { "level": 3, "parent_title": "Primary Flight Controls", "page_anchor": "6-7" },
+    "reason": "Canard is discussed as a primary-control configuration within Primary Flight Controls."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Rudder",
+    "toc_says": { "level": 2, "parent_title": "Flight Control Systems", "page_anchor": "6-8" },
+    "body_says": { "level": 3, "parent_title": "Primary Flight Controls", "page_anchor": "6-8" },
+    "reason": "Rudder is a primary-control surface within Primary Flight Controls; body nesting wins."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "V-Tail",
+    "toc_says": { "level": 2, "parent_title": "Flight Control Systems", "page_anchor": "6-8" },
+    "body_says": { "level": 3, "parent_title": "Primary Flight Controls", "page_anchor": "6-8" },
+    "reason": "V-Tail is a configuration variant within the Rudder discussion; flattened to L3 under Primary Flight Controls per the cap-at-3 rule."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Flaps",
+    "toc_says": { "level": 2, "parent_title": "Flight Control Systems", "page_anchor": "6-8" },
+    "body_says": { "level": 3, "parent_title": "Secondary Flight Controls", "page_anchor": "6-8" },
+    "reason": "Flaps is a secondary-control device under Secondary Flight Controls; TOC flattened the secondary-control subsection."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Leading Edge Devices",
+    "toc_says": { "level": 2, "parent_title": "Flight Control Systems", "page_anchor": "6-9" },
+    "body_says": { "level": 3, "parent_title": "Secondary Flight Controls", "page_anchor": "6-9" },
+    "reason": "Leading Edge Devices is a secondary-control category; nested under Secondary Flight Controls in body."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Spoilers",
+    "toc_says": { "level": 2, "parent_title": "Flight Control Systems", "page_anchor": "6-10" },
+    "body_says": { "level": 3, "parent_title": "Secondary Flight Controls", "page_anchor": "6-10" },
+    "reason": "Spoilers is a secondary-control category; nested under Secondary Flight Controls."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Trim Tabs",
+    "toc_says": { "level": 2, "parent_title": "Flight Control Systems", "page_anchor": "6-10" },
+    "body_says": { "level": 3, "parent_title": "Secondary Flight Controls", "page_anchor": "6-10" },
+    "reason": "Trim Tabs is a Trim Systems sub-type within Secondary Flight Controls; flattened to L3 under Secondary Flight Controls per the cap-at-3 rule."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Balance Tabs",
+    "toc_says": { "level": 2, "parent_title": "Flight Control Systems", "page_anchor": "6-11" },
+    "body_says": { "level": 3, "parent_title": "Secondary Flight Controls", "page_anchor": "6-11" },
+    "reason": "Balance Tabs is a Trim Systems sub-type; flattened to L3 under Secondary Flight Controls."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Servo Tabs",
+    "toc_says": { "level": 2, "parent_title": "Flight Control Systems", "page_anchor": "6-11" },
+    "body_says": { "level": 3, "parent_title": "Secondary Flight Controls", "page_anchor": "6-11" },
+    "reason": "Servo Tabs is a Trim Systems sub-type; flattened to L3 under Secondary Flight Controls."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Antiservo Tabs",
+    "toc_says": { "level": 2, "parent_title": "Flight Control Systems", "page_anchor": "6-11" },
+    "body_says": { "level": 3, "parent_title": "Secondary Flight Controls", "page_anchor": "6-11" },
+    "reason": "Antiservo Tabs is a Trim Systems sub-type; flattened to L3 under Secondary Flight Controls."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Ground Adjustable Tabs",
+    "toc_says": { "level": 2, "parent_title": "Flight Control Systems", "page_anchor": "6-11" },
+    "body_says": { "level": 3, "parent_title": "Secondary Flight Controls", "page_anchor": "6-11" },
+    "reason": "Ground Adjustable Tabs is a Trim Systems sub-type; flattened to L3 under Secondary Flight Controls."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Adjustable Stabilizer",
+    "toc_says": { "level": 2, "parent_title": "Flight Control Systems", "page_anchor": "6-12" },
+    "body_says": { "level": 3, "parent_title": "Secondary Flight Controls", "page_anchor": "6-12" },
+    "reason": "Adjustable Stabilizer is a Trim Systems sub-type; flattened to L3 under Secondary Flight Controls."
+  },
+  {
+    "type": "extra_in_toc",
+    "title": "Ailerons",
+    "toc_says": { "level": null, "parent_title": null, "page_anchor": null },
+    "body_says": { "level": 3, "parent_title": "Primary Flight Controls", "page_anchor": "6-3" },
+    "reason": "TOC parser missed the Ailerons body heading; it appears verbatim at line 182 introducing the aileron primary-control section."
+  },
+  {
+    "type": "extra_in_toc",
+    "title": "Adverse Yaw",
+    "toc_says": { "level": null, "parent_title": null, "page_anchor": null },
+    "body_says": { "level": 3, "parent_title": "Primary Flight Controls", "page_anchor": "6-3" },
+    "reason": "TOC parser missed the Adverse Yaw body heading; flattened to L3 under Primary Flight Controls per cap-at-3 rule."
+  },
+  {
+    "type": "extra_in_toc",
+    "title": "Differential Ailerons",
+    "toc_says": { "level": null, "parent_title": null, "page_anchor": null },
+    "body_says": { "level": 3, "parent_title": "Primary Flight Controls", "page_anchor": "6-4" },
+    "reason": "TOC parser missed the Differential Ailerons body heading; flattened to L3 under Primary Flight Controls."
+  },
+  {
+    "type": "extra_in_toc",
+    "title": "Frise-Type Ailerons",
+    "toc_says": { "level": null, "parent_title": null, "page_anchor": null },
+    "body_says": { "level": 3, "parent_title": "Primary Flight Controls", "page_anchor": "6-4" },
+    "reason": "TOC parser missed the Frise-Type Ailerons body heading; flattened to L3 under Primary Flight Controls."
+  },
+  {
+    "type": "extra_in_toc",
+    "title": "Coupled Ailerons and Rudder",
+    "toc_says": { "level": null, "parent_title": null, "page_anchor": null },
+    "body_says": { "level": 3, "parent_title": "Primary Flight Controls", "page_anchor": "6-4" },
+    "reason": "TOC parser missed the Coupled Ailerons and Rudder body heading; flattened to L3 under Primary Flight Controls."
+  },
+  {
+    "type": "extra_in_toc",
+    "title": "Flaperons",
+    "toc_says": { "level": null, "parent_title": null, "page_anchor": null },
+    "body_says": { "level": 3, "parent_title": "Primary Flight Controls", "page_anchor": "6-5" },
+    "reason": "TOC parser missed the Flaperons body heading; flattened to L3 under Primary Flight Controls."
+  },
+  {
+    "type": "extra_in_toc",
+    "title": "Trim Systems",
+    "toc_says": { "level": null, "parent_title": null, "page_anchor": null },
+    "body_says": { "level": 3, "parent_title": "Secondary Flight Controls", "page_anchor": "6-10" },
+    "reason": "TOC parser missed the Trim Systems body heading at line 727; it is the parent category for the trim/balance/servo/antiservo/ground-adjustable tabs and adjustable stabilizer."
+  }
+]

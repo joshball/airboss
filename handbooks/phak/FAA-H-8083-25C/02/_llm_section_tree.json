@@ -36,119 +36,70 @@
   },
   {
     "title": "Hazardous Attitudes and Antidotes",
-    "level": 1,
+    "level": 2,
     "page_anchor": "2-5",
     "line_offset": 299,
-    "parent_title": null
+    "parent_title": "Hazard and Risk"
   },
   {
     "title": "Risk",
-    "level": 1,
+    "level": 2,
     "page_anchor": "2-6",
     "line_offset": 341,
-    "parent_title": null
+    "parent_title": "Hazard and Risk"
   },
   {
     "title": "Assessing Risk",
     "level": 2,
     "page_anchor": "2-6",
     "line_offset": 346,
-    "parent_title": "Risk"
-  },
-  {
-    "title": "Likelihood of an Event",
-    "level": 3,
-    "page_anchor": "2-6",
-    "line_offset": 380,
-    "parent_title": "Assessing Risk"
-  },
-  {
-    "title": "Severity of an Event",
-    "level": 3,
-    "page_anchor": "2-6",
-    "line_offset": 400,
-    "parent_title": "Assessing Risk"
+    "parent_title": "Hazard and Risk"
   },
   {
     "title": "Mitigating Risk",
     "level": 2,
     "page_anchor": "2-8",
     "line_offset": 538,
-    "parent_title": "Risk"
+    "parent_title": "Hazard and Risk"
   },
   {
     "title": "The PAVE Checklist",
-    "level": 1,
+    "level": 2,
     "page_anchor": "2-8",
     "line_offset": 577,
-    "parent_title": null
+    "parent_title": "Hazard and Risk"
   },
   {
     "title": "P = Pilot in Command (PIC)",
-    "level": 2,
+    "level": 3,
     "page_anchor": "2-8",
     "line_offset": 607,
     "parent_title": "The PAVE Checklist"
   },
   {
     "title": "A = Aircraft",
-    "level": 2,
+    "level": 3,
     "page_anchor": "2-8",
     "line_offset": 612,
     "parent_title": "The PAVE Checklist"
   },
   {
-    "title": "Airspace",
-    "level": 3,
-    "page_anchor": "2-9",
-    "line_offset": 654,
-    "parent_title": "A = Aircraft"
-  },
-  {
-    "title": "Nighttime",
-    "level": 3,
-    "page_anchor": "2-9",
-    "line_offset": 666,
-    "parent_title": "A = Aircraft"
-  },
-  {
     "title": "E = External Pressures",
-    "level": 2,
+    "level": 3,
     "page_anchor": "2-9",
     "line_offset": 681,
     "parent_title": "The PAVE Checklist"
   },
   {
     "title": "V = EnVironment",
-    "level": 2,
+    "level": 3,
     "page_anchor": "2-9",
     "line_offset": 703,
     "parent_title": "The PAVE Checklist"
   },
   {
-    "title": "Weather",
-    "level": 3,
-    "page_anchor": "2-9",
-    "line_offset": 704,
-    "parent_title": "V = EnVironment"
-  },
-  {
-    "title": "Terrain",
-    "level": 3,
-    "page_anchor": "2-9",
-    "line_offset": 741,
-    "parent_title": "V = EnVironment"
-  },
-  {
-    "title": "Airport",
-    "level": 3,
-    "page_anchor": "2-9",
-    "line_offset": 753,
-    "parent_title": "V = EnVironment"
-  },
-  {
     "title": "Managing External Pressures",
-    "level": 2,
+    "level": 3,
     "page_anchor": "2-10",
     "line_offset": 822,
     "parent_title": "The PAVE Checklist"
@@ -176,126 +127,126 @@
   },
   {
     "title": "Single-Pilot Resource Management (SRM)",
-    "level": 2,
-    "page_anchor": "2-12",
+    "level": 1,
+    "page_anchor": "2-13",
     "line_offset": 1038,
-    "parent_title": "The Decision-Making Process"
+    "parent_title": null
   },
   {
     "title": "The 5 Ps Check",
-    "level": 2,
-    "page_anchor": "2-12",
+    "level": 1,
+    "page_anchor": "2-13",
     "line_offset": 1051,
-    "parent_title": "The Decision-Making Process"
+    "parent_title": null
   },
   {
     "title": "The Plan",
-    "level": 3,
-    "page_anchor": "2-13",
+    "level": 2,
+    "page_anchor": "2-14",
     "line_offset": 1134,
     "parent_title": "The 5 Ps Check"
   },
   {
     "title": "The Plane",
-    "level": 3,
-    "page_anchor": "2-13",
+    "level": 2,
+    "page_anchor": "2-14",
     "line_offset": 1157,
     "parent_title": "The 5 Ps Check"
   },
   {
     "title": "The Pilot",
-    "level": 3,
-    "page_anchor": "2-13",
+    "level": 2,
+    "page_anchor": "2-14",
     "line_offset": 1170,
     "parent_title": "The 5 Ps Check"
   },
   {
     "title": "The Passengers",
-    "level": 3,
-    "page_anchor": "2-13",
+    "level": 2,
+    "page_anchor": "2-14",
     "line_offset": 1191,
     "parent_title": "The 5 Ps Check"
   },
   {
     "title": "The Programming",
-    "level": 3,
-    "page_anchor": "2-14",
+    "level": 2,
+    "page_anchor": "2-15",
     "line_offset": 1246,
     "parent_title": "The 5 Ps Check"
   },
   {
     "title": "Perceive, Process, Perform (3P) Model",
-    "level": 2,
+    "level": 1,
     "page_anchor": "2-15",
     "line_offset": 1277,
-    "parent_title": "The Decision-Making Process"
+    "parent_title": null
   },
   {
     "title": "PAVE Checklist: Identify Hazards and Personal Minimums",
-    "level": 3,
+    "level": 2,
     "page_anchor": "2-15",
     "line_offset": 1306,
     "parent_title": "Perceive, Process, Perform (3P) Model"
   },
   {
     "title": "CARE Checklist: Review Hazards and Evaluate Risks",
-    "level": 3,
-    "page_anchor": "2-15",
+    "level": 2,
+    "page_anchor": "2-16",
     "line_offset": 1357,
     "parent_title": "Perceive, Process, Perform (3P) Model"
   },
   {
     "title": "TEAM Checklist: Choose and Implement Risk Controls",
-    "level": 3,
+    "level": 2,
     "page_anchor": "2-16",
     "line_offset": 1389,
     "parent_title": "Perceive, Process, Perform (3P) Model"
   },
   {
     "title": "The DECIDE Model",
-    "level": 2,
+    "level": 1,
     "page_anchor": "2-18",
     "line_offset": 1662,
-    "parent_title": "The Decision-Making Process"
+    "parent_title": null
   },
   {
     "title": "Detect (the Problem)",
-    "level": 3,
-    "page_anchor": "2-19",
+    "level": 2,
+    "page_anchor": "2-20",
     "line_offset": 1779,
     "parent_title": "The DECIDE Model"
   },
   {
     "title": "Estimate (the Need To React)",
-    "level": 3,
+    "level": 2,
     "page_anchor": "2-20",
     "line_offset": 1790,
     "parent_title": "The DECIDE Model"
   },
   {
     "title": "Choose (a Course of Action)",
-    "level": 3,
+    "level": 2,
     "page_anchor": "2-20",
     "line_offset": 1812,
     "parent_title": "The DECIDE Model"
   },
   {
     "title": "Identify (Solutions)",
-    "level": 3,
+    "level": 2,
     "page_anchor": "2-20",
     "line_offset": 1818,
     "parent_title": "The DECIDE Model"
   },
   {
     "title": "Do (the Necessary Actions)",
-    "level": 3,
+    "level": 2,
     "page_anchor": "2-20",
     "line_offset": 1826,
     "parent_title": "The DECIDE Model"
   },
   {
     "title": "Evaluate (the Effect of the Action)",
-    "level": 3,
+    "level": 2,
     "page_anchor": "2-20",
     "line_offset": 1830,
     "parent_title": "The DECIDE Model"
@@ -352,14 +303,14 @@
   {
     "title": "Situational Awareness",
     "level": 1,
-    "page_anchor": "2-23",
+    "page_anchor": "2-24",
     "line_offset": 2079,
     "parent_title": null
   },
   {
     "title": "Obstacles to Maintaining Situational Awareness",
     "level": 2,
-    "page_anchor": "2-23",
+    "page_anchor": "2-24",
     "line_offset": 2104,
     "parent_title": "Situational Awareness"
   },
@@ -414,31 +365,31 @@
   },
   {
     "title": "Respect for Onboard Systems",
-    "level": 2,
+    "level": 1,
     "page_anchor": "2-29",
     "line_offset": 2484,
-    "parent_title": "Equipment Use"
+    "parent_title": null
   },
   {
     "title": "Reinforcement of Onboard Suites",
-    "level": 2,
+    "level": 1,
     "page_anchor": "2-29",
     "line_offset": 2493,
-    "parent_title": "Equipment Use"
+    "parent_title": null
   },
   {
     "title": "Getting Beyond Rote Workmanship",
-    "level": 2,
+    "level": 1,
     "page_anchor": "2-29",
     "line_offset": 2501,
-    "parent_title": "Equipment Use"
+    "parent_title": null
   },
   {
     "title": "Understand the Platform",
-    "level": 2,
+    "level": 1,
     "page_anchor": "2-29",
     "line_offset": 2513,
-    "parent_title": "Equipment Use"
+    "parent_title": null
   },
   {
     "title": "Managing Aircraft Automation",

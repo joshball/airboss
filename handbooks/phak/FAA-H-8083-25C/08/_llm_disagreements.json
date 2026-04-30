@@ -1,0 +1,324 @@
+[
+  {
+    "type": "level_mismatch",
+    "title": "Altimeter",
+    "toc_says": { "level": 2, "parent_title": "Pitot-Static Flight Instruments", "page_anchor": "8-3" },
+    "body_says": { "level": 2, "parent_title": "Pitot-Static Flight Instruments", "page_anchor": "8-3" },
+    "reason": "TOC labels Altimeter L2 but flattens its children (Principle of Operation, Effect of Nonstandard Pressure and Temperature, Setting the Altimeter, Altimeter Operation, Types of Altitude, Instrument Check) as siblings; body nests them as L3 under Altimeter."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Principle of Operation",
+    "toc_says": { "level": 2, "parent_title": "Pitot-Static Flight Instruments", "page_anchor": "8-3" },
+    "body_says": { "level": 3, "parent_title": "Altimeter", "page_anchor": "8-3" },
+    "reason": "Body nests this Principle of Operation under the Altimeter section."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Effect of Nonstandard Pressure and Temperature",
+    "toc_says": { "level": 2, "parent_title": "Pitot-Static Flight Instruments", "page_anchor": "8-4" },
+    "body_says": { "level": 3, "parent_title": "Altimeter", "page_anchor": "8-4" },
+    "reason": "Body nests this under Altimeter."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Setting the Altimeter",
+    "toc_says": { "level": 2, "parent_title": "Pitot-Static Flight Instruments", "page_anchor": "8-5" },
+    "body_says": { "level": 3, "parent_title": "Altimeter", "page_anchor": "8-5" },
+    "reason": "Body nests this under Altimeter."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Altimeter Operation",
+    "toc_says": { "level": 2, "parent_title": "Pitot-Static Flight Instruments", "page_anchor": "8-6" },
+    "body_says": { "level": 3, "parent_title": "Altimeter", "page_anchor": "8-6" },
+    "reason": "Body nests this under Altimeter."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Types of Altitude",
+    "toc_says": { "level": 2, "parent_title": "Pitot-Static Flight Instruments", "page_anchor": "8-6" },
+    "body_says": { "level": 3, "parent_title": "Altimeter", "page_anchor": "8-6" },
+    "reason": "Body nests this under Altimeter."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Instrument Check",
+    "toc_says": { "level": 2, "parent_title": "Pitot-Static Flight Instruments", "page_anchor": "8-7" },
+    "body_says": { "level": 3, "parent_title": "Altimeter", "page_anchor": "8-7" },
+    "reason": "First Instrument Check at 8-7 in body falls under the Altimeter section."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Vertical Speed Indicator (VSI)",
+    "toc_says": { "level": 2, "parent_title": "Pitot-Static Flight Instruments", "page_anchor": "8-7" },
+    "body_says": { "level": 2, "parent_title": "Pitot-Static Flight Instruments", "page_anchor": "8-7" },
+    "reason": "TOC promotes VSI's children (Principle of Operation, Instrument Check) to L1 siblings; body nests them as L3 under VSI."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Principle of Operation",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "8-7" },
+    "body_says": { "level": 3, "parent_title": "Vertical Speed Indicator (VSI)", "page_anchor": "8-7" },
+    "reason": "Second occurrence at 8-7 belongs to the VSI subsection in body."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Instrument Check",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "8-8" },
+    "body_says": { "level": 3, "parent_title": "Vertical Speed Indicator (VSI)", "page_anchor": "8-8" },
+    "reason": "Body shows this Instrument Check as the closing subsection of VSI."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Airspeed Indicator (ASI)",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "8-8" },
+    "body_says": { "level": 2, "parent_title": "Pitot-Static Flight Instruments", "page_anchor": "8-8" },
+    "reason": "Chapter intro (8-1) lists ASI alongside altimeter and VSI as members of the pitot-static system; body groups them together."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Airspeed Indicator Markings",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "8-9" },
+    "body_says": { "level": 3, "parent_title": "Airspeed Indicator (ASI)", "page_anchor": "8-9" },
+    "reason": "Body nests this under ASI."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Other Airspeed Limitations",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "8-9" },
+    "body_says": { "level": 3, "parent_title": "Airspeed Indicator (ASI)", "page_anchor": "8-9" },
+    "reason": "Body nests this under ASI."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Instrument Check",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "8-10" },
+    "body_says": { "level": 3, "parent_title": "Airspeed Indicator (ASI)", "page_anchor": "8-10" },
+    "reason": "Body shows this Instrument Check as the closing subsection of ASI."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Blockage of the Pitot-Static System",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "8-10" },
+    "body_says": { "level": 2, "parent_title": "Pitot-Static Flight Instruments", "page_anchor": "8-10" },
+    "reason": "Topic is explicitly about the pitot-static system; body groups it under that heading."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Blocked Pitot System",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "8-10" },
+    "body_says": { "level": 3, "parent_title": "Blockage of the Pitot-Static System", "page_anchor": "8-10" },
+    "reason": "Body nests this under Blockage of the Pitot-Static System."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Blocked Static System",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "8-11" },
+    "body_says": { "level": 3, "parent_title": "Blockage of the Pitot-Static System", "page_anchor": "8-11" },
+    "reason": "Body nests this under Blockage of the Pitot-Static System."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Airspeed Tape",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "8-12" },
+    "body_says": { "level": 2, "parent_title": "Electronic Flight Display (EFD)", "page_anchor": "8-12" },
+    "reason": "All EFD sub-instruments (Airspeed Tape, Attitude Indicator, Altimeter, VSI, Heading Indicator, Turn Indicator, Tachometer, Slip/Skid Indicator, Turn Rate Indicator, ADC, Trend Vectors) appear in body as children of the EFD section."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Attitude Indicator",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "8-13" },
+    "body_says": { "level": 2, "parent_title": "Electronic Flight Display (EFD)", "page_anchor": "8-13" },
+    "reason": "First Attitude Indicator occurrence (8-13) is the EFD-pane subsection."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Altimeter",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "8-13" },
+    "body_says": { "level": 2, "parent_title": "Electronic Flight Display (EFD)", "page_anchor": "8-13" },
+    "reason": "Second Altimeter occurrence (8-13) is the EFD-pane subsection."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Vertical Speed Indicator (VSI)",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "8-13" },
+    "body_says": { "level": 2, "parent_title": "Electronic Flight Display (EFD)", "page_anchor": "8-13" },
+    "reason": "Second VSI occurrence (8-13) is the EFD-pane subsection."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Heading Indicator",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "8-13" },
+    "body_says": { "level": 2, "parent_title": "Electronic Flight Display (EFD)", "page_anchor": "8-13" },
+    "reason": "First Heading Indicator (8-13) is an EFD subsection."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Turn Indicator",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "8-13" },
+    "body_says": { "level": 2, "parent_title": "Electronic Flight Display (EFD)", "page_anchor": "8-13" },
+    "reason": "Body nests Turn Indicator under EFD."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Tachometer",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "8-13" },
+    "body_says": { "level": 2, "parent_title": "Electronic Flight Display (EFD)", "page_anchor": "8-13" },
+    "reason": "Body nests Tachometer under EFD."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Slip/Skid Indicator",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "8-13" },
+    "body_says": { "level": 2, "parent_title": "Electronic Flight Display (EFD)", "page_anchor": "8-13" },
+    "reason": "Body nests Slip/Skid Indicator under EFD."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Turn Rate Indicator",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "8-13" },
+    "body_says": { "level": 2, "parent_title": "Electronic Flight Display (EFD)", "page_anchor": "8-13" },
+    "reason": "Body nests Turn Rate Indicator under EFD."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Air Data Computer (ADC)",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "8-14" },
+    "body_says": { "level": 2, "parent_title": "Electronic Flight Display (EFD)", "page_anchor": "8-14" },
+    "reason": "Body nests ADC under EFD."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Trend Vectors",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "8-14" },
+    "body_says": { "level": 2, "parent_title": "Electronic Flight Display (EFD)", "page_anchor": "8-14" },
+    "reason": "Body nests Trend Vectors under EFD."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Gyroscopic Principles",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "8-15" },
+    "body_says": { "level": 2, "parent_title": "Gyroscopic Flight Instruments", "page_anchor": "8-15" },
+    "reason": "Body nests Gyroscopic Principles (and its children Rigidity in Space and Precession) under Gyroscopic Flight Instruments."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Rigidity in Space",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "8-15" },
+    "body_says": { "level": 3, "parent_title": "Gyroscopic Principles", "page_anchor": "8-15" },
+    "reason": "Body explicitly groups Rigidity in Space and Precession under Gyroscopic Principles."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Precession",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "8-15" },
+    "body_says": { "level": 3, "parent_title": "Gyroscopic Principles", "page_anchor": "8-15" },
+    "reason": "Body groups this with Rigidity in Space under Gyroscopic Principles."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Sources of Power",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "8-16" },
+    "body_says": { "level": 2, "parent_title": "Gyroscopic Flight Instruments", "page_anchor": "8-16" },
+    "reason": "Body nests this under Gyroscopic Flight Instruments."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Turn Indicators",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "8-16" },
+    "body_says": { "level": 2, "parent_title": "Gyroscopic Flight Instruments", "page_anchor": "8-16" },
+    "reason": "Body groups Turn Indicators (and its children Turn-and-Slip Indicator, Turn Coordinator, Inclinometer, Yaw String, Instrument Check) under Gyroscopic Flight Instruments."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Turn-and-Slip Indicator",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "8-16" },
+    "body_says": { "level": 3, "parent_title": "Turn Indicators", "page_anchor": "8-16" },
+    "reason": "Body nests this under Turn Indicators."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Turn Coordinator",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "8-17" },
+    "body_says": { "level": 3, "parent_title": "Turn Indicators", "page_anchor": "8-17" },
+    "reason": "Body nests this under Turn Indicators."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Attitude Indicator",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "8-18" },
+    "body_says": { "level": 2, "parent_title": "Gyroscopic Flight Instruments", "page_anchor": "8-18" },
+    "reason": "Second Attitude Indicator occurrence (8-18) is a Gyroscopic L2 subsection."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Heading Indicator",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "8-19" },
+    "body_says": { "level": 2, "parent_title": "Gyroscopic Flight Instruments", "page_anchor": "8-19" },
+    "reason": "Second Heading Indicator (8-19) is a Gyroscopic L2 subsection."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Attitude and Heading Reference System (AHRS)",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "8-20" },
+    "body_says": { "level": 2, "parent_title": "Gyroscopic Flight Instruments", "page_anchor": "8-20" },
+    "reason": "Body nests AHRS under Gyroscopic Flight Instruments."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "The Flux Gate Compass System",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "8-20" },
+    "body_says": { "level": 2, "parent_title": "Gyroscopic Flight Instruments", "page_anchor": "8-20" },
+    "reason": "Body discusses Flux Gate Compass within the gyroscopic instruments family (it drives slaved gyros)."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Remote Indicating Compass",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "8-21" },
+    "body_says": { "level": 2, "parent_title": "Gyroscopic Flight Instruments", "page_anchor": "8-21" },
+    "reason": "Body discusses Remote Indicating Compass within the gyroscopic instruments family."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Magnetic Compass",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "8-23" },
+    "body_says": { "level": 2, "parent_title": "Compass Systems", "page_anchor": "8-23" },
+    "reason": "Body opens Compass Systems then introduces Magnetic Compass as a subsection."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Magnetic Compass Induced Errors",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "8-24" },
+    "body_says": { "level": 2, "parent_title": "Compass Systems", "page_anchor": "8-24" },
+    "reason": "Body groups this with Magnetic Compass under Compass Systems."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "The Vertical Card Magnetic Compass",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "8-27" },
+    "body_says": { "level": 2, "parent_title": "Compass Systems", "page_anchor": "8-27" },
+    "reason": "Body groups this with Magnetic Compass under Compass Systems."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Lags or Leads",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "8-27" },
+    "body_says": { "level": 3, "parent_title": "The Vertical Card Magnetic Compass", "page_anchor": "8-27" },
+    "reason": "Body nests Lags or Leads (and Eddy Current Damping) under The Vertical Card Magnetic Compass."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Eddy Current Damping",
+    "toc_says": { "level": 1, "parent_title": null, "page_anchor": "8-27" },
+    "body_says": { "level": 3, "parent_title": "The Vertical Card Magnetic Compass", "page_anchor": "8-27" },
+    "reason": "Body nests this under The Vertical Card Magnetic Compass."
+  },
+  {
+    "type": "extra_in_toc",
+    "title": "Variation / Deviation / Dip Errors / Northerly Turning Errors / Southerly Turning Errors / Acceleration Error / Oscillation Error",
+    "toc_says": { "level": null, "parent_title": null, "page_anchor": null },
+    "body_says": { "level": 3, "parent_title": "Magnetic Compass Induced Errors", "page_anchor": "8-24..8-27" },
+    "reason": "Body lists seven L3 children under Magnetic Compass Induced Errors that the TOC parser missed entirely."
+  }
+]

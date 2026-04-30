@@ -44,35 +44,35 @@
   {
     "title": "Satellite",
     "level": 2,
-    "page_anchor": "13-3",
+    "page_anchor": "13-4",
     "line_offset": 216,
     "parent_title": "Observations"
   },
   {
     "title": "Service Outlets",
     "level": 1,
-    "page_anchor": "13-3",
+    "page_anchor": "13-4",
     "line_offset": 222,
     "parent_title": null
   },
   {
     "title": "Flight Service Station (FSS)",
     "level": 2,
-    "page_anchor": "13-3",
+    "page_anchor": "13-4",
     "line_offset": 229,
     "parent_title": "Service Outlets"
   },
   {
     "title": "Telephone Information Briefing Service (TIBS)",
     "level": 2,
-    "page_anchor": "13-3",
+    "page_anchor": "13-4",
     "line_offset": 240,
     "parent_title": "Service Outlets"
   },
   {
     "title": "Hazardous Inflight Weather Advisory Service (HIWAS)",
     "level": 2,
-    "page_anchor": "13-3",
+    "page_anchor": "13-4",
     "line_offset": 252,
     "parent_title": "Service Outlets"
   },
@@ -134,31 +134,31 @@
   },
   {
     "title": "Aviation Forecasts",
-    "level": 1,
+    "level": 2,
     "page_anchor": "13-9",
     "line_offset": 770,
-    "parent_title": null
+    "parent_title": "Aviation Weather Reports"
   },
   {
     "title": "Terminal Aerodrome Forecasts (TAF)",
     "level": 2,
     "page_anchor": "13-9",
     "line_offset": 779,
-    "parent_title": "Aviation Forecasts"
+    "parent_title": "Aviation Weather Reports"
   },
   {
     "title": "Area Forecasts (FA)",
     "level": 2,
     "page_anchor": "13-10",
     "line_offset": 877,
-    "parent_title": "Aviation Forecasts"
+    "parent_title": "Aviation Weather Reports"
   },
   {
     "title": "Inflight Weather Advisories",
     "level": 2,
     "page_anchor": "13-11",
     "line_offset": 1567,
-    "parent_title": "Aviation Forecasts"
+    "parent_title": "Aviation Weather Reports"
   },
   {
     "title": "AIRMET",
@@ -186,7 +186,7 @@
     "level": 2,
     "page_anchor": "13-13",
     "line_offset": 1724,
-    "parent_title": "Aviation Forecasts"
+    "parent_title": "Aviation Weather Reports"
   },
   {
     "title": "Weather Charts",
@@ -246,31 +246,31 @@
   },
   {
     "title": "The Next Generation Weather Radar System (NEXRAD)",
-    "level": 1,
+    "level": 2,
     "page_anchor": "13-18",
     "line_offset": 2074,
-    "parent_title": null
+    "parent_title": "Electronic Flight Displays (EFD) /Multi-Function Display (MFD) Weather"
   },
   {
     "title": "What Can Pilots Do?",
     "level": 2,
     "page_anchor": "13-19",
     "line_offset": 2143,
-    "parent_title": "The Next Generation Weather Radar System (NEXRAD)"
+    "parent_title": "Electronic Flight Displays (EFD) /Multi-Function Display (MFD) Weather"
   },
   {
     "title": "NEXRAD Abnormalities",
     "level": 2,
     "page_anchor": "13-21",
     "line_offset": 2166,
-    "parent_title": "The Next Generation Weather Radar System (NEXRAD)"
+    "parent_title": "Electronic Flight Displays (EFD) /Multi-Function Display (MFD) Weather"
   },
   {
     "title": "NEXRAD Limitations",
     "level": 2,
     "page_anchor": "13-21",
     "line_offset": 2183,
-    "parent_title": "The Next Generation Weather Radar System (NEXRAD)"
+    "parent_title": "Electronic Flight Displays (EFD) /Multi-Function Display (MFD) Weather"
   },
   {
     "title": "Base Reflectivity",
@@ -291,28 +291,28 @@
     "level": 2,
     "page_anchor": "13-21",
     "line_offset": 2204,
-    "parent_title": "The Next Generation Weather Radar System (NEXRAD)"
+    "parent_title": "Electronic Flight Displays (EFD) /Multi-Function Display (MFD) Weather"
   },
   {
     "title": "Graphical METARs",
     "level": 2,
     "page_anchor": "13-21",
     "line_offset": 2217,
-    "parent_title": "The Next Generation Weather Radar System (NEXRAD)"
+    "parent_title": "Electronic Flight Displays (EFD) /Multi-Function Display (MFD) Weather"
   },
   {
     "title": "Data Link Weather",
-    "level": 1,
+    "level": 2,
     "page_anchor": "13-21",
     "line_offset": 2234,
-    "parent_title": null
+    "parent_title": "Electronic Flight Displays (EFD) /Multi-Function Display (MFD) Weather"
   },
   {
     "title": "Data Link Weather Products",
     "level": 2,
     "page_anchor": "13-23",
     "line_offset": 2261,
-    "parent_title": "Data Link Weather"
+    "parent_title": "Electronic Flight Displays (EFD) /Multi-Function Display (MFD) Weather"
   },
   {
     "title": "Flight Information Service- Broadcast (FIS-B)",
@@ -326,7 +326,7 @@
     "level": 2,
     "page_anchor": "13-24",
     "line_offset": 2307,
-    "parent_title": "Data Link Weather"
+    "parent_title": "Electronic Flight Displays (EFD) /Multi-Function Display (MFD) Weather"
   },
   {
     "title": "Chapter Summary",

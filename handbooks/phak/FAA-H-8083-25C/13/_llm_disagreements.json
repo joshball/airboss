@@ -1,0 +1,58 @@
+[
+  {
+    "type": "level_mismatch",
+    "title": "AIRMET",
+    "toc_says": { "level": 2, "parent_title": "Aviation Weather Reports", "page_anchor": "13-11" },
+    "body_says": { "level": 3, "parent_title": "Inflight Weather Advisories", "page_anchor": "13-11" },
+    "reason": "Body text places AIRMET as a sub-type under the 'Inflight Weather Advisories' heading; TOC flattened it to L2 sibling."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "SIGMET",
+    "toc_says": { "level": 2, "parent_title": "Aviation Weather Reports", "page_anchor": "13-12" },
+    "body_says": { "level": 3, "parent_title": "Inflight Weather Advisories", "page_anchor": "13-11" },
+    "reason": "Body text places SIGMET as a sub-type under 'Inflight Weather Advisories'; TOC flattened it."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Convective Significant Meteorological Information (WST)",
+    "toc_says": { "level": 2, "parent_title": "Aviation Weather Reports", "page_anchor": "13-12" },
+    "body_says": { "level": 3, "parent_title": "Inflight Weather Advisories", "page_anchor": "13-12" },
+    "reason": "Body text places Convective SIGMET as a sub-type under 'Inflight Weather Advisories'; TOC flattened it."
+  },
+  {
+    "type": "extra_in_toc",
+    "title": "The Next Generation Weather Radar System (NEXRAD)",
+    "toc_says": { "level": null, "parent_title": null, "page_anchor": null },
+    "body_says": { "level": 2, "parent_title": "Electronic Flight Displays (EFD) /Multi-Function Display (MFD) Weather", "page_anchor": "13-18" },
+    "reason": "TOC parser missed this body heading (appears between 'Weather Products Age and Expiration' and 'What Can Pilots Do?')."
+  },
+  {
+    "type": "extra_in_toc",
+    "title": "Base Reflectivity",
+    "toc_says": { "level": null, "parent_title": null, "page_anchor": null },
+    "body_says": { "level": 3, "parent_title": "NEXRAD Limitations", "page_anchor": "13-21" },
+    "reason": "TOC parser missed this body sub-heading under 'NEXRAD Limitations'."
+  },
+  {
+    "type": "extra_in_toc",
+    "title": "Resolution Display",
+    "toc_says": { "level": null, "parent_title": null, "page_anchor": null },
+    "body_says": { "level": 3, "parent_title": "NEXRAD Limitations", "page_anchor": "13-21" },
+    "reason": "TOC parser missed this body sub-heading under 'NEXRAD Limitations'."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Flight Information Service- Broadcast (FIS-B)",
+    "toc_says": { "level": 2, "parent_title": "Electronic Flight Displays (EFD) /Multi-Function Display (MFD) Weather", "page_anchor": "13-23" },
+    "body_says": { "level": 3, "parent_title": "Data Link Weather Products", "page_anchor": "13-23" },
+    "reason": "Body text places FIS-B as the sole sub-section under 'Data Link Weather Products'; TOC promoted to L2."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Chapter Summary",
+    "toc_says": { "level": 2, "parent_title": "Electronic Flight Displays (EFD) /Multi-Function Display (MFD) Weather", "page_anchor": "13-24" },
+    "body_says": { "level": 1, "parent_title": null, "page_anchor": "13-24" },
+    "reason": "Chapter Summary is the chapter's closing boilerplate (per contract, always L1), not a subsection of the EFD/MFD section."
+  }
+]

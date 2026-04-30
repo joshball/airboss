@@ -29,35 +29,35 @@
   },
   {
     "title": "Pressure Altitude",
-    "level": 2,
+    "level": 1,
     "page_anchor": "11-3",
     "line_offset": 313,
-    "parent_title": "Atmospheric Pressure"
+    "parent_title": null
   },
   {
     "title": "Density Altitude",
-    "level": 2,
+    "level": 1,
     "page_anchor": "11-3",
     "line_offset": 334,
-    "parent_title": "Atmospheric Pressure"
+    "parent_title": null
   },
   {
     "title": "Effects of Pressure on Density",
-    "level": 3,
+    "level": 2,
     "page_anchor": "11-4",
     "line_offset": 440,
     "parent_title": "Density Altitude"
   },
   {
     "title": "Effects of Temperature on Density",
-    "level": 3,
+    "level": 2,
     "page_anchor": "11-5",
     "line_offset": 453,
     "parent_title": "Density Altitude"
   },
   {
     "title": "Effects of Humidity (Moisture) on Density",
-    "level": 3,
+    "level": 2,
     "page_anchor": "11-5",
     "line_offset": 463,
     "parent_title": "Density Altitude"
@@ -85,24 +85,24 @@
   },
   {
     "title": "Angle of Climb (AOC)",
-    "level": 3,
+    "level": 2,
     "page_anchor": "11-7",
     "line_offset": 711,
-    "parent_title": "Climb Performance"
+    "parent_title": "Performance"
   },
   {
     "title": "Rate of Climb (ROC)",
-    "level": 3,
+    "level": 2,
     "page_anchor": "11-7",
     "line_offset": 735,
-    "parent_title": "Climb Performance"
+    "parent_title": "Performance"
   },
   {
     "title": "Climb Performance Factors",
-    "level": 3,
+    "level": 2,
     "page_anchor": "11-8",
     "line_offset": 813,
-    "parent_title": "Climb Performance"
+    "parent_title": "Performance"
   },
   {
     "title": "Range Performance",
@@ -127,31 +127,31 @@
   },
   {
     "title": "Runway Surface and Gradient",
-    "level": 3,
+    "level": 2,
     "page_anchor": "11-12",
     "line_offset": 1220,
-    "parent_title": "Takeoff and Landing Performance"
+    "parent_title": "Performance"
   },
   {
     "title": "Water on the Runway and Dynamic Hydroplaning",
-    "level": 3,
+    "level": 2,
     "page_anchor": "11-13",
     "line_offset": 1269,
-    "parent_title": "Takeoff and Landing Performance"
+    "parent_title": "Performance"
   },
   {
     "title": "Takeoff Performance",
-    "level": 3,
+    "level": 2,
     "page_anchor": "11-14",
     "line_offset": 1315,
-    "parent_title": "Takeoff and Landing Performance"
+    "parent_title": "Performance"
   },
   {
     "title": "Landing Performance",
-    "level": 3,
+    "level": 2,
     "page_anchor": "11-16",
     "line_offset": 1517,
-    "parent_title": "Takeoff and Landing Performance"
+    "parent_title": "Performance"
   },
   {
     "title": "Performance Speeds",
@@ -218,17 +218,17 @@
   },
   {
     "title": "Transport Category Aircraft Performance",
-    "level": 1,
+    "level": 2,
     "page_anchor": "11-28",
     "line_offset": 3982,
-    "parent_title": null
+    "parent_title": "Performance Charts"
   },
   {
     "title": "Air Carrier Obstacle Clearance Requirements",
-    "level": 1,
+    "level": 2,
     "page_anchor": "11-28",
     "line_offset": 3989,
-    "parent_title": null
+    "parent_title": "Performance Charts"
   },
   {
     "title": "Chapter Summary",

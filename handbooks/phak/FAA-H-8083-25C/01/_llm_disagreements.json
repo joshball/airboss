@@ -1,0 +1,205 @@
+[
+  {
+    "type": "missing_in_body",
+    "title": "Privileges:",
+    "toc_says": { "level": 2, "parent_title": null, "page_anchor": "1-16" },
+    "body_says": { "level": null, "parent_title": null, "page_anchor": null },
+    "reason": "Pseudo-heading list-item label introducing a bulleted list under Sport Pilot; not a real section per the contract's difficult-cases rule."
+  },
+  {
+    "type": "missing_in_body",
+    "title": "Limitations:",
+    "toc_says": { "level": 2, "parent_title": null, "page_anchor": "1-17" },
+    "body_says": { "level": null, "parent_title": null, "page_anchor": null },
+    "reason": "Pseudo-heading list-item label under Sport Pilot; not a real section."
+  },
+  {
+    "type": "missing_in_body",
+    "title": "Privileges:",
+    "toc_says": { "level": 2, "parent_title": null, "page_anchor": "1-17" },
+    "body_says": { "level": null, "parent_title": null, "page_anchor": null },
+    "reason": "Pseudo-heading list-item label under Recreational Pilot; not a real section."
+  },
+  {
+    "type": "missing_in_body",
+    "title": "Limitations:",
+    "toc_says": { "level": 2, "parent_title": null, "page_anchor": "1-17" },
+    "body_says": { "level": null, "parent_title": null, "page_anchor": null },
+    "reason": "Pseudo-heading list-item label under Recreational Pilot; not a real section."
+  },
+  {
+    "type": "extra_in_toc",
+    "title": "History of the Federal Aviation Administration (FAA)",
+    "toc_says": { "level": null, "parent_title": null, "page_anchor": null },
+    "body_says": { "level": 1, "parent_title": null, "page_anchor": "1-3" },
+    "reason": "Major L1 section heading present in body text (lines 101-102, two-line wrap) that the TOC parser missed; all of Transcontinental Air Mail Route, Federal Certification, Civil Aeronautics Act, FAA Act of 1958, DOT, ATC Automation, PATCO, Airline Deregulation Act are children of this heading."
+  },
+  {
+    "type": "extra_in_toc",
+    "title": "The Civil Aeronautics Act of 1938",
+    "toc_says": { "level": null, "parent_title": null, "page_anchor": null },
+    "body_says": { "level": 2, "parent_title": "History of the Federal Aviation Administration (FAA)", "page_anchor": "1-5" },
+    "reason": "Body heading at line 271 the TOC parser missed."
+  },
+  {
+    "type": "extra_in_toc",
+    "title": "Sport Pilot",
+    "toc_says": { "level": null, "parent_title": null, "page_anchor": null },
+    "body_says": { "level": 2, "parent_title": "Pilot Certifications", "page_anchor": "1-16" },
+    "reason": "Body heading at line 1416 introducing the Sport Pilot certification subsection; TOC included only its Privileges/Limitations pseudo-headings."
+  },
+  {
+    "type": "extra_in_toc",
+    "title": "FAA Reference Material",
+    "toc_says": { "level": null, "parent_title": null, "page_anchor": null },
+    "body_says": { "level": 2, "parent_title": "The Role of the FAA", "page_anchor": "1-9" },
+    "reason": "Body heading at line 605 introducing the AIM/Handbooks/ACs/Flight Publications cluster; TOC parser missed it and left those entries flat under Role of the FAA."
+  },
+  {
+    "type": "extra_in_toc",
+    "title": "Flight Standards Service",
+    "toc_says": { "level": null, "parent_title": null, "page_anchor": null },
+    "body_says": { "level": 3, "parent_title": "Field Offices", "page_anchor": "1-8" },
+    "reason": "Body heading at line 552 nested under Field Offices; TOC parser missed it."
+  },
+  {
+    "type": "extra_in_toc",
+    "title": "Flight Standards District Office (FSDO)",
+    "toc_says": { "level": null, "parent_title": null, "page_anchor": null },
+    "body_says": { "level": 3, "parent_title": "Field Offices", "page_anchor": "1-9" },
+    "reason": "Body heading at line 622 nested under Field Offices; TOC parser missed it."
+  },
+  {
+    "type": "extra_in_toc",
+    "title": "NOTAM (D) Information",
+    "toc_says": { "level": null, "parent_title": null, "page_anchor": null },
+    "body_says": { "level": 3, "parent_title": "Notices to Airmen (NOTAMs)", "page_anchor": "1-12" },
+    "reason": "Body heading at line 1002; TOC parser missed it."
+  },
+  {
+    "type": "extra_in_toc",
+    "title": "FDC NOTAMs",
+    "toc_says": { "level": null, "parent_title": null, "page_anchor": null },
+    "body_says": { "level": 3, "parent_title": "Notices to Airmen (NOTAMs)", "page_anchor": "1-13" },
+    "reason": "Body heading at line 1103; TOC parser missed it."
+  },
+  {
+    "type": "extra_in_toc",
+    "title": "NOTAM Composition",
+    "toc_says": { "level": null, "parent_title": null, "page_anchor": null },
+    "body_says": { "level": 3, "parent_title": "Notices to Airmen (NOTAMs)", "page_anchor": "1-13" },
+    "reason": "Body heading at line 1149; TOC parser missed it."
+  },
+  {
+    "type": "extra_in_toc",
+    "title": "NOTAM Dissemination and Availability",
+    "toc_says": { "level": null, "parent_title": null, "page_anchor": null },
+    "body_says": { "level": 3, "parent_title": "Notices to Airmen (NOTAMs)", "page_anchor": "1-14" },
+    "reason": "Body heading at line 1192; TOC parser missed it."
+  },
+  {
+    "type": "extra_in_toc",
+    "title": "Student Pilot Solo Requirements",
+    "toc_says": { "level": null, "parent_title": null, "page_anchor": null },
+    "body_says": { "level": 3, "parent_title": "The Student Pilot", "page_anchor": "1-21" },
+    "reason": "Body heading at line 1843 nested under The Student Pilot; TOC parser missed it."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Aeronautical Information Manual (AIM)",
+    "toc_says": { "level": 2, "parent_title": "The Role of the FAA", "page_anchor": "1-9" },
+    "body_says": { "level": 3, "parent_title": "FAA Reference Material", "page_anchor": "1-9" },
+    "reason": "Body groups AIM under the FAA Reference Material heading the TOC missed; promoting it to L2 sibling of Role of the FAA flattens the structure."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Handbooks",
+    "toc_says": { "level": 2, "parent_title": "The Role of the FAA", "page_anchor": "1-10" },
+    "body_says": { "level": 3, "parent_title": "FAA Reference Material", "page_anchor": "1-10" },
+    "reason": "Body nests Handbooks under FAA Reference Material; TOC promoted it after missing the parent heading."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Advisory Circulars (ACs)",
+    "toc_says": { "level": 2, "parent_title": "The Role of the FAA", "page_anchor": "1-10" },
+    "body_says": { "level": 3, "parent_title": "FAA Reference Material", "page_anchor": "1-10" },
+    "reason": "Body nests ACs under FAA Reference Material."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Flight Publications",
+    "toc_says": { "level": 2, "parent_title": "The Role of the FAA", "page_anchor": "1-11" },
+    "body_says": { "level": 3, "parent_title": "FAA Reference Material", "page_anchor": "1-11" },
+    "reason": "Body nests Flight Publications under FAA Reference Material."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Notices to Airmen (NOTAMs)",
+    "toc_says": { "level": 2, "parent_title": "The Role of the FAA", "page_anchor": "1-12" },
+    "body_says": { "level": 3, "parent_title": "Pilot and Aeronautical Information", "page_anchor": "1-12" },
+    "reason": "Body nests NOTAMs under Pilot and Aeronautical Information; TOC flattened them as siblings."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Aviation Safety Inspector (ASI)",
+    "toc_says": { "level": 2, "parent_title": "The Role of the FAA", "page_anchor": "1-9" },
+    "body_says": { "level": 3, "parent_title": "Field Offices", "page_anchor": "1-9" },
+    "reason": "Body nests ASI under the Field Offices heading; TOC flattened it."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Basic Requirements",
+    "toc_says": { "level": 2, "parent_title": "Pilot Certifications", "page_anchor": "1-20" },
+    "body_says": { "level": 3, "parent_title": "The Student Pilot", "page_anchor": "1-20" },
+    "reason": "Body nests Basic Requirements under The Student Pilot heading; TOC flattened to L2 sibling."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Medical Certification Requirements",
+    "toc_says": { "level": 2, "parent_title": "Pilot Certifications", "page_anchor": "1-20" },
+    "body_says": { "level": 3, "parent_title": "The Student Pilot", "page_anchor": "1-20" },
+    "reason": "Body nests Medical Certification Requirements under The Student Pilot."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Knowledge Tests",
+    "toc_says": { "level": 2, "parent_title": "Pilot Certifications", "page_anchor": "1-21" },
+    "body_says": { "level": 3, "parent_title": "Knowledge and Skill Tests", "page_anchor": "1-21" },
+    "reason": "Body nests Knowledge Tests under Knowledge and Skill Tests heading."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "When To Take the Knowledge Test",
+    "toc_says": { "level": 2, "parent_title": "Pilot Certifications", "page_anchor": "1-22" },
+    "body_says": { "level": 3, "parent_title": "Knowledge and Skill Tests", "page_anchor": "1-22" },
+    "reason": "Body nests this under Knowledge and Skill Tests."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Practical Test",
+    "toc_says": { "level": 2, "parent_title": "Pilot Certifications", "page_anchor": "1-22" },
+    "body_says": { "level": 3, "parent_title": "Knowledge and Skill Tests", "page_anchor": "1-22" },
+    "reason": "Body nests Practical Test under Knowledge and Skill Tests."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "When To Take the Practical Test",
+    "toc_says": { "level": 2, "parent_title": "Pilot Certifications", "page_anchor": "1-23" },
+    "body_says": { "level": 3, "parent_title": "Knowledge and Skill Tests", "page_anchor": "1-23" },
+    "reason": "Body nests this under Knowledge and Skill Tests."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Who Administers the FAA Practical Tests?",
+    "toc_says": { "level": 2, "parent_title": "Pilot Certifications", "page_anchor": "1-23" },
+    "body_says": { "level": 3, "parent_title": "Knowledge and Skill Tests", "page_anchor": "1-23" },
+    "reason": "Body nests this under Knowledge and Skill Tests."
+  },
+  {
+    "type": "level_mismatch",
+    "title": "Chapter Summary",
+    "toc_says": { "level": 2, "parent_title": "Pilot Certifications", "page_anchor": "1-24" },
+    "body_says": { "level": 1, "parent_title": null, "page_anchor": "1-24" },
+    "reason": "Chapter Summary is the chapter's closing L1 boilerplate per the contract, not a child of Pilot Certifications."
+  }
+]
