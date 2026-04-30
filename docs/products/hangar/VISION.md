@@ -32,8 +32,8 @@ Three areas:
 | Area        | What lives here                                                                               | Status                     |
 | ----------- | --------------------------------------------------------------------------------------------- | -------------------------- |
 | **Content** | Sources, glossary, scenarios, cards, routes, modules -- the upstream of every learner surface | Sources + glossary shipped |
-| **People**  | Users, sessions, invites, bans, audit-by-actor                                                | Read-only `/users` shipped |
-| **System**  | Job queue, audit log, diagnostics, future feature flags                                       | Jobs + audit-ping shipped  |
+| **People**  | Users, sessions, invites, bans, audit-by-actor                                                | `/users` editor shipped    |
+| **System**  | Job queue, audit log, diagnostics, future feature flags                                       | Audit explorer + jobs done |
 
 Each area is a section in the top nav. Sub-pages live underneath.
 
@@ -71,11 +71,11 @@ Authoring once feeds many surfaces. A scenario authored in hangar runs in study 
 
 Per-area phasing. No fixed dates.
 
-| Area    | Now                         | Next                                                         | Later                                           |
-| ------- | --------------------------- | ------------------------------------------------------------ | ----------------------------------------------- |
-| Content | Sources, Glossary           | Scenarios authoring, Cards authoring                         | Routes, Modules, Cross-surface authoring shell  |
-| People  | Read-only `/users`          | Role editing, ban/unban, session revoke, invite flow         | Per-user activity heatmap, content attribution  |
-| System  | Jobs, audit-ping diagnostic | Real audit explorer (filter by actor / target / op / window) | Feature flags, diagnostics dashboard, queue ops |
+| Area    | Now                                          | Next                                                 | Later                                           |
+| ------- | -------------------------------------------- | ---------------------------------------------------- | ----------------------------------------------- |
+| Content | Sources, Glossary                            | Scenarios authoring, Cards authoring                 | Routes, Modules, Cross-surface authoring shell  |
+| People  | `/users` directory + role / ban / revoke     | Invite flow                                          | Per-user activity heatmap, content attribution  |
+| System  | Jobs, cross-cutting audit explorer           | Hangar e2e infra, diagnostics dashboard              | Feature flags, queue ops                        |
 
 The dashboard at `/` aggregates one stat per area. Each area gets its own surface as features land.
 

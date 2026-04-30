@@ -28,9 +28,7 @@ export const audit: HelpPage = {
 			title: 'What this surface shows',
 			body: `The audit log captures one row per mutation across every BC. Every \`auditWrite\` call lands here: card edits, source ingests, job lifecycle events, sync flips, role changes -- everything. The explorer is the read surface for that log: search by who, by what, by when, and drill into the full before / after / metadata payload of any single row.
 
-ADMIN-only -- audit data carries enough context (request bodies, raw user input, system identifiers) that it sits above the AUTHOR / OPERATOR floor that the rest of hangar uses.
-
-The companion heartbeat at \`/admin/audit-ping\` stays available as a self-test for the auth -> form-action -> audit-write -> audit-read loop. The two surfaces will merge in a follow-up cleanup once enough real BCs emit audit rows that the heartbeat is redundant.`,
+ADMIN-only -- audit data carries enough context (request bodies, raw user input, system identifiers) that it sits above the AUTHOR / OPERATOR floor that the rest of hangar uses.`,
 		},
 		{
 			id: 'filters',

@@ -11,10 +11,13 @@
  */
 export const AUDIT_TARGETS = {
 	/**
-	 * Scaffold-era heartbeat emitted by `apps/hangar/` to prove the
-	 * auth -> role gate -> form action -> audit write path end-to-end.
-	 * Replaced by real targets (hangar.source, hangar.reference, ...)
-	 * as later work packages land.
+	 * Retired scaffold-era heartbeat. The `/admin/audit-ping` route was
+	 * removed once real BC writes (cards, sources, hangar.user) made the
+	 * diagnostic redundant. The enum value stays so existing
+	 * `audit.audit_log` rows (append-only per ADR 004) remain valid against
+	 * the DB CHECK constraint -- which is regenerated from
+	 * `AUDIT_TARGET_VALUES` on every migration. No code emits `hangar.ping`
+	 * anymore; do not reuse this string for a new target.
 	 */
 	HANGAR_PING: 'hangar.ping',
 	/** Reference-registry edits in hangar (create / update / delete). */

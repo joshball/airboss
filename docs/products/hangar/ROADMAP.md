@@ -14,11 +14,9 @@ For the why, see [VISION.md](VISION.md). For shipped surfaces, see [PRD.md](PRD.
 
 ## Where we are
 
-Hangar ships an authoring + admin surface today: dashboard with three tiles (Content, People, System), source pipeline (`/sources`, `/sources/[id]`), glossary registry (`/glossary`, `/glossary/[id]`), read-only user explorer (`/users`, `/users/[id]`), background job log (`/jobs`), and audit-ping scaffold (`/admin/audit-ping`). Layout-level role gating is in place.
+Hangar ships an authoring + admin surface today: dashboard with three tiles (Content, People, System), source pipeline (`/sources`, `/sources/[id]`), glossary registry (`/glossary`, `/glossary/[id]`), user explorer + editor (`/users`, `/users/[id]` -- role / ban / revoke), background job log (`/jobs`), and the cross-cutting audit explorer (`/admin/audit`, `/admin/audit/[id]`). Layout-level role gating is in place.
 
 ## Active
-
-- **Real audit explorer.** Replaces `/admin/audit-ping` as the System -> Audit destination. Filter by actor, target, op, time window. First non-scaffold System surface.
 
 ## Queued
 

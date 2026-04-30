@@ -30,7 +30,7 @@ Ordered by what unblocks the most downstream work.
 | ------- | --------------------------------------------------------------------------------------------------------------- |
 | study   | Calibration improvements, more knowledge-graph content, content authoring polish                                |
 | sim     | Phase 7 horizon view continuation; cockpit panel extraction (per ADR 015 follow-up note); more scenarios        |
-| hangar  | Real audit explorer (replaces audit-ping); /users editing (role assign, ban/unban, session revoke); invite flow |
+| hangar  | Invite flow; Playwright e2e infra; remaining authoring surfaces (scenarios, cards)                              |
 
 Specifics live in each app's roadmap and the per-feature work packages.
 
