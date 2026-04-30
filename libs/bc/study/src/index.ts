@@ -287,6 +287,16 @@ export type {
 	MasteryRollup,
 } from './lenses';
 export { acsLens, computeMasteryRollup, domainLens, LensError } from './lenses';
+export type { GateState, LeafMasteryState, NodeEvidenceState } from './mastery';
+export {
+	aggregateLeafKindStates,
+	credentialSlugToCertApplicability,
+	getLeafMasteryStateMap,
+	getNodeEvidenceState,
+	getNodeEvidenceStateMap,
+	isLeafMastered,
+	SyllabusLeafNotFoundError,
+} from './mastery';
 export type { CreatePlanInput, UpdatePlanInput } from './plans';
 export {
 	activatePlan,
