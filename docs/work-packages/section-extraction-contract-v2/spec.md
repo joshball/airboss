@@ -292,14 +292,17 @@ The v3 amendments were patched in place into the live emitted prompts during the
 - ✅ Existing tests pass (`bun run check` clean; pytest in `tools/handbook-ingest/tests/`).
 - ✅ The committed `_llm_section_tree.json` files for phak are present (PR #355) under contract v3. The `phak-llm-v1-baseline` tag preserved the v1 artifacts for the entry-count delta verification; tag deleted post-acceptance.
 
-### Phase 3 (deferred; conditional on Phase 4 compare-report review)
+### Phase 3 (GREENLIT 2026-04-30; pending implementation)
 
-These criteria assumed Phase 3 (TOC checklist + disagreements wiring) shipped before Phase 4. Phase 4 ran without Phase 3; the data informs whether Phase 3 is justified:
+The compare report regenerated 2026-04-30 against PR #355's committed v3 artifacts shows systematic disagreement: 485 parent-mismatches and 317 level-mismatches across 17 chapters, with 15 of 17 chapters carrying parent-diff > 10. Ch 7 alone has 86 of 88 TOC entries flagged L1 -- the printed TOC's flatness is a formatting artifact, not the document's structure. The LLM's nesting matches the body text; the TOC parser over-flattens systematically.
 
-- ⏸️ The per-chapter template substitutes `{toc_checklist}` and `{handbook_hints}` placeholders; an emitted prompt for phak ch 7 visibly includes both.
-- ⏸️ The compare report's "Disagreements" digest highlights TOC parser over-flattening.
+This is the "ship Phase 3" branch of the decision criteria: structural disagreement that's both visible and actionable. See [tasks.md Phase 3](tasks.md) for the metric table and full reasoning.
 
-Decision: review the compare report from PR #355 against the criteria. If the disagreements would surface specific issues v3 didn't catch, Phase 3 ships. If the report shows TOC + LLM already align well, Phase 3 is polish, deferred with a documented trigger condition.
+These criteria are in scope for the Phase 3 PR (separate, follows this WP closure):
+
+- The per-chapter template substitutes `{toc_checklist}` and `{handbook_hints}` placeholders; an emitted prompt for phak ch 7 visibly includes both.
+- The compare report's "Disagreements" digest highlights TOC parser over-flattening.
+- Sub-agents emit `_llm_disagreements.json` alongside the section tree per the schema reserved in `section_tree.md`.
 
 ## Manual test plan
 

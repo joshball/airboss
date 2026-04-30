@@ -74,6 +74,7 @@ The week was dominated by the reference identifier system (ADR 019, **phases 1-9
 ## In flight
 
 - *(FAR navigation course Weeks 3-10 and 2 sibling capstones moved to "Just shipped 2026-04-30".)*
+- **[section-extraction-contract-v2](../work-packages/section-extraction-contract-v2/spec.md) Phase 3 GREENLIT (2026-04-30).** Decision driven by the regenerated compare report against PR #355 artifacts: 485 parent-mismatches and 317 level-mismatches across 17 chapters, 15 of 17 chapters with parent-diff > 10, ch 7 with 86 of 88 TOC entries flagged L1. Systematic TOC over-flattening; LLM nesting consistently matches body text. See [tasks.md Phase 3](../work-packages/section-extraction-contract-v2/tasks.md) for the metric table and full reasoning. Phase 3 implementation is a separate PR following this WP closure.
 
 ## ADR 016 status (post-2026-04-28 ship)
 
