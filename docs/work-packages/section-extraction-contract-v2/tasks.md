@@ -3,8 +3,9 @@ title: 'Tasks: Section extraction contract v2'
 product: platform
 feature: section-extraction-contract-v2
 type: tasks
-status: unread
-review_status: pending
+status: done
+review_status: done
+closed_at: '2026-04-30'
 ---
 
 # Tasks: Section extraction contract v2

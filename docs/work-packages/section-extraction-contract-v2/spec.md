@@ -3,8 +3,10 @@ title: 'Spec: Section extraction contract v2'
 product: platform
 feature: section-extraction-contract-v2
 type: spec
-status: unread
-review_status: pending
+status: done
+review_status: done
+closed_at: '2026-04-30'
+closed_by: 'PR #366 (Phase 4 v4 production run) + housekeeping'
 ---
 
 # Spec: Section extraction contract v2

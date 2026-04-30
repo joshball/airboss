@@ -3,8 +3,9 @@ title: 'Test plan: Section extraction contract v2'
 product: platform
 feature: section-extraction-contract-v2
 type: test-plan
-status: unread
-review_status: pending
+status: done
+review_status: done
+closed_at: '2026-04-30'
 ---
 
 # Test plan: Section extraction contract v2
