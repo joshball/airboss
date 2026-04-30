@@ -148,6 +148,14 @@ bun run sources extract handbooks <doc> --apply-errata <id>
 
 Follow [ADR 020](../decisions/020-handbook-edition-and-amendment-policy.md).
 
+Errata download is on-demand: `bun run sources download` does NOT fetch
+the errata PDF. The Python apply path fetches it as a side-effect when
+you run `--apply-errata`. See the "Errata path" section in
+[handbook-ingest-pipeline.md](handbook-ingest-pipeline.md) for the
+boundary explanation. If you onboard a handbook with errata in YAML
+but skip Step 9, the cache will be missing `<edition>-errata-<id>.pdf`
+until apply runs -- that's expected, not a gap.
+
 ### Step 10. Commit
 
 Branch + PR. Stage by name (no `git add -A`). Verify the manifest looks clean before committing the inline derivative tree. The cache bytes stay developer-local per [ADR 018](../decisions/018-source-artifact-storage-policy/decision.md); only the in-repo derivatives get committed.
