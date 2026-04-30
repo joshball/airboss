@@ -339,3 +339,7 @@ Per [MULTI_PRODUCT_ARCHITECTURE.md](docs/platform/MULTI_PRODUCT_ARCHITECTURE.md)
 Once migration is complete, airboss-firc becomes archived. Nothing stays there long-term.
 
 The FIRC question bank, scenario library, and aviation knowledge research already copied into `course/` serve two purposes: reference material for current work, and candidate content for the knowledge graph (see [ADR 011](docs/decisions/011-knowledge-graph-learning-system/decision.md)).
+
+## Scheduled jobs
+
+- **Scheduled jobs.** See [`scripts/scheduler/README.md`](scripts/scheduler/README.md). Author new jobs in `scripts/scheduled-jobs/`. Skill source: `~/src/_me/ai/agent-skills/skills/scheduled-jobs/`.

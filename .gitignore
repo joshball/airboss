@@ -52,3 +52,9 @@ regulations/cfr-*/**/*.md
 # live in the parent edition's sections.json; ingestion writes them locally
 # but they're redundant for commit purposes.
 regulations/cfr-*/**/*.meta.json
+
+# scheduled-jobs cache (do not commit)
+scripts/scheduler/.cache/
+
+# scheduled-jobs per-machine config (regenerate via bootstrap)
+scripts/scheduler/.scheduler-config

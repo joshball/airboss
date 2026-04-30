@@ -2,7 +2,11 @@
 	"name": "airboss",
 	"private": true,
 	"type": "module",
-	"workspaces": ["apps/*", "libs/*", "libs/bc/*"],
+	"workspaces": [
+		"apps/*",
+		"libs/*",
+		"libs/bc/*"
+	],
 	"scripts": {
 		"dev": "bun scripts/dev.ts",
 		"check": "bun scripts/check.ts",
@@ -15,7 +19,12 @@
 		"smoke": "bun scripts/smoke.ts",
 		"themes:emit": "bun scripts/themes/emit.ts",
 		"lint:theme": "bun tools/theme-lint/bin.ts",
-		"codemod:theme": "bun tools/theme-codemod/bin.ts"
+		"codemod:theme": "bun tools/theme-codemod/bin.ts",
+		"schedule": "./scripts/scheduler/list.sh",
+		"schedule:install": "./scripts/scheduler/install.sh",
+		"schedule:uninstall": "./scripts/scheduler/uninstall.sh",
+		"schedule:status": "./scripts/scheduler/status.sh",
+		"schedule:new": "./scripts/scheduler/new-job.sh"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.4.7",
