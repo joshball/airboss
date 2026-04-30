@@ -42,23 +42,28 @@ least 20%.
 
 **Expected:** 6 hits (one per pattern).
 
-## Phase 2 acceptance -- contract rewrite
+## Phase 2 acceptance -- contract rewrite (PR #342, amended #355)
 
-### Test 2.1 -- contract document reflects v2 shape
+### Test 2.1 -- contract document reflects v3 shape
 
 1. Open `tools/handbook-ingest/ingest/prompts/section_tree.md`.
-2. Verify v2 entry shape documented (level, title, page_anchor, ordinal, parent_title).
-3. Verify coverage assertion documented as a postcondition.
+2. Verify entry shape: `level`, `title`, `page_anchor`, `line_offset`, `parent_title`.
+3. Verify coverage assertion documented as a postcondition (with v3 amendment: figure-only trailing pages tolerated).
 4. Verify boilerplate rule documented (Introduction + Chapter Summary as L1).
-5. Verify hierarchy preference documented (body wins over TOC).
+5. Verify hierarchy preference documented (body wins over printed TOC).
 6. Verify difficult-cases catalog present.
-7. Verify contract version bumped.
+7. Verify `CONTRACT VERSION: 3` line at the top.
+8. Verify level cap rule (levels 1-3 only; flatten L4+ to L3 with documented worked example).
 
-### Test 2.2 -- legacy shape rejected
+### Test 2.2 -- legacy `no-anchor` literal rejected
 
-1. Manually craft a `_llm_section_tree.json` with v1 shape (`page_anchor: "no-anchor"`).
-2. Run `bun run sources extract handbooks phak --strategy compare`.
-3. Confirm hard-fail with a clear error pointing at the v2 shape.
+The contract forbids the literal string `"no-anchor"` in `page_anchor`. Verify every committed `_llm_section_tree.json` under `handbooks/phak/FAA-H-8083-25C/<NN>/` uses `null` (or a real anchor like `"7-12"`), never `"no-anchor"`.
+
+```bash
+grep -r '"no-anchor"' handbooks/phak/FAA-H-8083-25C/
+```
+
+**Expected:** zero hits.
 
 ### Test 2.3 -- pytest
 
@@ -68,66 +73,43 @@ cd tools/handbook-ingest && .venv/bin/pytest -q
 
 **Expected:** all green.
 
-## Phase 3 acceptance -- mutual-reviewer framing
+## Phase 3 acceptance -- DEFERRED
 
-### Test 3.1 -- emitted prompt includes TOC checklist
+Phase 3 tests will run only if the WP greenlights Phase 3 after reviewing the PR #355 compare report. See `tasks.md` Phase 3 section for decision criteria. Deferred test scaffold:
 
-1. `bun run sources extract handbooks phak --strategy prompt --force`.
-2. Open `tools/handbook-ingest/prompts-out/phak/FAA-H-8083-25C/out/07-aircraft-systems.md`.
-3. Verify the prompt includes a "TOC parser checklist" section listing the deterministic parser's headings for ch 7.
-4. Verify the prompt includes a `Per-handbook hints:` section (may be empty for phak).
+- (deferred) Emitted prompt includes `{toc_checklist}` and `{handbook_hints}` placeholder content per chapter.
+- (deferred) Sub-agents emit `_llm_disagreements.json` alongside the section tree.
+- (deferred) Compare report grows a "Disagreements" section.
 
-### Test 3.2 -- disagreements file shape
-
-1. Manually run a single-chapter LLM extraction in a fresh CC session against `01-introduction-to-flying.md`.
-2. Verify two files written: `_llm_section_tree.json` (entries, v2 shape) and `_llm_disagreements.json` (disagreement schema).
-3. Confirm sub-agent return status line includes disagreement count.
-
-### Test 3.3 -- compare report extensions
-
-1. Run `bun run sources extract handbooks phak --strategy compare` against the freshly-extracted artifacts.
-2. Open the report.
-3. Verify "Coverage" section per-chapter (sidecar size, last entry anchor, status).
-4. Verify "Disagreements" section aggregating all chapters' disagreements by type.
-
-## Phase 4 acceptance -- end-to-end re-run
+## Phase 4 acceptance -- end-to-end re-run (PR #355, shipped)
 
 ### Test 4.1 -- emit + paste-extract + compare
 
-1. `bun run sources extract handbooks phak --strategy prompt --force`.
-2. Open a FRESH Claude Code session. Paste `out/_run.md`.
-3. Wait for 17 sub-agent completions.
-4. Run `bun run sources extract handbooks phak --strategy compare`.
+Shipped via PR #355's self-driving orchestrator. Outcomes verified:
 
-**Expected outcomes:**
-
-- All 17 sub-agents return success.
-- Every chapter has both files written.
-- Coverage report: all green.
-- Ch 7 entry count: 80-100 (vs 22 in the v1 run).
-- Every entry has a `page_anchor` (or `null` with reason; `no-anchor` literal does not appear).
-- Disagreements report flags TOC over-flattening as a systematic pattern (specifically ch 7's Propeller / Induction Systems hierarchy).
+- ✅ All 17 sub-agents returned success.
+- ✅ Every chapter has both files written (`_llm_section_tree.json` + `_model_self_report.txt`).
+- ✅ Coverage report: green for every chapter.
+- ✅ Ch 7 entry count: **89** (up from 22 in the v1 run).
+- ✅ Every entry has a `page_anchor` (real value or `null`); literal `"no-anchor"` does not appear.
+- ⏸️ Disagreements report: not yet implemented; deferred to Phase 3.
 
 ### Test 4.2 -- artifact replacement
 
-1. `git status` -- 17 chapter directories show modified `_llm_section_tree.json` files.
-2. Stage by name (no `git add -A`).
-3. Inspect three random `_llm_section_tree.json` files. Verify v2 shape.
-4. Commit.
+Shipped via PR #355. New `_llm_section_tree.json` files committed. The `phak-llm-v1-baseline` tag preserved the v1 artifacts during the transition; deleted post-acceptance.
 
 ### Test 4.3 -- determinism
 
-1. Run `bun run sources extract handbooks phak --strategy compare` again.
-2. Diff the new report against the previous one.
-3. **Expected:** identical (compare is deterministic given fixed inputs).
+Compare is deterministic given fixed inputs. Re-running `--strategy compare` against the committed artifacts produces an identical report.
 
-## Phase 5 acceptance -- docs updated
+## Phase 5 acceptance -- docs updated (this polish PR)
 
 ### Test 5.1 -- doc cross-references
 
-1. Open `docs/agents/section-extraction-strategies.md`. Verify v2 contract referenced.
-2. Open `docs/agents/handbook-ingest-pipeline.md`. Verify truncation noted as "fixed in WP".
-3. Open `docs/agents/handbook-onboarding-checklist.md`. Verify cap-sizing guidance from Phase 1.
+1. Open `docs/agents/section-extraction-strategies.md`. Verify contract v3 referenced; truncation no longer described as "current".
+2. Open `docs/agents/handbook-ingest-pipeline.md`. Verify truncation noted as "resolved in PR #332/#335 + #337" with link to ADR 022.
+3. Open `docs/agents/handbook-onboarding-checklist.md`. Verify cap-sizing guidance points at `measure_chapter_sizes.py`. Verify the per-handbook quirks table no longer says "PHAK chapters too long for 60K cap".
+4. Open `docs/work/NOW.md`. Verify the chapter-source-ingestion note carries the post-#355 entry count (913) instead of the v1 baseline (~559).
 
 ### Test 5.2 -- example walkthrough
 
@@ -138,13 +120,13 @@ as follow-up tasks.
 
 ## Regression coverage
 
-After all phases:
+After all shipped phases (1, 2, 4, 5):
 
-- [ ] No handbook configured for `prompt` mode hits the cap.
-- [ ] No `_llm_section_tree.json` in the repo carries the v1 shape.
-- [ ] No prompt template references the literal `no-anchor` string.
-- [ ] `bun run check` clean.
-- [ ] Every test in `tools/handbook-ingest/tests/` passes.
+- [x] No handbook configured for `prompt` mode hits the cap (verified by `measure_chapter_sizes.py`).
+- [x] No `_llm_section_tree.json` in the repo carries the v1 shape (PR #355 replaced them all).
+- [x] No prompt template references the literal `no-anchor` string (forbidden by contract v2/v3).
+- [x] `bun run check` clean (PR #355 ran the check before shipping).
+- [x] Every test in `tools/handbook-ingest/tests/` passes (123/123 + 9 skipped as of PR #342).
 
 ## What we do NOT test in this WP
 

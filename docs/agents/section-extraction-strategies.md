@@ -108,19 +108,19 @@ plus the JSON contract in
 - Catches body headings the FAA omitted from the printed TOC.
 - Resilient to TOC formatting quirks since it never reads the TOC.
 
-### What it gets wrong
+### What it gets wrong (and what was fixed)
 
-| Limitation                          | Cause                                                                                                                                                          |
-| ----------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Input truncation (load-bearing)** | `chapter_text_max_chars` caps the plaintext fed to the model. PHAK is 60000. The most recent run had 11 of 17 PHAK chapters hit the cap.                       |
-| Boilerplate omission                | The contract is silent on whether to keep "Introduction" / "Chapter Summary"; the model tends to drop them.                                                    |
-| No page anchors                     | Current contract doesn't ask for page anchors; LLM emits `no-anchor` everywhere even though the page footer text (`7-12`, `7-13`) is in the sidecar plaintext. |
-| Model variance                      | Two paste runs of the same prompt may differ slightly in casing / inclusion of edge cases.                                                                     |
+The original v1 contract had several gaps the v2/v3 rewrite addressed. Status table:
 
-The truncation pitfall is severe. Ch 7 ended mid-sentence in engine
-cooling; the LLM never saw turbine engines, fuel systems, oxygen, or
-anti-ice. Any "missing back-half" pattern in the compare report should
-be checked against the plaintext file size first.
+| Pitfall                               | v1 behavior                                                                                                          | Fix                                                                                                                                            |
+| ------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| Input truncation                      | `chapter_text_max_chars` cap fed truncated plaintext to model; 11 of 17 PHAK chapters hit the 60000 cap silently.    | Per-handbook caps raised empirically (PR #332/#335). Chapter-source-ingestion bypasses cap entirely for handbooks with chapter PDFs (PR #337). |
+| Boilerplate omission                  | Contract silent; model dropped Introduction / Chapter Summary.                                                       | Contract v2 mandates inclusion as L1 entries when present in body text (PR #342).                                                              |
+| No page anchors                       | LLM emitted literal `"no-anchor"` everywhere; contract didn't ask for real anchors.                                  | Contract v2 forbids the `"no-anchor"` literal; mandates `null` or a real `<chapter>-<page>` anchor (PR #342).                                  |
+| Hierarchy mis-flattening              | Contract silent on TOC-vs-body precedence; LLM sometimes promoted subsections to L1 to mirror the printed TOC.       | Contract v2 explicitly favors body-text nesting (PR #342).                                                                                     |
+| Output truncation (silent short tree) | No coverage check; tree could end mid-chapter without raising.                                                       | Contract v2 added a coverage self-check; v3 amended for figure-only trailing pages (PR #355).                                                  |
+| Level explosion (L4+)                 | Contract said "L3 rare" but didn't cap; ch 17's first pass emitted 44/95 entries at L4.                              | Contract v3 caps levels at 3 with a worked example for flattening (PR #355).                                                                   |
+| Model variance                        | Two paste runs may still differ slightly in casing.                                                                  | Inherent. Compare report surfaces it as small "TOC only" / "LLM only" deltas; tolerate.                                                        |
 
 ## Compare strategy deep dive
 
@@ -160,67 +160,88 @@ Per-category interpretation:
 | Level mismatch    | LLM nested a subsection that TOC promoted to L1.                                              | LLM is usually correct.                                                   |
 | Parent mismatch   | Same heading, different parent. The two trees disagree about which L1 owns it.                | LLM is usually correct.                                                   |
 
-## Three patterns observed in the phak FAA-H-8083-25C run
+## Patterns observed in the phak FAA-H-8083-25C runs
 
-Snapshot from
-[section-strategy-compare-phak-FAA-H-8083-25C.md](../../tools/handbook-ingest/reports/section-strategy-compare-phak-FAA-H-8083-25C.md).
-Re-runs will refresh the numbers.
+Two snapshots exist: the v1 baseline (preserved at the now-deleted
+`phak-llm-v1-baseline` git tag) and the v3 production run committed in
+PR #355. Re-running `--strategy compare` regenerates a current report
+at [section-strategy-compare-phak-FAA-H-8083-25C.md](../../tools/handbook-ingest/reports/section-strategy-compare-phak-FAA-H-8083-25C.md)
+(gitignored; reproducible from committed inputs).
 
 ### Pattern A -- TOC over-flattens, LLM nests correctly
 
-The clearest example is ch 7 (Aircraft Systems): 16 level mismatches +
-16 parent mismatches. Subsections like "Fixed-Pitch Propeller" appear
-as L1 in TOC, L2 under "Propeller" in LLM. LLM is right; FAA's printed
-TOC indentation can't be trusted as level signal.
+The clearest example is ch 7 (Aircraft Systems). Subsections like
+"Fixed-Pitch Propeller" appear as L1 in TOC, L2 under "Propeller" in
+LLM. LLM is right; FAA's printed TOC indentation can't be trusted as
+level signal. Contract v2 codified this as the **hierarchy preference
+rule** (body-text nesting wins over printed TOC).
 
-### Pattern B -- LLM truncated inputs cause missing back-half sections
+### Pattern B -- v1 input truncation surfaced as missing back-half sections (RESOLVED)
 
-11 of 17 PHAK chapters hit the 60000-char cap. Ch 7 is missing
-turbines, fuel, oxygen, and anti-ice. Ch 14 (Airport Operations) is
-missing the second half. The compare report flags these as huge "TOC
-only" counts in the back half of the chapter. Read the report bottom-up
-in those cases -- the missing cluster is contiguous.
+Under the v1 contract with the 60000-char cap, 11 of 17 PHAK chapters
+hit the cap silently. Ch 7 was missing turbines, fuel, oxygen, anti-ice
+(22 entries). Ch 14 was missing the second half. PR #332/#335 raised
+caps; PR #337 bypasses caps for chapter-PDF handbooks; PR #355's
+contract v2 coverage self-check catches output truncation explicitly.
+Ch 7 now produces 89 entries.
 
-### Pattern C -- LLM skips boilerplate, TOC keeps it
+### Pattern C -- v1 boilerplate skipping (RESOLVED)
 
-"Introduction" and "Chapter Summary" appear in roughly every chapter's
-printed TOC but the LLM omits them as boilerplate. ~34 expected gaps
-across the book. Predictable. Fixable with a contract change ("always
-include Introduction and Chapter Summary if present").
+Under v1, "Introduction" and "Chapter Summary" were dropped from every
+chapter (~34 missing entries across the book). Contract v2 mandates
+their inclusion as L1 entries when present in body text. PR #355's
+output has Chapter Summary in every chapter.
 
-## The mutual-reviewer framing (proposed)
+### Pattern D -- v3 figure-only trailing pages (NEW; informational)
 
-Future contract-v2 work will operationalize this:
+FAA chapters frequently end body text mid-page and devote trailing
+pages to full-page figure plates with no headings. Under contract v2's
+coverage self-check, this tripped a false-positive `incomplete coverage`
+error on ch 03 and ch 14 in PR #355. Contract v3 amends the rule to
+inspect trailing pages: figure-only / caption-only / blank-only pages
+are tolerated; real missed body headings still hard-fail.
+
+## The mutual-reviewer framing (Phase 3, status: pending decision)
+
+The current proposal:
 
 - Pass the parsed TOC to the LLM **as a checklist**, not as truth.
 - Ask the LLM to (a) verify each TOC entry exists in body text,
-  (b) find any missing, and (c) emit a `disagreements:` array
+  (b) find any missing, and (c) emit a `_llm_disagreements.json` file
   explaining where it disagrees with the TOC parse.
 - Both outputs (the LLM tree AND the disagreements) feed back into
   improving the TOC parser.
 
-This makes TOC and LLM mutual reviewers rather than competing oracles.
-The compare step becomes the auditor's view rather than a deep diff.
+**Status:** the contract document (`section_tree.md`) reserves the
+`_llm_disagreements.json` schema. The wiring (TOC checklist threaded
+into prompts, disagreements read in compare report) is **deferred**
+pending review of the PR #355 compare report. See
+[section-extraction-contract-v2 spec](../work-packages/section-extraction-contract-v2/spec.md)
+"Phase 3" decision criteria. If shipped, this makes TOC and LLM mutual
+reviewers rather than competing oracles.
 
 ## What you do with a compare report
 
 Operational checklist when a fresh report lands:
 
 1. Skim the top table. Identify chapters with `TOC total >> LLM total`
-   (>2x) -- those are truncation-suspect.
-2. For each truncation-suspect chapter, check the
-   `_chapter_plaintext.txt` byte size vs `chapter_text_max_chars` in
-   the YAML. If the file is exactly at the cap, it's truncated. Bump
-   the cap and re-emit prompts for that chapter.
-3. For chapters where totals look comparable, read level/parent
+   (>2x) -- those are coverage-suspect. Contract v2's coverage
+   self-check should have caught this at extraction time; if a chapter
+   slipped through, suspect either an out-of-date contract version or
+   the v3.1 figure-only-trailing-pages tolerance masking real loss.
+   Re-emit and re-paste that chapter.
+2. For chapters where totals look comparable, read level/parent
    mismatches first. They are the structural issues; if the LLM nests
-   sensibly, prefer the LLM tree.
-4. Scan "LLM only" entries. If they appear in body text, the printed
+   sensibly, prefer the LLM tree (per the contract's hierarchy
+   preference rule).
+3. Scan "LLM only" entries. If they appear in body text, the printed
    TOC is incomplete (not a fixable bug, but informs how to weight
    TOC-only data downstream).
-5. Scan "TOC only" entries. Sort into "real heading the LLM missed"
-   (truncation or model miss) vs "boilerplate" (tolerate).
-6. Decide per-chapter which strategy to trust, or whether to re-run.
+4. Scan "TOC only" entries. Sort into "real heading the LLM missed"
+   (model miss; rare under v2/v3) vs "boilerplate" (Introduction,
+   Chapter Summary -- contract v2 mandates these, so absence is a
+   re-run signal).
+5. Decide per-chapter which strategy to trust, or whether to re-run.
 
 The compare report is read by humans. Its job is to surface decisions,
 not to make them.

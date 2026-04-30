@@ -162,23 +162,23 @@ Branch + PR. Stage by name (no `git add -A`). Verify the manifest looks clean be
 
 ## 4. Per-handbook quirks
 
-Current as of 2026-04-29.
+Current as of 2026-04-30.
 
-| Handbook                  | Quirk                                                                                                                                                |
-| ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **PHAK** FAA-H-8083-25C   | Long chapters; `chapter_text_max_chars: 60000` is too small for 11 of 17 chapters (truncates). Chapter PDFs available via two-hop scrape. MOSAIC errata published. |
-| **AFH** FAA-H-8083-3C     | Chapter PDFs available directly on index page. MOSAIC errata published.                                                                              |
-| **AVWX** FAA-H-8083-28B   | Whole-doc only. PDF has internal TOC bookmarks if needed. No errata yet.                                                                             |
-| **IPH** FAA-H-8083-16B    | Chapter PDFs available with `FAA-H-8083-16B_Chapter_<N>.pdf` pattern.                                                                                |
-| **AIM**                   | Per-chapter HTML at `aim_html/chap_<N>.html`. No edition cycle; per-chapter Last-Modified is the change boundary.                                    |
-| **IFH** FAA-H-8083-15     | Whole-doc only. No chapter splits.                                                                                                                   |
+| Handbook                | Quirk                                                                                                                                                                                                |
+| ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **PHAK** FAA-H-8083-25C | Chapter PDFs via two-hop scrape (per ADR 022). `chapter_text_max_chars: 250000` set in YAML for the whole-doc fallback path. MOSAIC errata applied. 913 LLM section-tree entries across 17 chapters. |
+| **AFH** FAA-H-8083-3C   | Chapter PDFs available directly on index page. `chapter_text_max_chars: 200000`. MOSAIC errata applied.                                                                                              |
+| **AVWX** FAA-H-8083-28B | Whole-doc only (no chapter PDFs). `chapter_text_max_chars: 150000`. PDF has internal TOC bookmarks if needed. No errata.                                                                             |
+| **IPH** FAA-H-8083-16B  | Chapter PDFs available with `FAA-H-8083-16B_Chapter_<N>.pdf` pattern. Configure when onboarded.                                                                                                      |
+| **AIM**                 | Per-chapter HTML at `aim_html/chap_<N>.html`. No edition cycle; per-chapter Last-Modified is the change boundary. Already supported (PR #337).                                                       |
+| **IFH** FAA-H-8083-15   | Whole-doc only. No chapter splits.                                                                                                                                                                   |
 
 ## 5. Common gotchas
 
 - **`page_offset` is wrong.** The PDF's page 1 is "1-1" in the printed body. If they're off by 5 (cover, copyright, dedication, foreword, introduction = 5 front-matter pages), set `page_offset: 5`. Symptom: empty section bodies.
 - **`outline_strategy: bookmark` returns garbage.** PDF has bookmarks but they're auto-generated and wrong. Switch to `content` and configure `chapter_overrides` if needed.
 - **Chapter heading detection misses a chapter.** Symptom: 16 outline nodes when the book has 17 chapters. Add a `chapter_overrides` entry to force-include.
-- **`chapter_text_max_chars` truncates real content.** Symptom: LLM strategy produces incomplete section trees on long chapters; compare report shows large "TOC only" lists at the end of page ranges. Raise the cap or wait for chapter-source-ingestion.
+- **`chapter_text_max_chars` not set for a `prompt`-mode handbook.** The loader hard-fails with a hint. Run [tools/handbook-ingest/measure_chapter_sizes.py](../../tools/handbook-ingest/measure_chapter_sizes.py) to size the cap (longest chapter * 1.2, rounded up to next 25K). Annotate the YAML with the chapter that drove the value.
 - **TOC strategy emits 100s of warnings.** Most are fingerprint-not-found ("TOC line couldn't match a body heading"). Non-fatal; review for systematic mismatches that hint at a `heading_style` config gap.
 - **Errata applied twice.** `apply_errata` is idempotent without `--force`. If you see "already applied" messages, that's correct behavior.
 
@@ -188,9 +188,9 @@ Stop and ask, don't push through:
 
 - The PDF outline doesn't match the printed TOC and you can't tell which is right.
 - Section bodies are non-empty but contain garbled text (encoding issues; PyMuPDF version drift).
-- The LLM strategy hits the truncation cap on more than 2 chapters; raising the cap to fit causes other problems.
 - The handbook has a structure no other handbook has (per-section appendices, multi-volume, runtime-generated content).
 - Errata are bigger than the WP-spec'd scope (re-numbered chapters, removed sections, large-scale rewrites).
+- The LLM run produces an `error: incomplete coverage` you can't explain (contract v3.1 should tolerate figure-only trailing pages; if you're seeing it on body-text pages, escalate).
 
 ## 7. See also
 

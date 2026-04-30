@@ -283,13 +283,23 @@ The v3 amendments were patched in place into the live emitted prompts during the
 
 ## Acceptance criteria
 
-- `chapter_text_max_chars` for phak is set to a value that fits all 17 chapters with 20% headroom; `wc -c` on every chapter sidecar comes in below the cap. Same for any other handbook configured for `section_strategy: prompt`.
-- Re-run of phak `--strategy prompt` produces 17 sub-agent outputs that each include `page_anchor` for every entry (or `null` with reason).
-- Re-run of phak `--strategy compare` produces a report where every chapter's "Coverage" section shows green; ch 7 has 80+ entries; the report's "Disagreements" digest highlights TOC parser over-flattening.
-- The contract document at [tools/handbook-ingest/ingest/prompts/section_tree.md](../../../tools/handbook-ingest/ingest/prompts/section_tree.md) reflects the new entry shape, coverage rule, boilerplate rule, hierarchy preference, and difficult-cases catalog.
-- The per-chapter template substitutes `{toc_checklist}` and `{handbook_hints}` placeholders; an emitted prompt for phak ch 7 visibly includes both.
-- Existing tests pass (`bun run check` clean; pytest in `tools/handbook-ingest/tests/`).
-- The committed `_llm_section_tree.json` files for phak are replaced with v2-contract output. Old artifacts are gone, not preserved alongside.
+### Phases 1, 2, 4 (shipped)
+
+- ✅ `chapter_text_max_chars` for phak fits all 17 chapters with 20% headroom (PR #332, #335). Same for AFH and AVWX.
+- ✅ Re-run of phak `--strategy prompt` produces 17 sub-agent outputs that each include `page_anchor` for every entry (PR #355). 913 entries total across all chapters; every entry has a populated `page_anchor` (or `null` with reason); literal `"no-anchor"` is forbidden.
+- ✅ Re-run of phak `--strategy compare` produces a report where every chapter's "Coverage" section shows green; ch 7 has 89 entries (was 22 under v1).
+- ✅ The contract document at [tools/handbook-ingest/ingest/prompts/section_tree.md](../../../tools/handbook-ingest/ingest/prompts/section_tree.md) reflects the new entry shape, coverage rule, boilerplate rule, hierarchy preference, and difficult-cases catalog. Plus the v3 amendments (level cap, figure-only-trailing-pages tolerance) shipped in PR #355.
+- ✅ Existing tests pass (`bun run check` clean; pytest in `tools/handbook-ingest/tests/`).
+- ✅ The committed `_llm_section_tree.json` files for phak are present (PR #355) under contract v3. The `phak-llm-v1-baseline` tag preserved the v1 artifacts for the entry-count delta verification; tag deleted post-acceptance.
+
+### Phase 3 (deferred; conditional on Phase 4 compare-report review)
+
+These criteria assumed Phase 3 (TOC checklist + disagreements wiring) shipped before Phase 4. Phase 4 ran without Phase 3; the data informs whether Phase 3 is justified:
+
+- ⏸️ The per-chapter template substitutes `{toc_checklist}` and `{handbook_hints}` placeholders; an emitted prompt for phak ch 7 visibly includes both.
+- ⏸️ The compare report's "Disagreements" digest highlights TOC parser over-flattening.
+
+Decision: review the compare report from PR #355 against the criteria. If the disagreements would surface specific issues v3 didn't catch, Phase 3 ships. If the report shows TOC + LLM already align well, Phase 3 is polish, deferred with a documented trigger condition.
 
 ## Manual test plan
 
