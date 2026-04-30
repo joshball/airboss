@@ -244,7 +244,7 @@ This is lesson 1 of week 3. It gave you the structural map of subpart H. The rem
 ## Related
 
 - Knowledge graph: [reg-pilot-privileges-limitations](../../knowledge/regulations/pilot-privileges-limitations/node.md)
-- Live source: [Part 61 subpart H](airboss-ref:regs/cfr-14/61/subpart-h?at=2026)
+- Live source: [Part 61](airboss-ref:regs/cfr-14/61?at=2026), subpart H
 - Live source: [§61.183 eligibility](airboss-ref:regs/cfr-14/61/183?at=2026)
 - Live source: [§61.189 instructor records](airboss-ref:regs/cfr-14/61/189?at=2026)
 - Live source: [§61.193 privileges](airboss-ref:regs/cfr-14/61/193?at=2026)
