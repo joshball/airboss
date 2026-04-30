@@ -221,6 +221,40 @@ PDF as `<edition>-errata-<id>.pdf` (per ADR 021). Skips the full
 extraction pipeline. See [ADR 020](../decisions/020-handbook-edition-and-amendment-policy.md)
 for the policy on errata across editions.
 
+### Errata download is on-demand, not pre-fetched
+
+Important boundary: `bun run sources download handbooks` does NOT
+download errata files. The TS download path emits plans for whole-doc,
+chapter PDFs, ancillaries, AIM HTML, AC/ACS, and regs -- but not errata.
+
+Errata are fetched on-demand by `apply_errata.py` as a side-effect of
+`--apply-errata <id>`. The Python module's `_download_errata_pdf()`
+either reuses a cached `<edition>-errata-<id>.pdf` if present or
+fetches from the YAML's `errata[].source_url`. Errata are deliberately
+on-demand because:
+
+- Not every operator needs every errata applied.
+- The Python side owns the apply pipeline; bundling fetch with apply
+  keeps "did the right bytes get applied" verifiable in one place.
+- The Python module also reuses any pre-cached errata file (e.g. an
+  operator-downloaded PDF placed at the canonical filename) without
+  re-fetching.
+
+Cache-side consequence: a fresh-clone operator who runs
+`bun run sources download handbooks` will have the whole-doc and
+chapter PDFs, but `<edition>-errata-<id>.pdf` is absent until they
+actually invoke `--apply-errata`. This is by design, not a bug. If you
+see a handbook config declaring errata but no errata PDF in the cache
+for that handbook, run the apply command instead of treating it as a
+download gap.
+
+The handbook-side `manifest.json` carries the `errata[]` array with
+applied timestamps, source SHA, and per-section `errata_note_path`
+references. That manifest is owned by `apply_errata.py`, NOT by the
+TS downloader; the TS downloader's `manifest.ts` documents this
+boundary explicitly: "Errata entries on handbook manifests are managed
+by the Python ingest pipeline; we preserve them across writes."
+
 ## Known issues (current as of 2026-04-29)
 
 ### LLM-input truncation on long chapters
