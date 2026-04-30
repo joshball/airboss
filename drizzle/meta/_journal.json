@@ -15,6 +15,13 @@
       "when": 1777513451042,
       "tag": "0001_engine_goal_cutover",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1777553920373,
+      "tag": "0002_evidence_kind_gating",
+      "breakpoints": true
     }
   ]
 }

@@ -1799,6 +1799,15 @@ export const syllabusNode = studySchema.table(
 		 */
 		contentHash: text('content_hash'),
 		seedOrigin: text('seed_origin'),
+		/**
+		 * Evidence-kind gating (evidence-kind-gating WP). When true the leaf
+		 * demands TEACHING_EVIDENCE_KINDS in addition to whatever the triad
+		 * mapping resolves to. Set on CFI pedagogical leaves where the
+		 * candidate has to teach the concept, not just recall or demonstrate
+		 * it. Default false. CHECK below restricts the flag to element-level
+		 * rows that carry a triad.
+		 */
+		requiresTeaching: boolean('requires_teaching').notNull().default(false),
 		...timestamps(),
 	},
 	(t) => ({
@@ -1845,6 +1854,14 @@ export const syllabusNode = studySchema.table(
 			sql.raw(`"airboss_ref" IS NULL OR "airboss_ref" LIKE 'airboss-ref:%'`),
 		),
 		ordinalNonNegativeCheck: check('syllabus_node_ordinal_check', sql.raw(`"ordinal" >= 0`)),
+		// requires_teaching is meaningful only on element-level rows that
+		// carry a triad. Setting it on internal nodes (area / task / chapter)
+		// or on triad=null leaves silently widens the leaf-mastery gate; reject
+		// at write time.
+		requiresTeachingTriadCheck: check(
+			'syllabus_node_requires_teaching_triad_check',
+			sql.raw(`"requires_teaching" = false OR "triad" IS NOT NULL`),
+		),
 		// Class scoping: NULL or every element drawn from AIRPLANE_CLASS_VALUES.
 		// Non-empty when set; empty array would be ambiguous with NULL and is
 		// rejected to keep the "this row applies to every class" semantics
