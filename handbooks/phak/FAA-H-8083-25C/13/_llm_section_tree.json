@@ -1,0 +1,338 @@
+[
+  {
+    "title": "Introduction",
+    "level": 1,
+    "page_anchor": "13-1",
+    "line_offset": 2,
+    "parent_title": null
+  },
+  {
+    "title": "Observations",
+    "level": 1,
+    "page_anchor": "13-2",
+    "line_offset": 24,
+    "parent_title": null
+  },
+  {
+    "title": "Surface Aviation Weather Observations",
+    "level": 2,
+    "page_anchor": "13-2",
+    "line_offset": 29,
+    "parent_title": "Observations"
+  },
+  {
+    "title": "Air Route Traffic Control Center (ARTCC)",
+    "level": 2,
+    "page_anchor": "13-2",
+    "line_offset": 53,
+    "parent_title": "Observations"
+  },
+  {
+    "title": "Upper Air Observations",
+    "level": 2,
+    "page_anchor": "13-2",
+    "line_offset": 69,
+    "parent_title": "Observations"
+  },
+  {
+    "title": "Radar Observations",
+    "level": 2,
+    "page_anchor": "13-3",
+    "line_offset": 166,
+    "parent_title": "Observations"
+  },
+  {
+    "title": "Satellite",
+    "level": 2,
+    "page_anchor": "13-3",
+    "line_offset": 216,
+    "parent_title": "Observations"
+  },
+  {
+    "title": "Service Outlets",
+    "level": 1,
+    "page_anchor": "13-3",
+    "line_offset": 222,
+    "parent_title": null
+  },
+  {
+    "title": "Flight Service Station (FSS)",
+    "level": 2,
+    "page_anchor": "13-3",
+    "line_offset": 229,
+    "parent_title": "Service Outlets"
+  },
+  {
+    "title": "Telephone Information Briefing Service (TIBS)",
+    "level": 2,
+    "page_anchor": "13-3",
+    "line_offset": 240,
+    "parent_title": "Service Outlets"
+  },
+  {
+    "title": "Hazardous Inflight Weather Advisory Service (HIWAS)",
+    "level": 2,
+    "page_anchor": "13-3",
+    "line_offset": 252,
+    "parent_title": "Service Outlets"
+  },
+  {
+    "title": "Transcribed Weather Broadcast (TWEB) (Alaska Only)",
+    "level": 2,
+    "page_anchor": "13-4",
+    "line_offset": 265,
+    "parent_title": "Service Outlets"
+  },
+  {
+    "title": "Weather Briefings",
+    "level": 1,
+    "page_anchor": "13-5",
+    "line_offset": 285,
+    "parent_title": null
+  },
+  {
+    "title": "Standard Briefing",
+    "level": 2,
+    "page_anchor": "13-5",
+    "line_offset": 301,
+    "parent_title": "Weather Briefings"
+  },
+  {
+    "title": "Abbreviated Briefing",
+    "level": 2,
+    "page_anchor": "13-5",
+    "line_offset": 357,
+    "parent_title": "Weather Briefings"
+  },
+  {
+    "title": "Outlook Briefing",
+    "level": 2,
+    "page_anchor": "13-5",
+    "line_offset": 366,
+    "parent_title": "Weather Briefings"
+  },
+  {
+    "title": "Aviation Weather Reports",
+    "level": 1,
+    "page_anchor": "13-5",
+    "line_offset": 379,
+    "parent_title": null
+  },
+  {
+    "title": "Aviation Routine Weather Report (METAR)",
+    "level": 2,
+    "page_anchor": "13-6",
+    "line_offset": 386,
+    "parent_title": "Aviation Weather Reports"
+  },
+  {
+    "title": "Pilot Weather Reports (PIREPs)",
+    "level": 2,
+    "page_anchor": "13-8",
+    "line_offset": 675,
+    "parent_title": "Aviation Weather Reports"
+  },
+  {
+    "title": "Aviation Forecasts",
+    "level": 1,
+    "page_anchor": "13-9",
+    "line_offset": 770,
+    "parent_title": null
+  },
+  {
+    "title": "Terminal Aerodrome Forecasts (TAF)",
+    "level": 2,
+    "page_anchor": "13-9",
+    "line_offset": 779,
+    "parent_title": "Aviation Forecasts"
+  },
+  {
+    "title": "Area Forecasts (FA)",
+    "level": 2,
+    "page_anchor": "13-10",
+    "line_offset": 877,
+    "parent_title": "Aviation Forecasts"
+  },
+  {
+    "title": "Inflight Weather Advisories",
+    "level": 2,
+    "page_anchor": "13-11",
+    "line_offset": 1567,
+    "parent_title": "Aviation Forecasts"
+  },
+  {
+    "title": "AIRMET",
+    "level": 3,
+    "page_anchor": "13-11",
+    "line_offset": 1574,
+    "parent_title": "Inflight Weather Advisories"
+  },
+  {
+    "title": "SIGMET",
+    "level": 3,
+    "page_anchor": "13-11",
+    "line_offset": 1623,
+    "parent_title": "Inflight Weather Advisories"
+  },
+  {
+    "title": "Convective Significant Meteorological Information (WST)",
+    "level": 3,
+    "page_anchor": "13-12",
+    "line_offset": 1656,
+    "parent_title": "Inflight Weather Advisories"
+  },
+  {
+    "title": "Winds and Temperature Aloft Forecast (FB)",
+    "level": 2,
+    "page_anchor": "13-13",
+    "line_offset": 1724,
+    "parent_title": "Aviation Forecasts"
+  },
+  {
+    "title": "Weather Charts",
+    "level": 1,
+    "page_anchor": "13-13",
+    "line_offset": 1770,
+    "parent_title": null
+  },
+  {
+    "title": "Surface Analysis Chart",
+    "level": 2,
+    "page_anchor": "13-13",
+    "line_offset": 1780,
+    "parent_title": "Weather Charts"
+  },
+  {
+    "title": "Weather Depiction Chart",
+    "level": 2,
+    "page_anchor": "13-15",
+    "line_offset": 1868,
+    "parent_title": "Weather Charts"
+  },
+  {
+    "title": "Significant Weather Prognostic Charts",
+    "level": 2,
+    "page_anchor": "13-15",
+    "line_offset": 1892,
+    "parent_title": "Weather Charts"
+  },
+  {
+    "title": "ATC Radar Weather Displays",
+    "level": 1,
+    "page_anchor": "13-16",
+    "line_offset": 1941,
+    "parent_title": null
+  },
+  {
+    "title": "Weather Avoidance Assistance",
+    "level": 2,
+    "page_anchor": "13-18",
+    "line_offset": 1991,
+    "parent_title": "ATC Radar Weather Displays"
+  },
+  {
+    "title": "Electronic Flight Displays (EFD) /Multi-Function Display (MFD) Weather",
+    "level": 1,
+    "page_anchor": "13-18",
+    "line_offset": 2016,
+    "parent_title": null
+  },
+  {
+    "title": "Weather Products Age and Expiration",
+    "level": 2,
+    "page_anchor": "13-18",
+    "line_offset": 2062,
+    "parent_title": "Electronic Flight Displays (EFD) /Multi-Function Display (MFD) Weather"
+  },
+  {
+    "title": "The Next Generation Weather Radar System (NEXRAD)",
+    "level": 1,
+    "page_anchor": "13-18",
+    "line_offset": 2074,
+    "parent_title": null
+  },
+  {
+    "title": "What Can Pilots Do?",
+    "level": 2,
+    "page_anchor": "13-19",
+    "line_offset": 2143,
+    "parent_title": "The Next Generation Weather Radar System (NEXRAD)"
+  },
+  {
+    "title": "NEXRAD Abnormalities",
+    "level": 2,
+    "page_anchor": "13-21",
+    "line_offset": 2166,
+    "parent_title": "The Next Generation Weather Radar System (NEXRAD)"
+  },
+  {
+    "title": "NEXRAD Limitations",
+    "level": 2,
+    "page_anchor": "13-21",
+    "line_offset": 2183,
+    "parent_title": "The Next Generation Weather Radar System (NEXRAD)"
+  },
+  {
+    "title": "Base Reflectivity",
+    "level": 3,
+    "page_anchor": "13-21",
+    "line_offset": 2186,
+    "parent_title": "NEXRAD Limitations"
+  },
+  {
+    "title": "Resolution Display",
+    "level": 3,
+    "page_anchor": "13-21",
+    "line_offset": 2196,
+    "parent_title": "NEXRAD Limitations"
+  },
+  {
+    "title": "AIRMET/SIGMET Display",
+    "level": 2,
+    "page_anchor": "13-21",
+    "line_offset": 2204,
+    "parent_title": "The Next Generation Weather Radar System (NEXRAD)"
+  },
+  {
+    "title": "Graphical METARs",
+    "level": 2,
+    "page_anchor": "13-21",
+    "line_offset": 2217,
+    "parent_title": "The Next Generation Weather Radar System (NEXRAD)"
+  },
+  {
+    "title": "Data Link Weather",
+    "level": 1,
+    "page_anchor": "13-21",
+    "line_offset": 2234,
+    "parent_title": null
+  },
+  {
+    "title": "Data Link Weather Products",
+    "level": 2,
+    "page_anchor": "13-23",
+    "line_offset": 2261,
+    "parent_title": "Data Link Weather"
+  },
+  {
+    "title": "Flight Information Service- Broadcast (FIS-B)",
+    "level": 3,
+    "page_anchor": "13-23",
+    "line_offset": 2262,
+    "parent_title": "Data Link Weather Products"
+  },
+  {
+    "title": "Pilot Responsibility",
+    "level": 2,
+    "page_anchor": "13-24",
+    "line_offset": 2307,
+    "parent_title": "Data Link Weather"
+  },
+  {
+    "title": "Chapter Summary",
+    "level": 1,
+    "page_anchor": "13-24",
+    "line_offset": 2370,
+    "parent_title": null
+  }
+]

@@ -65,7 +65,7 @@ Do NOT echo the JSON back to the parent; the section tree lives on disk.
    `88565855e02b81034095e396f61e827d73f8537b5ba90ccdee6dbc165e67e406`. On mismatch, return the error status line above.
 2. Read `tools/handbook-ingest/prompts-out/phak/FAA-H-8083-25C/out/_section_tree_contract.md` to load the JSON output specification. The
    contract opens with a `CONTRACT VERSION:` line; the current version is
-   `2`. Apply every rule in that file -- entry shape, page-anchor handling,
+   `3`. Apply every rule in that file -- entry shape, page-anchor handling,
    boilerplate inclusion, hierarchy preference, coverage self-check, and
    the difficult-cases catalog.
 3. Read `handbooks/phak/FAA-H-8083-25C/07/_chapter_plaintext.txt` (the chapter plaintext).
@@ -74,9 +74,12 @@ Do NOT echo the JSON back to the parent; the section tree lives on disk.
    Page anchors should match the printed FAA format (e.g. `12-7`).
 5. Run the contract's coverage self-check. The chapter's printed page
    range is `7-1..7-42`. If your last entry's page anchor is more
-   than one printed page short of the chapter's last page, return
-   `error: incomplete coverage -- last anchor at <anchor>, expected
-   on-or-after <last_page>` instead of writing JSON.
+   than one printed page short of the chapter's last page, inspect
+   the trailing pages in the sidecar: if they contain only figure
+   callouts, table titles, captions, or blank space (no body-text
+   headings), the shortfall is acceptable -- proceed to write JSON.
+   Otherwise return `error: incomplete coverage -- last anchor at
+   <anchor>, expected on-or-after <last_page>` instead of writing JSON.
 6. Write the JSON to `handbooks/phak/FAA-H-8083-25C/07/_llm_section_tree.json` (one trailing newline; no markdown
    fencing).
 7. Write `handbooks/phak/FAA-H-8083-25C/07/_model_self_report.txt`

@@ -1,0 +1,387 @@
+[
+  {
+    "title": "Introduction",
+    "level": 1,
+    "page_anchor": "1-1",
+    "line_offset": 2,
+    "parent_title": null
+  },
+  {
+    "title": "History of Flight",
+    "level": 1,
+    "page_anchor": "1-2",
+    "line_offset": 26,
+    "parent_title": null
+  },
+  {
+    "title": "History of the Federal Aviation Administration (FAA)",
+    "level": 1,
+    "page_anchor": "1-3",
+    "line_offset": 101,
+    "parent_title": null
+  },
+  {
+    "title": "Transcontinental Air Mail Route",
+    "level": 2,
+    "page_anchor": "1-3",
+    "line_offset": 196,
+    "parent_title": "History of the Federal Aviation Administration (FAA)"
+  },
+  {
+    "title": "Federal Certification of Pilots and Mechanics",
+    "level": 2,
+    "page_anchor": "1-4",
+    "line_offset": 230,
+    "parent_title": "History of the Federal Aviation Administration (FAA)"
+  },
+  {
+    "title": "The Civil Aeronautics Act of 1938",
+    "level": 2,
+    "page_anchor": "1-5",
+    "line_offset": 271,
+    "parent_title": "History of the Federal Aviation Administration (FAA)"
+  },
+  {
+    "title": "The Federal Aviation Act of 1958",
+    "level": 2,
+    "page_anchor": "1-5",
+    "line_offset": 294,
+    "parent_title": "History of the Federal Aviation Administration (FAA)"
+  },
+  {
+    "title": "Department of Transportation (DOT)",
+    "level": 2,
+    "page_anchor": "1-6",
+    "line_offset": 310,
+    "parent_title": "History of the Federal Aviation Administration (FAA)"
+  },
+  {
+    "title": "ATC Automation",
+    "level": 2,
+    "page_anchor": "1-6",
+    "line_offset": 341,
+    "parent_title": "History of the Federal Aviation Administration (FAA)"
+  },
+  {
+    "title": "The Professional Air Traffic Controllers Organization (PATCO) Strike",
+    "level": 2,
+    "page_anchor": "1-6",
+    "line_offset": 361,
+    "parent_title": "History of the Federal Aviation Administration (FAA)"
+  },
+  {
+    "title": "The Airline Deregulation Act of 1978",
+    "level": 2,
+    "page_anchor": "1-7",
+    "line_offset": 378,
+    "parent_title": "History of the Federal Aviation Administration (FAA)"
+  },
+  {
+    "title": "The Role of the FAA",
+    "level": 1,
+    "page_anchor": "1-7",
+    "line_offset": 434,
+    "parent_title": null
+  },
+  {
+    "title": "The Code of Federal Regulations (CFR)",
+    "level": 2,
+    "page_anchor": "1-7",
+    "line_offset": 435,
+    "parent_title": "The Role of the FAA"
+  },
+  {
+    "title": "Primary Locations of the FAA",
+    "level": 2,
+    "page_anchor": "1-8",
+    "line_offset": 534,
+    "parent_title": "The Role of the FAA"
+  },
+  {
+    "title": "Field Offices",
+    "level": 2,
+    "page_anchor": "1-8",
+    "line_offset": 551,
+    "parent_title": "The Role of the FAA"
+  },
+  {
+    "title": "Flight Standards Service",
+    "level": 3,
+    "page_anchor": "1-8",
+    "line_offset": 552,
+    "parent_title": "Field Offices"
+  },
+  {
+    "title": "Obtaining Assistance from the FAA",
+    "level": 2,
+    "page_anchor": "1-9",
+    "line_offset": 590,
+    "parent_title": "The Role of the FAA"
+  },
+  {
+    "title": "FAA Reference Material",
+    "level": 1,
+    "page_anchor": "1-9",
+    "line_offset": 605,
+    "parent_title": null
+  },
+  {
+    "title": "Aeronautical Information Manual (AIM)",
+    "level": 2,
+    "page_anchor": "1-9",
+    "line_offset": 614,
+    "parent_title": "FAA Reference Material"
+  },
+  {
+    "title": "Flight Standards District Office (FSDO)",
+    "level": 3,
+    "page_anchor": "1-9",
+    "line_offset": 622,
+    "parent_title": "Field Offices"
+  },
+  {
+    "title": "Aviation Safety Inspector (ASI)",
+    "level": 3,
+    "page_anchor": "1-9",
+    "line_offset": 637,
+    "parent_title": "Field Offices"
+  },
+  {
+    "title": "FAA Safety Team (FAASTeam)",
+    "level": 3,
+    "page_anchor": "1-9",
+    "line_offset": 653,
+    "parent_title": "Field Offices"
+  },
+  {
+    "title": "Handbooks",
+    "level": 2,
+    "page_anchor": "1-10",
+    "line_offset": 721,
+    "parent_title": "FAA Reference Material"
+  },
+  {
+    "title": "Advisory Circulars (ACs)",
+    "level": 2,
+    "page_anchor": "1-10",
+    "line_offset": 736,
+    "parent_title": "FAA Reference Material"
+  },
+  {
+    "title": "Flight Publications",
+    "level": 2,
+    "page_anchor": "1-11",
+    "line_offset": 774,
+    "parent_title": "FAA Reference Material"
+  },
+  {
+    "title": "Pilot and Aeronautical Information Notices to Airmen (NOTAMs)",
+    "level": 2,
+    "page_anchor": "1-12",
+    "line_offset": 955,
+    "parent_title": "FAA Reference Material"
+  },
+  {
+    "title": "NOTAM (D) Information",
+    "level": 3,
+    "page_anchor": "1-12",
+    "line_offset": 1002,
+    "parent_title": "Pilot and Aeronautical Information Notices to Airmen (NOTAMs)"
+  },
+  {
+    "title": "FDC NOTAMs",
+    "level": 3,
+    "page_anchor": "1-13",
+    "line_offset": 1103,
+    "parent_title": "Pilot and Aeronautical Information Notices to Airmen (NOTAMs)"
+  },
+  {
+    "title": "NOTAM Composition",
+    "level": 3,
+    "page_anchor": "1-13",
+    "line_offset": 1149,
+    "parent_title": "Pilot and Aeronautical Information Notices to Airmen (NOTAMs)"
+  },
+  {
+    "title": "NOTAM Dissemination and Availability",
+    "level": 3,
+    "page_anchor": "1-13",
+    "line_offset": 1192,
+    "parent_title": "Pilot and Aeronautical Information Notices to Airmen (NOTAMs)"
+  },
+  {
+    "title": "Safety Program Airmen Notification System (SPANS)",
+    "level": 3,
+    "page_anchor": "1-14",
+    "line_offset": 1235,
+    "parent_title": "Pilot and Aeronautical Information Notices to Airmen (NOTAMs)"
+  },
+  {
+    "title": "Aircraft Classifications and Ultralight Vehicles",
+    "level": 1,
+    "page_anchor": "1-14",
+    "line_offset": 1245,
+    "parent_title": null
+  },
+  {
+    "title": "Pilot Certifications",
+    "level": 1,
+    "page_anchor": "1-15",
+    "line_offset": 1389,
+    "parent_title": null
+  },
+  {
+    "title": "Sport Pilot",
+    "level": 2,
+    "page_anchor": "1-16",
+    "line_offset": 1416,
+    "parent_title": "Pilot Certifications"
+  },
+  {
+    "title": "Recreational Pilot",
+    "level": 2,
+    "page_anchor": "1-17",
+    "line_offset": 1494,
+    "parent_title": "Pilot Certifications"
+  },
+  {
+    "title": "Private Pilot",
+    "level": 2,
+    "page_anchor": "1-17",
+    "line_offset": 1547,
+    "parent_title": "Pilot Certifications"
+  },
+  {
+    "title": "Commercial Pilot",
+    "level": 2,
+    "page_anchor": "1-18",
+    "line_offset": 1568,
+    "parent_title": "Pilot Certifications"
+  },
+  {
+    "title": "Airline Transport Pilot",
+    "level": 2,
+    "page_anchor": "1-18",
+    "line_offset": 1584,
+    "parent_title": "Pilot Certifications"
+  },
+  {
+    "title": "Selecting a Flight School",
+    "level": 1,
+    "page_anchor": "1-18",
+    "line_offset": 1598,
+    "parent_title": null
+  },
+  {
+    "title": "How To Find a Reputable Flight Program",
+    "level": 2,
+    "page_anchor": "1-19",
+    "line_offset": 1667,
+    "parent_title": "Selecting a Flight School"
+  },
+  {
+    "title": "How To Choose a Certificated Flight Instructor (CFI)",
+    "level": 2,
+    "page_anchor": "1-19",
+    "line_offset": 1705,
+    "parent_title": "Selecting a Flight School"
+  },
+  {
+    "title": "The Student Pilot",
+    "level": 1,
+    "page_anchor": "1-20",
+    "line_offset": 1750,
+    "parent_title": null
+  },
+  {
+    "title": "Basic Requirements",
+    "level": 2,
+    "page_anchor": "1-20",
+    "line_offset": 1757,
+    "parent_title": "The Student Pilot"
+  },
+  {
+    "title": "Medical Certification Requirements",
+    "level": 2,
+    "page_anchor": "1-20",
+    "line_offset": 1798,
+    "parent_title": "The Student Pilot"
+  },
+  {
+    "title": "Student Pilot Solo Requirements",
+    "level": 2,
+    "page_anchor": "1-21",
+    "line_offset": 1843,
+    "parent_title": "The Student Pilot"
+  },
+  {
+    "title": "Becoming a Pilot",
+    "level": 2,
+    "page_anchor": "1-21",
+    "line_offset": 1857,
+    "parent_title": "The Student Pilot"
+  },
+  {
+    "title": "Knowledge and Skill Tests",
+    "level": 1,
+    "page_anchor": "1-21",
+    "line_offset": 1909,
+    "parent_title": null
+  },
+  {
+    "title": "Knowledge Tests",
+    "level": 2,
+    "page_anchor": "1-21",
+    "line_offset": 1910,
+    "parent_title": "Knowledge and Skill Tests"
+  },
+  {
+    "title": "When To Take the Knowledge Test",
+    "level": 3,
+    "page_anchor": "1-22",
+    "line_offset": 1928,
+    "parent_title": "Knowledge Tests"
+  },
+  {
+    "title": "Practical Test",
+    "level": 2,
+    "page_anchor": "1-22",
+    "line_offset": 1938,
+    "parent_title": "Knowledge and Skill Tests"
+  },
+  {
+    "title": "When To Take the Practical Test",
+    "level": 3,
+    "page_anchor": "1-23",
+    "line_offset": 1985,
+    "parent_title": "Practical Test"
+  },
+  {
+    "title": "Who Administers the FAA Practical Tests?",
+    "level": 3,
+    "page_anchor": "1-23",
+    "line_offset": 2040,
+    "parent_title": "Practical Test"
+  },
+  {
+    "title": "Role of the Certificated Flight Instructor",
+    "level": 1,
+    "page_anchor": "1-23",
+    "line_offset": 2050,
+    "parent_title": null
+  },
+  {
+    "title": "Role of the Designated Pilot Examiner",
+    "level": 1,
+    "page_anchor": "1-24",
+    "line_offset": 2099,
+    "parent_title": null
+  },
+  {
+    "title": "Chapter Summary",
+    "level": 1,
+    "page_anchor": "1-24",
+    "line_offset": 2146,
+    "parent_title": null
+  }
+]

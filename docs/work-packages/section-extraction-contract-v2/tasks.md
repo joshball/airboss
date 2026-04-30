@@ -79,12 +79,23 @@ Tasks:
 
 Tasks:
 
-- [ ] Run `bun run sources extract handbooks phak --strategy prompt --force`. Verify the emitted `out/01-introduction-to-flying.md` includes the new placeholders.
-- [ ] Open a fresh Claude Code session. Paste `out/_run.md`. Wait for all 17 sub-agents to complete.
-- [ ] Verify each chapter's `_llm_section_tree.json` matches v2 shape; verify each `_llm_disagreements.json` exists (may be empty).
-- [ ] Run `bun run sources extract handbooks phak --strategy compare`. Read the new report.
-- [ ] Verify ch 7 has 80+ entries; verify all chapters have `page_anchor` populated; verify Coverage section is green; verify Disagreements digest captures TOC over-flattening.
-- [ ] Replace existing `_llm_section_tree.json` files in `handbooks/phak/FAA-H-8083-25C/<NN>/` with v2 output. Stage by name. Commit.
+- [x] Run `bun run sources extract handbooks phak --strategy prompt --force`. Verify the emitted `out/01-introduction-to-flying.md` includes the new placeholders.
+- [x] Open a fresh Claude Code session. Paste `out/_run.md`. Wait for all 17 sub-agents to complete.
+- [x] Verify each chapter's `_llm_section_tree.json` matches v2 shape. (Disagreements file deferred -- Phase 3 TOC-as-checklist not yet implemented.)
+- [x] Run `bun run sources extract handbooks phak --strategy compare`. Read the new report.
+- [x] Verify ch 7 has 80+ entries (got 89); verify all chapters have `page_anchor` populated; verify Coverage section is green.
+- [x] Replace existing `_llm_section_tree.json` files in `handbooks/phak/FAA-H-8083-25C/<NN>/` with output. Stage by name. Commit. (PR #355.)
+
+### Phase 4 amendments (v2 -> v3)
+
+The phak re-run forced two contract amendments shipped alongside it. See spec §12 for the full rationale; tasks below capture the work.
+
+- [x] Amend coverage self-check to tolerate trailing figure-only / caption-only / blank pages. Source: `tools/handbook-ingest/ingest/prompts/section_tree.md`.
+- [x] Amend level definitions with explicit cap at 3 + flatten-by-example guidance. Source: same file.
+- [x] Bump `CONTRACT VERSION:` to 3 and update the chapter prompt template to reference `3`.
+- [x] Patch the live emitted prompts under `prompts-out/phak/FAA-H-8083-25C/out/` so the in-flight run picks up the new rules without re-emit.
+- [x] Re-dispatch ch 03, ch 14 (coverage false-positives), and ch 17 (level cap violation) under the amended rules. All three returned `ok`.
+- [x] Note the run-audit drift in PR body: `meta.json` records the v2 template SHA at emit time; the committed prompts are the v3 versions; the JSON outputs are valid v3 shape regardless. Future contract changes go through a fresh re-emit before dispatch.
 
 ## Phase 5 -- Documentation updates
 

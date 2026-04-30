@@ -1,0 +1,275 @@
+[
+  {
+    "title": "Introduction",
+    "level": 1,
+    "page_anchor": "9-1",
+    "line_offset": 2,
+    "parent_title": null
+  },
+  {
+    "title": "Airplane Flight Manuals (AFM)",
+    "level": 1,
+    "page_anchor": "9-1",
+    "line_offset": 11,
+    "parent_title": null
+  },
+  {
+    "title": "Preliminary Pages",
+    "level": 1,
+    "page_anchor": "9-2",
+    "line_offset": 61,
+    "parent_title": null
+  },
+  {
+    "title": "General (Section 1)",
+    "level": 1,
+    "page_anchor": "9-2",
+    "line_offset": 80,
+    "parent_title": null
+  },
+  {
+    "title": "Limitations (Section 2)",
+    "level": 1,
+    "page_anchor": "9-2",
+    "line_offset": 96,
+    "parent_title": null
+  },
+  {
+    "title": "Airspeed",
+    "level": 2,
+    "page_anchor": "9-2",
+    "line_offset": 103,
+    "parent_title": "Limitations (Section 2)"
+  },
+  {
+    "title": "Powerplant",
+    "level": 2,
+    "page_anchor": "9-3",
+    "line_offset": 225,
+    "parent_title": "Limitations (Section 2)"
+  },
+  {
+    "title": "Weight and Loading Distribution",
+    "level": 2,
+    "page_anchor": "9-3",
+    "line_offset": 244,
+    "parent_title": "Limitations (Section 2)"
+  },
+  {
+    "title": "Flight Limits",
+    "level": 2,
+    "page_anchor": "9-4",
+    "line_offset": 254,
+    "parent_title": "Limitations (Section 2)"
+  },
+  {
+    "title": "Placards",
+    "level": 2,
+    "page_anchor": "9-4",
+    "line_offset": 260,
+    "parent_title": "Limitations (Section 2)"
+  },
+  {
+    "title": "Emergency Procedures (Section 3)",
+    "level": 1,
+    "page_anchor": "9-4",
+    "line_offset": 267,
+    "parent_title": null
+  },
+  {
+    "title": "Normal Procedures (Section 4)",
+    "level": 1,
+    "page_anchor": "9-4",
+    "line_offset": 285,
+    "parent_title": null
+  },
+  {
+    "title": "Performance (Section 5)",
+    "level": 1,
+    "page_anchor": "9-4",
+    "line_offset": 297,
+    "parent_title": null
+  },
+  {
+    "title": "Weight and Balance/Equipment List (Section 6)",
+    "level": 1,
+    "page_anchor": "9-4",
+    "line_offset": 312,
+    "parent_title": null
+  },
+  {
+    "title": "Systems Description (Section 7)",
+    "level": 1,
+    "page_anchor": "9-4",
+    "line_offset": 318,
+    "parent_title": null
+  },
+  {
+    "title": "Handling, Service, and Maintenance (Section 8)",
+    "level": 1,
+    "page_anchor": "9-5",
+    "line_offset": 358,
+    "parent_title": null
+  },
+  {
+    "title": "Supplements (Section 9)",
+    "level": 1,
+    "page_anchor": "9-5",
+    "line_offset": 369,
+    "parent_title": null
+  },
+  {
+    "title": "Safety Tips (Section 10)",
+    "level": 1,
+    "page_anchor": "9-6",
+    "line_offset": 383,
+    "parent_title": null
+  },
+  {
+    "title": "Aircraft Documents",
+    "level": 1,
+    "page_anchor": "9-6",
+    "line_offset": 389,
+    "parent_title": null
+  },
+  {
+    "title": "Certificate of Aircraft Registration",
+    "level": 2,
+    "page_anchor": "9-6",
+    "line_offset": 390,
+    "parent_title": "Aircraft Documents"
+  },
+  {
+    "title": "Airworthiness Certificate",
+    "level": 2,
+    "page_anchor": "9-7",
+    "line_offset": 477,
+    "parent_title": "Aircraft Documents"
+  },
+  {
+    "title": "Aircraft Maintenance",
+    "level": 1,
+    "page_anchor": "9-8",
+    "line_offset": 542,
+    "parent_title": null
+  },
+  {
+    "title": "Aircraft Inspections",
+    "level": 1,
+    "page_anchor": "9-8",
+    "line_offset": 557,
+    "parent_title": null
+  },
+  {
+    "title": "Annual Inspection",
+    "level": 2,
+    "page_anchor": "9-8",
+    "line_offset": 579,
+    "parent_title": "Aircraft Inspections"
+  },
+  {
+    "title": "100-Hour Inspection",
+    "level": 2,
+    "page_anchor": "9-8",
+    "line_offset": 598,
+    "parent_title": "Aircraft Inspections"
+  },
+  {
+    "title": "Preflight Inspections",
+    "level": 2,
+    "page_anchor": "9-9",
+    "line_offset": 620,
+    "parent_title": "Aircraft Inspections"
+  },
+  {
+    "title": "Minimum Equipment Lists (MEL) and Operations With Inoperative Equipment",
+    "level": 1,
+    "page_anchor": "9-9",
+    "line_offset": 626,
+    "parent_title": null
+  },
+  {
+    "title": "Other Inspection Programs",
+    "level": 2,
+    "page_anchor": "9-9",
+    "line_offset": 664,
+    "parent_title": "Aircraft Inspections"
+  },
+  {
+    "title": "Altimeter System Inspection",
+    "level": 2,
+    "page_anchor": "9-9",
+    "line_offset": 672,
+    "parent_title": "Aircraft Inspections"
+  },
+  {
+    "title": "Transponder Inspection",
+    "level": 2,
+    "page_anchor": "9-9",
+    "line_offset": 678,
+    "parent_title": "Aircraft Inspections"
+  },
+  {
+    "title": "Emergency Locator Transmitter",
+    "level": 2,
+    "page_anchor": "9-9",
+    "line_offset": 684,
+    "parent_title": "Aircraft Inspections"
+  },
+  {
+    "title": "Preventive Maintenance",
+    "level": 1,
+    "page_anchor": "9-10",
+    "line_offset": 737,
+    "parent_title": null
+  },
+  {
+    "title": "Maintenance Entries",
+    "level": 2,
+    "page_anchor": "9-10",
+    "line_offset": 743,
+    "parent_title": "Preventive Maintenance"
+  },
+  {
+    "title": "Examples of Preventive Maintenance",
+    "level": 2,
+    "page_anchor": "9-10",
+    "line_offset": 752,
+    "parent_title": "Preventive Maintenance"
+  },
+  {
+    "title": "Repairs and Alterations",
+    "level": 1,
+    "page_anchor": "9-12",
+    "line_offset": 931,
+    "parent_title": null
+  },
+  {
+    "title": "Special Flight Permits",
+    "level": 1,
+    "page_anchor": "9-12",
+    "line_offset": 947,
+    "parent_title": null
+  },
+  {
+    "title": "Airworthiness Directives (ADs)",
+    "level": 1,
+    "page_anchor": "9-12",
+    "line_offset": 969,
+    "parent_title": null
+  },
+  {
+    "title": "Aircraft Owner/Operator Responsibilities",
+    "level": 1,
+    "page_anchor": "9-13",
+    "line_offset": 1071,
+    "parent_title": null
+  },
+  {
+    "title": "Chapter Summary",
+    "level": 1,
+    "page_anchor": "9-13",
+    "line_offset": 1094,
+    "parent_title": null
+  }
+]

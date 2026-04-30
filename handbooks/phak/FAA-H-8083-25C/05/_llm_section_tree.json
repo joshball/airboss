@@ -1,0 +1,520 @@
+[
+  {
+    "title": "Forces Acting on the Aircraft",
+    "level": 1,
+    "page_anchor": "5-1",
+    "line_offset": 2,
+    "parent_title": null
+  },
+  {
+    "title": "Thrust",
+    "level": 2,
+    "page_anchor": "5-2",
+    "line_offset": 111,
+    "parent_title": "Forces Acting on the Aircraft"
+  },
+  {
+    "title": "Lift",
+    "level": 2,
+    "page_anchor": "5-3",
+    "line_offset": 210,
+    "parent_title": "Forces Acting on the Aircraft"
+  },
+  {
+    "title": "Lift/Drag Ratio",
+    "level": 2,
+    "page_anchor": "5-5",
+    "line_offset": 364,
+    "parent_title": "Forces Acting on the Aircraft"
+  },
+  {
+    "title": "Drag",
+    "level": 2,
+    "page_anchor": "5-5",
+    "line_offset": 422,
+    "parent_title": "Forces Acting on the Aircraft"
+  },
+  {
+    "title": "Parasite Drag",
+    "level": 3,
+    "page_anchor": "5-5",
+    "line_offset": 428,
+    "parent_title": "Drag"
+  },
+  {
+    "title": "Form Drag",
+    "level": 3,
+    "page_anchor": "5-5",
+    "line_offset": 436,
+    "parent_title": "Parasite Drag"
+  },
+  {
+    "title": "Interference Drag",
+    "level": 3,
+    "page_anchor": "5-6",
+    "line_offset": 449,
+    "parent_title": "Parasite Drag"
+  },
+  {
+    "title": "Skin Friction Drag",
+    "level": 3,
+    "page_anchor": "5-6",
+    "line_offset": 464,
+    "parent_title": "Parasite Drag"
+  },
+  {
+    "title": "Induced Drag",
+    "level": 3,
+    "page_anchor": "5-6",
+    "line_offset": 504,
+    "parent_title": "Drag"
+  },
+  {
+    "title": "Weight",
+    "level": 2,
+    "page_anchor": "5-7",
+    "line_offset": 582,
+    "parent_title": "Forces Acting on the Aircraft"
+  },
+  {
+    "title": "Wingtip Vortices",
+    "level": 1,
+    "page_anchor": "5-7",
+    "line_offset": 609,
+    "parent_title": null
+  },
+  {
+    "title": "Formation of Vortices",
+    "level": 2,
+    "page_anchor": "5-7",
+    "line_offset": 610,
+    "parent_title": "Wingtip Vortices"
+  },
+  {
+    "title": "Avoiding Wake Turbulence",
+    "level": 2,
+    "page_anchor": "5-8",
+    "line_offset": 642,
+    "parent_title": "Wingtip Vortices"
+  },
+  {
+    "title": "Ground Effect",
+    "level": 1,
+    "page_anchor": "5-10",
+    "line_offset": 735,
+    "parent_title": null
+  },
+  {
+    "title": "Axes of an Aircraft",
+    "level": 1,
+    "page_anchor": "5-11",
+    "line_offset": 857,
+    "parent_title": null
+  },
+  {
+    "title": "Moment and Moment Arm",
+    "level": 1,
+    "page_anchor": "5-13",
+    "line_offset": 913,
+    "parent_title": null
+  },
+  {
+    "title": "Aircraft Design Characteristics",
+    "level": 1,
+    "page_anchor": "5-13",
+    "line_offset": 972,
+    "parent_title": null
+  },
+  {
+    "title": "Stability",
+    "level": 2,
+    "page_anchor": "5-13",
+    "line_offset": 986,
+    "parent_title": "Aircraft Design Characteristics"
+  },
+  {
+    "title": "Static Stability",
+    "level": 3,
+    "page_anchor": "5-13",
+    "line_offset": 1002,
+    "parent_title": "Stability"
+  },
+  {
+    "title": "Dynamic Stability",
+    "level": 3,
+    "page_anchor": "5-14",
+    "line_offset": 1019,
+    "parent_title": "Stability"
+  },
+  {
+    "title": "Longitudinal Stability (Pitching)",
+    "level": 2,
+    "page_anchor": "5-15",
+    "line_offset": 1073,
+    "parent_title": "Aircraft Design Characteristics"
+  },
+  {
+    "title": "Lateral Stability (Rolling)",
+    "level": 2,
+    "page_anchor": "5-17",
+    "line_offset": 1251,
+    "parent_title": "Aircraft Design Characteristics"
+  },
+  {
+    "title": "Dihedral",
+    "level": 3,
+    "page_anchor": "5-18",
+    "line_offset": 1261,
+    "parent_title": "Lateral Stability (Rolling)"
+  },
+  {
+    "title": "Sweepback and Wing Location",
+    "level": 3,
+    "page_anchor": "5-18",
+    "line_offset": 1287,
+    "parent_title": "Lateral Stability (Rolling)"
+  },
+  {
+    "title": "Keel Effect and Weight Distribution",
+    "level": 3,
+    "page_anchor": "5-18",
+    "line_offset": 1302,
+    "parent_title": "Lateral Stability (Rolling)"
+  },
+  {
+    "title": "Directional Stability (Yawing)",
+    "level": 2,
+    "page_anchor": "5-19",
+    "line_offset": 1343,
+    "parent_title": "Aircraft Design Characteristics"
+  },
+  {
+    "title": "Free Directional Oscillations (Dutch Roll)",
+    "level": 3,
+    "page_anchor": "5-20",
+    "line_offset": 1419,
+    "parent_title": "Directional Stability (Yawing)"
+  },
+  {
+    "title": "Spiral Instability",
+    "level": 3,
+    "page_anchor": "5-20",
+    "line_offset": 1442,
+    "parent_title": "Directional Stability (Yawing)"
+  },
+  {
+    "title": "Effect of Wing Planform",
+    "level": 2,
+    "page_anchor": "5-20",
+    "line_offset": 1482,
+    "parent_title": "Aircraft Design Characteristics"
+  },
+  {
+    "title": "Aerodynamic Forces in Flight Maneuvers",
+    "level": 1,
+    "page_anchor": "5-22",
+    "line_offset": 1586,
+    "parent_title": null
+  },
+  {
+    "title": "Forces in Turns",
+    "level": 2,
+    "page_anchor": "5-22",
+    "line_offset": 1587,
+    "parent_title": "Aerodynamic Forces in Flight Maneuvers"
+  },
+  {
+    "title": "Forces in Climbs",
+    "level": 2,
+    "page_anchor": "5-23",
+    "line_offset": 1704,
+    "parent_title": "Aerodynamic Forces in Flight Maneuvers"
+  },
+  {
+    "title": "Forces in Descents",
+    "level": 2,
+    "page_anchor": "5-24",
+    "line_offset": 1826,
+    "parent_title": "Aerodynamic Forces in Flight Maneuvers"
+  },
+  {
+    "title": "Stalls",
+    "level": 1,
+    "page_anchor": "5-25",
+    "line_offset": 1852,
+    "parent_title": null
+  },
+  {
+    "title": "Angle of Attack Indicators",
+    "level": 1,
+    "page_anchor": "5-26",
+    "line_offset": 2034,
+    "parent_title": null
+  },
+  {
+    "title": "Basic Propeller Principles",
+    "level": 1,
+    "page_anchor": "5-28",
+    "line_offset": 2170,
+    "parent_title": null
+  },
+  {
+    "title": "Torque and P-Factor",
+    "level": 1,
+    "page_anchor": "5-30",
+    "line_offset": 2523,
+    "parent_title": null
+  },
+  {
+    "title": "Torque Reaction",
+    "level": 2,
+    "page_anchor": "5-31",
+    "line_offset": 2581,
+    "parent_title": "Torque and P-Factor"
+  },
+  {
+    "title": "Corkscrew Effect",
+    "level": 2,
+    "page_anchor": "5-31",
+    "line_offset": 2620,
+    "parent_title": "Torque and P-Factor"
+  },
+  {
+    "title": "Gyroscopic Action",
+    "level": 2,
+    "page_anchor": "5-31",
+    "line_offset": 2642,
+    "parent_title": "Torque and P-Factor"
+  },
+  {
+    "title": "Asymmetric Loading (P-Factor)",
+    "level": 2,
+    "page_anchor": "5-32",
+    "line_offset": 2698,
+    "parent_title": "Torque and P-Factor"
+  },
+  {
+    "title": "Load Factors",
+    "level": 1,
+    "page_anchor": "5-33",
+    "line_offset": 2763,
+    "parent_title": null
+  },
+  {
+    "title": "Load Factors in Aircraft Design",
+    "level": 2,
+    "page_anchor": "5-33",
+    "line_offset": 2798,
+    "parent_title": "Load Factors"
+  },
+  {
+    "title": "Load Factors in Steep Turns",
+    "level": 2,
+    "page_anchor": "5-34",
+    "line_offset": 2923,
+    "parent_title": "Load Factors"
+  },
+  {
+    "title": "Load Factors and Stalling Speeds",
+    "level": 2,
+    "page_anchor": "5-34",
+    "line_offset": 2951,
+    "parent_title": "Load Factors"
+  },
+  {
+    "title": "Load Factors and Flight Maneuvers",
+    "level": 2,
+    "page_anchor": "5-36",
+    "line_offset": 3076,
+    "parent_title": "Load Factors"
+  },
+  {
+    "title": "Turns",
+    "level": 3,
+    "page_anchor": "5-36",
+    "line_offset": 3087,
+    "parent_title": "Load Factors and Flight Maneuvers"
+  },
+  {
+    "title": "Stalls",
+    "level": 3,
+    "page_anchor": "5-36",
+    "line_offset": 3097,
+    "parent_title": "Load Factors and Flight Maneuvers"
+  },
+  {
+    "title": "Spins",
+    "level": 3,
+    "page_anchor": "5-36",
+    "line_offset": 3123,
+    "parent_title": "Load Factors and Flight Maneuvers"
+  },
+  {
+    "title": "High Speed Stalls",
+    "level": 3,
+    "page_anchor": "5-36",
+    "line_offset": 3139,
+    "parent_title": "Load Factors and Flight Maneuvers"
+  },
+  {
+    "title": "Chandelles and Lazy Eights",
+    "level": 3,
+    "page_anchor": "5-36",
+    "line_offset": 3155,
+    "parent_title": "Load Factors and Flight Maneuvers"
+  },
+  {
+    "title": "Rough Air",
+    "level": 3,
+    "page_anchor": "5-37",
+    "line_offset": 3184,
+    "parent_title": "Load Factors and Flight Maneuvers"
+  },
+  {
+    "title": "Vg Diagram",
+    "level": 1,
+    "page_anchor": "5-37",
+    "line_offset": 3215,
+    "parent_title": null
+  },
+  {
+    "title": "Rate of Turn",
+    "level": 1,
+    "page_anchor": "5-38",
+    "line_offset": 3321,
+    "parent_title": null
+  },
+  {
+    "title": "Radius of Turn",
+    "level": 1,
+    "page_anchor": "5-39",
+    "line_offset": 3426,
+    "parent_title": null
+  },
+  {
+    "title": "Weight and Balance",
+    "level": 1,
+    "page_anchor": "5-40",
+    "line_offset": 3495,
+    "parent_title": null
+  },
+  {
+    "title": "Effect of Weight on Flight Performance",
+    "level": 2,
+    "page_anchor": "5-42",
+    "line_offset": 3604,
+    "parent_title": "Weight and Balance"
+  },
+  {
+    "title": "Effect of Weight on Aircraft Structure",
+    "level": 2,
+    "page_anchor": "5-42",
+    "line_offset": 3645,
+    "parent_title": "Weight and Balance"
+  },
+  {
+    "title": "Effect of Weight on Stability and Controllability",
+    "level": 2,
+    "page_anchor": "5-42",
+    "line_offset": 3695,
+    "parent_title": "Weight and Balance"
+  },
+  {
+    "title": "Effect of Load Distribution",
+    "level": 2,
+    "page_anchor": "5-43",
+    "line_offset": 3720,
+    "parent_title": "Weight and Balance"
+  },
+  {
+    "title": "High Speed Flight",
+    "level": 1,
+    "page_anchor": "5-44",
+    "line_offset": 3861,
+    "parent_title": null
+  },
+  {
+    "title": "Subsonic Versus Supersonic Flow",
+    "level": 2,
+    "page_anchor": "5-44",
+    "line_offset": 3862,
+    "parent_title": "High Speed Flight"
+  },
+  {
+    "title": "Speed Ranges",
+    "level": 2,
+    "page_anchor": "5-44",
+    "line_offset": 3895,
+    "parent_title": "High Speed Flight"
+  },
+  {
+    "title": "Mach Number Versus Airspeed",
+    "level": 2,
+    "page_anchor": "5-45",
+    "line_offset": 3999,
+    "parent_title": "High Speed Flight"
+  },
+  {
+    "title": "Boundary Layer",
+    "level": 2,
+    "page_anchor": "5-46",
+    "line_offset": 4060,
+    "parent_title": "High Speed Flight"
+  },
+  {
+    "title": "Laminar Boundary Layer Flow",
+    "level": 3,
+    "page_anchor": "5-46",
+    "line_offset": 4068,
+    "parent_title": "Boundary Layer"
+  },
+  {
+    "title": "Turbulent Boundary Layer Flow",
+    "level": 3,
+    "page_anchor": "5-46",
+    "line_offset": 4076,
+    "parent_title": "Boundary Layer"
+  },
+  {
+    "title": "Boundary Layer Separation",
+    "level": 3,
+    "page_anchor": "5-46",
+    "line_offset": 4085,
+    "parent_title": "Boundary Layer"
+  },
+  {
+    "title": "Shock Waves",
+    "level": 2,
+    "page_anchor": "5-46",
+    "line_offset": 4104,
+    "parent_title": "High Speed Flight"
+  },
+  {
+    "title": "Sweepback",
+    "level": 2,
+    "page_anchor": "5-48",
+    "line_offset": 4231,
+    "parent_title": "High Speed Flight"
+  },
+  {
+    "title": "Mach Buffet Boundaries",
+    "level": 2,
+    "page_anchor": "5-49",
+    "line_offset": 4302,
+    "parent_title": "High Speed Flight"
+  },
+  {
+    "title": "High Speed Flight Controls",
+    "level": 2,
+    "page_anchor": "5-49",
+    "line_offset": 4334,
+    "parent_title": "High Speed Flight"
+  },
+  {
+    "title": "Chapter Summary",
+    "level": 1,
+    "page_anchor": "5-51",
+    "line_offset": 4508,
+    "parent_title": null
+  }
+]

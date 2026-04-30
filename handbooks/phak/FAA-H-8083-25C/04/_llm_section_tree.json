@@ -1,0 +1,156 @@
+[
+  {
+    "title": "Introduction",
+    "level": 1,
+    "page_anchor": "4-1",
+    "line_offset": 2,
+    "parent_title": null
+  },
+  {
+    "title": "Structure of the Atmosphere",
+    "level": 1,
+    "page_anchor": "4-1",
+    "line_offset": 10,
+    "parent_title": null
+  },
+  {
+    "title": "Air is a Fluid",
+    "level": 1,
+    "page_anchor": "4-2",
+    "line_offset": 29,
+    "parent_title": null
+  },
+  {
+    "title": "Viscosity",
+    "level": 2,
+    "page_anchor": "4-2",
+    "line_offset": 41,
+    "parent_title": "Air is a Fluid"
+  },
+  {
+    "title": "Friction",
+    "level": 2,
+    "page_anchor": "4-2",
+    "line_offset": 63,
+    "parent_title": "Air is a Fluid"
+  },
+  {
+    "title": "Pressure",
+    "level": 1,
+    "page_anchor": "4-3",
+    "line_offset": 216,
+    "parent_title": null
+  },
+  {
+    "title": "Atmospheric Pressure",
+    "level": 2,
+    "page_anchor": "4-3",
+    "line_offset": 225,
+    "parent_title": "Pressure"
+  },
+  {
+    "title": "Pressure Altitude",
+    "level": 2,
+    "page_anchor": "4-4",
+    "line_offset": 270,
+    "parent_title": "Pressure"
+  },
+  {
+    "title": "Density Altitude",
+    "level": 2,
+    "page_anchor": "4-4",
+    "line_offset": 290,
+    "parent_title": "Pressure"
+  },
+  {
+    "title": "Effect of Pressure on Density",
+    "level": 2,
+    "page_anchor": "4-4",
+    "line_offset": 342,
+    "parent_title": "Pressure"
+  },
+  {
+    "title": "Effect of Temperature on Density",
+    "level": 2,
+    "page_anchor": "4-4",
+    "line_offset": 352,
+    "parent_title": "Pressure"
+  },
+  {
+    "title": "Effect of Humidity (Moisture) on Density",
+    "level": 2,
+    "page_anchor": "4-5",
+    "line_offset": 364,
+    "parent_title": "Pressure"
+  },
+  {
+    "title": "Theories in the Production of Lift",
+    "level": 1,
+    "page_anchor": "4-5",
+    "line_offset": 413,
+    "parent_title": null
+  },
+  {
+    "title": "Newton’s Basic Laws of Motion",
+    "level": 2,
+    "page_anchor": "4-5",
+    "line_offset": 425,
+    "parent_title": "Theories in the Production of Lift"
+  },
+  {
+    "title": "Bernoulli’s Principle of Differential Pressure",
+    "level": 2,
+    "page_anchor": "4-5",
+    "line_offset": 518,
+    "parent_title": "Theories in the Production of Lift"
+  },
+  {
+    "title": "Airfoil Design",
+    "level": 1,
+    "page_anchor": "4-6",
+    "line_offset": 547,
+    "parent_title": null
+  },
+  {
+    "title": "Low Pressure Above",
+    "level": 2,
+    "page_anchor": "4-7",
+    "line_offset": 652,
+    "parent_title": "Airfoil Design"
+  },
+  {
+    "title": "High Pressure Below",
+    "level": 2,
+    "page_anchor": "4-7",
+    "line_offset": 730,
+    "parent_title": "Airfoil Design"
+  },
+  {
+    "title": "Pressure Distribution",
+    "level": 2,
+    "page_anchor": "4-8",
+    "line_offset": 747,
+    "parent_title": "Airfoil Design"
+  },
+  {
+    "title": "Airfoil Behavior",
+    "level": 2,
+    "page_anchor": "4-8",
+    "line_offset": 767,
+    "parent_title": "Airfoil Design"
+  },
+  {
+    "title": "A Third Dimension",
+    "level": 2,
+    "page_anchor": "4-9",
+    "line_offset": 804,
+    "parent_title": "Airfoil Design"
+  },
+  {
+    "title": "Chapter Summary",
+    "level": 1,
+    "page_anchor": "4-9",
+    "line_offset": 822,
+    "parent_title": null
+  }
+]

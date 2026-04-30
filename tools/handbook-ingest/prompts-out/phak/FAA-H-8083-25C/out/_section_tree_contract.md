@@ -1,4 +1,4 @@
-CONTRACT VERSION: 2
+CONTRACT VERSION: 3
 
 You extract the section structure of FAA handbook chapter content.
 
@@ -29,6 +29,7 @@ RULES:
 - Level 1 = top-level section under the chapter (e.g. "Aerodynamic Forces").
 - Level 2 = subsection (e.g. "Lift", "Drag" under "Aerodynamic Forces").
 - Level 3 = sub-subsection (rare; use only when the prose actually distinguishes them).
+- **Levels are capped at 3.** Valid values for `level` are exactly `1`, `2`, or `3`. Never emit `4` or deeper. If the body text nests a fourth tier (e.g. a chapter has L1 "Spatial Disorientation" -> L2 "Vestibular Illusions" -> would-be L3 children "The Leans", "Coriolis Illusion", and would-be L4 grandchildren), flatten the tail to L3: emit the leaf items at level 3 with `parent_title` set to the most meaningful enclosing L2 heading. Do NOT promote them to L2 just to escape the cap; the L1/L2/L3 spine should still match the body's outermost structure.
 - For level 2+, set parent_title to the title of the most recent strictly-shallower heading.
 - Sort by line_offset ascending.
 - Output JSON only. No markdown fencing. No explanation.
@@ -52,12 +53,14 @@ COVERAGE -- self-check before writing:
 The chapter occupies a printed page range stated in the per-chapter prompt (e.g. `7-1..7-41`). Before emitting JSON:
 
 1. Find the largest printed-page anchor referenced by your last entries.
-2. If the largest anchor is more than ONE page short of the chapter's last printed page, return:
-   `error: incomplete coverage -- last anchor at <anchor>, expected on-or-after <last_page>`
-   instead of writing JSON.
+2. If the largest anchor is more than ONE page short of the chapter's last printed page, inspect the pages between the largest anchor and the last printed page in the sidecar:
+   - If those trailing pages contain ONLY figure callouts ("FIGURE 7-12"), table titles ("TABLE 7-3"), figure labels, captions, blank space, or other non-heading content, the shortfall is acceptable. Proceed to write JSON.
+   - If those trailing pages contain at least one body-text heading you failed to emit, return:
+     `error: incomplete coverage -- last anchor at <anchor>, expected on-or-after <last_page>`
+     instead of writing JSON.
 3. If the chapter has explicit boilerplate ("Chapter Summary"), it must be in your output. Its absence is a coverage failure.
 
-This catches input truncation and partial extractions explicitly. Do not silently emit a short tree.
+This catches input truncation and partial extractions explicitly. Do not silently emit a short tree. Trailing figure-only pages are common in FAA handbooks (full-page figure plates after the body of the chapter ends) and are not coverage failures.
 
 DIFFICULT CASES -- patterns observed in FAA handbooks:
 
