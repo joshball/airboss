@@ -48,8 +48,8 @@ function figureUrl(assetPath: string): string {
 <PageHeader title={`Chapter ${data.chapter.code}: ${data.chapter.title}`}>
 	{#snippet eyebrowSnippet()}
 		<nav aria-label="Breadcrumb">
-			<a href={ROUTES.HANDBOOKS}>Handbooks</a> &raquo;
-			<a href={ROUTES.HANDBOOK(data.reference.documentSlug)}>{data.reference.title}</a> &raquo;
+			<a href={ROUTES.LIBRARY}>Library</a> &raquo;
+			<a href={ROUTES.LIBRARY_DOC(data.reference.documentSlug)}>{data.reference.title}</a> &raquo;
 			<span>Ch {data.chapter.code}</span>
 		</nav>
 	{/snippet}

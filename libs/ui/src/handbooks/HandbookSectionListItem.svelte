@@ -30,7 +30,7 @@ const pageRange = $derived(
 );
 </script>
 
-<a class="section-item" href={ROUTES.HANDBOOK_SECTION(documentSlug, chapterCode, sectionPart)}>
+<a class="section-item" href={ROUTES.LIBRARY_SECTION(documentSlug, chapterCode, sectionPart)}>
 	<span class="code">§{sectionPart}</span>
 	<span class="title">{title}</span>
 	{#if pageRange}

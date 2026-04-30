@@ -51,7 +51,7 @@ const showSuggestion = $derived(
 );
 
 const heartbeatUrl = $derived(
-	ROUTES.HANDBOOK_SECTION_HEARTBEAT(
+	ROUTES.LIBRARY_SECTION_HEARTBEAT(
 		data.reference.documentSlug,
 		data.chapter.code,
 		data.section.code.split('.').slice(1).join('.'),
@@ -140,9 +140,9 @@ function dismissSuggestion(): void {
 
 <header class="page-header">
 	<nav aria-label="Breadcrumb">
-		<a href={ROUTES.HANDBOOKS}>Handbooks</a> &raquo;
-		<a href={ROUTES.HANDBOOK(data.reference.documentSlug)}>{data.reference.title}</a> &raquo;
-		<a href={ROUTES.HANDBOOK_CHAPTER(data.reference.documentSlug, data.chapter.code)}
+		<a href={ROUTES.LIBRARY}>Library</a> &raquo;
+		<a href={ROUTES.LIBRARY_DOC(data.reference.documentSlug)}>{data.reference.title}</a> &raquo;
+		<a href={ROUTES.LIBRARY_CHAPTER(data.reference.documentSlug, data.chapter.code)}
 			>Ch {data.chapter.code}</a
 		>
 		&raquo; <span>§{data.section.code}</span>
@@ -175,7 +175,7 @@ function dismissSuggestion(): void {
 				{#each data.siblings as sibling (sibling.id)}
 					<li class:active={sibling.id === data.section.id}>
 						<a
-							href={ROUTES.HANDBOOK_SECTION(
+							href={ROUTES.LIBRARY_SECTION(
 								data.reference.documentSlug,
 								data.chapter.code,
 								sibling.code.split('.').slice(1).join('.'),

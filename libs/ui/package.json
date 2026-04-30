@@ -9,6 +9,7 @@
 		},
 		"./components/*": "./src/components/*",
 		"./handbooks/*": "./src/handbooks/*",
+		"./library/*": "./src/library/*",
 		"./lib/*": "./src/lib/*"
 	},
 	"dependencies": {
