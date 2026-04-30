@@ -11,5 +11,6 @@
 
 import type { HelpPage } from '@ab/help';
 import { audit } from './content/audit';
+import { users } from './content/users';
 
-export const hangarHelpPages: readonly HelpPage[] = [audit];
+export const hangarHelpPages: readonly HelpPage[] = [audit, users];
