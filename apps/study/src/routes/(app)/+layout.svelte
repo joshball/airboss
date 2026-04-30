@@ -208,9 +208,20 @@ function handleMemoryMenuBlur(event: FocusEvent) {
 function handleMemoryItemClick() {
 	if (memoryMenu) memoryMenu.open = false;
 }
+
+// The identity menu hosts non-navigating controls (theme radios, sign-out
+// form) so it can't rely on link-click teardown to dismiss. Close it when
+// a pointerdown lands outside the <details>; clicks on the appearance
+// radios stay inside and are unaffected.
+function handleDocumentPointerDown(event: PointerEvent) {
+	if (!menu?.open) return;
+	const target = event.target;
+	if (target instanceof Node && menu.contains(target)) return;
+	menu.open = false;
+}
 </script>
 
-<svelte:window onkeydown={handleMenuKeydown} />
+<svelte:window onkeydown={handleMenuKeydown} onpointerdown={handleDocumentPointerDown} />
 
 <a class="skip" href="#main">Skip to main content</a>
 
