@@ -146,7 +146,20 @@ export {
 	pickArchivesToPrune,
 } from './upload-helpers';
 export {
+	type BanUserFormInput,
+	BanUserInputSchema,
+	type RevokeAllUserSessionsFormInput,
+	RevokeAllUserSessionsInputSchema,
+	type RevokeUserSessionFormInput,
+	RevokeUserSessionInputSchema,
+	type SetUserRoleFormInput,
+	SetUserRoleInputSchema,
+	type UnbanUserFormInput,
+	UnbanUserInputSchema,
+} from './user-write-schemas';
+export {
 	buildUserSearchWhere,
+	countUserSessions,
 	countUsersByRole,
 	getUser,
 	type ListUsersOptions,

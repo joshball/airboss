@@ -201,6 +201,19 @@ export async function getUser(id: string, db: Db = defaultDb): Promise<UserDirec
 	};
 }
 
+/**
+ * Count of `bauth_session` rows currently held for a user. Used by the
+ * revoke-all-sessions BC helper to populate `metadata.revokedCount`
+ * before calling better-auth (which returns `{ success }`, not a count).
+ */
+export async function countUserSessions(userId: string, db: Db = defaultDb): Promise<number> {
+	const [row] = await db
+		.select({ c: sql<number>`count(*)::int` })
+		.from(bauthSession)
+		.where(eq(bauthSession.userId, userId));
+	return row?.c ?? 0;
+}
+
 export async function listRecentUserSessions(
 	userId: string,
 	limit = USER_DETAIL_SESSION_LIMIT,
