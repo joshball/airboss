@@ -150,15 +150,20 @@ AUDIT_CURSOR: 'cursor',
 
 For the unfiltered "everything in last 24h" case the query falls back to a sort by `timestamp desc`. Postgres has no index on `timestamp` alone today. If the table grows past hundreds of thousands of rows this becomes the bottleneck; v1 ships without that index and a follow-up adds it once row count justifies it. (Captured as a non-blocking risk in design.md.)
 
-## Open questions
+## Decisions (ratified 2026-04-30)
 
-| #  | Question                                                                                                              | Default                                                                                                           |
-| -- | --------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
-| 1  | Default time window: 24h or 7d?                                                                                       | 24h. Rare for an admin to want week-old context unfiltered; specific investigations widen the window themselves.  |
-| 2  | Actor filter input: free-text email/name search, or pick-from-list dropdown?                                          | Free-text search. Hangar user count is small; live-search behaves like the `/users` search bar (debounced 150ms). |
-| 3  | Show diff (before vs after) for `update` ops in v1, or only side-by-side jsonb?                                       | Side-by-side jsonb. A real diff is a v2 polish pass.                                                              |
-| 4  | List page row click goes to the detail page, or expands inline?                                                       | Detail page. Deep-linkable; no surprise scroll-jumps; matches `/users` flow.                                      |
-| 5  | Should we render `actorName + actorEmail` on the list, or just the id?                                                | Both name and email columns on the list, joined server-side. Saves the admin a second tab.                        |
+All five drafting-phase questions resolved in favour of the recommended defaults. No scope changes. Two implementation choices likewise ratified.
+
+1. **Default time window: 24h.** Rare for an admin to want week-old context unfiltered; specific investigations widen the window themselves.
+2. **Actor filter: free-text email or name search.** Live-search behaves like the `/users` search bar (debounced 150ms). Pick-from-list dropdown rejected -- hangar user count is small, and the filter bar already mirrors `/users`.
+3. **Update-row rendering: side-by-side pretty-printed jsonb.** No real diff renderer in v1. Trigger to revisit: first investigation where side-by-side proves hard to read on a real `update` row. Until then, pretty-printed JSON with copy-to-clipboard is the safe minimum.
+4. **List row click -> detail page.** Deep-linkable; no surprise scroll-jumps; matches `/users` flow. Inline expand rejected -- breaks copy-link-and-share.
+5. **List columns: actorName + actorEmail (server-side joined).** Actor id alone is useless to a human. Server-side join is one query, not N+1.
+
+Implementation choices:
+
+- **Pagination: cursor "Show more".** Numbered pages would need `count(*)` per page change -- wasteful on a growing append-only table.
+- **`audit_log(timestamp desc)` index: deferred.** The actor + target indexes already exist; only the unfiltered case is the slow path. Trigger to add: unfiltered list latency exceeds 200ms in production.
 
 ## Acceptance
 

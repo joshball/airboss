@@ -29,12 +29,12 @@ Three writes; one surface. Plus the audit + confirmation contract that future ad
 - `apps/hangar/src/routes/(app)/users/+page.server.ts` -- existing read-only list load. Still works after this WP; the list page gains no actions.
 - `apps/hangar/src/routes/(app)/users/[id]/+page.server.ts` -- existing read-only detail load. Gains the form actions in this WP.
 - `apps/hangar/src/routes/(app)/users/[id]/+page.svelte` -- existing detail page. Gains role picker, ban toggle, "revoke this session" buttons in the sessions table, "revoke all sessions" button, and the confirmation modal.
-- `libs/bc/hangar/src/users.ts:1-247` -- existing read queries (`listUsers`, `getUser`, `listRecentUserSessions`, `listRecentUserAudits`). New write helpers added in a sibling module per [Open Question (e)](#e-bc-write-module-location).
+- `libs/bc/hangar/src/users.ts:1-247` -- existing read queries (`listUsers`, `getUser`, `listRecentUserSessions`, `listRecentUserAudits`). New write helpers added in a sibling module `user-writes.ts` (decision (e)).
 - `libs/auth/src/auth.ts:79-86` -- `requireRole`. Used by every load + every form action. Per the dual-gate auth contract.
 - `libs/auth/src/server.ts:106-130` -- session cookie-cache config; `maxAge: 5 * 60`. Constrains the upper bound on how long a revoked session can ride the cache before the BC re-validates.
 - `libs/auth/src/schema.ts:13-28` -- `bauthUser` columns include `role`, `banned`, `banReason`, `banExpires`.
 - `libs/audit/src/log.ts:17-43` -- `auditWrite`. Single insert, accepts `actorId`, `op`, `targetType`, `targetId`, `before`, `after`, `metadata`. Already proven end-to-end by the audit-ping flow.
-- `libs/constants/src/audit.ts:12-39` -- `AUDIT_TARGETS`. We add `HANGAR_USER` (`hangar.user`) here and a small set of action-flavour kinds for the ops; see [Open Question (a)](#a-audit-target-and-op-shape).
+- `libs/constants/src/audit.ts:12-39` -- `AUDIT_TARGETS`. We add `HANGAR_USER` (`hangar.user`) here; op-distinguishing kind goes into `metadata.subKind` from a closed `HANGAR_USER_OP_SUBKINDS` set (decision (a)).
 - `libs/constants/src/roles.ts` -- `ROLES`, `ROLE_VALUES`, `ROLE_LABELS`. The picker populates from `ROLE_VALUES`.
 - `apps/hangar/src/routes/(app)/admin/audit-ping/+page.server.ts` -- canonical example of `requireRole(ADMIN) -> form action -> auditWrite -> read-back via auditRecent`. The shape this WP repeats four times (set-role, ban, unban, revoke).
 - [`hangar-non-textual` spec](../hangar-non-textual/spec.md) -- closest sibling that already runs admin writes through `auditWrite`, gives a precedent for `before/after` snapshots.
@@ -42,7 +42,7 @@ Three writes; one surface. Plus the audit + confirmation contract that future ad
 
 ## In Scope
 
-1. **BC write helpers under `libs/bc/hangar/src/user-writes.ts`** ([Open Question (e)](#e-bc-write-module-location); recommended new file rather than swelling `users.ts`):
+1. **BC write helpers under `libs/bc/hangar/src/user-writes.ts`** (new file, sibling to read-only `users.ts`; decision (e)):
    - `setUserRole(input: { actorId, targetUserId, newRole, headers }, db?) -> { user: UserDirectoryRow }` -- delegates to `auth.api.setRole`, then re-reads the user via `getUser`, then `auditWrite` with `before` / `after` snapshots.
    - `banUserAction(input: { actorId, targetUserId, reason, expiresAt?, headers }, db?) -> { user: UserDirectoryRow }` -- delegates to `auth.api.banUser`, re-reads, audits.
    - `unbanUserAction(input: { actorId, targetUserId, headers }, db?) -> { user: UserDirectoryRow }` -- delegates to `auth.api.unbanUser`, re-reads, audits.
@@ -67,17 +67,17 @@ Three writes; one surface. Plus the audit + confirmation contract that future ad
 
    Constants live in `ROUTES` (no inline strings); see "Routes" below.
 
-3. **Role-edit UI on `/users/[id]/+page.svelte`** -- a `<form method="post" action="?/setRole">` with a `<select>` populated from `ROLE_VALUES` and a "Save" button. Disabled when the chosen role equals the current role. Shows current role in the select's default value. No confirmation gate -- role change is recoverable and not destructive ([Open Question (b)](#b-confirmation-gate-on-role-change)).
+3. **Role-edit UI on `/users/[id]/+page.svelte`** -- a `<form method="post" action="?/setRole">` with a `<select>` populated from `ROLE_VALUES` and a "Save" button. Disabled when the chosen role equals the current role. Shows current role in the select's default value. No confirmation gate -- role change is recoverable and not destructive (decision (b)).
 
 4. **Ban / unban UI** -- a single button:
-   - When `data.user.banned === false`: renders "Ban user" button. Clicking opens the confirmation modal. Modal has a required `reason` textarea + optional `expiresAt` input + a typed-confirmation gate (the admin types the user's email to confirm; see [Open Question (c)](#c-confirmation-gate-style)). Submit hits `?/ban`.
+   - When `data.user.banned === false`: renders "Ban user" button. Clicking opens the confirmation modal. Modal has a required `reason` textarea + optional `expiresAt` input + a typed-confirmation gate (the admin types the user's email to confirm; decision (c)). Submit hits `?/ban`.
    - When `data.user.banned === true`: renders "Unban user" button. Clicking opens a smaller confirmation modal (no typed gate -- unban is the safe direction). Submit hits `?/unban`.
 
 5. **Session revoke UI** -- the existing sessions table gains a "Revoke" column with a button per row. Clicking opens the confirmation modal (typed-confirmation gate). Submit hits `?/revokeSession` with the session id. Above the table, a "Revoke all sessions" button (typed-confirmation gate, count in the modal copy) hits `?/revokeAllSessions`. After revoke, the page reloads the load function, sessions list shrinks accordingly.
 
-6. **Confirmation modal component** -- `libs/ui/src/components/ConfirmAction.svelte`. Snippet-based ([Open Question (d)](#d-modal-component-location-and-shape)). Props: `open`, `title`, `body` snippet, `confirmText`, `dangerLevel: 'caution' | 'danger'`, optional `typedConfirmation: { label: string; expected: string }`. Emits `cancel` / `confirm` events. Wraps a SvelteKit `<form>` so the action button is the form's submit and posts the form when the typed confirmation matches `expected`. The component lives in `libs/ui/` because the dual-gate pattern (audit + confirmation) will be reused on every future admin-write surface (sources delete, references delete, jobs cancel, future sim flag-overrides, ...).
+6. **Confirmation modal component** -- `libs/ui/src/components/ConfirmAction.svelte`. Snippet-based (decision (d)). Props: `open`, `title`, `body` snippet, `confirmText`, `dangerLevel: 'caution' | 'danger'`, optional `typedConfirmation: { label: string; expected: string }`. Emits `cancel` / `confirm` events. Wraps a SvelteKit `<form>` so the action button is the form's submit and posts the form when the typed confirmation matches `expected`. The component lives in `libs/ui/` because the dual-gate pattern (audit + confirmation) will be reused on every future admin-write surface (sources delete, references delete, jobs cancel, future sim flag-overrides, ...).
 
-7. **AUDIT_TARGETS additions** -- `HANGAR_USER` (`hangar.user`) added to `libs/constants/src/audit.ts`. The five operations all share `targetType = HANGAR_USER`; the operation kind is captured by `op` + `metadata.subKind` ([Open Question (a)](#a-audit-target-and-op-shape)).
+7. **AUDIT_TARGETS additions** -- `HANGAR_USER` (`hangar.user`) added to `libs/constants/src/audit.ts`. The five operations all share `targetType = HANGAR_USER`; the operation kind is captured by `op` + `metadata.subKind` (decision (a)).
 
 8. **Audit-emission contract for each op:**
 
@@ -92,7 +92,7 @@ Three writes; one surface. Plus the audit + confirmation contract that future ad
    `metadata` always carries `requestId`, `userAgent`, the calling admin's email (denormalized for ease of reading), and op-specific extras: revoked-session-id for the single revoke; revoked count for the bulk revoke; ban reason + expiry for the ban (also in `after`, intentional duplication for query speed).
 
 9. **Self-target guards.** Every action rejects when `targetUserId === actorId`:
-   - Self role demotion is dangerous (admin demotes themselves out of admin and locks themselves out). Hard-blocked with `fail(409, { error: 'Cannot change your own role.' })`. ([Open Question (g)](#g-self-target-guards))
+   - Self role demotion is dangerous (admin demotes themselves out of admin and locks themselves out). Hard-blocked with `fail(409, { error: 'Cannot change your own role.' })` (decision (g)).
    - Self ban is absurd. Hard-blocked.
    - Self session-revoke (single) is allowed (you may want to revoke a stale device); just revokes the targeted row. Self revoke-all is allowed but blocks the current session, which means the next request 401s -- the form action's success response includes a redirect to `/login` when the current admin's session is among the revoked.
    - Last-admin guard: a role change that would leave zero admins in the system is hard-blocked. The BC walks `countUsersByRole` (existing) before the `auth.api.setRole` call.
@@ -248,7 +248,7 @@ export interface RevokeAllUserSessionsInput {
 HANGAR_USER: 'hangar.user',
 ```
 
-Added to `AUDIT_TARGETS`. `AUDIT_TARGET_VALUES` picks it up automatically; the DB CHECK constraint regenerates from the values list (see [Open Question (h)](#h-db-check-constraint-regen)).
+Added to `AUDIT_TARGETS`. `AUDIT_TARGET_VALUES` picks it up automatically; the DB CHECK constraint regenerates from the values list (decision (h)).
 
 `libs/constants/src/routes.ts` additions: see In Scope #10.
 
@@ -305,113 +305,24 @@ The list page `/users` does not gain actions in this WP -- all editing happens o
 - **Unban while session-revoke didn't happen.** Better-auth already invalidated sessions on ban. Unban does NOT restore sessions; the user must log in again. UI copy in the unban modal says "the user must sign in again."
 - **Session id from a stale page load (the session expired between the page load and the action).** Better-auth admin plugin no-ops gracefully. Audit row still written (admin's intent is auditworthy).
 - **Cookie-cache TTL window.** A revoked session may continue to authorize requests for up to `5 * 60` seconds because of the better-auth `cookieCache.maxAge`. The audit row is written immediately; the user-facing logout may lag the cache TTL. Documented in the modal's body copy: "User will be logged out within 5 minutes."
-- **Demotion that strips ADMIN from a user mid-flow.** That user's existing sessions remain valid (sessions don't carry role; role is read from `bauth_user` on each `getSession`). Their next request 403s on the per-page `requireRole(ADMIN)` gate. UI offers "demote + revoke-all sessions" as a follow-on micro-flow ([Open Question (i)](#i-demote-plus-revoke-shortcut)).
+- **Demotion that strips ADMIN from a user mid-flow.** That user's existing sessions remain valid (sessions don't carry role; role is read from `bauth_user` on each `getSession`). Their next request 403s on the per-page `requireRole(ADMIN)` gate. The demote + revoke-all-sessions combo is intentionally not a single action (decision (i)); the admin performs them as two separate clicks if both are needed.
 - **Better-auth admin plugin throws because the calling user lost ADMIN between layout-load and form-action POST.** `requireRole(event, ROLES.ADMIN)` catches it first (per-page gate). Form action 403s before the BC is touched.
 - **Race: two admins set role on the same user simultaneously.** Better-auth's adapter is last-write-wins on the `role` column. Both audit rows are written; the timestamp ordering tells the story. No optimistic lock here -- this isn't `hangar_source` with rev numbers.
 
-## Open Questions
+## Decisions (ratified 2026-04-30)
 
-The user resolves each before tasks.md finalizes.
+All ten drafting-phase questions resolved in favour of the recommended options. No scope changes; the spec body above is the contract for the build phase. The original tradeoff tables for each decision are preserved in git history at the spec-authoring commit.
 
-### (a) Audit target and op shape
-
-**Recommended:** single `AUDIT_TARGETS.HANGAR_USER` target type, existing `AUDIT_OPS.UPDATE` / `AUDIT_OPS.ACTION` op, op-distinguishing kind in `metadata.subKind` from a closed `HANGAR_USER_OP_SUBKINDS` set. Keeps the audit op enum tight (per the comment in `libs/audit/src/schema.ts`) while making the per-op queries trivial via `metadata->>'subKind'`.
-
-| Option                                                          | For                                                                  | Against                                                                                                       |
-| --------------------------------------------------------------- | -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| Single target + subKind metadata (recommended)                  | Tight enum. Existing pattern (audit-ping uses subKind).              | Per-op queries go through JSONB.                                                                              |
-| Separate target per op (`hangar.user.role`, `hangar.user.ban`)  | Per-op queries are pure column scans.                                | Target enum bloat (5 new values for one feature). Sets bad precedent for every future admin-write WP.         |
-| Add new op kinds (`role-assign`, `ban`, `unban`)                | Each op classified at the column.                                    | Op enum was deliberately kept to 4 (per the schema comment). Adding 5 more for one feature is the wrong move. |
-
-### (b) Confirmation gate on role change
-
-**Recommended:** no confirmation gate on role change. Role change is recoverable (set it back) and not destructive. The picker requires an explicit Save click; that's enough.
-
-| Option                                            | For                                                                 | Against                                                              |
-| ------------------------------------------------- | ------------------------------------------------------------------- | -------------------------------------------------------------------- |
-| No gate (recommended)                             | Recoverable. Frequent op for content authors.                       | A misclick promotes a learner to admin.                              |
-| Simple modal ("Change role from X to Y? Yes/No.") | Catches misclicks.                                                  | One more click for every role change.                                |
-| Typed-confirmation gate                           | Maximally safe.                                                     | Overkill for a recoverable change.                                   |
-
-If misclicks become a real issue we add the simple modal in a follow-on.
-
-### (c) Confirmation gate style
-
-**Recommended:** typed-confirmation (admin types the target user's email) for ban + revoke + revoke-all. Simple modal (no typed gate) for unban.
-
-| Option                                                                          | For                                                                                              | Against                                                                                |
-| ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------- |
-| Typed-confirmation on ban/revoke/revoke-all + simple on unban (recommended)     | Reads the user identity into the admin's brain before the action. Used by GitHub for repo delete. | Two-stage flow.                                                                        |
-| Simple modal on everything                                                      | One pattern.                                                                                     | Easy to misclick "revoke all sessions." Admin doesn't have to look at the target user. |
-| Type a verb (`ban`, `revoke`)                                                   | Pattern from Stripe.                                                                             | Doesn't bind the action to the target. Admin could type `ban` while looking at user A and submit on user B. |
-
-### (d) Modal component location and shape
-
-**Recommended:** `libs/ui/src/components/ConfirmAction.svelte`. Snippet-based body (Svelte 5; no `<slot>`). Wraps a SvelteKit `<form>` so the modal IS the form. Reused on every later admin-write surface.
-
-| Option                                                          | For                                                            | Against                                                                          |
-| --------------------------------------------------------------- | -------------------------------------------------------------- | -------------------------------------------------------------------------------- |
-| `libs/ui/components/ConfirmAction.svelte` (recommended)         | Reusable across every admin-write surface in every app.        | Adds a component to `@ab/ui` -- minor surface growth, well-scoped.               |
-| `apps/hangar/src/lib/components/ConfirmAction.svelte`           | Local to hangar; ships only if hangar uses it.                 | Next admin-write WP duplicates it. Convergent finding waiting to happen.         |
-| Inline modal in `+page.svelte`                                  | No new component.                                              | Three modal flavours inline; copy-paste drift across the four actions in this WP. |
-
-### (e) BC write module location
-
-**Recommended:** new file `libs/bc/hangar/src/user-writes.ts`. Sibling to `users.ts` (read-only). Symmetric with the `source-form.ts` / `registry.ts` split (forms vs registry).
-
-| Option                                              | For                                                          | Against                                                                                                       |
-| --------------------------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------- |
-| New `user-writes.ts` (recommended)                  | Read/write split is clear. `users.ts` stays read-only.       | One more file in `libs/bc/hangar/src/`.                                                                       |
-| Extend `users.ts`                                   | Single module for "user stuff."                              | Mixes read and write. Read-only callers pulled into a module that imports `auth.api`.                         |
-| Extend `registry.ts`                                | Already has the `auditWrite` pattern.                        | `registry.ts` is for hangar's own tables (sources, references). User table is owned by better-auth.           |
-
-### (f) Ban duration -- permanent or time-bounded?
-
-**Recommended:** ban duration optional; UI offers a date picker for `expiresAt`. Default = permanent (no expiry). If the user enters an expiry, we pass it through to better-auth's `banExpires`. Better-auth handles auto-unban at expiry on the next sign-in attempt (its admin plugin checks `banExpires` against current time).
-
-| Option                                                  | For                                                                  | Against                                                                                          |
-| ------------------------------------------------------- | -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
-| Optional expiry; default permanent (recommended)        | Matches better-auth's column shape directly. Flexible.               | Admin has to remember to clear the field for permanent bans.                                     |
-| Always permanent                                        | Simplest UI.                                                         | Loses the "cool-off" use case (ban for 7 days).                                                  |
-| Always time-bounded with hard-coded options (1d/7d/30d) | Forces admin to pick a duration -- explicit.                         | Doesn't match better-auth's flexible expiry. Hard to do "ban indefinitely until further notice." |
-
-### (g) Self-target guards
-
-**Recommended:** hard-block self role-change and self-ban; allow self session-revoke (single + bulk).
-
-| Option                                                       | For                                                                                                                                                           | Against                                                                                |
-| ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| Block self role + ban; allow self revoke (recommended)       | Self-demote-out-of-admin is an irreversible foot-gun for a single-admin platform. Self-revoke is useful (kill stale device).                                  | Two admins on a team eventually lift the role-change block; this WP doesn't have that. |
-| Block all self-targeting                                     | Maximally safe.                                                                                                                                               | Loses self-revoke utility.                                                             |
-| Allow everything                                             | Trust the admin.                                                                                                                                              | Single-admin lockout is one click away.                                                |
-
-### (h) DB CHECK constraint regen
-
-The `audit.audit_log.target_type` column has a CHECK that lists the allowed values. `AUDIT_TARGET_VALUES` is the source. Adding `HANGAR_USER` to `AUDIT_TARGETS` widens the value list. The migration that updates the CHECK ships with this WP.
-
-**Recommended:** Drizzle migration drops + recreates the CHECK with the new value list. Single-statement migration. No data migration -- existing audit rows have target_type values already in the new list.
-
-| Option                                                              | For                                                  | Against                                                                                                                |
-| ------------------------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| Drop + recreate CHECK in migration (recommended)                    | Keeps DB CHECK aligned with `AUDIT_TARGET_VALUES`.    | Migration touches a constraint every time a new audit target lands.                                                    |
-| Remove the CHECK constraint entirely                                | No more migrations on the constraint.                | Loses DB-level guarantee that `target_type` is always a known value. Drift between code and rows becomes possible.    |
-| Convert `target_type` to a Postgres enum                            | Type safety.                                         | Postgres enum migrations are painful. Better-auth's pattern in this codebase already uses CHECK; consistency wins.    |
-
-### (i) Demote + revoke shortcut
-
-**Recommended:** ship the two operations separately in this WP. A "demote and revoke all sessions" combo button is a nice-to-have but adds a second form action, second audit row, and orchestration logic. Punt to a follow-on if the friction shows up.
-
-| Option                                                  | For                                                                | Against                                                                                                  |
-| ------------------------------------------------------- | ------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------- |
-| Separate ops (recommended)                              | Each op is auditable. UI keeps modeling clean.                     | Admin must perform two actions for the security-critical case ("demote AND kick out their sessions").   |
-| Combo "demote + revoke" action                          | Single click for the security case.                                | Two audit rows or one composite row -- ambiguity. Reverts get messy.                                    |
-| Auto-revoke on demote                                   | Admin doesn't have to remember.                                    | Not all demotions are security events. A learner self-promoted to author by mistake doesn't need revoke. |
-
-### (j) Revoke-all when target has many sessions
-
-**Recommended:** revoke-all is fire-and-forget on the better-auth side. We don't fetch the count first; we let the admin plugin do its thing and read the resulting count from its return value. `metadata.revokedCount` carries it.
-
-If this becomes a perf concern (a target user with hundreds of sessions), we add a hard cap or a confirmation step that surfaces the count. Defer.
+- **(a) Audit target + op shape:** single `AUDIT_TARGETS.HANGAR_USER` target, existing `AUDIT_OPS.UPDATE` / `AUDIT_OPS.ACTION`, op-distinguishing kind in `metadata.subKind` from a closed `HANGAR_USER_OP_SUBKINDS` set. Keeps the audit op enum tight (matches the audit-ping precedent and the schema comment in `libs/audit/src/schema.ts`).
+- **(b) Confirmation gate on role change:** none. Role change is recoverable, picker requires explicit Save. Trigger to revisit: misclicks become a real issue -> add a simple modal.
+- **(c) Confirmation gate style:** typed-confirmation (admin types target user email) for ban / revoke / revoke-all; simple modal (no typed gate) on unban. Binds the action to the target.
+- **(d) Modal component location:** `libs/ui/src/components/ConfirmAction.svelte` from day one. Snippet-based body, wraps the SvelteKit `<form>`. Every future admin-write surface reuses it.
+- **(e) BC write module location:** new file `libs/bc/hangar/src/user-writes.ts` (sibling to `users.ts`). Read/write split clean; `users.ts` stays read-only.
+- **(f) Ban duration:** optional expiry; default permanent (no expiry). UI offers a date picker for `expiresAt`. Pass-through to better-auth's `banExpires`; better-auth handles auto-unban at expiry on the next sign-in attempt.
+- **(g) Self-target guards:** hard-block self role-change and self-ban; allow self session-revoke (single + bulk). Self-demote-out-of-admin is an irreversible foot-gun on a single-admin platform; self-revoke is useful (kill stale device).
+- **(h) DB CHECK constraint regen:** Drizzle migration drops + recreates the CHECK with the new value list. Single-statement migration; no data migration. Keeps DB CHECK aligned with `AUDIT_TARGET_VALUES`.
+- **(i) Demote + revoke shortcut:** ship the two operations separately. No combo button. Trigger to revisit: friction shows up in actual incident response.
+- **(j) Revoke-all when target has many sessions:** fire-and-forget. Read `revokedCount` from better-auth's return value into `metadata.revokedCount`. Trigger to revisit: a target user with hundreds of sessions ever materialises.
 
 ## References
 

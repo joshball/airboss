@@ -94,6 +94,16 @@ Boundary discussion -- including the design tradeoff between "panel only" vs "pa
 - `apps/sim/src/lib/cockpit/CockpitPanel.svelte`, `apps/sim/src/lib/instruments/`, and `apps/sim/src/lib/panels/AnnunciatorStrip.svelte` no longer exist (`apps/sim/src/lib/panels/` keeps the surround panels listed under "Non-goals").
 - `libs/activities/src/cockpit-panel/CockpitPanel.svelte` imports its dependencies via relative intra-lib paths (e.g. `./instruments/Asi.svelte`, `./AnnunciatorStrip.svelte`); no `$lib/*` imports leak into the lib.
 
+## Decisions (ratified 2026-04-30)
+
+The drafting agent flagged five judgement calls. All resolved in favour of the spec as written; no changes to scope.
+
+1. **Promote `ControlInput.svelte` in this WP?** -> **Separate WP.** Different axis (input host vs visual render), separate boundary questions (`control-handler.ts`, `control-ramp.ts`, `tape-store.ts`). Logged as future work below. Keeps this WP mechanical.
+2. **Move `_dev/instruments` gallery into the lib?** -> **Stays in `apps/sim/`.** It's a *consumer* of the lib (a dev gallery), not part of the lib. Imports rewired per spec. Moving dev tooling into a lib confuses the lib's purpose.
+3. **Folder name `cockpit-panel/` vs `cockpit/` vs other?** -> **`cockpit-panel/`.** `cockpit/` would conflict with `apps/sim/src/lib/cockpit/` which still hosts `ControlInput.svelte`. Unambiguous. Already in spec.
+4. **Restructure for hypothetical avionics or instructor-station consumers (flatter layout)?** -> **Ship cut B as designed.** Instruments remain individually importable at `@ab/activities/cockpit-panel/Asi.svelte`. Don't design for unknown future consumers.
+5. **Add `panel-tick.svelte.ts` easing layer (mirror PFD) in this WP?** -> **Defer.** Adding easing is a behaviour change, not an extraction. This WP is scoped zero-behaviour-change. Easing gets its own WP if a consumer asks for it.
+
 ## Future work (logged here, not done in this WP)
 
 - **`ControlInput.svelte` promotion.** Same shape as this WP: pure-prop input host, three current sim consumers, future avionics / instructor / replay-theatre pages will want it. Trigger: when an off-sim surface needs keyboard input bound to FDM-style `inputs`. Destination: `libs/activities/src/cockpit-controls/` (separate package dir to keep the visual panel and the input host independently importable).
