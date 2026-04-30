@@ -1,15 +1,15 @@
 {
-  "run_id": "20260430-0105",
-  "generated_at_utc": "2026-04-30T01:05:56Z",
+  "run_id": "20260430-1349",
+  "generated_at_utc": "2026-04-30T13:49:42Z",
   "document_slug": "phak",
   "edition": "FAA-H-8083-25C",
-  "repo_sha": "acc11d8f8fd90e6f2898dce6ddeb6e9e6cda36c5",
+  "repo_sha": "471e4da3145a45a8cc8ca9a67cb1669d808c1d4d",
   "source_pdf_sha256": "247929cace0ab56b376e683eba540cc4c8f39f199ab35414e8b604e24f395cb7",
   "templates": {
-    "parameters_md_sha256": "98382dc434abff47c11794e2c662fd918d1076c2941918fcc9626bd44ace0ca0",
-    "section_tree_md_sha256": "e33a1cf32fbd77f6176701c3bdf0fa7e7f7d7f47a66bd9882c7c8d5ef13c06ab",
+    "parameters_md_sha256": "dbc9ce5a5da82828629df64d61404bbd7675ba84dae0d3fee28a124138298088",
+    "section_tree_md_sha256": "d8f6232a32cbe277cb295063e38727cdc586c9dec8be8915f4e519107d13d263",
     "orchestrator_md_sha256": "21b7e9afaf62f136b6df84e71d4c61a8e94d3b2d3494d9fcced9c86291732d2f",
-    "chapter_md_sha256": "5f228948ada23f12c2985c9ab0f0337a8b5464fce980058f59184605f40e107a",
+    "chapter_md_sha256": "7057819c8f45abecbd961ac9571deb92cfa828f120020eee9748b043417fcf6f",
     "run_readme_md_sha256": "a1d2f860ef2cff522af1856ec463d5222582b1f54bcb53bd513deb495ffce68d"
   },
   "config": {
@@ -29,7 +29,7 @@
       "output_path": "handbooks/phak/FAA-H-8083-25C/01/_llm_section_tree.json",
       "model_self_report_path": "handbooks/phak/FAA-H-8083-25C/01/_model_self_report.txt",
       "prompt_path": "tools/handbook-ingest/prompts-out/phak/FAA-H-8083-25C/out/01-introduction-to-flying.md",
-      "prompt_sha256": "8ac46157711d7bb00955e8bdae25ea8971356308164b12f5c3f8767e50e89e8e"
+      "prompt_sha256": "f01a7eb120b341a9a140f6a470a83cf411e50aa7ccbb537e64f9df56b691126e"
     },
     {
       "ordinal": 2,
@@ -42,7 +42,7 @@
       "output_path": "handbooks/phak/FAA-H-8083-25C/02/_llm_section_tree.json",
       "model_self_report_path": "handbooks/phak/FAA-H-8083-25C/02/_model_self_report.txt",
       "prompt_path": "tools/handbook-ingest/prompts-out/phak/FAA-H-8083-25C/out/02-aeronautical-decision-making.md",
-      "prompt_sha256": "cdd10d9e56569e45d99fbb2399a55b91c1290fcb579e1a3d152e46ea34b35177"
+      "prompt_sha256": "92c1686e0130cd201c963a94fb2ec77dc388742d0118a03d60c46009fea224c7"
     },
     {
       "ordinal": 3,
@@ -55,7 +55,7 @@
       "output_path": "handbooks/phak/FAA-H-8083-25C/03/_llm_section_tree.json",
       "model_self_report_path": "handbooks/phak/FAA-H-8083-25C/03/_model_self_report.txt",
       "prompt_path": "tools/handbook-ingest/prompts-out/phak/FAA-H-8083-25C/out/03-aircraft-construction.md",
-      "prompt_sha256": "d1a768d25195e5cf572a04103c6e921f034ce1436eb2f7907dd1cb93643b36da"
+      "prompt_sha256": "fad3e46a937a46c7f176fe181422cf5683809aae77f763c4508cfcbcf7a17634"
     },
     {
       "ordinal": 4,
@@ -68,7 +68,7 @@
       "output_path": "handbooks/phak/FAA-H-8083-25C/04/_llm_section_tree.json",
       "model_self_report_path": "handbooks/phak/FAA-H-8083-25C/04/_model_self_report.txt",
       "prompt_path": "tools/handbook-ingest/prompts-out/phak/FAA-H-8083-25C/out/04-principles-of-flight.md",
-      "prompt_sha256": "097da101d30fba8701a2777d9d7142a29ed3273c50599bf14902ffbb26ac94cc"
+      "prompt_sha256": "28de68fbf540a99b31d90e6a27fa127f20629d24a797f78b16ac22fcc58218f3"
     },
     {
       "ordinal": 5,
@@ -81,7 +81,7 @@
       "output_path": "handbooks/phak/FAA-H-8083-25C/05/_llm_section_tree.json",
       "model_self_report_path": "handbooks/phak/FAA-H-8083-25C/05/_model_self_report.txt",
       "prompt_path": "tools/handbook-ingest/prompts-out/phak/FAA-H-8083-25C/out/05-aerodynamics-of-flight.md",
-      "prompt_sha256": "a131c2ceec381ab73b31821ef6a5676cf1c7e6cbd4233e3e4fd2f25259e2e33d"
+      "prompt_sha256": "66341bd2b70c8bbecd05f4f653efb95af7e0e2dcd22d87733082067d0b7696ed"
     },
     {
       "ordinal": 6,
@@ -94,7 +94,7 @@
       "output_path": "handbooks/phak/FAA-H-8083-25C/06/_llm_section_tree.json",
       "model_self_report_path": "handbooks/phak/FAA-H-8083-25C/06/_model_self_report.txt",
       "prompt_path": "tools/handbook-ingest/prompts-out/phak/FAA-H-8083-25C/out/06-flight-controls.md",
-      "prompt_sha256": "5044fce4d4b26bc8a546e48dd2cc21eea84543a9d497ea0fe247ff70ba679887"
+      "prompt_sha256": "b0bf33f8c7be69d37eed75f2dba7e3860cb422420504d0e7ce79228b44a77fdd"
     },
     {
       "ordinal": 7,
@@ -107,7 +107,7 @@
       "output_path": "handbooks/phak/FAA-H-8083-25C/07/_llm_section_tree.json",
       "model_self_report_path": "handbooks/phak/FAA-H-8083-25C/07/_model_self_report.txt",
       "prompt_path": "tools/handbook-ingest/prompts-out/phak/FAA-H-8083-25C/out/07-aircraft-systems.md",
-      "prompt_sha256": "0c1c873455129c02f5b847c4d016c7f3340614ce3f7483cca6f15204e89907b2"
+      "prompt_sha256": "0df747227e16211cf83d09ca1d2c33c95a93f6bc5935c63a062e9e15d88afed4"
     },
     {
       "ordinal": 8,
@@ -120,7 +120,7 @@
       "output_path": "handbooks/phak/FAA-H-8083-25C/08/_llm_section_tree.json",
       "model_self_report_path": "handbooks/phak/FAA-H-8083-25C/08/_model_self_report.txt",
       "prompt_path": "tools/handbook-ingest/prompts-out/phak/FAA-H-8083-25C/out/08-flight-instruments.md",
-      "prompt_sha256": "dc50e51117b84a164cfa575bffced4fbd3e7978c3c711d43bdc40aa6748bcc6d"
+      "prompt_sha256": "0b461df75d7ca5a77556b4010ae35e477f9a1c58e85dbb8c6706cf59d535d29a"
     },
     {
       "ordinal": 9,
@@ -133,7 +133,7 @@
       "output_path": "handbooks/phak/FAA-H-8083-25C/09/_llm_section_tree.json",
       "model_self_report_path": "handbooks/phak/FAA-H-8083-25C/09/_model_self_report.txt",
       "prompt_path": "tools/handbook-ingest/prompts-out/phak/FAA-H-8083-25C/out/09-flight-manuals-and-other-documents.md",
-      "prompt_sha256": "ef58265c5bb1279675bb546828da01a0f586aab4528c509cc3eb00687acc092a"
+      "prompt_sha256": "5dfa0a89593fc909cccd49d29f32e025648df10540d590afd8cb191fcb8e0551"
     },
     {
       "ordinal": 10,
@@ -146,7 +146,7 @@
       "output_path": "handbooks/phak/FAA-H-8083-25C/10/_llm_section_tree.json",
       "model_self_report_path": "handbooks/phak/FAA-H-8083-25C/10/_model_self_report.txt",
       "prompt_path": "tools/handbook-ingest/prompts-out/phak/FAA-H-8083-25C/out/10-weight-and-balance.md",
-      "prompt_sha256": "dc08b997a30c3e55b2f46c0beb2f83a40033cfeb1c364a1a76c873bfe68d8852"
+      "prompt_sha256": "00099da1a867a34d7329af8ea9dea1f10cb03e1229d95f294408aa0c0b84f1b7"
     },
     {
       "ordinal": 11,
@@ -159,7 +159,7 @@
       "output_path": "handbooks/phak/FAA-H-8083-25C/11/_llm_section_tree.json",
       "model_self_report_path": "handbooks/phak/FAA-H-8083-25C/11/_model_self_report.txt",
       "prompt_path": "tools/handbook-ingest/prompts-out/phak/FAA-H-8083-25C/out/11-aircraft-performance.md",
-      "prompt_sha256": "47a86dd3fcf231a16d880d68cf870de3a48154b8a10fcf6da0acf000ffdf1315"
+      "prompt_sha256": "e175df267b2b508136b476e038e355c3f64ba02c7bc7e96cb5cbc7c7881b7796"
     },
     {
       "ordinal": 12,
@@ -172,7 +172,7 @@
       "output_path": "handbooks/phak/FAA-H-8083-25C/12/_llm_section_tree.json",
       "model_self_report_path": "handbooks/phak/FAA-H-8083-25C/12/_model_self_report.txt",
       "prompt_path": "tools/handbook-ingest/prompts-out/phak/FAA-H-8083-25C/out/12-weather-theory.md",
-      "prompt_sha256": "dac3ab8c6cb5eac8e653ce2444c3438c1048f90a170eea4239fc98b82f3a5f9b"
+      "prompt_sha256": "91ee71d1801c8bfd86a2bb5926c9f82099b6dd2c1765ea6f9d4c7a5ab399aadb"
     },
     {
       "ordinal": 13,
@@ -185,7 +185,7 @@
       "output_path": "handbooks/phak/FAA-H-8083-25C/13/_llm_section_tree.json",
       "model_self_report_path": "handbooks/phak/FAA-H-8083-25C/13/_model_self_report.txt",
       "prompt_path": "tools/handbook-ingest/prompts-out/phak/FAA-H-8083-25C/out/13-aviation-weather-services.md",
-      "prompt_sha256": "1bc6d24787164aea02f1802ac98a3de71ec5072d32a149dfbcd99d7ac5ce1f8e"
+      "prompt_sha256": "caf57e2bd7783eab9863878e8045975a68c3f176123ecd604f79f13ccb2bc56e"
     },
     {
       "ordinal": 14,
@@ -198,7 +198,7 @@
       "output_path": "handbooks/phak/FAA-H-8083-25C/14/_llm_section_tree.json",
       "model_self_report_path": "handbooks/phak/FAA-H-8083-25C/14/_model_self_report.txt",
       "prompt_path": "tools/handbook-ingest/prompts-out/phak/FAA-H-8083-25C/out/14-airport-operations.md",
-      "prompt_sha256": "a1e3037fd76829a45df3fbf64e3265698d3dc81156c6a96b8e7e81506eef034c"
+      "prompt_sha256": "1f60f2e20f6f700c9e1d96019047a7e7faf022d44dcd2c6481dc397b50c8adc7"
     },
     {
       "ordinal": 15,
@@ -211,7 +211,7 @@
       "output_path": "handbooks/phak/FAA-H-8083-25C/15/_llm_section_tree.json",
       "model_self_report_path": "handbooks/phak/FAA-H-8083-25C/15/_model_self_report.txt",
       "prompt_path": "tools/handbook-ingest/prompts-out/phak/FAA-H-8083-25C/out/15-airspace.md",
-      "prompt_sha256": "57642d6fb6ee280a9447413fc1e74712550fe2664bd804f6b6cffccce726b9bd"
+      "prompt_sha256": "090893ca978ad51d1a86f8df96f9275bf8e5bee249bc166895c8a236d15626dd"
     },
     {
       "ordinal": 16,
@@ -224,7 +224,7 @@
       "output_path": "handbooks/phak/FAA-H-8083-25C/16/_llm_section_tree.json",
       "model_self_report_path": "handbooks/phak/FAA-H-8083-25C/16/_model_self_report.txt",
       "prompt_path": "tools/handbook-ingest/prompts-out/phak/FAA-H-8083-25C/out/16-navigation.md",
-      "prompt_sha256": "76f1e83c63ac5c7db32fc66517202e63fc8b2acf8b9205b8476cc183d10e61f5"
+      "prompt_sha256": "6d1727b6b0b8ee5a824b09ffa331ce59f42c199feb34c78dd58c9b5fe1f1a0da"
     },
     {
       "ordinal": 17,
@@ -237,7 +237,7 @@
       "output_path": "handbooks/phak/FAA-H-8083-25C/17/_llm_section_tree.json",
       "model_self_report_path": "handbooks/phak/FAA-H-8083-25C/17/_model_self_report.txt",
       "prompt_path": "tools/handbook-ingest/prompts-out/phak/FAA-H-8083-25C/out/17-aeromedical-factors.md",
-      "prompt_sha256": "3098a091ee8f45668c8eb818df097e0d62448db653dabe44e7f5c9b6d055a627"
+      "prompt_sha256": "8c2f25a68c26c6a23942d9f3bffb42a42a1070dda9344d0fc41ebb545ce96516"
     }
   ]
 }
