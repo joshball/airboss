@@ -97,6 +97,28 @@ For browse pages, the "make current state visible" pattern: when filters are app
 
 ---
 
+## 7. Three-Stage Skill Ladder (Decode → Understand → Triage)
+
+**Source:** Design session 2026-04-30. Originated in the weather/NOTAMs course shaping but applies to every dense, encoded format a pilot must read under pressure (METAR/TAF, NOTAMs, PIREPs, AIRMET/SIGMET, charts, ATIS, clearance shorthand, and beyond).
+
+Mastery of any encoded operational format is three stages, not one. Conflating them is why most aviation training stalls at "memorized the codes, still freezes during a real briefing."
+
+- **Stage 1: Decode.** What does this field mean? Reps until each code/symbol is automatic. The atomic unit. METAR `BKN015` = broken at 1500 ft AGL, no thinking required.
+- **Stage 2: Understand.** What is this whole item telling me about the world? The composition. A METAR isn't its fields; it's a snapshot of an airfield. Reading "the snapshot" is a separate skill from naming the fields.
+- **Stage 3: Triage.** Given N items, which matter? In what order? Make the call, fast. The professional skill. Pilots who fail real flights rarely fail at decode -- they fail at "47 NOTAMs, 12 METARs, 4 SIGMETs, what do I act on?"
+
+**Mastery gates progression.** A learner only graduates to Stage 3 drills using codes/items they have already mastered at Stages 1 and 2. The triage drill engine reads from learner mastery state and assembles packs *only* from items the learner can decode. This connects directly to [ADR 011](../decisions/011-knowledge-graph-learning-system/decision.md) -- triage is a knowledge-graph synthesis activity, not a separate system.
+
+**Concrete mechanics:**
+
+- Self-assessment after each rep: "Did you decode it? Did you understand it? Did you struggle?"
+- Translate-on-demand with a time penalty: in triage drills, clicking "what does this mean" is allowed but costs ~15s. Makes speed pressure real without being punitive.
+- Triage scenarios authored *from the learner's mastered subset*, never from the full universe.
+
+**How to apply:** When designing a feature that involves reading any encoded operational text, ask which stage it serves. Don't bundle stages into one drill. Don't gate Stage 3 by anything other than mastery of the underlying Stage 1+2 atoms. Don't punish the learner for using translate -- make it cost time, not points.
+
+---
+
 ## Adding New Principles
 
 Principles are promoted from [IDEAS.md](IDEAS.md) when they've proven their value -- either through implementation experience or through repeated use in design decisions. A principle should be:
