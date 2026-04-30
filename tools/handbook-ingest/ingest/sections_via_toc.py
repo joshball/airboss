@@ -567,3 +567,32 @@ def _heading_matches(toc_title: str, body_runs: list[str], threshold: float) -> 
 def _hex_to_int(hex_str: str) -> int:
     s = hex_str.lstrip("#")
     return int(s, 16)
+
+
+def to_checklist_for_chapter(
+    nodes: list[SectionTreeNode],
+    chapter_ordinal: int,
+) -> str:
+    """Format the TOC parser's per-chapter section list as a markdown checklist.
+
+    Used by the prompt-emit flow (Phase 3 of section-extraction-contract-v2):
+    the deterministic TOC parser's view of chapter <N> is passed to the LLM
+    as a CHECKLIST -- not as truth. The LLM verifies each entry against body
+    text, finds entries the TOC missed, and emits disagreements where it
+    disagrees with the TOC parse.
+
+    Output is a static markdown bullet list, one line per entry, indented by
+    `level - 1` (so L1 is unindented, L2 indents 2 spaces, L3 indents 4).
+    Page anchor follows in parentheses when present. Empty string when the
+    chapter has no entries (the prompt template should treat empty as
+    "no checklist available; rely on body text alone").
+    """
+    chapter_nodes = [n for n in nodes if n.chapter_ordinal == chapter_ordinal]
+    if not chapter_nodes:
+        return ""
+    lines: list[str] = []
+    for node in chapter_nodes:
+        indent = "  " * max(0, node.level - 1)
+        anchor = f" ({node.page_anchor})" if node.page_anchor else ""
+        lines.append(f"{indent}- L{node.level} {node.title}{anchor}")
+    return "\n".join(lines) + "\n"

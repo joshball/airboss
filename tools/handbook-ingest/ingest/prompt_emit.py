@@ -39,6 +39,7 @@ from .config_loader import HandbookConfig, resolve_config_path
 from .outline import OutlineNode
 from .paths import edition_root, ensure_dir, relative_to_repo, repo_root
 from .sections import SectionBody
+from .sections_via_toc import extract_via_toc, to_checklist_for_chapter
 
 # Filenames written into out/ and archive/<run-id>/. Module-level so the
 # tests + cli + readme stay in sync.
@@ -95,6 +96,7 @@ def emit_prompts(
     chapter_bodies: list[SectionBody],
     sidecars: list[ChapterPlaintextSidecar],
     *,
+    pdf_path: Path,
     source_pdf_sha256: str,
     archive: bool = True,
     now: datetime | None = None,
@@ -141,6 +143,20 @@ def emit_prompts(
     sidecar_by_ordinal = {s.chapter_ordinal: s for s in sidecars}
     bodies_by_ordinal = {b.node.ordinal: b for b in chapter_bodies if b.node.level == "chapter"}
 
+    # Run the deterministic TOC parser once at emit time so each per-chapter
+    # prompt can include the parser's view of THAT chapter as a checklist
+    # for the LLM to verify and disagree with (Phase 3 of the contract WP).
+    # Failures here are tolerated: TOC parser warnings on a half-onboarded
+    # handbook should not block prompt emission. An empty checklist tells
+    # the LLM there's nothing to cross-reference; that's acceptable.
+    try:
+        toc_result = extract_via_toc(pdf_path, config, chapter_only_sorted, raw_yaml=config.raw_yaml)
+        toc_nodes = toc_result.nodes
+    except Exception:  # noqa: BLE001 -- TOC parser failures shouldn't block emit
+        toc_nodes = []
+
+    handbook_hints_text = _format_handbook_hints(config.extraction_hints)
+
     chapter_prompt_paths: list[Path] = []
     chapter_meta: list[dict[str, object]] = []
     contract_relative_for_prompt = relative_to_repo(out_dir / CONTRACT_FILENAME)
@@ -160,6 +176,7 @@ def emit_prompts(
             / LLM_SECTION_TREE_FILENAME
         )
         sidecar_path_rel = relative_to_repo(sidecar.path)
+        toc_checklist = to_checklist_for_chapter(toc_nodes, chap.ordinal) or "(no TOC parser entries for this chapter)"
         rendered = chapter_template.format(
             document_slug=config.document_slug,
             edition=config.edition,
@@ -171,6 +188,8 @@ def emit_prompts(
             sidecar_sha256=sidecar.sha256,
             output_path=output_path_rel,
             contract_path=contract_relative_for_prompt,
+            toc_checklist=toc_checklist,
+            handbook_hints=handbook_hints_text,
         )
         prompt_path.write_text(rendered, encoding="utf-8")
         chapter_prompt_paths.append(prompt_path)
@@ -334,6 +353,21 @@ def _format_page_range(body: SectionBody) -> str:
     if start == end:
         return start
     return f"{start}..{end}"
+
+
+def _format_handbook_hints(hints: list[str]) -> str:
+    """Render the handbook's `extraction_hints` block as a markdown bullet list.
+
+    Empty list returns a single line stating no hints exist; the prompt
+    still has a discoverable section (the LLM doesn't see a stray empty
+    placeholder). Each hint becomes one bullet. Hints are inserted into
+    the chapter template as a `.format(handbook_hints=...)` value, so the
+    string passes through as-is -- no escaping needed (`{` in a hint
+    value is not a placeholder; only `{...}` in the template itself is).
+    """
+    if not hints:
+        return "(no handbook-specific hints for this run)"
+    return "\n".join(f"- {h}" for h in hints)
 
 
 _SLUG_RE = re.compile(r"[^a-z0-9]+")

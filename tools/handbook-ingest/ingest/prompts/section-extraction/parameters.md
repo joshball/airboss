@@ -50,14 +50,20 @@ is wanted.
 
 ## Sub-agent file-write rules
 
-Each sub-agent writes exactly TWO files inside its chapter's directory:
+Each sub-agent writes up to THREE files inside its chapter's directory:
 
-1. `handbooks/<doc>/<edition>/<NN>/_llm_section_tree.json`
+1. `handbooks/<doc>/<edition>/<NN>/_llm_section_tree.json` -- REQUIRED.
    The strict-JSON section tree (per the contract in
    `_section_tree_contract.md`). One trailing newline.
-2. `handbooks/<doc>/<edition>/<NN>/_model_self_report.txt`
+2. `handbooks/<doc>/<edition>/<NN>/_model_self_report.txt` -- REQUIRED.
    A one-line file containing the model the sub-agent self-reports running
    on (e.g. `claude-opus-4-7`). One trailing newline.
+3. `handbooks/<doc>/<edition>/<NN>/_llm_disagreements.json` -- OPTIONAL.
+   A JSON array per the contract's DISAGREEMENTS schema. Written only
+   when the per-chapter prompt's TOC checklist is non-empty AND the
+   sub-agent disagrees with the parser on at least one entry (level,
+   parent, anchor, missing in body, or extra in TOC). Skipped entirely
+   when the checklist is empty or when the sub-agent fully agrees.
 
 The sub-agent MUST NOT modify any other file:
 

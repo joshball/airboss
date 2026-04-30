@@ -8,7 +8,7 @@ Covers per-design.md test plan:
 - Re-running overwrites `out/` and produces a fresh archive snapshot.
 - `archive=False` skips the snapshot.
 - Two runs in the same minute produce `archive/<run-id>/` and `archive/<run-id>-2/`.
-- Per-chapter prompt has all nine placeholders substituted.
+- Per-chapter prompt has all eleven placeholders substituted (incl. Phase 3's `toc_checklist` and `handbook_hints`).
 - `_run.md` lists chapter prompt paths and references `_parameters.md`
   (does not restate its rules).
 """
@@ -140,6 +140,7 @@ def test_out_dir_contains_all_expected_files(fake_repo: Path, monkeypatch) -> No
         chapter_nodes=chapters,
         chapter_bodies=bodies,
         sidecars=sidecars,
+        pdf_path=Path("/nonexistent.pdf"),
         source_pdf_sha256="deadbeef" * 8,
     )
     out = result.out_dir
@@ -167,6 +168,7 @@ def test_meta_template_sha_matches_actual_files(fake_repo: Path, monkeypatch) ->
         chapter_nodes=chapters,
         chapter_bodies=bodies,
         sidecars=sidecars,
+        pdf_path=Path("/nonexistent.pdf"),
         source_pdf_sha256="cafe" * 16,
     )
     meta = json.loads(result.meta_path.read_text(encoding="utf-8"))
@@ -185,7 +187,7 @@ def test_meta_template_sha_matches_actual_files(fake_repo: Path, monkeypatch) ->
     assert meta["source_pdf_sha256"] == "cafe" * 16
 
 
-def test_per_chapter_prompt_has_all_nine_placeholders(
+def test_per_chapter_prompt_has_all_eleven_placeholders(
     fake_repo: Path, monkeypatch
 ) -> None:
     config, chapters, bodies, sidecars = _setup_three_chapters(fake_repo, monkeypatch)
@@ -194,6 +196,7 @@ def test_per_chapter_prompt_has_all_nine_placeholders(
         chapter_nodes=chapters,
         chapter_bodies=bodies,
         sidecars=sidecars,
+        pdf_path=Path("/nonexistent.pdf"),
         source_pdf_sha256="aa" * 32,
     )
     text = result.chapter_prompt_paths[0].read_text(encoding="utf-8")
@@ -215,6 +218,11 @@ def test_per_chapter_prompt_has_all_nine_placeholders(
     assert "_llm_section_tree.json" in text
     # `contract_path`
     assert "_section_tree_contract.md" in text
+    # `toc_checklist` (synthetic config has no real PDF, so the helper returns
+    # the empty-checklist sentinel)
+    assert "(no TOC parser entries for this chapter)" in text
+    # `handbook_hints` (synthetic config has no extraction_hints)
+    assert "(no handbook-specific hints for this run)" in text
 
 
 def test_run_md_lists_all_chapter_prompts_and_references_parameters(
@@ -226,6 +234,7 @@ def test_run_md_lists_all_chapter_prompts_and_references_parameters(
         chapter_nodes=chapters,
         chapter_bodies=bodies,
         sidecars=sidecars,
+        pdf_path=Path("/nonexistent.pdf"),
         source_pdf_sha256="00" * 32,
     )
     run_text = (result.out_dir / RUN_FILENAME).read_text(encoding="utf-8")
@@ -247,6 +256,7 @@ def test_archive_skipped_when_archive_false(fake_repo: Path, monkeypatch) -> Non
         chapter_nodes=chapters,
         chapter_bodies=bodies,
         sidecars=sidecars,
+        pdf_path=Path("/nonexistent.pdf"),
         source_pdf_sha256="00" * 32,
         archive=False,
     )
@@ -263,6 +273,7 @@ def test_archive_default_creates_run_id_dir(fake_repo: Path, monkeypatch) -> Non
         chapter_nodes=chapters,
         chapter_bodies=bodies,
         sidecars=sidecars,
+        pdf_path=Path("/nonexistent.pdf"),
         source_pdf_sha256="00" * 32,
     )
     assert result.archive_dir is not None
@@ -281,6 +292,7 @@ def test_collision_suffix_for_same_minute_runs(fake_repo: Path, monkeypatch) -> 
         chapter_nodes=chapters,
         chapter_bodies=bodies,
         sidecars=sidecars,
+        pdf_path=Path("/nonexistent.pdf"),
         source_pdf_sha256="00" * 32,
         now=fixed_now,
     )
@@ -289,6 +301,7 @@ def test_collision_suffix_for_same_minute_runs(fake_repo: Path, monkeypatch) -> 
         chapter_nodes=chapters,
         chapter_bodies=bodies,
         sidecars=sidecars,
+        pdf_path=Path("/nonexistent.pdf"),
         source_pdf_sha256="00" * 32,
         now=fixed_now,
     )
@@ -299,6 +312,7 @@ def test_collision_suffix_for_same_minute_runs(fake_repo: Path, monkeypatch) -> 
         chapter_nodes=chapters,
         chapter_bodies=bodies,
         sidecars=sidecars,
+        pdf_path=Path("/nonexistent.pdf"),
         source_pdf_sha256="00" * 32,
         now=fixed_now,
     )
@@ -312,6 +326,7 @@ def test_rerun_overwrites_out_dir(fake_repo: Path, monkeypatch) -> None:
         chapter_nodes=chapters,
         chapter_bodies=bodies,
         sidecars=sidecars,
+        pdf_path=Path("/nonexistent.pdf"),
         source_pdf_sha256="00" * 32,
     )
     # Plant a stale file inside out/ that the next run should remove.
@@ -323,6 +338,7 @@ def test_rerun_overwrites_out_dir(fake_repo: Path, monkeypatch) -> None:
         chapter_nodes=chapters,
         chapter_bodies=bodies,
         sidecars=sidecars,
+        pdf_path=Path("/nonexistent.pdf"),
         source_pdf_sha256="00" * 32,
     )
     assert not stale.exists()
@@ -335,6 +351,7 @@ def test_meta_chapter_count_matches_input(fake_repo: Path, monkeypatch) -> None:
         chapter_nodes=chapters,
         chapter_bodies=bodies,
         sidecars=sidecars,
+        pdf_path=Path("/nonexistent.pdf"),
         source_pdf_sha256="00" * 32,
     )
     meta = json.loads(result.meta_path.read_text(encoding="utf-8"))

@@ -6,7 +6,8 @@ heading-fingerprint verification is covered separately with mocks.
 
 from __future__ import annotations
 
-from ingest.sections_via_toc import TocLine, _parse_toc_lines
+from ingest.section_tree import SectionTreeNode
+from ingest.sections_via_toc import TocLine, _parse_toc_lines, to_checklist_for_chapter
 
 
 def L(text: str, x: float, page: int = 11) -> TocLine:
@@ -92,3 +93,78 @@ def test_parse_toc_three_level_indent_collapses_to_two() -> None:
     # the indent stack pops back to L1 when the deeper L3 is rewritten as L2.
     assert nodes[1].parent_title == "Forces on the Aircraft"
     assert nodes[2].parent_title == "Forces on the Aircraft"
+
+
+# ---------------------------------------------------------------------------
+# to_checklist_for_chapter -- Phase 3 mutual-reviewer support
+# ---------------------------------------------------------------------------
+
+
+def _node(chap: int, level: int, title: str, anchor: str | None = None) -> SectionTreeNode:
+    return SectionTreeNode(
+        chapter_ordinal=chap,
+        level=level,
+        title=title,
+        page_anchor=anchor,
+        provenance="toc",
+    )
+
+
+def test_checklist_renders_indented_markdown_list() -> None:
+    nodes = [
+        _node(7, 1, "Powerplant", "7-1"),
+        _node(7, 2, "Reciprocating Engines", "7-2"),
+        _node(7, 2, "Propeller", "7-4"),
+        _node(7, 1, "Induction Systems", "7-7"),
+    ]
+    out = to_checklist_for_chapter(nodes, chapter_ordinal=7)
+    expected = (
+        "- L1 Powerplant (7-1)\n"
+        "  - L2 Reciprocating Engines (7-2)\n"
+        "  - L2 Propeller (7-4)\n"
+        "- L1 Induction Systems (7-7)\n"
+    )
+    assert out == expected
+
+
+def test_checklist_filters_to_chapter() -> None:
+    nodes = [
+        _node(1, 1, "Introduction", "1-1"),
+        _node(7, 1, "Powerplant", "7-1"),
+        _node(7, 2, "Reciprocating Engines", "7-2"),
+        _node(12, 1, "Atmosphere", "12-2"),
+    ]
+    out = to_checklist_for_chapter(nodes, chapter_ordinal=7)
+    assert "Powerplant" in out
+    assert "Reciprocating" in out
+    assert "Introduction" not in out
+    assert "Atmosphere" not in out
+
+
+def test_checklist_omits_empty_anchor_in_parens() -> None:
+    nodes = [
+        _node(3, 1, "Aircraft Structure", None),
+        _node(3, 2, "Fuselage", "3-3"),
+    ]
+    out = to_checklist_for_chapter(nodes, chapter_ordinal=3)
+    # No-anchor entries render without the trailing "(...)".
+    assert "- L1 Aircraft Structure\n" in out
+    assert "  - L2 Fuselage (3-3)\n" in out
+
+
+def test_checklist_returns_empty_string_when_chapter_absent() -> None:
+    nodes = [_node(1, 1, "Introduction", "1-1")]
+    out = to_checklist_for_chapter(nodes, chapter_ordinal=99)
+    assert out == ""
+
+
+def test_checklist_handles_l3_indent() -> None:
+    nodes = [
+        _node(17, 1, "Spatial Disorientation", "17-10"),
+        _node(17, 2, "Vestibular Illusions", "17-11"),
+        _node(17, 3, "The Leans", "17-11"),
+        _node(17, 3, "Coriolis Illusion", "17-12"),
+    ]
+    out = to_checklist_for_chapter(nodes, chapter_ordinal=17)
+    assert "    - L3 The Leans (17-11)\n" in out
+    assert "    - L3 Coriolis Illusion (17-12)\n" in out
