@@ -11,7 +11,7 @@ supersedes: ../../.archive/products/hangar/PRD.md
 
 What hangar does today and what's queued next. Per-feature spec lives in `docs/work-packages/{feature}/`, not inline here.
 
-For the why, see [VISION.md](VISION.md). For the FIRC-era PRD (425 lines of dormant submission machinery), see [.archive/products/hangar/PRD.md](../../.archive/products/hangar/PRD.md).
+For the why, see [VISION.md](VISION.md). For what's queued next, see [ROADMAP.md](ROADMAP.md). For the FIRC-era PRD (425 lines of dormant submission machinery), see [.archive/products/hangar/PRD.md](../../.archive/products/hangar/PRD.md).
 
 ## Shipped
 
