@@ -24,7 +24,7 @@ Every later admin-write surface in hangar will follow the same shape:
 3. **Zod-validated input.** Schema lives next to the form action's BC helper, not inline.
 4. **BC helper does the work.** The form action is a thin shell: parse, gate, call BC, audit, return result. The BC helper is the unit of business logic and the unit of test.
 5. **Audit row written in the same call.** Every write emits exactly one audit row. The audit write is not optional, deferred, or "best-effort." When the BC helper returns successfully, the audit row exists.
-6. **Confirmation modal for destructive actions.** Reusable `ConfirmAction` component. Typed-confirmation gate (admin types target email or equivalent). Caution / danger styling.
+6. **Confirmation modal for destructive actions.** Reusable `ConfirmDialog` component (extends the existing `libs/ui/src/components/ConfirmDialog.svelte`). Typed-confirmation gate (admin types target email or equivalent). Caution / danger styling.
 7. **Routing constants.** Form action ids in `ROUTES`. Pages reference the constants; never inline strings.
 
 This WP ships steps 1-7 once. Future admin-write WPs ship steps 1-5 + reuse the `ConfirmAction` component from step 6 + reuse the routing-constant convention from step 7.
@@ -95,17 +95,19 @@ The cost is one extra interaction per dangerous action. For a single-admin platf
 
 The simple-confirm alternative ("are you sure? yes/no") is less protective and not measurably faster -- the click count is the same; only the typing differs.
 
-### Why a shared `ConfirmAction` component in `@ab/ui`
+### Why a shared `ConfirmDialog` component in `@ab/ui`
 
 Three places it could live:
 
-| Location                                                | For                                                                          | Against                                                                                                                                       |
-| ------------------------------------------------------- | ---------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| `libs/ui/components/ConfirmAction.svelte` (recommended) | Reused by every admin-write surface across every app.                        | New surface in `@ab/ui`. Acceptable -- the pattern is intrinsically reusable.                                                                |
-| `apps/hangar/src/lib/components/ConfirmAction.svelte`   | Local. Ships only if hangar uses it.                                         | Three months from now sources, references, jobs, sim, study all need the same component and someone copy-pastes. Convergent finding waiting. |
-| Inline in `+page.svelte`                                | Zero new component.                                                          | Three modal flavours inline. Drift across the four actions in this WP alone.                                                                  |
+| Location                                                                       | For                                                                   | Against                                                                                                                                      |
+| ------------------------------------------------------------------------------ | --------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| `libs/ui/src/components/ConfirmDialog.svelte` (recommended -- extend in place) | Reused by every admin-write surface across every app. Already exists. | New props (`typedConfirmation`, `dangerLevel`) added additively; theme-tokens test must keep passing.                                        |
+| `apps/hangar/src/lib/components/ConfirmDialog.svelte`                          | Local. Ships only if hangar uses it.                                  | Three months from now sources, references, jobs, sim, study all need the same component and someone copy-pastes. Convergent finding waiting. |
+| Inline in `+page.svelte`                                                       | Zero new component.                                                   | Three modal flavours inline. Drift across the four actions in this WP alone.                                                                 |
 
 Putting it in `@ab/ui` from day one reflects the reality: this is a platform component. Future WPs that need it import; they don't redesign.
+
+> **Build-phase correction (2026-04-30):** the spec originally proposed a new `ConfirmAction.svelte`. We discovered `libs/ui/src/components/ConfirmAction.svelte` already exists as an inline two-step confirm widget with five active consumers in `apps/study/`. To avoid collision, the reusable modal lives at `ConfirmDialog.svelte` (extends the existing snippet-based, form-aware modal already in `libs/ui/`). The existing `ConfirmAction.svelte` is left untouched.
 
 ### Why the modal IS the form
 
