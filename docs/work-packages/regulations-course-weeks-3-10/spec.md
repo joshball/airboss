@@ -1,6 +1,6 @@
 ---
-status: pending
-review_status: pending
+status: done
+review_status: done
 ---
 
 # Regulations course Weeks 3-10

@@ -1,0 +1,164 @@
+---
+title: Week 9 drills -- post-event reporting and enforcement triage
+week: 9
+---
+
+# Week 9 drills
+
+The post-event landscape spans multiple agencies, multiple titles of the CFR, and multiple deadlines. The drill format for this week is *triage*: given an incident, what reports are required, by whom, by when?
+
+The skill being exercised is sorting through possible obligations quickly and accurately. The pilot who can't sort fast either over-reports (volunteering information that creates new exposure) or under-reports (missing a 10-day deadline that becomes its own violation on top of the original event).
+
+Each drill below names a scenario. Cover the right column. Answer:
+
+1. **NTSB Part 830** -- accident, §830.5(a) incident, or neither? Notification owed?
+2. **FAA enforcement** -- LOI likely? Compliance Program eligible?
+3. **NASA ASRS** -- file? Within what window? Waiver eligible?
+4. **§61.15(c)** -- motor vehicle action? 60-day report?
+5. **§91.123(d)** -- 48-hour written report owed?
+6. **Other** -- §67.403, §61.59, §91.17, §61.16, etc.
+
+These drills feed `apps/study/` scenario cards. Format 1 -> "what's reportable" cards. Format 2 -> "what's the deadline" cards. Format 3 -> "what's the right posture" cards.
+
+## Format 1 -- What's reportable?
+
+For each scenario, identify the reports required.
+
+| Scenario                                                                              | Reports owed                                                                                 |
+| ------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| Inadvertent altitude bust 200 feet, ATC notices                                        | NASA ASRS within 10 days. No NTSB. FAA may LOI; respond if so.                               |
+| Inadvertent Class B incursion, ATC notices                                             | NASA ASRS within 10 days. No NTSB. FAA likely LOI; respond, propose remedial training.       |
+| Gear-up landing at towered airport, prop strike, fuselage damage, engine teardown reqd | NTSB §830.5 immediate (accident under §830.2). FAA notification customary. 10-day Form 6120.1 NTSB report. NASA ASRS within 10 days (no waiver, accident exclusion, but file for posture). FAA LOI expected. |
+| In-flight engine failure, single-engine glides to safe landing in field, no damage     | No NTSB (single-engine failure excluded from substantial damage; no other damage). FAA notification customary. NASA ASRS within 10 days as good practice. |
+| TCAS RA, deviated 200 feet, notified ATC on frequency                                  | §91.123(c) on-frequency notification (satisfied). §91.123(d) 48-hour written report only if ATC requests. NASA ASRS within 10 days. No NTSB unless aircraft damage / serious injury. |
+| In-flight fire from electrical short, contained, lands safely, interior heat damage    | NTSB §830.5(a)(4) immediate (in-flight fire, §830.5 trigger regardless of damage). Form 6120.1 only if NTSB requests. NASA ASRS within 10 days. FAA notification customary. |
+| Ramp check while medical expired 6 weeks ago                                           | Not Part 830. FAA enforcement likely, lack of qualification (Compliance Program excluded, ASRS waiver excluded). NASA ASRS for posture but no waiver. Counsel-driven response. |
+| Pilot DUI arrest on personal time, not flying                                          | §61.15(c) 60-day motor vehicle action report. No Part 830, no §91.17, no §61.16. ASRS not applicable (no aviation event). |
+| Pilot fails roadside breath test, license suspended                                    | §61.15(c) 60-day report on the administrative action. ASRS not applicable. No §61.16 (different test).       |
+| Pilot refuses §91.17(c) test after FBO inspector requests after suspect flight         | §61.16 violation (refusal to test). FAA emergency revocation likely. Criminal exposure possible. ASRS does not apply (criminal exclusion). NTSB notification depends on event leading to test. |
+| Pilot lands at the wrong airport, no damage, no injury, no other consequence           | Not Part 830 (no accident, no §830.5(a) trigger for GA wrong-airport). FAA may LOI under §91.103 / §91.13. NASA ASRS within 10 days. Compliance Program likely. |
+| Mid-air collision in flight, both aircraft land safely with damage                     | NTSB §830.5(a)(5) immediate. Likely accident under §830.2 (substantial damage probable on both aircraft). Form 6120.1 within 10 days. NASA ASRS within 10 days. FAA enforcement near-certain; counsel essential. |
+| Pilot lands hard, prop strike but no other damage                                      | Prop strike alone excluded from substantial damage, BUT engine teardown after prop strike often reveals crank/case damage that meets the threshold. Defer the §830.2 determination until teardown completes. Notify NTSB if teardown reveals substantial damage; file Form 6120.1 within 10 days of *that* determination. |
+| 121 first officer notices captain skipped a checklist item                             | ASAP filing within operator's window (typically 24 hours). NASA ASRS as backup within 10 days. No Part 830 unless event resulted in damage/injury. |
+| 121 captain busts a clearance during a normal procedure turn                           | ASAP within 24 hours. NASA ASRS within 10 days. ATC likely files pilot deviation; FSDO LOI possible but ASAP often resolves before LOI. |
+| Pilot diverts due to thunderstorm, ATC denies deviation, pilot turns under §91.3(b)     | §91.123(c) on-frequency notification owed. §91.123(d) 48-hour written report if ATC requests. NASA ASRS within 10 days. FAA may evaluate §91.3(b) assertion; likely closes if proportional. |
+| Pilot files ASRS but Form 8500-8 omitted a prior medical issue                         | §61.15(c) does not apply (medical-app fraud is §67.403). §67.403 violation possible if FAA later discovers. ASRS not applicable to medical-app fraud (criminal exclusion). |
+| Pilot's CFI signed flight review endorsement without conducting the review             | §61.59 violation (CFI side -- false logbook entry). The student pilot may also be exposed under §61.56 if relying on the false endorsement. Both face revocation. ASRS not applicable. |
+| Pilot's logbook reveals 5 fabricated cross-country hours during commercial application | §61.59(a)(2) violation. Revocation typical. Criminal referral under 18 USC 1001 possible. ASRS not applicable. |
+| Passenger has heart attack mid-flight, pilot diverts, passenger hospitalized 5 days    | §830.2 accident (serious injury -- hospitalization >48 hr during operation). §830.5 immediate notification. Form 6120.1 within 10 days. NASA ASRS for procedural posture. FAA enforcement unlikely if diversion was well-handled. |
+| Pilot lands on a closed runway by mistake, no damage, ATC observed                     | Not Part 830 (no accident, no §830.5(a) trigger for GA closed-runway landing). FAA likely LOI -- §91.123(b) and §91.13. NASA ASRS within 10 days. Compliance Program likely with proposed remedial training. |
+| Pilot enters an MOA without checking active times, was scheduled hot                    | Not Part 830. FAA may LOI under §91.13 / §91.135 (special-use airspace). NASA ASRS within 10 days. Compliance Program likely. |
+| Pilot busts a TFR for a stadium event                                                   | Not Part 830 (unless intercepted with consequences). FAA LOI very likely; TFR violations are heavily enforced. NASA ASRS within 10 days. Compliance Program possible if first-time inadvertent; counsel needed regardless. |
+| Pilot misses required maintenance inspection but flies anyway, discovered later        | Not Part 830 unless event during the unauthorized op. FAA enforcement likely on §91.405 / §91.7. ASRS waiver may apply if inadvertent and within 10 days; file. |
+| Pilot operates an airplane they were not endorsed for (high-performance)               | Not Part 830. FAA enforcement likely on §61.31; lack-of-qualification exclusion makes Compliance Program difficult. ASRS waiver excluded (lack of qualification). |
+
+## Format 2 -- What's the deadline?
+
+For each obligation, name the deadline.
+
+| Obligation                                                       | Deadline                                          |
+| ---------------------------------------------------------------- | ------------------------------------------------- |
+| NASA ASRS report                                                  | 10 calendar days from the event                   |
+| ASAP report (typical 121/135 program)                             | 24 hours from the event                           |
+| NTSB §830.5 immediate notification                                | "Immediately, by the most expeditious means"      |
+| NTSB §830.15 written report (Form 6120.1)                         | 10 days from the accident (7 days for overdue)    |
+| §91.123(d) 48-hour written report                                 | 48 hours, only if ATC requests                    |
+| §61.15(c) motor vehicle action report                             | 60 calendar days from the action                  |
+| FAA LOI written response                                          | Typically 10 calendar days, extendable on request |
+| Notice of Proposed Certificate Action -- response deadline        | Stated in the NOPCA (varies)                      |
+| Order of Certificate Action -- NTSB appeal                        | 20 days from receipt                              |
+| ALJ decision -- appeal to NTSB Board                              | Per 49 CFR 821 (typically 10 days notice + 50 days brief) |
+| FAA enforcement statute of limitations                            | 6 years from the violation (28 USC 2462)          |
+| BasicMed online course                                            | 24 calendar months (not enforcement, included for completeness) |
+| Flight review                                                     | 24 calendar months (not enforcement)              |
+| §67.403 fraud -- statute of limitations starts                    | When the FAA discovers the fraud, not when committed |
+
+## Format 3 -- What's the right posture?
+
+For each scenario, identify the right pilot posture.
+
+| Scenario                                                                              | Right posture                                                                              |
+| ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| FSDO calls 4 days after a Class B incursion you suspect they noticed                    | Acknowledge call, indicate willingness to engage, do not narrate substantively, retain counsel, file ASRS if within 10-day window. |
+| Tower says "call this number when you land" after a deviation                            | Land, secure airplane, brief any passengers, then call. Identify yourself, acknowledge the issue, request the LOI in writing. Decline to discuss specifics on the phone. |
+| LOI arrives in mail with 10-day response window                                          | Calendar deadline. Retain counsel today. Request ATC tapes and FAA records under PBR2. File ASRS if within window. Draft response with counsel; submit on time or request extension before deadline. |
+| FSDO offers Compliance Action with 8 hours remedial training and counseling letter       | Accept, complete training within agreed window, file CFI endorsement with FSDO, close case. Better than 30-day suspension on file. |
+| NOPCA proposes 60-day suspension; agency's evidence on key fact is weak                  | Counsel: request informal conference. Present defense. Negotiate to remedial training or reduced suspension. If unsuccessful, NTSB appeal preserves rights. |
+| Order of Certificate Action issues 30-day suspension; counsel evaluates appeal          | Counsel evaluates: probability of NTSB success, deference standard, cost. Many cases settle for shorter suspension at this stage rather than litigate. 20-day appeal window is hard. |
+| Pilot suspects they busted an altitude but ATC said nothing                              | File ASRS within 10 days regardless. Costs nothing if FAA didn't notice; protects waiver if they did. |
+| Pilot is hand-flying an ILS, ATC asks "say type aircraft," pilot says "Cessna"            | Just answer. Routine ATC interaction. No reporting. |
+| Pilot accepts NOPCA's proposed 30-day suspension; 6 months later, similar incident       | Repeat exclusion under 8000.373B. Compliance Program now unavailable. Likely revocation or longer suspension. Counsel essential. The first acceptance taught the agency the pilot's response posture; the second event is a different conversation. |
+| Pilot is arrested for DUI on personal time                                               | File §61.15(c) within 60 days regardless of conviction outcome. Retain criminal counsel and aviation counsel separately (different specialties). Notify employer if 121/135. |
+| AME asks at next medical exam about a 3-year-old DUI                                     | Disclose. The AME asks because Form 8500-8 asks. Failure to disclose is §67.403. The DUI alone is rarely disqualifying with proper documentation; the failure to disclose ends careers. |
+| Pilot's BasicMed online course expired 2 months ago, flew anyway, no event              | Not Part 830 unless event. Self-ground now. Renew course. Whether to disclose to FAA: counsel decision. Statute of limitations means the agency could enforce later if discovered, but most cases of this kind close without action when the pilot self-corrects. |
+| Pilot was given §91.3(b) emergency authority verbally by ATC during deviation            | §91.3(b) authority is *exercised* by the pilot, not granted by ATC. ATC's "approved" is operational support; the regulatory authority comes from the pilot's emergency. File §91.123(d) report if requested. |
+| ATC asks for "tail number and pilot certificate number, please" after a deviation        | Provide tail number (it's in their data anyway). Provide your name. *Decline* certificate number on the spot if you have any concern about enforcement -- the agency can look it up; you don't owe it on the radio. Counsel sorts this out later. |
+| Inspector arrives at FBO for ramp check, no event preceding                              | Cooperate routinely. Show certificate, medical, logbook, airworthiness docs. Answer factual questions. If inspector raises concerns, ask for them in writing. |
+
+## Format 4 -- Trap detector
+
+For each statement, identify the misreading and correct it.
+
+| Statement                                                                | Trap and correction |
+| ------------------------------------------------------------------------ | ------------------- |
+| "If I file ASRS, I'm immune from all FAA enforcement."                    | Wrong. ASRS provides a *waiver of certificate action* for inadvertent, non-criminal, non-accident, qualification-intact violations within a 5-year clean window. Not blanket immunity. Investigation can still occur; the disposition is what's bounded. |
+| "An accident is anything that gets the airplane bent."                    | Wrong. §830.2 has a precise definition: death OR serious injury OR substantial damage. The substantial-damage definition has a negative list (prop strike, gear, wingtip, etc.). A bent wingtip is not substantial damage. |
+| "I can refuse the §91.17(c) test if I want my lawyer first."               | Wrong (operationally). Refusing triggers §61.16 sanctions equivalent to positive-test consequences. There is no procedural advantage to refusing. |
+| "DUI arrest on personal time isn't an FAA matter."                         | Wrong. §61.15(c) requires reporting within 60 days of any motor vehicle action involving alcohol or drugs, regardless of whether the pilot was flying. |
+| "If ATC denies my deviation request, I have to comply."                   | Wrong. §91.3(b) emergency authority allows deviation when safety requires, regardless of ATC. The pilot does not fly into a thunderstorm because the controller said "unable." |
+| "I have to declare an emergency on frequency to use §91.3(b)."             | Wrong. §91.3(b) doesn't require declaration. The pilot can use emergency authority and explain afterward. Declaration is operationally useful (priority handling) but not legally required. |
+| "ASRS waiver applies to my gear-up landing because I filed within 10 days." | Wrong. ASRS waiver excludes accidents under §830.2. A gear-up landing with substantial damage is an accident. File the report (it has confidentiality value and supports posture) but the formal waiver does not apply. |
+| "The 6-month grace on flight review applies to enforcement deadlines."   | Wrong. The 6-month grace applies to IFR currency under §61.57(c). Enforcement deadlines (LOI response 10 days, §61.15(c) 60 days, §91.123(d) 48 hours, NTSB appeal 20 days, etc.) are firm. |
+| "Compliance Program means the FAA can't suspend my certificate."          | Wrong. Compliance Program is the *preferred* track for inadvertent first-time violations. The agency retains full enforcement authority for excluded categories (reckless, intentional, criminal, repeat, lack of qualification). |
+| "Remedial training is just for new pilots."                                | Wrong. The agency uses remedial training for inadvertent violations regardless of pilot experience. ATP-rated commercial pilots receive remedial training. |
+| "If the FAA didn't open an LOI, the Compliance Program kicked in automatically." | Wrong. Silence is not a Compliance Action. Most enforcement starts with LOI; if you didn't get one, either no investigation is open or one is open but not yet served. Don't assume. |
+| "The 48-hour written report under §91.123(d) is automatic after every emergency." | Wrong. Required only if ATC requests. ATC may close the case without a request. |
+| "An LOI means I'm losing my certificate."                                 | Wrong. Most LOIs close at Compliance Action with no certificate action. Posture during the response shapes the outcome. |
+| "I can call the FAA Regional Counsel attorney directly to negotiate."     | Wrong. Counsel does that. Pro se representation is risky once the case is in formal posture. |
+| "The 5-year ASRS clean-record requirement starts from when I last filed."  | Wrong. Starts from the date of the prior *finding* of violation, not from filings. Filing ASRS reports doesn't burn the 5-year clock. |
+| "I have 30 days to file ASRS."                                            | Wrong. 10 calendar days. The 30-day rule is the §61.15 conviction-reporting window (and even that is actually 60 days under §61.15(c)). |
+| "ASRS is anonymous to everyone."                                          | Mostly. NASA strips identifying information from public versions. Original retains identity for the agency's waiver mechanism. The pilot uses their own copy of confirmation to invoke the waiver. |
+| "The NTSB and FAA are basically the same."                                | Wrong. Different agencies. NTSB investigates accidents and incidents (Title 49). FAA enforces against pilots (Title 14). Reporting obligations are independent. |
+| "Substantial damage means any major repair."                              | Mostly right with caveats. §830.2 specifically excludes prop, gear, wingtip, etc. Engine failure on single-engine excluded. Read the negative list. |
+| "If I admit nothing, the agency has nothing."                             | Wrong, dangerously. The agency has ATC tapes, radar, pilot reports, witness statements, ADS-B data. Denial of clear facts looks like dishonesty and pushes the case toward enforcement. The right posture: acknowledge factual reality, contest characterization where contested, decline to volunteer narrative. |
+
+## Hardcover drill -- 60 seconds, no notes
+
+Integration. Read the prompt; give the answer in 60 seconds without notes.
+
+1. **Walk me through what you owe in the first 24 hours after a gear-up landing.** -> Control airplane, evacuate if needed (§91.3(b)). ATC notification (§91.123(c)). Do not move airplane (§830.10 preservation, except as needed for safety). Notify NTSB immediately (§830.5 -- accident). Notification to FSDO customary alongside. Document in airplane logs (§91.417). File ASRS within 10 days (no waiver but supports posture).
+
+2. **A friend asks you to file an ASRS for them on an event from 12 days ago. What do you say?** -> The 10-day filing window has closed. ASRS waiver eligibility is forfeited. They can still file the report (it has confidentiality value for safety-research purposes), but the certificate-action waiver does not apply. Their counsel handles whatever remains.
+
+3. **Distinguish §91.17 from §91.13 from §61.15.** -> §91.17 is the operating rule -- 8-hour, 0.04, no influence, no impairing drug. §91.13 is the catch-all careless or reckless rule. §61.15 is the conviction-reporting rule -- 60 days for motor vehicle actions involving alcohol or drugs, including administrative DMV actions. They cover three different layers: §91.17 is what you can't do in the airplane, §91.13 is the always-attached rider, §61.15 is the post-conviction disclosure obligation.
+
+4. **A pilot has 5 prior NASA ASRS filings on file but no FAA findings of violation. They have a new event today. Does the 5-year rule disqualify them?** -> No. The 5-year rule looks at *findings of violation*, not at filings. ASRS filings do not consume the window. As long as no actual finding in the prior 5 years, the waiver remains available for this event if the other criteria are met.
+
+5. **An ATC controller suspects you were at 5,200 when assigned 5,000. What do they file and where does it go?** -> A pilot deviation report. Goes to the FSDO. The FSDO opens an investigation, typically issues an LOI within days to weeks. The pilot's response shapes whether it routes to Compliance Action or legal enforcement.
+
+6. **What's the difference between a Compliance Program disposition and a Letter of Correction?** -> Compliance Program is a track preference (8000.373B); Letter of Correction is a specific document the agency issues. A Compliance Action under the program *might* result in a Letter of Correction or a counseling letter or a documented training plan. Letter of Correction is a tier-2 administrative document, lower than NOPCA but higher than no-action.
+
+7. **A pilot is involved in an accident under §830.2, files ASRS within 10 days, and the FAA opens an LOI 30 days later. Does the ASRS waiver apply?** -> No. Accident-level events are excluded from ASRS waiver. File the report for posture and confidentiality, but the formal waiver does not apply. The pilot's defense is on the substantive merits and the Compliance Program (which may apply if the violation was inadvertent, even though the accident itself is heavier).
+
+8. **The agency offers you a 30-day suspension via NOPCA. Your counsel says the agency's case is weak on whether your deviation was reckless. What's the negotiation?** -> Request informal conference. Present the evidence that contradicts the recklessness allegation. Propose remedial training in lieu of suspension. The agency typically accepts a settlement at less than the proposed sanction when the evidence is contestable and the pilot's posture supports administrative resolution.
+
+9. **A Form 8500-8 asks "have you ever been arrested for any reason?" The pilot was arrested 12 years ago for shoplifting, charges dismissed, no conviction. Disclose?** -> Yes. The form asks about arrests, not just convictions. Failure to disclose is §67.403 territory. The arrest is unlikely to be medically disqualifying; the failure to disclose is what creates the violation. Disclose, let the AME or FAA medical office determine relevance.
+
+10. **Tower says "Two-Three Tango, taxi to ramp via Alpha Charlie, hold short of runway 26L." You're at the intersection and don't see a hold-short line for 26L because it's faded. What do you say?** -> "Tower, Two-Three Tango, unable identify hold-short line for 26L on Charlie, request progressive taxi." Do not cross. Wait for ATC clarification. The pilot's ambiguity is the regulation's intended trigger for the §91.123(a) "request clarification" rule. Crossing without clarification is the violation.
+
+## Where this drill set fits
+
+These drills are the connective tissue from Week 9's lessons to `apps/study/`. Format 1 (What's reportable?) -> reporting-obligation cards. Format 2 (Deadlines) -> deadline cards. Format 3 (Posture) -> response-strategy cards. Format 4 (Trap detector) -> misconception-correction cards.
+
+The week's oral integrates these drills under the certificate-action defense walkthrough.
+
+## Related
+
+- [01-compliance-program-vs-enforcement.md](01-compliance-program-vs-enforcement.md)
+- [02-enforcement-action-pipeline.md](02-enforcement-action-pipeline.md)
+- [03-asrs-asap-and-self-disclosure.md](03-asrs-asap-and-self-disclosure.md)
+- [04-career-enders.md](04-career-enders.md)
+- [05-ntsb-part-830.md](05-ntsb-part-830.md)
+- [06-deviations-and-remedial-training.md](06-deviations-and-remedial-training.md)
+- [oral.md](oral.md) -- Week 9 oral, certificate-action defense
+- Capstone: [orals/gear-up-night-ifr.md](../orals/gear-up-night-ifr.md) -- post-incident integration
