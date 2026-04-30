@@ -170,8 +170,13 @@ This doc is preserved as the proposal. The actions called out above have largely
 - Open question 7 (FIRC content pack as dormant): formalized in [ADR 017](../decisions/017-firc-compliance-dormant.md).
 - Steps 1, 2, 5, 8 and open questions 1-6, 8 are still open.
 
+## A note on terminology
+
+The word "product" appears throughout this doc and across `docs/vision/`. As of 2026-04-30, the term was overloaded -- many things called "products" are really *features* of a smaller number of real products. See [PRODUCT_TAXONOMY.md](PRODUCT_TAXONOMY.md) for the distinction. This doc is preserved as written; the taxonomy doc is the current source of truth on what counts as a product.
+
 ## References
 
 - Book that catalyzed this: [course/firc/L04-Design/references/performance-pilot-review.md](../../course/firc/L04-Design/references/performance-pilot-review.md)
 - Integration thinking: [course/firc/L04-Design/references/performance-pilot-integration.md](../../course/firc/L04-Design/references/performance-pilot-integration.md)
 - Chief instructor blocker: see memory `project_chief_instructor`
+- Product taxonomy: [PRODUCT_TAXONOMY.md](PRODUCT_TAXONOMY.md)
