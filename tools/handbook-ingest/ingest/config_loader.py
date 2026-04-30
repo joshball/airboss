@@ -107,6 +107,9 @@ class HandbookConfig:
     publisher: str
     kind: str
     source_url: str
+    # Library-index aviation-topic subjects (1..3 entries). Required so that
+    # re-running ingest doesn't drop the field from the manifest.
+    subjects: list[str] = field(default_factory=list)
     # Per chapter-source-ingestion WP: optional whole-doc descriptor (when
     # present, supersedes `source_url` for download-side use). The TS
     # downloader reads `whole_doc.url`; legacy code reads `source_url`. Both
@@ -292,6 +295,15 @@ def load_config(document_slug: str) -> HandbookConfig:
     if source_url is None:
         raise ConfigError(f"{config_path}: must specify source_url or whole_doc.url.")
 
+    subjects_raw = raw.get("subjects") or []
+    if not isinstance(subjects_raw, list) or not all(isinstance(s, str) for s in subjects_raw):
+        raise ConfigError(f"{config_path}: 'subjects' must be a list of strings.")
+    if not (1 <= len(subjects_raw) <= 3):
+        raise ConfigError(
+            f"{config_path}: 'subjects' must contain 1..3 aviation-topic values "
+            f"(got {len(subjects_raw)}). See AVIATION_TOPIC_VALUES in libs/constants."
+        )
+
     return HandbookConfig(
         document_slug=raw["document_slug"],
         edition=raw["edition"],
@@ -299,6 +311,7 @@ def load_config(document_slug: str) -> HandbookConfig:
         publisher=raw.get("publisher", "FAA"),
         kind=raw.get("kind", "handbook"),
         source_url=source_url,
+        subjects=[str(s) for s in subjects_raw],
         whole_doc=whole_doc,
         chapter_pdfs=chapter_pdfs,
         excluded_assets=[str(s) for s in excluded_assets_raw],

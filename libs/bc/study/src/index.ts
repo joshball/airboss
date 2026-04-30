@@ -195,6 +195,7 @@ export {
 	getHandbookProgress,
 	getHandbookSection,
 	getNodesCitingSection,
+	getReadableReferenceIds,
 	getReadState,
 	getReferenceByDocument,
 	getReferenceById,

@@ -22,6 +22,13 @@
       "when": 1777553920373,
       "tag": "0002_evidence_kind_gating",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1777584736555,
+      "tag": "0003_lumpy_stick",
+      "breakpoints": true
     }
   ]
 }

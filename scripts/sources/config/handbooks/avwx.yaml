@@ -13,6 +13,7 @@ edition: FAA-H-8083-28B
 kind: handbook
 title: "Aviation Weather Handbook"
 publisher: FAA
+subjects: [weather]
 
 # -----------------------------------------------------------------------------
 # Source download (TS downloader)

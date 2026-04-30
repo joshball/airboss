@@ -115,6 +115,7 @@ async function seedEdition(
 		title: manifest.title,
 		publisher: manifest.publisher,
 		url: manifest.source_url,
+		subjects: manifest.subjects,
 		seedOrigin: options.seedOrigin ?? null,
 	});
 

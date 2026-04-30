@@ -8,6 +8,10 @@ edition: FAA-H-8083-25C
 kind: handbook
 title: "Pilot's Handbook of Aeronautical Knowledge"
 publisher: FAA
+# Library-index aviation-topic subjects (1..3). Closed vocabulary --
+# values must be valid `AviationTopic` members. Drives subject grouping
+# at /library.
+subjects: [aerodynamics, aircraft-systems, weather]
 
 # -----------------------------------------------------------------------------
 # Source download (TS downloader)

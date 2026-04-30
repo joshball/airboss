@@ -12,6 +12,7 @@ edition: FAA-H-8083-3C
 kind: handbook
 title: "Airplane Flying Handbook"
 publisher: FAA
+subjects: [procedures, aerodynamics, training-ops]
 
 # -----------------------------------------------------------------------------
 # Source download (TS downloader)

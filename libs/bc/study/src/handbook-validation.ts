@@ -19,6 +19,8 @@
  */
 
 import {
+	AVIATION_TOPIC_VALUES,
+	type AviationTopic,
 	CITATION_FRAMING_VALUES,
 	type CitationFraming,
 	HANDBOOK_READ_STATUS_VALUES,
@@ -170,6 +172,13 @@ export const handbookManifestSchema = z.object({
 	// `datetime.now(tz=UTC).isoformat()` produces this; Zod's `.datetime()`
 	// rejects it by default. `offset: true` opts in.
 	fetched_at: z.string().datetime({ offset: true }),
+	// Aviation-topic subjects for the library index (1..3 entries). Required
+	// for all ingested handbooks; values must be valid `AviationTopic` enum
+	// members.
+	subjects: z
+		.array(z.enum(AVIATION_TOPIC_VALUES as [AviationTopic, ...AviationTopic[]]))
+		.min(1)
+		.max(3),
 	sections: z.array(handbookManifestSectionSchema).min(1),
 	figures: z.array(handbookManifestFigureSchema),
 	warnings: z.array(handbookManifestWarningSchema).default([]),
