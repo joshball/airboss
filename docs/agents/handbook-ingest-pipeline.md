@@ -255,41 +255,33 @@ TS downloader; the TS downloader's `manifest.ts` documents this
 boundary explicitly: "Errata entries on handbook manifests are managed
 by the Python ingest pipeline; we preserve them across writes."
 
-## Known issues (current as of 2026-04-29)
+## Resolved issues
 
-### LLM-input truncation on long chapters
+### LLM-input truncation on long chapters (RESOLVED)
 
-`chapter_text_max_chars` defaults to 60000 for PHAK. **11 of 17 PHAK
-chapters hit the cap on the most recent run** (verified by `wc -c` on
-each chapter's `_chapter_plaintext.txt`). The truncation drops the back
-half of those chapters from the LLM's input, which silently produces
-incomplete section trees on chapters 1, 2, 5, 7, 8, 11, 12, 13, 14, 16,
-17.
+The `chapter_text_max_chars` cap (originally 60000) silently truncated
+long chapters mid-content. PHAK ch 7 produced 22 entries instead of 89
+under v1 because the back half of the chapter was never in the input.
 
-**Symptoms in the compare report:** chapters with low entry counts on
-the LLM side and a large set of "TOC only" headings clustered at the
-end of the page range. Chapter 7 is the worst case (22 LLM entries vs
-88 TOC entries).
+**Resolved by two layered fixes:**
 
-**Root cause:** `chapter_text_max_chars` is too low for long chapters.
-Truncation is from the END (per [chapter_plaintext.py](../../tools/handbook-ingest/ingest/chapter_plaintext.py))
-to preserve the chapter intro. Fix is two-layered:
+1. PR #332 raised per-handbook caps empirically (PHAK 250000, AFH 200000,
+   AVWX 150000 -- each set to longest_chapter * 1.2). PR #335 removed the
+   silent default; `prompt`-mode handbooks must declare a cap explicitly.
+2. PR #337 (chapter-source-ingestion, ADR 022) bypasses the cap entirely
+   for handbooks that publish per-chapter PDFs (PHAK, AFH, IPH,
+   helicopter, glider, balloon, instructors): the chapter PDF IS the
+   input unit, no slicing, no truncation.
+3. Contract v3 (PR #355) added a coverage self-check that catches output
+   truncation explicitly: the LLM verifies the last entry's page anchor
+   is on or after the chapter's last printed page (with v3.1 amendment
+   for figure-only trailing pages).
 
-1. **Cheap fix:** raise the cap to a value that fits every chapter
-   (~300K for PHAK), or remove it entirely.
-2. **Right fix:** chapter-level source ingestion (per-chapter PDFs from
-   the FAA, where available). Eliminates the cap and gives authoritative
-   chapter boundaries. Tracked in `docs/work-packages/chapter-source-ingestion/`
-   (in flight at time of writing).
+**Verification:** PR #355 ran phak end-to-end. Ch 7 produced 89 entries.
+Every chapter has populated page anchors and Chapter Summary boilerplate.
 
-### Migration script survival
-
-[scripts/migrate-cache-flat.ts](../../scripts/migrate-cache-flat.ts) was
-intended as a one-shot migration tool deleted in commit B of PR #327
-per the cache-flat-naming WP spec. It survived. Either an artifact of
-PR ordering or the deletion commit was dropped. **Verify in your tree
-before running anything cache-related.** If it's there, the cache may
-or may not have been migrated; check the cache layout against ADR 021.
+Re-measure caps with [tools/handbook-ingest/measure_chapter_sizes.py](../../tools/handbook-ingest/measure_chapter_sizes.py)
+when adding a new handbook or after an FAA edition update.
 
 ### Stale agent worktrees
 
