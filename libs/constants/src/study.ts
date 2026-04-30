@@ -6,7 +6,8 @@
  * graph's domain taxonomy rather than an authoritative constant.
  */
 
-import { CERT_APPLICABILITIES } from './reference-tags';
+import { ACS_TRIAD, type ACSTriad } from './credentials';
+import { CERT_APPLICABILITIES, type CertApplicability } from './reference-tags';
 import { MS_PER_DAY, MS_PER_HOUR } from './time';
 
 /**
@@ -1029,6 +1030,122 @@ export const NODE_MASTERY_GATE_LABELS: Record<NodeMasteryGate, string> = {
 	[NODE_MASTERY_GATES.FAIL]: 'Fail',
 	[NODE_MASTERY_GATES.INSUFFICIENT_DATA]: 'Not enough data',
 	[NODE_MASTERY_GATES.NOT_APPLICABLE]: 'Not applicable',
+};
+
+// -------- Evidence-kind gating (evidence-kind-gating WP) --------
+
+/**
+ * Which assessment-method evidence kinds a syllabus leaf demands, keyed by
+ * the leaf's ACS triad and qualified by the cert level the leaf belongs to.
+ *
+ * Inner array (`AssessmentMethod[]`) is "all-of": every entry must clear its
+ * gate.
+ * Outer array (`AssessmentMethod[][]`) is "any-of": at least one inner array
+ * must clear (a single satisfied alternative suffices).
+ *
+ * The mapping varies by cert level for the K (knowledge) triad: instructor-
+ * tier and ATP candidates must clear K via both recall and scenario evidence
+ * (an examiner-grade K leaf is not satisfied by recall alone). Every other
+ * cert level keeps K=recall as the single gate. R and S are uniform across
+ * all cert levels.
+ *
+ * Per Learning Philosophy principle 9 ("evidence has to match the kind of
+ * knowledge"). See `docs/work-packages/evidence-kind-gating/spec.md`.
+ *
+ * NOTE: `CertApplicability.ALL` and `CertApplicability.STUDENT` use the same
+ * mapping as the lowest non-instructor tier (recall-only K). The DB CHECK on
+ * `syllabus_node.triad` cannot enforce per-cert-level mapping; consumers
+ * resolve the credential's level externally and look up here.
+ */
+export const TRIAD_EVIDENCE_REQUIREMENTS: Record<
+	CertApplicability,
+	Record<ACSTriad, readonly (readonly AssessmentMethod[])[]>
+> = {
+	[CERT_APPLICABILITIES.STUDENT]: {
+		[ACS_TRIAD.KNOWLEDGE]: [[ASSESSMENT_METHODS.RECALL]],
+		[ACS_TRIAD.RISK_MANAGEMENT]: [[ASSESSMENT_METHODS.SCENARIO]],
+		[ACS_TRIAD.SKILL]: [[ASSESSMENT_METHODS.DEMONSTRATION], [ASSESSMENT_METHODS.SCENARIO]],
+	},
+	[CERT_APPLICABILITIES.SPORT]: {
+		[ACS_TRIAD.KNOWLEDGE]: [[ASSESSMENT_METHODS.RECALL]],
+		[ACS_TRIAD.RISK_MANAGEMENT]: [[ASSESSMENT_METHODS.SCENARIO]],
+		[ACS_TRIAD.SKILL]: [[ASSESSMENT_METHODS.DEMONSTRATION], [ASSESSMENT_METHODS.SCENARIO]],
+	},
+	[CERT_APPLICABILITIES.RECREATIONAL]: {
+		[ACS_TRIAD.KNOWLEDGE]: [[ASSESSMENT_METHODS.RECALL]],
+		[ACS_TRIAD.RISK_MANAGEMENT]: [[ASSESSMENT_METHODS.SCENARIO]],
+		[ACS_TRIAD.SKILL]: [[ASSESSMENT_METHODS.DEMONSTRATION], [ASSESSMENT_METHODS.SCENARIO]],
+	},
+	[CERT_APPLICABILITIES.PRIVATE]: {
+		[ACS_TRIAD.KNOWLEDGE]: [[ASSESSMENT_METHODS.RECALL]],
+		[ACS_TRIAD.RISK_MANAGEMENT]: [[ASSESSMENT_METHODS.SCENARIO]],
+		[ACS_TRIAD.SKILL]: [[ASSESSMENT_METHODS.DEMONSTRATION], [ASSESSMENT_METHODS.SCENARIO]],
+	},
+	[CERT_APPLICABILITIES.INSTRUMENT]: {
+		[ACS_TRIAD.KNOWLEDGE]: [[ASSESSMENT_METHODS.RECALL]],
+		[ACS_TRIAD.RISK_MANAGEMENT]: [[ASSESSMENT_METHODS.SCENARIO]],
+		[ACS_TRIAD.SKILL]: [[ASSESSMENT_METHODS.DEMONSTRATION], [ASSESSMENT_METHODS.SCENARIO]],
+	},
+	[CERT_APPLICABILITIES.COMMERCIAL]: {
+		[ACS_TRIAD.KNOWLEDGE]: [[ASSESSMENT_METHODS.RECALL]],
+		[ACS_TRIAD.RISK_MANAGEMENT]: [[ASSESSMENT_METHODS.SCENARIO]],
+		[ACS_TRIAD.SKILL]: [[ASSESSMENT_METHODS.DEMONSTRATION], [ASSESSMENT_METHODS.SCENARIO]],
+	},
+	[CERT_APPLICABILITIES.CFI]: {
+		[ACS_TRIAD.KNOWLEDGE]: [[ASSESSMENT_METHODS.RECALL, ASSESSMENT_METHODS.SCENARIO]],
+		[ACS_TRIAD.RISK_MANAGEMENT]: [[ASSESSMENT_METHODS.SCENARIO]],
+		[ACS_TRIAD.SKILL]: [[ASSESSMENT_METHODS.DEMONSTRATION], [ASSESSMENT_METHODS.SCENARIO]],
+	},
+	[CERT_APPLICABILITIES.CFII]: {
+		[ACS_TRIAD.KNOWLEDGE]: [[ASSESSMENT_METHODS.RECALL, ASSESSMENT_METHODS.SCENARIO]],
+		[ACS_TRIAD.RISK_MANAGEMENT]: [[ASSESSMENT_METHODS.SCENARIO]],
+		[ACS_TRIAD.SKILL]: [[ASSESSMENT_METHODS.DEMONSTRATION], [ASSESSMENT_METHODS.SCENARIO]],
+	},
+	[CERT_APPLICABILITIES.ATP]: {
+		[ACS_TRIAD.KNOWLEDGE]: [[ASSESSMENT_METHODS.RECALL, ASSESSMENT_METHODS.SCENARIO]],
+		[ACS_TRIAD.RISK_MANAGEMENT]: [[ASSESSMENT_METHODS.SCENARIO]],
+		[ACS_TRIAD.SKILL]: [[ASSESSMENT_METHODS.DEMONSTRATION], [ASSESSMENT_METHODS.SCENARIO]],
+	},
+	[CERT_APPLICABILITIES.ALL]: {
+		[ACS_TRIAD.KNOWLEDGE]: [[ASSESSMENT_METHODS.RECALL]],
+		[ACS_TRIAD.RISK_MANAGEMENT]: [[ASSESSMENT_METHODS.SCENARIO]],
+		[ACS_TRIAD.SKILL]: [[ASSESSMENT_METHODS.DEMONSTRATION], [ASSESSMENT_METHODS.SCENARIO]],
+	},
+};
+
+/**
+ * Default cert applicability used when a syllabus leaf's owning credential
+ * does not resolve to a specific cert level. Matches the recall-only K
+ * mapping used by every non-instructor / non-ATP tier; safe fallback that
+ * cannot tighten the gate beyond what the spec demands.
+ */
+export const DEFAULT_TRIAD_EVIDENCE_CERT: CertApplicability = CERT_APPLICABILITIES.ALL;
+
+/**
+ * Evidence-kind requirement that stacks on top of `TRIAD_EVIDENCE_REQUIREMENTS`
+ * when a `syllabus_node.requires_teaching` flag is true (CFI pedagogical
+ * leaves -- the candidate has to teach the concept, not just recall or
+ * demonstrate it).
+ *
+ * The teaching gate stays `not_applicable` until teaching-exercise content
+ * ships (no backfill per spec). Until then a leaf with
+ * `requires_teaching=true` reports `missingKinds=['teaching']` -- the right
+ * surface for "this content gap is on the platform, not on you."
+ */
+export const TEACHING_EVIDENCE_KINDS: readonly AssessmentMethod[] = [ASSESSMENT_METHODS.TEACHING];
+
+/**
+ * Human-readable labels for each evidence kind required by a triad mapping.
+ * Used by follow-on UI WPs that surface "you need scenario evidence" to the
+ * learner. Single-sourced so renames stay consistent with the
+ * `ASSESSMENT_METHODS` enum.
+ */
+export const TRIAD_EVIDENCE_REQUIREMENT_LABELS: Record<AssessmentMethod, string> = {
+	[ASSESSMENT_METHODS.RECALL]: 'Recall',
+	[ASSESSMENT_METHODS.CALCULATION]: 'Calculation',
+	[ASSESSMENT_METHODS.SCENARIO]: 'Scenario',
+	[ASSESSMENT_METHODS.DEMONSTRATION]: 'Demonstration',
+	[ASSESSMENT_METHODS.TEACHING]: 'Teaching',
 };
 
 /**
