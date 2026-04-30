@@ -1,6 +1,13 @@
 # Now
 
-Single entry point for "what should I work on?" in airboss. Refresh date: 2026-04-30 (engine-goal-cutover shipped; doc + audit reconciliation).
+Single entry point for "what should I work on?" in airboss. Refresh date: 2026-04-30 (hangar-audit-explorer + cockpit-panel + encoded-text family + WP status flips).
+
+## Just shipped (2026-04-30 -- hangar admin audit explorer)
+
+- **[hangar-audit-explorer](../work-packages/hangar-audit-explorer/spec.md) shipped (PR #365).** Cross-cutting audit explorer at `/admin/audit` + `/admin/audit/[id]`. Pure read consumer of `audit.audit_log`. New BC reads (`listAuditEntries`, `getAuditEntry`, `searchActorIds`) cursor-paginate / join the actor / typeahead. Filter bar UI (actor, target type/id, op, time-window chips), side-by-side jsonb panes on the detail page. Hangar dashboard's System -> Audit tile retargeted; audit-ping retirement is a separate follow-up cleanup WP. Spec frontmatter `status: shipped`.
+- **CockpitPanel promoted to `libs/activities/cockpit-panel/` (PR #364).** Sim is the second consumer; matches the PFD promotion pattern from #328. 10 components moved (Altimeter, AnnunciatorStrip, Asi, AttitudeIndicator, CockpitPanel, HeadingIndicator, Tachometer, TurnCoordinator, Vsi, plus a `cluster/` subdir).
+- **Encoded-text family kicked off (PR #369).** New `course/weather/` and `course/notams/` skeletons + the wx scenario engine vision. Both anchor the broader encoded-text pedagogy ladder (decode -> understand -> triage) called out in memory: `project_encoded_text_family.md`. PRDs at `docs/vision/products/pre-flight/notam-triage/` + `weather-scenario-engine/`.
+- **WP `status:` frontmatter flips.** Three WPs whose code shipped without a spec-status flip: `evidence-kind-gating` (#361), `engine-goal-cutover` (#353), `cert-syllabus-and-goal-composer` (#248/254/264/270/274). All flipped to `status: shipped`.
 
 ## Just shipped (2026-04-30 -- doc + audit reconciliation)
 
@@ -83,8 +90,8 @@ The week was dominated by the reference identifier system (ADR 019, **phases 1-9
 
 ## In flight
 
-- *(FAR navigation course Weeks 3-10 and 2 sibling capstones moved to "Just shipped 2026-04-30".)*
-- **[hangar-audit-explorer](../work-packages/hangar-audit-explorer/spec.md) (2026-04-30).** Cross-cutting audit explorer at `/admin/audit` + `/admin/audit/[id]`. Pure read consumer of `audit.audit_log`. New BC reads (`listAuditEntries`, `getAuditEntry`, `searchActorIds`) cursor-paginate / join the actor / typeahead. Filter bar UI (actor, target type/id, op, time-window chips), side-by-side jsonb panes on the detail page. Hangar dashboard's System -> Audit tile retargeted; audit-ping retirement is a separate follow-up cleanup WP. PR open; manual test plan walks Joshua through the surface before flip-to-shipped.
+- **[evidence-kind-data-layer](../work-packages/evidence-kind-data-layer/spec.md) (2026-04-30).** Authored to close the `not_applicable` shims that `evidence-kind-gating` (#361) shipped: today `calculation`, `demonstration`, and `teaching` gates return `not_applicable` because there's no `card.kind`, no `scenario.assessment_methods`, and no `teaching-exercise` `SESSION_ITEM_KIND`. WP plans the schema + seeds + assessment-method writes that make the four-kind partition real. Spec authored (#367); `status: unread`, awaiting sign-off + implementation.
+- **[hangar-users-editing](../work-packages/hangar-users-editing/spec.md) (2026-04-30).** Ratified alongside cockpit-panel + audit-explorer in #362. Spec on disk; `status: unread`, awaiting sign-off + implementation. The other two from that ratification batch (cockpit-panel, audit-explorer) shipped same day; this one is the lone holdout.
 - **[section-extraction-contract-v2](../work-packages/section-extraction-contract-v2/spec.md) Phase 3 GREENLIT (2026-04-30).** Decision driven by the regenerated compare report against PR #355 artifacts: 485 parent-mismatches and 317 level-mismatches across 17 chapters, 15 of 17 chapters with parent-diff > 10, ch 7 with 86 of 88 TOC entries flagged L1. Systematic TOC over-flattening; LLM nesting consistently matches body text. See [tasks.md Phase 3](../work-packages/section-extraction-contract-v2/tasks.md) for the metric table and full reasoning. Phase 3 implementation is a separate PR following this WP closure.
 
 ## ADR 016 status (post-2026-04-28 ship)

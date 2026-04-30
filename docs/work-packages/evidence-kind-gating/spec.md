@@ -3,7 +3,7 @@ title: 'Spec: Evidence Kind Gating'
 product: study
 feature: evidence-kind-gating
 type: spec
-status: unread
+status: shipped
 review_status: pending
 ---
 
