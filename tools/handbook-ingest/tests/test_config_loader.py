@@ -158,3 +158,69 @@ def test_invalid_chapter_text_max_chars_raises(
     _seed_yaml(tmp_path, "test", body, monkeypatch)
     with pytest.raises(ConfigError):
         load_config("test")
+
+
+# ---------------------------------------------------------------------------
+# extraction_hints -- Phase 3 of section-extraction-contract-v2
+# ---------------------------------------------------------------------------
+
+
+def test_extraction_hints_default_empty(tmp_path: Path, monkeypatch) -> None:
+    body = _VALID_HEADER + "section_strategy: toc\n"
+    _seed_yaml(tmp_path, "test", body, monkeypatch)
+    config = load_config("test")
+    assert config.extraction_hints == []
+
+
+def test_extraction_hints_loaded_when_present(tmp_path: Path, monkeypatch) -> None:
+    body = (
+        _VALID_HEADER
+        + "section_strategy: toc\n"
+        + "extraction_hints:\n"
+        + "  - 'Chapter 17 nests Vestibular Illusions under Spatial Disorientation'\n"
+        + "  - 'TOC flattens both to L1 -- prefer body nesting'\n"
+    )
+    _seed_yaml(tmp_path, "test", body, monkeypatch)
+    config = load_config("test")
+    assert config.extraction_hints == [
+        "Chapter 17 nests Vestibular Illusions under Spatial Disorientation",
+        "TOC flattens both to L1 -- prefer body nesting",
+    ]
+
+
+def test_extraction_hints_rejects_empty_string(tmp_path: Path, monkeypatch) -> None:
+    body = (
+        _VALID_HEADER
+        + "section_strategy: toc\n"
+        + "extraction_hints:\n"
+        + "  - ''\n"
+    )
+    _seed_yaml(tmp_path, "test", body, monkeypatch)
+    with pytest.raises(ConfigError) as excinfo:
+        load_config("test")
+    assert "is empty" in str(excinfo.value)
+
+
+def test_extraction_hints_rejects_non_string_entry(tmp_path: Path, monkeypatch) -> None:
+    body = (
+        _VALID_HEADER
+        + "section_strategy: toc\n"
+        + "extraction_hints:\n"
+        + "  - 42\n"
+    )
+    _seed_yaml(tmp_path, "test", body, monkeypatch)
+    with pytest.raises(ConfigError) as excinfo:
+        load_config("test")
+    assert "must be a string" in str(excinfo.value)
+
+
+def test_extraction_hints_rejects_non_list(tmp_path: Path, monkeypatch) -> None:
+    body = (
+        _VALID_HEADER
+        + "section_strategy: toc\n"
+        + "extraction_hints: 'not a list'\n"
+    )
+    _seed_yaml(tmp_path, "test", body, monkeypatch)
+    with pytest.raises(ConfigError) as excinfo:
+        load_config("test")
+    assert "must be a list of strings" in str(excinfo.value)

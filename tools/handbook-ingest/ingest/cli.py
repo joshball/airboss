@@ -71,6 +71,7 @@ from .sections_compare import compare_strategies
 from .sections_via_sidecar import (
     SidecarMalformedError,
     SidecarMissingError,
+    load_chapter_disagreements,
     load_chapter_sidecars,
 )
 from .sections_via_toc import extract_via_toc
@@ -237,6 +238,7 @@ def main(
             config,
             chapter_nodes,
             chapter_bodies_only,
+            pdf_path=fetch_result.path,
             source_pdf_sha256=fetch_result.sha256,
             archive=not no_archive,
         )
@@ -322,6 +324,7 @@ def _run_prompt_strategy(
     chapter_nodes: list[OutlineNode],
     chapter_bodies_only,
     *,
+    pdf_path: Path,
     source_pdf_sha256: str,
     archive: bool,
 ) -> None:
@@ -354,6 +357,7 @@ def _run_prompt_strategy(
         chapter_nodes=chapter_nodes,
         chapter_bodies=chapter_bodies_only,
         sidecars=sidecars,
+        pdf_path=pdf_path,
         source_pdf_sha256=source_pdf_sha256,
         archive=archive,
     )
@@ -468,6 +472,19 @@ def _run_compare_strategy(
     click.echo("  HOW:  greedy title-match within (chapter, level); markdown table + diff.")
     chapter_titles = {n.ordinal: n.title for n in chapter_nodes}
     compare_result = compare_strategies(toc_result.nodes, sidecar_load.all_nodes, chapter_titles)
+    # Attach per-chapter disagreements (Phase 3 of contract-v2). Each
+    # chapter's `_llm_disagreements.json` is optional; absent files mean
+    # the sub-agent fully agreed with the TOC checklist.
+    for chap in chapter_nodes:
+        if chap.level != "chapter":
+            continue
+        try:
+            entries = load_chapter_disagreements(config, chap.ordinal)
+        except SidecarMalformedError as exc:
+            click.echo(f"warning: {exc}", err=True)
+            continue
+        if entries:
+            compare_result.disagreements[chap.ordinal] = entries
     report_path = _write_compare_report(config, compare_result)
     click.echo(f"  -> {relative_to_repo(report_path)}")
     click.echo("done.")

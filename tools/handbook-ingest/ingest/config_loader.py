@@ -162,6 +162,15 @@ class HandbookConfig:
     # discovery dispatcher reads this list to mark matching candidates as
     # `dismissed` across re-runs (idempotent; no GitHub issue re-open).
     dismissed_errata: list[ErrataDismissal] = field(default_factory=list)
+    # Per-handbook hints surfaced to the LLM section-extraction prompt
+    # (Phase 3 of section-extraction-contract-v2). Free-form strings the
+    # prompt-emit flow renders verbatim into a "Handbook hints" block on
+    # each per-chapter prompt. Used to capture handbook-specific quirks
+    # the contract's generic difficult-cases catalog doesn't cover (e.g.
+    # "PHAK ch 17 nests Vestibular Illusions under Spatial Disorientation
+    # but the printed TOC flattens both"). Empty / None for handbooks
+    # without observed quirks.
+    extraction_hints: list[str] = field(default_factory=list)
     # Raw YAML payload, exposed so strategy modules can read their own blocks
     # (`toc`, `heading_style`, `prompt`) without each one re-parsing the file.
     raw_yaml: dict[str, object] = field(default_factory=dict)
@@ -266,6 +275,7 @@ def load_config(document_slug: str) -> HandbookConfig:
 
     errata = _load_errata_list(raw.get("errata"), config_path)
     dismissed_errata = _load_dismissed_errata_list(raw.get("dismissed_errata"), config_path)
+    extraction_hints = _load_extraction_hints(raw.get("extraction_hints"), config_path)
     whole_doc = _load_whole_doc(raw.get("whole_doc"), config_path)
     chapter_pdfs = _load_chapter_pdfs(raw.get("chapter_pdfs"), config_path)
     excluded_assets_raw = raw.get("excluded_assets", [])
@@ -309,6 +319,7 @@ def load_config(document_slug: str) -> HandbookConfig:
         page_label_walk_back=walk_back,
         errata=errata,
         dismissed_errata=dismissed_errata,
+        extraction_hints=extraction_hints,
         raw_yaml=raw,
     )
 
@@ -524,4 +535,40 @@ def _load_dismissed_errata_list(raw: object, config_path: Path) -> list[ErrataDi
             )
         reason = str(entry.get('reason', '')).strip()
         out.append(ErrataDismissal(url=url, sha256=sha256, reason=reason))
+    return out
+
+
+def _load_extraction_hints(raw: object, config_path: Path) -> list[str]:
+    """Parse the YAML ``extraction_hints:`` block.
+
+    The block is an optional list of free-form strings the prompt-emit flow
+    surfaces verbatim to the LLM section-extraction sub-agents (Phase 3 of
+    section-extraction-contract-v2). Used to capture handbook-specific
+    quirks the contract's generic difficult-cases catalog doesn't cover.
+
+    Empty / missing / null all produce an empty list. List entries must be
+    non-empty strings; anything else hard-fails so YAML typos surface
+    immediately.
+    """
+    if raw is None:
+        return []
+    if not isinstance(raw, list):
+        raise ConfigError(
+            f"extraction_hints in {config_path} must be a list of strings; "
+            f"got {type(raw).__name__}."
+        )
+    out: list[str] = []
+    for idx, entry in enumerate(raw):
+        if not isinstance(entry, str):
+            raise ConfigError(
+                f"extraction_hints[{idx}] in {config_path} must be a string; "
+                f"got {type(entry).__name__}."
+            )
+        cleaned = entry.strip()
+        if not cleaned:
+            raise ConfigError(
+                f"extraction_hints[{idx}] in {config_path} is empty; "
+                f"omit the entry instead of leaving an empty string."
+            )
+        out.append(cleaned)
     return out
