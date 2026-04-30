@@ -2,6 +2,10 @@
 
 Single entry point for "what should I work on?" in airboss. Refresh date: 2026-04-30 (FAR navigation course content-complete).
 
+## Just shipped (2026-04-30 -- evidence-kind-gating WP)
+
+- **[evidence-kind-gating](../work-packages/evidence-kind-gating/spec.md) shipped.** Per-cert triad mapping (`TRIAD_EVIDENCE_REQUIREMENTS` keyed by `CertApplicability`) + `requires_teaching` flag on `syllabus_node` + new `mastery.ts` BC primitive (`getNodeEvidenceState`, `isLeafMastered`, `aggregateLeafKindStates`). Rollups in `getCredentialMastery`, `acsLens`, and `domainLens` now decompose mastery per `AssessmentMethod` and surface `missingKinds` so the cert dashboard can render "you have recall down but need a scenario" without re-walking. Hard cutover: existing `mastered: boolean` keeps name + meaning; new fields are additive. Achievable scope shipped: `recall` and `scenario` gates compute against the live schema; `calculation`, `demonstration`, and `teaching` return `not_applicable` until backing data ships (no `card.kind`, no `scenario.assessment_methods`, no `teaching-exercise` SESSION_ITEM_KIND today -- richer partition is a follow-on data WP). YAML element schema now accepts `requires_teaching: true`; CFI ACS-25 transcription stays incremental.
+
 ## Just shipped (2026-04-30 -- FAR navigation course Weeks 3-10 + 2 sibling capstones)
 
 - **FAR navigation course is content-complete.** All 10 weeks authored. All 4 sibling capstone orals authored. Authored across one work package PR (#349, merged) and one content PR (#350, the omnibus). Authoring approach: parallel sub-agents per week, exclusive directory ownership, phased dispatch.
