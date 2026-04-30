@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# {{NAME}} -- TODO: describe what this job does.
+#
+# Run from the repo root (the wrapper cd's there for you).
+# Exit 0 on success. Exit non-zero on failure.
+#
+# If this script writes files, the wrapper will branch + commit + open a PR
+# (if behaviour.on_diff = "open-pr" in job.toml). Just do the work; let the
+# wrapper handle PR mechanics.
+
+set -euo pipefail
+
+echo "TODO: replace this run.sh with the actual work for {{NAME}}"
+echo "Working dir: $(pwd)"
+echo "Repo HEAD:   $(git rev-parse --short HEAD)"

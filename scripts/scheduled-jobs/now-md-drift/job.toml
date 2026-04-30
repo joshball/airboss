@@ -1,0 +1,17 @@
+# Scheduled job: now-md-drift
+#
+# Detect WPs whose spec frontmatter says status:shipped but NOW.md still
+# lists the feature in its "In flight" section.
+
+name = "now-md-drift"
+description = "Detect WPs marked status:shipped that NOW.md's In flight section still references"
+enabled = true
+
+# Daily at 09:00 local time.
+schedule = "0 9 * * *"
+
+[behaviour]
+on_diff = "log-only"            # WP-status drift wants human review, not an auto-PR
+branch_prefix = "scheduled/"
+pr_labels = ["scheduled-job", "drift"]
+working_dir = "."

@@ -1,0 +1,28 @@
+# Scheduled job: {{NAME}}
+#
+# Edit this file + run.sh, then run `../../scheduler/install.sh` to register.
+
+name = "{{NAME}}"
+description = "TODO: one-line description"
+enabled = true
+
+# --- Cadence -- pick exactly one ---------------------------------------------
+# Recurring: standard 5-field cron ("minute hour day-of-month month day-of-week").
+# v1 supports `*` and bare integers ONLY -- no ranges (1-5), no lists (1,15),
+# no steps (*/15), no named months/weekdays. Setting BOTH day-of-month and
+# day-of-week is rejected (cron uses OR; launchd uses AND -- ambiguous).
+schedule = "0 9 * * *"          # daily at 09:00 local time
+
+# One-time: ISO 8601 datetime with timezone offset.
+# launchd has no Year key, so `auto_disable = true` is REQUIRED for run_at;
+# without it the plist would fire on the same month/day every year.
+# run_at = "2026-05-11T09:00:00-03:00"
+# auto_disable = true
+
+[behaviour]
+on_diff = "open-pr"             # open-pr | log-only
+branch_prefix = "scheduled/"
+pr_labels = ["scheduled-job"]   # passed to `gh pr create --label`
+working_dir = "."               # relative to repo root
+base_branch = "main"            # branch the job-worktree is created from + PR base
+# allow_branches = ["main", "master"]   # legacy override (no longer needed -- jobs run in their own worktree)

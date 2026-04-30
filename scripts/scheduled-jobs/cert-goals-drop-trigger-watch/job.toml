@@ -1,0 +1,18 @@
+# Scheduled job: cert-goals-drop-trigger-watch
+#
+# Nightly poll of engine-targeting telemetry. When 14 consecutive days of
+# source='goal' (no 'plan' fallback) is reached, opens a PR shipping the
+# staged cert_goals column drop migration.
+
+name = "cert-goals-drop-trigger-watch"
+description = "Watch engine-targeting telemetry; open PR with staged migration once 14 consecutive days of source=goal"
+enabled = true
+
+# Nightly at 02:00 local time. (Picks up overnight telemetry from the prior day.)
+schedule = "0 2 * * *"
+
+[behaviour]
+on_diff = "open-pr"             # we want the migration shipped automatically once the trigger fires
+branch_prefix = "scheduled/"
+pr_labels = ["scheduled-job", "migration", "cert-goals-drop"]
+working_dir = "."
