@@ -25,20 +25,18 @@ For the why, see [VISION.md](VISION.md). For what's queued next, see [ROADMAP.md
 | `/users`            | User list (ADMIN-only): name, email, role, last seen, banned                                       | --                                                                         |
 | `/users/[id]`       | User detail (ADMIN-only): role picker, ban / unban, session revoke, sessions + audit               | [hangar-users-editing](../../work-packages/hangar-users-editing/spec.md)   |
 | `/jobs`             | Background-job log with 1Hz live polling                                                           | [hangar-registry](../../work-packages/hangar-registry/spec.md)             |
-| `/admin/audit-ping` | Scaffold-era heartbeat -- diagnostic only; System -> Audit dashboard tile points at `/admin/audit` | [hangar-scaffold](../../work-packages/hangar-scaffold/spec.md)             |
 | `/admin/audit`      | Cross-cutting audit explorer (ADMIN-only): filter by actor / target / op / time window, paginate   | [hangar-audit-explorer](../../work-packages/hangar-audit-explorer/spec.md) |
 | `/admin/audit/[id]` | Detail view: actor card, side-by-side before/after jsonb panes, metadata, cross-links              | [hangar-audit-explorer](../../work-packages/hangar-audit-explorer/spec.md) |
 | Auth gate           | Layout-level `requireRole(AUTHOR                                                                   | OPERATOR                                                                   |
 
 ## In flight or imminent
 
-| Item                        | State       | Notes                                                                                                                                                                       |
-| --------------------------- | ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Retire `/admin/audit-ping`  | Not started | Cleanup: drop the route + decide on `AUDIT_TARGETS.HANGAR_PING` once a real BC write surface emits its own audit rows. Unblocked: hangar-users-editing emits audit rows.    |
-| Hangar Playwright e2e infra | Not started | Tracked at [hangar-e2e-infrastructure](../../work-packages/hangar-e2e-infrastructure/spec.md). Prerequisite for the deferred audit-explorer + users-editing e2e suites.     |
-| Invite flow                 | Not started | Email infra exists in `libs/auth/src/email/`. Onboard: Better Auth invite token, email send, accept route on study side.                                                    |
-| Scenarios authoring         | Not scoped  | Will follow the scenario tick model from `airboss-firc/libs/engine/`. Stand up only after engine migrates.                                                                  |
-| Cards authoring             | Not scoped  | Cards (study) are seeded today; admin authoring UI is downstream of stable card spec.                                                                                       |
+| Item                        | State       | Notes                                                                                                                                                                   |
+| --------------------------- | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Hangar Playwright e2e infra | Not started | Tracked at [hangar-e2e-infrastructure](../../work-packages/hangar-e2e-infrastructure/spec.md). Prerequisite for the deferred audit-explorer + users-editing e2e suites. |
+| Invite flow                 | Not started | Email infra exists in `libs/auth/src/email/`. Onboard: Better Auth invite token, email send, accept route on study side.                                                |
+| Scenarios authoring         | Not scoped  | Will follow the scenario tick model from `airboss-firc/libs/engine/`. Stand up only after engine migrates.                                                              |
+| Cards authoring             | Not scoped  | Cards (study) are seeded today; admin authoring UI is downstream of stable card spec.                                                                                   |
 
 ## Tracking
 

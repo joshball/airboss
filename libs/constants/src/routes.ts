@@ -377,8 +377,6 @@ export const ROUTES = {
 	HANGAR_USER_REVOKE_SESSION_ACTION: '?/revokeSession',
 	/** Form-action id: revoke every session for the target user (`?/revokeAllSessions`). */
 	HANGAR_USER_REVOKE_ALL_SESSIONS_ACTION: '?/revokeAllSessions',
-	/** Scaffold-era audit heartbeat demo, kept as an admin diagnostic. */
-	HANGAR_ADMIN_AUDIT_PING: '/admin/audit-ping',
 	/** Cross-cutting audit explorer (audit-explorer WP). ADMIN-only. */
 	HANGAR_ADMIN_AUDIT: '/admin/audit',
 	/** Detail view for one `audit_log` row. ADMIN-only. */
