@@ -26,6 +26,7 @@ import {
 	CARD_STATUS_VALUES,
 	CARD_STATUSES,
 	CARD_TYPE_VALUES,
+	CERT_APPLICABILITY_VALUES,
 	CERT_VALUES,
 	type Cert,
 	CONTENT_SOURCE_VALUES,
@@ -1236,6 +1237,23 @@ export const reference = studySchema.table(
 		 */
 		subjects: text('subjects').array().notNull().default(sql`'{}'::text[]`),
 		/**
+		 * Primary cert that "owns" this reference for library browsing. Drives
+		 * the cert-spine in `/library/cert/{cert}` (library-by-cert WP). NULL
+		 * means cert-agnostic -- the reference renders only in the topic and
+		 * regulations spines.
+		 *
+		 * Carryover from prerequisite certs is NOT stored here -- it is derived
+		 * at render time by walking `CredentialPrereq` via
+		 * `getCertsCoveredBy()` (see ADR 016 / `libs/bc/study/src/credentials.ts`).
+		 * Keeping carryover as a derived value avoids drift between this column
+		 * and the credential DAG: any future change to PPL -> CPL prerequisites
+		 * is picked up automatically without reseeding rows.
+		 *
+		 * See `docs/work-packages/library-by-cert/spec.md` ratifications block
+		 * (Q1.A + the cert_carryover drop).
+		 */
+		primaryCert: text('primary_cert'),
+		/**
 		 * Set when a newer edition exists. The reader surfaces "newer edition
 		 * available" when this points to a non-archived row; resolvers continue
 		 * to honor citations against the older edition so historical links
@@ -1273,6 +1291,15 @@ export const reference = studySchema.table(
 		subjectsValuesCheck: check(
 			'reference_subjects_values_check',
 			sql.raw(`"subjects" <@ ARRAY[${inList(AVIATION_TOPIC_VALUES)}]::text[]`),
+		),
+		// Primary cert (nullable). NULL is allowed (cert-agnostic refs render
+		// only in the topic/regulations spines). When non-NULL, must be a valid
+		// CERT_APPLICABILITY value -- the same enum used by the YAML loader's
+		// validator so an invalid YAML never reaches the DB without first
+		// failing the seed.
+		primaryCertCheck: check(
+			'reference_primary_cert_check',
+			sql.raw(`"primary_cert" IS NULL OR "primary_cert" IN (${inList(CERT_APPLICABILITY_VALUES)})`),
 		),
 	}),
 );

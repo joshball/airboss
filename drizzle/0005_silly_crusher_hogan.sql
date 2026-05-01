@@ -1,0 +1,2 @@
+ALTER TABLE "study"."reference" ADD COLUMN "primary_cert" text;--> statement-breakpoint
+ALTER TABLE "study"."reference" ADD CONSTRAINT "reference_primary_cert_check" CHECK ("primary_cert" IS NULL OR "primary_cert" IN ('student', 'sport', 'recreational', 'private', 'instrument', 'commercial', 'cfi', 'cfii', 'atp', 'all'));
