@@ -98,6 +98,73 @@ describe('runIngest against title-14 fixture', () => {
 	});
 });
 
+describe('runIngest against title-49 (multi-part aggregation)', () => {
+	let originalCacheEnv: string | undefined;
+	let cacheTmpRoot: string;
+
+	beforeEach(() => {
+		originalCacheEnv = process.env.AIRBOSS_HANDBOOK_CACHE;
+		cacheTmpRoot = mkdtempSync(join(tmpdir(), 'cfr-49-cache-'));
+		process.env.AIRBOSS_HANDBOOK_CACHE = cacheTmpRoot;
+	});
+
+	afterEach(() => {
+		if (originalCacheEnv === undefined) delete process.env.AIRBOSS_HANDBOOK_CACHE;
+		else process.env.AIRBOSS_HANDBOOK_CACHE = originalCacheEnv;
+		rmSync(cacheTmpRoot, { recursive: true, force: true });
+	});
+
+	it('fetches each part separately and aggregates into one manifest', async () => {
+		const part830Xml =
+			'<?xml version="1.0"?>\n' +
+			'<DIV5 N="830" TYPE="PART"><HEAD>PART 830&#x2014;NTSB REPORTING</HEAD>\n' +
+			'<DIV6 N="A" TYPE="SUBPART"><HEAD>Subpart A&#x2014;General</HEAD>\n' +
+			'<DIV8 N="830.1" TYPE="SECTION"><HEAD>&#xA7; 830.1 Applicability.</HEAD>\n' +
+			'<P>This part contains rules.</P></DIV8></DIV6></DIV5>';
+		const part1552Xml =
+			'<?xml version="1.0"?>\n' +
+			'<DIV5 N="1552" TYPE="PART"><HEAD>PART 1552&#x2014;FLIGHT TRAINING SECURITY</HEAD>\n' +
+			'<DIV6 N="A" TYPE="SUBPART"><HEAD>Subpart A&#x2014;General</HEAD>\n' +
+			'<DIV8 N="1552.1" TYPE="SECTION"><HEAD>&#xA7; 1552.1 Scope.</HEAD>\n' +
+			'<P>This part includes requirements.</P></DIV8></DIV6></DIV5>';
+
+		const fetched: string[] = [];
+		const fetchImpl = async (url: string) => {
+			fetched.push(url);
+			let body = '';
+			if (url.includes('part=830')) body = part830Xml;
+			else if (url.includes('part=1552')) body = part1552Xml;
+			else throw new Error(`unexpected fetch: ${url}`);
+			return { ok: true, status: 200, text: async () => body };
+		};
+
+		const report = await runIngest({
+			title: '49',
+			editionDate: '2026-04-24',
+			outRoot: tmpRoot,
+			fetchImpl,
+		});
+
+		// Both parts fetched separately
+		expect(fetched).toHaveLength(2);
+		expect(fetched.some((u) => u.includes('part=830'))).toBe(true);
+		expect(fetched.some((u) => u.includes('part=1552'))).toBe(true);
+
+		// Aggregated into one manifest with both parts
+		expect(report.entriesIngested).toBeGreaterThan(0);
+		const sources = __sources_internal__.getActiveTable();
+		expect(sources['airboss-ref:regs/cfr-49/830' as SourceId]).toBeDefined();
+		expect(sources['airboss-ref:regs/cfr-49/1552' as SourceId]).toBeDefined();
+		expect(sources['airboss-ref:regs/cfr-49/830/1' as SourceId]).toBeDefined();
+		expect(sources['airboss-ref:regs/cfr-49/1552/1' as SourceId]).toBeDefined();
+
+		// Single manifest covers both parts
+		expect(existsSync(join(tmpRoot, 'cfr-49/2026-04-24/manifest.json'))).toBe(true);
+		expect(existsSync(join(tmpRoot, 'cfr-49/2026-04-24/830/830-1.md'))).toBe(true);
+		expect(existsSync(join(tmpRoot, 'cfr-49/2026-04-24/1552/1552-1.md'))).toBe(true);
+	});
+});
+
 describe('parseCliArgs', () => {
 	it('parses --edition + --title + --out', () => {
 		const result = parseCliArgs(['--edition=2026-01-01', '--title=14', '--out=/tmp/x']);
