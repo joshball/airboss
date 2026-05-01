@@ -20,7 +20,14 @@ import { existsSync, readdirSync, statSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { AVIATION_TOPIC_VALUES, type AviationTopic, REFERENCE_KIND_VALUES, type ReferenceKind } from '@ab/constants';
+import {
+	AVIATION_TOPIC_VALUES,
+	type AviationTopic,
+	CERT_APPLICABILITY_VALUES,
+	type CertApplicability,
+	REFERENCE_KIND_VALUES,
+	type ReferenceKind,
+} from '@ab/constants';
 import { client } from '@ab/db/connection';
 import { parse } from 'yaml';
 import { z } from 'zod';
@@ -30,7 +37,7 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = resolve(HERE, '..', '..');
 const REFERENCES_DIR = resolve(REPO_ROOT, 'course/references');
 
-const referenceEntrySchema = z.object({
+export const referenceEntrySchema = z.object({
 	slug: z
 		.string()
 		.min(3)
@@ -49,6 +56,17 @@ const referenceEntrySchema = z.object({
 		.array(z.enum(AVIATION_TOPIC_VALUES as [AviationTopic, ...AviationTopic[]]))
 		.min(1)
 		.max(3),
+	/**
+	 * Optional primary cert that owns this reference for library-by-cert
+	 * browsing. Omitted / null = cert-agnostic. When present, must be one of
+	 * `CERT_APPLICABILITY_VALUES`. The DB CHECK constraint mirrors this at the
+	 * storage layer; the YAML validator catches invalid values before they
+	 * reach the upsert.
+	 */
+	primary_cert: z
+		.enum(CERT_APPLICABILITY_VALUES as [CertApplicability, ...CertApplicability[]])
+		.nullable()
+		.optional(),
 });
 
 const referencesFileSchema = z.object({
@@ -98,6 +116,7 @@ export async function seedReferences(options: SeedReferencesOptions = {}): Promi
 				publisher: entry.publisher ?? 'FAA',
 				url: entry.url ?? null,
 				subjects: entry.subjects,
+				primaryCert: entry.primary_cert ?? null,
 				seedOrigin: options.seedOrigin ?? null,
 			});
 			summary.rowsUpserted += 1;

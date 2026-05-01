@@ -26,6 +26,7 @@
  */
 
 import {
+	type CertApplicability,
 	CITATION_URL_TEMPLATES,
 	HANDBOOK_HEARTBEAT_INTERVAL_SEC,
 	HANDBOOK_HEARTBEAT_MIN_DELTA_SEC,
@@ -742,6 +743,12 @@ export interface UpsertReferenceInput {
 	publisher?: string;
 	url?: string | null;
 	subjects?: readonly string[];
+	/**
+	 * Optional primary cert that "owns" this reference for library browsing.
+	 * NULL/undefined = cert-agnostic. See `study.reference.primary_cert` doc
+	 * comment in `schema.ts` for the carryover-derivation rationale.
+	 */
+	primaryCert?: CertApplicability | null;
 	seedOrigin?: string | null;
 }
 
@@ -757,6 +764,7 @@ export async function upsertReference(input: UpsertReferenceInput, db: Db = defa
 		publisher: input.publisher ?? 'FAA',
 		url: input.url ?? null,
 		subjects,
+		primaryCert: input.primaryCert ?? null,
 		seedOrigin: input.seedOrigin ?? null,
 	};
 
@@ -771,6 +779,7 @@ export async function upsertReference(input: UpsertReferenceInput, db: Db = defa
 				publisher: input.publisher ?? 'FAA',
 				url: input.url ?? null,
 				subjects,
+				primaryCert: input.primaryCert ?? null,
 				seedOrigin: input.seedOrigin ?? null,
 				updatedAt: new Date(),
 			},
