@@ -307,6 +307,8 @@ Two rows in the placement table get explicit overrides that diverge from a naive
 | 3    | Library route restructure (`/library/cert/...`, `/library/regulations/...`, `/library/topic/...`); retire old URL family; carryover BC function. |
 | 4    | E2e tests for the new routes + manual test plan execution.                                                                                       |
 
+- Wave 3b cleanup: retired `@deprecated` route aliases inline (no legacy left).
+
 ## Phase 2 design hooks
 
 If the user wants to ratify and proceed, `design.md` in this directory will cover:
