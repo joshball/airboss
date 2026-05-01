@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "fetched_at": "2026-05-01T00:22:47.720Z",
+  "entries": [
+    {
+      "doc_id": "faa-h-8083-30",
+      "slug": "amt-general",
+      "edition_slug": "8083-30B",
+      "faa_dir": "FAA-H-8083-30B",
+      "title": "Aviation Maintenance Technician Handbook - General (30B)",
+      "publication_date": "2023-07-27",
+      "manifest_path": "handbooks/amt-general/FAA-H-8083-30B/manifest.json"
+    },
+    {
+      "doc_id": "faa-h-8083-32",
+      "slug": "amt-powerplant",
+      "edition_slug": "8083-32B",
+      "faa_dir": "FAA-H-8083-32B",
+      "title": "AMT Handbook - Powerplant (FAA-H-8083-32B)",
+      "publication_date": "2023-07-17",
+      "manifest_path": "handbooks/amt-powerplant/FAA-H-8083-32B/manifest.json"
+    },
+    {
+      "doc_id": "faa-h-8083-9",
+      "slug": "aviation-instructor",
+      "edition_slug": "8083-9",
+      "faa_dir": "FAA-H-8083-9",
+      "title": "Aviation Instructor's Handbook (FAA-H-8083-9B)",
+      "publication_date": "2022-03-25",
+      "manifest_path": "handbooks/aviation-instructor/FAA-H-8083-9/manifest.json"
+    },
+    {
+      "doc_id": "faa-h-8083-15",
+      "slug": "ifh",
+      "edition_slug": "8083-15B",
+      "faa_dir": "FAA-H-8083-15B",
+      "title": "ISO 15930 - Electronic document file format for prepress digital data exchange (PDF/X)",
+      "publication_date": "2022-03-25",
+      "manifest_path": "handbooks/ifh/FAA-H-8083-15B/manifest.json"
+    },
+    {
+      "doc_id": "faa-h-8083-16",
+      "slug": "iph",
+      "edition_slug": "8083-16B",
+      "faa_dir": "FAA-H-8083-16B",
+      "title": "FAA-H-8083-16B (All)",
+      "publication_date": "2022-03-25",
+      "manifest_path": "handbooks/iph/FAA-H-8083-16B/manifest.json"
+    },
+    {
+      "doc_id": "faa-h-8083-2",
+      "slug": "risk-management",
+      "edition_slug": "8083-2A",
+      "faa_dir": "FAA-H-8083-2A",
+      "title": "Risk Management Handbook",
+      "publication_date": "2022-06-02",
+      "manifest_path": "handbooks/risk-management/FAA-H-8083-2A/manifest.json"
+    }
+  ]
+}
