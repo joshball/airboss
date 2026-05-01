@@ -6,6 +6,7 @@ references:
     publisher: FAA
     url: https://www.faa.gov/training_testing/testing/acs/private_airplane_acs_6.pdf
     subjects: [certification, training-ops]
+    primary_cert: private
 
   - slug: ir-airplane-acs-8c
     kind: acs
@@ -14,6 +15,7 @@ references:
     publisher: FAA
     url: https://www.faa.gov/training_testing/testing/acs/instrument_rating_airplane_acs_8.pdf
     subjects: [certification, training-ops]
+    primary_cert: instrument
 
   - slug: cpl-airplane-acs-7b
     kind: acs
@@ -22,6 +24,7 @@ references:
     publisher: FAA
     url: https://www.faa.gov/training_testing/testing/acs/commercial_airplane_acs_7.pdf
     subjects: [certification, training-ops]
+    primary_cert: commercial
 
   - slug: cfi-airplane-acs-25
     kind: acs
@@ -30,6 +33,7 @@ references:
     publisher: FAA
     url: https://www.faa.gov/training_testing/testing/acs/cfi_airplane_acs_25.pdf
     subjects: [certification, training-ops]
+    primary_cert: cfi
 
   - slug: cfii-airplane-pts-9e
     kind: pts
@@ -38,6 +42,7 @@ references:
     publisher: FAA
     url: https://www.faa.gov/training_testing/testing/acs/cfi_instrument_pts_9.pdf
     subjects: [certification, training-ops]
+    primary_cert: cfii
 
   - slug: atp-airplane-acs-11a
     kind: acs
@@ -46,7 +51,10 @@ references:
     publisher: FAA
     url: https://www.faa.gov/training_testing/testing/acs/atp_airplane_acs_11.pdf
     subjects: [certification, training-ops]
+    primary_cert: atp
 
+  # Cross-cert companion guide -- carryover sidebar will compute its visibility
+  # across every cert page; no single cert "owns" it.
   - slug: faa-g-acs-2-companion-guide
     kind: other
     edition: FAA-G-ACS-2
@@ -54,3 +62,4 @@ references:
     publisher: FAA
     url: https://www.faa.gov/training_testing/testing/acs/media/faa_g_acs_2.pdf
     subjects: [certification, training-ops]
+    primary_cert: null

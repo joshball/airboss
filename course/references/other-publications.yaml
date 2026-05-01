@@ -12,6 +12,9 @@
 # a specific edition tag yet.
 
 references:
+  # Override (Wave 2 ratification): originally placed under
+  # "Topic -> Human factors (no cert affinity)"; CFI is the actual
+  # primary audience for the AOPA Air Safety Institute corpus.
   - slug: aopa-air-safety-institute
     kind: other
     edition: current
@@ -19,13 +22,18 @@ references:
     publisher: AOPA
     url: https://www.aopa.org/training-and-safety/air-safety-institute
     subjects: [human-factors, training-ops]
+    primary_cert: cfi
 
+  # Override (Wave 2 ratification): originally placed under FAA Orders/policy;
+  # ratified to render in the AC 60-series group under Regulations & policy,
+  # not under any cert spine -- so primary_cert stays null.
   - slug: faa-p-8740-36
     kind: other
     edition: unspecified
     title: Aviation Decision Making (FAA-P-8740-36)
     publisher: FAA
     subjects: [human-factors]
+    primary_cert: null
 
   - slug: faa-order-8260-3
     kind: other
@@ -34,6 +42,7 @@ references:
     publisher: FAA
     url: https://www.faa.gov/regulations_policies/orders_notices?searchedQuery=8260.3
     subjects: [procedures, navigation]
+    primary_cert: null
 
   - slug: faa-approach-plates
     kind: other
@@ -42,6 +51,7 @@ references:
     publisher: FAA
     url: https://www.faa.gov/air_traffic/flight_info/aeronav/digital_products/
     subjects: [procedures, navigation, airports]
+    primary_cert: null
 
   - slug: jeppesen-faa-charts
     kind: other
@@ -49,6 +59,7 @@ references:
     title: Jeppesen and FAA aeronautical charts
     publisher: Jeppesen / FAA
     subjects: [navigation, airspace]
+    primary_cert: null
 
   - slug: rogers-d-f
     kind: other
@@ -56,6 +67,7 @@ references:
     title: The Possible 'Impossible' Turn (AIAA Journal of Aircraft, 1995)
     publisher: AIAA
     subjects: [emergencies, aerodynamics]
+    primary_cert: null
 
   # Umbrella rows for legacy "ACS" / "PTS" citations that don't yet
   # specify which cert. The migration's ACS / PTS recognizer routes to
@@ -70,6 +82,7 @@ references:
     publisher: FAA
     url: https://www.faa.gov/training_testing/testing/acs
     subjects: [certification]
+    primary_cert: null
 
   - slug: generic-pts
     kind: pts
@@ -78,3 +91,4 @@ references:
     publisher: FAA
     url: https://www.faa.gov/training_testing/testing/acs
     subjects: [certification]
+    primary_cert: null
