@@ -1,0 +1,16 @@
+{
+  "document_slug": "ifh",
+  "edition": "8083-15B",
+  "kind": "whole-doc",
+  "title": "ISO 15930 - Electronic document file format for prepress digital data exchange (PDF/X)",
+  "publisher": "FAA",
+  "source_url": "https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/FAA-H-8083-15B.pdf",
+  "source_checksum": "15cbf13fef6bf9810ad38d1f5bbff318133554a6ca118c4474bc1760ad9059d5",
+  "fetched_at": "2026-05-01T00:07:42.914Z",
+  "sections": [],
+  "body_path": "handbooks/ifh/FAA-H-8083-15B/document.md",
+  "body_sha256": "2d2a9386f4e3c3f60056dcf594a5ada152adde603851e13b2ef19a1a0cf410aa",
+  "page_count": 371,
+  "doc_id": "faa-h-8083-15",
+  "faa_edition": "15B"
+}

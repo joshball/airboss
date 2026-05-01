@@ -1,0 +1,16 @@
+{
+  "document_slug": "iph",
+  "edition": "8083-16B",
+  "kind": "whole-doc",
+  "title": "FAA-H-8083-16B (All)",
+  "publisher": "FAA",
+  "source_url": "https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/instrument_procedures_handbook/FAA-H-8083-16B.pdf",
+  "source_checksum": "67bee284221e2748c426a99793c332fe9f57018b9858f77b911675c814a03e91",
+  "fetched_at": "2026-05-01T00:07:47.442Z",
+  "sections": [],
+  "body_path": "handbooks/iph/FAA-H-8083-16B/document.md",
+  "body_sha256": "e325ffc837cc1fd79f024082b7ef4cd99eb751701aaefc7fa96ad3ab718df7a1",
+  "page_count": 312,
+  "doc_id": "faa-h-8083-16",
+  "faa_edition": "16B"
+}

@@ -43,7 +43,14 @@ export interface ManifestSection {
 
 /**
  * Top-level shape of `handbooks/<doc>/<faa-dir>/manifest.json`. Mirrors the
- * shape PR #242's pipeline writes.
+ * shape PR #242's pipeline writes for chapter-aware handbooks.
+ *
+ * The `body_path` + `body_sha256` + `page_count` fields are populated by the
+ * `handbooks-extras` pipeline (`libs/sources/src/handbooks-extras/`) for
+ * whole-doc-only Class C handbooks (`risk-management`, `ifh`, `iph`,
+ * `amt-general`, `amt-powerplant`, `aviation-instructor`). Chapter-aware
+ * handbooks leave them undefined and supply per-section body paths via
+ * `sections[]`.
  */
 export interface ManifestFile {
 	readonly document_slug: string;
@@ -55,6 +62,12 @@ export interface ManifestFile {
 	readonly source_checksum: string;
 	readonly fetched_at: string;
 	readonly sections: readonly ManifestSection[];
+	/** Whole-doc body markdown (handbooks-extras only). Repo-relative, starts with `handbooks/`. */
+	readonly body_path?: string;
+	/** SHA-256 of the rendered whole-doc body (handbooks-extras only). */
+	readonly body_sha256?: string;
+	/** Total page count from `pdfinfo` (handbooks-extras only). */
+	readonly page_count?: number;
 }
 
 /**

@@ -36,7 +36,7 @@ export const PHASE_6_REVIEWER_ID = 'phase-6-handbook-ingestion';
  * handbook means adding here AND extending `HANDBOOK_DOC_SLUGS`,
  * `HANDBOOK_DOC_EDITIONS`, and `HANDBOOK_LIVE_URLS`.
  */
-const DOC_DISPLAY: Record<string, { readonly short: string; readonly formal: string }> = {
+export const DOC_DISPLAY: Record<string, { readonly short: string; readonly formal: string }> = {
 	phak: {
 		short: 'PHAK',
 		formal: "Pilot's Handbook of Aeronautical Knowledge",
@@ -48,6 +48,32 @@ const DOC_DISPLAY: Record<string, { readonly short: string; readonly formal: str
 	avwx: {
 		short: 'AvWX',
 		formal: 'Aviation Weather Handbook',
+	},
+	// handbooks-extras Class C whole-doc-only handbooks (registered by the
+	// `handbooks-extras` ingest under the same `handbooks` corpus).
+	'risk-management': {
+		short: 'RMH',
+		formal: 'Risk Management Handbook',
+	},
+	'aviation-instructor': {
+		short: 'AIH',
+		formal: "Aviation Instructor's Handbook",
+	},
+	ifh: {
+		short: 'IFH',
+		formal: 'Instrument Flying Handbook',
+	},
+	iph: {
+		short: 'IPH',
+		formal: 'Instrument Procedures Handbook',
+	},
+	'amt-general': {
+		short: 'AMT-G',
+		formal: 'Aviation Maintenance Technician Handbook -- General',
+	},
+	'amt-powerplant': {
+		short: 'AMT-P',
+		formal: 'Aviation Maintenance Technician Handbook -- Powerplant',
 	},
 };
 

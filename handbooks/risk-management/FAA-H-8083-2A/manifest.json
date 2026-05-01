@@ -1,0 +1,16 @@
+{
+  "document_slug": "risk-management",
+  "edition": "8083-2A",
+  "kind": "whole-doc",
+  "title": "Risk Management Handbook",
+  "publisher": "FAA",
+  "source_url": "https://www.faa.gov/sites/faa.gov/files/2022-06/risk_management_handbook_2A.pdf",
+  "source_checksum": "519443a598eedd34c1824ad2ea482f393af0b80e52649e33c0e24a351e4c78bf",
+  "fetched_at": "2026-05-01T00:07:24.317Z",
+  "sections": [],
+  "body_path": "handbooks/risk-management/FAA-H-8083-2A/document.md",
+  "body_sha256": "c7d03aeeaed52b3c5a961171d99cf9f15b6b5707a5f20860b5c30a9c30e4d014",
+  "page_count": 80,
+  "doc_id": "faa-h-8083-2",
+  "faa_edition": "2A"
+}
