@@ -3,7 +3,7 @@ title: 'Library taxonomy: by-cert primary, topic cross-cut, regulations top-leve
 product: study
 feature: library-by-cert
 type: spec
-status: unread
+status: reading
 review_status: pending
 ---
 
@@ -245,6 +245,67 @@ Out of scope for this WP: actual SQL migration, route changes, page rewrite, tes
 - POH per-aircraft authoring (Phase 10 in ADR 016).
 - ACS Area-of-Operation cross-mapping for CFR sections (Q4.B; Phase 2).
 - Filling broad-extraction gaps 1-5 (separate small PRs per the survey's recommendation).
+
+## Ratifications (2026-05-01)
+
+The five Q1-Q5 questions above plus the schema sketch were ratified in conversation on 2026-05-01. This section is the durable record of what was decided vs proposed; future readers should trust the ratifications block over the recommendation prose above when they conflict.
+
+### Q1-Q5 outcomes
+
+| Question                  | Outcome | Notes                                                                                                                          |
+| ------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| Q1 multi-cert books       | A       | Primary cert + carryover sidebar. Carryover is **derived at render time**, not stored. See "Schema delta" below.               |
+| Q2 legal/policy placement | A       | Single `Regulations & policy` spine. Render-time grouping by `kind`. No new stored field.                                      |
+| Q3 sparse topic groups    | A       | Keep all 18 `AVIATION_TOPICS`. UI rule: collapse-by-default any topic with < 4 entries; show count badge. No data-shape change. |
+| Q4 Title 14 render        | A       | Browse by Part with section drill-in. Index pages (per-Part) are part of Phase 1, not deferred.                                |
+| Q5 AIM render             | A       | Browse by Chapter with section drill-in. Same shape as Q4. Chapter index pages part of Phase 1.                                |
+
+### Schema delta from the original sketch
+
+The original "Schema sketch" section above proposes two columns: `primary_cert` and `cert_carryover text[]`. **The `cert_carryover` column is dropped.** Carryover is derived at render time by walking the CredentialPrereq DAG via `getCertsCoveredBy()` (ADR 016 / `libs/bc/study/src/credentials.ts`).
+
+Rationale: storing carryover as a column would duplicate the credential DAG. Any future change to PPL -> CPL prerequisites (e.g. adding Sport as a new node, restructuring Recreational) would have to be mirrored across every reference row's `cert_carryover[]` or rows would silently drift out of sync with the prereq graph. One source of truth wins.
+
+Final shipped schema for Wave 1:
+
+| Field          | Type              | Notes                                                                                                                               |
+| -------------- | ----------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `primary_cert` | `text` (nullable) | One of `CERT_APPLICABILITY_VALUES` or NULL. NULL = cert-agnostic (renders only in topic + regulations spines). CHECK enforces enum. |
+
+`subjects: text[]` stays as-is. The `Regulations & policy` spine is render-time grouping by `kind`, not a stored field.
+
+### URL shape
+
+**Option B** ratified: one canonical URL family `/library/cert/{cert}` + `/library/regulations/{kind}` + `/library/topic/{topic}` (Wave 3). The pre-existing `/library/[doc]/[chapter]/[section]` family will be **retired** in Wave 3 (replaced, not parallel-supported). Old URL doesn't survive the cutover.
+
+### Phase 1 scope expansion
+
+The original spec listed per-Part / per-Chapter routes as out of scope ("a separate WP, likely under regulations-browse"). **These are now in Phase 1** of this WP. Library Phase 1 ships:
+
+- `/library` (three-spine landing)
+- `/library/cert/{cert}` (per-cert page with carryover sidebar)
+- `/library/regulations/{kind}` (e.g. 14 CFR index, AIM index)
+- `/library/regulations/14-cfr/part-{N}` (per-Part section list with drill-in)
+- `/library/regulations/aim/chapter-{N}` (per-Chapter section list with drill-in)
+- `/library/topic/{topic}` (cross-cut topic page)
+
+### Placement overrides applied during Wave 2 reseed
+
+Two rows in the placement table get explicit overrides that diverge from a naive read:
+
+| Slug                        | Override               | Why                                                                                                      |
+| --------------------------- | ---------------------- | -------------------------------------------------------------------------------------------------------- |
+| `aopa-air-safety-institute` | `primary_cert = 'cfi'` | Originally placed under "Topic -> Human factors (no cert affinity)"; CFI is the actual primary audience. |
+| `faa-p-8740-36`             | `primary_cert = NULL`  | Renders in the AC 60-series group under Regulations & policy, not under any cert spine.                  |
+
+### Wave breakdown
+
+| Wave | Scope                                                                                                                                            |
+| ---- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 1    | Ratifications + `primary_cert` schema + Drizzle migration + YAML schema + validator + smoke test (this PR).                                      |
+| 2    | Reseed all 8 `course/references/*.yaml` with `primary_cert` per the placement table + 2 overrides above.                                         |
+| 3    | Library route restructure (`/library/cert/...`, `/library/regulations/...`, `/library/topic/...`); retire old URL family; carryover BC function. |
+| 4    | E2e tests for the new routes + manual test plan execution.                                                                                       |
 
 ## Phase 2 design hooks
 
