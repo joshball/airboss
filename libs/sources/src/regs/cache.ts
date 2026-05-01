@@ -11,12 +11,21 @@
  * the XML from the eCFR Versioner endpoint and writes it to the cache; later
  * runs read from the cache directly. Re-fetching is automatic only when the
  * cache file is missing.
+ *
+ * Hardening (cluster E): the network branch streams the response body and
+ * caps it at `SOURCE_ACTION_LIMITS.MAX_DOWNLOAD_BYTES` so a poisoned eCFR
+ * endpoint cannot exhaust developer disk via a runaway response. The fetch
+ * implementation may expose a `body` stream + `headers.get('content-length')`
+ * (the global `fetch` does); the test seam continues to work via the simpler
+ * `text()` shape, but with a post-fetch byte-length check that fails fast on
+ * oversized payloads.
  */
 
 import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, readFileSync, renameSync, unlinkSync, writeFileSync } from 'node:fs';
 import { dirname, isAbsolute, join, resolve } from 'node:path';
-import { resolveCacheRoot as resolveSourceCacheRoot } from '@ab/constants';
+import { Readable } from 'node:stream';
+import { SOURCE_ACTION_LIMITS, resolveCacheRoot as resolveSourceCacheRoot } from '@ab/constants';
 
 const ECFR_BASE = 'https://www.ecfr.gov/api/versioner/v1/full';
 
@@ -24,6 +33,20 @@ export interface CacheLoadResult {
 	readonly xml: string;
 	readonly sourceUrl: string;
 	readonly sourceSha256: string;
+}
+
+/**
+ * Minimal response shape used by the cache. Compatible with the global
+ * `fetch` `Response` (every test `fetchImpl` need only implement `ok`, `status`,
+ * and `text()` to keep the existing seam green; production callers get the
+ * extra `headers` + `body` for the streaming + size-cap path).
+ */
+export interface CacheFetchResponse {
+	readonly ok: boolean;
+	readonly status: number;
+	readonly text: () => Promise<string>;
+	readonly headers?: { get(name: string): string | null };
+	readonly body?: ReadableStream<Uint8Array> | null;
 }
 
 export interface CacheLoadOptions {
@@ -37,7 +60,9 @@ export interface CacheLoadOptions {
 	 * Optional override of the network fetch. Tests pass a stub; production
 	 * uses the global `fetch` builtin.
 	 */
-	readonly fetchImpl?: (url: string) => Promise<{ ok: boolean; status: number; text: () => Promise<string> }>;
+	readonly fetchImpl?: (url: string) => Promise<CacheFetchResponse>;
+	/** Optional override of the per-download body cap. Tests use a tiny value to exercise overrun. */
+	readonly maxBodyBytes?: number;
 }
 
 /**
@@ -102,7 +127,22 @@ export async function loadEcfrXml(opts: CacheLoadOptions): Promise<CacheLoadResu
 	if (!response.ok) {
 		throw new Error(`eCFR Versioner returned ${response.status} for ${url}`);
 	}
-	const xml = await response.text();
+
+	const maxBodyBytes = opts.maxBodyBytes ?? SOURCE_ACTION_LIMITS.MAX_DOWNLOAD_BYTES;
+
+	// Early reject by Content-Length when the server provides one. Catches the
+	// "10 GB tarpit" case before we read any bytes.
+	const contentLengthHeader = response.headers?.get?.('content-length') ?? null;
+	if (contentLengthHeader !== null) {
+		const declared = Number.parseInt(contentLengthHeader, 10);
+		if (Number.isFinite(declared) && declared > maxBodyBytes) {
+			throw new Error(
+				`eCFR response Content-Length ${declared} exceeds cap ${maxBodyBytes} for ${url}; refusing to download`,
+			);
+		}
+	}
+
+	const xml = await readBoundedBody(response, maxBodyBytes, url);
 
 	writeAtomic(cachePath, xml);
 
@@ -134,6 +174,42 @@ function writeAtomic(path: string, content: string): void {
 		throw err;
 	}
 }
+
+/**
+ * Read the response body up to `maxBodyBytes`. Streams when `response.body`
+ * is set (production global `fetch`); falls back to `text()` for the test
+ * seam (which then verifies the post-decode byte length).
+ */
+async function readBoundedBody(response: CacheFetchResponse, maxBodyBytes: number, url: string): Promise<string> {
+	if (response.body !== undefined && response.body !== null) {
+		const chunks: Buffer[] = [];
+		let bytes = 0;
+		const stream = Readable.fromWeb(response.body as unknown as import('node:stream/web').ReadableStream);
+		try {
+			for await (const chunk of stream) {
+				const buf = typeof chunk === 'string' ? Buffer.from(chunk) : (chunk as Buffer);
+				bytes += buf.byteLength;
+				if (bytes > maxBodyBytes) {
+					stream.destroy();
+					throw new Error(`eCFR response body exceeded ${maxBodyBytes} bytes for ${url}; aborting`);
+				}
+				chunks.push(buf);
+			}
+		} catch (err) {
+			if (err instanceof Error && err.message.includes('exceeded')) throw err;
+			throw err;
+		}
+		return Buffer.concat(chunks).toString('utf-8');
+	}
+
+	const xml = await response.text();
+	const bytes = Buffer.byteLength(xml, 'utf-8');
+	if (bytes > maxBodyBytes) {
+		throw new Error(`eCFR response body exceeded ${maxBodyBytes} bytes for ${url}; refusing to cache`);
+	}
+	return xml;
+}
+
 
 function buildEcfrUrl(opts: CacheLoadOptions): string {
 	const base = `${ECFR_BASE}/${opts.editionDate}/title-${opts.title}.xml`;

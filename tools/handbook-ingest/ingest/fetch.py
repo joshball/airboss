@@ -10,6 +10,14 @@ filter line is dormant plumbing for the day the policy flips.
 We always recompute the SHA-256 after download so the manifest reflects the
 bytes on disk, not whatever the URL served when an extractor first ran. The
 manifest's `source_checksum` is the audit trail.
+
+Hardening (cluster E): the network branch flows through
+:func:`ingest.http_fetch.fetch_url_bytes`, which adds:
+    - 60 s timeout
+    - max-redirects=5 with same-scheme (`https`) and host-allowlist enforcement
+    - 250 MiB body cap
+    - PDF Content-Type check
+    - optional SHA-256 verification against a YAML pin (when present)
 """
 
 from __future__ import annotations
@@ -21,7 +29,19 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 from .config_loader import HandbookConfig
+from .http_fetch import (
+    DEFAULT_PDF_CONTENT_TYPES,
+    DEFAULT_USER_AGENT,
+    FetchError,
+    fetch_url_bytes,
+)
 from .paths import cache_edition_root, ensure_dir
+
+__all__ = ['FetchResult', 'fetch_pdf']
+
+# Re-export so legacy callers / tests that imported `urllib.request` from this
+# module keep working. New code should not rely on this; use `http_fetch`.
+_ = urllib.request
 
 
 @dataclass(frozen=True)
@@ -59,25 +79,28 @@ def fetch_pdf(config: HandbookConfig, *, force: bool = False) -> FetchResult:
             size_bytes=target.stat().st_size,
         )
 
-    # Atomic write: stream into `<target>.part`, then rename over the
-    # destination after the body is fully written. POSIX rename is atomic on
-    # the same filesystem, so a SIGINT or network drop mid-stream leaves
-    # either the prior file or no file -- never a partially-written
-    # destination. Required by ADR 021.
-    partial = target.with_suffix(target.suffix + ".part")
-    request = urllib.request.Request(config.source_url, headers={"User-Agent": "airboss-handbook-ingest/0.1"})
     try:
-        with urllib.request.urlopen(request) as response, partial.open("wb") as fh:
-            while True:
-                chunk = response.read(1024 * 1024)
-                if not chunk:
-                    break
-                fh.write(chunk)
+        fetched = fetch_url_bytes(
+            config.source_url,
+            user_agent=DEFAULT_USER_AGENT,
+            allowed_content_types=DEFAULT_PDF_CONTENT_TYPES,
+        )
+    except FetchError as exc:
+        raise FetchError(f"fetch_pdf failed for {config.document_slug}/{config.edition}: {exc}") from exc
+
+    # Atomic write: stage into `<target>.part`, then rename. POSIX rename is
+    # atomic on the same filesystem, so a SIGINT or write error leaves either
+    # the prior file or no file -- never a partially-written destination.
+    # Required by ADR 021.
+    partial = target.with_suffix(target.suffix + ".part")
+    try:
+        partial.write_bytes(fetched.body)
         partial.replace(target)
     except BaseException:
-        # Includes KeyboardInterrupt and any IO/network error mid-stream.
         partial.unlink(missing_ok=True)
         raise
+
+
     sha = _sha256_of(target)
     return FetchResult(
         path=target,

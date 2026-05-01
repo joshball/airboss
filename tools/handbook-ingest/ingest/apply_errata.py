@@ -58,7 +58,17 @@ from .handbooks.base import (
     ErrataConfig,
     ErrataPatch,
 )
+from .http_fetch import (
+    DEFAULT_PDF_CONTENT_TYPES,
+    DEFAULT_USER_AGENT,
+    FetchError,
+    fetch_url_bytes,
+)
 from .paths import cache_edition_root, edition_root, ensure_dir, relative_to_repo
+
+# Keep `urllib.request` import alive for legacy callers / tests that may have
+# referenced it through this module. New code uses `http_fetch`.
+_ = urllib.request
 
 
 @dataclass
@@ -268,23 +278,25 @@ def _download_errata_pdf(config: HandbookConfig, errata: ErrataConfig) -> tuple[
         target.write_bytes(candidate.read_bytes())
         return target, sha, datetime.now(tz=UTC).isoformat()
 
-    # Fall back to URL fetch. Atomic write: stream into `<target>.part`, then
-    # rename over the destination after the body is fully written. POSIX
-    # rename is atomic on the same filesystem, so a SIGINT or network drop
-    # mid-stream leaves either the prior file or no file -- never a partially-
-    # written destination. Required by ADR 021.
-    partial = target.with_suffix(target.suffix + ".part")
-    request = urllib.request.Request(errata.source_url, headers={"User-Agent": "airboss-handbook-ingest/0.1"})
+    # Fall back to URL fetch (cluster-E hardened: timeout, redirect cap,
+    # body cap, content-type check, host allowlist). Atomic write via
+    # `.part` + rename per ADR 021.
     try:
-        with urllib.request.urlopen(request) as response, partial.open("wb") as fh:
-            while True:
-                chunk = response.read(1024 * 1024)
-                if not chunk:
-                    break
-                fh.write(chunk)
+        fetched = fetch_url_bytes(
+            errata.source_url,
+            user_agent=DEFAULT_USER_AGENT,
+            allowed_content_types=DEFAULT_PDF_CONTENT_TYPES,
+        )
+    except FetchError as exc:
+        raise ErrataApplyError(
+            f"errata fetch failed for {errata.id} ({errata.source_url}): {exc}"
+        ) from exc
+
+    partial = target.with_suffix(target.suffix + ".part")
+    try:
+        partial.write_bytes(fetched.body)
         partial.replace(target)
     except BaseException:
-        # Includes KeyboardInterrupt and any IO/network error mid-stream.
         partial.unlink(missing_ok=True)
         raise
     sha = _sha256_of(target)

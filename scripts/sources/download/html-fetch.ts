@@ -13,6 +13,7 @@ import { createWriteStream, mkdirSync, renameSync, unlinkSync } from 'node:fs';
 import { dirname } from 'node:path';
 import { Readable } from 'node:stream';
 import { pipeline } from 'node:stream/promises';
+import { SOURCE_ACTION_LIMITS, SOURCE_FETCH_ALLOWED_HOSTS } from '@ab/constants';
 import { sleep } from '../../lib/sleep';
 import { NETWORK_TIMEOUT_MS, RETRY_DELAY_MS, USER_AGENT } from './constants';
 import { type DownloadOutcome, followRedirectsHead, HttpError } from './http';
@@ -20,6 +21,10 @@ import { type DownloadOutcome, followRedirectsHead, HttpError } from './http';
 export interface HtmlDownloadOptions {
 	readonly verbose: boolean;
 	readonly fetchImpl?: typeof fetch;
+	/** Override the per-download body cap. Tests use a small value to exercise the overrun path. */
+	readonly maxBodyBytes?: number;
+	/** Override the redirect-host allowlist. Tests pass a stub. */
+	readonly allowedHosts?: readonly string[];
 }
 
 export async function downloadHtmlFile(
@@ -46,7 +51,8 @@ async function downloadHtmlOnce(url: string, destPath: string, opts: HtmlDownloa
 		throw new Error('no fetch implementation available in this runtime');
 	}
 
-	const finalUrl = await followRedirectsHead(url, fetchImpl, opts.verbose);
+	const allowedHosts = opts.allowedHosts ?? SOURCE_FETCH_ALLOWED_HOSTS;
+	const finalUrl = await followRedirectsHead(url, fetchImpl, opts.verbose, allowedHosts);
 	const controller = new AbortController();
 	const timer = setTimeout(() => controller.abort(), NETWORK_TIMEOUT_MS);
 
@@ -86,15 +92,23 @@ async function downloadHtmlOnce(url: string, destPath: string, opts: HtmlDownloa
 	// the prior file or no file -- never a partially-written destination.
 	// Required by ADR 021.
 	const partPath = `${destPath}.part`;
+	const maxBodyBytes = opts.maxBodyBytes ?? SOURCE_ACTION_LIMITS.MAX_DOWNLOAD_BYTES;
 	const hash = createHash('sha256');
 	let bytes = 0;
 	const fileStream = createWriteStream(partPath);
 	const nodeStream = Readable.fromWeb(response.body as unknown as import('node:stream/web').ReadableStream);
 
+	let overrunError: Error | null = null;
 	nodeStream.on('data', (chunk: Buffer | string) => {
 		const buf = typeof chunk === 'string' ? Buffer.from(chunk) : chunk;
 		hash.update(buf);
 		bytes += buf.byteLength;
+		if (bytes > maxBodyBytes) {
+			overrunError = new Error(
+				`html download body exceeded ${maxBodyBytes} bytes for ${finalUrl}; aborting to defend the cache`,
+			);
+			nodeStream.destroy(overrunError);
+		}
 	});
 
 	try {
@@ -106,6 +120,7 @@ async function downloadHtmlOnce(url: string, destPath: string, opts: HtmlDownloa
 		} catch {
 			// .part may not exist or may already be gone; ignore.
 		}
+		if (overrunError !== null) throw overrunError;
 		throw err;
 	}
 

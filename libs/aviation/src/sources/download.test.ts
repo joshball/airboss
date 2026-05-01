@@ -129,6 +129,44 @@ describe('downloadFile', () => {
 		});
 		expect(result.fileSize).toBe(5);
 	});
+
+	it('refuses a response whose HEAD Content-Length exceeds maxBodyBytes', async () => {
+		const body = new TextEncoder().encode('hello').buffer;
+		const fetchImpl = ((_url: string | URL | Request, init?: RequestInit) => {
+			if (init?.method === 'HEAD') return Promise.resolve(makeResponse(200, null, { 'content-length': '99999' }));
+			return Promise.resolve(makeResponse(200, body));
+		}) as typeof fetch;
+
+		const dest = join(workDir, 'too-big.bin');
+		await expect(
+			downloadFile('https://example.test/too-big', dest, {
+				fetchImpl,
+				sleepImpl: async () => {},
+				maxBodyBytes: 1024,
+			}),
+		).rejects.toThrow(/HEAD Content-Length 99999 exceeds cap 1024/);
+	});
+
+	it('aborts the streamed body when it overruns maxBodyBytes', async () => {
+		// Body is 2 KiB; cap is 256 bytes. The HEAD has no content-length so we
+		// don't reject early; the streaming path must trip on the first chunk.
+		const body = new TextEncoder().encode('x'.repeat(2048)).buffer;
+		const fetchImpl = ((_url: string | URL | Request, init?: RequestInit) => {
+			if (init?.method === 'HEAD') return Promise.resolve(makeResponse(200, null));
+			return Promise.resolve(makeResponse(200, body));
+		}) as typeof fetch;
+
+		const dest = join(workDir, 'overrun.bin');
+		await expect(
+			downloadFile('https://example.test/overrun', dest, {
+				fetchImpl,
+				sleepImpl: async () => {},
+				maxBodyBytes: 256,
+			}),
+		).rejects.toThrow(/exceeded 256 bytes|after 3 attempts/);
+		// no `.part` file lingering after all retries fail
+		await expect(stat(`${dest}.part`)).rejects.toThrow();
+	});
 });
 
 describe('headCheck', () => {

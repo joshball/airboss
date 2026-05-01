@@ -13,6 +13,18 @@ import { REFERENCE_SOURCE_TYPES, type ReferenceSourceType } from './reference-ta
 export const SOURCE_ACTION_LIMITS = {
 	/** Hard cap on a single upload body. 500 MiB covers yearly CFR + AIM bundles. */
 	MAX_UPLOAD_BYTES: 500 * 1024 * 1024,
+	/**
+	 * Hard cap on a single HTTP download body (DoS / fill-cache defense).
+	 *
+	 * 250 MiB exceeds every realistic FAA / eCFR asset (largest known is the
+	 * AvWX whole-doc PDF at ~50 MiB) by 5x, so we never cap a legitimate
+	 * payload but always abort tarpit / runaway responses well before they
+	 * exhaust the developer's home directory. Used by every download path:
+	 * `libs/aviation/src/sources/download.ts`, `libs/sources/src/regs/cache.ts`,
+	 * `scripts/sources/download/http.ts`, `scripts/sources/download/html-fetch.ts`,
+	 * and the Python ingest fetchers in `tools/handbook-ingest/`.
+	 */
+	MAX_DOWNLOAD_BYTES: 250 * 1024 * 1024,
 	/** End-to-end timeout on a single download GET (wall clock). */
 	DOWNLOAD_TIMEOUT_MS: 120_000,
 	/** How many times to retry a failed fetch before giving up. */
@@ -24,6 +36,22 @@ export const SOURCE_ACTION_LIMITS = {
 	/** Retained archived versions of a source binary before the oldest is pruned. */
 	ARCHIVE_RETENTION: 3,
 } as const;
+
+/**
+ * Hostname allowlist for the source-fetch redirect chain.
+ *
+ * Every download / discovery / scrape URL traces back to a YAML config under
+ * `scripts/sources/config/**` and the upstream domains are exactly two:
+ * `www.faa.gov` and `www.ecfr.gov`. Redirect chains that leave this set are
+ * refused so that a poisoned DNS response, an MITM 302, or a compromised CDN
+ * edge cannot silently swap the corpus bytes from an unauthenticated source.
+ *
+ * Add to this list only when a new YAML config introduces a new upstream host.
+ * Adding a host is intentionally a code change so the security review surface
+ * for "what hosts is the downloader allowed to talk to?" stays small and
+ * reviewable.
+ */
+export const SOURCE_FETCH_ALLOWED_HOSTS: readonly string[] = ['www.faa.gov', 'www.ecfr.gov'];
 
 /** User-Agent string sent by the source downloader. Advertises the tool honestly. */
 export const SOURCE_DOWNLOADER_USER_AGENT =

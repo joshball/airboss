@@ -8,14 +8,25 @@
  *   3. HEAD info + HTTP status available on the result so callers can short-circuit
  *      `304 Not Modified` without inspecting headers themselves.
  *
+ * Hardening (cluster E):
+ *   - The GET path streams the body chunk-by-chunk and aborts the moment the
+ *     running byte count exceeds `SOURCE_ACTION_LIMITS.MAX_DOWNLOAD_BYTES` so
+ *     a tarpit / runaway response can't fill the developer's home directory.
+ *   - When the server provides a `Content-Length` larger than the cap, we
+ *     refuse before reading any body bytes.
+ *   - The hash is computed incrementally over the same chunks, no double-buffer.
+ *
  * Stays Bun-native: uses `Bun.write`, `Bun.CryptoHasher`, `Bun.file`. The `.part`
  * temp-file -> atomic-rename dance guarantees the destination is either absent
  * or fully hashed; no half-written files survive a crash.
  */
 
 import { createHash } from 'node:crypto';
+import { createWriteStream } from 'node:fs';
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import { Readable } from 'node:stream';
+import { pipeline } from 'node:stream/promises';
 import { SOURCE_ACTION_LIMITS, SOURCE_DOWNLOADER_USER_AGENT } from '@ab/constants';
 
 /** HEAD probe info; every field null-safe because many servers block HEAD. */
@@ -46,6 +57,12 @@ export interface DownloadOptions {
 	sleepImpl?: (ms: number) => Promise<void>;
 	/** Structured log hook (events: `head`, `get`, `retry`, `304`, `done`). */
 	log?: (event: string, detail: Record<string, unknown>) => void;
+	/**
+	 * Override the per-download body cap. Tests use a small value to exercise
+	 * the overrun path. Production callers leave this undefined; the default
+	 * is `SOURCE_ACTION_LIMITS.MAX_DOWNLOAD_BYTES`.
+	 */
+	maxBodyBytes?: number;
 }
 
 async function defaultSleep(ms: number): Promise<void> {
@@ -84,21 +101,14 @@ export async function headCheck(url: string, options: DownloadOptions = {}): Pro
 	}
 }
 
-function computeSha256(bytes: Uint8Array): string {
-	// Bun ships Bun.CryptoHasher, but we use node:crypto so the function is
-	// testable under the Vitest node runtime without Bun-only globals.
-	const hasher = createHash('sha256');
-	hasher.update(bytes);
-	return hasher.digest('hex');
-}
-
 /**
  * Download `url` into `destPath` with retry + conditional-GET + atomic rename.
  *
  * Returns `{ notModified: true }` (without writing any file) when the server
  * honors `If-None-Match` / `If-Modified-Since` and returns 304.
  *
- * Throws `Error` after `SOURCE_ACTION_LIMITS.DOWNLOAD_MAX_RETRIES` failures.
+ * Throws `Error` after `SOURCE_ACTION_LIMITS.DOWNLOAD_MAX_RETRIES` failures or
+ * the moment a body exceeds `maxBodyBytes` (defaults to MAX_DOWNLOAD_BYTES).
  */
 export async function downloadFile(
 	url: string,
@@ -108,9 +118,16 @@ export async function downloadFile(
 	const fetchImpl = options.fetchImpl ?? fetch;
 	const sleepImpl = options.sleepImpl ?? defaultSleep;
 	const log = options.log ?? (() => {});
+	const maxBodyBytes = options.maxBodyBytes ?? SOURCE_ACTION_LIMITS.MAX_DOWNLOAD_BYTES;
 
 	log('head', { url });
 	const headInfo = await headCheck(url, options);
+
+	if (headInfo.contentLength !== null && headInfo.contentLength > maxBodyBytes) {
+		throw new Error(
+			`refusing to download: HEAD Content-Length ${headInfo.contentLength} exceeds cap ${maxBodyBytes} for ${url}`,
+		);
+	}
 
 	const partPath = `${destPath}.part`;
 	const dir = path.dirname(destPath);
@@ -154,15 +171,21 @@ export async function downloadFile(
 				throw new Error('download failed: response has no body');
 			}
 
-			const arrayBuffer = await response.arrayBuffer();
-			const bytes = new Uint8Array(arrayBuffer);
-			await fs.writeFile(partPath, bytes);
-			const sha256 = computeSha256(bytes);
-			const stat = await fs.stat(partPath);
+			// Re-check the body's own Content-Length (HEAD and GET can differ).
+			const responseLengthHeader = response.headers.get('content-length');
+			if (responseLengthHeader !== null) {
+				const declared = Number.parseInt(responseLengthHeader, 10);
+				if (Number.isFinite(declared) && declared > maxBodyBytes) {
+					throw new Error(`download failed: GET Content-Length ${declared} exceeds cap ${maxBodyBytes} for ${url}`);
+				}
+			}
+
+			const result = await streamToFileWithCap(response.body, partPath, maxBodyBytes, url);
+
 			await fs.rename(partPath, destPath);
 
-			log('done', { url, fileSize: stat.size, sha256 });
-			return { sha256, fileSize: stat.size, headInfo, notModified: false };
+			log('done', { url, fileSize: result.bytes, sha256: result.sha256 });
+			return { sha256: result.sha256, fileSize: result.bytes, headInfo, notModified: false };
 		} catch (err) {
 			lastError = err instanceof Error ? err : new Error(String(err));
 			try {
@@ -180,8 +203,48 @@ export async function downloadFile(
 	);
 }
 
+/**
+ * Pipe a Web ReadableStream to a file while updating a sha256 hash and aborting
+ * once the running byte count exceeds `maxBodyBytes`. The stream is destroyed
+ * on overrun so we never write more than `maxBodyBytes + last-chunk-size` to
+ * disk; the `.part` file is unlinked by the caller's catch handler.
+ */
+async function streamToFileWithCap(
+	body: ReadableStream<Uint8Array>,
+	partPath: string,
+	maxBodyBytes: number,
+	url: string,
+): Promise<{ sha256: string; bytes: number }> {
+	const hash = createHash('sha256');
+	let bytes = 0;
+	let overrunError: Error | null = null;
+	const fileStream = createWriteStream(partPath);
+	const nodeStream = Readable.fromWeb(body as unknown as import('node:stream/web').ReadableStream);
+
+	nodeStream.on('data', (chunk: Buffer | string) => {
+		const buf = typeof chunk === 'string' ? Buffer.from(chunk) : chunk;
+		hash.update(buf);
+		bytes += buf.byteLength;
+		if (bytes > maxBodyBytes) {
+			overrunError = new Error(`download body exceeded ${maxBodyBytes} bytes for ${url}; aborting to defend the cache`);
+			nodeStream.destroy(overrunError);
+		}
+	});
+
+	try {
+		await pipeline(nodeStream, fileStream);
+	} catch (err) {
+		if (overrunError !== null) throw overrunError;
+		throw err;
+	}
+
+	return { sha256: hash.digest('hex'), bytes };
+}
+
 /** Stream a file from disk and return its sha256 without loading the whole buffer. */
 export async function computeFileHash(filePath: string): Promise<string> {
 	const data = await fs.readFile(filePath);
-	return computeSha256(data);
+	const hasher = createHash('sha256');
+	hasher.update(data);
+	return hasher.digest('hex');
 }
