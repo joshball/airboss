@@ -45,7 +45,7 @@ const percentRead = $derived(
 		? 0
 		: Math.round((progress.readSections / progress.totalSections) * 100),
 );
-const readerHref = $derived(isReadable ? ROUTES.LIBRARY_DOC(documentSlug) : null);
+const readerHref = $derived(isReadable ? ROUTES.LIBRARY_HANDBOOK(documentSlug) : null);
 </script>
 
 {#if isReadable && readerHref !== null && progress !== null}

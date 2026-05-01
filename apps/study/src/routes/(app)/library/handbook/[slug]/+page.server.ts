@@ -1,5 +1,5 @@
 /**
- * `/handbooks/[doc]` -- chapter list for a single handbook.
+ * `/library/handbook/[slug]` -- chapter list for a single handbook.
  *
  * Defaults to the latest non-superseded edition; honors `?edition=` to pin a
  * historical edition (citations on a node that pre-dates a re-ingestion). If
@@ -15,7 +15,7 @@ import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async (event) => {
 	const user = requireAuth(event);
-	const documentSlug = event.params.doc;
+	const documentSlug = event.params.slug;
 	const editionParam = event.url.searchParams.get(QUERY_PARAMS.EDITION) ?? undefined;
 
 	const ref = await getReferenceByDocument(documentSlug, { edition: editionParam }).catch(() => null);

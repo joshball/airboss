@@ -1,5 +1,5 @@
 /**
- * `POST /handbooks/[doc]/[chapter]/[section]/heartbeat`
+ * `POST /library/handbook/[slug]/[chapter]/[section]/heartbeat`
  *
  * Client-tick endpoint for the section reader's read-time accumulator.
  *
@@ -59,7 +59,7 @@ export const POST: RequestHandler = async (event) => {
 		return json({ error: `Heartbeat delta above maximum (${HEARTBEAT_MAX_DELTA_SEC}s).` }, { status: 400 });
 	}
 
-	const documentSlug = event.params.doc;
+	const documentSlug = event.params.slug;
 	const chapterCode = event.params.chapter;
 	const sectionCode = event.params.section;
 	const editionParam = event.url.searchParams.get(QUERY_PARAMS.EDITION) ?? undefined;

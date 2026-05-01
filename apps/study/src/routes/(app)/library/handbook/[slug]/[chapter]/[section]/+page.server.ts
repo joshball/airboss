@@ -1,5 +1,5 @@
 /**
- * `/handbooks/[doc]/[chapter]/[section]` -- per-section read view.
+ * `/library/handbook/[slug]/[chapter]/[section]` -- per-section read view.
  *
  * Lights up for handbooks whose ingestion produced section-granularity rows.
  * v1 PHAK ingestion only produces chapter rows so PHAK URLs at this depth
@@ -29,7 +29,7 @@ import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async (event) => {
 	const user = requireAuth(event);
-	const documentSlug = event.params.doc;
+	const documentSlug = event.params.slug;
 	const chapterCode = event.params.chapter;
 	const sectionCode = event.params.section;
 	const editionParam = event.url.searchParams.get(QUERY_PARAMS.EDITION) ?? undefined;
@@ -117,7 +117,7 @@ export const load: PageServerLoad = async (event) => {
 export const actions: Actions = {
 	'set-status': async (event) => {
 		const user = requireAuth(event);
-		const sectionId = await resolveSectionId(event.params.doc, event.params.chapter, event.params.section);
+		const sectionId = await resolveSectionId(event.params.slug, event.params.chapter, event.params.section);
 		const formData = await event.request.formData();
 		const parsed = handbookReadStatusSchema.safeParse(String(formData.get('status') ?? ''));
 		if (!parsed.success) return fail(400, { fieldError: 'Invalid status' });
@@ -126,7 +126,7 @@ export const actions: Actions = {
 	},
 	'set-comprehended': async (event) => {
 		const user = requireAuth(event);
-		const sectionId = await resolveSectionId(event.params.doc, event.params.chapter, event.params.section);
+		const sectionId = await resolveSectionId(event.params.slug, event.params.chapter, event.params.section);
 		const formData = await event.request.formData();
 		const comprehended = String(formData.get('comprehended') ?? '') === 'true';
 		try {
@@ -139,7 +139,7 @@ export const actions: Actions = {
 	},
 	'mark-reread': async (event) => {
 		const user = requireAuth(event);
-		const sectionId = await resolveSectionId(event.params.doc, event.params.chapter, event.params.section);
+		const sectionId = await resolveSectionId(event.params.slug, event.params.chapter, event.params.section);
 		try {
 			await markAsReread(user.id, sectionId);
 		} catch (err) {
@@ -150,7 +150,7 @@ export const actions: Actions = {
 	},
 	'set-notes': async (event) => {
 		const user = requireAuth(event);
-		const sectionId = await resolveSectionId(event.params.doc, event.params.chapter, event.params.section);
+		const sectionId = await resolveSectionId(event.params.slug, event.params.chapter, event.params.section);
 		const formData = await event.request.formData();
 		const notesMd = String(formData.get('notesMd') ?? '');
 		if (notesMd.length > HANDBOOK_NOTES_MAX_LENGTH) {

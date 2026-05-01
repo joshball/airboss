@@ -1,5 +1,6 @@
+import type { AviationTopic, CertApplicability } from './reference-tags';
 import type { SimScenarioId } from './sim';
-import type { KnowledgePhase } from './study';
+import type { KnowledgePhase, LibraryRegulationsKind } from './study';
 
 /** Query-string parameter names used across study routes. */
 export const QUERY_PARAMS = {
@@ -202,23 +203,41 @@ export const ROUTES = {
 	// `docs/work-packages/handbook-ingestion-and-reader/spec.md` and
 	// `docs/decisions/016-cert-syllabus-goal-model/decision.md`.
 	LIBRARY: '/library',
-	LIBRARY_DOC: (doc: string) => `/library/${encodeURIComponent(doc)}` as const,
-	LIBRARY_CHAPTER: (doc: string, chapter: number | string) =>
-		`/library/${encodeURIComponent(doc)}/${encodeURIComponent(String(chapter))}` as const,
-	LIBRARY_SECTION: (doc: string, chapter: number | string, section: number | string) =>
-		`/library/${encodeURIComponent(doc)}/${encodeURIComponent(String(chapter))}/${encodeURIComponent(String(section))}` as const,
 	/**
-	 * Edition-pinned section URL. Default reader resolves the latest
-	 * non-superseded edition; this variant keeps a learner on a specific
-	 * edition (e.g. citations on a node that pre-dates a re-ingestion).
+	 * Cert spine -- references whose `primary_cert` matches plus carryover
+	 * groups inherited via the prereq DAG. See `library-by-cert` BC.
 	 */
-	LIBRARY_SECTION_AT_EDITION: (doc: string, chapter: number | string, section: number | string, edition: string) =>
-		`/library/${encodeURIComponent(doc)}/${encodeURIComponent(String(chapter))}/${encodeURIComponent(String(section))}?${QUERY_PARAMS.EDITION}=${encodeURIComponent(edition)}` as const,
-	LIBRARY_AT_EDITION: (doc: string, edition: string) =>
-		`/library/${encodeURIComponent(doc)}?${QUERY_PARAMS.EDITION}=${encodeURIComponent(edition)}` as const,
-	/** POST endpoint for client heartbeat ticks while reading a section. */
-	LIBRARY_SECTION_HEARTBEAT: (doc: string, chapter: number | string, section: number | string) =>
-		`/library/${encodeURIComponent(doc)}/${encodeURIComponent(String(chapter))}/${encodeURIComponent(String(section))}/heartbeat` as const,
+	LIBRARY_CERT: (cert: CertApplicability) => `/library/cert/${encodeURIComponent(cert)}` as const,
+	/** Topic cross-cut -- references tagged with the given aviation topic. */
+	LIBRARY_TOPIC: (topic: AviationTopic) => `/library/topic/${encodeURIComponent(topic)}` as const,
+	/** Top-level regulations & policy index. */
+	LIBRARY_REGULATIONS: '/library/regulations',
+	/** One bucket inside the regulations index (`14-cfr`, `aim`, ...). */
+	LIBRARY_REGULATIONS_KIND: (kind: LibraryRegulationsKind) =>
+		`/library/regulations/${encodeURIComponent(kind)}` as const,
+	/**
+	 * One group inside a regulations bucket -- a CFR Part, an AIM Chapter,
+	 * an AC series, etc. Forward-compatible with future per-section reader
+	 * URLs; today renders the umbrella card when no inline sections exist.
+	 */
+	LIBRARY_REGULATIONS_GROUP: (kind: LibraryRegulationsKind, group: string) =>
+		`/library/regulations/${encodeURIComponent(kind)}/${encodeURIComponent(group)}` as const,
+	/** Per-section leaf reader inside a regulations group. */
+	LIBRARY_REGULATIONS_SECTION: (kind: LibraryRegulationsKind, group: string, section: string) =>
+		`/library/regulations/${encodeURIComponent(kind)}/${encodeURIComponent(group)}/${encodeURIComponent(section)}` as const,
+	/** Handbook TOC by document slug (PHAK, AFH, IFH, ...). */
+	LIBRARY_HANDBOOK: (slug: string) => `/library/handbook/${encodeURIComponent(slug)}` as const,
+	/** Single chapter inside a handbook. */
+	LIBRARY_HANDBOOK_CHAPTER: (slug: string, chapter: number | string) =>
+		`/library/handbook/${encodeURIComponent(slug)}/${encodeURIComponent(String(chapter))}` as const,
+	/** Single section inside a handbook chapter (leaf reader). */
+	LIBRARY_HANDBOOK_SECTION: (slug: string, chapter: number | string, section: number | string) =>
+		`/library/handbook/${encodeURIComponent(slug)}/${encodeURIComponent(String(chapter))}/${encodeURIComponent(String(section))}` as const,
+	/** POST endpoint for client heartbeat ticks while reading a handbook section. */
+	LIBRARY_HANDBOOK_SECTION_HEARTBEAT: (slug: string, chapter: number | string, section: number | string) =>
+		`/library/handbook/${encodeURIComponent(slug)}/${encodeURIComponent(String(chapter))}/${encodeURIComponent(String(section))}/heartbeat` as const,
+	/** Aircraft-specific (POH/AFM) umbrella surface. */
+	LIBRARY_AIRCRAFT: (slug: string) => `/library/aircraft/${encodeURIComponent(slug)}` as const,
 
 	// Study -- Help (per-app help content; primitives shared via @ab/help)
 	HELP: '/help',

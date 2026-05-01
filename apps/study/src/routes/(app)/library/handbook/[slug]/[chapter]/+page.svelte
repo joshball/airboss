@@ -49,7 +49,7 @@ function figureUrl(assetPath: string): string {
 	{#snippet eyebrowSnippet()}
 		<nav aria-label="Breadcrumb">
 			<a href={ROUTES.LIBRARY}>Library</a> &raquo;
-			<a href={ROUTES.LIBRARY_DOC(data.reference.documentSlug)}>{data.reference.title}</a> &raquo;
+			<a href={ROUTES.LIBRARY_HANDBOOK(data.reference.documentSlug)}>{data.reference.title}</a> &raquo;
 			<span>Ch {data.chapter.code}</span>
 		</nav>
 	{/snippet}

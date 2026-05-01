@@ -155,29 +155,29 @@ test.describe('handbook reader: navigation + section rendering', () => {
 		await expect(page.getByRole('heading', { name: 'Library' })).toBeVisible();
 
 		// Click the PHAK card -- the card is a link wrapping the title.
-		const phakCard = page.locator(`a[href="${ROUTES.LIBRARY_DOC(PHAK_DOC)}"]`).first();
+		const phakCard = page.locator(`a[href="${ROUTES.LIBRARY_HANDBOOK(PHAK_DOC)}"]`).first();
 		await phakCard.click();
-		await expect(page).toHaveURL(ROUTES.LIBRARY_DOC(PHAK_DOC));
+		await expect(page).toHaveURL(ROUTES.LIBRARY_HANDBOOK(PHAK_DOC));
 
 		// Chapter 12 link surfaces in the chapter list.
 		const chapter12Link = page
-			.locator(`a[href$="${ROUTES.LIBRARY_CHAPTER(PHAK_DOC, PHAK_CHAPTER_12)}"]`)
+			.locator(`a[href$="${ROUTES.LIBRARY_HANDBOOK_CHAPTER(PHAK_DOC, PHAK_CHAPTER_12)}"]`)
 			.first();
 		await expect(chapter12Link).toBeVisible();
 		await chapter12Link.click();
-		await expect(page).toHaveURL(ROUTES.LIBRARY_CHAPTER(PHAK_DOC, PHAK_CHAPTER_12));
+		await expect(page).toHaveURL(ROUTES.LIBRARY_HANDBOOK_CHAPTER(PHAK_DOC, PHAK_CHAPTER_12));
 		await expect(page.getByRole('heading', { level: 1 })).toContainText(
 			new RegExp(PHAK_CHAPTER_12_TITLE, 'i'),
 		);
 
 		// Click §9 (Atmospheric Stability).
 		const section9Link = page
-			.locator(`a[href$="${ROUTES.LIBRARY_SECTION(PHAK_DOC, PHAK_CHAPTER_12, PHAK_SECTION_9)}"]`)
+			.locator(`a[href$="${ROUTES.LIBRARY_HANDBOOK_SECTION(PHAK_DOC, PHAK_CHAPTER_12, PHAK_SECTION_9)}"]`)
 			.first();
 		await expect(section9Link).toBeVisible();
 		await section9Link.click();
 		await expect(page).toHaveURL(
-			ROUTES.LIBRARY_SECTION(PHAK_DOC, PHAK_CHAPTER_12, PHAK_SECTION_9),
+			ROUTES.LIBRARY_HANDBOOK_SECTION(PHAK_DOC, PHAK_CHAPTER_12, PHAK_SECTION_9),
 		);
 
 		// Section page renders with the right title.
@@ -216,7 +216,7 @@ test.describe('handbook reader: navigation + section rendering', () => {
 		// list (no chapter-body block). The H1 may say "Chapter 1: ..." but
 		// no duplicate "Chapter 1\n\nIntroduction To Flying\n\nIntroduction"
 		// stutter should appear inside any rendered chapter body.
-		await page.goto(ROUTES.LIBRARY_CHAPTER(PHAK_DOC, '1'));
+		await page.goto(ROUTES.LIBRARY_HANDBOOK_CHAPTER(PHAK_DOC, '1'));
 		const chapterBody = page.locator('article.chapter-body');
 		const bodyCount = await chapterBody.count();
 		if (bodyCount > 0) {
@@ -235,7 +235,7 @@ test.describe('handbook reader: navigation + section rendering', () => {
 test.describe('handbook reader: read-state controls', () => {
 
 	test('mark as read persists across reload; re-read resets', async ({ page }) => {
-		const url = ROUTES.LIBRARY_SECTION(PHAK_DOC, PHAK_CHAPTER_12, PHAK_SECTION_9);
+		const url = ROUTES.LIBRARY_HANDBOOK_SECTION(PHAK_DOC, PHAK_CHAPTER_12, PHAK_SECTION_9);
 		await page.goto(url);
 		await resetReadState(page);
 
@@ -275,14 +275,14 @@ test.describe('handbook reader: read-state controls', () => {
 	});
 
 	test('comprehension checkbox is disabled when status is unread', async ({ page }) => {
-		const url = ROUTES.LIBRARY_SECTION(PHAK_DOC, PHAK_CHAPTER_12, PHAK_SECTION_9);
+		const url = ROUTES.LIBRARY_HANDBOOK_SECTION(PHAK_DOC, PHAK_CHAPTER_12, PHAK_SECTION_9);
 		await page.goto(url);
 		await resetReadState(page);
 		await expect(page.locator('input[type=checkbox][name=comprehended]')).toBeDisabled();
 	});
 
 	test('notes save and persist across reload', async ({ page }) => {
-		const url = ROUTES.LIBRARY_SECTION(PHAK_DOC, PHAK_CHAPTER_12, PHAK_SECTION_9);
+		const url = ROUTES.LIBRARY_HANDBOOK_SECTION(PHAK_DOC, PHAK_CHAPTER_12, PHAK_SECTION_9);
 		await page.goto(url);
 
 		const stamp = `e2e-note-${Date.now()}`;
@@ -339,7 +339,7 @@ test.describe('handbook reader: heartbeat + suggestion banner', () => {
 	test('suggestion banner appears once thresholds met; "Mark as read" flips status', async ({
 		page,
 	}) => {
-		const url = ROUTES.LIBRARY_SECTION(PHAK_DOC, PHAK_CHAPTER_12, PHAK_SECTION_9);
+		const url = ROUTES.LIBRARY_HANDBOOK_SECTION(PHAK_DOC, PHAK_CHAPTER_12, PHAK_SECTION_9);
 
 		// Reset baseline first (no virtual clock yet -- this is a real flow).
 		await page.goto(url);
@@ -373,7 +373,7 @@ test.describe('handbook reader: heartbeat + suggestion banner', () => {
 	});
 
 	test('"Not yet" dismissal hides the banner for the rest of the session', async ({ page }) => {
-		const url = ROUTES.LIBRARY_SECTION(PHAK_DOC, PHAK_CHAPTER_12, PHAK_SECTION_9);
+		const url = ROUTES.LIBRARY_HANDBOOK_SECTION(PHAK_DOC, PHAK_CHAPTER_12, PHAK_SECTION_9);
 
 		await page.goto(url);
 		await resetReadState(page);
@@ -396,20 +396,20 @@ test.describe('handbook reader: heartbeat + suggestion banner', () => {
 
 test.describe('handbook reader: cross-handbook smoke', () => {
 	test('AFH index + section render with body content', async ({ page }) => {
-		await page.goto(ROUTES.LIBRARY_DOC(AFH_DOC));
+		await page.goto(ROUTES.LIBRARY_HANDBOOK(AFH_DOC));
 		await expect(page.locator('h1')).toContainText(/Airplane Flying Handbook/i);
 
-		await page.goto(ROUTES.LIBRARY_SECTION(AFH_DOC, AFH_CHAPTER_3, AFH_SECTION_2));
+		await page.goto(ROUTES.LIBRARY_HANDBOOK_SECTION(AFH_DOC, AFH_CHAPTER_3, AFH_SECTION_2));
 		await expect(page.locator('h1')).toContainText(new RegExp(AFH_SECTION_2_TITLE, 'i'));
 		const bodyText = (await page.locator('article.section-body').innerText()).trim();
 		expect(bodyText.length).toBeGreaterThan(200);
 	});
 
 	test('AvWX index + section render with body content', async ({ page }) => {
-		await page.goto(ROUTES.LIBRARY_DOC(AVWX_DOC));
+		await page.goto(ROUTES.LIBRARY_HANDBOOK(AVWX_DOC));
 		await expect(page.locator('h1')).toContainText(/Aviation Weather Handbook/i);
 
-		await page.goto(ROUTES.LIBRARY_SECTION(AVWX_DOC, AVWX_CHAPTER_5, AVWX_SECTION_1));
+		await page.goto(ROUTES.LIBRARY_HANDBOOK_SECTION(AVWX_DOC, AVWX_CHAPTER_5, AVWX_SECTION_1));
 		await expect(page.locator('h1')).toContainText(new RegExp(AVWX_SECTION_1_TITLE, 'i'));
 		const bodyText = (await page.locator('article.section-body').innerText()).trim();
 		expect(bodyText.length).toBeGreaterThan(100);
@@ -418,7 +418,7 @@ test.describe('handbook reader: cross-handbook smoke', () => {
 
 test.describe('handbook reader: citing-nodes panel', () => {
 	test('citing-nodes panel renders without breaking the page', async ({ page }) => {
-		await page.goto(ROUTES.LIBRARY_SECTION(PHAK_DOC, PHAK_CHAPTER_12, PHAK_SECTION_9));
+		await page.goto(ROUTES.LIBRARY_HANDBOOK_SECTION(PHAK_DOC, PHAK_CHAPTER_12, PHAK_SECTION_9));
 		// The panel always renders; it shows an empty-state message when no
 		// nodes carry a structured handbook citation pointing at this
 		// section. The Vitest fixture covers the populated case

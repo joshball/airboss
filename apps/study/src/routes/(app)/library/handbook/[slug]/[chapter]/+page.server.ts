@@ -1,5 +1,5 @@
 /**
- * `/handbooks/[doc]/[chapter]` -- chapter overview / read view.
+ * `/library/handbook/[slug]/[chapter]` -- chapter overview / read view.
  *
  * For handbooks whose ingestion produced sections under a chapter, this page
  * lists those sections. For handbooks whose v1 ingestion only produced
@@ -30,7 +30,7 @@ import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async (event) => {
 	const user = requireAuth(event);
-	const documentSlug = event.params.doc;
+	const documentSlug = event.params.slug;
 	const chapterCode = event.params.chapter;
 	const editionParam = event.url.searchParams.get(QUERY_PARAMS.EDITION) ?? undefined;
 
@@ -107,7 +107,7 @@ export const load: PageServerLoad = async (event) => {
 export const actions: Actions = {
 	'set-status': async (event) => {
 		const user = requireAuth(event);
-		const ref = await getReferenceByDocument(event.params.doc).catch(() => null);
+		const ref = await getReferenceByDocument(event.params.slug).catch(() => null);
 		if (!ref) throw error(404, 'Handbook not found');
 		const chapter = await getHandbookChapter(ref.id, event.params.chapter).catch(() => null);
 		if (!chapter) throw error(404, 'Chapter not found');
@@ -122,7 +122,7 @@ export const actions: Actions = {
 
 	'set-comprehended': async (event) => {
 		const user = requireAuth(event);
-		const ref = await getReferenceByDocument(event.params.doc).catch(() => null);
+		const ref = await getReferenceByDocument(event.params.slug).catch(() => null);
 		if (!ref) throw error(404, 'Handbook not found');
 		const chapter = await getHandbookChapter(ref.id, event.params.chapter).catch(() => null);
 		if (!chapter) throw error(404, 'Chapter not found');
@@ -142,7 +142,7 @@ export const actions: Actions = {
 
 	'mark-reread': async (event) => {
 		const user = requireAuth(event);
-		const ref = await getReferenceByDocument(event.params.doc).catch(() => null);
+		const ref = await getReferenceByDocument(event.params.slug).catch(() => null);
 		if (!ref) throw error(404, 'Handbook not found');
 		const chapter = await getHandbookChapter(ref.id, event.params.chapter).catch(() => null);
 		if (!chapter) throw error(404, 'Chapter not found');
@@ -159,7 +159,7 @@ export const actions: Actions = {
 
 	'set-notes': async (event) => {
 		const user = requireAuth(event);
-		const ref = await getReferenceByDocument(event.params.doc).catch(() => null);
+		const ref = await getReferenceByDocument(event.params.slug).catch(() => null);
 		if (!ref) throw error(404, 'Handbook not found');
 		const chapter = await getHandbookChapter(ref.id, event.params.chapter).catch(() => null);
 		if (!chapter) throw error(404, 'Chapter not found');

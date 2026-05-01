@@ -1430,6 +1430,35 @@ export const REFERENCE_KIND_LABELS: Record<ReferenceKind, string> = {
 };
 
 /**
+ * Top-level "Regulations & policy" buckets surfaced on `/library/regulations`.
+ * One bucket per regulator-or-publisher family (14 CFR, 49 CFR, AIM, advisory
+ * circulars, NTSB). These map to URL slugs (`/library/regulations/14-cfr`).
+ *
+ * Closed enum -- adding a new kind requires a code edit so the route loader
+ * always knows how to group the references inside.
+ */
+export const LIBRARY_REGULATIONS_KINDS = {
+	CFR_14: '14-cfr',
+	CFR_49: '49-cfr',
+	AIM: 'aim',
+	AC: 'ac',
+	NTSB: 'ntsb',
+} as const;
+
+export type LibraryRegulationsKind = (typeof LIBRARY_REGULATIONS_KINDS)[keyof typeof LIBRARY_REGULATIONS_KINDS];
+
+export const LIBRARY_REGULATIONS_KIND_VALUES: readonly LibraryRegulationsKind[] =
+	Object.values(LIBRARY_REGULATIONS_KINDS);
+
+export const LIBRARY_REGULATIONS_KIND_LABELS: Record<LibraryRegulationsKind, string> = {
+	[LIBRARY_REGULATIONS_KINDS.CFR_14]: '14 CFR',
+	[LIBRARY_REGULATIONS_KINDS.CFR_49]: '49 CFR',
+	[LIBRARY_REGULATIONS_KINDS.AIM]: 'AIM',
+	[LIBRARY_REGULATIONS_KINDS.AC]: 'Advisory Circulars',
+	[LIBRARY_REGULATIONS_KINDS.NTSB]: 'NTSB',
+};
+
+/**
  * External-citation URL templates. The `resolveCitationUrl` resolver in
  * `@ab/bc-study handbooks.ts` consumes these for non-handbook citation kinds.
  * Centralised here so a URL change (eCFR rebrand, FAA AIM reorganisation)

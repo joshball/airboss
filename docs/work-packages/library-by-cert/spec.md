@@ -3,7 +3,7 @@ title: 'Library taxonomy: by-cert primary, topic cross-cut, regulations top-leve
 product: study
 feature: library-by-cert
 type: spec
-status: reading
+status: building
 review_status: pending
 ---
 
@@ -306,6 +306,8 @@ Two rows in the placement table get explicit overrides that diverge from a naive
 | 2    | Reseed all 8 `course/references/*.yaml` with `primary_cert` per the placement table + 2 overrides above.                                         |
 | 3    | Library route restructure (`/library/cert/...`, `/library/regulations/...`, `/library/topic/...`); retire old URL family; carryover BC function. |
 | 4    | E2e tests for the new routes + manual test plan execution.                                                                                       |
+
+- Wave 3b cleanup: retired `@deprecated` route aliases inline (no legacy left).
 
 ## Phase 2 design hooks
 
