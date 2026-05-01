@@ -227,10 +227,23 @@ export async function getHandbookSection(
 	const section = sectionRows[0];
 	if (!section) throw new HandbookSectionNotFoundError({ referenceId, code: fullCode });
 
+	// The chapter slot must be a real chapter row -- a level=section row
+	// whose code happens to match `chapterCode` (e.g. `12.3` when the
+	// caller passes a multi-dot path) is NOT a chapter and would render
+	// the page with a section header pretending to be a chapter. Filtering
+	// by `level=chapter` here also blocks the URL-aliasing pathological
+	// case where two distinct (chapter, section) URL splits collide on
+	// the same `fullCode`. See Wave 4 of library-by-cert.
 	const chapterRows = await db
 		.select()
 		.from(handbookSection)
-		.where(and(eq(handbookSection.referenceId, referenceId), eq(handbookSection.code, chapterCode)))
+		.where(
+			and(
+				eq(handbookSection.referenceId, referenceId),
+				eq(handbookSection.code, chapterCode),
+				eq(handbookSection.level, HANDBOOK_SECTION_LEVELS.CHAPTER),
+			),
+		)
 		.limit(1);
 	const chapter = chapterRows[0];
 	if (!chapter) throw new HandbookSectionNotFoundError({ referenceId, code: chapterCode });
@@ -250,7 +263,14 @@ export async function getHandbookSection(
 	return { section, chapter, figures, siblings };
 }
 
-/** Convenience: resolve a section by chapter-only code (chapter overview pages). */
+/**
+ * Convenience: resolve a chapter row by code. Filters by `level=chapter`
+ * so a section row whose code happens to match (e.g. `12.3` when the URL
+ * is hand-typed as `/library/handbook/<slug>/12.3`) is NOT returned -- the
+ * chapter page renders the chapter header from this row, and a section
+ * row sitting in that slot would mislabel the page. See Wave 4 of
+ * library-by-cert.
+ */
 export async function getHandbookChapter(
 	referenceId: string,
 	chapterCode: string,
@@ -259,7 +279,13 @@ export async function getHandbookChapter(
 	const rows = await db
 		.select()
 		.from(handbookSection)
-		.where(and(eq(handbookSection.referenceId, referenceId), eq(handbookSection.code, chapterCode)))
+		.where(
+			and(
+				eq(handbookSection.referenceId, referenceId),
+				eq(handbookSection.code, chapterCode),
+				eq(handbookSection.level, HANDBOOK_SECTION_LEVELS.CHAPTER),
+			),
+		)
 		.limit(1);
 	const row = rows[0];
 	if (!row) throw new HandbookSectionNotFoundError({ referenceId, code: chapterCode });

@@ -35,9 +35,11 @@ import { generateAuthId, generateHandbookFigureId, generateHandbookSectionId, ge
 import { eq } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import {
+	getHandbookChapter,
 	getHandbookSection,
 	getNodesCitingSection,
 	getReferenceByDocument,
+	HandbookSectionNotFoundError,
 	HandbookValidationError,
 	listHandbookChapters,
 	listReferences,
@@ -81,6 +83,7 @@ const AFH_3C_ID = generateReferenceId();
 const CHAPTER_12_ID = generateHandbookSectionId();
 const SECTION_12_3_ID = generateHandbookSectionId();
 const SECTION_12_4_ID = generateHandbookSectionId();
+const SUBSECTION_12_3_4_ID = generateHandbookSectionId();
 const CHAPTER_5_ID = generateHandbookSectionId();
 const SECTION_5_1_ID = generateHandbookSectionId();
 const FIGURE_12_3_A_ID = generateHandbookFigureId();
@@ -202,6 +205,30 @@ beforeAll(async () => {
 			sourceLocator: 'PHAK Ch 12 §4',
 			contentMd: 'Density altitude is pressure altitude corrected for...',
 			contentHash: 'hash-12-4',
+			hasFigures: false,
+			hasTables: false,
+			seedOrigin: SUITE_TAG,
+			createdAt: now,
+			updatedAt: now,
+		},
+		// Subsection under §12.3 -- exercises the multi-dot code path. Real
+		// PHAK ingestion produces these (e.g. `1.2.1`, `1.2.2`); the fixture
+		// guards `getHandbookSection` + `getHandbookChapter` against treating
+		// a section row as a chapter when a hand-typed URL probes the
+		// multi-dot path.
+		{
+			id: SUBSECTION_12_3_4_ID,
+			referenceId: PHAK_25C_ID,
+			parentId: SECTION_12_3_ID,
+			level: HANDBOOK_SECTION_LEVELS.SUBSECTION,
+			ordinal: 4,
+			code: '12.3.4',
+			title: 'Subsection used for level-guard tests',
+			faaPageStart: '12-3',
+			faaPageEnd: '12-3',
+			sourceLocator: 'PHAK Ch 12 §3.4',
+			contentMd: 'Synthetic subsection.',
+			contentHash: 'hash-12-3-4',
 			hasFigures: false,
 			hasTables: false,
 			seedOrigin: SUITE_TAG,
@@ -399,6 +426,35 @@ describe('getHandbookSection', () => {
 		expect(view.chapter.id).toBe(CHAPTER_12_ID);
 		expect(view.figures.map((f) => f.id)).toEqual([FIGURE_12_3_A_ID, FIGURE_12_3_B_ID]);
 		expect(view.siblings.map((s) => s.code)).toEqual(['12.3', '12.4']);
+	});
+
+	// Wave 4 fix: the chapter slot must be a level=chapter row. The fixture
+	// includes `12.3` (section) + `12.3.4` (subsection). A hand-typed URL of
+	// `/library/handbook/<slug>/12.3/4` would call
+	// `getHandbookSection(refId, '12.3', '4')` -> `fullCode='12.3.4'` (a real
+	// subsection row exists). Pre-fix, the chapter slot would be filled with
+	// the SECTION row code='12.3' -- the page would render with a section in
+	// the chapter header. Post-fix, the chapter resolver requires
+	// `level=chapter`, so the request 404s cleanly.
+	it('throws when the chapterCode resolves to a non-chapter row (level guard)', async () => {
+		await expect(getHandbookSection(PHAK_25C_ID, '12.3', '4')).rejects.toBeInstanceOf(HandbookSectionNotFoundError);
+	});
+});
+
+describe('getHandbookChapter', () => {
+	it('returns the chapter row by code', async () => {
+		const chapter = await getHandbookChapter(PHAK_25C_ID, '12');
+		expect(chapter.id).toBe(CHAPTER_12_ID);
+		expect(chapter.level).toBe(HANDBOOK_SECTION_LEVELS.CHAPTER);
+	});
+
+	// Wave 4 fix: chapter resolution must filter by `level=chapter`. Before
+	// the fix, a section row with a multi-dot code (e.g. '12.3') would be
+	// returned when a hand-typed URL like /library/handbook/<slug>/12.3
+	// reached the chapter resolver. The page would then render with a
+	// section row in the chapter slot. The fixed behaviour: 404 cleanly.
+	it('throws when the code matches a non-chapter row (level guard)', async () => {
+		await expect(getHandbookChapter(PHAK_25C_ID, '12.3')).rejects.toBeInstanceOf(HandbookSectionNotFoundError);
 	});
 });
 
