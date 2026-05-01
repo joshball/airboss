@@ -1,6 +1,18 @@
 # Now
 
-Single entry point for "what should I work on?" in airboss. Refresh date: 2026-04-30 (hangar-audit-explorer + cockpit-panel + encoded-text family + WP status flips).
+Single entry point for "what should I work on?" in airboss. Refresh date: 2026-04-30 (#373-#380 sweep + scheduled-jobs).
+
+## Just shipped (2026-04-30 -- scheduled-jobs + library rename + cleanups)
+
+- **[scheduled-jobs skill bootstrapped (PR #378)](../../scripts/scheduler/README.md).** Local launchd-driven scheduler for repo-scoped scheduled work, installed from the [scheduled-jobs skill](~/src/_me/ai/agent-skills/skills/scheduled-jobs/SKILL.md). Each job runs in an isolated git worktree branched from main; the user's main checkout is never touched. Wired in: `scripts/scheduler/` (manager), `scripts/scheduled-jobs/` (jobs root), CLAUDE.md pointer, 5 `schedule:*` package.json aliases. Two airboss jobs registered with launchd: `now-md-drift` (daily 09:00, log-only -- writes a drift report when WPs marked `status: shipped` are still in NOW.md's "In flight"), and `cert-goals-drop-trigger-watch` (nightly 02:00, open-pr -- polls `bun run db check engine-targeting-source --window=14d`, ships the staged migration when 14 consecutive days hit). Both smoke-tested end-to-end.
+- **`/handbooks` -> `/library` rename (PR #376).** Reader subject grouping + every reference kind exposed. `/handbooks` becomes a `[...rest]` redirect for inbound link compatibility; `/library` is the canonical home.
+- **`/admin/audit-ping` retired (PR #375).** Route gone; the `audit-ping` enum value stays per ADR 004 (audit-log enum is append-only). Closed by [`retire-audit-ping`](../work-packages/retire-audit-ping/) WP (`status: shipped`).
+- **Hangar user editing (PR #371).** First admin-write surface in hangar -- role / ban / session revoke. Composes on the audit explorer (#365).
+- **Identity menu close-on-outside-pointerdown fix (PR #373).** Small UX fix to the study layout's identity menu.
+- **Library + content cleanups -- gaps 2 + 6 + IDEAS.md sweep (PR #379).** Three file-disjoint cleanups: ACS slug mapping for the four cached PDFs that were detecting fine but skipping at register time (now `scanned=5 ingested=5 skipped=0`, 5 publications / 53 areas / 276 tasks / 1576 elements); AFH duplicate-errata cleanup (605 lines of duplicated content removed across 6 files where MOSAIC errata had been applied multiple times); IDEAS.md sweep timestamp (2026-04-30 marker, no triage performed -- ~50 active ideas across 7 sections, funnel healthy).
+- **Postgres pool drain on script exit (PR #380).** `bun run db reset --force` and 10 other `scripts/db/*` entrypoints were hanging ~20s after their work because `libs/db/src/connection.ts` opens a pool on import and Bun keeps the event loop alive until the pool's idle timeout. Added `await client.end()` in `.finally()` for 11 scripts. Force-exit scripts skipped (drain irrelevant); non-DB scripts skipped.
+- **Provenance + signoff WP authored (PR #374).** Extract-provenance-and-signoff spec on disk; `status: unread`. Plus a fresh CFR Title 14 ingest. Closes the second half of the library-broad-extraction-survey work.
+- **Hangar invite flow WP authored (PR #377).** Spec + tasks + test-plan + design on disk; `status: draft`. The next admin-write surface after user-editing.
 
 ## Just shipped (2026-04-30 -- hangar admin audit explorer)
 
@@ -95,7 +107,10 @@ The week was dominated by the reference identifier system (ADR 019, **phases 1-9
 ## In flight
 
 - **[evidence-kind-data-layer](../work-packages/evidence-kind-data-layer/spec.md) (2026-04-30).** Authored to close the `not_applicable` shims that `evidence-kind-gating` (#361) shipped: today `calculation`, `demonstration`, and `teaching` gates return `not_applicable` because there's no `card.kind`, no `scenario.assessment_methods`, and no `teaching-exercise` `SESSION_ITEM_KIND`. WP plans the schema + seeds + assessment-method writes that make the four-kind partition real. Spec authored (#367); `status: unread`, awaiting sign-off + implementation.
-- **[hangar-users-editing](../work-packages/hangar-users-editing/spec.md) (2026-04-30).** Ratified alongside cockpit-panel + audit-explorer in #362. Spec on disk; `status: unread`, awaiting sign-off + implementation. The other two from that ratification batch (cockpit-panel, audit-explorer) shipped same day; this one is the lone holdout.
+- **[hangar-users-editing](../work-packages/hangar-users-editing/spec.md) (2026-04-30).** Originally ratified alongside cockpit-panel + audit-explorer in #362; cockpit-panel + audit-explorer shipped same day, but the user-editing WP turned into the larger admin-write surface that landed via PR #371 (role / ban / session revoke). Spec frontmatter still says `status: unread` -- needs flipping to `shipped` if the WP is considered closed by #371, or kept open if the spec describes additional surfaces (form validation polish, empty-state copy, etc) not yet built. Decision needed.
+- **[hangar-invite-flow](../work-packages/hangar-invite-flow/spec.md) (2026-04-30).** Spec + tasks + test-plan + design authored via PR #377. `status: draft`. Next admin-write surface after user-editing (#371). Awaiting sign-off + implementation.
+- **[extract-provenance-and-signoff](../work-packages/extract-provenance-and-signoff/spec.md) (2026-04-30).** Spec authored via PR #374. `status: unread`. Closes the back half of the library-broad-extraction-survey -- captures who/when/how content was extracted + a signoff workflow. Awaiting sign-off + implementation.
+- **[library-broad-extraction-survey](../work-packages/library-broad-extraction-survey/spec.md) (2026-04-30).** Survey-shaped WP authored via PR #374; no `status:` frontmatter. Read-only inventory of what's in the library + what extraction quality looks like across corpora.
 
 ## ADR 016 status (post-2026-04-28 ship)
 
