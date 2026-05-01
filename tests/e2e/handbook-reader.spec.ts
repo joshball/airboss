@@ -150,13 +150,17 @@ async function setStatusViaSegment(
 // Test cases -----------------------------------------------------------------
 
 test.describe('handbook reader: navigation + section rendering', () => {
-	test('PHAK card -> chapter list -> chapter -> section', async ({ page }) => {
-		await page.goto(ROUTES.LIBRARY);
-		await expect(page.getByRole('heading', { name: 'Library' })).toBeVisible();
-
-		// Click the PHAK card -- the card is a link wrapping the title.
-		const phakCard = page.locator(`a[href="${ROUTES.LIBRARY_HANDBOOK(PHAK_DOC)}"]`).first();
-		await phakCard.click();
+	test('PHAK index -> chapter list -> chapter -> section', async ({ page }) => {
+		// Wave 3b retired `/library/[doc]` in favour of three spines (cert /
+		// topic / regulations) on `/library`. Handbook cards now live under
+		// `/library/cert/[cert]` and `/library/topic/[topic]`, but the
+		// LibraryCard's readable-link branch is gated on `progress !== null`
+		// and both spine loaders pass `progress={null}`, so the cards render
+		// as un-linked text in those views today. Until the spine loaders
+		// thread through reading progress, navigation to the handbook reader
+		// happens by URL; the chapter-list -> chapter -> section flow below
+		// is what this test cares about.
+		await page.goto(ROUTES.LIBRARY_HANDBOOK(PHAK_DOC));
 		await expect(page).toHaveURL(ROUTES.LIBRARY_HANDBOOK(PHAK_DOC));
 
 		// Chapter 12 link surfaces in the chapter list.
