@@ -24,7 +24,7 @@ const AFH_MOSAIC_URL_FRAGMENT = 'AFH_Addendum_(MOSAIC).pdf';
 
 test.describe('handbook amendment: badge + diff panel', () => {
 	test('badge surfaces, click expands panel, FAA source URL visible', async ({ page }) => {
-		await page.goto(ROUTES.LIBRARY_SECTION(AFH_DOC, AFH_CHAPTER, AFH_SECTION));
+		await page.goto(ROUTES.LIBRARY_HANDBOOK_SECTION(AFH_DOC, AFH_CHAPTER, AFH_SECTION));
 
 		// Badge sits inside the page header, near the section title.
 		const badge = page.getByTestId('amendment-panel-badge');
@@ -64,7 +64,7 @@ test.describe('handbook amendment: badge + diff panel', () => {
 
 	test('sections without applied errata render no badge', async ({ page }) => {
 		// Pick a PHAK section that's not on the MOSAIC patch list.
-		await page.goto(ROUTES.LIBRARY_SECTION('phak', '12', '9'));
+		await page.goto(ROUTES.LIBRARY_HANDBOOK_SECTION('phak', '12', '9'));
 		await expect(page.getByTestId('amendment-panel')).toHaveCount(0);
 		await expect(page.getByTestId('amendment-panel-badge')).toHaveCount(0);
 	});
