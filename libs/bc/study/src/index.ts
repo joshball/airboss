@@ -166,30 +166,34 @@ export {
 } from './goals';
 export {
 	citationSchema,
-	type HandbookManifest,
 	type HandbookManifestFigure,
 	type HandbookManifestSection,
 	type HandbookManifestWarning,
 	type HandbookSectionFrontmatter,
 	handbookHeartbeatInputSchema,
 	handbookManifestFigureSchema,
-	handbookManifestSchema,
 	handbookManifestSectionSchema,
 	handbookManifestWarningSchema,
 	handbookNotesInputSchema,
 	handbookReadStatusSchema,
 	handbookSectionFrontmatterSchema,
 	legacyCitationSchema,
+	type Manifest,
+	manifestSchema,
+	type SectionTreeManifest,
+	sectionTreeManifestSchema,
 	structuredCitationSchema,
-} from './handbook-validation';
-// Handbook ingestion + reader (ADR 016 phase 0).
+	type WholeDocManifest,
+	wholeDocManifestSchema,
+} from './manifest-validation';
+// Reference ingestion + reader (post-WP-SUB substrate; ADR 016 phase 0).
 export type {
 	CitingNodesQuery,
 	GetReferenceOptions,
 	HandbookProgressSummary,
 	HandbookSectionView,
 	ListReferencesOptions,
-} from './handbooks';
+} from './references';
 export {
 	getHandbookChapter,
 	getHandbookProgress,
@@ -213,13 +217,13 @@ export {
 	setComprehended,
 	setNotes,
 	setReadStatus,
-} from './handbooks';
-// Handbook errata (apply-errata-and-afh-mosaic WP).
+} from './references';
+// Reference-section errata (apply-errata-and-afh-mosaic WP).
 export type {
 	ErrataDisplay,
 	ErrataInsert,
-	HandbookSectionErrataRow,
-} from './handbooks-errata';
+	ReferenceSectionErrataRow,
+} from './reference-errata';
 export {
 	countSectionsByErratumId,
 	deleteErrataByErratumId,
@@ -230,7 +234,7 @@ export {
 	listErrataForSection,
 	newErrataId,
 	validateErrataInsert,
-} from './handbooks-errata';
+} from './reference-errata';
 export type {
 	CertAndDomainMatrix,
 	CertProgress,
@@ -404,9 +408,6 @@ export type {
 	GoalNodeRow,
 	GoalRow,
 	GoalSyllabusRow,
-	HandbookFigureRow,
-	HandbookReadStateRow,
-	HandbookSectionRow,
 	KnowledgeEdgeRow,
 	KnowledgeNodeProgressRow,
 	KnowledgeNodeRow,
@@ -421,14 +422,14 @@ export type {
 	NewGoalNodeRow,
 	NewGoalRow,
 	NewGoalSyllabusRow,
-	NewHandbookFigureRow,
-	NewHandbookReadStateRow,
-	NewHandbookSectionRow,
 	NewKnowledgeEdgeRow,
 	NewKnowledgeNodeProgressRow,
 	NewKnowledgeNodeRow,
 	NewMemoryReviewSessionRow,
+	NewReferenceFigureRow,
 	NewReferenceRow,
+	NewReferenceSectionReadStateRow,
+	NewReferenceSectionRow,
 	NewReviewRow,
 	NewSavedDeckRow,
 	NewScenarioOptionRow,
@@ -439,7 +440,10 @@ export type {
 	NewSyllabusNodeLinkRow,
 	NewSyllabusNodeRow,
 	NewSyllabusRow,
+	ReferenceFigureRow,
 	ReferenceRow,
+	ReferenceSectionReadStateRow,
+	ReferenceSectionRow,
 	ReviewRow,
 	ReviewSessionDeckSpec,
 	SavedDeckRow,
@@ -465,11 +469,15 @@ export {
 	goal,
 	goalNode,
 	goalSyllabus,
-	handbookSectionErrata,
 	knowledgeEdge,
 	knowledgeNode,
 	knowledgeNodeProgress,
 	memoryReviewSession,
+	reference,
+	referenceFigure,
+	referenceSection,
+	referenceSectionErrata,
+	referenceSectionReadState,
 	review,
 	savedDeck,
 	scenario,

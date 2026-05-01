@@ -1,21 +1,37 @@
 /**
- * Zod schemas for the handbook ingestion pipeline + reader BC.
+ * Zod schemas for the reference ingestion pipeline + reader BC.
  *
  * Two audiences:
  *
- * 1. The seed (`scripts/db/seed-handbooks.ts`) parses every section markdown
- *    file's frontmatter and the `<doc>/<edition>/manifest.json` against these
- *    schemas before touching the DB. A malformed manifest is a load-time
- *    error, not a silent crash mid-walk.
- * 2. The reverse-citation BC (`libs/bc/study/src/handbooks.ts`) validates the
- *    structured `Citation` shape coming off `knowledge_node.references` so a
- *    bad row never reaches `resolveCitationUrl` un-narrowed.
+ * 1. The seed (`scripts/db/seed-references-from-manifest.ts`) parses every
+ *    section markdown file's frontmatter and the
+ *    `<corpus>/<doc>/<edition>/manifest.json` against these schemas before
+ *    touching the DB. A malformed manifest is a load-time error, not a silent
+ *    crash mid-walk.
+ * 2. The reverse-citation BC (`libs/bc/study/src/references.ts`) validates
+ *    the structured `Citation` shape coming off `knowledge_node.references`
+ *    so a bad row never reaches `resolveCitationUrl` un-narrowed.
  *
  * The schemas mirror the discriminated union in `@ab/types` for storage shape
  * and the spec's "Section markdown shape" + "manifest.json" payloads for the
  * ingestion side. Zod gives us narrowing + helpful error messages; the file
  * lives in the BC (not `@ab/types`) so the dependency on `zod` stays out of
  * the type-only barrel.
+ *
+ * Manifest validator (post-WP-SUB) is a **discriminated union on manifest
+ * kind**, where the discriminator is the manifest's own `kind` field:
+ *
+ *   - `kind: 'handbook'`   -- section-tree shape (PHAK / AFH / AVWX). Walks
+ *                             chapter/section/subsection trees.
+ *   - `kind: 'whole-doc'`  -- single-row shape (post-#384 risk-mgmt,
+ *                             instructor, IFH, IPH, AMT-G, AMT-P). Body
+ *                             stored on a single `reference_section` row at
+ *                             depth 0, level 'document'.
+ *
+ * Manifest kind is NOT the same as `reference.kind` (the storage discriminator
+ * for handbook vs CFR vs AC vs ...). A whole-doc manifest still produces a
+ * `reference` row with `kind: 'handbook'`; the manifest kind only chooses
+ * which seed adapter to dispatch to.
  */
 
 import {
@@ -26,10 +42,7 @@ import {
 	CITATION_FRAMING_VALUES,
 	type CitationFraming,
 	HANDBOOK_READ_STATUS_VALUES,
-	HANDBOOK_SECTION_LEVEL_VALUES,
 	type HandbookReadStatus,
-	type HandbookSectionLevel,
-	REFERENCE_KIND_VALUES,
 	REFERENCE_KINDS,
 } from '@ab/constants';
 import { z } from 'zod';
@@ -59,8 +72,15 @@ const structuredCitationCommonShape = {
 /** Storage-shape regex for `reference.document_slug` (mirrors the DB CHECK). */
 const DOCUMENT_SLUG_REGEX = /^[a-z0-9][a-z0-9-]{1,30}[a-z0-9]$/;
 
-/** Storage-shape regex for `handbook_section.code` (mirrors the DB CHECK). */
-const SECTION_CODE_REGEX = /^[0-9]+(\.[0-9]+){0,2}$/;
+/**
+ * Section code shape for the **section-tree handbook** corpus
+ * (PHAK / AFH / AVWX / future sectioned handbooks). Dotted decimal up to
+ * three levels: "12", "12.3", "12.3.2". Other corpora carry their own
+ * code regex in their per-corpus manifest schema (CFR uses
+ * `91.103(b)(1)(i)`-style; AIM uses `5-2-1`-style); the DB column itself
+ * is now free-form text post-WP-SUB.
+ */
+const SECTION_TREE_CODE_REGEX = /^[0-9]+(\.[0-9]+){0,2}$/;
 
 /**
  * Frontmatter on every per-section markdown file in the `handbooks/` tree.
@@ -89,7 +109,7 @@ export type HandbookSectionFrontmatter = z.infer<typeof handbookSectionFrontmatt
  */
 export const handbookManifestFigureSchema = z.object({
 	id: z.string().min(1),
-	section_code: z.string().regex(SECTION_CODE_REGEX),
+	section_code: z.string().regex(SECTION_TREE_CODE_REGEX),
 	ordinal: z.number().int().nonnegative(),
 	caption: z.string(),
 	asset_path: z.string().min(1),
@@ -99,15 +119,23 @@ export const handbookManifestFigureSchema = z.object({
 export type HandbookManifestFigure = z.infer<typeof handbookManifestFigureSchema>;
 
 /**
+ * Level vocabulary accepted on a section-tree manifest's `sections[].level`.
+ * Inline rather than imported from constants so it stays scoped to this
+ * shape -- whole-doc manifests don't have a sections array, and other
+ * corpora's manifests use different vocabulary.
+ */
+const SECTION_TREE_LEVELS = ['chapter', 'section', 'subsection'] as const;
+
+/**
  * One section row inside `manifest.json -> sections[]`. The seed reads the
  * markdown body separately from disk; the manifest carries enough scaffolding
  * to walk the tree and validate the (parent, ordinal, hash) triples.
  */
 export const handbookManifestSectionSchema = z.object({
-	level: z.enum(HANDBOOK_SECTION_LEVEL_VALUES as unknown as readonly [HandbookSectionLevel, ...HandbookSectionLevel[]]),
-	code: z.string().regex(SECTION_CODE_REGEX),
+	level: z.enum(SECTION_TREE_LEVELS),
+	code: z.string().regex(SECTION_TREE_CODE_REGEX),
 	ordinal: z.number().int().nonnegative(),
-	parent_code: z.string().regex(SECTION_CODE_REGEX).nullable(),
+	parent_code: z.string().regex(SECTION_TREE_CODE_REGEX).nullable(),
 	title: z.string().min(1),
 	// FAA-printed page references (e.g. `"12-7"`). Stored as text so hyphenated
 	// pagination round-trips intact; bare-digit pages still validate.
@@ -149,20 +177,19 @@ export const handbookManifestWarningSchema = z.object({
 		// visible to seed reviewers.
 		'page-label',
 	]),
-	section_code: z.string().regex(SECTION_CODE_REGEX).nullish(),
+	section_code: z.string().regex(SECTION_TREE_CODE_REGEX).nullish(),
 	message: z.string().min(1),
 });
 export type HandbookManifestWarning = z.infer<typeof handbookManifestWarningSchema>;
 
 /**
- * Top-level shape of `handbooks/<doc>/<edition>/manifest.json`. The seed
- * reads this once per edition tree and walks the sections + figures arrays
- * to upsert the DB rows. Idempotency keys off `sections[].content_hash`.
+ * Fields shared by both manifest shapes. The discriminator (`kind`) and
+ * shape-specific fields (sections/figures vs body_path/body_sha256) live
+ * on the per-shape schemas below.
  */
-export const handbookManifestSchema = z.object({
+const manifestCommonFields = {
 	document_slug: z.string().regex(DOCUMENT_SLUG_REGEX),
 	edition: z.string().min(1).max(64),
-	kind: z.enum(REFERENCE_KIND_VALUES as [string, ...string[]]),
 	title: z.string().min(1),
 	publisher: z.string().min(1).default('FAA'),
 	source_url: z.string().url(),
@@ -174,9 +201,38 @@ export const handbookManifestSchema = z.object({
 	// `datetime.now(tz=UTC).isoformat()` produces this; Zod's `.datetime()`
 	// rejects it by default. `offset: true` opts in.
 	fetched_at: z.string().datetime({ offset: true }),
-	// Aviation-topic subjects for the library index (1..3 entries). Required
-	// for all ingested handbooks; values must be valid `AviationTopic` enum
-	// members.
+} as const;
+
+/**
+ * Optional metadata that can ride on either manifest shape -- subjects +
+ * primary_cert. Whole-doc manifests typically omit these (they're carried
+ * on the YAML row in `course/references/handbooks-noningested.yaml`);
+ * section-tree manifests require subjects.
+ */
+const manifestSubjectsOptional = {
+	subjects: z
+		.array(z.enum(AVIATION_TOPIC_VALUES as [AviationTopic, ...AviationTopic[]]))
+		.min(1)
+		.max(3)
+		.optional(),
+	primary_cert: z
+		.enum(CERT_APPLICABILITY_VALUES as [CertApplicability, ...CertApplicability[]])
+		.nullable()
+		.optional(),
+} as const;
+
+/**
+ * Section-tree manifest (`kind: 'handbook'`). PHAK / AFH / AVWX shape.
+ * Carries a hierarchy of chapter/section/subsection rows + per-figure
+ * records. The seeder produces N `reference_section` rows.
+ *
+ * Subjects are **required** for the section-tree shape (the manifest is
+ * the canonical authoring location; YAML rows carry the subjects for
+ * non-ingested handbooks).
+ */
+export const sectionTreeManifestSchema = z.object({
+	kind: z.literal('handbook'),
+	...manifestCommonFields,
 	subjects: z
 		.array(z.enum(AVIATION_TOPIC_VALUES as [AviationTopic, ...AviationTopic[]]))
 		.min(1)
@@ -200,7 +256,41 @@ export const handbookManifestSchema = z.object({
 	figures: z.array(handbookManifestFigureSchema),
 	warnings: z.array(handbookManifestWarningSchema).default([]),
 });
-export type HandbookManifest = z.infer<typeof handbookManifestSchema>;
+export type SectionTreeManifest = z.infer<typeof sectionTreeManifestSchema>;
+
+/**
+ * Whole-doc manifest (`kind: 'whole-doc'`). Post-#384 handbooks-extras
+ * shape. Body lives in a single file (`document.md`); the seeder produces
+ * **one** `reference_section` row at depth 0, level `'document'`.
+ *
+ * No `sections[]` or `figures[]` arrays. Subjects + primary_cert are
+ * optional here (they can ride on the YAML seed row instead).
+ */
+export const wholeDocManifestSchema = z.object({
+	kind: z.literal('whole-doc'),
+	...manifestCommonFields,
+	...manifestSubjectsOptional,
+	/** Repo-relative path to the document body markdown. */
+	body_path: z.string().min(1),
+	/** SHA-256 hex digest of the body markdown file. */
+	body_sha256: z.string().regex(/^[0-9a-f]{64}$/i),
+	/** Source PDF page count (informational; surfaces in the reader). */
+	page_count: z.number().int().positive().optional(),
+	/** FAA document identifier (e.g. `faa-h-8083-2`). */
+	doc_id: z.string().min(1).optional(),
+	/** FAA-published edition tag (e.g. `2A`, `9B`). Display-only; canonical edition is the top-level `edition` field. */
+	faa_edition: z.string().min(1).optional(),
+});
+export type WholeDocManifest = z.infer<typeof wholeDocManifestSchema>;
+
+/**
+ * Top-level shape of `handbooks/<doc>/<edition>/manifest.json`. Discriminated
+ * union over manifest kind: section-tree (`kind: 'handbook'`) vs whole-doc
+ * (`kind: 'whole-doc'`). The seed dispatches on the discriminator to choose
+ * the right adapter.
+ */
+export const manifestSchema = z.discriminatedUnion('kind', [sectionTreeManifestSchema, wholeDocManifestSchema]);
+export type Manifest = z.infer<typeof manifestSchema>;
 
 // ---------------------------------------------------------------------------
 // Citation discriminated-union schemas (validate `knowledge_node.references`)

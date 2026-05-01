@@ -1,23 +1,31 @@
 /**
- * Handbook ingestion + reader BC.
+ * Reference ingestion + reader BC.
+ *
+ * Reads, writes, and BC-internal helpers for the corpus-agnostic
+ * `reference` + `reference_section` substrate (post-WP-SUB). Handbook
+ * navigation primitives (chapter / section / figure) live here today because
+ * handbooks were the first corpus; they continue to serve the handbook
+ * reader unchanged. Future corpora (AIM, CFR, ...) add their own readers
+ * alongside these.
  *
  * Read paths:
- *   - listReferences / getReferenceByDocument        index + per-handbook page
- *   - listHandbookChapters / listChapterSections     chapter list, section list
- *   - getHandbookSection                              section page payload
+ *   - listReferences / getReferenceByDocument        index + per-document page
+ *   - listHandbookChapters / listChapterSections     handbook chapter list, section list
+ *   - getHandbookSection                              handbook section page payload
  *   - getNodesCitingSection                           reverse citation panel
  *   - getReadState / getHandbookProgress              read-state for a user
+ *   - getReadableReferenceIds                         "has body content" probe
  *   - resolveCitationUrl                              link out from node refs
  *
- * Write paths (Phase 4):
+ * Write paths:
  *   - setReadStatus / setComprehended / markAsReread / setNotes
  *   - recordHeartbeat
  *
- * Build-only helpers (Phase 4, not exported from the BC barrel):
- *   - upsertReference / upsertHandbookSection
+ * Build-only helpers (not exported from the BC barrel):
+ *   - upsertReference / upsertReferenceSection
  *   - replaceFiguresForSection / attachSupersededByLatest
  *
- * The reverse-citation reverse query relies on the GIN index added on
+ * The reverse-citation query relies on the GIN index added on
  * `knowledge_node.references` -- containment (`@>`) on a JSONB column with
  * `jsonb_path_ops` keeps the candidate scan bounded. The locator narrowing
  * happens in-memory because `@>` against a partially-known shape (e.g.
@@ -32,32 +40,32 @@ import {
 	HANDBOOK_HEARTBEAT_MIN_DELTA_SEC,
 	HANDBOOK_NOTES_MAX_LENGTH,
 	HANDBOOK_READ_STATUSES,
-	HANDBOOK_SECTION_LEVELS,
 	type HandbookReadStatus,
 	REFERENCE_KINDS,
+	REFERENCE_SECTION_LEVELS,
 	ROUTES,
 } from '@ab/constants';
 import { db as defaultDb } from '@ab/db/connection';
 import { getCorpusResolver, isParseError, parseIdentifier, type SourceId } from '@ab/sources';
 import type { Citation, StructuredCitation } from '@ab/types';
 import { isHandbookCitation, isStructuredCitation } from '@ab/types';
-import { generateHandbookFigureId, generateHandbookSectionId, generateReferenceId } from '@ab/utils';
+import { generateReferenceFigureId, generateReferenceId, generateReferenceSectionId } from '@ab/utils';
 import { and, asc, eq, inArray, isNull, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import {
-	type HandbookFigureRow,
-	type HandbookReadStateRow,
-	type HandbookSectionRow,
-	handbookFigure,
-	handbookReadState,
-	handbookSection,
 	type KnowledgeNodeRow,
 	knowledgeNode,
-	type NewHandbookFigureRow,
-	type NewHandbookSectionRow,
+	type NewReferenceFigureRow,
 	type NewReferenceRow,
-	type ReferenceRow,
+	type NewReferenceSectionRow,
 	reference,
+	type ReferenceFigureRow,
+	referenceFigure,
+	type ReferenceRow,
+	referenceSection,
+	type ReferenceSectionReadStateRow,
+	referenceSectionReadState,
+	type ReferenceSectionRow,
 } from './schema';
 
 type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;
@@ -166,43 +174,43 @@ export async function getReferenceById(id: string, db: Db = defaultDb): Promise<
 }
 
 /** Chapter rows for a reference, ordered by ordinal. */
-export async function listHandbookChapters(referenceId: string, db: Db = defaultDb): Promise<HandbookSectionRow[]> {
+export async function listHandbookChapters(referenceId: string, db: Db = defaultDb): Promise<ReferenceSectionRow[]> {
 	return db
 		.select()
-		.from(handbookSection)
+		.from(referenceSection)
 		.where(
-			and(eq(handbookSection.referenceId, referenceId), eq(handbookSection.level, HANDBOOK_SECTION_LEVELS.CHAPTER)),
+			and(eq(referenceSection.referenceId, referenceId), eq(referenceSection.level, REFERENCE_SECTION_LEVELS.CHAPTER)),
 		)
-		.orderBy(asc(handbookSection.ordinal));
+		.orderBy(asc(referenceSection.ordinal));
 }
 
 /** Section rows for a chapter, ordered by ordinal. Excludes the chapter row itself. */
-export async function listChapterSections(chapterId: string, db: Db = defaultDb): Promise<HandbookSectionRow[]> {
+export async function listChapterSections(chapterId: string, db: Db = defaultDb): Promise<ReferenceSectionRow[]> {
 	return db
 		.select()
-		.from(handbookSection)
-		.where(eq(handbookSection.parentId, chapterId))
-		.orderBy(asc(handbookSection.ordinal));
+		.from(referenceSection)
+		.where(eq(referenceSection.parentId, chapterId))
+		.orderBy(asc(referenceSection.ordinal));
 }
 
 /** All sections under a reference flattened in tree order (chapter, then sections, then subsections). */
 export async function listAllSectionsForReference(
 	referenceId: string,
 	db: Db = defaultDb,
-): Promise<HandbookSectionRow[]> {
+): Promise<ReferenceSectionRow[]> {
 	return db
 		.select()
-		.from(handbookSection)
-		.where(eq(handbookSection.referenceId, referenceId))
-		.orderBy(asc(handbookSection.code));
+		.from(referenceSection)
+		.where(eq(referenceSection.referenceId, referenceId))
+		.orderBy(asc(referenceSection.code));
 }
 
 export interface HandbookSectionView {
-	section: HandbookSectionRow;
-	chapter: HandbookSectionRow;
-	figures: HandbookFigureRow[];
+	section: ReferenceSectionRow;
+	chapter: ReferenceSectionRow;
+	figures: ReferenceFigureRow[];
 	/** Sibling sections under the same chapter -- powers the sticky TOC. */
-	siblings: HandbookSectionRow[];
+	siblings: ReferenceSectionRow[];
 }
 
 /**
@@ -221,8 +229,8 @@ export async function getHandbookSection(
 	const fullCode = `${chapterCode}.${sectionCode}`;
 	const sectionRows = await db
 		.select()
-		.from(handbookSection)
-		.where(and(eq(handbookSection.referenceId, referenceId), eq(handbookSection.code, fullCode)))
+		.from(referenceSection)
+		.where(and(eq(referenceSection.referenceId, referenceId), eq(referenceSection.code, fullCode)))
 		.limit(1);
 	const section = sectionRows[0];
 	if (!section) throw new HandbookSectionNotFoundError({ referenceId, code: fullCode });
@@ -236,12 +244,12 @@ export async function getHandbookSection(
 	// the same `fullCode`. See Wave 4 of library-by-cert.
 	const chapterRows = await db
 		.select()
-		.from(handbookSection)
+		.from(referenceSection)
 		.where(
 			and(
-				eq(handbookSection.referenceId, referenceId),
-				eq(handbookSection.code, chapterCode),
-				eq(handbookSection.level, HANDBOOK_SECTION_LEVELS.CHAPTER),
+				eq(referenceSection.referenceId, referenceId),
+				eq(referenceSection.code, chapterCode),
+				eq(referenceSection.level, REFERENCE_SECTION_LEVELS.CHAPTER),
 			),
 		)
 		.limit(1);
@@ -250,15 +258,15 @@ export async function getHandbookSection(
 
 	const figures = await db
 		.select()
-		.from(handbookFigure)
-		.where(eq(handbookFigure.sectionId, section.id))
-		.orderBy(asc(handbookFigure.ordinal));
+		.from(referenceFigure)
+		.where(eq(referenceFigure.sectionId, section.id))
+		.orderBy(asc(referenceFigure.ordinal));
 
 	const siblings = await db
 		.select()
-		.from(handbookSection)
-		.where(eq(handbookSection.parentId, chapter.id))
-		.orderBy(asc(handbookSection.ordinal));
+		.from(referenceSection)
+		.where(eq(referenceSection.parentId, chapter.id))
+		.orderBy(asc(referenceSection.ordinal));
 
 	return { section, chapter, figures, siblings };
 }
@@ -275,15 +283,15 @@ export async function getHandbookChapter(
 	referenceId: string,
 	chapterCode: string,
 	db: Db = defaultDb,
-): Promise<HandbookSectionRow> {
+): Promise<ReferenceSectionRow> {
 	const rows = await db
 		.select()
-		.from(handbookSection)
+		.from(referenceSection)
 		.where(
 			and(
-				eq(handbookSection.referenceId, referenceId),
-				eq(handbookSection.code, chapterCode),
-				eq(handbookSection.level, HANDBOOK_SECTION_LEVELS.CHAPTER),
+				eq(referenceSection.referenceId, referenceId),
+				eq(referenceSection.code, chapterCode),
+				eq(referenceSection.level, REFERENCE_SECTION_LEVELS.CHAPTER),
 			),
 		)
 		.limit(1);
@@ -292,13 +300,13 @@ export async function getHandbookChapter(
 	return row;
 }
 
-/** Figures bound to any handbook_section row (chapter or section), ordered. */
-export async function listFiguresForSection(sectionId: string, db: Db = defaultDb): Promise<HandbookFigureRow[]> {
+/** Figures bound to any reference_section row, ordered. */
+export async function listFiguresForSection(sectionId: string, db: Db = defaultDb): Promise<ReferenceFigureRow[]> {
 	return db
 		.select()
-		.from(handbookFigure)
-		.where(eq(handbookFigure.sectionId, sectionId))
-		.orderBy(asc(handbookFigure.ordinal));
+		.from(referenceFigure)
+		.where(eq(referenceFigure.sectionId, sectionId))
+		.orderBy(asc(referenceFigure.ordinal));
 }
 
 // ---------------------------------------------------------------------------
@@ -456,13 +464,13 @@ function resolveAirbossRefUrl(ref: string): string | null {
 /** Fetch the read-state row for a (user, section) pair. Returns null when none exists. */
 export async function getReadState(
 	userId: string,
-	handbookSectionId: string,
+	referenceSectionId: string,
 	db: Db = defaultDb,
-): Promise<HandbookReadStateRow | null> {
+): Promise<ReferenceSectionReadStateRow | null> {
 	const rows = await db
 		.select()
-		.from(handbookReadState)
-		.where(and(eq(handbookReadState.userId, userId), eq(handbookReadState.handbookSectionId, handbookSectionId)))
+		.from(referenceSectionReadState)
+		.where(and(eq(referenceSectionReadState.userId, userId), eq(referenceSectionReadState.referenceSectionId, referenceSectionId)))
 		.limit(1);
 	return rows[0] ?? null;
 }
@@ -487,23 +495,23 @@ export async function getHandbookProgress(
 ): Promise<HandbookProgressSummary> {
 	const totalsRow = await db
 		.select({ total: sql<number>`count(*)::int` })
-		.from(handbookSection)
+		.from(referenceSection)
 		.where(
 			and(
-				eq(handbookSection.referenceId, referenceId),
-				sql`${handbookSection.level} <> ${HANDBOOK_SECTION_LEVELS.CHAPTER}`,
+				eq(referenceSection.referenceId, referenceId),
+				sql`${referenceSection.level} <> ${REFERENCE_SECTION_LEVELS.CHAPTER}`,
 			),
 		);
 	const totalSections = totalsRow[0]?.total ?? 0;
 
 	const readStateRows = await db
 		.select({
-			status: handbookReadState.status,
-			comprehended: handbookReadState.comprehended,
+			status: referenceSectionReadState.status,
+			comprehended: referenceSectionReadState.comprehended,
 		})
-		.from(handbookReadState)
-		.innerJoin(handbookSection, eq(handbookReadState.handbookSectionId, handbookSection.id))
-		.where(and(eq(handbookReadState.userId, userId), eq(handbookSection.referenceId, referenceId)));
+		.from(referenceSectionReadState)
+		.innerJoin(referenceSection, eq(referenceSectionReadState.referenceSectionId, referenceSection.id))
+		.where(and(eq(referenceSectionReadState.userId, userId), eq(referenceSection.referenceId, referenceId)));
 
 	let readSections = 0;
 	let readingSections = 0;
@@ -519,11 +527,22 @@ export async function getHandbookProgress(
 
 /**
  * Bulk readability probe over a set of references. Returns the set of
- * reference ids that have at least one non-chapter `handbook_section` row,
- * which is the criterion the library index uses to flag "Read in-app" cards.
+ * reference ids that have at least one `reference_section` row with non-empty
+ * body content -- the criterion the library spines use to flag "Read in-app"
+ * cards.
  *
- * Single query so the `/library` page load is one round-trip per N references
- * rather than N. Empty input short-circuits so callers don't have to.
+ * Probes `content_md` directly rather than naming a level (the pre-WP-SUB
+ * probe filtered `level <> 'chapter'`, which baked the handbook hierarchy
+ * into the library page). The new probe works for sectioned handbooks
+ * (chapter rows have empty `content_md`, child sections carry the body),
+ * whole-doc handbooks (one `level: 'document'` row carries the body), CFR
+ * (paragraph rows carry the body, Subpart rows are containers), and any
+ * future corpus that follows the same "container vs leaf" pattern.
+ *
+ * Single query so the `/library` spine loaders make one round-trip per N
+ * references rather than N. Empty input short-circuits so callers don't
+ * have to. The `reference_section_readable_idx` partial index keeps this
+ * O(log N) on a sparse predicate.
  */
 export async function getReadableReferenceIds(
 	referenceIds: readonly string[],
@@ -531,12 +550,12 @@ export async function getReadableReferenceIds(
 ): Promise<Set<string>> {
 	if (referenceIds.length === 0) return new Set();
 	const rows = await db
-		.selectDistinct({ referenceId: handbookSection.referenceId })
-		.from(handbookSection)
+		.selectDistinct({ referenceId: referenceSection.referenceId })
+		.from(referenceSection)
 		.where(
 			and(
-				inArray(handbookSection.referenceId, [...referenceIds]),
-				sql`${handbookSection.level} <> ${HANDBOOK_SECTION_LEVELS.CHAPTER}`,
+				inArray(referenceSection.referenceId, [...referenceIds]),
+				sql`${referenceSection.contentMd} <> ''`,
 			),
 		);
 	return new Set(rows.map((r) => r.referenceId));
@@ -548,7 +567,7 @@ export async function getReadableReferenceIds(
 
 /**
  * Set the explicit read status for a (user, section) pair. Upserts the row
- * (composite PK is `(user_id, handbook_section_id)`). Updates `last_read_at`
+ * (composite PK is `(user_id, reference_section_id)`). Updates `last_read_at`
  * on every write so the dashboard's "recent reads" lens stays current.
  *
  * Allowed transitions: any of unread / reading / read. The system never
@@ -556,26 +575,26 @@ export async function getReadableReferenceIds(
  */
 export async function setReadStatus(
 	userId: string,
-	handbookSectionId: string,
+	referenceSectionId: string,
 	status: HandbookReadStatus,
 	db: Db = defaultDb,
-): Promise<HandbookReadStateRow> {
+): Promise<ReferenceSectionReadStateRow> {
 	const insert = {
 		userId,
-		handbookSectionId,
+		referenceSectionId,
 		status,
 		comprehended: false,
 		lastReadAt: new Date(),
 		openedCount: 0,
 		totalSecondsVisible: 0,
 		notesMd: '',
-	} satisfies Omit<HandbookReadStateRow, 'createdAt' | 'updatedAt' | 'seedOrigin'> & { seedOrigin?: string | null };
+	} satisfies Omit<ReferenceSectionReadStateRow, 'createdAt' | 'updatedAt' | 'seedOrigin'> & { seedOrigin?: string | null };
 
 	const rows = await db
-		.insert(handbookReadState)
+		.insert(referenceSectionReadState)
 		.values(insert)
 		.onConflictDoUpdate({
-			target: [handbookReadState.userId, handbookReadState.handbookSectionId],
+			target: [referenceSectionReadState.userId, referenceSectionReadState.referenceSectionId],
 			set: {
 				status,
 				lastReadAt: new Date(),
@@ -599,18 +618,18 @@ export async function setReadStatus(
  */
 export async function setComprehended(
 	userId: string,
-	handbookSectionId: string,
+	referenceSectionId: string,
 	comprehended: boolean,
 	db: Db = defaultDb,
-): Promise<HandbookReadStateRow> {
-	const existing = await getReadState(userId, handbookSectionId, db);
+): Promise<ReferenceSectionReadStateRow> {
+	const existing = await getReadState(userId, referenceSectionId, db);
 	if (comprehended && (!existing || existing.status === HANDBOOK_READ_STATUSES.UNREAD)) {
 		throw new HandbookValidationError('Cannot mark a section "didn\'t get it" before opening it.');
 	}
 
 	const insert = {
 		userId,
-		handbookSectionId,
+		referenceSectionId,
 		status: existing?.status ?? HANDBOOK_READ_STATUSES.UNREAD,
 		comprehended,
 		lastReadAt: existing?.lastReadAt ?? null,
@@ -620,10 +639,10 @@ export async function setComprehended(
 	};
 
 	const rows = await db
-		.insert(handbookReadState)
+		.insert(referenceSectionReadState)
 		.values(insert)
 		.onConflictDoUpdate({
-			target: [handbookReadState.userId, handbookReadState.handbookSectionId],
+			target: [referenceSectionReadState.userId, referenceSectionReadState.referenceSectionId],
 			set: {
 				comprehended,
 				updatedAt: new Date(),
@@ -644,22 +663,22 @@ export async function setComprehended(
  */
 export async function markAsReread(
 	userId: string,
-	handbookSectionId: string,
+	referenceSectionId: string,
 	db: Db = defaultDb,
-): Promise<HandbookReadStateRow> {
+): Promise<ReferenceSectionReadStateRow> {
 	const rows = await db
-		.update(handbookReadState)
+		.update(referenceSectionReadState)
 		.set({
 			status: HANDBOOK_READ_STATUSES.UNREAD,
 			comprehended: false,
 			updatedAt: new Date(),
 		})
-		.where(and(eq(handbookReadState.userId, userId), eq(handbookReadState.handbookSectionId, handbookSectionId)))
+		.where(and(eq(referenceSectionReadState.userId, userId), eq(referenceSectionReadState.referenceSectionId, referenceSectionId)))
 		.returning();
 	const row = rows[0];
 	if (!row) {
 		throw new HandbookValidationError(
-			`markAsReread: no read-state row for user ${userId} on section ${handbookSectionId}`,
+			`markAsReread: no read-state row for user ${userId} on section ${referenceSectionId}`,
 		);
 	}
 	return row;
@@ -668,17 +687,17 @@ export async function markAsReread(
 /** Persist user notes for a section. Validates length against `HANDBOOK_NOTES_MAX_LENGTH`. */
 export async function setNotes(
 	userId: string,
-	handbookSectionId: string,
+	referenceSectionId: string,
 	notesMd: string,
 	db: Db = defaultDb,
-): Promise<HandbookReadStateRow> {
+): Promise<ReferenceSectionReadStateRow> {
 	if (notesMd.length > HANDBOOK_NOTES_MAX_LENGTH) {
 		throw new HandbookValidationError(`Notes exceed ${HANDBOOK_NOTES_MAX_LENGTH} characters.`);
 	}
 
 	const insert = {
 		userId,
-		handbookSectionId,
+		referenceSectionId,
 		status: HANDBOOK_READ_STATUSES.UNREAD,
 		comprehended: false,
 		openedCount: 0,
@@ -687,10 +706,10 @@ export async function setNotes(
 	};
 
 	const rows = await db
-		.insert(handbookReadState)
+		.insert(referenceSectionReadState)
 		.values(insert)
 		.onConflictDoUpdate({
-			target: [handbookReadState.userId, handbookReadState.handbookSectionId],
+			target: [referenceSectionReadState.userId, referenceSectionReadState.referenceSectionId],
 			set: {
 				notesMd,
 				updatedAt: new Date(),
@@ -712,10 +731,10 @@ export async function setNotes(
  */
 export async function recordHeartbeat(
 	userId: string,
-	handbookSectionId: string,
+	referenceSectionId: string,
 	deltaSeconds: number,
 	db: Db = defaultDb,
-): Promise<HandbookReadStateRow> {
+): Promise<ReferenceSectionReadStateRow> {
 	if (deltaSeconds < HANDBOOK_HEARTBEAT_MIN_DELTA_SEC) {
 		throw new HandbookValidationError(
 			`Heartbeat delta ${deltaSeconds}s below minimum ${HANDBOOK_HEARTBEAT_MIN_DELTA_SEC}s.`,
@@ -726,7 +745,7 @@ export async function recordHeartbeat(
 
 	const insert = {
 		userId,
-		handbookSectionId,
+		referenceSectionId,
 		status: HANDBOOK_READ_STATUSES.READING,
 		comprehended: false,
 		lastReadAt: now,
@@ -736,16 +755,16 @@ export async function recordHeartbeat(
 	};
 
 	const rows = await db
-		.insert(handbookReadState)
+		.insert(referenceSectionReadState)
 		.values(insert)
 		.onConflictDoUpdate({
-			target: [handbookReadState.userId, handbookReadState.handbookSectionId],
+			target: [referenceSectionReadState.userId, referenceSectionReadState.referenceSectionId],
 			set: {
-				totalSecondsVisible: sql`${handbookReadState.totalSecondsVisible} + ${cappedDelta}`,
+				totalSecondsVisible: sql`${referenceSectionReadState.totalSecondsVisible} + ${cappedDelta}`,
 				lastReadAt: now,
 				// Only auto-advance unread -> reading; never overwrite an explicit
 				// `read` status with the heartbeat tick.
-				status: sql`CASE WHEN ${handbookReadState.status} = ${HANDBOOK_READ_STATUSES.UNREAD} THEN ${HANDBOOK_READ_STATUSES.READING} ELSE ${handbookReadState.status} END`,
+				status: sql`CASE WHEN ${referenceSectionReadState.status} = ${HANDBOOK_READ_STATUSES.UNREAD} THEN ${HANDBOOK_READ_STATUSES.READING} ELSE ${referenceSectionReadState.status} END`,
 				updatedAt: now,
 			},
 		})
@@ -757,9 +776,21 @@ export async function recordHeartbeat(
 }
 
 // ---------------------------------------------------------------------------
-// Build-only helpers (consumed by scripts/db/seed-handbooks.ts; not exported
-// from the BC barrel).
+// Build-only helpers (consumed by scripts/db/seed-references-from-manifest.ts;
+// not exported from the BC barrel).
 // ---------------------------------------------------------------------------
+
+/**
+ * Per-kind hierarchy declaration stored on `reference.section_schema`.
+ * Validated against this Zod-equivalent shape at ingest; the DB only sees
+ * a free-form jsonb. `levels[]` is the vocabulary of legal `level` values
+ * for child `reference_section` rows; `strict_sequence` (handbooks)
+ * additionally pins level to depth.
+ */
+export interface SectionSchema {
+	levels: readonly string[];
+	strictSequence?: boolean;
+}
 
 export interface UpsertReferenceInput {
 	kind: ReferenceRow['kind'];
@@ -775,12 +806,26 @@ export interface UpsertReferenceInput {
 	 * comment in `schema.ts` for the carryover-derivation rationale.
 	 */
 	primaryCert?: CertApplicability | null;
+	/**
+	 * Per-kind level vocabulary for child `reference_section` rows. Defaults
+	 * to `{ levels: [] }` (empty) when omitted -- meaning "no per-kind
+	 * hierarchy declared." Seeders should always populate this so production
+	 * rows are fully specified.
+	 */
+	sectionSchema?: SectionSchema;
+	/**
+	 * Per-kind document-level extras (CFR title number, NTSB docket, AC
+	 * cancels-list, the source-PDF page count for a whole-doc handbook).
+	 */
+	metadata?: Record<string, unknown>;
 	seedOrigin?: string | null;
 }
 
 /** Insert or update a `reference` row; returns the post-write row. */
 export async function upsertReference(input: UpsertReferenceInput, db: Db = defaultDb): Promise<ReferenceRow> {
 	const subjects = [...(input.subjects ?? [])];
+	const sectionSchema = input.sectionSchema ?? { levels: [] };
+	const metadata = input.metadata ?? {};
 	const values: NewReferenceRow = {
 		id: generateReferenceId(),
 		kind: input.kind,
@@ -791,6 +836,8 @@ export async function upsertReference(input: UpsertReferenceInput, db: Db = defa
 		url: input.url ?? null,
 		subjects,
 		primaryCert: input.primaryCert ?? null,
+		sectionSchema,
+		metadata,
 		seedOrigin: input.seedOrigin ?? null,
 	};
 
@@ -806,6 +853,8 @@ export async function upsertReference(input: UpsertReferenceInput, db: Db = defa
 				url: input.url ?? null,
 				subjects,
 				primaryCert: input.primaryCert ?? null,
+				sectionSchema,
+				metadata,
 				seedOrigin: input.seedOrigin ?? null,
 				updatedAt: new Date(),
 			},
@@ -820,11 +869,12 @@ export async function upsertReference(input: UpsertReferenceInput, db: Db = defa
 	return row;
 }
 
-export interface UpsertHandbookSectionInput {
+export interface UpsertReferenceSectionInput {
 	referenceId: string;
 	parentId: string | null;
-	level: HandbookSectionRow['level'];
+	level: ReferenceSectionRow['level'];
 	ordinal: number;
+	depth: number;
 	code: string;
 	title: string;
 	faaPageStart: string | null;
@@ -834,31 +884,36 @@ export interface UpsertHandbookSectionInput {
 	contentHash: string;
 	hasFigures: boolean;
 	hasTables: boolean;
+	metadata?: Record<string, unknown>;
 	seedOrigin?: string | null;
 }
 
 /**
- * Upsert a handbook_section row by `(reference_id, code)`. Returns
+ * Upsert a `reference_section` row by `(reference_id, code)`. Returns
  * `{row, changed}` so the caller can mass-replace figures only when the
- * section's body actually changed (idempotent re-seed).
+ * section's body actually changed (idempotent re-seed). Corpus-agnostic:
+ * accepts handbook chapters/sections/subsections, whole-doc rows
+ * (`level: 'document'`), CFR paragraphs, AIM sections, etc. -- per-kind
+ * shape validation belongs at ingest, not here.
  */
-export async function upsertHandbookSection(
-	input: UpsertHandbookSectionInput,
+export async function upsertReferenceSection(
+	input: UpsertReferenceSectionInput,
 	db: Db = defaultDb,
-): Promise<{ row: HandbookSectionRow; changed: boolean }> {
+): Promise<{ row: ReferenceSectionRow; changed: boolean }> {
 	const existing = await db
 		.select()
-		.from(handbookSection)
-		.where(and(eq(handbookSection.referenceId, input.referenceId), eq(handbookSection.code, input.code)))
+		.from(referenceSection)
+		.where(and(eq(referenceSection.referenceId, input.referenceId), eq(referenceSection.code, input.code)))
 		.limit(1);
 	const prev = existing[0];
 
-	const values: NewHandbookSectionRow = {
-		id: prev?.id ?? generateHandbookSectionId(),
+	const values: NewReferenceSectionRow = {
+		id: prev?.id ?? generateReferenceSectionId(),
 		referenceId: input.referenceId,
 		parentId: input.parentId,
 		level: input.level,
 		ordinal: input.ordinal,
+		depth: input.depth,
 		code: input.code,
 		title: input.title,
 		faaPageStart: input.faaPageStart,
@@ -868,6 +923,7 @@ export async function upsertHandbookSection(
 		contentHash: input.contentHash,
 		hasFigures: input.hasFigures,
 		hasTables: input.hasTables,
+		metadata: input.metadata ?? {},
 		seedOrigin: input.seedOrigin ?? null,
 	};
 
@@ -876,33 +932,36 @@ export async function upsertHandbookSection(
 		// (parent / ordinal / locator / hasFigures / hasTables) in case the
 		// extractor moved a section without re-extracting its body.
 		const rows = await db
-			.update(handbookSection)
+			.update(referenceSection)
 			.set({
 				parentId: input.parentId,
 				ordinal: input.ordinal,
+				depth: input.depth,
 				title: input.title,
 				faaPageStart: input.faaPageStart,
 				faaPageEnd: input.faaPageEnd,
 				sourceLocator: input.sourceLocator,
 				hasFigures: input.hasFigures,
 				hasTables: input.hasTables,
+				metadata: input.metadata ?? prev.metadata,
 				updatedAt: new Date(),
 			})
-			.where(eq(handbookSection.id, prev.id))
+			.where(eq(referenceSection.id, prev.id))
 			.returning();
 		const row = rows[0] ?? prev;
 		return { row, changed: false };
 	}
 
 	const rows = await db
-		.insert(handbookSection)
+		.insert(referenceSection)
 		.values(values)
 		.onConflictDoUpdate({
-			target: [handbookSection.referenceId, handbookSection.code],
+			target: [referenceSection.referenceId, referenceSection.code],
 			set: {
 				parentId: input.parentId,
 				level: input.level,
 				ordinal: input.ordinal,
+				depth: input.depth,
 				title: input.title,
 				faaPageStart: input.faaPageStart,
 				faaPageEnd: input.faaPageEnd,
@@ -911,6 +970,7 @@ export async function upsertHandbookSection(
 				contentHash: input.contentHash,
 				hasFigures: input.hasFigures,
 				hasTables: input.hasTables,
+				metadata: input.metadata ?? {},
 				seedOrigin: input.seedOrigin ?? null,
 				updatedAt: new Date(),
 			},
@@ -919,7 +979,7 @@ export async function upsertHandbookSection(
 	const row = rows[0];
 	if (!row) {
 		throw new HandbookValidationError(
-			`upsertHandbookSection: insert returned no row for ${input.referenceId} / ${input.code}`,
+			`upsertReferenceSection: insert returned no row for ${input.referenceId} / ${input.code}`,
 		);
 	}
 	return { row, changed: true };
@@ -943,11 +1003,11 @@ export async function replaceFiguresForSection(
 	figures: ReadonlyArray<FigureInput>,
 	db: Db = defaultDb,
 	seedOrigin: string | null = null,
-): Promise<HandbookFigureRow[]> {
-	await db.delete(handbookFigure).where(eq(handbookFigure.sectionId, sectionId));
+): Promise<ReferenceFigureRow[]> {
+	await db.delete(referenceFigure).where(eq(referenceFigure.sectionId, sectionId));
 	if (figures.length === 0) return [];
-	const values: NewHandbookFigureRow[] = figures.map((f) => ({
-		id: generateHandbookFigureId(),
+	const values: NewReferenceFigureRow[] = figures.map((f) => ({
+		id: generateReferenceFigureId(),
 		sectionId,
 		ordinal: f.ordinal,
 		caption: f.caption,
@@ -956,7 +1016,7 @@ export async function replaceFiguresForSection(
 		height: f.height,
 		seedOrigin,
 	}));
-	return db.insert(handbookFigure).values(values).returning();
+	return db.insert(referenceFigure).values(values).returning();
 }
 
 /**
