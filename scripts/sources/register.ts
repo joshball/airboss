@@ -17,8 +17,9 @@ import { HELP as ACS_HELP, runRegisterAcs } from './register/acs';
 import { HELP as AIM_HELP, runRegisterAim } from './register/aim';
 import { HELP as CFR_HELP, runRegisterCfr } from './register/cfr';
 import { HELP as HANDBOOKS_HELP, runRegisterHandbooks } from './register/handbooks';
+import { HELP as HANDBOOKS_EXTRAS_HELP, runRegisterHandbooksExtras } from './register/handbooks-extras';
 
-export type RegisterCorpus = 'cfr' | 'handbooks' | 'aim' | 'ac' | 'acs';
+export type RegisterCorpus = 'cfr' | 'handbooks' | 'handbooks-extras' | 'aim' | 'ac' | 'acs';
 
 export interface RegisterSpec {
 	readonly run: (argv: readonly string[]) => Promise<number>;
@@ -28,6 +29,7 @@ export interface RegisterSpec {
 export const REGISTER_SUBCOMMANDS: Readonly<Record<RegisterCorpus, RegisterSpec>> = {
 	cfr: { run: runRegisterCfr, help: CFR_HELP },
 	handbooks: { run: runRegisterHandbooks, help: HANDBOOKS_HELP },
+	'handbooks-extras': { run: runRegisterHandbooksExtras, help: HANDBOOKS_EXTRAS_HELP },
 	aim: { run: runRegisterAim, help: AIM_HELP },
 	ac: { run: runRegisterAc, help: AC_HELP },
 	acs: { run: runRegisterAcs, help: ACS_HELP },

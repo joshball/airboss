@@ -42,6 +42,29 @@ export const HANDBOOK_DOC_EDITIONS: Record<string, Record<string, string>> = {
 	avwx: {
 		'8083-28B': 'FAA-H-8083-28B',
 	},
+	// Whole-doc-only handbooks (handbooks-extras). Edition slug = `8083-<n>[<rev>]`,
+	// derivative dir = `FAA-H-8083-<n>[<rev>]`. The null-edition handbook
+	// (Aviation Instructor's Handbook) uses the bare `8083-9` slug; FAA does
+	// not currently publish a revision letter for it. See
+	// `libs/sources/src/handbooks-extras/` for the ingestion pipeline.
+	'risk-management': {
+		'8083-2A': 'FAA-H-8083-2A',
+	},
+	'aviation-instructor': {
+		'8083-9': 'FAA-H-8083-9',
+	},
+	ifh: {
+		'8083-15B': 'FAA-H-8083-15B',
+	},
+	iph: {
+		'8083-16B': 'FAA-H-8083-16B',
+	},
+	'amt-general': {
+		'8083-30B': 'FAA-H-8083-30B',
+	},
+	'amt-powerplant': {
+		'8083-32B': 'FAA-H-8083-32B',
+	},
 };
 
 const SOURCE_ID_PREFIX = 'airboss-ref:handbooks/';
@@ -146,6 +169,27 @@ export const HANDBOOKS_RESOLVER: CorpusResolver = {
 		if (faaDir === null) return null;
 		const manifest = loadManifestCached(doc, faaDir, _derivativeRoot);
 		if (manifest === null) return null;
+
+		// Whole-doc reference (no chapter/section/subsection): if the manifest
+		// records a top-level `body_path` (handbooks-extras Class C handbooks
+		// without chapter splits), read it directly. Falls back to the
+		// section-resolution path otherwise so chapter-aware handbooks keep
+		// their existing behaviour.
+		const isWholeDoc =
+			parsed.handbooks.chapter === undefined &&
+			parsed.handbooks.section === undefined &&
+			parsed.handbooks.subsection === undefined &&
+			parsed.handbooks.paragraph === undefined &&
+			parsed.handbooks.figure === undefined &&
+			parsed.handbooks.table === undefined;
+		if (isWholeDoc && typeof manifest.body_path === 'string' && manifest.body_path.length > 0) {
+			const bodyPath = manifest.body_path.startsWith('handbooks/')
+				? join(_derivativeRoot, manifest.body_path.slice('handbooks/'.length))
+				: join(_derivativeRoot, manifest.body_path);
+			if (!existsSync(bodyPath)) return null;
+			return readFileSync(bodyPath, 'utf-8');
+		}
+
 		const section = manifestSectionForLocator(manifest, parsed.handbooks);
 		if (section === null) return null;
 		const bodyPath = bodyPathForSection(section, _derivativeRoot);

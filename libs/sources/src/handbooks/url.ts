@@ -26,6 +26,18 @@ export const HANDBOOK_LIVE_URLS: Record<string, string> = {
 	phak: 'https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/phak',
 	afh: 'https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/airplane_handbook',
 	avwx: 'https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/aviation_weather_handbook',
+	// handbooks-extras Class C whole-doc-only handbooks. The FAA does not host
+	// per-handbook landing pages for all of these in a uniform way; use the
+	// parent Aviation Handbooks & Manuals index as the safe default when a
+	// dedicated landing page is not currently published. `Edition.source_url`
+	// from the YAML carries the actual PDF download URL.
+	'risk-management': 'https://www.faa.gov/regulations_policies/handbooks_manuals/aviation',
+	'aviation-instructor':
+		'https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/aviation_instructors_handbook',
+	ifh: 'https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/instrument_flying_handbook',
+	iph: 'https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/instrument_procedures_handbook',
+	'amt-general': 'https://www.faa.gov/regulations_policies/handbooks_manuals/aviation',
+	'amt-powerplant': 'https://www.faa.gov/regulations_policies/handbooks_manuals/aviation',
 };
 
 /**
