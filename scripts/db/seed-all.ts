@@ -46,6 +46,7 @@
 
 import { resolve } from 'node:path';
 import { DEV_ACCOUNTS, DEV_DB_URL, DEV_SEED_ORIGIN_TAG, ENV_VARS } from '@ab/constants';
+import { client } from '@ab/db/connection';
 import { seedAsrsFromManifest } from '@ab/sources/asrs/seed';
 import { seedFormsFromManifest } from '@ab/sources/forms/seed';
 import { seedInfoFromManifest } from '@ab/sources/info/seed';
@@ -304,7 +305,9 @@ async function main(): Promise<void> {
 	process.stdout.write('\nseed: done.\n');
 }
 
-main().catch((err) => {
-	process.stderr.write(`seed-all: ${(err as Error).stack ?? err}\n`);
-	process.exit(1);
-});
+main()
+	.catch((err) => {
+		process.stderr.write(`seed-all: ${(err as Error).stack ?? err}\n`);
+		process.exitCode = 1;
+	})
+	.finally(() => client.end());

@@ -47,7 +47,7 @@ import {
 	type SyllabusKind,
 	type SyllabusStatus,
 } from '@ab/constants';
-import { db } from '@ab/db/connection';
+import { client, db } from '@ab/db/connection';
 import { generateSyllabusId, generateSyllabusNodeId, generateSyllabusNodeLinkId } from '@ab/utils';
 import { eq } from 'drizzle-orm';
 import { parse } from 'yaml';
@@ -394,8 +394,10 @@ async function main(): Promise<void> {
 }
 
 if (import.meta.main) {
-	main().catch((err) => {
-		process.stderr.write(`seed-syllabi: ${(err as Error).stack ?? err}\n`);
-		process.exit(1);
-	});
+	main()
+		.catch((err) => {
+			process.stderr.write(`seed-syllabi: ${(err as Error).stack ?? err}\n`);
+			process.exitCode = 1;
+		})
+		.finally(() => client.end());
 }

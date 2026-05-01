@@ -20,7 +20,7 @@
 
 import { goal, studyPlan } from '@ab/bc-study/schema';
 import { GOAL_STATUSES, PLAN_STATUSES } from '@ab/constants';
-import { db as defaultDb } from '@ab/db/connection';
+import { client, db as defaultDb } from '@ab/db/connection';
 import { and, eq } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 
@@ -115,5 +115,9 @@ async function main(): Promise<void> {
 }
 
 if (import.meta.main) {
-	await main();
+	try {
+		await main();
+	} finally {
+		await client.end();
+	}
 }

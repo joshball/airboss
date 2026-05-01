@@ -28,6 +28,7 @@ import { readFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { type HandbookManifest, handbookManifestSchema } from '@ab/bc-study';
+import { client } from '@ab/db/connection';
 // Build helpers live in the handbooks BC but aren't re-exported from the
 // barrel (route handlers should never need them; only seed code does).
 // Direct relative path is documented in libs/bc/study/src/handbooks.ts.
@@ -194,8 +195,12 @@ function listChildDirs(dir: string): string[] {
 if (import.meta.main) {
 	const [doc, edition] = process.argv.slice(2);
 	console.log('seed: handbooks');
-	const summary = await seedHandbooks({ documentSlug: doc, edition });
-	console.log(
-		`done: ${summary.editionsProcessed} editions, ${summary.sectionsTouched} sections (${summary.sectionsChanged} changed), ${summary.figuresWritten} figures, ${summary.supersededLinks} superseded links.`,
-	);
+	try {
+		const summary = await seedHandbooks({ documentSlug: doc, edition });
+		console.log(
+			`done: ${summary.editionsProcessed} editions, ${summary.sectionsTouched} sections (${summary.sectionsChanged} changed), ${summary.figuresWritten} figures, ${summary.supersededLinks} superseded links.`,
+		);
+	} finally {
+		await client.end();
+	}
 }

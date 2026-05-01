@@ -21,6 +21,7 @@ import { readFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { AVIATION_TOPIC_VALUES, type AviationTopic, REFERENCE_KIND_VALUES, type ReferenceKind } from '@ab/constants';
+import { client } from '@ab/db/connection';
 import { parse } from 'yaml';
 import { z } from 'zod';
 import { upsertReference } from '../../libs/bc/study/src/handbooks';
@@ -113,8 +114,10 @@ async function main(): Promise<void> {
 }
 
 if (import.meta.main) {
-	main().catch((err) => {
-		process.stderr.write(`seed-references: ${(err as Error).stack ?? err}\n`);
-		process.exit(1);
-	});
+	main()
+		.catch((err) => {
+			process.stderr.write(`seed-references: ${(err as Error).stack ?? err}\n`);
+			process.exitCode = 1;
+		})
+		.finally(() => client.end());
 }

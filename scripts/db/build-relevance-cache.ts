@@ -46,7 +46,7 @@ import {
 	syllabusNodeLink,
 } from '@ab/bc-study';
 import { BLOOM_LEVELS, type BloomLevel, STUDY_PRIORITIES, type StudyPriority, SYLLABUS_STATUSES } from '@ab/constants';
-import { db } from '@ab/db/connection';
+import { client, db } from '@ab/db/connection';
 import type { RelevanceEntry } from '@ab/types';
 import { eq, sql } from 'drizzle-orm';
 
@@ -396,8 +396,10 @@ async function main(): Promise<void> {
 }
 
 if (import.meta.main) {
-	main().catch((err) => {
-		process.stderr.write(`build-relevance-cache: ${(err as Error).stack ?? err}\n`);
-		process.exit(1);
-	});
+	main()
+		.catch((err) => {
+			process.stderr.write(`build-relevance-cache: ${(err as Error).stack ?? err}\n`);
+			process.exitCode = 1;
+		})
+		.finally(() => client.end());
 }

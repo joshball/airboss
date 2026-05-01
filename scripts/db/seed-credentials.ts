@@ -48,7 +48,7 @@ import {
 	SYLLABUS_PRIMACY_VALUES,
 	type SyllabusPrimacy,
 } from '@ab/constants';
-import { db } from '@ab/db/connection';
+import { client, db } from '@ab/db/connection';
 import type { StructuredCitation } from '@ab/types';
 import { generateCredentialId } from '@ab/utils';
 import { parse } from 'yaml';
@@ -248,8 +248,10 @@ async function main(): Promise<void> {
 }
 
 if (import.meta.main) {
-	main().catch((err) => {
-		process.stderr.write(`seed-credentials: ${(err as Error).stack ?? err}\n`);
-		process.exit(1);
-	});
+	main()
+		.catch((err) => {
+			process.stderr.write(`seed-credentials: ${(err as Error).stack ?? err}\n`);
+			process.exitCode = 1;
+		})
+		.finally(() => client.end());
 }
