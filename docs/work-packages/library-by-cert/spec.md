@@ -3,7 +3,7 @@ title: 'Library taxonomy: by-cert primary, topic cross-cut, regulations top-leve
 product: study
 feature: library-by-cert
 type: spec
-status: reading
+status: building
 review_status: pending
 ---
 
