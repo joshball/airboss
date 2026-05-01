@@ -51,7 +51,7 @@ const showSuggestion = $derived(
 );
 
 const heartbeatUrl = $derived(
-	ROUTES.LIBRARY_SECTION_HEARTBEAT(
+	ROUTES.LIBRARY_HANDBOOK_SECTION_HEARTBEAT(
 		data.reference.documentSlug,
 		data.chapter.code,
 		data.section.code.split('.').slice(1).join('.'),

@@ -233,33 +233,11 @@ export const ROUTES = {
 	/** Single section inside a handbook chapter (leaf reader). */
 	LIBRARY_HANDBOOK_SECTION: (slug: string, chapter: number | string, section: number | string) =>
 		`/library/handbook/${encodeURIComponent(slug)}/${encodeURIComponent(String(chapter))}/${encodeURIComponent(String(section))}` as const,
+	/** POST endpoint for client heartbeat ticks while reading a handbook section. */
+	LIBRARY_HANDBOOK_SECTION_HEARTBEAT: (slug: string, chapter: number | string, section: number | string) =>
+		`/library/handbook/${encodeURIComponent(slug)}/${encodeURIComponent(String(chapter))}/${encodeURIComponent(String(section))}/heartbeat` as const,
 	/** Aircraft-specific (POH/AFM) umbrella surface. */
 	LIBRARY_AIRCRAFT: (slug: string) => `/library/aircraft/${encodeURIComponent(slug)}` as const,
-	// --- Legacy aliases (retained until callers migrate) ----------------
-	// The Wave 3b route family replaces `/library/[doc]/...` with
-	// `/library/handbook/[slug]/...`. These aliases keep `@ab/bc-study`
-	// helpers, UI cards, and tests building while their internals migrate
-	// to the new function names. Each one points at the new path.
-	/** @deprecated use `LIBRARY_HANDBOOK`. */
-	LIBRARY_DOC: (doc: string) => `/library/handbook/${encodeURIComponent(doc)}` as const,
-	/** @deprecated use `LIBRARY_HANDBOOK_CHAPTER`. */
-	LIBRARY_CHAPTER: (doc: string, chapter: number | string) =>
-		`/library/handbook/${encodeURIComponent(doc)}/${encodeURIComponent(String(chapter))}` as const,
-	/** @deprecated use `LIBRARY_HANDBOOK_SECTION`. */
-	LIBRARY_SECTION: (doc: string, chapter: number | string, section: number | string) =>
-		`/library/handbook/${encodeURIComponent(doc)}/${encodeURIComponent(String(chapter))}/${encodeURIComponent(String(section))}` as const,
-	/**
-	 * Edition-pinned section URL. Default reader resolves the latest
-	 * non-superseded edition; this variant keeps a learner on a specific
-	 * edition (e.g. citations on a node that pre-dates a re-ingestion).
-	 */
-	LIBRARY_SECTION_AT_EDITION: (doc: string, chapter: number | string, section: number | string, edition: string) =>
-		`/library/handbook/${encodeURIComponent(doc)}/${encodeURIComponent(String(chapter))}/${encodeURIComponent(String(section))}?${QUERY_PARAMS.EDITION}=${encodeURIComponent(edition)}` as const,
-	LIBRARY_AT_EDITION: (doc: string, edition: string) =>
-		`/library/handbook/${encodeURIComponent(doc)}?${QUERY_PARAMS.EDITION}=${encodeURIComponent(edition)}` as const,
-	/** POST endpoint for client heartbeat ticks while reading a section. */
-	LIBRARY_SECTION_HEARTBEAT: (doc: string, chapter: number | string, section: number | string) =>
-		`/library/handbook/${encodeURIComponent(doc)}/${encodeURIComponent(String(chapter))}/${encodeURIComponent(String(section))}/heartbeat` as const,
 
 	// Study -- Help (per-app help content; primitives shared via @ab/help)
 	HELP: '/help',
