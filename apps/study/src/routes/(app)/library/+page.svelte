@@ -1,180 +1,40 @@
 <script lang="ts">
 import {
 	AVIATION_TOPIC_LABELS,
-	AVIATION_TOPIC_VALUES,
 	type AviationTopic,
-	LIBRARY_EXPANDED_SUBJECTS_KEY,
-	LIBRARY_STATE_LABELS,
-	LIBRARY_STATE_VALUES,
-	LIBRARY_STATES,
-	type LibraryState,
-	QUERY_PARAMS,
-	REFERENCE_KIND_LABELS,
-	REFERENCE_KIND_VALUES,
-	type ReferenceKind,
+	CERT_APPLICABILITIES,
+	CERT_APPLICABILITY_LABELS,
+	LIBRARY_REGULATIONS_KIND_LABELS,
 	ROUTES,
 } from '@ab/constants';
 import PageHelp from '@ab/help/ui/PageHelp.svelte';
 import EmptyState from '@ab/ui/components/EmptyState.svelte';
 import PageHeader from '@ab/ui/components/PageHeader.svelte';
-import LibraryCard from '@ab/ui/library/LibraryCard.svelte';
-import { dev } from '$app/environment';
-import { goto } from '$app/navigation';
-import { page } from '$app/state';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
 
-const OTHER_SUBJECT_KEY = '__other__';
+// "Topics with <4 entries collapse under a Show all toggle" per spec.
+const TOPIC_VISIBLE_THRESHOLD = 4;
 
-function parseStateParam(raw: string | null): LibraryState {
-	if (raw === null) return LIBRARY_STATES.ALL;
-	return (LIBRARY_STATE_VALUES as readonly string[]).includes(raw) ? (raw as LibraryState) : LIBRARY_STATES.ALL;
-}
-
-function parseKindsParam(raw: string | null): readonly ReferenceKind[] {
-	if (raw === null || raw === '') return REFERENCE_KIND_VALUES;
-	const requested = raw
-		.split(',')
-		.map((s) => s.trim())
-		.filter((s) => s.length > 0);
-	const allowed = new Set<string>(REFERENCE_KIND_VALUES);
-	const filtered = requested.filter((s) => allowed.has(s)) as ReferenceKind[];
-	return filtered.length === 0 ? REFERENCE_KIND_VALUES : filtered;
-}
-
-const stateFilter = $derived(parseStateParam(page.url.searchParams.get(QUERY_PARAMS.LIBRARY_STATE)));
-const kindFilter = $derived(parseKindsParam(page.url.searchParams.get(QUERY_PARAMS.KIND)));
-const kindFilterSet = $derived(new Set<ReferenceKind>(kindFilter));
-const allKindsActive = $derived(kindFilter.length === REFERENCE_KIND_VALUES.length);
-
-function matchesState(card: PageData['cards'][number]): boolean {
-	if (stateFilter === LIBRARY_STATES.ALL) return true;
-	if (stateFilter === LIBRARY_STATES.IN_APP) return card.isReadable;
-	return !card.isReadable;
-}
-
-function matchesKind(card: PageData['cards'][number]): boolean {
-	return kindFilterSet.has(card.kind);
-}
-
-const filteredCards = $derived(data.cards.filter((c) => matchesState(c) && matchesKind(c)));
-
-interface SubjectGroup {
-	key: string;
-	label: string;
-	cards: PageData['cards'];
-}
-
-const groups = $derived<SubjectGroup[]>(
-	(() => {
-		const buckets = new Map<string, PageData['cards']>();
-		for (const topic of AVIATION_TOPIC_VALUES) buckets.set(topic, []);
-		buckets.set(OTHER_SUBJECT_KEY, []);
-		for (const card of filteredCards) {
-			if (card.subjects.length === 0) {
-				buckets.get(OTHER_SUBJECT_KEY)?.push(card);
-				continue;
-			}
-			for (const subject of card.subjects) {
-				const bucket = buckets.get(subject);
-				if (bucket) bucket.push(card);
-				else buckets.get(OTHER_SUBJECT_KEY)?.push(card);
-			}
-		}
-		const result: SubjectGroup[] = [];
-		for (const topic of AVIATION_TOPIC_VALUES) {
-			const cards = buckets.get(topic) ?? [];
-			if (cards.length === 0) continue;
-			result.push({ key: topic, label: AVIATION_TOPIC_LABELS[topic as AviationTopic], cards });
-		}
-		const otherCards = buckets.get(OTHER_SUBJECT_KEY) ?? [];
-		if (otherCards.length > 0) result.push({ key: OTHER_SUBJECT_KEY, label: 'Other', cards: otherCards });
-		return result;
-	})(),
+const visibleCertSpine = $derived(
+	data.certSpine.filter((entry) => entry.cert !== CERT_APPLICABILITIES.ALL && entry.count > 0),
 );
 
-// Default-expanded subjects: the ones containing at least one in-app readable
-// reference. Persisted to localStorage on toggle so the learner's preference
-// survives reloads.
-const defaultExpanded = $derived(new Set(groups.filter((g) => g.cards.some((c) => c.isReadable)).map((g) => g.key)));
-let expandedSubjects: Set<string> = $state(new Set());
-let hydrated = $state(false);
+const allTopics = $derived(data.topicSpine);
+const primaryTopics = $derived(allTopics.filter((entry) => entry.count >= TOPIC_VISIBLE_THRESHOLD));
+const collapsedTopics = $derived(allTopics.filter((entry) => entry.count > 0 && entry.count < TOPIC_VISIBLE_THRESHOLD));
 
-$effect(() => {
-	if (typeof window === 'undefined') return;
-	if (hydrated) return;
-	const raw = window.localStorage.getItem(LIBRARY_EXPANDED_SUBJECTS_KEY);
-	if (raw === null) {
-		expandedSubjects = new Set(defaultExpanded);
-	} else {
-		try {
-			const parsed = JSON.parse(raw);
-			if (Array.isArray(parsed) && parsed.every((s) => typeof s === 'string')) {
-				expandedSubjects = new Set(parsed);
-			} else {
-				expandedSubjects = new Set(defaultExpanded);
-			}
-		} catch {
-			expandedSubjects = new Set(defaultExpanded);
-		}
-	}
-	hydrated = true;
-});
+let showAllTopics = $state(false);
 
-function persistExpanded(): void {
-	if (typeof window === 'undefined') return;
-	window.localStorage.setItem(LIBRARY_EXPANDED_SUBJECTS_KEY, JSON.stringify([...expandedSubjects]));
-}
+const visibleRegulationBuckets = $derived(data.regulationBuckets.filter((b) => b.count > 0));
 
-function isExpanded(key: string): boolean {
-	if (!hydrated) return defaultExpanded.has(key);
-	return expandedSubjects.has(key);
-}
+const certCount = $derived(visibleCertSpine.length);
+const topicCount = $derived(primaryTopics.length + collapsedTopics.length);
+const regCount = $derived(visibleRegulationBuckets.length);
+const aircraftCount = $derived(data.aircraft.length);
 
-function handleToggle(key: string, event: Event): void {
-	const target = event.currentTarget as HTMLDetailsElement;
-	const nextOpen = target.open;
-	const next = new Set(expandedSubjects);
-	if (nextOpen) next.add(key);
-	else next.delete(key);
-	expandedSubjects = next;
-	persistExpanded();
-}
-
-async function setStateFilter(value: LibraryState): Promise<void> {
-	const url = new URL(page.url);
-	if (value === LIBRARY_STATES.ALL) url.searchParams.delete(QUERY_PARAMS.LIBRARY_STATE);
-	else url.searchParams.set(QUERY_PARAMS.LIBRARY_STATE, value);
-	await goto(url.pathname + url.search, { replaceState: true, keepFocus: true, noScroll: true });
-}
-
-async function toggleKind(kind: ReferenceKind): Promise<void> {
-	const url = new URL(page.url);
-	const next = new Set(kindFilterSet);
-	if (allKindsActive) {
-		// Switching from "all" to a single-kind selection clears the rest.
-		next.clear();
-		next.add(kind);
-	} else if (next.has(kind)) {
-		next.delete(kind);
-	} else {
-		next.add(kind);
-	}
-	if (next.size === 0 || next.size === REFERENCE_KIND_VALUES.length) {
-		url.searchParams.delete(QUERY_PARAMS.KIND);
-	} else {
-		const ordered = REFERENCE_KIND_VALUES.filter((k) => next.has(k));
-		url.searchParams.set(QUERY_PARAMS.KIND, ordered.join(','));
-	}
-	await goto(url.pathname + url.search, { replaceState: true, keepFocus: true, noScroll: true });
-}
-
-async function clearKindFilter(): Promise<void> {
-	const url = new URL(page.url);
-	url.searchParams.delete(QUERY_PARAMS.KIND);
-	await goto(url.pathname + url.search, { replaceState: true, keepFocus: true, noScroll: true });
-}
+const totalSurfaces = $derived(certCount + topicCount + regCount + aircraftCount);
 </script>
 
 <svelte:head>
@@ -183,119 +43,161 @@ async function clearKindFilter(): Promise<void> {
 
 <PageHeader
 	title="Library"
-	subtitle="Browse references by topic. Read FAA handbooks in-app; external references open in a new tab."
+	subtitle="Pick a cert spine, a cross-cutting topic, or a regulations & policy bucket. References live where they primarily apply; cross-cuts surface on the topic spines."
 >
 	{#snippet titleSuffix()}
 		<PageHelp pageId="library" />
 	{/snippet}
 </PageHeader>
 
-{#if data.cards.length === 0}
+{#if totalSurfaces === 0}
 	<EmptyState title="No references yet">
 		{#snippet bodySnippet()}
 			<p>
 				References are added by your administrator -- check back, or browse
 				<a href={ROUTES.KNOWLEDGE}>the knowledge graph</a> in the meantime.
 			</p>
-			{#if dev}
-				<p class="dev-hint">
-					Dev: run <code>bun run sources extract handbooks phak</code> then <code>bun run db seed</code>.
-				</p>
-			{/if}
 		{/snippet}
 	</EmptyState>
 {:else}
-	<section class="filters" aria-label="Filters">
-		<div class="filter-group" role="radiogroup" aria-label="State filter">
-			{#each LIBRARY_STATE_VALUES as value (value)}
-				<button
-					type="button"
-					class="chip"
-					class:active={stateFilter === value}
-					role="radio"
-					aria-checked={stateFilter === value}
-					onclick={() => setStateFilter(value)}
-				>
-					{LIBRARY_STATE_LABELS[value]}
-				</button>
-			{/each}
-		</div>
-		<div class="filter-group" aria-label="Kind filter">
-			<button
-				type="button"
-				class="chip"
-				class:active={allKindsActive}
-				aria-pressed={allKindsActive}
-				onclick={() => clearKindFilter()}
-			>
-				All kinds
-			</button>
-			{#each REFERENCE_KIND_VALUES as value (value)}
-				<button
-					type="button"
-					class="chip"
-					class:active={!allKindsActive && kindFilterSet.has(value)}
-					aria-pressed={!allKindsActive && kindFilterSet.has(value)}
-					onclick={() => toggleKind(value)}
-				>
-					{REFERENCE_KIND_LABELS[value]}
-				</button>
-			{/each}
-		</div>
+	<section class="spine" aria-labelledby="cert-spine-h">
+		<h2 id="cert-spine-h">By cert</h2>
+		<p class="spine-lead">References whose primary cert is this rating, plus carryover from upstream prereqs.</p>
+		{#if visibleCertSpine.length === 0}
+			<EmptyState title="No cert assignments yet" body="Run the reference seed to populate primary_cert." />
+		{:else}
+			<ul class="grid">
+				{#each visibleCertSpine as entry (entry.cert)}
+					<li>
+						<a class="card cert-card" href={ROUTES.LIBRARY_CERT(entry.cert)}>
+							<span class="card-title">{CERT_APPLICABILITY_LABELS[entry.cert]}</span>
+							<span class="card-count">{entry.count} reference{entry.count === 1 ? '' : 's'}</span>
+						</a>
+					</li>
+				{/each}
+			</ul>
+		{/if}
 	</section>
 
-	{#if filteredCards.length === 0}
-		<EmptyState title="No references match these filters" body="Try clearing one of the chips above." />
-	{:else}
-		<div class="groups">
-			{#each groups as group (group.key)}
-				<details
-					class="group"
-					open={isExpanded(group.key)}
-					ontoggle={(event) => handleToggle(group.key, event)}
-				>
-					<summary>
-						<span class="group-label">{group.label}</span>
-						<span class="group-count" aria-label={`${group.cards.length} references`}>
-							{group.cards.length}
-						</span>
-					</summary>
-					<ul class="grid">
-						{#each group.cards as card (`${group.key}:${card.id}`)}
-							<li>
-								<LibraryCard
-									documentSlug={card.documentSlug}
-									edition={card.edition}
-									title={card.title}
-									publisher={card.publisher}
-									kind={card.kind}
-									subjects={card.subjects}
-									externalUrl={card.externalUrl}
-									isReadable={card.isReadable}
-									progress={card.progress}
-								/>
-							</li>
-						{/each}
-					</ul>
-				</details>
-			{/each}
-		</div>
+	<section class="spine" aria-labelledby="topic-spine-h">
+		<h2 id="topic-spine-h">By topic</h2>
+		<p class="spine-lead">Cross-cutting subject groupings; a single reference can appear under several topics.</p>
+		{#if primaryTopics.length === 0 && collapsedTopics.length === 0}
+			<EmptyState title="No topic tags yet" body="Run the reference seed to populate subjects." />
+		{:else}
+			<ul class="grid">
+				{#each primaryTopics as entry (entry.topic)}
+					<li>
+						<a class="card topic-card" href={ROUTES.LIBRARY_TOPIC(entry.topic as AviationTopic)}>
+							<span class="card-title">{AVIATION_TOPIC_LABELS[entry.topic as AviationTopic] ?? entry.topic}</span>
+							<span class="card-count">{entry.count} reference{entry.count === 1 ? '' : 's'}</span>
+						</a>
+					</li>
+				{/each}
+				{#if showAllTopics}
+					{#each collapsedTopics as entry (entry.topic)}
+						<li>
+							<a class="card topic-card" href={ROUTES.LIBRARY_TOPIC(entry.topic as AviationTopic)}>
+								<span class="card-title">{AVIATION_TOPIC_LABELS[entry.topic as AviationTopic] ?? entry.topic}</span>
+								<span class="card-count">{entry.count} reference{entry.count === 1 ? '' : 's'}</span>
+							</a>
+						</li>
+					{/each}
+				{/if}
+			</ul>
+			{#if collapsedTopics.length > 0}
+				<button type="button" class="show-all" onclick={() => (showAllTopics = !showAllTopics)}>
+					{showAllTopics ? 'Hide smaller topics' : `Show all ${primaryTopics.length + collapsedTopics.length} topics`}
+				</button>
+			{/if}
+		{/if}
+	</section>
+
+	<section class="spine" aria-labelledby="regs-spine-h">
+		<h2 id="regs-spine-h">Regulations & policy</h2>
+		<p class="spine-lead">Federal regulations, advisory circulars, and accident-investigation reports.</p>
+		{#if visibleRegulationBuckets.length === 0}
+			<EmptyState title="No regulatory references seeded yet" />
+		{:else}
+			<ul class="grid">
+				{#each visibleRegulationBuckets as bucket (bucket.kind)}
+					<li>
+						<a class="card reg-card" href={ROUTES.LIBRARY_REGULATIONS_KIND(bucket.kind)}>
+							<span class="card-title">{LIBRARY_REGULATIONS_KIND_LABELS[bucket.kind]}</span>
+							<span class="card-count">{bucket.count} reference{bucket.count === 1 ? '' : 's'}</span>
+						</a>
+					</li>
+				{/each}
+			</ul>
+		{/if}
+	</section>
+
+	{#if aircraftCount > 0}
+		<section class="spine" aria-labelledby="aircraft-spine-h">
+			<h2 id="aircraft-spine-h">Aircraft-specific</h2>
+			<p class="spine-lead">Pilot's Operating Handbooks and Aircraft Flight Manuals.</p>
+			<ul class="grid">
+				{#each data.aircraft as ac (ac.id)}
+					<li>
+						<a class="card aircraft-card" href={ROUTES.LIBRARY_AIRCRAFT(ac.documentSlug)}>
+							<span class="card-title">{ac.title}</span>
+							<span class="card-count">POH / AFM</span>
+						</a>
+					</li>
+				{/each}
+			</ul>
+		</section>
 	{/if}
 {/if}
 
 <style>
-	.filters {
+	.spine {
+		margin-bottom: var(--space-lg);
+	}
+	.spine h2 {
+		margin: 0 0 var(--space-2xs);
+		font-size: var(--font-size-xl);
+		font-weight: var(--font-weight-semibold);
+	}
+	.spine-lead {
+		margin: 0 0 var(--space-sm);
+		color: var(--ink-muted);
+	}
+	.grid {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: grid;
+		gap: var(--space-sm);
+		grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+	}
+	.card {
 		display: flex;
 		flex-direction: column;
-		gap: var(--space-xs);
-		margin-bottom: var(--space-md);
-	}
-	.filter-group {
-		display: flex;
-		flex-wrap: wrap;
 		gap: var(--space-2xs);
+		padding: var(--space-sm) var(--space-md);
+		border-radius: var(--radius-md);
+		border: 1px solid var(--edge-default);
+		background: var(--surface-raised);
+		color: inherit;
+		text-decoration: none;
+		transition: border-color var(--motion-fast) ease;
 	}
-	.chip {
+	.card:hover,
+	.card:focus-visible {
+		border-color: var(--action-default-edge);
+		outline: none;
+	}
+	.card-title {
+		font-size: var(--font-size-md);
+		font-weight: var(--font-weight-semibold);
+	}
+	.card-count {
+		color: var(--ink-muted);
+		font-size: var(--font-size-sm);
+	}
+	.show-all {
+		margin-top: var(--space-sm);
 		padding: var(--space-2xs) var(--space-sm);
 		border-radius: var(--radius-pill, var(--radius-md));
 		border: 1px solid var(--edge-default);
@@ -303,72 +205,10 @@ async function clearKindFilter(): Promise<void> {
 		color: var(--ink-muted);
 		font-size: var(--font-size-sm);
 		cursor: pointer;
-		transition:
-			border-color var(--motion-fast) ease,
-			background var(--motion-fast) ease,
-			color var(--motion-fast) ease;
 	}
-	.chip:hover,
-	.chip:focus-visible {
+	.show-all:hover,
+	.show-all:focus-visible {
 		border-color: var(--action-default-edge);
 		outline: none;
-	}
-	.chip.active {
-		background: var(--action-default);
-		color: var(--action-default-ink);
-		border-color: var(--action-default-edge);
-	}
-	.groups {
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-md);
-	}
-	.group {
-		border-radius: var(--radius-md);
-		background: var(--surface-panel);
-	}
-	.group summary {
-		display: flex;
-		align-items: center;
-		gap: var(--space-sm);
-		padding: var(--space-xs) var(--space-sm);
-		cursor: pointer;
-		list-style: none;
-		font-size: var(--font-size-lg);
-		font-weight: var(--font-weight-semibold);
-	}
-	.group summary::-webkit-details-marker {
-		display: none;
-	}
-	.group summary::before {
-		content: '▸';
-		display: inline-block;
-		color: var(--ink-muted);
-		transition: transform var(--motion-fast) ease;
-	}
-	.group[open] summary::before {
-		transform: rotate(90deg);
-	}
-	.group-label {
-		flex: 1;
-	}
-	.group-count {
-		color: var(--ink-muted);
-		font-size: var(--font-size-sm);
-		font-weight: var(--font-weight-regular, normal);
-	}
-	.grid {
-		list-style: none;
-		padding: var(--space-xs) 0 var(--space-sm);
-		margin: 0;
-		display: grid;
-		gap: var(--space-sm);
-		grid-template-columns: repeat(auto-fill, minmax(22rem, 1fr));
-	}
-	.dev-hint code {
-		background: var(--surface-sunken);
-		padding: 0 var(--space-2xs);
-		border-radius: var(--radius-sm);
-		font-family: var(--font-family-mono);
 	}
 </style>

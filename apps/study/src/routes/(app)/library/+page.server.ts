@@ -1,65 +1,110 @@
 /**
- * `/library` -- subject-grouped browse over every active reference.
+ * `/library` -- three-spine landing page.
  *
- * Hydrates one card per non-superseded `study.reference` row (handbooks, CFRs,
- * ACs, ACS / PTS, AIM, PCG, NTSB, POH, other). For each row the loader probes
- * whether the reference is "readable in-app" -- meaning it has at least one
- * non-chapter `handbook_section` in the DB -- and computes its external URL
- * via the single-source `externalUrlForReference` helper so the card always
- * builds a link from the same path the citation resolver does.
+ * Replaces the old subject-grouped browse with three distinct entry points:
+ *   - "By cert"  -> `/library/cert/[cert]`
+ *   - "By topic" -> `/library/topic/[topic]`
+ *   - "Regulations & policy" -> `/library/regulations/[kind]`
+ *   - "Aircraft-specific"    -> `/library/aircraft/[slug]` (POH/AFM)
  *
- * Group-by-subject + filters happen on the client so a chip toggle stays
- * snappy without a server round-trip; the URL state survives reloads.
+ * Counts are pre-aggregated server-side so each card on the landing page can
+ * show its size without an N+1 fetch on the client. See
+ * `docs/work-packages/library-by-cert/spec.md`.
  */
 
 import { requireAuth } from '@ab/auth';
+import { getReferenceCountsByCert, getReferenceCountsByTopic, listReferences } from '@ab/bc-study';
 import {
-	getHandbookProgress,
-	getReadableReferenceIds,
-	type HandbookProgressSummary,
-	listReferences,
-} from '@ab/bc-study';
-import { externalUrlForReference, type ReferenceKind } from '@ab/constants';
+	AVIATION_TOPIC_VALUES,
+	CERT_APPLICABILITY_VALUES,
+	type CertApplicability,
+	LIBRARY_REGULATIONS_KIND_VALUES,
+	type LibraryRegulationsKind,
+	REFERENCE_KINDS,
+	type ReferenceKind,
+} from '@ab/constants';
 import type { PageServerLoad } from './$types';
 
-export interface LibraryReferenceCard {
+interface CertSpineEntry {
+	cert: CertApplicability;
+	count: number;
+}
+
+interface TopicSpineEntry {
+	topic: string;
+	count: number;
+}
+
+interface RegulationsBucket {
+	kind: LibraryRegulationsKind;
+	count: number;
+}
+
+interface AircraftEntry {
 	id: string;
 	documentSlug: string;
-	edition: string;
 	title: string;
-	publisher: string;
-	kind: ReferenceKind;
-	subjects: readonly string[];
-	externalUrl: string | null;
-	isReadable: boolean;
-	progress: HandbookProgressSummary | null;
+}
+
+/**
+ * Map a `LibraryRegulationsKind` slug to the predicate that tests whether a
+ * `study.reference` row belongs in that bucket.
+ *
+ * - `14-cfr` / `49-cfr`: `kind = cfr` AND slug starts with `14cfr` / `49cfr`.
+ * - `aim`: `kind = aim` OR `pcg` (the Pilot/Controller Glossary belongs
+ *   under AIM since it ships with the AIM publication).
+ * - `ac`: `kind = ac`.
+ * - `ntsb`: `kind = ntsb`.
+ */
+function regulationsBucketMatcher(kind: LibraryRegulationsKind): (ref: { kind: ReferenceKind; documentSlug: string }) => boolean {
+	switch (kind) {
+		case '14-cfr':
+			return (ref) => ref.kind === REFERENCE_KINDS.CFR && ref.documentSlug.startsWith('14cfr');
+		case '49-cfr':
+			return (ref) => ref.kind === REFERENCE_KINDS.CFR && ref.documentSlug.startsWith('49cfr');
+		case 'aim':
+			return (ref) => ref.kind === REFERENCE_KINDS.AIM || ref.kind === REFERENCE_KINDS.PCG;
+		case 'ac':
+			return (ref) => ref.kind === REFERENCE_KINDS.AC;
+		case 'ntsb':
+			return (ref) => ref.kind === REFERENCE_KINDS.NTSB;
+	}
 }
 
 export const load: PageServerLoad = async (event) => {
-	const user = requireAuth(event);
-	const references = await listReferences();
-	const readableIds = await getReadableReferenceIds(references.map((r) => r.id));
+	requireAuth(event);
 
-	const cards: LibraryReferenceCard[] = await Promise.all(
-		references.map(async (ref) => {
-			const isReadable = readableIds.has(ref.id);
-			const progress = isReadable ? await getHandbookProgress(user.id, ref.id) : null;
-			const kind = ref.kind as ReferenceKind;
-			const externalUrl = externalUrlForReference(kind, ref.documentSlug, ref.edition, ref.url);
-			return {
-				id: ref.id,
-				documentSlug: ref.documentSlug,
-				edition: ref.edition,
-				title: ref.title,
-				publisher: ref.publisher,
-				kind,
-				subjects: ref.subjects,
-				externalUrl,
-				isReadable,
-				progress,
-			};
-		}),
-	);
+	const [certCounts, topicCounts, allRefs] = await Promise.all([
+		getReferenceCountsByCert(),
+		getReferenceCountsByTopic(),
+		listReferences(),
+	]);
 
-	return { cards };
+	const certSpine: CertSpineEntry[] = CERT_APPLICABILITY_VALUES.map((cert) => ({
+		cert,
+		count: certCounts[cert] ?? 0,
+	}));
+
+	const topicSpine: TopicSpineEntry[] = AVIATION_TOPIC_VALUES.map((topic) => ({
+		topic,
+		count: topicCounts[topic] ?? 0,
+	}));
+
+	const regulationBuckets: RegulationsBucket[] = LIBRARY_REGULATIONS_KIND_VALUES.map((kind) => {
+		const matcher = regulationsBucketMatcher(kind);
+		const count = allRefs.reduce((acc, ref) => (matcher({ kind: ref.kind as ReferenceKind, documentSlug: ref.documentSlug }) ? acc + 1 : acc), 0);
+		return { kind, count };
+	});
+
+	const aircraft: AircraftEntry[] = allRefs
+		.filter((ref) => ref.kind === REFERENCE_KINDS.POH)
+		.map((ref) => ({ id: ref.id, documentSlug: ref.documentSlug, title: ref.title }))
+		.sort((a, b) => a.title.localeCompare(b.title));
+
+	return {
+		certSpine,
+		topicSpine,
+		regulationBuckets,
+		aircraft,
+	};
 };
