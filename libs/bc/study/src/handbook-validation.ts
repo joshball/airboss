@@ -21,6 +21,8 @@
 import {
 	AVIATION_TOPIC_VALUES,
 	type AviationTopic,
+	CERT_APPLICABILITY_VALUES,
+	type CertApplicability,
 	CITATION_FRAMING_VALUES,
 	type CitationFraming,
 	HANDBOOK_READ_STATUS_VALUES,
@@ -179,6 +181,21 @@ export const handbookManifestSchema = z.object({
 		.array(z.enum(AVIATION_TOPIC_VALUES as [AviationTopic, ...AviationTopic[]]))
 		.min(1)
 		.max(3),
+	/**
+	 * Optional primary cert that owns this handbook for library-by-cert
+	 * browsing. Mirrors the `primary_cert` field on `referenceEntrySchema`
+	 * (`scripts/db/seed-references.ts`) so handbooks declare their cert
+	 * placement in the same canonical location as their other metadata
+	 * (title, subjects, fetched_at) rather than via a parallel override file.
+	 * Omitted / null = cert-agnostic (renders only in topic + regulations
+	 * spines). When present, must be one of `CERT_APPLICABILITY_VALUES`. The
+	 * DB CHECK constraint on `study.reference.primary_cert` is the storage
+	 * safety net.
+	 */
+	primary_cert: z
+		.enum(CERT_APPLICABILITY_VALUES as [CertApplicability, ...CertApplicability[]])
+		.nullable()
+		.optional(),
 	sections: z.array(handbookManifestSectionSchema).min(1),
 	figures: z.array(handbookManifestFigureSchema),
 	warnings: z.array(handbookManifestWarningSchema).default([]),
