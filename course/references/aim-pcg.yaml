@@ -13,6 +13,7 @@ references:
     publisher: FAA
     url: https://www.faa.gov/air_traffic/publications/atpubs/aim_html/
     subjects: [procedures, communications, navigation]
+    primary_cert: null
 
   - slug: pcg
     kind: pcg
@@ -21,3 +22,4 @@ references:
     publisher: FAA
     url: https://www.faa.gov/air_traffic/publications/atpubs/pcg_html/
     subjects: [communications]
+    primary_cert: null

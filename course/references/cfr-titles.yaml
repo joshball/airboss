@@ -9,6 +9,9 @@
 # Title 14 covers Aeronautics and Space; Title 49 covers Transportation
 # (incl. NTSB Part 830 and TSA Part 1552 referenced from cert-syllabus
 # regulations course material).
+#
+# All CFR rows carry `primary_cert: null` -- the regulations spine groups
+# them by Title/Part, not by cert (per library-by-cert WP placement table).
 
 references:
   # ---------- Title 14 (Aeronautics and Space) -----------------------------
@@ -20,6 +23,7 @@ references:
     publisher: FAA
     url: https://www.ecfr.gov/current/title-14/part-14
     subjects: [regulations]
+    primary_cert: null
 
   - slug: 14cfr23
     kind: cfr
@@ -28,6 +32,7 @@ references:
     publisher: FAA
     url: https://www.ecfr.gov/current/title-14/part-23
     subjects: [regulations, aircraft-systems]
+    primary_cert: null
 
   - slug: 14cfr61
     kind: cfr
@@ -36,6 +41,7 @@ references:
     publisher: FAA
     url: https://www.ecfr.gov/current/title-14/part-61
     subjects: [regulations, certification]
+    primary_cert: null
 
   - slug: 14cfr68
     kind: cfr
@@ -44,6 +50,7 @@ references:
     publisher: FAA
     url: https://www.ecfr.gov/current/title-14/part-68
     subjects: [regulations, medical]
+    primary_cert: null
 
   - slug: 14cfr71
     kind: cfr
@@ -52,6 +59,7 @@ references:
     publisher: FAA
     url: https://www.ecfr.gov/current/title-14/part-71
     subjects: [regulations, airspace]
+    primary_cert: null
 
   - slug: 14cfr73
     kind: cfr
@@ -60,6 +68,7 @@ references:
     publisher: FAA
     url: https://www.ecfr.gov/current/title-14/part-73
     subjects: [regulations, airspace]
+    primary_cert: null
 
   - slug: 14cfr91
     kind: cfr
@@ -68,6 +77,7 @@ references:
     publisher: FAA
     url: https://www.ecfr.gov/current/title-14/part-91
     subjects: [regulations, procedures]
+    primary_cert: null
 
   - slug: 14cfr135
     kind: cfr
@@ -76,6 +86,7 @@ references:
     publisher: FAA
     url: https://www.ecfr.gov/current/title-14/part-135
     subjects: [regulations, procedures]
+    primary_cert: null
 
   - slug: 14cfr141
     kind: cfr
@@ -84,6 +95,7 @@ references:
     publisher: FAA
     url: https://www.ecfr.gov/current/title-14/part-141
     subjects: [regulations, certification, training-ops]
+    primary_cert: null
 
   # ---------- Title 49 (Transportation) ------------------------------------
 
@@ -94,6 +106,7 @@ references:
     publisher: NTSB
     url: https://www.ecfr.gov/current/title-49/part-830
     subjects: [regulations, emergencies]
+    primary_cert: null
 
   - slug: 49cfr1552
     kind: cfr
@@ -102,3 +115,4 @@ references:
     publisher: TSA
     url: https://www.ecfr.gov/current/title-49/part-1552
     subjects: [regulations, training-ops]
+    primary_cert: null
