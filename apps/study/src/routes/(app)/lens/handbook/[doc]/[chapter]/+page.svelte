@@ -42,7 +42,7 @@ const totalCitingNodes = $derived(sections.reduce((acc, s) => acc + s.citingNode
 						<span class="sec-code">{entry.section.code}</span>
 						<a
 							class="sec-title"
-							href={ROUTES.LIBRARY_SECTION(reference.documentSlug, chapter.code, entry.section.code)}
+							href={ROUTES.LIBRARY_HANDBOOK_SECTION(reference.documentSlug, chapter.code, entry.section.code)}
 						>
 							{entry.section.title}
 						</a>
