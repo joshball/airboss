@@ -26,6 +26,8 @@ This is **v2**. v1 recommended Option C (`library_entry` projection table). [rev
 
 ## Glossary (so we're not arguing about words)
 
+> Layers as they exist today (pre-WP-SUB, snapshot of `5a972b3a`). Post-substrate, `handbook_section` becomes `reference_section` and the readability probe becomes content-based; see §1. The glossary is intentionally a frozen snapshot so future readers can diff against the substrate.
+
 | Layer                            | Where it lives                                        | Populated by                                                               |
 | -------------------------------- | ----------------------------------------------------- | -------------------------------------------------------------------------- |
 | **Cache**                        | `~/Documents/airboss-handbook-cache/`                 | `bun run sources fetch <corpus>`                                           |
@@ -125,20 +127,21 @@ Pre-launch, no production data, single-developer environment. The schema file is
 
 #### `reference` (one row per document)
 
-| Column                 | Type        | Notes                                                                         |
-| ---------------------- | ----------- | ----------------------------------------------------------------------------- |
-| id                     | text PK     | `ref_ULID`                                                                    |
-| kind                   | text        | TS const-array union; Zod-validated at ingest. DB CHECK can stay or go.       |
-| document_slug          | text        | `phak`, `14cfr91`, `ac-91-79b`, `aim-2026-04`                                 |
-| edition                | text        | `FAA-H-8083-25C`, `2026-04-22`, `2024-letter-mangiamele`                      |
-| title                  | text        | Display title                                                                 |
-| publisher              | text        | `FAA`, `NTSB`, `AOPA`, ... display metadata only                              |
-| subjects               | text[]      | Aviation topics (existing)                                                    |
+| Column                 | Type        | Notes |
+| ---------------------- | ----------- | ----- |
+| id                     | text PK     | `ref_ULID` |
+| kind                   | text        | Member of `REFERENCE_KINDS` (handbook, cfr, ac, acs, aim, pcg, ntsb, interp, safo, info, order, pamphlet, poh, other). **Drop the DB CHECK.** Zod-validated at ingest is the single source of truth; adding a corpus shouldn't need a migration. |
+| document_slug          | text        | `phak`, `14cfr91`, `ac-91-79b`, `aim-2026-04` |
+| edition                | text        | `FAA-H-8083-25C`, `2026-04-22`, `2024-letter-mangiamele` |
+| title                  | text        | Display title |
+| publisher              | text        | `FAA`, `NTSB`, `AOPA`, ... display metadata only |
+| subjects               | text[]      | Aviation topics (existing) |
+| primary_cert           | text NULL   | **Existing post-PR #386** (Wave 1 of library-by-cert). CHECK against `CERT_APPLICABILITY_VALUES`. NULL = cert-agnostic. WP-SUB preserves this column unchanged. |
 | section_schema         | jsonb       | `{ levels: string[], strict_sequence?: boolean }`. Per-kind level vocabulary. |
-| superseded_by_id       | text FK     | Self-ref for edition chains (existing)                                        |
-| metadata               | jsonb       | Per-kind-typed extras. Empty for kinds that don't need them.                  |
-| seed_origin            | text        | Existing                                                                      |
-| created_at, updated_at | timestamptz | Existing                                                                      |
+| superseded_by_id       | text FK     | Self-ref for edition chains (existing) |
+| metadata               | jsonb       | Per-kind-typed extras. Empty for kinds that don't need them. |
+| seed_origin            | text NULL   | Dev-seed marker (existing). NULL on production rows; tagged on dev-seeded rows so reset paths can target only what they own. |
+| created_at, updated_at | timestamptz | Existing |
 
 #### `reference_section` (hierarchical content)
 
@@ -227,6 +230,8 @@ The substrate rename closes the gap by fixing the cause once. The `library_entry
 
 ## 2. Corpus catalog
 
+> Snapshot of `5a972b3a` (pre-WP-SUB). Column 5 (`handbook_section` seeded?) describes today's schema; post-substrate the same question becomes "`reference_section` seeded with `content_md`?". The catalog rows are deliberately preserved as historical truth.
+
 Every reference cohort, surveyed against the actual filesystem + the YAML registry today (2026-04-30, post `5a972b3a`). "Library-visible?" = `isReadable` would be `true` for at least one row in the cohort.
 
 | Corpus                           | Cache            | Inline derivs                                 | `study.reference` rows                          | `handbook_section` seeded? | Library-visible? | Action                                                      |
@@ -265,7 +270,7 @@ Verification trail:
 
 ## 3. CFR / AIM density
 
-Once Option C is in, CFR-14 alone adds 7,218 visible entries. AIM adds 744. The current `/library` page treats every reference as one card; a 7k-entry CFR title would either need to be one card (the whole title) or 7k cards (every section). Neither is right.
+Once `reference_section` carries CFR rows (post-WP-SUB), CFR-14 alone adds 7,218 visible entries. AIM adds 744. The current `/library` page treats every reference as one card; a 7k-entry CFR title would either need to be one card (the whole title) or 7k cards (every section). Neither is right.
 
 The library page already groups by aviation topic (`subjects`) on the client. Three live design questions for high-density corpora:
 
@@ -363,7 +368,9 @@ Not promised to anyone, surfacing as an explicit menu so the user picks rather t
 
 Discrete WPs that ship independently. Each is small enough to ship in a session or two; each leaves the system better than it found it.
 
-1. **WP-SUB (substrate).** This WP after ratification. Author + ship the substrate rename described in §1: rename `handbook_section` -> `reference_section` (+ figure, errata), drop the handbook-shaped CHECK constraints, add `section_schema` + `metadata` jsonb + `depth`, rewrite `getReadableReferenceIds()` against `content_md`, generalize the seeder. Re-seed handbooks. Zero behavior change beyond the rename; unlocks every following WP. (Replaces v1's WP-V + WP-VS.)
+> **Note:** Wave 1 of `library-by-cert` (PR #386) shipped between v1 and v2 of this spec and added `reference.primary_cert` (NULL = cert-agnostic; CHECK against `CERT_APPLICABILITY_VALUES`). WP-SUB preserves this column unchanged.
+
+1. **WP-SUB (substrate).** This WP after ratification. Author + ship the substrate rename described in §1: rename `handbook_section` -> `reference_section` (+ figure, errata), drop the handbook-shaped CHECK constraints (including the `kind` CHECK), add `section_schema` + `metadata` jsonb + `depth`, rewrite `getReadableReferenceIds()` against `content_md`, generalize the seeder. Re-seed handbooks. Preserves `reference.primary_cert` from PR #386. Zero behavior change beyond the rename; unlocks every following WP. (Replaces v1's WP-V + WP-VS.)
 2. **WP-EX-Verify.** Confirm the generalized seeder produces `reference_section` rows for the 6 handbooks-extras (risk-mgmt, instructor, IFH, IPH, AMT-G, AMT-P). Small PR if anything is off. (May already work for free under WP-SUB; needs a 5-minute check.)
 3. **WP-MTN.** Tips on Mountain Flying pamphlet -- single PDF, AC-style pipeline. Smallest possible win.
 4. **WP-AIM.** AIM seed: walk `aim/<edition>/manifest.json`, populate `reference_section` via the generalized seeder. 744 entries unlocked.
@@ -383,7 +390,7 @@ Stop conditions: any WP can be deferred or dropped at any point. The hard order 
 
 These don't block the substrate WP, but they're the same flavor of problem and shouldn't be lost:
 
-1. **`course/references/handbooks-noningested.yaml` exists only because the seed pipeline was handbook-only.** Once WP-SUB ships and WP-EX-Verify confirms the 6 extras seed cleanly, this file's job is done. Delete it; delete the `migrate-references-to-structured.ts` bridge with it. No other corpus needs the YAML-as-fallback pattern.
+1. **`course/references/handbooks-noningested.yaml` exists only because the seed pipeline was handbook-only.** Most of its rows (AIH/IFH/IPH/risk-mgmt) are now cached post-#384 and will seed via WP-SUB. One row -- `afh` at edition `FAA-H-8083-3B` (prior edition; current `3C` is ingested) -- has no cache and isn't in scope for either WP-SUB or WP-EX-Verify; it exists only so historical citations to 3B keep resolving until a content audit promotes them to 3C. Resolution: delete `handbooks-noningested.yaml` once every row has a structured-content equivalent. The 3B-prior-edition row stays until it's ingested (low priority) or content is audited and re-pointed at 3C. The `migrate-references-to-structured.ts` bridge goes with the YAML when the YAML goes.
 2. **17 corpus modules each have identical 3-line `index.ts` registration boilerplate.** A registry that auto-discovers corpora from a manifest would erase ~50 lines and make adding a corpus a single-file change. Low priority; nice cleanup.
 3. **Phase-numbered reviewer IDs (`PHASE_3_REVIEWER_ID` ... `PHASE_9_REVIEWER_ID`)** encode ingest order rather than identity. Replace with stable per-corpus reviewer IDs derived from corpus slug. Trivial.
 4. **`externalUrlForReference()` switch in constants** (`libs/constants/src/study.ts:1496`) duplicates what the resolver registry is for. Folded into WP-SUB step 7.
