@@ -275,11 +275,11 @@ export const wholeDocManifestSchema = z.object({
 	/** SHA-256 hex digest of the body markdown file. */
 	body_sha256: z.string().regex(/^[0-9a-f]{64}$/i),
 	/** Source PDF page count (informational; surfaces in the reader). */
-	page_count: z.number().int().positive().optional(),
+	page_count: z.number().int().positive().nullable().optional(),
 	/** FAA document identifier (e.g. `faa-h-8083-2`). */
-	doc_id: z.string().min(1).optional(),
+	doc_id: z.string().min(1).nullable().optional(),
 	/** FAA-published edition tag (e.g. `2A`, `9B`). Display-only; canonical edition is the top-level `edition` field. */
-	faa_edition: z.string().min(1).optional(),
+	faa_edition: z.string().min(1).nullable().optional(),
 });
 export type WholeDocManifest = z.infer<typeof wholeDocManifestSchema>;
 

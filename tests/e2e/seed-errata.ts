@@ -23,7 +23,7 @@ import {
 	insertErrataRows,
 } from '../../libs/bc/study/src';
 import { db } from '../../libs/db/src/connection';
-import { handbookSection } from '../../libs/bc/study/src/schema';
+import { referenceSection } from '../../libs/bc/study/src/schema';
 import { HANDBOOK_ERRATA_PATCH_KINDS } from '../../libs/constants/src';
 
 /** AFH MOSAIC FAA URL -- matches the spec's URL-fragment assertion. */
@@ -40,9 +40,9 @@ const ERRATA_ID = 'mosaic';
 async function resolveSectionId(documentSlug: string, code: string): Promise<string> {
 	const ref = await getReferenceByDocument(documentSlug);
 	const rows = await db
-		.select({ id: handbookSection.id })
-		.from(handbookSection)
-		.where(and(eq(handbookSection.referenceId, ref.id), eq(handbookSection.code, code)))
+		.select({ id: referenceSection.id })
+		.from(referenceSection)
+		.where(and(eq(referenceSection.referenceId, ref.id), eq(referenceSection.code, code)))
 		.limit(1);
 	const row = rows[0];
 	if (!row) throw new Error(`seed-errata: section ${documentSlug} §${code} not found`);

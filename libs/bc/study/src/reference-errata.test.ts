@@ -11,10 +11,10 @@ import {
 	type ErrataInsert,
 	ErrataValidationError,
 	formatErrataForDisplay,
-	type HandbookSectionErrataRow,
 	newErrataId,
+	type ReferenceSectionErrataRow,
 	validateErrataInsert,
-} from './handbooks-errata';
+} from './reference-errata';
 
 const VALID: ErrataInsert = {
 	sectionId: 'hbs_01ABCDEFGHJKMNPQRSTVWXYZ12',
@@ -29,9 +29,9 @@ const VALID: ErrataInsert = {
 };
 
 describe('newErrataId', () => {
-	it('returns a hbe_<ULID>-shaped string', () => {
+	it('returns a refera_<ULID>-shaped string', () => {
 		const id = newErrataId();
-		expect(id).toMatch(/^hbe_[0-9a-hjkmnp-tv-z]{26}$/i);
+		expect(id).toMatch(/^refera_[0-9a-hjkmnp-tv-z]{26}$/i);
 	});
 
 	it('is unique on each call', () => {
@@ -96,12 +96,12 @@ describe('validateErrataInsert', () => {
 describe('formatErrataForDisplay', () => {
 	it('serializes Date appliedAt to ISO', () => {
 		const appliedAt = new Date('2026-04-28T12:00:00Z');
-		const row: HandbookSectionErrataRow = {
+		const row: ReferenceSectionErrataRow = {
 			...VALID,
 			id: 'hbe_test',
 			appliedAt,
 			createdAt: appliedAt,
-		} as HandbookSectionErrataRow;
+		} as ReferenceSectionErrataRow;
 		const out = formatErrataForDisplay(row);
 		expect(out.appliedAt).toEqual(appliedAt.toISOString());
 		expect(out.publishedAt).toEqual('2025-10-20');
@@ -109,14 +109,14 @@ describe('formatErrataForDisplay', () => {
 	});
 
 	it('preserves null original_text on add_subsection', () => {
-		const row: HandbookSectionErrataRow = {
+		const row: ReferenceSectionErrataRow = {
 			...VALID,
 			id: 'hbe_test',
 			patchKind: 'add_subsection',
 			originalText: null,
 			appliedAt: new Date(),
 			createdAt: new Date(),
-		} as HandbookSectionErrataRow;
+		} as ReferenceSectionErrataRow;
 		const out = formatErrataForDisplay(row);
 		expect(out.originalText).toBeNull();
 	});

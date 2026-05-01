@@ -25,13 +25,13 @@ import { bauthUser } from '@ab/auth/schema';
 import {
 	HANDBOOK_HEARTBEAT_INTERVAL_SEC,
 	HANDBOOK_READ_STATUSES,
-	HANDBOOK_SECTION_LEVELS,
 	REFERENCE_KINDS,
+	REFERENCE_SECTION_LEVELS,
 	ROUTES,
 } from '@ab/constants';
 import { db } from '@ab/db/connection';
 import type { LegacyCitation, StructuredCitation } from '@ab/types';
-import { generateAuthId, generateHandbookFigureId, generateHandbookSectionId, generateReferenceId } from '@ab/utils';
+import { generateAuthId, generateReferenceFigureId, generateReferenceId, generateReferenceSectionId } from '@ab/utils';
 import { eq } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import {
@@ -50,14 +50,14 @@ import {
 	setComprehended,
 	setNotes,
 	setReadStatus,
-} from './handbooks';
+} from './references';
 import {
-	handbookFigure,
-	handbookReadState,
-	handbookSection,
 	knowledgeNode,
 	type NewKnowledgeNodeRow,
 	reference,
+	referenceFigure,
+	referenceSection,
+	referenceSectionReadState,
 } from './schema';
 
 // -- Per-suite fixture ------------------------------------------------------
@@ -80,14 +80,14 @@ const PHAK_25B_ID = generateReferenceId();
 const PHAK_25C_ID = generateReferenceId();
 const AFH_3C_ID = generateReferenceId();
 
-const CHAPTER_12_ID = generateHandbookSectionId();
-const SECTION_12_3_ID = generateHandbookSectionId();
-const SECTION_12_4_ID = generateHandbookSectionId();
-const SUBSECTION_12_3_4_ID = generateHandbookSectionId();
-const CHAPTER_5_ID = generateHandbookSectionId();
-const SECTION_5_1_ID = generateHandbookSectionId();
-const FIGURE_12_3_A_ID = generateHandbookFigureId();
-const FIGURE_12_3_B_ID = generateHandbookFigureId();
+const CHAPTER_12_ID = generateReferenceSectionId();
+const SECTION_12_3_ID = generateReferenceSectionId();
+const SECTION_12_4_ID = generateReferenceSectionId();
+const SUBSECTION_12_3_4_ID = generateReferenceSectionId();
+const CHAPTER_5_ID = generateReferenceSectionId();
+const SECTION_5_1_ID = generateReferenceSectionId();
+const FIGURE_12_3_A_ID = generateReferenceFigureId();
+const FIGURE_12_3_B_ID = generateReferenceFigureId();
 
 const NODE_CITES_CHAPTER_ID = `kn-${SUITE_TAG}-cites-chapter`;
 const NODE_CITES_SECTION_ID = `kn-${SUITE_TAG}-cites-section`;
@@ -153,13 +153,14 @@ beforeAll(async () => {
 
 	// PHAK-25C: chapter 12 with two sections, chapter 5 with one section. The
 	// codes mirror what the seed produces in Phase 9.
-	await db.insert(handbookSection).values([
+	await db.insert(referenceSection).values([
 		{
 			id: CHAPTER_12_ID,
 			referenceId: PHAK_25C_ID,
 			parentId: null,
-			level: HANDBOOK_SECTION_LEVELS.CHAPTER,
+			level: REFERENCE_SECTION_LEVELS.CHAPTER,
 			ordinal: 12,
+			depth: 0,
 			code: '12',
 			title: 'Weather Theory',
 			faaPageStart: null,
@@ -177,8 +178,9 @@ beforeAll(async () => {
 			id: SECTION_12_3_ID,
 			referenceId: PHAK_25C_ID,
 			parentId: CHAPTER_12_ID,
-			level: HANDBOOK_SECTION_LEVELS.SECTION,
+			level: REFERENCE_SECTION_LEVELS.SECTION,
 			ordinal: 3,
+			depth: 1,
 			code: '12.3',
 			title: 'Atmospheric Pressure and Altitude',
 			faaPageStart: '12-3',
@@ -196,8 +198,9 @@ beforeAll(async () => {
 			id: SECTION_12_4_ID,
 			referenceId: PHAK_25C_ID,
 			parentId: CHAPTER_12_ID,
-			level: HANDBOOK_SECTION_LEVELS.SECTION,
+			level: REFERENCE_SECTION_LEVELS.SECTION,
 			ordinal: 4,
+			depth: 1,
 			code: '12.4',
 			title: 'Density Altitude',
 			faaPageStart: '12-4',
@@ -220,8 +223,9 @@ beforeAll(async () => {
 			id: SUBSECTION_12_3_4_ID,
 			referenceId: PHAK_25C_ID,
 			parentId: SECTION_12_3_ID,
-			level: HANDBOOK_SECTION_LEVELS.SUBSECTION,
+			level: REFERENCE_SECTION_LEVELS.SUBSECTION,
 			ordinal: 4,
+			depth: 2,
 			code: '12.3.4',
 			title: 'Subsection used for level-guard tests',
 			faaPageStart: '12-3',
@@ -239,8 +243,9 @@ beforeAll(async () => {
 			id: CHAPTER_5_ID,
 			referenceId: PHAK_25C_ID,
 			parentId: null,
-			level: HANDBOOK_SECTION_LEVELS.CHAPTER,
+			level: REFERENCE_SECTION_LEVELS.CHAPTER,
 			ordinal: 5,
+			depth: 0,
 			code: '5',
 			title: 'Flight Controls',
 			faaPageStart: null,
@@ -258,8 +263,9 @@ beforeAll(async () => {
 			id: SECTION_5_1_ID,
 			referenceId: PHAK_25C_ID,
 			parentId: CHAPTER_5_ID,
-			level: HANDBOOK_SECTION_LEVELS.SECTION,
+			level: REFERENCE_SECTION_LEVELS.SECTION,
 			ordinal: 1,
+			depth: 1,
 			code: '5.1',
 			title: 'Primary Flight Controls',
 			faaPageStart: '5-1',
@@ -276,7 +282,7 @@ beforeAll(async () => {
 	]);
 
 	// Two figures bound to PHAK 12.3 to test figure ordering.
-	await db.insert(handbookFigure).values([
+	await db.insert(referenceFigure).values([
 		{
 			id: FIGURE_12_3_A_ID,
 			sectionId: SECTION_12_3_ID,
@@ -363,10 +369,10 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-	await db.delete(handbookReadState).where(eq(handbookReadState.userId, TEST_USER_ID));
+	await db.delete(referenceSectionReadState).where(eq(referenceSectionReadState.userId, TEST_USER_ID));
 	await db.delete(knowledgeNode).where(eq(knowledgeNode.seedOrigin, SUITE_TAG));
-	await db.delete(handbookFigure).where(eq(handbookFigure.seedOrigin, SUITE_TAG));
-	await db.delete(handbookSection).where(eq(handbookSection.seedOrigin, SUITE_TAG));
+	await db.delete(referenceFigure).where(eq(referenceFigure.seedOrigin, SUITE_TAG));
+	await db.delete(referenceSection).where(eq(referenceSection.seedOrigin, SUITE_TAG));
 	await db.delete(reference).where(eq(reference.seedOrigin, SUITE_TAG));
 	await db.delete(bauthUser).where(eq(bauthUser.id, TEST_USER_ID));
 });
@@ -415,7 +421,7 @@ describe('listHandbookChapters', () => {
 	it('returns chapter rows ordered by ordinal', async () => {
 		const chapters = await listHandbookChapters(PHAK_25C_ID);
 		expect(chapters.map((c) => c.code)).toEqual(['5', '12']);
-		expect(chapters.every((c) => c.level === HANDBOOK_SECTION_LEVELS.CHAPTER)).toBe(true);
+		expect(chapters.every((c) => c.level === REFERENCE_SECTION_LEVELS.CHAPTER)).toBe(true);
 	});
 });
 
@@ -445,7 +451,7 @@ describe('getHandbookChapter', () => {
 	it('returns the chapter row by code', async () => {
 		const chapter = await getHandbookChapter(PHAK_25C_ID, '12');
 		expect(chapter.id).toBe(CHAPTER_12_ID);
-		expect(chapter.level).toBe(HANDBOOK_SECTION_LEVELS.CHAPTER);
+		expect(chapter.level).toBe(REFERENCE_SECTION_LEVELS.CHAPTER);
 	});
 
 	// Wave 4 fix: chapter resolution must filter by `level=chapter`. Before

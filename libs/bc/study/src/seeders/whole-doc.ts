@@ -38,10 +38,13 @@ export async function seedWholeDocManifest(
 	}
 	const contentMd = await readFile(bodyAbsPath, 'utf-8');
 
+	// Optional/nullable fields land in `reference.metadata` jsonb. Skip both
+	// undefined (omitted from the manifest) and null (explicit "no value")
+	// so the metadata stays compact and contains only meaningful entries.
 	const metadata: Record<string, unknown> = {};
-	if (manifest.page_count !== undefined) metadata.page_count = manifest.page_count;
-	if (manifest.doc_id !== undefined) metadata.doc_id = manifest.doc_id;
-	if (manifest.faa_edition !== undefined) metadata.faa_edition = manifest.faa_edition;
+	if (manifest.page_count != null) metadata.page_count = manifest.page_count;
+	if (manifest.doc_id != null) metadata.doc_id = manifest.doc_id;
+	if (manifest.faa_edition != null) metadata.faa_edition = manifest.faa_edition;
 
 	const ref = await upsertReference({
 		kind: 'handbook',

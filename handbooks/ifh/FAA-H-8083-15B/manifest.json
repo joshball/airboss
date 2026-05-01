@@ -12,5 +12,11 @@
   "body_sha256": "2d2a9386f4e3c3f60056dcf594a5ada152adde603851e13b2ef19a1a0cf410aa",
   "page_count": 371,
   "doc_id": "faa-h-8083-15",
-  "faa_edition": "15B"
+  "faa_edition": "15B",
+  "subjects": [
+    "procedures",
+    "navigation",
+    "flight-instruments"
+  ],
+  "primary_cert": "instrument"
 }

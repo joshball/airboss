@@ -21,7 +21,7 @@
 
 import { REFERENCE_KINDS } from '@ab/constants';
 import { describe, expect, it } from 'vitest';
-import { listReferences } from './handbooks';
+import { listReferences } from './references';
 
 const REGULATIONS_SPINE_KINDS: ReadonlySet<string> = new Set([
 	REFERENCE_KINDS.CFR,
