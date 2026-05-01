@@ -288,6 +288,14 @@ export type {
 	MasteryRollup,
 } from './lenses';
 export { acsLens, computeMasteryRollup, domainLens, LensError } from './lenses';
+// Library-by-cert spine (ADR 016 / library-by-cert WP wave 3).
+export type { CarryoverGroup, CertReferenceBundle } from './library-by-cert';
+export {
+	getReferenceCountsByCert,
+	getReferenceCountsByTopic,
+	getReferencesForCertWithCarryover,
+	listReferencesByTopic,
+} from './library-by-cert';
 export type { GateState, LeafMasteryState, NodeEvidenceState } from './mastery';
 export {
 	aggregateLeafKindStates,
