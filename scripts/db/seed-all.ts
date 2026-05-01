@@ -7,9 +7,10 @@
  *   1. users      -- better-auth rows for DEV_ACCOUNTS (scripts/db/seed-dev-users.ts)
  *   2. knowledge  -- knowledge_node + knowledge_edge from course/knowledge/**\/node.md
  *                    (scripts/build-knowledge-index.ts, full build)
- *   3. handbooks  -- reference + handbook_section + handbook_figure rows
- *                    from the committed handbooks/ tree
- *                    (scripts/db/seed-handbooks.ts :: seedHandbooks)
+ *   3. handbooks  -- reference + reference_section + reference_figure rows
+ *                    from the committed handbooks/ tree (both section-tree
+ *                    and whole-doc manifest shapes; post-WP-SUB)
+ *                    (scripts/db/seed-references-from-manifest.ts :: seedReferencesFromManifest)
  *   4. references -- non-handbook reference rows (ACS / PTS / companion
  *                    guide) from course/references/*.yaml. Cert-syllabus WP.
  *   5. credentials -- credential / credential_prereq / credential_syllabus
@@ -66,7 +67,7 @@ import { type AbbySeedCounts, seedAbby } from './seed-abby';
 import { seedCardsForUser } from './seed-cards';
 import { seedCredentials } from './seed-credentials';
 import { decideSeedGuard } from './seed-guard';
-import { seedHandbooks } from './seed-handbooks';
+import { seedReferencesFromManifest } from './seed-references-from-manifest';
 import { seedReferences } from './seed-references';
 import { seedSyllabi } from './seed-syllabi';
 
@@ -117,8 +118,8 @@ async function phaseKnowledge(): Promise<void> {
 }
 
 async function phaseHandbooks(): Promise<void> {
-	process.stdout.write('\n=== seed: handbooks ===\n');
-	const summary = await seedHandbooks();
+	process.stdout.write('\n=== seed: handbooks (section-tree + whole-doc manifests) ===\n');
+	const summary = await seedReferencesFromManifest();
 	process.stdout.write(
 		`  ${summary.editionsProcessed} editions, ${summary.sectionsTouched} sections (${summary.sectionsChanged} changed), ${summary.figuresWritten} figures, ${summary.supersededLinks} superseded links\n`,
 	);
