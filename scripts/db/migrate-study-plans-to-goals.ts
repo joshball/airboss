@@ -43,7 +43,7 @@
 
 import { credential, credentialSyllabus, goal, goalSyllabus, studyPlan, syllabus } from '@ab/bc-study';
 import { GOAL_STATUSES, SYLLABUS_PRIMACY } from '@ab/constants';
-import { db as defaultDb } from '@ab/db/connection';
+import { client, db as defaultDb } from '@ab/db/connection';
 import { generateGoalId } from '@ab/utils';
 import { and, eq } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
@@ -256,8 +256,10 @@ async function main(): Promise<void> {
 }
 
 if (import.meta.main) {
-	main().catch((err) => {
-		process.stderr.write(`migrate-study-plans-to-goals: ${(err as Error).stack ?? err}\n`);
-		process.exit(1);
-	});
+	main()
+		.catch((err) => {
+			process.stderr.write(`migrate-study-plans-to-goals: ${(err as Error).stack ?? err}\n`);
+			process.exitCode = 1;
+		})
+		.finally(() => client.end());
 }

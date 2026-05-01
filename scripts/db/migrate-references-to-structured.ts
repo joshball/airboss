@@ -49,7 +49,7 @@
  */
 
 import { CITATION_FRAMINGS, type CitationFraming, REFERENCE_KINDS, type ReferenceKind } from '@ab/constants';
-import { db as defaultDb } from '@ab/db/connection';
+import { client, db as defaultDb } from '@ab/db/connection';
 import type { LegacyCitation, StructuredCitation } from '@ab/types';
 import { isStructuredCitation } from '@ab/types';
 import { and, eq } from 'drizzle-orm';
@@ -756,8 +756,10 @@ async function main(): Promise<void> {
 }
 
 if (import.meta.main) {
-	main().catch((err) => {
-		process.stderr.write(`migrate-references-to-structured: ${(err as Error).stack ?? err}\n`);
-		process.exit(1);
-	});
+	main()
+		.catch((err) => {
+			process.stderr.write(`migrate-references-to-structured: ${(err as Error).stack ?? err}\n`);
+			process.exitCode = 1;
+		})
+		.finally(() => client.end());
 }

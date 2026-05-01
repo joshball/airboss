@@ -19,7 +19,7 @@
 import { getDerivedCertGoals } from '@ab/bc-study';
 import { studyPlan } from '@ab/bc-study/schema';
 import { PLAN_STATUSES } from '@ab/constants';
-import { db } from '@ab/db/connection';
+import { client, db } from '@ab/db/connection';
 import { and, eq, sql } from 'drizzle-orm';
 
 interface DriftRow {
@@ -76,4 +76,8 @@ async function main(): Promise<void> {
 	}
 }
 
-await main();
+try {
+	await main();
+} finally {
+	await client.end();
+}

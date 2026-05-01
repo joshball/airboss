@@ -21,7 +21,7 @@
 import { getEngineTargeting } from '@ab/bc-study';
 import { studyPlan } from '@ab/bc-study/schema';
 import { ENGINE_TARGETING_SOURCES, PLAN_STATUSES } from '@ab/constants';
-import { db } from '@ab/db/connection';
+import { client, db } from '@ab/db/connection';
 import { and, eq, sql } from 'drizzle-orm';
 
 interface OrphanedPlan {
@@ -73,4 +73,8 @@ async function main(): Promise<void> {
 	process.exitCode = 1;
 }
 
-await main();
+try {
+	await main();
+} finally {
+	await client.end();
+}
