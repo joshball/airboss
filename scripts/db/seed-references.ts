@@ -23,8 +23,8 @@ import { fileURLToPath } from 'node:url';
 import {
 	AVIATION_TOPIC_VALUES,
 	type AviationTopic,
-	type CertApplicability,
 	CERT_APPLICABILITY_VALUES,
+	type CertApplicability,
 	REFERENCE_KIND_VALUES,
 	type ReferenceKind,
 } from '@ab/constants';
