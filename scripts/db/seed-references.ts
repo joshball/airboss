@@ -7,9 +7,9 @@
  * per `(slug, edition)` pair. Idempotent: re-running with no changes is a
  * no-op apart from updated_at refresh.
  *
- * Handbook references are seeded separately by `scripts/db/seed-handbooks.ts`;
- * this script appends the ACS / PTS / endorsement-source rows the
- * cert-syllabus WP requires.
+ * Handbook references are seeded separately by
+ * `scripts/db/seed-references-from-manifest.ts`; this script appends the
+ * ACS / PTS / endorsement-source rows the cert-syllabus WP requires.
  *
  * Usage:
  *   bun scripts/db/seed-references.ts          # seed every YAML
@@ -31,7 +31,7 @@ import {
 import { client } from '@ab/db/connection';
 import { parse } from 'yaml';
 import { z } from 'zod';
-import { upsertReference } from '../../libs/bc/study/src/handbooks';
+import { upsertReference } from '../../libs/bc/study/src/references';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = resolve(HERE, '..', '..');

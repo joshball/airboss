@@ -2,24 +2,24 @@ import { requireAuth } from '@ab/auth';
 import {
 	getNodesCitingSection,
 	getReferenceByDocument,
-	type HandbookSectionRow,
 	type KnowledgeNodeRow,
 	listChapterSections,
 	listHandbookChapters,
 	ReferenceNotFoundError,
 	type ReferenceRow,
+	type ReferenceSectionRow,
 } from '@ab/bc-study';
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
 export interface SectionWithNodes {
-	section: HandbookSectionRow;
+	section: ReferenceSectionRow;
 	citingNodes: KnowledgeNodeRow[];
 }
 
 export interface ChapterLensData {
 	reference: ReferenceRow;
-	chapter: HandbookSectionRow;
+	chapter: ReferenceSectionRow;
 	sections: SectionWithNodes[];
 }
 

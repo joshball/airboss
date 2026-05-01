@@ -54,7 +54,7 @@ import type { LegacyCitation, StructuredCitation } from '@ab/types';
 import { isStructuredCitation } from '@ab/types';
 import { and, eq } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
-import { upsertReference } from '../../libs/bc/study/src/handbooks';
+import { upsertReference } from '../../libs/bc/study/src/references';
 import { knowledgeNode, reference } from '../../libs/bc/study/src/schema';
 
 type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;

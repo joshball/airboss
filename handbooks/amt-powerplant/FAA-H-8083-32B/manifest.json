@@ -12,5 +12,9 @@
   "body_sha256": "13b46f71c74109368fefba2c03b57ed4696228177cfffe2e9dff9a7890620566",
   "page_count": 500,
   "doc_id": "faa-h-8083-32",
-  "faa_edition": "32B"
+  "faa_edition": "32B",
+  "subjects": [
+    "aircraft-systems"
+  ],
+  "primary_cert": null
 }

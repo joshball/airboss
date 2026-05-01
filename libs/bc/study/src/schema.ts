@@ -51,8 +51,6 @@ import {
 	HANDBOOK_NOTES_MAX_LENGTH,
 	HANDBOOK_READ_STATUS_VALUES,
 	HANDBOOK_READ_STATUSES,
-	HANDBOOK_SECTION_LEVEL_VALUES,
-	HANDBOOK_SECTION_LEVELS,
 	KNOWLEDGE_EDGE_TYPE_VALUES,
 	MASTERY_STABILITY_DAYS,
 	MAX_SESSION_LENGTH,
@@ -62,7 +60,6 @@ import {
 	PHASE_OF_FLIGHT_VALUES,
 	PLAN_STATUS_VALUES,
 	PLAN_STATUSES,
-	REFERENCE_KIND_VALUES,
 	REVIEW_SESSION_STATUS_VALUES,
 	REVIEW_SESSION_STATUSES,
 	SAVED_DECK_LABEL_MAX_LENGTH,
@@ -1254,6 +1251,33 @@ export const reference = studySchema.table(
 		 */
 		primaryCert: text('primary_cert'),
 		/**
+		 * Per-kind hierarchy declaration. Shape:
+		 * `{ levels: string[], strict_sequence?: boolean }`.
+		 *
+		 * `levels` is the set of legal `level` values for `reference_section`
+		 * rows under this reference (validators check `every section.level IN
+		 * reference.section_schema.levels` at ingest). `strict_sequence: true`
+		 * (sectioned handbooks) additionally enforces "at depth N, level must
+		 * be `levels[N]`." Off by default; CFR/AIM use the loose form because
+		 * their hierarchies are asymmetric. Whole-doc handbooks declare
+		 * `{ levels: ['document'], strict_sequence: true }`.
+		 *
+		 * Default `'{}'::jsonb` (empty object) so legacy rows pre-WP-SUB don't
+		 * need backfill -- the validator treats an empty object as
+		 * "no per-kind hierarchy declared, accept anything." Seeders populate
+		 * this on every upsert so production rows are always fully specified.
+		 */
+		sectionSchema: jsonb('section_schema').notNull().default(sql`'{}'::jsonb`),
+		/**
+		 * Per-kind document-level extras. Empty for kinds that don't need any.
+		 * Validated by per-kind Zod schemas at ingest. **No DB-level shape
+		 * constraint** -- shape varies per kind, and the DB has no way to
+		 * encode "this jsonb must match the schema for this row's `kind`."
+		 * Examples: CFR title number, NTSB docket, AC cancels-list, the
+		 * source-PDF page count for a whole-doc handbook.
+		 */
+		metadata: jsonb('metadata').notNull().default(sql`'{}'::jsonb`),
+		/**
 		 * Set when a newer edition exists. The reader surfaces "newer edition
 		 * available" when this points to a non-archived row; resolvers continue
 		 * to honor citations against the older edition so historical links
@@ -1274,7 +1298,6 @@ export const reference = studySchema.table(
 		// "Most-recent edition for this document" probe + the "is this row
 		// superseded?" filter both lean on (document_slug, superseded_by_id).
 		referenceDocSupersededIdx: index('reference_doc_superseded_idx').on(t.documentSlug, t.supersededById),
-		kindCheck: check('reference_kind_check', sql.raw(`"kind" IN (${inList(REFERENCE_KIND_VALUES)})`)),
 		// Slug shape: kebab-case, 3..32 chars. Document slugs are reader URL
 		// fragments; constraining at the storage layer keeps a typo from
 		// shipping a route that breaks `decodeURIComponent` round-trips.
@@ -1305,86 +1328,128 @@ export const reference = studySchema.table(
 );
 
 /**
- * Per-section content row. One row per `<chapter>/<section>.md` file in the
- * `handbooks/` tree. Tree-shaped via `parent_id`: a chapter is a row at
- * `level='chapter'` with `parent_id IS NULL`; sections nest under chapters,
- * subsections under sections.
+ * Per-section content row -- the substrate for every corpus's hierarchical
+ * content (handbooks, AIM, CFR, AC, ACS, ...). One row per content node:
+ * a chapter, a section, a subsection, a CFR paragraph, an AIM section, or
+ * the entire document for a "whole-doc" handbook. Tree-shaped via
+ * `parent_id`; flat references (Chief Counsel letters, whole-doc handbooks)
+ * carry one row at depth 0.
  *
- * `code` is the citation-grade dotted index ("12", "12.3", "12.3.2"); the
- * seed composes it deterministically so URL stability across re-ingests
- * doesn't depend on row ordering. `content_hash` (SHA-256 of the source
- * markdown file) drives idempotent seed: an unchanged section is a no-op.
+ * Per-corpus shape lives in `reference.section_schema` (level vocabulary +
+ * strict-sequence flag). `depth` is positional only: 0 = top-level child of
+ * the reference, ++ per nesting. It does NOT map 1:1 to `level` because some
+ * corpora (CFR) are asymmetric -- depth 1 in Part 91 is a Subpart, depth 1
+ * in Part 1 is a Section.
+ *
+ * `code` is the citation-grade locator -- `"12.3"` for a handbook subsection,
+ * `"91.103(b)(1)(i)"` for a CFR clause, `"5-2-1"` for an AIM paragraph,
+ * `"1"` for a whole-doc handbook's single document row. Per-kind regexes
+ * validate the shape at ingest; the DB does not enforce a regex anymore --
+ * shape varies per kind and one regex couldn't fit them all.
+ *
+ * `content_hash` (SHA-256 of the source body) drives idempotent seed: an
+ * unchanged row is a no-op apart from refreshing scaffolding fields.
+ *
+ * Validation moves to ingest-time Zod (per-kind manifest schemas). The DB
+ * keeps only the corpus-agnostic invariants: ordinal >= 0, FK integrity,
+ * unique (reference_id, code), and the FAA-page null-pair invariant on
+ * the kept handbook columns.
  */
-export const handbookSection = studySchema.table(
-	'handbook_section',
+export const referenceSection = studySchema.table(
+	'reference_section',
 	{
 		id: text('id').primaryKey(),
 		referenceId: text('reference_id')
 			.notNull()
 			.references(() => reference.id, { onDelete: 'cascade' }),
 		/**
-		 * NULL for chapter rows; the chapter id for section rows; the section
-		 * id for subsection rows. `cascade` so a chapter delete drops its
-		 * subtree -- per-edition trees are mass-replaced by the seed when an
-		 * extraction warning becomes a fixable bug.
+		 * NULL for top-level rows (chapters in a handbook, the document row in a
+		 * whole-doc handbook, top-level Parts in a CFR title, etc.); parent's id
+		 * for nested rows. `cascade` so a parent delete drops its subtree --
+		 * per-edition trees are mass-replaced by the seed when an extraction
+		 * warning becomes a fixable bug.
 		 */
-		parentId: text('parent_id').references((): AnyPgColumn => handbookSection.id, {
+		parentId: text('parent_id').references((): AnyPgColumn => referenceSection.id, {
 			onDelete: 'cascade',
 		}),
-		/** chapter / section / subsection. See {@link HANDBOOK_SECTION_LEVELS}. */
+		/**
+		 * Per-kind level label. Validated at ingest against
+		 * `reference.section_schema.levels`. Examples: `chapter`, `section`,
+		 * `subsection` (handbooks); `subpart`, `section`, `paragraph`,
+		 * `subparagraph`, `clause` (CFR); `chapter`, `section`, `paragraph`
+		 * (AIM); `task`, `element` (ACS); `document` (whole-doc handbooks).
+		 * No DB CHECK -- enum is per-corpus, declared on the parent reference.
+		 */
 		level: text('level').notNull(),
 		/** Within-parent sort order. */
 		ordinal: integer('ordinal').notNull(),
-		/** Citation code: "12", "12.3", "12.3.2". Composed deterministically. */
+		/**
+		 * Positional depth: 0 = top-level child of the reference, ++ per nesting
+		 * level. NOT a 1:1 map to `level` for asymmetric hierarchies (CFR Part 91
+		 * has Subparts at depth 0, sections at depth 1; CFR Part 1 has sections
+		 * at depth 0).
+		 */
+		depth: integer('depth').notNull(),
+		/**
+		 * Citation locator: `"12"`, `"12.3"`, `"12.3.2"` (handbook),
+		 * `"91.103(b)(1)(i)"` (CFR), `"5-2-1"` (AIM), `"1"` (whole-doc).
+		 * Per-kind regex validation at ingest; no DB regex.
+		 */
 		code: text('code').notNull(),
 		title: text('title').notNull(),
 		/**
-		 * First FAA-printed page reference. Stored as text because FAA pagination
-		 * is hyphenated (`"12-7"` = chapter 12, page 7 within the chapter); a
-		 * future handbook with non-hyphenated pages just stores the bare digit
-		 * string. NULL when the page reference is unknown.
+		 * First FAA-printed page reference (handbook only; NULL elsewhere).
+		 * Stored as text because FAA pagination is hyphenated (`"12-7"` =
+		 * chapter 12, page 7 within the chapter).
 		 */
 		faaPageStart: text('faa_page_start'),
 		faaPageEnd: text('faa_page_end'),
 		/** Canonical citation string ("PHAK Ch 12 §3 (pp. 12-7..12-9)"). Cached for display. */
 		sourceLocator: text('source_locator').notNull(),
-		/** Section body markdown. Empty on chapter rows. */
+		/**
+		 * Body markdown for this row. Empty on container rows (handbook chapters
+		 * with no chapter-level body; CFR Part rows that just hold subparts).
+		 * The readability probe `getReadableReferenceIds()` looks for any row
+		 * under a reference where `content_md` is non-empty.
+		 */
 		contentMd: text('content_md').notNull().default(''),
-		/** SHA-256 of the source markdown file. Drives idempotent seed. */
+		/** SHA-256 of the source markdown file (or `body_sha256` for whole-doc). Drives idempotent seed. */
 		contentHash: text('content_hash').notNull(),
 		/** Cached aggregates so list rendering avoids per-row joins. */
 		hasFigures: boolean('has_figures').notNull().default(false),
 		hasTables: boolean('has_tables').notNull().default(false),
+		/**
+		 * Per-kind per-section extras. Empty for kinds that don't need any.
+		 * Validated by per-kind Zod schemas at ingest. **No DB-level shape
+		 * constraint.** Examples: CFR effective date + authority note + cross-
+		 * refs; AC paragraph cancellation pointers.
+		 */
+		metadata: jsonb('metadata').notNull().default(sql`'{}'::jsonb`),
 		seedOrigin: text('seed_origin'),
 		...timestamps(),
 	},
 	(t) => ({
 		// One row per (reference, code). Conflict target for the seed upsert.
-		handbookSectionRefCodeUnique: uniqueIndex('handbook_section_ref_code_unique').on(t.referenceId, t.code),
-		// Tree walks: chapter list -> sections -> subsections.
-		handbookSectionTreeIdx: index('handbook_section_tree_idx').on(t.referenceId, t.parentId, t.ordinal),
-		// "List chapters in this handbook" -- level=chapter ordered by ordinal.
-		handbookSectionLevelIdx: index('handbook_section_level_idx').on(t.referenceId, t.level, t.ordinal),
-		levelCheck: check('handbook_section_level_check', sql.raw(`"level" IN (${inList(HANDBOOK_SECTION_LEVEL_VALUES)})`)),
-		// Code shape: dotted decimal up to 3 levels deep ("12", "12.3", "12.3.2").
-		codeShapeCheck: check('handbook_section_code_shape_check', sql.raw(`"code" ~ '^[0-9]+(\\.[0-9]+){0,2}$'`)),
-		// `parent_id IS NULL` iff `level = 'chapter'`. Belt-and-suspenders against
-		// a buggy seed inserting a section without a chapter or a chapter under
-		// another row.
-		parentLevelConsistencyCheck: check(
-			'handbook_section_parent_level_check',
-			sql.raw(
-				`("level" = '${HANDBOOK_SECTION_LEVELS.CHAPTER}' AND "parent_id" IS NULL) OR ("level" <> '${HANDBOOK_SECTION_LEVELS.CHAPTER}' AND "parent_id" IS NOT NULL)`,
-			),
-		),
-		ordinalNonNegativeCheck: check('handbook_section_ordinal_check', sql.raw(`"ordinal" >= 0`)),
+		referenceSectionRefCodeUnique: uniqueIndex('reference_section_ref_code_unique').on(t.referenceId, t.code),
+		// Tree walks: parent listing for TOC rendering.
+		referenceSectionTreeIdx: index('reference_section_tree_idx').on(t.referenceId, t.parentId, t.ordinal),
+		// "List top-level rows in this reference" -- depth=0 ordered by ordinal.
+		// Replaces the old level=chapter index; depth is corpus-agnostic.
+		referenceSectionDepthIdx: index('reference_section_depth_idx').on(t.referenceId, t.depth, t.ordinal),
+		// Readability probe: "any rows under this reference with body content?"
+		// Partial index keeps the probe O(log N) on a sparse predicate.
+		referenceSectionReadableIdx: index('reference_section_readable_idx')
+			.on(t.referenceId)
+			.where(sql`${t.contentMd} <> ''`),
+		ordinalNonNegativeCheck: check('reference_section_ordinal_check', sql.raw(`"ordinal" >= 0`)),
+		depthNonNegativeCheck: check('reference_section_depth_check', sql.raw(`"depth" >= 0`)),
 		// Printed FAA pagination is `<chapter>-<page>` so lexicographic ordering
 		// (`"12-23"` < `"12-9"`) is unsafe. Just enforce the NULL-pair invariant:
 		// either both ends are NULL (page reference unknown) or `faa_page_start`
 		// is set. `faa_page_end` may be NULL when the section ends on its start
 		// page. The within-chapter ordering uses `ordinal`, not page strings.
 		faaPagesConsistentCheck: check(
-			'handbook_section_faa_pages_check',
+			'reference_section_faa_pages_check',
 			sql.raw(`("faa_page_start" IS NULL AND "faa_page_end" IS NULL) OR "faa_page_start" IS NOT NULL`),
 		),
 	}),
@@ -1400,13 +1465,13 @@ export const handbookSection = studySchema.table(
  * opportunistically (some PDFs decode to vector content with no pixel
  * dimension to record).
  */
-export const handbookFigure = studySchema.table(
-	'handbook_figure',
+export const referenceFigure = studySchema.table(
+	'reference_figure',
 	{
 		id: text('id').primaryKey(),
 		sectionId: text('section_id')
 			.notNull()
-			.references(() => handbookSection.id, { onDelete: 'cascade' }),
+			.references(() => referenceSection.id, { onDelete: 'cascade' }),
 		ordinal: integer('ordinal').notNull(),
 		caption: text('caption').notNull().default(''),
 		/** Repo-relative path under `handbooks/<doc>/<edition>/figures/`. */
@@ -1417,10 +1482,10 @@ export const handbookFigure = studySchema.table(
 		createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
 	},
 	(t) => ({
-		handbookFigureSectionIdx: index('handbook_figure_section_idx').on(t.sectionId, t.ordinal),
-		ordinalNonNegativeCheck: check('handbook_figure_ordinal_check', sql.raw(`"ordinal" >= 0`)),
+		referenceFigureSectionIdx: index('reference_figure_section_idx').on(t.sectionId, t.ordinal),
+		ordinalNonNegativeCheck: check('reference_figure_ordinal_check', sql.raw(`"ordinal" >= 0`)),
 		dimensionsCheck: check(
-			'handbook_figure_dimensions_check',
+			'reference_figure_dimensions_check',
 			sql.raw(`("width" IS NULL OR "width" > 0) AND ("height" IS NULL OR "height" > 0)`),
 		),
 	}),
@@ -1443,13 +1508,13 @@ export const handbookFigure = studySchema.table(
  * See [ADR 020](../../../../docs/decisions/020-handbook-edition-and-amendment-policy.md)
  * and the `apply-errata-and-afh-mosaic` work package.
  */
-export const handbookSectionErrata = studySchema.table(
-	'handbook_section_errata',
+export const referenceSectionErrata = studySchema.table(
+	'reference_section_errata',
 	{
 		id: text('id').primaryKey(),
 		sectionId: text('section_id')
 			.notNull()
-			.references(() => handbookSection.id, { onDelete: 'cascade' }),
+			.references(() => referenceSection.id, { onDelete: 'cascade' }),
 		/** Erratum identifier (matches the YAML `errata[].id`, e.g. `mosaic`). */
 		errataId: text('errata_id').notNull(),
 		/** The FAA URL the erratum was downloaded from. Stored for citation. */
@@ -1482,11 +1547,11 @@ export const handbookSectionErrata = studySchema.table(
 	(t) => ({
 		// One row per (section, erratum) pair: prevents double-apply. The
 		// `--force` re-apply path deletes-then-inserts inside one transaction.
-		bySectionErratum: uniqueIndex('handbook_section_errata_section_errata_idx').on(t.sectionId, t.errataId),
+		bySectionErratum: uniqueIndex('reference_section_errata_section_errata_idx').on(t.sectionId, t.errataId),
 		// Reader query: "show me amendments for this section, newest first."
-		bySectionApplied: index('handbook_section_errata_section_applied_idx').on(t.sectionId, t.appliedAt),
+		bySectionApplied: index('reference_section_errata_section_applied_idx').on(t.sectionId, t.appliedAt),
 		patchKindCheck: check(
-			'handbook_section_errata_patch_kind_check',
+			'reference_section_errata_patch_kind_check',
 			sql.raw(`"patch_kind" IN (${inList(HANDBOOK_ERRATA_PATCH_KIND_VALUES)})`),
 		),
 		// add_subsection patches have no original text; non-add kinds must.
@@ -1495,27 +1560,27 @@ export const handbookSectionErrata = studySchema.table(
 		// the section markdown at apply time. The CHECK enforces only the
 		// inverse: if patch_kind = 'add_subsection', original_text IS NULL.)
 		addSubsectionOriginalCheck: check(
-			'handbook_section_errata_add_subsection_check',
+			'reference_section_errata_add_subsection_check',
 			sql.raw(`("patch_kind" <> 'add_subsection') OR ("original_text" IS NULL)`),
 		),
 		// Page anchor must look like "<chapter>-<page>" with both halves digit-only.
 		targetPageShapeCheck: check(
-			'handbook_section_errata_target_page_check',
+			'reference_section_errata_target_page_check',
 			sql.raw(`"target_page" ~ '^[0-9]+-[0-9]+$'`),
 		),
 		// Replacement text is non-empty.
 		replacementNonEmptyCheck: check(
-			'handbook_section_errata_replacement_nonempty_check',
+			'reference_section_errata_replacement_nonempty_check',
 			sql.raw(`length(trim("replacement_text")) > 0`),
 		),
 		// Source URL must be HTTPS.
-		sourceUrlHttpsCheck: check('handbook_section_errata_source_url_check', sql.raw(`"source_url" LIKE 'https://%'`)),
+		sourceUrlHttpsCheck: check('reference_section_errata_source_url_check', sql.raw(`"source_url" LIKE 'https://%'`)),
 	}),
 );
 
 /**
  * Per-(user, section) read tracking. Composite PK so a user has at most
- * one row per section. Editions cycle row identity at the `handbook_section`
+ * one row per section. Editions cycle row identity at the `reference_section`
  * layer (a new edition produces fresh rows with new ids), so the user
  * automatically gets a fresh read state when opening a new-edition section.
  *
@@ -1524,15 +1589,15 @@ export const handbookSectionErrata = studySchema.table(
  * `comprehended` is a separate "read but didn't get it" toggle scoped to a
  * read or reading row.
  */
-export const handbookReadState = studySchema.table(
-	'handbook_read_state',
+export const referenceSectionReadState = studySchema.table(
+	'reference_section_read_state',
 	{
 		userId: text('user_id')
 			.notNull()
 			.references(() => bauthUser.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
-		handbookSectionId: text('handbook_section_id')
+		referenceSectionId: text('reference_section_id')
 			.notNull()
-			.references(() => handbookSection.id, { onDelete: 'cascade' }),
+			.references(() => referenceSection.id, { onDelete: 'cascade' }),
 		status: text('status').notNull().default(HANDBOOK_READ_STATUSES.UNREAD),
 		/**
 		 * "Read but didn't get it" toggle. Counts as read for coverage; queryable
@@ -1552,19 +1617,25 @@ export const handbookReadState = studySchema.table(
 		...timestamps(),
 	},
 	(t) => ({
-		pk: primaryKey({ columns: [t.userId, t.handbookSectionId] }),
+		pk: primaryKey({ columns: [t.userId, t.referenceSectionId] }),
 		// "Unread sections in handbook X" / "what am I currently reading" query.
-		handbookReadStateUserStatusIdx: index('handbook_read_state_user_status_idx').on(t.userId, t.status),
+		referenceSectionReadStateUserStatusIdx: index('reference_section_read_state_user_status_idx').on(
+			t.userId,
+			t.status,
+		),
 		// Cross-user analytics (later phases): "how many users have read this section?"
-		handbookReadStateSectionIdx: index('handbook_read_state_section_idx').on(t.handbookSectionId),
+		referenceSectionReadStateSectionIdx: index('reference_section_read_state_section_idx').on(t.referenceSectionId),
 		statusCheck: check(
-			'handbook_read_state_status_check',
+			'reference_section_read_state_status_check',
 			sql.raw(`"status" IN (${inList(HANDBOOK_READ_STATUS_VALUES)})`),
 		),
-		totalSecondsCheck: check('handbook_read_state_total_seconds_check', sql.raw(`"total_seconds_visible" >= 0`)),
-		openedCountCheck: check('handbook_read_state_opened_count_check', sql.raw(`"opened_count" >= 0`)),
+		totalSecondsCheck: check(
+			'reference_section_read_state_total_seconds_check',
+			sql.raw(`"total_seconds_visible" >= 0`),
+		),
+		openedCountCheck: check('reference_section_read_state_opened_count_check', sql.raw(`"opened_count" >= 0`)),
 		notesLengthCheck: check(
-			'handbook_read_state_notes_length_check',
+			'reference_section_read_state_notes_length_check',
 			sql.raw(`char_length("notes_md") <= ${HANDBOOK_NOTES_MAX_LENGTH}`),
 		),
 	}),
@@ -1572,12 +1643,12 @@ export const handbookReadState = studySchema.table(
 
 export type ReferenceRow = typeof reference.$inferSelect;
 export type NewReferenceRow = typeof reference.$inferInsert;
-export type HandbookSectionRow = typeof handbookSection.$inferSelect;
-export type NewHandbookSectionRow = typeof handbookSection.$inferInsert;
-export type HandbookFigureRow = typeof handbookFigure.$inferSelect;
-export type NewHandbookFigureRow = typeof handbookFigure.$inferInsert;
-export type HandbookReadStateRow = typeof handbookReadState.$inferSelect;
-export type NewHandbookReadStateRow = typeof handbookReadState.$inferInsert;
+export type ReferenceSectionRow = typeof referenceSection.$inferSelect;
+export type NewReferenceSectionRow = typeof referenceSection.$inferInsert;
+export type ReferenceFigureRow = typeof referenceFigure.$inferSelect;
+export type NewReferenceFigureRow = typeof referenceFigure.$inferInsert;
+export type ReferenceSectionReadStateRow = typeof referenceSectionReadState.$inferSelect;
+export type NewReferenceSectionReadStateRow = typeof referenceSectionReadState.$inferInsert;
 
 // ---------------------------------------------------------------------------
 // Cert-syllabus-and-goal-composer WP -- ADR 016 phases 1-6.

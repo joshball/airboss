@@ -1,11 +1,16 @@
 /**
- * Bounded-context functions for the `handbook_section_errata` table.
+ * Bounded-context functions for the `reference_section_errata` table.
  *
  * The reader's amendment panel calls {@link listErrataForSection} on
  * every section page load. The apply pipeline (Python) hands us patch
  * rows via `bun run sources extract handbooks <doc> --apply-errata <id>`;
  * the seed handler reads per-section errata notes and inserts via
  * {@link insertErrataRows} inside one transaction.
+ *
+ * Errata is currently a handbook-only mechanism (FAA publishes errata
+ * sheets per handbook edition); the table sits on the corpus-agnostic
+ * `reference_section` substrate post-WP-SUB so future corpora can adopt
+ * it without a schema change.
  *
  * See [ADR 020](../../../../docs/decisions/020-handbook-edition-and-amendment-policy.md)
  * for the policy and `docs/work-packages/apply-errata-and-afh-mosaic/` for
@@ -14,18 +19,18 @@
 
 import {
 	HANDBOOK_ERRATA_PATCH_KIND_VALUES,
-	HANDBOOK_SECTION_ERRATA_ID_PREFIX,
 	type HandbookErrataPatchKind,
+	REFERENCE_SECTION_ERRATA_ID_PREFIX,
 } from '@ab/constants';
 import { db as defaultDb } from '@ab/db/connection';
 import { createId } from '@ab/utils';
 import { desc, eq, sql } from 'drizzle-orm';
-import { handbookSectionErrata } from './schema';
+import { referenceSectionErrata } from './schema';
 
 type Database = typeof defaultDb;
 
-/** A row read from `study.handbook_section_errata`. */
-export type HandbookSectionErrataRow = typeof handbookSectionErrata.$inferSelect;
+/** A row read from `study.reference_section_errata`. */
+export type ReferenceSectionErrataRow = typeof referenceSectionErrata.$inferSelect;
 
 /**
  * Insert payload (id and timestamps default-fill via the table). The
@@ -68,9 +73,9 @@ export class ErrataValidationError extends Error {
 	}
 }
 
-/** Generate a `hbe_<ULID>` id. Exported for tests + the apply pipeline. */
+/** Generate a `refera_<ULID>` id. Exported for tests + the apply pipeline. */
 export function newErrataId(): string {
-	return createId(HANDBOOK_SECTION_ERRATA_ID_PREFIX);
+	return createId(REFERENCE_SECTION_ERRATA_ID_PREFIX);
 }
 
 /**
@@ -111,12 +116,12 @@ export function validateErrataInsert(row: ErrataInsert): void {
 export async function listErrataForSection(
 	sectionId: string,
 	db: Database = defaultDb,
-): Promise<HandbookSectionErrataRow[]> {
+): Promise<ReferenceSectionErrataRow[]> {
 	return db
 		.select()
-		.from(handbookSectionErrata)
-		.where(eq(handbookSectionErrata.sectionId, sectionId))
-		.orderBy(desc(handbookSectionErrata.appliedAt));
+		.from(referenceSectionErrata)
+		.where(eq(referenceSectionErrata.sectionId, sectionId))
+		.orderBy(desc(referenceSectionErrata.appliedAt));
 }
 
 /**
@@ -125,9 +130,9 @@ export async function listErrataForSection(
  */
 export async function hasErrata(sectionId: string, db: Database = defaultDb): Promise<boolean> {
 	const rows = await db
-		.select({ id: handbookSectionErrata.id })
-		.from(handbookSectionErrata)
-		.where(eq(handbookSectionErrata.sectionId, sectionId))
+		.select({ id: referenceSectionErrata.id })
+		.from(referenceSectionErrata)
+		.where(eq(referenceSectionErrata.sectionId, sectionId))
 		.limit(1);
 	return rows.length > 0;
 }
@@ -142,7 +147,7 @@ export async function hasErrata(sectionId: string, db: Database = defaultDb): Pr
 export async function insertErrataRows(
 	rows: ErrataInsert[],
 	db: Database = defaultDb,
-): Promise<HandbookSectionErrataRow[]> {
+): Promise<ReferenceSectionErrataRow[]> {
 	if (rows.length === 0) return [];
 	for (const row of rows) {
 		validateErrataInsert(row);
@@ -151,7 +156,7 @@ export async function insertErrataRows(
 		id: newErrataId(),
 		...row,
 	}));
-	return db.insert(handbookSectionErrata).values(payload).returning();
+	return db.insert(referenceSectionErrata).values(payload).returning();
 }
 
 /**
@@ -160,14 +165,14 @@ export async function insertErrataRows(
  */
 export async function deleteErrataByErratumId(errataId: string, db: Database = defaultDb): Promise<number> {
 	const result = await db
-		.delete(handbookSectionErrata)
-		.where(eq(handbookSectionErrata.errataId, errataId))
-		.returning({ id: handbookSectionErrata.id });
+		.delete(referenceSectionErrata)
+		.where(eq(referenceSectionErrata.errataId, errataId))
+		.returning({ id: referenceSectionErrata.id });
 	return result.length;
 }
 
 /** Format a row for the reader's amendment panel. */
-export function formatErrataForDisplay(row: HandbookSectionErrataRow): ErrataDisplay {
+export function formatErrataForDisplay(row: ReferenceSectionErrataRow): ErrataDisplay {
 	return {
 		id: row.id,
 		errataId: row.errataId,
@@ -190,7 +195,7 @@ export function formatErrataForDisplay(row: HandbookSectionErrataRow): ErrataDis
 export async function countSectionsByErratumId(errataId: string, db: Database = defaultDb): Promise<number> {
 	const rows = await db
 		.select({ count: sql<number>`count(*)::int` })
-		.from(handbookSectionErrata)
-		.where(eq(handbookSectionErrata.errataId, errataId));
+		.from(referenceSectionErrata)
+		.where(eq(referenceSectionErrata.errataId, errataId));
 	return rows[0]?.count ?? 0;
 }

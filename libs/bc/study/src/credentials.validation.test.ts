@@ -15,7 +15,7 @@ import {
 	syllabusNodeYamlSchema,
 	updateGoalInputSchema,
 } from './credentials.validation';
-import { citationSchema, legacyCitationSchema, structuredCitationSchema } from './handbook-validation';
+import { citationSchema, legacyCitationSchema, structuredCitationSchema } from './manifest-validation';
 
 describe('structuredCitationSchema framing + airboss_ref extension', () => {
 	it('accepts a WP #1-style handbook citation without framing or airboss_ref', () => {

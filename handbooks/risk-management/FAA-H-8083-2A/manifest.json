@@ -12,5 +12,9 @@
   "body_sha256": "c7d03aeeaed52b3c5a961171d99cf9f15b6b5707a5f20860b5c30a9c30e4d014",
   "page_count": 80,
   "doc_id": "faa-h-8083-2",
-  "faa_edition": "2A"
+  "faa_edition": "2A",
+  "subjects": [
+    "human-factors"
+  ],
+  "primary_cert": "private"
 }

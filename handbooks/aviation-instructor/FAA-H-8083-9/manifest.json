@@ -12,5 +12,10 @@
   "body_sha256": "2b74bde92d324dec9f8d495811d49bafbf35a926287c157a844f5865bdcbcdbc",
   "page_count": 228,
   "doc_id": "faa-h-8083-9",
-  "faa_edition": null
+  "faa_edition": null,
+  "subjects": [
+    "training-ops",
+    "human-factors"
+  ],
+  "primary_cert": "cfi"
 }
