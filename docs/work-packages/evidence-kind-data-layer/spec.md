@@ -3,7 +3,7 @@ title: 'Spec: Evidence Kind Data Layer'
 product: study
 feature: evidence-kind-data-layer
 type: spec
-status: unread
+status: read
 review_status: pending
 ---
 

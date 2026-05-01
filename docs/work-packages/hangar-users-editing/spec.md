@@ -3,8 +3,8 @@ title: 'Spec: Hangar Users Editing'
 product: hangar
 feature: hangar-users-editing
 type: spec
-status: unread
-review_status: pending
+status: shipped
+review_status: done
 ---
 
 # Spec: Hangar Users Editing
