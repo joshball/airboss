@@ -1,6 +1,7 @@
 import { existsSync, mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { ENV_VARS } from '@ab/constants';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { resetRegistry } from '../registry/__test_helpers__.ts';
 import { __editions_internal__ } from '../registry/editions.ts';
@@ -103,14 +104,14 @@ describe('runIngest against title-49 (multi-part aggregation)', () => {
 	let cacheTmpRoot: string;
 
 	beforeEach(() => {
-		originalCacheEnv = process.env.AIRBOSS_HANDBOOK_CACHE;
+		originalCacheEnv = process.env[ENV_VARS.AIRBOSS_HANDBOOK_CACHE];
 		cacheTmpRoot = mkdtempSync(join(tmpdir(), 'cfr-49-cache-'));
-		process.env.AIRBOSS_HANDBOOK_CACHE = cacheTmpRoot;
+		process.env[ENV_VARS.AIRBOSS_HANDBOOK_CACHE] = cacheTmpRoot;
 	});
 
 	afterEach(() => {
-		if (originalCacheEnv === undefined) delete process.env.AIRBOSS_HANDBOOK_CACHE;
-		else process.env.AIRBOSS_HANDBOOK_CACHE = originalCacheEnv;
+		if (originalCacheEnv === undefined) delete process.env[ENV_VARS.AIRBOSS_HANDBOOK_CACHE];
+		else process.env[ENV_VARS.AIRBOSS_HANDBOOK_CACHE] = originalCacheEnv;
 		rmSync(cacheTmpRoot, { recursive: true, force: true });
 	});
 

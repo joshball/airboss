@@ -15,6 +15,7 @@
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { resolveCacheRoot } from '@ab/constants';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { validateReferences } from '../check.ts';
 import { resetRegistry } from '../registry/__test_helpers__.ts';
@@ -55,8 +56,7 @@ async function ingestRealAcCorpus(): Promise<void> {
 	// Cache root is irrelevant when we point at an already-extracted tree --
 	// but the ingest expects a cache to walk. We re-ingest from the real
 	// developer cache so the test is end-to-end.
-	const cacheRoot =
-		process.env.AIRBOSS_HANDBOOK_CACHE ?? join(process.env.HOME ?? '', 'Documents', 'airboss-handbook-cache');
+	const cacheRoot = resolveCacheRoot({ ensureExists: false });
 	await runAcIngest({ cacheRoot, derivativeRoot: AC_DERIVATIVE_ROOT });
 }
 

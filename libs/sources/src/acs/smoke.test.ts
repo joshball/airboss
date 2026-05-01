@@ -21,6 +21,7 @@
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { resolveCacheRoot } from '@ab/constants';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { validateReferences } from '../check.ts';
 import { resetRegistry } from '../registry/__test_helpers__.ts';
@@ -48,8 +49,7 @@ afterEach(() => {
 
 async function ingestRealAcsCorpus(): Promise<void> {
 	setAcsDerivativeRoot(ACS_DERIVATIVE_ROOT);
-	const cacheRoot =
-		process.env.AIRBOSS_HANDBOOK_CACHE ?? join(process.env.HOME ?? '', 'Documents', 'airboss-handbook-cache');
+	const cacheRoot = resolveCacheRoot({ ensureExists: false });
 	await runAcsIngest({ cacheRoot, derivativeRoot: ACS_DERIVATIVE_ROOT });
 }
 

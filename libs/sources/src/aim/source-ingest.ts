@@ -35,8 +35,8 @@
 
 import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { homedir } from 'node:os';
 import { join } from 'node:path';
+import { resolveCacheRoot } from '@ab/constants';
 import type { ManifestEntry, ManifestFile } from './derivative-reader.ts';
 import { type ExtractedAim, extractAim } from './extract.ts';
 import { type IngestReport, runAimIngest } from './ingest.ts';
@@ -44,11 +44,6 @@ import { type IngestReport, runAimIngest } from './ingest.ts';
 export const PHASE_7_SOURCE_REVIEWER_ID = 'phase-7-aim-source-ingestion';
 
 const EDITION_PATTERN = /^[0-9]{4}-(0[1-9]|1[0-2])$/;
-
-// Default editor cache (mirrors `scripts/sources/download/`).
-function defaultCacheRoot(): string {
-	return process.env.AIRBOSS_HANDBOOK_CACHE ?? join(homedir(), 'Documents', 'airboss-handbook-cache');
-}
 
 /**
  * Per-AIM-cache `ManifestEntry` shape, mirroring the downloader's writer at
@@ -435,7 +430,7 @@ export interface SourceCliArgs {
 }
 
 export function parseSourceCliArgs(argv: readonly string[]): SourceCliArgs | { error: string } {
-	let cacheRoot = defaultCacheRoot();
+	let cacheRoot = resolveCacheRoot({ ensureExists: false });
 	let derivativeRoot = join(process.cwd(), 'aim');
 	let edition: string | null = null;
 	let help = false;

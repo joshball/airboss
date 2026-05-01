@@ -15,6 +15,22 @@ export const ENV_VARS = {
 	BETTER_AUTH_URL: 'BETTER_AUTH_URL',
 	RESEND_API_KEY: 'RESEND_API_KEY',
 	AIRBOSS_ALLOW_DEV_SEED: 'AIRBOSS_ALLOW_DEV_SEED',
+	/**
+	 * Source-document cache root override (per ADR 018). Honours `~/`
+	 * expansion. Default: `~/Documents/airboss-handbook-cache/`. Read by
+	 * `resolveCacheRoot()` in `@ab/constants/source-cache`.
+	 */
+	AIRBOSS_HANDBOOK_CACHE: 'AIRBOSS_HANDBOOK_CACHE',
+	/**
+	 * Suppresses dispatcher banners (currently the discover-errata "N
+	 * unreviewed candidates" banner). Set to `1` or `true` to silence.
+	 */
+	AIRBOSS_QUIET: 'AIRBOSS_QUIET',
+	/**
+	 * GitHub token consumed by `gh issue create` during discover-errata.
+	 * Absence is a soft skip, not an error.
+	 */
+	GH_TOKEN: 'GH_TOKEN',
 	/** Hangar sync-to-disk mode override. Values: `commit-local` | `pr`. */
 	HANGAR_SYNC_MODE: 'HANGAR_SYNC_MODE',
 	/**

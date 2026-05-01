@@ -13,24 +13,11 @@
 
 import { spawn } from 'node:child_process';
 import { existsSync, readFileSync } from 'node:fs';
-import { homedir } from 'node:os';
 import { join } from 'node:path';
-import { DISCOVERY_CACHE, DISCOVERY_FRESHNESS_MS } from '@ab/constants';
+import { DISCOVERY_CACHE, DISCOVERY_FRESHNESS_MS, ENV_VARS, resolveCacheRoot } from '@ab/constants';
 import { createLogger } from '@ab/utils';
 
 const log = createLogger('study');
-
-function expandHome(p: string): string {
-	if (p.startsWith('~/')) return join(homedir(), p.slice(2));
-	if (p === '~') return homedir();
-	return p;
-}
-
-function resolveCacheRoot(): string {
-	const fromEnv = process.env.AIRBOSS_HANDBOOK_CACHE;
-	if (typeof fromEnv === 'string' && fromEnv.length > 0) return expandHome(fromEnv);
-	return join(homedir(), 'Documents', 'airboss-handbook-cache');
-}
 
 function isStaleSentinel(cacheRoot: string, now: number, windowMs: number): boolean {
 	const sentinel = join(cacheRoot, DISCOVERY_CACHE.LAST_RUN_FILE);
@@ -63,7 +50,7 @@ export async function maybeRunDiscovery(): Promise<void> {
 		const child = spawn('bun', ['run', 'sources', 'discover-errata'], {
 			detached: true,
 			stdio: 'ignore',
-			env: { ...process.env, AIRBOSS_HANDBOOK_CACHE: cacheRoot },
+			env: { ...process.env, [ENV_VARS.AIRBOSS_HANDBOOK_CACHE]: cacheRoot },
 		});
 		child.on('error', (err) => {
 			log.warn('discover-errata startup hook failed to spawn', {
