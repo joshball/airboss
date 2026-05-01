@@ -9,6 +9,10 @@
 # link -- the FAA's AC index URL scheme rotates documentIDs over time. The
 # corpus can be wired to the FAA AC catalog (Phase 8 `ac` corpus) when its
 # resolver supplies live URLs.
+#
+# All AC rows carry `primary_cert: null` -- ACs are FAA-published policy
+# under the regulations spine (grouped by series), not under any cert spine
+# (per library-by-cert WP placement table).
 
 references:
   # ---------- AC 00 series (general) ---------------------------------------
@@ -19,6 +23,7 @@ references:
     title: Aviation Weather
     publisher: FAA
     subjects: [weather]
+    primary_cert: null
 
   - slug: ac-00-24
     kind: ac
@@ -26,6 +31,7 @@ references:
     title: Thunderstorms
     publisher: FAA
     subjects: [weather, emergencies]
+    primary_cert: null
 
   - slug: ac-00-45
     kind: ac
@@ -33,6 +39,7 @@ references:
     title: Aviation Weather Services
     publisher: FAA
     subjects: [weather]
+    primary_cert: null
 
   # ---------- AC 60 series (airmen / training) -----------------------------
 
@@ -42,6 +49,7 @@ references:
     title: Aeronautical Decision Making
     publisher: FAA
     subjects: [human-factors]
+    primary_cert: null
 
   # ---------- AC 61 series (airmen) ----------------------------------------
 
@@ -51,6 +59,7 @@ references:
     title: Instrument Flying Handbook (legacy AC superseded by FAA-H-8083-15)
     publisher: FAA
     subjects: [procedures, navigation, flight-instruments]
+    primary_cert: null
 
   - slug: ac-61-67
     kind: ac
@@ -58,6 +67,7 @@ references:
     title: Stall and Spin Awareness Training
     publisher: FAA
     subjects: [aerodynamics, emergencies]
+    primary_cert: null
 
   - slug: ac-61-83
     kind: ac
@@ -65,6 +75,7 @@ references:
     title: Nationally Scheduled, FAA-Approved, Industry-Conducted Flight Instructor Refresher Course
     publisher: FAA
     subjects: [training-ops]
+    primary_cert: null
 
   - slug: ac-61-84
     kind: ac
@@ -72,6 +83,7 @@ references:
     title: Role of Preflight Preparation
     publisher: FAA
     subjects: [procedures]
+    primary_cert: null
 
   - slug: ac-61-98
     kind: ac
@@ -79,6 +91,7 @@ references:
     title: Currency Requirements and Guidance for the Flight Review and Instrument Proficiency Check
     publisher: FAA
     subjects: [regulations, certification]
+    primary_cert: null
 
   - slug: ac-61-134
     kind: ac
@@ -86,6 +99,7 @@ references:
     title: General Aviation Controlled Flight Into Terrain Awareness
     publisher: FAA
     subjects: [human-factors, navigation]
+    primary_cert: null
 
   # ---------- AC 90 series (operations) ------------------------------------
 
@@ -95,6 +109,7 @@ references:
     title: Non-Towered Airport Flight Operations
     publisher: FAA
     subjects: [airports, communications, procedures]
+    primary_cert: null
 
   - slug: ac-90-100
     kind: ac
@@ -102,6 +117,7 @@ references:
     title: U.S. Terminal and En Route Area Navigation (RNAV) Operations
     publisher: FAA
     subjects: [navigation, procedures]
+    primary_cert: null
 
   # ---------- AC 91 series (general operating) -----------------------------
 
@@ -111,6 +127,7 @@ references:
     title: Pilot's Weight and Balance Handbook
     publisher: FAA
     subjects: [weight-balance, performance]
+    primary_cert: null
 
   - slug: ac-91-44
     kind: ac
@@ -118,6 +135,7 @@ references:
     title: Operational and Maintenance Practices for Emergency Locator Transmitters and Receivers
     publisher: FAA
     subjects: [aircraft-systems, emergencies]
+    primary_cert: null
 
   - slug: ac-91-74
     kind: ac
@@ -125,6 +143,7 @@ references:
     title: Pilot Guide -- Flight in Icing Conditions
     publisher: FAA
     subjects: [weather, emergencies]
+    primary_cert: null
 
   - slug: ac-91-75
     kind: ac
@@ -132,6 +151,7 @@ references:
     title: Attitude Indicator
     publisher: FAA
     subjects: [flight-instruments]
+    primary_cert: null
 
   - slug: ac-91-79
     kind: ac
@@ -139,3 +159,4 @@ references:
     title: Mitigating the Risks of a Runway Overrun Upon Landing
     publisher: FAA
     subjects: [procedures, performance, airports]
+    primary_cert: null
