@@ -333,7 +333,7 @@ export async function getNodesCitingSection(query: CitingNodesQuery, db: Db = de
  * Routing rules:
  *
  * 1. Handbook citations resolve to the in-app handbook reader route
- *    (`ROUTES.LIBRARY_CHAPTER` or `ROUTES.LIBRARY_SECTION`).
+ *    (`ROUTES.LIBRARY_HANDBOOK_CHAPTER` or `ROUTES.LIBRARY_HANDBOOK_SECTION`).
  * 2. When `airboss_ref` is set, attempt the `@ab/sources` registry's
  *    per-corpus `getLiveUrl()`. This is the canonical resolution path for
  *    cross-corpus identifiers per ADR 019. Falls through to the
@@ -402,8 +402,8 @@ function resolveHandbookCitationUrl(
 	const ref = references.find((r) => r.id === citation.reference_id);
 	if (!ref) return null;
 	const { chapter, section } = citation.locator;
-	if (section === undefined) return ROUTES.LIBRARY_CHAPTER(ref.documentSlug, chapter);
-	return ROUTES.LIBRARY_SECTION(ref.documentSlug, chapter, section);
+	if (section === undefined) return ROUTES.LIBRARY_HANDBOOK_CHAPTER(ref.documentSlug, chapter);
+	return ROUTES.LIBRARY_HANDBOOK_SECTION(ref.documentSlug, chapter, section);
 }
 
 /**

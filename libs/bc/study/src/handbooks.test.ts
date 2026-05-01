@@ -437,7 +437,7 @@ describe('resolveCitationUrl', () => {
 			},
 			refs,
 		);
-		expect(url).toBe(ROUTES.LIBRARY_SECTION(PHAK_SLUG, 12, 3));
+		expect(url).toBe(ROUTES.LIBRARY_HANDBOOK_SECTION(PHAK_SLUG, 12, 3));
 	});
 
 	it('resolves a chapter-only citation to the chapter URL', async () => {
@@ -450,7 +450,7 @@ describe('resolveCitationUrl', () => {
 			},
 			refs,
 		);
-		expect(url).toBe(ROUTES.LIBRARY_CHAPTER(PHAK_SLUG, 12));
+		expect(url).toBe(ROUTES.LIBRARY_HANDBOOK_CHAPTER(PHAK_SLUG, 12));
 	});
 
 	it('returns null for legacy freeform citations', async () => {
@@ -586,7 +586,7 @@ describe('resolveCitationUrl', () => {
 			},
 			refs,
 		);
-		expect(url).toBe(ROUTES.LIBRARY_SECTION(PHAK_SLUG, 12, 3));
+		expect(url).toBe(ROUTES.LIBRARY_HANDBOOK_SECTION(PHAK_SLUG, 12, 3));
 	});
 
 	it('returns null when reference id does not resolve for a handbook citation', async () => {
