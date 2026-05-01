@@ -1585,24 +1585,33 @@ export const LIBRARY_STATE_LABELS: Record<LibraryState, string> = {
 export const LIBRARY_EXPANDED_SUBJECTS_KEY = 'library:expanded-subjects';
 
 /**
- * `handbook_section.level`. A section row is one of: a chapter (top-level,
- * `parent_id IS NULL`), a section (direct child of a chapter), or a
- * subsection (child of a section).
+ * Level vocabulary for the **sectioned-handbook** corpus (PHAK / AFH / AVWX).
+ * Used by the section-tree manifest validator and the handbook reader UI;
+ * not enforced at the DB layer (post-WP-SUB; per-corpus level vocabulary
+ * lives on `reference.section_schema`).
+ *
+ * Other corpora declare their own level vocabulary on
+ * `reference.section_schema.levels`. Examples: whole-doc handbooks ->
+ * `['document']`; CFR -> `['subpart','section','paragraph','subparagraph','clause']`;
+ * AIM -> `['chapter','section','paragraph']`; ACS -> `['task','element']`.
  */
-export const HANDBOOK_SECTION_LEVELS = {
+export const REFERENCE_SECTION_LEVELS = {
 	CHAPTER: 'chapter',
 	SECTION: 'section',
 	SUBSECTION: 'subsection',
+	/** Whole-doc handbooks (post-#384 risk-mgmt, instructor, IFH, IPH, AMT-G, AMT-P). */
+	DOCUMENT: 'document',
 } as const;
 
-export type HandbookSectionLevel = (typeof HANDBOOK_SECTION_LEVELS)[keyof typeof HANDBOOK_SECTION_LEVELS];
+export type ReferenceSectionLevel = (typeof REFERENCE_SECTION_LEVELS)[keyof typeof REFERENCE_SECTION_LEVELS];
 
-export const HANDBOOK_SECTION_LEVEL_VALUES = Object.values(HANDBOOK_SECTION_LEVELS);
+export const REFERENCE_SECTION_LEVEL_VALUES = Object.values(REFERENCE_SECTION_LEVELS);
 
-export const HANDBOOK_SECTION_LEVEL_LABELS: Record<HandbookSectionLevel, string> = {
-	[HANDBOOK_SECTION_LEVELS.CHAPTER]: 'Chapter',
-	[HANDBOOK_SECTION_LEVELS.SECTION]: 'Section',
-	[HANDBOOK_SECTION_LEVELS.SUBSECTION]: 'Subsection',
+export const REFERENCE_SECTION_LEVEL_LABELS: Record<ReferenceSectionLevel, string> = {
+	[REFERENCE_SECTION_LEVELS.CHAPTER]: 'Chapter',
+	[REFERENCE_SECTION_LEVELS.SECTION]: 'Section',
+	[REFERENCE_SECTION_LEVELS.SUBSECTION]: 'Subsection',
+	[REFERENCE_SECTION_LEVELS.DOCUMENT]: 'Document',
 };
 
 /**
@@ -1629,11 +1638,11 @@ export const HANDBOOK_READ_STATUS_LABELS: Record<HandbookReadStatus, string> = {
 	[HANDBOOK_READ_STATUSES.READ]: 'Read',
 };
 
-/** ID prefixes for the handbook tables (composed via `@ab/utils createId`). */
+/** ID prefixes for the reference tables (composed via `@ab/utils createId`). */
 export const REFERENCE_ID_PREFIX = 'ref';
-export const HANDBOOK_SECTION_ID_PREFIX = 'hbs';
-export const HANDBOOK_FIGURE_ID_PREFIX = 'hbf';
-export const HANDBOOK_SECTION_ERRATA_ID_PREFIX = 'hbe';
+export const REFERENCE_SECTION_ID_PREFIX = 'refsec';
+export const REFERENCE_FIGURE_ID_PREFIX = 'reffig';
+export const REFERENCE_SECTION_ERRATA_ID_PREFIX = 'refera';
 
 /**
  * Heartbeat + suggestion-prompt thresholds (spec Open Question 5).

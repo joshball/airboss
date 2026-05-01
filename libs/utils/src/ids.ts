@@ -51,13 +51,16 @@ export const generateKnowledgeNodeProgressId = (): string => createId('knp');
 /** Content-citation row (polymorphic source -> reference). */
 export const generateContentCitationId = (): string => createId('ccit');
 
-// Handbook ingestion + reader (ADR 016 phase 0). Reference = edition-versioned
-// citation source; handbookSection = per-section row (chapter / section /
-// subsection); handbookFigure = per-figure asset record. Read-state has a
-// composite PK so it doesn't need its own id.
+// Reference substrate (post-WP-SUB; ADR 016 phase 0 + library-completeness).
+// `reference` = edition-versioned citation source for any corpus (handbook,
+// CFR, AC, AIM, ...); `referenceSection` = per-content-node row in the
+// hierarchy; `referenceFigure` = per-figure asset record. Errata + read-state
+// rows live in their own tables (errata gets its own id; read-state has a
+// composite PK).
 export const generateReferenceId = (): string => createId('ref');
-export const generateHandbookSectionId = (): string => createId('hbs');
-export const generateHandbookFigureId = (): string => createId('hbf');
+export const generateReferenceSectionId = (): string => createId('refsec');
+export const generateReferenceFigureId = (): string => createId('reffig');
+export const generateReferenceSectionErrataId = (): string => createId('refera');
 
 // Hangar BC -- job queue + streamed log + sync ledger.
 export const generateHangarJobId = (): string => createId('job');
