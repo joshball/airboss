@@ -4,9 +4,14 @@ import { describe, expect, it } from 'vitest';
 import { __xml_walker_internal__, walkRegsXml } from './xml-walker.ts';
 
 const FIXTURE_PATH = join(process.cwd(), 'tests/fixtures/cfr/title-14-2026-fixture.xml');
+const PART_830_FIXTURE_PATH = join(process.cwd(), 'tests/fixtures/cfr/title-49-part-830-fixture.xml');
 
 function loadFixture(): string {
 	return readFileSync(FIXTURE_PATH, 'utf-8');
+}
+
+function loadPart830Fixture(): string {
+	return readFileSync(PART_830_FIXTURE_PATH, 'utf-8');
 }
 
 describe('walkRegsXml against title-14 fixture', () => {
@@ -74,6 +79,62 @@ describe('walkRegsXml against title-14 fixture', () => {
 		const reserved = tree.sections.find((s) => s.section === '149');
 		expect(reserved?.reserved).toBe(true);
 		expect(reserved?.headTitle).toBe('[Reserved]');
+	});
+});
+
+describe('walkRegsXml against part-only root (Title 49 fixture)', () => {
+	it('accepts <DIV5 TYPE="PART"> root and emits the part', () => {
+		const tree = walkRegsXml(loadPart830Fixture(), { title: '49' });
+		expect(tree.parts.map((p) => p.part)).toEqual(['830']);
+	});
+
+	it('part head is title-cased and section-marker stripped', () => {
+		const tree = walkRegsXml(loadPart830Fixture(), { title: '49' });
+		const part = tree.parts.find((p) => p.part === '830');
+		expect(part?.headTitle).toContain('Notification and Reporting of Aircraft Accidents');
+	});
+
+	it('emits subparts under part-only root', () => {
+		const tree = walkRegsXml(loadPart830Fixture(), { title: '49' });
+		const subs = tree.subparts
+			.filter((s) => s.part === '830')
+			.map((s) => s.subpart)
+			.sort();
+		expect(subs).toEqual(['a', 'b']);
+	});
+
+	it('decodes numeric character entities in section heads (e.g. &#xA7;)', () => {
+		const tree = walkRegsXml(loadPart830Fixture(), { title: '49' });
+		const sec = tree.sections.find((s) => s.section === '1');
+		// `&#xA7; 830.1 Applicability.` -> head should resolve to 'Applicability'
+		expect(sec?.headTitle).toBe('Applicability');
+	});
+
+	it('emits sections nested under subparts', () => {
+		const tree = walkRegsXml(loadPart830Fixture(), { title: '49' });
+		const sectionIds = tree.sections.map((s) => `${s.part}.${s.section}`).sort();
+		expect(sectionIds).toEqual(['830.1', '830.2', '830.5']);
+	});
+
+	it('parents sections under their subpart letter', () => {
+		const tree = walkRegsXml(loadPart830Fixture(), { title: '49' });
+		const sec1 = tree.sections.find((s) => s.section === '1');
+		const sec5 = tree.sections.find((s) => s.section === '5');
+		expect(sec1?.subpart).toBe('a');
+		expect(sec5?.subpart).toBe('b');
+	});
+
+	it('extracts amended date from CITA in part-only XML', () => {
+		const tree = walkRegsXml(loadPart830Fixture(), { title: '49' });
+		const sec1 = tree.sections.find((s) => s.section === '1');
+		expect(sec1?.amendedDate).toBe('1995-08-07');
+	});
+});
+
+describe('walkRegsXml rejects unknown root', () => {
+	it('throws when neither DIV1-TITLE nor DIV5-PART is present', () => {
+		const xml = '<?xml version="1.0"?><HEAD>not a CFR title or part</HEAD>';
+		expect(() => walkRegsXml(xml, { title: '14' })).toThrow(/missing.*DIV1.*DIV5/u);
 	});
 });
 

@@ -31,6 +31,19 @@ export interface ManifestInput {
 	readonly sourceUrl: string;
 	readonly sourceSha256: string;
 	readonly fetchedAt: string; // ISO-8601
+	/**
+	 * Optional list of additional source files when a title's content is
+	 * assembled from multiple downloads (Title 49: each scoped Part is fetched
+	 * separately because the eCFR Versioner only honors one `?part=` per
+	 * request). When present, `sourceUrl` / `sourceSha256` reflect the FIRST
+	 * source; `sources` lists every source contributing to this manifest.
+	 */
+	readonly sources?: readonly ManifestSource[];
+}
+
+export interface ManifestSource {
+	readonly url: string;
+	readonly sha256: string;
 }
 
 export interface ManifestRecord {
@@ -44,6 +57,7 @@ export interface ManifestRecord {
 	readonly partCount: number;
 	readonly subpartCount: number;
 	readonly sectionCount: number;
+	readonly sources?: readonly ManifestSource[];
 }
 
 export interface SectionsJsonRecord {
@@ -149,6 +163,9 @@ export function writeDerivativeTree(input: DerivativeWriteInput): DerivativeWrit
 		partCount: input.parts.length,
 		subpartCount: input.subparts.length,
 		sectionCount: input.sections.length,
+		...(input.manifest.sources !== undefined && input.manifest.sources.length > 0
+			? { sources: input.manifest.sources }
+			: {}),
 	};
 	const manifestPath = join(editionDir, 'manifest.json');
 	const manifestContent = `${JSON.stringify(manifest, null, 2)}\n`;

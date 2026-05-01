@@ -105,6 +105,30 @@ describe('writeDerivativeTree', () => {
 		expect(second.filesUnchanged).toBeGreaterThan(0);
 	});
 
+	it('manifest includes a `sources` array when multi-source input is supplied', () => {
+		const input = buildInput();
+		const multi: DerivativeWriteInput = {
+			...input,
+			manifest: {
+				...input.manifest,
+				sources: [
+					{ url: 'file:///tmp/part-830.xml', sha256: 'aa' },
+					{ url: 'file:///tmp/part-1552.xml', sha256: 'bb' },
+				],
+			},
+		};
+		writeDerivativeTree(multi);
+		const manifest = JSON.parse(readFileSync(join(tmpRoot, 'cfr-14/2026-01-01/manifest.json'), 'utf-8'));
+		expect(manifest.sources).toHaveLength(2);
+		expect(manifest.sources[0]).toEqual({ url: 'file:///tmp/part-830.xml', sha256: 'aa' });
+	});
+
+	it('manifest omits the `sources` field for single-source titles', () => {
+		writeDerivativeTree(buildInput());
+		const manifest = JSON.parse(readFileSync(join(tmpRoot, 'cfr-14/2026-01-01/manifest.json'), 'utf-8'));
+		expect(manifest.sources).toBeUndefined();
+	});
+
 	it('rewrites only the changed file when one body changes', () => {
 		writeDerivativeTree(buildInput());
 		const updatedInput = buildInput();

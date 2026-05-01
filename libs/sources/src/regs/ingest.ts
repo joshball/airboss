@@ -23,7 +23,7 @@ import { __editions_internal__ } from '../registry/editions.ts';
 import { getEntryLifecycle, recordPromotion } from '../registry/lifecycle.ts';
 import { __sources_internal__ } from '../registry/sources.ts';
 import type { Edition, SourceEntry, SourceId } from '../types.ts';
-import { loadEcfrXml } from './cache.ts';
+import { type CacheLoadResult, loadEcfrXml } from './cache.ts';
 import { writeDerivativeTree } from './derivative-writer.ts';
 import {
 	type NormalizedPart,
@@ -33,10 +33,16 @@ import {
 	normalizeRawSection,
 	normalizeRawSubpart,
 } from './normalizer.ts';
-import { walkRegsXml } from './xml-walker.ts';
+import { type RawCfrTree, walkRegsXml } from './xml-walker.ts';
 
 export const PHASE_3_REVIEWER_ID = 'phase-3-bulk-ingestion';
 
+/**
+ * Title 49 parts in scope (NTSB Part 830 + TSA Part 1552). The eCFR Versioner
+ * `?part=` filter only honors a single part per request, so each part is
+ * fetched + cached separately, then aggregated into a single Title 49
+ * manifest. See `regs.yaml` for the canonical config.
+ */
 const TITLE_49_PART_FILTER: ReadonlySet<string> = new Set(['830', '1552']);
 
 export interface IngestOneTitleArgs {
@@ -62,28 +68,80 @@ export interface IngestReport {
 /**
  * Run a single-Title ingestion. Idempotent: re-running with the same edition
  * reuses cache, hash-compares derivatives, skips re-promotion when accepted.
+ *
+ * For full-title fetches (Title 14) the walker handles the entire title in
+ * one pass. For part-filtered titles (Title 49: parts 830 + 1552) each part
+ * is fetched separately because the eCFR Versioner ignores all but one
+ * `?part=` query value; the per-part walker outputs are concatenated into a
+ * single manifest.
  */
 export async function runIngest(args: IngestOneTitleArgs): Promise<IngestReport> {
 	const editionSlug = args.editionSlug ?? extractYear(args.editionDate);
-	const partFilter = args.title === '49' ? TITLE_49_PART_FILTER : undefined;
+	const partList = args.title === '49' ? [...TITLE_49_PART_FILTER].sort() : null;
 
-	// 1. Cache or fixture
-	const cacheResult = await loadEcfrXml({
-		title: args.title,
-		editionDate: args.editionDate,
-		partFilter,
-		fixturePath: args.fixturePath,
-		fetchImpl: args.fetchImpl,
-	});
+	// 1. Cache or fixture; 2. Walk. For full-title (Title 14) this is one pass.
+	// For part-filtered (Title 49) we loop over each scoped part and aggregate.
+	let aggregateTree: RawCfrTree;
+	let primaryCache: CacheLoadResult;
+	let additionalSources: readonly { url: string; sha256: string }[] | undefined;
 
-	// 2. Walk
-	const tree = walkRegsXml(cacheResult.xml, { title: args.title, partFilter });
+	if (partList === null) {
+		primaryCache = await loadEcfrXml({
+			title: args.title,
+			editionDate: args.editionDate,
+			fixturePath: args.fixturePath,
+			fetchImpl: args.fetchImpl,
+		});
+		aggregateTree = walkRegsXml(primaryCache.xml, { title: args.title });
+	} else {
+		// Multi-part: fetch each part separately, walk each, then concatenate.
+		// `fixturePath`, when supplied, applies to the FIRST fetch only -- tests
+		// that exercise multi-part should use the cache (or per-part fixtures
+		// via the fetchImpl seam).
+		const partsAcc: RawCfrTree['parts'][number][] = [];
+		const subpartsAcc: RawCfrTree['subparts'][number][] = [];
+		const sectionsAcc: RawCfrTree['sections'][number][] = [];
+		const cacheResults: CacheLoadResult[] = [];
+		for (const partN of partList) {
+			const cacheResult = await loadEcfrXml({
+				title: args.title,
+				editionDate: args.editionDate,
+				partFilter: new Set([partN]),
+				fixturePath: cacheResults.length === 0 ? args.fixturePath : undefined,
+				fetchImpl: args.fetchImpl,
+			});
+			cacheResults.push(cacheResult);
+			const tree = walkRegsXml(cacheResult.xml, { title: args.title });
+			partsAcc.push(...tree.parts);
+			subpartsAcc.push(...tree.subparts);
+			sectionsAcc.push(...tree.sections);
+		}
+		aggregateTree = {
+			title: args.title,
+			parts: partsAcc,
+			subparts: subpartsAcc,
+			sections: sectionsAcc,
+		};
+		const first = cacheResults[0];
+		if (first === undefined) {
+			throw new Error(`Title ${args.title} configured with empty part list; refusing to ingest`);
+		}
+		// `sourceUrl` / `sourceSha256` carry the first source; `additionalSources`
+		// captures every source so the manifest preserves provenance for all
+		// fetched parts.
+		primaryCache = first;
+		additionalSources = cacheResults.map((r) => ({ url: r.sourceUrl, sha256: r.sourceSha256 }));
+	}
 
 	// 3. Normalize
 	const publishedDate = new Date(`${args.editionDate}T00:00:00.000Z`);
-	const partsNorm: NormalizedPart[] = tree.parts.map((p) => normalizeRawPart(p, { publishedDate }));
-	const subpartsNorm: NormalizedSubpart[] = tree.subparts.map((s) => normalizeRawSubpart(s, { publishedDate }));
-	const sectionsNorm: NormalizedSection[] = tree.sections.map((s) => normalizeRawSection(s, { publishedDate }));
+	const partsNorm: NormalizedPart[] = aggregateTree.parts.map((p) => normalizeRawPart(p, { publishedDate }));
+	const subpartsNorm: NormalizedSubpart[] = aggregateTree.subparts.map((s) =>
+		normalizeRawSubpart(s, { publishedDate }),
+	);
+	const sectionsNorm: NormalizedSection[] = aggregateTree.sections.map((s) =>
+		normalizeRawSection(s, { publishedDate }),
+	);
 
 	// 4. Populate registry tables
 	const allEntries: SourceEntry[] = [
@@ -113,7 +171,7 @@ export async function runIngest(args: IngestOneTitleArgs): Promise<IngestReport>
 			const newEdition: Edition = {
 				id: editionSlug,
 				published_date: publishedDate,
-				source_url: cacheResult.sourceUrl,
+				source_url: primaryCache.sourceUrl,
 			};
 			editionsPatch.set(entry.id, [...existingEditions, newEdition]);
 		}
@@ -132,9 +190,10 @@ export async function runIngest(args: IngestOneTitleArgs): Promise<IngestReport>
 		subparts: subpartsNorm,
 		parts: partsNorm,
 		manifest: {
-			sourceUrl: cacheResult.sourceUrl,
-			sourceSha256: cacheResult.sourceSha256,
+			sourceUrl: primaryCache.sourceUrl,
+			sourceSha256: primaryCache.sourceSha256,
 			fetchedAt: new Date().toISOString(),
+			...(additionalSources !== undefined ? { sources: additionalSources } : {}),
 		},
 	});
 
@@ -147,7 +206,7 @@ export async function runIngest(args: IngestOneTitleArgs): Promise<IngestReport>
 			corpus: 'regs',
 			reviewerId: PHASE_3_REVIEWER_ID,
 			scope: scopeIds,
-			inputSource: cacheResult.sourceUrl,
+			inputSource: primaryCache.sourceUrl,
 			targetLifecycle: 'accepted',
 		});
 		if (!result.ok) {

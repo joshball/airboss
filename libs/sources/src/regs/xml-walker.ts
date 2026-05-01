@@ -7,6 +7,16 @@
  * subchapters, parts, subparts, and sections. We walk by `TYPE` attribute,
  * not by depth, so the walker tolerates schema variation between Titles.
  *
+ * Two valid root shapes:
+ *
+ *   - `<DIV1 TYPE="TITLE">` -- full-title download (Title 14 path).
+ *   - `<DIV5 TYPE="PART">` -- single-part download (Title 49 path; the eCFR
+ *     Versioner returns part-rooted XML when `?part=` is supplied, even when
+ *     multiple `?part=` filters are given -- only the first is honored, so
+ *     each filtered part must be fetched separately and aggregated by the
+ *     caller). When the root is a part, we treat the part as if it were a
+ *     single child of an implicit title.
+ *
  * Walking is read-only and pure. No I/O; no registry mutation.
  */
 
@@ -306,6 +316,12 @@ export function walkRegsXml(xmlSource: string, opts: WalkOptions): RawCfrTree {
 		alwaysCreateTextNode: true,
 		preserveOrder: true,
 		trimValues: false,
+		// Decode numeric character references (e.g. `&#xA7;` -> `§`,
+		// `&#x2014;` -> `—`). The eCFR full-title download uses raw chars but
+		// the part-filtered download leaves entities encoded; this normalizes
+		// both shapes. (Default fast-xml-parser behavior leaves numeric
+		// entities raw.)
+		htmlEntities: true,
 	});
 
 	const root = parser.parse(xmlSource);
@@ -313,19 +329,23 @@ export function walkRegsXml(xmlSource: string, opts: WalkOptions): RawCfrTree {
 		throw new Error('eCFR XML parse produced non-array root');
 	}
 
-	// Find the <DIV1 TYPE="TITLE"> wrapper. The root array contains an XML
-	// declaration node + an outer wrapper (often `<ECFR>` or directly the
-	// `<DIV1>`). Recurse to find the first TITLE-typed DIV1.
-	const titleNode = findFirstTitleDiv(root as Node[]);
-	if (titleNode === null) {
-		throw new Error('eCFR XML missing <DIV1 TYPE="TITLE"> root');
+	// Find either a `<DIV1 TYPE="TITLE">` wrapper (full-title download) or a
+	// `<DIV5 TYPE="PART">` wrapper (single-part download). The root array
+	// contains an XML declaration node + an outer wrapper (often `<ECFR>` or
+	// directly the `<DIV1>`/`<DIV5>`).
+	const walkRoot = findWalkRoot(root as Node[]);
+	if (walkRoot === null) {
+		throw new Error('eCFR XML missing <DIV1 TYPE="TITLE"> or <DIV5 TYPE="PART"> root');
 	}
 
 	const parts: RawPart[] = [];
 	const subparts: RawSubpart[] = [];
 	const sections: RawSection[] = [];
 
-	const partNodes = collectDivByType(titleNode, TYPE_PART);
+	// When the root is a single PART, walk just that part. Otherwise, the root
+	// is a TITLE; collect every PART under it.
+	const partNodes: readonly Node[] =
+		walkRoot.kind === 'part' ? [walkRoot.node] : collectDivByType(walkRoot.node, TYPE_PART);
 	for (const partNode of partNodes) {
 		const partN = getN(partNode);
 		if (partN === undefined) continue;
@@ -404,19 +424,35 @@ function collectDirectSections(partNode: Node): readonly Node[] {
 	return out;
 }
 
-function findFirstTitleDiv(nodes: readonly Node[]): Node | null {
-	const stack: Node[] = [...nodes];
-	while (stack.length > 0) {
-		const cur = stack.pop();
+interface WalkRoot {
+	readonly kind: 'title' | 'part';
+	readonly node: Node;
+}
+
+/**
+ * Locate the first valid walk root: a `<DIV1 TYPE="TITLE">` (full-title
+ * download) OR a `<DIV5 TYPE="PART">` (filtered single-part download).
+ *
+ * Title roots are preferred when both exist (a TITLE shape always has PART
+ * descendants; if the parser yields TITLE first we want to walk the whole
+ * tree, not stop at the first PART). The walk is breadth-first ordered via a
+ * queue so a DIV1 sibling is checked before its DIV5 descendants.
+ */
+function findWalkRoot(nodes: readonly Node[]): WalkRoot | null {
+	const queue: Node[] = [...nodes];
+	while (queue.length > 0) {
+		const cur = queue.shift();
 		if (cur === undefined) continue;
 		const tag = tagOf(cur);
 		if (tag === undefined) continue;
 		if (tag === 'DIV1' && getType(cur) === 'TITLE') {
-			return cur;
+			return { kind: 'title', node: cur };
 		}
-		// Descend into children
+		if (tag === 'DIV5' && getType(cur) === TYPE_PART) {
+			return { kind: 'part', node: cur };
+		}
 		for (const child of childrenOf(cur)) {
-			stack.push(child);
+			queue.push(child);
 		}
 	}
 	return null;
