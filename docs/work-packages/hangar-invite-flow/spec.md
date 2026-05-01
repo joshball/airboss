@@ -3,7 +3,7 @@ title: 'Spec: Hangar invite flow'
 product: hangar
 feature: hangar-invite-flow
 type: spec
-status: draft
+status: read
 review_status: pending
 created: 2026-04-30
 ---

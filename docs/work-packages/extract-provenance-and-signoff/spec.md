@@ -3,7 +3,7 @@ title: 'Spec: Extract provenance + per-section signoff'
 product: platform
 feature: extract-provenance-and-signoff
 type: spec
-status: unread
+status: read
 review_status: pending
 ---
 
