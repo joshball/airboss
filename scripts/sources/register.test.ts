@@ -159,29 +159,25 @@ describe('argument forwarding', () => {
 });
 
 describe('--all', () => {
+	const ALL_CORPORA: readonly RegisterCorpus[] = ['cfr', 'handbooks', 'handbooks-extras', 'aim', 'ac', 'acs'];
+
 	it('invokes every registered subcommand with the forwarded args', async () => {
-		stubRegisterCorpus('cfr', 0);
-		stubRegisterCorpus('handbooks', 0);
-		stubRegisterCorpus('aim', 0);
+		for (const name of ALL_CORPORA) stubRegisterCorpus(name, 0);
 		const code = await runRegisterDispatcher(['--all']);
 		expect(code).toBe(0);
-		expect(calls.map((c) => c.name)).toEqual(['cfr', 'handbooks', 'aim']);
+		expect(calls.map((c) => c.name)).toEqual([...ALL_CORPORA]);
 		for (const c of calls) expect(c.argv).toEqual([]);
 	});
 
 	it('returns the first non-zero exit code, but still runs every subcommand', async () => {
-		stubRegisterCorpus('cfr', 0);
-		stubRegisterCorpus('handbooks', 5);
-		stubRegisterCorpus('aim', 9);
+		for (const name of ALL_CORPORA) stubRegisterCorpus(name, name === 'handbooks' ? 5 : name === 'aim' ? 9 : 0);
 		const code = await runRegisterDispatcher(['--all']);
 		expect(code).toBe(5);
-		expect(calls.map((c) => c.name)).toEqual(['cfr', 'handbooks', 'aim']);
+		expect(calls.map((c) => c.name)).toEqual([...ALL_CORPORA]);
 	});
 
 	it('forwards trailing args to every subcommand', async () => {
-		stubRegisterCorpus('cfr', 0);
-		stubRegisterCorpus('handbooks', 0);
-		stubRegisterCorpus('aim', 0);
+		for (const name of ALL_CORPORA) stubRegisterCorpus(name, 0);
 		const code = await runRegisterDispatcher(['--all', '--out=/tmp/x']);
 		expect(code).toBe(0);
 		for (const c of calls) expect(c.argv).toEqual(['--out=/tmp/x']);
