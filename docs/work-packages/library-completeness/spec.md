@@ -4,30 +4,36 @@ product: study
 feature: library-completeness
 type: spec
 status: unread
-review_status: pending
+review_status: done
+revised: 2026-05-01
+revision_history:
+  - v1 (2026-04-30) -- initial spec (recommended a `library_entry` projection table).
+  - v2 (2026-05-01) -- §1 replaced with the substrate rename approach after [review.md](review.md). §§2-5 kept verbatim; §6 simplified -- downstream corpus WPs no longer carry a projection-population step.
 ---
 
 # Library completeness
 
 A discussion document. The user ratifies each numbered point before any implementation. Six sections, each ending with explicit ratification points.
 
+This is **v2**. v1 recommended Option C (`library_entry` projection table). [review.md](review.md) argued -- correctly -- that Option C ships a workaround instead of fixing the root cause. v2 replaces §1 with a substrate rename + relax + generalize approach. §§2-5 are unchanged; §6 folds WP-V + WP-VS into a single substrate WP.
+
 ## TL;DR
 
 - The `/library` page lists ~60 reference cards (handbooks + ACS + AC + AIM + CFR + NTSB + POH + other), but only the 9 ingested handbooks render as "Read in-app." Every other reference card is a dead link to faa.gov.
-- Cause: the loader's `isReadable` probe is `EXISTS handbook_section WHERE level <> 'chapter'`. Only `seed-handbooks.ts` produces those rows, and it only walks `handbooks/`. AIM (744 entries on disk), CFR-14 (7,218), CFR-49 (~30), AC (9), ACS (5) all have manifests but nothing seeds them into a queryable shape.
-- Recommended fix: **Option C** -- add a corpus-agnostic `library_visibility` table that any seed can populate, decoupling library readability from the handbook-specific schema. (Trade-offs in §1.)
+- Cause: the loader's `isReadable` probe is `EXISTS handbook_section WHERE level <> 'chapter'`. Only `seed-handbooks.ts` produces those rows, and it only walks `handbooks/`. AIM (744 entries on disk), CFR-14 (7,218), CFR-49 (~30), AC (9), ACS (5) all have manifests but nothing seeds them into a queryable shape. The deeper cause: the only structured-content table in the schema is named after the first corpus we ingested (`handbook_section`) and carries handbook-shaped CHECK constraints. The visibility gap is a symptom of that misnaming.
+- Recommended fix: **rename `handbook_section` -> `reference_section`, drop the handbook-shaped CHECK constraints, declare per-kind hierarchy on `reference.section_schema` jsonb, store per-kind extras in `metadata` jsonb on both tables (Zod-validated at write time), and generalize the seeder to walk every corpus's manifests.** One substrate WP, ~10 callers updated, no projection layer. After it lands, every §4 corpus is purely additive. (Trade-offs vs the v1 Option C alternative in §1.)
 - The user wants to add: airplane-track handbooks (covered by gap 5 + this WP), the FAA *Tips on Mountain Flying* pamphlet, NTSB ALJ rulings, FAA Chief Counsel legal interpretations, SAFOs, InFOs, FAA Order 8900.1, and the full AC catalog. Each gets its own follow-on WP (§4).
 
 ## Glossary (so we're not arguing about words)
 
-| Layer                  | Where it lives                            | Populated by                          |
-| ---------------------- | ----------------------------------------- | ------------------------------------- |
-| **Cache**              | `~/Documents/airboss-handbook-cache/`     | `bun run sources fetch <corpus>`      |
-| **Inline derivatives** | `handbooks/`, `aim/`, `regulations/`, `ac/`, `acs/` | `bun run sources register <corpus>`   |
-| **Sources registry**   | runtime `@ab/sources` corpus resolvers    | `import 'libs/sources/src/<c>/index.ts'` |
-| **Study DB -- reference**       | `study.reference` rows                    | `seed-handbooks.ts` + `seed-references.ts` (YAMLs in `course/references/`) |
-| **Study DB -- handbook_section** | `study.handbook_section` rows             | `seed-handbooks.ts` only             |
-| **Library readability** | derived: "has any non-chapter `handbook_section` row" | `getReadableReferenceIds()` at `libs/bc/study/src/handbooks.ts:501` |
+| Layer                            | Where it lives                                        | Populated by                                                               |
+| -------------------------------- | ----------------------------------------------------- | -------------------------------------------------------------------------- |
+| **Cache**                        | `~/Documents/airboss-handbook-cache/`                 | `bun run sources fetch <corpus>`                                           |
+| **Inline derivatives**           | `handbooks/`, `aim/`, `regulations/`, `ac/`, `acs/`   | `bun run sources register <corpus>`                                        |
+| **Sources registry**             | runtime `@ab/sources` corpus resolvers                | `import 'libs/sources/src/<c>/index.ts'`                                   |
+| **Study DB -- reference**        | `study.reference` rows                                | `seed-handbooks.ts` + `seed-references.ts` (YAMLs in `course/references/`) |
+| **Study DB -- handbook_section** | `study.handbook_section` rows                         | `seed-handbooks.ts` only                                                   |
+| **Library readability**          | derived: "has any non-chapter `handbook_section` row" | `getReadableReferenceIds()` at `libs/bc/study/src/handbooks.ts:501`        |
 
 The "registered into the runtime registry" number quoted in the broad-extraction findings (9,823) is the **sources registry**, not the **library page**. The library page only sees what the **study DB** holds. They are different surfaces; conflating them is what made the gap invisible until now.
 
@@ -46,61 +52,204 @@ The `/library` loader (`apps/study/src/routes/(app)/library/+page.server.ts:38`)
 - Handbook references that are seeded via `seed-handbooks.ts` -> `isReadable=true`. (9 docs after PR #384.)
 - Every other reference (ACS, AC, AIM, CFR, NTSB, POH, "noningested handbooks", other) -> `isReadable=false`. The card shows but only links to the external URL. No in-app reading, no progress, no citations resolve to internal anchors.
 
-This isn't a bug in any one file. The schema and the seed pipeline encode "readable in-app" as a synonym for "is a handbook," which it isn't anymore.
+Underneath the loader-probe symptom is a **naming + constraint problem**: `study.handbook_section` is the only structured-content table in the schema, and it carries handbook-shaped constraints (`level IN ('chapter','section','subsection')`, `code ~ '^[0-9]+(\\.[0-9]+){0,2}$'`). It also has a handbook-shaped name. The schema, seed pipeline, and probe all encode "readable in-app" as a synonym for "is a handbook." The fix is to stop encoding that.
 
-### Three ways out
+### What's actually fine
 
-**Option A -- extend `seed-handbooks.ts` to walk every corpus.**
+Look at what `handbook_section` stores (schema.ts:1291-1376):
 
-- Add walks for `aim/`, `regulations/cfr-*/`, `ac/`, `acs/`, and the handbooks-extras (already handled by PR #384). Each walk produces `handbook_section` rows where `level` maps to whatever the corpus's hierarchy is (`section`/`subsection` for AIM, `part`/`section`/`paragraph` for CFR, etc.).
-- Pros: zero schema change. Library page works immediately.
-- Cons: pollutes a "handbook" table with non-handbook rows. The `code` shape check (`^[0-9]+(\.[0-9]+){0,2}$`) at schema.ts:1343 rejects CFR-style codes (`91.103(b)(1)(i)`) and AC paragraph codes outright. Either we relax the constraint (loses validation power for handbooks) or per-corpus reformatters squeeze codes into 3-level dotted form (lossy). The level enum (`chapter|section|subsection`) doesn't fit `part|subpart|section|paragraph` either.
+```text
+reference_id, parent_id, ordinal, level, code, title, content_md, content_hash,
+faa_page_start, faa_page_end, has_figures, has_tables, ...
+```
 
-**Option B -- per-corpus tables and a polymorphic readability probe.**
+That's a **generic content-tree row**. Every corpus needs exactly this shape: a reference, a parent, an ordinal, a level label, a citation code, a title, optional markdown body, a content hash for idempotent re-seed, source page references. The substrate is correct; only the name and a few CHECK constraints are wrong.
 
-- Add `aim_section`, `cfr_section`, `ac_section`, `acs_element` tables. Generalize `getReadableReferenceIds` to UNION across them.
-- Pros: each corpus's structure is honestly modeled. Citation resolvers can lean on real columns.
-- Cons: every new corpus is N tables + a `getReadableReferenceIds` change + a Drizzle schema migration. Adds an N-way coupling between library page and storage shape. Drift risk grows linearly with corpora.
+### The fix: rename + relax + generalize
 
-**Option C -- corpus-agnostic visibility table (recommended).**
+One substrate WP, then §6's sequence runs on top of it nearly unchanged.
 
-- Add `study.library_entry` (or similar): `(reference_id, locator, kind, title, parent_locator, ordinal, content_hash, ...)`. Each corpus's seed populates it from its manifest. The library probe becomes `EXISTS library_entry WHERE reference_id = ?`.
-- Per-corpus content tables (`handbook_section`, future `aim_section`, etc.) stay as they are for content/resolver concerns; `library_entry` is a thin "is this thing browseable" projection.
-- Pros: library page decoupled from corpus-specific shape. Adding a corpus = one seed + N rows in `library_entry`. No schema change after the initial table.
-- Cons: introduces a small projection layer that has to stay in sync with the underlying content. Mitigated by populating it in the same transaction as the content, and by `content_hash` idempotence (same pattern `handbook_section` already uses).
+1. **Rename tables**:
+    - `handbook_section` -> `reference_section`
+    - `handbook_figure` -> `reference_figure`
+    - `handbook_section_errata` -> `reference_section_errata`
+    - Constants module: `HANDBOOK_SECTION_*` -> `REFERENCE_SECTION_*`. Kind enum stays `REFERENCE_KINDS` (already correct).
 
-**Recommendation: Option C.** It is the only one of the three that doesn't make adding a new corpus harder over time. The work to introduce it is bounded (one new table + one migration + a small refactor of the loader probe + populate it from the existing handbook seed), and it lets us defer per-corpus content tables until we actually need in-app reading for a given corpus.
+2. **Drop the handbook-shaped DB CHECK constraints**:
+    - Remove `level IN ('chapter','section','subsection')`.
+    - Remove the `code ~ '^[0-9]+(\\.[0-9]+){0,2}$'` regex.
+    - Add `depth int NOT NULL` (0 = top-level child of the reference, ++ per nesting). Depth is positional; it does **not** map 1:1 to `level` semantically (CFR is asymmetric -- depth 1 inside Part 91 is a Subpart, depth 1 inside Part 1 is a Section).
+    - Validation moves to ingest-time Zod per kind. The DB is no longer the last line of defense for shape; it doesn't know how to be, since shape varies per kind.
 
-A short follow-up consideration: Option C can be staged. Phase 1 of the implementation WP populates `library_entry` for handbooks only (zero behavior change, just refactors the probe). Phase 2 onward adds AIM, CFR, etc., each as small follow-on PRs.
+3. **Add per-kind hierarchy declaration on `reference`**:
+    - New column: `section_schema jsonb`. Shape: `{ levels: string[], strict_sequence?: boolean }`.
+    - `levels` is the **set** of legal `level` values for sections under this reference, not a fixed sequence. Validators check `every section.level IN reference.section_schema.levels`.
+    - `strict_sequence: true` (handbooks) additionally enforces "at depth N, level must be levels[N]." Off by default. CFR/AIM use the loose form because their hierarchies are asymmetric.
 
-> **Ratify (1.A):** Pick Option **A**, **B**, or **C**. Default recommendation = **C**.
-> **Ratify (1.B):** Confirm the staged rollout (handbooks-first, then per-corpus) over a big-bang seed of every corpus at once.
+4. **Add `metadata jsonb` on both tables**:
+    - `reference.metadata` -- per-document extras (CFR title number, NTSB docket, AC cancels-list at the document level).
+    - `reference_section.metadata` -- per-section extras (CFR effective date, authority note, cross-refs; AC paragraph cancellations). Existing handbook-specific columns like `faa_page_start/end` stay as columns since they already exist; new corpus extras land in `metadata`.
+    - Both validated by per-kind Zod schemas at ingest, seed, and module load. **No DB-level shape constraint on the jsonb.**
+    - For most corpora one of the two will be empty. Empty jsonb is free; cramming per-section data into the document row is awful.
+
+5. **Rewrite the readability probe**:
+    - New `getReadableReferenceIds()`: `EXISTS reference_section WHERE reference_id = ? AND content_md IS NOT NULL AND content_md <> ''`.
+    - Delete the `level <> 'chapter'` magic. The probe answers "is there body content to render," without naming any level.
+
+6. **Generalize the seeder**:
+    - `seed-handbooks.ts` becomes `seed-references-from-manifest.ts` (or keeps the handbooks name for one cycle and gains a corpus parameter -- low-stakes).
+    - Walks every `*/manifest.json` under `handbooks/`, `aim/`, `regulations/`, `ac/`, `acs/`. Per-corpus quirks live in tiny adapter modules (one per corpus), not in the seed core.
+
+7. **Move external-URL formatting onto resolvers**:
+    - Retire the `kind` switch in `externalUrlForReference()` at `libs/constants/src/study.ts:1496`.
+    - Each `CorpusResolver` already has a `formatCitation()` slot at `libs/sources/src/registry/corpus-resolver.ts:38`. Add `externalUrlFor(reference)` to the same protocol. Consolidates per-kind URL knowledge in one place per corpus.
+
+What this is **not**:
+
+- Not a new `library_entry` projection table.
+- Not per-corpus content tables.
+- Not a polymorphic schema with discriminator routing.
+- Not a deferred "we'll generalize later" comment.
+
+### Scope
+
+Pre-launch, no production data, single-developer environment. The schema file is the source of truth; we squash and re-seed rather than migrate. That removes the usual rename-migration choreography and turns this into a straight-edit substrate change.
+
+- Rename touches ~10 callers (per the grep audit in [review.md](review.md)).
+- Schema edits are direct: rename three tables and the constants module, drop the two handbook-shaped CHECK constraints, add `section_schema` + `metadata` jsonb on `reference`, add `metadata` jsonb + `depth int` on `reference_section`. One commit.
+- Probe rewrite is ~5 lines.
+- Seeder generalization is the only real engineering, bounded by manifest count (5 corpora today).
+- URL switch retirement is mechanical.
+
+### Schema after the substrate WP
+
+#### `reference` (one row per document)
+
+| Column                 | Type        | Notes                                                                         |
+| ---------------------- | ----------- | ----------------------------------------------------------------------------- |
+| id                     | text PK     | `ref_ULID`                                                                    |
+| kind                   | text        | TS const-array union; Zod-validated at ingest. DB CHECK can stay or go.       |
+| document_slug          | text        | `phak`, `14cfr91`, `ac-91-79b`, `aim-2026-04`                                 |
+| edition                | text        | `FAA-H-8083-25C`, `2026-04-22`, `2024-letter-mangiamele`                      |
+| title                  | text        | Display title                                                                 |
+| publisher              | text        | `FAA`, `NTSB`, `AOPA`, ... display metadata only                              |
+| subjects               | text[]      | Aviation topics (existing)                                                    |
+| section_schema         | jsonb       | `{ levels: string[], strict_sequence?: boolean }`. Per-kind level vocabulary. |
+| superseded_by_id       | text FK     | Self-ref for edition chains (existing)                                        |
+| metadata               | jsonb       | Per-kind-typed extras. Empty for kinds that don't need them.                  |
+| seed_origin            | text        | Existing                                                                      |
+| created_at, updated_at | timestamptz | Existing                                                                      |
+
+#### `reference_section` (hierarchical content)
+
+| Column                       | Type        | Notes                                                                     |
+| ---------------------------- | ----------- | ------------------------------------------------------------------------- |
+| id                           | text PK     | `refsec_ULID`                                                             |
+| reference_id                 | text FK     | -> `reference.id` ON DELETE CASCADE                                       |
+| parent_id                    | text FK     | -> `reference_section.id` (null for top-level)                            |
+| ordinal                      | int         | Position among siblings                                                   |
+| depth                        | int         | 0 for top-level, ++ per nesting. Positional, not semantic.                |
+| level                        | text        | This row's level label. Validated at ingest. **No DB CHECK.**             |
+| code                         | text        | Citation locator. Validated at ingest by per-kind regex. **No DB regex.** |
+| title                        | text        | Section heading                                                           |
+| content_md                   | text NULL   | Markdown body. NULL/empty for pure container rows.                        |
+| content_hash                 | text        | For idempotent re-seeding (existing pattern)                              |
+| faa_page_start, faa_page_end | int NULL    | Existing handbook-specific columns; kept since they're already there.     |
+| has_figures, has_tables      | bool        | Existing                                                                  |
+| metadata                     | jsonb       | Per-kind-typed per-section extras. Empty for kinds that don't need them.  |
+| created_at, updated_at       | timestamptz | Existing                                                                  |
+
+`level` examples: `chapter`, `section`, `subsection` (handbook); `subpart`, `section`, `paragraph`, `subparagraph`, `clause` (CFR); `chapter`, `section`, `paragraph` (AIM); `task`, `element` (ACS).
+
+`code` examples: `5-2-1` (AIM), `91.103(b)(1)(i)` (CFR), `1.1.2` (handbook subsection).
+
+Indexes:
+
+- `(reference_id, parent_id, ordinal)` -- TOC walk.
+- `(reference_id) WHERE content_md IS NOT NULL` -- partial index for the readability probe.
+- `(reference_id, code)` -- citation resolution (`14 CFR 91.103` -> section row).
+
+`reference_figure` and `reference_section_errata` are pure renames, FKs unchanged except for the parent rename.
+
+### Symmetric vs asymmetric hierarchies
+
+This drove the `section_schema` design and is worth being explicit about:
+
+- **Handbook** -- symmetric: depth 0 = chapter, depth 1 = section, depth 2 = subsection. Always. -> `section_schema = { levels: ['chapter','section','subsection'], strict_sequence: true }`.
+- **CFR Part** -- asymmetric: some Parts have Subparts, some are flat. -> `section_schema = { levels: ['subpart','section','paragraph','subparagraph','clause'] }`. No `strict_sequence`.
+- **AIM** -- asymmetric: PCG glossary entries are flat; chapter/section/paragraph trees go deeper. -> `section_schema = { levels: ['chapter','section','paragraph'] }`.
+- **Chief Counsel letter** -- flat: -> `section_schema = { levels: [] }` and either zero `reference_section` rows (use `reference.metadata` to hold the body) or one row carrying the letter body. Resolver decides.
+
+The renderer asks both questions: `reference.kind` (which dispatcher) and `reference_section.level` (which slot within that dispatcher). Substrate stays uniform; presentation per kind is opinionated.
+
+### Styling story
+
+Two layers, composed:
+
+1. **Generic CSS by `level`**: `.ref-section[data-level="chapter"]`, `.ref-section[data-level="paragraph"]`, etc. Handles ~80% of cases across all corpora.
+2. **Per-kind renderer override**: a dispatcher routes on `reference.kind` (`<HandbookSectionRenderer>`, `<CfrSectionRenderer>`, `<AimSectionRenderer>`). Each applies its corpus-specific stylesheet (CFR's hanging-paragraph format + authority-note pill + cross-ref chips; handbook's plainer rendering) and reads its `metadata` jsonb through a Zod schema.
+
+Strongly typed at the kind boundary, generic at the section level.
+
+### Fail-fast gates
+
+Bad metadata cannot accumulate because every write path validates:
+
+1. **Ingest time.** Corpus ingest builds `reference` + `reference_section[]`, validates the whole tree against the kind's Zod schema (level membership, code regex, metadata shape). Aborts on first violation. Nothing reaches the DB.
+2. **Seed time.** `seed-references-from-manifest.ts` re-validates as it reads `manifest.json`. Catches drift between an old manifest and a newer schema.
+3. **Module load (build / startup).** Every corpus resolver self-checks its own `section_schema` is well-formed and Zod schemas parse. App fails to boot if any resolver is broken; no silent degradation.
+4. **Render time (dev only).** Assert metadata matches schema. Production strips this for perf; dev catches drift introduced by hand-editing rows or partial migrations.
+
+Three of the four gates are at write time. The DB never trusts what it's storing -- per-kind validators do.
+
+### Why not extend the handbook seeder, or add per-corpus tables?
+
+Two earlier ideas considered and rejected; the rejection logic is still worth recording.
+
+**Extend `seed-handbooks.ts` to walk every corpus** would pollute a handbook-shaped table with non-handbook rows. The `code` regex (`^[0-9]+(\.[0-9]+){0,2}$`) rejects CFR-style codes (`91.103(b)(1)(i)`) and AC paragraph codes outright; the `level` enum (`chapter|section|subsection`) doesn't fit `subpart|section|paragraph`. Either we relax constraints (giving up validation power) or we squeeze codes into 3-level dotted form (lossy). The substrate rename does the relaxation honestly, with per-kind validation moved to ingest-time Zod -- which is where it belongs.
+
+**Add per-corpus tables** (`aim_section`, `cfr_section`, `ac_section`, `acs_element`) and UNION across them in the readability probe. Every new corpus then needs a table + a probe change + a schema migration. Linear coupling between library-page logic and storage shape; drift risk grows with corpus count. The substrate rename gives us one table that fits every corpus because the only thing that varies is per-kind metadata, which lives in jsonb.
+
+### Alternative considered: a `library_entry` projection table
+
+v1 of this spec recommended adding `study.library_entry` -- a thin projection of "which references have browseable content," populated by every corpus seed alongside whatever per-corpus content tables eventually appear. The readability probe would become `EXISTS library_entry`.
+
+[review.md](review.md) flagged three problems:
+
+1. **It accepts that future corpora will get their own content tables** (v1's wording: "Per-corpus content tables stay as they are"). That's the slow road back to per-corpus tables. We end up with N content tables plus a projection layer -- the worst of both.
+2. **The projection has to stay in sync with the real content.** Every corpus seed has to remember to write to two places. That's the kind of small sync layer that drifts six months later when someone adds a backfill script and forgets the projection.
+3. **It ratifies the lie that handbooks are special.** `handbook_section` keeps its name and its handbook-shaped CHECK constraints. Every future reader of the schema asks the same question we're asking now: "wait, why is there a handbook table?"
+
+The substrate rename closes the gap by fixing the cause once. The `library_entry` projection closes the gap by routing around the cause and committing to maintain the workaround forever.
+
+> **Ratify (1.A):** Pick the **substrate rename** (recommended) or the **`library_entry` projection** (v1's approach, kept as the documented alternative). Default = **substrate rename**.
+> **Ratify (1.B):** Confirm the staged rollout: substrate WP lands first (zero behavior change beyond the rename + handbook re-seed); each §6 corpus WP follows opportunistically. The staging is identical regardless of which 1.A wins.
 
 ## 2. Corpus catalog
 
 Every reference cohort, surveyed against the actual filesystem + the YAML registry today (2026-04-30, post `5a972b3a`). "Library-visible?" = `isReadable` would be `true` for at least one row in the cohort.
 
-| Corpus                     | Cache | Inline derivs                              | `study.reference` rows                          | `handbook_section` seeded? | Library-visible? | Action                                                       |
-| -------------------------- | ----- | ------------------------------------------ | ----------------------------------------------- | -------------------------- | ---------------- | ------------------------------------------------------------ |
-| PHAK FAA-H-8083-25C        | yes   | yes (manifest + 850 sections)              | yes (seed-handbooks)                            | yes (850)                  | yes              | none                                                         |
-| AFH FAA-H-8083-3C          | yes   | yes (manifest + 531 sections)              | yes (seed-handbooks)                            | yes (531)                  | yes              | gap 6 cleanup (AFH errata duplicate-applied; survey §6)      |
-| AVWX FAA-H-8083-28B        | yes   | yes (manifest + 480 sections)              | yes (seed-handbooks)                            | yes (480)                  | yes              | none                                                         |
-| Risk Mgmt FAA-H-8083-2A    | yes   | yes (manifest + whole-doc, post #384)      | yes (seed-handbooks; needs verification)        | depends on PR #384 seed    | depends          | confirm seed actually ran for the 6 extras post #384         |
-| Aviation Instructor FAA-H-8083-9 | yes | yes (whole-doc post #384)                  | yes (post-#384 seed)                            | depends                    | depends          | same as above                                                |
-| IFH FAA-H-8083-15B         | yes   | yes (whole-doc post #384)                  | yes (post-#384 seed)                            | depends                    | depends          | same as above                                                |
-| IPH FAA-H-8083-16B         | yes   | yes (whole-doc post #384)                  | yes (post-#384 seed)                            | depends                    | depends          | same as above                                                |
-| AMT-G FAA-H-8083-30B       | yes   | yes (whole-doc post #384)                  | yes (post-#384 seed)                            | depends                    | depends          | same as above; airplane-track only? user to confirm scope    |
-| AMT-P FAA-H-8083-32B       | yes   | yes (whole-doc post #384)                  | yes (post-#384 seed)                            | depends                    | depends          | same as above                                                |
-| AIH (handbooks-noningested) | no   | no                                         | yes (YAML row only)                             | no                         | NO               | ingest via handbooks-extras pipeline OR drop                 |
-| AIM 2026-04                | yes   | yes (manifest + 744 entries)               | yes (`aim` slug from aim-pcg.yaml)              | NO                         | NO               | seed via Option C / extend pipeline                          |
-| PCG (Pilot/Controller Gloss) | bundled with AIM | yes (in AIM manifest)              | yes (`pcg` slug)                                | NO                         | NO               | same as AIM                                                  |
-| CFR Title 14 (2026-04-22)  | yes   | manifest + 7,218 entries (.md gitignored)  | yes (11 part-level YAML rows: 14, 23, 61, 68, 71, 73, 91, 135, 141, etc.) | NO  | NO  | seed via Option C; high-density UI question (§3)             |
-| CFR Title 49 (2026-04-24)  | yes   | manifest (parts 830 + 1552, post PR #382)  | yes (49cfr830, 49cfr1552 YAML rows)             | NO                         | NO               | seed via Option C                                            |
-| AC (12 cached / 17 YAML)   | 12    | manifest + 9 doc.md (3 ingestion gaps)     | yes (17 YAML rows)                              | NO                         | NO               | seed via Option C; resolve gaps 3+4 from broad survey        |
-| ACS (5 cached / 7 YAML)    | 5     | manifest + 5 element trees (1 wired, 4 gap 2) | yes (7 YAML rows)                            | NO                         | NO               | resolve gap 2 from broad survey, then seed via Option C      |
-| NTSB (umbrella)            | no    | no                                         | yes (1 row, umbrella only)                      | no                         | NO               | umbrella card; per-report ingestion is a separate WP (§4.A)  |
-| POH-AFM (umbrella)         | no    | no                                         | yes (1 row)                                     | no                         | NO               | umbrella card; per-aircraft is out of scope                  |
-| Other publications (8)     | no    | no                                         | yes (8 YAML rows, e.g., AOPA ASI, Order 8260-3) | no                         | NO               | each needs its own decision: ingest, link-only, or drop      |
+| Corpus                           | Cache            | Inline derivs                                 | `study.reference` rows                          | `handbook_section` seeded? | Library-visible? | Action                                                      |
+| -------------------------------- | ---------------- | --------------------------------------------- | ----------------------------------------------- | -------------------------- | ---------------- | ----------------------------------------------------------- |
+| PHAK FAA-H-8083-25C              | yes              | yes (manifest + 850 sections)                 | yes (seed-handbooks)                            | yes (850)                  | yes              | none                                                        |
+| AFH FAA-H-8083-3C                | yes              | yes (manifest + 531 sections)                 | yes (seed-handbooks)                            | yes (531)                  | yes              | gap 6 cleanup (AFH errata duplicate-applied; survey §6)     |
+| AVWX FAA-H-8083-28B              | yes              | yes (manifest + 480 sections)                 | yes (seed-handbooks)                            | yes (480)                  | yes              | none                                                        |
+| Risk Mgmt FAA-H-8083-2A          | yes              | yes (manifest + whole-doc, post #384)         | yes (seed-handbooks; needs verification)        | depends on PR #384 seed    | depends          | confirm seed actually ran for the 6 extras post #384        |
+| Aviation Instructor FAA-H-8083-9 | yes              | yes (whole-doc post #384)                     | yes (post-#384 seed)                            | depends                    | depends          | same as above                                               |
+| IFH FAA-H-8083-15B               | yes              | yes (whole-doc post #384)                     | yes (post-#384 seed)                            | depends                    | depends          | same as above                                               |
+| IPH FAA-H-8083-16B               | yes              | yes (whole-doc post #384)                     | yes (post-#384 seed)                            | depends                    | depends          | same as above                                               |
+| AMT-G FAA-H-8083-30B             | yes              | yes (whole-doc post #384)                     | yes (post-#384 seed)                            | depends                    | depends          | same as above; airplane-track only? user to confirm scope   |
+| AMT-P FAA-H-8083-32B             | yes              | yes (whole-doc post #384)                     | yes (post-#384 seed)                            | depends                    | depends          | same as above                                               |
+| AIH (handbooks-noningested)      | no               | no                                            | yes (YAML row only)                             | no                         | NO               | ingest via handbooks-extras pipeline OR drop                |
+| AIM 2026-04                      | yes              | yes (manifest + 744 entries)                  | yes (`aim` slug from aim-pcg.yaml)              | NO                         | NO               | seed via generalized seeder                                 |
+| PCG (Pilot/Controller Gloss)     | bundled with AIM | yes (in AIM manifest)                         | yes (`pcg` slug)                                | NO                         | NO               | same as AIM                                                 |
+| CFR Title 14 (2026-04-22)        | yes              | manifest + 7,218 entries (.md gitignored)     | yes (11 part-level YAML rows)                   | NO                         | NO               | seed via generalized seeder; UI question §3                 |
+| CFR Title 49 (2026-04-24)        | yes              | manifest (parts 830 + 1552, post PR #382)     | yes (49cfr830, 49cfr1552 YAML rows)             | NO                         | NO               | seed via generalized seeder                                 |
+| AC (12 cached / 17 YAML)         | 12               | manifest + 9 doc.md (3 ingestion gaps)        | yes (17 YAML rows)                              | NO                         | NO               | seed via generalized seeder; gaps 3+4 first                 |
+| ACS (5 cached / 7 YAML)          | 5                | manifest + 5 element trees (1 wired, 4 gap 2) | yes (7 YAML rows)                               | NO                         | NO               | resolve gap 2 first, then seed                              |
+| NTSB (umbrella)                  | no               | no                                            | yes (1 row, umbrella only)                      | no                         | NO               | umbrella card; per-report ingestion is a separate WP (§4.A) |
+| POH-AFM (umbrella)               | no               | no                                            | yes (1 row)                                     | no                         | NO               | umbrella card; per-aircraft is out of scope                 |
+| Other publications (8)           | no               | no                                            | yes (8 YAML rows, e.g., AOPA ASI, Order 8260-3) | no                         | NO               | each needs its own decision: ingest, link-only, or drop     |
 
 Verification trail:
 
@@ -214,22 +363,31 @@ Not promised to anyone, surfacing as an explicit menu so the user picks rather t
 
 Discrete WPs that ship independently. Each is small enough to ship in a session or two; each leaves the system better than it found it.
 
-1. **WP-V (this WP, after ratification).** Pick option A/B/C for the visibility gap. Author the implementation WP (`docs/work-packages/library-visibility-gap/`).
-2. **WP-VS (Visibility Step 1).** Refactor: introduce `study.library_entry` (or chosen mechanism), populate it from `seed-handbooks.ts`, switch `getReadableReferenceIds` to read it. Zero behavior change, but unlocks every following WP.
-3. **WP-EX-Verify.** Confirm post-#384 handbooks-extras seeding actually produces `handbook_section` rows for the 6 extras. Small PR if not. (May already work; needs a 5-minute check.)
-4. **WP-MTN.** Tips on Mountain Flying pamphlet -- single PDF, AC-style pipeline. Smallest possible win.
-5. **WP-AIM.** AIM seed: walk the existing `aim/<edition>/manifest.json`, populate `library_entry` (or chosen mechanism). 744 entries unlocked.
-6. **WP-CFR-V.** CFR-14 + CFR-49 seed: same idea, plus the §3 UI question (part-level cards). 7,218 + ~30 entries unlocked.
-7. **WP-AC-V.** AC catalog visibility: seed the 9 already-extracted ACs into `library_entry`. (Resolving gaps 3+4 from the broad survey is a separate prior fix; deferred per survey recommendation.)
-8. **WP-ACS-V.** Same for ACS. Depends on resolving gap 2 (ACS edition slug mapping) from the broad survey first.
-9. **WP-CC.** Chief Counsel interpretations -- new corpus, ADR 019 already provisions the URI. Highest pedagogical leverage of the §4 candidates.
-10. **WP-NTSB-ALJ.** NTSB ALJ rulings -- new corpus.
-11. **WP-SAFO + WP-INFO.** SAFOs and InFOs -- combined or sequential; pipelines are identical.
-12. **WP-AC-FULL.** Expand the AC config from 12 -> ~50 curated-relevance ACs. Content-only WP; pipeline already exists.
-13. **WP-O8900-V5.** FAA Order 8900.1 Volume 5 carve-out (Airman Certification). Defer the rest of 8900.1 indefinitely.
-14. **WP-SAFETY-BRIEF.** Safety Briefing magazine archive (if §5 ratified yes).
+1. **WP-SUB (substrate).** This WP after ratification. Author + ship the substrate rename described in §1: rename `handbook_section` -> `reference_section` (+ figure, errata), drop the handbook-shaped CHECK constraints, add `section_schema` + `metadata` jsonb + `depth`, rewrite `getReadableReferenceIds()` against `content_md`, generalize the seeder. Re-seed handbooks. Zero behavior change beyond the rename; unlocks every following WP. (Replaces v1's WP-V + WP-VS.)
+2. **WP-EX-Verify.** Confirm the generalized seeder produces `reference_section` rows for the 6 handbooks-extras (risk-mgmt, instructor, IFH, IPH, AMT-G, AMT-P). Small PR if anything is off. (May already work for free under WP-SUB; needs a 5-minute check.)
+3. **WP-MTN.** Tips on Mountain Flying pamphlet -- single PDF, AC-style pipeline. Smallest possible win.
+4. **WP-AIM.** AIM seed: walk `aim/<edition>/manifest.json`, populate `reference_section` via the generalized seeder. 744 entries unlocked.
+5. **WP-CFR-V.** CFR-14 + CFR-49 seed: same idea, plus the §3 UI question (part-level cards). 7,218 + ~30 entries unlocked.
+6. **WP-AC-V.** AC catalog visibility: seed the 9 already-extracted ACs. (Resolving gaps 3+4 from the broad survey is a separate prior fix; deferred per survey recommendation.)
+7. **WP-ACS-V.** Same for ACS. Depends on resolving gap 2 (ACS edition slug mapping) from the broad survey first.
+8. **WP-CC.** Chief Counsel interpretations -- new corpus, ADR 019 already provisions the URI. Highest pedagogical leverage of the §4 candidates.
+9. **WP-NTSB-ALJ.** NTSB ALJ rulings -- new corpus.
+10. **WP-SAFO + WP-INFO.** SAFOs and InFOs -- combined or sequential; pipelines are identical.
+11. **WP-AC-FULL.** Expand the AC config from 12 -> ~50 curated-relevance ACs. Content-only WP; pipeline already exists.
+12. **WP-O8900-V5.** FAA Order 8900.1 Volume 5 carve-out (Airman Certification). Defer the rest of 8900.1 indefinitely.
+13. **WP-SAFETY-BRIEF.** Safety Briefing magazine archive (if §5 ratified yes).
 
-Stop conditions: any WP can be deferred or dropped at any point. The hard order is 1 -> 2 (foundation), then 4-8 (existing manifests, easy wins), then 9-14 (new corpora, more work).
+Stop conditions: any WP can be deferred or dropped at any point. The hard order is 1 (foundation), then 3-7 (existing manifests, easy wins), then 8-13 (new corpora, more work). WP-EX-Verify is gated on WP-SUB landing but otherwise blocks nothing.
+
+### Smells worth fixing along the way
+
+These don't block the substrate WP, but they're the same flavor of problem and shouldn't be lost:
+
+1. **`course/references/handbooks-noningested.yaml` exists only because the seed pipeline was handbook-only.** Once WP-SUB ships and WP-EX-Verify confirms the 6 extras seed cleanly, this file's job is done. Delete it; delete the `migrate-references-to-structured.ts` bridge with it. No other corpus needs the YAML-as-fallback pattern.
+2. **17 corpus modules each have identical 3-line `index.ts` registration boilerplate.** A registry that auto-discovers corpora from a manifest would erase ~50 lines and make adding a corpus a single-file change. Low priority; nice cleanup.
+3. **Phase-numbered reviewer IDs (`PHASE_3_REVIEWER_ID` ... `PHASE_9_REVIEWER_ID`)** encode ingest order rather than identity. Replace with stable per-corpus reviewer IDs derived from corpus slug. Trivial.
+4. **`externalUrlForReference()` switch in constants** (`libs/constants/src/study.ts:1496`) duplicates what the resolver registry is for. Folded into WP-SUB step 7.
+5. **Library page conflates "ingested + readable" with "umbrella + link-only."** Open Question #1 below. Worth its own small UX WP after the substrate is honest -- a card-state indicator (`Read · Browse · External link only`).
 
 > **Ratify (6):** Confirm the sequence, or reorder. Default is as listed.
 
@@ -237,9 +395,9 @@ Stop conditions: any WP can be deferred or dropped at any point. The hard order 
 
 These don't block the WP but should be captured so they don't fall through the cracks:
 
-- Should the library page distinguish "ingested + readable in-app" from "umbrella (link-only)"? Today it shows both as cards; only the "Read in-app" affordance differs. Risk: users tap the umbrella POH card expecting content, get bounced to the FAA. Maybe a card-state indicator (`Read · Browse · External link only`).
+- Should the library page distinguish "ingested + readable in-app" from "umbrella (link-only)"? Today it shows both as cards; only the "Read in-app" affordance differs. Risk: users tap the umbrella POH card expecting content, get bounced to the FAA. Maybe a card-state indicator (`Read · Browse · External link only`). Picked up as a smell #5 above.
 - Where do per-aircraft POHs land? Currently one umbrella row. The user has not asked for this, but it's the elephant in the corpus catalog.
-- Once `library_entry` exists, the `/library` page can reasonably support search-across-corpora. Worth its own WP later.
+- Once `reference_section` is the substrate, the `/library` page can reasonably support search-across-corpora. Worth its own WP later.
 
 ## Verification trail
 
