@@ -19,8 +19,8 @@
 
 import {
 	HANDBOOK_ERRATA_PATCH_KIND_VALUES,
-	REFERENCE_SECTION_ERRATA_ID_PREFIX,
 	type HandbookErrataPatchKind,
+	REFERENCE_SECTION_ERRATA_ID_PREFIX,
 } from '@ab/constants';
 import { db as defaultDb } from '@ab/db/connection';
 import { createId } from '@ab/utils';

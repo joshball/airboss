@@ -11,6 +11,12 @@ export interface SeedContext {
 	readonly repoRoot: string;
 	/** Optional dev-seed marker; production runs leave this null. */
 	readonly seedOrigin: string | null;
+	/**
+	 * Optional progress sink the adapter calls once per edition with a one-line
+	 * summary. The seed script wires this to `console.log`; callers in tests
+	 * can inject a no-op or capture the messages.
+	 */
+	readonly onProgress?: (line: string) => void;
 }
 
 export interface SeedSummary {

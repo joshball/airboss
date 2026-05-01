@@ -14,7 +14,7 @@
  * stays out of the type-only barrel. The shape mirrors the spec and the
  * Drizzle schema definitions in `schema.ts`. Citation entries inside
  * credential `regulatory_basis` and syllabus_node `citations` reuse the
- * `structuredCitationSchema` from `handbook-validation.ts` so there is
+ * `structuredCitationSchema` from `manifest-validation.ts` so there is
  * one citation primitive across the BC.
  *
  * See `docs/work-packages/cert-syllabus-and-goal-composer/spec.md` and
@@ -50,7 +50,7 @@ import {
 	type SyllabusStatus,
 } from '@ab/constants';
 import { z } from 'zod';
-import { structuredCitationSchema } from './handbook-validation';
+import { structuredCitationSchema } from './manifest-validation';
 
 /** Slug shape mirrored from the DB CHECK on `credential.slug` and `syllabus.slug`. */
 const SLUG_REGEX = /^[a-z0-9][a-z0-9-]{1,62}[a-z0-9]$/;

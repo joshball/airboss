@@ -12,8 +12,8 @@
 import { existsSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
-import { replaceFiguresForSection, type SectionSchema, upsertReference, upsertReferenceSection } from '../references';
 import type { SectionTreeManifest } from '../manifest-validation';
+import { replaceFiguresForSection, type SectionSchema, upsertReference, upsertReferenceSection } from '../references';
 import type { SeedContext, SeedSummary } from './types';
 
 /** Depth lookup keyed by handbook level. */
@@ -96,7 +96,7 @@ export async function seedSectionTreeManifest(
 	}
 
 	summary.editionsProcessed += 1;
-	console.log(
+	context.onProgress?.(
 		`  ${manifest.document_slug} ${manifest.edition}: ${sortedSections.length} sections, ${manifest.figures.length} figures, ${manifest.warnings.length} warnings`,
 	);
 	return ref.id;

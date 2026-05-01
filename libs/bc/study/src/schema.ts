@@ -51,8 +51,6 @@ import {
 	HANDBOOK_NOTES_MAX_LENGTH,
 	HANDBOOK_READ_STATUS_VALUES,
 	HANDBOOK_READ_STATUSES,
-	HANDBOOK_SECTION_LEVEL_VALUES,
-	HANDBOOK_SECTION_LEVELS,
 	KNOWLEDGE_EDGE_TYPE_VALUES,
 	MASTERY_STABILITY_DAYS,
 	MAX_SESSION_LENGTH,
@@ -62,7 +60,6 @@ import {
 	PHASE_OF_FLIGHT_VALUES,
 	PLAN_STATUS_VALUES,
 	PLAN_STATUSES,
-	REFERENCE_KIND_VALUES,
 	REVIEW_SESSION_STATUS_VALUES,
 	REVIEW_SESSION_STATUSES,
 	SAVED_DECK_LABEL_MAX_LENGTH,
@@ -1577,10 +1574,7 @@ export const referenceSectionErrata = studySchema.table(
 			sql.raw(`length(trim("replacement_text")) > 0`),
 		),
 		// Source URL must be HTTPS.
-		sourceUrlHttpsCheck: check(
-			'reference_section_errata_source_url_check',
-			sql.raw(`"source_url" LIKE 'https://%'`),
-		),
+		sourceUrlHttpsCheck: check('reference_section_errata_source_url_check', sql.raw(`"source_url" LIKE 'https://%'`)),
 	}),
 );
 
@@ -1630,9 +1624,7 @@ export const referenceSectionReadState = studySchema.table(
 			t.status,
 		),
 		// Cross-user analytics (later phases): "how many users have read this section?"
-		referenceSectionReadStateSectionIdx: index('reference_section_read_state_section_idx').on(
-			t.referenceSectionId,
-		),
+		referenceSectionReadStateSectionIdx: index('reference_section_read_state_section_idx').on(t.referenceSectionId),
 		statusCheck: check(
 			'reference_section_read_state_status_check',
 			sql.raw(`"status" IN (${inList(HANDBOOK_READ_STATUS_VALUES)})`),

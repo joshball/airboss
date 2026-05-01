@@ -82,7 +82,7 @@ export async function seedWholeDocManifest(
 	summary.sectionsTouched += 1;
 	if (changed) summary.sectionsChanged += 1;
 	summary.editionsProcessed += 1;
-	console.log(
+	context.onProgress?.(
 		`  ${manifest.document_slug} ${manifest.edition}: whole-doc (${manifest.page_count ?? '?'} pages, ${changed ? 'changed' : 'unchanged'})`,
 	);
 	return ref.id;

@@ -1,17 +1,17 @@
 import { requireAuth } from '@ab/auth';
 import {
 	getReferenceByDocument,
-	type HandbookSectionRow,
 	listHandbookChapters,
 	ReferenceNotFoundError,
 	type ReferenceRow,
+	type ReferenceSectionRow,
 } from '@ab/bc-study';
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
 export interface DocLensData {
 	reference: ReferenceRow;
-	chapters: HandbookSectionRow[];
+	chapters: ReferenceSectionRow[];
 }
 
 export const load: PageServerLoad = async (event) => {

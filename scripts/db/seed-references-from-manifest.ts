@@ -43,7 +43,7 @@ import { client } from '@ab/db/connection';
 // barrel (route handlers should never need them; only seed code does).
 import { attachSupersededByLatest } from '../../libs/bc/study/src/references';
 import { seedSectionTreeManifest } from '../../libs/bc/study/src/seeders/section-tree';
-import { type SeedContext, type SeedSummary, emptySummary } from '../../libs/bc/study/src/seeders/types';
+import { emptySummary, type SeedContext, type SeedSummary } from '../../libs/bc/study/src/seeders/types';
 import { seedWholeDocManifest } from '../../libs/bc/study/src/seeders/whole-doc';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -68,13 +68,12 @@ export interface SeedReferencesOptions {
 export type SeedReferencesSummary = SeedSummary;
 
 /** Walk every CORPUS_DIRS tree and upsert references + sections. */
-export async function seedReferencesFromManifest(
-	options: SeedReferencesOptions = {},
-): Promise<SeedReferencesSummary> {
+export async function seedReferencesFromManifest(options: SeedReferencesOptions = {}): Promise<SeedReferencesSummary> {
 	const summary = emptySummary();
 	const context: SeedContext = {
 		repoRoot: REPO_ROOT,
 		seedOrigin: options.seedOrigin ?? null,
+		onProgress: (line) => console.log(line),
 	};
 
 	for (const corpusDir of CORPUS_DIRS) {
@@ -110,11 +109,7 @@ export async function seedReferencesFromManifest(
 }
 
 /** Parse one manifest, dispatch on `kind`, return the upserted reference id. */
-async function dispatchManifest(
-	manifestPath: string,
-	context: SeedContext,
-	summary: SeedSummary,
-): Promise<string> {
+async function dispatchManifest(manifestPath: string, context: SeedContext, summary: SeedSummary): Promise<string> {
 	const raw = JSON.parse(await readFile(manifestPath, 'utf-8'));
 	const manifest: Manifest = manifestSchema.parse(raw);
 

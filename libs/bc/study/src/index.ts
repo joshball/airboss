@@ -164,77 +164,6 @@ export {
 	setPrimaryGoal,
 	updateGoal,
 } from './goals';
-export {
-	citationSchema,
-	type HandbookManifestFigure,
-	type HandbookManifestSection,
-	type HandbookManifestWarning,
-	type HandbookSectionFrontmatter,
-	handbookHeartbeatInputSchema,
-	handbookManifestFigureSchema,
-	handbookManifestSectionSchema,
-	handbookManifestWarningSchema,
-	handbookNotesInputSchema,
-	handbookReadStatusSchema,
-	handbookSectionFrontmatterSchema,
-	legacyCitationSchema,
-	type Manifest,
-	manifestSchema,
-	type SectionTreeManifest,
-	sectionTreeManifestSchema,
-	structuredCitationSchema,
-	type WholeDocManifest,
-	wholeDocManifestSchema,
-} from './manifest-validation';
-// Reference ingestion + reader (post-WP-SUB substrate; ADR 016 phase 0).
-export type {
-	CitingNodesQuery,
-	GetReferenceOptions,
-	HandbookProgressSummary,
-	HandbookSectionView,
-	ListReferencesOptions,
-} from './references';
-export {
-	getHandbookChapter,
-	getHandbookProgress,
-	getHandbookSection,
-	getNodesCitingSection,
-	getReadableReferenceIds,
-	getReadState,
-	getReferenceByDocument,
-	getReferenceById,
-	HandbookSectionNotFoundError,
-	HandbookValidationError,
-	listAllSectionsForReference,
-	listChapterSections,
-	listFiguresForSection,
-	listHandbookChapters,
-	listReferences,
-	markAsReread,
-	ReferenceNotFoundError,
-	recordHeartbeat,
-	resolveCitationUrl,
-	setComprehended,
-	setNotes,
-	setReadStatus,
-} from './references';
-// Reference-section errata (apply-errata-and-afh-mosaic WP).
-export type {
-	ErrataDisplay,
-	ErrataInsert,
-	ReferenceSectionErrataRow,
-} from './reference-errata';
-export {
-	countSectionsByErratumId,
-	deleteErrataByErratumId,
-	ErrataValidationError,
-	formatErrataForDisplay,
-	hasErrata,
-	insertErrataRows,
-	listErrataForSection,
-	newErrataId,
-	validateErrataInsert,
-} from './reference-errata';
 export type {
 	CertAndDomainMatrix,
 	CertProgress,
@@ -300,6 +229,28 @@ export {
 	getReferencesForCertWithCarryover,
 	listReferencesByTopic,
 } from './library-by-cert';
+export {
+	citationSchema,
+	type HandbookManifestFigure,
+	type HandbookManifestSection,
+	type HandbookManifestWarning,
+	type HandbookSectionFrontmatter,
+	handbookHeartbeatInputSchema,
+	handbookManifestFigureSchema,
+	handbookManifestSectionSchema,
+	handbookManifestWarningSchema,
+	handbookNotesInputSchema,
+	handbookReadStatusSchema,
+	handbookSectionFrontmatterSchema,
+	legacyCitationSchema,
+	type Manifest,
+	manifestSchema,
+	type SectionTreeManifest,
+	sectionTreeManifestSchema,
+	structuredCitationSchema,
+	type WholeDocManifest,
+	wholeDocManifestSchema,
+} from './manifest-validation';
 export type { GateState, LeafMasteryState, NodeEvidenceState } from './mastery';
 export {
 	aggregateLeafKindStates,
@@ -329,6 +280,55 @@ export {
 	removeSkipNode,
 	updatePlan,
 } from './plans';
+// Reference-section errata (apply-errata-and-afh-mosaic WP).
+export type {
+	ErrataDisplay,
+	ErrataInsert,
+	ReferenceSectionErrataRow,
+} from './reference-errata';
+export {
+	countSectionsByErratumId,
+	deleteErrataByErratumId,
+	ErrataValidationError,
+	formatErrataForDisplay,
+	hasErrata,
+	insertErrataRows,
+	listErrataForSection,
+	newErrataId,
+	validateErrataInsert,
+} from './reference-errata';
+// Reference ingestion + reader (post-WP-SUB substrate; ADR 016 phase 0).
+export type {
+	CitingNodesQuery,
+	GetReferenceOptions,
+	HandbookProgressSummary,
+	HandbookSectionView,
+	ListReferencesOptions,
+} from './references';
+export {
+	getHandbookChapter,
+	getHandbookProgress,
+	getHandbookSection,
+	getNodesCitingSection,
+	getReadableReferenceIds,
+	getReadState,
+	getReferenceByDocument,
+	getReferenceById,
+	HandbookSectionNotFoundError,
+	HandbookValidationError,
+	listAllSectionsForReference,
+	listChapterSections,
+	listFiguresForSection,
+	listHandbookChapters,
+	listReferences,
+	markAsReread,
+	ReferenceNotFoundError,
+	recordHeartbeat,
+	resolveCitationUrl,
+	setComprehended,
+	setNotes,
+	setReadStatus,
+} from './references';
 export type {
 	CardSessionRef,
 	ReviewSessionCard,

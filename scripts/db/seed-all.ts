@@ -67,8 +67,8 @@ import { type AbbySeedCounts, seedAbby } from './seed-abby';
 import { seedCardsForUser } from './seed-cards';
 import { seedCredentials } from './seed-credentials';
 import { decideSeedGuard } from './seed-guard';
-import { seedReferencesFromManifest } from './seed-references-from-manifest';
 import { seedReferences } from './seed-references';
+import { seedReferencesFromManifest } from './seed-references-from-manifest';
 import { seedSyllabi } from './seed-syllabi';
 
 type Phase =

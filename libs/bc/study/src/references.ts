@@ -58,14 +58,14 @@ import {
 	type NewReferenceFigureRow,
 	type NewReferenceRow,
 	type NewReferenceSectionRow,
-	reference,
 	type ReferenceFigureRow,
-	referenceFigure,
 	type ReferenceRow,
-	referenceSection,
 	type ReferenceSectionReadStateRow,
-	referenceSectionReadState,
 	type ReferenceSectionRow,
+	reference,
+	referenceFigure,
+	referenceSection,
+	referenceSectionReadState,
 } from './schema';
 
 type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;
@@ -470,7 +470,12 @@ export async function getReadState(
 	const rows = await db
 		.select()
 		.from(referenceSectionReadState)
-		.where(and(eq(referenceSectionReadState.userId, userId), eq(referenceSectionReadState.referenceSectionId, referenceSectionId)))
+		.where(
+			and(
+				eq(referenceSectionReadState.userId, userId),
+				eq(referenceSectionReadState.referenceSectionId, referenceSectionId),
+			),
+		)
 		.limit(1);
 	return rows[0] ?? null;
 }
@@ -552,12 +557,7 @@ export async function getReadableReferenceIds(
 	const rows = await db
 		.selectDistinct({ referenceId: referenceSection.referenceId })
 		.from(referenceSection)
-		.where(
-			and(
-				inArray(referenceSection.referenceId, [...referenceIds]),
-				sql`${referenceSection.contentMd} <> ''`,
-			),
-		);
+		.where(and(inArray(referenceSection.referenceId, [...referenceIds]), sql`${referenceSection.contentMd} <> ''`));
 	return new Set(rows.map((r) => r.referenceId));
 }
 
@@ -588,7 +588,9 @@ export async function setReadStatus(
 		openedCount: 0,
 		totalSecondsVisible: 0,
 		notesMd: '',
-	} satisfies Omit<ReferenceSectionReadStateRow, 'createdAt' | 'updatedAt' | 'seedOrigin'> & { seedOrigin?: string | null };
+	} satisfies Omit<ReferenceSectionReadStateRow, 'createdAt' | 'updatedAt' | 'seedOrigin'> & {
+		seedOrigin?: string | null;
+	};
 
 	const rows = await db
 		.insert(referenceSectionReadState)
@@ -673,7 +675,12 @@ export async function markAsReread(
 			comprehended: false,
 			updatedAt: new Date(),
 		})
-		.where(and(eq(referenceSectionReadState.userId, userId), eq(referenceSectionReadState.referenceSectionId, referenceSectionId)))
+		.where(
+			and(
+				eq(referenceSectionReadState.userId, userId),
+				eq(referenceSectionReadState.referenceSectionId, referenceSectionId),
+			),
+		)
 		.returning();
 	const row = rows[0];
 	if (!row) {
