@@ -86,23 +86,31 @@ One substrate WP, then §6's sequence runs on top of it nearly unchanged.
 3. **Add per-kind hierarchy declaration on `reference`**:
     - New column: `section_schema jsonb`. Shape: `{ levels: string[], strict_sequence?: boolean }`.
     - `levels` is the **set** of legal `level` values for sections under this reference, not a fixed sequence. Validators check `every section.level IN reference.section_schema.levels`.
-    - `strict_sequence: true` (handbooks) additionally enforces "at depth N, level must be levels[N]." Off by default. CFR/AIM use the loose form because their hierarchies are asymmetric.
+    - `strict_sequence: true` (sectioned handbooks) additionally enforces "at depth N, level must be levels[N]." Off by default. CFR/AIM use the loose form because their hierarchies are asymmetric.
+    - Whole-doc handbooks (post-#384 risk-mgmt, instructor, IFH, IPH, AMT-G, AMT-P) declare `{ levels: ['document'], strict_sequence: true }` -- one row per document at depth 0 with the body in `content_md`. No tree, no figures.
 
-4. **Add `metadata jsonb` on both tables**:
+4. **Two manifest shapes from day one** (the (2.B) finding promoted into substrate scope). The generalized seeder accepts both shapes natively, not as a special case bolted on after:
+    - **Section-tree manifest** (PHAK / AFH / AVWX): `kind: handbook`, `subjects: [...]`, `sections: [...]`, `figures: [...]`. Today's `handbookManifestSchema`. Produces N `reference_section` rows in a chapter/section/subsection tree.
+    - **Whole-doc manifest** (handbooks-extras post-#384): `kind: whole-doc`, no `subjects`, no `sections`, no `figures` array. Produces **one** `reference_section` row at depth 0, level `document`, with `content_md` holding the entire body.
+    - The Zod validator branches on the manifest's `kind` field (the manifest's own `kind`, not REFERENCE_KIND), not on the corpus directory. A corpus directory holds a mix -- `handbooks/` contains both shapes today (PHAK/AFH/AVWX section-tree + 6 whole-doc extras).
+    - **Acceptance criterion**: after WP-SUB merges, `bun run db seed` produces `reference_section` rows for all 9 handbooks (3 sectioned + 6 whole-doc). This absorbs WP-EX-Verify -- no separate WP.
+
+5. **Add `metadata jsonb` on both tables**:
     - `reference.metadata` -- per-document extras (CFR title number, NTSB docket, AC cancels-list at the document level).
     - `reference_section.metadata` -- per-section extras (CFR effective date, authority note, cross-refs; AC paragraph cancellations). Existing handbook-specific columns like `faa_page_start/end` stay as columns since they already exist; new corpus extras land in `metadata`.
     - Both validated by per-kind Zod schemas at ingest, seed, and module load. **No DB-level shape constraint on the jsonb.**
     - For most corpora one of the two will be empty. Empty jsonb is free; cramming per-section data into the document row is awful.
 
-5. **Rewrite the readability probe**:
+6. **Rewrite the readability probe**:
     - New `getReadableReferenceIds()`: `EXISTS reference_section WHERE reference_id = ? AND content_md IS NOT NULL AND content_md <> ''`.
     - Delete the `level <> 'chapter'` magic. The probe answers "is there body content to render," without naming any level.
 
-6. **Generalize the seeder**:
+7. **Generalize the seeder**:
     - `seed-handbooks.ts` becomes `seed-references-from-manifest.ts` (or keeps the handbooks name for one cycle and gains a corpus parameter -- low-stakes).
     - Walks every `*/manifest.json` under `handbooks/`, `aim/`, `regulations/`, `ac/`, `acs/`. Per-corpus quirks live in tiny adapter modules (one per corpus), not in the seed core.
+    - Branches on each manifest's own `kind` field (`handbook` -> section-tree path; `whole-doc` -> single-row path). See step 4.
 
-7. **Move external-URL formatting onto resolvers**:
+8. **Move external-URL formatting onto resolvers**:
     - Retire the `kind` switch in `externalUrlForReference()` at `libs/constants/src/study.ts:1496`.
     - Each `CorpusResolver` already has a `formatCitation()` slot at `libs/sources/src/registry/corpus-resolver.ts:38`. Add `externalUrlFor(reference)` to the same protocol. Consolidates per-kind URL knowledge in one place per corpus.
 
@@ -316,7 +324,7 @@ URL verification ran on 2026-04-30. `[200]` = curl HEAD success. `[?]` = couldn'
 - Pipeline recommendation: same as AC pipeline. Single PDF per item. New `libs/sources/src/safo/`.
 - Citation URI: ADR 019 §1.2 line 182 already defines `airboss-ref:safo/<num>?at=<year>`. Reuse it.
 
-> **Ratify (4.C.URL):** User to confirm canonical SAFO landing URL before this WP starts. Fallback: scrape via DRS.
+> **Ratify (4.C.URL):** *Resolved 2026-05-01.* DRS-first ingestion. Per-doc config carries a `canonical_url_override` field; populate it later if/when a stable FAA topic-page URL is found. Stops blocking on FAA URL churn.
 
 ### 4.D InFOs (Information For Operators)
 
@@ -325,7 +333,7 @@ URL verification ran on 2026-04-30. `[200]` = curl HEAD success. `[?]` = couldn'
 - Pipeline: identical to SAFO.
 - Citation URI: ADR 019 §1.2 line 182 reserves `info` (alongside `safo`). Reuse.
 
-> **Ratify (4.D.URL):** User to confirm canonical InFO landing URL.
+> **Ratify (4.D.URL):** *Resolved 2026-05-01.* Same as 4.C: DRS-first, `canonical_url_override` field for retrofitting later.
 
 ### 4.E FAA Order 8900.1 (Flight Standards Information Management System / FSIMS)
 
@@ -364,33 +372,57 @@ Not promised to anyone, surfacing as an explicit menu so the user picks rather t
 
 > **Ratify (5):** Pick which (if any) of these become follow-on WPs. Default: only Safety Briefing magazine; rest deferred.
 
+## Ratifications (2026-05-01)
+
+User ran the spec walkthrough on 2026-05-01 and accepted every recommended default. The full block:
+
+| Point             | Ratified                                                                                                                                  |
+| ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| **1.A**           | Substrate rename. (`library_entry` projection rejected as a workaround.)                                                                  |
+| **1.B**           | Staged rollout: WP-SUB first; corpus WPs follow opportunistically.                                                                        |
+| **2.A**           | Catalog stands as written.                                                                                                                |
+| **2.B**           | Seed check run as part of PR #388 -- `bun run db seed handbooks` aborts on a ZodError because `kind: whole-doc` manifests don't match `handbookManifestSchema`. The 6 handbooks-extras are NOT seeding into `handbook_section` today. **Implication folded into WP-SUB scope** (§1 step 4: two manifest shapes from day one). WP-EX-Verify is no longer a separate WP. |
+| **2.C**           | "Other publications" stay link-only umbrella cards. Order 8260-3 noted as watch-list, no commitment.                                      |
+| **3.A**           | Part-level cards for CFR-14; title-level for CFR-49.                                                                                      |
+| **3.B**           | Search-first inside CFR drill-down. Tree available, search is the entry point.                                                            |
+| **3.C**           | AIM as one card with chapter-tree expansion.                                                                                              |
+| **4.A**           | NTSB ALJ -- own WP.                                                                                                                       |
+| **4.B**           | Chief Counsel -- own WP, sequenced first among the new corpora (highest pedagogical leverage).                                            |
+| **4.C** + **4.D** | SAFOs and InFOs -- own WPs (or one combined). **DRS-first**, with a `canonical_url_override` field on per-doc config for retrofitting a stable URL when one is found. Stops blocking on the FAA's topic-page churn. |
+| **4.E**           | FAA Order 8900.1 -- deferred. Trigger to revisit: "we ship CFI training content that benefits from Vol 5."                                |
+| **4.F**           | Tips on Mountain Flying -- early. Single-PDF, AC-style pipeline; smallest possible win.                                                   |
+| **4.G**           | AC catalog expansion -- WP, curated to ~50 ACs (not the full ~200).                                                                       |
+| **5**             | Safety Briefing magazine archive opted in as a follow-on WP. Other candidates (GA-JSC, Part 67, CAP/WINGS, plates) dropped or deferred.   |
+| **6**             | Sequence as written, with WP-EX-Verify folded into WP-SUB per the (2.B) finding.                                                          |
+
+The next document is the WP-SUB implementation plan, drafted against this ratified block.
+
 ## 6. Recommended sequence
 
 Discrete WPs that ship independently. Each is small enough to ship in a session or two; each leaves the system better than it found it.
 
 > **Note:** Wave 1 of `library-by-cert` (PR #386) shipped between v1 and v2 of this spec and added `reference.primary_cert` (NULL = cert-agnostic; CHECK against `CERT_APPLICABILITY_VALUES`). WP-SUB preserves this column unchanged.
 
-1. **WP-SUB (substrate).** This WP after ratification. Author + ship the substrate rename described in §1: rename `handbook_section` -> `reference_section` (+ figure, errata), drop the handbook-shaped CHECK constraints (including the `kind` CHECK), add `section_schema` + `metadata` jsonb + `depth`, rewrite `getReadableReferenceIds()` against `content_md`, generalize the seeder. Re-seed handbooks. Preserves `reference.primary_cert` from PR #386. Zero behavior change beyond the rename; unlocks every following WP. (Replaces v1's WP-V + WP-VS.)
-2. **WP-EX-Verify.** Confirm the generalized seeder produces `reference_section` rows for the 6 handbooks-extras (risk-mgmt, instructor, IFH, IPH, AMT-G, AMT-P). Small PR if anything is off. (May already work for free under WP-SUB; needs a 5-minute check.)
-3. **WP-MTN.** Tips on Mountain Flying pamphlet -- single PDF, AC-style pipeline. Smallest possible win.
-4. **WP-AIM.** AIM seed: walk `aim/<edition>/manifest.json`, populate `reference_section` via the generalized seeder. 744 entries unlocked.
-5. **WP-CFR-V.** CFR-14 + CFR-49 seed: same idea, plus the §3 UI question (part-level cards). 7,218 + ~30 entries unlocked.
-6. **WP-AC-V.** AC catalog visibility: seed the 9 already-extracted ACs. (Resolving gaps 3+4 from the broad survey is a separate prior fix; deferred per survey recommendation.)
-7. **WP-ACS-V.** Same for ACS. Depends on resolving gap 2 (ACS edition slug mapping) from the broad survey first.
-8. **WP-CC.** Chief Counsel interpretations -- new corpus, ADR 019 already provisions the URI. Highest pedagogical leverage of the §4 candidates.
-9. **WP-NTSB-ALJ.** NTSB ALJ rulings -- new corpus.
-10. **WP-SAFO + WP-INFO.** SAFOs and InFOs -- combined or sequential; pipelines are identical.
-11. **WP-AC-FULL.** Expand the AC config from 12 -> ~50 curated-relevance ACs. Content-only WP; pipeline already exists.
-12. **WP-O8900-V5.** FAA Order 8900.1 Volume 5 carve-out (Airman Certification). Defer the rest of 8900.1 indefinitely.
-13. **WP-SAFETY-BRIEF.** Safety Briefing magazine archive (if §5 ratified yes).
+1. **WP-SUB (substrate).** This WP after ratification. Author + ship the substrate rename described in §1: rename `handbook_section` -> `reference_section` (+ figure, errata), drop the handbook-shaped CHECK constraints (including the `kind` CHECK), add `section_schema` + `metadata` jsonb + `depth`, rewrite `getReadableReferenceIds()` against `content_md`, generalize the seeder to accept **both** section-tree and whole-doc manifests, re-seed handbooks. **Acceptance criterion** (absorbing the former WP-EX-Verify): `bun run db seed` produces `reference_section` rows for all 9 handbooks (3 sectioned + 6 whole-doc extras). Preserves `reference.primary_cert` from PR #386. Zero behavior change beyond the rename and the now-actually-seeding extras; unlocks every following WP. (Replaces v1's WP-V + WP-VS + the formerly-separate WP-EX-Verify.)
+2. **WP-MTN.** Tips on Mountain Flying pamphlet -- single PDF, AC-style pipeline. Smallest possible win.
+3. **WP-AIM.** AIM seed: walk `aim/<edition>/manifest.json`, populate `reference_section` via the generalized seeder. 744 entries unlocked.
+4. **WP-CFR-V.** CFR-14 + CFR-49 seed: same idea, plus the §3 UI question (part-level cards). 7,218 + ~30 entries unlocked.
+5. **WP-AC-V.** AC catalog visibility: seed the 9 already-extracted ACs. (Resolving gaps 3+4 from the broad survey is a separate prior fix; deferred per survey recommendation.)
+6. **WP-ACS-V.** Same for ACS. Depends on resolving gap 2 (ACS edition slug mapping) from the broad survey first.
+7. **WP-CC.** Chief Counsel interpretations -- new corpus, ADR 019 already provisions the URI. Highest pedagogical leverage of the §4 candidates.
+8. **WP-NTSB-ALJ.** NTSB ALJ rulings -- new corpus.
+9. **WP-SAFO + WP-INFO.** SAFOs and InFOs -- combined or sequential; pipelines are identical. DRS-first per §4.C/4.D ratification, with `canonical_url_override` field on the per-doc config so a stable URL can be retrofitted without re-ratification.
+10. **WP-AC-FULL.** Expand the AC config from 12 -> ~50 curated-relevance ACs. Content-only WP; pipeline already exists.
+11. **WP-O8900-V5.** FAA Order 8900.1 Volume 5 carve-out (Airman Certification). Deferred per §4.E ratification; trigger to revisit = "we ship CFI training content that benefits from Vol 5."
+12. **WP-SAFETY-BRIEF.** Safety Briefing magazine archive (per §5 ratification).
 
-Stop conditions: any WP can be deferred or dropped at any point. The hard order is 1 (foundation), then 3-7 (existing manifests, easy wins), then 8-13 (new corpora, more work). WP-EX-Verify is gated on WP-SUB landing but otherwise blocks nothing.
+Stop conditions: any WP can be deferred or dropped at any point. The hard order is 1 (foundation), then 2-6 (existing manifests, easy wins), then 7-12 (new corpora, more work). The former WP-EX-Verify is now an acceptance criterion of WP-SUB, not a separate sequenced item.
 
 ### Smells worth fixing along the way
 
 These don't block the substrate WP, but they're the same flavor of problem and shouldn't be lost:
 
-1. **`course/references/handbooks-noningested.yaml` exists only because the seed pipeline was handbook-only.** Most of its rows (AIH/IFH/IPH/risk-mgmt) are now cached post-#384 and will seed via WP-SUB. One row -- `afh` at edition `FAA-H-8083-3B` (prior edition; current `3C` is ingested) -- has no cache and isn't in scope for either WP-SUB or WP-EX-Verify; it exists only so historical citations to 3B keep resolving until a content audit promotes them to 3C. Resolution: delete `handbooks-noningested.yaml` once every row has a structured-content equivalent. The 3B-prior-edition row stays until it's ingested (low priority) or content is audited and re-pointed at 3C. The `migrate-references-to-structured.ts` bridge goes with the YAML when the YAML goes.
+1. **`course/references/handbooks-noningested.yaml` is mostly redundant after WP-SUB.** Once WP-SUB's two-shape seeder lands, four of its five rows (AIH, IFH, IPH, risk-mgmt) seed from the handbooks-extras whole-doc manifests. The fifth -- `afh` at edition `FAA-H-8083-3B` (prior edition; `3C` is ingested) -- has no cache and only exists so historical citations to 3B resolve until a content audit promotes them to 3C. Resolution: delete `handbooks-noningested.yaml` once every row has a structured-content equivalent. The 3B-prior-edition row stays until it's ingested (low priority) or content is audited and re-pointed at 3C. The `migrate-references-to-structured.ts` bridge goes with the YAML when the YAML goes.
 2. **17 corpus modules each have identical 3-line `index.ts` registration boilerplate.** A registry that auto-discovers corpora from a manifest would erase ~50 lines and make adding a corpus a single-file change. Low priority; nice cleanup.
 3. **Phase-numbered reviewer IDs (`PHASE_3_REVIEWER_ID` ... `PHASE_9_REVIEWER_ID`)** encode ingest order rather than identity. Replace with stable per-corpus reviewer IDs derived from corpus slug. Trivial.
 4. **`externalUrlForReference()` switch in constants** (`libs/constants/src/study.ts:1496`) duplicates what the resolver registry is for. Folded into WP-SUB step 7.
