@@ -19,6 +19,7 @@ import {
 	CERT_APPLICABILITY_VALUES,
 	type CertApplicability,
 	LIBRARY_REGULATIONS_KIND_VALUES,
+	LIBRARY_REGULATIONS_KINDS,
 	type LibraryRegulationsKind,
 	REFERENCE_KINDS,
 	type ReferenceKind,
@@ -56,18 +57,24 @@ interface AircraftEntry {
  * - `ac`: `kind = ac`.
  * - `ntsb`: `kind = ntsb`.
  */
-function regulationsBucketMatcher(kind: LibraryRegulationsKind): (ref: { kind: ReferenceKind; documentSlug: string }) => boolean {
+function regulationsBucketMatcher(
+	kind: LibraryRegulationsKind,
+): (ref: { kind: ReferenceKind; documentSlug: string }) => boolean {
 	switch (kind) {
-		case '14-cfr':
+		case LIBRARY_REGULATIONS_KINDS.CFR_14:
 			return (ref) => ref.kind === REFERENCE_KINDS.CFR && ref.documentSlug.startsWith('14cfr');
-		case '49-cfr':
+		case LIBRARY_REGULATIONS_KINDS.CFR_49:
 			return (ref) => ref.kind === REFERENCE_KINDS.CFR && ref.documentSlug.startsWith('49cfr');
-		case 'aim':
+		case LIBRARY_REGULATIONS_KINDS.AIM:
 			return (ref) => ref.kind === REFERENCE_KINDS.AIM || ref.kind === REFERENCE_KINDS.PCG;
-		case 'ac':
+		case LIBRARY_REGULATIONS_KINDS.AC:
 			return (ref) => ref.kind === REFERENCE_KINDS.AC;
-		case 'ntsb':
+		case LIBRARY_REGULATIONS_KINDS.NTSB:
 			return (ref) => ref.kind === REFERENCE_KINDS.NTSB;
+		default: {
+			const exhaustive: never = kind;
+			throw new Error(`Unknown regulations kind: ${exhaustive as string}`);
+		}
 	}
 }
 
@@ -92,7 +99,10 @@ export const load: PageServerLoad = async (event) => {
 
 	const regulationBuckets: RegulationsBucket[] = LIBRARY_REGULATIONS_KIND_VALUES.map((kind) => {
 		const matcher = regulationsBucketMatcher(kind);
-		const count = allRefs.reduce((acc, ref) => (matcher({ kind: ref.kind as ReferenceKind, documentSlug: ref.documentSlug }) ? acc + 1 : acc), 0);
+		const count = allRefs.reduce(
+			(acc, ref) => (matcher({ kind: ref.kind as ReferenceKind, documentSlug: ref.documentSlug }) ? acc + 1 : acc),
+			0,
+		);
 		return { kind, count };
 	});
 

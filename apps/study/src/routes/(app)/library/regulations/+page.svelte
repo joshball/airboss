@@ -61,7 +61,7 @@ let { data }: { data: PageData } = $props();
 		opacity: 0.55;
 	}
 	.card-title {
-		font-size: var(--font-size-md);
+		font-size: var(--font-size-base);
 		font-weight: var(--font-weight-semibold);
 	}
 	.card-count {

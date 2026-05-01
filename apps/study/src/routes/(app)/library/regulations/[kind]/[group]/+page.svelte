@@ -1,11 +1,14 @@
 <script lang="ts">
-import { ROUTES } from '@ab/constants';
+import { type LibraryRegulationsKind, ROUTES } from '@ab/constants';
 import EmptyState from '@ab/ui/components/EmptyState.svelte';
 import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import LibraryCard from '@ab/ui/library/LibraryCard.svelte';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
+
+const kind = $derived(data.kind as LibraryRegulationsKind);
+const kindLabel = $derived(data.kindLabel);
 </script>
 
 <svelte:head>
@@ -17,7 +20,7 @@ let { data }: { data: PageData } = $props();
 		<nav aria-label="Breadcrumb">
 			<a href={ROUTES.LIBRARY}>Library</a> &raquo;
 			<a href={ROUTES.LIBRARY_REGULATIONS}>Regulations & policy</a> &raquo;
-			<a href={ROUTES.LIBRARY_REGULATIONS_KIND(data.kind)}>{data.kindLabel}</a> &raquo;
+			<a href={ROUTES.LIBRARY_REGULATIONS_KIND(kind)}>{kindLabel}</a> &raquo;
 			<span>{data.groupLabel}</span>
 		</nav>
 	{/snippet}
@@ -28,7 +31,7 @@ let { data }: { data: PageData } = $props();
 		<ul class="section-list">
 			{#each data.sections as section (section.id)}
 				<li>
-					<a href={ROUTES.LIBRARY_REGULATIONS_SECTION(data.kind, data.group, section.code)} class="section-link">
+					<a href={ROUTES.LIBRARY_REGULATIONS_SECTION(kind, data.group, section.code)} class="section-link">
 						<span class="section-code">{section.code}</span>
 						<span class="section-title">{section.title}</span>
 					</a>

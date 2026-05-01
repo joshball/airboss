@@ -1,11 +1,16 @@
 <script lang="ts">
-import { ROUTES } from '@ab/constants';
+import { type LibraryRegulationsKind, ROUTES } from '@ab/constants';
 import EmptyState from '@ab/ui/components/EmptyState.svelte';
 import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import LibraryCard from '@ab/ui/library/LibraryCard.svelte';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
+
+// PageData is narrowed by the loader; the TS inference through SvelteKit
+// occasionally widens kind back to `string`. Re-narrow at the boundary
+// so the route helpers stay typed.
+const kind = $derived(data.kind as LibraryRegulationsKind);
 </script>
 
 <svelte:head>
@@ -33,7 +38,7 @@ let { data }: { data: PageData } = $props();
 			<ul class="grid">
 				{#each data.groups as group (group.groupKey)}
 					<li>
-						<a class="card" href={ROUTES.LIBRARY_REGULATIONS_GROUP(data.kind, group.groupKey)}>
+						<a class="card" href={ROUTES.LIBRARY_REGULATIONS_GROUP(kind, group.groupKey)}>
 							<span class="card-title">{group.label}</span>
 							<span class="card-count">
 								{group.referenceCount} reference{group.referenceCount === 1 ? '' : 's'}
@@ -107,7 +112,7 @@ let { data }: { data: PageData } = $props();
 		outline: none;
 	}
 	.card-title {
-		font-size: var(--font-size-md);
+		font-size: var(--font-size-base);
 		font-weight: var(--font-weight-semibold);
 	}
 	.card-count {

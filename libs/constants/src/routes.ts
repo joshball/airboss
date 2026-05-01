@@ -1,4 +1,4 @@
-import type { CertApplicability, AviationTopic } from './reference-tags';
+import type { AviationTopic, CertApplicability } from './reference-tags';
 import type { SimScenarioId } from './sim';
 import type { KnowledgePhase, LibraryRegulationsKind } from './study';
 

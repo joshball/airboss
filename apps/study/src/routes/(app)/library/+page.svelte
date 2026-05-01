@@ -189,7 +189,7 @@ const totalSurfaces = $derived(certCount + topicCount + regCount + aircraftCount
 		outline: none;
 	}
 	.card-title {
-		font-size: var(--font-size-md);
+		font-size: var(--font-size-base);
 		font-weight: var(--font-weight-semibold);
 	}
 	.card-count {
