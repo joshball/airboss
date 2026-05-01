@@ -59,13 +59,25 @@ def fetch_pdf(config: HandbookConfig, *, force: bool = False) -> FetchResult:
             size_bytes=target.stat().st_size,
         )
 
+    # Atomic write: stream into `<target>.part`, then rename over the
+    # destination after the body is fully written. POSIX rename is atomic on
+    # the same filesystem, so a SIGINT or network drop mid-stream leaves
+    # either the prior file or no file -- never a partially-written
+    # destination. Required by ADR 021.
+    partial = target.with_suffix(target.suffix + ".part")
     request = urllib.request.Request(config.source_url, headers={"User-Agent": "airboss-handbook-ingest/0.1"})
-    with urllib.request.urlopen(request) as response, target.open("wb") as fh:
-        while True:
-            chunk = response.read(1024 * 1024)
-            if not chunk:
-                break
-            fh.write(chunk)
+    try:
+        with urllib.request.urlopen(request) as response, partial.open("wb") as fh:
+            while True:
+                chunk = response.read(1024 * 1024)
+                if not chunk:
+                    break
+                fh.write(chunk)
+        partial.replace(target)
+    except BaseException:
+        # Includes KeyboardInterrupt and any IO/network error mid-stream.
+        partial.unlink(missing_ok=True)
+        raise
     sha = _sha256_of(target)
     return FetchResult(
         path=target,

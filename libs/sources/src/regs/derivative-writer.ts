@@ -10,7 +10,7 @@
  * compares each file before writing; skips writes when unchanged. Idempotent.
  */
 
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, renameSync, unlinkSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import type { SourceEntry } from '../types.ts';
 import { sha256 } from './cache.ts';
@@ -190,7 +190,21 @@ function writeIfChanged(path: string, content: string): { wrote: boolean } {
 		const current = readFileSync(path, 'utf-8');
 		if (current === content) return { wrote: false };
 	}
-	writeFileSync(path, content, 'utf-8');
+	// Atomic write: tmp + rename. POSIX rename is atomic on the same
+	// filesystem; a crash mid-write leaves either the prior file or no file --
+	// never a partial destination. Required by ADR 021.
+	const tmp = `${path}.tmp`;
+	try {
+		writeFileSync(tmp, content, 'utf-8');
+		renameSync(tmp, path);
+	} catch (err) {
+		try {
+			unlinkSync(tmp);
+		} catch {
+			// tmp may not exist; ignore.
+		}
+		throw err;
+	}
 	return { wrote: true };
 }
 
@@ -231,3 +245,8 @@ interface SectionMeta {
 	readonly last_amended_date: string;
 	readonly body_sha256: string;
 }
+
+// Test-only helpers
+export const __derivative_writer_internal__ = {
+	writeIfChanged,
+};

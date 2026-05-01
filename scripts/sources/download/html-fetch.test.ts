@@ -70,4 +70,42 @@ describe('downloadHtmlFile', () => {
 			}),
 		).rejects.toThrow(/HTTP 404/);
 	});
+
+	it('atomicity -- happy path leaves no .part sibling at destPath', async () => {
+		const body = '<html><body>ok</body></html>';
+		const fakeFetch: typeof fetch = async () =>
+			new Response(body, { status: 200, headers: { 'Content-Type': 'text/html' } });
+		const dest = join(tempRoot, 'aim', 'happy.html');
+		await downloadHtmlFile('https://example.test/happy.html', dest, {
+			verbose: false,
+			fetchImpl: fakeFetch,
+		});
+		expect(existsSync(dest)).toBe(true);
+		expect(existsSync(`${dest}.part`)).toBe(false);
+	});
+
+	it('atomicity -- mid-stream failure leaves no partial dest and no .part sibling', async () => {
+		const fakeFetch: typeof fetch = (async (_input, init): Promise<Response> => {
+			const method = init?.method ?? 'GET';
+			if (method === 'HEAD') return new Response(null, { status: 200 });
+			const stream = new ReadableStream<Uint8Array>({
+				start(controller) {
+					controller.enqueue(new TextEncoder().encode('<html>partial'));
+					queueMicrotask(() => controller.error(new Error('simulated stream failure')));
+				},
+			});
+			return new Response(stream, { status: 200, headers: { 'Content-Type': 'text/html' } });
+		}) as typeof fetch;
+
+		const dest = join(tempRoot, 'aim', 'broken.html');
+		await expect(
+			downloadHtmlFile('https://example.test/broken.html', dest, {
+				verbose: false,
+				fetchImpl: fakeFetch,
+			}),
+		).rejects.toThrow();
+
+		expect(existsSync(dest)).toBe(false);
+		expect(existsSync(`${dest}.part`)).toBe(false);
+	});
 });
