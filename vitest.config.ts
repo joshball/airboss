@@ -35,6 +35,7 @@ const aliases = {
 	'@ab/sources/registry/__test_helpers__': resolve('./libs/sources/src/registry/__test_helpers__.ts'),
 	'@ab/sources/registry': resolve('./libs/sources/src/registry/index.ts'),
 	'@ab/sources/regs': resolve('./libs/sources/src/regs/index.ts'),
+	'@ab/sources/handbooks-extras': resolve('./libs/sources/src/handbooks-extras/index.ts'),
 	'@ab/sources/handbooks': resolve('./libs/sources/src/handbooks/index.ts'),
 	'@ab/sources/aim': resolve('./libs/sources/src/aim/index.ts'),
 	'@ab/sources/ac': resolve('./libs/sources/src/ac/index.ts'),
