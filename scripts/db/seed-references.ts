@@ -37,7 +37,7 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = resolve(HERE, '..', '..');
 const REFERENCES_DIR = resolve(REPO_ROOT, 'course/references');
 
-const referenceEntrySchema = z.object({
+export const referenceEntrySchema = z.object({
 	slug: z
 		.string()
 		.min(3)
