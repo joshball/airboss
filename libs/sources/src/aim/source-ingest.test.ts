@@ -9,11 +9,12 @@
  * per ADR 021/022).
  */
 
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, statSync, utimesSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { __aim_source_ingest_internal__, parseSourceCliArgs } from './source-ingest.ts';
+import type { ExtractedAim } from './extract.ts';
+import { __aim_source_ingest_internal__, parseSourceCliArgs, writeAimDerivatives } from './source-ingest.ts';
 
 const { discoverCachedAim, readAimCorpusManifest } = __aim_source_ingest_internal__;
 
@@ -248,13 +249,6 @@ describe('parseSourceCliArgs', () => {
  * idempotent regen contract. These tests pin the post-fix behaviour --
  * re-running the writer with identical inputs produces zero file mutations.
  */
-
-import { mkdtempSync, readFileSync, rmSync, statSync, utimesSync } from 'node:fs';
-import { tmpdir } from 'node:os';
-import { join } from 'node:path';
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import type { ExtractedAim } from './extract.ts';
-import { writeAimDerivatives } from './source-ingest.ts';
 
 let tempDerivative: string;
 
