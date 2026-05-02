@@ -1,5 +1,5 @@
 {
-  "id": "9358d9cf-42ed-4c79-b217-1a1e8909f37c",
+  "id": "e7aecfc5-7f1a-4934-90ae-8d6f4cf176b5",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -6768,29 +6768,7 @@
           "default": "now()"
         }
       },
-      "indexes": {
-        "hangar_job_log_job_idx": {
-          "name": "hangar_job_log_job_idx",
-          "columns": [
-            {
-              "expression": "job_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "seq",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
+      "indexes": {},
       "foreignKeys": {
         "job_log_job_id_job_id_fk": {
           "name": "job_log_job_id_job_id_fk",
@@ -6808,7 +6786,16 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
+      "uniqueConstraints": {
+        "hangar_job_log_job_seq_unique": {
+          "name": "hangar_job_log_job_seq_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "job_id",
+            "seq"
+          ]
+        }
+      },
       "policies": {},
       "checkConstraints": {
         "hangar_job_log_stream_check": {
