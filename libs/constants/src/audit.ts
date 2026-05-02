@@ -47,6 +47,32 @@ export const AUDIT_TARGETS = {
 	 * learner submitted on a given slot without joining the mutable table.
 	 */
 	STUDY_SESSION_ITEM: 'study.session_item_result',
+	/**
+	 * Successful sign-in via better-auth (`/api/auth/sign-in/email` and any
+	 * other future credential path). `actor_id` is the signed-in user's id;
+	 * `target_id` mirrors that id so "all auth events for user X" reads
+	 * cleanly off the `(target_type, target_id, timestamp)` composite. `op =
+	 * action`, since login is non-mutating in the BC-row sense even though
+	 * the auth schema creates a session row -- that lifecycle is captured
+	 * separately. The audit row exists so admin surfaces can answer "who
+	 * signed in last hour" without joining session history.
+	 */
+	AUTH_LOGIN: 'auth.login',
+	/**
+	 * Failed sign-in attempt -- bad credentials, rate-limited, banned-block,
+	 * 5xx. `actor_id` is null because the request never authenticated; the
+	 * email is intentionally NOT recorded in `metadata` (a verbose audit log
+	 * full of typed-wrong emails is itself a user-enumeration leak). The
+	 * `metadata.outcome` tag distinguishes the cases for the admin reader.
+	 */
+	AUTH_LOGIN_FAILED: 'auth.login-failed',
+	/**
+	 * Sign-out via `/api/auth/sign-out`. `actor_id` is the user that owned
+	 * the session being terminated, captured before better-auth deletes the
+	 * row. `target_id` mirrors the actor so the row reads cleanly in the
+	 * "actions on user X" filter alongside `AUTH_LOGIN`.
+	 */
+	AUTH_LOGOUT: 'auth.logout',
 } as const;
 
 export type AuditTarget = (typeof AUDIT_TARGETS)[keyof typeof AUDIT_TARGETS];

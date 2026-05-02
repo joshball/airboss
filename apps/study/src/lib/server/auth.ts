@@ -1,3 +1,4 @@
+import { createAuditAuthEventEmitter } from '@ab/audit';
 import { createAuth } from '@ab/auth';
 import { ENV_VARS } from '@ab/constants';
 import { building, dev } from '$app/environment';
@@ -12,7 +13,10 @@ function getAuth() {
 	// Required in prod; the lib falls back to localhost:STUDY in dev.
 	const baseURL = process.env[ENV_VARS.BETTER_AUTH_URL];
 
-	return createAuth({ secret, baseURL, isDev: dev });
+	// Wire audit emission so every sign-in / failed sign-in / sign-out lands
+	// in `audit.audit_log`. Hangar admin home reads this to answer "who
+	// signed in last hour" and to spot brute-force traffic.
+	return createAuth({ secret, baseURL, isDev: dev, authEventEmitter: createAuditAuthEventEmitter() });
 }
 
 // Lazy init: skip during SvelteKit build analysis

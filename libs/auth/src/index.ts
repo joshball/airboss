@@ -1,6 +1,14 @@
 // Auth lib -- identity, sessions, permissions.
 // Infrastructure: same interface for all apps.
 
+// AuthEventEmitter contract -- duck-typed mirror of `@ab/audit`'s emitter
+// shape. Apps inject `createAuditAuthEventEmitter()` into `createAuth` to
+// route sign-in / sign-out events into the audit log.
+export type {
+	AuthEventContext,
+	AuthEventEmitter,
+	AuthLoginFailedOutcome,
+} from './audit-events-contract';
 // Guards and types
 export { type AuthSession, type AuthUser, requireAuth, requireRole, requireVerifiedEmail } from './auth';
 // Client-side auth (Svelte)

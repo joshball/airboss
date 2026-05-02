@@ -83,6 +83,7 @@
       "name": "@ab/study",
       "dependencies": {
         "@ab/activities": "workspace:*",
+        "@ab/audit": "workspace:*",
         "@ab/auth": "workspace:*",
         "@ab/aviation": "workspace:*",
         "@ab/bc-hangar": "workspace:*",
