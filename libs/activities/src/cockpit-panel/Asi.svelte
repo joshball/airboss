@@ -57,8 +57,8 @@ const yellowArc = $derived(arcPath(kiasToAngle(VNO_KTS), kiasToAngle(VNE_KTS), 7
 const ticks = Array.from({ length: 15 }, (_, i) => MIN_KIAS + i * 10);
 </script>
 
-<div class="instrument" aria-label={`Airspeed indicator reading ${kiasSafe.toFixed(0)} knots`}>
-	<svg viewBox="0 0 200 200" role="img">
+<div class="instrument">
+	<svg viewBox="0 0 200 200" role="img" aria-label={`Airspeed indicator reading ${kiasSafe.toFixed(0)} knots`}>
 		<circle cx="100" cy="100" r="96" class="instrument-face" stroke-width="2" />
 
 		<!-- arcs -->

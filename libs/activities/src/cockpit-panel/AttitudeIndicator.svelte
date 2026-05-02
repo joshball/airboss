@@ -22,8 +22,8 @@ const offsetY = $derived(pitchDeg * PIXELS_PER_DEG);
 const ladderLines = [-30, -20, -10, 10, 20, 30];
 </script>
 
-<div class="instrument" aria-label={`Attitude indicator pitch ${pitchDeg.toFixed(1)} degrees`}>
-	<svg viewBox="0 0 200 200" role="img">
+<div class="instrument">
+	<svg viewBox="0 0 200 200" role="img" aria-label={`Attitude indicator pitch ${pitchDeg.toFixed(1)} degrees`}>
 		<defs>
 			<clipPath id="ai-clip">
 				<circle cx="100" cy="100" r="90" />

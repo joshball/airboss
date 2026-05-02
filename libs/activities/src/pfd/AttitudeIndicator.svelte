@@ -63,8 +63,13 @@ function bankTickPath(deg: number, innerR: number, outerR: number): string {
 }
 </script>
 
-<div class="instrument" aria-label={`Attitude pitch ${safePitchDeg.toFixed(1)} bank ${safeRollDeg.toFixed(1)}`}>
-	<svg viewBox="0 0 {VIEW_SIZE} {VIEW_SIZE}" role="img" preserveAspectRatio="xMidYMid meet">
+<div class="instrument">
+	<svg
+		viewBox="0 0 {VIEW_SIZE} {VIEW_SIZE}"
+		role="img"
+		aria-label={`Attitude pitch ${safePitchDeg.toFixed(1)} bank ${safeRollDeg.toFixed(1)}`}
+		preserveAspectRatio="xMidYMid meet"
+	>
 		<defs>
 			<clipPath id="ai-clip">
 				<circle cx={CENTER} cy={CENTER} r={HORIZON_RADIUS} />

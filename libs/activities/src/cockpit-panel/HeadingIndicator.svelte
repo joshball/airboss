@@ -29,8 +29,8 @@ const LABELS = [
 const majorTicks = Array.from({ length: 36 }, (_, i) => i * 10);
 </script>
 
-<div class="instrument" aria-label={`Heading indicator reading ${headingSafe.toFixed(0)} degrees`}>
-	<svg viewBox="0 0 200 200" role="img">
+<div class="instrument">
+	<svg viewBox="0 0 200 200" role="img" aria-label={`Heading indicator reading ${headingSafe.toFixed(0)} degrees`}>
 		<circle cx="100" cy="100" r="96" class="instrument-face" stroke-width="2" />
 
 		<!-- Rotating compass card -->

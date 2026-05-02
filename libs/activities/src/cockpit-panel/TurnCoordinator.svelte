@@ -24,11 +24,12 @@ const BALL_TRAVEL_PX = 22;
 const ballX = $derived(100 + Math.max(-1, Math.min(1, ballSafe)) * BALL_TRAVEL_PX);
 </script>
 
-<div
-	class="instrument"
-	aria-label={`Turn coordinator: yaw ${yawSafe.toFixed(1)} deg per second, ball ${ballSafe.toFixed(2)}`}
->
-	<svg viewBox="0 0 200 200" role="img">
+<div class="instrument">
+	<svg
+		viewBox="0 0 200 200"
+		role="img"
+		aria-label={`Turn coordinator: yaw ${yawSafe.toFixed(1)} deg per second, ball ${ballSafe.toFixed(2)}`}
+	>
 		<circle cx="100" cy="100" r="96" class="instrument-face" stroke-width="2" />
 
 		<!-- Standard-rate marks (L and R) -->

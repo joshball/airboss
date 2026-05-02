@@ -42,8 +42,8 @@ const greenArc = arcPath(GREEN_LOW_ANGLE, GREEN_HIGH_ANGLE, 72);
 const majorTicks = [0, 500, 1000, 1500, 2000, 2500, 3000];
 </script>
 
-<div class="instrument" aria-label={`Tachometer reading ${rpmSafe.toFixed(0)} RPM`}>
-	<svg viewBox="0 0 200 200" role="img">
+<div class="instrument">
+	<svg viewBox="0 0 200 200" role="img" aria-label={`Tachometer reading ${rpmSafe.toFixed(0)} RPM`}>
 		<circle cx="100" cy="100" r="96" class="instrument-face" stroke-width="2" />
 
 		<!-- green operating arc -->

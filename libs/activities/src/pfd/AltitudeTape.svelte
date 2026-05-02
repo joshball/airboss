@@ -101,8 +101,13 @@ const counterTranslateY = $derived(-((thousandsFractional % 10) * COUNTER_CELL_H
 const lowDigitsLabel = $derived(lowDigits.toString().padStart(3, '0'));
 </script>
 
-<div class="instrument" aria-label={`Altitude ${alt.toFixed(0)} feet`}>
-	<svg viewBox="0 0 {VIEW_WIDTH} {VIEW_HEIGHT}" role="img" preserveAspectRatio="xMidYMid meet">
+<div class="instrument">
+	<svg
+		viewBox="0 0 {VIEW_WIDTH} {VIEW_HEIGHT}"
+		role="img"
+		aria-label={`Altitude ${alt.toFixed(0)} feet`}
+		preserveAspectRatio="xMidYMid meet"
+	>
 		<defs>
 			<clipPath id="alt-counter-clip">
 				<rect x={COUNTER_CELL_X} y={COUNTER_CELL_Y} width={COUNTER_CELL_WIDTH} height={COUNTER_CELL_HEIGHT} />

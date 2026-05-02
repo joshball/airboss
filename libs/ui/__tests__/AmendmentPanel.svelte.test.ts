@@ -4,7 +4,11 @@
  * rows mount inside.
  */
 
-import { HANDBOOK_AMENDMENT_BADGE_LABEL, HANDBOOK_ERRATA_PATCH_KINDS } from '@ab/constants';
+import {
+	HANDBOOK_AMENDMENT_BADGE_LABEL,
+	HANDBOOK_ERRATA_PATCH_KIND_LABELS,
+	HANDBOOK_ERRATA_PATCH_KINDS,
+} from '@ab/constants';
 import { cleanup, fireEvent, render, screen } from '@testing-library/svelte';
 import { afterEach, describe, expect, it } from 'vitest';
 import AmendmentPanel from '../src/handbooks/AmendmentPanel.svelte';
@@ -64,7 +68,9 @@ describe('AmendmentPanel -- populated', () => {
 		expect(badge.getAttribute('aria-expanded')).toBe('true');
 		// ErrataEntry mounted inside.
 		expect(body.querySelector('article.errata-entry')).toBeTruthy();
-		expect(body.textContent).toContain(HANDBOOK_AMENDMENT_BADGE_LABEL === 'Amended' ? 'Paragraph added' : '');
+		// The patch-kind label for the configured sampleEntry (APPEND_PARAGRAPH) must render.
+		const expectedPatchKindLabel = HANDBOOK_ERRATA_PATCH_KIND_LABELS[HANDBOOK_ERRATA_PATCH_KINDS.APPEND_PARAGRAPH];
+		expect(body.querySelector('.patch-kind')?.textContent?.trim()).toBe(expectedPatchKindLabel);
 	});
 
 	it('toggles closed on a second click', async () => {
