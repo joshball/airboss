@@ -48,8 +48,8 @@
 
 import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { homedir } from 'node:os';
 import { dirname, join } from 'node:path';
+import { resolveCacheRoot } from '@ab/constants';
 import type { ExtractedDocument, ExtractedPage } from '../pdf/index.ts';
 import { extractPdf, findAcsEditionSlug, findEffectiveDate } from '../pdf/index.ts';
 import { __editions_internal__ } from '../registry/editions.ts';
@@ -932,12 +932,8 @@ export interface CliArgs {
 	readonly help: boolean;
 }
 
-function defaultCacheRoot(): string {
-	return process.env.AIRBOSS_HANDBOOK_CACHE ?? join(homedir(), 'Documents', 'airboss-handbook-cache');
-}
-
 export function parseCliArgs(argv: readonly string[]): CliArgs | { error: string } {
-	let cacheRoot = defaultCacheRoot();
+	let cacheRoot = resolveCacheRoot({ ensureExists: false });
 	let derivativeRoot = join(process.cwd(), 'acs');
 	const slugsAccum: string[] = [];
 	let help = false;

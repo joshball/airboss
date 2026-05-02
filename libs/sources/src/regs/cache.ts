@@ -15,8 +15,8 @@
 
 import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { homedir } from 'node:os';
 import { dirname, isAbsolute, join, resolve } from 'node:path';
+import { resolveCacheRoot as resolveSourceCacheRoot } from '@ab/constants';
 
 const ECFR_BASE = 'https://www.ecfr.gov/api/versioner/v1/full';
 
@@ -43,17 +43,12 @@ export interface CacheLoadOptions {
 /**
  * Resolve the cache root. Honors the `AIRBOSS_HANDBOOK_CACHE` env var; defaults
  * to `~/Documents/airboss-handbook-cache/`. Creates the directory on demand.
+ *
+ * Thin wrapper around the canonical helper in `@ab/constants` so existing
+ * `@ab/sources` consumers keep their import path.
  */
 export function resolveCacheRoot(): string {
-	const fromEnv = process.env.AIRBOSS_HANDBOOK_CACHE;
-	const root =
-		fromEnv !== undefined && fromEnv.length > 0
-			? expandHome(fromEnv)
-			: join(homedir(), 'Documents', 'airboss-handbook-cache');
-	if (!existsSync(root)) {
-		mkdirSync(root, { recursive: true });
-	}
-	return root;
+	return resolveSourceCacheRoot();
 }
 
 /** Build the full cache path for a given title + edition date. */
@@ -131,12 +126,6 @@ function buildEcfrUrl(opts: CacheLoadOptions): string {
 
 export function sha256(input: string): string {
 	return createHash('sha256').update(input, 'utf-8').digest('hex');
-}
-
-function expandHome(p: string): string {
-	if (p.startsWith('~/')) return join(homedir(), p.slice(2));
-	if (p === '~') return homedir();
-	return p;
 }
 
 // Test-only helpers

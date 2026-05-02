@@ -1,6 +1,7 @@
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
+import { ENV_VARS } from '@ab/constants';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { __cache_internal__, cacheXmlPath, loadEcfrXml, resolveCacheRoot, sha256 } from './cache.ts';
 
@@ -9,13 +10,13 @@ let originalEnv: string | undefined;
 
 beforeEach(() => {
 	tmpRoot = mkdtempSync(join(tmpdir(), 'cfr-cache-'));
-	originalEnv = process.env.AIRBOSS_HANDBOOK_CACHE;
-	process.env.AIRBOSS_HANDBOOK_CACHE = tmpRoot;
+	originalEnv = process.env[ENV_VARS.AIRBOSS_HANDBOOK_CACHE];
+	process.env[ENV_VARS.AIRBOSS_HANDBOOK_CACHE] = tmpRoot;
 });
 
 afterEach(() => {
-	if (originalEnv === undefined) delete process.env.AIRBOSS_HANDBOOK_CACHE;
-	else process.env.AIRBOSS_HANDBOOK_CACHE = originalEnv;
+	if (originalEnv === undefined) delete process.env[ENV_VARS.AIRBOSS_HANDBOOK_CACHE];
+	else process.env[ENV_VARS.AIRBOSS_HANDBOOK_CACHE] = originalEnv;
 	rmSync(tmpRoot, { recursive: true, force: true });
 });
 

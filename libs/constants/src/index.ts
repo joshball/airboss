@@ -286,6 +286,7 @@ export {
 	type SimWarningCue,
 	type SimWorkerMessage,
 } from './sim';
+export { defaultCacheRoot, expandHome, resolveCacheRoot, SOURCE_CACHE } from './source-cache';
 export {
 	DISCOVERY_CACHE,
 	DISCOVERY_FRESHNESS_MS,

@@ -27,8 +27,8 @@
 
 import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { homedir } from 'node:os';
 import { join } from 'node:path';
+import { resolveCacheRoot } from '@ab/constants';
 import { extractPdf, findEffectiveDate } from '../pdf/index.ts';
 import { __editions_internal__ } from '../registry/editions.ts';
 import { getEntryLifecycle, recordPromotion } from '../registry/lifecycle.ts';
@@ -442,12 +442,8 @@ export interface CliArgs {
 	readonly help: boolean;
 }
 
-function defaultCacheRoot(): string {
-	return process.env.AIRBOSS_HANDBOOK_CACHE ?? join(homedir(), 'Documents', 'airboss-handbook-cache');
-}
-
 export function parseCliArgs(argv: readonly string[]): CliArgs | { error: string } {
-	let cacheRoot = defaultCacheRoot();
+	let cacheRoot = resolveCacheRoot({ ensureExists: false });
 	let derivativeRoot = join(process.cwd(), 'ac');
 	let help = false;
 

@@ -6,6 +6,7 @@
  * force a reach across unrelated domains.
  */
 
+import { ENV_VARS } from './env';
 import { REFERENCE_SOURCE_TYPES, type ReferenceSourceType } from './reference-tags';
 
 /** Limits that bound the cost of a single source-ingest operation. */
@@ -241,7 +242,7 @@ export type DiscoveryStatus = (typeof DISCOVERY_STATUSES)[keyof typeof DISCOVERY
 export const DISCOVERY_STATUS_VALUES: readonly DiscoveryStatus[] = Object.values(DISCOVERY_STATUSES);
 
 /** Env var that suppresses the dispatcher banner ("N unreviewed candidates"). */
-export const DISCOVERY_QUIET_ENV = 'AIRBOSS_QUIET';
+export const DISCOVERY_QUIET_ENV = ENV_VARS.AIRBOSS_QUIET;
 
 /** Env var carrying the GitHub token used by `gh issue create`. */
-export const DISCOVERY_GITHUB_TOKEN_ENV = 'GH_TOKEN';
+export const DISCOVERY_GITHUB_TOKEN_ENV = ENV_VARS.GH_TOKEN;
