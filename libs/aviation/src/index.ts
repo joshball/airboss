@@ -35,6 +35,16 @@ export {
 } from './registry';
 export type { Reference, VerbatimBlock } from './schema/reference';
 export {
+	parseAircraftSlug,
+	parseCertSlug,
+	parseHandbookChapter,
+	parseHandbookSection,
+	parseHandbookSlug,
+	parseRegulationGroup,
+	parseRegulationKind,
+	parseRegulationSection,
+} from './slugs';
+export {
 	isSourceEdition,
 	isSourceMedia,
 	type Source,
