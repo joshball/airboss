@@ -11,6 +11,7 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import {
+	aimManifestSchema,
 	handbookManifestErrataEntrySchema,
 	manifestSchema,
 	sectionTreeManifestSchema,
@@ -46,6 +47,41 @@ const VALID_SECTION_TREE = {
 		},
 	],
 	figures: [],
+} as const;
+
+const VALID_AIM = {
+	kind: 'aim',
+	document_slug: 'aim',
+	edition: '2026-04',
+	title: 'Aeronautical Information Manual',
+	publisher: 'FAA',
+	source_url: 'https://www.faa.gov/air_traffic/publications/media/aim.pdf',
+	fetched_at: '2026-04-26T00:00:00.000+00:00',
+	subjects: ['regulations', 'procedures', 'navigation'],
+	primary_cert: null,
+	entries: [
+		{
+			kind: 'chapter',
+			code: '1',
+			title: 'Air Navigation',
+			body_path: 'aim/2026-04/chapter-1/index.md',
+			content_hash: 'a'.repeat(64),
+		},
+		{
+			kind: 'section',
+			code: '1-1',
+			title: 'Navigation Aids',
+			body_path: 'aim/2026-04/chapter-1/section-1/index.md',
+			content_hash: 'b'.repeat(64),
+		},
+		{
+			kind: 'paragraph',
+			code: '1-1-1',
+			title: 'General',
+			body_path: 'aim/2026-04/chapter-1/section-1/paragraph-1.md',
+			content_hash: 'c'.repeat(64),
+		},
+	],
 } as const;
 
 const VALID_WHOLE_DOC = {
@@ -112,6 +148,46 @@ describe('manifestSchema (discriminated union on kind)', () => {
 
 	it('rejects a whole-doc manifest with malformed body_sha256', () => {
 		const result = wholeDocManifestSchema.safeParse({ ...VALID_WHOLE_DOC, body_sha256: 'not-a-hex' });
+		expect(result.success).toBe(false);
+	});
+
+	it('accepts a valid AIM manifest', () => {
+		const result = manifestSchema.safeParse(VALID_AIM);
+		expect(result.success).toBe(true);
+		if (result.success) {
+			expect(result.data.kind).toBe('aim');
+		}
+	});
+
+	it("rejects an AIM manifest missing 'entries'", () => {
+		const { entries: _drop, ...withoutEntries } = VALID_AIM;
+		const result = aimManifestSchema.safeParse(withoutEntries);
+		expect(result.success).toBe(false);
+	});
+
+	it('rejects an AIM manifest entry with an unknown kind', () => {
+		const broken = {
+			...VALID_AIM,
+			entries: [{ ...VALID_AIM.entries[0], kind: 'novel-leaf' }],
+		};
+		const result = aimManifestSchema.safeParse(broken);
+		expect(result.success).toBe(false);
+	});
+
+	it('rejects an AIM manifest entry with malformed content_hash', () => {
+		const broken = {
+			...VALID_AIM,
+			entries: [{ ...VALID_AIM.entries[0], content_hash: 'not-a-sha' }],
+		};
+		const result = aimManifestSchema.safeParse(broken);
+		expect(result.success).toBe(false);
+	});
+
+	it('rejects an AIM manifest with too many subjects (>3)', () => {
+		const result = aimManifestSchema.safeParse({
+			...VALID_AIM,
+			subjects: ['regulations', 'procedures', 'navigation', 'communications'],
+		});
 		expect(result.success).toBe(false);
 	});
 });
@@ -239,4 +315,19 @@ describe('on-disk manifest fixtures (every shipped handbook)', () => {
 			expect(issuesSummary, `Manifest ${slug}/${edition}\n${issuesSummary ?? ''}`).toBeNull();
 		});
 	}
+});
+
+describe('on-disk manifest fixture (AIM)', () => {
+	it('parses cleanly: aim/2026-04', () => {
+		const path = resolve(REPO_ROOT, 'aim', '2026-04', 'manifest.json');
+		const raw = JSON.parse(readFileSync(path, 'utf-8'));
+		const result = manifestSchema.safeParse(raw);
+		const issuesSummary = result.success
+			? null
+			: result.error.issues.map((i) => `${i.path.join('.')}: ${i.code}: ${i.message}`).join('\n');
+		expect(issuesSummary, `Manifest aim/2026-04\n${issuesSummary ?? ''}`).toBeNull();
+		if (result.success && result.data.kind === 'aim') {
+			expect(result.data.entries.length).toBeGreaterThan(700);
+		}
+	});
 });
