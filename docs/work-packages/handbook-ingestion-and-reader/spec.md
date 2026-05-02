@@ -30,7 +30,7 @@ ADR 016 phase 0 is the contract. This spec implements it.
 - [ADR 011 -- Knowledge graph + learning system](../../decisions/011-knowledge-graph-learning-system/decision.md). Knowledge nodes carry the `references` array this WP upgrades.
 - [ADR 018 -- Source artifact storage policy](../../decisions/018-source-artifact-storage-policy/decision.md). Where source PDFs and derivatives live.
 - [ADR 020 -- Handbook edition and amendment policy](../../decisions/020-handbook-edition-and-amendment-policy.md). How full editions, errata sheets, and supersession are modeled.
-- [HANDBOOK_INGESTION_STRATEGIES.md](../../platform/HANDBOOK_INGESTION_STRATEGIES.md). TOC vs LLM extraction strategies; empirical findings from the PHAK run.
+- [HANDBOOK_INGESTION_STRATEGIES.md](../../ingestion-pipeline/handbook-ingestion-strategies.md). TOC vs LLM extraction strategies; empirical findings from the PHAK run.
 - Existing constants this WP composes with: `CERT_APPLICABILITIES`, `KNOWLEDGE_EDGE_TYPES`, `CONTENT_SOURCES`, `REFERENCE_SOURCE_TYPES` (in `libs/constants/src/reference-tags.ts`). The new `REFERENCE_KINDS` constant in this WP is a peer to `REFERENCE_SOURCE_TYPES` (the latter is the 5-axis tagging axis; the former is the storage discriminator on the `reference` table).
 
 ## In Scope

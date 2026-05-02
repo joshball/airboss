@@ -27,7 +27,7 @@ Depends on: cert-syllabus-and-goal-composer (lens framework + ACS lens shipped, 
 
 - [ ] Read `docs/decisions/016-cert-syllabus-goal-model/decision.md` phase 8 row.
 - [ ] Read `docs/decisions/020-handbook-edition-and-amendment-policy.md`.
-- [ ] Read `docs/agents/reference-citations-pattern.md` (mounting picker, chips, cited-by panel).
+- [ ] Read `docs/ingestion-pipeline/reference-citations-pattern.md` (mounting picker, chips, cited-by panel).
 - [ ] Read `libs/bc/study/src/lenses.ts` (lens framework types + ACS / Domain implementations).
 - [ ] Read `libs/bc/study/src/handbooks.ts` (every BC function the handbook lens consumes).
 - [ ] Read `libs/bc/study/src/dashboard.ts` (`getWeakAreas`, `getRepBacklog`, `WeakArea*` types).

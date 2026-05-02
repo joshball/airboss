@@ -32,7 +32,7 @@ Sibling WPs cover the other phase 8/9 surfaces: `cert-dashboard` owns `/credenti
 - [Cert, Syllabus, Goal Composer spec](../cert-syllabus-and-goal-composer/spec.md). Data layer this WP consumes.
 - [Handbook Ingestion and Reader spec](../handbook-ingestion-and-reader/spec.md). `reference`, `handbook_section`, `handbook_figure` tables; `getNodesCitingSection` BC function.
 - [Calibration Tracker spec](../calibration-tracker/spec.md). `getCalibration` BC + `study.confidence_calibration_point` table the weakness lens reads.
-- [Citations pattern reference](../../agents/reference-citations-pattern.md). Picker / chip / cited-by panel composition.
+- [Citations pattern reference](../../ingestion-pipeline/reference-citations-pattern.md). Picker / chip / cited-by panel composition.
 
 Sibling WPs (different branches; not yet on main):
 

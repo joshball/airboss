@@ -108,7 +108,7 @@ Determinism beats resilience. Hardcoded URLs are auditable (git history). Scrape
 
 ### Inventory document
 
-`bun run sources inventory` regenerates `docs/sources/INVENTORY.md` from YAML config + cache manifests. Idempotent (byte-equal regen with same input + seed). Per-corpus tables; SHA-256 prefix 12 hex chars; date trimmed to YYYY-MM-DD so per-fetch timestamps don't thrash the diff. One timestamp at the top.
+`bun run sources inventory` regenerates `docs/ingestion-pipeline/inventory.md` from YAML config + cache manifests. Idempotent (byte-equal regen with same input + seed). Per-corpus tables; SHA-256 prefix 12 hex chars; date trimmed to YYYY-MM-DD so per-fetch timestamps don't thrash the diff. One timestamp at the top.
 
 ## Consequences
 
@@ -118,7 +118,7 @@ Determinism beats resilience. Hardcoded URLs are auditable (git history). Scrape
 - **Per-chapter SHAs:** re-extract one chapter without re-validating the whole document.
 - **Authoritative chapter boundaries:** the FAA decides where ch7 ends, not our PDF outline parser.
 - **Operator-edits-only paths:** FAA URL rotation = one YAML edit, no code review.
-- **Inventory diff is meaningful:** `git diff docs/sources/INVENTORY.md` after a download shows exactly which sources changed.
+- **Inventory diff is meaningful:** `git diff docs/ingestion-pipeline/inventory.md` after a download shows exactly which sources changed.
 
 ### Negative
 

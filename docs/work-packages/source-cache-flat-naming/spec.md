@@ -246,7 +246,7 @@ To make this unambiguous: any file path beginning with `$AIRBOSS_HANDBOOK_CACHE`
 | File:Line | Action |
 | --- | --- |
 | [docs/platform/STORAGE.md:28](../../platform/STORAGE.md), :30, :34, :37, :75-83 | Rewrite the cache layout block. Update the `git add` walk-through. |
-| [docs/platform/HANDBOOK_INGESTION_STRATEGIES.md:156](../../platform/HANDBOOK_INGESTION_STRATEGIES.md) | Update the PHAK source path. |
+| [docs/ingestion-pipeline/handbook-ingestion-strategies.md:156](../../ingestion-pipeline/handbook-ingestion-strategies.md) | Update the PHAK source path. |
 | [docs/decisions/018-source-artifact-storage-policy/decision.md](../../decisions/018-source-artifact-storage-policy/decision.md) | **Do NOT rewrite.** Per airboss "ADRs are immutable once approved" rule. Add a single line at the top: `> **Superseded by [ADR 021](../021-source-cache-flat-naming/decision.md) as of 2026-04-29 -- this ADR's cache filename layout is replaced; the three-tier policy (cache / inline / generated) still stands.**` Leave the rest of ADR 018 intact. |
 | **NEW: [docs/decisions/021-source-cache-flat-naming/decision.md](../../decisions/021-source-cache-flat-naming/decision.md)** | **Create.** Records the flat cache decision: layout, manifest schema, deletion of the symlink shim, and the rationale for superseding ADR 018's filename layout (while preserving its three-tier policy). This ADR is a deliverable of this WP. |
 | [docs/decisions/016-cert-syllabus-goal-model/decision.md:238](../../decisions/016-cert-syllabus-goal-model/decision.md) | Update path in the ingestion pipeline diagram. |

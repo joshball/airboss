@@ -9,7 +9,7 @@ review_status: pending
 
 # Spec: Chapter source ingestion
 
-Extends the source download/cache architecture (post-ADR 021) to fetch chapter-level assets when the FAA publishes them, additive to the existing whole-doc PDFs. Three publisher classes: chapter PDFs (PHAK, AFH, IPH, helicopter, glider, balloon, instructors), section HTML (AIM only), whole-doc only (AVWX, IFH, AMT, seaplane). Whole-doc PDFs are kept; chapter assets are layered on top. Includes per-corpus YAML config migration so the AC/ACS/AIM/regs URL inventory lives in config, not code, and a generated `docs/sources/INVENTORY.md` that lists every cached document with its source URL.
+Extends the source download/cache architecture (post-ADR 021) to fetch chapter-level assets when the FAA publishes them, additive to the existing whole-doc PDFs. Three publisher classes: chapter PDFs (PHAK, AFH, IPH, helicopter, glider, balloon, instructors), section HTML (AIM only), whole-doc only (AVWX, IFH, AMT, seaplane). Whole-doc PDFs are kept; chapter assets are layered on top. Includes per-corpus YAML config migration so the AC/ACS/AIM/regs URL inventory lives in config, not code, and a generated `docs/ingestion-pipeline/inventory.md` that lists every cached document with its source URL.
 
 ## Why this WP exists
 
@@ -264,7 +264,7 @@ Class C handbooks keep the existing page-range slicing pipeline.
 
    Same shape for 404s: which file, which field, what to set it to.
 
-10. **Inventory document.** New command `bun run sources inventory`. Walks every YAML config, every cache manifest, emits `docs/sources/INVENTORY.md`. Per-corpus tables: doc name, edition, source URL, cache filename, SHA-256 prefix, last fetched. Regenerable, idempotent, committed. Format in §F.
+10. **Inventory document.** New command `bun run sources inventory`. Walks every YAML config, every cache manifest, emits `docs/ingestion-pipeline/inventory.md`. Per-corpus tables: doc name, edition, source URL, cache filename, SHA-256 prefix, last fetched. Regenerable, idempotent, committed. Format in §F.
 
     **SHA-256 prefix length: 12 hex chars** (= 6 bytes = 48 bits). Matches git's full-prefix convention. Plenty for human disambiguation in an inventory doc; not for adversarial collision resistance (which the inventory doesn't need -- it's a human-readable index, not a security artifact).
 
@@ -328,7 +328,7 @@ Class C handbooks keep the existing page-range slicing pipeline.
   - 1 corpus manifest with `primary` + `sections[]` + `appendices[]`
 - `bun run sources download <any>` re-run against the post-download cache makes zero PDF/HTML body downloads. HEAD requests expected.
 - `bun run sources verify-urls` reports zero 404s and the AIM section count matches `sections_per_chapter`.
-- `bun run sources inventory` produces `docs/sources/INVENTORY.md`. Contents: per-corpus tables with doc name, edition, source URL, cache filename, SHA-256 (first 12 chars), last fetched. File is committed; regenerable.
+- `bun run sources inventory` produces `docs/ingestion-pipeline/inventory.md`. Contents: per-corpus tables with doc name, edition, source URL, cache filename, SHA-256 (first 12 chars), last fetched. File is committed; regenerable.
 - `bun run sources extract handbooks phak --strategy prompt`:
   - Produces 17 chapter sidecars derived from chapter PDFs.
   - None at the 60K cap (the cap does not apply to chapter-PDF mode).
@@ -350,7 +350,7 @@ Per project rule, every feature is hand-tested before ship.
 6. Run `bun run sources download avwx` -- whole-doc only, no chapter entries. `bun run sources extract handbooks avwx --strategy prompt` -- still uses page-range slicing (Class C path), confirms 60K cap still applies for whole-doc handbooks.
 7. Run `bun run sources download aim`. Walk `aim/`: 48 section files (per `sections_per_chapter`) + 5 appendix files + 1 PDF. Manifest's `sections[]` indexed by chapter+section pair. `chap07_section_03.html` content includes a known paragraph (`7-3-1. Effect of Cold Temperature`).
 8. Run `bun run sources verify-urls` -- zero 404s.
-9. Run `bun run sources inventory` -- emits `docs/sources/INVENTORY.md`. Open it, verify entries are sorted, every URL is clickable, SHA-256 prefixes are present.
+9. Run `bun run sources inventory` -- emits `docs/ingestion-pipeline/inventory.md`. Open it, verify entries are sorted, every URL is clickable, SHA-256 prefixes are present.
 10. Run `bun run sources extract handbooks phak --strategy prompt`. Verify ch 7 sidecar is full (no 60K cap), contains all 5 expected literal strings.
 11. Re-run `bun run sources inventory` -- output is byte-identical to (9) (idempotent regeneration check).
 
@@ -408,7 +408,7 @@ This is the file:line audit for review.
 | Action | Path | Notes |
 | --- | --- | --- |
 | Create | `scripts/sources/verify-urls.ts` | HEAD-checks every configured URL. Reports 404s with structured remediation. Re-runs two-hop scrape and compares to manifest. AIM section-count check. |
-| Create | `scripts/sources/inventory.ts` | Walks every config + every cache manifest. Emits `docs/sources/INVENTORY.md`. Format in §F. |
+| Create | `scripts/sources/inventory.ts` | Walks every config + every cache manifest. Emits `docs/ingestion-pipeline/inventory.md`. Format in §F. |
 | Edit | [scripts/sources.ts](../../../scripts/sources.ts) | Register `verify-urls` and `inventory` subcommands in the dispatcher. |
 
 ### F. Schemas + inventory format
@@ -481,7 +481,7 @@ The flat-corpora manifests stay as-is. Only AIM grows new fields.
 
 #### Inventory document format
 
-`docs/sources/INVENTORY.md`:
+`docs/ingestion-pipeline/inventory.md`:
 
 ```markdown
 # Source inventory

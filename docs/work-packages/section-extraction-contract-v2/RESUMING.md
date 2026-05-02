@@ -82,7 +82,7 @@ Currently disagreements are surfaced in the compare report as a markdown digest.
 
 ## See also
 
-- [docs/agents/handbook-ingest-pipeline.md](../../agents/handbook-ingest-pipeline.md) -- end-to-end pipeline overview
-- [docs/agents/section-extraction-strategies.md](../../agents/section-extraction-strategies.md) -- TOC vs LLM deep dive
-- [docs/agents/section-extraction-prompt-strategy.md](../../agents/section-extraction-prompt-strategy.md) -- the no-API-key paste flow
+- [docs/ingestion-pipeline/handbook-ingest-pipeline.md](../../ingestion-pipeline/handbook-ingest-pipeline.md) -- end-to-end pipeline overview
+- [docs/ingestion-pipeline/section-extraction-strategies.md](../../ingestion-pipeline/section-extraction-strategies.md) -- TOC vs LLM deep dive
+- [docs/ingestion-pipeline/section-extraction-prompt-strategy.md](../../ingestion-pipeline/section-extraction-prompt-strategy.md) -- the no-API-key paste flow
 - [ADR 022](../../decisions/022-chapter-source-ingestion/decision.md) -- chapter-source ingestion (the cap-bypass companion)

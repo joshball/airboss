@@ -94,7 +94,7 @@ bun run sources extract handbooks phak --edition FAA-H-8083-25C --strategy compa
 Section granularity (chapter -> section -> subsection) is extracted by one
 of two strategies. The per-handbook YAML config picks the default; the
 `--strategy` flag overrides per-run. See
-[docs/agents/section-extraction-prompt-strategy.md](../../docs/agents/section-extraction-prompt-strategy.md)
+[docs/ingestion-pipeline/section-extraction-prompt-strategy.md](../../docs/ingestion-pipeline/section-extraction-prompt-strategy.md)
 for the full prompt-flow walkthrough.
 
 ### `--strategy toc` (deterministic Python)

@@ -61,7 +61,7 @@ These run across all surfaces and don't fit a single app's roadmap:
 - **Theme system** -- shipped per [docs/platform/theme-system/](theme-system/00-INDEX.md).
 - **Auth + identity** -- shipped per [ADR 007](../decisions/007-AUTH_TOPOLOGY.md). Better Auth on `*.airboss.test`. Cross-subdomain session cookie. Future: invite flow, role editing UI.
 - **Audit + content versioning** -- shipped per [ADR 005](../decisions/005-PUBLISHED_CONTENT.md), [ADR 006](../decisions/006-CONTENT_VERSIONING.md). Schema rigor stays even though FIRC submission is dormant.
-- **Reference / glossary pipeline** -- shipped per [docs/work-packages/hangar-sources-v1/](../work-packages/hangar-sources-v1/spec.md), [docs/platform/REFERENCE_SYSTEM_FLOW.md](REFERENCE_SYSTEM_FLOW.md).
+- **Reference / glossary pipeline** -- shipped per [docs/work-packages/hangar-sources-v1/](../work-packages/hangar-sources-v1/spec.md), [docs/ingestion-pipeline/reference-system-flow.md](REFERENCE_SYSTEM_FLOW.md).
 - **Knowledge graph** -- foundation shipped per [ADR 011](../decisions/011-knowledge-graph-learning-system/decision.md). Ongoing content authoring.
 - **Cert/syllabus/goal/lens model** -- foundation per [ADR 016](../decisions/016-cert-syllabus-goal-model/decision.md). Ongoing wiring across surfaces.
 

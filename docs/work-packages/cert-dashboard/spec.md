@@ -34,7 +34,7 @@ Pure read-only consumer of the existing BC. No new schema, no new BC functions, 
 - [Predecessor WP -- cert-syllabus-and-goal-composer](../cert-syllabus-and-goal-composer/spec.md). The data layer this WP consumes.
 - [Sibling WP -- lens-ui](../lens-ui/spec.md). Owns `/lens/...`. Cert dashboard renders the ACS lens for one credential; lens-ui owns the cross-lens browse surface.
 - [Sibling WP -- goal-composer](../goal-composer/spec.md). Owns `/goals/...`. Cert dashboard reads `getPrimaryGoal` for default filtering; it never writes goals.
-- [reference-citations-pattern.md](../../agents/reference-citations-pattern.md). How to mount cited-by panels on a new surface.
+- [reference-citations-pattern.md](../../ingestion-pipeline/reference-citations-pattern.md). How to mount cited-by panels on a new surface.
 - [reference-sveltekit-patterns.md](../../agents/reference-sveltekit-patterns.md). Loader / page-server / route-style conventions.
 
 ## In Scope

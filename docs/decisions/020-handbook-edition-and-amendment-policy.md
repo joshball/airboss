@@ -263,7 +263,7 @@ The following are explicitly not addressed by this ADR:
 
 ## Acceptance criteria
 
-- [ ] [docs/platform/HANDBOOK_INGESTION_STRATEGIES.md](../platform/HANDBOOK_INGESTION_STRATEGIES.md) cross-references this ADR (already in place).
+- [ ] [docs/ingestion-pipeline/handbook-ingestion-strategies.md](../ingestion-pipeline/handbook-ingestion-strategies.md) cross-references this ADR (already in place).
 - [ ] [handbook-ingestion-and-reader/spec.md](../work-packages/handbook-ingestion-and-reader/spec.md) updated to reference ADR 020 in its "Migration considerations" or "Edge cases" section.
 - [ ] [tools/handbook-ingest/README.md](../../tools/handbook-ingest/README.md) documents the `--apply-errata` flag (or notes it as not-yet-implemented).
 - [ ] `manifest.json` schema documented to include the `errata` array; the seed reader is forward-compatible (ignores unknown fields, accepts errata-shaped manifests).
@@ -279,7 +279,7 @@ The following are explicitly not addressed by this ADR:
 
 - [ADR 016](./016-cert-syllabus-goal-model/decision.md) -- the broader citation/cert/syllabus model this slots into.
 - [ADR 018](./018-source-artifact-storage-policy/decision.md) -- where source PDFs (and now errata PDFs) live.
-- [HANDBOOK_INGESTION_STRATEGIES.md](../platform/HANDBOOK_INGESTION_STRATEGIES.md) -- TOC vs LLM extraction strategies.
+- [HANDBOOK_INGESTION_STRATEGIES.md](../ingestion-pipeline/handbook-ingestion-strategies.md) -- TOC vs LLM extraction strategies.
 - [STORAGE.md](../platform/STORAGE.md) -- the three-tier storage policy.
 - [handbook-ingestion-and-reader spec](../work-packages/handbook-ingestion-and-reader/spec.md) -- the WP that ingests handbooks.
 - [apply-errata-and-afh-mosaic spec](../work-packages/apply-errata-and-afh-mosaic/spec.md) -- the WP that ships the apply pipeline + AFH MOSAIC + the discovery surface.

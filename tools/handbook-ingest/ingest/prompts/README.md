@@ -15,7 +15,7 @@ This directory holds the prompt material for the section-extraction flow.
 
 ## How the prompt strategy runs
 
-See `docs/agents/section-extraction-prompt-strategy.md` for the full
+See `docs/ingestion-pipeline/section-extraction-prompt-strategy.md` for the full
 walkthrough. Short version:
 
 1. `bun run sources extract handbooks <doc> --edition <ed> --strategy prompt`

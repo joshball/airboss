@@ -98,7 +98,7 @@ Every finishing agent MUST read these. They're the contracts the code has to sat
 ### Plans + architecture
 
 1. [20260422-hangar-data-management-plan.md](./20260422-hangar-data-management-plan.md) — the locked plan with all 8 decisions
-2. [REFERENCE_SYSTEM_FLOW.md](../../platform/REFERENCE_SYSTEM_FLOW.md) — end-to-end flow from wiki-link to rendered glossary page
+2. [REFERENCE_SYSTEM_FLOW.md](../../ingestion-pipeline/reference-system-flow.md) — end-to-end flow from wiki-link to rendered glossary page
 3. [20260422-reference-system-architecture.md](./20260422-reference-system-architecture.md) — schema + extraction pipeline + gates
 4. [MULTI_PRODUCT_ARCHITECTURE.md](../../platform/MULTI_PRODUCT_ARCHITECTURE.md) — where hangar sits in the surface taxonomy
 5. [20260422-firc-hangar-ops-survey.md](./20260422-firc-hangar-ops-survey.md) — what to port from FIRC vs leave behind

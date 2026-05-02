@@ -177,7 +177,7 @@ These require network access. Not in CI; run manually before merge.
 
 ### Inventory generation real run
 
-- [ ] Run `bun run sources inventory` against the populated cache. Expect `docs/sources/INVENTORY.md` to be generated.
+- [ ] Run `bun run sources inventory` against the populated cache. Expect `docs/ingestion-pipeline/inventory.md` to be generated.
 - [ ] Open the file. Verify per-corpus tables, sorted entries, clickable URLs, SHA-256 prefixes present.
 - [ ] Re-run. Expect byte-equal output.
 - [ ] `git status` shows the file changed only when the underlying data actually changed.
@@ -194,7 +194,7 @@ This is the punch list the operator runs before approving the implementation PR 
 6. **AVWX regression.** Wipe + re-fetch; verify whole-doc only, no spurious chapter download attempt.
 7. **Re-download idempotency.** Re-run all 5 above downloads; expect zero PDF/HTML body fetches.
 8. **URL verifier sweep.** Run `bun run sources verify-urls`; eyeball the output for any unexpected warnings.
-9. **Inventory regen.** Run `bun run sources inventory`; open `docs/sources/INVENTORY.md`; verify it's complete and reasonable.
+9. **Inventory regen.** Run `bun run sources inventory`; open `docs/ingestion-pipeline/inventory.md`; verify it's complete and reasonable.
 10. **Idempotent inventory.** Re-run; assert `git status` shows no changes.
 
 ## Test data fixtures
