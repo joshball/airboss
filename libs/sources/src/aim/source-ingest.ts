@@ -34,9 +34,10 @@
  */
 
 import { createHash } from 'node:crypto';
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { resolveCacheRoot } from '@ab/constants';
+import { writeIfChanged } from '../io/write-if-changed.ts';
 import type { ManifestEntry, ManifestFile } from './derivative-reader.ts';
 import { type ExtractedAim, extractAim } from './extract.ts';
 import { type IngestReport, runAimIngest } from './ingest.ts';
@@ -223,7 +224,7 @@ export function writeAimDerivatives(args: {
 		ensureDir(dir);
 		const bodyPath = join(dir, 'index.md');
 		const body = ch.body.length > 0 ? ch.body : `# ${ch.title}\n`;
-		writeFileSync(bodyPath, body, 'utf-8');
+		writeIfChanged(bodyPath, body);
 		entries.push({
 			kind: 'chapter',
 			code: ch.num,
@@ -239,7 +240,7 @@ export function writeAimDerivatives(args: {
 		ensureDir(dir);
 		const bodyPath = join(dir, 'index.md');
 		const body = sec.body.length > 0 ? sec.body : `# ${sec.title}\n`;
-		writeFileSync(bodyPath, body, 'utf-8');
+		writeIfChanged(bodyPath, body);
 		entries.push({
 			kind: 'section',
 			code: sec.code,
@@ -255,7 +256,7 @@ export function writeAimDerivatives(args: {
 		ensureDir(dir);
 		const bodyPath = join(dir, `paragraph-${p.paragraph}.md`);
 		const body = p.body.length > 0 ? `# ${p.title}\n\n${p.body}\n` : `# ${p.title}\n`;
-		writeFileSync(bodyPath, body, 'utf-8');
+		writeIfChanged(bodyPath, body);
 		entries.push({
 			kind: 'paragraph',
 			code: p.code,
@@ -271,7 +272,7 @@ export function writeAimDerivatives(args: {
 	for (const g of extracted.glossary) {
 		const bodyPath = join(glossaryDir, `${g.slug}.md`);
 		const body = g.body.length > 0 ? `# ${g.title}\n\n${g.body}\n` : `# ${g.title}\n`;
-		writeFileSync(bodyPath, body, 'utf-8');
+		writeIfChanged(bodyPath, body);
 		entries.push({
 			kind: 'glossary',
 			code: `glossary/${g.slug}`,
@@ -285,7 +286,7 @@ export function writeAimDerivatives(args: {
 	for (const a of extracted.appendices) {
 		const bodyPath = join(editionRoot, `appendix-${a.num}.md`);
 		const body = a.body.length > 0 ? `# ${a.title}\n\n${a.body}\n` : `# ${a.title}\n`;
-		writeFileSync(bodyPath, body, 'utf-8');
+		writeIfChanged(bodyPath, body);
 		entries.push({
 			kind: 'appendix',
 			code: `appendix-${a.num}`,
@@ -306,7 +307,7 @@ export function writeAimDerivatives(args: {
 		entries,
 	};
 	const manifestPath = join(editionRoot, 'manifest.json');
-	writeFileSync(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`, 'utf-8');
+	writeIfChanged(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
 
 	return { manifestPath, entriesWritten: entries.length };
 }

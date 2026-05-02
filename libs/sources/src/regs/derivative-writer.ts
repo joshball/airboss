@@ -10,8 +10,9 @@
  * compares each file before writing; skips writes when unchanged. Idempotent.
  */
 
-import { existsSync, mkdirSync, readFileSync, renameSync, unlinkSync, writeFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
+import { mkdirSync } from 'node:fs';
+import { join } from 'node:path';
+import { writeIfChanged } from '../io/write-if-changed.ts';
 import type { SourceEntry } from '../types.ts';
 import { sha256 } from './cache.ts';
 import type { NormalizedPart, NormalizedSection, NormalizedSubpart } from './normalizer.ts';
@@ -183,30 +184,6 @@ export function writeDerivativeTree(input: DerivativeWriteInput): DerivativeWrit
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
-
-function writeIfChanged(path: string, content: string): { wrote: boolean } {
-	mkdirSync(dirname(path), { recursive: true });
-	if (existsSync(path)) {
-		const current = readFileSync(path, 'utf-8');
-		if (current === content) return { wrote: false };
-	}
-	// Atomic write: tmp + rename. POSIX rename is atomic on the same
-	// filesystem; a crash mid-write leaves either the prior file or no file --
-	// never a partial destination. Required by ADR 021.
-	const tmp = `${path}.tmp`;
-	try {
-		writeFileSync(tmp, content, 'utf-8');
-		renameSync(tmp, path);
-	} catch (err) {
-		try {
-			unlinkSync(tmp);
-		} catch {
-			// tmp may not exist; ignore.
-		}
-		throw err;
-	}
-	return { wrote: true };
-}
 
 function partNumberFromEntry(entry: SourceEntry): string {
 	// Entry id: 'airboss-ref:regs/cfr-14/91/103' -> '91'

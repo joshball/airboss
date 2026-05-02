@@ -26,9 +26,10 @@
  */
 
 import { createHash } from 'node:crypto';
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { resolveCacheRoot } from '@ab/constants';
+import { writeIfChanged } from '../io/write-if-changed.ts';
 import { extractPdf, findEffectiveDate } from '../pdf/index.ts';
 import { __editions_internal__ } from '../registry/editions.ts';
 import { getEntryLifecycle, recordPromotion } from '../registry/lifecycle.ts';
@@ -327,7 +328,7 @@ export async function runAcIngest(args: IngestArgs): Promise<IngestReport> {
 			const docDir = join(args.derivativeRoot, ac.docSlug, ac.revision);
 			ensureDir(docDir);
 			const bodyPath = join(docDir, 'document.md');
-			writeFileSync(bodyPath, documentBody, 'utf-8');
+			writeIfChanged(bodyPath, documentBody);
 
 			const manifest: AcManifestFile = {
 				schema_version: 1,
@@ -348,7 +349,7 @@ export async function runAcIngest(args: IngestArgs): Promise<IngestReport> {
 				changes: [],
 			};
 			const manifestPath = join(docDir, 'manifest.json');
-			writeFileSync(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`, 'utf-8');
+			writeIfChanged(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
 
 			const entry = buildSourceEntry({ ac, title, publicationDate });
 			const existing = sourcesPatch[entry.id];
@@ -404,13 +405,20 @@ export async function runAcIngest(args: IngestArgs): Promise<IngestReport> {
 		promotionBatchId = result.batch.id;
 	}
 
+	// Use the max per-source `fetched_at` so re-running with no upstream
+	// change leaves the index byte-equal (ADR 022 idempotent regen).
+	const sourceFetchedAtValues = cached
+		.map((c) => c.downloaderManifest.fetched_at)
+		.filter((v): v is string => typeof v === 'string' && v.length > 0);
+	const corpusFetchedAt =
+		sourceFetchedAtValues.length > 0 ? sourceFetchedAtValues.slice().sort().slice(-1)[0] : '1970-01-01T00:00:00.000Z';
 	const corpusIndex: AcCorpusIndex = {
 		schema_version: 1,
-		fetched_at: new Date().toISOString(),
+		fetched_at: corpusFetchedAt ?? '1970-01-01T00:00:00.000Z',
 		entries: indexEntries.sort((a, b) => a.doc_slug.localeCompare(b.doc_slug)),
 	};
 	const indexPath = join(args.derivativeRoot, 'index.json');
-	writeFileSync(indexPath, `${JSON.stringify(corpusIndex, null, 2)}\n`, 'utf-8');
+	writeIfChanged(indexPath, `${JSON.stringify(corpusIndex, null, 2)}\n`);
 
 	return {
 		acsScanned: cached.length + discovery.skipped.length,
