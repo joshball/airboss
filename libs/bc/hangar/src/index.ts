@@ -152,6 +152,7 @@ export {
 	makeUploadHandler,
 	makeValidateHandler,
 	nodeSpawnRunner,
+	REGISTRY_TARGET_ID,
 	REPO_ROOT,
 	type SourceJobOptions,
 	type SpawnResult,

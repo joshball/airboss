@@ -1,4 +1,5 @@
-import { ROUTES, type Role } from '@ab/constants';
+import { narrowRole } from '@ab/bc-hangar';
+import { ROUTES } from '@ab/constants';
 import { recoverOrphanedRunning, startWorker, type WorkerHandle } from '@ab/hangar-jobs';
 import { initRegistry } from '@ab/sources';
 import {
@@ -142,7 +143,11 @@ export const handle: Handle = async ({ event, resolve }) => {
 						firstName: ((session.user as Record<string, unknown>).firstName as string) ?? '',
 						lastName: ((session.user as Record<string, unknown>).lastName as string) ?? '',
 						emailVerified: session.user.emailVerified,
-						role: (session.user.role as Role) ?? null,
+						// Narrow better-auth's free-text role field to the closed
+						// `Role` union; non-matching strings (legacy seed data,
+						// custom roles) collapse to null so downstream
+						// `requireRole` checks fail closed.
+						role: narrowRole(session.user.role ?? null),
 						image: session.user.image ?? null,
 						banned: session.user.banned ?? null,
 						createdAt: session.user.createdAt,

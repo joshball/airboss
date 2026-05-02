@@ -99,8 +99,11 @@ export const hangarReference = hangarSchema.table(
 	(t) => ({
 		// Partial: dirty rows are the only ones the sync service queries.
 		refDirtyIdx: index('hangar_reference_dirty_idx').on(t.dirty).where(sql`${t.dirty} = true`),
-		refUpdatedIdx: index('hangar_reference_updated_idx').on(t.updatedAt),
-		refLiveIdx: index('hangar_reference_live_idx').on(t.id).where(sql`${t.deletedAt} IS NULL`),
+		// Live rows are the BC's hot list; partial-on-deleted-at pairs with
+		// the BC's `updatedAt desc` sort to keep the partial useful (the
+		// previous `(id) WHERE deleted_at IS NULL` partial was redundant
+		// with the PK -- chunk-6 schema MIN).
+		refUpdatedIdx: index('hangar_reference_updated_idx').on(t.updatedAt).where(sql`${t.deletedAt} IS NULL`),
 	}),
 );
 
@@ -151,7 +154,11 @@ export const hangarSource = hangarSchema.table(
 		sourceTypeIdx: index('hangar_source_type_idx').on(t.type),
 		// Partial: dirty rows are the only ones the sync service queries.
 		sourceDirtyIdx: index('hangar_source_dirty_idx').on(t.dirty).where(sql`${t.dirty} = true`),
-		sourceLiveIdx: index('hangar_source_live_idx').on(t.id).where(sql`${t.deletedAt} IS NULL`),
+		// Replaces the redundant `(id) WHERE deleted_at IS NULL` partial:
+		// the BC's `listLiveSources` consumer orders by `updatedAt desc`,
+		// so a partial-on-deleted-at index keyed on `updatedAt` actually
+		// pays back. Chunk-6 schema MIN.
+		sourceUpdatedIdx: index('hangar_source_updated_idx').on(t.updatedAt).where(sql`${t.deletedAt} IS NULL`),
 		sourceTypeCheck: check('hangar_source_type_check', sql.raw(`"type" IN (${inList(SOURCE_TYPE_VALUES)})`)),
 	}),
 );
@@ -189,10 +196,17 @@ export const hangarSyncLog = hangarSchema.table(
 		} | null>(),
 		startedAt: timestamp('started_at', { withTimezone: true }).notNull().defaultNow(),
 		finishedAt: timestamp('finished_at', { withTimezone: true }),
+		// Convention parity with every other hangar table: `created_at` /
+		// `updated_at` even on append-only rows so admin tooling that filters
+		// "last touched" works uniformly. Closes chunk-6 schema NIT.
+		...timestamps(),
 	},
 	(t) => ({
 		syncActorIdx: index('hangar_sync_log_actor_idx').on(t.actorId, t.startedAt),
 		syncOutcomeIdx: index('hangar_sync_log_outcome_idx').on(t.outcome, t.startedAt),
+		// Closes chunk-6 schema MIN: enable "recent syncs of kind = pr"
+		// admin-history filters without falling back to a full scan.
+		syncKindIdx: index('hangar_sync_log_kind_idx').on(t.kind, t.startedAt),
 		syncKindCheck: check('hangar_sync_log_kind_check', sql.raw(`"kind" IN (${inList(HANGAR_SYNC_MODE_VALUES)})`)),
 		syncOutcomeCheck: check('hangar_sync_log_outcome_check', sql.raw(`"outcome" IN (${inList(SYNC_OUTCOME_VALUES)})`)),
 	}),

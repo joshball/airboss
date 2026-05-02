@@ -120,7 +120,7 @@ function formatDate(iso: string): string {
 					size="md"
 					disabled={data.dirtyCount === 0}
 					loading={syncing}
-					loadingLabel="Queueing..."
+					loadingLabel="Queueing"
 				>
 					Sync all pending{data.dirtyCount > 0 ? ` (${data.dirtyCount})` : ''}
 				</Button>
@@ -317,6 +317,11 @@ function formatDate(iso: string): string {
 
 	.pagination a:hover {
 		background: var(--surface-sunken);
+	}
+
+	.pagination a:focus-visible {
+		outline: 2px solid var(--focus-ring);
+		outline-offset: 2px;
 	}
 
 	.pagination a.disabled {

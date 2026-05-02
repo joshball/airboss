@@ -67,11 +67,23 @@ export interface CreateThemeEndpointOptions {
 	 * caller that forgets to pass this errs on the safe side.
 	 */
 	dev?: boolean;
+	/**
+	 * When true, the endpoint rejects requests without `event.locals.user`
+	 * (401). Hangar opts in: the surface is admin-only and an anonymous POST
+	 * is always either a probe or noise. Study / sim / avionics also opt in
+	 * since the picker only ever runs after sign-in. Closes chunk-6 security
+	 * MIN: theme cookie endpoint was unauthenticated and lacked a CSRF token.
+	 */
+	requireAuth?: boolean;
 }
 
 export function createThemeEndpoint(options: CreateThemeEndpointOptions = {}): RequestHandler {
 	const secure = !options.dev;
-	return async ({ request, cookies }) => {
+	const requireAuth = options.requireAuth === true;
+	return async ({ request, cookies, locals }) => {
+		if (requireAuth && !(locals as { user?: unknown } | undefined)?.user) {
+			throw error(401, 'sign-in required');
+		}
 		let payload: unknown;
 		try {
 			payload = await request.json();

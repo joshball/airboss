@@ -42,6 +42,14 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 /** Four ascents: libs/bc/hangar/src/ -> libs/bc/hangar/ -> libs/bc/ -> libs/ -> repo root. */
 export const REPO_ROOT = resolve(HERE, '..', '..', '..', '..');
 
+/**
+ * Sentinel `targetId` for audit rows tied to a registry-wide operation
+ * (`build-references`, `validate-references`) rather than a single source row.
+ * Centralised so a future rename or sibling sentinel (`'index'` etc.) lives
+ * in one place.
+ */
+export const REGISTRY_TARGET_ID = 'registry';
+
 /** Shape a subprocess runner produces; aligns with the smaller of the Bun + node APIs. */
 export interface SpawnResult {
 	exitCode: number;
@@ -360,7 +368,7 @@ export function makeBuildHandler(options: SourceJobOptions = {}): JobHandler {
 			actorId: ctx.job.actorId,
 			op: AUDIT_OPS.UPDATE,
 			targetType: AUDIT_TARGETS.HANGAR_SOURCE,
-			targetId: 'registry',
+			targetId: REGISTRY_TARGET_ID,
 			metadata: { jobKind: ctx.job.kind, jobId: ctx.job.id, outcome: 'built' },
 		});
 		return { kind: 'build', exitCode: result.exitCode, stdoutLines: result.stdout.length };
@@ -421,7 +429,7 @@ export function makeValidateHandler(options: SourceJobOptions = {}): JobHandler 
 			actorId: ctx.job.actorId,
 			op: AUDIT_OPS.UPDATE,
 			targetType: AUDIT_TARGETS.HANGAR_SOURCE,
-			targetId: 'registry',
+			targetId: REGISTRY_TARGET_ID,
 			metadata: { jobKind: ctx.job.kind, jobId: ctx.job.id, outcome: 'validated' },
 		});
 		return { kind: 'validate', exitCode: result.exitCode, stdoutLines: result.stdout.length };

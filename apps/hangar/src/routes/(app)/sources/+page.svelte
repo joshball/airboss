@@ -101,7 +101,7 @@ function formatDate(iso: string | null): string {
 			</div>
 			<div class="status-tile">
 				<div class="tile-value ts">{formatDate(data.statusTiles.oldestDownloadedAt)}</div>
-				<div class="tile-label">Oldest source</div>
+				<div class="tile-label">Oldest cached download</div>
 			</div>
 		</div>
 	</section>
@@ -292,5 +292,10 @@ function formatDate(iso: string | null): string {
 	.chip:hover {
 		background: var(--action-default-wash);
 		border-color: var(--action-default-edge);
+	}
+
+	.chip:focus-visible {
+		outline: 2px solid var(--focus-ring);
+		outline-offset: 2px;
 	}
 </style>

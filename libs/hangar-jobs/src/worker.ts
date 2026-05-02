@@ -117,13 +117,14 @@ export function startWorker(options: WorkerOptions): WorkerHandle {
 		// without trampling each other's domains.
 		if (kindFilter.length === 0) return undefined;
 		const lockedTargets = Array.from(runningTargets);
-		const conditions = [
-			eq(hangarJob.status, JOB_STATUSES.QUEUED),
-			inArray(hangarJob.kind, kindFilter as string[]),
-			lockedTargets.length === 0
-				? isNotNull(hangarJob.id)
-				: or(isNull(hangarJob.targetId), notInArray(hangarJob.targetId, lockedTargets)),
-		];
+		const conditions = [eq(hangarJob.status, JOB_STATUSES.QUEUED), inArray(hangarJob.kind, kindFilter as string[])];
+		if (lockedTargets.length > 0) {
+			// Only constrain on locked targets when there are any. The prior
+			// `isNotNull(id)` clause was a no-op padding for the and(...) call
+			// (PK is never null) flagged in the chunk-6 correctness review.
+			const lockedClause = or(isNull(hangarJob.targetId), notInArray(hangarJob.targetId, lockedTargets));
+			if (lockedClause) conditions.push(lockedClause);
+		}
 		if (options.targetIdPrefix !== undefined) {
 			conditions.push(isNotNull(hangarJob.targetId));
 			conditions.push(like(hangarJob.targetId, `${options.targetIdPrefix}%`));

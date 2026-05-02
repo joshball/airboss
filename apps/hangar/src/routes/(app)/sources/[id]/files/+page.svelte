@@ -100,8 +100,14 @@ function truncate(text: string | null, max = 20_000): string {
 				{@const isOpen = expanded[file.name]}
 				<li class="file" class:archive={file.isArchive}>
 					<div class="file-head">
-						<button type="button" class="expander" aria-expanded={isOpen} onclick={() => toggle(file.name)}>
-							<span class="chevron" aria-hidden="true">{isOpen ? 'v' : '>'}</span>
+						<button
+							type="button"
+							class="expander"
+							aria-expanded={isOpen}
+							aria-controls="preview-{file.name}"
+							onclick={() => toggle(file.name)}
+						>
+							<span class="chevron" aria-hidden="true">{isOpen ? '▾' : '▸'}</span>
 							<span class="name mono">{file.name}</span>
 						</button>
 						<span class="meta mono">{formatBytes(file.sizeBytes)}</span>
@@ -121,7 +127,7 @@ function truncate(text: string | null, max = 20_000): string {
 						{/if}
 					</div>
 					{#if isOpen}
-						<div class="preview">
+						<div class="preview" id="preview-{file.name}">
 							{#if file.previewKind === PREVIEW_KINDS.GEOTIFF}
 								<GeotiffPreview
 									sourceId={data.source.id}

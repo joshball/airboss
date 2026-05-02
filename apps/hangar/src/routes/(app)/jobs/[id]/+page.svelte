@@ -215,7 +215,11 @@ function formatTime(iso: string | null): string {
 				<span class="live-indicator" aria-live="polite">polling 1 Hz</span>
 			{/if}
 		</div>
-		<div class="log-body">
+		<!-- role=log + aria-live=polite so screen-reader users hear new
+			 lines as the worker streams them. aria-relevant=additions
+			 keeps SRs from re-announcing the full buffer on every poll
+			 (chunk-6 a11y MAJOR). -->
+		<div class="log-body" role="log" aria-live="polite" aria-relevant="additions">
 			{#if droppedLineCount > 0}
 				<p class="trim-notice" role="status">
 					Showing the last {logs.length.toLocaleString()} of {(logs.length + droppedLineCount).toLocaleString()} lines.
@@ -416,11 +420,24 @@ function formatTime(iso: string | null): string {
 
 	.log-line {
 		display: grid;
-		grid-template-columns: 3rem 7rem 5rem 1fr;
+		/* `auto` lets the seq column expand for >999 lines and the timestamp
+		   widen for long ISO timestamps without truncation (chunk-6 ux NIT). */
+		grid-template-columns: minmax(3rem, auto) minmax(7rem, auto) minmax(5rem, auto) 1fr;
 		gap: var(--space-sm);
 		padding: var(--space-2xs) 0;
 		color: var(--ink-body);
 		align-items: baseline;
+	}
+
+	/* Below ~600px collapse meta columns into a single line above the text
+	   so users on narrow viewports do not have to horizontal-scroll inside
+	   the log body for every line (chunk-6 a11y MIN: 1.4.10 Reflow). */
+	@media (max-width: 600px) {
+		.log-line {
+			grid-template-columns: 1fr;
+			grid-template-rows: auto auto;
+			gap: var(--space-2xs);
+		}
 	}
 
 	.log-seq {

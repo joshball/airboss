@@ -95,13 +95,28 @@ export const outboundUrlSchema = z
 	.regex(/^https?:\/\//i, 'URL must be http(s)')
 	.max(2048);
 
+/**
+ * Citation URLs require `https://` (not `http://`). Every legitimate aviation
+ * source the platform cites is HTTPS today, and a future renderer that
+ * de-references citation URLs (link previews, validation pings, archive
+ * captures) would inherit the SSRF surface from `outboundUrlSchema` -- locking
+ * scheme to https here removes one class of internal-host targets up front.
+ *
+ * Closes chunk-6 security MIN: reference citation URL allows any host.
+ */
+export const citationUrlSchema = z
+	.string()
+	.trim()
+	.regex(/^https:\/\//i, 'Citation URL must be https')
+	.max(2048);
+
 /** Single citation. Locator stays freeform (per source-type). */
 export const citationSchema = z.object({
 	sourceId: z.string().trim().min(1).max(128),
 	locator: z
 		.record(z.union([z.string().trim().min(1).max(200), z.number().int()]))
 		.refine((o) => Object.keys(o).length > 0, 'Locator must not be empty'),
-	url: outboundUrlSchema.optional(),
+	url: citationUrlSchema.optional(),
 });
 
 /**

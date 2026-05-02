@@ -57,15 +57,25 @@ export const actions: Actions = {
 			const authResponse = await auth.handler(authRequest);
 
 			if (!authResponse.ok) {
-				const data = (await authResponse.json().catch(() => null)) as { message?: string } | null;
+				// Drain the response body so the connection can be released; we
+				// intentionally discard `data.message` because surfacing
+				// better-auth's distinct "user not found" vs "invalid password"
+				// strings is a user-enumeration vector.
+				await authResponse.json().catch(() => null);
 				if (authResponse.status === 429) {
 					return fail(429, {
 						error: 'Too many sign-in attempts. Please wait a moment and try again.',
 						email,
 					});
 				}
+				// Force a uniform user-facing message on the 400/401 branches.
+				// Better-auth distinguishes "user not found" vs "invalid
+				// password" in `data.message`; combined with the email echo
+				// that's a user-enumeration vector. Closes chunk-6 security
+				// MIN: login form returns the typed email back into the
+				// fail() body, including 401 paths.
 				return fail(authResponse.status === 401 ? 401 : 400, {
-					error: data?.message ?? 'Invalid email or password',
+					error: 'Invalid email or password',
 					email,
 				});
 			}

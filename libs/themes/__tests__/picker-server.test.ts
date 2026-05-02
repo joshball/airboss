@@ -111,6 +111,30 @@ describe('createThemeEndpoint', () => {
 		// One year ± a day's slack -- exact constant lives in `@ab/constants`.
 		expect((opts?.maxAge ?? 0) >= SECONDS_PER_YEAR - SECONDS_PER_DAY).toBe(true);
 	});
+
+	describe('requireAuth gate', () => {
+		const POSTGated = createThemeEndpoint({ requireAuth: true });
+
+		function makeGatedEvent(body: unknown, cookies: Cookies, user: object | null) {
+			return { request: makeRequest(body), cookies, locals: { user } } as unknown as Parameters<
+				ReturnType<typeof createThemeEndpoint>
+			>[0];
+		}
+
+		it('returns 401 when no session is attached and requireAuth is set', async () => {
+			const { cookies, store } = makeCookies();
+			const res = await POSTGated(makeGatedEvent({ value: THEMES.AIRBOSS_DEFAULT }, cookies, null)).catch((e) => e);
+			expect(res.status).toBe(401);
+			expect(store.has(THEME_COOKIE)).toBe(false);
+		});
+
+		it('persists the cookie when a session IS attached', async () => {
+			const { cookies, store } = makeCookies();
+			const res = await POSTGated(makeGatedEvent({ value: THEMES.AIRBOSS_DEFAULT }, cookies, { id: 'usr_x' }));
+			expect(res.status).toBe(200);
+			expect(store.get(THEME_COOKIE)?.value).toBe(THEMES.AIRBOSS_DEFAULT);
+		});
+	});
 });
 
 describe('readThemeFromCookies', () => {

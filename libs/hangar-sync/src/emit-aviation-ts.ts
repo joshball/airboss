@@ -60,7 +60,12 @@ function formatString(value: string): string {
 		else if (ch === '\n') out += '\\n';
 		else if (ch === '\r') out += '\\r';
 		else if (ch === '\t') out += '\\t';
-		else if (code < 0x20 || code === 0x7f) {
+		// 0x2028 (LINE SEPARATOR) and 0x2029 (PARAGRAPH SEPARATOR) are valid
+		// in JSON / TOML strings but terminate a JavaScript single-quoted
+		// string literal. Escape them so paraphrases pasted from regulatory
+		// PDFs (which sometimes carry these as soft line breaks) emit a
+		// parseable aviation.ts.
+		else if (code < 0x20 || code === 0x7f || code === 0x2028 || code === 0x2029) {
 			out += `\\u${code.toString(16).padStart(4, '0')}`;
 		} else {
 			out += ch;
