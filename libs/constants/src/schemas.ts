@@ -29,6 +29,11 @@
  *   so no tables exist yet. The namespace is reserved here so the eventual
  *   scan-trainer drill, MFD page state, and any avionics-specific attempt
  *   tables land under `avionics.*` without colliding with sim's `sim.*` rows.
+ * - `SOURCES_REGISTRY`: home of the `@ab/sources` registry persistence
+ *   tables (`promotion_batches`, `editions`). Populated by the WP
+ *   `promotion-batches-persistence`. The audit row contract is frozen by
+ *   ADR 019 §2.4 + §6.1; the registry's static identity table (`SOURCES`)
+ *   stays in code.
  */
 export const SCHEMAS = {
 	IDENTITY: 'identity',
@@ -37,6 +42,7 @@ export const SCHEMAS = {
 	HANGAR: 'hangar',
 	SIM: 'sim',
 	AVIONICS: 'avionics',
+	SOURCES_REGISTRY: 'sources_registry',
 } as const;
 
 export type SchemaName = (typeof SCHEMAS)[keyof typeof SCHEMAS];

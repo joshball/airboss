@@ -4,7 +4,9 @@
 	"type": "module",
 	"dependencies": {
 		"@ab/constants": "workspace:*",
+		"@ab/db": "workspace:*",
 		"@ab/utils": "workspace:*",
+		"drizzle-orm": "^0.44.2",
 		"fast-xml-parser": "^4.5.0",
 		"yaml": "^2.8.3"
 	}
