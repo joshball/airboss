@@ -421,15 +421,76 @@ export const aimManifestSchema = z.object({
 export type AimManifest = z.infer<typeof aimManifestSchema>;
 
 /**
+ * AC revision shape. Single lowercase letter (`a`..`z`); the FAA's revision
+ * letter is uppercased on the cover page (`AC 61-98D`) but the downloader
+ * normalises to lowercase for filesystem safety. The seeder reverses this
+ * when computing the DB edition tag (`AC 61-98D`).
+ */
+const AC_REVISION_REGEX = /^[a-z]$/;
+
+/**
+ * AC `doc_slug` regex -- filesystem-safe (dots replaced by dashes). The
+ * canonical FAA doc number with dots preserved is carried separately on
+ * `doc_number` so the locator round-trips.
+ *
+ *   'ac/00-6/b'   -> doc_slug='00-6'    doc_number='00-6'
+ *   'ac/91-21-1/d' -> doc_slug='91-21-1' doc_number='91.21-1' (or '91-21.1' depending on the AC)
+ */
+const AC_DOC_SLUG_REGEX = /^[0-9]+(?:[-.][0-9]+)*$/;
+
+/**
+ * AC manifest (`kind: 'ac'`). One per `(doc_slug, revision)` pair under
+ * `<repo>/ac/<doc_slug>/<revision>/manifest.json`. The seed adapter consumes
+ * the whole-document body (`body_path`) and produces ONE `reference_section`
+ * row at depth 0, level `'circular'`, code `'1'`.
+ *
+ * Distinct from the `whole-doc` shape because AC manifests carry a different
+ * vocabulary (`doc_slug`/`revision` vs `document_slug`/`edition`) and a
+ * `changes[]` cancellation/supersession array. Subjects + primary_cert are
+ * NOT carried on the manifest -- those live on the YAML row in
+ * `course/references/advisory-circulars.yaml` and survive seed via
+ * `upsertReference`'s null-defaulting on conflict.
+ *
+ * `sections[]` and `changes[]` are validated as arrays of unknown today; AC
+ * section + change extraction is a follow-up WP. The fields are required
+ * (with default empty array) so the writer always emits them and forward-
+ * compatibility plumbing stays simple.
+ */
+export const acManifestSchema = z.object({
+	kind: z.literal('ac'),
+	schema_version: z.number().int().positive().optional(),
+	corpus: z.literal('ac'),
+	doc_slug: z.string().regex(AC_DOC_SLUG_REGEX),
+	doc_number: z.string().min(1),
+	revision: z.string().regex(AC_REVISION_REGEX),
+	title: z.string().min(1),
+	publisher: z.string().min(1).default('FAA'),
+	publication_date: z
+		.string()
+		.regex(/^\d{4}-\d{2}-\d{2}$/)
+		.nullable(),
+	source_url: z.string().url(),
+	source_sha256: z.string().regex(/^[0-9a-f]{64}$/i),
+	fetched_at: z.string().datetime({ offset: true }),
+	page_count: z.number().int().positive(),
+	body_path: z.string().min(1),
+	body_sha256: z.string().regex(/^[0-9a-f]{64}$/i),
+	sections: z.array(z.unknown()).default([]),
+	changes: z.array(z.unknown()).default([]),
+});
+export type AcManifest = z.infer<typeof acManifestSchema>;
+
+/**
  * Top-level shape of `<corpus>/<doc>/<edition>/manifest.json`. Discriminated
  * union over manifest kind: section-tree (`kind: 'handbook'`), whole-doc
- * (`kind: 'whole-doc'`), or AIM (`kind: 'aim'`). The seed dispatches on the
- * discriminator to choose the right adapter.
+ * (`kind: 'whole-doc'`), AIM (`kind: 'aim'`), or AC (`kind: 'ac'`). The seed
+ * dispatches on the discriminator to choose the right adapter.
  */
 export const manifestSchema = z.discriminatedUnion('kind', [
 	sectionTreeManifestSchema,
 	wholeDocManifestSchema,
 	aimManifestSchema,
+	acManifestSchema,
 ]);
 export type Manifest = z.infer<typeof manifestSchema>;
 
