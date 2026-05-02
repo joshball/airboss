@@ -20,7 +20,7 @@ export const load: PageServerLoad = async (event) => {
 
 	const refs = await listReferences();
 	const ref = refs.find((r) => r.kind === REFERENCE_KINDS.POH && r.documentSlug === slug);
-	if (!ref) throw error(404, `Aircraft not found: ${slug}`);
+	if (!ref) throw error(404, 'Aircraft not found.');
 
 	const refKind = ref.kind as ReferenceKind;
 	return {

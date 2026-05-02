@@ -39,7 +39,6 @@ import { actions } from './+page.server';
 
 const TEST_USER_ID = generateAuthId();
 const TEST_EMAIL = `memory-review-actions-test-${TEST_USER_ID}@airboss.test`;
-const CREATED_CARD_IDS: string[] = [];
 
 beforeAll(async () => {
 	const now = new Date();
@@ -57,11 +56,13 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
+	// Run cleanup unconditionally (no `length > 0` accumulator gate). Each
+	// delete is a no-op when the WHERE matches zero rows, and routing every
+	// cleanup through `userId` predicates handles the case where a test
+	// throws before `seedDueCard()` could record an id.
 	await db.delete(memoryReviewSession).where(eq(memoryReviewSession.userId, TEST_USER_ID));
-	if (CREATED_CARD_IDS.length > 0) {
-		await db.delete(cardState).where(eq(cardState.userId, TEST_USER_ID));
-		await db.delete(card).where(eq(card.userId, TEST_USER_ID));
-	}
+	await db.delete(cardState).where(eq(cardState.userId, TEST_USER_ID));
+	await db.delete(card).where(eq(card.userId, TEST_USER_ID));
 	await db.delete(bauthUser).where(eq(bauthUser.id, TEST_USER_ID));
 });
 
@@ -102,7 +103,6 @@ async function seedDueCard(): Promise<string> {
 		reviewCount: 0,
 		lapseCount: 0,
 	});
-	CREATED_CARD_IDS.push(id);
 	return id;
 }
 

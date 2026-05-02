@@ -19,7 +19,7 @@ export const load: PageServerLoad = async (event) => {
 	const editionParam = event.url.searchParams.get(QUERY_PARAMS.EDITION) ?? undefined;
 
 	const ref = await getReferenceByDocument(documentSlug, { edition: editionParam }).catch(() => null);
-	if (!ref) throw error(404, `Handbook not found: ${documentSlug}`);
+	if (!ref) throw error(404, 'Handbook not found.');
 
 	const chapters = await listHandbookChapters(ref.id);
 	const progress = await getHandbookProgress(user.id, ref.id);

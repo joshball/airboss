@@ -35,7 +35,6 @@ import { actions } from './+page.server';
 
 const TEST_USER_ID = generateAuthId();
 const TEST_EMAIL = `card-route-actions-test-${TEST_USER_ID}@airboss.test`;
-const CREATED_CARD_IDS: string[] = [];
 
 beforeAll(async () => {
 	const now = new Date();
@@ -53,11 +52,13 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-	if (CREATED_CARD_IDS.length > 0) {
-		await db.delete(contentCitation).where(eq(contentCitation.createdBy, TEST_USER_ID));
-		await db.delete(cardState).where(eq(cardState.userId, TEST_USER_ID));
-		await db.delete(card).where(eq(card.userId, TEST_USER_ID));
-	}
+	// Run cleanup unconditionally (no `length > 0` accumulator gate). Each
+	// delete is a no-op when the WHERE matches zero rows, and routing every
+	// cleanup through `userId` predicates handles the case where a test
+	// throws before `seedCard()` could record an id.
+	await db.delete(contentCitation).where(eq(contentCitation.createdBy, TEST_USER_ID));
+	await db.delete(cardState).where(eq(cardState.userId, TEST_USER_ID));
+	await db.delete(card).where(eq(card.userId, TEST_USER_ID));
 	await db.delete(bauthUser).where(eq(bauthUser.id, TEST_USER_ID));
 });
 
@@ -92,7 +93,6 @@ async function seedCard(): Promise<string> {
 		reviewCount: 0,
 		lapseCount: 0,
 	});
-	CREATED_CARD_IDS.push(id);
 	return id;
 }
 
@@ -165,6 +165,9 @@ describe('memory/[id] addCitation action', () => {
 		expect(rows[0]?.createdBy).toBe(TEST_USER_ID);
 		expect(rows[0]?.sourceType).toBe(CITATION_SOURCE_TYPES.CARD);
 		expect(rows[0]?.targetType).toBe(CITATION_TARGET_TYPES.EXTERNAL_REF);
+		// Pin the targetId we sent. Without this assertion a regression that
+		// swallowed the URL or stored only the title would still pass.
+		expect(rows[0]?.targetId).toBe(targetId);
 		expect(rows[0]?.citationContext).toBe('My note');
 	});
 

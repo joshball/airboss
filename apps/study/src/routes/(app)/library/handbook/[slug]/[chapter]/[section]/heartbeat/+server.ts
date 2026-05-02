@@ -27,7 +27,12 @@ import {
 	handbookHeartbeatInputSchema,
 	recordHeartbeat,
 } from '@ab/bc-study';
-import { HANDBOOK_HEARTBEAT_INTERVAL_SEC, HANDBOOK_HEARTBEAT_MIN_DELTA_SEC, QUERY_PARAMS } from '@ab/constants';
+import {
+	HANDBOOK_EDITION_MAX_LENGTH,
+	HANDBOOK_HEARTBEAT_INTERVAL_SEC,
+	HANDBOOK_HEARTBEAT_MIN_DELTA_SEC,
+	QUERY_PARAMS,
+} from '@ab/constants';
 import { error, json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 
@@ -62,13 +67,20 @@ export const POST: RequestHandler = async (event) => {
 	const documentSlug = event.params.slug;
 	const chapterCode = event.params.chapter;
 	const sectionCode = event.params.section;
-	const editionParam = event.url.searchParams.get(QUERY_PARAMS.EDITION) ?? undefined;
+	// Cap edition to a sane length before forwarding to the BC. Prevents the
+	// hot-tick path from issuing multi-KB varchar lookups against
+	// `study.reference.edition` when an unfriendly client passes a long value.
+	const editionRaw = event.url.searchParams.get(QUERY_PARAMS.EDITION);
+	const editionParam =
+		editionRaw === null || editionRaw.length === 0 || editionRaw.length > HANDBOOK_EDITION_MAX_LENGTH
+			? undefined
+			: editionRaw;
 
 	const ref = await getReferenceByDocument(documentSlug, { edition: editionParam }).catch(() => null);
-	if (!ref) throw error(404, `Handbook not found: ${documentSlug}`);
+	if (!ref) throw error(404, 'Handbook not found.');
 
 	const view = await getHandbookSection(ref.id, chapterCode, sectionCode).catch(() => null);
-	if (!view) throw error(404, `Section not found: ${documentSlug} / ${chapterCode}.${sectionCode}`);
+	if (!view) throw error(404, 'Section not found.');
 
 	await recordHeartbeat(user.id, view.section.id, delta);
 	return new Response(null, { status: 204 });

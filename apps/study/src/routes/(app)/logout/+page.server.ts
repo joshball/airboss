@@ -8,7 +8,7 @@ import type { Actions, PageServerLoad } from './$types';
 const log = createLogger('study:logout');
 
 export const load: PageServerLoad = async () => {
-	redirect(302, ROUTES.LOGIN);
+	redirect(303, ROUTES.LOGIN);
 };
 
 export const actions: Actions = {

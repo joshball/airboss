@@ -177,7 +177,11 @@ export class LensError extends Error {
 		public readonly lensKind: string,
 		message: string,
 	) {
-		super(`[${lensKind}] ${message}`);
+		// Lens kind is exposed as a structured `public readonly` field so
+		// `instanceof LensError && err.lensKind === 'acs'` is the canonical
+		// discriminator path; matches the pattern used by every other typed
+		// error in this BC. The message itself is unprefixed.
+		super(message);
 		this.name = 'LensError';
 	}
 }

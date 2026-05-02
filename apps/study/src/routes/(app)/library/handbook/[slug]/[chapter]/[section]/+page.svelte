@@ -7,6 +7,7 @@ import HandbookSectionNotes from '@ab/aviation/ui/handbooks/HandbookSectionNotes
 import {
 	HANDBOOK_HEARTBEAT_BUFFER,
 	HANDBOOK_HEARTBEAT_INTERVAL_SEC,
+	HANDBOOK_HEARTBEAT_MIN_DELTA_SEC,
 	HANDBOOK_READ_STATUSES,
 	type HandbookReadStatus,
 	ROUTES,
@@ -63,30 +64,50 @@ const heartbeatUrl = $derived(
 // HANDBOOK_HEARTBEAT_BUFFER so a long offline stretch doesn't grow
 // unbounded -- the oldest entries are dropped past the cap.
 const pendingDeltas: number[] = [];
+// Single-flight gate: prevents concurrent `postHeartbeat` invocations from
+// stomping on `pendingDeltas` when a tick fires while a previous POST is
+// still in flight (slow network, paused dev backend). Without the gate two
+// ticks could each grab the buffer mid-mutation and either lose deltas or
+// double-count them.
+let postingInFlight = false;
 
-async function postHeartbeat(delta: number): Promise<void> {
-	const queue = [...pendingDeltas, delta];
-	pendingDeltas.length = 0;
-	while (queue.length > 0) {
-		const next = queue[0];
-		if (next === undefined) break;
-		try {
-			const response = await fetch(heartbeatUrl, {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ delta: next }),
-			});
-			if (!response.ok) throw new Error(`heartbeat failed: ${response.status}`);
-			queue.shift();
-		} catch {
-			// Network or server rejected: re-buffer the unsent tail and bail.
-			// Trim from the front (drop oldest) to honor the cap.
-			const overflow = queue.length - HANDBOOK_HEARTBEAT_BUFFER;
-			const tail = overflow > 0 ? queue.slice(overflow) : queue;
-			pendingDeltas.push(...tail);
-			return;
+async function flushPending(): Promise<void> {
+	if (postingInFlight) return;
+	if (pendingDeltas.length === 0) return;
+	postingInFlight = true;
+	try {
+		while (pendingDeltas.length > 0) {
+			const next = pendingDeltas[0];
+			if (next === undefined) break;
+			try {
+				const response = await fetch(heartbeatUrl, {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ delta: next }),
+				});
+				if (!response.ok) throw new Error(`heartbeat failed: ${response.status}`);
+				pendingDeltas.shift();
+				// Only credit the local accumulator on confirmed success so
+				// `totalSecondsVisible` cannot drift above the server's
+				// authoritative count when the network is degraded.
+				accumulatedSecondsThisLoad += next;
+			} catch {
+				// Network or server rejected: keep the unsent tail; trim from
+				// the front past the cap so a long offline stretch can't grow
+				// unbounded.
+				const overflow = pendingDeltas.length - HANDBOOK_HEARTBEAT_BUFFER;
+				if (overflow > 0) pendingDeltas.splice(0, overflow);
+				return;
+			}
 		}
+	} finally {
+		postingInFlight = false;
 	}
+}
+
+function enqueueHeartbeat(delta: number): void {
+	pendingDeltas.push(delta);
+	void flushPending();
 }
 
 $effect(() => {
@@ -102,18 +123,53 @@ $effect(() => {
 	checkScroll();
 	window.addEventListener('scroll', checkScroll, { passive: true });
 
+	let lastTickTs = Date.now();
 	function tick(): void {
 		if (document.visibilityState !== 'visible') return;
 		const delta = HANDBOOK_HEARTBEAT_INTERVAL_SEC;
 		openedSecondsInSession += delta;
-		accumulatedSecondsThisLoad += delta;
-		void postHeartbeat(delta);
+		lastTickTs = Date.now();
+		enqueueHeartbeat(delta);
 	}
 	const interval = window.setInterval(tick, HANDBOOK_HEARTBEAT_INTERVAL_SEC * 1000);
+
+	// Flush partial deltas on tab hide / page unload so the read-time spent
+	// since the last tick isn't silently dropped. `sendBeacon` keeps the
+	// payload in flight after the document is torn down (whereas fetch can
+	// be aborted by the unload). Falls back to fetch when the API is
+	// unavailable.
+	function flushPartial(): void {
+		if (typeof document === 'undefined') return;
+		if (document.visibilityState === 'visible') return;
+		const elapsedSec = Math.floor((Date.now() - lastTickTs) / 1000);
+		if (elapsedSec < HANDBOOK_HEARTBEAT_MIN_DELTA_SEC) return;
+		lastTickTs = Date.now();
+		const body = JSON.stringify({ delta: elapsedSec });
+		if (typeof navigator !== 'undefined' && typeof navigator.sendBeacon === 'function') {
+			const blob = new Blob([body], { type: 'application/json' });
+			navigator.sendBeacon(heartbeatUrl, blob);
+		} else {
+			void fetch(heartbeatUrl, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body,
+				keepalive: true,
+			}).catch(() => {
+				/* best-effort on unload */
+			});
+		}
+		// Optimistically credit the local counter so the suggestion banner
+		// reflects the time on the next visit. Server confirms via beacon.
+		accumulatedSecondsThisLoad += elapsedSec;
+	}
+	document.addEventListener('visibilitychange', flushPartial);
+	window.addEventListener('pagehide', flushPartial);
 
 	return () => {
 		window.clearInterval(interval);
 		window.removeEventListener('scroll', checkScroll);
+		document.removeEventListener('visibilitychange', flushPartial);
+		window.removeEventListener('pagehide', flushPartial);
 	};
 });
 
@@ -225,6 +281,14 @@ function dismissSuggestion(): void {
 	}
 	.page-header nav a {
 		color: inherit;
+	}
+	.page-header nav a:hover,
+	.page-header nav a:focus-visible {
+		text-decoration: underline;
+	}
+	.page-header nav a:focus-visible {
+		outline: 2px solid var(--focus-ring);
+		outline-offset: 2px;
 	}
 	.page-header h1 {
 		margin: 0 0 var(--space-xs) 0;

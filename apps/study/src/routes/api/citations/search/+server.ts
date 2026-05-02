@@ -5,7 +5,12 @@ import {
 	searchKnowledgeNodes,
 	searchRegulationNodes,
 } from '@ab/bc-study';
-import { CITATION_TARGET_TYPES, type CitationTargetType, QUERY_PARAMS } from '@ab/constants';
+import {
+	CITATION_SEARCH_QUERY_MAX_LENGTH,
+	CITATION_TARGET_TYPES,
+	type CitationTargetType,
+	QUERY_PARAMS,
+} from '@ab/constants';
 import { error, json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 
@@ -23,7 +28,10 @@ export const GET: RequestHandler = async (event) => {
 
 	const url = event.url;
 	const target = url.searchParams.get(QUERY_PARAMS.TARGET);
-	const q = url.searchParams.get(QUERY_PARAMS.SEARCH) ?? '';
+	// Cap query length so a logged-in caller cannot force the BC into
+	// a multi-MB LIKE scan by passing an oversized `q`. Trim incidental
+	// whitespace so the BC's substring match isn't anchored on spaces.
+	const q = (url.searchParams.get(QUERY_PARAMS.SEARCH) ?? '').trim().slice(0, CITATION_SEARCH_QUERY_MAX_LENGTH);
 
 	if (!target) throw error(400, 'missing target');
 

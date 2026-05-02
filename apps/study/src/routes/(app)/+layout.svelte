@@ -91,29 +91,39 @@ async function setTheme(value: ThemeId) {
 	}
 }
 
+/**
+ * Prefix-aware nav-active check. `pathname.startsWith('/memory')` matches
+ * a hypothetical `/memorywall` (false positive); requiring an exact match
+ * or a trailing `/` keeps the nav highlight on the right item even when a
+ * future route shares a prefix with an existing one.
+ */
+function pathMatches(current: string, prefix: string): boolean {
+	return current === prefix || current.startsWith(`${prefix}/`);
+}
+
 const dashboardActive = $derived(page.url.pathname === ROUTES.DASHBOARD);
-const memoryActive = $derived(page.url.pathname.startsWith(ROUTES.MEMORY));
+const memoryActive = $derived(pathMatches(page.url.pathname, ROUTES.MEMORY));
 const memoryHomeActive = $derived(page.url.pathname === ROUTES.MEMORY);
-const memoryBrowseActive = $derived(page.url.pathname.startsWith(ROUTES.MEMORY_BROWSE));
-const memoryReviewActive = $derived(page.url.pathname.startsWith(ROUTES.MEMORY_REVIEW));
-const memoryNewActive = $derived(page.url.pathname.startsWith(ROUTES.MEMORY_NEW));
-const repsActive = $derived(page.url.pathname.startsWith(ROUTES.REPS));
-const credentialsActive = $derived(page.url.pathname.startsWith(ROUTES.CREDENTIALS));
-const lensActive = $derived(page.url.pathname.startsWith(ROUTES.LENS));
-const goalsActive = $derived(page.url.pathname.startsWith(ROUTES.GOALS));
-const knowledgeActive = $derived(page.url.pathname.startsWith(ROUTES.KNOWLEDGE));
-const glossaryActive = $derived(page.url.pathname.startsWith(ROUTES.GLOSSARY));
-const libraryActive = $derived(page.url.pathname.startsWith(ROUTES.LIBRARY));
-const helpActive = $derived(page.url.pathname.startsWith(ROUTES.HELP));
-const helpConceptsActive = $derived(page.url.pathname.startsWith(ROUTES.HELP_CONCEPTS));
+const memoryBrowseActive = $derived(pathMatches(page.url.pathname, ROUTES.MEMORY_BROWSE));
+const memoryReviewActive = $derived(pathMatches(page.url.pathname, ROUTES.MEMORY_REVIEW));
+const memoryNewActive = $derived(pathMatches(page.url.pathname, ROUTES.MEMORY_NEW));
+const repsActive = $derived(pathMatches(page.url.pathname, ROUTES.REPS));
+const credentialsActive = $derived(pathMatches(page.url.pathname, ROUTES.CREDENTIALS));
+const lensActive = $derived(pathMatches(page.url.pathname, ROUTES.LENS));
+const goalsActive = $derived(pathMatches(page.url.pathname, ROUTES.GOALS));
+const knowledgeActive = $derived(pathMatches(page.url.pathname, ROUTES.KNOWLEDGE));
+const glossaryActive = $derived(pathMatches(page.url.pathname, ROUTES.GLOSSARY));
+const libraryActive = $derived(pathMatches(page.url.pathname, ROUTES.LIBRARY));
+const helpActive = $derived(pathMatches(page.url.pathname, ROUTES.HELP));
+const helpConceptsActive = $derived(pathMatches(page.url.pathname, ROUTES.HELP_CONCEPTS));
 const helpIndexActive = $derived(helpActive && !helpConceptsActive);
-const calibrationActive = $derived(page.url.pathname.startsWith(ROUTES.CALIBRATION));
+const calibrationActive = $derived(pathMatches(page.url.pathname, ROUTES.CALIBRATION));
 // Plans, /session/start and /sessions/* roll under one nav item -- they're
 // the same flow from the user's perspective.
 const plansActive = $derived(
-	page.url.pathname.startsWith(ROUTES.PLANS) ||
-		page.url.pathname.startsWith(ROUTES.SESSION_START) ||
-		page.url.pathname.startsWith(ROUTES.SESSIONS),
+	pathMatches(page.url.pathname, ROUTES.PLANS) ||
+		pathMatches(page.url.pathname, ROUTES.SESSION_START) ||
+		pathMatches(page.url.pathname, ROUTES.SESSIONS),
 );
 
 // Dashboard renders as a full-bleed TUI grid; every other surface keeps the

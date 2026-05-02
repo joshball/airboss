@@ -23,7 +23,12 @@ function extractActivityIds(body: string | null): string[] {
 	const regex = /`activity:([a-z][a-z0-9-]*)`/g;
 	let match = regex.exec(body);
 	while (match !== null) {
-		ids.add(match[1]);
+		// Defensive guard for `noUncheckedIndexedAccess`: capture group 1 is
+		// non-optional given the regex shape, but this keeps a future regex
+		// edit (e.g. group becomes optional) from silently inserting `undefined`
+		// into the Set.
+		const id = match[1];
+		if (id !== undefined) ids.add(id);
 		match = regex.exec(body);
 	}
 	return Array.from(ids);
@@ -35,7 +40,7 @@ export const load: PageServerLoad = async (event) => {
 
 	const view = await getNodeView(slug, user.id);
 	if (!view) {
-		error(404, `Knowledge node not found: ${slug}`);
+		error(404, 'Knowledge node not found.');
 	}
 
 	const phaseBodies = splitContentPhases(view.node.contentMd);

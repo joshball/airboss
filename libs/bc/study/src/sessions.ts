@@ -530,28 +530,34 @@ async function fetchRecentSessionDomains(userId: string, db: Db, lookback = 2): 
 		}
 	}
 
+	// Three independent reads (cards / scenarios / nodes); they share no data
+	// and can fan out in parallel. Empty-set legs short-circuit to `[]` so we
+	// don't issue a `WHERE id IN ()` round-trip.
+	const [cardRows, scenarioRows, nodeRows] = await Promise.all([
+		cardIds.size > 0
+			? db
+					.select({ domain: card.domain })
+					.from(card)
+					.where(inArray(card.id, Array.from(cardIds)))
+			: Promise.resolve<{ domain: string }[]>([]),
+		scenarioIds.size > 0
+			? db
+					.select({ domain: scenario.domain })
+					.from(scenario)
+					.where(inArray(scenario.id, Array.from(scenarioIds)))
+			: Promise.resolve<{ domain: string }[]>([]),
+		nodeIds.size > 0
+			? db
+					.select({ domain: knowledgeNode.domain })
+					.from(knowledgeNode)
+					.where(inArray(knowledgeNode.id, Array.from(nodeIds)))
+			: Promise.resolve<{ domain: string }[]>([]),
+	]);
+
 	const domains = new Set<Domain>();
-	if (cardIds.size > 0) {
-		const rows = await db
-			.select({ domain: card.domain })
-			.from(card)
-			.where(inArray(card.id, Array.from(cardIds)));
-		for (const r of rows) if (DOMAIN_VALUES.includes(r.domain as Domain)) domains.add(r.domain as Domain);
-	}
-	if (scenarioIds.size > 0) {
-		const rows = await db
-			.select({ domain: scenario.domain })
-			.from(scenario)
-			.where(inArray(scenario.id, Array.from(scenarioIds)));
-		for (const r of rows) if (DOMAIN_VALUES.includes(r.domain as Domain)) domains.add(r.domain as Domain);
-	}
-	if (nodeIds.size > 0) {
-		const rows = await db
-			.select({ domain: knowledgeNode.domain })
-			.from(knowledgeNode)
-			.where(inArray(knowledgeNode.id, Array.from(nodeIds)));
-		for (const r of rows) if (DOMAIN_VALUES.includes(r.domain as Domain)) domains.add(r.domain as Domain);
-	}
+	for (const r of cardRows) if (DOMAIN_VALUES.includes(r.domain as Domain)) domains.add(r.domain as Domain);
+	for (const r of scenarioRows) if (DOMAIN_VALUES.includes(r.domain as Domain)) domains.add(r.domain as Domain);
+	for (const r of nodeRows) if (DOMAIN_VALUES.includes(r.domain as Domain)) domains.add(r.domain as Domain);
 	return Array.from(domains);
 }
 
@@ -611,7 +617,9 @@ export async function previewSession(
 	// targeting once per preview and emit the dual-read telemetry so the
 	// trigger condition for dropping `study_plan.cert_goals` can be verified
 	// from production logs.
-	const targetingSnapshot = await getEngineTargetingSnapshot(userId, db);
+	// Reuse the plan we just fetched -- the snapshot would otherwise issue a
+	// second `getActivePlan` round-trip per preview.
+	const targetingSnapshot = await getEngineTargetingSnapshot(userId, db, plan);
 	emitEngineTargetingTelemetry(userId, targetingSnapshot);
 	const targeting = targetingSnapshot.targeting;
 

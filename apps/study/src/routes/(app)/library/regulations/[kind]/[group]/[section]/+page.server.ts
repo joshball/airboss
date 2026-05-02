@@ -85,7 +85,7 @@ export const load: PageServerLoad = async (event) => {
 	const subCode = dotIndex >= 0 ? sectionCode.slice(dotIndex + 1) : '';
 
 	const view = await getHandbookSection(ref.id, chapterCode, subCode).catch(() => null);
-	if (!view) throw error(404, `Section not found: ${kind} / ${group} / ${sectionCode}`);
+	if (!view) throw error(404, 'Section not found.');
 
 	const readState = await getReadState(user.id, view.section.id);
 	const citingNodes = await getNodesCitingSection({

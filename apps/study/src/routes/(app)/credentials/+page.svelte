@@ -158,6 +158,12 @@ function pct(num: number, den: number): number {
 		text-decoration: none;
 	}
 
+	.card-link:focus-visible {
+		outline: 2px solid var(--focus-ring);
+		outline-offset: 2px;
+		border-radius: var(--radius-sm);
+	}
+
 	.card-header {
 		display: flex;
 		align-items: center;

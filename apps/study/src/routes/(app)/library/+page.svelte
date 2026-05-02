@@ -5,6 +5,7 @@ import {
 	CERT_APPLICABILITIES,
 	CERT_APPLICABILITY_LABELS,
 	LIBRARY_REGULATIONS_KIND_LABELS,
+	LIBRARY_TOPIC_VISIBLE_THRESHOLD,
 	ROUTES,
 } from '@ab/constants';
 import PageHelp from '@ab/help/ui/PageHelp.svelte';
@@ -14,8 +15,8 @@ import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
 
-// "Topics with <4 entries collapse under a Show all toggle" per spec.
-const TOPIC_VISIBLE_THRESHOLD = 4;
+// "Topics with <N entries collapse under a Show all toggle" per spec; N tunable via the constant.
+const TOPIC_VISIBLE_THRESHOLD = LIBRARY_TOPIC_VISIBLE_THRESHOLD;
 
 const visibleCertSpine = $derived(
 	data.certSpine.filter((entry) => entry.cert !== CERT_APPLICABILITIES.ALL && entry.count > 0),
@@ -85,7 +86,7 @@ const totalSurfaces = $derived(certCount + topicCount + regCount + aircraftCount
 		{#if primaryTopics.length === 0 && collapsedTopics.length === 0}
 			<EmptyState title="No topic tags yet" body="Run the reference seed to populate subjects." />
 		{:else}
-			<ul class="grid">
+			<ul class="grid" id="library-topics-list">
 				{#each primaryTopics as entry (entry.topic)}
 					<li>
 						<a class="card topic-card" href={ROUTES.LIBRARY_TOPIC(entry.topic as AviationTopic)}>
@@ -106,7 +107,13 @@ const totalSurfaces = $derived(certCount + topicCount + regCount + aircraftCount
 				{/if}
 			</ul>
 			{#if collapsedTopics.length > 0}
-				<button type="button" class="show-all" onclick={() => (showAllTopics = !showAllTopics)}>
+				<button
+					type="button"
+					class="show-all"
+					aria-expanded={showAllTopics}
+					aria-controls="library-topics-list"
+					onclick={() => (showAllTopics = !showAllTopics)}
+				>
 					{showAllTopics ? 'Hide smaller topics' : `Show all ${primaryTopics.length + collapsedTopics.length} topics`}
 				</button>
 			{/if}
@@ -183,10 +190,13 @@ const totalSurfaces = $derived(certCount + topicCount + regCount + aircraftCount
 		text-decoration: none;
 		transition: border-color var(--motion-fast) ease;
 	}
-	.card:hover,
+	.card:hover {
+		border-color: var(--action-default-edge);
+	}
 	.card:focus-visible {
 		border-color: var(--action-default-edge);
-		outline: none;
+		outline: 2px solid var(--focus-ring);
+		outline-offset: 2px;
 	}
 	.card-title {
 		font-size: var(--font-size-base);
@@ -206,9 +216,12 @@ const totalSurfaces = $derived(certCount + topicCount + regCount + aircraftCount
 		font-size: var(--font-size-sm);
 		cursor: pointer;
 	}
-	.show-all:hover,
+	.show-all:hover {
+		border-color: var(--action-default-edge);
+	}
 	.show-all:focus-visible {
 		border-color: var(--action-default-edge);
-		outline: none;
+		outline: 2px solid var(--focus-ring);
+		outline-offset: 2px;
 	}
 </style>

@@ -106,10 +106,13 @@ const kind = $derived(data.kind as LibraryRegulationsKind);
 		text-decoration: none;
 		transition: border-color var(--motion-fast) ease;
 	}
-	.card:hover,
+	.card:hover {
+		border-color: var(--action-default-edge);
+	}
 	.card:focus-visible {
 		border-color: var(--action-default-edge);
-		outline: none;
+		outline: 2px solid var(--focus-ring);
+		outline-offset: 2px;
 	}
 	.card-title {
 		font-size: var(--font-size-base);

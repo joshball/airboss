@@ -773,12 +773,11 @@ export async function getRepStats(
  * different scopes -- the spec separates "how much work did I do today?"
  * from "how accurate have I been over the last month?".
  *
- * Note on archived scenarios: `unattemptedCount` is "active scenarios with
- * zero attempts in history". If a learner attempts a scenario and later
- * archives it, the archived row disappears from `scenarioCount` but does
- * not affect `unattemptedCount` (the archived row was never in the
- * subquery). Accepted for MVP; future UX can surface archived-but-
- * unattempted rows as a separate count.
+ * Note on archived scenarios: both `scenarioCount` and `unattemptedCount`
+ * count only `status = ACTIVE` rows. Archiving a scenario removes it from
+ * both totals. The narrowing happens inside the per-domain GROUP BY over
+ * `outerScenario` filtered to `status = ACTIVE`. Accepted for MVP; a future
+ * UX could surface archived-but-unattempted rows as a separate count.
  */
 export async function getRepDashboard(
 	userId: string,

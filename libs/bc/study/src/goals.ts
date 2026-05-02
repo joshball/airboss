@@ -248,7 +248,14 @@ export async function createGoal(params: CreateGoalParams, db: Db = defaultDb): 
 	};
 	if (row.isPrimary) {
 		return db.transaction(async (tx) => {
-			await tx.update(goal).set({ isPrimary: false, updatedAt: new Date() }).where(eq(goal.userId, params.userId));
+			// Narrow to `is_primary = true` rows -- only those collide with the
+			// partial UNIQUE. Sweeping every goal bumps `updatedAt` on rows
+			// that didn't actually change, polluting `listGoals` ordering and
+			// audit consumers. Mirrors `setPrimaryGoal` (`goals.ts:295`).
+			await tx
+				.update(goal)
+				.set({ isPrimary: false, updatedAt: new Date() })
+				.where(and(eq(goal.userId, params.userId), eq(goal.isPrimary, true)));
 			const [inserted] = await tx.insert(goal).values(row).returning();
 			if (!inserted) throw new Error('createGoal failed');
 			return inserted;

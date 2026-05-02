@@ -1,6 +1,6 @@
 import { requireAuth } from '@ab/auth';
 import { createGoal } from '@ab/bc-study';
-import { ROUTES } from '@ab/constants';
+import { GOAL_NOTES_MAX_LENGTH, GOAL_TITLE_MAX_LENGTH, ROUTES } from '@ab/constants';
 import { fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 
@@ -21,9 +21,15 @@ export const actions: Actions = {
 		if (title === '') {
 			return fail(400, { error: 'Title is required.', values: { title, notesMd, targetDateRaw, isPrimary } });
 		}
-		if (title.length > 200) {
+		if (title.length > GOAL_TITLE_MAX_LENGTH) {
 			return fail(400, {
-				error: 'Title must be 200 characters or fewer.',
+				error: `Title must be ${GOAL_TITLE_MAX_LENGTH} characters or fewer.`,
+				values: { title, notesMd, targetDateRaw, isPrimary },
+			});
+		}
+		if (notesMd.length > GOAL_NOTES_MAX_LENGTH) {
+			return fail(400, {
+				error: `Notes must be ${GOAL_NOTES_MAX_LENGTH} characters or fewer.`,
 				values: { title, notesMd, targetDateRaw, isPrimary },
 			});
 		}

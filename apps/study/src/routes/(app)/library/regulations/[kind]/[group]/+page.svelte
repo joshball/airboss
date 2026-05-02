@@ -84,10 +84,13 @@ const kindLabel = $derived(data.kindLabel);
 		text-decoration: none;
 		transition: border-color var(--motion-fast) ease;
 	}
-	.section-link:hover,
+	.section-link:hover {
+		border-color: var(--action-default-edge);
+	}
 	.section-link:focus-visible {
 		border-color: var(--action-default-edge);
-		outline: none;
+		outline: 2px solid var(--focus-ring);
+		outline-offset: 2px;
 	}
 	.section-code {
 		font-family: var(--font-family-mono);

@@ -275,8 +275,9 @@ const groups = $derived.by<BrowseListGroup<NodeRow>[]>(() => {
 					{#snippet title()}
 						<div class="card-head">
 							<span class="card-title">{n.title}</span>
-							<span class="mastery" aria-label="Mastery {masteryPct(n.displayScore)} percent">
-								<span class="mastery-bar">
+							<span class="mastery">
+								<span class="visually-hidden">Mastery</span>
+								<span class="mastery-bar" aria-hidden="true">
 									<span class="mastery-fill" style:width="{masteryPct(n.displayScore)}%"></span>
 								</span>
 								<span class="mastery-pct">{masteryPct(n.displayScore)}%</span>

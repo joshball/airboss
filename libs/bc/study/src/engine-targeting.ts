@@ -46,6 +46,7 @@ import { createLogger } from '@ab/utils';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import { getDerivedCertGoals, getPrimaryGoal } from './goals';
 import { getActivePlan } from './plans';
+import type { StudyPlanRow } from './schema';
 
 type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;
 
@@ -98,13 +99,25 @@ export async function getEngineTargeting(userId: string, db: Db = defaultDb): Pr
  * the caller can both consume and emit. The disagreement flag is true
  * only when the goal path was taken AND the plan would have produced a
  * different cert set.
+ *
+ * Callers that already loaded the active plan (e.g. `previewSession`) can
+ * pass it via `prefetchedPlan` to avoid the extra `getActivePlan` round-trip
+ * the snapshot would otherwise issue.
  */
-export async function getEngineTargetingSnapshot(userId: string, db: Db = defaultDb): Promise<EngineTargetingSnapshot> {
+export async function getEngineTargetingSnapshot(
+	userId: string,
+	db: Db = defaultDb,
+	prefetchedPlan?: StudyPlanRow | null,
+): Promise<EngineTargetingSnapshot> {
 	const recordedAt = new Date();
 
 	// Plan + primary goal are independent reads -- fan them out so the
-	// helper costs at most one round-trip in the parallel case.
-	const [primary, plan] = await Promise.all([getPrimaryGoal(userId, db), getActivePlan(userId, db)]);
+	// helper costs at most one round-trip in the parallel case. When the
+	// caller pre-fetched the plan, only fetch the primary goal.
+	const [primary, plan] =
+		prefetchedPlan !== undefined
+			? await Promise.all([getPrimaryGoal(userId, db), Promise.resolve(prefetchedPlan)])
+			: await Promise.all([getPrimaryGoal(userId, db), getActivePlan(userId, db)]);
 
 	const depthPreference = (plan?.depthPreference as DepthPreference | undefined) ?? DEPTH_PREFERENCES.WORKING;
 	const sessionLength = plan?.sessionLength ?? DEFAULT_SESSION_LENGTH;

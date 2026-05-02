@@ -118,6 +118,12 @@ const totalGoals = $derived(
 		text-decoration: none;
 	}
 
+	.goal-link:focus-visible {
+		outline: 2px solid var(--focus-ring);
+		outline-offset: 2px;
+		border-radius: var(--radius-sm);
+	}
+
 	.goal-head {
 		display: flex;
 		justify-content: space-between;
