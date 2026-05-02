@@ -30,6 +30,8 @@ export {
 export { clearSessionCookies } from './logout';
 // Read-only count helpers over `bauth_user`
 export { countAllUsersIncludingBanned } from './queries';
+// Open-redirect guard for `?redirectTo=...` style flows
+export { isSafeRedirect } from './redirect';
 // Read-only Drizzle schemas for better-auth tables
 export { bauthAccount, bauthRateLimit, bauthSession, bauthUser, bauthVerification } from './schema';
 // Server-side auth factory
