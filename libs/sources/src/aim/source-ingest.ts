@@ -40,10 +40,21 @@ function defaultCacheRoot(): string {
 	return process.env.AIRBOSS_HANDBOOK_CACHE ?? join(homedir(), 'Documents', 'airboss-handbook-cache');
 }
 
+/**
+ * Per-entry shape inside the AIM cache manifest. Mirrors the downloader's
+ * `ManifestEntry` (see `scripts/sources/download/manifest.ts`) but inlined here
+ * because the lib (`@ab/sources`) cannot import from `scripts/`.
+ *
+ * `edition` is `string | null` per ADR 021 §"Manifest schema" -- AIM's bundled
+ * PDF currently records `edition: null` because the downloader has no
+ * publication-date metadata to thread through (see correctness#3 follow-up).
+ * The loader treats a null edition as the literal slug `'current'` for routing
+ * derivative output paths.
+ */
 interface DownloaderManifest {
 	readonly corpus: string;
 	readonly doc: string;
-	readonly edition: string;
+	readonly edition: string | null;
 	readonly source_url: string;
 	readonly source_filename: string;
 	readonly source_sha256: string;
@@ -51,30 +62,46 @@ interface DownloaderManifest {
 	readonly last_modified?: string;
 }
 
-interface CorpusManifestFile {
+/**
+ * AIM cache manifest as written by `writeAimEntry` in
+ * `scripts/sources/download/manifest.ts`. Shape:
+ *
+ *   { schema_version, corpus: 'aim', primary, sections[], appendices[] }
+ *
+ * The bundled PDF (`primary`) is the only artifact this ingest path consumes;
+ * `sections[]` and `appendices[]` index the per-section HTML cache files but
+ * those run through the future HTML extractor, not this PDF-driven path.
+ */
+interface AimCorpusManifestFile {
 	readonly schema_version: number;
-	readonly corpus: string;
-	readonly entries: readonly Partial<DownloaderManifest>[];
+	readonly corpus: 'aim';
+	readonly primary: Partial<DownloaderManifest>;
+	readonly sections?: readonly unknown[];
+	readonly appendices?: readonly unknown[];
 }
 
-function readCorpusManifest(path: string): CorpusManifestFile {
+function readAimCorpusManifest(path: string): AimCorpusManifestFile {
 	const raw = readFileSync(path, 'utf-8');
-	const parsed = JSON.parse(raw) as Partial<CorpusManifestFile>;
-	if (!Array.isArray(parsed.entries)) {
-		throw new Error(`per-corpus manifest at ${path} missing entries[] array`);
+	const parsed = JSON.parse(raw) as Partial<AimCorpusManifestFile>;
+	if (parsed.corpus !== 'aim') {
+		throw new Error(`per-corpus manifest at ${path} has corpus='${String(parsed.corpus)}' (expected 'aim')`);
+	}
+	if (typeof parsed.primary !== 'object' || parsed.primary === null) {
+		throw new Error(`per-corpus manifest at ${path} missing primary{} entry`);
 	}
 	return {
 		schema_version: typeof parsed.schema_version === 'number' ? parsed.schema_version : 1,
-		corpus: typeof parsed.corpus === 'string' ? parsed.corpus : 'aim',
-		entries: parsed.entries,
+		corpus: 'aim',
+		primary: parsed.primary,
+		sections: Array.isArray(parsed.sections) ? parsed.sections : [],
+		appendices: Array.isArray(parsed.appendices) ? parsed.appendices : [],
 	};
 }
 
-function validateEntry(entry: Partial<DownloaderManifest>, manifestPath: string): DownloaderManifest {
+function validatePrimary(entry: Partial<DownloaderManifest>, manifestPath: string): DownloaderManifest {
 	const required: readonly (keyof DownloaderManifest)[] = [
 		'corpus',
 		'doc',
-		'edition',
 		'source_url',
 		'source_filename',
 		'source_sha256',
@@ -82,8 +109,13 @@ function validateEntry(entry: Partial<DownloaderManifest>, manifestPath: string)
 	];
 	for (const key of required) {
 		if (entry[key] === undefined) {
-			throw new Error(`per-corpus manifest at ${manifestPath} has entry missing required field: ${String(key)}`);
+			throw new Error(`per-corpus manifest at ${manifestPath} primary missing required field: ${String(key)}`);
 		}
+	}
+	// `edition` may legitimately be null (AIM downloader records null until a
+	// per-edition publication date is threaded through -- see correctness#3).
+	if (!('edition' in entry)) {
+		throw new Error(`per-corpus manifest at ${manifestPath} primary missing edition field`);
 	}
 	return entry as DownloaderManifest;
 }
@@ -94,10 +126,19 @@ interface CachedAim {
 	readonly downloaderManifest: DownloaderManifest;
 }
 
+/** Slug used when the downloader records `edition: null` for the bundled PDF. */
+const NULL_EDITION_SLUG = 'current';
+
 /**
- * Walk the AIM cache and return every available edition. The downloader writes
- * a single per-corpus index at `<cache>/aim/manifest.json` with one entry per
- * cached edition; the PDFs sit alongside as `<edition>.pdf`.
+ * Walk the AIM cache and return the bundled-PDF edition. The downloader writes
+ * a single per-corpus manifest at `<cache>/aim/manifest.json` with `primary`
+ * (the bundled PDF) plus `sections[]`/`appendices[]` (per-section HTML); this
+ * loader only consumes `primary`. The PDF sits alongside the manifest as
+ * `<source_filename>` (currently `aim.pdf`).
+ *
+ * When `primary.edition` is null, the loader uses the slug `'current'` to route
+ * derivative output. This keeps the per-edition derivative tree path stable
+ * even before a publication-date is threaded into the AIM downloader.
  */
 function discoverCachedAim(cacheRoot: string): { editions: CachedAim[]; skipped: string[] } {
 	const aimRoot = join(cacheRoot, 'aim');
@@ -106,31 +147,28 @@ function discoverCachedAim(cacheRoot: string): { editions: CachedAim[]; skipped:
 	if (!existsSync(manifestPath)) {
 		return { editions: [], skipped: [`aim/manifest.json: per-corpus manifest not found (skip)`] };
 	}
-	let parsed: CorpusManifestFile;
+	let parsed: AimCorpusManifestFile;
 	try {
-		parsed = readCorpusManifest(manifestPath);
+		parsed = readAimCorpusManifest(manifestPath);
 	} catch (e) {
 		return { editions: [], skipped: [`aim/manifest.json: invalid manifest -- ${(e as Error).message} (skip)`] };
 	}
 
-	const editions: CachedAim[] = [];
-	const skipped: string[] = [];
-	for (const raw of parsed.entries) {
-		let dm: DownloaderManifest;
-		try {
-			dm = validateEntry(raw, manifestPath);
-		} catch (e) {
-			skipped.push(`aim/manifest.json: invalid entry -- ${(e as Error).message} (skip)`);
-			continue;
-		}
-		const pdfPath = join(aimRoot, dm.source_filename);
-		if (!existsSync(pdfPath)) {
-			skipped.push(`${dm.edition}: PDF not found at ${dm.source_filename} (skip)`);
-			continue;
-		}
-		editions.push({ edition: dm.edition, pdfPath, downloaderManifest: dm });
+	let dm: DownloaderManifest;
+	try {
+		dm = validatePrimary(parsed.primary, manifestPath);
+	} catch (e) {
+		return { editions: [], skipped: [`aim/manifest.json: invalid primary -- ${(e as Error).message} (skip)`] };
 	}
-	return { editions, skipped };
+	const pdfPath = join(aimRoot, dm.source_filename);
+	if (!existsSync(pdfPath)) {
+		return {
+			editions: [],
+			skipped: [`aim/manifest.json: PDF not found at ${dm.source_filename} (skip)`],
+		};
+	}
+	const edition = dm.edition ?? NULL_EDITION_SLUG;
+	return { editions: [{ edition, pdfPath, downloaderManifest: dm }], skipped: [] };
 }
 
 function sha256(input: string): string {
@@ -145,14 +183,21 @@ function ensureDir(path: string): void {
  * Write the AIM derivative tree and manifest from an extracted PDF.
  * Returns the manifest entries as written; caller can then register via
  * `runAimIngest`.
+ *
+ * The `edition` arg is the resolved edition slug -- either the downloader's
+ * `primary.edition` value, or the `'current'` fallback when the downloader
+ * recorded null (see `discoverCachedAim`). The derivative tree always lands
+ * under `<derivativeRoot>/<edition>/`; the inline manifest's `edition` field
+ * carries the same slug for round-trip consistency with `derivative-reader`.
  */
 export function writeAimDerivatives(args: {
 	readonly extracted: ExtractedAim;
 	readonly downloaderManifest: DownloaderManifest;
+	readonly edition: string;
 	readonly derivativeRoot: string;
 }): { manifestPath: string; entriesWritten: number } {
-	const { extracted, downloaderManifest, derivativeRoot } = args;
-	const editionRoot = join(derivativeRoot, downloaderManifest.edition);
+	const { extracted, downloaderManifest, edition, derivativeRoot } = args;
+	const editionRoot = join(derivativeRoot, edition);
 	ensureDir(editionRoot);
 
 	const entries: ManifestEntry[] = [];
@@ -168,7 +213,7 @@ export function writeAimDerivatives(args: {
 			kind: 'chapter',
 			code: ch.num,
 			title: ch.title,
-			body_path: `aim/${downloaderManifest.edition}/chapter-${ch.num}/index.md`,
+			body_path: `aim/${edition}/chapter-${ch.num}/index.md`,
 			content_hash: sha256(body),
 		});
 	}
@@ -184,7 +229,7 @@ export function writeAimDerivatives(args: {
 			kind: 'section',
 			code: sec.code,
 			title: sec.title,
-			body_path: `aim/${downloaderManifest.edition}/chapter-${sec.chapter}/section-${sec.section}/index.md`,
+			body_path: `aim/${edition}/chapter-${sec.chapter}/section-${sec.section}/index.md`,
 			content_hash: sha256(body),
 		});
 	}
@@ -200,7 +245,7 @@ export function writeAimDerivatives(args: {
 			kind: 'paragraph',
 			code: p.code,
 			title: p.title,
-			body_path: `aim/${downloaderManifest.edition}/chapter-${p.chapter}/section-${p.section}/paragraph-${p.paragraph}.md`,
+			body_path: `aim/${edition}/chapter-${p.chapter}/section-${p.section}/paragraph-${p.paragraph}.md`,
 			content_hash: sha256(body),
 		});
 	}
@@ -216,7 +261,7 @@ export function writeAimDerivatives(args: {
 			kind: 'glossary',
 			code: `glossary/${g.slug}`,
 			title: g.title,
-			body_path: `aim/${downloaderManifest.edition}/glossary/${g.slug}.md`,
+			body_path: `aim/${edition}/glossary/${g.slug}.md`,
 			content_hash: sha256(body),
 		});
 	}
@@ -230,13 +275,13 @@ export function writeAimDerivatives(args: {
 			kind: 'appendix',
 			code: `appendix-${a.num}`,
 			title: a.title,
-			body_path: `aim/${downloaderManifest.edition}/appendix-${a.num}.md`,
+			body_path: `aim/${edition}/appendix-${a.num}.md`,
 			content_hash: sha256(body),
 		});
 	}
 
 	const manifest: ManifestFile = {
-		edition: downloaderManifest.edition,
+		edition,
 		kind: 'aim',
 		title: 'Aeronautical Information Manual',
 		publisher: 'FAA',
@@ -301,6 +346,7 @@ export async function runAimSourceIngest(args: SourceIngestArgs): Promise<Source
 			const { entriesWritten } = writeAimDerivatives({
 				extracted,
 				downloaderManifest: cached.downloaderManifest,
+				edition: cached.edition,
 				derivativeRoot: args.derivativeRoot,
 			});
 			const registry = await runAimIngest({
@@ -345,7 +391,9 @@ const SOURCE_USAGE = `usage:
   --edition=<slug>   Restrict to one edition (default: ingest every cached edition).
 `;
 
-const EDITION_PATTERN = /^[0-9]{4}-(0[1-9]|1[0-2])$/;
+// Accept both YYYY-MM editions (the future intended slug) and the literal
+// `'current'` fallback used when the downloader records `edition: null`.
+const EDITION_PATTERN = /^(?:[0-9]{4}-(0[1-9]|1[0-2])|current)$/;
 
 export interface SourceCliArgs {
 	readonly cacheRoot: string;
@@ -383,7 +431,9 @@ export async function runSourceIngestCli(argv: readonly string[]): Promise<numbe
 		return 0;
 	}
 	if (parsed.edition !== null && !EDITION_PATTERN.test(parsed.edition)) {
-		process.stderr.write(`aim source ingest: --edition must be YYYY-MM (got "${parsed.edition}")\n${SOURCE_USAGE}`);
+		process.stderr.write(
+			`aim source ingest: --edition must be YYYY-MM or 'current' (got "${parsed.edition}")\n${SOURCE_USAGE}`,
+		);
 		return 2;
 	}
 	const report = await runAimSourceIngest({
