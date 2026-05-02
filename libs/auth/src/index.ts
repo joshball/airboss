@@ -18,7 +18,14 @@ export { auditColumns } from './columns';
 // Cookie forwarding
 export { forwardAuthCookies, resolveCookieDomain, rewriteSetCookieDomain } from './cookies';
 // Email transport and templates
-export { type EmailMessage, magicLinkEmail, resetPasswordEmail, sendEmail, verificationEmail } from './email';
+export {
+	type EmailMessage,
+	inviteEmail,
+	magicLinkEmail,
+	resetPasswordEmail,
+	sendEmail,
+	verificationEmail,
+} from './email';
 // Logout
 export { clearSessionCookies } from './logout';
 // Read-only count helpers over `bauth_user`

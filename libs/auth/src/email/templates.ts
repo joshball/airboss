@@ -68,3 +68,34 @@ export function magicLinkEmail(url: string): { subject: string; html: string } {
 `),
 	};
 }
+
+/**
+ * Invitation email used by the hangar invite flow. Mirrors the
+ * `magicLinkEmail` shape (single CTA button + the URL also rendered as
+ * plain text for clients that strip buttons). Subject line stays
+ * descriptive so the recipient's inbox preview tells them what landed.
+ *
+ * `inviterName` is the inviting admin's display name (falls back to
+ * email upstream); `role` is the role the invitee will be created with.
+ * `expiryDays` matches `INVITATION_DEFAULT_EXPIRY_DAYS` from
+ * `@ab/constants`.
+ */
+export function inviteEmail(input: { url: string; role: string; inviterName: string; expiryDays: number }): {
+	subject: string;
+	html: string;
+} {
+	const safeRole = escapeHtml(input.role);
+	const safeInviter = escapeHtml(input.inviterName);
+	const safeUrl = escapeHtml(input.url);
+	return {
+		subject: "You've been invited to airboss",
+		html: baseTemplate(`
+<h1 style="font-size: 20px; margin: 0 0 16px;">You've been invited to airboss</h1>
+<p>${safeInviter} invited you to airboss as <strong>${safeRole}</strong>.</p>
+<p>Click the button below to set a password and finish signing up.</p>
+<p style="margin: 24px 0;">${buttonHtml(input.url, 'Accept invite')}</p>
+<p style="font-size: 13px; color: #64748b;">Or paste this URL into your browser:<br /><span style="word-break: break-all;">${safeUrl}</span></p>
+<p style="font-size: 13px; color: #64748b;">This link is good for ${input.expiryDays} days. If you weren't expecting this email, you can safely ignore it -- the invite will expire on its own.</p>
+`),
+	};
+}
