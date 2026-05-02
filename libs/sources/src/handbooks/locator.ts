@@ -42,9 +42,16 @@ export const HANDBOOK_DOC_SLUGS: readonly string[] = [
 	'iph',
 	'amt-general',
 	'amt-powerplant',
+	'tips-mountain-flying',
 ];
 
-const EDITION_PATTERN = /^[0-9]{4}-[0-9]{1,3}[a-z]?$/i;
+// Edition slug shapes accepted under the `handbooks` corpus:
+//   - FAA H-numbered handbooks: `8083-25C`, `8083-3C`, `8083-9` (the bulk).
+//   - Non-H-numbered FAA-published handbooks/pamphlets: `<slug>-<year>` style
+//     (e.g. `mtn-2003` for the Tips on Mountain Flying pamphlet, which has
+//     no FAA H designator). The slug component is `[a-z][a-z0-9-]{0,15}` so
+//     it stays bounded without dictating individual slugs.
+const EDITION_PATTERN = /^([0-9]{4}-[0-9]{1,3}[a-z]?|[a-z][a-z0-9-]{0,15}-[0-9]{4})$/i;
 const CHAPTER_PATTERN = /^[1-9][0-9]{0,2}$/;
 const SECTION_NUMBER_PATTERN = /^[1-9][0-9]{0,2}$/;
 const SUBSECTION_PATTERN = /^[1-9][0-9]{0,2}$/;
