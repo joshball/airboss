@@ -43,4 +43,5 @@ export {
 	getAcDerivativeRoot,
 	setAcDerivativeRoot,
 } from './resolver.ts';
+export { type AcSeedMappingEntry, getAcSeedMapping, listAcSeedMappings } from './seed-mapping.ts';
 export { getAcLiveUrl } from './url.ts';
