@@ -101,15 +101,18 @@ export {
 	updateSource,
 } from './registry';
 export {
+	type HangarInvitationRow,
 	type HangarReferenceRow,
 	type HangarSourceEdition,
 	type HangarSourceMedia,
 	type HangarSourceRow,
 	type HangarSyncLogRow,
+	hangarInvitation,
 	hangarReference,
 	hangarSchema,
 	hangarSource,
 	hangarSyncLog,
+	type NewHangarInvitationRow,
 	type NewHangarReferenceRow,
 	type NewHangarSourceRow,
 	type NewHangarSyncLogRow,

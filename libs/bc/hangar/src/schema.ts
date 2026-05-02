@@ -23,10 +23,10 @@
  */
 
 import { bauthUser } from '@ab/auth/schema';
-import { HANGAR_SYNC_MODE_VALUES, SCHEMAS, SOURCE_TYPE_VALUES, SYNC_OUTCOME_VALUES } from '@ab/constants';
+import { HANGAR_SYNC_MODE_VALUES, ROLE_VALUES, SCHEMAS, SOURCE_TYPE_VALUES, SYNC_OUTCOME_VALUES } from '@ab/constants';
 import { timestamps } from '@ab/db';
 import { sql } from 'drizzle-orm';
-import { boolean, check, index, integer, jsonb, pgSchema, text, timestamp } from 'drizzle-orm/pg-core';
+import { boolean, check, index, integer, jsonb, pgSchema, text, timestamp, uniqueIndex } from 'drizzle-orm/pg-core';
 
 /** Render a string array as a SQL `IN (...)` value list. */
 const inList = (values: readonly string[]) => values.map((v) => `'${v.replace(/'/g, "''")}'`).join(', ');
@@ -212,9 +212,107 @@ export const hangarSyncLog = hangarSchema.table(
 	}),
 );
 
+// -------- invitation --------
+
+/**
+ * Admin-controlled invitation to onboard a new user. The invite link
+ * carries an opaque random token (the row's `token` column); when the
+ * recipient clicks it the study app's `/invite/[token]` route looks up
+ * the row, creates a `bauth_user` with the proposed role, marks the
+ * invite accepted, and signs the new user in.
+ *
+ * Lives in the hangar schema (not auth) because invites are an admin /
+ * authoring concern, not a better-auth construct. Better-auth's
+ * organization plugin ships a similar surface but carries multi-tenancy
+ * machinery this product doesn't want -- decision called out in the
+ * `hangar-invite-flow` spec.
+ *
+ * State machine:
+ *
+ *   - Pending  -- accepted_at IS NULL AND revoked_at IS NULL AND expires_at > now()
+ *   - Expired  -- accepted_at IS NULL AND revoked_at IS NULL AND expires_at <= now()
+ *   - Accepted -- accepted_at IS NOT NULL
+ *   - Revoked  -- revoked_at IS NOT NULL
+ *
+ * The unique partial index keeps "two pending invites for the same email"
+ * impossible without making the row-history (accepted/revoked invites for
+ * the same email) collide. See spec In Scope #1 + decision (f).
+ */
+export const hangarInvitation = hangarSchema.table(
+	'invitation',
+	{
+		/** `inv_<ulid>` -- prefixed via `@ab/utils` `createId('inv')`. */
+		id: text('id').primaryKey(),
+		/**
+		 * Recipient email. Lowercased on insert by the BC writer so the
+		 * unique partial index hit is case-insensitive without a separate
+		 * functional index.
+		 */
+		email: text('email').notNull(),
+		/**
+		 * Role the new user will be created with. One of `ROLE_VALUES`,
+		 * minus `admin` (decision (e)) -- the BC create helper validates
+		 * this, but the DB CHECK still allows admin so the column can
+		 * carry historical rows + a future spec change without a schema
+		 * round-trip.
+		 */
+		proposedRole: text('proposed_role').notNull(),
+		/**
+		 * Opaque bearer token. base64url-encoded random bytes
+		 * (`INVITATION_TOKEN_BYTES` from `@ab/constants`). Lookup is a
+		 * unique-index hit; no JWT, no signed envelope.
+		 */
+		token: text('token').notNull().unique(),
+		/** Admin who created the invitation. */
+		invitedByUserId: text('invited_by_user_id').references(() => bauthUser.id, {
+			onDelete: 'set null',
+			onUpdate: 'cascade',
+		}),
+		invitedAt: timestamp('invited_at', { withTimezone: true }).notNull().defaultNow(),
+		/** Computed at insert time as `invitedAt + INVITATION_DEFAULT_EXPIRY_DAYS`. */
+		expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
+		acceptedAt: timestamp('accepted_at', { withTimezone: true }),
+		/** `bauth_user.id` of the user the recipient created on accept. */
+		acceptedUserId: text('accepted_user_id').references(() => bauthUser.id, {
+			onDelete: 'set null',
+			onUpdate: 'cascade',
+		}),
+		revokedAt: timestamp('revoked_at', { withTimezone: true }),
+		revokedByUserId: text('revoked_by_user_id').references(() => bauthUser.id, {
+			onDelete: 'set null',
+			onUpdate: 'cascade',
+		}),
+		...timestamps(),
+	},
+	(t) => ({
+		// Hot path: accept-route lookup -- the route hits this index on
+		// every click of an invite link. `unique()` above already creates
+		// a covering index; this declaration would be redundant.
+		// Hot path: list-pending tab + status filtering on the admin list.
+		invitationStatusIdx: index('hangar_invitation_status_idx').on(t.acceptedAt, t.revokedAt, t.expiresAt),
+		// Hot path: per-recipient history queries from the user-detail page.
+		invitationEmailIdx: index('hangar_invitation_email_idx').on(t.email),
+		// Hot path: admin's "what did I just send?" view.
+		invitationInvitedAtIdx: index('hangar_invitation_invited_at_idx').on(t.invitedAt),
+		// Decision (f): block two pending invites for the same email at
+		// the DB level. Partial index allows accepted/revoked rows to
+		// coexist with a fresh pending row for the same recipient.
+		invitationPendingEmailUniqueIdx: uniqueIndex('hangar_invitation_pending_email_unique_idx')
+			.on(t.email)
+			.where(sql`${t.acceptedAt} IS NULL AND ${t.revokedAt} IS NULL`),
+		invitationProposedRoleCheck: check(
+			'hangar_invitation_proposed_role_check',
+			sql.raw(`"proposed_role" IN (${inList(ROLE_VALUES)})`),
+		),
+	}),
+);
+
+
 export type HangarReferenceRow = typeof hangarReference.$inferSelect;
 export type NewHangarReferenceRow = typeof hangarReference.$inferInsert;
 export type HangarSourceRow = typeof hangarSource.$inferSelect;
 export type NewHangarSourceRow = typeof hangarSource.$inferInsert;
 export type HangarSyncLogRow = typeof hangarSyncLog.$inferSelect;
 export type NewHangarSyncLogRow = typeof hangarSyncLog.$inferInsert;
+export type HangarInvitationRow = typeof hangarInvitation.$inferSelect;
+export type NewHangarInvitationRow = typeof hangarInvitation.$inferInsert;
