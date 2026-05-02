@@ -3,7 +3,7 @@
  * `db.select().from(hangarJob)` directly -- the BC owns the query shape.
  */
 
-import { type JOB_KINDS, JOB_STATUSES } from '@ab/constants';
+import { type JOB_KINDS, JOB_STATUSES, JOBS_LIST_HARD_CAP } from '@ab/constants';
 import { db as defaultDb } from '@ab/db/connection';
 import { type HangarJobRow, hangarJob } from '@ab/hangar-jobs';
 import { and, desc, eq, inArray } from 'drizzle-orm';
@@ -82,11 +82,27 @@ export async function getLatestCompleteJobForTarget(
 /**
  * Currently-running jobs across the registry, newest first. Drives the
  * `/sources` flow diagram's "active arrows" overlay.
+ *
+ * Bounded by `JOBS_LIST_HARD_CAP`. Worker concurrency is well below this cap
+ * in normal operation; the limit guards against an orphan-recovery scenario
+ * where many `running` rows pre-date the recovery sweep and would otherwise
+ * be returned with their full `payload` / `result` jsonb on every page hit.
+ * Returns only the columns the consumer (`/sources`) needs -- omits
+ * `payload`, `result`, and `error` so wire bytes stay bounded.
  */
-export async function listRunningJobs(db: Db = defaultDb): Promise<readonly HangarJobRow[]> {
+export async function listRunningJobs(
+	db: Db = defaultDb,
+): Promise<readonly Pick<HangarJobRow, 'id' | 'kind' | 'targetType' | 'targetId' | 'startedAt'>[]> {
 	return db
-		.select()
+		.select({
+			id: hangarJob.id,
+			kind: hangarJob.kind,
+			targetType: hangarJob.targetType,
+			targetId: hangarJob.targetId,
+			startedAt: hangarJob.startedAt,
+		})
 		.from(hangarJob)
 		.where(eq(hangarJob.status, JOB_STATUSES.RUNNING))
-		.orderBy(desc(hangarJob.startedAt));
+		.orderBy(desc(hangarJob.startedAt))
+		.limit(JOBS_LIST_HARD_CAP);
 }

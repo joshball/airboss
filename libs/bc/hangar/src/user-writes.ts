@@ -23,7 +23,7 @@ import { AUDIT_TARGETS, HANGAR_USER_OP_SUBKINDS, type HangarUserOpSubkind, ROLES
 import { db as defaultDb } from '@ab/db/connection';
 import { and, eq } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
-import { countUsersByRole, getUser, listRecentUserSessions, type UserDirectoryRow } from './users';
+import { countUserSessions, countUsersByRole, getUser, hasUserSessionWithId, type UserDirectoryRow } from './users';
 
 type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;
 
@@ -448,12 +448,17 @@ export async function revokeAllUserSessions(
 	input: RevokeAllUserSessionsInput,
 	db: Db = defaultDb,
 ): Promise<{ revokedCount: number; revokedOwn: boolean }> {
-	// Read the pre-revoke session list so we can compute `revokedCount`
-	// (better-auth returns `{ success }`, not a count) and detect whether
-	// the actor's own current session was in the set.
-	const sessions = await listRecentUserSessions(input.targetUserId, Number.MAX_SAFE_INTEGER, db);
-	const revokedCount = sessions.length;
-	const revokedOwn = input.currentSessionId !== null && sessions.some((s) => s.id === input.currentSessionId);
+	// Compute `revokedCount` (better-auth returns `{ success }`, not a count)
+	// and detect whether the actor's own current session is in the set.
+	// Two cheap aggregate / index-hit queries, run concurrently -- replaces
+	// a previous full-row scan that selected every session column with
+	// `LIMIT Number.MAX_SAFE_INTEGER` just to call `.length` and `.some()`.
+	const [revokedCount, revokedOwn] = await Promise.all([
+		countUserSessions(input.targetUserId, db),
+		input.currentSessionId !== null
+			? hasUserSessionWithId(input.targetUserId, input.currentSessionId, db)
+			: Promise.resolve(false),
+	]);
 
 	await callAdmin(() =>
 		input.auth.api.revokeUserSessions({

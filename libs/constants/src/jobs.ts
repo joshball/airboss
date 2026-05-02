@@ -100,6 +100,30 @@ export type JobAuditReason = (typeof JOB_AUDIT_REASONS)[keyof typeof JOB_AUDIT_R
 export const JOB_HEARTBEAT_INTERVAL_MS = 5000;
 export const JOB_HEARTBEAT_STALE_MS = 30_000;
 
+/**
+ * Hard cap on the number of running-job rows surfaced to the hangar admin
+ * UI. Worker concurrency defaults to 3, so the realistic running count is
+ * bounded today; this cap is a safety belt against a stuck-recovery scenario
+ * (orphaned `running` rows that pre-date the recovery sweep) leaking full
+ * `payload` / `result` jsonb to every `/sources` page hit.
+ *
+ * 50 is well above worst-case live concurrency yet small enough to keep the
+ * row set trivial for an "active arrows" overlay on the flow diagram.
+ */
+export const JOBS_LIST_HARD_CAP = 50;
+
+/**
+ * Cap on the number of log lines retained client-side on the job-detail page.
+ * `pollLog` runs at 1 Hz and can return up to a few hundred new lines per
+ * poll for a chatty subprocess (extract / build / diff). Without a cap a
+ * long-running job grows the buffer (and the rendered DOM) without bound.
+ *
+ * On overflow the client drops the oldest lines and surfaces a "showing last
+ * N -- view full log" affordance; the server retains the full history and
+ * can be queried by `seq` cursor for the full stream.
+ */
+export const JOB_LOG_CLIENT_BUFFER_MAX = 5000;
+
 /** Modes for the sync-to-disk handler. */
 export const HANGAR_SYNC_MODES = {
 	/** Stage + commit locally on the current branch. */

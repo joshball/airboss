@@ -18,7 +18,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 const auditWriteMock = vi.fn();
 const getUserMock = vi.fn();
 const countUsersByRoleMock = vi.fn();
-const listRecentUserSessionsMock = vi.fn();
+const countUserSessionsMock = vi.fn();
+const hasUserSessionWithIdMock = vi.fn();
 
 // Minimal Drizzle query-builder shim. Each test seeds a result via
 // `.__nextResult` and the chain returns it.
@@ -49,7 +50,9 @@ vi.mock('@ab/audit', async () => {
 vi.mock('./users', () => ({
 	getUser: (id: string, db?: unknown) => getUserMock(id, db),
 	countUsersByRole: (opts?: unknown, db?: unknown) => countUsersByRoleMock(opts, db),
-	listRecentUserSessions: (id: string, limit?: number, db?: unknown) => listRecentUserSessionsMock(id, limit, db),
+	countUserSessions: (id: string, db?: unknown) => countUserSessionsMock(id, db),
+	hasUserSessionWithId: (userId: string, sessionId: string, db?: unknown) =>
+		hasUserSessionWithIdMock(userId, sessionId, db),
 	USER_DETAIL_SESSION_LIMIT: 10,
 }));
 
@@ -73,7 +76,8 @@ beforeEach(() => {
 	auditWriteMock.mockReset();
 	getUserMock.mockReset();
 	countUsersByRoleMock.mockReset();
-	listRecentUserSessionsMock.mockReset();
+	countUserSessionsMock.mockReset();
+	hasUserSessionWithIdMock.mockReset();
 	drizzleResults.length = 0;
 	auditWriteMock.mockResolvedValue({ id: 'audit_test' });
 });
@@ -393,10 +397,8 @@ describe('revokeUserSession', () => {
 
 describe('revokeAllUserSessions', () => {
 	it('counts sessions before the revoke, writes audit with revokedCount + revokedOwn', async () => {
-		listRecentUserSessionsMock.mockResolvedValueOnce([
-			{ id: 'sess_self', ipAddress: null, userAgent: null, createdAt: new Date(), expiresAt: new Date() },
-			{ id: 'sess_other', ipAddress: null, userAgent: null, createdAt: new Date(), expiresAt: new Date() },
-		]);
+		countUserSessionsMock.mockResolvedValueOnce(2);
+		hasUserSessionWithIdMock.mockResolvedValueOnce(true);
 
 		const { api, bundle } = makeAdmin();
 		const result = await revokeAllUserSessions(
@@ -416,6 +418,8 @@ describe('revokeAllUserSessions', () => {
 			body: { userId: 'target' },
 			headers: baseHeaders,
 		});
+		expect(countUserSessionsMock).toHaveBeenCalledWith('target', dbStub);
+		expect(hasUserSessionWithIdMock).toHaveBeenCalledWith('target', 'sess_self', dbStub);
 		const audit = auditWriteMock.mock.calls[0]?.[0] as Record<string, unknown>;
 		expect((audit.metadata as Record<string, unknown>).subKind).toBe('session-revoke-all');
 		expect((audit.metadata as Record<string, unknown>).revokedCount).toBe(2);
@@ -425,9 +429,8 @@ describe('revokeAllUserSessions', () => {
 	});
 
 	it('reports revokedOwn=false when the actor session is not in the set', async () => {
-		listRecentUserSessionsMock.mockResolvedValueOnce([
-			{ id: 'sess_a', ipAddress: null, userAgent: null, createdAt: new Date(), expiresAt: new Date() },
-		]);
+		countUserSessionsMock.mockResolvedValueOnce(1);
+		hasUserSessionWithIdMock.mockResolvedValueOnce(false);
 		const { bundle } = makeAdmin();
 		const result = await revokeAllUserSessions(
 			{
@@ -442,10 +445,31 @@ describe('revokeAllUserSessions', () => {
 			dbStub,
 		);
 		expect(result.revokedOwn).toBe(false);
+		expect(hasUserSessionWithIdMock).toHaveBeenCalledTimes(1);
+	});
+
+	it('skips the session-id lookup entirely when currentSessionId is null', async () => {
+		countUserSessionsMock.mockResolvedValueOnce(3);
+		const { bundle } = makeAdmin();
+		const result = await revokeAllUserSessions(
+			{
+				auth: bundle,
+				actorId: 'admin1',
+				actorEmail: 'admin@a.test',
+				targetUserId: 'target',
+				currentSessionId: null,
+				headers: baseHeaders,
+				...baseRequestCtx,
+			},
+			dbStub,
+		);
+		expect(result.revokedCount).toBe(3);
+		expect(result.revokedOwn).toBe(false);
+		expect(hasUserSessionWithIdMock).not.toHaveBeenCalled();
 	});
 
 	it('reports revokedCount=0 when target has no sessions but still audits', async () => {
-		listRecentUserSessionsMock.mockResolvedValueOnce([]);
+		countUserSessionsMock.mockResolvedValueOnce(0);
 		const { bundle } = makeAdmin();
 		const result = await revokeAllUserSessions(
 			{

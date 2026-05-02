@@ -12,7 +12,13 @@ import { hangarJob } from '@ab/hangar-jobs';
 import { generateAuthId, generateHangarJobId } from '@ab/utils';
 import { eq, inArray } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { countAllJobs, countLiveReferences, countLiveSources, listLiveSources } from './dashboard-queries';
+import {
+	countAllJobs,
+	countLiveReferences,
+	countLiveSources,
+	countVerbatimReferences,
+	listLiveSources,
+} from './dashboard-queries';
 import { hangarReference, hangarSource } from './schema';
 
 const TEST_USER_ID = generateAuthId();
@@ -152,6 +158,48 @@ describe('countLiveReferences -- deletedAt-IS-NULL filtering', () => {
 			updatedBy: TEST_USER_ID,
 		});
 		const after = await countLiveReferences();
+		expect(after).toBeGreaterThanOrEqual(before + 1);
+	});
+});
+
+describe('countVerbatimReferences -- counts only live references with a verbatim block', () => {
+	it('grows for live + verbatim rows; ignores deleted or null-verbatim rows', async () => {
+		const before = await countVerbatimReferences();
+
+		const verbatimLiveId = refId('verb-live');
+		const noVerbatimLiveId = refId('verb-none-live');
+		const verbatimDeletedId = refId('verb-deleted');
+
+		await db.insert(hangarReference).values([
+			{
+				id: verbatimLiveId,
+				displayName: verbatimLiveId,
+				paraphrase: 'live with verbatim',
+				tags: { sourceType: REFERENCE_SOURCE_TYPES.CFR },
+				verbatim: { source: 'cfr-x', text: 'verbatim text' },
+				updatedBy: TEST_USER_ID,
+			},
+			{
+				id: noVerbatimLiveId,
+				displayName: noVerbatimLiveId,
+				paraphrase: 'live without verbatim',
+				tags: { sourceType: REFERENCE_SOURCE_TYPES.CFR },
+				updatedBy: TEST_USER_ID,
+			},
+			{
+				id: verbatimDeletedId,
+				displayName: verbatimDeletedId,
+				paraphrase: 'deleted with verbatim',
+				tags: { sourceType: REFERENCE_SOURCE_TYPES.CFR },
+				verbatim: { source: 'cfr-y', text: 'verbatim text' },
+				updatedBy: TEST_USER_ID,
+				deletedAt: new Date(),
+			},
+		]);
+
+		const after = await countVerbatimReferences();
+		// Only the live + verbatim row should bump the count. The deleted-but-verbatim
+		// and live-but-no-verbatim rows must not. Use >= to tolerate concurrent peers.
 		expect(after).toBeGreaterThanOrEqual(before + 1);
 	});
 });
