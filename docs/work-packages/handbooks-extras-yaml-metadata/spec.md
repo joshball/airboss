@@ -86,3 +86,19 @@ These mirror the values from the existing manifests / the WP-MTN spec; they're t
 - Extending the same pattern to chapter-aware handbooks (PHAK / AFH / AVWX). Their manifests already carry these fields because the section-tree extraction pipeline authors them. Different code path.
 - Removing `subjects` from `wholeDocManifestSchema` (manifest still ships it; just no longer authored separately).
 - Adding new YAML fields beyond `subjects` + `primary_cert`.
+
+## Pre-existing bugs surfaced during Phase 4 verification
+
+While verifying that all 7 extras seeded with the YAML-authored metadata, two pre-existing issues surfaced. Neither is in WP-EXTRAS-YAML's scope; capturing for future follow-up.
+
+### Bug 1: duplicate ifh / iph rows after seed
+
+`course/references/handbooks-noningested.yaml` seeds `ifh` and `iph` rows at edition `FAA-H-8083-15B` / `FAA-H-8083-16B` (uppercase, full FAA filename). The handbooks-extras pipeline produces them at edition `8083-15B` / `8083-16B` (lowercase, short slug). Different `(document_slug, edition)` tuples means two parallel `study.reference` rows for the same handbook. Verified post-seed: 9 extras-area rows for what should be 7 documents.
+
+Likely fix: drop `ifh` + `iph` from `handbooks-noningested.yaml` (the extras pipeline supersedes them now that they're real ingested handbooks). Tiny WP -- one YAML edit + a seed reset to confirm one-row-per-handbook.
+
+### Bug 2: extras-side ifh/iph title from PDF metadata
+
+The `ifh` / `iph` references seeded by the extras pipeline carry titles like "ISO 15930 - Electronic document file format for prepress digital data exchange (PDF/X)". That comes from PDF metadata the FAA's authoring toolchain embedded; the extras ingest reads it as the title. Should pull from a per-doc display-string source instead (`FRIENDLY_DISPLAY` in `libs/sources/src/handbooks-extras/ingest.ts` already has the right strings).
+
+Fix: have `runHandbooksExtrasIngest` use `FRIENDLY_DISPLAY[slug].formal` instead of `doc.metadata.title` when available. Single conditional + a guard. Could fold into the same WP that fixes Bug 1.

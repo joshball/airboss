@@ -13,22 +13,46 @@ import { join } from 'node:path';
 import { resolveCacheRoot } from '@ab/constants';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { resetRegistry } from '../registry/__test_helpers__.ts';
-import { _setHandbooksExtrasYamlPath, readExtrasCorpusIndex } from './derivative-reader.ts';
+import { _setHandbooksExtrasYamlPath, loadHandbooksExtrasYaml, readExtrasCorpusIndex } from './derivative-reader.ts';
 import { DOC_ID_TO_FRIENDLY, parseCliArgs, runHandbooksExtrasIngest } from './ingest.ts';
 
 let tempCache: string;
 let tempDerivative: string;
 let tempYaml: string;
 
-function writeYaml(entries: ReadonlyArray<{ doc_id: string; edition: string | null; filename: string }>): void {
+interface TestYamlEntry {
+	doc_id: string;
+	edition: string | null;
+	filename: string;
+	/** Defaults to `[human-factors]` so existing tests don't have to spell it out. */
+	subjects?: readonly string[];
+	/** Defaults to `null` (cert-agnostic). Use the literal string `'private'` etc. for typed values. */
+	primary_cert?: string | null;
+}
+
+function writeYaml(entries: ReadonlyArray<TestYamlEntry>): void {
 	const yaml =
 		`base_url: https://example.invalid\nentries:\n` +
 		entries
-			.map(
-				(e) =>
-					`  - doc_id: ${e.doc_id}\n    edition: ${e.edition === null ? 'null' : `'${e.edition}'`}\n    url: https://example.invalid/${e.filename}\n    filename: ${e.filename}\n`,
-			)
+			.map((e) => {
+				const subjects = e.subjects ?? ['human-factors'];
+				const primaryCert = 'primary_cert' in e ? e.primary_cert : null;
+				const certLine = primaryCert === null ? 'null' : primaryCert;
+				return (
+					`  - doc_id: ${e.doc_id}\n` +
+					`    edition: ${e.edition === null ? 'null' : `'${e.edition}'`}\n` +
+					`    url: https://example.invalid/${e.filename}\n` +
+					`    filename: ${e.filename}\n` +
+					`    subjects: [${subjects.join(', ')}]\n` +
+					`    primary_cert: ${certLine}\n`
+				);
+			})
 			.join('');
+	writeFileSync(tempYaml, yaml, 'utf-8');
+}
+
+/** Write a raw YAML string -- for tests that exercise validation failures. */
+function writeRawYaml(yaml: string): void {
 	writeFileSync(tempYaml, yaml, 'utf-8');
 }
 
@@ -175,6 +199,105 @@ describe('runHandbooksExtrasIngest -- empty cache', () => {
 	});
 });
 
+describe('loadHandbooksExtrasYaml -- subjects + primary_cert validation', () => {
+	it('rejects a row missing subjects', () => {
+		writeRawYaml(
+			[
+				`base_url: https://example.invalid`,
+				`entries:`,
+				`  - doc_id: faa-h-8083-2`,
+				`    edition: '2A'`,
+				`    url: https://example.invalid/rmh.pdf`,
+				`    filename: rmh.pdf`,
+				`    primary_cert: private`,
+				``,
+			].join('\n'),
+		);
+		expect(() => loadHandbooksExtrasYaml()).toThrow(/invalid subjects/i);
+	});
+
+	it('rejects subjects with 0 entries', () => {
+		writeYaml([{ doc_id: 'faa-h-8083-2', edition: '2A', filename: 'rmh.pdf', subjects: [] }]);
+		expect(() => loadHandbooksExtrasYaml()).toThrow(/invalid subjects/i);
+	});
+
+	it('rejects subjects with 4+ entries', () => {
+		writeYaml([
+			{
+				doc_id: 'faa-h-8083-2',
+				edition: '2A',
+				filename: 'rmh.pdf',
+				subjects: ['weather', 'navigation', 'procedures', 'performance'],
+			},
+		]);
+		expect(() => loadHandbooksExtrasYaml()).toThrow(/invalid subjects/i);
+	});
+
+	it('rejects an unknown subject value', () => {
+		writeYaml([{ doc_id: 'faa-h-8083-2', edition: '2A', filename: 'rmh.pdf', subjects: ['made-up-topic'] }]);
+		expect(() => loadHandbooksExtrasYaml()).toThrow(/invalid subjects/i);
+	});
+
+	it('rejects a row missing primary_cert entirely', () => {
+		writeRawYaml(
+			[
+				`base_url: https://example.invalid`,
+				`entries:`,
+				`  - doc_id: faa-h-8083-2`,
+				`    edition: '2A'`,
+				`    url: https://example.invalid/rmh.pdf`,
+				`    filename: rmh.pdf`,
+				`    subjects: [human-factors]`,
+				``,
+			].join('\n'),
+		);
+		expect(() => loadHandbooksExtrasYaml()).toThrow(/missing primary_cert/i);
+	});
+
+	it('rejects an unknown primary_cert value', () => {
+		writeYaml([
+			{
+				doc_id: 'faa-h-8083-2',
+				edition: '2A',
+				filename: 'rmh.pdf',
+				subjects: ['human-factors'],
+				primary_cert: 'made-up-cert',
+			},
+		]);
+		expect(() => loadHandbooksExtrasYaml()).toThrow(/invalid primary_cert/i);
+	});
+
+	it('accepts null primary_cert (cert-agnostic)', () => {
+		writeYaml([
+			{
+				doc_id: 'faa-h-8083-2',
+				edition: '2A',
+				filename: 'rmh.pdf',
+				subjects: ['human-factors'],
+				primary_cert: null,
+			},
+		]);
+		const yaml = loadHandbooksExtrasYaml();
+		expect(yaml.entries).toHaveLength(1);
+		expect(yaml.entries[0]?.primary_cert).toBeNull();
+		expect(yaml.entries[0]?.subjects).toEqual(['human-factors']);
+	});
+
+	it('accepts a typed primary_cert', () => {
+		writeYaml([
+			{
+				doc_id: 'faa-h-8083-2',
+				edition: '2A',
+				filename: 'rmh.pdf',
+				subjects: ['human-factors'],
+				primary_cert: 'private',
+			},
+		]);
+		const yaml = loadHandbooksExtrasYaml();
+		expect(yaml.entries[0]?.primary_cert).toBe('private');
+	});
+});
+
 describe('runHandbooksExtrasIngest -- live cache (smoke)', () => {
 	const liveCache = resolveCacheRoot({ ensureExists: false });
 	const haveLiveCache = existsSync(join(liveCache, 'handbooks', 'faa-h-8083-2', 'faa-h-8083-2.pdf'));
@@ -235,6 +358,14 @@ describe('runHandbooksExtrasIngest -- live cache (smoke)', () => {
 			const rmhManifest = JSON.parse(readFileSync(rmhManifestPath, 'utf-8')) as Record<string, unknown>;
 			expect(rmhManifest.body_path).toBe('handbooks/risk-management/FAA-H-8083-2A/document.md');
 			expect(rmhManifest.sections).toEqual([]);
+			// Subjects + primary_cert flow through from the YAML row (WP-EXTRAS-YAML).
+			expect(rmhManifest.subjects).toEqual(['human-factors']);
+			expect(rmhManifest.primary_cert).toBe('private');
+			// Spot-check a row authored with primary_cert: null in the YAML.
+			const amtgManifestPath = join(tempDerivative, 'amt-general', 'FAA-H-8083-30B', 'manifest.json');
+			const amtgManifest = JSON.parse(readFileSync(amtgManifestPath, 'utf-8')) as Record<string, unknown>;
+			expect(amtgManifest.subjects).toEqual(['aircraft-systems']);
+			expect(amtgManifest.primary_cert).toBeNull();
 		},
 		// The smoke test runs the full extract pipeline twice (initial + the
 		// idempotency re-check), so 7 entries means 14 PDF extractions. Each
