@@ -24,11 +24,65 @@
  * cost of a custom-resolver `fetch` was deemed disproportionate; the
  * validator covers the typed-URL surface and the redirect chain is bounded
  * by `SOURCE_FETCH_ALLOWED_HOSTS` for the YAML-driven corpus pipeline.
+ *
+ * # Browser safety
+ *
+ * `@ab/utils` is imported from client code (id helpers, formatters, etc.)
+ * and the barrel re-exports this module, so Vite traces it into the
+ * browser bundle even though `validateOutboundUrl` is server-only. To keep
+ * the browser bundle clean, this module MUST NOT statically import
+ * `node:dns/promises` or `node:net` at module top level -- Vite would
+ * externalize them and crash the client at first hit
+ * (`Module "node:dns/promises" has been externalized for browser compatibility`).
+ *
+ * Instead, we resolve the Node built-ins lazily via
+ * `process.getBuiltinModule(spec)`. This is a runtime API (Node 22+, Bun)
+ * that Vite's static analyzer cannot follow, so the bundler never sees the
+ * `node:*` specifiers and never tries to externalize them. The browser
+ * loads this module but never executes the function bodies, so the
+ * lookups never fire on the client.
  */
 
-import { lookup } from 'node:dns/promises';
-import { isIP } from 'node:net';
 import { ALLOWED_OUTBOUND_SCHEMES, PRIVATE_IPV4_CIDRS, PRIVATE_IPV6_CIDRS } from '@ab/constants';
+
+type DnsLookupRecord = { address: string; family: number };
+type NodeDnsPromises = {
+	lookup: (hostname: string, options: { all: true }) => Promise<readonly DnsLookupRecord[]>;
+};
+type NodeNet = { isIP: (input: string) => 0 | 4 | 6 };
+
+let cachedDns: NodeDnsPromises | null = null;
+let cachedNet: NodeNet | null = null;
+
+type GetBuiltinModule = (spec: string) => unknown;
+
+/**
+ * Resolve a Node built-in lazily, hidden from Vite's static analyzer.
+ *
+ * Uses `process.getBuiltinModule` (Node 22+, Bun) so the specifier is
+ * passed at runtime and never appears in a static `import` form the
+ * bundler can rewrite or externalize.
+ */
+function loadBuiltin<T>(spec: string): T {
+	const proc = (typeof process !== 'undefined' ? process : undefined) as
+		| (NodeJS.Process & { getBuiltinModule?: GetBuiltinModule })
+		| undefined;
+	const getBuiltin = proc?.getBuiltinModule;
+	if (typeof getBuiltin !== 'function') {
+		throw new Error(`outbound-url: ${spec} unavailable in this runtime (no process.getBuiltinModule)`);
+	}
+	return getBuiltin(spec) as T;
+}
+
+function nodeDns(): NodeDnsPromises {
+	if (!cachedDns) cachedDns = loadBuiltin<NodeDnsPromises>('node:dns/promises');
+	return cachedDns;
+}
+
+function nodeNet(): NodeNet {
+	if (!cachedNet) cachedNet = loadBuiltin<NodeNet>('node:net');
+	return cachedNet;
+}
 
 /** Successful validation: URL is safe to hand to `fetch()`. */
 export interface OutboundUrlOk {
@@ -53,7 +107,7 @@ export interface ValidateOutboundUrlOptions {
 }
 
 async function defaultResolveAll(hostname: string): Promise<readonly { address: string; family: number }[]> {
-	const records = await lookup(hostname, { all: true });
+	const records = await nodeDns().lookup(hostname, { all: true });
 	return records.map((r) => ({ address: r.address, family: r.family }));
 }
 
@@ -90,7 +144,7 @@ export async function validateOutboundUrl(
 	// WHATWG `URL.hostname` returns IPv6 literals wrapped in `[...]`. Node's
 	// `isIP` rejects the bracketed form, so strip them before classifying.
 	const unbracketed = rawHost.startsWith('[') && rawHost.endsWith(']') ? rawHost.slice(1, -1) : rawHost;
-	const literalFamily = isIP(unbracketed);
+	const literalFamily = nodeNet().isIP(unbracketed);
 	if (literalFamily === 4) {
 		const denial = checkIpv4(unbracketed);
 		if (denial !== null) return { ok: false, reason: denial };

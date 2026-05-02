@@ -12,12 +12,47 @@
  * constructed.
  *
  * See `docs/work-packages/review-sessions-url/spec.md` product decision (2).
+ *
+ * # Browser safety
+ *
+ * `@ab/bc-study` is imported from client `.svelte` files (the `/memory` and
+ * `/memory/review` pages call `summarizeDeckSpec` for the Saved-Decks list).
+ * `computeDeckHash` is server-only -- it derives the bucket key on the API
+ * side -- but the whole module is pulled into the client bundle by the
+ * shared barrel. To keep the browser bundle clean, this file MUST NOT
+ * statically import `node:crypto` at module top level. Instead we resolve
+ * it lazily inside `computeDeckHash` via `process.getBuiltinModule`
+ * (Node 22+, Bun), hidden from Vite's static analyzer. See
+ * `libs/constants/src/source-cache.ts` for the canonical pattern.
  */
 
-import { createHash } from 'node:crypto';
 import { DECK_HASH_LENGTH, DOMAIN_LABELS, type Domain } from '@ab/constants';
 import { humanize } from '@ab/utils';
 import type { ReviewSessionDeckSpec } from './schema';
+
+type NodeCrypto = {
+	createHash: (algorithm: string) => { update: (data: string) => { digest: (encoding: string) => string } };
+};
+
+let cachedCrypto: NodeCrypto | null = null;
+
+type GetBuiltinModule = (spec: string) => unknown;
+
+function loadBuiltin<T>(spec: string): T {
+	const proc = (typeof process !== 'undefined' ? process : undefined) as
+		| (NodeJS.Process & { getBuiltinModule?: GetBuiltinModule })
+		| undefined;
+	const getBuiltin = proc?.getBuiltinModule;
+	if (typeof getBuiltin !== 'function') {
+		throw new Error(`deck-spec: ${spec} unavailable in this runtime (no process.getBuiltinModule)`);
+	}
+	return getBuiltin(spec) as T;
+}
+
+function nodeCrypto(): NodeCrypto {
+	if (!cachedCrypto) cachedCrypto = loadBuiltin<NodeCrypto>('node:crypto');
+	return cachedCrypto;
+}
 
 // ---------- Errors ----------
 
@@ -157,7 +192,7 @@ export function decodeDeckSpec(encoded: string): ReviewSessionDeckSpec {
  */
 export function computeDeckHash(spec: ReviewSessionDeckSpec): string {
 	const canonical = canonicalDeckSpecJson(spec);
-	return createHash('sha1').update(canonical).digest('hex').slice(0, DECK_HASH_LENGTH);
+	return nodeCrypto().createHash('sha1').update(canonical).digest('hex').slice(0, DECK_HASH_LENGTH);
 }
 
 /**

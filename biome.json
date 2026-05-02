@@ -65,6 +65,39 @@
 					}
 				}
 			}
+		},
+		{
+			"includes": [
+				"libs/constants/**/*.ts",
+				"libs/utils/**/*.ts",
+				"libs/types/**/*.ts",
+				"libs/themes/**/*.ts",
+				"libs/ui/**/*.ts",
+				"libs/ui/**/*.svelte",
+				"libs/help/**/*.ts",
+				"libs/help/**/*.svelte",
+				"libs/aviation/**/*.ts",
+				"libs/audit/**/*.ts",
+				"libs/sources/**/*.ts",
+				"libs/activities/**/*.ts",
+				"libs/bc/study/**/*.ts",
+				"libs/bc/sim/**/*.ts",
+				"!**/*.test.ts",
+				"!**/*.spec.ts",
+				"!**/*.server.ts",
+				"!**/seeders/**",
+				"!**/scripts/**",
+				"!**/server/**",
+				"!libs/aviation/src/sources/**",
+				"!libs/sources/src/**"
+			],
+			"linter": {
+				"rules": {
+					"correctness": {
+						"noNodejsModules": "error"
+					}
+				}
+			}
 		}
 	],
 	"assist": {

@@ -153,6 +153,69 @@ export const actions: Actions = {
 - `$lib/server/` for app-specific server helpers.
 - Check UI lib before creating new components.
 
+## Browser-safe libraries
+
+Several `@ab/*` libs are imported from both server and client code. SvelteKit `.svelte` files import from these libs, and Vite traces them into the browser bundle. The libs that are bundled into the browser:
+
+`@ab/constants`, `@ab/utils`, `@ab/types`, `@ab/themes`, `@ab/ui`, `@ab/help`, `@ab/aviation`, `@ab/audit`, `@ab/sources`, `@ab/activities`, `@ab/bc-study`, `@ab/bc-sim`
+
+### The rule
+
+Files inside those libs **MUST NOT** statically import `node:*` modules at module top level. Vite externalizes those imports for browser compatibility, and the externalized stub throws at first property access:
+
+> Error: Module "node:fs" has been externalized for browser compatibility. Cannot access "node:fs.existsSync" in client code.
+
+This is true even if every function in the file is server-only. Just loading the module on the client is enough to register the error in the console; touching any of the symbols crashes the page.
+
+Biome's `correctness/noNodejsModules` rule is wired up in `biome.json` to enforce this on the listed libs. Test files, `**/server/**` paths, and `*.server.ts` files are excluded.
+
+### The pattern
+
+If you need a Node built-in inside one of these libs, lazy-load it via `process.getBuiltinModule(spec)` (Node 22+, Bun). Vite's static analyzer cannot follow runtime string arguments, so the bundler never sees the `node:*` specifier and never externalizes it.
+
+```typescript
+type NodeFs = { readFileSync: (p: string) => Buffer };
+
+let cachedFs: NodeFs | null = null;
+
+function loadBuiltin<T>(spec: string): T {
+  const proc = (typeof process !== 'undefined' ? process : undefined) as
+    | (NodeJS.Process & { getBuiltinModule?: (spec: string) => unknown })
+    | undefined;
+  const get = proc?.getBuiltinModule;
+  if (typeof get !== 'function') {
+    throw new Error(`${spec} unavailable in this runtime`);
+  }
+  return get(spec) as T;
+}
+
+function nodeFs(): NodeFs {
+  if (!cachedFs) cachedFs = loadBuiltin<NodeFs>('node:fs');
+  return cachedFs;
+}
+
+export function readSomething(path: string): Buffer {
+  return nodeFs().readFileSync(path);
+}
+```
+
+The browser will load the module (since the barrel re-exports it) but never executes the function bodies, so `getBuiltinModule` is never called and no `node:*` is ever resolved.
+
+### The escape hatches
+
+If a file is truly server-only and shouldn't be importable from the client at all:
+
+1. Move it under a `**/server/**` subdirectory in the lib. The `noNodejsModules` Biome override excludes `**/server/**` paths.
+2. Or move it out of these libs entirely (e.g., into `libs/sources/**` if it's pipeline / ingest code).
+
+Don't silence the lint rule with `// biome-ignore`. The rule is enforcement, not advice.
+
+### Worked examples
+
+- [libs/constants/src/source-cache.ts](../../libs/constants/src/source-cache.ts) - canonical pattern. PR #471.
+- [libs/utils/src/outbound-url.ts](../../libs/utils/src/outbound-url.ts) - DNS lookup + IP parsing, lazy-loaded.
+- [libs/bc/study/src/deck-spec.ts](../../libs/bc/study/src/deck-spec.ts) - `node:crypto` for deck hash, lazy-loaded.
+
 ## Formatting (Biome)
 
 - Tabs (width 2), single quotes, 120 char lines, trailing commas, semicolons.
