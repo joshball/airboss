@@ -170,114 +170,114 @@ describe('cluster-E hardening', () => {
 
 	afterEach(() => {
 		rmSync(tempRoot, { recursive: true, force: true });
-});
-
-describe('followRedirectsHead -- cluster-E hardening', () => {
-	it('returns the start URL when there is no redirect', async () => {
-		const fakeFetch: typeof fetch = async (): Promise<Response> => new Response('', { status: 200 });
-		const final = await followRedirectsHead('https://example.test/foo', fakeFetch, false, TEST_HOSTS);
-		expect(final).toBe('https://example.test/foo');
 	});
 
-	it('follows a same-host redirect', async () => {
-		let calls = 0;
-		const fakeFetch: typeof fetch = async (_input: RequestInfo | URL): Promise<Response> => {
-			calls += 1;
-			if (calls === 1) {
+	describe('followRedirectsHead -- cluster-E hardening', () => {
+		it('returns the start URL when there is no redirect', async () => {
+			const fakeFetch: typeof fetch = async (): Promise<Response> => new Response('', { status: 200 });
+			const final = await followRedirectsHead('https://example.test/foo', fakeFetch, false, TEST_HOSTS);
+			expect(final).toBe('https://example.test/foo');
+		});
+
+		it('follows a same-host redirect', async () => {
+			let calls = 0;
+			const fakeFetch: typeof fetch = async (_input: RequestInfo | URL): Promise<Response> => {
+				calls += 1;
+				if (calls === 1) {
+					return new Response('', {
+						status: 302,
+						headers: { Location: 'https://example.test/bar' },
+					});
+				}
+				return new Response('', { status: 200 });
+			};
+			const final = await followRedirectsHead('https://example.test/foo', fakeFetch, false, TEST_HOSTS);
+			expect(final).toBe('https://example.test/bar');
+		});
+
+		it('refuses a redirect to a non-allowlisted host', async () => {
+			const fakeFetch: typeof fetch = async (): Promise<Response> => {
 				return new Response('', {
 					status: 302,
-					headers: { Location: 'https://example.test/bar' },
+					headers: { Location: 'https://attacker.example/poisoned' },
 				});
-			}
-			return new Response('', { status: 200 });
-		};
-		const final = await followRedirectsHead('https://example.test/foo', fakeFetch, false, TEST_HOSTS);
-		expect(final).toBe('https://example.test/bar');
+			};
+			await expect(followRedirectsHead('https://example.test/foo', fakeFetch, false, TEST_HOSTS)).rejects.toThrow(
+				/refused redirect.*attacker\.example/,
+			);
+		});
+
+		it('refuses a redirect that downgrades to plain http', async () => {
+			const fakeFetch: typeof fetch = async (): Promise<Response> => {
+				return new Response('', {
+					status: 302,
+					headers: { Location: 'http://example.test/foo' },
+				});
+			};
+			await expect(followRedirectsHead('https://example.test/foo', fakeFetch, false, TEST_HOSTS)).rejects.toThrow(
+				/refused redirect.*http:/,
+			);
+		});
+
+		it('refuses an initial URL on a non-allowlisted host', async () => {
+			const fakeFetch: typeof fetch = async (): Promise<Response> => new Response('', { status: 200 });
+			await expect(followRedirectsHead('https://attacker.example/foo', fakeFetch, false, TEST_HOSTS)).rejects.toThrow(
+				/refused redirect.*attacker\.example/,
+			);
+		});
+
+		it('caps the redirect chain length', async () => {
+			const fakeFetch: typeof fetch = async (input: RequestInfo | URL): Promise<Response> => {
+				// Always redirect to the next path; never stops.
+				const url = new URL(String(input));
+				const next = url.pathname.endsWith('z') ? '/a' : `${url.pathname}z`;
+				return new Response('', {
+					status: 302,
+					headers: { Location: `https://example.test${next}` },
+				});
+			};
+			await expect(followRedirectsHead('https://example.test/a', fakeFetch, false, TEST_HOSTS)).rejects.toThrow(
+				/too many redirects/,
+			);
+		});
 	});
 
-	it('refuses a redirect to a non-allowlisted host', async () => {
-		const fakeFetch: typeof fetch = async (): Promise<Response> => {
-			return new Response('', {
-				status: 302,
-				headers: { Location: 'https://attacker.example/poisoned' },
-			});
-		};
-		await expect(followRedirectsHead('https://example.test/foo', fakeFetch, false, TEST_HOSTS)).rejects.toThrow(
-			/refused redirect.*attacker\.example/,
-		);
-	});
+	describe('downloadFile -- cluster-E hardening', () => {
+		it('caps the streamed body at maxBodyBytes', async () => {
+			const fakeFetch: typeof fetch = async (_input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
+				if (init?.method === 'HEAD') {
+					return new Response('', { status: 200 });
+				}
+				return new Response('x'.repeat(2048), { status: 200 });
+			};
+			const dest = join(tempRoot, 'big.bin');
+			await expect(
+				downloadFile('https://example.test/big.bin', dest, {
+					verbose: false,
+					fetchImpl: fakeFetch,
+					allowedHosts: TEST_HOSTS,
+					maxBodyBytes: 256,
+				}),
+			).rejects.toThrow(/exceeded 256 bytes/);
+		});
 
-	it('refuses a redirect that downgrades to plain http', async () => {
-		const fakeFetch: typeof fetch = async (): Promise<Response> => {
-			return new Response('', {
-				status: 302,
-				headers: { Location: 'http://example.test/foo' },
-			});
-		};
-		await expect(followRedirectsHead('https://example.test/foo', fakeFetch, false, TEST_HOSTS)).rejects.toThrow(
-			/refused redirect.*http:/,
-		);
-	});
-
-	it('refuses an initial URL on a non-allowlisted host', async () => {
-		const fakeFetch: typeof fetch = async (): Promise<Response> => new Response('', { status: 200 });
-		await expect(followRedirectsHead('https://attacker.example/foo', fakeFetch, false, TEST_HOSTS)).rejects.toThrow(
-			/refused redirect.*attacker\.example/,
-		);
-	});
-
-	it('caps the redirect chain length', async () => {
-		const fakeFetch: typeof fetch = async (input: RequestInfo | URL): Promise<Response> => {
-			// Always redirect to the next path; never stops.
-			const url = new URL(String(input));
-			const next = url.pathname.endsWith('z') ? '/a' : `${url.pathname}z`;
-			return new Response('', {
-				status: 302,
-				headers: { Location: `https://example.test${next}` },
-			});
-		};
-		await expect(followRedirectsHead('https://example.test/a', fakeFetch, false, TEST_HOSTS)).rejects.toThrow(
-			/too many redirects/,
-		);
-	});
-});
-
-describe('downloadFile -- cluster-E hardening', () => {
-	it('caps the streamed body at maxBodyBytes', async () => {
-		const fakeFetch: typeof fetch = async (_input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
-			if (init?.method === 'HEAD') {
-				return new Response('', { status: 200 });
-			}
-			return new Response('x'.repeat(2048), { status: 200 });
-		};
-		const dest = join(tempRoot, 'big.bin');
-		await expect(
-			downloadFile('https://example.test/big.bin', dest, {
+		it('writes a normal-sized body without tripping the cap', async () => {
+			const body = 'hello world';
+			const fakeFetch: typeof fetch = async (_input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
+				if (init?.method === 'HEAD') {
+					return new Response('', { status: 200, headers: { 'Content-Length': String(body.length) } });
+				}
+				return new Response(body, { status: 200 });
+			};
+			const dest = join(tempRoot, 'ok.txt');
+			const outcome = await downloadFile('https://example.test/ok.txt', dest, {
 				verbose: false,
 				fetchImpl: fakeFetch,
 				allowedHosts: TEST_HOSTS,
-				maxBodyBytes: 256,
-			}),
-		).rejects.toThrow(/exceeded 256 bytes/);
-	});
-
-	it('writes a normal-sized body without tripping the cap', async () => {
-		const body = 'hello world';
-		const fakeFetch: typeof fetch = async (_input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
-			if (init?.method === 'HEAD') {
-				return new Response('', { status: 200, headers: { 'Content-Length': String(body.length) } });
-			}
-			return new Response(body, { status: 200 });
-		};
-		const dest = join(tempRoot, 'ok.txt');
-		const outcome = await downloadFile('https://example.test/ok.txt', dest, {
-			verbose: false,
-			fetchImpl: fakeFetch,
-			allowedHosts: TEST_HOSTS,
-			maxBodyBytes: 1024,
+				maxBodyBytes: 1024,
+			});
+			expect(outcome.bytes).toBe(body.length);
+			expect(statSync(dest).size).toBe(body.length);
 		});
-		expect(outcome.bytes).toBe(body.length);
-		expect(statSync(dest).size).toBe(body.length);
 	});
-});
 });
