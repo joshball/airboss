@@ -581,10 +581,31 @@ async function buildDetailView(
  * view-shaped payload (or {@link RegulationsViewNotFoundError} when the slug
  * resolves to nothing).
  *
- * The aggregator is a composition layer over existing reads -- it does not
- * introduce new query semantics. Per-view fan-out parallelizes the same reads
- * the route loaders previously issued sequentially.
+ * The overload set narrows the return type by the input `view` discriminant
+ * so callers don't have to cast. The aggregator is a composition layer over
+ * existing reads -- it does not introduce new query semantics. Per-view
+ * fan-out parallelizes the same reads the route loaders previously issued
+ * sequentially.
  */
+export async function getRegulationsView(params: { view: 'landing' }, db?: Db): Promise<RegulationsLandingView>;
+export async function getRegulationsView(
+	params: { view: 'group'; kind: LibraryRegulationsKind },
+	db?: Db,
+): Promise<RegulationsGroupView>;
+export async function getRegulationsView(
+	params: { view: 'section'; kind: LibraryRegulationsKind; group: string },
+	db?: Db,
+): Promise<RegulationsSectionListView>;
+export async function getRegulationsView(
+	params: {
+		view: 'detail';
+		kind: LibraryRegulationsKind;
+		group: string;
+		section: { chapterCode: string; sectionCode: string };
+		userId: string;
+	},
+	db?: Db,
+): Promise<RegulationsDetailView>;
 export async function getRegulationsView(params: RegulationsViewParams, db: Db = defaultDb): Promise<RegulationsView> {
 	switch (params.view) {
 		case 'landing':

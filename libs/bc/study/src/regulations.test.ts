@@ -32,15 +32,7 @@ import type { StructuredCitation } from '@ab/types';
 import { generateAuthId, generateReferenceFigureId, generateReferenceId, generateReferenceSectionId } from '@ab/utils';
 import { eq } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import {
-	getRegulationsView,
-	type RegulationsDetailView,
-	type RegulationsGroupView,
-	type RegulationsLandingView,
-	type RegulationsSectionListView,
-	RegulationsViewNotFoundError,
-	resolveRegulationsSectionId,
-} from './regulations';
+import { getRegulationsView, RegulationsViewNotFoundError, resolveRegulationsSectionId } from './regulations';
 import {
 	knowledgeNode,
 	type NewKnowledgeNodeRow,
@@ -330,7 +322,7 @@ afterAll(async () => {
 
 describe('getRegulationsView (landing)', () => {
 	it('returns one bucket per regulations kind', async () => {
-		const view = (await getRegulationsView({ view: 'landing' })) as RegulationsLandingView;
+		const view = await getRegulationsView({ view: 'landing' });
 		expect(view.view).toBe('landing');
 		expect(view.buckets).toHaveLength(5);
 		const kinds = view.buckets.map((b) => b.kind);
@@ -342,7 +334,7 @@ describe('getRegulationsView (landing)', () => {
 	});
 
 	it('every bucket label is human-readable', async () => {
-		const view = (await getRegulationsView({ view: 'landing' })) as RegulationsLandingView;
+		const view = await getRegulationsView({ view: 'landing' });
 		for (const bucket of view.buckets) {
 			expect(bucket.label).toMatch(/\S/);
 			expect(bucket.count).toBeGreaterThanOrEqual(0);
@@ -350,7 +342,7 @@ describe('getRegulationsView (landing)', () => {
 	});
 
 	it('counts the test fixture in each kind it contributes to', async () => {
-		const view = (await getRegulationsView({ view: 'landing' })) as RegulationsLandingView;
+		const view = await getRegulationsView({ view: 'landing' });
 		const cfr14 = view.buckets.find((b) => b.kind === LIBRARY_REGULATIONS_KINDS.CFR_14);
 		const cfr49 = view.buckets.find((b) => b.kind === LIBRARY_REGULATIONS_KINDS.CFR_49);
 		const aim = view.buckets.find((b) => b.kind === LIBRARY_REGULATIONS_KINDS.AIM);
@@ -366,10 +358,10 @@ describe('getRegulationsView (landing)', () => {
 
 describe('getRegulationsView (group)', () => {
 	it('14 CFR groups by Part and labels each `Part <N>`', async () => {
-		const view = (await getRegulationsView({
+		const view = await getRegulationsView({
 			view: 'group',
 			kind: LIBRARY_REGULATIONS_KINDS.CFR_14,
-		})) as RegulationsGroupView;
+		});
 		expect(view.view).toBe('group');
 		expect(view.kind).toBe(LIBRARY_REGULATIONS_KINDS.CFR_14);
 		expect(view.kindLabel).toBe('14 CFR');
@@ -381,10 +373,10 @@ describe('getRegulationsView (group)', () => {
 	});
 
 	it('49 CFR groups by Part separately from 14 CFR', async () => {
-		const view = (await getRegulationsView({
+		const view = await getRegulationsView({
 			view: 'group',
 			kind: LIBRARY_REGULATIONS_KINDS.CFR_49,
-		})) as RegulationsGroupView;
+		});
 		const testPart = view.groups.find((g) => g.groupKey === CFR49_PART);
 		expect(testPart).toBeDefined();
 		expect(testPart?.label).toBe(`Part ${CFR49_PART}`);
@@ -393,10 +385,10 @@ describe('getRegulationsView (group)', () => {
 	});
 
 	it('AC groups by series and orphans go to the umbrella card list', async () => {
-		const view = (await getRegulationsView({
+		const view = await getRegulationsView({
 			view: 'group',
 			kind: LIBRARY_REGULATIONS_KINDS.AC,
-		})) as RegulationsGroupView;
+		});
 		const series = view.groups.find((g) => g.groupKey === AC_SERIES);
 		expect(series).toBeDefined();
 		expect(series?.label).toBe(`Series ${AC_SERIES}`);
@@ -409,10 +401,10 @@ describe('getRegulationsView (group)', () => {
 	});
 
 	it('AIM returns umbrella cards (no inline groups)', async () => {
-		const view = (await getRegulationsView({
+		const view = await getRegulationsView({
 			view: 'group',
 			kind: LIBRARY_REGULATIONS_KINDS.AIM,
-		})) as RegulationsGroupView;
+		});
 		expect(view.groups).toEqual([]);
 		const card = view.umbrellas.find((u) => u.id === AIM_REF_ID);
 		expect(card).toBeDefined();
@@ -421,10 +413,10 @@ describe('getRegulationsView (group)', () => {
 	});
 
 	it('NTSB returns umbrella cards (no inline groups)', async () => {
-		const view = (await getRegulationsView({
+		const view = await getRegulationsView({
 			view: 'group',
 			kind: LIBRARY_REGULATIONS_KINDS.NTSB,
-		})) as RegulationsGroupView;
+		});
 		expect(view.groups).toEqual([]);
 		const card = view.umbrellas.find((u) => u.id === NTSB_REF_ID);
 		expect(card).toBeDefined();
@@ -433,11 +425,11 @@ describe('getRegulationsView (group)', () => {
 
 describe('getRegulationsView (section)', () => {
 	it('returns the section TOC when one reference resolves with chapter rows', async () => {
-		const view = (await getRegulationsView({
+		const view = await getRegulationsView({
 			view: 'section',
 			kind: LIBRARY_REGULATIONS_KINDS.CFR_14,
 			group: CFR14_PART,
-		})) as RegulationsSectionListView;
+		});
 		expect(view.view).toBe('section');
 		expect(view.group).toBe(CFR14_PART);
 		expect(view.groupLabel).toBe(`14 CFR Part ${CFR14_PART}`);
@@ -459,11 +451,11 @@ describe('getRegulationsView (section)', () => {
 	});
 
 	it('preserves NTSB umbrella shape', async () => {
-		const view = (await getRegulationsView({
+		const view = await getRegulationsView({
 			view: 'section',
 			kind: LIBRARY_REGULATIONS_KINDS.NTSB,
 			group: NTSB_SLUG,
-		})) as RegulationsSectionListView;
+		});
 		expect(view.umbrellas).toHaveLength(1);
 		expect(view.umbrellas[0]?.id).toBe(NTSB_REF_ID);
 		// NTSB has no chapter rows in the fixture; the section TOC should be
@@ -474,13 +466,13 @@ describe('getRegulationsView (section)', () => {
 
 describe('getRegulationsView (detail)', () => {
 	it('hydrates the full section payload', async () => {
-		const view = (await getRegulationsView({
+		const view = await getRegulationsView({
 			view: 'detail',
 			kind: LIBRARY_REGULATIONS_KINDS.CFR_14,
 			group: CFR14_PART,
 			section: { chapterCode: '91', sectionCode: '103' },
 			userId: TEST_USER_ID,
-		})) as RegulationsDetailView;
+		});
 
 		expect(view.view).toBe('detail');
 		expect(view.reference.id).toBe(CFR14_REF_ID);

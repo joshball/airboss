@@ -3,63 +3,32 @@
  *
  * Resolves the matching `study.reference` row for `kind/group`, then loads
  * the section row by code. Reuses the shared handbook-section resolver --
- * regulations live in the same `handbook_section` table once their content
+ * regulations live in the same `reference_section` table once their content
  * is ingested.
+ *
+ * Loader is a thin adapter: parse the `[kind]/[group]/[section]` slugs, call
+ * the `getRegulationsView` BC aggregator, return its payload. The form
+ * actions resolve the same (kind, group, section) tuple to a section id via
+ * `resolveRegulationsSectionId` -- the lighter helper from the BC aggregator
+ * that skips the rest of the detail-view payload.
  */
 
 import { requireAuth } from '@ab/auth';
 import { parseRegulationGroup, parseRegulationKind, parseRegulationSection } from '@ab/aviation';
 import {
-	formatErrataForDisplay,
-	getHandbookSection,
-	getNodesCitingSection,
-	getReadState,
-	getReferenceById,
+	getRegulationsView,
 	HandbookValidationError,
 	handbookReadStatusSchema,
-	listErrataForSection,
-	listReferences,
 	markAsReread,
+	RegulationsViewNotFoundError,
+	resolveRegulationsSectionId,
 	setComprehended,
 	setNotes,
 	setReadStatus,
 } from '@ab/bc-study';
-import {
-	HANDBOOK_NOTES_MAX_LENGTH,
-	HANDBOOK_READ_STATUSES,
-	LIBRARY_REGULATIONS_KINDS,
-	type LibraryRegulationsKind,
-	REFERENCE_KINDS,
-} from '@ab/constants';
+import { HANDBOOK_NOTES_MAX_LENGTH } from '@ab/constants';
 import { error, fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
-
-async function resolveReferenceForGroup(
-	kind: LibraryRegulationsKind,
-	group: string,
-): Promise<{ id: string; documentSlug: string; edition: string; title: string }> {
-	const refs = await listReferences();
-	let match: (typeof refs)[number] | undefined;
-	switch (kind) {
-		case LIBRARY_REGULATIONS_KINDS.CFR_14:
-			match = refs.find((r) => r.documentSlug === `14cfr${group}`);
-			break;
-		case LIBRARY_REGULATIONS_KINDS.CFR_49:
-			match = refs.find((r) => r.documentSlug === `49cfr${group}`);
-			break;
-		case LIBRARY_REGULATIONS_KINDS.AIM:
-			match = refs.find((r) => r.kind === REFERENCE_KINDS.AIM && r.documentSlug === group);
-			break;
-		case LIBRARY_REGULATIONS_KINDS.AC:
-			match = refs.find((r) => r.kind === REFERENCE_KINDS.AC && r.documentSlug.startsWith(`ac-${group}-`));
-			break;
-		case LIBRARY_REGULATIONS_KINDS.NTSB:
-			match = refs.find((r) => r.kind === REFERENCE_KINDS.NTSB && r.documentSlug === group);
-			break;
-	}
-	if (!match) throw error(404, `No reference for ${kind} / ${group}`);
-	return { id: match.id, documentSlug: match.documentSlug, edition: match.edition, title: match.title };
-}
 
 export const load: PageServerLoad = async (event) => {
 	const user = requireAuth(event);
@@ -75,86 +44,31 @@ export const load: PageServerLoad = async (event) => {
 	if (!parsedSection) {
 		throw error(404, `Invalid section slug: ${event.params.section}`);
 	}
-	const { chapterCode, sectionCode: subCode } = parsedSection;
 
-	const ref = await resolveReferenceForGroup(kind, group);
-
-	const view = await getHandbookSection(ref.id, chapterCode, subCode).catch(() => null);
-	if (!view) throw error(404, 'Section not found.');
-
-	const readState = await getReadState(user.id, view.section.id);
-	const citingNodes = await getNodesCitingSection({
-		referenceId: ref.id,
-		chapter: Number(chapterCode),
-		section: subCode === '' ? undefined : Number(subCode),
-	});
-
-	const errataRows = await listErrataForSection(view.section.id);
-	const errata = errataRows.map(formatErrataForDisplay);
-
-	const latestRow = await getReferenceById(ref.id).catch(() => null);
-	const supersededByEdition = latestRow?.supersededById
-		? ((await getReferenceById(latestRow.supersededById).catch(() => null))?.edition ?? null)
-		: null;
-
-	return {
-		kind,
-		group,
-		reference: {
-			id: ref.id,
-			documentSlug: ref.documentSlug,
-			edition: ref.edition,
-			title: ref.title,
-			supersededByEdition,
-		},
-		section: {
-			id: view.section.id,
-			code: view.section.code,
-			title: view.section.title,
-			contentMd: view.section.contentMd,
-			sourceLocator: view.section.sourceLocator,
-			faaPageStart: view.section.faaPageStart,
-			faaPageEnd: view.section.faaPageEnd,
-		},
-		chapter: {
-			id: view.chapter.id,
-			code: view.chapter.code,
-			title: view.chapter.title,
-		},
-		figures: view.figures.map((f) => ({
-			id: f.id,
-			ordinal: f.ordinal,
-			caption: f.caption,
-			assetPath: f.assetPath,
-			width: f.width,
-			height: f.height,
-		})),
-		siblings: view.siblings.map((s) => ({
-			id: s.id,
-			code: s.code,
-			title: s.title,
-			ordinal: s.ordinal,
-		})),
-		readState: readState
-			? {
-					status: readState.status,
-					comprehended: readState.comprehended,
-					notesMd: readState.notesMd,
-					totalSecondsVisible: readState.totalSecondsVisible,
-				}
-			: {
-					status: HANDBOOK_READ_STATUSES.UNREAD,
-					comprehended: false,
-					notesMd: '',
-					totalSecondsVisible: 0,
-				},
-		citingNodes: citingNodes.map((n) => ({
-			id: n.id,
-			title: n.title,
-			domain: n.domain,
-		})),
-		errata,
-	};
+	try {
+		const view = await getRegulationsView({
+			view: 'detail',
+			kind,
+			group,
+			section: parsedSection,
+			userId: user.id,
+		});
+		return {
+			kind: view.kind,
+			group: view.group,
+			reference: view.reference,
+			section: view.section,
+			chapter: view.chapter,
+			figures: view.figures,
+			siblings: view.siblings,
+			readState: view.readState,
+			citingNodes: view.citingNodes,
+			errata: view.errata,
+		};
+	} catch (err) {
+		if (err instanceof RegulationsViewNotFoundError) throw error(404, err.message);
+		throw err;
+	}
 };
 
 export const actions: Actions = {
@@ -211,8 +125,10 @@ async function resolveSectionId(params: { kind: string; group: string; section: 
 	if (!group) throw error(404, `Invalid group slug: ${params.group}`);
 	const parsedSection = parseRegulationSection(params.section);
 	if (!parsedSection) throw error(404, `Invalid section slug: ${params.section}`);
-	const ref = await resolveReferenceForGroup(kind, group);
-	const view = await getHandbookSection(ref.id, parsedSection.chapterCode, parsedSection.sectionCode).catch(() => null);
-	if (!view) throw error(404, 'Section not found');
-	return view.section.id;
+	try {
+		return await resolveRegulationsSectionId({ kind, group, section: parsedSection });
+	} catch (err) {
+		if (err instanceof RegulationsViewNotFoundError) throw error(404, err.message);
+		throw err;
+	}
 }
