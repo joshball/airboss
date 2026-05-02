@@ -8,7 +8,7 @@
  */
 
 import { createHash } from 'node:crypto';
-import { createWriteStream, mkdirSync } from 'node:fs';
+import { createWriteStream, mkdirSync, renameSync, unlinkSync } from 'node:fs';
 import { dirname } from 'node:path';
 import { Readable } from 'node:stream';
 import { pipeline } from 'node:stream/promises';
@@ -114,9 +114,14 @@ async function downloadOnce(url: string, destPath: string, opts: DownloadOptions
 
 	mkdirSync(dirname(destPath), { recursive: true });
 
+	// ADR 021 §Atomicity -- stream to a sibling `.part` file then atomically
+	// rename to the destination. POSIX rename is atomic on the same
+	// filesystem, so the canonical path is either absent or fully written.
+	// The reference implementation lives in `libs/aviation/src/sources/download.ts`.
+	const partPath = `${destPath}.part`;
 	const hash = createHash('sha256');
 	let bytes = 0;
-	const fileStream = createWriteStream(destPath);
+	const fileStream = createWriteStream(partPath);
 	const nodeStream = Readable.fromWeb(response.body as unknown as import('node:stream/web').ReadableStream);
 
 	nodeStream.on('data', (chunk: Buffer | string) => {
@@ -125,7 +130,17 @@ async function downloadOnce(url: string, destPath: string, opts: DownloadOptions
 		bytes += buf.byteLength;
 	});
 
-	await pipeline(nodeStream, fileStream);
+	try {
+		await pipeline(nodeStream, fileStream);
+		renameSync(partPath, destPath);
+	} catch (err) {
+		try {
+			unlinkSync(partPath);
+		} catch {
+			// .part may not exist; ignore.
+		}
+		throw err;
+	}
 
 	return {
 		url: finalUrl,

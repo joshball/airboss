@@ -39,6 +39,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import re
 import sys
 import urllib.request
@@ -269,14 +270,29 @@ def _download_errata_pdf(config: HandbookConfig, errata: ErrataConfig) -> tuple[
         return target, sha, datetime.now(tz=UTC).isoformat()
 
     # Fall back to URL fetch.
+    # ADR 021 §Atomicity -- stream into a sibling `.part` file then
+    # `os.replace` over the canonical name so a SIGINT / network drop never
+    # leaves a half-written errata PDF at the cache path. Mirrors the
+    # primary-PDF path in `fetch.py:fetch_pdf`.
+    partial = target.with_name(target.name + ".part")
     request = urllib.request.Request(errata.source_url, headers={"User-Agent": "airboss-handbook-ingest/0.1"})
-    with urllib.request.urlopen(request) as response, target.open("wb") as fh:
-        while True:
-            chunk = response.read(1024 * 1024)
-            if not chunk:
-                break
-            fh.write(chunk)
-    sha = _sha256_of(target)
+    try:
+        with urllib.request.urlopen(request) as response, partial.open("wb") as fh:
+            while True:
+                chunk = response.read(1024 * 1024)
+                if not chunk:
+                    break
+                fh.write(chunk)
+        sha = _sha256_of(partial)
+        os.replace(partial, target)
+    except BaseException:
+        # BaseException covers KeyboardInterrupt + SystemExit so a Ctrl-C
+        # mid-download cleans the partial file before re-raising.
+        try:
+            partial.unlink(missing_ok=True)
+        except OSError:
+            pass
+        raise
     return target, sha, datetime.now(tz=UTC).isoformat()
 
 

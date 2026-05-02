@@ -143,4 +143,23 @@ describe('writeDerivativeTree', () => {
 		expect(report.filesWritten).toBeGreaterThanOrEqual(2);
 		expect(report.filesUnchanged).toBeGreaterThanOrEqual(2);
 	});
+
+	it('writes derivatives atomically: no `.tmp` siblings remain after success (ADR 021)', () => {
+		writeDerivativeTree(buildInput());
+		const editionDir = join(tmpRoot, 'cfr-14/2026-01-01');
+		// Every written file must land at its canonical path. No `.tmp` side
+		// files should leak into the derivative tree.
+		const targets = [
+			join(editionDir, '91/91-103.md'),
+			join(editionDir, '91/91-103.meta.json'),
+			join(editionDir, '91/subpart-b.md'),
+			join(editionDir, '91/index.md'),
+			join(editionDir, 'sections.json'),
+			join(editionDir, 'manifest.json'),
+		];
+		for (const target of targets) {
+			expect(existsSync(target)).toBe(true);
+			expect(existsSync(`${target}.tmp`)).toBe(false);
+		}
+	});
 });

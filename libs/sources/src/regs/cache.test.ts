@@ -80,6 +80,22 @@ describe('loadEcfrXml', () => {
 		expect(second.xml).toBe('<fetched/>');
 	});
 
+	it('writes the XML atomically: no `.tmp` sibling remains after success (ADR 021)', async () => {
+		await loadEcfrXml({
+			title: '14',
+			editionDate: '2026-01-01',
+			fetchImpl: async () => ({
+				ok: true,
+				status: 200,
+				text: async () => '<fetched/>',
+			}),
+		});
+		const cachePath = cacheXmlPath('14', '2026-01-01');
+		const fs = await import('node:fs');
+		expect(fs.existsSync(cachePath)).toBe(true);
+		expect(fs.existsSync(`${cachePath}.tmp`)).toBe(false);
+	});
+
 	it('throws on non-OK response', async () => {
 		await expect(
 			loadEcfrXml({

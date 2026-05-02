@@ -10,9 +10,10 @@
  * compares each file before writing; skips writes when unchanged. Idempotent.
  */
 
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
+import { existsSync, mkdirSync, readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import type { SourceEntry } from '../types.ts';
+import { writeFileAtomic } from './atomic-write.ts';
 import { sha256 } from './cache.ts';
 import type { NormalizedPart, NormalizedSection, NormalizedSubpart } from './normalizer.ts';
 
@@ -185,12 +186,14 @@ export function writeDerivativeTree(input: DerivativeWriteInput): DerivativeWrit
 // ---------------------------------------------------------------------------
 
 function writeIfChanged(path: string, content: string): { wrote: boolean } {
-	mkdirSync(dirname(path), { recursive: true });
 	if (existsSync(path)) {
 		const current = readFileSync(path, 'utf-8');
 		if (current === content) return { wrote: false };
 	}
-	writeFileSync(path, content, 'utf-8');
+	// ADR 021 §Atomicity -- write via `<path>.tmp` + rename so an interrupted
+	// regen never leaves a half-written section markdown / sections.json /
+	// manifest.json at the canonical path.
+	writeFileAtomic(path, content);
 	return { wrote: true };
 }
 

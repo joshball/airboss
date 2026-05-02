@@ -14,9 +14,10 @@
  */
 
 import { createHash } from 'node:crypto';
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync } from 'node:fs';
 import { homedir } from 'node:os';
-import { dirname, isAbsolute, join, resolve } from 'node:path';
+import { isAbsolute, join, resolve } from 'node:path';
+import { writeFileAtomic } from './atomic-write.ts';
 
 const ECFR_BASE = 'https://www.ecfr.gov/api/versioner/v1/full';
 
@@ -109,8 +110,10 @@ export async function loadEcfrXml(opts: CacheLoadOptions): Promise<CacheLoadResu
 	}
 	const xml = await response.text();
 
-	mkdirSync(dirname(cachePath), { recursive: true });
-	writeFileSync(cachePath, xml, 'utf-8');
+	// ADR 021 §Atomicity -- write via `<path>.tmp` + rename so a SIGINT /
+	// network drop / kill mid-write never leaves a half-formed XML file at
+	// the canonical cache path.
+	writeFileAtomic(cachePath, xml);
 
 	return {
 		xml,

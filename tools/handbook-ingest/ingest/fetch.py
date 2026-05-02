@@ -15,6 +15,7 @@ manifest's `source_checksum` is the audit trail.
 from __future__ import annotations
 
 import hashlib
+import os
 import urllib.request
 from dataclasses import dataclass
 from datetime import UTC, datetime
@@ -59,14 +60,32 @@ def fetch_pdf(config: HandbookConfig, *, force: bool = False) -> FetchResult:
             size_bytes=target.stat().st_size,
         )
 
+    # ADR 021 §Atomicity -- stream into a sibling `.part` file in the
+    # destination directory, then `os.replace` over the canonical name. POSIX
+    # rename is atomic on the same filesystem, so a SIGINT / network drop /
+    # kill mid-write never leaves a half-written PDF at the cache path. On
+    # any failure the `.part` file is removed before the exception
+    # propagates. Mirrors the TS pattern in
+    # `libs/aviation/src/sources/download.ts`.
+    partial = target.with_name(target.name + ".part")
     request = urllib.request.Request(config.source_url, headers={"User-Agent": "airboss-handbook-ingest/0.1"})
-    with urllib.request.urlopen(request) as response, target.open("wb") as fh:
-        while True:
-            chunk = response.read(1024 * 1024)
-            if not chunk:
-                break
-            fh.write(chunk)
-    sha = _sha256_of(target)
+    try:
+        with urllib.request.urlopen(request) as response, partial.open("wb") as fh:
+            while True:
+                chunk = response.read(1024 * 1024)
+                if not chunk:
+                    break
+                fh.write(chunk)
+        sha = _sha256_of(partial)
+        os.replace(partial, target)
+    except BaseException:
+        # BaseException covers KeyboardInterrupt + SystemExit so a Ctrl-C
+        # mid-download still cleans the partial file before re-raising.
+        try:
+            partial.unlink(missing_ok=True)
+        except OSError:
+            pass
+        raise
     return FetchResult(
         path=target,
         url=config.source_url,

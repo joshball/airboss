@@ -32,6 +32,9 @@ describe('downloadHtmlFile', () => {
 		expect(readFileSync(dest, 'utf-8')).toBe(body);
 		expect(outcome.bytes).toBe(body.length);
 		expect(outcome.sha256).toMatch(/^[0-9a-f]{64}$/);
+		// ADR 021 §Atomicity: the .part side file must be renamed away after a
+		// successful download so the cache is left in a single canonical state.
+		expect(existsSync(`${dest}.part`)).toBe(false);
 	});
 
 	it('rejects responses whose Content-Type is not text/html', async () => {
