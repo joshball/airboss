@@ -113,6 +113,7 @@ export {
 	type NewHangarSourceRow,
 	type NewHangarSyncLogRow,
 } from './schema';
+export { assertRevSnapshot, parseRevSnapshot, type RevSnapshot, RevSnapshotSchema } from './schema-types';
 export {
 	type ArchiveEntry,
 	type ArchiveReaderFn,

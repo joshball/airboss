@@ -36,15 +36,33 @@ export interface DriftReport {
 }
 
 /**
- * One conflict surfaced by `detectConflict`. A conflict means some actor
- * advanced `rev` past what the last successful sync observed, so writing
- * back now would silently clobber an edit the sync-log didn't see.
+ * Reason a row showed up as a conflict.
+ *
+ * - `advanced`: rev moved forward between the last successful sync and
+ *   the current read (a third writer touched the row in a way the
+ *   sync-log baseline didn't see).
+ * - `deleted`: the id was in the baseline snapshot but is missing from
+ *   the current rev map AND is not tracked as a soft-delete -- i.e. the
+ *   row was hard-deleted out of band (manual SQL, DB reset). A tracked
+ *   soft-delete propagates through `detectDrift`, not here.
+ */
+export type ConflictCause = 'advanced' | 'deleted';
+
+/**
+ * One conflict surfaced by `detectConflict`. A conflict means the row
+ * changed in some way the sync-log baseline didn't see, so blindly
+ * writing back the current state could silently clobber or omit an edit.
  */
 export interface ConflictEntry {
 	kind: 'reference' | 'source';
 	id: string;
-	/** `rev` in the DB right now. */
-	currentRev: number;
+	cause: ConflictCause;
+	/**
+	 * `rev` in the DB right now. `null` when the row no longer exists in
+	 * `loadState` (the `deleted` cause -- a hard-deleted row has no rev to
+	 * report).
+	 */
+	currentRev: number | null;
 	/** `rev` the last successful sync recorded for this id. */
 	lastSyncedRev: number | null;
 }
