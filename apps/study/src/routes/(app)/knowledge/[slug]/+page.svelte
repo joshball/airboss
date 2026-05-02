@@ -185,10 +185,11 @@ const citedByItems = $derived<CitedByItem[]>(
 </svelte:head>
 
 <section class="page">
-	<nav class="crumb" aria-label="Breadcrumb">
-		<a href={ROUTES.KNOWLEDGE}>Knowledge</a>
-		<span aria-hidden="true">/</span>
-		<span>{domainLabel(node.domain)}</span>
+	<nav aria-label="Breadcrumb">
+		<ol class="crumb">
+			<li><a href={ROUTES.KNOWLEDGE}>Knowledge</a></li>
+			<li aria-current="page">{domainLabel(node.domain)}</li>
+		</ol>
 	</nav>
 
 	<header class="hd">
@@ -219,7 +220,15 @@ const citedByItems = $derived<CitedByItem[]>(
 			<span class="mastery-label">Mastery</span>
 			<span class="mastery-pct">{masteryPct}%{mastery.mastered ? ' -- Mastered' : ''}</span>
 		</div>
-		<div class="mastery-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow={masteryPct}>
+		<div
+			class="mastery-bar"
+			role="progressbar"
+			aria-label="Mastery"
+			aria-valuemin="0"
+			aria-valuemax="100"
+			aria-valuenow={masteryPct}
+			aria-valuetext="{masteryPct}% mastery{mastery.mastered ? ', mastered' : ''}"
+		>
 			<span class="mastery-fill" style:width="{masteryPct}%"></span>
 		</div>
 		<dl class="gates">
@@ -410,8 +419,17 @@ const citedByItems = $derived<CitedByItem[]>(
 	.crumb {
 		display: flex;
 		gap: var(--space-sm);
+		list-style: none;
+		padding: 0;
+		margin: 0;
 		font-size: var(--type-ui-label-size);
 		color: var(--ink-subtle);
+	}
+
+	.crumb li + li::before {
+		content: '/';
+		margin-right: var(--space-sm);
+		color: var(--ink-faint);
 	}
 
 	.crumb a {

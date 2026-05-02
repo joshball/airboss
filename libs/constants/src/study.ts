@@ -1743,3 +1743,77 @@ export const HANDBOOK_ERRATA_PATCH_KIND_LABELS: Record<HandbookErrataPatchKind, 
  * `Amended` during work-package scoping (vs Updated / Errata / Changed).
  */
 export const HANDBOOK_AMENDMENT_BADGE_LABEL = 'Amended';
+
+/**
+ * Hard cap on goal title length. Mirrors the BC zod schema in
+ * `credentials.validation.ts`; routes parse against this so requests
+ * exceeding the limit fail at the route boundary instead of slipping
+ * an oversized payload through.
+ */
+export const GOAL_TITLE_MAX_LENGTH = 200;
+
+/**
+ * Hard cap on goal `notesMd` length. Mirrors the BC zod schema in
+ * `credentials.validation.ts`; same rationale as `GOAL_TITLE_MAX_LENGTH`.
+ */
+export const GOAL_NOTES_MAX_LENGTH = 16384;
+
+/**
+ * Hard cap on plan title length. Routes parse against this so requests
+ * exceeding the limit fail at the route boundary.
+ */
+export const PLAN_TITLE_MAX_LENGTH = 200;
+
+/**
+ * Hard cap on the deterministic session-start `seed` query/form value.
+ * Bounded to prevent a logged-in caller forwarding arbitrary-length
+ * strings into the engine's pool dispatcher.
+ */
+export const SESSION_SEED_MAX_LENGTH = 64;
+
+/**
+ * Allowed shape for the session-start `seed` value. Same charset as
+ * URL-safe base64 plus `-` and `_`. Keeps the seed log-grep-friendly.
+ */
+export const SESSION_SEED_PATTERN = /^[A-Za-z0-9_-]+$/;
+
+/**
+ * Hard cap on the `?edition=` value passed to handbook lookups (heartbeat
+ * + reader). Prevents a high-volume tick path from scanning multi-KB
+ * varchar values against `study.reference.edition`.
+ */
+export const HANDBOOK_EDITION_MAX_LENGTH = 64;
+
+/**
+ * Hard cap on the `q` query parameter forwarded to citation searches.
+ * Keeps a logged-in caller from forcing the BC into a pathological
+ * full-table LIKE scan with multi-MB strings.
+ */
+export const CITATION_SEARCH_QUERY_MAX_LENGTH = 200;
+
+/**
+ * Hard upper bound on the `limit` parameter accepted by citation search
+ * endpoints (and any other future BC search). The BC clamps caller-
+ * supplied limits to this value so a buggy or malicious caller cannot
+ * request unbounded result sets.
+ */
+export const MAX_SEARCH_LIMIT = 100;
+
+/**
+ * Recent reviews surfaced on the memory-card detail page.
+ * Tunes how much history the per-card "Recent reviews" panel shows.
+ */
+export const MEMORY_CARD_RECENT_REVIEWS_LIMIT = 10;
+
+/**
+ * Recent attempts surfaced on the rep detail page.
+ * Tunes how much history the per-rep "Recent attempts" panel shows.
+ */
+export const REPS_DETAIL_RECENT_ATTEMPTS_LIMIT = 5;
+
+/**
+ * Library landing collapses topic spines below this threshold under
+ * the "Show all topics" disclosure. Matches the spec rule "topics with
+ * fewer than N entries collapse".
+ */
+export const LIBRARY_TOPIC_VISIBLE_THRESHOLD = 4;

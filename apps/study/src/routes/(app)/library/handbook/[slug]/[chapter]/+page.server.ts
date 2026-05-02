@@ -35,10 +35,10 @@ export const load: PageServerLoad = async (event) => {
 	const editionParam = event.url.searchParams.get(QUERY_PARAMS.EDITION) ?? undefined;
 
 	const ref = await getReferenceByDocument(documentSlug, { edition: editionParam }).catch(() => null);
-	if (!ref) throw error(404, `Handbook not found: ${documentSlug}`);
+	if (!ref) throw error(404, 'Handbook not found.');
 
 	const chapter = await getHandbookChapter(ref.id, chapterCode).catch(() => null);
-	if (!chapter) throw error(404, `Chapter not found: ${documentSlug} / ${chapterCode}`);
+	if (!chapter) throw error(404, 'Chapter not found.');
 
 	const sections = await listChapterSections(chapter.id);
 	const figures = sections.length === 0 ? await listFiguresForSection(chapter.id) : [];

@@ -44,7 +44,7 @@ function isUserSafeMessage(msg: string): boolean {
 </svelte:head>
 
 <main class="wrap">
-	<div class="card">
+	<div class="card" role="alert">
 		<p class="status">{status}</p>
 		<h1>{title}</h1>
 		<p class="message">{safeMessage}</p>

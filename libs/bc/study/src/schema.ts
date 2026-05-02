@@ -86,7 +86,7 @@ import {
 } from '@ab/constants';
 import { timestamps } from '@ab/db';
 import type { RelevanceEntry, StructuredCitation } from '@ab/types';
-import { sql } from 'drizzle-orm';
+import { desc, sql } from 'drizzle-orm';
 import {
 	type AnyPgColumn,
 	boolean,
@@ -315,6 +315,11 @@ export const knowledgeEdge = studySchema.table(
 			'knowledge_edge_type_check',
 			sql.raw(`"edge_type" IN (${inList(KNOWLEDGE_EDGE_TYPE_VALUES)})`),
 		),
+		// Belt-and-suspenders against an authoring slip: ADR 011 edges are
+		// directional and a self-loop has no semantic meaning. The build
+		// pipeline already filters these out; the DB CHECK enforces it at
+		// the storage layer too. Mirrors `credential_prereq_no_self_loop_check`.
+		noSelfLoopCheck: check('knowledge_edge_no_self_loop_check', sql.raw(`"from_node_id" <> "to_node_id"`)),
 	}),
 );
 
@@ -349,6 +354,10 @@ export const card = studySchema.table(
 		cardUserStatusIdx: index('card_user_status_idx').on(t.userId, t.status),
 		cardUserDomainIdx: index('card_user_domain_idx').on(t.userId, t.domain),
 		cardUserCreatedIdx: index('card_user_created_idx').on(t.userId, t.createdAt),
+		// Browse-by-recently-updated (`cards.ts:348` ORDER BY updated_at DESC)
+		// is index-backed via this composite. Without it, every edit forces a
+		// per-user sort over the personal deck.
+		cardUserUpdatedIdx: index('card_user_updated_idx').on(t.userId, t.updatedAt),
 		// node-first order: the read shapes in `knowledge.ts` (getCardsForNode,
 		// listNodeSummaries count-by-node) select on node_id primarily and
 		// user_id secondarily. Node is the more selective column (one node of
@@ -889,6 +898,12 @@ export const sessionItemResult = studySchema.table(
 		// this node via a session slot?") without scanning the whole slot
 		// table for each knowledge-graph render.
 		sirNodeCompletedIdx: index('sir_node_completed_idx').on(t.nodeId, t.completedAt),
+		// Covers the FK back-reference. Without this, deleting a
+		// `scenario_option` row (the rebuild path in scenario-options-relational)
+		// has to seq-scan `session_item_result` to find rows referring to the
+		// deleted option for `ON DELETE set null`. Partial because the column
+		// is null on every non-rep slot (the majority of rows).
+		sirChosenOptionIdx: index('sir_chosen_option_idx').on(t.chosenOptionId).where(sql`${t.chosenOptionId} is not null`),
 		itemKindCheck: check('sir_item_kind_check', sql.raw(`"item_kind" IN (${inList(SESSION_ITEM_KIND_VALUES)})`)),
 		sliceCheck: check('sir_slice_check', sql.raw(`"slice" IN (${inList(SESSION_SLICE_VALUES)})`)),
 		reasonCodeCheck: check(
@@ -1179,8 +1194,14 @@ export const cardFeedback = studySchema.table(
 	},
 	(t) => ({
 		// Per-card aggregate read ("has this user liked / flagged this card?"),
-		// per-user list for the learner's history.
-		cardFeedbackUserCardIdx: index('card_feedback_user_card_idx').on(t.userId, t.cardId),
+		// per-user list for the learner's history. Trailing `created_at DESC`
+		// makes `getLatestFeedback` (`feedback.ts:80`) an index-only LIMIT 1
+		// instead of a per-pair seq+sort.
+		cardFeedbackUserCardCreatedIdx: index('card_feedback_user_card_created_idx').on(
+			t.userId,
+			t.cardId,
+			desc(t.createdAt),
+		),
 		signalCheck: check('card_feedback_signal_check', sql.raw(`"signal" IN (${inList(CARD_FEEDBACK_SIGNAL_VALUES)})`)),
 	}),
 );
@@ -2079,6 +2100,10 @@ export const goal = studySchema.table(
 	},
 	(t) => ({
 		goalUserStatusIdx: index('goal_user_status_idx').on(t.userId, t.status),
+		// Goals list orders by (is_primary DESC, updated_at DESC) per user;
+		// covered by this composite so the dashboard sort is index-backed
+		// after a goal edit instead of falling back to an in-memory sort.
+		goalUserUpdatedIdx: index('goal_user_updated_idx').on(t.userId, t.updatedAt),
 		// Partial UNIQUE: one primary goal per user. Mirrors `plan_user_active_uniq`.
 		goalUserPrimaryUnique: uniqueIndex('goal_user_primary_unique').on(t.userId).where(sql`is_primary = true`),
 		statusCheck: check('goal_status_check', sql.raw(`"status" IN (${inList(GOAL_STATUS_VALUES)})`)),

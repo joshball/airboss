@@ -66,7 +66,7 @@ export const load: PageServerLoad = async (event) => {
 	requireAuth(event);
 	const topicParam = event.params.topic;
 	if (!isAviationTopic(topicParam)) {
-		throw error(404, `Unknown topic: ${topicParam}`);
+		throw error(404, 'Topic not found.');
 	}
 	const topic = topicParam;
 

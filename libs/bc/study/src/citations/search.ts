@@ -8,7 +8,8 @@
  */
 
 import { hangarReference } from '@ab/bc-hangar/schema';
-import { REFERENCE_SOURCE_TYPES, SOURCE_TYPE_LABELS } from '@ab/constants';
+import { MAX_SEARCH_LIMIT, REFERENCE_SOURCE_TYPES, SOURCE_TYPE_LABELS } from '@ab/constants';
+import { escapeLikePattern } from '@ab/db';
 import { db as defaultDb } from '@ab/db/connection';
 import { and, ilike, or, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
@@ -24,12 +25,18 @@ export interface RegulationSearchResult {
 
 const DEFAULT_LIMIT = 25;
 
-function escapeLike(input: string): string {
-	return input.replace(/\\/g, '\\\\').replace(/%/g, '\\%').replace(/_/g, '\\_');
+function buildTermPattern(query: string): string {
+	return `%${escapeLikePattern(query.trim())}%`;
 }
 
-function buildTermPattern(query: string): string {
-	return `%${escapeLike(query.trim())}%`;
+/**
+ * Clamp caller-supplied search limits into a sane range. Keeps a buggy or
+ * malicious caller from requesting unbounded result sets, and ensures the
+ * BC's resource use stays bounded regardless of route-side validation.
+ */
+function clampLimit(limit: number): number {
+	if (!Number.isFinite(limit)) return DEFAULT_LIMIT;
+	return Math.max(1, Math.min(MAX_SEARCH_LIMIT, Math.floor(limit)));
 }
 
 /**
@@ -59,7 +66,7 @@ export async function searchRegulationNodes(
 			),
 		)
 		.orderBy(hangarReference.displayName)
-		.limit(limit);
+		.limit(clampLimit(limit));
 	return rows.map((r) => ({
 		id: r.id,
 		label: r.displayName,
@@ -92,7 +99,7 @@ export async function searchAcReferences(
 			),
 		)
 		.orderBy(hangarReference.displayName)
-		.limit(limit);
+		.limit(clampLimit(limit));
 	return rows.map((r) => ({
 		id: r.id,
 		label: r.displayName,
@@ -121,7 +128,7 @@ export async function searchKnowledgeNodes(
 			query.trim().length === 0 ? sql`true` : or(ilike(knowledgeNode.id, pattern), ilike(knowledgeNode.title, pattern)),
 		)
 		.orderBy(knowledgeNode.title)
-		.limit(limit);
+		.limit(clampLimit(limit));
 	return rows.map((r) => ({
 		id: r.id,
 		label: r.title,

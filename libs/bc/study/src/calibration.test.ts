@@ -25,43 +25,14 @@ import {
 import { db } from '@ab/db/connection';
 import { generateAuthId, generateCardId, generateReviewId, generateScenarioId } from '@ab/utils';
 import { eq } from 'drizzle-orm';
-import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { getCalibration, getCalibrationPointCount, getCalibrationTrend } from './calibration';
 import { card, cardState, review, scenario, scenarioOption, session, sessionItemResult, studyPlan } from './schema';
 import { seedRepAttempt } from './test-support';
 
-const TEST_USER_ID = generateAuthId();
-const TEST_EMAIL = `calibration-test-${TEST_USER_ID}@airboss.test`;
-
-beforeAll(async () => {
-	const now = new Date();
-	await db.insert(bauthUser).values({
-		id: TEST_USER_ID,
-		email: TEST_EMAIL,
-		name: 'Calibration Test',
-		firstName: 'Calibration',
-		lastName: 'Test',
-		emailVerified: true,
-		role: 'learner',
-		createdAt: now,
-		updatedAt: now,
-	});
-});
-
-afterAll(async () => {
-	// FK order: review references card (restrict), session_item_result references
-	// scenario (set null), session references plan (restrict). Wipe the slot
-	// log + sessions + plan first via the test-support helper so the scenario
-	// delete doesn't trip the FK from session_item_result.
-	await db.delete(review).where(eq(review.userId, TEST_USER_ID));
-	await db.delete(sessionItemResult).where(eq(sessionItemResult.userId, TEST_USER_ID));
-	await db.delete(session).where(eq(session.userId, TEST_USER_ID));
-	await db.delete(studyPlan).where(eq(studyPlan.userId, TEST_USER_ID));
-	await db.delete(cardState).where(eq(cardState.userId, TEST_USER_ID));
-	await db.delete(card).where(eq(card.userId, TEST_USER_ID));
-	await db.delete(scenario).where(eq(scenario.userId, TEST_USER_ID));
-	await db.delete(bauthUser).where(eq(bauthUser.id, TEST_USER_ID));
-});
+// Every test uses `withFreshUser` for full isolation. The previous shared
+// TEST_USER_ID + beforeAll/afterAll fixtures were unused -- removed so the
+// suite doesn't carry dead seed.
 
 /**
  * Create a fresh user scoped to a single test case. Ensures data isolation

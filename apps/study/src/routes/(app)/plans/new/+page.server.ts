@@ -8,6 +8,7 @@ import {
 	type Domain,
 	MAX_SESSION_LENGTH,
 	MIN_SESSION_LENGTH,
+	PLAN_TITLE_MAX_LENGTH,
 	ROUTES,
 	SESSION_MODE_VALUES,
 	type SessionMode,
@@ -41,6 +42,13 @@ export const actions: Actions = {
 		// studying for. The plan owns session shape only.
 		const focusDomains: Domain[] = focusDomainsRaw.filter((v): v is Domain => DOMAIN_VALUES.includes(v as Domain));
 		const skipDomains: Domain[] = skipDomainsRaw.filter((v): v is Domain => DOMAIN_VALUES.includes(v as Domain));
+
+		if (title.length > PLAN_TITLE_MAX_LENGTH) {
+			return fail(400, {
+				error: `Title must be ${PLAN_TITLE_MAX_LENGTH} characters or fewer.`,
+				values: { title, focusDomains: focusDomainsRaw, skipDomains: skipDomainsRaw },
+			});
+		}
 
 		// focus/skip disjointness is enforced by the BC schema, but catching it
 		// here lets us hand the user a readable error without round-tripping.

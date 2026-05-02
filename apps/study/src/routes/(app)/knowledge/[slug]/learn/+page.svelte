@@ -112,12 +112,12 @@ function phaseLabel(phase: string): string {
 </svelte:head>
 
 <section class="page">
-	<nav class="crumb" aria-label="Breadcrumb">
-		<a href={ROUTES.KNOWLEDGE}>Knowledge</a>
-		<span aria-hidden="true">/</span>
-		<a href={ROUTES.KNOWLEDGE_SLUG(node.id)}>{node.title}</a>
-		<span aria-hidden="true">/</span>
-		<span>Learn</span>
+	<nav aria-label="Breadcrumb">
+		<ol class="crumb">
+			<li><a href={ROUTES.KNOWLEDGE}>Knowledge</a></li>
+			<li><a href={ROUTES.KNOWLEDGE_SLUG(node.id)}>{node.title}</a></li>
+			<li aria-current="page">Learn</li>
+		</ol>
 	</nav>
 
 	<PageHeader
@@ -137,9 +137,11 @@ function phaseLabel(phase: string): string {
 		<div
 			class="progress-bar"
 			role="progressbar"
+			aria-label="Phase progress"
 			aria-valuemin="1"
 			aria-valuemax={totalPhases}
 			aria-valuenow={stepIndex + 1}
+			aria-valuetext="Phase {stepIndex + 1} of {totalPhases}: {phaseLabel(currentPhase)}"
 		>
 			<span class="progress-fill" style:width="{progressPct}%"></span>
 		</div>
@@ -227,8 +229,17 @@ function phaseLabel(phase: string): string {
 	.crumb {
 		display: flex;
 		gap: var(--space-sm);
+		list-style: none;
+		padding: 0;
+		margin: 0;
 		font-size: var(--font-size-sm);
 		color: var(--ink-subtle);
+	}
+
+	.crumb li + li::before {
+		content: '/';
+		margin-right: var(--space-sm);
+		color: var(--ink-faint);
 	}
 
 	.crumb a {

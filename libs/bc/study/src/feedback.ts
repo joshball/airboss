@@ -20,7 +20,8 @@ type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;
 /** Raised when a caller picks a signal that requires a comment but omits it. */
 export class FeedbackCommentRequiredError extends Error {
 	constructor(public readonly signal: CardFeedbackSignal) {
-		super(`Feedback signal '${signal}' requires a comment`);
+		const requiring = CARD_FEEDBACK_SIGNALS_REQUIRING_COMMENT.join(', ');
+		super(`Feedback signal '${signal}' requires a comment (signals requiring comment: ${requiring})`);
 		this.name = 'FeedbackCommentRequiredError';
 	}
 }

@@ -21,13 +21,12 @@ import {
 import { db } from '@ab/db/connection';
 import { generateAuthId, generateContentCitationId, generateScenarioId } from '@ab/utils';
 import type { ActionFailure } from '@sveltejs/kit';
-import { eq } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { actions } from './+page.server';
 
 const TEST_USER_ID = generateAuthId();
 const TEST_EMAIL = `rep-route-actions-test-${TEST_USER_ID}@airboss.test`;
-const CREATED_SCENARIO_IDS: string[] = [];
 
 beforeAll(async () => {
 	const now = new Date();
@@ -45,10 +44,12 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-	if (CREATED_SCENARIO_IDS.length > 0) {
-		await db.delete(contentCitation).where(eq(contentCitation.createdBy, TEST_USER_ID));
-		await db.delete(scenario).where(eq(scenario.userId, TEST_USER_ID));
-	}
+	// Run cleanup unconditionally (no `length > 0` accumulator gate). Each
+	// delete is a no-op when the WHERE matches zero rows, and routing every
+	// cleanup through `userId` predicates handles the case where a test
+	// throws before `seedScenario()` could record an id.
+	await db.delete(contentCitation).where(eq(contentCitation.createdBy, TEST_USER_ID));
+	await db.delete(scenario).where(eq(scenario.userId, TEST_USER_ID));
 	await db.delete(bauthUser).where(eq(bauthUser.id, TEST_USER_ID));
 });
 
@@ -66,7 +67,6 @@ async function seedScenario(): Promise<string> {
 		difficulty: DIFFICULTIES.INTERMEDIATE,
 		phaseOfFlight: PHASES_OF_FLIGHT.TAKEOFF,
 	});
-	CREATED_SCENARIO_IDS.push(row.id);
 	return row.id;
 }
 
@@ -177,7 +177,14 @@ describe('reps/[id] removeCitation action', () => {
 		addForm.set('targetId', targetId);
 		await actions.addCitation(makeEvent({ scenarioId, formData: addForm }) as never);
 
-		const [row] = await db.select().from(contentCitation).where(eq(contentCitation.sourceId, scenarioId));
+		// Pin the row by targetId rather than destructuring the first row of
+		// an unordered SELECT. Postgres has no implicit order; if a future
+		// edit adds a second addCitation call to the same scenario, the
+		// destructure becomes order-dependent.
+		const [row] = await db
+			.select()
+			.from(contentCitation)
+			.where(and(eq(contentCitation.sourceId, scenarioId), eq(contentCitation.targetId, targetId)));
 		if (!row) throw new Error('seed citation missing');
 
 		const removeForm = new FormData();

@@ -31,7 +31,7 @@ let { data }: { data: PageData } = $props();
 </PageHeader>
 
 {#if data.reference.supersededByEdition}
-	<div class="banner" role="alert">
+	<div class="banner" role="status">
 		<strong>Newer edition available.</strong>
 		You're reading {data.reference.edition}; the latest is
 		<a href={ROUTES.LIBRARY_HANDBOOK(data.reference.documentSlug)}>{data.reference.supersededByEdition}</a>.

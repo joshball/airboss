@@ -32,7 +32,12 @@ import {
 	getScenario,
 	resolveCitationTargets,
 } from '@ab/bc-study';
-import { CITATION_SOURCE_TYPES, CITATION_TARGET_VALUES, type CitationTargetType } from '@ab/constants';
+import {
+	CITATION_SOURCE_TYPES,
+	CITATION_TARGET_VALUES,
+	type CitationTargetType,
+	REPS_DETAIL_RECENT_ATTEMPTS_LIMIT,
+} from '@ab/constants';
 import { createLogger } from '@ab/utils';
 import { error, fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
@@ -45,7 +50,7 @@ export const load: PageServerLoad = async (event) => {
 
 	const [scenario, recentAttempts, citationRows] = await Promise.all([
 		getScenario(params.id, user.id),
-		getRecentAttemptsForScenario(params.id, user.id, 5),
+		getRecentAttemptsForScenario(params.id, user.id, REPS_DETAIL_RECENT_ATTEMPTS_LIMIT),
 		getCitationsOf(CITATION_SOURCE_TYPES.REP, params.id),
 	]);
 

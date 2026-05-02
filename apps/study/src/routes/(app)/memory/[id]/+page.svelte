@@ -250,7 +250,7 @@ async function handleCitationSelect(selection: CitationPickerSelection): Promise
 <section class="page">
 	<header class="hd">
 		<div>
-			<a class="back" href={ROUTES.MEMORY_BROWSE}>← Browse</a>
+			<a class="back" href={ROUTES.MEMORY_BROWSE}><span aria-hidden="true">←</span> Browse</a>
 			<div class="title-row">
 				<h1>Card detail</h1>
 				<PageHelp pageId="memory-card" />

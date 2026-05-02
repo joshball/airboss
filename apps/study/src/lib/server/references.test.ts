@@ -28,6 +28,12 @@ function makeEntry(overrides: Partial<SourceEntry> & Pick<SourceEntry, 'id'>): S
 	};
 }
 
+// Most tests use the same §91.103 fixture; hoist so each test only declares
+// the bits it varies. Tests that need a distinct fixture (e.g. the interp
+// `walker-2017` row) keep their local construction.
+const PHAK_91_103_ID = 'airboss-ref:regs/cfr-14/91/103' as SourceId;
+const PHAK_91_103_LIVE_URL = 'https://www.ecfr.gov/.../section-91.103';
+
 function mockResolver(corpus: string, urls: Record<string, string>): CorpusResolver {
 	return {
 		corpus,
@@ -82,9 +88,32 @@ describe('loadLessonReferences', () => {
 			const body = 'Per [@cite](airboss-ref:regs/cfr-14/91/103?at=2026), the PIC...';
 			const out = await loadLessonReferences(body, []);
 			expect(out.body).toBe(body);
-			expect(out.resolved['airboss-ref:regs/cfr-14/91/103?at=2026']).toBeDefined();
+			const resolved = out.resolved['airboss-ref:regs/cfr-14/91/103?at=2026'];
+			expect(resolved).toBeDefined();
+			// Pin the default annotation to `none` (no historical / no current
+			// override) so a regression that flipped every citation to
+			// `historical` (and broke the lesson renderer's default styling)
+			// doesn't pass green. Mirrors the positive `historical` cases
+			// below for the explicit historical flag and the acks cascade.
+			expect(resolved?.annotation.kind).toBe('none');
 			// The resolved payload should be JSON-serializable.
 			expect(() => JSON.parse(JSON.stringify(out.resolved))).not.toThrow();
+		});
+	});
+
+	it('annotates as `current` by default when no acks or historicalLens are passed', async () => {
+		const e = makeEntry({ id: 'airboss-ref:regs/cfr-14/91/103' as SourceId });
+		registerCorpusResolver(
+			mockResolver('regs', {
+				[e.id]: 'https://www.ecfr.gov/.../section-91.103',
+			}),
+		);
+
+		await withTestEntries({ [e.id]: e }, async () => {
+			const body = '[@cite](airboss-ref:regs/cfr-14/91/103?at=2026)';
+			const out = await loadLessonReferences(body, []);
+			const resolved = out.resolved['airboss-ref:regs/cfr-14/91/103?at=2026'];
+			expect(resolved?.annotation.kind).toBe('none');
 		});
 	});
 

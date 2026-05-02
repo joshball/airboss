@@ -26,7 +26,7 @@ import {
 import { db } from '@ab/db/connection';
 import { generateAuthId, generateCardId, generateReviewId, generateScenarioId } from '@ab/utils';
 import { eq } from 'drizzle-orm';
-import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import {
 	type DashboardFetchers,
 	getDashboardPayload,
@@ -39,39 +39,9 @@ import {
 import { card, cardState, review, scenario, scenarioOption, session, sessionItemResult, studyPlan } from './schema';
 import { seedRepAttempt } from './test-support';
 
-/** Shared user for tests that don't mutate shared state destructively. */
-const BASE_USER = generateAuthId();
-
-beforeAll(async () => {
-	const now = new Date();
-	await db.insert(bauthUser).values({
-		id: BASE_USER,
-		email: `dashboard-test-${BASE_USER}@airboss.test`,
-		name: 'Dashboard Test',
-		firstName: 'Dashboard',
-		lastName: 'Test',
-		emailVerified: true,
-		role: 'learner',
-		createdAt: now,
-		updatedAt: now,
-	});
-});
-
-afterAll(async () => {
-	// session_item_result -> scenario is SET NULL but -> session is CASCADE;
-	// scenario delete also needs no dangling SIR rows because a rep slot is
-	// pinned to a scenario id (set null there too). review -> card is RESTRICT.
-	// Delete slot rows, sessions, plan, then scenario/card trees before the
-	// user cascade.
-	await db.delete(sessionItemResult).where(eq(sessionItemResult.userId, BASE_USER));
-	await db.delete(session).where(eq(session.userId, BASE_USER));
-	await db.delete(studyPlan).where(eq(studyPlan.userId, BASE_USER));
-	await db.delete(scenario).where(eq(scenario.userId, BASE_USER));
-	await db.delete(review).where(eq(review.userId, BASE_USER));
-	await db.delete(cardState).where(eq(cardState.userId, BASE_USER));
-	await db.delete(card).where(eq(card.userId, BASE_USER));
-	await db.delete(bauthUser).where(eq(bauthUser.id, BASE_USER));
-});
+// Every test uses `isolatedUser` for full isolation. The previous shared
+// BASE_USER + beforeAll/afterAll fixtures were unused -- removed so the
+// suite doesn't carry dead seed.
 
 /** Create an isolated user + return a cleanup closure. */
 async function isolatedUser(label: string): Promise<{ userId: string; cleanup: () => Promise<void> }> {

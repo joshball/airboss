@@ -834,6 +834,12 @@ export interface NodeMasterySnapshot {
  *     accuracy >= REP_ACCURACY_THRESHOLD.
  *   - `mastered` iff both applicable gates pass AND at least one gate applied.
  *   - `inProgress` iff the node is not mastered AND (cardsTotal > 0 OR repsTotal > 0).
+ *
+ * Expected upper bound on `nodeIds.length`: a few hundred. The internal
+ * `inArray(card.nodeId, ids)` predicate degenerates on Postgres past
+ * roughly 500 ids (planner switches off the index), so callers building
+ * graph-wide aggregations should chunk if they ever need more than that.
+ * Today the knowledge graph is ~30-50 nodes; we're well under the limit.
  */
 export async function getNodeMasteryMap(
 	userId: string,

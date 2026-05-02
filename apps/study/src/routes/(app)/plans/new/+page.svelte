@@ -157,6 +157,8 @@ const skipPreview = $derived([...selectedSkip].sort().map((d) => domainLabel(d))
 			<input
 				type="range"
 				name="sessionLength"
+				aria-label="Items per session"
+				aria-valuetext="{sessionLength} items per session"
 				min={MIN_SESSION_LENGTH}
 				max={MAX_SESSION_LENGTH}
 				bind:value={sessionLength}

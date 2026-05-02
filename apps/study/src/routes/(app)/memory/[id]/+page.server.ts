@@ -28,6 +28,7 @@ import {
 	CITATION_TARGET_VALUES,
 	type CitationTargetType,
 	type DOMAIN_VALUES,
+	MEMORY_CARD_RECENT_REVIEWS_LIMIT,
 	ROUTES,
 } from '@ab/constants';
 import { createLogger } from '@ab/utils';
@@ -52,7 +53,7 @@ export const load: PageServerLoad = async (event) => {
 	// the owner detail page on first paint.
 	const [found, recentReviews, citationRows, crossRefs] = await Promise.all([
 		getCard(params.id, user.id),
-		getRecentReviewsForCard(params.id, user.id, 10),
+		getRecentReviewsForCard(params.id, user.id, MEMORY_CARD_RECENT_REVIEWS_LIMIT),
 		getCitationsOf(CITATION_SOURCE_TYPES.CARD, params.id),
 		getCardCrossReferences(params.id, user.id),
 	]);

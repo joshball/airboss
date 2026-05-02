@@ -103,6 +103,14 @@ function figureUrl(assetPath: string): string {
 	.page-header nav a {
 		color: inherit;
 	}
+	.page-header nav a:hover,
+	.page-header nav a:focus-visible {
+		text-decoration: underline;
+	}
+	.page-header nav a:focus-visible {
+		outline: 2px solid var(--focus-ring);
+		outline-offset: 2px;
+	}
 	.page-header h1 {
 		margin: 0 0 var(--space-xs) 0;
 		font-size: var(--font-size-2xl);
@@ -165,6 +173,14 @@ function figureUrl(assetPath: string): string {
 	.toc a {
 		color: inherit;
 		text-decoration: none;
+	}
+	.toc a:hover,
+	.toc a:focus-visible {
+		text-decoration: underline;
+	}
+	.toc a:focus-visible {
+		outline: 2px solid var(--focus-ring);
+		outline-offset: 2px;
 	}
 	.inline-figure {
 		margin: var(--space-md) 0;

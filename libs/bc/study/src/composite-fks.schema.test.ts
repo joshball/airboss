@@ -6,6 +6,12 @@
  * The composite FKs lock the denormalized user_id to the owning row; without
  * them a write could land a card_state row whose user_id disagrees with the
  * owning card. These tests bypass the BC and assert the storage layer raises.
+ *
+ * Note: this file does NOT cover `session_item_result.chosen_option_id`'s
+ * `ON DELETE set null` chain. That FK is exercised in
+ * `scenario-option.schema.test.ts` (the SET NULL path and the
+ * cascade-through-scenario path). Cross-reference there if you need to
+ * audit the full SIR FK story.
  */
 
 import { bauthUser } from '@ab/auth/schema';

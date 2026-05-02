@@ -19,6 +19,8 @@ import {
 	QUERY_PARAMS,
 	ROUTES,
 	SESSION_MODE_VALUES,
+	SESSION_SEED_MAX_LENGTH,
+	SESSION_SEED_PATTERN,
 	type SessionMode,
 } from '@ab/constants';
 import { createLogger } from '@ab/utils';
@@ -42,6 +44,20 @@ function parseCert(raw: string | null): Cert | undefined {
 	return (CERT_VALUES as readonly string[]).includes(raw) ? (raw as Cert) : undefined;
 }
 
+/**
+ * The seed is forwarded into the engine's deterministic dispatcher; cap
+ * length and restrict charset so a logged-in caller cannot inject a
+ * pathological value (the seed reaches `previewSession` / `startSession`
+ * directly). Returns `undefined` if the input is malformed -- the engine
+ * then picks a fresh seed.
+ */
+function parseSeed(raw: string | null): string | undefined {
+	if (!raw) return undefined;
+	if (raw.length === 0 || raw.length > SESSION_SEED_MAX_LENGTH) return undefined;
+	if (!SESSION_SEED_PATTERN.test(raw)) return undefined;
+	return raw;
+}
+
 export const load: PageServerLoad = async (event) => {
 	const user = requireAuth(event);
 	const plan = await getActivePlan(user.id);
@@ -52,7 +68,7 @@ export const load: PageServerLoad = async (event) => {
 	const mode = parseMode(event.url.searchParams.get(QUERY_PARAMS.SESSION_MODE));
 	const focus = parseFocus(event.url.searchParams.get(QUERY_PARAMS.SESSION_FOCUS));
 	const cert = parseCert(event.url.searchParams.get(QUERY_PARAMS.SESSION_CERT));
-	const seed = event.url.searchParams.get(QUERY_PARAMS.SESSION_SEED) ?? undefined;
+	const seed = parseSeed(event.url.searchParams.get(QUERY_PARAMS.SESSION_SEED));
 
 	try {
 		const preview = await previewSession(user.id, { mode, focus, cert, seed }, new Date());
@@ -61,7 +77,11 @@ export const load: PageServerLoad = async (event) => {
 		if (err instanceof NoActivePlanError) return { needsPlan: true as const, presets: PRESET_VALUES };
 		log.error(
 			'previewSession threw',
-			{ requestId: event.locals.requestId, userId: user.id },
+			{
+				requestId: event.locals.requestId,
+				userId: user.id,
+				metadata: { mode, focus, cert, seedPresent: seed !== undefined },
+			},
 			err instanceof Error ? err : undefined,
 		);
 		throw err;
@@ -76,7 +96,7 @@ export const actions: Actions = {
 		const mode = parseMode(String(form.get('mode') ?? ''));
 		const focus = parseFocus(String(form.get('focus') ?? ''));
 		const cert = parseCert(String(form.get('cert') ?? ''));
-		const seed = String(form.get('seed') ?? '') || undefined;
+		const seed = parseSeed(String(form.get('seed') ?? ''));
 
 		try {
 			const { session } = await startSession(user.id, { mode, focus, cert, seed });

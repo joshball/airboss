@@ -498,25 +498,29 @@ export async function getHandbookProgress(
 	referenceId: string,
 	db: Db = defaultDb,
 ): Promise<HandbookProgressSummary> {
-	const totalsRow = await db
-		.select({ total: sql<number>`count(*)::int` })
-		.from(referenceSection)
-		.where(
-			and(
-				eq(referenceSection.referenceId, referenceId),
-				sql`${referenceSection.level} <> ${REFERENCE_SECTION_LEVELS.CHAPTER}`,
+	// Two independent reads -- total-section count and per-user read state.
+	// Fan out in parallel to halve the page-build latency on the lens index
+	// where this helper is invoked once per handbook.
+	const [totalsRow, readStateRows] = await Promise.all([
+		db
+			.select({ total: sql<number>`count(*)::int` })
+			.from(referenceSection)
+			.where(
+				and(
+					eq(referenceSection.referenceId, referenceId),
+					sql`${referenceSection.level} <> ${REFERENCE_SECTION_LEVELS.CHAPTER}`,
+				),
 			),
-		);
+		db
+			.select({
+				status: referenceSectionReadState.status,
+				comprehended: referenceSectionReadState.comprehended,
+			})
+			.from(referenceSectionReadState)
+			.innerJoin(referenceSection, eq(referenceSectionReadState.referenceSectionId, referenceSection.id))
+			.where(and(eq(referenceSectionReadState.userId, userId), eq(referenceSection.referenceId, referenceId))),
+	]);
 	const totalSections = totalsRow[0]?.total ?? 0;
-
-	const readStateRows = await db
-		.select({
-			status: referenceSectionReadState.status,
-			comprehended: referenceSectionReadState.comprehended,
-		})
-		.from(referenceSectionReadState)
-		.innerJoin(referenceSection, eq(referenceSectionReadState.referenceSectionId, referenceSection.id))
-		.where(and(eq(referenceSectionReadState.userId, userId), eq(referenceSection.referenceId, referenceId)));
 
 	let readSections = 0;
 	let readingSections = 0;

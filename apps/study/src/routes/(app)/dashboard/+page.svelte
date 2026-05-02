@@ -16,8 +16,20 @@ let { data }: { data: PageData } = $props();
 
 const payload = $derived(data.payload);
 
-const loadedAt = new Date();
-const stamp = `${loadedAt.getFullYear()}-${String(loadedAt.getMonth() + 1).padStart(2, '0')}-${String(loadedAt.getDate()).padStart(2, '0')} ${String(loadedAt.getHours()).padStart(2, '0')}:${String(loadedAt.getMinutes()).padStart(2, '0')}`;
+// Decorative timestamp in the page footer. Tick once per minute on the
+// client so a long-lived tab doesn't keep showing yesterday's stamp; the
+// footer is `aria-hidden="true"` so SR users aren't affected either way.
+let now = $state(new Date());
+$effect(() => {
+	if (typeof window === 'undefined') return;
+	const interval = window.setInterval(() => {
+		now = new Date();
+	}, 60_000);
+	return () => window.clearInterval(interval);
+});
+const stamp = $derived(
+	`${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`,
+);
 </script>
 
 <svelte:head>

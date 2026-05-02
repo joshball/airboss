@@ -24,9 +24,11 @@ import {
 } from '@ab/bc-study';
 import {
 	CREDENTIAL_STATUSES,
+	GOAL_NOTES_MAX_LENGTH,
 	GOAL_STATUS_VALUES,
 	GOAL_SYLLABUS_WEIGHT_MAX,
 	GOAL_SYLLABUS_WEIGHT_MIN,
+	GOAL_TITLE_MAX_LENGTH,
 	type GoalStatus,
 	ROUTES,
 	SYLLABUS_PRIMACY,
@@ -58,7 +60,7 @@ export const load: PageServerLoad = async (event) => {
 		goal = await getOwnedGoal(id, user.id);
 	} catch (err) {
 		if (err instanceof GoalNotFoundError || err instanceof GoalNotOwnedError) {
-			throw error(404, `Goal '${id}' not found.`);
+			throw error(404, 'Goal not found.');
 		}
 		throw err;
 	}
@@ -124,6 +126,18 @@ export const actions: Actions = {
 		const targetDateRaw = String(form.get('targetDate') ?? '').trim();
 
 		if (title === '') return fail(400, { intent: 'update', error: 'Title is required.' });
+		if (title.length > GOAL_TITLE_MAX_LENGTH) {
+			return fail(400, {
+				intent: 'update',
+				error: `Title must be ${GOAL_TITLE_MAX_LENGTH} characters or fewer.`,
+			});
+		}
+		if (notesMd.length > GOAL_NOTES_MAX_LENGTH) {
+			return fail(400, {
+				intent: 'update',
+				error: `Notes must be ${GOAL_NOTES_MAX_LENGTH} characters or fewer.`,
+			});
+		}
 		if (targetDateRaw !== '' && !/^\d{4}-\d{2}-\d{2}$/.test(targetDateRaw)) {
 			return fail(400, { intent: 'update', error: 'Target date must be YYYY-MM-DD or empty.' });
 		}

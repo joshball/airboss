@@ -421,10 +421,12 @@ describe('scenario_option -- CASCADE on scenario delete', () => {
 		expect(remainingOptions).toHaveLength(0);
 
 		const [survivingSir] = await db.select().from(sessionItemResult).where(eq(sessionItemResult.id, sirId));
-		expect(survivingSir).toBeDefined();
 		// scenario_id FK is set null on scenario delete.
-		expect(survivingSir?.scenarioId).toBeNull();
 		// chosen_option_id FK is set null on option delete (cascade reached it).
+		// `toBeNull()` already implies the row exists -- on `undefined` the
+		// optional-chain returns `undefined`, which is not `null` and fails
+		// these assertions.
+		expect(survivingSir?.scenarioId).toBeNull();
 		expect(survivingSir?.chosenOptionId).toBeNull();
 	});
 });

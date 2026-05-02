@@ -20,6 +20,7 @@
  */
 
 import {
+	CARD_STATES,
 	CARD_STATUSES,
 	MS_PER_DAY,
 	REVIEW_BATCH_SIZE,
@@ -31,7 +32,7 @@ import {
 } from '@ab/constants';
 import { db as defaultDb } from '@ab/db/connection';
 import { generateCardSnoozeId } from '@ab/utils';
-import { and, desc, eq, gt, isNull, or, sql } from 'drizzle-orm';
+import { and, desc, eq, gt, isNull, lte, or, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import { CardNotFoundError } from './cards';
 import { type CardSnoozeRow, card, cardSnooze, cardState } from './schema';
@@ -41,7 +42,8 @@ type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;
 /** Raised when a caller picks a reason that requires a comment but omits it. */
 export class SnoozeCommentRequiredError extends Error {
 	constructor(public readonly reason: SnoozeReason) {
-		super(`Snooze reason '${reason}' requires a comment`);
+		const requiring = SNOOZE_REASONS_REQUIRING_COMMENT.join(', ');
+		super(`Snooze reason '${reason}' requires a comment (reasons requiring comment: ${requiring})`);
 		this.name = 'SnoozeCommentRequiredError';
 	}
 }
@@ -240,7 +242,11 @@ export async function restoreCardByCard(cardId: string, userId: string, db: Db =
 			),
 		)
 		.returning();
-	if (!updated) throw new SnoozeNotFoundError(`${cardId}:${userId}`);
+	// Drop userId from the error message -- the snoozeId field on the error
+	// class carries the cardId for the caller's own restore path; leaking
+	// the user id into log lines or HTTP responses serves no debug value
+	// (the function only writes the caller's row).
+	if (!updated) throw new SnoozeNotFoundError(cardId);
 	return updated;
 }
 
@@ -380,7 +386,7 @@ export async function getReplacementCard(
 				eq(card.userId, opts.userId),
 				eq(card.domain, opts.domain),
 				eq(card.status, CARD_STATUSES.ACTIVE),
-				sql`"due_at" <= ${now.toISOString()}`,
+				lte(cardState.dueAt, now),
 			),
 		)
 		.orderBy(cardState.dueAt)
@@ -404,7 +410,7 @@ export async function getReplacementCard(
 				eq(card.userId, opts.userId),
 				eq(card.domain, opts.domain),
 				eq(card.status, CARD_STATUSES.ACTIVE),
-				eq(cardState.state, 'new'),
+				eq(cardState.state, CARD_STATES.NEW),
 			),
 		)
 		.orderBy(card.createdAt)

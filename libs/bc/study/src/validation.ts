@@ -167,7 +167,12 @@ export const submitAttemptSchema = z.object({
 	 * the scenario_options-relational migration: now an FK to
 	 * `scenario_option.id`, not free text.
 	 */
-	chosenOptionId: z.string().trim().min(1).max(50),
+	// `createScenario` builds composite option PKs as `${scenarioId}__${o.id}`
+	// (e.g. ~30-char scenario id + `__` + up to 50-char authored option id =
+	// ~82 chars). Cap at 150 so any composite shape `createScenario` can
+	// produce is also submittable -- the previous 50-char cap rejected
+	// legitimate composite ids.
+	chosenOptionId: z.string().trim().min(1).max(150),
 	confidence: confidenceSchema.nullish(),
 	answerMs: z.number().int().min(0).nullish(),
 });
