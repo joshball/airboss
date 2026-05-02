@@ -30,6 +30,9 @@ export const SOURCES: Readonly<Record<SourceId, SourceEntry>> = Object.freeze({}
  * test; see `registry/__test_helpers__.ts`.
  *
  * The function returns the previous table so the test can restore it after.
+ *
+ * Bumps the registry generation counter on every swap so any cached index
+ * (`registry/index-cache.ts`) sees an invalidation signal on the next read.
  */
 export const __sources_internal__ = {
 	getActiveTable(): Record<SourceId, SourceEntry> {
@@ -38,11 +41,21 @@ export const __sources_internal__ = {
 	setActiveTable(next: Record<SourceId, SourceEntry>): Record<SourceId, SourceEntry> {
 		const prev = _activeSources;
 		_activeSources = next;
+		_sourcesGeneration += 1;
 		return prev;
+	},
+	/**
+	 * Monotonic generation counter. Bumped on every `setActiveTable` call.
+	 * Index caches (`registry/index-cache.ts`) compare this against their
+	 * last-seen generation to decide whether to rebuild.
+	 */
+	getGeneration(): number {
+		return _sourcesGeneration;
 	},
 };
 
 let _activeSources: Record<SourceId, SourceEntry> = { ...SOURCES };
+let _sourcesGeneration = 0;
 
 /**
  * Read the currently-active entry table. Production callers see `SOURCES`
