@@ -2,6 +2,14 @@
 	"name": "@ab/aviation",
 	"private": true,
 	"type": "module",
+	"exports": {
+		".": {
+			"types": "./src/index.ts",
+			"default": "./src/index.ts"
+		},
+		"./sources": "./src/sources/index.ts",
+		"./ui/*": "./src/ui/*"
+	},
 	"dependencies": {
 		"@ab/constants": "workspace:*",
 		"smol-toml": "^1.6.1"

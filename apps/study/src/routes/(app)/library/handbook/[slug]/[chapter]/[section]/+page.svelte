@@ -1,4 +1,9 @@
 <script lang="ts">
+import AmendmentPanel from '@ab/aviation/ui/handbooks/AmendmentPanel.svelte';
+import HandbookCitingNodesPanel from '@ab/aviation/ui/handbooks/HandbookCitingNodesPanel.svelte';
+import HandbookEditionBadge from '@ab/aviation/ui/handbooks/HandbookEditionBadge.svelte';
+import HandbookReadProgressControl from '@ab/aviation/ui/handbooks/HandbookReadProgressControl.svelte';
+import HandbookSectionNotes from '@ab/aviation/ui/handbooks/HandbookSectionNotes.svelte';
 import {
 	HANDBOOK_HEARTBEAT_BUFFER,
 	HANDBOOK_HEARTBEAT_INTERVAL_SEC,
@@ -6,11 +11,6 @@ import {
 	type HandbookReadStatus,
 	ROUTES,
 } from '@ab/constants';
-import AmendmentPanel from '@ab/ui/handbooks/AmendmentPanel.svelte';
-import HandbookCitingNodesPanel from '@ab/ui/handbooks/HandbookCitingNodesPanel.svelte';
-import HandbookEditionBadge from '@ab/ui/handbooks/HandbookEditionBadge.svelte';
-import HandbookReadProgressControl from '@ab/ui/handbooks/HandbookReadProgressControl.svelte';
-import HandbookSectionNotes from '@ab/ui/handbooks/HandbookSectionNotes.svelte';
 import { extractImageUrls, normalizeHandbookAssetPath, renderMarkdown } from '@ab/utils';
 import type { PageData } from './$types';
 import { shouldShowReadSuggestion } from './read-suggestion';

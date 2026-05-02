@@ -11,8 +11,8 @@ import {
 } from '@ab/constants';
 import { cleanup, fireEvent, render, screen } from '@testing-library/svelte';
 import { afterEach, describe, expect, it } from 'vitest';
-import AmendmentPanel from '../src/handbooks/AmendmentPanel.svelte';
-import type { ErrataEntryDisplay } from '../src/handbooks/ErrataEntry.svelte';
+import AmendmentPanel from '../../src/ui/handbooks/AmendmentPanel.svelte';
+import type { ErrataEntryDisplay } from '../../src/ui/handbooks/ErrataEntry.svelte';
 
 afterEach(() => {
 	cleanup();

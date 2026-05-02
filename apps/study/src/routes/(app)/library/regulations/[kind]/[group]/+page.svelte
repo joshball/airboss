@@ -1,8 +1,8 @@
 <script lang="ts">
+import LibraryCard from '@ab/aviation/ui/LibraryCard.svelte';
 import { type LibraryRegulationsKind, ROUTES } from '@ab/constants';
 import EmptyState from '@ab/ui/components/EmptyState.svelte';
 import PageHeader from '@ab/ui/components/PageHeader.svelte';
-import LibraryCard from '@ab/ui/library/LibraryCard.svelte';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();

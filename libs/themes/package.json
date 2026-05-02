@@ -2,6 +2,15 @@
 	"name": "@ab/themes",
 	"private": true,
 	"type": "module",
+	"exports": {
+		".": {
+			"types": "./index.ts",
+			"default": "./index.ts"
+		},
+		"./ThemeProvider.svelte": "./ThemeProvider.svelte",
+		"./picker/*": "./picker/*",
+		"./generated/*": "./generated/*"
+	},
 	"dependencies": {
 		"@ab/constants": "workspace:*"
 	}
