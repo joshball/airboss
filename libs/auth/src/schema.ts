@@ -5,10 +5,14 @@
  * Table prefix: bauth_ (set via modelName in server.ts).
  * These live in the default public schema since better-auth
  * does not support PostgreSQL schema namespaces.
+ *
+ * Indexes: better-auth's session sweeper, ban-by-user, and login flows
+ * all hit columns that better-auth itself does NOT index. We add the
+ * indexes here so drizzle-kit emits them in our migrations.
  */
 
 import { AUTH_RATE_LIMIT } from '@ab/constants';
-import { bigint, boolean, integer, jsonb, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
+import { bigint, boolean, index, integer, jsonb, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 
 export const bauthUser = pgTable('bauth_user', {
 	id: text('id').primaryKey(),
@@ -27,46 +31,79 @@ export const bauthUser = pgTable('bauth_user', {
 	updatedAt: timestamp('updated_at', { withTimezone: true }).notNull(),
 });
 
-export const bauthSession = pgTable('bauth_session', {
-	id: text('id').primaryKey(),
-	userId: text('user_id')
-		.notNull()
-		.references(() => bauthUser.id),
-	token: text('token').notNull().unique(),
-	expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
-	ipAddress: text('ip_address'),
-	userAgent: text('user_agent'),
-	impersonatedBy: text('impersonated_by'),
-	createdAt: timestamp('created_at', { withTimezone: true }).notNull(),
-	updatedAt: timestamp('updated_at', { withTimezone: true }).notNull(),
-});
+export const bauthSession = pgTable(
+	'bauth_session',
+	{
+		id: text('id').primaryKey(),
+		userId: text('user_id')
+			.notNull()
+			.references(() => bauthUser.id),
+		token: text('token').notNull().unique(),
+		expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
+		ipAddress: text('ip_address'),
+		userAgent: text('user_agent'),
+		// Set by better-auth's admin plugin when an admin impersonates a user.
+		// References bauth_user with `set null` on delete so deleting the
+		// impersonator doesn't cascade-kill their target's session, but the
+		// FK is still enforced so we can't end up with a dangling string.
+		impersonatedBy: text('impersonated_by').references(() => bauthUser.id, { onDelete: 'set null' }),
+		createdAt: timestamp('created_at', { withTimezone: true }).notNull(),
+		updatedAt: timestamp('updated_at', { withTimezone: true }).notNull(),
+	},
+	(t) => ({
+		// Hot path: revoke-all-for-user, list-sessions, ban-by-user.
+		// Without this every operation seq-scans the session table.
+		userIdx: index('bauth_session_user_idx').on(t.userId),
+		// Hot path: better-auth's session sweeper deletes expired rows on a
+		// recurring tick. Without this the sweeper seq-scans too.
+		expiresAtIdx: index('bauth_session_expires_at_idx').on(t.expiresAt),
+	}),
+);
 
-export const bauthAccount = pgTable('bauth_account', {
-	id: text('id').primaryKey(),
-	userId: text('user_id')
-		.notNull()
-		.references(() => bauthUser.id),
-	accountId: text('account_id').notNull(),
-	providerId: text('provider_id').notNull(),
-	accessToken: text('access_token'),
-	refreshToken: text('refresh_token'),
-	accessTokenExpiresAt: timestamp('access_token_expires_at', { withTimezone: true }),
-	refreshTokenExpiresAt: timestamp('refresh_token_expires_at', { withTimezone: true }),
-	scope: text('scope'),
-	idToken: text('id_token'),
-	password: text('password'),
-	createdAt: timestamp('created_at', { withTimezone: true }).notNull(),
-	updatedAt: timestamp('updated_at', { withTimezone: true }).notNull(),
-});
+export const bauthAccount = pgTable(
+	'bauth_account',
+	{
+		id: text('id').primaryKey(),
+		userId: text('user_id')
+			.notNull()
+			.references(() => bauthUser.id),
+		accountId: text('account_id').notNull(),
+		providerId: text('provider_id').notNull(),
+		accessToken: text('access_token'),
+		refreshToken: text('refresh_token'),
+		accessTokenExpiresAt: timestamp('access_token_expires_at', { withTimezone: true }),
+		refreshTokenExpiresAt: timestamp('refresh_token_expires_at', { withTimezone: true }),
+		scope: text('scope'),
+		idToken: text('id_token'),
+		password: text('password'),
+		createdAt: timestamp('created_at', { withTimezone: true }).notNull(),
+		updatedAt: timestamp('updated_at', { withTimezone: true }).notNull(),
+	},
+	(t) => ({
+		// Hot path: every email/password sign-in resolves the user's account
+		// row via (userId) for hash lookup, or (providerId, accountId) for
+		// provider-scoped lookups (link-account, OAuth).
+		userIdx: index('bauth_account_user_idx').on(t.userId),
+		providerAccountIdx: index('bauth_account_provider_account_idx').on(t.providerId, t.accountId),
+	}),
+);
 
-export const bauthVerification = pgTable('bauth_verification', {
-	id: text('id').primaryKey(),
-	identifier: text('identifier').notNull(),
-	value: text('value').notNull(),
-	expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
-	createdAt: timestamp('created_at', { withTimezone: true }).notNull(),
-	updatedAt: timestamp('updated_at', { withTimezone: true }).notNull(),
-});
+export const bauthVerification = pgTable(
+	'bauth_verification',
+	{
+		id: text('id').primaryKey(),
+		identifier: text('identifier').notNull(),
+		value: text('value').notNull(),
+		expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
+		createdAt: timestamp('created_at', { withTimezone: true }).notNull(),
+		updatedAt: timestamp('updated_at', { withTimezone: true }).notNull(),
+	},
+	(t) => ({
+		// Hot path: every email-verification, magic-link, and password-reset
+		// click resolves the token row via the identifier column.
+		identifierIdx: index('bauth_verification_identifier_idx').on(t.identifier),
+	}),
+);
 
 /**
  * Rate-limit storage for better-auth.
