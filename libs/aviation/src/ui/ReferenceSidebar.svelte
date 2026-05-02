@@ -112,13 +112,13 @@ let {
 	.sidebar {
 		display: flex;
 		flex-direction: column;
-		gap: 1rem;
+		gap: var(--space-lg);
 	}
 
 	section {
 		display: flex;
 		flex-direction: column;
-		gap: 0.25rem;
+		gap: var(--space-2xs);
 	}
 
 	h3 {
@@ -126,7 +126,7 @@ let {
 		font-size: var(--font-size-xs);
 		font-weight: 700;
 		text-transform: uppercase;
-		letter-spacing: 0.08em;
+		letter-spacing: var(--letter-spacing-caps);
 		color: var(--ink-muted);
 	}
 
@@ -141,8 +141,8 @@ let {
 	li {
 		display: flex;
 		justify-content: space-between;
-		gap: 0.5rem;
-		padding: 0.25rem 0;
+		gap: var(--space-sm);
+		padding: var(--space-2xs) 0;
 		font-size: var(--font-size-sm);
 		color: var(--ink-body);
 	}

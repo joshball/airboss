@@ -241,10 +241,11 @@ function backdropKeydown(event: KeyboardEvent): void {
 	.backdrop {
 		position: fixed;
 		inset: 0;
-		background: rgba(15, 23, 42, 0.4);
+		background: var(--overlay-scrim);
 		display: flex;
 		align-items: flex-start;
 		justify-content: center;
+		/* lint-disable-token-enforcement: viewport offset positions palette in upper third, not on spacing rhythm */
 		padding-top: 6rem;
 		z-index: var(--z-command-palette);
 	}
@@ -262,7 +263,7 @@ function backdropKeydown(event: KeyboardEvent): void {
 	}
 
 	.input-row {
-		padding: 0.75rem 1rem;
+		padding: var(--space-md) var(--space-lg);
 		border-bottom: 1px solid var(--edge-default);
 	}
 
@@ -271,7 +272,7 @@ function backdropKeydown(event: KeyboardEvent): void {
 		border: 0;
 		outline: none;
 		font-size: var(--font-size-base);
-		padding: 0.5rem 0;
+		padding: var(--space-sm) 0;
 		background: transparent;
 		color: inherit;
 	}
@@ -284,8 +285,8 @@ function backdropKeydown(event: KeyboardEvent): void {
 		overflow-y: auto;
 		display: grid;
 		grid-template-columns: 1fr 1fr;
-		gap: 1rem;
-		padding: 0.75rem 1rem;
+		gap: var(--space-lg);
+		padding: var(--space-md) var(--space-lg);
 		flex: 1;
 	}
 
@@ -299,16 +300,16 @@ function backdropKeydown(event: KeyboardEvent): void {
 		justify-content: space-between;
 		font-size: var(--font-size-xs);
 		text-transform: uppercase;
-		letter-spacing: 0.08em;
+		letter-spacing: var(--letter-spacing-caps);
 		color: var(--ink-muted);
-		margin-bottom: 0.375rem;
+		margin-bottom: var(--space-xs);
 	}
 
 	.bucket .count {
 		font-variant-numeric: tabular-nums;
 		background: var(--surface-sunken);
 		border-radius: var(--radius-pill);
-		padding: 0 0.5rem;
+		padding: 0 var(--space-sm);
 		font-size: var(--font-size-xs);
 	}
 
@@ -318,7 +319,7 @@ function backdropKeydown(event: KeyboardEvent): void {
 		margin: 0;
 		display: flex;
 		flex-direction: column;
-		gap: 0.25rem;
+		gap: var(--space-2xs);
 	}
 
 	.bucket li.focused button {
@@ -329,13 +330,13 @@ function backdropKeydown(event: KeyboardEvent): void {
 	.bucket button {
 		display: grid;
 		grid-template-columns: 1fr;
-		gap: 0.125rem;
+		gap: var(--space-3xs);
 		width: 100%;
 		text-align: left;
 		background: var(--surface-panel);
 		border: 1px solid var(--edge-default);
 		border-radius: var(--radius-sm);
-		padding: 0.5rem 0.625rem;
+		padding: var(--space-sm) var(--space-md);
 		cursor: pointer;
 		color: inherit;
 		font: inherit;
@@ -353,7 +354,7 @@ function backdropKeydown(event: KeyboardEvent): void {
 	.tag {
 		font-size: var(--font-size-xs);
 		text-transform: uppercase;
-		letter-spacing: 0.06em;
+		letter-spacing: var(--letter-spacing-caps);
 		color: var(--ink-muted);
 	}
 
@@ -372,20 +373,20 @@ function backdropKeydown(event: KeyboardEvent): void {
 
 	.hint,
 	.empty-hint {
-		margin: 0.5rem 0 0;
+		margin: var(--space-sm) 0 0;
 		font-size: var(--font-size-sm);
 		color: var(--ink-subtle);
 	}
 
 	.empty-hint {
-		padding: 0 1rem 0.75rem;
+		padding: 0 var(--space-lg) var(--space-md);
 	}
 
 	.shortcuts {
 		display: flex;
-		gap: 1rem;
+		gap: var(--space-lg);
 		border-top: 1px solid var(--edge-default);
-		padding: 0.5rem 1rem;
+		padding: var(--space-sm) var(--space-lg);
 		font-size: var(--font-size-xs);
 		color: var(--ink-muted);
 	}
@@ -394,7 +395,7 @@ function backdropKeydown(event: KeyboardEvent): void {
 		border: 1px solid var(--edge-default);
 		border-bottom-width: 2px;
 		border-radius: var(--radius-xs);
-		padding: 0 0.25rem;
+		padding: 0 var(--space-2xs);
 		font-size: var(--font-size-xs);
 		font-family: var(--font-family-mono);
 		background: var(--surface-sunken);

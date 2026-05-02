@@ -568,7 +568,7 @@ function tickEnd(angleDeg: number): { x: number; y: number } {
 		justify-content: space-between;
 		align-items: baseline;
 		gap: var(--space-lg);
-		padding: 0.15rem 0;
+		padding: var(--space-3xs) 0;
 	}
 
 	.readout-row.big {
@@ -596,10 +596,10 @@ function tickEnd(angleDeg: number): { x: number; y: number } {
 	.warn-badge {
 		display: inline-block;
 		margin-left: var(--space-sm);
-		padding: 0.1rem 0.45rem;
+		padding: var(--space-3xs) var(--space-sm);
 		font-size: var(--font-size-xs);
 		font-weight: 700;
-		letter-spacing: 0.04em;
+		letter-spacing: var(--letter-spacing-wide);
 		color: var(--action-hazard-ink);
 		background: var(--action-hazard);
 		border-radius: var(--radius-xs);
@@ -616,13 +616,13 @@ function tickEnd(angleDeg: number): { x: number; y: number } {
 	.controls {
 		display: flex;
 		flex-direction: column;
-		gap: 0.9rem;
+		gap: var(--space-lg);
 	}
 
 	.control {
 		display: flex;
 		flex-direction: column;
-		gap: 0.4rem;
+		gap: var(--space-xs);
 	}
 
 	.control.toggle {

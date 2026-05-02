@@ -47,7 +47,7 @@ let { refs }: { refs: readonly ExternalRef[] | undefined } = $props();
 
 	.list {
 		margin: 0;
-		padding-left: 1.25rem;
+		padding-left: var(--space-xl);
 		display: grid;
 		gap: var(--space-sm);
 	}
@@ -59,7 +59,7 @@ let { refs }: { refs: readonly ExternalRef[] | undefined } = $props();
 	.head {
 		display: flex;
 		align-items: baseline;
-		gap: 0.5rem;
+		gap: var(--space-sm);
 		flex-wrap: wrap;
 	}
 
@@ -82,12 +82,12 @@ let { refs }: { refs: readonly ExternalRef[] | undefined } = $props();
 
 	.badge {
 		display: inline-block;
-		padding: 0 0.375rem;
+		padding: 0 var(--space-xs);
 		border-radius: var(--radius-xs);
 		font-size: var(--font-size-xs);
 		font-weight: var(--font-weight-semibold);
 		text-transform: uppercase;
-		letter-spacing: 0.05em;
+		letter-spacing: var(--letter-spacing-wide);
 		background: var(--surface-sunken);
 		color: var(--ink-muted);
 		border: 1px solid var(--edge-default);
@@ -99,7 +99,7 @@ let { refs }: { refs: readonly ExternalRef[] | undefined } = $props();
 	}
 
 	.note {
-		margin: 0.125rem 0 0;
+		margin: var(--space-3xs) 0 0;
 		font-size: var(--font-size-sm);
 		color: var(--ink-muted);
 	}

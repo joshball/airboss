@@ -140,11 +140,11 @@ function truncate(text: string, max: number): string {
 		color: var(--ink-body);
 		border: 1px solid var(--edge-default);
 		border-radius: var(--radius-md);
-		padding: 0.625rem 0.75rem;
-		box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+		padding: var(--space-md) var(--space-md);
+		box-shadow: var(--shadow-lg);
 		display: flex;
 		flex-direction: column;
-		gap: 0.375rem;
+		gap: var(--space-xs);
 		font-size: var(--font-size-sm);
 		font-weight: 400;
 		white-space: normal;
@@ -163,17 +163,17 @@ function truncate(text: string, max: number): string {
 	.pop-tags {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 0.25rem;
+		gap: var(--space-2xs);
 	}
 
 	.chip {
 		font-size: var(--font-size-xs);
-		padding: 0.0625rem 0.375rem;
+		padding: var(--space-4xs) var(--space-xs);
 		border-radius: var(--radius-pill);
 		background: var(--surface-sunken);
 		color: var(--ink-muted);
 		text-transform: uppercase;
-		letter-spacing: 0.04em;
+		letter-spacing: var(--letter-spacing-wide);
 	}
 
 	.pop-hint {

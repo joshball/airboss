@@ -85,15 +85,15 @@ const ballX = $derived(100 + Math.max(-1, Math.min(1, ballSafe)) * BALL_TRAVEL_P
 
 <style>
 	.instrument {
-		width: 200px;
+		width: 12.5rem;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 	}
 
 	svg {
-		width: 200px;
-		height: 200px;
+		width: 12.5rem;
+		height: 12.5rem;
 		display: block;
 	}
 

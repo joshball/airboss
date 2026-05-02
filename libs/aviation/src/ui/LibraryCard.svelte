@@ -181,7 +181,7 @@ const readerHref = $derived(isReadable ? ROUTES.LIBRARY_HANDBOOK(documentSlug) :
 	}
 	.kind-chip.kind-handbook {
 		background: var(--signal-info-wash);
-		color: var(--signal-info-edge);
+		color: var(--signal-info);
 	}
 	.subjects {
 		list-style: none;

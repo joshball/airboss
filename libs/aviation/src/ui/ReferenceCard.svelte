@@ -79,7 +79,7 @@ const matchedParts = $derived.by<HighlightParts | null>(() => {
 		background: var(--surface-panel);
 		border: 1px solid var(--edge-default);
 		border-radius: var(--radius-md);
-		padding: 0.875rem var(--space-lg);
+		padding: var(--space-lg) var(--space-lg);
 		text-decoration: none;
 		color: inherit;
 		transition:
@@ -134,7 +134,7 @@ const matchedParts = $derived.by<HighlightParts | null>(() => {
 	mark {
 		background: var(--action-caution-wash);
 		color: var(--ink-body);
-		padding: 0 0.0625rem;
+		padding: 0 var(--space-4xs);
 		border-radius: var(--radius-xs);
 	}
 
@@ -147,7 +147,7 @@ const matchedParts = $derived.by<HighlightParts | null>(() => {
 	.chip {
 		display: inline-flex;
 		align-items: center;
-		padding: 0.0625rem var(--space-sm);
+		padding: var(--space-4xs) var(--space-sm);
 		font-size: var(--font-size-xs);
 		border-radius: var(--radius-pill);
 		background: var(--surface-sunken);

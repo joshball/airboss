@@ -191,17 +191,17 @@ function resolveWikilink(pageId: string): { href: string; resolved: boolean } {
 	.md-body :global(.md-ul),
 	.md-body :global(.md-ol) {
 		margin: 0 0 var(--space-md);
-		padding-left: 1.5rem;
+		padding-left: var(--space-xl);
 	}
 
 	.md-body :global(.md-ul li),
 	.md-body :global(.md-ol li) {
-		margin-bottom: 0.25rem;
+		margin-bottom: var(--space-2xs);
 	}
 
 	.md-body :global(.md-inline-code) {
 		background: var(--surface-sunken);
-		padding: 0.0625rem 0.375rem;
+		padding: var(--space-4xs) var(--space-xs);
 		border-radius: var(--radius-xs);
 		font-family: var(--font-family-mono);
 		font-size: var(--font-size-sm);
@@ -227,20 +227,20 @@ function resolveWikilink(pageId: string): { href: string; resolved: boolean } {
 
 	.md-body :global(.md-external-icon) {
 		display: inline-block;
-		margin-left: 0.15em;
+		margin-left: var(--space-2xs);
 		font-size: var(--font-size-sm);
 		color: var(--ink-subtle);
 	}
 
 	.md-body :global(.md-source-badge) {
 		display: inline-block;
-		margin-left: 0.375rem;
-		padding: 0 0.375rem;
+		margin-left: var(--space-xs);
+		padding: 0 var(--space-xs);
 		border-radius: var(--radius-xs);
 		font-size: var(--font-size-xs);
 		font-weight: var(--font-weight-semibold);
 		text-transform: uppercase;
-		letter-spacing: 0.05em;
+		letter-spacing: var(--letter-spacing-wide);
 		background: var(--surface-sunken);
 		color: var(--ink-muted);
 		border: 1px solid var(--edge-default);
@@ -286,7 +286,7 @@ function resolveWikilink(pageId: string): { href: string; resolved: boolean } {
 
 	.md-body :global(.md-table th),
 	.md-body :global(.md-table td) {
-		padding: 0.5rem 0.75rem;
+		padding: var(--space-sm) var(--space-md);
 		border-bottom: 1px solid var(--edge-default);
 		vertical-align: top;
 	}
@@ -323,7 +323,7 @@ function resolveWikilink(pageId: string): { href: string; resolved: boolean } {
 	.md-body :global(.md-code-wrap pre),
 	.md-body :global(.md-code) {
 		margin: 0;
-		padding: 0.75rem 1rem;
+		padding: var(--space-md) var(--space-lg);
 		font-family: var(--font-family-mono);
 		font-size: var(--font-size-sm);
 		overflow-x: auto;
@@ -355,7 +355,7 @@ function resolveWikilink(pageId: string): { href: string; resolved: boolean } {
 
 	.md-body :global(.md-quote) {
 		margin: var(--space-md) 0;
-		padding: 0.5rem 1rem;
+		padding: var(--space-sm) var(--space-lg);
 		border-left: 3px solid var(--edge-default);
 		background: var(--surface-sunken);
 		color: var(--ink-muted);
@@ -373,7 +373,7 @@ function resolveWikilink(pageId: string): { href: string; resolved: boolean } {
 	}
 
 	.md-body :global(.md-figure figcaption) {
-		margin-top: 0.375rem;
+		margin-top: var(--space-xs);
 		font-size: var(--font-size-sm);
 		color: var(--ink-muted);
 		text-align: center;

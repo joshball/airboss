@@ -41,8 +41,8 @@ let {
 		border: 1px solid var(--edge-default);
 		border-left-width: 4px;
 		border-radius: var(--radius-md);
-		padding: 0.75rem 1rem;
-		margin: 1rem 0;
+		padding: var(--space-md) var(--space-lg);
+		margin: var(--space-lg) 0;
 		background: var(--surface-panel);
 	}
 
@@ -76,7 +76,7 @@ let {
 
 	header {
 		font-weight: var(--font-weight-semibold);
-		margin-bottom: 0.375rem;
+		margin-bottom: var(--space-xs);
 		font-size: var(--font-size-base);
 	}
 

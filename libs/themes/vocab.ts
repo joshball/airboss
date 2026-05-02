@@ -145,6 +145,8 @@ export const TOKENS = {
 	fontFamilyBase: '--font-family-base',
 
 	// -------- scale: spacing --------
+	space4xs: '--space-4xs',
+	space3xs: '--space-3xs',
 	space2xs: '--space-2xs',
 	spaceXs: '--space-xs',
 	spaceSm: '--space-sm',

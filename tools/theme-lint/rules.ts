@@ -96,6 +96,10 @@ const KNOWN_PREFIXES: ReadonlyArray<RegExp> = [
 	/^--underline-offset-[a-z0-9]+$/,
 	/^--sim-[a-z0-9-]+$/,
 	/^--avionics-[a-z0-9-]+$/,
+	// Shiki emits per-token CSS variables on inline spans (`--shiki-light`,
+	// `--shiki-dark`, `--shiki-light-bg`, `--shiki-dark-bg`). Consumed by
+	// `MarkdownBody` to drive dual-theme code highlighting.
+	/^--shiki-(light|dark)(-bg)?$/,
 ];
 
 function isKnownToken(name: string, known: Set<string>): boolean {

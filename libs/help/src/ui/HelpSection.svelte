@@ -78,12 +78,12 @@ function handleKey(event: KeyboardEvent): void {
 
 <style>
 	.section {
-		padding: 0.5rem 0 1rem;
+		padding: var(--space-sm) 0 var(--space-lg);
 		scroll-margin-top: 4rem;
 	}
 
 	h2 {
-		margin: 0 0 0.75rem;
+		margin: 0 0 var(--space-md);
 		font-size: var(--font-size-lg);
 		font-weight: var(--font-weight-semibold);
 		color: var(--ink-body);
@@ -92,10 +92,10 @@ function handleKey(event: KeyboardEvent): void {
 	.toggle {
 		display: inline-flex;
 		align-items: center;
-		gap: 0.5rem;
+		gap: var(--space-sm);
 		background: transparent;
 		border: 0;
-		padding: 0.25rem 0;
+		padding: var(--space-2xs) 0;
 		cursor: pointer;
 		color: inherit;
 		font: inherit;
