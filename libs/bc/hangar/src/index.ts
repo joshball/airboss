@@ -41,9 +41,12 @@ export {
 } from './form-helpers';
 export {
 	aliasesSchema,
+	type BinaryVisualLocatorParsed,
+	binaryVisualLocatorSchema,
 	citationSchema,
 	displayNameSchema,
 	keywordsSchema,
+	outboundUrlSchema,
 	paraphraseSchema,
 	type ReferenceInputParsed,
 	referenceIdSchema,
@@ -128,10 +131,14 @@ export {
 	type ThumbnailFn,
 } from './source-fetch';
 export {
+	type OutboundUrlValidationFailure,
+	type OutboundUrlValidationOk,
+	type OutboundUrlValidationResult,
 	type SourceValidationFailure,
 	sourceFormDataToInitial,
 	type ValidatedSource,
 	validateSourceForm,
+	validateSourceFormUrls,
 } from './source-form';
 export { EMPTY_SOURCE_INITIAL, type SourceFormInitial } from './source-form-types';
 export {

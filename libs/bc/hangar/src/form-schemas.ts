@@ -81,19 +81,46 @@ export const tagsSchema = z
 		}
 	});
 
+/**
+ * Outbound HTTP(S) URL field shared by `sourceSchema.url`, `bv_index_url`, and
+ * `citationSchema.url`. The regex catches the obvious "ftp://", "file://",
+ * "javascript:" cases at form validation time. The async denylist
+ * (RFC1918 / loopback / link-local / cloud metadata) lives in
+ * `@ab/utils` `validateOutboundUrl` and runs in form actions before the
+ * worker is allowed to fetch the URL. See ssrf review finding for context.
+ */
+export const outboundUrlSchema = z
+	.string()
+	.trim()
+	.regex(/^https?:\/\//i, 'URL must be http(s)')
+	.max(2048);
+
 /** Single citation. Locator stays freeform (per source-type). */
 export const citationSchema = z.object({
 	sourceId: z.string().trim().min(1).max(128),
 	locator: z
 		.record(z.union([z.string().trim().min(1).max(200), z.number().int()]))
 		.refine((o) => Object.keys(o).length > 0, 'Locator must not be empty'),
-	url: z
-		.string()
-		.trim()
-		.regex(/^https?:\/\//i, 'URL must be http(s)')
-		.max(2048)
-		.optional(),
+	url: outboundUrlSchema.optional(),
 });
+
+/**
+ * Binary-visual-source schema for the operator-typed `bv_*` fields.
+ * Mirrors the regex + length cap on `outboundUrlSchema` so the index URL
+ * cannot bypass the http(s) check applied to the main `url` column.
+ *
+ * The async SSRF denylist (`validateOutboundUrl`) runs in the form action
+ * after this sync parse succeeds; it must run there because Zod refines
+ * cannot await without `parseAsync` and the route layer is the right place
+ * to surface DNS-driven failures as form errors.
+ */
+export const binaryVisualLocatorSchema = z.object({
+	region: z.string().trim().min(1, 'Region is required for binary-visual sources').max(120),
+	index_url: outboundUrlSchema,
+	cadence_days: z.number().int().positive().optional(),
+});
+
+export type BinaryVisualLocatorParsed = z.infer<typeof binaryVisualLocatorSchema>;
 
 export const referenceSchema = z.object({
 	id: referenceIdSchema,
@@ -129,11 +156,7 @@ export const sourceSchema = z.object({
 	type: z.enum(SOURCE_TYPE_VALUES as unknown as [string, ...string[]]),
 	title: z.string().trim().min(1).max(200),
 	version: z.string().trim().min(1).max(120),
-	url: z
-		.string()
-		.trim()
-		.regex(/^https?:\/\//i, 'URL must be http(s)')
-		.max(2048),
+	url: outboundUrlSchema,
 	path: z.string().trim().min(1).max(512),
 	format: sourceFormatSchema,
 	checksum: z.string().trim().min(1).max(128),

@@ -180,6 +180,7 @@ export {
 	SYNC_OUTCOMES,
 	type SyncOutcome,
 } from './jobs';
+export { ALLOWED_OUTBOUND_SCHEMES, PRIVATE_IPV4_CIDRS, PRIVATE_IPV6_CIDRS } from './network';
 export { PORTS } from './ports';
 export {
 	CUSTOM_TILE,
