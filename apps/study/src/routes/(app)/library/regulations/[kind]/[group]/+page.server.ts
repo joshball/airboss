@@ -12,11 +12,11 @@
  */
 
 import { requireAuth } from '@ab/auth';
+import { parseRegulationGroup, parseRegulationKind } from '@ab/aviation';
 import { listHandbookChapters, listReferences } from '@ab/bc-study';
 import {
 	externalUrlForReference,
 	LIBRARY_REGULATIONS_KIND_LABELS,
-	LIBRARY_REGULATIONS_KIND_VALUES,
 	LIBRARY_REGULATIONS_KINDS,
 	type LibraryRegulationsKind,
 	REFERENCE_KIND_LABELS,
@@ -44,10 +44,6 @@ interface ReferenceUmbrella {
 	externalUrl: string | null;
 }
 
-function isLibraryRegulationsKind(value: string): value is LibraryRegulationsKind {
-	return (LIBRARY_REGULATIONS_KIND_VALUES as readonly string[]).includes(value);
-}
-
 /**
  * Map a (kind, group) pair to the document-slug that should match the
  * `study.reference` row representing this group.
@@ -73,12 +69,14 @@ function expectedSlugForGroup(kind: LibraryRegulationsKind, group: string): stri
 
 export const load: PageServerLoad = async (event) => {
 	requireAuth(event);
-	const kindParam = event.params.kind;
-	if (!isLibraryRegulationsKind(kindParam)) {
-		throw error(404, `Unknown regulations kind: ${kindParam}`);
+	const kind = parseRegulationKind(event.params.kind);
+	if (!kind) {
+		throw error(404, `Unknown regulations kind: ${event.params.kind}`);
 	}
-	const kind = kindParam;
-	const group = event.params.group;
+	const group = parseRegulationGroup(kind, event.params.group);
+	if (!group) {
+		throw error(404, `Invalid group slug: ${event.params.group}`);
+	}
 
 	const allRefs = await listReferences();
 	const expectedSlug = expectedSlugForGroup(kind, group);

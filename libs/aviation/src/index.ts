@@ -52,6 +52,16 @@ export {
 	isSourceType,
 	type ReferenceTags,
 } from './schema/tags';
+export {
+	parseAircraftSlug,
+	parseCertSlug,
+	parseHandbookChapter,
+	parseHandbookSection,
+	parseHandbookSlug,
+	parseRegulationGroup,
+	parseRegulationKind,
+	parseRegulationSection,
+} from './slugs';
 export { type CfrDocument, CfrParseError, type CfrSectionLocator, parseCfrXml } from './sources/cfr/parser';
 export { isSourceMeta, metaPathFor, type SourceMeta } from './sources/meta';
 export { decodeReferences, decodeSources, encodeReferences, encodeSources } from './toml-codec';

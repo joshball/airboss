@@ -12,13 +12,12 @@
  */
 
 import { requireAuth } from '@ab/auth';
+import { parseRegulationKind } from '@ab/aviation';
 import { listReferences } from '@ab/bc-study';
 import {
 	externalUrlForReference,
 	LIBRARY_REGULATIONS_KIND_LABELS,
-	LIBRARY_REGULATIONS_KIND_VALUES,
 	LIBRARY_REGULATIONS_KINDS,
-	type LibraryRegulationsKind,
 	REFERENCE_KIND_LABELS,
 	REFERENCE_KINDS,
 	type ReferenceKind,
@@ -41,10 +40,6 @@ interface UmbrellaCard {
 	kind: ReferenceKind;
 	kindLabel: string;
 	externalUrl: string | null;
-}
-
-function isLibraryRegulationsKind(value: string): value is LibraryRegulationsKind {
-	return (LIBRARY_REGULATIONS_KIND_VALUES as readonly string[]).includes(value);
 }
 
 /**
@@ -71,11 +66,10 @@ function extractAcSeries(slug: string): string | null {
 
 export const load: PageServerLoad = async (event) => {
 	requireAuth(event);
-	const kindParam = event.params.kind;
-	if (!isLibraryRegulationsKind(kindParam)) {
-		throw error(404, `Unknown regulations kind: ${kindParam}`);
+	const kind = parseRegulationKind(event.params.kind);
+	if (!kind) {
+		throw error(404, `Unknown regulations kind: ${event.params.kind}`);
 	}
-	const kind = kindParam;
 
 	const refs = await listReferences();
 

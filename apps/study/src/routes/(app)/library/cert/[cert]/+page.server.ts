@@ -7,10 +7,10 @@
  */
 
 import { requireAuth } from '@ab/auth';
+import { parseCertSlug } from '@ab/aviation';
 import { getReadableReferenceIds, getReferencesForCertWithCarryover } from '@ab/bc-study';
 import {
 	CERT_APPLICABILITY_LABELS,
-	CERT_APPLICABILITY_VALUES,
 	type CertApplicability,
 	externalUrlForReference,
 	type ReferenceKind,
@@ -36,17 +36,12 @@ interface CarryoverView {
 	cards: CardView[];
 }
 
-function isCertApplicability(value: string): value is CertApplicability {
-	return (CERT_APPLICABILITY_VALUES as readonly string[]).includes(value);
-}
-
 export const load: PageServerLoad = async (event) => {
 	requireAuth(event);
-	const certParam = event.params.cert;
-	if (!isCertApplicability(certParam)) {
-		throw error(404, `Unknown cert: ${certParam}`);
+	const cert = parseCertSlug(event.params.cert);
+	if (!cert) {
+		throw error(404, `Unknown cert: ${event.params.cert}`);
 	}
-	const cert = certParam;
 
 	const bundle = await getReferencesForCertWithCarryover(cert);
 

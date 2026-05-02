@@ -9,6 +9,7 @@
  */
 
 import { requireAuth } from '@ab/auth';
+import { parseHandbookChapter, parseHandbookSlug } from '@ab/aviation';
 import {
 	getHandbookChapter,
 	getNodesCitingSection,
@@ -30,8 +31,10 @@ import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async (event) => {
 	const user = requireAuth(event);
-	const documentSlug = event.params.slug;
-	const chapterCode = event.params.chapter;
+	const documentSlug = parseHandbookSlug(event.params.slug);
+	if (!documentSlug) throw error(404, 'Handbook not found.');
+	const chapterCode = parseHandbookChapter(event.params.chapter);
+	if (!chapterCode) throw error(404, 'Chapter not found.');
 	const editionParam = event.url.searchParams.get(QUERY_PARAMS.EDITION) ?? undefined;
 
 	const ref = await getReferenceByDocument(documentSlug, { edition: editionParam }).catch(() => null);
