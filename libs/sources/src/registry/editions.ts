@@ -20,9 +20,10 @@
  *     (set, warm, write commit). Index caches in `index-cache.ts` watch
  *     this counter to know when to rebuild.
  *
- * Phase 2 ships an empty initial state. Ingestion pipelines populate the
- * map (in memory) via `commitIngestBatch`; future WPs persist edition rows
- * to Postgres so the cache survives restart.
+ * The cache starts empty on each process. Ingestion pipelines populate it
+ * via `commitIngestBatch` (in-memory) and via `warmEditionsCache()` at
+ * bootstrap (Postgres -> map). See WP `promotion-batches-persistence` for
+ * the persistence design.
  */
 
 import { and, eq, isNull } from 'drizzle-orm';
