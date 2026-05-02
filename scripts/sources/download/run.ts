@@ -7,10 +7,11 @@
  */
 
 import { resolveCacheRoot } from '../../lib/cache';
-import { setColorEnabled } from '../../lib/colors';
+import { dim, red, setColorEnabled, yellow } from '../../lib/colors';
 import { describeError } from '../../lib/error';
 import { ALL_CORPORA, type CliArgs, HELP_TEXT, parseArgs } from './args';
 import { executePlan, runVerify } from './execute';
+import { dropPartialDownloads, partialLogPath, planIdKey, readPartialDownloads } from './partial-log';
 import { buildPlans, type DownloadPlan } from './plans';
 import { type CorpusResult, printSummary, printVerifyTable } from './summary';
 
@@ -63,6 +64,12 @@ export async function runDownloadSources(opts: RunOptions = {}): Promise<number>
 		console.log(`Dry run -- ${plans.length} planned downloads (cache root ${cacheRoot}):`);
 	} else {
 		console.log(`Fetching ${plans.length} sources to ${cacheRoot}`);
+		surfacePreviousPartialLog(cacheRoot, plans);
+		// Drop only the prior records for plans this run will actually touch so
+		// follow-up runs (with different `--corpus=` filtering) can still see
+		// failures the current run won't address. Dry runs don't touch the log.
+		const planIds = new Set(plans.map((p) => planIdKey(p)));
+		dropPartialDownloads(cacheRoot, planIds);
 	}
 
 	const results: CorpusResult[] = ALL_CORPORA.filter((c) => args.corpora.has(c)).map((corpus) => ({
@@ -86,13 +93,17 @@ export async function runDownloadSources(opts: RunOptions = {}): Promise<number>
 		const result = results.find((r) => r.corpus === corpus);
 		if (result === undefined) continue;
 		for (const plan of corpusPlans) {
-			await executePlan(plan, args, result);
+			await executePlan(plan, args, result, args.dryRun ? undefined : { cacheRoot });
 		}
 	}
 
 	printSummary(results, cacheRoot, args.dryRun);
 
 	const totalErrors = results.reduce((acc, r) => acc + r.errors, 0);
+
+	if (!args.dryRun && totalErrors > 0) {
+		printFailedPlansSummary(cacheRoot);
+	}
 
 	// Piggyback errata discovery on a successful download. Skipped on dry-run
 	// (no real download happened) and on verify-only runs (which return earlier
@@ -103,6 +114,50 @@ export async function runDownloadSources(opts: RunOptions = {}): Promise<number>
 	}
 
 	return totalErrors > 0 ? 1 : 0;
+}
+
+/**
+ * If the previous run left a partial-download log behind, surface a count and
+ * (when the operator did NOT pass `--corpus=` filtering this run out) note
+ * that the corpora at issue are part of this invocation. The freshness gate
+ * does the actual retry: previously-successful entries skip via manifest
+ * match, previously-failed entries fall through to a fresh fetch attempt.
+ */
+function surfacePreviousPartialLog(cacheRoot: string, plans: readonly DownloadPlan[]): void {
+	const records = readPartialDownloads(cacheRoot);
+	if (records.length === 0) return;
+	const planIds = new Set(plans.map((p) => planIdKey(p)));
+	const retrying = records.filter((r) => planIds.has(planIdKey(r)));
+	const skipping = records.length - retrying.length;
+	console.log('');
+	console.log(yellow(`${records.length} partial downloads from previous run:`));
+	console.log(`  ${dim(`(log: ${partialLogPath(cacheRoot)})`)}`);
+	if (retrying.length > 0) {
+		console.log(`  retrying ${retrying.length} (still in this run's plan set; freshness gate falls through)`);
+	}
+	if (skipping > 0) {
+		console.log(
+			`  skipping ${skipping} (filtered out by --corpus= or --include-handbooks-extras; pass the matching flag to retry)`,
+		);
+	}
+}
+
+/** End-of-run "failures by plan" block + retry hint. */
+function printFailedPlansSummary(cacheRoot: string): void {
+	const records = readPartialDownloads(cacheRoot);
+	if (records.length === 0) return;
+	console.log('');
+	console.log(red(`Failed plans (${records.length}):`));
+	for (const r of records) {
+		const ordinal = r.ordinal !== null ? ` ord=${r.ordinal}` : '';
+		const edition = r.edition !== null ? `@${r.edition}` : '';
+		console.log(`  ${r.corpus}/${r.doc}${edition} ${r.kind}${ordinal}`);
+		console.log(`    ${r.url}`);
+		console.log(`    ${dim(r.error)}`);
+	}
+	console.log('');
+	console.log(`(Re-run \`bun run sources download\` to retry; cached files are skipped via manifest match.)`);
+	console.log(`(Log: ${partialLogPath(cacheRoot)})`);
 }
 
 async function maybeRunDiscoveryPiggyback(cacheRoot: string): Promise<void> {

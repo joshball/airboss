@@ -152,7 +152,20 @@ Exits 0 when every URL returns 2xx, 1 when any URL is non-2xx or unreachable. Us
 
 ### When a URL is wrong
 
-The FAA periodically rotates PDF URLs. The verified list lives in `scripts/sources/download/plans.ts` (`AC_TARGETS`, `ACS_TARGETS`, `HANDBOOKS_EXTRAS_TARGETS`, `AIM_PDF_URL`). Each target has a single URL -- no fallbacks. If `--verify` flags a target as 404, edit the URL in the file and re-run. Operator commits the change.
+The FAA periodically rotates PDF URLs. Per [ADR 022](../docs/decisions/022-chapter-source-ingestion/decision.md), the verified URL inventory lives in YAML under `scripts/sources/config/`:
+
+| Corpus            | YAML file                               |
+| ----------------- | --------------------------------------- |
+| Advisory Circulars| `scripts/sources/config/ac.yaml`        |
+| ACS               | `scripts/sources/config/acs.yaml`       |
+| AIM               | `scripts/sources/config/aim.yaml`       |
+| CFR               | `scripts/sources/config/regs.yaml`      |
+| Handbooks (whole) | `scripts/sources/config/handbooks-extras.yaml` |
+| Handbooks (chapter)| `scripts/sources/config/handbooks/<slug>.yaml` |
+
+If `bun run sources verify-urls` (or `bun run sources download --verify`) flags a target as 404, edit the matching `entry.url` (or `whole_doc.url` / chapter-pdf URL for handbook YAMLs), re-run `bun run sources verify-urls` to confirm, and commit. No code change is needed; both the TS downloader and the Python ingest tool read the same YAMLs.
+
+When the FAA rotates a URL alongside a revision bump, the YAML's `edition` field also needs to advance. Confirm against the [FAA Advisory Circular search](https://www.faa.gov/regulations_policies/advisory_circulars/) or the publisher's index page for the doc.
 
 ### Not in CI
 

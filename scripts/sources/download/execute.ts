@@ -18,10 +18,20 @@ import { evaluateFreshness } from './freshness';
 import { downloadHtmlFile } from './html-fetch';
 import { downloadFile, headRequest } from './http';
 import { type ManifestEntry, readManifestEntry, writeManifestEntry } from './manifest';
+import { appendPartialDownload } from './partial-log';
 import { type DownloadPlan, SCHEMA_VERSION } from './plans';
 import type { CorpusResult, VerifyRow } from './summary';
 
-export async function executePlan(plan: DownloadPlan, args: CliArgs, result: CorpusResult): Promise<void> {
+export interface ExecuteContext {
+	readonly cacheRoot: string;
+}
+
+export async function executePlan(
+	plan: DownloadPlan,
+	args: CliArgs,
+	result: CorpusResult,
+	ctx?: ExecuteContext,
+): Promise<void> {
 	const label = describePlan(plan);
 
 	if (args.dryRun) {
@@ -72,6 +82,13 @@ export async function executePlan(plan: DownloadPlan, args: CliArgs, result: Cor
 	} catch (error) {
 		result.errors += 1;
 		console.error(`    ${red('error')} ${label}: ${describeError(error)}`);
+		if (ctx !== undefined) {
+			try {
+				appendPartialDownload(ctx.cacheRoot, plan, error);
+			} catch (logError) {
+				console.error(`    ${red('error')} (failed to record partial-download log: ${describeError(logError)})`);
+			}
+		}
 	}
 }
 
