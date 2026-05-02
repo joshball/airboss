@@ -183,7 +183,7 @@ The implementation PR has logical groupings that minimize merge friction. Sugges
 4. **TS download path: AIM HTML.** Section + appendix. Manifest extension. Tests.
 5. **Python ingest: chapter-PDF mode.** `fetch.py` + `chapter_plaintext.py` chapter-mode branch. Verify against PHAK end-to-end.
 6. **Python ingest: AIM HTML extraction.** `aim_html_extract.py`. Verify against AIM end-to-end.
-7. **CLI: verify-urls + inventory.** Both commands. Generate `docs/sources/INVENTORY.md`.
+7. **CLI: verify-urls + inventory.** Both commands. Generate `docs/ingestion-pipeline/inventory.md`.
 8. **ADR 022.** Records the decisions above.
 9. **Doc sweep.** STORAGE.md, ADR 020, related work-packages.
 

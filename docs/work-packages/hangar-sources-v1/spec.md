@@ -13,13 +13,13 @@ The interactive operations surface for source documents. `/sources` becomes the 
 
 Orchestrator: [20260423-hangar-finish-plan.md](../../work/todos/20260423-hangar-finish-plan.md)
 Locked plan: [20260422-hangar-data-management-plan.md](../../work/todos/20260422-hangar-data-management-plan.md)
-Reference flow doc: [REFERENCE_SYSTEM_FLOW.md](../../platform/REFERENCE_SYSTEM_FLOW.md)
+Reference flow doc: [REFERENCE_SYSTEM_FLOW.md](../../ingestion-pipeline/reference-system-flow.md)
 
 ## In scope
 
 ### `/sources` index — interactive flow diagram
 
-Primary artifact. An SVG / Svelte-component rendering of the pipeline from [REFERENCE_SYSTEM_FLOW.md](../../platform/REFERENCE_SYSTEM_FLOW.md). Every node and every bracketed affordance is live.
+Primary artifact. An SVG / Svelte-component rendering of the pipeline from [REFERENCE_SYSTEM_FLOW.md](../../ingestion-pipeline/reference-system-flow.md). Every node and every bracketed affordance is live.
 
 Nodes (top -> bottom):
 

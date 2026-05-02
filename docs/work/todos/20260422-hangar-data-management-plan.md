@@ -7,7 +7,7 @@ Status: draft -- awaits user sign-off before work packages are authored.
 Companion reading:
 
 - [FIRC hangar / ops / downloader survey](./20260422-firc-hangar-ops-survey.md)
-- [Reference system flow](../../platform/REFERENCE_SYSTEM_FLOW.md)
+- [Reference system flow](../../ingestion-pipeline/reference-system-flow.md)
 - [Reference system architecture](./20260422-reference-system-architecture.md)
 
 ## TL;DR
@@ -50,7 +50,7 @@ One app (`apps/hangar/`), one route family (`/sources`), one DB table if needed 
 
 ### The index page -- interactive flow diagram
 
-**Primary artifact. The HTML version of [REFERENCE_SYSTEM_FLOW.md](../../platform/REFERENCE_SYSTEM_FLOW.md).**
+**Primary artifact. The HTML version of [REFERENCE_SYSTEM_FLOW.md](../../ingestion-pipeline/reference-system-flow.md).**
 
 Top half of `/sources` renders the data-flow diagram as an interactive SVG / Svelte-component tree. Each node in the flow is a clickable affordance:
 

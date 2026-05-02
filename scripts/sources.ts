@@ -120,7 +120,7 @@ const COMMAND_HELP: Record<string, CommandHelp> = {
 			'scripts/sources/extract.ts',
 			'scripts/sources/extract/handbooks.ts',
 			'tools/handbook-ingest/README.md',
-			'docs/platform/HANDBOOK_INGESTION_STRATEGIES.md',
+			'docs/ingestion-pipeline/handbook-ingestion-strategies.md',
 			'docs/work-packages/handbook-ingestion-and-reader/',
 		],
 	},
@@ -141,16 +141,16 @@ after a suspected FAA URL rotation.`,
 		],
 	},
 	inventory: {
-		summary: 'Regenerate docs/sources/INVENTORY.md from YAML config + cache manifests',
+		summary: 'Regenerate docs/ingestion-pipeline/inventory.md from YAML config + cache manifests',
 		what: `Walks every YAML config + every cache manifest and emits a per-corpus markdown report. The output is idempotent: same input bytes = same output bytes. One timestamp at the top; no timestamps inside section bodies. Per-corpus tables show doc name, source URL, cache filename, SHA-256 (12-char prefix), and last-fetched date.
 
-  bun run sources inventory                    # writes docs/sources/INVENTORY.md
+  bun run sources inventory                    # writes docs/ingestion-pipeline/inventory.md
   bun run sources inventory --help             # show flags`,
 		why: 'The inventory is the human-readable index of every byte the project pulls from publishers. Operators git-diff INVENTORY.md to see what changed across cache regenerations. Regenerable + sortedstable means the diff stays small even when one doc rotates.',
 		how: "Reads YAML configs via the same loader the downloader uses. Reads cache manifests via the manifest module. SHA-256 prefix is 12 hex chars (matches git's full-prefix convention).",
 		links: [
 			'scripts/sources/inventory.ts',
-			'docs/sources/INVENTORY.md',
+			'docs/ingestion-pipeline/inventory.md',
 			'docs/decisions/022-chapter-source-ingestion/decision.md',
 		],
 	},

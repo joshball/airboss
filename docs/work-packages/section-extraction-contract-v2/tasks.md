@@ -126,9 +126,9 @@ The phak re-run forced two contract amendments shipped alongside it. See spec §
 
 ## Phase 5 -- Documentation updates (post-#355 polish sweep)
 
-- [x] Update `docs/agents/section-extraction-strategies.md`: replace "current contract gaps" section with "contract v3 in production" + numbers from PR #355.
-- [x] Update `docs/agents/handbook-ingest-pipeline.md`: known-issue on truncation moves from "current as of 2026-04-29" to "resolved in contract v2/v3 + chapter-source-ingestion (#332/#335/#337/#342/#355)."
-- [x] Update `docs/agents/handbook-onboarding-checklist.md`: per-handbook quirks table no longer says "PHAK chapters too long for 60K cap" (resolved); cap-sizing guidance points at `measure_chapter_sizes.py`.
+- [x] Update `docs/ingestion-pipeline/section-extraction-strategies.md`: replace "current contract gaps" section with "contract v3 in production" + numbers from PR #355.
+- [x] Update `docs/ingestion-pipeline/handbook-ingest-pipeline.md`: known-issue on truncation moves from "current as of 2026-04-29" to "resolved in contract v2/v3 + chapter-source-ingestion (#332/#335/#337/#342/#355)."
+- [x] Update `docs/ingestion-pipeline/handbook-onboarding-checklist.md`: per-handbook quirks table no longer says "PHAK chapters too long for 60K cap" (resolved); cap-sizing guidance points at `measure_chapter_sizes.py`.
 - [x] Update `docs/work/NOW.md`: "PHAK regenerated" entry now reflects 913 entries (post-PR-355) instead of the v1 baseline ~559.
 - [x] Delete the `phak-llm-v1-baseline` tag locally and on origin (acceptance comparison done; tag earned its keep, no longer needed).
 

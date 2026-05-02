@@ -74,7 +74,7 @@ The single critical finding is partial-state recovery on download failures: when
 ### MAJOR: `bun run setup` does not warm the source cache; new contributors hit a wall on first `bun run sources extract`
 
 - **File**: `scripts/setup.ts:113-141`
-- **Problem**: A fresh checkout runs `bun run setup`, which configures `/etc/hosts`, deps, `.env`, db container, schema, and dev users. It does NOT run `bun run sources download` (or even mention it). The contributor then runs `bun run sources extract handbooks phak ...` and hits `manifest not found` errors deep in the pipeline because no source bytes exist in the cache. Per the runbook in `docs/agents/handbook-onboarding-checklist.md`, this is expected operator workflow; but the setup script doesn't mention it.
+- **Problem**: A fresh checkout runs `bun run setup`, which configures `/etc/hosts`, deps, `.env`, db container, schema, and dev users. It does NOT run `bun run sources download` (or even mention it). The contributor then runs `bun run sources extract handbooks phak ...` and hits `manifest not found` errors deep in the pipeline because no source bytes exist in the cache. Per the runbook in `docs/ingestion-pipeline/handbook-onboarding-checklist.md`, this is expected operator workflow; but the setup script doesn't mention it.
 - **Fix**: At the end of `setup.ts:139`, add a one-line pointer:
     ```text
     Ready. Start the app with: bun run dev
@@ -96,8 +96,8 @@ The single critical finding is partial-state recovery on download failures: when
 ### MINOR: `inventory` writes the byte count to stdout but does not show what changed
 
 - **File**: `scripts/sources/inventory.ts:332`
-- **Problem**: `Wrote /Users/foo/.../docs/sources/INVENTORY.md (54321 bytes).` is the entire output. Operators run `bun run sources inventory` after a `bun run sources download`, expecting to see what changed. There's no `git diff docs/sources/INVENTORY.md` hint, and no "X corpora updated this run; Y rows changed" summary. The skill prompt explicitly calls out "is there a way to see only the diff vs last run?" -- there isn't.
-- **Fix**: After writing, run `git diff --stat docs/sources/INVENTORY.md` (or read the previous file content via `readFileSync` before the write and diff manually) and print a 1-line summary: `(M lines changed; run \`git diff docs/sources/INVENTORY.md\` to inspect)`. If git is not available (CI sandboxes), fall back to "Wrote ... (54321 bytes). Compare with previous version via git diff."
+- **Problem**: `Wrote /Users/foo/.../docs/ingestion-pipeline/inventory.md (54321 bytes).` is the entire output. Operators run `bun run sources inventory` after a `bun run sources download`, expecting to see what changed. There's no `git diff docs/ingestion-pipeline/inventory.md` hint, and no "X corpora updated this run; Y rows changed" summary. The skill prompt explicitly calls out "is there a way to see only the diff vs last run?" -- there isn't.
+- **Fix**: After writing, run `git diff --stat docs/ingestion-pipeline/inventory.md` (or read the previous file content via `readFileSync` before the write and diff manually) and print a 1-line summary: `(M lines changed; run \`git diff docs/ingestion-pipeline/inventory.md\` to inspect)`. If git is not available (CI sandboxes), fall back to "Wrote ... (54321 bytes). Compare with previous version via git diff."
 
 ### MINOR: `--fix` doesn't say which file got which stamp; only counts
 

@@ -1,10 +1,10 @@
 /**
- * `bun run sources inventory` -- regenerate `docs/sources/INVENTORY.md`.
+ * `bun run sources inventory` -- regenerate `docs/ingestion-pipeline/inventory.md`.
  *
  * Walks every YAML config + every cache manifest and emits a per-corpus
  * markdown report. The output is idempotent: same input bytes = same
  * output bytes. One timestamp at the top; no timestamps inside section
- * bodies. Operators can `git diff docs/sources/INVENTORY.md` to see what
+ * bodies. Operators can `git diff docs/ingestion-pipeline/inventory.md` to see what
  * changed in the source cache.
  *
  * Per ADR 022, SHA-256 prefix is 12 hex chars (matches git's full-prefix

@@ -398,7 +398,7 @@ A static template file at `tools/handbook-ingest/ingest/prompts/section-extracti
 - `tools/handbook-ingest/tests/test_chapter_plaintext.py`
 - `tools/handbook-ingest/tests/test_prompt_emit.py`
 - `tools/handbook-ingest/tests/test_sections_via_sidecar.py`
-- `docs/agents/section-extraction-prompt-strategy.md` -- the user-facing pattern doc. Scope vs this design (reviewer tiny): this `design.md` captures *why* the architecture is shaped the way it is and survives in `docs/work-packages/.archive/` after the work package ships. The pattern doc at `docs/agents/` is the *how-to* for future agents and is the file CLAUDE.md's "Before You Build" links to. Contents: the three-step flow (run prompt strategy -> paste orchestrator into a fresh CC session -> run compare strategy), the run-dir layout, the `meta.json` schema, common failure modes. Short (under 200 lines), opinionated, no architectural justification.
+- `docs/ingestion-pipeline/section-extraction-prompt-strategy.md` -- the user-facing pattern doc. Scope vs this design (reviewer tiny): this `design.md` captures *why* the architecture is shaped the way it is and survives in `docs/work-packages/.archive/` after the work package ships. The pattern doc at `docs/agents/` is the *how-to* for future agents and is the file CLAUDE.md's "Before You Build" links to. Contents: the three-step flow (run prompt strategy -> paste orchestrator into a fresh CC session -> run compare strategy), the run-dir layout, the `meta.json` schema, common failure modes. Short (under 200 lines), opinionated, no architectural justification.
 
 ### Files modified
 
@@ -407,7 +407,7 @@ A static template file at `tools/handbook-ingest/ingest/prompts/section-extracti
 - `tools/handbook-ingest/ingest/sections_compare.py` -- accept nodes from the sidecar reader; docstring update only.
 - `tools/handbook-ingest/ingest/config/{phak,afh,avwx}.yaml` -- `section_strategy: toc` stays. Rename `llm:` block to `prompt:`. Remove `per_chapter_section_strategy: {}` field.
 - `tools/handbook-ingest/README.md` -- point at the new pattern doc.
-- `CLAUDE.md` "Before You Build" section -- add a new bullet "Source ingestion / handbook section extraction" pointing at `docs/agents/section-extraction-prompt-strategy.md` (reviewer tiny).
+- `CLAUDE.md` "Before You Build" section -- add a new bullet "Source ingestion / handbook section extraction" pointing at `docs/ingestion-pipeline/section-extraction-prompt-strategy.md` (reviewer tiny).
 - `~/.claude/projects/-Users-joshua-src--me-aviation-airboss/memory/feedback_llm_comparison_runner_is_interactive.md` -- update body to cite this design and distinguish emitting-session vs paste-driven-session dispatch (reviewer C1).
 
 ### Sidecar write policy (REVISED per reviewer #7-3)
@@ -443,7 +443,7 @@ if raw_strategy not in VALID_STRATEGIES:
         raise ConfigError(
             f"{config_path}: section_strategy: llm has been removed. "
             f"Rename to `prompt` (no API key required). "
-            f"See docs/agents/section-extraction-prompt-strategy.md."
+            f"See docs/ingestion-pipeline/section-extraction-prompt-strategy.md."
         )
     raise ConfigError(
         f"{config_path}: unknown section_strategy `{raw_strategy}`. "

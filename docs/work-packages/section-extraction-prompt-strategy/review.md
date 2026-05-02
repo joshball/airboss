@@ -178,7 +178,7 @@ Lists `{title}`, `{sidecar_path}`, `{output_path}`, `{chapter_ordinal}`, `{page_
 ## Tiny
 
 - [design.md L165](design.md#L165) says "3-line header (WHAT, WHY, HOW)" but the example at [design.md L172-176](design.md#L172-L176) is 3 *labels* on 6 lines. Update the spec to "3-section header" or restructure the example.
-- [design.md L343](design.md#L343) adds `docs/agents/section-extraction-prompt-strategy.md` but the design doesn't explain its scope vs this design doc. Is it the user-facing pattern doc that survives after this work-package is archived? Say so explicitly.
+- [design.md L343](design.md#L343) adds `docs/ingestion-pipeline/section-extraction-prompt-strategy.md` but the design doesn't explain its scope vs this design doc. Is it the user-facing pattern doc that survives after this work-package is archived? Say so explicitly.
 - [design.md L350](design.md#L350): "the `llm:` block stays (still controls `chapter_text_max_chars`)." Rename it. `llm:` is now a misnomer — there's no LLM in this CLI's path. Rename to `prompt:` or `chapter_text:`. One-line YAML migration; loud naming is cheap.
 - [design.md L352](design.md#L352): "CLAUDE.md 'Before You Build' — link to the new pattern doc." Specify which bullet (or add a new "Source ingestion / handbook extraction" bullet).
 

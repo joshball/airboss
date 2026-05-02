@@ -25,7 +25,7 @@ The Python ingest tool (`tools/handbook-ingest/`) reads from the same `handbooks
 | ----------------------------- | ------------------------------------------------------------------------------------- |
 | `sources download`            | Fetch source bytes (CFR XML, AIM, ACs, ACS, handbooks) into the cache                 |
 | `sources verify-urls`         | HEAD-check every configured URL (network); reports 404s with structured remediation   |
-| `sources inventory`           | Regenerate `docs/sources/INVENTORY.md` from YAML config + cache manifests             |
+| `sources inventory`           | Regenerate `docs/ingestion-pipeline/inventory.md` from YAML config + cache manifests             |
 | `sources register <corpus>`   | Walk a derivative tree and register entries in the `@ab/sources` registry             |
 | `sources extract <pipeline>`  | Run a source-extraction pipeline (currently: `handbooks` Python TOC + LLM strategies) |
 
@@ -209,4 +209,4 @@ bun run sources extract handbooks phak --edition FAA-H-8083-25C --strategy compa
 
 Currently routes to a single sub-pipeline: `handbooks`, which dispatches to `python -m ingest` from `tools/handbook-ingest/`. Uses `tools/handbook-ingest/.venv/bin/python` if present, otherwise falls back to `python3` on PATH. All flags after `handbooks` pass through to argparse on the Python side.
 
-See [docs/platform/HANDBOOK_INGESTION_STRATEGIES.md](../docs/platform/HANDBOOK_INGESTION_STRATEGIES.md) and [docs/work-packages/handbook-ingestion-and-reader/](../docs/work-packages/handbook-ingestion-and-reader/).
+See [docs/ingestion-pipeline/handbook-ingestion-strategies.md](../docs/ingestion-pipeline/handbook-ingestion-strategies.md) and [docs/work-packages/handbook-ingestion-and-reader/](../docs/work-packages/handbook-ingestion-and-reader/).

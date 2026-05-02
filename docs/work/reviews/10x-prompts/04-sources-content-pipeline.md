@@ -32,8 +32,8 @@ If pipeline code calls into other libs, READ for context but do not raise findin
 ## Project context the reviewers must respect
 - Read `CLAUDE.md` at repo root.
 - Read ADR 018 (`docs/decisions/018-source-artifact-storage-policy/decision.md`) and `docs/platform/STORAGE.md` -- source bytes live in `~/Documents/airboss-handbook-cache/` (override via `AIRBOSS_HANDBOOK_CACHE`). LFS plumbing is dormant. Extracted derivatives (markdown, figure PNGs, table HTML, manifest.json) stay inline. Generated artifacts (DB rows, indexes) stay out of repo.
-- Read `docs/agents/section-extraction-prompt-strategy.md` for the paste-to-Claude flow used by ingest.
-- Read `docs/agents/reference-citations-pattern.md` for citation rendering rules.
+- Read `docs/ingestion-pipeline/section-extraction-prompt-strategy.md` for the paste-to-Claude flow used by ingest.
+- Read `docs/ingestion-pipeline/reference-citations-pattern.md` for citation rendering rules.
 - Hard rules: no raw SQL, no `any`, no magic strings, `@ab/*` aliases, IDs via `createId()`.
 
 ## Reviewers to launch (floor -- detect stack and add more if appropriate)

@@ -127,12 +127,12 @@ Extend handbook configs at `scripts/sources/config/handbooks/<slug>.yaml` (post-
 
 - [ ] Create `scripts/sources/inventory.ts`.
 - [ ] Walks every YAML config and every cache manifest.
-- [ ] Emits `docs/sources/INVENTORY.md` with per-corpus tables.
+- [ ] Emits `docs/ingestion-pipeline/inventory.md` with per-corpus tables.
 - [ ] One timestamp at the top; no timestamps inside section bodies (idempotent regeneration).
 - [ ] Sorted: per-corpus, per-doc, per-asset.
 - [ ] Add unit test asserting byte-equal output for the same input.
 - [ ] Register `inventory` subcommand in `scripts/sources.ts`.
-- [ ] Run `bun run sources inventory`; commit the generated `docs/sources/INVENTORY.md`.
+- [ ] Run `bun run sources inventory`; commit the generated `docs/ingestion-pipeline/inventory.md`.
 
 - [ ] `bun run check` clean.
 - [ ] Commit: `feat(sources): verify-urls + inventory commands`.
@@ -166,7 +166,7 @@ Extend handbook configs at `scripts/sources/config/handbooks/<slug>.yaml` (post-
 - [ ] Run `bun run sources download avwx`. Expect whole-doc only.
 - [ ] Run `bun run sources download aim`. Expect 48 sections (per `sections_per_chapter` empirical counts) + 5 appendices + bundled PDF.
 - [ ] Run `bun run sources verify-urls`. Expect zero 404s.
-- [ ] Run `bun run sources inventory`. Verify `docs/sources/INVENTORY.md` is generated, sorted, every URL is clickable.
+- [ ] Run `bun run sources inventory`. Verify `docs/ingestion-pipeline/inventory.md` is generated, sorted, every URL is clickable.
 - [ ] Re-run `bun run sources inventory`. Expect byte-equal output.
 - [ ] Run `bun run sources extract handbooks phak --strategy prompt`. Verify ch 7 sidecar contains the 5 expected literals.
 - [ ] `bun test` clean for all changed-area tests.

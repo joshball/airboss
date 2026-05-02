@@ -53,9 +53,9 @@ correctness fix, not polish.
 
 ## Anchors
 
-- [Section extraction strategies](../../agents/section-extraction-strategies.md). The current TOC + LLM behavior, the three patterns observed in the phak run, and the proposed mutual-reviewer framing.
-- [Section extraction prompt strategy](../../agents/section-extraction-prompt-strategy.md). The no-API-key paste flow this contract drives.
-- [Handbook ingest pipeline](../../agents/handbook-ingest-pipeline.md). End-to-end pipeline; this WP touches phase 3b (`--strategy prompt`) only.
+- [Section extraction strategies](../../ingestion-pipeline/section-extraction-strategies.md). The current TOC + LLM behavior, the three patterns observed in the phak run, and the proposed mutual-reviewer framing.
+- [Section extraction prompt strategy](../../ingestion-pipeline/section-extraction-prompt-strategy.md). The no-API-key paste flow this contract drives.
+- [Handbook ingest pipeline](../../ingestion-pipeline/handbook-ingest-pipeline.md). End-to-end pipeline; this WP touches phase 3b (`--strategy prompt`) only.
 - The current contract: [tools/handbook-ingest/ingest/prompts/section_tree.md](../../../tools/handbook-ingest/ingest/prompts/section_tree.md).
 - The current parameters: [tools/handbook-ingest/ingest/prompts/section-extraction/parameters.md](../../../tools/handbook-ingest/ingest/prompts/section-extraction/parameters.md).
 - The current per-chapter prompt template: [tools/handbook-ingest/ingest/prompts/section-extraction/chapter.md](../../../tools/handbook-ingest/ingest/prompts/section-extraction/chapter.md).

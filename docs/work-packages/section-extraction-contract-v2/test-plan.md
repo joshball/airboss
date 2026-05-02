@@ -107,9 +107,9 @@ Compare is deterministic given fixed inputs. Re-running `--strategy compare` aga
 
 ### Test 5.1 -- doc cross-references
 
-1. Open `docs/agents/section-extraction-strategies.md`. Verify contract v3 referenced; truncation no longer described as "current".
-2. Open `docs/agents/handbook-ingest-pipeline.md`. Verify truncation noted as "resolved in PR #332/#335 + #337" with link to ADR 022.
-3. Open `docs/agents/handbook-onboarding-checklist.md`. Verify cap-sizing guidance points at `measure_chapter_sizes.py`. Verify the per-handbook quirks table no longer says "PHAK chapters too long for 60K cap".
+1. Open `docs/ingestion-pipeline/section-extraction-strategies.md`. Verify contract v3 referenced; truncation no longer described as "current".
+2. Open `docs/ingestion-pipeline/handbook-ingest-pipeline.md`. Verify truncation noted as "resolved in PR #332/#335 + #337" with link to ADR 022.
+3. Open `docs/ingestion-pipeline/handbook-onboarding-checklist.md`. Verify cap-sizing guidance points at `measure_chapter_sizes.py`. Verify the per-handbook quirks table no longer says "PHAK chapters too long for 60K cap".
 4. Open `docs/work/NOW.md`. Verify the chapter-source-ingestion note carries the post-#355 entry count (913) instead of the v1 baseline (~559).
 
 ### Test 5.2 -- example walkthrough
