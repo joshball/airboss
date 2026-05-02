@@ -40,8 +40,8 @@
 
 import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
-import { homedir } from 'node:os';
 import { join } from 'node:path';
+import { defaultCacheRoot } from '../cache.ts';
 import { extractPdf } from '../pdf/index.ts';
 import { __editions_internal__ } from '../registry/editions.ts';
 import { getEntryLifecycle, recordPromotion } from '../registry/lifecycle.ts';
@@ -392,10 +392,6 @@ export interface CliArgs {
 	readonly cacheRoot: string;
 	readonly derivativeRoot: string;
 	readonly help: boolean;
-}
-
-function defaultCacheRoot(): string {
-	return process.env.AIRBOSS_HANDBOOK_CACHE ?? join(homedir(), 'Documents', 'airboss-handbook-cache');
 }
 
 export function parseCliArgs(argv: readonly string[]): CliArgs | { error: string } {

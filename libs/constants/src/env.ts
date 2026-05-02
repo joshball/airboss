@@ -26,6 +26,23 @@ export const ENV_VARS = {
 	 * Refuses to activate when `NODE_ENV=production`.
 	 */
 	HANGAR_EDITION_STUB_URL: 'HANGAR_EDITION_STUB_URL',
+	/**
+	 * Override for the developer-local source cache root. Defaults to
+	 * `~/Documents/airboss-handbook-cache/`. Read by every ingestion module +
+	 * downloader. Per ADR 018; resolution lives in `@ab/sources/cache`.
+	 */
+	AIRBOSS_HANDBOOK_CACHE: 'AIRBOSS_HANDBOOK_CACHE',
+	/**
+	 * Suppresses the dev-server discover-errata banner ("N unreviewed
+	 * candidates"). Values: `1` | `true` to silence; anything else (or unset)
+	 * keeps the banner.
+	 */
+	AIRBOSS_QUIET: 'AIRBOSS_QUIET',
+	/**
+	 * GitHub token used by `gh issue create` in the discover-errata flow. When
+	 * unset the orchestrator skips the API call and logs an explicit message.
+	 */
+	GH_TOKEN: 'GH_TOKEN',
 } as const;
 
 export type EnvVarName = (typeof ENV_VARS)[keyof typeof ENV_VARS];

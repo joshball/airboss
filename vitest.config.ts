@@ -40,6 +40,7 @@ const aliases = {
 	'@ab/sources/aim': resolve('./libs/sources/src/aim/index.ts'),
 	'@ab/sources/ac': resolve('./libs/sources/src/ac/index.ts'),
 	'@ab/sources/acs': resolve('./libs/sources/src/acs/index.ts'),
+	'@ab/sources/cache': resolve('./libs/sources/src/cache.ts'),
 	'@ab/sources': resolve('./libs/sources/src/index.ts'),
 };
 

@@ -45,6 +45,7 @@ export {
 	hydrateRegsFromDerivatives,
 	PHASE_9_BOOTSTRAP_REVIEWER_ID,
 } from './bootstrap.ts';
+export { defaultCacheRoot, expandHome, resolveCacheRoot } from './cache.ts';
 export { isParseError, parseIdentifier } from './parser.ts';
 export { getCorpusResolver, productionRegistry } from './registry/index.ts';
 export { NULL_REGISTRY } from './registry-stub.ts';

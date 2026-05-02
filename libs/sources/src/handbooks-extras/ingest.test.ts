@@ -11,6 +11,7 @@ import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { defaultCacheRoot } from '../cache.ts';
 import { resetRegistry } from '../registry/__test_helpers__.ts';
 import { _setHandbooksExtrasYamlPath, readExtrasCorpusIndex } from './derivative-reader.ts';
 import { DOC_ID_TO_FRIENDLY, parseCliArgs, runHandbooksExtrasIngest } from './ingest.ts';
@@ -175,8 +176,7 @@ describe('runHandbooksExtrasIngest -- empty cache', () => {
 });
 
 describe('runHandbooksExtrasIngest -- live cache (smoke)', () => {
-	const liveCache =
-		process.env.AIRBOSS_HANDBOOK_CACHE ?? join(process.env.HOME ?? '', 'Documents', 'airboss-handbook-cache');
+	const liveCache = defaultCacheRoot();
 	const haveLiveCache = existsSync(join(liveCache, 'handbooks', 'faa-h-8083-2', 'faa-h-8083-2.pdf'));
 
 	(haveLiveCache ? it : it.skip)(
