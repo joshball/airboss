@@ -131,6 +131,12 @@ export function createAuth(options: { secret: string; baseURL?: string; isDev?: 
 
 		emailAndPassword: {
 			enabled: true,
+			// airboss is a private/hosted-only product. Sign-in is enabled, but
+			// the public sign-up endpoint stays disabled -- accounts are seeded
+			// by the operator (admin user-writes in @ab/bc-hangar). Closing this
+			// gates BOTH the HTTP route and the server-side `auth.api.signUpEmail`
+			// (better-auth's sign-up route checks this before any other logic).
+			disableSignUp: true,
 			requireEmailVerification: false,
 			sendResetPassword: async ({ user, url }) => {
 				const { subject, html } = resetPasswordEmail(url, user.name);
