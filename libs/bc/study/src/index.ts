@@ -507,6 +507,7 @@ export type {
 } from './sessions';
 export {
 	buildEnginePools,
+	buildSlotUpdateSet,
 	commitSession,
 	completeSession,
 	getResumableSession,
@@ -517,6 +518,7 @@ export {
 	getSessions,
 	getStreakDays,
 	previewSession,
+	ReviewNotFoundError,
 	recordItemResult,
 	SessionNotFoundError,
 	SessionSlotNotFoundError,

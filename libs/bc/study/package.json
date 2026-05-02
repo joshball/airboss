@@ -3,6 +3,7 @@
 	"private": true,
 	"type": "module",
 	"dependencies": {
+		"@ab/audit": "workspace:*",
 		"@ab/auth": "workspace:*",
 		"@ab/bc-sim": "workspace:*",
 		"@ab/constants": "workspace:*",
