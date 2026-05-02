@@ -13,8 +13,12 @@
  *                              risk-mgmt / instructor / IFH / IPH / AMT-G /
  *                              AMT-P). Produces ONE reference_section row at
  *                              depth 0, level 'document'.
+ *   - `kind: 'aim'`        -> AIM adapter. Walks a flat entries[] and builds
+ *                              the chapter/section/paragraph tree from
+ *                              dotted code prefixes; appendices + glossary
+ *                              entries land at depth 0 alongside chapters.
  *
- * Today this script only walks `handbooks/`. Future corpus WPs (AIM, CFR,
+ * Today this script walks `handbooks/` and `aim/`. Future corpus WPs (CFR,
  * AC, ACS) extend `CORPUS_DIRS` so the same dispatch handles them; their
  * manifest schemas register additional members on `manifestSchema` (via
  * the discriminated union at `libs/bc/study/src/manifest-validation.ts`).
@@ -42,6 +46,7 @@ import { client } from '@ab/db/connection';
 // Build helpers live in the references BC but aren't re-exported from the
 // barrel (route handlers should never need them; only seed code does).
 import { attachSupersededByLatest } from '../../libs/bc/study/src/references';
+import { seedAimManifest } from '../../libs/bc/study/src/seeders/aim';
 import { seedSectionTreeManifest } from '../../libs/bc/study/src/seeders/section-tree';
 import { emptySummary, type SeedContext, type SeedSummary } from '../../libs/bc/study/src/seeders/types';
 import { seedWholeDocManifest } from '../../libs/bc/study/src/seeders/whole-doc';
@@ -54,7 +59,7 @@ const REPO_ROOT = resolve(HERE, '..', '..');
  * relative to the repo root; the seeder enumerates `<dir>/<doc>/<edition>/
  * manifest.json` under it. Add new corpora here as their WPs land.
  */
-const CORPUS_DIRS = ['handbooks'] as const;
+const CORPUS_DIRS = ['handbooks', 'aim'] as const;
 
 export interface SeedReferencesOptions {
 	/** Filter to a single document slug (e.g. `phak`). Default = all. */
@@ -118,6 +123,8 @@ async function dispatchManifest(manifestPath: string, context: SeedContext, summ
 			return seedSectionTreeManifest(manifest, context, summary);
 		case 'whole-doc':
 			return seedWholeDocManifest(manifest, context, summary);
+		case 'aim':
+			return seedAimManifest(manifest, context, summary);
 	}
 }
 
