@@ -341,6 +341,28 @@ export {
 	setNotes,
 	setReadStatus,
 } from './references';
+// Regulations BC aggregator (one entry point for /library/regulations/* loaders).
+export type {
+	RegulationsBucketCard,
+	RegulationsChapterDetail,
+	RegulationsCitingNode,
+	RegulationsDetailView,
+	RegulationsFigureTile,
+	RegulationsGroupCard,
+	RegulationsGroupView,
+	RegulationsLandingView,
+	RegulationsReadState,
+	RegulationsReferenceSummary,
+	RegulationsSectionDetail,
+	RegulationsSectionListView,
+	RegulationsSectionRow,
+	RegulationsSiblingRow,
+	RegulationsUmbrellaCard,
+	RegulationsView,
+	RegulationsViewNotFoundKey,
+	RegulationsViewParams,
+} from './regulations';
+export { getRegulationsView, RegulationsViewNotFoundError, resolveRegulationsSectionId } from './regulations';
 export type {
 	CardSessionRef,
 	ReviewSessionCard,
