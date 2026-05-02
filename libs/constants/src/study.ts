@@ -1599,6 +1599,12 @@ export const REFERENCE_SECTION_LEVELS = {
 	CHAPTER: 'chapter',
 	SECTION: 'section',
 	SUBSECTION: 'subsection',
+	/** AIM paragraph (depth 2 under chapter / section). */
+	PARAGRAPH: 'paragraph',
+	/** AIM appendix (top-level peer of chapters). */
+	APPENDIX: 'appendix',
+	/** AIM Pilot/Controller Glossary entry (top-level, flat). */
+	GLOSSARY: 'glossary',
 	/** Whole-doc handbooks (post-#384 risk-mgmt, instructor, IFH, IPH, AMT-G, AMT-P). */
 	DOCUMENT: 'document',
 } as const;
@@ -1611,6 +1617,9 @@ export const REFERENCE_SECTION_LEVEL_LABELS: Record<ReferenceSectionLevel, strin
 	[REFERENCE_SECTION_LEVELS.CHAPTER]: 'Chapter',
 	[REFERENCE_SECTION_LEVELS.SECTION]: 'Section',
 	[REFERENCE_SECTION_LEVELS.SUBSECTION]: 'Subsection',
+	[REFERENCE_SECTION_LEVELS.PARAGRAPH]: 'Paragraph',
+	[REFERENCE_SECTION_LEVELS.APPENDIX]: 'Appendix',
+	[REFERENCE_SECTION_LEVELS.GLOSSARY]: 'Glossary',
 	[REFERENCE_SECTION_LEVELS.DOCUMENT]: 'Document',
 };
 

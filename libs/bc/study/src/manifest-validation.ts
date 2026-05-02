@@ -371,12 +371,66 @@ export const wholeDocManifestSchema = z.object({
 export type WholeDocManifest = z.infer<typeof wholeDocManifestSchema>;
 
 /**
- * Top-level shape of `handbooks/<doc>/<edition>/manifest.json`. Discriminated
- * union over manifest kind: section-tree (`kind: 'handbook'`) vs whole-doc
- * (`kind: 'whole-doc'`). The seed dispatches on the discriminator to choose
- * the right adapter.
+ * AIM manifest entry kinds. Asymmetric depth -- chapters / appendices /
+ * glossary entries sit at depth 0; sections at depth 1; paragraphs at
+ * depth 2. The seeder builds the parent/child tree by parsing each
+ * entry's `code` field rather than carrying explicit `parent_code`.
  */
-export const manifestSchema = z.discriminatedUnion('kind', [sectionTreeManifestSchema, wholeDocManifestSchema]);
+const AIM_ENTRY_KINDS = ['chapter', 'section', 'paragraph', 'appendix', 'glossary'] as const;
+
+/**
+ * One entry inside an AIM manifest's `entries[]`. Flat array; the seeder
+ * derives the chapter -> section -> paragraph tree from the dotted
+ * `code` (`"1"`, `"1-1"`, `"1-1-3"`). Appendices use `"appendix-N"`;
+ * glossary entries use `"glossary/<term-slug>"`.
+ */
+export const aimManifestEntrySchema = z.object({
+	kind: z.enum(AIM_ENTRY_KINDS),
+	code: z.string().min(1),
+	title: z.string().min(1),
+	/** Repo-relative path to the per-entry markdown body. */
+	body_path: z.string().min(1),
+	/** SHA-256 hex digest of the markdown file. */
+	content_hash: z.string().regex(/^[0-9a-f]{64}$/i),
+});
+export type AimManifestEntry = z.infer<typeof aimManifestEntrySchema>;
+
+/**
+ * AIM manifest (`kind: 'aim'`). Flat `entries[]` carrying chapters /
+ * sections / paragraphs / appendices / glossary terms. The seed adapter
+ * walks the array, builds a parent/child tree by code prefix, and
+ * produces N `reference_section` rows.
+ *
+ * Subjects + primary_cert are required at the manifest level so the AIM
+ * lands cert-agnostic + topic-tagged on first seed without needing a
+ * sibling YAML row.
+ */
+export const aimManifestSchema = z.object({
+	kind: z.literal('aim'),
+	...manifestCommonFields,
+	subjects: z
+		.array(z.enum(AVIATION_TOPIC_VALUES as [AviationTopic, ...AviationTopic[]]))
+		.min(1)
+		.max(3),
+	primary_cert: z
+		.enum(CERT_APPLICABILITY_VALUES as [CertApplicability, ...CertApplicability[]])
+		.nullable()
+		.optional(),
+	entries: z.array(aimManifestEntrySchema).min(1),
+});
+export type AimManifest = z.infer<typeof aimManifestSchema>;
+
+/**
+ * Top-level shape of `<corpus>/<doc>/<edition>/manifest.json`. Discriminated
+ * union over manifest kind: section-tree (`kind: 'handbook'`), whole-doc
+ * (`kind: 'whole-doc'`), or AIM (`kind: 'aim'`). The seed dispatches on the
+ * discriminator to choose the right adapter.
+ */
+export const manifestSchema = z.discriminatedUnion('kind', [
+	sectionTreeManifestSchema,
+	wholeDocManifestSchema,
+	aimManifestSchema,
+]);
 export type Manifest = z.infer<typeof manifestSchema>;
 
 // ---------------------------------------------------------------------------

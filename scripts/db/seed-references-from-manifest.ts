@@ -13,8 +13,12 @@
  *                              risk-mgmt / instructor / IFH / IPH / AMT-G /
  *                              AMT-P). Produces ONE reference_section row at
  *                              depth 0, level 'document'.
+ *   - `kind: 'aim'`        -> AIM adapter. Walks a flat entries[] and builds
+ *                              the chapter/section/paragraph tree from
+ *                              dotted code prefixes; appendices + glossary
+ *                              entries land at depth 0 alongside chapters.
  *
- * Today this script only walks `handbooks/`. Future corpus WPs (AIM, CFR,
+ * Today this script walks `handbooks/` and `aim/`. Future corpus WPs (CFR,
  * AC, ACS) extend `CORPUS_DIRS` so the same dispatch handles them; their
  * manifest schemas register additional members on `manifestSchema` (via
  * the discriminated union at `libs/bc/study/src/manifest-validation.ts`).
@@ -42,6 +46,7 @@ import { client } from '@ab/db/connection';
 // Build helpers live in the references BC but aren't re-exported from the
 // barrel (route handlers should never need them; only seed code does).
 import { attachSupersededByLatest } from '../../libs/bc/study/src/references';
+import { seedAimManifest } from '../../libs/bc/study/src/seeders/aim';
 import { seedSectionTreeManifest } from '../../libs/bc/study/src/seeders/section-tree';
 import { emptySummary, type SeedContext, type SeedSummary } from '../../libs/bc/study/src/seeders/types';
 import { seedWholeDocManifest } from '../../libs/bc/study/src/seeders/whole-doc';
@@ -54,7 +59,7 @@ const REPO_ROOT = resolve(HERE, '..', '..');
  * relative to the repo root; the seeder enumerates `<dir>/<doc>/<edition>/
  * manifest.json` under it. Add new corpora here as their WPs land.
  */
-const CORPUS_DIRS = ['handbooks'] as const;
+const CORPUS_DIRS = ['handbooks', 'aim'] as const;
 
 export interface SeedReferencesOptions {
 	/** Filter to a single document slug (e.g. `phak`). Default = all. */
@@ -80,28 +85,55 @@ export async function seedReferencesFromManifest(options: SeedReferencesOptions 
 		const corpusAbs = resolve(REPO_ROOT, corpusDir);
 		if (!existsSync(corpusAbs)) continue;
 
-		const documentSlugs = options.documentSlug ? [options.documentSlug] : listChildDirs(corpusAbs);
+		// Two supported layouts coexist within a corpus:
+		//   (a) Multi-doc:  <corpus>/<slug>/<edition>/manifest.json  (handbooks)
+		//   (b) Single-doc: <corpus>/<edition>/manifest.json         (aim)
+		// We walk the first-level children and decide per-child: if the child
+		// directly contains `manifest.json`, treat it as a single-doc edition;
+		// otherwise treat it as a slug and recurse one level deeper for editions.
+		// This lets test fixtures and real corpora cohabit cleanly.
+		const firstLevelDirs = listChildDirs(corpusAbs);
 
-		for (const slug of documentSlugs) {
-			const slugDir = resolve(corpusAbs, slug);
-			if (!existsSync(slugDir) || !statSync(slugDir).isDirectory()) continue;
+		// Group editions by effective document slug so supersede chains span
+		// every edition seen for the same logical document.
+		const slugToEditionRefIds = new Map<string, string[]>();
 
-			const editions = options.edition ? [options.edition] : listChildDirs(slugDir);
-			const seededReferenceIds: string[] = [];
+		for (const childDir of firstLevelDirs) {
+			const childAbs = resolve(corpusAbs, childDir);
+			if (!statSync(childAbs).isDirectory()) continue;
+
+			const childManifest = resolve(childAbs, 'manifest.json');
+			if (existsSync(childManifest)) {
+				// Single-doc layout: childDir is the edition; effective slug is the corpus dir.
+				if (options.edition !== undefined && options.edition !== childDir) continue;
+				if (options.documentSlug !== undefined && options.documentSlug !== corpusDir) continue;
+				const refId = await dispatchManifest(childManifest, context, summary);
+				const list = slugToEditionRefIds.get(corpusDir) ?? [];
+				list.push(refId);
+				slugToEditionRefIds.set(corpusDir, list);
+				continue;
+			}
+
+			// Multi-doc layout: childDir is the slug; iterate edition subdirs.
+			if (options.documentSlug !== undefined && options.documentSlug !== childDir) continue;
+			const editions = options.edition ? [options.edition] : listChildDirs(childAbs);
 			for (const edition of editions) {
-				const manifestPath = resolve(slugDir, edition, 'manifest.json');
+				const manifestPath = resolve(childAbs, edition, 'manifest.json');
 				if (!existsSync(manifestPath)) continue;
 				const refId = await dispatchManifest(manifestPath, context, summary);
-				seededReferenceIds.push(refId);
+				const list = slugToEditionRefIds.get(childDir) ?? [];
+				list.push(refId);
+				slugToEditionRefIds.set(childDir, list);
 			}
-			// Wire `superseded_by_id` chains for this document slug (only when we
-			// processed > 1 edition this run; otherwise leave existing pointers
-			// untouched).
-			if (seededReferenceIds.length > 1) {
-				const latestId = seededReferenceIds[seededReferenceIds.length - 1];
-				await attachSupersededByLatest(slug, latestId);
-				summary.supersededLinks += seededReferenceIds.length - 1;
-			}
+		}
+
+		// Wire `superseded_by_id` chains per slug (only when > 1 edition seen).
+		for (const [slug, refIds] of slugToEditionRefIds) {
+			if (refIds.length <= 1) continue;
+			const latestId = refIds[refIds.length - 1];
+			if (latestId === undefined) continue;
+			await attachSupersededByLatest(slug, latestId);
+			summary.supersededLinks += refIds.length - 1;
 		}
 	}
 
@@ -118,6 +150,8 @@ async function dispatchManifest(manifestPath: string, context: SeedContext, summ
 			return seedSectionTreeManifest(manifest, context, summary);
 		case 'whole-doc':
 			return seedWholeDocManifest(manifest, context, summary);
+		case 'aim':
+			return seedAimManifest(manifest, context, summary);
 	}
 }
 

@@ -33,6 +33,7 @@ const SUITE_TOKEN = Math.floor(Math.random() * 0x100_000_000)
 	.toString(16)
 	.padStart(8, '0');
 const HANDBOOKS_DIR = join(REPO_ROOT, 'handbooks');
+const AIM_DIR = join(REPO_ROOT, 'aim');
 
 interface Fixture {
 	slug: string;
@@ -90,20 +91,25 @@ function buildFixture(slugSuffix: string, edition: string, contentHash: string):
 	return { slug, edition, manifestPath, bodyPath };
 }
 
-const fixtures: string[] = [];
+interface TrackedFixture {
+	slug: string;
+	corpusDir: string;
+}
 
-function trackFixture(slug: string): void {
-	fixtures.push(slug);
+const fixtures: TrackedFixture[] = [];
+
+function trackFixture(slug: string, corpusDir: string = HANDBOOKS_DIR): void {
+	fixtures.push({ slug, corpusDir });
 }
 
 afterAll(async () => {
 	// Wipe DB rows for every fixture slug.
-	for (const slug of fixtures) {
+	for (const { slug } of fixtures) {
 		await db.delete(reference).where(eq(reference.documentSlug, slug));
 	}
 	// Wipe disk fixtures.
-	for (const slug of fixtures) {
-		const dir = join(HANDBOOKS_DIR, slug);
+	for (const { slug, corpusDir } of fixtures) {
+		const dir = join(corpusDir, slug);
 		try {
 			rmSync(dir, { recursive: true, force: true });
 		} catch {
@@ -245,6 +251,148 @@ describe('seedReferencesFromManifest', () => {
 		const second = await seedReferencesFromManifest({ documentSlug: slug });
 		expect(second.sectionsTouched).toBe(1);
 		expect(second.sectionsChanged).toBe(0);
+	});
+
+	it('AIM manifest produces a chapter -> section -> paragraph tree', async () => {
+		const slug = `test-${SUITE_TOKEN}-aim`;
+		const edition = '2026-04';
+		trackFixture(slug, AIM_DIR);
+		const editionDir = join(AIM_DIR, slug, edition);
+		mkdirSync(join(editionDir, 'chapter-1', 'section-1'), { recursive: true });
+
+		const chapterBody = '# Chapter 1\n\nIntro.\n';
+		const sectionBody = '# Section 1-1\n\nSection body.\n';
+		const paragraphBody = '# Paragraph 1-1-1\n\nParagraph body.\n';
+		writeFileSync(join(editionDir, 'chapter-1', 'index.md'), chapterBody);
+		writeFileSync(join(editionDir, 'chapter-1', 'section-1', 'index.md'), sectionBody);
+		writeFileSync(join(editionDir, 'chapter-1', 'section-1', 'paragraph-1.md'), paragraphBody);
+
+		const chapterHash = sha256Hex(chapterBody);
+		const sectionHash = sha256Hex(sectionBody);
+		const paragraphHash = sha256Hex(paragraphBody);
+
+		const manifestPath = join(editionDir, 'manifest.json');
+		writeFileSync(
+			manifestPath,
+			JSON.stringify({
+				kind: 'aim',
+				document_slug: slug,
+				edition,
+				title: 'Aeronautical Information Manual (test)',
+				publisher: 'FAA',
+				source_url: 'https://example.com/aim.pdf',
+				fetched_at: '2026-04-26T00:00:00.000+00:00',
+				subjects: ['regulations', 'procedures', 'navigation'],
+				primary_cert: null,
+				entries: [
+					{
+						kind: 'chapter',
+						code: '1',
+						title: 'Air Navigation',
+						body_path: `aim/${slug}/${edition}/chapter-1/index.md`,
+						content_hash: chapterHash,
+					},
+					{
+						kind: 'section',
+						code: '1-1',
+						title: 'Navigation Aids',
+						body_path: `aim/${slug}/${edition}/chapter-1/section-1/index.md`,
+						content_hash: sectionHash,
+					},
+					{
+						kind: 'paragraph',
+						code: '1-1-1',
+						title: 'General',
+						body_path: `aim/${slug}/${edition}/chapter-1/section-1/paragraph-1.md`,
+						content_hash: paragraphHash,
+					},
+				],
+			}),
+		);
+
+		const summary = await seedReferencesFromManifest({ documentSlug: slug });
+		expect(summary.editionsProcessed).toBe(1);
+		expect(summary.sectionsTouched).toBe(3);
+		expect(summary.sectionsChanged).toBe(3);
+
+		const refRow = (await db.select().from(reference).where(eq(reference.documentSlug, slug)))[0];
+		expect(refRow).toBeDefined();
+		if (!refRow) return;
+		expect(refRow.kind).toBe('aim');
+		expect(refRow.subjects).toEqual(['regulations', 'procedures', 'navigation']);
+		expect(refRow.primaryCert).toBeNull();
+		expect(refRow.sectionSchema).toEqual({
+			levels: ['chapter', 'section', 'paragraph', 'appendix', 'glossary'],
+			strictSequence: false,
+		});
+
+		const sections = await db.select().from(referenceSection).where(eq(referenceSection.referenceId, refRow.id));
+		expect(sections).toHaveLength(3);
+
+		const chapter = sections.find((s) => s.code === '1');
+		const section = sections.find((s) => s.code === '1-1');
+		const paragraph = sections.find((s) => s.code === '1-1-1');
+		expect(chapter).toBeDefined();
+		expect(section).toBeDefined();
+		expect(paragraph).toBeDefined();
+		if (!chapter || !section || !paragraph) return;
+
+		expect(chapter.depth).toBe(0);
+		expect(chapter.level).toBe('chapter');
+		expect(chapter.parentId).toBeNull();
+		expect(chapter.contentMd).toBe(chapterBody);
+
+		expect(section.depth).toBe(1);
+		expect(section.level).toBe('section');
+		expect(section.parentId).toBe(chapter.id);
+		expect(section.contentMd).toBe(sectionBody);
+
+		expect(paragraph.depth).toBe(2);
+		expect(paragraph.level).toBe('paragraph');
+		expect(paragraph.parentId).toBe(section.id);
+		expect(paragraph.contentMd).toBe(paragraphBody);
+
+		// Idempotent re-run: zero changes.
+		const second = await seedReferencesFromManifest({ documentSlug: slug });
+		expect(second.sectionsTouched).toBe(3);
+		expect(second.sectionsChanged).toBe(0);
+	});
+
+	it('AIM seed throws when a child entry references a missing parent', async () => {
+		const slug = `test-${SUITE_TOKEN}-aim-orphan`;
+		const edition = '2026-04';
+		trackFixture(slug, AIM_DIR);
+		const editionDir = join(AIM_DIR, slug, edition);
+		mkdirSync(join(editionDir, 'chapter-9', 'section-1'), { recursive: true });
+		const orphanBody = '# Orphan paragraph\n';
+		writeFileSync(join(editionDir, 'chapter-9', 'section-1', 'paragraph-1.md'), orphanBody);
+		const manifestPath = join(editionDir, 'manifest.json');
+		// Paragraph 9-1-1 references section 9-1, which is NOT in the entries.
+		writeFileSync(
+			manifestPath,
+			JSON.stringify({
+				kind: 'aim',
+				document_slug: slug,
+				edition,
+				title: 'AIM (orphan test)',
+				publisher: 'FAA',
+				source_url: 'https://example.com/aim.pdf',
+				fetched_at: '2026-04-26T00:00:00.000+00:00',
+				subjects: ['regulations'],
+				primary_cert: null,
+				entries: [
+					{
+						kind: 'paragraph',
+						code: '9-1-1',
+						title: 'Orphan paragraph',
+						body_path: `aim/${slug}/${edition}/chapter-9/section-1/paragraph-1.md`,
+						content_hash: sha256Hex(orphanBody),
+					},
+				],
+			}),
+		);
+
+		await expect(seedReferencesFromManifest({ documentSlug: slug })).rejects.toThrow(/missing parent/);
 	});
 
 	it('supersede chain wires older edition to the newest', async () => {

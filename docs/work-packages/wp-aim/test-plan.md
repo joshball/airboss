@@ -1,7 +1,7 @@
 ---
 title: 'WP-AIM -- test plan'
 type: test-plan
-status: in-progress
+status: done
 ---
 
 # Test plan

@@ -5215,5 +5215,12 @@
       "body_path": "aim/2026-04/appendix-3.md",
       "content_hash": "f3219a62466024a24c91801d49d6086a3676c8d6f31d06b0c5b4847b8e8de0f7"
     }
-  ]
+  ],
+  "document_slug": "aim",
+  "subjects": [
+    "regulations",
+    "procedures",
+    "navigation"
+  ],
+  "primary_cert": null
 }
