@@ -1,2 +1,0 @@
-ALTER TABLE "study"."reference" ADD COLUMN "subjects" text[] DEFAULT '{}'::text[] NOT NULL;--> statement-breakpoint
-ALTER TABLE "study"."reference" ADD CONSTRAINT "reference_subjects_values_check" CHECK ("subjects" <@ ARRAY['regulations', 'weather', 'navigation', 'communications', 'airspace', 'aerodynamics', 'performance', 'weight-balance', 'aircraft-systems', 'flight-instruments', 'procedures', 'human-factors', 'medical', 'certification', 'maintenance', 'airports', 'emergencies', 'training-ops']::text[]);
