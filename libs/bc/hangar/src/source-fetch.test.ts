@@ -23,6 +23,7 @@ vi.mock('@ab/audit', () => ({
 // Bind a typed handle to the mocked auditWrite so failure-path tests can
 // assert against its calls without redeclaring the mock.
 import { auditWrite } from '@ab/audit';
+
 const auditWriteMock = vi.mocked(auditWrite);
 
 const TMP_ROOT = join(import.meta.dirname, '__tmp_sectional__');
