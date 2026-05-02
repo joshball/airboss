@@ -68,6 +68,15 @@ export const auditLog = auditSchema.table(
 	(t) => ({
 		auditActorIdx: index('audit_log_actor_idx').on(t.actorId, t.timestamp),
 		auditTargetIdx: index('audit_log_target_idx').on(t.targetType, t.targetId, t.timestamp),
+		// Standalone (timestamp) index for `countAuditEntriesSince` -- a
+		// `WHERE timestamp >= ?` query cannot use either composite above
+		// because timestamp is the trailing column.
+		auditTimestampIdx: index('audit_log_timestamp_idx').on(t.timestamp),
+		// (targetType, timestamp) supports `auditRecent` when no targetId is
+		// supplied -- the `(targetType, targetId, timestamp)` composite can't
+		// serve `WHERE targetType = ? ORDER BY timestamp DESC` cleanly because
+		// targetId separates the equality column from the sort column.
+		auditTargetTypeTimeIdx: index('audit_log_target_type_time_idx').on(t.targetType, t.timestamp),
 		opCheck: check('audit_log_op_check', sql.raw(`"op" IN (${inList(AUDIT_OP_VALUES)})`)),
 		targetTypeCheck: check('audit_log_target_type_check', sql.raw(`"target_type" IN (${inList(AUDIT_TARGET_VALUES)})`)),
 	}),

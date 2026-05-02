@@ -1,6 +1,6 @@
 import { db as defaultDb } from '@ab/db/connection';
 import { generateAuditLogId } from '@ab/utils';
-import { count, desc, eq, gte } from 'drizzle-orm';
+import { and, count, desc, eq, gte } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import { type AuditLogRow, type AuditOp, auditLog } from './schema';
 
@@ -45,19 +45,25 @@ export async function auditWrite(
 /**
  * Read the most recent audit rows for a given `targetType`. Used by admin
  * surfaces (hangar) to show the last N actions on a resource. Optional
- * `targetId` filter scopes to a single row.
+ * `targetId` filter scopes to a single row of that targetType.
+ *
+ * `targetType` is always required and is always part of the filter -- prior
+ * versions of this function dropped the targetType clause whenever a
+ * targetId was supplied, which is wrong: targetIds are not unique across
+ * types (a 'study.card' and a 'hangar.source' can share the same ULID-ish
+ * prefix), so the unfiltered query could return rows from a different
+ * resource family.
  */
 export async function auditRecent(
 	input: { targetType: string; targetId?: string | null; limit?: number },
 	db: Db = defaultDb,
 ): Promise<AuditLogRow[]> {
 	const limit = input.limit ?? 10;
-	const base = db.select().from(auditLog);
-	const filtered =
+	const where =
 		input.targetId != null
-			? base.where(eq(auditLog.targetId, input.targetId))
-			: base.where(eq(auditLog.targetType, input.targetType));
-	return filtered.orderBy(desc(auditLog.timestamp)).limit(limit);
+			? and(eq(auditLog.targetType, input.targetType), eq(auditLog.targetId, input.targetId))
+			: eq(auditLog.targetType, input.targetType);
+	return db.select().from(auditLog).where(where).orderBy(desc(auditLog.timestamp)).limit(limit);
 }
 
 /**
