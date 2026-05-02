@@ -41,7 +41,7 @@
 import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync } from 'node:fs';
 import { join } from 'node:path';
-import { resolveCacheRoot } from '@ab/constants';
+import { type AviationTopic, type CertApplicability, resolveCacheRoot } from '@ab/constants';
 import { writeIfChanged } from '../io/write-if-changed.ts';
 import { extractPdf } from '../pdf/index.ts';
 import { __editions_internal__ } from '../registry/editions.ts';
@@ -129,6 +129,8 @@ interface CachedExtra {
 	readonly sourceSha256: string;
 	readonly fetchedAt: string;
 	readonly lastModified?: string;
+	readonly subjects: readonly AviationTopic[];
+	readonly primaryCert: CertApplicability | null;
 }
 
 interface DiscoveryResult {
@@ -195,6 +197,8 @@ function discover(cacheRoot: string): DiscoveryResult {
 			...(cacheManifest.primary.last_modified !== undefined
 				? { lastModified: cacheManifest.primary.last_modified }
 				: {}),
+			subjects: entry.subjects,
+			primaryCert: entry.primary_cert,
 		});
 	}
 
@@ -300,6 +304,8 @@ export async function runHandbooksExtrasIngest(args: IngestArgs): Promise<Ingest
 				page_count: doc.pageCount,
 				doc_id: extra.docId,
 				faa_edition: extra.edition,
+				subjects: extra.subjects,
+				primary_cert: extra.primaryCert,
 			};
 			const manifestPath = join(docDir, 'manifest.json');
 			writeIfChanged(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);

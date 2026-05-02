@@ -24,6 +24,12 @@
  */
 
 import { existsSync, readFileSync } from 'node:fs';
+import {
+	AVIATION_TOPIC_VALUES,
+	type AviationTopic,
+	CERT_APPLICABILITY_VALUES,
+	type CertApplicability,
+} from '@ab/constants';
 import { parse as parseYaml } from 'yaml';
 import type { ManifestFile, ManifestSection } from '../handbooks/derivative-reader.ts';
 
@@ -31,11 +37,26 @@ import type { ManifestFile, ManifestSection } from '../handbooks/derivative-read
 // YAML inventory
 // ---------------------------------------------------------------------------
 
+/**
+ * One row of the handbooks-extras YAML config. The YAML is the canonical
+ * source of truth for `subjects` + `primary_cert` on whole-doc handbooks
+ * (per the post-WP-SUB convention) so `register handbooks-extras` can
+ * write them into every produced manifest. Without that, the ingest
+ * rewrites manifests cleanly each run and strips any fields it doesn't
+ * author -- the bug surfaced by WP-MTN.
+ */
 export interface ExtrasYamlEntry {
 	readonly doc_id: string;
 	readonly edition: string | null;
 	readonly url: string;
 	readonly filename: string;
+	/** Aviation topics this handbook covers. 1-3 entries, all from `AVIATION_TOPIC_VALUES`. Required. */
+	readonly subjects: readonly AviationTopic[];
+	/**
+	 * Primary cert that owns this handbook for library-by-cert browsing,
+	 * or `null` for cert-agnostic. Mirrors the column on `study.reference`.
+	 */
+	readonly primary_cert: CertApplicability | null;
 }
 
 export interface ExtrasYaml {
@@ -59,9 +80,25 @@ function defaultYamlPath(): string {
 	return `${process.cwd()}/scripts/sources/config/handbooks-extras.yaml`;
 }
 
+function isValidSubjects(value: unknown): value is AviationTopic[] {
+	if (!Array.isArray(value)) return false;
+	if (value.length < 1 || value.length > 3) return false;
+	return value.every((v) => typeof v === 'string' && (AVIATION_TOPIC_VALUES as readonly string[]).includes(v));
+}
+
+function isValidPrimaryCert(value: unknown): value is CertApplicability | null {
+	if (value === null) return true;
+	return typeof value === 'string' && (CERT_APPLICABILITY_VALUES as readonly string[]).includes(value);
+}
+
 /**
  * Parse the handbooks-extras YAML config. Throws on missing file or malformed
  * shape. Re-reads on every call -- callers should cache if needed.
+ *
+ * Validates `subjects` (1-3 entries, each in `AVIATION_TOPIC_VALUES`) and
+ * `primary_cert` (null or in `CERT_APPLICABILITY_VALUES`) so register
+ * fails fast on a bad row instead of producing a manifest the seeder
+ * later rejects.
  */
 export function loadHandbooksExtrasYaml(): ExtrasYaml {
 	const path = _yamlPathOverride ?? defaultYamlPath();
@@ -79,6 +116,21 @@ export function loadHandbooksExtrasYaml(): ExtrasYaml {
 	for (const e of parsed.entries) {
 		if (typeof e.doc_id !== 'string' || typeof e.url !== 'string' || typeof e.filename !== 'string') {
 			throw new Error(`handbooks-extras YAML at ${path} has malformed entry: ${JSON.stringify(e)}`);
+		}
+		if (!isValidSubjects(e.subjects)) {
+			throw new Error(
+				`handbooks-extras YAML at ${path} entry ${e.doc_id} has invalid subjects (require 1-3 from AVIATION_TOPIC_VALUES): ${JSON.stringify(e.subjects)}`,
+			);
+		}
+		if (!('primary_cert' in e)) {
+			throw new Error(
+				`handbooks-extras YAML at ${path} entry ${e.doc_id} missing primary_cert (use null for cert-agnostic)`,
+			);
+		}
+		if (!isValidPrimaryCert(e.primary_cert)) {
+			throw new Error(
+				`handbooks-extras YAML at ${path} entry ${e.doc_id} has invalid primary_cert (require null or one of CERT_APPLICABILITY_VALUES): ${JSON.stringify(e.primary_cert)}`,
+			);
 		}
 	}
 	return parsed as ExtrasYaml;
@@ -169,6 +221,10 @@ export interface ExtrasManifestFile extends ManifestFile {
 	readonly page_count: number;
 	readonly doc_id: string;
 	readonly faa_edition: string | null;
+	/** Aviation topics, mirrored from the YAML row. Required by the post-WP-SUB seed. */
+	readonly subjects: readonly AviationTopic[];
+	/** Primary cert (or null = cert-agnostic), mirrored from the YAML row. */
+	readonly primary_cert: CertApplicability | null;
 }
 
 // ---------------------------------------------------------------------------
