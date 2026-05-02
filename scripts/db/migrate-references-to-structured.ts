@@ -113,6 +113,14 @@ interface HandbookPattern {
 	defaultEdition: string;
 	title: string;
 	url?: string;
+	/**
+	 * When true, ignore any inline `FAA-H-8083-...` edition tag in the source
+	 * string and always resolve to `defaultEdition`. Used for handbooks whose
+	 * canonical edition is the short edition-slug (`8083-15B`) emitted by the
+	 * handbooks-extras ingest pipeline; honoring the long FAA tag in `source`
+	 * would create a duplicate synthetic row keyed on the long tag.
+	 */
+	pinDefaultEdition?: boolean;
 }
 
 /**
@@ -145,14 +153,22 @@ const HANDBOOK_PATTERNS: readonly HandbookPattern[] = [
 	{
 		regex: /\b(?:IPH|Instrument Procedures Handbook|FAA-H-8083-16[A-Z]?)\b/i,
 		slug: 'iph',
-		defaultEdition: 'FAA-H-8083-16B',
+		// Matches the edition slug emitted by the handbooks-extras ingest
+		// pipeline (`libs/sources/src/handbooks-extras/ingest.ts`), so the
+		// migration resolves to the authored row instead of creating a
+		// duplicate synthetic one keyed on the long FAA tag.
+		defaultEdition: '8083-16B',
+		pinDefaultEdition: true,
 		title: 'Instrument Procedures Handbook',
 		url: 'https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/instrument_procedures_handbook',
 	},
 	{
 		regex: /\b(?:Instrument Flying Handbook|IFH|FAA-H-8083-15[A-Z]?)\b/i,
 		slug: 'ifh',
-		defaultEdition: 'FAA-H-8083-15B',
+		// See note on iph above -- aligned with the extras pipeline's
+		// edition slug to prevent duplicate synthetic rows.
+		defaultEdition: '8083-15B',
+		pinDefaultEdition: true,
 		title: 'Instrument Flying Handbook',
 		url: 'https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/instrument_flying_handbook',
 	},
@@ -288,7 +304,9 @@ export function reshapeLegacyCitation(legacy: LegacyCitation): ReshapedCitation 
 		const locator = extractHandbookLocator(detail);
 		// Honor an explicit edition tag in `source` if it matches the pattern's
 		// edition family (e.g. `AFH (FAA-H-8083-3B)` overrides the default).
-		const editionMatch = source.match(/\bFAA-H-8083-\d+[A-Z]?\b/i);
+		// Patterns that pin the default edition ignore inline tags entirely
+		// (see HandbookPattern.pinDefaultEdition).
+		const editionMatch = pattern.pinDefaultEdition ? null : source.match(/\bFAA-H-8083-\d+[A-Z]?\b/i);
 		const edition = editionMatch ? editionMatch[0].toUpperCase() : pattern.defaultEdition;
 		const resolved: ResolvedReference = {
 			kind: REFERENCE_KINDS.HANDBOOK,

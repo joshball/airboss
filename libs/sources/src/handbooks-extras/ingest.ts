@@ -257,12 +257,17 @@ export async function runHandbooksExtrasIngest(args: IngestArgs): Promise<Ingest
 		try {
 			const doc = extractPdf(extra.pdfPath);
 
-			// Title detection: prefer PDF metadata title; fall back to the
-			// friendly display formal name. Authors can correct
-			// canonical_title inline in the manifest later.
-			const titleFromMeta = (doc.metadata?.title ?? '').trim();
+			// Title: always use the friendly-display formal name. FAA's
+			// authoring toolchain leaks template strings into PDF metadata
+			// (e.g. "ISO 15930 - Electronic document file format ..." or
+			// "FAA-H-8083-16B (All)"), so we never trust `doc.metadata.title`.
+			// `FRIENDLY_DISPLAY` is the canonical, version-controlled,
+			// human-readable title for each handbook slug.
 			const display = FRIENDLY_DISPLAY[extra.slug];
-			const title = titleFromMeta.length > 0 ? titleFromMeta : (display?.formal ?? extra.docId);
+			if (display === undefined) {
+				throw new Error(`handbooks-extras: no FRIENDLY_DISPLAY for slug "${extra.slug}"`);
+			}
+			const title = display.formal;
 
 			// Publication date: derive from the cache manifest's last_modified
 			// HTTP header when present, else fetched_at. The YAML edition
