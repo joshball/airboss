@@ -15,7 +15,7 @@
  */
 
 import { requireRole } from '@ab/auth';
-import { type AuditFilters, listAuditEntries, searchActorIds } from '@ab/bc-hangar';
+import { type AuditFilters, listAuditEntries, resolveActorForChip } from '@ab/bc-hangar';
 import { AUDIT_LIST_DEFAULT_LIMIT, ROLES } from '@ab/constants';
 import type { PageServerLoad } from './$types';
 import { decodeAuditFilters } from './filters';
@@ -36,12 +36,15 @@ export const load: PageServerLoad = async (event) => {
 		limit: AUDIT_LIST_DEFAULT_LIMIT,
 	};
 
-	const [page, actorOptions] = await Promise.all([
-		listAuditEntries(filters),
-		decoded.actorId !== undefined && decoded.actorId !== 'null'
-			? searchActorIds(decoded.actorId, 1)
-			: Promise.resolve([]),
-	]);
+	// Deep-link resolution for the actor chip: the URL carries `?actor=<id>`
+	// when the user picked a typeahead hit (better-auth user id). The old
+	// implementation called `searchActorIds(id, 1)` which runs an
+	// ILIKE-on-name/email query that better-auth ids never match, leaving
+	// every shared/bookmarked URL with a silently-empty chip.
+	// `resolveActorForChip` routes id-shaped values to the exact-match
+	// lookup and falls back to the typeahead search only for hand-edited
+	// free-text values.
+	const [page, actorOptions] = await Promise.all([listAuditEntries(filters), resolveActorForChip(decoded.actorId)]);
 
 	return {
 		rows: page.rows.map((r) => ({
