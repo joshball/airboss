@@ -1,6 +1,6 @@
 <script lang="ts">
 import type { DashboardStats, PanelResult } from '@ab/bc-study';
-import { domainLabel, ROUTES } from '@ab/constants';
+import { domainLabel, QUERY_PARAMS, ROUTES } from '@ab/constants';
 import Button from '@ab/ui/components/Button.svelte';
 import PanelShell from '@ab/ui/components/PanelShell.svelte';
 
@@ -27,7 +27,7 @@ const topDomains = $derived(
 const moreCount = $derived((value?.domains ?? []).filter((d) => d.due > 0).length - topDomains.length);
 
 function domainHref(slug: string): string {
-	return `${ROUTES.MEMORY_BROWSE}?domain=${encodeURIComponent(slug)}`;
+	return `${ROUTES.MEMORY_BROWSE}?${QUERY_PARAMS.DOMAIN}=${encodeURIComponent(slug)}`;
 }
 </script>
 

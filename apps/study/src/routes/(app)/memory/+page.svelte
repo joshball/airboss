@@ -392,7 +392,7 @@ function percent(n: number, total: number): number {
 				{#each stats.domains as d (d.domain)}
 					<li>
 						<div class="dm-head">
-							<a class="dm-name" href={`${ROUTES.MEMORY_BROWSE}?domain=${encodeURIComponent(d.domain)}`}>
+							<a class="dm-name" href={`${ROUTES.MEMORY_BROWSE}?${QUERY_PARAMS.DOMAIN}=${encodeURIComponent(d.domain)}`}>
 								{domainLabel(d.domain)}
 							</a>
 							<span class="dm-counts">

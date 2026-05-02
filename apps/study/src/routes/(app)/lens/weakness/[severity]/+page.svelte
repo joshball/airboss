@@ -1,5 +1,5 @@
 <script lang="ts">
-import { domainLabel, NAV_LABELS, ROUTES, WEAKNESS_SEVERITY_LABELS } from '@ab/constants';
+import { domainLabel, NAV_LABELS, QUERY_PARAMS, ROUTES, WEAKNESS_SEVERITY_LABELS } from '@ab/constants';
 import EmptyState from '@ab/ui/components/EmptyState.svelte';
 import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import type { PageData } from './$types';
@@ -54,8 +54,8 @@ function reasonText(area: {
 					<a
 						class="drill"
 						href={area.link === 'reps'
-							? `${ROUTES.REPS_BROWSE}?domain=${encodeURIComponent(area.domain)}`
-							: `${ROUTES.MEMORY_BROWSE}?domain=${encodeURIComponent(area.domain)}`}>Drill</a
+							? `${ROUTES.REPS_BROWSE}?${QUERY_PARAMS.DOMAIN}=${encodeURIComponent(area.domain)}`
+							: `${ROUTES.MEMORY_BROWSE}?${QUERY_PARAMS.DOMAIN}=${encodeURIComponent(area.domain)}`}>Drill</a
 					>
 				</li>
 			{/each}

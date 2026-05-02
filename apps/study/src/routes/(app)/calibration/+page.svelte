@@ -175,7 +175,7 @@ function practiceHrefForBucket(_bucket: CalibrationBucket): string {
  * learner lands in a scoped review without any extra clicks.
  */
 function practiceHrefForDomain(d: DomainCalibration): string {
-	return `${ROUTES.MEMORY_REVIEW}?domain=${encodeURIComponent(d.domain)}`;
+	return `${ROUTES.MEMORY_REVIEW}?${QUERY_PARAMS.DOMAIN}=${encodeURIComponent(d.domain)}`;
 }
 
 /**
@@ -805,7 +805,7 @@ const interpretation = $derived(
 	.sparkline {
 		width: 100%;
 		height: auto;
-		max-height: 120px;
+		max-height: 7.5rem;
 	}
 
 	.sparkline-axis {

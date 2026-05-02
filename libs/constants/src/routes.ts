@@ -292,6 +292,14 @@ export const ROUTES = {
 	GOAL_EDIT: (id: string) => `/goals/${encodeURIComponent(id)}?${QUERY_PARAMS.EDIT}=1` as const,
 
 	// Study -- Lens UI (lens-ui WP, ADR 016 phase 8).
+	/** Umbrella prefix for the Lens area; used by nav-active prefix checks. */
+	LENS: '/lens',
+	/**
+	 * Handbook / regulation figure asset stream. The `[...path]` server route
+	 * resolves `path` against the handbook cache root and pipes the file body.
+	 * Callers strip any leading slash before passing in.
+	 */
+	HANDBOOK_ASSET: (path: string) => `/handbook-asset/${path}` as const,
 	LENS_HANDBOOK: '/lens/handbook',
 	LENS_HANDBOOK_DOC: (doc: string) => `/lens/handbook/${encodeURIComponent(doc)}` as const,
 	LENS_HANDBOOK_CHAPTER: (doc: string, chapter: string | number) =>

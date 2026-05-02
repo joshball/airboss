@@ -1,6 +1,12 @@
 import { requireAuth } from '@ab/auth';
 import { createScenario, newScenarioSchema, type ScenarioOption, type ScenarioRow } from '@ab/bc-study';
-import { type DIFFICULTY_VALUES, type DOMAIN_VALUES, type PHASE_OF_FLIGHT_VALUES, ROUTES } from '@ab/constants';
+import {
+	type DIFFICULTY_VALUES,
+	type DOMAIN_VALUES,
+	type PHASE_OF_FLIGHT_VALUES,
+	QUERY_PARAMS,
+	ROUTES,
+} from '@ab/constants';
 import { createLogger } from '@ab/utils';
 import { fail, redirect } from '@sveltejs/kit';
 import type { Actions } from './$types';
@@ -20,13 +26,15 @@ function parseOptions(form: FormData): ScenarioOption[] {
 		if (match) indexSet.add(Number(match[1]));
 	}
 	const indexes = [...indexSet].sort((a, b) => a - b);
+	// `options[correct]` is a single radio value -- read once outside the loop
+	// (it doesn't change per option).
+	const correctIndex = String(form.get('options[correct]') ?? '');
 	const result: ScenarioOption[] = [];
 	for (const i of indexes) {
 		const id = String(form.get(`options[${i}][id]`) ?? '').trim();
 		const text = String(form.get(`options[${i}][text]`) ?? '').trim();
 		const outcome = String(form.get(`options[${i}][outcome]`) ?? '').trim();
 		const whyNot = String(form.get(`options[${i}][whyNot]`) ?? '').trim();
-		const correctIndex = String(form.get('options[correct]') ?? '');
 		const isCorrect = correctIndex !== '' && Number(correctIndex) === i;
 		// Drop the row entirely when the user left the option blank -- they
 		// clicked Remove but the row stayed in the DOM, or they added a blank
@@ -116,6 +124,6 @@ export const actions: Actions = {
 		// Land the user on browse with `?created=<id>` so the page can surface
 		// a success banner and highlight the new row. Confirmation, not guesswork --
 		// see DESIGN_PRINCIPLES.md #7.
-		redirect(303, `${ROUTES.REPS_BROWSE}?created=${encodeURIComponent(created.id)}`);
+		redirect(303, `${ROUTES.REPS_BROWSE}?${QUERY_PARAMS.CREATED}=${encodeURIComponent(created.id)}`);
 	},
 } satisfies Actions;

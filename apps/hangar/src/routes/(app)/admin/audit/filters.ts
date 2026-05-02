@@ -79,6 +79,9 @@ function parseDate(raw: string): Date | undefined {
  */
 export function pickAllowedValue<T extends string>(value: string | null, allowed: readonly T[]): T | undefined {
 	if (value === null || value === '') return undefined;
+	// `includes()` proves at runtime that `value` is one of `T`; TS doesn't
+	// narrow generic readonly-array membership, so we widen the array to
+	// `readonly string[]` for the check and narrow `value` back to `T`.
 	return (allowed as readonly string[]).includes(value) ? (value as T) : undefined;
 }
 

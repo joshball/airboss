@@ -124,6 +124,15 @@ export const JOBS_LIST_HARD_CAP = 50;
  */
 export const JOB_LOG_CLIENT_BUFFER_MAX = 5000;
 
+/**
+ * Job-detail UI poll interval (ms). Mirrors the worker's
+ * `DEFAULT_POLL_INTERVAL_MS` so the live log refreshes at roughly the rate the
+ * worker drains the queue. Worker side keeps its own constant local because
+ * the worker contract doesn't depend on this UI default; the value is shared
+ * here so a future tuning lands in one place.
+ */
+export const JOB_DETAIL_POLL_INTERVAL_MS = 1000;
+
 /** Modes for the sync-to-disk handler. */
 export const HANGAR_SYNC_MODES = {
 	/** Stage + commit locally on the current branch. */

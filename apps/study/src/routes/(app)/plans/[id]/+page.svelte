@@ -16,6 +16,7 @@ import {
 	SESSION_MODE_LABELS,
 	SESSION_MODE_VALUES,
 	type SessionMode,
+	TOAST_DISMISS_MS,
 } from '@ab/constants';
 import type { ActionFailure } from '@ab/types';
 import Banner from '@ab/ui/components/Banner.svelte';
@@ -59,7 +60,7 @@ $effect(() => {
 	editToastVisible = true;
 	const timer = setTimeout(() => {
 		editToastVisible = false;
-	}, 3000);
+	}, TOAST_DISMISS_MS);
 	return () => clearTimeout(timer);
 });
 

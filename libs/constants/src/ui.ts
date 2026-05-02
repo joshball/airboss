@@ -38,3 +38,17 @@ export const Z_INDEX = {
 } as const;
 
 export type ZIndexTier = (typeof Z_INDEX)[keyof typeof Z_INDEX];
+
+/**
+ * Auto-dismiss duration (ms) for confirmation toasts surfaced after a
+ * successful save / share / commit. The default lingers long enough that a
+ * fast reader can confirm "yes, that worked", while still being short enough
+ * to feel snappy.
+ */
+export const TOAST_DISMISS_MS = 3000;
+
+/**
+ * Shorter dismiss for toasts that follow a copy-to-clipboard interaction.
+ * Copy is a low-stakes signal; readers don't need the longer linger.
+ */
+export const TOAST_DISMISS_SHORT_MS = 2000;

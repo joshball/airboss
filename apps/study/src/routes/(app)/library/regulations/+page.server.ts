@@ -11,6 +11,7 @@ import { listReferences } from '@ab/bc-study';
 import {
 	LIBRARY_REGULATIONS_KIND_LABELS,
 	LIBRARY_REGULATIONS_KIND_VALUES,
+	LIBRARY_REGULATIONS_KINDS,
 	type LibraryRegulationsKind,
 	REFERENCE_KINDS,
 	type ReferenceKind,
@@ -25,15 +26,15 @@ interface BucketView {
 
 function bucketMatches(kind: LibraryRegulationsKind, refKind: ReferenceKind, slug: string): boolean {
 	switch (kind) {
-		case '14-cfr':
+		case LIBRARY_REGULATIONS_KINDS.CFR_14:
 			return refKind === REFERENCE_KINDS.CFR && slug.startsWith('14cfr');
-		case '49-cfr':
+		case LIBRARY_REGULATIONS_KINDS.CFR_49:
 			return refKind === REFERENCE_KINDS.CFR && slug.startsWith('49cfr');
-		case 'aim':
+		case LIBRARY_REGULATIONS_KINDS.AIM:
 			return refKind === REFERENCE_KINDS.AIM || refKind === REFERENCE_KINDS.PCG;
-		case 'ac':
+		case LIBRARY_REGULATIONS_KINDS.AC:
 			return refKind === REFERENCE_KINDS.AC;
-		case 'ntsb':
+		case LIBRARY_REGULATIONS_KINDS.NTSB:
 			return refKind === REFERENCE_KINDS.NTSB;
 	}
 }

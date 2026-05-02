@@ -23,8 +23,10 @@ import {
 	SCENARIO_STATUSES,
 	SESSION_ITEM_KINDS,
 	WEAK_AREA_ACCURACY_THRESHOLD,
+	WEAK_AREA_CARD_WEIGHT,
 	WEAK_AREA_LIMIT,
 	WEAK_AREA_MIN_DATA_POINTS,
+	WEAK_AREA_REP_WEIGHT,
 	WEAK_AREA_WINDOW_DAYS,
 } from '@ab/constants';
 import { db as defaultDb } from '@ab/db/connection';
@@ -389,7 +391,9 @@ async function extendedStreak(userId: string, db: Db, now: Date): Promise<number
  *     card_weakness = max(0, threshold - card_accuracy)
  *     rep_weakness  = max(0, threshold - rep_accuracy)
  *     overdue_load  = overdue_card_count / max(1, active_cards_in_domain)
- *     score         = 2 * card_weakness + 2 * rep_weakness + overdue_load
+ *     score         = WEAK_AREA_CARD_WEIGHT * card_weakness
+ *                   + WEAK_AREA_REP_WEIGHT * rep_weakness
+ *                   + overdue_load
  *
  * A domain with insufficient data is skipped entirely (empty-state behavior).
  * Ordering: score desc, then domain asc for a stable tiebreaker.
@@ -514,7 +518,7 @@ export async function getWeakAreas(
 		const repWeakness = Math.max(0, WEAK_AREA_ACCURACY_THRESHOLD - repAccuracy);
 		const overdueLoad = agg.overdue === 0 ? 0 : agg.overdue / Math.max(1, agg.activeCards);
 
-		const score = 2 * cardWeakness + 2 * repWeakness + overdueLoad;
+		const score = WEAK_AREA_CARD_WEIGHT * cardWeakness + WEAK_AREA_REP_WEIGHT * repWeakness + overdueLoad;
 		if (score <= 0) continue;
 
 		const reasons: WeakAreaReason[] = [];

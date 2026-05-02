@@ -101,6 +101,9 @@ export async function readJobLog(
 	db: Db = defaultDb,
 ): Promise<HangarJobLogRow[]> {
 	const limit = options.limit ?? 500;
+	// Real `seq` values start at 0; `-1` is the "from the beginning" sentinel
+	// so the `seq > sinceSeq` predicate yields every row when no cursor was
+	// supplied.
 	const sinceSeq = options.sinceSeq ?? -1;
 	return db
 		.select()

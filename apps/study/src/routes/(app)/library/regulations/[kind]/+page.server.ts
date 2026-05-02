@@ -17,6 +17,7 @@ import {
 	externalUrlForReference,
 	LIBRARY_REGULATIONS_KIND_LABELS,
 	LIBRARY_REGULATIONS_KIND_VALUES,
+	LIBRARY_REGULATIONS_KINDS,
 	type LibraryRegulationsKind,
 	REFERENCE_KIND_LABELS,
 	REFERENCE_KINDS,
@@ -81,8 +82,8 @@ export const load: PageServerLoad = async (event) => {
 	let groups: GroupCard[] = [];
 	let umbrellas: UmbrellaCard[] = [];
 
-	if (kind === '14-cfr' || kind === '49-cfr') {
-		const prefix = kind === '14-cfr' ? '14cfr' : '49cfr';
+	if (kind === LIBRARY_REGULATIONS_KINDS.CFR_14 || kind === LIBRARY_REGULATIONS_KINDS.CFR_49) {
+		const prefix = kind === LIBRARY_REGULATIONS_KINDS.CFR_14 ? '14cfr' : '49cfr';
 		const matching = refs.filter((r) => r.kind === REFERENCE_KINDS.CFR && r.documentSlug.startsWith(prefix));
 		const byPart = new Map<string, number>();
 		for (const ref of matching) {
@@ -93,7 +94,7 @@ export const load: PageServerLoad = async (event) => {
 		groups = [...byPart.entries()]
 			.sort(([a], [b]) => Number(a) - Number(b))
 			.map(([part, count]) => ({ groupKey: part, label: `Part ${part}`, referenceCount: count }));
-	} else if (kind === 'aim') {
+	} else if (kind === LIBRARY_REGULATIONS_KINDS.AIM) {
 		// AIM umbrella + PCG always render as umbrella cards; per-chapter
 		// section navigation is forward-compatible (rendered when
 		// handbook_section rows exist for AIM, see [group] route).
@@ -111,7 +112,7 @@ export const load: PageServerLoad = async (event) => {
 				externalUrl: externalUrlForReference(refKind, ref.documentSlug, ref.edition, ref.url),
 			};
 		});
-	} else if (kind === 'ac') {
+	} else if (kind === LIBRARY_REGULATIONS_KINDS.AC) {
 		const acRefs = refs.filter((r) => r.kind === REFERENCE_KINDS.AC);
 		const bySeries = new Map<string, number>();
 		const orphans: typeof acRefs = [];
@@ -145,7 +146,7 @@ export const load: PageServerLoad = async (event) => {
 				externalUrl: externalUrlForReference(refKind, ref.documentSlug, ref.edition, ref.url),
 			};
 		});
-	} else if (kind === 'ntsb') {
+	} else if (kind === LIBRARY_REGULATIONS_KINDS.NTSB) {
 		const ntsbRefs = refs.filter((r) => r.kind === REFERENCE_KINDS.NTSB);
 		umbrellas = ntsbRefs.map((ref) => {
 			const refKind = ref.kind as ReferenceKind;

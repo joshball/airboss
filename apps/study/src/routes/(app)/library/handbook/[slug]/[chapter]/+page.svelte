@@ -37,7 +37,7 @@ function stripFrontmatter(md: string): string {
 // `handbooks/` segment.
 function figureUrl(assetPath: string): string {
 	const stripped = assetPath.startsWith('handbooks/') ? assetPath.slice('handbooks/'.length) : assetPath;
-	return `/handbook-asset/${stripped}`;
+	return ROUTES.HANDBOOK_ASSET(stripped);
 }
 </script>
 

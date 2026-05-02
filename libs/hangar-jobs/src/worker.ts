@@ -79,6 +79,12 @@ export interface WorkerHandle {
 
 const DEFAULT_CONCURRENCY = 3;
 const DEFAULT_POLL_INTERVAL_MS = 1000;
+/**
+ * Drain-loop sleep (ms) used during graceful shutdown while waiting for
+ * in-flight jobs to finish. Tighter than `DEFAULT_POLL_INTERVAL_MS` so
+ * shutdown latency stays sub-second once the last job completes.
+ */
+const DRAIN_POLL_INTERVAL_MS = 25;
 
 /**
  * Start a worker. Returns a handle the hangar server shutdown hook uses
@@ -414,7 +420,7 @@ export function startWorker(options: WorkerOptions): WorkerHandle {
 			await sleep(pollInterval);
 		}
 		// Wait for any in-flight jobs to complete before signalling stop.
-		while (runningIds.size > 0) await sleep(25);
+		while (runningIds.size > 0) await sleep(DRAIN_POLL_INTERVAL_MS);
 		stopResolve();
 	}
 
