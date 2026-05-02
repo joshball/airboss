@@ -18,6 +18,7 @@ import { parseLesson } from '../lesson-parser.ts';
 import type { Edition, EditionId, LessonId, SourceEntry, SourceId } from '../types.ts';
 import { getCorpusResolver } from './corpus-resolver.ts';
 import { getEditionsMap } from './editions.ts';
+import { getChildrenForId, getEntriesForCanonicalShort } from './index-cache.ts';
 import { getSources } from './sources.ts';
 
 // ---------------------------------------------------------------------------
@@ -60,21 +61,14 @@ export function hasEntry(id: SourceId): boolean {
  * Example: children of `airboss-ref:regs/cfr-14/91` include
  * `airboss-ref:regs/cfr-14/91/103` and `airboss-ref:regs/cfr-14/91/107` but
  * exclude `airboss-ref:regs/cfr-14/91/103/b` (grandchild).
+ *
+ * Backed by a generation-invalidated parent->children index in
+ * `index-cache.ts`; O(1) per call after the first build of the current
+ * sources generation.
  */
 export function getChildren(id: SourceId): readonly SourceEntry[] {
 	const stripped = stripPin(id);
-	const sources = getSources();
-	const out: SourceEntry[] = [];
-	const prefix = `${stripped}/`;
-	for (const [key, entry] of Object.entries(sources) as [SourceId, SourceEntry][]) {
-		if (!key.startsWith(prefix)) continue;
-		const remainder = key.slice(prefix.length);
-		// "one-level-deep" = no additional `/` in the remainder.
-		if (remainder.length === 0) continue;
-		if (remainder.includes('/')) continue;
-		out.push(entry);
-	}
-	return out;
+	return getChildrenForId(stripped);
 }
 
 /**
@@ -119,18 +113,12 @@ export function isSupersessionChainBroken(id: SourceId): boolean {
 
 /**
  * Find every entry whose `canonical_short` matches `short` (case-insensitive).
- * Linear scan; the corpus is small enough for v1. Per-canonical-short
- * indexing is a future optimisation.
+ * Backed by a generation-invalidated `lowercase_short -> SourceEntry[]` index
+ * in `index-cache.ts`; O(1) per call after the first build of the current
+ * sources generation.
  */
 export function findEntriesByCanonicalShort(short: string): readonly SourceEntry[] {
-	const needle = short.toLowerCase();
-	const out: SourceEntry[] = [];
-	for (const entry of Object.values(getSources())) {
-		if (entry.canonical_short.toLowerCase() === needle) {
-			out.push(entry);
-		}
-	}
-	return out;
+	return getEntriesForCanonicalShort(short);
 }
 
 // ---------------------------------------------------------------------------

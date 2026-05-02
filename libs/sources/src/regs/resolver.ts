@@ -14,8 +14,8 @@ import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import type { CorpusResolver } from '../registry/corpus-resolver.ts';
 import { getEditionsMap } from '../registry/editions.ts';
+import { getCurrentEditionForCorpus } from '../registry/index-cache.ts';
 import { stripPin } from '../registry/query.ts';
-import { getSources } from '../registry/sources.ts';
 import type { Edition, EditionId, IndexedContent, LocatorError, ParsedLocator, SourceId } from '../types.ts';
 import { formatRegsCitation } from './citation.ts';
 import { parseRegsLocator } from './locator.ts';
@@ -53,21 +53,13 @@ export const REGS_RESOLVER: CorpusResolver = {
 	},
 
 	getCurrentEdition(): EditionId | null {
-		// Walk every regs-corpus entry's editions; return the lexically-largest
-		// edition slug. Editions are calendar years (or YYYY-MM-DD), so lexical
-		// max is also chronological max.
+		// Memoized through the generation-invalidated index in
+		// `registry/index-cache.ts`. The cache walks the regs-corpus entry
+		// list once per (sources-gen, editions-gen); subsequent reads are
+		// O(1) Map-gets. Editions are calendar years (or YYYY-MM-DD), so
+		// lexical max is also chronological max.
 		const editionsMap = getEditionsMap();
-		const sources = getSources();
-		let max: EditionId | null = null;
-		for (const id of Object.keys(sources)) {
-			const entry = sources[id as SourceId];
-			if (entry === undefined || entry.corpus !== REGS_CORPUS) continue;
-			const editions = editionsMap.get(id as SourceId) ?? [];
-			for (const edition of editions) {
-				if (max === null || edition.id > max) max = edition.id;
-			}
-		}
-		return max;
+		return getCurrentEditionForCorpus(REGS_CORPUS, (id) => editionsMap.get(id) ?? []);
 	},
 
 	async getEditions(id: SourceId): Promise<readonly Edition[]> {

@@ -15,8 +15,8 @@ import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import type { CorpusResolver } from '../registry/corpus-resolver.ts';
 import { getEditionsMap } from '../registry/editions.ts';
+import { getCurrentEditionForCorpus } from '../registry/index-cache.ts';
 import { stripPin } from '../registry/query.ts';
-import { getSources } from '../registry/sources.ts';
 import type { Edition, EditionId, IndexedContent, LocatorError, ParsedLocator, SourceId } from '../types.ts';
 import { formatHandbooksCitation } from './citation.ts';
 import { bodyPathForSection, type ManifestFile, manifestSectionForLocator, readManifest } from './derivative-reader.ts';
@@ -129,24 +129,16 @@ export const HANDBOOKS_RESOLVER: CorpusResolver = {
 	},
 
 	getCurrentEdition(): EditionId | null {
-		// Walk every handbooks-corpus entry's editions; return the lexically-
-		// largest edition slug. Editions are letter-suffixed FAA revisions
+		// Memoized through the generation-invalidated index in
+		// `registry/index-cache.ts`. The cache walks the handbooks-corpus
+		// entry list once per (sources-gen, editions-gen); subsequent reads
+		// are O(1) Map-gets. Editions are letter-suffixed FAA revisions
 		// (8083-25A < 8083-25B < 8083-25C), so lexical max is also publication
 		// max within a doc. Across docs the result is doc-dependent; this
 		// method's contract is "the most recent edition slug ingested",
 		// matching Phase 3's regs implementation.
 		const editionsMap = getEditionsMap();
-		const sources = getSources();
-		let max: EditionId | null = null;
-		for (const id of Object.keys(sources)) {
-			const entry = sources[id as SourceId];
-			if (entry === undefined || entry.corpus !== HANDBOOKS_CORPUS) continue;
-			const editions = editionsMap.get(id as SourceId) ?? [];
-			for (const edition of editions) {
-				if (max === null || edition.id > max) max = edition.id;
-			}
-		}
-		return max;
+		return getCurrentEditionForCorpus(HANDBOOKS_CORPUS, (id) => editionsMap.get(id) ?? []);
 	},
 
 	async getEditions(id: SourceId): Promise<readonly Edition[]> {

@@ -23,6 +23,9 @@ export const EDITIONS: ReadonlyMap<SourceId, readonly Edition[]> = new Map();
 
 /**
  * Test-only mutation surface. Production code MUST NOT call this.
+ *
+ * Bumps the editions generation counter on every swap so any cached index
+ * (`registry/index-cache.ts`) sees an invalidation signal on the next read.
  */
 export const __editions_internal__ = {
 	getActiveTable(): Map<SourceId, readonly Edition[]> {
@@ -31,11 +34,21 @@ export const __editions_internal__ = {
 	setActiveTable(next: Map<SourceId, readonly Edition[]>): Map<SourceId, readonly Edition[]> {
 		const prev = _activeEditions;
 		_activeEditions = next;
+		_editionsGeneration += 1;
 		return prev;
+	},
+	/**
+	 * Monotonic generation counter. Bumped on every `setActiveTable` call.
+	 * Index caches (`registry/index-cache.ts`) compare this against their
+	 * last-seen generation to decide whether to rebuild.
+	 */
+	getGeneration(): number {
+		return _editionsGeneration;
 	},
 };
 
 let _activeEditions: Map<SourceId, readonly Edition[]> = new Map(EDITIONS);
+let _editionsGeneration = 0;
 
 /** Read the currently-active edition map. */
 export function getEditionsMap(): Map<SourceId, readonly Edition[]> {
