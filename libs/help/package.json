@@ -5,6 +5,7 @@
 	"dependencies": {
 		"@ab/aviation": "workspace:*",
 		"@ab/constants": "workspace:*",
+		"@ab/ui": "workspace:*",
 		"@ab/utils": "workspace:*"
 	}
 }

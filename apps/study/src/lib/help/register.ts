@@ -22,6 +22,7 @@
  */
 
 import { helpRegistry } from '@ab/help';
+import { setInfoTipHelpResolver } from '@ab/ui/lib/info-tip-resolver';
 import { studyHelpPages } from './pages';
 
 const STUDY_APP_ID = 'study';
@@ -30,6 +31,10 @@ export { studyHelpPages };
 
 export function registerStudyHelp(): void {
 	helpRegistry.registerPages(STUDY_APP_ID, studyHelpPages);
+	// Hand `@ab/ui` a registry-existence callback so InfoTip can dev-warn
+	// on broken `helpId` props without importing from `@ab/help`. Inverting
+	// this edge keeps the ui <-> help dependency acyclic.
+	setInfoTipHelpResolver((id) => helpRegistry.getById(id) !== undefined);
 }
 
 // Module-eval side-effect: register on first import. Idempotent on
