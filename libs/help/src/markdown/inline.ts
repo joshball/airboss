@@ -16,7 +16,7 @@
 import { sourceFromUrl } from '../schema/external-ref';
 import type { InlineNode, LinkInline } from './ast';
 
-const ESCAPABLE = new Set(['\\', '`', '*', '_', '[', ']', '(', ')', '<', '>', '#', '|']);
+export const ESCAPABLE = new Set(['\\', '`', '*', '_', '[', ']', '(', ')', '<', '>', '#', '|']);
 
 interface InlineCursor {
 	src: string;
@@ -128,11 +128,20 @@ function parseInlineUntil(cursor: InlineCursor, end: string | null): InlineNode[
 	return out;
 }
 
-/** Locate `needle` in `src` starting at `from`, skipping `\x` escapes. */
+/**
+ * Locate `needle` in `src` starting at `from`, skipping `\<c>` escapes.
+ *
+ * Must match `parseInlineUntil`'s escape grammar exactly: a backslash only
+ * counts as an escape when the next char is in `ESCAPABLE`. Otherwise the
+ * backslash is literal and we advance by one. If the two predicates disagree,
+ * the closing-delimiter scan can step over a real `*` / `**` (or `*` can be
+ * found in a position the body parse treats as literal), and the resulting
+ * spans render mis-bounded.
+ */
 function findUnescaped(src: string, needle: string, from: number): number {
 	let i = from;
 	while (i < src.length) {
-		if (src[i] === '\\' && i + 1 < src.length) {
+		if (src[i] === '\\' && i + 1 < src.length && ESCAPABLE.has(src[i + 1] as string)) {
 			i += 2;
 			continue;
 		}
@@ -153,7 +162,7 @@ function tryParseLink(src: string, start: number): LinkResult | null {
 	let depth = 1;
 	while (i < src.length && depth > 0) {
 		const ch = src[i];
-		if (ch === '\\' && i + 1 < src.length) {
+		if (ch === '\\' && i + 1 < src.length && ESCAPABLE.has(src[i + 1] as string)) {
 			i += 2;
 			continue;
 		}

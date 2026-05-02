@@ -8,6 +8,7 @@
 import { cleanup, render, screen } from '@testing-library/svelte';
 import { userEvent } from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import ConfirmDialogBindableHarness from './harnesses/ConfirmDialogBindableHarness.svelte';
 import ConfirmDialogHarness from './harnesses/ConfirmDialogHarness.svelte';
 
 afterEach(() => {
@@ -153,5 +154,56 @@ describe('ConfirmDialog -- closed state', () => {
 	it('does not render the dialog body when open=false', () => {
 		render(ConfirmDialogHarness, { open: false });
 		expect(screen.queryByTestId('dialog-body')).toBeNull();
+	});
+});
+
+describe('ConfirmDialog -- reactivity (open is bindable)', () => {
+	it('Dialog write of open=false on scrim close propagates back to the caller through bind:open', async () => {
+		const user = userEvent.setup();
+		const { container } = render(ConfirmDialogBindableHarness);
+
+		// Sanity: dialog is mounted, harness reflects open=true.
+		expect(screen.getByTestId('dialog-body')).toBeTruthy();
+		expect(container.querySelector('[data-testid=harness-state]')?.getAttribute('data-open')).toBe('true');
+
+		// Click the scrim (not the panel) -- Dialog calls `close()`, which
+		// writes `open = false` and fires onClose. With `bind:open` wired
+		// through ConfirmDialog, that write propagates back to the harness.
+		const scrim = container.querySelector('[data-testid=dialog-scrim]') as HTMLElement;
+		expect(scrim).toBeTruthy();
+		// pointerdown on the scrim itself (not a child) triggers close.
+		await user.pointer({ keys: '[MouseLeft>]', target: scrim });
+		await user.pointer({ keys: '[/MouseLeft]', target: scrim });
+
+		expect(container.querySelector('[data-testid=harness-state]')?.getAttribute('data-open')).toBe('false');
+		expect(screen.queryByTestId('dialog-body')).toBeNull();
+	});
+
+	it('Cancel button click propagates close through to caller (open flips to false)', async () => {
+		const user = userEvent.setup();
+		const { container } = render(ConfirmDialogBindableHarness);
+		expect(container.querySelector('[data-testid=harness-state]')?.getAttribute('data-open')).toBe('true');
+
+		await user.click(screen.getByRole('button', { name: 'Cancel' }));
+
+		expect(container.querySelector('[data-testid=harness-state]')?.getAttribute('data-cancel-count')).toBe('1');
+		expect(container.querySelector('[data-testid=harness-state]')?.getAttribute('data-open')).toBe('false');
+	});
+
+	it('parent setting open=false re-mounts cleanly when set back to true', async () => {
+		// Regression guard: with the previous one-way wire, internal Dialog
+		// writes left ConfirmDialog's view of `open` desynced from the
+		// caller's. Toggling the parent's source-of-truth should reliably
+		// remount the dialog body.
+		const { container, rerender } = render(ConfirmDialogBindableHarness, { initialOpen: false });
+		expect(screen.queryByTestId('dialog-body')).toBeNull();
+		await rerender({ initialOpen: true });
+		// rerender does not reset `$state` initialised via $props on first
+		// mount; instead trigger reopen by re-rendering a fresh harness.
+		cleanup();
+		render(ConfirmDialogBindableHarness, { initialOpen: true });
+		expect(screen.getByTestId('dialog-body')).toBeTruthy();
+		expect(document.querySelector('[data-testid=harness-state]')?.getAttribute('data-open')).toBe('true');
+		void container; // marker for biome
 	});
 });

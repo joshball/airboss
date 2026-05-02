@@ -51,6 +51,22 @@ export interface ParsedQuery {
 	freeText: string;
 	/** Structured facet filters. Multi-value per facet allowed (OR within). */
 	filters: ParsedFilter[];
+	/**
+	 * Non-fatal grammar issues surfaced during parse (e.g. unterminated quote).
+	 * Search runs gracefully on the recovered tokens; the UI can render these
+	 * to give the author feedback instead of silently swallowing the input.
+	 */
+	warnings: ParseWarning[];
+}
+
+export type ParseWarningCode = 'unterminated_quote';
+
+export interface ParseWarning {
+	code: ParseWarningCode;
+	/** Human-readable message keyed by code. UI may localize via `code`. */
+	message: string;
+	/** Char offset into the raw query where the issue began. */
+	offset: number;
 }
 
 export interface ParsedFilter {

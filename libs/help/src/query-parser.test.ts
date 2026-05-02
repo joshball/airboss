@@ -113,15 +113,43 @@ describe('parseQuery - quoted phrases', () => {
 		expect(filter(result, 'source')).toEqual(['cfr']);
 	});
 
-	it('handles unclosed quotes as consuming the rest of the input', () => {
+	it('handles unclosed quotes as consuming the rest of the input AND emits a clear warning', () => {
 		const result = parseQuery('"foo bar');
 		expect(result.freeText).toBe('foo bar');
+		expect(result.warnings).toHaveLength(1);
+		expect(result.warnings[0]?.code).toBe('unterminated_quote');
+		expect(result.warnings[0]?.offset).toBe(0);
+		expect(result.warnings[0]?.message).toMatch(/unterminated/i);
+	});
+
+	it('emits no warning when quotes are properly closed', () => {
+		const result = parseQuery('"foo bar"');
+		expect(result.warnings).toEqual([]);
+	});
+
+	it('records the offset of the opening quote when unterminated mid-input', () => {
+		const result = parseQuery('metar "foo bar');
+		expect(result.freeText).toBe('metar foo bar');
+		expect(result.warnings).toHaveLength(1);
+		expect(result.warnings[0]?.code).toBe('unterminated_quote');
+		expect(result.warnings[0]?.offset).toBe(6);
 	});
 
 	it('preserves colons inside a quoted phrase (not parsed as a facet)', () => {
 		const result = parseQuery('"aim 7-1-1:cruise"');
 		expect(result.freeText).toBe('aim 7-1-1:cruise');
 		expect(result.filters).toEqual([]);
+	});
+
+	it('breaks a bare token on an opening quote (no silent fragmentation across tokens)', () => {
+		// Previously: tokenizer kept the `"` inside the bare token, producing
+		// `tag:foo"bar` (unknown bare token, fell through to free-text), then a
+		// second quoted token `baz`. Now: bare token closes at the `"`, the
+		// quote starts a phrase `bar baz`.
+		const result = parseQuery('tag:foo"bar baz"');
+		expect(filter(result, 'tag')).toEqual(['foo']);
+		expect(result.freeText).toBe('bar baz');
+		expect(result.warnings).toEqual([]);
 	});
 });
 

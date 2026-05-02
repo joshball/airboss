@@ -50,8 +50,8 @@ interface Props {
 	children: Snippet;
 }
 
-const {
-	open,
+let {
+	open = $bindable(false),
 	onconfirm,
 	oncancel,
 	title = 'Confirm',
@@ -90,7 +90,7 @@ $effect(() => {
 });
 </script>
 
-<Dialog {open} onClose={oncancel} size="sm" ariaLabel={title}>
+<Dialog bind:open onClose={oncancel} size="sm" ariaLabel={title}>
 	{#snippet header()}
 		<span class="title">{title}</span>
 	{/snippet}
