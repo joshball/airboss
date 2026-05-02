@@ -423,6 +423,21 @@ Stop conditions: any WP can be deferred or dropped at any point. The hard order 
 These don't block the substrate WP, but they're the same flavor of problem and shouldn't be lost:
 
 1. **`course/references/handbooks-noningested.yaml` is mostly redundant after WP-SUB.** Once WP-SUB's two-shape seeder lands, four of its five rows (AIH, IFH, IPH, risk-mgmt) seed from the handbooks-extras whole-doc manifests. The fifth -- `afh` at edition `FAA-H-8083-3B` (prior edition; `3C` is ingested) -- has no cache and only exists so historical citations to 3B resolve until a content audit promotes them to 3C. Resolution: delete `handbooks-noningested.yaml` once every row has a structured-content equivalent. The 3B-prior-edition row stays until it's ingested (low priority) or content is audited and re-pointed at 3C. The `migrate-references-to-structured.ts` bridge goes with the YAML when the YAML goes.
+
+    **Audit 2026-05-02 (Phase G smell #1 review):** the cleanup is more involved than "delete 4 YAML rows." Slug + edition pairs do not match cleanly across the two seeders:
+
+    | YAML noningested            | handbooks-extras                  |
+    | --------------------------- | --------------------------------- |
+    | `aih` + `FAA-H-8083-9B`     | `aviation-instructor` + `8083-9`  |
+    | `ifh` + `FAA-H-8083-15B`    | `ifh` + `8083-15B`                |
+    | `iph` + `FAA-H-8083-16B`    | `iph` + `8083-16B`                |
+    | `faa-h-8083-2` + `2A`       | `risk-management` + `8083-2A`     |
+
+    Different `(slug, edition)` pairs land as different `reference` rows. Today on main there are likely 8 rows for these 4 handbooks. The migrator at [`scripts/db/migrate-references-to-structured.ts:139-148`](../../scripts/db/migrate-references-to-structured.ts#L139-L148) hardcodes the noningested slug+edition pairs (`aih + FAA-H-8083-9B`, `iph + FAA-H-8083-16B`, etc.) for citation -> authored-row matching. Deleting noningested rows would make those lookups upsert synthetic rows -- the exact failure mode the YAML's own comment documents.
+
+    **Resolution path:** retire the `migrate-references-to-structured.ts` bridge first (it's a documented one-shot migration script), then delete `handbooks-noningested.yaml` rows that have handbooks-extras equivalents, then cross-update knowledge nodes whose `source` strings reference the legacy slugs. **Trigger to revisit:** the migrator's last consumer is gone (verify via `bun scripts/db/migrate-references-to-structured.ts --dry-run` showing zero rows touched), OR a content audit re-points knowledge-node `source` strings to the new slugs.
+
+    Status: **deferred** -- not fixed in this PR; risk of silent breakage on in-progress citation migrations. Captured here so the cleanup survives across sessions.
 2. **17 corpus modules each have identical 3-line `index.ts` registration boilerplate.** A registry that auto-discovers corpora from a manifest would erase ~50 lines and make adding a corpus a single-file change. Low priority; nice cleanup.
 3. **Phase-numbered reviewer IDs (`PHASE_3_REVIEWER_ID` ... `PHASE_9_REVIEWER_ID`)** encode ingest order rather than identity. Replace with stable per-corpus reviewer IDs derived from corpus slug. Trivial.
 4. **`externalUrlForReference()` switch in constants** (`libs/constants/src/study.ts:1496`) duplicates what the resolver registry is for. Folded into WP-SUB step 7.
