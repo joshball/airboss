@@ -32,6 +32,7 @@
  */
 
 import { join } from 'node:path';
+import { SOURCE_CACHE } from '@ab/constants';
 import {
 	listHandbookSlugs,
 	loadAcConfig,
@@ -185,7 +186,7 @@ function buildRegsPlan(target: RegsTarget, ecfrBase: string, root: string): Down
 		doc: `cfr-${target.title}-${partSlug}`,
 		edition: target.editionDate,
 		url,
-		destPath: join(root, 'regulations', `cfr-${target.title}`, filename),
+		destPath: join(root, SOURCE_CACHE.REGS, `cfr-${target.title}`, filename),
 		extension: 'xml',
 		kind: 'regs-xml',
 		ordinal: null,
@@ -215,7 +216,7 @@ function flatPlan(
 	if (corpus === 'handbooks') {
 		// Slug already encodes the edition for these whole-doc-only handbooks
 		// (handbooks-extras); re-use it as the dir.
-		destPath = join(root, 'handbooks', docId, `${docId}.pdf`);
+		destPath = join(root, SOURCE_CACHE.HANDBOOKS, docId, `${docId}.pdf`);
 	} else {
 		destPath = join(root, corpus, `${docId}.pdf`);
 	}
@@ -242,7 +243,7 @@ async function buildHandbookPlans(hb: HandbookConfig, root: string, opts: BuildP
 	const plans: DownloadPlan[] = [];
 	const slug = hb.document_slug;
 	const edition = hb.edition;
-	const editionRoot = join(root, 'handbooks', slug, edition);
+	const editionRoot = join(root, SOURCE_CACHE.HANDBOOKS, slug, edition);
 
 	// Whole-doc PDF.
 	const wholeDocUrl = hb.whole_doc?.url ?? hb.source_url;
@@ -367,7 +368,7 @@ function buildAncillaryPlan(
 
 function buildAimPlans(aim: AimConfig, root: string): DownloadPlan[] {
 	const plans: DownloadPlan[] = [];
-	const aimRoot = join(root, 'aim');
+	const aimRoot = join(root, SOURCE_CACHE.AIM);
 
 	// Bundled PDF (kept alongside HTML, archival).
 	plans.push({

@@ -21,6 +21,7 @@
 
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
+import { SOURCE_CACHE } from '@ab/constants';
 import { commitIngestBatch, getEntryLifecycle } from '../registry/lifecycle.ts';
 import type { Edition, SourceEntry, SourceId } from '../types.ts';
 import { type ManifestFile, type ManifestSection, readManifest } from './derivative-reader.ts';
@@ -266,7 +267,7 @@ export interface CliArgs {
 export function parseCliArgs(argv: readonly string[]): CliArgs | { error: string } {
 	let doc: string | null = null;
 	let edition: string | null = null;
-	let derivativeRoot = join(process.cwd(), 'handbooks');
+	let derivativeRoot = join(process.cwd(), SOURCE_CACHE.HANDBOOKS);
 	let help = false;
 
 	for (const arg of argv) {

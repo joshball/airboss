@@ -12,6 +12,7 @@
 
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { SOURCE_CACHE } from '@ab/constants';
 import type { CorpusResolver } from '../registry/corpus-resolver.ts';
 import { getEditionsMap } from '../registry/editions.ts';
 import { getCurrentEditionForCorpus } from '../registry/index-cache.ts';
@@ -27,7 +28,7 @@ export const REGS_CORPUS = 'regs';
  * The directory root for in-repo regulation derivatives. Test code overrides
  * via `setRegsDerivativeRoot`; production reads from `<cwd>/regulations`.
  */
-let _derivativeRoot: string = join(process.cwd(), 'regulations');
+let _derivativeRoot: string = join(process.cwd(), SOURCE_CACHE.REGS);
 
 export function setRegsDerivativeRoot(root: string): void {
 	_derivativeRoot = root;

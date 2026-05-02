@@ -39,7 +39,39 @@ export const SOURCE_CACHE = {
 	DEFAULT_PARENT_DIR: 'Documents',
 	/** Directory name appended under the parent for the default cache root. */
 	DEFAULT_DIR_NAME: 'airboss-handbook-cache',
+	// -----------------------------------------------------------------------
+	// Per-corpus subdirectory names under the resolved cache root.
+	//
+	// Source of truth: ADR 021 (cache flat naming). Each ingest pipeline that
+	// builds a path of the form `join(cacheRoot, '<corpus>', ...)` routes the
+	// `<corpus>` segment through one of these constants instead of hardcoding
+	// the literal. Adding a new corpus: drop a new key here, add the matching
+	// `.gitignore` line per ADR 018, and the ingest module imports the new
+	// member.
+	//
+	// Note: the `REGS` cache subdir is `regulations` (not `regs` -- the corpus
+	// id) by historical convention. The corpus discriminator string `'regs'`
+	// in `corpus: 'regs'` fields is a separate concept (resolver registration,
+	// per ADR 019 §2.1) and stays a string literal there.
+	// -----------------------------------------------------------------------
+	/** Advisory Circulars cache subdir: `<root>/ac/`. */
+	AC: 'ac',
+	/** Airman Certification Standards cache subdir: `<root>/acs/`. */
+	ACS: 'acs',
+	/** Aeronautical Information Manual cache subdir: `<root>/aim/`. */
+	AIM: 'aim',
+	/** FAA handbooks (PHAK, AFH, IFH, FIRC, ...) cache subdir: `<root>/handbooks/`. */
+	HANDBOOKS: 'handbooks',
+	/** eCFR regulations XML cache subdir: `<root>/regulations/`. */
+	REGS: 'regulations',
 } as const;
+
+/**
+ * Per-corpus subdirectory name. Narrows `SOURCE_CACHE` to just the corpus
+ * keys; callers that need to discriminate "is this a corpus subdir or one of
+ * the metadata fields (`ENV_VAR`, etc.)?" can pin to this type.
+ */
+export type SourceCacheSubdir = (typeof SOURCE_CACHE)['AC' | 'ACS' | 'AIM' | 'HANDBOOKS' | 'REGS'];
 
 type NodeFs = { existsSync: (p: string) => boolean; mkdirSync: (p: string, opts: { recursive: boolean }) => void };
 type NodeOs = { homedir: () => string };
