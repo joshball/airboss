@@ -236,8 +236,10 @@ describe('runHandbooksExtrasIngest -- live cache (smoke)', () => {
 			expect(rmhManifest.body_path).toBe('handbooks/risk-management/FAA-H-8083-2A/document.md');
 			expect(rmhManifest.sections).toEqual([]);
 		},
-		// 7 PDFs through the full extract pipeline takes 100-200s on a warm
-		// cache; bump generously past the 120s default so flaky CI runs stay green.
-		240000,
+		// The smoke test runs the full extract pipeline twice (initial + the
+		// idempotency re-check), so 7 entries means 14 PDF extractions. Each
+		// takes ~30-60s; observed total is 400-520s on a warm cache. Budget
+		// 720s to keep CI green even on cold-cache + slower-machine runs.
+		720000,
 	);
 });
