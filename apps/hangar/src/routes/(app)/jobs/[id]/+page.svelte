@@ -1,11 +1,13 @@
 <script lang="ts">
 import {
+	JOB_DETAIL_POLL_INTERVAL_MS,
 	JOB_LOG_CLIENT_BUFFER_MAX,
 	JOB_LOG_STREAMS,
 	JOB_STATUSES,
 	JOB_TERMINAL_STATUSES,
 	type JobLogStream,
 	type JobStatus,
+	QUERY_PARAMS,
 	ROUTES,
 } from '@ab/constants';
 import type { BadgeTone } from '@ab/ui';
@@ -33,6 +35,8 @@ let latestSeq = $state(data.latestSeq);
 // log endpoint with a `sinceSeq` cursor.
 let droppedLineCount = $state(0);
 // svelte-ignore state_referenced_locally
+// Server values are constrained to JobStatus by the audit-checked DB enum;
+// TS sees `string` because the JSON serialisation widens it on the wire.
 let currentStatus = $state<JobStatus>(data.job.status as JobStatus);
 // svelte-ignore state_referenced_locally
 let currentError = $state<string | null>(data.job.error);
@@ -62,7 +66,7 @@ const elapsedSinceStart = $derived.by(() => {
 const filteredLogs = $derived(activeStream === 'all' ? logs : logs.filter((l) => l.stream === activeStream));
 
 async function pollLog(): Promise<void> {
-	const res = await fetch(`${ROUTES.HANGAR_JOB_LOG(data.job.id)}?sinceSeq=${latestSeq}`);
+	const res = await fetch(`${ROUTES.HANGAR_JOB_LOG(data.job.id)}?${QUERY_PARAMS.SINCE_SEQ}=${latestSeq}`);
 	if (!res.ok) return;
 	const body = (await res.json()) as {
 		status: string;
@@ -97,7 +101,7 @@ $effect(() => {
 	if (typeof window === 'undefined') return;
 	const timer = setInterval(() => {
 		void pollLog();
-	}, 1000);
+	}, JOB_DETAIL_POLL_INTERVAL_MS);
 	return () => clearInterval(timer);
 });
 

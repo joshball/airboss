@@ -1,5 +1,5 @@
 import { requireRole } from '@ab/auth';
-import { ROLES, ROUTES } from '@ab/constants';
+import { QUERY_PARAMS, ROLES, ROUTES } from '@ab/constants';
 import { redirect } from '@sveltejs/kit';
 import type { LayoutServerLoad } from './$types';
 
@@ -34,7 +34,7 @@ export const load: LayoutServerLoad = async (event) => {
 		const { pathname, search } = event.url;
 		const original = `${pathname}${search}`;
 		const redirectTo = encodeURIComponent(original);
-		redirect(302, `${ROUTES.LOGIN}?redirectTo=${redirectTo}`);
+		redirect(302, `${ROUTES.LOGIN}?${QUERY_PARAMS.REDIRECT_TO}=${redirectTo}`);
 	}
 
 	const user = requireRole(event, ROLES.AUTHOR, ROLES.OPERATOR, ROLES.ADMIN);

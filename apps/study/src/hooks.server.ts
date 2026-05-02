@@ -59,8 +59,11 @@ function applySecurityHeaders(response: Response): void {
 			// HSTS only in prod; dev uses http on 127.0.0.1/localhost.
 			response.headers.set('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
 		}
-	} catch {
-		// Some response types (streaming/binary) have frozen headers; skip silently.
+	} catch (err) {
+		// Some response types (streaming/binary) have frozen headers; skip
+		// silently in prod. In dev surface the failure so a real CSP regression
+		// (or a future header-set bug) doesn't hide behind the throw.
+		if (dev) log.warn('security header set failed', { metadata: { err: String(err) } });
 	}
 }
 

@@ -7,6 +7,7 @@
  * navigation. The `(dev)/` route group convention matches the primitives demo.
  */
 
+import { QUERY_PARAMS } from '@ab/constants';
 import RenderedLesson from '$lib/components/RenderedLesson.svelte';
 import type { PageData } from './$types';
 
@@ -25,7 +26,7 @@ let { data }: { data: PageData } = $props();
 	<nav class="mode-nav" aria-label="Render mode">
 		{#each data.modes as mode (mode)}
 			<a
-				href={`?mode=${mode}`}
+				href={`?${QUERY_PARAMS.MODE}=${mode}`}
 				class:active={mode === data.mode}
 				aria-current={mode === data.mode ? 'page' : undefined}
 			>

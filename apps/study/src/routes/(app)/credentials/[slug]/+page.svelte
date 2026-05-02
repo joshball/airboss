@@ -1,5 +1,11 @@
 <script lang="ts">
-import { CREDENTIAL_KIND_LABELS, type CredentialKind, NAV_LABELS, ROUTES } from '@ab/constants';
+import {
+	CREDENTIAL_KIND_LABELS,
+	CREDENTIAL_PREREQ_KINDS,
+	type CredentialKind,
+	NAV_LABELS,
+	ROUTES,
+} from '@ab/constants';
 import PageHelp from '@ab/help/ui/PageHelp.svelte';
 import EmptyState from '@ab/ui/components/EmptyState.svelte';
 import PageHeader from '@ab/ui/components/PageHeader.svelte';
@@ -16,8 +22,8 @@ const areas = $derived(data.areas);
 const prereqs = $derived(data.prereqs);
 const supplemental = $derived(data.supplemental);
 
-const requiredPrereqs = $derived(prereqs.filter((p) => p.kind === 'required'));
-const recommendedPrereqs = $derived(prereqs.filter((p) => p.kind === 'recommended'));
+const requiredPrereqs = $derived(prereqs.filter((p) => p.kind === CREDENTIAL_PREREQ_KINDS.REQUIRED));
+const recommendedPrereqs = $derived(prereqs.filter((p) => p.kind === CREDENTIAL_PREREQ_KINDS.RECOMMENDED));
 
 let supplementalOpen = $state(false);
 

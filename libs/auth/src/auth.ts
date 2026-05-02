@@ -1,4 +1,4 @@
-import { ROUTES, type Role } from '@ab/constants';
+import { QUERY_PARAMS, ROUTES, type Role } from '@ab/constants';
 import { error, type RequestEvent, redirect } from '@sveltejs/kit';
 
 /** Session shape stored in locals by hooks.server.ts. */
@@ -67,7 +67,7 @@ export function requireAuth(event: RequestEvent): AuthUser {
 		const { pathname, search } = event.url;
 		const original = `${pathname}${search}`;
 		const redirectTo = encodeURIComponent(original);
-		redirect(302, `${ROUTES.LOGIN}?redirectTo=${redirectTo}`);
+		redirect(302, `${ROUTES.LOGIN}?${QUERY_PARAMS.REDIRECT_TO}=${redirectTo}`);
 	}
 	return user;
 }

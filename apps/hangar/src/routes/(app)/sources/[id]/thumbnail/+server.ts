@@ -47,6 +47,10 @@ export const GET: RequestHandler = async (event) => {
 	}
 
 	const stream = createReadStream(abs);
+	// Node fs Readable -> web ReadableStream coercion. SvelteKit / undici accept
+	// the runtime shape (Node's Readable is async-iterable, which Response()
+	// streams natively); TS lacks a structural overlap between the two stream
+	// hierarchies, hence the double cast.
 	return new Response(stream as unknown as ReadableStream, {
 		status: 200,
 		headers: {

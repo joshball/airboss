@@ -1,6 +1,6 @@
 <script lang="ts">
 import type { PanelResult, WeakArea, WeakAreaReason } from '@ab/bc-study';
-import { domainLabel, ROUTES, WEAK_AREA_WINDOW_DAYS } from '@ab/constants';
+import { domainLabel, QUERY_PARAMS, ROUTES, WEAK_AREA_WINDOW_DAYS } from '@ab/constants';
 import PanelShell from '@ab/ui/components/PanelShell.svelte';
 
 /**
@@ -16,7 +16,9 @@ const errorMessage = $derived('error' in weakAreas ? weakAreas.error : undefined
 
 function rowHref(area: WeakArea): string {
 	const slug = encodeURIComponent(area.domain);
-	return area.link === 'reps' ? `${ROUTES.REPS_BROWSE}?domain=${slug}` : `${ROUTES.MEMORY_BROWSE}?domain=${slug}`;
+	return area.link === 'reps'
+		? `${ROUTES.REPS_BROWSE}?${QUERY_PARAMS.DOMAIN}=${slug}`
+		: `${ROUTES.MEMORY_BROWSE}?${QUERY_PARAMS.DOMAIN}=${slug}`;
 }
 
 function reasonLabel(reason: WeakAreaReason): string {

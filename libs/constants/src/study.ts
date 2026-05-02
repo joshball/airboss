@@ -187,6 +187,19 @@ export const WEAK_AREA_WINDOW_DAYS = 30;
 /** Default number of weak areas surfaced on the dashboard. */
 export const WEAK_AREA_LIMIT = 5;
 
+/**
+ * Weight applied to card-side weakness in the weak-area score.
+ * Mirrors `WEAK_AREA_REP_WEIGHT`; both sides count equally.
+ * Tuning dial -- adjust here, not inline in `dashboard.ts`.
+ */
+export const WEAK_AREA_CARD_WEIGHT = 2;
+
+/**
+ * Weight applied to rep-side weakness in the weak-area score.
+ * Mirrors `WEAK_AREA_CARD_WEIGHT`; both sides count equally.
+ */
+export const WEAK_AREA_REP_WEIGHT = 2;
+
 /** Sparkline window (days) for the activity panel. */
 export const ACTIVITY_WINDOW_DAYS = 7;
 

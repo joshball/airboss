@@ -1,5 +1,5 @@
 <script lang="ts">
-import { domainLabel, REP_DASHBOARD_WINDOW_DAYS, ROUTES } from '@ab/constants';
+import { domainLabel, QUERY_PARAMS, REP_DASHBOARD_WINDOW_DAYS, ROUTES } from '@ab/constants';
 import PageHelp from '@ab/help/ui/PageHelp.svelte';
 import Button from '@ab/ui/components/Button.svelte';
 import EmptyState from '@ab/ui/components/EmptyState.svelte';
@@ -112,7 +112,7 @@ function bar(value: number): number {
 				{#each stats.scenariosByDomain as d (d.domain)}
 					<li>
 						<div class="dm-head">
-							<a class="dm-name" href={`${ROUTES.REPS_BROWSE}?domain=${encodeURIComponent(d.domain)}`}>
+							<a class="dm-name" href={`${ROUTES.REPS_BROWSE}?${QUERY_PARAMS.DOMAIN}=${encodeURIComponent(d.domain)}`}>
 								{domainLabel(d.domain)}
 							</a>
 							<span class="dm-counts">

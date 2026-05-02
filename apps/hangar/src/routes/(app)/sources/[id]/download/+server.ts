@@ -44,6 +44,9 @@ export const GET: RequestHandler = async (event) => {
 
 	const stream = createReadStream(archivePath);
 	const filename = `${row.id}-${row.edition.effectiveDate}-${basename(archivePath)}`;
+	// Node fs Readable -> web ReadableStream coercion. SvelteKit / undici accept
+	// the runtime shape; TS lacks a structural overlap between the two stream
+	// hierarchies, hence the double cast.
 	return new Response(stream as unknown as ReadableStream, {
 		status: 200,
 		headers: {

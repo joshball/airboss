@@ -30,12 +30,6 @@ export const SHIKI_THEME_LIGHT = 'github-light';
 /** Shiki theme name for the dark appearance. */
 export const SHIKI_THEME_DARK = 'github-dark';
 
-/**
- * Legacy export: the light theme name. Retained for code that read the
- * single-theme constant before dual-theme support landed.
- */
-export const SHIKI_THEME = SHIKI_THEME_LIGHT;
-
 export const SUPPORTED_LANGS = ['typescript', 'svelte', 'sql', 'bash', 'json', 'text'] as const;
 export type SupportedLang = (typeof SUPPORTED_LANGS)[number];
 
@@ -66,6 +60,10 @@ async function getHighlighter(): Promise<ShikiHighlighter> {
 			themes: [SHIKI_THEME_LIGHT, SHIKI_THEME_DARK],
 			langs: realLangs,
 		});
+		// Shiki's `Highlighter` type exposes ~20 methods; we model only the
+		// `codeToHtml` slice we use to keep the import surface narrow and
+		// avoid pulling Shiki's extensive types into every consumer of this
+		// module. Runtime shape is a strict superset of `ShikiHighlighter`.
 		return h as unknown as ShikiHighlighter;
 	})();
 	return highlighterPromise;

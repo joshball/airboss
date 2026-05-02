@@ -126,7 +126,7 @@ function stripFrontmatter(md: string): string {
 
 function figureUrl(assetPath: string): string {
 	const stripped = assetPath.startsWith('handbooks/') ? assetPath.slice('handbooks/'.length) : assetPath;
-	return `/handbook-asset/${stripped}`;
+	return ROUTES.HANDBOOK_ASSET(stripped);
 }
 
 function dismissSuggestion(): void {

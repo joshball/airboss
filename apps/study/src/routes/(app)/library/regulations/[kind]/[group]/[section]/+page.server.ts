@@ -27,6 +27,7 @@ import {
 	HANDBOOK_NOTES_MAX_LENGTH,
 	HANDBOOK_READ_STATUSES,
 	LIBRARY_REGULATIONS_KIND_VALUES,
+	LIBRARY_REGULATIONS_KINDS,
 	type LibraryRegulationsKind,
 	REFERENCE_KINDS,
 } from '@ab/constants';
@@ -44,19 +45,19 @@ async function resolveReferenceForGroup(
 	const refs = await listReferences();
 	let match: (typeof refs)[number] | undefined;
 	switch (kind) {
-		case '14-cfr':
+		case LIBRARY_REGULATIONS_KINDS.CFR_14:
 			match = refs.find((r) => r.documentSlug === `14cfr${group}`);
 			break;
-		case '49-cfr':
+		case LIBRARY_REGULATIONS_KINDS.CFR_49:
 			match = refs.find((r) => r.documentSlug === `49cfr${group}`);
 			break;
-		case 'aim':
+		case LIBRARY_REGULATIONS_KINDS.AIM:
 			match = refs.find((r) => r.kind === REFERENCE_KINDS.AIM && r.documentSlug === group);
 			break;
-		case 'ac':
+		case LIBRARY_REGULATIONS_KINDS.AC:
 			match = refs.find((r) => r.kind === REFERENCE_KINDS.AC && r.documentSlug.startsWith(`ac-${group}-`));
 			break;
-		case 'ntsb':
+		case LIBRARY_REGULATIONS_KINDS.NTSB:
 			match = refs.find((r) => r.kind === REFERENCE_KINDS.NTSB && r.documentSlug === group);
 			break;
 	}

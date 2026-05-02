@@ -83,7 +83,7 @@ export const actions: Actions = {
 		if (saveAndAdd) {
 			// Preserve the domain + tags so the next card stays in context.
 			const next = new URLSearchParams({
-				created: created.id,
+				[QUERY_PARAMS.CREATED]: created.id,
 				[QUERY_PARAMS.DOMAIN]: parsed.data.domain,
 				[QUERY_PARAMS.CARD_TYPE]: parsed.data.cardType,
 			});

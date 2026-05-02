@@ -20,6 +20,7 @@ import {
 	SNOOZE_REASONS,
 	type SnoozeDurationLevel,
 	type SnoozeReason,
+	TOAST_DISMISS_SHORT_MS,
 } from '@ab/constants';
 import PageHelp from '@ab/help/ui/PageHelp.svelte';
 import Button from '@ab/ui/components/Button.svelte';
@@ -81,7 +82,6 @@ let snoozeFocusComment = $state(false);
 let shareOpen = $state(false);
 let shareToast = $state<string | null>(null);
 let shareToastTimer: ReturnType<typeof setTimeout> | null = null;
-const SHARE_TOAST_MS = 2000;
 let feedbackSignal = $state<CardFeedbackSignal | null>(null);
 let feedbackComment = $state('');
 let feedbackError = $state<string | null>(null);
@@ -339,7 +339,7 @@ function handleShareCopy(_url: string) {
 	shareToastTimer = setTimeout(() => {
 		shareToast = null;
 		shareToastTimer = null;
-	}, SHARE_TOAST_MS);
+	}, TOAST_DISMISS_SHORT_MS);
 }
 
 function handleShareReport(_cardId: string) {

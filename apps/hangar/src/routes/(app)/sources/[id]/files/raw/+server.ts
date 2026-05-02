@@ -84,6 +84,9 @@ export const GET: RequestHandler = async (event) => {
 	const contentType = CONTENT_TYPE_BY_EXTENSION[ext] ?? 'application/octet-stream';
 
 	const stream = createReadStream(full);
+	// Node fs Readable -> web ReadableStream coercion. SvelteKit / undici accept
+	// the runtime shape; TS lacks a structural overlap between the two stream
+	// hierarchies, hence the double cast.
 	return new Response(stream as unknown as ReadableStream, {
 		status: 200,
 		headers: {

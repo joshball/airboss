@@ -19,6 +19,7 @@ import {
 	REVIEW_SESSION_STATUSES,
 	type ReviewSessionStatus,
 	ROUTES,
+	TOAST_DISMISS_MS,
 } from '@ab/constants';
 import PageHelp from '@ab/help/ui/PageHelp.svelte';
 import Button from '@ab/ui/components/Button.svelte';
@@ -98,7 +99,7 @@ async function sharePublicLink() {
 	if (shareToastTimer !== null) clearTimeout(shareToastTimer);
 	shareToastTimer = setTimeout(() => {
 		shareToastVisible = false;
-	}, 3000);
+	}, TOAST_DISMISS_MS);
 }
 
 const reviewSessionStatusLabels: Record<ReviewSessionStatus, string> = {
@@ -128,7 +129,7 @@ $effect(() => {
 	editing = false;
 	const timer = setTimeout(() => {
 		editToastVisible = false;
-	}, 3000);
+	}, TOAST_DISMISS_MS);
 	return () => clearTimeout(timer);
 });
 

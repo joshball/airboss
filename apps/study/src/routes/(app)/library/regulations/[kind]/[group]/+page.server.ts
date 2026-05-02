@@ -17,6 +17,7 @@ import {
 	externalUrlForReference,
 	LIBRARY_REGULATIONS_KIND_LABELS,
 	LIBRARY_REGULATIONS_KIND_VALUES,
+	LIBRARY_REGULATIONS_KINDS,
 	type LibraryRegulationsKind,
 	REFERENCE_KIND_LABELS,
 	REFERENCE_KINDS,
@@ -59,13 +60,13 @@ function isLibraryRegulationsKind(value: string): value is LibraryRegulationsKin
  */
 function expectedSlugForGroup(kind: LibraryRegulationsKind, group: string): string | null {
 	switch (kind) {
-		case '14-cfr':
+		case LIBRARY_REGULATIONS_KINDS.CFR_14:
 			return `14cfr${group}`;
-		case '49-cfr':
+		case LIBRARY_REGULATIONS_KINDS.CFR_49:
 			return `49cfr${group}`;
-		case 'aim':
-		case 'ac':
-		case 'ntsb':
+		case LIBRARY_REGULATIONS_KINDS.AIM:
+		case LIBRARY_REGULATIONS_KINDS.AC:
+		case LIBRARY_REGULATIONS_KINDS.NTSB:
 			return null;
 	}
 }
@@ -85,12 +86,12 @@ export const load: PageServerLoad = async (event) => {
 	let groupRefs: typeof allRefs;
 	if (expectedSlug !== null) {
 		groupRefs = allRefs.filter((r) => r.documentSlug === expectedSlug);
-	} else if (kind === 'ac') {
+	} else if (kind === LIBRARY_REGULATIONS_KINDS.AC) {
 		// AC series group key -- match every AC reference whose slug
 		// shape is `ac-<group>-...`.
 		const prefix = `ac-${group}-`;
 		groupRefs = allRefs.filter((r) => r.kind === REFERENCE_KINDS.AC && r.documentSlug.startsWith(prefix));
-	} else if (kind === 'aim') {
+	} else if (kind === LIBRARY_REGULATIONS_KINDS.AIM) {
 		// The AIM doesn't have an inline group concept yet; the page
 		// is reachable only if the group string matches an AIM-like
 		// slug. Fall through to umbrella resolution below.
@@ -132,15 +133,15 @@ export const load: PageServerLoad = async (event) => {
 
 	const groupLabel = (() => {
 		switch (kind) {
-			case '14-cfr':
+			case LIBRARY_REGULATIONS_KINDS.CFR_14:
 				return `14 CFR Part ${group}`;
-			case '49-cfr':
+			case LIBRARY_REGULATIONS_KINDS.CFR_49:
 				return `49 CFR Part ${group}`;
-			case 'aim':
+			case LIBRARY_REGULATIONS_KINDS.AIM:
 				return `AIM -- ${group}`;
-			case 'ac':
+			case LIBRARY_REGULATIONS_KINDS.AC:
 				return `AC Series ${group}`;
-			case 'ntsb':
+			case LIBRARY_REGULATIONS_KINDS.NTSB:
 				return `NTSB -- ${group}`;
 		}
 	})();
