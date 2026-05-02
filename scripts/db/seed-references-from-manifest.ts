@@ -85,28 +85,55 @@ export async function seedReferencesFromManifest(options: SeedReferencesOptions 
 		const corpusAbs = resolve(REPO_ROOT, corpusDir);
 		if (!existsSync(corpusAbs)) continue;
 
-		const documentSlugs = options.documentSlug ? [options.documentSlug] : listChildDirs(corpusAbs);
+		// Two supported layouts coexist within a corpus:
+		//   (a) Multi-doc:  <corpus>/<slug>/<edition>/manifest.json  (handbooks)
+		//   (b) Single-doc: <corpus>/<edition>/manifest.json         (aim)
+		// We walk the first-level children and decide per-child: if the child
+		// directly contains `manifest.json`, treat it as a single-doc edition;
+		// otherwise treat it as a slug and recurse one level deeper for editions.
+		// This lets test fixtures and real corpora cohabit cleanly.
+		const firstLevelDirs = listChildDirs(corpusAbs);
 
-		for (const slug of documentSlugs) {
-			const slugDir = resolve(corpusAbs, slug);
-			if (!existsSync(slugDir) || !statSync(slugDir).isDirectory()) continue;
+		// Group editions by effective document slug so supersede chains span
+		// every edition seen for the same logical document.
+		const slugToEditionRefIds = new Map<string, string[]>();
 
-			const editions = options.edition ? [options.edition] : listChildDirs(slugDir);
-			const seededReferenceIds: string[] = [];
+		for (const childDir of firstLevelDirs) {
+			const childAbs = resolve(corpusAbs, childDir);
+			if (!statSync(childAbs).isDirectory()) continue;
+
+			const childManifest = resolve(childAbs, 'manifest.json');
+			if (existsSync(childManifest)) {
+				// Single-doc layout: childDir is the edition; effective slug is the corpus dir.
+				if (options.edition !== undefined && options.edition !== childDir) continue;
+				if (options.documentSlug !== undefined && options.documentSlug !== corpusDir) continue;
+				const refId = await dispatchManifest(childManifest, context, summary);
+				const list = slugToEditionRefIds.get(corpusDir) ?? [];
+				list.push(refId);
+				slugToEditionRefIds.set(corpusDir, list);
+				continue;
+			}
+
+			// Multi-doc layout: childDir is the slug; iterate edition subdirs.
+			if (options.documentSlug !== undefined && options.documentSlug !== childDir) continue;
+			const editions = options.edition ? [options.edition] : listChildDirs(childAbs);
 			for (const edition of editions) {
-				const manifestPath = resolve(slugDir, edition, 'manifest.json');
+				const manifestPath = resolve(childAbs, edition, 'manifest.json');
 				if (!existsSync(manifestPath)) continue;
 				const refId = await dispatchManifest(manifestPath, context, summary);
-				seededReferenceIds.push(refId);
+				const list = slugToEditionRefIds.get(childDir) ?? [];
+				list.push(refId);
+				slugToEditionRefIds.set(childDir, list);
 			}
-			// Wire `superseded_by_id` chains for this document slug (only when we
-			// processed > 1 edition this run; otherwise leave existing pointers
-			// untouched).
-			if (seededReferenceIds.length > 1) {
-				const latestId = seededReferenceIds[seededReferenceIds.length - 1];
-				await attachSupersededByLatest(slug, latestId);
-				summary.supersededLinks += seededReferenceIds.length - 1;
-			}
+		}
+
+		// Wire `superseded_by_id` chains per slug (only when > 1 edition seen).
+		for (const [slug, refIds] of slugToEditionRefIds) {
+			if (refIds.length <= 1) continue;
+			const latestId = refIds[refIds.length - 1];
+			if (latestId === undefined) continue;
+			await attachSupersededByLatest(slug, latestId);
+			summary.supersededLinks += refIds.length - 1;
 		}
 	}
 
