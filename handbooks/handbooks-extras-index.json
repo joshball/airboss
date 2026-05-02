@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "fetched_at": "2026-05-01T00:22:47.720Z",
+  "fetched_at": "2026-05-02T12:07:26.237Z",
   "entries": [
     {
       "doc_id": "faa-h-8083-30",
@@ -55,6 +55,15 @@
       "title": "Risk Management Handbook",
       "publication_date": "2022-06-02",
       "manifest_path": "handbooks/risk-management/FAA-H-8083-2A/manifest.json"
+    },
+    {
+      "doc_id": "faa-mtn-tips",
+      "slug": "tips-mountain-flying",
+      "edition_slug": "mtn-2003",
+      "faa_dir": "MTN-2003",
+      "title": "Tips on Mountain Flying",
+      "publication_date": "2022-03-25",
+      "manifest_path": "handbooks/tips-mountain-flying/MTN-2003/manifest.json"
     }
   ]
 }

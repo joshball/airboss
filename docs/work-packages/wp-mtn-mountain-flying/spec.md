@@ -66,3 +66,14 @@ The pamphlet exposes one assumption in the handbooks substrate: the `EDITION_PAT
 - Figure/table extraction.
 - Citation deep-links (the pamphlet has no internal citation grammar).
 - `pamphlet` as a new `kind` (deferred; revisit if/when we ship 3+ non-handbook pamphlets).
+
+## Surfaced bug -- separate follow-up
+
+`handbooks-extras register` rewrites every produced manifest cleanly each run and **does not preserve post-WP-SUB authored fields** (`subjects`, `primary_cert`). When WP-MTN ran register against the 7 entries in the YAML, it stripped those fields from the 6 existing manifests (risk-management, aviation-instructor, IFH, IPH, AMT-G, AMT-P).
+
+Two reasonable fixes for a follow-up WP:
+
+1. Teach the extras ingest to preserve `subjects` + `primary_cert` if they already exist in the on-disk manifest (read-merge-write).
+2. Have the extras ingest author them from a per-doc YAML config (similar to how `seed-references.ts` reads `course/references/*.yaml` for non-handbook references).
+
+Path 2 is cleaner long-term; path 1 is a smaller patch. Either way, **WP-MTN reverts the 6 collateral manifest edits** and commits only the new tips-mountain-flying derivative + the index update. The fix lands in its own WP, not as scope creep here.

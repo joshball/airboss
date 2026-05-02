@@ -1,0 +1,22 @@
+{
+  "document_slug": "tips-mountain-flying",
+  "edition": "mtn-2003",
+  "kind": "whole-doc",
+  "title": "Tips on Mountain Flying",
+  "publisher": "FAA",
+  "source_url": "https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/tips_on_mountain_flying.pdf",
+  "source_checksum": "7012b6d5676a94df0735bcb9c32d16ea237c4a943cad37ef52aba2a5caabda58",
+  "fetched_at": "2026-05-02T12:07:26.237Z",
+  "sections": [],
+  "body_path": "handbooks/tips-mountain-flying/MTN-2003/document.md",
+  "body_sha256": "e02c2df59a4ee6a9f486b2b3fe19d644088d90949eadf103289f1f1ddf98ad90",
+  "page_count": 18,
+  "doc_id": "faa-mtn-tips",
+  "faa_edition": "2003",
+  "subjects": [
+    "performance",
+    "weather",
+    "emergencies"
+  ],
+  "primary_cert": null
+}
