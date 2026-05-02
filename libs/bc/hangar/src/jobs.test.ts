@@ -10,11 +10,10 @@
 import { bauthUser } from '@ab/auth/schema';
 import { JOB_KINDS, JOB_STATUSES } from '@ab/constants';
 import { db } from '@ab/db/connection';
-import { appendJobLog, enqueueJob, readJobLog } from '@ab/hangar-jobs';
+import { appendJobLog, enqueueJob, hangarJob, readJobLog } from '@ab/hangar-jobs';
 import { generateAuthId } from '@ab/utils';
 import { eq } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { hangarJob } from './schema';
 
 const TEST_USER_ID = generateAuthId();
 const TEST_EMAIL = `hangar-jobs-test-${TEST_USER_ID}@airboss.test`;

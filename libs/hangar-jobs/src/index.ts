@@ -1,9 +1,10 @@
-// @ab/hangar-jobs -- generic job queue + streamed log for hangar workloads.
+// @ab/hangar-jobs -- generic job queue + streamed log.
 //
-// One schema (`hangar.job` + `hangar.job_log`), one worker, pluggable
-// handlers per kind. wp-hangar-registry lands the `sync-to-disk` handler;
-// wp-hangar-sources-v1 adds fetch / upload / extract / build / diff /
-// validate / size-report without a schema change.
+// Owns the `hangar.job` + `hangar.job_log` tables, the polling worker,
+// and the per-handler runtime contract (`JobContext`, `JobHandler`,
+// `JobHandlers`). Handler registration belongs to the consuming app
+// (e.g. `apps/hangar/src/lib/server/jobs.ts`); the kind taxonomy lives
+// in `@ab/constants` (`JOB_KINDS`).
 
 export {
 	appendJobLog,
@@ -16,6 +17,13 @@ export {
 	recoverOrphanedRunning,
 	writeJobLogRow,
 } from './enqueue';
+export {
+	hangarJob,
+	hangarJobLog,
+	hangarJobsSchema,
+	type NewHangarJobLogRow,
+	type NewHangarJobRow,
+} from './schema';
 export type {
 	HangarJobLogRow,
 	HangarJobRow,

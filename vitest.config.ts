@@ -35,6 +35,7 @@ const aliases = {
 	'@ab/aviation': resolve('./libs/aviation/src/index.ts'),
 	'@ab/help': resolve('./libs/help/src/index.ts'),
 	'@ab/activities': resolve('./libs/activities/src/index.ts'),
+	'@ab/hangar-jobs/schema': resolve('./libs/hangar-jobs/src/schema.ts'),
 	'@ab/hangar-jobs': resolve('./libs/hangar-jobs/src/index.ts'),
 	'@ab/hangar-sync': resolve('./libs/hangar-sync/src/index.ts'),
 	'@ab/sources/registry/__test_helpers__': resolve('./libs/sources/src/registry/__test_helpers__.ts'),

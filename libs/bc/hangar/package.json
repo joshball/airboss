@@ -14,7 +14,6 @@
 		"@ab/constants": "workspace:*",
 		"@ab/db": "workspace:*",
 		"@ab/hangar-jobs": "workspace:*",
-		"@ab/hangar-sync": "workspace:*",
 		"@ab/utils": "workspace:*"
 	}
 }

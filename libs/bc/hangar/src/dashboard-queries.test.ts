@@ -8,11 +8,12 @@
 import { bauthUser } from '@ab/auth/schema';
 import { JOB_KINDS, JOB_STATUSES, REFERENCE_SOURCE_TYPES } from '@ab/constants';
 import { db } from '@ab/db/connection';
+import { hangarJob } from '@ab/hangar-jobs';
 import { generateAuthId, generateHangarJobId } from '@ab/utils';
 import { eq, inArray } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { countAllJobs, countLiveReferences, countLiveSources, listLiveSources } from './dashboard-queries';
-import { hangarJob, hangarReference, hangarSource } from './schema';
+import { hangarReference, hangarSource } from './schema';
 
 const TEST_USER_ID = generateAuthId();
 const TEST_EMAIL = `hangar-dashboard-${TEST_USER_ID}@airboss.test`;
