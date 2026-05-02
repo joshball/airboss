@@ -40,7 +40,7 @@ A reference: [@cite](airboss-ref:plates/KAPA/ils-rwy-35R).
 `;
 		writeFileSync(join(lessonsDir, 'plates-smoke.md'), lessonContent, 'utf-8');
 
-		const report = validateReferences({
+		const report = await validateReferences({
 			registry: productionRegistry,
 			contentPaths: ['course/regulations'],
 			cwd: lessonRoot,

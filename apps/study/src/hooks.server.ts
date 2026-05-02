@@ -1,4 +1,5 @@
 import { ROUTES, type Role } from '@ab/constants';
+import { initRegistry } from '@ab/sources';
 import {
 	APPEARANCE_COOKIE,
 	injectPreHydrationScript,
@@ -21,6 +22,13 @@ const errorHandler = createErrorHandler({ logger: log });
 // `apply-errata-and-afh-mosaic` phase R7.
 if (!building) {
 	void maybeRunDiscovery();
+	// Hydrate the @ab/sources registry from Postgres so the lifecycle overlay
+	// + editions cache reflect the persisted audit trail before the first
+	// request lands. Errors are logged but never block bootstrap; the empty
+	// state is identical to a fresh DB and only blocks reviewer ops.
+	void initRegistry().catch((err: unknown) =>
+		log.error('initRegistry failed', undefined, err instanceof Error ? err : undefined),
+	);
 }
 
 const REQUEST_ID_PATTERN = /^[a-zA-Z0-9_-]{1,64}$/;

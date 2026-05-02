@@ -17,29 +17,70 @@ import { __sources_internal__ } from './sources.ts';
 
 /**
  * Run `body` with the active entry table swapped to `entries`. Restores the
- * previous table afterward.
+ * previous table afterward. Detects whether `body` returns a Promise: sync
+ * bodies stay synchronous (matching legacy callers); async bodies hold the
+ * primed table for the full duration of the awaited work.
  */
-export function withTestEntries<T>(entries: Record<string, SourceEntry>, body: () => T): T {
+export function withTestEntries<T>(entries: Record<string, SourceEntry>, body: () => T): T;
+export function withTestEntries<T>(entries: Record<string, SourceEntry>, body: () => Promise<T>): Promise<T>;
+export function withTestEntries<T>(entries: Record<string, SourceEntry>, body: () => T | Promise<T>): T | Promise<T> {
 	const cast = entries as Record<SourceId, SourceEntry>;
 	const prev = __sources_internal__.setActiveTable({ ...cast });
-	try {
-		return body();
-	} finally {
+	let restored = false;
+	const restore = (): void => {
+		if (restored) return;
+		restored = true;
 		__sources_internal__.setActiveTable(prev);
+	};
+	try {
+		const result = body();
+		if (isPromiseLike(result)) {
+			return Promise.resolve(result).finally(restore);
+		}
+		restore();
+		return result;
+	} catch (err) {
+		restore();
+		throw err;
 	}
 }
 
 /**
  * Run `body` with the active edition map swapped to `editions`. Restores the
- * previous map afterward.
+ * previous map afterward. Like `withTestEntries`, sync bodies stay sync and
+ * async bodies hold the primed map until the awaited work completes.
  */
-export function withTestEditions<T>(editions: ReadonlyMap<SourceId, readonly Edition[]>, body: () => T): T {
+export function withTestEditions<T>(editions: ReadonlyMap<SourceId, readonly Edition[]>, body: () => T): T;
+export function withTestEditions<T>(
+	editions: ReadonlyMap<SourceId, readonly Edition[]>,
+	body: () => Promise<T>,
+): Promise<T>;
+export function withTestEditions<T>(
+	editions: ReadonlyMap<SourceId, readonly Edition[]>,
+	body: () => T | Promise<T>,
+): T | Promise<T> {
 	const prev = __editions_internal__.setActiveTable(new Map(editions));
-	try {
-		return body();
-	} finally {
+	let restored = false;
+	const restore = (): void => {
+		if (restored) return;
+		restored = true;
 		__editions_internal__.setActiveTable(prev);
+	};
+	try {
+		const result = body();
+		if (isPromiseLike(result)) {
+			return Promise.resolve(result).finally(restore);
+		}
+		restore();
+		return result;
+	} catch (err) {
+		restore();
+		throw err;
 	}
+}
+
+function isPromiseLike<T>(value: T | Promise<T>): value is Promise<T> {
+	return value !== null && typeof value === 'object' && typeof (value as { then?: unknown }).then === 'function';
 }
 
 /**

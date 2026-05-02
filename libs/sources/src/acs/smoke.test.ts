@@ -71,7 +71,7 @@ Pilot Qualifications is covered in [@cite](airboss-ref:acs/ppl-airplane-6c/area-
 `;
 		writeFileSync(join(lessonsDir, 'acs-task.md'), lessonContent, 'utf-8');
 
-		const report = validateReferences({
+		const report = await validateReferences({
 			registry: productionRegistry,
 			contentPaths: ['course/regulations'],
 			cwd: lessonRoot,
@@ -80,7 +80,7 @@ Pilot Qualifications is covered in [@cite](airboss-ref:acs/ppl-airplane-6c/area-
 		const errors = report.findings.filter((f) => f.severity === 'error');
 		expect(errors).toEqual([]);
 		expect(report.identifiersFound).toBe(1);
-	});
+	}, 60000); // 60s: real-corpus ingest hits the DB once per batch and competes with other test workers.
 
 	it('validates a lesson citing an ACS K/R/S element with zero ERRORs', async () => {
 		await ingestRealAcsCorpus();
@@ -98,7 +98,7 @@ The recordkeeping requirement is captured in
 `;
 		writeFileSync(join(lessonsDir, 'acs-element.md'), lessonContent, 'utf-8');
 
-		const report = validateReferences({
+		const report = await validateReferences({
 			registry: productionRegistry,
 			contentPaths: ['course/regulations'],
 			cwd: lessonRoot,
@@ -107,7 +107,7 @@ The recordkeeping requirement is captured in
 		const errors = report.findings.filter((f) => f.severity === 'error');
 		expect(errors).toEqual([]);
 		expect(report.identifiersFound).toBe(1);
-	});
+	}, 60000); // 60s: real-corpus ingest hits the DB once per batch and competes with other test workers.
 
 	it('validates a lesson citing both acs and regs corpora with zero ERRORs', async () => {
 		// Cross-corpus proof: ingest both, then validate a lesson that mixes
@@ -138,7 +138,7 @@ regulation is [@cite](airboss-ref:regs/cfr-14/61/3?at=2026).
 `;
 		writeFileSync(join(lessonsDir, 'cross-corpus.md'), lessonContent, 'utf-8');
 
-		const report = validateReferences({
+		const report = await validateReferences({
 			registry: productionRegistry,
 			contentPaths: ['course/regulations'],
 			cwd: lessonRoot,

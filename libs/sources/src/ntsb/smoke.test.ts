@@ -67,7 +67,7 @@ A relevant accident is [@cite](airboss-ref:ntsb/WPR23LA123).
 `;
 		writeFileSync(join(lessonsDir, 'ntsb-smoke.md'), lessonContent, 'utf-8');
 
-		const report = validateReferences({
+		const report = await validateReferences({
 			registry: productionRegistry,
 			contentPaths: ['course/regulations'],
 			cwd: lessonRoot,
@@ -94,7 +94,7 @@ A relevant accident is [@cite](airboss-ref:ntsb/CEN24FA045).
 `;
 		writeFileSync(join(lessonsDir, 'ntsb-bundled-smoke.md'), lessonContent, 'utf-8');
 
-		const report = validateReferences({
+		const report = await validateReferences({
 			registry: productionRegistry,
 			contentPaths: ['course/regulations'],
 			cwd: lessonRoot,

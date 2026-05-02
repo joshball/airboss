@@ -144,7 +144,7 @@ export function parseSnapshotArgs(args: readonly string[]): ParsedCliArgs | CliE
  *
  * Exit code 0 on success; 2 on argument error.
  */
-export function runSnapshotCli(args: readonly string[], opts: SnapshotCliOptions = {}): number {
+export async function runSnapshotCli(args: readonly string[], opts: SnapshotCliOptions = {}): Promise<number> {
 	const parsed = parseSnapshotArgs(args);
 	if (parsed.kind === 'error') {
 		process.stderr.write(`snapshot: ${parsed.message}\n`);
@@ -156,7 +156,7 @@ export function runSnapshotCli(args: readonly string[], opts: SnapshotCliOptions
 	const skipBootstrap = opts.skipBootstrap ?? parsed.skipBootstrap;
 
 	if (!skipBootstrap) {
-		hydrateRegsFromDerivatives({ cwd });
+		await hydrateRegsFromDerivatives({ cwd });
 	}
 
 	// Build the snapshot ONCE, then write + count from the same data so the

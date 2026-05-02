@@ -117,20 +117,20 @@ describe('parseSnapshotArgs', () => {
 });
 
 describe('runSnapshotCli', () => {
-	test('writes default-path snapshot and returns 0', () => {
-		const code = runSnapshotCli(['--no-bootstrap'], { cwd: workDir });
+	test('writes default-path snapshot and returns 0', async () => {
+		const code = await runSnapshotCli(['--no-bootstrap'], { cwd: workDir });
 		expect(code).toBe(0);
 		expect(existsSync(join(workDir, DEFAULT_SNAPSHOT_PATH))).toBe(true);
 	});
 
-	test('writes custom-path snapshot when --out= given', () => {
-		const code = runSnapshotCli(['--out=custom/path.json', '--no-bootstrap'], { cwd: workDir });
+	test('writes custom-path snapshot when --out= given', async () => {
+		const code = await runSnapshotCli(['--out=custom/path.json', '--no-bootstrap'], { cwd: workDir });
 		expect(code).toBe(0);
 		expect(existsSync(join(workDir, 'custom/path.json'))).toBe(true);
 	});
 
-	test('returns 2 on argument error', () => {
-		const code = runSnapshotCli(['--bogus']);
+	test('returns 2 on argument error', async () => {
+		const code = await runSnapshotCli(['--bogus']);
 		expect(code).toBe(2);
 	});
 
@@ -140,7 +140,7 @@ describe('runSnapshotCli', () => {
 		if (result.kind === 'ok') expect(result.skipBootstrap).toBe(true);
 	});
 
-	test('S-08: hydrates registry from on-disk derivatives by default (was broken pre-fix)', () => {
+	test('S-08: hydrates registry from on-disk derivatives by default (was broken pre-fix)', async () => {
 		// Build a minimal regs derivative tree the bootstrap can consume.
 		const regsDir = join(workDir, 'regulations', 'cfr-14', '2026');
 		mkdirSync(regsDir, { recursive: true });
@@ -171,7 +171,7 @@ describe('runSnapshotCli', () => {
 		writeFileSync(join(regsDir, 'sections.json'), JSON.stringify(sections), 'utf-8');
 
 		const out = join(workDir, 'snap.json');
-		const code = runSnapshotCli([`--out=${out}`], { cwd: workDir });
+		const code = await runSnapshotCli([`--out=${out}`], { cwd: workDir });
 		expect(code).toBe(0);
 		const parsed = JSON.parse(readFileSync(out, 'utf-8')) as SnapshotShape;
 		const ids = Object.keys(parsed.entries);

@@ -59,7 +59,7 @@ The earliest aviation history is described in [@cite](airboss-ref:handbooks/phak
 		writeFileSync(join(lessonsDir, 'smoke.md'), lessonContent, 'utf-8');
 
 		// 3. Run the validator
-		const report = validateReferences({
+		const report = await validateReferences({
 			registry: productionRegistry,
 			contentPaths: ['course/regulations'],
 			cwd: lessonRoot,
@@ -92,7 +92,7 @@ section_order: "01"
 			'utf-8',
 		);
 
-		const report = validateReferences({
+		const report = await validateReferences({
 			registry: productionRegistry,
 			contentPaths: ['course/regulations'],
 			cwd: lessonRoot,
@@ -123,7 +123,7 @@ section_order: "01"
 			'utf-8',
 		);
 
-		const report = validateReferences({
+		const report = await validateReferences({
 			registry: productionRegistry,
 			contentPaths: ['course/regulations'],
 			cwd: lessonRoot,

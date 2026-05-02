@@ -878,7 +878,7 @@ export async function runAcsIngest(args: IngestArgs): Promise<IngestReport> {
 		}
 	}
 
-	const commit = commitIngestBatch({
+	const commit = await commitIngestBatch({
 		corpus: CORPUS,
 		reviewerId: PHASE_9_REVIEWER_ID,
 		inputSource: args.cacheRoot,

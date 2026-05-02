@@ -40,7 +40,7 @@ A reference: [@cite](airboss-ref:statutes/usc-49/40103).
 `;
 		writeFileSync(join(lessonsDir, 'statutes-smoke.md'), lessonContent, 'utf-8');
 
-		const report = validateReferences({
+		const report = await validateReferences({
 			registry: productionRegistry,
 			contentPaths: ['course/regulations'],
 			cwd: lessonRoot,

@@ -40,7 +40,7 @@ A reference: [@cite](airboss-ref:safo/21002).
 `;
 		writeFileSync(join(lessonsDir, 'safo-smoke.md'), lessonContent, 'utf-8');
 
-		const report = validateReferences({
+		const report = await validateReferences({
 			registry: productionRegistry,
 			contentPaths: ['course/regulations'],
 			cwd: lessonRoot,

@@ -56,13 +56,13 @@ function writeManifest(title: '14' | '49', editionDate: string, sectionsByPart: 
 }
 
 describe('hydrateRegsFromDerivatives', () => {
-	test('returns zero counts when regulations/ does not exist', () => {
-		const report = hydrateRegsFromDerivatives({ cwd: workDir });
+	test('returns zero counts when regulations/ does not exist', async () => {
+		const report = await hydrateRegsFromDerivatives({ cwd: workDir });
 		expect(report.editionsHydrated).toBe(0);
 		expect(report.entriesAdded).toBe(0);
 	});
 
-	test('synthesizes Part + Section entries for one edition and promotes them to accepted', () => {
+	test('synthesizes Part + Section entries for one edition and promotes them to accepted', async () => {
 		writeManifest('14', '2026-04-22', {
 			'91': [
 				{
@@ -75,7 +75,7 @@ describe('hydrateRegsFromDerivatives', () => {
 				},
 			],
 		});
-		const report = hydrateRegsFromDerivatives({ cwd: workDir });
+		const report = await hydrateRegsFromDerivatives({ cwd: workDir });
 		expect(report.editionsHydrated).toBe(1);
 		// 1 Part entry + 1 Section entry = 2 entries.
 		expect(report.entriesAdded).toBe(2);
@@ -95,7 +95,7 @@ describe('hydrateRegsFromDerivatives', () => {
 		expect(productionRegistry.hasEdition('airboss-ref:regs/cfr-14/91' as SourceId, '2026')).toBe(true);
 	});
 
-	test('is idempotent: re-running over the same manifest adds zero new entries', () => {
+	test('is idempotent: re-running over the same manifest adds zero new entries', async () => {
 		writeManifest('14', '2026-04-22', {
 			'91': [
 				{
@@ -108,15 +108,15 @@ describe('hydrateRegsFromDerivatives', () => {
 				},
 			],
 		});
-		const first = hydrateRegsFromDerivatives({ cwd: workDir });
+		const first = await hydrateRegsFromDerivatives({ cwd: workDir });
 		expect(first.entriesAdded).toBe(2);
 
-		const second = hydrateRegsFromDerivatives({ cwd: workDir });
+		const second = await hydrateRegsFromDerivatives({ cwd: workDir });
 		expect(second.entriesAdded).toBe(0);
 		expect(second.entriesAlreadyAccepted).toBe(2);
 	});
 
-	test('handles multiple editions across both Title 14 and Title 49', () => {
+	test('handles multiple editions across both Title 14 and Title 49', async () => {
 		writeManifest('14', '2026-04-22', {
 			'91': [
 				{
@@ -141,7 +141,7 @@ describe('hydrateRegsFromDerivatives', () => {
 				},
 			],
 		});
-		const report = hydrateRegsFromDerivatives({ cwd: workDir });
+		const report = await hydrateRegsFromDerivatives({ cwd: workDir });
 		expect(report.editionsHydrated).toBe(2);
 		// 2 Parts + 2 Sections.
 		expect(report.entriesAdded).toBe(4);
@@ -151,12 +151,12 @@ describe('hydrateRegsFromDerivatives', () => {
 		expect(productionRegistry.getEntry('airboss-ref:regs/cfr-49/830/5' as SourceId)).not.toBeNull();
 	});
 
-	test('skips edition dirs missing manifest.json or sections.json', () => {
+	test('skips edition dirs missing manifest.json or sections.json', async () => {
 		const partial = join(workDir, 'regulations', 'cfr-14', 'broken');
 		mkdirSync(partial, { recursive: true });
 		writeFileSync(join(partial, 'manifest.json'), '{}', 'utf-8');
 		// no sections.json
-		const report = hydrateRegsFromDerivatives({ cwd: workDir });
+		const report = await hydrateRegsFromDerivatives({ cwd: workDir });
 		expect(report.editionsHydrated).toBe(0);
 		expect(report.skipped).toHaveLength(1);
 		expect(report.skipped[0]?.reason).toMatch(/missing/u);

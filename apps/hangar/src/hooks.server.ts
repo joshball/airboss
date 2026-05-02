@@ -1,5 +1,6 @@
 import { ROUTES, type Role } from '@ab/constants';
 import { recoverOrphanedRunning, startWorker, type WorkerHandle } from '@ab/hangar-jobs';
+import { initRegistry } from '@ab/sources';
 import {
 	APPEARANCE_COOKIE,
 	injectPreHydrationScript,
@@ -48,6 +49,12 @@ async function bootWorker(): Promise<void> {
  */
 if (!building) {
 	void bootWorker();
+	// Hydrate the @ab/sources registry from Postgres so the lifecycle overlay
+	// + editions cache match the persisted audit trail. Non-blocking;
+	// failures log but never crash bootstrap.
+	void initRegistry().catch((err: unknown) =>
+		log.error('initRegistry failed', undefined, err instanceof Error ? err : undefined),
+	);
 	process.on('beforeExit', () => {
 		if (worker !== null) {
 			void worker.stop();

@@ -113,7 +113,7 @@ export async function seedInfoFromManifest(opts: InfoSeedOptions = {}): Promise<
 
 	let promotionBatchId: string | null = null;
 	if (entriesToPromote.length > 0) {
-		const result = recordPromotion({
+		const result = await recordPromotion({
 			corpus: CORPUS,
 			reviewerId: INFO_SEED_REVIEWER_ID,
 			scope: entriesToPromote,

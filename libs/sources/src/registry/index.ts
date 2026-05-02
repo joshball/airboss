@@ -108,7 +108,14 @@ export {
 	makeDefaultResolver,
 	registerCorpusResolver,
 } from './corpus-resolver.ts';
-export { EDITIONS } from './editions.ts';
+export {
+	EDITIONS,
+	getCurrentEditionForSource,
+	getEditionsMapAsync,
+	loadEditionsFromDb,
+	warmEditionsCache,
+} from './editions.ts';
+export { initRegistry } from './init.ts';
 export {
 	commitIngestBatch,
 	type DePromotionInput,
@@ -123,6 +130,7 @@ export {
 	type PromotionInput,
 	type PromotionResult,
 	type PromotionState,
+	rebuildLifecycleOverlay,
 	recordDePromotion,
 	recordPromotion,
 } from './lifecycle.ts';

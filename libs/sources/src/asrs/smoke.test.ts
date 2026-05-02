@@ -65,7 +65,7 @@ A relevant report is [@cite](airboss-ref:asrs/1234567).
 `;
 		writeFileSync(join(lessonsDir, 'asrs-smoke.md'), lessonContent, 'utf-8');
 
-		const report = validateReferences({
+		const report = await validateReferences({
 			registry: productionRegistry,
 			contentPaths: ['course/regulations'],
 			cwd: lessonRoot,

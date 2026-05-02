@@ -81,7 +81,7 @@ describe('getEditionDistance integration', () => {
 });
 
 describe('validator row-6 WARNING and rewrite round-trip', () => {
-	it('fires row-6 for a pin two editions stale, and clears it after rewrite', () => {
+	it('fires row-6 for a pin two editions stale, and clears it after rewrite', async () => {
 		// Synthesize a third edition slug ahead of 2026 + 2027 so distance is > 1.
 		// We add a 2025 edition record to the existing entry by mutating the
 		// editions map. Adding via `__editions_internal__` keeps the test honest:
@@ -107,7 +107,7 @@ describe('validator row-6 WARNING and rewrite round-trip', () => {
 		);
 
 		// Validate -- expect row-6 WARNING.
-		const report = validateReferences({ cwd: tmpRoot, contentPaths: ['course/regulations'] });
+		const report = await validateReferences({ cwd: tmpRoot, contentPaths: ['course/regulations'] });
 		const row6 = report.findings.filter((f) => f.ruleId === 6);
 		expect(row6.length).toBeGreaterThanOrEqual(1);
 		expect(row6[0]?.severity).toBe('warning');
@@ -143,7 +143,7 @@ describe('validator row-6 WARNING and rewrite round-trip', () => {
 		expect(rewriteResult.occurrencesAdvanced).toBe(1);
 
 		// Re-validate -- row-6 should be clear.
-		const report2 = validateReferences({ cwd: tmpRoot, contentPaths: ['course/regulations'] });
+		const report2 = await validateReferences({ cwd: tmpRoot, contentPaths: ['course/regulations'] });
 		const row6After = report2.findings.filter((f) => f.ruleId === 6);
 		expect(row6After).toEqual([]);
 	});

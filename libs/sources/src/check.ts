@@ -71,7 +71,7 @@ export interface ValidateReport {
  * Never throws. File-system errors and YAML parse errors land on the report's
  * `findings` array.
  */
-export function validateReferences(opts: ValidateOptions = {}): ValidateReport {
+export async function validateReferences(opts: ValidateOptions = {}): Promise<ValidateReport> {
 	const registry = opts.registry ?? productionRegistry;
 	const cwd = opts.cwd ?? process.cwd();
 	const roots = opts.contentPaths ?? LESSON_CONTENT_PATHS;
@@ -80,7 +80,7 @@ export function validateReferences(opts: ValidateOptions = {}): ValidateReport {
 	// explicit registry) keep the registry untouched.
 	const shouldBootstrap = opts.bootstrap ?? opts.registry === undefined;
 	if (shouldBootstrap) {
-		hydrateRegsFromDerivatives({ cwd });
+		await hydrateRegsFromDerivatives({ cwd });
 	}
 
 	const findings: ValidationFinding[] = [];
@@ -140,8 +140,8 @@ export function validateReferences(opts: ValidateOptions = {}): ValidateReport {
  * findings; non-zero otherwise. Called by `scripts/check.ts` and the
  * `airboss-ref` script alias.
  */
-export function runCli(opts: ValidateOptions = {}): number {
-	const report = validateReferences(opts);
+export async function runCli(opts: ValidateOptions = {}): Promise<number> {
+	const report = await validateReferences(opts);
 	const errors = report.findings.filter((f) => f.severity === 'error');
 	const warnings = report.findings.filter((f) => f.severity === 'warning');
 	const notices = report.findings.filter((f) => f.severity === 'notice');
