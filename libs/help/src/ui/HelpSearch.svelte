@@ -67,8 +67,8 @@ function handleWindowKey(event: KeyboardEvent): void {
 	.trigger {
 		display: inline-flex;
 		align-items: center;
-		gap: 0.5rem;
-		padding: 0.25rem 0.625rem;
+		gap: var(--space-sm);
+		padding: var(--space-2xs) var(--space-md);
 		border: 1px solid var(--edge-default);
 		border-radius: var(--radius-sm);
 		background: var(--surface-panel);
@@ -93,13 +93,13 @@ function handleWindowKey(event: KeyboardEvent): void {
 	}
 
 	.hint {
-		margin-left: 0.25rem;
+		margin-left: var(--space-2xs);
 		font-size: var(--font-size-xs);
 		font-family: var(--font-family-mono);
 		border: 1px solid var(--edge-default);
 		border-bottom-width: 2px;
 		border-radius: var(--radius-xs);
-		padding: 0 0.25rem;
+		padding: 0 var(--space-2xs);
 		background: var(--surface-sunken);
 	}
 

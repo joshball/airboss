@@ -9,6 +9,8 @@ import type { Chrome } from '../../../contract';
 
 export const chrome: Chrome = {
 	space: {
+		'4xs': '0.0625rem',
+		'3xs': '0.125rem',
 		'2xs': '0.25rem',
 		xs: '0.375rem',
 		sm: '0.5rem',

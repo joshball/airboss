@@ -35,7 +35,7 @@ let {
 	.search {
 		display: grid;
 		grid-template-columns: auto 1fr auto;
-		gap: 0.5rem;
+		gap: var(--space-sm);
 		align-items: center;
 	}
 
@@ -44,12 +44,12 @@ let {
 		font-weight: 600;
 		color: var(--ink-muted);
 		text-transform: uppercase;
-		letter-spacing: 0.06em;
+		letter-spacing: var(--letter-spacing-caps);
 	}
 
 	.input {
 		font: inherit;
-		padding: 0.5rem 0.625rem;
+		padding: var(--space-sm) var(--space-md);
 		border: 1px solid var(--edge-default);
 		border-radius: var(--radius-sm);
 		background: var(--surface-panel);
@@ -59,12 +59,12 @@ let {
 	.input:focus-visible {
 		outline: none;
 		border-color: var(--action-default);
-		box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+		box-shadow: var(--focus-ring-shadow);
 	}
 
 	.go {
 		font: inherit;
-		padding: 0.5rem 1rem;
+		padding: var(--space-sm) var(--space-lg);
 		border-radius: var(--radius-sm);
 		border: 1px solid var(--edge-default);
 		background: var(--surface-sunken);

@@ -163,22 +163,22 @@ $effect(() => {
 	.help {
 		display: grid;
 		grid-template-columns: 14rem 1fr;
-		gap: 2rem;
+		gap: var(--space-2xl);
 		align-items: start;
 	}
 
 	.sidebar {
 		position: sticky;
-		top: 1rem;
+		top: var(--space-lg);
 		display: flex;
 		flex-direction: column;
-		gap: 1rem;
-		padding: 0.5rem 0;
+		gap: var(--space-lg);
+		padding: var(--space-sm) 0;
 	}
 
 	.sidebar-extra {
 		border-top: 1px solid var(--edge-default);
-		padding-top: 0.75rem;
+		padding-top: var(--space-md);
 	}
 
 	.content {
@@ -186,13 +186,13 @@ $effect(() => {
 	}
 
 	.page-head {
-		margin-bottom: 1.5rem;
-		padding-bottom: 1rem;
+		margin-bottom: var(--space-xl);
+		padding-bottom: var(--space-lg);
 		border-bottom: 1px solid var(--edge-default);
 	}
 
 	.page-head h1 {
-		margin: 0 0 0.25rem;
+		margin: 0 0 var(--space-2xs);
 		font-size: var(--font-size-2xl);
 		letter-spacing: -0.02em;
 	}
@@ -205,14 +205,14 @@ $effect(() => {
 	}
 
 	.documents {
-		margin: 0.5rem 0 0;
+		margin: var(--space-sm) 0 0;
 		font-size: var(--font-size-sm);
 		color: var(--ink-subtle);
 	}
 
 	.documents code {
 		background: var(--surface-sunken);
-		padding: 0.0625rem 0.375rem;
+		padding: var(--space-4xs) var(--space-xs);
 		border-radius: var(--radius-xs);
 		font-family: var(--font-family-mono);
 		font-size: var(--font-size-sm);

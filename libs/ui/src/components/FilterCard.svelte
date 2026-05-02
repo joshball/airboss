@@ -44,7 +44,7 @@ let {
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-md);
-		background: var(--ink-inverse);
+		background: var(--surface-raised);
 		border: 1px solid var(--edge-default);
 		border-radius: var(--radius-lg);
 		padding: var(--space-lg);
@@ -93,7 +93,7 @@ let {
 		padding: var(--space-sm) var(--space-sm);
 		border: 1px solid var(--edge-strong);
 		border-radius: var(--radius-sm);
-		background: var(--ink-inverse);
+		background: var(--input-default-bg);
 		color: var(--ink-body);
 		min-width: 0;
 	}

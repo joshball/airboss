@@ -239,7 +239,7 @@ function handleTriggerClick(event: MouseEvent): void {
 		margin: 0;
 		font-size: var(--font-size-xs);
 		font-weight: var(--font-weight-semibold);
-		letter-spacing: 0.08em;
+		letter-spacing: var(--letter-spacing-caps);
 		text-transform: uppercase;
 		color: var(--ink-subtle);
 	}

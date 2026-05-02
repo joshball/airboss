@@ -88,7 +88,7 @@ const hitsById = $derived.by(() => {
 	.page {
 		display: flex;
 		flex-direction: column;
-		gap: 1.25rem;
+		gap: var(--space-xl);
 	}
 
 	.hd {
@@ -96,7 +96,7 @@ const hitsById = $derived.by(() => {
 		justify-content: space-between;
 		align-items: end;
 		flex-wrap: wrap;
-		gap: 1rem;
+		gap: var(--space-lg);
 	}
 
 	.hd h1 {
@@ -106,7 +106,7 @@ const hitsById = $derived.by(() => {
 	}
 
 	.sub {
-		margin: 0.25rem 0 0;
+		margin: var(--space-2xs) 0 0;
 		color: var(--ink-muted);
 		font-size: var(--font-size-base);
 	}
@@ -114,7 +114,7 @@ const hitsById = $derived.by(() => {
 	.layout {
 		display: grid;
 		grid-template-columns: 14rem 1fr;
-		gap: 1.5rem;
+		gap: var(--space-xl);
 		align-items: start;
 	}
 
@@ -128,20 +128,20 @@ const hitsById = $derived.by(() => {
 		margin: 0;
 		display: grid;
 		grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
-		gap: 0.75rem;
+		gap: var(--space-md);
 	}
 
 	.empty {
 		background: var(--surface-panel);
 		border: 1px dashed var(--edge-strong);
 		border-radius: var(--radius-lg);
-		padding: 2.5rem 1.5rem;
+		padding: var(--space-2xl) var(--space-xl);
 		text-align: center;
 		color: var(--ink-muted);
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		gap: 0.75rem;
+		gap: var(--space-md);
 	}
 
 	.empty h2 {
@@ -165,7 +165,7 @@ const hitsById = $derived.by(() => {
 		font-family: var(--font-family-mono);
 		font-size: var(--font-size-sm);
 		background: var(--surface-sunken);
-		padding: 0.0625rem 0.375rem;
+		padding: var(--space-4xs) var(--space-xs);
 		border-radius: var(--radius-xs);
 	}
 

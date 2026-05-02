@@ -12,6 +12,8 @@ const MONO = "ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospac
 
 export const chrome: Chrome = {
 	space: {
+		'4xs': '0.03125rem',
+		'3xs': '0.0625rem',
 		'2xs': '0.125rem',
 		xs: '0.25rem',
 		sm: '0.375rem',

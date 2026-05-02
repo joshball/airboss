@@ -53,7 +53,7 @@ let { href, id, justCreated = false, title, meta, stats, extra, trailing }: Brow
 
 <style>
 	.card {
-		background: var(--ink-inverse);
+		background: var(--surface-raised);
 		border: 1px solid var(--edge-default);
 		border-radius: var(--radius-md);
 		transition: border-color var(--motion-fast), box-shadow var(--motion-fast);

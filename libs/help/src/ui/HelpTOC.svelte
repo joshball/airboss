@@ -42,12 +42,12 @@ let {
 		padding: 0;
 		display: flex;
 		flex-direction: column;
-		gap: 0.25rem;
+		gap: var(--space-2xs);
 	}
 
 	.toc a {
 		display: block;
-		padding: 0.375rem 0.625rem;
+		padding: var(--space-xs) var(--space-md);
 		border-radius: var(--radius-sm);
 		color: var(--ink-muted);
 		text-decoration: none;

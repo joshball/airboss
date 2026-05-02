@@ -399,7 +399,7 @@ function cancel(): void {
 		padding: var(--space-sm) var(--space-md);
 		border: 1px solid var(--edge-strong);
 		border-radius: var(--radius-md);
-		background: var(--ink-inverse);
+		background: var(--input-default-bg);
 		color: var(--ink-body);
 	}
 
