@@ -12,8 +12,22 @@ import { REFERENCE_SOURCE_TYPES, type ReferenceSourceType } from './reference-ta
 export const SOURCE_ACTION_LIMITS = {
 	/** Hard cap on a single upload body. 500 MiB covers yearly CFR + AIM bundles. */
 	MAX_UPLOAD_BYTES: 500 * 1024 * 1024,
+	/**
+	 * Hard cap on a single download body (response stream). 250 MiB is well
+	 * above the largest known FAA asset (full PHAK ~75 MiB, eCFR Title 14 XML
+	 * ~200 MiB at peak) and below any plausible runaway response from a
+	 * tarpit / poisoned redirect chain. Streaming downloaders abort the read
+	 * loop the moment cumulative bytes exceed this ceiling.
+	 */
+	MAX_DOWNLOAD_BYTES: 250 * 1024 * 1024,
 	/** End-to-end timeout on a single download GET (wall clock). */
 	DOWNLOAD_TIMEOUT_MS: 120_000,
+	/**
+	 * Default short-fetch timeout used by metadata calls (eCFR titles, etc).
+	 * 30 s is long enough for normal eCFR latency and short enough that a
+	 * hung endpoint does not stall an entire `bun run sources download` run.
+	 */
+	METADATA_FETCH_TIMEOUT_MS: 30_000,
 	/** How many times to retry a failed fetch before giving up. */
 	DOWNLOAD_MAX_RETRIES: 3,
 	/** Linear backoff base: delay = BASE_MS * 2^(attempt-1). */
@@ -27,6 +41,57 @@ export const SOURCE_ACTION_LIMITS = {
 /** User-Agent string sent by the source downloader. Advertises the tool honestly. */
 export const SOURCE_DOWNLOADER_USER_AGENT =
 	'Mozilla/5.0 (compatible; airboss-hangar/1.0; aviation reference ingestion)';
+
+/**
+ * Host allowlist for source downloads + redirect targets.
+ *
+ * Hardcoded because: (1) only three publishers serve airboss source content
+ * today (FAA primary, eCFR for Title 14/49, FAA TFM for runway-condition
+ * data), (2) deriving the allowlist dynamically from YAML config would let a
+ * malicious YAML edit silently expand network reach, (3) every entry here
+ * matches at least one URL in `scripts/sources/config/*.yaml` (verified via
+ * `grep -hoE 'https?://[a-zA-Z0-9.-]+' scripts/sources/config/*.yaml`).
+ *
+ * Adding a publisher: append the bare hostname here and add the matching
+ * YAML entry. The TS downloader and the Python ingestion helpers both read
+ * from this single list (Python imports it via a shim; see
+ * `tools/handbook-ingest/ingest/_http_safety.py`).
+ */
+export const SOURCE_DOWNLOAD_HOST_ALLOWLIST: readonly string[] = ['www.faa.gov', 'tfmlearning.faa.gov', 'www.ecfr.gov'];
+
+/**
+ * Maximum number of redirect hops the downloader follows before aborting.
+ * Mirrors `scripts/sources/download/constants.ts:MAX_REDIRECTS`; centralised
+ * here so the Python ingestion helpers consume the same ceiling.
+ */
+export const SOURCE_DOWNLOAD_MAX_REDIRECTS = 5;
+
+/**
+ * Allowed URL schemes for source downloads. HTTPS only by policy; an explicit
+ * list keeps the validator readable and rejects `javascript:`/`data:` etc.
+ * outright.
+ */
+export const SOURCE_DOWNLOAD_ALLOWED_SCHEMES: readonly string[] = ['https:'];
+
+/**
+ * Returns the trimmed hostname of `url` when it is an `https:` URL whose host
+ * is in {@link SOURCE_DOWNLOAD_HOST_ALLOWLIST}; returns `null` otherwise. Used
+ * by every fetch path that talks to a source publisher (TS downloader,
+ * redirect chaser, Python ingestion shim) so a single guard governs which
+ * hosts the pipeline is allowed to reach.
+ */
+export function allowedSourceHost(url: string): string | null {
+	let parsed: URL;
+	try {
+		parsed = new URL(url);
+	} catch {
+		return null;
+	}
+	if (!SOURCE_DOWNLOAD_ALLOWED_SCHEMES.includes(parsed.protocol)) return null;
+	const host = parsed.hostname.toLowerCase();
+	if (!SOURCE_DOWNLOAD_HOST_ALLOWLIST.includes(host)) return null;
+	return host;
+}
 
 /** Extension -> previewer kind mapping for the /sources/[id]/files browser. */
 export const PREVIEW_KINDS = {

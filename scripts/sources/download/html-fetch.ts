@@ -9,13 +9,21 @@
  */
 
 import { createHash } from 'node:crypto';
-import { createWriteStream, mkdirSync } from 'node:fs';
+import { createWriteStream, mkdirSync, unlinkSync } from 'node:fs';
 import { dirname } from 'node:path';
 import { Readable } from 'node:stream';
 import { pipeline } from 'node:stream/promises';
+import { SOURCE_ACTION_LIMITS } from '@ab/constants';
 import { sleep } from '../../lib/sleep';
 import { NETWORK_TIMEOUT_MS, RETRY_DELAY_MS, USER_AGENT } from './constants';
-import { type DownloadOutcome, followRedirectsHead, HttpError } from './http';
+import {
+	assertAllowedHost,
+	BodyTooLargeError,
+	type DownloadOutcome,
+	followRedirectsHead,
+	HostPolicyError,
+	HttpError,
+} from './http';
 
 export interface HtmlDownloadOptions {
 	readonly verbose: boolean;
@@ -46,6 +54,7 @@ async function downloadHtmlOnce(url: string, destPath: string, opts: HtmlDownloa
 		throw new Error('no fetch implementation available in this runtime');
 	}
 
+	assertAllowedHost(url);
 	const finalUrl = await followRedirectsHead(url, fetchImpl, opts.verbose);
 	const controller = new AbortController();
 	const timer = setTimeout(() => controller.abort(), NETWORK_TIMEOUT_MS);
@@ -85,13 +94,29 @@ async function downloadHtmlOnce(url: string, destPath: string, opts: HtmlDownloa
 	const fileStream = createWriteStream(destPath);
 	const nodeStream = Readable.fromWeb(response.body as unknown as import('node:stream/web').ReadableStream);
 
+	const cap = SOURCE_ACTION_LIMITS.MAX_DOWNLOAD_BYTES;
+	let cappedError: BodyTooLargeError | null = null;
 	nodeStream.on('data', (chunk: Buffer | string) => {
 		const buf = typeof chunk === 'string' ? Buffer.from(chunk) : chunk;
 		hash.update(buf);
 		bytes += buf.byteLength;
+		if (bytes > cap && cappedError === null) {
+			cappedError = new BodyTooLargeError(finalUrl, cap);
+			nodeStream.destroy(cappedError);
+		}
 	});
 
-	await pipeline(nodeStream, fileStream);
+	try {
+		await pipeline(nodeStream, fileStream);
+	} catch (error) {
+		try {
+			unlinkSync(destPath);
+		} catch {
+			// File may not have been created; ignore.
+		}
+		if (cappedError !== null) throw cappedError;
+		throw error;
+	}
 
 	return {
 		url: finalUrl,
@@ -103,6 +128,8 @@ async function downloadHtmlOnce(url: string, destPath: string, opts: HtmlDownloa
 }
 
 function isTransient(error: unknown): boolean {
+	if (error instanceof HostPolicyError) return false;
+	if (error instanceof BodyTooLargeError) return false;
 	if (error instanceof HttpError) {
 		return error.status >= 500 && error.status < 600;
 	}

@@ -42,6 +42,7 @@ describe('downloadFile', () => {
 		const result = await downloadFile('https://example.test/hello.txt', dest, {
 			fetchImpl,
 			sleepImpl: async () => {},
+			skipHostAllowlist: true,
 		});
 
 		expect(result.notModified).toBe(false);
@@ -70,6 +71,7 @@ describe('downloadFile', () => {
 		const result = await downloadFile('https://example.test/retry', dest, {
 			fetchImpl,
 			sleepImpl: async () => {},
+			skipHostAllowlist: true,
 		});
 		expect(gets).toBe(2);
 		expect(result.fileSize).toBe(2);
@@ -86,6 +88,7 @@ describe('downloadFile', () => {
 			downloadFile('https://example.test/fail', dest, {
 				fetchImpl,
 				sleepImpl: async () => {},
+				skipHostAllowlist: true,
 			}),
 		).rejects.toThrow(/after 3 attempts/);
 
@@ -108,6 +111,7 @@ describe('downloadFile', () => {
 			etag: '"abc"',
 			fetchImpl,
 			sleepImpl: async () => {},
+			skipHostAllowlist: true,
 		});
 		expect(getCalled).toBe(true);
 		expect(result.notModified).toBe(true);
@@ -126,6 +130,7 @@ describe('downloadFile', () => {
 		const result = await downloadFile('https://example.test/redirect', dest, {
 			fetchImpl,
 			sleepImpl: async () => {},
+			skipHostAllowlist: true,
 		});
 		expect(result.fileSize).toBe(5);
 	});
@@ -167,7 +172,11 @@ describe('computeFileHash', () => {
 			return Promise.resolve(new Response(body, { status: 200 }));
 		}) as typeof fetch;
 		const dest = join(workDir, 'h.txt');
-		await downloadFile('https://example.test/h', dest, { fetchImpl, sleepImpl: async () => {} });
+		await downloadFile('https://example.test/h', dest, {
+			fetchImpl,
+			sleepImpl: async () => {},
+			skipHostAllowlist: true,
+		});
 		expect(await computeFileHash(dest)).toBe('b94d27b9934d3e08a52e52d7da7dabfac484efe37a5380ee9088f7ace2efcde9');
 	});
 });

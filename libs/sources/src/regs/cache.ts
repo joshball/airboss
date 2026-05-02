@@ -17,6 +17,7 @@ import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { dirname, isAbsolute, join, resolve } from 'node:path';
+import { allowedSourceHost, SOURCE_ACTION_LIMITS } from '@ab/constants';
 
 const ECFR_BASE = 'https://www.ecfr.gov/api/versioner/v1/full';
 
@@ -35,9 +36,25 @@ export interface CacheLoadOptions {
 	readonly fixturePath?: string;
 	/**
 	 * Optional override of the network fetch. Tests pass a stub; production
-	 * uses the global `fetch` builtin.
+	 * uses the global `fetch` builtin. The shim returns a Response-like
+	 * object: production callers (`globalThis.fetch`) provide `body`; legacy
+	 * test stubs may supply `text()` only and we read it through the
+	 * fall-through path.
 	 */
-	readonly fetchImpl?: (url: string) => Promise<{ ok: boolean; status: number; text: () => Promise<string> }>;
+	readonly fetchImpl?: (url: string) => Promise<EcfrFetchResponse>;
+}
+
+/**
+ * Minimum surface the cache loader needs from a fetch response. Modeled on
+ * the global `Response` so production can pass `globalThis.fetch` straight
+ * through; tests can stub either streaming `body` or the legacy `text()`
+ * fallback.
+ */
+export interface EcfrFetchResponse {
+	readonly ok: boolean;
+	readonly status: number;
+	readonly body?: ReadableStream<Uint8Array> | null;
+	readonly text?: () => Promise<string>;
 }
 
 /**
@@ -98,16 +115,35 @@ export async function loadEcfrXml(opts: CacheLoadOptions): Promise<CacheLoadResu
 	}
 
 	const url = buildEcfrUrl(opts);
-	const fetchImpl = opts.fetchImpl ?? globalThis.fetch;
+	// HTTPS-only + host-allowlist guard: refuse to talk to anything other than
+	// https://www.ecfr.gov even if a future code path or test ever passes a
+	// hand-crafted URL through `buildEcfrUrl`. Returns a typed error so the
+	// caller can distinguish from a network 4xx/5xx.
+	if (allowedSourceHost(url) === null) {
+		throw new Error(`eCFR cache: refusing disallowed URL ${url}; expected https://www.ecfr.gov`);
+	}
+	const fetchImpl = opts.fetchImpl ?? (globalThis.fetch as unknown as (u: string) => Promise<EcfrFetchResponse>);
 	if (typeof fetchImpl !== 'function') {
 		throw new Error('eCFR fetch unavailable: no fetch implementation in this runtime');
 	}
 
-	const response = await fetchImpl(url);
+	const controller = new AbortController();
+	const timer = setTimeout(() => controller.abort(), SOURCE_ACTION_LIMITS.METADATA_FETCH_TIMEOUT_MS);
+	let response: EcfrFetchResponse;
+	try {
+		// Cast: production fetchImpl is `globalThis.fetch` whose signature
+		// accepts an `AbortSignal`; legacy test stubs ignore it. Either is fine.
+		response = await (fetchImpl as (u: string, init?: { signal?: AbortSignal }) => Promise<EcfrFetchResponse>)(url, {
+			signal: controller.signal,
+		});
+	} finally {
+		clearTimeout(timer);
+	}
 	if (!response.ok) {
 		throw new Error(`eCFR Versioner returned ${response.status} for ${url}`);
 	}
-	const xml = await response.text();
+
+	const xml = await readBodyWithCap(response, url);
 
 	mkdirSync(dirname(cachePath), { recursive: true });
 	writeFileSync(cachePath, xml, 'utf-8');
@@ -117,6 +153,53 @@ export async function loadEcfrXml(opts: CacheLoadOptions): Promise<CacheLoadResu
 		sourceUrl: url,
 		sourceSha256: sha256(xml),
 	};
+}
+
+/**
+ * Read the response body to a string while enforcing
+ * {@link SOURCE_ACTION_LIMITS.MAX_DOWNLOAD_BYTES}. Prefers streaming via
+ * `body` (production); falls back to the legacy `text()` shape that some
+ * test stubs use, with a post-decode length check so the cap still bites.
+ */
+async function readBodyWithCap(response: EcfrFetchResponse, url: string): Promise<string> {
+	const cap = SOURCE_ACTION_LIMITS.MAX_DOWNLOAD_BYTES;
+	if (response.body) {
+		const reader = response.body.getReader();
+		const decoder = new TextDecoder('utf-8');
+		const chunks: string[] = [];
+		let total = 0;
+		// Stream the response; abort the read loop the moment cumulative
+		// bytes exceed the ceiling so we don't keep buffering attacker bytes.
+		while (true) {
+			const { done, value } = await reader.read();
+			if (done) break;
+			total += value.byteLength;
+			if (total > cap) {
+				try {
+					await reader.cancel();
+				} catch {
+					// reader may already be in error state; ignore.
+				}
+				throw new Error(`eCFR cache: response body exceeded ${cap} bytes for ${url}`);
+			}
+			chunks.push(decoder.decode(value, { stream: true }));
+		}
+		chunks.push(decoder.decode());
+		return chunks.join('');
+	}
+	if (response.text) {
+		const xml = await response.text();
+		// `xml.length` is char-count, not bytes. UTF-8 byte length >= char
+		// count for typical regulator XML, so this check is conservative
+		// in the safe direction (rejects oversized bodies on the byte
+		// budget regardless of encoding ratio).
+		const bytes = new TextEncoder().encode(xml).byteLength;
+		if (bytes > cap) {
+			throw new Error(`eCFR cache: response body exceeded ${cap} bytes for ${url}`);
+		}
+		return xml;
+	}
+	throw new Error(`eCFR cache: response had no body and no text() for ${url}`);
 }
 
 function buildEcfrUrl(opts: CacheLoadOptions): string {

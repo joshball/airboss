@@ -41,7 +41,6 @@ import hashlib
 import json
 import re
 import sys
-import urllib.request
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
@@ -49,6 +48,7 @@ from pathlib import Path
 import click
 import yaml
 
+from ._http_safety import HttpSafetyError, fetch_to_file
 from .config_loader import HandbookConfig
 from .handbooks import HandbookPlugin
 from .handbooks.base import (
@@ -59,6 +59,8 @@ from .handbooks.base import (
     ErrataPatch,
 )
 from .paths import cache_edition_root, edition_root, ensure_dir, relative_to_repo
+
+_USER_AGENT = "airboss-handbook-ingest/0.1"
 
 
 @dataclass
@@ -268,15 +270,38 @@ def _download_errata_pdf(config: HandbookConfig, errata: ErrataConfig) -> tuple[
         target.write_bytes(candidate.read_bytes())
         return target, sha, datetime.now(tz=UTC).isoformat()
 
-    # Fall back to URL fetch.
-    request = urllib.request.Request(errata.source_url, headers={"User-Agent": "airboss-handbook-ingest/0.1"})
-    with urllib.request.urlopen(request) as response, target.open("wb") as fh:
-        while True:
-            chunk = response.read(1024 * 1024)
-            if not chunk:
-                break
-            fh.write(chunk)
+    # Fall back to URL fetch through the safe-fetch helper. The helper
+    # asserts HTTPS-only, host allowlist, redirect cap, end-to-end timeout,
+    # body-size ceiling, and content-type sniff. Confined to network-layer
+    # hardening here -- tmp+rename atomicity is W3's scope.
+    try:
+        fetch_to_file(
+            errata.source_url,
+            target,
+            user_agent=_USER_AGENT,
+            expected_content_types=("application/pdf",),
+        )
+    except HttpSafetyError as exc:
+        raise ErrataApplyError(f"errata {errata.id!r}: {exc}") from exc
     sha = _sha256_of(target)
+    pinned = getattr(errata, "sha256", None)
+    if pinned:
+        if not isinstance(pinned, str) or len(pinned) != 64:
+            try:
+                target.unlink()
+            except FileNotFoundError:
+                pass
+            raise ErrataApplyError(
+                f"errata {errata.id!r}: malformed sha256 pin {pinned!r}; expected 64-char hex digest"
+            )
+        if pinned.lower() != sha.lower():
+            try:
+                target.unlink()
+            except FileNotFoundError:
+                pass
+            raise ErrataApplyError(
+                f"errata {errata.id!r}: sha256 mismatch (expected {pinned}, got {sha}); cache file removed"
+            )
     return target, sha, datetime.now(tz=UTC).isoformat()
 
 

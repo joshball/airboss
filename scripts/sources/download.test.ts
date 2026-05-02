@@ -354,7 +354,7 @@ describe('User-Agent header', () => {
 				headers: { 'Content-Length': '1234', 'Last-Modified': 'Wed, 22 Apr 2026 12:00:00 GMT' },
 			});
 		};
-		const result = await headRequest('https://example.test/foo.pdf', fakeFetch);
+		const result = await headRequest('https://www.faa.gov/foo.pdf', fakeFetch);
 		expect(result.status).toBe(200);
 		expect(result.contentLength).toBe(1234);
 		expect(result.lastModified).toBe('Wed, 22 Apr 2026 12:00:00 GMT');

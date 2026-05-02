@@ -8,10 +8,11 @@
  */
 
 import { createHash } from 'node:crypto';
-import { createWriteStream, mkdirSync } from 'node:fs';
+import { createWriteStream, mkdirSync, unlinkSync } from 'node:fs';
 import { dirname } from 'node:path';
 import { Readable } from 'node:stream';
 import { pipeline } from 'node:stream/promises';
+import { allowedSourceHost, SOURCE_ACTION_LIMITS } from '@ab/constants';
 import { sleep } from '../../lib/sleep';
 import { MAX_REDIRECTS, NETWORK_TIMEOUT_MS, RETRY_DELAY_MS, USER_AGENT } from './constants';
 
@@ -44,7 +45,52 @@ export class HttpError extends Error {
 	}
 }
 
+/**
+ * Thrown when a fetch target (or a redirect hop) is not in the source-host
+ * allowlist or uses a non-HTTPS scheme. Distinct from {@link HttpError} so
+ * callers can surface the host policy failure separately from server errors.
+ */
+export class HostPolicyError extends Error {
+	readonly url: string;
+	constructor(message: string, url: string) {
+		super(message);
+		this.url = url;
+		this.name = 'HostPolicyError';
+	}
+}
+
+/**
+ * Thrown when a streaming download exceeds {@link SOURCE_ACTION_LIMITS.MAX_DOWNLOAD_BYTES}.
+ * The partial `.tmp`/`.part` file is removed before the error is raised;
+ * callers retry safely.
+ */
+export class BodyTooLargeError extends Error {
+	readonly url: string;
+	readonly limit: number;
+	constructor(url: string, limit: number) {
+		super(`response body exceeded ${limit} bytes for ${url}`);
+		this.url = url;
+		this.limit = limit;
+		this.name = 'BodyTooLargeError';
+	}
+}
+
+/**
+ * Validate the URL scheme + host before issuing a request. Throws
+ * {@link HostPolicyError} on rejection so the caller's catch block treats it
+ * as a hard error (not a transient retry candidate).
+ */
+export function assertAllowedHost(url: string): void {
+	if (allowedSourceHost(url) === null) {
+		throw new HostPolicyError(
+			`refusing request to disallowed host or scheme: ${url} (must be https: and host in SOURCE_DOWNLOAD_HOST_ALLOWLIST)`,
+			url,
+		);
+	}
+}
+
 export async function headRequest(startUrl: string, fetchImpl: typeof fetch = globalThis.fetch): Promise<HeadResult> {
+	assertAllowedHost(startUrl);
 	const finalUrl = await followRedirectsHead(startUrl, fetchImpl, false);
 	const controller = new AbortController();
 	const timer = setTimeout(() => controller.abort(), NETWORK_TIMEOUT_MS);
@@ -89,6 +135,7 @@ async function downloadOnce(url: string, destPath: string, opts: DownloadOptions
 		throw new Error('no fetch implementation available in this runtime');
 	}
 
+	assertAllowedHost(url);
 	const finalUrl = await followRedirectsHead(url, fetchImpl, opts.verbose);
 	const controller = new AbortController();
 	const timer = setTimeout(() => controller.abort(), NETWORK_TIMEOUT_MS);
@@ -119,13 +166,31 @@ async function downloadOnce(url: string, destPath: string, opts: DownloadOptions
 	const fileStream = createWriteStream(destPath);
 	const nodeStream = Readable.fromWeb(response.body as unknown as import('node:stream/web').ReadableStream);
 
+	const cap = SOURCE_ACTION_LIMITS.MAX_DOWNLOAD_BYTES;
+	let cappedError: BodyTooLargeError | null = null;
 	nodeStream.on('data', (chunk: Buffer | string) => {
 		const buf = typeof chunk === 'string' ? Buffer.from(chunk) : chunk;
 		hash.update(buf);
 		bytes += buf.byteLength;
+		if (bytes > cap && cappedError === null) {
+			cappedError = new BodyTooLargeError(finalUrl, cap);
+			nodeStream.destroy(cappedError);
+		}
 	});
 
-	await pipeline(nodeStream, fileStream);
+	try {
+		await pipeline(nodeStream, fileStream);
+	} catch (error) {
+		// Streaming aborted (cap exceeded, network error, signal abort): wipe the
+		// partial file so the caller's retry path starts from a clean slate.
+		try {
+			unlinkSync(destPath);
+		} catch {
+			// Destination may not have been created yet; ignore.
+		}
+		if (cappedError !== null) throw cappedError;
+		throw error;
+	}
 
 	return {
 		url: finalUrl,
@@ -141,6 +206,11 @@ export async function followRedirectsHead(
 	fetchImpl: typeof fetch,
 	verbose: boolean,
 ): Promise<string> {
+	// Defense-in-depth: enforce the policy at the start AND on every hop. The
+	// caller has already validated `startUrl`, but a redirect into a
+	// disallowed host (MITM rewrite, DNS poisoning, attacker-controlled CDN
+	// alias) must be rejected here regardless.
+	assertAllowedHost(startUrl);
 	let url = startUrl;
 	for (let i = 0; i < MAX_REDIRECTS; i += 1) {
 		const head = await fetchImpl(url, {
@@ -151,7 +221,9 @@ export async function followRedirectsHead(
 		if (head.status >= 300 && head.status < 400) {
 			const next = head.headers.get('location');
 			if (next === null) return url;
-			url = new URL(next, url).toString();
+			const resolved = new URL(next, url).toString();
+			assertAllowedHost(resolved);
+			url = resolved;
 			if (verbose) console.warn(`  redirect ${head.status} -> ${url}`);
 			continue;
 		}
@@ -161,6 +233,10 @@ export async function followRedirectsHead(
 }
 
 function isTransient(error: unknown): boolean {
+	// Host policy + body-cap failures are not server flakiness; retrying does
+	// nothing but waste work, so callers should fail fast.
+	if (error instanceof HostPolicyError) return false;
+	if (error instanceof BodyTooLargeError) return false;
 	if (error instanceof HttpError) {
 		return error.status >= 500 && error.status < 600;
 	}

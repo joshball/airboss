@@ -16,7 +16,7 @@
 import { createHash } from 'node:crypto';
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import { SOURCE_ACTION_LIMITS, SOURCE_DOWNLOADER_USER_AGENT } from '@ab/constants';
+import { allowedSourceHost, SOURCE_ACTION_LIMITS, SOURCE_DOWNLOADER_USER_AGENT } from '@ab/constants';
 
 /** HEAD probe info; every field null-safe because many servers block HEAD. */
 export interface HeadInfo {
@@ -44,8 +44,15 @@ export interface DownloadOptions {
 	fetchImpl?: typeof fetch;
 	/** Override the sleep between retries. Tests return immediately. */
 	sleepImpl?: (ms: number) => Promise<void>;
-	/** Structured log hook (events: `head`, `get`, `retry`, `304`, `done`). */
+	/** Structured log hook (events: `head`, `get`, `retry`, `304`, `done`, `cap`). */
 	log?: (event: string, detail: Record<string, unknown>) => void;
+	/**
+	 * Bypass the source-host allowlist. Defaults to `false` (production must
+	 * keep this off). Tests that drive `https://example.test/...` through
+	 * mocked fetches set `true` to keep the allowlist scoped to real network
+	 * targets while still exercising the streaming + cap paths.
+	 */
+	skipHostAllowlist?: boolean;
 }
 
 async function defaultSleep(ms: number): Promise<void> {
@@ -93,6 +100,54 @@ function computeSha256(bytes: Uint8Array): string {
 }
 
 /**
+ * Stream `response.body` into the file at `partPath`, hashing as we go and
+ * aborting the moment cumulative bytes exceed
+ * {@link SOURCE_ACTION_LIMITS.MAX_DOWNLOAD_BYTES}. Returns the sha256 + byte
+ * count on success; throws (and removes the partial file) when the cap is
+ * exceeded or the stream errors.
+ *
+ * Replaces the prior `await response.arrayBuffer()` pattern that buffered
+ * the entire body in memory before disk write, eliminating both the
+ * memory-DoS surface and the no-cap concern.
+ */
+async function streamBodyToPart(
+	response: Response,
+	partPath: string,
+	url: string,
+	log: (event: string, detail: Record<string, unknown>) => void,
+): Promise<{ sha256: string; bytes: number }> {
+	if (!response.body) {
+		throw new Error('download failed: response has no body');
+	}
+	const cap = SOURCE_ACTION_LIMITS.MAX_DOWNLOAD_BYTES;
+	const reader = response.body.getReader();
+	const handle = await fs.open(partPath, 'w');
+	const hasher = createHash('sha256');
+	let total = 0;
+	try {
+		while (true) {
+			const { done, value } = await reader.read();
+			if (done) break;
+			total += value.byteLength;
+			if (total > cap) {
+				log('cap', { url, cap, bytesAtAbort: total });
+				try {
+					await reader.cancel();
+				} catch {
+					// reader may already be terminal; ignore.
+				}
+				throw new Error(`download failed: response body exceeded ${cap} bytes for ${url}`);
+			}
+			hasher.update(value);
+			await handle.write(value);
+		}
+	} finally {
+		await handle.close();
+	}
+	return { sha256: hasher.digest('hex'), bytes: total };
+}
+
+/**
  * Download `url` into `destPath` with retry + conditional-GET + atomic rename.
  *
  * Returns `{ notModified: true }` (without writing any file) when the server
@@ -105,6 +160,11 @@ export async function downloadFile(
 	destPath: string,
 	options: DownloadOptions = {},
 ): Promise<DownloadResult> {
+	if (!options.skipHostAllowlist && allowedSourceHost(url) === null) {
+		throw new Error(
+			`refusing download from disallowed host or scheme: ${url} (must be https: and host in SOURCE_DOWNLOAD_HOST_ALLOWLIST)`,
+		);
+	}
 	const fetchImpl = options.fetchImpl ?? fetch;
 	const sleepImpl = options.sleepImpl ?? defaultSleep;
 	const log = options.log ?? (() => {});
@@ -150,19 +210,15 @@ export async function downloadFile(
 			if (!response.ok) {
 				throw new Error(`download failed: HTTP ${response.status}`);
 			}
-			if (!response.body) {
-				throw new Error('download failed: response has no body');
-			}
 
-			const arrayBuffer = await response.arrayBuffer();
-			const bytes = new Uint8Array(arrayBuffer);
-			await fs.writeFile(partPath, bytes);
-			const sha256 = computeSha256(bytes);
-			const stat = await fs.stat(partPath);
+			// Stream + cap: write directly to `.part`, hashing chunks as they
+			// arrive. Replaces the old `await response.arrayBuffer()` which
+			// loaded the entire body into memory before disk write.
+			const { sha256, bytes } = await streamBodyToPart(response, partPath, url, log);
 			await fs.rename(partPath, destPath);
 
-			log('done', { url, fileSize: stat.size, sha256 });
-			return { sha256, fileSize: stat.size, headInfo, notModified: false };
+			log('done', { url, fileSize: bytes, sha256 });
+			return { sha256, fileSize: bytes, headInfo, notModified: false };
 		} catch (err) {
 			lastError = err instanceof Error ? err : new Error(String(err));
 			try {

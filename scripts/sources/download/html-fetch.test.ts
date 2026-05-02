@@ -24,7 +24,7 @@ describe('downloadHtmlFile', () => {
 			return new Response(body, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' } });
 		};
 		const dest = join(tempRoot, 'aim', 'chap07_section_03.html');
-		const outcome = await downloadHtmlFile('https://example.test/file.html', dest, {
+		const outcome = await downloadHtmlFile('https://www.faa.gov/file.html', dest, {
 			verbose: false,
 			fetchImpl: fakeFetch,
 		});
@@ -39,7 +39,7 @@ describe('downloadHtmlFile', () => {
 			return new Response('binary', { status: 200, headers: { 'Content-Type': 'application/pdf' } });
 		};
 		await expect(
-			downloadHtmlFile('https://example.test/x.html', join(tempRoot, 'x.html'), {
+			downloadHtmlFile('https://www.faa.gov/x.html', join(tempRoot, 'x.html'), {
 				verbose: false,
 				fetchImpl: fakeFetch,
 			}),
@@ -54,7 +54,7 @@ describe('downloadHtmlFile', () => {
 			});
 		};
 		await expect(
-			downloadHtmlFile('https://example.test/x.html', join(tempRoot, 'x.html'), {
+			downloadHtmlFile('https://www.faa.gov/x.html', join(tempRoot, 'x.html'), {
 				verbose: false,
 				fetchImpl: fakeFetch,
 			}),
@@ -64,7 +64,7 @@ describe('downloadHtmlFile', () => {
 	it('throws on non-2xx status', async () => {
 		const fakeFetch: typeof fetch = async (): Promise<Response> => new Response('', { status: 404 });
 		await expect(
-			downloadHtmlFile('https://example.test/x.html', join(tempRoot, 'x.html'), {
+			downloadHtmlFile('https://www.faa.gov/x.html', join(tempRoot, 'x.html'), {
 				verbose: false,
 				fetchImpl: fakeFetch,
 			}),
