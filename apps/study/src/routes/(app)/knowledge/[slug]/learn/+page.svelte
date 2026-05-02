@@ -1,13 +1,13 @@
 <script lang="ts">
 import { domainLabel, KNOWLEDGE_PHASE_LABELS, type KnowledgePhase, QUERY_PARAMS, ROUTES } from '@ab/constants';
 import PageHelp from '@ab/help/ui/PageHelp.svelte';
+import ActivityHost from '@ab/ui/components/ActivityHost.svelte';
 import Banner from '@ab/ui/components/Banner.svelte';
 import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import { humanize, renderMarkdown } from '@ab/utils';
 import { replaceState } from '$app/navigation';
 import { page } from '$app/state';
 import type { PageData } from './$types';
-import ActivityHost from './ActivityHost.svelte';
 
 let { data }: { data: PageData } = $props();
 

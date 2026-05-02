@@ -17,12 +17,12 @@ let { activityId }: Props = $props();
 </script>
 
 {#if activityId === 'crosswind-component'}
-	<figure class="activity">
+	<figure class="activity" data-testid="activity-host-known" data-activity-id={activityId}>
 		<CrosswindComponent maxDemoCrosswind={15} />
 		<figcaption>Interactive activity: drag the wind to see the crosswind + headwind split change.</figcaption>
 	</figure>
 {:else}
-	<aside class="unknown" role="note">
+	<aside class="unknown" role="note" data-testid="activity-host-unknown" data-activity-id={activityId}>
 		Activity <code>{activityId}</code> is referenced but not yet registered in the UI.
 	</aside>
 {/if}
