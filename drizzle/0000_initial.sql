@@ -679,6 +679,7 @@ CREATE TABLE "hangar"."job_log" (
 	"stream" text NOT NULL,
 	"line" text NOT NULL,
 	"at" timestamp with time zone DEFAULT now() NOT NULL,
+	CONSTRAINT "hangar_job_log_job_seq_unique" UNIQUE("job_id","seq"),
 	CONSTRAINT "hangar_job_log_stream_check" CHECK ("stream" IN ('stdout', 'stderr', 'event'))
 );
 --> statement-breakpoint
@@ -904,7 +905,6 @@ CREATE INDEX "hangar_job_status_idx" ON "hangar"."job" USING btree ("status","cr
 CREATE INDEX "hangar_job_kind_idx" ON "hangar"."job" USING btree ("kind","created_at");--> statement-breakpoint
 CREATE INDEX "hangar_job_target_idx" ON "hangar"."job" USING btree ("target_type","target_id","created_at");--> statement-breakpoint
 CREATE INDEX "hangar_job_actor_idx" ON "hangar"."job" USING btree ("actor_id","created_at");--> statement-breakpoint
-CREATE INDEX "hangar_job_log_job_idx" ON "hangar"."job_log" USING btree ("job_id","seq");--> statement-breakpoint
 CREATE INDEX "sim_attempt_user_scenario_ended_idx" ON "sim"."attempt" USING btree ("user_id","scenario_id","ended_at");--> statement-breakpoint
 CREATE INDEX "sim_attempt_user_ended_idx" ON "sim"."attempt" USING btree ("user_id","ended_at");--> statement-breakpoint
 CREATE INDEX "audit_log_actor_idx" ON "audit"."audit_log" USING btree ("actor_id","timestamp");--> statement-breakpoint
