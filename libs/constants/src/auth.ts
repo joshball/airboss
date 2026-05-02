@@ -18,7 +18,18 @@ export const BETTER_AUTH_ENDPOINTS = {
 
 export type BetterAuthEndpoint = (typeof BETTER_AUTH_ENDPOINTS)[keyof typeof BETTER_AUTH_ENDPOINTS];
 
-/** Cookie names better-auth writes during session management. */
+/**
+ * Cookie names better-auth writes during session management.
+ *
+ * The `__Host-` cookie prefix is intentionally NOT used here. `__Host-`
+ * forbids the `Domain` attribute, which is incompatible with the
+ * cross-subdomain cookie strategy (sessions must travel between
+ * `study.air-boss.org` and `hangar.air-boss.org`). The trade-off is
+ * accepted: a sibling host on the same registrable domain could
+ * theoretically perform a cookie-toss attack if one ever existed; today
+ * the airboss apex hosts no untrusted subdomains. If that changes, lock
+ * the apex separately rather than dropping the cross-subdomain mode.
+ */
 export const BETTER_AUTH_COOKIES = {
 	SESSION_TOKEN: 'better-auth.session_token',
 	SESSION_DATA: 'better-auth.session_data',

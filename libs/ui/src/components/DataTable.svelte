@@ -77,8 +77,11 @@ const sortedRows = $derived.by(() => {
 
 function sortIndicator(column: DataTableColumn<T>): string {
 	if (!column.sortBy) return '';
-	if (sort.columnId !== column.id) return ' ';
-	return sort.direction === 'asc' ? '^' : 'v';
+	if (sort.columnId !== column.id) return '';
+	// Triangle glyphs read as "this column is sorted" at a glance; ASCII ^/v
+	// confused with adjacent letter content (e.g. a "Version" header next to
+	// a literal "v").
+	return sort.direction === 'asc' ? '▲' : '▼';
 }
 </script>
 

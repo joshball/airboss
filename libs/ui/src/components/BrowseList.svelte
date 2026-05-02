@@ -15,11 +15,29 @@ export interface BrowseListProps<T> {
 	item: import('svelte').Snippet<[T]>;
 	/** ARIA label override for screen readers. Default: "Results". */
 	ariaLabel?: string;
+	/**
+	 * Stable key extractor for an item, used as the `{#each}` key. Without it,
+	 * BrowseList falls back to `item.id` when present, otherwise to the item
+	 * value itself -- which thrashes the DOM whenever the parent re-renders
+	 * with freshly-mapped objects (lost focus, lost local DOM state). All
+	 * library/study consumers pass `{ id: string }`-shaped rows; provide
+	 * `keyOf` explicitly when item identity isn't carried by `id`.
+	 */
+	keyOf?: (item: T) => string | number;
 }
 </script>
 
 <script lang="ts" generics="T">
-let { groups, item, ariaLabel = 'Results' }: BrowseListProps<T> = $props();
+let { groups, item, ariaLabel = 'Results', keyOf }: BrowseListProps<T> = $props();
+
+function pickKey(it: T): string | number {
+	if (keyOf) return keyOf(it);
+	const candidate = (it as { id?: string | number }).id;
+	if (candidate !== undefined && (typeof candidate === 'string' || typeof candidate === 'number')) return candidate;
+	// Last-resort: fall back to the value itself. Stable for primitives;
+	// brittle for freshly-mapped objects (every render = new key).
+	return it as unknown as string;
+}
 </script>
 
 {#each groups as group (group.key)}
@@ -30,7 +48,7 @@ let { groups, item, ariaLabel = 'Results' }: BrowseListProps<T> = $props();
 		</h2>
 	{/if}
 	<ul class="list" aria-label={ariaLabel} data-testid={`browselist-list-${group.key}`} data-group-key={group.key}>
-		{#each group.items as it (it)}
+		{#each group.items as it (pickKey(it))}
 			{@render item(it)}
 		{/each}
 	</ul>

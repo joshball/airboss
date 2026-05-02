@@ -39,7 +39,7 @@ let {
 } = $props();
 
 const slugId = $derived(`panel-${title.replace(/\s+/g, '-').toLowerCase()}`);
-const fallbackErrorMessage = $derived(`Unable to load ${title.toLowerCase()} -- try refreshing.`);
+const fallbackErrorMessage = $derived(`Unable to load ${title.toLowerCase()}. Try refreshing.`);
 const resolvedError = $derived(error ? (errorMessage ?? fallbackErrorMessage) : undefined);
 </script>
 

@@ -47,11 +47,20 @@ describe('Tabs -- selection', () => {
 		expect(screen.getByTestId('harness-panel-two')).toBeTruthy();
 	});
 
-	it('disabled tabs are skipped on click and have data-state=disabled', () => {
+	it('disabled tabs are skipped on click and have data-state=disabled', async () => {
 		const tabsWithDisabled = [tabs[0], { id: 'two', label: 'Two', disabled: true }, tabs[2]];
+		const user = userEvent.setup();
 		render(TabsHarness, { tabs: tabsWithDisabled });
+		// State + native disabled attr.
 		expect(screen.getByTestId('tabs-item-two').getAttribute('data-state')).toBe('disabled');
 		expect((screen.getByTestId('tabs-item-two') as HTMLButtonElement).disabled).toBe(true);
+		// Click does not change selection: tab one stays active and panel two
+		// never mounts. The native `disabled` attribute should swallow the
+		// click; assert the post-click state, not just the attributes.
+		await user.click(screen.getByTestId('tabs-item-two'));
+		expect(screen.getByTestId('tabs-item-one').getAttribute('aria-selected')).toBe('true');
+		expect(screen.getByTestId('tabs-item-two').getAttribute('aria-selected')).toBe('false');
+		expect(screen.queryByTestId('harness-panel-two')).toBeNull();
 	});
 });
 

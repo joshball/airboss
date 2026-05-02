@@ -73,6 +73,7 @@ const describedBy = $derived([hintId, errorId].filter(Boolean).join(' ') || unde
 		{required}
 		{disabled}
 		aria-invalid={error ? 'true' : undefined}
+		aria-required={required ? 'true' : undefined}
 		aria-describedby={describedBy}
 		data-testid="select-control"
 	>

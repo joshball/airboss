@@ -1,4 +1,5 @@
-import { ROUTES, type Role } from '@ab/constants';
+import { parseRole } from '@ab/auth';
+import { ROUTES } from '@ab/constants';
 import { initRegistry } from '@ab/sources';
 import {
 	APPEARANCE_COOKIE,
@@ -34,7 +35,13 @@ if (!building) {
 const REQUEST_ID_PATTERN = /^[a-zA-Z0-9_-]{1,64}$/;
 const REQUEST_ID_HEADER = 'x-request-id';
 
-function resolveRequestId(req: Request): string {
+/**
+ * Inbound request-id is correlation-only, never trust-bearing. We accept any
+ * 64-char alphanumeric+`_-` value the caller supplies for log threading and
+ * mint a random UUID when nothing valid arrived. The value is echoed back as
+ * the response header so a client can correlate failures.
+ */
+function acceptOrGenerateRequestId(req: Request): string {
 	const raw = req.headers.get(REQUEST_ID_HEADER);
 	return raw && REQUEST_ID_PATTERN.test(raw) ? raw : crypto.randomUUID();
 }
@@ -68,7 +75,7 @@ function applySecurityHeaders(response: Response): void {
 }
 
 export const handleError: HandleServerError = ({ error, event, status, message }) => {
-	const requestId = event.locals.requestId ?? resolveRequestId(event.request);
+	const requestId = event.locals.requestId ?? acceptOrGenerateRequestId(event.request);
 	return errorHandler({ error, status, message, requestId, userId: event.locals.user?.id });
 };
 
@@ -77,7 +84,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 	if (building) return resolve(event);
 
 	const start = performance.now();
-	const requestId = resolveRequestId(event.request);
+	const requestId = acceptOrGenerateRequestId(event.request);
 	event.locals.requestId = requestId;
 	event.locals.appearance = parseAppearancePreference(event.cookies.get(APPEARANCE_COOKIE));
 	event.locals.theme = readThemeFromCookies(event.cookies);
@@ -110,7 +117,6 @@ export const handle: Handle = async ({ event, resolve }) => {
 				? {
 						id: session.session.id,
 						userId: session.session.userId,
-						expiresAt: session.session.expiresAt,
 					}
 				: null;
 
@@ -119,10 +125,14 @@ export const handle: Handle = async ({ event, resolve }) => {
 						id: session.user.id,
 						email: session.user.email,
 						name: session.user.name,
+						// better-auth's additionalFields are typed as `unknown` on the
+						// session payload; widen via Record<string, unknown> and narrow
+						// with a `?? ''` fallback at the boundary so the rest of the app
+						// gets a typed AuthUser without per-callsite casts.
 						firstName: ((session.user as Record<string, unknown>).firstName as string) ?? '',
 						lastName: ((session.user as Record<string, unknown>).lastName as string) ?? '',
 						emailVerified: session.user.emailVerified,
-						role: (session.user.role as Role) ?? null,
+						role: parseRole(session.user.role),
 						image: session.user.image ?? null,
 						banned: session.user.banned ?? null,
 						createdAt: session.user.createdAt,
@@ -164,10 +174,13 @@ export const handle: Handle = async ({ event, resolve }) => {
 	applySecurityHeaders(response);
 
 	const ms = Math.round(performance.now() - start);
+	// `authenticated` positively records the anonymous case so a "broken auth
+	// path" (call site forgot to thread userId) is distinguishable from
+	// "request was deliberately anonymous" in JSON logs.
 	log.info(`${event.request.method} ${event.url.pathname} ${response.status}`, {
 		requestId,
 		userId: event.locals.user?.id ?? null,
-		metadata: { ms },
+		metadata: { ms, authenticated: event.locals.user != null },
 	});
 
 	return response;

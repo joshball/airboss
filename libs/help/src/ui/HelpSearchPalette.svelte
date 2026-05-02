@@ -164,7 +164,7 @@ function backdropKeydown(event: KeyboardEvent): void {
 					bind:value={rawQuery}
 					onkeydown={handleKey}
 					type="search"
-					placeholder="Search -- try `tag:weather rules:ifr` or `metar`"
+					placeholder="Search (try `tag:weather rules:ifr` or `metar`)"
 					autocomplete="off"
 					spellcheck="false"
 					aria-label="Search query"

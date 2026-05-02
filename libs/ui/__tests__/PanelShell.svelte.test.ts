@@ -65,6 +65,6 @@ describe('PanelShell -- error', () => {
 
 	it('error truthy with no errorMessage falls back to a generic per-title message', () => {
 		render(PanelShellHarness, { title: 'Plan', error: 'oh no' });
-		expect(screen.getByTestId('panelshell-error').textContent).toBe('Unable to load plan -- try refreshing.');
+		expect(screen.getByTestId('panelshell-error').textContent).toBe('Unable to load plan. Try refreshing.');
 	});
 });

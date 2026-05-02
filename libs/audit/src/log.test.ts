@@ -19,7 +19,10 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { auditRecent, auditWrite, countAuditEntriesSince } from './log';
 import { AUDIT_OPS, auditLog } from './schema';
 
-const TEST_TARGET_TYPE = AUDIT_TARGETS.HANGAR_PING;
+// Use a current (non-retired) target so the test exercises the AUDIT_TARGETS
+// surface authors actually emit against. HANGAR_REFERENCE is a stable choice;
+// any current target works since the test isolates rows via TEST_RUN_ID.
+const TEST_TARGET_TYPE = AUDIT_TARGETS.HANGAR_REFERENCE;
 const TEST_RUN_ID = `audit-test-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
 
 beforeAll(async () => {
@@ -27,10 +30,12 @@ beforeAll(async () => {
 	// metadata.testRunId scopes deletion to this run; other concurrent suites
 	// (or production rows) are left untouched.
 	await db.delete(auditLog).where(eq(auditLog.targetId, TEST_RUN_ID));
+	await db.delete(auditLog).where(eq(auditLog.targetId, `${TEST_RUN_ID}-shared`));
 });
 
 afterAll(async () => {
 	await db.delete(auditLog).where(eq(auditLog.targetId, TEST_RUN_ID));
+	await db.delete(auditLog).where(eq(auditLog.targetId, `${TEST_RUN_ID}-shared`));
 });
 
 describe('countAuditEntriesSince', () => {
@@ -135,5 +140,37 @@ describe('auditWrite + auditRecent round-trip', () => {
 		expect(indexA).toBeGreaterThanOrEqual(0);
 		expect(indexB).toBeGreaterThanOrEqual(0);
 		expect(indexB).toBeLessThan(indexA);
+	});
+
+	it('always filters by targetType, even when targetId is supplied', async () => {
+		// Write rows with the SAME targetId but DIFFERENT targetType. A correct
+		// query must return only the rows matching the requested targetType --
+		// previous versions dropped the targetType filter when targetId was
+		// supplied and would surface rows from any namespace sharing the id.
+		const sharedTargetId = `${TEST_RUN_ID}-shared`;
+		const otherType = AUDIT_TARGETS.HANGAR_SOURCE;
+		const ours = await auditWrite({
+			actorId: null,
+			op: AUDIT_OPS.ACTION,
+			targetType: TEST_TARGET_TYPE,
+			targetId: sharedTargetId,
+			metadata: { testRunId: TEST_RUN_ID, marker: 'type-precedence-ours' },
+		});
+		const collider = await auditWrite({
+			actorId: null,
+			op: AUDIT_OPS.ACTION,
+			targetType: otherType,
+			targetId: sharedTargetId,
+			metadata: { testRunId: TEST_RUN_ID, marker: 'type-precedence-collider' },
+		});
+
+		const recent = await auditRecent({ targetType: TEST_TARGET_TYPE, targetId: sharedTargetId, limit: 10 });
+		const ids = recent.map((row) => row.id);
+		expect(ids).toContain(ours.id);
+		expect(ids).not.toContain(collider.id);
+
+		// Cleanup the cross-type collider row -- the global afterAll only
+		// targets TEST_RUN_ID and the collider row uses sharedTargetId.
+		await db.delete(auditLog).where(eq(auditLog.id, collider.id));
 	});
 });

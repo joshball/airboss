@@ -89,4 +89,19 @@ describe('JumpToCardPopover -- interaction', () => {
 		await user.click(screen.getByTestId('dialog-close'));
 		expect(onClose).toHaveBeenCalledTimes(1);
 	});
+
+	it('Escape key closes the dialog', async () => {
+		const onClose = vi.fn();
+		const user = userEvent.setup();
+		render(JumpToCardPopover, {
+			open: true,
+			totalCards: 4,
+			currentIndex: 1,
+			statuses,
+			onPick: vi.fn(),
+			onClose,
+		});
+		await user.keyboard('{Escape}');
+		expect(onClose).toHaveBeenCalledTimes(1);
+	});
 });

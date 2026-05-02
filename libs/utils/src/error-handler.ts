@@ -18,9 +18,11 @@ interface ErrorResponse {
 }
 
 function safeMessageForStatus(status: number): string {
-	if (status === 404) return 'Page not found';
+	if (status === 400) return 'Invalid request';
 	if (status === 401) return 'Please sign in';
 	if (status === 403) return 'You do not have permission to view this page';
+	if (status === 404) return 'Page not found';
+	if (status === 429) return 'Too many requests, please slow down';
 	return 'An unexpected error occurred';
 }
 

@@ -2,7 +2,7 @@ import { ROLES, ROUTES, type Role } from '@ab/constants';
 import type { RequestEvent } from '@sveltejs/kit';
 import { describe, expect, it } from 'vitest';
 import type { AuthUser } from './auth';
-import { requireAuth, requireRole } from './auth';
+import { parseRole, requireAuth, requireRole } from './auth';
 
 function makeUser(role: Role = ROLES.AUTHOR): AuthUser {
 	return {
@@ -50,7 +50,7 @@ describe('requireAuth', () => {
 		try {
 			requireAuth(makeEvent(null));
 		} catch (e) {
-			expectRedirect(e, 302, ROUTES.LOGIN);
+			expectRedirect(e, 303, ROUTES.LOGIN);
 		}
 	});
 
@@ -93,7 +93,7 @@ describe('requireRole', () => {
 		try {
 			requireRole(makeEvent(null), ROLES.AUTHOR);
 		} catch (e) {
-			expectRedirect(e, 302, ROUTES.LOGIN);
+			expectRedirect(e, 303, ROUTES.LOGIN);
 		}
 	});
 
@@ -126,5 +126,27 @@ describe('requireRole', () => {
 		} catch (e) {
 			expectForbidden(e);
 		}
+	});
+});
+
+describe('parseRole', () => {
+	it('returns the typed role for known values', () => {
+		expect(parseRole(ROLES.LEARNER)).toBe(ROLES.LEARNER);
+		expect(parseRole(ROLES.AUTHOR)).toBe(ROLES.AUTHOR);
+		expect(parseRole(ROLES.OPERATOR)).toBe(ROLES.OPERATOR);
+		expect(parseRole(ROLES.ADMIN)).toBe(ROLES.ADMIN);
+	});
+
+	it('returns null for unknown strings', () => {
+		expect(parseRole('super-admin')).toBeNull();
+		expect(parseRole('')).toBeNull();
+		expect(parseRole('LEARNER')).toBeNull(); // case-sensitive
+	});
+
+	it('returns null for non-string inputs', () => {
+		expect(parseRole(null)).toBeNull();
+		expect(parseRole(undefined)).toBeNull();
+		expect(parseRole(0)).toBeNull();
+		expect(parseRole({})).toBeNull();
 	});
 });

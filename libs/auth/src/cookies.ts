@@ -49,11 +49,22 @@ function authCookieOptions(isDev: boolean, host: string | null | undefined, maxA
 	};
 }
 
-/** Decode a cookie value, falling back to the raw string if the encoding is malformed. */
+/**
+ * Decode a cookie value, falling back to the raw string if the encoding is
+ * malformed. We swallow the parse error rather than throw because better-auth
+ * never emits malformed Set-Cookie values today and bubbling would crash the
+ * sign-in flow on a single bad header. Trip a console warning so the next
+ * reader has a breadcrumb if a future better-auth upgrade changes encoding
+ * shape and the silent fallback starts firing.
+ */
 function decodeCookieValue(raw: string): string {
 	try {
 		return decodeURIComponent(raw);
 	} catch {
+		if (typeof console !== 'undefined') {
+			// biome-ignore lint/suspicious/noConsole: diagnostic breadcrumb for a malformed-cookie fallback that should never fire in practice; surfaces unnoticed cookie corruption.
+			console.warn('forwardAuthCookies: malformed cookie value, using raw form');
+		}
 		return raw;
 	}
 }
@@ -138,6 +149,11 @@ export function forwardAuthCookies(
 
 		if (isExpiring || value === '') {
 			const domain = resolveCookieDomain(host, isDev);
+			// `path: '/'` matches better-auth's default scope for every cookie it
+			// currently emits. If a future plugin sets a path-scoped cookie (e.g.
+			// `Path=/api/auth`) the delete here would not match -- in that case
+			// add the cookie to the explicit cookie-name list and pass the right
+			// `path` here so the delete cookie targets the same scope.
 			cookies.delete(name, { path: '/', ...(domain ? { domain } : {}) });
 		} else {
 			// Preserve the better-auth-set lifetime. Only fall back when

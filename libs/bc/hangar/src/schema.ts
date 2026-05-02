@@ -307,7 +307,6 @@ export const hangarInvitation = hangarSchema.table(
 	}),
 );
 
-
 export type HangarReferenceRow = typeof hangarReference.$inferSelect;
 export type NewHangarReferenceRow = typeof hangarReference.$inferInsert;
 export type HangarSourceRow = typeof hangarSource.$inferSelect;

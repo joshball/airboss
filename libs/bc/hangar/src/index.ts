@@ -104,9 +104,9 @@ export {
 	PendingInvitationExistsError,
 	type ResendInvitationInput,
 	type ResendInvitationResult,
-	resendInvitation,
 	type RevokeInvitationInput,
 	type RevokeInvitationResult,
+	resendInvitation,
 	revokeInvitation,
 } from './invitations';
 export {

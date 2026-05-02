@@ -128,9 +128,17 @@ describe('helpRegistry - search', () => {
 	});
 
 	it('ranked hits sorted alphabetically within a rank bucket', () => {
-		// All three pages' bodies contain "a"; but only two have "review" in body/summary.
-		const results = helpRegistry.search(parseQuery('review'));
-		expect(results.map((r) => r.id)).toContain('memory-review');
+		// Seed two pages whose titles tie on the same rank bucket. Substring
+		// match on title is bucket 2; both `Beta token` and `Alpha token`
+		// match `'token'` at bucket 2. The contract is: tied bucket -> sort
+		// alphabetically by title, so `Alpha` lands ahead of `Beta`.
+		helpRegistry.clear();
+		helpRegistry.registerPages('study', [
+			makePage({ id: 'b-page', title: 'Beta token', summary: 'b' }),
+			makePage({ id: 'a-page', title: 'Alpha token', summary: 'a' }),
+		]);
+		const results = helpRegistry.search(parseQuery('token'));
+		expect(results.map((r) => r.id)).toEqual(['a-page', 'b-page']);
 	});
 });
 

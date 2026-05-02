@@ -36,8 +36,13 @@ describe('buildPreHydrationScript', () => {
 		expect(script).toContain(`: '${THEMES.STUDY_SECTIONAL}'`);
 	});
 
-	it('forces dark only for sim/glass', () => {
-		expect(script).toContain(`forcedDark = theme === '${THEMES.SIM_GLASS}'`);
+	it('builds the forced-appearance lookup from FORCED_APPEARANCE_BY_THEME', () => {
+		// The lookup is now a plain JS object literal so adding a new forced
+		// theme to `FORCED_APPEARANCE_BY_THEME` ships through codegen without
+		// editing the script source. Verify the entry, not the old hard-coded
+		// `theme === SIM_GLASS` shape.
+		expect(script).toContain(`'${THEMES.SIM_GLASS}': 'dark'`);
+		expect(script).toContain('var forcedAppearance = forced[theme]');
 	});
 
 	it('reads both `theme` and `appearance` cookies', () => {

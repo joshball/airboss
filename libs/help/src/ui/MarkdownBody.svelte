@@ -139,7 +139,12 @@ function resolveWikilink(pageId: string): { href: string; resolved: boolean } {
 			</HelpCard>
 		{:else if node.kind === 'figure'}
 			<figure class="md-figure">
-				<img src={node.src} alt={node.alt} />
+				<!--
+					loading=lazy + decoding=async: figures on long help pages are
+					commonly offscreen at first paint; eager loads waste bytes
+					before the user scrolls and contribute to CLS.
+				-->
+				<img src={node.src} alt={node.alt} loading="lazy" decoding="async" />
 				{#if node.caption}
 					<figcaption>{node.caption}</figcaption>
 				{/if}

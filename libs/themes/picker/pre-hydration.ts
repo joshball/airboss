@@ -42,7 +42,7 @@
  */
 
 import { listThemes } from '../registry';
-import { resolveThemeForPath } from '../resolve';
+import { FORCED_APPEARANCE_BY_THEME, resolveThemeForPath } from '../resolve';
 
 const FLIGHTDECK_THEME = resolveThemeForPath('/dashboard').theme;
 const SIM_THEME = resolveThemeForPath('/sim').theme;
@@ -72,10 +72,15 @@ export function buildPreHydrationScript(): string {
 		.map((t) => t.id)
 		.sort();
 	const allowList = ids.map((id) => `'${id}': 1`).join(', ');
-	// Single-quoted theme ids; the resolver treats forced-dark themes via
-	// `forcedAppearanceFor`. Today only `sim/glass` qualifies; if another
-	// theme joins the forced set, surface it via a named export here so
-	// this script picks it up at codegen time.
+	// Build the forced-appearance lookup from the canonical map in
+	// `resolve.ts` so adding a new forced theme there ships through codegen
+	// without anyone editing this file. The previous `theme === SIM_THEME`
+	// hardcode would have silently ignored a second forced theme and let
+	// users see a brief light-mode flash on first paint.
+	const forcedEntries = Object.entries(FORCED_APPEARANCE_BY_THEME)
+		.filter(([, appearance]) => appearance !== undefined)
+		.map(([id, appearance]) => `'${id}': '${appearance}'`)
+		.join(', ');
 	return `(function () {
 	try {
 		var doc = document.documentElement;
@@ -98,13 +103,17 @@ export function buildPreHydrationScript(): string {
 		var pref = stored ? stored[1] : 'system';
 		var system = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 		// Forced-appearance themes (today: sim/glass dark-only) bypass user prefs.
-		var forcedDark = theme === '${SIM_THEME}';
-		var appearance = forcedDark ? 'dark' : pref === 'system' ? system : pref;
+		var forced = { ${forcedEntries} };
+		var forcedAppearance = forced[theme];
+		var appearance = forcedAppearance ? forcedAppearance : pref === 'system' ? system : pref;
 		doc.setAttribute('data-theme', theme);
 		doc.setAttribute('data-appearance', appearance);
 		doc.setAttribute('data-layout', layout);
 	} catch (e) {
-		/* Fall through to the HTML defaults. */
+		// Surface the failure as a DOM attribute so devs can see "did the
+		// pre-hydration script throw?" without instrumenting console output.
+		// Falls through to the HTML defaults regardless.
+		try { doc.setAttribute('data-pre-hydration-error', (e && e.message) ? e.message : '1'); } catch (_) {}
 	}
 })();`;
 }

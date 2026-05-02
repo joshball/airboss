@@ -27,6 +27,7 @@ let {
 	bodySnippet,
 	actions,
 	role = 'status',
+	headingLevel = 2,
 }: {
 	title: string;
 	/**
@@ -37,11 +38,24 @@ let {
 	bodySnippet?: Snippet;
 	actions?: Snippet;
 	role?: 'status' | 'note' | 'region';
+	/**
+	 * Heading level for the title. Default `2` matches a top-level empty
+	 * state in a route. Pass `3` (or `4`) when the empty state is nested
+	 * inside a panel that already owns an h2 (e.g. `PanelShell`) so the
+	 * heading hierarchy stays valid.
+	 */
+	headingLevel?: 2 | 3 | 4;
 } = $props();
 </script>
 
 <article class="empty" {role} data-testid="emptystate-root">
-	<h2 data-testid="emptystate-title">{title}</h2>
+	{#if headingLevel === 2}
+		<h2 data-testid="emptystate-title">{title}</h2>
+	{:else if headingLevel === 3}
+		<h3 data-testid="emptystate-title">{title}</h3>
+	{:else}
+		<h4 data-testid="emptystate-title">{title}</h4>
+	{/if}
 	{#if bodySnippet}
 		<div class="body" data-testid="emptystate-body">{@render bodySnippet()}</div>
 	{:else if body}
@@ -65,7 +79,9 @@ let {
 		text-align: left;
 	}
 
-	h2 {
+	h2,
+	h3,
+	h4 {
 		margin: 0;
 		font-size: var(--font-size-lg);
 		font-weight: var(--font-weight-semibold);

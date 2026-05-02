@@ -95,7 +95,10 @@ describe('SharePopover -- open', () => {
 		(screen.getByTestId('sharepopover-copy') as HTMLButtonElement).click();
 		await new Promise((resolve) => setTimeout(resolve, 0));
 		await new Promise((resolve) => setTimeout(resolve, 0));
-		expect(screen.getByTestId('sharepopover-error')).toBeTruthy();
+		// Assert on the user-facing message text, not just element presence:
+		// an empty error region would silently pass otherwise.
+		const errorText = screen.getByTestId('sharepopover-error').textContent ?? '';
+		expect(errorText.trim().length).toBeGreaterThan(0);
 	});
 
 	it('clicking the shared Dialog close button calls onClose', () => {

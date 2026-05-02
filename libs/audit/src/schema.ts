@@ -63,7 +63,13 @@ export const auditLog = auditSchema.table(
 		/** Row snapshot after the mutation; null for deletes + actions. */
 		after: jsonb('after'),
 		/** Request-id, user-agent, reason, anything else. */
-		metadata: jsonb('metadata').$type<Record<string, unknown>>().notNull().default({}),
+		metadata: jsonb('metadata')
+			.$type<Record<string, unknown>>()
+			.notNull()
+			// Explicit `'{}'::jsonb` cast matches the convention used in
+			// `libs/bc/study/src/schema.ts` and stays stable across Drizzle
+			// versions that have changed how the literal `{}` value renders.
+			.default(sql`'{}'::jsonb`),
 	},
 	(t) => ({
 		auditActorIdx: index('audit_log_actor_idx').on(t.actorId, t.timestamp),

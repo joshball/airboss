@@ -10,16 +10,6 @@
  * for non-row actions (login, export, scaffold-ping).
  */
 export const AUDIT_TARGETS = {
-	/**
-	 * Retired scaffold-era heartbeat. The `/admin/audit-ping` route was
-	 * removed once real BC writes (cards, sources, hangar.user) made the
-	 * diagnostic redundant. The enum value stays so existing
-	 * `audit.audit_log` rows (append-only per ADR 004) remain valid against
-	 * the DB CHECK constraint -- which is regenerated from
-	 * `AUDIT_TARGET_VALUES` on every migration. No code emits `hangar.ping`
-	 * anymore; do not reuse this string for a new target.
-	 */
-	HANGAR_PING: 'hangar.ping',
 	/** Reference-registry edits in hangar (create / update / delete). */
 	HANGAR_REFERENCE: 'hangar.reference',
 	/** Source-registry edits in hangar. */
@@ -87,8 +77,36 @@ export const AUDIT_TARGETS = {
 
 export type AuditTarget = (typeof AUDIT_TARGETS)[keyof typeof AUDIT_TARGETS];
 
-/** Allow-list values used by the DB CHECK constraint on `audit_log.target_type`. */
-export const AUDIT_TARGET_VALUES: readonly AuditTarget[] = Object.values(AUDIT_TARGETS);
+/**
+ * Retired audit-target strings. These values are no longer emitted by any
+ * call site, but the DB CHECK constraint on `audit.audit_log.target_type`
+ * still has to allow them because existing audit rows are append-only per
+ * ADR 004. Authors choosing a new audit target type MUST NOT reuse any of
+ * these strings.
+ *
+ * Move a value out of `AUDIT_TARGETS` and into here when a target retires.
+ */
+export const AUDIT_TARGETS_RETIRED = {
+	/**
+	 * Scaffold-era heartbeat. The `/admin/audit-ping` route was removed once
+	 * real BC writes (cards, sources, hangar.user) made the diagnostic
+	 * redundant.
+	 */
+	HANGAR_PING: 'hangar.ping',
+} as const;
+
+export type AuditTargetRetired = (typeof AUDIT_TARGETS_RETIRED)[keyof typeof AUDIT_TARGETS_RETIRED];
+
+/**
+ * Allow-list values used by the DB CHECK constraint on `audit_log.target_type`.
+ * Includes both currently-emitted targets (`AUDIT_TARGETS`) and retired
+ * targets (`AUDIT_TARGETS_RETIRED`) so historic rows stay valid against the
+ * generated CHECK clause.
+ */
+export const AUDIT_TARGET_VALUES: readonly (AuditTarget | AuditTargetRetired)[] = [
+	...Object.values(AUDIT_TARGETS),
+	...Object.values(AUDIT_TARGETS_RETIRED),
+];
 
 /**
  * Preset time-window options for the hangar audit explorer filter bar.

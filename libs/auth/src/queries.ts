@@ -11,8 +11,17 @@ import { bauthUser } from './schema';
 
 type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;
 
-/** Count of all `bauth_user` rows (no filter). */
-export async function countAllUsers(db: Db = defaultDb): Promise<number> {
+/**
+ * Count of every row in `bauth_user`, including banned (and any
+ * future-soft-deleted) accounts. Renamed from a plain `countAllUsers` to make
+ * the inclusion explicit -- the hangar admin home tile can drift from "active
+ * sessions" by the banned-row delta and the call-site name now documents that.
+ */
+export async function countAllUsersIncludingBanned(db: Db = defaultDb): Promise<number> {
 	const rows = await db.select({ c: count() }).from(bauthUser);
-	return Number(rows[0]?.c ?? 0);
+	// drizzle's pg `count()` already returns a `number`; the previous `Number(...)`
+	// cast was a no-op. Cast a `bigint` defensively in case a future driver swap
+	// changes the shape, but otherwise pass the number through directly.
+	const c = rows[0]?.c ?? 0;
+	return typeof c === 'bigint' ? Number(c) : c;
 }

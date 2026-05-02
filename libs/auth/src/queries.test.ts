@@ -1,5 +1,5 @@
 /**
- * Sanity coverage for `countAllUsers`. Asserts the count grows by exactly the
+ * Sanity coverage for `countAllUsersIncludingBanned`. Asserts the count grows by exactly the
  * number of users we add and falls back when they are removed. Uses the live
  * dev Postgres so the COUNT runs against the real table shape.
  */
@@ -8,7 +8,7 @@ import { db } from '@ab/db/connection';
 import { generateAuthId } from '@ab/utils';
 import { eq, inArray } from 'drizzle-orm';
 import { afterAll, describe, expect, it } from 'vitest';
-import { countAllUsers } from './queries';
+import { countAllUsersIncludingBanned } from './queries';
 import { bauthUser } from './schema';
 
 const userIds: string[] = [];
@@ -36,9 +36,9 @@ async function insertUser(): Promise<string> {
 	return id;
 }
 
-describe('countAllUsers', () => {
+describe('countAllUsersIncludingBanned', () => {
 	it('returns a non-negative number', async () => {
-		const count = await countAllUsers();
+		const count = await countAllUsersIncludingBanned();
 		expect(count).toBeGreaterThanOrEqual(0);
 		expect(Number.isInteger(count)).toBe(true);
 	});
@@ -46,7 +46,7 @@ describe('countAllUsers', () => {
 	it('counts at least our inserted users', async () => {
 		await insertUser();
 		await insertUser();
-		const count = await countAllUsers();
+		const count = await countAllUsersIncludingBanned();
 		// We added two; the global count must be at least that.
 		// Cannot assert exact delta because peer test files share the table.
 		expect(count).toBeGreaterThanOrEqual(2);
@@ -63,8 +63,8 @@ describe('countAllUsers', () => {
 		userIds.splice(userIds.indexOf(id), 1);
 		const fetchedAfter = await db.select().from(bauthUser).where(eq(bauthUser.id, id));
 		expect(fetchedAfter).toHaveLength(0);
-		// And countAllUsers still returns a non-negative integer post-delete.
-		const count = await countAllUsers();
+		// And countAllUsersIncludingBanned still returns a non-negative integer post-delete.
+		const count = await countAllUsersIncludingBanned();
 		expect(count).toBeGreaterThanOrEqual(0);
 	});
 });

@@ -46,7 +46,8 @@ const role = $derived(tone === 'danger' ? 'alert' : 'status');
 			data-testid="banner-dismiss"
 			onclick={onDismiss}
 		>
-			x
+			<!-- U+00D7 multiplication sign: standard close glyph, matches FilterChips/SnoozeReason/JumpToCard. -->
+			×
 		</button>
 	{/if}
 </div>
