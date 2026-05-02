@@ -103,8 +103,8 @@ const majorTicks = Array.from({ length: 36 }, (_, i) => i * 10);
 
 <style>
 	.instrument {
-		width: 200px;
-		height: 200px;
+		width: 12.5rem;
+		height: 12.5rem;
 	}
 
 	svg {

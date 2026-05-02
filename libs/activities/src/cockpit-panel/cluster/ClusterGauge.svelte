@@ -95,8 +95,8 @@ const display = $derived(formatter ? formatter(safeValue) : safeValue.toFixed(0)
 
 <style>
 	.cluster-gauge {
-		width: 120px;
-		height: 120px;
+		width: 7.5rem;
+		height: 7.5rem;
 	}
 	svg {
 		width: 100%;

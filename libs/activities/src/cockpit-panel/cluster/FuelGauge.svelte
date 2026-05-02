@@ -53,8 +53,8 @@ const lowPct = $derived(lowFuelThreshold === undefined ? 0 : fillPct(lowFuelThre
 
 <style>
 	.fuel-gauge {
-		width: 120px;
-		height: 120px;
+		width: 7.5rem;
+		height: 7.5rem;
 		display: grid;
 		grid-template-columns: 1fr 1fr;
 		grid-template-rows: 1fr auto;
@@ -73,7 +73,7 @@ const lowPct = $derived(lowFuelThreshold === undefined ? 0 : fillPct(lowFuelThre
 	.bar {
 		position: relative;
 		flex: 1;
-		width: 24px;
+		width: 1.5rem;
 		background: var(--sim-instrument-face-inner);
 		border: 1px solid var(--sim-instrument-bezel);
 		overflow: hidden;

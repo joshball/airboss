@@ -98,8 +98,8 @@ const majorTicks = [0, 500, 1000, 1500, 2000, 2500, 3000];
 
 <style>
 	.instrument {
-		width: 200px;
-		height: 200px;
+		width: 12.5rem;
+		height: 12.5rem;
 	}
 
 	svg {

@@ -119,8 +119,8 @@ const ticks = Array.from({ length: 15 }, (_, i) => MIN_KIAS + i * 10);
 
 <style>
 	.instrument {
-		width: 200px;
-		height: 200px;
+		width: 12.5rem;
+		height: 12.5rem;
 	}
 
 	svg {
