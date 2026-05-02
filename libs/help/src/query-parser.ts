@@ -13,8 +13,8 @@
  *                    `\,` escapes a comma. A quoted VALUE is NOT supported
  *                    (quote the free-text outside the facet instead).
  *   quoted-phrase := '"' chars-without-quote '"'
- *   free-token  := any run of non-whitespace characters that does not
- *                    satisfy `KEY:VALUE`
+ *   free-token  := any run of non-whitespace, non-quote characters that
+ *                    does not satisfy `KEY:VALUE`
  *
  * Escape rules (apply only to bare tokens; quoted strings are verbatim):
  *   `\:` -> literal colon (prevents key:value interpretation)
@@ -29,6 +29,11 @@
  *   - Multiple filters with the same key OR together (`tag:weather tag:ifr`
  *     becomes `tag` with values `[weather, ifr]`).
  *   - Empty values are dropped (`tag:` with nothing after is free-text).
+ *   - An opening `"` inside a bare token closes that token (so
+ *     `tag:foo"bar baz"` parses as `tag:foo` plus a phrase `bar baz`).
+ *   - An unterminated quote (`"foo`) consumes the rest of the input as a
+ *     phrase AND emits an `unterminated_quote` warning on the result.
+ *     The UI is expected to surface warnings rather than silently swallow.
  *
  * Not supported:
  *   - Parentheses / boolean operators (YAGNI until user asks).
@@ -36,12 +41,12 @@
  *   - Wildcards.
  */
 
-import type { FilterKey, ParsedFilter, ParsedQuery } from './schema/help-registry';
+import type { FilterKey, ParsedFilter, ParsedQuery, ParseWarning } from './schema/help-registry';
 
 const KNOWN_KEYS: readonly string[] = ['tag', 'source', 'rules', 'kind', 'surface', 'lib'];
 
 export function parseQuery(raw: string): ParsedQuery {
-	const tokens = tokenize(raw);
+	const { tokens, warnings } = tokenize(raw);
 	const freeTextPieces: string[] = [];
 	const filterMap = new Map<FilterKey, string[]>();
 
@@ -70,6 +75,7 @@ export function parseQuery(raw: string): ParsedQuery {
 	return {
 		freeText: freeTextPieces.join(' ').trim(),
 		filters,
+		warnings,
 	};
 }
 
@@ -85,8 +91,14 @@ interface QuotedToken {
 }
 type Token = BareToken | QuotedToken;
 
-function tokenize(raw: string): Token[] {
+interface TokenizeResult {
+	tokens: Token[];
+	warnings: ParseWarning[];
+}
+
+function tokenize(raw: string): TokenizeResult {
 	const tokens: Token[] = [];
+	const warnings: ParseWarning[] = [];
 	let i = 0;
 	const n = raw.length;
 	while (i < n) {
@@ -97,21 +109,37 @@ function tokenize(raw: string): Token[] {
 			continue;
 		}
 		if (c === '"') {
+			const openOffset = i;
 			const start = i + 1;
 			let end = start;
 			while (end < n && raw[end] !== '"') end += 1;
 			const text = raw.slice(start, end);
 			tokens.push({ kind: 'quoted', text });
-			i = end < n ? end + 1 : end;
+			if (end >= n) {
+				// Unterminated quote: take the rest as a phrase but signal the
+				// author. Falling back gracefully avoids breaking incremental
+				// typing while still surfacing a warning the UI can render.
+				warnings.push({
+					code: 'unterminated_quote',
+					message: 'Unterminated quoted phrase. Add a closing `"` to match the opening quote.',
+					offset: openOffset,
+				});
+				i = n;
+			} else {
+				i = end + 1;
+			}
 			continue;
 		}
-		// Bare token: consume until next whitespace, respecting `\<c>`.
+		// Bare token: consume until next whitespace OR an opening quote,
+		// respecting `\<c>`. Breaking on `"` keeps `tag:foo"bar baz"` from
+		// silently fragmenting one logical value across two tokens.
 		let j = i;
 		let out = '';
 		while (j < n) {
 			const ch = raw[j];
 			if (ch === undefined) break;
 			if (/\s/.test(ch)) break;
+			if (ch === '"') break;
 			if (ch === '\\' && j + 1 < n) {
 				const next = raw[j + 1];
 				if (next === ':' || next === ',' || next === '\\') {
@@ -126,7 +154,7 @@ function tokenize(raw: string): Token[] {
 		tokens.push({ kind: 'bare', text: out });
 		i = j;
 	}
-	return tokens;
+	return { tokens, warnings };
 }
 
 // -------- facet parsing --------

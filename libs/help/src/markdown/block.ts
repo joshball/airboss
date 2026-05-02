@@ -23,7 +23,7 @@
 
 import { CALLOUT_VARIANTS } from '../validation';
 import type { CalloutVariant, InlineNode, MdNode, TableAlign } from './ast';
-import { parseInline } from './inline';
+import { ESCAPABLE, parseInline } from './inline';
 
 const CALLOUT_VARIANT_SET = new Set<string>(CALLOUT_VARIANTS);
 
@@ -351,9 +351,15 @@ function splitTableRow(line: string): string[] {
 	for (let i = 0; i < s.length; i += 1) {
 		const ch = s[i];
 		if (ch === '\\' && i + 1 < s.length) {
-			buf += s[i + 1];
-			i += 1;
-			continue;
+			const next = s[i + 1] as string;
+			if (ESCAPABLE.has(next)) {
+				// Escape sequence: emit only the escaped char.
+				buf += next;
+				i += 1;
+				continue;
+			}
+			// Not an escape: keep the backslash literal and fall through to
+			// process `next` on the following iteration.
 		}
 		if (ch === '|') {
 			out.push(buf);

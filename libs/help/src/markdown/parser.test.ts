@@ -177,4 +177,26 @@ describe('inline parser', () => {
 		expect(nodes).toHaveLength(1);
 		expect(nodes[0]).toEqual({ kind: 'text', value: 'not *italic* here' });
 	});
+
+	it('keeps a literal backslash before a non-escapable char and still finds the closing emphasis delimiter', () => {
+		// `\z` is NOT in ESCAPABLE -- the body parse keeps `\` literal, so the
+		// closing `*` must be detected at the end of the run. Previously
+		// `findUnescaped` skipped `\z` as if it were an escape and stepped
+		// past the real closing delimiter, dropping the emphasis entirely.
+		const nodes = parseInline('*foo \\z bar*');
+		expect(nodes).toHaveLength(1);
+		expect(nodes[0]?.kind).toBe('em');
+		if (nodes[0]?.kind === 'em') {
+			expect(nodes[0].children).toEqual([{ kind: 'text', value: 'foo \\z bar' }]);
+		}
+	});
+
+	it('keeps a literal backslash before a non-escapable char inside strong runs', () => {
+		const nodes = parseInline('**foo \\d bar**');
+		expect(nodes).toHaveLength(1);
+		expect(nodes[0]?.kind).toBe('strong');
+		if (nodes[0]?.kind === 'strong') {
+			expect(nodes[0].children).toEqual([{ kind: 'text', value: 'foo \\d bar' }]);
+		}
+	});
 });
