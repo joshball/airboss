@@ -20,8 +20,8 @@ const tenThousandsAngle = $derived(((altSafe % 100000) / 100000) * 360);
 const ticks = Array.from({ length: 10 }, (_, i) => i);
 </script>
 
-<div class="instrument" aria-label={`Altimeter reading ${altSafe.toFixed(0)} feet`}>
-	<svg viewBox="0 0 200 200" role="img">
+<div class="instrument">
+	<svg viewBox="0 0 200 200" role="img" aria-label={`Altimeter reading ${altSafe.toFixed(0)} feet`}>
 		<circle cx="100" cy="100" r="96" class="instrument-face" />
 
 		<!-- tick marks: 0..9 (hundreds scale). The "5" tick line (6 o'clock)

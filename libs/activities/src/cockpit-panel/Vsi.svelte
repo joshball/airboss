@@ -29,8 +29,12 @@ const majorTicks = [-2000, -1500, -1000, -500, 0, 500, 1000, 1500, 2000];
 const minorTicks = [-400, -300, -200, -100, 100, 200, 300, 400];
 </script>
 
-<div class="instrument" aria-label={`Vertical speed indicator reading ${fpmSafe.toFixed(0)} feet per minute`}>
-	<svg viewBox="0 0 200 200" role="img">
+<div class="instrument">
+	<svg
+		viewBox="0 0 200 200"
+		role="img"
+		aria-label={`Vertical speed indicator reading ${fpmSafe.toFixed(0)} feet per minute`}
+	>
 		<circle cx="100" cy="100" r="96" class="instrument-face" stroke-width="2" />
 
 		{#each majorTicks as t (t)}

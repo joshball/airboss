@@ -133,11 +133,14 @@ const readerHref = $derived(isReadable ? ROUTES.LIBRARY_HANDBOOK(documentSlug) :
 		transition: border-color var(--motion-fast) ease;
 	}
 	.library-card.readable:hover,
+	.library-card.external:hover {
+		border-color: var(--action-default-edge);
+	}
 	.library-card.readable:focus-visible,
-	.library-card.external:hover,
 	.library-card.external:focus-visible {
 		border-color: var(--action-default-edge);
-		outline: none;
+		outline: 2px solid var(--focus-ring);
+		outline-offset: 2px;
 	}
 	.library-card.unlinked {
 		opacity: 0.7;

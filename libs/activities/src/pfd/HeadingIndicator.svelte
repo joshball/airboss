@@ -91,8 +91,13 @@ function tickX(rawDeg: number): number {
 }
 </script>
 
-<div class="instrument" aria-label={`Heading ${headingForLabel} degrees`}>
-	<svg viewBox="0 0 {VIEW_WIDTH} {VIEW_HEIGHT}" role="img" preserveAspectRatio="xMidYMid meet">
+<div class="instrument">
+	<svg
+		viewBox="0 0 {VIEW_WIDTH} {VIEW_HEIGHT}"
+		role="img"
+		aria-label={`Heading ${headingForLabel} degrees`}
+		preserveAspectRatio="xMidYMid meet"
+	>
 		<rect x="0" y="0" width={VIEW_WIDTH} height={VIEW_HEIGHT} class="strip-bg" />
 
 		<!-- Tick + label strip -->

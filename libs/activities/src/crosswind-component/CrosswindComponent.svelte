@@ -623,7 +623,7 @@ function tickEnd(angleDeg: number): { x: number; y: number } {
 		font-size: var(--font-size-xs);
 		font-weight: 700;
 		letter-spacing: 0.04em;
-		color: var(--action-hazard);
+		color: var(--action-hazard-ink);
 		background: var(--action-hazard);
 		border-radius: var(--radius-xs);
 		vertical-align: middle;

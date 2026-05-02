@@ -50,10 +50,13 @@ const pageRange = $derived(
 		text-decoration: none;
 		transition: background var(--motion-fast) ease;
 	}
-	.section-item:hover,
+	.section-item:hover {
+		background: var(--surface-sunken);
+	}
 	.section-item:focus-visible {
 		background: var(--surface-sunken);
-		outline: none;
+		outline: 2px solid var(--focus-ring);
+		outline-offset: 2px;
 	}
 	.code {
 		font-family: var(--font-family-mono);

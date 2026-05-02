@@ -74,6 +74,12 @@ let { href, id, justCreated = false, title, meta, stats, extra, trailing }: Brow
 		padding: var(--space-sm) var(--space-md);
 		text-decoration: none;
 		color: inherit;
+		border-radius: var(--radius-md);
+	}
+
+	.card-link:focus-visible {
+		outline: 2px solid var(--focus-ring);
+		outline-offset: 2px;
 	}
 
 	.card-title {
