@@ -2,6 +2,7 @@
 import { ROUTES } from '@ab/constants';
 import Badge from '@ab/ui/components/Badge.svelte';
 import Banner from '@ab/ui/components/Banner.svelte';
+import Breadcrumbs from '@ab/ui/components/Breadcrumbs.svelte';
 import Button from '@ab/ui/components/Button.svelte';
 import ConfirmDialog from '@ab/ui/components/ConfirmDialog.svelte';
 import ReferenceForm from '$lib/components/ReferenceForm.svelte';
@@ -28,11 +29,12 @@ function formatTime(iso: string): string {
 <section class="page">
 	<header class="hd">
 		<div>
-			<p class="crumbs">
-				<a href={ROUTES.HANGAR_GLOSSARY}>Glossary</a>
-				<span aria-hidden="true">/</span>
-				<span class="mono">{data.reference.id}</span>
-			</p>
+			<Breadcrumbs
+				items={[
+					{ label: 'Glossary', href: ROUTES.HANGAR_GLOSSARY },
+					{ label: data.reference.id, mono: true },
+				]}
+			/>
 			<h1>{data.reference.displayName}</h1>
 			<div class="meta">
 				<Badge tone={data.reference.dirty ? 'warning' : 'success'} size="sm">
@@ -103,24 +105,6 @@ function formatTime(iso: string): string {
 		gap: var(--space-xl);
 		padding-top: var(--space-lg);
 		padding-bottom: var(--space-2xl);
-	}
-
-	.crumbs {
-		margin: 0 0 var(--space-2xs);
-		color: var(--ink-muted);
-		font-size: var(--type-ui-label-size);
-		display: flex;
-		gap: var(--space-xs);
-		align-items: center;
-	}
-
-	.crumbs a {
-		color: var(--link-default);
-		text-decoration: none;
-	}
-
-	.crumbs a:hover {
-		color: var(--link-hover);
 	}
 
 	h1 {

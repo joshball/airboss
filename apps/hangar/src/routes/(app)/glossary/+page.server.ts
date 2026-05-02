@@ -12,13 +12,13 @@ import {
 	type ReferencePhaseOfFlight,
 	type ReferenceSourceType,
 	ROLES,
-	ROUTES,
 	SOURCE_TYPE_VALUES,
 } from '@ab/constants';
-import { enqueueJob } from '@ab/hangar-jobs';
-import { narrow } from '@ab/utils';
-import { fail, isRedirect, redirect } from '@sveltejs/kit';
+import { createLogger, narrow } from '@ab/utils';
+import { enqueueAndRedirect } from '$lib/server/enqueue-and-redirect';
 import type { Actions, PageServerLoad } from './$types';
+
+const log = createLogger('hangar:glossary-sync');
 
 const PAGE_SIZE = 25;
 
@@ -89,20 +89,16 @@ export const actions: Actions = {
 	 */
 	syncAll: async (event) => {
 		const user = requireRole(event, ROLES.AUTHOR, ROLES.OPERATOR, ROLES.ADMIN);
-		try {
-			const job = await enqueueJob({
+		return enqueueAndRedirect(
+			event,
+			{
 				kind: JOB_KINDS.SYNC_TO_DISK,
 				targetType: 'registry',
 				targetId: 'registry',
 				actorId: user.id,
 				payload: {},
-			});
-			redirect(303, ROUTES.HANGAR_JOB_DETAIL(job.id));
-		} catch (err) {
-			if (err instanceof Response) throw err;
-			// SvelteKit redirects throw -- rethrow so they propagate.
-			if (isRedirect(err)) throw err;
-			return fail(500, { error: err instanceof Error ? err.message : 'failed to enqueue sync job' });
-		}
+			},
+			{ logger: log, failureMessage: 'failed to enqueue sync job' },
+		);
 	},
 };

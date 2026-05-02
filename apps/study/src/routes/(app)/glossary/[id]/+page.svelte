@@ -1,6 +1,7 @@
 <script lang="ts">
 import ReferenceText from '@ab/aviation/ui/ReferenceText.svelte';
 import { ROUTES } from '@ab/constants';
+import Breadcrumbs from '@ab/ui/components/Breadcrumbs.svelte';
 import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import type { PageData } from './$types';
 
@@ -15,11 +16,12 @@ const related = $derived(data.related);
 </svelte:head>
 
 <section class="page">
-	<nav class="crumbs" aria-label="Breadcrumb">
-		<a href={ROUTES.GLOSSARY}>Glossary</a>
-		<span aria-hidden="true">/</span>
-		<span>{reference.displayName}</span>
-	</nav>
+	<Breadcrumbs
+		items={[
+			{ label: 'Glossary', href: ROUTES.GLOSSARY },
+			{ label: reference.displayName },
+		]}
+	/>
 
 	<PageHeader title={reference.displayName}>
 		{#snippet subtitleSnippet()}
@@ -102,19 +104,6 @@ const related = $derived(data.related);
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-lg);
-	}
-
-	.crumbs {
-		display: flex;
-		gap: var(--space-xs);
-		font-size: var(--type-ui-label-size);
-		color: var(--ink-muted);
-	}
-
-	.crumbs a {
-		color: inherit;
-		text-decoration: none;
-		border-bottom: 1px dotted currentColor;
 	}
 
 	.id {

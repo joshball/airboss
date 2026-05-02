@@ -1,6 +1,7 @@
 <script lang="ts">
 import { ROUTES } from '@ab/constants';
 import Banner from '@ab/ui/components/Banner.svelte';
+import Breadcrumbs from '@ab/ui/components/Breadcrumbs.svelte';
 import Button from '@ab/ui/components/Button.svelte';
 import FormStack from '@ab/ui/components/FormStack.svelte';
 import PageHeader from '@ab/ui/components/PageHeader.svelte';
@@ -23,13 +24,13 @@ const isBusy = $derived(data.activeJob !== null);
 </svelte:head>
 
 <section class="page">
-	<nav aria-label="Breadcrumb" class="crumbs">
-		<a href={ROUTES.HANGAR_SOURCES}>Sources</a>
-		<span aria-hidden="true">/</span>
-		<a href={ROUTES.HANGAR_SOURCE_DETAIL(data.source.id)}>{data.source.id}</a>
-		<span aria-hidden="true">/</span>
-		<span class="current">Upload</span>
-	</nav>
+	<Breadcrumbs
+		items={[
+			{ label: 'Sources', href: ROUTES.HANGAR_SOURCES },
+			{ label: data.source.id, href: ROUTES.HANGAR_SOURCE_DETAIL(data.source.id), mono: true },
+			{ label: 'Upload' },
+		]}
+	/>
 
 	<PageHeader title="Upload new version">
 		{#snippet subtitleSnippet()}
@@ -75,7 +76,7 @@ const isBusy = $derived(data.activeJob !== null);
 			</p>
 		</div>
 		<div class="actions">
-			<a class="btn-like" href={ROUTES.HANGAR_SOURCE_DETAIL(data.source.id)}>Cancel</a>
+			<Button variant="secondary" size="md" href={ROUTES.HANGAR_SOURCE_DETAIL(data.source.id)}>Cancel</Button>
 			<Button type="submit" variant="primary" size="md" disabled={isBusy}>Upload</Button>
 		</div>
 	</FormStack>
@@ -90,18 +91,6 @@ const isBusy = $derived(data.activeJob !== null);
 		padding-bottom: var(--space-2xl);
 		max-width: 40rem;
 	}
-
-	.crumbs {
-		display: flex;
-		gap: var(--space-xs);
-		color: var(--ink-muted);
-		font-size: var(--type-ui-label-size);
-		align-items: center;
-	}
-
-	.crumbs a { color: var(--link-default); text-decoration: none; }
-	.crumbs a:hover { text-decoration: underline; }
-	.crumbs .current { color: var(--ink-body); }
 
 	.field {
 		display: flex;
@@ -150,23 +139,6 @@ const isBusy = $derived(data.activeJob !== null);
 		display: flex;
 		gap: var(--space-sm);
 		justify-content: flex-end;
-	}
-
-	.btn-like {
-		display: inline-flex;
-		align-items: center;
-		padding: var(--space-xs) var(--space-md);
-		background: var(--surface-sunken);
-		color: var(--ink-body);
-		border: 1px solid var(--edge-default);
-		border-radius: var(--radius-sm);
-		text-decoration: none;
-		font-weight: var(--font-weight-semibold);
-		font-size: var(--type-ui-label-size);
-	}
-
-	.btn-like:hover {
-		background: var(--action-default-wash);
 	}
 
 	.mono { font-family: var(--font-family-mono); }

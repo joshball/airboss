@@ -11,7 +11,9 @@ import {
 } from '@ab/constants';
 import PageHelp from '@ab/help/ui/PageHelp.svelte';
 import EmptyState from '@ab/ui/components/EmptyState.svelte';
+import FilterBar from '@ab/ui/components/FilterBar.svelte';
 import PageHeader from '@ab/ui/components/PageHeader.svelte';
+import Table from '@ab/ui/components/Table.svelte';
 import { goto, replaceState } from '$app/navigation';
 import { page } from '$app/state';
 import type { PageData } from './$types';
@@ -347,7 +349,7 @@ const hasFiltersBeyondWindow = $derived(
 		{/snippet}
 	</PageHeader>
 
-	<section class="filter-bar" aria-label="Filter audit events">
+	<FilterBar layout="rows" ariaLabel="Filter audit events">
 		<div class="row">
 			<div class="field actor-field">
 				<label for="audit-actor">Actor</label>
@@ -460,7 +462,7 @@ const hasFiltersBeyondWindow = $derived(
 				<button type="button" class="link-button" onclick={clearAllFilters}>Clear filters</button>
 			</div>
 		</div>
-	</section>
+	</FilterBar>
 
 	{#if data.capReached && data.nextCursor !== null}
 		<p class="cap-banner" role="status">
@@ -475,43 +477,41 @@ const hasFiltersBeyondWindow = $derived(
 			<EmptyState title="No audit events yet" body="Mutations across every BC will appear here." />
 		{/if}
 	{:else}
-		<div class="table-wrap">
-			<table>
-				<thead>
+		<Table ariaLabel="Audit events">
+			<thead>
+				<tr>
+					<th scope="col">Time</th>
+					<th scope="col">Actor</th>
+					<th scope="col">Op</th>
+					<th scope="col">Target type</th>
+					<th scope="col">Target id</th>
+				</tr>
+			</thead>
+			<tbody>
+				{#each data.rows as row (row.id)}
 					<tr>
-						<th scope="col">Time</th>
-						<th scope="col">Actor</th>
-						<th scope="col">Op</th>
-						<th scope="col">Target type</th>
-						<th scope="col">Target id</th>
+						<td class="mono">
+							<a href={ROUTES.HANGAR_ADMIN_AUDIT_DETAIL(row.id)}>{formatTimestamp(row.timestamp)}</a>
+						</td>
+						<td>
+							{#if row.actorId === null}
+								<span class="muted">system</span>
+							{:else}
+								<a href={ROUTES.HANGAR_ADMIN_AUDIT_DETAIL(row.id)}>
+									<span class="actor-name">{actorLabel(row)}</span>
+									{#if row.actorEmail}
+										<span class="actor-email mono">{row.actorEmail}</span>
+									{/if}
+								</a>
+							{/if}
+						</td>
+						<td><span class="op-pill op-{row.op}">{row.op}</span></td>
+						<td class="mono">{row.targetType}</td>
+						<td class="mono">{row.targetId ?? '-'}</td>
 					</tr>
-				</thead>
-				<tbody>
-					{#each data.rows as row (row.id)}
-						<tr>
-							<td class="mono">
-								<a href={ROUTES.HANGAR_ADMIN_AUDIT_DETAIL(row.id)}>{formatTimestamp(row.timestamp)}</a>
-							</td>
-							<td>
-								{#if row.actorId === null}
-									<span class="muted">system</span>
-								{:else}
-									<a href={ROUTES.HANGAR_ADMIN_AUDIT_DETAIL(row.id)}>
-										<span class="actor-name">{actorLabel(row)}</span>
-										{#if row.actorEmail}
-											<span class="actor-email mono">{row.actorEmail}</span>
-										{/if}
-									</a>
-								{/if}
-							</td>
-							<td><span class="op-pill op-{row.op}">{row.op}</span></td>
-							<td class="mono">{row.targetType}</td>
-							<td class="mono">{row.targetId ?? '-'}</td>
-						</tr>
-					{/each}
-				</tbody>
-			</table>
-		</div>
+				{/each}
+			</tbody>
+		</Table>
 		{#if data.nextCursor !== null}
 			<div class="show-more-row">
 				<button type="button" class="show-more" onclick={showMore}>Show more</button>
@@ -527,16 +527,6 @@ const hasFiltersBeyondWindow = $derived(
 		gap: var(--space-xl);
 		padding-top: var(--space-lg);
 		padding-bottom: var(--space-2xl);
-	}
-
-	.filter-bar {
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-md);
-		padding: var(--space-md);
-		background: var(--surface-raised);
-		border: 1px solid var(--edge-default);
-		border-radius: var(--radius-md);
 	}
 
 	.row {
@@ -723,41 +713,6 @@ const hasFiltersBeyondWindow = $derived(
 		border-radius: var(--radius-md);
 		color: var(--ink-muted);
 		font-size: var(--type-ui-caption-size);
-	}
-
-	.table-wrap {
-		overflow-x: auto;
-		border: 1px solid var(--edge-default);
-		border-radius: var(--radius-md);
-		background: var(--surface-raised);
-	}
-
-	table {
-		width: 100%;
-		border-collapse: collapse;
-		font-size: var(--type-ui-label-size);
-	}
-
-	th,
-	td {
-		padding: var(--space-sm) var(--space-md);
-		text-align: left;
-		border-bottom: 1px solid var(--table-row-edge);
-		color: var(--ink-body);
-		vertical-align: top;
-	}
-
-	th {
-		background: var(--table-header-bg);
-		color: var(--table-header-ink);
-		text-transform: uppercase;
-		letter-spacing: var(--letter-spacing-wide);
-		font-size: var(--type-ui-caption-size);
-		font-weight: var(--font-weight-semibold);
-	}
-
-	tr:hover {
-		background: var(--table-row-bg-hover);
 	}
 
 	td a {

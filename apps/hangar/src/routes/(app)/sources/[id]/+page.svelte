@@ -2,6 +2,7 @@
 import { ROUTES, SOURCE_KINDS } from '@ab/constants';
 import Badge from '@ab/ui/components/Badge.svelte';
 import Banner from '@ab/ui/components/Banner.svelte';
+import Breadcrumbs from '@ab/ui/components/Breadcrumbs.svelte';
 import Button from '@ab/ui/components/Button.svelte';
 import EmptyState from '@ab/ui/components/EmptyState.svelte';
 import SourcePreviewTile from '$lib/components/SourcePreviewTile.svelte';
@@ -48,11 +49,12 @@ const checksumMatchesOnDisk = $derived(
 </svelte:head>
 
 <section class="page">
-	<nav aria-label="Breadcrumb" class="crumbs">
-		<a href={ROUTES.HANGAR_SOURCES}>Sources</a>
-		<span aria-hidden="true">/</span>
-		<span class="current">{data.source.id}</span>
-	</nav>
+	<Breadcrumbs
+		items={[
+			{ label: 'Sources', href: ROUTES.HANGAR_SOURCES },
+			{ label: data.source.id, mono: true },
+		]}
+	/>
 
 	<header class="hd">
 		<div>
@@ -63,7 +65,7 @@ const checksumMatchesOnDisk = $derived(
 			<form method="POST" action={ROUTES.HANGAR_SOURCE_FETCH_ACTION}>
 				<Button type="submit" variant="primary" size="sm" disabled={isBusy}>Fetch</Button>
 			</form>
-			<a class="btn-like" class:disabled-link={isBusy} aria-disabled={isBusy} href={ROUTES.HANGAR_SOURCE_UPLOAD(data.source.id)}>Upload</a>
+			<Button variant="secondary" size="sm" href={ROUTES.HANGAR_SOURCE_UPLOAD(data.source.id)} disabled={isBusy}>Upload</Button>
 			<form method="POST" action={ROUTES.HANGAR_SOURCE_EXTRACT_ACTION}>
 				<Button type="submit" variant="secondary" size="sm" disabled={data.source.isPendingChecksum || isBusy}>
 					Extract
@@ -182,7 +184,7 @@ const checksumMatchesOnDisk = $derived(
 			<p class="muted">
 				Browse every binary + archived version under <code>hangar-blobs/{data.source.type}/</code>.
 			</p>
-			<a class="btn-like" href={ROUTES.HANGAR_SOURCE_FILES(data.source.id)}>Open files</a>
+			<Button variant="secondary" size="sm" href={ROUTES.HANGAR_SOURCE_FILES(data.source.id)}>Open files</Button>
 		</section>
 	</section>
 
@@ -213,26 +215,6 @@ const checksumMatchesOnDisk = $derived(
 		padding-bottom: var(--space-2xl);
 	}
 
-	.crumbs {
-		display: flex;
-		gap: var(--space-xs);
-		color: var(--ink-muted);
-		font-size: var(--type-ui-label-size);
-		align-items: center;
-	}
-
-	.crumbs a {
-		color: var(--link-default);
-		text-decoration: none;
-	}
-
-	.crumbs a:hover { text-decoration: underline; }
-
-	.crumbs .current {
-		color: var(--ink-body);
-		font-family: var(--font-family-mono);
-	}
-
 	.hd {
 		display: flex;
 		justify-content: space-between;
@@ -258,31 +240,6 @@ const checksumMatchesOnDisk = $derived(
 		gap: var(--space-sm);
 		flex-wrap: wrap;
 		align-items: center;
-	}
-
-	.btn-like {
-		display: inline-flex;
-		align-items: center;
-		padding: var(--space-xs) var(--space-md);
-		background: var(--surface-sunken);
-		color: var(--ink-body);
-		border: 1px solid var(--edge-default);
-		border-radius: var(--radius-sm);
-		font-weight: var(--font-weight-semibold);
-		text-decoration: none;
-		font-size: var(--type-ui-label-size);
-	}
-
-	.btn-like:hover {
-		background: var(--action-default-wash);
-		border-color: var(--action-default-edge);
-	}
-
-	.btn-like.disabled-link,
-	.btn-like[aria-disabled='true'] {
-		opacity: 0.5;
-		pointer-events: none;
-		cursor: not-allowed;
 	}
 
 	.cards {

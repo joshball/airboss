@@ -19,6 +19,7 @@
 export { isTone, TONES, type Tone } from '@ab/themes';
 export type { BadgeSize, BadgeTone } from './components/Badge.svelte';
 export type { BannerTone } from './components/Banner.svelte';
+export type { BreadcrumbItem } from './components/Breadcrumbs.svelte';
 export type { BrowseListGroup, BrowseListProps } from './components/BrowseList.svelte';
 export type { BrowseListItemProps } from './components/BrowseListItem.svelte';
 export type { BrowseViewControlsOption, BrowseViewControlsProps } from './components/BrowseViewControls.svelte';
@@ -27,6 +28,7 @@ export type { CheckboxSize } from './components/Checkbox.svelte';
 export type { DialogSize } from './components/Dialog.svelte';
 export type { DividerOrientation } from './components/Divider.svelte';
 export type { DrawerSide, DrawerSize } from './components/Drawer.svelte';
+export type { FilterBarProps } from './components/FilterBar.svelte';
 export type { FilterCardProps } from './components/FilterCard.svelte';
 export type { FilterChipDef, FilterChipsProps } from './components/FilterChips.svelte';
 export type { PagerProps } from './components/Pager.svelte';

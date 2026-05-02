@@ -12,6 +12,7 @@ import {
 } from '@ab/themes';
 import ThemePicker from '@ab/themes/picker/ThemePicker.svelte';
 import ThemeProvider from '@ab/themes/ThemeProvider.svelte';
+import RolePill from '@ab/ui/components/RolePill.svelte';
 import type { Snippet } from 'svelte';
 import { page } from '$app/state';
 import Nav from '$lib/components/Nav.svelte';
@@ -150,7 +151,7 @@ function handleMenuKeydown(event: KeyboardEvent) {
 				<span class="identity-label-full">{identityLabel}</span>
 				<span class="identity-label-compact" aria-hidden="true">{initials}</span>
 				{#if data.user.role}
-					<span class="role-pill" aria-hidden="true">{data.user.role}</span>
+					<RolePill ariaHidden>{data.user.role}</RolePill>
 				{/if}
 				<span class="chevron" aria-hidden="true">v</span>
 			</summary>
@@ -286,18 +287,6 @@ function handleMenuKeydown(event: KeyboardEvent) {
 
 	.identity[open] .chevron {
 		transform: rotate(180deg);
-	}
-
-	.role-pill {
-		display: inline-block;
-		font-size: var(--type-ui-caption-size);
-		font-weight: var(--font-weight-semibold);
-		padding: 0 var(--space-2xs);
-		border-radius: var(--radius-pill);
-		background: var(--action-default-wash);
-		color: var(--action-default-hover);
-		text-transform: uppercase;
-		letter-spacing: var(--letter-spacing-wide);
 	}
 
 	.chevron {

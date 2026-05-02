@@ -10,6 +10,7 @@ import {
 } from '@ab/constants';
 import type { BadgeTone } from '@ab/ui';
 import Badge from '@ab/ui/components/Badge.svelte';
+import Breadcrumbs from '@ab/ui/components/Breadcrumbs.svelte';
 import ConfirmDialog from '@ab/ui/components/ConfirmDialog.svelte';
 import type { ActionData, PageData } from './$types';
 
@@ -129,11 +130,12 @@ function formatTime(iso: string | null): string {
 
 <section class="page">
 	<header class="hd">
-		<p class="crumbs">
-			<a href={ROUTES.HANGAR_JOBS}>Jobs</a>
-			<span aria-hidden="true">/</span>
-			<span class="mono">{data.job.id}</span>
-		</p>
+		<Breadcrumbs
+			items={[
+				{ label: 'Jobs', href: ROUTES.HANGAR_JOBS },
+				{ label: data.job.id, mono: true },
+			]}
+		/>
 		<h1 class="mono">{data.job.kind}</h1>
 		<div class="meta">
 			<Badge tone={statusTone(currentStatus)} size="sm">{currentStatus}</Badge>
@@ -272,24 +274,6 @@ function formatTime(iso: string | null): string {
 		gap: var(--space-lg);
 		padding-top: var(--space-lg);
 		padding-bottom: var(--space-2xl);
-	}
-
-	.crumbs {
-		margin: 0 0 var(--space-2xs);
-		color: var(--ink-muted);
-		font-size: var(--type-ui-label-size);
-		display: flex;
-		gap: var(--space-xs);
-		align-items: center;
-	}
-
-	.crumbs a {
-		color: var(--link-default);
-		text-decoration: none;
-	}
-
-	.crumbs a:hover {
-		color: var(--link-hover);
 	}
 
 	h1 {

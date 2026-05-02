@@ -4,6 +4,8 @@ import Badge from '@ab/ui/components/Badge.svelte';
 import Button from '@ab/ui/components/Button.svelte';
 import ConfirmDialog from '@ab/ui/components/ConfirmDialog.svelte';
 import EmptyState from '@ab/ui/components/EmptyState.svelte';
+import RolePill from '@ab/ui/components/RolePill.svelte';
+import Table from '@ab/ui/components/Table.svelte';
 import type { PageData } from './$types';
 
 /**
@@ -89,7 +91,7 @@ function openRevokeSession(sessionId: string) {
 		</div>
 		<div class="badges">
 			{#if data.user.role}
-				<span class="role-pill">{ROLE_LABELS[data.user.role]}</span>
+				<RolePill>{ROLE_LABELS[data.user.role]}</RolePill>
 			{/if}
 			{#if data.user.banned}
 				<Badge tone="danger" size="sm">Banned</Badge>
@@ -188,36 +190,34 @@ function openRevokeSession(sessionId: string) {
 		{#if data.sessions.length === 0}
 			<EmptyState title="No sessions" body="No sessions on record." />
 		{:else}
-			<div class="table-wrap">
-				<table>
-					<thead>
+			<Table ariaLabel="Active sessions">
+				<thead>
+					<tr>
+						<th scope="col">Session ID</th>
+						<th scope="col">IP</th>
+						<th scope="col">User agent</th>
+						<th scope="col">Created</th>
+						<th scope="col">Expires</th>
+						<th scope="col">Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					{#each data.sessions as session (session.id)}
 						<tr>
-							<th scope="col">Session ID</th>
-							<th scope="col">IP</th>
-							<th scope="col">User agent</th>
-							<th scope="col">Created</th>
-							<th scope="col">Expires</th>
-							<th scope="col">Actions</th>
+							<td class="mono">{truncate(session.id, 12)}</td>
+							<td class="mono">{session.ipAddress ?? '-'}</td>
+							<td class="mono ua" title={session.userAgent ?? ''}>{truncate(session.userAgent, 64)}</td>
+							<td class="mono">{formatDateTime(session.createdAt)}</td>
+							<td class="mono">{formatDateTime(session.expiresAt)}</td>
+							<td>
+								<Button variant="danger" size="sm" onclick={() => openRevokeSession(session.id)}>
+									Revoke
+								</Button>
+							</td>
 						</tr>
-					</thead>
-					<tbody>
-						{#each data.sessions as session (session.id)}
-							<tr>
-								<td class="mono">{truncate(session.id, 12)}</td>
-								<td class="mono">{session.ipAddress ?? '-'}</td>
-								<td class="mono ua" title={session.userAgent ?? ''}>{truncate(session.userAgent, 64)}</td>
-								<td class="mono">{formatDateTime(session.createdAt)}</td>
-								<td class="mono">{formatDateTime(session.expiresAt)}</td>
-								<td>
-									<Button variant="danger" size="sm" onclick={() => openRevokeSession(session.id)}>
-										Revoke
-									</Button>
-								</td>
-							</tr>
-						{/each}
-					</tbody>
-				</table>
-			</div>
+					{/each}
+				</tbody>
+			</Table>
 		{/if}
 	</section>
 
@@ -226,28 +226,26 @@ function openRevokeSession(sessionId: string) {
 		{#if data.audits.length === 0}
 			<EmptyState title="No audit activity" body="No audit rows for this user." />
 		{:else}
-			<div class="table-wrap">
-				<table>
-					<thead>
+			<Table ariaLabel="Recent audit activity">
+				<thead>
+					<tr>
+						<th scope="col">When</th>
+						<th scope="col">Op</th>
+						<th scope="col">Target type</th>
+						<th scope="col">Target id</th>
+					</tr>
+				</thead>
+				<tbody>
+					{#each data.audits as audit (audit.id)}
 						<tr>
-							<th scope="col">When</th>
-							<th scope="col">Op</th>
-							<th scope="col">Target type</th>
-							<th scope="col">Target id</th>
+							<td class="mono">{formatDateTime(audit.timestamp)}</td>
+							<td class="mono">{audit.op}</td>
+							<td class="mono">{audit.targetType}</td>
+							<td class="mono">{audit.targetId ?? '-'}</td>
 						</tr>
-					</thead>
-					<tbody>
-						{#each data.audits as audit (audit.id)}
-							<tr>
-								<td class="mono">{formatDateTime(audit.timestamp)}</td>
-								<td class="mono">{audit.op}</td>
-								<td class="mono">{audit.targetType}</td>
-								<td class="mono">{audit.targetId ?? '-'}</td>
-							</tr>
-						{/each}
-					</tbody>
-				</table>
-			</div>
+					{/each}
+				</tbody>
+			</Table>
 		{/if}
 	</section>
 </section>
@@ -358,18 +356,6 @@ function openRevokeSession(sessionId: string) {
 		display: flex;
 		gap: var(--space-xs);
 		align-items: center;
-	}
-
-	.role-pill {
-		display: inline-block;
-		font-size: var(--type-ui-caption-size);
-		font-weight: var(--font-weight-semibold);
-		padding: 0 var(--space-2xs);
-		border-radius: var(--radius-pill);
-		background: var(--action-default-wash);
-		color: var(--action-default-hover);
-		text-transform: uppercase;
-		letter-spacing: var(--letter-spacing-wide);
 	}
 
 	.alert {
@@ -515,34 +501,6 @@ function openRevokeSession(sessionId: string) {
 		background: var(--input-default-bg);
 		color: var(--ink-body);
 		font: inherit;
-	}
-
-	.table-wrap {
-		overflow-x: auto;
-	}
-
-	table {
-		width: 100%;
-		border-collapse: collapse;
-		font-size: var(--type-ui-label-size);
-	}
-
-	th,
-	td {
-		padding: var(--space-sm) var(--space-md);
-		text-align: left;
-		border-bottom: 1px solid var(--table-row-edge);
-		color: var(--ink-body);
-		vertical-align: top;
-	}
-
-	th {
-		background: var(--table-header-bg);
-		color: var(--table-header-ink);
-		text-transform: uppercase;
-		letter-spacing: var(--letter-spacing-wide);
-		font-size: var(--type-ui-caption-size);
-		font-weight: var(--font-weight-semibold);
 	}
 
 	.ua {

@@ -24,10 +24,9 @@ import {
 	PENDING_DOWNLOAD,
 	REPO_ROOT,
 } from '@ab/bc-hangar';
-import { JOB_KINDS, ROLES, ROUTES } from '@ab/constants';
-import { enqueueJob } from '@ab/hangar-jobs';
+import { JOB_KINDS, ROLES } from '@ab/constants';
 import { createLogger } from '@ab/utils';
-import { fail, isRedirect, redirect } from '@sveltejs/kit';
+import { enqueueAndRedirect } from '$lib/server/enqueue-and-redirect';
 import type { Actions, PageServerLoad } from './$types';
 
 const log = createLogger('hangar:sources-flow');
@@ -152,26 +151,19 @@ export const load: PageServerLoad = async (event) => {
 async function enqueueGlobalAction(
 	event: Parameters<NonNullable<Actions['rescan']>>[0],
 	kind: (typeof JOB_KINDS)[keyof typeof JOB_KINDS],
-): Promise<Response | ReturnType<typeof fail>> {
+) {
 	const user = requireRole(event, ROLES.AUTHOR, ROLES.OPERATOR, ROLES.ADMIN);
-	try {
-		const job = await enqueueJob({
+	return enqueueAndRedirect(
+		event,
+		{
 			kind,
 			targetType: 'registry',
 			targetId: 'registry',
 			actorId: user.id,
 			payload: {},
-		});
-		redirect(303, ROUTES.HANGAR_JOB_DETAIL(job.id));
-	} catch (err) {
-		if (isRedirect(err)) throw err;
-		log.error(
-			`enqueue ${kind} failed`,
-			{ requestId: event.locals.requestId, userId: user.id },
-			err instanceof Error ? err : undefined,
-		);
-		return fail(500, { error: err instanceof Error ? err.message : 'failed to enqueue job' });
-	}
+		},
+		{ logger: log },
+	);
 }
 
 export const actions: Actions = {

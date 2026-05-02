@@ -3,7 +3,11 @@ import { QUERY_PARAMS, ROLE_LABELS, ROLE_VALUES, ROUTES, type Role } from '@ab/c
 import Badge from '@ab/ui/components/Badge.svelte';
 import Banner from '@ab/ui/components/Banner.svelte';
 import EmptyState from '@ab/ui/components/EmptyState.svelte';
+import FilterBar from '@ab/ui/components/FilterBar.svelte';
+import FilterField from '@ab/ui/components/FilterField.svelte';
 import PageHeader from '@ab/ui/components/PageHeader.svelte';
+import RolePill from '@ab/ui/components/RolePill.svelte';
+import Table from '@ab/ui/components/Table.svelte';
 import { replaceState } from '$app/navigation';
 import { page } from '$app/state';
 import type { PageData } from './$types';
@@ -87,9 +91,8 @@ function formatLastSeen(iso: string | null): string {
 		User editing coming soon -- this is a read-only view for now.
 	</Banner>
 
-	<section class="filter-bar" aria-label="Filter users">
-		<div class="field">
-			<label for="user-search">Search</label>
+	<FilterBar ariaLabel="Filter users" maxWidth="32rem" columns="minmax(0, 1fr)">
+		<FilterField id="user-search" label="Search">
 			<input
 				id="user-search"
 				type="search"
@@ -97,8 +100,8 @@ function formatLastSeen(iso: string | null): string {
 				bind:value={searchValue}
 				autocomplete="off"
 			/>
-		</div>
-	</section>
+		</FilterField>
+	</FilterBar>
 
 	{#if data.users.length === 0}
 		{#if data.filters.search}
@@ -110,46 +113,44 @@ function formatLastSeen(iso: string | null): string {
 		{#if data.truncated}
 			<p class="muted">Showing the first {data.limit} users. Refine the search to narrow the list.</p>
 		{/if}
-		<div class="table-wrap">
-			<table>
-				<thead>
+		<Table ariaLabel="Users">
+			<thead>
+				<tr>
+					<th scope="col">Name</th>
+					<th scope="col">Email</th>
+					<th scope="col">Role</th>
+					<th scope="col">Last seen</th>
+					<th scope="col">Created</th>
+					<th scope="col">Status</th>
+				</tr>
+			</thead>
+			<tbody>
+				{#each data.users as user (user.id)}
 					<tr>
-						<th scope="col">Name</th>
-						<th scope="col">Email</th>
-						<th scope="col">Role</th>
-						<th scope="col">Last seen</th>
-						<th scope="col">Created</th>
-						<th scope="col">Status</th>
+						<td>
+							<a href={ROUTES.HANGAR_USER_DETAIL(user.id)}>{displayName(user.name, user.email)}</a>
+						</td>
+						<td class="mono">{user.email}</td>
+						<td>
+							{#if user.role}
+								<RolePill>{ROLE_LABELS[user.role]}</RolePill>
+							{:else}
+								<span class="muted">-</span>
+							{/if}
+						</td>
+						<td class="mono">{formatLastSeen(user.lastSeenAt)}</td>
+						<td class="mono">{formatDate(user.createdAt)}</td>
+						<td>
+							{#if user.banned}
+								<Badge tone="danger" size="sm">Banned</Badge>
+							{:else}
+								<span class="muted">-</span>
+							{/if}
+						</td>
 					</tr>
-				</thead>
-				<tbody>
-					{#each data.users as user (user.id)}
-						<tr>
-							<td>
-								<a href={ROUTES.HANGAR_USER_DETAIL(user.id)}>{displayName(user.name, user.email)}</a>
-							</td>
-							<td class="mono">{user.email}</td>
-							<td>
-								{#if user.role}
-									<span class="role-pill">{ROLE_LABELS[user.role]}</span>
-								{:else}
-									<span class="muted">-</span>
-								{/if}
-							</td>
-							<td class="mono">{formatLastSeen(user.lastSeenAt)}</td>
-							<td class="mono">{formatDate(user.createdAt)}</td>
-							<td>
-								{#if user.banned}
-									<Badge tone="danger" size="sm">Banned</Badge>
-								{:else}
-									<span class="muted">-</span>
-								{/if}
-							</td>
-						</tr>
-					{/each}
-				</tbody>
-			</table>
-		</div>
+				{/each}
+			</tbody>
+		</Table>
 	{/if}
 </section>
 
@@ -160,83 +161,6 @@ function formatLastSeen(iso: string | null): string {
 		gap: var(--space-xl);
 		padding-top: var(--space-lg);
 		padding-bottom: var(--space-2xl);
-	}
-
-	.filter-bar {
-		display: grid;
-		grid-template-columns: minmax(0, 1fr);
-		gap: var(--space-md);
-		align-items: end;
-		padding: var(--space-md);
-		background: var(--surface-raised);
-		border: 1px solid var(--edge-default);
-		border-radius: var(--radius-md);
-		max-width: 32rem;
-	}
-
-	.field {
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-2xs);
-	}
-
-	.field label {
-		font-size: var(--type-ui-caption-size);
-		color: var(--ink-muted);
-		font-weight: var(--font-weight-semibold);
-		text-transform: uppercase;
-		letter-spacing: var(--letter-spacing-wide);
-	}
-
-	.field input {
-		background: var(--input-default-bg);
-		color: var(--input-default-ink);
-		border: 1px solid var(--input-default-border);
-		border-radius: var(--radius-sm);
-		padding: var(--space-xs) var(--space-sm);
-		font: inherit;
-	}
-
-	.field input:focus-visible {
-		outline: 2px solid var(--focus-ring);
-		outline-offset: 1px;
-		border-color: var(--input-default-hover-border);
-	}
-
-
-	.table-wrap {
-		overflow-x: auto;
-		border: 1px solid var(--edge-default);
-		border-radius: var(--radius-md);
-		background: var(--surface-raised);
-	}
-
-	table {
-		width: 100%;
-		border-collapse: collapse;
-		font-size: var(--type-ui-label-size);
-	}
-
-	th,
-	td {
-		padding: var(--space-sm) var(--space-md);
-		text-align: left;
-		border-bottom: 1px solid var(--table-row-edge);
-		color: var(--ink-body);
-		vertical-align: top;
-	}
-
-	th {
-		background: var(--table-header-bg);
-		color: var(--table-header-ink);
-		text-transform: uppercase;
-		letter-spacing: var(--letter-spacing-wide);
-		font-size: var(--type-ui-caption-size);
-		font-weight: var(--font-weight-semibold);
-	}
-
-	tr:hover {
-		background: var(--table-row-bg-hover);
 	}
 
 	td a {
@@ -255,17 +179,4 @@ function formatLastSeen(iso: string | null): string {
 	.muted {
 		color: var(--ink-faint);
 	}
-
-	.role-pill {
-		display: inline-block;
-		font-size: var(--type-ui-caption-size);
-		font-weight: var(--font-weight-semibold);
-		padding: 0 var(--space-2xs);
-		border-radius: var(--radius-pill);
-		background: var(--action-default-wash);
-		color: var(--action-default-hover);
-		text-transform: uppercase;
-		letter-spacing: var(--letter-spacing-wide);
-	}
-
 </style>
