@@ -21,24 +21,6 @@ references:
     subjects: [training-ops, human-factors]
     primary_cert: cfi
 
-  - slug: ifh
-    kind: handbook
-    edition: FAA-H-8083-15B
-    title: Instrument Flying Handbook
-    publisher: FAA
-    url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/instrument_flying_handbook
-    subjects: [procedures, navigation, flight-instruments]
-    primary_cert: instrument
-
-  - slug: iph
-    kind: handbook
-    edition: FAA-H-8083-16B
-    title: Instrument Procedures Handbook
-    publisher: FAA
-    url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/instrument_procedures_handbook
-    subjects: [procedures, navigation, flight-instruments]
-    primary_cert: instrument
-
   - slug: faa-h-8083-2
     kind: handbook
     edition: FAA-H-8083-2A
