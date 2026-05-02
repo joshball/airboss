@@ -38,6 +38,8 @@ import { existsSync, mkdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { resolveCacheRoot } from '@ab/constants';
 import { writeIfChanged } from '../io/write-if-changed.ts';
+import { INGEST_EXIT_CODES, classifySkipReasons } from '../shared/exit-codes.ts';
+import { ShaMismatchError, verifyCachedSha } from '../shared/sha-verify.ts';
 import type { ManifestEntry, ManifestFile } from './derivative-reader.ts';
 import { type ExtractedAim, extractAim } from './extract.ts';
 import { type IngestReport, runAimIngest } from './ingest.ts';
@@ -326,6 +328,13 @@ export interface SourceIngestArgs {
 	 * acts as a guard: ingest skips with a reason if the values disagree.
 	 */
 	readonly edition?: string;
+	/**
+	 * Disable per-file SHA-256 verification against the manifest's recorded
+	 * `source_sha256`. Default: false (verification ON, per the 2026-05-01
+	 * backend review). Production runs must leave this false; only set true
+	 * for tests that knowingly pass mutated cache fixtures.
+	 */
+	readonly skipShaVerify?: boolean;
 }
 
 export interface SourceIngestReport {
@@ -371,6 +380,9 @@ export async function runAimSourceIngest(args: SourceIngestArgs): Promise<Source
 	let editionsIngested = 0;
 
 	try {
+		// SHA verification BEFORE extraction. A poisoned cache must error
+		// loudly without writing derivatives or advancing state.
+		verifyCachedSha(cached.pdfPath, cached.primary.source_sha256, args.skipShaVerify === true);
 		const extracted = extractAim({ pdfPath: cached.pdfPath });
 		const { entriesWritten } = writeAimDerivatives({
 			extracted,
@@ -390,7 +402,11 @@ export async function runAimSourceIngest(args: SourceIngestArgs): Promise<Source
 		});
 		editionsIngested += 1;
 	} catch (e) {
-		skipReasons.push(`${cached.edition}: ${(e as Error).message}`);
+		if (e instanceof ShaMismatchError) {
+			skipReasons.push(`${cached.edition}: ${e.message}`);
+		} else {
+			skipReasons.push(`${cached.edition}: ${(e as Error).message}`);
+		}
 	}
 
 	return {
@@ -427,6 +443,7 @@ export interface SourceCliArgs {
 	readonly cacheRoot: string;
 	readonly derivativeRoot: string;
 	readonly edition: string | null;
+	readonly skipShaVerify: boolean;
 	readonly help: boolean;
 }
 
@@ -434,39 +451,50 @@ export function parseSourceCliArgs(argv: readonly string[]): SourceCliArgs | { e
 	let cacheRoot = resolveCacheRoot({ ensureExists: false });
 	let derivativeRoot = join(process.cwd(), 'aim');
 	let edition: string | null = null;
+	let skipShaVerify = false;
 	let help = false;
 	for (const arg of argv) {
 		if (arg === '--help' || arg === '-h') help = true;
+		else if (arg === '--skip-sha-verify') skipShaVerify = true;
 		else if (arg.startsWith('--cache=')) cacheRoot = arg.slice('--cache='.length);
 		else if (arg.startsWith('--out=')) derivativeRoot = arg.slice('--out='.length);
 		else if (arg.startsWith('--edition=')) edition = arg.slice('--edition='.length);
 		else return { error: `unknown argument: ${arg}` };
 	}
-	return { cacheRoot, derivativeRoot, edition, help };
+	return { cacheRoot, derivativeRoot, edition, skipShaVerify, help };
 }
 
 /**
  * CLI entry point for source-PDF AIM ingestion.
+ *
+ * Exit codes (per `INGEST_EXIT_CODES` in `shared/exit-codes.ts`):
+ *   - 0 OK: every entry either ingested or soft-skipped.
+ *   - 1 HARD_SKIPS: at least one entry skipped due to an unrecoverable
+ *     failure (extraction error, SHA mismatch, schema mismatch).
+ *   - 2 BAD_ARGS: argument parse error.
  */
 export async function runSourceIngestCli(argv: readonly string[]): Promise<number> {
 	const parsed = parseSourceCliArgs(argv);
 	if ('error' in parsed) {
 		process.stderr.write(`${parsed.error}\n${SOURCE_USAGE}`);
-		return 2;
+		return INGEST_EXIT_CODES.BAD_ARGS;
 	}
 	if (parsed.help) {
 		process.stdout.write(SOURCE_USAGE);
-		return 0;
+		return INGEST_EXIT_CODES.OK;
 	}
 	if (parsed.edition !== null && !EDITION_PATTERN.test(parsed.edition)) {
 		process.stderr.write(`aim source ingest: --edition must be YYYY-MM (got "${parsed.edition}")\n${SOURCE_USAGE}`);
-		return 2;
+		return INGEST_EXIT_CODES.BAD_ARGS;
 	}
 	const report = await runAimSourceIngest({
 		cacheRoot: parsed.cacheRoot,
 		derivativeRoot: parsed.derivativeRoot,
 		edition: parsed.edition ?? undefined,
+		skipShaVerify: parsed.skipShaVerify,
 	});
+
+	const { soft, hard } = classifySkipReasons(report.skipReasons);
 
 	process.stdout.write(
 		`aim source ingest:\n` +
@@ -485,10 +513,13 @@ export async function runSourceIngestCli(argv: readonly string[]): Promise<numbe
 			process.stdout.write(`    extract-skip: ... and ${e.extractSkipped.length - 5} more\n`);
 		}
 	}
-	for (const reason of report.skipReasons) {
+	for (const reason of soft) {
 		process.stdout.write(`  skip: ${reason}\n`);
 	}
-	return 0;
+	for (const reason of hard) {
+		process.stderr.write(`  ERROR-skip: ${reason}\n`);
+	}
+	return hard.length > 0 ? INGEST_EXIT_CODES.HARD_SKIPS : INGEST_EXIT_CODES.OK;
 }
 
 // ---------------------------------------------------------------------------

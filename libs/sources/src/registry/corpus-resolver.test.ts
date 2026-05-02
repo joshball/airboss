@@ -117,4 +117,37 @@ describe('corpus-resolver registration', () => {
 			expect(registered).toContain(corpus);
 		}
 	});
+
+	test('CR-08: ENUMERATED_CORPORA reflects fresh resolver registrations (open enum)', () => {
+		// Per ADR 019 §2.1: corpus is a string, not a closed enum. Adding a new
+		// corpus is a single registerCorpusResolver call; ENUMERATED_CORPORA
+		// observes the registry, so consumers see the corpus immediately.
+		const fakeCorpus = 'fake-corpus-for-test';
+		expect(Array.from(ENUMERATED_CORPORA)).not.toContain(fakeCorpus);
+		expect(isEnumeratedCorpus(fakeCorpus)).toBe(false);
+
+		const fake: CorpusResolver = {
+			corpus: fakeCorpus,
+			parseLocator: (_locator) => ({ kind: 'ok', segments: [_locator] }),
+			formatCitation: (_e, _s) => 'fake',
+			getCurrentEdition: () => null,
+			getEditions: async () => [],
+			getLiveUrl: () => null,
+			getDerivativeContent: () => null,
+			getIndexedContent: async () => null,
+		};
+		registerCorpusResolver(fake);
+		expect(Array.from(ENUMERATED_CORPORA)).toContain(fakeCorpus);
+		expect(isEnumeratedCorpus(fakeCorpus)).toBe(true);
+	});
+
+	test('CR-09: ENUMERATED_CORPORA includes pts (closed-enum bug fix)', () => {
+		// Regression test: pre-fix, `pts` was registered at runtime but missing
+		// from the static ENUMERATED_CORPORA list. After the open-enum fix,
+		// `pts` shows up because the iterable view reads from the registry.
+		// `wipeToNoOpDefaults` -> `resetToDefaults` cycle preserves it as well,
+		// because the production snapshot is the source of truth for reset.
+		__corpus_resolver_internal__.resetToDefaults();
+		expect(Array.from(ENUMERATED_CORPORA)).toContain('pts');
+	});
 });

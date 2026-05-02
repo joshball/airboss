@@ -53,9 +53,9 @@ import { resolveCacheRoot } from '@ab/constants';
 import { writeIfChanged } from '../io/write-if-changed.ts';
 import type { ExtractedDocument, ExtractedPage } from '../pdf/index.ts';
 import { extractPdf, findAcsEditionSlug, findEffectiveDate } from '../pdf/index.ts';
-import { __editions_internal__ } from '../registry/editions.ts';
-import { getEntryLifecycle, recordPromotion } from '../registry/lifecycle.ts';
-import { __sources_internal__ } from '../registry/sources.ts';
+import { commitIngestBatch, getEntryLifecycle } from '../registry/lifecycle.ts';
+import { classifySkipReasons, INGEST_EXIT_CODES } from '../shared/exit-codes.ts';
+import { ShaMismatchError, verifyCachedSha } from '../shared/sha-verify.ts';
 import type { Edition, SourceEntry, SourceId } from '../types.ts';
 import type {
 	AcsCorpusIndex,
@@ -118,6 +118,13 @@ export interface IngestArgs {
 	 * runs that are testing a single publication.
 	 */
 	readonly slugs?: readonly string[];
+	/**
+	 * Disable per-file SHA-256 verification against the manifest's recorded
+	 * `source_sha256`. Default: false (verification ON, per the 2026-05-01
+	 * backend review). Production runs must leave this false; only set true
+	 * for tests that knowingly pass mutated cache fixtures.
+	 */
+	readonly skipShaVerify?: boolean;
 }
 
 export interface IngestReport {
@@ -611,8 +618,8 @@ export async function runAcsIngest(args: IngestArgs): Promise<IngestReport> {
 
 	ensureDir(args.derivativeRoot);
 
-	const sourcesPatch: Record<string, SourceEntry> = { ...__sources_internal__.getActiveTable() };
-	const editionsPatch = new Map(__editions_internal__.getActiveTable());
+	const sourcesAcc: Record<string, SourceEntry> = {};
+	const editionsAcc: Map<SourceId, readonly Edition[]> = new Map();
 
 	const indexEntries: AcsCorpusIndexEntry[] = [];
 	const entriesToPromote: SourceId[] = [];
@@ -622,6 +629,9 @@ export async function runAcsIngest(args: IngestArgs): Promise<IngestReport> {
 
 	for (const pub of cached) {
 		try {
+			// SHA verification BEFORE extraction. A poisoned cache must error
+			// loudly without writing derivatives or advancing state.
+			verifyCachedSha(pub.pdfPath, pub.downloaderManifest.source_sha256, args.skipShaVerify === true);
 			// Layout mode preserves column structure; ACS task blocks render with
 			// stable indentation (element codes left-justified, body text indented)
 			// which makes the heading + element regexes unambiguous. Raw mode also
@@ -817,15 +827,14 @@ export async function runAcsIngest(args: IngestArgs): Promise<IngestReport> {
 			const idPrefix = `airboss-ref:${CORPUS}/${slug}`;
 			for (const entry of localEntries) {
 				const overlay = getEntryLifecycle(entry.id);
-				const existing = sourcesPatch[entry.id];
-				if (existing !== undefined && overlay === 'accepted') {
+				if (overlay === 'accepted') {
 					if (entry.id === idPrefix) {
 						publicationsAlreadyAccepted += 1;
 						publicationCounted = true;
 					}
 					continue;
 				}
-				sourcesPatch[entry.id] = entry;
+				sourcesAcc[entry.id] = entry;
 				entriesToPromote.push(entry.id);
 				const tail = entry.id.slice(idPrefix.length);
 				if (tail.length === 0) {
@@ -846,10 +855,10 @@ export async function runAcsIngest(args: IngestArgs): Promise<IngestReport> {
 					published_date: publicationDate,
 					source_url: pub.downloaderManifest.source_url,
 				};
-				const existingEditions = editionsPatch.get(entry.id) ?? [];
+				const existingEditions = editionsAcc.get(entry.id) ?? [];
 				const hasEdition = existingEditions.some((e) => e.id === editionRecord.id);
 				if (!hasEdition) {
-					editionsPatch.set(entry.id, [...existingEditions, editionRecord]);
+					editionsAcc.set(entry.id, [...existingEditions, editionRecord]);
 				}
 			}
 
@@ -860,28 +869,28 @@ export async function runAcsIngest(args: IngestArgs): Promise<IngestReport> {
 				manifest_path: `acs/${slug}/manifest.json`,
 			});
 		} catch (e) {
-			skipReasons.push(`acs/${pub.cacheDocSlug}: extraction failed -- ${(e as Error).message}`);
+			if (e instanceof ShaMismatchError) {
+				skipReasons.push(`acs/${pub.cacheDocSlug}: ${e.message}`);
+			} else {
+				skipReasons.push(`acs/${pub.cacheDocSlug}: extraction failed -- ${(e as Error).message}`);
+			}
 			publicationsSkipped += 1;
 		}
 	}
 
-	__sources_internal__.setActiveTable(sourcesPatch as Record<SourceId, SourceEntry>);
-	__editions_internal__.setActiveTable(editionsPatch);
-
-	let promotionBatchId: string | null = null;
-	if (entriesToPromote.length > 0) {
-		const result = recordPromotion({
-			corpus: CORPUS,
-			reviewerId: PHASE_9_REVIEWER_ID,
-			scope: entriesToPromote,
-			inputSource: args.cacheRoot,
-			targetLifecycle: 'accepted',
-		});
-		if (!result.ok) {
-			throw new Error(`acs ingest batch promotion failed: ${result.error}`);
-		}
-		promotionBatchId = result.batch.id;
+	const commit = commitIngestBatch({
+		corpus: CORPUS,
+		reviewerId: PHASE_9_REVIEWER_ID,
+		inputSource: args.cacheRoot,
+		targetLifecycle: 'accepted',
+		sources: sourcesAcc as Record<SourceId, SourceEntry>,
+		editions: editionsAcc,
+		scope: entriesToPromote,
+	});
+	if (!commit.ok) {
+		throw new Error(`acs ingest batch promotion failed: ${commit.error}`);
 	}
+	const promotionBatchId = commit.batchId;
 
 	// Use the max per-source `fetched_at` so re-running with no upstream
 	// change leaves the index byte-equal (ADR 022 idempotent regen).
@@ -937,6 +946,7 @@ export interface CliArgs {
 	readonly cacheRoot: string;
 	readonly derivativeRoot: string;
 	readonly slugs: readonly string[] | null;
+	readonly skipShaVerify: boolean;
 	readonly help: boolean;
 }
 
@@ -944,10 +954,12 @@ export function parseCliArgs(argv: readonly string[]): CliArgs | { error: string
 	let cacheRoot = resolveCacheRoot({ ensureExists: false });
 	let derivativeRoot = join(process.cwd(), 'acs');
 	const slugsAccum: string[] = [];
+	let skipShaVerify = false;
 	let help = false;
 
 	for (const arg of argv) {
 		if (arg === '--help' || arg === '-h') help = true;
+		else if (arg === '--skip-sha-verify') skipShaVerify = true;
 		else if (arg.startsWith('--cache=')) cacheRoot = arg.slice('--cache='.length);
 		else if (arg.startsWith('--out=')) derivativeRoot = arg.slice('--out='.length);
 		else if (arg.startsWith('--slug=')) {
@@ -962,6 +974,7 @@ export function parseCliArgs(argv: readonly string[]): CliArgs | { error: string
 		cacheRoot,
 		derivativeRoot,
 		slugs: slugsAccum.length === 0 ? null : slugsAccum,
+		skipShaVerify,
 		help,
 	};
 }
@@ -969,23 +982,32 @@ export function parseCliArgs(argv: readonly string[]): CliArgs | { error: string
 /**
  * CLI entry point. Returns exit code. Never throws on user-facing errors;
  * unexpected exceptions propagate.
+ *
+ * Exit codes (per `INGEST_EXIT_CODES` in `shared/exit-codes.ts`):
+ *   - 0 OK: every entry either ingested or soft-skipped (out of scope, etc.).
+ *   - 1 HARD_SKIPS: at least one entry skipped due to an unrecoverable
+ *     failure (extraction error, SHA mismatch, schema mismatch).
+ *   - 2 BAD_ARGS: argument parse error.
  */
 export async function runIngestCli(argv: readonly string[]): Promise<number> {
 	const parsed = parseCliArgs(argv);
 	if ('error' in parsed) {
 		process.stderr.write(`${parsed.error}\n${USAGE}`);
-		return 2;
+		return INGEST_EXIT_CODES.BAD_ARGS;
 	}
 	if (parsed.help) {
 		process.stdout.write(USAGE);
-		return 0;
+		return INGEST_EXIT_CODES.OK;
 	}
 
 	const report = await runAcsIngest({
 		cacheRoot: parsed.cacheRoot,
 		derivativeRoot: parsed.derivativeRoot,
 		slugs: parsed.slugs ?? undefined,
+		skipShaVerify: parsed.skipShaVerify,
 	});
+
+	const { soft, hard } = classifySkipReasons(report.skipReasons);
 
 	process.stdout.write(
 		`acs ingest:\n` +
@@ -994,8 +1016,11 @@ export async function runIngestCli(argv: readonly string[]): Promise<number> {
 			`  promotionBatchId=${report.promotionBatchId ?? '(none)'}\n` +
 			`  index=${report.indexPath}\n`,
 	);
-	for (const reason of report.skipReasons) {
+	for (const reason of soft) {
 		process.stdout.write(`  skip: ${reason}\n`);
 	}
-	return 0;
+	for (const reason of hard) {
+		process.stderr.write(`  ERROR-skip: ${reason}\n`);
+	}
+	return hard.length > 0 ? INGEST_EXIT_CODES.HARD_SKIPS : INGEST_EXIT_CODES.OK;
 }
