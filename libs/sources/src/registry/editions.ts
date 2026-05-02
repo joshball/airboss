@@ -22,6 +22,14 @@ import type { Edition, SourceId } from '../types.ts';
 export const EDITIONS: ReadonlyMap<SourceId, readonly Edition[]> = new Map();
 
 /**
+ * Generation counter for the active editions map. Bumped on every swap so the
+ * lazy index (`registry/index-cache.ts`) can detect a stale cache without
+ * subscribing to mutation events. See ADR 019 §2.3 + the Cluster F perf review
+ * (2026-05-01) for why per-call linear scans were replaced.
+ */
+let _editionsGeneration = 0;
+
+/**
  * Test-only mutation surface. Production code MUST NOT call this.
  */
 export const __editions_internal__ = {
@@ -31,7 +39,17 @@ export const __editions_internal__ = {
 	setActiveTable(next: Map<SourceId, readonly Edition[]>): Map<SourceId, readonly Edition[]> {
 		const prev = _activeEditions;
 		_activeEditions = next;
+		_editionsGeneration += 1;
 		return prev;
+	},
+	/**
+	 * Read the current generation counter. The lazy index uses this to decide
+	 * whether to rebuild on the next read. Production code should NOT depend
+	 * on the absolute value -- only that two equal reads imply no swap occurred
+	 * between them.
+	 */
+	getGeneration(): number {
+		return _editionsGeneration;
 	},
 };
 

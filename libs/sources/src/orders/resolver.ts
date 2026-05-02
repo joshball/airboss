@@ -15,8 +15,8 @@
 
 import type { CorpusResolver } from '../registry/corpus-resolver.ts';
 import { getEditionsMap } from '../registry/editions.ts';
+import { getCurrentEditionForCorpus } from '../registry/index-cache.ts';
 import { stripPin } from '../registry/query.ts';
-import { getSources } from '../registry/sources.ts';
 import type { Edition, EditionId, IndexedContent, LocatorError, ParsedLocator, SourceId } from '../types.ts';
 import { formatOrdersCitation } from './citation.ts';
 import { parseOrdersLocator } from './locator.ts';
@@ -40,21 +40,10 @@ export const ORDERS_RESOLVER: CorpusResolver = {
 	},
 
 	getCurrentEdition(): EditionId | null {
-		// Walk every orders-corpus entry's editions; return the lexically-largest
-		// edition slug. Orders pin format is `?at=YYYY-MM` or `?at=YYYY`, so
-		// lexical max is also publication max.
-		const editionsMap = getEditionsMap();
-		const sources = getSources();
-		let max: EditionId | null = null;
-		for (const id of Object.keys(sources)) {
-			const entry = sources[id as SourceId];
-			if (entry === undefined || entry.corpus !== ORDERS_CORPUS) continue;
-			const editions = editionsMap.get(id as SourceId) ?? [];
-			for (const edition of editions) {
-				if (max === null || edition.id > max) max = edition.id;
-			}
-		}
-		return max;
+		// Lex-max edition slug across the corpus. Orders pin format is `?at=YYYY-MM`
+		// or `?at=YYYY`, so lexical max is also publication max. Backed by
+		// `index-cache.ts`: see `regs/resolver.ts` for the convergent rationale.
+		return getCurrentEditionForCorpus(ORDERS_CORPUS);
 	},
 
 	async getEditions(id: SourceId): Promise<readonly Edition[]> {

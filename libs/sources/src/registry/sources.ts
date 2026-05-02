@@ -25,6 +25,14 @@ import type { SourceEntry, SourceId } from '../types.ts';
 export const SOURCES: Readonly<Record<SourceId, SourceEntry>> = Object.freeze({});
 
 /**
+ * Generation counter for the active sources table. Bumped on every swap so the
+ * lazy index (`registry/index-cache.ts`) can detect a stale cache without
+ * subscribing to mutation events. See ADR 019 §2.3 + the Cluster F perf review
+ * (2026-05-01) for why per-call linear scans were replaced.
+ */
+let _sourcesGeneration = 0;
+
+/**
  * Test-only mutation surface. Production code MUST NOT call this. Tests use
  * `__test_helpers__.ts` to swap the active entry table for the duration of a
  * test; see `registry/__test_helpers__.ts`.
@@ -38,7 +46,17 @@ export const __sources_internal__ = {
 	setActiveTable(next: Record<SourceId, SourceEntry>): Record<SourceId, SourceEntry> {
 		const prev = _activeSources;
 		_activeSources = next;
+		_sourcesGeneration += 1;
 		return prev;
+	},
+	/**
+	 * Read the current generation counter. The lazy index uses this to decide
+	 * whether to rebuild on the next read. Production code should NOT depend
+	 * on the absolute value -- only that two equal reads imply no swap occurred
+	 * between them.
+	 */
+	getGeneration(): number {
+		return _sourcesGeneration;
 	},
 };
 

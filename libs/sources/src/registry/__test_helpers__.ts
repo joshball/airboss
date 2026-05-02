@@ -11,6 +11,7 @@
 import type { Edition, SourceEntry, SourceId } from '../types.ts';
 import { __corpus_resolver_internal__ } from './corpus-resolver.ts';
 import { __editions_internal__ } from './editions.ts';
+import { __index_cache_internal__ } from './index-cache.ts';
 import { __lifecycle_internal__ } from './lifecycle.ts';
 import { clearReverseIndex } from './query.ts';
 import { __sources_internal__ } from './sources.ts';
@@ -51,5 +52,6 @@ export function resetRegistry(): void {
 	__corpus_resolver_internal__.resetToDefaults();
 	__sources_internal__.setActiveTable({});
 	__editions_internal__.setActiveTable(new Map());
+	__index_cache_internal__.reset();
 	clearReverseIndex();
 }

@@ -15,8 +15,8 @@
 
 import type { CorpusResolver } from '../registry/corpus-resolver.ts';
 import { getEditionsMap } from '../registry/editions.ts';
+import { getCurrentEditionForCorpus } from '../registry/index-cache.ts';
 import { stripPin } from '../registry/query.ts';
-import { getSources } from '../registry/sources.ts';
 import type { Edition, EditionId, IndexedContent, LocatorError, ParsedLocator, SourceId } from '../types.ts';
 import { formatNtsbCitation } from './citation.ts';
 import { parseNtsbLocator } from './locator.ts';
@@ -42,21 +42,11 @@ export const NTSB_RESOLVER: CorpusResolver = {
 
 	getCurrentEdition(): EditionId | null {
 		// NTSB reports are immutable; the "current edition" concept doesn't
-		// apply per-corpus. Return the lexically-largest edition slug across
-		// every ntsb-corpus entry as a degenerate implementation, matching
-		// the contract used by AC and AIM.
-		const editionsMap = getEditionsMap();
-		const sources = getSources();
-		let max: EditionId | null = null;
-		for (const id of Object.keys(sources)) {
-			const entry = sources[id as SourceId];
-			if (entry === undefined || entry.corpus !== NTSB_CORPUS) continue;
-			const editions = editionsMap.get(id as SourceId) ?? [];
-			for (const edition of editions) {
-				if (max === null || edition.id > max) max = edition.id;
-			}
-		}
-		return max;
+		// apply per-corpus. Returns the lexically-largest edition slug across
+		// every ntsb-corpus entry as a degenerate implementation, matching the
+		// AC / AIM contract. Backed by `index-cache.ts`: see `regs/resolver.ts`
+		// for the convergent rationale.
+		return getCurrentEditionForCorpus(NTSB_CORPUS);
 	},
 
 	async getEditions(id: SourceId): Promise<readonly Edition[]> {

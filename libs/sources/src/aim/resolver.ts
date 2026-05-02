@@ -14,8 +14,8 @@ import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import type { CorpusResolver } from '../registry/corpus-resolver.ts';
 import { getEditionsMap } from '../registry/editions.ts';
+import { getCurrentEditionForCorpus } from '../registry/index-cache.ts';
 import { stripPin } from '../registry/query.ts';
-import { getSources } from '../registry/sources.ts';
 import type { Edition, EditionId, IndexedContent, LocatorError, ParsedLocator, SourceId } from '../types.ts';
 import { formatAimCitation } from './citation.ts';
 import { bodyPathForEntry, type ManifestFile, manifestEntryForLocator, readManifest } from './derivative-reader.ts';
@@ -76,21 +76,11 @@ export const AIM_RESOLVER: CorpusResolver = {
 	},
 
 	getCurrentEdition(): EditionId | null {
-		// Walk every aim-corpus entry's editions; return the lexically-largest
-		// edition slug. Editions are `YYYY-MM`, so lexical max is also
-		// publication max.
-		const editionsMap = getEditionsMap();
-		const sources = getSources();
-		let max: EditionId | null = null;
-		for (const id of Object.keys(sources)) {
-			const entry = sources[id as SourceId];
-			if (entry === undefined || entry.corpus !== AIM_CORPUS) continue;
-			const editions = editionsMap.get(id as SourceId) ?? [];
-			for (const edition of editions) {
-				if (max === null || edition.id > max) max = edition.id;
-			}
-		}
-		return max;
+		// Lex-max edition slug across every aim-corpus entry. Editions are
+		// `YYYY-MM`, so lexical max is also publication max. Backed by
+		// `index-cache.ts` so a page rendering N citations does one O(1) read
+		// per resolver instead of one full table scan per id.
+		return getCurrentEditionForCorpus(AIM_CORPUS);
 	},
 
 	async getEditions(id: SourceId): Promise<readonly Edition[]> {

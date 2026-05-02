@@ -15,8 +15,8 @@ import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import type { CorpusResolver } from '../registry/corpus-resolver.ts';
 import { getEditionsMap } from '../registry/editions.ts';
+import { getCurrentEditionForCorpus } from '../registry/index-cache.ts';
 import { stripPin } from '../registry/query.ts';
-import { getSources } from '../registry/sources.ts';
 import type { Edition, EditionId, IndexedContent, LocatorError, ParsedLocator, SourceId } from '../types.ts';
 import { formatAcsCitation } from './citation.ts';
 import { type AcsManifestFile, readAcsManifest } from './derivative-reader.ts';
@@ -104,23 +104,12 @@ export const ACS_RESOLVER: CorpusResolver = {
 	},
 
 	getCurrentEdition(): EditionId | null {
-		// Walk every acs-corpus entry's editions; return the lexically-largest
-		// edition slug. ACS editions are FAA publication IDs (`faa-s-acs-25`,
-		// `faa-s-acs-6b`); lexical max approximates publication-most-recent
-		// within a single cert family. Cross-cert it is cert-dependent; this
-		// method's contract matches the regs / handbooks pattern.
-		const editionsMap = getEditionsMap();
-		const sources = getSources();
-		let max: EditionId | null = null;
-		for (const id of Object.keys(sources)) {
-			const entry = sources[id as SourceId];
-			if (entry === undefined || entry.corpus !== ACS_CORPUS) continue;
-			const editions = editionsMap.get(id as SourceId) ?? [];
-			for (const edition of editions) {
-				if (max === null || edition.id > max) max = edition.id;
-			}
-		}
-		return max;
+		// Lex-max edition slug across every acs-corpus entry. ACS editions are
+		// FAA publication IDs (`faa-s-acs-25`, `faa-s-acs-6b`); lexical max
+		// approximates publication-most-recent within a single cert family.
+		// Backed by `index-cache.ts` so a page rendering N citations does one
+		// O(1) read per resolver instead of one full table scan per id.
+		return getCurrentEditionForCorpus(ACS_CORPUS);
 	},
 
 	async getEditions(id: SourceId): Promise<readonly Edition[]> {
