@@ -230,6 +230,10 @@ export {
 	listReferencesByTopic,
 } from './library-by-cert';
 export {
+	type AimManifest,
+	type AimManifestEntry,
+	aimManifestEntrySchema,
+	aimManifestSchema,
 	citationSchema,
 	type HandbookManifestErrataEntry,
 	type HandbookManifestErrataSectionPatched,
