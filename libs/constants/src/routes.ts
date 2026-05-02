@@ -366,7 +366,7 @@ export const ROUTES = {
 	HANGAR_SOURCE_UPLOAD: (id: string) => `/sources/${encodeURIComponent(id)}/upload` as const,
 	/** Binary-visual: stream the full archive from disk with content-disposition: attachment. */
 	HANGAR_SOURCE_DOWNLOAD: (id: string) => `/sources/${encodeURIComponent(id)}/download` as const,
-	/** Binary-visual: static thumbnail image served from `data/sources/<type>/<id>/<edition>/`. */
+	/** Binary-visual: static thumbnail image served from the hangar blob root (`<cache>/hangar-blobs/<type>/<id>/<edition>/`). */
 	HANGAR_SOURCE_THUMBNAIL: (id: string) => `/sources/${encodeURIComponent(id)}/thumbnail` as const,
 	/** Operational form actions on a source. */
 	HANGAR_SOURCE_FETCH_ACTION: '?/fetch',
@@ -377,7 +377,6 @@ export const ROUTES = {
 	HANGAR_SOURCES_RESCAN_ACTION: '?/rescan',
 	HANGAR_SOURCES_REVALIDATE_ACTION: '?/revalidate',
 	HANGAR_SOURCES_BUILD_ACTION: '?/build',
-	HANGAR_SOURCES_SIZE_REPORT_ACTION: '?/sizeReport',
 	HANGAR_JOBS: '/jobs',
 	HANGAR_JOB_DETAIL: (id: string) => `/jobs/${encodeURIComponent(id)}` as const,
 	/** JSON endpoint for the /jobs/[id] streaming log (cursor-based polling). */

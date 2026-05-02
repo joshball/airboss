@@ -2,8 +2,9 @@
  * Upload job handler. The form action writes the incoming file to a temp path
  * and enqueues an `upload-source` job with the temp path in `payload`. This
  * handler picks the job up, archives the prior binary if a version changed,
- * moves the temp file into place at `data/sources/<type>/<id>.<ext>`, and
- * updates the `hangar.source` row with the new checksum + size + timestamp.
+ * moves the temp file into place at `<hangar-blob-root>/<type>/<id>.<ext>`,
+ * and updates the `hangar.source` row with the new checksum + size +
+ * timestamp.
  *
  * Keeping the archive dance in a job handler (rather than the action) gives
  * us the same restart-recovery + cancellation + logging behaviour every
@@ -12,7 +13,7 @@
 
 import { constants as fsConstants } from 'node:fs';
 import fs from 'node:fs/promises';
-import { resolve } from 'node:path';
+import { join, resolve } from 'node:path';
 import { AUDIT_OPS, auditWrite } from '@ab/audit';
 import { computeFileHash } from '@ab/aviation/sources';
 import { AUDIT_TARGETS, SOURCE_ACTION_LIMITS } from '@ab/constants';
@@ -20,8 +21,8 @@ import { db as defaultDb } from '@ab/db/connection';
 import type { JobContext, JobHandler } from '@ab/hangar-jobs';
 import { and, eq } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
+import { resolveHangarBlobRoot } from './blob-root';
 import { hangarSource } from './schema';
-import { REPO_ROOT } from './source-jobs';
 import { archiveFilename, destFilename, extensionOf, isNoChange, pickArchivesToPrune } from './upload-helpers';
 
 type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;
@@ -49,13 +50,17 @@ async function pathExists(path: string): Promise<boolean> {
 
 export interface UploadHandlerOptions {
 	db?: Db;
-	repoRoot?: string;
+	/**
+	 * Override the hangar blob root. Tests pass a per-test tmp directory; the
+	 * handler creates `<blobRoot>/<type>/...` underneath.
+	 */
+	blobRoot?: string;
 	now?: () => Date;
 }
 
 export function makeUploadHandler(options: UploadHandlerOptions = {}): JobHandler {
 	const db = options.db ?? defaultDb;
-	const repoRoot = options.repoRoot ?? REPO_ROOT;
+	const blobRoot = options.blobRoot ?? resolveHangarBlobRoot();
 	const now = options.now ?? (() => new Date());
 
 	return async (ctx: JobContext): Promise<Record<string, unknown>> => {
@@ -75,7 +80,7 @@ export function makeUploadHandler(options: UploadHandlerOptions = {}): JobHandle
 		if (existing.deletedAt) throw new Error(`upload job ${ctx.job.id}: source '${sourceId}' is deleted`);
 
 		const ext = extensionOf(originalFilename) || extensionOf(existing.path) || existing.format || 'bin';
-		const destDir = resolve(repoRoot, 'data', 'sources', existing.type);
+		const destDir = resolve(blobRoot, existing.type);
 		const destPath = resolve(destDir, destFilename(sourceId, ext));
 
 		await ctx.reportProgress({ step: 2, total: 4, message: 'hashing upload' });
@@ -117,7 +122,7 @@ export function makeUploadHandler(options: UploadHandlerOptions = {}): JobHandle
 				downloadedAt: updatedAt.toISOString(),
 				sizeBytes,
 				version: newVersion,
-				path: `data/sources/${existing.type}/${sourceId}.${ext}`,
+				path: join(existing.type, `${sourceId}.${ext}`),
 				dirty: true,
 				updatedBy: ctx.job.actorId,
 				updatedAt,

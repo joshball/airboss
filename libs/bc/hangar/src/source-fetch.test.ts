@@ -25,7 +25,7 @@ const TMP_ROOT = join(import.meta.dirname, '__tmp_sectional__');
 async function freshTmp() {
 	await rm(TMP_ROOT, { recursive: true, force: true });
 	await mkdir(TMP_ROOT, { recursive: true });
-	await mkdir(join(TMP_ROOT, 'data', 'sources', 'sectional', 'sectional-denver'), { recursive: true });
+	await mkdir(join(TMP_ROOT, 'sectional', 'sectional-denver'), { recursive: true });
 }
 
 interface FakeCtx {
@@ -85,7 +85,7 @@ function baseRow(overrides: Partial<Record<string, unknown>> = {}): SectionalFet
 		title: 'Denver VFR Sectional Chart',
 		version: 'pending-download',
 		url: 'https://aeronav.faa.gov/visual/{edition-date}/sectional-files/{region}.zip',
-		path: 'data/sources/sectional/sectional-denver',
+		path: 'sectional/sectional-denver',
 		format: 'geotiff-zip',
 		checksum: 'pending-download',
 		downloadedAt: 'pending-download',
@@ -126,7 +126,7 @@ describe('runSectionalFetch happy path', () => {
 			ctx,
 			{
 				row,
-				repoRoot: TMP_ROOT,
+				blobRoot: TMP_ROOT,
 				fetchHtml: async () => '<p>Denver 2026-03-21 Edition 116</p>',
 			},
 			{
@@ -164,7 +164,7 @@ describe('runSectionalFetch happy path', () => {
 		expect(outcome.archiveEntries).toEqual([{ name: 'Denver.tif', sizeBytes: 100 }]);
 
 		// Disk layout
-		const editionDir = join(TMP_ROOT, 'data/sources/sectional/sectional-denver/2026-03-21');
+		const editionDir = join(TMP_ROOT, 'sectional/sectional-denver/2026-03-21');
 		const archive = await readFile(join(editionDir, 'chart.zip'));
 		expect(archive.length).toBe(fakeArchiveBytes.length);
 		const meta = JSON.parse(await readFile(join(editionDir, 'meta.json'), 'utf8'));
@@ -187,7 +187,7 @@ describe('runSectionalFetch happy path', () => {
 	it('short-circuits with no-change when edition + sha + size match', async () => {
 		const { ctx, events } = fakeCtx();
 		// Pre-populate a matching edition + media + archive on disk.
-		const editionDir = join(TMP_ROOT, 'data/sources/sectional/sectional-denver/2026-03-21');
+		const editionDir = join(TMP_ROOT, 'sectional/sectional-denver/2026-03-21');
 		await mkdir(editionDir, { recursive: true });
 		const bytes = new Uint8Array([1, 2, 3, 4, 5]);
 		await writeFile(join(editionDir, 'chart.zip'), bytes);
@@ -206,7 +206,7 @@ describe('runSectionalFetch happy path', () => {
 				resolvedAt: '2026-04-24T12:00:00.000Z',
 			},
 			media: {
-				thumbnailPath: 'data/sources/sectional/sectional-denver/2026-03-21/thumb.jpg',
+				thumbnailPath: 'sectional/sectional-denver/2026-03-21/thumb.jpg',
 				thumbnailSha256: 'bb',
 				thumbnailSizeBytes: 100,
 				archiveEntries: [{ name: 'x', sizeBytes: 1 }],
@@ -217,7 +217,7 @@ describe('runSectionalFetch happy path', () => {
 		const downloaderCalled = vi.fn();
 		const outcome = await runSectionalFetch(
 			ctx,
-			{ row, repoRoot: TMP_ROOT, fetchHtml: async () => '' },
+			{ row, blobRoot: TMP_ROOT, fetchHtml: async () => '' },
 			{
 				resolver: async () => ({
 					effectiveDate: '2026-03-21',
@@ -259,7 +259,7 @@ describe('runSectionalFetch happy path', () => {
 		await expect(
 			runSectionalFetch(
 				ctx,
-				{ row, repoRoot: TMP_ROOT, fetchHtml: async () => '' },
+				{ row, blobRoot: TMP_ROOT, fetchHtml: async () => '' },
 				{
 					resolver: async () => ({
 						effectiveDate: '2026-03-21',
@@ -287,7 +287,7 @@ describe('runSectionalFetch happy path', () => {
 	it('rejects when locator_shape.region is missing', async () => {
 		const { ctx } = fakeCtx();
 		const row = baseRow({ locatorShape: { index_url: 'x' } });
-		await expect(runSectionalFetch(ctx, { row, repoRoot: TMP_ROOT, fetchHtml: async () => '' }, {})).rejects.toThrow(
+		await expect(runSectionalFetch(ctx, { row, blobRoot: TMP_ROOT, fetchHtml: async () => '' }, {})).rejects.toThrow(
 			/region/,
 		);
 	});
@@ -328,7 +328,7 @@ describe('handleBinaryVisualFetch dispatcher', () => {
 		const { ctx } = fakeCtx();
 		await expect(
 			handleBinaryVisualFetch(ctx, 'cfr-14', {
-				repoRoot: TMP_ROOT,
+				blobRoot: TMP_ROOT,
 				loadSource: async () => baseRow({ type: 'cfr' }),
 			}),
 		).rejects.toThrow(/not a binary-visual kind/);
@@ -337,7 +337,7 @@ describe('handleBinaryVisualFetch dispatcher', () => {
 	it('throws when the source is not found', async () => {
 		const { ctx } = fakeCtx();
 		await expect(
-			handleBinaryVisualFetch(ctx, 'missing', { repoRoot: TMP_ROOT, loadSource: async () => null }),
+			handleBinaryVisualFetch(ctx, 'missing', { blobRoot: TMP_ROOT, loadSource: async () => null }),
 		).rejects.toThrow(/not found/);
 	});
 });

@@ -15,7 +15,6 @@ import {
 	makeDiffHandler,
 	makeExtractHandler,
 	makeFetchHandler,
-	makeSizeReportHandler,
 	makeValidateHandler,
 	type SpawnRunner,
 } from './source-jobs';
@@ -184,17 +183,5 @@ describe('source-jobs.makeValidateHandler', () => {
 		const { ctx } = fakeContext({ kind: 'validate-references', payload: {} });
 		const result = await handler(ctx);
 		expect(result).toMatchObject({ kind: 'validate', exitCode: 0 });
-	});
-});
-
-describe('source-jobs.makeSizeReportHandler', () => {
-	it('runs size-report and captures stdout in result.text', async () => {
-		const handler = makeSizeReportHandler({
-			runner: makeSuccessRunner(['commit: 3 files', 'lfs: 0 files']),
-		});
-		const { ctx } = fakeContext({ kind: 'size-report', payload: {} });
-		const result = await handler(ctx);
-		expect(result).toMatchObject({ kind: 'size-report', lines: 2 });
-		expect(String(result?.text ?? '')).toContain('lfs: 0 files');
 	});
 });

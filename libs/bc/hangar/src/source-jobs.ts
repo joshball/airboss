@@ -23,6 +23,7 @@ import { AUDIT_TARGETS, type ReferenceSourceType, SOURCE_KIND_BY_TYPE, SOURCE_KI
 import { db } from '@ab/db/connection';
 import type { JobContext, JobHandler } from '@ab/hangar-jobs';
 import { eq } from 'drizzle-orm';
+import { resolveHangarBlobRoot } from './blob-root';
 import { type HangarSourceRow, hangarSource } from './schema';
 import { handleBinaryVisualFetch, type SectionalFetchHooks } from './source-fetch';
 
@@ -155,8 +156,8 @@ async function finalizeAudit(ctx: JobContext, targetId: string, extras: Record<s
 
 /**
  * Generic "spawn `bun scripts/references/<cmd>`" driver. All of the
- * scan / extract / build / diff / validate / size-report handlers share this
- * shape; they only differ in the script path + the way the result is shaped.
+ * scan / extract / build / diff / validate handlers share this shape; they
+ * only differ in the script path + the way the result is shaped.
  */
 async function runReferenceScript(
 	ctx: JobContext,
@@ -200,6 +201,8 @@ export interface FetchHandlerOptions extends SourceJobOptions {
 	loadSource?: (id: string) => Promise<HangarSourceRow | null>;
 	/** Injected HTML fetcher for the edition resolver (test-overridable). */
 	fetchHtml?: (url: string) => Promise<string>;
+	/** Override the hangar blob root (test-overridable). */
+	blobRoot?: string;
 }
 
 /**
@@ -211,7 +214,7 @@ export interface FetchHandlerOptions extends SourceJobOptions {
 export function makeFetchHandler(options: FetchHandlerOptions = {}): JobHandler {
 	return async (ctx) => {
 		const sourceId = readSourceId(ctx);
-		const repoRoot = options.repoRoot ?? REPO_ROOT;
+		const blobRoot = options.blobRoot ?? resolveHangarBlobRoot();
 
 		// Resolve the source row so we can branch by kind.
 		const loadSource =
@@ -226,7 +229,7 @@ export function makeFetchHandler(options: FetchHandlerOptions = {}): JobHandler 
 		if (kind === SOURCE_KINDS.BINARY_VISUAL) {
 			await ctx.logEvent(`fetch: binary-visual kind (${row?.type}); running in-process pipeline`);
 			const outcome = await handleBinaryVisualFetch(ctx, sourceId, {
-				repoRoot,
+				blobRoot,
 				fetchHtml: options.fetchHtml,
 				hooks: options.binaryVisualHooks,
 				// Re-use already-loaded row so we do not hit the DB twice.
@@ -380,29 +383,6 @@ export function makeValidateHandler(options: SourceJobOptions = {}): JobHandler 
 			metadata: { jobKind: ctx.job.kind, jobId: ctx.job.id, outcome: 'validated' },
 		});
 		return { kind: 'validate', exitCode: result.exitCode, stdoutLines: result.stdout.length };
-	};
-}
-
-export function makeSizeReportHandler(options: SourceJobOptions = {}): JobHandler {
-	return async (ctx) => {
-		const result = await runReferenceScript(ctx, {
-			scriptPath: 'scripts/references/size-report.ts',
-			extraArgs: [],
-			options,
-		});
-		await auditWrite({
-			actorId: ctx.job.actorId,
-			op: AUDIT_OPS.UPDATE,
-			targetType: AUDIT_TARGETS.HANGAR_SOURCE,
-			targetId: 'registry',
-			metadata: { jobKind: ctx.job.kind, jobId: ctx.job.id, outcome: 'reported' },
-		});
-		return {
-			kind: 'size-report',
-			exitCode: result.exitCode,
-			text: result.stdout.join('\n'),
-			lines: result.stdout.length,
-		};
 	};
 }
 

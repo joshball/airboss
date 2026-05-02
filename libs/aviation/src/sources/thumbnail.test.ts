@@ -31,7 +31,7 @@ describe('generateSectionalThumbnail', () => {
 		const result = await generateSectionalThumbnail({
 			archivePath: archive,
 			outPath,
-			recordedPath: 'data/sources/sectional/x/2026-03-21/thumb.jpg',
+			recordedPath: 'sectional/x/2026-03-21/thumb.jpg',
 			forceBytes: tinyJpegBytes(),
 			probeTool: async () => false,
 		});
@@ -48,7 +48,7 @@ describe('generateSectionalThumbnail', () => {
 		const result = await generateSectionalThumbnail({
 			archivePath: archive,
 			outPath,
-			recordedPath: 'data/sources/sectional/x/ed/thumb.jpg',
+			recordedPath: 'sectional/x/ed/thumb.jpg',
 			probeTool: async (cmd) => cmd === 'gdal_translate',
 			runCommand: async ({ cmd }) => {
 				// Simulate gdal writing to the temp path (cmd last arg).
@@ -68,7 +68,7 @@ describe('generateSectionalThumbnail', () => {
 		const result = await generateSectionalThumbnail({
 			archivePath: archive,
 			outPath,
-			recordedPath: 'data/sources/sectional/x/ed/thumb.jpg',
+			recordedPath: 'sectional/x/ed/thumb.jpg',
 			probeTool: async (cmd) => cmd === 'sips',
 			runCommand: async ({ cmd }) => {
 				// sips --out is next-to-last
@@ -87,7 +87,7 @@ describe('generateSectionalThumbnail', () => {
 		const result = await generateSectionalThumbnail({
 			archivePath: archive,
 			outPath,
-			recordedPath: 'data/sources/sectional/x/ed/thumb.jpg',
+			recordedPath: 'sectional/x/ed/thumb.jpg',
 			probeTool: async () => false,
 			runCommand: async () => 0,
 		});
@@ -106,7 +106,7 @@ describe('generateSectionalThumbnail', () => {
 			generateSectionalThumbnail({
 				archivePath: archive,
 				outPath,
-				recordedPath: 'data/sources/sectional/x/ed/thumb.jpg',
+				recordedPath: 'sectional/x/ed/thumb.jpg',
 				forceBytes: bigBytes,
 				probeTool: async () => false,
 			}),
@@ -119,7 +119,7 @@ describe('generateSectionalThumbnail', () => {
 		const result = await generateSectionalThumbnail({
 			archivePath: archive,
 			outPath,
-			recordedPath: 'data/sources/sectional/x/ed/thumb.jpg',
+			recordedPath: 'sectional/x/ed/thumb.jpg',
 			forceBytes: tinyJpegBytes(),
 			probeTool: async () => false,
 		});

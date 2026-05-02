@@ -187,5 +187,4 @@ export const actions: Actions = {
 	rescan: (event) => enqueueGlobalAction(event, JOB_KINDS.FETCH_SOURCE),
 	revalidate: (event) => enqueueGlobalAction(event, JOB_KINDS.VALIDATE_REFERENCES),
 	build: (event) => enqueueGlobalAction(event, JOB_KINDS.BUILD_REFERENCES),
-	sizeReport: (event) => enqueueGlobalAction(event, JOB_KINDS.SIZE_REPORT),
 };

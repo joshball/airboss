@@ -100,7 +100,7 @@ function sourceInput(id: string) {
 		title: `Source ${id}`,
 		version: 'v1',
 		url: 'https://example.test',
-		path: `data/sources/${id}.xml`,
+		path: `cfr/${id}.xml`,
 		format: 'xml',
 		checksum: 'pending-download',
 		downloadedAt: 'pending-download',

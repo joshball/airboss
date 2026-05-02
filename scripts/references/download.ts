@@ -6,7 +6,7 @@
  * Runs the same in-process pipeline the hangar UI's Fetch action drives
  * (`handleBinaryVisualFetch`): resolve edition -> short-circuit if no
  * change -> download -> drift-detect -> archive rotation -> write
- * meta.json + thumbnail -> commit to `data/sources/<type>/<id>/<edition>/`
+ * meta.json + thumbnail -> commit to `<blob-root>/<type>/<id>/<edition>/`
  * and update the `hangar.source` row.
  *
  * Intended for operators who want a terminal-only path for a fetch
@@ -20,12 +20,9 @@
  *      checksum mismatch, etc.)
  */
 
-import { resolve } from 'node:path';
-import { handleBinaryVisualFetch, type SectionalFetchOutcome } from '@ab/bc-hangar';
+import { handleBinaryVisualFetch, resolveHangarBlobRoot, type SectionalFetchOutcome } from '@ab/bc-hangar';
 import { JOB_KINDS, JOB_STATUSES } from '@ab/constants';
 import type { JobContext, JobProgress } from '@ab/hangar-jobs';
-
-const REPO_ROOT = resolve(import.meta.dirname ?? import.meta.dir, '..', '..');
 
 const HELP_TEXT = `
 bun references download --id <source-id>
@@ -51,8 +48,8 @@ export interface DownloadCliOptions {
 	stderr?: (line: string) => void;
 	/** Injected so tests can swap in a mock pipeline. */
 	runFetch?: typeof handleBinaryVisualFetch;
-	/** Overridable repo root for tests. */
-	repoRoot?: string;
+	/** Overridable hangar blob root for tests. */
+	blobRoot?: string;
 }
 
 export interface DownloadCliResult {
@@ -108,7 +105,7 @@ export async function runDownloadCli(options: DownloadCliOptions): Promise<Downl
 	const stdout = options.stdout ?? ((l: string) => console.log(l));
 	const stderr = options.stderr ?? ((l: string) => console.error(l));
 	const runFetch = options.runFetch ?? handleBinaryVisualFetch;
-	const repoRoot = options.repoRoot ?? REPO_ROOT;
+	const blobRoot = options.blobRoot ?? resolveHangarBlobRoot();
 
 	if (wantsHelp(options.argv)) {
 		stdout(HELP_TEXT.trim());
@@ -124,7 +121,7 @@ export async function runDownloadCli(options: DownloadCliOptions): Promise<Downl
 
 	const ctx = buildCliContext(sourceId, stdout, stderr);
 	try {
-		const outcome = await runFetch(ctx, sourceId, { repoRoot });
+		const outcome = await runFetch(ctx, sourceId, { blobRoot });
 		stdout(
 			`download: ${outcome.kind} (edition=${outcome.editionDate}, sha=${outcome.sha256.slice(0, 16)}, size=${outcome.sizeBytes} bytes)`,
 		);

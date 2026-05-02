@@ -1,7 +1,7 @@
 /**
  * GET /sources/[id]/thumbnail -- inline JPEG for the preview tile. Binary-
  * visual sources only; served from `media.thumbnailPath` relative to the
- * repo root.
+ * hangar blob root.
  *
  * Returns 204 No Content when the row has no thumbnail yet (pre-fetch or
  * generator='unavailable'); the detail page renders a placeholder tile in
@@ -12,7 +12,7 @@ import { createReadStream } from 'node:fs';
 import { stat } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { requireRole } from '@ab/auth';
-import { getSource, REPO_ROOT } from '@ab/bc-hangar';
+import { getSource, resolveHangarBlobRoot } from '@ab/bc-hangar';
 import { type ReferenceSourceType, ROLES, SOURCE_KIND_BY_TYPE, SOURCE_KINDS } from '@ab/constants';
 import { error } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
@@ -29,14 +29,14 @@ export const GET: RequestHandler = async (event) => {
 		return new Response(null, { status: 204 });
 	}
 
-	const abs = resolve(REPO_ROOT, row.media.thumbnailPath);
-	// Defense-in-depth: refuse any path that escapes data/sources/. The DB
-	// column is operator-supplied (fetch worker stores it); a future bug or
+	const blobRoot = resolveHangarBlobRoot();
+	const abs = resolve(blobRoot, row.media.thumbnailPath);
+	// Defense-in-depth: refuse any path that escapes the hangar blob root. The
+	// DB column is operator-supplied (fetch worker stores it); a future bug or
 	// hand-edit could drop a `..` segment. Mirrors the guard in
 	// /sources/[id]/files/raw/+server.ts.
-	const sourcesRoot = resolve(REPO_ROOT, 'data', 'sources');
-	if (!(abs === sourcesRoot || abs.startsWith(`${sourcesRoot}/`))) {
-		throw error(400, `thumbnail path is outside data/sources/: ${abs}`);
+	if (!(abs === blobRoot || abs.startsWith(`${blobRoot}/`))) {
+		throw error(400, `thumbnail path is outside the hangar blob root: ${abs}`);
 	}
 	try {
 		const s = await stat(abs);

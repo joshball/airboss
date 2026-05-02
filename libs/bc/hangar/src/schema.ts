@@ -13,8 +13,8 @@
  *     submitted `rev`; the server increments on success and returns 409
  *     with a diff on mismatch.
  *   - `job` + `jobLog` are generic enough to carry every hangar workload
- *     (sync-to-disk today, fetch/upload/extract/build/diff/validate/
- *     size-report in wp-hangar-sources-v1).
+ *     (sync-to-disk today, fetch/upload/extract/build/diff/validate in
+ *     wp-hangar-sources-v1).
  *   - `syncLog` is append-only; one row per sync attempt with the commit
  *     SHA (and PR URL in `pr` mode) so conflict detection can cheaply
  *     compare the last-known good SHA against the current on-disk TOML.
@@ -122,7 +122,10 @@ export const hangarSource = hangarSchema.table(
 		title: text('title').notNull(),
 		version: text('version').notNull(),
 		url: text('url').notNull(),
-		/** Where the downloaded binary lives under `data/sources/`. */
+		/**
+		 * Path to the downloaded binary, relative to the hangar blob root
+		 * (`<cache>/hangar-blobs/`). Resolved via `resolveHangarBlobRoot()`.
+		 */
 		path: text('path').notNull(),
 		format: text('format').notNull(),
 		/** SHA-256 of the downloaded binary; `pending-download` sentinel. */

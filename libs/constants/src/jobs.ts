@@ -21,8 +21,6 @@ export const JOB_KINDS = {
 	DIFF_SOURCE: 'diff-source',
 	/** Validate the registry + wiki-links + sources. WP3. */
 	VALIDATE_REFERENCES: 'validate-references',
-	/** Size report for corpus binaries. WP3. */
-	SIZE_REPORT: 'size-report',
 } as const;
 
 export type JobKind = (typeof JOB_KINDS)[keyof typeof JOB_KINDS];
