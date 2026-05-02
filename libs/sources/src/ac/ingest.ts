@@ -343,6 +343,7 @@ export async function runAcIngest(args: IngestArgs): Promise<IngestReport> {
 			const manifest: AcManifestFile = {
 				schema_version: 1,
 				corpus: 'ac',
+				kind: 'ac',
 				doc_slug: ac.docSlug,
 				doc_number: ac.docNumber,
 				revision: ac.revision,

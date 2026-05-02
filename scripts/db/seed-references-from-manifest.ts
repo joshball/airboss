@@ -46,6 +46,7 @@ import { client } from '@ab/db/connection';
 // Build helpers live in the references BC but aren't re-exported from the
 // barrel (route handlers should never need them; only seed code does).
 import { attachSupersededByLatest } from '../../libs/bc/study/src/references';
+import { seedAcManifest } from '../../libs/bc/study/src/seeders/ac';
 import { seedAimManifest } from '../../libs/bc/study/src/seeders/aim';
 import { seedSectionTreeManifest } from '../../libs/bc/study/src/seeders/section-tree';
 import { emptySummary, type SeedContext, type SeedSummary } from '../../libs/bc/study/src/seeders/types';
@@ -59,7 +60,7 @@ const REPO_ROOT = resolve(HERE, '..', '..');
  * relative to the repo root; the seeder enumerates `<dir>/<doc>/<edition>/
  * manifest.json` under it. Add new corpora here as their WPs land.
  */
-const CORPUS_DIRS = ['handbooks', 'aim'] as const;
+const CORPUS_DIRS = ['handbooks', 'aim', 'ac'] as const;
 
 export interface SeedReferencesOptions {
 	/** Filter to a single document slug (e.g. `phak`). Default = all. */
@@ -152,6 +153,8 @@ async function dispatchManifest(manifestPath: string, context: SeedContext, summ
 			return seedWholeDocManifest(manifest, context, summary);
 		case 'aim':
 			return seedAimManifest(manifest, context, summary);
+		case 'ac':
+			return seedAcManifest(manifest, context, summary);
 	}
 }
 

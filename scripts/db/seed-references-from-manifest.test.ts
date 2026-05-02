@@ -18,6 +18,7 @@ import { mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { db } from '@ab/db/connection';
+import { __ac_seed_mapping_internal__ } from '@ab/sources/ac';
 import { eq } from 'drizzle-orm';
 import { afterAll, describe, expect, it } from 'vitest';
 import { reference, referenceFigure, referenceSection } from '../../libs/bc/study/src/schema';
@@ -34,6 +35,7 @@ const SUITE_TOKEN = Math.floor(Math.random() * 0x100_000_000)
 	.padStart(8, '0');
 const HANDBOOKS_DIR = join(REPO_ROOT, 'handbooks');
 const AIM_DIR = join(REPO_ROOT, 'aim');
+const AC_DIR = join(REPO_ROOT, 'ac');
 
 interface Fixture {
 	slug: string;
@@ -393,6 +395,128 @@ describe('seedReferencesFromManifest', () => {
 		);
 
 		await expect(seedReferencesFromManifest({ documentSlug: slug })).rejects.toThrow(/missing parent/);
+	});
+
+	it('AC manifest produces a single circular section + idempotent re-run', async () => {
+		// Synthetic doc_slug + revision so we don't collide with the built-in
+		// production AC list. The test-only mapping helper makes the slug
+		// resolvable without polluting the canonical registry.
+		// AC schema requires `doc_slug` to be digit-only with `-`/`.` separators
+		// (mirroring real FAA AC numbers like `91-21-1`); SUITE_TOKEN is hex so
+		// strip any letters out for the synthetic slug.
+		const numericToken = SUITE_TOKEN.replace(/[a-f]/g, '');
+		const docSlug = `999-${numericToken}-1`;
+		const revision = 'a';
+		const documentSlug = `test-ac-${SUITE_TOKEN}`;
+		const edition = 'AC TEST-1A';
+		__ac_seed_mapping_internal__.register({ docSlug, revision, documentSlug, edition });
+		trackFixture(documentSlug);
+
+		const editionDir = join(AC_DIR, docSlug, revision);
+		mkdirSync(editionDir, { recursive: true });
+		const bodyPath = join(editionDir, 'body.md');
+		const bodyContent = '# AC Test\n\nFull AC body markdown.\n';
+		writeFileSync(bodyPath, bodyContent);
+		const bodySha = sha256Hex(bodyContent);
+
+		const manifestPath = join(editionDir, 'manifest.json');
+		writeFileSync(
+			manifestPath,
+			JSON.stringify({
+				schema_version: 1,
+				kind: 'ac',
+				corpus: 'ac',
+				doc_slug: docSlug,
+				doc_number: docSlug,
+				revision,
+				title: 'AC Synthetic Test',
+				publisher: 'FAA',
+				publication_date: '2026-01-15',
+				source_url: 'https://example.com/ac-test.pdf',
+				source_sha256: 'a'.repeat(64),
+				fetched_at: '2026-04-26T00:00:00.000+00:00',
+				page_count: 12,
+				body_path: `ac/${docSlug}/${revision}/body.md`,
+				body_sha256: bodySha,
+				sections: [],
+				changes: [],
+			}),
+		);
+
+		// Track the AC dir for cleanup (directory != document_slug under AC).
+		fixtures.push({ slug: docSlug, corpusDir: AC_DIR });
+
+		// AC dispatcher filters by on-disk directory (`doc_slug`), not by the
+		// DB `document_slug` -- the registry mediates between the two.
+		const summary = await seedReferencesFromManifest({ documentSlug: docSlug });
+		expect(summary.editionsProcessed).toBe(1);
+		expect(summary.sectionsTouched).toBe(1);
+		expect(summary.sectionsChanged).toBe(1);
+
+		const refRow = (await db.select().from(reference).where(eq(reference.documentSlug, documentSlug)))[0];
+		expect(refRow).toBeDefined();
+		if (!refRow) return;
+		expect(refRow.kind).toBe('ac');
+		expect(refRow.edition).toBe(edition);
+		expect(refRow.sectionSchema).toEqual({ levels: ['circular'], strictSequence: true });
+
+		const sections = await db.select().from(referenceSection).where(eq(referenceSection.referenceId, refRow.id));
+		expect(sections).toHaveLength(1);
+		const sec = sections[0];
+		if (!sec) return;
+		expect(sec.depth).toBe(0);
+		expect(sec.level).toBe('circular');
+		expect(sec.code).toBe('1');
+		expect(sec.parentId).toBeNull();
+		expect(sec.contentMd).toBe(bodyContent);
+		expect(sec.contentHash).toBe(bodySha);
+
+		// Idempotent re-run.
+		const second = await seedReferencesFromManifest({ documentSlug: docSlug });
+		expect(second.sectionsTouched).toBe(1);
+		expect(second.sectionsChanged).toBe(0);
+
+		__ac_seed_mapping_internal__.reset();
+	});
+
+	it('AC seed throws a clear error when the registry has no mapping for (doc_slug, revision)', async () => {
+		// Same numeric-slug constraint as the previous test (AC_DOC_SLUG_REGEX).
+		const numericToken = SUITE_TOKEN.replace(/[a-f]/g, '');
+		const docSlug = `888-${numericToken}-9`;
+		const revision = 'a';
+		const editionDir = join(AC_DIR, docSlug, revision);
+		mkdirSync(editionDir, { recursive: true });
+		const bodyPath = join(editionDir, 'body.md');
+		const bodyContent = '# Orphan AC\n';
+		writeFileSync(bodyPath, bodyContent);
+		const bodySha = sha256Hex(bodyContent);
+		writeFileSync(
+			join(editionDir, 'manifest.json'),
+			JSON.stringify({
+				schema_version: 1,
+				kind: 'ac',
+				corpus: 'ac',
+				doc_slug: docSlug,
+				doc_number: docSlug,
+				revision,
+				title: 'AC Orphan',
+				publisher: 'FAA',
+				publication_date: null,
+				source_url: 'https://example.com/orphan.pdf',
+				source_sha256: 'a'.repeat(64),
+				fetched_at: '2026-04-26T00:00:00.000+00:00',
+				page_count: 1,
+				body_path: `ac/${docSlug}/${revision}/body.md`,
+				body_sha256: bodySha,
+				sections: [],
+				changes: [],
+			}),
+		);
+		fixtures.push({ slug: docSlug, corpusDir: AC_DIR });
+
+		// Scope to this AC's on-disk directory so unrelated fixtures don't run
+		// (the AIM orphan test would otherwise throw first under {} filter).
+		await expect(seedReferencesFromManifest({ documentSlug: docSlug })).rejects.toThrow(/no DB mapping/);
 	});
 
 	it('supersede chain wires older edition to the newest', async () => {

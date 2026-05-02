@@ -1620,6 +1620,13 @@ export const REFERENCE_SECTION_LEVELS = {
 	GLOSSARY: 'glossary',
 	/** Whole-doc handbooks (post-#384 risk-mgmt, instructor, IFH, IPH, AMT-G, AMT-P). */
 	DOCUMENT: 'document',
+	/**
+	 * FAA Advisory Circular whole-document body (WP-AC). One row per AC at
+	 * depth 0; section-level extraction within an AC is a follow-up. Distinct
+	 * from `document` so the reader can render AC-specific chrome (cancellation
+	 * pointers, change list) when section-level extraction lands.
+	 */
+	CIRCULAR: 'circular',
 } as const;
 
 export type ReferenceSectionLevel = (typeof REFERENCE_SECTION_LEVELS)[keyof typeof REFERENCE_SECTION_LEVELS];
@@ -1634,6 +1641,7 @@ export const REFERENCE_SECTION_LEVEL_LABELS: Record<ReferenceSectionLevel, strin
 	[REFERENCE_SECTION_LEVELS.APPENDIX]: 'Appendix',
 	[REFERENCE_SECTION_LEVELS.GLOSSARY]: 'Glossary',
 	[REFERENCE_SECTION_LEVELS.DOCUMENT]: 'Document',
+	[REFERENCE_SECTION_LEVELS.CIRCULAR]: 'Circular',
 };
 
 /**
