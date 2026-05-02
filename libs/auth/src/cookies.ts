@@ -31,7 +31,7 @@ export function resolveCookieDomain(host: string | null | undefined, isDev: bool
 	return undefined;
 }
 
-function authCookieOptions(isDev: boolean, host: string | null | undefined, maxAgeSeconds?: number) {
+function authCookieOptions(isDev: boolean, host: string | null | undefined, maxAgeSeconds: number) {
 	const domain = resolveCookieDomain(host, isDev);
 	return {
 		path: '/',
@@ -45,7 +45,7 @@ function authCookieOptions(isDev: boolean, host: string | null | undefined, maxA
 		// If magic-link or OAuth lands later, downgrade to `lax` at that point.
 		sameSite: 'strict' as const,
 		secure: !isDev,
-		maxAge: maxAgeSeconds ?? SESSION_MAX_AGE_SECONDS,
+		maxAge: maxAgeSeconds,
 	};
 }
 
@@ -59,20 +59,65 @@ function decodeCookieValue(raw: string): string {
 }
 
 /**
+ * Parse the per-cookie lifetime from a Set-Cookie header. Prefers Max-Age
+ * (RFC 6265 §5.2.2 -- takes precedence over Expires when both are present).
+ * Returns the lifetime in seconds, or `undefined` if neither attribute was set.
+ *
+ * Critical for security: better-auth issues short-lived cookies (e.g. the
+ * 5-minute `bauth_session_data` cookie-cache) alongside the long-lived
+ * session cookie. Forwarding all of them with one fixed Max-Age silently
+ * extends the short ones -- and the cookie-cache is what ban / role-change
+ * propagation depends on, so extending it neutralizes those guarantees.
+ */
+function parseCookieMaxAge(setCookie: string): number | undefined {
+	const parts = setCookie.split(';').slice(1);
+	let maxAge: number | undefined;
+	let expiresAt: number | undefined;
+	for (const part of parts) {
+		const trimmed = part.trim();
+		const eq = trimmed.indexOf('=');
+		if (eq === -1) continue;
+		const attr = trimmed.substring(0, eq).trim().toLowerCase();
+		const val = trimmed.substring(eq + 1).trim();
+		if (attr === 'max-age') {
+			const n = Number.parseInt(val, 10);
+			if (Number.isFinite(n)) maxAge = n;
+		} else if (attr === 'expires') {
+			const t = Date.parse(val);
+			if (Number.isFinite(t)) expiresAt = t;
+		}
+	}
+	if (maxAge !== undefined) return maxAge;
+	if (expiresAt !== undefined) {
+		const seconds = Math.floor((expiresAt - Date.now()) / 1000);
+		return seconds > 0 ? seconds : 0;
+	}
+	return undefined;
+}
+
+/**
  * Parse Set-Cookie headers from a better-auth response and forward them
  * to the browser via SvelteKit's cookies API.
  *
  * Handles URL decoding of cookie values (better-auth encodes / and + chars)
  * and applies secure cookie options based on environment and request host.
+ *
+ * Per-cookie lifetime is preserved from the better-auth Set-Cookie header
+ * (Max-Age, falling back to Expires). The optional `fallbackMaxAgeSeconds`
+ * parameter only applies to cookies where better-auth set NO TTL at all
+ * (i.e. session cookies that should default to the configured session
+ * lifetime). This prevents silently extending better-auth's short-lived
+ * cookies -- in particular the 5-minute `bauth_session_data` cookie-cache,
+ * which is the propagation channel for ban / role-change.
  */
 export function forwardAuthCookies(
 	authResponse: Response,
 	cookies: Cookies,
 	isDev: boolean,
 	host: string | null | undefined,
-	maxAgeSeconds?: number,
+	fallbackMaxAgeSeconds?: number,
 ): void {
-	const opts = authCookieOptions(isDev, host, maxAgeSeconds);
+	const fallback = fallbackMaxAgeSeconds ?? SESSION_MAX_AGE_SECONDS;
 	const setCookieHeaders = authResponse.headers.getSetCookie?.() ?? [];
 	for (const raw of setCookieHeaders) {
 		const parts = raw.split(';');
@@ -84,13 +129,21 @@ export function forwardAuthCookies(
 
 		const value = decodeCookieValue(nameVal.substring(eqIndex + 1).trim());
 
-		// Check if the response is clearing this cookie (sign-out)
-		const rawLower = raw.toLowerCase();
-		const isExpiring = rawLower.includes('max-age=0') || rawLower.includes('expires=thu, 01 jan 1970');
+		// Detect cookie-clear: better-auth signals deletion via Max-Age=0 or
+		// an Expires date in the past. Use the parsed lifetime so format
+		// changes (capitalization, exact past-date string) don't silently
+		// turn a delete into a 7-day set.
+		const parsedMaxAge = parseCookieMaxAge(raw);
+		const isExpiring = parsedMaxAge === 0;
 
 		if (isExpiring || value === '') {
-			cookies.delete(name, { path: '/', ...(opts.domain ? { domain: opts.domain } : {}) });
+			const domain = resolveCookieDomain(host, isDev);
+			cookies.delete(name, { path: '/', ...(domain ? { domain } : {}) });
 		} else {
+			// Preserve the better-auth-set lifetime. Only fall back when
+			// better-auth set no Max-Age and no Expires (rare; typically only
+			// session cookies, where the fallback is the session lifetime).
+			const opts = authCookieOptions(isDev, host, parsedMaxAge ?? fallback);
 			cookies.set(name, value, opts);
 		}
 	}
