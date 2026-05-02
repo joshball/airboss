@@ -39,6 +39,36 @@ export function archiveFilename(sourceId: string, version: string, ext: string):
 	return `${sourceId}@${version}.${ext}`;
 }
 
+/**
+ * Same-version archive filename: when the operator re-uploads with the same
+ * version string but different bytes (e.g. corrected scan, errata patch), we
+ * disambiguate with a short prefix of the prior checksum so multiple
+ * same-version uploads do not clobber each other.
+ *
+ * `priorChecksum` is the sha256 hex string of the bytes being archived; the
+ * first 12 chars give 48 bits of entropy, plenty to distinguish all yearly
+ * re-uploads of the same source.
+ */
+export function archiveFilenameWithChecksum(
+	sourceId: string,
+	version: string,
+	priorChecksum: string,
+	ext: string,
+): string {
+	const shaPrefix = priorChecksum.slice(0, 12);
+	return `${sourceId}@${version}-${shaPrefix}.${ext}`;
+}
+
 export function destFilename(sourceId: string, ext: string): string {
 	return `${sourceId}.${ext}`;
+}
+
+/**
+ * Stage filename used between "tmp upload arrived" and "atomic rename into
+ * place". Living inside `destDir` (rather than `os.tmpdir()`) guarantees
+ * `rename(stage -> destPath)` stays on the same filesystem, which keeps the
+ * archive-and-install pair atomic from the operator's perspective.
+ */
+export function stageFilename(sourceId: string, ext: string, suffix: string): string {
+	return `${sourceId}.${ext}.uploading-${suffix}`;
 }

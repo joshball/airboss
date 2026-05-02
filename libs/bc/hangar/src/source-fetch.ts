@@ -250,6 +250,42 @@ export async function runSectionalFetch(
 	hooks: SectionalFetchHooks = {},
 ): Promise<SectionalFetchOutcome> {
 	const row = input.row;
+	const stepRef = { current: 'init' };
+	try {
+		return await runSectionalFetchUnsafe(ctx, input, hooks, stepRef);
+	} catch (err) {
+		// Emit a per-source audit breadcrumb on EVERY terminal failure (not
+		// only the drift branch). Operators scanning `audit_log` for "what
+		// touched source X in the last 24 hours" need to see failed runs;
+		// otherwise the only trail is the worker's `hangar.job.error`
+		// column, which a per-source audit query does not reach.
+		const message = err instanceof Error ? err.message : String(err);
+		await auditWrite({
+			actorId: ctx.job.actorId,
+			op: AUDIT_OPS.UPDATE,
+			targetType: AUDIT_TARGETS.HANGAR_SOURCE,
+			targetId: row.id,
+			metadata: {
+				jobId: ctx.job.id,
+				outcome: 'failed',
+				kind: 'binary-visual',
+				step: stepRef.current,
+				error: message,
+			},
+		}).catch(() => {
+			// Audit-write failure must not mask the original handler error.
+		});
+		throw err;
+	}
+}
+
+async function runSectionalFetchUnsafe(
+	ctx: JobContext,
+	input: SectionalFetchInput,
+	hooks: SectionalFetchHooks,
+	stepRef: { current: string },
+): Promise<SectionalFetchOutcome> {
+	const row = input.row;
 	const resolver = hooks.resolver ?? resolveCurrentSectionalEdition;
 	const downloader = hooks.downloader ?? defaultDownloader;
 	const thumbnailFn = hooks.thumbnail ?? generateSectionalThumbnail;
@@ -257,11 +293,13 @@ export async function runSectionalFetch(
 	const dbUpdate = hooks.dbUpdate ?? defaultDbUpdate;
 	const now = hooks.now ?? (() => new Date());
 
+	stepRef.current = 'parse-locator';
 	const locator = parseLocatorShape(row.locatorShape);
 	if (!locator.region) throw new Error(`locator_shape.region is required for binary-visual source '${row.id}'`);
 	if (!locator.index_url) throw new Error(`locator_shape.index_url is required for binary-visual source '${row.id}'`);
 
 	// Step 1: resolve edition.
+	stepRef.current = 'resolve-edition';
 	await ctx.logEvent(`resolving edition for ${locator.region} via ${locator.index_url}`);
 	await ctx.reportProgress({ step: 1, total: 7, message: 'resolving edition' });
 	const edition = await resolver({
@@ -319,6 +357,7 @@ export async function runSectionalFetch(
 	}
 
 	// Step 3: download.
+	stepRef.current = 'download';
 	await ctx.reportProgress({ step: 2, total: 7, message: 'downloading' });
 	const tmpPath = `${archivePath}.downloading`;
 	await mkdir(editionDir, { recursive: true });
@@ -327,6 +366,7 @@ export async function runSectionalFetch(
 	await ctx.logEvent(`downloaded ${dl.fileSize} bytes (sha256=${dl.sha256.slice(0, 16)}...)`);
 
 	// Step 5: drift check.
+	stepRef.current = 'drift-check';
 	if (
 		row.edition &&
 		row.edition.effectiveDate === edition.effectiveDate &&
@@ -355,13 +395,16 @@ export async function runSectionalFetch(
 	}
 
 	// Step 6: rotate archives before committing the new edition dir.
+	stepRef.current = 'rotate-archives';
 	const keptArchives = await rotateArchives(sourceRoot, edition.effectiveDate);
 	await ctx.logEvent(`archive retention: kept ${keptArchives.length} previous edition(s)`);
 
 	// Step 7: move tmp -> archivePath.
+	stepRef.current = 'install-archive';
 	await rename(tmpPath, archivePath);
 
 	// Step 8: archive manifest.
+	stepRef.current = 'read-manifest';
 	await ctx.reportProgress({ step: 3, total: 7, message: 'reading archive manifest' });
 	let archiveEntries: readonly ArchiveEntry[] = [];
 	try {
@@ -373,6 +416,7 @@ export async function runSectionalFetch(
 	}
 
 	// Step 9: thumbnail.
+	stepRef.current = 'thumbnail';
 	await ctx.reportProgress({ step: 4, total: 7, message: 'generating thumbnail' });
 	const thumbnail = await thumbnailFn({
 		archivePath,
@@ -395,6 +439,7 @@ export async function runSectionalFetch(
 	});
 
 	// Step 10: meta.json sidecar.
+	stepRef.current = 'meta-json';
 	const meta: SourceMeta & { edition: SourceEdition; media: SourceMedia } = {
 		sourceId: row.id,
 		version: edition.effectiveDate,
@@ -420,6 +465,7 @@ export async function runSectionalFetch(
 	await writeFile(metaPath, `${JSON.stringify(meta, null, 2)}\n`, 'utf8');
 
 	// Step 11: update DB row.
+	stepRef.current = 'db-update';
 	await ctx.reportProgress({ step: 5, total: 7, message: 'updating registry row' });
 	const media: HangarSourceMedia = {
 		thumbnailPath: recordedThumbPath,

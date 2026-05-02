@@ -19,7 +19,15 @@ import { spawn } from 'node:child_process';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { AUDIT_OPS, auditWrite } from '@ab/audit';
-import { AUDIT_TARGETS, type ReferenceSourceType, SOURCE_KIND_BY_TYPE, SOURCE_KINDS } from '@ab/constants';
+import {
+	AUDIT_TARGETS,
+	JOB_LOG_MAX_BYTES,
+	JOB_LOG_TRUNCATION_MARKER,
+	JOB_RESULT_TEXT_MAX_BYTES,
+	type ReferenceSourceType,
+	SOURCE_KIND_BY_TYPE,
+	SOURCE_KINDS,
+} from '@ab/constants';
 import { db } from '@ab/db/connection';
 import type { JobContext, JobHandler } from '@ab/hangar-jobs';
 import { eq } from 'drizzle-orm';
@@ -55,6 +63,28 @@ export type SpawnRunner = (args: {
  * is plenty for "stop this long-running extract".
  */
 const CANCEL_POLL_INTERVAL_MS = 500;
+
+/**
+ * Truncate a single subprocess output line to `JOB_LOG_MAX_BYTES`. A
+ * misbehaving subprocess that emits a multi-MiB single line (recursive stack
+ * trace, base64 blob, noisy diff) would otherwise land the whole payload in
+ * `hangar.job_log` and ship it to every poll of the live-log endpoint. The
+ * truncation marker is appended so the operator sees the cut.
+ */
+export function truncateLogLine(line: string): string {
+	const buf = Buffer.from(line, 'utf8');
+	if (buf.byteLength <= JOB_LOG_MAX_BYTES) return line;
+	const head = buf.subarray(0, JOB_LOG_MAX_BYTES).toString('utf8');
+	return `${head}${JOB_LOG_TRUNCATION_MARKER}`;
+}
+
+/** Truncate result text (e.g. diff body) before it lands in `hangar.job.result`. */
+export function truncateResultText(text: string): string {
+	const buf = Buffer.from(text, 'utf8');
+	if (buf.byteLength <= JOB_RESULT_TEXT_MAX_BYTES) return text;
+	const head = buf.subarray(0, JOB_RESULT_TEXT_MAX_BYTES).toString('utf8');
+	return `${head}${JOB_LOG_TRUNCATION_MARKER}`;
+}
 
 /**
  * Default runner backed by `node:child_process.spawn`. Uses node's stdio
@@ -177,8 +207,8 @@ async function runReferenceScript(
 	const result = await runner({
 		cmd,
 		cwd,
-		onStdout: (line) => ctx.logStdout(line),
-		onStderr: (line) => ctx.logStderr(line),
+		onStdout: (line) => ctx.logStdout(truncateLogLine(line)),
+		onStderr: (line) => ctx.logStderr(truncateLogLine(line)),
 		isCancelled: () => ctx.isCancelled(),
 	});
 
@@ -356,7 +386,7 @@ export function makeDiffHandler(
 			extraArgs: [sourceId],
 			options,
 		});
-		const body = result.stdout.join('\n');
+		const body = truncateResultText(result.stdout.join('\n'));
 		await finalizeAudit(ctx, sourceId, { outcome: 'diffed' });
 		return {
 			kind: 'diff',
