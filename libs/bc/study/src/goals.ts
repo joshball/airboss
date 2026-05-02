@@ -29,12 +29,18 @@
  * See cert-syllabus WP spec + ADR 016 phase 6 for the model rationale.
  */
 
-import { type Cert, type Domain, GOAL_STATUSES, type GoalStatus, SYLLABUS_PRIMACY } from '@ab/constants';
+import {
+	type Cert,
+	type Domain,
+	GOAL_STATUSES,
+	type GoalStatus,
+	SYLLABUS_PRIMACY,
+	SYLLABUS_STATUSES,
+} from '@ab/constants';
 import { db as defaultDb } from '@ab/db/connection';
 import { generateGoalId } from '@ab/utils';
-import { and, eq, sql } from 'drizzle-orm';
+import { and, eq, inArray, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
-import { CredentialNotFoundError, getCredentialBySlug, getCredentialPrimarySyllabus } from './credentials';
 import type {
 	AddGoalNodeInput,
 	AddGoalSyllabusInput,
@@ -53,6 +59,7 @@ import {
 	type NewGoalNodeRow,
 	type NewGoalRow,
 	type NewGoalSyllabusRow,
+	syllabus,
 	syllabusNode,
 	syllabusNodeLink,
 } from './schema';
@@ -520,8 +527,9 @@ export interface ApplyCertGoalsResult {
 
 /**
  * Apply a list of cert slugs to the user's primary goal, creating one
- * if none exists. Each slug is resolved through
- * `getCredentialBySlug -> getCredentialPrimarySyllabus`; the resulting
+ * if none exists. Resolves all slugs in two batched reads
+ * (`credential` by slug, then primary `credential_syllabus` by credential
+ * id) instead of a per-cert sequential walk; the resulting
  * `goal_syllabus` rows are upserted via `addGoalSyllabus` so the call is
  * idempotent on re-run.
  *
@@ -563,25 +571,68 @@ export async function applyCertGoalsToPrimaryGoal(
 		await db.update(goal).set(targetingPatch).where(eq(goal.id, primary.id));
 	}
 
+	if (certs.length === 0) {
+		return { goalId: primary.id, created, skippedCerts: [] };
+	}
+
+	// Batch read 1: every credential row for the requested slugs in one query.
+	// Replaces the per-cert `getCredentialBySlug` round-trip.
+	const certSlugs = [...new Set(certs)];
+	const credentialRows = await db
+		.select({ id: credential.id, slug: credential.slug })
+		.from(credential)
+		.where(inArray(credential.slug, certSlugs));
+	const credBySlug = new Map(credentialRows.map((r) => [r.slug, r.id] as const));
+
+	const foundCredIds = credentialRows.map((r) => r.id);
+
+	// Batch read 2: every primary credential_syllabus row in one query.
+	// Replaces the per-cert `getCredentialPrimarySyllabus` round-trip.
+	// Filtered to active syllabi to mirror `getCredentialPrimarySyllabus`'s
+	// "we don't surface archived primaries" semantic.
+	const primarySyllabusRows =
+		foundCredIds.length === 0
+			? []
+			: await db
+					.select({ credentialId: credentialSyllabus.credentialId, syllabusId: credentialSyllabus.syllabusId })
+					.from(credentialSyllabus)
+					.innerJoin(syllabus, eq(syllabus.id, credentialSyllabus.syllabusId))
+					.where(
+						and(
+							inArray(credentialSyllabus.credentialId, foundCredIds),
+							eq(credentialSyllabus.primacy, SYLLABUS_PRIMACY.PRIMARY),
+							eq(syllabus.status, SYLLABUS_STATUSES.ACTIVE),
+						),
+					);
+	const syllabusByCredId = new Map(primarySyllabusRows.map((r) => [r.credentialId, r.syllabusId] as const));
+
+	// Resolve each requested slug; record skips when either lookup missed.
+	// Resolutions for the upsert phase preserve input order so deterministic
+	// re-runs hit goal_syllabus rows in the same order.
 	const skippedCerts: string[] = [];
+	const resolved: Array<{ slug: Cert; syllabusId: string }> = [];
+	const seen = new Set<Cert>();
 	for (const certSlug of certs) {
-		let cred: Awaited<ReturnType<typeof getCredentialBySlug>>;
-		try {
-			cred = await getCredentialBySlug(certSlug, db);
-		} catch (err) {
-			if (err instanceof CredentialNotFoundError) {
-				skippedCerts.push(certSlug);
-				continue;
-			}
-			throw err;
-		}
-		const syllabus = await getCredentialPrimarySyllabus(cred.id, db);
-		if (syllabus === null) {
+		if (seen.has(certSlug)) continue;
+		seen.add(certSlug);
+		const credId = credBySlug.get(certSlug);
+		if (credId === undefined) {
 			skippedCerts.push(certSlug);
 			continue;
 		}
-		await addGoalSyllabus(primary.id, userId, { syllabusId: syllabus.id, weight: 1.0 }, db);
+		const syllabusId = syllabusByCredId.get(credId);
+		if (syllabusId === undefined) {
+			skippedCerts.push(certSlug);
+			continue;
+		}
+		resolved.push({ slug: certSlug, syllabusId });
 	}
+
+	// Each upsert targets a distinct (goal_id, syllabus_id) row; running in
+	// parallel via Promise.all collapses N round-trips into one batched wait.
+	await Promise.all(
+		resolved.map((r) => addGoalSyllabus(primary.id, userId, { syllabusId: r.syllabusId, weight: 1.0 }, db)),
+	);
 
 	return { goalId: primary.id, created, skippedCerts };
 }
