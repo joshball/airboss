@@ -170,6 +170,7 @@ Feature lifecycle is driven by shared skills:
 - **Do work in worktrees and in parallel if possible** - always work on worktrees. Be carefule cleaning up (ensure all is committed). and try and orchestrate work in parallel if possible.
 - **No `any`.** No magic strings. No implicit types.
 - **All literal values in `libs/constants/`.** Enums, routes, ports, config.
+- **Browser-bundled libs must not statically import `node:*`.** Files in `libs/{constants,utils,types,themes,ui,help,aviation,audit,sources,activities,bc/study,bc/sim}/**` are bundled into the browser via SvelteKit. A top-level `import 'node:fs'` in any of these will crash the dev server with a Vite externalization error at first hit. If you need a Node built-in inside one of these libs, lazy-load it via `process.getBuiltinModule('node:fs')` inside a function body, gated behind a `typeof process !== 'undefined'` check. See [libs/constants/src/source-cache.ts](libs/constants/src/source-cache.ts) for the canonical pattern. Biome's `noNodejsModules` rule enforces this on the listed libs.
 - **All routes go through `ROUTES` in `libs/constants/src/routes.ts`.** Never write a path string inline. Static routes are string constants. Routes with parameters are typed functions.
 - **Cross-lib imports use `@ab/*` aliases, never relative paths.** See Import rules below.
 - **Drizzle ORM only.** No raw SQL.
