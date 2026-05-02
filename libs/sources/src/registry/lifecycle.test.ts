@@ -1,7 +1,9 @@
 import { afterEach, beforeEach, describe, expect, test } from 'vitest';
-import type { SourceEntry, SourceId } from '../types.ts';
+import type { Edition, SourceEntry, SourceId } from '../types.ts';
 import { resetRegistry, withTestEntries } from './__test_helpers__.ts';
+import { __editions_internal__, getEditionsMap } from './editions.ts';
 import {
+	commitIngestBatch,
 	getBatch,
 	getEntryLifecycle,
 	getValidTransitions,
@@ -10,6 +12,7 @@ import {
 	recordDePromotion,
 	recordPromotion,
 } from './lifecycle.ts';
+import { getSources } from './sources.ts';
 
 beforeEach(() => {
 	resetRegistry();
@@ -241,6 +244,107 @@ describe('recordPromotion / recordDePromotion', () => {
 			previousBatchId: 'does-not-exist',
 		});
 		expect(result.ok).toBe(false);
+	});
+});
+
+describe('commitIngestBatch', () => {
+	function entry(id: string, lifecycle: SourceEntry['lifecycle'] = 'pending'): SourceEntry {
+		return { ...makeEntry(id), lifecycle };
+	}
+
+	test('CB-01: happy path: sources + editions + lifecycle commit together', () => {
+		const id = 'airboss-ref:regs/cfr-14/91/103' as SourceId;
+		const ed: Edition = { id: '2026', published_date: new Date('2026-01-01'), source_url: 'about:blank' };
+		const result = commitIngestBatch({
+			corpus: 'regs',
+			reviewerId: 'jball',
+			inputSource: 'ecfr-2026',
+			targetLifecycle: 'accepted',
+			sources: { [id]: entry(id) },
+			editions: new Map([[id, [ed]]]),
+			scope: [id],
+		});
+		expect(result.ok).toBe(true);
+		if (result.ok) expect(result.batchId).not.toBeNull();
+		expect(getSources()[id]).toBeDefined();
+		expect(getEditionsMap().get(id)?.[0]?.id).toBe('2026');
+		expect(getEntryLifecycle(id)).toBe('accepted');
+	});
+
+	test('CB-02: validation failure rolls back -- no SOURCES/EDITIONS mutations leak', () => {
+		// Pre-populate one entry as already-accepted (terminal vs target=accepted? actually accepted->accepted is invalid).
+		const okId = 'airboss-ref:regs/cfr-14/91/103' as SourceId;
+		const blockedId = 'airboss-ref:regs/cfr-14/91/107' as SourceId;
+		// First, commit blockedId as 'retired' (terminal).
+		const seedRes = commitIngestBatch({
+			corpus: 'regs',
+			reviewerId: 'jball',
+			inputSource: 'seed',
+			targetLifecycle: 'retired',
+			sources: { [blockedId]: entry(blockedId) },
+			editions: new Map(),
+			scope: [blockedId],
+		});
+		expect(seedRes.ok).toBe(true);
+
+		// Now attempt a batch that promotes okId AND blockedId -- blockedId can't transition.
+		const ed: Edition = { id: '2026', published_date: new Date('2026-01-01'), source_url: 'about:blank' };
+		const priorSourcesCount = Object.keys(getSources()).length;
+		const result = commitIngestBatch({
+			corpus: 'regs',
+			reviewerId: 'jball',
+			inputSource: 'ecfr-2026',
+			targetLifecycle: 'accepted',
+			sources: { [okId]: entry(okId) },
+			editions: new Map([[okId, [ed]]]),
+			scope: [okId, blockedId],
+		});
+		expect(result.ok).toBe(false);
+		// okId must NOT have leaked into SOURCES; blockedId stays retired.
+		expect(getSources()[okId]).toBeUndefined();
+		expect(getEditionsMap().has(okId)).toBe(false);
+		expect(getEntryLifecycle(blockedId)).toBe('retired');
+		expect(Object.keys(getSources())).toHaveLength(priorSourcesCount);
+	});
+
+	test('CB-03: empty scope upserts SOURCES/EDITIONS without recording a batch', () => {
+		const id = 'airboss-ref:regs/cfr-14/91/103' as SourceId;
+		const ed: Edition = { id: '2026', published_date: new Date('2026-01-01'), source_url: 'about:blank' };
+		const result = commitIngestBatch({
+			corpus: 'regs',
+			reviewerId: 'jball',
+			inputSource: 'idempotent-rerun',
+			targetLifecycle: 'accepted',
+			sources: { [id]: entry(id) },
+			editions: new Map([[id, [ed]]]),
+			scope: [],
+		});
+		expect(result.ok).toBe(true);
+		if (result.ok) expect(result.batchId).toBeNull();
+		expect(getSources()[id]).toBeDefined();
+		expect(getEditionsMap().get(id)?.[0]?.id).toBe('2026');
+		// Lifecycle was NOT promoted -- the entry's static lifecycle remains pending.
+		expect(getEntryLifecycle(id)).toBe('pending');
+	});
+
+	test('CB-04: editions are merged with existing rows (no overwrite)', () => {
+		const id = 'airboss-ref:regs/cfr-14/91/103' as SourceId;
+		const seedEd: Edition = { id: '2025', published_date: new Date('2025-01-01'), source_url: 'about:blank' };
+		__editions_internal__.setActiveTable(new Map([[id, [seedEd]]]));
+
+		const newEd: Edition = { id: '2026', published_date: new Date('2026-01-01'), source_url: 'about:blank' };
+		const result = commitIngestBatch({
+			corpus: 'regs',
+			reviewerId: 'jball',
+			inputSource: 'ecfr-2026',
+			targetLifecycle: 'accepted',
+			sources: { [id]: entry(id) },
+			editions: new Map([[id, [newEd]]]),
+			scope: [id],
+		});
+		expect(result.ok).toBe(true);
+		const editions = getEditionsMap().get(id) ?? [];
+		expect(editions.map((e) => e.id).sort()).toEqual(['2025', '2026']);
 	});
 });
 

@@ -110,10 +110,13 @@ export {
 } from './corpus-resolver.ts';
 export { EDITIONS } from './editions.ts';
 export {
+	commitIngestBatch,
 	type DePromotionInput,
 	getBatch,
 	getEntryLifecycle,
 	getValidTransitions,
+	type IngestBatchInput,
+	type IngestBatchResult,
 	isValidTransition,
 	listBatches,
 	type PromotionBatch,

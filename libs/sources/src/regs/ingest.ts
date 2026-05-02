@@ -19,9 +19,7 @@
 
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
-import { __editions_internal__ } from '../registry/editions.ts';
-import { getEntryLifecycle, recordPromotion } from '../registry/lifecycle.ts';
-import { __sources_internal__ } from '../registry/sources.ts';
+import { commitIngestBatch, getEntryLifecycle } from '../registry/lifecycle.ts';
 import type { Edition, SourceEntry, SourceId } from '../types.ts';
 import { type CacheLoadResult, loadEcfrXml } from './cache.ts';
 import { writeDerivativeTree } from './derivative-writer.ts';
@@ -152,20 +150,19 @@ export async function runIngest(args: IngestOneTitleArgs): Promise<IngestReport>
 
 	let entriesAlreadyAccepted = 0;
 	let entriesIngested = 0;
-	const sourcesPatch: Record<string, SourceEntry> = { ...__sources_internal__.getActiveTable() };
-	const editionsPatch = new Map(__editions_internal__.getActiveTable());
+	const sourcesAcc: Record<string, SourceEntry> = {};
+	const editionsAcc: Map<SourceId, readonly Edition[]> = new Map();
 
 	for (const entry of allEntries) {
-		const existing = sourcesPatch[entry.id];
 		const overlay = getEntryLifecycle(entry.id);
-		if (existing !== undefined && overlay === 'accepted') {
+		if (overlay === 'accepted') {
 			entriesAlreadyAccepted += 1;
 		} else {
-			sourcesPatch[entry.id] = entry;
+			sourcesAcc[entry.id] = entry;
 			entriesIngested += 1;
 		}
 
-		const existingEditions = editionsPatch.get(entry.id) ?? [];
+		const existingEditions = editionsAcc.get(entry.id) ?? [];
 		const hasEdition = existingEditions.some((e) => e.id === editionSlug);
 		if (!hasEdition) {
 			const newEdition: Edition = {
@@ -173,12 +170,9 @@ export async function runIngest(args: IngestOneTitleArgs): Promise<IngestReport>
 				published_date: publishedDate,
 				source_url: primaryCache.sourceUrl,
 			};
-			editionsPatch.set(entry.id, [...existingEditions, newEdition]);
+			editionsAcc.set(entry.id, [...existingEditions, newEdition]);
 		}
 	}
-
-	__sources_internal__.setActiveTable(sourcesPatch as Record<SourceId, SourceEntry>);
-	__editions_internal__.setActiveTable(editionsPatch);
 
 	// 5. Write derivatives
 	const writeReport = writeDerivativeTree({
@@ -197,24 +191,22 @@ export async function runIngest(args: IngestOneTitleArgs): Promise<IngestReport>
 		},
 	});
 
-	// 6. Atomic batch promotion (skip already-accepted entries)
+	// 6. Atomic batch commit (skip already-accepted entries from the scope).
 	const scopeIds: SourceId[] = allEntries.filter((e) => getEntryLifecycle(e.id) !== 'accepted').map((e) => e.id);
 
-	let promotionBatchId: string | null = null;
-	if (scopeIds.length > 0) {
-		const result = recordPromotion({
-			corpus: 'regs',
-			reviewerId: PHASE_3_REVIEWER_ID,
-			scope: scopeIds,
-			inputSource: primaryCache.sourceUrl,
-			targetLifecycle: 'accepted',
-		});
-		if (!result.ok) {
-			// Surface the error; do NOT silently roll forward to a half-promoted state.
-			throw new Error(`ingestion batch promotion failed: ${result.error}`);
-		}
-		promotionBatchId = result.batch.id;
+	const commit = commitIngestBatch({
+		corpus: 'regs',
+		reviewerId: PHASE_3_REVIEWER_ID,
+		inputSource: primaryCache.sourceUrl,
+		targetLifecycle: 'accepted',
+		sources: sourcesAcc as Record<SourceId, SourceEntry>,
+		editions: editionsAcc,
+		scope: scopeIds,
+	});
+	if (!commit.ok) {
+		throw new Error(`ingestion batch promotion failed: ${commit.error}`);
 	}
+	const promotionBatchId = commit.batchId;
 
 	return {
 		title: args.title,

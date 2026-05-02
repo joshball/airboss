@@ -30,9 +30,7 @@
 
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
-import { __editions_internal__ } from './registry/editions.ts';
-import { getEntryLifecycle, recordPromotion } from './registry/lifecycle.ts';
-import { __sources_internal__ } from './registry/sources.ts';
+import { commitIngestBatch, getEntryLifecycle } from './registry/lifecycle.ts';
 import type { Edition, EditionId, SourceEntry, SourceId } from './types.ts';
 
 export const PHASE_9_BOOTSTRAP_REVIEWER_ID = 'phase-9-bootstrap';
@@ -157,8 +155,8 @@ function hydrateOneEdition(manifest: ManifestRecord, sections: SectionsRecord): 
 	const publishedDate = new Date(`${manifest.editionDate}T00:00:00.000Z`);
 	const sourceUrl = manifest.sourceUrl;
 
-	const sourcesPatch: Record<string, SourceEntry> = { ...__sources_internal__.getActiveTable() };
-	const editionsPatch = new Map(__editions_internal__.getActiveTable());
+	const sourcesAcc: Record<string, SourceEntry> = {};
+	const editionsAcc: Map<SourceId, readonly Edition[]> = new Map();
 
 	const newEntries: SourceEntry[] = [];
 	let entriesAlreadyAccepted = 0;
@@ -172,46 +170,41 @@ function hydrateOneEdition(manifest: ManifestRecord, sections: SectionsRecord): 
 			const partId = `airboss-ref:regs/cfr-${manifest.title}/${part}` as SourceId;
 			const partEntry = makePartEntry(manifest.title, part, publishedDate);
 			const partOverlay = getEntryLifecycle(partId);
-			if (sourcesPatch[partId] !== undefined && partOverlay === 'accepted') {
+			if (partOverlay === 'accepted') {
 				entriesAlreadyAccepted += 1;
 			} else {
-				sourcesPatch[partId] = partEntry;
+				sourcesAcc[partId] = partEntry;
 				newEntries.push(partEntry);
 			}
-			addEditionTo(editionsPatch, partId, editionSlug, publishedDate, sourceUrl);
+			addEditionTo(editionsAcc, partId, editionSlug, publishedDate, sourceUrl);
 		}
 
 		for (const row of rows) {
 			const id = row.id as SourceId;
 			const entry = makeSectionEntryFromRow(row, publishedDate);
 			const overlay = getEntryLifecycle(id);
-			if (sourcesPatch[id] !== undefined && overlay === 'accepted') {
+			if (overlay === 'accepted') {
 				entriesAlreadyAccepted += 1;
 			} else {
-				sourcesPatch[id] = entry;
+				sourcesAcc[id] = entry;
 				newEntries.push(entry);
 			}
-			addEditionTo(editionsPatch, id, editionSlug, publishedDate, sourceUrl);
+			addEditionTo(editionsAcc, id, editionSlug, publishedDate, sourceUrl);
 		}
 	}
 
-	__sources_internal__.setActiveTable(sourcesPatch as Record<SourceId, SourceEntry>);
-	__editions_internal__.setActiveTable(editionsPatch);
-
-	if (newEntries.length > 0) {
-		const scopeIds = newEntries.filter((e) => getEntryLifecycle(e.id) !== 'accepted').map((e) => e.id);
-		if (scopeIds.length > 0) {
-			const result = recordPromotion({
-				corpus: 'regs',
-				reviewerId: PHASE_9_BOOTSTRAP_REVIEWER_ID,
-				scope: scopeIds,
-				inputSource: sourceUrl,
-				targetLifecycle: 'accepted',
-			});
-			if (!result.ok) {
-				throw new Error(`bootstrap batch promotion failed: ${result.error}`);
-			}
-		}
+	const scopeIds = newEntries.filter((e) => getEntryLifecycle(e.id) !== 'accepted').map((e) => e.id);
+	const commit = commitIngestBatch({
+		corpus: 'regs',
+		reviewerId: PHASE_9_BOOTSTRAP_REVIEWER_ID,
+		inputSource: sourceUrl,
+		targetLifecycle: 'accepted',
+		sources: sourcesAcc as Record<SourceId, SourceEntry>,
+		editions: editionsAcc,
+		scope: scopeIds,
+	});
+	if (!commit.ok) {
+		throw new Error(`bootstrap batch promotion failed: ${commit.error}`);
 	}
 
 	return { entriesAdded: newEntries.length, entriesAlreadyAccepted };

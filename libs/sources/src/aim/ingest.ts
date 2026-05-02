@@ -20,9 +20,7 @@
 
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
-import { __editions_internal__ } from '../registry/editions.ts';
-import { getEntryLifecycle, recordPromotion } from '../registry/lifecycle.ts';
-import { __sources_internal__ } from '../registry/sources.ts';
+import { commitIngestBatch, getEntryLifecycle } from '../registry/lifecycle.ts';
 import type { Edition, SourceEntry, SourceId } from '../types.ts';
 import { type ManifestEntry, type ManifestFile, readManifest } from './derivative-reader.ts';
 
@@ -159,11 +157,11 @@ export async function runAimIngest(args: IngestArgs): Promise<IngestReport> {
 	// Build entries
 	const entries: SourceEntry[] = manifest.entries.map((entry) => buildEntry({ entry, publishedDate }));
 
-	// Patch into active tables
+	// Build accumulators (commitIngestBatch performs the atomic merge).
 	let entriesAlreadyAccepted = 0;
 	let entriesIngested = 0;
-	const sourcesPatch: Record<string, SourceEntry> = { ...__sources_internal__.getActiveTable() };
-	const editionsPatch = new Map(__editions_internal__.getActiveTable());
+	const sourcesAcc: Record<string, SourceEntry> = {};
+	const editionsAcc: Map<SourceId, readonly Edition[]> = new Map();
 
 	const editionRecord: Edition = {
 		id: args.edition,
@@ -172,42 +170,37 @@ export async function runAimIngest(args: IngestArgs): Promise<IngestReport> {
 	};
 
 	for (const entry of entries) {
-		const existing = sourcesPatch[entry.id];
 		const overlay = getEntryLifecycle(entry.id);
-		if (existing !== undefined && overlay === 'accepted') {
+		if (overlay === 'accepted') {
 			entriesAlreadyAccepted += 1;
 		} else {
-			sourcesPatch[entry.id] = entry;
+			sourcesAcc[entry.id] = entry;
 			entriesIngested += 1;
 		}
 
-		const existingEditions = editionsPatch.get(entry.id) ?? [];
+		const existingEditions = editionsAcc.get(entry.id) ?? [];
 		const hasEdition = existingEditions.some((e) => e.id === args.edition);
 		if (!hasEdition) {
-			editionsPatch.set(entry.id, [...existingEditions, editionRecord]);
+			editionsAcc.set(entry.id, [...existingEditions, editionRecord]);
 		}
 	}
 
-	__sources_internal__.setActiveTable(sourcesPatch as Record<SourceId, SourceEntry>);
-	__editions_internal__.setActiveTable(editionsPatch);
-
-	// Atomic batch promotion (skip already-accepted entries)
+	// Atomic batch commit (skip already-accepted entries from the scope).
 	const scopeIds: SourceId[] = entries.filter((e) => getEntryLifecycle(e.id) !== 'accepted').map((e) => e.id);
 
-	let promotionBatchId: string | null = null;
-	if (scopeIds.length > 0) {
-		const result = recordPromotion({
-			corpus: 'aim',
-			reviewerId: PHASE_7_REVIEWER_ID,
-			scope: scopeIds,
-			inputSource: manifestPath,
-			targetLifecycle: 'accepted',
-		});
-		if (!result.ok) {
-			throw new Error(`aim ingest batch promotion failed: ${result.error}`);
-		}
-		promotionBatchId = result.batch.id;
+	const commit = commitIngestBatch({
+		corpus: 'aim',
+		reviewerId: PHASE_7_REVIEWER_ID,
+		inputSource: manifestPath,
+		targetLifecycle: 'accepted',
+		sources: sourcesAcc as Record<SourceId, SourceEntry>,
+		editions: editionsAcc,
+		scope: scopeIds,
+	});
+	if (!commit.ok) {
+		throw new Error(`aim ingest batch promotion failed: ${commit.error}`);
 	}
+	const promotionBatchId = commit.batchId;
 
 	return {
 		edition: args.edition,

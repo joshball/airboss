@@ -31,9 +31,9 @@ import { join } from 'node:path';
 import { resolveCacheRoot } from '@ab/constants';
 import { writeIfChanged } from '../io/write-if-changed.ts';
 import { extractPdf, findEffectiveDate } from '../pdf/index.ts';
-import { __editions_internal__ } from '../registry/editions.ts';
-import { getEntryLifecycle, recordPromotion } from '../registry/lifecycle.ts';
-import { __sources_internal__ } from '../registry/sources.ts';
+import { commitIngestBatch, getEntryLifecycle } from '../registry/lifecycle.ts';
+import { classifySkipReasons, INGEST_EXIT_CODES } from '../shared/exit-codes.ts';
+import { ShaMismatchError, verifyCachedSha } from '../shared/sha-verify.ts';
 import type { Edition, SourceEntry, SourceId } from '../types.ts';
 import type { AcCorpusIndex, AcCorpusIndexEntry, AcManifestFile } from './derivative-reader.ts';
 
@@ -48,6 +48,13 @@ export interface IngestArgs {
 	readonly cacheRoot: string;
 	/** Path to the in-repo derivative root (default `<cwd>/ac`). */
 	readonly derivativeRoot: string;
+	/**
+	 * Disable per-file SHA-256 verification against the manifest's recorded
+	 * `source_sha256`. Default: false (verification ON, per the 2026-05-01
+	 * backend review). Production runs must leave this false; only set true
+	 * for tests that knowingly pass mutated cache fixtures.
+	 */
+	readonly skipShaVerify?: boolean;
 }
 
 export interface IngestReport {
@@ -288,14 +295,17 @@ export async function runAcIngest(args: IngestArgs): Promise<IngestReport> {
 
 	ensureDir(args.derivativeRoot);
 
-	const sourcesPatch: Record<string, SourceEntry> = { ...__sources_internal__.getActiveTable() };
-	const editionsPatch = new Map(__editions_internal__.getActiveTable());
+	const sourcesAcc: Record<string, SourceEntry> = {};
+	const editionsAcc: Map<SourceId, readonly Edition[]> = new Map();
 
 	const indexEntries: AcCorpusIndexEntry[] = [];
 	const entriesToPromote: SourceId[] = [];
 
 	for (const ac of cached) {
 		try {
+			// SHA verification BEFORE extraction. A poisoned cache must error
+			// loudly without writing derivatives or advancing state.
+			verifyCachedSha(ac.pdfPath, ac.downloaderManifest.source_sha256, args.skipShaVerify === true);
 			const doc = extractPdf(ac.pdfPath);
 			const coverPages = doc.pages.slice(0, 3);
 
@@ -352,12 +362,11 @@ export async function runAcIngest(args: IngestArgs): Promise<IngestReport> {
 			writeIfChanged(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
 
 			const entry = buildSourceEntry({ ac, title, publicationDate });
-			const existing = sourcesPatch[entry.id];
 			const overlay = getEntryLifecycle(entry.id);
-			if (existing !== undefined && overlay === 'accepted') {
+			if (overlay === 'accepted') {
 				acsAlreadyAccepted += 1;
 			} else {
-				sourcesPatch[entry.id] = entry;
+				sourcesAcc[entry.id] = entry;
 				acsIngested += 1;
 				entriesToPromote.push(entry.id);
 			}
@@ -367,10 +376,10 @@ export async function runAcIngest(args: IngestArgs): Promise<IngestReport> {
 				published_date: publicationDate,
 				source_url: ac.downloaderManifest.source_url,
 			};
-			const existingEditions = editionsPatch.get(entry.id) ?? [];
+			const existingEditions = editionsAcc.get(entry.id) ?? [];
 			const hasEdition = existingEditions.some((e) => e.id === editionRecord.id);
 			if (!hasEdition) {
-				editionsPatch.set(entry.id, [...existingEditions, editionRecord]);
+				editionsAcc.set(entry.id, [...existingEditions, editionRecord]);
 			}
 
 			indexEntries.push({
@@ -382,28 +391,28 @@ export async function runAcIngest(args: IngestArgs): Promise<IngestReport> {
 				manifest_path: `ac/${ac.docSlug}/${ac.revision}/manifest.json`,
 			});
 		} catch (e) {
-			skipReasons.push(`${ac.docNumber}/${ac.revision}: extraction failed -- ${(e as Error).message}`);
+			if (e instanceof ShaMismatchError) {
+				skipReasons.push(`${ac.docNumber}/${ac.revision}: ${e.message}`);
+			} else {
+				skipReasons.push(`${ac.docNumber}/${ac.revision}: extraction failed -- ${(e as Error).message}`);
+			}
 			acsSkipped += 1;
 		}
 	}
 
-	__sources_internal__.setActiveTable(sourcesPatch as Record<SourceId, SourceEntry>);
-	__editions_internal__.setActiveTable(editionsPatch);
-
-	let promotionBatchId: string | null = null;
-	if (entriesToPromote.length > 0) {
-		const result = recordPromotion({
-			corpus: CORPUS,
-			reviewerId: PHASE_8_REVIEWER_ID,
-			scope: entriesToPromote,
-			inputSource: args.cacheRoot,
-			targetLifecycle: 'accepted',
-		});
-		if (!result.ok) {
-			throw new Error(`ac ingest batch promotion failed: ${result.error}`);
-		}
-		promotionBatchId = result.batch.id;
+	const commit = commitIngestBatch({
+		corpus: CORPUS,
+		reviewerId: PHASE_8_REVIEWER_ID,
+		inputSource: args.cacheRoot,
+		targetLifecycle: 'accepted',
+		sources: sourcesAcc as Record<SourceId, SourceEntry>,
+		editions: editionsAcc,
+		scope: entriesToPromote,
+	});
+	if (!commit.ok) {
+		throw new Error(`ac ingest batch promotion failed: ${commit.error}`);
 	}
+	const promotionBatchId = commit.batchId;
 
 	// Use the max per-source `fetched_at` so re-running with no upstream
 	// change leaves the index byte-equal (ADR 022 idempotent regen).
@@ -447,43 +456,55 @@ const USAGE = `usage:
 export interface CliArgs {
 	readonly cacheRoot: string;
 	readonly derivativeRoot: string;
+	readonly skipShaVerify: boolean;
 	readonly help: boolean;
 }
 
 export function parseCliArgs(argv: readonly string[]): CliArgs | { error: string } {
 	let cacheRoot = resolveCacheRoot({ ensureExists: false });
 	let derivativeRoot = join(process.cwd(), 'ac');
+	let skipShaVerify = false;
 	let help = false;
 
 	for (const arg of argv) {
 		if (arg === '--help' || arg === '-h') help = true;
+		else if (arg === '--skip-sha-verify') skipShaVerify = true;
 		else if (arg.startsWith('--cache=')) cacheRoot = arg.slice('--cache='.length);
 		else if (arg.startsWith('--out=')) derivativeRoot = arg.slice('--out='.length);
 		else return { error: `unknown argument: ${arg}` };
 	}
 
-	return { cacheRoot, derivativeRoot, help };
+	return { cacheRoot, derivativeRoot, skipShaVerify, help };
 }
 
 /**
  * CLI entry point. Returns exit code. Never throws on user-facing errors;
  * unexpected exceptions propagate.
+ *
+ * Exit codes (per `INGEST_EXIT_CODES` in `shared/exit-codes.ts`):
+ *   - 0 OK: every entry either ingested or soft-skipped (out of scope, etc.).
+ *   - 1 HARD_SKIPS: at least one entry skipped due to an unrecoverable
+ *     failure (extraction error, SHA mismatch, schema mismatch).
+ *   - 2 BAD_ARGS: argument parse error.
  */
 export async function runIngestCli(argv: readonly string[]): Promise<number> {
 	const parsed = parseCliArgs(argv);
 	if ('error' in parsed) {
 		process.stderr.write(`${parsed.error}\n${USAGE}`);
-		return 2;
+		return INGEST_EXIT_CODES.BAD_ARGS;
 	}
 	if (parsed.help) {
 		process.stdout.write(USAGE);
-		return 0;
+		return INGEST_EXIT_CODES.OK;
 	}
 
 	const report = await runAcIngest({
 		cacheRoot: parsed.cacheRoot,
 		derivativeRoot: parsed.derivativeRoot,
+		skipShaVerify: parsed.skipShaVerify,
 	});
+
+	const { soft, hard } = classifySkipReasons(report.skipReasons);
 
 	process.stdout.write(
 		`ac ingest:\n` +
@@ -491,8 +512,11 @@ export async function runIngestCli(argv: readonly string[]): Promise<number> {
 			`  promotionBatchId=${report.promotionBatchId ?? '(none)'}\n` +
 			`  index=${report.indexPath}\n`,
 	);
-	for (const reason of report.skipReasons) {
+	for (const reason of soft) {
 		process.stdout.write(`  skip: ${reason}\n`);
 	}
-	return 0;
+	for (const reason of hard) {
+		process.stderr.write(`  ERROR-skip: ${reason}\n`);
+	}
+	return hard.length > 0 ? INGEST_EXIT_CODES.HARD_SKIPS : INGEST_EXIT_CODES.OK;
 }

@@ -47,14 +47,23 @@ export interface CorpusResolver {
 }
 
 /**
- * Enumerated corpora per ADR 019 §1.2. The validator's row-1 check uses
- * this list to distinguish "unknown corpus prefix" (row 1 ERROR) from
- * "known corpus, registry has no entry yet" (row 2 ERROR).
+ * Bootstrap list of known corpora, used to seed default no-op resolvers at
+ * module load BEFORE the per-corpus side-effect imports run. After init,
+ * each corpus's own `index.ts` replaces its bootstrap default with a real
+ * resolver via `registerCorpusResolver`.
  *
- * Adding a new corpus to ADR 019 §1.2 means adding it here AND registering
- * a default resolver eagerly at module init.
+ * Per ADR 019 §2.1: "`corpus` is a string, not a closed enum. New corpus =
+ * new resolver registration; no constants change." The list below is a
+ * pre-registration convenience so the validator's row-1 enumeration check
+ * can recognise a corpus prefix even before its module is imported. Any
+ * corpus that calls `registerCorpusResolver` (the single source of truth)
+ * gets folded into the registry whether or not it appears here.
+ *
+ * `ENUMERATED_CORPORA` is computed live from the registry, so adding a
+ * corpus to this list OR registering a real resolver both make the corpus
+ * visible to iteration without further edits.
  */
-export const ENUMERATED_CORPORA: readonly string[] = [
+const BOOTSTRAP_CORPORA: readonly string[] = [
 	'regs',
 	'aim',
 	'ac',
@@ -67,12 +76,32 @@ export const ENUMERATED_CORPORA: readonly string[] = [
 	'plates',
 	'ntsb',
 	'acs',
+	'pts',
 	'forms',
 	'tcds',
 	'asrs',
 	'info',
 	'safo',
 ];
+
+/**
+ * Live iterable view of every corpus currently registered with a resolver.
+ * Reads off the resolver registry (the single source of truth) at the
+ * moment of iteration, so consumers always see whatever is registered now
+ * -- including corpora whose side-effect imports landed after module init,
+ * and tests that registered a fake corpus mid-test.
+ *
+ * Per ADR 019 §2.1: "`corpus` is a string, not a closed enum. New corpus =
+ * new resolver registration; no constants change."
+ */
+export const ENUMERATED_CORPORA: Iterable<string> & { readonly length: number } = {
+	get length(): number {
+		return RESOLVERS.size;
+	},
+	[Symbol.iterator](): IterableIterator<string> {
+		return RESOLVERS.keys();
+	},
+};
 
 /**
  * Build a default no-op resolver for a corpus. Returns null/empty for every
@@ -126,9 +155,9 @@ export function makeDefaultResolver(corpus: string): CorpusResolver {
 
 const RESOLVERS: Map<string, CorpusResolver> = new Map();
 
-// Eagerly register a default no-op resolver for every enumerated corpus.
+// Eagerly register a default no-op resolver for every bootstrap corpus.
 // Phase 3+ replace their corpus's default by calling `registerCorpusResolver`.
-for (const corpus of ENUMERATED_CORPORA) {
+for (const corpus of BOOTSTRAP_CORPORA) {
 	RESOLVERS.set(corpus, makeDefaultResolver(corpus));
 }
 
@@ -149,8 +178,9 @@ const PRODUCTION_SNAPSHOT: Map<string, CorpusResolver> = new Map();
 
 // Eagerly seed the snapshot with the no-op defaults so corpora with no real
 // resolver fall back to the no-op behavior on reset.
-for (const corpus of ENUMERATED_CORPORA) {
-	PRODUCTION_SNAPSHOT.set(corpus, RESOLVERS.get(corpus) as CorpusResolver);
+for (const corpus of BOOTSTRAP_CORPORA) {
+	const resolver = RESOLVERS.get(corpus);
+	if (resolver !== undefined) PRODUCTION_SNAPSHOT.set(corpus, resolver);
 }
 
 /**
@@ -218,10 +248,18 @@ export const __corpus_resolver_internal__ = {
 	 * touching the production snapshot. Use this in tests that exercise
 	 * the no-op default behavior; pair with `resetToDefaults` in afterEach
 	 * to restore the production registry for the next file.
+	 *
+	 * Wipes back to the union of (current registrations + bootstrap list)
+	 * so corpora whose side-effect resolver registered after init are
+	 * preserved as no-op defaults rather than disappearing entirely.
 	 */
 	wipeToNoOpDefaults(): void {
+		const knownCorpora = new Set<string>(BOOTSTRAP_CORPORA);
+		for (const corpus of RESOLVERS.keys()) {
+			knownCorpora.add(corpus);
+		}
 		RESOLVERS.clear();
-		for (const corpus of ENUMERATED_CORPORA) {
+		for (const corpus of knownCorpora) {
 			RESOLVERS.set(corpus, makeDefaultResolver(corpus));
 		}
 	},
