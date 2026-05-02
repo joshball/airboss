@@ -95,6 +95,61 @@ function makeFailureRunner(exitCode: number, stderr: readonly string[]): SpawnRu
 	};
 }
 
+describe('source-jobs cancellation handoff', () => {
+	it('runner observes ctx.isCancelled() and reports a non-zero exit code', async () => {
+		// Track every poll the runner makes -- the handler hands `isCancelled`
+		// straight through, so a runner that polls it once per tick exercises
+		// the cancellation plumbing end-to-end.
+		const polls: boolean[] = [];
+		// `isCancelled` flips to `true` after the first poll; the runner then
+		// returns a non-zero exit code as if SIGTERM landed on the child.
+		const runner: SpawnRunner = async ({ isCancelled, onStdout }) => {
+			await onStdout('progress: 25%');
+			let safetyTicks = 0;
+			while (true) {
+				const cancelled = await isCancelled();
+				polls.push(cancelled);
+				if (cancelled) break;
+				safetyTicks += 1;
+				if (safetyTicks > 5) break; // prevent runaway loop in test
+			}
+			return { exitCode: 130, stdout: ['progress: 25%'], stderr: ['terminated'] };
+		};
+		const handler = makeFetchHandler({ runner, loadSource: async () => null });
+		let calls = 0;
+		const { ctx } = fakeContext({
+			kind: 'fetch-source',
+			payload: { sourceId: 'cfr-14' },
+			isCancelled: async () => {
+				calls += 1;
+				return calls >= 2; // first poll = false, second poll = true
+			},
+		});
+		// The handler throws on a non-zero exit code; we assert the cancellation
+		// triggered that path AND that the runner observed at least one cancelled
+		// poll (the SIGTERM signal in production code).
+		await expect(handler(ctx)).rejects.toThrow(/exit/);
+		expect(polls.some((p) => p === true)).toBe(true);
+		expect(calls).toBeGreaterThanOrEqual(2);
+	});
+
+	it('runner sees isCancelled=true on the very first poll when the job is already cancelled', async () => {
+		const polled: boolean[] = [];
+		const runner: SpawnRunner = async ({ isCancelled }) => {
+			polled.push(await isCancelled());
+			return { exitCode: 130, stdout: [], stderr: [] };
+		};
+		const handler = makeFetchHandler({ runner, loadSource: async () => null });
+		const { ctx } = fakeContext({
+			kind: 'fetch-source',
+			payload: { sourceId: 'cfr-14' },
+			isCancelled: async () => true,
+		});
+		await expect(handler(ctx)).rejects.toThrow(/exit/);
+		expect(polled).toEqual([true]);
+	});
+});
+
 describe('source-jobs.makeFetchHandler', () => {
 	it('runs the scan script with --id <sourceId> and streams stdout', async () => {
 		const capturedCmd: string[][] = [];
