@@ -13,10 +13,10 @@ import { stat } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { requireRole } from '@ab/auth';
 import { getActiveJobForTarget, getSource, listRecentJobsForTarget, PENDING_DOWNLOAD, REPO_ROOT } from '@ab/bc-hangar';
-import { JOB_KINDS, type ReferenceSourceType, ROLES, ROUTES, SOURCE_KIND_BY_TYPE, SOURCE_KINDS } from '@ab/constants';
-import { enqueueJob } from '@ab/hangar-jobs';
+import { JOB_KINDS, type ReferenceSourceType, ROLES, SOURCE_KIND_BY_TYPE, SOURCE_KINDS } from '@ab/constants';
 import { createLogger } from '@ab/utils';
-import { error, fail, isRedirect, redirect } from '@sveltejs/kit';
+import { error, fail } from '@sveltejs/kit';
+import { enqueueAndRedirect } from '$lib/server/enqueue-and-redirect';
 import type { Actions, PageServerLoad } from './$types';
 
 const log = createLogger('hangar:source-detail');
@@ -93,35 +93,28 @@ export const load: PageServerLoad = async (event) => {
 };
 
 function buildEnqueue(kind: (typeof JOB_KINDS)[keyof typeof JOB_KINDS]) {
-	return async (event: Parameters<NonNullable<Actions['fetch']>>[0]): Promise<Response | ReturnType<typeof fail>> => {
+	return async (event: Parameters<NonNullable<Actions['fetch']>>[0]) => {
 		const user = requireRole(event, ROLES.AUTHOR, ROLES.OPERATOR, ROLES.ADMIN);
-		try {
-			// Defense-in-depth: even though the worker serialises by targetId, refuse
-			// to enqueue a second non-terminal job from the form layer so the user
-			// gets a fast, unambiguous error rather than a deferred queue position.
-			const existing = await getActiveJobForTarget(event.params.id);
-			if (existing) {
-				return fail(409, {
-					error: `source '${event.params.id}' already has a ${existing.status} ${existing.kind} job (#${existing.id}); wait for it to finish or cancel it first`,
-				});
-			}
-			const job = await enqueueJob({
+		// Defense-in-depth: even though the worker serialises by targetId, refuse
+		// to enqueue a second non-terminal job from the form layer so the user
+		// gets a fast, unambiguous error rather than a deferred queue position.
+		const existing = await getActiveJobForTarget(event.params.id);
+		if (existing) {
+			return fail(409, {
+				error: `source '${event.params.id}' already has a ${existing.status} ${existing.kind} job (#${existing.id}); wait for it to finish or cancel it first`,
+			});
+		}
+		return enqueueAndRedirect(
+			event,
+			{
 				kind,
 				targetType: 'hangar.source',
 				targetId: event.params.id,
 				actorId: user.id,
 				payload: { sourceId: event.params.id },
-			});
-			redirect(303, ROUTES.HANGAR_JOB_DETAIL(job.id));
-		} catch (err) {
-			if (isRedirect(err)) throw err;
-			log.error(
-				`enqueue ${kind} failed`,
-				{ requestId: event.locals.requestId, userId: user.id },
-				err instanceof Error ? err : undefined,
-			);
-			return fail(500, { error: err instanceof Error ? err.message : 'failed to enqueue job' });
-		}
+			},
+			{ logger: log },
+		);
 	};
 }
 

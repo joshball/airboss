@@ -4,7 +4,10 @@ import Badge from '@ab/ui/components/Badge.svelte';
 import Banner from '@ab/ui/components/Banner.svelte';
 import Button from '@ab/ui/components/Button.svelte';
 import EmptyState from '@ab/ui/components/EmptyState.svelte';
+import FilterBar from '@ab/ui/components/FilterBar.svelte';
+import FilterField from '@ab/ui/components/FilterField.svelte';
 import PageHeader from '@ab/ui/components/PageHeader.svelte';
+import Table from '@ab/ui/components/Table.svelte';
 import { enhance } from '$app/forms';
 import { replaceState } from '$app/navigation';
 import { page } from '$app/state';
@@ -78,7 +81,7 @@ function nextPageHref(): string {
 		subtitle={`${data.total} source${data.total === 1 ? '' : 's'} in the registry.`}
 	>
 		{#snippet actions()}
-			<a class="btn secondary" href={ROUTES.HANGAR_GLOSSARY_SOURCES_NEW}>New source</a>
+			<Button variant="secondary" size="md" href={ROUTES.HANGAR_GLOSSARY_SOURCES_NEW}>New source</Button>
 			<form method="POST" action="?/syncAll" use:enhance={() => {
 				syncing = true;
 				return async ({ update }) => {
@@ -104,24 +107,21 @@ function nextPageHref(): string {
 		<Banner tone="danger">{form.error}</Banner>
 	{/if}
 
-	<section class="filter-bar" aria-label="Filter sources">
-		<div class="field">
-			<label for="src-search">Search</label>
+	<FilterBar ariaLabel="Filter sources" columns="2fr 1fr 1fr auto">
+		<FilterField id="src-search" label="Search">
 			<input id="src-search" type="search" bind:value={searchValue} placeholder="id, title, or url" autocomplete="off" />
-		</div>
+		</FilterField>
 
-		<div class="field">
-			<label for="src-filter-type">Type</label>
+		<FilterField id="src-filter-type" label="Type">
 			<select id="src-filter-type" bind:value={typeValue}>
 				<option value="">All types</option>
 				{#each SOURCE_TYPE_VALUES as value (value)}
 					<option {value}>{SOURCE_TYPE_LABELS[value]}</option>
 				{/each}
 			</select>
-		</div>
+		</FilterField>
 
-		<div class="field">
-			<label for="src-filter-format">Format</label>
+		<FilterField id="src-filter-format" label="Format">
 			<select id="src-filter-format" bind:value={formatValue}>
 				<option value="">All formats</option>
 				<option value="xml">xml</option>
@@ -131,13 +131,13 @@ function nextPageHref(): string {
 				<option value="json">json</option>
 				<option value="csv">csv</option>
 			</select>
-		</div>
+		</FilterField>
 
 		<label class="dirty-toggle">
 			<input type="checkbox" bind:checked={dirtyOnlyValue} />
 			<span>Dirty only</span>
 		</label>
-	</section>
+	</FilterBar>
 
 	{#if data.sources.length === 0}
 		{#if data.filters.search || data.filters.type || data.filters.format || data.filters.dirtyOnly}
@@ -150,42 +150,40 @@ function nextPageHref(): string {
 			</EmptyState>
 		{/if}
 	{:else}
-		<div class="table-wrap">
-			<table>
-				<thead>
+		<Table ariaLabel="Sources">
+			<thead>
+				<tr>
+					<th scope="col" class="col-id">ID</th>
+					<th scope="col">Title</th>
+					<th scope="col">Type</th>
+					<th scope="col">Version</th>
+					<th scope="col">Format</th>
+					<th scope="col">Updated</th>
+					<th scope="col">Status</th>
+				</tr>
+			</thead>
+			<tbody>
+				{#each data.sources as src (src.id)}
 					<tr>
-						<th scope="col" class="col-id">ID</th>
-						<th scope="col">Title</th>
-						<th scope="col">Type</th>
-						<th scope="col">Version</th>
-						<th scope="col">Format</th>
-						<th scope="col">Updated</th>
-						<th scope="col">Status</th>
+						<td class="col-id mono">
+							<a href={ROUTES.HANGAR_GLOSSARY_SOURCES_DETAIL(src.id)}>{src.id}</a>
+						</td>
+						<td>{src.title}</td>
+						<td>{SOURCE_TYPE_LABELS[src.type as ReferenceSourceType] ?? src.type}</td>
+						<td class="mono">{src.version}</td>
+						<td class="mono">{src.format}</td>
+						<td class="mono">{formatDate(src.updatedAt)}</td>
+						<td>
+							{#if src.dirty}
+								<Badge tone="warning" size="sm">Dirty</Badge>
+							{:else}
+								<Badge tone="success" size="sm">Clean</Badge>
+							{/if}
+						</td>
 					</tr>
-				</thead>
-				<tbody>
-					{#each data.sources as src (src.id)}
-						<tr>
-							<td class="col-id mono">
-								<a href={ROUTES.HANGAR_GLOSSARY_SOURCES_DETAIL(src.id)}>{src.id}</a>
-							</td>
-							<td>{src.title}</td>
-							<td>{SOURCE_TYPE_LABELS[src.type as ReferenceSourceType] ?? src.type}</td>
-							<td class="mono">{src.version}</td>
-							<td class="mono">{src.format}</td>
-							<td class="mono">{formatDate(src.updatedAt)}</td>
-							<td>
-								{#if src.dirty}
-									<Badge tone="warning" size="sm">Dirty</Badge>
-								{:else}
-									<Badge tone="success" size="sm">Clean</Badge>
-								{/if}
-							</td>
-						</tr>
-					{/each}
-				</tbody>
-			</table>
-		</div>
+				{/each}
+			</tbody>
+		</Table>
 
 		{#if data.totalPages > 1}
 			<nav class="pagination" aria-label="Pagination">
@@ -220,76 +218,6 @@ function nextPageHref(): string {
 		padding-bottom: var(--space-2xl);
 	}
 
-	.btn {
-		padding: var(--space-sm) var(--space-lg);
-		font-size: var(--type-definition-body-size);
-		font-weight: var(--font-weight-semibold);
-		border-radius: var(--radius-md);
-		text-decoration: none;
-		border: 1px solid transparent;
-		cursor: pointer;
-		display: inline-flex;
-		align-items: center;
-	}
-
-	.btn.secondary {
-		background: var(--surface-sunken);
-		color: var(--ink-body);
-		border-color: var(--edge-default);
-	}
-
-	.btn.secondary:hover {
-		background: var(--edge-default);
-	}
-
-	.filter-bar {
-		display: grid;
-		grid-template-columns: 2fr 1fr 1fr auto;
-		gap: var(--space-md);
-		align-items: end;
-		padding: var(--space-md);
-		background: var(--surface-raised);
-		border: 1px solid var(--edge-default);
-		border-radius: var(--radius-md);
-	}
-
-	@media (max-width: 700px) {
-		.filter-bar {
-			grid-template-columns: 1fr 1fr;
-		}
-	}
-
-	.field {
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-2xs);
-	}
-
-	.field label {
-		font-size: var(--type-ui-caption-size);
-		color: var(--ink-muted);
-		font-weight: var(--font-weight-semibold);
-		text-transform: uppercase;
-		letter-spacing: var(--letter-spacing-wide);
-	}
-
-	.field input,
-	.field select {
-		background: var(--input-default-bg);
-		color: var(--input-default-ink);
-		border: 1px solid var(--input-default-border);
-		border-radius: var(--radius-sm);
-		padding: var(--space-xs) var(--space-sm);
-		font: inherit;
-	}
-
-	.field input:focus-visible,
-	.field select:focus-visible {
-		outline: 2px solid var(--focus-ring);
-		outline-offset: 1px;
-		border-color: var(--input-default-hover-border);
-	}
-
 	.dirty-toggle {
 		display: inline-flex;
 		align-items: center;
@@ -302,41 +230,6 @@ function nextPageHref(): string {
 
 	.dirty-toggle input {
 		accent-color: var(--action-default);
-	}
-
-	.table-wrap {
-		overflow-x: auto;
-		border: 1px solid var(--edge-default);
-		border-radius: var(--radius-md);
-		background: var(--surface-raised);
-	}
-
-	table {
-		width: 100%;
-		border-collapse: collapse;
-		font-size: var(--type-ui-label-size);
-	}
-
-	th,
-	td {
-		padding: var(--space-sm) var(--space-md);
-		text-align: left;
-		border-bottom: 1px solid var(--table-row-edge);
-		color: var(--ink-body);
-		vertical-align: top;
-	}
-
-	th {
-		background: var(--table-header-bg);
-		color: var(--table-header-ink);
-		text-transform: uppercase;
-		letter-spacing: var(--letter-spacing-wide);
-		font-size: var(--type-ui-caption-size);
-		font-weight: var(--font-weight-semibold);
-	}
-
-	tr:hover {
-		background: var(--table-row-bg-hover);
 	}
 
 	.mono {

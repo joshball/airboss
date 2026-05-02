@@ -18,7 +18,10 @@ import Badge from '@ab/ui/components/Badge.svelte';
 import Banner from '@ab/ui/components/Banner.svelte';
 import Button from '@ab/ui/components/Button.svelte';
 import EmptyState from '@ab/ui/components/EmptyState.svelte';
+import FilterBar from '@ab/ui/components/FilterBar.svelte';
+import FilterField from '@ab/ui/components/FilterField.svelte';
 import PageHeader from '@ab/ui/components/PageHeader.svelte';
+import Table from '@ab/ui/components/Table.svelte';
 import { enhance } from '$app/forms';
 import { replaceState } from '$app/navigation';
 import { page } from '$app/state';
@@ -103,7 +106,7 @@ function formatDate(iso: string): string {
 		subtitle={`${data.total} reference${data.total === 1 ? '' : 's'} in the registry.`}
 	>
 		{#snippet actions()}
-			<a class="btn secondary" href={ROUTES.HANGAR_GLOSSARY_NEW}>New reference</a>
+			<Button variant="secondary" size="md" href={ROUTES.HANGAR_GLOSSARY_NEW}>New reference</Button>
 			<form method="POST" action="?/syncAll" use:enhance={() => {
 				syncing = true;
 				return async ({ update }) => {
@@ -129,9 +132,8 @@ function formatDate(iso: string): string {
 		<Banner tone="danger">{form.error}</Banner>
 	{/if}
 
-	<section class="filter-bar" aria-label="Filter references">
-		<div class="field">
-			<label for="ref-search">Search</label>
+	<FilterBar ariaLabel="Filter references" columns="2fr 1fr 1fr 1fr auto">
+		<FilterField id="ref-search" label="Search">
 			<input
 				id="ref-search"
 				type="search"
@@ -139,43 +141,40 @@ function formatDate(iso: string): string {
 				bind:value={searchValue}
 				autocomplete="off"
 			/>
-		</div>
+		</FilterField>
 
-		<div class="field">
-			<label for="ref-source-type">Source type</label>
+		<FilterField id="ref-source-type" label="Source type">
 			<select id="ref-source-type" bind:value={sourceTypeValue}>
 				<option value="">All sources</option>
 				{#each SOURCE_TYPE_VALUES as value (value)}
 					<option {value}>{SOURCE_TYPE_LABELS[value]}</option>
 				{/each}
 			</select>
-		</div>
+		</FilterField>
 
-		<div class="field">
-			<label for="ref-kind">Kind</label>
+		<FilterField id="ref-kind" label="Kind">
 			<select id="ref-kind" bind:value={knowledgeKindValue}>
 				<option value="">All kinds</option>
 				{#each KNOWLEDGE_KIND_VALUES as value (value)}
 					<option {value}>{KNOWLEDGE_KIND_LABELS[value]}</option>
 				{/each}
 			</select>
-		</div>
+		</FilterField>
 
-		<div class="field">
-			<label for="ref-rules">Rules</label>
+		<FilterField id="ref-rules" label="Rules">
 			<select id="ref-rules" bind:value={flightRulesValue}>
 				<option value="">All</option>
 				{#each FLIGHT_RULES_VALUES as value (value)}
 					<option {value}>{FLIGHT_RULES_LABELS[value]}</option>
 				{/each}
 			</select>
-		</div>
+		</FilterField>
 
 		<label class="dirty-toggle">
 			<input type="checkbox" bind:checked={dirtyOnlyValue} />
 			<span>Dirty only</span>
 		</label>
-	</section>
+	</FilterBar>
 
 	{#if data.references.length === 0}
 		{#if data.filters.search || data.filters.sourceType || data.filters.knowledgeKind || data.filters.flightRules || data.filters.dirtyOnly}
@@ -188,48 +187,46 @@ function formatDate(iso: string): string {
 			</EmptyState>
 		{/if}
 	{:else}
-		<div class="table-wrap">
-			<table>
-				<thead>
+		<Table ariaLabel="References" stickyHeader>
+			<thead>
+				<tr>
+					<th scope="col" class="col-id">ID</th>
+					<th scope="col">Display name</th>
+					<th scope="col">Source</th>
+					<th scope="col">Kind</th>
+					<th scope="col">Certs</th>
+					<th scope="col">Updated</th>
+					<th scope="col">Status</th>
+				</tr>
+			</thead>
+			<tbody>
+				{#each data.references as ref (ref.id)}
 					<tr>
-						<th scope="col" class="col-id">ID</th>
-						<th scope="col">Display name</th>
-						<th scope="col">Source</th>
-						<th scope="col">Kind</th>
-						<th scope="col">Certs</th>
-						<th scope="col">Updated</th>
-						<th scope="col">Status</th>
+						<td class="col-id mono">
+							<a href={ROUTES.HANGAR_GLOSSARY_DETAIL(ref.id)}>{ref.id}</a>
+						</td>
+						<td>{ref.displayName}</td>
+						<td>{ref.sourceType ? SOURCE_TYPE_LABELS[ref.sourceType] : '-'}</td>
+						<td>{ref.knowledgeKind ? KNOWLEDGE_KIND_LABELS[ref.knowledgeKind] : '-'}</td>
+						<td class="certs">
+							{#if ref.certApplicability.length === 0}
+								<span class="muted">-</span>
+							{:else}
+								{ref.certApplicability.map((c) => CERT_APPLICABILITY_LABELS[c as CertApplicability]).join(', ')}
+							{/if}
+						</td>
+						<td class="mono">{formatDate(ref.updatedAt)}</td>
+						<td>
+							{#if ref.dirty}
+								<Badge tone="warning" size="sm">Dirty</Badge>
+							{:else}
+								<Badge tone="success" size="sm">Clean</Badge>
+							{/if}
+						</td>
 					</tr>
-				</thead>
-				<tbody>
-					{#each data.references as ref (ref.id)}
-						<tr>
-							<td class="col-id mono">
-								<a href={ROUTES.HANGAR_GLOSSARY_DETAIL(ref.id)}>{ref.id}</a>
-							</td>
-							<td>{ref.displayName}</td>
-							<td>{ref.sourceType ? SOURCE_TYPE_LABELS[ref.sourceType] : '-'}</td>
-							<td>{ref.knowledgeKind ? KNOWLEDGE_KIND_LABELS[ref.knowledgeKind] : '-'}</td>
-							<td class="certs">
-								{#if ref.certApplicability.length === 0}
-									<span class="muted">-</span>
-								{:else}
-									{ref.certApplicability.map((c) => CERT_APPLICABILITY_LABELS[c as CertApplicability]).join(', ')}
-								{/if}
-							</td>
-							<td class="mono">{formatDate(ref.updatedAt)}</td>
-							<td>
-								{#if ref.dirty}
-									<Badge tone="warning" size="sm">Dirty</Badge>
-								{:else}
-									<Badge tone="success" size="sm">Clean</Badge>
-								{/if}
-							</td>
-						</tr>
-					{/each}
-				</tbody>
-			</table>
-		</div>
+				{/each}
+			</tbody>
+		</Table>
 
 		{#if data.totalPages > 1}
 			<nav class="pagination" aria-label="Pagination">
@@ -264,76 +261,6 @@ function formatDate(iso: string): string {
 		padding-bottom: var(--space-2xl);
 	}
 
-	.btn {
-		padding: var(--space-sm) var(--space-lg);
-		font-size: var(--type-definition-body-size);
-		font-weight: var(--font-weight-semibold);
-		border-radius: var(--radius-md);
-		text-decoration: none;
-		border: 1px solid transparent;
-		cursor: pointer;
-		display: inline-flex;
-		align-items: center;
-	}
-
-	.btn.secondary {
-		background: var(--surface-sunken);
-		color: var(--ink-body);
-		border-color: var(--edge-default);
-	}
-
-	.btn.secondary:hover {
-		background: var(--edge-default);
-	}
-
-	.filter-bar {
-		display: grid;
-		grid-template-columns: 2fr 1fr 1fr 1fr auto;
-		gap: var(--space-md);
-		align-items: end;
-		padding: var(--space-md);
-		background: var(--surface-raised);
-		border: 1px solid var(--edge-default);
-		border-radius: var(--radius-md);
-	}
-
-	@media (max-width: 800px) {
-		.filter-bar {
-			grid-template-columns: 1fr 1fr;
-		}
-	}
-
-	.field {
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-2xs);
-	}
-
-	.field label {
-		font-size: var(--type-ui-caption-size);
-		color: var(--ink-muted);
-		font-weight: var(--font-weight-semibold);
-		text-transform: uppercase;
-		letter-spacing: var(--letter-spacing-wide);
-	}
-
-	.field input,
-	.field select {
-		background: var(--input-default-bg);
-		color: var(--input-default-ink);
-		border: 1px solid var(--input-default-border);
-		border-radius: var(--radius-sm);
-		padding: var(--space-xs) var(--space-sm);
-		font: inherit;
-	}
-
-	.field input:focus-visible,
-	.field select:focus-visible {
-		outline: 2px solid var(--focus-ring);
-		outline-offset: 1px;
-		border-color: var(--input-default-hover-border);
-	}
-
 	.dirty-toggle {
 		display: inline-flex;
 		align-items: center;
@@ -346,43 +273,6 @@ function formatDate(iso: string): string {
 
 	.dirty-toggle input {
 		accent-color: var(--action-default);
-	}
-
-	.table-wrap {
-		overflow-x: auto;
-		border: 1px solid var(--edge-default);
-		border-radius: var(--radius-md);
-		background: var(--surface-raised);
-	}
-
-	table {
-		width: 100%;
-		border-collapse: collapse;
-		font-size: var(--type-ui-label-size);
-	}
-
-	th,
-	td {
-		padding: var(--space-sm) var(--space-md);
-		text-align: left;
-		border-bottom: 1px solid var(--table-row-edge);
-		color: var(--ink-body);
-		vertical-align: top;
-	}
-
-	th {
-		background: var(--table-header-bg);
-		color: var(--table-header-ink);
-		text-transform: uppercase;
-		letter-spacing: var(--letter-spacing-wide);
-		font-size: var(--type-ui-caption-size);
-		font-weight: var(--font-weight-semibold);
-		position: sticky;
-		top: 0;
-	}
-
-	tr:hover {
-		background: var(--table-row-bg-hover);
 	}
 
 	.mono {

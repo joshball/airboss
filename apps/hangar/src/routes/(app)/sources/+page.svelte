@@ -6,6 +6,7 @@ import Banner from '@ab/ui/components/Banner.svelte';
 import Button from '@ab/ui/components/Button.svelte';
 import EmptyState from '@ab/ui/components/EmptyState.svelte';
 import PageHeader from '@ab/ui/components/PageHeader.svelte';
+import Table from '@ab/ui/components/Table.svelte';
 import FlowDiagram from '$lib/components/FlowDiagram.svelte';
 import type { ActionData, PageData } from './$types';
 
@@ -114,52 +115,50 @@ function formatDate(iso: string | null): string {
 		{#if data.sources.length === 0}
 			<EmptyState title="No sources registered yet" />
 		{:else}
-			<div class="table-wrap">
-				<table>
-					<thead>
-						<tr>
-							<th scope="col" class="col-id">ID</th>
-							<th scope="col">Title</th>
-							<th scope="col">Type</th>
-							<th scope="col">Version</th>
-							<th scope="col">State</th>
-							<th scope="col">Size</th>
-							<th scope="col">Activity</th>
-							<th scope="col">Actions</th>
+			<Table ariaLabel="Source registry">
+				<thead>
+					<tr>
+						<th scope="col" class="col-id">ID</th>
+						<th scope="col">Title</th>
+						<th scope="col">Type</th>
+						<th scope="col">Version</th>
+						<th scope="col">State</th>
+						<th scope="col">Size</th>
+						<th scope="col">Activity</th>
+						<th scope="col">Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					{#each data.sources as src (src.id)}
+						<tr class:busy={src.activeJob !== null}>
+							<td class="col-id mono">
+								<a href={ROUTES.HANGAR_SOURCE_DETAIL(src.id)}>{src.id}</a>
+							</td>
+							<td>{src.title}</td>
+							<td>{SOURCE_TYPE_LABELS[src.type as ReferenceSourceType] ?? src.type}</td>
+							<td class="mono">{src.version}</td>
+							<td>
+								<Badge tone={stateTone(src.state)} size="sm">{formatState(src.state)}</Badge>
+							</td>
+							<td class="mono">{formatBytes(src.sizeBytes)}</td>
+							<td>
+								{#if src.activeJob}
+									<a class="active-job" href={ROUTES.HANGAR_JOB_DETAIL(src.activeJob.id)}>
+										{src.activeJob.kind}
+									</a>
+								{:else}
+									<span class="muted">--</span>
+								{/if}
+							</td>
+							<td class="actions">
+								<a class="chip" href={ROUTES.HANGAR_SOURCE_DETAIL(src.id)}>Open</a>
+								<a class="chip" href={ROUTES.HANGAR_SOURCE_FILES(src.id)}>Files</a>
+								<a class="chip" href={ROUTES.HANGAR_SOURCE_DIFF(src.id)}>Diff</a>
+							</td>
 						</tr>
-					</thead>
-					<tbody>
-						{#each data.sources as src (src.id)}
-							<tr class:busy={src.activeJob !== null}>
-								<td class="col-id mono">
-									<a href={ROUTES.HANGAR_SOURCE_DETAIL(src.id)}>{src.id}</a>
-								</td>
-								<td>{src.title}</td>
-								<td>{SOURCE_TYPE_LABELS[src.type as ReferenceSourceType] ?? src.type}</td>
-								<td class="mono">{src.version}</td>
-								<td>
-									<Badge tone={stateTone(src.state)} size="sm">{formatState(src.state)}</Badge>
-								</td>
-								<td class="mono">{formatBytes(src.sizeBytes)}</td>
-								<td>
-									{#if src.activeJob}
-										<a class="active-job" href={ROUTES.HANGAR_JOB_DETAIL(src.activeJob.id)}>
-											{src.activeJob.kind}
-										</a>
-									{:else}
-										<span class="muted">--</span>
-									{/if}
-								</td>
-								<td class="actions">
-									<a class="chip" href={ROUTES.HANGAR_SOURCE_DETAIL(src.id)}>Open</a>
-									<a class="chip" href={ROUTES.HANGAR_SOURCE_FILES(src.id)}>Files</a>
-									<a class="chip" href={ROUTES.HANGAR_SOURCE_DIFF(src.id)}>Diff</a>
-								</td>
-							</tr>
-						{/each}
-					</tbody>
-				</table>
-			</div>
+					{/each}
+				</tbody>
+			</Table>
 		{/if}
 	</section>
 </section>
@@ -245,36 +244,6 @@ function formatDate(iso: string | null): string {
 	}
 
 	.inline-link:hover { text-decoration: underline; }
-
-	.table-wrap {
-		overflow-x: auto;
-		border: 1px solid var(--edge-default);
-		border-radius: var(--radius-md);
-		background: var(--surface-panel);
-	}
-
-	table {
-		width: 100%;
-		border-collapse: collapse;
-		font-size: var(--type-ui-label-size);
-	}
-
-	th, td {
-		padding: var(--space-sm) var(--space-md);
-		text-align: left;
-		border-bottom: 1px solid var(--table-row-edge);
-		color: var(--ink-body);
-		vertical-align: top;
-	}
-
-	th {
-		background: var(--table-header-bg);
-		color: var(--table-header-ink);
-		text-transform: uppercase;
-		letter-spacing: var(--letter-spacing-wide);
-		font-size: var(--type-ui-caption-size);
-		font-weight: var(--font-weight-semibold);
-	}
 
 	tr.busy {
 		background: var(--signal-info-wash);

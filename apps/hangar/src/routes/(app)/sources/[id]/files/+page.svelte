@@ -1,5 +1,6 @@
 <script lang="ts">
 import { PREVIEW_KINDS, ROUTES } from '@ab/constants';
+import Breadcrumbs from '@ab/ui/components/Breadcrumbs.svelte';
 import Button from '@ab/ui/components/Button.svelte';
 import ConfirmDialog from '@ab/ui/components/ConfirmDialog.svelte';
 import EmptyState from '@ab/ui/components/EmptyState.svelte';
@@ -66,13 +67,13 @@ function truncate(text: string | null, max = 20_000): string {
 </svelte:head>
 
 <section class="page">
-	<nav aria-label="Breadcrumb" class="crumbs">
-		<a href={ROUTES.HANGAR_SOURCES}>Sources</a>
-		<span aria-hidden="true">/</span>
-		<a href={ROUTES.HANGAR_SOURCE_DETAIL(data.source.id)}>{data.source.id}</a>
-		<span aria-hidden="true">/</span>
-		<span class="current">Files</span>
-	</nav>
+	<Breadcrumbs
+		items={[
+			{ label: 'Sources', href: ROUTES.HANGAR_SOURCES },
+			{ label: data.source.id, href: ROUTES.HANGAR_SOURCE_DETAIL(data.source.id), mono: true },
+			{ label: 'Files' },
+		]}
+	/>
 
 	<PageHeader title="Files">
 		{#snippet subtitleSnippet()}
@@ -205,18 +206,6 @@ function truncate(text: string | null, max = 20_000): string {
 		padding-top: var(--space-lg);
 		padding-bottom: var(--space-2xl);
 	}
-
-	.crumbs {
-		display: flex;
-		gap: var(--space-xs);
-		color: var(--ink-muted);
-		font-size: var(--type-ui-label-size);
-		align-items: center;
-	}
-
-	.crumbs a { color: var(--link-default); text-decoration: none; }
-	.crumbs a:hover { text-decoration: underline; }
-	.crumbs .current { color: var(--ink-body); }
 
 	.banner.danger {
 		background: var(--signal-danger-wash);

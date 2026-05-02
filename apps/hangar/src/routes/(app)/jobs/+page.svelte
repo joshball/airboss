@@ -3,7 +3,10 @@ import { JOB_KIND_VALUES, JOB_STATUS_VALUES, JOB_STATUSES, type JobKind, type Jo
 import type { BadgeTone } from '@ab/ui';
 import Badge from '@ab/ui/components/Badge.svelte';
 import EmptyState from '@ab/ui/components/EmptyState.svelte';
+import FilterBar from '@ab/ui/components/FilterBar.svelte';
+import FilterField from '@ab/ui/components/FilterField.svelte';
 import PageHeader from '@ab/ui/components/PageHeader.svelte';
+import Table from '@ab/ui/components/Table.svelte';
 import { invalidateAll, replaceState } from '$app/navigation';
 import { page } from '$app/state';
 import type { PageData } from './$types';
@@ -88,27 +91,25 @@ function formatDuration(startedAt: string | null, finishedAt: string | null): st
 		subtitle={`Last ${data.limit} entries in the hangar job queue. Live jobs refresh every second.`}
 	/>
 
-	<section class="filter-bar" aria-label="Filter jobs">
-		<div class="field">
-			<label for="job-kind">Kind</label>
+	<FilterBar ariaLabel="Filter jobs" maxWidth="40rem" columns="1fr 1fr">
+		<FilterField id="job-kind" label="Kind">
 			<select id="job-kind" bind:value={kindValue}>
 				<option value="">All kinds</option>
 				{#each JOB_KIND_VALUES as value (value)}
 					<option {value}>{value}</option>
 				{/each}
 			</select>
-		</div>
+		</FilterField>
 
-		<div class="field">
-			<label for="job-status">Status</label>
+		<FilterField id="job-status" label="Status">
 			<select id="job-status" bind:value={statusValue}>
 				<option value="">All statuses</option>
 				{#each JOB_STATUS_VALUES as value (value)}
 					<option {value}>{value}</option>
 				{/each}
 			</select>
-		</div>
-	</section>
+		</FilterField>
+	</FilterBar>
 
 	{#if data.jobs.length === 0}
 		{#if data.filters.kind || data.filters.status}
@@ -121,53 +122,51 @@ function formatDuration(startedAt: string | null, finishedAt: string | null): st
 			</EmptyState>
 		{/if}
 	{:else}
-		<div class="table-wrap">
-			<table>
-				<thead>
+		<Table ariaLabel="Jobs">
+			<thead>
+				<tr>
+					<th scope="col">Job</th>
+					<th scope="col">Kind</th>
+					<th scope="col">Target</th>
+					<th scope="col">Status</th>
+					<th scope="col">Progress</th>
+					<th scope="col">Duration</th>
+					<th scope="col">Created</th>
+				</tr>
+			</thead>
+			<tbody>
+				{#each data.jobs as job (job.id)}
 					<tr>
-						<th scope="col">Job</th>
-						<th scope="col">Kind</th>
-						<th scope="col">Target</th>
-						<th scope="col">Status</th>
-						<th scope="col">Progress</th>
-						<th scope="col">Duration</th>
-						<th scope="col">Created</th>
+						<td class="mono">
+							<a href={ROUTES.HANGAR_JOB_DETAIL(job.id)}>{job.id}</a>
+						</td>
+						<td class="mono">{job.kind}</td>
+						<td class="mono">
+							{#if job.targetType}
+								{job.targetType}{job.targetId ? `:${job.targetId}` : ''}
+							{:else}
+								-
+							{/if}
+						</td>
+						<td>
+							<Badge tone={statusTone(job.status)} size="sm">{job.status}</Badge>
+						</td>
+						<td>
+							{#if job.status === JOB_STATUSES.RUNNING}
+								{job.progress.step ?? 0}{#if job.progress.total} / {job.progress.total}{/if}
+								{#if job.progress.message}
+									<span class="muted"> &middot; {job.progress.message}</span>
+								{/if}
+							{:else}
+								<span class="muted">-</span>
+							{/if}
+						</td>
+						<td class="mono">{formatDuration(job.startedAt, job.finishedAt)}</td>
+						<td class="mono">{formatTime(job.createdAt)}</td>
 					</tr>
-				</thead>
-				<tbody>
-					{#each data.jobs as job (job.id)}
-						<tr>
-							<td class="mono">
-								<a href={ROUTES.HANGAR_JOB_DETAIL(job.id)}>{job.id}</a>
-							</td>
-							<td class="mono">{job.kind}</td>
-							<td class="mono">
-								{#if job.targetType}
-									{job.targetType}{job.targetId ? `:${job.targetId}` : ''}
-								{:else}
-									-
-								{/if}
-							</td>
-							<td>
-								<Badge tone={statusTone(job.status)} size="sm">{job.status}</Badge>
-							</td>
-							<td>
-								{#if job.status === JOB_STATUSES.RUNNING}
-									{job.progress.step ?? 0}{#if job.progress.total} / {job.progress.total}{/if}
-									{#if job.progress.message}
-										<span class="muted"> &middot; {job.progress.message}</span>
-									{/if}
-								{:else}
-									<span class="muted">-</span>
-								{/if}
-							</td>
-							<td class="mono">{formatDuration(job.startedAt, job.finishedAt)}</td>
-							<td class="mono">{formatTime(job.createdAt)}</td>
-						</tr>
-					{/each}
-				</tbody>
-			</table>
-		</div>
+				{/each}
+			</tbody>
+		</Table>
 	{/if}
 </section>
 
@@ -178,80 +177,6 @@ function formatDuration(startedAt: string | null, finishedAt: string | null): st
 		gap: var(--space-xl);
 		padding-top: var(--space-lg);
 		padding-bottom: var(--space-2xl);
-	}
-
-	.filter-bar {
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		gap: var(--space-md);
-		padding: var(--space-md);
-		background: var(--surface-raised);
-		border: 1px solid var(--edge-default);
-		border-radius: var(--radius-md);
-		max-width: 40rem;
-	}
-
-	.field {
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-2xs);
-	}
-
-	.field label {
-		font-size: var(--type-ui-caption-size);
-		color: var(--ink-muted);
-		font-weight: var(--font-weight-semibold);
-		text-transform: uppercase;
-		letter-spacing: var(--letter-spacing-wide);
-	}
-
-	.field select {
-		background: var(--input-default-bg);
-		color: var(--input-default-ink);
-		border: 1px solid var(--input-default-border);
-		border-radius: var(--radius-sm);
-		padding: var(--space-xs) var(--space-sm);
-		font: inherit;
-	}
-
-	.field select:focus-visible {
-		outline: 2px solid var(--focus-ring);
-		outline-offset: 1px;
-	}
-
-	.table-wrap {
-		overflow-x: auto;
-		border: 1px solid var(--edge-default);
-		border-radius: var(--radius-md);
-		background: var(--surface-raised);
-	}
-
-	table {
-		width: 100%;
-		border-collapse: collapse;
-		font-size: var(--type-ui-label-size);
-	}
-
-	th,
-	td {
-		padding: var(--space-sm) var(--space-md);
-		text-align: left;
-		border-bottom: 1px solid var(--table-row-edge);
-		color: var(--ink-body);
-		vertical-align: top;
-	}
-
-	th {
-		background: var(--table-header-bg);
-		color: var(--table-header-ink);
-		text-transform: uppercase;
-		letter-spacing: var(--letter-spacing-wide);
-		font-size: var(--type-ui-caption-size);
-		font-weight: var(--font-weight-semibold);
-	}
-
-	tr:hover {
-		background: var(--table-row-bg-hover);
 	}
 
 	.mono {
@@ -270,5 +195,4 @@ function formatDuration(startedAt: string | null, finishedAt: string | null): st
 	.muted {
 		color: var(--ink-muted);
 	}
-
 </style>

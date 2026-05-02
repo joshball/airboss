@@ -1,7 +1,9 @@
 <script lang="ts">
 import { QUERY_PARAMS, ROUTES } from '@ab/constants';
 import PageHelp from '@ab/help/ui/PageHelp.svelte';
+import Breadcrumbs from '@ab/ui/components/Breadcrumbs.svelte';
 import PageHeader from '@ab/ui/components/PageHeader.svelte';
+import RolePill from '@ab/ui/components/RolePill.svelte';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
@@ -90,13 +92,13 @@ async function copyToClipboard(key: 'before' | 'after' | 'metadata' | 'id', text
 </svelte:head>
 
 <section class="page">
-	<nav class="crumbs" aria-label="Breadcrumb">
-		<a href={ROUTES.HANGAR_HOME}>Hangar</a>
-		<span aria-hidden="true">/</span>
-		<a href={ROUTES.HANGAR_ADMIN_AUDIT}>Audit</a>
-		<span aria-hidden="true">/</span>
-		<span class="crumb-current mono">{entry.id}</span>
-	</nav>
+	<Breadcrumbs
+		items={[
+			{ label: 'Hangar', href: ROUTES.HANGAR_HOME },
+			{ label: 'Audit', href: ROUTES.HANGAR_ADMIN_AUDIT },
+			{ label: entry.id, mono: true },
+		]}
+	/>
 
 	<PageHeader title="Audit event" subtitle={`${entry.op} -- ${entry.targetType}${entry.targetId ? ` -- ${entry.targetId}` : ''}`}>
 		{#snippet titleSuffix()}
@@ -150,7 +152,7 @@ async function copyToClipboard(key: 'before' | 'after' | 'metadata' | 'id', text
 					<dt>Role</dt>
 					<dd>
 						{#if entry.actorRole}
-							<span class="role-pill">{entry.actorRole}</span>
+							<RolePill>{entry.actorRole}</RolePill>
 						{:else}
 							<span class="muted">-</span>
 						{/if}
@@ -229,27 +231,6 @@ async function copyToClipboard(key: 'before' | 'after' | 'metadata' | 'id', text
 		gap: var(--space-xl);
 		padding-top: var(--space-lg);
 		padding-bottom: var(--space-2xl);
-	}
-
-	.crumbs {
-		display: flex;
-		gap: var(--space-2xs);
-		align-items: center;
-		font-size: var(--type-ui-caption-size);
-		color: var(--ink-muted);
-	}
-
-	.crumbs a {
-		color: var(--link-default);
-		text-decoration: none;
-	}
-
-	.crumbs a:hover {
-		text-decoration: underline;
-	}
-
-	.crumb-current {
-		color: var(--ink-muted);
 	}
 
 	.meta {
@@ -343,18 +324,6 @@ async function copyToClipboard(key: 'before' | 'after' | 'metadata' | 'id', text
 
 	.actor-links a:hover {
 		text-decoration: underline;
-	}
-
-	.role-pill {
-		display: inline-block;
-		font-size: var(--type-ui-caption-size);
-		font-weight: var(--font-weight-semibold);
-		padding: 0 var(--space-2xs);
-		border-radius: var(--radius-pill);
-		background: var(--action-default-wash);
-		color: var(--action-default-hover);
-		text-transform: uppercase;
-		letter-spacing: var(--letter-spacing-wide);
 	}
 
 	.payload-grid {

@@ -1,6 +1,7 @@
 <script lang="ts">
 import { ROUTES } from '@ab/constants';
 import Banner from '@ab/ui/components/Banner.svelte';
+import Breadcrumbs from '@ab/ui/components/Breadcrumbs.svelte';
 import Button from '@ab/ui/components/Button.svelte';
 import ConfirmDialog from '@ab/ui/components/ConfirmDialog.svelte';
 import EmptyState from '@ab/ui/components/EmptyState.svelte';
@@ -57,13 +58,13 @@ const lines = $derived(data.diffText ? data.diffText.split('\n').map(classifyLin
 </svelte:head>
 
 <section class="page">
-	<nav aria-label="Breadcrumb" class="crumbs">
-		<a href={ROUTES.HANGAR_SOURCES}>Sources</a>
-		<span aria-hidden="true">/</span>
-		<a href={ROUTES.HANGAR_SOURCE_DETAIL(data.source.id)}>{data.source.id}</a>
-		<span aria-hidden="true">/</span>
-		<span class="current">Diff</span>
-	</nav>
+	<Breadcrumbs
+		items={[
+			{ label: 'Sources', href: ROUTES.HANGAR_SOURCES },
+			{ label: data.source.id, href: ROUTES.HANGAR_SOURCE_DETAIL(data.source.id), mono: true },
+			{ label: 'Diff' },
+		]}
+	/>
 
 	<PageHeader title="Diff">
 		{#snippet subtitleSnippet()}
@@ -145,18 +146,6 @@ const lines = $derived(data.diffText ? data.diffText.split('\n').map(classifyLin
 		padding-top: var(--space-lg);
 		padding-bottom: var(--space-2xl);
 	}
-
-	.crumbs {
-		display: flex;
-		gap: var(--space-xs);
-		color: var(--ink-muted);
-		font-size: var(--type-ui-label-size);
-		align-items: center;
-	}
-
-	.crumbs a { color: var(--link-default); text-decoration: none; }
-	.crumbs a:hover { text-decoration: underline; }
-	.crumbs .current { color: var(--ink-body); }
 
 	.status {
 		margin: 0;

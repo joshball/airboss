@@ -12,10 +12,10 @@
 
 import { requireRole } from '@ab/auth';
 import { getLatestCompleteJobForTarget, getSource } from '@ab/bc-hangar';
-import { JOB_KINDS, ROLES, ROUTES } from '@ab/constants';
-import { enqueueJob } from '@ab/hangar-jobs';
+import { JOB_KINDS, ROLES } from '@ab/constants';
 import { createLogger } from '@ab/utils';
-import { error, fail, isRedirect, redirect } from '@sveltejs/kit';
+import { error } from '@sveltejs/kit';
+import { enqueueAndRedirect } from '$lib/server/enqueue-and-redirect';
 import type { Actions, PageServerLoad } from './$types';
 
 const log = createLogger('hangar:source-diff');
@@ -46,45 +46,31 @@ export const load: PageServerLoad = async (event) => {
 export const actions: Actions = {
 	enqueue: async (event) => {
 		const user = requireRole(event, ROLES.AUTHOR, ROLES.OPERATOR, ROLES.ADMIN);
-		try {
-			const job = await enqueueJob({
+		return enqueueAndRedirect(
+			event,
+			{
 				kind: JOB_KINDS.DIFF_SOURCE,
 				targetType: 'hangar.source',
 				targetId: event.params.id,
 				actorId: user.id,
 				payload: { sourceId: event.params.id },
-			});
-			redirect(303, ROUTES.HANGAR_JOB_DETAIL(job.id));
-		} catch (err) {
-			if (isRedirect(err)) throw err;
-			log.error(
-				'enqueue diff failed',
-				{ requestId: event.locals.requestId, userId: user.id },
-				err instanceof Error ? err : undefined,
-			);
-			return fail(500, { error: err instanceof Error ? err.message : 'failed to enqueue diff job' });
-		}
+			},
+			{ logger: log, failureMessage: 'failed to enqueue diff job' },
+		);
 	},
 
 	commit: async (event) => {
 		const user = requireRole(event, ROLES.AUTHOR, ROLES.OPERATOR, ROLES.ADMIN);
-		try {
-			const job = await enqueueJob({
+		return enqueueAndRedirect(
+			event,
+			{
 				kind: JOB_KINDS.SYNC_TO_DISK,
 				targetType: 'registry',
 				targetId: 'registry',
 				actorId: user.id,
 				payload: {},
-			});
-			redirect(303, ROUTES.HANGAR_JOB_DETAIL(job.id));
-		} catch (err) {
-			if (isRedirect(err)) throw err;
-			log.error(
-				'commit diff sync failed',
-				{ requestId: event.locals.requestId, userId: user.id },
-				err instanceof Error ? err : undefined,
-			);
-			return fail(500, { error: err instanceof Error ? err.message : 'failed to enqueue sync job' });
-		}
+			},
+			{ logger: log, failureMessage: 'failed to enqueue sync job' },
+		);
 	},
 };
