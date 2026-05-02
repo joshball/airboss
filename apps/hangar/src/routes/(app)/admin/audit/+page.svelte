@@ -32,6 +32,20 @@ let actorSearch = $state(initialActor ? formatActor(initialActor) : '');
 let actorId = $state<string | null>(data.filters.actorId);
 let actorOptions = $state<ActorOption[]>([]);
 let actorMenuOpen = $state(false);
+// Index into `actorOptions` for the active descendant. -1 means no option
+// is highlighted (input has focus, no selection yet). Resets whenever the
+// option list changes so a stale index can't point past the new array.
+let actorActiveIndex = $state(-1);
+// Polite live-region announcement for result count. Empty until a search
+// has actually run so it doesn't fire on initial focus.
+let actorAnnouncement = $state('');
+let actorWrapEl = $state<HTMLDivElement | null>(null);
+
+const ACTOR_MENU_ID = 'audit-actor-menu';
+const ACTOR_LIVE_ID = 'audit-actor-live';
+function actorOptionId(index: number): string {
+	return `audit-actor-option-${index}`;
+}
 
 let searchDebounce: ReturnType<typeof setTimeout> | null = null;
 let lastTypeaheadTerm = '';
@@ -43,6 +57,8 @@ $effect(() => {
 	if (!term) {
 		actorOptions = [];
 		actorMenuOpen = false;
+		actorActiveIndex = -1;
+		actorAnnouncement = '';
 		return;
 	}
 	if (term === lastTypeaheadTerm) return;
@@ -56,6 +72,11 @@ $effect(() => {
 			const body = (await res.json()) as { results: ActorOption[] };
 			actorOptions = body.results;
 			actorMenuOpen = body.results.length > 0;
+			actorActiveIndex = body.results.length > 0 ? 0 : -1;
+			actorAnnouncement =
+				body.results.length === 0
+					? 'No actors found.'
+					: `${body.results.length} actor${body.results.length === 1 ? '' : 's'} found. Use arrow keys to navigate.`;
 		} catch {
 			// Non-fatal: typeahead failure leaves the previous list in place.
 		}
@@ -64,6 +85,68 @@ $effect(() => {
 		if (searchDebounce !== null) clearTimeout(searchDebounce);
 	};
 });
+
+// Outside-click closes the menu so screen readers don't strand the user
+// inside an `aria-expanded="true"` combobox after they tab/click away.
+$effect(() => {
+	if (typeof window === 'undefined') return;
+	if (!actorMenuOpen) return;
+	function handleDocumentPointer(event: PointerEvent): void {
+		const target = event.target;
+		if (!(target instanceof Node)) return;
+		if (actorWrapEl?.contains(target)) return;
+		actorMenuOpen = false;
+		actorActiveIndex = -1;
+	}
+	document.addEventListener('pointerdown', handleDocumentPointer);
+	return () => document.removeEventListener('pointerdown', handleDocumentPointer);
+});
+
+function handleActorKeydown(event: KeyboardEvent): void {
+	switch (event.key) {
+		case 'ArrowDown': {
+			event.preventDefault();
+			if (actorOptions.length === 0) return;
+			if (!actorMenuOpen) actorMenuOpen = true;
+			actorActiveIndex = actorActiveIndex < 0 ? 0 : (actorActiveIndex + 1) % actorOptions.length;
+			break;
+		}
+		case 'ArrowUp': {
+			event.preventDefault();
+			if (actorOptions.length === 0) return;
+			if (!actorMenuOpen) actorMenuOpen = true;
+			actorActiveIndex = actorActiveIndex <= 0 ? actorOptions.length - 1 : actorActiveIndex - 1;
+			break;
+		}
+		case 'Home': {
+			if (!actorMenuOpen || actorOptions.length === 0) return;
+			event.preventDefault();
+			actorActiveIndex = 0;
+			break;
+		}
+		case 'End': {
+			if (!actorMenuOpen || actorOptions.length === 0) return;
+			event.preventDefault();
+			actorActiveIndex = actorOptions.length - 1;
+			break;
+		}
+		case 'Enter': {
+			if (!actorMenuOpen || actorActiveIndex < 0) return;
+			const option = actorOptions[actorActiveIndex];
+			if (!option) return;
+			event.preventDefault();
+			pickActor(option);
+			break;
+		}
+		case 'Escape': {
+			if (!actorMenuOpen) return;
+			event.preventDefault();
+			actorMenuOpen = false;
+			actorActiveIndex = -1;
+			break;
+		}
+	}
+}
 
 function formatActor(option: ActorOption): string {
 	const trimmed = option.name.trim();
@@ -268,7 +351,7 @@ const hasFiltersBeyondWindow = $derived(
 		<div class="row">
 			<div class="field actor-field">
 				<label for="audit-actor">Actor</label>
-				<div class="actor-input-wrap">
+				<div class="actor-input-wrap" bind:this={actorWrapEl}>
 					<input
 						id="audit-actor"
 						type="text"
@@ -278,27 +361,42 @@ const hasFiltersBeyondWindow = $derived(
 						onfocus={() => {
 							if (actorOptions.length > 0) actorMenuOpen = true;
 						}}
+						onkeydown={handleActorKeydown}
 						autocomplete="off"
 						aria-expanded={actorMenuOpen}
-						aria-controls="audit-actor-menu"
+						aria-controls={ACTOR_MENU_ID}
 						aria-autocomplete="list"
+						aria-activedescendant={actorMenuOpen && actorActiveIndex >= 0
+							? actorOptionId(actorActiveIndex)
+							: undefined}
 					/>
 					{#if actorId}
 						<button type="button" class="chip-clear" aria-label="Clear actor filter" onclick={clearActor}>x</button>
 					{/if}
 					{#if actorMenuOpen}
-						<ul id="audit-actor-menu" class="actor-menu" role="listbox">
-							{#each actorOptions as option (option.id)}
-								<li>
-									<button type="button" onclick={() => pickActor(option)} role="option" aria-selected="false">
-										<span class="actor-menu-name">{option.name.trim() || option.email}</span>
-										<span class="actor-menu-email">{option.email}</span>
-									</button>
+						<ul id={ACTOR_MENU_ID} class="actor-menu" role="listbox" aria-label="Actor results">
+							{#each actorOptions as option, index (option.id)}
+								{@const active = index === actorActiveIndex}
+								<!-- svelte-ignore a11y_click_events_have_key_events -->
+								<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+								<li
+									id={actorOptionId(index)}
+									class="actor-option"
+									class:is-active={active}
+									role="option"
+									aria-selected={active}
+									tabindex="-1"
+									onclick={() => pickActor(option)}
+									onmousemove={() => (actorActiveIndex = index)}
+								>
+									<span class="actor-menu-name">{option.name.trim() || option.email}</span>
+									<span class="actor-menu-email">{option.email}</span>
 								</li>
 							{/each}
 						</ul>
 					{/if}
 				</div>
+				<span id={ACTOR_LIVE_ID} class="visually-hidden" aria-live="polite" aria-atomic="true">{actorAnnouncement}</span>
 				<button type="button" class="link-button" onclick={pickSystemActor}>System writes only</button>
 			</div>
 
@@ -527,7 +625,7 @@ const hasFiltersBeyondWindow = $derived(
 		z-index: 10;
 	}
 
-	.actor-menu li button {
+	.actor-option {
 		display: flex;
 		flex-direction: column;
 		align-items: flex-start;
@@ -535,15 +633,32 @@ const hasFiltersBeyondWindow = $derived(
 		width: 100%;
 		padding: var(--space-xs) var(--space-sm);
 		background: transparent;
-		border: 0;
 		color: var(--ink-body);
 		cursor: pointer;
 		text-align: left;
 		font: inherit;
 	}
 
-	.actor-menu li button:hover {
+	.actor-option:hover,
+	.actor-option.is-active {
 		background: var(--surface-sunken);
+	}
+
+	.actor-option.is-active {
+		outline: 2px solid var(--focus-ring);
+		outline-offset: -2px;
+	}
+
+	.visually-hidden {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		white-space: nowrap;
+		border: 0;
 	}
 
 	.actor-menu-email {

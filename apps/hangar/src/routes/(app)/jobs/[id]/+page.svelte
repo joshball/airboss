@@ -173,32 +173,34 @@ function formatTime(iso: string | null): string {
 	{/if}
 
 	<section class="logs" aria-label="Job log">
-		<div class="log-tabs" role="tablist" aria-label="Log stream">
+		<!--
+			Toggle group, not a tablist. We don't ship the full ARIA tabs
+			contract (roving tabindex + arrow keys + tabpanel association),
+			so `role="group"` + `aria-pressed` is the correct shape per
+			WAI-ARIA APG and matches the audit page's chip-group pattern.
+		-->
+		<div class="log-tabs" role="group" aria-label="Filter log stream">
 			<button
 				type="button"
-				role="tab"
-				aria-selected={activeStream === 'all'}
+				aria-pressed={activeStream === 'all'}
 				class:selected={activeStream === 'all'}
 				onclick={() => (activeStream = 'all')}
 			>All</button>
 			<button
 				type="button"
-				role="tab"
-				aria-selected={activeStream === JOB_LOG_STREAMS.STDOUT}
+				aria-pressed={activeStream === JOB_LOG_STREAMS.STDOUT}
 				class:selected={activeStream === JOB_LOG_STREAMS.STDOUT}
 				onclick={() => (activeStream = JOB_LOG_STREAMS.STDOUT)}
 			>stdout</button>
 			<button
 				type="button"
-				role="tab"
-				aria-selected={activeStream === JOB_LOG_STREAMS.STDERR}
+				aria-pressed={activeStream === JOB_LOG_STREAMS.STDERR}
 				class:selected={activeStream === JOB_LOG_STREAMS.STDERR}
 				onclick={() => (activeStream = JOB_LOG_STREAMS.STDERR)}
 			>stderr</button>
 			<button
 				type="button"
-				role="tab"
-				aria-selected={activeStream === JOB_LOG_STREAMS.EVENT}
+				aria-pressed={activeStream === JOB_LOG_STREAMS.EVENT}
 				class:selected={activeStream === JOB_LOG_STREAMS.EVENT}
 				onclick={() => (activeStream = JOB_LOG_STREAMS.EVENT)}
 			>event</button>
@@ -394,7 +396,8 @@ function formatTime(iso: string | null): string {
 		background: var(--surface-sunken);
 	}
 
-	.log-tabs button.selected {
+	.log-tabs button.selected,
+	.log-tabs button[aria-pressed='true'] {
 		color: var(--action-default-hover);
 		background: var(--action-default-wash);
 	}
