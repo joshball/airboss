@@ -5,9 +5,9 @@
 
 import { type JOB_KINDS, JOB_STATUSES } from '@ab/constants';
 import { db as defaultDb } from '@ab/db/connection';
+import { type HangarJobRow, hangarJob } from '@ab/hangar-jobs';
 import { and, desc, eq, inArray } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
-import { type HangarJobRow, hangarJob } from './schema';
 
 type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;
 

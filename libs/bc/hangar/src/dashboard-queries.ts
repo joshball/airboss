@@ -6,9 +6,10 @@
  */
 
 import { db as defaultDb } from '@ab/db/connection';
+import { hangarJob } from '@ab/hangar-jobs';
 import { count, isNull } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
-import { hangarJob, hangarReference, hangarSource } from './schema';
+import { hangarReference, hangarSource } from './schema';
 
 type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;
 

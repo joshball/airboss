@@ -3,7 +3,7 @@
  * row types, with a narrower `JobProgress` shape for handlers to emit.
  */
 
-import type { HangarJobLogRow, HangarJobRow } from '@ab/bc-hangar/schema';
+import type { HangarJobLogRow, HangarJobRow } from './schema';
 
 export type { HangarJobLogRow, HangarJobRow };
 

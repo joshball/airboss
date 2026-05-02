@@ -52,7 +52,6 @@ export {
 	sourceSchema,
 	tagsSchema,
 } from './form-schemas';
-export { hangarJobHandlers } from './jobs';
 export {
 	getActiveJobForTarget,
 	getLatestCompleteJobByKind,
@@ -95,21 +94,15 @@ export {
 	updateSource,
 } from './registry';
 export {
-	type HangarJobLogRow,
-	type HangarJobRow,
 	type HangarReferenceRow,
 	type HangarSourceEdition,
 	type HangarSourceMedia,
 	type HangarSourceRow,
 	type HangarSyncLogRow,
-	hangarJob,
-	hangarJobLog,
 	hangarReference,
 	hangarSchema,
 	hangarSource,
 	hangarSyncLog,
-	type NewHangarJobLogRow,
-	type NewHangarJobRow,
 	type NewHangarReferenceRow,
 	type NewHangarSourceRow,
 	type NewHangarSyncLogRow,

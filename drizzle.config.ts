@@ -8,6 +8,7 @@ export default defineConfig({
 		'./libs/bc/study/src/schema.ts',
 		'./libs/bc/study/src/citations/schema.ts',
 		'./libs/bc/hangar/src/schema.ts',
+		'./libs/hangar-jobs/src/schema.ts',
 		'./libs/bc/sim/src/schema.ts',
 		'./libs/audit/src/schema.ts',
 		'./libs/sources/src/db/schema.ts',
