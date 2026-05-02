@@ -6,6 +6,8 @@ CREATE SCHEMA "sim";
 --> statement-breakpoint
 CREATE SCHEMA "audit";
 --> statement-breakpoint
+CREATE SCHEMA "sources_registry";
+--> statement-breakpoint
 CREATE TABLE "bauth_account" (
 	"id" text PRIMARY KEY NOT NULL,
 	"user_id" text NOT NULL,
@@ -181,6 +183,9 @@ CREATE TABLE "study"."goal" (
 	"status" text DEFAULT 'active' NOT NULL,
 	"is_primary" boolean DEFAULT false NOT NULL,
 	"target_date" date,
+	"focus_domains" jsonb DEFAULT '[]'::jsonb NOT NULL,
+	"skip_domains" jsonb DEFAULT '[]'::jsonb NOT NULL,
+	"skip_nodes" jsonb DEFAULT '[]'::jsonb NOT NULL,
 	"seed_origin" text,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
 	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
@@ -206,84 +211,6 @@ CREATE TABLE "study"."goal_syllabus" (
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
 	CONSTRAINT "goal_syllabus_goal_id_syllabus_id_pk" PRIMARY KEY("goal_id","syllabus_id"),
 	CONSTRAINT "goal_syllabus_weight_check" CHECK ("weight" >= 0 AND "weight" <= 10)
-);
---> statement-breakpoint
-CREATE TABLE "study"."handbook_figure" (
-	"id" text PRIMARY KEY NOT NULL,
-	"section_id" text NOT NULL,
-	"ordinal" integer NOT NULL,
-	"caption" text DEFAULT '' NOT NULL,
-	"asset_path" text NOT NULL,
-	"width" integer,
-	"height" integer,
-	"seed_origin" text,
-	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
-	CONSTRAINT "handbook_figure_ordinal_check" CHECK ("ordinal" >= 0),
-	CONSTRAINT "handbook_figure_dimensions_check" CHECK (("width" IS NULL OR "width" > 0) AND ("height" IS NULL OR "height" > 0))
-);
---> statement-breakpoint
-CREATE TABLE "study"."handbook_read_state" (
-	"user_id" text NOT NULL,
-	"handbook_section_id" text NOT NULL,
-	"status" text DEFAULT 'unread' NOT NULL,
-	"comprehended" boolean DEFAULT false NOT NULL,
-	"last_read_at" timestamp with time zone,
-	"opened_count" integer DEFAULT 0 NOT NULL,
-	"total_seconds_visible" integer DEFAULT 0 NOT NULL,
-	"notes_md" text DEFAULT '' NOT NULL,
-	"seed_origin" text,
-	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
-	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
-	CONSTRAINT "handbook_read_state_user_id_handbook_section_id_pk" PRIMARY KEY("user_id","handbook_section_id"),
-	CONSTRAINT "handbook_read_state_status_check" CHECK ("status" IN ('unread', 'reading', 'read')),
-	CONSTRAINT "handbook_read_state_total_seconds_check" CHECK ("total_seconds_visible" >= 0),
-	CONSTRAINT "handbook_read_state_opened_count_check" CHECK ("opened_count" >= 0),
-	CONSTRAINT "handbook_read_state_notes_length_check" CHECK (char_length("notes_md") <= 16384)
-);
---> statement-breakpoint
-CREATE TABLE "study"."handbook_section" (
-	"id" text PRIMARY KEY NOT NULL,
-	"reference_id" text NOT NULL,
-	"parent_id" text,
-	"level" text NOT NULL,
-	"ordinal" integer NOT NULL,
-	"code" text NOT NULL,
-	"title" text NOT NULL,
-	"faa_page_start" text,
-	"faa_page_end" text,
-	"source_locator" text NOT NULL,
-	"content_md" text DEFAULT '' NOT NULL,
-	"content_hash" text NOT NULL,
-	"has_figures" boolean DEFAULT false NOT NULL,
-	"has_tables" boolean DEFAULT false NOT NULL,
-	"seed_origin" text,
-	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
-	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
-	CONSTRAINT "handbook_section_level_check" CHECK ("level" IN ('chapter', 'section', 'subsection')),
-	CONSTRAINT "handbook_section_code_shape_check" CHECK ("code" ~ '^[0-9]+(\.[0-9]+){0,2}$'),
-	CONSTRAINT "handbook_section_parent_level_check" CHECK (("level" = 'chapter' AND "parent_id" IS NULL) OR ("level" <> 'chapter' AND "parent_id" IS NOT NULL)),
-	CONSTRAINT "handbook_section_ordinal_check" CHECK ("ordinal" >= 0),
-	CONSTRAINT "handbook_section_faa_pages_check" CHECK (("faa_page_start" IS NULL AND "faa_page_end" IS NULL) OR "faa_page_start" IS NOT NULL)
-);
---> statement-breakpoint
-CREATE TABLE "study"."handbook_section_errata" (
-	"id" text PRIMARY KEY NOT NULL,
-	"section_id" text NOT NULL,
-	"errata_id" text NOT NULL,
-	"source_url" text NOT NULL,
-	"published_at" text NOT NULL,
-	"applied_at" timestamp with time zone DEFAULT now() NOT NULL,
-	"patch_kind" text NOT NULL,
-	"target_anchor" text,
-	"target_page" text NOT NULL,
-	"original_text" text,
-	"replacement_text" text NOT NULL,
-	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
-	CONSTRAINT "handbook_section_errata_patch_kind_check" CHECK ("patch_kind" IN ('add_subsection', 'append_paragraph', 'replace_paragraph')),
-	CONSTRAINT "handbook_section_errata_add_subsection_check" CHECK (("patch_kind" <> 'add_subsection') OR ("original_text" IS NULL)),
-	CONSTRAINT "handbook_section_errata_target_page_check" CHECK ("target_page" ~ '^[0-9]+-[0-9]+$'),
-	CONSTRAINT "handbook_section_errata_replacement_nonempty_check" CHECK (length(trim("replacement_text")) > 0),
-	CONSTRAINT "handbook_section_errata_source_url_check" CHECK ("source_url" LIKE 'https://%')
 );
 --> statement-breakpoint
 CREATE TABLE "study"."knowledge_edge" (
@@ -362,13 +289,96 @@ CREATE TABLE "study"."reference" (
 	"title" text NOT NULL,
 	"publisher" text DEFAULT 'FAA' NOT NULL,
 	"url" text,
+	"subjects" text[] DEFAULT '{}'::text[] NOT NULL,
+	"primary_cert" text,
+	"section_schema" jsonb DEFAULT '{}'::jsonb NOT NULL,
+	"metadata" jsonb DEFAULT '{}'::jsonb NOT NULL,
 	"superseded_by_id" text,
 	"seed_origin" text,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
 	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
-	CONSTRAINT "reference_kind_check" CHECK ("kind" IN ('handbook', 'cfr', 'ac', 'acs', 'pts', 'aim', 'pcg', 'ntsb', 'poh', 'other')),
 	CONSTRAINT "reference_document_slug_shape_check" CHECK ("document_slug" ~ '^[a-z0-9][a-z0-9-]{1,30}[a-z0-9]$'),
-	CONSTRAINT "reference_edition_length_check" CHECK (char_length("edition") BETWEEN 1 AND 64)
+	CONSTRAINT "reference_edition_length_check" CHECK (char_length("edition") BETWEEN 1 AND 64),
+	CONSTRAINT "reference_subjects_values_check" CHECK ("subjects" <@ ARRAY['regulations', 'weather', 'navigation', 'communications', 'airspace', 'aerodynamics', 'performance', 'weight-balance', 'aircraft-systems', 'flight-instruments', 'procedures', 'human-factors', 'medical', 'certification', 'maintenance', 'airports', 'emergencies', 'training-ops']::text[]),
+	CONSTRAINT "reference_primary_cert_check" CHECK ("primary_cert" IS NULL OR "primary_cert" IN ('student', 'sport', 'recreational', 'private', 'instrument', 'commercial', 'cfi', 'cfii', 'atp', 'all'))
+);
+--> statement-breakpoint
+CREATE TABLE "study"."reference_figure" (
+	"id" text PRIMARY KEY NOT NULL,
+	"section_id" text NOT NULL,
+	"ordinal" integer NOT NULL,
+	"caption" text DEFAULT '' NOT NULL,
+	"asset_path" text NOT NULL,
+	"width" integer,
+	"height" integer,
+	"seed_origin" text,
+	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
+	CONSTRAINT "reference_figure_ordinal_check" CHECK ("ordinal" >= 0),
+	CONSTRAINT "reference_figure_dimensions_check" CHECK (("width" IS NULL OR "width" > 0) AND ("height" IS NULL OR "height" > 0))
+);
+--> statement-breakpoint
+CREATE TABLE "study"."reference_section" (
+	"id" text PRIMARY KEY NOT NULL,
+	"reference_id" text NOT NULL,
+	"parent_id" text,
+	"level" text NOT NULL,
+	"ordinal" integer NOT NULL,
+	"depth" integer NOT NULL,
+	"code" text NOT NULL,
+	"title" text NOT NULL,
+	"faa_page_start" text,
+	"faa_page_end" text,
+	"source_locator" text NOT NULL,
+	"content_md" text DEFAULT '' NOT NULL,
+	"content_hash" text NOT NULL,
+	"has_figures" boolean DEFAULT false NOT NULL,
+	"has_tables" boolean DEFAULT false NOT NULL,
+	"metadata" jsonb DEFAULT '{}'::jsonb NOT NULL,
+	"seed_origin" text,
+	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
+	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
+	CONSTRAINT "reference_section_ordinal_check" CHECK ("ordinal" >= 0),
+	CONSTRAINT "reference_section_depth_check" CHECK ("depth" >= 0),
+	CONSTRAINT "reference_section_faa_pages_check" CHECK (("faa_page_start" IS NULL AND "faa_page_end" IS NULL) OR "faa_page_start" IS NOT NULL)
+);
+--> statement-breakpoint
+CREATE TABLE "study"."reference_section_errata" (
+	"id" text PRIMARY KEY NOT NULL,
+	"section_id" text NOT NULL,
+	"errata_id" text NOT NULL,
+	"source_url" text NOT NULL,
+	"published_at" text NOT NULL,
+	"applied_at" timestamp with time zone DEFAULT now() NOT NULL,
+	"patch_kind" text NOT NULL,
+	"target_anchor" text,
+	"target_page" text NOT NULL,
+	"original_text" text,
+	"replacement_text" text NOT NULL,
+	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
+	CONSTRAINT "reference_section_errata_patch_kind_check" CHECK ("patch_kind" IN ('add_subsection', 'append_paragraph', 'replace_paragraph')),
+	CONSTRAINT "reference_section_errata_add_subsection_check" CHECK (("patch_kind" <> 'add_subsection') OR ("original_text" IS NULL)),
+	CONSTRAINT "reference_section_errata_target_page_check" CHECK ("target_page" ~ '^[0-9]+-[0-9]+$'),
+	CONSTRAINT "reference_section_errata_replacement_nonempty_check" CHECK (length(trim("replacement_text")) > 0),
+	CONSTRAINT "reference_section_errata_source_url_check" CHECK ("source_url" LIKE 'https://%')
+);
+--> statement-breakpoint
+CREATE TABLE "study"."reference_section_read_state" (
+	"user_id" text NOT NULL,
+	"reference_section_id" text NOT NULL,
+	"status" text DEFAULT 'unread' NOT NULL,
+	"comprehended" boolean DEFAULT false NOT NULL,
+	"last_read_at" timestamp with time zone,
+	"opened_count" integer DEFAULT 0 NOT NULL,
+	"total_seconds_visible" integer DEFAULT 0 NOT NULL,
+	"notes_md" text DEFAULT '' NOT NULL,
+	"seed_origin" text,
+	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
+	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
+	CONSTRAINT "reference_section_read_state_user_id_reference_section_id_pk" PRIMARY KEY("user_id","reference_section_id"),
+	CONSTRAINT "reference_section_read_state_status_check" CHECK ("status" IN ('unread', 'reading', 'read')),
+	CONSTRAINT "reference_section_read_state_total_seconds_check" CHECK ("total_seconds_visible" >= 0),
+	CONSTRAINT "reference_section_read_state_opened_count_check" CHECK ("opened_count" >= 0),
+	CONSTRAINT "reference_section_read_state_notes_length_check" CHECK (char_length("notes_md") <= 16384)
 );
 --> statement-breakpoint
 CREATE TABLE "study"."review" (
@@ -544,6 +554,7 @@ CREATE TABLE "study"."syllabus_node" (
 	"classes" jsonb,
 	"content_hash" text,
 	"seed_origin" text,
+	"requires_teaching" boolean DEFAULT false NOT NULL,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
 	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
 	CONSTRAINT "syllabus_node_level_check" CHECK ("level" IN ('area', 'task', 'element', 'chapter', 'section', 'subsection')),
@@ -554,6 +565,7 @@ CREATE TABLE "study"."syllabus_node" (
 	CONSTRAINT "syllabus_node_required_bloom_leaf_check" CHECK (("is_leaf" = true AND "required_bloom" IS NOT NULL) OR ("is_leaf" = false AND "required_bloom" IS NULL)),
 	CONSTRAINT "syllabus_node_airboss_ref_shape_check" CHECK ("airboss_ref" IS NULL OR "airboss_ref" LIKE 'airboss-ref:%'),
 	CONSTRAINT "syllabus_node_ordinal_check" CHECK ("ordinal" >= 0),
+	CONSTRAINT "syllabus_node_requires_teaching_triad_check" CHECK ("requires_teaching" = false OR "triad" IS NOT NULL),
 	CONSTRAINT "syllabus_node_classes_check" CHECK ("classes" IS NULL OR (jsonb_typeof("classes") = 'array' AND jsonb_array_length("classes") > 0 AND "classes" <@ '["asel", "amel", "ases", "ames"]'::jsonb))
 );
 --> statement-breakpoint
@@ -581,34 +593,6 @@ CREATE TABLE "study"."content_citations" (
 	CONSTRAINT "content_citation_source_type_check" CHECK ("source_type" IN ('card', 'rep', 'scenario', 'node')),
 	CONSTRAINT "content_citation_target_type_check" CHECK ("target_type" IN ('regulation_node', 'ac_reference', 'external_ref', 'knowledge_node')),
 	CONSTRAINT "content_citation_context_length_check" CHECK ("citation_context" IS NULL OR char_length("citation_context") <= 500)
-);
---> statement-breakpoint
-CREATE TABLE "hangar"."job" (
-	"id" text PRIMARY KEY NOT NULL,
-	"kind" text NOT NULL,
-	"target_type" text,
-	"target_id" text,
-	"status" text DEFAULT 'queued' NOT NULL,
-	"progress" jsonb DEFAULT '{}'::jsonb NOT NULL,
-	"payload" jsonb DEFAULT '{}'::jsonb NOT NULL,
-	"result" jsonb,
-	"error" text,
-	"actor_id" text,
-	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
-	"started_at" timestamp with time zone,
-	"finished_at" timestamp with time zone,
-	CONSTRAINT "hangar_job_status_check" CHECK ("status" IN ('queued', 'running', 'complete', 'failed', 'cancelled')),
-	CONSTRAINT "hangar_job_kind_check" CHECK ("kind" IN ('sync-to-disk', 'fetch-source', 'upload-source', 'extract-source', 'build-references', 'diff-source', 'validate-references', 'size-report'))
-);
---> statement-breakpoint
-CREATE TABLE "hangar"."job_log" (
-	"id" text PRIMARY KEY NOT NULL,
-	"job_id" text NOT NULL,
-	"seq" integer NOT NULL,
-	"stream" text NOT NULL,
-	"line" text NOT NULL,
-	"at" timestamp with time zone DEFAULT now() NOT NULL,
-	CONSTRAINT "hangar_job_log_stream_check" CHECK ("stream" IN ('stdout', 'stderr', 'event'))
 );
 --> statement-breakpoint
 CREATE TABLE "hangar"."reference" (
@@ -669,6 +653,35 @@ CREATE TABLE "hangar"."sync_log" (
 	CONSTRAINT "hangar_sync_log_outcome_check" CHECK ("outcome" IN ('success', 'noop', 'conflict', 'failed'))
 );
 --> statement-breakpoint
+CREATE TABLE "hangar"."job" (
+	"id" text PRIMARY KEY NOT NULL,
+	"kind" text NOT NULL,
+	"target_type" text,
+	"target_id" text,
+	"status" text DEFAULT 'queued' NOT NULL,
+	"progress" jsonb DEFAULT '{}'::jsonb NOT NULL,
+	"payload" jsonb DEFAULT '{}'::jsonb NOT NULL,
+	"result" jsonb,
+	"error" text,
+	"actor_id" text,
+	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
+	"started_at" timestamp with time zone,
+	"finished_at" timestamp with time zone,
+	"last_heartbeat_at" timestamp with time zone,
+	CONSTRAINT "hangar_job_status_check" CHECK ("status" IN ('queued', 'running', 'complete', 'failed', 'cancelled')),
+	CONSTRAINT "hangar_job_kind_check" CHECK ("kind" IN ('sync-to-disk', 'fetch-source', 'upload-source', 'extract-source', 'build-references', 'diff-source', 'validate-references'))
+);
+--> statement-breakpoint
+CREATE TABLE "hangar"."job_log" (
+	"id" text PRIMARY KEY NOT NULL,
+	"job_id" text NOT NULL,
+	"seq" integer NOT NULL,
+	"stream" text NOT NULL,
+	"line" text NOT NULL,
+	"at" timestamp with time zone DEFAULT now() NOT NULL,
+	CONSTRAINT "hangar_job_log_stream_check" CHECK ("stream" IN ('stdout', 'stderr', 'event'))
+);
+--> statement-breakpoint
 CREATE TABLE "sim"."attempt" (
 	"id" text PRIMARY KEY NOT NULL,
 	"user_id" text NOT NULL,
@@ -695,11 +708,37 @@ CREATE TABLE "audit"."audit_log" (
 	"after" jsonb,
 	"metadata" jsonb DEFAULT '{}'::jsonb NOT NULL,
 	CONSTRAINT "audit_log_op_check" CHECK ("op" IN ('create', 'update', 'delete', 'action')),
-	CONSTRAINT "audit_log_target_type_check" CHECK ("target_type" IN ('hangar.ping', 'hangar.reference', 'hangar.source', 'hangar.sync', 'hangar.job', 'hangar.source.edition-resolved', 'hangar.source.edition-drift', 'hangar.source.thumbnail-generated'))
+	CONSTRAINT "audit_log_target_type_check" CHECK ("target_type" IN ('hangar.ping', 'hangar.reference', 'hangar.source', 'hangar.sync', 'hangar.job', 'hangar.source.edition-resolved', 'hangar.source.edition-drift', 'hangar.source.thumbnail-generated', 'hangar.user', 'study.session_item_result', 'auth.login', 'auth.login-failed', 'auth.logout'))
+);
+--> statement-breakpoint
+CREATE TABLE "sources_registry"."editions" (
+	"id" text PRIMARY KEY NOT NULL,
+	"source_id" text NOT NULL,
+	"edition_label" text NOT NULL,
+	"published_at" timestamp with time zone,
+	"retired_at" timestamp with time zone,
+	"metadata" jsonb
+);
+--> statement-breakpoint
+CREATE TABLE "sources_registry"."promotion_batches" (
+	"id" text PRIMARY KEY NOT NULL,
+	"corpus" text NOT NULL,
+	"reviewer_id" text NOT NULL,
+	"promotion_date" timestamp with time zone NOT NULL,
+	"scope" jsonb NOT NULL,
+	"input_source" text NOT NULL,
+	"state" text NOT NULL,
+	"from_lifecycle" text NOT NULL,
+	"to_lifecycle" text NOT NULL,
+	"previous_batch_id" text,
+	CONSTRAINT "promotion_batches_state_check" CHECK ("state" IN ('promoted', 'de-promoted')),
+	CONSTRAINT "promotion_batches_from_lifecycle_check" CHECK ("from_lifecycle" IN ('draft', 'pending', 'accepted', 'retired', 'superseded')),
+	CONSTRAINT "promotion_batches_to_lifecycle_check" CHECK ("to_lifecycle" IN ('draft', 'pending', 'accepted', 'retired', 'superseded'))
 );
 --> statement-breakpoint
 ALTER TABLE "bauth_account" ADD CONSTRAINT "bauth_account_user_id_bauth_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."bauth_user"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "bauth_session" ADD CONSTRAINT "bauth_session_user_id_bauth_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."bauth_user"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "bauth_session" ADD CONSTRAINT "bauth_session_impersonated_by_bauth_user_id_fk" FOREIGN KEY ("impersonated_by") REFERENCES "public"."bauth_user"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "study"."card" ADD CONSTRAINT "card_user_id_bauth_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."bauth_user"("id") ON DELETE cascade ON UPDATE cascade;--> statement-breakpoint
 ALTER TABLE "study"."card" ADD CONSTRAINT "card_node_id_knowledge_node_id_fk" FOREIGN KEY ("node_id") REFERENCES "study"."knowledge_node"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "study"."card_feedback" ADD CONSTRAINT "card_feedback_card_id_card_id_fk" FOREIGN KEY ("card_id") REFERENCES "study"."card"("id") ON DELETE cascade ON UPDATE cascade;--> statement-breakpoint
@@ -717,18 +756,18 @@ ALTER TABLE "study"."goal_node" ADD CONSTRAINT "goal_node_goal_id_goal_id_fk" FO
 ALTER TABLE "study"."goal_node" ADD CONSTRAINT "goal_node_knowledge_node_id_knowledge_node_id_fk" FOREIGN KEY ("knowledge_node_id") REFERENCES "study"."knowledge_node"("id") ON DELETE restrict ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "study"."goal_syllabus" ADD CONSTRAINT "goal_syllabus_goal_id_goal_id_fk" FOREIGN KEY ("goal_id") REFERENCES "study"."goal"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "study"."goal_syllabus" ADD CONSTRAINT "goal_syllabus_syllabus_id_syllabus_id_fk" FOREIGN KEY ("syllabus_id") REFERENCES "study"."syllabus"("id") ON DELETE restrict ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "study"."handbook_figure" ADD CONSTRAINT "handbook_figure_section_id_handbook_section_id_fk" FOREIGN KEY ("section_id") REFERENCES "study"."handbook_section"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "study"."handbook_read_state" ADD CONSTRAINT "handbook_read_state_user_id_bauth_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."bauth_user"("id") ON DELETE cascade ON UPDATE cascade;--> statement-breakpoint
-ALTER TABLE "study"."handbook_read_state" ADD CONSTRAINT "handbook_read_state_handbook_section_id_handbook_section_id_fk" FOREIGN KEY ("handbook_section_id") REFERENCES "study"."handbook_section"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "study"."handbook_section" ADD CONSTRAINT "handbook_section_reference_id_reference_id_fk" FOREIGN KEY ("reference_id") REFERENCES "study"."reference"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "study"."handbook_section" ADD CONSTRAINT "handbook_section_parent_id_handbook_section_id_fk" FOREIGN KEY ("parent_id") REFERENCES "study"."handbook_section"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "study"."handbook_section_errata" ADD CONSTRAINT "handbook_section_errata_section_id_handbook_section_id_fk" FOREIGN KEY ("section_id") REFERENCES "study"."handbook_section"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "study"."knowledge_edge" ADD CONSTRAINT "knowledge_edge_from_node_id_knowledge_node_id_fk" FOREIGN KEY ("from_node_id") REFERENCES "study"."knowledge_node"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "study"."knowledge_node" ADD CONSTRAINT "knowledge_node_author_id_bauth_user_id_fk" FOREIGN KEY ("author_id") REFERENCES "public"."bauth_user"("id") ON DELETE set null ON UPDATE cascade;--> statement-breakpoint
 ALTER TABLE "study"."knowledge_node_progress" ADD CONSTRAINT "knowledge_node_progress_user_id_bauth_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."bauth_user"("id") ON DELETE cascade ON UPDATE cascade;--> statement-breakpoint
 ALTER TABLE "study"."knowledge_node_progress" ADD CONSTRAINT "knowledge_node_progress_node_id_knowledge_node_id_fk" FOREIGN KEY ("node_id") REFERENCES "study"."knowledge_node"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "study"."memory_review_session" ADD CONSTRAINT "memory_review_session_user_id_bauth_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."bauth_user"("id") ON DELETE cascade ON UPDATE cascade;--> statement-breakpoint
 ALTER TABLE "study"."reference" ADD CONSTRAINT "reference_superseded_by_id_reference_id_fk" FOREIGN KEY ("superseded_by_id") REFERENCES "study"."reference"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "study"."reference_figure" ADD CONSTRAINT "reference_figure_section_id_reference_section_id_fk" FOREIGN KEY ("section_id") REFERENCES "study"."reference_section"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "study"."reference_section" ADD CONSTRAINT "reference_section_reference_id_reference_id_fk" FOREIGN KEY ("reference_id") REFERENCES "study"."reference"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "study"."reference_section" ADD CONSTRAINT "reference_section_parent_id_reference_section_id_fk" FOREIGN KEY ("parent_id") REFERENCES "study"."reference_section"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "study"."reference_section_errata" ADD CONSTRAINT "reference_section_errata_section_id_reference_section_id_fk" FOREIGN KEY ("section_id") REFERENCES "study"."reference_section"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "study"."reference_section_read_state" ADD CONSTRAINT "reference_section_read_state_user_id_bauth_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."bauth_user"("id") ON DELETE cascade ON UPDATE cascade;--> statement-breakpoint
+ALTER TABLE "study"."reference_section_read_state" ADD CONSTRAINT "reference_section_read_state_reference_section_id_reference_section_id_fk" FOREIGN KEY ("reference_section_id") REFERENCES "study"."reference_section"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "study"."review" ADD CONSTRAINT "review_card_id_card_id_fk" FOREIGN KEY ("card_id") REFERENCES "study"."card"("id") ON DELETE restrict ON UPDATE cascade;--> statement-breakpoint
 ALTER TABLE "study"."review" ADD CONSTRAINT "review_user_id_bauth_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."bauth_user"("id") ON DELETE cascade ON UPDATE cascade;--> statement-breakpoint
 ALTER TABLE "study"."review" ADD CONSTRAINT "review_review_session_id_memory_review_session_id_fk" FOREIGN KEY ("review_session_id") REFERENCES "study"."memory_review_session"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
@@ -752,13 +791,19 @@ ALTER TABLE "study"."syllabus_node" ADD CONSTRAINT "syllabus_node_parent_id_syll
 ALTER TABLE "study"."syllabus_node_link" ADD CONSTRAINT "syllabus_node_link_syllabus_node_id_syllabus_node_id_fk" FOREIGN KEY ("syllabus_node_id") REFERENCES "study"."syllabus_node"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "study"."syllabus_node_link" ADD CONSTRAINT "syllabus_node_link_knowledge_node_id_knowledge_node_id_fk" FOREIGN KEY ("knowledge_node_id") REFERENCES "study"."knowledge_node"("id") ON DELETE restrict ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "study"."content_citations" ADD CONSTRAINT "content_citations_created_by_bauth_user_id_fk" FOREIGN KEY ("created_by") REFERENCES "public"."bauth_user"("id") ON DELETE cascade ON UPDATE cascade;--> statement-breakpoint
-ALTER TABLE "hangar"."job" ADD CONSTRAINT "job_actor_id_bauth_user_id_fk" FOREIGN KEY ("actor_id") REFERENCES "public"."bauth_user"("id") ON DELETE set null ON UPDATE cascade;--> statement-breakpoint
-ALTER TABLE "hangar"."job_log" ADD CONSTRAINT "job_log_job_id_job_id_fk" FOREIGN KEY ("job_id") REFERENCES "hangar"."job"("id") ON DELETE cascade ON UPDATE cascade;--> statement-breakpoint
 ALTER TABLE "hangar"."reference" ADD CONSTRAINT "reference_updated_by_bauth_user_id_fk" FOREIGN KEY ("updated_by") REFERENCES "public"."bauth_user"("id") ON DELETE set null ON UPDATE cascade;--> statement-breakpoint
 ALTER TABLE "hangar"."source" ADD CONSTRAINT "source_updated_by_bauth_user_id_fk" FOREIGN KEY ("updated_by") REFERENCES "public"."bauth_user"("id") ON DELETE set null ON UPDATE cascade;--> statement-breakpoint
 ALTER TABLE "hangar"."sync_log" ADD CONSTRAINT "sync_log_actor_id_bauth_user_id_fk" FOREIGN KEY ("actor_id") REFERENCES "public"."bauth_user"("id") ON DELETE set null ON UPDATE cascade;--> statement-breakpoint
+ALTER TABLE "hangar"."job" ADD CONSTRAINT "job_actor_id_bauth_user_id_fk" FOREIGN KEY ("actor_id") REFERENCES "public"."bauth_user"("id") ON DELETE set null ON UPDATE cascade;--> statement-breakpoint
+ALTER TABLE "hangar"."job_log" ADD CONSTRAINT "job_log_job_id_job_id_fk" FOREIGN KEY ("job_id") REFERENCES "hangar"."job"("id") ON DELETE cascade ON UPDATE cascade;--> statement-breakpoint
 ALTER TABLE "sim"."attempt" ADD CONSTRAINT "attempt_user_id_bauth_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."bauth_user"("id") ON DELETE cascade ON UPDATE cascade;--> statement-breakpoint
 ALTER TABLE "audit"."audit_log" ADD CONSTRAINT "audit_log_actor_id_bauth_user_id_fk" FOREIGN KEY ("actor_id") REFERENCES "public"."bauth_user"("id") ON DELETE set null ON UPDATE cascade;--> statement-breakpoint
+ALTER TABLE "sources_registry"."promotion_batches" ADD CONSTRAINT "promotion_batches_previous_batch_fk" FOREIGN KEY ("previous_batch_id") REFERENCES "sources_registry"."promotion_batches"("id") ON DELETE restrict ON UPDATE no action;--> statement-breakpoint
+CREATE INDEX "bauth_account_user_idx" ON "bauth_account" USING btree ("user_id");--> statement-breakpoint
+CREATE INDEX "bauth_account_provider_account_idx" ON "bauth_account" USING btree ("provider_id","account_id");--> statement-breakpoint
+CREATE INDEX "bauth_session_user_idx" ON "bauth_session" USING btree ("user_id");--> statement-breakpoint
+CREATE INDEX "bauth_session_expires_at_idx" ON "bauth_session" USING btree ("expires_at");--> statement-breakpoint
+CREATE INDEX "bauth_verification_identifier_idx" ON "bauth_verification" USING btree ("identifier");--> statement-breakpoint
 CREATE INDEX "card_user_status_idx" ON "study"."card" USING btree ("user_id","status");--> statement-breakpoint
 CREATE INDEX "card_user_domain_idx" ON "study"."card" USING btree ("user_id","domain");--> statement-breakpoint
 CREATE INDEX "card_user_created_idx" ON "study"."card" USING btree ("user_id","created_at");--> statement-breakpoint
@@ -786,14 +831,6 @@ CREATE INDEX "goal_user_status_idx" ON "study"."goal" USING btree ("user_id","st
 CREATE UNIQUE INDEX "goal_user_primary_unique" ON "study"."goal" USING btree ("user_id") WHERE is_primary = true;--> statement-breakpoint
 CREATE INDEX "goal_node_by_knowledge_node_idx" ON "study"."goal_node" USING btree ("knowledge_node_id");--> statement-breakpoint
 CREATE INDEX "goal_syllabus_by_syllabus_idx" ON "study"."goal_syllabus" USING btree ("syllabus_id");--> statement-breakpoint
-CREATE INDEX "handbook_figure_section_idx" ON "study"."handbook_figure" USING btree ("section_id","ordinal");--> statement-breakpoint
-CREATE INDEX "handbook_read_state_user_status_idx" ON "study"."handbook_read_state" USING btree ("user_id","status");--> statement-breakpoint
-CREATE INDEX "handbook_read_state_section_idx" ON "study"."handbook_read_state" USING btree ("handbook_section_id");--> statement-breakpoint
-CREATE UNIQUE INDEX "handbook_section_ref_code_unique" ON "study"."handbook_section" USING btree ("reference_id","code");--> statement-breakpoint
-CREATE INDEX "handbook_section_tree_idx" ON "study"."handbook_section" USING btree ("reference_id","parent_id","ordinal");--> statement-breakpoint
-CREATE INDEX "handbook_section_level_idx" ON "study"."handbook_section" USING btree ("reference_id","level","ordinal");--> statement-breakpoint
-CREATE UNIQUE INDEX "handbook_section_errata_section_errata_idx" ON "study"."handbook_section_errata" USING btree ("section_id","errata_id");--> statement-breakpoint
-CREATE INDEX "handbook_section_errata_section_applied_idx" ON "study"."handbook_section_errata" USING btree ("section_id","applied_at");--> statement-breakpoint
 CREATE INDEX "knowledge_edge_from_idx" ON "study"."knowledge_edge" USING btree ("from_node_id","edge_type");--> statement-breakpoint
 CREATE INDEX "knowledge_edge_to_idx" ON "study"."knowledge_edge" USING btree ("to_node_id","edge_type");--> statement-breakpoint
 CREATE INDEX "knowledge_node_domain_idx" ON "study"."knowledge_node" USING btree ("domain");--> statement-breakpoint
@@ -808,6 +845,15 @@ CREATE INDEX "mrs_user_started_idx" ON "study"."memory_review_session" USING btr
 CREATE UNIQUE INDEX "reference_doc_edition_unique" ON "study"."reference" USING btree ("document_slug","edition");--> statement-breakpoint
 CREATE INDEX "reference_kind_idx" ON "study"."reference" USING btree ("kind");--> statement-breakpoint
 CREATE INDEX "reference_doc_superseded_idx" ON "study"."reference" USING btree ("document_slug","superseded_by_id");--> statement-breakpoint
+CREATE INDEX "reference_figure_section_idx" ON "study"."reference_figure" USING btree ("section_id","ordinal");--> statement-breakpoint
+CREATE UNIQUE INDEX "reference_section_ref_code_unique" ON "study"."reference_section" USING btree ("reference_id","code");--> statement-breakpoint
+CREATE INDEX "reference_section_tree_idx" ON "study"."reference_section" USING btree ("reference_id","parent_id","ordinal");--> statement-breakpoint
+CREATE INDEX "reference_section_depth_idx" ON "study"."reference_section" USING btree ("reference_id","depth","ordinal");--> statement-breakpoint
+CREATE INDEX "reference_section_readable_idx" ON "study"."reference_section" USING btree ("reference_id") WHERE "study"."reference_section"."content_md" <> '';--> statement-breakpoint
+CREATE UNIQUE INDEX "reference_section_errata_section_errata_idx" ON "study"."reference_section_errata" USING btree ("section_id","errata_id");--> statement-breakpoint
+CREATE INDEX "reference_section_errata_section_applied_idx" ON "study"."reference_section_errata" USING btree ("section_id","applied_at");--> statement-breakpoint
+CREATE INDEX "reference_section_read_state_user_status_idx" ON "study"."reference_section_read_state" USING btree ("user_id","status");--> statement-breakpoint
+CREATE INDEX "reference_section_read_state_section_idx" ON "study"."reference_section_read_state" USING btree ("reference_section_id");--> statement-breakpoint
 CREATE INDEX "review_card_reviewed_idx" ON "study"."review" USING btree ("card_id","reviewed_at");--> statement-breakpoint
 CREATE INDEX "review_user_reviewed_idx" ON "study"."review" USING btree ("user_id","reviewed_at");--> statement-breakpoint
 CREATE INDEX "review_session_card_idx" ON "study"."review" USING btree ("review_session_id","card_id");--> statement-breakpoint
@@ -846,11 +892,6 @@ CREATE INDEX "content_citation_target_idx" ON "study"."content_citations" USING 
 CREATE INDEX "content_citation_card_source_idx" ON "study"."content_citations" USING btree ("source_id") WHERE source_type = 'card';--> statement-breakpoint
 CREATE INDEX "content_citation_regulation_target_idx" ON "study"."content_citations" USING btree ("target_id") WHERE target_type = 'regulation_node';--> statement-breakpoint
 CREATE UNIQUE INDEX "content_citation_source_target_unique" ON "study"."content_citations" USING btree ("source_type","source_id","target_type","target_id");--> statement-breakpoint
-CREATE INDEX "hangar_job_status_idx" ON "hangar"."job" USING btree ("status","created_at");--> statement-breakpoint
-CREATE INDEX "hangar_job_kind_idx" ON "hangar"."job" USING btree ("kind","created_at");--> statement-breakpoint
-CREATE INDEX "hangar_job_target_idx" ON "hangar"."job" USING btree ("target_type","target_id","created_at");--> statement-breakpoint
-CREATE INDEX "hangar_job_actor_idx" ON "hangar"."job" USING btree ("actor_id","created_at");--> statement-breakpoint
-CREATE INDEX "hangar_job_log_job_idx" ON "hangar"."job_log" USING btree ("job_id","seq");--> statement-breakpoint
 CREATE INDEX "hangar_reference_dirty_idx" ON "hangar"."reference" USING btree ("dirty") WHERE "hangar"."reference"."dirty" = true;--> statement-breakpoint
 CREATE INDEX "hangar_reference_updated_idx" ON "hangar"."reference" USING btree ("updated_at");--> statement-breakpoint
 CREATE INDEX "hangar_reference_live_idx" ON "hangar"."reference" USING btree ("id") WHERE "hangar"."reference"."deleted_at" IS NULL;--> statement-breakpoint
@@ -859,7 +900,19 @@ CREATE INDEX "hangar_source_dirty_idx" ON "hangar"."source" USING btree ("dirty"
 CREATE INDEX "hangar_source_live_idx" ON "hangar"."source" USING btree ("id") WHERE "hangar"."source"."deleted_at" IS NULL;--> statement-breakpoint
 CREATE INDEX "hangar_sync_log_actor_idx" ON "hangar"."sync_log" USING btree ("actor_id","started_at");--> statement-breakpoint
 CREATE INDEX "hangar_sync_log_outcome_idx" ON "hangar"."sync_log" USING btree ("outcome","started_at");--> statement-breakpoint
+CREATE INDEX "hangar_job_status_idx" ON "hangar"."job" USING btree ("status","created_at");--> statement-breakpoint
+CREATE INDEX "hangar_job_kind_idx" ON "hangar"."job" USING btree ("kind","created_at");--> statement-breakpoint
+CREATE INDEX "hangar_job_target_idx" ON "hangar"."job" USING btree ("target_type","target_id","created_at");--> statement-breakpoint
+CREATE INDEX "hangar_job_actor_idx" ON "hangar"."job" USING btree ("actor_id","created_at");--> statement-breakpoint
+CREATE INDEX "hangar_job_log_job_idx" ON "hangar"."job_log" USING btree ("job_id","seq");--> statement-breakpoint
 CREATE INDEX "sim_attempt_user_scenario_ended_idx" ON "sim"."attempt" USING btree ("user_id","scenario_id","ended_at");--> statement-breakpoint
 CREATE INDEX "sim_attempt_user_ended_idx" ON "sim"."attempt" USING btree ("user_id","ended_at");--> statement-breakpoint
 CREATE INDEX "audit_log_actor_idx" ON "audit"."audit_log" USING btree ("actor_id","timestamp");--> statement-breakpoint
-CREATE INDEX "audit_log_target_idx" ON "audit"."audit_log" USING btree ("target_type","target_id","timestamp");
+CREATE INDEX "audit_log_target_idx" ON "audit"."audit_log" USING btree ("target_type","target_id","timestamp");--> statement-breakpoint
+CREATE INDEX "audit_log_timestamp_idx" ON "audit"."audit_log" USING btree ("timestamp");--> statement-breakpoint
+CREATE INDEX "audit_log_target_type_time_idx" ON "audit"."audit_log" USING btree ("target_type","timestamp");--> statement-breakpoint
+CREATE INDEX "editions_source_date_idx" ON "sources_registry"."editions" USING btree ("source_id","published_at");--> statement-breakpoint
+CREATE INDEX "editions_source_current_idx" ON "sources_registry"."editions" USING btree ("source_id") WHERE retired_at IS NULL;--> statement-breakpoint
+CREATE INDEX "promotion_batches_corpus_date_idx" ON "sources_registry"."promotion_batches" USING btree ("corpus","promotion_date" DESC NULLS LAST);--> statement-breakpoint
+CREATE INDEX "promotion_batches_previous_batch_idx" ON "sources_registry"."promotion_batches" USING btree ("previous_batch_id");--> statement-breakpoint
+CREATE INDEX "promotion_batches_reviewer_date_idx" ON "sources_registry"."promotion_batches" USING btree ("reviewer_id","promotion_date" DESC NULLS LAST);

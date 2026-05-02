@@ -5,50 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1777386438856,
+      "when": 1777728994623,
       "tag": "0000_initial",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1777513451042,
-      "tag": "0001_engine_goal_cutover",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1777553920373,
-      "tag": "0002_evidence_kind_gating",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1777582957989,
-      "tag": "0003_widen_audit_log_target_type_for_hangar_user",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "7",
-      "when": 1777589789731,
-      "tag": "0004_organic_harry_osborn",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "7",
-      "when": 1777641506043,
-      "tag": "0005_silly_crusher_hogan",
-      "breakpoints": true
-    },
-    {
-      "idx": 7,
-      "version": "7",
-      "when": 1777724767536,
-      "tag": "0007_promotion_batches_and_editions",
       "breakpoints": true
     }
   ]
