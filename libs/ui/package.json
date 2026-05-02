@@ -11,6 +11,7 @@
 		"./lib/*": "./src/lib/*"
 	},
 	"dependencies": {
+		"@ab/activities": "workspace:*",
 		"@ab/constants": "workspace:*",
 		"@ab/themes": "workspace:*"
 	}
