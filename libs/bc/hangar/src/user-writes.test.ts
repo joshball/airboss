@@ -233,6 +233,169 @@ describe('setUserRole', () => {
 	});
 });
 
+describe('BetterAuthApiError wrap (api-throws on every write op)', () => {
+	it('banUserAction wraps a thrown api error and skips the audit', async () => {
+		// readBanSnapshot before -> banned=false (mid-flight DB read works).
+		drizzleResults.push([{ banned: false, banReason: null, banExpires: null }]);
+		const { bundle } = makeAdmin({
+			banUser: vi.fn().mockRejectedValue(new Error('admin plugin: forbidden')),
+		});
+		await expect(
+			banUserAction(
+				{
+					auth: bundle,
+					actorId: 'admin1',
+					actorEmail: 'admin@a.test',
+					targetUserId: 'target',
+					reason: 'spam',
+					headers: baseHeaders,
+					...baseRequestCtx,
+				},
+				dbStub,
+			),
+		).rejects.toBeInstanceOf(BetterAuthApiError);
+		expect(auditWriteMock).not.toHaveBeenCalled();
+	});
+
+	it('unbanUserAction wraps a thrown api error and skips the audit', async () => {
+		drizzleResults.push([{ banned: true, banReason: 'old', banExpires: null }]);
+		const { bundle } = makeAdmin({
+			unbanUser: vi.fn().mockRejectedValue(new Error('admin plugin: forbidden')),
+		});
+		await expect(
+			unbanUserAction(
+				{
+					auth: bundle,
+					actorId: 'admin1',
+					actorEmail: 'admin@a.test',
+					targetUserId: 'target',
+					headers: baseHeaders,
+					...baseRequestCtx,
+				},
+				dbStub,
+			),
+		).rejects.toBeInstanceOf(BetterAuthApiError);
+		expect(auditWriteMock).not.toHaveBeenCalled();
+	});
+
+	it('revokeUserSession wraps a thrown api error and skips the audit', async () => {
+		// Session lookup succeeds; better-auth then throws.
+		drizzleResults.push([{ token: 'tok_xyz', userId: 'target' }]);
+		const { bundle } = makeAdmin({
+			revokeUserSession: vi.fn().mockRejectedValue(new Error('admin plugin: forbidden')),
+		});
+		await expect(
+			revokeUserSession(
+				{
+					auth: bundle,
+					actorId: 'admin1',
+					actorEmail: 'admin@a.test',
+					targetUserId: 'target',
+					sessionId: 'sess_abc',
+					headers: baseHeaders,
+					...baseRequestCtx,
+				},
+				dbStub,
+			),
+		).rejects.toBeInstanceOf(BetterAuthApiError);
+		expect(auditWriteMock).not.toHaveBeenCalled();
+	});
+
+	it('revokeAllUserSessions wraps a thrown api error and skips the audit', async () => {
+		countUserSessionsMock.mockResolvedValueOnce(2);
+		hasUserSessionWithIdMock.mockResolvedValueOnce(false);
+		const { bundle } = makeAdmin({
+			revokeUserSessions: vi.fn().mockRejectedValue(new Error('admin plugin: forbidden')),
+		});
+		await expect(
+			revokeAllUserSessions(
+				{
+					auth: bundle,
+					actorId: 'admin1',
+					actorEmail: 'admin@a.test',
+					targetUserId: 'target',
+					currentSessionId: 'sess_self',
+					headers: baseHeaders,
+					...baseRequestCtx,
+				},
+				dbStub,
+			),
+		).rejects.toBeInstanceOf(BetterAuthApiError);
+		expect(auditWriteMock).not.toHaveBeenCalled();
+	});
+});
+
+describe('post-write snapshot failure (mid-flight DB / FK race)', () => {
+	it('banUserAction throws BetterAuthApiError when the after-snapshot user has disappeared', async () => {
+		// readBanSnapshot before -> succeeds
+		drizzleResults.push([{ banned: false, banReason: null, banExpires: null }]);
+		// readBanSnapshot after -> empty (user vanished); BC code throws
+		// `BetterAuthApiError` so the audit row is not written.
+		drizzleResults.push([]);
+		const { bundle } = makeAdmin();
+		await expect(
+			banUserAction(
+				{
+					auth: bundle,
+					actorId: 'admin1',
+					actorEmail: 'admin@a.test',
+					targetUserId: 'target',
+					reason: 'spam',
+					headers: baseHeaders,
+					...baseRequestCtx,
+				},
+				dbStub,
+			),
+		).rejects.toBeInstanceOf(BetterAuthApiError);
+		expect(auditWriteMock).not.toHaveBeenCalled();
+	});
+
+	it('unbanUserAction throws BetterAuthApiError when the after-snapshot is missing', async () => {
+		drizzleResults.push([{ banned: true, banReason: 'old', banExpires: null }]);
+		drizzleResults.push([]); // after-snapshot empty
+		const { bundle } = makeAdmin();
+		await expect(
+			unbanUserAction(
+				{
+					auth: bundle,
+					actorId: 'admin1',
+					actorEmail: 'admin@a.test',
+					targetUserId: 'target',
+					headers: baseHeaders,
+					...baseRequestCtx,
+				},
+				dbStub,
+			),
+		).rejects.toBeInstanceOf(BetterAuthApiError);
+		expect(auditWriteMock).not.toHaveBeenCalled();
+	});
+
+	it('setUserRole throws BetterAuthApiError when the after-snapshot user has disappeared', async () => {
+		// assertNotLastAdmin pre-check -> not an admin, early return.
+		getUserMock.mockResolvedValueOnce({ id: 'target', role: ROLES.LEARNER });
+		// before snapshot -> exists
+		getUserMock.mockResolvedValueOnce({ id: 'target', role: ROLES.LEARNER });
+		// after snapshot -> null (user disappeared mid-flight)
+		getUserMock.mockResolvedValueOnce(null);
+		const { bundle } = makeAdmin();
+		await expect(
+			setUserRole(
+				{
+					auth: bundle,
+					actorId: 'admin1',
+					actorEmail: 'admin@a.test',
+					targetUserId: 'target',
+					newRole: ROLES.AUTHOR,
+					headers: baseHeaders,
+					...baseRequestCtx,
+				},
+				dbStub,
+			),
+		).rejects.toBeInstanceOf(BetterAuthApiError);
+		expect(auditWriteMock).not.toHaveBeenCalled();
+	});
+});
+
 describe('banUserAction', () => {
 	it('calls auth.api.banUser with banExpiresIn (seconds), audits before/after', async () => {
 		const future = new Date(Date.now() + 60_000);
