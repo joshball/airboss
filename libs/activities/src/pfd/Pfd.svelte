@@ -101,7 +101,7 @@ function closeLegend(): void {
 </div>
 
 <PfdKeyboardLegend
-	open={legendOpen}
+	bind:open={legendOpen}
 	{bindings}
 	onClose={closeLegend}
 	helpKeyLabel={HELP_KEY}

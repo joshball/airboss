@@ -1,6 +1,12 @@
 /**
  * JumpToCardPopover DOM contract -- dialog open/close, item rendering,
  * Escape behaviour, click-on-row picks the index and closes.
+ *
+ * After the Dialog refactor, role=dialog and the close button live on the
+ * shared primitive (`dialog-panel` / `dialog-close`); the per-popover root
+ * marker (`jumptocardpopover-root`) is kept so consumers can still gate on
+ * "this specific popover is open" without poking at internal Dialog
+ * testids.
  */
 
 import { cleanup, render, screen } from '@testing-library/svelte';
@@ -24,15 +30,19 @@ describe('JumpToCardPopover -- closed', () => {
 			onPick: vi.fn(),
 		});
 		expect(container.querySelector('[data-testid="jumptocardpopover-root"]')).toBeNull();
+		expect(container.querySelector('[data-testid="dialog-panel"]')).toBeNull();
 	});
 });
 
 describe('JumpToCardPopover -- open', () => {
 	it('renders dialog with role=dialog and aria-modal=true', () => {
 		render(JumpToCardPopover, { open: true, totalCards: 4, currentIndex: 1, statuses, onPick: vi.fn() });
-		const root = screen.getByTestId('jumptocardpopover-root');
-		expect(root.getAttribute('role')).toBe('dialog');
-		expect(root.getAttribute('aria-modal')).toBe('true');
+		const panel = screen.getByTestId('dialog-panel');
+		expect(panel.getAttribute('role')).toBe('dialog');
+		expect(panel.getAttribute('aria-modal')).toBe('true');
+		// The per-popover marker is still present so consumers / e2e selectors
+		// can disambiguate between concurrently mounted dialogs.
+		expect(screen.getByTestId('jumptocardpopover-root')).toBeTruthy();
 	});
 
 	it('renders one row per card with the right state and aria-selected', () => {
@@ -65,7 +75,7 @@ describe('JumpToCardPopover -- interaction', () => {
 		expect(onPick).toHaveBeenCalledWith(2);
 	});
 
-	it('clicking the close button calls onClose', async () => {
+	it('clicking the shared Dialog close button calls onClose', async () => {
 		const onClose = vi.fn();
 		const user = userEvent.setup();
 		render(JumpToCardPopover, {
@@ -76,7 +86,7 @@ describe('JumpToCardPopover -- interaction', () => {
 			onPick: vi.fn(),
 			onClose,
 		});
-		await user.click(screen.getByTestId('jumptocardpopover-close'));
+		await user.click(screen.getByTestId('dialog-close'));
 		expect(onClose).toHaveBeenCalledTimes(1);
 	});
 });

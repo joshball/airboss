@@ -10,7 +10,10 @@
  * review page's form action does that so the "did we actually snooze?"
  * side-effect is visible in the network tab.
  *
- * A11y: dialog role + aria-label, ESC closes, focus-trap keeps Tab inside.
+ * A11y / chrome: built on the shared `Dialog` primitive -- canonical
+ * close glyph, focus trap, ESC-to-close, scrim-click-to-close, focus
+ * return all live there. Local state covers reason selection and the
+ * report-flow `focusComment` open behaviour.
  */
 
 import {
@@ -25,7 +28,8 @@ import {
 	type SnoozeDurationLevel,
 	type SnoozeReason,
 } from '@ab/constants';
-import { createFocusTrap } from '../lib/focus-trap';
+import Button from './Button.svelte';
+import Dialog from './Dialog.svelte';
 
 interface SnoozeSubmission {
 	reason: SnoozeReason;
@@ -70,8 +74,8 @@ let durationLevel = $state<SnoozeDurationLevel>(
 	SNOOZE_DEFAULT_DURATION[resolveDefaultReason(initialReason)] ?? 'medium',
 );
 let waitForEdit = $state(true);
-let panelEl = $state<HTMLDivElement | null>(null);
 let submitError = $state<string | null>(null);
+let formEl = $state<HTMLFormElement | null>(null);
 
 const requiresComment = $derived(
 	(SNOOZE_REASONS_REQUIRING_COMMENT as readonly SnoozeReason[]).includes(selectedReason),
@@ -91,16 +95,6 @@ function pickReason(reason: SnoozeReason): void {
 function close(): void {
 	open = false;
 	onClose?.();
-}
-
-function handleKeyDown(event: KeyboardEvent): void {
-	if (!panelEl) return;
-	const trap = createFocusTrap(panelEl, { onEscape: close });
-	trap.handleKeyDown(event);
-}
-
-function handleScrim(event: PointerEvent): void {
-	if (event.target === event.currentTarget) close();
 }
 
 function submit(event: SubmitEvent): void {
@@ -148,168 +142,118 @@ $effect(() => {
 	if (seedDuration) durationLevel = seedDuration;
 	comment = '';
 	submitError = null;
-	// Move focus into the panel on open. When `focusComment` is true,
-	// jump straight to the textarea -- the Report flow has already
-	// pre-selected the reason and the user just needs to type.
-	const shouldFocusComment = focusComment;
-	queueMicrotask(() => {
-		if (!panelEl) return;
-		if (shouldFocusComment) {
-			panelEl.querySelector<HTMLTextAreaElement>('textarea')?.focus();
-			return;
-		}
-		panelEl.querySelector<HTMLElement>('input, textarea, button')?.focus();
-	});
+	// When the parent opened us via the Report flow, jump to the comment
+	// textarea after Dialog has run its own initial-focus pass.
+	if (focusComment) {
+		queueMicrotask(() => {
+			formEl?.querySelector<HTMLTextAreaElement>('textarea')?.focus();
+		});
+	}
 });
 </script>
 
-{#if open}
-	<!-- svelte-ignore a11y_click_events_have_key_events -->
-	<!-- svelte-ignore a11y_no_static_element_interactions -->
-	<div class="scrim" onpointerdown={handleScrim} onkeydown={handleKeyDown} data-testid="snoozereasonpopover-scrim">
-		<div
-			bind:this={panelEl}
-			class="panel"
-			role="dialog"
-			aria-modal="true"
-			aria-label="Snooze this card"
+<Dialog
+	bind:open
+	ariaLabel="Snooze this card"
+	size="md"
+	onClose={close}
+>
+	{#snippet header()}
+		<h2 id="snooze-title" data-testid="snoozereasonpopover-title">Snooze this card</h2>
+	{/snippet}
+
+	{#snippet body()}
+		<span
+			class="visually-hidden"
 			data-testid="snoozereasonpopover-root"
 			data-selected-reason={selectedReason}
-		>
-			<header class="hd">
-				<h2 id="snooze-title" data-testid="snoozereasonpopover-title">Snooze this card</h2>
-				<button type="button" class="close" aria-label="Close" data-testid="snoozereasonpopover-close" onclick={close}>&times;</button>
-			</header>
-			<form onsubmit={submit} data-testid="snoozereasonpopover-form">
-				<fieldset class="reasons" data-testid="snoozereasonpopover-reasons">
-					<legend class="visually-hidden">Reason</legend>
-					{#each SNOOZE_REASON_VALUES as reason (reason)}
-						<label
-							class="reason-row"
-							class:is-selected={selectedReason === reason}
-							data-testid={`snoozereasonpopover-reason-${reason}`}
-							data-state={selectedReason === reason ? 'selected' : 'idle'}
-						>
-							<input
-								type="radio"
-								name="reason"
-								value={reason}
-								checked={selectedReason === reason}
-								data-testid={`snoozereasonpopover-reason-input-${reason}`}
-								onchange={() => pickReason(reason)}
-							/>
-							<span class="reason-body">
-								<span class="reason-label">{SNOOZE_REASON_LABELS[reason]}</span>
-								<span class="reason-desc">{SNOOZE_REASON_DESCRIPTIONS[reason]}</span>
-							</span>
-						</label>
-					{/each}
-				</fieldset>
-
-				{#if allowsWaitForEdit}
-					<label class="toggle">
-						<input type="checkbox" bind:checked={waitForEdit} />
-						<span>Wait for the author to edit (no fixed duration)</span>
+		></span>
+		<form bind:this={formEl} onsubmit={submit} data-testid="snoozereasonpopover-form" id="snooze-form">
+			<fieldset class="reasons" data-testid="snoozereasonpopover-reasons">
+				<legend class="visually-hidden">Reason</legend>
+				{#each SNOOZE_REASON_VALUES as reason (reason)}
+					<label
+						class="reason-row"
+						class:is-selected={selectedReason === reason}
+						data-testid={`snoozereasonpopover-reason-${reason}`}
+						data-state={selectedReason === reason ? 'selected' : 'idle'}
+					>
+						<input
+							type="radio"
+							name="reason"
+							value={reason}
+							checked={selectedReason === reason}
+							data-testid={`snoozereasonpopover-reason-input-${reason}`}
+							onchange={() => pickReason(reason)}
+						/>
+						<span class="reason-body">
+							<span class="reason-label">{SNOOZE_REASON_LABELS[reason]}</span>
+							<span class="reason-desc">{SNOOZE_REASON_DESCRIPTIONS[reason]}</span>
+						</span>
 					</label>
-				{/if}
+				{/each}
+			</fieldset>
 
-				{#if allowsDurationPick && !(allowsWaitForEdit && waitForEdit)}
-					<fieldset class="durations">
-						<legend>Duration</legend>
-						<div class="duration-row">
-							{#each SNOOZE_DURATION_LEVEL_VALUES as level (level)}
-								<label class="duration-chip" class:is-selected={durationLevel === level}>
-									<input
-										type="radio"
-										name="durationLevel"
-										value={level}
-										checked={durationLevel === level}
-										onchange={() => (durationLevel = level)}
-									/>
-									<span>{SNOOZE_DURATION_LEVEL_LABELS[level]}</span>
-								</label>
-							{/each}
-						</div>
-					</fieldset>
-				{/if}
-
-				<label class="comment" data-testid="snoozereasonpopover-comment">
-					<span class="comment-label">
-						Comment{requiresComment ? ' (required)' : ' (optional)'}
-					</span>
-					<textarea
-						bind:value={comment}
-						rows="3"
-						placeholder={requiresComment ? 'Why are you snoozing this card?' : 'Optional note'}
-						data-testid="snoozereasonpopover-comment-input"
-					></textarea>
+			{#if allowsWaitForEdit}
+				<label class="toggle">
+					<input type="checkbox" bind:checked={waitForEdit} />
+					<span>Wait for the author to edit (no fixed duration)</span>
 				</label>
+			{/if}
 
-				{#if submitError}
-					<p class="error" role="alert" data-testid="snoozereasonpopover-error">{submitError}</p>
-				{/if}
+			{#if allowsDurationPick && !(allowsWaitForEdit && waitForEdit)}
+				<fieldset class="durations">
+					<legend>Duration</legend>
+					<div class="duration-row">
+						{#each SNOOZE_DURATION_LEVEL_VALUES as level (level)}
+							<label class="duration-chip" class:is-selected={durationLevel === level}>
+								<input
+									type="radio"
+									name="durationLevel"
+									value={level}
+									checked={durationLevel === level}
+									onchange={() => (durationLevel = level)}
+								/>
+								<span>{SNOOZE_DURATION_LEVEL_LABELS[level]}</span>
+							</label>
+						{/each}
+					</div>
+				</fieldset>
+			{/if}
 
-				<footer class="ft">
-					<button type="button" class="btn ghost" data-testid="snoozereasonpopover-cancel" onclick={close}>Cancel</button>
-					<button type="submit" class="btn primary" data-testid="snoozereasonpopover-submit">Snooze</button>
-				</footer>
-			</form>
-		</div>
-	</div>
-{/if}
+			<label class="comment" data-testid="snoozereasonpopover-comment">
+				<span class="comment-label">
+					Comment{requiresComment ? ' (required)' : ' (optional)'}
+				</span>
+				<textarea
+					bind:value={comment}
+					rows="3"
+					placeholder={requiresComment ? 'Why are you snoozing this card?' : 'Optional note'}
+					data-testid="snoozereasonpopover-comment-input"
+				></textarea>
+			</label>
+
+			{#if submitError}
+				<p class="error" role="alert" data-testid="snoozereasonpopover-error">{submitError}</p>
+			{/if}
+		</form>
+	{/snippet}
+
+	{#snippet footer()}
+		<Button variant="ghost" size="md" onclick={close}>
+			<span data-testid="snoozereasonpopover-cancel">Cancel</span>
+		</Button>
+		<Button
+			variant="primary"
+			size="md"
+			onclick={() => formEl?.requestSubmit()}
+		>
+			<span data-testid="snoozereasonpopover-submit">Snooze</span>
+		</Button>
+	{/snippet}
+</Dialog>
 
 <style>
-	.scrim {
-		position: fixed;
-		inset: 0;
-		background: var(--dialog-scrim);
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		z-index: var(--z-modal);
-	}
-
-	.panel {
-		background: var(--surface-panel, var(--ink-inverse));
-		border: 1px solid var(--edge-default);
-		border-radius: var(--radius-lg);
-		padding: var(--space-lg) var(--space-xl);
-		min-width: min(32rem, 92vw);
-		max-width: 36rem;
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-md);
-		box-shadow: var(--shadow-lg);
-	}
-
-	.hd {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-	}
-
-	.hd h2 {
-		margin: 0;
-		font-size: var(--font-size-lg);
-		color: var(--ink-body);
-	}
-
-	.close {
-		background: transparent;
-		border: none;
-		color: var(--ink-muted);
-		font-size: var(--font-size-xl);
-		line-height: 1;
-		cursor: pointer;
-		padding: var(--space-2xs) var(--space-sm);
-	}
-
-	.close:focus-visible {
-		outline: none;
-		box-shadow: 0 0 0 3px var(--focus-ring);
-		border-radius: var(--radius-sm);
-	}
-
 	form {
 		display: flex;
 		flex-direction: column;
@@ -440,7 +384,13 @@ $effect(() => {
 		padding: var(--space-sm);
 		border: 1px solid var(--edge-strong);
 		border-radius: var(--radius-sm);
-		background: var(--ink-inverse);
+		background: var(--input-default-bg, var(--surface-panel));
+		color: var(--ink-body);
+	}
+
+	h2 {
+		margin: 0;
+		font-size: var(--font-size-lg);
 		color: var(--ink-body);
 	}
 
@@ -448,44 +398,6 @@ $effect(() => {
 		color: var(--signal-danger, var(--action-hazard-hover));
 		font-size: var(--font-size-sm);
 		margin: 0;
-	}
-
-	.ft {
-		display: flex;
-		justify-content: flex-end;
-		gap: var(--space-sm);
-	}
-
-	.btn {
-		padding: var(--space-sm) var(--space-xl);
-		font-size: var(--font-size-body);
-		font-weight: 600;
-		border-radius: var(--radius-md);
-		border: 1px solid transparent;
-		cursor: pointer;
-	}
-
-	.btn.primary {
-		background: var(--action-default);
-		color: var(--ink-inverse);
-	}
-
-	.btn.primary:hover {
-		background: var(--action-default-hover);
-	}
-
-	.btn.ghost {
-		background: transparent;
-		color: var(--ink-muted);
-	}
-
-	.btn.ghost:hover {
-		background: var(--surface-sunken);
-	}
-
-	.btn:focus-visible {
-		outline: none;
-		box-shadow: 0 0 0 3px var(--focus-ring);
 	}
 
 	.visually-hidden {
