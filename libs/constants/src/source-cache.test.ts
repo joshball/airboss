@@ -26,6 +26,16 @@ describe('SOURCE_CACHE', () => {
 	it('routes through ENV_VARS so the env-var name has one canonical source', () => {
 		expect(SOURCE_CACHE.ENV_VAR).toBe(ENV_VARS.AIRBOSS_HANDBOOK_CACHE);
 	});
+
+	it('pins each per-corpus cache subdirectory name (ADR 021)', () => {
+		// Path values are runtime-stable: ingest tests assert literal cache
+		// paths, so these constants must keep their existing string values.
+		expect(SOURCE_CACHE.AC).toBe('ac');
+		expect(SOURCE_CACHE.ACS).toBe('acs');
+		expect(SOURCE_CACHE.AIM).toBe('aim');
+		expect(SOURCE_CACHE.HANDBOOKS).toBe('handbooks');
+		expect(SOURCE_CACHE.REGS).toBe('regulations');
+	});
 });
 
 describe('expandHome', () => {
