@@ -77,11 +77,11 @@ These are root-cause clusters where multiple reviewers landed on the same archit
 - correctness minor: 4 of those helpers don't expand `~` in `AIRBOSS_HANDBOOK_CACHE`.
 - Fix once: one `SOURCE_CACHE` const block + one `resolveCacheRoot()` helper + register the env vars.
 
-**C. ADR 019 "open corpus" promise broken.**
+**C. ADR 019 "open corpus" promise broken.** **Closed (verified 2026-05-02).**
 
-- architecture#2 (major): `ENUMERATED_CORPORA` is closed array in `corpus-resolver.ts:57-75`; combined with side-effect import list in `index.ts` and per-corpus key in `ParsedLocator`, adding a corpus is 3 coordinated edits.
-- correctness minor: `ENUMERATED_CORPORA` omits `pts`, breaking the test-only `wipeToNoOpDefaults` helper.
-- Fix: register at module load + drive enumeration off the registry, not a hand-maintained array.
+- architecture#2 (major): `ENUMERATED_CORPORA` was a closed array. **Closed**: `libs/sources/src/registry/corpus-resolver.ts:97` is now a live iterable view that reads `RESOLVERS.size` / `RESOLVERS.keys()` at iteration time. `BOOTSTRAP_CORPORA` is a pre-registration convenience for the validator's row-1 check; the real source of truth is `registerCorpusResolver`. Test `corpus-resolver.test.ts` CR-08 pins this: a fake corpus registered mid-test shows up in `ENUMERATED_CORPORA` without further edits.
+- correctness minor: `ENUMERATED_CORPORA` omits `pts`. **Closed**: `pts` is in the `BOOTSTRAP_CORPORA` list (`corpus-resolver.ts:80`) and registered like the rest.
+- Adding a corpus is now one `registerCorpusResolver(...)` call; the side-effect import list in `index.ts` is the only "second edit" and exists to ensure module init runs (a deferred-init alternative would require structural changes elsewhere). Verdict: ADR 019 §2.1 satisfied.
 
 **D. Atomicity violations in writers.**
 
