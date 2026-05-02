@@ -1,3 +1,5 @@
+import { ROUTES } from '@ab/constants';
+
 /**
  * Minimal, safe markdown-to-HTML renderer for knowledge-graph phase bodies.
  *
@@ -65,7 +67,7 @@ function renderInline(text: string): string {
  * `/handbook-asset/[...path]`. Other URLs pass through unchanged.
  */
 function rewriteHandbookAssetUrl(url: string): string {
-	if (url.startsWith('/handbooks/')) return `/handbook-asset/${url.slice('/handbooks/'.length)}`;
+	if (url.startsWith('/handbooks/')) return ROUTES.HANDBOOK_ASSET(url.slice('/handbooks/'.length));
 	return url;
 }
 
