@@ -22,6 +22,8 @@
 
 import { AUTH_RATE_LIMIT, BETTER_AUTH_ENDPOINTS, ENV_VARS, ROUTES } from '@ab/constants';
 import { db } from '@ab/db/connection';
+import { generateAuthId } from '@ab/utils';
+import { hashPassword } from 'better-auth/crypto';
 import { eq, like } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { bauthAccount, bauthRateLimit, bauthSession, bauthUser } from './schema';
@@ -72,17 +74,33 @@ describe('database-backed rate-limit on sign-in', () => {
 
 	beforeAll(async () => {
 		auth = makeAuth();
-		// Seed a real user so signInEmail returns 401 (bad password) instead
-		// of 400 (validation) -- we want the rate-limit middleware itself to
-		// gate the response, not the body parser.
-		await auth.api.signUpEmail({
-			body: {
-				email: TEST_EMAIL,
-				password: TEST_PASSWORD,
-				name: 'Rate Limit Test',
-				firstName: 'Rate',
-				lastName: 'Limit',
-			},
+		// Seed a real user directly via Drizzle so signInEmail returns 401
+		// (bad password) instead of 400 (validation) -- we want the rate-limit
+		// middleware itself to gate the response, not the body parser. Direct
+		// insert avoids the public sign-up endpoint, which is disabled in
+		// production (`disableSignUp: true` in `createAuth`).
+		const userId = generateAuthId();
+		const accountId = generateAuthId();
+		const passwordHash = await hashPassword(TEST_PASSWORD);
+		const now = new Date();
+		await db.insert(bauthUser).values({
+			id: userId,
+			email: TEST_EMAIL,
+			name: 'Rate Limit Test',
+			firstName: 'Rate',
+			lastName: 'Limit',
+			emailVerified: false,
+			createdAt: now,
+			updatedAt: now,
+		});
+		await db.insert(bauthAccount).values({
+			id: accountId,
+			userId,
+			accountId: userId,
+			providerId: 'credential',
+			password: passwordHash,
+			createdAt: now,
+			updatedAt: now,
 		});
 		// Clear any prior rate-limit rows for this IP (defensive -- the random
 		// IP makes a clash unlikely, but the suite must be deterministic).
