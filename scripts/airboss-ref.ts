@@ -47,7 +47,7 @@ async function main(argv: readonly string[]): Promise<number> {
 	}
 
 	if (command === undefined) {
-		return runCli();
+		return await runCli();
 	}
 
 	if (command === '--fix') {
@@ -56,11 +56,11 @@ async function main(argv: readonly string[]): Promise<number> {
 			process.stderr.write(USAGE);
 			return 2;
 		}
-		return runFixCli();
+		return await runFixCli();
 	}
 
 	if (command === 'snapshot') {
-		return runSnapshotCli(rest);
+		return await runSnapshotCli(rest);
 	}
 
 	if (command === 'diff') {

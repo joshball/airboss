@@ -17,6 +17,7 @@
 		"@ab/hangar-jobs": "workspace:*",
 		"@ab/hangar-sync": "workspace:*",
 		"@ab/help": "workspace:*",
+		"@ab/sources": "workspace:*",
 		"@ab/themes": "workspace:*",
 		"@ab/ui": "workspace:*",
 		"@ab/utils": "workspace:*"

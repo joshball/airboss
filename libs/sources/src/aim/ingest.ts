@@ -188,7 +188,7 @@ export async function runAimIngest(args: IngestArgs): Promise<IngestReport> {
 	// Atomic batch commit (skip already-accepted entries from the scope).
 	const scopeIds: SourceId[] = entries.filter((e) => getEntryLifecycle(e.id) !== 'accepted').map((e) => e.id);
 
-	const commit = commitIngestBatch({
+	const commit = await commitIngestBatch({
 		corpus: 'aim',
 		reviewerId: PHASE_7_REVIEWER_ID,
 		inputSource: manifestPath,

@@ -48,7 +48,7 @@ The compliance philosophy is detailed in [@cite](airboss-ref:orders/faa/2150-3?a
 `;
 		writeFileSync(join(lessonsDir, 'orders-smoke.md'), lessonContent, 'utf-8');
 
-		const report = validateReferences({
+		const report = await validateReferences({
 			registry: productionRegistry,
 			contentPaths: ['course/regulations'],
 			cwd: lessonRoot,
@@ -74,7 +74,7 @@ FSIMS provides ASI guidance: [@cite](airboss-ref:orders/faa/8900-1).
 `;
 		writeFileSync(join(lessonsDir, 'orders-unpinned.md'), lessonContent, 'utf-8');
 
-		const report = validateReferences({
+		const report = await validateReferences({
 			registry: productionRegistry,
 			contentPaths: ['course/regulations'],
 			cwd: lessonRoot,

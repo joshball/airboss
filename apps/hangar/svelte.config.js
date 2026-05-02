@@ -60,6 +60,8 @@ const config = {
 			'@ab/bc-avionics/*': '../../libs/bc/avionics/src/*',
 			'@ab/help': '../../libs/help/src/index.ts',
 			'@ab/help/*': '../../libs/help/src/*',
+			'@ab/sources': '../../libs/sources/src/index.ts',
+			'@ab/sources/*': '../../libs/sources/src/*',
 		},
 		env: {
 			dir: '../../',

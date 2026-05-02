@@ -223,7 +223,7 @@ export async function runHandbookIngest(args: IngestOneHandbookArgs): Promise<In
 	// Atomic batch commit (skip already-accepted entries from the scope).
 	const scopeIds: SourceId[] = entries.filter((e) => getEntryLifecycle(e.id) !== 'accepted').map((e) => e.id);
 
-	const commit = commitIngestBatch({
+	const commit = await commitIngestBatch({
 		corpus: 'handbooks',
 		reviewerId: PHASE_6_REVIEWER_ID,
 		inputSource: manifestPath,

@@ -10,7 +10,11 @@
  * future WP; the audit-trail shape is final.
  */
 
+import { PROMOTION_STATES } from '@ab/constants';
 import { createId } from '@ab/utils';
+import { asc, eq } from 'drizzle-orm';
+import { db } from '../db/client.ts';
+import { type PromotionBatchRow, promotionBatches } from '../db/schema.ts';
 import type { Edition, SourceEntry, SourceId, SourceLifecycle } from '../types.ts';
 import { __editions_internal__ } from './editions.ts';
 import { __sources_internal__, getSources } from './sources.ts';
@@ -82,7 +86,13 @@ export function isValidTransition(from: SourceLifecycle, to: SourceLifecycle): b
 // Stores
 // ---------------------------------------------------------------------------
 
-const BATCHES: Map<string, PromotionBatch> = new Map();
+/**
+ * In-memory overlay of `SourceId -> latest lifecycle`. Derived from the
+ * `promotion_batches` audit trail at startup via `rebuildLifecycleOverlay`,
+ * then mutated in-place when `recordPromotion` / `recordDePromotion` commit.
+ *
+ * The overlay is the runtime cache; the audit trail is the source of truth.
+ */
 const ENTRY_LIFECYCLES: Map<SourceId, SourceLifecycle> = new Map();
 
 /**
@@ -104,44 +114,15 @@ export function getEntryLifecycle(id: SourceId): SourceLifecycle | null {
 /**
  * Atomic batch promotion. Validates every entry's transition before mutating
  * any. Either all `scope` entries transition to `targetLifecycle` or none do.
+ *
+ * Persistence: opens a Drizzle transaction, inserts one `promotion_batches`
+ * row, and only mutates the in-memory overlay after the transaction commits.
+ * On any DB error the overlay is untouched.
  */
-export function recordPromotion(input: PromotionInput): PromotionResult {
-	if (input.scope.length === 0) {
-		return { ok: false, error: 'empty scope: promotion requires at least one entry' };
-	}
+export async function recordPromotion(input: PromotionInput): Promise<PromotionResult> {
+	const validation = validatePromotionInput(input);
+	if (!validation.ok) return validation;
 
-	if (input.targetLifecycle === 'draft') {
-		return { ok: false, error: 'cannot transition to "draft"; draft is a starting state only' };
-	}
-
-	let fromLifecycle: SourceLifecycle | null = null;
-	for (const id of input.scope) {
-		const current = getEntryLifecycle(id);
-		if (current === null) {
-			return { ok: false, error: `entry "${id}" is not in the registry` };
-		}
-		if (!isValidTransition(current, input.targetLifecycle)) {
-			return {
-				ok: false,
-				error: `entry "${id}" cannot transition from "${current}" to "${input.targetLifecycle}"`,
-			};
-		}
-		if (fromLifecycle === null) {
-			fromLifecycle = current;
-		} else if (fromLifecycle !== current) {
-			return {
-				ok: false,
-				error: `batch contains entries in mixed lifecycles ("${fromLifecycle}" and "${current}"); promote homogeneous batches only`,
-			};
-		}
-	}
-
-	if (fromLifecycle === null) {
-		// Defensive; we already checked scope.length > 0.
-		return { ok: false, error: 'unable to determine source lifecycle' };
-	}
-
-	// All entries validate. Mutate.
 	const batch: PromotionBatch = {
 		id: createId('batch'),
 		corpus: input.corpus,
@@ -149,62 +130,47 @@ export function recordPromotion(input: PromotionInput): PromotionResult {
 		promotionDate: new Date(),
 		scope: [...input.scope],
 		inputSource: input.inputSource,
-		state: 'promoted',
-		fromLifecycle,
+		state: PROMOTION_STATES.PROMOTED,
+		fromLifecycle: validation.fromLifecycle,
 		toLifecycle: input.targetLifecycle,
 	};
 
+	try {
+		await db.transaction(async (tx) => {
+			await tx.insert(promotionBatches).values(toRow(batch));
+		});
+	} catch (err) {
+		return { ok: false, error: errorMessage(err) };
+	}
+
+	// Commit succeeded; mutate overlay + bump generation. Order matters:
+	// overlay first so any concurrent reader sees the new state before the
+	// generation bump invalidates derived caches.
 	for (const id of input.scope) {
 		ENTRY_LIFECYCLES.set(id, input.targetLifecycle);
 	}
-	BATCHES.set(batch.id, batch);
-
+	__editions_internal__.bumpGeneration();
 	return { ok: true, batch };
 }
 
 /**
  * De-promotion: walks `accepted` entries back to `pending` (or `retired`).
  * Records `previousBatchId` so the audit trail links the events. Atomic at
- * the batch level.
+ * the batch level. The FK on `previous_batch_id -> id` enforces existence
+ * of the referenced batch at the DB level; mid-transaction failure rolls
+ * back the audit row and leaves the overlay untouched.
  */
-export function recordDePromotion(input: DePromotionInput): PromotionResult {
+export async function recordDePromotion(input: DePromotionInput): Promise<PromotionResult> {
 	if (input.scope.length === 0) {
 		return { ok: false, error: 'empty scope: de-promotion requires at least one entry' };
-	}
-
-	if (!BATCHES.has(input.previousBatchId)) {
-		return { ok: false, error: `previous batch "${input.previousBatchId}" not found` };
 	}
 
 	if (input.targetLifecycle === 'draft') {
 		return { ok: false, error: 'cannot transition to "draft"; draft is a starting state only' };
 	}
 
-	let fromLifecycle: SourceLifecycle | null = null;
-	for (const id of input.scope) {
-		const current = getEntryLifecycle(id);
-		if (current === null) {
-			return { ok: false, error: `entry "${id}" is not in the registry` };
-		}
-		if (!isValidTransition(current, input.targetLifecycle)) {
-			return {
-				ok: false,
-				error: `entry "${id}" cannot transition from "${current}" to "${input.targetLifecycle}"`,
-			};
-		}
-		if (fromLifecycle === null) {
-			fromLifecycle = current;
-		} else if (fromLifecycle !== current) {
-			return {
-				ok: false,
-				error: `batch contains entries in mixed lifecycles ("${fromLifecycle}" and "${current}")`,
-			};
-		}
-	}
-
-	if (fromLifecycle === null) {
-		return { ok: false, error: 'unable to determine source lifecycle' };
-	}
+	const transitionCheck = validateScopeTransitions(input.scope, input.targetLifecycle);
+	if (!transitionCheck.ok) return transitionCheck;
 
 	const batch: PromotionBatch = {
 		id: createId('batch'),
@@ -213,18 +179,49 @@ export function recordDePromotion(input: DePromotionInput): PromotionResult {
 		promotionDate: new Date(),
 		scope: [...input.scope],
 		inputSource: input.inputSource,
-		state: 'de-promoted',
-		fromLifecycle,
+		state: PROMOTION_STATES.DE_PROMOTED,
+		fromLifecycle: transitionCheck.fromLifecycle,
 		toLifecycle: input.targetLifecycle,
 		previousBatchId: input.previousBatchId,
 	};
 
+	try {
+		await db.transaction(async (tx) => {
+			await tx.insert(promotionBatches).values(toRow(batch));
+		});
+	} catch (err) {
+		return { ok: false, error: errorMessage(err) };
+	}
+
 	for (const id of input.scope) {
 		ENTRY_LIFECYCLES.set(id, input.targetLifecycle);
 	}
-	BATCHES.set(batch.id, batch);
-
+	__editions_internal__.bumpGeneration();
 	return { ok: true, batch };
+}
+
+// ---------------------------------------------------------------------------
+// Bootstrap rebuild
+// ---------------------------------------------------------------------------
+
+/**
+ * Replay every persisted batch into the overlay map so a freshly-loaded
+ * process sees the same lifecycle state the prior process committed.
+ *
+ * Read order: `promotion_date ASC`. Each batch's `toLifecycle` overwrites
+ * the prior overlay entry for every id in its scope; the final pass
+ * therefore reflects the most-recent state per id.
+ */
+export async function rebuildLifecycleOverlay(): Promise<void> {
+	const rows = await db.select().from(promotionBatches).orderBy(asc(promotionBatches.promotionDate));
+	ENTRY_LIFECYCLES.clear();
+	for (const row of rows) {
+		const targetLifecycle = row.toLifecycle as SourceLifecycle;
+		const scope = row.scope as readonly string[];
+		for (const id of scope) {
+			ENTRY_LIFECYCLES.set(id as SourceId, targetLifecycle);
+		}
+	}
 }
 
 // ---------------------------------------------------------------------------
@@ -258,8 +255,7 @@ export type IngestBatchResult =
  * Atomic batch commit per ADR 019 §2.4. Validates the proposed promotion
  * BEFORE mutating any registry table; on validation failure, no SOURCES,
  * EDITIONS, or lifecycle state is changed. On lifecycle-mutation failure
- * (impossible given the pre-validation, but kept defensive), the
- * SOURCES/EDITIONS overlays are rolled back to their pre-call values.
+ * the SOURCES/EDITIONS overlays are rolled back to their pre-call values.
  *
  * This is the only correct way for an ingest pipeline to record SOURCES +
  * EDITIONS + lifecycle changes together. Direct calls to
@@ -271,24 +267,19 @@ export type IngestBatchResult =
  * (caller upserted entries without recording a promotion -- typically the
  * already-accepted idempotent path).
  */
-export function commitIngestBatch(input: IngestBatchInput): IngestBatchResult {
+export async function commitIngestBatch(input: IngestBatchInput): Promise<IngestBatchResult> {
 	if (input.targetLifecycle === 'draft') {
 		return { ok: false, error: 'cannot transition to "draft"; draft is a starting state only' };
 	}
 
 	// Phase 1: validate scope BEFORE any mutation.
 	if (input.scope.length > 0) {
-		// The proposed source table is the union of (current sources + new sources).
-		// We need to validate that every scope id resolves -- either via the
-		// in-flight sourcesPatch or via the existing active table.
 		const proposedSources: Record<SourceId, SourceEntry> = {
 			...__sources_internal__.getActiveTable(),
 			...input.sources,
 		};
 		let fromLifecycle: SourceLifecycle | null = null;
 		for (const id of input.scope) {
-			// Lifecycle: prefer the in-memory overlay, then the proposed entry's
-			// lifecycle (which is what the entry will be after the mutation).
 			const overlay = ENTRY_LIFECYCLES.get(id);
 			const proposed = proposedSources[id];
 			if (overlay === undefined && proposed === undefined) {
@@ -316,9 +307,6 @@ export function commitIngestBatch(input: IngestBatchInput): IngestBatchResult {
 	}
 
 	// Phase 2: snapshot prior state for rollback, then apply SOURCES/EDITIONS.
-	// Editions for each id are merged (de-duplicated by edition id) so callers
-	// can pass only the in-flight additions without having to seed their
-	// accumulator from the active map.
 	const priorSources = __sources_internal__.getActiveTable();
 	const priorEditions = __editions_internal__.getActiveTable();
 	const nextSources: Record<SourceId, SourceEntry> = { ...priorSources, ...input.sources };
@@ -341,7 +329,7 @@ export function commitIngestBatch(input: IngestBatchInput): IngestBatchResult {
 		return { ok: true, batchId: null };
 	}
 
-	const promotion = recordPromotion({
+	const promotion = await recordPromotion({
 		corpus: input.corpus,
 		reviewerId: input.reviewerId,
 		scope: input.scope,
@@ -349,8 +337,6 @@ export function commitIngestBatch(input: IngestBatchInput): IngestBatchResult {
 		targetLifecycle: input.targetLifecycle,
 	});
 	if (!promotion.ok) {
-		// Rollback the SOURCES/EDITIONS mutations -- the promotion failed, so
-		// the registry must end the call exactly as it began.
 		__sources_internal__.setActiveTable(priorSources);
 		__editions_internal__.setActiveTable(priorEditions);
 		return { ok: false, error: promotion.error };
@@ -363,14 +349,25 @@ export function commitIngestBatch(input: IngestBatchInput): IngestBatchResult {
 // Read helpers
 // ---------------------------------------------------------------------------
 
-/** Look up a batch by its ID. */
-export function getBatch(id: string): PromotionBatch | null {
-	return BATCHES.get(id) ?? null;
+/**
+ * Look up a batch by its ID from the persisted audit trail. Returns null
+ * when no matching row exists. The `promotion_batches` table is
+ * append-only so a single-row read by primary key is the canonical access
+ * pattern.
+ */
+export async function getBatch(id: string): Promise<PromotionBatch | null> {
+	const rows = await db.select().from(promotionBatches).where(eq(promotionBatches.id, id)).limit(1);
+	const row = rows[0];
+	return row === undefined ? null : rowToBatch(row);
 }
 
-/** All batches in chronological insertion order. */
-export function listBatches(): readonly PromotionBatch[] {
-	return Array.from(BATCHES.values());
+/**
+ * All batches in chronological order (oldest first). Walks the persisted
+ * audit trail.
+ */
+export async function listBatches(): Promise<readonly PromotionBatch[]> {
+	const rows = await db.select().from(promotionBatches).orderBy(asc(promotionBatches.promotionDate));
+	return rows.map(rowToBatch);
 }
 
 // ---------------------------------------------------------------------------
@@ -379,7 +376,101 @@ export function listBatches(): readonly PromotionBatch[] {
 
 export const __lifecycle_internal__ = {
 	reset(): void {
-		BATCHES.clear();
 		ENTRY_LIFECYCLES.clear();
 	},
 };
+
+// ---------------------------------------------------------------------------
+// Internal helpers
+// ---------------------------------------------------------------------------
+
+function validatePromotionInput(
+	input: PromotionInput,
+): { readonly ok: true; readonly fromLifecycle: SourceLifecycle } | { readonly ok: false; readonly error: string } {
+	if (input.scope.length === 0) {
+		return { ok: false, error: 'empty scope: promotion requires at least one entry' };
+	}
+	if (input.targetLifecycle === 'draft') {
+		return { ok: false, error: 'cannot transition to "draft"; draft is a starting state only' };
+	}
+	return validateScopeTransitions(input.scope, input.targetLifecycle);
+}
+
+function validateScopeTransitions(
+	scope: readonly SourceId[],
+	target: SourceLifecycle,
+): { readonly ok: true; readonly fromLifecycle: SourceLifecycle } | { readonly ok: false; readonly error: string } {
+	let fromLifecycle: SourceLifecycle | null = null;
+	for (const id of scope) {
+		const current = getEntryLifecycle(id);
+		if (current === null) {
+			return { ok: false, error: `entry "${id}" is not in the registry` };
+		}
+		if (!isValidTransition(current, target)) {
+			return {
+				ok: false,
+				error: `entry "${id}" cannot transition from "${current}" to "${target}"`,
+			};
+		}
+		if (fromLifecycle === null) {
+			fromLifecycle = current;
+		} else if (fromLifecycle !== current) {
+			return {
+				ok: false,
+				error: `batch contains entries in mixed lifecycles ("${fromLifecycle}" and "${current}"); promote homogeneous batches only`,
+			};
+		}
+	}
+	if (fromLifecycle === null) {
+		return { ok: false, error: 'unable to determine source lifecycle' };
+	}
+	return { ok: true, fromLifecycle };
+}
+
+function toRow(batch: PromotionBatch): typeof promotionBatches.$inferInsert {
+	return {
+		id: batch.id,
+		corpus: batch.corpus,
+		reviewerId: batch.reviewerId,
+		promotionDate: batch.promotionDate,
+		scope: [...batch.scope] as readonly string[],
+		inputSource: batch.inputSource,
+		state: batch.state,
+		fromLifecycle: batch.fromLifecycle,
+		toLifecycle: batch.toLifecycle,
+		previousBatchId: batch.previousBatchId ?? null,
+	};
+}
+
+function rowToBatch(row: PromotionBatchRow): PromotionBatch {
+	const base: {
+		readonly id: string;
+		readonly corpus: string;
+		readonly reviewerId: string;
+		readonly promotionDate: Date;
+		readonly scope: readonly SourceId[];
+		readonly inputSource: string;
+		readonly state: PromotionState;
+		readonly fromLifecycle: SourceLifecycle;
+		readonly toLifecycle: SourceLifecycle;
+	} = {
+		id: row.id,
+		corpus: row.corpus,
+		reviewerId: row.reviewerId,
+		promotionDate: row.promotionDate,
+		scope: row.scope.map((s) => s as SourceId),
+		inputSource: row.inputSource,
+		state: row.state as PromotionState,
+		fromLifecycle: row.fromLifecycle as SourceLifecycle,
+		toLifecycle: row.toLifecycle as SourceLifecycle,
+	};
+	if (row.previousBatchId !== null) {
+		return { ...base, previousBatchId: row.previousBatchId };
+	}
+	return base;
+}
+
+function errorMessage(err: unknown): string {
+	if (err instanceof Error) return err.message;
+	return String(err);
+}

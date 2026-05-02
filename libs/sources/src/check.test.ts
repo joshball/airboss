@@ -22,26 +22,26 @@ function writeLesson(relPath: string, body: string): void {
 }
 
 describe('validateReferences (integration)', () => {
-	test('C-01: empty corpus -> 0 findings', () => {
+	test('C-01: empty corpus -> 0 findings', async () => {
 		writeLesson('course/regulations/sample/empty.md', `---\ntitle: x\n---\n\nNo references here.\n`);
-		const report = validateReferences({ cwd: workDir });
+		const report = await validateReferences({ cwd: workDir });
 		const errors = report.findings.filter((f) => f.severity === 'error');
 		expect(errors).toHaveLength(0);
 		expect(report.identifiersFound).toBe(0);
 	});
 
-	test('C-02: lesson with one ERROR identifier -> errors > 0', () => {
+	test('C-02: lesson with one ERROR identifier -> errors > 0', async () => {
 		writeLesson(
 			'course/regulations/sample/with-unknown.md',
 			`---\ntitle: x\n---\n\n[@cite](airboss-ref:unknown/some-future-thing)\n`,
 		);
-		const report = validateReferences({ cwd: workDir });
+		const report = await validateReferences({ cwd: workDir });
 		const errors = report.findings.filter((f) => f.severity === 'error');
 		expect(errors.length).toBeGreaterThan(0);
 		expect(errors.find((f) => f.ruleId === 0)).toBeDefined();
 	});
 
-	test('C-03: lesson with WARNING + NOTICE only -> 0 errors', () => {
+	test('C-03: lesson with WARNING + NOTICE only -> 0 errors', async () => {
 		// Clean the directory so previous tests' files don't bleed in.
 		rmSync(`${workDir}/course/regulations`, { recursive: true, force: true });
 		mkdirSync(`${workDir}/course/regulations/sample`, { recursive: true });
@@ -53,7 +53,7 @@ describe('validateReferences (integration)', () => {
 			'course/regulations/sample/notice-only.md',
 			`---\ntitle: x\n---\n\nSee airboss-ref:regs/cfr-14/91/103?at=2026 inline.\n`,
 		);
-		const report = validateReferences({
+		const report = await validateReferences({
 			cwd: workDir,
 			registry: {
 				hasEntry: () => true,
@@ -81,8 +81,8 @@ describe('validateReferences (integration)', () => {
 		expect(notices.length).toBeGreaterThan(0);
 	});
 
-	test('C-04: real `course/regulations` walk in the repo -> 0 ERROR findings', () => {
-		const report = validateReferences();
+	test('C-04: real `course/regulations` walk in the repo -> 0 ERROR findings', async () => {
+		const report = await validateReferences();
 		// Phase 9 migrated three lesson links to `airboss-ref:regs/...` URIs;
 		// every migrated identifier resolves cleanly via the bootstrap-loaded
 		// regs registry, so the validator finds identifiers but produces zero

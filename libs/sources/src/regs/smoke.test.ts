@@ -62,7 +62,7 @@ Per [@cite](airboss-ref:regs/cfr-14/91/103?at=2026), the PIC must become familia
 		writeFileSync(join(lessonsDir, 'smoke.md'), lessonContent, 'utf-8');
 
 		// 3. Run the validator
-		const report = validateReferences({
+		const report = await validateReferences({
 			registry: productionRegistry,
 			contentPaths: ['course/regulations'],
 			cwd: lessonRoot,
@@ -100,7 +100,7 @@ section_order: "01"
 			'utf-8',
 		);
 
-		const report = validateReferences({
+		const report = await validateReferences({
 			registry: productionRegistry,
 			contentPaths: ['course/regulations'],
 			cwd: lessonRoot,

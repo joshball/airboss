@@ -68,7 +68,7 @@ Preflight procedures live in [@cite](airboss-ref:aim/5-1?at=2026-04).
 `;
 		writeFileSync(join(lessonsDir, 'aim-smoke.md'), lessonContent, 'utf-8');
 
-		const report = validateReferences({
+		const report = await validateReferences({
 			registry: productionRegistry,
 			contentPaths: ['course/regulations'],
 			cwd: lessonRoot,
@@ -77,7 +77,7 @@ Preflight procedures live in [@cite](airboss-ref:aim/5-1?at=2026-04).
 		const errors = report.findings.filter((f) => f.severity === 'error');
 		expect(errors).toEqual([]);
 		expect(report.identifiersFound).toBe(1);
-	});
+	}, 60000); // 60s: real-corpus ingest hits the DB once per batch and competes with other test workers.
 
 	it('validates a paragraph-level reference airboss-ref:aim/5-1-7?at=2026-04 with zero ERRORs', async () => {
 		await ingestRealAimCorpus();
@@ -97,7 +97,7 @@ The composite flight plan procedure appears in [@cite](airboss-ref:aim/5-1-7?at=
 			'utf-8',
 		);
 
-		const report = validateReferences({
+		const report = await validateReferences({
 			registry: productionRegistry,
 			contentPaths: ['course/regulations'],
 			cwd: lessonRoot,
@@ -106,7 +106,7 @@ The composite flight plan procedure appears in [@cite](airboss-ref:aim/5-1-7?at=
 		const errors = report.findings.filter((f) => f.severity === 'error');
 		expect(errors).toEqual([]);
 		expect(report.identifiersFound).toBe(1);
-	});
+	}, 60000); // 60s: real-corpus ingest hits the DB once per batch and competes with other test workers.
 
 	it('validates a lesson citing both aim and regs corpora with zero ERRORs (cross-corpus)', async () => {
 		// Cross-corpus proof: ingest both, then validate a lesson that mixes
@@ -136,7 +136,7 @@ references the underlying regulation [@cite](airboss-ref:regs/cfr-14/61/3?at=202
 `;
 		writeFileSync(join(lessonsDir, 'cross-corpus.md'), lessonContent, 'utf-8');
 
-		const report = validateReferences({
+		const report = await validateReferences({
 			registry: productionRegistry,
 			contentPaths: ['course/regulations'],
 			cwd: lessonRoot,

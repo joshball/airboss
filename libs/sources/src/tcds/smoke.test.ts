@@ -40,7 +40,7 @@ A reference: [@cite](airboss-ref:tcds/3a12).
 `;
 		writeFileSync(join(lessonsDir, 'tcds-smoke.md'), lessonContent, 'utf-8');
 
-		const report = validateReferences({
+		const report = await validateReferences({
 			registry: productionRegistry,
 			contentPaths: ['course/regulations'],
 			cwd: lessonRoot,

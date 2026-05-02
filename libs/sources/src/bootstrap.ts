@@ -90,7 +90,7 @@ export interface BootstrapOptions {
  * Idempotent: re-runs against the same on-disk state add zero new entries
  * and create no new promotion batches.
  */
-export function hydrateRegsFromDerivatives(opts: BootstrapOptions = {}): BootstrapReport {
+export async function hydrateRegsFromDerivatives(opts: BootstrapOptions = {}): Promise<BootstrapReport> {
 	const cwd = opts.cwd ?? process.cwd();
 	const regsRoot = opts.regsRoot ?? join(cwd, 'regulations');
 	const skipped: { path: string; reason: string }[] = [];
@@ -135,7 +135,7 @@ export function hydrateRegsFromDerivatives(opts: BootstrapOptions = {}): Bootstr
 				continue;
 			}
 
-			const result = hydrateOneEdition(manifest, sections);
+			const result = await hydrateOneEdition(manifest, sections);
 			editionsHydrated += 1;
 			entriesAdded += result.entriesAdded;
 			entriesAlreadyAccepted += result.entriesAlreadyAccepted;
@@ -150,7 +150,7 @@ interface OneEditionResult {
 	readonly entriesAlreadyAccepted: number;
 }
 
-function hydrateOneEdition(manifest: ManifestRecord, sections: SectionsRecord): OneEditionResult {
+async function hydrateOneEdition(manifest: ManifestRecord, sections: SectionsRecord): Promise<OneEditionResult> {
 	const editionSlug = manifest.editionSlug;
 	const publishedDate = new Date(`${manifest.editionDate}T00:00:00.000Z`);
 	const sourceUrl = manifest.sourceUrl;
@@ -194,7 +194,7 @@ function hydrateOneEdition(manifest: ManifestRecord, sections: SectionsRecord): 
 	}
 
 	const scopeIds = newEntries.filter((e) => getEntryLifecycle(e.id) !== 'accepted').map((e) => e.id);
-	const commit = commitIngestBatch({
+	const commit = await commitIngestBatch({
 		corpus: 'regs',
 		reviewerId: PHASE_9_BOOTSTRAP_REVIEWER_ID,
 		inputSource: sourceUrl,

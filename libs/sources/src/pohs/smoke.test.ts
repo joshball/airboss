@@ -40,7 +40,7 @@ The aircraft handbook is [@cite](airboss-ref:pohs/c172s).
 `;
 		writeFileSync(join(lessonsDir, 'pohs-smoke.md'), lessonContent, 'utf-8');
 
-		const report = validateReferences({
+		const report = await validateReferences({
 			registry: productionRegistry,
 			contentPaths: ['course/regulations'],
 			cwd: lessonRoot,

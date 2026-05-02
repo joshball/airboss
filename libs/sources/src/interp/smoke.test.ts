@@ -43,7 +43,7 @@ A relevant interpretation is [@cite](airboss-ref:interp/chief-counsel/mangiamele
 `;
 		writeFileSync(join(lessonsDir, 'interp-smoke.md'), lessonContent, 'utf-8');
 
-		const report = validateReferences({
+		const report = await validateReferences({
 			registry: productionRegistry,
 			contentPaths: ['course/regulations'],
 			cwd: lessonRoot,

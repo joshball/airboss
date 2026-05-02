@@ -46,7 +46,7 @@ export {
 	PHASE_9_BOOTSTRAP_REVIEWER_ID,
 } from './bootstrap.ts';
 export { isParseError, parseIdentifier } from './parser.ts';
-export { getCorpusResolver, productionRegistry } from './registry/index.ts';
+export { getCorpusResolver, initRegistry, productionRegistry } from './registry/index.ts';
 export { NULL_REGISTRY } from './registry-stub.ts';
 export {
 	__batch_internal__,

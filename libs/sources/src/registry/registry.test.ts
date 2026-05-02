@@ -1,14 +1,27 @@
+import { db } from '@ab/db/connection';
+import { eq } from 'drizzle-orm';
 import { afterEach, beforeEach, describe, expect, test } from 'vitest';
+import { promotionBatches } from '../db/schema.ts';
 import type { SourceEntry, SourceId } from '../types.ts';
 import { resetRegistry, withTestEntries } from './__test_helpers__.ts';
 import { productionRegistry } from './index.ts';
 import { recordPromotion } from './lifecycle.ts';
 
-beforeEach(() => {
+// Stable reviewer-id for cleanup scoping. Concurrent test files (e.g.
+// regs/ingest.test.ts under PHASE_3_REVIEWER_ID) own their own rows.
+const TEST_REVIEWER_ID = 'jball';
+
+async function deleteOurBatches(): Promise<void> {
+	await db.delete(promotionBatches).where(eq(promotionBatches.reviewerId, TEST_REVIEWER_ID));
+}
+
+beforeEach(async () => {
+	await deleteOurBatches();
 	resetRegistry();
 });
 
-afterEach(() => {
+afterEach(async () => {
+	await deleteOurBatches();
 	resetRegistry();
 });
 
@@ -78,13 +91,13 @@ describe('productionRegistry integration', () => {
 		});
 	});
 
-	test('lifecycle overlay surfaces through getEntry', () => {
+	test('lifecycle overlay surfaces through getEntry', async () => {
 		const id = 'airboss-ref:regs/cfr-14/91/103';
-		withTestEntries({ [id]: makeEntry(id, 'pending') }, () => {
+		await withTestEntries({ [id]: makeEntry(id, 'pending') }, async () => {
 			// Initially pending.
 			expect(productionRegistry.getEntry(id as SourceId)?.lifecycle).toBe('pending');
 			// Promote to accepted; getEntry now reflects the overlay.
-			recordPromotion({
+			await recordPromotion({
 				corpus: 'regs',
 				reviewerId: 'jball',
 				scope: [id as SourceId],

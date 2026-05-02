@@ -78,7 +78,7 @@ The endorsement examples appear in [@cite](airboss-ref:ac/61-65/j).
 `;
 		writeFileSync(join(lessonsDir, 'ac-smoke.md'), lessonContent, 'utf-8');
 
-		const report = validateReferences({
+		const report = await validateReferences({
 			registry: productionRegistry,
 			contentPaths: ['course/regulations'],
 			cwd: lessonRoot,
@@ -87,7 +87,7 @@ The endorsement examples appear in [@cite](airboss-ref:ac/61-65/j).
 		const errors = report.findings.filter((f) => f.severity === 'error');
 		expect(errors).toEqual([]);
 		expect(report.identifiersFound).toBe(1);
-	});
+	}, 60000); // 60s: real-corpus ingest hits the DB once per batch and competes with other test workers.
 
 	it('validates a lesson citing airboss-ref:ac/91-21.1/d (dotted-sub doc number) with zero ERRORs', async () => {
 		await ingestRealAcCorpus();
@@ -104,7 +104,7 @@ PED policy is in [@cite](airboss-ref:ac/91-21.1/d).
 `;
 		writeFileSync(join(lessonsDir, 'ac-dotted.md'), lessonContent, 'utf-8');
 
-		const report = validateReferences({
+		const report = await validateReferences({
 			registry: productionRegistry,
 			contentPaths: ['course/regulations'],
 			cwd: lessonRoot,
@@ -112,7 +112,7 @@ PED policy is in [@cite](airboss-ref:ac/91-21.1/d).
 
 		const errors = report.findings.filter((f) => f.severity === 'error');
 		expect(errors).toEqual([]);
-	});
+	}, 60000); // 60s: real-corpus ingest hits the DB once per batch and competes with other test workers.
 
 	it('validates a lesson citing both ac and regs corpora with zero ERRORs', async () => {
 		// Cross-corpus proof: ingest both, then validate a lesson that mixes
@@ -143,7 +143,7 @@ regulation is [@cite](airboss-ref:regs/cfr-14/61/3?at=2026).
 `;
 		writeFileSync(join(lessonsDir, 'cross-corpus.md'), lessonContent, 'utf-8');
 
-		const report = validateReferences({
+		const report = await validateReferences({
 			registry: productionRegistry,
 			contentPaths: ['course/regulations'],
 			cwd: lessonRoot,

@@ -113,7 +113,7 @@ export async function seedPohsFromManifest(opts: PohsSeedOptions = {}): Promise<
 
 	let promotionBatchId: string | null = null;
 	if (entriesToPromote.length > 0) {
-		const result = recordPromotion({
+		const result = await recordPromotion({
 			corpus: CORPUS,
 			reviewerId: POHS_SEED_REVIEWER_ID,
 			scope: entriesToPromote,

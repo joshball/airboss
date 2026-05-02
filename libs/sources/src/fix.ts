@@ -49,7 +49,7 @@ export interface FixReport {
  * Never throws; filesystem errors surface as validator-level findings on
  * the re-run pass (the second-pass validator surfaces any new errors).
  */
-export function applyFixes(opts: FixOptions = {}): FixReport {
+export async function applyFixes(opts: FixOptions = {}): Promise<FixReport> {
 	const registry = opts.registry ?? productionRegistry;
 	const cwd = opts.cwd ?? process.cwd();
 	const roots = opts.contentPaths ?? LESSON_CONTENT_PATHS;
@@ -85,7 +85,7 @@ export function applyFixes(opts: FixOptions = {}): FixReport {
 
 	// Re-run the validator on the rewritten files for sanity.
 	const validateOpts: ValidateOptions = { registry, cwd, contentPaths: roots };
-	const reReport = validateReferences(validateOpts);
+	const reReport = await validateReferences(validateOpts);
 	const remainingErrors = reReport.findings.filter((f) => f.severity === 'error');
 
 	return { filesScanned, filesModified, identifiersStamped, remainingErrors };
@@ -95,13 +95,13 @@ export function applyFixes(opts: FixOptions = {}): FixReport {
  * CLI entry: refuses to run when `CI=true`. Prints a per-file summary and
  * exits 0 on success, non-zero on failure.
  */
-export function runFixCli(opts: FixOptions = {}): number {
+export async function runFixCli(opts: FixOptions = {}): Promise<number> {
 	if (process.env.CI === 'true') {
 		process.stderr.write('--fix is local-only; CI must not write to lesson files.\n');
 		return 2;
 	}
 
-	const report = applyFixes(opts);
+	const report = await applyFixes(opts);
 
 	process.stdout.write(
 		`\nReference identifier --fix: ${report.filesScanned} lesson(s) scanned, ${report.filesModified} file(s) modified, ${report.identifiersStamped} identifier(s) stamped.\n`,

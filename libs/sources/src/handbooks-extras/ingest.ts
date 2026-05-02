@@ -352,7 +352,7 @@ export async function runHandbooksExtrasIngest(args: IngestArgs): Promise<Ingest
 
 	let promotionBatchId: string | null = null;
 	if (entriesToPromote.length > 0) {
-		const result = recordPromotion({
+		const result = await recordPromotion({
 			corpus: CORPUS,
 			reviewerId: HANDBOOKS_EXTRAS_REVIEWER_ID,
 			scope: entriesToPromote,

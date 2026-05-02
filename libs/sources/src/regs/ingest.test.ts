@@ -2,7 +2,10 @@ import { existsSync, mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { ENV_VARS } from '@ab/constants';
+import { db } from '@ab/db/connection';
+import { eq } from 'drizzle-orm';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { promotionBatches } from '../db/schema.ts';
 import { resetRegistry } from '../registry/__test_helpers__.ts';
 import { __editions_internal__ } from '../registry/editions.ts';
 import { getEntryLifecycle, listBatches } from '../registry/lifecycle.ts';
@@ -15,15 +18,23 @@ const FIXTURE_PATH = join(process.cwd(), 'tests/fixtures/cfr/title-14-2026-fixtu
 
 let tmpRoot: string;
 
-beforeEach(() => {
+async function deleteOurBatches(): Promise<void> {
+	// Scoped cleanup so concurrent test files (e.g. lifecycle.test.ts under
+	// reviewer 'jball') keep their own rows.
+	await db.delete(promotionBatches).where(eq(promotionBatches.reviewerId, PHASE_3_REVIEWER_ID));
+}
+
+beforeEach(async () => {
 	tmpRoot = mkdtempSync(join(tmpdir(), 'cfr-ingest-'));
+	await deleteOurBatches();
 	resetRegistry();
 	setRegsDerivativeRoot(tmpRoot);
 });
 
-afterEach(() => {
+afterEach(async () => {
 	setRegsDerivativeRoot(join(process.cwd(), 'regulations'));
 	rmSync(tmpRoot, { recursive: true, force: true });
+	await deleteOurBatches();
 	resetRegistry();
 });
 
@@ -68,7 +79,7 @@ describe('runIngest against title-14 fixture', () => {
 		expect(report.promotionBatchId).not.toBeNull();
 		expect(getEntryLifecycle('airboss-ref:regs/cfr-14/91/103' as SourceId)).toBe('accepted');
 
-		const batches = listBatches();
+		const batches = await listBatches();
 		const ourBatch = batches.find((b) => b.id === report.promotionBatchId);
 		expect(ourBatch?.reviewerId).toBe(PHASE_3_REVIEWER_ID);
 		expect(ourBatch?.toLifecycle).toBe('accepted');

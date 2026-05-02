@@ -58,31 +58,31 @@ function makeRegistry(currentAccepted: Record<string, string>): RegistryReader {
 }
 
 describe('applyFixes', () => {
-	test('F-01: stamps unpinned identifier with current accepted edition', () => {
+	test('F-01: stamps unpinned identifier with current accepted edition', async () => {
 		const file = writeLesson(
 			'course/regulations/sample/lesson.md',
 			`---\ntitle: x\n---\n\nSee [@cite](airboss-ref:regs/cfr-14/91/103) for the rule.\n`,
 		);
 		registerCorpusResolver(makeResolver('regs', '2026'));
-		const report = applyFixes({ cwd: workDir, registry: makeRegistry({ regs: '2026' }) });
+		const report = await applyFixes({ cwd: workDir, registry: makeRegistry({ regs: '2026' }) });
 		expect(report.filesModified).toBe(1);
 		expect(report.identifiersStamped).toBe(1);
 		const newSource = readFileSync(file, 'utf-8');
 		expect(newSource).toContain('airboss-ref:regs/cfr-14/91/103?at=2026');
 	});
 
-	test('F-02: leaves already-pinned identifier alone', () => {
+	test('F-02: leaves already-pinned identifier alone', async () => {
 		const file = writeLesson(
 			'course/regulations/sample/lesson.md',
 			`---\ntitle: x\n---\n\nSee [@cite](airboss-ref:regs/cfr-14/91/103?at=2025) for the rule.\n`,
 		);
 		const before = readFileSync(file, 'utf-8');
-		const report = applyFixes({ cwd: workDir, registry: makeRegistry({ regs: '2026' }) });
+		const report = await applyFixes({ cwd: workDir, registry: makeRegistry({ regs: '2026' }) });
 		expect(report.filesModified).toBe(0);
 		expect(readFileSync(file, 'utf-8')).toBe(before);
 	});
 
-	test('F-03: leaves slug-encoded edition alone (no ?at= but pinned via slug)', () => {
+	test('F-03: leaves slug-encoded edition alone (no ?at= but pinned via slug)', async () => {
 		// Note: parser would return pin === null for `airboss-ref:ac/61-65/j`
 		// because there's no `?at=` query. The slug-encoded edition is the AC
 		// revision letter `j`. The default no-op resolver returns null for
@@ -94,51 +94,51 @@ describe('applyFixes', () => {
 		);
 		const before = readFileSync(file, 'utf-8');
 		// No accepted edition for 'ac' -> applyFixes leaves it alone.
-		const report = applyFixes({ cwd: workDir, registry: makeRegistry({}) });
+		const report = await applyFixes({ cwd: workDir, registry: makeRegistry({}) });
 		expect(report.filesModified).toBe(0);
 		expect(readFileSync(file, 'utf-8')).toBe(before);
 	});
 
-	test('F-04: leaves unknown-corpus alone', () => {
+	test('F-04: leaves unknown-corpus alone', async () => {
 		const file = writeLesson(
 			'course/regulations/sample/lesson.md',
 			`---\ntitle: x\n---\n\n[@cite](airboss-ref:unknown/some-future-thing)\n`,
 		);
 		const before = readFileSync(file, 'utf-8');
-		const report = applyFixes({ cwd: workDir, registry: makeRegistry({ regs: '2026' }) });
+		const report = await applyFixes({ cwd: workDir, registry: makeRegistry({ regs: '2026' }) });
 		expect(report.filesModified).toBe(0);
 		expect(readFileSync(file, 'utf-8')).toBe(before);
 	});
 
-	test('F-05: leaves malformed identifier alone', () => {
+	test('F-05: leaves malformed identifier alone', async () => {
 		const file = writeLesson(
 			'course/regulations/sample/lesson.md',
 			`---\ntitle: x\n---\n\n[@cite](airboss-ref:/regs/cfr-14/91/103?at=2026)\n`,
 		);
 		const before = readFileSync(file, 'utf-8');
-		const report = applyFixes({ cwd: workDir, registry: makeRegistry({ regs: '2026' }) });
+		const report = await applyFixes({ cwd: workDir, registry: makeRegistry({ regs: '2026' }) });
 		expect(report.filesModified).toBe(0);
 		expect(readFileSync(file, 'utf-8')).toBe(before);
 	});
 
-	test('F-06: skips identifier inside fenced code block', () => {
+	test('F-06: skips identifier inside fenced code block', async () => {
 		const file = writeLesson(
 			'course/regulations/sample/lesson.md',
 			`---\ntitle: x\n---\n\n\`\`\`\nairboss-ref:regs/cfr-14/91/103\n\`\`\`\n`,
 		);
 		const before = readFileSync(file, 'utf-8');
-		const report = applyFixes({ cwd: workDir, registry: makeRegistry({ regs: '2026' }) });
+		const report = await applyFixes({ cwd: workDir, registry: makeRegistry({ regs: '2026' }) });
 		expect(report.filesModified).toBe(0);
 		expect(readFileSync(file, 'utf-8')).toBe(before);
 	});
 
-	test('F-07: stamps multiple unpinned identifiers in one file', () => {
+	test('F-07: stamps multiple unpinned identifiers in one file', async () => {
 		const file = writeLesson(
 			'course/regulations/sample/lesson.md',
 			`---\ntitle: x\n---\n\n[a](airboss-ref:regs/cfr-14/91/103)\n[b](airboss-ref:regs/cfr-14/91/107)\n[c](airboss-ref:regs/cfr-14/91/113)\n`,
 		);
 		registerCorpusResolver(makeResolver('regs', '2026'));
-		const report = applyFixes({ cwd: workDir, registry: makeRegistry({ regs: '2026' }) });
+		const report = await applyFixes({ cwd: workDir, registry: makeRegistry({ regs: '2026' }) });
 		expect(report.identifiersStamped).toBe(3);
 		const newSource = readFileSync(file, 'utf-8');
 		expect(newSource).toContain('airboss-ref:regs/cfr-14/91/103?at=2026');
@@ -146,24 +146,24 @@ describe('applyFixes', () => {
 		expect(newSource).toContain('airboss-ref:regs/cfr-14/91/113?at=2026');
 	});
 
-	test('F-08: idempotent -- second run is a no-op', () => {
+	test('F-08: idempotent -- second run is a no-op', async () => {
 		writeLesson(
 			'course/regulations/sample/lesson.md',
 			`---\ntitle: x\n---\n\n[@cite](airboss-ref:regs/cfr-14/91/103)\n`,
 		);
 		registerCorpusResolver(makeResolver('regs', '2026'));
 		const reg = makeRegistry({ regs: '2026' });
-		const r1 = applyFixes({ cwd: workDir, registry: reg });
+		const r1 = await applyFixes({ cwd: workDir, registry: reg });
 		expect(r1.filesModified).toBe(1);
-		const r2 = applyFixes({ cwd: workDir, registry: reg });
+		const r2 = await applyFixes({ cwd: workDir, registry: reg });
 		expect(r2.filesModified).toBe(0);
 	});
 
-	test('F-09: runFixCli refuses to run when CI=true', () => {
+	test('F-09: runFixCli refuses to run when CI=true', async () => {
 		const prev = process.env.CI;
 		process.env.CI = 'true';
 		try {
-			const code = runFixCli({ cwd: workDir });
+			const code = await runFixCli({ cwd: workDir });
 			expect(code).toBe(2);
 		} finally {
 			if (prev === undefined) delete process.env.CI;
@@ -171,7 +171,7 @@ describe('applyFixes', () => {
 		}
 	});
 
-	test('F-10: applyFixes succeeds; second-pass validator finds 0 errors after stamping', () => {
+	test('F-10: applyFixes succeeds; second-pass validator finds 0 errors after stamping', async () => {
 		writeLesson(
 			'course/regulations/sample/lesson.md',
 			`---\ntitle: x\n---\n\n[@cite](airboss-ref:regs/cfr-14/91/103)\n`,
@@ -201,25 +201,25 @@ describe('applyFixes', () => {
 			walkSupersessionChain: () => [],
 			isCorpusKnown: (c) => c === 'regs',
 		};
-		const report = applyFixes({ cwd: workDir, registry: reg });
+		const report = await applyFixes({ cwd: workDir, registry: reg });
 		expect(report.identifiersStamped).toBe(1);
 		expect(report.remainingErrors).toHaveLength(0);
 	});
 
-	test('F-11: bare URL form unpinned -- stamps in place', () => {
+	test('F-11: bare URL form unpinned -- stamps in place', async () => {
 		const file = writeLesson(
 			'course/regulations/sample/lesson.md',
 			`---\ntitle: x\n---\n\nSee airboss-ref:regs/cfr-14/91/103 for the rule.\n`,
 		);
-		const report = applyFixes({ cwd: workDir, registry: makeRegistry({ regs: '2026' }) });
+		const report = await applyFixes({ cwd: workDir, registry: makeRegistry({ regs: '2026' }) });
 		expect(report.identifiersStamped).toBe(1);
 		const newSource = readFileSync(file, 'utf-8');
 		expect(newSource).toContain('airboss-ref:regs/cfr-14/91/103?at=2026');
 	});
 
-	test('runFixCli prints summary and returns 0 on success', () => {
+	test('runFixCli prints summary and returns 0 on success', async () => {
 		writeLesson('course/regulations/sample/empty.md', `---\ntitle: x\n---\n\nNo refs.\n`);
-		const code = runFixCli({ cwd: workDir, registry: makeRegistry({ regs: '2026' }) });
+		const code = await runFixCli({ cwd: workDir, registry: makeRegistry({ regs: '2026' }) });
 		expect(code).toBe(0);
 	});
 });

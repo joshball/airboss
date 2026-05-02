@@ -145,7 +145,7 @@ export async function seedOrdersFromManifest(opts: OrdersSeedOptions = {}): Prom
 
 	let promotionBatchId: string | null = null;
 	if (entriesToPromote.length > 0) {
-		const result = recordPromotion({
+		const result = await recordPromotion({
 			corpus: CORPUS,
 			reviewerId: ORDERS_SEED_REVIEWER_ID,
 			scope: entriesToPromote,
