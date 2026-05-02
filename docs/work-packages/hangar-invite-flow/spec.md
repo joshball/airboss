@@ -4,8 +4,9 @@ product: hangar
 feature: hangar-invite-flow
 type: spec
 status: read
-review_status: pending
+review_status: done
 created: 2026-04-30
+ratified: 2026-05-02
 ---
 
 Add an invite-by-email flow so an admin can onboard a new user from hangar without sharing a password. The admin enters an email + role, the platform sends a one-shot invite link, the recipient lands on a study route that creates their account via better-auth's signup, and the inviting admin sees the invite move from "pending" to "accepted" in the hangar UI.
@@ -90,9 +91,26 @@ This is the natural follow-on to [hangar-users-editing](../hangar-users-editing/
 - **Invite organizations / teams.** No multi-tenant story today. Keep flat.
 - **Better-auth organization plugin.** It carries multi-tenancy machinery we don't want. Hand-roll the table.
 
-## Open questions
+## Ratifications (2026-05-02)
 
-The user resolves each before tasks.md finalizes.
+User ratified all 10 recommended defaults. Build proceeds against the recommendations below; the alternative options stay for future readers but are no longer live.
+
+| Q   | Decision                                       | Ratified value                                       |
+| --- | ---------------------------------------------- | ---------------------------------------------------- |
+| (a) | Invite expiry default                          | 7 days                                               |
+| (b) | Token shape                                    | 32 bytes from `crypto.getRandomValues`, base64url    |
+| (c) | Send-failure semantics                         | Roll back row insert on email-send failure           |
+| (d) | Resend regenerates token                       | Yes -- old token invalidated on resend               |
+| (e) | Can invite target `admin` role?                | No -- admin grants stay on `/users/[id]` role picker |
+| (f) | Allow inviting an existing user's email?       | No -- block + redirect to existing user              |
+| (g) | Email pre-filled and read-only on accept page? | Yes                                                  |
+| (h) | Audit `targetId` for invite create             | `invitation.id`; recipient email in `metadata.email` |
+| (i) | Public accept route lives in study app         | Yes -- `/invite/[token]` with hooks-layer exemption  |
+| (j) | Cleanup of expired invites                     | None in v1; future cron WP if table grows            |
+
+## Open questions (history -- now ratified above)
+
+The user resolves each before tasks.md finalizes. **Resolved 2026-05-02; see Ratifications section above.**
 
 ### (a) Expiry default
 
