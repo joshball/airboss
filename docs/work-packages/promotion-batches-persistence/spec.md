@@ -1,7 +1,9 @@
 ---
 title: Promotion batches & editions persistence
-status: draft
+status: shipped
 created: 2026-05-01
+shipped: 2026-05-02
+shipped-prs: [434, 454]
 authored-by: Joshua (with agent)
 trigger: chunk-4 review (Cluster H) closure; review #393 line 115
 related-adrs: [019]

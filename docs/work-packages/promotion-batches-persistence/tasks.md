@@ -1,60 +1,55 @@
 ---
 title: Promotion batches & editions persistence -- tasks
-status: draft
+status: shipped
 created: 2026-05-01
-sequencing: blocked-on-W5-W6-merge
+shipped: 2026-05-02
 ---
 
 Build order. Each task is a single PR unless noted.
 
 ## Prereq
 
-- [ ] W5 (`perf/sources-registry-index`) merged to main.
-- [ ] W6 (`fix/sources-backend-criticals`) merged to main.
+- [x] W5 (`perf/sources-registry-index`) merged to main (#409).
+- [x] W6 (`fix/sources-backend-criticals`) merged to main (#408).
 
-Once both prereq PRs land, the in-memory atomicity + index contracts are stable and this WP rebases against them cleanly.
+## Phase 1 -- schema + migration -- PR #434
 
-## Phase 1 -- schema + migration
+- [x] Author `libs/sources/src/db/schema.ts` with `promotion_batches` + `editions` per `spec.md`.
+- [x] Wire into `drizzle.config.ts` schema array.
+- [x] Generate migration: hand-written `drizzle/0007_promotion_batches_and_editions.sql`.
+- [x] Hand-review the SQL: indexes, FK, CHECK constraints all present.
+- [x] Migration README documenting rollback SQL.
+- [x] Schema-shape unit tests in `libs/sources/src/db/schema.test.ts` (18 tests).
 
-- [ ] Author `libs/sources/src/db/schema.ts` with `promotion_batches` + `editions` per `spec.md`.
-- [ ] Wire into `drizzle.config.ts` schema array.
-- [ ] Generate migration: `bun run db:generate`.
-- [ ] Hand-review the generated SQL: confirm indexes, FK, enum check constraints look right.
-- [ ] Add migration README documenting rollback SQL.
-- [ ] Test: `bun run db:migrate` against a fresh DB succeeds; rerun is no-op.
+## Phase 2 -- read path -- PR #454 (combined with phase 3)
 
-## Phase 2 -- read path
+- [x] `getEditionsMap` reads through the Postgres-backed cache with `_loaded` flag + generation counter.
+- [x] `getCurrentEdition(id)` single-row read.
+- [x] `rebuildLifecycleOverlay()` in `init.ts`; `initRegistry()` called from `apps/{study,hangar}/src/hooks.server.ts`.
+- [x] Tests in `editions.test.ts` and `lifecycle-overlay-rebuild.test.ts`.
 
-- [ ] Refactor `getEditionsMap` to query Postgres with a generation-counter cache.
-- [ ] Add `getCurrentEdition(id)` (single-row read) for hot paths.
-- [ ] Add bootstrap-time `rebuildLifecycleOverlay()` and call from the app bootstrap.
-- [ ] Tests per `test-plan.md` `editions.test.ts` and `lifecycle-overlay-rebuild.test.ts`.
+## Phase 3 -- write path -- PR #454
 
-## Phase 3 -- write path
-
-- [ ] Convert `recordPromotion` / `recordDePromotion` to use a Drizzle transaction. If the public signature changes to async, batch the caller updates.
-- [ ] Bump generation counter on every committed transaction.
-- [ ] Tests per `test-plan.md` `lifecycle.test.ts` extensions.
-- [ ] Integration test: write -> restart -> overlay rebuilt -> read returns post-write state.
+- [x] `recordPromotion` / `recordDePromotion` are async + Drizzle-transactional. Public signature changed sync -> async; 14 corpus seed/ingest callers updated.
+- [x] Generation counter bumped on every committed transaction.
+- [x] Tests extending `lifecycle.test.ts`; integration test write -> restart -> overlay rebuild.
 
 ## Phase 4 -- cleanup
 
-- [ ] Remove the `let _activeEditions` mutable-module-level binding from `editions.ts`. The DB is the source of truth; the cache is a read-through layer with no test mutation surface beyond `__editions_internal__` (which becomes a no-op or is deleted entirely if no test still depends on it).
-- [ ] Update `lifecycle.ts:9` and `editions.ts:7` doc comments: remove "Phase 2 ships X; persistence is a future WP" language. Replace with "Persisted via the `sources_registry.promotion_batches` and `sources_registry.editions` tables; see WP `promotion-batches-persistence`."
-- [ ] Update ADR 019 §2.1 to reflect the indexed tier is now active.
-- [ ] Manual test plan run; sign-off.
+- [x] Update `lifecycle.ts:9` and `editions.ts:7` doc comments to drop the "Phase 2 / future WP" language. Replaced with "Persisted via `sources_registry.promotion_batches` / `editions`; see WP `promotion-batches-persistence`."
+- [x] Update ADR 019 §2.1 to note `editions` is in the indexed tier (persisted).
+- [ ] **Dropped:** "Remove `let _activeEditions` mutable-module-level binding." After Phase 2+3 shipped, this binding is the runtime cache the design.md describes (sync-caller compatibility, Postgres read-through). It is not stale Phase-2 scaffolding; removing it would break sync callers and the `__editions_internal__` test surface that test helpers still depend on. Decision recorded; no follow-on WP.
+- [ ] Manual test plan run; user sign-off.
 
 ## Verification gates per phase
 
-- `bun run check` clean (0/0).
-- All existing sources tests pass.
-- New tests pass.
-- Manual restart-survives-promotion test passes.
+- [x] `bun run check` clean (0/0) per phase.
+- [x] All existing sources tests pass.
+- [x] New tests pass.
+- [ ] Manual restart-survives-promotion test (deferred to user).
 
-## Estimated PR count
+## Outcome
 
-3 PRs:
+3 PRs shipped: #434 (schema), #454 (phases 2+3), this PR (Phase 4 cleanup).
 
-1. Phase 1 (schema + migration).
-2. Phase 2 + 3 (read + write paths together; they share the cache contract).
-3. Phase 4 (cleanup + ADR update).
+Cluster H of the chunk-4 sources & content pipeline review (`docs/work/reviews/2026-05-01-sources-content-pipeline-INDEX.md`) is now closed by code, not by spec.

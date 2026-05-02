@@ -360,7 +360,7 @@ interface SourceEntry {
 type SourceLifecycle = 'draft' | 'pending' | 'accepted' | 'retired' | 'superseded';
 ```
 
-Removed from v2: `parent` (compute from id), `editions: Edition[]` (move to indexed tier), `current_edition` (compute), `derivative_path` and `indexed_table` (per-corpus resolver function), `last_verified` (no audit trail at this layer).
+Removed from v2: `parent` (compute from id), `editions: Edition[]` (in the indexed tier; persisted in `sources_registry.editions` per WP `promotion-batches-persistence`), `current_edition` (compute), `derivative_path` and `indexed_table` (per-corpus resolver function), `last_verified` (no audit trail at this layer).
 
 Renamed from v2: `aliases?: string[]` → `alternative_names?: string[]` (to disambiguate from `Edition.aliases` which is for renumbering).
 

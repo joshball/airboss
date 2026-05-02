@@ -3,11 +3,12 @@
  *
  * Source of truth: ADR 019 §2.4. Five states: `draft`, `pending`, `accepted`,
  * `retired`, `superseded`. Transitions are atomic at the batch level: either
- * every entry in a batch transitions or none does. The audit trail
- * (`promotion_batches`) preserves every promotion + de-promotion event.
+ * every entry in a batch transitions or none does. The audit trail is
+ * persisted in the `sources_registry.promotion_batches` table; the in-memory
+ * `ENTRY_LIFECYCLES` overlay is a derived runtime cache rebuilt from that
+ * table on bootstrap via `rebuildLifecycleOverlay()` (see init.ts).
  *
- * Phase 2 ships the in-memory implementation. Persistence to Postgres is a
- * future WP; the audit-trail shape is final.
+ * See WP `promotion-batches-persistence` for the persistence design.
  */
 
 import { PROMOTION_STATES } from '@ab/constants';
