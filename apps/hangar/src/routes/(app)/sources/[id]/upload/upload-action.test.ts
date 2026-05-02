@@ -17,7 +17,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const TMP_ROOT = join(tmpdir(), 'airboss-upload-action-test');
 
-async function dirExists(path: string): Promise<boolean> {
+async function _dirExists(path: string): Promise<boolean> {
 	try {
 		await stat(path);
 		return true;
