@@ -3,7 +3,7 @@ title: 'Library substrate -- tasks'
 product: study
 feature: library-substrate
 type: tasks
-status: unread
+status: shipped
 ---
 
 # WP-SUB tasks

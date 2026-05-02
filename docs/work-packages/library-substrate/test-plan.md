@@ -3,7 +3,7 @@ title: 'Library substrate -- test plan'
 product: study
 feature: library-substrate
 type: test-plan
-status: unread
+status: shipped
 ---
 
 # WP-SUB test plan

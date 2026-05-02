@@ -3,8 +3,9 @@ title: 'Library substrate -- WP-SUB implementation plan'
 product: study
 feature: library-substrate
 type: spec
-status: unread
-review_status: pending
+status: shipped
+review_status: done
+shipped_via: PR #396 (implementation 2026-05-01) + PR #393 (plan)
 parent: docs/work-packages/library-completeness/spec.md
 ---
 
