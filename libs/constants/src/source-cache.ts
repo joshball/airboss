@@ -10,11 +10,25 @@
  * Lives in `@ab/constants` (and not `@ab/sources`) so that pure-Node script
  * entry points can import the helper without dragging in the full sources
  * lib's transitive deps (fast-xml-parser, etc.).
+ *
+ * # Browser safety
+ *
+ * `@ab/constants` is imported from client code (route constants, help kinds,
+ * etc.) and the barrel re-exports this module, so Vite traces it into the
+ * browser bundle even though every function below is server-only. To keep
+ * the browser bundle clean, this module MUST NOT statically import
+ * `node:fs`, `node:os`, or `node:path` at module top level -- Vite would
+ * externalize them and crash the client at first hit
+ * (`Module "node:fs" has been externalized for browser compatibility`).
+ *
+ * Instead, we resolve the Node built-ins lazily via
+ * `process.getBuiltinModule(spec)`. This is a runtime API (Node 22+, Bun)
+ * that Vite's static analyzer cannot follow, so the bundler never sees the
+ * `node:*` specifiers and never tries to externalize them. The browser
+ * loads this module but never executes the function bodies, so the
+ * lookups never fire on the client.
  */
 
-import { existsSync, mkdirSync } from 'node:fs';
-import { homedir } from 'node:os';
-import { join } from 'node:path';
 import { ENV_VARS } from './env';
 
 /** Names + literals defining the source-document cache. */
@@ -27,19 +41,62 @@ export const SOURCE_CACHE = {
 	DEFAULT_DIR_NAME: 'airboss-handbook-cache',
 } as const;
 
+type NodeFs = { existsSync: (p: string) => boolean; mkdirSync: (p: string, opts: { recursive: boolean }) => void };
+type NodeOs = { homedir: () => string };
+type NodePath = { join: (...parts: string[]) => string };
+
+let cachedFs: NodeFs | null = null;
+let cachedOs: NodeOs | null = null;
+let cachedPath: NodePath | null = null;
+
+type GetBuiltinModule = (spec: string) => unknown;
+
+/**
+ * Resolve a Node built-in lazily, hidden from Vite's static analyzer.
+ *
+ * Uses `process.getBuiltinModule` (Node 22+, Bun) so the specifier is
+ * passed at runtime and never appears in a static `import` form the
+ * bundler can rewrite or externalize.
+ */
+function loadBuiltin<T>(spec: string): T {
+	const proc = (typeof process !== 'undefined' ? process : undefined) as
+		| (NodeJS.Process & { getBuiltinModule?: GetBuiltinModule })
+		| undefined;
+	const getBuiltin = proc?.getBuiltinModule;
+	if (typeof getBuiltin !== 'function') {
+		throw new Error(`source-cache: ${spec} unavailable in this runtime (no process.getBuiltinModule)`);
+	}
+	return getBuiltin(spec) as T;
+}
+
+function nodeFs(): NodeFs {
+	if (!cachedFs) cachedFs = loadBuiltin<NodeFs>('node:fs');
+	return cachedFs;
+}
+
+function nodeOs(): NodeOs {
+	if (!cachedOs) cachedOs = loadBuiltin<NodeOs>('node:os');
+	return cachedOs;
+}
+
+function nodePath(): NodePath {
+	if (!cachedPath) cachedPath = loadBuiltin<NodePath>('node:path');
+	return cachedPath;
+}
+
 /**
  * Expand a leading `~` or `~/` in a path against the current user home.
  * No-op when the path does not start with `~`.
  */
 export function expandHome(p: string): string {
-	if (p === '~') return homedir();
-	if (p.startsWith('~/')) return join(homedir(), p.slice(2));
+	if (p === '~') return nodeOs().homedir();
+	if (p.startsWith('~/')) return nodePath().join(nodeOs().homedir(), p.slice(2));
 	return p;
 }
 
 /** Default cache root: `~/Documents/airboss-handbook-cache/`. */
 export function defaultCacheRoot(): string {
-	return join(homedir(), SOURCE_CACHE.DEFAULT_PARENT_DIR, SOURCE_CACHE.DEFAULT_DIR_NAME);
+	return nodePath().join(nodeOs().homedir(), SOURCE_CACHE.DEFAULT_PARENT_DIR, SOURCE_CACHE.DEFAULT_DIR_NAME);
 }
 
 /**
@@ -57,8 +114,9 @@ export function resolveCacheRoot(options: { ensureExists?: boolean } = {}): stri
 	const { ensureExists = true } = options;
 	const fromEnv = process.env[SOURCE_CACHE.ENV_VAR];
 	const root = fromEnv !== undefined && fromEnv.length > 0 ? expandHome(fromEnv) : defaultCacheRoot();
-	if (ensureExists && !existsSync(root)) {
-		mkdirSync(root, { recursive: true });
+	const fs = nodeFs();
+	if (ensureExists && !fs.existsSync(root)) {
+		fs.mkdirSync(root, { recursive: true });
 	}
 	return root;
 }
