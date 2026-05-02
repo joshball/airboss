@@ -1,8 +1,8 @@
-import { existsSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { dirname, join } from 'node:path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { type DerivativeWriteInput, writeDerivativeTree } from './derivative-writer.ts';
+import { __derivative_writer_internal__, type DerivativeWriteInput, writeDerivativeTree } from './derivative-writer.ts';
 import { normalizeRawPart, normalizeRawSection, normalizeRawSubpart } from './normalizer.ts';
 
 const PUBLISHED = new Date('2026-01-01');
@@ -142,5 +142,46 @@ describe('writeDerivativeTree', () => {
 		// Modified files: the section markdown, its meta (sha changed), and sections.json (entry sha changed)
 		expect(report.filesWritten).toBeGreaterThanOrEqual(2);
 		expect(report.filesUnchanged).toBeGreaterThanOrEqual(2);
+	});
+});
+
+describe('writeIfChanged (ADR 021 atomicity)', () => {
+	it('happy path -- writes the file and leaves no .tmp sibling', () => {
+		const target = join(tmpRoot, 'sub', 'happy.md');
+		const result = __derivative_writer_internal__.writeIfChanged(target, '# hello\n');
+		expect(result.wrote).toBe(true);
+		expect(readFileSync(target, 'utf-8')).toBe('# hello\n');
+		expect(existsSync(`${target}.tmp`)).toBe(false);
+	});
+
+	it('mid-write failure -- canonical path is never partially written', () => {
+		// Force renameSync to fail by planting a non-empty directory at the
+		// canonical path. The writer must throw and leave the directory
+		// untouched -- never replace it with a partial file.
+		const target = join(tmpRoot, 'sub', 'blocked.md');
+		mkdirSync(dirname(target), { recursive: true });
+		mkdirSync(target);
+		writeFileSync(join(target, 'sentinel'), 'block', 'utf-8');
+
+		expect(() => __derivative_writer_internal__.writeIfChanged(target, 'should not land')).toThrow();
+		expect(statSync(target).isDirectory()).toBe(true);
+		expect(existsSync(join(target, 'sentinel'))).toBe(true);
+	});
+
+	it('existing dest replaced atomically -- prior content fully overwritten', () => {
+		const target = join(tmpRoot, 'sub', 'replaced.md');
+		__derivative_writer_internal__.writeIfChanged(target, 'first');
+		expect(readFileSync(target, 'utf-8')).toBe('first');
+		__derivative_writer_internal__.writeIfChanged(target, 'second');
+		expect(readFileSync(target, 'utf-8')).toBe('second');
+		expect(existsSync(`${target}.tmp`)).toBe(false);
+	});
+
+	it('skips the write entirely when content is unchanged (no .tmp produced)', () => {
+		const target = join(tmpRoot, 'sub', 'idempotent.md');
+		__derivative_writer_internal__.writeIfChanged(target, 'hello');
+		const second = __derivative_writer_internal__.writeIfChanged(target, 'hello');
+		expect(second.wrote).toBe(false);
+		expect(existsSync(`${target}.tmp`)).toBe(false);
 	});
 });

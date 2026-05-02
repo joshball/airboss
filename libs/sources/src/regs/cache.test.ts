@@ -1,4 +1,4 @@
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { ENV_VARS } from '@ab/constants';
@@ -118,5 +118,53 @@ describe('buildEcfrUrl', () => {
 			editionDate: '2026-01-01',
 		});
 		expect(url).toBe('https://www.ecfr.gov/api/versioner/v1/full/2026-01-01/title-14.xml');
+	});
+});
+
+describe('writeAtomic (ADR 021 atomicity)', () => {
+	it('happy path -- writes the file and leaves no .tmp sibling', () => {
+		const target = join(tmpRoot, 'sub', 'happy.txt');
+		__cache_internal__.writeAtomic(target, 'hello world');
+		expect(readFileSync(target, 'utf-8')).toBe('hello world');
+		expect(existsSync(`${target}.tmp`)).toBe(false);
+	});
+
+	it('mid-write failure -- canonical path is never partially written', () => {
+		// Force renameSync to fail by planting a non-empty directory at the
+		// canonical path. The writer must throw and leave the directory
+		// untouched -- never replace it with a partial file.
+		const target = join(tmpRoot, 'sub', 'blocked.txt');
+		mkdirSync(target, { recursive: true });
+		writeFileSync(join(target, 'sentinel'), 'block', 'utf-8');
+
+		expect(() => __cache_internal__.writeAtomic(target, 'should not land')).toThrow();
+		expect(statSync(target).isDirectory()).toBe(true);
+		expect(existsSync(join(target, 'sentinel'))).toBe(true);
+	});
+
+	it('existing dest replaced atomically -- prior content fully overwritten', () => {
+		const target = join(tmpRoot, 'sub', 'replaced.txt');
+		__cache_internal__.writeAtomic(target, 'first');
+		expect(readFileSync(target, 'utf-8')).toBe('first');
+		__cache_internal__.writeAtomic(target, 'second');
+		expect(readFileSync(target, 'utf-8')).toBe('second');
+		expect(existsSync(`${target}.tmp`)).toBe(false);
+	});
+});
+
+describe('loadEcfrXml (cache write atomicity)', () => {
+	it('does not leave a `.tmp` sibling at the cache path after a successful fetch', async () => {
+		await loadEcfrXml({
+			title: '14',
+			editionDate: '2026-01-01',
+			fetchImpl: async () => ({
+				ok: true,
+				status: 200,
+				text: async () => '<fetched/>',
+			}),
+		});
+		const cachePath = cacheXmlPath('14', '2026-01-01');
+		expect(existsSync(cachePath)).toBe(true);
+		expect(existsSync(`${cachePath}.tmp`)).toBe(false);
 	});
 });

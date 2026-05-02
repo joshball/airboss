@@ -14,7 +14,7 @@
  */
 
 import { createHash } from 'node:crypto';
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, renameSync, unlinkSync, writeFileSync } from 'node:fs';
 import { dirname, isAbsolute, join, resolve } from 'node:path';
 import { resolveCacheRoot as resolveSourceCacheRoot } from '@ab/constants';
 
@@ -104,14 +104,35 @@ export async function loadEcfrXml(opts: CacheLoadOptions): Promise<CacheLoadResu
 	}
 	const xml = await response.text();
 
-	mkdirSync(dirname(cachePath), { recursive: true });
-	writeFileSync(cachePath, xml, 'utf-8');
+	writeAtomic(cachePath, xml);
 
 	return {
 		xml,
 		sourceUrl: url,
 		sourceSha256: sha256(xml),
 	};
+}
+
+/**
+ * Write `content` to `path` atomically: write to `<path>.tmp`, then rename
+ * over the destination. POSIX rename is atomic on the same filesystem, so a
+ * SIGINT or process kill mid-write leaves either the prior file or no file --
+ * never a half-written destination. Required by ADR 021.
+ */
+function writeAtomic(path: string, content: string): void {
+	mkdirSync(dirname(path), { recursive: true });
+	const tmp = `${path}.tmp`;
+	try {
+		writeFileSync(tmp, content, 'utf-8');
+		renameSync(tmp, path);
+	} catch (err) {
+		try {
+			unlinkSync(tmp);
+		} catch {
+			// tmp may not exist; ignore.
+		}
+		throw err;
+	}
 }
 
 function buildEcfrUrl(opts: CacheLoadOptions): string {
@@ -131,4 +152,5 @@ export function sha256(input: string): string {
 // Test-only helpers
 export const __cache_internal__ = {
 	buildEcfrUrl,
+	writeAtomic,
 };

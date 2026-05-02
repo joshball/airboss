@@ -8,7 +8,7 @@
  */
 
 import { createHash } from 'node:crypto';
-import { createWriteStream, mkdirSync } from 'node:fs';
+import { createWriteStream, mkdirSync, renameSync, unlinkSync } from 'node:fs';
 import { dirname } from 'node:path';
 import { Readable } from 'node:stream';
 import { pipeline } from 'node:stream/promises';
@@ -114,9 +114,15 @@ async function downloadOnce(url: string, destPath: string, opts: DownloadOptions
 
 	mkdirSync(dirname(destPath), { recursive: true });
 
+	// Atomic write: stream into `${destPath}.part`, then rename over the
+	// destination after the pipeline completes. POSIX rename is atomic on the
+	// same filesystem, so a SIGINT or network drop mid-stream leaves either
+	// the prior file or no file -- never a partially-written destination.
+	// Required by ADR 021.
+	const partPath = `${destPath}.part`;
 	const hash = createHash('sha256');
 	let bytes = 0;
-	const fileStream = createWriteStream(destPath);
+	const fileStream = createWriteStream(partPath);
 	const nodeStream = Readable.fromWeb(response.body as unknown as import('node:stream/web').ReadableStream);
 
 	nodeStream.on('data', (chunk: Buffer | string) => {
@@ -125,7 +131,17 @@ async function downloadOnce(url: string, destPath: string, opts: DownloadOptions
 		bytes += buf.byteLength;
 	});
 
-	await pipeline(nodeStream, fileStream);
+	try {
+		await pipeline(nodeStream, fileStream);
+		renameSync(partPath, destPath);
+	} catch (err) {
+		try {
+			unlinkSync(partPath);
+		} catch {
+			// .part may not exist or may already be gone; ignore.
+		}
+		throw err;
+	}
 
 	return {
 		url: finalUrl,
