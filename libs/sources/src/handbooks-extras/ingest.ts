@@ -79,6 +79,9 @@ export const DOC_ID_TO_FRIENDLY: Readonly<
 	'faa-h-8083-16': { slug: 'iph', editionSlug: '8083-16B', faaDir: 'FAA-H-8083-16B' },
 	'faa-h-8083-30': { slug: 'amt-general', editionSlug: '8083-30B', faaDir: 'FAA-H-8083-30B' },
 	'faa-h-8083-32': { slug: 'amt-powerplant', editionSlug: '8083-32B', faaDir: 'FAA-H-8083-32B' },
+	// Non-H-numbered FAA pamphlet. Synthetic doc_id since FAA never assigned
+	// a Handbook number to Tips on Mountain Flying.
+	'faa-mtn-tips': { slug: 'tips-mountain-flying', editionSlug: 'mtn-2003', faaDir: 'MTN-2003' },
 };
 
 /**
@@ -95,6 +98,7 @@ const FRIENDLY_DISPLAY: Readonly<Record<string, { readonly short: string; readon
 	iph: { short: 'IPH', formal: 'Instrument Procedures Handbook' },
 	'amt-general': { short: 'AMT-G', formal: 'Aviation Maintenance Technician Handbook -- General' },
 	'amt-powerplant': { short: 'AMT-P', formal: 'Aviation Maintenance Technician Handbook -- Powerplant' },
+	'tips-mountain-flying': { short: 'MTN', formal: 'Tips on Mountain Flying' },
 };
 
 export interface IngestArgs {

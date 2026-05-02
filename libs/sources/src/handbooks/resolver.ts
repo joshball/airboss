@@ -65,6 +65,13 @@ export const HANDBOOK_DOC_EDITIONS: Record<string, Record<string, string>> = {
 	'amt-powerplant': {
 		'8083-32B': 'FAA-H-8083-32B',
 	},
+	// Non-FAA-H-numbered FAA pamphlet (Tips on Mountain Flying). Edition slug
+	// = `mtn-2003` (current public FAA-hosted version is undated; traced to
+	// the early-2000s authoring window). On-disk dir uses uppercase to match
+	// the FAA-H-* convention.
+	'tips-mountain-flying': {
+		'mtn-2003': 'MTN-2003',
+	},
 };
 
 const SOURCE_ID_PREFIX = 'airboss-ref:handbooks/';

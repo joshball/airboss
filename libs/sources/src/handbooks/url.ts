@@ -38,6 +38,10 @@ export const HANDBOOK_LIVE_URLS: Record<string, string> = {
 	iph: 'https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/instrument_procedures_handbook',
 	'amt-general': 'https://www.faa.gov/regulations_policies/handbooks_manuals/aviation',
 	'amt-powerplant': 'https://www.faa.gov/regulations_policies/handbooks_manuals/aviation',
+	// FAA Tips on Mountain Flying pamphlet. No dedicated landing page; the
+	// PDF lives under the parent aviation handbooks index. Edition.source_url
+	// from the YAML carries the actual PDF download URL.
+	'tips-mountain-flying': 'https://www.faa.gov/regulations_policies/handbooks_manuals/aviation',
 };
 
 /**
