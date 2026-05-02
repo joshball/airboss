@@ -15,7 +15,6 @@ export {
 	listJobs,
 	readJobLog,
 	recoverOrphanedRunning,
-	writeJobLogRow,
 } from './enqueue';
 export {
 	hangarJob,

@@ -31,11 +31,11 @@
 import { AUDIT_OPS, auditWrite } from '@ab/audit';
 import { AUDIT_TARGETS, JOB_AUDIT_REASONS, JOB_LOG_STREAMS, JOB_STATUSES } from '@ab/constants';
 import { db as defaultDb } from '@ab/db/connection';
-import { createLogger, generateHangarJobLogId } from '@ab/utils';
+import { createLogger } from '@ab/utils';
 import { and, asc, eq, inArray, isNotNull, isNull, like, notInArray, or } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
-import { recoverOrphanedRunning } from './enqueue';
-import { hangarJob, hangarJobLog } from './schema';
+import { appendJobLog, recoverOrphanedRunning } from './enqueue';
+import { hangarJob } from './schema';
 import type { JobContext, JobHandlers, JobProgress } from './types';
 
 type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;
@@ -141,15 +141,15 @@ export function startWorker(options: WorkerOptions): WorkerHandle {
 	}
 
 	function makeContext(job: typeof hangarJob.$inferSelect): JobContext {
-		let seq = 0;
+		// Seq allocation is delegated to `appendJobLog`, which serialises
+		// concurrent appenders for the same `jobId` via a `FOR UPDATE` row
+		// lock on the parent job row and computes `MAX(seq)+1` inside that
+		// transaction. The previous in-memory `seq++` counter could collide
+		// with the orphan-recovery loop and the no-handler terminal-event
+		// insert; the unique `(job_id, seq)` constraint added in the same
+		// migration is the safety net for any path that bypasses this helper.
 		async function writeLine(stream: string, line: string): Promise<void> {
-			await db.insert(hangarJobLog).values({
-				id: generateHangarJobLogId(),
-				jobId: job.id,
-				seq: seq++,
-				stream,
-				line,
-			});
+			await appendJobLog({ jobId: job.id, stream, line }, db);
 		}
 		return {
 			job,
@@ -272,15 +272,18 @@ export function startWorker(options: WorkerOptions): WorkerHandle {
 			if (!wrote) {
 				// Either preempted by cancel or the transaction failed; leave
 				// a breadcrumb but don't audit again (cancel already audited
-				// or the failure path is the audit absence itself).
+				// or the failure path is the audit absence itself). Route
+				// through the atomic appender so the seq doesn't collide with
+				// any other writer for this job.
 				try {
-					await db.insert(hangarJobLog).values({
-						id: generateHangarJobLogId(),
-						jobId: job.id,
-						seq: 0,
-						stream: JOB_LOG_STREAMS.EVENT,
-						line: 'no-handler outcome not recorded as terminal (preempted or tx failed)',
-					});
+					await appendJobLog(
+						{
+							jobId: job.id,
+							stream: JOB_LOG_STREAMS.EVENT,
+							line: 'no-handler outcome not recorded as terminal (preempted or tx failed)',
+						},
+						db,
+					);
 				} catch (err) {
 					log.warn('failed to log no-handler preemption event', {
 						metadata: { jobId: job.id, err: err instanceof Error ? err.message : String(err) },
