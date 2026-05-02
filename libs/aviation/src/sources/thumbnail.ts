@@ -45,8 +45,8 @@ export interface ThumbnailOptions {
 	/** Absolute path to write the JPEG to. */
 	outPath: string;
 	/**
-	 * Relative path to record on the result (what the DB row will carry).
-	 * Keeps the data/sources/... prefix stable across tests and production.
+	 * Relative path (from the hangar blob root) to record on the result --
+	 * this is what the `hangar.source.media.thumbnailPath` column will carry.
 	 */
 	recordedPath: string;
 	/** Injection: probe whether a given binary is on PATH. */

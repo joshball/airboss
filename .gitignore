@@ -16,15 +16,6 @@ coverage/
 /playwright-report/
 /test-results/
 
-# Source binaries - gitignored per reference-system-architecture decision #2
-data/sources/**/*.xml
-data/sources/**/*.pdf
-data/sources/**/*.csv
-data/sources/**/*.txt
-data/sources/**/*.html
-# But KEEP the meta.json files
-!data/sources/**/*.meta.json
-
 # ADR 019 §2.5 -- generated registry snapshot for non-TypeScript consumers.
 # Regenerated per environment via `bun scripts/airboss-ref.ts snapshot`.
 data/sources-snapshot.json

@@ -1,9 +1,9 @@
 /**
  * /sources/[id]/files -- filesystem browser for a source's binary + archives.
  *
- * Lists every file under `data/sources/<type>/` whose name starts with
- * `<sourceId>.` or `<sourceId>@`. Preview payloads are rendered client-side
- * (XML/JSON/CSV/Markdown/PDF/text) keyed on extension.
+ * Lists every file under the hangar blob root's `<type>/` directory whose
+ * name starts with `<sourceId>.` or `<sourceId>@`. Preview payloads are
+ * rendered client-side (XML/JSON/CSV/Markdown/PDF/text) keyed on extension.
  *
  * Admin-only delete is handled via the `delete` form action; the detail
  * pages display the affordance only to users with ROLES.ADMIN.
@@ -12,7 +12,7 @@
 import { readdir, readFile, stat, unlink } from 'node:fs/promises';
 import { dirname, relative, resolve } from 'node:path';
 import { requireRole } from '@ab/auth';
-import { getSource, REPO_ROOT } from '@ab/bc-hangar';
+import { getSource, HANGAR_BLOB_DIR, resolveHangarBlobRoot } from '@ab/bc-hangar';
 import {
 	EXTENSION_TO_PREVIEW_KIND,
 	PREVIEW_KINDS,
@@ -110,16 +110,16 @@ export const load: PageServerLoad = async (event) => {
 	const source = await getSource(event.params.id);
 	if (!source) throw error(404, `source '${event.params.id}' not found`);
 	const kind = SOURCE_KIND_BY_TYPE[source.type as ReferenceSourceType] ?? SOURCE_KINDS.TEXT;
-	const sourcesRoot = resolve(REPO_ROOT, 'data', 'sources');
+	const blobRoot = resolveHangarBlobRoot();
 
 	let entries: FileEntry[] = [];
 	let dirDisplay: string;
 
 	if (kind === SOURCE_KINDS.BINARY_VISUAL) {
-		// Binary-visual layout: data/sources/<type>/<id>/<edition>/{chart.zip, thumb.jpg, meta.json}
+		// Binary-visual layout: <blob-root>/<type>/<id>/<edition>/{chart.zip, thumb.jpg, meta.json}
 		// Each edition directory becomes a section prefix in the displayed name.
-		const sourceRoot = resolve(REPO_ROOT, 'data', 'sources', source.type, source.id);
-		dirDisplay = `data/sources/${source.type}/${source.id}`;
+		const sourceRoot = resolve(blobRoot, source.type, source.id);
+		dirDisplay = `${HANGAR_BLOB_DIR}/${source.type}/${source.id}`;
 		try {
 			const editions = await readdir(sourceRoot, { withFileTypes: true });
 			const editionDirs = editions.filter((e) => e.isDirectory()).map((e) => e.name);
@@ -127,14 +127,14 @@ export const load: PageServerLoad = async (event) => {
 			const collected: FileEntry[] = [];
 			for (const ed of editionDirs) {
 				const edPath = resolve(sourceRoot, ed);
-				if (!isInsideRoot(edPath, sourcesRoot)) {
+				if (!isInsideRoot(edPath, blobRoot)) {
 					throw new Error(`path escape detected: ${edPath}`);
 				}
 				const files = await readdir(edPath);
 				files.sort();
 				for (const file of files) {
 					const full = resolve(edPath, file);
-					if (!isInsideRoot(full, sourcesRoot)) continue;
+					if (!isInsideRoot(full, blobRoot)) continue;
 					const isArchive = ed.includes('@archived-');
 					const display = `${ed}/${file}`;
 					collected.push(await buildEntry(full, display, isArchive));
@@ -149,8 +149,8 @@ export const load: PageServerLoad = async (event) => {
 			entries = [];
 		}
 	} else {
-		const dir = resolve(REPO_ROOT, 'data', 'sources', source.type);
-		dirDisplay = `data/sources/${source.type}`;
+		const dir = resolve(blobRoot, source.type);
+		dirDisplay = `${HANGAR_BLOB_DIR}/${source.type}`;
 		try {
 			const names = await readdir(dir);
 			const prefix1 = `${source.id}.`;
@@ -161,7 +161,7 @@ export const load: PageServerLoad = async (event) => {
 				ownedNames.sort().map(async (name): Promise<FileEntry> => {
 					const full = resolve(dir, name);
 					// Guard against symlink escapes.
-					if (!isInsideRoot(full, sourcesRoot)) {
+					if (!isInsideRoot(full, blobRoot)) {
 						throw new Error(`path escape detected: ${full}`);
 					}
 					return buildEntry(full, name, name.startsWith(prefix2));
@@ -216,7 +216,7 @@ export const actions: Actions = {
 		if (!name.startsWith(`${source.id}@`)) {
 			return fail(400, { error: 'only archived versions may be deleted here' });
 		}
-		const dir = resolve(REPO_ROOT, 'data', 'sources', source.type);
+		const dir = resolve(resolveHangarBlobRoot(), source.type);
 		const full = resolve(dir, name);
 		if (dirname(full) !== dir) {
 			return fail(400, { error: 'path escape' });

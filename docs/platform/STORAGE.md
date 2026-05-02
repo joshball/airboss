@@ -148,7 +148,7 @@ Sources expected today and as airboss grows. Each gets a `.gitattributes` filter
 | POH excerpts        | `pohs/`          | `$AIRBOSS_HANDBOOK_CACHE/pohs/`                 | `.pdf`     | Per aircraft profile  |
 | Audio masters       | `audio/`         | `$AIRBOSS_HANDBOOK_CACHE/audio/`                | `.wav`     | Future audio surface  |
 
-Anything not on this list is *not* under the source-artifact policy. Random PDFs dropped into a doc folder, scratch test fixtures, etc. should land in the existing `data/sources/**` gitignore tier (which is gitignored entirely; never committed).
+Anything not on this list is *not* under the source-artifact policy. Random PDFs dropped into a doc folder, scratch test fixtures, etc. should land outside the repo (in `$AIRBOSS_HANDBOOK_CACHE` or a developer-local scratch dir). The previous `data/sources/**` gitignore-escape-valve tier was retired alongside the legacy in-repo source pipeline; it never carried committed bytes.
 
 ## When to flip out of Flavor D
 

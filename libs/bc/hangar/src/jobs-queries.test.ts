@@ -172,20 +172,20 @@ describe('getLatestCompleteJobByKind / getLatestCompleteJobForTarget', () => {
 		const later = new Date();
 
 		const completeId = await insertJob({
-			kind: JOB_KINDS.SIZE_REPORT,
+			kind: JOB_KINDS.EXTRACT_SOURCE,
 			status: JOB_STATUSES.COMPLETE,
 			targetId,
 			finishedAt: earlier,
 		});
 		// Newer FAILED job should not displace the older COMPLETE one.
 		await insertJob({
-			kind: JOB_KINDS.SIZE_REPORT,
+			kind: JOB_KINDS.EXTRACT_SOURCE,
 			status: JOB_STATUSES.FAILED,
 			targetId,
 			finishedAt: later,
 		});
 
-		const latest = await getLatestCompleteJobByKind(JOB_KINDS.SIZE_REPORT);
+		const latest = await getLatestCompleteJobByKind(JOB_KINDS.EXTRACT_SOURCE);
 		expect(latest?.id).toBe(completeId);
 	});
 

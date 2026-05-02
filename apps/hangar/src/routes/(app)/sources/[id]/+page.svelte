@@ -179,7 +179,7 @@ const checksumMatchesOnDisk = $derived(
 		<section aria-labelledby="files-h">
 			<h2 id="files-h">Files</h2>
 			<p class="muted">
-				Browse every binary + archived version under <code>data/sources/{data.source.type}/</code>.
+				Browse every binary + archived version under <code>hangar-blobs/{data.source.type}/</code>.
 			</p>
 			<a class="btn-like" href={ROUTES.HANGAR_SOURCE_FILES(data.source.id)}>Open files</a>
 		</section>

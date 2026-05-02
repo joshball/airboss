@@ -10,7 +10,7 @@
  *   4. compute sha256 + sizeBytes
  *   5. drift check (same edition date, different sha => fail)
  *   6. archive previous edition directory (respects ARCHIVE_RETENTION)
- *   7. move tmp -> data/sources/<type>/<id>/<edition>/chart.zip
+ *   7. move tmp -> <blob-root>/<type>/<id>/<edition>/chart.zip
  *   8. read archive manifest (entries + sizes)
  *   9. generate thumbnail
  *  10. write meta.json sidecar
@@ -86,8 +86,12 @@ export interface LocatorShape {
 export interface SectionalFetchInput {
 	/** The loaded `hangar.source` row. */
 	row: HangarSourceRow;
-	/** Repo root for resolving relative paths (injected by handler). */
-	repoRoot: string;
+	/**
+	 * Hangar blob root: absolute path under which `<type>/<id>/<edition>/`
+	 * directories live. Injected by the handler from `resolveHangarBlobRoot()`
+	 * in production; tests pass a per-test tmp directory.
+	 */
+	blobRoot: string;
 	/** Fetch HTML (lets tests swap in a fixture). */
 	fetchHtml: (url: string) => Promise<string>;
 }
@@ -206,8 +210,8 @@ async function defaultFetchHtml(url: string): Promise<string> {
 	return await res.text();
 }
 
-function sectionalRootFor(repoRoot: string, type: string, id: string): string {
-	return resolve(repoRoot, 'data', 'sources', type, id);
+function sectionalRootFor(blobRoot: string, type: string, id: string): string {
+	return resolve(blobRoot, type, id);
 }
 
 function editionDirFor(root: string, editionDate: string): string {
@@ -281,13 +285,13 @@ export async function runSectionalFetch(
 		},
 	});
 
-	const sourceRoot = sectionalRootFor(input.repoRoot, row.type, row.id);
+	const sourceRoot = sectionalRootFor(input.blobRoot, row.type, row.id);
 	const editionDir = editionDirFor(sourceRoot, edition.effectiveDate);
 	const archivePath = join(editionDir, 'chart.zip');
 	const thumbPath = join(editionDir, 'thumb.jpg');
 	const metaPath = join(editionDir, 'meta.json');
-	const _recordedArchivePath = relative(input.repoRoot, archivePath);
-	const recordedThumbPath = relative(input.repoRoot, thumbPath);
+	const _recordedArchivePath = relative(input.blobRoot, archivePath);
+	const recordedThumbPath = relative(input.blobRoot, thumbPath);
 
 	// Step 2: short-circuit if edition + on-disk sha match.
 	if (editionsEqual(row.edition, edition.effectiveDate, edition.resolvedUrl) && row.media) {
@@ -434,7 +438,7 @@ export async function runSectionalFetch(
 		checksum: dl.sha256,
 		sizeBytes: dl.fileSize,
 		downloadedAt: now().toISOString(),
-		path: relative(input.repoRoot, archivePath),
+		path: relative(input.blobRoot, archivePath),
 		version: edition.effectiveDate,
 		media,
 		edition: editionRow,
@@ -471,7 +475,11 @@ export async function runSectionalFetch(
 // -------- binary-visual handler glue --------
 
 export interface BinaryVisualFetchOptions {
-	repoRoot: string;
+	/**
+	 * Hangar blob root passed through to the fetch pipeline. Resolved from
+	 * `resolveHangarBlobRoot()` by the handler in production.
+	 */
+	blobRoot: string;
 	fetchHtml?: (url: string) => Promise<string>;
 	hooks?: SectionalFetchHooks;
 	loadSource?: (id: string) => Promise<HangarSourceRow | null>;
@@ -503,7 +511,7 @@ export async function handleBinaryVisualFetch(
 		ctx,
 		{
 			row,
-			repoRoot: options.repoRoot,
+			blobRoot: options.blobRoot,
 			fetchHtml: options.fetchHtml ?? defaultFetchHtml,
 		},
 		options.hooks,

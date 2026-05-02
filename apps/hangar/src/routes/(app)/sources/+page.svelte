@@ -65,9 +65,6 @@ function formatDate(iso: string | null): string {
 			<form method="POST" action={ROUTES.HANGAR_SOURCES_BUILD_ACTION}>
 				<Button type="submit" variant="secondary" size="sm">Build</Button>
 			</form>
-			<form method="POST" action={ROUTES.HANGAR_SOURCES_SIZE_REPORT_ACTION}>
-				<Button type="submit" variant="secondary" size="sm">Size report</Button>
-			</form>
 		{/snippet}
 	</FlowDiagram>
 

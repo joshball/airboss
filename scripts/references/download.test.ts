@@ -48,7 +48,7 @@ function fakeOutcome(overrides: Partial<SectionalFetchOutcome> = {}): SectionalF
 		resolvedUrl: 'https://host/Denver.zip',
 		sha256: 'aa'.repeat(32),
 		sizeBytes: 1024,
-		thumbnailPath: 'data/sources/sectional/sectional-denver/2026-03-21/thumb.jpg',
+		thumbnailPath: 'sectional/sectional-denver/2026-03-21/thumb.jpg',
 		generator: 'gdal_translate',
 		archiveEntries: [{ name: 'Denver.tif', sizeBytes: 1000 }],
 		...overrides,
@@ -65,14 +65,14 @@ describe('runDownloadCli', () => {
 			stdout: io.stdout,
 			stderr: io.stderr,
 			runFetch,
-			repoRoot: '/tmp/repo',
+			blobRoot: '/tmp/blob',
 		});
 
 		expect(result.exitCode).toBe(0);
 		expect(runFetch).toHaveBeenCalledTimes(1);
 		const [, sourceId, opts] = runFetch.mock.calls[0] ?? [];
 		expect(sourceId).toBe('sectional-denver');
-		expect(opts?.repoRoot).toBe('/tmp/repo');
+		expect(opts?.blobRoot).toBe('/tmp/blob');
 		expect(io.stdoutLines.some((l) => l.startsWith('download: fetched'))).toBe(true);
 	});
 
@@ -85,7 +85,7 @@ describe('runDownloadCli', () => {
 			stdout: io.stdout,
 			stderr: io.stderr,
 			runFetch,
-			repoRoot: '/tmp/repo',
+			blobRoot: '/tmp/blob',
 		});
 
 		expect(result.exitCode).toBe(0);
@@ -101,7 +101,7 @@ describe('runDownloadCli', () => {
 			stdout: io.stdout,
 			stderr: io.stderr,
 			runFetch,
-			repoRoot: '/tmp/repo',
+			blobRoot: '/tmp/blob',
 		});
 
 		expect(result.exitCode).toBe(0);
@@ -117,7 +117,7 @@ describe('runDownloadCli', () => {
 			stdout: io.stdout,
 			stderr: io.stderr,
 			runFetch,
-			repoRoot: '/tmp/repo',
+			blobRoot: '/tmp/blob',
 		});
 
 		expect(result.exitCode).toBe(1);
@@ -136,7 +136,7 @@ describe('runDownloadCli', () => {
 			stdout: io.stdout,
 			stderr: io.stderr,
 			runFetch,
-			repoRoot: '/tmp/repo',
+			blobRoot: '/tmp/blob',
 		});
 
 		expect(result.exitCode).toBe(1);
@@ -155,7 +155,7 @@ describe('runDownloadCli', () => {
 			stdout: io.stdout,
 			stderr: io.stderr,
 			runFetch,
-			repoRoot: '/tmp/repo',
+			blobRoot: '/tmp/blob',
 		});
 
 		expect(result.exitCode).toBe(1);
@@ -171,7 +171,7 @@ describe('runDownloadCli', () => {
 			stdout: io.stdout,
 			stderr: io.stderr,
 			runFetch,
-			repoRoot: '/tmp/repo',
+			blobRoot: '/tmp/blob',
 		});
 
 		expect(result.exitCode).toBe(0);
@@ -195,7 +195,7 @@ describe('runDownloadCli', () => {
 			stdout: io.stdout,
 			stderr: io.stderr,
 			runFetch,
-			repoRoot: '/tmp/repo',
+			blobRoot: '/tmp/blob',
 		});
 
 		expect(result.exitCode).toBe(0);

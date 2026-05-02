@@ -117,7 +117,7 @@ function fieldError(key: string): string | undefined {
 	<div class="field">
 		<label for="src-path">Path</label>
 		<input id="src-path" name="path" type="text" value={initial.path} required />
-		<p class="hint">Repo-relative path under <code>data/sources/</code>.</p>
+		<p class="hint">Path relative to the hangar blob root (<code>hangar-blobs/</code> under the developer cache).</p>
 		{#if fieldError('path')}<p class="err">{fieldError('path')}</p>{/if}
 	</div>
 

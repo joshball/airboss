@@ -4,8 +4,8 @@
  * Maps `JOB_KINDS.*` strings to the per-kind runner function `startWorker`
  * invokes when it picks up a job row. wp-hangar-registry lands the single
  * `sync-to-disk` handler; wp-hangar-sources-v1 extends this object with
- * fetch / upload / extract / build / diff / validate / size-report without
- * touching the worker wiring.
+ * fetch / upload / extract / build / diff / validate without touching the
+ * worker wiring.
  *
  * The boot-time worker lives in `hooks.server.ts`; this file is pure
  * configuration, safe to import from anywhere on the server.
@@ -20,7 +20,6 @@ import {
 	makeDiffHandler,
 	makeExtractHandler,
 	makeFetchHandler,
-	makeSizeReportHandler,
 	makeUploadHandler,
 	makeValidateHandler,
 } from './source-jobs';
@@ -31,8 +30,8 @@ import {
  * `JobContext` and perform the work.
  *
  * WP2 (registry) landed `sync-to-disk`. WP3 (sources-v1) adds the reference-
- * system operations: fetch, upload, extract, build, diff, validate, size-report.
- * Every handler here is stateless at the module level; dependencies are closed
+ * system operations: fetch, upload, extract, build, diff, validate. Every
+ * handler here is stateless at the module level; dependencies are closed
  * over via the `make*Handler({ ... })` factories so tests can swap spawn + db.
  */
 export const hangarJobHandlers: JobHandlers = {
@@ -43,5 +42,4 @@ export const hangarJobHandlers: JobHandlers = {
 	[JOB_KINDS.BUILD_REFERENCES]: makeBuildHandler(),
 	[JOB_KINDS.DIFF_SOURCE]: makeDiffHandler(),
 	[JOB_KINDS.VALIDATE_REFERENCES]: makeValidateHandler(),
-	[JOB_KINDS.SIZE_REPORT]: makeSizeReportHandler(),
 };

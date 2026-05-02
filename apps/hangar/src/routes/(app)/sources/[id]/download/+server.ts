@@ -10,7 +10,7 @@ import { createReadStream } from 'node:fs';
 import { stat } from 'node:fs/promises';
 import { basename, resolve } from 'node:path';
 import { requireRole } from '@ab/auth';
-import { getSource, REPO_ROOT } from '@ab/bc-hangar';
+import { getSource, resolveHangarBlobRoot } from '@ab/bc-hangar';
 import { type ReferenceSourceType, ROLES, SOURCE_KIND_BY_TYPE, SOURCE_KINDS } from '@ab/constants';
 import { error } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
@@ -27,13 +27,13 @@ export const GET: RequestHandler = async (event) => {
 		throw error(409, 'source has no edition on disk yet; run fetch first');
 	}
 
-	const archivePath = resolve(REPO_ROOT, 'data', 'sources', row.type, row.id, row.edition.effectiveDate, 'chart.zip');
-	// Defense-in-depth: refuse any path that escapes data/sources/. Each path
-	// segment is row-derived but `row.type` / `row.id` / `row.edition.effectiveDate`
+	const blobRoot = resolveHangarBlobRoot();
+	const archivePath = resolve(blobRoot, row.type, row.id, row.edition.effectiveDate, 'chart.zip');
+	// Defense-in-depth: refuse any path that escapes the hangar blob root. Each
+	// path segment is row-derived but `row.type` / `row.id` / `row.edition.effectiveDate`
 	// could in principle carry a `..` segment from a buggy ingest path.
-	const sourcesRoot = resolve(REPO_ROOT, 'data', 'sources');
-	if (!(archivePath === sourcesRoot || archivePath.startsWith(`${sourcesRoot}/`))) {
-		throw error(400, `archive path is outside data/sources/: ${archivePath}`);
+	if (!(archivePath === blobRoot || archivePath.startsWith(`${blobRoot}/`))) {
+		throw error(400, `archive path is outside the hangar blob root: ${archivePath}`);
 	}
 	try {
 		const s = await stat(archivePath);

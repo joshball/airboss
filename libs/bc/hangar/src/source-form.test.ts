@@ -12,7 +12,7 @@ function buildForm(overrides: Partial<Record<string, string>> = {}): FormData {
 	form.set('title', 'Test Source');
 	form.set('version', 'v1');
 	form.set('url', 'https://example.test/source');
-	form.set('path', 'data/sources/test.xml');
+	form.set('path', 'cfr/test.xml');
 	form.set('format', 'xml');
 	form.set('checksum', 'pending-download');
 	form.set('downloadedAt', 'pending-download');
@@ -83,7 +83,7 @@ describe('validateSourceForm', () => {
 			title: 'Denver VFR Sectional Chart',
 			version: 'pending-download',
 			url: 'https://aeronav.faa.gov/visual/{edition-date}/sectional-files/{region}.zip',
-			path: 'data/sources/sectional/sectional-denver',
+			path: 'sectional/sectional-denver',
 			format: 'geotiff-zip',
 			bv_region: 'Denver',
 			bv_index_url: 'https://aeronav.faa.gov/visual/',

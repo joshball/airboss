@@ -17,6 +17,7 @@ export {
 	listAuditEntries,
 	searchActorIds,
 } from './audit-queries';
+export { HANGAR_BLOB_DIR, resolveHangarBlobRoot } from './blob-root';
 export {
 	countAllJobs,
 	countLiveReferences,
@@ -143,7 +144,6 @@ export {
 	makeDiffHandler,
 	makeExtractHandler,
 	makeFetchHandler,
-	makeSizeReportHandler,
 	makeUploadHandler,
 	makeValidateHandler,
 	nodeSpawnRunner,

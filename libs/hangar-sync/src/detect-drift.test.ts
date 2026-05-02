@@ -37,7 +37,7 @@ function makeSource(id: string): Source {
 		title: `Title ${id}`,
 		version: 'v1',
 		url: 'https://example.test',
-		path: `data/sources/${id}.xml`,
+		path: `cfr/${id}.xml`,
 		format: 'xml',
 		downloadedAt: 'pending-download',
 		checksum: 'pending-download',

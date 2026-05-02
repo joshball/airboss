@@ -124,7 +124,7 @@ describe('toml-codec sources', () => {
 			title: 'Denver VFR Sectional Chart',
 			version: 'pending-download',
 			format: 'geotiff-zip',
-			path: 'data/sources/sectional/sectional-denver',
+			path: 'sectional/sectional-denver',
 			url: 'https://aeronav.faa.gov/visual/{edition-date}/sectional-files/Denver.zip',
 			checksum: 'pending-download',
 			downloadedAt: 'pending-download',

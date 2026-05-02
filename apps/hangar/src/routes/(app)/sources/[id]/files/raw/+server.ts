@@ -1,6 +1,6 @@
 /**
  * GET /sources/[id]/files/raw?name=<filename> -- stream a single file from
- * the source's `data/sources/<type>[/<id>]/...` tree with `content-type`
+ * the source's `<blob-root>/<type>[/<id>]/...` tree with `content-type`
  * inferred from the extension. Used by the inline previewers (PdfPreview
  * embeds a PDF via `<object>`; the same endpoint backs future viewers).
  *
@@ -13,7 +13,7 @@ import { createReadStream } from 'node:fs';
 import { stat } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { requireRole } from '@ab/auth';
-import { getSource, REPO_ROOT } from '@ab/bc-hangar';
+import { getSource, resolveHangarBlobRoot } from '@ab/bc-hangar';
 import { QUERY_PARAMS, type ReferenceSourceType, ROLES, SOURCE_KIND_BY_TYPE, SOURCE_KINDS } from '@ab/constants';
 import { error } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
@@ -51,18 +51,16 @@ export const GET: RequestHandler = async (event) => {
 	const source = await getSource(event.params.id);
 	if (!source) throw error(404, `source '${event.params.id}' not found`);
 
-	const sourcesRoot = resolve(REPO_ROOT, 'data', 'sources');
+	const blobRoot = resolveHangarBlobRoot();
 	const kind = SOURCE_KIND_BY_TYPE[source.type as ReferenceSourceType] ?? SOURCE_KINDS.TEXT;
 	const root =
-		kind === SOURCE_KINDS.BINARY_VISUAL
-			? resolve(sourcesRoot, source.type, source.id)
-			: resolve(sourcesRoot, source.type);
+		kind === SOURCE_KINDS.BINARY_VISUAL ? resolve(blobRoot, source.type, source.id) : resolve(blobRoot, source.type);
 
 	const full = resolve(root, name);
 	if (!(full === root || full.startsWith(`${root}/`))) {
 		throw error(400, 'path escape');
 	}
-	if (!(full === sourcesRoot || full.startsWith(`${sourcesRoot}/`))) {
+	if (!(full === blobRoot || full.startsWith(`${blobRoot}/`))) {
 		throw error(400, 'path escape');
 	}
 	// For text sources we also enforce the per-source filename prefix to keep

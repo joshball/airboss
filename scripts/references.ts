@@ -85,13 +85,6 @@ const COMMAND_HELP: Record<string, CommandHelp> = {
 			'docs/work-packages/hangar-non-textual/spec.md',
 		],
 	},
-	'size-report': {
-		summary: 'Tally data/sources/ sizes + storage classification',
-		what: 'Walks data/sources/**, measures every binary + every .meta.json, groups by source type, and classifies each file: commit-directly (<1 MB), commit-borderline (1-5 MB), use-LFS (5-100 MB), external-storage (>100 MB).',
-		why: 'Decision #2 of the reference architecture: data/sources/ is gitignored during initial build-out; storage strategy gets decided per-source once we have actual files on disk. This script produces the report that drives that decision.',
-		how: "Runs when you ask. Outputs a table to stdout and writes docs/work/todos/20260422-source-sizes-report.md if there's anything to classify.",
-		links: ['scripts/references/size-report.ts', 'docs/work/todos/20260422-reference-system-architecture.md'],
-	},
 	help: {
 		summary: 'Show the command index (or detailed help for one command)',
 		what: '`bun run references help` prints the index of every command with its one-line summary. `bun run references <command> --help` prints a what/why/how/links block for that command only.',
@@ -128,7 +121,7 @@ interface CommandGroup {
 // Grouped so the index reads in the order an author reaches for commands:
 // inspect what's cited, build verbatim, validate, then meta/help.
 const COMMAND_GROUPS: readonly CommandGroup[] = [
-	{ label: 'Inspection', commands: ['scan', 'size-report'] },
+	{ label: 'Inspection', commands: ['scan'] },
 	{ label: 'Build', commands: ['extract', 'build', 'diff', 'download'] },
 	{ label: 'Validation', commands: ['validate'] },
 	{ label: 'Utility', commands: ['help'] },
@@ -168,7 +161,6 @@ const handlers: Record<string, () => Promise<void> | void> = {
 	diff: () => run(['bun', 'scripts/references/diff.ts', ...passthrough]),
 	download: () => run(['bun', 'scripts/references/download.ts', ...passthrough]),
 	validate: () => run(['bun', 'scripts/references/validate.ts', ...passthrough]),
-	'size-report': () => run(['bun', 'scripts/references/size-report.ts', ...passthrough]),
 	help: printIndex,
 };
 
