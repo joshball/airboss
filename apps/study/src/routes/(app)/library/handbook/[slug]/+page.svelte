@@ -1,9 +1,9 @@
 <script lang="ts">
+import HandbookChapterListItem from '@ab/aviation/ui/handbooks/HandbookChapterListItem.svelte';
+import HandbookEditionBadge from '@ab/aviation/ui/handbooks/HandbookEditionBadge.svelte';
 import { ROUTES } from '@ab/constants';
 import EmptyState from '@ab/ui/components/EmptyState.svelte';
 import PageHeader from '@ab/ui/components/PageHeader.svelte';
-import HandbookChapterListItem from '@ab/ui/handbooks/HandbookChapterListItem.svelte';
-import HandbookEditionBadge from '@ab/ui/handbooks/HandbookEditionBadge.svelte';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();

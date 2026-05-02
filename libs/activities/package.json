@@ -1,5 +1,14 @@
 {
 	"name": "@ab/activities",
 	"private": true,
-	"type": "module"
+	"type": "module",
+	"exports": {
+		".": {
+			"types": "./src/index.ts",
+			"default": "./src/index.ts"
+		},
+		"./pfd/*": "./src/pfd/*",
+		"./cockpit-panel/*": "./src/cockpit-panel/*",
+		"./crosswind-component/*": "./src/crosswind-component/*"
+	}
 }
