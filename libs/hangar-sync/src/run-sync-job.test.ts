@@ -141,6 +141,8 @@ describe('executeSync -- happy path', () => {
 			sourceRows: [],
 			refs: [makeReference(refRow)],
 			sources: [],
+			deletedRefIds: [],
+			deletedSourceIds: [],
 			lastSync: null,
 		};
 		const glossaryOnDisk = encodeReferences([onDiskRef]);
@@ -201,6 +203,8 @@ describe('executeSync -- conflict path', () => {
 			sourceRows: [],
 			refs: [makeReference(refRow)],
 			sources: [],
+			deletedRefIds: [],
+			deletedSourceIds: [],
 			lastSync: baseline,
 		};
 
@@ -234,6 +238,8 @@ describe('executeSync -- noop path', () => {
 			sourceRows: [],
 			refs: [ref],
 			sources: [],
+			deletedRefIds: [],
+			deletedSourceIds: [],
 			lastSync: null,
 		};
 		const glossaryOnDisk = encodeReferences([ref]);

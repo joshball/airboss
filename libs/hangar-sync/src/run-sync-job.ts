@@ -29,6 +29,7 @@ import {
 	hangarSource,
 	hangarSyncLog,
 } from '@ab/bc-hangar/schema';
+import { assertRevSnapshot } from '@ab/bc-hangar/schema-types';
 import {
 	AUDIT_TARGETS,
 	ENV_VARS,
@@ -42,7 +43,7 @@ import {
 import { db as defaultDb } from '@ab/db/connection';
 import type { JobContext } from '@ab/hangar-jobs';
 import { generateHangarSyncLogId } from '@ab/utils';
-import { and, desc, eq, isNull, sql } from 'drizzle-orm';
+import { and, desc, eq, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import { commitAndMaybePr } from './commit-and-maybe-pr';
 import { baselineFromSyncLog, detectConflict } from './detect-conflict';
@@ -96,6 +97,13 @@ export interface LoadedState {
 	sources: readonly Source[];
 	refRows: readonly HangarReferenceRow[];
 	sourceRows: readonly HangarSourceRow[];
+	/**
+	 * Soft-deleted ids by kind. Used so `detectDrift` can flag the on-disk
+	 * file for rewrite (delete propagation) and `detectConflict` can tell
+	 * an intentional soft-delete apart from a hard-delete conflict.
+	 */
+	deletedRefIds: readonly string[];
+	deletedSourceIds: readonly string[];
 	lastSync: HangarSyncLogRow | null;
 }
 
@@ -173,6 +181,10 @@ export async function executeSync(input: {
 				references: state.refRows.map((r) => ({ kind: 'reference' as const, id: r.id, dirty: r.dirty })),
 				sources: state.sourceRows.map((r) => ({ kind: 'source' as const, id: r.id, dirty: r.dirty })),
 			},
+			deletedIds: {
+				references: state.deletedRefIds,
+				sources: state.deletedSourceIds,
+			},
 		},
 		{ readFile: input.readFile },
 	);
@@ -188,6 +200,10 @@ export async function executeSync(input: {
 		referenceRevs: currentRefRevs,
 		sourceRevs: currentSourceRevs,
 		baseline: baselineFromSyncLog(state.lastSync),
+		deletedIds: {
+			references: state.deletedRefIds,
+			sources: state.deletedSourceIds,
+		},
 	});
 
 	if (conflicts.hasConflict) {
@@ -274,12 +290,20 @@ export async function executeSync(input: {
 }
 
 /**
- * Load `LoadedState` from the DB. Filters soft-deleted rows (deleted_at is
- * null) and picks the most recent successful sync as the conflict baseline.
+ * Load `LoadedState` from the DB. Live rows (`deleted_at IS NULL`) drive
+ * `refs` / `sources`; soft-deleted ids are surfaced separately so the
+ * sync can both propagate the deletion to disk (`detectDrift`) and
+ * distinguish intentional deletes from out-of-band hard deletes
+ * (`detectConflict`). Picks the most recent successful sync as the
+ * conflict baseline.
  */
 export async function loadState(db: Db): Promise<LoadedState> {
-	const refRows = await db.select().from(hangarReference).where(isNull(hangarReference.deletedAt));
-	const sourceRows = await db.select().from(hangarSource).where(isNull(hangarSource.deletedAt));
+	const allRefRows = await db.select().from(hangarReference);
+	const allSourceRows = await db.select().from(hangarSource);
+	const refRows = allRefRows.filter((r) => r.deletedAt === null);
+	const sourceRows = allSourceRows.filter((r) => r.deletedAt === null);
+	const deletedRefIds = allRefRows.filter((r) => r.deletedAt !== null).map((r) => r.id);
+	const deletedSourceIds = allSourceRows.filter((r) => r.deletedAt !== null).map((r) => r.id);
 	const [lastSync] = await db
 		.select()
 		.from(hangarSyncLog)
@@ -291,6 +315,8 @@ export async function loadState(db: Db): Promise<LoadedState> {
 		sourceRows,
 		refs: refRows.map(rowToReference),
 		sources: sourceRows.map(rowToSource),
+		deletedRefIds,
+		deletedSourceIds,
 		lastSync: lastSync ?? null,
 	};
 }
@@ -319,6 +345,11 @@ function makeWriters(input: {
 			}
 		},
 		writeSyncLog: async (values) => {
+			// Zod-validate the snapshot before persisting so a malformed
+			// payload (programmer error / future-shape drift) fails loud at
+			// the write boundary instead of silently corrupting the next
+			// run's conflict detection.
+			const validatedSnapshot = assertRevSnapshot(values.revSnapshot);
 			const [row] = await db
 				.insert(hangarSyncLog)
 				.values({
@@ -330,7 +361,7 @@ function makeWriters(input: {
 					prUrl: values.prUrl,
 					outcome: values.outcome,
 					message: values.message,
-					revSnapshot: values.revSnapshot,
+					revSnapshot: validatedSnapshot,
 					finishedAt: new Date(),
 				})
 				.returning();

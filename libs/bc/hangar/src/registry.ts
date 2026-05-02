@@ -158,6 +158,28 @@ export async function getReference(id: string, db: Db = defaultDb): Promise<Hang
 	return row;
 }
 
+/**
+ * Inside-transaction read that takes a row-level lock (`SELECT ... FOR
+ * UPDATE`). Any concurrent writer for the same id blocks on the lock until
+ * the transaction commits or rolls back, so the rev observed here cannot
+ * advance underneath the subsequent `UPDATE` -- which closes the
+ * read/refresh race the previous unlocked refresh-select had (a third
+ * writer could land between our failed update and our refresh-select,
+ * making the reported rev stale-er than reality).
+ *
+ * Only safe to call inside `db.transaction(...)`. Caller passes the `tx`
+ * handle (typed identically to `Db`).
+ */
+async function lockReferenceForUpdate(id: string, db: Db): Promise<HangarReferenceRow | undefined> {
+	const [row] = await db.select().from(hangarReference).where(eq(hangarReference.id, id)).for('update').limit(1);
+	return row;
+}
+
+async function lockSourceForUpdate(id: string, db: Db): Promise<HangarSourceRow | undefined> {
+	const [row] = await db.select().from(hangarSource).where(eq(hangarSource.id, id)).for('update').limit(1);
+	return row;
+}
+
 /** Subset of the reference row used by the study reference detail page. */
 export interface ReferenceSummaryRow {
 	id: string;
@@ -241,7 +263,12 @@ export async function updateReference(
 	db: Db = defaultDb,
 ): Promise<HangarReferenceRow> {
 	return db.transaction(async (tx) => {
-		const existing = await getReference(input.id, tx);
+		// `FOR UPDATE` row-lock: any concurrent writer for this id blocks
+		// here until our tx ends, so the rev cannot advance between this
+		// read and the UPDATE below. Closes the read/refresh race where
+		// the post-UPDATE refresh-select could observe a *third* writer's
+		// rev (and report a stale value to the operator).
+		const existing = await lockReferenceForUpdate(input.id, tx);
 		if (!existing) throw new NotFoundError(`reference '${input.id}' not found`);
 		if (existing.deletedAt) throw new NotFoundError(`reference '${input.id}' is deleted`);
 		if (existing.rev !== input.rev) {
@@ -269,13 +296,10 @@ export async function updateReference(
 			.where(and(eq(hangarReference.id, input.id), eq(hangarReference.rev, input.rev)))
 			.returning();
 		if (!row) {
-			// Race: another writer bumped rev between our read and our write.
-			const [refreshed] = await tx
-				.select({ rev: hangarReference.rev })
-				.from(hangarReference)
-				.where(eq(hangarReference.id, input.id))
-				.limit(1);
-			throw new RevConflictError(refreshed?.rev ?? existing.rev + 1, `reference '${input.id}' rev advanced mid-write`);
+			// With the row lock above this branch should be unreachable; keep
+			// the throw as a defence-in-depth guard so a future lock removal
+			// fails loud instead of silent.
+			throw new RevConflictError(existing.rev + 1, `reference '${input.id}' rev advanced mid-write`);
 		}
 		await writeAudit(AUDIT_OPS.UPDATE, AUDIT_TARGETS.HANGAR_REFERENCE, row.id, actorId, existing, row, tx);
 		return row;
@@ -288,7 +312,7 @@ export async function softDeleteReference(
 	db: Db = defaultDb,
 ): Promise<HangarReferenceRow> {
 	return db.transaction(async (tx) => {
-		const existing = await getReference(input.id, tx);
+		const existing = await lockReferenceForUpdate(input.id, tx);
 		if (!existing) throw new NotFoundError(`reference '${input.id}' not found`);
 		if (existing.deletedAt) return existing;
 		if (existing.rev !== input.rev) {
@@ -409,7 +433,8 @@ export async function updateSource(
 	db: Db = defaultDb,
 ): Promise<HangarSourceRow> {
 	return db.transaction(async (tx) => {
-		const existing = await getSource(input.id, tx);
+		// `FOR UPDATE` row-lock -- see `updateReference` for rationale.
+		const existing = await lockSourceForUpdate(input.id, tx);
 		if (!existing) throw new NotFoundError(`source '${input.id}' not found`);
 		if (existing.deletedAt) throw new NotFoundError(`source '${input.id}' is deleted`);
 		if (existing.rev !== input.rev) {
@@ -439,12 +464,7 @@ export async function updateSource(
 			.where(and(eq(hangarSource.id, input.id), eq(hangarSource.rev, input.rev)))
 			.returning();
 		if (!row) {
-			const [refreshed] = await tx
-				.select({ rev: hangarSource.rev })
-				.from(hangarSource)
-				.where(eq(hangarSource.id, input.id))
-				.limit(1);
-			throw new RevConflictError(refreshed?.rev ?? existing.rev + 1, `source '${input.id}' rev advanced mid-write`);
+			throw new RevConflictError(existing.rev + 1, `source '${input.id}' rev advanced mid-write`);
 		}
 		await writeAudit(AUDIT_OPS.UPDATE, AUDIT_TARGETS.HANGAR_SOURCE, row.id, actorId, existing, row, tx);
 		return row;
@@ -457,7 +477,7 @@ export async function softDeleteSource(
 	db: Db = defaultDb,
 ): Promise<HangarSourceRow> {
 	return db.transaction(async (tx) => {
-		const existing = await getSource(input.id, tx);
+		const existing = await lockSourceForUpdate(input.id, tx);
 		if (!existing) throw new NotFoundError(`source '${input.id}' not found`);
 		if (existing.deletedAt) return existing;
 		if (existing.rev !== input.rev) {

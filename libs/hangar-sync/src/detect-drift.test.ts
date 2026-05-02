@@ -1,11 +1,10 @@
 /**
- * `detectDrift` tests -- two references in DB, one drifts, one matches.
+ * `detectDrift` tests.
  *
- * Uses a fake filesystem reader so the test has no IO side effects. The
- * fixture builds an on-disk TOML body for both references, then mutates one
- * reference's in-memory state. `detectDrift` should flag exactly one entry
- * as differing, leave the clean one untouched, and surface the glossary
- * file in `files` (because it needs rewriting).
+ * The detector compares decoded TOML to in-memory domain objects -- not
+ * raw strings -- so codec/whitespace differences are not drift. Soft-
+ * deleted ids (live in DB with deletedAt set) flow through `deletedIds`
+ * so the on-disk file gets queued for rewrite.
  */
 
 import type { Reference, Source } from '@ab/aviation';
@@ -134,5 +133,87 @@ describe('detectDrift', () => {
 		expect(report.entries[0]?.kind).toBe('source');
 		expect(report.entries[0]?.differsOnDisk).toBe(true);
 		expect(report.files.some((f) => f.endsWith('sources.toml'))).toBe(true);
+	});
+
+	it('does NOT flag whitespace / blank-line / CRLF codec drift as a real diff', async () => {
+		const ref = makeReference('codec-ref', 'body');
+		// Build the on-disk body, then perturb it with whitespace-only
+		// changes that survive the TOML decoder. The previous
+		// string-compare implementation would flag this as drift; the
+		// semantic deep-equal must report none.
+		const cleanBody = encodeReferences([ref]);
+		const noisyBody = `\n\n${cleanBody.replace(/\n/g, '\r\n')}   \n`;
+		const report = await detectDrift(
+			{
+				references: [ref],
+				sources: [],
+				rows: {
+					references: [{ kind: 'reference', id: 'codec-ref', dirty: false }],
+					sources: [],
+				},
+			},
+			{
+				readFile: async (path) => {
+					if (path.endsWith('glossary.toml')) return noisyBody;
+					if (path.endsWith('sources.toml')) return encodeSources([]);
+					return null;
+				},
+			},
+		);
+		expect(report.entries).toEqual([]);
+		expect(report.files).toEqual([]);
+	});
+
+	it('flags a soft-deleted id as drift so the file is rewritten without it', async () => {
+		// On disk: an entry survived from a previous sync. In memory: the
+		// row is soft-deleted, so loadState dropped it from `references`
+		// and only surfaced it in `deletedIds`. The file must be queued
+		// for rewrite -- without the deletedIds path the sync would
+		// noop and orphan the id forever.
+		const stale = makeReference('soft-deleted-ref', 'body');
+		const glossaryOnDisk = encodeReferences([stale]);
+		const report = await detectDrift(
+			{
+				references: [],
+				sources: [],
+				rows: { references: [], sources: [] },
+				deletedIds: { references: ['soft-deleted-ref'] },
+			},
+			{
+				readFile: async (path) => {
+					if (path.endsWith('glossary.toml')) return glossaryOnDisk;
+					if (path.endsWith('sources.toml')) return encodeSources([]);
+					return null;
+				},
+			},
+		);
+		expect(report.files.some((f) => f.endsWith('glossary.toml'))).toBe(true);
+		expect(report.entries.length).toBe(1);
+		expect(report.entries[0]).toMatchObject({
+			kind: 'reference',
+			id: 'soft-deleted-ref',
+			differsOnDisk: true,
+		});
+	});
+
+	it('does not duplicate-flag a soft-delete that already finished propagating to disk', async () => {
+		const report = await detectDrift(
+			{
+				references: [],
+				sources: [],
+				rows: { references: [], sources: [] },
+				deletedIds: { references: ['already-gone'] },
+			},
+			{
+				readFile: async (path) => {
+					// The on-disk file already lacks the id -- nothing to do.
+					if (path.endsWith('glossary.toml')) return encodeReferences([]);
+					if (path.endsWith('sources.toml')) return encodeSources([]);
+					return null;
+				},
+			},
+		);
+		expect(report.entries).toEqual([]);
+		expect(report.files).toEqual([]);
 	});
 });
