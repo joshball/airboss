@@ -8,6 +8,7 @@ import {
 	sourceFormDataToInitial,
 	updateSource,
 	validateSourceForm,
+	validateSourceFormUrls,
 } from '@ab/bc-hangar';
 import { type ReferenceSourceType, ROLES, ROUTES, SOURCE_KIND_BY_TYPE, SOURCE_KINDS } from '@ab/constants';
 import { createLogger } from '@ab/utils';
@@ -93,6 +94,16 @@ export const actions: Actions = {
 				initial: { ...initial, id: event.params.id },
 				fieldErrors: result.errors.fieldErrors,
 				formError: result.errors.formError,
+				conflict: null,
+			});
+		}
+
+		const urlCheck = await validateSourceFormUrls(result);
+		if (!urlCheck.ok) {
+			return fail(400, {
+				initial: { ...initial, id: event.params.id },
+				fieldErrors: urlCheck.errors.fieldErrors,
+				formError: urlCheck.errors.formError,
 				conflict: null,
 			});
 		}

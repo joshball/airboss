@@ -5,6 +5,7 @@ import {
 	getSource,
 	sourceFormDataToInitial,
 	validateSourceForm,
+	validateSourceFormUrls,
 } from '@ab/bc-hangar';
 import { ROLES, ROUTES } from '@ab/constants';
 import { createLogger } from '@ab/utils';
@@ -30,6 +31,15 @@ export const actions: Actions = {
 				initial,
 				fieldErrors: result.errors.fieldErrors,
 				formError: result.errors.formError,
+			});
+		}
+
+		const urlCheck = await validateSourceFormUrls(result);
+		if (!urlCheck.ok) {
+			return fail(400, {
+				initial,
+				fieldErrors: urlCheck.errors.fieldErrors,
+				formError: urlCheck.errors.formError,
 			});
 		}
 
