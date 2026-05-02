@@ -4,13 +4,13 @@
  * `SourceCitation` is a pointer on a `Reference` back into a known `Source`
  * at a specific locator.
  *
- * The in-repo `Source[]` table is owned by the extraction-pipeline package
- * (`wp-reference-extraction-pipeline`); its populated list lives at
- * `libs/aviation/src/sources/registry.ts` as `SOURCES`. Binary corpus
- * files may not yet be downloaded -- entries use the `PENDING_DOWNLOAD`
- * sentinel for `downloadedAt` and `checksum` until the pipeline lands. The
- * `sources[].sourceId` validation gate is active: `validateReferences()`
- * errors if any citation points at an id not in `SOURCES`.
+ * The seed catalog of `Source` entries lives at `@ab/bc-hangar`
+ * (`libs/bc/hangar/src/source-seed-registry.ts`) next to the `hangar.source`
+ * schema that owns the live state machine. Binary corpus files may not yet be
+ * downloaded - entries use the `PENDING_DOWNLOAD` sentinel for `downloadedAt`
+ * and `checksum` until the pipeline lands. The `sources[].sourceId`
+ * validation gate is active: `validateReferences()` errors if any citation
+ * points at an id not in the seed registry.
  */
 
 import type { ReferenceSourceType } from '@ab/constants';
@@ -34,7 +34,10 @@ export interface Source {
 	/** Format of the downloaded file. `geotiff-zip` is the sectional-chart archive. */
 	format: 'xml' | 'pdf' | 'html' | 'txt' | 'json' | 'csv' | 'geotiff-zip';
 
-	/** Repo-relative path to the downloaded file under `data/sources/`. */
+	/**
+	 * Absolute path to the downloaded file under the developer-local cache root
+	 * (per ADR 018). Produced by the seed registry's `seedPath` helper.
+	 */
 	path: string;
 
 	/** Canonical URL where the user can cross-check the live source. */
@@ -141,10 +144,13 @@ export interface SourceExtractor {
 	/**
 	 * Materialize the verbatim block for a single reference. Concrete
 	 * extractors read the file at `sourceFile` and pluck out the text at
-	 * `locator`.
+	 * `locator`. The orchestrator looks up the source in the seed registry
+	 * (lives at `@ab/bc-hangar`) and passes its `version` here so the parser
+	 * does not need its own registry lookup.
 	 */
 	extract(
 		locator: Readonly<Record<string, string | number>>,
 		sourceFile: string,
+		sourceVersion: string,
 	): Promise<{ text: string; sourceVersion: string; extractedAt: string }>;
 }

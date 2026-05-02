@@ -11,7 +11,6 @@
 
 import { readFileSync } from 'node:fs';
 import type { SourceExtractor } from '../../schema/source';
-import { SOURCES } from '../registry';
 import { type CfrDocument, type CfrSectionLocator, parseCfrXml } from './parser';
 
 export class CfrExtractor implements SourceExtractor {
@@ -24,13 +23,11 @@ export class CfrExtractor implements SourceExtractor {
 	async extract(
 		locator: Readonly<Record<string, string | number>>,
 		sourceFile: string,
+		sourceVersion: string,
 	): Promise<{ text: string; sourceVersion: string; extractedAt: string }> {
 		const normalizedLocator = normalizeLocator(locator);
 		const doc = this.loadDocument(sourceFile);
 		const parsed = doc.getSection(normalizedLocator);
-
-		const source = SOURCES.find((s) => s.path === sourceFile);
-		const sourceVersion = source?.version ?? 'unknown';
 
 		return {
 			text: parsed.bodyMarkdown,

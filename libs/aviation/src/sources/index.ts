@@ -1,7 +1,12 @@
-// Public barrel for `@ab/aviation/sources`. Exposes the source registry,
-// the per-source metadata helpers, and the source-extractor dispatch used by
-// `scripts/references/extract.ts`. Consumers that only need the reference
-// types should keep importing from `@ab/aviation` itself.
+// Public barrel for `@ab/aviation/sources`. Exposes per-source metadata
+// helpers, the source-extractor dispatch used by
+// `scripts/references/extract.ts`, the binary-visual download helpers, and
+// the sectional thumbnail/edition machinery. Consumers that only need the
+// reference types should keep importing from `@ab/aviation` itself.
+//
+// The legacy seed catalog (PENDING_DOWNLOAD, SOURCES, getSource,
+// getSourcesByType, isSourceDownloaded) moved to `@ab/bc-hangar` next to the
+// `hangar.source` schema that owns the live state machine.
 
 // wp-hangar-non-textual additions:
 export {
@@ -15,7 +20,6 @@ export type { SourceExtractor } from './extractors';
 export { allExtractors, resolveExtractors } from './extractors';
 export type { SourceMeta } from './meta';
 export { isSourceMeta, metaPathFor } from './meta';
-export { getSource, getSourcesByType, isSourceDownloaded, PENDING_DOWNLOAD, SOURCES } from './registry';
 export {
 	type ResolvedEdition,
 	type ResolveEditionOptions,

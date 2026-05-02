@@ -1,12 +1,23 @@
 /**
- * Source registry tests. Per-entry invariants that should hold regardless of
- * whether any binary is actually on disk.
+ * Source seed registry tests. Per-entry invariants that should hold regardless
+ * of whether any binary is actually on disk.
+ *
+ * Successor to `libs/aviation/src/sources/registry.test.ts`. The legacy
+ * "paths under `data/sources/`" assertion is gone; paths now resolve through
+ * the developer-local cache root per ADR 018.
  */
 
+import { isAbsolute } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { getSource, getSourcesByType, isSourceDownloaded, PENDING_DOWNLOAD, SOURCES } from './registry';
+import {
+	getSeedSource,
+	getSeedSourcesByType,
+	isSeedSourceDownloaded,
+	PENDING_DOWNLOAD,
+	SOURCES,
+} from './source-seed-registry';
 
-describe('SOURCES registry', () => {
+describe('hangar source seed registry', () => {
 	it('has at least the Phase 1 entries (cfr, aim, phak, afh, ifh, pcg)', () => {
 		const ids = SOURCES.map((s) => s.id);
 		expect(ids).toContain('cfr-14');
@@ -25,9 +36,9 @@ describe('SOURCES registry', () => {
 		}
 	});
 
-	it('paths are always under data/sources/', () => {
+	it('paths are absolute (resolved through the cache root)', () => {
 		for (const s of SOURCES) {
-			expect(s.path.startsWith('data/sources/')).toBe(true);
+			expect(isAbsolute(s.path)).toBe(true);
 			expect(s.path.includes('..')).toBe(false);
 		}
 	});
@@ -36,27 +47,24 @@ describe('SOURCES registry', () => {
 		for (const s of SOURCES) {
 			expect(s.checksum).toBe(PENDING_DOWNLOAD);
 			expect(s.downloadedAt).toBe(PENDING_DOWNLOAD);
-			expect(isSourceDownloaded(s)).toBe(false);
+			expect(isSeedSourceDownloaded(s)).toBe(false);
 		}
 	});
 
-	it('getSource() resolves a known id', () => {
-		expect(getSource('cfr-14')?.type).toBe('cfr');
+	it('getSeedSource() resolves a known id', () => {
+		expect(getSeedSource('cfr-14')?.type).toBe('cfr');
 	});
 
-	it('getSource() returns undefined for unknown ids', () => {
-		expect(getSource('made-up-source')).toBeUndefined();
+	it('getSeedSource() returns undefined for unknown ids', () => {
+		expect(getSeedSource('made-up-source')).toBeUndefined();
 	});
 
-	it('getSourcesByType() filters the registry', () => {
-		const cfrSources = getSourcesByType('cfr');
+	it('getSeedSourcesByType() filters the registry', () => {
+		const cfrSources = getSeedSourcesByType('cfr');
 		expect(cfrSources.length).toBeGreaterThanOrEqual(1);
-		// All filtered entries are type=cfr.
 		for (const source of cfrSources) {
 			expect(source.type).toBe('cfr');
 		}
-		// cfr-14 is the Phase 1 required entry; additional CFR titles
-		// (cfr-49, etc.) may land via PR #45's extended registry.
 		expect(cfrSources.map((s) => s.id)).toContain('cfr-14');
 	});
 });

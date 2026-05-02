@@ -9,6 +9,11 @@
 // Source extractors (CfrExtractor, allExtractors, resolveExtractors) pull
 // `node:fs` transitively and live at `@ab/aviation/sources` so the client
 // bundle never sees them. Scripts import from there directly.
+//
+// The legacy seed-source catalog (PENDING_DOWNLOAD, SOURCES, getSource,
+// getSourcesByType, isSourceDownloaded) lives at `@ab/bc-hangar` next to the
+// `hangar.source` schema that owns the live state machine. Hangar surfaces
+// and the references extraction pipeline import the seeds from there.
 
 // Empty registry in Phase 1. Phase 2 populates aviation.ts + calls
 // registerReferences() at module load.
@@ -49,7 +54,6 @@ export {
 } from './schema/tags';
 export { type CfrDocument, CfrParseError, type CfrSectionLocator, parseCfrXml } from './sources/cfr/parser';
 export { isSourceMeta, metaPathFor, type SourceMeta } from './sources/meta';
-export { getSource, getSourcesByType, isSourceDownloaded, PENDING_DOWNLOAD, SOURCES } from './sources/registry';
 export { decodeReferences, decodeSources, encodeReferences, encodeSources } from './toml-codec';
 export {
 	type ContentScan,

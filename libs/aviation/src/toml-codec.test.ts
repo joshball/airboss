@@ -3,7 +3,7 @@
  *
  * Guarantees:
  *   - decode(encode(x)) deep-equals x for every `Reference` in `aviation.ts`
- *     and every `Source` in `sources/registry.ts`.
+ *     and a representative `Source[]` fixture covering every format.
  *   - encode(decode(encode(x))) === encode(x) -- idempotent after the first
  *     normalization pass. That's the byte-identity property hangar relies
  *     on to produce minimal diffs.
@@ -13,8 +13,43 @@ import { describe, expect, it } from 'vitest';
 import { AVIATION_REFERENCES } from './references/aviation';
 import type { Reference } from './schema/reference';
 import type { Source } from './schema/source';
-import { SOURCES } from './sources/registry';
 import { decodeReferences, decodeSources, encodeReferences, encodeSources } from './toml-codec';
+
+const SOURCE_FIXTURES: readonly Source[] = [
+	{
+		id: 'cfr-14',
+		type: 'cfr',
+		title: '14 CFR - Aeronautics and Space',
+		version: 'revised-2026-01-01',
+		downloadedAt: 'pending-download',
+		format: 'xml',
+		path: '/abs/path/cfr/cfr-14.xml',
+		url: 'https://www.govinfo.gov/bulkdata/CFR/2026/title-14/CFR-2026-title14.xml',
+		checksum: 'pending-download',
+	},
+	{
+		id: 'aim-current',
+		type: 'aim',
+		title: 'FAA Aeronautical Information Manual',
+		version: '2026-01',
+		downloadedAt: 'pending-download',
+		format: 'pdf',
+		path: '/abs/path/aim/aim-current.pdf',
+		url: 'https://www.faa.gov/air_traffic/publications/atpubs/aim_html/',
+		checksum: 'pending-download',
+	},
+	{
+		id: 'faa-safety',
+		type: 'faa-safety',
+		title: 'FAASTeam',
+		version: '2026-01',
+		downloadedAt: 'pending-download',
+		format: 'html',
+		path: '/abs/path/faa-safety/faa-safety.html',
+		url: 'https://www.faasafety.gov/',
+		checksum: 'pending-download',
+	},
+];
 
 function normalizeReference(ref: Reference): Reference {
 	return {
@@ -102,17 +137,17 @@ describe('toml-codec references', () => {
 });
 
 describe('toml-codec sources', () => {
-	it('round-trips the full SOURCES array', () => {
-		const encoded = encodeSources(SOURCES);
+	it('round-trips the source fixture array', () => {
+		const encoded = encodeSources(SOURCE_FIXTURES);
 		const decoded = decodeSources(encoded);
-		expect(decoded.length).toBe(SOURCES.length);
-		const original: Source[] = sortedById(SOURCES).map((s) => ({ ...s }));
+		expect(decoded.length).toBe(SOURCE_FIXTURES.length);
+		const original: Source[] = sortedById(SOURCE_FIXTURES).map((s) => ({ ...s }));
 		const roundTripped: Source[] = [...decoded].map((s) => ({ ...s }));
 		expect(roundTripped).toEqual(original);
 	});
 
 	it('is byte-identical after the first encode', () => {
-		const first = encodeSources(SOURCES);
+		const first = encodeSources(SOURCE_FIXTURES);
 		const second = encodeSources(decodeSources(first));
 		expect(second).toBe(first);
 	});

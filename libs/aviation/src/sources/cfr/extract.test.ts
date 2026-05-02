@@ -23,7 +23,7 @@ describe('CfrExtractor', () => {
 
 	it('extract() returns a VerbatimBlock with the section text', async () => {
 		const extractor = new CfrExtractor();
-		const block = await extractor.extract({ title: 14, part: 91, section: '155' }, FIXTURE);
+		const block = await extractor.extract({ title: 14, part: 91, section: '155' }, FIXTURE, 'test-version');
 		expect(block.text).toContain('Except as provided');
 		expect(block.sourceVersion).toBeTruthy();
 		expect(block.extractedAt).toBeTruthy();
@@ -32,21 +32,21 @@ describe('CfrExtractor', () => {
 
 	it('extract() surfaces a clear error for unknown sections', async () => {
 		const extractor = new CfrExtractor();
-		await expect(extractor.extract({ title: 14, part: 91, section: '404' }, FIXTURE)).rejects.toThrow(
+		await expect(extractor.extract({ title: 14, part: 91, section: '404' }, FIXTURE, 'test-version')).rejects.toThrow(
 			/Section .*91\.404 not found/,
 		);
 	});
 
 	it('extract() requires a numeric title and part', async () => {
 		const extractor = new CfrExtractor();
-		await expect(extractor.extract({ title: 'not-a-number', part: 91, section: '155' }, FIXTURE)).rejects.toThrow(
-			/numeric 'title'/,
-		);
+		await expect(
+			extractor.extract({ title: 'not-a-number', part: 91, section: '155' }, FIXTURE, 'test-version'),
+		).rejects.toThrow(/numeric 'title'/);
 	});
 
 	it('extract() requires a non-empty section string', async () => {
 		const extractor = new CfrExtractor();
-		await expect(extractor.extract({ title: 14, part: 91, section: '' }, FIXTURE)).rejects.toThrow(
+		await expect(extractor.extract({ title: 14, part: 91, section: '' }, FIXTURE, 'test-version')).rejects.toThrow(
 			/non-empty 'section'/,
 		);
 	});

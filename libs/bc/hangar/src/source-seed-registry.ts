@@ -1,26 +1,48 @@
 /**
- * Source registry.
+ * Static seed catalog for hangar sources.
  *
- * The list of authoritative source corpora the extraction pipeline knows
- * how to route. Each entry names a downloaded file under `data/sources/`,
- * its canonical download URL, version string, and an SHA-256 checksum the
- * validator uses to detect drift.
+ * The hangar BC owns operational source state in `hangar.source` rows, but the
+ * citation surface (every `Reference.sources[].sourceId` in
+ * `libs/aviation/src/references/aviation.ts`) needs a stable, in-process list
+ * of valid source ids before any DB row exists. This module is that list -
+ * the seed catalog the validator gates against and the legacy extraction
+ * pipeline (`scripts/references/extract.ts`, `scripts/references/validate.ts`)
+ * uses to locate downloaded binaries.
  *
- * Binary files under `data/sources/` are gitignored (per reference-system
- * architecture decision #2). `*.meta.json` files next to each binary are
- * committed so a fresh clone can re-download and verify.
+ * Predecessor: `libs/aviation/src/sources/registry.ts`, retired alongside the
+ * in-repo `data/sources/` tree per ADR 018. Lives next to the `hangar.source`
+ * schema so the legacy `PENDING_DOWNLOAD` sentinel and the static catalog sit
+ * with the live state machine. See the 2026-05-01 sources-content-pipeline
+ * architecture review, finding "MINOR: apps/hangar form actions read
+ * PENDING_DOWNLOAD from the legacy registry".
  *
- * Files on disk do not have to be present for the registry to load -- the
- * `path` points to where the binary will live once downloaded. Until then
- * the `checksum` and `downloadedAt` fields carry the sentinel value
- * `PENDING_DOWNLOAD`.
+ * `path` on each entry resolves through the developer-local cache root
+ * (default `~/Documents/airboss-handbook-cache/`, override via
+ * `AIRBOSS_HANDBOOK_CACHE`) per ADR 018 - not the in-repo `data/sources/`
+ * tree the legacy registry used.
  */
 
-import { REFERENCE_SOURCE_TYPES, type ReferenceSourceType } from '@ab/constants';
-import type { Source } from '../schema/source';
+import { join } from 'node:path';
+import type { Source } from '@ab/aviation';
+import { REFERENCE_SOURCE_TYPES, type ReferenceSourceType, resolveCacheRoot } from '@ab/constants';
 
 /** Sentinel used for registry entries whose binary has not been downloaded. */
 export const PENDING_DOWNLOAD = 'pending-download';
+
+/**
+ * Build the on-disk path for a seed source binary. Locates the file under
+ * `<cacheRoot>/<type>/<basename>` per ADR 018; the legacy in-repo
+ * `data/sources/<type>/<basename>` layout is gone.
+ *
+ * Resolution is lazy (`resolveCacheRoot` is read at call time, not at module
+ * load) so tests that swap `AIRBOSS_HANDBOOK_CACHE` see the change. The
+ * `ensureExists: false` flag keeps this side-effect-free for static use; the
+ * cache root is created lazily by the ingest pipelines that actually write
+ * binaries there.
+ */
+function seedPath(type: ReferenceSourceType, basename: string): string {
+	return join(resolveCacheRoot({ ensureExists: false }), type, basename);
+}
 
 export const SOURCES: readonly Source[] = [
 	{
@@ -30,7 +52,7 @@ export const SOURCES: readonly Source[] = [
 		version: 'revised-2026-01-01',
 		downloadedAt: PENDING_DOWNLOAD,
 		format: 'xml',
-		path: 'data/sources/cfr/cfr-14.xml',
+		path: seedPath(REFERENCE_SOURCE_TYPES.CFR, 'cfr-14.xml'),
 		url: 'https://www.govinfo.gov/bulkdata/CFR/2026/title-14/CFR-2026-title14.xml',
 		checksum: PENDING_DOWNLOAD,
 	},
@@ -41,7 +63,7 @@ export const SOURCES: readonly Source[] = [
 		version: '2026-01',
 		downloadedAt: PENDING_DOWNLOAD,
 		format: 'pdf',
-		path: 'data/sources/aim/aim-current.pdf',
+		path: seedPath(REFERENCE_SOURCE_TYPES.AIM, 'aim-current.pdf'),
 		url: 'https://www.faa.gov/air_traffic/publications/atpubs/aim_html/',
 		checksum: PENDING_DOWNLOAD,
 	},
@@ -52,7 +74,7 @@ export const SOURCES: readonly Source[] = [
 		version: '2023',
 		downloadedAt: PENDING_DOWNLOAD,
 		format: 'pdf',
-		path: 'data/sources/phak/phak-current.pdf',
+		path: seedPath(REFERENCE_SOURCE_TYPES.PHAK, 'phak-current.pdf'),
 		url: 'https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/phak',
 		checksum: PENDING_DOWNLOAD,
 	},
@@ -63,7 +85,7 @@ export const SOURCES: readonly Source[] = [
 		version: '2021',
 		downloadedAt: PENDING_DOWNLOAD,
 		format: 'pdf',
-		path: 'data/sources/afh/afh-current.pdf',
+		path: seedPath(REFERENCE_SOURCE_TYPES.AFH, 'afh-current.pdf'),
 		url: 'https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/airplane_handbook',
 		checksum: PENDING_DOWNLOAD,
 	},
@@ -74,7 +96,7 @@ export const SOURCES: readonly Source[] = [
 		version: '2012',
 		downloadedAt: PENDING_DOWNLOAD,
 		format: 'pdf',
-		path: 'data/sources/ifh/ifh-current.pdf',
+		path: seedPath(REFERENCE_SOURCE_TYPES.IFH, 'ifh-current.pdf'),
 		url: 'https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/instrument_flying_handbook',
 		checksum: PENDING_DOWNLOAD,
 	},
@@ -85,7 +107,7 @@ export const SOURCES: readonly Source[] = [
 		version: '2026-01',
 		downloadedAt: PENDING_DOWNLOAD,
 		format: 'pdf',
-		path: 'data/sources/pcg/pcg-current.pdf',
+		path: seedPath(REFERENCE_SOURCE_TYPES.PCG, 'pcg-current.pdf'),
 		url: 'https://www.faa.gov/air_traffic/publications/atpubs/pcg_html/',
 		checksum: PENDING_DOWNLOAD,
 	},
@@ -99,7 +121,7 @@ export const SOURCES: readonly Source[] = [
 		version: 'revised-2026-01-01',
 		downloadedAt: PENDING_DOWNLOAD,
 		format: 'xml',
-		path: 'data/sources/cfr/cfr-49.xml',
+		path: seedPath(REFERENCE_SOURCE_TYPES.CFR, 'cfr-49.xml'),
 		url: 'https://www.govinfo.gov/bulkdata/CFR/2026/title-49/CFR-2026-title49.xml',
 		checksum: PENDING_DOWNLOAD,
 	},
@@ -110,7 +132,7 @@ export const SOURCES: readonly Source[] = [
 		version: '61-83K',
 		downloadedAt: PENDING_DOWNLOAD,
 		format: 'pdf',
-		path: 'data/sources/ac/ac-61-83k.pdf',
+		path: seedPath(REFERENCE_SOURCE_TYPES.AC, 'ac-61-83k.pdf'),
 		url: 'https://www.faa.gov/documentlibrary/media/advisory_circular/ac_61-83k.pdf',
 		checksum: PENDING_DOWNLOAD,
 	},
@@ -121,7 +143,7 @@ export const SOURCES: readonly Source[] = [
 		version: '2026-01',
 		downloadedAt: PENDING_DOWNLOAD,
 		format: 'pdf',
-		path: 'data/sources/acs/acs-current.pdf',
+		path: seedPath(REFERENCE_SOURCE_TYPES.ACS, 'acs-current.pdf'),
 		url: 'https://www.faa.gov/training_testing/testing/acs/',
 		checksum: PENDING_DOWNLOAD,
 	},
@@ -132,7 +154,7 @@ export const SOURCES: readonly Source[] = [
 		version: '2026-01',
 		downloadedAt: PENDING_DOWNLOAD,
 		format: 'html',
-		path: 'data/sources/faa-safety/faa-safety-current.html',
+		path: seedPath(REFERENCE_SOURCE_TYPES.FAA_SAFETY, 'faa-safety-current.html'),
 		url: 'https://www.faasafety.gov/',
 		checksum: PENDING_DOWNLOAD,
 	},
@@ -143,7 +165,7 @@ export const SOURCES: readonly Source[] = [
 		version: '2026-01',
 		downloadedAt: PENDING_DOWNLOAD,
 		format: 'html',
-		path: 'data/sources/gajsc/gajsc-current.html',
+		path: seedPath(REFERENCE_SOURCE_TYPES.GAJSC, 'gajsc-current.html'),
 		url: 'https://www.gajsc.org/',
 		checksum: PENDING_DOWNLOAD,
 	},
@@ -154,7 +176,7 @@ export const SOURCES: readonly Source[] = [
 		version: '2026-annual',
 		downloadedAt: PENDING_DOWNLOAD,
 		format: 'csv',
-		path: 'data/sources/ntsb/ntsb-current.csv',
+		path: seedPath(REFERENCE_SOURCE_TYPES.NTSB, 'ntsb-current.csv'),
 		url: 'https://www.ntsb.gov/Pages/AviationQuery.aspx',
 		checksum: PENDING_DOWNLOAD,
 	},
@@ -165,7 +187,7 @@ export const SOURCES: readonly Source[] = [
 		version: 'current',
 		downloadedAt: PENDING_DOWNLOAD,
 		format: 'html',
-		path: 'data/sources/usc/usc.html',
+		path: seedPath(REFERENCE_SOURCE_TYPES.AUTHORED, 'usc.html'),
 		url: 'https://uscode.house.gov/',
 		checksum: PENDING_DOWNLOAD,
 	},
@@ -176,7 +198,7 @@ export const SOURCES: readonly Source[] = [
 		version: 'current',
 		downloadedAt: PENDING_DOWNLOAD,
 		format: 'pdf',
-		path: 'data/sources/icao/annexes.pdf',
+		path: seedPath(REFERENCE_SOURCE_TYPES.AUTHORED, 'icao-annexes.pdf'),
 		url: 'https://www.icao.int/publications/pages/annexes-booklets.aspx',
 		checksum: PENDING_DOWNLOAD,
 	},
@@ -187,25 +209,25 @@ export const SOURCES: readonly Source[] = [
 		version: 'current',
 		downloadedAt: PENDING_DOWNLOAD,
 		format: 'html',
-		path: 'data/sources/faa-gov/index.html',
+		path: seedPath(REFERENCE_SOURCE_TYPES.AUTHORED, 'faa-gov.html'),
 		url: 'https://www.faa.gov/',
 		checksum: PENDING_DOWNLOAD,
 	},
 ];
 
-export function getSource(id: string): Source | undefined {
+export function getSeedSource(id: string): Source | undefined {
 	return SOURCES.find((s) => s.id === id);
 }
 
-export function getSourcesByType(type: ReferenceSourceType): readonly Source[] {
+export function getSeedSourcesByType(type: ReferenceSourceType): readonly Source[] {
 	return SOURCES.filter((s) => s.type === type);
 }
 
 /**
- * Returns true when a source's binary is expected to be on disk -- i.e.
+ * Returns true when a source's binary is expected to be on disk - i.e.
  * `checksum` and `downloadedAt` have real values, not the sentinel. Lets
  * validators distinguish "never downloaded" from "downloaded but absent".
  */
-export function isSourceDownloaded(source: Source): boolean {
+export function isSeedSourceDownloaded(source: Source): boolean {
 	return source.checksum !== PENDING_DOWNLOAD && source.downloadedAt !== PENDING_DOWNLOAD;
 }

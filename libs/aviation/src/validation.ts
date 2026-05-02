@@ -3,21 +3,23 @@
  *
  * Two distinct layers:
  *
- *   1) `validateReferences(refs)` -- audits the reference data itself:
- *      tag completeness, enum membership, symmetric `related[]`, keyword
- *      shape, `verbatim`/`sources` coherence, duplicate ids, reviewedAt
- *      staleness, and every `sources[].sourceId` resolving against the
- *      `SOURCES` registry. Pure function.
+ *   1) `validateReferences(refs, knownSourceIds?)` - audits the reference data
+ *      itself: tag completeness, enum membership, symmetric `related[]`,
+ *      keyword shape, `verbatim`/`sources` coherence, duplicate ids,
+ *      reviewedAt staleness, and every `sources[].sourceId` resolving against
+ *      the seed registry the caller passes in. Pure function. Callers that
+ *      live above `@ab/bc-hangar` (where the seed registry now lives) inject
+ *      the known ids; callers that don't need the gate skip the argument.
  *
- *   2) `validateContentWikilinks(scans, registry)` -- audits content
- *      (knowledge markdown, help content TS, paraphrase text) against the
- *      populated registry: every `[[*::id]]` must resolve to a known
- *      reference; malformed parser output escalates to errors; `[[text::]]`
- *      TBD-id links accumulate as warnings.
+ *   2) `validateContentWikilinks(scans, registry)` - audits content (knowledge
+ *      markdown, help content TS, paraphrase text) against the populated
+ *      registry: every `[[*::id]]` must resolve to a known reference;
+ *      malformed parser output escalates to errors; `[[text::]]` TBD-id links
+ *      accumulate as warnings.
  *
- * Either layer returns `{ errors, warnings }` the caller aggregates.
- * Callers (`scripts/references/validate.ts`, `scripts/check.ts`, the dev
- * launcher) decide whether `errors.length > 0` fails the build.
+ * Either layer returns `{ errors, warnings }` the caller aggregates. Callers
+ * (`scripts/references/validate.ts`, `scripts/check.ts`, the dev launcher)
+ * decide whether `errors.length > 0` fails the build.
  */
 
 import {
@@ -38,7 +40,6 @@ import {
 	SOURCE_TYPE_VALUES,
 } from '@ab/constants';
 import type { Reference } from './schema/reference';
-import { SOURCES } from './sources/registry';
 import { extractWikilinks, type WikilinkParseError } from './wikilink/parser';
 
 export interface ValidationIssue {
@@ -58,11 +59,12 @@ const STALE_REVIEW_MS = MS_PER_YEAR;
 
 // -------- layer 1: reference data --------
 
-export function validateReferences(refs: readonly Reference[]): ValidationResult {
+export function validateReferences(
+	refs: readonly Reference[],
+	knownSourceIds: ReadonlySet<string> = new Set(),
+): ValidationResult {
 	const errors: ValidationIssue[] = [];
 	const warnings: ValidationIssue[] = [];
-
-	const knownSourceIds = new Set<string>(SOURCES.map((s) => s.id));
 
 	const seenIds = new Map<string, Reference>();
 	for (const ref of refs) {
@@ -283,17 +285,20 @@ function validateOneReference(ref: Reference, errors: ValidationIssue[], knownSo
 		});
 	}
 
-	// Shape check + registry gate: sourceId must be non-empty and resolve
-	// against the populated `SOURCES` registry; locator must be an object.
+	// Shape check + registry gate: sourceId must be non-empty; when the caller
+	// passed a non-empty `knownSourceIds` set, every sourceId must resolve
+	// against it. The set is the seed registry from `@ab/bc-hangar`. Callers
+	// that do not supply the set (e.g. data-shape-only tests) skip the gate.
+	const enforceRegistryGate = knownSourceIds.size > 0;
 	for (const citation of ref.sources) {
 		if (!citation.sourceId || citation.sourceId.trim() === '') {
 			errors.push({
 				message: `Reference '${id}' has a sources[] entry with empty sourceId.`,
 				referenceId: id,
 			});
-		} else if (!knownSourceIds.has(citation.sourceId)) {
+		} else if (enforceRegistryGate && !knownSourceIds.has(citation.sourceId)) {
 			errors.push({
-				message: `Reference '${id}' cites unregistered sourceId '${citation.sourceId}'. Add the source to SOURCES in libs/aviation/src/sources/registry.ts.`,
+				message: `Reference '${id}' cites unregistered sourceId '${citation.sourceId}'. Add the source to the seed registry in libs/bc/hangar/src/source-seed-registry.ts.`,
 				referenceId: id,
 			});
 		}

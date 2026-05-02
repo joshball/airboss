@@ -153,6 +153,13 @@ export {
 	type SpawnRunner,
 	type TargetedSourcePayload,
 } from './source-jobs';
+export {
+	getSeedSource,
+	getSeedSourcesByType,
+	isSeedSourceDownloaded,
+	PENDING_DOWNLOAD,
+	SOURCES as SEED_SOURCES,
+} from './source-seed-registry';
 export type { UploadHandlerOptions, UploadJobPayload } from './upload-handler';
 export {
 	archiveFilename,
