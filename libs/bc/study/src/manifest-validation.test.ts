@@ -11,6 +11,7 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import {
+	acManifestSchema,
 	aimManifestSchema,
 	handbookManifestErrataEntrySchema,
 	manifestSchema,
@@ -82,6 +83,26 @@ const VALID_AIM = {
 			content_hash: 'c'.repeat(64),
 		},
 	],
+} as const;
+
+const VALID_AC = {
+	kind: 'ac',
+	schema_version: 1,
+	corpus: 'ac',
+	doc_slug: '61-98',
+	doc_number: '61-98',
+	revision: 'd',
+	title: 'AC 61-98D - Currency Requirements and Guidance',
+	publisher: 'FAA',
+	publication_date: '2018-04-30',
+	source_url: 'https://www.faa.gov/documentLibrary/media/Advisory_Circular/AC_61-98D.pdf',
+	source_sha256: 'a'.repeat(64),
+	fetched_at: '2026-04-26T00:00:00.000+00:00',
+	page_count: 49,
+	body_path: 'ac/61-98/d/body.md',
+	body_sha256: 'b'.repeat(64),
+	sections: [],
+	changes: [],
 } as const;
 
 const VALID_WHOLE_DOC = {
@@ -188,6 +209,30 @@ describe('manifestSchema (discriminated union on kind)', () => {
 			...VALID_AIM,
 			subjects: ['regulations', 'procedures', 'navigation', 'communications'],
 		});
+		expect(result.success).toBe(false);
+	});
+
+	it('accepts a valid AC manifest', () => {
+		const result = manifestSchema.safeParse(VALID_AC);
+		expect(result.success).toBe(true);
+		if (result.success) {
+			expect(result.data.kind).toBe('ac');
+		}
+	});
+
+	it('rejects an AC manifest with a malformed revision (uppercase)', () => {
+		const result = acManifestSchema.safeParse({ ...VALID_AC, revision: 'D' });
+		expect(result.success).toBe(false);
+	});
+
+	it('rejects an AC manifest with a multi-letter revision', () => {
+		const result = acManifestSchema.safeParse({ ...VALID_AC, revision: 'aa' });
+		expect(result.success).toBe(false);
+	});
+
+	it("rejects an AC manifest missing 'body_path'", () => {
+		const { body_path: _drop, ...withoutBody } = VALID_AC;
+		const result = acManifestSchema.safeParse(withoutBody);
 		expect(result.success).toBe(false);
 	});
 });
@@ -330,4 +375,33 @@ describe('on-disk manifest fixture (AIM)', () => {
 			expect(result.data.entries.length).toBeGreaterThan(700);
 		}
 	});
+});
+
+describe('on-disk manifest fixtures (AC)', () => {
+	const AC_FIXTURES = [
+		{ docSlug: '00-6', revision: 'b' },
+		{ docSlug: '25-7', revision: 'd' },
+		{ docSlug: '61-65', revision: 'j' },
+		{ docSlug: '61-83', revision: 'j' },
+		{ docSlug: '61-98', revision: 'd' },
+		{ docSlug: '90-66', revision: 'c' },
+		{ docSlug: '91-21-1', revision: 'd' },
+		{ docSlug: '91-79', revision: 'a' },
+		{ docSlug: '120-71', revision: 'b' },
+	] as const;
+
+	for (const { docSlug, revision } of AC_FIXTURES) {
+		it(`parses cleanly: ac/${docSlug}/${revision}`, () => {
+			const path = resolve(REPO_ROOT, 'ac', docSlug, revision, 'manifest.json');
+			const raw = JSON.parse(readFileSync(path, 'utf-8'));
+			const result = manifestSchema.safeParse(raw);
+			const issuesSummary = result.success
+				? null
+				: result.error.issues.map((i) => `${i.path.join('.')}: ${i.code}: ${i.message}`).join('\n');
+			expect(issuesSummary, `Manifest ac/${docSlug}/${revision}\n${issuesSummary ?? ''}`).toBeNull();
+			if (result.success) {
+				expect(result.data.kind).toBe('ac');
+			}
+		});
+	}
 });

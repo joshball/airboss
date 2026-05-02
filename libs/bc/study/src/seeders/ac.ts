@@ -14,7 +14,7 @@
  *
  * Bridges the on-disk shape (doc_slug + revision under `ac/`) to the
  * DB-side shape (document_slug + edition) via the explicit registry at
- * `@ab/sources` :: `getAcSeedMapping`. A manifest with no registry entry
+ * `@ab/sources/ac` :: `getAcSeedMapping`. A manifest with no registry entry
  * raises a clear seed-time error -- the YAML row must exist for the AC
  * to land as a readable card.
  *
@@ -27,7 +27,7 @@ import { existsSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { REFERENCE_KINDS, REFERENCE_SECTION_LEVELS } from '@ab/constants';
-import { getAcSeedMapping } from '@ab/sources';
+import { getAcSeedMapping } from '@ab/sources/ac';
 import type { AcManifest } from '../manifest-validation';
 import { type SectionSchema, upsertReference, upsertReferenceSection } from '../references';
 import type { SeedContext, SeedSummary } from './types';

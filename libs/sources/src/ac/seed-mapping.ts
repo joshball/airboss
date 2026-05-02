@@ -36,7 +36,7 @@ export interface AcSeedMappingEntry {
 	readonly edition: string;
 }
 
-const AC_SEED_MAPPINGS: readonly AcSeedMappingEntry[] = [
+const BUILT_IN_AC_SEED_MAPPINGS: readonly AcSeedMappingEntry[] = [
 	{ docSlug: '00-6', revision: 'b', documentSlug: 'ac-00-6', edition: 'AC 00-6B' },
 	{ docSlug: '25-7', revision: 'd', documentSlug: 'ac-25-7', edition: 'AC 25-7D' },
 	{ docSlug: '61-65', revision: 'j', documentSlug: 'ac-61-65', edition: 'AC 61-65J' },
@@ -49,17 +49,46 @@ const AC_SEED_MAPPINGS: readonly AcSeedMappingEntry[] = [
 ];
 
 /**
+ * Per-test-run additions to the registry. Production callers never touch this;
+ * the test internal helper below pushes / clears entries here so synthetic AC
+ * manifests resolve without polluting the built-in list.
+ */
+const TEST_AC_SEED_MAPPINGS: AcSeedMappingEntry[] = [];
+
+/**
  * Look up the DB (document_slug, edition) for an on-disk AC manifest.
  * Returns null when no mapping exists -- the seed adapter raises a clear
  * error in that case so missing entries are visible at seed time, not
  * mysteriously skipped.
+ *
+ * Test additions registered via `__ac_seed_mapping_internal__` win over the
+ * built-in list (last-write-wins); the test helper resets between runs so
+ * production lookups stay deterministic.
  */
 export function getAcSeedMapping(docSlug: string, revision: string): AcSeedMappingEntry | null {
-	const found = AC_SEED_MAPPINGS.find((entry) => entry.docSlug === docSlug && entry.revision === revision);
+	const testHit = TEST_AC_SEED_MAPPINGS.find((entry) => entry.docSlug === docSlug && entry.revision === revision);
+	if (testHit) return testHit;
+	const found = BUILT_IN_AC_SEED_MAPPINGS.find((entry) => entry.docSlug === docSlug && entry.revision === revision);
 	return found ?? null;
 }
 
-/** Read-only view of every registered mapping. Useful for tests + audits. */
+/** Read-only view of every registered mapping (built-in + test). Useful for tests + audits. */
 export function listAcSeedMappings(): readonly AcSeedMappingEntry[] {
-	return AC_SEED_MAPPINGS;
+	return [...BUILT_IN_AC_SEED_MAPPINGS, ...TEST_AC_SEED_MAPPINGS];
 }
+
+/**
+ * Test-only mutators. Mirrors the `__ac_resolver_internal__` pattern -- the
+ * underscore prefix marks the surface as off-limits to production callers.
+ * Lets seed-adapter integration tests inject synthetic (docSlug, revision)
+ * mappings so they can exercise the full AC seeding path without colliding
+ * with built-in production rows.
+ */
+export const __ac_seed_mapping_internal__ = {
+	register(entry: AcSeedMappingEntry): void {
+		TEST_AC_SEED_MAPPINGS.push(entry);
+	},
+	reset(): void {
+		TEST_AC_SEED_MAPPINGS.length = 0;
+	},
+};
