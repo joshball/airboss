@@ -355,6 +355,10 @@ export const ROUTES = {
 	HANGAR_GLOSSARY_SOURCES: '/glossary/sources',
 	HANGAR_GLOSSARY_SOURCES_NEW: '/glossary/sources/new',
 	HANGAR_GLOSSARY_SOURCES_DETAIL: (id: string) => `/glossary/sources/${encodeURIComponent(id)}` as const,
+	/** Form-action id: save edits on a glossary reference detail page (`?/save`). */
+	HANGAR_GLOSSARY_SAVE_ACTION: '?/save',
+	/** Form-action id: soft-delete a glossary reference / source (`?/delete`). */
+	HANGAR_GLOSSARY_DELETE_ACTION: '?/delete',
 	// Hangar -- /sources operational surface (wp-hangar-sources-v1).
 	HANGAR_SOURCES: '/sources',
 	HANGAR_SOURCE_DETAIL: (id: string) => `/sources/${encodeURIComponent(id)}` as const,
@@ -373,12 +377,20 @@ export const ROUTES = {
 	HANGAR_SOURCE_EXTRACT_ACTION: '?/extract',
 	HANGAR_SOURCE_DIFF_ACTION: '?/diff',
 	HANGAR_SOURCE_VALIDATE_ACTION: '?/validate',
+	/** Form-action id: delete an archived file under a source's data dir (`?/delete`). */
+	HANGAR_SOURCE_FILE_DELETE_ACTION: '?/delete',
+	/** Form-action id on /sources/[id]/diff: enqueue a fresh diff job. */
+	HANGAR_SOURCE_DIFF_ENQUEUE_ACTION: '?/enqueue',
+	/** Form-action id on /sources/[id]/diff: promote staged diff to canonical. */
+	HANGAR_SOURCE_DIFF_COMMIT_ACTION: '?/commit',
 	/** Global flow-level actions on /sources. */
 	HANGAR_SOURCES_RESCAN_ACTION: '?/rescan',
 	HANGAR_SOURCES_REVALIDATE_ACTION: '?/revalidate',
 	HANGAR_SOURCES_BUILD_ACTION: '?/build',
 	HANGAR_JOBS: '/jobs',
 	HANGAR_JOB_DETAIL: (id: string) => `/jobs/${encodeURIComponent(id)}` as const,
+	/** Form-action id on /jobs/[id]: cancel a queued/running job. */
+	HANGAR_JOB_CANCEL_ACTION: '?/cancel',
 	/** JSON endpoint for the /jobs/[id] streaming log (cursor-based polling). */
 	HANGAR_JOB_LOG: (id: string) => `/jobs/${encodeURIComponent(id)}/log` as const,
 	// Hangar -- /users directory of bauth_user rows. Lists the authoring

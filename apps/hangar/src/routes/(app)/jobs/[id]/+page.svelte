@@ -7,7 +7,7 @@ import {
 	type JobStatus,
 	ROUTES,
 } from '@ab/constants';
-import { enhance } from '$app/forms';
+import ConfirmDialog from '@ab/ui/components/ConfirmDialog.svelte';
 import type { ActionData, PageData } from './$types';
 
 let { data, form }: { data: PageData; form: ActionData } = $props();
@@ -32,9 +32,23 @@ let currentFinishedAt = $state<string | null>(data.job.finishedAt);
 // svelte-ignore state_referenced_locally
 let currentProgress = $state<{ step?: number; total?: number; message?: string }>(data.job.progress);
 let activeStream = $state<'all' | JobLogStream>('all');
-let cancelling = $state(false);
+let cancelDialogOpen = $state(false);
 
 const isTerminal = $derived((JOB_TERMINAL_STATUSES as readonly string[]).includes(currentStatus));
+
+const cancelTargetLabel = $derived(`${data.job.targetType ?? '-'}${data.job.targetId ? `:${data.job.targetId}` : ''}`);
+
+const elapsedSinceStart = $derived.by(() => {
+	if (!data.job.startedAt) return null;
+	const startedMs = new Date(data.job.startedAt).getTime();
+	if (Number.isNaN(startedMs)) return null;
+	const finishedMs = currentFinishedAt ? new Date(currentFinishedAt).getTime() : Date.now();
+	const elapsedSeconds = Math.max(0, Math.round((finishedMs - startedMs) / 1000));
+	if (elapsedSeconds < 60) return `${elapsedSeconds}s`;
+	const minutes = Math.floor(elapsedSeconds / 60);
+	const seconds = elapsedSeconds % 60;
+	return `${minutes}m${seconds.toString().padStart(2, '0')}s`;
+});
 
 const filteredLogs = $derived(activeStream === 'all' ? logs : logs.filter((l) => l.stream === activeStream));
 
@@ -192,22 +206,37 @@ function formatTime(iso: string | null): string {
 	</section>
 
 	{#if currentStatus === JOB_STATUSES.RUNNING || currentStatus === JOB_STATUSES.QUEUED}
-		<form method="POST" action="?/cancel" use:enhance={() => {
-			cancelling = true;
-			return async ({ update }) => {
-				cancelling = false;
-				await update();
-			};
-		}}>
-			<button type="submit" class="cancel-btn" disabled={cancelling}>
-				{cancelling ? 'Cancelling...' : 'Cancel job'}
+		<div class="cancel-row">
+			<button type="button" class="cancel-btn" onclick={() => (cancelDialogOpen = true)}>
+				Cancel job
 			</button>
 			{#if form?.error}
 				<p class="err">{form.error}</p>
 			{/if}
-		</form>
+		</div>
 	{/if}
 </section>
+
+<ConfirmDialog
+	open={cancelDialogOpen}
+	oncancel={() => (cancelDialogOpen = false)}
+	title="Cancel job?"
+	confirmLabel="Cancel job"
+	cancelLabel="Keep running"
+	dangerLevel="caution"
+	formAction={ROUTES.HANGAR_JOB_CANCEL_ACTION}
+>
+	<p>
+		Cancel <code class="mono">{data.job.kind}</code> on <code class="mono">{cancelTargetLabel}</code>?
+	</p>
+	<p>
+		Any partial work will be discarded. Side-effects already written to disk or database will not be rolled back;
+		the job simply stops on its next cancel-poll tick.
+		{#if elapsedSinceStart}
+			This job has been running for <strong>{elapsedSinceStart}</strong>.
+		{/if}
+	</p>
+</ConfirmDialog>
 
 <style>
 	.page {
@@ -448,6 +477,13 @@ function formatTime(iso: string | null): string {
 		font-style: italic;
 	}
 
+	.cancel-row {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: var(--space-xs);
+	}
+
 	.cancel-btn {
 		background: var(--action-hazard-wash);
 		color: var(--action-hazard);
@@ -467,11 +503,6 @@ function formatTime(iso: string | null): string {
 	.cancel-btn:focus-visible {
 		outline: 2px solid var(--focus-ring);
 		outline-offset: 2px;
-	}
-
-	.cancel-btn[disabled] {
-		opacity: 0.6;
-		cursor: not-allowed;
 	}
 
 	.err {

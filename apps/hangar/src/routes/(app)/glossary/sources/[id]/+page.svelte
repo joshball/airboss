@@ -2,6 +2,7 @@
 import { ROUTES } from '@ab/constants';
 import Banner from '@ab/ui/components/Banner.svelte';
 import Button from '@ab/ui/components/Button.svelte';
+import ConfirmDialog from '@ab/ui/components/ConfirmDialog.svelte';
 import SourceForm from '$lib/components/SourceForm.svelte';
 import type { ActionData, PageData } from './$types';
 
@@ -11,6 +12,8 @@ const initial = $derived(form?.initial ?? data.initial);
 const fieldErrors = $derived(form?.fieldErrors ?? {});
 const formError = $derived(form?.formError ?? null);
 const conflict = $derived(form?.conflict ?? null);
+
+let deleteDialogOpen = $state(false);
 
 function formatTime(iso: string): string {
 	return new Date(iso).toLocaleString();
@@ -53,7 +56,7 @@ function formatTime(iso: string): string {
 		</Banner>
 	{/if}
 
-	<form method="POST" action="?/save" class="form">
+	<form method="POST" action={ROUTES.HANGAR_GLOSSARY_SAVE_ACTION} class="form">
 		<SourceForm {initial} {fieldErrors} {formError} mode="edit" rev={data.source.rev} />
 		<div class="footer">
 			<a class="cancel" href={ROUTES.HANGAR_GLOSSARY_SOURCES}>Cancel</a>
@@ -62,13 +65,32 @@ function formatTime(iso: string): string {
 	</form>
 
 	{#if !data.source.deletedAt}
-		<form method="POST" action="?/delete" class="delete-form">
-			<input type="hidden" name="rev" value={data.source.rev} />
-			<button type="submit" class="delete-btn">Soft-delete this source</button>
+		<div class="delete-form">
+			<Button variant="danger" size="md" onclick={() => (deleteDialogOpen = true)}>
+				Soft-delete this source
+			</Button>
 			<p class="hint">Soft-delete retains the row for citation integrity; hard delete is admin-only.</p>
-		</form>
+		</div>
 	{/if}
 </section>
+
+<ConfirmDialog
+	open={deleteDialogOpen}
+	oncancel={() => (deleteDialogOpen = false)}
+	title="Soft-delete {data.source.title}?"
+	confirmLabel="Soft-delete"
+	dangerLevel="danger"
+	formAction={ROUTES.HANGAR_GLOSSARY_DELETE_ACTION}
+	hiddenFields={{ rev: String(data.source.rev) }}
+	typedConfirmation={{ label: `Type the source id to confirm: ${data.source.id}`, expected: data.source.id }}
+>
+	<p>
+		The source <code class="mono">{data.source.id}</code> will be marked hidden and disappear from the glossary.
+		Sources fan out to many references, so every reference that cites this source will surface a hidden parent.
+	</p>
+	<p>The row is retained for citation integrity. Recovery requires clearing <code class="mono">deletedAt</code>
+		directly in the database; there is no in-app un-delete control yet.</p>
+</ConfirmDialog>
 
 <style>
 	.page {
@@ -180,29 +202,8 @@ function formatTime(iso: string): string {
 		border-radius: var(--radius-md);
 		display: flex;
 		flex-direction: column;
+		align-items: flex-start;
 		gap: var(--space-xs);
-	}
-
-	.delete-btn {
-		align-self: flex-start;
-		background: var(--action-hazard-wash);
-		color: var(--action-hazard);
-		border: 1px solid var(--action-hazard-edge);
-		border-radius: var(--radius-sm);
-		padding: var(--space-xs) var(--space-md);
-		cursor: pointer;
-		font: inherit;
-		font-weight: var(--font-weight-semibold);
-	}
-
-	.delete-btn:hover {
-		background: var(--action-hazard);
-		color: var(--action-hazard-ink);
-	}
-
-	.delete-btn:focus-visible {
-		outline: 2px solid var(--focus-ring);
-		outline-offset: 2px;
 	}
 
 	.hint {
