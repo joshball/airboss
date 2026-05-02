@@ -1,4 +1,4 @@
-import { parseRole } from '@ab/auth';
+import { mapBetterAuthSession } from '@ab/auth';
 import { ROUTES } from '@ab/constants';
 import { initRegistry } from '@ab/sources';
 import {
@@ -120,25 +120,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 					}
 				: null;
 
-			event.locals.user = session?.user
-				? {
-						id: session.user.id,
-						email: session.user.email,
-						name: session.user.name,
-						// better-auth's additionalFields are typed as `unknown` on the
-						// session payload; widen via Record<string, unknown> and narrow
-						// with a `?? ''` fallback at the boundary so the rest of the app
-						// gets a typed AuthUser without per-callsite casts.
-						firstName: ((session.user as Record<string, unknown>).firstName as string) ?? '',
-						lastName: ((session.user as Record<string, unknown>).lastName as string) ?? '',
-						emailVerified: session.user.emailVerified,
-						role: parseRole(session.user.role),
-						image: session.user.image ?? null,
-						banned: session.user.banned ?? null,
-						createdAt: session.user.createdAt,
-						updatedAt: session.user.updatedAt,
-					}
-				: null;
+			event.locals.user = mapBetterAuthSession(session);
 		} catch (err) {
 			// Degrade gracefully: anonymous requests (e.g. /login) should still load
 			// when the DB is flapping. requireAuth guards protect authenticated routes.
