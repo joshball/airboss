@@ -7,7 +7,7 @@
  * fake-cache tests cover error / skip paths the live cache never exercises.
  */
 
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, statSync, utimesSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { resolveCacheRoot } from '@ab/constants';
@@ -196,10 +196,31 @@ describe('runHandbooksExtrasIngest -- live cache (smoke)', () => {
 			}
 
 			// Re-running is idempotent (every entry already accepted).
+			// Cluster J fix (ADR 022): re-running with identical inputs must
+			// produce zero file mutations on disk. Force a measurable mtime
+			// gap, re-run, then assert mtime is unchanged on the tracked
+			// derivative outputs + the corpus index.
+			const trackedPaths = [
+				join(tempDerivative, 'handbooks-extras-index.json'),
+				join(tempDerivative, 'risk-management', 'FAA-H-8083-2A', 'manifest.json'),
+				join(tempDerivative, 'risk-management', 'FAA-H-8083-2A', 'document.md'),
+			];
+			const past = new Date(Date.now() - 5000);
+			for (const p of trackedPaths) {
+				utimesSync(p, past, past);
+			}
+			const beforeBytes = trackedPaths.map((p) => readFileSync(p, 'utf-8'));
+			const beforeMtimes = trackedPaths.map((p) => statSync(p).mtimeMs);
+
 			const second = await runHandbooksExtrasIngest({ cacheRoot: liveCache, derivativeRoot: tempDerivative });
 			expect(second.ingested).toBe(0);
 			expect(second.alreadyAccepted).toBe(6);
 			expect(second.promotionBatchId).toBeNull();
+
+			const afterBytes = trackedPaths.map((p) => readFileSync(p, 'utf-8'));
+			const afterMtimes = trackedPaths.map((p) => statSync(p).mtimeMs);
+			expect(afterBytes).toEqual(beforeBytes);
+			expect(afterMtimes).toEqual(beforeMtimes);
 
 			// Manifest carries the whole-doc body_path that the resolver short-circuits on.
 			const rmhManifestPath = join(tempDerivative, 'risk-management', 'FAA-H-8083-2A', 'manifest.json');

@@ -239,3 +239,149 @@ describe('parseSourceCliArgs', () => {
 		expect(r.help).toBe(true);
 	});
 });
+
+/**
+ * Unit tests for the AIM source-PDF derivative writer.
+ *
+ * Cluster J (sources & content pipeline 10x review, perf): the writer used
+ * to call `writeFileSync` unconditionally, breaking ADR 022's byte-equal
+ * idempotent regen contract. These tests pin the post-fix behaviour --
+ * re-running the writer with identical inputs produces zero file mutations.
+ */
+
+import { mkdtempSync, readFileSync, rmSync, statSync, utimesSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import type { ExtractedAim } from './extract.ts';
+import { writeAimDerivatives } from './source-ingest.ts';
+
+let tempDerivative: string;
+
+beforeEach(() => {
+	tempDerivative = mkdtempSync(join(tmpdir(), 'aim-deriv-'));
+});
+
+afterEach(() => {
+	rmSync(tempDerivative, { recursive: true, force: true });
+});
+
+function buildExtracted(): ExtractedAim {
+	return {
+		chapters: [{ num: '1', title: 'Air Navigation', body: 'Chapter body.' }],
+		sections: [{ chapter: '1', section: '1', code: '1-1', title: 'Navigation Aids', body: 'Section body.' }],
+		paragraphs: [
+			{
+				chapter: '1',
+				section: '1',
+				paragraph: '1',
+				code: '1-1-1',
+				title: 'General',
+				body: 'Paragraph body.',
+			},
+		],
+		appendices: [{ num: '1', title: 'Bird Hazards', body: 'Appendix body.' }],
+		glossary: [{ slug: 'absolute-altitude', title: 'ABSOLUTE ALTITUDE', body: 'Altitude above ground.' }],
+		skipped: [],
+		pageCount: 100,
+	};
+}
+
+const downloaderManifest = {
+	corpus: 'aim',
+	doc: 'aim',
+	edition: '2026-04',
+	source_url: 'https://example.invalid/aim.pdf',
+	source_filename: 'aim.pdf',
+	source_sha256: 'deadbeef'.repeat(8),
+	fetched_at: '2026-04-30T12:00:00.000Z',
+};
+
+describe('writeAimDerivatives -- idempotent regen (ADR 022)', () => {
+	it('writes the manifest + per-entry markdown on first run', () => {
+		const result = writeAimDerivatives({
+			extracted: buildExtracted(),
+			downloaderManifest,
+			derivativeRoot: tempDerivative,
+		});
+		expect(result.entriesWritten).toBeGreaterThan(0);
+		const manifestPath = result.manifestPath;
+		const manifest = JSON.parse(readFileSync(manifestPath, 'utf-8')) as { entries: unknown[] };
+		expect(manifest.entries.length).toBe(result.entriesWritten);
+	});
+
+	it('does not bump mtime on a second run with identical input', () => {
+		writeAimDerivatives({
+			extracted: buildExtracted(),
+			downloaderManifest,
+			derivativeRoot: tempDerivative,
+		});
+
+		const editionRoot = join(tempDerivative, downloaderManifest.edition);
+		const trackedPaths = [
+			join(editionRoot, 'manifest.json'),
+			join(editionRoot, 'chapter-1', 'index.md'),
+			join(editionRoot, 'chapter-1', 'section-1', 'index.md'),
+			join(editionRoot, 'chapter-1', 'section-1', 'paragraph-1.md'),
+			join(editionRoot, 'glossary', 'absolute-altitude.md'),
+			join(editionRoot, 'appendix-1.md'),
+		];
+
+		// Force a measurable mtime gap so a no-op is detectable on a
+		// second-resolution mtime filesystem.
+		const past = new Date(Date.now() - 5000);
+		for (const p of trackedPaths) {
+			utimesSync(p, past, past);
+		}
+		const beforeBytes = trackedPaths.map((p) => readFileSync(p, 'utf-8'));
+		const beforeMtimes = trackedPaths.map((p) => statSync(p).mtimeMs);
+
+		writeAimDerivatives({
+			extracted: buildExtracted(),
+			downloaderManifest,
+			derivativeRoot: tempDerivative,
+		});
+
+		const afterBytes = trackedPaths.map((p) => readFileSync(p, 'utf-8'));
+		const afterMtimes = trackedPaths.map((p) => statSync(p).mtimeMs);
+		expect(afterBytes).toEqual(beforeBytes);
+		expect(afterMtimes).toEqual(beforeMtimes);
+	});
+
+	it('rewrites only changed files when one body changes', () => {
+		writeAimDerivatives({
+			extracted: buildExtracted(),
+			downloaderManifest,
+			derivativeRoot: tempDerivative,
+		});
+
+		const editionRoot = join(tempDerivative, downloaderManifest.edition);
+		const stableMd = join(editionRoot, 'chapter-1', 'section-1', 'index.md');
+		const changedMd = join(editionRoot, 'chapter-1', 'section-1', 'paragraph-1.md');
+		const past = new Date(Date.now() - 5000);
+		utimesSync(stableMd, past, past);
+		utimesSync(changedMd, past, past);
+		const stableBefore = statSync(stableMd).mtimeMs;
+		const changedBefore = statSync(changedMd).mtimeMs;
+
+		const next = buildExtracted();
+		const mutated: ExtractedAim = {
+			...next,
+			paragraphs: [
+				{
+					chapter: '1',
+					section: '1',
+					paragraph: '1',
+					code: '1-1-1',
+					title: 'General',
+					body: 'Paragraph body (revised).',
+				},
+			],
+		};
+
+		writeAimDerivatives({ extracted: mutated, downloaderManifest, derivativeRoot: tempDerivative });
+
+		expect(statSync(stableMd).mtimeMs).toBe(stableBefore);
+		expect(statSync(changedMd).mtimeMs).not.toBe(changedBefore);
+	});
+});

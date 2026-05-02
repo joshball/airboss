@@ -39,9 +39,10 @@
  */
 
 import { createHash } from 'node:crypto';
-import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { resolveCacheRoot } from '@ab/constants';
+import { writeIfChanged } from '../io/write-if-changed.ts';
 import { extractPdf } from '../pdf/index.ts';
 import { __editions_internal__ } from '../registry/editions.ts';
 import { getEntryLifecycle, recordPromotion } from '../registry/lifecycle.ts';
@@ -278,7 +279,7 @@ export async function runHandbooksExtrasIngest(args: IngestArgs): Promise<Ingest
 			const docDir = join(args.derivativeRoot, extra.slug, extra.faaDir);
 			ensureDir(docDir);
 			const bodyPath = join(docDir, 'document.md');
-			writeFileSync(bodyPath, documentBody, 'utf-8');
+			writeIfChanged(bodyPath, documentBody);
 
 			const manifest: ExtrasManifestFile = {
 				document_slug: extra.slug,
@@ -297,7 +298,7 @@ export async function runHandbooksExtrasIngest(args: IngestArgs): Promise<Ingest
 				faa_edition: extra.edition,
 			};
 			const manifestPath = join(docDir, 'manifest.json');
-			writeFileSync(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`, 'utf-8');
+			writeIfChanged(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
 
 			const entry = buildSourceEntry({ extra, title, publishedDate });
 			const existing = sourcesPatch[entry.id];
@@ -354,13 +355,19 @@ export async function runHandbooksExtrasIngest(args: IngestArgs): Promise<Ingest
 		promotionBatchId = result.batch.id;
 	}
 
+	// Use the max per-source `fetched_at` so re-running with no upstream
+	// change leaves the index byte-equal (ADR 022 idempotent regen).
+	// Stamping `new Date()` here would mtime-bump the file every run.
+	const sourceFetchedAtValues = cached.map((c) => c.fetchedAt).filter((v) => v.length > 0);
+	const corpusFetchedAt =
+		sourceFetchedAtValues.length > 0 ? sourceFetchedAtValues.slice().sort().slice(-1)[0] : '1970-01-01T00:00:00.000Z';
 	const corpusIndex: ExtrasCorpusIndex = {
 		schema_version: 1,
-		fetched_at: new Date().toISOString(),
+		fetched_at: corpusFetchedAt ?? '1970-01-01T00:00:00.000Z',
 		entries: indexEntries.sort((a, b) => a.slug.localeCompare(b.slug)),
 	};
 	const indexPath = join(args.derivativeRoot, 'handbooks-extras-index.json');
-	writeFileSync(indexPath, `${JSON.stringify(corpusIndex, null, 2)}\n`, 'utf-8');
+	writeIfChanged(indexPath, `${JSON.stringify(corpusIndex, null, 2)}\n`);
 
 	return {
 		scanned: cached.length + discovery.skipped.length,
