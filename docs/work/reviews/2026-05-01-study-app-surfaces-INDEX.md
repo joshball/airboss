@@ -31,6 +31,10 @@ nit: 27
 | backend      |        1 |     6 |     9 |   2 |    18 | [link](2026-05-01-study-app-surfaces-backend.md) |
 | **TOTAL**    |    **5** |**58** |**76** |**27**|**166**| |
 
+## Closed findings
+
+- **patterns (major) -- `handbook-asset` URL shape not in `ROUTES`**: closed by [PR #466](https://github.com/joshball/airboss/pull/466). `ROUTES.HANDBOOK_ASSET(path)` added to `libs/constants/src/routes.ts`; all three figure-URL builders flagged in the patterns review now route through it, plus `rewriteHandbookAssetUrl` in `@ab/utils`.
+
 ## Critical findings (5)
 
 - **a11y x3** -- see [a11y review](2026-05-01-study-app-surfaces-a11y.md)
