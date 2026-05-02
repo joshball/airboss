@@ -183,11 +183,81 @@ export const handbookManifestWarningSchema = z.object({
 export type HandbookManifestWarning = z.infer<typeof handbookManifestWarningSchema>;
 
 /**
+ * One section the errata pipeline patched. The Python apply path emits these
+ * onto `manifest.json -> errata[].sections_patched[]` so future re-ingest can
+ * round-trip the patched state. Mirrors the dataclass written by
+ * `tools/handbook-ingest/ingest/handbooks/base.py`.
+ */
+export const handbookManifestErrataSectionPatchedSchema = z.object({
+	section_code: z.string().min(1),
+	section_path: z.string().min(1),
+	chapter: z.string().min(1),
+	target_page: z.string().min(1),
+	patch_kind: z.string().min(1),
+	section_anchor: z.string().min(1),
+	new_heading: z.string().min(1).nullable(),
+	content_hash: z.string().regex(/^[0-9a-f]{64}$/i),
+	errata_note_path: z.string().min(1),
+});
+export type HandbookManifestErrataSectionPatched = z.infer<typeof handbookManifestErrataSectionPatchedSchema>;
+
+/**
+ * One applied errata entry on `manifest.json -> errata[]`.
+ *
+ * ADR 020 §"Errata flow" requires every applied errata to leave an audit
+ * record on the manifest so the seed can verify SHA + applied_at without
+ * re-running the apply pipeline. The id is kebab-case (matches the YAML
+ * authoring shape in `scripts/sources/config/handbooks/<slug>.yaml`).
+ */
+export const handbookManifestErrataEntrySchema = z.object({
+	id: z
+		.string()
+		.regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/)
+		.min(3)
+		.max(32),
+	source_url: z.string().url(),
+	published_at: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+	sha256: z.string().regex(/^[0-9a-f]{64}$/i),
+	fetched_at: z.string().datetime({ offset: true }),
+	applied_at: z.string().datetime({ offset: true }),
+	parser: z.string().min(1),
+	sections_patched: z.array(handbookManifestErrataSectionPatchedSchema),
+});
+export type HandbookManifestErrataEntry = z.infer<typeof handbookManifestErrataEntrySchema>;
+
+/**
+ * `manifest.json -> extraction` block (section-tree shape). The Python
+ * pipeline records the strategy + per-strategy config it ran with so the
+ * seed can audit which extraction path produced the in-repo derivative tree.
+ *
+ * Validated as a permissive object: the inner shape evolves with the
+ * extraction pipeline (TOC vs prompt vs heading-style configs) and locking
+ * each leaf would force a manifest-rewrite every time a strategy gets a new
+ * tunable. The wrapping `section_strategy.kind` discriminator is what the
+ * seed reads.
+ */
+export const handbookManifestExtractionSchema = z
+	.object({
+		section_strategy: z.object({
+			kind: z.string().min(1),
+			config: z.record(z.string(), z.unknown()).optional(),
+		}),
+	})
+	.catchall(z.unknown());
+export type HandbookManifestExtraction = z.infer<typeof handbookManifestExtractionSchema>;
+
+/**
  * Fields shared by both manifest shapes. The discriminator (`kind`) and
  * shape-specific fields (sections/figures vs body_path/body_sha256) live
  * on the per-shape schemas below.
+ *
+ * `schema_version` is forward-compatibility plumbing per ADR 021: cache-tier
+ * manifests already carry it, in-repo derivative manifests will start
+ * carrying it as the Python ingest pipeline catches up. Optional today; the
+ * seed uses presence to gate version-aware reads when it lands.
  */
 const manifestCommonFields = {
+	schema_version: z.number().int().positive().optional(),
 	document_slug: z.string().regex(DOCUMENT_SLUG_REGEX),
 	edition: z.string().min(1).max(64),
 	title: z.string().min(1),
@@ -255,6 +325,17 @@ export const sectionTreeManifestSchema = z.object({
 	sections: z.array(handbookManifestSectionSchema).min(1),
 	figures: z.array(handbookManifestFigureSchema),
 	warnings: z.array(handbookManifestWarningSchema).default([]),
+	/**
+	 * Per-extraction-run audit (which strategy + config the Python pipeline ran).
+	 * Optional because pre-extraction-audit manifests omit it.
+	 */
+	extraction: handbookManifestExtractionSchema.optional(),
+	/**
+	 * Applied errata audit per ADR 020. Each entry records one FAA-published
+	 * amendment that the apply pipeline already merged into the in-repo body
+	 * markdown. Optional because handbooks without errata omit the array.
+	 */
+	errata: z.array(handbookManifestErrataEntrySchema).optional(),
 });
 export type SectionTreeManifest = z.infer<typeof sectionTreeManifestSchema>;
 
@@ -280,6 +361,12 @@ export const wholeDocManifestSchema = z.object({
 	doc_id: z.string().min(1).nullable().optional(),
 	/** FAA-published edition tag (e.g. `2A`, `9B`). Display-only; canonical edition is the top-level `edition` field. */
 	faa_edition: z.string().min(1).nullable().optional(),
+	/**
+	 * Applied errata audit per ADR 020. Whole-doc handbooks don't ship errata
+	 * today (ADR 020 §"Class C handbooks"); the field is plumbed here so a
+	 * future whole-doc errata stream parses cleanly without a schema change.
+	 */
+	errata: z.array(handbookManifestErrataEntrySchema).optional(),
 });
 export type WholeDocManifest = z.infer<typeof wholeDocManifestSchema>;
 

@@ -173,6 +173,29 @@ Current as of 2026-04-30.
 | **AIM**                 | Per-chapter HTML at `aim_html/chap_<N>.html`. No edition cycle; per-chapter Last-Modified is the change boundary. Already supported (PR #337).                                                       |
 | **IFH** FAA-H-8083-15   | Whole-doc only. No chapter splits.                                                                                                                                                                   |
 
+## 4a. Recovering from partial downloads
+
+When a multi-file fetch (chapter-aware handbook, AIM section sweep) fails mid-run, the downloader writes one JSON record per failed plan to `$HANDBOOK_CACHE_ROOT/.partial-download.log` and prints a "Failed plans" block at the end of the run.
+
+Re-run the same command:
+
+```bash
+bun run sources download
+```
+
+The freshness gate skips entries that already wrote a manifest record (cache hit) and re-attempts every plan that did not. The downloader surfaces a one-line summary at the start of the next run:
+
+```text
+N partial downloads from previous run:
+  (log: $HANDBOOK_CACHE_ROOT/.partial-download.log)
+  retrying X (still in this run's plan set; freshness gate falls through)
+  skipping Y (filtered out by --corpus= or --include-handbooks-extras; pass the matching flag to retry)
+```
+
+If the failures are filtered out (`skipping Y > 0`), pass the matching `--corpus=` or `--include-handbooks-extras` flag to retry them. The log is cleared at the start of every fresh real run, so the file never accumulates noise across successful runs.
+
+If the failures persist, inspect the URL: it's likely a 404 from an FAA URL rotation. Update the YAML and re-run `bun run sources verify-urls` to confirm.
+
 ## 5. Common gotchas
 
 - **`page_offset` is wrong.** The PDF's page 1 is "1-1" in the printed body. If they're off by 5 (cover, copyright, dedication, foreword, introduction = 5 front-matter pages), set `page_offset: 5`. Symptom: empty section bodies.

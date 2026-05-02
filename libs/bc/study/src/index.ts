@@ -231,11 +231,17 @@ export {
 } from './library-by-cert';
 export {
 	citationSchema,
+	type HandbookManifestErrataEntry,
+	type HandbookManifestErrataSectionPatched,
+	type HandbookManifestExtraction,
 	type HandbookManifestFigure,
 	type HandbookManifestSection,
 	type HandbookManifestWarning,
 	type HandbookSectionFrontmatter,
 	handbookHeartbeatInputSchema,
+	handbookManifestErrataEntrySchema,
+	handbookManifestErrataSectionPatchedSchema,
+	handbookManifestExtractionSchema,
 	handbookManifestFigureSchema,
 	handbookManifestSectionSchema,
 	handbookManifestWarningSchema,
