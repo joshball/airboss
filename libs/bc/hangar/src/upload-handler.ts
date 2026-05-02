@@ -133,8 +133,42 @@ export function makeUploadHandler(options: UploadHandlerOptions = {}): JobHandle
 			await ctx.logEvent(`sha256=${sha256} size=${sizeBytes}`);
 
 			if (isNoChange(existing.checksum, sha256)) {
-				await ctx.logEvent('no change: sha matches current checksum');
 				await fs.unlink(tempPath).catch(() => {});
+
+				// Bytes haven't changed. Check whether the operator supplied a
+				// corrected version string (e.g. typo fix from "2025-1" to
+				// "2025-01") and persist it as a metadata-only update so the
+				// version row catches up without a file rename. Closes the
+				// chunk-6 correctness MIN where version-only changes silently
+				// no-op'd and the operator had no way to fix metadata typos.
+				const trimmedVersion = payload.version?.trim();
+				if (trimmedVersion && trimmedVersion !== existing.version) {
+					const updatedAt = now();
+					const [updated] = await db
+						.update(hangarSource)
+						.set({
+							rev: existing.rev + 1,
+							version: trimmedVersion,
+							dirty: true,
+							updatedBy: ctx.job.actorId,
+							updatedAt,
+						})
+						.where(and(eq(hangarSource.id, sourceId), eq(hangarSource.rev, existing.rev)))
+						.returning();
+					if (!updated) {
+						throw new Error(`upload job ${ctx.job.id}: source row rev advanced mid-metadata-update for '${sourceId}'`);
+					}
+					await ctx.logEvent(`metadata-updated: version '${existing.version}' -> '${trimmedVersion}'`);
+					await finalizeAudit(ctx, sourceId, {
+						outcome: 'metadata-updated',
+						checksum: sha256,
+						version: trimmedVersion,
+						priorVersion: existing.version,
+					});
+					return { kind: 'upload', outcome: 'metadata-updated', sha256, version: trimmedVersion };
+				}
+
+				await ctx.logEvent('no change: sha matches current checksum');
 				await finalizeAudit(ctx, sourceId, {
 					outcome: 'no-change',
 					checksum: sha256,

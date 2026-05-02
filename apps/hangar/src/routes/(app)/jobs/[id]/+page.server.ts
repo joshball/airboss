@@ -46,15 +46,25 @@ export const load: PageServerLoad = async (event) => {
 export const actions: Actions = {
 	cancel: async (event) => {
 		const user = requireRole(event, ROLES.AUTHOR, ROLES.OPERATOR, ROLES.ADMIN);
+		// Ownership gate: AUTHORs can cancel only their own jobs;
+		// OPERATOR / ADMIN can cancel anyone's. Closes chunk-6 security MIN
+		// where any AUTHOR could interrupt an admin's long-running fetch
+		// without a per-actor signal in the audit row.
+		const job = await getJob(event.params.id);
+		if (!job) throw error(404, `job '${event.params.id}' not found`);
+		const elevated = user.role === ROLES.OPERATOR || user.role === ROLES.ADMIN;
+		if (!elevated && job.actorId !== user.id) {
+			return fail(403, { error: 'only the actor who enqueued this job (or operator/admin) can cancel it' });
+		}
 		try {
 			await cancelJob(event.params.id, user.id);
 		} catch (err) {
 			log.error(
 				'cancelJob failed',
-				{ requestId: event.locals.requestId, userId: user.id },
+				{ requestId: event.locals.requestId, userId: user.id, metadata: { jobId: event.params.id } },
 				err instanceof Error ? err : undefined,
 			);
-			return fail(500, { error: 'cancel failed' });
+			return fail(500, { error: `cancel failed for job '${event.params.id}'` });
 		}
 		redirect(303, ROUTES.HANGAR_JOB_DETAIL(event.params.id));
 	},

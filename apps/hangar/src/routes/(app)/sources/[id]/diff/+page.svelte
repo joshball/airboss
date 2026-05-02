@@ -81,6 +81,7 @@ const lines = $derived(data.diffText ? data.diffText.split('\n').map(classifyLin
 				variant="secondary"
 				size="sm"
 				disabled={!data.latestDiff}
+				title={!data.latestDiff ? 'Run a diff first to enable commit' : undefined}
 				onclick={() => (commitDialogOpen = true)}
 			>
 				Commit this diff
@@ -105,7 +106,32 @@ const lines = $derived(data.diffText ? data.diffText.split('\n').map(classifyLin
 	{/if}
 
 	{#if data.diffText && lines.length > 0}
-		<pre class="diff-body" aria-label="Diff output">{#each lines as line, index (index)}<span class="line k-{line.kind}">{line.text}
+		<!-- Diff legend gives non-color users a key for the +/-/@@ tinting
+			 (chunk-6 a11y MAJOR). The visually-hidden span before each line
+			 announces "added: ", "removed: ", "context: ", "header: " so a
+			 screen reader gets the structural cue alongside the text. -->
+		<dl class="diff-legend" aria-label="Diff color key">
+			<dt><span class="line k-add">+</span></dt>
+			<dd>added</dd>
+			<dt><span class="line k-remove">-</span></dt>
+			<dd>removed</dd>
+			<dt><span class="line k-context">&nbsp;</span></dt>
+			<dd>context</dd>
+			<dt><span class="line k-hunk">@@</span></dt>
+			<dd>hunk header</dd>
+		</dl>
+		<!-- Region + tabindex so the scrollable diff body is reachable via
+			 keyboard and announced as a navigable region (chunk-6 a11y MIN).
+			 The role="region" is the indicator-of-interactivity for screen
+			 readers; the svelte-ignore is the standard pattern for that
+			 a11y rule when the region tabindex is intentional. -->
+		<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+		<pre
+			class="diff-body"
+			role="region"
+			tabindex="0"
+			aria-label="Diff output"
+		>{#each lines as line, index (index)}<span class="line k-{line.kind}"><span class="sr-only">{line.kind === 'add' ? 'added: ' : line.kind === 'remove' ? 'removed: ' : line.kind === 'hunk' ? 'header: ' : 'context: '}</span>{line.text}
 </span>{/each}</pre>
 	{:else if data.latestDiff}
 		<EmptyState title="No changes" body="The latest diff is empty. Nothing has changed since the last commit." />
@@ -178,6 +204,49 @@ const lines = $derived(data.diffText ? data.diffText.split('\n').map(classifyLin
 	.line.k-remove { color: var(--signal-danger); background: var(--signal-danger-wash); }
 	.line.k-hunk { color: var(--signal-info); background: var(--signal-info-wash); font-weight: var(--font-weight-semibold); }
 	.line.k-context { color: var(--ink-muted); }
+
+	.diff-legend {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--space-sm);
+		margin: 0;
+		padding: var(--space-xs) var(--space-sm);
+		background: var(--surface-sunken);
+		border: 1px solid var(--edge-default);
+		border-radius: var(--radius-sm);
+		font-size: var(--type-ui-caption-size);
+		color: var(--ink-muted);
+		align-items: center;
+	}
+
+	.diff-legend dt {
+		display: inline-block;
+		font-family: var(--font-family-mono);
+		font-weight: var(--font-weight-bold);
+		min-width: 1.5rem;
+		text-align: center;
+	}
+
+	.diff-legend dd {
+		margin: 0 var(--space-md) 0 var(--space-2xs);
+	}
+
+	.diff-body:focus-visible {
+		outline: 2px solid var(--focus-ring);
+		outline-offset: 2px;
+	}
+
+	.sr-only {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		white-space: nowrap;
+		border: 0;
+	}
 
 	.mono { font-family: var(--font-family-mono); }
 </style>

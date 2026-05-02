@@ -222,6 +222,11 @@ function editionDirFor(root: string, editionDate: string): string {
  * Rotate previous edition directories so the latest ARCHIVE_RETENTION are
  * preserved; the rest are removed. Called before creating the new edition
  * directory so operators never lose the active edition.
+ *
+ * Retention semantic: `ARCHIVE_RETENTION` counts **the current edition plus
+ * prior archives kept on disk**. We keep `RETENTION - 1` prior editions so
+ * the total surviving copies (current + prior) equal `RETENTION`. Mirrors
+ * the upload-handler's `pickArchivesToPrune` semantic; both paths agree.
  */
 async function rotateArchives(sourceRoot: string, currentEdition: string): Promise<readonly string[]> {
 	let names: readonly string[];
@@ -332,13 +337,24 @@ async function runSectionalFetchUnsafe(
 	const recordedThumbPath = relative(input.blobRoot, thumbPath);
 
 	// Step 2: short-circuit if edition + on-disk sha match.
-	if (editionsEqual(row.edition, edition.effectiveDate, edition.resolvedUrl) && row.media) {
+	const priorEdition = row.edition;
+	if (priorEdition && editionsEqual(priorEdition, edition.effectiveDate, edition.resolvedUrl) && row.media) {
 		try {
 			const s = await stat(archivePath);
 			if (s.isFile() && s.size === row.sizeBytes) {
 				const existingSha = await computeFileHash(archivePath);
 				if (existingSha === row.checksum) {
 					await ctx.logEvent('no change (edition + bytes match)');
+					// Bytes haven't changed but the operator just confirmed
+					// the edition is still current; refresh `edition.resolvedAt`
+					// so audit / UI surfaces show the latest "last checked at"
+					// timestamp. Other edition fields stay pinned to their
+					// previous values.
+					if (priorEdition.resolvedAt !== edition.resolvedAt) {
+						await dbUpdate(row.id, {
+							edition: { ...priorEdition, resolvedAt: edition.resolvedAt },
+						});
+					}
 					return {
 						kind: 'no-change',
 						editionDate: edition.effectiveDate,
@@ -407,12 +423,34 @@ async function runSectionalFetchUnsafe(
 	stepRef.current = 'read-manifest';
 	await ctx.reportProgress({ step: 3, total: 7, message: 'reading archive manifest' });
 	let archiveEntries: readonly ArchiveEntry[] = [];
+	let archiveError: string | null = null;
 	try {
 		archiveEntries = await readArchive(archivePath);
 		await ctx.logEvent(`archive manifest: ${archiveEntries.length} entries`);
 	} catch (err) {
-		await ctx.logStderr(`archive manifest read failed: ${err instanceof Error ? err.message : String(err)}`);
+		// Don't fail the fetch on a manifest read error -- the bytes are
+		// still on disk and usable. Capture the failure mode in audit so
+		// operators can distinguish "empty archive" from "we couldn't read
+		// it" (chunk-6 correctness MIN: zip64 archive silently produces no
+		// manifest entries).
+		archiveError = err instanceof Error ? err.message : String(err);
+		await ctx.logStderr(`archive manifest read failed: ${archiveError}`);
 		archiveEntries = [];
+		await auditWrite({
+			actorId: ctx.job.actorId,
+			op: AUDIT_OPS.UPDATE,
+			targetType: AUDIT_TARGETS.HANGAR_SOURCE,
+			targetId: row.id,
+			metadata: {
+				jobId: ctx.job.id,
+				outcome: 'manifest-read-failed',
+				kind: 'binary-visual',
+				step: 'read-manifest',
+				error: archiveError,
+			},
+		}).catch(() => {
+			// Audit-write failure must not mask the original handler outcome.
+		});
 	}
 
 	// Step 9: thumbnail.
@@ -502,6 +540,7 @@ async function runSectionalFetchUnsafe(
 			editionDate: edition.effectiveDate,
 			checksum: dl.sha256,
 			sizeBytes: dl.fileSize,
+			...(archiveError ? { archiveError } : {}),
 		},
 	});
 

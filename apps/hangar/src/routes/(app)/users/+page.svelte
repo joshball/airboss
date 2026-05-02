@@ -87,9 +87,7 @@ function formatLastSeen(iso: string | null): string {
 <section class="page">
 	<PageHeader title="Users" subtitle={countSummary} />
 
-	<Banner tone="info">
-		User editing coming soon -- this is a read-only view for now.
-	</Banner>
+	<Banner tone="info">Click a user to edit role, ban status, and sessions.</Banner>
 
 	<FilterBar ariaLabel="Filter users" maxWidth="32rem" columns="minmax(0, 1fr)">
 		<FilterField id="user-search" label="Search">

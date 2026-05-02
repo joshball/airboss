@@ -11,7 +11,14 @@ import type { RequestHandler } from './$types';
  * `Path=/; Max-Age=1y; SameSite=Lax` so every subsequent request (including
  * SSR on first paint) sees the preference. Mirrors `apps/study/appearance`.
  */
-export const POST: RequestHandler = async ({ request, cookies }) => {
+export const POST: RequestHandler = async ({ request, cookies, locals }) => {
+	// Require an authenticated session. The endpoint exists only to persist a
+	// UI choice the signed-in user just made; any anonymous POST is either a
+	// probe or noise. Closes chunk-6 security MIN: appearance cookie endpoint
+	// was unauthenticated and lacked a CSRF token.
+	if (!locals.user) {
+		throw error(401, 'sign-in required');
+	}
 	let payload: unknown;
 	try {
 		payload = await request.json();

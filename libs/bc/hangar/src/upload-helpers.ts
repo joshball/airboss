@@ -4,11 +4,28 @@
  * without pulling in `@ab/db` at import time.
  */
 
-/** Lowercased extension without the dot. Returns `''` when none present. */
+/**
+ * Whitelist for upload file extensions. The slice after `lastIndexOf('.')`
+ * cannot contain `..` (so path-escape is impossible), but it CAN contain `/`
+ * if the upstream filename was crafted like `x.foo/bar` -- which would let
+ * `resolve()` collapse the destination into a real subdirectory under
+ * `destDir`. The simplest correct fix is to require the extension to be
+ * pure alphanumeric (the only legitimate aviation-document extensions are
+ * `pdf`, `html`, `txt`, `xml`, `zip`, etc.); anything that fails the check
+ * falls back to the existing row's `format` column upstream.
+ *
+ * Closes the chunk-6 security MIN: Upload `originalFilename` extension can
+ * contain path-segment characters and produce nested directories.
+ */
+const SAFE_EXTENSION_RE = /^[a-z0-9]+$/;
+
+/** Lowercased extension without the dot. Returns `''` when none present
+ * or when the candidate fails the safe-extension whitelist. */
 export function extensionOf(filename: string): string {
 	const lastDot = filename.lastIndexOf('.');
 	if (lastDot <= 0 || lastDot === filename.length - 1) return '';
-	return filename.slice(lastDot + 1).toLowerCase();
+	const candidate = filename.slice(lastDot + 1).toLowerCase();
+	return SAFE_EXTENSION_RE.test(candidate) ? candidate : '';
 }
 
 /**

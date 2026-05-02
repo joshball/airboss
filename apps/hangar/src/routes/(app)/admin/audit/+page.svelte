@@ -373,7 +373,7 @@ const hasFiltersBeyondWindow = $derived(
 							: undefined}
 					/>
 					{#if actorId}
-						<button type="button" class="chip-clear" aria-label="Clear actor filter" onclick={clearActor}>x</button>
+						<button type="button" class="chip-clear" aria-label="Clear actor filter" onclick={clearActor}>×</button>
 					{/if}
 					{#if actorMenuOpen}
 						<ul id={ACTOR_MENU_ID} class="actor-menu" role="listbox" aria-label="Actor results">

@@ -23,6 +23,16 @@ describe('extensionOf', () => {
 	it('returns empty when the name ends with a dot', () => {
 		expect(extensionOf('a.')).toBe('');
 	});
+
+	it('rejects extensions that contain path separators or other unsafe chars', () => {
+		// Closes chunk-6 security MIN: a filename like `x.foo/bar` would
+		// otherwise produce extension `foo/bar` and `resolve()` would collapse
+		// the destination into a real subdirectory under destDir.
+		expect(extensionOf('x.foo/bar')).toBe('');
+		expect(extensionOf('x.foo bar')).toBe('');
+		expect(extensionOf('x.foo-bar')).toBe('');
+		expect(extensionOf('x.foo.bar')).toBe('bar');
+	});
 });
 
 describe('isNoChange', () => {

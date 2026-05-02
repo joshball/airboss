@@ -14,6 +14,7 @@
 import { requireRole } from '@ab/auth';
 import { getAuditEntry } from '@ab/bc-hangar';
 import { ROLES } from '@ab/constants';
+import { redactSensitive } from '@ab/utils';
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
@@ -34,9 +35,14 @@ export const load: PageServerLoad = async (event) => {
 			op: row.op,
 			targetType: row.targetType,
 			targetId: row.targetId,
-			before: row.before,
-			after: row.after,
-			metadata: row.metadata,
+			// Defense-in-depth scrub of any payload key whose name suggests
+			// a credential / session token. The BC has no schema constraint
+			// on what gets written into `metadata`, so a future caller could
+			// plant a session token or temp-file path that an admin reader
+			// would otherwise see verbatim. Closes chunk-6 security MIN.
+			before: redactSensitive(row.before),
+			after: redactSensitive(row.after),
+			metadata: redactSensitive(row.metadata),
 		},
 	};
 };

@@ -153,7 +153,7 @@ function handleMenuKeydown(event: KeyboardEvent) {
 				{#if data.user.role}
 					<RolePill ariaHidden>{data.user.role}</RolePill>
 				{/if}
-				<span class="chevron" aria-hidden="true">v</span>
+				<span class="chevron" aria-hidden="true">▾</span>
 			</summary>
 			<div class="identity-panel">
 				{#if showEmailRow}

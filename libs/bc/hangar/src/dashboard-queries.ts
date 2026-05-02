@@ -46,7 +46,30 @@ export async function countAllJobs(db: Db = defaultDb): Promise<number> {
 /**
  * List all live (`deletedAt IS NULL`) sources, sorted by id. Drives the
  * `/sources` flow diagram's primary list.
+ *
+ * Slim column projection: the `/sources` page mapper only reads the columns
+ * below, so pulling the full row (including `media`, `edition`,
+ * `locatorShape` jsonb) on every page hit was wasted DB I/O + wire bytes
+ * (chunk-6 perf MIN closure).
  */
 export async function listLiveSources(db: Db = defaultDb) {
-	return db.select().from(hangarSource).where(isNull(hangarSource.deletedAt)).orderBy(hangarSource.id);
+	return db
+		.select({
+			id: hangarSource.id,
+			rev: hangarSource.rev,
+			type: hangarSource.type,
+			title: hangarSource.title,
+			version: hangarSource.version,
+			url: hangarSource.url,
+			path: hangarSource.path,
+			format: hangarSource.format,
+			checksum: hangarSource.checksum,
+			sizeBytes: hangarSource.sizeBytes,
+			downloadedAt: hangarSource.downloadedAt,
+			dirty: hangarSource.dirty,
+			updatedAt: hangarSource.updatedAt,
+		})
+		.from(hangarSource)
+		.where(isNull(hangarSource.deletedAt))
+		.orderBy(hangarSource.id);
 }

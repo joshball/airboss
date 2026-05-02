@@ -16,7 +16,8 @@
  * without spawning real git / gh.
  */
 
-import { mkdir, writeFile } from 'node:fs/promises';
+import { randomBytes } from 'node:crypto';
+import { mkdir, rename, unlink, writeFile } from 'node:fs/promises';
 import { dirname } from 'node:path';
 import { HANGAR_SYNC_MODES, type HangarSyncMode } from '@ab/constants';
 import {
@@ -86,11 +87,32 @@ async function ensureParentDir(path: string): Promise<void> {
 	await mkdir(dirname(path), { recursive: true });
 }
 
+/**
+ * Two-phase write: stage every file at `<path>.tmp.<random>` first; if every
+ * stage write succeeds, atomically rename each tmp into place. On any stage
+ * failure the partials are unlinked so the working tree stays unchanged.
+ *
+ * Closes chunk-6 correctness MIN: `writeAllFiles writes sequentially with no
+ * rollback`. Without this, an out-of-disk mid-sync would leave the working
+ * tree half-written and every subsequent sync would surface false-drift.
+ */
 async function writeAllFiles(writes: FileWrites): Promise<void> {
 	const entries = Object.entries(writes);
-	for (const [path, body] of entries) {
-		await ensureParentDir(path);
-		await writeFile(path, body, 'utf8');
+	const stagePaths: { path: string; stagePath: string }[] = [];
+	const suffix = `.sync-tmp-${randomBytes(8).toString('hex')}`;
+	try {
+		for (const [path, body] of entries) {
+			await ensureParentDir(path);
+			const stagePath = `${path}${suffix}`;
+			await writeFile(stagePath, body, 'utf8');
+			stagePaths.push({ path, stagePath });
+		}
+	} catch (err) {
+		await Promise.all(stagePaths.map(({ stagePath }) => unlink(stagePath).catch(() => {})));
+		throw err;
+	}
+	for (const { path, stagePath } of stagePaths) {
+		await rename(stagePath, path);
 	}
 }
 

@@ -25,7 +25,6 @@ let { data }: { data: PageData } = $props();
 					<dd>
 						<a class="stat-link" href={ROUTES.HANGAR_SOURCES}>
 							<span class="stat-value">{data.counts.sources}</span>
-							<span class="stat-affordance" aria-hidden="true">Open -&gt;</span>
 						</a>
 					</dd>
 				</div>
@@ -34,7 +33,6 @@ let { data }: { data: PageData } = $props();
 					<dd>
 						<a class="stat-link" href={ROUTES.HANGAR_GLOSSARY}>
 							<span class="stat-value">{data.counts.glossary}</span>
-							<span class="stat-affordance" aria-hidden="true">Open -&gt;</span>
 						</a>
 					</dd>
 				</div>
@@ -44,13 +42,15 @@ let { data }: { data: PageData } = $props();
 		<article class="tile" aria-labelledby="tile-people-h">
 			<header class="tile-head">
 				<h2 id="tile-people-h">People</h2>
-				<p class="tile-sub">Users management coming soon.</p>
+				<p class="tile-sub">Roles, sessions, and ban controls.</p>
 			</header>
 			<dl class="stats">
 				<div class="stat">
-					<dt>Users <span class="badge">coming soon</span></dt>
+					<dt>Users</dt>
 					<dd>
-						<span class="stat-value muted">{data.counts.users}</span>
+						<a class="stat-link" href={ROUTES.HANGAR_USERS} aria-label="Open users ({data.counts.users})">
+							<span class="stat-value">{data.counts.users}</span>
+						</a>
 					</dd>
 				</div>
 			</dl>
@@ -67,7 +67,6 @@ let { data }: { data: PageData } = $props();
 					<dd>
 						<a class="stat-link" href={ROUTES.HANGAR_JOBS}>
 							<span class="stat-value">{data.counts.jobs}</span>
-							<span class="stat-affordance" aria-hidden="true">Open -&gt;</span>
 						</a>
 					</dd>
 				</div>
@@ -76,7 +75,6 @@ let { data }: { data: PageData } = $props();
 					<dd>
 						<a class="stat-link" href={ROUTES.HANGAR_ADMIN_AUDIT}>
 							<span class="stat-value">{data.counts.recentAudits}</span>
-							<span class="stat-affordance" aria-hidden="true">Open -&gt;</span>
 						</a>
 					</dd>
 				</div>
@@ -183,26 +181,4 @@ let { data }: { data: PageData } = $props();
 		color: var(--ink-body);
 	}
 
-	.stat-value.muted {
-		color: var(--ink-muted);
-		padding: var(--space-2xs) 0;
-	}
-
-	.stat-affordance {
-		font-size: var(--type-ui-caption-size);
-		color: var(--link-default);
-		font-family: var(--font-family-mono);
-	}
-
-	.badge {
-		display: inline-block;
-		font-size: var(--type-ui-caption-size);
-		font-weight: var(--font-weight-semibold);
-		padding: 0 var(--space-2xs);
-		border-radius: var(--radius-pill);
-		background: var(--action-default-wash);
-		color: var(--action-default-hover);
-		text-transform: uppercase;
-		letter-spacing: var(--letter-spacing-wide);
-	}
 </style>

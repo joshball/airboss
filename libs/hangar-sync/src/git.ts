@@ -43,7 +43,18 @@ export class ProcessError extends Error {
 	readonly stderr: string;
 
 	constructor(call: ProcessCall, result: ProcessResult) {
-		super(`${call.cmd} ${call.args.join(' ')} exited ${result.exitCode}: ${result.stderr.trim()}`);
+		// `git` and `gh` sometimes write the failure to stdout instead of
+		// stderr (e.g. `git push` rejection messages, `gh pr create`'s
+		// "no upstream" hint). Fall back to stdout when stderr is empty so
+		// the operator-visible message is never `cmd exited 1:` with no
+		// detail. Closes chunk-6 dx MIN.
+		const stderrTrimmed = result.stderr.trim();
+		const stdoutTrimmed = result.stdout.trim();
+		const detail = stderrTrimmed || stdoutTrimmed;
+		// Cap at 4 KiB so a giant subprocess output dump doesn't blow up the
+		// audit metadata or job-log line that wraps the thrown message.
+		const capped = detail.length > 4096 ? `${detail.slice(0, 4096)}... [truncated]` : detail;
+		super(`${call.cmd} ${call.args.join(' ')} exited ${result.exitCode}: ${capped}`);
 		this.name = 'ProcessError';
 		this.exitCode = result.exitCode;
 		this.cmd = call.cmd;
@@ -75,6 +86,16 @@ export const nodeProcessRunner: ProcessRunner = async (call) =>
 		child.on('error', reject);
 		child.on('close', (code) => {
 			resolve({ exitCode: code ?? 0, stdout, stderr });
+		});
+		// Attach a stdin error handler BEFORE writing so an EPIPE from a child
+		// that died before reading stdin (e.g. an unauthenticated `gh` that
+		// crashes pre-stdin) gets swallowed instead of propagating as an
+		// unhandledRejection that exits the worker. Closes chunk-6
+		// correctness MIN.
+		child.stdin.on('error', () => {
+			// The 'close' / 'error' handlers above resolve / reject the
+			// outer promise based on the child's exit; the stdin error is
+			// noise for the caller.
 		});
 		if (call.stdin !== undefined) {
 			child.stdin.write(call.stdin);

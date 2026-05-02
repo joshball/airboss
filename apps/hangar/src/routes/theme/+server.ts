@@ -9,4 +9,6 @@
 import { createThemeEndpoint } from '@ab/themes';
 import { dev } from '$app/environment';
 
-export const POST = createThemeEndpoint({ dev });
+// `requireAuth: true` -- hangar is admin-only; anonymous POSTs to the theme
+// endpoint are always probes or noise. Closes chunk-6 security MIN.
+export const POST = createThemeEndpoint({ dev, requireAuth: true });

@@ -100,6 +100,14 @@ export const hangarJobLog = hangarJobsSchema.table(
 		 * with a 23505 instead of corrupting the cursor.
 		 */
 		jobLogJobSeqUnique: unique('hangar_job_log_job_seq_unique').on(t.jobId, t.seq),
+		/**
+		 * Timestamp index for ad-hoc cross-job range scans ("everything that
+		 * happened in the last hour", future cross-job admin tail). Job logs
+		 * are the highest-volume table in the hangar cluster; this is cheap
+		 * insurance against a future surface that needs the column without
+		 * paying for a full-table scan. Closes chunk-6 schema MIN.
+		 */
+		jobLogAtIdx: index('hangar_job_log_at_idx').on(t.at),
 		jobLogStreamCheck: check('hangar_job_log_stream_check', sql.raw(`"stream" IN (${inList(JOB_LOG_STREAM_VALUES)})`)),
 	}),
 );

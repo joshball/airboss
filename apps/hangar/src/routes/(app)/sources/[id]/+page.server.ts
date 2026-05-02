@@ -28,25 +28,27 @@ export const load: PageServerLoad = async (event) => {
 	const row = await getSource(event.params.id);
 	if (!row) throw error(404, `source '${event.params.id}' not found`);
 
-	const recentJobs = await listRecentJobsForTarget(event.params.id, RECENT_JOBS_LIMIT);
-
-	// Pre-check: if a job for this source is already queued or running, the
-	// worker will serialise a second submission anyway (see source-jobs.ts).
-	// Surface that fact on the form so the operator doesn't fire-and-wait.
-	const activeJob = await getActiveJobForTarget(event.params.id);
-
-	// On-disk snapshot. Surfaces missing-file / rev-mismatch / size-match state
-	// so the operator knows whether a fetch is needed.
+	// Fan out the three independent reads in parallel (chunk-6 perf NIT
+	// closure). recent-jobs + active-job pre-check both hit `hangar.job`
+	// keyed by targetId; the on-disk stat depends only on the source row
+	// already loaded above. Bundling them collapses three round trips to
+	// one wall-clock unit.
 	const absolutePath = row.path ? resolve(REPO_ROOT, row.path) : null;
-	let onDisk: { sizeBytes: number; mtime: string } | null = null;
-	if (absolutePath) {
-		try {
-			const s = await stat(absolutePath);
-			onDisk = { sizeBytes: s.size, mtime: s.mtime.toISOString() };
-		} catch {
-			onDisk = null;
-		}
-	}
+	const [recentJobs, activeJob, onDisk] = await Promise.all([
+		listRecentJobsForTarget(event.params.id, RECENT_JOBS_LIMIT),
+		// Surfaces "another job already in flight for this source" so the
+		// operator doesn't fire-and-wait. Worker serialises by targetId
+		// regardless; the BC pre-check just keeps the UI honest.
+		getActiveJobForTarget(event.params.id),
+		// On-disk snapshot for missing-file / size-match indicators on the
+		// page; null on stat-failure so the consumer renders the empty
+		// state rather than crashing the loader.
+		absolutePath
+			? stat(absolutePath)
+					.then((s) => ({ sizeBytes: s.size, mtime: s.mtime.toISOString() }))
+					.catch(() => null as { sizeBytes: number; mtime: string } | null)
+			: Promise.resolve(null as { sizeBytes: number; mtime: string } | null),
+	]);
 
 	const isPendingChecksum = row.checksum === PENDING_DOWNLOAD || row.checksum === '';
 	const sourceKind = SOURCE_KIND_BY_TYPE[row.type as ReferenceSourceType] ?? SOURCE_KINDS.TEXT;

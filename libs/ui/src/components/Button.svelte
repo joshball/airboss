@@ -33,6 +33,7 @@ let {
 	loadingLabel,
 	fullWidth = false,
 	ariaLabel,
+	title,
 	onclick,
 	children,
 }: {
@@ -56,6 +57,12 @@ let {
 	loadingLabel?: string;
 	fullWidth?: boolean;
 	ariaLabel?: string;
+	/**
+	 * Native `title` tooltip. Useful on disabled buttons to surface "why
+	 * is this disabled?" without blocking activation. Mirrors the standard
+	 * HTML attribute.
+	 */
+	title?: string;
 	onclick?: (event: MouseEvent) => void;
 	children: Snippet;
 } = $props();
@@ -74,6 +81,7 @@ const resolvedRel = $derived(rel ?? (target === '_blank' ? 'noopener noreferrer'
 		rel={resolvedRel}
 		aria-disabled={isDisabled ? 'true' : undefined}
 		aria-label={ariaLabel}
+		{title}
 		tabindex={isDisabled ? -1 : undefined}
 		data-testid="button-root"
 		data-variant={variant}
@@ -101,6 +109,7 @@ const resolvedRel = $derived(rel ?? (target === '_blank' ? 'noopener noreferrer'
 		{type}
 		disabled={isDisabled}
 		aria-label={ariaLabel}
+		{title}
 		data-testid="button-root"
 		data-variant={variant}
 		data-size={size}
