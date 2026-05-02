@@ -10,3 +10,11 @@ export const HELP_TRIGGER_LABELS = {
 } as const;
 
 export type HelpTriggerLabelKey = keyof typeof HELP_TRIGGER_LABELS;
+
+/**
+ * Debounce window for the help/aviation search palette. Keystrokes inside
+ * this window collapse into a single search execution. 150 ms is short
+ * enough that the palette feels live for slow typing yet long enough to
+ * elide the per-key bursts a fast typist produces (~10 keys/sec).
+ */
+export const HELP_SEARCH_DEBOUNCE_MS = 150;

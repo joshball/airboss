@@ -8,6 +8,7 @@
  * regression to silent-broken help links.
  */
 
+import { APP_SURFACES, HELP_KINDS } from '@ab/constants';
 import { cleanup, render, screen } from '@testing-library/svelte';
 import { afterEach, beforeAll, describe, expect, it } from 'vitest';
 import { helpRegistry } from '../src/registry';
@@ -19,14 +20,12 @@ beforeAll(() => {
 			id: 'test-page',
 			title: 'Test Page',
 			summary: 'Test summary.',
+			tags: {
+				appSurface: [APP_SURFACES.GLOBAL],
+				helpKind: HELP_KINDS.CONCEPT,
+			},
 			sections: [{ id: 'overview', title: 'Overview', body: 'Plain body.' }],
 			externalRefs: [],
-			surfaces: [],
-			kinds: [],
-			sources: [],
-			rules: [],
-			relatedConcepts: [],
-			documents: undefined,
 		},
 	]);
 });

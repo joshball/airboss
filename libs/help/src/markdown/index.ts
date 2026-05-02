@@ -27,19 +27,35 @@ export async function parseMarkdown(body: string): Promise<MdNode[]> {
 }
 
 async function highlightAll(nodes: MdNode[]): Promise<void> {
-	for (const node of nodes) {
-		if (node.kind === 'code') {
-			node.highlighted = await highlight(node.value, node.lang);
-			continue;
-		}
-		if (node.kind === 'callout' || node.kind === 'blockquote') {
-			await highlightAll(node.children);
-			continue;
-		}
-		if (node.kind === 'list') {
-			for (const item of node.items) {
-				await highlightAll(item.children);
+	// Collect every code node up front so independent highlight calls run
+	// in parallel via `Promise.all` -- Shiki holds no per-call state once
+	// the highlighter is warm, so each block highlights independently and
+	// the total cost is `max(per-block-highlight-time)` instead of the sum.
+	// Container kinds (callout / blockquote / list) recurse synchronously
+	// here; their leaf code nodes feed the same shared collection.
+	const codeNodes: Array<Extract<MdNode, { kind: 'code' }>> = [];
+	const visit = (siblings: MdNode[]): void => {
+		for (const node of siblings) {
+			if (node.kind === 'code') {
+				codeNodes.push(node);
+				continue;
+			}
+			if (node.kind === 'callout' || node.kind === 'blockquote') {
+				visit(node.children);
+				continue;
+			}
+			if (node.kind === 'list') {
+				for (const item of node.items) {
+					visit(item.children);
+				}
 			}
 		}
-	}
+	};
+	visit(nodes);
+	if (codeNodes.length === 0) return;
+	await Promise.all(
+		codeNodes.map(async (node) => {
+			node.highlighted = await highlight(node.value, node.lang);
+		}),
+	);
 }

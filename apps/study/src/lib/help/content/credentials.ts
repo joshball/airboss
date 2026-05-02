@@ -7,15 +7,14 @@
  * edition pin behaviour.
  */
 
-import { APP_SURFACES, HELP_KINDS, ROUTES } from '@ab/constants';
-import type { HelpPage } from '@ab/help';
+import { APP_SURFACES, HELP_KINDS } from '@ab/constants';
+import type { HelpPageIndex } from '@ab/help';
 
-export const credentials: HelpPage = {
+export const credentialsIndex: HelpPageIndex = {
 	id: 'credentials',
 	title: 'Credentials',
 	summary:
 		'How the cert dashboard surfaces mastery and coverage across the certs, ratings, and endorsements you target -- including how prereqs compose and what edition pinning means.',
-	documents: ROUTES.CREDENTIALS,
 	tags: {
 		appSurface: [APP_SURFACES.CREDENTIALS],
 		helpKind: HELP_KINDS.REFERENCE,
@@ -32,98 +31,19 @@ export const credentials: HelpPage = {
 			'edition',
 		],
 	},
+	sections: [
+		{ id: 'overview', title: 'Overview' },
+		{ id: 'index', title: 'The index page' },
+		{ id: 'detail', title: 'The detail page' },
+		{ id: 'area-drill', title: 'The area drill' },
+		{ id: 'mastery-vs-coverage', title: 'Mastery vs coverage' },
+		{ id: 'prereqs', title: 'How prereqs compose' },
+		{ id: 'edition-pin', title: 'Edition pinning' },
+		{ id: 'empty-states', title: 'Empty states' },
+	],
+	searchHaystack:
+		'how the cert dashboard surfaces mastery and coverage across the certs, ratings, and endorsements you target -- including how prereqs compose and what edition pinning means. the credentials surface is the per-cert dashboard. every active credential you target (private, instrument, commercial, cfi, cfii, mei, multi-engine, endorsements, ...) shows up as a card on the index. each card shows mastery and coverage rolled up across the credential\'s primary syllabus.\n\nthis page explains:\n\n- the three surfaces (index, detail, area drill).\n- what mastery and coverage mean, and why they\'re different.\n- how prereqs compose -- cfii isn\'t "after cfi", it\'s cfi plus instrument plus its own pts.\n- what "edition pinning" does and when to use it. `/credentials` lists every active credential in the database. when you have a primary goal set, credentials referenced by that goal are sorted to the top and tagged with a primary goal badge. without a primary goal, every active credential is shown and a banner reminds you to set one.\n\neach card shows:\n\n- the credential title (e.g. private pilot certificate).\n- the credential kind (pilot certificate, instructor certificate, rating, endorsement).\n- category and class when applicable (airplane, asel, amel, ...).\n- mastery percentage and coverage percentage (see below for the difference).\n- total leaves -- the number of k/r/s elements in the primary syllabus.\n\nclick a card to drill into the detail page. `/credentials/<slug>` is the per-credential detail. header shows the credential title, kind, and category/class. the mastery rollup shows three numbers (mastery, coverage, total leaves). below the rollup is the area list -- one row per acs area of operation.\n\nthe detail page also shows:\n\n- immediate prereqs (one hop). for ppl: empty. for cfii: cfi + ir (both required).\n- a collapsed "supplemental syllabi" disclosure when the credential has alternate syllabi (school curricula, custom).\n- an edition-pin banner when `?edition=<slug>` is active. `/credentials/<slug>/areas/<areacode>` opens one area of operation. the page lists every task in that area and expands inline to show the k/r/s elements within each task.\n\neach element shows:\n\n- the element code (e.g. v.a.k1).\n- the triad badge -- knowledge (k), risk_management (r), or skill (s).\n- the element title and description.\n- linked knowledge nodes (jump-to-learn buttons) when authored.\n- citations from the syllabus -- references to the faa wording that backs the element. two numbers, two meanings:\n\n- **coverage** = covered leaves / total leaves. "i have touched this many of the leaves." a leaf is covered when you have any cards or reps recorded against the linked knowledge nodes.\n- **mastery** = mastered leaves / total leaves. "i have demonstrated mastery on this many." a leaf is mastered when every linked knowledge node clears its mastery gates.\n\na 90%-mastered cert at 30% coverage reads "expert at the third you\'ve studied; two-thirds untouched". a 30%-mastered cert at 90% coverage reads "broadly studied but not yet drilled". the two numbers track different progress dimensions; both matter. prereqs are a dag, not a line. cfii isn\'t "after cfi" -- it\'s cfi plus instrument rating plus its own pts. mei is cfi plus a multi-engine class rating. endorsements (complex, high-performance, tailwheel, ...) are separate credentials with their own one-hop prereqs.\n\nthe detail page shows immediate prereqs only. required prereqs gate the credential; recommended prereqs are faa-suggested but not regulatory. to trace the full chain (e.g. cfii -> cfi -> commercial -> private), click each prereq in turn -- you walk one hop at a time. when the faa publishes a new acs edition, the underlying syllabus row is added (not edited in place). a learner mid-prep on the older edition wants their syllabus tree, mastery state, and citations to stay consistent against that edition.\n\n`?edition=<slug>` pins the page to a specific syllabus edition. the edition slug is the syllabus row\'s `slug` field (e.g. `ppl-acs-25`). the pin survives navigation within the credential and is signalled by a banner with a "switch to current" affordance.\n\npin only when you actually need to. default behaviour resolves the credential\'s primary syllabus\'s current active edition. several states render explicit empty messaging rather than blank pages:\n\n- **no active credentials.** "no credentials are seeded as active." run `bun run db seed credentials` if you\'re a developer.\n- **no primary syllabus.** "syllabus not yet authored." acs / pts / endorsement transcription is iterative human work per adr 016 phase 10.\n- **primary syllabus exists but no areas.** "no areas yet." the syllabus is registered but no areas of operation are transcribed.\n- **area exists but no tasks.** "no tasks authored." the area row is in the tree but no tasks have been imported.\n- **element has no linked nodes.** "no knowledge nodes linked yet." the leaf is in the syllabus but no `syllabus_node_link` rows exist.\n\neach empty state preserves navigation -- the surrounding header, breadcrumbs, and other panels render normally. credentials cert rating endorsement acs pts mastery coverage prereq edition',
+	documents: '/credentials',
 	related: ['knowledge-graph', 'getting-started'],
 	reviewedAt: '2026-04-28',
-	sections: [
-		{
-			id: 'overview',
-			title: 'Overview',
-			body: `The credentials surface is the per-cert dashboard. Every active credential you target (private, instrument, commercial, CFI, CFII, MEI, multi-engine, endorsements, ...) shows up as a card on the index. Each card shows mastery and coverage rolled up across the credential's primary syllabus.
-
-This page explains:
-
-- The three surfaces (index, detail, area drill).
-- What mastery and coverage mean, and why they're different.
-- How prereqs compose -- CFII isn't "after CFI", it's CFI plus Instrument plus its own PTS.
-- What "edition pinning" does and when to use it.`,
-		},
-		{
-			id: 'index',
-			title: 'The index page',
-			body: `\`/credentials\` lists every active credential in the database. When you have a primary goal set, credentials referenced by that goal are sorted to the top and tagged with a Primary goal badge. Without a primary goal, every active credential is shown and a banner reminds you to set one.
-
-Each card shows:
-
-- The credential title (e.g. Private Pilot Certificate).
-- The credential kind (pilot certificate, instructor certificate, rating, endorsement).
-- Category and class when applicable (airplane, ASEL, AMEL, ...).
-- Mastery percentage and coverage percentage (see below for the difference).
-- Total leaves -- the number of K/R/S elements in the primary syllabus.
-
-Click a card to drill into the detail page.`,
-		},
-		{
-			id: 'detail',
-			title: 'The detail page',
-			body: `\`/credentials/<slug>\` is the per-credential detail. Header shows the credential title, kind, and category/class. The mastery rollup shows three numbers (mastery, coverage, total leaves). Below the rollup is the area list -- one row per ACS Area of Operation.
-
-The detail page also shows:
-
-- Immediate prereqs (one hop). For PPL: empty. For CFII: CFI + IR (both required).
-- A collapsed "Supplemental syllabi" disclosure when the credential has alternate syllabi (school curricula, custom).
-- An edition-pin banner when \`?edition=<slug>\` is active.`,
-		},
-		{
-			id: 'area-drill',
-			title: 'The area drill',
-			body: `\`/credentials/<slug>/areas/<areaCode>\` opens one Area of Operation. The page lists every Task in that Area and expands inline to show the K/R/S elements within each Task.
-
-Each element shows:
-
-- The element code (e.g. V.A.K1).
-- The triad badge -- knowledge (K), risk_management (R), or skill (S).
-- The element title and description.
-- Linked knowledge nodes (jump-to-learn buttons) when authored.
-- Citations from the syllabus -- references to the FAA wording that backs the element.`,
-		},
-		{
-			id: 'mastery-vs-coverage',
-			title: 'Mastery vs coverage',
-			body: `Two numbers, two meanings:
-
-- **Coverage** = covered leaves / total leaves. "I have touched this many of the leaves." A leaf is covered when you have any cards or reps recorded against the linked knowledge nodes.
-- **Mastery** = mastered leaves / total leaves. "I have demonstrated mastery on this many." A leaf is mastered when every linked knowledge node clears its mastery gates.
-
-A 90%-mastered cert at 30% coverage reads "expert at the third you've studied; two-thirds untouched". A 30%-mastered cert at 90% coverage reads "broadly studied but not yet drilled". The two numbers track different progress dimensions; both matter.`,
-		},
-		{
-			id: 'prereqs',
-			title: 'How prereqs compose',
-			body: `Prereqs are a DAG, not a line. CFII isn't "after CFI" -- it's CFI plus Instrument Rating plus its own PTS. MEI is CFI plus a multi-engine class rating. Endorsements (complex, high-performance, tailwheel, ...) are separate credentials with their own one-hop prereqs.
-
-The detail page shows immediate prereqs only. Required prereqs gate the credential; recommended prereqs are FAA-suggested but not regulatory. To trace the full chain (e.g. CFII -> CFI -> Commercial -> Private), click each prereq in turn -- you walk one hop at a time.`,
-		},
-		{
-			id: 'edition-pin',
-			title: 'Edition pinning',
-			body: `When the FAA publishes a new ACS edition, the underlying syllabus row is added (not edited in place). A learner mid-prep on the older edition wants their syllabus tree, mastery state, and citations to stay consistent against that edition.
-
-\`?edition=<slug>\` pins the page to a specific syllabus edition. The edition slug is the syllabus row's \`slug\` field (e.g. \`ppl-acs-25\`). The pin survives navigation within the credential and is signalled by a banner with a "Switch to current" affordance.
-
-Pin only when you actually need to. Default behaviour resolves the credential's primary syllabus's current active edition.`,
-		},
-		{
-			id: 'empty-states',
-			title: 'Empty states',
-			body: `Several states render explicit empty messaging rather than blank pages:
-
-- **No active credentials.** "No credentials are seeded as active." Run \`bun run db seed credentials\` if you're a developer.
-- **No primary syllabus.** "Syllabus not yet authored." ACS / PTS / endorsement transcription is iterative human work per ADR 016 phase 10.
-- **Primary syllabus exists but no Areas.** "No areas yet." The syllabus is registered but no Areas of Operation are transcribed.
-- **Area exists but no tasks.** "No tasks authored." The Area row is in the tree but no tasks have been imported.
-- **Element has no linked nodes.** "No knowledge nodes linked yet." The leaf is in the syllabus but no \`syllabus_node_link\` rows exist.
-
-Each empty state preserves navigation -- the surrounding header, breadcrumbs, and other panels render normally.`,
-		},
-	],
 };

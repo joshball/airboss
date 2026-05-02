@@ -7,9 +7,9 @@
  */
 
 import { APP_SURFACES, CONCEPT_GROUPS, HELP_KINDS } from '@ab/constants';
-import type { HelpPage } from '@ab/help';
+import type { HelpPageIndex } from '@ab/help';
 
-export const conceptFsrs: HelpPage = {
+export const conceptFsrsIndex: HelpPageIndex = {
 	id: 'concept-fsrs',
 	title: 'FSRS-5',
 	summary: 'The Free Spaced Repetition Scheduler -- how airboss models your memory of every card.',
@@ -19,7 +19,17 @@ export const conceptFsrs: HelpPage = {
 		conceptGroup: CONCEPT_GROUPS.LEARNING_SCIENCE,
 		keywords: ['fsrs', 'fsrs-5', 'scheduler', 'stability', 'difficulty', 'retrievability', 'sm-2', 'anki'],
 	},
-	concept: true,
+	sections: [
+		{ id: 'overview', title: 'Overview' },
+		{ id: 'the-algorithm', title: 'The algorithm' },
+		{ id: 'states', title: 'States' },
+		{ id: 'stability-vs-difficulty', title: 'Stability vs difficulty' },
+		{ id: 'stability-and-mastery', title: 'Stability and mastery' },
+		{ id: 'why-not-sm-2', title: 'Why not SM-2' },
+		{ id: 'what-this-means-for-you', title: 'What this means for you' },
+	],
+	searchHaystack:
+		"the free spaced repetition scheduler -- how airboss models your memory of every card. fsrs (free spaced repetition scheduler) is a modern spaced-repetition algorithm that predicts, for every card you review, how likely you are to recall it at any future moment. airboss uses fsrs-5, the fifth-generation public model maintained by the open-source spaced-repetition community.\n\nunlike a fixed ladder scheduler (1 day, 3 days, 7 days, ...), fsrs maintains a per-card memory model with three live variables and updates them after every review based on how you rated your recall. see spaced repetition for the underlying idea and active recall for why the rating matters.\n\n:::tip\nyou don't need to know the math to use the scheduler. you do need to rate honestly. \"good\" when you forgot corrupts the model for that card for weeks.\n::: fsrs tracks three per-card state variables:\n\n| variable          | what it represents                                                                           | how it changes                                                   |\n| ----------------- | -------------------------------------------------------------------------------------------- | ---------------------------------------------------------------- |\n| stability (s)     | how long, in days, it takes for retrievability to drop to the target recall rate.            | grows when you recall; collapses when you rate again.            |\n| difficulty (d)    | how \"hard\" this card is for you personally, on a 1-10 scale. rises with again, falls with easy. | drifts toward your long-run average difficulty over time.      |\n| retrievability (r) | the model's estimate, right now, of your probability of recalling this card.               | a function of stability and elapsed time since last review.      |\n\nthe scheduler picks the next due date by solving for the time at which retrievability hits a target (default 0.9 -- 90% recall). that gives an interval personalized to both the card's stability and the target recall rate the user picks.\n\npseudocode for the rating update:\n\n```text\non rate(card, rating, elapsed_days):\n  r = retrievability(card.s, elapsed_days)\n  s_new = next_stability(card.s, card.d, r, rating)\n  d_new = next_difficulty(card.d, rating)\n  due   = invert_recall(s_new, target=0.9)   // days until r falls to 0.9\n  persist(card, s_new, d_new, due)\n```\n\n:::note\nthe real fsrs-5 update uses 19 trained weights (`w[0]..w[18]`) fit by gradient descent against large review datasets. default weights work well for most users; advanced users can retrain against their own history. airboss ships the defaults.\n::: every card is always in exactly one of four fsrs states. the state controls which scheduling rules apply and how aggressive the next interval will be.\n\n| state       | meaning                                                                                          | how a card enters it                                                        |\n| ----------- | ------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------- |\n| new         | never been reviewed. not yet in the scheduler's long-interval model.                             | freshly authored card. no reviews yet.                                      |\n| learning    | in the initial short-interval loop (minutes to hours) before graduating to review.               | a new card that's been rated at least once but hasn't graduated yet.        |\n| review      | graduated to the long-interval scheduler. stability grows and shrinks based on ratings.          | a learning card that hit the graduation interval via a good or easy rating. |\n| relearning  | dropped back into short-interval recovery after a lapse (an again rating on a review-state card). | a review card that you rated again. returns to review once stabilized again. |\n\nthe normal lifecycle is **new -> learning -> review**, with the occasional trip through **relearning** when a review card slips. cards that keep bouncing between review and relearning usually aren't atomic enough; see minimum-information.\n\n:::note\nstate is visible on the [memory dashboard](/help/memory-dashboard) (the row of pills under the stat tiles, one pill per state) and on each card's [detail page](/help/memory-card#state). a fat relearning pill relative to your deck size is a signal to audit card quality, not a signal to study harder.\n::: these two variables get confused a lot. they measure different things.\n\n:::example\na ground-school regulation you mostly have down: stability grows fast (days -> weeks -> months) and difficulty stays low. after a few correct reviews the card is pushed months out.\n\na procedure you keep mis-sequencing: stability stays stuck in the single-digit days, and difficulty climbs toward 10. the scheduler brings it back frequently until difficulty falls again.\n:::\n\nstability is a property of _this particular card in your head right now_. difficulty is a running estimate of how much work this card takes _you_ compared to your average card. two pilots studying the same deck will end up with different difficulty values on the same card.\n\nwhen you see a card every two days for weeks despite rating good, that's high difficulty (not low stability) -- the model thinks you're about to forget if pushed further. trust it. stability is measured in days. it is the scheduler's estimate of how long it will take for your predicted recall of this card to decay to the target retention rate (default 90%). a card with stability = 7 will be scheduled about a week out; a card with stability = 180 will be scheduled about six months out.\n\nmastery is a derived signal on top of stability. a card counts as **mastered** once its stability clears a fixed threshold: the `mastery_stability_days` constant (currently 30 days). operationally that means: the scheduler is confident you'll still recall the card a month from now without another review. that's the bar airboss uses for the \"% mastered\" metric on the [memory dashboard](/help/memory-dashboard).\n\n:::note\nmastery is not a terminal state. a mastered card is still in the review state and still gets scheduled; it just happens that its current interval has stretched past the 30-day horizon. rate again on a mastered card and its stability collapses, pulling it back out of the mastered bucket until it re-earns the threshold.\n:::\n\nthe threshold is a product decision, not an fsrs output. fsrs only gives you stability; where you draw the line between \"learning it\" and \"know it\" is a policy choice. 30 days is a conservative line: it rules out cards that happen to be due next month because of a lucky interval and weights toward cards that have actually earned durable retention. sm-2 (supermemo 2, 1988) is the algorithm anki shipped with for decades. it's simpler and well-understood, but it has two structural problems fsrs fixes.\n\n| problem                                                                        | sm-2                                                            | fsrs-5                                                           |\n| ------------------------------------------------------------------------------ | --------------------------------------------------------------- | ---------------------------------------------------------------- |\n| no explicit memory model; \"ease factor\" conflates difficulty and interval.     | single ease factor drifts; lapses spiral into \"ease hell.\"      | separates stability (memory) from difficulty (card hardness).    |\n| schedules don't adapt to the user's target retention rate.                     | fixed multipliers.                                              | target retention is a first-class knob (0.9 default).            |\n| \"ease hell\": repeated lapses tank a card's ease and it comes up forever.        | common; reset-ease workarounds pile up in community decks.      | difficulty recovers toward mean over time; no spiral.            |\n| limited signal from new rating buttons.                                        | ratings (again/hard/good/easy) map linearly to ease changes.    | ratings feed into a trained model; non-linear, context-sensitive. |\n\n> scheduling is not curve-fitting to review history. it is modelling human memory and then asking when retrievability will hit a target. the two are mathematically related and operationally very different.\n\nfsrs-5 also benefits from a growing public dataset: the open-source community retrains the default weights regularly against anonymized review logs across millions of cards. sm-2 hasn't changed since piotr wozniak published it. three practical consequences:\n\n:::tip\n1. **rate what happened, not what you wish happened.** again is not a failure -- the scheduler _needs_ to see forgetting to estimate stability. forcing good when you forgot teaches the model a lie.\n2. **don't chase intervals.** if the scheduler brings a card back in 2 days and you think it should be 2 weeks, it has more data than you do. let it run.\n3. **calibration feeds the model, not the scheduler.** your confidence rating doesn't change fsrs. it feeds calibration, a separate system.\n::: fsrs fsrs-5 scheduler stability difficulty retrievability sm-2 anki",
 	related: [
 		'concept-spaced-rep',
 		'concept-active-recall',
@@ -29,144 +39,5 @@ export const conceptFsrs: HelpPage = {
 		'memory-card',
 	],
 	reviewedAt: '2026-04-24',
-	sections: [
-		{
-			id: 'overview',
-			title: 'Overview',
-			body: `FSRS (Free Spaced Repetition Scheduler) is a modern spaced-repetition algorithm that predicts, for every card you review, how likely you are to recall it at any future moment. airboss uses FSRS-5, the fifth-generation public model maintained by the open-source spaced-repetition community.
-
-Unlike a fixed ladder scheduler (1 day, 3 days, 7 days, ...), FSRS maintains a per-card memory model with three live variables and updates them after every review based on how you rated your recall. See [[spaced repetition::concept-spaced-rep]] for the underlying idea and [[active recall::concept-active-recall]] for why the rating matters.
-
-:::tip
-You don't need to know the math to use the scheduler. You do need to rate honestly. "Good" when you forgot corrupts the model for that card for weeks.
-:::`,
-		},
-		{
-			id: 'the-algorithm',
-			title: 'The algorithm',
-			body: `FSRS tracks three per-card state variables:
-
-| Variable          | What it represents                                                                           | How it changes                                                   |
-| ----------------- | -------------------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
-| Stability (S)     | How long, in days, it takes for retrievability to drop to the target recall rate.            | Grows when you recall; collapses when you rate Again.            |
-| Difficulty (D)    | How "hard" this card is for you personally, on a 1-10 scale. Rises with Again, falls with Easy. | Drifts toward your long-run average difficulty over time.      |
-| Retrievability (R) | The model's estimate, right now, of your probability of recalling this card.               | A function of stability and elapsed time since last review.      |
-
-The scheduler picks the next due date by solving for the time at which retrievability hits a target (default 0.9 -- 90% recall). That gives an interval personalized to both the card's stability and the target recall rate the user picks.
-
-Pseudocode for the rating update:
-
-\`\`\`text
-on rate(card, rating, elapsed_days):
-  R = retrievability(card.S, elapsed_days)
-  S_new = next_stability(card.S, card.D, R, rating)
-  D_new = next_difficulty(card.D, rating)
-  due   = invert_recall(S_new, target=0.9)   // days until R falls to 0.9
-  persist(card, S_new, D_new, due)
-\`\`\`
-
-:::note
-The real FSRS-5 update uses 19 trained weights (\`w[0]..w[18]\`) fit by gradient descent against large review datasets. Default weights work well for most users; advanced users can retrain against their own history. airboss ships the defaults.
-:::`,
-		},
-		{
-			id: 'states',
-			title: 'States',
-			body: `Every card is always in exactly one of four FSRS states. The state controls which scheduling rules apply and how aggressive the next interval will be.
-
-| State       | Meaning                                                                                          | How a card enters it                                                        |
-| ----------- | ------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------- |
-| New         | Never been reviewed. Not yet in the scheduler's long-interval model.                             | Freshly authored card. No reviews yet.                                      |
-| Learning    | In the initial short-interval loop (minutes to hours) before graduating to Review.               | A New card that's been rated at least once but hasn't graduated yet.        |
-| Review      | Graduated to the long-interval scheduler. Stability grows and shrinks based on ratings.          | A Learning card that hit the graduation interval via a Good or Easy rating. |
-| Relearning  | Dropped back into short-interval recovery after a lapse (an Again rating on a Review-state card). | A Review card that you rated Again. Returns to Review once stabilized again. |
-
-The normal lifecycle is **New -> Learning -> Review**, with the occasional trip through **Relearning** when a Review card slips. Cards that keep bouncing between Review and Relearning usually aren't atomic enough; see [[minimum-information::memory-new]].
-
-:::note
-State is visible on the [memory dashboard](/help/memory-dashboard) (the row of pills under the stat tiles, one pill per state) and on each card's [detail page](/help/memory-card#state). A fat Relearning pill relative to your deck size is a signal to audit card quality, not a signal to study harder.
-:::`,
-		},
-		{
-			id: 'stability-vs-difficulty',
-			title: 'Stability vs difficulty',
-			body: `These two variables get confused a lot. They measure different things.
-
-:::example
-A ground-school regulation you mostly have down: stability grows fast (days -> weeks -> months) and difficulty stays low. After a few correct reviews the card is pushed months out.
-
-A procedure you keep mis-sequencing: stability stays stuck in the single-digit days, and difficulty climbs toward 10. The scheduler brings it back frequently until difficulty falls again.
-:::
-
-Stability is a property of _this particular card in your head right now_. Difficulty is a running estimate of how much work this card takes _you_ compared to your average card. Two pilots studying the same deck will end up with different difficulty values on the same card.
-
-When you see a card every two days for weeks despite rating Good, that's high difficulty (not low stability) -- the model thinks you're about to forget if pushed further. Trust it.`,
-		},
-		{
-			id: 'stability-and-mastery',
-			title: 'Stability and mastery',
-			body: `Stability is measured in days. It is the scheduler's estimate of how long it will take for your predicted recall of this card to decay to the target retention rate (default 90%). A card with stability = 7 will be scheduled about a week out; a card with stability = 180 will be scheduled about six months out.
-
-Mastery is a derived signal on top of stability. A card counts as **mastered** once its stability clears a fixed threshold: the \`MASTERY_STABILITY_DAYS\` constant (currently 30 days). Operationally that means: the scheduler is confident you'll still recall the card a month from now without another review. That's the bar airboss uses for the "% mastered" metric on the [memory dashboard](/help/memory-dashboard).
-
-:::note
-Mastery is not a terminal state. A mastered card is still in the Review state and still gets scheduled; it just happens that its current interval has stretched past the 30-day horizon. Rate Again on a mastered card and its stability collapses, pulling it back out of the mastered bucket until it re-earns the threshold.
-:::
-
-The threshold is a product decision, not an FSRS output. FSRS only gives you stability; where you draw the line between "learning it" and "know it" is a policy choice. 30 days is a conservative line: it rules out cards that happen to be due next month because of a lucky interval and weights toward cards that have actually earned durable retention.`,
-		},
-		{
-			id: 'why-not-sm-2',
-			title: 'Why not SM-2',
-			body: `SM-2 (SuperMemo 2, 1988) is the algorithm Anki shipped with for decades. It's simpler and well-understood, but it has two structural problems FSRS fixes.
-
-| Problem                                                                        | SM-2                                                            | FSRS-5                                                           |
-| ------------------------------------------------------------------------------ | --------------------------------------------------------------- | ---------------------------------------------------------------- |
-| No explicit memory model; "ease factor" conflates difficulty and interval.     | Single ease factor drifts; lapses spiral into "ease hell."      | Separates stability (memory) from difficulty (card hardness).    |
-| Schedules don't adapt to the user's target retention rate.                     | Fixed multipliers.                                              | Target retention is a first-class knob (0.9 default).            |
-| "Ease hell": repeated lapses tank a card's ease and it comes up forever.        | Common; reset-ease workarounds pile up in community decks.      | Difficulty recovers toward mean over time; no spiral.            |
-| Limited signal from new rating buttons.                                        | Ratings (Again/Hard/Good/Easy) map linearly to ease changes.    | Ratings feed into a trained model; non-linear, context-sensitive. |
-
-> Scheduling is not curve-fitting to review history. It is modelling human memory and then asking when retrievability will hit a target. The two are mathematically related and operationally very different.
-
-FSRS-5 also benefits from a growing public dataset: the open-source community retrains the default weights regularly against anonymized review logs across millions of cards. SM-2 hasn't changed since Piotr Wozniak published it.`,
-		},
-		{
-			id: 'what-this-means-for-you',
-			title: 'What this means for you',
-			body: `Three practical consequences:
-
-:::tip
-1. **Rate what happened, not what you wish happened.** Again is not a failure -- the scheduler _needs_ to see forgetting to estimate stability. Forcing Good when you forgot teaches the model a lie.
-2. **Don't chase intervals.** If the scheduler brings a card back in 2 days and you think it should be 2 weeks, it has more data than you do. Let it run.
-3. **Calibration feeds the model, not the scheduler.** Your confidence rating doesn't change FSRS. It feeds [[calibration::concept-calibration]], a separate system.
-:::`,
-		},
-	],
-	externalRefs: [
-		{
-			title: 'Free Spaced Repetition Scheduler (Wikipedia)',
-			url: 'https://en.wikipedia.org/wiki/Free_Spaced_Repetition_Scheduler',
-			source: 'wikipedia',
-			note: 'Overview of FSRS family, including FSRS-5. Good starting point.',
-		},
-		{
-			title: 'Optimizing Spaced Repetition Schedule by Capturing the Dynamics of Memory (arXiv)',
-			url: 'https://arxiv.org/abs/2402.12291',
-			source: 'paper',
-			note: 'Ye et al. -- the DSR (Difficulty, Stability, Retrievability) model behind FSRS.',
-		},
-		{
-			title: 'open-spaced-repetition/fsrs4anki (GitHub)',
-			url: 'https://github.com/open-spaced-repetition/fsrs4anki/wiki',
-			source: 'other',
-			note: 'Reference implementation wiki. Parameter meanings, retraining guide.',
-		},
-		{
-			title: 'Spaced Repetition Algorithm: A Three-Day Journey from Novice to Expert',
-			url: 'https://github.com/open-spaced-repetition/fsrs4anki/wiki/Spaced-Repetition-Algorithm:-A-Three-Day-Journey-from-Novice-to-Expert',
-			source: 'other',
-			note: 'Jarrett Ye -- accessible three-part primer on FSRS design.',
-		},
-	],
+	concept: true,
 };

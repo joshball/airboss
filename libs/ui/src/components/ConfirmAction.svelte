@@ -1,7 +1,7 @@
 <script lang="ts">
 import type { Snippet } from 'svelte';
 import { tick } from 'svelte';
-import { createFocusTrap } from '../lib/focus-trap';
+import { createFocusTrap, type FocusTrap } from '../lib/focus-trap';
 import type { ButtonSize, ButtonVariant } from './Button.svelte';
 
 /**
@@ -57,6 +57,9 @@ let confirming = $state(false);
 let triggerEl = $state<HTMLButtonElement | null>(null);
 let confirmEl = $state<HTMLButtonElement | null>(null);
 let panelEl = $state<HTMLDivElement | null>(null);
+// One trap per open instead of a fresh closure on every keydown. Built
+// when the confirm panel mounts; nulled on close.
+let trap: FocusTrap | null = null;
 
 async function openConfirm() {
 	if (disabled) return;
@@ -79,12 +82,7 @@ function runCallback() {
 }
 
 function onPanelKeydown(event: KeyboardEvent) {
-	if (!panelEl) return;
-	// Focus trap across every focusable in the panel. Falls back to
-	// {confirm, cancel} when the panel only renders those two, matching the
-	// previous behavior exactly.
-	const trap = createFocusTrap(panelEl, { onEscape: () => void cancel() });
-	trap.handleKeyDown(event);
+	trap?.handleKeyDown(event);
 }
 
 /**
@@ -108,6 +106,18 @@ $effect(() => {
 	document.addEventListener('pointerdown', onDocumentPointerDown, true);
 	return () => {
 		document.removeEventListener('pointerdown', onDocumentPointerDown, true);
+	};
+});
+
+// Build the focus trap once per open. Previously each keystroke allocated
+// a fresh trap closure plus internal helpers; the trap holds no state
+// between calls so the rebuild was throwaway work.
+$effect(() => {
+	if (!confirming || !panelEl) return;
+	trap = createFocusTrap(panelEl, { onEscape: () => void cancel() });
+	return () => {
+		trap?.release();
+		trap = null;
 	};
 });
 </script>

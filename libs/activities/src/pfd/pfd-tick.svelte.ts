@@ -139,6 +139,29 @@ const MIN_DT_SECONDS = 1 / 1000;
 /** Cap a frame's `dt` to avoid blowing past the easing on a long pause. */
 const MAX_DT_SECONDS = 1 / 15;
 
+/**
+ * Quiescence epsilons. When every channel sits within these absolute
+ * bounds of its target, the loop snaps rendered = target and stops the
+ * rAF until the next input nudges a target. Values chosen so the snap is
+ * invisible on every instrument.
+ *
+ * Heading wraps at 360, so its epsilon is checked against the signed
+ * shortest-arc delta rather than the raw difference.
+ */
+const QUIESCENCE_EPSILON = {
+	pitchDeg: 0.01,
+	bankDeg: 0.01,
+	airspeedKnots: 0.05,
+	altitudeFeet: 0.05,
+	headingDeg: 0.05,
+	verticalSpeedFpm: 0.5,
+} as const;
+
+/** Signed shortest-arc difference in degrees, in (-180, 180]. */
+function headingDelta(target: number, rendered: number): number {
+	return ((((target - rendered) % 360) + 540) % 360) - 180;
+}
+
 function clamp(v: number, lo: number, hi: number): number {
 	return v < lo ? lo : v > hi ? hi : v;
 }
@@ -172,6 +195,12 @@ function lowPassStepHeading(rendered: number, target: number, dt: number, tau: n
  * by inputs), one for rendered values (read by instruments). The rAF
  * loop is owned by `attachPfdTickLoop`, which expects to be called
  * inside an `$effect` inside a component so cleanup runs on navigation.
+ *
+ * The `step` function returns `true` when the channels remain dirty
+ * (target != rendered after the step) and `false` when every channel has
+ * landed inside its quiescence epsilon. The rAF loop uses the return
+ * value to idle when nothing is moving instead of burning frames at 60
+ * Hz forever.
  */
 export class PfdTickState {
 	target = $state<PfdValues>({ ...DEFAULT_PFD_VALUES });
@@ -188,8 +217,49 @@ export class PfdTickState {
 		this.rendered = { ...DEFAULT_PFD_VALUES };
 	}
 
-	/** Step the rendered values toward the targets over `dtSeconds`. */
-	step(dtSeconds: number): void {
+	/**
+	 * True when every channel sits inside its quiescence epsilon. Cheap
+	 * pure check; the rAF loop calls this before scheduling the next
+	 * frame so a fully-settled PFD stops eating GPU/battery.
+	 */
+	isQuiescent(): boolean {
+		const t = this.target;
+		const r = this.rendered;
+		return (
+			Math.abs(t.pitchDeg - r.pitchDeg) <= QUIESCENCE_EPSILON.pitchDeg &&
+			Math.abs(t.bankDeg - r.bankDeg) <= QUIESCENCE_EPSILON.bankDeg &&
+			Math.abs(t.airspeedKnots - r.airspeedKnots) <= QUIESCENCE_EPSILON.airspeedKnots &&
+			Math.abs(t.altitudeFeet - r.altitudeFeet) <= QUIESCENCE_EPSILON.altitudeFeet &&
+			Math.abs(headingDelta(t.headingDeg, r.headingDeg)) <= QUIESCENCE_EPSILON.headingDeg &&
+			Math.abs(t.verticalSpeedFpm - r.verticalSpeedFpm) <= QUIESCENCE_EPSILON.verticalSpeedFpm
+		);
+	}
+
+	/**
+	 * Step the rendered values toward the targets over `dtSeconds`. Returns
+	 * `true` when the state is still moving (rAF should keep running) or
+	 * `false` when every channel has snapped to its target (rAF can idle).
+	 */
+	step(dtSeconds: number): boolean {
+		// If the state is already settled, snap rendered = target once and
+		// skip the write that would otherwise produce a fresh object on
+		// every frame. Returning false signals the loop to idle.
+		if (this.isQuiescent()) {
+			const t = this.target;
+			const r = this.rendered;
+			if (
+				r.pitchDeg !== t.pitchDeg ||
+				r.bankDeg !== t.bankDeg ||
+				r.airspeedKnots !== t.airspeedKnots ||
+				r.altitudeFeet !== t.altitudeFeet ||
+				r.headingDeg !== t.headingDeg ||
+				r.verticalSpeedFpm !== t.verticalSpeedFpm
+			) {
+				this.rendered = { ...t };
+			}
+			return false;
+		}
+
 		const dt = clamp(dtSeconds, MIN_DT_SECONDS, MAX_DT_SECONDS);
 		const t = this.target;
 		const r = this.rendered;
@@ -201,6 +271,7 @@ export class PfdTickState {
 			headingDeg: lowPassStepHeading(r.headingDeg, t.headingDeg, dt, this.easing.heading),
 			verticalSpeedFpm: lowPassStep(r.verticalSpeedFpm, t.verticalSpeedFpm, dt, this.easing.verticalSpeed),
 		};
+		return true;
 	}
 }
 
@@ -211,6 +282,13 @@ export class PfdTickState {
  *
  * The loop pauses when `document.visibilityState === 'hidden'` and
  * resumes on the next visible event without skipping the easing.
+ *
+ * The loop also idles whenever `state.step()` reports the channels as
+ * quiescent. A small reactive heartbeat watches `state.target`; any
+ * write (slider drag, keyboard nudge, programmatic reset) re-arms the
+ * loop. This drops idle GPU/battery cost to zero on a settled PFD --
+ * previously the rAF ran at 60 Hz forever even when every channel was
+ * already at its target.
  */
 export function attachPfdTickLoop(state: PfdTickState): () => void {
 	if (typeof window === 'undefined') {
@@ -224,7 +302,11 @@ export function attachPfdTickLoop(state: PfdTickState): () => void {
 	const onFrame = (timestampMs: number): void => {
 		const dt = (timestampMs - lastTimestampMs) / 1000;
 		lastTimestampMs = timestampMs;
-		state.step(dt);
+		const stillMoving = state.step(dt);
+		if (!stillMoving) {
+			rafId = 0;
+			return;
+		}
 		rafId = window.requestAnimationFrame(onFrame);
 	};
 
@@ -248,12 +330,25 @@ export function attachPfdTickLoop(state: PfdTickState): () => void {
 		}
 	};
 
+	// Re-arm the loop whenever a target value changes. The reactive read on
+	// `state.target` makes this $effect re-run on each input nudge; if the
+	// loop has idled we restart it.
+	const targetWatcher = $effect.root(() => {
+		$effect(() => {
+			void state.target;
+			if (rafId === 0 && document.visibilityState !== 'hidden') {
+				start();
+			}
+		});
+	});
+
 	document.addEventListener('visibilitychange', onVisibilityChange);
 	start();
 
 	return () => {
 		stop();
 		document.removeEventListener('visibilitychange', onVisibilityChange);
+		targetWatcher();
 	};
 }
 

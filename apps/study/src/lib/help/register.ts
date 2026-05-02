@@ -1,36 +1,36 @@
 /**
  * Study-app help registration.
  *
- * Hands the study app's authored help pages over to `@ab/help` at
- * module-load time. The module-eval side-effect means:
+ * Hands the study app's authored help-page indices over to `@ab/help` at
+ * module-load time. Section bodies stay outside the always-loaded layout
+ * bundle: the registry's body loader uses dynamic `import()` keyed by id
+ * (see `./pages-index.ts`).
  *
- *   - Server: the pages are registered the first time any server module
- *     imports `$lib/help/register`. SvelteKit load functions that hit the
- *     registry on the server get populated results because the shared
+ * The module-eval side-effect means:
+ *
+ *   - Server: indices are registered the first time any server module
+ *     imports `$lib/help/register`. SvelteKit load functions hit the
+ *     registry server-side and get populated results because the shared
  *     module graph already evaluated this file.
- *   - Client: the same import registers the pages on the browser side
- *     after hydration, so the search palette opened from the nav has the
- *     same index the server used.
+ *   - Client: the same import registers indices on the browser side after
+ *     hydration; the search palette + InfoTip resolver use them. Bodies
+ *     load lazily on `/help/[id]` and PageHelp drawer open.
  *
- * Re-evaluation is safe: `helpRegistry.registerPages` is idempotent per
+ * Re-evaluation is safe: `helpRegistry.registerIndex` is idempotent per
  * appId (it replaces the app's prior pages, no accumulation). HMR rounds
  * therefore can't duplicate.
- *
- * The actual `HelpPage[]` content lives in `./pages.ts` so validation
- * scripts (run under Bun, which doesn't read Vite aliases) can import
- * the list directly and register it against the same registry singleton.
  */
 
 import { helpRegistry } from '@ab/help';
 import { setInfoTipHelpResolver } from '@ab/ui/lib/info-tip-resolver';
-import { studyHelpPages } from './pages';
+import { loadStudyHelpBody, studyHelpIndex } from './pages-index';
 
 const STUDY_APP_ID = 'study';
 
-export { studyHelpPages };
+export { studyHelpIndex };
 
 export function registerStudyHelp(): void {
-	helpRegistry.registerPages(STUDY_APP_ID, studyHelpPages);
+	helpRegistry.registerIndex(STUDY_APP_ID, studyHelpIndex, loadStudyHelpBody);
 	// Hand `@ab/ui` a registry-existence callback so InfoTip can dev-warn
 	// on broken `helpId` props without importing from `@ab/help`. Inverting
 	// this edge keeps the ui <-> help dependency acyclic.

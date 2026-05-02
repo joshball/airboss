@@ -38,7 +38,23 @@ const sections = $derived(page.sections);
 let scrolledActiveId = $state<string | null>(null);
 const activeId = $derived(scrolledActiveId ?? sections[0]?.id ?? null);
 
-function handleScroll(): void {
+/**
+ * Track which section heading is currently in view via `IntersectionObserver`.
+ * The previous implementation read `el.offsetTop` per section per scroll
+ * event -- on a long help page that forces N layouts per scroll. The
+ * observer reports intersection changes asynchronously without re-reading
+ * layout, so scrolling stays jank-free regardless of section count.
+ *
+ * We pick the section whose target has scrolled above the 80 px sticky-
+ * header threshold (same offset the legacy `scrollY + 80` used); when the
+ * page is at the top, fall back to the first intersecting section.
+ *
+ * Browsers without `IntersectionObserver` fall back to a passive scroll
+ * listener that performs the same `offsetTop` scan as before. This is
+ * unreachable in every browser SvelteKit supports today, but the guard
+ * keeps SSR + jsdom test environments correct.
+ */
+function handleScrollFallback(): void {
 	if (sections.length === 0) return;
 	const scrollY = window.scrollY + 80;
 	let current = sections[0]?.id ?? null;
@@ -52,11 +68,69 @@ function handleScroll(): void {
 
 $effect(() => {
 	if (typeof window === 'undefined') return;
-	window.addEventListener('scroll', handleScroll, { passive: true });
-	handleScroll();
-	return () => {
-		window.removeEventListener('scroll', handleScroll);
-	};
+	if (sections.length === 0) return;
+
+	if (typeof IntersectionObserver === 'undefined') {
+		window.addEventListener('scroll', handleScrollFallback, { passive: true });
+		handleScrollFallback();
+		return () => window.removeEventListener('scroll', handleScrollFallback);
+	}
+
+	// Map section id -> latest intersection ratio + above-top flag.
+	const states = new Map<string, { aboveTop: boolean; ratio: number }>();
+	for (const section of sections) {
+		states.set(section.id, { aboveTop: false, ratio: 0 });
+	}
+
+	function recompute(): void {
+		// Active section = last one whose top has crossed the threshold.
+		let lastAbove: string | null = null;
+		for (const section of sections) {
+			const state = states.get(section.id);
+			if (state?.aboveTop) lastAbove = section.id;
+		}
+		// At the top of the page no section has scrolled past yet -- pick
+		// the topmost intersecting section instead, matching legacy behaviour.
+		if (!lastAbove) {
+			for (const section of sections) {
+				const state = states.get(section.id);
+				if (state && state.ratio > 0) {
+					lastAbove = section.id;
+					break;
+				}
+			}
+		}
+		scrolledActiveId = lastAbove ?? sections[0]?.id ?? null;
+	}
+
+	const observer = new IntersectionObserver(
+		(entries) => {
+			for (const entry of entries) {
+				const id = entry.target.getAttribute('id');
+				if (!id) continue;
+				const state = states.get(id);
+				if (!state) continue;
+				state.aboveTop = entry.boundingClientRect.top <= 80;
+				state.ratio = entry.intersectionRatio;
+			}
+			recompute();
+		},
+		{
+			// `rootMargin: -80px 0 0 0` shifts the intersection edge down by
+			// the sticky-header offset so a section becomes "active" the
+			// moment its heading clears the header.
+			rootMargin: '-80px 0px 0px 0px',
+			threshold: [0, 1],
+		},
+	);
+
+	for (const section of sections) {
+		const el = document.getElementById(section.id);
+		if (el) observer.observe(el);
+	}
+
+	recompute();
+	return () => observer.disconnect();
 });
 </script>
 

@@ -27,7 +27,7 @@
 
 import { tick } from 'svelte';
 import { page } from '$app/state';
-import { createFocusTrap } from '../lib/focus-trap';
+import { createFocusTrap, type FocusTrap } from '../lib/focus-trap';
 import { getInfoTipHelpResolver } from '../lib/info-tip-resolver';
 
 let {
@@ -56,6 +56,10 @@ let triggerEl = $state<HTMLButtonElement | null>(null);
 let popoverEl = $state<HTMLDivElement | null>(null);
 let flipY = $state(false);
 let flipX = $state(false);
+// One trap per open instead of a fresh closure on every keydown -- the
+// trap is stateless today, so the per-keystroke rebuild was throwaway
+// allocation. Built when the popover mounts; nulled on close.
+let trap: FocusTrap | null = null;
 
 const popoverId = $derived(`infotip-${term.replace(/\s+/g, '-').toLowerCase()}`);
 const titleId = $derived(`${popoverId}-title`);
@@ -141,14 +145,7 @@ function handleTriggerKeyDown(event: KeyboardEvent): void {
 }
 
 function handlePopoverKeyDown(event: KeyboardEvent): void {
-	if (!popoverEl) return;
-	const trap = createFocusTrap(popoverEl, {
-		onEscape: () => {
-			hide();
-			triggerEl?.focus();
-		},
-	});
-	trap.handleKeyDown(event);
+	trap?.handleKeyDown(event);
 }
 
 function handleDocumentPointerDown(event: PointerEvent): void {
@@ -169,6 +166,23 @@ $effect(() => {
 		document.removeEventListener('pointerdown', handleDocumentPointerDown, true);
 		window.removeEventListener('resize', measureFlip);
 		window.removeEventListener('scroll', measureFlip);
+	};
+});
+
+// Build the focus trap once per open. The popover mounts inside
+// `{#if open}`, so we observe both `open` and `popoverEl` so the trap
+// rebuilds if the panel ref changes between opens.
+$effect(() => {
+	if (!open || !popoverEl) return;
+	trap = createFocusTrap(popoverEl, {
+		onEscape: () => {
+			hide();
+			triggerEl?.focus();
+		},
+	});
+	return () => {
+		trap?.release();
+		trap = null;
 	};
 });
 

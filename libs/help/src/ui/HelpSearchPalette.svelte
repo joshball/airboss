@@ -1,5 +1,5 @@
 <script lang="ts">
-import { ROUTES } from '@ab/constants';
+import { HELP_SEARCH_DEBOUNCE_MS, ROUTES } from '@ab/constants';
 import { goto } from '$app/navigation';
 import type { SearchResult, SearchResultSet } from '../schema/help-registry';
 import { search } from '../search';
@@ -17,6 +17,13 @@ import { search } from '../search';
  *
  * Results are grouped into aviation and help buckets. No cross-bucket
  * implicit ranking.
+ *
+ * Performance:
+ *   - Search runs against precomputed lowercased haystacks on each
+ *     `HelpPageIndex` -- per-keystroke `String.toLowerCase` allocations
+ *     are amortised at registration time.
+ *   - Keystrokes debounce by `HELP_SEARCH_DEBOUNCE_MS` so a fast typist
+ *     fires at most one search per debounce window instead of per char.
  */
 
 let {
@@ -29,14 +36,30 @@ let {
 
 let input = $state<HTMLInputElement | null>(null);
 let rawQuery = $state('');
-const results = $derived<SearchResultSet>(search(rawQuery));
+/**
+ * Debounced view of `rawQuery`. The search runs only when this lands;
+ * the input box updates `rawQuery` on every keystroke so the field still
+ * feels live.
+ */
+let debouncedQuery = $state('');
+const results = $derived<SearchResultSet>(search(debouncedQuery));
 let focusedBucket = $state<'aviation' | 'help'>('aviation');
 let focusedIndex = $state(0);
 
-// Reset focus whenever the query changes. We depend on `rawQuery` (not
-// `results`) so the effect never reads state it writes, which would loop.
 $effect(() => {
-	void rawQuery;
+	const next = rawQuery;
+	if (next === debouncedQuery) return;
+	const handle = window.setTimeout(() => {
+		debouncedQuery = next;
+	}, HELP_SEARCH_DEBOUNCE_MS);
+	return () => window.clearTimeout(handle);
+});
+
+// Reset focus whenever the debounced query lands. We depend on
+// `debouncedQuery` (not `results`) so the effect never reads state it
+// writes, which would loop.
+$effect(() => {
+	void debouncedQuery;
 	focusedIndex = 0;
 	focusedBucket = results.aviation.length > 0 ? 'aviation' : results.help.length > 0 ? 'help' : 'aviation';
 });

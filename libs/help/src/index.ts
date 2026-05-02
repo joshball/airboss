@@ -28,8 +28,11 @@ export {
 	sourceFromUrl,
 } from './schema/external-ref';
 export type { HelpPage } from './schema/help-page';
+export type { HelpPageBody } from './schema/help-page-body';
+export type { HelpPageIndex, HelpSectionIndex } from './schema/help-page-index';
 export type {
 	FilterKey,
+	HelpBodyLoader,
 	HelpRegistry,
 	ParsedFilter,
 	ParsedQuery,
@@ -40,7 +43,7 @@ export type {
 export type { HelpSection } from './schema/help-section';
 export type { HelpTags } from './schema/help-tags';
 export { listAviationReferences, search } from './search';
-export { matchesFilters, rankBucket } from './search-core';
+export { type IndexedRankInput, matchesFilters, rankBucket, rankBucketIndexed } from './search-core';
 export {
 	type HelpValidationIssue,
 	type HelpValidationOptions,

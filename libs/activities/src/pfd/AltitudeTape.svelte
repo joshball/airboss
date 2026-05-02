@@ -60,23 +60,40 @@ interface Tick {
 	labeled: boolean;
 }
 
-const ticks = $derived.by<readonly Tick[]>(() => {
-	const lo = Math.max(
-		MIN_TAPE_FT,
-		Math.floor((alt - HALF_VISIBLE_FT) / MINOR_TICK_INTERVAL_FT) * MINOR_TICK_INTERVAL_FT,
-	);
-	const hi = Math.min(
-		MAX_TAPE_FT,
-		Math.ceil((alt + HALF_VISIBLE_FT) / MINOR_TICK_INTERVAL_FT) * MINOR_TICK_INTERVAL_FT,
-	);
+/**
+ * Static tick ladder spanning the entire tape range. Computed once at
+ * module init -- with `MIN_TAPE_FT=0`, `MAX_TAPE_FT=30_000`, and
+ * `MINOR_TICK_INTERVAL_FT=100` that's 301 entries, a trivial one-time
+ * cost. The visible window slices this ladder by index instead of
+ * allocating a fresh ~50-entry tick array per frame.
+ */
+const FULL_LADDER: readonly Tick[] = (() => {
 	const out: Tick[] = [];
-	for (let ft = lo; ft <= hi; ft += MINOR_TICK_INTERVAL_FT) {
-		const isMajor = ft % MAJOR_TICK_INTERVAL_FT === 0;
-		const isLabeled = ft % LABEL_INTERVAL_FT === 0;
-		out.push({ ft, major: isMajor, labeled: isLabeled });
+	for (let ft = MIN_TAPE_FT; ft <= MAX_TAPE_FT; ft += MINOR_TICK_INTERVAL_FT) {
+		out.push({
+			ft,
+			major: ft % MAJOR_TICK_INTERVAL_FT === 0,
+			labeled: ft % LABEL_INTERVAL_FT === 0,
+		});
 	}
 	return out;
-});
+})();
+
+/**
+ * Snap visible-band boundaries to `MINOR_TICK_INTERVAL_FT` so the slice
+ * indices change only when the altitude actually crosses a tick. Sub-foot
+ * altitude motion no longer churns the ticks array between frames.
+ */
+const bandLoIndex = $derived(
+	Math.max(0, Math.floor((alt - HALF_VISIBLE_FT) / MINOR_TICK_INTERVAL_FT) - MIN_TAPE_FT / MINOR_TICK_INTERVAL_FT),
+);
+const bandHiIndex = $derived(
+	Math.min(
+		FULL_LADDER.length - 1,
+		Math.ceil((alt + HALF_VISIBLE_FT) / MINOR_TICK_INTERVAL_FT) - MIN_TAPE_FT / MINOR_TICK_INTERVAL_FT,
+	),
+);
+const ticks = $derived<readonly Tick[]>(FULL_LADDER.slice(bandLoIndex, bandHiIndex + 1));
 
 function tapeY(ft: number): number {
 	return CENTER_Y - ft * PIXELS_PER_FOOT;
