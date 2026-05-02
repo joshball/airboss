@@ -380,6 +380,30 @@ describe('getCredentialIdsCoveredBy', () => {
 		// All edges in this fixture are 'required', so the two should match.
 		expect(new Set(required)).toEqual(new Set(all));
 	});
+
+	it('issues a single DB round-trip regardless of DAG depth', async () => {
+		// Wrap the real db in a proxy that counts `execute` invocations. The
+		// CTE rewrite collapses the BFS into one statement; the BFS regression
+		// would show up as N+1 (one per layer). CFII has depth 3 (CFII -> CFI
+		// -> COMMERCIAL/INSTRUMENT -> PRIVATE), so the old loop ran 4 queries.
+		let executeCount = 0;
+		const spyDb = new Proxy(db, {
+			get(target, prop, receiver) {
+				if (prop === 'execute') {
+					return (...args: unknown[]) => {
+						executeCount += 1;
+						// biome-ignore lint/suspicious/noExplicitAny: forwarding to real drizzle execute
+						return (target as any).execute(...args);
+					};
+				}
+				return Reflect.get(target, prop, receiver);
+			},
+		});
+		// biome-ignore lint/suspicious/noExplicitAny: proxy stand-in for the structurally-identical Db type
+		const ids = await getCredentialIdsCoveredBy(CFII_ID, {}, spyDb as any);
+		expect(executeCount).toBe(1);
+		expect(new Set(ids)).toEqual(new Set([CFII_ID, CFI_ID, INSTRUMENT_ID, COMMERCIAL_ID, PRIVATE_ID]));
+	});
 });
 
 describe('getCertsCoveredBy', () => {

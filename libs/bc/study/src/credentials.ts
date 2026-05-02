@@ -130,11 +130,16 @@ export async function getCredentialPrereqs(credentialId: string, db: Db = defaul
  * credential ids reachable from `credentialId` through `credential_prereq`,
  * including `credentialId` itself.
  *
- * Visited-set defends against malformed rows (the seed's topological sort
- * should have caught any cycle, but a hand-edited DB row could still slip in).
- *
  * Set the `kind` option to `'required'` to walk only hard prereqs; default
  * walks every kind (required AND recommended AND experience).
+ *
+ * Implementation note: this is a single Postgres `WITH RECURSIVE` CTE issued
+ * via Drizzle's `sql\`\`` template. The CLAUDE.md "Drizzle ORM only / no raw
+ * SQL" rule has a deliberate exception for graph walks -- expressing a
+ * fixpoint traversal through Drizzle's query builder would require one
+ * round-trip per BFS layer, which is exactly the cost we are removing here.
+ * Postgres' `UNION` (not `UNION ALL`) gives us the visited-set guard for
+ * free, so a hand-edited cyclic edge can't loop the recursion.
  */
 export async function getCredentialIdsCoveredBy(
 	credentialId: string,
@@ -142,28 +147,21 @@ export async function getCredentialIdsCoveredBy(
 	db: Db = defaultDb,
 ): Promise<string[]> {
 	const kindFilter = options.kind ?? 'all';
-	const out = new Set<string>([credentialId]);
-	const queue: string[] = [credentialId];
-	const visited = new Set<string>();
-	while (queue.length > 0) {
-		const current = queue.shift();
-		if (current === undefined) break;
-		if (visited.has(current)) continue;
-		visited.add(current);
-		const conditions = [eq(credentialPrereq.credentialId, current)];
-		if (kindFilter === 'required') {
-			conditions.push(eq(credentialPrereq.kind, CREDENTIAL_PREREQ_KINDS.REQUIRED));
-		}
-		const where = conditions.length === 1 ? conditions[0] : and(...conditions);
-		const rows = await db.select({ prereqId: credentialPrereq.prereqId }).from(credentialPrereq).where(where);
-		for (const r of rows) {
-			if (!out.has(r.prereqId)) {
-				out.add(r.prereqId);
-				queue.push(r.prereqId);
-			}
-		}
-	}
-	return [...out];
+	const requiredKind = CREDENTIAL_PREREQ_KINDS.REQUIRED;
+	const kindClause = kindFilter === 'required' ? sql`AND cp.kind = ${requiredKind}` : sql``;
+	const result = await db.execute(sql`
+		WITH RECURSIVE covered(id) AS (
+			SELECT ${credentialId}::text
+			UNION
+			SELECT cp.prereq_id
+			FROM study.credential_prereq cp
+			JOIN covered c ON c.id = cp.credential_id
+			WHERE TRUE ${kindClause}
+		)
+		SELECT id FROM covered
+	`);
+	const rows = result as unknown as ReadonlyArray<{ id: string }>;
+	return rows.map((r) => r.id);
 }
 
 /**
