@@ -6,9 +6,9 @@
  */
 
 import { APP_SURFACES, CONCEPT_GROUPS, HELP_KINDS } from '@ab/constants';
-import type { HelpPage } from '@ab/help';
+import type { HelpPageIndex } from '@ab/help';
 
-export const conceptKnowledgeGraph: HelpPage = {
+export const conceptKnowledgeGraphIndex: HelpPageIndex = {
 	id: 'concept-knowledge-graph',
 	title: 'Knowledge graph',
 	summary: "airboss's model of aviation knowledge: typed nodes, typed edges, and what the engine does with them.",
@@ -18,87 +18,15 @@ export const conceptKnowledgeGraph: HelpPage = {
 		conceptGroup: CONCEPT_GROUPS.AIRBOSS_ARCHITECTURE,
 		keywords: ['knowledge graph', 'node', 'edge', 'prerequisite', 'topic', 'procedure', 'teach node'],
 	},
-	concept: true,
+	sections: [
+		{ id: 'overview', title: 'Overview' },
+		{ id: 'node-types', title: 'Node types' },
+		{ id: 'edges-and-prerequisites', title: 'Edges and prerequisites' },
+		{ id: 'what-the-engine-does', title: 'What the engine does with it' },
+	],
+	searchHaystack:
+		'airboss\'s model of aviation knowledge: typed nodes, typed edges, and what the engine does with them. aviation knowledge isn\'t a flat list of facts -- it\'s a web. knowing "vy" is useful only when linked to "climb performance," "density altitude," and "engine-failure-after-takeoff" procedures. airboss models this web explicitly as a _knowledge graph_: a set of typed nodes connected by typed edges.\n\nthe graph drives three things:\n\n1. **authoring.** content authors write one node at a time, declaring its prerequisites. the graph emerges from those declarations.\n2. **sessions.** the session engine walks the graph to decide what to surface (unstarted prerequisites before their dependents, cold domains when diversifying, etc.).\n3. **pages.** each knowledge-graph page in the app renders a node with its immediate neighbors, letting you navigate along edges. three kinds of nodes, each with different authoring and scheduling rules.\n\n| type           | purpose                                                                         | example                                                                 | has cards? |\n| -------------- | ------------------------------------------------------------------------------- | ----------------------------------------------------------------------- | ---------- |\n| **topic**      | an aviation concept. the unit of knowledge the graph is built around.           | "density altitude", "ils approach", "uncontrolled airspace procedures". | yes        |\n| **procedure**  | an ordered set of steps tied to a scenario or action.                           | "engine-failure-after-takeoff response", "vor cross-check".             | yes        |\n| **teach node** | a learning unit: one objective, built from several topic/procedure nodes.       | "understand how to plan a vfr cross-country in mountainous terrain."    | indirect   |\n\ntopic and procedure nodes are the atoms. teach nodes are the compositions: each one cites the topic/procedure nodes it teaches and defines the pedagogy (scenarios, guided discovery, check questions).\n\n:::tip\ndiscovery-first pedagogy applies at the teach-node level. topic nodes present the concept directly; teach nodes lead with a situation or question and let the learner reason toward the same concept. see [adr 011](/knowledge) for the full principle.\n::: edges carry type too. the most important one is _prerequisite_.\n\n| edge type     | meaning                                                                | effect on sessions                                                    |\n| ------------- | ---------------------------------------------------------------------- | --------------------------------------------------------------------- |\n| prerequisite  | a -> b means "you should understand a before b is meaningful."         | expand/diversify won\'t surface b if a is unstarted.                   |\n| related       | bidirectional. "these nodes come up together."                         | drives "see also" suggestions on node pages.                          |\n| subsumes      | a -> b means "a covers everything in b plus more."                     | avoids double-counting coverage metrics.                              |\n\n> "a graph without prerequisites is just a list. a graph without _related_ edges is just a tree. we need both." -- authoring-system design notes\n\n:::example\nnode: "localizer back-course approaches." prerequisites: "ils basics," "reverse sensing concept." related: "ndb approaches," "circling minimums." subsumes: (none).\n\na session that tries to expand this node will refuse to surface it until both prerequisites are done. a session that has just surfaced it will suggest the related nodes as next steps.\n::: the session engine treats the graph as a live picture of your knowledge and picks items against it.\n\n:::note\n**coverage.** the engine tracks which nodes you have _started_ (at least one card reviewed), which are _progressing_ (cards not yet mature), and which are _mature_ (fsrs stability above threshold). domain-level rollups drive the "unused domain" and "cold domain" signals.\n:::\n\n:::note\n**prerequisites in action.** if expand wants to add a new node and all candidates have unstarted prerequisites, the engine instead surfaces the prerequisite. you rarely need to think about this; it just means sessions feel "connected" instead of scattershot.\n:::\n\n:::note\n**teach-node coverage.** when a teach-node is authored as a session module, completing it requires mastery of each cited topic/procedure node. the rollup is automatic; the authoring surface never duplicates cards.\n::: knowledge graph node edge prerequisite topic procedure teach node',
 	related: ['concept-session-slices', 'concept-spaced-rep', 'knowledge-graph'],
 	reviewedAt: '2026-04-23',
-	sections: [
-		{
-			id: 'overview',
-			title: 'Overview',
-			body: `Aviation knowledge isn't a flat list of facts -- it's a web. Knowing "Vy" is useful only when linked to "climb performance," "density altitude," and "engine-failure-after-takeoff" procedures. airboss models this web explicitly as a _knowledge graph_: a set of typed nodes connected by typed edges.
-
-The graph drives three things:
-
-1. **Authoring.** Content authors write one node at a time, declaring its prerequisites. The graph emerges from those declarations.
-2. **Sessions.** The [[session engine::concept-session-slices]] walks the graph to decide what to surface (unstarted prerequisites before their dependents, cold domains when diversifying, etc.).
-3. **Pages.** Each knowledge-graph page in the app renders a node with its immediate neighbors, letting you navigate along edges.`,
-		},
-		{
-			id: 'node-types',
-			title: 'Node types',
-			body: `Three kinds of nodes, each with different authoring and scheduling rules.
-
-| Type           | Purpose                                                                         | Example                                                                 | Has cards? |
-| -------------- | ------------------------------------------------------------------------------- | ----------------------------------------------------------------------- | ---------- |
-| **Topic**      | An aviation concept. The unit of knowledge the graph is built around.           | "Density altitude", "ILS approach", "Uncontrolled airspace procedures". | Yes        |
-| **Procedure**  | An ordered set of steps tied to a scenario or action.                           | "Engine-failure-after-takeoff response", "VOR cross-check".             | Yes        |
-| **Teach node** | A learning unit: one objective, built from several topic/procedure nodes.       | "Understand how to plan a VFR cross-country in mountainous terrain."    | Indirect   |
-
-Topic and procedure nodes are the atoms. Teach nodes are the compositions: each one cites the topic/procedure nodes it teaches and defines the pedagogy (scenarios, guided discovery, check questions).
-
-:::tip
-Discovery-first pedagogy applies at the teach-node level. Topic nodes present the concept directly; teach nodes lead with a situation or question and let the learner reason toward the same concept. See [ADR 011](/knowledge) for the full principle.
-:::`,
-		},
-		{
-			id: 'edges-and-prerequisites',
-			title: 'Edges and prerequisites',
-			body: `Edges carry type too. The most important one is _prerequisite_.
-
-| Edge type     | Meaning                                                                | Effect on sessions                                                    |
-| ------------- | ---------------------------------------------------------------------- | --------------------------------------------------------------------- |
-| prerequisite  | A -> B means "you should understand A before B is meaningful."         | Expand/Diversify won't surface B if A is unstarted.                   |
-| related       | Bidirectional. "These nodes come up together."                         | Drives "see also" suggestions on node pages.                          |
-| subsumes      | A -> B means "A covers everything in B plus more."                     | Avoids double-counting coverage metrics.                              |
-
-> "A graph without prerequisites is just a list. A graph without _related_ edges is just a tree. We need both." -- authoring-system design notes
-
-:::example
-Node: "Localizer back-course approaches." Prerequisites: "ILS basics," "Reverse sensing concept." Related: "NDB approaches," "Circling minimums." Subsumes: (none).
-
-A session that tries to Expand this node will refuse to surface it until both prerequisites are done. A session that has just surfaced it will suggest the related nodes as next steps.
-:::`,
-		},
-		{
-			id: 'what-the-engine-does',
-			title: 'What the engine does with it',
-			body: `The session engine treats the graph as a live picture of your knowledge and picks items against it.
-
-:::note
-**Coverage.** The engine tracks which nodes you have _started_ (at least one card reviewed), which are _progressing_ (cards not yet mature), and which are _mature_ (FSRS stability above threshold). Domain-level rollups drive the "Unused domain" and "Cold domain" signals.
-:::
-
-:::note
-**Prerequisites in action.** If Expand wants to add a new node and all candidates have unstarted prerequisites, the engine instead surfaces the prerequisite. You rarely need to think about this; it just means sessions feel "connected" instead of scattershot.
-:::
-
-:::note
-**Teach-node coverage.** When a teach-node is authored as a session module, completing it requires mastery of each cited topic/procedure node. The rollup is automatic; the authoring surface never duplicates cards.
-:::`,
-		},
-	],
-	externalRefs: [
-		{
-			title: 'Knowledge graph (Wikipedia)',
-			url: 'https://en.wikipedia.org/wiki/Knowledge_graph',
-			source: 'wikipedia',
-			note: 'General definition of typed-node/typed-edge knowledge bases.',
-		},
-		{
-			title: 'Concept map (Wikipedia)',
-			url: 'https://en.wikipedia.org/wiki/Concept_map',
-			source: 'wikipedia',
-			note: "Ausubel's pedagogical roots of the graph-based knowledge representation used here.",
-		},
-	],
+	concept: true,
 };

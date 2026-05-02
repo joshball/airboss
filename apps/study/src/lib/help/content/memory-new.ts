@@ -11,15 +11,14 @@
  * link to from per-field InfoTips.
  */
 
-import { APP_SURFACES, HELP_KINDS, ROUTES } from '@ab/constants';
-import type { HelpPage } from '@ab/help';
+import { APP_SURFACES, HELP_KINDS } from '@ab/constants';
+import type { HelpPageIndex } from '@ab/help';
 
-export const memoryNew: HelpPage = {
+export const memoryNewIndex: HelpPageIndex = {
 	id: 'memory-new',
 	title: 'New memory card',
 	summary:
 		'How to author a memory card that spaced repetition can actually work with: one fact, tight front, tight back, the right domain and tags.',
-	documents: ROUTES.MEMORY_NEW,
 	tags: {
 		appSurface: [APP_SURFACES.MEMORY],
 		helpKind: HELP_KINDS.HOW_TO,
@@ -37,6 +36,17 @@ export const memoryNew: HelpPage = {
 			'minimum-information',
 		],
 	},
+	sections: [
+		{ id: 'minimum-information', title: 'Minimum-information principle' },
+		{ id: 'front-back', title: 'Front and back' },
+		{ id: 'domain', title: 'Domain' },
+		{ id: 'type', title: 'Type' },
+		{ id: 'tags', title: 'Tags' },
+		{ id: 'save-and-add-another', title: 'Save and add another' },
+	],
+	searchHaystack:
+		'how to author a memory card that spaced repetition can actually work with: one fact, tight front, tight back, the right domain and tags. write cards small. one fact per card. a card that asks _two_ things can\'t be rated honestly: you got one right and one wrong, so what was it, good or again? neither is true, and the scheduler learns a lie.\n\n:::tip\nif the back of a card has a comma, an "and," or a numbered list longer than three items, split it. two narrow cards always beat one wide card. you\'ll review them faster, rate them more accurately, and the scheduler will converge on the right interval for each.\n:::\n\nthe classic formulation is piotr wozniak\'s "make it as simple as possible, but no simpler." in practice that means: one concept, one relationship, one fact. a regulation\'s number on the front, the meaning on the back. a procedure\'s trigger on the front, the response on the back. not "everything about vfr weather minimums" on one card. the front is the cue. the back is the answer. the cue has to be specific enough that the answer is unambiguous.\n\n**front guidance:**\n\n- pose a question, not a topic. "what is vr?" beats "vr" as a front.\n- include enough context that you can\'t answer two different ways. "what\'s the minimum visibility for vfr at night in class g below 1,200 agl?" is a good front. "vfr visibility?" is not.\n- avoid pronouns that point at the back. if the front contains "it," the back usually has to repeat itself.\n\n**back guidance:**\n\n- shortest true answer. not a paragraph.\n- if the answer has a number and a unit, include both. "3 statute miles," not "3."\n- don\'t cheat the front by putting the question context on the back. the back is the answer only.\n\nactive recall is the mechanism that makes cards work; a card that doesn\'t force recall is just a re-reading exercise. tight fronts + tight backs maximize the recall signal. every card belongs to one domain (weather, regs, procedures, aerodynamics, systems, etc.). the domain is not decorative: it drives three things.\n\n1. **filtering.** the [browse page](/help/memory-browse) and the dashboard state groupings let you narrow to a single domain, which is how you study a single area without distraction.\n2. **session mix.** plans and sessions can weight domains differently. misfiling a weather card as regs means your weather sessions miss it.\n3. **weak-area detection.** the dashboard weak areas panel computes per-domain accuracy. if a card is misfiled, its misses land in the wrong column.\n\npick the domain the card\'s _back_ is about, not the front. a card whose front is a metar and whose back is a class-g visibility rule is a regs card, not a weather card. the type selector picks the rendering and rating shape of the card. today the only type is **basic**: a front (cue), a back (answer), reveal the back, rate against the four fsrs ratings (again / hard / good / easy).\n\nfuture types may include cloze deletion (fill-in-the-blank), image-occlusion (hide-a-region on a diagram), and typed-answer (cheap typo-tolerant string match). they aren\'t shipped yet; every card in the system today is basic.\n\nif a card doesn\'t fit basic cleanly, that\'s usually a signal to split it into two basic cards rather than wait for the type that fits. see [minimum-information principle](#minimum-information) above. tags are free-text labels you attach to a card. unlike domain, tags are optional, multi-valued, and user-defined. use them for any grouping the fixed domain list doesn\'t cover: cross-cuts ("checkride-prep"), personal emphasis ("weak-spot"), source tracking ("gleim-ch4"), or scenario linkage.\n\ntags power filtering on the [browse page](/help/memory-browse) and show up as badges on [card detail pages](/help/memory-card). they don\'t feed the scheduler or any metric; they\'re there so you can find your own cards.\n\n:::note\ntags are not synonyms for domain. a single-domain card can have many tags; a card with no tags is fine. use them when they earn their keep and ignore them when they don\'t.\n::: the "save and add another" button saves the current card and resets the form for the next one, with domain and tags carried forward. the front and back fields clear; the type stays on basic.\n\nthis is the right button when you\'re authoring a batch of cards for the same topic. set domain and tags once, then fire cards at it without re-selecting the same dropdowns for each. the "save" button alone saves and returns to the deck; pick it for the last card in a batch.\n\nbatch-authoring cards in a single sitting (10-20 at a time, all same domain) is faster and produces more consistent card quality than drip-feeding one card every few days. memory new create author card front back domain type tags minimum-information',
+	documents: '/memory/new',
 	related: [
 		'memory-dashboard',
 		'memory-browse',
@@ -47,76 +57,4 @@ export const memoryNew: HelpPage = {
 		'concept-active-recall',
 	],
 	reviewedAt: '2026-04-24',
-	sections: [
-		{
-			id: 'minimum-information',
-			title: 'Minimum-information principle',
-			body: `Write cards small. One fact per card. A card that asks _two_ things can't be rated honestly: you got one right and one wrong, so what was it, Good or Again? Neither is true, and the scheduler learns a lie.
-
-:::tip
-If the back of a card has a comma, an "and," or a numbered list longer than three items, split it. Two narrow cards always beat one wide card. You'll review them faster, rate them more accurately, and the scheduler will converge on the right interval for each.
-:::
-
-The classic formulation is Piotr Wozniak's "make it as simple as possible, but no simpler." In practice that means: one concept, one relationship, one fact. A regulation's number on the front, the meaning on the back. A procedure's trigger on the front, the response on the back. Not "everything about VFR weather minimums" on one card.`,
-		},
-		{
-			id: 'front-back',
-			title: 'Front and back',
-			body: `The front is the cue. The back is the answer. The cue has to be specific enough that the answer is unambiguous.
-
-**Front guidance:**
-
-- Pose a question, not a topic. "What is VR?" beats "VR" as a front.
-- Include enough context that you can't answer two different ways. "What's the minimum visibility for VFR at night in Class G below 1,200 AGL?" is a good front. "VFR visibility?" is not.
-- Avoid pronouns that point at the back. If the front contains "it," the back usually has to repeat itself.
-
-**Back guidance:**
-
-- Shortest true answer. Not a paragraph.
-- If the answer has a number and a unit, include both. "3 statute miles," not "3."
-- Don't cheat the front by putting the question context on the back. The back is the answer only.
-
-[[Active recall::concept-active-recall]] is the mechanism that makes cards work; a card that doesn't force recall is just a re-reading exercise. Tight fronts + tight backs maximize the recall signal.`,
-		},
-		{
-			id: 'domain',
-			title: 'Domain',
-			body: `Every card belongs to one domain (Weather, Regs, Procedures, Aerodynamics, Systems, etc.). The domain is not decorative: it drives three things.
-
-1. **Filtering.** The [browse page](/help/memory-browse) and the dashboard state groupings let you narrow to a single domain, which is how you study a single area without distraction.
-2. **Session mix.** Plans and sessions can weight domains differently. Misfiling a Weather card as Regs means your Weather sessions miss it.
-3. **Weak-area detection.** The dashboard Weak Areas panel computes per-domain accuracy. If a card is misfiled, its misses land in the wrong column.
-
-Pick the domain the card's _back_ is about, not the front. A card whose front is a METAR and whose back is a Class-G visibility rule is a Regs card, not a Weather card.`,
-		},
-		{
-			id: 'type',
-			title: 'Type',
-			body: `The Type selector picks the rendering and rating shape of the card. Today the only type is **Basic**: a front (cue), a back (answer), reveal the back, rate against the four FSRS ratings (Again / Hard / Good / Easy).
-
-Future types may include cloze deletion (fill-in-the-blank), image-occlusion (hide-a-region on a diagram), and typed-answer (cheap typo-tolerant string match). They aren't shipped yet; every card in the system today is Basic.
-
-If a card doesn't fit Basic cleanly, that's usually a signal to split it into two Basic cards rather than wait for the type that fits. See [Minimum-information principle](#minimum-information) above.`,
-		},
-		{
-			id: 'tags',
-			title: 'Tags',
-			body: `Tags are free-text labels you attach to a card. Unlike domain, tags are optional, multi-valued, and user-defined. Use them for any grouping the fixed domain list doesn't cover: cross-cuts ("checkride-prep"), personal emphasis ("weak-spot"), source tracking ("gleim-ch4"), or scenario linkage.
-
-Tags power filtering on the [browse page](/help/memory-browse) and show up as badges on [card detail pages](/help/memory-card). They don't feed the scheduler or any metric; they're there so you can find your own cards.
-
-:::note
-Tags are not synonyms for domain. A single-domain card can have many tags; a card with no tags is fine. Use them when they earn their keep and ignore them when they don't.
-:::`,
-		},
-		{
-			id: 'save-and-add-another',
-			title: 'Save and add another',
-			body: `The "Save and add another" button saves the current card and resets the form for the next one, with domain and tags carried forward. The front and back fields clear; the type stays on Basic.
-
-This is the right button when you're authoring a batch of cards for the same topic. Set domain and tags once, then fire cards at it without re-selecting the same dropdowns for each. The "Save" button alone saves and returns to the deck; pick it for the last card in a batch.
-
-Batch-authoring cards in a single sitting (10-20 at a time, all same domain) is faster and produces more consistent card quality than drip-feeding one card every few days.`,
-		},
-	],
 };

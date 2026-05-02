@@ -1,8 +1,10 @@
 import { APP_SURFACES, HELP_KINDS } from '@ab/constants';
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { parseQuery } from './query-parser';
 import { helpRegistry } from './registry';
 import type { HelpPage } from './schema/help-page';
+import type { HelpPageBody } from './schema/help-page-body';
+import type { HelpPageIndex } from './schema/help-page-index';
 
 function makePage(overrides: Partial<HelpPage>): HelpPage {
 	return {
@@ -138,5 +140,133 @@ describe('helpRegistry - clear', () => {
 		helpRegistry.clear();
 		expect(helpRegistry.getAllPages()).toHaveLength(0);
 		expect(helpRegistry.getById('a')).toBeUndefined();
+	});
+});
+
+// -------- registerIndex / loadById (lazy-load path) --------
+
+function makeIndex(overrides: Partial<HelpPageIndex>): HelpPageIndex {
+	return {
+		id: 'idx-1',
+		title: 'Sample',
+		summary: 'A sample help page.',
+		tags: {
+			appSurface: [APP_SURFACES.GLOBAL],
+			helpKind: HELP_KINDS.CONCEPT,
+		},
+		sections: [{ id: 'lede', title: 'Overview' }],
+		searchHaystack: 'a sample help page. plain-text body.',
+		...overrides,
+	};
+}
+
+function makeBody(id: string, overrides: Partial<HelpPageBody> = {}): HelpPageBody {
+	return {
+		id,
+		sections: [{ id: 'lede', title: 'Overview', body: 'Plain-text body.' }],
+		...overrides,
+	};
+}
+
+describe('helpRegistry - registerIndex (lazy)', () => {
+	it('exposes metadata-only pages with empty section bodies before loadById', () => {
+		const loader = vi.fn(async (id: string) => makeBody(id));
+		helpRegistry.registerIndex('study', [makeIndex({ id: 'a', title: 'Alpha' })], loader);
+
+		const page = helpRegistry.getById('a');
+		expect(page?.title).toBe('Alpha');
+		expect(page?.sections).toHaveLength(1);
+		expect(page?.sections[0]?.body).toBe('');
+		expect(loader).not.toHaveBeenCalled();
+	});
+
+	it('loadById invokes loader and caches the merged body', async () => {
+		const loader = vi.fn(async (id: string) =>
+			makeBody(id, { sections: [{ id: 'lede', title: 'Overview', body: 'Loaded body text.' }] }),
+		);
+		helpRegistry.registerIndex('study', [makeIndex({ id: 'b' })], loader);
+
+		const first = await helpRegistry.loadById('b');
+		expect(first?.sections[0]?.body).toBe('Loaded body text.');
+		expect(loader).toHaveBeenCalledTimes(1);
+
+		// Subsequent calls reuse the cached page.
+		const second = await helpRegistry.loadById('b');
+		expect(second).toBe(first);
+		expect(loader).toHaveBeenCalledTimes(1);
+
+		// `getById` now returns the loaded page.
+		expect(helpRegistry.getById('b')?.sections[0]?.body).toBe('Loaded body text.');
+	});
+
+	it('loadById returns undefined for unknown ids', async () => {
+		helpRegistry.registerIndex('study', [makeIndex({ id: 'c' })], async () => undefined);
+		const result = await helpRegistry.loadById('does-not-exist');
+		expect(result).toBeUndefined();
+	});
+
+	it('concurrent loadById calls share a single in-flight promise', async () => {
+		let resolved = 0;
+		const loader = vi.fn(async (id: string) => {
+			resolved += 1;
+			await new Promise((r) => setTimeout(r, 5));
+			return makeBody(id);
+		});
+		helpRegistry.registerIndex('study', [makeIndex({ id: 'd' })], loader);
+
+		const [a, b] = await Promise.all([helpRegistry.loadById('d'), helpRegistry.loadById('d')]);
+		expect(a).toBe(b);
+		expect(loader).toHaveBeenCalledTimes(1);
+		expect(resolved).toBe(1);
+	});
+
+	it('search uses the precomputed haystack from the index entry', () => {
+		const loader = vi.fn(async (id: string) => makeBody(id));
+		helpRegistry.registerIndex(
+			'study',
+			[
+				makeIndex({
+					id: 'e',
+					title: 'Calibration',
+					summary: 'Confidence vs accuracy.',
+					searchHaystack: 'confidence vs accuracy. brier score discussion lives here.',
+				}),
+			],
+			loader,
+		);
+
+		const hits = helpRegistry.search(parseQuery('brier'));
+		expect(hits.map((h) => h.id)).toEqual(['e']);
+		expect(hits[0]?.rankBucket).toBe(3);
+		// Search did not need the body to find the hit.
+		expect(loader).not.toHaveBeenCalled();
+	});
+
+	it('re-registering an app via registerIndex replaces prior entries', () => {
+		const loader = vi.fn(async (id: string) => makeBody(id));
+		helpRegistry.registerIndex('study', [makeIndex({ id: 'f1' })], loader);
+		helpRegistry.registerIndex(
+			'study',
+			[makeIndex({ id: 'f2', title: 'Replaced' })],
+			vi.fn(async (id: string) => makeBody(id)),
+		);
+		expect(helpRegistry.getById('f1')).toBeUndefined();
+		expect(helpRegistry.getById('f2')?.title).toBe('Replaced');
+	});
+
+	it('eager registerPages can replace a prior lazy registerIndex for the same app', async () => {
+		helpRegistry.registerIndex(
+			'study',
+			[makeIndex({ id: 'g' })],
+			vi.fn(async (id: string) => makeBody(id)),
+		);
+		helpRegistry.registerPages('study', [makePage({ id: 'g', title: 'Eager replacement' })]);
+
+		const page = helpRegistry.getById('g');
+		expect(page?.title).toBe('Eager replacement');
+		expect(page?.sections[0]?.body).toBe('Plain-text body.');
+		// loadById on an eagerly-registered page is a no-op (no loader needed).
+		const loaded = await helpRegistry.loadById('g');
+		expect(loaded?.sections[0]?.body).toBe('Plain-text body.');
 	});
 });

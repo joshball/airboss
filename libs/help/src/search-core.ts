@@ -27,6 +27,51 @@ export interface RankInput {
 }
 
 /**
+ * Variant of `rankBucket` that takes pre-lowercased fields and a single
+ * pre-built haystack (summary + bodies + keywords joined and lowercased).
+ * Used by the help registry's hot search path so each keystroke skips the
+ * per-page `String.prototype.toLowerCase` allocations the original
+ * `rankBucket` performs.
+ *
+ * Semantics mirror `rankBucket`: bucket 1 = exact title/alias, bucket 2 =
+ * substring title/alias, bucket 3 = substring keyword or haystack.
+ */
+export interface IndexedRankInput {
+	/** The query term, already lowercased and trimmed. */
+	needle: string;
+	/** Lowercased display title. */
+	lowerTitle: string;
+	/** Lowercased aliases. Empty array if not applicable. */
+	lowerAliases: readonly string[];
+	/** Lowercased keywords. */
+	lowerKeywords: readonly string[];
+	/**
+	 * Lowercased concatenation of summary + section bodies + keywords.
+	 * Built once at registration time, reused per keystroke.
+	 */
+	lowerHaystack: string;
+}
+
+export function rankBucketIndexed(input: IndexedRankInput): 1 | 2 | 3 | null {
+	const { needle } = input;
+	if (needle.length === 0) return 3;
+
+	if (input.lowerTitle === needle) return 1;
+	if (input.lowerAliases.includes(needle)) return 1;
+
+	if (input.lowerTitle.includes(needle)) return 2;
+	for (const alias of input.lowerAliases) {
+		if (alias.includes(needle)) return 2;
+	}
+
+	for (const keyword of input.lowerKeywords) {
+		if (keyword.includes(needle)) return 3;
+	}
+	if (input.lowerHaystack.includes(needle)) return 3;
+	return null;
+}
+
+/**
  * Returns the rank bucket for the given input:
  *   1 = exact-match on displayName (case-insensitive) or in aliases.
  *   2 = substring-match on displayName or alias.

@@ -169,3 +169,34 @@ describe('search - empty query', () => {
 		expect(result.help).toHaveLength(0);
 	});
 });
+
+describe('search - precomputed haystack', () => {
+	it('uses the lazy index entry searchHaystack without resolving the body', async () => {
+		// Register a page via the lazy path with a body that the loader has
+		// not yet resolved. The haystack should still hit "calibration".
+		const loader = async (id: string) => ({
+			id,
+			sections: [{ id: 'lede', title: 'Lede', body: 'A long full body about brier scores.' }],
+		});
+		helpRegistry.registerIndex(
+			'study',
+			[
+				{
+					id: 'lazy-cal',
+					title: 'Lazy calibration',
+					summary: 'Confidence vs accuracy.',
+					tags: { appSurface: [APP_SURFACES.CALIBRATION], helpKind: HELP_KINDS.CONCEPT },
+					sections: [{ id: 'lede', title: 'Lede' }],
+					searchHaystack: 'confidence vs accuracy. brier score discussion lives in the body.',
+				},
+			],
+			loader,
+		);
+
+		const result = search('brier');
+		expect(result.help.map((r) => r.id)).toEqual(['lazy-cal']);
+		// Body must remain unresolved; the search path shouldn't load it.
+		const stillStub = helpRegistry.getById('lazy-cal');
+		expect(stillStub?.sections[0]?.body).toBe('');
+	});
+});

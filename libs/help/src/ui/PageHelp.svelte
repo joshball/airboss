@@ -25,6 +25,9 @@ import { page } from '$app/state';
 import { parseMarkdown } from '../markdown';
 import type { MdNode } from '../markdown/ast';
 import { helpRegistry } from '../registry';
+// helpRegistry is used both for sync `getById` (existence guard) and async
+// `loadById` (drawer body materialisation). The lazy load is what keeps
+// section markdown out of the always-loaded layout bundle.
 import ExternalRefsFooter from './ExternalRefsFooter.svelte';
 import HelpSection from './HelpSection.svelte';
 import { isHelpTargetMatch, withHelpParam } from './page-help-url';
@@ -72,9 +75,21 @@ async function loadContent(): Promise<void> {
 	loading = true;
 	parseError = null;
 	try {
+		// Resolve the lazy body before parsing -- when the page was
+		// registered via `registerIndex`, `helpPage.sections` carry empty
+		// bodies until `loadById` materialises the markdown. Eagerly-
+		// registered pages short-circuit (the loader returns the same page).
+		const fullPage = (await helpRegistry.loadById(pageId)) ?? helpPage;
+		// Parse every section in parallel so drawer-open latency is
+		// `max(per-section)` instead of `sum(per-section)`.
+		const parsed = await Promise.all(
+			fullPage.sections.map(
+				async (section): Promise<[string, MdNode[]]> => [section.id, await parseMarkdown(section.body)],
+			),
+		);
 		const next: Record<string, MdNode[]> = {};
-		for (const section of helpPage.sections) {
-			next[section.id] = await parseMarkdown(section.body);
+		for (const [id, nodes] of parsed) {
+			next[id] = nodes;
 		}
 		sectionNodes = next;
 	} catch (err) {

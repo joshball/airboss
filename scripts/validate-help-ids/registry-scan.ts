@@ -87,31 +87,34 @@ async function walk(absDir: string, ids: Set<string>, skipped: string[]): Promis
 }
 
 /**
- * Match an `export const <name>` declaration annotated as `HelpPage` (via
- * `: HelpPage =` or `satisfies HelpPage`), then capture the object
- * literal's `id:` property. This intentionally does not grab the `id:`
- * fields on nested `sections[i]` entries because the top-level object's
- * `id:` is always the first `id:` that appears after the declaration
- * header, and we anchor the capture to that header.
+ * Match an `export const <name>` declaration annotated as `HelpPage` or
+ * `HelpPageIndex` (via `: HelpPage =` / `: HelpPageIndex =` /
+ * `satisfies HelpPage` / `satisfies HelpPageIndex`), then capture the
+ * object literal's `id:` property. This intentionally does not grab the
+ * `id:` fields on nested `sections[i]` entries because the top-level
+ * object's `id:` is always the first `id:` that appears after the
+ * declaration header, and we anchor the capture to that header.
  *
- * Two shapes supported (both appear in the current codebase):
+ * Pages were split into a metadata-only `HelpPageIndex` (statically
+ * imported into the always-loaded layout bundle) plus a body file
+ * (dynamically imported on `/help/[id]` open). Both shapes carry the
+ * page id; the validator accepts either.
  *
- *   export const gettingStarted: HelpPage = {
- *       id: 'getting-started',   <- captured
- *       sections: [{ id: 'intro' }],  <- not captured
- *   };
+ * Accepted forms:
  *
- *   export const gettingStarted = {
- *       id: 'getting-started',   <- captured
- *   } satisfies HelpPage;
+ *   export const gettingStarted: HelpPage = { id: 'getting-started', ... };
+ *   export const gettingStartedIndex: HelpPageIndex = { id: 'getting-started', ... };
+ *   export const gettingStarted = { id: 'getting-started', ... } satisfies HelpPage;
+ *   export const gettingStartedIndex = { id: 'getting-started', ... } satisfies HelpPageIndex;
  *
  * Accepts double quotes, single quotes, or a bare template literal (no
  * interpolation).
  */
-const TYPED_PAGE_REGEX = /export\s+const\s+\w+\s*:\s*HelpPage\s*=\s*\{\s*id\s*:\s*(?:"([^"]+)"|'([^']+)'|`([^`$]+)`)/g;
+const TYPED_PAGE_REGEX =
+	/export\s+const\s+\w+\s*:\s*HelpPage(?:Index)?\s*=\s*\{\s*id\s*:\s*(?:"([^"]+)"|'([^']+)'|`([^`$]+)`)/g;
 /** Same shape, but with the type annotation trailing after the literal via `satisfies`. */
 const SATISFIES_PAGE_REGEX =
-	/export\s+const\s+\w+\s*=\s*\{\s*id\s*:\s*(?:"([^"]+)"|'([^']+)'|`([^`$]+)`)[^;]*satisfies\s+HelpPage/g;
+	/export\s+const\s+\w+\s*=\s*\{\s*id\s*:\s*(?:"([^"]+)"|'([^']+)'|`([^`$]+)`)[^;]*satisfies\s+HelpPage(?:Index)?/g;
 
 export function extractHelpPageIds(content: string): readonly string[] {
 	const out: string[] = [];

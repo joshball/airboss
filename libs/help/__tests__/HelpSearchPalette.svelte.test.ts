@@ -2,6 +2,7 @@
  * HelpSearchPalette DOM contract -- dialog gating, search input, escape.
  */
 
+import { HELP_SEARCH_DEBOUNCE_MS } from '@ab/constants';
 import { cleanup, render, screen } from '@testing-library/svelte';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import HelpSearchPalette from '../src/ui/HelpSearchPalette.svelte';
@@ -14,6 +15,15 @@ describe('HelpSearchPalette -- closed', () => {
 	it('renders nothing when open=false', () => {
 		const { container } = render(HelpSearchPalette, { open: false, onClose: vi.fn() });
 		expect(container.querySelector('[data-testid="helpsearchpalette-root"]')).toBeNull();
+	});
+});
+
+describe('HelpSearchPalette -- debounce contract', () => {
+	it('exports a non-trivial debounce window', () => {
+		// Pin the contract so a future zeroing of the debounce constant
+		// doesn't silently revive sync-on-keystroke search.
+		expect(HELP_SEARCH_DEBOUNCE_MS).toBeGreaterThanOrEqual(50);
+		expect(HELP_SEARCH_DEBOUNCE_MS).toBeLessThan(500);
 	});
 });
 

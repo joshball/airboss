@@ -8,6 +8,8 @@
 
 import type { AppSurface } from '@ab/constants';
 import type { HelpPage } from './help-page';
+import type { HelpPageBody } from './help-page-body';
+import type { HelpPageIndex } from './help-page-index';
 
 /**
  * Result from cross-library search. Library + sourceType are always set so
@@ -77,6 +79,20 @@ export interface SearchFilters {
 /**
  * The registry API. The concrete singleton is exported from
  * `../registry.ts` as `helpRegistry`.
+ *
+ * Two registration paths:
+ *   - `registerPages(appId, pages)` -- eager: hands over fully-bodied
+ *     `HelpPage[]`. Used by Bun build scripts (the validator) and by tests
+ *     where lazy loading isn't worth the indirection.
+ *   - `registerIndex(appId, indexEntries, loader)` -- lazy: hands over
+ *     metadata-only `HelpPageIndex[]` plus a `loader` that resolves a
+ *     `HelpPageBody` for an id via dynamic import. Production browser apps
+ *     use this so section bodies don't ride along in the always-loaded
+ *     layout bundle.
+ *
+ * After `registerIndex`, `getById` returns a synthetic `HelpPage` with
+ * `sections` carrying titles + empty bodies until `loadById` resolves.
+ * `loadById(id)` materialises the full page (idempotent, cached).
  */
 export interface HelpRegistry {
 	/**
@@ -87,11 +103,27 @@ export interface HelpRegistry {
 	 */
 	registerPages(appId: string, pages: readonly HelpPage[]): void;
 
+	/**
+	 * Register page indices + a body loader for an app. Same idempotency
+	 * shape as `registerPages` but ships only metadata + precomputed search
+	 * haystacks. Body markdown loads via `loader(id)` when a consumer calls
+	 * `loadById`.
+	 */
+	registerIndex(appId: string, entries: readonly HelpPageIndex[], loader: HelpBodyLoader): void;
+
 	/** All currently-registered pages, iteration order by app then page. */
 	getAllPages(): readonly HelpPage[];
 
 	/** Lookup a page by id. */
 	getById(id: string): HelpPage | undefined;
+
+	/**
+	 * Resolve and cache the full `HelpPage` for an id, including section
+	 * bodies + externalRefs. Idempotent: subsequent calls return the cached
+	 * page. Returns `undefined` if the id isn't registered. Throws if the
+	 * loader rejects (callers handle the error in their load function).
+	 */
+	loadById(id: string): Promise<HelpPage | undefined>;
 
 	/**
 	 * Every page whose primary `appSurface` (first entry) is the given
@@ -109,3 +141,11 @@ export interface HelpRegistry {
 	/** Reset the registry. Tests + HMR only. */
 	clear(): void;
 }
+
+/**
+ * Body loader signature. Apps return a Promise resolving to the page body
+ * (or `undefined` if the id isn't owned by this loader -- typically the
+ * loader is invoked via the dispatch the registry tracks per-appId, so an
+ * unknown id resolving to undefined is treated as a registry miss).
+ */
+export type HelpBodyLoader = (id: string) => Promise<HelpPageBody | undefined>;

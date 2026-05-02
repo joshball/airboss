@@ -11,15 +11,14 @@
  * keep them stable.
  */
 
-import { APP_SURFACES, HELP_KINDS, ROUTES } from '@ab/constants';
-import type { HelpPage } from '@ab/help';
+import { APP_SURFACES, HELP_KINDS } from '@ab/constants';
+import type { HelpPageIndex } from '@ab/help';
 
-export const memoryBrowse: HelpPage = {
+export const memoryBrowseIndex: HelpPageIndex = {
 	id: 'memory-browse',
 	title: 'Memory browse',
 	summary:
 		'What the browse view is for, the four filters (Domain / Type / Source / Status), and the status lifecycle that decides whether a card is schedulable.',
-	documents: ROUTES.MEMORY_BROWSE,
 	tags: {
 		appSurface: [APP_SURFACES.MEMORY],
 		helpKind: HELP_KINDS.REFERENCE,
@@ -37,59 +36,15 @@ export const memoryBrowse: HelpPage = {
 			'badges',
 		],
 	},
+	sections: [
+		{ id: 'browse-vs-review', title: 'What browse shows vs review' },
+		{ id: 'filters', title: 'Filters' },
+		{ id: 'status-lifecycle', title: 'Status lifecycle' },
+		{ id: 'badges', title: 'Per-card badges' },
+	],
+	searchHaystack:
+		"what the browse view is for, the four filters (domain / type / source / status), and the status lifecycle that decides whether a card is schedulable. browse and review answer two different questions.\n\n- **[review](/help/memory-review)** (`/memory/review`) shows the cards the fsrs scheduler has queued for right now: due, one at a time, rate-as-you-go. it ignores everything that isn't due.\n- **browse** (`/memory/browse`) shows the full card library -- every card you own, regardless of due date, state, or status. it exists for finding, editing, and inspecting cards, not for running through them.\n\nuse browse to audit the deck (coverage gaps, duplicates, misfiled cards), to jump to a specific card's detail page, or to filter down to a subset and act on it. use review to actually do your daily reps. four filters narrow the list. they compose: every active filter ands with the others.\n\n| filter  | values                                                       | what it's for                                                               |\n| ------- | ------------------------------------------------------------ | --------------------------------------------------------------------------- |\n| domain  | weather, regs, procedures, aerodynamics, systems, ...        | narrow to one topic. see domain for why domain matters.     |\n| type    | basic (more coming)                                          | narrow by card shape. today every card is basic; see type.  |\n| source  | personal, course                                             | narrow to cards you authored vs cards ported from course content.           |\n| status  | active, suspended, archived                                  | narrow by lifecycle state. see [status lifecycle](#status-lifecycle) below. |\n\nthe filter bar preserves selections in the url, so a filtered view is shareable and survives reload. clearing a filter broadens the list; clearing all filters returns the full deck. every card is in one of three lifecycle states. the status controls whether the card is schedulable, not whether it's visible.\n\n:::note\n**active** cards are in the scheduler. they appear in the review queue when due; their fsrs state evolves with every rating. this is the default for every newly authored card.\n\n**suspended** cards are held back temporarily. they keep their fsrs state (stability, difficulty, due date) but the scheduler skips them. suspend a card when you know the answer is wrong or outdated and you plan to fix it soon. reactivating resumes scheduling without resetting memory state.\n\n**archived** cards are retired. they're excluded from the scheduler, from dashboard counts, and from most filters by default. archive a card when you no longer want to study it but don't want to delete it. archived cards can be reactivated if you change your mind.\n:::\n\nsuspend and archive do not delete. they're reversible from the [card detail page](/help/memory-card#lifecycle). prefer either to deleting a card outright; deleted cards lose their review history and can't come back. each row in the browse list carries the same set of badges you see on the [card detail page](/help/memory-card): domain, type, status, and source. they're a quick visual audit of the deck without having to click into each card.\n\n- **domain** -- the topic bucket the card belongs to. see domain.\n- **type** -- basic (the only type today). see type.\n- **status** -- active, suspended, or archived. see [status lifecycle](#status-lifecycle) above.\n- **source** -- personal (you authored it) or course (ported from course content; read-only in most cases). see [source](/help/memory-card#source).\n\nscan the badges on a filtered list to spot outliers: one course card in a sea of personal, one suspended card you forgot to fix, a domain you didn't mean to file the card under. memory browse filter domain type source status active suspended archived badges",
+	documents: '/memory/browse',
 	related: ['memory-dashboard', 'memory-new', 'memory-card', 'memory-review', 'concept-fsrs'],
 	reviewedAt: '2026-04-24',
-	sections: [
-		{
-			id: 'browse-vs-review',
-			title: 'What browse shows vs review',
-			body: `Browse and review answer two different questions.
-
-- **[Review](/help/memory-review)** (\`/memory/review\`) shows the cards the FSRS scheduler has queued for right now: due, one at a time, rate-as-you-go. It ignores everything that isn't due.
-- **Browse** (\`/memory/browse\`) shows the full card library -- every card you own, regardless of due date, state, or status. It exists for finding, editing, and inspecting cards, not for running through them.
-
-Use browse to audit the deck (coverage gaps, duplicates, misfiled cards), to jump to a specific card's detail page, or to filter down to a subset and act on it. Use review to actually do your daily reps.`,
-		},
-		{
-			id: 'filters',
-			title: 'Filters',
-			body: `Four filters narrow the list. They compose: every active filter ANDs with the others.
-
-| Filter  | Values                                                       | What it's for                                                               |
-| ------- | ------------------------------------------------------------ | --------------------------------------------------------------------------- |
-| Domain  | Weather, Regs, Procedures, Aerodynamics, Systems, ...        | Narrow to one topic. See [[domain::memory-new]] for why domain matters.     |
-| Type    | Basic (more coming)                                          | Narrow by card shape. Today every card is Basic; see [[type::memory-new]].  |
-| Source  | Personal, Course                                             | Narrow to cards you authored vs cards ported from course content.           |
-| Status  | Active, Suspended, Archived                                  | Narrow by lifecycle state. See [Status lifecycle](#status-lifecycle) below. |
-
-The filter bar preserves selections in the URL, so a filtered view is shareable and survives reload. Clearing a filter broadens the list; clearing all filters returns the full deck.`,
-		},
-		{
-			id: 'status-lifecycle',
-			title: 'Status lifecycle',
-			body: `Every card is in one of three lifecycle states. The status controls whether the card is schedulable, not whether it's visible.
-
-:::note
-**Active** cards are in the scheduler. They appear in the review queue when due; their FSRS state evolves with every rating. This is the default for every newly authored card.
-
-**Suspended** cards are held back temporarily. They keep their FSRS state (stability, difficulty, due date) but the scheduler skips them. Suspend a card when you know the answer is wrong or outdated and you plan to fix it soon. Reactivating resumes scheduling without resetting memory state.
-
-**Archived** cards are retired. They're excluded from the scheduler, from dashboard counts, and from most filters by default. Archive a card when you no longer want to study it but don't want to delete it. Archived cards can be reactivated if you change your mind.
-:::
-
-Suspend and Archive do not delete. They're reversible from the [card detail page](/help/memory-card#lifecycle). Prefer either to deleting a card outright; deleted cards lose their review history and can't come back.`,
-		},
-		{
-			id: 'badges',
-			title: 'Per-card badges',
-			body: `Each row in the browse list carries the same set of badges you see on the [card detail page](/help/memory-card): Domain, Type, Status, and Source. They're a quick visual audit of the deck without having to click into each card.
-
-- **Domain** -- the topic bucket the card belongs to. See [[domain::memory-new]].
-- **Type** -- Basic (the only type today). See [[type::memory-new]].
-- **Status** -- Active, Suspended, or Archived. See [Status lifecycle](#status-lifecycle) above.
-- **Source** -- Personal (you authored it) or Course (ported from course content; read-only in most cases). See [Source](/help/memory-card#source).
-
-Scan the badges on a filtered list to spot outliers: one Course card in a sea of Personal, one Suspended card you forgot to fix, a Domain you didn't mean to file the card under.`,
-		},
-	],
 };
