@@ -20,6 +20,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import {
 	addGoalNode,
 	addGoalSyllabus,
+	applyCertGoalsToPrimaryGoal,
 	archiveGoal,
 	createGoal,
 	GoalNotFoundError,
@@ -59,11 +60,26 @@ const slug = (s: string): string => `${s}-${SUITE_TOKEN}`;
 
 const TEST_USER_ID = generateAuthId();
 const OTHER_USER_ID = generateAuthId();
+// Dedicated user for applyCertGoalsToPrimaryGoal tests so primary-goal
+// state doesn't collide with the broader createGoal/setPrimaryGoal suite.
+const APPLY_USER_ID = generateAuthId();
 
 const PPL_CRED_ID = generateCredentialId();
 const PPL_CRED_SLUG = slug('private');
 const PPL_SYL_ID = generateSyllabusId();
 const PPL_SYL_SLUG = slug('ppl-acs');
+
+// Second credential with a primary syllabus -- exercises the batched
+// applyCertGoalsToPrimaryGoal path with two found certs in one query.
+const IFR_CRED_ID = generateCredentialId();
+const IFR_CRED_SLUG = slug('instrument');
+const IFR_SYL_ID = generateSyllabusId();
+const IFR_SYL_SLUG = slug('ifr-acs');
+
+// Third credential WITHOUT a primary syllabus -- exercises the "credential
+// resolves but no primary syllabus" skip branch.
+const ORPHAN_CRED_ID = generateCredentialId();
+const ORPHAN_CRED_SLUG = slug('orphan-cred');
 
 const AREA_ID = generateSyllabusNodeId();
 const TASK_ID = generateSyllabusNodeId();
@@ -90,6 +106,17 @@ beforeAll(async () => {
 			email: `other-${SUITE_TAG}@airboss.test`,
 			name: 'Other User',
 			firstName: 'Other',
+			lastName: 'User',
+			emailVerified: true,
+			role: 'learner',
+			createdAt: now,
+			updatedAt: now,
+		},
+		{
+			id: APPLY_USER_ID,
+			email: `apply-${SUITE_TAG}@airboss.test`,
+			name: 'Apply Cert Goals',
+			firstName: 'Apply',
 			lastName: 'User',
 			emailVerified: true,
 			role: 'learner',
@@ -129,6 +156,56 @@ beforeAll(async () => {
 		primacy: SYLLABUS_PRIMACY.PRIMARY,
 		seedOrigin: SUITE_TAG,
 		createdAt: now,
+	});
+
+	// Second cert with a primary syllabus -- gives applyCertGoalsToPrimaryGoal
+	// a multi-cert success path through the batched reads.
+	await db.insert(credential).values({
+		id: IFR_CRED_ID,
+		slug: IFR_CRED_SLUG,
+		kind: 'pilot-cert',
+		title: 'Instrument Rating',
+		category: 'airplane',
+		class: 'single-engine-land',
+		regulatoryBasis: [],
+		status: CREDENTIAL_STATUSES.ACTIVE,
+		seedOrigin: SUITE_TAG,
+		createdAt: now,
+		updatedAt: now,
+	});
+	await db.insert(syllabus).values({
+		id: IFR_SYL_ID,
+		slug: IFR_SYL_SLUG,
+		kind: 'acs',
+		title: 'Test IFR ACS',
+		edition: `faa-s-acs-8-${SUITE_TOKEN}`,
+		status: SYLLABUS_STATUSES.ACTIVE,
+		seedOrigin: SUITE_TAG,
+		createdAt: now,
+		updatedAt: now,
+	});
+	await db.insert(credentialSyllabus).values({
+		credentialId: IFR_CRED_ID,
+		syllabusId: IFR_SYL_ID,
+		primacy: SYLLABUS_PRIMACY.PRIMARY,
+		seedOrigin: SUITE_TAG,
+		createdAt: now,
+	});
+
+	// Third cert without any primary syllabus -- exercises the "credential
+	// resolves but primary syllabus is missing" skip branch.
+	await db.insert(credential).values({
+		id: ORPHAN_CRED_ID,
+		slug: ORPHAN_CRED_SLUG,
+		kind: 'pilot-cert',
+		title: 'Orphan Cert',
+		category: 'airplane',
+		class: 'single-engine-land',
+		regulatoryBasis: [],
+		status: CREDENTIAL_STATUSES.ACTIVE,
+		seedOrigin: SUITE_TAG,
+		createdAt: now,
+		updatedAt: now,
 	});
 
 	// Tree with one leaf so getGoalNodeUnion has something to find.
@@ -265,6 +342,7 @@ afterAll(async () => {
 	await db.delete(goalSyllabus).where(eq(goalSyllabus.syllabusId, PPL_SYL_ID));
 	await db.delete(goal).where(eq(goal.userId, TEST_USER_ID));
 	await db.delete(goal).where(eq(goal.userId, OTHER_USER_ID));
+	await db.delete(goal).where(eq(goal.userId, APPLY_USER_ID));
 	await db.delete(syllabusNodeLink).where(eq(syllabusNodeLink.seedOrigin, SUITE_TAG));
 	await db.delete(syllabusNode).where(eq(syllabusNode.seedOrigin, SUITE_TAG));
 	await db.delete(credentialSyllabus).where(eq(credentialSyllabus.seedOrigin, SUITE_TAG));
@@ -273,6 +351,7 @@ afterAll(async () => {
 	await db.delete(knowledgeNode).where(eq(knowledgeNode.seedOrigin, SUITE_TAG));
 	await db.delete(bauthUser).where(eq(bauthUser.id, TEST_USER_ID));
 	await db.delete(bauthUser).where(eq(bauthUser.id, OTHER_USER_ID));
+	await db.delete(bauthUser).where(eq(bauthUser.id, APPLY_USER_ID));
 });
 
 describe('createGoal', () => {
@@ -454,5 +533,68 @@ describe('getDerivedCertGoals', () => {
 	it('returns [] when the user has no primary goal', async () => {
 		const slugs = await getDerivedCertGoals(OTHER_USER_ID);
 		expect(slugs).toEqual([]);
+	});
+});
+
+describe('applyCertGoalsToPrimaryGoal', () => {
+	it('returns the existing primary unchanged for an empty cert list', async () => {
+		const result = await applyCertGoalsToPrimaryGoal(APPLY_USER_ID, [], { goalTitle: 'apply empty' });
+		expect(result.created).toBe(true);
+		expect(result.skippedCerts).toEqual([]);
+		const primary = await getPrimaryGoal(APPLY_USER_ID);
+		expect(primary?.id).toBe(result.goalId);
+		expect(primary?.title).toBe('apply empty');
+		const linked = await getGoalSyllabi(result.goalId);
+		expect(linked.length).toBe(0);
+
+		// Re-running with [] is a no-op (no new primary, no new links).
+		const second = await applyCertGoalsToPrimaryGoal(APPLY_USER_ID, []);
+		expect(second.created).toBe(false);
+		expect(second.goalId).toBe(result.goalId);
+		expect(second.skippedCerts).toEqual([]);
+	});
+
+	it('batches mixed found / missing certs and reports skips', async () => {
+		// Cast the test slugs through `unknown` -- the DB treats `cert` as a
+		// free-form text column at this layer, so the runtime accepts any
+		// string. The Cert type alias keeps the production call sites honest;
+		// the test fixture seeds slugs that aren't in the constant set.
+		const certs = [PPL_CRED_SLUG, IFR_CRED_SLUG, ORPHAN_CRED_SLUG, slug('does-not-exist')] as unknown as Array<
+			Parameters<typeof applyCertGoalsToPrimaryGoal>[1][number]
+		>;
+		const result = await applyCertGoalsToPrimaryGoal(APPLY_USER_ID, certs);
+		expect(result.created).toBe(false); // primary already exists from prior test
+		expect(result.skippedCerts.sort()).toEqual([ORPHAN_CRED_SLUG, slug('does-not-exist')].sort());
+
+		const linked = await getGoalSyllabi(result.goalId);
+		const linkedSyllabusIds = linked.map((r) => r.syllabusId).sort();
+		expect(linkedSyllabusIds).toEqual([PPL_SYL_ID, IFR_SYL_ID].sort());
+		expect(linked.every((r) => r.weight === 1.0)).toBe(true);
+	});
+
+	it('is idempotent on re-run', async () => {
+		const certs = [PPL_CRED_SLUG, IFR_CRED_SLUG] as unknown as Array<
+			Parameters<typeof applyCertGoalsToPrimaryGoal>[1][number]
+		>;
+		const before = await getGoalSyllabi((await getPrimaryGoal(APPLY_USER_ID))?.id ?? '');
+		const beforeIds = before.map((r) => r.syllabusId).sort();
+		const result = await applyCertGoalsToPrimaryGoal(APPLY_USER_ID, certs);
+		expect(result.created).toBe(false);
+		expect(result.skippedCerts).toEqual([]);
+		const after = await getGoalSyllabi(result.goalId);
+		const afterIds = after.map((r) => r.syllabusId).sort();
+		expect(afterIds).toEqual(beforeIds);
+		expect(after.length).toBe(before.length);
+	});
+
+	it('dedupes repeated cert slugs in the input', async () => {
+		const certs = [PPL_CRED_SLUG, PPL_CRED_SLUG, IFR_CRED_SLUG] as unknown as Array<
+			Parameters<typeof applyCertGoalsToPrimaryGoal>[1][number]
+		>;
+		const result = await applyCertGoalsToPrimaryGoal(APPLY_USER_ID, certs);
+		expect(result.skippedCerts).toEqual([]);
+		const linked = await getGoalSyllabi(result.goalId);
+		// Same two unique syllabi as the prior test -- duplicates collapse.
+		expect(linked.map((r) => r.syllabusId).sort()).toEqual([PPL_SYL_ID, IFR_SYL_ID].sort());
 	});
 });
