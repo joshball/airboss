@@ -19,6 +19,7 @@
 
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
+import { SOURCE_CACHE } from '@ab/constants';
 import { commitIngestBatch, getEntryLifecycle } from '../registry/lifecycle.ts';
 import type { Edition, SourceEntry, SourceId } from '../types.ts';
 import { type CacheLoadResult, loadEcfrXml } from './cache.ts';
@@ -242,7 +243,7 @@ export function parseCliArgs(argv: readonly string[]): CliArgs | { error: string
 	let editionDate: string | null = null;
 	let fixturePath: string | null = null;
 	let title: '14' | '49' = '14';
-	let outRoot = join(process.cwd(), 'regulations');
+	let outRoot = join(process.cwd(), SOURCE_CACHE.REGS);
 	let help = false;
 
 	for (const arg of argv) {

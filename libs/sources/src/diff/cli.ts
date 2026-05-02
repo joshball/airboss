@@ -12,6 +12,7 @@
 import { existsSync, mkdtempSync, readFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { SOURCE_CACHE } from '@ab/constants';
 import { runIngest } from '../regs/ingest.ts';
 import { setRegsDerivativeRoot } from '../regs/resolver.ts';
 import { type DiffJobArgs, formatDiffSummary, runDiffJob } from './diff-job.ts';
@@ -110,7 +111,7 @@ export async function runDiffCli(argv: readonly string[]): Promise<number> {
 		return 0;
 	}
 
-	const outRoot = parsed.regulationsRoot ?? join(process.cwd(), 'regulations');
+	const outRoot = parsed.regulationsRoot ?? join(process.cwd(), SOURCE_CACHE.REGS);
 
 	// Fixture-pair short-circuit: ingest both fixtures into a fresh in-memory
 	// registry with a temp derivative root, then run the diff against that.

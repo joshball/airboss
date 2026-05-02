@@ -36,7 +36,7 @@
 import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { resolveCacheRoot } from '@ab/constants';
+import { resolveCacheRoot, SOURCE_CACHE } from '@ab/constants';
 import { writeIfChanged } from '../io/write-if-changed.ts';
 import { classifySkipReasons, INGEST_EXIT_CODES } from '../shared/exit-codes.ts';
 import { ShaMismatchError, verifyCachedSha } from '../shared/sha-verify.ts';
@@ -142,7 +142,7 @@ function discoverCachedAim(
 	cacheRoot: string,
 	editionOverride: string | null,
 ): { cached: CachedAim | null; skipped: string[] } {
-	const aimRoot = join(cacheRoot, 'aim');
+	const aimRoot = join(cacheRoot, SOURCE_CACHE.AIM);
 	if (!existsSync(aimRoot)) return { cached: null, skipped: [] };
 	const manifestPath = join(aimRoot, 'manifest.json');
 	if (!existsSync(manifestPath)) {
@@ -449,7 +449,7 @@ export interface SourceCliArgs {
 
 export function parseSourceCliArgs(argv: readonly string[]): SourceCliArgs | { error: string } {
 	let cacheRoot = resolveCacheRoot({ ensureExists: false });
-	let derivativeRoot = join(process.cwd(), 'aim');
+	let derivativeRoot = join(process.cwd(), SOURCE_CACHE.AIM);
 	let edition: string | null = null;
 	let skipShaVerify = false;
 	let help = false;

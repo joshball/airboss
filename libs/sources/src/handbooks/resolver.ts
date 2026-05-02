@@ -13,6 +13,7 @@
 
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { SOURCE_CACHE } from '@ab/constants';
 import type { CorpusResolver } from '../registry/corpus-resolver.ts';
 import { getEditionsMap } from '../registry/editions.ts';
 import { getCurrentEditionForCorpus } from '../registry/index-cache.ts';
@@ -80,7 +81,7 @@ const SOURCE_ID_PREFIX = 'airboss-ref:handbooks/';
  * The directory root for in-repo handbook derivatives. Test code overrides
  * via `setHandbooksDerivativeRoot`; production reads from `<cwd>/handbooks`.
  */
-let _derivativeRoot: string = join(process.cwd(), 'handbooks');
+let _derivativeRoot: string = join(process.cwd(), SOURCE_CACHE.HANDBOOKS);
 
 export function setHandbooksDerivativeRoot(root: string): void {
 	_derivativeRoot = root;

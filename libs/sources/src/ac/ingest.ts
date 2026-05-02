@@ -28,7 +28,7 @@
 import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { resolveCacheRoot } from '@ab/constants';
+import { resolveCacheRoot, SOURCE_CACHE } from '@ab/constants';
 import { writeIfChanged } from '../io/write-if-changed.ts';
 import { extractPdf, findEffectiveDate } from '../pdf/index.ts';
 import { commitIngestBatch, getEntryLifecycle } from '../registry/lifecycle.ts';
@@ -212,7 +212,7 @@ function validateEntry(entry: Partial<DownloaderManifest>, manifestPath: string)
  * with one entry per cached AC; the PDFs sit alongside as `<doc-id>.pdf`.
  */
 function discoverCachedAcs(cacheRoot: string): DiscoveryResult {
-	const acRoot = join(cacheRoot, 'ac');
+	const acRoot = join(cacheRoot, SOURCE_CACHE.AC);
 	if (!existsSync(acRoot)) return { acs: [], skipped: [] };
 	const manifestPath = join(acRoot, 'manifest.json');
 	if (!existsSync(manifestPath)) {
@@ -462,7 +462,7 @@ export interface CliArgs {
 
 export function parseCliArgs(argv: readonly string[]): CliArgs | { error: string } {
 	let cacheRoot = resolveCacheRoot({ ensureExists: false });
-	let derivativeRoot = join(process.cwd(), 'ac');
+	let derivativeRoot = join(process.cwd(), SOURCE_CACHE.AC);
 	let skipShaVerify = false;
 	let help = false;
 

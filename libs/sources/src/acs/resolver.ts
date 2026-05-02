@@ -13,6 +13,7 @@
 
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { SOURCE_CACHE } from '@ab/constants';
 import type { CorpusResolver } from '../registry/corpus-resolver.ts';
 import { getEditionsMap } from '../registry/editions.ts';
 import { stripPin } from '../registry/query.ts';
@@ -31,7 +32,7 @@ const SOURCE_ID_PREFIX = 'airboss-ref:acs/';
  * The directory root for in-repo ACS derivatives. Test code overrides via
  * `setAcsDerivativeRoot`; production reads from `<cwd>/acs`.
  */
-let _derivativeRoot: string = join(process.cwd(), 'acs');
+let _derivativeRoot: string = join(process.cwd(), SOURCE_CACHE.ACS);
 
 export function setAcsDerivativeRoot(root: string): void {
 	_derivativeRoot = root;

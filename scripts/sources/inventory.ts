@@ -13,6 +13,7 @@
 
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
+import { SOURCE_CACHE } from '@ab/constants';
 import { resolveCacheRoot } from '../lib/cache';
 import {
 	listHandbookSlugs,
@@ -85,7 +86,7 @@ function renderTable(rows: readonly RowFields[]): string {
 
 function renderHandbookSection(slug: string, cacheRoot: string): string {
 	const hb = loadHandbookConfig(slug);
-	const editionDir = join(cacheRoot, 'handbooks', slug, hb.edition);
+	const editionDir = join(cacheRoot, SOURCE_CACHE.HANDBOOKS, slug, hb.edition);
 	const manifest = readHandbookManifestFile(join(editionDir, 'manifest.json'));
 	const wholeDocFilename = hb.whole_doc?.filename ?? `${hb.edition}.pdf`;
 
@@ -167,7 +168,7 @@ function renderHandbooksExtras(cacheRoot: string): string {
 	const cfg = loadHandbooksExtrasConfig();
 	const rows: RowFields[] = [];
 	for (const e of cfg.entries) {
-		const cacheDir = join(cacheRoot, 'handbooks', e.doc_id);
+		const cacheDir = join(cacheRoot, SOURCE_CACHE.HANDBOOKS, e.doc_id);
 		const manifest = readHandbookManifestFile(join(cacheDir, 'manifest.json'));
 		const cacheFilename = `${e.doc_id}.pdf`;
 		if (manifest !== null) {
@@ -198,7 +199,7 @@ function renderFlatCorpus(label: string, slug: 'ac' | 'acs', cacheRoot: string):
 
 function renderAim(cacheRoot: string): string {
 	const cfg = loadAimConfig();
-	const manifest = readAimCorpusManifestFile(join(cacheRoot, 'aim', 'manifest.json'));
+	const manifest = readAimCorpusManifestFile(join(cacheRoot, SOURCE_CACHE.AIM, 'manifest.json'));
 
 	const lines: string[] = ['## AIM -- Aeronautical Information Manual', ''];
 
@@ -269,7 +270,7 @@ function renderRegs(cacheRoot: string): string {
 		titleGroups.set(t.title, list);
 	}
 	for (const [title, descs] of [...titleGroups.entries()].sort()) {
-		const titleDir = join(cacheRoot, 'regulations', `cfr-${title}`);
+		const titleDir = join(cacheRoot, SOURCE_CACHE.REGS, `cfr-${title}`);
 		const manifest = readCorpusManifestFile(join(titleDir, 'manifest.json'));
 		const rows: RowFields[] = [];
 		for (const desc of descs) {
@@ -301,9 +302,9 @@ export function buildInventory(cacheRoot: string, generatedAt: string): string {
 	lines.push('');
 	lines.push(renderHandbooksExtras(cacheRoot));
 	lines.push('');
-	lines.push(renderFlatCorpus('Advisory Circulars', 'ac', cacheRoot));
+	lines.push(renderFlatCorpus('Advisory Circulars', SOURCE_CACHE.AC, cacheRoot));
 	lines.push('');
-	lines.push(renderFlatCorpus('ACS -- Airman Certification Standards', 'acs', cacheRoot));
+	lines.push(renderFlatCorpus('ACS -- Airman Certification Standards', SOURCE_CACHE.ACS, cacheRoot));
 	lines.push('');
 	lines.push(renderAim(cacheRoot));
 	lines.push('');

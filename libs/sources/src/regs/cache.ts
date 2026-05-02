@@ -25,7 +25,7 @@ import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, readFileSync, renameSync, unlinkSync, writeFileSync } from 'node:fs';
 import { dirname, isAbsolute, join, resolve } from 'node:path';
 import { Readable } from 'node:stream';
-import { resolveCacheRoot as resolveSourceCacheRoot, SOURCE_ACTION_LIMITS } from '@ab/constants';
+import { resolveCacheRoot as resolveSourceCacheRoot, SOURCE_ACTION_LIMITS, SOURCE_CACHE } from '@ab/constants';
 
 const ECFR_BASE = 'https://www.ecfr.gov/api/versioner/v1/full';
 
@@ -83,7 +83,7 @@ export function cacheXmlPath(title: '14' | '49', editionDate: string, partFilter
 		partFilter === undefined || partFilter.size === 0
 			? `${editionDate}.xml`
 			: `${editionDate}-parts-${[...partFilter].sort().join('-')}.xml`;
-	return join(root, 'regulations', `cfr-${title}`, filename);
+	return join(root, SOURCE_CACHE.REGS, `cfr-${title}`, filename);
 }
 
 /**

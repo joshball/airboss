@@ -49,7 +49,7 @@
 import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
-import { resolveCacheRoot } from '@ab/constants';
+import { resolveCacheRoot, SOURCE_CACHE } from '@ab/constants';
 import { writeIfChanged } from '../io/write-if-changed.ts';
 import type { ExtractedDocument, ExtractedPage } from '../pdf/index.ts';
 import { extractPdf, findAcsEditionSlug, findEffectiveDate } from '../pdf/index.ts';
@@ -215,7 +215,7 @@ function validateEntry(entry: Partial<DownloaderManifest>, manifestPath: string)
  * into `ACS_DETECTED_EDITION_TO_SLUG`).
  */
 function discoverCachedAcs(cacheRoot: string): DiscoveryResult {
-	const root = join(cacheRoot, 'acs');
+	const root = join(cacheRoot, SOURCE_CACHE.ACS);
 	if (!existsSync(root)) return { publications: [], skipped: [] };
 	const manifestPath = join(root, 'manifest.json');
 	if (!existsSync(manifestPath)) {
@@ -952,7 +952,7 @@ export interface CliArgs {
 
 export function parseCliArgs(argv: readonly string[]): CliArgs | { error: string } {
 	let cacheRoot = resolveCacheRoot({ ensureExists: false });
-	let derivativeRoot = join(process.cwd(), 'acs');
+	let derivativeRoot = join(process.cwd(), SOURCE_CACHE.ACS);
 	const slugsAccum: string[] = [];
 	let skipShaVerify = false;
 	let help = false;

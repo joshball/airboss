@@ -30,6 +30,7 @@
 
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
+import { SOURCE_CACHE } from '@ab/constants';
 import { commitIngestBatch, getEntryLifecycle } from './registry/lifecycle.ts';
 import type { Edition, EditionId, SourceEntry, SourceId } from './types.ts';
 
@@ -92,7 +93,7 @@ export interface BootstrapOptions {
  */
 export async function hydrateRegsFromDerivatives(opts: BootstrapOptions = {}): Promise<BootstrapReport> {
 	const cwd = opts.cwd ?? process.cwd();
-	const regsRoot = opts.regsRoot ?? join(cwd, 'regulations');
+	const regsRoot = opts.regsRoot ?? join(cwd, SOURCE_CACHE.REGS);
 	const skipped: { path: string; reason: string }[] = [];
 
 	if (!existsSync(regsRoot)) {

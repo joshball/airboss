@@ -41,7 +41,7 @@
 import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync } from 'node:fs';
 import { join } from 'node:path';
-import { type AviationTopic, type CertApplicability, resolveCacheRoot } from '@ab/constants';
+import { type AviationTopic, type CertApplicability, resolveCacheRoot, SOURCE_CACHE } from '@ab/constants';
 import { writeIfChanged } from '../io/write-if-changed.ts';
 import { extractPdf } from '../pdf/index.ts';
 import { __editions_internal__ } from '../registry/editions.ts';
@@ -157,7 +157,7 @@ function discover(cacheRoot: string): DiscoveryResult {
 			continue;
 		}
 
-		const cacheDir = join(cacheRoot, 'handbooks', entry.doc_id);
+		const cacheDir = join(cacheRoot, SOURCE_CACHE.HANDBOOKS, entry.doc_id);
 		const pdfPath = join(cacheDir, `${entry.doc_id}.pdf`);
 		const manifestPath = join(cacheDir, 'manifest.json');
 
@@ -418,7 +418,7 @@ export interface CliArgs {
 
 export function parseCliArgs(argv: readonly string[]): CliArgs | { error: string } {
 	let cacheRoot = resolveCacheRoot({ ensureExists: false });
-	let derivativeRoot = join(process.cwd(), 'handbooks');
+	let derivativeRoot = join(process.cwd(), SOURCE_CACHE.HANDBOOKS);
 	let help = false;
 
 	for (const arg of argv) {
