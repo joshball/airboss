@@ -7,6 +7,12 @@ export type SpinnerTone = 'default' | 'inverse';
 /**
  * Indeterminate spinner. Size + tone variants. Respects
  * `prefers-reduced-motion` by suspending the rotation.
+ *
+ * Pass a specific `ariaLabel` whenever a page renders more than one spinner
+ * concurrently (e.g. a dashboard with several async panels). The default
+ * `'Loading'` is fine for a single in-flight indicator but reads identically
+ * across multiple, leaving screen-reader users without a way to tell the
+ * regions apart. Prefer copy like `Loading scenarios` / `Loading citations`.
  */
 
 let {

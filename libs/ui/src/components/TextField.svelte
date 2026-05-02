@@ -29,6 +29,7 @@ let {
 	placeholder,
 	hint,
 	error,
+	invalid = false,
 	required = false,
 	disabled = false,
 	autocomplete,
@@ -44,6 +45,14 @@ let {
 	placeholder?: string;
 	hint?: string;
 	error?: string;
+	/**
+	 * Mark the field as invalid (aria-invalid="true") without rendering an
+	 * inline error message. Use when a form-level error banner already
+	 * describes the failure but the field needs to be programmatically
+	 * marked so AT users navigating back into the form hear the invalid
+	 * state. `error` (visible string) takes precedence over `invalid`.
+	 */
+	invalid?: boolean;
 	required?: boolean;
 	disabled?: boolean;
 	autocomplete?: AutoComplete;
@@ -55,6 +64,7 @@ const autoId = $derived(id ?? (name ? `tf-${name}` : `tf-${label.replace(/\s+/g,
 const hintId = $derived(hint ? `${autoId}-hint` : undefined);
 const errorId = $derived(error ? `${autoId}-error` : undefined);
 const describedBy = $derived([hintId, errorId].filter(Boolean).join(' ') || undefined);
+const ariaInvalid = $derived(error || invalid ? 'true' : undefined);
 </script>
 
 <label
@@ -82,7 +92,8 @@ const describedBy = $derived([hintId, errorId].filter(Boolean).join(' ') || unde
 			{disabled}
 			{autocomplete}
 			{rows}
-			aria-invalid={error ? 'true' : undefined}
+			aria-invalid={ariaInvalid}
+			aria-required={required ? 'true' : undefined}
 			aria-describedby={describedBy}
 			data-testid="textfield-control"
 		></textarea>
@@ -97,7 +108,8 @@ const describedBy = $derived([hintId, errorId].filter(Boolean).join(' ') || unde
 			{disabled}
 			{autocomplete}
 			{inputmode}
-			aria-invalid={error ? 'true' : undefined}
+			aria-invalid={ariaInvalid}
+			aria-required={required ? 'true' : undefined}
 			aria-describedby={describedBy}
 			data-testid="textfield-control"
 		/>

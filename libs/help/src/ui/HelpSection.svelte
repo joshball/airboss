@@ -66,7 +66,7 @@ function handleKey(event: KeyboardEvent): void {
 		</h2>
 	{/if}
 	{#if expanded}
-		<div id={`${section.id}-body`} class="body" data-testid="helpsection-body">
+		<div id={`${section.id}-body`} class="body" class:legacy={!nodes} data-testid="helpsection-body">
 			{#if nodes}
 				<MarkdownBody {nodes} />
 			{:else}
@@ -119,6 +119,15 @@ function handleKey(event: KeyboardEvent): void {
 		font-size: var(--font-size-base);
 		line-height: 1.6;
 		color: var(--ink-body);
+	}
+
+	/*
+	 * Legacy `<ReferenceText>` rendering preserves source whitespace; the new
+	 * `<MarkdownBody>` path emits real <p>/<li>/<table> elements where
+	 * `pre-wrap` would force literal newlines between paragraphs and inside
+	 * lists.
+	 */
+	.body.legacy {
 		white-space: pre-wrap;
 	}
 </style>

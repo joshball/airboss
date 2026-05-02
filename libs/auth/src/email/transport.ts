@@ -22,6 +22,20 @@ export interface EmailMessage {
 }
 
 /**
+ * Redact a recipient email for log lines (`a***@example.com`). The dev
+ * fallback path logs every send for visibility, but the raw recipient is PII
+ * and would land in any log shipper that picks up `bun dev` console output.
+ * Keeping the domain helps debug "wrong domain" misconfigurations.
+ */
+function redactEmail(addr: string): string {
+	const at = addr.indexOf('@');
+	if (at <= 0) return '***';
+	const local = addr.slice(0, at);
+	const domain = addr.slice(at);
+	return `${local[0] ?? '*'}***${domain}`;
+}
+
+/**
  * Send an email via Resend. Falls back to console logging when no API key is set (dev).
  * Does not throw -- logs errors and returns false.
  */
@@ -31,7 +45,7 @@ export async function sendEmail(message: EmailMessage): Promise<boolean> {
 
 	if (!client) {
 		log.info('no RESEND_API_KEY -- email logged', {
-			metadata: { to: message.to, from, subject: message.subject },
+			metadata: { to: redactEmail(message.to), from, subject: message.subject },
 		});
 		return true;
 	}

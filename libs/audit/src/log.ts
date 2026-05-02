@@ -72,5 +72,9 @@ export async function auditRecent(
  */
 export async function countAuditEntriesSince(since: Date, db: Db = defaultDb): Promise<number> {
 	const rows = await db.select({ c: count() }).from(auditLog).where(gte(auditLog.timestamp, since));
-	return Number(rows[0]?.c ?? 0);
+	// drizzle's pg `count()` returns a `number`; the previous `Number(...)` cast
+	// was a no-op. Branch on bigint defensively in case a future driver swap
+	// changes the shape, but otherwise return the value directly.
+	const c = rows[0]?.c ?? 0;
+	return typeof c === 'bigint' ? Number(c) : c;
 }

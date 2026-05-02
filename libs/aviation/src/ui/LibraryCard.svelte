@@ -115,7 +115,7 @@ const readerHref = $derived(isReadable ? ROUTES.LIBRARY_HANDBOOK(documentSlug) :
 				{/each}
 			</ul>
 		{/if}
-		<p class="publisher muted">{publisher} -- no link available</p>
+		<p class="publisher muted">{publisher} (no link available)</p>
 	</div>
 {/if}
 

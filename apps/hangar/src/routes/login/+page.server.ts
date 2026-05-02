@@ -7,12 +7,26 @@ import type { Actions, PageServerLoad } from './$types';
 
 const log = createLogger('hangar:login');
 
-/** True when the path is a safe local redirect target (no open-redirect bypasses). */
+/**
+ * True when the path is a safe local redirect target (no open-redirect
+ * bypasses). The character allowlist + URL-parse-against-placeholder pattern
+ * forces the result to resolve relative to the current origin: any value that
+ * either contains a control character or parses to a host other than the
+ * placeholder is rejected.
+ */
 function isSafeRedirect(path: string): boolean {
 	if (!path.startsWith('/')) return false;
 	if (path.startsWith('//')) return false;
 	if (path.includes('\\')) return false;
 	if (path.includes('\r') || path.includes('\n')) return false;
+	if (!/^[A-Za-z0-9_\-./?&=%~+#:@!$',;*]+$/.test(path)) return false;
+	try {
+		const placeholder = 'https://x.local';
+		const parsed = new URL(path, placeholder);
+		if (parsed.host !== 'x.local') return false;
+	} catch {
+		return false;
+	}
 	return true;
 }
 
@@ -57,27 +71,30 @@ export const actions: Actions = {
 			const authResponse = await auth.handler(authRequest);
 
 			if (!authResponse.ok) {
-				// Drain the response body so the connection can be released; we
-				// intentionally discard `data.message` because surfacing
-				// better-auth's distinct "user not found" vs "invalid password"
-				// strings is a user-enumeration vector.
-				await authResponse.json().catch(() => null);
+				const data = (await authResponse.json().catch(() => null)) as { message?: string } | null;
+				// Server-side log so on-call can distinguish "wrong password" from
+				// "banned" / "verification required" / "validation error" without
+				// leaking the difference to the client.
+				log.warn('login non-ok response', {
+					requestId: locals.requestId,
+					metadata: { status: authResponse.status, betterAuthMessage: data?.message ?? null },
+				});
 				if (authResponse.status === 429) {
 					return fail(429, {
 						error: 'Too many sign-in attempts. Please wait a moment and try again.',
 						email,
 					});
 				}
-				// Force a uniform user-facing message on the 400/401 branches.
-				// Better-auth distinguishes "user not found" vs "invalid
-				// password" in `data.message`; combined with the email echo
-				// that's a user-enumeration vector. Closes chunk-6 security
-				// MIN: login form returns the typed email back into the
-				// fail() body, including 401 paths.
-				return fail(authResponse.status === 401 ? 401 : 400, {
-					error: 'Invalid email or password',
-					email,
-				});
+				if (authResponse.status === 401) {
+					// Blank the echoed email on a credential-stuffing 401 so the form
+					// doesn't double as a low-cost enumeration assistant. The 400
+					// (validation) path still echoes so a typo doesn't force a
+					// re-type of the email. Force a uniform user-facing message on
+					// 400/401 because better-auth's distinct "user not found" vs
+					// "invalid password" strings are a user-enumeration vector.
+					return fail(401, { error: 'Invalid email or password', email: '' });
+				}
+				return fail(400, { error: 'Invalid email or password', email });
 			}
 
 			forwardAuthCookies(authResponse, cookies, url.host);

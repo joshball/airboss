@@ -56,7 +56,14 @@ describe('MarkdownBody', () => {
 				children: [{ kind: 'text', value: '<script>window.__pwn = true;</script>' }],
 			},
 		];
-		render(MarkdownBody, { nodes });
+		const { container } = render(MarkdownBody, { nodes });
+		// Side-effect check: window.__pwn was never set. Necessary but not
+		// sufficient (any syntax-error script body would also leave __pwn
+		// undefined), so pair it with a structural check on the rendered DOM:
+		// confirm no <script> element mounted and the literal text rendered
+		// as escaped content.
 		expect((window as unknown as { __pwn?: boolean }).__pwn).not.toBe(true);
+		expect(container.querySelector('script')).toBeNull();
+		expect(container.textContent).toContain('<script>');
 	});
 });

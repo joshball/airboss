@@ -21,29 +21,40 @@ function fillDevAccount(accountEmail: string) {
 </script>
 
 <svelte:head>
-	<title>Sign in -- hangar</title>
+	<title>Sign in - airboss hangar</title>
 </svelte:head>
 
 <ThemeProvider theme="airboss/default">
 	<main class="page">
-		<section class="card">
-			<header class="hd">
-				<h1>airboss</h1>
-				<p class="sub">hangar</p>
-			</header>
+		<section class="card" aria-labelledby="login-heading">
+			<div class="hd">
+				<h1 id="login-heading">Sign in to airboss hangar</h1>
+				<p class="sub" aria-hidden="true">airboss hangar</p>
+			</div>
 
 			{#if form?.error}
 				<Banner tone="danger">{form.error}</Banner>
 			{/if}
+
+			<!--
+				aria-live region announces submit-in-flight to AT users -- the Button's
+				text swap is not consistently re-announced by NVDA/VoiceOver.
+			-->
+			<span class="sr-only" aria-live="polite">{loading ? 'Signing in...' : ''}</span>
 
 			<form
 				method="POST"
 				class="form"
 				use:enhance={() => {
 					loading = true;
-					return async ({ update }) => {
+					return async ({ update, result }) => {
 						loading = false;
 						await update();
+						if (result.type === 'failure') {
+							// Move focus to the password field on failed submit so keyboard
+							// users get a clear signal something changed and can correct.
+							document.querySelector<HTMLInputElement>('input[name="password"]')?.focus();
+						}
 					};
 				}}
 			>
@@ -56,6 +67,7 @@ function fillDevAccount(accountEmail: string) {
 					autocomplete="email"
 					disabled={loading}
 					placeholder="you@example.com"
+					invalid={!!form?.error}
 				/>
 				<TextField
 					name="password"
@@ -65,6 +77,7 @@ function fillDevAccount(accountEmail: string) {
 					required
 					autocomplete="current-password"
 					disabled={loading}
+					invalid={!!form?.error}
 				/>
 				<Button
 					type="submit"
@@ -88,15 +101,19 @@ function fillDevAccount(accountEmail: string) {
 								class="dev-btn"
 								aria-label="Pre-fill login form as {account.name} ({account.role})"
 								onclick={() => fillDevAccount(account.email)}
+								disabled={loading}
 							>
 								<span class="dev-name">{account.name}</span>
 								<span class="dev-role">{account.role}</span>
 							</button>
 						{/each}
 					</div>
-					<p class="dev-hint">
-						password: <code>{DEV_PASSWORD}</code>
-					</p>
+					<!--
+						Dev-account buttons pre-fill the password field on click; we
+						deliberately do NOT print the password to screen so the login page
+						doesn't train people to expect credentials to live there. Matches
+						study/login.
+					-->
 				</section>
 			{/if}
 		</section>
@@ -105,7 +122,7 @@ function fillDevAccount(accountEmail: string) {
 
 <style>
 	.page {
-		min-height: 100vh;
+		min-height: 100dvh;
 		display: grid;
 		place-items: center;
 		padding: var(--space-2xl) var(--space-lg);
@@ -193,8 +210,26 @@ function fillDevAccount(accountEmail: string) {
 	}
 
 	.dev-btn:focus-visible {
-		outline: none;
+		/*
+		 * outline:transparent preserves a visible system focus ring in forced-
+		 * colors / Windows High-Contrast Mode (where box-shadow is discarded).
+		 * The themed box-shadow renders on top in normal modes.
+		 */
+		outline: 2px solid transparent;
+		outline-offset: 2px;
 		box-shadow: 0 0 0 3px var(--focus-ring);
+	}
+
+	.sr-only {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		white-space: nowrap;
+		border: 0;
 	}
 
 	.dev-name {
@@ -209,19 +244,4 @@ function fillDevAccount(accountEmail: string) {
 		letter-spacing: var(--type-ui-caption-tracking);
 	}
 
-	.dev-hint {
-		margin: var(--space-sm) 0 0;
-		font-size: var(--type-ui-caption-size);
-		color: var(--ink-faint);
-		text-align: center;
-	}
-
-	.dev-hint code {
-		background: var(--surface-sunken);
-		padding: 0 var(--space-2xs);
-		border-radius: var(--radius-sm);
-		font-family: var(--font-family-mono);
-		font-size: var(--type-ui-caption-size);
-		color: var(--ink-muted);
-	}
 </style>

@@ -91,9 +91,11 @@ export function parseThemePreference(raw: string | null | undefined): ThemePrefe
  *
  * Today only `sim/glass` qualifies (dark-only -- emit throws if asked for
  * a light palette). Centralized here so the picker, server, and pre-hydration
- * script all agree.
+ * script all agree. The pre-hydration script generator imports this map by
+ * name (NOT a hardcoded `theme === SIM_THEME` check) so a future addition
+ * here ships through codegen without a manual second-edit step.
  */
-const FORCED_APPEARANCE_BY_THEME: Readonly<Partial<Record<ThemeId, AppearanceMode>>> = {
+export const FORCED_APPEARANCE_BY_THEME: Readonly<Partial<Record<ThemeId, AppearanceMode>>> = {
 	[THEMES.SIM_GLASS]: 'dark',
 };
 

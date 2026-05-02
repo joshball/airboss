@@ -67,6 +67,10 @@ let {
 }: Props = $props();
 
 let typedValue = $state('');
+// Unique id for the typed-confirmation input so the wrapping label has an
+// explicit `for=` linkage (some AT prefer the explicit form over implicit
+// label-wraps-input association).
+const typedInputId = `confirm-typed-${Math.random().toString(36).slice(2, 10)}`;
 
 const effectiveVariant = $derived<'primary' | 'danger'>(
 	dangerLevel === 'danger' ? 'danger' : dangerLevel === 'caution' ? 'primary' : variant,
@@ -88,6 +92,13 @@ function handleFormSubmit(event: SubmitEvent) {
 $effect(() => {
 	if (!open) typedValue = '';
 });
+
+// Note: when both `dangerLevel` and `variant` are passed, `dangerLevel` wins
+// silently. We accept the silent override because the practical migration
+// trigger -- "every admin-write surface in hangar/* uses `dangerLevel`
+// exclusively" -- is the right moment to drop the `variant` prop entirely
+// rather than ship a runtime warning that has to be removed at the same
+// time. See hangar/users/[id] and hangar/sources/[id] for current callers.
 </script>
 
 <Dialog bind:open onClose={oncancel} size="sm" ariaLabel={title}>
@@ -99,9 +110,10 @@ $effect(() => {
 		<div class="content">
 			{@render children()}
 			{#if typedConfirmation}
-				<label class="typed-gate">
+	<label class="typed-gate" for={typedInputId}>
 					<span class="typed-gate-label">{typedConfirmation.label}</span>
 					<input
+						id={typedInputId}
 						type="text"
 						class="typed-gate-input"
 						bind:value={typedValue}

@@ -1,11 +1,18 @@
-import { QUERY_PARAMS, ROUTES, type Role } from '@ab/constants';
+import { QUERY_PARAMS, ROLE_VALUES, ROUTES, type Role } from '@ab/constants';
 import { error, type RequestEvent, redirect } from '@sveltejs/kit';
 
-/** Session shape stored in locals by hooks.server.ts. */
+/**
+ * Session shape stored in locals by hooks.server.ts.
+ *
+ * `expiresAt` is intentionally NOT included: better-auth's session validation
+ * already enforces expiry on every request, and no caller in airboss reads it
+ * off `event.locals.session`. If a future flow needs "re-auth before sensitive
+ * write" semantics, add a `requireFreshSession(event, maxAgeSeconds)` helper
+ * here and re-introduce the field with that single consumer in mind.
+ */
 export interface AuthSession {
 	id: string;
 	userId: string;
-	expiresAt: Date;
 }
 
 /** User shape stored in locals by hooks.server.ts. */
@@ -21,6 +28,23 @@ export interface AuthUser {
 	banned: boolean | null;
 	createdAt: Date;
 	updatedAt: Date;
+}
+
+/**
+ * Validate an unknown role string against `ROLE_VALUES`. Returns a typed `Role`
+ * for known values, `null` for `null` / `undefined` / unknown strings.
+ *
+ * Use at the hook boundary when hydrating `event.locals.user.role` from
+ * better-auth: the `bauth_user.role` column is plain `text` (better-auth manages
+ * writes to that table, so we don't add a CHECK there ourselves), so a stray
+ * DB write or third-party integration could land any string. Without this guard
+ * the `role: (raw as Role) ?? null` cast launders unknown values into the
+ * `Role` type and downstream `=== ROLES.ADMIN` comparisons silently disagree
+ * with `requireRole`'s `includes` check.
+ */
+export function parseRole(raw: unknown): Role | null {
+	if (typeof raw !== 'string') return null;
+	return (ROLE_VALUES as readonly string[]).includes(raw) ? (raw as Role) : null;
 }
 
 /**
@@ -60,6 +84,9 @@ export interface AuthUser {
  * server (browsers strip them), and SvelteKit now forbids reading
  * `event.url.hash` on the server -- any fragment must be restored client-side
  * if needed.
+ *
+ * Uses 303 (See Other) so POST -> redirect -> GET is unambiguous per RFC 7231;
+ * matches the login action's own success redirect.
  */
 export function requireAuth(event: RequestEvent): AuthUser {
 	const user = event.locals.user;
@@ -67,40 +94,23 @@ export function requireAuth(event: RequestEvent): AuthUser {
 		const { pathname, search } = event.url;
 		const original = `${pathname}${search}`;
 		const redirectTo = encodeURIComponent(original);
-		redirect(302, `${ROUTES.LOGIN}?${QUERY_PARAMS.REDIRECT_TO}=${redirectTo}`);
+		redirect(303, `${ROUTES.LOGIN}?${QUERY_PARAMS.REDIRECT_TO}=${redirectTo}`);
 	}
 	return user;
 }
 
 /**
  * Guard: require one of the specified roles.
- * Reads user from locals (set by hooks.server.ts).
+ *
+ * Reads user from locals (set by hooks.server.ts). If the user is not
+ * authenticated, redirects to `/login` first (via `requireAuth`); otherwise
+ * throws 403 (`error(...)`) if the user has no role or the role does not
+ * match any of the supplied set.
  */
 export function requireRole(event: RequestEvent, ...roles: Role[]): AuthUser {
 	const user = requireAuth(event);
 	if (!user.role || !(roles as readonly string[]).includes(user.role)) {
 		error(403, 'Forbidden');
-	}
-	return user;
-}
-
-/**
- * Chokepoint for flows that require a verified email address. Not wired into
- * any route today -- no current route demands `emailVerified === true` -- but
- * declared here so the first admin / sensitive-write route adds one line
- * instead of writing the check from scratch. Use after `requireAuth`:
- *
- *   const user = requireAuth(event);
- *   requireVerifiedEmail(user);
- *
- * Throws a 403 `error(...)` rather than a redirect because a verified-email
- * wall is typically an admin surface -- bouncing to login would be the wrong
- * UX. Callers can catch and render a "please verify your email" page if they
- * prefer.
- */
-export function requireVerifiedEmail(user: AuthUser): AuthUser {
-	if (!user.emailVerified) {
-		error(403, 'Email verification required');
 	}
 	return user;
 }

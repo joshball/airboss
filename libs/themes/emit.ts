@@ -479,7 +479,10 @@ export function themeToCss(theme: Theme, appearance: AppearanceMode): string {
 	const resolved = resolveTheme(theme);
 	const palette = resolved.palette[appearance];
 	if (!palette) {
-		throw new Error(`Theme ${theme.id} has no palette for appearance ${appearance}`);
+		const declared = (Object.keys(resolved.palette) as AppearanceMode[]).join(', ') || '(none)';
+		throw new Error(
+			`Theme ${theme.id} has no palette for appearance '${appearance}'. Declared appearances: ${declared}.`,
+		);
 	}
 	const isDark = appearance === 'dark';
 	const avionics = resolved.avionics ? (isDark ? resolved.avionics.dark : resolved.avionics.light) : undefined;

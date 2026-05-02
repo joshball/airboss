@@ -9,7 +9,7 @@
  */
 
 import { countAuditEntriesSince } from '@ab/audit';
-import { countAllUsers, requireRole } from '@ab/auth';
+import { countAllUsersIncludingBanned, requireRole } from '@ab/auth';
 import { countAllJobs, countLiveReferences, countLiveSources } from '@ab/bc-hangar';
 import { ROLES } from '@ab/constants';
 import type { PageServerLoad } from './$types';
@@ -33,7 +33,7 @@ export const load: PageServerLoad = async (event) => {
 	const [sourceCount, glossaryCount, userCount, recentAuditCount, jobCount] = await Promise.all([
 		safeCount(countLiveSources()),
 		safeCount(countLiveReferences()),
-		safeCount(countAllUsers()),
+		safeCount(countAllUsersIncludingBanned()),
 		safeCount(countAuditEntriesSince(auditWindowStart)),
 		safeCount(countAllJobs()),
 	]);

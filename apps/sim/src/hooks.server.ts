@@ -1,4 +1,4 @@
-import type { Role } from '@ab/constants';
+import { parseRole } from '@ab/auth';
 import {
 	APPEARANCE_COOKIE,
 	injectPreHydrationScript,
@@ -6,14 +6,23 @@ import {
 	readThemeFromCookies,
 } from '@ab/themes';
 import { PRE_HYDRATION_SCRIPT } from '@ab/themes/generated/pre-hydration';
+import { createLogger } from '@ab/utils';
 import type { Handle } from '@sveltejs/kit';
 import { building } from '$app/environment';
 import { auth } from '$lib/server/auth';
 
+const log = createLogger('sim');
+
 const REQUEST_ID_PATTERN = /^[a-zA-Z0-9_-]{1,64}$/;
 const REQUEST_ID_HEADER = 'x-request-id';
 
-function resolveRequestId(req: Request): string {
+/**
+ * Inbound request-id is correlation-only, never trust-bearing. We accept any
+ * 64-char alphanumeric+`_-` value the caller supplies for log threading and
+ * mint a random UUID when nothing valid arrived. The value is echoed back as
+ * the response header so a client can correlate failures.
+ */
+function acceptOrGenerateRequestId(req: Request): string {
 	const raw = req.headers.get(REQUEST_ID_HEADER);
 	return raw && REQUEST_ID_PATTERN.test(raw) ? raw : crypto.randomUUID();
 }
@@ -34,7 +43,7 @@ function resolveRequestId(req: Request): string {
 export const handle: Handle = async ({ event, resolve }) => {
 	if (building) return resolve(event);
 
-	const requestId = resolveRequestId(event.request);
+	const requestId = acceptOrGenerateRequestId(event.request);
 	event.locals.requestId = requestId;
 	event.locals.appearance = parseAppearancePreference(event.cookies.get(APPEARANCE_COOKIE));
 	event.locals.theme = readThemeFromCookies(event.cookies);
@@ -45,7 +54,6 @@ export const handle: Handle = async ({ event, resolve }) => {
 			? {
 					id: session.session.id,
 					userId: session.session.userId,
-					expiresAt: session.session.expiresAt,
 				}
 			: null;
 		event.locals.user = session?.user
@@ -53,20 +61,31 @@ export const handle: Handle = async ({ event, resolve }) => {
 					id: session.user.id,
 					email: session.user.email,
 					name: session.user.name,
+					// better-auth's additionalFields are typed as `unknown` on the
+					// session payload; widen via Record<string, unknown> and narrow
+					// with a `?? ''` fallback at the boundary so the rest of the app
+					// gets a typed AuthUser without per-callsite casts.
 					firstName: ((session.user as Record<string, unknown>).firstName as string) ?? '',
 					lastName: ((session.user as Record<string, unknown>).lastName as string) ?? '',
 					emailVerified: session.user.emailVerified,
-					role: (session.user.role as Role) ?? null,
+					role: parseRole(session.user.role),
 					image: session.user.image ?? null,
 					banned: session.user.banned ?? null,
 					createdAt: session.user.createdAt,
 					updatedAt: session.user.updatedAt,
 				}
 			: null;
-	} catch {
+	} catch (err) {
 		// Degrade gracefully -- session lookup is best-effort. Anonymous
 		// visits stay functional; only the persistence endpoint gates on
 		// `event.locals.user` and rejects unauthenticated callers there.
+		// Log so on-call has signal when "I'm signed in on study but sim says
+		// I'm not" is reported.
+		log.error(
+			'session lookup failed',
+			{ requestId, metadata: { path: event.url.pathname } },
+			err instanceof Error ? err : undefined,
+		);
 		event.locals.session = null;
 		event.locals.user = null;
 	}

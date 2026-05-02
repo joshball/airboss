@@ -9,14 +9,14 @@ let {
 	formAction: string;
 } = $props();
 
-let value = $state('');
-$effect(() => {
-	// Re-sync the textarea state whenever the server-side notes prop changes
-	// (after a successful POST and an action invalidation, for example). The
-	// initial-value capture warning fires without this; the effect closes over
-	// the live `notesMd` prop instead of capturing the initial string once.
-	value = notesMd;
-});
+// Seed once from the server-rendered prop. The previous `$effect` re-sync
+// clobbered in-flight typing whenever the parent revalidated (any
+// re-render where `notesMd` re-read the same string would reset the
+// textarea, dropping unsaved keystrokes). The effect is only useful after a
+// real save -- prefer remounting via `{#key notesMd}` at the parent if a
+// hard reset is ever needed.
+// svelte-ignore state_referenced_locally -- initial-value only
+let value = $state(notesMd);
 const remaining = $derived(HANDBOOK_NOTES_MAX_LENGTH - value.length);
 const overflowing = $derived(remaining < 0);
 </script>

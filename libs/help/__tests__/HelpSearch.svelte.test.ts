@@ -33,4 +33,25 @@ describe('HelpSearch', () => {
 		await new Promise((resolve) => setTimeout(resolve, 0));
 		expect(screen.getByTestId('helpsearch-trigger').getAttribute('data-state')).toBe('open');
 	});
+
+	it('"/" on document.body opens the palette', async () => {
+		render(HelpSearch);
+		const event = new KeyboardEvent('keydown', { key: '/', bubbles: true });
+		document.body.dispatchEvent(event);
+		await new Promise((resolve) => setTimeout(resolve, 0));
+		expect(screen.getByTestId('helpsearch-trigger').getAttribute('data-state')).toBe('open');
+	});
+
+	it('"/" while focus is in an editable field does NOT open the palette', async () => {
+		render(HelpSearch);
+		const input = document.createElement('input');
+		input.type = 'text';
+		document.body.appendChild(input);
+		input.focus();
+		const event = new KeyboardEvent('keydown', { key: '/', bubbles: true });
+		input.dispatchEvent(event);
+		await new Promise((resolve) => setTimeout(resolve, 0));
+		expect(screen.getByTestId('helpsearch-trigger').getAttribute('data-state')).toBe('closed');
+		input.remove();
+	});
 });

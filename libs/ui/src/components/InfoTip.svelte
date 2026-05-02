@@ -112,14 +112,28 @@ function measureFlip(): void {
 	flipX = rect.right > window.innerWidth - margin;
 }
 
+/**
+ * Hover-to-open is gated to true hover devices. On touch (`pointer: coarse`)
+ * `pointerenter` fires on tap, so without the guard a tap would hover-open
+ * the tooltip and then immediately also fire `click` to pin/unpin -- the
+ * resulting flicker confuses touch users. Keyboard focus + click are the
+ * touch entry points; hover stays a desktop affordance.
+ */
+function isHoverDevice(): boolean {
+	if (typeof window === 'undefined') return false;
+	return window.matchMedia?.('(hover: hover)').matches ?? false;
+}
+
 function handlePointerEnter(): void {
 	// Don't preempt a pinned popover with hover state.
 	if (pinned) return;
+	if (!isHoverDevice()) return;
 	void show(false);
 }
 
 function handlePointerLeave(): void {
 	if (pinned) return;
+	if (!isHoverDevice()) return;
 	hide();
 }
 

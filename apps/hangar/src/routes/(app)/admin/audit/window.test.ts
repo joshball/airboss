@@ -99,7 +99,7 @@ describe('pickAllowedValue', () => {
 
 	it('returns the value when it is in the allow-list', () => {
 		expect(pickAllowedValue(AUDIT_OPS.CREATE, AUDIT_OP_VALUES)).toBe(AUDIT_OPS.CREATE);
-		expect(pickAllowedValue(AUDIT_TARGETS.HANGAR_PING, AUDIT_TARGET_VALUES)).toBe(AUDIT_TARGETS.HANGAR_PING);
+		expect(pickAllowedValue(AUDIT_TARGETS.HANGAR_REFERENCE, AUDIT_TARGET_VALUES)).toBe(AUDIT_TARGETS.HANGAR_REFERENCE);
 	});
 });
 
@@ -117,7 +117,7 @@ describe('decodeAuditFilters', () => {
 	it('decodes a fully populated URL', () => {
 		const params = new URLSearchParams();
 		params.set(QUERY_PARAMS.AUDIT_ACTOR, 'usr_abby');
-		params.set(QUERY_PARAMS.AUDIT_TARGET_TYPE, AUDIT_TARGETS.HANGAR_PING);
+		params.set(QUERY_PARAMS.AUDIT_TARGET_TYPE, AUDIT_TARGETS.HANGAR_REFERENCE);
 		params.set(QUERY_PARAMS.AUDIT_TARGET_ID, 'src_x');
 		params.set(QUERY_PARAMS.AUDIT_OP, AUDIT_OPS.UPDATE);
 		params.set(QUERY_PARAMS.AUDIT_WINDOW, AUDIT_WINDOWS.DAY_7);
@@ -125,7 +125,7 @@ describe('decodeAuditFilters', () => {
 
 		const decoded = decodeAuditFilters(params, NOW);
 		expect(decoded.actorId).toBe('usr_abby');
-		expect(decoded.targetType).toBe(AUDIT_TARGETS.HANGAR_PING);
+		expect(decoded.targetType).toBe(AUDIT_TARGETS.HANGAR_REFERENCE);
 		expect(decoded.targetId).toBe('src_x');
 		expect(decoded.op).toBe(AUDIT_OPS.UPDATE);
 		expect(decoded.cursor).toBe('2026-04-30T00:00:00Z::aud_x');

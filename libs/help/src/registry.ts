@@ -235,6 +235,11 @@ function getByAppSurface(surface: AppSurface): readonly HelpPage[] {
 function search(query: ParsedQuery): readonly SearchResult[] {
 	const results: SearchResult[] = [];
 	const needle = query.freeText.trim().toLowerCase();
+	// Empty-query short-circuit: belt-and-braces match for `searchHelp`'s same
+	// guard at the call boundary. Returning an empty array here means a future
+	// caller that bypasses `searchHelp` (e.g. an admin diagnostic surface)
+	// can't accidentally flood the UI with every registered page.
+	if (needle.length === 0 && query.filters.length === 0) return results;
 	for (const indexed of byId.values()) {
 		if (!matchesFilters(indexed.page, query.filters)) continue;
 		const bucket = rankBucketIndexed({

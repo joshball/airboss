@@ -7,7 +7,13 @@ import type { Actions, PageServerLoad } from './$types';
 
 const log = createLogger('study:login');
 
-/** True when the path is a safe local redirect target (no open-redirect bypasses). */
+/**
+ * True when the path is a safe local redirect target (no open-redirect
+ * bypasses). The character allowlist + URL-parse-against-placeholder pattern
+ * forces the result to resolve relative to the current origin: any value that
+ * either contains a control character or parses to a host other than the
+ * placeholder is rejected.
+ */
 function isSafeRedirect(path: string): boolean {
 	if (!path.startsWith('/')) return false;
 	if (path.startsWith('//')) return false;
@@ -15,6 +21,19 @@ function isSafeRedirect(path: string): boolean {
 	if (path.includes('\\')) return false;
 	// Block CR/LF header injection
 	if (path.includes('\r') || path.includes('\n')) return false;
+	// Reject any whitespace or any character outside the URL-safe set so
+	// Unicode tricks (RTL override, leading tab) cannot smuggle a host in.
+	if (!/^[A-Za-z0-9_\-./?&=%~+#:@!$',;*]+$/.test(path)) return false;
+	// Parse against a placeholder origin and confirm the result still resolves
+	// to the placeholder host. Any value that promotes to a different host
+	// (e.g. via percent-encoded `//` after a normalisation pass) is rejected.
+	try {
+		const placeholder = 'https://x.local';
+		const parsed = new URL(path, placeholder);
+		if (parsed.host !== 'x.local') return false;
+	} catch {
+		return false;
+	}
 	return true;
 }
 
@@ -71,16 +90,27 @@ export const actions: Actions = {
 
 			if (!authResponse.ok) {
 				const data = (await authResponse.json().catch(() => null)) as { message?: string } | null;
+				// Server-side log so on-call can distinguish "wrong password" from
+				// "banned" / "verification required" / "validation error" without
+				// leaking the difference to the client.
+				log.warn('login non-ok response', {
+					requestId: locals.requestId,
+					metadata: { status: authResponse.status, betterAuthMessage: data?.message ?? null },
+				});
 				if (authResponse.status === 429) {
 					return fail(429, {
 						error: 'Too many sign-in attempts. Please wait a moment and try again.',
 						email,
 					});
 				}
-				return fail(authResponse.status === 401 ? 401 : 400, {
-					error: data?.message ?? 'Invalid email or password',
-					email,
-				});
+				if (authResponse.status === 401) {
+					// Blank the echoed email on a credential-stuffing 401 so the form
+					// doesn't double as a low-cost enumeration assistant. The 400
+					// (validation) path still echoes so a typo doesn't force a
+					// re-type of the email.
+					return fail(401, { error: data?.message ?? 'Invalid email or password', email: '' });
+				}
+				return fail(400, { error: data?.message ?? 'Invalid email or password', email });
 			}
 
 			forwardAuthCookies(authResponse, cookies, url.host);

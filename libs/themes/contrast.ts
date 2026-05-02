@@ -197,18 +197,31 @@ export function luminanceOklch(oklch: Pick<ParsedOklch, 'l' | 'c' | 'h'>): numbe
 }
 
 /**
- * Resolve any supported color string to relative luminance.
- * Returns 0 for unparseable input (defensive; callers decide whether
- * to treat that as a test failure).
+ * Resolve any supported color string to relative luminance, returning
+ * `undefined` when the input matches no parser. Use this from callers that
+ * need to fail loudly on a malformed token; use `luminance(...)` from hot
+ * paths that can tolerate the silent-zero fallback.
  */
-export function luminance(value: string): number {
+export function luminanceStrict(value: string): number | undefined {
 	const trimmed = value.trim();
 	const oklch = parseOklch(trimmed);
 	if (oklch) return luminanceOklch(oklch);
 	if (HEX_LONG_RE.test(trimmed) || HEX_SHORT_RE.test(trimmed)) return luminanceHex(trimmed);
 	const rgb = parseRgb(trimmed);
 	if (rgb) return luminanceLinear(rgb);
-	return 0;
+	return undefined;
+}
+
+/**
+ * Resolve any supported color string to relative luminance.
+ * Returns 0 for unparseable input (defensive; callers decide whether
+ * to treat that as a test failure). Prefer `luminanceStrict` when the
+ * caller can branch on a parse failure -- contrast tests in particular
+ * hide their actual bug (a malformed token) when the silent-zero fallback
+ * fires here.
+ */
+export function luminance(value: string): number {
+	return luminanceStrict(value) ?? 0;
 }
 
 /**
@@ -219,10 +232,17 @@ export function luminance(value: string): number {
  * colors are 1:1. Translucent colors are measured at their own
  * luminance (alpha is ignored for the ratio -- flatten via the caller
  * if compositing math is needed).
+ *
+ * Throws (rather than silently scoring 1:1) when either side is
+ * unparseable -- the previous silent-zero fallback masked malformed
+ * tokens as "real" 21:1 / 1:1 readings, which made contrast-matrix test
+ * failures point at the wrong color and cost 10-minute debug detours.
  */
 export function contrastRatio(foreground: string, background: string): number {
-	const lum1 = luminance(foreground);
-	const lum2 = luminance(background);
+	const lum1 = luminanceStrict(foreground);
+	if (lum1 === undefined) throw new Error(`contrastRatio: cannot parse foreground color '${foreground}'`);
+	const lum2 = luminanceStrict(background);
+	if (lum2 === undefined) throw new Error(`contrastRatio: cannot parse background color '${background}'`);
 	const lighter = Math.max(lum1, lum2);
 	const darker = Math.min(lum1, lum2);
 	return (lighter + 0.05) / (darker + 0.05);
