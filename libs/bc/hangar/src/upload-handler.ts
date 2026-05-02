@@ -88,6 +88,30 @@ export function makeUploadHandler(options: UploadHandlerOptions = {}): JobHandle
 		await ctx.logEvent(`sha256=${sha256} size=${sizeBytes}`);
 
 		if (isNoChange(existing.checksum, sha256)) {
+			// Same bytes: persist a version-only update if the operator typed
+			// a corrected version string; otherwise it's a true no-op.
+			const supplied = payload.version?.trim();
+			if (supplied && supplied !== existing.version) {
+				await fs.unlink(tempPath).catch(() => {});
+				const updatedAt = now();
+				await db
+					.update(hangarSource)
+					.set({
+						rev: existing.rev + 1,
+						version: supplied,
+						dirty: true,
+						updatedBy: ctx.job.actorId,
+						updatedAt,
+					})
+					.where(and(eq(hangarSource.id, sourceId), eq(hangarSource.rev, existing.rev)));
+				await ctx.logEvent(`metadata-only update: version ${existing.version} -> ${supplied}`);
+				await finalizeAudit(ctx, sourceId, {
+					outcome: 'metadata-updated',
+					checksum: sha256,
+					version: supplied,
+				});
+				return { kind: 'upload', outcome: 'metadata-updated', sha256, version: supplied };
+			}
 			await ctx.logEvent('no change: sha matches current checksum');
 			await fs.unlink(tempPath).catch(() => {});
 			await finalizeAudit(ctx, sourceId, {
@@ -101,15 +125,41 @@ export function makeUploadHandler(options: UploadHandlerOptions = {}): JobHandle
 
 		const newVersion = payload.version?.trim() || existing.version;
 		const versionChanged = newVersion !== existing.version;
-		if (versionChanged && (await pathExists(destPath))) {
-			const archivePath = resolve(destDir, archiveFilename(sourceId, existing.version, ext));
+		// Archive the prior binary on ANY checksum-mismatched overwrite, not
+		// just version changes. A re-upload with the same version but
+		// different bytes (errata patch, corrected scan) would otherwise
+		// silently clobber the prior file with no recovery path. Use a
+		// sha-prefix suffix when versions collide so multiple same-version
+		// archives don't overwrite each other.
+		const destExists = await pathExists(destPath);
+		if (destExists) {
+			const archiveName = versionChanged
+				? archiveFilename(sourceId, existing.version, ext)
+				: archiveFilename(sourceId, `${existing.version}-${existing.checksum.slice(0, 8)}`, ext);
+			const archivePath = resolve(destDir, archiveName);
 			await fs.rename(destPath, archivePath);
 			await ctx.logEvent(`archived ${destPath} -> ${archivePath}`);
 			await pruneOldArchives(destDir, sourceId, ext, SOURCE_ACTION_LIMITS.ARCHIVE_RETENTION, ctx);
 		}
 
 		await ctx.reportProgress({ step: 3, total: 4, message: 'writing destination' });
-		await fs.rename(tempPath, destPath);
+		// Stage tmp inside destDir so both renames cross the same fs and a
+		// crashed mid-flow can detect a half-finished upload (destPath
+		// missing + a `.upload-in-progress.<pid>` sentinel beside the archive).
+		const stagePath = resolve(destDir, `.upload-in-progress.${process.pid}.${Date.now()}.${ext}`);
+		try {
+			await fs.rename(tempPath, stagePath);
+		} catch {
+			// Cross-device rename -- fall back to copy+unlink.
+			await fs.copyFile(tempPath, stagePath);
+			await fs.unlink(tempPath).catch(() => {});
+		}
+		try {
+			await fs.rename(stagePath, destPath);
+		} catch (err) {
+			await fs.unlink(stagePath).catch(() => {});
+			throw err;
+		}
 		await ctx.logEvent(`wrote ${destPath}`);
 
 		await ctx.reportProgress({ step: 4, total: 4, message: 'updating registry' });

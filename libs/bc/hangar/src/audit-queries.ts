@@ -93,10 +93,21 @@ const CURSOR_DELIMITER = '::';
  * Decode a cursor string into a `(timestamp, id)` tuple. Returns `null` if
  * the string isn't well-formed -- the caller treats that as "no cursor"
  * rather than a hard error so a stale URL still loads page 1.
+ *
+ * Splits on the **last** occurrence of `::`. The id half (an `aud_<ULID>`)
+ * never contains `::`, but the timestamp half always carries colons inside
+ * the time component (`HH:MM:SS`). Splitting on the first `::` would only
+ * match a literal `::` *inside* the ISO timestamp -- which never happens
+ * for valid input but can happen for crafted/stale cursors. Last-occurrence
+ * split keeps the cleanly-encoded happy path correct (`<ts>::<id>`) and
+ * defensively handles input where extra delimiters appear inside the
+ * timestamp: a `Date(...)` of "2026-04-30T00:00:00Z::aud_x" still yields
+ * NaN, returning `null` -> caller resets to page 1 instead of silently
+ * matching nothing.
  */
 export function decodeAuditCursor(raw: string | undefined | null): DecodedAuditCursor | null {
 	if (!raw) return null;
-	const idx = raw.indexOf(CURSOR_DELIMITER);
+	const idx = raw.lastIndexOf(CURSOR_DELIMITER);
 	if (idx <= 0) return null;
 	const tsPart = raw.slice(0, idx);
 	const id = raw.slice(idx + CURSOR_DELIMITER.length);
@@ -298,6 +309,73 @@ export interface ActorSearchHit {
 	id: string;
 	name: string;
 	email: string;
+}
+
+/**
+ * Better-auth user ids are unprefixed lowercase ULIDs -- 26 chars of
+ * Crockford base32 (`[0-9a-z]` minus `i`, `l`, `o`, `u`). The audit
+ * explorer encodes the actor filter as `?actor=<id>`, so the deep-link
+ * resolution path can recognise an id-shaped value cheaply and skip the
+ * name/email ILIKE query (which would never match by definition).
+ *
+ * The check is intentionally cheap and shape-only: it doesn't certify that
+ * the id exists in `bauth_user`, just that it could plausibly be one.
+ * `getActorById` is the lookup; this is the gatekeeper that picks between
+ * the id path and the search path.
+ */
+const AUTH_ID_REGEX = /^[0-9abcdefghjkmnpqrstvwxyz]{26}$/;
+
+/**
+ * Cheap shape check for a better-auth user id. See {@link AUTH_ID_REGEX}.
+ * Exposed so the deep-link resolver in the audit-page loader can route a
+ * `?actor=<value>` to {@link getActorById} (exact-match) when the value
+ * looks like an id, and fall back to {@link searchActorIds} (name/email
+ * ILIKE) otherwise.
+ */
+export function isLikelyAuthId(value: string | undefined | null): boolean {
+	if (!value) return false;
+	return AUTH_ID_REGEX.test(value);
+}
+
+/**
+ * Exact-match lookup of a single `bauth_user` row by id, returning the
+ * same shape as {@link searchActorIds} so the audit-page deep-link
+ * resolution can swap in/out without re-shaping the result. Returns an
+ * empty array when the id is unknown -- callers iterate the result, the
+ * "not found" case looks identical to "no match" from the search path.
+ *
+ * Lives next to `searchActorIds` because the two are siblings: same row
+ * shape, same caller (the actor-chip resolver in the audit-page loader),
+ * different match strategies.
+ */
+export async function getActorById(id: string | undefined | null, db: Db = defaultDb): Promise<ActorSearchHit[]> {
+	if (!id) return [];
+	const trimmed = id.trim();
+	if (!trimmed) return [];
+	return db
+		.select({ id: bauthUser.id, name: bauthUser.name, email: bauthUser.email })
+		.from(bauthUser)
+		.where(eq(bauthUser.id, trimmed))
+		.limit(1);
+}
+
+/**
+ * Resolve an `?actor=<value>` deep-link to the matching actor chip. Routes
+ * to {@link getActorById} when the value looks like a better-auth id (the
+ * encoded form the URL always carries when the user picked a typeahead
+ * hit), and falls back to {@link searchActorIds} (name/email ILIKE) for
+ * free-text values bookmarked from older URLs or hand-edited.
+ *
+ * The system-write sentinel (`AUDIT_ACTOR_SYSTEM`) and empty input both
+ * yield `[]` -- the caller renders no chip in those cases.
+ */
+export async function resolveActorForChip(
+	value: string | undefined | null,
+	db: Db = defaultDb,
+): Promise<ActorSearchHit[]> {
+	if (!value || value === AUDIT_ACTOR_SYSTEM) return [];
+	if (isLikelyAuthId(value)) return getActorById(value, db);
+	return searchActorIds(value, 1, db);
 }
 
 /**

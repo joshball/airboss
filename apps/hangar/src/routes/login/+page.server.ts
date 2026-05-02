@@ -57,15 +57,19 @@ export const actions: Actions = {
 			const authResponse = await auth.handler(authRequest);
 
 			if (!authResponse.ok) {
-				const data = (await authResponse.json().catch(() => null)) as { message?: string } | null;
 				if (authResponse.status === 429) {
 					return fail(429, {
 						error: 'Too many sign-in attempts. Please wait a moment and try again.',
 						email,
 					});
 				}
+				// Drain the body so the connection is reusable, but ignore the
+				// underlying message: better-auth distinguishes "user not found"
+				// from "invalid password" which combined with the email echo
+				// is a user-enumeration signal. Force a uniform message.
+				await authResponse.json().catch(() => null);
 				return fail(authResponse.status === 401 ? 401 : 400, {
-					error: data?.message ?? 'Invalid email or password',
+					error: 'Invalid email or password',
 					email,
 				});
 			}

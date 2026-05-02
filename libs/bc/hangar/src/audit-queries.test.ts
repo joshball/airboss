@@ -23,8 +23,11 @@ import {
 	clampAuditLimit,
 	decodeAuditCursor,
 	encodeAuditCursor,
+	getActorById,
 	getAuditEntry,
+	isLikelyAuthId,
 	listAuditEntries,
+	resolveActorForChip,
 	searchActorIds,
 } from './audit-queries';
 
@@ -77,6 +80,61 @@ describe('audit cursor encode + decode', () => {
 		expect(decodeAuditCursor('2026-04-30T00:00:00Z::')).toBeNull(); // empty id
 		expect(decodeAuditCursor('not-a-date::aud_x')).toBeNull(); // bad date
 		expect(decodeAuditCursor('plainstring')).toBeNull(); // no delimiter
+	});
+
+	it('splits on the LAST delimiter so a stale/crafted cursor with extra `::` resets to page 1', () => {
+		// A crafted cursor smuggling a `::` into the timestamp half. With
+		// indexOf-based splitting the parser picked the FIRST `::`, leaving
+		// a partial timestamp like "2026-04-30T00:00:00Z" parseable -- but
+		// then the id half started with "garbage::" which silently matched
+		// nothing in the keyset compare. With lastIndexOf the timestamp
+		// half is "2026-04-30T00:00:00Z::garbage" which Date() rejects, so
+		// decoding fails -> caller resets to page 1 cleanly.
+		expect(decodeAuditCursor('2026-04-30T00:00:00Z::garbage::aud_x')).toBeNull();
+		// And a valid cursor (no extra `::`) still round-trips happily.
+		const ts = new Date('2026-04-30T12:34:56.789Z');
+		const id = 'aud_01HX0000000000000000000000';
+		const decoded = decodeAuditCursor(`${ts.toISOString()}::${id}`);
+		expect(decoded).not.toBeNull();
+		expect(decoded?.timestamp.toISOString()).toBe(ts.toISOString());
+		expect(decoded?.id).toBe(id);
+	});
+});
+
+describe('isLikelyAuthId', () => {
+	it('accepts a 26-char Crockford base32 lowercase ULID (better-auth id shape)', () => {
+		// Sample produced by ulidx -> .toLowerCase().
+		expect(isLikelyAuthId('01kqmb6jrp1bhnsn3me4wwgf5s')).toBe(true);
+	});
+
+	it('rejects empty / nullish / whitespace-only input', () => {
+		expect(isLikelyAuthId(undefined)).toBe(false);
+		expect(isLikelyAuthId(null)).toBe(false);
+		expect(isLikelyAuthId('')).toBe(false);
+		expect(isLikelyAuthId('   ')).toBe(false);
+	});
+
+	it('rejects ids the wrong length', () => {
+		expect(isLikelyAuthId('01kqmb6jrp1bhnsn3me4wwgf5')).toBe(false); // 25
+		expect(isLikelyAuthId('01kqmb6jrp1bhnsn3me4wwgf5s0')).toBe(false); // 27
+	});
+
+	it('rejects ids using base32 letters Crockford excludes (i/l/o/u)', () => {
+		expect(isLikelyAuthId('01kqmb6jrp1bhnsn3me4wwgf5i')).toBe(false);
+		expect(isLikelyAuthId('01kqmb6jrp1bhnsn3me4wwgf5l')).toBe(false);
+		expect(isLikelyAuthId('01kqmb6jrp1bhnsn3me4wwgf5o')).toBe(false);
+		expect(isLikelyAuthId('01kqmb6jrp1bhnsn3me4wwgf5u')).toBe(false);
+	});
+
+	it('rejects prefixed-id shapes (auth ids are unprefixed)', () => {
+		expect(isLikelyAuthId('aud_01kqmb6jrp1bhnsn3me4wwgf5s')).toBe(false);
+		expect(isLikelyAuthId('usr_01kqmb6jrp1bhnsn3me4wwgf5s')).toBe(false);
+	});
+
+	it('rejects free-text actor searches (the searchActorIds path)', () => {
+		expect(isLikelyAuthId('joshua@airboss.test')).toBe(false);
+		expect(isLikelyAuthId('Audit Tester Alpha')).toBe(false);
+		expect(isLikelyAuthId('null')).toBe(false); // the system-write sentinel
 	});
 });
 
@@ -413,5 +471,72 @@ describe('searchActorIds', () => {
 		// Cap at 1 even though 2 fixtures match the prefix.
 		const hits = await searchActorIds('Audit Tester', 1);
 		expect(hits.length).toBeLessThanOrEqual(1);
+	});
+});
+
+describe('getActorById', () => {
+	it('returns an empty list for empty / nullish input', async () => {
+		expect(await getActorById('')).toEqual([]);
+		expect(await getActorById('   ')).toEqual([]);
+		expect(await getActorById(undefined)).toEqual([]);
+		expect(await getActorById(null)).toEqual([]);
+	});
+
+	it('returns the matching actor on an exact-id hit (the deep-link case ILIKE silently missed)', async () => {
+		const hits = await getActorById(ACTOR_A_ID);
+		expect(hits).toHaveLength(1);
+		expect(hits[0]?.id).toBe(ACTOR_A_ID);
+		expect(hits[0]?.name).toBe('Audit Tester Alpha');
+		expect(hits[0]?.email).toBe(ACTOR_A_EMAIL);
+	});
+
+	it('returns an empty list for an unknown id (chip renders empty, no crash)', async () => {
+		// A well-shaped but unknown id. searchActorIds would have returned []
+		// here too, just for the wrong reason; getActorById returns it for
+		// the right one (no row matches the PK).
+		const unknownId = generateAuthId();
+		const hits = await getActorById(unknownId);
+		expect(hits).toEqual([]);
+	});
+
+	it('does NOT match name or email -- that is searchActorIds territory', async () => {
+		// The whole point: getActorById is exact-PK only. Passing a name
+		// fragment or email must not return the seeded actor (it would
+		// under the old `searchActorIds(decoded.actorId, 1)` wiring).
+		expect(await getActorById('Audit Tester Alpha')).toEqual([]);
+		expect(await getActorById(ACTOR_A_EMAIL)).toEqual([]);
+	});
+});
+
+describe('resolveActorForChip (deep-link wiring)', () => {
+	it('returns [] for empty input', async () => {
+		expect(await resolveActorForChip('')).toEqual([]);
+		expect(await resolveActorForChip(undefined)).toEqual([]);
+		expect(await resolveActorForChip(null)).toEqual([]);
+	});
+
+	it('returns [] for the system-write sentinel (no chip rendered)', async () => {
+		expect(await resolveActorForChip(AUDIT_ACTOR_SYSTEM)).toEqual([]);
+	});
+
+	it('routes id-shaped values through getActorById (the URL deep-link path)', async () => {
+		// ACTOR_A_ID is a plain ULID -> isLikelyAuthId true -> exact match.
+		const hits = await resolveActorForChip(ACTOR_A_ID);
+		expect(hits).toHaveLength(1);
+		expect(hits[0]?.id).toBe(ACTOR_A_ID);
+		expect(hits[0]?.email).toBe(ACTOR_A_EMAIL);
+	});
+
+	it('routes free-text values through searchActorIds (hand-edited URL fallback)', async () => {
+		// "Audit Tester Alpha" doesn't look like an auth id, so the resolver
+		// falls back to the ILIKE search; it should still find the seeded
+		// actor by name.
+		const hits = await resolveActorForChip('Audit Tester Alpha');
+		expect(hits.some((h) => h.id === ACTOR_A_ID)).toBe(true);
+	});
+
+	it('returns [] for a well-shaped but unknown id (no chip, no crash)', async () => {
+		const unknownId = generateAuthId();
+		expect(await resolveActorForChip(unknownId)).toEqual([]);
 	});
 });

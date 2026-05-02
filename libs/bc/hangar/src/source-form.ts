@@ -6,7 +6,7 @@
 import { type ReferenceSourceType, SOURCE_KIND_BY_TYPE, SOURCE_KINDS } from '@ab/constants';
 import type { z } from 'zod';
 import { type FieldErrors, getString, parseJsonObject, zodIssuesToFieldErrors } from './form-helpers';
-import { sourceSchema } from './form-schemas';
+import { bvCadenceDaysSchema, bvIndexUrlSchema, bvRegionSchema, sourceSchema } from './form-schemas';
 import type { SourceInput } from './registry';
 import type { SourceFormInitial } from './source-form-types';
 
@@ -80,19 +80,26 @@ export function validateSourceForm(form: FormData): ValidatedSource | SourceVali
 	if (sourceKind === SOURCE_KINDS.BINARY_VISUAL) {
 		// Binary-visual sources build locator_shape from structured fields,
 		// not from the raw JSON textarea (which the form hides for this kind).
-		const region = (initial.bvRegion ?? '').trim();
-		const indexUrl = (initial.bvIndexUrl ?? '').trim();
-		const cadenceRaw = (initial.bvCadenceDays ?? '').trim();
+		// Each field flows through a Zod schema so validation matches the
+		// shape and rigour of the main `url` regex rather than ad-hoc checks.
 		const fieldErrors: Record<string, string> = {};
-		if (region.length === 0) fieldErrors.bv_region = 'Region is required for binary-visual sources';
-		if (indexUrl.length === 0) fieldErrors.bv_index_url = 'Index URL is required for binary-visual sources';
+		const regionParsed = bvRegionSchema.safeParse((initial.bvRegion ?? '').trim());
+		if (!regionParsed.success) {
+			fieldErrors.bv_region = regionParsed.error.issues[0]?.message ?? 'Region is required for binary-visual sources';
+		}
+		const indexUrlParsed = bvIndexUrlSchema.safeParse((initial.bvIndexUrl ?? '').trim());
+		if (!indexUrlParsed.success) {
+			fieldErrors.bv_index_url = indexUrlParsed.error.issues[0]?.message ?? 'Invalid index URL';
+		}
+		const cadenceRaw = (initial.bvCadenceDays ?? '').trim();
 		let cadenceDays: number | undefined;
 		if (cadenceRaw.length > 0) {
 			const n = Number.parseInt(cadenceRaw, 10);
-			if (!Number.isFinite(n) || n < 1) {
-				fieldErrors.bv_cadence_days = 'Cadence must be a positive integer';
+			const parsed = bvCadenceDaysSchema.safeParse(n);
+			if (!parsed.success) {
+				fieldErrors.bv_cadence_days = parsed.error.issues[0]?.message ?? 'Cadence must be a positive integer';
 			} else {
-				cadenceDays = n;
+				cadenceDays = parsed.data;
 			}
 		}
 		if (Object.keys(fieldErrors).length > 0) {
@@ -100,8 +107,8 @@ export function validateSourceForm(form: FormData): ValidatedSource | SourceVali
 		}
 		locatorShape = {
 			kind: 'binary-visual',
-			region,
-			index_url: indexUrl,
+			region: regionParsed.success ? regionParsed.data : '',
+			index_url: indexUrlParsed.success ? indexUrlParsed.data : '',
 			...(cadenceDays !== undefined ? { cadence_days: cadenceDays } : {}),
 		};
 	} else {

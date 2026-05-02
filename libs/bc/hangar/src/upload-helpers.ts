@@ -4,11 +4,20 @@
  * without pulling in `@ab/db` at import time.
  */
 
-/** Lowercased extension without the dot. Returns `''` when none present. */
+/**
+ * Lowercased extension without the dot. Returns `''` when none present.
+ *
+ * Hardened against path-segment characters: an attacker-controlled
+ * `x.foo/bar` would otherwise produce extension `foo/bar`, which `resolve()`
+ * collapses to a real subdirectory under the blob root. We whitelist
+ * `[a-z0-9]` and fall back to empty when the candidate fails.
+ */
 export function extensionOf(filename: string): string {
 	const lastDot = filename.lastIndexOf('.');
 	if (lastDot <= 0 || lastDot === filename.length - 1) return '';
-	return filename.slice(lastDot + 1).toLowerCase();
+	const candidate = filename.slice(lastDot + 1).toLowerCase();
+	const match = candidate.match(/^[a-z0-9]+/);
+	return match ? match[0] : '';
 }
 
 /**

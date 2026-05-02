@@ -13,8 +13,11 @@ export {
 	type DecodedAuditCursor,
 	decodeAuditCursor,
 	encodeAuditCursor,
+	getActorById,
 	getAuditEntry,
+	isLikelyAuthId,
 	listAuditEntries,
+	resolveActorForChip,
 	searchActorIds,
 } from './audit-queries';
 export { HANGAR_BLOB_DIR, resolveHangarBlobRoot } from './blob-root';

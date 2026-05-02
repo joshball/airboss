@@ -61,6 +61,7 @@ function fakeContext(overrides: {
 			createdAt: new Date() as any,
 			startedAt: new Date(),
 			finishedAt: null,
+			lastHeartbeatAt: null,
 		},
 		reportProgress: async (p) => {
 			progress.push(p);

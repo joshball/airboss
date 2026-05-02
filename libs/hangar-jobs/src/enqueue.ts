@@ -8,13 +8,18 @@
 
 import { AUDIT_OPS, auditWrite } from '@ab/audit';
 import { type HangarJobLogRow, type HangarJobRow, hangarJob, hangarJobLog } from '@ab/bc-hangar/schema';
-import { AUDIT_TARGETS, JOB_STATUSES, type JobKind } from '@ab/constants';
+import { AUDIT_TARGETS, JOB_LOG_STREAMS, JOB_STATUSES, type JobKind } from '@ab/constants';
 import { db as defaultDb } from '@ab/db/connection';
-import { generateHangarJobId, generateHangarJobLogId } from '@ab/utils';
+import { createLogger, generateHangarJobId, generateHangarJobLogId } from '@ab/utils';
 import { and, asc, desc, eq, gt, inArray, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 
 type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;
+
+const log = createLogger('hangar:enqueue');
+
+/** Sentinel used by `readJobLog` when the caller has no prior cursor. Real seq starts at 0. */
+const SINCE_SEQ_BEGINNING = -1;
 
 export interface EnqueueInput {
 	kind: JobKind;
@@ -28,37 +33,42 @@ export interface EnqueueInput {
  * Insert one queued job row. Returns the created row. Also writes one
  * `hangar.job` audit row (op = create) so the queue activity is visible
  * in the cross-cutting audit log alongside reference/source writes.
+ *
+ * Insert + audit-write run inside a single transaction so a crash between
+ * them can't leave a queued row with no audit emission.
  */
 export async function enqueueJob(input: EnqueueInput, db: Db = defaultDb): Promise<HangarJobRow> {
-	const [row] = await db
-		.insert(hangarJob)
-		.values({
-			id: generateHangarJobId(),
-			kind: input.kind,
-			targetType: input.targetType ?? null,
-			targetId: input.targetId ?? null,
-			status: JOB_STATUSES.QUEUED,
-			progress: {},
-			payload: input.payload ?? {},
-			actorId: input.actorId,
-		})
-		.returning();
-	await auditWrite(
-		{
-			actorId: input.actorId,
-			op: AUDIT_OPS.CREATE,
-			targetType: AUDIT_TARGETS.HANGAR_JOB,
-			targetId: row.id,
-			after: {
-				kind: row.kind,
-				targetType: row.targetType,
-				targetId: row.targetId,
-				status: row.status,
+	return db.transaction(async (tx) => {
+		const [row] = await tx
+			.insert(hangarJob)
+			.values({
+				id: generateHangarJobId(),
+				kind: input.kind,
+				targetType: input.targetType ?? null,
+				targetId: input.targetId ?? null,
+				status: JOB_STATUSES.QUEUED,
+				progress: {},
+				payload: input.payload ?? {},
+				actorId: input.actorId,
+			})
+			.returning();
+		await auditWrite(
+			{
+				actorId: input.actorId,
+				op: AUDIT_OPS.CREATE,
+				targetType: AUDIT_TARGETS.HANGAR_JOB,
+				targetId: row.id,
+				after: {
+					kind: row.kind,
+					targetType: row.targetType,
+					targetId: row.targetId,
+					status: row.status,
+				},
 			},
-		},
-		db,
-	);
-	return row;
+			tx as unknown as Db,
+		);
+		return row;
+	});
 }
 
 export async function getJob(id: string, db: Db = defaultDb): Promise<HangarJobRow | undefined> {
@@ -94,7 +104,7 @@ export async function readJobLog(
 	db: Db = defaultDb,
 ): Promise<HangarJobLogRow[]> {
 	const limit = options.limit ?? 500;
-	const sinceSeq = options.sinceSeq ?? -1;
+	const sinceSeq = options.sinceSeq ?? SINCE_SEQ_BEGINNING;
 	return db
 		.select()
 		.from(hangarJobLog)
@@ -122,44 +132,79 @@ export async function writeJobLogRow(
 }
 
 /**
- * Append a single log line with MAX(seq)+1 computed server-side. Safe for
- * callers without a local counter (e.g. enqueue-time events).
+ * Append a single log line with MAX(seq)+1 computed server-side. Wrapped
+ * in a transaction so the read+insert are atomic against concurrent appends;
+ * the `(job_id, seq)` unique constraint catches any remaining race loudly.
+ *
+ * Hot-loop callers (extract/build) should use the worker's per-job in-memory
+ * counter via `JobContext.logStdout`/etc.; this helper is for one-shot events
+ * (recovery, enqueue-time markers).
  */
 export async function appendJobLog(
 	input: { jobId: string; stream: string; line: string },
 	db: Db = defaultDb,
 ): Promise<void> {
-	const nextSeq = sql<number>`coalesce((select max(${hangarJobLog.seq}) from ${hangarJobLog} where ${hangarJobLog.jobId} = ${input.jobId}), -1) + 1`;
-	await db.insert(hangarJobLog).values({
-		id: generateHangarJobLogId(),
-		jobId: input.jobId,
-		seq: nextSeq,
-		stream: input.stream,
-		line: input.line,
+	await db.transaction(async (tx) => {
+		const nextSeq = sql<number>`coalesce((select max(${hangarJobLog.seq}) from ${hangarJobLog} where ${hangarJobLog.jobId} = ${input.jobId}), -1) + 1`;
+		await tx.insert(hangarJobLog).values({
+			id: generateHangarJobLogId(),
+			jobId: input.jobId,
+			seq: nextSeq,
+			stream: input.stream,
+			line: input.line,
+		});
 	});
 }
 
 /**
- * Mark any `running` jobs as `queued` with a `recovered` log line. Call on
- * worker boot so a crashed process never leaves a ghost running job.
+ * Mark any `running` jobs as `queued` with a recovery log + audit row.
+ * Call on worker boot so a crashed process never leaves a ghost running job.
+ *
+ * Both the per-orphan log line and audit row keep the "every state transition
+ * is audited" contract that audit-explorer relies on.
  */
 export async function recoverOrphanedRunning(db: Db = defaultDb): Promise<number> {
 	const orphaned = await db
-		.select({ id: hangarJob.id })
+		.select({ id: hangarJob.id, actorId: hangarJob.actorId, startedAt: hangarJob.startedAt })
 		.from(hangarJob)
 		.where(eq(hangarJob.status, JOB_STATUSES.RUNNING));
 	if (orphaned.length === 0) return 0;
 	await db
 		.update(hangarJob)
-		.set({ status: JOB_STATUSES.QUEUED, startedAt: null })
+		.set({ status: JOB_STATUSES.QUEUED, startedAt: null, lastHeartbeatAt: null })
 		.where(
 			inArray(
 				hangarJob.id,
 				orphaned.map((r) => r.id),
 			),
 		);
-	for (const { id } of orphaned) {
-		await appendJobLog({ jobId: id, stream: 'event', line: 'recovered from worker restart' }, db);
+	for (const orphan of orphaned) {
+		try {
+			await appendJobLog(
+				{
+					jobId: orphan.id,
+					stream: JOB_LOG_STREAMS.EVENT,
+					line: `recovered from worker restart (was running since ${orphan.startedAt?.toISOString() ?? 'unknown'})`,
+				},
+				db,
+			);
+			await auditWrite(
+				{
+					actorId: orphan.actorId,
+					op: AUDIT_OPS.UPDATE,
+					targetType: AUDIT_TARGETS.HANGAR_JOB,
+					targetId: orphan.id,
+					metadata: { status: JOB_STATUSES.QUEUED, reason: 'recovered-from-restart' },
+				},
+				db,
+			);
+		} catch (err) {
+			log.error(
+				'recoverOrphanedRunning per-orphan write failed',
+				{ metadata: { jobId: orphan.id } },
+				err instanceof Error ? err : undefined,
+			);
+		}
 	}
 	return orphaned.length;
 }

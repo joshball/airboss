@@ -87,13 +87,28 @@ export const citationSchema = z.object({
 	locator: z
 		.record(z.union([z.string().trim().min(1).max(200), z.number().int()]))
 		.refine((o) => Object.keys(o).length > 0, 'Locator must not be empty'),
+	// HTTPS-only: future renderers that follow the URL would otherwise inherit
+	// any SSRF surface from `http://10.x.x.x/`-style values.
 	url: z
 		.string()
 		.trim()
-		.regex(/^https?:\/\//i, 'URL must be http(s)')
+		.regex(/^https:\/\//i, 'URL must be HTTPS')
 		.max(2048)
 		.optional(),
 });
+
+/** Binary-visual locator field schema. HTTPS-only mirrors source url rule. */
+export const bvIndexUrlSchema = z
+	.string()
+	.trim()
+	.regex(/^https:\/\//i, 'Index URL must be HTTPS')
+	.max(2048);
+
+/** Binary-visual region (FAA-style sectional region label). */
+export const bvRegionSchema = z.string().trim().min(1).max(64);
+
+/** Binary-visual fetch cadence in days; bounded so a typo can't disable updates. */
+export const bvCadenceDaysSchema = z.number().int().min(1).max(3650);
 
 export const referenceSchema = z.object({
 	id: referenceIdSchema,

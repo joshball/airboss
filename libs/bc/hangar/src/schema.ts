@@ -26,13 +26,14 @@ import {
 	JOB_KIND_VALUES,
 	JOB_LOG_STREAM_VALUES,
 	JOB_STATUS_VALUES,
+	JOB_TARGET_TYPE_VALUES,
 	SCHEMAS,
 	SOURCE_TYPE_VALUES,
 	SYNC_OUTCOME_VALUES,
 } from '@ab/constants';
 import { timestamps } from '@ab/db';
 import { sql } from 'drizzle-orm';
-import { boolean, check, index, integer, jsonb, pgSchema, text, timestamp } from 'drizzle-orm/pg-core';
+import { boolean, check, index, integer, jsonb, pgSchema, text, timestamp, unique } from 'drizzle-orm/pg-core';
 
 /** Render a string array as a SQL `IN (...)` value list. */
 const inList = (values: readonly string[]) => values.map((v) => `'${v.replace(/'/g, "''")}'`).join(', ');
@@ -227,17 +228,39 @@ export const hangarJob = hangarSchema.table(
 		/** Failure text on `status = failed`. */
 		error: text('error'),
 		actorId: text('actor_id').references(() => bauthUser.id, { onDelete: 'set null', onUpdate: 'cascade' }),
+		/**
+		 * Heartbeat marker -- updated by the worker on a 5s timer while the
+		 * handler is running. Stale heartbeat ("running" but `now() - lastHeartbeatAt > N`)
+		 * flags a stuck handler so the /jobs surface can distinguish "worker
+		 * working" from "worker stuck".
+		 */
+		lastHeartbeatAt: timestamp('last_heartbeat_at', { withTimezone: true }),
 		createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
 		startedAt: timestamp('started_at', { withTimezone: true }),
 		finishedAt: timestamp('finished_at', { withTimezone: true }),
 	},
 	(t) => ({
+		// Partial: queue-poll path only filters status='queued'.
+		jobQueuedIdx: index('hangar_job_queued_idx').on(t.createdAt).where(sql`${t.status} = 'queued'`),
+		// Partial: orphan-recovery path only filters status='running'.
+		jobRunningIdx: index('hangar_job_running_idx').on(t.startedAt).where(sql`${t.status} = 'running'`),
 		jobStatusIdx: index('hangar_job_status_idx').on(t.status, t.createdAt),
 		jobKindIdx: index('hangar_job_kind_idx').on(t.kind, t.createdAt),
+		// Partial: terminal-state lookup (getLatestCompleteJobByKind / ForTarget).
+		jobKindCompleteIdx: index('hangar_job_kind_complete_idx')
+			.on(t.kind, t.finishedAt)
+			.where(sql`${t.status} = 'complete'`),
+		jobKindTargetCompleteIdx: index('hangar_job_kind_target_complete_idx')
+			.on(t.kind, t.targetId, t.finishedAt)
+			.where(sql`${t.status} = 'complete'`),
 		jobTargetIdx: index('hangar_job_target_idx').on(t.targetType, t.targetId, t.createdAt),
 		jobActorIdx: index('hangar_job_actor_idx').on(t.actorId, t.createdAt),
 		jobStatusCheck: check('hangar_job_status_check', sql.raw(`"status" IN (${inList(JOB_STATUS_VALUES)})`)),
 		jobKindCheck: check('hangar_job_kind_check', sql.raw(`"kind" IN (${inList(JOB_KIND_VALUES)})`)),
+		jobTargetTypeCheck: check(
+			'hangar_job_target_type_check',
+			sql.raw(`"target_type" IS NULL OR "target_type" IN (${inList(JOB_TARGET_TYPE_VALUES)})`),
+		),
 	}),
 );
 
@@ -259,6 +282,12 @@ export const hangarJobLog = hangarSchema.table(
 	},
 	(t) => ({
 		jobLogJobIdx: index('hangar_job_log_job_idx').on(t.jobId, t.seq),
+		jobLogAtIdx: index('hangar_job_log_at_idx').on(t.at),
+		// (job_id, seq) must be unique -- the polling cursor `seq > sinceSeq`
+		// requires monotonic per-job sequence; duplicate seq values from a
+		// race between in-memory counter and MAX-seq subquery would silently
+		// drop one of the colliding rows.
+		jobLogJobSeqUnique: unique('hangar_job_log_job_seq_unique').on(t.jobId, t.seq),
 		jobLogStreamCheck: check('hangar_job_log_stream_check', sql.raw(`"stream" IN (${inList(JOB_LOG_STREAM_VALUES)})`)),
 	}),
 );

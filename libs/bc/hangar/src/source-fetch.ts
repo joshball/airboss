@@ -21,6 +21,7 @@
  * plausible defaults that use the library helpers from @ab/aviation.
  */
 
+import { lookup as dnsLookup } from 'node:dns/promises';
 import { mkdir, readdir, readFile, rename, rm, stat, writeFile } from 'node:fs/promises';
 import { basename, dirname, join, relative, resolve } from 'node:path';
 import { AUDIT_OPS, auditWrite } from '@ab/audit';
@@ -42,6 +43,8 @@ import {
 	SOURCE_ACTION_LIMITS,
 	SOURCE_KIND_BY_TYPE,
 	SOURCE_KINDS,
+	SSRF_BLOCKED_HOSTS,
+	SSRF_BLOCKED_RANGES,
 } from '@ab/constants';
 import { db } from '@ab/db/connection';
 import type { JobContext } from '@ab/hangar-jobs';
@@ -119,7 +122,56 @@ export interface SectionalFetchOutcome {
 
 // -------- default adapters --------
 
+/** IPv4-only host->int. IPv6 lookups skip the range check (returns NaN). */
+function ipv4ToInt(ip: string): number {
+	const parts = ip.split('.').map((p) => Number.parseInt(p, 10));
+	if (parts.length !== 4 || parts.some((n) => !Number.isFinite(n) || n < 0 || n > 255)) return Number.NaN;
+	return ((parts[0] << 24) | (parts[1] << 16) | (parts[2] << 8) | parts[3]) >>> 0;
+}
+
+/**
+ * Reject outbound URLs whose host resolves to a private/loopback/link-local/
+ * cloud-metadata IP. Authoring users must not be able to point the fetcher
+ * at internal hosts and read responses out of the live job log.
+ */
+async function assertOutboundUrlAllowed(rawUrl: string): Promise<void> {
+	let parsed: URL;
+	try {
+		parsed = new URL(rawUrl);
+	} catch {
+		throw new Error(`outbound fetch rejected: invalid URL '${rawUrl}'`);
+	}
+	if (parsed.protocol !== 'https:' && parsed.protocol !== 'http:') {
+		throw new Error(`outbound fetch rejected: unsupported scheme '${parsed.protocol}'`);
+	}
+	const host = parsed.hostname.toLowerCase();
+	if (SSRF_BLOCKED_HOSTS.includes(host)) {
+		throw new Error(`outbound fetch rejected: host '${host}' is in the denylist`);
+	}
+	let address = host;
+	// Literal IPv4 host: skip DNS, check directly.
+	if (!/^\d{1,3}(\.\d{1,3}){3}$/.test(host)) {
+		try {
+			const lookup = await dnsLookup(host, { family: 4 });
+			address = lookup.address;
+		} catch {
+			throw new Error(`outbound fetch rejected: DNS lookup failed for '${host}'`);
+		}
+	}
+	const asInt = ipv4ToInt(address);
+	if (Number.isFinite(asInt)) {
+		for (const range of SSRF_BLOCKED_RANGES) {
+			const fromInt = ipv4ToInt(range.from);
+			const toInt = ipv4ToInt(range.to);
+			if (asInt >= fromInt && asInt <= toInt) {
+				throw new Error(`outbound fetch rejected: '${host}' resolves to private range ${range.from}-${range.to}`);
+			}
+		}
+	}
+}
+
 async function defaultDownloader(url: string, destPath: string): Promise<{ sha256: string; fileSize: number }> {
+	await assertOutboundUrlAllowed(url);
 	const result = await downloadFile(url, destPath);
 	return { sha256: result.sha256, fileSize: result.fileSize };
 }
@@ -203,6 +255,7 @@ function editionsEqual(a: HangarSourceEdition | null | undefined, dateString: st
 }
 
 async function defaultFetchHtml(url: string): Promise<string> {
+	await assertOutboundUrlAllowed(url);
 	const res = await fetch(url);
 	if (!res.ok) {
 		throw new Error(`fetch-index: HTTP ${res.status} for ${url}`);
@@ -249,6 +302,42 @@ export async function runSectionalFetch(
 	input: SectionalFetchInput,
 	hooks: SectionalFetchHooks = {},
 ): Promise<SectionalFetchOutcome> {
+	let lastStep = 'init';
+	try {
+		return await runSectionalFetchInner(ctx, input, hooks, (step) => {
+			lastStep = step;
+		});
+	} catch (err) {
+		const message = err instanceof Error ? err.message : String(err);
+		await auditWrite({
+			actorId: ctx.job.actorId,
+			op: AUDIT_OPS.UPDATE,
+			targetType: AUDIT_TARGETS.HANGAR_SOURCE,
+			targetId: input.row.id,
+			metadata: {
+				jobId: ctx.job.id,
+				outcome: 'failed',
+				kind: 'binary-visual',
+				step: lastStep,
+				errorMessage: message,
+			},
+		}).catch((auditErr) => {
+			log.error(
+				'failure-audit write threw',
+				{ metadata: { jobId: ctx.job.id, sourceId: input.row.id } },
+				auditErr instanceof Error ? auditErr : undefined,
+			);
+		});
+		throw err;
+	}
+}
+
+async function runSectionalFetchInner(
+	ctx: JobContext,
+	input: SectionalFetchInput,
+	hooks: SectionalFetchHooks,
+	mark: (step: string) => void,
+): Promise<SectionalFetchOutcome> {
 	const row = input.row;
 	const resolver = hooks.resolver ?? resolveCurrentSectionalEdition;
 	const downloader = hooks.downloader ?? defaultDownloader;
@@ -257,9 +346,11 @@ export async function runSectionalFetch(
 	const dbUpdate = hooks.dbUpdate ?? defaultDbUpdate;
 	const now = hooks.now ?? (() => new Date());
 
+	mark('validate-locator');
 	const locator = parseLocatorShape(row.locatorShape);
 	if (!locator.region) throw new Error(`locator_shape.region is required for binary-visual source '${row.id}'`);
 	if (!locator.index_url) throw new Error(`locator_shape.index_url is required for binary-visual source '${row.id}'`);
+	mark('resolve-edition');
 
 	// Step 1: resolve edition.
 	await ctx.logEvent(`resolving edition for ${locator.region} via ${locator.index_url}`);
@@ -290,7 +381,6 @@ export async function runSectionalFetch(
 	const archivePath = join(editionDir, 'chart.zip');
 	const thumbPath = join(editionDir, 'thumb.jpg');
 	const metaPath = join(editionDir, 'meta.json');
-	const _recordedArchivePath = relative(input.blobRoot, archivePath);
 	const recordedThumbPath = relative(input.blobRoot, thumbPath);
 
 	// Step 2: short-circuit if edition + on-disk sha match.
@@ -319,6 +409,7 @@ export async function runSectionalFetch(
 	}
 
 	// Step 3: download.
+	mark('download');
 	await ctx.reportProgress({ step: 2, total: 7, message: 'downloading' });
 	const tmpPath = `${archivePath}.downloading`;
 	await mkdir(editionDir, { recursive: true });
@@ -359,9 +450,11 @@ export async function runSectionalFetch(
 	await ctx.logEvent(`archive retention: kept ${keptArchives.length} previous edition(s)`);
 
 	// Step 7: move tmp -> archivePath.
+	mark('install-archive');
 	await rename(tmpPath, archivePath);
 
 	// Step 8: archive manifest.
+	mark('read-manifest');
 	await ctx.reportProgress({ step: 3, total: 7, message: 'reading archive manifest' });
 	let archiveEntries: readonly ArchiveEntry[] = [];
 	try {
@@ -420,6 +513,7 @@ export async function runSectionalFetch(
 	await writeFile(metaPath, `${JSON.stringify(meta, null, 2)}\n`, 'utf8');
 
 	// Step 11: update DB row.
+	mark('update-row');
 	await ctx.reportProgress({ step: 5, total: 7, message: 'updating registry row' });
 	const media: HangarSourceMedia = {
 		thumbnailPath: recordedThumbPath,

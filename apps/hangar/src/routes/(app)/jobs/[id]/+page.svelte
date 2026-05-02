@@ -1,10 +1,12 @@
 <script lang="ts">
 import {
 	JOB_LOG_STREAMS,
+	JOB_POLL_INTERVAL_MS,
 	JOB_STATUSES,
 	JOB_TERMINAL_STATUSES,
 	type JobLogStream,
 	type JobStatus,
+	QUERY_PARAMS,
 	ROUTES,
 } from '@ab/constants';
 import { enhance } from '$app/forms';
@@ -38,8 +40,11 @@ const isTerminal = $derived((JOB_TERMINAL_STATUSES as readonly string[]).include
 
 const filteredLogs = $derived(activeStream === 'all' ? logs : logs.filter((l) => l.stream === activeStream));
 
-async function pollLog(): Promise<void> {
-	const res = await fetch(`${ROUTES.HANGAR_JOB_LOG(data.job.id)}?sinceSeq=${latestSeq}`);
+/** Cap the client-side log buffer; server cursor is the authoritative log. */
+const LOG_BUFFER_CAP = 5000;
+
+async function pollLog(signal: AbortSignal): Promise<void> {
+	const res = await fetch(`${ROUTES.HANGAR_JOB_LOG(data.job.id)}?${QUERY_PARAMS.SINCE_SEQ}=${latestSeq}`, { signal });
 	if (!res.ok) return;
 	const body = (await res.json()) as {
 		status: string;
@@ -49,12 +54,15 @@ async function pollLog(): Promise<void> {
 		lines: LogLine[];
 		latestSeq: number;
 	};
+	if (signal.aborted) return;
+	// server values are constrained to JobStatus by the audit-checked DB enum.
 	currentStatus = body.status as JobStatus;
 	currentProgress = body.progress;
 	currentError = body.error;
 	currentFinishedAt = body.finishedAt;
 	if (body.lines.length > 0) {
-		logs = [...logs, ...body.lines];
+		const merged = [...logs, ...body.lines];
+		logs = merged.length > LOG_BUFFER_CAP ? merged.slice(merged.length - LOG_BUFFER_CAP) : merged;
 		latestSeq = body.latestSeq;
 	}
 }
@@ -62,10 +70,14 @@ async function pollLog(): Promise<void> {
 $effect(() => {
 	if (isTerminal) return;
 	if (typeof window === 'undefined') return;
+	const controller = new AbortController();
 	const timer = setInterval(() => {
-		void pollLog();
-	}, 1000);
-	return () => clearInterval(timer);
+		void pollLog(controller.signal);
+	}, JOB_POLL_INTERVAL_MS);
+	return () => {
+		clearInterval(timer);
+		controller.abort();
+	};
 });
 
 function statusTone(status: string): string {

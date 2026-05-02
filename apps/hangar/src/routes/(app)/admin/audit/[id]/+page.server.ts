@@ -17,6 +17,23 @@ import { ROLES } from '@ab/constants';
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
+/** Defense-in-depth: redact secrets-shaped keys in audit JSON before render. */
+const SECRET_KEY = /token|secret|password|cookie|apikey|api_key|bearer/i;
+const REDACTED = '[redacted]';
+
+function redact(value: unknown): unknown {
+	if (value === null || value === undefined) return value;
+	if (Array.isArray(value)) return value.map(redact);
+	if (typeof value === 'object') {
+		const out: Record<string, unknown> = {};
+		for (const [k, v] of Object.entries(value as Record<string, unknown>)) {
+			out[k] = SECRET_KEY.test(k) ? REDACTED : redact(v);
+		}
+		return out;
+	}
+	return value;
+}
+
 export const load: PageServerLoad = async (event) => {
 	requireRole(event, ROLES.ADMIN);
 
@@ -34,9 +51,9 @@ export const load: PageServerLoad = async (event) => {
 			op: row.op,
 			targetType: row.targetType,
 			targetId: row.targetId,
-			before: row.before,
-			after: row.after,
-			metadata: row.metadata,
+			before: redact(row.before),
+			after: redact(row.after),
+			metadata: redact(row.metadata),
 		},
 	};
 };

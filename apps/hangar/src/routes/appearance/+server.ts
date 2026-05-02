@@ -11,7 +11,16 @@ import type { RequestHandler } from './$types';
  * `Path=/; Max-Age=1y; SameSite=Lax` so every subsequent request (including
  * SSR on first paint) sees the preference. Mirrors `apps/study/appearance`.
  */
-export const POST: RequestHandler = async ({ request, cookies }) => {
+export const POST: RequestHandler = async ({ request, cookies, locals, url }) => {
+	// Cosmetic preference, but requires a session and a same-origin POST so a
+	// drive-by JSON POST can't flip an admin's appearance from a third-party page.
+	if (!locals.user) {
+		throw error(401, 'sign in required');
+	}
+	const origin = request.headers.get('origin');
+	if (origin !== null && origin !== url.origin) {
+		throw error(403, 'cross-origin POST blocked');
+	}
 	let payload: unknown;
 	try {
 		payload = await request.json();
