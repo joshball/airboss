@@ -2,6 +2,7 @@
 import { ROUTES } from '@ab/constants';
 import Banner from '@ab/ui/components/Banner.svelte';
 import Button from '@ab/ui/components/Button.svelte';
+import ConfirmDialog from '@ab/ui/components/ConfirmDialog.svelte';
 import ReferenceForm from '$lib/components/ReferenceForm.svelte';
 import type { ActionData, PageData } from './$types';
 
@@ -11,6 +12,8 @@ const initial = $derived(form?.initial ?? data.initial);
 const fieldErrors = $derived(form?.fieldErrors ?? {});
 const formError = $derived(form?.formError ?? null);
 const conflict = $derived(form?.conflict ?? null);
+
+let deleteDialogOpen = $state(false);
 
 function formatTime(iso: string): string {
 	return new Date(iso).toLocaleString();
@@ -53,7 +56,7 @@ function formatTime(iso: string): string {
 		</Banner>
 	{/if}
 
-	<form method="POST" action="?/save" class="form">
+	<form method="POST" action={ROUTES.HANGAR_GLOSSARY_SAVE_ACTION} class="form">
 		<ReferenceForm {initial} {fieldErrors} {formError} mode="edit" rev={data.reference.rev} />
 		<div class="footer">
 			<a class="cancel" href={ROUTES.HANGAR_GLOSSARY}>Cancel</a>
@@ -62,16 +65,35 @@ function formatTime(iso: string): string {
 	</form>
 
 	{#if !data.reference.deletedAt}
-		<form method="POST" action="?/delete" class="delete-form">
-			<input type="hidden" name="rev" value={data.reference.rev} />
-			<button type="submit" class="delete-btn">Soft-delete this reference</button>
+		<div class="delete-form">
+			<Button variant="danger" size="md" onclick={() => (deleteDialogOpen = true)}>
+				Soft-delete this reference
+			</Button>
 			<p class="hint">
 				Soft-deleted references are marked hidden but retained for citation integrity. Hard delete lands with
 				wp-hangar-sources-v1.
 			</p>
-		</form>
+		</div>
 	{/if}
 </section>
+
+<ConfirmDialog
+	open={deleteDialogOpen}
+	oncancel={() => (deleteDialogOpen = false)}
+	title="Soft-delete {data.reference.displayName}?"
+	confirmLabel="Soft-delete"
+	dangerLevel="danger"
+	formAction={ROUTES.HANGAR_GLOSSARY_DELETE_ACTION}
+	hiddenFields={{ rev: String(data.reference.rev) }}
+>
+	<p>
+		The reference <code class="mono">{data.reference.id}</code> will be marked hidden and disappear from the
+		glossary. The row is retained for citation integrity, so any learner-facing citation that pointed at it will
+		resolve to a hidden row rather than a missing one.
+	</p>
+	<p>You can recover from this by clearing <code class="mono">deletedAt</code> in the database, but the surface has
+		no in-app un-delete control yet.</p>
+</ConfirmDialog>
 
 <style>
 	.page {
@@ -183,29 +205,8 @@ function formatTime(iso: string): string {
 		border-radius: var(--radius-md);
 		display: flex;
 		flex-direction: column;
+		align-items: flex-start;
 		gap: var(--space-xs);
-	}
-
-	.delete-btn {
-		align-self: flex-start;
-		background: var(--action-hazard-wash);
-		color: var(--action-hazard);
-		border: 1px solid var(--action-hazard-edge);
-		border-radius: var(--radius-sm);
-		padding: var(--space-xs) var(--space-md);
-		cursor: pointer;
-		font: inherit;
-		font-weight: var(--font-weight-semibold);
-	}
-
-	.delete-btn:hover {
-		background: var(--action-hazard);
-		color: var(--action-hazard-ink);
-	}
-
-	.delete-btn:focus-visible {
-		outline: 2px solid var(--focus-ring);
-		outline-offset: 2px;
 	}
 
 	.hint {

@@ -2,9 +2,18 @@
 import { ROUTES } from '@ab/constants';
 import Banner from '@ab/ui/components/Banner.svelte';
 import Button from '@ab/ui/components/Button.svelte';
+import ConfirmDialog from '@ab/ui/components/ConfirmDialog.svelte';
 import EmptyState from '@ab/ui/components/EmptyState.svelte';
 import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import type { ActionData, PageData } from './$types';
+
+/**
+ * Threshold above which a "Commit this diff" action escalates from a caution
+ * dialog to a danger dialog with typed confirmation. Mirrors the review
+ * recommendation: small commits are routine; large commits are high-blast
+ * and need the operator to bind the action to its target.
+ */
+const LARGE_DIFF_LINE_THRESHOLD = 500;
 
 let { data, form }: { data: PageData; form: ActionData } = $props();
 
@@ -13,6 +22,10 @@ const formError = $derived.by(() => {
 	const err = (form as { error?: unknown }).error;
 	return typeof err === 'string' ? err : null;
 });
+
+let commitDialogOpen = $state(false);
+const diffLines = $derived(data.latestDiff?.lines ?? 0);
+const isLargeDiff = $derived(diffLines >= LARGE_DIFF_LINE_THRESHOLD);
 
 function formatDate(iso: string | null): string {
 	if (!iso) return 'never';
@@ -60,14 +73,17 @@ const lines = $derived(data.diffText ? data.diffText.split('\n').map(classifyLin
 			</p>
 		{/snippet}
 		{#snippet actions()}
-			<form method="POST" action="?/enqueue">
+			<form method="POST" action={ROUTES.HANGAR_SOURCE_DIFF_ENQUEUE_ACTION}>
 				<Button type="submit" variant="primary" size="sm">Run diff now</Button>
 			</form>
-			<form method="POST" action="?/commit">
-				<Button type="submit" variant="secondary" size="sm" disabled={!data.latestDiff}>
-					Commit this diff
-				</Button>
-			</form>
+			<Button
+				variant="secondary"
+				size="sm"
+				disabled={!data.latestDiff}
+				onclick={() => (commitDialogOpen = true)}
+			>
+				Commit this diff
+			</Button>
 		{/snippet}
 	</PageHeader>
 
@@ -94,6 +110,32 @@ const lines = $derived(data.diffText ? data.diffText.split('\n').map(classifyLin
 		<EmptyState title="No changes" body="The latest diff is empty. Nothing has changed since the last commit." />
 	{/if}
 </section>
+
+<ConfirmDialog
+	open={commitDialogOpen}
+	oncancel={() => (commitDialogOpen = false)}
+	title="Commit diff for {data.source.id}?"
+	confirmLabel="Commit"
+	dangerLevel={isLargeDiff ? 'danger' : 'caution'}
+	formAction={ROUTES.HANGAR_SOURCE_DIFF_COMMIT_ACTION}
+	typedConfirmation={isLargeDiff
+		? { label: `Type the source id to confirm: ${data.source.id}`, expected: data.source.id }
+		: undefined}
+>
+	<p>
+		Commit promotes <strong>{diffLines} line{diffLines === 1 ? '' : 's'}</strong> of staged changes to the
+		canonical source for <code class="mono">{data.source.id}</code>. Once committed, the previous canonical
+		content is replaced and downstream consumers will see the new bytes on their next read.
+	</p>
+	{#if isLargeDiff}
+		<p>
+			This is a large diff ({diffLines} lines, threshold {LARGE_DIFF_LINE_THRESHOLD}). Confirm by typing the
+			source id below to bind the action to its target.
+		</p>
+	{:else}
+		<p>Review the diff above before continuing. Cancel if anything looks unintended.</p>
+	{/if}
+</ConfirmDialog>
 
 <style>
 	.page {

@@ -17,7 +17,11 @@ const aliases = {
 	'@ab/auth': resolve('./libs/auth/src/index.ts'),
 	'@ab/audit': resolve('./libs/audit/src/index.ts'),
 	'@ab/themes': resolve('./libs/themes/index.ts'),
+	// Deep `@ab/ui/components/<Name>.svelte` imports mirror the SvelteKit
+	// app aliases. The wildcard at the bottom (`@ab/ui/*`) handles every
+	// other component without needing to enumerate them here.
 	'@ab/ui/components/Drawer.svelte': resolve('./libs/ui/src/components/Drawer.svelte'),
+	'@ab/ui/components': resolve('./libs/ui/src/components'),
 	'@ab/ui': resolve('./libs/ui/src/index.ts'),
 	'@ab/utils': resolve('./libs/utils/src/index.ts'),
 	'@ab/bc-study': resolve('./libs/bc/study/src/index.ts'),

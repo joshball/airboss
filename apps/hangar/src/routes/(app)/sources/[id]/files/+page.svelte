@@ -1,5 +1,7 @@
 <script lang="ts">
 import { PREVIEW_KINDS, ROUTES } from '@ab/constants';
+import Button from '@ab/ui/components/Button.svelte';
+import ConfirmDialog from '@ab/ui/components/ConfirmDialog.svelte';
 import EmptyState from '@ab/ui/components/EmptyState.svelte';
 import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import CsvPreview from '$lib/components/preview/CsvPreview.svelte';
@@ -19,9 +21,18 @@ const formError = $derived.by(() => {
 });
 
 let expanded = $state<Record<string, boolean>>({});
+let pendingDeleteName = $state<string | null>(null);
 
 function toggle(name: string) {
 	expanded = { ...expanded, [name]: !expanded[name] };
+}
+
+function openDeleteDialog(name: string) {
+	pendingDeleteName = name;
+}
+
+function closeDeleteDialog() {
+	pendingDeleteName = null;
 }
 
 function formatBytes(bytes: number): string {
@@ -99,10 +110,13 @@ function truncate(text: string | null, max = 20_000): string {
 							<span class="tag archive-tag">archive</span>
 						{/if}
 						{#if data.isAdmin && file.isArchive}
-							<form method="POST" action="?/delete" class="inline-delete">
-								<input type="hidden" name="name" value={file.name} />
-								<button type="submit" class="danger-action">Delete</button>
-							</form>
+							<Button
+								variant="danger"
+								size="sm"
+								onclick={() => openDeleteDialog(file.name)}
+							>
+								Delete
+							</Button>
 						{/if}
 					</div>
 					{#if isOpen}
@@ -161,6 +175,27 @@ function truncate(text: string | null, max = 20_000): string {
 		</ul>
 	{/if}
 </section>
+
+<ConfirmDialog
+	open={pendingDeleteName !== null}
+	oncancel={closeDeleteDialog}
+	title="Delete archived file?"
+	confirmLabel="Delete archive"
+	dangerLevel="danger"
+	formAction={ROUTES.HANGAR_SOURCE_FILE_DELETE_ACTION}
+	hiddenFields={{ name: pendingDeleteName ?? '' }}
+	typedConfirmation={{
+		label: `Type the file name to confirm: ${pendingDeleteName ?? ''}`,
+		expected: pendingDeleteName ?? '',
+	}}
+>
+	<p>
+		This permanently removes the archived edition <code class="mono">{pendingDeleteName}</code> from disk. The
+		operation is irreversible -- the underlying bytes are unlinked from the filesystem and there is no trash bin.
+	</p>
+	<p>Only proceed if you are certain this archived edition is no longer needed for audit, citation integrity, or
+		recovery.</p>
+</ConfirmDialog>
 
 <style>
 	.page {
@@ -265,27 +300,6 @@ function truncate(text: string | null, max = 20_000): string {
 	}
 
 	.archive-tag { background: var(--signal-info-wash); color: var(--signal-info); }
-
-	.inline-delete { margin: 0; }
-
-	.danger-action {
-		background: transparent;
-		border: 1px solid var(--signal-danger-edge);
-		color: var(--signal-danger);
-		padding: var(--space-2xs) var(--space-sm);
-		font-size: var(--type-ui-caption-size);
-		border-radius: var(--radius-sm);
-		cursor: pointer;
-	}
-
-	.danger-action:hover {
-		background: var(--signal-danger-wash);
-	}
-
-	.danger-action:focus-visible {
-		outline: 2px solid var(--focus-ring);
-		outline-offset: 2px;
-	}
 
 	.preview {
 		border-top: 1px solid var(--edge-subtle);
