@@ -4,9 +4,16 @@ import Badge, { type BadgeSize, type BadgeTone } from '../../src/components/Badg
 let {
 	tone = 'default',
 	size = 'md',
+	glyph = true,
 	ariaLabel,
 	label = 'badge',
-}: { tone?: BadgeTone; size?: BadgeSize; ariaLabel?: string; label?: string } = $props();
+}: {
+	tone?: BadgeTone;
+	size?: BadgeSize;
+	glyph?: boolean;
+	ariaLabel?: string;
+	label?: string;
+} = $props();
 </script>
 
-<Badge {tone} {size} {ariaLabel}>{label}</Badge>
+<Badge {tone} {size} {glyph} {ariaLabel}>{label}</Badge>

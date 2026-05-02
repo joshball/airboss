@@ -1,5 +1,6 @@
 <script lang="ts">
 import { ROUTES, SOURCE_KINDS } from '@ab/constants';
+import Badge from '@ab/ui/components/Badge.svelte';
 import Banner from '@ab/ui/components/Banner.svelte';
 import Button from '@ab/ui/components/Button.svelte';
 import EmptyState from '@ab/ui/components/EmptyState.svelte';
@@ -111,10 +112,10 @@ const checksumMatchesOnDisk = $derived(
 			<div class="card-label">Binary</div>
 			<div class="card-value">
 				{#if data.onDisk}
-					<span class="state state-ok">on disk</span>
+					<Badge tone="success" size="sm">on disk</Badge>
 					<span class="card-detail mono">{formatBytes(data.onDisk.sizeBytes)}</span>
 				{:else}
-					<span class="state state-missing">missing</span>
+					<Badge tone="danger" size="sm">missing</Badge>
 				{/if}
 			</div>
 			<div class="card-ts">{data.onDisk ? formatDate(data.onDisk.mtime) : '--'}</div>
@@ -123,13 +124,13 @@ const checksumMatchesOnDisk = $derived(
 			<div class="card-label">Checksum match</div>
 			<div class="card-value">
 				{#if data.source.isPendingChecksum}
-					<span class="state state-warn">pending</span>
+					<Badge tone="warning" size="sm">pending</Badge>
 				{:else if checksumMatchesOnDisk}
-					<span class="state state-ok">match</span>
+					<Badge tone="success" size="sm">match</Badge>
 				{:else if data.onDisk === null}
-					<span class="state state-missing">no binary</span>
+					<Badge tone="danger" size="sm">no binary</Badge>
 				{:else}
-					<span class="state state-warn">size differs</span>
+					<Badge tone="warning" size="sm">size differs</Badge>
 				{/if}
 			</div>
 			<div class="card-detail mono">{data.source.checksum.slice(0, 12) || '--'}</div>
@@ -143,7 +144,7 @@ const checksumMatchesOnDisk = $derived(
 			<div class="card-label">Last downloaded</div>
 			<div class="card-value">
 				{#if data.source.isPendingChecksum}
-					<span class="state state-warn">pending</span>
+					<Badge tone="warning" size="sm">pending</Badge>
 				{:else}
 					{formatDate(data.source.downloadedAt)}
 				{/if}
@@ -324,20 +325,6 @@ const checksumMatchesOnDisk = $derived(
 		color: var(--ink-muted);
 		font-size: var(--type-ui-caption-size);
 	}
-
-	.state {
-		display: inline-block;
-		padding: var(--space-2xs) var(--space-sm);
-		border-radius: var(--radius-pill);
-		font-size: var(--type-ui-caption-size);
-		text-transform: uppercase;
-		letter-spacing: var(--letter-spacing-wide);
-		font-weight: var(--font-weight-semibold);
-	}
-
-	.state-ok { background: var(--signal-success-wash); color: var(--signal-success); }
-	.state-warn { background: var(--signal-warning-wash); color: var(--signal-warning); }
-	.state-missing { background: var(--signal-danger-wash); color: var(--signal-danger); }
 
 	.two-col {
 		display: grid;

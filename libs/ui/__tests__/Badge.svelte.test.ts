@@ -1,9 +1,15 @@
 /**
  * Badge DOM contract -- tone + size reflect on data attributes and classes.
+ *
+ * Glyph contract: every tone renders a leading decorative glyph
+ * (aria-hidden) so the badge meaning carries on monochrome / color-blind
+ * displays. Required for WCAG 1.4.1 (Use of Color).
  */
 
+import type { Tone } from '@ab/themes';
 import { cleanup, render, screen } from '@testing-library/svelte';
 import { afterEach, describe, expect, it } from 'vitest';
+import { BADGE_TONE_GLYPHS } from '../src/components/Badge.svelte';
 import BadgeHarness from './harnesses/BadgeHarness.svelte';
 
 afterEach(() => {
@@ -13,7 +19,9 @@ afterEach(() => {
 describe('Badge', () => {
 	it('renders with the children label', () => {
 		render(BadgeHarness, { label: 'New' });
-		expect(screen.getByTestId('badge-root').textContent?.trim()).toBe('New');
+		// Children label is in textContent alongside the leading glyph; assert
+		// the label is present rather than that it is the entire text.
+		expect(screen.getByTestId('badge-root').textContent ?? '').toContain('New');
 	});
 
 	it('default tone + size reflect as default + md', () => {
@@ -35,5 +43,32 @@ describe('Badge', () => {
 	it('passes ariaLabel through', () => {
 		render(BadgeHarness, { label: '7', ariaLabel: '7 unread' });
 		expect(screen.getByTestId('badge-root').getAttribute('aria-label')).toBe('7 unread');
+	});
+
+	describe('glyph (WCAG 1.4.1 non-color cue)', () => {
+		const tones = Object.keys(BADGE_TONE_GLYPHS) as Tone[];
+
+		it.each(tones)('tone=%s renders the expected leading glyph', (tone) => {
+			render(BadgeHarness, { label: 'Status', tone });
+			const glyph = screen.getByTestId('badge-glyph');
+			expect(glyph.textContent?.trim()).toBe(BADGE_TONE_GLYPHS[tone]);
+		});
+
+		it.each(tones)('tone=%s glyph is aria-hidden so SR does not double-announce', (tone) => {
+			render(BadgeHarness, { label: 'Status', tone });
+			const glyph = screen.getByTestId('badge-glyph');
+			expect(glyph.getAttribute('aria-hidden')).toBe('true');
+		});
+
+		it('glyph={false} suppresses the glyph for callers who provide their own icon', () => {
+			render(BadgeHarness, { label: 'Custom', tone: 'success', glyph: false });
+			expect(screen.queryByTestId('badge-glyph')).toBeNull();
+		});
+
+		it('every Tone has a distinct glyph (no two tones collapse to the same shape)', () => {
+			const glyphs = Object.values(BADGE_TONE_GLYPHS);
+			const unique = new Set(glyphs);
+			expect(unique.size).toBe(glyphs.length);
+		});
 	});
 });

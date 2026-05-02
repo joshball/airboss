@@ -1,5 +1,7 @@
 <script lang="ts">
 import { JOB_KIND_VALUES, JOB_STATUS_VALUES, JOB_STATUSES, type JobKind, type JobStatus, ROUTES } from '@ab/constants';
+import type { BadgeTone } from '@ab/ui';
+import Badge from '@ab/ui/components/Badge.svelte';
 import EmptyState from '@ab/ui/components/EmptyState.svelte';
 import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import { invalidateAll, replaceState } from '$app/navigation';
@@ -43,20 +45,20 @@ $effect(() => {
 	return () => clearInterval(timer);
 });
 
-function statusTone(status: string): string {
+function statusTone(status: string): BadgeTone {
 	switch (status) {
 		case JOB_STATUSES.COMPLETE:
 			return 'success';
 		case JOB_STATUSES.RUNNING:
 			return 'info';
 		case JOB_STATUSES.QUEUED:
-			return 'neutral';
+			return 'default';
 		case JOB_STATUSES.FAILED:
 			return 'danger';
 		case JOB_STATUSES.CANCELLED:
 			return 'warning';
 		default:
-			return 'neutral';
+			return 'default';
 	}
 }
 
@@ -147,7 +149,7 @@ function formatDuration(startedAt: string | null, finishedAt: string | null): st
 								{/if}
 							</td>
 							<td>
-								<span class="status-chip status-{statusTone(job.status)}">{job.status}</span>
+								<Badge tone={statusTone(job.status)} size="sm">{job.status}</Badge>
 							</td>
 							<td>
 								{#if job.status === JOB_STATUSES.RUNNING}
@@ -269,36 +271,4 @@ function formatDuration(startedAt: string | null, finishedAt: string | null): st
 		color: var(--ink-muted);
 	}
 
-	.status-chip {
-		display: inline-block;
-		font-size: var(--type-ui-caption-size);
-		font-weight: var(--font-weight-semibold);
-		padding: var(--space-2xs) var(--space-sm);
-		border-radius: var(--radius-pill);
-	}
-
-	.status-success {
-		background: var(--signal-success-wash);
-		color: var(--signal-success);
-	}
-
-	.status-info {
-		background: var(--signal-info-wash);
-		color: var(--signal-info);
-	}
-
-	.status-warning {
-		background: var(--signal-warning-wash);
-		color: var(--signal-warning);
-	}
-
-	.status-danger {
-		background: var(--signal-danger-wash);
-		color: var(--signal-danger);
-	}
-
-	.status-neutral {
-		background: var(--surface-sunken);
-		color: var(--ink-muted);
-	}
 </style>
