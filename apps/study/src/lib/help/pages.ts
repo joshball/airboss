@@ -32,6 +32,7 @@ import { dashboardBody } from './content/bodies/dashboard';
 import { focusDomainsBody } from './content/bodies/focus-domains';
 import { gettingStartedBody } from './content/bodies/getting-started';
 import { goalsBody } from './content/bodies/goals';
+import { inviteAcceptBody } from './content/bodies/invite-accept';
 import { keyboardShortcutsBody } from './content/bodies/keyboard-shortcuts';
 import { knowledgeGraphBody } from './content/bodies/knowledge-graph';
 import { lensBody } from './content/bodies/lens';
@@ -62,6 +63,7 @@ import { dashboardIndex } from './content/dashboard';
 import { focusDomainsIndex } from './content/focus-domains';
 import { gettingStartedIndex } from './content/getting-started';
 import { goalsIndex } from './content/goals';
+import { inviteAcceptIndex } from './content/invite-accept';
 import { keyboardShortcutsIndex } from './content/keyboard-shortcuts';
 import { knowledgeGraphIndex } from './content/knowledge-graph';
 import { lensIndex } from './content/lens';
@@ -113,6 +115,7 @@ export const studyHelpPages: readonly HelpPage[] = [
 	merge(knowledgeGraphIndex, knowledgeGraphBody),
 	merge(lensIndex, lensBody),
 	merge(libraryIndex, libraryBody),
+	merge(inviteAcceptIndex, inviteAcceptBody),
 	merge(keyboardShortcutsIndex, keyboardShortcutsBody),
 	merge(conceptFsrsIndex, conceptFsrsBody),
 	merge(conceptSpacedRepIndex, conceptSpacedRepBody),

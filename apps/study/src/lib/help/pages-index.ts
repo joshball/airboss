@@ -38,6 +38,7 @@ import { dashboardIndex } from './content/dashboard';
 import { focusDomainsIndex } from './content/focus-domains';
 import { gettingStartedIndex } from './content/getting-started';
 import { goalsIndex } from './content/goals';
+import { inviteAcceptIndex } from './content/invite-accept';
 import { keyboardShortcutsIndex } from './content/keyboard-shortcuts';
 import { knowledgeGraphIndex } from './content/knowledge-graph';
 import { lensIndex } from './content/lens';
@@ -73,6 +74,7 @@ export const studyHelpIndex: readonly HelpPageIndex[] = [
 	knowledgeGraphIndex,
 	lensIndex,
 	libraryIndex,
+	inviteAcceptIndex,
 	keyboardShortcutsIndex,
 	conceptFsrsIndex,
 	conceptSpacedRepIndex,
@@ -134,6 +136,8 @@ export const loadStudyHelpBody: HelpBodyLoader = async (id: string): Promise<Hel
 			return (await import('./content/bodies/lens')).lensBody;
 		case 'library':
 			return (await import('./content/bodies/library')).libraryBody;
+		case 'invite-accept':
+			return (await import('./content/bodies/invite-accept')).inviteAcceptBody;
 		case 'keyboard-shortcuts':
 			return (await import('./content/bodies/keyboard-shortcuts')).keyboardShortcutsBody;
 		case 'concept-fsrs':

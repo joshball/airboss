@@ -3,10 +3,11 @@ title: 'Spec: Hangar invite flow'
 product: hangar
 feature: hangar-invite-flow
 type: spec
-status: read
-review_status: done
+status: shipped
+review_status: pending
 created: 2026-04-30
 ratified: 2026-05-02
+shipped: 2026-05-02
 ---
 
 Add an invite-by-email flow so an admin can onboard a new user from hangar without sharing a password. The admin enters an email + role, the platform sends a one-shot invite link, the recipient lands on a study route that creates their account via better-auth's signup, and the inviting admin sees the invite move from "pending" to "accepted" in the hangar UI.

@@ -1,6 +1,6 @@
 <script lang="ts">
 import { INVITATION_STATUS, type InvitationStatus } from '@ab/bc-hangar';
-import { ROLE_LABELS, ROUTES } from '@ab/constants';
+import { ROLE_LABELS, ROUTES, type Role } from '@ab/constants';
 import Button from '@ab/ui/components/Button.svelte';
 import ConfirmDialog from '@ab/ui/components/ConfirmDialog.svelte';
 import EmptyState from '@ab/ui/components/EmptyState.svelte';
@@ -49,7 +49,7 @@ function formatDateTime(iso: string): string {
 			<p class="email mono">{data.invitation.id}</p>
 		</div>
 		<div class="badges">
-			<span class="role-pill">{ROLE_LABELS[data.invitation.proposedRole]}</span>
+			<span class="role-pill">{ROLE_LABELS[data.invitation.proposedRole as Role]}</span>
 			<span class="status-pill status-{data.invitation.status}">{statusLabel(data.invitation.status)}</span>
 		</div>
 	</header>

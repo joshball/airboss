@@ -64,7 +64,7 @@ function statusLabel(status: InvitationStatus): string {
 
 function totalCount(counts: PageData['counts'], filter: InvitationStatus | 'all'): number {
 	if (filter === 'all') {
-		return Object.values(counts).reduce((a, b) => a + b, 0);
+		return (Object.values(counts) as number[]).reduce((a, b) => a + b, 0);
 	}
 	return counts[filter] ?? 0;
 }
@@ -142,7 +142,7 @@ function totalCount(counts: PageData['counts'], filter: InvitationStatus | 'all'
 								<a href={ROUTES.HANGAR_USERS_INVITATION_DETAIL(row.id)}>{row.email}</a>
 							</td>
 							<td>
-								<span class="role-pill">{ROLE_LABELS[row.proposedRole]}</span>
+								<span class="role-pill">{ROLE_LABELS[row.proposedRole as Role]}</span>
 							</td>
 							<td>
 								<span class="status-pill status-{row.status}">{statusLabel(row.status)}</span>

@@ -14,7 +14,7 @@ For the why, see [VISION.md](VISION.md). For shipped surfaces, see [PRD.md](PRD.
 
 ## Where we are
 
-Hangar ships an authoring + admin surface today: dashboard with three tiles (Content, People, System), source pipeline (`/sources`, `/sources/[id]`), glossary registry (`/glossary`, `/glossary/[id]`), user explorer + editor (`/users`, `/users/[id]` -- role / ban / revoke), background job log (`/jobs`), and the cross-cutting audit explorer (`/admin/audit`, `/admin/audit/[id]`). Layout-level role gating is in place.
+Hangar ships an authoring + admin surface today: dashboard with three tiles (Content, People, System), source pipeline (`/sources`, `/sources/[id]`), glossary registry (`/glossary`, `/glossary/[id]`), user explorer + editor (`/users`, `/users/[id]` -- role / ban / revoke), invitation flow (`/users/invitations`, `/users/invitations/[id]`), background job log (`/jobs`), and the cross-cutting audit explorer (`/admin/audit`, `/admin/audit/[id]`). Layout-level role gating is in place.
 
 ## Active
 
@@ -22,8 +22,6 @@ Hangar ships an authoring + admin surface today: dashboard with three tiles (Con
 
 | Item                        | Notes                                                                                                                  | Trigger to start                                            |
 | --------------------------- | ---------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
-| `/users` editing            | Role assignment, ban/unban, session revoke. First admin-write surface; dual-gate `requireRole(ADMIN)` on load + action | After audit explorer ships                                  |
-| Invite flow                 | Better Auth invite token, email send (infra exists in `libs/auth/src/email/`), accept route on study side              | After `/users` editing lands the admin-write pattern        |
 | Scenarios authoring         | Follows the scenario tick model from `airboss-firc/libs/engine/`                                                       | After engine migrates into airboss                          |
 | Cards authoring             | Cards (study) are seeded today; admin authoring UI is downstream of stable card spec                                   | After card spec stabilizes in study                         |
 
