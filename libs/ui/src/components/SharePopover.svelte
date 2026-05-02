@@ -13,12 +13,11 @@
  * (or routes the report) on `onReport`. Component does no I/O beyond the
  * clipboard write.
  *
- * A11y: dialog role + aria-label, ESC closes, scrim click closes,
- * focus-trap keeps Tab inside, focus moves to the first action on open.
- * Mirrors `SnoozeReasonPopover`.
+ * Chrome / a11y: built on the shared `Dialog` primitive (canonical close
+ * glyph, focus trap, ESC + scrim close, focus return).
  */
 
-import { createFocusTrap } from '../lib/focus-trap';
+import Dialog from './Dialog.svelte';
 
 let {
 	open = $bindable(false),
@@ -40,7 +39,6 @@ let {
 	onClose?: () => void;
 } = $props();
 
-let panelEl = $state<HTMLDivElement | null>(null);
 let copied = $state(false);
 let copyError = $state<string | null>(null);
 let copyResetTimer: ReturnType<typeof setTimeout> | null = null;
@@ -50,16 +48,6 @@ const COPY_FEEDBACK_MS = 2000;
 function close(): void {
 	open = false;
 	onClose?.();
-}
-
-function handleKeyDown(event: KeyboardEvent): void {
-	if (!panelEl) return;
-	const trap = createFocusTrap(panelEl, { onEscape: close });
-	trap.handleKeyDown(event);
-}
-
-function handleScrim(event: PointerEvent): void {
-	if (event.target === event.currentTarget) close();
 }
 
 async function copy(): Promise<void> {
@@ -87,9 +75,6 @@ $effect(() => {
 	if (!open) return;
 	copied = false;
 	copyError = null;
-	queueMicrotask(() => {
-		panelEl?.querySelector<HTMLElement>('button')?.focus();
-	});
 });
 
 $effect(() => {
@@ -102,99 +87,45 @@ $effect(() => {
 });
 </script>
 
-{#if open}
-	<!-- svelte-ignore a11y_click_events_have_key_events -->
-	<!-- svelte-ignore a11y_no_static_element_interactions -->
-	<div class="scrim" onpointerdown={handleScrim} onkeydown={handleKeyDown} data-testid="sharepopover-scrim">
-		<div
-			bind:this={panelEl}
-			class="panel"
-			role="dialog"
-			aria-modal="true"
-			aria-label="Share this card"
+<Dialog
+	bind:open
+	ariaLabel="Share this card"
+	size="md"
+	onClose={close}
+>
+	{#snippet header()}
+		<h2 data-testid="sharepopover-title">Share this card</h2>
+	{/snippet}
+
+	{#snippet body()}
+		<span
 			data-testid="sharepopover-root"
 			data-state={copied ? 'copied' : copyError ? 'error' : 'idle'}
-		>
-			<header class="hd">
-				<h2 data-testid="sharepopover-title">Share this card</h2>
-				<button type="button" class="close" aria-label="Close" data-testid="sharepopover-close" onclick={close}>&times;</button>
-			</header>
+			class="visually-hidden"
+		></span>
+		<div class="actions">
+			<button type="button" class="action" onclick={copy} aria-live="polite" data-testid="sharepopover-copy">
+				<span class="action-label">{copied ? 'Copied!' : 'Copy card link'}</span>
+				<span class="action-desc">
+					{copied ? 'The public card URL is on your clipboard.' : 'Public link to this card.'}
+				</span>
+			</button>
 
-			<div class="actions">
-				<button type="button" class="action" onclick={copy} aria-live="polite" data-testid="sharepopover-copy">
-					<span class="action-label">{copied ? 'Copied!' : 'Copy card link'}</span>
-					<span class="action-desc">
-						{copied ? 'The public card URL is on your clipboard.' : 'Public link to this card.'}
-					</span>
-				</button>
-
-				<button type="button" class="action" onclick={report} data-testid="sharepopover-report">
-					<span class="action-label">Report this card</span>
-					<span class="action-desc">Flag a problem; we'll ask you for a comment.</span>
-				</button>
-			</div>
-
-			{#if copyError}
-				<p class="error" role="alert" data-testid="sharepopover-error">{copyError}</p>
-			{/if}
-
-			<p class="url" aria-label="Card link preview" data-testid="sharepopover-url">{cardPublicUrl}</p>
+			<button type="button" class="action" onclick={report} data-testid="sharepopover-report">
+				<span class="action-label">Report this card</span>
+				<span class="action-desc">Flag a problem; we'll ask you for a comment.</span>
+			</button>
 		</div>
-	</div>
-{/if}
+
+		{#if copyError}
+			<p class="error" role="alert" data-testid="sharepopover-error">{copyError}</p>
+		{/if}
+
+		<p class="url" aria-label="Card link preview" data-testid="sharepopover-url">{cardPublicUrl}</p>
+	{/snippet}
+</Dialog>
 
 <style>
-	.scrim {
-		position: fixed;
-		inset: 0;
-		background: var(--dialog-scrim);
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		z-index: var(--z-modal);
-	}
-
-	.panel {
-		background: var(--surface-panel, var(--ink-inverse));
-		border: 1px solid var(--edge-default);
-		border-radius: var(--radius-lg);
-		padding: var(--space-lg) var(--space-xl);
-		min-width: min(28rem, 92vw);
-		max-width: 32rem;
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-md);
-		box-shadow: var(--shadow-lg);
-	}
-
-	.hd {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-	}
-
-	.hd h2 {
-		margin: 0;
-		font-size: var(--font-size-lg);
-		color: var(--ink-body);
-	}
-
-	.close {
-		background: transparent;
-		border: none;
-		color: var(--ink-muted);
-		font-size: var(--font-size-xl);
-		line-height: 1;
-		cursor: pointer;
-		padding: var(--space-2xs) var(--space-sm);
-	}
-
-	.close:focus-visible {
-		outline: none;
-		box-shadow: 0 0 0 3px var(--focus-ring);
-		border-radius: var(--radius-sm);
-	}
-
 	.actions {
 		display: flex;
 		flex-direction: column;
@@ -209,7 +140,7 @@ $effect(() => {
 		padding: var(--space-sm) var(--space-md);
 		border: 1px solid var(--edge-default);
 		border-radius: var(--radius-md);
-		background: var(--ink-inverse);
+		background: var(--surface-panel);
 		color: var(--ink-body);
 		cursor: pointer;
 	}
@@ -220,8 +151,8 @@ $effect(() => {
 	}
 
 	.action:focus-visible {
-		outline: none;
-		box-shadow: 0 0 0 3px var(--focus-ring);
+		outline: 2px solid var(--focus-ring);
+		outline-offset: 2px;
 	}
 
 	.action-label {
@@ -233,6 +164,12 @@ $effect(() => {
 	.action-desc {
 		font-size: var(--font-size-xs);
 		color: var(--ink-subtle);
+	}
+
+	h2 {
+		margin: 0;
+		font-size: var(--font-size-lg);
+		color: var(--ink-body);
 	}
 
 	.url {
@@ -250,5 +187,17 @@ $effect(() => {
 		color: var(--signal-danger, var(--action-hazard-hover));
 		font-size: var(--font-size-sm);
 		margin: 0;
+	}
+
+	.visually-hidden {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		white-space: nowrap;
+		border: 0;
 	}
 </style>

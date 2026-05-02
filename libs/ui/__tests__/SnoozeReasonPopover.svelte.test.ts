@@ -25,9 +25,13 @@ describe('SnoozeReasonPopover -- closed', () => {
 describe('SnoozeReasonPopover -- open', () => {
 	it('renders dialog with role=dialog', () => {
 		render(SnoozeReasonPopover, { open: true, onSubmit: vi.fn() });
-		const root = screen.getByTestId('snoozereasonpopover-root');
-		expect(root.getAttribute('role')).toBe('dialog');
-		expect(root.getAttribute('aria-modal')).toBe('true');
+		// role=dialog + aria-modal come from the shared Dialog primitive's
+		// panel; the per-popover root marker still carries the
+		// `data-selected-reason` state used by the rest of these tests.
+		const panel = screen.getByTestId('dialog-panel');
+		expect(panel.getAttribute('role')).toBe('dialog');
+		expect(panel.getAttribute('aria-modal')).toBe('true');
+		expect(screen.getByTestId('snoozereasonpopover-root')).toBeTruthy();
 	});
 
 	it('reflects the default reason on data-selected-reason', () => {
@@ -67,10 +71,10 @@ describe('SnoozeReasonPopover -- reason selection', () => {
 });
 
 describe('SnoozeReasonPopover -- close', () => {
-	it('clicking close calls onClose', () => {
+	it('clicking the shared Dialog close button calls onClose', () => {
 		const onClose = vi.fn();
 		render(SnoozeReasonPopover, { open: true, onSubmit: vi.fn(), onClose });
-		(screen.getByTestId('snoozereasonpopover-close') as HTMLButtonElement).click();
+		(screen.getByTestId('dialog-close') as HTMLButtonElement).click();
 		expect(onClose).toHaveBeenCalledTimes(1);
 	});
 

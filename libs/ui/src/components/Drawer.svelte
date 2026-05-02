@@ -5,7 +5,7 @@ export type DrawerSize = 'sm' | 'md' | 'lg';
 
 <script lang="ts">
 import { tick, untrack, type Snippet } from 'svelte';
-import { createFocusTrap } from '../lib/focus-trap';
+import { createFocusTrap, type FocusTrap } from '../lib/focus-trap';
 
 /**
  * Accessible slide-over drawer primitive.
@@ -53,6 +53,8 @@ let {
 
 let panelEl = $state<HTMLDivElement | null>(null);
 let previousFocus: HTMLElement | null = null;
+// Allocate one focus-trap per modal-open instead of per keystroke.
+let trap: FocusTrap | null = null;
 
 function close(): void {
 	open = false;
@@ -60,9 +62,7 @@ function close(): void {
 }
 
 function handleKeyDown(event: KeyboardEvent): void {
-	if (!panelEl) return;
-	const trap = createFocusTrap(panelEl, { onEscape: close });
-	trap.handleKeyDown(event);
+	trap?.handleKeyDown(event);
 }
 
 function handleScrimPointerDown(event: PointerEvent): void {
@@ -75,12 +75,17 @@ $effect(() => {
 		previousFocus = (document.activeElement as HTMLElement | null) ?? null;
 	});
 	void tick().then(() => {
+		if (panelEl) {
+			trap = createFocusTrap(panelEl, { onEscape: close });
+		}
 		const first = panelEl?.querySelector<HTMLElement>(
 			'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
 		);
 		(first ?? panelEl)?.focus();
 	});
 	return () => {
+		trap?.release();
+		trap = null;
 		previousFocus?.focus?.();
 		previousFocus = null;
 	};

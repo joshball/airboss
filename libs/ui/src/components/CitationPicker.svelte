@@ -42,6 +42,7 @@ interface SearchResult {
  * single-column without a JSON side-table just for URLs.
  */
 
+import Button from './Button.svelte';
 import Dialog from './Dialog.svelte';
 
 let {
@@ -70,6 +71,14 @@ let externalUrl = $state('');
 let externalTitle = $state('');
 let submitting = $state(false);
 let submitError = $state<string | null>(null);
+// Monotonic search-request id. The previous `targetType === activeType`
+// guard in `runSearch.finally` left `loading` stuck at `true` whenever the
+// user switched tabs (notably to External-Ref) before a fetch resolved,
+// because the in-flight resolution then no longer matched the active tab
+// and silently skipped the `loading = false` reset. Tracking a token
+// makes "is this the latest request?" a straight equality check that does
+// not depend on which tab is active when the fetch returns.
+let searchToken = 0;
 
 // When the caller reconfigures targetTypes, reset the active tab to a valid one.
 $effect(() => {
@@ -99,7 +108,12 @@ let searchTimer: ReturnType<typeof setTimeout> | null = null;
 $effect(() => {
 	if (!open) return;
 	if (activeType === CITATION_TARGET_TYPES.EXTERNAL_REF) {
+		// Switching to External-Ref also bumps the token so any in-flight
+		// fetch resolves into the "stale" branch and clears `loading`.
+		searchToken += 1;
 		results = [];
+		loading = false;
+		fetchError = null;
 		return;
 	}
 	if (searchTimer) clearTimeout(searchTimer);
@@ -114,6 +128,8 @@ $effect(() => {
 });
 
 async function runSearch(targetType: CitationTargetType, q: string): Promise<void> {
+	searchToken += 1;
+	const myToken = searchToken;
 	loading = true;
 	fetchError = null;
 	try {
@@ -121,21 +137,27 @@ async function runSearch(targetType: CitationTargetType, q: string): Promise<voi
 		const res = await fetch(`${ROUTES.API_CITATIONS_SEARCH}?${params.toString()}`, {
 			headers: { accept: 'application/json' },
 		});
+		// Stale resolution: a newer search has been kicked off (or the user
+		// switched to External-Ref). Drop the response without touching the
+		// current results / loading state -- the newer request owns those.
+		if (myToken !== searchToken) return;
 		if (!res.ok) {
 			fetchError = 'Could not load results.';
 			results = [];
 			return;
 		}
 		const body: { results?: SearchResult[] } = await res.json();
-		// If the user switched tabs before the fetch resolved, drop the result
-		// set to avoid flashing stale rows from a different target type.
-		if (targetType !== activeType) return;
+		if (myToken !== searchToken) return;
 		results = body.results ?? [];
 	} catch (err) {
+		if (myToken !== searchToken) return;
 		fetchError = err instanceof Error ? err.message : 'Could not load results.';
 		results = [];
 	} finally {
-		if (targetType === activeType) loading = false;
+		// Only the latest in-flight request gets to clear the spinner. Stale
+		// resolutions never touch `loading`, so they can't undo the spinner
+		// the newer request just put up.
+		if (myToken === searchToken) loading = false;
 	}
 }
 
@@ -148,6 +170,10 @@ function handleTabClick(type: CitationTargetType): void {
 	selectedId = null;
 	query = '';
 	results = [];
+	// Invalidate any in-flight search so its late resolution can't repaint
+	// stale rows or leave the spinner up after the tab switch.
+	searchToken += 1;
+	loading = false;
 }
 
 const noteLength = $derived(note.trim().length);
@@ -197,10 +223,7 @@ function cancel(): void {
 
 <Dialog bind:open ariaLabel="Cite a reference" size="lg" onClose={() => onCancel?.()}>
 	{#snippet header()}
-		<div class="header-row">
-			<span class="title">Cite a reference</span>
-			<span class="kbd">Esc to close</span>
-		</div>
+		<h2 class="title" data-testid="citationpicker-title">Cite a reference</h2>
 	{/snippet}
 
 	{#snippet body()}
@@ -308,28 +331,21 @@ function cancel(): void {
 	{/snippet}
 
 	{#snippet footer()}
-		<button type="button" class="btn ghost" onclick={cancel} disabled={submitting}>Cancel</button>
-		<button type="button" class="btn primary" onclick={submit} disabled={!canSubmit}>
-			{submitting ? 'Adding...' : 'Add cite'}
-		</button>
+		<Button variant="ghost" size="md" disabled={submitting} onclick={cancel}>
+			<span data-testid="citationpicker-cancel">Cancel</span>
+		</Button>
+		<Button variant="primary" size="md" disabled={!canSubmit} onclick={submit}>
+			<span data-testid="citationpicker-submit">{submitting ? 'Adding...' : 'Add cite'}</span>
+		</Button>
 	{/snippet}
 </Dialog>
 
 <style>
-	.header-row {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: var(--space-sm);
-	}
-
 	.title {
+		margin: 0;
 		font-weight: var(--font-weight-semibold);
-	}
-
-	.kbd {
-		color: var(--ink-faint);
-		font-size: var(--type-ui-caption-size);
+		font-size: var(--font-size-lg);
+		color: var(--ink-body);
 	}
 
 	.tabs {
@@ -487,37 +503,5 @@ function cancel(): void {
 		flex-direction: column;
 		gap: var(--space-md);
 		margin-bottom: var(--space-md);
-	}
-
-	.btn {
-		padding: var(--space-sm) var(--space-lg);
-		font-size: var(--type-definition-body-size);
-		font-weight: 600;
-		border-radius: var(--radius-md);
-		border: 1px solid transparent;
-		cursor: pointer;
-	}
-
-	.btn.primary {
-		background: var(--action-default);
-		color: var(--ink-inverse);
-	}
-
-	.btn.primary:hover:not(:disabled) {
-		background: var(--action-default-hover);
-	}
-
-	.btn.ghost {
-		background: transparent;
-		color: var(--ink-muted);
-	}
-
-	.btn.ghost:hover:not(:disabled) {
-		background: var(--surface-sunken);
-	}
-
-	.btn:disabled {
-		opacity: 0.6;
-		cursor: not-allowed;
 	}
 </style>

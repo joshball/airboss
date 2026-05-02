@@ -47,8 +47,13 @@ describe('SharePopover -- open', () => {
 			cardPublicUrl: 'https://airboss.test/c/1',
 			onReport: vi.fn(),
 		});
-		const root = screen.getByTestId('sharepopover-root');
-		expect(root.getAttribute('role')).toBe('dialog');
+		// role=dialog and aria-modal live on the shared Dialog primitive's
+		// panel; the per-popover root marker is still present so callers can
+		// disambiguate between concurrently mounted dialogs.
+		const panel = screen.getByTestId('dialog-panel');
+		expect(panel.getAttribute('role')).toBe('dialog');
+		expect(panel.getAttribute('aria-modal')).toBe('true');
+		expect(screen.getByTestId('sharepopover-root')).toBeTruthy();
 		expect(screen.getByTestId('sharepopover-url').textContent).toBe('https://airboss.test/c/1');
 	});
 
@@ -93,7 +98,7 @@ describe('SharePopover -- open', () => {
 		expect(screen.getByTestId('sharepopover-error')).toBeTruthy();
 	});
 
-	it('clicking close calls onClose', () => {
+	it('clicking the shared Dialog close button calls onClose', () => {
 		const onClose = vi.fn();
 		render(SharePopover, {
 			open: true,
@@ -102,7 +107,7 @@ describe('SharePopover -- open', () => {
 			onReport: vi.fn(),
 			onClose,
 		});
-		(screen.getByTestId('sharepopover-close') as HTMLButtonElement).click();
+		(screen.getByTestId('dialog-close') as HTMLButtonElement).click();
 		expect(onClose).toHaveBeenCalledTimes(1);
 	});
 });

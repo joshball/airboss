@@ -11,13 +11,14 @@
  * a row calls `onPick(index)`; the parent submits the form action that
  * writes the session row and re-renders. The component does no I/O.
  *
- * A11y: dialog role + aria-label, ESC closes, scrim click closes,
- * focus-trap keeps Tab inside, Arrow Up/Down moves between rows, Enter
- * activates the focused row. Mirrors `SharePopover` and
- * `SnoozeReasonPopover`.
+ * Chrome / a11y: built on the shared `Dialog` primitive (canonical close
+ * glyph, focus trap, ESC + scrim close, focus return). Listbox roving
+ * tabindex via Arrow Up/Down is implemented locally; Enter activates the
+ * focused row.
  */
 
-import { createFocusTrap } from '../lib/focus-trap';
+import { tick } from 'svelte';
+import Dialog from './Dialog.svelte';
 
 export type JumpCardStatus = 'rated' | 'pending' | 'current';
 
@@ -40,7 +41,6 @@ let {
 	onClose?: () => void;
 } = $props();
 
-let panelEl = $state<HTMLDivElement | null>(null);
 let listEl = $state<HTMLDivElement | null>(null);
 
 const STATUS_LABELS: Record<JumpCardStatus, string> = {
@@ -54,26 +54,38 @@ function close(): void {
 	onClose?.();
 }
 
-function handleKeyDown(event: KeyboardEvent): void {
-	if (!panelEl) return;
-	const trap = createFocusTrap(panelEl, { onEscape: close });
-	trap.handleKeyDown(event);
-
-	if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
-		const buttons = listEl?.querySelectorAll<HTMLButtonElement>('button[data-jump-row]');
-		if (!buttons || buttons.length === 0) return;
-		const active = document.activeElement as HTMLElement | null;
-		const list = Array.from(buttons);
-		const idx = active ? list.indexOf(active as HTMLButtonElement) : -1;
-		const delta = event.key === 'ArrowDown' ? 1 : -1;
-		const next = idx === -1 ? (delta === 1 ? 0 : list.length - 1) : (idx + delta + list.length) % list.length;
-		event.preventDefault();
-		list[next]?.focus();
-	}
+function rovingMove(delta: number): void {
+	const buttons = listEl?.querySelectorAll<HTMLButtonElement>('button[data-jump-row]');
+	if (!buttons || buttons.length === 0) return;
+	const active = document.activeElement as HTMLElement | null;
+	const list = Array.from(buttons);
+	const idx = active ? list.indexOf(active as HTMLButtonElement) : -1;
+	const next = idx === -1 ? (delta === 1 ? 0 : list.length - 1) : (idx + delta + list.length) % list.length;
+	list[next]?.focus();
 }
 
-function handleScrim(event: PointerEvent): void {
-	if (event.target === event.currentTarget) close();
+function handleListKeyDown(event: KeyboardEvent): void {
+	switch (event.key) {
+		case 'ArrowDown':
+			event.preventDefault();
+			rovingMove(1);
+			break;
+		case 'ArrowUp':
+			event.preventDefault();
+			rovingMove(-1);
+			break;
+		case 'Home': {
+			event.preventDefault();
+			listEl?.querySelector<HTMLButtonElement>('button[data-jump-row="0"]')?.focus();
+			break;
+		}
+		case 'End': {
+			event.preventDefault();
+			const last = listEl?.querySelector<HTMLButtonElement>(`button[data-jump-row="${totalCards - 1}"]`);
+			last?.focus();
+			break;
+		}
+	}
 }
 
 function pick(index: number): void {
@@ -83,110 +95,70 @@ function pick(index: number): void {
 
 $effect(() => {
 	if (!open) return;
-	queueMicrotask(() => {
+	void tick().then(() => {
 		const target = listEl?.querySelector<HTMLButtonElement>(`button[data-jump-row="${currentIndex}"]`);
 		(target ?? listEl?.querySelector<HTMLButtonElement>('button[data-jump-row]'))?.focus();
 	});
 });
 </script>
 
-{#if open}
-	<!-- svelte-ignore a11y_click_events_have_key_events -->
-	<!-- svelte-ignore a11y_no_static_element_interactions -->
-	<div class="scrim" onpointerdown={handleScrim} onkeydown={handleKeyDown} data-testid="jumptocardpopover-scrim">
+<Dialog
+	bind:open
+	ariaLabel="Jump to card in session"
+	size="sm"
+	onClose={close}
+>
+	{#snippet header()}
+		<h2 data-testid="jumptocardpopover-title">Jump to card</h2>
+	{/snippet}
+
+	{#snippet body()}
+		<span data-testid="jumptocardpopover-root" class="visually-hidden"></span>
+		<p class="sub">Pick a position. Skipped cards stay pending; come back to them anytime.</p>
+
+		<!-- svelte-ignore a11y_no_static_element_interactions -->
 		<div
-			bind:this={panelEl}
-			class="panel"
-			role="dialog"
-			aria-modal="true"
-			aria-label="Jump to card in session"
-			data-testid="jumptocardpopover-root"
+			class="list"
+			bind:this={listEl}
+			role="listbox"
+			tabindex="-1"
+			aria-label="Card positions"
+			aria-activedescendant={`jumptocard-row-${currentIndex}`}
+			data-testid="jumptocardpopover-list"
+			onkeydown={handleListKeyDown}
 		>
-			<header class="hd">
-				<h2 data-testid="jumptocardpopover-title">Jump to card</h2>
-				<button type="button" class="close" aria-label="Close" data-testid="jumptocardpopover-close" onclick={close}>&times;</button>
-			</header>
-
-			<p class="sub">Pick a position. Skipped cards stay pending; come back to them anytime.</p>
-
-			<div class="list" bind:this={listEl} role="listbox" aria-label="Card positions" data-testid="jumptocardpopover-list">
-				{#each Array.from({ length: totalCards }, (_, i) => i) as index (index)}
-					{@const status = index === currentIndex ? 'current' : (statuses[index] ?? 'pending')}
-					<button
-						type="button"
-						class="row row-{status}"
-						class:is-current={status === 'current'}
-						data-jump-row={index}
-						data-testid={`jumptocardpopover-item-${index}`}
-						data-state={status}
-						role="option"
-						aria-selected={index === currentIndex}
-						onclick={() => pick(index)}
-					>
-						<span class="row-pos">Card {index + 1}</span>
-						<span class="row-status">{STATUS_LABELS[status]}</span>
-					</button>
-				{/each}
-			</div>
+			{#each Array.from({ length: totalCards }, (_, i) => i) as index (index)}
+				{@const status = index === currentIndex ? 'current' : (statuses[index] ?? 'pending')}
+				<button
+					type="button"
+					id={`jumptocard-row-${index}`}
+					class="row row-{status}"
+					class:is-current={status === 'current'}
+					data-jump-row={index}
+					data-testid={`jumptocardpopover-item-${index}`}
+					data-state={status}
+					role="option"
+					aria-selected={index === currentIndex}
+					tabindex={index === currentIndex ? 0 : -1}
+					onclick={() => pick(index)}
+				>
+					<span class="row-pos">Card {index + 1}</span>
+					<span class="row-status">{STATUS_LABELS[status]}</span>
+				</button>
+			{/each}
 		</div>
-	</div>
-{/if}
+	{/snippet}
+</Dialog>
 
 <style>
-	.scrim {
-		position: fixed;
-		inset: 0;
-		background: var(--dialog-scrim);
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		z-index: var(--z-modal);
-	}
-
-	.panel {
-		background: var(--surface-panel, var(--ink-inverse));
-		border: 1px solid var(--edge-default);
-		border-radius: var(--radius-lg);
-		padding: var(--space-lg) var(--space-xl);
-		min-width: min(24rem, 92vw);
-		max-width: 28rem;
-		max-height: 80vh;
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-md);
-		box-shadow: var(--shadow-lg);
-	}
-
-	.hd {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-	}
-
-	.hd h2 {
+	h2 {
 		margin: 0;
 		font-size: var(--font-size-lg);
 		color: var(--ink-body);
 	}
 
-	.close {
-		background: transparent;
-		border: none;
-		color: var(--ink-muted);
-		font-size: var(--font-size-xl);
-		line-height: 1;
-		cursor: pointer;
-		padding: var(--space-2xs) var(--space-sm);
-	}
-
-	.close:focus-visible {
-		outline: none;
-		box-shadow: 0 0 0 3px var(--focus-ring);
-		border-radius: var(--radius-sm);
-	}
-
 	.sub {
-		margin: 0;
+		margin: 0 0 var(--space-md);
 		color: var(--ink-subtle);
 		font-size: var(--font-size-sm);
 	}
@@ -197,6 +169,7 @@ $effect(() => {
 		gap: var(--space-2xs);
 		overflow-y: auto;
 		padding: var(--space-2xs);
+		max-height: 60vh;
 	}
 
 	.row {
@@ -207,7 +180,7 @@ $effect(() => {
 		padding: var(--space-sm) var(--space-md);
 		border: 1px solid var(--edge-default);
 		border-radius: var(--radius-md);
-		background: var(--ink-inverse);
+		background: var(--surface-panel);
 		color: var(--ink-body);
 		cursor: pointer;
 		font: inherit;
@@ -219,8 +192,8 @@ $effect(() => {
 	}
 
 	.row:focus-visible {
-		outline: none;
-		box-shadow: 0 0 0 3px var(--focus-ring);
+		outline: 2px solid var(--focus-ring);
+		outline-offset: 2px;
 	}
 
 	.row-pos {
@@ -255,5 +228,17 @@ $effect(() => {
 	.row.is-current .row-status {
 		color: var(--action-default-hover);
 		font-weight: 600;
+	}
+
+	.visually-hidden {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		white-space: nowrap;
+		border: 0;
 	}
 </style>
