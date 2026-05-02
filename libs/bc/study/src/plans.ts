@@ -172,10 +172,13 @@ export async function createPlan(input: CreatePlanInput, db: Db = defaultDb): Pr
 			const [inserted] = await tx.insert(studyPlan).values(rowsToInsert).returning();
 			return inserted;
 		} catch (err) {
-			// The partial UNIQUE index is our race guard; unique_violation here
-			// means another transaction just inserted an active plan between
-			// our archive and insert.
-			if (err instanceof Error && /unique|duplicate/i.test(err.message)) {
+			// The partial UNIQUE index is our race guard; unique_violation
+			// (Postgres SQLSTATE 23505) here means another transaction just
+			// inserted an active plan between our archive and insert.
+			// Match on SQLSTATE rather than the error message text so a
+			// driver-side message rewording doesn't silently demote this to
+			// an unmapped 500. Mirrors `citations/citations.ts:292`.
+			if (err instanceof Error && 'code' in err && (err as { code?: string }).code === '23505') {
 				throw new DuplicateActivePlanError(input.userId);
 			}
 			throw err;

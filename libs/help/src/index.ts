@@ -14,7 +14,6 @@ export {
 	MarkdownParseError,
 	type MdNode,
 	parseMarkdown,
-	SHIKI_THEME,
 	SUPPORTED_LANGS,
 	type SupportedLang,
 	type TableAlign,

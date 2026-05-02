@@ -22,5 +22,8 @@ function getAuth() {
 	return createAuth({ secret, baseURL, isDev: dev });
 }
 
-// Lazy init: skip during SvelteKit build analysis.
+// Lazy init: skip during SvelteKit build analysis. SvelteKit's build pass
+// imports this module; auth isn't initialised until runtime, so we satisfy
+// the type with an `undefined` placeholder. Any caller during build is
+// itself buggy -- runtime code paths never read this value during build.
 export const auth = building ? (undefined as unknown as ReturnType<typeof createAuth>) : getAuth();

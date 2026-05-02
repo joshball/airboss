@@ -55,7 +55,15 @@ export async function seedSectionTreeManifest(
 	for (const section of sortedSections) {
 		const parentId = section.parent_code ? (codeToSectionId.get(section.parent_code) ?? null) : null;
 		const bodyAbsPath = resolve(context.repoRoot, section.body_path);
-		const contentMd = existsSync(bodyAbsPath) ? await readFile(bodyAbsPath, 'utf-8') : '';
+		// Mirror `whole-doc.ts`: a manifest that references a missing body
+		// file is a seed-time error, not a silent empty-content fall-through.
+		// Silently substituting `''` masked broken manifests for months.
+		if (!existsSync(bodyAbsPath)) {
+			throw new Error(
+				`section-tree manifest references missing body file: ${section.body_path} (resolved: ${bodyAbsPath})`,
+			);
+		}
+		const contentMd = await readFile(bodyAbsPath, 'utf-8');
 		const { row, changed } = await upsertReferenceSection({
 			referenceId: ref.id,
 			parentId,

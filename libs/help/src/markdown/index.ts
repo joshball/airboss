@@ -13,7 +13,7 @@ import { highlight } from './highlight';
 
 export type { CalloutVariant, InlineNode, MdNode, TableAlign } from './ast';
 export { MarkdownParseError } from './block';
-export { highlight, SHIKI_THEME, SUPPORTED_LANGS, type SupportedLang } from './highlight';
+export { highlight, SUPPORTED_LANGS, type SupportedLang } from './highlight';
 
 /**
  * Parse a markdown body, pre-highlight all code blocks, and return the AST.

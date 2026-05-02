@@ -11,10 +11,13 @@
 
 import { CERT_APPLICABILITIES, CERT_APPLICABILITY_VALUES, type CertApplicability } from '@ab/constants';
 import { db as defaultDb } from '@ab/db/connection';
+import { createLogger } from '@ab/utils';
 import { and, asc, eq, inArray, isNull } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import { CredentialNotFoundError, getCertsCoveredBy, getCredentialBySlug } from './credentials';
 import { type ReferenceRow, reference } from './schema';
+
+const log = createLogger('study:library-by-cert');
 
 type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;
 
@@ -91,10 +94,9 @@ export async function getReferencesForCertWithCarryover(
 		credentialId = cred.id;
 	} catch (err) {
 		if (err instanceof CredentialNotFoundError) {
-			process.stderr.write(
-				`library-by-cert: cert "${cert}" has no credential row for slug "${slug}"; ` +
-					'returning primary refs only. Seed the credential DAG to enable carryover.\n',
-			);
+			log.warn('cert has no credential row; returning primary refs only', {
+				metadata: { cert, slug, hint: 'seed the credential DAG to enable carryover' },
+			});
 			return { primary, carryover: [] };
 		}
 		throw err;
