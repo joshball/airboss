@@ -222,7 +222,7 @@ describe('runHandbooksExtrasIngest -- live cache (smoke)', () => {
 
 			const second = await runHandbooksExtrasIngest({ cacheRoot: liveCache, derivativeRoot: tempDerivative });
 			expect(second.ingested).toBe(0);
-			expect(second.alreadyAccepted).toBe(6);
+			expect(second.alreadyAccepted).toBe(7);
 			expect(second.promotionBatchId).toBeNull();
 
 			const afterBytes = trackedPaths.map((p) => readFileSync(p, 'utf-8'));
@@ -236,6 +236,8 @@ describe('runHandbooksExtrasIngest -- live cache (smoke)', () => {
 			expect(rmhManifest.body_path).toBe('handbooks/risk-management/FAA-H-8083-2A/document.md');
 			expect(rmhManifest.sections).toEqual([]);
 		},
-		120000,
+		// 7 PDFs through the full extract pipeline takes 100-200s on a warm
+		// cache; bump generously past the 120s default so flaky CI runs stay green.
+		240000,
 	);
 });
