@@ -1,5 +1,6 @@
 <script lang="ts">
 import { ROLE_LABELS, ROLE_VALUES, ROUTES, type Role } from '@ab/constants';
+import Badge from '@ab/ui/components/Badge.svelte';
 import Button from '@ab/ui/components/Button.svelte';
 import ConfirmDialog from '@ab/ui/components/ConfirmDialog.svelte';
 import EmptyState from '@ab/ui/components/EmptyState.svelte';
@@ -91,7 +92,7 @@ function openRevokeSession(sessionId: string) {
 				<span class="role-pill">{ROLE_LABELS[data.user.role]}</span>
 			{/if}
 			{#if data.user.banned}
-				<span class="badge banned">Banned</span>
+				<Badge tone="danger" size="sm">Banned</Badge>
 			{/if}
 		</div>
 	</header>
@@ -369,19 +370,6 @@ function openRevokeSession(sessionId: string) {
 		color: var(--action-default-hover);
 		text-transform: uppercase;
 		letter-spacing: var(--letter-spacing-wide);
-	}
-
-	.badge {
-		display: inline-block;
-		font-size: var(--type-ui-caption-size);
-		font-weight: var(--font-weight-semibold);
-		padding: var(--space-2xs) var(--space-sm);
-		border-radius: var(--radius-pill);
-	}
-
-	.badge.banned {
-		background: var(--signal-warning-wash);
-		color: var(--signal-warning);
 	}
 
 	.alert {

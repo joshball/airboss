@@ -7,6 +7,8 @@ import {
 	type JobStatus,
 	ROUTES,
 } from '@ab/constants';
+import type { BadgeTone } from '@ab/ui';
+import Badge from '@ab/ui/components/Badge.svelte';
 import ConfirmDialog from '@ab/ui/components/ConfirmDialog.svelte';
 import type { ActionData, PageData } from './$types';
 
@@ -82,20 +84,20 @@ $effect(() => {
 	return () => clearInterval(timer);
 });
 
-function statusTone(status: string): string {
+function statusTone(status: string): BadgeTone {
 	switch (status) {
 		case JOB_STATUSES.COMPLETE:
 			return 'success';
 		case JOB_STATUSES.RUNNING:
 			return 'info';
 		case JOB_STATUSES.QUEUED:
-			return 'neutral';
+			return 'default';
 		case JOB_STATUSES.FAILED:
 			return 'danger';
 		case JOB_STATUSES.CANCELLED:
 			return 'warning';
 		default:
-			return 'neutral';
+			return 'default';
 	}
 }
 
@@ -118,7 +120,7 @@ function formatTime(iso: string | null): string {
 		</p>
 		<h1 class="mono">{data.job.kind}</h1>
 		<div class="meta">
-			<span class="status-chip status-{statusTone(currentStatus)}">{currentStatus}</span>
+			<Badge tone={statusTone(currentStatus)} size="sm">{currentStatus}</Badge>
 			<span class="muted">Target <span class="mono">{data.job.targetType ?? '-'}{data.job.targetId ? `:${data.job.targetId}` : ''}</span></span>
 			{#if data.job.actorId}
 				<span class="muted">Actor <span class="mono">{data.job.actorId}</span></span>
@@ -285,39 +287,6 @@ function formatTime(iso: string | null): string {
 	}
 
 	.muted {
-		color: var(--ink-muted);
-	}
-
-	.status-chip {
-		display: inline-block;
-		font-size: var(--type-ui-caption-size);
-		font-weight: var(--font-weight-semibold);
-		padding: var(--space-2xs) var(--space-sm);
-		border-radius: var(--radius-pill);
-	}
-
-	.status-success {
-		background: var(--signal-success-wash);
-		color: var(--signal-success);
-	}
-
-	.status-info {
-		background: var(--signal-info-wash);
-		color: var(--signal-info);
-	}
-
-	.status-warning {
-		background: var(--signal-warning-wash);
-		color: var(--signal-warning);
-	}
-
-	.status-danger {
-		background: var(--signal-danger-wash);
-		color: var(--signal-danger);
-	}
-
-	.status-neutral {
-		background: var(--surface-sunken);
 		color: var(--ink-muted);
 	}
 

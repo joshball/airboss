@@ -1,5 +1,6 @@
 <script lang="ts">
 import { ROUTES } from '@ab/constants';
+import Badge from '@ab/ui/components/Badge.svelte';
 import Banner from '@ab/ui/components/Banner.svelte';
 import Button from '@ab/ui/components/Button.svelte';
 import ConfirmDialog from '@ab/ui/components/ConfirmDialog.svelte';
@@ -34,16 +35,16 @@ function formatTime(iso: string): string {
 			</p>
 			<h1>{data.source.title}</h1>
 			<div class="meta">
-				<span class="badge" class:dirty={data.source.dirty} class:clean={!data.source.dirty}>
+				<Badge tone={data.source.dirty ? 'warning' : 'success'} size="sm">
 					{data.source.dirty ? 'Dirty' : 'Clean'}
-				</span>
+				</Badge>
 				<span class="mono">rev {data.source.rev}</span>
 				<span class="muted">Updated {formatTime(data.source.updatedAt)}</span>
 				{#if data.source.updatedBy}
 					<span class="muted">by <span class="mono">{data.source.updatedBy}</span></span>
 				{/if}
 				{#if data.source.deletedAt}
-					<span class="badge deleted">Deleted {formatTime(data.source.deletedAt)}</span>
+					<Badge tone="danger" size="sm">Deleted {formatTime(data.source.deletedAt)}</Badge>
 				{/if}
 			</div>
 		</div>
@@ -132,29 +133,6 @@ function formatTime(iso: string): string {
 		align-items: center;
 		color: var(--ink-muted);
 		font-size: var(--type-ui-label-size);
-	}
-
-	.badge {
-		display: inline-block;
-		font-size: var(--type-ui-caption-size);
-		font-weight: var(--font-weight-semibold);
-		padding: var(--space-2xs) var(--space-sm);
-		border-radius: var(--radius-pill);
-	}
-
-	.badge.dirty {
-		background: var(--signal-warning-wash);
-		color: var(--signal-warning);
-	}
-
-	.badge.clean {
-		background: var(--signal-success-wash);
-		color: var(--signal-success);
-	}
-
-	.badge.deleted {
-		background: var(--signal-danger-wash);
-		color: var(--signal-danger);
 	}
 
 	.mono {

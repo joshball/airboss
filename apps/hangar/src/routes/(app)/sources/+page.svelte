@@ -1,5 +1,7 @@
 <script lang="ts">
 import { type ReferenceSourceType, ROUTES, SOURCE_TYPE_LABELS } from '@ab/constants';
+import type { BadgeTone } from '@ab/ui';
+import Badge from '@ab/ui/components/Badge.svelte';
 import Banner from '@ab/ui/components/Banner.svelte';
 import Button from '@ab/ui/components/Button.svelte';
 import EmptyState from '@ab/ui/components/EmptyState.svelte';
@@ -31,6 +33,15 @@ function formatState(state: 'pending' | 'downloaded' | 'extracted'): string {
 	if (state === 'pending') return 'pending';
 	if (state === 'downloaded') return 'downloaded';
 	return 'extracted';
+}
+
+// Map ingest lifecycle to a tone so the Badge primitive carries shape +
+// color + text (WCAG 1.4.1). pending = warning (action needed), downloaded
+// = info (in progress), extracted = success (terminal).
+function stateTone(state: 'pending' | 'downloaded' | 'extracted'): BadgeTone {
+	if (state === 'pending') return 'warning';
+	if (state === 'downloaded') return 'info';
+	return 'success';
 }
 
 function formatDate(iso: string | null): string {
@@ -127,7 +138,7 @@ function formatDate(iso: string | null): string {
 								<td>{SOURCE_TYPE_LABELS[src.type as ReferenceSourceType] ?? src.type}</td>
 								<td class="mono">{src.version}</td>
 								<td>
-									<span class="state state-{src.state}">{formatState(src.state)}</span>
+									<Badge tone={stateTone(src.state)} size="sm">{formatState(src.state)}</Badge>
 								</td>
 								<td class="mono">{formatBytes(src.sizeBytes)}</td>
 								<td>
@@ -279,31 +290,6 @@ function formatDate(iso: string | null): string {
 	}
 
 	.col-id a:hover { text-decoration: underline; }
-
-	.state {
-		display: inline-block;
-		font-size: var(--type-ui-caption-size);
-		font-weight: var(--font-weight-semibold);
-		padding: var(--space-2xs) var(--space-sm);
-		border-radius: var(--radius-pill);
-		text-transform: uppercase;
-		letter-spacing: var(--letter-spacing-wide);
-	}
-
-	.state-pending {
-		background: var(--signal-warning-wash);
-		color: var(--signal-warning);
-	}
-
-	.state-downloaded {
-		background: var(--signal-info-wash);
-		color: var(--signal-info);
-	}
-
-	.state-extracted {
-		background: var(--signal-success-wash);
-		color: var(--signal-success);
-	}
 
 	.muted { color: var(--ink-muted); }
 

@@ -14,6 +14,7 @@ import {
 	SOURCE_TYPE_LABELS,
 	SOURCE_TYPE_VALUES,
 } from '@ab/constants';
+import Badge from '@ab/ui/components/Badge.svelte';
 import Banner from '@ab/ui/components/Banner.svelte';
 import Button from '@ab/ui/components/Button.svelte';
 import EmptyState from '@ab/ui/components/EmptyState.svelte';
@@ -219,9 +220,9 @@ function formatDate(iso: string): string {
 							<td class="mono">{formatDate(ref.updatedAt)}</td>
 							<td>
 								{#if ref.dirty}
-									<span class="badge dirty">Dirty</span>
+									<Badge tone="warning" size="sm">Dirty</Badge>
 								{:else}
-									<span class="badge clean">Clean</span>
+									<Badge tone="success" size="sm">Clean</Badge>
 								{/if}
 							</td>
 						</tr>
@@ -407,24 +408,6 @@ function formatDate(iso: string): string {
 
 	.muted {
 		color: var(--ink-faint);
-	}
-
-	.badge {
-		display: inline-block;
-		font-size: var(--type-ui-caption-size);
-		font-weight: var(--font-weight-semibold);
-		padding: var(--space-2xs) var(--space-sm);
-		border-radius: var(--radius-pill);
-	}
-
-	.badge.dirty {
-		background: var(--signal-warning-wash);
-		color: var(--signal-warning);
-	}
-
-	.badge.clean {
-		background: var(--signal-success-wash);
-		color: var(--signal-success);
 	}
 
 	.pagination {

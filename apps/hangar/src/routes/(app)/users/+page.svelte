@@ -1,5 +1,6 @@
 <script lang="ts">
 import { QUERY_PARAMS, ROLE_LABELS, ROLE_VALUES, ROUTES, type Role } from '@ab/constants';
+import Badge from '@ab/ui/components/Badge.svelte';
 import Banner from '@ab/ui/components/Banner.svelte';
 import EmptyState from '@ab/ui/components/EmptyState.svelte';
 import PageHeader from '@ab/ui/components/PageHeader.svelte';
@@ -139,7 +140,7 @@ function formatLastSeen(iso: string | null): string {
 							<td class="mono">{formatDate(user.createdAt)}</td>
 							<td>
 								{#if user.banned}
-									<span class="badge banned">Banned</span>
+									<Badge tone="danger" size="sm">Banned</Badge>
 								{:else}
 									<span class="muted">-</span>
 								{/if}
@@ -267,16 +268,4 @@ function formatLastSeen(iso: string | null): string {
 		letter-spacing: var(--letter-spacing-wide);
 	}
 
-	.badge {
-		display: inline-block;
-		font-size: var(--type-ui-caption-size);
-		font-weight: var(--font-weight-semibold);
-		padding: var(--space-2xs) var(--space-sm);
-		border-radius: var(--radius-pill);
-	}
-
-	.badge.banned {
-		background: var(--signal-warning-wash);
-		color: var(--signal-warning);
-	}
 </style>
