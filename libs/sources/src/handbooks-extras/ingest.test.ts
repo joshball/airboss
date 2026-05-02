@@ -180,17 +180,25 @@ describe('runHandbooksExtrasIngest -- live cache (smoke)', () => {
 	const haveLiveCache = existsSync(join(liveCache, 'handbooks', 'faa-h-8083-2', 'faa-h-8083-2.pdf'));
 
 	(haveLiveCache ? it : it.skip)(
-		'ingests all 6 cached handbooks against the live YAML',
+		'ingests all 7 cached handbooks against the live YAML',
 		async () => {
 			// Use the live YAML so this also validates that the YAML and
 			// DOC_ID_TO_FRIENDLY agree.
 			_setHandbooksExtrasYamlPath(null);
 			const report = await runHandbooksExtrasIngest({ cacheRoot: liveCache, derivativeRoot: tempDerivative });
-			expect(report.ingested).toBe(6);
+			expect(report.ingested).toBe(7);
 			expect(report.skipped).toBe(0);
 			expect(report.promotionBatchId).not.toBeNull();
 			// Each derivative has a manifest + body
-			for (const slug of ['risk-management', 'aviation-instructor', 'ifh', 'iph', 'amt-general', 'amt-powerplant']) {
+			for (const slug of [
+				'risk-management',
+				'aviation-instructor',
+				'ifh',
+				'iph',
+				'amt-general',
+				'amt-powerplant',
+				'tips-mountain-flying',
+			]) {
 				const dir = join(tempDerivative, slug);
 				expect(existsSync(dir)).toBe(true);
 			}
@@ -214,7 +222,7 @@ describe('runHandbooksExtrasIngest -- live cache (smoke)', () => {
 
 			const second = await runHandbooksExtrasIngest({ cacheRoot: liveCache, derivativeRoot: tempDerivative });
 			expect(second.ingested).toBe(0);
-			expect(second.alreadyAccepted).toBe(6);
+			expect(second.alreadyAccepted).toBe(7);
 			expect(second.promotionBatchId).toBeNull();
 
 			const afterBytes = trackedPaths.map((p) => readFileSync(p, 'utf-8'));
@@ -228,6 +236,10 @@ describe('runHandbooksExtrasIngest -- live cache (smoke)', () => {
 			expect(rmhManifest.body_path).toBe('handbooks/risk-management/FAA-H-8083-2A/document.md');
 			expect(rmhManifest.sections).toEqual([]);
 		},
-		120000,
+		// The smoke test runs the full extract pipeline twice (initial + the
+		// idempotency re-check), so 7 entries means 14 PDF extractions. Each
+		// takes ~30-60s; observed total is 400-520s on a warm cache. Budget
+		// 720s to keep CI green even on cold-cache + slower-machine runs.
+		720000,
 	);
 });

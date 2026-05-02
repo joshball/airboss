@@ -52,3 +52,11 @@ entries:
     edition: '32B'
     url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/amt_powerplant_handbook.pdf
     filename: amt_powerplant_handbook.pdf
+  # Non-FAA-H-numbered FAA pamphlet. Synthetic doc_id since FAA never assigned
+  # a Handbook number to Tips on Mountain Flying. Edition '2003' is the YAML
+  # value (the locator slug is `mtn-2003`); current FAA-hosted version is
+  # undated on the cover but traces to the early-2000s authoring window.
+  - doc_id: faa-mtn-tips
+    edition: '2003'
+    url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/tips_on_mountain_flying.pdf
+    filename: tips_on_mountain_flying.pdf

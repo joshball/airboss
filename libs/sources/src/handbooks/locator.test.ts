@@ -107,6 +107,15 @@ describe('parseHandbooksLocator', () => {
 				section: '2',
 			});
 		});
+
+		it('non-FAA-H-numbered handbook (Tips on Mountain Flying)', () => {
+			// Pamphlets/handbooks without an FAA H-designator use a `<slug>-<year>`
+			// edition shape (see EDITION_PATTERN in locator.ts).
+			const result = parseHandbooksLocator('tips-mountain-flying/mtn-2003');
+			expect(result.kind).toBe('ok');
+			if (result.kind !== 'ok') return;
+			expect(result.handbooks).toEqual({ doc: 'tips-mountain-flying', edition: 'mtn-2003' });
+		});
 	});
 
 	describe('rejects', () => {
