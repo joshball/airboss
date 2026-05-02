@@ -28,6 +28,13 @@ import { join } from 'node:path';
 export interface AcManifestFile {
 	readonly schema_version: 1;
 	readonly corpus: 'ac';
+	/**
+	 * Discriminator member of the post-WP-SUB `manifestSchema` discriminated
+	 * union (sibling of `'handbook'`, `'whole-doc'`, `'aim'`). Lets the seeder
+	 * dispatch on `kind` directly instead of inferring from `corpus`. Always
+	 * `'ac'` for files written under `ac/<doc-slug>/<rev>/`.
+	 */
+	readonly kind: 'ac';
 	/** Filesystem-safe slug (dots -> dashes), e.g. `91-21-1` for AC 91-21.1. */
 	readonly doc_slug: string;
 	/** Canonical doc number with dots preserved (`91-21.1`). Round-trips with the locator. */
@@ -128,6 +135,7 @@ export function readAcManifest(root: string, docSlug: string, revision: string):
 	const required: readonly (keyof AcManifestFile)[] = [
 		'schema_version',
 		'corpus',
+		'kind',
 		'doc_slug',
 		'doc_number',
 		'revision',

@@ -1,6 +1,7 @@
 {
   "schema_version": 1,
   "corpus": "ac",
+  "kind": "ac",
   "doc_slug": "61-98",
   "doc_number": "61-98",
   "revision": "d",
