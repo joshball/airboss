@@ -25,6 +25,7 @@ export {
 	countAllJobs,
 	countLiveReferences,
 	countLiveSources,
+	countVerbatimReferences,
 	listLiveSources,
 } from './dashboard-queries';
 export type { FetchHtmlFn } from './edition-stub';
@@ -209,6 +210,7 @@ export {
 	countUserSessions,
 	countUsersByRole,
 	getUser,
+	hasUserSessionWithId,
 	type ListUsersOptions,
 	listRecentUserAudits,
 	listRecentUserSessions,

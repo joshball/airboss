@@ -232,6 +232,22 @@ export async function countUserSessions(userId: string, db: Db = defaultDb): Pro
 	return row?.c ?? 0;
 }
 
+/**
+ * `true` when the given session id belongs to the given user. Used by the
+ * revoke-all-sessions BC helper to detect whether the calling admin's own
+ * active session is in the set being revoked, so the form action can
+ * redirect to /login. Avoids loading every session row just to check id
+ * membership.
+ */
+export async function hasUserSessionWithId(userId: string, sessionId: string, db: Db = defaultDb): Promise<boolean> {
+	const rows = await db
+		.select({ id: bauthSession.id })
+		.from(bauthSession)
+		.where(and(eq(bauthSession.userId, userId), eq(bauthSession.id, sessionId)))
+		.limit(1);
+	return rows.length > 0;
+}
+
 export async function listRecentUserSessions(
 	userId: string,
 	limit = USER_DETAIL_SESSION_LIMIT,

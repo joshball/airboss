@@ -235,6 +235,35 @@ describe('listRunningJobs -- filters strictly by status=running', () => {
 		expect(ids).not.toContain(queuedId);
 		expect(ids).not.toContain(completeId);
 	});
+
+	it('returns a slim projection (no payload / result / error jsonb)', async () => {
+		const targetId = `target-list-running-projection-${TEST_USER_ID}`;
+		await insertJob({ status: JOB_STATUSES.RUNNING, targetId, startedAt: new Date() });
+
+		const running = await listRunningJobs();
+		const row = running.find((r) => r.targetId === targetId);
+		expect(row).toBeDefined();
+		if (!row) throw new Error('row not found');
+		// The slim projection only carries the columns the /sources overlay needs.
+		expect(Object.keys(row).sort()).toEqual(['id', 'kind', 'startedAt', 'targetId', 'targetType']);
+	});
+
+	it('caps result count at JOBS_LIST_HARD_CAP', async () => {
+		const { JOBS_LIST_HARD_CAP } = await import('@ab/constants');
+		// Insert enough RUNNING rows to exceed the cap. Existing tests in this
+		// suite also insert RUNNING rows, so the global count may already be
+		// above the cap; either way the call must return at most the cap.
+		const baseTarget = `target-list-running-cap-${TEST_USER_ID}`;
+		for (let i = 0; i < JOBS_LIST_HARD_CAP + 2; i++) {
+			await insertJob({
+				status: JOB_STATUSES.RUNNING,
+				targetId: `${baseTarget}-${i}`,
+				startedAt: new Date(Date.now() - i * 1000),
+			});
+		}
+		const running = await listRunningJobs();
+		expect(running.length).toBeLessThanOrEqual(JOBS_LIST_HARD_CAP);
+	});
 });
 
 describe('listRecentJobsForTarget -- newest first, bounded by limit', () => {

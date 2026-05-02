@@ -1,5 +1,6 @@
 <script lang="ts">
 import {
+	JOB_LOG_CLIENT_BUFFER_MAX,
 	JOB_LOG_STREAMS,
 	JOB_STATUSES,
 	JOB_TERMINAL_STATUSES,
@@ -25,6 +26,11 @@ interface LogLine {
 let logs = $state<LogLine[]>(data.logs.map((l) => ({ seq: l.seq, stream: l.stream, line: l.line, at: l.at })));
 // svelte-ignore state_referenced_locally
 let latestSeq = $state(data.latestSeq);
+// Number of log lines dropped from the head of the buffer due to the
+// `JOB_LOG_CLIENT_BUFFER_MAX` cap. Surfaced in the log header so operators
+// know what they're looking at; the full history is still queryable via the
+// log endpoint with a `sinceSeq` cursor.
+let droppedLineCount = $state(0);
 // svelte-ignore state_referenced_locally
 let currentStatus = $state<JobStatus>(data.job.status as JobStatus);
 // svelte-ignore state_referenced_locally
@@ -70,7 +76,17 @@ async function pollLog(): Promise<void> {
 	currentError = body.error;
 	currentFinishedAt = body.finishedAt;
 	if (body.lines.length > 0) {
-		logs = [...logs, ...body.lines];
+		const merged = [...logs, ...body.lines];
+		// Cap the buffer at JOB_LOG_CLIENT_BUFFER_MAX. Drop oldest lines
+		// (FIFO) when the cap is exceeded; the count is surfaced in the
+		// log header so operators know lines have been trimmed.
+		if (merged.length > JOB_LOG_CLIENT_BUFFER_MAX) {
+			const overflow = merged.length - JOB_LOG_CLIENT_BUFFER_MAX;
+			droppedLineCount += overflow;
+			logs = merged.slice(overflow);
+		} else {
+			logs = merged;
+		}
 		latestSeq = body.latestSeq;
 	}
 }
@@ -192,6 +208,13 @@ function formatTime(iso: string | null): string {
 			{/if}
 		</div>
 		<div class="log-body">
+			{#if droppedLineCount > 0}
+				<p class="trim-notice" role="status">
+					Showing the last {logs.length.toLocaleString()} of {(logs.length + droppedLineCount).toLocaleString()} lines.
+					Older lines were dropped to keep the page responsive; the full log is available via the
+					<a href="{ROUTES.HANGAR_JOB_LOG(data.job.id)}?sinceSeq=-1">log endpoint</a>.
+				</p>
+			{/if}
 			{#if filteredLogs.length === 0}
 				<p class="empty">No log lines yet.</p>
 			{:else}
@@ -444,6 +467,21 @@ function formatTime(iso: string | null): string {
 		margin: 0;
 		color: var(--ink-muted);
 		font-style: italic;
+	}
+
+	.trim-notice {
+		margin: 0 0 var(--space-sm);
+		padding: var(--space-xs) var(--space-sm);
+		border-radius: var(--radius-sm);
+		background: var(--signal-info-wash);
+		color: var(--signal-info);
+		font-family: var(--font-family-base);
+		font-size: var(--type-ui-caption-size);
+	}
+
+	.trim-notice a {
+		color: inherit;
+		text-decoration: underline;
 	}
 
 	.cancel-row {

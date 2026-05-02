@@ -14,7 +14,8 @@ const countUsersByRoleMock = vi.fn();
 vi.mock('./users', () => ({
 	getUser: (id: string, db?: unknown) => getUserMock(id, db),
 	countUsersByRole: (opts?: unknown, db?: unknown) => countUsersByRoleMock(opts, db),
-	listRecentUserSessions: vi.fn(),
+	countUserSessions: vi.fn(),
+	hasUserSessionWithId: vi.fn(),
 }));
 
 const { assertNotLastAdmin, assertSelfTargetAllowed, LastAdminError, SelfTargetForbiddenError } = await import(

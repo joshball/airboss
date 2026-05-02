@@ -3,8 +3,9 @@
  *
  * Loads one snapshot per request: the source registry from `hangar.source`,
  * a manifest summary if `data/references/manifest.json` exists, the latest
- * validation + diff job for each source, and counts derived from the
- * committed `libs/aviation/src/references/aviation.ts` file.
+ * validation + diff job for each source, and live reference / verbatim
+ * counts from `hangar.reference` (replaces an earlier per-request regex
+ * sweep over `libs/aviation/src/references/aviation.ts`).
  *
  * Form actions enqueue `hangar.job` rows for the flow-level operations
  * (rescan / revalidate / build / size-report). Per-source actions live on
@@ -15,6 +16,8 @@ import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { requireRole } from '@ab/auth';
 import {
+	countLiveReferences,
+	countVerbatimReferences,
 	getLatestCompleteJobByKind,
 	listLiveSources,
 	listRunningJobs,
@@ -56,32 +59,21 @@ async function loadManifestSummary(): Promise<ManifestSummary | null> {
 	}
 }
 
-async function loadAviationCounts(): Promise<{ referenceCount: number; verbatimCount: number }> {
-	const path = resolve(REPO_ROOT, 'libs', 'aviation', 'src', 'references', 'aviation.ts');
-	try {
-		const raw = await readFile(path, 'utf8');
-		// Simple heuristics -- the generated file has one top-level entry per reference.
-		// `id: '...'` appears once per reference; `verbatim: [` per reference is a proxy
-		// for "has verbatim block", good enough for a surface tile.
-		const referenceMatches = raw.match(/^\s*\{\s*$\s*id:\s*['"]/gm) ?? [];
-		const verbatimMatches = raw.match(/verbatim:\s*\[/g) ?? [];
-		return {
-			referenceCount: referenceMatches.length,
-			verbatimCount: verbatimMatches.length,
-		};
-	} catch {
-		return { referenceCount: 0, verbatimCount: 0 };
-	}
-}
-
 export const load: PageServerLoad = async (event) => {
 	requireRole(event, ROLES.AUTHOR, ROLES.OPERATOR, ROLES.ADMIN);
 
-	const rows = await listLiveSources();
-
-	// Find the most recent running/queued job per sourceId so the diagram can
-	// animate the arrows that connect to active work.
-	const activeJobs = await listRunningJobs();
+	// Run the independent reads concurrently. The previous shape ran 4
+	// awaits + 2 file reads + 2 regex sweeps serially; everything outside
+	// the source-row map is independent and can fan out.
+	const [rows, activeJobs, latestValidate, latestScan, manifest, referenceCount, verbatimCount] = await Promise.all([
+		listLiveSources(),
+		listRunningJobs(),
+		getLatestCompleteJobByKind(JOB_KINDS.VALIDATE_REFERENCES),
+		getLatestCompleteJobByKind(JOB_KINDS.FETCH_SOURCE),
+		loadManifestSummary(),
+		countLiveReferences(),
+		countVerbatimReferences(),
+	]);
 
 	const activeByTarget = new Map<string, { id: string; kind: string }>();
 	for (const job of activeJobs) {
@@ -89,12 +81,6 @@ export const load: PageServerLoad = async (event) => {
 			activeByTarget.set(job.targetId, { id: job.id, kind: job.kind });
 		}
 	}
-
-	const latestValidate = await getLatestCompleteJobByKind(JOB_KINDS.VALIDATE_REFERENCES);
-	const latestScan = await getLatestCompleteJobByKind(JOB_KINDS.FETCH_SOURCE);
-
-	const manifest = await loadManifestSummary();
-	const aviation = await loadAviationCounts();
 
 	const sources = rows.map((row) => {
 		const active = activeByTarget.get(row.id) ?? null;
@@ -149,14 +135,14 @@ export const load: PageServerLoad = async (event) => {
 				validateJobId: latestValidate?.id ?? null,
 			},
 			glossary: {
-				referenceCount: aviation.referenceCount,
+				referenceCount,
 				sourceCount: sources.length,
 			},
 		},
 		statusTiles: {
 			registeredSources: sources.length,
 			downloaded: downloadedCount,
-			verbatimMaterialised: aviation.verbatimCount,
+			verbatimMaterialised: verbatimCount,
 			tbdCount: manifest?.tbdCount ?? 0,
 			oldestDownloadedAt,
 		},

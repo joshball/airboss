@@ -7,7 +7,7 @@
 
 import { db as defaultDb } from '@ab/db/connection';
 import { hangarJob } from '@ab/hangar-jobs';
-import { count, isNull } from 'drizzle-orm';
+import { and, count, isNotNull, isNull } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import { hangarReference, hangarSource } from './schema';
 
@@ -20,6 +20,21 @@ export async function countLiveSources(db: Db = defaultDb): Promise<number> {
 
 export async function countLiveReferences(db: Db = defaultDb): Promise<number> {
 	const rows = await db.select({ c: count() }).from(hangarReference).where(isNull(hangarReference.deletedAt));
+	return Number(rows[0]?.c ?? 0);
+}
+
+/**
+ * Count of live references that carry a verbatim source-exact block.
+ *
+ * Powers the "verbatim materialised" tile on `/sources`. Replaces a previous
+ * regex sweep over `libs/aviation/src/references/aviation.ts` that ran on
+ * every page load.
+ */
+export async function countVerbatimReferences(db: Db = defaultDb): Promise<number> {
+	const rows = await db
+		.select({ c: count() })
+		.from(hangarReference)
+		.where(and(isNull(hangarReference.deletedAt), isNotNull(hangarReference.verbatim)));
 	return Number(rows[0]?.c ?? 0);
 }
 
