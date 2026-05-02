@@ -180,17 +180,25 @@ describe('runHandbooksExtrasIngest -- live cache (smoke)', () => {
 	const haveLiveCache = existsSync(join(liveCache, 'handbooks', 'faa-h-8083-2', 'faa-h-8083-2.pdf'));
 
 	(haveLiveCache ? it : it.skip)(
-		'ingests all 6 cached handbooks against the live YAML',
+		'ingests all 7 cached handbooks against the live YAML',
 		async () => {
 			// Use the live YAML so this also validates that the YAML and
 			// DOC_ID_TO_FRIENDLY agree.
 			_setHandbooksExtrasYamlPath(null);
 			const report = await runHandbooksExtrasIngest({ cacheRoot: liveCache, derivativeRoot: tempDerivative });
-			expect(report.ingested).toBe(6);
+			expect(report.ingested).toBe(7);
 			expect(report.skipped).toBe(0);
 			expect(report.promotionBatchId).not.toBeNull();
 			// Each derivative has a manifest + body
-			for (const slug of ['risk-management', 'aviation-instructor', 'ifh', 'iph', 'amt-general', 'amt-powerplant']) {
+			for (const slug of [
+				'risk-management',
+				'aviation-instructor',
+				'ifh',
+				'iph',
+				'amt-general',
+				'amt-powerplant',
+				'tips-mountain-flying',
+			]) {
 				const dir = join(tempDerivative, slug);
 				expect(existsSync(dir)).toBe(true);
 			}
