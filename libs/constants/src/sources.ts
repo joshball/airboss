@@ -9,6 +9,46 @@
 import { ENV_VARS } from './env';
 import { REFERENCE_SOURCE_TYPES, type ReferenceSourceType } from './reference-tags';
 
+// ---------------------------------------------------------------------------
+// Registry lifecycle + audit (ADR 019 §2.1, §2.4)
+// ---------------------------------------------------------------------------
+
+/**
+ * Lifecycle states for a `SOURCES` entry. Frozen by ADR 019 §2.1.
+ *
+ * Kept here (rather than in `libs/sources/src/types.ts` next to the type
+ * alias) so DB schemas and CHECK-constraint generators can consume the
+ * value array without dragging the rest of `@ab/sources` into the
+ * drizzle-kit graph. The `SourceLifecycle` type alias in
+ * `libs/sources/src/types.ts` is structurally identical and continues to
+ * be the type the rest of `@ab/sources` consumes.
+ */
+export const SOURCE_LIFECYCLES = {
+	DRAFT: 'draft',
+	PENDING: 'pending',
+	ACCEPTED: 'accepted',
+	RETIRED: 'retired',
+	SUPERSEDED: 'superseded',
+} as const;
+
+export type SourceLifecycle = (typeof SOURCE_LIFECYCLES)[keyof typeof SOURCE_LIFECYCLES];
+
+export const SOURCE_LIFECYCLE_VALUES: readonly SourceLifecycle[] = Object.values(SOURCE_LIFECYCLES);
+
+/**
+ * Audit-row state per ADR 019 §2.4. One row in `promotion_batches` is either
+ * a forward `promoted` event or a `de-promoted` rollback. The two values
+ * exhaust the audit semantics; new states require an ADR amendment.
+ */
+export const PROMOTION_STATES = {
+	PROMOTED: 'promoted',
+	DE_PROMOTED: 'de-promoted',
+} as const;
+
+export type PromotionState = (typeof PROMOTION_STATES)[keyof typeof PROMOTION_STATES];
+
+export const PROMOTION_STATE_VALUES: readonly PromotionState[] = Object.values(PROMOTION_STATES);
+
 /** Limits that bound the cost of a single source-ingest operation. */
 export const SOURCE_ACTION_LIMITS = {
 	/** Hard cap on a single upload body. 500 MiB covers yearly CFR + AIM bundles. */
