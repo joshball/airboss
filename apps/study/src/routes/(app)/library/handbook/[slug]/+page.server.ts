@@ -8,6 +8,7 @@
  */
 
 import { requireAuth } from '@ab/auth';
+import { parseHandbookSlug } from '@ab/aviation';
 import { getHandbookProgress, getReferenceByDocument, getReferenceById, listHandbookChapters } from '@ab/bc-study';
 import { QUERY_PARAMS } from '@ab/constants';
 import { error } from '@sveltejs/kit';
@@ -15,7 +16,8 @@ import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async (event) => {
 	const user = requireAuth(event);
-	const documentSlug = event.params.slug;
+	const documentSlug = parseHandbookSlug(event.params.slug);
+	if (!documentSlug) throw error(404, 'Handbook not found.');
 	const editionParam = event.url.searchParams.get(QUERY_PARAMS.EDITION) ?? undefined;
 
 	const ref = await getReferenceByDocument(documentSlug, { edition: editionParam }).catch(() => null);

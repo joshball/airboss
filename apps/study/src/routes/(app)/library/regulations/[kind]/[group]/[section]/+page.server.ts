@@ -8,6 +8,7 @@
  */
 
 import { requireAuth } from '@ab/auth';
+import { parseRegulationGroup, parseRegulationKind, parseRegulationSection } from '@ab/aviation';
 import {
 	formatErrataForDisplay,
 	getHandbookSection,
@@ -26,17 +27,12 @@ import {
 import {
 	HANDBOOK_NOTES_MAX_LENGTH,
 	HANDBOOK_READ_STATUSES,
-	LIBRARY_REGULATIONS_KIND_VALUES,
 	LIBRARY_REGULATIONS_KINDS,
 	type LibraryRegulationsKind,
 	REFERENCE_KINDS,
 } from '@ab/constants';
 import { error, fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
-
-function isLibraryRegulationsKind(value: string): value is LibraryRegulationsKind {
-	return (LIBRARY_REGULATIONS_KIND_VALUES as readonly string[]).includes(value);
-}
 
 async function resolveReferenceForGroup(
 	kind: LibraryRegulationsKind,
@@ -67,22 +63,21 @@ async function resolveReferenceForGroup(
 
 export const load: PageServerLoad = async (event) => {
 	const user = requireAuth(event);
-	const kindParam = event.params.kind;
-	if (!isLibraryRegulationsKind(kindParam)) {
-		throw error(404, `Unknown regulations kind: ${kindParam}`);
+	const kind = parseRegulationKind(event.params.kind);
+	if (!kind) {
+		throw error(404, `Unknown regulations kind: ${event.params.kind}`);
 	}
-	const kind = kindParam;
-	const group = event.params.group;
-	const sectionCode = event.params.section;
+	const group = parseRegulationGroup(kind, event.params.group);
+	if (!group) {
+		throw error(404, `Invalid group slug: ${event.params.group}`);
+	}
+	const parsedSection = parseRegulationSection(event.params.section);
+	if (!parsedSection) {
+		throw error(404, `Invalid section slug: ${event.params.section}`);
+	}
+	const { chapterCode, sectionCode: subCode } = parsedSection;
 
 	const ref = await resolveReferenceForGroup(kind, group);
-
-	// Section codes in regulations follow the same `<chapter>.<section>` shape
-	// the handbook resolver expects -- e.g. `91.103` lives at chapter `91`,
-	// section `103`. We pass through whatever shape the URL carries.
-	const dotIndex = sectionCode.indexOf('.');
-	const chapterCode = dotIndex >= 0 ? sectionCode.slice(0, dotIndex) : sectionCode;
-	const subCode = dotIndex >= 0 ? sectionCode.slice(dotIndex + 1) : '';
 
 	const view = await getHandbookSection(ref.id, chapterCode, subCode).catch(() => null);
 	if (!view) throw error(404, 'Section not found.');
@@ -210,13 +205,14 @@ export const actions: Actions = {
 };
 
 async function resolveSectionId(params: { kind: string; group: string; section: string }): Promise<string> {
-	if (!isLibraryRegulationsKind(params.kind)) throw error(404, `Unknown regulations kind: ${params.kind}`);
-	const ref = await resolveReferenceForGroup(params.kind, params.group);
-	const sectionCode = params.section;
-	const dotIndex = sectionCode.indexOf('.');
-	const chapterCode = dotIndex >= 0 ? sectionCode.slice(0, dotIndex) : sectionCode;
-	const subCode = dotIndex >= 0 ? sectionCode.slice(dotIndex + 1) : '';
-	const view = await getHandbookSection(ref.id, chapterCode, subCode).catch(() => null);
+	const kind = parseRegulationKind(params.kind);
+	if (!kind) throw error(404, `Unknown regulations kind: ${params.kind}`);
+	const group = parseRegulationGroup(kind, params.group);
+	if (!group) throw error(404, `Invalid group slug: ${params.group}`);
+	const parsedSection = parseRegulationSection(params.section);
+	if (!parsedSection) throw error(404, `Invalid section slug: ${params.section}`);
+	const ref = await resolveReferenceForGroup(kind, group);
+	const view = await getHandbookSection(ref.id, parsedSection.chapterCode, parsedSection.sectionCode).catch(() => null);
 	if (!view) throw error(404, 'Section not found');
 	return view.section.id;
 }

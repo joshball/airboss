@@ -9,6 +9,7 @@
  */
 
 import { requireAuth } from '@ab/auth';
+import { parseAircraftSlug } from '@ab/aviation';
 import { listReferences } from '@ab/bc-study';
 import { externalUrlForReference, REFERENCE_KINDS, type ReferenceKind } from '@ab/constants';
 import { error } from '@sveltejs/kit';
@@ -16,7 +17,8 @@ import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async (event) => {
 	requireAuth(event);
-	const slug = event.params.slug;
+	const slug = parseAircraftSlug(event.params.slug);
+	if (!slug) throw error(404, 'Aircraft not found.');
 
 	const refs = await listReferences();
 	const ref = refs.find((r) => r.kind === REFERENCE_KINDS.POH && r.documentSlug === slug);
