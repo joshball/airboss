@@ -1,3 +1,4 @@
+import { isSafeRedirect } from '@ab/auth';
 import { AUTH_INTERNAL_ORIGIN, BETTER_AUTH_ENDPOINTS, QUERY_PARAMS, ROUTES } from '@ab/constants';
 import { createLogger } from '@ab/utils';
 import { fail, redirect } from '@sveltejs/kit';
@@ -6,29 +7,6 @@ import { forwardAuthCookies } from '$lib/server/cookies';
 import type { Actions, PageServerLoad } from './$types';
 
 const log = createLogger('hangar:login');
-
-/**
- * True when the path is a safe local redirect target (no open-redirect
- * bypasses). The character allowlist + URL-parse-against-placeholder pattern
- * forces the result to resolve relative to the current origin: any value that
- * either contains a control character or parses to a host other than the
- * placeholder is rejected.
- */
-function isSafeRedirect(path: string): boolean {
-	if (!path.startsWith('/')) return false;
-	if (path.startsWith('//')) return false;
-	if (path.includes('\\')) return false;
-	if (path.includes('\r') || path.includes('\n')) return false;
-	if (!/^[A-Za-z0-9_\-./?&=%~+#:@!$',;*]+$/.test(path)) return false;
-	try {
-		const placeholder = 'https://x.local';
-		const parsed = new URL(path, placeholder);
-		if (parsed.host !== 'x.local') return false;
-	} catch {
-		return false;
-	}
-	return true;
-}
 
 export const load: PageServerLoad = async ({ locals }) => {
 	if (locals.session) {
