@@ -9,7 +9,9 @@
 import type { HelpPage, HelpPageBody, HelpPageIndex } from '@ab/help';
 import { auditIndex } from './content/audit';
 import { auditBody } from './content/bodies/audit';
+import { invitationsBody } from './content/bodies/invitations';
 import { usersBody } from './content/bodies/users';
+import { invitationsIndex } from './content/invitations';
 import { usersIndex } from './content/users';
 
 function merge(index: HelpPageIndex, body: HelpPageBody): HelpPage {
@@ -28,4 +30,8 @@ function merge(index: HelpPageIndex, body: HelpPageBody): HelpPage {
 	};
 }
 
-export const hangarHelpPages: readonly HelpPage[] = [merge(auditIndex, auditBody), merge(usersIndex, usersBody)];
+export const hangarHelpPages: readonly HelpPage[] = [
+	merge(auditIndex, auditBody),
+	merge(invitationsIndex, invitationsBody),
+	merge(usersIndex, usersBody),
+];

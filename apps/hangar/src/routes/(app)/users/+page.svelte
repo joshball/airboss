@@ -85,7 +85,11 @@ function formatLastSeen(iso: string | null): string {
 </svelte:head>
 
 <section class="page">
-	<PageHeader title="Users" subtitle={countSummary} />
+	<PageHeader title="Users" subtitle={countSummary}>
+		{#snippet actions()}
+			<a class="invitations-link" href={ROUTES.HANGAR_USERS_INVITATIONS}>Manage invitations &rarr;</a>
+		{/snippet}
+	</PageHeader>
 
 	<Banner tone="info">Click a user to edit role, ban status, and sessions.</Banner>
 
@@ -176,5 +180,16 @@ function formatLastSeen(iso: string | null): string {
 
 	.muted {
 		color: var(--ink-faint);
+	}
+
+	.invitations-link {
+		color: var(--link-default);
+		text-decoration: none;
+		font-size: var(--type-ui-label-size);
+		font-weight: var(--font-weight-medium);
+	}
+
+	.invitations-link:hover {
+		text-decoration: underline;
 	}
 </style>
