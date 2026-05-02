@@ -1,5 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import { archiveFilename, destFilename, extensionOf, isNoChange, pickArchivesToPrune } from './upload-helpers';
+import {
+	archiveFilename,
+	archiveFilenameWithChecksum,
+	destFilename,
+	extensionOf,
+	isNoChange,
+	pickArchivesToPrune,
+	stageFilename,
+} from './upload-helpers';
 
 describe('extensionOf', () => {
 	it('returns the trailing extension lowercased', () => {
@@ -42,5 +50,25 @@ describe('filename helpers', () => {
 	});
 	it('destFilename uses the <id>.<ext> shape', () => {
 		expect(destFilename('cfr-14', 'xml')).toBe('cfr-14.xml');
+	});
+	it('archiveFilenameWithChecksum disambiguates same-version uploads via prior sha prefix', () => {
+		const sha = '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef';
+		expect(archiveFilenameWithChecksum('cfr-14', '2025', sha, 'xml')).toBe('cfr-14@2025-0123456789ab.xml');
+	});
+	it('archiveFilenameWithChecksum produces a different name from archiveFilename so collision is impossible', () => {
+		const sha = 'aaaaaaaaaaaa1234567890';
+		const versionOnly = archiveFilename('cfr-14', '2025', 'xml');
+		const versionPlusSha = archiveFilenameWithChecksum('cfr-14', '2025', sha, 'xml');
+		expect(versionOnly).not.toBe(versionPlusSha);
+	});
+	it('stageFilename uses the .uploading- shape so the upload-handler archive filter never matches it', () => {
+		const name = stageFilename('cfr-14', 'xml', 'deadbeef');
+		expect(name).toBe('cfr-14.xml.uploading-deadbeef');
+		// The handler's prune step filters readdir results by `<id>@` prefix
+		// and `.<ext>` suffix; this stage name does NOT start with `cfr-14@`,
+		// so a stage file mid-upload cannot accidentally end up in the
+		// archive-prune candidate set.
+		expect(name.startsWith('cfr-14@')).toBe(false);
+		expect(name.endsWith('.xml')).toBe(false);
 	});
 });

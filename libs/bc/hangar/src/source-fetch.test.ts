@@ -20,6 +20,11 @@ vi.mock('@ab/audit', () => ({
 	auditWrite: vi.fn(async () => {}),
 }));
 
+// Bind a typed handle to the mocked auditWrite so failure-path tests can
+// assert against its calls without redeclaring the mock.
+import { auditWrite } from '@ab/audit';
+const auditWriteMock = vi.mocked(auditWrite);
+
 const TMP_ROOT = join(import.meta.dirname, '__tmp_sectional__');
 
 async function freshTmp() {
@@ -290,6 +295,69 @@ describe('runSectionalFetch happy path', () => {
 		await expect(runSectionalFetch(ctx, { row, blobRoot: TMP_ROOT, fetchHtml: async () => '' }, {})).rejects.toThrow(
 			/region/,
 		);
+	});
+});
+
+describe('runSectionalFetch audit-on-failure', () => {
+	beforeEach(async () => {
+		await freshTmp();
+		auditWriteMock.mockClear();
+	});
+	afterEach(async () => rm(TMP_ROOT, { recursive: true, force: true }));
+
+	it('emits a HANGAR_SOURCE failed audit row when the downloader throws', async () => {
+		const { ctx } = fakeCtx();
+		const row = baseRow();
+		await expect(
+			runSectionalFetch(
+				ctx,
+				{ row, blobRoot: TMP_ROOT, fetchHtml: async () => '' },
+				{
+					resolver: async () => ({
+						effectiveDate: '2026-03-21',
+						editionNumber: 116,
+						resolvedUrl: 'https://host/Denver.zip',
+						resolvedAt: 'now',
+					}),
+					downloader: async () => {
+						throw new Error('network blip');
+					},
+				},
+			),
+		).rejects.toThrow(/network blip/);
+
+		// One success-path audit (edition-resolved) + one catch-all failure audit.
+		const failureCalls = auditWriteMock.mock.calls.filter((call) => {
+			const arg = call[0] as { metadata?: { outcome?: unknown }; targetType?: string } | undefined;
+			return arg?.targetType === 'hangar.source' && arg?.metadata?.outcome === 'failed';
+		});
+		expect(failureCalls.length).toBeGreaterThanOrEqual(1);
+		const failure = failureCalls[0]?.[0] as { metadata?: { step?: string; error?: string } };
+		expect(failure?.metadata?.step).toBe('download');
+		expect(String(failure?.metadata?.error ?? '')).toContain('network blip');
+	});
+
+	it('emits a failed audit row when the resolver itself throws (very early failure)', async () => {
+		const { ctx } = fakeCtx();
+		const row = baseRow();
+		await expect(
+			runSectionalFetch(
+				ctx,
+				{ row, blobRoot: TMP_ROOT, fetchHtml: async () => '' },
+				{
+					resolver: async () => {
+						throw new Error('html parse failed');
+					},
+				},
+			),
+		).rejects.toThrow(/html parse failed/);
+		const failureCalls = auditWriteMock.mock.calls.filter((call) => {
+			const arg = call[0] as { metadata?: { outcome?: unknown }; targetType?: string } | undefined;
+			return arg?.targetType === 'hangar.source' && arg?.metadata?.outcome === 'failed';
+		});
+		expect(failureCalls).toHaveLength(1);
+		const failure = failureCalls[0]?.[0] as { metadata?: { step?: string } };
+		expect(failure?.metadata?.step).toBe('resolve-edition');
 	});
 });
 

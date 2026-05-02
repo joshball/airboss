@@ -18,7 +18,7 @@ import { getActiveJobForTarget, getSource } from '@ab/bc-hangar';
 import { JOB_KINDS, ROLES, ROUTES, SOURCE_ACTION_LIMITS } from '@ab/constants';
 import { enqueueJob } from '@ab/hangar-jobs';
 import { createLogger } from '@ab/utils';
-import { error, fail, isRedirect, redirect } from '@sveltejs/kit';
+import { error, fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 
 const log = createLogger('hangar:source-upload');
@@ -85,8 +85,18 @@ export const actions: Actions = {
 
 		// Wrap the enqueue in a try/finally so a failed enqueue (DB blip,
 		// worker outage) doesn't leak the staged temp directory. The worker
-		// owns cleanup once enqueueJob returns.
+		// owns cleanup once enqueueJob returns; on any pre-enqueue failure
+		// the finally block removes the staged directory.
+		//
+		// Ordering is load-bearing: `enqueued = true` is set on the line
+		// IMMEDIATELY after `await enqueueJob(...)` resolves, BEFORE any
+		// other expression. The finally block reads this flag and skips
+		// cleanup when the worker now owns the directory; flipping the flag
+		// any later opens a window where a post-enqueue throw deletes a
+		// tempPath the worker still references. The redirect is thrown
+		// AFTER the try/finally so it cannot interleave with cleanup.
 		let enqueued = false;
+		let jobId: string | null = null;
 		try {
 			const job = await enqueueJob({
 				kind: JOB_KINDS.UPLOAD_SOURCE,
@@ -102,14 +112,14 @@ export const actions: Actions = {
 				},
 			});
 			enqueued = true;
-			redirect(303, ROUTES.HANGAR_JOB_DETAIL(job.id));
+			jobId = job.id;
 		} catch (err) {
-			if (isRedirect(err)) throw err;
 			log.error(
 				'enqueue upload failed',
 				{ requestId: event.locals.requestId, userId: user.id },
 				err instanceof Error ? err : undefined,
 			);
+			// `enqueued` is still false; finally below cleans up the staged dir.
 			return fail(500, { error: err instanceof Error ? err.message : 'failed to enqueue upload job' });
 		} finally {
 			if (!enqueued) {
@@ -119,5 +129,13 @@ export const actions: Actions = {
 				});
 			}
 		}
+
+		if (!jobId) {
+			// Defensive: reaching here with `enqueued === true` means the
+			// worker now owns the temp dir, so we cannot safely clean up.
+			// Return a 500 rather than redirect.
+			return fail(500, { error: 'enqueue returned no job id' });
+		}
+		throw redirect(303, ROUTES.HANGAR_JOB_DETAIL(jobId));
 	},
 };

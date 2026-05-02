@@ -54,6 +54,28 @@ export const JOB_LOG_STREAMS = {
 export type JobLogStream = (typeof JOB_LOG_STREAMS)[keyof typeof JOB_LOG_STREAMS];
 export const JOB_LOG_STREAM_VALUES: readonly JobLogStream[] = Object.values(JOB_LOG_STREAMS);
 
+/**
+ * Cap on the byte length of a single `hangar.job_log.line`. A subprocess that
+ * emits a multi-MiB single line (a recursive stack trace, a base64 blob, a
+ * noisy diff) would otherwise land the whole payload in Postgres and ship it
+ * to every poll of the live-log endpoint. Lines longer than this are
+ * truncated and `JOB_LOG_TRUNCATION_MARKER` is appended so the operator sees
+ * the cut.
+ *
+ * 16 KiB is plenty for diagnostic prose and JSON payloads; anything longer is
+ * almost always a misbehaving emitter.
+ */
+export const JOB_LOG_MAX_BYTES = 16 * 1024;
+
+/**
+ * Cap on `hangar.job.result` text fields (e.g. `text` body returned by the
+ * diff handler, which the UI renders verbatim).
+ */
+export const JOB_RESULT_TEXT_MAX_BYTES = 256 * 1024;
+
+/** Suffix appended when a log line or result text is truncated to its cap. */
+export const JOB_LOG_TRUNCATION_MARKER = ' ... [truncated]';
+
 /** Modes for the sync-to-disk handler. */
 export const HANGAR_SYNC_MODES = {
 	/** Stage + commit locally on the current branch. */

@@ -17,6 +17,8 @@ import {
 	makeFetchHandler,
 	makeValidateHandler,
 	type SpawnRunner,
+	truncateLogLine,
+	truncateResultText,
 } from './source-jobs';
 
 vi.mock('@ab/audit', () => ({
@@ -183,5 +185,61 @@ describe('source-jobs.makeValidateHandler', () => {
 		const { ctx } = fakeContext({ kind: 'validate-references', payload: {} });
 		const result = await handler(ctx);
 		expect(result).toMatchObject({ kind: 'validate', exitCode: 0 });
+	});
+});
+
+describe('source-jobs subprocess output cap', () => {
+	it('truncateLogLine leaves under-cap lines untouched', () => {
+		expect(truncateLogLine('hello')).toBe('hello');
+	});
+
+	it('truncateLogLine caps a multi-MiB line at JOB_LOG_MAX_BYTES + truncation marker', () => {
+		const big = 'x'.repeat(2 * 1024 * 1024);
+		const out = truncateLogLine(big);
+		// Must end with the truncation marker so the operator knows the cut.
+		expect(out.endsWith('[truncated]')).toBe(true);
+		// Body before marker is bounded; total length is well below the
+		// pathological 2 MiB input.
+		expect(out.length).toBeLessThan(big.length / 100);
+	});
+
+	it('truncateResultText caps a noisy diff body under JOB_RESULT_TEXT_MAX_BYTES', () => {
+		const noisyDiff = 'a'.repeat(1024 * 1024);
+		const out = truncateResultText(noisyDiff);
+		expect(out.endsWith('[truncated]')).toBe(true);
+		// Should be at most ~256 KiB + marker, definitely much less than 1 MiB.
+		expect(out.length).toBeLessThan(noisyDiff.length / 2);
+	});
+
+	it('runReferenceScript truncates a runaway stdout line before passing it to logStdout', async () => {
+		const big = 'B'.repeat(1024 * 1024);
+		const runner: SpawnRunner = async ({ onStdout }) => {
+			await onStdout(big);
+			return { exitCode: 0, stdout: [big], stderr: [] };
+		};
+		const handler = makeFetchHandler({ runner, loadSource: async () => null });
+		const { ctx, stdout } = fakeContext({ kind: 'fetch-source', payload: { sourceId: 'cfr-14' } });
+		await handler(ctx);
+		// Exactly one line emitted; it's truncated at the cap, not the
+		// pathological 1 MiB input. The job_log row therefore never carries
+		// the unbounded payload.
+		expect(stdout).toHaveLength(1);
+		const emitted = stdout[0] ?? '';
+		expect(emitted.endsWith('[truncated]')).toBe(true);
+		expect(emitted.length).toBeLessThan(big.length / 10);
+	});
+
+	it('makeDiffHandler caps the result `text` field via truncateResultText', async () => {
+		const big = 'x'.repeat(1024 * 1024);
+		const runner: SpawnRunner = async ({ onStdout }) => {
+			await onStdout(big);
+			return { exitCode: 0, stdout: [big, big, big], stderr: [] };
+		};
+		const handler = makeDiffHandler({ runner, loadSource: async () => null });
+		const { ctx } = fakeContext({ kind: 'diff-source', payload: { sourceId: 'cfr-14' } });
+		const result = await handler(ctx);
+		const text = String(result?.text ?? '');
+		expect(text.endsWith('[truncated]')).toBe(true);
+		expect(text.length).toBeLessThan(3 * big.length);
 	});
 });
