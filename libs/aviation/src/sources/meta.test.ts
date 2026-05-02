@@ -3,8 +3,8 @@
  */
 
 import { describe, expect, it } from 'vitest';
+import type { Source } from '../schema/source';
 import { isSourceMeta, metaPathFor } from './meta';
-import { SOURCES } from './registry';
 
 describe('isSourceMeta', () => {
 	const validMeta = {
@@ -50,10 +50,18 @@ describe('isSourceMeta', () => {
 });
 
 describe('metaPathFor', () => {
-	it('places .meta.json next to each registered source', () => {
-		const cfr = SOURCES.find((s) => s.id === 'cfr-14');
-		expect(cfr).toBeTruthy();
-		if (!cfr) return;
-		expect(metaPathFor(cfr)).toBe(`${cfr.path}.meta.json`);
+	it('appends .meta.json to the source path', () => {
+		const source: Source = {
+			id: 'cfr-14',
+			type: 'cfr',
+			title: '14 CFR',
+			version: 'revised-2026-01-01',
+			downloadedAt: 'pending-download',
+			format: 'xml',
+			path: '/abs/path/to/cfr/cfr-14.xml',
+			url: 'https://example.com/cfr.xml',
+			checksum: 'pending-download',
+		};
+		expect(metaPathFor(source)).toBe('/abs/path/to/cfr/cfr-14.xml.meta.json');
 	});
 });

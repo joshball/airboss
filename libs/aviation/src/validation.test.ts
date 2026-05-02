@@ -174,20 +174,28 @@ describe('validateReferences - verbatim / sources / ids', () => {
 		expect(errors.some((e) => /sourceId/i.test(e.message))).toBe(true);
 	});
 
-	it('errors when sources[].sourceId is not registered in SOURCES', () => {
+	it('errors when sources[].sourceId is not registered in the known set', () => {
 		const bad = makeRef({
 			sources: [{ sourceId: 'not-a-real-source-id', locator: { title: 14, part: 91, section: '155' } }],
 		});
-		const { errors } = validateReferences([bad]);
+		const { errors } = validateReferences([bad], new Set(['cfr-14']));
 		expect(errors.some((e) => /unregistered sourceId/i.test(e.message))).toBe(true);
 	});
 
-	it('passes when sources[].sourceId resolves against SOURCES', () => {
+	it('passes when sources[].sourceId resolves against the known set', () => {
 		const good = makeRef({
 			sources: [{ sourceId: 'cfr-14', locator: { title: 14, part: 91, section: '155' } }],
 		});
-		const result = validateReferences([good]);
+		const result = validateReferences([good], new Set(['cfr-14']));
 		expect(result.errors).toEqual([]);
+	});
+
+	it('skips the registry gate when no known set is supplied', () => {
+		const noGate = makeRef({
+			sources: [{ sourceId: 'made-up-source', locator: { title: 14, part: 91, section: '155' } }],
+		});
+		const { errors } = validateReferences([noGate]);
+		expect(errors.some((e) => /unregistered sourceId/i.test(e.message))).toBe(false);
 	});
 });
 

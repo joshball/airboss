@@ -1,16 +1,16 @@
 /**
- * `SourceMeta` -- the committed sidecar next to every downloaded source
- * binary under `data/sources/`.
+ * `SourceMeta` - the committed sidecar next to every downloaded source binary
+ * under the developer-local cache root (per ADR 018).
  *
  * Binaries are gitignored; `<source-id>.meta.json` files next to them are
  * committed. A fresh clone reads the meta.json to know where to re-download
  * and which sha256 to verify.
  *
- * The shape mirrors (but does not duplicate) the `Source` registry entry;
- * the meta.json is the per-file artifact of an actual download, while the
- * registry lists everything we intend to track. Checksums in the meta.json
- * are the source of truth at rest; the registry entry's `checksum` should
- * match when the binary is present.
+ * The shape mirrors (but does not duplicate) the `Source` registry entry; the
+ * meta.json is the per-file artifact of an actual download, while the registry
+ * lists everything we intend to track. Checksums in the meta.json are the
+ * source of truth at rest; the registry entry's `checksum` should match when
+ * the binary is present.
  */
 
 import type { Source } from '../schema/source';

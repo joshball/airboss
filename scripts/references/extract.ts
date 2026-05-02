@@ -25,16 +25,10 @@
  */
 
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { dirname, resolve } from 'node:path';
-import {
-	AVIATION_REFERENCES,
-	getSource,
-	type Reference,
-	SOURCES,
-	type SourceCitation,
-	type VerbatimBlock,
-} from '@ab/aviation';
+import { dirname, isAbsolute, resolve } from 'node:path';
+import { AVIATION_REFERENCES, type Reference, type SourceCitation, type VerbatimBlock } from '@ab/aviation';
 import { resolveExtractors } from '@ab/aviation/sources';
+import { getSeedSource, SOURCES as SEED_SOURCES } from '@ab/bc-hangar/source-seed-registry';
 import { type ReferenceSourceType, SOURCE_KIND_BY_TYPE, SOURCE_KINDS } from '@ab/constants';
 import { type ScanManifest, scanContent } from './scan';
 
@@ -106,7 +100,7 @@ export async function runExtract(options: ExtractOptions = {}): Promise<ExtractR
 		// Use first citation for extraction; additional citations are references
 		// to additional regs and are out of scope for the primary verbatim block.
 		const citation = ref.sources[0] as SourceCitation;
-		const source = getSource(citation.sourceId);
+		const source = getSeedSource(citation.sourceId);
 		if (!source) {
 			result.errors.push({ id, reason: `sourceId '${citation.sourceId}' not in registry` });
 			continue;
@@ -130,7 +124,10 @@ export async function runExtract(options: ExtractOptions = {}): Promise<ExtractR
 		const extractor = extractors[0];
 		if (!extractor) continue;
 
-		const sourcePath = resolve(REPO_ROOT, source.path);
+		// Seed registry paths are absolute (resolved through the cache root per
+		// ADR 018); fall back to repo-relative resolution if a future ingest
+		// pipeline ever produces a relative path.
+		const sourcePath = isAbsolute(source.path) ? source.path : resolve(REPO_ROOT, source.path);
 		if (!existsSync(sourcePath)) {
 			result.warnings.push({
 				id,
@@ -141,7 +138,7 @@ export async function runExtract(options: ExtractOptions = {}): Promise<ExtractR
 		}
 
 		try {
-			const block = await extractor.extract(citation.locator, sourcePath);
+			const block = await extractor.extract(citation.locator, sourcePath, source.version);
 			if (!isValidVerbatim(block)) {
 				result.errors.push({
 					id,
@@ -273,7 +270,7 @@ if (import.meta.main) {
 	if (options.idFilter) {
 		const ref = AVIATION_REFERENCES.find((r) => r.id === options.idFilter);
 		const firstSourceId = ref?.sources[0]?.sourceId ?? options.idFilter;
-		const source = getSource(firstSourceId);
+		const source = getSeedSource(firstSourceId);
 		if (source && SOURCE_KIND_BY_TYPE[source.type as ReferenceSourceType] === SOURCE_KINDS.BINARY_VISUAL) {
 			console.log(`[extract] ${options.idFilter}: binary-visual source, skipping extraction (not applicable).`);
 			process.exit(0);
@@ -308,9 +305,9 @@ if (import.meta.main) {
 		`extract: ${result.extracted.length} extracted${perTypeCounts ? ` (${perTypeCounts})` : ''}, ${result.skipped.length} skipped, ${result.errors.length} errors, ${result.warnings.length} warnings${options.dryRun ? ' [dry-run]' : ''}.`,
 	);
 
-	// Touch SOURCES to suppress unused-import warnings on CI type-check runs;
+	// Touch SEED_SOURCES to suppress unused-import warnings on CI type-check runs;
 	// the registry is imported so the module load warms caches.
-	void SOURCES.length;
+	void SEED_SOURCES.length;
 
 	if (result.errors.length > 0) {
 		process.exit(1);

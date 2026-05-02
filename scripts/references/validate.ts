@@ -11,12 +11,12 @@
  *   2.5) validateHelpPages(registeredPages) -- required axes, section-id
  *      uniqueness, route shape, wiki-link resolution against aviation +
  *      help registries.
- *   3) Registry coherence -- every `Reference.sources[].sourceId` exists
- *      in SOURCES with a type matching the id prefix.
- *   4) Meta.json integrity -- for every source, if the binary is on disk,
+ *   3) Registry coherence - every `Reference.sources[].sourceId` exists in
+ *      the seed registry with a type matching the id prefix.
+ *   4) Meta.json integrity - for every source, if the binary is on disk,
  *      its sha256 matches Source.checksum; if the meta.json is present, it
  *      validates against SourceMeta and its checksum also matches.
- *   5) Generated-file freshness -- for every manifest id with a source
+ *   5) Generated-file freshness - for every manifest id with a source
  *      citation, warn if no VerbatimBlock lives in the generated file.
  *
  * Exit code 1 on any error; exit 0 on clean or warnings-only. Output goes
@@ -26,22 +26,24 @@
 import { createHash } from 'node:crypto';
 import { existsSync, readFileSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
-import { resolve } from 'node:path';
+import { isAbsolute, resolve } from 'node:path';
 import {
 	AVIATION_REFERENCES,
-	getSource,
 	hasReference,
-	isSourceDownloaded,
 	isSourceMeta,
 	listReferences,
 	metaPathFor,
-	PENDING_DOWNLOAD,
-	SOURCES,
 	type Source,
 	type VerbatimBlock,
 	validateContentWikilinks,
 	validateReferences,
 } from '@ab/aviation';
+import {
+	getSeedSource,
+	isSeedSourceDownloaded,
+	PENDING_DOWNLOAD,
+	SOURCES as SEED_SOURCES,
+} from '@ab/bc-hangar/source-seed-registry';
 import { helpRegistry, validateHelpPages } from '@ab/help';
 // Register per-app help pages before the gate runs so the validator sees
 // exactly what each app will hand to `@ab/help` in production. The study
@@ -81,7 +83,8 @@ function print(issue: Issue): void {
 
 // -------- layer 1/2: from @ab/aviation --------
 
-const refResult = validateReferences(AVIATION_REFERENCES);
+const knownSeedSourceIds = new Set<string>(SEED_SOURCES.map((s) => s.id));
+const refResult = validateReferences(AVIATION_REFERENCES, knownSeedSourceIds);
 
 const { scans, manifest } = scanContent();
 const contentResult = validateContentWikilinks(scans, {
@@ -149,17 +152,18 @@ function helpLocation(issue: { pageId?: string; sectionId?: string }): string | 
 
 // -------- layer 3: registry coherence --------
 
-// Every Source.id must be unique; every Source.path must be under data/sources/.
+// Every Source.id must be unique; every Source.path must be an absolute path
+// under the developer-local cache root (per ADR 018) with no `..` segments.
 const seenSourceIds = new Set<string>();
-for (const source of SOURCES) {
+for (const source of SEED_SOURCES) {
 	if (seenSourceIds.has(source.id)) {
 		errors.push({ level: 'error', message: `Duplicate Source.id '${source.id}' in registry` });
 	}
 	seenSourceIds.add(source.id);
-	if (!source.path.startsWith('data/sources/')) {
+	if (!isAbsolute(source.path)) {
 		errors.push({
 			level: 'error',
-			message: `Source '${source.id}' path '${source.path}' must start with 'data/sources/'`,
+			message: `Source '${source.id}' path '${source.path}' must be absolute (resolved through the cache root per ADR 018)`,
 		});
 	}
 	if (source.path.includes('..')) {
@@ -173,10 +177,10 @@ for (const source of SOURCES) {
 // only. Hand-authored entries ported from airboss-firc use
 // topic-suffixed ids (e.g. `aircraft-def`, `vfr-wx-minimums`) and are
 // exempt from the prefix check.
-const KNOWN_SOURCE_PREFIXES = new Set(SOURCES.map((s) => s.type));
+const KNOWN_SOURCE_PREFIXES = new Set(SEED_SOURCES.map((s) => s.type));
 for (const ref of AVIATION_REFERENCES) {
 	for (const citation of ref.sources) {
-		const source = getSource(citation.sourceId);
+		const source = getSeedSource(citation.sourceId);
 		if (!source) {
 			errors.push({
 				level: 'error',
@@ -208,13 +212,14 @@ for (const ref of AVIATION_REFERENCES) {
 
 const STALE_DOWNLOAD_MS = 13 * 30 * 24 * 60 * 60 * 1000;
 
-for (const source of SOURCES) {
-	const binaryPath = resolve(REPO_ROOT, source.path);
-	const metaPath = resolve(REPO_ROOT, metaPathFor(source));
+for (const source of SEED_SOURCES) {
+	const binaryPath = isAbsolute(source.path) ? source.path : resolve(REPO_ROOT, source.path);
+	const metaPathRaw = metaPathFor(source);
+	const metaPath = isAbsolute(metaPathRaw) ? metaPathRaw : resolve(REPO_ROOT, metaPathRaw);
 	const binaryPresent = existsSync(binaryPath);
 	const metaPresent = existsSync(metaPath);
 
-	if (!isSourceDownloaded(source)) {
+	if (!isSeedSourceDownloaded(source)) {
 		if (binaryPresent) {
 			warnings.push({
 				level: 'warn',
@@ -310,7 +315,7 @@ function validateMetaFile(metaPath: string, source: Source, binaryPath: string |
 const manifestIds = new Set(manifest.references.map((m) => m.id));
 const generatedByType = new Map<string, Record<string, VerbatimBlock>>();
 
-for (const source of SOURCES) {
+for (const source of SEED_SOURCES) {
 	if (!generatedByType.has(source.type)) {
 		generatedByType.set(source.type, readExistingGenerated(source.type));
 	}
@@ -320,7 +325,7 @@ for (const ref of AVIATION_REFERENCES) {
 	if (!manifestIds.has(ref.id)) continue;
 	const citation = ref.sources[0];
 	if (!citation) continue;
-	const source = getSource(citation.sourceId);
+	const source = getSeedSource(citation.sourceId);
 	if (!source) continue;
 	const generated = generatedByType.get(source.type) ?? {};
 	if (!generated[ref.id]) {
@@ -359,5 +364,5 @@ if (errors.length > 0) {
 const orphanRefSuffix =
 	orphanRefIds.length > 0 ? `; ${orphanRefIds.length} orphan reference(s) (run with --verbose to list)` : '';
 console.log(
-	`references: 0 errors, ${warnings.length} warning(s); scanned ${scans.length} content location(s), ${contentResult.summary.linkCount} wiki-link(s); ${SOURCES.length} source(s) registered; ${helpPages.length} help page(s) validated${orphanRefSuffix}.`,
+	`references: 0 errors, ${warnings.length} warning(s); scanned ${scans.length} content location(s), ${contentResult.summary.linkCount} wiki-link(s); ${SEED_SOURCES.length} source(s) registered; ${helpPages.length} help page(s) validated${orphanRefSuffix}.`,
 );
