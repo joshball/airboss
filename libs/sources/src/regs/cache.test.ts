@@ -100,6 +100,53 @@ describe('writeCacheDirectory creation', () => {
 	});
 });
 
+describe('loadEcfrXml -- cluster-E body cap', () => {
+	it('refuses a response whose Content-Length exceeds maxBodyBytes (early reject)', async () => {
+		await expect(
+			loadEcfrXml({
+				title: '14',
+				editionDate: '2026-01-01',
+				maxBodyBytes: 16,
+				fetchImpl: async () => ({
+					ok: true,
+					status: 200,
+					headers: { get: (name: string) => (name.toLowerCase() === 'content-length' ? '999999999' : null) },
+					text: async () => '<x/>',
+				}),
+			}),
+		).rejects.toThrow(/Content-Length .* exceeds cap/);
+	});
+
+	it('refuses a body that decodes larger than maxBodyBytes (text fallback)', async () => {
+		await expect(
+			loadEcfrXml({
+				title: '14',
+				editionDate: '2026-01-01',
+				maxBodyBytes: 4,
+				fetchImpl: async () => ({
+					ok: true,
+					status: 200,
+					text: async () => '<this-is-much-longer-than-four-bytes/>',
+				}),
+			}),
+		).rejects.toThrow(/exceeded 4 bytes/);
+	});
+
+	it('accepts a body within maxBodyBytes', async () => {
+		const result = await loadEcfrXml({
+			title: '14',
+			editionDate: '2026-01-01',
+			maxBodyBytes: 64,
+			fetchImpl: async () => ({
+				ok: true,
+				status: 200,
+				text: async () => '<small/>',
+			}),
+		});
+		expect(result.xml).toBe('<small/>');
+	});
+});
+
 describe('buildEcfrUrl', () => {
 	it('appends ?part= for partFilter', () => {
 		const url = __cache_internal__.buildEcfrUrl({

@@ -10,6 +10,8 @@ import { downloadHtmlFile } from './html-fetch';
 
 let tempRoot: string;
 
+const TEST_HOSTS: readonly string[] = ['example.test'];
+
 beforeEach(() => {
 	tempRoot = mkdtempSync(join(tmpdir(), 'airboss-html-'));
 });
@@ -27,6 +29,7 @@ describe('downloadHtmlFile', () => {
 		const outcome = await downloadHtmlFile('https://example.test/file.html', dest, {
 			verbose: false,
 			fetchImpl: fakeFetch,
+			allowedHosts: TEST_HOSTS,
 		});
 		expect(existsSync(dest)).toBe(true);
 		expect(readFileSync(dest, 'utf-8')).toBe(body);
@@ -42,6 +45,7 @@ describe('downloadHtmlFile', () => {
 			downloadHtmlFile('https://example.test/x.html', join(tempRoot, 'x.html'), {
 				verbose: false,
 				fetchImpl: fakeFetch,
+				allowedHosts: TEST_HOSTS,
 			}),
 		).rejects.toThrow(/unexpected Content-Type/);
 	});
@@ -57,6 +61,7 @@ describe('downloadHtmlFile', () => {
 			downloadHtmlFile('https://example.test/x.html', join(tempRoot, 'x.html'), {
 				verbose: false,
 				fetchImpl: fakeFetch,
+				allowedHosts: TEST_HOSTS,
 			}),
 		).resolves.toBeDefined();
 	});
@@ -67,6 +72,7 @@ describe('downloadHtmlFile', () => {
 			downloadHtmlFile('https://example.test/x.html', join(tempRoot, 'x.html'), {
 				verbose: false,
 				fetchImpl: fakeFetch,
+				allowedHosts: TEST_HOSTS,
 			}),
 		).rejects.toThrow(/HTTP 404/);
 	});
@@ -107,5 +113,52 @@ describe('downloadHtmlFile', () => {
 
 		expect(existsSync(dest)).toBe(false);
 		expect(existsSync(`${dest}.part`)).toBe(false);
+	});
+
+	it('refuses a redirect that leaves the allowed-host set', async () => {
+		const fakeFetch: typeof fetch = async (_input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
+			if (init?.method === 'HEAD') {
+				return new Response(null, { status: 302, headers: { Location: 'https://attacker.example/x.html' } });
+			}
+			return new Response('<html></html>', { status: 200, headers: { 'Content-Type': 'text/html' } });
+		};
+		await expect(
+			downloadHtmlFile('https://example.test/x.html', join(tempRoot, 'x.html'), {
+				verbose: false,
+				fetchImpl: fakeFetch,
+				allowedHosts: TEST_HOSTS,
+			}),
+		).rejects.toThrow(/refused redirect.*attacker\.example/);
+	});
+
+	it('refuses a redirect that downgrades to plain http', async () => {
+		const fakeFetch: typeof fetch = async (_input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
+			if (init?.method === 'HEAD') {
+				return new Response(null, { status: 302, headers: { Location: 'http://example.test/x.html' } });
+			}
+			return new Response('<html></html>', { status: 200, headers: { 'Content-Type': 'text/html' } });
+		};
+		await expect(
+			downloadHtmlFile('https://example.test/x.html', join(tempRoot, 'x.html'), {
+				verbose: false,
+				fetchImpl: fakeFetch,
+				allowedHosts: TEST_HOSTS,
+			}),
+		).rejects.toThrow(/refused redirect.*http:/);
+	});
+
+	it('aborts when the body exceeds maxBodyBytes', async () => {
+		const body = 'x'.repeat(2048);
+		const fakeFetch: typeof fetch = async (): Promise<Response> => {
+			return new Response(body, { status: 200, headers: { 'Content-Type': 'text/html' } });
+		};
+		await expect(
+			downloadHtmlFile('https://example.test/x.html', join(tempRoot, 'big.html'), {
+				verbose: false,
+				fetchImpl: fakeFetch,
+				allowedHosts: TEST_HOSTS,
+				maxBodyBytes: 256,
+			}),
+		).rejects.toThrow(/exceeded 256 bytes/);
 	});
 });

@@ -4,7 +4,13 @@
 
 import { describe, expect, it } from 'vitest';
 import { REFERENCE_SOURCE_TYPES, SOURCE_TYPE_VALUES } from './reference-tags';
-import { SECTIONAL_THUMBNAIL, SOURCE_KIND_BY_TYPE, SOURCE_KINDS } from './sources';
+import {
+	SECTIONAL_THUMBNAIL,
+	SOURCE_ACTION_LIMITS,
+	SOURCE_FETCH_ALLOWED_HOSTS,
+	SOURCE_KIND_BY_TYPE,
+	SOURCE_KINDS,
+} from './sources';
 
 describe('SOURCE_KINDS', () => {
 	it('exposes the two known kinds', () => {
@@ -48,5 +54,26 @@ describe('SECTIONAL_THUMBNAIL budget', () => {
 
 	it('caps output at 256 KiB', () => {
 		expect(SECTIONAL_THUMBNAIL.MAX_BYTES).toBe(256 * 1024);
+	});
+});
+
+describe('SOURCE_ACTION_LIMITS.MAX_DOWNLOAD_BYTES', () => {
+	it('is 250 MiB', () => {
+		expect(SOURCE_ACTION_LIMITS.MAX_DOWNLOAD_BYTES).toBe(250 * 1024 * 1024);
+	});
+
+	it('is at most the upload cap (the upload cap is the looser ceiling for already-vetted bytes)', () => {
+		expect(SOURCE_ACTION_LIMITS.MAX_DOWNLOAD_BYTES).toBeLessThanOrEqual(SOURCE_ACTION_LIMITS.MAX_UPLOAD_BYTES);
+	});
+});
+
+describe('SOURCE_FETCH_ALLOWED_HOSTS', () => {
+	it('contains the two FAA / eCFR hosts that back every YAML config', () => {
+		expect(SOURCE_FETCH_ALLOWED_HOSTS).toContain('www.faa.gov');
+		expect(SOURCE_FETCH_ALLOWED_HOSTS).toContain('www.ecfr.gov');
+	});
+
+	it('is small (<= 4) so the security review surface stays reviewable', () => {
+		expect(SOURCE_FETCH_ALLOWED_HOSTS.length).toBeLessThanOrEqual(4);
 	});
 });
