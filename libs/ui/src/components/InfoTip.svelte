@@ -25,10 +25,10 @@
  * when it would overflow the viewport.
  */
 
-import { helpRegistry } from '@ab/help';
 import { tick } from 'svelte';
 import { page } from '$app/state';
 import { createFocusTrap } from '../lib/focus-trap';
+import { getInfoTipHelpResolver } from '../lib/info-tip-resolver';
 
 let {
 	term,
@@ -71,7 +71,12 @@ const triggerLabel = $derived(label ?? `Learn more about ${term}`);
 $effect(() => {
 	if (!helpId) return;
 	if (!import.meta.env.DEV) return;
-	if (helpRegistry.getById(helpId) === undefined) {
+	// Apps register a resolver from outside @ab/ui to keep this lib a leaf
+	// (see info-tip-resolver.ts). Tests + apps without a help corpus skip
+	// the warning rather than fabricate a registry edge.
+	const resolve = getInfoTipHelpResolver();
+	if (resolve === null) return;
+	if (!resolve(helpId)) {
 		// biome-ignore lint/suspicious/noConsole: dev-only authoring guard
 		console.warn(`InfoTip: no help page registered for id '${helpId}' (term='${term}').`);
 	}

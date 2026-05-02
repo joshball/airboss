@@ -206,6 +206,7 @@
       "dependencies": {
         "@ab/aviation": "workspace:*",
         "@ab/constants": "workspace:*",
+        "@ab/ui": "workspace:*",
         "@ab/utils": "workspace:*",
       },
     },
@@ -233,7 +234,6 @@
       "name": "@ab/ui",
       "dependencies": {
         "@ab/constants": "workspace:*",
-        "@ab/help": "workspace:*",
         "@ab/themes": "workspace:*",
       },
     },
