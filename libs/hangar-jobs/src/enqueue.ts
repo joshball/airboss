@@ -111,38 +111,60 @@ export async function readJobLog(
 }
 
 /**
- * Append one log line. Caller supplies the monotonic seq (the worker owns
- * a counter per job; callers outside the worker should use `appendJobLog`
- * which grabs MAX(seq)+1 atomically).
- */
-export async function writeJobLogRow(
-	input: { jobId: string; seq: number; stream: string; line: string },
-	db: Db = defaultDb,
-): Promise<void> {
-	await db.insert(hangarJobLog).values({
-		id: generateHangarJobLogId(),
-		jobId: input.jobId,
-		seq: input.seq,
-		stream: input.stream,
-		line: input.line,
-	});
-}
-
-/**
- * Append a single log line with MAX(seq)+1 computed server-side. Safe for
- * callers without a local counter (e.g. enqueue-time events).
+ * Append a single log line with MAX(seq)+1 computed server-side, atomically.
+ *
+ * Atomic seq allocation strategy (chunk-6 schema critical fix):
+ *
+ *   1. Open a transaction.
+ *   2. `SELECT id ... FOR UPDATE` on the parent `hangar.job` row. This takes a
+ *      row-level lock that serialises every concurrent appender for the same
+ *      `jobId` (orphan recovery loop, the worker's per-handler stream, the
+ *      no-handler terminal-event path) against each other, while leaving
+ *      different `jobId`s parallel.
+ *   3. Compute `seq = COALESCE(MAX(seq) + 1, 0)` from `hangar.job_log` for
+ *      this job inside the same transaction. The row lock guarantees no other
+ *      appender can land an insert between the SELECT and the INSERT.
+ *   4. Insert the log row. The `(job_id, seq)` UNIQUE constraint is the
+ *      safety net: if any path ever bypasses this helper and races, the
+ *      offender fails fast with a 23505 instead of silently corrupting the
+ *      polling cursor.
+ *
+ * Why a row lock instead of a `bigserial` per-job side counter (e.g. a
+ * `next_log_seq integer` on `hangar.job` bumped by `UPDATE ... RETURNING`):
+ * the row-lock + MAX pattern keeps `seq` continuous (no gaps when an INSERT
+ * fails post-lock), keeps `hangar.job` writes scoped to status/result/
+ * progress, and avoids a parallel "what's authoritative" question between
+ * the column and the actual log rows. The `UPDATE ... RETURNING` approach
+ * also requires a column migration we don't want to ship today; a row-level
+ * lock on the parent gets the atomicity at zero schema cost.
+ *
+ * The worker's per-handler `makeContext` previously held an in-memory `seq++`
+ * counter shared across N concurrent writes per job. That counter could
+ * collide with the orphan-recovery loop (different process, same job) and
+ * with the no-handler terminal-event insert (worker.ts hardcoded `seq: 0`).
+ * Both of those paths now route through this single atomic helper, so there
+ * is exactly ONE seq generator per `(jobId, transaction)`.
  */
 export async function appendJobLog(
 	input: { jobId: string; stream: string; line: string },
 	db: Db = defaultDb,
 ): Promise<void> {
-	const nextSeq = sql<number>`coalesce((select max(${hangarJobLog.seq}) from ${hangarJobLog} where ${hangarJobLog.jobId} = ${input.jobId}), -1) + 1`;
-	await db.insert(hangarJobLog).values({
-		id: generateHangarJobLogId(),
-		jobId: input.jobId,
-		seq: nextSeq,
-		stream: input.stream,
-		line: input.line,
+	await db.transaction(async (tx) => {
+		// Row lock on the parent so concurrent appenders for the same job
+		// serialise on this SELECT. Different jobIds keep running in parallel.
+		await tx.execute(sql`select ${hangarJob.id} from ${hangarJob} where ${hangarJob.id} = ${input.jobId} for update`);
+		const [maxRow] = await tx
+			.select({ maxSeq: sql<number | null>`max(${hangarJobLog.seq})` })
+			.from(hangarJobLog)
+			.where(eq(hangarJobLog.jobId, input.jobId));
+		const nextSeq = (maxRow?.maxSeq ?? -1) + 1;
+		await tx.insert(hangarJobLog).values({
+			id: generateHangarJobLogId(),
+			jobId: input.jobId,
+			seq: nextSeq,
+			stream: input.stream,
+			line: input.line,
+		});
 	});
 }
 

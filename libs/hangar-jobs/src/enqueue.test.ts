@@ -11,7 +11,7 @@ import { AUDIT_TARGETS, JOB_KINDS, JOB_LOG_STREAMS, JOB_STATUSES } from '@ab/con
 import { db } from '@ab/db/connection';
 import { eq } from 'drizzle-orm';
 import { afterEach, describe, expect, it } from 'vitest';
-import { appendJobLog, enqueueJob, getJob, listJobs, readJobLog, writeJobLogRow } from './index';
+import { appendJobLog, enqueueJob, getJob, listJobs, readJobLog } from './index';
 import { hangarJob, hangarJobLog } from './schema';
 
 const PREFIX = `enqueue-test-${process.pid}-${Date.now()}`;
@@ -71,7 +71,7 @@ describe('getJob + listJobs', () => {
 	});
 });
 
-describe('appendJobLog + writeJobLogRow + readJobLog', () => {
+describe('appendJobLog + readJobLog', () => {
 	it('appendJobLog assigns monotonic seq starting at 0', async () => {
 		const j = await enqueueJob({ kind: JOB_KINDS.SYNC_TO_DISK, targetId: `${PREFIX}-log-mono`, actorId: null });
 		created.add(j.id);
@@ -100,16 +100,77 @@ describe('appendJobLog + writeJobLogRow + readJobLog', () => {
 		expect(empty.length).toBe(0);
 	});
 
-	it('writeJobLogRow honours the supplied seq', async () => {
-		const j = await enqueueJob({ kind: JOB_KINDS.SYNC_TO_DISK, targetId: `${PREFIX}-explicit-seq`, actorId: null });
+	it('N concurrent appenders for the same jobId all land distinct seqs (chunk-6 schema critical)', async () => {
+		const j = await enqueueJob({
+			kind: JOB_KINDS.SYNC_TO_DISK,
+			targetId: `${PREFIX}-concurrent`,
+			actorId: null,
+		});
 		created.add(j.id);
-		await writeJobLogRow({ jobId: j.id, seq: 7, stream: JOB_LOG_STREAMS.STDERR, line: 'manual' });
-		const rows = await db
-			.select({ seq: hangarJobLog.seq, line: hangarJobLog.line })
-			.from(hangarJobLog)
-			.where(eq(hangarJobLog.jobId, j.id));
-		expect(rows).toHaveLength(1);
-		expect(rows[0]?.seq).toBe(7);
-		expect(rows[0]?.line).toBe('manual');
+		const N = 20;
+		// Fire N concurrent appends. Without the FOR UPDATE row lock + unique
+		// constraint, two of these would land on the same seq under
+		// READ COMMITTED; with the fix they all serialise on the parent row.
+		await Promise.all(
+			Array.from({ length: N }, (_, i) =>
+				appendJobLog({ jobId: j.id, stream: JOB_LOG_STREAMS.EVENT, line: `line-${i}` }),
+			),
+		);
+		const rows = await db.select({ seq: hangarJobLog.seq }).from(hangarJobLog).where(eq(hangarJobLog.jobId, j.id));
+		expect(rows).toHaveLength(N);
+		const seqs = rows.map((r) => r.seq).sort((a, b) => a - b);
+		// Distinct, contiguous, starting at 0.
+		expect(seqs).toEqual(Array.from({ length: N }, (_, i) => i));
+		expect(new Set(seqs).size).toBe(N);
+	});
+
+	it('exercises the recovery + draining-worker race: two parallel waves of appends never collide', async () => {
+		// Simulates the chunk-6 race: orphan-recovery loop appending one
+		// "recovered" line per orphaned job while the previous worker is still
+		// flushing its handler stream. Both paths now route through
+		// `appendJobLog`; without the row lock, the two waves could observe
+		// the same MAX(seq) and produce duplicate rows.
+		const j = await enqueueJob({
+			kind: JOB_KINDS.SYNC_TO_DISK,
+			targetId: `${PREFIX}-recover-race`,
+			actorId: null,
+		});
+		created.add(j.id);
+		const drainingWorker = Promise.all(
+			Array.from({ length: 10 }, (_, i) =>
+				appendJobLog({ jobId: j.id, stream: JOB_LOG_STREAMS.STDOUT, line: `worker-${i}` }),
+			),
+		);
+		const orphanRecovery = Promise.all(
+			Array.from({ length: 10 }, (_, i) =>
+				appendJobLog({ jobId: j.id, stream: JOB_LOG_STREAMS.EVENT, line: `recovered-${i}` }),
+			),
+		);
+		await Promise.all([drainingWorker, orphanRecovery]);
+		const rows = await db.select({ seq: hangarJobLog.seq }).from(hangarJobLog).where(eq(hangarJobLog.jobId, j.id));
+		expect(rows).toHaveLength(20);
+		const seqs = rows.map((r) => r.seq);
+		expect(new Set(seqs).size).toBe(20); // no duplicates
+		const sorted = [...seqs].sort((a, b) => a - b);
+		expect(sorted).toEqual(Array.from({ length: 20 }, (_, i) => i));
+	});
+
+	it('different jobIds do not block each other (per-job lock granularity)', async () => {
+		// Sanity: the FOR UPDATE lock is per parent row, so two different jobs
+		// must be able to append in parallel without serialising globally.
+		const a = await enqueueJob({ kind: JOB_KINDS.SYNC_TO_DISK, targetId: `${PREFIX}-iso-a`, actorId: null });
+		const b = await enqueueJob({ kind: JOB_KINDS.SYNC_TO_DISK, targetId: `${PREFIX}-iso-b`, actorId: null });
+		created.add(a.id);
+		created.add(b.id);
+		await Promise.all([
+			appendJobLog({ jobId: a.id, stream: JOB_LOG_STREAMS.EVENT, line: 'a-0' }),
+			appendJobLog({ jobId: b.id, stream: JOB_LOG_STREAMS.EVENT, line: 'b-0' }),
+			appendJobLog({ jobId: a.id, stream: JOB_LOG_STREAMS.EVENT, line: 'a-1' }),
+			appendJobLog({ jobId: b.id, stream: JOB_LOG_STREAMS.EVENT, line: 'b-1' }),
+		]);
+		const aRows = await db.select({ seq: hangarJobLog.seq }).from(hangarJobLog).where(eq(hangarJobLog.jobId, a.id));
+		const bRows = await db.select({ seq: hangarJobLog.seq }).from(hangarJobLog).where(eq(hangarJobLog.jobId, b.id));
+		expect(aRows.map((r) => r.seq).sort()).toEqual([0, 1]);
+		expect(bRows.map((r) => r.seq).sort()).toEqual([0, 1]);
 	});
 });
