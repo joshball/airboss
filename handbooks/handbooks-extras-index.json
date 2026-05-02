@@ -7,7 +7,7 @@
       "slug": "amt-general",
       "edition_slug": "8083-30B",
       "faa_dir": "FAA-H-8083-30B",
-      "title": "Aviation Maintenance Technician Handbook - General (30B)",
+      "title": "Aviation Maintenance Technician Handbook -- General",
       "publication_date": "2023-07-27",
       "manifest_path": "handbooks/amt-general/FAA-H-8083-30B/manifest.json"
     },
@@ -16,7 +16,7 @@
       "slug": "amt-powerplant",
       "edition_slug": "8083-32B",
       "faa_dir": "FAA-H-8083-32B",
-      "title": "AMT Handbook - Powerplant (FAA-H-8083-32B)",
+      "title": "Aviation Maintenance Technician Handbook -- Powerplant",
       "publication_date": "2023-07-17",
       "manifest_path": "handbooks/amt-powerplant/FAA-H-8083-32B/manifest.json"
     },
@@ -25,7 +25,7 @@
       "slug": "aviation-instructor",
       "edition_slug": "8083-9",
       "faa_dir": "FAA-H-8083-9",
-      "title": "Aviation Instructor's Handbook (FAA-H-8083-9B)",
+      "title": "Aviation Instructor's Handbook",
       "publication_date": "2022-03-25",
       "manifest_path": "handbooks/aviation-instructor/FAA-H-8083-9/manifest.json"
     },
@@ -34,7 +34,7 @@
       "slug": "ifh",
       "edition_slug": "8083-15B",
       "faa_dir": "FAA-H-8083-15B",
-      "title": "ISO 15930 - Electronic document file format for prepress digital data exchange (PDF/X)",
+      "title": "Instrument Flying Handbook",
       "publication_date": "2022-03-25",
       "manifest_path": "handbooks/ifh/FAA-H-8083-15B/manifest.json"
     },
@@ -43,7 +43,7 @@
       "slug": "iph",
       "edition_slug": "8083-16B",
       "faa_dir": "FAA-H-8083-16B",
-      "title": "FAA-H-8083-16B (All)",
+      "title": "Instrument Procedures Handbook",
       "publication_date": "2022-03-25",
       "manifest_path": "handbooks/iph/FAA-H-8083-16B/manifest.json"
     },
