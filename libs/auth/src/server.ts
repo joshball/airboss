@@ -13,6 +13,8 @@ import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { admin } from 'better-auth/plugins/admin';
 import { magicLink } from 'better-auth/plugins/magic-link';
+import type { AuthEventEmitter } from './audit-events-contract';
+import { createAuthAuditHooks } from './audit-hooks';
 import { magicLinkEmail, resetPasswordEmail, sendEmail, verificationEmail } from './email';
 import { bauthAccount, bauthRateLimit, bauthSession, bauthUser, bauthVerification } from './schema';
 
@@ -40,8 +42,22 @@ const authSchema = {
  *   `true` in every environment so the limit is on in dev, prod, and tests.
  *   Tests that need to bypass it can pass `false` and reset the storage table
  *   between cases.
+ * @param options.authEventEmitter - Optional hook surface that fans
+ *   sign-in / sign-out lifecycle events out to an external recorder
+ *   (typically `createAuditAuthEventEmitter()` from `@ab/audit`). When
+ *   provided, `betterAuth({ hooks })` is wired so every successful sign-in,
+ *   failed sign-in, and successful sign-out emits one `audit_log` row. Tests
+ *   that don't need the audit trail can omit it; production wiring should
+ *   always pass it so the admin audit explorer has a record to read.
  */
-export function createAuth(options: { secret: string; baseURL?: string; isDev?: boolean; rateLimitEnabled?: boolean }) {
+export function createAuth(options: {
+	secret: string;
+	baseURL?: string;
+	isDev?: boolean;
+	rateLimitEnabled?: boolean;
+	authEventEmitter?: AuthEventEmitter;
+}) {
+	const auditHooks = options.authEventEmitter ? createAuthAuditHooks(options.authEventEmitter) : null;
 	return betterAuth({
 		database: drizzleAdapter(db, { provider: DB_ADAPTER_PROVIDER, schema: authSchema }),
 		baseURL: options.baseURL ?? `http://localhost:${PORTS.STUDY}`,
@@ -168,6 +184,12 @@ export function createAuth(options: { secret: string; baseURL?: string; isDev?: 
 				},
 			}),
 		],
+
+		// Auth-event hooks fan sign-in/sign-out lifecycle into an injected
+		// `AuthEventEmitter` so the audit log records every login/logout. The
+		// hook surface is left undefined when no emitter is wired -- tests
+		// that don't need the audit trail get a quieter `betterAuth` instance.
+		...(auditHooks ? { hooks: { before: auditHooks.before, after: auditHooks.after } } : {}),
 	});
 }
 
