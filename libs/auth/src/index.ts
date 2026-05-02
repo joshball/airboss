@@ -36,3 +36,5 @@ export { isSafeRedirect } from './redirect';
 export { bauthAccount, bauthRateLimit, bauthSession, bauthUser, bauthVerification } from './schema';
 // Server-side auth factory
 export { type Auth, createAuth } from './server';
+// Better-auth session -> AuthUser mapping at the hooks boundary
+export { type BetterAuthSessionPayload, mapBetterAuthSession } from './session-map';
