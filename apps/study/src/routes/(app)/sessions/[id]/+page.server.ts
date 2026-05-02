@@ -10,10 +10,12 @@ import {
 	getSessionItemResult,
 	getSessionItemResults,
 	InvalidOptionError,
+	ReviewNotFoundError,
 	recordItemResult,
 	ScenarioNotAttemptableError,
 	ScenarioNotFoundError,
 	SessionNotFoundError,
+	SessionSlotNotFoundError,
 	skipSessionSlot,
 	submitAttempt,
 	submitAttemptSchema,
@@ -259,6 +261,28 @@ export const actions: Actions = {
 					reasonDetail: 'Card no longer reviewable',
 				});
 				return { success: true as const, skipped: true as const };
+			}
+			if (err instanceof ReviewNotFoundError) {
+				// Caller composed a request with a stale / foreign review id. The
+				// BC owns the typed boundary; the runner replies 400 instead of
+				// 500 since the failure is a client-side mismatch, not a server bug.
+				log.warn('submitReview yielded an unrecognized reviewId', {
+					requestId: event.locals.requestId,
+					userId: user.id,
+					metadata: { sessionId: event.params.id, reviewId: err.reviewId },
+				});
+				return fail(400, { error: 'Review not found' });
+			}
+			if (err instanceof SessionSlotNotFoundError) {
+				// commitSession invariant violated -- caller passed a slot index
+				// that doesn't exist on this session. Surface as 400 so the
+				// runner client can refetch the slot list and recover.
+				log.warn('submitReview targeted a missing slot', {
+					requestId: event.locals.requestId,
+					userId: user.id,
+					metadata: { sessionId: event.params.id, slotIndex: err.slotIndex },
+				});
+				return fail(400, { error: 'Slot not found on session' });
 			}
 			log.error(
 				'submitReview from session threw',

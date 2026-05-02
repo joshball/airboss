@@ -15,7 +15,9 @@
  *   - streak computation in the user's local timezone.
  */
 
+import { AUDIT_OPS, auditWrite } from '@ab/audit';
 import {
+	AUDIT_TARGETS,
 	CARD_STATES,
 	CARD_STATUSES,
 	type CardState,
@@ -45,7 +47,7 @@ import {
 	type StudyPriority,
 } from '@ab/constants';
 import { db as defaultDb } from '@ab/db/connection';
-import { generateSessionId, generateSessionItemResultId } from '@ab/utils';
+import { createLogger, generateSessionId, generateSessionItemResultId } from '@ab/utils';
 import { and, desc, eq, gte, inArray, isNotNull, isNull, lt, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import { setCardStatus } from './cards';
@@ -840,48 +842,38 @@ export class SessionSlotNotFoundError extends Error {
 }
 
 /**
- * Mark a single session slot as completed. Idempotent per `(session_id,
- * slot_index)`: a second call updates the existing row instead of inserting a
- * duplicate.
+ * Raised when `recordItemResult` is called with a `reviewId` that does not
+ * exist or does not belong to `userId`. Distinct from `SessionNotFoundError`
+ * so a route handler can map it to 400/403 (caller composed a request they
+ * had no business making) instead of 404 (session genuinely missing).
  *
- * The UNIQUE(session_id, slot_index) constraint on `session_item_result`
- * backs an atomic UPSERT (`.onConflictDoUpdate`), so two concurrent writers
- * for the same slot (double-submit, SvelteKit `enhance` retry, dup tab)
- * collapse to exactly one row.
- *
- * Field semantics: `undefined` means "leave existing value unchanged",
- * `null` means "clear the field". This lets a second-pass record legitimately
- * unset a field without that being indistinguishable from "I forgot to pass
- * it." `itemKind`, `slice`, `reasonCode`, and `slotIndex` are always set from
- * the engine-authored slot row at commit time and must be supplied here.
- *
- * INVARIANT: when `result.reviewId` is non-null, the caller must have just
- * produced that review row for `userId`. `submitReview` (reviews.ts) is the
- * only write path today: it inserts the review and returns the id, which is
- * then passed straight through here. We defensively re-check ownership so a
- * buggy caller can't smuggle someone else's review id onto a slot result.
+ * Pre-fix this path threw `SessionNotFoundError` and an operator chasing the
+ * 2am log line ended up searching session data when the actual mismatch was
+ * on the review id.
  */
-export async function recordItemResult(
-	sessionId: string,
-	userId: string,
-	result: ItemResultInput,
-	db: Db = defaultDb,
-	now: Date = new Date(),
-): Promise<SessionItemResultRow> {
-	const sess = await getSession(sessionId, userId, db);
-	if (!sess) throw new SessionNotFoundError(sessionId, userId);
-
-	if (result.reviewId) {
-		const [rev] = await db
-			.select({ id: review.id })
-			.from(review)
-			.where(and(eq(review.id, result.reviewId), eq(review.userId, userId)))
-			.limit(1);
-		if (!rev) throw new SessionNotFoundError(sessionId, userId);
+export class ReviewNotFoundError extends Error {
+	constructor(
+		public readonly reviewId: string,
+		public readonly userId: string,
+	) {
+		super(`Review ${reviewId} not found for user ${userId}`);
+		this.name = 'ReviewNotFoundError';
 	}
+}
 
-	// Build the UPDATE set, omitting any field the caller didn't provide so
-	// the existing row's value is preserved. `undefined` = skip, `null` = clear.
+const recordItemResultLog = createLogger('study:sessions:record-item-result');
+
+/**
+ * Build the partial UPDATE set for a slot row. Pure: no DB access, no clock
+ * read. `undefined` skips the column (existing value preserved); `null`
+ * clears it. Engine-authored fields (`itemKind`, `slice`, `reasonCode`) are
+ * always written; the caller passes them straight through from the slot
+ * snapshot the engine produced at commit time.
+ *
+ * Split out so the upstream contract -- "preserve unset, clear null" -- is
+ * unit-testable in isolation from the transaction shape.
+ */
+export function buildSlotUpdateSet(result: ItemResultInput, now: Date): Partial<typeof sessionItemResult.$inferInsert> {
 	const updateSet: Partial<typeof sessionItemResult.$inferInsert> = {
 		itemKind: result.itemKind,
 		slice: result.slice,
@@ -898,46 +890,144 @@ export async function recordItemResult(
 	if (result.isCorrect !== undefined) updateSet.isCorrect = result.isCorrect;
 	if (result.confidence !== undefined) updateSet.confidence = result.confidence;
 	if (result.answerMs !== undefined) updateSet.answerMs = result.answerMs;
+	return updateSet;
+}
 
-	// The BC contract is that slots are inserted by `commitSession`; results
-	// UPSERT an existing row. If no row exists for this slot, it's an error
-	// condition worth surfacing -- inserting a fresh row here would accept
-	// slotIndex / itemKind values the caller controls rather than the engine
-	// snapshot, and the `presentedAt` would be wrong (now, not commit time).
-	// The ON CONFLICT target is UNIQUE(session_id, slot_index) so this UPSERT
-	// is atomic even under concurrent writers.
-	const rows = await db
-		.insert(sessionItemResult)
-		.values({
-			id: generateSessionItemResultId(),
-			sessionId,
-			userId,
-			slotIndex: result.slotIndex,
-			itemKind: result.itemKind,
-			slice: result.slice,
-			reasonCode: result.reasonCode,
-			cardId: result.cardId ?? null,
-			scenarioId: result.scenarioId ?? null,
-			nodeId: result.nodeId ?? null,
-			reviewId: result.reviewId ?? null,
-			skipKind: result.skipKind ?? null,
-			reasonDetail: result.reasonDetail ?? null,
-			chosenOptionId: result.chosenOptionId ?? null,
-			isCorrect: result.isCorrect ?? null,
-			confidence: result.confidence ?? null,
-			answerMs: result.answerMs ?? null,
-			presentedAt: now,
-			completedAt: now,
-		})
-		.onConflictDoUpdate({
-			target: [sessionItemResult.sessionId, sessionItemResult.slotIndex],
-			set: updateSet,
-		})
-		.returning();
+/**
+ * Confirm the session row exists and is owned by `userId`. Throws
+ * `SessionNotFoundError` otherwise. Returns the row so callers can avoid a
+ * second round-trip if they need session metadata.
+ */
+async function assertSessionForUser(sessionId: string, userId: string, db: Db): Promise<SessionRow> {
+	const sess = await getSession(sessionId, userId, db);
+	if (!sess) throw new SessionNotFoundError(sessionId, userId);
+	return sess;
+}
 
-	const row = rows[0];
-	if (!row) throw new SessionSlotNotFoundError(sessionId, result.slotIndex);
-	return row;
+/**
+ * Confirm `reviewId` exists and belongs to `userId`. Throws
+ * `ReviewNotFoundError` (NOT `SessionNotFoundError`) on miss so the caller
+ * can disambiguate "session is gone" from "review id was foreign / stale".
+ */
+async function assertReviewForUser(reviewId: string, userId: string, db: Db): Promise<void> {
+	const [rev] = await db
+		.select({ id: review.id })
+		.from(review)
+		.where(and(eq(review.id, reviewId), eq(review.userId, userId)))
+		.limit(1);
+	if (!rev) throw new ReviewNotFoundError(reviewId, userId);
+}
+
+/**
+ * Mark a single session slot as completed.
+ *
+ * Contract:
+ *   - Slot rows are inserted by `commitSession`. `recordItemResult` only
+ *     UPDATEs them. If `(sessionId, slotIndex)` resolves to no row, throws
+ *     `SessionSlotNotFoundError` -- pre-fix this path silently inserted a
+ *     ghost row with caller-controlled `slotIndex` / `itemKind` and a wrong
+ *     `presentedAt` (now, not commit time).
+ *   - Idempotent: a second call against the same slot UPDATEs the same row
+ *     in place (no duplicate). UNIQUE(session_id, slot_index) on
+ *     `session_item_result` is the structural backstop; the UPDATE-by-PK
+ *     path is the load-bearing one.
+ *
+ * Atomicity: session/review existence checks, the UPDATE, and the audit
+ * emission all run inside a single `db.transaction`. Either the slot row,
+ * the audit row, AND the side-effect commits land together, or none do.
+ * `skipSessionSlot` calls this with its own transaction scope; `db.transaction`
+ * on a transaction passes through.
+ *
+ * Field semantics: `undefined` means "leave existing value unchanged",
+ * `null` means "clear the field". This lets a second-pass record legitimately
+ * unset a field without that being indistinguishable from "I forgot to pass
+ * it." `itemKind`, `slice`, `reasonCode`, and `slotIndex` are always set from
+ * the engine-authored slot row at commit time and must be supplied here.
+ *
+ * INVARIANT: when `result.reviewId` is non-null, the caller must have just
+ * produced that review row for `userId`. `submitReview` (reviews.ts) is the
+ * only write path today: it inserts the review and returns the id, which is
+ * then passed straight through here. A foreign / stale review id throws
+ * `ReviewNotFoundError`, NOT `SessionNotFoundError` -- the operator looking
+ * at a 2am traceback should see the actual failing primary key.
+ *
+ * Audit: every successful update emits one `audit.audit_log` row tagged
+ * `study.session_item_result` with the before/after slot snapshot, scoped
+ * to the actor. Captures the same view the learner just submitted so the
+ * row is reconstructable post-hoc without joining the mutable table.
+ */
+export async function recordItemResult(
+	sessionId: string,
+	userId: string,
+	result: ItemResultInput,
+	db: Db = defaultDb,
+	now: Date = new Date(),
+): Promise<SessionItemResultRow> {
+	const updateSet = buildSlotUpdateSet(result, now);
+
+	return await db.transaction(async (tx) => {
+		await assertSessionForUser(sessionId, userId, tx);
+		if (result.reviewId) await assertReviewForUser(result.reviewId, userId, tx);
+
+		// Snapshot the existing slot for the audit row's `before` field. The
+		// row MUST exist (commitSession invariant); if it doesn't, the UPDATE
+		// below resolves zero rows and we throw SessionSlotNotFoundError.
+		const [before] = await tx
+			.select()
+			.from(sessionItemResult)
+			.where(
+				and(
+					eq(sessionItemResult.sessionId, sessionId),
+					eq(sessionItemResult.userId, userId),
+					eq(sessionItemResult.slotIndex, result.slotIndex),
+				),
+			)
+			.limit(1);
+
+		const rows = await tx
+			.update(sessionItemResult)
+			.set(updateSet)
+			.where(
+				and(
+					eq(sessionItemResult.sessionId, sessionId),
+					eq(sessionItemResult.userId, userId),
+					eq(sessionItemResult.slotIndex, result.slotIndex),
+				),
+			)
+			.returning();
+
+		const after = rows[0];
+		if (!after) {
+			recordItemResultLog.warn('slot row missing for recordItemResult', {
+				userId,
+				metadata: { sessionId, slotIndex: result.slotIndex },
+			});
+			throw new SessionSlotNotFoundError(sessionId, result.slotIndex);
+		}
+
+		await auditWrite(
+			{
+				actorId: userId,
+				op: AUDIT_OPS.UPDATE,
+				targetType: AUDIT_TARGETS.STUDY_SESSION_ITEM,
+				targetId: after.id,
+				before: before ?? null,
+				after,
+				metadata: {
+					sessionId,
+					slotIndex: result.slotIndex,
+					itemKind: result.itemKind,
+					slice: result.slice,
+					reasonCode: result.reasonCode,
+					skipKind: result.skipKind ?? null,
+					reviewId: result.reviewId ?? null,
+				},
+			},
+			tx,
+		);
+
+		return after;
+	});
 }
 
 /** Slot shape the `skipSessionSlot` orchestration needs. Narrow on purpose --

@@ -158,6 +158,7 @@
     "libs/bc/study": {
       "name": "@ab/bc-study",
       "dependencies": {
+        "@ab/audit": "workspace:*",
         "@ab/auth": "workspace:*",
         "@ab/bc-sim": "workspace:*",
         "@ab/constants": "workspace:*",

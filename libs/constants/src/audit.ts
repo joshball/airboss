@@ -40,6 +40,13 @@ export const AUDIT_TARGETS = {
 	 * `metadata.subKind` from the closed `HANGAR_USER_OP_SUBKINDS` set below.
 	 */
 	HANGAR_USER: 'hangar.user',
+	/**
+	 * Per-slot result writes on `study.session_item_result` driven by the
+	 * session runner (`recordItemResult`, `skipSessionSlot`). Captures the
+	 * before / after row snapshot so an operator can reconstruct what the
+	 * learner submitted on a given slot without joining the mutable table.
+	 */
+	STUDY_SESSION_ITEM: 'study.session_item_result',
 } as const;
 
 export type AuditTarget = (typeof AUDIT_TARGETS)[keyof typeof AUDIT_TARGETS];
