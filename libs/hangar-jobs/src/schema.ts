@@ -52,6 +52,13 @@ export const hangarJob = hangarJobsSchema.table(
 		createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
 		startedAt: timestamp('started_at', { withTimezone: true }),
 		finishedAt: timestamp('finished_at', { withTimezone: true }),
+		/**
+		 * Last heartbeat from the worker for this job. Updated on every poll
+		 * iteration while the row is `running` so external probes / UI can flag
+		 * stale heartbeats (`now - lastHeartbeatAt > JOB_HEARTBEAT_STALE_MS`)
+		 * as "stuck" without trusting the handler to emit log lines.
+		 */
+		lastHeartbeatAt: timestamp('last_heartbeat_at', { withTimezone: true }),
 	},
 	(t) => ({
 		jobStatusIdx: index('hangar_job_status_idx').on(t.status, t.createdAt),

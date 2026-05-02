@@ -30,10 +30,13 @@ import {
 } from '@ab/constants';
 import { db } from '@ab/db/connection';
 import type { JobContext, JobHandler } from '@ab/hangar-jobs';
+import { createLogger } from '@ab/utils';
 import { eq } from 'drizzle-orm';
 import { resolveHangarBlobRoot } from './blob-root';
 import { type HangarSourceRow, hangarSource } from './schema';
 import { handleBinaryVisualFetch, type SectionalFetchHooks } from './source-fetch';
+
+const log = createLogger('hangar-source-jobs');
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 /** Four ascents: libs/bc/hangar/src/ -> libs/bc/hangar/ -> libs/bc/ -> libs/ -> repo root. */
@@ -135,8 +138,17 @@ export const nodeSpawnRunner: SpawnRunner = async ({ cmd, cwd, onStdout, onStder
 	}
 
 	const cancelPoll = setInterval(async () => {
-		if (await isCancelled()) {
-			child.kill('SIGTERM');
+		// `isCancelled()` reads from the DB and can throw on a transient
+		// disconnect / timeout. An async setInterval callback that throws
+		// becomes an unhandledRejection that node silently absorbs, so the
+		// cancel button stops working with no log signal. Catch + log so a
+		// 2am operator can see "the cancel poll is failing" in the journal.
+		try {
+			if (await isCancelled()) {
+				child.kill('SIGTERM');
+			}
+		} catch (err) {
+			log.error('cancel poll failed', { metadata: { cmd: cmd.join(' ') } }, err instanceof Error ? err : undefined);
 		}
 	}, CANCEL_POLL_INTERVAL_MS);
 

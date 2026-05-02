@@ -7,10 +7,10 @@
  */
 
 import { AUDIT_OPS, auditWrite } from '@ab/audit';
-import { AUDIT_TARGETS, JOB_STATUSES, type JobKind } from '@ab/constants';
+import { AUDIT_TARGETS, JOB_AUDIT_REASONS, JOB_LOG_STREAMS, JOB_STATUSES, type JobKind } from '@ab/constants';
 import { db as defaultDb } from '@ab/db/connection';
 import { generateHangarJobId, generateHangarJobLogId } from '@ab/utils';
-import { and, asc, desc, eq, gt, inArray, sql } from 'drizzle-orm';
+import { and, asc, desc, eq, gt, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import { type HangarJobLogRow, type HangarJobRow, hangarJob, hangarJobLog } from './schema';
 
@@ -28,37 +28,44 @@ export interface EnqueueInput {
  * Insert one queued job row. Returns the created row. Also writes one
  * `hangar.job` audit row (op = create) so the queue activity is visible
  * in the cross-cutting audit log alongside reference/source writes.
+ *
+ * Both writes go through a single `db.transaction` so the audit row never
+ * lags or vanishes when the audit insert fails after the job insert
+ * commits (chunk-6 backend review: terminal-state transitions non-atomic
+ * with audit emissions).
  */
 export async function enqueueJob(input: EnqueueInput, db: Db = defaultDb): Promise<HangarJobRow> {
-	const [row] = await db
-		.insert(hangarJob)
-		.values({
-			id: generateHangarJobId(),
-			kind: input.kind,
-			targetType: input.targetType ?? null,
-			targetId: input.targetId ?? null,
-			status: JOB_STATUSES.QUEUED,
-			progress: {},
-			payload: input.payload ?? {},
-			actorId: input.actorId,
-		})
-		.returning();
-	await auditWrite(
-		{
-			actorId: input.actorId,
-			op: AUDIT_OPS.CREATE,
-			targetType: AUDIT_TARGETS.HANGAR_JOB,
-			targetId: row.id,
-			after: {
-				kind: row.kind,
-				targetType: row.targetType,
-				targetId: row.targetId,
-				status: row.status,
+	return db.transaction(async (tx) => {
+		const [row] = await tx
+			.insert(hangarJob)
+			.values({
+				id: generateHangarJobId(),
+				kind: input.kind,
+				targetType: input.targetType ?? null,
+				targetId: input.targetId ?? null,
+				status: JOB_STATUSES.QUEUED,
+				progress: {},
+				payload: input.payload ?? {},
+				actorId: input.actorId,
+			})
+			.returning();
+		await auditWrite(
+			{
+				actorId: input.actorId,
+				op: AUDIT_OPS.CREATE,
+				targetType: AUDIT_TARGETS.HANGAR_JOB,
+				targetId: row.id,
+				after: {
+					kind: row.kind,
+					targetType: row.targetType,
+					targetId: row.targetId,
+					status: row.status,
+				},
 			},
-		},
-		db,
-	);
-	return row;
+			tx,
+		);
+		return row;
+	});
 }
 
 export async function getJob(id: string, db: Db = defaultDb): Promise<HangarJobRow | undefined> {
@@ -140,26 +147,46 @@ export async function appendJobLog(
 }
 
 /**
- * Mark any `running` jobs as `queued` with a `recovered` log line. Call on
- * worker boot so a crashed process never leaves a ghost running job.
+ * Mark any `running` jobs as `queued` with a `recovered` log line and an
+ * audit row. Call on worker boot so a crashed process never leaves a
+ * ghost running job. The audit row preserves the "every state transition
+ * is audited" contract that audit-explorer relies on (chunk-6 correctness
+ * major: orphaned-running recovery never updates audit log).
+ *
+ * The status flip + audit write per row run inside one transaction so a
+ * crash mid-recovery never leaves an audit row orphaned of its job (or
+ * vice versa).
  */
 export async function recoverOrphanedRunning(db: Db = defaultDb): Promise<number> {
 	const orphaned = await db
-		.select({ id: hangarJob.id })
+		.select({ id: hangarJob.id, actorId: hangarJob.actorId, startedAt: hangarJob.startedAt })
 		.from(hangarJob)
 		.where(eq(hangarJob.status, JOB_STATUSES.RUNNING));
 	if (orphaned.length === 0) return 0;
-	await db
-		.update(hangarJob)
-		.set({ status: JOB_STATUSES.QUEUED, startedAt: null })
-		.where(
-			inArray(
-				hangarJob.id,
-				orphaned.map((r) => r.id),
-			),
-		);
-	for (const { id } of orphaned) {
-		await appendJobLog({ jobId: id, stream: 'event', line: 'recovered from worker restart' }, db);
+	for (const orphan of orphaned) {
+		await db.transaction(async (tx) => {
+			const updated = await tx
+				.update(hangarJob)
+				.set({ status: JOB_STATUSES.QUEUED, startedAt: null, lastHeartbeatAt: null })
+				.where(and(eq(hangarJob.id, orphan.id), eq(hangarJob.status, JOB_STATUSES.RUNNING)))
+				.returning({ id: hangarJob.id });
+			if (updated.length === 0) return;
+			await auditWrite(
+				{
+					actorId: orphan.actorId,
+					op: AUDIT_OPS.UPDATE,
+					targetType: AUDIT_TARGETS.HANGAR_JOB,
+					targetId: orphan.id,
+					metadata: {
+						status: JOB_STATUSES.QUEUED,
+						reason: JOB_AUDIT_REASONS.RECOVERED_FROM_RESTART,
+						priorStartedAt: orphan.startedAt?.toISOString() ?? null,
+					},
+				},
+				tx,
+			);
+		});
+		await appendJobLog({ jobId: orphan.id, stream: JOB_LOG_STREAMS.EVENT, line: 'recovered from worker restart' }, db);
 	}
 	return orphaned.length;
 }

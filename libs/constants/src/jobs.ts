@@ -76,6 +76,30 @@ export const JOB_RESULT_TEXT_MAX_BYTES = 256 * 1024;
 /** Suffix appended when a log line or result text is truncated to its cap. */
 export const JOB_LOG_TRUNCATION_MARKER = ' ... [truncated]';
 
+/**
+ * Reason codes recorded in `metadata.reason` on `hangar.job` audit rows so
+ * audit-explorer can surface "why" alongside "what" for state transitions.
+ * Centralised so worker, recovery, and cancel paths agree on the vocabulary.
+ */
+export const JOB_AUDIT_REASONS = {
+	/** Worker had no handler registered for the job kind. */
+	NO_HANDLER: 'no-handler',
+	/** Worker boot found a `running` row from a prior crashed process. */
+	RECOVERED_FROM_RESTART: 'recovered-from-restart',
+	/** Terminal write was preempted by an earlier `cancelled` transition. */
+	PREEMPTED_BY_CANCEL: 'preempted-by-cancel',
+} as const;
+
+export type JobAuditReason = (typeof JOB_AUDIT_REASONS)[keyof typeof JOB_AUDIT_REASONS];
+
+/**
+ * Worker liveness tuning. The worker writes `last_heartbeat_at` on every
+ * iteration of the poll loop; an external probe / UI can flag a job whose
+ * heartbeat is older than `JOB_HEARTBEAT_STALE_MS` as "stuck".
+ */
+export const JOB_HEARTBEAT_INTERVAL_MS = 5000;
+export const JOB_HEARTBEAT_STALE_MS = 30_000;
+
 /** Modes for the sync-to-disk handler. */
 export const HANGAR_SYNC_MODES = {
 	/** Stage + commit locally on the current branch. */
