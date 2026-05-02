@@ -239,6 +239,16 @@ export const ROUTES = {
 	/** Aircraft-specific (POH/AFM) umbrella surface. */
 	LIBRARY_AIRCRAFT: (slug: string) => `/library/aircraft/${encodeURIComponent(slug)}` as const,
 
+	// Study -- Invite acceptance (hangar-invite-flow WP).
+	// Public route -- the token IS the credential. Lives outside the
+	// `(app)` group so the layout-level auth gate doesn't apply, mirroring
+	// `/login`'s placement. The accept page is the only non-auth-gated
+	// mutation surface in study; see decision (i) in
+	// `docs/work-packages/hangar-invite-flow/spec.md`.
+	STUDY_INVITE_ACCEPT: (token: string) => `/invite/${encodeURIComponent(token)}` as const,
+	/** Form-action id used by the accept page's redemption form. */
+	STUDY_INVITE_ACCEPT_ACTION: '?/accept',
+
 	// Study -- Help (per-app help content; primitives shared via @ab/help)
 	HELP: '/help',
 	HELP_CONCEPTS: '/help/concepts',
@@ -419,6 +429,21 @@ export const ROUTES = {
 	HANGAR_USER_REVOKE_SESSION_ACTION: '?/revokeSession',
 	/** Form-action id: revoke every session for the target user (`?/revokeAllSessions`). */
 	HANGAR_USER_REVOKE_ALL_SESSIONS_ACTION: '?/revokeAllSessions',
+	// Hangar -- invitation flow (hangar-invite-flow WP).
+	// `/users/invitations` is the admin-facing list; `[id]` is the per-row
+	// detail with revoke + resend affordances. Distinct from `/users`
+	// because invites are their own row family until accepted (at which
+	// point the bauth_user row exists and `/users/[id]` takes over).
+	/** Pending / accepted / revoked / expired invitations list. ADMIN-only. */
+	HANGAR_USERS_INVITATIONS: '/users/invitations',
+	/** Per-invitation detail page; carries revoke + resend admin actions. ADMIN-only. */
+	HANGAR_USERS_INVITATION_DETAIL: (id: string) => `/users/invitations/${encodeURIComponent(id)}` as const,
+	/** Form-action id: create a new invitation. */
+	HANGAR_INVITATION_CREATE_ACTION: '?/createInvitation',
+	/** Form-action id: revoke a pending invitation. */
+	HANGAR_INVITATION_REVOKE_ACTION: '?/revokeInvitation',
+	/** Form-action id: regenerate the token + re-email an invitation. */
+	HANGAR_INVITATION_RESEND_ACTION: '?/resendInvitation',
 	/** Cross-cutting audit explorer (audit-explorer WP). ADMIN-only. */
 	HANGAR_ADMIN_AUDIT: '/admin/audit',
 	/** Detail view for one `audit_log` row. ADMIN-only. */

@@ -73,6 +73,16 @@ export const AUDIT_TARGETS = {
 	 * "actions on user X" filter alongside `AUTH_LOGIN`.
 	 */
 	AUTH_LOGOUT: 'auth.logout',
+	/**
+	 * Lifecycle events on a `hangar.invitation` row (create / revoke / resend
+	 * / accept). The per-op kind is carried in `metadata.subKind` from the
+	 * closed `HANGAR_INVITATION_OP_SUBKINDS` set below. Distinct target type
+	 * from `hangar.user` because invites are their own row family with their
+	 * own id; the eventual `accepted_user_id` is recorded in metadata, not
+	 * promoted to `targetId`. See
+	 * `docs/work-packages/hangar-invite-flow/spec.md` decision (h).
+	 */
+	HANGAR_INVITATION: 'hangar.invitation',
 } as const;
 
 export type AuditTarget = (typeof AUDIT_TARGETS)[keyof typeof AUDIT_TARGETS];
@@ -148,3 +158,42 @@ export const HANGAR_USER_OP_SUBKINDS = {
 
 export type HangarUserOpSubkind = (typeof HANGAR_USER_OP_SUBKINDS)[keyof typeof HANGAR_USER_OP_SUBKINDS];
 export const HANGAR_USER_OP_SUBKIND_VALUES: readonly HangarUserOpSubkind[] = Object.values(HANGAR_USER_OP_SUBKINDS);
+
+/**
+ * Op-distinguishing sub-kind for `AUDIT_TARGETS.HANGAR_INVITATION` audit rows.
+ * Mirrors {@link HANGAR_USER_OP_SUBKINDS} -- the audit `op` enum stays tight
+ * (`create` / `update` / `action`) and the per-op flavour rides in
+ * `metadata.subKind`. The accept event (`subKind = accept`) is the only one
+ * the recipient drives; create / revoke / resend are admin-driven.
+ */
+export const HANGAR_INVITATION_OP_SUBKINDS = {
+	/** Admin created an invitation. `op = create`. */
+	CREATE: 'create',
+	/** Admin revoked a pending invitation (soft-delete). `op = update`. */
+	REVOKE: 'revoke',
+	/** Admin re-sent an invitation; old token invalidated. `op = action`. */
+	RESEND: 'resend',
+	/** Recipient redeemed the token and signed up. `op = action`. */
+	ACCEPT: 'accept',
+} as const;
+
+export type HangarInvitationOpSubkind =
+	(typeof HANGAR_INVITATION_OP_SUBKINDS)[keyof typeof HANGAR_INVITATION_OP_SUBKINDS];
+export const HANGAR_INVITATION_OP_SUBKIND_VALUES: readonly HangarInvitationOpSubkind[] =
+	Object.values(HANGAR_INVITATION_OP_SUBKINDS);
+
+/**
+ * Default expiry on a freshly minted hangar invitation, in days. Matches
+ * `docs/work-packages/hangar-invite-flow/spec.md` decision (a). Long enough
+ * for a busy CFI to act on it; short enough that a stale token in someone's
+ * inbox stops working before it can be misused.
+ */
+export const INVITATION_DEFAULT_EXPIRY_DAYS = 7;
+
+/**
+ * Number of random bytes in a hangar invitation token. base64url-encoded
+ * the token is 43 characters. Decision (b) in the spec: 32 bytes via
+ * `crypto.getRandomValues`, no JWT, no signed envelope. Lookup is a
+ * unique-index hit on `hangar.invitation.token`.
+ */
+export const INVITATION_TOKEN_BYTES = 32;

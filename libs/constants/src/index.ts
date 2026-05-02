@@ -10,9 +10,14 @@ export {
 	AUDIT_WINDOWS,
 	type AuditTarget,
 	type AuditWindow,
+	HANGAR_INVITATION_OP_SUBKIND_VALUES,
+	HANGAR_INVITATION_OP_SUBKINDS,
 	HANGAR_USER_OP_SUBKIND_VALUES,
 	HANGAR_USER_OP_SUBKINDS,
+	type HangarInvitationOpSubkind,
 	type HangarUserOpSubkind,
+	INVITATION_DEFAULT_EXPIRY_DAYS,
+	INVITATION_TOKEN_BYTES,
 } from './audit';
 export {
 	AUTH_RATE_LIMIT,
