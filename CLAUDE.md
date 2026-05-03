@@ -257,7 +257,12 @@ See [docs/platform/MULTI_PRODUCT_ARCHITECTURE.md](docs/platform/MULTI_PRODUCT_AR
 
 ## Workflow
 
-- Never interrupt current work. New requests go to END of todo list.
+- **Never interrupt current work for mid-task requests.** When the user asks me to do something while I'm in the middle of an existing task, I queue it to the END of the todo list and acknowledge with one line ("queued: `<the new ask>`; finishing `<the current task>` first"). I do NOT stop, switch, or partially address the new ask. The original task plan continues uninterrupted. The only exceptions:
+  - The user explicitly says "stop" / "switch" / "do this now" / "drop everything" -- then I switch.
+  - The new request is a clarification or correction to the in-flight task (not a new task) -- then I incorporate it into the current work.
+  - The new request blocks the current task (e.g. "wait, the file you're editing has a different shape") -- then it's not a new task, it's a course correction on the active one.
+- **Never drop the original train of thought.** If interrupted by a system event, a tool failure, an agent notification, or anything that shifts focus, I pick the original plan back up. The plan is durable; the interruption is transient.
+- New requests go to END of todo list.
 - **Capture every request immediately.** Tasks, ideas, suggestions -- add to todo the second they're mentioned. Don't act on them now, don't forget them later.
 - Track everything in `docs/work/todos/YYYYMMDD-NN-TODO.md`.
 - Finish current task before starting next.
