@@ -72,3 +72,31 @@ describe('ConfirmAction -- form mode', () => {
 		expect(screen.getByTestId('confirmaction-confirm').getAttribute('type')).toBe('submit');
 	});
 });
+
+describe('ConfirmAction -- loading state', () => {
+	it('reflects loading on the Confirm button: disabled, data-state=loading, loadingLabel rendered', async () => {
+		const user = userEvent.setup();
+		render(ConfirmActionHarness, { label: 'Delete', confirmLabel: 'Delete it', loading: true });
+		await user.click(screen.getByTestId('confirmaction-trigger'));
+		const confirm = screen.getByTestId('confirmaction-confirm') as HTMLButtonElement;
+		expect(confirm.disabled).toBe(true);
+		expect(confirm.getAttribute('data-state')).toBe('loading');
+		// Default loading label is `${confirmLabel}...`.
+		expect(confirm.textContent).toContain('Delete it...');
+	});
+
+	it('disables Cancel while loading so users cannot back out mid-submit', async () => {
+		const user = userEvent.setup();
+		render(ConfirmActionHarness, { label: 'Delete', loading: true });
+		await user.click(screen.getByTestId('confirmaction-trigger'));
+		const cancel = screen.getByTestId('confirmaction-cancel') as HTMLButtonElement;
+		expect(cancel.disabled).toBe(true);
+	});
+
+	it('loadingLabel overrides the default loading copy', async () => {
+		const user = userEvent.setup();
+		render(ConfirmActionHarness, { label: 'Delete', loading: true, loadingLabel: 'Deleting' });
+		await user.click(screen.getByTestId('confirmaction-trigger'));
+		expect(screen.getByTestId('confirmaction-confirm').textContent).toContain('Deleting');
+	});
+});

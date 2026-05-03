@@ -38,7 +38,7 @@ const end = $derived(pageCount === 0 ? 0 : (currentPage - 1) * pageSize + pageCo
 {#if total > 0}
 	<p class="result-summary" data-testid="resultsummary-root" data-total={total} data-page-count={pageCount}>
 		{#if total > pageSize}
-			Showing {start}&ndash;{end} of {total} {word}{suffix}.
+			Showing {start}-{end} of {total} {word}{suffix}.
 		{:else}
 			Showing {total} {word}{suffix}.
 		{/if}

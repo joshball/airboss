@@ -36,9 +36,7 @@ const percentRead = $derived(
 		</div>
 		<div class="counts">
 			<span>{progress.readSections} read</span>
-			<span class="dot" aria-hidden="true">·</span>
 			<span>{progress.readingSections} reading</span>
-			<span class="dot" aria-hidden="true">·</span>
 			<span>{progress.unreadSections} unread</span>
 		</div>
 	</div>
@@ -97,7 +95,14 @@ const percentRead = $derived(
 		gap: var(--space-xs);
 		color: var(--ink-muted);
 	}
-	.dot {
-		color: var(--edge-subtle);
+	/*
+	 * Visual mid-dot separators are rendered via CSS instead of inline
+	 * `<span class="dot">·</span>` text content. Cleaner DOM, AT-friendly
+	 * (no decorative content to skip), and the separator color tracks the
+	 * theme via tokens.
+	 */
+	.counts > span + span {
+		border-left: 1px solid var(--edge-subtle);
+		padding-left: var(--space-xs);
 	}
 </style>

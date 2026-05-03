@@ -111,8 +111,8 @@ $effect(() => {
 		<div class="content">
 			{@render children()}
 			{#if typedConfirmation}
-				<label class="typed-gate" for={typedInputId}>
-					<span class="typed-gate-label">{typedConfirmation.label}</span>
+				<div class="typed-gate">
+					<label class="typed-gate-label" for={typedInputId}>{typedConfirmation.label}</label>
 					<input
 						id={typedInputId}
 						type="text"
@@ -122,10 +122,16 @@ $effect(() => {
 						spellcheck="false"
 						aria-describedby={typedHintId}
 					/>
+					<!--
+						Hint sits outside the <label> wrapper so the label's
+						accessible-text remains exactly `typedConfirmation.label`.
+						aria-describedby on the input + on the disabled Confirm
+						button still surfaces the hint to AT.
+					-->
 					<span id={typedHintId} class="typed-gate-hint">
 						Type <code>{typedConfirmation.expected}</code> to enable Confirm.
 					</span>
-				</label>
+				</div>
 			{/if}
 		</div>
 	{/snippet}
@@ -201,6 +207,7 @@ $effect(() => {
 		color: var(--ink-body);
 		font-size: var(--type-ui-label-size);
 		font-weight: var(--font-weight-medium);
+		display: block;
 	}
 
 	.typed-gate-input {
