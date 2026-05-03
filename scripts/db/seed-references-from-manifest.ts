@@ -88,6 +88,20 @@ const CORPUS_DIRS = ['handbooks', 'aim', 'ac', 'regulations', 'acs'] as const;
  */
 const SINGLE_DOC_KEY_BY_CHILD: ReadonlySet<string> = new Set(['acs']);
 
+/**
+ * Corpora that are rolling publications (not editioned): the dispatcher
+ * keeps only the lexicographically-latest on-disk edition and ignores any
+ * older snapshots that may still be on disk from a previous ingest. This
+ * matches the per-adapter contract -- e.g. the CFR adapter writes to a
+ * single `(document_slug, edition='current')` row regardless of which
+ * eCFR snapshot date the manifest declares, so seeding two CFR editions
+ * back-to-back would clobber the same DB row twice (and crash on missing
+ * body files for the older snapshot, which the dev's `.gitignore` keeps
+ * out of the repo per ADR 018). Listed by corpus dir name; expand only when
+ * a new corpus uses the same rolling-edition convention.
+ */
+const ROLLING_EDITION_CORPORA: ReadonlySet<string> = new Set(['regulations']);
+
 export interface SeedReferencesOptions {
 	/** Filter to a single document slug (e.g. `phak`). Default = all. */
 	documentSlug?: string;
@@ -148,7 +162,11 @@ export async function seedReferencesFromManifest(options: SeedReferencesOptions 
 
 			// Multi-doc layout: childDir is the slug; iterate edition subdirs.
 			if (options.documentSlug !== undefined && options.documentSlug !== childDir) continue;
-			const editions = options.edition ? [options.edition] : listChildDirs(childAbs);
+			const editions = pickEditions({
+				corpusDir,
+				childAbs,
+				explicitEdition: options.edition,
+			});
 			for (const edition of editions) {
 				const manifestPath = resolve(childAbs, edition, 'manifest.json');
 				if (!existsSync(manifestPath)) continue;
@@ -211,6 +229,38 @@ function listChildDirs(dir: string): string[] {
 			return false;
 		}
 	});
+}
+
+interface PickEditionsArgs {
+	readonly corpusDir: string;
+	readonly childAbs: string;
+	readonly explicitEdition: string | undefined;
+}
+
+/**
+ * Resolve which edition subdirs the multi-doc dispatcher should walk.
+ *
+ * Default: every edition under the slug (the supersede-chain logic at the
+ * caller wires older editions to the newest).
+ *
+ * Rolling-publication corpora (CFR per ADR 019): pick only the
+ * lexicographically-latest edition. CFR seeds write to a single
+ * `(document_slug, edition='current')` DB row regardless of which on-disk
+ * snapshot date the manifest declares -- so seeding two editions back-to-back
+ * would clobber the same row twice and crash on the older snapshot's missing
+ * body files (kept out of the repo by `.gitignore` per ADR 018). YYYY-MM-DD
+ * sorts chronologically, so `.sort().at(-1)` picks the newest snapshot.
+ *
+ * Explicit `--edition=` overrides everything: the caller is asking for a
+ * specific edition by name and we trust them.
+ */
+export function pickEditions(args: PickEditionsArgs): string[] {
+	if (args.explicitEdition !== undefined) return [args.explicitEdition];
+	const all = listChildDirs(args.childAbs);
+	if (!ROLLING_EDITION_CORPORA.has(args.corpusDir) || all.length <= 1) return all;
+	const sorted = [...all].sort();
+	const latest = sorted[sorted.length - 1];
+	return latest === undefined ? [] : [latest];
 }
 
 // CLI entry point.
