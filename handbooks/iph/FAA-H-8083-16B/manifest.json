@@ -7,7 +7,11 @@
   "source_url": "https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/instrument_procedures_handbook/FAA-H-8083-16B.pdf",
   "source_checksum": "67bee284221e2748c426a99793c332fe9f57018b9858f77b911675c814a03e91",
   "fetched_at": "2026-05-03T19:24:46.430610+00:00",
-  "subjects": [],
+  "subjects": [
+    "procedures",
+    "navigation",
+    "flight-instruments"
+  ],
   "sections": [
     {
       "level": "chapter",
