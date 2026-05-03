@@ -6,9 +6,10 @@ The single canonical list of every FAA reference document airboss ingests, with 
 
 ## Snapshot
 
-**Last updated:** 2026-05-03 (live snapshot — auto-update on each library PR; flightbag scaffold landed; WP-CC v1 registry-only shipped)
+**Last updated:** 2026-05-03 (live snapshot — auto-update on each library PR; flightbag scaffold landed; WP-CC v1 registry-only shipped; Wave 6 link-only completion landed -- 12 ACs + 2 ACS/PTS publications now deep-link to their FAA-hosted PDFs)
 
 **Readable in-app today:** 36 references (40 with the references cleanup sweep — 4 AC YAML rows added so subjects + primary_cert render)
+**Catalogued + linked out (Sourced stage):** 14 references (12 ACs + CFII PTS + ACS Companion Guide -- citation chips deep-link to FAA-hosted PDFs)
 **Total tracked:** ~50 references across all corpora
 **Target shape:** every reference is a section-tree (whole-doc retired)
 
@@ -71,7 +72,7 @@ CFR is structurally section-tree (per-Part references with section rows undernea
 
 ### Advisory Circulars
 
-9 cached and readable as section-tree (post WP-AC-PROMOTE). 12 link-only cards need download.
+9 cached and readable as section-tree (post WP-AC-PROMOTE). 12 link-only stubs deep-link to FAA-hosted PDFs (Wave 6, WP-AC-LINK-ONLY) -- body extraction is downstream WP-AC-FULL.
 
 | FAA number | Common name | Stage | Target |
 |------------|-------------|-------|--------|
@@ -84,22 +85,22 @@ CFR is structurally section-tree (per-Part references with section rows undernea
 | AC 91-21.1D | Use of Portable Electronic Devices Aboard Aircraft | ✅ readable, section-tree | done |
 | AC 91-79A | Mitigating Runway Overrun | ✅ readable, section-tree | done |
 | AC 120-71B | SOPs and Pilot Monitoring Duties | ✅ readable, section-tree | done |
-| AC 00-24 | Thunderstorms | ❌ link-only | full pipeline + section-tree |
-| AC 00-45 | Aviation Weather Services | ❌ link-only | full pipeline + section-tree |
-| AC 60-22 | Aeronautical Decision Making | ❌ link-only | full pipeline + section-tree |
-| AC 61-27 | Instrument Flying Handbook (legacy AC, superseded by FAA-H-8083-15) | ❌ link-only | (decide: ingest or drop, since superseded) |
-| AC 61-67 | Stall and Spin Awareness Training | ❌ link-only | full pipeline + section-tree |
-| AC 61-84 | Role of Preflight Preparation | ❌ link-only | full pipeline + section-tree |
-| AC 61-134 | GA Controlled Flight Into Terrain Awareness | ❌ link-only | full pipeline + section-tree |
-| AC 90-100 | RNAV Operations | ❌ link-only | full pipeline + section-tree |
-| AC 91-23 | Pilot's Weight and Balance Handbook | ❌ link-only | full pipeline + section-tree |
-| AC 91-44 | ELT Maintenance Practices | ❌ link-only | full pipeline + section-tree |
-| AC 91-74 | Flight in Icing Conditions | ❌ link-only | full pipeline + section-tree |
-| AC 91-75 | Attitude Indicator | ❌ link-only | full pipeline + section-tree |
+| AC 00-24C | Thunderstorms | ✅ link-only stub (Sourced) | section-tree (WP-AC-FULL) |
+| AC 00-45H | Aviation Weather Services | ✅ link-only stub (Sourced) | section-tree (WP-AC-FULL) |
+| AC 60-22 | Aeronautical Decision Making | ✅ link-only stub (Sourced) | section-tree (WP-AC-FULL) |
+| AC 61-27C | Instrument Flying Handbook (legacy AC, superseded by FAA-H-8083-15) | ✅ link-only stub (Sourced) | retire when knowledge nodes re-point to FAA-H-8083-15 |
+| AC 61-67C | Stall and Spin Awareness Training | ✅ link-only stub (Sourced) | section-tree (WP-AC-FULL) |
+| AC 61-84B | Role of Preflight Preparation | ✅ link-only stub (Sourced) | section-tree (WP-AC-FULL) |
+| AC 61-134 | GA Controlled Flight Into Terrain Awareness | ✅ link-only stub (Sourced) | section-tree (WP-AC-FULL) |
+| AC 90-100A | RNAV Operations | ✅ link-only stub (Sourced) | section-tree (WP-AC-FULL) |
+| AC 91-23A | Pilot's Weight and Balance Handbook | ✅ link-only stub (Sourced) | section-tree (WP-AC-FULL) |
+| AC 91-44A | ELT Maintenance Practices | ✅ link-only stub (Sourced) | section-tree (WP-AC-FULL) |
+| AC 91-74B | Flight in Icing Conditions | ✅ link-only stub (Sourced) | section-tree (WP-AC-FULL) |
+| AC 91-75 | Attitude Indicator | ✅ link-only stub (Sourced) | section-tree (WP-AC-FULL) |
 
 ### Airman Certification Standards
 
-5 cataloged and readable as section-tree (publication → area → task → element). 2 link-only.
+5 cataloged and readable as section-tree (publication → area → task → element). 2 link-only stubs deep-link to FAA-hosted PDFs (Wave 6, WP-ACS-LINK-ONLY).
 
 | FAA number | Common name | Stage |
 |------------|-------------|-------|
@@ -108,8 +109,8 @@ CFR is structurally section-tree (per-Part references with section rows undernea
 | FAA-S-ACS-8C | Instrument Rating — Airplane | ✅ readable, section-tree (174 sections) |
 | FAA-S-ACS-11A | Airline Transport Pilot — Airplane | ✅ readable, section-tree (485 sections) |
 | FAA-S-ACS-25 | Flight Instructor — Airplane | ⚠️ readable, but data thin — FAA didn't carry K/R/S codes (100 sections, 0 elements) |
-| FAA-S-ACS-9E | Flight Instructor – Instrument Airplane PTS (CFII) | ❌ link-only — PTS not ACS, different doc shape |
-| FAA-G-ACS-2 | ACS Companion Guide for Pilots | ❌ link-only — no manifest, not in download config |
+| FAA-S-8081-9E | Flight Instructor Instrument (Airplane / Helicopter) PTS (CFII) | ✅ link-only stub (Sourced) — PTS not ACS, different doc shape |
+| FAA-G-ACS-2 | ACS Companion Guide for Pilots | ✅ link-only stub (Sourced) — guide *about* the ACS, not an ACS publication |
 
 ### NTSB administrative law judge rulings
 
@@ -196,8 +197,9 @@ This is the sequenced path to "everything readable as section-tree" excluding ne
 | 6 | IFH section-tree promotion | ✅ shipped (WP-IFH-SECTION-TREE) | TOC parsed via new `toc-file-sidecar` strategy; 11 chapters / 587 sections; Section I/II quirk modeled as two L1 sections per chapter |
 | 7 | IPH section-tree promotion | ✅ shipped (WP-IPH-section-tree) | Class A2 chapter-aware ingest with TOC parse from whole-doc PDF pp.12-16; 7 chapters / 84 sections / 228 subsections |
 | 8 | AC section-tree promotion (existing 9) | ❌ not started | Replace whole-doc seeder with section-tree; per-AC TOC parse |
-| 9 | AC section-tree extraction (12 link-only) | ❌ not started | Add to download config + extract + section-tree seed |
-| 10 | ACS link-only completion | ❌ not started | `cfii-airplane-pts-9e` (PTS), `faa-g-acs-2-companion-guide` |
+| 9 | AC link-only stubs (12 cards) | ✅ shipped (WP-AC-LINK-ONLY, Wave 6) | YAML `url:` added for the 12 link-only ACs; library cards + citation chips deep-link to the FAA-hosted PDF (was the AC index landing). Body extraction (section-tree) is downstream WP-AC-FULL. |
+| 9b | AC section-tree extraction (12 link-only) | ❌ not started -- WP-AC-FULL | Add to download config + extract + section-tree seed |
+| 10 | ACS link-only completion | ✅ shipped (WP-ACS-LINK-ONLY, Wave 6) | CFII PTS (`cfii-airplane-pts-9e`, `kind: pts`) and ACS Companion Guide (`faa-g-acs-2-companion-guide`, `kind: other`) already had `url:` in YAML; status flipped from link-only to link-only stub (Sourced) |
 | 11 | New corpora — WP-SAFO + WP-INFO | ❌ not started | Pipelines are nearly identical; can be combined |
 <<<<<<< HEAD
 | 12 | New corpora — WP-CC | ⚠️ v1 (registry-only) shipped | 17 most-cited Chief Counsel interpretations + 1 NTSB Board order in registry; full pipeline (extractor + rendered bodies + render route) deferred |

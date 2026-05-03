@@ -1,13 +1,25 @@
 ---
-title: 'Spec: WP-AC-LINK-ONLY -- full pipeline for the 12 link-only AC cards'
+title: 'Spec: WP-AC-LINK-ONLY -- link-only stubs for the 12 link-only AC cards'
 product: study
 feature: wp-ac-link-only-pipeline
 type: spec
-status: draft
-review_status: pending
+status: shipped
+review_status: done
 ---
 
-# WP-AC-LINK-ONLY: full pipeline for the 12 link-only AC cards
+# WP-AC-LINK-ONLY: link-only stubs for the 12 link-only AC cards
+
+> **Wave 6 scope (shipped 2026-05-03):** stage-1 (Sourced) stubs only. The 12
+> Advisory Circulars already had `study.reference` rows seeded from
+> `course/references/advisory-circulars.yaml`, but no `url:` field, so library
+> cards and citation chips fell back to the FAA AC index landing page. This WP
+> added the canonical FAA Document Library PDF URL to each of the 12 YAML
+> rows so chips and library cards now deep-link to the source PDF directly.
+> Body extraction + section-tree (the "full pipeline" originally scoped below)
+> moves to **WP-AC-FULL** (Wave 8 deferred per `REFERENCES_ROADMAP.md`).
+>
+> The text below is the original ambition; preserved as the design target for
+> WP-AC-FULL. Wave 6 deliberately ships the cheap stubs first.
 
 Build the download → extract → register → seed pipeline for the 12 Advisory Circulars currently link-only on `/library`. Pattern is established by WP-AC (#480) and the 9 already-seeded ACs; this WP just expands the cached corpus.
 

@@ -5,10 +5,17 @@
 # (`AC 61-67C`). This matches what scripts/db/migrate-references-to-structured.ts
 # generates so the migration finds an authored row.
 #
-# URLs intentionally omitted for ACs without a stable, well-known direct PDF
-# link -- the FAA's AC index URL scheme rotates documentIDs over time. The
-# corpus can be wired to the FAA AC catalog (Phase 8 `ac` corpus) when its
-# resolver supplies live URLs.
+# URLs follow the FAA Document Library canonical pattern when known:
+# `https://www.faa.gov/documentLibrary/media/Advisory_Circular/AC_<EDITION>.pdf`
+# (where `<EDITION>` includes the revision letter, e.g. `00-6B`, `91-23A`).
+#
+# Readable (section-tree) ACs omit `url:` because the manifest's `source_url`
+# wins via the manifest-phase seeder, and the in-app reader is preferred over
+# the external link anyway. Link-only stubs (Wave 6: ACs whose body has not
+# been extracted yet) carry an explicit `url:` so the library card and
+# citation chips deep-link to the FAA-hosted PDF instead of the AC index
+# landing. When such a card later promotes to readable, its YAML `url:`
+# becomes redundant and may be removed.
 #
 # Most AC rows carry `primary_cert: null` -- ACs are FAA-published policy
 # under the regulations spine (grouped by series), not under any cert spine
@@ -41,6 +48,7 @@ references:
     edition: AC 00-24C
     title: Thunderstorms
     publisher: FAA
+    url: https://www.faa.gov/documentLibrary/media/Advisory_Circular/AC_00-24C.pdf
     subjects: [weather, emergencies]
     primary_cert: null
 
@@ -49,6 +57,7 @@ references:
     edition: AC 00-45H
     title: Aviation Weather Services
     publisher: FAA
+    url: https://www.faa.gov/documentLibrary/media/Advisory_Circular/AC_00-45H.pdf
     subjects: [weather]
     primary_cert: null
 
@@ -59,16 +68,22 @@ references:
     edition: AC 60-22
     title: Aeronautical Decision Making
     publisher: FAA
+    url: https://www.faa.gov/documentLibrary/media/Advisory_Circular/AC_60-22.pdf
     subjects: [human-factors]
     primary_cert: null
 
   # ---------- AC 61 series (airmen) ----------------------------------------
 
+  # AC 61-27 is the legacy AC superseded by the Instrument Flying Handbook
+  # (FAA-H-8083-15). Kept link-only for citation-historical references; new
+  # knowledge nodes should cite FAA-H-8083-15 instead. The FAA still hosts
+  # the PDF on its document library so the chip resolves to the source.
   - slug: ac-61-27
     kind: ac
     edition: AC 61-27C
     title: Instrument Flying Handbook (legacy AC superseded by FAA-H-8083-15)
     publisher: FAA
+    url: https://www.faa.gov/documentLibrary/media/Advisory_Circular/AC_61-27C.pdf
     subjects: [procedures, navigation, flight-instruments]
     primary_cert: null
 
@@ -85,6 +100,7 @@ references:
     edition: AC 61-67C
     title: Stall and Spin Awareness Training
     publisher: FAA
+    url: https://www.faa.gov/documentLibrary/media/Advisory_Circular/AC_61-67C.pdf
     subjects: [aerodynamics, emergencies]
     primary_cert: null
 
@@ -101,6 +117,7 @@ references:
     edition: AC 61-84B
     title: Role of Preflight Preparation
     publisher: FAA
+    url: https://www.faa.gov/documentLibrary/media/Advisory_Circular/AC_61-84B.pdf
     subjects: [procedures]
     primary_cert: null
 
@@ -117,6 +134,7 @@ references:
     edition: AC 61-134
     title: General Aviation Controlled Flight Into Terrain Awareness
     publisher: FAA
+    url: https://www.faa.gov/documentLibrary/media/Advisory_Circular/AC_61-134.pdf
     subjects: [human-factors, navigation]
     primary_cert: null
 
@@ -135,6 +153,7 @@ references:
     edition: AC 90-100A
     title: U.S. Terminal and En Route Area Navigation (RNAV) Operations
     publisher: FAA
+    url: https://www.faa.gov/documentLibrary/media/Advisory_Circular/AC_90-100A.pdf
     subjects: [navigation, procedures]
     primary_cert: null
 
@@ -153,6 +172,7 @@ references:
     edition: AC 91-23A
     title: Pilot's Weight and Balance Handbook
     publisher: FAA
+    url: https://www.faa.gov/documentLibrary/media/Advisory_Circular/AC_91-23A.pdf
     subjects: [weight-balance, performance]
     primary_cert: null
 
@@ -161,6 +181,7 @@ references:
     edition: AC 91-44A
     title: Operational and Maintenance Practices for Emergency Locator Transmitters and Receivers
     publisher: FAA
+    url: https://www.faa.gov/documentLibrary/media/Advisory_Circular/AC_91-44A.pdf
     subjects: [aircraft-systems, emergencies]
     primary_cert: null
 
@@ -169,6 +190,7 @@ references:
     edition: AC 91-74B
     title: Pilot Guide -- Flight in Icing Conditions
     publisher: FAA
+    url: https://www.faa.gov/documentLibrary/media/Advisory_Circular/AC_91-74B.pdf
     subjects: [weather, emergencies]
     primary_cert: null
 
@@ -177,6 +199,7 @@ references:
     edition: AC 91-75
     title: Attitude Indicator
     publisher: FAA
+    url: https://www.faa.gov/documentLibrary/media/Advisory_Circular/AC_91-75.pdf
     subjects: [flight-instruments]
     primary_cert: null
 

@@ -56,14 +56,14 @@ After Wave 3 lands and Wave 4 ships:
 | WP-HANGAR-REFS | References admin dashboard (TOC validation, force-reingest, health checks) | [spec](../work-packages/wp-hangar-references-dashboard/spec.md) |
 | WP-TOC-VALIDATION-SCHEMA | Per-doc validation manifest shape | [spec](../work-packages/wp-toc-validation-schema/spec.md) |
 
-### Wave 6 — Link-only completion
+### Wave 6 — Link-only completion (✅ shipped 2026-05-03)
 
-These can run in parallel; each is independent.
+Both shipped as stage-1 ("Sourced") stubs: the 12 ACs + 2 ACS/PTS publications now deep-link to their FAA-hosted PDFs from library cards and citation chips. Body extraction (full pipeline) moves to WP-AC-FULL / WP-ACS-FULL under Wave 8.
 
-| WP | Effect | Spec |
-|----|--------|------|
-| WP-AC-LINK-ONLY | Pipeline for the 12 link-only AC cards | [spec](../work-packages/wp-ac-link-only-pipeline/spec.md) |
-| WP-ACS-LINK-ONLY | Pipeline for the 2 link-only ACS / PTS cards | [spec](../work-packages/wp-acs-link-only-pipeline/spec.md) |
+| WP | Effect | Status |
+|----|--------|--------|
+| WP-AC-LINK-ONLY | YAML `url:` added to the 12 link-only AC stubs; chips + library cards deep-link to the FAA Document Library PDF (was the AC index landing) | ✅ shipped ([spec](../work-packages/wp-ac-link-only-pipeline/spec.md)) |
+| WP-ACS-LINK-ONLY | CFII PTS + ACS Companion Guide stubs verified URL-equipped; status flipped from "link-only" to "link-only stub (Sourced)" | ✅ shipped ([spec](../work-packages/wp-acs-link-only-pipeline/spec.md)) |
 
 ### Wave 7 — New corpora
 
@@ -79,7 +79,8 @@ Each is independent; can run in parallel. All are larger builds (new corpus pipe
 
 | WP | Trigger |
 |----|---------|
-| WP-AC-FULL | After WP-AC-LINK-ONLY; expand AC config from 21 → ~50 |
+| WP-AC-FULL | Body extraction + section-tree for the 12 Wave-6 AC stubs (and expansion 21 → ~50). Trigger: a knowledge node demands inline AC body, or the user wants AC text searchable. |
+| WP-ACS-FULL | Body extraction for CFII PTS + ACS Companion Guide. Trigger: CFII training content needs PTS body in app, OR FAA promotes CFII to ACS. |
 | WP-O8900-V5 | When CFI training content needs Vol 5 |
 | WP-SAFETY-BRIEF | Low priority |
 | Public-facing flightbag deploy | When platform goes external |
@@ -90,7 +91,7 @@ Each is independent; can run in parallel. All are larger builds (new corpus pipe
 - **Wave 2 + Wave 3** can run in parallel (different files)
 - **Within Wave 2**, all 5 promotions can run in parallel (different doc_ids); minor merge conflicts on `handbooks-extras.yaml` rebase cleanly
 - **Wave 4 → Wave 5** is sequential (citation migration needs flightbag scaffold)
-- **Wave 6 → Wave 7** can overlap if new-corpus WPs are picked up by separate teams; they share the dispatcher file but conflicts are mechanical
+- **Wave 6 → Wave 7** can overlap if new-corpus WPs are picked up by separate teams; they share the dispatcher file but conflicts are mechanical (Wave 6 link-only stubs shipped 2026-05-03; full body extraction lives in Wave 8 as WP-AC-FULL / WP-ACS-FULL)
 
 ## Anchors
 
