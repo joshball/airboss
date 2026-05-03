@@ -224,7 +224,14 @@ def detect_outline_from_text(
     chapter_last_seen: dict[int, int] = {}
     skip = skip_pages or set()
 
-    page_header_re = re.compile(r"^(\d+)-\d+\b")
+    # The standalone-line FAA page header is `<chap>-<page>` and nothing else
+    # on the line. Accepting trailing body text (e.g. `29-2, Certification of
+    # Transport Category Rotorcraft.`, an AC reference inside chapter 7's
+    # body) caused chapter-29 false positives during IPH ingest. Anchor the
+    # match to end-of-line (with trailing whitespace tolerance) so only true
+    # page headers fire. PHAK/AFH/AVWX headers already render as pure
+    # `<chap>-<page>` lines, so this tightening doesn't regress them.
+    page_header_re = re.compile(r"^(\d+)-\d+\s*$")
 
     with fitz.open(pdf_path) as doc:
         for page_num in range(doc.page_count):

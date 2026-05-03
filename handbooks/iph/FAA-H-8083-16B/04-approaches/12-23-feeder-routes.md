@@ -1,0 +1,29 @@
+---
+handbook: iph
+edition: FAA-H-8083-16B
+chapter_number: 4
+section_title: Feeder Routes
+faa_pages: 4-42
+section_number: 12
+subsection_number: 23
+source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/instrument_procedures_handbook/FAA-H-8083-16B.pdf
+---
+
+# Feeder Routes
+
+Feeder Routes
+By definition, a feeder route is a route depicted on IAP
+charts to designate routes for aircraft to proceed from the
+en route structure to the IAF. [Figure 4-29 ] Feeder routes,
+also referred to as approach transitions, technically are
+not considered approach segments but are an integral
+part of many IAPs. Although an approach procedure may
+have several feeder routes, pilots normally choose the one
+closest to the en route arrival point. When the IAF is part of
+the en route structure, there may be no need to designate
+additional routes for aircraft to proceed to the IAF.
+When a feeder route is designated, the chart provides
+the course or bearing to be flown, the distance, and the
+minimum altitude. En route airway obstacle clearance
+criteria apply to feeder routes, providing 1,000 feet of
+obstacle clearance (2,000 feet in mountainous areas).

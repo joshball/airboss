@@ -127,7 +127,10 @@ describe('DOC_ID_TO_FRIENDLY', () => {
 	it('covers every doc_id in the canonical YAML', () => {
 		// Authoritative list per scripts/sources/config/handbooks-extras.yaml. If
 		// this drifts, ingest.test.ts fails before the live YAML can mismatch.
-		const expected = ['faa-h-8083-2', 'faa-h-8083-9', 'faa-h-8083-16'];
+		// IFH (faa-h-8083-15) and IPH (faa-h-8083-16) were migrated to the
+		// chapter-aware Class A2 pipeline per WP-IFH-SECTION-TREE and
+		// WP-IPH-section-tree (2026-05-03); they are intentionally not in this list.
+		const expected = ['faa-h-8083-2', 'faa-h-8083-9'];
 		for (const docId of expected) {
 			expect(DOC_ID_TO_FRIENDLY[docId]).toBeDefined();
 		}
@@ -367,17 +370,22 @@ describe('runHandbooksExtrasIngest -- live cache (smoke)', () => {
 	const haveLiveCache = existsSync(join(liveCache, 'handbooks', 'faa-h-8083-2', 'faa-h-8083-2.pdf'));
 
 	(haveLiveCache ? it : it.skip)(
-		'ingests all 4 active cached handbooks against the live YAML',
+		'ingests all 3 active cached handbooks against the live YAML',
 		async () => {
 			// Use the live YAML so this also validates that the YAML and
 			// DOC_ID_TO_FRIENDLY agree.
+			//
+			// IFH (faa-h-8083-15) and IPH (faa-h-8083-16) were migrated to
+			// the chapter-aware Class A2 pipeline per WP-IFH-SECTION-TREE
+			// and WP-IPH-section-tree (2026-05-03); neither is in the
+			// handbooks-extras whole-doc-only set anymore.
 			_setHandbooksExtrasYamlPath(null);
 			const report = await runHandbooksExtrasIngest({ cacheRoot: liveCache, derivativeRoot: tempDerivative });
-			expect(report.ingested).toBe(4);
+			expect(report.ingested).toBe(3);
 			expect(report.skipped).toBe(0);
 			expect(report.promotionBatchId).not.toBeNull();
 			// Each derivative has a manifest + body
-			for (const slug of ['risk-management', 'aviation-instructor', 'iph', 'tips-mountain-flying']) {
+			for (const slug of ['risk-management', 'aviation-instructor', 'tips-mountain-flying']) {
 				const dir = join(tempDerivative, slug);
 				expect(existsSync(dir)).toBe(true);
 			}
@@ -401,7 +409,7 @@ describe('runHandbooksExtrasIngest -- live cache (smoke)', () => {
 
 			const second = await runHandbooksExtrasIngest({ cacheRoot: liveCache, derivativeRoot: tempDerivative });
 			expect(second.ingested).toBe(0);
-			expect(second.alreadyAccepted).toBe(4);
+			expect(second.alreadyAccepted).toBe(3);
 			expect(second.promotionBatchId).toBeNull();
 
 			const afterBytes = trackedPaths.map((p) => readFileSync(p, 'utf-8'));
@@ -450,8 +458,8 @@ describe('runHandbooksExtrasIngest -- live cache (smoke)', () => {
 			expect(existsSync(mtnLegacyBodyPath)).toBe(false);
 		},
 		// The smoke test runs the full extract pipeline twice (initial + the
-		// idempotency re-check), so 4 entries means 8 PDF extractions. Each
-		// takes ~30-60s; observed total is 240-320s on a warm cache. Budget
+		// idempotency re-check), so 3 entries means 6 PDF extractions. Each
+		// takes ~30-60s; observed total is 180-240s on a warm cache. Budget
 		// 600s to keep CI green even on cold-cache + slower-machine runs.
 		600000,
 	);
