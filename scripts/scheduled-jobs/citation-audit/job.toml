@@ -1,0 +1,19 @@
+# Scheduled job: citation-audit
+#
+# Run the stage-5 cross-link audit against the dev database and write a
+# markdown report to docs/loose-ends/ when findings exist. No PR; the
+# operator reviews the report and decides whether to backfill, retire, or
+# re-seed.
+
+name = "citation-audit"
+description = "Stage-5 cross-link audit: dead targets, dead sources, resolver coverage gaps"
+enabled = false
+
+# Weekly, Mondays at 09:30 local time.
+schedule = "30 9 * * 1"
+
+[behaviour]
+on_diff = "log-only"            # citation drift wants human review, not an auto-PR
+branch_prefix = "scheduled/"
+pr_labels = ["scheduled-job", "drift", "stage-5"]
+working_dir = "."

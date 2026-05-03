@@ -154,6 +154,32 @@ after a suspected FAA URL rotation.`,
 			'docs/decisions/022-chapter-source-ingestion/decision.md',
 		],
 	},
+	'audit-citations': {
+		summary: 'Stage-5 cross-link audit -- find dead targets, dead sources, and resolver coverage gaps',
+		what: `Walks every row in \`study.content_citations\` and reports:
+
+  - dead targets (citation points at a row that no longer exists)
+  - dead sources (citation's owning card / scenario / node was hard-deleted)
+  - resolver coverage gaps (corpus-backed citations whose corpus has no
+    resolver registered, so the citation chip cannot deep-link)
+  - invalid external_ref URLs
+
+Also emits per-target-type and per-corpus rollups so the library-completeness
+sequence can see at a glance which corpus is accumulating citations without a
+resolver behind it.
+
+  bun run sources audit-citations              # human-readable report
+  bun run sources audit-citations --json       # JSON report (scheduled-job format)`,
+		why: 'Stage 5 of the source ingestion pipeline ("Resolve & cite") completes when authored citations resolve to live deep-linkable targets. The audit is the read-only sanity check that catches drift -- soft-FK polymorphic edges have no DB-level enforcement, so a hard-delete of a card / reference can leave dangling citations until something looks for them.',
+		how: 'Reads `study.content_citations`, joins against `hangar.reference` (regulation + AC targets), `study.knowledge_node` (knowledge targets), and the source tables (`card`, `scenario`, `knowledge_node`). Consults the registered resolver registry (`@ab/sources` `ENUMERATED_CORPORA`) to detect coverage gaps. Read-only; never mutates the DB.',
+		links: [
+			'scripts/sources/audit-citations.ts',
+			'libs/bc/study/src/citations/audit.ts',
+			'libs/bc/study/src/citations/corpus.ts',
+			'docs/ingestion-pipeline/pipeline.md',
+			'docs/ingestion-pipeline/stage-status.md',
+		],
+	},
 	help: {
 		summary: 'Show the command index (or detailed help for one command)',
 		what: '`bun run sources help` prints the index. `bun run sources <command> --help` prints a what/why/how/links block. `bun run sources <command> <subcommand> --help` defers to the per-subcommand help (e.g. `bun run sources register cfr --help`).',
@@ -191,6 +217,7 @@ const COMMAND_GROUPS: readonly CommandGroup[] = [
 	{ label: 'Source bytes', commands: ['download', 'verify-urls', 'inventory'] },
 	{ label: 'Derivative ingestion', commands: ['register', 'extract'] },
 	{ label: 'Discovery', commands: ['discover-errata'] },
+	{ label: 'Cross-link', commands: ['audit-citations'] },
 	{ label: 'Utility', commands: ['help'] },
 ];
 
@@ -290,6 +317,19 @@ export async function runSourcesDispatcher(argv: readonly string[]): Promise<num
 			}
 			const { runInventory } = await import('./sources/inventory');
 			return await runInventory();
+		}
+		case 'audit-citations': {
+			if (rest.includes('--help') || rest.includes('-h')) {
+				printCommandHelp('audit-citations');
+				return 0;
+			}
+			const { runAuditCitations } = await import('./sources/audit-citations');
+			const code = await runAuditCitations(rest);
+			// `auditCitations` opens a postgres connection via @ab/db; close it
+			// so the bun process can exit cleanly.
+			const { client } = await import('@ab/db/connection');
+			await client.end({ timeout: 5 });
+			return code;
 		}
 		default: {
 			console.error(`Unknown command: ${head}\n`);
