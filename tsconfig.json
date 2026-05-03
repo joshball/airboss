@@ -55,7 +55,9 @@
 			"@ab/hangar-sync": ["libs/hangar-sync/src/index.ts"],
 			"@ab/hangar-sync/*": ["libs/hangar-sync/src/*"],
 			"@ab/sources": ["libs/sources/src/index.ts"],
-			"@ab/sources/*": ["libs/sources/src/*"]
+			"@ab/sources/*": ["libs/sources/src/*"],
+			"@ab/library": ["libs/library/src/index.ts"],
+			"@ab/library/*": ["libs/library/src/*"]
 		}
 	},
 	"include": ["libs/*/src/**/*.ts", "libs/bc/*/src/**/*.ts", "libs/themes/**/*.ts", "apps/*/src/**/*.ts", "scripts/**/*.ts"],

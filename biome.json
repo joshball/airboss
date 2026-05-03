@@ -79,6 +79,8 @@
 				"libs/aviation/**/*.ts",
 				"libs/audit/**/*.ts",
 				"libs/sources/**/*.ts",
+				"libs/library/**/*.ts",
+				"libs/library/**/*.svelte",
 				"libs/activities/**/*.ts",
 				"libs/bc/study/**/*.ts",
 				"libs/bc/sim/**/*.ts",

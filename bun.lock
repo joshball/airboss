@@ -211,6 +211,15 @@
         "@ab/utils": "workspace:*",
       },
     },
+    "libs/library": {
+      "name": "@ab/library",
+      "version": "0.0.1",
+      "dependencies": {
+        "@ab/constants": "workspace:*",
+        "@ab/sources": "workspace:*",
+        "@ab/ui": "workspace:*",
+      },
+    },
     "libs/sources": {
       "name": "@ab/sources",
       "dependencies": {
@@ -276,6 +285,8 @@
     "@ab/hangar-sync": ["@ab/hangar-sync@workspace:libs/hangar-sync"],
 
     "@ab/help": ["@ab/help@workspace:libs/help"],
+
+    "@ab/library": ["@ab/library@workspace:libs/library"],
 
     "@ab/sim": ["@ab/sim@workspace:apps/sim"],
 
