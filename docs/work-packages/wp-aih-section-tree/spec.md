@@ -3,7 +3,7 @@ title: 'WP-AIH -- Aviation Instructor''s Handbook section-tree promotion'
 product: study
 feature: wp-aih-section-tree
 type: spec
-status: unread
+status: shipped
 review_status: pending
 created: 2026-05-02
 ---
