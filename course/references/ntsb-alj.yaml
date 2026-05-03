@@ -1,0 +1,51 @@
+# NTSB administrative law judge (ALJ) rulings.
+#
+# Per WP-NTSB-ALJ spec, these are quasi-judicial decisions on FAA enforcement
+# actions and surface in CFI ground-school discussion of pilot deviations and
+# accident analysis. The umbrella `ntsb` row in `ntsb.yaml` stays as a
+# citation fallback for legacy / non-pinned references; the rows below carry
+# per-ruling cards for the most pedagogically valuable cases.
+#
+# Slug shape: `ntsb-alj-<prefix>-<sequence>` (lowercase). Edition is the
+# ruling's release year. URLs default to the OALJ landing page because per-
+# ruling PDFs are CMS-managed and don't compose stably from the case number;
+# extend the resolver to emit per-ruling URLs when WP-NTSB-ALJ Phase 5
+# lands.
+#
+# Kind reuses the existing `ntsb` REFERENCE_KIND value -- ALJ rulings are NTSB
+# documents and share the umbrella card's downstream chrome (citation
+# rendering, reference-tag taxonomy). When a future WP splits the data model,
+# a dedicated `ntsb-alj` REFERENCE_KIND can be added.
+#
+# Subjects: ALJ enforcement rulings cluster around regulatory interpretation
+# (`regulations`) and pilot deviations / human factors (`human-factors`).
+# `primary_cert: null` keeps these cert-agnostic; they appear under the
+# regulations spine alongside the other NTSB references.
+
+references:
+  - slug: ntsb-alj-ea-5567
+    kind: ntsb
+    edition: '2011'
+    title: NTSB Order EA-5567 (Administrative Law Judge ruling)
+    publisher: NTSB
+    url: https://www.ntsb.gov/legal/alj/Pages/default.aspx
+    subjects: [regulations, human-factors]
+    primary_cert: null
+
+  - slug: ntsb-alj-ea-5704
+    kind: ntsb
+    edition: '2014'
+    title: NTSB Order EA-5704 (Administrative Law Judge ruling)
+    publisher: NTSB
+    url: https://www.ntsb.gov/legal/alj/Pages/default.aspx
+    subjects: [regulations, human-factors]
+    primary_cert: null
+
+  - slug: ntsb-alj-ea-5631
+    kind: ntsb
+    edition: '2012'
+    title: NTSB Order EA-5631 (Administrative Law Judge ruling)
+    publisher: NTSB
+    url: https://www.ntsb.gov/legal/alj/Pages/default.aspx
+    subjects: [regulations, human-factors]
+    primary_cert: null

@@ -735,11 +735,95 @@ export const cfrSectionsFileSchema = z.object({
 export type CfrSectionsFile = z.infer<typeof cfrSectionsFileSchema>;
 
 /**
+ * NTSB ALJ ruling case-number regex (manifest-side). Lowercase prefix from
+ * the locked vocabulary (`ea`, `se`, `wd`, `ia`) followed by a hyphen and
+ * digits. Mirrors `ALJ_CASE_NUMBER_PATTERN` in
+ * `libs/sources/src/ntsb-alj/locator.ts`; the seeder builds the `airboss-ref:`
+ * URL and the DB `document_slug` (`ntsb-alj-<case-number>`) from this value.
+ */
+const NTSB_ALJ_CASE_NUMBER_REGEX = /^(ea|se|wd|ia)-[0-9]+$/;
+
+/**
+ * NTSB ALJ ruling section code. Five named opinion sections per the WP-NTSB-ALJ
+ * spec; mirrors `ALJ_SECTION_PATTERN` in the locator. Kebab-case lowercase.
+ */
+const NTSB_ALJ_SECTION_CODE_REGEX = /^(?:findings-of-fact|conclusions-of-law|order|discussion|final)$/;
+
+/**
+ * Single legal level for ALJ ruling sections (depth 1 under the document).
+ * Reuses the `'section'` vocabulary so the renderer can dispatch generic
+ * section chrome; the per-corpus narrative (Findings / Conclusions / Order)
+ * is carried on the section title.
+ */
+const NTSB_ALJ_SECTION_TREE_LEVELS = ['section'] as const;
+
+/**
+ * One opinion-section row inside an NTSB-ALJ manifest's `sections[]`. Mirrors
+ * the shape of the handbook section schema but scoped to the closed
+ * five-section vocabulary the WP defines (`findings-of-fact`,
+ * `conclusions-of-law`, `order`, `discussion`, `final`).
+ */
+export const ntsbAljManifestSectionSchema = z.object({
+	level: z.enum(NTSB_ALJ_SECTION_TREE_LEVELS),
+	code: z.string().regex(NTSB_ALJ_SECTION_CODE_REGEX),
+	ordinal: z.number().int().nonnegative(),
+	title: z.string().min(1),
+	/** Repo-relative path to the per-section markdown body. */
+	body_path: selfDescribingPath,
+	/** SHA-256 hex digest of the section markdown body. */
+	content_hash: z.string().regex(/^[0-9a-f]{64}$/i),
+});
+export type NtsbAljManifestSection = z.infer<typeof ntsbAljManifestSectionSchema>;
+
+/**
+ * NTSB-ALJ ruling manifest (`kind: 'ntsb-alj'`, WP-NTSB-ALJ). One per
+ * `(case_number, edition)` pair under `<repo>/ntsb-alj/<case>/<edition>/
+ * manifest.json`. The seed adapter dispatches on `sections[].length`:
+ *
+ *   - `sections === []`  -> whole-doc behavior. The `body_path` becomes a
+ *                          single `reference_section` row at depth 0,
+ *                          level `'document'`, code `'1'`. Phase 1 of the WP
+ *                          ships in this shape (manual curation; no per-
+ *                          section extraction yet).
+ *   - `sections.length > 0` -> section-tree behavior. The seeder writes one
+ *                              row per `sections[]` entry into the depth-1
+ *                              opinion-section tree under the document root.
+ *                              Used when content authors add per-ruling
+ *                              extraction.
+ *
+ * Subjects + primary_cert are NOT carried on the manifest -- those live on
+ * the YAML row in `course/references/ntsb-alj.yaml` (and survive seed via
+ * `upsertReference`'s null-default-on-conflict path, same pattern as AC).
+ */
+export const ntsbAljManifestSchema = z.object({
+	kind: z.literal('ntsb-alj'),
+	schema_version: z.number().int().positive().optional(),
+	corpus: z.literal('ntsb-alj'),
+	case_number: z.string().regex(NTSB_ALJ_CASE_NUMBER_REGEX),
+	edition: z.string().min(1).max(64),
+	title: z.string().min(1),
+	publisher: z.string().min(1).default('NTSB'),
+	publication_date: z
+		.string()
+		.regex(/^\d{4}-\d{2}-\d{2}$/)
+		.nullable(),
+	source_url: z.string().url(),
+	source_sha256: z.string().regex(/^[0-9a-f]{64}$/i),
+	fetched_at: z.string().datetime({ offset: true }),
+	page_count: z.number().int().positive().nullable().optional(),
+	body_path: selfDescribingPath,
+	body_sha256: z.string().regex(/^[0-9a-f]{64}$/i),
+	sections: z.array(ntsbAljManifestSectionSchema).default([]),
+});
+export type NtsbAljManifest = z.infer<typeof ntsbAljManifestSchema>;
+
+/**
  * Top-level shape of `<corpus>/<doc>/<edition>/manifest.json`. Discriminated
  * union over manifest kind: section-tree (`kind: 'handbook'`), whole-doc
  * (`kind: 'whole-doc'`), AIM (`kind: 'aim'`), AC (`kind: 'ac'`), CFR
- * (`kind: 'cfr'`), or ACS (`kind: 'acs'`). The seed dispatches on the
- * discriminator to choose the right adapter.
+ * (`kind: 'cfr'`), ACS (`kind: 'acs'`), or NTSB-ALJ ruling
+ * (`kind: 'ntsb-alj'`). The seed dispatches on the discriminator to choose
+ * the right adapter.
  */
 export const manifestSchema = z.discriminatedUnion('kind', [
 	sectionTreeManifestSchema,
@@ -748,6 +832,7 @@ export const manifestSchema = z.discriminatedUnion('kind', [
 	acManifestSchema,
 	cfrManifestSchema,
 	acsManifestSchema,
+	ntsbAljManifestSchema,
 ]);
 export type Manifest = z.infer<typeof manifestSchema>;
 

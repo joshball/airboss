@@ -101,6 +101,22 @@ describe('urlForReference -- acs', () => {
 	});
 });
 
+describe('urlForReference -- ntsb-alj', () => {
+	it('maps a whole-ruling URI to FLIGHTBAG_NTSB_ALJ', () => {
+		expect(urlForReference(id('airboss-ref:ntsb-alj/ea-5567'))).toBe(ROUTES.FLIGHTBAG_NTSB_ALJ('ea-5567'));
+	});
+
+	it('maps a section-depth URI to FLIGHTBAG_NTSB_ALJ_SECTION', () => {
+		expect(urlForReference(id('airboss-ref:ntsb-alj/ea-5567/findings-of-fact'))).toBe(
+			ROUTES.FLIGHTBAG_NTSB_ALJ_SECTION('ea-5567', 'findings-of-fact'),
+		);
+	});
+
+	it('falls back to home for a malformed locator', () => {
+		expect(urlForReference(id('airboss-ref:ntsb-alj/xy-1234'))).toBe(ROUTES.FLIGHTBAG_HOME);
+	});
+});
+
 describe('urlForReference -- error cases', () => {
 	it('returns FLIGHTBAG_HOME for non-airboss-ref strings', () => {
 		expect(urlForReference(id('https://example.com/foo'))).toBe(ROUTES.FLIGHTBAG_HOME);

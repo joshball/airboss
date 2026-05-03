@@ -58,6 +58,9 @@ describe('productionRegistry integration', () => {
 		expect(productionRegistry.isCorpusKnown('safo')).toBe(true);
 		expect(productionRegistry.isCorpusKnown('tcds')).toBe(true);
 		expect(productionRegistry.isCorpusKnown('asrs')).toBe(true);
+		// WP-NTSB-ALJ: ntsb-alj resolver registers via side-effect import from
+		// the lib root. Distinct from the `ntsb` corpus (accident reports).
+		expect(productionRegistry.isCorpusKnown('ntsb-alj')).toBe(true);
 	});
 
 	test('PR-02: isCorpusKnown returns false for non-enumerated', () => {

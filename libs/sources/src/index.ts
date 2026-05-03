@@ -38,6 +38,8 @@ import './info/index.ts';
 import './safo/index.ts';
 import './tcds/index.ts';
 import './asrs/index.ts';
+// Side-effect import: registers the `ntsb-alj` CorpusResolver (WP-NTSB-ALJ).
+import './ntsb-alj/index.ts';
 
 export { parseAcLocator } from './ac/locator.ts';
 export { parseAcsLocator } from './acs/locator.ts';

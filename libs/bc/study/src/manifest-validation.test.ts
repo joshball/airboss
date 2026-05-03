@@ -18,6 +18,7 @@ import {
 	cfrSectionsFileSchema,
 	handbookManifestErrataEntrySchema,
 	manifestSchema,
+	ntsbAljManifestSchema,
 	sectionTreeManifestSchema,
 	wholeDocManifestSchema,
 } from './manifest-validation';
@@ -171,6 +172,24 @@ const VALID_CFR = {
 	partCount: 226,
 	subpartCount: 664,
 	sectionCount: 6328,
+} as const;
+
+const VALID_NTSB_ALJ = {
+	kind: 'ntsb-alj',
+	schema_version: 1,
+	corpus: 'ntsb-alj',
+	case_number: 'ea-5567',
+	edition: '2011',
+	title: 'NTSB Order EA-5567 (Administrative Law Judge ruling)',
+	publisher: 'NTSB',
+	publication_date: '2011-06-15',
+	source_url: 'https://www.ntsb.gov/legal/alj/Pages/default.aspx',
+	source_sha256: 'a'.repeat(64),
+	fetched_at: '2026-05-03T00:00:00.000+00:00',
+	page_count: 18,
+	body_path: 'ntsb-alj/ea-5567/2011/ntsb-alj-ea-5567.md',
+	body_sha256: 'b'.repeat(64),
+	sections: [],
 } as const;
 
 const VALID_CFR_SECTIONS_FILE = {
@@ -499,6 +518,92 @@ describe('manifestSchema (discriminated union on kind)', () => {
 			],
 		});
 		expect(result.success).toBe(true);
+	});
+
+	it('accepts a valid NTSB-ALJ manifest (whole-doc mode)', () => {
+		const result = manifestSchema.safeParse(VALID_NTSB_ALJ);
+		expect(result.success).toBe(true);
+		if (result.success) {
+			expect(result.data.kind).toBe('ntsb-alj');
+		}
+	});
+
+	it('accepts an NTSB-ALJ manifest with section-tree opinion sections', () => {
+		const sectionTreeAlj = {
+			...VALID_NTSB_ALJ,
+			sections: [
+				{
+					level: 'section',
+					code: 'findings-of-fact',
+					ordinal: 0,
+					title: 'Findings of Fact',
+					body_path: 'ntsb-alj/ea-5567/2011/findings-of-fact.md',
+					content_hash: 'c'.repeat(64),
+				},
+				{
+					level: 'section',
+					code: 'conclusions-of-law',
+					ordinal: 1,
+					title: 'Conclusions of Law',
+					body_path: 'ntsb-alj/ea-5567/2011/conclusions-of-law.md',
+					content_hash: 'd'.repeat(64),
+				},
+				{
+					level: 'section',
+					code: 'order',
+					ordinal: 2,
+					title: 'Order',
+					body_path: 'ntsb-alj/ea-5567/2011/order.md',
+					content_hash: 'e'.repeat(64),
+				},
+			],
+		};
+		const result = ntsbAljManifestSchema.safeParse(sectionTreeAlj);
+		expect(result.success).toBe(true);
+	});
+
+	it('rejects an NTSB-ALJ manifest with an unknown opinion-section code', () => {
+		const broken = {
+			...VALID_NTSB_ALJ,
+			sections: [
+				{
+					level: 'section',
+					code: 'preamble',
+					ordinal: 0,
+					title: 'Preamble',
+					body_path: 'ntsb-alj/ea-5567/2011/preamble.md',
+					content_hash: 'c'.repeat(64),
+				},
+			],
+		};
+		const result = ntsbAljManifestSchema.safeParse(broken);
+		expect(result.success).toBe(false);
+	});
+
+	it('rejects an NTSB-ALJ manifest with an unknown case-number prefix', () => {
+		const result = ntsbAljManifestSchema.safeParse({ ...VALID_NTSB_ALJ, case_number: 'xy-1234' });
+		expect(result.success).toBe(false);
+	});
+
+	it('rejects an NTSB-ALJ manifest with an uppercase case-number prefix', () => {
+		const result = ntsbAljManifestSchema.safeParse({ ...VALID_NTSB_ALJ, case_number: 'EA-5567' });
+		expect(result.success).toBe(false);
+	});
+
+	it("rejects an NTSB-ALJ manifest missing 'body_path'", () => {
+		const { body_path: _drop, ...withoutBody } = VALID_NTSB_ALJ;
+		const result = ntsbAljManifestSchema.safeParse(withoutBody);
+		expect(result.success).toBe(false);
+	});
+
+	it('rejects an NTSB-ALJ manifest with malformed body_sha256', () => {
+		const result = ntsbAljManifestSchema.safeParse({ ...VALID_NTSB_ALJ, body_sha256: 'not-a-hex' });
+		expect(result.success).toBe(false);
+	});
+
+	it('rejects an NTSB-ALJ manifest with the wrong corpus literal', () => {
+		const result = ntsbAljManifestSchema.safeParse({ ...VALID_NTSB_ALJ, corpus: 'ntsb' });
+		expect(result.success).toBe(false);
 	});
 });
 

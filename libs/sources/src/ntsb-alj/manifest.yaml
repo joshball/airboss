@@ -1,0 +1,44 @@
+# NTSB administrative law judge ruling manifest -- registry seeding source.
+#
+# Source of truth: WP-NTSB-ALJ spec at `docs/work-packages/wp-ntsb-alj/spec.md`
+# + ADR 019 §2.6 (registry population). Loaded by `seedNtsbAljFromManifest`.
+#
+# Locator shape: `<prefix>-<sequence>` where prefix is one of `ea` (Board
+# Enforcement Appeals order), `se` (Safety / Enforcement docket), `wd`
+# (Withdrawal), or `ia` (Informal action). Stored lowercase in the locator;
+# canonical FAA presentations uppercase the prefix (`EA-5567`).
+#
+# Phase 1 (per spec): manual curation of the most pedagogically valuable
+# rulings -- the ones cited in CFI training material, AC 91-79-style accident
+# analysis, and pilot-deviation discussions. Add over time as content authors
+# cite additional case numbers.
+#
+# ALJ rulings are immutable post-publication; no `?at=` pin required.
+# `editions[].id` carries the ruling's release year (`YYYY`) or month
+# (`YYYY-MM`). `source_url` carries the per-ruling PDF link when known;
+# otherwise the resolver falls back to the OALJ landing page.
+
+ntsb-alj:
+  - id: ea-5567
+    canonical_short: EA-5567
+    canonical_formal: NTSB Order EA-5567
+    canonical_title: NTSB Administrative Law Judge Ruling EA-5567
+    editions:
+      - id: '2011'
+        lifecycle: accepted
+
+  - id: ea-5704
+    canonical_short: EA-5704
+    canonical_formal: NTSB Order EA-5704
+    canonical_title: NTSB Administrative Law Judge Ruling EA-5704
+    editions:
+      - id: '2014'
+        lifecycle: accepted
+
+  - id: ea-5631
+    canonical_short: EA-5631
+    canonical_formal: NTSB Order EA-5631
+    canonical_title: NTSB Administrative Law Judge Ruling EA-5631
+    editions:
+      - id: '2012'
+        lifecycle: accepted

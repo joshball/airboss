@@ -82,6 +82,7 @@ const BOOTSTRAP_CORPORA: readonly string[] = [
 	'asrs',
 	'info',
 	'safo',
+	'ntsb-alj',
 ];
 
 /**

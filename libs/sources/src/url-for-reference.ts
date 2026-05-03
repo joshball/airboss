@@ -16,6 +16,7 @@ import { parseAcLocator } from './ac/locator.ts';
 import { parseAcsLocator } from './acs/locator.ts';
 import { parseAimLocator } from './aim/locator.ts';
 import { parseHandbooksLocator } from './handbooks/locator.ts';
+import { parseNtsbAljLocator } from './ntsb-alj/locator.ts';
 import { isParseError, parseIdentifier } from './parser.ts';
 import { parseRegsLocator } from './regs/locator.ts';
 import type { SourceId } from './types.ts';
@@ -57,6 +58,8 @@ export function urlForReference(uri: SourceId): string {
 			return urlForAc(parsed.locator);
 		case 'acs':
 			return urlForAcs(parsed.locator);
+		case 'ntsb-alj':
+			return urlForNtsbAlj(parsed.locator);
 		default:
 			return ROUTES.FLIGHTBAG_HOME;
 	}
@@ -122,4 +125,15 @@ function urlForAcs(locator: string): string {
 	}
 	// Whole-publication and area-only ACS URIs have no flightbag route yet.
 	return ROUTES.FLIGHTBAG_HOME;
+}
+
+function urlForNtsbAlj(locator: string): string {
+	const result = parseNtsbAljLocator(locator);
+	if (result.kind === 'error') return ROUTES.FLIGHTBAG_HOME;
+	const ntsbAlj = result.ntsbAlj;
+	if (ntsbAlj === undefined) return ROUTES.FLIGHTBAG_HOME;
+	if (ntsbAlj.section !== undefined) {
+		return ROUTES.FLIGHTBAG_NTSB_ALJ_SECTION(ntsbAlj.caseNumber, ntsbAlj.section);
+	}
+	return ROUTES.FLIGHTBAG_NTSB_ALJ(ntsbAlj.caseNumber);
 }

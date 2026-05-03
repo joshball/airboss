@@ -60,6 +60,7 @@ import { seedFormsFromManifest } from '@ab/sources/forms/seed';
 import { seedInfoFromManifest } from '@ab/sources/info/seed';
 import { seedInterpFromManifest } from '@ab/sources/interp/seed';
 import { seedNtsbFromManifest } from '@ab/sources/ntsb/seed';
+import { seedNtsbAljFromManifest } from '@ab/sources/ntsb-alj/seed';
 import { seedOrdersFromManifest } from '@ab/sources/orders/seed';
 import { seedPlatesFromManifest } from '@ab/sources/plates/seed';
 import { seedPohsFromManifest } from '@ab/sources/pohs/seed';
@@ -175,6 +176,7 @@ async function phaseReferenceCorpusSeed(): Promise<void> {
 	const seeders: ReadonlyArray<readonly [string, () => Promise<CorpusSeedReport>]> = [
 		['orders', seedOrdersFromManifest],
 		['ntsb', seedNtsbFromManifest],
+		['ntsb-alj', seedNtsbAljFromManifest],
 		['interp', seedInterpFromManifest],
 		['pohs', seedPohsFromManifest],
 		['sectionals', seedSectionalsFromManifest],
