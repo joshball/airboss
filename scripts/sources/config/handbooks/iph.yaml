@@ -1,0 +1,157 @@
+# Instrument Procedures Handbook (IPH)
+#
+# Source: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/instrument_procedures_handbook/FAA-H-8083-16B.pdf
+# Edition: FAA-H-8083-16B (Sept. 2017; current bound edition as of 2026-05)
+#
+# Errata: none on the FAA index for this edition. The empty `errata: []`
+# block below is the canonical placeholder so discovery scans report
+# "none found" rather than "field missing" (per ADR 020).
+#
+# Migration provenance: this YAML promotes IPH from the Class C
+# `handbooks-extras.yaml` whole-doc shape to the Class A2 chapter-aware
+# shape. See `docs/work-packages/wp-iph-section-tree/spec.md` and the
+# whole-doc-promotion research doc (`docs/work-packages/whole-doc-promotion/research.md`,
+# §IPH).
+
+document_slug: iph
+edition: FAA-H-8083-16B
+kind: handbook
+title: "Instrument Procedures Handbook"
+publisher: FAA
+subjects: [procedures, navigation, flight-instruments]
+
+# -----------------------------------------------------------------------------
+# Source download (TS downloader)
+# -----------------------------------------------------------------------------
+
+# Whole-doc PDF (kept alongside chapter PDFs for cross-chapter reference
+# and -- crucially -- for the printed TOC parse below).
+whole_doc:
+  url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/instrument_procedures_handbook/FAA-H-8083-16B.pdf
+  filename: FAA-H-8083-16B.pdf
+
+# Per-chapter PDFs. IPH is Class A2 (chapter PDFs + separately-distributed
+# ancillaries: Front_Page, Table_of_Contents, Appendix_A, Appendix_B,
+# Glossary). The publisher's instrument_procedures_handbook/ index links
+# every chapter PDF directly with no zero-padding (`Chapter_<N>.pdf`); this
+# is the AFH-style direct pattern with file_ordinal_offset=0 and no `{NN}`
+# substitution (the URL only uses `{N}`).
+chapter_pdfs:
+  direct_pattern: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/instrument_procedures_handbook/FAA-H-8083-16B_Chapter_{N}.pdf
+  chapter_count: 7
+  file_ordinal_offset: 0
+  ancillary:
+    # The IPH publisher splits front matter into Front_Cover.pdf +
+    # Front_Page.pdf. We download Front_Page.pdf as the canonical front
+    # matter (cover + foreword + acknowledgments + preface). The
+    # Front_Cover.pdf is duplicated in the whole-doc PDF and is not
+    # load-bearing for the derivative tree; skipping it keeps the
+    # cache layout symmetrical with AFH's single-front-PDF shape.
+    - kind: front
+      url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/instrument_procedures_handbook/FAA-H-8083-16B_Front_Page.pdf
+    # Standalone Table of Contents PDF (5 pages, identical to whole-doc
+    # PDF pp. 12-16). Cached for audit + future tooling that may need
+    # to consume the TOC outside the body PDF; the section parser reads
+    # from the whole-doc PDF range below to keep the parser surface flat.
+    - kind: toc
+      url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/instrument_procedures_handbook/FAA-H-8083-16B_Table_of_Contents.pdf
+    - kind: appendix
+      appendix_id: A
+      url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/instrument_procedures_handbook/FAA-H-8083-16B_Appendix_A.pdf
+    - kind: appendix
+      appendix_id: B
+      url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/instrument_procedures_handbook/FAA-H-8083-16B_Appendix_B.pdf
+    - kind: glossary
+      url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/instrument_procedures_handbook/FAA-H-8083-16B_Glossary.pdf
+
+# URL-substring patterns the downloader skips even if the publisher serves
+# them. Default empty; documented for future use.
+excluded_assets: []
+
+# Legacy field used by the Python ingest tool when whole_doc is absent.
+source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/instrument_procedures_handbook/FAA-H-8083-16B.pdf
+expected_pages: 312
+# IPH chapter cover pages typeset the inline `Chapter N - <Title>` heading
+# with the same FAA `<chap>-<page>` page-footer convention used by AFH and
+# PHAK. Front matter (cover + ToC + preface) sits at PDF pp.1-16; chapter 1
+# starts at PDF p.17 (printed `1-1`).
+page_offset: 0
+# IPH's PyMuPDF outline carries 14 entries, all depth 1 (chapters and
+# appendices only -- no sections or subsections). Bookmark strategy would
+# emit a chapter-only tree and the `extract_via_toc` step would have no
+# body chapters to anchor to. The content scanner derives the chapter
+# tree from page footers -- same path AFH uses.
+outline_strategy: content
+outline_overrides: []
+title_overrides: {}
+figure_prefix_pattern: 'Figure (\d+)-(\d+)\.'
+table_prefix_pattern: 'Table (\d+)-(\d+)\.'
+
+# -----------------------------------------------------------------------------
+# Section-tree extraction
+# -----------------------------------------------------------------------------
+
+# `toc` = deterministic Python parser of the printed TOC; `prompt` =
+# paste-and-run flow; `compare` = diff the prompt JSONs against TOC.
+# IPH's printed TOC carries depth-3 sections cleanly, so the TOC parser
+# is the right default.
+section_strategy: toc
+
+# Printed Table of Contents page range (PDF page numbers).
+# IPH 16B TOC spans PDF pp. 12-16 (5 pages).
+#
+# IPH's TOC uses the dotted-leader form (`Departure Procedures ......... 1-1`),
+# not AFH's right-column form. The `dotted_leader` pattern is the
+# single-line title + dots + `<chapter>-<page>` shape that
+# `_DOTTED_LEADER_RE` already handles.
+toc:
+  page_start: 12
+  page_end: 16
+  pattern: dotted_leader
+
+# IPH chapter cover pages typeset the chapter heading in plain (not red)
+# Arial-Bold; section headings inside a chapter are also Arial-Bold but
+# at a different size class. Body verification stays off until the
+# fingerprint is tuned per-chapter; the TOC parse is the source of
+# truth in the meantime. (Mirrors AFH / AVWX.)
+heading_style:
+  body_font_size: 10.0
+  heading_min_size_ratio: 1.10
+  heading_color_hex: '#000000'
+  heading_match_threshold: 0.85
+  verify_in_body: false
+
+# Per-chapter input cap for the plaintext sidecar the prompt-flow agent
+# would read. IPH's longest chapter is ch4 Approaches at ~92 PDF pages
+# (the largest single chapter across all FAA handbooks per the research
+# doc). Sized at 200,000 to match AFH's empirical cap; re-measure with
+# tools/handbook-ingest/measure_chapter_sizes.py if a future edition
+# restyles. Required when section_strategy ever flips to `prompt`;
+# kept here as a stable default since the chapter-PDF mode in
+# `chapter_plaintext.py` ignores the cap when chapter PDFs are cached.
+prompt:
+  chapter_text_max_chars: 200000
+
+# IPH chapter cover pages render the chapter title once on the cover and
+# then the content begins on the next page. Strip the inline
+# "Chapter N - <Title>" sentinel so the chapter overview body doesn't
+# open with a stutter.
+chapter_cover_strip:
+  enabled: true
+  max_lines: 6
+
+page_label_walk_back: 5
+chapter_overrides: {}
+
+# Declarative errata list. Each entry is one FAA-published amendment to
+# this edition. IPH 16B (Sept 2017) has no published errata as of
+# 2026-05-02; the empty list is a deliberate placeholder so the field
+# is uniform across handbooks and discovery scans report "none found"
+# rather than "field missing". See ADR 020.
+errata: []
+
+# Discovery dismissal stop-list. Each entry silences a candidate that
+# `bun run sources discover-errata` would otherwise re-flag every week.
+# Schema: at least one of `url` or `sha256`; optional `reason` is a
+# free-form audit note.
+dismissed_errata: []
