@@ -19,6 +19,7 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { db } from '@ab/db/connection';
 import { __ac_seed_mapping_internal__ } from '@ab/sources/ac';
+import { __acs_seed_mapping_internal__ } from '@ab/sources/acs';
 import { eq } from 'drizzle-orm';
 import { afterAll, describe, expect, it } from 'vitest';
 import { reference, referenceFigure, referenceSection } from '../../libs/bc/study/src/schema';
@@ -37,6 +38,7 @@ const HANDBOOKS_DIR = join(REPO_ROOT, 'handbooks');
 const AIM_DIR = join(REPO_ROOT, 'aim');
 const AC_DIR = join(REPO_ROOT, 'ac');
 const REGS_DIR = join(REPO_ROOT, 'regulations');
+const ACS_DIR = join(REPO_ROOT, 'acs');
 
 interface Fixture {
 	slug: string;
@@ -720,6 +722,219 @@ describe('seedReferencesFromManifest', () => {
 		);
 
 		await expect(seedReferencesFromManifest({ documentSlug: dirSlug })).rejects.toThrow(/missing body file/);
+	});
+
+	it('ACS manifest produces a 4-level tree (publication -> area -> task -> element)', async () => {
+		// Synthetic manifest slug + DB documentSlug so the test doesn't collide
+		// with the built-in production ACS list. The test-only mapping helper
+		// makes the slug resolvable without polluting the canonical registry.
+		const manifestSlug = `test-acs-${SUITE_TOKEN}`;
+		const documentSlug = `test-acs-doc-${SUITE_TOKEN}`;
+		const edition = 'TEST-ACS-1';
+		__acs_seed_mapping_internal__.register({ manifestSlug, documentSlug, edition });
+
+		const slugDir = join(ACS_DIR, manifestSlug);
+		const areaDir = join(slugDir, 'area-01');
+		mkdirSync(areaDir, { recursive: true });
+		const taskBody = '# Task A. Sample\n\nFull task body.\n';
+		const taskBodyPath = join(areaDir, 'task-a.md');
+		writeFileSync(taskBodyPath, taskBody);
+		const taskBodySha = sha256Hex(taskBody);
+
+		const manifestPath = join(slugDir, 'manifest.json');
+		writeFileSync(
+			manifestPath,
+			JSON.stringify({
+				kind: 'acs',
+				schema_version: 1,
+				corpus: 'acs',
+				slug: manifestSlug,
+				title: 'Synthetic ACS Test',
+				publisher: 'FAA',
+				publication_date: '2026-01-15',
+				source_url: 'https://example.com/acs-test.pdf',
+				source_sha256: 'a'.repeat(64),
+				fetched_at: '2026-04-26T00:00:00.000+00:00',
+				page_count: 50,
+				areas: [
+					{
+						area: '01',
+						title: 'Sample Area',
+						tasks: [
+							{
+								task: 'a',
+								title: 'Sample Task',
+								body_path: `acs/${manifestSlug}/area-01/task-a.md`,
+								body_sha256: taskBodySha,
+								elements: [
+									{ triad: 'k', ordinal: '01', code: 'TS.I.A.K1', title: 'Element 1.' },
+									{ triad: 'r', ordinal: '02', code: 'TS.I.A.R2', title: 'Element 2.' },
+								],
+							},
+						],
+					},
+				],
+			}),
+		);
+		// Track the on-disk fixture for cleanup; the ACS dispatcher keys
+		// supersede grouping by childDir for the `acs/` corpus, so the slug
+		// the supersede code sees is `manifestSlug`, not the corpus dir.
+		fixtures.push({ slug: manifestSlug, corpusDir: ACS_DIR });
+		fixtures.push({ slug: documentSlug, corpusDir: HANDBOOKS_DIR });
+
+		// `documentSlug` filter is the dispatcher-effective slug; for ACS that's
+		// the manifest's child dir name (the per-child convention).
+		const summary = await seedReferencesFromManifest({ documentSlug: manifestSlug });
+		expect(summary.editionsProcessed).toBe(1);
+		// 1 publication + 1 area + 1 task + 2 elements = 5 sections.
+		expect(summary.sectionsTouched).toBe(5);
+		expect(summary.sectionsChanged).toBe(5);
+
+		const refRow = (await db.select().from(reference).where(eq(reference.documentSlug, documentSlug)))[0];
+		expect(refRow).toBeDefined();
+		if (!refRow) return;
+		expect(refRow.kind).toBe('acs');
+		expect(refRow.edition).toBe(edition);
+		expect(refRow.sectionSchema).toEqual({
+			levels: ['publication', 'area', 'task', 'element'],
+			strictSequence: true,
+		});
+
+		const sections = await db.select().from(referenceSection).where(eq(referenceSection.referenceId, refRow.id));
+		expect(sections).toHaveLength(5);
+
+		const pub = sections.find((s) => s.code === 'publication');
+		const area = sections.find((s) => s.code === 'I');
+		const task = sections.find((s) => s.code === 'I.A');
+		const elemK = sections.find((s) => s.code === 'TS.I.A.K1');
+		const elemR = sections.find((s) => s.code === 'TS.I.A.R2');
+
+		expect(pub).toBeDefined();
+		expect(area).toBeDefined();
+		expect(task).toBeDefined();
+		expect(elemK).toBeDefined();
+		expect(elemR).toBeDefined();
+		if (!pub || !area || !task || !elemK || !elemR) return;
+
+		expect(pub.depth).toBe(0);
+		expect(pub.level).toBe('publication');
+		expect(pub.parentId).toBeNull();
+		expect(pub.contentMd).toBe('');
+
+		expect(area.depth).toBe(1);
+		expect(area.level).toBe('area');
+		expect(area.parentId).toBe(pub.id);
+
+		expect(task.depth).toBe(2);
+		expect(task.level).toBe('task');
+		expect(task.parentId).toBe(area.id);
+		expect(task.contentMd).toBe(taskBody);
+		expect(task.contentHash).toBe(taskBodySha);
+
+		expect(elemK.depth).toBe(3);
+		expect(elemK.level).toBe('element');
+		expect(elemK.parentId).toBe(task.id);
+		expect(elemK.contentMd).toBe('');
+		expect(elemR.parentId).toBe(task.id);
+
+		// Idempotent re-run: zero changes.
+		const second = await seedReferencesFromManifest({ documentSlug: manifestSlug });
+		expect(second.sectionsTouched).toBe(5);
+		expect(second.sectionsChanged).toBe(0);
+
+		__acs_seed_mapping_internal__.reset();
+	});
+
+	it('ACS seed throws a clear error when the registry has no mapping for the manifest slug', async () => {
+		const manifestSlug = `orphan-acs-${SUITE_TOKEN}`;
+		const slugDir = join(ACS_DIR, manifestSlug);
+		const areaDir = join(slugDir, 'area-01');
+		mkdirSync(areaDir, { recursive: true });
+		const taskBody = '# Orphan task\n';
+		writeFileSync(join(areaDir, 'task-a.md'), taskBody);
+		const taskBodySha = sha256Hex(taskBody);
+
+		writeFileSync(
+			join(slugDir, 'manifest.json'),
+			JSON.stringify({
+				kind: 'acs',
+				schema_version: 1,
+				corpus: 'acs',
+				slug: manifestSlug,
+				title: 'Orphan ACS',
+				publisher: 'FAA',
+				publication_date: null,
+				source_url: 'https://example.com/orphan.pdf',
+				source_sha256: 'a'.repeat(64),
+				fetched_at: '2026-04-26T00:00:00.000+00:00',
+				page_count: 1,
+				areas: [
+					{
+						area: '01',
+						title: 'Orphan',
+						tasks: [
+							{
+								task: 'a',
+								title: 'Orphan Task',
+								body_path: `acs/${manifestSlug}/area-01/task-a.md`,
+								body_sha256: taskBodySha,
+								elements: [],
+							},
+						],
+					},
+				],
+			}),
+		);
+		fixtures.push({ slug: manifestSlug, corpusDir: ACS_DIR });
+
+		await expect(seedReferencesFromManifest({ documentSlug: manifestSlug })).rejects.toThrow(/no DB mapping/);
+	});
+
+	it('ACS seed throws when a referenced task body file is missing', async () => {
+		const manifestSlug = `missing-body-acs-${SUITE_TOKEN}`;
+		const documentSlug = `missing-body-doc-${SUITE_TOKEN}`;
+		const edition = 'TEST-ACS-MB';
+		__acs_seed_mapping_internal__.register({ manifestSlug, documentSlug, edition });
+
+		const slugDir = join(ACS_DIR, manifestSlug);
+		mkdirSync(slugDir, { recursive: true });
+		writeFileSync(
+			join(slugDir, 'manifest.json'),
+			JSON.stringify({
+				kind: 'acs',
+				schema_version: 1,
+				corpus: 'acs',
+				slug: manifestSlug,
+				title: 'Missing-body ACS',
+				publisher: 'FAA',
+				publication_date: null,
+				source_url: 'https://example.com/missing.pdf',
+				source_sha256: 'a'.repeat(64),
+				fetched_at: '2026-04-26T00:00:00.000+00:00',
+				page_count: 1,
+				areas: [
+					{
+						area: '01',
+						title: 'Missing',
+						tasks: [
+							{
+								task: 'a',
+								title: 'No body on disk',
+								body_path: `acs/${manifestSlug}/area-01/task-a.md`,
+								body_sha256: 'b'.repeat(64),
+								elements: [],
+							},
+						],
+					},
+				],
+			}),
+		);
+		fixtures.push({ slug: manifestSlug, corpusDir: ACS_DIR });
+		fixtures.push({ slug: documentSlug, corpusDir: HANDBOOKS_DIR });
+
+		await expect(seedReferencesFromManifest({ documentSlug: manifestSlug })).rejects.toThrow(/missing task body/);
+
+		__acs_seed_mapping_internal__.reset();
 	});
 
 	it('supersede chain wires older edition to the newest', async () => {

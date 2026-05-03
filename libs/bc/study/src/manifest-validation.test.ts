@@ -12,6 +12,7 @@ import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import {
 	acManifestSchema,
+	acsManifestSchema,
 	aimManifestSchema,
 	cfrManifestSchema,
 	cfrSectionsFileSchema,
@@ -120,6 +121,42 @@ const VALID_WHOLE_DOC = {
 	page_count: 80,
 	doc_id: 'faa-h-8083-2',
 	faa_edition: '2A',
+} as const;
+
+const VALID_ACS = {
+	kind: 'acs',
+	schema_version: 1,
+	corpus: 'acs',
+	slug: 'ppl-airplane-6c',
+	title: 'Private Pilot for Airplane Category ACS',
+	publisher: 'FAA',
+	publication_date: '2023-11-01',
+	source_url: 'https://www.faa.gov/training_testing/testing/acs/private_airplane_acs_6.pdf',
+	source_sha256: 'a'.repeat(64),
+	fetched_at: '2026-04-27T21:20:47.864+00:00',
+	page_count: 87,
+	areas: [
+		{
+			area: '01',
+			title: 'Preflight Preparation',
+			tasks: [
+				{
+					task: 'a',
+					title: 'Pilot Qualifications',
+					body_path: 'acs/ppl-airplane-6c/area-01/task-a.md',
+					body_sha256: 'b'.repeat(64),
+					elements: [
+						{
+							triad: 'k',
+							ordinal: '01',
+							code: 'PA.I.A.K1',
+							title: 'Certification requirements, recent flight experience, and recordkeeping.',
+						},
+					],
+				},
+			],
+		},
+	],
 } as const;
 
 const VALID_CFR = {
@@ -291,6 +328,94 @@ describe('manifestSchema (discriminated union on kind)', () => {
 	it('rejects a CFR manifest with a malformed editionDate', () => {
 		const result = cfrManifestSchema.safeParse({ ...VALID_CFR, editionDate: '04/22/2026' });
 		expect(result.success).toBe(false);
+	});
+
+	it('accepts a valid ACS manifest', () => {
+		const result = manifestSchema.safeParse(VALID_ACS);
+		expect(result.success).toBe(true);
+		if (result.success) {
+			expect(result.data.kind).toBe('acs');
+		}
+	});
+
+	it("rejects an ACS manifest missing 'areas'", () => {
+		const { areas: _drop, ...withoutAreas } = VALID_ACS;
+		const result = acsManifestSchema.safeParse(withoutAreas);
+		expect(result.success).toBe(false);
+	});
+
+	it("rejects an ACS manifest with a non-FAA publisher", () => {
+		const result = acsManifestSchema.safeParse({ ...VALID_ACS, publisher: 'AOPA' });
+		expect(result.success).toBe(false);
+	});
+
+	it('rejects an ACS task with a malformed body_sha256', () => {
+		const broken = {
+			...VALID_ACS,
+			areas: [
+				{
+					...VALID_ACS.areas[0],
+					tasks: [{ ...VALID_ACS.areas[0].tasks[0], body_sha256: 'not-a-hash' }],
+				},
+			],
+		};
+		const result = acsManifestSchema.safeParse(broken);
+		expect(result.success).toBe(false);
+	});
+
+	it('rejects an ACS element with an unknown triad value', () => {
+		const broken = {
+			...VALID_ACS,
+			areas: [
+				{
+					...VALID_ACS.areas[0],
+					tasks: [
+						{
+							...VALID_ACS.areas[0].tasks[0],
+							elements: [{ ...VALID_ACS.areas[0].tasks[0].elements[0], triad: 'x' }],
+						},
+					],
+				},
+			],
+		};
+		const result = acsManifestSchema.safeParse(broken);
+		expect(result.success).toBe(false);
+	});
+
+	it('rejects an ACS area with a non-padded ordinal', () => {
+		const broken = {
+			...VALID_ACS,
+			areas: [{ ...VALID_ACS.areas[0], area: '1' }],
+		};
+		const result = acsManifestSchema.safeParse(broken);
+		expect(result.success).toBe(false);
+	});
+
+	it('rejects an ACS task with a multi-letter task identifier', () => {
+		const broken = {
+			...VALID_ACS,
+			areas: [
+				{
+					...VALID_ACS.areas[0],
+					tasks: [{ ...VALID_ACS.areas[0].tasks[0], task: 'aa' }],
+				},
+			],
+		};
+		const result = acsManifestSchema.safeParse(broken);
+		expect(result.success).toBe(false);
+	});
+
+	it('accepts an ACS manifest with empty elements (CFI ACS shape)', () => {
+		const result = acsManifestSchema.safeParse({
+			...VALID_ACS,
+			areas: [
+				{
+					...VALID_ACS.areas[0],
+					tasks: [{ ...VALID_ACS.areas[0].tasks[0], elements: [] }],
+				},
+			],
+		});
+		expect(result.success).toBe(true);
 	});
 });
 
@@ -577,6 +702,32 @@ describe('on-disk manifest fixtures (CFR)', () => {
 				? null
 				: result.error.issues.map((i) => `${i.path.join('.')}: ${i.code}: ${i.message}`).join('\n');
 			expect(issuesSummary, `sections.json regulations/cfr-${title}/${editionDate}\n${issuesSummary ?? ''}`).toBeNull();
+		});
+	}
+});
+
+describe('on-disk manifest fixtures (ACS)', () => {
+	const ACS_FIXTURES = [
+		{ slug: 'ppl-airplane-6c', expectedAreas: 12 },
+		{ slug: 'ir-airplane-8c', expectedAreas: 8 },
+		{ slug: 'cpl-airplane-7b', expectedAreas: 11 },
+		{ slug: 'cfi-airplane-25', expectedAreas: 14 },
+		{ slug: 'atp-airplane-11a', expectedAreas: 8 },
+	] as const;
+
+	for (const { slug, expectedAreas } of ACS_FIXTURES) {
+		it(`parses cleanly: acs/${slug}`, () => {
+			const path = resolve(REPO_ROOT, 'acs', slug, 'manifest.json');
+			const raw = JSON.parse(readFileSync(path, 'utf-8'));
+			const result = manifestSchema.safeParse(raw);
+			const issuesSummary = result.success
+				? null
+				: result.error.issues.map((i) => `${i.path.join('.')}: ${i.code}: ${i.message}`).join('\n');
+			expect(issuesSummary, `Manifest acs/${slug}\n${issuesSummary ?? ''}`).toBeNull();
+			if (result.success && result.data.kind === 'acs') {
+				expect(result.data.slug).toBe(slug);
+				expect(result.data.areas.length).toBe(expectedAreas);
+			}
 		});
 	}
 });
