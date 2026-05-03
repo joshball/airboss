@@ -39,7 +39,7 @@
  */
 
 import { createHash } from 'node:crypto';
-import { existsSync, mkdirSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { type AviationTopic, type CertApplicability, resolveCacheRoot, SOURCE_CACHE } from '@ab/constants';
 import { writeIfChanged } from '../io/write-if-changed.ts';
@@ -131,6 +131,8 @@ interface CachedExtra {
 	readonly lastModified?: string;
 	readonly subjects: readonly AviationTopic[];
 	readonly primaryCert: CertApplicability | null;
+	/** Absolute path to a hand-curated markdown file replacing the OCR body, or null. */
+	readonly bodyOverridePath: string | null;
 }
 
 interface DiscoveryResult {
@@ -184,6 +186,24 @@ function discover(cacheRoot: string): DiscoveryResult {
 			continue;
 		}
 
+		// Body override: optional hand-curated markdown that replaces the
+		// `pdftotext` extraction. Resolve to absolute path relative to cwd
+		// (repo root at CLI invocation). If the YAML names a path but the
+		// file is missing, surface as a skip reason.
+		let bodyOverridePath: string | null = null;
+		if (entry.body_override !== undefined) {
+			const absOverride = entry.body_override.startsWith('/')
+				? entry.body_override
+				: join(process.cwd(), entry.body_override);
+			if (!existsSync(absOverride)) {
+				skipped.push(
+					`${entry.doc_id}: body_override declared at ${entry.body_override} but file does not exist (skip)`,
+				);
+				continue;
+			}
+			bodyOverridePath = absOverride;
+		}
+
 		extras.push({
 			docId: entry.doc_id,
 			edition: entry.edition,
@@ -199,6 +219,7 @@ function discover(cacheRoot: string): DiscoveryResult {
 				: {}),
 			subjects: entry.subjects,
 			primaryCert: entry.primary_cert,
+			bodyOverridePath,
 		});
 	}
 
@@ -283,10 +304,16 @@ export async function runHandbooksExtrasIngest(args: IngestArgs): Promise<Ingest
 			}
 			const publicationIso = publishedDate.toISOString().slice(0, 10);
 
-			// Compose the full document body. Whole-doc PDFs render under the
-			// default `-layout` mode; chapter-level extraction is not
-			// applicable for these Class C handbooks.
-			const documentBody = doc.pages.map((p) => p.text).join('\n\n');
+			// Compose the full document body. By default, whole-doc PDFs
+			// render via `pdftotext` under the default `-layout` mode;
+			// chapter-level extraction is not applicable for these Class C
+			// handbooks. When the YAML entry declares a `body_override`, the
+			// file's contents replace the extraction verbatim. The PDF still
+			// supplies `page_count` (set below from `doc.pageCount`).
+			const documentBody =
+				extra.bodyOverridePath !== null
+					? readFileSync(extra.bodyOverridePath, 'utf-8')
+					: doc.pages.map((p) => p.text).join('\n\n');
 			const bodySha = sha256(documentBody);
 
 			const docDir = join(args.derivativeRoot, extra.slug, extra.faaDir);
