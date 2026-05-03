@@ -374,11 +374,21 @@ _NORMALISE_WS = re.compile(r"\s+")
 # is already stored separately on the node; carrying it inside `title`
 # duplicates it on every chip, breadcrumb, and page heading.
 _BOOKMARK_CODE_PREFIX = re.compile(r"^\d+(?:\.\d+)*\s+")
+# Strip a leading "Chapter N: " or "Appendix X: " prefix from a bookmark
+# title, e.g. "Chapter 1:  Introduction to Risk Management" -> "Introduction
+# to Risk Management" or "Appendix A: Risk Management Training" -> "Risk
+# Management Training". RMH and AIH typeset their L1 bookmarks this way
+# (AvWX uses the dotted-code form handled by _BOOKMARK_CODE_PREFIX).
+_CHAPTER_PREFIX = re.compile(
+    r"^(?:Chapter\s+\d+|Appendix\s+[A-Z])\s*[:—–-]\s*",
+    re.IGNORECASE,
+)
 
 
 def _clean_title(title: str) -> str:
     cleaned = _NORMALISE_WS.sub(" ", title).strip()
     cleaned = _BOOKMARK_CODE_PREFIX.sub("", cleaned, count=1)
+    cleaned = _CHAPTER_PREFIX.sub("", cleaned, count=1)
     return cleaned
 
 

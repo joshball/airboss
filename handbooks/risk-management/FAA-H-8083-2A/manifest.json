@@ -1,20 +1,3008 @@
 {
   "document_slug": "risk-management",
-  "edition": "8083-2A",
-  "kind": "whole-doc",
+  "edition": "FAA-H-8083-2A",
+  "kind": "handbook",
   "title": "Risk Management Handbook",
   "publisher": "FAA",
   "source_url": "https://www.faa.gov/sites/faa.gov/files/2022-06/risk_management_handbook_2A.pdf",
   "source_checksum": "519443a598eedd34c1824ad2ea482f393af0b80e52649e33c0e24a351e4c78bf",
-  "fetched_at": "2026-05-01T00:07:24.317Z",
-  "sections": [],
-  "body_path": "handbooks/risk-management/FAA-H-8083-2A/risk-management-FAA-H-8083-2A.md",
-  "body_sha256": "c7d03aeeaed52b3c5a961171d99cf9f15b6b5707a5f20860b5c30a9c30e4d014",
-  "page_count": 80,
-  "doc_id": "faa-h-8083-2",
-  "faa_edition": "2A",
+  "fetched_at": "2026-05-03T19:29:16.547388+00:00",
   "subjects": [
     "human-factors"
   ],
-  "primary_cert": "private"
+  "primary_cert": "private",
+  "sections": [
+    {
+      "level": "chapter",
+      "code": "1",
+      "ordinal": 1,
+      "parent_code": null,
+      "title": "Introduction to Risk Management",
+      "faa_page_start": "1-1",
+      "faa_page_end": "1-3",
+      "source_locator": "RISK-MANAGEMENT Ch 1 (1-1..1-3)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/01-introduction-to-risk-management/00-introduction-to-risk-management.md",
+      "content_hash": "5d3e6b12cd4c7d69db387dfef072700429a6169def1e3f5bba418cf359faf5c6",
+      "has_figures": true,
+      "has_tables": false
+    },
+    {
+      "level": "section",
+      "code": "1.1",
+      "ordinal": 1,
+      "parent_code": "1",
+      "title": "Introduction",
+      "faa_page_start": "1-1",
+      "faa_page_end": "1-1",
+      "source_locator": "RISK-MANAGEMENT Ch 1 §1 (1-1)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/01-introduction-to-risk-management/01-introduction.md",
+      "content_hash": "ba232d94649f967ef2d0732f0946b3aa0904a2119d1cad6a1409bc85ea3bad5f",
+      "has_figures": true,
+      "has_tables": false
+    },
+    {
+      "level": "section",
+      "code": "1.2",
+      "ordinal": 2,
+      "parent_code": "1",
+      "title": "Safety Management Systems in Aviation",
+      "faa_page_start": "1-1",
+      "faa_page_end": "1-1",
+      "source_locator": "RISK-MANAGEMENT Ch 1 §2 (1-1)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/01-introduction-to-risk-management/02-safety-management-systems-in-aviation.md",
+      "content_hash": "1793aed19234833c63b7d72eac1581a7ea7407c2f803743ce16ee67ced23c5b9",
+      "has_figures": true,
+      "has_tables": false
+    },
+    {
+      "level": "section",
+      "code": "1.3",
+      "ordinal": 3,
+      "parent_code": "1",
+      "title": "Accident Causality & Responsibility",
+      "faa_page_start": "1-1",
+      "faa_page_end": "1-1",
+      "source_locator": "RISK-MANAGEMENT Ch 1 §3 (1-1)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/01-introduction-to-risk-management/03-accident-causality-responsibility.md",
+      "content_hash": "1285e7856bdc2b8cd614f4ff56d363c08c1952b470a95e9bd0d53056f0a76144",
+      "has_figures": true,
+      "has_tables": false
+    },
+    {
+      "level": "section",
+      "code": "1.4",
+      "ordinal": 4,
+      "parent_code": "1",
+      "title": "Risk Management Analysis Using the PAVE Checklist",
+      "faa_page_start": "1-2",
+      "faa_page_end": "1-2",
+      "source_locator": "RISK-MANAGEMENT Ch 1 §4 (1-2)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/01-introduction-to-risk-management/04-risk-management-analysis-using-the-pave-checklis.md",
+      "content_hash": "87a43fc3df3fce15d5c60e97e8db2c6a5d49b5883a8f2abd246fc1c329a39874",
+      "has_figures": true,
+      "has_tables": false
+    },
+    {
+      "level": "section",
+      "code": "1.5",
+      "ordinal": 5,
+      "parent_code": "1",
+      "title": "Chapter Summary",
+      "faa_page_start": "1-3",
+      "faa_page_end": "1-3",
+      "source_locator": "RISK-MANAGEMENT Ch 1 §5 (1-3)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/01-introduction-to-risk-management/05-chapter-summary.md",
+      "content_hash": "7e9d159e30d4b5f7de6028ce6087bf3715d389716266cf90911a1ecd893b616b",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "chapter",
+      "code": "2",
+      "ordinal": 2,
+      "parent_code": null,
+      "title": "Personal Minimums",
+      "faa_page_start": "2-1",
+      "faa_page_end": "2-6",
+      "source_locator": "RISK-MANAGEMENT Ch 2 (2-1..2-6)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/02-personal-minimums/00-personal-minimums.md",
+      "content_hash": "de09edd4636772b572877adad214637d40e9e41d0dfb429023fc6171c76f4a82",
+      "has_figures": false,
+      "has_tables": true
+    },
+    {
+      "level": "section",
+      "code": "2.1",
+      "ordinal": 1,
+      "parent_code": "2",
+      "title": "Introduction",
+      "faa_page_start": "2-1",
+      "faa_page_end": "2-1",
+      "source_locator": "RISK-MANAGEMENT Ch 2 §1 (2-1)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/02-personal-minimums/01-introduction.md",
+      "content_hash": "4965b35c552a3c62be1818ef2ea059f0af96eefe152f3b80f20ff495036207c8",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "section",
+      "code": "2.2",
+      "ordinal": 2,
+      "parent_code": "2",
+      "title": "Personal Minimums",
+      "faa_page_start": "2-1",
+      "faa_page_end": "2-4",
+      "source_locator": "RISK-MANAGEMENT Ch 2 §2 (2-1..2-4)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/02-personal-minimums/02-personal-minimums.md",
+      "content_hash": "2586edc648805f15964bcf6cce0486121de2e11eaf14e7db7dedc8a9b66602f9",
+      "has_figures": false,
+      "has_tables": true
+    },
+    {
+      "level": "subsection",
+      "code": "2.2.1",
+      "ordinal": 1,
+      "parent_code": "2.2",
+      "title": "Step 1—Review Weather Flight Categories",
+      "faa_page_start": "2-1",
+      "faa_page_end": "2-1",
+      "source_locator": "RISK-MANAGEMENT Ch 2 §2 (1) (2-1)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/02-personal-minimums/02-01-step-1-review-weather-flight-categories.md",
+      "content_hash": "317d9c4797a933f95990a212261944c858f3010dbcd6f16fb1e5a14e01499f35",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "subsection",
+      "code": "2.2.2",
+      "ordinal": 2,
+      "parent_code": "2.2",
+      "title": "Step 2—Assess Experience and Comfort Level",
+      "faa_page_start": "2-1",
+      "faa_page_end": "2-2",
+      "source_locator": "RISK-MANAGEMENT Ch 2 §2 (2) (2-1..2-2)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/02-personal-minimums/02-02-step-2-assess-experience-and-comfort-level.md",
+      "content_hash": "05e859de1126fc27c8b56619618c8802fb420dea343ee2d3086fb798dab820f3",
+      "has_figures": false,
+      "has_tables": true
+    },
+    {
+      "level": "subsection",
+      "code": "2.2.3",
+      "ordinal": 3,
+      "parent_code": "2.2",
+      "title": "Step 3—Consider Other Conditions",
+      "faa_page_start": "2-3",
+      "faa_page_end": "2-3",
+      "source_locator": "RISK-MANAGEMENT Ch 2 §2 (3) (2-3)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/02-personal-minimums/02-03-step-3-consider-other-conditions.md",
+      "content_hash": "43e1d3dac2f6e3edba3c87c13f60db8b94f511252dad0624d2236e9ac879a11a",
+      "has_figures": false,
+      "has_tables": true
+    },
+    {
+      "level": "subsection",
+      "code": "2.2.4",
+      "ordinal": 4,
+      "parent_code": "2.2",
+      "title": "Step 4—Assemble and Evaluate",
+      "faa_page_start": "2-4",
+      "faa_page_end": "2-4",
+      "source_locator": "RISK-MANAGEMENT Ch 2 §2 (4) (2-4)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/02-personal-minimums/02-04-step-4-assemble-and-evaluate.md",
+      "content_hash": "dd00d3e3e124cb9ccd97102bdc3f769278d3a6095dd72a459111fd3714c80798",
+      "has_figures": false,
+      "has_tables": true
+    },
+    {
+      "level": "subsection",
+      "code": "2.2.5",
+      "ordinal": 5,
+      "parent_code": "2.2",
+      "title": "Step 5—Adjust for Specific Conditions",
+      "faa_page_start": "2-5",
+      "faa_page_end": "2-5",
+      "source_locator": "RISK-MANAGEMENT Ch 2 §2 (5) (2-5)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/02-personal-minimums/02-05-step-5-adjust-for-specific-conditions.md",
+      "content_hash": "411c52b59dc98b5afad227fbbbfa4573fbcddecdbec7e0fb9f5194d7a9a648b1",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "subsection",
+      "code": "2.2.6",
+      "ordinal": 6,
+      "parent_code": "2.2",
+      "title": "Step 6—Stick to the Plan",
+      "faa_page_start": "2-5",
+      "faa_page_end": "2-5",
+      "source_locator": "RISK-MANAGEMENT Ch 2 §2 (6) (2-5)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/02-personal-minimums/02-06-step-6-stick-to-the-plan.md",
+      "content_hash": "27c93a38d5cb9ce83f7300078671416f699251e20cc4b76ed3ae9a658823e832",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "section",
+      "code": "2.3",
+      "ordinal": 3,
+      "parent_code": "2",
+      "title": "Using the FAA WINGS Program for Risk Mitigation & Safety",
+      "faa_page_start": "2-5",
+      "faa_page_end": "2-5",
+      "source_locator": "RISK-MANAGEMENT Ch 2 §3 (2-5)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/02-personal-minimums/03-using-the-faa-wings-program-for-risk-mitigation-.md",
+      "content_hash": "fa409df9bf7f4de9093773d979c2eb47fcb0d1ef0f7e4d80294af111beab76ae",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "section",
+      "code": "2.4",
+      "ordinal": 4,
+      "parent_code": "2",
+      "title": "Chapter Summary",
+      "faa_page_start": "2-6",
+      "faa_page_end": "2-6",
+      "source_locator": "RISK-MANAGEMENT Ch 2 §4 (2-6)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/02-personal-minimums/04-chapter-summary.md",
+      "content_hash": "22240bf01bd4a3f770bdecf7f4ee1c71c8001b5c9329a24a56b10a5acc62b501",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "chapter",
+      "code": "3",
+      "ordinal": 3,
+      "parent_code": null,
+      "title": "Identifying Hazards & Associated Risks",
+      "faa_page_start": "3-1",
+      "faa_page_end": "3-15",
+      "source_locator": "RISK-MANAGEMENT Ch 3 (3-1..3-15)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/03-identifying-hazards-associated-risks/00-identifying-hazards-associated-risks.md",
+      "content_hash": "838f2eef5d8a034145cc97ff27d16ef5bcebab954b7ebddf6db5119ea7e42be3",
+      "has_figures": true,
+      "has_tables": true
+    },
+    {
+      "level": "section",
+      "code": "3.1",
+      "ordinal": 1,
+      "parent_code": "3",
+      "title": "Introduction",
+      "faa_page_start": "3-1",
+      "faa_page_end": "3-1",
+      "source_locator": "RISK-MANAGEMENT Ch 3 §1 (3-1)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/03-identifying-hazards-associated-risks/01-introduction.md",
+      "content_hash": "651e1238206d29b41e34202f845496adbd1625240ae098727f3e179526aa6f6a",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "subsection",
+      "code": "3.1.1",
+      "ordinal": 1,
+      "parent_code": "3.1",
+      "title": "Hazard Exposure",
+      "faa_page_start": "3-1",
+      "faa_page_end": "3-1",
+      "source_locator": "RISK-MANAGEMENT Ch 3 §1 (1) (3-1)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/03-identifying-hazards-associated-risks/01-01-hazard-exposure.md",
+      "content_hash": "f51b0c24066696c14093617d562e0758b626113b4b4ab1b7d3a987bc759036f7",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "section",
+      "code": "3.2",
+      "ordinal": 2,
+      "parent_code": "3",
+      "title": "Why Hazards Result in Aviation Accidents",
+      "faa_page_start": "3-1",
+      "faa_page_end": "3-2",
+      "source_locator": "RISK-MANAGEMENT Ch 3 §2 (3-1..3-2)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/03-identifying-hazards-associated-risks/02-why-hazards-result-in-aviation-accidents.md",
+      "content_hash": "1499823c6e72d60fee9b8eafced08611ea59e7979b3ffc6e5fd72b5c45f4a776",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "subsection",
+      "code": "3.2.1",
+      "ordinal": 1,
+      "parent_code": "3.2",
+      "title": "Understanding the Risks Posed by Hazards",
+      "faa_page_start": "3-2",
+      "faa_page_end": "3-2",
+      "source_locator": "RISK-MANAGEMENT Ch 3 §2 (1) (3-2)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/03-identifying-hazards-associated-risks/02-01-understanding-the-risks-posed-by-hazards.md",
+      "content_hash": "91dbce35909397e2612c4ec1dfdc48f209328440ef8b82a6dcc0dc4e8834a0e8",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "section",
+      "code": "3.3",
+      "ordinal": 3,
+      "parent_code": "3",
+      "title": "Leading Accident Causes",
+      "faa_page_start": "3-3",
+      "faa_page_end": "3-3",
+      "source_locator": "RISK-MANAGEMENT Ch 3 §3 (3-3)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/03-identifying-hazards-associated-risks/03-leading-accident-causes.md",
+      "content_hash": "12fccbeb3b204a939ab635402c0d5e244c502e071ca60efba8fe17a79a81bbca",
+      "has_figures": false,
+      "has_tables": true
+    },
+    {
+      "level": "subsection",
+      "code": "3.3.1",
+      "ordinal": 1,
+      "parent_code": "3.3",
+      "title": "Identifying Hazards",
+      "faa_page_start": "3-4",
+      "faa_page_end": "3-4",
+      "source_locator": "RISK-MANAGEMENT Ch 3 §3 (1) (3-4)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/03-identifying-hazards-associated-risks/03-01-identifying-hazards.md",
+      "content_hash": "c28a0265e4007b11b0e34af2878ddfb54434c4b949f7126ab2f72fcf3919c054",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "section",
+      "code": "3.4",
+      "ordinal": 4,
+      "parent_code": "3",
+      "title": "Using the PAVE Checklist to Identify Hazards",
+      "faa_page_start": "3-4",
+      "faa_page_end": "3-7",
+      "source_locator": "RISK-MANAGEMENT Ch 3 §4 (3-4..3-7)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/03-identifying-hazards-associated-risks/04-using-the-pave-checklist-to-identify-hazards.md",
+      "content_hash": "be2ab76ca600271a5bfc665004bfc802bdcda14d08ae4db197c563db9c8c930b",
+      "has_figures": true,
+      "has_tables": false
+    },
+    {
+      "level": "subsection",
+      "code": "3.4.1",
+      "ordinal": 1,
+      "parent_code": "3.4",
+      "title": "Pilot Hazards",
+      "faa_page_start": "3-4",
+      "faa_page_end": "3-5",
+      "source_locator": "RISK-MANAGEMENT Ch 3 §4 (1) (3-4..3-5)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/03-identifying-hazards-associated-risks/04-01-pilot-hazards.md",
+      "content_hash": "103f1747dff864d3ffd962150d7de48acef9dcd82c67edb2841ebb3d7604af86",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "subsection",
+      "code": "3.4.2",
+      "ordinal": 2,
+      "parent_code": "3.4",
+      "title": "Aircraft Hazards",
+      "faa_page_start": "3-6",
+      "faa_page_end": "3-6",
+      "source_locator": "RISK-MANAGEMENT Ch 3 §4 (2) (3-6)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/03-identifying-hazards-associated-risks/04-02-aircraft-hazards.md",
+      "content_hash": "57c2a709b9ac83126ba3c88d8dd223f1250fdb57976610563a05942428f67b0c",
+      "has_figures": true,
+      "has_tables": false
+    },
+    {
+      "level": "subsection",
+      "code": "3.4.3",
+      "ordinal": 3,
+      "parent_code": "3.4",
+      "title": "Environmental Hazards",
+      "faa_page_start": "3-7",
+      "faa_page_end": "3-7",
+      "source_locator": "RISK-MANAGEMENT Ch 3 §4 (3) (3-7)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/03-identifying-hazards-associated-risks/04-03-environmental-hazards.md",
+      "content_hash": "4df91607d1484fca86651284be96680e536a6860a9ac58eb487707908204292a",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "subsection",
+      "code": "3.4.4",
+      "ordinal": 4,
+      "parent_code": "3.4",
+      "title": "External Pressure Hazards",
+      "faa_page_start": "3-8",
+      "faa_page_end": "3-8",
+      "source_locator": "RISK-MANAGEMENT Ch 3 §4 (4) (3-8)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/03-identifying-hazards-associated-risks/04-04-external-pressure-hazards.md",
+      "content_hash": "b55b41934ccc3eb02b17ccbcd96fb2ec39af772bc96bc16cc1461e4e3544dfde",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "section",
+      "code": "3.5",
+      "ordinal": 5,
+      "parent_code": "3",
+      "title": "Hazard Combinations",
+      "faa_page_start": "3-8",
+      "faa_page_end": "3-8",
+      "source_locator": "RISK-MANAGEMENT Ch 3 §5 (3-8)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/03-identifying-hazards-associated-risks/05-hazard-combinations.md",
+      "content_hash": "b04dcbb5b36cc7308852b3f7091e33672013ee5a52e0c448871c8bff3b857c1b",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "section",
+      "code": "3.6",
+      "ordinal": 6,
+      "parent_code": "3",
+      "title": "Hazards and Associated Risks",
+      "faa_page_start": "3-9",
+      "faa_page_end": "3-10",
+      "source_locator": "RISK-MANAGEMENT Ch 3 §6 (3-9..3-10)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/03-identifying-hazards-associated-risks/06-hazards-and-associated-risks.md",
+      "content_hash": "d81d6c84271574a619b6aa83c14dd4e352bc21fbc0a5bd6cc5ebef7d1d6f82a9",
+      "has_figures": true,
+      "has_tables": false
+    },
+    {
+      "level": "subsection",
+      "code": "3.6.1",
+      "ordinal": 1,
+      "parent_code": "3.6",
+      "title": "Using a Flight Risk Assessment Tool (FRAT)",
+      "faa_page_start": "3-10",
+      "faa_page_end": "3-10",
+      "source_locator": "RISK-MANAGEMENT Ch 3 §6 (1) (3-10)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/03-identifying-hazards-associated-risks/06-01-using-a-flight-risk-assessment-tool-frat.md",
+      "content_hash": "f4fc07b0cdc8a2a1947e429d4afad457d66ee653aab27410db6087ebbfbcecca",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "section",
+      "code": "3.7",
+      "ordinal": 7,
+      "parent_code": "3",
+      "title": "Case Study",
+      "faa_page_start": "3-11",
+      "faa_page_end": "3-14",
+      "source_locator": "RISK-MANAGEMENT Ch 3 §7 (3-11..3-14)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/03-identifying-hazards-associated-risks/07-case-study.md",
+      "content_hash": "77eabe56d59ce0e43cbe285d08e36d743b0246c37779f68af13c41efa6f93c86",
+      "has_figures": true,
+      "has_tables": false
+    },
+    {
+      "level": "subsection",
+      "code": "3.7.1",
+      "ordinal": 1,
+      "parent_code": "3.7",
+      "title": "Background and Setting",
+      "faa_page_start": "3-11",
+      "faa_page_end": "3-12",
+      "source_locator": "RISK-MANAGEMENT Ch 3 §7 (1) (3-11..3-12)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/03-identifying-hazards-associated-risks/07-01-background-and-setting.md",
+      "content_hash": "be8c11843cf8961e15809aa34e33c427f4f1a9a5acc0c52ca559ef94be5d39d5",
+      "has_figures": true,
+      "has_tables": false
+    },
+    {
+      "level": "subsection",
+      "code": "3.7.2",
+      "ordinal": 2,
+      "parent_code": "3.7",
+      "title": "Data",
+      "faa_page_start": "3-13",
+      "faa_page_end": "3-13",
+      "source_locator": "RISK-MANAGEMENT Ch 3 §7 (2) (3-13)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/03-identifying-hazards-associated-risks/07-02-data.md",
+      "content_hash": "8a88ff37d75d6a779820c6d286203913852f1c4fa6c6016fe5930f5bf8d2bac8",
+      "has_figures": true,
+      "has_tables": false
+    },
+    {
+      "level": "subsection",
+      "code": "3.7.3",
+      "ordinal": 3,
+      "parent_code": "3.7",
+      "title": "Hazard Identification and Risk Analysis",
+      "faa_page_start": "3-14",
+      "faa_page_end": "3-14",
+      "source_locator": "RISK-MANAGEMENT Ch 3 §7 (3) (3-14)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/03-identifying-hazards-associated-risks/07-03-hazard-identification-and-risk-analysis.md",
+      "content_hash": "d15cecc4583240aa2630577e8cb09356805576f80838de8cbaa4c31424af3909",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "section",
+      "code": "3.8",
+      "ordinal": 8,
+      "parent_code": "3",
+      "title": "Chapter Summary",
+      "faa_page_start": "3-15",
+      "faa_page_end": "3-15",
+      "source_locator": "RISK-MANAGEMENT Ch 3 §8 (3-15)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/03-identifying-hazards-associated-risks/08-chapter-summary.md",
+      "content_hash": "8c137895d720b20ca59161d378bb4f1eb13b54815f6f80df0945bfa73e45a7a3",
+      "has_figures": true,
+      "has_tables": false
+    },
+    {
+      "level": "chapter",
+      "code": "4",
+      "ordinal": 4,
+      "parent_code": null,
+      "title": "Assessing Risk",
+      "faa_page_start": "4-1",
+      "faa_page_end": "4-5",
+      "source_locator": "RISK-MANAGEMENT Ch 4 (4-1..4-5)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/04-assessing-risk/00-assessing-risk.md",
+      "content_hash": "61688e0db0cfe221c2a0ffc6783408930d27af21cf192d7eca2984b9251bd379",
+      "has_figures": false,
+      "has_tables": true
+    },
+    {
+      "level": "section",
+      "code": "4.1",
+      "ordinal": 1,
+      "parent_code": "4",
+      "title": "Introduction",
+      "faa_page_start": "4-1",
+      "faa_page_end": "4-1",
+      "source_locator": "RISK-MANAGEMENT Ch 4 §1 (4-1)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/04-assessing-risk/01-introduction.md",
+      "content_hash": "1203a8ac379172e71e90644c009aae56b739c4fed91b1ada9149a53dd380b1be",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "subsection",
+      "code": "4.1.1",
+      "ordinal": 1,
+      "parent_code": "4.1",
+      "title": "Risk Assessment Components",
+      "faa_page_start": "4-1",
+      "faa_page_end": "4-1",
+      "source_locator": "RISK-MANAGEMENT Ch 4 §1 (1) (4-1)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/04-assessing-risk/01-01-risk-assessment-components.md",
+      "content_hash": "7d9762f4c865334e6ddf9288320b8933dbead6923b32873f05dc1c4a0fe63cbf",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "section",
+      "code": "4.2",
+      "ordinal": 2,
+      "parent_code": "4",
+      "title": "Using a Risk Assessment Matrix",
+      "faa_page_start": "4-2",
+      "faa_page_end": "4-2",
+      "source_locator": "RISK-MANAGEMENT Ch 4 §2 (4-2)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/04-assessing-risk/02-using-a-risk-assessment-matrix.md",
+      "content_hash": "7d793fd8badfb1d828b41d9232e6032de26d191a499cdaf168af0c5545de0252",
+      "has_figures": false,
+      "has_tables": true
+    },
+    {
+      "level": "subsection",
+      "code": "4.2.1",
+      "ordinal": 1,
+      "parent_code": "4.2",
+      "title": "Matrix Errors",
+      "faa_page_start": "4-2",
+      "faa_page_end": "4-2",
+      "source_locator": "RISK-MANAGEMENT Ch 4 §2 (1) (4-2)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/04-assessing-risk/02-01-matrix-errors.md",
+      "content_hash": "d0b149626299e4071a3449c3dcff0666a505a564d72b0959fbc95fc8b5bc785f",
+      "has_figures": false,
+      "has_tables": true
+    },
+    {
+      "level": "section",
+      "code": "4.3",
+      "ordinal": 3,
+      "parent_code": "4",
+      "title": "Case Study",
+      "faa_page_start": "4-3",
+      "faa_page_end": "4-4",
+      "source_locator": "RISK-MANAGEMENT Ch 4 §3 (4-3..4-4)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/04-assessing-risk/03-case-study.md",
+      "content_hash": "1fc9c66ed27157a2d873d881f00de031172861d33bb91670e9c541bbc684dd1f",
+      "has_figures": false,
+      "has_tables": true
+    },
+    {
+      "level": "subsection",
+      "code": "4.3.1",
+      "ordinal": 1,
+      "parent_code": "4.3",
+      "title": "Risk Assessment Analysis",
+      "faa_page_start": "4-3",
+      "faa_page_end": "4-4",
+      "source_locator": "RISK-MANAGEMENT Ch 4 §3 (1) (4-3..4-4)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/04-assessing-risk/03-01-risk-assessment-analysis.md",
+      "content_hash": "64f26070a1e5dfc2c5366204e783b5cdda79e8b655878b781b8317c5fb35570b",
+      "has_figures": false,
+      "has_tables": true
+    },
+    {
+      "level": "section",
+      "code": "4.4",
+      "ordinal": 4,
+      "parent_code": "4",
+      "title": "Chapter Summary",
+      "faa_page_start": "4-5",
+      "faa_page_end": "4-5",
+      "source_locator": "RISK-MANAGEMENT Ch 4 §4 (4-5)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/04-assessing-risk/04-chapter-summary.md",
+      "content_hash": "d565c6ddfb51b9fa856241c96b6b1b2e6694c86a78b0b78136578cbf441bba0f",
+      "has_figures": false,
+      "has_tables": true
+    },
+    {
+      "level": "chapter",
+      "code": "5",
+      "ordinal": 5,
+      "parent_code": null,
+      "title": "Mitigating Risk",
+      "faa_page_start": "5-1",
+      "faa_page_end": "5-5",
+      "source_locator": "RISK-MANAGEMENT Ch 5 (5-1..5-5)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/05-mitigating-risk/00-mitigating-risk.md",
+      "content_hash": "b6aa77aa6298dd6b65015127011540d8ec2308e98bb41ce40f44cb99bf561509",
+      "has_figures": true,
+      "has_tables": true
+    },
+    {
+      "level": "section",
+      "code": "5.1",
+      "ordinal": 1,
+      "parent_code": "5",
+      "title": "Introduction",
+      "faa_page_start": "5-1",
+      "faa_page_end": "5-1",
+      "source_locator": "RISK-MANAGEMENT Ch 5 §1 (5-1)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/05-mitigating-risk/01-introduction.md",
+      "content_hash": "dc768edd1b8dc054a6dd406088d29240e5f1efe262b7b87601cc959451a5c1a3",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "section",
+      "code": "5.2",
+      "ordinal": 2,
+      "parent_code": "5",
+      "title": "Preflight Risk Mitigation Strategies",
+      "faa_page_start": "5-1",
+      "faa_page_end": "5-1",
+      "source_locator": "RISK-MANAGEMENT Ch 5 §2 (5-1)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/05-mitigating-risk/02-preflight-risk-mitigation-strategies.md",
+      "content_hash": "4361e34cb61d1ce4696180a34ae96a8d400835a858c8903aecf9b56e10f7d856",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "subsection",
+      "code": "5.2.1",
+      "ordinal": 1,
+      "parent_code": "5.2",
+      "title": "Mitigating Pilot Risks",
+      "faa_page_start": "5-1",
+      "faa_page_end": "5-1",
+      "source_locator": "RISK-MANAGEMENT Ch 5 §2 (1) (5-1)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/05-mitigating-risk/02-01-mitigating-pilot-risks.md",
+      "content_hash": "0426dc925857580eeb72a678b4e3b5c5637ec9cb0f71a3495d5ef6a4753a4ab5",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "subsection",
+      "code": "5.2.2",
+      "ordinal": 2,
+      "parent_code": "5.2",
+      "title": "Mitigating Aircraft Risks",
+      "faa_page_start": "5-1",
+      "faa_page_end": "5-1",
+      "source_locator": "RISK-MANAGEMENT Ch 5 §2 (2) (5-1)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/05-mitigating-risk/02-02-mitigating-aircraft-risks.md",
+      "content_hash": "ba0722ac96e2294697ed3f58f457c4eb4fcbbd7c06c4103d28cb18b974176594",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "subsection",
+      "code": "5.2.3",
+      "ordinal": 3,
+      "parent_code": "5.2",
+      "title": "Mitigating Environmental Risks",
+      "faa_page_start": "5-2",
+      "faa_page_end": "5-2",
+      "source_locator": "RISK-MANAGEMENT Ch 5 §2 (3) (5-2)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/05-mitigating-risk/02-03-mitigating-environmental-risks.md",
+      "content_hash": "5b894f10bdc3aa646f10e6e103b7c111160ed586623ec21d3faa6f93d2533d8c",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "subsection",
+      "code": "5.2.4",
+      "ordinal": 4,
+      "parent_code": "5.2",
+      "title": "Mitigating External Pressure Risks",
+      "faa_page_start": "5-2",
+      "faa_page_end": "5-2",
+      "source_locator": "RISK-MANAGEMENT Ch 5 §2 (4) (5-2)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/05-mitigating-risk/02-04-mitigating-external-pressure-risks.md",
+      "content_hash": "b79425587087e607be16cc15ac1c021e28560a11fed5e5ef0ac420a986d338a4",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "section",
+      "code": "5.3",
+      "ordinal": 3,
+      "parent_code": "5",
+      "title": "Case Study",
+      "faa_page_start": "5-2",
+      "faa_page_end": "5-3",
+      "source_locator": "RISK-MANAGEMENT Ch 5 §3 (5-2..5-3)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/05-mitigating-risk/03-case-study.md",
+      "content_hash": "6d362452eb54b42d8b1a4a5ef329d9a46de5c0d226910deca643da43603d70ba",
+      "has_figures": true,
+      "has_tables": false
+    },
+    {
+      "level": "subsection",
+      "code": "5.3.1",
+      "ordinal": 1,
+      "parent_code": "5.3",
+      "title": "Risk Mitigation Analysis",
+      "faa_page_start": "5-2",
+      "faa_page_end": "5-3",
+      "source_locator": "RISK-MANAGEMENT Ch 5 §3 (1) (5-2..5-3)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/05-mitigating-risk/03-01-risk-mitigation-analysis.md",
+      "content_hash": "4f40e455752dc026ab4bce0d065fa8e13f6e2a6349c79f88d0a3103a8b8797b3",
+      "has_figures": true,
+      "has_tables": false
+    },
+    {
+      "level": "section",
+      "code": "5.4",
+      "ordinal": 4,
+      "parent_code": "5",
+      "title": "Balanced Approach to Risk Management",
+      "faa_page_start": "5-4",
+      "faa_page_end": "5-4",
+      "source_locator": "RISK-MANAGEMENT Ch 5 §4 (5-4)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/05-mitigating-risk/04-balanced-approach-to-risk-management.md",
+      "content_hash": "32498fc75620d1e5174953a94b2a4a89d4092d398540e953adacdc90798e711a",
+      "has_figures": false,
+      "has_tables": true
+    },
+    {
+      "level": "section",
+      "code": "5.5",
+      "ordinal": 5,
+      "parent_code": "5",
+      "title": "Chapter Summary",
+      "faa_page_start": "5-5",
+      "faa_page_end": "5-5",
+      "source_locator": "RISK-MANAGEMENT Ch 5 §5 (5-5)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/05-mitigating-risk/05-chapter-summary.md",
+      "content_hash": "52493ecd598e6a5ec0d1547a97f3442d908db4163fd4ecbc0674fa52f103257e",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "chapter",
+      "code": "6",
+      "ordinal": 6,
+      "parent_code": null,
+      "title": "Threat and Error Management",
+      "faa_page_start": "6-1",
+      "faa_page_end": "6-6",
+      "source_locator": "RISK-MANAGEMENT Ch 6 (6-1..6-6)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/06-threat-and-error-management/00-threat-and-error-management.md",
+      "content_hash": "2a031da6df2aba27234084006cfe8a1be41c56140a0de8299bb434fc04d0674e",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "section",
+      "code": "6.1",
+      "ordinal": 1,
+      "parent_code": "6",
+      "title": "Introduction",
+      "faa_page_start": "6-1",
+      "faa_page_end": "6-1",
+      "source_locator": "RISK-MANAGEMENT Ch 6 §1 (6-1)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/06-threat-and-error-management/01-introduction.md",
+      "content_hash": "788e83668e0f32927d5742a52e54e1a953380535c3d7fed2a86f65c95786121c",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "section",
+      "code": "6.2",
+      "ordinal": 2,
+      "parent_code": "6",
+      "title": "Threats",
+      "faa_page_start": "6-1",
+      "faa_page_end": "6-1",
+      "source_locator": "RISK-MANAGEMENT Ch 6 §2 (6-1)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/06-threat-and-error-management/02-threats.md",
+      "content_hash": "08ceb4edda04e7600022940f5cb39e93db3ba096b4efbacb19ca02952c64f8cf",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "section",
+      "code": "6.3",
+      "ordinal": 3,
+      "parent_code": "6",
+      "title": "What is an Error?",
+      "faa_page_start": "6-1",
+      "faa_page_end": "6-2",
+      "source_locator": "RISK-MANAGEMENT Ch 6 §3 (6-1..6-2)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/06-threat-and-error-management/03-what-is-an-error.md",
+      "content_hash": "ba9b15c9738c293f0bbb745242143b4b29d383089554fd6cbbd734edad4a4b72",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "subsection",
+      "code": "6.3.1",
+      "ordinal": 1,
+      "parent_code": "6.3",
+      "title": "Causes of Errors",
+      "faa_page_start": "6-1",
+      "faa_page_end": "6-2",
+      "source_locator": "RISK-MANAGEMENT Ch 6 §3 (1) (6-1..6-2)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/06-threat-and-error-management/03-01-causes-of-errors.md",
+      "content_hash": "5d54aeff1330759cb1f6d55c61ce4ac982bfa61b01a76eb314a9ebb46f22d1b7",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "section",
+      "code": "6.4",
+      "ordinal": 4,
+      "parent_code": "6",
+      "title": "What is an Undesired Aircraft State?",
+      "faa_page_start": "6-3",
+      "faa_page_end": "6-3",
+      "source_locator": "RISK-MANAGEMENT Ch 6 §4 (6-3)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/06-threat-and-error-management/04-what-is-an-undesired-aircraft-state.md",
+      "content_hash": "28e1f244d5dcedc6a819333d984e45cc9ca446cb591207007524cd62aea2a7cd",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "section",
+      "code": "6.5",
+      "ordinal": 5,
+      "parent_code": "6",
+      "title": "Defenses against Threats, Errors, and Undesired Aircraft States",
+      "faa_page_start": "6-3",
+      "faa_page_end": "6-4",
+      "source_locator": "RISK-MANAGEMENT Ch 6 §5 (6-3..6-4)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/06-threat-and-error-management/05-defenses-against-threats-errors-and-undesired-ai.md",
+      "content_hash": "3e30dcea0f4d976baf39631638d9b48da51e39d9fc736c488f17c0beb22a273b",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "subsection",
+      "code": "6.5.1",
+      "ordinal": 1,
+      "parent_code": "6.5",
+      "title": "Defenses Provided to the Pilot or Crew",
+      "faa_page_start": "6-3",
+      "faa_page_end": "6-3",
+      "source_locator": "RISK-MANAGEMENT Ch 6 §5 (1) (6-3)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/06-threat-and-error-management/05-01-defenses-provided-to-the-pilot-or-crew.md",
+      "content_hash": "f23e1f23ef91a1b8ab4e605403588a8e3fb24daa3a6009866179cb890cd77372",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "subsection",
+      "code": "6.5.2",
+      "ordinal": 2,
+      "parent_code": "6.5",
+      "title": "Defenses Provided by the Pilot or Crew",
+      "faa_page_start": "6-4",
+      "faa_page_end": "6-4",
+      "source_locator": "RISK-MANAGEMENT Ch 6 §5 (2) (6-4)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/06-threat-and-error-management/05-02-defenses-provided-by-the-pilot-or-crew.md",
+      "content_hash": "b5aff2fd842e88789ab7fffe7d1b44319a68b30da0e7a0aa5e50d5b2342f79ac",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "section",
+      "code": "6.6",
+      "ordinal": 6,
+      "parent_code": "6",
+      "title": "Chapter Summary",
+      "faa_page_start": "6-5",
+      "faa_page_end": "6-6",
+      "source_locator": "RISK-MANAGEMENT Ch 6 §6 (6-5..6-6)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/06-threat-and-error-management/06-chapter-summary.md",
+      "content_hash": "537c1d2fa124eed283dc41a0fdcf5f43e516d7d39c96da94a1a387386de036af",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "chapter",
+      "code": "7",
+      "ordinal": 7,
+      "parent_code": null,
+      "title": "Automation & Flight Path Management",
+      "faa_page_start": "7-1",
+      "faa_page_end": "7-4",
+      "source_locator": "RISK-MANAGEMENT Ch 7 (7-1..7-4)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/07-automation-flight-path-management/00-automation-flight-path-management.md",
+      "content_hash": "de0b8413256111bb37b1549e36a2c56282701da05fbfd0a26d9113743eb72f52",
+      "has_figures": true,
+      "has_tables": true
+    },
+    {
+      "level": "section",
+      "code": "7.1",
+      "ordinal": 1,
+      "parent_code": "7",
+      "title": "Introduction",
+      "faa_page_start": "7-1",
+      "faa_page_end": "7-1",
+      "source_locator": "RISK-MANAGEMENT Ch 7 §1 (7-1)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/07-automation-flight-path-management/01-introduction.md",
+      "content_hash": "8cd60cf990bf9ed01919edf268efed69c239ec8bf617d002d0332ad3384ffaac",
+      "has_figures": true,
+      "has_tables": false
+    },
+    {
+      "level": "section",
+      "code": "7.2",
+      "ordinal": 2,
+      "parent_code": "7",
+      "title": "Reliance on Automation",
+      "faa_page_start": "7-2",
+      "faa_page_end": "7-2",
+      "source_locator": "RISK-MANAGEMENT Ch 7 §2 (7-2)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/07-automation-flight-path-management/02-reliance-on-automation.md",
+      "content_hash": "eebc46075cd834fd57c6c10da154a90cf5e636175d26b87b5d06e6f4aeede7e0",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "section",
+      "code": "7.3",
+      "ordinal": 3,
+      "parent_code": "7",
+      "title": "Balancing Automated & Manual Flight",
+      "faa_page_start": "7-2",
+      "faa_page_end": "7-2",
+      "source_locator": "RISK-MANAGEMENT Ch 7 §3 (7-2)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/07-automation-flight-path-management/03-balancing-automated-manual-flight.md",
+      "content_hash": "dd913517dd3fbb96457c35016b52c9437882a338334cb09f778d2d1a496406bd",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "section",
+      "code": "7.4",
+      "ordinal": 4,
+      "parent_code": "7",
+      "title": "Interacting with Automation",
+      "faa_page_start": "7-2",
+      "faa_page_end": "7-2",
+      "source_locator": "RISK-MANAGEMENT Ch 7 §4 (7-2)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/07-automation-flight-path-management/04-interacting-with-automation.md",
+      "content_hash": "ba55ea45ae70aee4d54f86b76b56b6298b8a08dfd2ac976248beb0f0b9d5379a",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "section",
+      "code": "7.5",
+      "ordinal": 5,
+      "parent_code": "7",
+      "title": "Failure to Anticipate, Act, & Verify",
+      "faa_page_start": "7-3",
+      "faa_page_end": "7-3",
+      "source_locator": "RISK-MANAGEMENT Ch 7 §5 (7-3)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/07-automation-flight-path-management/05-failure-to-anticipate-act-verify.md",
+      "content_hash": "5f65aee90adbbfacc685b363c76b6e2661488c61abc84ceac4c64025b98e1355",
+      "has_figures": true,
+      "has_tables": true
+    },
+    {
+      "level": "section",
+      "code": "7.6",
+      "ordinal": 6,
+      "parent_code": "7",
+      "title": "Integrated Flight Path Automation Systems",
+      "faa_page_start": "7-3",
+      "faa_page_end": "7-3",
+      "source_locator": "RISK-MANAGEMENT Ch 7 §6 (7-3)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/07-automation-flight-path-management/06-integrated-flight-path-automation-systems.md",
+      "content_hash": "45f65f69cf99e4c5661aa4917b012f98fb0faaa326cb16ff13b3a52639590355",
+      "has_figures": true,
+      "has_tables": true
+    },
+    {
+      "level": "section",
+      "code": "7.7",
+      "ordinal": 7,
+      "parent_code": "7",
+      "title": "Chapter Summary",
+      "faa_page_start": "7-4",
+      "faa_page_end": "7-4",
+      "source_locator": "RISK-MANAGEMENT Ch 7 §7 (7-4)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/07-automation-flight-path-management/07-chapter-summary.md",
+      "content_hash": "395d5729093c2b56ad4a65b03c0ddc92a61cbcba9eea8b8cdc4ff6687dc6abc5",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "chapter",
+      "code": "8",
+      "ordinal": 8,
+      "parent_code": null,
+      "title": "Aeronautical Decision-Making in Flight",
+      "faa_page_start": "8-1",
+      "faa_page_end": "8-4",
+      "source_locator": "RISK-MANAGEMENT Ch 8 (8-1..8-4)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/08-aeronautical-decision-making-in-flight/00-aeronautical-decision-making-in-flight.md",
+      "content_hash": "47202efb4bcd4fd4b5a333c3b404d3d06a72467639c3bda55c0004b1b7be2b38",
+      "has_figures": true,
+      "has_tables": false
+    },
+    {
+      "level": "section",
+      "code": "8.1",
+      "ordinal": 1,
+      "parent_code": "8",
+      "title": "Introduction",
+      "faa_page_start": "8-1",
+      "faa_page_end": "8-1",
+      "source_locator": "RISK-MANAGEMENT Ch 8 §1 (8-1)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/08-aeronautical-decision-making-in-flight/01-introduction.md",
+      "content_hash": "aae25fb216e972dd7e47f54ced01cdcb4bb1cbf3f7f97fdd6b84d46934d895dc",
+      "has_figures": true,
+      "has_tables": false
+    },
+    {
+      "level": "section",
+      "code": "8.2",
+      "ordinal": 2,
+      "parent_code": "8",
+      "title": "ADM Background",
+      "faa_page_start": "8-1",
+      "faa_page_end": "8-1",
+      "source_locator": "RISK-MANAGEMENT Ch 8 §2 (8-1)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/08-aeronautical-decision-making-in-flight/02-adm-background.md",
+      "content_hash": "3b1fde63a69d9d5f520a60a7bcac93a5452472b2ab091b69a1e450447420179f",
+      "has_figures": true,
+      "has_tables": false
+    },
+    {
+      "level": "section",
+      "code": "8.3",
+      "ordinal": 3,
+      "parent_code": "8",
+      "title": "Analytical Decision-Making",
+      "faa_page_start": "8-1",
+      "faa_page_end": "8-2",
+      "source_locator": "RISK-MANAGEMENT Ch 8 §3 (8-1..8-2)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/08-aeronautical-decision-making-in-flight/03-analytical-decision-making.md",
+      "content_hash": "986c75802d8f9b87c4084f254fd250301e5c70d11870b1dc64559f2f5195fc38",
+      "has_figures": true,
+      "has_tables": false
+    },
+    {
+      "level": "section",
+      "code": "8.4",
+      "ordinal": 4,
+      "parent_code": "8",
+      "title": "Naturalistic Decision-Making",
+      "faa_page_start": "8-3",
+      "faa_page_end": "8-3",
+      "source_locator": "RISK-MANAGEMENT Ch 8 §4 (8-3)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/08-aeronautical-decision-making-in-flight/04-naturalistic-decision-making.md",
+      "content_hash": "229637bdfd2ea1772cda9aac9d60eabfc7ad9e89a214a495be566c5573163ae3",
+      "has_figures": true,
+      "has_tables": false
+    },
+    {
+      "level": "section",
+      "code": "8.5",
+      "ordinal": 5,
+      "parent_code": "8",
+      "title": "Single-Pilot Resource Management",
+      "faa_page_start": "8-3",
+      "faa_page_end": "8-3",
+      "source_locator": "RISK-MANAGEMENT Ch 8 §5 (8-3)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/08-aeronautical-decision-making-in-flight/05-single-pilot-resource-management.md",
+      "content_hash": "8fd0ee75a01ae9b9f005121a8bd48624958693863d491166e635f402300e7d87",
+      "has_figures": true,
+      "has_tables": false
+    },
+    {
+      "level": "section",
+      "code": "8.6",
+      "ordinal": 6,
+      "parent_code": "8",
+      "title": "Chapter Summary",
+      "faa_page_start": "8-4",
+      "faa_page_end": "8-4",
+      "source_locator": "RISK-MANAGEMENT Ch 8 §6 (8-4)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/08-aeronautical-decision-making-in-flight/06-chapter-summary.md",
+      "content_hash": "51610a6da6d6f2bcd8e0bc79a3bacdea8f45300c4e39dfc06ae91060ae92aa22",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "chapter",
+      "code": "9",
+      "ordinal": 9,
+      "parent_code": null,
+      "title": "Risk Management Training",
+      "faa_page_start": "8-4",
+      "faa_page_end": "8-4",
+      "source_locator": "RISK-MANAGEMENT Ch 9 (8-4)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/09-risk-management-training/00-risk-management-training.md",
+      "content_hash": "babfe7e1ec4531834f0a48f88a5c4dcc0ada1ce63343603ca0a26f7ed665dd11",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "section",
+      "code": "9.1",
+      "ordinal": 1,
+      "parent_code": "9",
+      "title": "Integrating Risk Management Training and Other Training Requirements",
+      "faa_page_start": "8-4",
+      "faa_page_end": "8-4",
+      "source_locator": "RISK-MANAGEMENT Ch 9 §1 (8-4)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/09-risk-management-training/01-integrating-risk-management-training-and-other-t.md",
+      "content_hash": "3f649a8f7453d6d61170ffd43be3684f3b74520af7c890ad1f4ea84cee5170f5",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "chapter",
+      "code": "10",
+      "ordinal": 10,
+      "parent_code": null,
+      "title": "Risk Management Tools",
+      "faa_page_start": "8-4",
+      "faa_page_end": "63",
+      "source_locator": "RISK-MANAGEMENT Ch 10 (8-4..63)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/10-risk-management-tools/00-risk-management-tools.md",
+      "content_hash": "d4a0d7f84e603145c9551d341f7b69d26d92013670d92b6b8782dc89b13d41ff",
+      "has_figures": false,
+      "has_tables": true
+    },
+    {
+      "level": "section",
+      "code": "10.1",
+      "ordinal": 1,
+      "parent_code": "10",
+      "title": "Risk Assessment Tools Identifying, Assessing, & Mitigating Risk",
+      "faa_page_start": "8-4",
+      "faa_page_end": "8-4",
+      "source_locator": "RISK-MANAGEMENT Ch 10 §1 (8-4)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/10-risk-management-tools/01-risk-assessment-tools-identifying-assessing-miti.md",
+      "content_hash": "8480d1f8a57d08df22c9aa8d3fbd523ab9aa7bd68ed981931c248d46a7ab8a1a",
+      "has_figures": false,
+      "has_tables": true
+    },
+    {
+      "level": "subsection",
+      "code": "10.1.1",
+      "ordinal": 1,
+      "parent_code": "10.1",
+      "title": "Risk Identification Tools",
+      "faa_page_start": "8-4",
+      "faa_page_end": "8-4",
+      "source_locator": "RISK-MANAGEMENT Ch 10 §1 (1) (8-4)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/10-risk-management-tools/01-01-risk-identification-tools.md",
+      "content_hash": "b0be2b7c4f7cb1468584d0d1dd8ad1ede1097dcf8a2eeb68a07629b57e99d1e2",
+      "has_figures": false,
+      "has_tables": true
+    },
+    {
+      "level": "section",
+      "code": "10.2",
+      "ordinal": 2,
+      "parent_code": "10",
+      "title": "Additional Risk Assessment Tools",
+      "faa_page_start": "8-4",
+      "faa_page_end": "63",
+      "source_locator": "RISK-MANAGEMENT Ch 10 §2 (8-4..63)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/10-risk-management-tools/02-additional-risk-assessment-tools.md",
+      "content_hash": "bf199a945658d0323048ce6708205a9ed6bb2b9cbe649b874bcd6cf500291bfd",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "subsection",
+      "code": "10.2.1",
+      "ordinal": 1,
+      "parent_code": "10.2",
+      "title": "Risk Mitigation Tools",
+      "faa_page_start": "8-4",
+      "faa_page_end": "63",
+      "source_locator": "RISK-MANAGEMENT Ch 10 §2 (1) (8-4..63)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/10-risk-management-tools/02-01-risk-mitigation-tools.md",
+      "content_hash": "b34a7f74fadaf81ef50fd8793921f9e1ce1c8c9302d25fc8209441185c0f9e44",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "chapter",
+      "code": "11",
+      "ordinal": 11,
+      "parent_code": null,
+      "title": "Accident Case Studies",
+      "faa_page_start": "64",
+      "faa_page_end": "68",
+      "source_locator": "RISK-MANAGEMENT Ch 11 (64..68)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/11-accident-case-studies/00-accident-case-studies.md",
+      "content_hash": "5bccaf0e63f9319e6d16c6b8c25a685d652077d54a88921f5017f81d0bbf5769",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "section",
+      "code": "11.1",
+      "ordinal": 1,
+      "parent_code": "11",
+      "title": "General Information",
+      "faa_page_start": "64",
+      "faa_page_end": "64",
+      "source_locator": "RISK-MANAGEMENT Ch 11 §1 (64)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/11-accident-case-studies/01-general-information.md",
+      "content_hash": "7131960cc6b5514a919393a3d457fcdb0fd4aeea6e46f7a03b7bc45f214f6ff0",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "section",
+      "code": "11.2",
+      "ordinal": 2,
+      "parent_code": "11",
+      "title": "Accident Profile 1: Fatal Accident in a Single-Engine Airplane with a Piston Engine",
+      "faa_page_start": "64",
+      "faa_page_end": "64",
+      "source_locator": "RISK-MANAGEMENT Ch 11 §2 (64)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/11-accident-case-studies/02-accident-profile-1-fatal-accident-in-a-single-en.md",
+      "content_hash": "ec8fb67d2707e238d31078c3238dcd2707e39b490a3c5de57b247899afe22e48",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "subsection",
+      "code": "11.2.1",
+      "ordinal": 1,
+      "parent_code": "11.2",
+      "title": "NTSB Probable Cause",
+      "faa_page_start": "64",
+      "faa_page_end": "64",
+      "source_locator": "RISK-MANAGEMENT Ch 11 §2 (1) (64)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/11-accident-case-studies/02-01-ntsb-probable-cause.md",
+      "content_hash": "d1c1c6ae69c5846bda1acbf28ec0c55e245d64cfac6d9de54996197e07fc402f",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "subsection",
+      "code": "11.2.2",
+      "ordinal": 2,
+      "parent_code": "11.2",
+      "title": "NTSB Factual Summary Excerpts (edited)",
+      "faa_page_start": "64",
+      "faa_page_end": "64",
+      "source_locator": "RISK-MANAGEMENT Ch 11 §2 (2) (64)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/11-accident-case-studies/02-02-ntsb-factual-summary-excerpts-edited.md",
+      "content_hash": "a76bf7a76bcc0247a0d7e65099fac413166678e180e1d7bf2bbfeaa3a802fbef",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "subsection",
+      "code": "11.2.3",
+      "ordinal": 3,
+      "parent_code": "11.2",
+      "title": "Risk Identification, Assessment, and Mitigation",
+      "faa_page_start": "64",
+      "faa_page_end": "64",
+      "source_locator": "RISK-MANAGEMENT Ch 11 §2 (3) (64)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/11-accident-case-studies/02-03-risk-identification-assessment-and-mitigation.md",
+      "content_hash": "40ee523d3995a77285c4bc0a62e5a18e07cb2d6abb5050933b084f4f2599e427",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "section",
+      "code": "11.3",
+      "ordinal": 3,
+      "parent_code": "11",
+      "title": "Accident Profile 2: Fatal Accident, Turboprop-Powered, Transportation",
+      "faa_page_start": "65",
+      "faa_page_end": "65",
+      "source_locator": "RISK-MANAGEMENT Ch 11 §3 (65)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/11-accident-case-studies/03-accident-profile-2-fatal-accident-turboprop-powe.md",
+      "content_hash": "4ffdfe930d63b901866734a4cef5c891508d113b2916206e7398204d6f16df75",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "subsection",
+      "code": "11.3.1",
+      "ordinal": 1,
+      "parent_code": "11.3",
+      "title": "NTSB Probable Cause",
+      "faa_page_start": "65",
+      "faa_page_end": "65",
+      "source_locator": "RISK-MANAGEMENT Ch 11 §3 (1) (65)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/11-accident-case-studies/03-01-ntsb-probable-cause.md",
+      "content_hash": "d274ff67a7462b3ae3814a2283e9aa364679533026bdfc4e83ee8f5b369c3f6a",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "subsection",
+      "code": "11.3.2",
+      "ordinal": 2,
+      "parent_code": "11.3",
+      "title": "NTSB Factual Summary Excerpts (edited)",
+      "faa_page_start": "65",
+      "faa_page_end": "65",
+      "source_locator": "RISK-MANAGEMENT Ch 11 §3 (2) (65)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/11-accident-case-studies/03-02-ntsb-factual-summary-excerpts-edited.md",
+      "content_hash": "a2a843952f0e0ae2be181c9c3fe47c50782f3358f96b1bf3fe35c073b120bb0c",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "subsection",
+      "code": "11.3.3",
+      "ordinal": 3,
+      "parent_code": "11.3",
+      "title": "Risk Identification, Assessment, and Mitigation",
+      "faa_page_start": "66",
+      "faa_page_end": "66",
+      "source_locator": "RISK-MANAGEMENT Ch 11 §3 (3) (66)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/11-accident-case-studies/03-03-risk-identification-assessment-and-mitigation.md",
+      "content_hash": "5f5eb59fb093b1aff4ae367d7c5daf067a8e5efe22022633d96c367eac07ddf2",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "section",
+      "code": "11.4",
+      "ordinal": 4,
+      "parent_code": "11",
+      "title": "Accident Profile 3: Fatal Accident, Helicopter, Personal Flight",
+      "faa_page_start": "66",
+      "faa_page_end": "66",
+      "source_locator": "RISK-MANAGEMENT Ch 11 §4 (66)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/11-accident-case-studies/04-accident-profile-3-fatal-accident-helicopter-per.md",
+      "content_hash": "f4d24677af0f96498fe97060ea19ea8aa715be30ef353849751beaf53951ea0c",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "subsection",
+      "code": "11.4.1",
+      "ordinal": 1,
+      "parent_code": "11.4",
+      "title": "NTSB Probable Cause",
+      "faa_page_start": "66",
+      "faa_page_end": "66",
+      "source_locator": "RISK-MANAGEMENT Ch 11 §4 (1) (66)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/11-accident-case-studies/04-01-ntsb-probable-cause.md",
+      "content_hash": "6122f809f0eb2343d8f17def8f05039fa11724ee82c763b687fec5ce414d8c95",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "subsection",
+      "code": "11.4.2",
+      "ordinal": 2,
+      "parent_code": "11.4",
+      "title": "NTSB Factual Summary Excerpts (edited)",
+      "faa_page_start": "66",
+      "faa_page_end": "66",
+      "source_locator": "RISK-MANAGEMENT Ch 11 §4 (2) (66)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/11-accident-case-studies/04-02-ntsb-factual-summary-excerpts-edited.md",
+      "content_hash": "eeb26ab572a99eaee15afda1ae9b4e32993da216087af3f0e91737c237d749d2",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "subsection",
+      "code": "11.4.3",
+      "ordinal": 3,
+      "parent_code": "11.4",
+      "title": "Risk Identification, Assessment, and Mitigation",
+      "faa_page_start": "67",
+      "faa_page_end": "67",
+      "source_locator": "RISK-MANAGEMENT Ch 11 §4 (3) (67)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/11-accident-case-studies/04-03-risk-identification-assessment-and-mitigation.md",
+      "content_hash": "1de1dda1e6b251c371ccf3a162f61257121ba30858f56ce2578eb837e1c2ee3d",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "section",
+      "code": "11.5",
+      "ordinal": 5,
+      "parent_code": "11",
+      "title": "Accident Profile 4: Fatal Turbojet-Powered Airplane Accident",
+      "faa_page_start": "67",
+      "faa_page_end": "68",
+      "source_locator": "RISK-MANAGEMENT Ch 11 §5 (67..68)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/11-accident-case-studies/05-accident-profile-4-fatal-turbojet-powered-airpla.md",
+      "content_hash": "9816442db05bd5f3c2cd8eab23661b0141c9592e90bb1c769460127a4099d228",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "subsection",
+      "code": "11.5.1",
+      "ordinal": 1,
+      "parent_code": "11.5",
+      "title": "NTSB Probable Cause",
+      "faa_page_start": "67",
+      "faa_page_end": "67",
+      "source_locator": "RISK-MANAGEMENT Ch 11 §5 (1) (67)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/11-accident-case-studies/05-01-ntsb-probable-cause.md",
+      "content_hash": "4f7f6641d193dba703b78181c40ee92d69370ecc6cde30cd2ef1d904efb466b3",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "subsection",
+      "code": "11.5.2",
+      "ordinal": 2,
+      "parent_code": "11.5",
+      "title": "NTSB Factual Summary Excerpts (edited)",
+      "faa_page_start": "67",
+      "faa_page_end": "67",
+      "source_locator": "RISK-MANAGEMENT Ch 11 §5 (2) (67)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/11-accident-case-studies/05-02-ntsb-factual-summary-excerpts-edited.md",
+      "content_hash": "09b9c77227abfe9223504aeefb9f7f3413d44e17d188aee3d55e0b35d687dbc5",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "subsection",
+      "code": "11.5.3",
+      "ordinal": 3,
+      "parent_code": "11.5",
+      "title": "Risk Identification, Assessment, and Mitigation",
+      "faa_page_start": "67",
+      "faa_page_end": "68",
+      "source_locator": "RISK-MANAGEMENT Ch 11 §5 (3) (67..68)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/11-accident-case-studies/05-03-risk-identification-assessment-and-mitigation.md",
+      "content_hash": "58107fc30b61165ac2df2395f57cc22fc47cf2110d1120469c6a5298963e8884",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "chapter",
+      "code": "12",
+      "ordinal": 12,
+      "parent_code": null,
+      "title": "Risk Management Exercises",
+      "faa_page_start": "69",
+      "faa_page_end": "8-2",
+      "source_locator": "RISK-MANAGEMENT Ch 12 (69..8-2)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/12-risk-management-exercises/00-risk-management-exercises.md",
+      "content_hash": "6878b0826592cd51002d78d311383734d0e52f80a5eda5e848adb5ec8f3796fe",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "section",
+      "code": "12.1",
+      "ordinal": 1,
+      "parent_code": "12",
+      "title": "Four Scenarios",
+      "faa_page_start": "69",
+      "faa_page_end": "8-2",
+      "source_locator": "RISK-MANAGEMENT Ch 12 §1 (69..8-2)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/12-risk-management-exercises/01-four-scenarios.md",
+      "content_hash": "1a4f39b231f2394e533c1753043ba0d0e2f4058d6393cae2c0353360c4528309",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "subsection",
+      "code": "12.1.1",
+      "ordinal": 1,
+      "parent_code": "12.1",
+      "title": "Scenario 1: Recreational Aviation",
+      "faa_page_start": "69",
+      "faa_page_end": "69",
+      "source_locator": "RISK-MANAGEMENT Ch 12 §1 (1) (69)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/12-risk-management-exercises/01-01-scenario-1-recreational-aviation.md",
+      "content_hash": "8d4dbffe7b1219e54e0f09f34635e6442947b815c73d9792666113ba66fe49e5",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "subsection",
+      "code": "12.1.2",
+      "ordinal": 2,
+      "parent_code": "12.1",
+      "title": "Scenario 2: Turboprop-Powered, Personal Transportation",
+      "faa_page_start": "70",
+      "faa_page_end": "70",
+      "source_locator": "RISK-MANAGEMENT Ch 12 §1 (2) (70)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/12-risk-management-exercises/01-02-scenario-2-turboprop-powered-personal-transporta.md",
+      "content_hash": "b0b2965be1eb316af73839aa54afa75f80efe765ece4d75c94e6a457ee8c0801",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "subsection",
+      "code": "12.1.3",
+      "ordinal": 3,
+      "parent_code": "12.1",
+      "title": "Scenario 3: Turbine Helicopter",
+      "faa_page_start": "70",
+      "faa_page_end": "70",
+      "source_locator": "RISK-MANAGEMENT Ch 12 §1 (3) (70)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/12-risk-management-exercises/01-03-scenario-3-turbine-helicopter.md",
+      "content_hash": "7ecfff24a43bfb9a0067a96a94812c0ad9aa0dde7b71f58f982f295946f53c6e",
+      "has_figures": false,
+      "has_tables": false
+    },
+    {
+      "level": "subsection",
+      "code": "12.1.4",
+      "ordinal": 4,
+      "parent_code": "12.1",
+      "title": "Scenario 4: Turbojet-Powered Airplane",
+      "faa_page_start": "71",
+      "faa_page_end": "8-2",
+      "source_locator": "RISK-MANAGEMENT Ch 12 §1 (4) (71..8-2)",
+      "body_path": "handbooks/risk-management/FAA-H-8083-2A/12-risk-management-exercises/01-04-scenario-4-turbojet-powered-airplane.md",
+      "content_hash": "b85070627c9bb5a3ad27269c5070e3a225c533f044c39acc722d7071fc568b0a",
+      "has_figures": false,
+      "has_tables": false
+    }
+  ],
+  "figures": [
+    {
+      "id": "fig-1-00",
+      "section_code": "1",
+      "ordinal": 0,
+      "caption": "Figure 1-1. Sample NTSB final report.\n11782\nKey findings of the NTSB aviation accident final report, highlighted above in yellow, emphasize the pilot's inadequate in-flight \nplanning/decision to continue flight into known adverse weather conditions after the engine’s dry air vacuum pump failed and \nChapter 1:  Introduc",
+      "asset_path": "handbooks/risk-management/FAA-H-8083-2A/figures/fig-1-1-00-sample-ntsb-final-report-11782-key-findings-of-t.png",
+      "width": 488,
+      "height": 357
+    },
+    {
+      "id": "fig-1-01",
+      "section_code": "1",
+      "ordinal": 1,
+      "caption": "Figure 1-2. The PAVE checklist.\n12855\nThe pilot reported to air traffic control (ATC) that the vacuum pump failed while in visual meteorological conditions (VMC). \nAs a result, the attitude indicator and directional gyro became inoperative. Rather than divert to an airport while in VMC, the \npilot decided to continue t",
+      "asset_path": "handbooks/risk-management/FAA-H-8083-2A/figures/fig-1-4-00-the-pave-checklist-12855-the-pilot-reported-to-a.png",
+      "width": 290,
+      "height": 246
+    },
+    {
+      "id": "fig-1-1-00",
+      "section_code": "1.1",
+      "ordinal": 0,
+      "caption": "Figure 1-1. Sample NTSB final report.\n11782\nKey findings of the NTSB aviation accident final report, highlighted above in yellow, emphasize the pilot's inadequate in-flight \nplanning/decision to continue flight into known adverse weather conditions after the engine’s dry air vacuum pump failed and \nChapter 1:  Introduc",
+      "asset_path": "handbooks/risk-management/FAA-H-8083-2A/figures/fig-1-1-00-sample-ntsb-final-report-11782-key-findings-of-t.png",
+      "width": 488,
+      "height": 357
+    },
+    {
+      "id": "fig-1-2-00",
+      "section_code": "1.2",
+      "ordinal": 0,
+      "caption": "Figure 1-1. Sample NTSB final report.\n11782\nKey findings of the NTSB aviation accident final report, highlighted above in yellow, emphasize the pilot's inadequate in-flight \nplanning/decision to continue flight into known adverse weather conditions after the engine’s dry air vacuum pump failed and \nChapter 1:  Introduc",
+      "asset_path": "handbooks/risk-management/FAA-H-8083-2A/figures/fig-1-1-00-sample-ntsb-final-report-11782-key-findings-of-t.png",
+      "width": 488,
+      "height": 357
+    },
+    {
+      "id": "fig-1-3-00",
+      "section_code": "1.3",
+      "ordinal": 0,
+      "caption": "Figure 1-1. Sample NTSB final report.\n11782\nKey findings of the NTSB aviation accident final report, highlighted above in yellow, emphasize the pilot's inadequate in-flight \nplanning/decision to continue flight into known adverse weather conditions after the engine’s dry air vacuum pump failed and \nChapter 1:  Introduc",
+      "asset_path": "handbooks/risk-management/FAA-H-8083-2A/figures/fig-1-1-00-sample-ntsb-final-report-11782-key-findings-of-t.png",
+      "width": 488,
+      "height": 357
+    },
+    {
+      "id": "fig-1-4-00",
+      "section_code": "1.4",
+      "ordinal": 0,
+      "caption": "Figure 1-2. The PAVE checklist.\n12855\nThe pilot reported to air traffic control (ATC) that the vacuum pump failed while in visual meteorological conditions (VMC). \nAs a result, the attitude indicator and directional gyro became inoperative. Rather than divert to an airport while in VMC, the \npilot decided to continue t",
+      "asset_path": "handbooks/risk-management/FAA-H-8083-2A/figures/fig-1-4-00-the-pave-checklist-12855-the-pilot-reported-to-a.png",
+      "width": 290,
+      "height": 246
+    },
+    {
+      "id": "fig-3-00",
+      "section_code": "3",
+      "ordinal": 0,
+      "caption": "Figure 3-3. IMSAFE checklist.\nAircraft Hazards\n11831\n“A” hazards can be classified in terms of both performance and equipage.\nPerformance\n11832\nAircraft performance hazards may include:\n11833\n•\t Fuel and Range–As previously described, fuel issues continue to be a leading cause of general aviation accidents. \nPlanning a",
+      "asset_path": "handbooks/risk-management/FAA-H-8083-2A/figures/fig-3-4-2-00-imsafe-checklist-aircraft-hazards-11831-a-hazard.png",
+      "width": 221,
+      "height": 195
+    },
+    {
+      "id": "fig-3-01",
+      "section_code": "3",
+      "ordinal": 1,
+      "caption": "Figure 3-4. Elkins, WV airport.\n11796\nFigure 3-5. Sectional chart excerpt of Elkins, WV airport.\n11797\nThe mountains and obstructions on both sides of the Elkins airport are a hazard. However, on a day with good visibility, few \nclouds, and light winds, the associated risks are low for most aircraft engaged in visual f",
+      "asset_path": "handbooks/risk-management/FAA-H-8083-2A/figures/fig-3-6-00-elkins-wv-airport-11796-figure-3-5-sectional-cha.png",
+      "width": 685,
+      "height": 514
+    },
+    {
+      "id": "fig-3-02",
+      "section_code": "3",
+      "ordinal": 2,
+      "caption": "Figure 3-5. Sectional chart excerpt of Elkins, WV airport.\n11797\nThe mountains and obstructions on both sides of the Elkins airport are a hazard. However, on a day with good visibility, few \nclouds, and light winds, the associated risks are low for most aircraft engaged in visual flight rules (VFR) operations.\n11798\nIf",
+      "asset_path": "handbooks/risk-management/FAA-H-8083-2A/figures/fig-3-6-01-sectional-chart-excerpt-of-elkins-wv-airport-117.png",
+      "width": 395,
+      "height": 330
+    },
+    {
+      "id": "fig-3-03",
+      "section_code": "3",
+      "ordinal": 3,
+      "caption": "Figure 3-8. Aeronautical chart excerpt showing Durango, CO.\n11887\nTricia and the Smiths are enjoying the warm-weather weekend with rafting, cycling, and hiking as featured activities. The \nSmiths are well-established in the Durango social scene, and the three friends go to parties on Friday and Saturday night, \nwith an",
+      "asset_path": "handbooks/risk-management/FAA-H-8083-2A/figures/fig-3-7-1-00-aeronautical-chart-excerpt-showing-durango-co-11.png",
+      "width": 641,
+      "height": 499
+    },
+    {
+      "id": "fig-3-04",
+      "section_code": "3",
+      "ordinal": 4,
+      "caption": "Figure 3-9. The direct route from Durango to Santa Rosa.\n11892\nTricia makes a quick analysis and figures she can fly this trip nonstop in just under five hours, with 6 hours and 45 minutes of \nendurance with full tanks. She then evaluates the weather and immediately foresees some challenges.\n11893\nA low-pressure system",
+      "asset_path": "handbooks/risk-management/FAA-H-8083-2A/figures/fig-3-7-2-00-the-direct-route-from-durango-to-santa-rosa-1189.png",
+      "width": 977,
+      "height": 477
+    },
+    {
+      "id": "fig-3-05",
+      "section_code": "3",
+      "ordinal": 5,
+      "caption": "Figure 3-10. She needs to assess these risks in terms of their likelihood and severity. She strives to complete the risk analysis \nso she can return and discuss the situation with the Smiths.\n11924\nFigure 3-10. Case study FRAT with risks identified.\n11923\nThe risk assessment and mitigation for this case study will cont",
+      "asset_path": "handbooks/risk-management/FAA-H-8083-2A/figures/fig-3-8-00-she-needs-to-assess-these-risks-in-terms-of-thei.png",
+      "width": 1492,
+      "height": 526
+    },
+    {
+      "id": "fig-3-4-00",
+      "section_code": "3.4",
+      "ordinal": 0,
+      "caption": "Figure 3-3. IMSAFE checklist.\nAircraft Hazards\n11831\n“A” hazards can be classified in terms of both performance and equipage.\nPerformance\n11832\nAircraft performance hazards may include:\n11833\n•\t Fuel and Range–As previously described, fuel issues continue to be a leading cause of general aviation accidents. \nPlanning a",
+      "asset_path": "handbooks/risk-management/FAA-H-8083-2A/figures/fig-3-4-2-00-imsafe-checklist-aircraft-hazards-11831-a-hazard.png",
+      "width": 221,
+      "height": 195
+    },
+    {
+      "id": "fig-3-4-2-00",
+      "section_code": "3.4.2",
+      "ordinal": 0,
+      "caption": "Figure 3-3. IMSAFE checklist.\nAircraft Hazards\n11831\n“A” hazards can be classified in terms of both performance and equipage.\nPerformance\n11832\nAircraft performance hazards may include:\n11833\n•\t Fuel and Range–As previously described, fuel issues continue to be a leading cause of general aviation accidents. \nPlanning a",
+      "asset_path": "handbooks/risk-management/FAA-H-8083-2A/figures/fig-3-4-2-00-imsafe-checklist-aircraft-hazards-11831-a-hazard.png",
+      "width": 221,
+      "height": 195
+    },
+    {
+      "id": "fig-3-6-00",
+      "section_code": "3.6",
+      "ordinal": 0,
+      "caption": "Figure 3-4. Elkins, WV airport.\n11796\nFigure 3-5. Sectional chart excerpt of Elkins, WV airport.\n11797\nThe mountains and obstructions on both sides of the Elkins airport are a hazard. However, on a day with good visibility, few \nclouds, and light winds, the associated risks are low for most aircraft engaged in visual f",
+      "asset_path": "handbooks/risk-management/FAA-H-8083-2A/figures/fig-3-6-00-elkins-wv-airport-11796-figure-3-5-sectional-cha.png",
+      "width": 685,
+      "height": 514
+    },
+    {
+      "id": "fig-3-6-01",
+      "section_code": "3.6",
+      "ordinal": 1,
+      "caption": "Figure 3-5. Sectional chart excerpt of Elkins, WV airport.\n11797\nThe mountains and obstructions on both sides of the Elkins airport are a hazard. However, on a day with good visibility, few \nclouds, and light winds, the associated risks are low for most aircraft engaged in visual flight rules (VFR) operations.\n11798\nIf",
+      "asset_path": "handbooks/risk-management/FAA-H-8083-2A/figures/fig-3-6-01-sectional-chart-excerpt-of-elkins-wv-airport-117.png",
+      "width": 395,
+      "height": 330
+    },
+    {
+      "id": "fig-3-7-00",
+      "section_code": "3.7",
+      "ordinal": 0,
+      "caption": "Figure 3-8. Aeronautical chart excerpt showing Durango, CO.\n11887\nTricia and the Smiths are enjoying the warm-weather weekend with rafting, cycling, and hiking as featured activities. The \nSmiths are well-established in the Durango social scene, and the three friends go to parties on Friday and Saturday night, \nwith an",
+      "asset_path": "handbooks/risk-management/FAA-H-8083-2A/figures/fig-3-7-1-00-aeronautical-chart-excerpt-showing-durango-co-11.png",
+      "width": 641,
+      "height": 499
+    },
+    {
+      "id": "fig-3-7-01",
+      "section_code": "3.7",
+      "ordinal": 1,
+      "caption": "Figure 3-9. The direct route from Durango to Santa Rosa.\n11892\nTricia makes a quick analysis and figures she can fly this trip nonstop in just under five hours, with 6 hours and 45 minutes of \nendurance with full tanks. She then evaluates the weather and immediately foresees some challenges.\n11893\nA low-pressure system",
+      "asset_path": "handbooks/risk-management/FAA-H-8083-2A/figures/fig-3-7-2-00-the-direct-route-from-durango-to-santa-rosa-1189.png",
+      "width": 977,
+      "height": 477
+    },
+    {
+      "id": "fig-3-7-1-00",
+      "section_code": "3.7.1",
+      "ordinal": 0,
+      "caption": "Figure 3-8. Aeronautical chart excerpt showing Durango, CO.\n11887\nTricia and the Smiths are enjoying the warm-weather weekend with rafting, cycling, and hiking as featured activities. The \nSmiths are well-established in the Durango social scene, and the three friends go to parties on Friday and Saturday night, \nwith an",
+      "asset_path": "handbooks/risk-management/FAA-H-8083-2A/figures/fig-3-7-1-00-aeronautical-chart-excerpt-showing-durango-co-11.png",
+      "width": 641,
+      "height": 499
+    },
+    {
+      "id": "fig-3-7-2-00",
+      "section_code": "3.7.2",
+      "ordinal": 0,
+      "caption": "Figure 3-9. The direct route from Durango to Santa Rosa.\n11892\nTricia makes a quick analysis and figures she can fly this trip nonstop in just under five hours, with 6 hours and 45 minutes of \nendurance with full tanks. She then evaluates the weather and immediately foresees some challenges.\n11893\nA low-pressure system",
+      "asset_path": "handbooks/risk-management/FAA-H-8083-2A/figures/fig-3-7-2-00-the-direct-route-from-durango-to-santa-rosa-1189.png",
+      "width": 977,
+      "height": 477
+    },
+    {
+      "id": "fig-3-8-00",
+      "section_code": "3.8",
+      "ordinal": 0,
+      "caption": "Figure 3-10. She needs to assess these risks in terms of their likelihood and severity. She strives to complete the risk analysis \nso she can return and discuss the situation with the Smiths.\n11924\nFigure 3-10. Case study FRAT with risks identified.\n11923\nThe risk assessment and mitigation for this case study will cont",
+      "asset_path": "handbooks/risk-management/FAA-H-8083-2A/figures/fig-3-8-00-she-needs-to-assess-these-risks-in-terms-of-thei.png",
+      "width": 1492,
+      "height": 526
+    },
+    {
+      "id": "fig-5-00",
+      "section_code": "5",
+      "ordinal": 0,
+      "caption": "Figure 5-1. Modified route.\n12164\nThe total distance along this route is 880 NM, versus the straight-line distance of 711 NM. The additional 169 NM adds about \n1 hour and 15 minutes to the total flight time.\n12165\nShe mitigated the aircraft and environmental risks using this plan. She should also deal with the external",
+      "asset_path": "handbooks/risk-management/FAA-H-8083-2A/figures/fig-5-3-1-00-modified-route-12164-the-total-distance-along-th.png",
+      "width": 951,
+      "height": 454
+    },
+    {
+      "id": "fig-5-3-00",
+      "section_code": "5.3",
+      "ordinal": 0,
+      "caption": "Figure 5-1. Modified route.\n12164\nThe total distance along this route is 880 NM, versus the straight-line distance of 711 NM. The additional 169 NM adds about \n1 hour and 15 minutes to the total flight time.\n12165\nShe mitigated the aircraft and environmental risks using this plan. She should also deal with the external",
+      "asset_path": "handbooks/risk-management/FAA-H-8083-2A/figures/fig-5-3-1-00-modified-route-12164-the-total-distance-along-th.png",
+      "width": 951,
+      "height": 454
+    },
+    {
+      "id": "fig-5-3-1-00",
+      "section_code": "5.3.1",
+      "ordinal": 0,
+      "caption": "Figure 5-1. Modified route.\n12164\nThe total distance along this route is 880 NM, versus the straight-line distance of 711 NM. The additional 169 NM adds about \n1 hour and 15 minutes to the total flight time.\n12165\nShe mitigated the aircraft and environmental risks using this plan. She should also deal with the external",
+      "asset_path": "handbooks/risk-management/FAA-H-8083-2A/figures/fig-5-3-1-00-modified-route-12164-the-total-distance-along-th.png",
+      "width": 951,
+      "height": 454
+    },
+    {
+      "id": "fig-7-00",
+      "section_code": "7",
+      "ordinal": 0,
+      "caption": "Figure 7-1. Autopilot interface.\nChapter 7:  Automation & Flight Path \nManagement\n7-1",
+      "asset_path": "handbooks/risk-management/FAA-H-8083-2A/figures/fig-7-1-00-autopilot-interface-chapter-7-automation-flight-.png",
+      "width": 519,
+      "height": 480
+    },
+    {
+      "id": "fig-7-01",
+      "section_code": "7",
+      "ordinal": 1,
+      "caption": "Figure 7-2. Steps for interacting with automation\n12301\nUnderstanding autopilot function and logic allows the pilot to anticipate, act, and verify the autopilot performs as expected. \nFigure 7-3 shows a typical flight mode annunciator displayed on the primary flight display (PFD) of a general aviation integrated \nfligh",
+      "asset_path": "handbooks/risk-management/FAA-H-8083-2A/figures/fig-7-5-00-steps-for-interacting-with-automation-12301-unde.png",
+      "width": 709,
+      "height": 715
+    },
+    {
+      "id": "fig-7-1-00",
+      "section_code": "7.1",
+      "ordinal": 0,
+      "caption": "Figure 7-1. Autopilot interface.\nChapter 7:  Automation & Flight Path \nManagement\n7-1",
+      "asset_path": "handbooks/risk-management/FAA-H-8083-2A/figures/fig-7-1-00-autopilot-interface-chapter-7-automation-flight-.png",
+      "width": 519,
+      "height": 480
+    },
+    {
+      "id": "fig-7-5-00",
+      "section_code": "7.5",
+      "ordinal": 0,
+      "caption": "Figure 7-2. Steps for interacting with automation\n12301\nUnderstanding autopilot function and logic allows the pilot to anticipate, act, and verify the autopilot performs as expected. \nFigure 7-3 shows a typical flight mode annunciator displayed on the primary flight display (PFD) of a general aviation integrated \nfligh",
+      "asset_path": "handbooks/risk-management/FAA-H-8083-2A/figures/fig-7-5-00-steps-for-interacting-with-automation-12301-unde.png",
+      "width": 709,
+      "height": 715
+    },
+    {
+      "id": "fig-7-6-00",
+      "section_code": "7.6",
+      "ordinal": 0,
+      "caption": "Figure 7-2. Steps for interacting with automation\n12301\nUnderstanding autopilot function and logic allows the pilot to anticipate, act, and verify the autopilot performs as expected. \nFigure 7-3 shows a typical flight mode annunciator displayed on the primary flight display (PFD) of a general aviation integrated \nfligh",
+      "asset_path": "handbooks/risk-management/FAA-H-8083-2A/figures/fig-7-5-00-steps-for-interacting-with-automation-12301-unde.png",
+      "width": 709,
+      "height": 715
+    },
+    {
+      "id": "fig-8-00",
+      "section_code": "8",
+      "ordinal": 0,
+      "caption": "Figure 8-1. Advisory Circular (AC) 60-22, Aeronautical Decision-Making, includes a wealth of information for pilots.\n12316\nAccidents still occur despite advances in training methods, aircraft technology, and services available to pilots. Despite \nimprovements in training and technology, human error remains an issue. AD",
+      "asset_path": "handbooks/risk-management/FAA-H-8083-2A/figures/fig-8-1-00-advisory-circular-ac-60-22-aeronautical-decision.png",
+      "width": 604,
+      "height": 774
+    },
+    {
+      "id": "fig-8-01",
+      "section_code": "8",
+      "ordinal": 1,
+      "caption": "Figure 8-2. The illustration shows how the 3P model is used in decision-making.\n12331\nPerceive: While en route, for example, a pilot checks data-link weather on an electronic flight bag and sees thunderstorms \ndeveloping ahead. The pilot perceives this as a significant hazard since the likelihood of a thunderstorm affe",
+      "asset_path": "handbooks/risk-management/FAA-H-8083-2A/figures/fig-8-3-01-the-illustration-shows-how-the-3p-model-is-used-.png",
+      "width": 600,
+      "height": 772
+    },
+    {
+      "id": "fig-8-02",
+      "section_code": "8",
+      "ordinal": 2,
+      "caption": "Figure 8-3. Sheared off titanium fan blade with feather impressions.\n12345\nYears later, a pilot who investigated this bird strike was flying a turbojet. When a large bird appeared in the departure path, the \npilot delayed rotation a few seconds, and  the airplane flew under the bird without incident. Visualizing what c",
+      "asset_path": "handbooks/risk-management/FAA-H-8083-2A/figures/fig-8-4-00-sheared-off-titanium-fan-blade-with-feather-impr.png",
+      "width": 1409,
+      "height": 777
+    },
+    {
+      "id": "fig-8-1-00",
+      "section_code": "8.1",
+      "ordinal": 0,
+      "caption": "Figure 8-1. Advisory Circular (AC) 60-22, Aeronautical Decision-Making, includes a wealth of information for pilots.\n12316\nAccidents still occur despite advances in training methods, aircraft technology, and services available to pilots. Despite \nimprovements in training and technology, human error remains an issue. AD",
+      "asset_path": "handbooks/risk-management/FAA-H-8083-2A/figures/fig-8-1-00-advisory-circular-ac-60-22-aeronautical-decision.png",
+      "width": 604,
+      "height": 774
+    },
+    {
+      "id": "fig-8-2-00",
+      "section_code": "8.2",
+      "ordinal": 0,
+      "caption": "Figure 8-1. Advisory Circular (AC) 60-22, Aeronautical Decision-Making, includes a wealth of information for pilots.\n12316\nAccidents still occur despite advances in training methods, aircraft technology, and services available to pilots. Despite \nimprovements in training and technology, human error remains an issue. AD",
+      "asset_path": "handbooks/risk-management/FAA-H-8083-2A/figures/fig-8-1-00-advisory-circular-ac-60-22-aeronautical-decision.png",
+      "width": 604,
+      "height": 774
+    },
+    {
+      "id": "fig-8-3-00",
+      "section_code": "8.3",
+      "ordinal": 0,
+      "caption": "Figure 8-1. Advisory Circular (AC) 60-22, Aeronautical Decision-Making, includes a wealth of information for pilots.\n12316\nAccidents still occur despite advances in training methods, aircraft technology, and services available to pilots. Despite \nimprovements in training and technology, human error remains an issue. AD",
+      "asset_path": "handbooks/risk-management/FAA-H-8083-2A/figures/fig-8-1-00-advisory-circular-ac-60-22-aeronautical-decision.png",
+      "width": 604,
+      "height": 774
+    },
+    {
+      "id": "fig-8-3-01",
+      "section_code": "8.3",
+      "ordinal": 1,
+      "caption": "Figure 8-2. The illustration shows how the 3P model is used in decision-making.\n12331\nPerceive: While en route, for example, a pilot checks data-link weather on an electronic flight bag and sees thunderstorms \ndeveloping ahead. The pilot perceives this as a significant hazard since the likelihood of a thunderstorm affe",
+      "asset_path": "handbooks/risk-management/FAA-H-8083-2A/figures/fig-8-3-01-the-illustration-shows-how-the-3p-model-is-used-.png",
+      "width": 600,
+      "height": 772
+    },
+    {
+      "id": "fig-8-4-00",
+      "section_code": "8.4",
+      "ordinal": 0,
+      "caption": "Figure 8-3. Sheared off titanium fan blade with feather impressions.\n12345\nYears later, a pilot who investigated this bird strike was flying a turbojet. When a large bird appeared in the departure path, the \npilot delayed rotation a few seconds, and  the airplane flew under the bird without incident. Visualizing what c",
+      "asset_path": "handbooks/risk-management/FAA-H-8083-2A/figures/fig-8-4-00-sheared-off-titanium-fan-blade-with-feather-impr.png",
+      "width": 1409,
+      "height": 777
+    },
+    {
+      "id": "fig-8-5-00",
+      "section_code": "8.5",
+      "ordinal": 0,
+      "caption": "Figure 8-3. Sheared off titanium fan blade with feather impressions.\n12345\nYears later, a pilot who investigated this bird strike was flying a turbojet. When a large bird appeared in the departure path, the \npilot delayed rotation a few seconds, and  the airplane flew under the bird without incident. Visualizing what c",
+      "asset_path": "handbooks/risk-management/FAA-H-8083-2A/figures/fig-8-4-00-sheared-off-titanium-fan-blade-with-feather-impr.png",
+      "width": 1409,
+      "height": 777
+    }
+  ],
+  "warnings": [
+    {
+      "code": "figure-without-caption",
+      "section_code": "1",
+      "message": "Image on page 11 (index 1) had no paired caption."
+    },
+    {
+      "code": "figure-without-caption",
+      "section_code": "1",
+      "message": "Image on page 11 (index 2) had no paired caption."
+    },
+    {
+      "code": "figure-without-caption",
+      "section_code": "1",
+      "message": "Image on page 11 (index 3) had no paired caption."
+    },
+    {
+      "code": "figure-without-caption",
+      "section_code": "1.4",
+      "message": "Image on page 11 (index 1) had no paired caption."
+    },
+    {
+      "code": "figure-without-caption",
+      "section_code": "1.4",
+      "message": "Image on page 11 (index 2) had no paired caption."
+    },
+    {
+      "code": "figure-without-caption",
+      "section_code": "1.4",
+      "message": "Image on page 11 (index 3) had no paired caption."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "2",
+      "message": "Caption `Figure 2-1. Weather category values for ceiling and visibility.\nStep 2—Assess Ex` on page 13 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "2",
+      "message": "Caption `Figure 2-5.\nChapter 2:  Personal Minimums\n2-1` on page 13 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "2",
+      "message": "Caption `Figure 2-2. Certification, training, and experience summary.\n12397\nThe tables in` on page 14 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "2",
+      "message": "Caption `Figure 2-3. A sample pilot experience and comfort level assessment for VFR and M` on page 15 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "2",
+      "message": "Caption `Figure 2-4. A sample pilot experience and comfort level assessment for IFR and L` on page 15 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "2",
+      "message": "Caption `Figure 2-5.\n12404\nExperience and “Comfort Level” Assessment \nCombined VFR & IFR\n` on page 15 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "2",
+      "message": "Caption `Figure 2-5. Experience and comfort level assessment for combined VFR and IFR.\nSt` on page 15 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "2",
+      "message": "Caption `Figure 2-6. A sample pilot experience and comfort level assessment for wind and ` on page 16 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "2",
+      "message": "Caption `Figure 2-7. Sample experience and comfort level assessment for performance facto` on page 16 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "2",
+      "message": "Caption `Figure 2-8.\n12410\nBaseline Personal Minimums\nWeather Condition\nCeiling\nDay\nNight` on page 16 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "2",
+      "message": "Caption `Figure 2-8. Sample baseline personal minimums.\n2-4` on page 16 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "2",
+      "message": "Caption `Figure 2-9. Examples of additional safety margins from baseline personal minimum` on page 17 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "2.1",
+      "message": "Caption `Figure 2-1. Weather category values for ceiling and visibility.\nStep 2—Assess Ex` on page 13 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "2.1",
+      "message": "Caption `Figure 2-5.\nChapter 2:  Personal Minimums\n2-1` on page 13 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "2.2",
+      "message": "Caption `Figure 2-1. Weather category values for ceiling and visibility.\nStep 2—Assess Ex` on page 13 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "2.2",
+      "message": "Caption `Figure 2-5.\nChapter 2:  Personal Minimums\n2-1` on page 13 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "2.2",
+      "message": "Caption `Figure 2-2. Certification, training, and experience summary.\n12397\nThe tables in` on page 14 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "2.2",
+      "message": "Caption `Figure 2-3. A sample pilot experience and comfort level assessment for VFR and M` on page 15 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "2.2",
+      "message": "Caption `Figure 2-4. A sample pilot experience and comfort level assessment for IFR and L` on page 15 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "2.2",
+      "message": "Caption `Figure 2-5.\n12404\nExperience and “Comfort Level” Assessment \nCombined VFR & IFR\n` on page 15 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "2.2",
+      "message": "Caption `Figure 2-5. Experience and comfort level assessment for combined VFR and IFR.\nSt` on page 15 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "2.2",
+      "message": "Caption `Figure 2-6. A sample pilot experience and comfort level assessment for wind and ` on page 16 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "2.2",
+      "message": "Caption `Figure 2-7. Sample experience and comfort level assessment for performance facto` on page 16 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "2.2",
+      "message": "Caption `Figure 2-8.\n12410\nBaseline Personal Minimums\nWeather Condition\nCeiling\nDay\nNight` on page 16 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "2.2",
+      "message": "Caption `Figure 2-8. Sample baseline personal minimums.\n2-4` on page 16 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "2.2.1",
+      "message": "Caption `Figure 2-1. Weather category values for ceiling and visibility.\nStep 2—Assess Ex` on page 13 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "2.2.1",
+      "message": "Caption `Figure 2-5.\nChapter 2:  Personal Minimums\n2-1` on page 13 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "2.2.2",
+      "message": "Caption `Figure 2-1. Weather category values for ceiling and visibility.\nStep 2—Assess Ex` on page 13 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "2.2.2",
+      "message": "Caption `Figure 2-5.\nChapter 2:  Personal Minimums\n2-1` on page 13 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "2.2.2",
+      "message": "Caption `Figure 2-2. Certification, training, and experience summary.\n12397\nThe tables in` on page 14 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "2.2.3",
+      "message": "Caption `Figure 2-3. A sample pilot experience and comfort level assessment for VFR and M` on page 15 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "2.2.3",
+      "message": "Caption `Figure 2-4. A sample pilot experience and comfort level assessment for IFR and L` on page 15 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "2.2.3",
+      "message": "Caption `Figure 2-5.\n12404\nExperience and “Comfort Level” Assessment \nCombined VFR & IFR\n` on page 15 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "2.2.3",
+      "message": "Caption `Figure 2-5. Experience and comfort level assessment for combined VFR and IFR.\nSt` on page 15 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "2.2.4",
+      "message": "Caption `Figure 2-6. A sample pilot experience and comfort level assessment for wind and ` on page 16 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "2.2.4",
+      "message": "Caption `Figure 2-7. Sample experience and comfort level assessment for performance facto` on page 16 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "2.2.4",
+      "message": "Caption `Figure 2-8.\n12410\nBaseline Personal Minimums\nWeather Condition\nCeiling\nDay\nNight` on page 16 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "2.2.4",
+      "message": "Caption `Figure 2-8. Sample baseline personal minimums.\n2-4` on page 16 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "2.2.5",
+      "message": "Caption `Figure 2-9. Examples of additional safety margins from baseline personal minimum` on page 17 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "2.2.6",
+      "message": "Caption `Figure 2-9. Examples of additional safety margins from baseline personal minimum` on page 17 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "2.3",
+      "message": "Caption `Figure 2-9. Examples of additional safety margins from baseline personal minimum` on page 17 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "3",
+      "message": "Caption `Figure 3-1. Pilots should examine their decisions carefully to ensure that their` on page 20 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "3",
+      "message": "Caption `Figure 3-2. Antidotes to hazardous attitudes.\nLeading Accident Causes\n11800\nThe ` on page 21 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "3",
+      "message": "Caption `Figure 3-6. Example of a numerical FRAT.\n25487/11871\nThe FAA provides a numerica` on page 28 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "3",
+      "message": "Caption `Figure 3-7. Example Flight Risk Assessment Tool.\nCase Study\n11883\nOne way to und` on page 29 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "3",
+      "message": "Caption `Figure 3-9.\n3-12` on page 30 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "3",
+      "message": "Caption `Figure 3-10. Case study FRAT with risks identified.\n11923\nThe risk assessment an` on page 33 had no paired image."
+    },
+    {
+      "code": "figure-without-caption",
+      "section_code": "3",
+      "message": "Image on page 24 (index 1) had no paired caption."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "3.2",
+      "message": "Caption `Figure 3-1. Pilots should examine their decisions carefully to ensure that their` on page 20 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "3.2.1",
+      "message": "Caption `Figure 3-1. Pilots should examine their decisions carefully to ensure that their` on page 20 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "3.3",
+      "message": "Caption `Figure 3-2. Antidotes to hazardous attitudes.\nLeading Accident Causes\n11800\nThe ` on page 21 had no paired image."
+    },
+    {
+      "code": "figure-without-caption",
+      "section_code": "3.4",
+      "message": "Image on page 24 (index 1) had no paired caption."
+    },
+    {
+      "code": "figure-without-caption",
+      "section_code": "3.4.2",
+      "message": "Image on page 24 (index 1) had no paired caption."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "3.6",
+      "message": "Caption `Figure 3-6. Example of a numerical FRAT.\n25487/11871\nThe FAA provides a numerica` on page 28 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "3.6.1",
+      "message": "Caption `Figure 3-6. Example of a numerical FRAT.\n25487/11871\nThe FAA provides a numerica` on page 28 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "3.7",
+      "message": "Caption `Figure 3-7. Example Flight Risk Assessment Tool.\nCase Study\n11883\nOne way to und` on page 29 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "3.7",
+      "message": "Caption `Figure 3-9.\n3-12` on page 30 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "3.7.1",
+      "message": "Caption `Figure 3-7. Example Flight Risk Assessment Tool.\nCase Study\n11883\nOne way to und` on page 29 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "3.7.1",
+      "message": "Caption `Figure 3-9.\n3-12` on page 30 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "3.8",
+      "message": "Caption `Figure 3-10. Case study FRAT with risks identified.\n11923\nThe risk assessment an` on page 33 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "4",
+      "message": "Caption `Figure 4-1. Risk Assessment Matrix.\n12082\nCross-matching the likelihood and seve` on page 35 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "4",
+      "message": "Caption `Figure 4-2. FRAT excerpt for pilot hazards and associated risks.\nAircraft\n12117\n` on page 36 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "4",
+      "message": "Caption `Figure 4-3. FRAT excerpt for aircraft hazards and associated risks.\nEnvironment\n` on page 36 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "4",
+      "message": "Caption `Figure 4-4. FRAT excerpt for environment hazards and associated risks.\n12124\nBot` on page 37 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "4",
+      "message": "Caption `Figure 4-5. FRAT Excerpt for external pressure hazards and associated risks.\n161` on page 37 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "4",
+      "message": "Caption `Figure 4-6. FRAT hazards and associated risks.\nChapter Summary\n12128\nRisk assess` on page 38 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "4.2",
+      "message": "Caption `Figure 4-1. Risk Assessment Matrix.\n12082\nCross-matching the likelihood and seve` on page 35 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "4.2.1",
+      "message": "Caption `Figure 4-1. Risk Assessment Matrix.\n12082\nCross-matching the likelihood and seve` on page 35 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "4.3",
+      "message": "Caption `Figure 4-2. FRAT excerpt for pilot hazards and associated risks.\nAircraft\n12117\n` on page 36 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "4.3",
+      "message": "Caption `Figure 4-3. FRAT excerpt for aircraft hazards and associated risks.\nEnvironment\n` on page 36 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "4.3",
+      "message": "Caption `Figure 4-4. FRAT excerpt for environment hazards and associated risks.\n12124\nBot` on page 37 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "4.3",
+      "message": "Caption `Figure 4-5. FRAT Excerpt for external pressure hazards and associated risks.\n161` on page 37 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "4.3.1",
+      "message": "Caption `Figure 4-2. FRAT excerpt for pilot hazards and associated risks.\nAircraft\n12117\n` on page 36 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "4.3.1",
+      "message": "Caption `Figure 4-3. FRAT excerpt for aircraft hazards and associated risks.\nEnvironment\n` on page 36 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "4.3.1",
+      "message": "Caption `Figure 4-4. FRAT excerpt for environment hazards and associated risks.\n12124\nBot` on page 37 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "4.3.1",
+      "message": "Caption `Figure 4-5. FRAT Excerpt for external pressure hazards and associated risks.\n161` on page 37 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "4.4",
+      "message": "Caption `Figure 4-6. FRAT hazards and associated risks.\nChapter Summary\n12128\nRisk assess` on page 38 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "5",
+      "message": "Caption `Figure 5-2. Case study FRAT with risks mitigated.\n12170\nOf the nine risks assess` on page 42 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "5.4",
+      "message": "Caption `Figure 5-2. Case study FRAT with risks mitigated.\n12170\nOf the nine risks assess` on page 42 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "6",
+      "message": "Caption `Figure 6-1. The Swiss cheese model.\nDiscipline\n12268\nDiscipline stems from good ` on page 48 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "6",
+      "message": "Caption `Figure 6-2. In general, a disciplined \npilot will always do the right thing. Jus` on page 48 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "6",
+      "message": "Caption `Figure 6-2. Operational Pitfalls and Hazardous Attitudes.\nChapter Summary\n12270\n` on page 48 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "6.6",
+      "message": "Caption `Figure 6-1. The Swiss cheese model.\nDiscipline\n12268\nDiscipline stems from good ` on page 48 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "6.6",
+      "message": "Caption `Figure 6-2. In general, a disciplined \npilot will always do the right thing. Jus` on page 48 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "6.6",
+      "message": "Caption `Figure 6-2. Operational Pitfalls and Hazardous Attitudes.\nChapter Summary\n12270\n` on page 48 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "7",
+      "message": "Caption `Figure 7-3. Flight mode annunciators in green indicate the autopilot is engaged ` on page 52 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "7.5",
+      "message": "Caption `Figure 7-3. Flight mode annunciators in green indicate the autopilot is engaged ` on page 52 had no paired image."
+    },
+    {
+      "code": "caption-without-figure",
+      "section_code": "7.6",
+      "message": "Caption `Figure 7-3. Flight mode annunciators in green indicate the autopilot is engaged ` on page 52 had no paired image."
+    },
+    {
+      "code": "figure-without-caption",
+      "section_code": "8",
+      "message": "Image on page 54 (index 2) had no paired caption."
+    },
+    {
+      "code": "figure-without-caption",
+      "section_code": "8",
+      "message": "Image on page 54 (index 3) had no paired caption."
+    },
+    {
+      "code": "figure-without-caption",
+      "section_code": "8.1",
+      "message": "Image on page 54 (index 1) had no paired caption."
+    },
+    {
+      "code": "figure-without-caption",
+      "section_code": "8.1",
+      "message": "Image on page 54 (index 2) had no paired caption."
+    },
+    {
+      "code": "figure-without-caption",
+      "section_code": "8.1",
+      "message": "Image on page 54 (index 3) had no paired caption."
+    },
+    {
+      "code": "figure-without-caption",
+      "section_code": "8.2",
+      "message": "Image on page 54 (index 1) had no paired caption."
+    },
+    {
+      "code": "figure-without-caption",
+      "section_code": "8.2",
+      "message": "Image on page 54 (index 2) had no paired caption."
+    },
+    {
+      "code": "figure-without-caption",
+      "section_code": "8.2",
+      "message": "Image on page 54 (index 3) had no paired caption."
+    },
+    {
+      "code": "figure-without-caption",
+      "section_code": "8.3",
+      "message": "Image on page 54 (index 2) had no paired caption."
+    },
+    {
+      "code": "figure-without-caption",
+      "section_code": "8.3",
+      "message": "Image on page 54 (index 3) had no paired caption."
+    },
+    {
+      "code": "figure-without-caption",
+      "section_code": "10",
+      "message": "Image on page 60 (index 0) had no paired caption."
+    },
+    {
+      "code": "figure-without-caption",
+      "section_code": "10",
+      "message": "Image on page 60 (index 1) had no paired caption."
+    },
+    {
+      "code": "figure-without-caption",
+      "section_code": "10",
+      "message": "Image on page 60 (index 2) had no paired caption."
+    },
+    {
+      "code": "figure-without-caption",
+      "section_code": "10",
+      "message": "Image on page 60 (index 3) had no paired caption."
+    },
+    {
+      "code": "figure-without-caption",
+      "section_code": "10",
+      "message": "Image on page 62 (index 0) had no paired caption."
+    },
+    {
+      "code": "figure-without-caption",
+      "section_code": "10",
+      "message": "Image on page 62 (index 1) had no paired caption."
+    },
+    {
+      "code": "figure-without-caption",
+      "section_code": "10",
+      "message": "Image on page 62 (index 2) had no paired caption."
+    },
+    {
+      "code": "figure-without-caption",
+      "section_code": "10.1",
+      "message": "Image on page 60 (index 0) had no paired caption."
+    },
+    {
+      "code": "figure-without-caption",
+      "section_code": "10.1",
+      "message": "Image on page 60 (index 1) had no paired caption."
+    },
+    {
+      "code": "figure-without-caption",
+      "section_code": "10.1",
+      "message": "Image on page 60 (index 2) had no paired caption."
+    },
+    {
+      "code": "figure-without-caption",
+      "section_code": "10.1",
+      "message": "Image on page 60 (index 3) had no paired caption."
+    },
+    {
+      "code": "figure-without-caption",
+      "section_code": "10.1.1",
+      "message": "Image on page 60 (index 0) had no paired caption."
+    },
+    {
+      "code": "figure-without-caption",
+      "section_code": "10.1.1",
+      "message": "Image on page 60 (index 1) had no paired caption."
+    },
+    {
+      "code": "figure-without-caption",
+      "section_code": "10.1.1",
+      "message": "Image on page 60 (index 2) had no paired caption."
+    },
+    {
+      "code": "figure-without-caption",
+      "section_code": "10.1.1",
+      "message": "Image on page 60 (index 3) had no paired caption."
+    },
+    {
+      "code": "figure-without-caption",
+      "section_code": "10.2",
+      "message": "Image on page 62 (index 0) had no paired caption."
+    },
+    {
+      "code": "figure-without-caption",
+      "section_code": "10.2",
+      "message": "Image on page 62 (index 1) had no paired caption."
+    },
+    {
+      "code": "figure-without-caption",
+      "section_code": "10.2",
+      "message": "Image on page 62 (index 2) had no paired caption."
+    },
+    {
+      "code": "figure-without-caption",
+      "section_code": "10.2.1",
+      "message": "Image on page 62 (index 0) had no paired caption."
+    },
+    {
+      "code": "figure-without-caption",
+      "section_code": "10.2.1",
+      "message": "Image on page 62 (index 1) had no paired caption."
+    },
+    {
+      "code": "figure-without-caption",
+      "section_code": "10.2.1",
+      "message": "Image on page 62 (index 2) had no paired caption."
+    },
+    {
+      "code": "figure-without-caption",
+      "section_code": "11",
+      "message": "Image on page 65 (index 0) had no paired caption."
+    },
+    {
+      "code": "figure-without-caption",
+      "section_code": "11",
+      "message": "Image on page 66 (index 0) had no paired caption."
+    },
+    {
+      "code": "figure-without-caption",
+      "section_code": "11.3",
+      "message": "Image on page 65 (index 0) had no paired caption."
+    },
+    {
+      "code": "figure-without-caption",
+      "section_code": "11.3.1",
+      "message": "Image on page 65 (index 0) had no paired caption."
+    },
+    {
+      "code": "figure-without-caption",
+      "section_code": "11.3.2",
+      "message": "Image on page 65 (index 0) had no paired caption."
+    },
+    {
+      "code": "figure-without-caption",
+      "section_code": "11.3.3",
+      "message": "Image on page 66 (index 0) had no paired caption."
+    },
+    {
+      "code": "figure-without-caption",
+      "section_code": "11.4",
+      "message": "Image on page 66 (index 0) had no paired caption."
+    },
+    {
+      "code": "figure-without-caption",
+      "section_code": "11.4.1",
+      "message": "Image on page 66 (index 0) had no paired caption."
+    },
+    {
+      "code": "figure-without-caption",
+      "section_code": "11.4.2",
+      "message": "Image on page 66 (index 0) had no paired caption."
+    },
+    {
+      "code": "figure-without-caption",
+      "section_code": "12",
+      "message": "Image on page 69 (index 0) had no paired caption."
+    },
+    {
+      "code": "figure-without-caption",
+      "section_code": "12",
+      "message": "Image on page 70 (index 0) had no paired caption."
+    },
+    {
+      "code": "figure-without-caption",
+      "section_code": "12",
+      "message": "Image on page 71 (index 0) had no paired caption."
+    },
+    {
+      "code": "figure-without-caption",
+      "section_code": "12",
+      "message": "Image on page 72 (index 0) had no paired caption."
+    },
+    {
+      "code": "figure-without-caption",
+      "section_code": "12.1",
+      "message": "Image on page 69 (index 0) had no paired caption."
+    },
+    {
+      "code": "figure-without-caption",
+      "section_code": "12.1",
+      "message": "Image on page 70 (index 0) had no paired caption."
+    },
+    {
+      "code": "figure-without-caption",
+      "section_code": "12.1",
+      "message": "Image on page 71 (index 0) had no paired caption."
+    },
+    {
+      "code": "figure-without-caption",
+      "section_code": "12.1",
+      "message": "Image on page 72 (index 0) had no paired caption."
+    },
+    {
+      "code": "figure-without-caption",
+      "section_code": "12.1.1",
+      "message": "Image on page 69 (index 0) had no paired caption."
+    },
+    {
+      "code": "figure-without-caption",
+      "section_code": "12.1.2",
+      "message": "Image on page 70 (index 0) had no paired caption."
+    },
+    {
+      "code": "figure-without-caption",
+      "section_code": "12.1.3",
+      "message": "Image on page 70 (index 0) had no paired caption."
+    },
+    {
+      "code": "figure-without-caption",
+      "section_code": "12.1.4",
+      "message": "Image on page 71 (index 0) had no paired caption."
+    },
+    {
+      "code": "figure-without-caption",
+      "section_code": "12.1.4",
+      "message": "Image on page 72 (index 0) had no paired caption."
+    },
+    {
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 8 end-page (PDF p58) had no parseable FAA header; recovered `8-4` from PDF p57 (walk-back 1)"
+    },
+    {
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 8.6 end-page (PDF p58) had no parseable FAA header; recovered `8-4` from PDF p57 (walk-back 1)"
+    },
+    {
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 9 start-page (PDF p59) had no parseable FAA header; recovered `8-4` from PDF p57 (walk-back 2)"
+    },
+    {
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 9 end-page (PDF p59) had no parseable FAA header; recovered `8-4` from PDF p57 (walk-back 2)"
+    },
+    {
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 9.1 start-page (PDF p59) had no parseable FAA header; recovered `8-4` from PDF p57 (walk-back 2)"
+    },
+    {
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 9.1 end-page (PDF p59) had no parseable FAA header; recovered `8-4` from PDF p57 (walk-back 2)"
+    },
+    {
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 10 start-page (PDF p60) had no parseable FAA header; recovered `8-4` from PDF p57 (walk-back 3)"
+    },
+    {
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 10 end-page (PDF p63) had no parseable FAA header within 5 pages; falling back to offset-derived `63`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 10.1 start-page (PDF p60) had no parseable FAA header; recovered `8-4` from PDF p57 (walk-back 3)"
+    },
+    {
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 10.1 end-page (PDF p61) had no parseable FAA header; recovered `8-4` from PDF p57 (walk-back 4)"
+    },
+    {
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 10.1.1 start-page (PDF p60) had no parseable FAA header; recovered `8-4` from PDF p57 (walk-back 3)"
+    },
+    {
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 10.1.1 end-page (PDF p61) had no parseable FAA header; recovered `8-4` from PDF p57 (walk-back 4)"
+    },
+    {
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 10.2 start-page (PDF p62) had no parseable FAA header; recovered `8-4` from PDF p57 (walk-back 5)"
+    },
+    {
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 10.2 end-page (PDF p63) had no parseable FAA header within 5 pages; falling back to offset-derived `63`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 10.2.1 start-page (PDF p62) had no parseable FAA header; recovered `8-4` from PDF p57 (walk-back 5)"
+    },
+    {
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 10.2.1 end-page (PDF p63) had no parseable FAA header within 5 pages; falling back to offset-derived `63`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 11 start-page (PDF p64) had no parseable FAA header within 5 pages; falling back to offset-derived `64`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 11 end-page (PDF p68) had no parseable FAA header within 5 pages; falling back to offset-derived `68`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 11.1 start-page (PDF p64) had no parseable FAA header within 5 pages; falling back to offset-derived `64`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 11.1 end-page (PDF p64) had no parseable FAA header within 5 pages; falling back to offset-derived `64`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 11.2 start-page (PDF p64) had no parseable FAA header within 5 pages; falling back to offset-derived `64`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 11.2 end-page (PDF p64) had no parseable FAA header within 5 pages; falling back to offset-derived `64`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 11.2.1 start-page (PDF p64) had no parseable FAA header within 5 pages; falling back to offset-derived `64`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 11.2.1 end-page (PDF p64) had no parseable FAA header within 5 pages; falling back to offset-derived `64`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 11.2.2 start-page (PDF p64) had no parseable FAA header within 5 pages; falling back to offset-derived `64`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 11.2.2 end-page (PDF p64) had no parseable FAA header within 5 pages; falling back to offset-derived `64`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 11.2.3 start-page (PDF p64) had no parseable FAA header within 5 pages; falling back to offset-derived `64`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 11.2.3 end-page (PDF p64) had no parseable FAA header within 5 pages; falling back to offset-derived `64`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 11.3 start-page (PDF p65) had no parseable FAA header within 5 pages; falling back to offset-derived `65`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 11.3 end-page (PDF p65) had no parseable FAA header within 5 pages; falling back to offset-derived `65`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 11.3.1 start-page (PDF p65) had no parseable FAA header within 5 pages; falling back to offset-derived `65`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 11.3.1 end-page (PDF p65) had no parseable FAA header within 5 pages; falling back to offset-derived `65`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 11.3.2 start-page (PDF p65) had no parseable FAA header within 5 pages; falling back to offset-derived `65`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 11.3.2 end-page (PDF p65) had no parseable FAA header within 5 pages; falling back to offset-derived `65`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 11.3.3 start-page (PDF p66) had no parseable FAA header within 5 pages; falling back to offset-derived `66`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 11.3.3 end-page (PDF p66) had no parseable FAA header within 5 pages; falling back to offset-derived `66`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 11.4 start-page (PDF p66) had no parseable FAA header within 5 pages; falling back to offset-derived `66`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 11.4 end-page (PDF p66) had no parseable FAA header within 5 pages; falling back to offset-derived `66`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 11.4.1 start-page (PDF p66) had no parseable FAA header within 5 pages; falling back to offset-derived `66`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 11.4.1 end-page (PDF p66) had no parseable FAA header within 5 pages; falling back to offset-derived `66`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 11.4.2 start-page (PDF p66) had no parseable FAA header within 5 pages; falling back to offset-derived `66`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 11.4.2 end-page (PDF p66) had no parseable FAA header within 5 pages; falling back to offset-derived `66`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 11.4.3 start-page (PDF p67) had no parseable FAA header within 5 pages; falling back to offset-derived `67`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 11.4.3 end-page (PDF p67) had no parseable FAA header within 5 pages; falling back to offset-derived `67`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 11.5 start-page (PDF p67) had no parseable FAA header within 5 pages; falling back to offset-derived `67`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 11.5 end-page (PDF p68) had no parseable FAA header within 5 pages; falling back to offset-derived `68`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 11.5.1 start-page (PDF p67) had no parseable FAA header within 5 pages; falling back to offset-derived `67`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 11.5.1 end-page (PDF p67) had no parseable FAA header within 5 pages; falling back to offset-derived `67`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 11.5.2 start-page (PDF p67) had no parseable FAA header within 5 pages; falling back to offset-derived `67`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 11.5.2 end-page (PDF p67) had no parseable FAA header within 5 pages; falling back to offset-derived `67`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 11.5.3 start-page (PDF p67) had no parseable FAA header within 5 pages; falling back to offset-derived `67`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 11.5.3 end-page (PDF p68) had no parseable FAA header within 5 pages; falling back to offset-derived `68`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 12 start-page (PDF p69) had no parseable FAA header within 5 pages; falling back to offset-derived `69`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 12 end-page (PDF p80) had no parseable FAA header; recovered `8-2` from PDF p79 (walk-back 1)"
+    },
+    {
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 12.1 start-page (PDF p69) had no parseable FAA header within 5 pages; falling back to offset-derived `69`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 12.1 end-page (PDF p80) had no parseable FAA header; recovered `8-2` from PDF p79 (walk-back 1)"
+    },
+    {
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 12.1.1 start-page (PDF p69) had no parseable FAA header within 5 pages; falling back to offset-derived `69`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 12.1.1 end-page (PDF p69) had no parseable FAA header within 5 pages; falling back to offset-derived `69`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 12.1.2 start-page (PDF p70) had no parseable FAA header within 5 pages; falling back to offset-derived `70`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 12.1.2 end-page (PDF p70) had no parseable FAA header within 5 pages; falling back to offset-derived `70`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 12.1.3 start-page (PDF p70) had no parseable FAA header within 5 pages; falling back to offset-derived `70`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 12.1.3 end-page (PDF p70) had no parseable FAA header within 5 pages; falling back to offset-derived `70`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 12.1.4 start-page (PDF p71) had no parseable FAA header within 5 pages; falling back to offset-derived `71`. Add `chapter_overrides` for an explicit value if this is wrong."
+    },
+    {
+      "code": "page-label",
+      "section_code": null,
+      "message": "page-label: node 12.1.4 end-page (PDF p80) had no parseable FAA header; recovered `8-2` from PDF p79 (walk-back 1)"
+    }
+  ],
+  "extraction": {
+    "section_strategy": {
+      "kind": "toc",
+      "config": {
+        "toc": {
+          "page_start": 6,
+          "page_end": 9,
+          "pattern": "right_column"
+        },
+        "heading_style": {
+          "body_font_size": 10.0,
+          "heading_min_size_ratio": 1.1,
+          "heading_color_hex": "#000000",
+          "heading_match_threshold": 0.85,
+          "verify_in_body": false
+        }
+      }
+    },
+    "figure_dedup": {
+      "canonicalized": 24,
+      "freed_bytes": 10022593
+    }
+  }
 }

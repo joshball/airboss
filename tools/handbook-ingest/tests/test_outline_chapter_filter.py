@@ -83,3 +83,43 @@ def test_filter_returns_empty_when_no_match() -> None:
     ]
     out = _apply_chapter_filter(toc, r"^Chapter")
     assert out == []
+
+
+# ----- _clean_title chapter / appendix prefix stripping -----------------------
+
+
+def test_clean_title_strips_chapter_prefix() -> None:
+    from ingest.outline import _clean_title
+
+    assert _clean_title("Chapter 1: Introduction to Risk Management") == (
+        "Introduction to Risk Management"
+    )
+
+
+def test_clean_title_strips_chapter_prefix_with_double_space() -> None:
+    from ingest.outline import _clean_title
+
+    # RMH's bookmarks have "Chapter 1:  Introduction" with two spaces.
+    assert _clean_title("Chapter 1:  Introduction") == "Introduction"
+
+
+def test_clean_title_strips_appendix_prefix() -> None:
+    from ingest.outline import _clean_title
+
+    assert _clean_title("Appendix A: Risk Management Training") == (
+        "Risk Management Training"
+    )
+
+
+def test_clean_title_preserves_titles_without_prefix() -> None:
+    from ingest.outline import _clean_title
+
+    assert _clean_title("Aerodynamics of Flight") == "Aerodynamics of Flight"
+    assert _clean_title("Introduction") == "Introduction"
+
+
+def test_clean_title_strips_dotted_code_then_chapter_prefix() -> None:
+    from ingest.outline import _clean_title
+
+    # Order-independent: dotted-code first, then chapter prefix.
+    assert _clean_title("1 Chapter 1: Risk") == "Risk"
