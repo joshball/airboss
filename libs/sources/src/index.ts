@@ -39,16 +39,20 @@ import './safo/index.ts';
 import './tcds/index.ts';
 import './asrs/index.ts';
 
+export { parseAcLocator } from './ac/locator.ts';
+export { parseAcsLocator } from './acs/locator.ts';
+export { parseAimLocator } from './aim/locator.ts';
 export {
 	type BootstrapOptions,
 	type BootstrapReport,
 	hydrateRegsFromDerivatives,
 	PHASE_9_BOOTSTRAP_REVIEWER_ID,
 } from './bootstrap.ts';
+export { parseHandbooksLocator } from './handbooks/locator.ts';
 export { isParseError, parseIdentifier } from './parser.ts';
-export { urlForReference } from './url-for-reference.ts';
 export { getCorpusResolver, initRegistry, productionRegistry } from './registry/index.ts';
 export { NULL_REGISTRY } from './registry-stub.ts';
+export { parseRegsLocator } from './regs/locator.ts';
 export {
 	__batch_internal__,
 	batchResolve,
@@ -72,3 +76,4 @@ export {
 	toSerializable,
 } from './render/index.ts';
 export * from './types.ts';
+export { urlForReference } from './url-for-reference.ts';

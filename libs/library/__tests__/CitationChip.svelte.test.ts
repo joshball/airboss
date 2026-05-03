@@ -21,9 +21,7 @@ describe('<CitationChip>', () => {
 	it('renders an anchor whose href routes through urlForReference', () => {
 		render(CitationChip, { uri: id('airboss-ref:handbooks/phak/8083-25C/2/3') });
 		const chip = screen.getByTestId('citation-chip');
-		expect(chip.getAttribute('href')).toBe(
-			ROUTES.FLIGHTBAG_HANDBOOK_SECTION('phak', '8083-25C', '2', '3'),
-		);
+		expect(chip.getAttribute('href')).toBe(ROUTES.FLIGHTBAG_HANDBOOK_SECTION('phak', '8083-25C', '2', '3'));
 	});
 
 	it('falls back to the URI text when no label is supplied', () => {

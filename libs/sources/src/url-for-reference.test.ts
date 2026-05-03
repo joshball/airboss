@@ -51,15 +51,11 @@ describe('urlForReference -- aim', () => {
 
 describe('urlForReference -- regs (CFR)', () => {
 	it('maps a Title 14 section URI to FLIGHTBAG_CFR_SECTION', () => {
-		expect(urlForReference(id('airboss-ref:regs/cfr-14/91/103'))).toBe(
-			ROUTES.FLIGHTBAG_CFR_SECTION('14', '91', '103'),
-		);
+		expect(urlForReference(id('airboss-ref:regs/cfr-14/91/103'))).toBe(ROUTES.FLIGHTBAG_CFR_SECTION('14', '91', '103'));
 	});
 
 	it('maps a Title 49 section URI to FLIGHTBAG_CFR_SECTION', () => {
-		expect(urlForReference(id('airboss-ref:regs/cfr-49/830/5'))).toBe(
-			ROUTES.FLIGHTBAG_CFR_SECTION('49', '830', '5'),
-		);
+		expect(urlForReference(id('airboss-ref:regs/cfr-49/830/5'))).toBe(ROUTES.FLIGHTBAG_CFR_SECTION('49', '830', '5'));
 	});
 
 	it('maps a paragraph-depth CFR URI to the parent section', () => {

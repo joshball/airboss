@@ -48,6 +48,18 @@
         "@ab/utils": "workspace:*",
       },
     },
+    "apps/flightbag": {
+      "name": "@ab/flightbag",
+      "dependencies": {
+        "@ab/constants": "workspace:*",
+        "@ab/db": "workspace:*",
+        "@ab/library": "workspace:*",
+        "@ab/sources": "workspace:*",
+        "@ab/themes": "workspace:*",
+        "@ab/ui": "workspace:*",
+        "@ab/utils": "workspace:*",
+      },
+    },
     "apps/hangar": {
       "name": "@ab/hangar",
       "dependencies": {
@@ -277,6 +289,8 @@
     "@ab/constants": ["@ab/constants@workspace:libs/constants"],
 
     "@ab/db": ["@ab/db@workspace:libs/db"],
+
+    "@ab/flightbag": ["@ab/flightbag@workspace:apps/flightbag"],
 
     "@ab/hangar": ["@ab/hangar@workspace:apps/hangar"],
 

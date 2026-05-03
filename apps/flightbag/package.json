@@ -1,0 +1,19 @@
+{
+	"name": "@ab/flightbag",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"dev": "vite dev --port 9640",
+		"build": "vite build",
+		"preview": "vite preview"
+	},
+	"dependencies": {
+		"@ab/constants": "workspace:*",
+		"@ab/db": "workspace:*",
+		"@ab/library": "workspace:*",
+		"@ab/sources": "workspace:*",
+		"@ab/themes": "workspace:*",
+		"@ab/ui": "workspace:*",
+		"@ab/utils": "workspace:*"
+	}
+}
