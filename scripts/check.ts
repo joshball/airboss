@@ -44,6 +44,9 @@ const knowledge = await $`bun scripts/build-knowledge-index.ts --dry-run`.nothro
 console.log('\nRunning theme-lint...');
 const themeLint = await $`bun tools/theme-lint/bin.ts`.nothrow();
 
+console.log('\nRunning test-lint...');
+const testLint = await $`bun tools/test-lint/bin.ts`.nothrow();
+
 console.log('\nValidating help-ids (InfoTip / PageHelp)...');
 const helpIds = await $`bun scripts/validate-help-ids.ts`.nothrow();
 
@@ -58,6 +61,7 @@ const failed =
 	airbossRef.exitCode !== 0 ||
 	knowledge.exitCode !== 0 ||
 	themeLint.exitCode !== 0 ||
+	testLint.exitCode !== 0 ||
 	helpIds.exitCode !== 0;
 if (failed) {
 	console.error('\nChecks failed.');
