@@ -439,7 +439,7 @@ describe('runHandbooksExtrasIngest -- live cache (smoke)', () => {
 			// The produced document.md must be that file's contents verbatim,
 			// not the OCR garbage that pdftotext would emit for the scanned
 			// 1999 pamphlet.
-			const mtnBodyPath = join(tempDerivative, 'tips-mountain-flying', 'MTN-2003', 'document.md');
+			const mtnBodyPath = join(tempDerivative, 'tips-mountain-flying', 'MTN-2003', 'tips-mountain-flying-MTN-2003.md');
 			const mtnBody = readFileSync(mtnBodyPath, 'utf-8');
 			const overrideSource = readFileSync(
 				join(process.cwd(), 'scripts/sources/config/handbooks-extras-overrides/faa-mtn-tips.md'),
