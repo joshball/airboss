@@ -17,11 +17,19 @@
  *                              the chapter/section/paragraph tree from
  *                              dotted code prefixes; appendices + glossary
  *                              entries land at depth 0 alongside chapters.
+ *   - `kind: 'ac'`         -> AC adapter (Advisory Circulars). One body
+ *                              row at depth 0 per AC; subjects + primary_cert
+ *                              come from `course/references/advisory-circulars.yaml`.
+ *   - `kind: 'cfr'`        -> CFR adapter (WP-CFR). Walks the sibling
+ *                              sections.json; produces N reference rows
+ *                              (one per Part with a matching YAML row) plus
+ *                              one `reference_section` per section (depth 0,
+ *                              level 'section', flat under the reference).
  *
- * Today this script walks `handbooks/` and `aim/`. Future corpus WPs (CFR,
- * AC, ACS) extend `CORPUS_DIRS` so the same dispatch handles them; their
- * manifest schemas register additional members on `manifestSchema` (via
- * the discriminated union at `libs/bc/study/src/manifest-validation.ts`).
+ * Today this script walks `handbooks/`, `aim/`, `ac/`, and `regulations/`.
+ * Future corpus WPs extend `CORPUS_DIRS` and add a discriminator member on
+ * `manifestSchema` (via the discriminated union at
+ * `libs/bc/study/src/manifest-validation.ts`).
  *
  * Idempotent: a section whose content_hash matches the DB row is a no-op
  * (apart from refreshing scaffolding fields like ordinal / parent / locator).
@@ -48,6 +56,7 @@ import { client } from '@ab/db/connection';
 import { attachSupersededByLatest } from '../../libs/bc/study/src/references';
 import { seedAcManifest } from '../../libs/bc/study/src/seeders/ac';
 import { seedAimManifest } from '../../libs/bc/study/src/seeders/aim';
+import { seedCfrManifest } from '../../libs/bc/study/src/seeders/cfr';
 import { seedSectionTreeManifest } from '../../libs/bc/study/src/seeders/section-tree';
 import { emptySummary, type SeedContext, type SeedSummary } from '../../libs/bc/study/src/seeders/types';
 import { seedWholeDocManifest } from '../../libs/bc/study/src/seeders/whole-doc';
@@ -60,7 +69,7 @@ const REPO_ROOT = resolve(HERE, '..', '..');
  * relative to the repo root; the seeder enumerates `<dir>/<doc>/<edition>/
  * manifest.json` under it. Add new corpora here as their WPs land.
  */
-const CORPUS_DIRS = ['handbooks', 'aim', 'ac'] as const;
+const CORPUS_DIRS = ['handbooks', 'aim', 'ac', 'regulations'] as const;
 
 export interface SeedReferencesOptions {
 	/** Filter to a single document slug (e.g. `phak`). Default = all. */
@@ -108,9 +117,9 @@ export async function seedReferencesFromManifest(options: SeedReferencesOptions 
 				// Single-doc layout: childDir is the edition; effective slug is the corpus dir.
 				if (options.edition !== undefined && options.edition !== childDir) continue;
 				if (options.documentSlug !== undefined && options.documentSlug !== corpusDir) continue;
-				const refId = await dispatchManifest(childManifest, context, summary);
+				const refIds = await dispatchManifest(childManifest, context, summary);
 				const list = slugToEditionRefIds.get(corpusDir) ?? [];
-				list.push(refId);
+				list.push(...refIds);
 				slugToEditionRefIds.set(corpusDir, list);
 				continue;
 			}
@@ -121,9 +130,9 @@ export async function seedReferencesFromManifest(options: SeedReferencesOptions 
 			for (const edition of editions) {
 				const manifestPath = resolve(childAbs, edition, 'manifest.json');
 				if (!existsSync(manifestPath)) continue;
-				const refId = await dispatchManifest(manifestPath, context, summary);
+				const refIds = await dispatchManifest(manifestPath, context, summary);
 				const list = slugToEditionRefIds.get(childDir) ?? [];
-				list.push(refId);
+				list.push(...refIds);
 				slugToEditionRefIds.set(childDir, list);
 			}
 		}
@@ -141,20 +150,31 @@ export async function seedReferencesFromManifest(options: SeedReferencesOptions 
 	return summary;
 }
 
-/** Parse one manifest, dispatch on `kind`, return the upserted reference id. */
-async function dispatchManifest(manifestPath: string, context: SeedContext, summary: SeedSummary): Promise<string> {
+/**
+ * Parse one manifest, dispatch on `kind`, return the upserted reference ids.
+ *
+ * Most adapters (handbook / whole-doc / aim / ac) produce exactly one
+ * `reference` row per manifest and return a single string; the CFR adapter
+ * produces N rows (one per Part with a matching DB row) and returns an
+ * array. The dispatcher uniformizes the contract by wrapping single-result
+ * adapters into one-element arrays so the caller's slug-to-edition collector
+ * always sees `string[]`.
+ */
+async function dispatchManifest(manifestPath: string, context: SeedContext, summary: SeedSummary): Promise<string[]> {
 	const raw = JSON.parse(await readFile(manifestPath, 'utf-8'));
 	const manifest: Manifest = manifestSchema.parse(raw);
 
 	switch (manifest.kind) {
 		case 'handbook':
-			return seedSectionTreeManifest(manifest, context, summary);
+			return [await seedSectionTreeManifest(manifest, context, summary)];
 		case 'whole-doc':
-			return seedWholeDocManifest(manifest, context, summary);
+			return [await seedWholeDocManifest(manifest, context, summary)];
 		case 'aim':
-			return seedAimManifest(manifest, context, summary);
+			return [await seedAimManifest(manifest, context, summary)];
 		case 'ac':
-			return seedAcManifest(manifest, context, summary);
+			return [await seedAcManifest(manifest, context, summary)];
+		case 'cfr':
+			return seedCfrManifest(manifest, { manifestAbsPath: manifestPath }, context, summary);
 	}
 }
 
