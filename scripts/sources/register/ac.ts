@@ -11,8 +11,8 @@ import { runIngestCli } from '@ab/sources/ac';
 export const HELP = `bun run sources register ac [--cache=<path>] [--out=<path>]
 
   Walk the AC cache (default $AIRBOSS_HANDBOOK_CACHE/ac/), extract each PDF,
-  write per-AC manifest.json + document.md under <repo>/ac/<doc>/<rev>/, and
-  register entries into the @ab/sources registry. The downloader populates
+  write per-AC manifest.json + ac-<doc>-<rev>.md under <repo>/ac/<doc>/<rev>/,
+  and register entries into the @ab/sources registry. The downloader populates
   the cache; this command reads it and is idempotent.
 `;
 
