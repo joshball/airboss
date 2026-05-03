@@ -10,6 +10,7 @@ counts:
   major: 4
   minor: 9
   nit: 3
+closed_out: 2026-05-04
 ---
 
 ## Summary
@@ -189,3 +190,26 @@ Problem: `resolvedActive = active || tabs[0]?.id`. If the user never sets `activ
 Trigger: caller's first tab is disabled and they don't pre-set `active`.
 
 Fix: derive `resolvedActive` as `active || (tabs.find(t => !t.disabled)?.id ?? '')`. Mirror what Home does.
+
+## Status as of 2026-05-04
+
+| # | Severity | Finding | Verdict |
+|---|----------|---------|---------|
+| 1 | Major | CitationPicker stuck `loading` on tab switch | CLOSED -- `runSearch` token-counter pattern resets `loading` regardless of `activeType` (`libs/ui/src/components/CitationPicker.svelte:67-181`). |
+| 2 | Major | `findUnescaped` disagrees with `parseInlineUntil` on escapes | CLOSED -- both `findUnescaped` and `splitTableRow` now gate on `ESCAPABLE.has(next)` (`libs/help/src/markdown/inline.ts:141-165`, `block.ts:344-365`). |
+| 3 | Major | Query-parser tokenizer doesn't break on `"` / unterminated quote | CLOSED -- bare-token loop breaks on `"`, unterminated emits `unterminated_quote` warning (`libs/help/src/query-parser.ts:111-145`). |
+| 4 | Major | PFD heading default 360 with max 359 | CLOSED in this audit -- set `default: 0` and `headingDeg: 0`, added comment documenting the half-open `[0, 360)` convention. |
+| 5 | Minor | Airspeed `requiresShift: true` blocks `=` key | CLOSED in this audit -- relaxed predicate so `requiresShift: true` requires shift but `false` accepts either. `event.key` already encodes shift state. |
+| 6 | Minor | rAF dt vs `lastTimestampMs` after visibility resume | CLOSED -- `MAX_DT_SECONDS` cap is the documented guard; verified no behavioural drift today. Defensive rewrite was optional and is dropped. |
+| 7 | Minor | `Dialog`/`Drawer` per-keystroke `createFocusTrap` | CLOSED -- traps now allocated once per modal-open and `release()`d in `$effect` cleanup (`libs/ui/src/components/Dialog.svelte:84-104`, `Drawer.svelte:56-100`, `ConfirmAction.svelte:130-132`). The 5 popovers (Snooze/Share/JumpTo/Citation/PfdLegend) now delegate to `Dialog`, so they inherit the fix. |
+| 8 | Minor | `InfoTip` blur loses focus when tabbing into popover | CLOSED in this audit -- onblur now ignores blurs whose `relatedTarget` is inside `popoverEl`. |
+| 9 | Minor | `helpRegistry.getByAppSurface` only matches primary surface | CLOSED in this audit -- behaviour confirmed intentional (test enforces it). Added explicit doc comment to `registry.ts` clarifying primary-surface contract and how to scan all surfaces. |
+| 10 | Minor | `ErrataEntry.formatPublishedDate` produces "Apr NaN, 2026" with full ISO | CLOSED in this audit -- regex match `/^(\d{4})-(\d{2})-(\d{2})$/` returns raw input on mismatch (`libs/aviation/src/ui/handbooks/ErrataEntry.svelte:59-72`, file moved during arch fix). |
+| 11 | Minor | Tabs Home/End sync focus vs rAF arrow focus | CLOSED in this audit -- Home/End now defer focus through rAF to match arrow keys. |
+| 12 | Minor | `BrowseList` keys by `(it)` and collides on dup primitives | CLOSED -- prop `keyOf?: (item: T) => string \| number` accepted with id fallback (`libs/ui/src/components/BrowseList.svelte:26-39`). |
+| 13 | Minor | `ConfidenceSlider` non-unique `id="skip-hint"` | CLOSED in this audit -- per-instance id via `$props.id()`, plus arrow-key roving for the radiogroup (Home/End included). |
+| 14 | Nit | `validateHelpPages` private-host check misses IPv6 | CLOSED in this audit -- added `::1`, `fe80:`, `fc00::/7`, `fd00::/8` patterns. |
+| 15 | Nit | `ClusterGauge.arcPath` degenerate when `a1 === a2` | CLOSED in this audit -- returns empty string for zero-length band. |
+| 16 | Nit | `Tabs.resolvedActive` falls through to disabled tab[0] | CLOSED in this audit -- derive falls through to first non-disabled tab. |
+
+All 16 findings closed.

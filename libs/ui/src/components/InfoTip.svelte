@@ -230,8 +230,14 @@ $effect(() => {
 		onpointerenter={handlePointerEnter}
 		onpointerleave={handlePointerLeave}
 		onfocus={() => void show(false)}
-		onblur={() => {
-			if (!pinned) hide();
+		onblur={(event) => {
+			// Don't close when focus moves into the popover (e.g. tabbing
+			// to "Learn more"). Only hide when relatedTarget is outside
+			// both the trigger and the popover.
+			if (pinned) return;
+			const next = event.relatedTarget as Node | null;
+			if (next && popoverEl?.contains(next)) return;
+			hide();
 		}}
 	>
 		<span aria-hidden="true">?</span>

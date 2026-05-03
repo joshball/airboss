@@ -16,20 +16,67 @@ let {
 	skipLabel = 'Skip confidence',
 	selected = null,
 }: Props = $props();
+
+// Per-instance id so two ConfidenceSliders on the same page don't collide on
+// `aria-describedby="skip-hint"`. Mirrors the pattern in ThemePicker.svelte.
+const instanceId = $props.id();
+const skipHintId = `${instanceId}-skip-hint`;
+
+// WAI-ARIA radiogroup requires arrow-key roving among the radios. The selected
+// (or first) radio takes tabindex=0; the rest take tabindex=-1.
+const focusIndex = $derived(
+	selected === null
+		? 0
+		: Math.max(
+				0,
+				CONFIDENCE_LEVEL_VALUES.findIndex((l) => l === selected),
+			),
+);
+
+function handleRadioKeyDown(event: KeyboardEvent, idx: number): void {
+	const last = CONFIDENCE_LEVEL_VALUES.length - 1;
+	let nextIdx: number | null = null;
+	switch (event.key) {
+		case 'ArrowRight':
+		case 'ArrowDown':
+			nextIdx = idx === last ? 0 : idx + 1;
+			break;
+		case 'ArrowLeft':
+		case 'ArrowUp':
+			nextIdx = idx === 0 ? last : idx - 1;
+			break;
+		case 'Home':
+			nextIdx = 0;
+			break;
+		case 'End':
+			nextIdx = last;
+			break;
+	}
+	if (nextIdx === null) return;
+	event.preventDefault();
+	const next = CONFIDENCE_LEVEL_VALUES[nextIdx];
+	onSelect(next);
+	requestAnimationFrame(() => {
+		document.getElementById(`${instanceId}-radio-${next}`)?.focus();
+	});
+}
 </script>
 
 <article class="prompt">
 	<p class="prompt-q">{prompt}</p>
 	<div class="confidence-row" role="radiogroup" aria-label={prompt}>
-		{#each CONFIDENCE_LEVEL_VALUES as level (level)}
+		{#each CONFIDENCE_LEVEL_VALUES as level, i (level)}
 			<button
 				type="button"
+				id={`${instanceId}-radio-${level}`}
 				role="radio"
 				aria-checked={selected === level}
 				aria-label={`${level} -- ${CONFIDENCE_LEVEL_LABELS[level]}`}
 				class="conf"
 				class:is-selected={selected === level}
+				tabindex={i === focusIndex ? 0 : -1}
 				onclick={() => onSelect(level)}
+				onkeydown={(e) => handleRadioKeyDown(e, i)}
 			>
 				<span class="conf-num">{level}</span>
 				<span class="conf-label">{CONFIDENCE_LEVEL_LABELS[level]}</span>
@@ -40,11 +87,11 @@ let {
 		type="button"
 		class="skip"
 		onclick={onSkip}
-		aria-describedby="skip-hint"
+		aria-describedby={skipHintId}
 	>
 		{skipLabel}
 	</button>
-	<span id="skip-hint" class="skip-hint">Skipping stops calibration tracking for this card.</span>
+	<span id={skipHintId} class="skip-hint">Skipping stops calibration tracking for this card.</span>
 </article>
 
 <style>
