@@ -23,7 +23,7 @@ import { __acs_seed_mapping_internal__ } from '@ab/sources/acs';
 import { eq } from 'drizzle-orm';
 import { afterAll, describe, expect, it } from 'vitest';
 import { reference, referenceFigure, referenceSection } from '../../libs/bc/study/src/schema';
-import { seedReferencesFromManifest } from './seed-references-from-manifest';
+import { pickEditions, seedReferencesFromManifest } from './seed-references-from-manifest';
 
 function sha256Hex(input: string): string {
 	return createHash('sha256').update(input).digest('hex');
@@ -722,6 +722,158 @@ describe('seedReferencesFromManifest', () => {
 		);
 
 		await expect(seedReferencesFromManifest({ documentSlug: dirSlug })).rejects.toThrow(/missing body file/);
+	});
+
+	it('CFR rolling-edition: dispatcher seeds only the latest snapshot when multiple editions are on disk', async () => {
+		// Two snapshot dirs side-by-side. The older one has NO body files (would
+		// crash the CFR adapter with "missing body file") -- mimicking what
+		// happens on a fresh dev box where `bun run sources register cfr` only
+		// produced derivatives for one edition. The newer snapshot has body
+		// files. The dispatcher must pick the newer one and skip the older.
+		const partKey = `96-${SUITE_TOKEN.replace(/[a-f]/g, '').slice(0, 4) || '7'}`;
+		const documentSlug = `14cfr${partKey}`;
+		const dirSlug = `test-${SUITE_TOKEN}-cfr-rolling`;
+		const olderEdition = '2026-04-20';
+		const newerEdition = '2026-04-24';
+
+		await db.insert(reference).values({
+			id: `ref_test_rolling_${SUITE_TOKEN}`,
+			kind: 'cfr',
+			documentSlug,
+			edition: 'current',
+			title: `14 CFR Part ${partKey} -- Rolling-edition test`,
+			publisher: 'FAA',
+			url: `https://www.ecfr.gov/current/title-14/part-${partKey}`,
+			subjects: ['regulations'],
+			primaryCert: null,
+			sectionSchema: { levels: [] },
+			metadata: {},
+		});
+		fixtures.push({ slug: documentSlug, corpusDir: HANDBOOKS_DIR });
+		fixtures.push({ slug: dirSlug, corpusDir: REGS_DIR });
+
+		// Older edition: manifest + sections.json declaring a body file we
+		// deliberately leave on disk-missing. If the dispatcher walked it, the
+		// CFR adapter would throw `missing body file`.
+		const olderDir = join(REGS_DIR, dirSlug, olderEdition);
+		mkdirSync(olderDir, { recursive: true });
+		writeFileSync(
+			join(olderDir, 'manifest.json'),
+			JSON.stringify({
+				schemaVersion: 1,
+				kind: 'cfr',
+				title: '14',
+				editionSlug: '2026',
+				editionDate: olderEdition,
+				sourceUrl: 'file:///old.xml',
+				sourceSha256: 'a'.repeat(64),
+				fetchedAt: '2026-04-20T00:00:00.000Z',
+				partCount: 1,
+				subpartCount: 0,
+				sectionCount: 1,
+			}),
+		);
+		writeFileSync(
+			join(olderDir, 'sections.json'),
+			JSON.stringify({
+				schemaVersion: 1,
+				edition: '2026',
+				sectionsByPart: {
+					[partKey]: [
+						{
+							id: `airboss-ref:regs/cfr-14/${partKey}/1`,
+							canonical_short: `§${partKey}.1`,
+							canonical_title: 'Older snapshot, body missing',
+							last_amended_date: '2024-01-01',
+							body_path: `${partKey}/${partKey}-1.md`,
+							body_sha256: 'e'.repeat(64),
+						},
+					],
+				},
+			}),
+		);
+
+		// Newer edition: full inline derivatives.
+		const newerDir = join(REGS_DIR, dirSlug, newerEdition);
+		mkdirSync(join(newerDir, partKey), { recursive: true });
+		const body = `# §${partKey}.1\n\nNewer snapshot body.\n`;
+		writeFileSync(join(newerDir, partKey, `${partKey}-1.md`), body);
+		const bodyHash = sha256Hex(body);
+		writeFileSync(
+			join(newerDir, 'manifest.json'),
+			JSON.stringify({
+				schemaVersion: 1,
+				kind: 'cfr',
+				title: '14',
+				editionSlug: '2026',
+				editionDate: newerEdition,
+				sourceUrl: 'file:///new.xml',
+				sourceSha256: 'b'.repeat(64),
+				fetchedAt: '2026-04-24T00:00:00.000Z',
+				partCount: 1,
+				subpartCount: 0,
+				sectionCount: 1,
+			}),
+		);
+		writeFileSync(
+			join(newerDir, 'sections.json'),
+			JSON.stringify({
+				schemaVersion: 1,
+				edition: '2026',
+				sectionsByPart: {
+					[partKey]: [
+						{
+							id: `airboss-ref:regs/cfr-14/${partKey}/1`,
+							canonical_short: `§${partKey}.1`,
+							canonical_title: 'Newer snapshot',
+							last_amended_date: '2024-08-01',
+							body_path: `${partKey}/${partKey}-1.md`,
+							body_sha256: bodyHash,
+						},
+					],
+				},
+			}),
+		);
+
+		// Should NOT throw -- dispatcher picks newer snapshot and skips older.
+		const summary = await seedReferencesFromManifest({ documentSlug: dirSlug });
+		expect(summary.editionsProcessed).toBe(1);
+		expect(summary.sectionsTouched).toBe(1);
+		expect(summary.sectionsChanged).toBe(1);
+
+		const refRow = (await db.select().from(reference).where(eq(reference.documentSlug, documentSlug)))[0];
+		expect(refRow).toBeDefined();
+		if (!refRow) return;
+		const sections = await db.select().from(referenceSection).where(eq(referenceSection.referenceId, refRow.id));
+		expect(sections).toHaveLength(1);
+		expect(sections[0]?.contentMd).toBe(body);
+	});
+
+	it('pickEditions picks the latest CFR snapshot but returns every handbook edition', () => {
+		const tmp = join(REGS_DIR, `pick-editions-${SUITE_TOKEN}`);
+		const handbookTmp = join(HANDBOOKS_DIR, `pick-editions-${SUITE_TOKEN}`);
+		mkdirSync(join(tmp, '2026-04-20'), { recursive: true });
+		mkdirSync(join(tmp, '2026-04-24'), { recursive: true });
+		mkdirSync(join(handbookTmp, 'A'), { recursive: true });
+		mkdirSync(join(handbookTmp, 'B'), { recursive: true });
+		fixtures.push({ slug: `pick-editions-${SUITE_TOKEN}`, corpusDir: REGS_DIR });
+		fixtures.push({ slug: `pick-editions-${SUITE_TOKEN}`, corpusDir: HANDBOOKS_DIR });
+
+		// Rolling corpus -> latest only.
+		expect(pickEditions({ corpusDir: 'regulations', childAbs: tmp, explicitEdition: undefined })).toEqual([
+			'2026-04-24',
+		]);
+
+		// Non-rolling corpus -> every edition.
+		expect(pickEditions({ corpusDir: 'handbooks', childAbs: handbookTmp, explicitEdition: undefined }).sort()).toEqual([
+			'A',
+			'B',
+		]);
+
+		// Explicit override always wins.
+		expect(pickEditions({ corpusDir: 'regulations', childAbs: tmp, explicitEdition: '2026-04-20' })).toEqual([
+			'2026-04-20',
+		]);
 	});
 
 	it('ACS manifest produces a 4-level tree (publication -> area -> task -> element)', async () => {
