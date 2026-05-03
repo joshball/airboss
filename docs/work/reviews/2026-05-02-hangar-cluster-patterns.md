@@ -4,7 +4,7 @@ category: patterns
 date: 2026-05-02
 branch: main
 status: unread
-review_status: pending
+review_status: done
 counts:
   critical: 0
   major: 0
@@ -102,3 +102,20 @@ File: `libs/hangar-jobs/src/enqueue.ts:97`
 Problem: `const sinceSeq = options.sinceSeq ?? -1;` works because `seq >= 0` for every real row, but the choice of `-1` to mean "from the beginning" is a tiny magic number worth either a constant or a one-line comment.
 Rule: "No magic numbers" (lightest interpretation).
 Fix: Either `const SINCE_SEQ_BEGINNING = -1;` at module scope, or a single-line comment: `// sentinel: real seq starts at 0, so -1 returns every row.`
+
+## Status as of 2026-05-04
+
+| Finding | Verdict | Closure |
+| ------- | ------- | ------- |
+| MINOR: redirectTo magic-string | CLOSED | `+layout.server.ts:37` and `login/+page.server.ts:86` use `QUERY_PARAMS.REDIRECT_TO` |
+| MINOR: `'event'` magic-string in appendJobLog | CLOSED | `enqueue.ts:214` uses `JOB_LOG_STREAMS.EVENT` |
+| MINOR: `?sinceSeq=` inline param | CLOSED | `jobs/[id]/+page.svelte:69` uses `QUERY_PARAMS.SINCE_SEQ`; trim-notice fallback link updated to match (this audit) |
+| MINOR: un-commented `as unknown as ReadableStream` casts | CLOSED | All three streaming routes carry the Node->Web stream coercion comment |
+| MINOR: drain-loop sleep magic 25 | CLOSED | `worker.ts:87` `DRAIN_POLL_INTERVAL_MS` constant |
+| MINOR: client poll interval magic 1000 | CLOSED | `JOB_DETAIL_POLL_INTERVAL_MS` in `@ab/constants` (`jobs.ts`) |
+| NIT: pickAllowedValue cast comment | CLOSED | `filters.ts:82-85` carries the includes() narrowing rationale |
+| NIT: `as JobStatus` casts | CLOSED | `jobs/[id]/+page.svelte:38-39` carries the trust-boundary rationale |
+| NIT: `'registry'` sentinel duplicated | CLOSED | `REGISTRY_TARGET_ID` constant at `source-jobs.ts:51` |
+| NIT: `sinceSeq ?? -1` magic | CLOSED | Inline comment at `enqueue.ts:104-106` documents the sentinel |
+
+Total: 10 closed / 0 open. `review_status` flipped to `done`.
