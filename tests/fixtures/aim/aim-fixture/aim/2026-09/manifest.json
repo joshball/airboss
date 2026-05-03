@@ -11,28 +11,28 @@
 			"kind": "chapter",
 			"code": "5",
 			"title": "Air Traffic Procedures",
-			"body_path": "aim/2026-09/chapter-5/index.md",
+			"body_path": "aim/2026-09/05-air-traffic-procedures/00-air-traffic-procedures.md",
 			"content_hash": "abc123"
 		},
 		{
 			"kind": "section",
 			"code": "5-1",
 			"title": "Preflight",
-			"body_path": "aim/2026-09/chapter-5/section-1/index.md",
+			"body_path": "aim/2026-09/05-air-traffic-procedures/01-preflight/00-preflight.md",
 			"content_hash": "def456"
 		},
 		{
 			"kind": "paragraph",
 			"code": "5-1-7",
 			"title": "Pilot Responsibility upon Clearance Issuance",
-			"body_path": "aim/2026-09/chapter-5/section-1/paragraph-7.md",
+			"body_path": "aim/2026-09/05-air-traffic-procedures/01-preflight/07-pilot-responsibility-upon-clearance-issuance.md",
 			"content_hash": "ghi789"
 		},
 		{
 			"kind": "paragraph",
 			"code": "5-1-8",
 			"title": "Flight Plan Cancellation",
-			"body_path": "aim/2026-09/chapter-5/section-1/paragraph-8.md",
+			"body_path": "aim/2026-09/05-air-traffic-procedures/01-preflight/08-flight-plan-cancellation.md",
 			"content_hash": "jkl012"
 		},
 		{
