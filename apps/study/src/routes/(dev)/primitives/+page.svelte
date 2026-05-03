@@ -6,7 +6,7 @@
  * surface before page-level migration (#5).
  */
 
-import { TONES } from '@ab/ui';
+import { TONES } from '@ab/themes';
 import Badge from '@ab/ui/components/Badge.svelte';
 import Banner from '@ab/ui/components/Banner.svelte';
 import Button from '@ab/ui/components/Button.svelte';

@@ -10,5 +10,10 @@
 		"./pfd/*": "./src/pfd/*",
 		"./cockpit-panel/*": "./src/cockpit-panel/*",
 		"./crosswind-component/*": "./src/crosswind-component/*"
+	},
+	"dependencies": {
+		"@ab/bc-sim": "workspace:*",
+		"@ab/constants": "workspace:*",
+		"@ab/ui": "workspace:*"
 	}
 }
