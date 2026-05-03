@@ -1,13 +1,26 @@
 ---
-title: 'Spec: WP-ACS-LINK-ONLY -- full pipeline for the 2 link-only ACS / PTS cards'
+title: 'Spec: WP-ACS-LINK-ONLY -- link-only stubs for the 2 link-only ACS / PTS cards'
 product: study
 feature: wp-acs-link-only-pipeline
 type: spec
-status: draft
-review_status: pending
+status: shipped
+review_status: done
 ---
 
-# WP-ACS-LINK-ONLY: full pipeline for the 2 link-only ACS / PTS cards
+# WP-ACS-LINK-ONLY: link-only stubs for the 2 link-only ACS / PTS cards
+
+> **Wave 6 scope (shipped 2026-05-03):** stage-1 (Sourced) stubs only. Both
+> publications already carry `url:` fields in `course/references/acs-pts.yaml`
+> pointing at the FAA-hosted PDFs (CFII PTS as `kind: pts`, ACS Companion
+> Guide as `kind: other`), so citation chips and library cards already
+> deep-link correctly. Wave 6 closes this WP by promoting status from
+> "link-only" to "link-only stub (Sourced)" and noting the slug + edition
+> alignment (`FAA-S-8081-9E` for the PTS, not `FAA-S-ACS-9E`).
+>
+> Body extraction + section-tree (the "full pipeline" originally scoped below)
+> moves to **WP-ACS-FULL** when CFII training content needs the PTS body in
+> app, or when the FAA promotes CFII to ACS. The text below is the original
+> ambition; preserved as the design target for that future WP.
 
 Build the download → extract → register → seed pipeline for the 2 ACS / PTS cards currently link-only on `/library`. Pattern established by WP-ACS-V (#501).
 

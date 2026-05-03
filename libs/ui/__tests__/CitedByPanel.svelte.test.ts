@@ -48,7 +48,7 @@ describe('CitedByPanel -- populated', () => {
 	it('renders one row per item with the right testid', () => {
 		render(CitedByPanel, { items });
 		for (const item of items) {
-			expect(screen.getByTestId(`citedbypanel-row-${item.id}`)).toBeTruthy();
+			expect(screen.getByTestId(`citedbypanel-row-${item.id}`).tagName).toBe('LI');
 		}
 	});
 
