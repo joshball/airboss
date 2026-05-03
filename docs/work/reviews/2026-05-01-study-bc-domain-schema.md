@@ -4,13 +4,94 @@ category: schema
 date: 2026-05-01
 branch: main
 status: unread
-review_status: pending
+review_status: done
 counts:
   critical: 0
   major: 5
   minor: 6
   nit: 4
 ---
+
+## Status as of 2026-05-04
+
+| Severity | Count | Closed | Open |
+| -------- | ----: | -----: | ---: |
+| critical |     0 |      0 |    0 |
+| major    |     5 |      4 |    1 |
+| minor    |     6 |      1 |    5 |
+| nit      |     4 |      0 |    4 |
+
+### MAJOR: scenario_option.scenario_id leading-column index -- CLOSED
+
+Self-closed by the original review (re-classified as a documentation NIT). The `(scenario_id, position)` partial unique still serves as the leading-column index. Closed.
+
+### MAJOR: session_item_result.chosen_option_id FK index -- CLOSED
+
+`libs/bc/study/src/schema.ts:906` adds `sirChosenOptionIdx: index('sir_chosen_option_idx').on(t.chosenOptionId)` with a partial `WHERE chosen_option_id IS NOT NULL` clause -- the partial-index variant the original review preferred. Closed.
+
+### MAJOR: review.review_session_id FK index -- CLOSED
+
+Self-closed by the original review (downgraded to no-fix). Existing `(review_session_id, card_id)` prefix is sufficient. Closed.
+
+### MAJOR: card.updated_at orderBy not index-backed -- CLOSED
+
+`libs/bc/study/src/schema.ts:360`. `cardUserUpdatedIdx: index('card_user_updated_idx').on(t.userId, t.updatedAt)`. Closed.
+
+### MAJOR: goal.updated_at orderBy not index-backed -- CLOSED
+
+`libs/bc/study/src/schema.ts:2106`. `goalUserUpdatedIdx: index('goal_user_updated_idx').on(t.userId, t.updatedAt)`. Closed.
+
+### MAJOR: card_feedback (card,user) ORDER BY created_at not covered -- CLOSED
+
+`libs/bc/study/src/schema.ts:1200`. `cardFeedbackUserCardCreatedIdx: index('card_feedback_user_card_created_idx').on(...)`. Closed.
+
+### MAJOR: knowledge_node missing updater audit column -- STILL OPEN
+
+`libs/bc/study/src/schema.ts:225` still tracks only `author_id`. No `last_edited_by` column. Trigger: when the knowledge-node-version table referenced in the column comment ships, add `lastEditedById` at the same time, OR open a small "knowledge-node audit" WP if the version-table work is deferred further.
+
+### MINOR: knowledge_edge no DB-level self-loop guard -- CLOSED
+
+`libs/bc/study/src/schema.ts:322`. `noSelfLoopCheck: check('knowledge_edge_no_self_loop_check', sql.raw(\`"from_node_id" <> "to_node_id"\`))`. Mirrors `credential_prereq`. Closed.
+
+### MINOR: knowledge_node.lifecycle no NOT NULL / safe default -- STILL OPEN
+
+`libs/bc/study/src/schema.ts:225` still nullable with default. CHECK still has `IS NULL OR ...`. Trigger: confirm every environment has run the back-fill seed; then in the next schema-cleanup migration, add `.notNull()` and tighten the CHECK to drop the `IS NULL OR` branch.
+
+### MINOR: knowledge_node.references_v2_migrated dead-end column -- STILL OPEN
+
+`libs/bc/study/src/schema.ts:235` column comment still ends with "a follow-on cleanup can drop it" with no WP pointer or trigger condition. Trigger: roll into the schema-cleanup pass with `lifecycle` notNull tightening.
+
+### MINOR: study_plan.cert_goals @deprecated trigger -- STILL OPEN
+
+Trigger: when the engine-goal-cutover WP's verify phase ships dual-read telemetry showing `source='plan'` reads at zero for 14 consecutive days, drop the column. Today the dual-read telemetry exists (`emitEngineTargetingTelemetry`) but the daily query / dashboard isn't documented. Roll into the cutover WP's verify phase.
+
+### MINOR: card.nodeId graph-linked composite UNIQUE -- STILL OPEN
+
+`libs/bc/study/src/schema.ts:578` has `scenarioUserNodeIdx` (non-unique). No partial UNIQUE on `(user_id, node_id) WHERE node_id IS NOT NULL` for cards. Trigger: confirm with spec whether multiple cards per (user, node) is intentional; if not, add the partial unique.
+
+### MINOR: knowledge_node.relevance jsonb GIN index -- STILL OPEN
+
+Forward-looking note. Trigger: when a "nodes relevant to cert X" reverse-containment read appears in the BC.
+
+### NIT: composite-fks.schema.test.ts cross-reference comment -- STILL OPEN
+
+No comment added pointing at `scenario-option.schema.test.ts`. Trigger: small docs-polish PR.
+
+### NIT: scenario_option.text shadows JS `text` import -- STILL OPEN
+
+Pure cosmetic. Trigger: if a scenario_option migration is needed for unrelated reasons, rename then.
+
+### NIT: knowledge_node_progress surrogate `id` -- STILL OPEN
+
+Trigger: if a future migration touches the table.
+
+### NIT: mrs `last_activity_at` ordering not index-leading -- STILL OPEN
+
+`libs/bc/study/src/schema.ts:1026` `mrs_user_started_idx` still leads on `started_at`, not `last_activity_at`. Per-user session count bounded; in-memory sort cheap. Trigger: when review-sessions list rendering shows up in p95s.
+
+### Final verdict
+
+4 of 5 majors closed (3 indexes added + 1 self-closed by original review). 1 of 6 minors closed (knowledge_edge self-loop CHECK). The remaining major (knowledge_node updater audit column) ties to the deferred knowledge_node_version table work. `review_status` flipped to `done`.
 
 ## Summary
 

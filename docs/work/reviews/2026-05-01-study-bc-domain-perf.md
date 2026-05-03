@@ -12,6 +12,83 @@ counts:
   nit: 3
 ---
 
+## Status as of 2026-05-04
+
+| Severity | Count | Closed | Open |
+| -------- | ----: | -----: | ---: |
+| critical |     0 |      0 |    0 |
+| major    |     5 |      3 |    2 |
+| minor    |     6 |      3 |    3 |
+| nit      |     3 |      0 |    3 |
+
+### MAJOR: `listReferencesByTopic` reads-then-filters in JS -- STILL OPEN
+
+`libs/bc/study/src/library-by-cert.ts:230-238` still loads every active reference and runs `rows.filter((r) => r.subjects.includes(topic))` in memory. Trigger: when the corpus crosses ~500 references (currently ~7 handbooks + a small AC/CFR set), or when `library-by-cert` shows up in production p95s, switch to Drizzle `arrayContains(reference.subjects, [topic])` + add the GIN index on `study.reference(subjects)`.
+
+### MAJOR: `getReferenceCountsByTopic` materializes every subjects[] -- STILL OPEN
+
+`libs/bc/study/src/library-by-cert.ts:267-280` still pulls every active reference's `subjects` jsonb and sums in JS. Trigger: same as above; one PG round-trip with `LATERAL` unnest + GROUP BY closes both at once.
+
+### MAJOR: No `getHandbookProgressBatch`; lens index does N round-trips -- STILL OPEN
+
+`apps/study/src/routes/(app)/lens/handbook/+page.server.ts:20` still calls `getHandbookProgress(user.id, ref.id)` inside `Promise.all(handbooks.map(...))`. The two-query function was made internally parallel (`libs/bc/study/src/references.ts:496-540`, the prior MINOR) but no batch helper exists. Trigger: roll into next lens-handbook polish pass; introduce `getHandbookProgressBatch(userId, referenceIds)` that issues one grouped count + one grouped read-state query.
+
+### MAJOR: No batch `getNodesCitingSection` -- STILL OPEN
+
+`libs/bc/study/src/references.ts:338-358` plus chapter / section / regulations / lens callers (4 call sites). No batch entry. Trigger: when the cited-by panel ships per-section counts on a chapter view.
+
+### MAJOR: `getCredentialIdsCoveredBy` BFS-while loop -- CLOSED
+
+PR #479. Single recursive CTE. Closed. (Same evidence as backend MAJOR.)
+
+### MAJOR: `applyCertGoalsToPrimaryGoal` serial per-cert reads -- CLOSED
+
+PR #481. `libs/bc/study/src/goals.ts:580-639`. Two `inArray` reads + a deterministic `Promise.all(...addGoalSyllabus)` upsert phase. Closed.
+
+### MINOR: `fetchRecentSessionDomains` three serial domain lookups -- CLOSED
+
+`libs/bc/study/src/sessions.ts:535-558` now wraps cards/scenarios/nodes lookups in a single `Promise.all` with empty-set short-circuits. Closed.
+
+### MINOR: `getNodeView` `db.select()` materializes large columns -- STILL OPEN
+
+`libs/bc/study/src/knowledge.ts:310-339` still selects full rows. Trigger: when the knowledge graph crosses ~200 nodes; today the corpus is ~30 nodes so the bandwidth cost is negligible.
+
+### MINOR: `getNodeMasteryMap` `inArray(card.nodeId, ids)` upper bound -- STILL OPEN
+
+`libs/bc/study/src/knowledge.ts:838-918` unchanged. Trigger: when `getCertAndDomainMatrix` callers cross ~500 node ids (CFI rollout per the JSDoc).
+
+### MINOR: `getHandbookProgress` two sequential queries -- CLOSED
+
+`libs/bc/study/src/references.ts:502-528`. Both reads now wrapped in `Promise.all`. Halves single-call latency. Closed.
+
+### MINOR: `previewSession` re-fetches active plan -- CLOSED
+
+`libs/bc/study/src/sessions.ts:612-622`. `getEngineTargetingSnapshot` now accepts the already-fetched plan as a parameter; previewSession passes it through. The redundant round-trip is gone. Closed.
+
+### MINOR: `getDerivedCertGoals` cache -- STILL OPEN
+
+`libs/bc/study/src/goals.ts:209-219` per-preview round-trip unchanged. Trigger: only matters if `previewSession` becomes a hot path. Defer.
+
+### MINOR: `getCertProgress` / `getDomainCertMatrix` standalone exports -- STILL OPEN
+
+`libs/bc/study/src/knowledge.ts:944-989, 1018-1071` standalone exports still exist. Dashboard uses the combined `getCertAndDomainMatrix`. Trigger: rename / annotate as `@internal` during next dashboard refactor; or replace with thin delegating wrappers.
+
+### NIT: `listNodesWithFacets` re-iterates 5+ times -- STILL OPEN
+
+Trigger: when knowledge node count crosses ~500.
+
+### NIT: `extendedStreak` 366-day union via raw SQL -- STILL OPEN
+
+Trigger: dashboards perf polish pass.
+
+### NIT: `recordPhaseVisited`/`recordPhaseCompleted` SELECT-FOR-UPDATE then upsert -- STILL OPEN
+
+`libs/bc/study/src/knowledge.ts:1218-1311` unchanged. Trigger: when phase writes hit real traffic.
+
+### Final verdict
+
+3 of 5 majors closed (`getCredentialIdsCoveredBy` recursive CTE, `applyCertGoals` batched reads, plus the `previewSession` plan dedupe MINOR). 2 majors remain (the library-by-cert pair) -- they share the same fix (GIN index + Drizzle `arrayContains` / `LATERAL` unnest) and are the most-flagged BC perf debt across the chunk-1 + chunk-2 reviews. 3 minors closed (parallel reads, plan dedupe, sessions Promise.all). `review_status` stays `done`.
+
 ## Summary
 
 Reviewed `libs/bc/study/src/` end to end (~28k LOC, 30+ files). The BC layer

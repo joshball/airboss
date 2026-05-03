@@ -8,7 +8,79 @@ critical: 2
 major: 29
 minor: 45
 nit: 26
+review_status: done
 ---
+
+## Final close-out as of 2026-05-04
+
+| Category     | Critical | Major C/O | Minor C/O | Nit C/O | Total C/O |
+| ------------ | :------: | :-------: | :-------: | :-----: | :-------: |
+| correctness  |    -     |    3/1    |    1/5    |   0/2   |    4/8    |
+| security     |    -     |    0/2    |    1/4    |   1/2   |    2/8    |
+| perf         |    -     |    3/2    |    3/3    |   0/3   |    6/8    |
+| architecture |   0/1    |    -      |    0/3    |   0/1   |    0/5    |
+| patterns     |    -     |    -      |    1/0    |    -    |    1/0    |
+| testing      |    -     |    5/0    |    2/7    |   2/2   |    9/9    |
+| dx           |    -     |    2/2    |    1/4    |   0/3   |    3/9    |
+| schema       |    -     |    4/1    |    1/5    |   0/4   |    5/10   |
+| backend      |   0/1    |    3/1    |    2/4    |   0/4   |    5/10   |
+| **TOTAL**    | **0/2**  | **20/9**  | **12/35** | **3/21**| **35/67** |
+
+(Format: `Closed/Open`. Architecture marks the chunk's sole CRITICAL as still open; backend's CRITICAL is partial-closed -- see per-category detail.)
+
+### Total tally
+
+- **Closed: 35 / 102 (34%)** -- includes 0 of 2 critical, 20 of 29 major, 12 of 45 minor (plus 1 minor counted as patterns), 3 of 26 nit.
+- **Still open: 67 / 102 (66%)** -- includes both criticals (1 fully open architecture; 1 partial-close backend), 9 majors, 35 minors, 21 nits.
+- All open items have concrete triggers documented in the per-category audit sections.
+
+### Convergent fixes that landed (root cause -> closed children)
+
+| Convergent finding | Landed via | Children closed |
+| ------------------ | ---------- | --------------- |
+| `recordItemResult` rewrite (typed errors, no upsert, single tx, audit emit) | PR #437 | correctness MAJOR ×2, backend MAJOR, dx MAJOR (`SessionNotFoundError` mislabel) |
+| `applyCertGoals` batched reads | PR #481 | perf MAJOR, backend (partial CRITICAL) |
+| `getCredentialIdsCoveredBy` recursive CTE | PR #479 | perf MAJOR, backend MAJOR |
+| Per-test isolation across mastery / knowledge.progress / credentials / engine-targeting | PR #546 | testing MAJOR ×4 |
+| `sessions.test.ts` coverage expansion | PR #547 | testing MAJOR |
+| ENGINE_SCORING-style weak-area constants | PR #468 | patterns MINOR |
+| Schema indexes (chosen_option, card/goal updated_at, card_feedback created_at) | landed via #468 + earlier | schema MAJOR ×3 |
+| `knowledge_edge_no_self_loop_check` | landed via #468 + earlier | schema MINOR |
+| `library-by-cert` stderr -> `createLogger` | landed prior | dx MAJOR |
+| `seeders/section-tree.ts` consistent error throwing | landed prior | dx MINOR |
+| `MAX_SEARCH_LIMIT` clamping on citations search | landed prior | security MINOR |
+| `restoreCardByCard` userId leak | landed prior | security NIT |
+| `previewSession` plan dedupe | landed prior | perf MINOR |
+| `getHandbookProgress` Promise.all | landed prior | perf MINOR |
+| `fetchRecentSessionDomains` Promise.all | landed prior | perf MINOR |
+| `createGoal` primary clear narrowed | landed prior | correctness MINOR |
+| `submitAttemptSchema.chosenOptionId` cap raise | landed prior | correctness MINOR |
+| `createPlan` SQLSTATE | landed prior | backend MAJOR |
+| `getRepDashboard` docstring fix | landed prior | correctness MAJOR |
+| Calibration / dashboard dead-seed NITs | landed prior | testing NIT ×2 |
+| `escapeLikePattern` reuse from `@ab/db` | landed prior | backend MINOR |
+| `snooze.ts` magic-string + raw SQL | landed prior | backend MINOR |
+
+### Audit-pass mechanical fixes (this PR)
+
+- Deleted the no-op `error classes exist` describe block from `plans.test.ts` and dropped the unused `NoActivePlanError` import. Closes testing MINOR.
+
+### Open work clusters (root-cause groupings of still-open items)
+
+1. **Package-boundary hardening (architecture)** -- one CRITICAL + 2 minors. Same WP: declare `@ab/bc-hangar` dep on bc-study + curated re-export, add `exports` field to `@ab/db` / `@ab/auth` / replace `@ab/bc-sim/persistence` wildcard with explicit subpath.
+2. **Library-by-cert SQL-side filter (perf)** -- 2 majors. Same fix: GIN on `study.reference(subjects)` + Drizzle `arrayContains` for list, `LATERAL` unnest for counts.
+3. **Batch BC helpers (perf)** -- 2 majors. `getHandbookProgressBatch` + `getNodesCitingSectionsBatch`; closes chunk-1 N+1s.
+4. **BC error-class hygiene sweep (dx + backend + correctness)** -- 1 major + 4 minors. `SourceRefRequiredError` dedupe, shared `UpsertReturnedNoRowError`, `CitationNotOwnedError`, `CredentialPrereqUnresolvedNodesError`, `LensError` style.
+5. **Transaction-wrap pass (backend + correctness)** -- 1 partial CRITICAL + 1 major + 1 minor. `applyCertGoalsToPrimaryGoal`, `updateCard`, `renameSavedDeck`/`deleteSavedDeck` -> `onConflictDoUpdate`.
+6. **Goals validation gap (security)** -- 1 major. Wire `createGoalInputSchema.parse` etc. at the BC boundary.
+7. **Build-only barrel split (security)** -- 1 major. Split `@ab/bc-study` and `@ab/bc-study/build` (or add actor assertions).
+8. **Knowledge-node updater audit column (schema)** -- 1 major tied to deferred `knowledge_node_version` work.
+9. **Schema cleanup migration (schema)** -- 3 minors. `lifecycle` notNull tightening, `references_v2_migrated` drop, `cert_goals` deprecated drop.
+10. **Test-polish sweep (testing)** -- 7 minors + 2 nits. `withFreshUser` propagation, scenarios reject regex pinning, smoke-test pinning.
+
+### Per-category status
+
+All nine per-category files have `review_status: done`. The user controls `status`. The INDEX now declares `review_status: done` -- the audit walk-through is complete; remaining open items are tracked with concrete triggers in the per-category bodies and grouped above.
 
 # 10x Review -- Chunk 2: study-bc domain
 

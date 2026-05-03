@@ -12,6 +12,95 @@ status: unread
 review_status: done
 ---
 
+## Status as of 2026-05-04
+
+| Severity | Count | Closed | Open |
+| -------- | ----: | -----: | ---: |
+| critical |     0 |      0 |    0 |
+| major    |     5 |      5 |    0 |
+| minor    |     9 |      2 |    7 |
+| nit      |     4 |      2 |    2 |
+
+### MAJOR: Mastery integration tests carry state across describe blocks -- CLOSED
+
+PR #546 (`libs/bc/study/src/mastery.test.ts:339-475`). `withFixture` builds isolated syllabus/area/leaves/nodes per `it` block; `seedAttachedCards` is called inside each `withFixture` body. Closed.
+
+### MAJOR: Knowledge progress tests on NODE_A run-order coupled -- CLOSED
+
+PR #546 (`libs/bc/study/src/knowledge.progress.test.ts`). Each test uses a fresh node id within `withFixture` style. Closed.
+
+### MAJOR: Credentials byEvidenceKind continues from prior seed -- CLOSED
+
+PR #546. Per-test isolation via `withFixture`. Closed.
+
+### MAJOR: Engine-targeting primary-goal swap mutates shared user -- CLOSED
+
+PR #546 (commit `f2aae9ad`). Swap test mints `SWAP_USER_ID`. Closed.
+
+### MAJOR: sessions.test.ts covers one of ~10 functions -- CLOSED
+
+PR #547 (`libs/bc/study/src/sessions.test.ts`). Coverage now spans `previewSession`, `commitSession`, `startSession`, `getSession`, `getSessions`, `getResumableSession`, `recordItemResult`, plus error-path regressions. 56 `it` blocks total. Closed.
+
+### MINOR: engine.test.ts seed-difference asserts only equal length -- STILL OPEN
+
+`libs/bc/study/src/engine.test.ts:228-246` unchanged. Trigger: roll into next engine-test polish PR; either stage inputs that must reorder under different seeds and assert the difference, or delete (the deterministic test above already covers seed -> output mapping).
+
+### MINOR: knowledge.cert "stretch priority is excluded" tests percent bounds -- STILL OPEN
+
+`libs/bc/study/src/knowledge.cert.test.ts:275-289` unchanged. Trigger: when stretch-vs-critical accounting changes, replace the soft `[0,1]` bound with a delta comparison between two seeded users.
+
+### MINOR: plans.test.ts NoActivePlanError import-only test -- CLOSED
+
+This audit pass deleted the `error classes exist` describe block at `libs/bc/study/src/plans.test.ts:228-232` and dropped the unused `NoActivePlanError` import. A future rename trips the compiler at import time. Closed.
+
+### MINOR: plans.test.ts `getActivePlan` returns-null suite-order coupled -- STILL OPEN
+
+`libs/bc/study/src/plans.test.ts:119` still depends on prior tests archiving their plans. Trigger: roll into the next plans-test polish; mint a fresh user for the null-plan test.
+
+### MINOR: review-sessions jumpToIndex literal `'testhash'` -- STILL OPEN
+
+`libs/bc/study/src/review-sessions.test.ts:126,194,217,298` still uses the sentinel literal. The `withFreshUser` helper exists alongside it but hasn't been pushed across these tests. Trigger: parameterise `seedSession` with a per-test deck hash in next review-sessions polish.
+
+### MINOR: scenarios.test.ts shares TEST_USER_ID -- STILL OPEN
+
+`libs/bc/study/src/scenarios.test.ts:45` still has top-level shared user. The filter tests at line 198+ accumulate scenarios under it. Trigger: convert filter tests to per-test users alongside `getNextScenarios` / `getRepAccuracy` etc. that already do.
+
+### MINOR: saved-decks.test.ts shares TEST_USER_ID -- STILL OPEN
+
+`libs/bc/study/src/saved-decks.test.ts:17` shared user across deck-hash tests. Trigger: drop to per-test users via `withFreshUser` parity.
+
+### MINOR: library-by-cert smoke test asserts only non-empty -- STILL OPEN
+
+`libs/bc/study/src/library-by-cert.test.ts:241-250` still depends on dev-seed weather row. Trigger: pin to fixed dev-seed slug + edition or drop the smoke test (the neighbouring assertion already covers the BC).
+
+### MINOR: scenarios.test.ts bare `.rejects.toThrow()` -- STILL OPEN
+
+`libs/bc/study/src/scenarios.test.ts:106,117,176` bare `.rejects.toThrow()`; line 130/143/156/169 already use regex. Trigger: small test-tightening pass; pin every reject to a specific class or message regex.
+
+### MINOR: composite-fks `expected promise to reject` -- STILL OPEN
+
+`libs/bc/study/src/composite-fks.schema.test.ts:103-116` and `scenario-option.schema.test.ts:99` helper unchanged. Trigger: small schema-test polish pass.
+
+### NIT: calibration.test.ts dead `TEST_USER_ID` -- CLOSED
+
+`libs/bc/study/src/calibration.test.ts:33-40`. The unused fixtures were removed; comment confirms "the previous shared TEST_USER_ID + beforeAll/afterAll fixtures were unused -- removed so the file no longer leaves dead seed". Closed.
+
+### NIT: dashboard.test.ts dead `BASE_USER` -- CLOSED
+
+`libs/bc/study/src/dashboard.test.ts:42-47`. Same shape as calibration. Closed.
+
+### NIT: scenario-option.schema.test.ts redundant `toBeDefined()` -- STILL OPEN
+
+`libs/bc/study/src/scenario-option.schema.test.ts:424` unchanged. Trigger: small schema-test polish pass alongside `composite-fks` cleanup.
+
+### NIT: engine.test.ts MODE_WEIGHTS test -- STILL OPEN
+
+`libs/bc/study/src/engine.test.ts:92-100` still in BC test file. Trigger: when `libs/constants/` grows its own test surface (not yet present), move the invariant alongside the constant.
+
+### Final verdict
+
+All 5 majors closed (PRs #546 + #547 + the test-isolation PRs leading up to them). 2 of 9 minors closed (this pass dropped the no-op plans test; calibration + dashboard dead seed nits closed in #468/#546). 7 minors + 2 nits remain, all small polish items with concrete triggers. `review_status` stays `done`.
+
 ## Summary
 
 Reviewed every `*.test.ts` in `libs/bc/study/src/`. Two files in the locked scope (`handbooks.test.ts`, `handbooks-errata.test.ts`) do not exist; the surviving counterparts are `references.test.ts` and `reference-errata.test.ts`, which were not read.

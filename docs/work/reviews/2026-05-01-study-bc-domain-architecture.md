@@ -12,6 +12,39 @@ status: unread
 review_status: done
 ---
 
+## Status as of 2026-05-04
+
+| Severity | Count | Closed | Open |
+| -------- | ----: | -----: | ---: |
+| critical |     1 |      0 |    1 |
+| major    |     0 |      0 |    0 |
+| minor    |     3 |      0 |    3 |
+| nit      |     1 |      0 |    1 |
+
+### CRITICAL: Undeclared cross-BC dep on `@ab/bc-hangar` -- STILL OPEN
+
+`libs/bc/study/package.json` still lists only `@ab/audit`, `@ab/auth`, `@ab/bc-sim`, `@ab/constants`, `@ab/db`, `@ab/sources`, `@ab/types`, `@ab/utils`. No `@ab/bc-hangar` entry. `libs/bc/study/src/citations/citations.ts:18` and `libs/bc/study/src/citations/search.ts:10` still `import { hangarReference } from '@ab/bc-hangar/schema'`. Workspace install resolves at runtime; metadata still hides the coupling. Trigger: when WP-CITATIONS-EXTRACT or any future cross-BC refactor touches `bc-study/citations`, declare the dep + add a curated `getHangarReferencesByIds(ids)` helper on `@ab/bc-hangar` and route the citation BC through it instead of the table object.
+
+### MINOR: Deep-subpath imports rely on missing `exports` field -- STILL OPEN
+
+`libs/db/package.json` and `libs/auth/package.json` still have no `exports` field. 27+ deep imports of `@ab/db/connection` + `@ab/auth/schema` keep working only because the resolution falls through. Trigger: bundle into a "package boundary hardening" WP alongside the bc-hangar dep declaration above; both fixes touch package.json `exports` discipline.
+
+### MINOR: `@ab/bc-sim/persistence` deep-subpath -- STILL OPEN
+
+`libs/bc/study/src/sim-bias.ts:16` still imports `getRecentSimWeakness`, `GetRecentSimWeaknessOptions`, `SimWeaknessSignal` from `@ab/bc-sim/persistence`. `libs/bc/sim/src/index.ts` does not re-export them. `bc-sim` `package.json` exposes the wildcard `./*` so the import works. Trigger: roll into the same package-boundary WP -- either re-export through the bc-sim barrel or replace `./*` wildcard with an explicit `./persistence` entry.
+
+### MINOR: Citations polymorphic source schema enforced only by check + BC -- STILL OPEN
+
+`libs/bc/study/src/citations/schema.ts` still has check constraints on `sourceType`/`targetType` enums but no per-type FKs; the BC layer is the write gate. Architectural design call already documented in the work package -- this is "tighten enforcement" not a bug. Trigger: ADR or follow-up WP if the citations BC ever exposes a write path that bypasses `verifySourceOwnership` / `verifyTargetExists`. Until then, current discipline holds.
+
+### NIT: `engine-targeting.ts` adjacent to `engine.ts` -- STILL OPEN
+
+`libs/bc/study/src/engine.ts` and `libs/bc/study/src/engine-targeting.ts` still co-located with the same prefix. No code-level note added pointing at ADR 014's purity boundary. Trigger: roll into any future engine refactor (e.g. when sim weakness or new candidate kinds land).
+
+### Final verdict
+
+All five findings still open. None are mechanical 1-3 line fixes; all require WP-level coordination (package metadata hardening + ADR follow-ups). `review_status` stays `done` because the audit is complete; `status` controlled by user.
+
 ## Summary
 
 Reviewed `libs/bc/study/src/` end to end (full directory, ~70 modules including subpackages `citations/` and `seeders/`). The BC layering is largely sound: no app imports, no Svelte / SvelteKit framework imports, no raw SQL outside Drizzle index/check primitives, no `any`-leaks or non-null assertion abuse spotted in the source files, and the `runEngine` core in `engine.ts` complies with ADR 014 (pure, only `@ab/constants` + local types from `./schema`, no DB or framework deps; pool reads come through injected callbacks).
