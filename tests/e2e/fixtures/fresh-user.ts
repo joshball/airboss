@@ -176,20 +176,26 @@ export async function cleanupFreshUser(userId: string): Promise<void> {
 	}
 }
 
+/** Age threshold (ms) before a fixture user is considered abandoned. */
+const FRESH_USER_REAP_AGE_MS = 5 * 60 * 1000;
+
 /**
- * Reap any fixture-owned auth rows that survived an earlier crash. Called
- * once per test run by the fixture (cheap query, GIN-friendly LIKE on the
- * unique email column). Safe to call concurrently; each row delete is its
- * own transaction and dev-seed users have a different prefix.
+ * Reap fixture-owned auth rows older than {@link FRESH_USER_REAP_AGE_MS}
+ * that survived an earlier crash. Called once per worker before the first
+ * fixture activation. Skips young rows so concurrent Playwright workers
+ * (own fixture users always exist for less than a single test run) never
+ * reap each other's rows.
  */
 async function reapStaleFreshUsers(): Promise<void> {
 	const { client, db } = openConnection();
 	try {
+		const cutoff = new Date(Date.now() - FRESH_USER_REAP_AGE_MS);
 		const stale = await db
-			.select({ id: bauthUser.id })
+			.select({ id: bauthUser.id, createdAt: bauthUser.createdAt })
 			.from(bauthUser)
 			.where(like(bauthUser.email, `${FRESH_USER_EMAIL_PREFIX}%${FRESH_USER_EMAIL_DOMAIN}`));
 		for (const row of stale) {
+			if (row.createdAt > cutoff) continue;
 			await cleanupFreshUser(row.id).catch(() => {
 				// Best-effort -- another worker may already have reaped this row.
 			});
@@ -291,37 +297,26 @@ export interface SeedPohReferenceOptions {
  * least one `a.aircraft-card` link to follow but only cares that the row
  * resolves -- not which manufacturer it belongs to.
  *
- * Idempotent on re-seed: looks for an existing row by `documentSlug` and
- * reuses its id. The teardown only deletes rows the seeder actually
- * inserted.
+ * Each call generates a unique `documentSlug` (unless the caller pins one)
+ * so concurrent Playwright workers do not collide on the
+ * `(document_slug, edition)` unique constraint. Teardown deletes the row
+ * the seeder inserted.
  */
 export async function seedPohReference(
 	options: SeedPohReferenceOptions = {},
 ): Promise<{ fixture: PohReferenceFixture; teardown: () => Promise<void> }> {
 	const { client, db } = openConnection();
 	try {
-		const documentSlug = options.documentSlug ?? `e2e-fixture-poh-${generateAuthId()}`;
+		// Default to a per-call unique slug so concurrent workers don't race
+		// on the (document_slug, edition) unique index. Slug must be 3..32
+		// chars, kebab-case, lowercase alphanumeric (the seed validator's
+		// regex). `e2e-poh-` (8 chars) + 26-char ULID = 34 -> truncate ULID
+		// to 24 chars to stay under the cap.
+		const documentSlug = options.documentSlug ?? `e2e-poh-${generateAuthId().slice(0, 24)}`;
 		const edition = options.edition ?? 'aircraft-specific';
 		const title = options.title ?? 'E2E fixture POH/AFM';
 		const id = `ref_${generateAuthId()}`;
 		const now = new Date();
-
-		const existing = await db
-			.select({ id: reference.id })
-			.from(reference)
-			.where(eq(reference.documentSlug, documentSlug))
-			.limit(1);
-
-		if (existing[0]) {
-			// Don't take ownership of a row we didn't create; only delete on
-			// teardown if we are the inserter.
-			return {
-				fixture: { referenceId: existing[0].id, documentSlug, title },
-				teardown: async () => {
-					/* no-op: pre-existing row */
-				},
-			};
-		}
 
 		await db.insert(reference).values({
 			id,

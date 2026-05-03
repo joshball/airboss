@@ -152,10 +152,9 @@ test.describe('library-by-cert: aircraft spine', () => {
 	let teardownPoh: (() => Promise<void>) | null = null;
 
 	test.beforeAll(async () => {
-		const seeded = await seedPohReference({
-			documentSlug: 'e2e-poh-aircraft-spine',
-			title: 'E2E aircraft-spine POH',
-		});
+		// The fixture mints a per-run unique documentSlug so this beforeAll
+		// is parallel-safe across Playwright workers.
+		const seeded = await seedPohReference({ title: 'E2E aircraft-spine POH' });
 		teardownPoh = seeded.teardown;
 	});
 
