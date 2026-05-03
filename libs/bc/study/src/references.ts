@@ -852,23 +852,33 @@ export async function upsertReference(input: UpsertReferenceInput, db: Db = defa
 		seedOrigin: input.seedOrigin ?? null,
 	};
 
+	// Two callers upsert the same `(document_slug, edition)` row in seed-all:
+	// the manifest-phase adapters (which know the per-kind level vocabulary
+	// and pass `sectionSchema`) and the YAML phase (which doesn't carry the
+	// vocabulary and would otherwise overwrite it back to `{ levels: [] }`).
+	// On conflict, only overwrite `sectionSchema` if the caller supplied one;
+	// otherwise preserve whatever the manifest phase already attached.
+	const onConflictSet: Record<string, unknown> = {
+		kind: input.kind,
+		title: input.title,
+		publisher: input.publisher ?? 'FAA',
+		url: input.url ?? null,
+		subjects,
+		primaryCert: input.primaryCert ?? null,
+		metadata,
+		seedOrigin: input.seedOrigin ?? null,
+		updatedAt: new Date(),
+	};
+	if (input.sectionSchema !== undefined) {
+		onConflictSet.sectionSchema = sectionSchema;
+	}
+
 	const rows = await db
 		.insert(reference)
 		.values(values)
 		.onConflictDoUpdate({
 			target: [reference.documentSlug, reference.edition],
-			set: {
-				kind: input.kind,
-				title: input.title,
-				publisher: input.publisher ?? 'FAA',
-				url: input.url ?? null,
-				subjects,
-				primaryCert: input.primaryCert ?? null,
-				sectionSchema,
-				metadata,
-				seedOrigin: input.seedOrigin ?? null,
-				updatedAt: new Date(),
-			},
+			set: onConflictSet,
 		})
 		.returning();
 
