@@ -268,6 +268,11 @@ function writeSectionTreeDerivatives(args: {
 	const rows: ExtrasSectionRow[] = [];
 	let chaptersWritten = 0;
 	let sectionsWritten = 0;
+	const display = FRIENDLY_DISPLAY[extra.slug];
+	if (display === undefined) {
+		throw new Error(`handbooks-extras: no FRIENDLY_DISPLAY for slug "${extra.slug}"`);
+	}
+	const shortCode = display.short;
 
 	for (let chIdx = 0; chIdx < chapters.length; chIdx++) {
 		const chapter = chapters[chIdx];
@@ -305,7 +310,7 @@ function writeSectionTreeDerivatives(args: {
 			title: chapter.title,
 			faa_page_start: null,
 			faa_page_end: null,
-			source_locator: `MTN-${faaDir} Ch.${chapterCode}`,
+			source_locator: `${shortCode} Ch.${chapterCode}`,
 			body_path: `handbooks/${extra.slug}/${faaDir}/${chapterDirName}/${chapterFile}`,
 			content_hash: sha256(chapterFileContent),
 			has_figures: false,
@@ -340,7 +345,7 @@ function writeSectionTreeDerivatives(args: {
 				title: section.title,
 				faa_page_start: null,
 				faa_page_end: null,
-				source_locator: `MTN-${faaDir} Ch.${sectionCode}`,
+				source_locator: `${shortCode} Ch.${sectionCode}`,
 				body_path: `handbooks/${extra.slug}/${faaDir}/${chapterDirName}/${sectionFile}`,
 				content_hash: sha256(sectionFileContent),
 				has_figures: false,
