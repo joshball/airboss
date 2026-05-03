@@ -19,7 +19,6 @@ import {
 	getActivePlan,
 	getPlan,
 	getPlans,
-	NoActivePlanError,
 	PlanCertGoalsDeprecatedError,
 	PlanNotFoundError,
 	removeSkipNode,
@@ -222,11 +221,3 @@ describe('getPlans', () => {
 	});
 });
 
-// NoActivePlanError is defined but not thrown by the plan BC directly; it's
-// thrown by the session BC when the session engine has nothing to run. Kept
-// here as a sanity import so a future rename doesn't silently drop it.
-describe('error classes exist', () => {
-	it('imports NoActivePlanError', () => {
-		expect(NoActivePlanError).toBeDefined();
-	});
-});
