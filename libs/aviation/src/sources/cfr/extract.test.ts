@@ -25,8 +25,8 @@ describe('CfrExtractor', () => {
 		const extractor = new CfrExtractor();
 		const block = await extractor.extract({ title: 14, part: 91, section: '155' }, FIXTURE, 'test-version');
 		expect(block.text).toContain('Except as provided');
-		expect(block.sourceVersion).toBeTruthy();
-		expect(block.extractedAt).toBeTruthy();
+		expect(block.sourceVersion).toBe('test-version');
+		expect(typeof block.extractedAt).toBe('string');
 		expect(new Date(block.extractedAt).toString()).not.toBe('Invalid Date');
 	});
 

@@ -14,7 +14,7 @@ afterEach(() => {
 describe('Banner -- rendering', () => {
 	it('renders root with body content', () => {
 		render(BannerHarness, { body: 'Saved' });
-		expect(screen.getByTestId('banner-root')).toBeTruthy();
+		expect(screen.getByTestId('banner-root')).toBeInTheDocument();
 		expect(screen.getByTestId('harness-banner-body').textContent).toBe('Saved');
 	});
 
@@ -54,7 +54,7 @@ describe('Banner -- dismiss', () => {
 
 	it('renders dismiss button when dismissible=true and onDismiss is set', () => {
 		render(BannerHarness, { body: 'b', dismissible: true, onDismiss: vi.fn() });
-		expect(screen.getByTestId('banner-dismiss')).toBeTruthy();
+		expect(screen.getByTestId('banner-dismiss')).toBeInTheDocument();
 	});
 
 	it('clicking dismiss calls onDismiss exactly once', async () => {

@@ -21,7 +21,7 @@ describe('ActivityHost -- unknown activityId', () => {
 	it('renders the unknown-activity aside with role=note for unknown activityId', () => {
 		render(ActivityHostHarness, { activityId: 'not-a-real-activity' });
 		const unknown = screen.getByTestId('activity-host-unknown');
-		expect(unknown).toBeTruthy();
+		expect(unknown).toBeInTheDocument();
 		expect(unknown.getAttribute('role')).toBe('note');
 	});
 
@@ -35,7 +35,7 @@ describe('ActivityHost -- known activityId', () => {
 	it('renders the known-activity <figure> for activityId="crosswind-component"', () => {
 		render(ActivityHostHarness, { activityId: 'crosswind-component' });
 		const known = screen.getByTestId('activity-host-known');
-		expect(known).toBeTruthy();
+		expect(known).toBeInTheDocument();
 		expect(known.tagName).toBe('FIGURE');
 		expect(known.getAttribute('data-activity-id')).toBe('crosswind-component');
 	});
@@ -45,7 +45,7 @@ describe('ActivityHost -- known activityId', () => {
 		// CrosswindComponent renders an svg.compass + a wind-handle group.
 		// We use those as a stable existence check rather than asserting
 		// the entire CrosswindComponent DOM here.
-		expect(container.querySelector('[data-testid="activity-host-known"] svg.compass')).toBeTruthy();
+		expect(container.querySelector('[data-testid="activity-host-known"] svg.compass')).toBeInTheDocument();
 	});
 
 	it('does not render the unknown-activity aside when activityId is registered', () => {
@@ -56,7 +56,7 @@ describe('ActivityHost -- known activityId', () => {
 	it('renders a figcaption explaining the activity', () => {
 		const { container } = render(ActivityHostHarness, { activityId: 'crosswind-component' });
 		const caption = container.querySelector('[data-testid="activity-host-known"] figcaption');
-		expect(caption).toBeTruthy();
+		expect(caption).toBeInTheDocument();
 		expect(caption?.textContent).toContain('crosswind');
 	});
 });

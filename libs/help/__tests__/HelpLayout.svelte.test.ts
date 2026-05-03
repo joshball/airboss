@@ -32,8 +32,8 @@ describe('HelpLayout', () => {
 
 	it('renders a TOC link per section', () => {
 		render(HelpLayout, { page });
-		expect(screen.getByTestId('helptoc-link-intro')).toBeTruthy();
-		expect(screen.getByTestId('helptoc-link-usage')).toBeTruthy();
+		expect(screen.getByTestId('helptoc-link-intro')).toBeInTheDocument();
+		expect(screen.getByTestId('helptoc-link-usage')).toBeInTheDocument();
 	});
 
 	it('renders documents block when page.documents is set', () => {

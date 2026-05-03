@@ -239,7 +239,8 @@ describe('ThemePicker -- ARIA', () => {
 		await user.click(trigger);
 
 		const panelId = trigger.getAttribute('aria-controls');
-		expect(panelId).toBeTruthy();
+		expect(panelId).not.toBeNull();
+		expect((panelId ?? '').length).toBeGreaterThan(0);
 		const panel = document.getElementById(panelId ?? '');
 		expect(panel).not.toBeNull();
 		expect(panel?.getAttribute('role')).toBe('listbox');
@@ -274,7 +275,8 @@ describe('ThemePicker -- locked state', () => {
 
 		expect(trigger.getAttribute('aria-disabled')).toBe('true');
 		const describedBy = trigger.getAttribute('aria-describedby');
-		expect(describedBy).toBeTruthy();
+		expect(describedBy).not.toBeNull();
+		expect((describedBy ?? '').length).toBeGreaterThan(0);
 		const desc = document.getElementById(describedBy ?? '');
 		expect(desc).not.toBeNull();
 		expect((desc?.textContent ?? '').trim().length).toBeGreaterThan(0);

@@ -53,7 +53,7 @@ describe('SharePopover -- open', () => {
 		const panel = screen.getByTestId('dialog-panel');
 		expect(panel.getAttribute('role')).toBe('dialog');
 		expect(panel.getAttribute('aria-modal')).toBe('true');
-		expect(screen.getByTestId('sharepopover-root')).toBeTruthy();
+		expect(screen.getByTestId('sharepopover-root')).toBeInTheDocument();
 		expect(screen.getByTestId('sharepopover-url').textContent).toBe('https://airboss.test/c/1');
 	});
 

@@ -45,9 +45,9 @@ describe('BrowseListItem', () => {
 			withExtra: true,
 			withTrailing: true,
 		});
-		expect(screen.getByTestId('browselistitem-meta')).toBeTruthy();
-		expect(screen.getByTestId('browselistitem-stats')).toBeTruthy();
-		expect(screen.getByTestId('browselistitem-extra')).toBeTruthy();
-		expect(screen.getByTestId('browselistitem-trailing')).toBeTruthy();
+		expect(screen.getByTestId('browselistitem-meta')).toBeInTheDocument();
+		expect(screen.getByTestId('browselistitem-stats')).toBeInTheDocument();
+		expect(screen.getByTestId('browselistitem-extra')).toBeInTheDocument();
+		expect(screen.getByTestId('browselistitem-trailing')).toBeInTheDocument();
 	});
 });

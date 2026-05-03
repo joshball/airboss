@@ -23,7 +23,7 @@ describe('RadioGroup -- rendering', () => {
 		expect(screen.getByTestId('radiogroup-root').tagName).toBe('FIELDSET');
 		expect(screen.getByTestId('radiogroup-legend').textContent).toBe('Kind');
 		for (const opt of opts) {
-			expect(screen.getByTestId(`radiogroup-item-${opt.value}`)).toBeTruthy();
+			expect(screen.getByTestId(`radiogroup-item-${opt.value}`)).toBeInTheDocument();
 			expect(screen.getByTestId(`radiogroup-input-${opt.value}`).tagName).toBe('INPUT');
 		}
 	});

@@ -162,7 +162,8 @@ describe('better-auth + audit hooks integration', () => {
 		const signInRes = await signIn(auth, { email: TEST_EMAIL, password: TEST_PASSWORD });
 		expect(signInRes.status).toBe(200);
 		const setCookie = signInRes.headers.get('set-cookie');
-		expect(setCookie, 'sign-in must return Set-Cookie').toBeTruthy();
+		expect(setCookie, 'sign-in must return Set-Cookie').not.toBeNull();
+		expect(setCookie ?? '').toMatch(/=/);
 		// Crude cookie-jar: take name=value pairs from each Set-Cookie header.
 		// Better-auth's handler concatenates multiple Set-Cookie via append,
 		// joined here by the standard Headers#get serialization.

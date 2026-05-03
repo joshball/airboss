@@ -25,14 +25,14 @@ describe('HelpSection -- rendering', () => {
 
 	it('renders the heading and toggle when showHeading=true', () => {
 		render(HelpSection, { section });
-		expect(screen.getByTestId('helpsection-toggle')).toBeTruthy();
+		expect(screen.getByTestId('helpsection-toggle')).toBeInTheDocument();
 		expect(screen.getByTestId('helpsection-title').textContent).toBe('Overview');
 	});
 
 	it('omits the heading toggle when showHeading=false (lede pattern)', () => {
 		render(HelpSection, { section, showHeading: false });
 		expect(screen.queryByTestId('helpsection-toggle')).toBeNull();
-		expect(screen.getByTestId('helpsection-body')).toBeTruthy();
+		expect(screen.getByTestId('helpsection-body')).toBeInTheDocument();
 	});
 
 	it('starts expanded by default', () => {

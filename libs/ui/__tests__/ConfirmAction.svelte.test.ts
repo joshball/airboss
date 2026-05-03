@@ -15,7 +15,7 @@ afterEach(() => {
 describe('ConfirmAction -- closed (initial)', () => {
 	it('renders the trigger button only', () => {
 		render(ConfirmActionHarness, { label: 'Delete' });
-		expect(screen.getByTestId('confirmaction-trigger')).toBeTruthy();
+		expect(screen.getByTestId('confirmaction-trigger')).toBeInTheDocument();
 		expect(screen.queryByTestId('confirmaction-panel')).toBeNull();
 	});
 
@@ -34,9 +34,9 @@ describe('ConfirmAction -- open', () => {
 		const user = userEvent.setup();
 		render(ConfirmActionHarness, { label: 'Delete' });
 		await user.click(screen.getByTestId('confirmaction-trigger'));
-		expect(screen.getByTestId('confirmaction-panel')).toBeTruthy();
-		expect(screen.getByTestId('confirmaction-confirm')).toBeTruthy();
-		expect(screen.getByTestId('confirmaction-cancel')).toBeTruthy();
+		expect(screen.getByTestId('confirmaction-panel')).toBeInTheDocument();
+		expect(screen.getByTestId('confirmaction-confirm')).toBeInTheDocument();
+		expect(screen.getByTestId('confirmaction-cancel')).toBeInTheDocument();
 	});
 
 	it('cancelling closes the panel without firing onConfirm', async () => {
@@ -47,7 +47,7 @@ describe('ConfirmAction -- open', () => {
 		await user.click(screen.getByTestId('confirmaction-cancel'));
 		expect(onConfirm).not.toHaveBeenCalled();
 		expect(screen.queryByTestId('confirmaction-panel')).toBeNull();
-		expect(screen.getByTestId('confirmaction-trigger')).toBeTruthy();
+		expect(screen.getByTestId('confirmaction-trigger')).toBeInTheDocument();
 	});
 
 	it('confirming fires onConfirm exactly once and closes the panel', async () => {

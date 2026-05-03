@@ -29,7 +29,7 @@ describe('ErrataEntry -- header', () => {
 	it('renders the errata id, published date, and source link', () => {
 		const { container } = render(ErrataEntry, { entry: baseEntry });
 		const article = container.querySelector('article.errata-entry');
-		expect(article).toBeTruthy();
+		expect(article).toBeInTheDocument();
 		expect(article?.textContent).toContain('mosaic');
 		expect(article?.textContent).toContain('Oct 22, 2025');
 		const link = article?.querySelector('a.source-link');
@@ -68,7 +68,7 @@ describe('ErrataEntry -- per-kind body', () => {
 	it('add_subsection: renders an "Added" framed block with replacement text', () => {
 		const { container } = render(ErrataEntry, { entry: baseEntry });
 		const body = container.querySelector('.body.added');
-		expect(body).toBeTruthy();
+		expect(body).toBeInTheDocument();
 		expect(body?.textContent).toContain('Added');
 		expect(body?.textContent).toContain('New subsection text added by MOSAIC.');
 	});
@@ -82,7 +82,7 @@ describe('ErrataEntry -- per-kind body', () => {
 			},
 		});
 		const body = container.querySelector('.body.appended');
-		expect(body).toBeTruthy();
+		expect(body).toBeInTheDocument();
 		expect(body?.textContent).toContain('Appended');
 		expect(body?.textContent).toContain('New paragraph appended.');
 	});
@@ -97,7 +97,7 @@ describe('ErrataEntry -- per-kind body', () => {
 			},
 		});
 		const body = container.querySelector('.body.replaced');
-		expect(body).toBeTruthy();
+		expect(body).toBeInTheDocument();
 		expect(body?.textContent).toContain('Revised');
 		const dels = body?.querySelectorAll('del') ?? [];
 		const ins = body?.querySelectorAll('ins') ?? [];
@@ -127,7 +127,7 @@ describe('ErrataEntry -- per-kind body', () => {
 		// The replaced body still renders because the template branches on
 		// patchKind, but the diff inside is empty -- no <del>/<ins> at all.
 		const body = container.querySelector('.body.replaced');
-		expect(body).toBeTruthy();
+		expect(body).toBeInTheDocument();
 		expect(body?.querySelectorAll('del').length).toBe(0);
 		expect(body?.querySelectorAll('ins').length).toBe(0);
 	});

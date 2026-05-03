@@ -22,7 +22,7 @@ const malformed = loadFixture('malformed.xml');
 describe('parseCfrXml -- structural', () => {
 	it('parses a fixture into a document without throwing', () => {
 		const doc = parseCfrXml(fixture, 'fixture:91.155.xml');
-		expect(doc).toBeTruthy();
+		expect(doc).toBeDefined();
 		expect(doc.root.tag).toBe('CFRDOC');
 	});
 

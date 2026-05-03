@@ -56,7 +56,7 @@ describe('FilterBar', () => {
 
 	it('renders children inside the panel', () => {
 		render(FilterBarHarness, {});
-		expect(screen.getByTestId('harness-input')).toBeTruthy();
+		expect(screen.getByTestId('harness-input')).toBeInTheDocument();
 	});
 
 	describe('FilterField', () => {

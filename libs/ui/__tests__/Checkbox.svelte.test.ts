@@ -14,7 +14,7 @@ afterEach(() => {
 describe('Checkbox -- rendering', () => {
 	it('renders root with label text', () => {
 		render(Checkbox, { label: 'Accept terms' });
-		expect(screen.getByTestId('checkbox-root')).toBeTruthy();
+		expect(screen.getByTestId('checkbox-root')).toBeInTheDocument();
 		expect(screen.getByTestId('checkbox-label').textContent).toBe('Accept terms');
 	});
 

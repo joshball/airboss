@@ -153,8 +153,8 @@ describe('Cancel job on /jobs/[id]', () => {
 		const form = container.querySelector('form.confirm-form');
 		expect(form?.getAttribute('action')).toBe(ROUTES.HANGAR_JOB_CANCEL_ACTION);
 		// Body surfaces the kind + target so the operator knows what they're killing.
-		expect(screen.getByText(/source.fetch/)).toBeTruthy();
-		expect(screen.getByText(/source:source-acs-pa/)).toBeTruthy();
+		expect(screen.getByText(/source.fetch/)).toBeInTheDocument();
+		expect(screen.getByText(/source:source-acs-pa/)).toBeInTheDocument();
 	});
 
 	it('Keep running cancel button closes the dialog without submitting', async () => {
@@ -166,7 +166,7 @@ describe('Cancel job on /jobs/[id]', () => {
 			startedAt: null,
 		});
 		await user.click(screen.getByRole('button', { name: 'Cancel job' }));
-		expect(container.querySelector('form.confirm-form')).toBeTruthy();
+		expect(container.querySelector('form.confirm-form')).toBeInTheDocument();
 		await user.click(screen.getByRole('button', { name: 'Keep running' }));
 		expect(container.querySelector('form.confirm-form')).toBeNull();
 	});

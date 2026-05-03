@@ -33,7 +33,7 @@ describe('Tabs -- rendering', () => {
 		render(TabsHarness, { tabs });
 		expect(screen.getByTestId('tabs-item-one').getAttribute('aria-selected')).toBe('true');
 		expect(screen.getByTestId('tabs-item-one').getAttribute('data-state')).toBe('active');
-		expect(screen.getByTestId('harness-panel-one')).toBeTruthy();
+		expect(screen.getByTestId('harness-panel-one')).toBeInTheDocument();
 	});
 });
 
@@ -44,7 +44,7 @@ describe('Tabs -- selection', () => {
 		await user.click(screen.getByTestId('tabs-item-two'));
 		expect(screen.getByTestId('tabs-item-two').getAttribute('aria-selected')).toBe('true');
 		expect(screen.getByTestId('tabs-item-one').getAttribute('aria-selected')).toBe('false');
-		expect(screen.getByTestId('harness-panel-two')).toBeTruthy();
+		expect(screen.getByTestId('harness-panel-two')).toBeInTheDocument();
 	});
 
 	it('disabled tabs are skipped on click and have data-state=disabled', async () => {

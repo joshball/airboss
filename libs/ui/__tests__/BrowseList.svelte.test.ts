@@ -17,8 +17,8 @@ describe('BrowseList', () => {
 			{ key: 'g2', label: 'Group 2', items: [{ id: 'b', name: 'B' }] },
 		];
 		render(BrowseListHarness, { groups });
-		expect(screen.getByTestId('browselist-list-g1')).toBeTruthy();
-		expect(screen.getByTestId('browselist-list-g2')).toBeTruthy();
+		expect(screen.getByTestId('browselist-list-g1')).toBeInTheDocument();
+		expect(screen.getByTestId('browselist-list-g2')).toBeInTheDocument();
 	});
 
 	it('renders group heading + count when label is set', () => {
