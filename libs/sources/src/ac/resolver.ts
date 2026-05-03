@@ -126,7 +126,10 @@ export const AC_RESOLVER: CorpusResolver = {
 		if (manifest === null) return null;
 
 		if (section !== undefined) {
-			const sec = manifest.sections.find((s) => s.section === section);
+			// Post-WP-AC-PROMOTE: section rows carry `code` + `level`, not the
+			// legacy flat `section` string. The locator's `section` token is
+			// matched against the chapter / section / subsection code.
+			const sec = manifest.sections.find((s) => s.code === section);
 			if (sec === undefined) return null;
 			return readBody(sec.body_path, _derivativeRoot);
 		}

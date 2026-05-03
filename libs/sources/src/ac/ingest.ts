@@ -35,13 +35,27 @@ import { commitIngestBatch, getEntryLifecycle } from '../registry/lifecycle.ts';
 import { classifySkipReasons, INGEST_EXIT_CODES } from '../shared/exit-codes.ts';
 import { ShaMismatchError, verifyCachedSha } from '../shared/sha-verify.ts';
 import type { Edition, SourceEntry, SourceId } from '../types.ts';
-import type { AcCorpusIndex, AcCorpusIndexEntry, AcManifestFile } from './derivative-reader.ts';
+import type { AcCorpusIndex, AcCorpusIndexEntry, AcManifestFile, AcManifestSection } from './derivative-reader.ts';
+import { type AcExtractionConfig, extractAcSections } from './section-extract.ts';
 
 export const PHASE_8_REVIEWER_ID = 'phase-8-ac-ingestion';
 
 const CORPUS = 'ac';
 const DOC_SHORT = 'AC';
 const DOC_FORMAL_PREFIX = 'FAA Advisory Circular';
+
+/**
+ * Per-AC extraction tuning (WP-AC-PROMOTE). Only ACs that need a non-default
+ * configuration are listed; everything else uses the default heuristic
+ * strategy chosen by `extractAcSections`. Today the only override is
+ * AC 25-7D, the 600-page transport-category Flight Test Guide -- the spec
+ * decision is to keep section-tree depth at chapter-only for that doc; its
+ * sub-paragraph numbering is engineering-cert noise and adds rows without
+ * adding learner value.
+ */
+const AC_EXTRACTION_OVERRIDES: ReadonlyMap<string, Pick<AcExtractionConfig, 'chapterOnly'>> = new Map([
+	['25-7', { chapterOnly: true }],
+]);
 
 export interface IngestArgs {
 	/** Path to the cache root containing `ac/<doc-id>.pdf` + per-corpus `ac/manifest.json` (ADR 021). */
@@ -266,6 +280,63 @@ function ensureDir(path: string): void {
 	}
 }
 
+/**
+ * Compute the repo-relative path for a per-section body markdown. The shape
+ * mirrors the handbook section-tree layout (chapter dir + per-section file)
+ * so the AC reader can reuse handbook navigation chrome:
+ *
+ *   ac/<doc-slug>/<rev>/<chapter-slug>/00-<chapter-slug>.md     (chapter row)
+ *   ac/<doc-slug>/<rev>/<chapter-slug>/<NN>-<section-slug>.md   (section row)
+ *   ac/<doc-slug>/<rev>/<chapter-slug>/<NN>-<NN>-<sub-slug>.md  (subsection row)
+ *
+ * Chapter rows ALSO write a `00-<chapter-slug>.md` body so the chapter has a
+ * walkable file even when only sub-paragraphs carry content; this matches
+ * the PHAK / AVWX shape and lets the reader render the chapter overview.
+ */
+function sectionBodyRelPath(args: {
+	readonly docSlug: string;
+	readonly revision: string;
+	readonly section: { level: 'chapter' | 'section' | 'subsection'; chapterSlug: string; fileSlug: string };
+}): string {
+	const { docSlug, revision, section } = args;
+	const root = `ac/${docSlug}/${revision}`;
+	if (section.level === 'chapter') {
+		return `${root}/${section.chapterSlug}/00-${section.fileSlug}.md`;
+	}
+	return `${root}/${section.chapterSlug}/${section.fileSlug}.md`;
+}
+
+/**
+ * Compose the human-readable source locator for a section row. Locators
+ * appear on every `reference_section` row (`reference_section.source_locator`)
+ * and surface in citation chrome:
+ *
+ *   "AC 61-65J Ch 1"               (chapter)
+ *   "AC 61-65J Ch 1 §1.1"          (section)
+ *   "AC 61-65J Ch 1 §1.1.1"        (subsection)
+ *   "AC 61-65J Appendix A"         (appendix container)
+ */
+function formatSectionLocator(args: {
+	readonly edition: string;
+	readonly section: { level: 'chapter' | 'section' | 'subsection'; code: string };
+}): string {
+	const { edition, section } = args;
+	if (section.level === 'chapter') {
+		if (section.code.startsWith('appendix-')) {
+			const id = section.code.slice('appendix-'.length).toUpperCase();
+			return `${edition} Appendix ${id}`;
+		}
+		return `${edition} Ch ${section.code}`;
+	}
+	const parts = section.code.split('.');
+	const chap = parts[0] ?? '';
+	if (chap.startsWith('appendix-')) {
+		const id = chap.slice('appendix-'.length).toUpperCase();
+		return `${edition} Appendix ${id} §${section.code}`;
+	}
+	return `${edition} Ch ${chap} §${section.code}`;
+}
+
 function buildSourceEntry(args: { ac: CachedAc; title: string; publicationDate: Date }): SourceEntry {
 	const { ac, title, publicationDate } = args;
 	const id = `airboss-ref:${CORPUS}/${ac.docNumber}/${ac.revision}` as SourceId;
@@ -331,7 +402,10 @@ export async function runAcIngest(args: IngestArgs): Promise<IngestReport> {
 			}
 
 			// Compose the full document body. AC PDFs render reasonably under
-			// the default `-layout` mode; section-level extraction is a follow-up.
+			// the default `-layout` mode. Section-tree extraction (WP-AC-PROMOTE)
+			// runs against the resulting markdown using FAA AC-style heading
+			// regexes; the whole-doc body is preserved on disk for audit and as
+			// a fallback when no headings are detected.
 			const documentBody = doc.pages.map((p) => p.text).join('\n\n');
 			const bodySha = sha256(documentBody);
 
@@ -340,6 +414,45 @@ export async function runAcIngest(args: IngestArgs): Promise<IngestReport> {
 			const bodyFilename = `ac-${ac.docSlug}-${ac.revision}.md`;
 			const bodyPath = join(docDir, bodyFilename);
 			writeIfChanged(bodyPath, documentBody);
+
+			// Run section extraction. The result is empty for ACs whose body
+			// produced no usable headings; the manifest then carries `sections: []`
+			// and the seeder falls back to whole-doc behavior (preserved from #480).
+			const override = AC_EXTRACTION_OVERRIDES.get(ac.docSlug);
+			const extraction = extractAcSections(documentBody, {
+				docSlug: ac.docSlug,
+				chapterOnly: override?.chapterOnly,
+			});
+
+			const sections: AcManifestSection[] = [];
+			// `args.derivativeRoot` ends with `/ac` (e.g. `/repo/ac`); section
+			// body paths are repo-relative and start with `ac/...`. Strip the
+			// trailing `ac` to recover the repo root for absolute writes.
+			const repoRoot = args.derivativeRoot.replace(/\/ac\/?$/, '') || args.derivativeRoot;
+			for (const sec of extraction.sections) {
+				const relSectionPath = sectionBodyRelPath({
+					docSlug: ac.docSlug,
+					revision: ac.revision,
+					section: sec,
+				});
+				const absSectionPath = join(repoRoot, relSectionPath);
+				ensureDir(join(absSectionPath, '..'));
+				writeIfChanged(absSectionPath, sec.bodyMd);
+				const editionUpper = `AC ${ac.docNumber}${ac.revision.toUpperCase()}`;
+				const locator = formatSectionLocator({ edition: editionUpper, section: sec });
+				sections.push({
+					level: sec.level,
+					code: sec.code,
+					ordinal: sec.ordinal,
+					parent_code: sec.parentCode,
+					title: sec.title,
+					faa_page_start: null,
+					faa_page_end: null,
+					source_locator: locator,
+					body_path: relSectionPath,
+					content_hash: sec.contentHash,
+				});
+			}
 
 			const manifest: AcManifestFile = {
 				schema_version: 1,
@@ -357,7 +470,7 @@ export async function runAcIngest(args: IngestArgs): Promise<IngestReport> {
 				page_count: doc.pageCount,
 				body_path: `ac/${ac.docSlug}/${ac.revision}/${bodyFilename}`,
 				body_sha256: bodySha,
-				sections: [],
+				sections,
 				changes: [],
 			};
 			const manifestPath = join(docDir, 'manifest.json');

@@ -71,19 +71,19 @@ CFR is structurally section-tree (per-Part references with section rows undernea
 
 ### Advisory Circulars
 
-9 cached and readable as whole-doc. 12 link-only cards need download. All ACs to be promoted to section-tree where the document has internal structure.
+9 cached and readable as section-tree (post WP-AC-PROMOTE). 12 link-only cards need download.
 
 | FAA number | Common name | Stage | Target |
 |------------|-------------|-------|--------|
-| AC 00-6B | Aviation Weather | ⚠️ readable, whole-doc | section-tree |
-| AC 25-7D | Flight Test Guide for Transport Category Airplanes | ⚠️ readable, whole-doc | section-tree (engineering doc — keep but section it) |
-| AC 61-65J | Certification: Pilots and Flight/Ground Instructors | ⚠️ readable, whole-doc | section-tree |
-| AC 61-83J | Industry-Conducted Flight Instructor Refresher Course | ⚠️ readable, whole-doc | section-tree |
-| AC 61-98D | Flight Review and IPC Currency | ⚠️ readable, whole-doc | section-tree |
-| AC 90-66C | Non-Towered Airport Flight Operations | ⚠️ readable, whole-doc | section-tree |
-| AC 91-21.1D | Use of Portable Electronic Devices Aboard Aircraft | ⚠️ readable, whole-doc | section-tree |
-| AC 91-79A | Mitigating Runway Overrun | ⚠️ readable, whole-doc | section-tree |
-| AC 120-71B | SOPs and Pilot Monitoring Duties | ⚠️ readable, whole-doc | section-tree |
+| AC 00-6B | Aviation Weather | ✅ readable, section-tree | done |
+| AC 25-7D | Flight Test Guide for Transport Category Airplanes | ✅ readable, section-tree (chapter-only) | done |
+| AC 61-65J | Certification: Pilots and Flight/Ground Instructors | ✅ readable, section-tree | done |
+| AC 61-83J | Industry-Conducted Flight Instructor Refresher Course | ✅ readable, section-tree | done |
+| AC 61-98D | Flight Review and IPC Currency | ✅ readable, section-tree | done |
+| AC 90-66C | Non-Towered Airport Flight Operations | ✅ readable, section-tree | done |
+| AC 91-21.1D | Use of Portable Electronic Devices Aboard Aircraft | ✅ readable, section-tree | done |
+| AC 91-79A | Mitigating Runway Overrun | ✅ readable, section-tree | done |
+| AC 120-71B | SOPs and Pilot Monitoring Duties | ✅ readable, section-tree | done |
 | AC 00-24 | Thunderstorms | ❌ link-only | full pipeline + section-tree |
 | AC 00-45 | Aviation Weather Services | ❌ link-only | full pipeline + section-tree |
 | AC 60-22 | Aeronautical Decision Making | ❌ link-only | full pipeline + section-tree |

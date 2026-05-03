@@ -44,7 +44,7 @@ After all 5 promotion WPs land:
 | WP | Effect | Spec / Status |
 |----|--------|---------------|
 | WP-EXTRAS-RETIRE | Slim `handbooks-extras` corpus to mtn-tips only; archive WP dirs | ✅ partial-shipped 2026-05-03 ([spec](../work-packages/wp-handbooks-extras-retire/spec.md)) -- full retirement deferred until `body_override` ports to chapter-aware path |
-| WP-AC-PROMOTE | Promote the 9 existing ACs from whole-doc to section-tree | 🟡 in flight ([spec](../work-packages/wp-ac-promote-to-section-tree/spec.md)) |
+| WP-AC-PROMOTE | Promote the 9 existing ACs from whole-doc to section-tree | ✅ shipped 2026-05-03 ([spec](../work-packages/wp-ac-promote-to-section-tree/spec.md)) -- 997 section rows across 9 ACs |
 
 ### Wave 5 — Citation migration
 

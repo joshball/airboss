@@ -306,6 +306,89 @@ describe('manifestSchema (discriminated union on kind)', () => {
 		expect(result.success).toBe(false);
 	});
 
+	it('accepts an AC manifest with structured sections[] (WP-AC-PROMOTE)', () => {
+		const sectionTreeAc = {
+			...VALID_AC,
+			sections: [
+				{
+					level: 'chapter',
+					code: '1',
+					ordinal: 1,
+					parent_code: null,
+					title: 'GENERAL',
+					faa_page_start: null,
+					faa_page_end: null,
+					source_locator: 'AC 61-98D Ch 1',
+					body_path: 'ac/61-98/d/01-general/00-01-general.md',
+					content_hash: 'c'.repeat(64),
+				},
+				{
+					level: 'section',
+					code: '1.1',
+					ordinal: 1,
+					parent_code: '1',
+					title: 'Purpose of This Advisory Circular (AC)',
+					faa_page_start: null,
+					faa_page_end: null,
+					source_locator: 'AC 61-98D Ch 1 §1.1',
+					body_path: 'ac/61-98/d/01-general/01-purpose-of-this-advisory-circular-ac.md',
+					content_hash: 'd'.repeat(64),
+				},
+			],
+		};
+		const result = acManifestSchema.safeParse(sectionTreeAc);
+		expect(result.success).toBe(true);
+		if (result.success) {
+			expect(result.data.sections).toHaveLength(2);
+			expect(result.data.sections[0]?.code).toBe('1');
+			expect(result.data.sections[1]?.parent_code).toBe('1');
+		}
+	});
+
+	it('accepts AC appendix container codes (`appendix-a`, `appendix-1`)', () => {
+		const sectionTreeAc = {
+			...VALID_AC,
+			sections: [
+				{
+					level: 'chapter',
+					code: 'appendix-a',
+					ordinal: 1,
+					parent_code: null,
+					title: 'SAMPLE ENDORSEMENTS',
+					faa_page_start: null,
+					faa_page_end: null,
+					source_locator: 'AC 61-98D Appendix A',
+					body_path: 'ac/61-98/d/appendix-a-sample-endorsements/00-appendix-a-sample-endorsements.md',
+					content_hash: 'e'.repeat(64),
+				},
+			],
+		};
+		const result = acManifestSchema.safeParse(sectionTreeAc);
+		expect(result.success).toBe(true);
+	});
+
+	it('rejects an AC manifest with a malformed section code', () => {
+		const sectionTreeAc = {
+			...VALID_AC,
+			sections: [
+				{
+					level: 'chapter',
+					code: 'NOT-A-VALID-CODE',
+					ordinal: 1,
+					parent_code: null,
+					title: 'Bad code',
+					faa_page_start: null,
+					faa_page_end: null,
+					source_locator: 'AC ?',
+					body_path: 'ac/61-98/d/foo/00-foo.md',
+					content_hash: 'f'.repeat(64),
+				},
+			],
+		};
+		const result = acManifestSchema.safeParse(sectionTreeAc);
+		expect(result.success).toBe(false);
+	});
+
 	it('accepts a valid CFR manifest', () => {
 		const result = manifestSchema.safeParse(VALID_CFR);
 		expect(result.success).toBe(true);

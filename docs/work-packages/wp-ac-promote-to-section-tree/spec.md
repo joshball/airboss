@@ -3,8 +3,9 @@ title: 'Spec: WP-AC-PROMOTE -- promote the 9 existing ACs from whole-doc to sect
 product: study
 feature: wp-ac-promote-to-section-tree
 type: spec
-status: draft
+status: shipped
 review_status: pending
+shipped_at: 2026-05-03
 ---
 
 # WP-AC-PROMOTE: promote 9 existing ACs to section-tree
