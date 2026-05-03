@@ -8,6 +8,9 @@ critical: 14
 major: 58
 minor: 64
 nit: 30
+review_status: done
+status: unread
+closed_out: 2026-05-04
 ---
 
 # 10x Review -- Chunk 5: UI library + themes
@@ -166,3 +169,53 @@ nit: 30
 - **major**: convergent pattern issue affecting many call sites / reactivity bug / won't-scale rendering
 - **minor**: localized DiD gap, naming, missing test
 - **nit**: polish, style preference
+
+## Final close-out as of 2026-05-04
+
+All 9 per-category reviews walked finding-by-finding against current main and updated with a "Status as of 2026-05-04" table. Per-category tally:
+
+| Category     | Total | Closed | Deferred | Dropped | File |
+|--------------|------:|-------:|---------:|--------:|------|
+| correctness  |    16 |     16 |        0 |       0 | [link](2026-05-02-ui-library-themes-correctness.md) |
+| perf         |    12 |     12 |        0 |       0 | [link](2026-05-02-ui-library-themes-perf.md) |
+| architecture |    11 |      9 |        0 |       2 | [link](2026-05-02-ui-library-themes-architecture.md) |
+| a11y         |    40 |     37 |        0 |       3 | [link](2026-05-02-ui-library-themes-a11y.md) |
+| patterns     |    11 |      7 |        4 |       0 | [link](2026-05-02-ui-library-themes-patterns.md) |
+| testing      |    24 |     17 |        1 |       6 | [link](2026-05-02-ui-library-themes-testing.md) |
+| dx           |    16 |     15 |        0 |       1 | [link](2026-05-02-ui-library-themes-dx.md) |
+| ux           |    31 |     23 |        3 |       5 | [link](2026-05-02-ui-library-themes-ux.md) |
+| svelte       |     9 |      9 |        0 |       0 | [link](2026-05-02-ui-library-themes-svelte.md) |
+| **TOTAL**    |**170**|**145** |    **8** |  **17** | |
+
+(The original index counted 192; per-category headers tally to 170 -- the 22-finding delta is convergent items that appeared in multiple reviews and were only counted once per category.)
+
+### Severity rollup (closed)
+
+| Severity | Closed | Deferred | Dropped |
+|----------|-------:|---------:|--------:|
+| Critical |     14 |        0 |       0 |
+| Major    |     56 |        0 |       2 |
+| Minor    |     54 |        4 |       6 |
+| Nit      |     21 |        4 |       9 |
+| **TOTAL**| **145**|    **8** |  **17** |
+
+### Deferred (8) -- all with explicit triggers
+
+- **patterns #8 / #9, nit #2 / #3 (4 items)**: design-token convergence pass. Captured in `docs/work-packages/wp-design-token-convergence/spec.md`. Trigger: next theme-pass session OR new overlay/instrument primitive.
+- **testing #12 (1 item)**: setTimeout(0) -> tick()/waitFor sweep. Stable today; defer to test-infra refresh.
+- **ux #12 (1 item)**: CitationPicker option-role inline buttons. Architecturally intentional (option role, not button variant).
+- **ux #16 / #17 (2 items)**: HandbookSectionNotes save banner + HandbookReadProgressControl status feedback. Requires parent-page coordination (server returns + page renders banner). Right place to land is the handbook reader page; logged here so the deferred decision survives.
+
+### Dropped (17) -- documented rationale per finding
+
+Cosmetic-only nits, intentional design choices, boundary WCAG cases, and convention deviations that are stable as-is. Each drop has its rationale captured in the per-category status table.
+
+### Convergent root cause closed in this audit
+
+**Layout effect-mirror -> $derived (chunk-5 svelte convergent root cause)**: 5 `+layout.svelte` files migrated from `$effect(() => { themePref = data.theme; })` to `const themePref = $derived(override ?? data.theme ?? DEFAULT)` with an optimistic `themeOverride` $state for the user-pick path. Eliminates the 4 `state_referenced_locally` warnings called out as the root cause. Files: `apps/study/(app)/`, `apps/hangar/`, `apps/hangar/(app)/`, `apps/sim/`, `apps/avionics/`.
+
+### Verification
+
+- `bun vitest run libs/{themes,help,ui,aviation,activities}` -> 1431 passed / 38 skipped (advisory contrast pairs).
+- All per-category review files have `review_status: done` and `closed_out: 2026-05-04`.
+- INDEX `review_status: done`.
