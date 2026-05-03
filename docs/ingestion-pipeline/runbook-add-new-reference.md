@@ -17,7 +17,7 @@ Is it a chapter-aware FAA handbook (FAA-H-XXXX-NX)?
    ├─ Airman Certification Standards (FAA-S-ACS-N) → acs/ corpus
    ├─ AIM section → can't add piecewise; AIM ingests as a whole
    ├─ CFR Part → cfr-titles.yaml + the 14cfr-NN slug pattern
-   ├─ NTSB ruling → wp-ntsb-alj corpus (in spec)
+   ├─ NTSB ALJ ruling → ntsb-alj/ corpus (`course/references/ntsb-alj.yaml` + `libs/sources/src/ntsb-alj/manifest.yaml`)
    ├─ Chief Counsel opinion → wp-cc corpus (in spec)
    ├─ SAFO / InFO → wp-safo-info corpus (in spec)
    └─ Something else → discuss in REFERENCES.md before pipelining
