@@ -61,11 +61,29 @@ function cellHref(domain: Domain, cert: Cert): string {
 	return `${ROUTES.KNOWLEDGE}?${params}`;
 }
 
-function cellTitle(domain: Domain, cell: DomainCertCell): string {
+function cellLabel(domain: Domain, cell: DomainCertCell): string {
 	const label = `${DOMAIN_LABELS[domain]} / ${CERT_LABELS[cell.cert]}`;
 	if (cell.percent === null) return `${label} -- no nodes`;
-	return `${label} -- ${cell.mastered} / ${cell.total} (${Math.round(cell.percent * 100)}%)`;
+	return `${label} -- ${cell.mastered} of ${cell.total} mastered (${Math.round(cell.percent * 100)}%)`;
 }
+
+/**
+ * Region-level summary so AT users hear what state the map is in (e.g.
+ * "Domain by cert mastery -- 12 of 56 cells populated") instead of a fixed
+ * label that doesn't reflect whether anything has been authored yet.
+ * Recomputes whenever the matrix changes so the live aria-label tracks
+ * state.
+ */
+const gridStateLabel = $derived.by(() => {
+	const totalCells = DOMAIN_VALUES.length * CERT_VALUES.length;
+	let populated = 0;
+	for (const domain of DOMAIN_VALUES) {
+		for (const cert of CERT_VALUES) {
+			if (cellFor(domain, cert).total > 0) populated++;
+		}
+	}
+	return `Domain by cert mastery grid -- ${populated} of ${totalCells} cells populated`;
+});
 </script>
 
 <PanelShell
@@ -73,7 +91,12 @@ function cellTitle(domain: Domain, cell: DomainCertCell): string {
 	subtitle="Domain x cert mastery"
 	error={errorMessage}
 >
-	<div class="map" role="table" aria-label="Domain by cert mastery grid">
+	<div
+		class="map"
+		role="table"
+		aria-label={gridStateLabel}
+		data-testid="map-panel-grid"
+	>
 		<div class="head" role="row">
 			<span class="corner" role="columnheader" aria-label="Domain"></span>
 			{#each CERT_VALUES as cert (cert)}
@@ -87,16 +110,18 @@ function cellTitle(domain: Domain, cell: DomainCertCell): string {
 				{#each CERT_VALUES as cert (cert)}
 					{@const cell = cellFor(domain, cert)}
 					{@const cls = intensityClass(cell.percent)}
-					{#if cell.total > 0}
-						<a
-							class="cell filled {cls}"
-							href={cellHref(domain, cert)}
-							title={cellTitle(domain, cell)}
-							role="cell"
-						></a>
-					{:else}
-						<span class="cell empty" title={cellTitle(domain, cell)} role="cell">-</span>
-					{/if}
+					{@const label = cellLabel(domain, cell)}
+					<span role="cell" class="cell-wrap">
+						{#if cell.total > 0}
+							<a
+								class="cell filled {cls}"
+								href={cellHref(domain, cert)}
+								aria-label={label}
+							></a>
+						{:else}
+							<span class="cell empty" aria-label={label}>-</span>
+						{/if}
+					</span>
 				{/each}
 			</div>
 		{/each}
@@ -149,6 +174,13 @@ function cellTitle(domain: Domain, cell: DomainCertCell): string {
 		text-overflow: ellipsis;
 	}
 
+	/* The role="cell" wrapper preserves table semantics on the anchor/span
+	   inside without affecting the grid layout. `display: contents` lets the
+	   inner cell occupy the grid track directly. */
+	.cell-wrap {
+		display: contents;
+	}
+
 	.cell {
 		display: inline-flex;
 		align-items: center;
@@ -160,6 +192,11 @@ function cellTitle(domain: Domain, cell: DomainCertCell): string {
 		font-family: var(--font-family-mono);
 		color: var(--ink-faint);
 		text-decoration: none;
+	}
+
+	.cell.filled:focus-visible {
+		outline: 2px solid var(--focus-ring);
+		outline-offset: 2px;
 	}
 
 	.cell.filled {
