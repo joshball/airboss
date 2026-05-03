@@ -8,7 +8,7 @@ The single canonical list of every FAA reference document airboss ingests, with 
 
 **Last updated:** 2026-05-03 (live snapshot — auto-update on each library PR)
 
-**Readable in-app today:** 36 references
+**Readable in-app today:** 36 references (40 with the references cleanup sweep — 4 AC YAML rows added so subjects + primary_cert render)
 **Total tracked:** ~50 references across all corpora
 **Target shape:** every reference is a section-tree (whole-doc retired, with one possible exception: mountain-flying)
 
@@ -145,15 +145,18 @@ These are intentional link-only cards for citation purposes. They will not get m
 
 ### Cleanup candidates (cruft)
 
-These exist in the DB and should be deleted or reconciled.
+Closed by the references-cleanup-sweep PR. Items remaining are the genuinely
+deferred ones (need a content audit, not a mechanical fix).
 
 | Row | Issue | Action |
 |-----|-------|--------|
-| `aim` edition `current` | Orphan placeholder; the real AIM is `2026-04` | Delete |
-| `aih` (FAA-H-8083-9B) in `handbooks-noningested.yaml` | Dupe of `aviation-instructor 8083-9` | Delete row |
-| `faa-h-8083-2` (2A) in `handbooks-noningested.yaml` | Dupe of `risk-management 8083-2A` | Delete row |
-| `afh` (FAA-H-8083-3B) in `handbooks-noningested.yaml` | Prior AFH edition kept for citation resolution | Decide: keep vs migrate citations to 3C |
-| `pcg` (Pilot/Controller Glossary) umbrella card | Already inside AIM as glossary entries | Decide: delete card or own corpus |
+| `afh` (FAA-H-8083-3B) in `handbooks-noningested.yaml` | Prior AFH edition kept for citation resolution | Deferred — needs a content audit that re-points every node's `source` string from 3B to 3C |
+
+Resolved in the cleanup sweep:
+
+- `aim` edition `current` — migrator now pins to `AIM_CURRENT_EDITION` (`2026-04`); existing orphan rows removed via `scripts/db/cleanup-aim-current-orphan.ts`.
+- `aih`/`faa-h-8083-2` dupe rows — deleted from `handbooks-noningested.yaml`; migrator's AIH/RMH patterns re-pointed at the canonical handbooks-extras `(slug, edition)` pairs (`aviation-instructor`/`8083-9`, `risk-management`/`8083-2A`).
+- `pcg` umbrella card — kept and reframed as a citation-fallback umbrella (matches the `generic-acs`/`generic-pts` pattern). The migrator's hardcoded `(pcg, current)` resolver still fires for legacy bare-PCG citations; the authored row absorbs them so no synthetic rows appear.
 
 ## Roadmap (in priority order)
 
@@ -162,7 +165,7 @@ This is the sequenced path to "everything readable as section-tree" excluding ne
 | # | WP | Status | Effect |
 |---|----|--------|--------|
 | 1 | AMT-G/P removal | ✅ shipped (#505) | -2 corpus entries |
-| 2 | Cleanup sweep | ❌ not started | Reconcile YAML cards (`ac-25-7`, `ac-61-65`, `ac-91-21-1`, `ac-120-71`); delete dupes; PCG decision; orphan delete |
+| 2 | Cleanup sweep | ✅ shipped | Reconciled 4 AC YAML rows (`ac-25-7`, `ac-61-65`, `ac-91-21-1`, `ac-120-71`); retired `aih`/`faa-h-8083-2` dupes from `handbooks-noningested.yaml` + re-pointed migrator; reframed PCG umbrella as citation-fallback; pinned AIM migrator to canonical edition + orphan cleanup script |
 | 3 | RMH section-tree promotion | ❌ not started | RMH chapter-tree from `RiskMgmtHdbk-TOC.md` |
 | 4 | mtn-flying section-tree promotion (from override) | ❌ not started | Parse the existing `body_override` markdown into a section-tree manifest |
 | 5 | AIH section-tree promotion (chapter-PDF download + extract) | ❌ not started | Per-chapter PDFs available from FAA |

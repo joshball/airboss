@@ -310,6 +310,7 @@ export {
 	type SourceCacheSubdir,
 } from './source-cache';
 export {
+	AIM_CURRENT_EDITION,
 	DISCOVERY_CACHE,
 	DISCOVERY_FRESHNESS_MS,
 	DISCOVERY_GITHUB_LABEL,

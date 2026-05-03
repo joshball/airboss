@@ -1,35 +1,22 @@
 # FAA handbooks referenced by airboss content but not yet ingested via the
 # `handbooks/` derivative pipeline (ADR 018 cache pattern).
 #
-# `handbooks/` currently ingests PHAK, AFH, AvWx. Other handbooks are
-# referenced from knowledge nodes; without authored reference rows here,
-# the citation migration upserts synthetic fallbacks. Once any of these
-# is ingested, the corresponding YAML entry can be removed -- the
-# handbook ingestion seed will own its row.
+# `handbooks/` ingests PHAK / AFH / AvWx as section-trees today; AIH / IFH /
+# IPH / RMH live as whole-doc rows under the handbooks-extras pipeline at
+# `libs/sources/src/handbooks-extras/ingest.ts` (canonical slugs:
+# `aviation-instructor`, `ifh`, `iph`, `risk-management`). The previous
+# duplicate rows here (`aih + FAA-H-8083-9B`, `faa-h-8083-2 + FAA-H-8083-2A`)
+# were retired in the references cleanup sweep -- the migrator at
+# `scripts/db/migrate-references-to-structured.ts` now resolves citations
+# directly to the handbooks-extras `(slug, edition)` pairs.
 #
-# Editions match what scripts/db/migrate-references-to-structured.ts uses
-# as defaults so `(slug, edition)` matches and the migration finds the
-# authored row instead of upserting a synthetic.
+# The single remaining row -- `afh` at `FAA-H-8083-3B` -- exists so historical
+# citations to the prior AFH edition (3C is current and section-tree
+# ingested) resolve cleanly. Deleting it requires a content audit that
+# re-points every node's `source` string to 3C; tracked as low priority in
+# the references roadmap.
 
 references:
-  - slug: aih
-    kind: handbook
-    edition: FAA-H-8083-9B
-    title: Aviation Instructor's Handbook
-    publisher: FAA
-    url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/aviation_instructors_handbook
-    subjects: [training-ops, human-factors]
-    primary_cert: cfi
-
-  - slug: faa-h-8083-2
-    kind: handbook
-    edition: FAA-H-8083-2A
-    title: Risk Management Handbook
-    publisher: FAA
-    url: https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/risk_management_handbook
-    subjects: [human-factors]
-    primary_cert: private
-
   # AFH 3B was the prior edition. Knowledge nodes still reference it
   # explicitly in `source` strings; rather than rewrite every node to 3C
   # (which would risk dangling chapter references; AFH reorganizes across

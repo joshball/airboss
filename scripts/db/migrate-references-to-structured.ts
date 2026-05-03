@@ -48,7 +48,13 @@
  *   bun scripts/db/migrate-references-to-structured.ts --dry-run
  */
 
-import { CITATION_FRAMINGS, type CitationFraming, REFERENCE_KINDS, type ReferenceKind } from '@ab/constants';
+import {
+	AIM_CURRENT_EDITION,
+	CITATION_FRAMINGS,
+	type CitationFraming,
+	REFERENCE_KINDS,
+	type ReferenceKind,
+} from '@ab/constants';
 import { client, db as defaultDb } from '@ab/db/connection';
 import type { LegacyCitation, StructuredCitation } from '@ab/types';
 import { isStructuredCitation } from '@ab/types';
@@ -145,8 +151,14 @@ const HANDBOOK_PATTERNS: readonly HandbookPattern[] = [
 	},
 	{
 		regex: /\b(?:AIH|Aviation Instructor's Handbook|FAA-H-8083-9[A-Z]?)\b/i,
-		slug: 'aih',
-		defaultEdition: 'FAA-H-8083-9B',
+		// Matches the canonical row seeded by the handbooks-extras pipeline
+		// (`libs/sources/src/handbooks-extras/ingest.ts`). The legacy
+		// `(aih, FAA-H-8083-9B)` pair was retired with
+		// `course/references/handbooks-noningested.yaml` -- using it here
+		// would re-create a synthetic dupe of the authored row.
+		slug: 'aviation-instructor',
+		defaultEdition: '8083-9',
+		pinDefaultEdition: true,
 		title: "Aviation Instructor's Handbook",
 		url: 'https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/aviation_instructors_handbook',
 	},
@@ -181,9 +193,15 @@ const HANDBOOK_PATTERNS: readonly HandbookPattern[] = [
 	},
 	{
 		regex: /\bFAA-H-8083-2[A-Z]?\b/i,
-		slug: 'faa-h-8083-2',
-		defaultEdition: 'FAA-H-8083-2A',
+		// Matches the canonical row seeded by the handbooks-extras pipeline.
+		// The legacy `(faa-h-8083-2, FAA-H-8083-2A)` pair was retired with
+		// `course/references/handbooks-noningested.yaml` -- using it here
+		// would re-create a synthetic dupe of the authored row.
+		slug: 'risk-management',
+		defaultEdition: '8083-2A',
+		pinDefaultEdition: true,
 		title: 'Risk Management Handbook',
+		url: 'https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/risk_management_handbook',
 	},
 ];
 
@@ -400,7 +418,12 @@ export function reshapeLegacyCitation(legacy: LegacyCitation): ReshapedCitation 
 		const resolved: ResolvedReference = {
 			kind: REFERENCE_KINDS.AIM,
 			documentSlug: 'aim',
-			edition: 'current',
+			// Pin to the on-disk edition so the migrator resolves to the
+			// authored row from `aim/<edition>/manifest.json` instead of
+			// upserting a synthetic `(aim, current)` orphan. When the FAA
+			// publishes a new AIM, bump AIM_CURRENT_EDITION in libs/constants
+			// in the same PR as the new on-disk edition.
+			edition: AIM_CURRENT_EDITION,
 			title: 'Aeronautical Information Manual',
 			url: 'https://www.faa.gov/air_traffic/publications/atpubs/aim_html/',
 		};

@@ -10,11 +10,22 @@
 # corpus can be wired to the FAA AC catalog (Phase 8 `ac` corpus) when its
 # resolver supplies live URLs.
 #
-# All AC rows carry `primary_cert: null` -- ACs are FAA-published policy
+# Most AC rows carry `primary_cert: null` -- ACs are FAA-published policy
 # under the regulations spine (grouped by series), not under any cert spine
-# (per library-by-cert WP placement table).
+# (per library-by-cert WP placement table). The exception is AC 61-65J
+# (cert + instructor endorsements), which is unambiguously CFI-owned.
 
 references:
+  # ---------- AC 25 series (transport-category airworthiness) --------------
+
+  - slug: ac-25-7
+    kind: ac
+    edition: AC 25-7D
+    title: Flight Test Guide for Certification of Transport Category Airplanes
+    publisher: FAA
+    subjects: [aerodynamics, performance]
+    primary_cert: null
+
   # ---------- AC 00 series (general) ---------------------------------------
 
   - slug: ac-00-6
@@ -60,6 +71,14 @@ references:
     publisher: FAA
     subjects: [procedures, navigation, flight-instruments]
     primary_cert: null
+
+  - slug: ac-61-65
+    kind: ac
+    edition: AC 61-65J
+    title: 'Certification: Pilots and Flight and Ground Instructors'
+    publisher: FAA
+    subjects: [certification, regulations, training-ops]
+    primary_cert: cfi
 
   - slug: ac-61-67
     kind: ac
@@ -121,6 +140,14 @@ references:
 
   # ---------- AC 91 series (general operating) -----------------------------
 
+  - slug: ac-91-21-1
+    kind: ac
+    edition: AC 91.21-1D
+    title: Use of Portable Electronic Devices Aboard Aircraft
+    publisher: FAA
+    subjects: [regulations, procedures, aircraft-systems]
+    primary_cert: null
+
   - slug: ac-91-23
     kind: ac
     edition: AC 91-23A
@@ -159,4 +186,14 @@ references:
     title: Mitigating the Risks of a Runway Overrun Upon Landing
     publisher: FAA
     subjects: [procedures, performance, airports]
+    primary_cert: null
+
+  # ---------- AC 120 series (air carrier ops) ------------------------------
+
+  - slug: ac-120-71
+    kind: ac
+    edition: AC 120-71B
+    title: Standard Operating Procedures and Pilot Monitoring Duties
+    publisher: FAA
+    subjects: [procedures, human-factors, training-ops]
     primary_cert: null

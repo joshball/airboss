@@ -338,3 +338,16 @@ export const DISCOVERY_QUIET_ENV = ENV_VARS.AIRBOSS_QUIET;
 
 /** Env var carrying the GitHub token used by `gh issue create`. */
 export const DISCOVERY_GITHUB_TOKEN_ENV = ENV_VARS.GH_TOKEN;
+
+/**
+ * Canonical AIM edition slug shipped on disk under `aim/<edition>/`. The
+ * AIM seeder walks `aim/<edition>/manifest.json` and seeds one
+ * `study.reference` row per edition, but the legacy citation migrator at
+ * `scripts/db/migrate-references-to-structured.ts` resolves bare `AIM`
+ * citations against a fixed `(slug, edition)` pair -- so the edition value
+ * here MUST match what's on disk, otherwise the migrator upserts a
+ * synthetic orphan row instead of resolving the authored row. When the
+ * FAA publishes a new AIM and a new edition directory lands, update this
+ * constant in the same PR as the on-disk content.
+ */
+export const AIM_CURRENT_EDITION = '2026-04' as const;

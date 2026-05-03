@@ -81,6 +81,32 @@ describe('reshapeLegacyCitation', () => {
 		expect(b.resolved.documentSlug).toBe('iph');
 	});
 
+	it('handbook: AIH variants resolve to canonical handbooks-extras (slug, edition)', () => {
+		// Pinned to `(aviation-instructor, 8083-9)` -- the row seeded by
+		// `libs/sources/src/handbooks-extras/ingest.ts`. Predecessor rows
+		// (`(aih, FAA-H-8083-9B)`) were retired in the references cleanup
+		// sweep; a regression here would re-create the synthetic dupe.
+		for (const source of ['AIH (FAA-H-8083-9B)', "Aviation Instructor's Handbook", 'AIH']) {
+			const result = reshapeLegacyCitation({ source, detail: 'Chapter 2', note: '' });
+			expect(result.resolved.documentSlug).toBe('aviation-instructor');
+			expect(result.resolved.edition).toBe('8083-9');
+		}
+	});
+
+	it('handbook: Risk Management Handbook resolves to canonical handbooks-extras (slug, edition)', () => {
+		// Pinned to `(risk-management, 8083-2A)` -- the row seeded by
+		// `libs/sources/src/handbooks-extras/ingest.ts`. Predecessor rows
+		// (`(faa-h-8083-2, FAA-H-8083-2A)`) were retired in the references
+		// cleanup sweep.
+		const result = reshapeLegacyCitation({
+			source: 'FAA-H-8083-2A',
+			detail: 'Risk Management Handbook',
+			note: '',
+		});
+		expect(result.resolved.documentSlug).toBe('risk-management');
+		expect(result.resolved.edition).toBe('8083-2A');
+	});
+
 	it('cfr: 14 CFR 91.3 -> kind=cfr, locator title/part/section', () => {
 		const result = reshapeLegacyCitation({
 			source: '14 CFR',
