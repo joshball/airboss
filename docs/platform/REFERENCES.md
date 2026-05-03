@@ -32,13 +32,14 @@ For the longer pipeline writeup see [docs/ingestion-pipeline/pipeline.md](../ing
 | FAA-H-8083-3C | Airplane Flying Handbook | AFH | ✅ readable, section-tree | (unchanged) | 18 chapters, 531 sections |
 | FAA-H-8083-28B | Aviation Weather Handbook | AVWX | ✅ readable, section-tree | (unchanged) | 28 chapters, 480 sections |
 | FAA-H-8083-9 | Aviation Instructor's Handbook | AIH | ✅ readable, section-tree | (unchanged) | 18 L1 entries (10 chapters + acks/preface + 4 appendices + glossary + index), 155 sections, 246 subsections (WP-AIH 2026-05-03) |
+| FAA-H-8083-15B | Instrument Flying Handbook | IFH | ✅ readable, section-tree | -- | Promoted via WP-IFH-SECTION-TREE; toc-file-sidecar strategy parses `docs/work-packages/whole-doc-promotion/source-tocs/ifh.md`; 11 chapters / 587 sections; chapters 6 / 7 model the printed-TOC Section I (analog) / Section II (electronic flight display) split as two L1 sections per chapter; 3 FAA amendment PDFs queued for follow-up under ADR 020 errata flow |
 | FAA-H-8083-16B | Instrument Procedures Handbook | IPH | ✅ readable, section-tree | (unchanged) | 7 chapters, 84 sections, 228 subsections (WP-IPH-section-tree 2026-05-03) |
+| FAA-H-8083-2A | Risk Management Handbook | RMH | ✅ readable, section-tree | (unchanged) | 12 chapters (8 + 4 appendices), 100 sections (WP-RMH 2026-05) |
+| FAA-P-8740-60 | Tips on Mountain Flying | MTN | ✅ readable, section-tree | (unchanged) | 12 chapters / 36 sections promoted from `body_override` markdown via the `handbooks-extras` ingest's section-tree branch (WP-MTN-section-tree, 2026-05-03) |
 
 ### Whole-doc handbooks → promote to section-tree
 
-| FAA number | Common name | Abbrev | Stage | Target | Notes |
-|------------|-------------|--------|-------|--------|-------|
-| FAA-H-8083-2A | Risk Management Handbook | RMH | ⚠️ readable, whole-doc | section-tree | TOC extracted at `source-tocs/rmh.md`; 8 chapters; promotion WP in flight |
+(empty -- all whole-doc handbooks have been promoted to section-tree as of WP-RMH (2026-05).)
 
 **Removed from corpus 2026-05-03**: AMT-General (FAA-H-8083-30B) and AMT-Powerplant (FAA-H-8083-32B). Maintenance technician handbooks; not pilot-training relevant.
 

@@ -12,15 +12,6 @@
       "manifest_path": "handbooks/aviation-instructor/FAA-H-8083-9/manifest.json"
     },
     {
-      "doc_id": "faa-h-8083-2",
-      "slug": "risk-management",
-      "edition_slug": "8083-2A",
-      "faa_dir": "FAA-H-8083-2A",
-      "title": "Risk Management Handbook",
-      "publication_date": "2022-06-02",
-      "manifest_path": "handbooks/risk-management/FAA-H-8083-2A/manifest.json"
-    },
-    {
       "doc_id": "faa-mtn-tips",
       "slug": "tips-mountain-flying",
       "edition_slug": "mtn-2003",
