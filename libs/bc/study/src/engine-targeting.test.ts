@@ -51,6 +51,9 @@ const GOAL_USER_ID = generateAuthId();
 const PLAN_ONLY_USER_ID = generateAuthId();
 const EMPTY_USER_ID = generateAuthId();
 const DISAGREE_USER_ID = generateAuthId();
+// Dedicated user for the primary-goal-switch test so the mutation does not
+// poison `GOAL_USER_ID`'s `[AIRSPACE]` invariant for the read-order suite.
+const SWAP_USER_ID = generateAuthId();
 
 const PPL_CRED_ID = generateCredentialId();
 const PPL_CRED_SLUG = CERTS.PPL;
@@ -103,6 +106,17 @@ beforeAll(async () => {
 			email: `disagree-${SUITE_TAG}@airboss.test`,
 			name: 'Disagree User',
 			firstName: 'Disagree',
+			lastName: 'User',
+			emailVerified: true,
+			role: 'learner',
+			createdAt: now,
+			updatedAt: now,
+		},
+		{
+			id: SWAP_USER_ID,
+			email: `swap-${SUITE_TAG}@airboss.test`,
+			name: 'Swap User',
+			firstName: 'Swap',
 			lastName: 'User',
 			emailVerified: true,
 			role: 'learner',
@@ -295,6 +309,7 @@ afterAll(async () => {
 	await db.delete(goalSyllabus).where(eq(goalSyllabus.syllabusId, IR_SYL_ID));
 	await db.delete(goal).where(eq(goal.userId, GOAL_USER_ID));
 	await db.delete(goal).where(eq(goal.userId, DISAGREE_USER_ID));
+	await db.delete(goal).where(eq(goal.userId, SWAP_USER_ID));
 	await db.delete(studyPlan).where(eq(studyPlan.seedOrigin, SUITE_TAG));
 	await db.delete(syllabusNode).where(eq(syllabusNode.seedOrigin, SUITE_TAG));
 	await db.delete(credentialSyllabus).where(eq(credentialSyllabus.seedOrigin, SUITE_TAG));
@@ -304,6 +319,7 @@ afterAll(async () => {
 	await db.delete(bauthUser).where(eq(bauthUser.id, PLAN_ONLY_USER_ID));
 	await db.delete(bauthUser).where(eq(bauthUser.id, EMPTY_USER_ID));
 	await db.delete(bauthUser).where(eq(bauthUser.id, DISAGREE_USER_ID));
+	await db.delete(bauthUser).where(eq(bauthUser.id, SWAP_USER_ID));
 });
 
 describe('getEngineTargeting -- read order', () => {
@@ -387,26 +403,36 @@ describe('getEngineTargetingSnapshot -- disagreement detection', () => {
 
 describe('getEngineTargeting -- primary goal switch', () => {
 	it('reflects the new primary goal on the next call', async () => {
-		// Add a second goal targeting IR with a distinct focus domain; flip
-		// primary. The cert projection still filters to [] (suite-tokenized
-		// credential slugs), so verify the swap via the goal's targeting
-		// columns instead -- the IR goal carries a different focus_domains
-		// list than the PPL goal, which is what the engine ultimately reads.
+		// Run on a dedicated user (`SWAP_USER_ID`) so the primary-goal flip
+		// cannot poison `GOAL_USER_ID`'s `[AIRSPACE]` invariant for the
+		// read-order suite. Seed two goals locally: the initial primary
+		// targets PPL with focusDomains=[AIRSPACE], the secondary targets IR
+		// with focusDomains=[WEATHER]. After the swap, the engine should
+		// read [WEATHER] instead of [AIRSPACE].
+		const pplGoal = await createGoal({
+			userId: SWAP_USER_ID,
+			title: 'Swap PPL goal',
+			notesMd: '',
+			isPrimary: true,
+		});
+		await addGoalSyllabus(pplGoal.id, SWAP_USER_ID, { syllabusId: PPL_SYL_ID, weight: 1.0 });
+		await setGoalFocusDomains(pplGoal.id, SWAP_USER_ID, [DOMAINS.AIRSPACE]);
+
 		const irGoal = await createGoal({
-			userId: GOAL_USER_ID,
-			title: 'IR push',
+			userId: SWAP_USER_ID,
+			title: 'Swap IR goal',
 			notesMd: '',
 			isPrimary: false,
 		});
-		await addGoalSyllabus(irGoal.id, GOAL_USER_ID, { syllabusId: IR_SYL_ID, weight: 1.0 });
-		await setGoalFocusDomains(irGoal.id, GOAL_USER_ID, [DOMAINS.WEATHER]);
+		await addGoalSyllabus(irGoal.id, SWAP_USER_ID, { syllabusId: IR_SYL_ID, weight: 1.0 });
+		await setGoalFocusDomains(irGoal.id, SWAP_USER_ID, [DOMAINS.WEATHER]);
 
-		const beforeSwap = await getEngineTargeting(GOAL_USER_ID);
+		const beforeSwap = await getEngineTargeting(SWAP_USER_ID);
 		expect([...beforeSwap.focusDomains].sort()).toEqual([DOMAINS.AIRSPACE]);
 
-		await setPrimaryGoal(irGoal.id, GOAL_USER_ID);
+		await setPrimaryGoal(irGoal.id, SWAP_USER_ID);
 
-		const afterSwap = await getEngineTargeting(GOAL_USER_ID);
+		const afterSwap = await getEngineTargeting(SWAP_USER_ID);
 		expect([...afterSwap.focusDomains].sort()).toEqual([DOMAINS.WEATHER]);
 	});
 });

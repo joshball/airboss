@@ -10,13 +10,14 @@ import { bauthUser } from '@ab/auth/schema';
 import { CREDENTIAL_PREREQ_KINDS, CREDENTIAL_STATUSES, SYLLABUS_PRIMACY, SYLLABUS_STATUSES } from '@ab/constants';
 import { db } from '@ab/db/connection';
 import {
+	createId,
 	generateAuthId,
 	generateCredentialId,
 	generateSyllabusId,
 	generateSyllabusNodeId,
 	generateSyllabusNodeLinkId,
 } from '@ab/utils';
-import { eq, sql } from 'drizzle-orm';
+import { eq, inArray, sql } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import {
 	CredentialNotFoundError,
@@ -461,16 +462,32 @@ describe('getCredentialMastery', () => {
 		expect(result.totalLeaves).toBe(0);
 	});
 
-	it('rolls up mastery when leaves + links exist', async () => {
-		// Seed a small Area / Task / Element subtree on the PPL syllabus and
-		// link two element leaves to two knowledge nodes.
+	/**
+	 * Seed the Performance Maneuvers area / Steep Turns task / two element
+	 * leaves (K + R) with knowledge-node links under PRIVATE_SYLLABUS_ID.
+	 * Each call returns the seeded ids and a cleanup callback so the test
+	 * can wipe the rows it created without leaving residue for siblings.
+	 */
+	async function seedPplMasterySubtree(): Promise<{
+		areaId: string;
+		taskId: string;
+		k1Id: string;
+		r1Id: string;
+		knNode1Id: string;
+		knNode2Id: string;
+		linkIds: string[];
+		cleanup: () => Promise<void>;
+	}> {
 		const now = new Date();
+		const tag = `${SUITE_TOKEN}-${createId('x').slice(0, 6)}`;
 		const areaId = generateSyllabusNodeId();
 		const taskId = generateSyllabusNodeId();
 		const k1Id = generateSyllabusNodeId();
 		const r1Id = generateSyllabusNodeId();
-		const knNode1Id = `kn-${SUITE_TAG}-1`;
-		const knNode2Id = `kn-${SUITE_TAG}-2`;
+		const knNode1Id = `kn-${SUITE_TAG}-${tag}-1`;
+		const knNode2Id = `kn-${SUITE_TAG}-${tag}-2`;
+		const link1Id = generateSyllabusNodeLinkId();
+		const link2Id = generateSyllabusNodeLinkId();
 
 		await db.insert(syllabusNode).values([
 			{
@@ -479,7 +496,7 @@ describe('getCredentialMastery', () => {
 				parentId: null,
 				level: 'area',
 				ordinal: 1,
-				code: `${SUITE_TOKEN}-V`,
+				code: `${tag}-V`,
 				title: 'Performance Maneuvers',
 				description: '',
 				triad: null,
@@ -498,7 +515,7 @@ describe('getCredentialMastery', () => {
 				parentId: areaId,
 				level: 'task',
 				ordinal: 1,
-				code: `${SUITE_TOKEN}-V.A`,
+				code: `${tag}-V.A`,
 				title: 'Steep Turns',
 				description: '',
 				triad: null,
@@ -517,7 +534,7 @@ describe('getCredentialMastery', () => {
 				parentId: taskId,
 				level: 'element',
 				ordinal: 1,
-				code: `${SUITE_TOKEN}-V.A.K1`,
+				code: `${tag}-V.A.K1`,
 				title: 'Aerodynamics of steep turns',
 				description: '',
 				triad: 'knowledge',
@@ -536,7 +553,7 @@ describe('getCredentialMastery', () => {
 				parentId: taskId,
 				level: 'element',
 				ordinal: 2,
-				code: `${SUITE_TOKEN}-V.A.R1`,
+				code: `${tag}-V.A.R1`,
 				title: 'Failure to maintain coordinated flight',
 				description: '',
 				triad: 'risk_management',
@@ -608,7 +625,7 @@ describe('getCredentialMastery', () => {
 
 		await db.insert(syllabusNodeLink).values([
 			{
-				id: generateSyllabusNodeLinkId(),
+				id: link1Id,
 				syllabusNodeId: k1Id,
 				knowledgeNodeId: knNode1Id,
 				weight: 1.0,
@@ -617,7 +634,7 @@ describe('getCredentialMastery', () => {
 				createdAt: now,
 			},
 			{
-				id: generateSyllabusNodeLinkId(),
+				id: link2Id,
 				syllabusNodeId: r1Id,
 				knowledgeNodeId: knNode2Id,
 				weight: 1.0,
@@ -627,26 +644,47 @@ describe('getCredentialMastery', () => {
 			},
 		]);
 
-		const result = await getCredentialMastery(TEST_USER_ID, PRIVATE_ID);
-		expect(result.totalLeaves).toBe(2);
-		// User has no cards or scenarios -> nothing covered or mastered.
-		expect(result.coveredLeaves).toBe(0);
-		expect(result.masteredLeaves).toBe(0);
-		expect(result.areas.length).toBe(1);
-		expect(result.areas[0]?.totalLeaves).toBe(2);
+		const cleanup = async () => {
+			await db.delete(syllabusNodeLink).where(inArray(syllabusNodeLink.id, [link1Id, link2Id]));
+			await db.delete(syllabusNode).where(inArray(syllabusNode.id, [k1Id, r1Id, taskId, areaId]));
+			await db.delete(knowledgeNode).where(inArray(knowledgeNode.id, [knNode1Id, knNode2Id]));
+		};
+
+		return { areaId, taskId, k1Id, r1Id, knNode1Id, knNode2Id, linkIds: [link1Id, link2Id], cleanup };
+	}
+
+	it('rolls up mastery when leaves + links exist', async () => {
+		const fixture = await seedPplMasterySubtree();
+		try {
+			const result = await getCredentialMastery(TEST_USER_ID, PRIVATE_ID);
+			expect(result.totalLeaves).toBe(2);
+			// User has no cards or scenarios -> nothing covered or mastered.
+			expect(result.coveredLeaves).toBe(0);
+			expect(result.masteredLeaves).toBe(0);
+			expect(result.areas.length).toBe(1);
+			expect(result.areas[0]?.totalLeaves).toBe(2);
+		} finally {
+			await fixture.cleanup();
+		}
 	});
 
 	it('byEvidenceKind aggregate counts required + passing leaves per kind', async () => {
-		// Continues from the previous test's seed: PRIVATE_ID has a K leaf
-		// (requires recall) and an R leaf (requires scenario), no evidence
-		// from the test user. Expect each kind to show up with required=1,
-		// passing=0 in the credential rollup.
-		const result = await getCredentialMastery(TEST_USER_ID, PRIVATE_ID);
-		expect(result.byEvidenceKind.recall).toEqual({ required: 1, passing: 0 });
-		expect(result.byEvidenceKind.scenario).toEqual({ required: 1, passing: 0 });
-		const area = result.areas[0];
-		expect(area?.byEvidenceKind.recall).toEqual({ required: 1, passing: 0 });
-		expect(area?.byEvidenceKind.scenario).toEqual({ required: 1, passing: 0 });
+		// Self-seeds the same K + R element subtree so the assertion does
+		// not depend on the previous test's row state. PRIVATE_ID then has
+		// one K leaf (requires recall) and one R leaf (requires scenario)
+		// with no evidence from the test user, so each kind shows up with
+		// required=1, passing=0 in the rollup.
+		const fixture = await seedPplMasterySubtree();
+		try {
+			const result = await getCredentialMastery(TEST_USER_ID, PRIVATE_ID);
+			expect(result.byEvidenceKind.recall).toEqual({ required: 1, passing: 0 });
+			expect(result.byEvidenceKind.scenario).toEqual({ required: 1, passing: 0 });
+			const area = result.areas[0];
+			expect(area?.byEvidenceKind.recall).toEqual({ required: 1, passing: 0 });
+			expect(area?.byEvidenceKind.scenario).toEqual({ required: 1, passing: 0 });
+		} finally {
+			await fixture.cleanup();
+		}
 	});
 });
 
