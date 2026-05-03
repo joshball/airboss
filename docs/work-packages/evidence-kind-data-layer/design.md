@@ -160,7 +160,7 @@ This WP keeps that semantic. Per-kind partitioning makes `not_applicable` more m
 
 ## Schema migration shape
 
-See `spec.md` item 9 for the SQL. The migration is `0003_evidence_kind_data_layer.sql`, single file, no consolidation. PostgreSQL handles the ALTER TABLE ADD COLUMN ... DEFAULT as metadata-only (no rewrite). The CREATE TABLE for `teaching_exercise` is independent.
+See `spec.md` item 9 for the SQL. The migration is `0002_evidence_kind_data_layer.sql`, single file, no consolidation. (The migration baseline was collapsed in PR #445 + #449 -- the live `drizzle/` directory holds `0000_initial.sql` + `0001_hangar_invitation.sql`; this WP appends `0002_*`.) Per `drizzle/README.md` the project applies schema via `drizzle-kit push` from the TS schema; the SQL file ships for diff-accuracy. PostgreSQL handles the ALTER TABLE ADD COLUMN ... DEFAULT as metadata-only (no rewrite). The CREATE TABLE for `teaching_exercise` is independent.
 
 ## Test design
 
