@@ -2,10 +2,12 @@
  * `handbooks-extras` corpus public surface.
  *
  * Several FAA whole-doc-only Class C handbooks (risk-management,
- * aviation-instructor, ifh, iph, tips-mountain-flying) registered under
+ * aviation-instructor, ifh, tips-mountain-flying) registered under
  * the same `handbooks` corpus as PHAK/AFH/AvWX. The chapter-aware
  * handbooks ingest cannot service these (no per-chapter PDFs from the
- * publisher); this module fills the gap.
+ * publisher, or no embedded outline + no printed TOC parser); this
+ * module fills the gap. IPH (faa-h-8083-16) was migrated to the
+ * chapter-aware Class A2 pipeline per WP-IPH-section-tree.
  *
  * No corpus-resolver registration here -- the `handbooks` resolver
  * (`libs/sources/src/handbooks/index.ts`) handles the new doc slugs once

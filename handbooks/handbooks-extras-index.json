@@ -12,15 +12,6 @@
       "manifest_path": "handbooks/aviation-instructor/FAA-H-8083-9/manifest.json"
     },
     {
-      "doc_id": "faa-h-8083-16",
-      "slug": "iph",
-      "edition_slug": "8083-16B",
-      "faa_dir": "FAA-H-8083-16B",
-      "title": "Instrument Procedures Handbook",
-      "publication_date": "2022-03-25",
-      "manifest_path": "handbooks/iph/FAA-H-8083-16B/manifest.json"
-    },
-    {
       "doc_id": "faa-h-8083-2",
       "slug": "risk-management",
       "edition_slug": "8083-2A",
