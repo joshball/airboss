@@ -75,7 +75,16 @@ section_strategy: toc-file-sidecar
 toc_file: docs/work-packages/whole-doc-promotion/source-tocs/ifh.md
 
 outline_overrides: []
-title_overrides: {}
+# Chapter titles overrides for chapters 6 and 7. Their printed-TOC sentinels
+# read `Chapter 6, Section I/II` rather than a bare `Chapter 6` line, so
+# the parser cannot infer a single chapter-level title from the TOC. The
+# Section I / II titles ("Airplane Attitude Instrument Flying Using Analog
+# Instrumentation" / "Using an Electronic Flight Display") are stamped as
+# section-level rows under the chapter; we set the chapter row's title to
+# the modality-agnostic theme.
+title_overrides:
+  '6': 'Airplane Attitude Instrument Flying'
+  '7': 'Airplane Basic Flight Maneuvers'
 figure_prefix_pattern: 'Figure (\d+)-(\d+)\.'
 table_prefix_pattern: 'Table (\d+)-(\d+)\.'
 

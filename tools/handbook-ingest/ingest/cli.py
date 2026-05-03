@@ -49,9 +49,13 @@ from .apply_errata import (
 )
 from .chapter_plaintext import write_chapter_sidecars
 from .config_loader import (
+    OUTLINE_STRATEGY_BOOKMARK,
+    OUTLINE_STRATEGY_CONTENT,
+    OUTLINE_STRATEGY_TOC_FILE_SIDECAR,
     SECTION_STRATEGY_COMPARE,
     SECTION_STRATEGY_PROMPT,
     SECTION_STRATEGY_TOC,
+    SECTION_STRATEGY_TOC_FILE_SIDECAR,
     VALID_STRATEGIES,
     ConfigError,
     HandbookConfig,
@@ -63,6 +67,7 @@ from .figures_dedup import deduplicate_figures
 from .handbooks import HandbookPlugin, UnknownHandbookError, get_handbook
 from .normalize import write_outputs
 from .outline import OutlineError, OutlineNode, detect_outline_from_text, filter_to_chapter, parse_outline
+from .paths import repo_root
 from .paths import relative_to_repo
 from .prompt_emit import emit_prompts, out_dir_for, read_meta
 from .section_tree import SectionTreeNode, derive_codes
@@ -75,6 +80,7 @@ from .sections_via_sidecar import (
     load_chapter_sidecars,
 )
 from .sections_via_toc import extract_via_toc
+from .sections_via_toc_file import TocFileExtractionResult, parse_toc_file
 from .tables import extract_tables
 
 _STRATEGY_CHOICES = tuple(sorted(VALID_STRATEGIES))
@@ -253,6 +259,18 @@ def main(
         )
         return
 
+    if effective_strategy == SECTION_STRATEGY_TOC_FILE_SIDECAR:
+        _run_toc_file_sidecar_strategy(
+            config,
+            fetch_result=fetch_result,
+            flat_outline=flat_outline,
+            bodies=bodies,
+            section_label_warnings=section_label_warnings,
+            chapter_nodes=chapter_nodes,
+            dry_run=dry_run,
+        )
+        return
+
     # Default: TOC strategy. Continue into the legacy seed/manifest path.
     _run_toc_strategy(
         config,
@@ -304,12 +322,15 @@ def _phase_outline(config: HandbookConfig, pdf_path: Path) -> list[OutlineNode]:
     click.echo("  WHY:  every other phase iterates chapter-by-chapter; the outline")
     click.echo("        is the source of truth for chapter ordinals + page ranges.")
     click.echo(f"  HOW:  {config.outline_strategy} strategy "
-               f"(`bookmark` reads PyMuPDF get_toc(); `content` scans page text).")
+               f"(`bookmark` reads PyMuPDF get_toc(); `content` scans page text; "
+               f"`toc-file-sidecar` parses a hand-extracted markdown TOC).")
     try:
-        if config.outline_strategy == "content":
+        if config.outline_strategy == OUTLINE_STRATEGY_CONTENT:
             flat_outline = detect_outline_from_text(
                 pdf_path, skip_pages=_toc_page_set(config)
             )
+        elif config.outline_strategy == OUTLINE_STRATEGY_TOC_FILE_SIDECAR:
+            flat_outline = _phase_outline_from_toc_file(config, pdf_path)
         else:
             flat_outline = parse_outline(pdf_path)
     except OutlineError as exc:
@@ -317,6 +338,41 @@ def _phase_outline(config: HandbookConfig, pdf_path: Path) -> list[OutlineNode]:
         raise SystemExit(2) from exc
     click.echo(f"  -> {len(flat_outline)} outline nodes")
     return flat_outline
+
+
+def _phase_outline_from_toc_file(config: HandbookConfig, pdf_path: Path) -> list[OutlineNode]:
+    """Build the chapter outline from the hand-extracted TOC markdown.
+
+    The TOC file gives us titles + first-page anchors per chapter; we
+    still need the PDF body's 1-indexed start page for each chapter so
+    `extract_sections` can slice. We get those by walking the body text
+    for FAA `<chap>-<page>` headers, same as `detect_outline_from_text`.
+    """
+    if config.toc_file is None:
+        raise OutlineError(
+            "outline_strategy=toc-file-sidecar requires a `toc_file:` field "
+            "in the handbook YAML."
+        )
+    toc_path = (repo_root() / config.toc_file).resolve()
+    if not toc_path.is_file():
+        raise OutlineError(
+            f"outline_strategy=toc-file-sidecar: toc_file={config.toc_file!r} "
+            f"does not resolve to a file (looked at {toc_path})."
+        )
+    # Walk the body for FAA `<chap>-<page>` headers to get real PDF
+    # start pages per chapter ordinal. This is the same scan
+    # `detect_outline_from_text` performs; we reuse the helper.
+    body_outline = detect_outline_from_text(pdf_path, skip_pages=_toc_page_set(config))
+    chapter_page_starts = {int(c.code): c.page_start for c in body_outline if c.level == "chapter"}
+    chapter_page_ends = {int(c.code): c.page_end for c in body_outline if c.level == "chapter"}
+    result = parse_toc_file(toc_path, chapter_page_starts=chapter_page_starts)
+    # Patch page_end on the chapter nodes from the body scan so
+    # `extract_sections` slices the right page range.
+    for node in result.chapters:
+        end = chapter_page_ends.get(int(node.code))
+        if end is not None:
+            node.page_end = max(node.page_start, end)
+    return result.chapters
 
 
 def _run_prompt_strategy(
@@ -490,6 +546,122 @@ def _run_compare_strategy(
     click.echo("done.")
 
 
+def _run_toc_file_sidecar_strategy(
+    config: HandbookConfig,
+    *,
+    fetch_result,
+    flat_outline: list[OutlineNode],
+    bodies,
+    section_label_warnings: list[str],
+    chapter_nodes: list[OutlineNode],
+    dry_run: bool,
+) -> None:
+    """Section strategy: parse the hand-extracted TOC markdown sidecar.
+
+    Mirrors `_run_toc_strategy` but uses the deterministic
+    `parse_toc_file` parser instead of the printed-TOC-page parser. The
+    parser was already invoked in the outline phase to derive chapter
+    titles + page anchors; we re-invoke it here to harvest the section
+    nodes (cheap and deterministic).
+    """
+    click.echo("")
+    click.echo("PHASE -- extract figures + tables")
+    click.echo("  WHAT: pull figure images + table HTML from the PDF.")
+    click.echo("  WHY:  the seed needs them inline; the reader surfaces them later.")
+    click.echo("  HOW:  PyMuPDF page-by-page; figures dedup; tables HTML serialize.")
+    figures, figure_warnings = extract_figures(
+        fetch_result.path,
+        flat_outline,
+        config.document_slug,
+        config.edition,
+        figure_pattern=config.figure_prefix_pattern,
+    )
+    click.echo(f"  -> figures: {len(figures)} extracted, {len(figure_warnings)} warnings")
+    figures, dedup_meta = deduplicate_figures(figures)
+    if dedup_meta["canonicalized"] > 0:
+        click.echo(
+            f"  figure dedup: {dedup_meta['canonicalized']} redundant files removed, "
+            f"{dedup_meta['freed_bytes']} bytes freed"
+        )
+    tables, table_warnings = extract_tables(
+        fetch_result.path,
+        flat_outline,
+        config.document_slug,
+        config.edition,
+        table_pattern=config.table_prefix_pattern,
+    )
+    click.echo(f"  -> tables: {len(tables)} extracted, {len(table_warnings)} warnings")
+
+    click.echo("")
+    click.echo("PHASE -- run toc-file-sidecar strategy")
+    click.echo("  WHAT: parse the hand-extracted TOC markdown into a section tree.")
+    click.echo("  WHY:  used when the embedded PDF TOC is empty AND no chapter PDFs ship.")
+    click.echo("        The user pre-extracts the printed TOC into a markdown file.")
+    click.echo(f"  HOW:  sections_via_toc_file.parse_toc_file({config.toc_file!r}).")
+    if config.toc_file is None:
+        click.echo("error: section_strategy=toc-file-sidecar requires `toc_file:`.", err=True)
+        raise SystemExit(2)
+    toc_path = (repo_root() / config.toc_file).resolve()
+    sidecar_result: TocFileExtractionResult = parse_toc_file(toc_path)
+    section_nodes: list[SectionTreeNode] = sidecar_result.sections
+    section_extra_warnings: list[str] = list(sidecar_result.warnings)
+    extraction_metadata: dict[str, object] = {
+        "section_strategy": {
+            "kind": SECTION_STRATEGY_TOC_FILE_SIDECAR,
+            "toc_file": config.toc_file,
+        },
+        "figure_dedup": dedup_meta,
+    }
+
+    click.echo(
+        f"  -> section-tree nodes: {len(section_nodes)} "
+        f"({sum(1 for n in section_nodes if n.level == 1)} L1, "
+        f"{sum(1 for n in section_nodes if n.level == 2)} L2, "
+        f"{sum(1 for n in section_nodes if n.level == 3)} L3)"
+    )
+    if section_extra_warnings:
+        click.echo(f"  section-tree warnings: {len(section_extra_warnings)} -- see manifest")
+    if section_label_warnings:
+        click.echo(f"  page-label warnings: {len(section_label_warnings)} -- see manifest")
+
+    if section_nodes:
+        flat_outline, bodies = _merge_section_nodes_into_outline(
+            flat_outline, bodies, section_nodes, fetch_result.path, config
+        )
+
+    if dry_run:
+        click.echo("")
+        click.echo(
+            f"dry-run summary: {len(bodies)} sections, {len(figures)} figures, {len(tables)} tables, "
+            f"{len(figure_warnings) + len(table_warnings)} warnings"
+        )
+        return
+
+    click.echo("")
+    click.echo("PHASE -- write outputs (markdown + manifest)")
+    click.echo("  WHAT: serialize the chapter / section markdown + figures/tables + manifest.json.")
+    click.echo("  WHY:  the seed loads these files; the reader serves them.")
+    click.echo("  HOW:  normalize.write_outputs writes the in-repo derivative tree.")
+    summary = write_outputs(
+        config=config,
+        fetch_result=fetch_result,
+        outline_nodes=flat_outline,
+        bodies=bodies,
+        figures=figures,
+        figure_warnings=figure_warnings,
+        tables=tables,
+        table_warnings=table_warnings,
+        extraction_metadata=extraction_metadata,
+        extra_warnings=[*section_extra_warnings, *section_label_warnings],
+    )
+    click.echo(
+        f"  -> wrote {summary.sections_written} sections, "
+        f"{summary.figures_written} figures, {summary.tables_written} tables; "
+        f"manifest -> {summary.manifest_path}"
+    )
+    click.echo(f"done: {config.document_slug} {config.edition}")
+
+
 def _run_toc_strategy(
     config: HandbookConfig,
     *,
@@ -622,12 +794,18 @@ def _override_edition(config: HandbookConfig, edition: str) -> HandbookConfig:
         publisher=config.publisher,
         kind=config.kind,
         source_url=config.source_url,
+        subjects=config.subjects,
+        whole_doc=config.whole_doc,
+        chapter_pdfs=config.chapter_pdfs,
+        excluded_assets=config.excluded_assets,
         expected_pages=config.expected_pages,
         page_offset=config.page_offset,
         outline_overrides=config.outline_overrides,
         figure_prefix_pattern=config.figure_prefix_pattern,
         table_prefix_pattern=config.table_prefix_pattern,
         outline_strategy=config.outline_strategy,
+        toc_file=config.toc_file,
+        primary_cert=config.primary_cert,
         title_overrides=config.title_overrides,
         section_strategy=config.section_strategy,
         chapter_text_max_chars=config.chapter_text_max_chars,
@@ -637,6 +815,7 @@ def _override_edition(config: HandbookConfig, edition: str) -> HandbookConfig:
         page_label_walk_back=config.page_label_walk_back,
         errata=config.errata,
         dismissed_errata=config.dismissed_errata,
+        extraction_hints=config.extraction_hints,
         raw_yaml=config.raw_yaml,
     )
 
