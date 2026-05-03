@@ -224,7 +224,7 @@ function formatTime(iso: string | null): string {
 				<p class="trim-notice" role="status">
 					Showing the last {logs.length.toLocaleString()} of {(logs.length + droppedLineCount).toLocaleString()} lines.
 					Older lines were dropped to keep the page responsive; the full log is available via the
-					<a href="{ROUTES.HANGAR_JOB_LOG(data.job.id)}?sinceSeq=-1">log endpoint</a>.
+					<a href="{ROUTES.HANGAR_JOB_LOG(data.job.id)}?{QUERY_PARAMS.SINCE_SEQ}=-1">log endpoint</a>.
 				</p>
 			{/if}
 			{#if filteredLogs.length === 0}

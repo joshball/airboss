@@ -116,5 +116,17 @@ describe('job-log cursor polling', () => {
 		expect(second.length).toBe(0);
 		const firstLines = first.map((r) => r.line);
 		expect(new Set(firstLines).size).toBe(firstLines.length);
+
+		// Also assert the contract that `readJobLog` returns rows in seq-asc
+		// order with strictly increasing seq values; uniqueness of `line`
+		// alone wouldn't catch a regression to constant or decreasing seq.
+		expect(first).toHaveLength(2);
+		const seqA = first[0]?.seq;
+		const seqB = first[1]?.seq;
+		expect(seqA).toBeDefined();
+		expect(seqB).toBeDefined();
+		if (seqA !== undefined && seqB !== undefined) {
+			expect(seqA).toBeLessThan(seqB);
+		}
 	});
 });

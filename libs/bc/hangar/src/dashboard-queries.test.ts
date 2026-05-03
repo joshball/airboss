@@ -79,6 +79,11 @@ describe('countLiveSources / listLiveSources -- deletedAt-IS-NULL filtering', ()
 		const deletedId = srcId('deleted');
 		const now = new Date();
 
+		// Capture the baseline before inserting our fixtures so the assertion
+		// is `after - before === 1` (not `>= 1`, which silently passed if the
+		// SQL counted the soft-deleted row too).
+		const before = await countLiveSources();
+
 		await db.insert(hangarSource).values([
 			{
 				id: liveId,
@@ -107,17 +112,17 @@ describe('countLiveSources / listLiveSources -- deletedAt-IS-NULL filtering', ()
 			},
 		]);
 
-		const count = await countLiveSources();
+		const after = await countLiveSources();
 		const listed = await listLiveSources();
 		const listedIds = listed.map((r) => r.id);
 
 		expect(listedIds).toContain(liveId);
 		expect(listedIds).not.toContain(deletedId);
 
-		// We don't know the global count -- another test or seed may have run.
-		// Asserting list ids contain ours and the count is at least the live row
-		// captures the filter without coupling to global state.
-		expect(count).toBeGreaterThanOrEqual(1);
+		// We inserted exactly one live + one soft-deleted row. A correct
+		// `WHERE deleted_at IS NULL` filter increments the live count by 1; a
+		// regression that counted both would shift it by 2.
+		expect(after - before).toBe(1);
 	});
 });
 

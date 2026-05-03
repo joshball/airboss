@@ -364,10 +364,13 @@ describe('listAuditEntries -- filter composition', () => {
 			from: lowerBound,
 		});
 		const ours = page.rows.filter((r) => insertedAuditIds.includes(r.id));
-		// rows 5 and 6 fall inside the 2.5s window; row 4 is exactly 1s
-		// older than the cutoff. Spec says inclusive, but the cutoff is
-		// 2.5s so only rows 5 + 6 land inside.
-		expect(ours.length).toBeGreaterThanOrEqual(2);
+		// Fixture timestamps are deterministic: rows 5 + 6 land inside the
+		// 2.5s window; row 4 is 1s older. Asserting `>= 2` would silently pass
+		// if a regression let in extra rows; pin to the exact ids/count.
+		expect(ours).toHaveLength(2);
+		const expectedIds = new Set([insertedAuditIds[4], insertedAuditIds[5]].filter((v): v is string => Boolean(v)));
+		const seenIds = new Set(ours.map((r) => r.id));
+		expect(seenIds).toEqual(expectedIds);
 		expect(ours.every((r) => r.timestamp.getTime() >= lowerBound.getTime())).toBe(true);
 	});
 
@@ -468,9 +471,21 @@ describe('searchActorIds', () => {
 	});
 
 	it('respects the cap', async () => {
-		// Cap at 1 even though 2 fixtures match the prefix.
+		// Cap at 1 even though 2 fixtures match the prefix. `toBeLessThanOrEqual`
+		// alone would pass for 0 hits or for hits that happened to match other
+		// rows in the DB; assert exact length and that the returned row is one
+		// of the seeded fixtures so a regression to "no matches" or "wrong
+		// matches" fails loudly.
 		const hits = await searchActorIds('Audit Tester', 1);
-		expect(hits.length).toBeLessThanOrEqual(1);
+		expect(hits).toHaveLength(1);
+		const id = hits[0]?.id;
+		expect(id === ACTOR_A_ID || id === ACTOR_B_ID).toBe(true);
+
+		// And with cap 5 we should see both fixture actors (the prefix matches
+		// exactly two seeded names).
+		const wider = await searchActorIds('Audit Tester', 5);
+		const wideIds = wider.map((h) => h.id).filter((rowId) => rowId === ACTOR_A_ID || rowId === ACTOR_B_ID);
+		expect(wideIds).toHaveLength(2);
 	});
 });
 

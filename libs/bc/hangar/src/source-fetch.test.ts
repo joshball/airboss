@@ -177,8 +177,11 @@ describe('runSectionalFetch happy path', () => {
 		expect(meta.edition.effectiveDate).toBe('2026-03-21');
 		expect(meta.media.generator).toBe('gdal_translate');
 
-		// DB update patch.
+		// DB update patch. Pin the row id too so a regression that called
+		// `dbUpdate('wrong-id', ...)` would fail; checksum/version alone
+		// wouldn't catch that.
 		expect(dbPatches).toHaveLength(1);
+		expect(dbPatches[0]?.id).toBe('sectional-denver');
 		expect(dbPatches[0]?.patch.checksum).toBe('aa'.repeat(32));
 		expect(dbPatches[0]?.patch.version).toBe('2026-03-21');
 

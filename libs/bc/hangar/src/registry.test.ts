@@ -136,6 +136,8 @@ describe('registry -- references', () => {
 		expect(updated.dirty).toBe(true);
 		expect(updated.displayName).toBe('changed');
 		expect(updated.paraphrase).toBe('updated body');
+		// updatedBy must persist on the update path too, not just on create.
+		expect(updated.updatedBy).toBe(TEST_USER_ID);
 	});
 
 	it('rejects stale rev with RevConflictError', async () => {
@@ -156,6 +158,7 @@ describe('registry -- references', () => {
 		expect(deleted.deletedAt).not.toBeNull();
 		expect(deleted.rev).toBe(created.rev + 1);
 		expect(deleted.dirty).toBe(true);
+		expect(deleted.updatedBy).toBe(TEST_USER_ID);
 
 		// deletedAt rows are excluded from list() by default.
 		const listed = await listReferences({ limit: 100, offset: 0 });

@@ -8,6 +8,8 @@ critical: 9
 major: 64
 minor: 87
 nit: 53
+status: unread
+review_status: done
 ---
 
 # 10x Review -- Chunk 6: hangar cluster
@@ -179,3 +181,83 @@ Same as above -- destructive, unconfirmed. Pair with #8 on a single fix pass tha
 - **major**: race, broken contract, won't-scale, missing protection, convergent pattern across many sites
 - **minor**: defensive gap, naming, missing test
 - **nit**: polish, style preference
+
+## Final close-out as of 2026-05-04
+
+Walked every per-category file heading-by-heading; re-grepped current main for each finding. Verdicts and closing PRs are recorded in each file's "Status as of 2026-05-04" section.
+
+### Per-category tally
+
+| Category     | Closed | Deferred (with trigger) | Open | Total | Status |
+|--------------|-------:|------------------------:|-----:|------:|--------|
+| correctness  |     18 |                       0 |    0 |    18 | done   |
+| security     |     12 |                       0 |    0 |    12 | done   |
+| perf         |     16 |                       0 |    0 |    16 | done   |
+| architecture |     11 |                       1 |    0 |    12 | done   |
+| a11y         |     25 |                       0 |    0 |    25 | done   |
+| patterns     |     10 |                       0 |    0 |    10 | done   |
+| testing      |     23 |                       0 |    0 |    23 | done   |
+| dx           |     15 |                       0 |    0 |    15 | done   |
+| schema       |      4 |                       9 |    0 |    13 | done   |
+| backend      |     14 |                       0 |    0 |    14 | done   |
+| svelte       |     20 |                       0 |    0 |    20 | done   |
+| ux           |     28 |                       0 |    0 |    28 | done   |
+| **TOTAL**    | **196**|                   **10**|**0** |**206**|        |
+
+The original INDEX summary table records 205-213 issues across two row totals (the table shows 205 in the row total, 213 in the frontmatter `total_issues`); the per-category file counts sum to 206 here. The 10 deferred items are 1 architecture (REPO_ROOT consolidation) + 9 schema (partial-index migrations, free-text check constraints, sentinel-string column types, anticipatory indexes, sync_log timestamps); each has a stated trigger and is captured in its category file's status table.
+
+### Critical findings (9 of 9)
+
+All 9 criticals are CLOSED:
+
+1. Worker cancel overwrite (correctness) -- PR #436
+2. Same-version upload data loss (correctness) -- PR #442
+3. Three-way package cycle (architecture) -- PR #435
+4. `(job_id, seq)` no unique constraint (schema) -- PR #448
+5. Audit combobox a11y (a11y) -- PR #455
+6. Job-detail tablist a11y (a11y) -- PR #455
+7. Audit-queries WHERE-clause filter coverage (testing) -- PR #463 + this audit
+8. Archive Delete no confirmation (ux) -- PR #433
+9. Glossary soft-delete no confirmation (ux) -- PR #433
+
+### Convergent root causes
+
+Every convergent root-cause cluster called out in the original INDEX has been resolved:
+
+- Job worker fragility -> PR #436 (atomic terminal-state, heartbeat, cancel-poll error handling, recovery audit)
+- Source ingest data integrity -> PR #442 (atomic archive+rename, audit on every terminal state, output caps)
+- Sync drift/conflict detection -> PR #452 (decoded-object comparison, baseline-key walking, Zod validation)
+- Audit explorer -> PR #438 (lastIndexOf cursor + getActorById helper) + chunk-3 PR #426 (timestamp index)
+- Status-pill a11y -> PR #440 (Badge glyph cue, 7 sites closed at once)
+- Heavy route CSS -> PR #464 (Breadcrumbs/FilterBar/RolePill/etc. extracted to @ab/ui) + #440 (Badge)
+- Destructive-action confirmations -> PR #433 (every destructive form-action through ConfirmDialog)
+- Fire-and-forget submits -> PR #467 wave + #548 (Banner-on-success + invalidateAll polling)
+- hangar-jobs not generic -> PR #435 (cycle break + own schema)
+- Outbound-fetch SSRF -> PR #441 (denylist + Zod schema for BV fields)
+- Test coverage gaps -> PR #463 (worker, enqueue, upload action, BetterAuthApiError wrap, cancellation handoff)
+- Missing job-table indexes -> PR #436 + #448 partials; full partial-index migration deferred with trigger documented in schema file
+- Performance hot spots -> PR #453 (slim projections, log buffer cap, list LIMITs, /sources DB-backed counts)
+
+### Mechanical fixes landed in this audit pass
+
+Items the audit found still open and fixed in-line (in addition to the per-category status writeups):
+
+- `apps/hangar/src/routes/(app)/jobs/[id]/+page.svelte`: replaced `?sinceSeq=-1` magic-string with `?${QUERY_PARAMS.SINCE_SEQ}=-1` in the trim-notice fallback link.
+- `libs/bc/hangar/src/audit-queries.test.ts`: sharpened `searchActorIds` cap test (exact length + fixture-id assertion + cap-5 widen check); sharpened time-window filter test (`toHaveLength(2)` + id-set pinning).
+- `libs/bc/hangar/src/dashboard-queries.test.ts`: sharpened `countLiveSources` to `after - before === 1` instead of `>= 1`.
+- `libs/bc/hangar/src/jobs.test.ts`: added seq-monotonicity assertion on the duplicate-poll test.
+- `libs/bc/hangar/src/source-fetch.test.ts`: pinned `dbPatches[0]?.id === 'sectional-denver'`.
+- `libs/bc/hangar/src/registry.test.ts`: asserted `updatedBy` persists on update + softDelete paths.
+- `libs/bc/hangar/src/jobs-queries.test.ts`: pinned per-fixture count on `listRunningJobs` test.
+- Renamed `apps/hangar/src/lib/components/preview/MarkdownPreview.svelte` -> `MarkdownFilePreview.svelte` to disambiguate from the form-side `MarkdownPreview.svelte`; updated route + test imports.
+
+`bun run check` is clean.
+
+### Next-action summary
+
+- Schema partial-index migration (queued + running + kind-complete): tracked as future perf work with explicit trigger ("when job table volume warrants").
+- `target_type` / `format` check constraints: tracked as a focused schema hardening pass.
+- `pending-download` sentinel + `reviewed_at` text->date: tracked as a schema-types cleanup pass.
+- REPO_ROOT consolidation into `@ab/utils`: tracked as architecture follow-up; behavior is correct today.
+
+`review_status` flipped to `done` on all per-category files and on this INDEX. Punch-list closed.

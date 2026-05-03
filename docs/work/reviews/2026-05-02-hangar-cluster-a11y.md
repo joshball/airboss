@@ -11,7 +11,7 @@ counts:
   nit: 6
   total: 25
 status: pending
-review_status: pending
+review_status: done
 ---
 
 ## Summary
@@ -347,3 +347,37 @@ WCAG: 3.3.4 (AA) - acceptable
 Problem: "Revoke ALL sessions for {displayName}?" with confirm-by-email-typing is a strong pattern. Good. No issue, just calling it out as the gold-standard for the soft-delete fixes recommended in MINOR above.
 
 Fix: none.
+
+## Status as of 2026-05-04
+
+| Finding | Verdict | Closure |
+| ------- | ------- | ------- |
+| CRITICAL: Audit actor combobox incomplete | CLOSED | PR #455 -- full ARIA combobox with `aria-activedescendant`, arrow-key + Enter/Escape handling, role="option" on listbox children |
+| CRITICAL: Job-detail tablist contract broken | CLOSED | PR #455 -- downgraded to `role="group"` + `aria-pressed` toggle group |
+| MAJOR: Pagination uses aria-disabled on `<a>` | CLOSED | PR #548 -- disabled state renders as `<span>` not anchor; non-color outline cue |
+| MAJOR: Diff page color-only +/- | CLOSED | PR #548 -- visually-hidden "added/removed/context:" prefix per line |
+| MAJOR: Job log non-live region | CLOSED | PR #453 -- `role="log" aria-live="polite" aria-relevant="additions"` on `.log-body` |
+| MAJOR: source-detail action row anchor-as-disabled | CLOSED | PR #548 -- conditional render with no href when busy |
+| MAJOR: status pills color-only | CLOSED | PR #440 -- Badge glyph cue (`@ab/ui/components/Badge.svelte`); convergent fix across 7 sites |
+| MAJOR: TBD warn tile color-only | CLOSED | PR #548 -- prepended warning glyph + aria-label on the value |
+| MAJOR: FlowDiagram h2 outline | CLOSED | PR #548 -- demoted tile titles to h3 + section-level h2 |
+| MAJOR: Files expander missing aria-controls | CLOSED | PR #548 -- aria-controls / id pairing on expander button + preview region |
+| MAJOR: Audit chip-group label | CLOSED | PR #548 -- adopted `<fieldset><legend>` |
+| MINOR: form errors not associated with inputs | CLOSED | PR #548 -- aria-describedby + aria-invalid wired |
+| MINOR: identity menu chevron literal "v" | CLOSED | PR #548 -- replaced with U+2304 / U+2303 chevron |
+| MINOR: chip focus-visible missing | CLOSED | PR #548 -- focus-visible outlines added on chip and pagination |
+| MINOR: pagination focus-visible missing | CLOSED | PR #548 -- as above |
+| MINOR: Audit chip-clear "x" lowercase | CLOSED | PR #548 -- replaced with U+00D7 |
+| MINOR: soft-delete no confirmation | CLOSED | PR #433 -- ConfirmDialog wired (closes both a11y MINOR and ux CRITICAL #9) |
+| MINOR: Diff page `<pre>` no role | CLOSED | PR #548 -- `role="region"` + `tabindex="0"` |
+| MINOR: Show-more contrast | CLOSED | PR #548 -- token contrast verified in theme test pass |
+| MINOR: log line grid overflow on narrow viewports | CLOSED | PR #548 -- `@media (max-width: 600px)` collapses meta cols |
+| MINOR: file-row 6-column grid wraps oddly | CLOSED | PR #548 -- responsive collapse under 700px |
+| NIT: breadcrumb separator "/" | CLOSED | PR #548 -- replaced with U+203A |
+| NIT: `<dl>` heading association | CLOSED | Pass-through audit; existing `aria-labelledby` adequate |
+| NIT: home stats link a11y | CLOSED | PR #548 -- aria-label on each stat-link |
+| NIT: Banner / EmptyState scope-out | CLOSED | Tracked under chunk-5 UI a11y pass (#469) |
+| NIT: select aria-describedby | CLOSED | PR #548 -- form hint ids + aria-describedby threaded |
+| NIT: ConfirmDialog scope-out | CLOSED | Documented gold-standard; nothing to fix |
+
+Total: 25 closed / 0 open. `review_status` flipped to `done`.
