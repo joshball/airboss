@@ -19,9 +19,9 @@ Every work package that touches references, in the order they should ship. Cross
 | AMT-G/P removal | Remove maintenance-tech handbooks from corpus | ✅ #505 (2026-05-03) |
 | References cleanup sweep | AC YAML reconciliation, dupe-row cleanup, AIM orphan delete | ✅ #518 (2026-05-03) |
 
-### Wave 2 — Section-tree promotions (🟡 partially in flight)
+### Wave 2 — Section-tree promotions (✅ complete)
 
-All dispatched 2026-05-03 ~18:50 UTC. See [whole-doc-promotion/sequence.md](../work-packages/whole-doc-promotion/sequence.md). After all 5 land, every whole-doc handbook is section-tree; `handbooks-extras` corpus is empty.
+All 5 promotions shipped 2026-05-03. Every whole-doc handbook is now section-tree; only mtn-tips remains in `handbooks-extras` (with section-tree shape via the body-override branch).
 
 | WP | Effect | Strategy | Status |
 |----|--------|----------|--------|
@@ -29,7 +29,7 @@ All dispatched 2026-05-03 ~18:50 UTC. See [whole-doc-promotion/sequence.md](../w
 | WP-MTN section-tree | Mountain Flying → section-tree | parse existing override markdown | ✅ #527 (2026-05-03) |
 | WP-IPH | Instrument Procedures Handbook → section-tree | Class A2 chapter PDFs + sidecar TOC PDF | ✅ #532 (2026-05-03) |
 | WP-AIH | Aviation Instructor's Handbook → section-tree | Class A2 chapter PDFs + bookmark | ✅ #536 (2026-05-03) |
-| WP-RMH | Risk Management Handbook → section-tree | bookmark extraction (rich embedded TOC) | 🟡 in flight |
+| WP-RMH | Risk Management Handbook → section-tree | bookmark extraction (rich embedded TOC) | ✅ #537 (2026-05-03) |
 
 ### Wave 3 — Flightbag scaffold (✅ shipped)
 
