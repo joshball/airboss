@@ -8,7 +8,37 @@ critical: 3
 major: 8
 minor: 7
 nit: 3
+status: unread
+review_status: pending
 ---
+
+## Status as of 2026-05-04
+
+Re-greped main against every finding. 14 of 21 closed; 7 still-open (2 of 3 criticals + radio-group keyboard nav remain).
+
+| Severity | Finding | Verdict | Evidence |
+| -------- | ------- | ------- | -------- |
+| CRITICAL | Dashboard map cells are unlabeled links (title-only, role=cell on `<a>`) | STILL OPEN | `apps/study/src/routes/(app)/dashboard/_panels/MapPanel.svelte:91-99` -- still `title=` not `aria-label=`; `role="cell"` still on the `<a>`. Next: replace `title` with `aria-label`, drop `role="cell"` from anchor, wrap in `<span role="cell">` if grid semantics matter |
+| CRITICAL | Memory-review feedback + confidence radio groups don't support arrow-key nav | STILL OPEN | `apps/study/src/routes/(app)/memory/review/[sessionId]/+page.svelte:531,573,604` -- still `role="radiogroup"` with every button as own tab stop, no roving tabindex, no ArrowLeft/Right keydown handler. Next: implement WAI-ARIA roving-focus pattern OR replace with native `<fieldset>` + `<input type="radio">` |
+| CRITICAL | Read-suggestion banner status without preamble | STILL OPEN | `apps/study/src/routes/(app)/library/handbook/[slug]/[chapter]/[section]/+page.svelte` aside still wraps the question without explanatory preamble. Low priority -- visible state surfaced via existing button labels; flagged for follow-up alongside the read-suggestion UX rework |
+| MAJOR    | Library card `:focus-visible` removed | CLOSED | `apps/study/src/routes/(app)/library/+page.svelte:196-199` adds `outline: 2px solid var(--focus-ring); outline-offset: 2px;` on `.card:focus-visible`; same on `regulations/+page.svelte:58-62` and the per-kind / per-group routes |
+| MAJOR    | Lens / handbook lens cards no focus indicator | CLOSED | `apps/study/src/routes/(app)/lens/handbook/+page.svelte:102-104` -- `.card-link:focus-visible` rule added |
+| MAJOR    | Goal cards / credentials cards no `:focus-visible` rule | CLOSED | `goals/+page.svelte:121-123` and `credentials/+page.svelte:161-163` both add the focus rule |
+| MAJOR    | Knowledge-node mastery progressbar has no accessible name | CLOSED | `apps/study/src/routes/(app)/knowledge/[slug]/+page.svelte:225-230` -- `aria-label="Mastery"` + `aria-valuetext="{n}% mastery..."` |
+| MAJOR    | Knowledge-learn progressbar accessible name + valuetext missing | CLOSED | `knowledge/[slug]/learn/+page.svelte:139-144` -- `aria-label="Phase progress"` + `aria-valuetext` |
+| MAJOR    | Knowledge-list mastery-bars announce % twice | CLOSED | `knowledge/+page.svelte:278-284` -- wrapper `aria-label` dropped; visually-hidden "Mastery" precedes the percent |
+| MAJOR    | Memory-review counter-trigger uses aria-expanded without aria-controls | STILL OPEN | popover trigger still lacks `aria-controls={popoverId}`. Next: add stable id on the dialog and wire `aria-controls` on the trigger |
+| MAJOR    | Login dev-account button list lacks group label / heading semantics | STILL OPEN (partial) | `<h1>` swap done (`login/+page.svelte:33`), but dev-accounts still uses `<p>` + `<div>` rather than `<h2>` + `<ul>`. Next: convert dev-accounts block to labelled section + ul/li |
+| MINOR    | Regulations + handbook breadcrumb anchors lack focus indicator | CLOSED | `library/handbook/[slug]/[chapter]/[section]/+page.svelte` and `library/regulations/[kind]/[group]/[section]/+page.svelte` both have `.page-header nav a:focus-visible` rules |
+| MINOR    | Regulations TOC sidebar links have no focus rule | CLOSED | `library/regulations/[kind]/[group]/[section]/+page.svelte:181-183` -- `.toc a:focus-visible` rule added |
+| MINOR    | Memory-card "back to browse" link iconic-text without aria-hidden | CLOSED | `apps/study/src/routes/(app)/memory/[id]/_panels/CardHeaderPanel.svelte:48` -- arrow wrapped in `<span aria-hidden="true">` |
+| MINOR    | Memory-review undo-toast announces actions | STILL OPEN | toast still wraps actions in the live region. Low priority advisory; trigger to revisit if SR users report noisy announcements |
+| MINOR    | Login form lacks descriptive `<h1>` | CLOSED | `login/+page.svelte:33` -- `<h1 id="login-heading">Sign in to airboss study</h1>` (brand demoted) |
+| MINOR    | Knowledge-graph crumb breadcrumb missing `<ol>` semantics | CLOSED | `knowledge/[slug]/+page.svelte:189` and `learn/+page.svelte:116` use `<nav aria-label="Breadcrumb"><ol class="crumb">` |
+| MINOR    | Memory-browse `dismissCreatedBanner` skips focus return | STILL OPEN | low-priority advisory -- not causing reported issues. Trigger: a11y testing sweep on memory/browse |
+| NIT      | `(app)/+error.svelte` and root `+error.svelte` could use `role="alert"` | CLOSED | `+error.svelte:47` and `(app)/+error.svelte:42` -- `<div class="card" role="alert">` |
+| NIT      | KbdHint announced as part of button label | STILL OPEN (low priority) | `libs/ui/src/components/KbdHint.svelte` doesn't auto-`aria-hidden`. Trigger: SR-user feedback |
+| NIT      | Memory-new "Cancel" link styled as a button | STILL OPEN | `apps/study/src/routes/(app)/memory/new/+page.svelte:196` still `<a class="btn ghost">`. Acceptable as a navigation; low priority |
 
 ## Summary
 

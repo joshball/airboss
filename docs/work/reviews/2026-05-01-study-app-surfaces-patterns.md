@@ -9,8 +9,26 @@ major: 4
 minor: 5
 nit: 2
 status: unread
-review_status: pending
+review_status: done
 ---
+
+## Status as of 2026-05-04
+
+Re-greped main against every finding. All 11 findings closed.
+
+| Severity | Finding | Verdict | Evidence |
+| -------- | ------- | ------- | -------- |
+| MAJOR    | LibraryRegulationsKind discriminants use magic strings | CLOSED | route logic moved into `libs/bc/study/src/regulations.ts`; thin adapters dispatch via `LIBRARY_REGULATIONS_KINDS` constant + `parseRegulationKind` helper |
+| MAJOR    | Inline pathname `'/lens'` in app layout | CLOSED | `libs/constants/src/routes.ts:306` -- `ROUTES.LENS = '/lens'`. `apps/study/src/routes/(app)/+layout.svelte:112` -- `pathMatches(page.url.pathname, ROUTES.LENS)` |
+| MAJOR    | handbook-asset URL shape not in ROUTES | CLOSED | `ROUTES.HANDBOOK_ASSET(path)` exists; all three figure-URL builders route through it (`library/handbook/[slug]/[chapter]/+page.svelte:40`, `[section]/+page.svelte:185`, `library/regulations/[kind]/[group]/[section]/+page.svelte:32`) |
+| MAJOR    | `?domain=...` deep links bypass `QUERY_PARAMS.DOMAIN` | CLOSED | every grep'd call site (`memory/+page.svelte:395`, `calibration/+page.svelte:178`, `dashboard/_panels/*Panel.svelte`, `lens/weakness/+page.svelte`, `reps/+page.svelte:115`) now uses `${QUERY_PARAMS.DOMAIN}=${...}` |
+| MINOR    | `QUERY_PARAMS.CREATED` defined but server inlines `'created'` | CLOSED | `apps/study/src/routes/(app)/memory/new/+page.server.ts:86` -- `[QUERY_PARAMS.CREATED]: created.id` |
+| MINOR    | `?created=...` inline in reps redirect | CLOSED | `apps/study/src/routes/(app)/reps/new/+page.server.ts:127` -- `${QUERY_PARAMS.CREATED}=${...}` |
+| MINOR    | `?mode=...` inline in dev references page | CLOSED | `apps/study/src/routes/(dev)/references/+page.svelte:29` -- `${QUERY_PARAMS.MODE}=${mode}` |
+| MINOR    | `'required'` / `'recommended'` inline in credentials detail | CLOSED | `credentials/[slug]/+page.svelte:25-26` uses `CREDENTIAL_PREREQ_KINDS.REQUIRED` / `.RECOMMENDED` |
+| MINOR    | Toast duration `3000` magic number duplicated | CLOSED | `libs/constants` exposes `TOAST_DISMISS_MS`; `plans/[id]/+page.svelte:19,63` imports + uses it. Memory toast pieces moved into the review-session component, no longer using bare 3000 |
+| NIT      | `min-height: 100vh` on login page | CLOSED | `apps/study/src/routes/login/+page.svelte:126` -- `min-height: 100dvh` |
+| NIT      | `max-height: 120px` on calibration sparkline | CLOSED | `apps/study/src/routes/(app)/calibration/+page.svelte:808` -- `max-height: 7.5rem` |
 
 ## Summary
 
