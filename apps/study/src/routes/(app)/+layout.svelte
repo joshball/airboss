@@ -24,20 +24,21 @@ let { data, children }: { data: LayoutData; children: Snippet } = $props();
 // Appearance preference + live system-appearance tracking.
 // `data.appearance` is the server-side cookie read; `systemAppearance`
 // mirrors `prefers-color-scheme` and updates when the OS changes.
-// Seeded from DEFAULT_APPEARANCE_PREFERENCE and populated via $effect so
-// Svelte's state-referenced-locally check stays clean; the effect re-syncs
-// on every navigation that changes the cookie.
-let appearancePref = $state<AppearancePreference>(DEFAULT_APPEARANCE_PREFERENCE);
+//
+// Pattern: `$derived` over (optimistic-user-override | server-data). The
+// optimistic override flips immediately when the user clicks (so the page
+// updates without waiting for the server) and is cleared when the next
+// navigation re-reads the cookie -- at which point data.appearance equals
+// the override and the derived value collapses back to the prop. This
+// replaces the prior `$effect` that mirrored props into local state, which
+// was an anti-pattern in Svelte 5 (props-into-state should be `$derived`,
+// not effect-mirrored).
+let appearanceOverride = $state<AppearancePreference | null>(null);
+let themeOverride = $state<ThemeId | null>(null);
 let systemAppearance = $state<AppearanceMode>(DEFAULT_APPEARANCE);
-let themePref = $state<ThemePreference>(DEFAULT_THEME_PREFERENCE);
 
-$effect(() => {
-	appearancePref = data.appearance;
-});
-
-$effect(() => {
-	themePref = data.theme;
-});
+const appearancePref = $derived<AppearancePreference>(appearanceOverride ?? data.appearance ?? DEFAULT_APPEARANCE_PREFERENCE);
+const themePref = $derived<ThemePreference>(themeOverride ?? data.theme ?? DEFAULT_THEME_PREFERENCE);
 
 $effect(() => {
 	if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') return;
@@ -62,7 +63,9 @@ $effect(() => {
 
 async function setAppearance(value: AppearancePreference) {
 	if (value === appearancePref) return;
-	appearancePref = value;
+	// Optimistic override: the derived `appearancePref` flips immediately so
+	// the user sees the change without waiting for the server round-trip.
+	appearanceOverride = value;
 	try {
 		await fetch(ROUTES.APPEARANCE, {
 			method: 'POST',
@@ -77,7 +80,7 @@ async function setAppearance(value: AppearancePreference) {
 
 async function setTheme(value: ThemeId) {
 	if (value === themePref) return;
-	themePref = value;
+	themeOverride = value;
 	try {
 		await fetch(ROUTES.THEME, {
 			method: 'POST',
@@ -86,7 +89,7 @@ async function setTheme(value: ThemeId) {
 		});
 	} catch {
 		// Non-fatal: cookie just won't persist. The data-theme attribute
-		// has already flipped via the $effect above, so the user sees the
+		// has already flipped via the $derived above, so the user sees the
 		// change immediately on this page.
 	}
 }

@@ -13,13 +13,12 @@ let { data, children }: { data: LayoutData; children: Snippet } = $props();
 
 // Reflect the effective appearance on <html> so the pre-hydration script's
 // choice survives SvelteKit re-rendering. Child routes (including login)
-// inherit the token palette from this attribute.
-let appearancePref = $state<AppearancePreference>(DEFAULT_APPEARANCE_PREFERENCE);
+// inherit the token palette from this attribute. Pattern: `$derived` over
+// the prop instead of `$effect` mirroring; no user-pick override here
+// (this layout has no theme picker), but the shape stays consistent with
+// the apps that do.
+const appearancePref = $derived<AppearancePreference>(data.appearance ?? DEFAULT_APPEARANCE_PREFERENCE);
 let systemAppearance = $state<AppearanceMode>(DEFAULT_APPEARANCE);
-
-$effect(() => {
-	appearancePref = data.appearance;
-});
 
 $effect(() => {
 	if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') return;
