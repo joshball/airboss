@@ -8,8 +8,8 @@
  * live PostgreSQL.
  */
 
-import { describe, expect, it } from 'vitest';
 import { __acs_seed_mapping_internal__, getAcsSeedMapping } from '@ab/sources/acs';
+import { describe, expect, it } from 'vitest';
 import { paddedOrdinalToRoman } from './acs';
 
 describe('paddedOrdinalToRoman', () => {

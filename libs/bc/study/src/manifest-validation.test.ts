@@ -344,7 +344,7 @@ describe('manifestSchema (discriminated union on kind)', () => {
 		expect(result.success).toBe(false);
 	});
 
-	it("rejects an ACS manifest with a non-FAA publisher", () => {
+	it('rejects an ACS manifest with a non-FAA publisher', () => {
 		const result = acsManifestSchema.safeParse({ ...VALID_ACS, publisher: 'AOPA' });
 		expect(result.success).toBe(false);
 	});
