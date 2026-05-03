@@ -6,7 +6,7 @@ The single canonical list of every FAA reference document airboss ingests, with 
 
 ## Snapshot
 
-**Last updated:** 2026-05-03 (live snapshot — auto-update on each library PR; flightbag scaffold landed)
+**Last updated:** 2026-05-03 (live snapshot — auto-update on each library PR; flightbag scaffold landed; WP-CC v1 registry-only shipped)
 
 **Readable in-app today:** 36 references (40 with the references cleanup sweep — 4 AC YAML rows added so subjects + primary_cert render)
 **Total tracked:** ~50 references across all corpora
@@ -119,7 +119,7 @@ These are tracked as TODO: a corpus-build WP per row.
 |--------|-------------|-------|-------|
 | SAFO | FAA Safety Alerts For Operators | ❌ no card, no pipeline | Estimated 30-50 docs; WP-SAFO not started |
 | InFO | FAA Information For Operators | ❌ no card, no pipeline | Estimated 20-30 docs; WP-INFO not started |
-| Chief Counsel | FAA Office of Chief Counsel legal interpretations | ❌ no card, no pipeline | Estimated 100-200 published opinions; WP-CC not started — highest pedagogical leverage |
+| Chief Counsel | FAA Office of Chief Counsel legal interpretations | ⚠️ registry-only (v1) | ~17 most-cited interpretations + 1 NTSB Board order seeded via `libs/sources/src/interp/manifest.yaml` (WP-CC v1, 2026-05-03). Citation chips resolve and link out to the FAA AGC index page. Full pipeline (rendered bodies, extractor, dedicated render route) deferred -- see `docs/work-packages/wp-cc/spec.md`. |
 | NTSB ALJ | NTSB administrative law judge rulings | ❌ no card, no pipeline | WP-NTSB-ALJ not started |
 | FAA Order 8900.1 Vol 5 | Flight Standards Information Management System (Airman Cert) | ❌ deferred | Trigger to revisit: CFI content needs Vol 5 |
 | FAA Safety Briefing | FAA magazine archive | ❌ deferred | Low priority |
@@ -174,7 +174,7 @@ This is the sequenced path to "everything readable as section-tree" excluding ne
 | 9 | AC section-tree extraction (12 link-only) | ❌ not started | Add to download config + extract + section-tree seed |
 | 10 | ACS link-only completion | ❌ not started | `cfii-airplane-pts-9e` (PTS), `faa-g-acs-2-companion-guide` |
 | 11 | New corpora — WP-SAFO + WP-INFO | ❌ not started | Pipelines are nearly identical; can be combined |
-| 12 | New corpora — WP-CC | ❌ not started | Highest pedagogical leverage |
+| 12 | New corpora — WP-CC | ⚠️ v1 (registry-only) shipped | 17 most-cited Chief Counsel interpretations + 1 NTSB Board order in registry; full pipeline (extractor + rendered bodies + render route) deferred |
 | 13 | New corpora — WP-NTSB-ALJ | ❌ not started | Different data model from FAA pubs |
 
 After 1-10: every cataloged FAA pilot-track publication is a readable section-tree. After 11-13: extended with auxiliary corpora.

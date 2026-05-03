@@ -9,6 +9,8 @@ review_status: pending
 
 # WP-CC: FAA Chief Counsel legal interpretations
 
+> **v1 (registry-only) shipped 2026-05-03.** The `libs/sources/src/interp/` umbrella corpus now carries ~17 most-cited Chief Counsel interpretations + the existing NTSB Lobeiko Board order, end-to-end via `seedInterpFromManifest` (seed-all phase 5a). Citation chips and knowledge-node references that resolve to `airboss-ref:interp/chief-counsel/<author>-<year>` now have canonical short cites and link out to the FAA AGC interpretations index page. **Full pipeline (rendered bodies, extractor, dedicated render route, source discovery automation) remains deferred** -- see the spec body below for the original full design and the phased rollout that v1 sidesteps.
+
 Build the corpus pipeline for FAA Office of Chief Counsel published legal interpretations. Per library-completeness §4.B ratification, this is the highest pedagogical leverage of the new-corpus candidates: legal interpretations are how the FAA clarifies ambiguous regulations, and they're frequently cited in CFI training, accident analysis, and regulatory enforcement contexts.
 
 ## Estimated scope
