@@ -110,7 +110,7 @@ prompt:
 # AFH chapter cover pages render the chapter title once on the cover and
 # then the content begins on the next page. The strip removes the
 # inline "Chapter N: Title" / "Introduction" sentinel so the chapter
-# index.md doesn't open with a stutter.
+# overview body doesn't open with a stutter.
 chapter_cover_strip:
   enabled: true
   max_lines: 6

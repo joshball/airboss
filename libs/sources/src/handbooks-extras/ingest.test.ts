@@ -401,7 +401,7 @@ describe('runHandbooksExtrasIngest -- live cache (smoke)', () => {
 			const trackedPaths = [
 				join(tempDerivative, 'handbooks-extras-index.json'),
 				join(tempDerivative, 'risk-management', 'FAA-H-8083-2A', 'manifest.json'),
-				join(tempDerivative, 'risk-management', 'FAA-H-8083-2A', 'document.md'),
+				join(tempDerivative, 'risk-management', 'FAA-H-8083-2A', 'risk-management-8083-2A.md'),
 			];
 			const past = new Date(Date.now() - 5000);
 			for (const p of trackedPaths) {
@@ -423,7 +423,7 @@ describe('runHandbooksExtrasIngest -- live cache (smoke)', () => {
 			// Manifest carries the whole-doc body_path that the resolver short-circuits on.
 			const rmhManifestPath = join(tempDerivative, 'risk-management', 'FAA-H-8083-2A', 'manifest.json');
 			const rmhManifest = JSON.parse(readFileSync(rmhManifestPath, 'utf-8')) as Record<string, unknown>;
-			expect(rmhManifest.body_path).toBe('handbooks/risk-management/FAA-H-8083-2A/document.md');
+			expect(rmhManifest.body_path).toBe('handbooks/risk-management/FAA-H-8083-2A/risk-management-8083-2A.md');
 			expect(rmhManifest.sections).toEqual([]);
 			// Subjects + primary_cert flow through from the YAML row (WP-EXTRAS-YAML).
 			expect(rmhManifest.subjects).toEqual(['human-factors']);
@@ -439,7 +439,7 @@ describe('runHandbooksExtrasIngest -- live cache (smoke)', () => {
 			// The produced document.md must be that file's contents verbatim,
 			// not the OCR garbage that pdftotext would emit for the scanned
 			// 1999 pamphlet.
-			const mtnBodyPath = join(tempDerivative, 'tips-mountain-flying', 'MTN-2003', 'document.md');
+			const mtnBodyPath = join(tempDerivative, 'tips-mountain-flying', 'MTN-2003', 'tips-mountain-flying-MTN-2003.md');
 			const mtnBody = readFileSync(mtnBodyPath, 'utf-8');
 			const overrideSource = readFileSync(
 				join(process.cwd(), 'scripts/sources/config/handbooks-extras-overrides/faa-mtn-tips.md'),

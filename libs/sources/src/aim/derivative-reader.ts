@@ -4,11 +4,11 @@
  * The on-disk shape (per ADR 018):
  *
  *   aim/<edition>/manifest.json
- *   aim/<edition>/chapter-<N>/index.md                                 chapter body
- *   aim/<edition>/chapter-<N>/section-<M>/index.md                     section body
- *   aim/<edition>/chapter-<N>/section-<M>/paragraph-<K>.md             paragraph body
- *   aim/<edition>/glossary/<slug>.md                                   glossary entry body
- *   aim/<edition>/appendix-<N>.md                                      appendix body
+ *   aim/<edition>/<NN>-<chapter-slug>/00-<chapter-slug>.md                                  chapter body
+ *   aim/<edition>/<NN>-<chapter-slug>/<MM>-<section-slug>/00-<section-slug>.md             section body
+ *   aim/<edition>/<NN>-<chapter-slug>/<MM>-<section-slug>/<KK>-<paragraph-slug>.md         paragraph body
+ *   aim/<edition>/glossary/<slug>.md                                                        glossary entry body
+ *   aim/<edition>/appendix-<N>.md                                                            appendix body
  *
  * Live AIM source-document ingestion (PDF / HTML -> derivatives) is a
  * separate operator pipeline outside this WP. Phase 7 only reads existing

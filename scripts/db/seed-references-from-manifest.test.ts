@@ -197,7 +197,8 @@ describe('seedReferencesFromManifest', () => {
 		trackFixture(slug);
 		const editionDir = join(HANDBOOKS_DIR, slug, edition);
 		mkdirSync(editionDir, { recursive: true });
-		const bodyPath = join(editionDir, 'document.md');
+		const bodyFilename = `${slug}-${edition}.md`;
+		const bodyPath = join(editionDir, bodyFilename);
 		const bodyContent = '# Whole Doc Sample\n\nFull document body here.\n';
 		writeFileSync(bodyPath, bodyContent);
 		// SHA-256 of the body content above (stable; computed once and pinned).
@@ -217,7 +218,7 @@ describe('seedReferencesFromManifest', () => {
 				fetched_at: '2026-04-26T00:00:00.000+00:00',
 				subjects: ['training-ops'],
 				primary_cert: 'private',
-				body_path: `handbooks/${slug}/${edition}/document.md`,
+				body_path: `handbooks/${slug}/${edition}/${bodyFilename}`,
 				body_sha256: bodySha,
 				page_count: 42,
 				doc_id: 'faa-test-wd',
@@ -260,14 +261,16 @@ describe('seedReferencesFromManifest', () => {
 		const edition = '2026-04';
 		trackFixture(slug, AIM_DIR);
 		const editionDir = join(AIM_DIR, slug, edition);
-		mkdirSync(join(editionDir, 'chapter-1', 'section-1'), { recursive: true });
+		const chapterDir = join(editionDir, '01-air-navigation');
+		const sectionDir = join(chapterDir, '01-navigation-aids');
+		mkdirSync(sectionDir, { recursive: true });
 
 		const chapterBody = '# Chapter 1\n\nIntro.\n';
 		const sectionBody = '# Section 1-1\n\nSection body.\n';
 		const paragraphBody = '# Paragraph 1-1-1\n\nParagraph body.\n';
-		writeFileSync(join(editionDir, 'chapter-1', 'index.md'), chapterBody);
-		writeFileSync(join(editionDir, 'chapter-1', 'section-1', 'index.md'), sectionBody);
-		writeFileSync(join(editionDir, 'chapter-1', 'section-1', 'paragraph-1.md'), paragraphBody);
+		writeFileSync(join(chapterDir, '00-air-navigation.md'), chapterBody);
+		writeFileSync(join(sectionDir, '00-navigation-aids.md'), sectionBody);
+		writeFileSync(join(sectionDir, '01-general.md'), paragraphBody);
 
 		const chapterHash = sha256Hex(chapterBody);
 		const sectionHash = sha256Hex(sectionBody);
@@ -291,21 +294,21 @@ describe('seedReferencesFromManifest', () => {
 						kind: 'chapter',
 						code: '1',
 						title: 'Air Navigation',
-						body_path: `aim/${slug}/${edition}/chapter-1/index.md`,
+						body_path: `aim/${slug}/${edition}/01-air-navigation/00-air-navigation.md`,
 						content_hash: chapterHash,
 					},
 					{
 						kind: 'section',
 						code: '1-1',
 						title: 'Navigation Aids',
-						body_path: `aim/${slug}/${edition}/chapter-1/section-1/index.md`,
+						body_path: `aim/${slug}/${edition}/01-air-navigation/01-navigation-aids/00-navigation-aids.md`,
 						content_hash: sectionHash,
 					},
 					{
 						kind: 'paragraph',
 						code: '1-1-1',
 						title: 'General',
-						body_path: `aim/${slug}/${edition}/chapter-1/section-1/paragraph-1.md`,
+						body_path: `aim/${slug}/${edition}/01-air-navigation/01-navigation-aids/01-general.md`,
 						content_hash: paragraphHash,
 					},
 				],
@@ -365,9 +368,10 @@ describe('seedReferencesFromManifest', () => {
 		const edition = '2026-04';
 		trackFixture(slug, AIM_DIR);
 		const editionDir = join(AIM_DIR, slug, edition);
-		mkdirSync(join(editionDir, 'chapter-9', 'section-1'), { recursive: true });
+		const orphanDir = join(editionDir, '09-airspace', '01-controlled-airspace');
+		mkdirSync(orphanDir, { recursive: true });
 		const orphanBody = '# Orphan paragraph\n';
-		writeFileSync(join(editionDir, 'chapter-9', 'section-1', 'paragraph-1.md'), orphanBody);
+		writeFileSync(join(orphanDir, '01-orphan.md'), orphanBody);
 		const manifestPath = join(editionDir, 'manifest.json');
 		// Paragraph 9-1-1 references section 9-1, which is NOT in the entries.
 		writeFileSync(
@@ -387,7 +391,7 @@ describe('seedReferencesFromManifest', () => {
 						kind: 'paragraph',
 						code: '9-1-1',
 						title: 'Orphan paragraph',
-						body_path: `aim/${slug}/${edition}/chapter-9/section-1/paragraph-1.md`,
+						body_path: `aim/${slug}/${edition}/09-airspace/01-controlled-airspace/01-orphan.md`,
 						content_hash: sha256Hex(orphanBody),
 					},
 				],

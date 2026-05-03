@@ -11,8 +11,8 @@
  *   2. Run `extractPdf` on the AC PDF; confirm cover-page slug + detect the
  *      effective date.
  *   3. Write derivative tree under `<repo>/ac/<doc-slug>/<rev>/`:
- *        - `document.md`     full PDF text
- *        - `manifest.json`   per-AC manifest with body_sha256 audit trail
+ *        - `ac-<doc-slug>-<rev>.md`   full PDF text
+ *        - `manifest.json`            per-AC manifest with body_sha256 audit trail
  *   4. Append an entry to corpus-level `<repo>/ac/index.json`.
  *   5. Insert one `SourceEntry` per AC into the active SOURCES table; insert
  *      one `Edition` per ingested (id, publication_date) into EDITIONS.
@@ -337,7 +337,8 @@ export async function runAcIngest(args: IngestArgs): Promise<IngestReport> {
 
 			const docDir = join(args.derivativeRoot, ac.docSlug, ac.revision);
 			ensureDir(docDir);
-			const bodyPath = join(docDir, 'document.md');
+			const bodyFilename = `ac-${ac.docSlug}-${ac.revision}.md`;
+			const bodyPath = join(docDir, bodyFilename);
 			writeIfChanged(bodyPath, documentBody);
 
 			const manifest: AcManifestFile = {
@@ -354,7 +355,7 @@ export async function runAcIngest(args: IngestArgs): Promise<IngestReport> {
 				source_sha256: ac.downloaderManifest.source_sha256,
 				fetched_at: ac.downloaderManifest.fetched_at,
 				page_count: doc.pageCount,
-				body_path: `ac/${ac.docSlug}/${ac.revision}/document.md`,
+				body_path: `ac/${ac.docSlug}/${ac.revision}/${bodyFilename}`,
 				body_sha256: bodySha,
 				sections: [],
 				changes: [],

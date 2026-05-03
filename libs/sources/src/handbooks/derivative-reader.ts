@@ -127,7 +127,7 @@ export function locatorToManifestCode(parsed: ParsedHandbooksLocator): string | 
 	}
 	if (parsed.section === 'intro') {
 		// Chapter intro is not a separately-coded section in the manifest; it's
-		// the chapter's `index.md` body. Return the chapter code.
+		// the chapter overview body (`00-<chapter-slug>.md`). Return the chapter code.
 		if (parsed.chapter === undefined) return null;
 		return parsed.chapter;
 	}

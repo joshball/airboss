@@ -71,9 +71,9 @@ The repo contains only the extracted derivatives:
 
 ```text
 handbooks/phak/8083-25C/
-  manifest.json                <- audit metadata (source_url, source_sha256, fetched_at)
-  12/index.md                  <- inline (chapter overview)
-  12/03-atmospheric-pressure.md
+  manifest.json                                              <- audit metadata (source_url, source_sha256, fetched_at)
+  12-weather-theory/00-weather-theory.md                     <- inline (chapter overview)
+  12-weather-theory/03-atmospheric-pressure.md               <- per section, slugged under <NN>-<chapter-slug>/
   figures/fig-12-7-...png
   tables/tbl-12-3-...html
 
@@ -83,7 +83,7 @@ regulations/ac/61-65/
 
 aim/2025-09/
   manifest.json
-  5-1-7.md                     <- per AIM paragraph
+  07-safety-of-flight/01-meteorology/01-altimetry.md         <- per AIM paragraph
 
 audio/phak/8083-25C/12-3/
   transcript.md

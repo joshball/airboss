@@ -193,11 +193,11 @@ Manual acceptance tests for [spec.md](./spec.md). Prefix `HBK-`.
 ### HBK-28: `/handbooks/phak/12` chapter overview
 
 1. Click Chapter 12 from the PHAK chapter list.
-2. **Expected:** URL is `/handbooks/phak/12`. Page shows chapter title + page range, lead-text from `index.md`, section list (12.1, 12.2, 12.3, ...) with read-state badges. Citing-nodes panel lists nodes whose references match the chapter; each node shows mastery indicator.
+2. **Expected:** URL is `/handbooks/phak/12`. Page shows chapter title + page range, lead-text from the chapter overview file (`12-weather-theory/00-weather-theory.md`), section list (12.1, 12.2, 12.3, ...) with read-state badges. Citing-nodes panel lists nodes whose references match the chapter; each node shows mastery indicator.
 
 ### HBK-29: Empty handbook surfaces a clear empty state
 
-1. Manually delete every section under `handbooks/phak/8083-25C/12/` (without removing the chapter row from manifest), re-seed.
+1. Manually delete every section under `handbooks/phak/8083-25C/12-weather-theory/` (without removing the chapter row from manifest), re-seed.
 2. Visit `/handbooks/phak/12`.
 3. **Expected:** Chapter loads but section list shows "ingestion incomplete" with a hint to rerun the pipeline. No 500.
 

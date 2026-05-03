@@ -102,7 +102,12 @@ describe('bodyPathForEntry', () => {
 		const entry = manifestEntryForLocator(m, parseAim('5-1-7'));
 		if (entry === null) throw new Error('expected entry');
 		const path = bodyPathForEntry(entry, FIXTURE_ROOT);
-		expect(path).toBe(join(FIXTURE_ROOT, '2026-09/chapter-5/section-1/paragraph-7.md'));
+		expect(path).toBe(
+			join(
+				FIXTURE_ROOT,
+				'2026-09/05-air-traffic-procedures/01-preflight/07-pilot-responsibility-upon-clearance-issuance.md',
+			),
+		);
 	});
 
 	it('handles a body_path that does not start with aim/', () => {

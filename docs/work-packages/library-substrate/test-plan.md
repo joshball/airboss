@@ -42,7 +42,7 @@ Total: 9 reference rows for handbooks + ~1,861 + 6 = ~1,867 `reference_section` 
 ### Idempotence
 
 - [ ] Re-run `bun scripts/db/seed-references-from-manifest.ts` against an already-seeded DB. `sectionsTouched > 0`, `sectionsChanged == 0` (per the seeder summary).
-- [ ] Modify one section's `content_md` in `handbooks/phak/.../01/index.md`, recompute the manifest's `content_hash`, re-seed. `sectionsChanged == 1`. The other ~849 PHAK rows are unchanged.
+- [ ] Modify one section's `content_md` in `handbooks/phak/.../01-introduction-to-flying/00-introduction-to-flying.md`, recompute the manifest's `content_hash`, re-seed. `sectionsChanged == 1`. The other ~849 PHAK rows are unchanged.
 
 ### Read state
 

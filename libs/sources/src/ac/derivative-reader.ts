@@ -5,7 +5,7 @@
  *
  *   ac/index.json                                    corpus-level catalog
  *   ac/<doc-slug>/<rev>/manifest.json                per-AC manifest
- *   ac/<doc-slug>/<rev>/document.md                  full document body
+ *   ac/<doc-slug>/<rev>/ac-<doc-slug>-<rev>.md       full document body
  *   ac/<doc-slug>/<rev>/section-<n>.md               optional per-section body
  *   ac/<doc-slug>/<rev>/change-<n>.md                optional Change body
  *

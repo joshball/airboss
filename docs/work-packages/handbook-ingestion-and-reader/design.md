@@ -96,7 +96,7 @@ Alternatives considered:
 
 The unit of citation is the section. `handbook_section` rows are per-section. The reader URL is per-section. Authoring per-section markdown maps 1:1 to the data model and the URL surface. Per-chapter markdown would require the reader to splice on render and the seed to slice on write.
 
-A chapter-overview markdown still exists (`<chapter>/index.md`) for the chapter-page lead text. It's a `level='chapter'` row whose `content_md` is the lead.
+A chapter-overview markdown still exists (`<chapter-dir>/00-<chapter-slug>.md`) for the chapter-page lead text. It's a `level='chapter'` row whose `content_md` is the lead.
 
 ### Why edition-locked output, not a single tree
 

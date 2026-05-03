@@ -296,15 +296,15 @@ In-repo (committed inline):
 handbooks/
   phak/
     8083-25C/
-      manifest.json                      # {reference, source_url, source_sha256, chapters, sections, hashes, figures}
+      manifest.json                                          # {reference, source_url, source_sha256, chapters, sections, hashes, figures}
       00-front-matter.md
-      01/
-        index.md                         # chapter overview text + section list
-        01-introduction-to-flying.md
-        02-aircraft-structure.md
+      01-introduction-to-flying/
+        00-introduction-to-flying.md                         # chapter overview text + section list
+        01-introduction.md
+        02-history-of-flight.md
         ...
-      12/
-        index.md
+      12-weather-theory/
+        00-weather-theory.md
         01-atmospheric-pressure.md
         ...
       figures/

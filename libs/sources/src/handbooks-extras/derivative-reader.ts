@@ -13,11 +13,11 @@
  *                             read `primary` here for source_url + sha)
  *
  *   In repo derivatives (`<repo>/handbooks/<friendly-slug>/<faa-dir>/`):
- *     - `document.md`         full whole-doc body markdown
- *     - `manifest.json`       `ExtrasManifestFile` extends the chapter-aware
- *                             `ManifestFile` with `body_path` + empty
- *                             `sections[]` so the existing handbooks
- *                             resolver can read them.
+ *     - `<friendly-slug>-<editionSlug>.md`  full whole-doc body markdown
+ *     - `manifest.json`                     `ExtrasManifestFile` extends the chapter-aware
+ *                                           `ManifestFile` with `body_path` + empty
+ *                                           `sections[]` so the existing handbooks
+ *                                           resolver can read them.
  *
  *   Corpus-level (`<repo>/handbooks/handbooks-extras-index.json`):
  *     - `ExtrasCorpusIndex`  one entry per ingested handbook for audit.

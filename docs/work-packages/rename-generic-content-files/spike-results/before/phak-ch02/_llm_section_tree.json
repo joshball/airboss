@@ -1,0 +1,436 @@
+[
+  {
+    "title": "Introduction",
+    "level": 1,
+    "page_anchor": "2-1",
+    "line_offset": 2,
+    "parent_title": null
+  },
+  {
+    "title": "History of ADM",
+    "level": 1,
+    "page_anchor": "2-2",
+    "line_offset": 68,
+    "parent_title": null
+  },
+  {
+    "title": "Risk Management",
+    "level": 1,
+    "page_anchor": "2-3",
+    "line_offset": 129,
+    "parent_title": null
+  },
+  {
+    "title": "Crew Resource Management (CRM) and Single-Pilot Resource Management",
+    "level": 1,
+    "page_anchor": "2-4",
+    "line_offset": 194,
+    "parent_title": null
+  },
+  {
+    "title": "Hazard and Risk",
+    "level": 1,
+    "page_anchor": "2-4",
+    "line_offset": 217,
+    "parent_title": null
+  },
+  {
+    "title": "Hazardous Attitudes and Antidotes",
+    "level": 2,
+    "page_anchor": "2-5",
+    "line_offset": 299,
+    "parent_title": "Hazard and Risk"
+  },
+  {
+    "title": "Risk",
+    "level": 2,
+    "page_anchor": "2-6",
+    "line_offset": 341,
+    "parent_title": "Hazard and Risk"
+  },
+  {
+    "title": "Assessing Risk",
+    "level": 2,
+    "page_anchor": "2-6",
+    "line_offset": 346,
+    "parent_title": "Hazard and Risk"
+  },
+  {
+    "title": "Mitigating Risk",
+    "level": 2,
+    "page_anchor": "2-8",
+    "line_offset": 538,
+    "parent_title": "Hazard and Risk"
+  },
+  {
+    "title": "The PAVE Checklist",
+    "level": 2,
+    "page_anchor": "2-8",
+    "line_offset": 577,
+    "parent_title": "Hazard and Risk"
+  },
+  {
+    "title": "P = Pilot in Command (PIC)",
+    "level": 3,
+    "page_anchor": "2-8",
+    "line_offset": 607,
+    "parent_title": "The PAVE Checklist"
+  },
+  {
+    "title": "A = Aircraft",
+    "level": 3,
+    "page_anchor": "2-8",
+    "line_offset": 612,
+    "parent_title": "The PAVE Checklist"
+  },
+  {
+    "title": "E = External Pressures",
+    "level": 3,
+    "page_anchor": "2-9",
+    "line_offset": 681,
+    "parent_title": "The PAVE Checklist"
+  },
+  {
+    "title": "V = EnVironment",
+    "level": 3,
+    "page_anchor": "2-9",
+    "line_offset": 703,
+    "parent_title": "The PAVE Checklist"
+  },
+  {
+    "title": "Managing External Pressures",
+    "level": 3,
+    "page_anchor": "2-10",
+    "line_offset": 822,
+    "parent_title": "The PAVE Checklist"
+  },
+  {
+    "title": "Human Factors",
+    "level": 1,
+    "page_anchor": "2-10",
+    "line_offset": 860,
+    "parent_title": null
+  },
+  {
+    "title": "Human Behavior",
+    "level": 1,
+    "page_anchor": "2-11",
+    "line_offset": 901,
+    "parent_title": null
+  },
+  {
+    "title": "The Decision-Making Process",
+    "level": 1,
+    "page_anchor": "2-12",
+    "line_offset": 1004,
+    "parent_title": null
+  },
+  {
+    "title": "Single-Pilot Resource Management (SRM)",
+    "level": 1,
+    "page_anchor": "2-13",
+    "line_offset": 1038,
+    "parent_title": null
+  },
+  {
+    "title": "The 5 Ps Check",
+    "level": 1,
+    "page_anchor": "2-13",
+    "line_offset": 1051,
+    "parent_title": null
+  },
+  {
+    "title": "The Plan",
+    "level": 2,
+    "page_anchor": "2-14",
+    "line_offset": 1134,
+    "parent_title": "The 5 Ps Check"
+  },
+  {
+    "title": "The Plane",
+    "level": 2,
+    "page_anchor": "2-14",
+    "line_offset": 1157,
+    "parent_title": "The 5 Ps Check"
+  },
+  {
+    "title": "The Pilot",
+    "level": 2,
+    "page_anchor": "2-14",
+    "line_offset": 1170,
+    "parent_title": "The 5 Ps Check"
+  },
+  {
+    "title": "The Passengers",
+    "level": 2,
+    "page_anchor": "2-14",
+    "line_offset": 1191,
+    "parent_title": "The 5 Ps Check"
+  },
+  {
+    "title": "The Programming",
+    "level": 2,
+    "page_anchor": "2-15",
+    "line_offset": 1246,
+    "parent_title": "The 5 Ps Check"
+  },
+  {
+    "title": "Perceive, Process, Perform (3P) Model",
+    "level": 1,
+    "page_anchor": "2-15",
+    "line_offset": 1277,
+    "parent_title": null
+  },
+  {
+    "title": "PAVE Checklist: Identify Hazards and Personal Minimums",
+    "level": 2,
+    "page_anchor": "2-15",
+    "line_offset": 1306,
+    "parent_title": "Perceive, Process, Perform (3P) Model"
+  },
+  {
+    "title": "CARE Checklist: Review Hazards and Evaluate Risks",
+    "level": 2,
+    "page_anchor": "2-16",
+    "line_offset": 1357,
+    "parent_title": "Perceive, Process, Perform (3P) Model"
+  },
+  {
+    "title": "TEAM Checklist: Choose and Implement Risk Controls",
+    "level": 2,
+    "page_anchor": "2-16",
+    "line_offset": 1389,
+    "parent_title": "Perceive, Process, Perform (3P) Model"
+  },
+  {
+    "title": "The DECIDE Model",
+    "level": 1,
+    "page_anchor": "2-18",
+    "line_offset": 1662,
+    "parent_title": null
+  },
+  {
+    "title": "Detect (the Problem)",
+    "level": 2,
+    "page_anchor": "2-20",
+    "line_offset": 1779,
+    "parent_title": "The DECIDE Model"
+  },
+  {
+    "title": "Estimate (the Need To React)",
+    "level": 2,
+    "page_anchor": "2-20",
+    "line_offset": 1790,
+    "parent_title": "The DECIDE Model"
+  },
+  {
+    "title": "Choose (a Course of Action)",
+    "level": 2,
+    "page_anchor": "2-20",
+    "line_offset": 1812,
+    "parent_title": "The DECIDE Model"
+  },
+  {
+    "title": "Identify (Solutions)",
+    "level": 2,
+    "page_anchor": "2-20",
+    "line_offset": 1818,
+    "parent_title": "The DECIDE Model"
+  },
+  {
+    "title": "Do (the Necessary Actions)",
+    "level": 2,
+    "page_anchor": "2-20",
+    "line_offset": 1826,
+    "parent_title": "The DECIDE Model"
+  },
+  {
+    "title": "Evaluate (the Effect of the Action)",
+    "level": 2,
+    "page_anchor": "2-20",
+    "line_offset": 1830,
+    "parent_title": "The DECIDE Model"
+  },
+  {
+    "title": "Decision-Making in a Dynamic Environment",
+    "level": 1,
+    "page_anchor": "2-21",
+    "line_offset": 1836,
+    "parent_title": null
+  },
+  {
+    "title": "Automatic Decision-Making",
+    "level": 2,
+    "page_anchor": "2-21",
+    "line_offset": 1849,
+    "parent_title": "Decision-Making in a Dynamic Environment"
+  },
+  {
+    "title": "Operational Pitfalls",
+    "level": 1,
+    "page_anchor": "2-21",
+    "line_offset": 1880,
+    "parent_title": null
+  },
+  {
+    "title": "Stress Management",
+    "level": 1,
+    "page_anchor": "2-21",
+    "line_offset": 1894,
+    "parent_title": null
+  },
+  {
+    "title": "Use of Resources",
+    "level": 1,
+    "page_anchor": "2-21",
+    "line_offset": 1924,
+    "parent_title": null
+  },
+  {
+    "title": "Internal Resources",
+    "level": 2,
+    "page_anchor": "2-23",
+    "line_offset": 1991,
+    "parent_title": "Use of Resources"
+  },
+  {
+    "title": "External Resources",
+    "level": 2,
+    "page_anchor": "2-23",
+    "line_offset": 2051,
+    "parent_title": "Use of Resources"
+  },
+  {
+    "title": "Situational Awareness",
+    "level": 1,
+    "page_anchor": "2-24",
+    "line_offset": 2079,
+    "parent_title": null
+  },
+  {
+    "title": "Obstacles to Maintaining Situational Awareness",
+    "level": 2,
+    "page_anchor": "2-24",
+    "line_offset": 2104,
+    "parent_title": "Situational Awareness"
+  },
+  {
+    "title": "Workload Management",
+    "level": 1,
+    "page_anchor": "2-24",
+    "line_offset": 2114,
+    "parent_title": null
+  },
+  {
+    "title": "Managing Risks",
+    "level": 1,
+    "page_anchor": "2-25",
+    "line_offset": 2165,
+    "parent_title": null
+  },
+  {
+    "title": "Automation",
+    "level": 1,
+    "page_anchor": "2-25",
+    "line_offset": 2223,
+    "parent_title": null
+  },
+  {
+    "title": "Results of the Study",
+    "level": 2,
+    "page_anchor": "2-27",
+    "line_offset": 2303,
+    "parent_title": "Automation"
+  },
+  {
+    "title": "Equipment Use",
+    "level": 1,
+    "page_anchor": "2-27",
+    "line_offset": 2362,
+    "parent_title": null
+  },
+  {
+    "title": "Autopilot Systems",
+    "level": 2,
+    "page_anchor": "2-27",
+    "line_offset": 2363,
+    "parent_title": "Equipment Use"
+  },
+  {
+    "title": "Familiarity",
+    "level": 2,
+    "page_anchor": "2-27",
+    "line_offset": 2389,
+    "parent_title": "Equipment Use"
+  },
+  {
+    "title": "Respect for Onboard Systems",
+    "level": 1,
+    "page_anchor": "2-29",
+    "line_offset": 2484,
+    "parent_title": null
+  },
+  {
+    "title": "Reinforcement of Onboard Suites",
+    "level": 1,
+    "page_anchor": "2-29",
+    "line_offset": 2493,
+    "parent_title": null
+  },
+  {
+    "title": "Getting Beyond Rote Workmanship",
+    "level": 1,
+    "page_anchor": "2-29",
+    "line_offset": 2501,
+    "parent_title": null
+  },
+  {
+    "title": "Understand the Platform",
+    "level": 1,
+    "page_anchor": "2-29",
+    "line_offset": 2513,
+    "parent_title": null
+  },
+  {
+    "title": "Managing Aircraft Automation",
+    "level": 1,
+    "page_anchor": "2-29",
+    "line_offset": 2531,
+    "parent_title": null
+  },
+  {
+    "title": "Information Management",
+    "level": 2,
+    "page_anchor": "2-30",
+    "line_offset": 2562,
+    "parent_title": "Managing Aircraft Automation"
+  },
+  {
+    "title": "Enhanced Situational Awareness",
+    "level": 2,
+    "page_anchor": "2-30",
+    "line_offset": 2623,
+    "parent_title": "Managing Aircraft Automation"
+  },
+  {
+    "title": "Automation Management",
+    "level": 2,
+    "page_anchor": "2-31",
+    "line_offset": 2684,
+    "parent_title": "Managing Aircraft Automation"
+  },
+  {
+    "title": "Risk Management",
+    "level": 2,
+    "page_anchor": "2-31",
+    "line_offset": 2713,
+    "parent_title": "Managing Aircraft Automation"
+  },
+  {
+    "title": "Chapter Summary",
+    "level": 1,
+    "page_anchor": "2-32",
+    "line_offset": 2772,
+    "parent_title": null
+  }
+]

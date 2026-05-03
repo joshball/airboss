@@ -26,10 +26,10 @@ review_status: pending
 `tests/fixtures/aim/aim-fixture/aim/2026-09/` contains:
 
 - `manifest.json` -- 1 chapter (`5`) with 1 section (`5-1`) and 2 paragraphs (`5-1-7`, `5-1-8`); 1 glossary entry (`pilot-in-command`); 1 appendix (`appendix-1`); `source_url` set; `fetched_at` set.
-- `chapter-5/index.md` -- chapter 5 body
-- `chapter-5/section-1/index.md` -- section 5-1 body
-- `chapter-5/section-1/paragraph-7.md` -- paragraph 5-1-7 body
-- `chapter-5/section-1/paragraph-8.md` -- paragraph 5-1-8 body
+- `05-air-traffic-procedures/00-air-traffic-procedures.md` -- chapter 5 body
+- `05-air-traffic-procedures/01-preflight/00-preflight.md` -- section 5-1 body
+- `05-air-traffic-procedures/01-preflight/07-pilot-responsibility-upon-clearance-issuance.md` -- paragraph 5-1-7 body
+- `05-air-traffic-procedures/01-preflight/08-flight-plan-cancellation.md` -- paragraph 5-1-8 body
 - `glossary/pilot-in-command.md` -- glossary entry body
 - `appendix-1.md` -- appendix body
 

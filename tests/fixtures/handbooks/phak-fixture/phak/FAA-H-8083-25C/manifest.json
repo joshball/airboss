@@ -17,7 +17,7 @@
 			"faa_page_start": "1-1",
 			"faa_page_end": "1-4",
 			"source_locator": "PHAK Ch 1 (1-1..1-4)",
-			"body_path": "handbooks/phak/FAA-H-8083-25C/01/index.md",
+			"body_path": "handbooks/phak/FAA-H-8083-25C/01-introduction-to-flying/00-introduction-to-flying.md",
 			"content_hash": "abc123",
 			"has_figures": false,
 			"has_tables": false
@@ -31,7 +31,7 @@
 			"faa_page_start": "1-1",
 			"faa_page_end": "1-1",
 			"source_locator": "PHAK Ch 1 §1 (1-1)",
-			"body_path": "handbooks/phak/FAA-H-8083-25C/01/01-introduction.md",
+			"body_path": "handbooks/phak/FAA-H-8083-25C/01-introduction-to-flying/01-introduction.md",
 			"content_hash": "def456",
 			"has_figures": false,
 			"has_tables": false
@@ -45,7 +45,7 @@
 			"faa_page_start": "1-2",
 			"faa_page_end": "1-3",
 			"source_locator": "PHAK Ch 1 §2 (1-2..1-3)",
-			"body_path": "handbooks/phak/FAA-H-8083-25C/01/02-history-of-flight.md",
+			"body_path": "handbooks/phak/FAA-H-8083-25C/01-introduction-to-flying/02-history-of-flight.md",
 			"content_hash": "ghi789",
 			"has_figures": false,
 			"has_tables": false
@@ -59,7 +59,7 @@
 			"faa_page_start": "1-3",
 			"faa_page_end": "1-3",
 			"source_locator": "PHAK Ch 1 §2 (1) (1-3)",
-			"body_path": "handbooks/phak/FAA-H-8083-25C/01/02-01-transcontinental-air-mail-route.md",
+			"body_path": "handbooks/phak/FAA-H-8083-25C/01-introduction-to-flying/02-01-transcontinental-air-mail-route.md",
 			"content_hash": "jkl012",
 			"has_figures": false,
 			"has_tables": false

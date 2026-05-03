@@ -22,10 +22,10 @@
  *      friendly slug + edition slug (`risk-management` + `8083-2A`) via
  *      `DOC_ID_TO_FRIENDLY` -- the locator/registry vocabulary.
  *   5. Write derivatives under `<repo>/handbooks/<friendly-slug>/<faaDir>/`:
- *        - `document.md`     full whole-doc markdown
- *        - `manifest.json`   `ManifestFile` with `body_path` + empty
- *                            `sections[]` (so the existing `handbooks`
- *                            resolver picks up whole-doc references).
+ *        - `<friendly-slug>-<editionSlug>.md`   full whole-doc markdown
+ *        - `manifest.json`                      `ManifestFile` with `body_path` + empty
+ *                                               `sections[]` (so the existing `handbooks`
+ *                                               resolver picks up whole-doc references).
  *   6. Insert one `SourceEntry` per (friendly-slug, edition) into the active
  *      `SOURCES` table; insert one `Edition` into `EDITIONS`.
  *   7. Record an atomic batch promotion `pending -> accepted` under
@@ -318,7 +318,8 @@ export async function runHandbooksExtrasIngest(args: IngestArgs): Promise<Ingest
 
 			const docDir = join(args.derivativeRoot, extra.slug, extra.faaDir);
 			ensureDir(docDir);
-			const bodyPath = join(docDir, 'document.md');
+			const bodyFilename = `${extra.slug}-${extra.editionSlug}.md`;
+			const bodyPath = join(docDir, bodyFilename);
 			writeIfChanged(bodyPath, documentBody);
 
 			const manifest: ExtrasManifestFile = {
@@ -331,7 +332,7 @@ export async function runHandbooksExtrasIngest(args: IngestArgs): Promise<Ingest
 				source_checksum: extra.sourceSha256,
 				fetched_at: extra.fetchedAt,
 				sections: [],
-				body_path: `handbooks/${extra.slug}/${extra.faaDir}/document.md`,
+				body_path: `handbooks/${extra.slug}/${extra.faaDir}/${bodyFilename}`,
 				body_sha256: bodySha,
 				page_count: doc.pageCount,
 				doc_id: extra.docId,
@@ -432,7 +433,7 @@ const USAGE = `usage:
 
   Walk the handbooks-extras cache (default: $AIRBOSS_HANDBOOK_CACHE/handbooks/
   or ~/Documents/airboss-handbook-cache/handbooks/), extract each whole-doc
-  PDF, write per-doc manifest.json + document.md under
+  PDF, write per-doc manifest.json + <friendly-slug>-<editionSlug>.md under
   <repo>/handbooks/<friendly-slug>/<faa-dir>/, and register entries into the
   @ab/sources registry. Idempotent.
 `;

@@ -41,7 +41,7 @@ const VALID_SECTION_TREE = {
 			faa_page_start: '1-1',
 			faa_page_end: '1-2',
 			source_locator: 'PHAK Ch 1',
-			body_path: 'handbooks/phak/FAA-H-8083-25C/01/index.md',
+			body_path: 'handbooks/phak/FAA-H-8083-25C/01-introduction-to-flying/00-introduction-to-flying.md',
 			content_hash: 'a'.repeat(64),
 			has_figures: false,
 			has_tables: false,
@@ -65,21 +65,21 @@ const VALID_AIM = {
 			kind: 'chapter',
 			code: '1',
 			title: 'Air Navigation',
-			body_path: 'aim/2026-04/chapter-1/index.md',
+			body_path: 'aim/2026-04/01-air-navigation/00-air-navigation.md',
 			content_hash: 'a'.repeat(64),
 		},
 		{
 			kind: 'section',
 			code: '1-1',
 			title: 'Navigation Aids',
-			body_path: 'aim/2026-04/chapter-1/section-1/index.md',
+			body_path: 'aim/2026-04/01-air-navigation/01-navigation-aids/00-navigation-aids.md',
 			content_hash: 'b'.repeat(64),
 		},
 		{
 			kind: 'paragraph',
 			code: '1-1-1',
 			title: 'General',
-			body_path: 'aim/2026-04/chapter-1/section-1/paragraph-1.md',
+			body_path: 'aim/2026-04/01-air-navigation/01-navigation-aids/01-general.md',
 			content_hash: 'c'.repeat(64),
 		},
 	],
@@ -99,7 +99,7 @@ const VALID_AC = {
 	source_sha256: 'a'.repeat(64),
 	fetched_at: '2026-04-26T00:00:00.000+00:00',
 	page_count: 49,
-	body_path: 'ac/61-98/d/body.md',
+	body_path: 'ac/61-98/d/ac-61-98-d.md',
 	body_sha256: 'b'.repeat(64),
 	sections: [],
 	changes: [],
@@ -113,7 +113,7 @@ const VALID_WHOLE_DOC = {
 	publisher: 'FAA',
 	source_url: 'https://www.faa.gov/risk-mgmt.pdf',
 	fetched_at: '2026-04-26T00:00:00.000+00:00',
-	body_path: 'handbooks/risk-management/FAA-H-8083-2A/document.md',
+	body_path: 'handbooks/risk-management/FAA-H-8083-2A/risk-management-8083-2A.md',
 	body_sha256: 'b'.repeat(64),
 	page_count: 80,
 	doc_id: 'faa-h-8083-2',
@@ -237,6 +237,51 @@ describe('manifestSchema (discriminated union on kind)', () => {
 	});
 });
 
+describe('selfDescribingPath enforcement (rename-generic-content-files)', () => {
+	it("rejects a section-tree body_path ending in '/index.md'", () => {
+		const broken = {
+			...VALID_SECTION_TREE,
+			sections: [{ ...VALID_SECTION_TREE.sections[0], body_path: 'handbooks/phak/FAA-H-8083-25C/01/index.md' }],
+		};
+		const result = sectionTreeManifestSchema.safeParse(broken);
+		expect(result.success).toBe(false);
+	});
+
+	it("rejects a whole-doc body_path ending in '/document.md'", () => {
+		const broken = { ...VALID_WHOLE_DOC, body_path: 'handbooks/risk-management/FAA-H-8083-2A/document.md' };
+		const result = wholeDocManifestSchema.safeParse(broken);
+		expect(result.success).toBe(false);
+	});
+
+	it("rejects an AIM entry body_path ending in '/index.md'", () => {
+		const broken = {
+			...VALID_AIM,
+			entries: [{ ...VALID_AIM.entries[0], body_path: 'aim/2026-04/chapter-1/index.md' }],
+		};
+		const result = aimManifestSchema.safeParse(broken);
+		expect(result.success).toBe(false);
+	});
+
+	it("rejects an AC body_path ending in '/document.md'", () => {
+		const broken = { ...VALID_AC, body_path: 'ac/61-98/d/document.md' };
+		const result = acManifestSchema.safeParse(broken);
+		expect(result.success).toBe(false);
+	});
+
+	it("carves out paths under 'regulations/' (regs cleanup is a follow-up WP)", () => {
+		// Regs writer still emits `<part>/index.md` for part overviews; the
+		// CI assertion must not block this until the regs-derivative-cleanup
+		// WP lands. The carve-out is filename-pattern-based; we exercise it
+		// via the section-tree schema which has the strictest body_path.
+		const allowed = {
+			...VALID_SECTION_TREE,
+			sections: [{ ...VALID_SECTION_TREE.sections[0], body_path: 'regulations/cfr-14/2026/91/index.md' }],
+		};
+		const result = sectionTreeManifestSchema.safeParse(allowed);
+		expect(result.success).toBe(true);
+	});
+});
+
 describe('handbookManifestErrataEntrySchema', () => {
 	const VALID_ERRATA = {
 		id: 'mosaic',
@@ -249,14 +294,15 @@ describe('handbookManifestErrataEntrySchema', () => {
 		sections_patched: [
 			{
 				section_code: '1.4',
-				section_path: 'handbooks/phak/FAA-H-8083-25C/01/04-aircraft-classifications.md',
+				section_path: 'handbooks/phak/FAA-H-8083-25C/01-introduction-to-flying/04-aircraft-classifications.md',
 				chapter: '01',
 				target_page: '1-15',
 				patch_kind: 'replace_paragraph',
 				section_anchor: 'Aircraft Classifications and Ultralight Vehicles',
 				new_heading: null,
 				content_hash: 'c'.repeat(64),
-				errata_note_path: 'handbooks/phak/FAA-H-8083-25C/01/04-aircraft-classifications.errata.md',
+				errata_note_path:
+					'handbooks/phak/FAA-H-8083-25C/01-introduction-to-flying/04-aircraft-classifications.errata.md',
 			},
 		],
 	} as const;
