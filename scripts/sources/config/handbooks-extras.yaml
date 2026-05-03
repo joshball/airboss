@@ -94,3 +94,7 @@ entries:
     filename: tips_on_mountain_flying.pdf
     subjects: [performance, weather, emergencies]
     primary_cert: null
+    # OCR output for this 1999 scanned pamphlet is too poor to be useful
+    # (broken hyphens, garbled glyphs, lost heading hierarchy). The override
+    # is a hand-transcribed markdown copy validated against the source PDF.
+    body_override: scripts/sources/config/handbooks-extras-overrides/faa-mtn-tips.md

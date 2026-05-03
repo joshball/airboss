@@ -53,6 +53,16 @@ export interface ExtrasYamlEntry {
 	/** Aviation topics this handbook covers. 1-3 entries, all from `AVIATION_TOPIC_VALUES`. Required. */
 	readonly subjects: readonly AviationTopic[];
 	/**
+	 * Optional path (relative to repo root) to a hand-curated markdown file
+	 * whose contents replace the body that would otherwise come from
+	 * `pdftotext` extraction. Use for whole-doc handbooks where OCR output
+	 * is too poor to be useful (e.g. older scanned pamphlets). The PDF still
+	 * provides `page_count` and the cache manifest still tracks the source
+	 * bytes, but the produced `document.md` is the override file's content
+	 * verbatim.
+	 */
+	readonly body_override?: string;
+	/**
 	 * Primary cert that owns this handbook for library-by-cert browsing,
 	 * or `null` for cert-agnostic. Mirrors the column on `study.reference`.
 	 */
@@ -131,6 +141,13 @@ export function loadHandbooksExtrasYaml(): ExtrasYaml {
 			throw new Error(
 				`handbooks-extras YAML at ${path} entry ${e.doc_id} has invalid primary_cert (require null or one of CERT_APPLICABILITY_VALUES): ${JSON.stringify(e.primary_cert)}`,
 			);
+		}
+		if ('body_override' in e && e.body_override !== undefined) {
+			if (typeof e.body_override !== 'string' || e.body_override.length === 0) {
+				throw new Error(
+					`handbooks-extras YAML at ${path} entry ${e.doc_id} has invalid body_override (require non-empty string path relative to repo root): ${JSON.stringify(e.body_override)}`,
+				);
+			}
 		}
 	}
 	return parsed as ExtrasYaml;

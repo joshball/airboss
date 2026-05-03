@@ -28,12 +28,6 @@ function makeEntry(overrides: Partial<SourceEntry> & Pick<SourceEntry, 'id'>): S
 	};
 }
 
-// Most tests use the same §91.103 fixture; hoist so each test only declares
-// the bits it varies. Tests that need a distinct fixture (e.g. the interp
-// `walker-2017` row) keep their local construction.
-const PHAK_91_103_ID = 'airboss-ref:regs/cfr-14/91/103' as SourceId;
-const PHAK_91_103_LIVE_URL = 'https://www.ecfr.gov/.../section-91.103';
-
 function mockResolver(corpus: string, urls: Record<string, string>): CorpusResolver {
 	return {
 		corpus,

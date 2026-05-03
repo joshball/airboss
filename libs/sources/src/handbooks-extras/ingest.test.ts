@@ -298,30 +298,97 @@ describe('loadHandbooksExtrasYaml -- subjects + primary_cert validation', () => 
 	});
 });
 
+describe('loadHandbooksExtrasYaml -- body_override validation', () => {
+	it('accepts a string body_override path', () => {
+		writeRawYaml(
+			[
+				`base_url: https://example.invalid`,
+				`entries:`,
+				`  - doc_id: faa-mtn-tips`,
+				`    edition: '2003'`,
+				`    url: https://example.invalid/mtn.pdf`,
+				`    filename: mtn.pdf`,
+				`    subjects: [weather]`,
+				`    primary_cert: null`,
+				`    body_override: scripts/sources/config/handbooks-extras-overrides/faa-mtn-tips.md`,
+				``,
+			].join('\n'),
+		);
+		const yaml = loadHandbooksExtrasYaml();
+		expect(yaml.entries[0]?.body_override).toBe('scripts/sources/config/handbooks-extras-overrides/faa-mtn-tips.md');
+	});
+
+	it('treats absent body_override as undefined', () => {
+		writeYaml([
+			{
+				doc_id: 'faa-h-8083-2',
+				edition: '2A',
+				filename: 'rmh.pdf',
+				subjects: ['human-factors'],
+				primary_cert: 'private',
+			},
+		]);
+		const yaml = loadHandbooksExtrasYaml();
+		expect(yaml.entries[0]?.body_override).toBeUndefined();
+	});
+
+	it('rejects a non-string body_override', () => {
+		writeRawYaml(
+			[
+				`base_url: https://example.invalid`,
+				`entries:`,
+				`  - doc_id: faa-mtn-tips`,
+				`    edition: '2003'`,
+				`    url: https://example.invalid/mtn.pdf`,
+				`    filename: mtn.pdf`,
+				`    subjects: [weather]`,
+				`    primary_cert: null`,
+				`    body_override: 42`,
+				``,
+			].join('\n'),
+		);
+		expect(() => loadHandbooksExtrasYaml()).toThrow(/invalid body_override/i);
+	});
+
+	it('rejects an empty body_override', () => {
+		writeRawYaml(
+			[
+				`base_url: https://example.invalid`,
+				`entries:`,
+				`  - doc_id: faa-mtn-tips`,
+				`    edition: '2003'`,
+				`    url: https://example.invalid/mtn.pdf`,
+				`    filename: mtn.pdf`,
+				`    subjects: [weather]`,
+				`    primary_cert: null`,
+				`    body_override: ''`,
+				``,
+			].join('\n'),
+		);
+		expect(() => loadHandbooksExtrasYaml()).toThrow(/invalid body_override/i);
+	});
+});
+
 describe('runHandbooksExtrasIngest -- live cache (smoke)', () => {
 	const liveCache = resolveCacheRoot({ ensureExists: false });
 	const haveLiveCache = existsSync(join(liveCache, 'handbooks', 'faa-h-8083-2', 'faa-h-8083-2.pdf'));
 
 	(haveLiveCache ? it : it.skip)(
-		'ingests all 7 cached handbooks against the live YAML',
+		'ingests all 5 active cached handbooks against the live YAML',
 		async () => {
 			// Use the live YAML so this also validates that the YAML and
-			// DOC_ID_TO_FRIENDLY agree.
+			// DOC_ID_TO_FRIENDLY agree. AMT-G/P are deferred via YAML
+			// commenting (see scripts/sources/config/handbooks-extras.yaml);
+			// they remain in DOC_ID_TO_FRIENDLY for one-line un-deferral but
+			// are not part of the active corpus, so the expected ingested
+			// count is 5, not 7.
 			_setHandbooksExtrasYamlPath(null);
 			const report = await runHandbooksExtrasIngest({ cacheRoot: liveCache, derivativeRoot: tempDerivative });
-			expect(report.ingested).toBe(7);
+			expect(report.ingested).toBe(5);
 			expect(report.skipped).toBe(0);
 			expect(report.promotionBatchId).not.toBeNull();
 			// Each derivative has a manifest + body
-			for (const slug of [
-				'risk-management',
-				'aviation-instructor',
-				'ifh',
-				'iph',
-				'amt-general',
-				'amt-powerplant',
-				'tips-mountain-flying',
-			]) {
+			for (const slug of ['risk-management', 'aviation-instructor', 'ifh', 'iph', 'tips-mountain-flying']) {
 				const dir = join(tempDerivative, slug);
 				expect(existsSync(dir)).toBe(true);
 			}
@@ -345,7 +412,7 @@ describe('runHandbooksExtrasIngest -- live cache (smoke)', () => {
 
 			const second = await runHandbooksExtrasIngest({ cacheRoot: liveCache, derivativeRoot: tempDerivative });
 			expect(second.ingested).toBe(0);
-			expect(second.alreadyAccepted).toBe(7);
+			expect(second.alreadyAccepted).toBe(5);
 			expect(second.promotionBatchId).toBeNull();
 
 			const afterBytes = trackedPaths.map((p) => readFileSync(p, 'utf-8'));
@@ -362,15 +429,29 @@ describe('runHandbooksExtrasIngest -- live cache (smoke)', () => {
 			expect(rmhManifest.subjects).toEqual(['human-factors']);
 			expect(rmhManifest.primary_cert).toBe('private');
 			// Spot-check a row authored with primary_cert: null in the YAML.
-			const amtgManifestPath = join(tempDerivative, 'amt-general', 'FAA-H-8083-30B', 'manifest.json');
-			const amtgManifest = JSON.parse(readFileSync(amtgManifestPath, 'utf-8')) as Record<string, unknown>;
-			expect(amtgManifest.subjects).toEqual(['aircraft-systems']);
-			expect(amtgManifest.primary_cert).toBeNull();
+			const mtnManifestPath = join(tempDerivative, 'tips-mountain-flying', 'MTN-2003', 'manifest.json');
+			const mtnManifest = JSON.parse(readFileSync(mtnManifestPath, 'utf-8')) as Record<string, unknown>;
+			expect(mtnManifest.subjects).toEqual(['performance', 'weather', 'emergencies']);
+			expect(mtnManifest.primary_cert).toBeNull();
+
+			// body_override: the mtn-tips entry declares an override at
+			// scripts/sources/config/handbooks-extras-overrides/faa-mtn-tips.md.
+			// The produced document.md must be that file's contents verbatim,
+			// not the OCR garbage that pdftotext would emit for the scanned
+			// 1999 pamphlet.
+			const mtnBodyPath = join(tempDerivative, 'tips-mountain-flying', 'MTN-2003', 'document.md');
+			const mtnBody = readFileSync(mtnBodyPath, 'utf-8');
+			const overrideSource = readFileSync(
+				join(process.cwd(), 'scripts/sources/config/handbooks-extras-overrides/faa-mtn-tips.md'),
+				'utf-8',
+			);
+			expect(mtnBody).toBe(overrideSource);
+			expect(mtnBody).toContain('# Tips on Mountain Flying');
 		},
 		// The smoke test runs the full extract pipeline twice (initial + the
-		// idempotency re-check), so 7 entries means 14 PDF extractions. Each
-		// takes ~30-60s; observed total is 400-520s on a warm cache. Budget
-		// 720s to keep CI green even on cold-cache + slower-machine runs.
-		720000,
+		// idempotency re-check), so 5 entries means 10 PDF extractions. Each
+		// takes ~30-60s; observed total is 300-400s on a warm cache. Budget
+		// 600s to keep CI green even on cold-cache + slower-machine runs.
+		600000,
 	);
 });
