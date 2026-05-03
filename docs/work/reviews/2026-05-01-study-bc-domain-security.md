@@ -9,8 +9,61 @@ counts:
   minor: 5
   nit: 3
 status: unread
-review_status: pending
+review_status: done
 ---
+
+## Status as of 2026-05-04
+
+| Severity | Count | Closed | Open |
+| -------- | ----: | -----: | ---: |
+| critical |     0 |      0 |    0 |
+| major    |     2 |      0 |    2 |
+| minor    |     5 |      1 |    4 |
+| nit      |     3 |      1 |    2 |
+
+### MAJOR: Knowledge-graph + credential write paths exposed without auth gate -- STILL OPEN
+
+`libs/bc/study/src/index.ts` still barrels `upsertKnowledgeNode`, `replaceNodeEdges`, `upsertCredential`, `upsertSyllabus`, etc. without admin/actor gates. Trigger: when the next route is wired that touches any of these (hangar admin authoring or seed-runner web UI), split the BC barrel into `@ab/bc-study` (read/user-write) and `@ab/bc-study/build` (admin/seeder upserts). As a stopgap, `// build-only` comments live on the function JSDocs but no lint rule blocks misuse.
+
+### MAJOR: `goals.ts` skips BC-level Zod validation -- STILL OPEN
+
+`libs/bc/study/src/goals.ts` still has zero `.parse(` calls. Cards/scenarios still parse at the BC boundary; goals does not. Trigger: small parser-integration PR (`createGoalInputSchema.parse`, `addGoalSyllabusInputSchema.parse`, etc.) at the top of each goals write path. Schemas already exist in `credentials.validation.ts`.
+
+### MINOR: `recordPhaseVisited` / `recordPhaseCompleted` accept arbitrary nodeId / phaseId -- STILL OPEN
+
+Same finding mirrored in correctness MINOR. Trigger documented there.
+
+### MINOR: `setNotes` / `recordHeartbeat` / `setReadStatus` / `setComprehended` do not pre-verify reference-section id -- STILL OPEN
+
+`libs/bc/study/src/references.ts:576-783` still relies on the FK constraint at insert time rather than throwing typed `HandbookSectionNotFoundError`. Trigger: roll into next references-hardening WP.
+
+### MINOR: search functions accept unbounded `limit` -- CLOSED
+
+`libs/bc/study/src/citations/search.ts:11,39`. `MAX_SEARCH_LIMIT` constant imported from `@ab/constants` and `Math.max(1, Math.min(MAX_SEARCH_LIMIT, Math.floor(limit)))` clamps every search call. Closed for the citations search functions; the broader "uniform clamping for `getCards`/`getScenarios`/etc." sub-finding is still open. Trigger: roll uniform clamping into a follow-up sweep; a `MAX_PAGE_SIZE` constant + repo-wide sweep is the cleanest fix.
+
+### MINOR: External-ref citation `targetId` https-only -- STILL OPEN
+
+`libs/bc/study/src/citations/citations.ts:223` still accepts both `http:` and `https:`. Trigger: tighten to `https:` only in a small citations-permissions PR; UI render-site `rel="..."` audit lives separately.
+
+### MINOR: NODE-source citation v1 carve-out -- STILL OPEN
+
+`libs/bc/study/src/citations/citations.ts:165` still allows any authenticated user to attribute citations to any knowledge node. Trigger: when per-node ACLs land OR when the citations surface is opened to broader users -- whichever first; pick a trigger and document it in the citations ADR.
+
+### NIT: `decodeDeckSpec` no Zod schema -- STILL OPEN
+
+`libs/bc/study/src/deck-spec.ts:128` still casts. Trigger: small deck-spec hardening PR.
+
+### NIT: `getPublicCard` no ownership scoping -- STILL OPEN
+
+Capability-URL behavior intentional per JSDoc. Trigger: when share-by-URL spec firms up, gate on `is_public` or `sourceType !== PERSONAL`.
+
+### NIT: `restoreCardByCard` error message leaks userId -- CLOSED
+
+`libs/bc/study/src/snooze.ts:249`. `throw new SnoozeNotFoundError(cardId)` -- userId dropped from the formatted lookup tuple. Closed.
+
+### Final verdict
+
+0 of 2 majors closed -- both require a meaningful BC-shape change (barrel split or Zod integration sweep) that hasn't landed. 1 of 5 minors closed (search caps); 1 of 3 nits closed (snooze message). Remaining items have concrete triggers tied to upcoming WPs (admin authoring routes, citations-permissions PR, references-hardening WP). `review_status` flipped to `done`.
 
 ## Summary
 

@@ -220,4 +220,3 @@ describe('getPlans', () => {
 		await archivePlan(p2.id, TEST_USER_ID);
 	});
 });
-
