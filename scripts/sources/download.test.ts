@@ -101,6 +101,33 @@ describe('parseArgs', () => {
 	it('rejects unknown flags', () => {
 		expect(() => parseArgs(['--no-such-flag'])).toThrow(/unknown argument/);
 	});
+
+	it('defaults concurrency to SOURCE_DOWNLOAD_CONCURRENCY (4) when --concurrency is not set', () => {
+		const args = parseArgs([]);
+		expect(args.concurrency).toBe(4);
+	});
+
+	it('parses --concurrency=N and accepts the upper bound', () => {
+		expect(parseArgs(['--concurrency=1']).concurrency).toBe(1);
+		expect(parseArgs(['--concurrency=8']).concurrency).toBe(8);
+		expect(parseArgs(['--concurrency=16']).concurrency).toBe(16);
+	});
+
+	it('rejects --concurrency=N outside the [1, SOURCE_DOWNLOAD_CONCURRENCY_MAX] range', () => {
+		expect(() => parseArgs(['--concurrency=0'])).toThrow(/between 1 and 16/);
+		expect(() => parseArgs(['--concurrency=17'])).toThrow(/between 1 and 16/);
+		expect(() => parseArgs(['--concurrency=-1'])).toThrow(/between 1 and 16/);
+	});
+
+	it('rejects non-integer --concurrency=N', () => {
+		expect(() => parseArgs(['--concurrency=2.5'])).toThrow(/must be an integer/);
+		expect(() => parseArgs(['--concurrency=abc'])).toThrow(/must be an integer/);
+	});
+
+	it('parses --rescrape', () => {
+		expect(parseArgs([]).rescrape).toBe(false);
+		expect(parseArgs(['--rescrape']).rescrape).toBe(true);
+	});
 });
 
 describe('buildEcfrUrl', () => {
