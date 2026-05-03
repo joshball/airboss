@@ -64,10 +64,10 @@ describe('AmendmentPanel -- populated', () => {
 		const badge = screen.getByTestId('amendment-panel-badge');
 		await fireEvent.click(badge);
 		const body = screen.getByTestId('amendment-panel-body');
-		expect(body).toBeTruthy();
+		expect(body).toBeInTheDocument();
 		expect(badge.getAttribute('aria-expanded')).toBe('true');
 		// ErrataEntry mounted inside.
-		expect(body.querySelector('article.errata-entry')).toBeTruthy();
+		expect(body.querySelector('article.errata-entry')).toBeInTheDocument();
 		// The patch-kind label for the configured sampleEntry (APPEND_PARAGRAPH) must render.
 		const expectedPatchKindLabel = HANDBOOK_ERRATA_PATCH_KIND_LABELS[HANDBOOK_ERRATA_PATCH_KINDS.APPEND_PARAGRAPH];
 		expect(body.querySelector('.patch-kind')?.textContent?.trim()).toBe(expectedPatchKindLabel);
@@ -77,7 +77,7 @@ describe('AmendmentPanel -- populated', () => {
 		render(AmendmentPanel, { entries: [sampleEntry] });
 		const badge = screen.getByTestId('amendment-panel-badge');
 		await fireEvent.click(badge);
-		expect(screen.getByTestId('amendment-panel-body')).toBeTruthy();
+		expect(screen.getByTestId('amendment-panel-body')).toBeInTheDocument();
 		await fireEvent.click(badge);
 		expect(screen.queryByTestId('amendment-panel-body')).toBeNull();
 		expect(badge.getAttribute('aria-expanded')).toBe('false');
@@ -85,7 +85,7 @@ describe('AmendmentPanel -- populated', () => {
 
 	it('honors initiallyOpen=true', () => {
 		render(AmendmentPanel, { entries: [sampleEntry], initiallyOpen: true });
-		expect(screen.getByTestId('amendment-panel-body')).toBeTruthy();
+		expect(screen.getByTestId('amendment-panel-body')).toBeInTheDocument();
 		expect(screen.getByTestId('amendment-panel-badge').getAttribute('aria-expanded')).toBe('true');
 	});
 

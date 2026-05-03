@@ -24,7 +24,9 @@ describe('AIRPLANE_CLASSES', () => {
 
 	it('label record covers every value', () => {
 		for (const value of AIRPLANE_CLASS_VALUES) {
-			expect(AIRPLANE_CLASS_LABELS[value]).toBeTruthy();
+			const label = AIRPLANE_CLASS_LABELS[value];
+			expect(label).toBeDefined();
+			expect((label ?? '').length).toBeGreaterThan(0);
 		}
 	});
 

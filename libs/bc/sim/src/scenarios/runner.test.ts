@@ -72,7 +72,7 @@ describe('scenario registry', () => {
 	it('returns the departure-stall scenario by id', () => {
 		const s = getScenario(SIM_SCENARIO_IDS.DEPARTURE_STALL);
 		expect(s.id).toBe(SIM_SCENARIO_IDS.DEPARTURE_STALL);
-		expect(s.title).toBeTruthy();
+		expect(s.title.length).toBeGreaterThan(0);
 	});
 
 	it('lists every registered scenario in recommended order', () => {

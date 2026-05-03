@@ -22,13 +22,13 @@ describe('Card -- rendering', () => {
 
 	it('renders header when withHeader=true', () => {
 		render(CardHarness, { withHeader: true, headerText: 'Title' });
-		expect(screen.getByTestId('card-header')).toBeTruthy();
+		expect(screen.getByTestId('card-header')).toBeInTheDocument();
 		expect(screen.getByTestId('harness-header-content').textContent).toBe('Title');
 	});
 
 	it('renders footer when withFooter=true', () => {
 		render(CardHarness, { withFooter: true, footerText: 'Save' });
-		expect(screen.getByTestId('card-footer')).toBeTruthy();
+		expect(screen.getByTestId('card-footer')).toBeInTheDocument();
 		expect(screen.getByTestId('harness-footer-content').textContent).toBe('Save');
 	});
 });

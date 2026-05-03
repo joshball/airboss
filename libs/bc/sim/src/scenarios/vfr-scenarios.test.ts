@@ -163,9 +163,9 @@ describe('VFR scenarios -- registration and shape', () => {
 	it.each(NEW_SCENARIO_IDS)('%s is resolvable via getScenario', (id) => {
 		const scenario = getScenario(id);
 		expect(scenario.id).toBe(id);
-		expect(scenario.title).toBeTruthy();
-		expect(scenario.briefing).toBeTruthy();
-		expect(scenario.objective).toBeTruthy();
+		expect(scenario.title.length).toBeGreaterThan(0);
+		expect(scenario.briefing.length).toBeGreaterThan(0);
+		expect(scenario.objective.length).toBeGreaterThan(0);
 	});
 
 	it.each(NEW_SCENARIO_IDS)('%s carries a flap detent in SIM_FLAP_NOTCHES', (id) => {

@@ -103,7 +103,8 @@ describe('auditWrite + auditRecent round-trip', () => {
 			targetId: TEST_RUN_ID,
 			metadata: { testRunId: TEST_RUN_ID, marker: 'round-trip' },
 		});
-		expect(written.id).toBeTruthy();
+		expect(typeof written.id).toBe('string');
+		expect(written.id.length).toBeGreaterThan(0);
 		expect(written.targetType).toBe(TEST_TARGET_TYPE);
 
 		const recent = await auditRecent({ targetType: TEST_TARGET_TYPE, targetId: TEST_RUN_ID, limit: 5 });

@@ -21,8 +21,8 @@ describe('FilterCard', () => {
 
 	it('renders the controls grid + actions row', () => {
 		render(FilterCardHarness, { resetHref: '/x' });
-		expect(screen.getByTestId('filtercard-grid')).toBeTruthy();
-		expect(screen.getByTestId('filtercard-actions')).toBeTruthy();
+		expect(screen.getByTestId('filtercard-grid')).toBeInTheDocument();
+		expect(screen.getByTestId('filtercard-actions')).toBeInTheDocument();
 	});
 
 	it('apply button is type=submit', () => {
@@ -42,6 +42,6 @@ describe('FilterCard', () => {
 
 	it('renders hidden snippet content when provided', () => {
 		render(FilterCardHarness, { resetHref: '/x', withHidden: true });
-		expect(screen.getByTestId('harness-hidden-page')).toBeTruthy();
+		expect(screen.getByTestId('harness-hidden-page')).toBeInTheDocument();
 	});
 });

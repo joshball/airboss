@@ -42,7 +42,7 @@ describe('JumpToCardPopover -- open', () => {
 		expect(panel.getAttribute('aria-modal')).toBe('true');
 		// The per-popover marker is still present so consumers / e2e selectors
 		// can disambiguate between concurrently mounted dialogs.
-		expect(screen.getByTestId('jumptocardpopover-root')).toBeTruthy();
+		expect(screen.getByTestId('jumptocardpopover-root')).toBeInTheDocument();
 	});
 
 	it('renders one row per card with the right state and aria-selected', () => {

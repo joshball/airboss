@@ -144,7 +144,8 @@ describe('memory renameDeck action', () => {
 		if (!isFailure<{ intent: string; deckHash: string; fieldErrors: { label?: string } }>(result))
 			throw new Error('expected failure');
 		expect(result.status).toBe(400);
-		expect(result.data.fieldErrors.label).toBeTruthy();
+		expect(result.data.fieldErrors.label).toBeDefined();
+		expect((result.data.fieldErrors.label ?? '').length).toBeGreaterThan(0);
 		expect(result.data.deckHash).toBe('rt000002');
 	});
 });

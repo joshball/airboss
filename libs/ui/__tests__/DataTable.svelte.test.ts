@@ -34,21 +34,21 @@ afterEach(() => {
 describe('DataTable -- rendering', () => {
 	it('renders header cells for each column', () => {
 		render(DataTableHarness, { rows, columns });
-		expect(screen.getByTestId('datatable-header-name')).toBeTruthy();
-		expect(screen.getByTestId('datatable-header-rank')).toBeTruthy();
-		expect(screen.getByTestId('datatable-header-static')).toBeTruthy();
+		expect(screen.getByTestId('datatable-header-name')).toBeInTheDocument();
+		expect(screen.getByTestId('datatable-header-rank')).toBeInTheDocument();
+		expect(screen.getByTestId('datatable-header-static')).toBeInTheDocument();
 	});
 
 	it('renders one row per data row via the row snippet', () => {
 		render(DataTableHarness, { rows, columns });
-		expect(screen.getByTestId('harness-row-a')).toBeTruthy();
-		expect(screen.getByTestId('harness-row-b')).toBeTruthy();
+		expect(screen.getByTestId('harness-row-a')).toBeInTheDocument();
+		expect(screen.getByTestId('harness-row-b')).toBeInTheDocument();
 	});
 
 	it('renders sort buttons only for sortable columns', () => {
 		render(DataTableHarness, { rows, columns });
-		expect(screen.getByTestId('datatable-sort-name')).toBeTruthy();
-		expect(screen.getByTestId('datatable-sort-rank')).toBeTruthy();
+		expect(screen.getByTestId('datatable-sort-name')).toBeInTheDocument();
+		expect(screen.getByTestId('datatable-sort-rank')).toBeInTheDocument();
 		expect(screen.queryByTestId('datatable-sort-static')).toBeNull();
 	});
 });
@@ -77,7 +77,7 @@ describe('DataTable -- sorting', () => {
 describe('DataTable -- empty state', () => {
 	it('renders a fallback empty row when there are no rows', () => {
 		render(DataTableHarness, { rows: [], columns });
-		expect(screen.getByTestId('datatable-empty')).toBeTruthy();
+		expect(screen.getByTestId('datatable-empty')).toBeInTheDocument();
 		expect(screen.getByTestId('datatable-root').getAttribute('data-state')).toBe('empty');
 	});
 });

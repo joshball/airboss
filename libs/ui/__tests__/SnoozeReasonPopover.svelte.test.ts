@@ -31,7 +31,7 @@ describe('SnoozeReasonPopover -- open', () => {
 		const panel = screen.getByTestId('dialog-panel');
 		expect(panel.getAttribute('role')).toBe('dialog');
 		expect(panel.getAttribute('aria-modal')).toBe('true');
-		expect(screen.getByTestId('snoozereasonpopover-root')).toBeTruthy();
+		expect(screen.getByTestId('snoozereasonpopover-root')).toBeInTheDocument();
 	});
 
 	it('reflects the default reason on data-selected-reason', () => {

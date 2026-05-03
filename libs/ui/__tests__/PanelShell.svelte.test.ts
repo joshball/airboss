@@ -26,7 +26,7 @@ describe('PanelShell -- rendering', () => {
 
 	it('renders action snippet when provided', () => {
 		render(PanelShellHarness, { title: 'Plan', withAction: true, actionLabel: 'Refresh' });
-		expect(screen.getByTestId('panelshell-action')).toBeTruthy();
+		expect(screen.getByTestId('panelshell-action')).toBeInTheDocument();
 		expect(screen.getByTestId('harness-action').textContent).toBe('Refresh');
 	});
 });

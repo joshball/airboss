@@ -65,8 +65,8 @@ describe('CitationPicker -- open', () => {
 			targetTypes: [CITATION_TARGET_TYPES.REGULATION_NODE, CITATION_TARGET_TYPES.AC_REF],
 			onSelect: vi.fn(),
 		});
-		expect(screen.getByTestId(`citationpicker-tab-${CITATION_TARGET_TYPES.REGULATION_NODE}`)).toBeTruthy();
-		expect(screen.getByTestId(`citationpicker-tab-${CITATION_TARGET_TYPES.AC_REF}`)).toBeTruthy();
+		expect(screen.getByTestId(`citationpicker-tab-${CITATION_TARGET_TYPES.REGULATION_NODE}`)).toBeInTheDocument();
+		expect(screen.getByTestId(`citationpicker-tab-${CITATION_TARGET_TYPES.AC_REF}`)).toBeInTheDocument();
 	});
 
 	it('omits the tab strip when only one target type is allowed', () => {
@@ -87,7 +87,7 @@ describe('CitationPicker -- open', () => {
 		const panel = screen.getByTestId('dialog-panel');
 		expect(panel.getAttribute('role')).toBe('dialog');
 		expect(panel.getAttribute('aria-modal')).toBe('true');
-		expect(screen.getByTestId('dialog-close')).toBeTruthy();
+		expect(screen.getByTestId('dialog-close')).toBeInTheDocument();
 	});
 
 	it('uses Button primitive for footer Cancel + Submit actions', () => {
@@ -96,8 +96,8 @@ describe('CitationPicker -- open', () => {
 			targetTypes: [CITATION_TARGET_TYPES.REGULATION_NODE],
 			onSelect: vi.fn(),
 		});
-		expect(screen.getByTestId('citationpicker-cancel')).toBeTruthy();
-		expect(screen.getByTestId('citationpicker-submit')).toBeTruthy();
+		expect(screen.getByTestId('citationpicker-cancel')).toBeInTheDocument();
+		expect(screen.getByTestId('citationpicker-submit')).toBeInTheDocument();
 	});
 });
 

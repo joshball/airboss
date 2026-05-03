@@ -49,7 +49,7 @@ describe('InfoTip -- open behavior', () => {
 		const user = userEvent.setup();
 		render(InfoTip, { term: 'Slice', definition: 'A bucket of work.' });
 		await user.click(screen.getByTestId('infotip-trigger'));
-		expect(screen.getByTestId('infotip-popover')).toBeTruthy();
+		expect(screen.getByTestId('infotip-popover')).toBeInTheDocument();
 		expect(screen.getByTestId('infotip-trigger').getAttribute('aria-expanded')).toBe('true');
 		expect(screen.getByTestId('infotip-root').getAttribute('data-state')).toBe('open');
 	});
@@ -75,7 +75,7 @@ describe('InfoTip -- open behavior', () => {
 		render(InfoTip, { term: 'Slice', definition: 'A bucket.' });
 		const trigger = screen.getByTestId('infotip-trigger');
 		await user.click(trigger);
-		expect(screen.getByTestId('infotip-popover')).toBeTruthy();
+		expect(screen.getByTestId('infotip-popover')).toBeInTheDocument();
 		await user.click(trigger);
 		expect(screen.queryByTestId('infotip-popover')).toBeNull();
 		expect(trigger.getAttribute('aria-expanded')).toBe('false');

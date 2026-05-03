@@ -28,13 +28,13 @@ describe('Pager', () => {
 	it('hides Previous when on the first page', () => {
 		render(Pager, { currentPage: 1, totalPages: 3, hasMore: true, pageHref });
 		expect(screen.queryByTestId('pager-prev')).toBeNull();
-		expect(screen.getByTestId('pager-prev-empty')).toBeTruthy();
+		expect(screen.getByTestId('pager-prev-empty')).toBeInTheDocument();
 	});
 
 	it('hides Next when hasMore is false', () => {
 		render(Pager, { currentPage: 3, totalPages: 3, hasMore: false, pageHref });
 		expect(screen.queryByTestId('pager-next')).toBeNull();
-		expect(screen.getByTestId('pager-next-empty')).toBeTruthy();
+		expect(screen.getByTestId('pager-next-empty')).toBeInTheDocument();
 	});
 
 	it('Previous links to currentPage - 1, Next to currentPage + 1', () => {

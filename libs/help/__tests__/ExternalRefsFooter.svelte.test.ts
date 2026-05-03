@@ -31,7 +31,7 @@ describe('ExternalRefsFooter -- populated', () => {
 
 	it('renders root section with the heading', () => {
 		render(ExternalRefsFooter, { refs });
-		expect(screen.getByTestId('externalrefsfooter-root')).toBeTruthy();
+		expect(screen.getByTestId('externalrefsfooter-root')).toBeInTheDocument();
 		expect(screen.getByTestId('externalrefsfooter-heading').textContent).toBe('External references');
 	});
 

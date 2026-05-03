@@ -115,7 +115,11 @@ export default defineConfig({
 					environment: 'happy-dom',
 					include: ['libs/**/*.svelte.test.ts', 'apps/**/*.svelte.test.ts'],
 					exclude: ['**/node_modules/**', '**/dist/**', '**/.svelte-kit/**'],
-					setupFiles: ['./vitest.setup.ts'],
+					// `@testing-library/jest-dom/vitest` registers DOM matchers
+					// (`.toBeInTheDocument()`, etc.) used by Svelte component
+					// tests. Loaded only on the DOM project; node tests have
+					// no DOM and don't need them.
+					setupFiles: ['./vitest.setup.ts', './vitest.setup.dom.ts'],
 				},
 			},
 		],

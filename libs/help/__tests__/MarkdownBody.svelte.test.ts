@@ -18,7 +18,7 @@ afterEach(() => {
 describe('MarkdownBody', () => {
 	it('renders root container with the testid', () => {
 		render(MarkdownBody, { nodes: [] });
-		expect(screen.getByTestId('markdownbody-root')).toBeTruthy();
+		expect(screen.getByTestId('markdownbody-root')).toBeInTheDocument();
 	});
 
 	it('renders an h2 from a heading node', () => {

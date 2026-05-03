@@ -158,7 +158,7 @@ describe('job log stream filter -- toggle group, not tablist', () => {
 		expect(screen.queryByRole('tablist')).toBeNull();
 		expect(screen.queryAllByRole('tab')).toHaveLength(0);
 		const group = screen.getByRole('group', { name: 'Filter log stream' });
-		expect(group).toBeTruthy();
+		expect(group).toBeInTheDocument();
 	});
 
 	it('exposes 4 toggle buttons with aria-pressed reflecting selection', async () => {

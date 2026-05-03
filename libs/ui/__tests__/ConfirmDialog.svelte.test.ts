@@ -91,7 +91,7 @@ describe('ConfirmDialog -- form-action mode with typed gate', () => {
 			hiddenFields: { reason: 'spam', userId: 'usr_abc' },
 		});
 		const form = container.querySelector('form.confirm-form');
-		expect(form).toBeTruthy();
+		expect(form).toBeInTheDocument();
 		expect(form?.getAttribute('action')).toBe('?/ban');
 		expect(form?.getAttribute('method')).toBe('POST');
 		const hidden = container.querySelectorAll('input[type=hidden]');
@@ -109,7 +109,7 @@ describe('ConfirmDialog -- form-action mode with typed gate', () => {
 		const input = screen.getByLabelText('Type the email') as HTMLInputElement;
 		await user.type(input, 'abby@airboss.test');
 		const confirmedHidden = container.querySelector('input[type=hidden][name=confirmedTarget]') as HTMLInputElement;
-		expect(confirmedHidden).toBeTruthy();
+		expect(confirmedHidden).toBeInTheDocument();
 		expect(confirmedHidden.value).toBe('abby@airboss.test');
 	});
 });
@@ -121,18 +121,18 @@ describe('ConfirmDialog -- dangerLevel mapping', () => {
 		// fallback: read class or just verify it's not the danger variant
 		const buttons = Array.from(container.querySelectorAll('button'));
 		const confirm = buttons.find((b) => b.textContent?.trim() === 'Confirm');
-		expect(confirm).toBeTruthy();
+		expect(confirm).toBeInTheDocument();
 		// caution should NOT carry danger styling cues
 		const classList = Array.from(confirm?.classList ?? []);
 		expect(classList.some((c) => c.includes('danger'))).toBe(false);
-		expect(confirmBtn).toBeTruthy(); // sanity that some primary-variant button exists
+		expect(confirmBtn).toBeInTheDocument(); // sanity that some primary-variant button exists
 	});
 
 	it('danger maps to danger variant on the Confirm button', () => {
 		const { container } = render(ConfirmDialogHarness, { dangerLevel: 'danger' });
 		const buttons = Array.from(container.querySelectorAll('button'));
 		const confirm = buttons.find((b) => b.textContent?.trim() === 'Confirm');
-		expect(confirm).toBeTruthy();
+		expect(confirm).toBeInTheDocument();
 		const classList = Array.from(confirm?.classList ?? []);
 		// danger variant produces a class containing 'danger' in our Button component
 		expect(classList.some((c) => c.includes('danger'))).toBe(true);
@@ -163,14 +163,14 @@ describe('ConfirmDialog -- reactivity (open is bindable)', () => {
 		const { container } = render(ConfirmDialogBindableHarness);
 
 		// Sanity: dialog is mounted, harness reflects open=true.
-		expect(screen.getByTestId('dialog-body')).toBeTruthy();
+		expect(screen.getByTestId('dialog-body')).toBeInTheDocument();
 		expect(container.querySelector('[data-testid=harness-state]')?.getAttribute('data-open')).toBe('true');
 
 		// Click the scrim (not the panel) -- Dialog calls `close()`, which
 		// writes `open = false` and fires onClose. With `bind:open` wired
 		// through ConfirmDialog, that write propagates back to the harness.
 		const scrim = container.querySelector('[data-testid=dialog-scrim]') as HTMLElement;
-		expect(scrim).toBeTruthy();
+		expect(scrim).toBeInTheDocument();
 		// pointerdown on the scrim itself (not a child) triggers close.
 		await user.pointer({ keys: '[MouseLeft>]', target: scrim });
 		await user.pointer({ keys: '[/MouseLeft]', target: scrim });
@@ -202,7 +202,7 @@ describe('ConfirmDialog -- reactivity (open is bindable)', () => {
 		// mount; instead trigger reopen by re-rendering a fresh harness.
 		cleanup();
 		render(ConfirmDialogBindableHarness, { initialOpen: true });
-		expect(screen.getByTestId('dialog-body')).toBeTruthy();
+		expect(screen.getByTestId('dialog-body')).toBeInTheDocument();
 		expect(document.querySelector('[data-testid=harness-state]')?.getAttribute('data-open')).toBe('true');
 		void container; // marker for biome
 	});
