@@ -16,8 +16,8 @@ Anchors: [spec](./spec.md), [tasks](./tasks.md), [WP B test plan](../evidence-ki
 ## Pre-conditions
 
 - Branch contains all phases through Phase 5 of [tasks](./tasks.md).
-- Local DB migrated: `bun run db:migrate` applied `0003_evidence_kind_data_layer.sql` (and `0004_*` if Phase 4 split out the BC-level CHECK).
-- Seed data refreshed: `bun run db:seed:abby` produces a learner with seed cards + scenarios.
+- Local DB rebuilt from TS schema: `bun run db reset --force` has run since the schema changes landed. (The project uses `drizzle-kit push`, not `migrate`. The `drizzle/0002_evidence_kind_data_layer.sql` file -- and `0003_*` if Phase 4 split out the BC-level CHECK -- exists for diff-accuracy but is not the runtime apply path.)
+- Seed data refreshed: `bun run db reset` runs the full seed orchestrator including the Abby seed user with cards + scenarios.
 
 ## Automated tests
 
@@ -64,7 +64,7 @@ Setup: Abby + node N + linked syllabus leaf L (triad/required_kinds vary per cas
 
 ### Integration -- migration
 
-- [ ] On a fresh DB, run `bun run db:migrate`. Verify:
+- [ ] On a fresh DB, run `bun run db reset --force` (uses `drizzle-kit push` from TS schema). Verify:
   - `study.card.kind` exists, NOT NULL, default 'recall', CHECK passes for 'recall' and 'calculation', rejects 'scenario'.
   - `study.scenario.assessment_methods` exists as jsonb, NOT NULL, default `'["scenario"]'::jsonb`.
   - `study.session_item_result.item_kind` accepts 'teaching-exercise' (insert + read back).
@@ -112,19 +112,20 @@ Setup: Abby + node N + linked syllabus leaf L (triad/required_kinds vary per cas
 3. With CFI cert, view a leaf linked to N where `requires_teaching=true`. Expected: `teaching = pass`. Combined with mastered recall cards on N, leaf reads as mastered.
 4. Drop the three session_item_result rows. Refresh. Expected: `teaching = not_applicable` (no rows), `missingKinds = ['teaching']`, leaf not mastered.
 
-### M5 -- Migration safety
+### M5 -- Schema-push safety
 
-1. Apply `0003_*.sql` against a copy of a populated DB (anonymized prod backup or rich dev seed).
-2. Verify no rows lost: `SELECT count(*) FROM study.card` matches before / after.
-3. Verify `card.kind` distribution is 100% `recall` immediately after migrate.
+1. Against a populated dev DB (rich abby seed), apply the schema delta via `bun run db push` (drizzle-kit push, not reset). Drizzle prints the planned ALTERs; confirm they match the spec's `0002_*.sql` shape (3 ADD COLUMN, 1 CREATE TABLE, 1 DROP+ADD CHECK, 1 CHECK on card.kind, 2 indexes).
+2. Verify no rows lost: `SELECT count(*) FROM study.card` matches before / after; same for `study.scenario` and `study.session_item_result`.
+3. Verify `card.kind` distribution is 100% `recall` immediately after push.
 4. Verify `bun run check` passes.
 5. Verify `bun test` passes against the migrated DB.
 
 ### M6 -- Backout
 
-1. With Phase 5 merged, simulate a backout: revert the `0003_*` migration via the Drizzle down path (or hand-author a `0003_down.sql` if the project doesn't track explicit downs).
+1. With Phase 5 merged, simulate a backout: revert the relevant TS schema changes in `libs/bc/study/src/schema.ts` and re-run `bun run db push`. Drizzle generates the inverse delta (DROP COLUMN, DROP TABLE, restore the CHECK with the original value list).
 2. Verify the schema returns to the WP B baseline (no `card.kind`, no `scenario.assessment_methods`, no `teaching_exercise` table).
-3. Confirm no orphaned rows in `session_item_result` (if any teaching-exercise rows were inserted during testing, they're handled by the migration's reverse).
+3. Confirm no orphaned rows in `session_item_result` (if any teaching-exercise rows were inserted during testing, they're rejected by the CHECK once it tightens).
+4. Forward-test that the inverse `0002_*.sql` snapshot generated via `drizzle-kit generate` after the schema revert is the inverse of the original (sanity-check, not a runtime path).
 
 ## Acceptance criteria
 

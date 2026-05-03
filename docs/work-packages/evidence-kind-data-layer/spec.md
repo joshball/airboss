@@ -54,15 +54,17 @@ The CFI ACS-25 transcription that flips `requires_teaching=true` on the right le
 - [Cert, Syllabus, and Goal Composer spec](../cert-syllabus-and-goal-composer/spec.md). Cert dashboard / lens consumers will surface the richer rollup once a follow-on UI WP picks it up.
 - [Engine Goal Cutover spec](../engine-goal-cutover/spec.md). Parallel WP -- both have shipped, both touched the goal model. This WP is independent.
 - `libs/bc/study/src/mastery.ts:1-38` -- the file header that documents every shim this WP closes.
-- `libs/bc/study/src/mastery.ts:199-298` -- `getNodeEvidenceStateMap` -- the per-kind gate computation. Shims become real partitions in this WP.
-- `libs/bc/study/src/schema.ts:322-377` -- `card` table. Gains `kind` column.
-- `libs/bc/study/src/schema.ts:533-586` -- `scenario` table. Gains `assessment_methods` jsonb column.
-- `libs/bc/study/src/schema.ts:820-905` -- `session_item_result` table. The `teaching-exercise` value extends the existing `item_kind` CHECK constraint.
-- `libs/constants/src/study.ts:200-216` -- `CARD_TYPES` (`basic | cloze | regulation | memory_item`). Different axis -- presentation form, not knowledge kind. This WP introduces a *new* `CARD_KINDS` enum for the knowledge axis.
-- `libs/constants/src/study.ts:658-668` -- `ASSESSMENT_METHODS` (`recall | calculation | scenario | demonstration | teaching`). Already exists; this WP adopts it as `card.kind`'s value space (subset) and `scenario.assessment_methods`'s value space.
-- `libs/constants/src/study.ts:795-803` -- `SESSION_ITEM_KINDS` (`card | rep | node_start`). Gains `teaching-exercise`.
-- `scripts/db/seed-cards.ts:96-111` -- the yaml-cards parser. Gains `kind` field with a default.
-- `scripts/db/seed-content.ts` -- scenarios authored as TS shapes; gains `assessmentMethods` field with a default.
+- `libs/bc/study/src/mastery.ts:182-298` -- `getNodeEvidenceStateMap` -- the per-kind gate computation. Shims become real partitions in this WP. The three explicit `NODE_MASTERY_GATES.NOT_APPLICABLE` shim assignments live at lines 284, 289, 293.
+- `libs/bc/study/src/schema.ts:326-389` -- `card` table. Gains `kind` column.
+- `libs/bc/study/src/schema.ts:541-593` -- `scenario` table. Gains `assessment_methods` jsonb column.
+- `libs/bc/study/src/schema.ts:813-908` -- `sessionItemResult` table. The `sir_item_kind_check` constraint at line 907 extends to admit `teaching-exercise`.
+- `libs/constants/src/study.ts:214-225` -- `CARD_TYPES` (`basic | cloze | regulation | memory_item`). Different axis -- presentation form, not knowledge kind. This WP introduces a *new* `CARD_KINDS` enum for the knowledge axis.
+- `libs/constants/src/study.ts:671-681` -- `ASSESSMENT_METHODS` (`recall | calculation | scenario | demonstration | teaching`). Already exists; this WP adopts it as `card.kind`'s value space (subset) and `scenario.assessment_methods`'s value space.
+- `libs/constants/src/study.ts:808-816` -- `SESSION_ITEM_KINDS` (`card | rep | node_start`). Gains `teaching-exercise`. (Note: `NODE_MODALITIES` already carries a `TEACHING_EXERCISE: 'teaching-exercise'` value at line 663 -- this is a separate axis, not the session-item-kind addition this WP makes.)
+- `scripts/db/seed-cards.ts:39-44` (`ParsedCard` interface), `:72-115` (yaml-cards fence parser), `:172-188` (BC `createCard` invocation). The `ParsedCard` shape gains `kind`; the parser reads `rec.kind`; the call passes `kind` through.
+- `scripts/db/seed-content.ts:49-58` (`SeedScenario` interface). Gains an optional `assessmentMethods` field with a default of `['scenario']` in the seeder that writes these rows.
+- `libs/bc/study/src/scenarios.ts:199` -- `createScenario`. Gains an optional `assessmentMethods` parameter; passes through into the `scenario` insert with the `[ASSESSMENT_METHODS.SCENARIO]` default.
+- `libs/bc/study/src/cards.ts:104` -- `createCard`. Gains an optional `kind` parameter; passes through into the `card` insert with the `CARD_KINDS.RECALL` default.
 
 ## In Scope
 
@@ -78,7 +80,7 @@ The CFI ACS-25 transcription that flips `requires_teaching=true` on the right le
    - Every existing `scenario` row gets `assessment_methods=['scenario']` via the column default. This matches the existing `mastery.ts` behavior where every rep contributes to the scenario gate. Authoring-time updates flip specific scenarios to `["demonstration"]` or `["scenario","demonstration"]` over time; that's content work, not migration work.
    - `session_item_result` has zero rows that would need `item_kind='teaching-exercise'`. The new value is forward-only -- historical rows stay on `card | rep | node_start`. No backfill, no shim.
 
-   The migration ships as a single Drizzle file `0003_evidence_kind_data_layer.sql`. The next sequence number after WP B's `0002_evidence_kind_gating.sql`. No consolidation.
+   The migration ships as a single Drizzle file `0002_evidence_kind_data_layer.sql`. The migration baseline was collapsed in PR #445 (and updated in PR #449), so the live migrations directory currently holds `0000_initial.sql` + `0001_hangar_invitation.sql`; this WP appends `0002_*`. No consolidation. Important: per `drizzle/README.md`, this project uses `drizzle-kit push` (not `migrate`) for both dev resets and the hosted deploy. The `0002_*` SQL file ships for diff-accuracy / future-migrate-path-revival -- it is not the runtime apply path. The TS schema in `libs/bc/study/src/schema.ts` is the source of truth; `bun run db reset` rebuilds from it.
 
 5. **Authoring tooling.**
 
@@ -118,10 +120,10 @@ The CFI ACS-25 transcription that flips `requires_teaching=true` on the right le
 
    `libs/types/src/index.ts`: re-export `CardKind` from `@ab/constants` if external consumers need it.
 
-9. **Schema additions** (recap, with exact migration shape):
+9. **Schema additions** (recap, with exact migration shape). The TS schema in `libs/bc/study/src/schema.ts` is authored first; `drizzle-kit generate` produces the SQL below into `drizzle/0002_evidence_kind_data_layer.sql` for diff-accuracy. `bun run db reset` rebuilds from TS via `drizzle-kit push` -- the SQL file is not the runtime apply path.
 
    ```sql
-   -- 0003_evidence_kind_data_layer.sql
+   -- 0002_evidence_kind_data_layer.sql
 
    ALTER TABLE study.card
        ADD COLUMN kind text NOT NULL DEFAULT 'recall';
@@ -382,9 +384,9 @@ No new routes for the engine / runtime. Hangar authoring routes are already in s
 - **Existing tests in `mastery.test.ts` (WP B) that expected `calculation=not_applicable` etc.** Those tests now reflect real partitions and may need updates. Phase 5 audits + updates them. The semantic of the existing card-only-on-S-leaf test still holds: pure recall cards still don't satisfy a skill leaf.
 - **A card with `card_type='regulation'` and `kind='calculation'`.** The two axes are independent. A regulation card can test calculation (e.g. "compute the cone of confusion height for a VOR at 60 NM, citing AIM 1-1-3"). Both axes co-exist on the same card row.
 
-## Open Questions
+## Open Questions -- resolved 2026-05-03
 
-The user resolves each before tasks.md finalizes. Each has a recommended answer; "do the right thing" defaults take the recommended path.
+The user signed "do the right thing" defaults; every recommended answer below is the chosen resolution. Re-opening any of these requires a spec amendment.
 
 ### (a) `card.kind` enum -- subset or full ASSESSMENT_METHODS?
 
@@ -454,7 +456,7 @@ Resolution to recommend: extend `mastery.ts`.
 
 ## Migration considerations
 
-- **Single Drizzle migration** at `0003_evidence_kind_data_layer.sql`, sequence number after WP B. No consolidation. Adds three column changes + one CHECK swap + one new table.
+- **Single Drizzle migration** at `0002_evidence_kind_data_layer.sql`, sequence number after WP B. No consolidation. Adds three column changes + one CHECK swap + one new table.
 - **Column defaults handle backfill.** No manual UPDATE. PostgreSQL >= 11 metadata-only ALTER for `card.kind` and `scenario.assessment_methods` (both have DEFAULT clauses in the ADD COLUMN).
 - **CHECK swap on `session_item_result.item_kind`.** DROP + ADD is the supported path. The expanded check accepts the existing values plus `teaching-exercise`. No data motion.
 - **New `teaching_exercise` table.** Empty on cutover. The `session_item_result.teaching_exercise_id` column is nullable so existing rows pass.
