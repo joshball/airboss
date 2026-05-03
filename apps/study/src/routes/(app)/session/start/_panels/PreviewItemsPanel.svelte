@@ -56,18 +56,22 @@ const KIND_DEFINITIONS: Record<SessionItemKind, string> = {
 	[SESSION_ITEM_KINDS.REP]: 'A decision-rep scenario. Read the situation, pick an option, see the outcome.',
 	[SESSION_ITEM_KINDS.NODE_START]:
 		'A knowledge-graph node you have not started yet. Launches the 7-phase guided learn flow.',
+	[SESSION_ITEM_KINDS.TEACHING_EXERCISE]:
+		'A free-response prompt for CFI-style teach-back evidence. Explain or demonstrate the concept; record the outcome.',
 };
 
 const KIND_LABELS: Record<SessionItemKind, string> = {
 	[SESSION_ITEM_KINDS.CARD]: 'Card',
 	[SESSION_ITEM_KINDS.REP]: 'Rep',
 	[SESSION_ITEM_KINDS.NODE_START]: 'Node',
+	[SESSION_ITEM_KINDS.TEACHING_EXERCISE]: 'Teaching',
 };
 
 const KIND_HELP: Record<SessionItemKind, { helpId: string; helpSection: string }> = {
 	[SESSION_ITEM_KINDS.CARD]: { helpId: 'memory-review', helpSection: 'fsrs-in-one-paragraph' },
 	[SESSION_ITEM_KINDS.REP]: { helpId: 'reps-session', helpSection: '' },
 	[SESSION_ITEM_KINDS.NODE_START]: { helpId: 'concept-knowledge-graph', helpSection: '' },
+	[SESSION_ITEM_KINDS.TEACHING_EXERCISE]: { helpId: 'concept-knowledge-graph', helpSection: '' },
 };
 
 function kindHelpSection(kind: SessionItemKind): string | undefined {

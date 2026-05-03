@@ -28,6 +28,12 @@ export const generateCardFeedbackId = (): string => createId('cfbk');
 // Decision reps (study BC) -- scenarios only. `repAttempt` was deleted per
 // ADR 012; rep outcomes live on session_item_result rows now.
 export const generateScenarioId = (): string => createId('rep');
+/**
+ * Teaching-exercise row (study BC, evidence-kind-data-layer WP). Free-response
+ * "explain / demonstrate" prompt that the candidate's session_item_result
+ * binds to via `teaching_exercise_id`.
+ */
+export const generateTeachingExerciseId = (): string => createId('texr');
 // Study plan + session engine.
 export const generateStudyPlanId = (): string => createId('plan');
 export const generateSessionId = (): string => createId('ses');
