@@ -38,7 +38,7 @@ For the longer pipeline writeup see [docs/ingestion-pipeline/pipeline.md](../ing
 |------------|-------------|--------|-------|--------|-------|
 | FAA-H-8083-2A | Risk Management Handbook | RMH | ⚠️ readable, whole-doc | section-tree | TOC extracted at `RiskMgmtHdbk-TOC.md`; 8 chapters; promotion WP pending |
 | FAA-H-8083-9 | Aviation Instructor's Handbook | AIH | ⚠️ readable, whole-doc | section-tree | Per-chapter PDFs published by FAA; promotion WP pending |
-| FAA-H-8083-15B | Instrument Flying Handbook | IFH | ⚠️ readable, whole-doc | section-tree | TOC extracted at `InstrumentFlyingHandbookToc.md`; 11+ chapters; promotion WP pending |
+| FAA-H-8083-15B | Instrument Flying Handbook | IFH | ✅ readable, section-tree | -- | Promoted via WP-IFH-SECTION-TREE; toc-file-sidecar strategy parses `docs/work-packages/whole-doc-promotion/source-tocs/ifh.md`; 11 chapters / 587 sections; chapters 6 / 7 model the printed-TOC Section I (analog) / Section II (electronic flight display) split as two L1 sections per chapter; 3 FAA amendment PDFs queued for follow-up under ADR 020 errata flow |
 | FAA-H-8083-16B | Instrument Procedures Handbook | IPH | ⚠️ readable, whole-doc | section-tree | Per-chapter PDFs + standalone TOC PDF published; promotion WP pending |
 | FAA-P-8740-60 | Tips on Mountain Flying | MTN | ⚠️ readable, whole-doc | section-tree (or stay whole-doc) | 16-page pamphlet with `body_override` to a hand-curated markdown; the override already has `## Chapter` headings — could be parsed into section-tree without re-extracting |
 
@@ -169,7 +169,7 @@ This is the sequenced path to "everything readable as section-tree" excluding ne
 | 3 | RMH section-tree promotion | ❌ not started | RMH chapter-tree from `RiskMgmtHdbk-TOC.md` |
 | 4 | mtn-flying section-tree promotion (from override) | ❌ not started | Parse the existing `body_override` markdown into a section-tree manifest |
 | 5 | AIH section-tree promotion (chapter-PDF download + extract) | ❌ not started | Per-chapter PDFs available from FAA |
-| 6 | IFH section-tree promotion | ❌ not started | TOC extracted at `InstrumentFlyingHandbookToc.md`; chapter PDFs may exist |
+| 6 | IFH section-tree promotion | ✅ shipped (WP-IFH-SECTION-TREE) | TOC parsed via new `toc-file-sidecar` strategy; 11 chapters / 587 sections; Section I/II quirk modeled as two L1 sections per chapter |
 | 7 | IPH section-tree promotion | ❌ not started | Per-chapter PDFs + standalone TOC PDF available |
 | 8 | AC section-tree promotion (existing 9) | ❌ not started | Replace whole-doc seeder with section-tree; per-AC TOC parse |
 | 9 | AC section-tree extraction (12 link-only) | ❌ not started | Add to download config + extract + section-tree seed |

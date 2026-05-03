@@ -1,0 +1,107 @@
+# Instrument Flying Handbook (IFH)
+#
+# Source: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/FAA-H-8083-15B.pdf
+# Edition: FAA-H-8083-15B (2012)
+#
+# Class C handbook (whole-doc PDF only; no per-chapter PDFs published by FAA).
+# Promoted from `handbooks-extras.yaml` to the section-tree pipeline by WP
+# `wp-ifh-section-tree`.
+#
+# Outline + section sources:
+#
+# - Embedded TOC (`fitz.get_toc()`) returns 0 entries; the bookmark strategy
+#   is unavailable.
+# - The printed TOC at PDF pp. 12-18 (printed pages `ix..xv`) carries L4+
+#   entries. The user has hand-extracted that TOC into the file referenced
+#   by `toc_file:` below; the new `toc-file-sidecar` strategy parses that
+#   markdown directly into the chapter / section / subsection tree.
+#
+# Chapter 6 / 7 quirk: chapters 6 and 7 each subdivide into "Section I" and
+# "Section II" (analog instrumentation vs electronic flight display). Per
+# the WP spec decision (b), we model these as 2 first-level sections per
+# chapter (`6.1`, `6.2`, `7.1`, `7.2`) so:
+#   - FAA chapter ordinals (1..11) and FAA page anchors (`6-1`, `6-15`,
+#     `7-1`, `7-33`) round-trip without renumbering.
+#   - The schema's chapter / section / subsection 3-level cap is preserved.
+#   - Deeper TOC entries under each Section I / II flatten to subsection
+#     (level 2 under the Section), matching AVWX / RMH / AIH precedent.
+#
+# Errata: FAA publishes 3 amendment PDFs (`ifh_errata.pdf`,
+# `ifh_addendum.pdf`, `ifh_addendum_b.pdf`). Out of scope for this WP per
+# the spec; tracked under a follow-up ADR-020 errata WP. The empty list
+# below is a deliberate placeholder so the field is uniform across
+# handbooks and discovery scans report "none found" rather than "field
+# missing".
+
+document_slug: ifh
+edition: FAA-H-8083-15B
+kind: handbook
+title: 'Instrument Flying Handbook'
+publisher: FAA
+subjects: [procedures, navigation, flight-instruments]
+primary_cert: instrument
+
+# -----------------------------------------------------------------------------
+# Source download (TS downloader)
+# -----------------------------------------------------------------------------
+
+# Whole-doc PDF only -- IFH is Class C (no per-chapter PDFs published).
+whole_doc:
+  url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/FAA-H-8083-15B.pdf
+  filename: FAA-H-8083-15B.pdf
+
+# No `chapter_pdfs` key -- publisher offers no chapter assets.
+
+# URL-substring patterns the downloader skips even if the publisher serves
+# them. Default empty.
+excluded_assets: []
+
+# Legacy field used by the Python ingest tool when whole_doc is absent.
+source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/FAA-H-8083-15B.pdf
+expected_pages: 371
+page_offset: 0
+
+# -----------------------------------------------------------------------------
+# Outline + section-tree extraction
+# -----------------------------------------------------------------------------
+
+# `toc-file-sidecar` reads the user's hand-extracted TOC markdown to derive
+# both the chapter outline AND the per-section tree. Implemented in
+# `tools/handbook-ingest/ingest/sections_via_toc_file.py`.
+outline_strategy: toc-file-sidecar
+section_strategy: toc-file-sidecar
+
+# Path (relative to the repo root) to the hand-extracted TOC markdown file.
+toc_file: docs/work-packages/whole-doc-promotion/source-tocs/ifh.md
+
+outline_overrides: []
+# Chapter titles overrides for chapters 6 and 7. Their printed-TOC sentinels
+# read `Chapter 6, Section I/II` rather than a bare `Chapter 6` line, so
+# the parser cannot infer a single chapter-level title from the TOC. The
+# Section I / II titles ("Airplane Attitude Instrument Flying Using Analog
+# Instrumentation" / "Using an Electronic Flight Display") are stamped as
+# section-level rows under the chapter; we set the chapter row's title to
+# the modality-agnostic theme.
+title_overrides:
+  '6': 'Airplane Attitude Instrument Flying'
+  '7': 'Airplane Basic Flight Maneuvers'
+figure_prefix_pattern: 'Figure (\d+)-(\d+)\.'
+table_prefix_pattern: 'Table (\d+)-(\d+)\.'
+
+heading_style:
+  body_font_size: 10.0
+  heading_min_size_ratio: 1.10
+  heading_color_hex: '#000000'
+  heading_match_threshold: 0.85
+  verify_in_body: false
+
+page_label_walk_back: 5
+chapter_overrides: {}
+
+# Declarative errata list. IFH has 3 FAA-published amendment PDFs (errata
+# + 2 addenda) but their merge is out of scope for this WP per the spec;
+# tracked under a follow-up ADR-020 errata WP.
+errata: []
+
+# Discovery dismissal stop-list.
+dismissed_errata: []

@@ -23,17 +23,49 @@ from .paths import config_dir
 
 # Section-tree extraction strategy selector.
 #
-# - `toc`     -- deterministic Python parser of the printed Table of Contents
-#                (`sections_via_toc.py`). Default for all shipped handbooks.
-# - `prompt`  -- emit a self-contained prompt set under `prompts-out/`; the
-#                user pastes the orchestrator into a fresh Claude Code session
-#                and sub-agents fan out one-per-chapter. No API key.
-# - `compare` -- read the per-chapter sidecars produced by the prompt flow,
-#                run the TOC strategy, render a markdown diff report.
+# - `toc`              -- deterministic Python parser of the printed Table of
+#                         Contents (`sections_via_toc.py`). Default for all
+#                         shipped handbooks.
+# - `toc-file-sidecar` -- deterministic parser of a hand-extracted TOC
+#                         markdown file at `toc_file:`. Used when the
+#                         embedded TOC is empty AND no chapter PDFs ship
+#                         (IFH FAA-H-8083-15B is the canonical instance).
+#                         Implementation: `sections_via_toc_file.py`.
+# - `prompt`           -- emit a self-contained prompt set under
+#                         `prompts-out/`; the user pastes the orchestrator
+#                         into a fresh Claude Code session and sub-agents
+#                         fan out one-per-chapter. No API key.
+# - `compare`          -- read the per-chapter sidecars produced by the
+#                         prompt flow, run the TOC strategy, render a
+#                         markdown diff report.
 SECTION_STRATEGY_TOC = "toc"
+SECTION_STRATEGY_TOC_FILE_SIDECAR = "toc-file-sidecar"
 SECTION_STRATEGY_PROMPT = "prompt"
 SECTION_STRATEGY_COMPARE = "compare"
-VALID_STRATEGIES = frozenset({SECTION_STRATEGY_TOC, SECTION_STRATEGY_PROMPT, SECTION_STRATEGY_COMPARE})
+VALID_STRATEGIES = frozenset({
+    SECTION_STRATEGY_TOC,
+    SECTION_STRATEGY_TOC_FILE_SIDECAR,
+    SECTION_STRATEGY_PROMPT,
+    SECTION_STRATEGY_COMPARE,
+})
+
+# Outline strategies. Driven by the same YAML key that the Python ingest
+# already understands (`outline_strategy:`); we expose the literal values
+# here so the CLI can validate them.
+#
+# - `bookmark`         -- read PyMuPDF's `get_toc()`. Default.
+# - `content`          -- scan body pages for FAA `<chap>-<page>` headers.
+# - `toc-file-sidecar` -- read the chapter outline from a hand-extracted
+#                         markdown TOC sidecar (paired with the same
+#                         section strategy of the same name).
+OUTLINE_STRATEGY_BOOKMARK = "bookmark"
+OUTLINE_STRATEGY_CONTENT = "content"
+OUTLINE_STRATEGY_TOC_FILE_SIDECAR = "toc-file-sidecar"
+VALID_OUTLINE_STRATEGIES = frozenset({
+    OUTLINE_STRATEGY_BOOKMARK,
+    OUTLINE_STRATEGY_CONTENT,
+    OUTLINE_STRATEGY_TOC_FILE_SIDECAR,
+})
 
 # How far back from a target PDF page to walk while looking for a parseable
 # FAA page header before falling back to `pdf_page - page_offset`. Five pages
@@ -128,7 +160,21 @@ class HandbookConfig:
     # `bookmark` (default) reads PyMuPDF's get_toc(); `content` falls back to
     # scanning page text for FAA-style chapter-page headers when the PDF's
     # bookmark tree is mangled (PHAK 25C is the v1 reason this exists).
+    # `toc-file-sidecar` reads the chapter outline from a hand-extracted
+    # markdown TOC at `toc_file:` -- used by IFH where the embedded TOC is
+    # empty and no chapter PDFs ship.
     outline_strategy: str = "bookmark"
+    # Optional path (relative to the repo root) to a hand-extracted TOC
+    # markdown file, consumed by the `toc-file-sidecar` outline + section
+    # strategies. Required when either strategy is selected; ignored
+    # otherwise.
+    toc_file: str | None = None
+    # Library-by-cert placement (mirrors the field the manifest schema
+    # accepts). One of `CERT_APPLICABILITY_VALUES` or null. Optional --
+    # legacy YAMLs may omit it and rely on a YAML override file or a
+    # post-processed manifest patch. New section-tree handbooks should
+    # declare it here so the manifest is the canonical placement source.
+    primary_cert: str | None = None
     # Per-chapter title corrections when the auto-detector produces a partial
     # or wrong title. Keyed by chapter number (string in YAML); applied after
     # the content scan in detect_outline_from_text.
@@ -190,6 +236,13 @@ def load_config(document_slug: str) -> HandbookConfig:
     cover_strip_raw = raw.get("chapter_cover_strip") or {}
     if not isinstance(cover_strip_raw, dict):
         cover_strip_raw = {}
+
+    outline_strategy = str(raw.get("outline_strategy", OUTLINE_STRATEGY_BOOKMARK))
+    if outline_strategy not in VALID_OUTLINE_STRATEGIES:
+        raise ConfigError(
+            f"{config_path}: unknown outline_strategy {outline_strategy!r}. "
+            f"Valid: {sorted(VALID_OUTLINE_STRATEGIES)}."
+        )
 
     section_strategy = str(raw.get("section_strategy", SECTION_STRATEGY_TOC))
     if section_strategy not in VALID_STRATEGIES:
@@ -304,6 +357,33 @@ def load_config(document_slug: str) -> HandbookConfig:
             f"(got {len(subjects_raw)}). See AVIATION_TOPIC_VALUES in libs/constants."
         )
 
+    # Optional `primary_cert:` -- mirrors the manifest schema field. Validation
+    # is light (string or null); the canonical enum check lives in the seeders.
+    primary_cert_raw = raw.get("primary_cert", None)
+    if primary_cert_raw is not None and not isinstance(primary_cert_raw, str):
+        raise ConfigError(
+            f"{config_path}: 'primary_cert' must be a string or null "
+            f"(got {type(primary_cert_raw).__name__})."
+        )
+
+    # Optional `toc_file:` -- relative path to a hand-extracted TOC markdown.
+    # Required when outline_strategy or section_strategy is `toc-file-sidecar`.
+    toc_file_raw = raw.get("toc_file")
+    if toc_file_raw is not None and not isinstance(toc_file_raw, str):
+        raise ConfigError(
+            f"{config_path}: 'toc_file' must be a string path or null "
+            f"(got {type(toc_file_raw).__name__})."
+        )
+    needs_toc_file = (
+        outline_strategy == OUTLINE_STRATEGY_TOC_FILE_SIDECAR
+        or section_strategy == SECTION_STRATEGY_TOC_FILE_SIDECAR
+    )
+    if needs_toc_file and not (toc_file_raw and toc_file_raw.strip()):
+        raise ConfigError(
+            f"{config_path}: 'toc_file' is required when outline_strategy or "
+            f"section_strategy is 'toc-file-sidecar'."
+        )
+
     return HandbookConfig(
         document_slug=raw["document_slug"],
         edition=raw["edition"],
@@ -320,7 +400,9 @@ def load_config(document_slug: str) -> HandbookConfig:
         outline_overrides=list(raw.get("outline_overrides", [])),
         figure_prefix_pattern=raw.get("figure_prefix_pattern", r"Figure (\d+)-(\d+)\."),
         table_prefix_pattern=raw.get("table_prefix_pattern", r"Table (\d+)-(\d+)\."),
-        outline_strategy=raw.get("outline_strategy", "bookmark"),
+        outline_strategy=outline_strategy,
+        toc_file=(toc_file_raw.strip() if isinstance(toc_file_raw, str) and toc_file_raw.strip() else None),
+        primary_cert=primary_cert_raw,
         title_overrides={str(k): str(v) for k, v in (raw.get("title_overrides") or {}).items()},
         section_strategy=section_strategy,
         chapter_text_max_chars=(

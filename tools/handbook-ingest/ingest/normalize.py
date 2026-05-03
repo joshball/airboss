@@ -166,6 +166,11 @@ def write_outputs(
         "figures": manifest_figures,
         "warnings": manifest_warnings,
     }
+    # Optional `primary_cert:` mirrors the manifest schema field. The Python
+    # ingest accepts it from the YAML so the manifest is the canonical
+    # placement source per `handbooks-overrides.yaml` retirement (PR #390).
+    if config.primary_cert is not None:
+        manifest["primary_cert"] = config.primary_cert
     if extraction_metadata:
         manifest["extraction"] = extraction_metadata
 
