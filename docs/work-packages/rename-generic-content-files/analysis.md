@@ -145,11 +145,20 @@ Per the user decision (open question 6 resolved): AC is folded into this WP. Sam
 
 The "cheap addition" framing in the spike was understated. Corrected scope: 9 file moves + 9 manifest `body_path` rewrites + 1 emitter change + AC test updates + AC doc-comment updates + spike-style verification of one rename. Bundle into the same WP because the rename rule is identical to whole-doc handbooks; running this as a separate WP later means re-litigating the same rule and re-doing the same review pass.
 
-### 2.7 CFR / regs (out of scope, with cleanup flag)
+### 2.7 CFR / regs (out of scope, with sequencing constraint)
 
-CFR has zero markdown files on disk today. Verified: `find regulations -name '*.md'` returns empty. The brief's "JSON-based, NOT affected" claim is correct for the current state.
+CFR has zero markdown files on disk today. Verified: `find regulations -name '*.md'` returns empty. The brief's "JSON-based, NOT affected" claim is correct for the current on-disk state.
 
-The reviewer flagged that `libs/sources/src/regs/derivative-writer.ts:137` and `libs/sources/src/regs/resolver.ts:180` reference `index.md` in their code. Those are **dead-code paths**: the regs ingestion pipeline does not currently exercise them. They will be cleaned up in a separate future WP (`regs-derivative-cleanup` or similar). This WP's spec MUST flag those lines so they are not forgotten.
+**However, the regs `index.md` writer is NOT dead code.** Independent review verified:
+
+- `libs/sources/src/regs/derivative-writer.ts:137` writes `<part>/index.md` and is exercised by a passing test (`derivative-writer.test.ts`).
+- It is called from `libs/sources/src/regs/ingest.ts:179`.
+- The ingest is registered in the public CLI dispatcher at `scripts/sources.ts` (`bun run sources register cfr`).
+- Default `outRoot = <repo>/regulations/`.
+
+The first user to run `bun run sources register cfr` after this WP merges will write `index.md` files into the repo. The regs corpus uses `body_path: '<part>/<part>-<section>.md'` for sections (e.g. `91/91-103.md`) PLUS `index.md` per part for the part overview. The CI assertion in §5.5 step 7 (rejects `body_path` ending in `index.md`/`document.md`) does NOT cover this case because regs writes `index.md` as a side-channel filesystem write, not as a `body_path` value. The assertion must be updated to handle this, OR the regs corpus must be excluded from the assertion's scope, OR the regs cleanup must land before this WP.
+
+**Sequencing constraint added:** before `bun run sources register cfr` is run again post-merge, a follow-up WP (`regs-derivative-cleanup`) must rewrite `derivative-writer.ts:137` and `resolver.ts:180` to use a self-describing filename (`<part>-overview.md` or similar). Until that lands, regs ingestion stays paused. The risk row in §6.1 captures this; the spec sign-off must include explicit acknowledgement of the regs sequencing.
 
 ### 2.8 ACS (out of scope, no rename needed)
 
@@ -370,7 +379,7 @@ Two categories of test impact: hardcoded path strings inside `*.test.ts` files (
 | `libs/sources/src/aim/derivative-reader.test.ts:105` | logic | `chapter-5/section-1/paragraph-7.md` fixture path. |
 | `libs/sources/src/handbooks-extras/ingest.test.ts:337` | logic | Asserts `document.md` written. |
 | `libs/sources/src/handbooks-extras/ingest.test.ts:359` | logic | Asserts `body_path` ends with `document.md`. |
-| `libs/sources/src/ac/ingest.test.ts` | logic | AC tests that assert on `document.md` paths. Audit to find specific lines once spec is being written. |
+| `libs/sources/src/ac/ingest-cli.test.ts` | logic | AC ingest-CLI tests; audit for `document.md` references during spec phase. (Note: there is no `libs/sources/src/ac/ingest.test.ts`; the AC test files are `ingest-cli`, `locator`, `resolver`, `smoke`, `url`.) |
 | `libs/bc/study/src/manifest-validation.test.ts:44,68,75,82,116` | logic | Test fixtures with hardcoded `body_path` strings. |
 | `scripts/db/seed-references-from-manifest.test.ts:200,220,268-270,294,301,308,370,390` | logic | Multiple hardcoded `body_path` and write-file paths. (The test creates its own throwaway tree, independent of real fixtures.) |
 
@@ -386,7 +395,7 @@ These are real markdown files and manifests committed under `tests/fixtures/` th
 | `tests/fixtures/aim/aim-fixture/aim/2026-09/chapter-5/section-1/index.md` | logic | AIM section overview. Renames to `05-<chapter-slug>/01-<section-slug>/00-<section-slug>.md`. |
 | `tests/fixtures/aim/aim-fixture/aim/2026-09/chapter-5/section-1/paragraph-7.md` | logic | Renames to `<NN>-<paragraph-slug>.md`. |
 | `tests/fixtures/aim/aim-fixture/aim/2026-09/chapter-5/section-1/paragraph-8.md` | logic | Same. |
-| `tests/fixtures/aim/aim-fixture/aim/2026-09/manifest.json` | logic | 4 fixture `body_path` strings. Rewrite per §5.2. |
+| `tests/fixtures/aim/aim-fixture/aim/2026-09/manifest.json` | logic | 6 fixture `body_path` strings (chapter overview, section overview, paragraphs, glossary, appendix). Rewrite per §5.2. |
 
 The fixtures use synthetic chapter/section titles, so the slugs in the renamed paths come from the fixture's own manifest titles, not from the production AIM corpus. The migration script must operate uniformly on production and fixture trees (driven by manifests), so this falls out of the existing rename plan as long as the script is pointed at both `handbooks/`, `aim/`, `ac/`, AND `tests/fixtures/`.
 
@@ -396,10 +405,18 @@ The fixtures use synthetic chapter/section titles, so the slugs in the renamed p
 
 These describe the old layout in docs / READMEs and need updating in the same WP so docs and reality stay in sync (per "Update docs as part of the work, not as a separate task").
 
+A repo-wide grep finds ~25 hits across documentation referencing `index.md` or `document.md` in the rename's scope (independent reviewer count). The high-confidence sites confirmed by audit:
+
 - `tools/handbook-ingest/README.md:212`: chapter layout block.
-- `docs/work-packages/handbook-ingestion-and-reader/` spec / tasks may mention the old layout.
-- `docs/ingestion-pipeline/pipeline.md` and `docs/ingestion-pipeline/handbook-ingest-pipeline.md`: both reference `index.md` and `document.md` in code blocks. Update.
-- Any per-feature docs that show `index.md` paths in examples.
+- `docs/work-packages/handbook-ingestion-and-reader/`: spec / tasks / layout examples.
+- `docs/work-packages/chapter-source-ingestion/`: spec / tasks / design / test-plan.
+- `docs/work-packages/section-extraction-contract-v2/`: layout references.
+- `docs/work-packages/section-extraction-prompt-strategy/design.md`: prompt-out path examples.
+- `docs/ingestion-pipeline/pipeline.md` and `docs/ingestion-pipeline/handbook-ingest-pipeline.md`: code-block layout examples.
+- `docs/ingestion-pipeline/section-extraction-strategies.md` and `docs/ingestion-pipeline/section-extraction-prompt-strategy.md`: same.
+- Per-feature docs that show `index.md` paths in examples.
+
+The spec phase MUST run a fresh `rg 'index\.md|document\.md' docs/ tools/` pass to enumerate the full set; this analysis surfaces the categories, not an exhaustive list.
 
 ### 4.6 Hits considered and discarded as not load-bearing
 
@@ -434,8 +451,10 @@ The rename script (TS, throwaway, deleted in same PR like `source-cache-flat-nam
    - Compute new overview filename: `00-<slug>.md`.
    - `mv <doc>/<edition>/<NN>/index.md <doc>/<edition>/<NN>-<slug>/00-<slug>.md`.
    - For every other file under `<NN>/` (sections, errata, debug `_*` files): `mv` to the new chapter dir, keeping the basename. Errata sibling files move with their primary by basename equality.
-3. After all chapters renamed, rewrite `manifest.json`:
-   - For every `body_path`, replace the `<NN>/` segment with `<NN>-<slug>/` and replace `index.md` with `00-<slug>.md` if applicable.
+3. After all chapters renamed, rewrite `manifest.json`. The schema includes THREE path fields per section, all of which must be rewritten in lockstep:
+   - **`body_path`** (every section): replace the `<NN>/` segment with `<NN>-<slug>/` and replace `index.md` with `00-<slug>.md` if applicable.
+   - **`section_path`** (every section): same rewrite rule. Verified shape via `libs/bc/study/src/manifest-validation.ts:193`. Production scope: 21 entries in PHAK manifest, 7 in AFH manifest (AVWX TBD; check during implementation). Critical: leaving these stale silently breaks the section locator at the resolver layer.
+   - **`errata_note_path`** (errata-bearing sections only): same rewrite rule. Schema at `libs/bc/study/src/manifest-validation.ts:200`. Critical: leaving these stale breaks the errata audit trail UI.
 
 ### 5.2 For AIM
 
@@ -458,6 +477,7 @@ For each of the 7 whole-doc handbooks (`risk-management`, `ifh`, `iph`, `aviatio
 ### 5.4 Code changes (in lockstep with the file moves)
 
 - `tools/handbook-ingest/ingest/normalize.py:_resolve_output_path` rewrites the chapter overview path. Must accept `node.title` to produce `00-<slug>.md`.
+- `tools/handbook-ingest/ingest/apply_errata.py:409` constructs `chapter_dir = edition_root(...) / patch.chapter` from the bare 2-digit code. After the rename, chapter directories carry slugs (`01-introduction-to-flying`); `is_dir()` returns False on the first errata reapply attempt. Must derive `chapter_dir` from the manifest's chapter `code` plus title-slug, not from `patch.chapter` alone. Concretely: read the manifest, look up the chapter slug by code, build `<NN>-<slug>` directory name.
 - `tools/handbook-ingest/ingest/apply_errata.py:430` updates the special-case to the structural-prefix-plus-semantic-slug check defined in §3.5.
 - `libs/sources/src/aim/source-ingest.ts:225-266`: rewrite the path construction and `body_path` strings per the AIM numbering rule from §3.3.
 - `libs/sources/src/handbooks-extras/ingest.ts:294,307`: rewrite the body filename writer.
@@ -487,33 +507,49 @@ Beyond "the script runs and reports success," the WP needs a concrete verificati
    - Re-run `bun run sources register handbooks-extras` (or the equivalent for this corpus).
    - Byte-diff.
    - Same for one AC doc.
-7. **CI assertion** added to `libs/bc/study/src/manifest-validation.ts`: every `body_path` must NOT match `/(?:^|/)(index|document)\.md$`. Rejects any future regression.
+7. **CI assertion** added to `libs/bc/study/src/manifest-validation.ts`: every path-bearing field (`body_path`, `section_path`, `errata_note_path`) must NOT match `/(?:^|/)(index|document)\.md$`. Rejects any future regression.
 
    **Sequencing rule:** this assertion lands in the same single squash-merge commit as the file moves and fixture migration (§4.4.2). It MUST NOT land first; if it lands before fixture manifests are rewritten, the fixture validation fires and blocks the merge. The migration script is responsible for moving production AND fixture trees in one pass.
+
+   **Regs side-channel exclusion:** the regs corpus writer (`libs/sources/src/regs/derivative-writer.ts:137`) writes `<part>/index.md` to the filesystem WITHOUT recording the path in any `body_path` field (regs uses `<part>/<part>-<section>.md` for `body_path`, plus `index.md` as a part overview). The CI assertion at the manifest level cannot catch this; a separate filesystem-walk assertion (or the regs cleanup landing first; see §2.7) is required. Until regs cleanup lands, the assertion explicitly carves out paths under `regulations/`.
 
 8. **CI assertion** added to detect AIM glossary slug collisions: every glossary file's slug must be unique within `aim/<edition>/glossary/`. Rejects future content that would collide under the 48-char truncation rule.
 
 The Python pipeline being paste-to-Claude (per `docs/ingestion-pipeline/section-extraction-prompt-strategy.md`) means step 4 may require a fresh-session prompt run for the toc strategy. Either strategy must produce the new shape. The acceptance criterion is byte-equality, not "the script ran."
 
-### 5.6 Atomic commit, not multi-commit migration
+### 5.6 Atomic squash-merge, with explicit multi-commit feature branch
 
-The migration is **one squash-merge commit**. All of:
+The migration lands as **one squash-merge commit on main**. Acceptance criterion: `git log --oneline main` shows exactly one commit for this WP.
+
+**On the feature branch, multi-commit is REQUIRED**, not optional, for review readability and bisect granularity. Suggested commit grouping (independent reviewer requirement):
+
+1. Migration script (added).
+2. Production file moves + manifest rewrites for `handbooks/`.
+3. Production file moves + manifest rewrites for `aim/` and `ac/`.
+4. Test fixture moves + fixture manifest rewrites.
+5. Emitter code changes (Python + TS).
+6. Test code path-string updates.
+7. CI assertions.
+8. Doc updates.
+9. Migration script removal (per `source-cache-flat-naming` precedent).
+
+Each commit on the feature branch is reviewable in isolation; the squash collapses them on merge.
+
+All path-bearing fields rewrite in lockstep across these commits:
 
 - File moves (production + fixtures)
-- Manifest `body_path` rewrites
+- Manifest path rewrites: `body_path`, `section_path`, `errata_note_path` (all three together)
 - Emitter code changes (Python + TS, three pipelines)
 - Test fixture content updates
 - Test code path-string updates
 - CI assertions
 - Doc updates
 
-land together. There is no valid intermediate state where filesystem and emitters disagree. The implementation may use multiple commits on the feature branch for review readability, but the merge is a squash so `git bisect` and reverts see one atomic boundary.
-
 This matters because:
 
-- Mid-PR commits could leave a state where `bun run sources extract` writes old-shape paths to a new-shape filesystem, or vice versa.
-- A revert of a partial commit would corrupt the corpus.
-- The CI assertion (§5.5 step 7) must not fire during the migration; it lands in the same atomic boundary as the fixture rewrites.
+- Mid-PR commits on the feature branch must each pass `bun run check` (so the multi-commit structure is testable, not just review-friendly).
+- A revert of the squash commit on main reverses the entire WP cleanly.
+- The CI assertion (§5.5 step 7) must not fire during the migration; it lands in the same squash-merge boundary as the fixture rewrites.
 
 ### 5.7 Mid-run failure recovery (within the migration script)
 
@@ -564,7 +600,7 @@ NO TIME ESTIMATES. Scope by counts:
 | `document.md` -> `<slug>-<edition>.md` renames     | 7 (whole-doc) + 9 (AC) = 16                   |
 | AIM `paragraph-N.md` -> `<NN>-<slug>.md` renames   | 396                                           |
 | Errata files moved (no rename, just dir change)    | 20                                            |
-| Manifest `body_path` rewrites                      | ~3,500 entries across 13+ manifests           |
+| Manifest path-field rewrites (body_path + section_path + errata_note_path) | ~2,680 entries across 13+ manifests (verified by `find handbooks/ aim/ ac/ -name 'manifest.json' \| xargs grep -h 'body_path\|section_path\|errata_note_path' \| wc -l`) |
 | Production TS/Python emitter LOC changed           | ~15 (concentrated in 4 files)                 |
 | Test fixture updates                               | ~25 hardcoded path strings across 7 test files|
 | Doc-comment updates                                | ~17 sites                                     |
@@ -584,7 +620,9 @@ NO TIME ESTIMATES. Scope by counts:
 | Future edition ingest produces old-shape filenames (regression) | CI assertion in `manifest-validation.ts` (§5.5 step 7) rejects any `body_path` ending in `index.md` or `document.md`. Catches at validate-time, before merge. |
 | AMT un-deferral re-creates orphan files | AMT files renamed in this WP (per §3.5). The next AMT ingest run will produce new-shape filenames matching what's already on disk; no orphan creation possible. |
 | Future glossary term truncates to a colliding slug | CI assertion (§5.5 step 8) rejects merge if any two glossary slugs collide. |
-| CFR dead-code emitter paths not cleaned up | Spec MUST include a flag-for-followup section listing `regs/derivative-writer.ts:137`, `regs/resolver.ts:180`, `diff/body-hasher.ts:101`. Tracked separately as `regs-derivative-cleanup` follow-up WP. |
+| Regs writer is live, not dead; first post-merge `register cfr` writes `index.md` files into the repo | §2.7 documents the constraint. Regs ingest must stay paused until `regs-derivative-cleanup` WP rewrites the writer. CI assertion explicitly carves out `regulations/` paths until that WP lands. Sign-off requires explicit acknowledgement. |
+| `section_path` and `errata_note_path` rewrites missed | §5.1 step 3 explicitly enumerates ALL three path-bearing fields. The migration script must rewrite all three; production scope is 28+ entries (PHAK 21, AFH 7) for `section_path` plus errata pairs for `errata_note_path`. |
+| `apply_errata.py` chapter_dir lookup breaks after rename | §5.4 calls out lines 409 AND 430 explicitly. The script update derives chapter dirs from the manifest's title-slug, not from the bare 2-digit chapter code. Tested by re-applying one errata patch end-to-end as part of validation §5.5 step 4. |
 
 ## 7. Pros and cons
 
