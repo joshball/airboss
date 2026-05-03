@@ -112,6 +112,21 @@ function measureFlip(): void {
 	flipX = rect.right > window.innerWidth - margin;
 }
 
+// rAF-throttle resize/scroll-driven `measureFlip`. Without the throttle,
+// fast scrolling with a pinned tooltip would call `getBoundingClientRect`
+// (a layout-forcing read) plus the two `window.inner*` reads on every
+// scroll event. Coalescing into one measurement per animation frame gives
+// the same visual result with one layout per frame instead of N.
+let measurePending = false;
+function scheduleMeasureFlip(): void {
+	if (measurePending) return;
+	measurePending = true;
+	requestAnimationFrame(() => {
+		measurePending = false;
+		measureFlip();
+	});
+}
+
 /**
  * Hover-to-open is gated to true hover devices. On touch (`pointer: coarse`)
  * `pointerenter` fires on tap, so without the guard a tap would hover-open
@@ -174,12 +189,12 @@ function handleDocumentPointerDown(event: PointerEvent): void {
 $effect(() => {
 	if (!open || !pinned) return;
 	document.addEventListener('pointerdown', handleDocumentPointerDown, true);
-	window.addEventListener('resize', measureFlip);
-	window.addEventListener('scroll', measureFlip, { passive: true });
+	window.addEventListener('resize', scheduleMeasureFlip);
+	window.addEventListener('scroll', scheduleMeasureFlip, { passive: true });
 	return () => {
 		document.removeEventListener('pointerdown', handleDocumentPointerDown, true);
-		window.removeEventListener('resize', measureFlip);
-		window.removeEventListener('scroll', measureFlip);
+		window.removeEventListener('resize', scheduleMeasureFlip);
+		window.removeEventListener('scroll', scheduleMeasureFlip);
 	};
 });
 
