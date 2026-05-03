@@ -1,8 +1,11 @@
 <script lang="ts">
 import {
+	CARD_KIND_LABELS,
+	CARD_KIND_VALUES,
 	CARD_STATUSES,
 	CARD_TYPE_LABELS,
 	CARD_TYPE_VALUES,
+	type CardKind,
 	type CardType,
 	DOMAIN_VALUES,
 	domainLabel,
@@ -34,6 +37,7 @@ interface CardModel {
 	back: string;
 	domain: string;
 	cardType: string;
+	kind: string;
 	status: string;
 	sourceType: string;
 	tags: ReadonlyArray<string> | null;
@@ -45,6 +49,7 @@ interface FieldValues {
 	back?: string;
 	domain?: string;
 	cardType?: string;
+	kind?: string;
 	tags?: string[];
 }
 
@@ -135,11 +140,16 @@ async function sharePublicLink() {
 
 const domainOptions = DOMAIN_VALUES;
 const cardTypeOptions = CARD_TYPE_VALUES;
+const cardKindOptions = CARD_KIND_VALUES;
 
 const tagsString = $derived((card.tags ?? []).join(', '));
 
 function cardTypeLabel(slug: string): string {
 	return (CARD_TYPE_LABELS as Record<CardType, string>)[slug as CardType] ?? humanize(slug);
+}
+
+function cardKindLabel(slug: string): string {
+	return (CARD_KIND_LABELS as Record<CardKind, string>)[slug as CardKind] ?? humanize(slug);
 }
 
 async function startEdit() {
@@ -222,6 +232,23 @@ function confirmDiscardEdit() {
 						<option value={t}>{cardTypeLabel(t)}</option>
 					{/each}
 				</select>
+			</label>
+			<label class="field">
+				<span class="label">
+					Kind
+					<InfoTip
+						term="Kind"
+						definition="Knowledge axis the card tests. 'Recall' = facts and definitions. 'Calculation' = numeric or procedural answer that you compute. Drives per-evidence-kind mastery aggregation."
+						helpId="memory-card"
+						helpSection="kind"
+					/>
+				</span>
+				<select name="kind" required disabled={saving} value={editValues.kind ?? card.kind}>
+					{#each cardKindOptions as k (k)}
+						<option value={k}>{cardKindLabel(k)}</option>
+					{/each}
+				</select>
+				{#if fieldErrors.kind}<span class="err">{fieldErrors.kind}</span>{/if}
 			</label>
 		</div>
 		<label class="field">

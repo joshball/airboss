@@ -1,6 +1,8 @@
 <script lang="ts">
 import type { ScenarioOption } from '@ab/bc-study';
 import {
+	ASSESSMENT_METHODS,
+	type AssessmentMethod,
 	DIFFICULTIES,
 	DIFFICULTY_LABELS,
 	DIFFICULTY_VALUES,
@@ -54,6 +56,38 @@ let phaseOfFlight = $state<string>((seed?.phaseOfFlight as string | null | undef
 let regReferences = $state<string>(
 	Array.isArray(seed?.regReferences) ? (seed.regReferences as string[]).join(', ') : '',
 );
+
+/**
+ * Assessment-method tags (evidence-kind-data-layer WP). Defaults to
+ * `['scenario']` when nothing checked -- matches the column default and
+ * the BC-applied default. Teaching is intentionally excluded from the
+ * scenario UI: teaching-exercises are a separate session-item-kind owned
+ * by `teaching_exercise` rows.
+ */
+const ASSESSMENT_METHOD_OPTIONS: ReadonlyArray<{ value: AssessmentMethod; label: string; hint: string }> = [
+	{ value: ASSESSMENT_METHODS.SCENARIO, label: 'Scenario', hint: 'Judgment under uncertainty (default)' },
+	{ value: ASSESSMENT_METHODS.DEMONSTRATION, label: 'Demonstration', hint: 'Maneuver performed to PTS/ACS standard' },
+	{ value: ASSESSMENT_METHODS.RECALL, label: 'Recall', hint: 'Rare on a scenario; only when the rep tests pure facts' },
+	{
+		value: ASSESSMENT_METHODS.CALCULATION,
+		label: 'Calculation',
+		hint: 'Rare on a scenario; only when the rep is a calc problem',
+	},
+];
+
+const seededAssessmentMethods: ReadonlyArray<string> = Array.isArray(seed?.assessmentMethods)
+	? (seed.assessmentMethods as string[])
+	: [ASSESSMENT_METHODS.SCENARIO];
+
+let assessmentMethods = $state<string[]>([...seededAssessmentMethods]);
+
+function toggleAssessmentMethod(value: AssessmentMethod, checked: boolean) {
+	if (checked) {
+		if (!assessmentMethods.includes(value)) assessmentMethods = [...assessmentMethods, value];
+	} else {
+		assessmentMethods = assessmentMethods.filter((v) => v !== value);
+	}
+}
 
 let options = $state<OptionDraft[]>(
 	Array.isArray(seed?.options) && (seed.options as OptionDraft[]).length > 0
@@ -308,6 +342,32 @@ function difficultyLabel(slug: string): string {
 			</label>
 		</div>
 
+		<fieldset class="methods">
+			<legend>
+				<span class="label">Assessment methods</span>
+				<span class="hint">(at least one; how this rep contributes to per-kind mastery)</span>
+			</legend>
+			{#if fieldErrors.assessmentMethods}
+				<p class="err" role="alert">{fieldErrors.assessmentMethods}</p>
+			{/if}
+			<div class="method-grid">
+				{#each ASSESSMENT_METHOD_OPTIONS as opt (opt.value)}
+					<label class="method">
+						<input
+							type="checkbox"
+							name="assessmentMethods"
+							value={opt.value}
+							checked={assessmentMethods.includes(opt.value)}
+							disabled={loading}
+							onchange={(e) => toggleAssessmentMethod(opt.value, (e.currentTarget as HTMLInputElement).checked)}
+						/>
+						<span class="method-label">{opt.label}</span>
+						<span class="method-hint">{opt.hint}</span>
+					</label>
+				{/each}
+			</div>
+		</fieldset>
+
 		<label class="field">
 			<span class="label">Regulation references <span class="hint">(comma-separated, optional)</span></span>
 			<input
@@ -431,7 +491,8 @@ function difficultyLabel(slug: string): string {
 		font-size: var(--type-ui-caption-size);
 	}
 
-	.options {
+	.options,
+	.methods {
 		border: 1px solid var(--edge-default);
 		border-radius: var(--radius-md);
 		padding: var(--space-lg);
@@ -440,11 +501,52 @@ function difficultyLabel(slug: string): string {
 		gap: var(--space-md);
 	}
 
-	.options legend {
+	.options legend,
+	.methods legend {
 		padding: 0 var(--space-sm);
 		display: flex;
 		gap: var(--space-sm);
 		align-items: baseline;
+	}
+
+	.method-grid {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: var(--space-md);
+	}
+
+	@media (max-width: 600px) {
+		.method-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	.method {
+		display: grid;
+		grid-template-columns: auto 1fr;
+		grid-template-rows: auto auto;
+		gap: var(--space-xs) var(--space-sm);
+		padding: var(--space-sm) var(--space-md);
+		border: 1px solid var(--edge-default);
+		border-radius: var(--radius-md);
+		cursor: pointer;
+		background: var(--surface-muted);
+	}
+
+	.method input[type='checkbox'] {
+		grid-row: 1 / span 2;
+		align-self: center;
+	}
+
+	.method-label {
+		font-weight: 600;
+		color: var(--ink-strong);
+	}
+
+	.method-hint {
+		grid-column: 2;
+		font-size: var(--type-ui-caption-size);
+		color: var(--ink-faint);
 	}
 
 	.option {

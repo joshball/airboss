@@ -1015,6 +1015,14 @@ export const sessionItemResult = studySchema.table(
 		),
 		confidenceCheck: check('sir_confidence_check', sql.raw(confidenceRangeCheckSql('confidence'))),
 		answerMsCheck: check('sir_answer_ms_check', sql.raw(nonNegativeDurationCheckSql('answer_ms'))),
+		// Ties teaching_exercise_id to item_kind: a 'teaching-exercise' slot must
+		// resolve to a teaching_exercise row, and any other item_kind must leave
+		// the column NULL. Defensive backstop on the BC invariant; enforced at
+		// the storage layer so direct Drizzle inserts can't drift. evidence-kind-data-layer WP.
+		teachingExerciseShapeCheck: check(
+			'sir_teaching_exercise_shape_check',
+			sql.raw(`("item_kind" = 'teaching-exercise') = ("teaching_exercise_id" IS NOT NULL)`),
+		),
 	}),
 );
 
