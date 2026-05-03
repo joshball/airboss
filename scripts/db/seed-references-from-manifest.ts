@@ -25,8 +25,13 @@
  *                              (one per Part with a matching YAML row) plus
  *                              one `reference_section` per section (depth 0,
  *                              level 'section', flat under the reference).
+ *   - `kind: 'acs'`        -> ACS adapter (WP-ACS-V). Produces ONE reference
+ *                              row per publication plus a 4-level tree:
+ *                              publication (depth 0) -> areas (depth 1) ->
+ *                              tasks (depth 2) -> elements (depth 3).
+ *                              Deepest tree shipped to date.
  *
- * Today this script walks `handbooks/`, `aim/`, `ac/`, and `regulations/`.
+ * Today this script walks `handbooks/`, `aim/`, `ac/`, `regulations/`, and `acs/`.
  * Future corpus WPs extend `CORPUS_DIRS` and add a discriminator member on
  * `manifestSchema` (via the discriminated union at
  * `libs/bc/study/src/manifest-validation.ts`).
@@ -55,6 +60,7 @@ import { client } from '@ab/db/connection';
 // barrel (route handlers should never need them; only seed code does).
 import { attachSupersededByLatest } from '../../libs/bc/study/src/references';
 import { seedAcManifest } from '../../libs/bc/study/src/seeders/ac';
+import { seedAcsManifest } from '../../libs/bc/study/src/seeders/acs';
 import { seedAimManifest } from '../../libs/bc/study/src/seeders/aim';
 import { seedCfrManifest } from '../../libs/bc/study/src/seeders/cfr';
 import { seedSectionTreeManifest } from '../../libs/bc/study/src/seeders/section-tree';
@@ -69,7 +75,18 @@ const REPO_ROOT = resolve(HERE, '..', '..');
  * relative to the repo root; the seeder enumerates `<dir>/<doc>/<edition>/
  * manifest.json` under it. Add new corpora here as their WPs land.
  */
-const CORPUS_DIRS = ['handbooks', 'aim', 'ac', 'regulations'] as const;
+const CORPUS_DIRS = ['handbooks', 'aim', 'ac', 'regulations', 'acs'] as const;
+
+/**
+ * Corpora where the single-doc layout (`<corpus>/<child>/manifest.json`)
+ * means each `<child>` is its own logical document (and supersede grouping
+ * should key on `<child>`, not on `<corpus>`). ACS is the canonical case --
+ * each ACS publication has its own slug under `acs/<slug>/`. AIM, by
+ * contrast, treats `aim/<edition>/` as editions of one logical document
+ * (slug = `aim`). Listed by membership rather than auto-detected so the
+ * convention stays explicit.
+ */
+const SINGLE_DOC_KEY_BY_CHILD: ReadonlySet<string> = new Set(['acs']);
 
 export interface SeedReferencesOptions {
 	/** Filter to a single document slug (e.g. `phak`). Default = all. */
@@ -114,13 +131,18 @@ export async function seedReferencesFromManifest(options: SeedReferencesOptions 
 
 			const childManifest = resolve(childAbs, 'manifest.json');
 			if (existsSync(childManifest)) {
-				// Single-doc layout: childDir is the edition; effective slug is the corpus dir.
-				if (options.edition !== undefined && options.edition !== childDir) continue;
-				if (options.documentSlug !== undefined && options.documentSlug !== corpusDir) continue;
+				// Single-doc layout. Two sub-conventions:
+				//   - default (AIM): childDir is the edition; effective slug = corpus dir.
+				//   - per-child (ACS): childDir is the slug; one publication per child.
+				// `SINGLE_DOC_KEY_BY_CHILD` encodes the per-child convention.
+				const keyByChild = SINGLE_DOC_KEY_BY_CHILD.has(corpusDir);
+				const effectiveSlug = keyByChild ? childDir : corpusDir;
+				if (options.documentSlug !== undefined && options.documentSlug !== effectiveSlug) continue;
+				if (!keyByChild && options.edition !== undefined && options.edition !== childDir) continue;
 				const refIds = await dispatchManifest(childManifest, context, summary);
-				const list = slugToEditionRefIds.get(corpusDir) ?? [];
+				const list = slugToEditionRefIds.get(effectiveSlug) ?? [];
 				list.push(...refIds);
-				slugToEditionRefIds.set(corpusDir, list);
+				slugToEditionRefIds.set(effectiveSlug, list);
 				continue;
 			}
 
@@ -175,6 +197,8 @@ async function dispatchManifest(manifestPath: string, context: SeedContext, summ
 			return [await seedAcManifest(manifest, context, summary)];
 		case 'cfr':
 			return seedCfrManifest(manifest, { manifestAbsPath: manifestPath }, context, summary);
+		case 'acs':
+			return [await seedAcsManifest(manifest, context, summary)];
 	}
 }
 
