@@ -200,33 +200,40 @@ $effect(() => {
 		font-weight: 600;
 	}
 
-	.row-status {
-		font-size: var(--font-size-xs);
-		color: var(--ink-subtle);
-		text-transform: uppercase;
-		letter-spacing: var(--letter-spacing-caps);
+	/*
+	 * Row status colors are driven by a single CSS custom property set on
+	 * each row variant. Avoids a tangled cascade where (rated | pending |
+	 * current) each clobber the .row-status color in different rules.
+	 */
+	.row {
+		--row-status-color: var(--ink-subtle);
 	}
 
 	.row-rated {
+		--row-status-color: var(--signal-success, var(--action-default-hover));
 		color: var(--ink-muted);
 	}
 
-	.row-rated .row-status {
-		color: var(--signal-success, var(--action-default-hover));
-	}
-
-	.row-pending .row-status {
-		color: var(--ink-faint);
+	.row-pending {
+		--row-status-color: var(--ink-faint);
 	}
 
 	.row.is-current {
+		--row-status-color: var(--action-default-hover);
 		border-color: var(--action-default);
 		background: var(--action-default-wash);
 		color: var(--action-default-hover);
 	}
 
+	.row-status {
+		font-size: var(--font-size-xs);
+		/* lint-disable-token-enforcement: --row-status-color is a component-local custom property, not a theme token */
+		color: var(--row-status-color);
+		text-transform: uppercase;
+		letter-spacing: var(--letter-spacing-caps);
+	}
+
 	.row.is-current .row-status {
-		color: var(--action-default-hover);
 		font-weight: 600;
 	}
 

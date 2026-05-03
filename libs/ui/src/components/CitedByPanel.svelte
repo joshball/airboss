@@ -10,6 +10,8 @@
 	on constants only, not on bcs).
 -->
 <script lang="ts">
+import EmptyState from './EmptyState.svelte';
+
 export interface CitedByItem {
 	id: string;
 	/** Source-kind label (e.g. "Card", "Knowledge node"). */
@@ -29,15 +31,28 @@ interface Props {
 	items: ReadonlyArray<CitedByItem>;
 	/** Heading text. Defaults to "Cited by ({count})". */
 	heading?: string;
-	/** Empty-state message. */
+	/** Empty-state title (rendered inside the framed `EmptyState`). */
+	emptyTitle?: string;
+	/** Empty-state body copy. */
 	emptyMessage?: string;
 	/** Heading level. Defaults to 2. */
 	headingLevel?: 2 | 3;
 }
 
-let { items, heading, emptyMessage = 'Not yet cited by other content.', headingLevel = 2 }: Props = $props();
+let {
+	items,
+	heading,
+	emptyTitle = 'Not yet cited',
+	emptyMessage = 'Not yet cited by other content.',
+	headingLevel = 2,
+}: Props = $props();
 
 const resolvedHeading = $derived(heading ?? `Cited by (${items.length})`);
+// Nested empty state mirrors the parent panel heading level: when the
+// section heading is h2, the empty-state title is h3, etc. Keeps document
+// outline valid when CitedByPanel is dropped into routes that already own
+// an h2 header.
+const emptyHeadingLevel = $derived<3 | 4>(headingLevel === 2 ? 3 : 4);
 </script>
 
 <section
@@ -52,7 +67,9 @@ const resolvedHeading = $derived(heading ?? `Cited by (${items.length})`);
 		<h3 data-testid="citedbypanel-heading">{resolvedHeading}</h3>
 	{/if}
 	{#if items.length === 0}
-		<p class="cited-by-empty" data-testid="citedbypanel-empty">{emptyMessage}</p>
+		<div data-testid="citedbypanel-empty">
+			<EmptyState title={emptyTitle} body={emptyMessage} headingLevel={emptyHeadingLevel} />
+		</div>
 	{:else}
 		<ul class="cited-by-list" data-testid="citedbypanel-list">
 			{#each items as item (item.id)}
@@ -81,12 +98,6 @@ const resolvedHeading = $derived(heading ?? `Cited by (${items.length})`);
 		text-transform: uppercase;
 		letter-spacing: var(--letter-spacing-caps);
 		color: var(--ink-muted);
-	}
-
-	.cited-by-empty {
-		margin: 0;
-		color: var(--ink-faint);
-		font-size: var(--type-ui-label-size);
 	}
 
 	.cited-by-list {

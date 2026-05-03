@@ -64,9 +64,36 @@ let { href, id, justCreated = false, title, meta, stats, extra, trailing }: Brow
 		box-shadow: var(--shadow-sm);
 	}
 
+	/*
+	 * Just-created highlight: soft wash-tinted halo with a stronger
+	 * border-color, fading to the resting state over the first few seconds
+	 * so the row settles after the user has registered the change. The
+	 * previous solid 3px halo of `--signal-success` read more like an
+	 * error/active state than a celebration; the wash variant keeps the
+	 * "see what you just created" intent without shouting.
+	 */
 	.card.just-created {
-		border-color: var(--signal-success-edge);
-		box-shadow: 0 0 0 3px var(--signal-success);
+		border-color: var(--signal-success);
+		box-shadow: 0 0 0 3px var(--signal-success-wash);
+		/* lint-disable-token-enforcement: animation duration tuned per UX review; not a global motion token */
+		animation: just-created-fade 4s ease-out forwards;
+	}
+
+	@keyframes just-created-fade {
+		from {
+			border-color: var(--signal-success);
+			box-shadow: 0 0 0 3px var(--signal-success-wash);
+		}
+		to {
+			border-color: var(--edge-default);
+			box-shadow: none;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.card.just-created {
+			animation: none;
+		}
 	}
 
 	.card-link {

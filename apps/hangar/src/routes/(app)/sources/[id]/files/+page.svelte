@@ -250,6 +250,19 @@ function truncate(text: string | null, max = 20_000): string {
 		align-items: center;
 	}
 
+	/*
+	 * Below ~700px the five auto columns of file metadata + the delete form
+	 * crowd each other and visually collide with the name column. Stack the
+	 * name on its own row and let meta + actions wrap underneath.
+	 */
+	@media (max-width: 700px) {
+		.file-head {
+			grid-template-columns: 1fr;
+			grid-template-rows: auto auto;
+			row-gap: var(--space-2xs);
+		}
+	}
+
 	.expander {
 		display: inline-flex;
 		align-items: center;

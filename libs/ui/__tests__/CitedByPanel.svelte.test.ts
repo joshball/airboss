@@ -12,15 +12,29 @@ afterEach(() => {
 });
 
 describe('CitedByPanel -- empty', () => {
-	it('renders the empty message and state=empty when no items', () => {
+	it('renders an EmptyState wrapper and state=empty when no items', () => {
 		render(CitedByPanel, { items: [] });
 		expect(screen.getByTestId('citedbypanel-root').getAttribute('data-state')).toBe('empty');
-		expect(screen.getByTestId('citedbypanel-empty').textContent).toBe('Not yet cited by other content.');
+		// The empty wrapper hosts the shared <EmptyState>; assert the body
+		// text rather than the full textContent (which now also includes the
+		// EmptyState title).
+		const empty = screen.getByTestId('citedbypanel-empty');
+		const body = empty.querySelector('[data-testid="emptystate-body"]');
+		expect(body?.textContent).toContain('Not yet cited by other content.');
 	});
 
 	it('honors a custom emptyMessage', () => {
 		render(CitedByPanel, { items: [], emptyMessage: 'Nothing cites this yet.' });
-		expect(screen.getByTestId('citedbypanel-empty').textContent).toBe('Nothing cites this yet.');
+		const empty = screen.getByTestId('citedbypanel-empty');
+		const body = empty.querySelector('[data-testid="emptystate-body"]');
+		expect(body?.textContent).toContain('Nothing cites this yet.');
+	});
+
+	it('honors a custom emptyTitle', () => {
+		render(CitedByPanel, { items: [], emptyTitle: 'No citations yet' });
+		const empty = screen.getByTestId('citedbypanel-empty');
+		const title = empty.querySelector('[data-testid="emptystate-title"]');
+		expect(title?.textContent).toBe('No citations yet');
 	});
 });
 

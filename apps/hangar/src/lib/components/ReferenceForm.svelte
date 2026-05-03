@@ -43,6 +43,11 @@ function fieldError(key: string): string | undefined {
 	return fieldErrors[key];
 }
 
+/** Stable id for the error <p> tied to a field via `aria-describedby`. */
+function errId(inputId: string): string {
+	return `${inputId}-err`;
+}
+
 function isChecked(values: readonly string[], candidate: string): boolean {
 	return values.includes(candidate);
 }
@@ -69,15 +74,25 @@ function isChecked(values: readonly string[], candidate: string): boolean {
 				required
 				autocomplete="off"
 				spellcheck="false"
+				aria-invalid={fieldError('id') ? 'true' : undefined}
+				aria-describedby={fieldError('id') ? errId('ref-id') : undefined}
 			/>
 			<p class="hint">Lowercase slug, e.g. <code>cfr-14-91-155</code>. Immutable after create.</p>
-			{#if fieldError('id')}<p class="err">{fieldError('id')}</p>{/if}
+			{#if fieldError('id')}<p class="err" id={errId('ref-id')}>{fieldError('id')}</p>{/if}
 		</div>
 
 		<div class="field">
 			<label for="ref-display">Display name</label>
-			<input id="ref-display" name="displayName" type="text" value={initial.displayName} required />
-			{#if fieldError('displayName')}<p class="err">{fieldError('displayName')}</p>{/if}
+			<input
+				id="ref-display"
+				name="displayName"
+				type="text"
+				value={initial.displayName}
+				required
+				aria-invalid={fieldError('displayName') ? 'true' : undefined}
+				aria-describedby={fieldError('displayName') ? errId('ref-display') : undefined}
+			/>
+			{#if fieldError('displayName')}<p class="err" id={errId('ref-display')}>{fieldError('displayName')}</p>{/if}
 		</div>
 	</div>
 
@@ -89,15 +104,25 @@ function isChecked(values: readonly string[], candidate: string): boolean {
 			type="text"
 			value={initial.aliasesText}
 			placeholder="comma-separated alternate labels"
+			aria-invalid={fieldError('aliases') ? 'true' : undefined}
+			aria-describedby={fieldError('aliases') ? errId('ref-aliases') : undefined}
 		/>
 		<p class="hint">Drives fuzzy match on <code>[[Text::]]</code> wiki-links and the glossary search.</p>
-		{#if fieldError('aliases')}<p class="err">{fieldError('aliases')}</p>{/if}
+		{#if fieldError('aliases')}<p class="err" id={errId('ref-aliases')}>{fieldError('aliases')}</p>{/if}
 	</div>
 
 	<div class="field paraphrase">
 		<label for="ref-paraphrase">Paraphrase</label>
 		<div class="paraphrase-split">
-			<textarea id="ref-paraphrase" name="paraphrase" rows="10" bind:value={paraphrase} required></textarea>
+			<textarea
+				id="ref-paraphrase"
+				name="paraphrase"
+				rows="10"
+				bind:value={paraphrase}
+				required
+				aria-invalid={fieldError('paraphrase') ? 'true' : undefined}
+				aria-describedby={fieldError('paraphrase') ? errId('ref-paraphrase') : undefined}
+			></textarea>
 			<aside class="preview" aria-label="Live markdown preview">
 				<div class="preview-heading">Preview</div>
 				<MarkdownPreview source={paraphrase} />
@@ -106,7 +131,7 @@ function isChecked(values: readonly string[], candidate: string): boolean {
 		<p class="hint">
 			Plain-English explanation. Markdown supported (paragraphs, headings, lists, inline code, emphasis, links).
 		</p>
-		{#if fieldError('paraphrase')}<p class="err">{fieldError('paraphrase')}</p>{/if}
+		{#if fieldError('paraphrase')}<p class="err" id={errId('ref-paraphrase')}>{fieldError('paraphrase')}</p>{/if}
 	</div>
 
 	<fieldset class="tags">
@@ -115,41 +140,64 @@ function isChecked(values: readonly string[], candidate: string): boolean {
 		<div class="grid">
 			<div class="field">
 				<label for="ref-source-type">Source type</label>
-				<select id="ref-source-type" name="sourceType" required>
+				<select
+					id="ref-source-type"
+					name="sourceType"
+					required
+					aria-invalid={fieldError('tags.sourceType') ? 'true' : undefined}
+					aria-describedby={fieldError('tags.sourceType') ? errId('ref-source-type') : undefined}
+				>
 					<option value="" selected={initial.sourceType === ''}>-- pick one --</option>
 					{#each SOURCE_TYPE_VALUES as value (value)}
 						<option {value} selected={initial.sourceType === value}>{SOURCE_TYPE_LABELS[value]}</option>
 					{/each}
 				</select>
-				{#if fieldError('tags.sourceType')}<p class="err">{fieldError('tags.sourceType')}</p>{/if}
+				{#if fieldError('tags.sourceType')}<p class="err" id={errId('ref-source-type')}>{fieldError('tags.sourceType')}</p>{/if}
 			</div>
 
 			<div class="field">
 				<label for="ref-flight-rules">Flight rules</label>
-				<select id="ref-flight-rules" name="flightRules" required>
+				<select
+					id="ref-flight-rules"
+					name="flightRules"
+					required
+					aria-invalid={fieldError('tags.flightRules') ? 'true' : undefined}
+					aria-describedby={fieldError('tags.flightRules') ? errId('ref-flight-rules') : undefined}
+				>
 					<option value="" selected={initial.flightRules === ''}>-- pick one --</option>
 					{#each FLIGHT_RULES_VALUES as value (value)}
 						<option {value} selected={initial.flightRules === value}>{FLIGHT_RULES_LABELS[value]}</option>
 					{/each}
 				</select>
-				{#if fieldError('tags.flightRules')}<p class="err">{fieldError('tags.flightRules')}</p>{/if}
+				{#if fieldError('tags.flightRules')}<p class="err" id={errId('ref-flight-rules')}>{fieldError('tags.flightRules')}</p>{/if}
 			</div>
 
 			<div class="field">
 				<label for="ref-knowledge-kind">Knowledge kind</label>
-				<select id="ref-knowledge-kind" name="knowledgeKind" required>
+				<select
+					id="ref-knowledge-kind"
+					name="knowledgeKind"
+					required
+					aria-invalid={fieldError('tags.knowledgeKind') ? 'true' : undefined}
+					aria-describedby={fieldError('tags.knowledgeKind') ? errId('ref-knowledge-kind') : undefined}
+				>
 					<option value="" selected={initial.knowledgeKind === ''}>-- pick one --</option>
 					{#each KNOWLEDGE_KIND_VALUES as value (value)}
 						<option {value} selected={initial.knowledgeKind === value}>{KNOWLEDGE_KIND_LABELS[value]}</option>
 					{/each}
 				</select>
-				{#if fieldError('tags.knowledgeKind')}<p class="err">{fieldError('tags.knowledgeKind')}</p>{/if}
+				{#if fieldError('tags.knowledgeKind')}<p class="err" id={errId('ref-knowledge-kind')}>{fieldError('tags.knowledgeKind')}</p>{/if}
 			</div>
 		</div>
 
 		<div class="field">
-			<span class="label-like">Aviation topic (1-4)</span>
-			<div class="chipset" role="group" aria-label="Aviation topic">
+			<span class="label-like" id="ref-aviation-topic-label">Aviation topic (1-4)</span>
+			<div
+				class="chipset"
+				role="group"
+				aria-labelledby="ref-aviation-topic-label"
+				aria-describedby={fieldError('tags.aviationTopic') ? errId('ref-aviation-topic') : undefined}
+			>
 				{#each AVIATION_TOPIC_VALUES as value (value)}
 					<label class="chip">
 						<input
@@ -162,12 +210,17 @@ function isChecked(values: readonly string[], candidate: string): boolean {
 					</label>
 				{/each}
 			</div>
-			{#if fieldError('tags.aviationTopic')}<p class="err">{fieldError('tags.aviationTopic')}</p>{/if}
+			{#if fieldError('tags.aviationTopic')}<p class="err" id={errId('ref-aviation-topic')}>{fieldError('tags.aviationTopic')}</p>{/if}
 		</div>
 
 		<div class="field">
-			<span class="label-like">Phase of flight (0-3)</span>
-			<div class="chipset" role="group" aria-label="Phase of flight">
+			<span class="label-like" id="ref-phase-of-flight-label">Phase of flight (0-3)</span>
+			<div
+				class="chipset"
+				role="group"
+				aria-labelledby="ref-phase-of-flight-label"
+				aria-describedby={fieldError('tags.phaseOfFlight') ? errId('ref-phase-of-flight') : undefined}
+			>
 				{#each REFERENCE_PHASE_OF_FLIGHT_VALUES as value (value)}
 					<label class="chip">
 						<input
@@ -180,12 +233,17 @@ function isChecked(values: readonly string[], candidate: string): boolean {
 					</label>
 				{/each}
 			</div>
-			{#if fieldError('tags.phaseOfFlight')}<p class="err">{fieldError('tags.phaseOfFlight')}</p>{/if}
+			{#if fieldError('tags.phaseOfFlight')}<p class="err" id={errId('ref-phase-of-flight')}>{fieldError('tags.phaseOfFlight')}</p>{/if}
 		</div>
 
 		<div class="field">
-			<span class="label-like">Cert applicability</span>
-			<div class="chipset" role="group" aria-label="Cert applicability">
+			<span class="label-like" id="ref-cert-applicability-label">Cert applicability</span>
+			<div
+				class="chipset"
+				role="group"
+				aria-labelledby="ref-cert-applicability-label"
+				aria-describedby={fieldError('tags.certApplicability') ? errId('ref-cert-applicability') : undefined}
+			>
 				{#each CERT_APPLICABILITY_VALUES as value (value)}
 					<label class="chip">
 						<input
@@ -198,7 +256,7 @@ function isChecked(values: readonly string[], candidate: string): boolean {
 					</label>
 				{/each}
 			</div>
-			{#if fieldError('tags.certApplicability')}<p class="err">{fieldError('tags.certApplicability')}</p>{/if}
+			{#if fieldError('tags.certApplicability')}<p class="err" id={errId('ref-cert-applicability')}>{fieldError('tags.certApplicability')}</p>{/if}
 		</div>
 
 		<div class="field">
@@ -209,19 +267,27 @@ function isChecked(values: readonly string[], candidate: string): boolean {
 				type="text"
 				value={initial.keywordsText}
 				placeholder="comma-separated freeform synonyms"
+				aria-invalid={fieldError('tags.keywords') ? 'true' : undefined}
+				aria-describedby={fieldError('tags.keywords') ? errId('ref-keywords') : undefined}
 			/>
-			{#if fieldError('tags.keywords')}<p class="err">{fieldError('tags.keywords')}</p>{/if}
+			{#if fieldError('tags.keywords')}<p class="err" id={errId('ref-keywords')}>{fieldError('tags.keywords')}</p>{/if}
 		</div>
 	</fieldset>
 
 	<div class="field">
 		<label for="ref-citations">Source citations (JSON array)</label>
-		<textarea id="ref-citations" name="citations" rows="4">{initial.citationsJson}</textarea>
+		<textarea
+			id="ref-citations"
+			name="citations"
+			rows="4"
+			aria-invalid={fieldError('sources') ? 'true' : undefined}
+			aria-describedby={fieldError('sources') ? errId('ref-citations') : undefined}
+		>{initial.citationsJson}</textarea>
 		<p class="hint">
 			Each entry: <code>&#123; "sourceId": "...", "locator": &#123; ... &#125; &#125;</code>. Use
 			<code>[]</code> when the reference has no authoritative citation.
 		</p>
-		{#if fieldError('sources')}<p class="err">{fieldError('sources')}</p>{/if}
+		{#if fieldError('sources')}<p class="err" id={errId('ref-citations')}>{fieldError('sources')}</p>{/if}
 	</div>
 
 	<div class="field">
@@ -232,21 +298,39 @@ function isChecked(values: readonly string[], candidate: string): boolean {
 			type="text"
 			value={initial.relatedText}
 			placeholder="comma-separated ids (must be symmetric)"
+			aria-invalid={fieldError('related') ? 'true' : undefined}
+			aria-describedby={fieldError('related') ? errId('ref-related') : undefined}
 		/>
-		{#if fieldError('related')}<p class="err">{fieldError('related')}</p>{/if}
+		{#if fieldError('related')}<p class="err" id={errId('ref-related')}>{fieldError('related')}</p>{/if}
 	</div>
 
 	<div class="grid">
 		<div class="field">
 			<label for="ref-author">Author</label>
-			<input id="ref-author" name="author" type="text" value={initial.author} placeholder="optional" />
-			{#if fieldError('author')}<p class="err">{fieldError('author')}</p>{/if}
+			<input
+				id="ref-author"
+				name="author"
+				type="text"
+				value={initial.author}
+				placeholder="optional"
+				aria-invalid={fieldError('author') ? 'true' : undefined}
+				aria-describedby={fieldError('author') ? errId('ref-author') : undefined}
+			/>
+			{#if fieldError('author')}<p class="err" id={errId('ref-author')}>{fieldError('author')}</p>{/if}
 		</div>
 
 		<div class="field">
 			<label for="ref-reviewed">Reviewed at (YYYY-MM-DD)</label>
-			<input id="ref-reviewed" name="reviewedAt" type="text" value={initial.reviewedAt} placeholder="optional" />
-			{#if fieldError('reviewedAt')}<p class="err">{fieldError('reviewedAt')}</p>{/if}
+			<input
+				id="ref-reviewed"
+				name="reviewedAt"
+				type="text"
+				value={initial.reviewedAt}
+				placeholder="optional"
+				aria-invalid={fieldError('reviewedAt') ? 'true' : undefined}
+				aria-describedby={fieldError('reviewedAt') ? errId('ref-reviewed') : undefined}
+			/>
+			{#if fieldError('reviewedAt')}<p class="err" id={errId('ref-reviewed')}>{fieldError('reviewedAt')}</p>{/if}
 		</div>
 	</div>
 </div>

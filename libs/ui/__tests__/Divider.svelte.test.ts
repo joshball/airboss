@@ -11,17 +11,20 @@ afterEach(() => {
 });
 
 describe('Divider', () => {
-	it('renders role=separator with horizontal orientation by default', () => {
+	it('renders a native <hr> for horizontal orientation by default', () => {
 		render(Divider);
 		const root = screen.getByTestId('divider-root');
-		expect(root.getAttribute('role')).toBe('separator');
-		expect(root.getAttribute('aria-orientation')).toBe('horizontal');
+		// Horizontal renders as native <hr>: separator semantics come from the
+		// platform, no role attribute required.
+		expect(root.tagName).toBe('HR');
 		expect(root.getAttribute('data-orientation')).toBe('horizontal');
 	});
 
-	it('orientation=vertical reflects on aria-orientation and data-orientation', () => {
+	it('orientation=vertical falls back to role="separator" with aria-orientation', () => {
 		render(Divider, { orientation: 'vertical' });
 		const root = screen.getByTestId('divider-root');
+		expect(root.tagName).toBe('DIV');
+		expect(root.getAttribute('role')).toBe('separator');
 		expect(root.getAttribute('aria-orientation')).toBe('vertical');
 		expect(root.getAttribute('data-orientation')).toBe('vertical');
 	});

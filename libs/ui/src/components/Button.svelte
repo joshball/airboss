@@ -33,6 +33,7 @@ let {
 	loadingLabel,
 	fullWidth = false,
 	ariaLabel,
+	ariaDescribedby,
 	title,
 	onclick,
 	children,
@@ -58,6 +59,13 @@ let {
 	fullWidth?: boolean;
 	ariaLabel?: string;
 	/**
+	 * Id of an element that describes this button. Useful on disabled
+	 * buttons gated behind a typed-confirmation or other precondition --
+	 * point this at the hint element so AT users hear "Type X to enable"
+	 * when they land on the disabled button.
+	 */
+	ariaDescribedby?: string;
+	/**
 	 * Native `title` tooltip. Useful on disabled buttons to surface "why
 	 * is this disabled?" without blocking activation. Mirrors the standard
 	 * HTML attribute.
@@ -81,6 +89,7 @@ const resolvedRel = $derived(rel ?? (target === '_blank' ? 'noopener noreferrer'
 		rel={resolvedRel}
 		aria-disabled={isDisabled ? 'true' : undefined}
 		aria-label={ariaLabel}
+		aria-describedby={ariaDescribedby}
 		{title}
 		tabindex={isDisabled ? -1 : undefined}
 		data-testid="button-root"
@@ -109,6 +118,7 @@ const resolvedRel = $derived(rel ?? (target === '_blank' ? 'noopener noreferrer'
 		{type}
 		disabled={isDisabled}
 		aria-label={ariaLabel}
+		aria-describedby={ariaDescribedby}
 		{title}
 		data-testid="button-root"
 		data-variant={variant}

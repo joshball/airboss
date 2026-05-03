@@ -36,7 +36,12 @@ let {
 	{:else}
 		<span data-testid="pager-prev-empty"></span>
 	{/if}
-	<span class="page-num" data-testid="pager-status">Page {currentPage} of {totalPages}</span>
+	<span
+		class="page-num"
+		data-testid="pager-status"
+		aria-live="polite"
+		aria-atomic="true"
+	>Page {currentPage} of {totalPages}</span>
 	{#if hasMore}
 		<span data-testid="pager-next"><Button href={pageHref(currentPage + 1)} variant="ghost">{nextLabel}</Button></span>
 	{:else}

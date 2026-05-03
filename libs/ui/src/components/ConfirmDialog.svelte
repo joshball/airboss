@@ -67,10 +67,11 @@ let {
 }: Props = $props();
 
 let typedValue = $state('');
-// Unique id for the typed-confirmation input so the wrapping label has an
-// explicit `for=` linkage (some AT prefer the explicit form over implicit
-// label-wraps-input association).
+// Unique ids for the typed-confirmation input + the gate description so AT
+// users hear "Type X to confirm" both as the input's accessible
+// description and as the explanation for why Confirm is disabled.
 const typedInputId = `confirm-typed-${Math.random().toString(36).slice(2, 10)}`;
+const typedHintId = `${typedInputId}-hint`;
 
 const effectiveVariant = $derived<'primary' | 'danger'>(
 	dangerLevel === 'danger' ? 'danger' : dangerLevel === 'caution' ? 'primary' : variant,
@@ -110,8 +111,8 @@ $effect(() => {
 		<div class="content">
 			{@render children()}
 			{#if typedConfirmation}
-	<label class="typed-gate" for={typedInputId}>
-					<span class="typed-gate-label">{typedConfirmation.label}</span>
+				<div class="typed-gate">
+					<label class="typed-gate-label" for={typedInputId}>{typedConfirmation.label}</label>
 					<input
 						id={typedInputId}
 						type="text"
@@ -119,8 +120,18 @@ $effect(() => {
 						bind:value={typedValue}
 						autocomplete="off"
 						spellcheck="false"
+						aria-describedby={typedHintId}
 					/>
-				</label>
+					<!--
+						Hint sits outside the <label> wrapper so the label's
+						accessible-text remains exactly `typedConfirmation.label`.
+						aria-describedby on the input + on the disabled Confirm
+						button still surfaces the hint to AT.
+					-->
+					<span id={typedHintId} class="typed-gate-hint">
+						Type <code>{typedConfirmation.expected}</code> to enable Confirm.
+					</span>
+				</div>
 			{/if}
 		</div>
 	{/snippet}
@@ -149,6 +160,7 @@ $effect(() => {
 					variant={effectiveVariant}
 					size="sm"
 					disabled={confirmDisabled}
+					ariaDescribedby={typedConfirmation && confirmDisabled ? typedHintId : undefined}
 				>
 					{confirmLabel}
 				</Button>
@@ -159,6 +171,7 @@ $effect(() => {
 				size="sm"
 				onclick={handleConfirmClick}
 				disabled={confirmDisabled}
+				ariaDescribedby={typedConfirmation && confirmDisabled ? typedHintId : undefined}
 			>
 				{confirmLabel}
 			</Button>
@@ -194,6 +207,7 @@ $effect(() => {
 		color: var(--ink-body);
 		font-size: var(--type-ui-label-size);
 		font-weight: var(--font-weight-medium);
+		display: block;
 	}
 
 	.typed-gate-input {
@@ -205,8 +219,21 @@ $effect(() => {
 		font: inherit;
 	}
 
-	.typed-gate-input:focus {
+	.typed-gate-input:focus-visible {
 		outline: 2px solid var(--focus-ring);
 		outline-offset: 1px;
+	}
+
+	.typed-gate-hint {
+		color: var(--ink-muted);
+		font-size: var(--type-ui-caption-size);
+	}
+
+	.typed-gate-hint code {
+		font-family: var(--font-family-mono);
+		background: var(--surface-sunken);
+		padding: 0 var(--space-2xs);
+		border-radius: var(--radius-sm);
+		color: var(--ink-body);
 	}
 </style>

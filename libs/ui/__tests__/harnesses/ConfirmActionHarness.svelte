@@ -6,6 +6,8 @@ let {
 	confirmLabel,
 	cancelLabel,
 	disabled = false,
+	loading = false,
+	loadingLabel,
 	onConfirm,
 	formAction,
 }: {
@@ -13,9 +15,11 @@ let {
 	confirmLabel?: string;
 	cancelLabel?: string;
 	disabled?: boolean;
+	loading?: boolean;
+	loadingLabel?: string;
 	onConfirm?: () => void;
 	formAction?: string;
 } = $props();
 </script>
 
-<ConfirmAction {label} {confirmLabel} {cancelLabel} {disabled} {onConfirm} {formAction} />
+<ConfirmAction {label} {confirmLabel} {cancelLabel} {disabled} {loading} {loadingLabel} {onConfirm} {formAction} />
