@@ -1,0 +1,37 @@
+---
+handbook: iph
+edition: FAA-H-8083-16B
+chapter_number: 4
+section_title: Benefits Of WAAS In The Airport Environment
+faa_pages: 4-25
+section_number: 12
+subsection_number: 2
+source_url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/instrument_procedures_handbook/FAA-H-8083-16B.pdf
+---
+
+# Benefits Of WAAS In The Airport Environment
+
+Benefits Of WAAS In The Airport Environment
+WAAS is a navigation service using a combination of GPS
+satellites and the WAAS geostationary satellites to improve
+the navigational service provided by GPS. WAAS achieved
+initial operating capability (IOC) in 2003. The system is
+owned and operated by the FAA and provided free of direct
+user charges to users across the United States and most of
+Canada and Mexico.
+WAAS improves the navigational system accuracy for
+en route, terminal, and approach operations over all the
+continental United States and significant portions of Alaska,
+Canada, and Mexico. This new navigational technology
+supports vertically-guided instrument approaches to all
+qualifying runways in the United States. Vertically-guided
+approaches reduce pilot workload and provide safety
+benefits compared to non-precision approaches. The WAAS
+enabled vertically guided approach procedures are called
+LPV, which stands for “localizer performance with vertical
+guidance,”and provide ILS equivalent approach minimums
+as low as 200 feet at qualifying airports. Actual minimums
+are based on an airport’s current infrastructure, as well as
+an evaluation of any existing obstructions. The FAA plans to
+publish 300 WAAS approach procedures per year to provide
+service to all qualifying instrument runways within the NAS.

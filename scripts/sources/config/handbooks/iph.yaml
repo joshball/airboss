@@ -83,7 +83,20 @@ page_offset: 0
 # tree from page footers -- same path AFH uses.
 outline_strategy: content
 outline_overrides: []
-title_overrides: {}
+# IPH typesets each chapter's title on a separate cover page before the
+# first content page (the page that carries `<chap>-1`). The content
+# scanner's title-extraction reads from the chapter-start page only, so
+# without overrides every chapter title resolves to the bare "Chapter N"
+# sentinel. The titles below come straight from the embedded PDF outline
+# (Chapter N - <Title>), which is itself authoritative for IPH 16B.
+title_overrides:
+  '1': 'Departure Procedures'
+  '2': 'En Route Operations'
+  '3': 'Arrivals'
+  '4': 'Approaches'
+  '5': 'Improvement Plans'
+  '6': 'Airborne Navigation Databases'
+  '7': 'Helicopter Instrument Procedures'
 figure_prefix_pattern: 'Figure (\d+)-(\d+)\.'
 table_prefix_pattern: 'Table (\d+)-(\d+)\.'
 
