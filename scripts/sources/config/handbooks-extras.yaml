@@ -42,12 +42,10 @@ entries:
     filename: risk_management_handbook_2A.pdf
     subjects: [human-factors]
     primary_cert: private
-  - doc_id: faa-h-8083-9
-    edition: null
-    url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/aviation_instructors_handbook/aviation_instructors_handbook.pdf
-    filename: aviation_instructors_handbook.pdf
-    subjects: [training-ops, human-factors]
-    primary_cert: cfi
+  # `faa-h-8083-9` (Aviation Instructor's Handbook) was promoted to the
+  # chapter-aware `handbooks/aviation-instructor.yaml` config on
+  # 2026-05-03 (WP-AIH). The chapter-aware path handles fetch + extract
+  # + register; the row no longer belongs in handbooks-extras.
   # IFH (faa-h-8083-15) was promoted to section-tree by WP-IFH-SECTION-TREE
   # and now lives at scripts/sources/config/handbooks/ifh.yaml.
   # IPH (faa-h-8083-16) was promoted to section-tree by WP-IPH-section-tree

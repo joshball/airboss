@@ -18,6 +18,14 @@ publisher: FAA
 # must be valid `AviationTopic` members. Drives subject grouping at /library.
 # Mirrors the prior handbooks-extras row that this YAML supersedes.
 subjects: [training-ops, human-factors]
+# Library-by-cert placement. Forwarded to `study.reference.primary_cert`
+# by the seeder; null = cert-agnostic. Closed vocabulary -- value must
+# be one of CERT_APPLICABILITY_VALUES. The Python config loader on
+# main does not currently read this field for chapter-aware handbooks
+# (PHAK / AFH / AVWX manifests carry primary_cert via a separate
+# register backfill). Authored here for forward-compatibility with the
+# YAML-driven primary_cert flow landing in WP-RMH.
+primary_cert: cfi
 
 # -----------------------------------------------------------------------------
 # Source download (TS downloader)

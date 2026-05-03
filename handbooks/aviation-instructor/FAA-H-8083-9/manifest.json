@@ -6,8 +6,11 @@
   "publisher": "FAA",
   "source_url": "https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/aviation_instructors_handbook/aviation_instructors_handbook.pdf",
   "source_checksum": "8a3c2cc0133d5d0231ff42589b55b49d995f604c21c16dffe688db1beccbaf73",
-  "fetched_at": "2026-05-03T19:21:25.129575+00:00",
-  "subjects": [],
+  "fetched_at": "2026-05-03T19:36:20.258177+00:00",
+  "subjects": [
+    "training-ops",
+    "human-factors"
+  ],
   "sections": [
     {
       "level": "chapter",

@@ -785,40 +785,14 @@ def relative_to_repo_or_path(path: Path) -> str:
 def _override_edition(config: HandbookConfig, edition: str) -> HandbookConfig:
     """Build a new `HandbookConfig` with the edition overridden.
 
-    The dataclass is frozen; we recreate it. Every field gets carried
-    forward so adding a field above this function doesn't silently drop it.
+    Uses `dataclasses.replace` so every field carries forward automatically;
+    a hand-written field-by-field copy is a footgun (subjects, whole_doc,
+    chapter_pdfs, excluded_assets, extraction_hints were all added after
+    the original copy and were silently dropped from --edition runs until
+    this fix).
     """
-    return HandbookConfig(
-        document_slug=config.document_slug,
-        edition=edition,
-        title=config.title,
-        publisher=config.publisher,
-        kind=config.kind,
-        source_url=config.source_url,
-        subjects=config.subjects,
-        whole_doc=config.whole_doc,
-        chapter_pdfs=config.chapter_pdfs,
-        excluded_assets=config.excluded_assets,
-        expected_pages=config.expected_pages,
-        page_offset=config.page_offset,
-        outline_overrides=config.outline_overrides,
-        figure_prefix_pattern=config.figure_prefix_pattern,
-        table_prefix_pattern=config.table_prefix_pattern,
-        outline_strategy=config.outline_strategy,
-        toc_file=config.toc_file,
-        primary_cert=config.primary_cert,
-        title_overrides=config.title_overrides,
-        section_strategy=config.section_strategy,
-        chapter_text_max_chars=config.chapter_text_max_chars,
-        chapter_cover_strip_enabled=config.chapter_cover_strip_enabled,
-        chapter_cover_strip_max_lines=config.chapter_cover_strip_max_lines,
-        chapter_overrides=config.chapter_overrides,
-        page_label_walk_back=config.page_label_walk_back,
-        errata=config.errata,
-        dismissed_errata=config.dismissed_errata,
-        extraction_hints=config.extraction_hints,
-        raw_yaml=config.raw_yaml,
-    )
+    from dataclasses import replace
+    return replace(config, edition=edition)
 
 
 def _toc_page_set(config: HandbookConfig) -> set[int]:
