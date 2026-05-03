@@ -234,6 +234,13 @@ describe('listRunningJobs -- filters strictly by status=running', () => {
 		expect(ids).toContain(runningId);
 		expect(ids).not.toContain(queuedId);
 		expect(ids).not.toContain(completeId);
+
+		// Pin the per-fixture count so a regression that returned every
+		// QUEUED row (or every row) instead of just RUNNING fails. We seeded
+		// exactly one RUNNING row under this test's actor; concurrent peer
+		// tests may seed more, so filter to ours then assert == 1.
+		const oursRunning = running.filter((r) => r.id === runningId);
+		expect(oursRunning).toHaveLength(1);
 	});
 
 	it('returns a slim projection (no payload / result / error jsonb)', async () => {
