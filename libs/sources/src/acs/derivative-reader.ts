@@ -37,6 +37,14 @@ import { join } from 'node:path';
  * `acs/<slug>/manifest.json`.
  */
 export interface AcsManifestFile {
+	/**
+	 * Manifest discriminator, `'acs'` (WP-ACS-V). Routes the seed dispatcher
+	 * at `scripts/db/seed-references-from-manifest.ts` to the ACS adapter.
+	 * Required from WP-ACS-V onward; older manifests written before the
+	 * field landed will fail Zod validation and need to be re-emitted by
+	 * `bun run sources register acs`.
+	 */
+	readonly kind: 'acs';
 	readonly schema_version: 1;
 	readonly corpus: 'acs';
 	/** Publication slug (matches `ACS_PUBLICATION_SLUGS` in `locator.ts`). E.g. `'ppl-airplane-6c'`. */
@@ -143,6 +151,7 @@ export function readAcsManifest(root: string, slug: string): AcsManifestFile {
 	}
 	const m = parsed as Partial<AcsManifestFile>;
 	const required: readonly (keyof AcsManifestFile)[] = [
+		'kind',
 		'schema_version',
 		'corpus',
 		'slug',

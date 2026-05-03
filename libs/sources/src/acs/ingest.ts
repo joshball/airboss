@@ -807,6 +807,7 @@ export async function runAcsIngest(args: IngestArgs): Promise<IngestReport> {
 			}
 
 			const manifest: AcsManifestFile = {
+				kind: 'acs',
 				schema_version: 1,
 				corpus: 'acs',
 				slug,
