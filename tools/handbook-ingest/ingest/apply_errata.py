@@ -472,13 +472,14 @@ def _locate_section_markdown(
     # anchors so subsection candidates inherit a parent-match bonus.
     md_files: list[tuple[Path, dict[str, object]]] = []
     for md_path in sorted(chapter_dir.glob("*.md")):
-        # Skip the chapter overview file (`00-<chapter-slug>.md`) per the
-        # rename-generic-content-files convention. We pair the structural
-        # `00-` prefix with semantic slug equality so a future chapter that
-        # has a regular section coincidentally numbered `00` is not mis-skipped.
-        if md_path.name.startswith("00-") and md_path.stem.removeprefix("00-") == chapter_slug:
+        # Skip errata files first (`<base>.errata.md`); they are applied
+        # separately upstream and should never be scored as section candidates.
+        # Then skip the chapter overview (`00-<chapter-slug>.md`) -- pair the
+        # structural `00-` prefix with semantic slug equality so a future chapter
+        # that has a regular section coincidentally numbered `00` is not mis-skipped.
+        if md_path.stem.endswith(".errata"):
             continue
-        if md_path.suffix == ".md" and md_path.stem.endswith(".errata"):
+        if md_path.name.startswith("00-") and md_path.stem.removeprefix("00-") == chapter_slug:
             continue
         try:
             text = md_path.read_text(encoding="utf-8")

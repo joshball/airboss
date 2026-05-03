@@ -70,7 +70,7 @@ The sub-agent MUST NOT modify any other file:
 - Do NOT touch the sidecar (`_chapter_plaintext.txt`).
 - Do NOT write under `tools/handbook-ingest/prompts-out/`.
 - Do NOT write in any other chapter's directory.
-- Do NOT write the chapter's `index.md` or per-section markdown files.
+- Do NOT write the chapter's overview file (`00-<chapter-slug>.md`) or any per-section markdown files.
 
 ## Sidecar verification
 
