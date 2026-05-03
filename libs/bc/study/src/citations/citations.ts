@@ -15,7 +15,7 @@
  *     by the DB index; duplicate inserts surface as DuplicateCitationError.
  */
 
-import { hangarReference } from '@ab/bc-hangar/schema';
+import { hangarReference } from '@ab/bc-hangar';
 import {
 	CITATION_CONTEXT_MAX_LENGTH,
 	CITATION_SOURCE_LABELS,

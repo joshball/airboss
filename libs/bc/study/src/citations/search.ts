@@ -7,7 +7,7 @@
  * the id on submit.
  */
 
-import { hangarReference } from '@ab/bc-hangar/schema';
+import { hangarReference } from '@ab/bc-hangar';
 import { MAX_SEARCH_LIMIT, REFERENCE_SOURCE_TYPES, SOURCE_TYPE_LABELS } from '@ab/constants';
 import { escapeLikePattern } from '@ab/db';
 import { db as defaultDb } from '@ab/db/connection';

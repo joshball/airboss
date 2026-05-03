@@ -30,7 +30,7 @@
  * testable without capturing stdout.
  */
 
-import { hangarReference } from '@ab/bc-hangar/schema';
+import { hangarReference } from '@ab/bc-hangar';
 import {
 	CITATION_SOURCE_TYPES,
 	CITATION_TARGET_TYPES,
