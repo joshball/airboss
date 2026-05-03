@@ -287,6 +287,7 @@ def _print_run_banner(config: HandbookConfig, effective_strategy: str) -> None:
     """One-line run banner + strategy reason, before any phase output."""
     reasons = {
         SECTION_STRATEGY_TOC: "deterministic Python parser of the printed TOC; no API calls",
+        SECTION_STRATEGY_TOC_FILE_SIDECAR: "deterministic parser of a hand-extracted TOC markdown sidecar; no API calls",
         SECTION_STRATEGY_PROMPT: "no API calls; emits prompt set for paste-into-Claude flow",
         SECTION_STRATEGY_COMPARE: "reads prompt-flow JSON + runs TOC strategy; renders diff report",
     }
