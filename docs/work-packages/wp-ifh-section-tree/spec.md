@@ -5,6 +5,7 @@ feature: wp-ifh-section-tree
 type: spec
 status: unread
 review_status: pending
+shipped_at: '2026-05-03'
 ---
 
 # Spec: IFH section-tree promotion
@@ -53,7 +54,7 @@ The schema (`tools/handbook-ingest/ingest/section_tree.py`) caps section depth a
 - The Section I / Section II split is semantically a "presentation modality" choice (analog vs glass cockpit) that fits the "section" abstraction better than a chapter-level boundary.
 - The deeper TOC entries that lived under each Section flatten to `subsection` (level 2 under the Section). The schema's 3-level cap means any L3+ TOC entry collapses to subsection -- same behavior as RMH (depth 4) and AIH (depth 5) where the existing flatten rule applies.
 
-Section titles preserve the `Section I -- ` / `Section II -- ` prefix in the rendered title so the TOC's split is visible in chips, breadcrumbs, and the cited-by panel.
+Section titles preserve the `Section I --` / `Section II --` prefix in the rendered title so the TOC's split is visible in chips, breadcrumbs, and the cited-by panel.
 
 ## Out of scope (explicitly punted, not deferred)
 

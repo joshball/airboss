@@ -5,6 +5,7 @@ feature: wp-ifh-section-tree
 type: test-plan
 status: unread
 review_status: pending
+shipped_at: '2026-05-03'
 ---
 
 # Test plan: IFH section-tree promotion
