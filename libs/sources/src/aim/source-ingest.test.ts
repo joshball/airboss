@@ -281,21 +281,33 @@ function buildExtracted(): ExtractedAim {
 	};
 }
 
-const downloaderManifest = {
+const TEST_EDITION = '2026-04';
+const testPrimary = {
 	corpus: 'aim',
 	doc: 'aim',
-	edition: '2026-04',
+	edition: TEST_EDITION,
 	source_url: 'https://example.invalid/aim.pdf',
 	source_filename: 'aim.pdf',
 	source_sha256: 'deadbeef'.repeat(8),
 	fetched_at: '2026-04-30T12:00:00.000Z',
-};
+} as const;
+
+// Slug shapes derived from the test extract above (see buildExtracted):
+//   chapter "1" / "Air Navigation" -> 01-air-navigation
+//   section "1-1" / "Navigation Aids" -> 01-navigation-aids
+//   paragraph "1-1-1" / "General" -> 01-general
+const CH1_DIR = '01-air-navigation';
+const SEC1_DIR = '01-navigation-aids';
+const CH1_OVERVIEW = '00-air-navigation.md';
+const SEC1_OVERVIEW = '00-navigation-aids.md';
+const PARA_1_1_1 = '01-general.md';
 
 describe('writeAimDerivatives -- idempotent regen (ADR 022)', () => {
 	it('writes the manifest + per-entry markdown on first run', () => {
 		const result = writeAimDerivatives({
 			extracted: buildExtracted(),
-			downloaderManifest,
+			edition: TEST_EDITION,
+			primary: testPrimary,
 			derivativeRoot: tempDerivative,
 		});
 		expect(result.entriesWritten).toBeGreaterThan(0);
@@ -307,16 +319,17 @@ describe('writeAimDerivatives -- idempotent regen (ADR 022)', () => {
 	it('does not bump mtime on a second run with identical input', () => {
 		writeAimDerivatives({
 			extracted: buildExtracted(),
-			downloaderManifest,
+			edition: TEST_EDITION,
+			primary: testPrimary,
 			derivativeRoot: tempDerivative,
 		});
 
-		const editionRoot = join(tempDerivative, downloaderManifest.edition);
+		const editionRoot = join(tempDerivative, TEST_EDITION);
 		const trackedPaths = [
 			join(editionRoot, 'manifest.json'),
-			join(editionRoot, 'chapter-1', 'index.md'),
-			join(editionRoot, 'chapter-1', 'section-1', 'index.md'),
-			join(editionRoot, 'chapter-1', 'section-1', 'paragraph-1.md'),
+			join(editionRoot, CH1_DIR, CH1_OVERVIEW),
+			join(editionRoot, CH1_DIR, SEC1_DIR, SEC1_OVERVIEW),
+			join(editionRoot, CH1_DIR, SEC1_DIR, PARA_1_1_1),
 			join(editionRoot, 'glossary', 'absolute-altitude.md'),
 			join(editionRoot, 'appendix-1.md'),
 		];
@@ -332,7 +345,8 @@ describe('writeAimDerivatives -- idempotent regen (ADR 022)', () => {
 
 		writeAimDerivatives({
 			extracted: buildExtracted(),
-			downloaderManifest,
+			edition: TEST_EDITION,
+			primary: testPrimary,
 			derivativeRoot: tempDerivative,
 		});
 
@@ -345,13 +359,14 @@ describe('writeAimDerivatives -- idempotent regen (ADR 022)', () => {
 	it('rewrites only changed files when one body changes', () => {
 		writeAimDerivatives({
 			extracted: buildExtracted(),
-			downloaderManifest,
+			edition: TEST_EDITION,
+			primary: testPrimary,
 			derivativeRoot: tempDerivative,
 		});
 
-		const editionRoot = join(tempDerivative, downloaderManifest.edition);
-		const stableMd = join(editionRoot, 'chapter-1', 'section-1', 'index.md');
-		const changedMd = join(editionRoot, 'chapter-1', 'section-1', 'paragraph-1.md');
+		const editionRoot = join(tempDerivative, TEST_EDITION);
+		const stableMd = join(editionRoot, CH1_DIR, SEC1_DIR, SEC1_OVERVIEW);
+		const changedMd = join(editionRoot, CH1_DIR, SEC1_DIR, PARA_1_1_1);
 		const past = new Date(Date.now() - 5000);
 		utimesSync(stableMd, past, past);
 		utimesSync(changedMd, past, past);
@@ -373,7 +388,12 @@ describe('writeAimDerivatives -- idempotent regen (ADR 022)', () => {
 			],
 		};
 
-		writeAimDerivatives({ extracted: mutated, downloaderManifest, derivativeRoot: tempDerivative });
+		writeAimDerivatives({
+			extracted: mutated,
+			edition: TEST_EDITION,
+			primary: testPrimary,
+			derivativeRoot: tempDerivative,
+		});
 
 		expect(statSync(stableMd).mtimeMs).toBe(stableBefore);
 		expect(statSync(changedMd).mtimeMs).not.toBe(changedBefore);
