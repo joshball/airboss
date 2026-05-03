@@ -124,16 +124,16 @@ export async function seedCfrManifest(
 
 		// Upsert the reference to populate `section_schema` while preserving
 		// YAML-authored metadata (subjects, primary_cert, title, url) via the
-		// undefined-on-conflict path in `upsertReference`. The YAML phase that
-		// runs after the manifest phase in `seed-all` is the canonical author
-		// for those fields; we just attach the level vocabulary here.
+		// undefined-on-conflict path in `upsertReference`. The YAML phase
+		// runs BEFORE this in `seed-all` and is the canonical author for
+		// those fields; we just attach the level vocabulary here.
 		const ref = await upsertReference({
 			kind: REFERENCE_KINDS.CFR,
 			documentSlug,
 			edition: CFR_DB_EDITION,
-			// `title` is a required upsert field; the YAML phase rewrites it
-			// to the canonical `14 CFR Part 91 -- ...` form right after this
-			// runs in seed-all. Pre-stamp it with a placeholder that's still
+			// `title` is a required upsert field; the YAML phase ran just
+			// before this and authored the canonical `14 CFR Part 91 -- ...`
+			// form. Pre-stamp it with a placeholder that's still
 			// recognisable if the YAML phase is somehow skipped.
 			title: `${manifest.title} CFR Part ${partKey}`,
 			publisher: 'FAA',
