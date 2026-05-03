@@ -1627,6 +1627,35 @@ export const REFERENCE_SECTION_LEVELS = {
 	 * pointers, change list) when section-level extraction lands.
 	 */
 	CIRCULAR: 'circular',
+	/**
+	 * CFR Part-level container (WP-CFR). The seeder doesn't produce part rows
+	 * today (the `reference` row IS the Part), but the level vocabulary
+	 * declares it on `section_schema` so the reader can render Part chrome and
+	 * a future WP can lay down explicit Part rows when sub-Part subdivisions
+	 * (e.g. Subpart B navigation) become important.
+	 */
+	PART: 'part',
+	/**
+	 * CFR Subpart-level grouping (WP-CFR). Skipped by the initial seeder --
+	 * sections sit flat under the reference -- but declared on the level
+	 * vocabulary so a future WP can lay down Subpart rows for asymmetric
+	 * Parts (e.g. 14 CFR 91 Subparts A through K).
+	 */
+	SUBPART: 'subpart',
+	/**
+	 * CFR sub-paragraph level (WP-CFR; reserved). The section is the citable
+	 * unit for the initial seed, but the level vocabulary anticipates a
+	 * future WP that lays down `(b)(1)` rows when reverse-citation panels
+	 * need sub-section granularity.
+	 */
+	SUBPARAGRAPH: 'subparagraph',
+	/**
+	 * CFR clause-level (WP-CFR; reserved). Same anticipation as
+	 * `subparagraph`: future WP territory; declared on the vocabulary now so
+	 * the schema doesn't need a follow-on migration when finer granularity
+	 * lands.
+	 */
+	CLAUSE: 'clause',
 } as const;
 
 export type ReferenceSectionLevel = (typeof REFERENCE_SECTION_LEVELS)[keyof typeof REFERENCE_SECTION_LEVELS];
@@ -1642,6 +1671,10 @@ export const REFERENCE_SECTION_LEVEL_LABELS: Record<ReferenceSectionLevel, strin
 	[REFERENCE_SECTION_LEVELS.GLOSSARY]: 'Glossary',
 	[REFERENCE_SECTION_LEVELS.DOCUMENT]: 'Document',
 	[REFERENCE_SECTION_LEVELS.CIRCULAR]: 'Circular',
+	[REFERENCE_SECTION_LEVELS.PART]: 'Part',
+	[REFERENCE_SECTION_LEVELS.SUBPART]: 'Subpart',
+	[REFERENCE_SECTION_LEVELS.SUBPARAGRAPH]: 'Subparagraph',
+	[REFERENCE_SECTION_LEVELS.CLAUSE]: 'Clause',
 };
 
 /**
