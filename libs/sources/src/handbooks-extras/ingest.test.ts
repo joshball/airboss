@@ -417,25 +417,37 @@ describe('runHandbooksExtrasIngest -- live cache (smoke)', () => {
 			// Subjects + primary_cert flow through from the YAML row (WP-EXTRAS-YAML).
 			expect(rmhManifest.subjects).toEqual(['human-factors']);
 			expect(rmhManifest.primary_cert).toBe('private');
-			// Spot-check a row authored with primary_cert: null in the YAML.
+
+			// mtn-tips has been promoted to section-tree (WP-MTN-section-tree).
+			// Its body_override carries `## ` chapter headings; the ingest
+			// now emits a `kind: 'handbook'` manifest with chapter / section
+			// rows instead of a single whole-doc body.
 			const mtnManifestPath = join(tempDerivative, 'tips-mountain-flying', 'MTN-2003', 'manifest.json');
 			const mtnManifest = JSON.parse(readFileSync(mtnManifestPath, 'utf-8')) as Record<string, unknown>;
+			expect(mtnManifest.kind).toBe('handbook');
 			expect(mtnManifest.subjects).toEqual(['performance', 'weather', 'emergencies']);
 			expect(mtnManifest.primary_cert).toBeNull();
-
-			// body_override: the mtn-tips entry declares an override at
-			// scripts/sources/config/handbooks-extras-overrides/faa-mtn-tips.md.
-			// The produced `<slug>-<faaDir>.md` body file must be that file's
-			// contents verbatim, not the OCR garbage that pdftotext would emit
-			// for the scanned 1999 pamphlet.
-			const mtnBodyPath = join(tempDerivative, 'tips-mountain-flying', 'MTN-2003', 'tips-mountain-flying-MTN-2003.md');
-			const mtnBody = readFileSync(mtnBodyPath, 'utf-8');
-			const overrideSource = readFileSync(
-				join(process.cwd(), 'scripts/sources/config/handbooks-extras-overrides/faa-mtn-tips.md'),
-				'utf-8',
+			const mtnSections = mtnManifest.sections as readonly Record<string, unknown>[];
+			expect(mtnSections.length).toBeGreaterThan(12);
+			const mtnChapters = mtnSections.filter((s) => s.level === 'chapter');
+			expect(mtnChapters.length).toBe(12);
+			// Per-chapter overview file exists at `<NN>-<chapter-slug>/00-<chapter-slug>.md`.
+			const forewordOverview = join(
+				tempDerivative,
+				'tips-mountain-flying',
+				'MTN-2003',
+				'01-foreword',
+				'00-foreword.md',
 			);
-			expect(mtnBody).toBe(overrideSource);
-			expect(mtnBody).toContain('# Tips on Mountain Flying');
+			expect(existsSync(forewordOverview)).toBe(true);
+			// The pre-existing whole-doc body file MUST NOT be left behind.
+			const mtnLegacyBodyPath = join(
+				tempDerivative,
+				'tips-mountain-flying',
+				'MTN-2003',
+				'tips-mountain-flying-MTN-2003.md',
+			);
+			expect(existsSync(mtnLegacyBodyPath)).toBe(false);
 		},
 		// The smoke test runs the full extract pipeline twice (initial + the
 		// idempotency re-check), so 4 entries means 8 PDF extractions. Each

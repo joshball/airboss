@@ -39,7 +39,7 @@
  */
 
 import { createHash } from 'node:crypto';
-import { existsSync, mkdirSync, readFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
 import { type AviationTopic, type CertApplicability, resolveCacheRoot, SOURCE_CACHE } from '@ab/constants';
 import { writeIfChanged } from '../io/write-if-changed.ts';
@@ -52,9 +52,12 @@ import {
 	type ExtrasCorpusIndex,
 	type ExtrasCorpusIndexEntry,
 	type ExtrasManifestFile,
+	type ExtrasSectionRow,
+	type ExtrasSectionTreeManifestFile,
 	loadHandbooksExtrasYaml,
 	readCacheManifest,
 } from './derivative-reader.ts';
+import { type ParsedChapter, parseOverrideToSectionTree } from './section-tree-parser.ts';
 
 export const HANDBOOKS_EXTRAS_REVIEWER_ID = 'handbooks-extras-ingestion';
 
@@ -230,6 +233,162 @@ function ensureDir(path: string): void {
 	}
 }
 
+/** Zero-pad an ordinal to 2 digits (`'1'` -> `'01'`, `'10'` -> `'10'`). */
+function padOrdinal2(value: number): string {
+	return value.toString().padStart(2, '0');
+}
+
+interface SectionTreeWriteResult {
+	readonly manifestSections: ExtrasSectionRow[];
+	readonly chaptersWritten: number;
+	readonly sectionsWritten: number;
+}
+
+/**
+ * Write the chapter / section markdown files for a section-tree-shaped
+ * override and return the manifest section rows. Output layout mirrors AVWX:
+ *
+ *   <docDir>/<NN>-<chapter-slug>/00-<chapter-slug>.md         (chapter overview)
+ *   <docDir>/<NN>-<chapter-slug>/<MM>-<section-slug>.md       (section)
+ *
+ * `parsed` comes from `parseOverrideToSectionTree`. The chapter overview body
+ * carries the prose between the chapter heading and the first section heading
+ * (or all chapter prose when the chapter has no sections). When that prose is
+ * empty the writer emits a single-line placeholder so the file always exists
+ * on disk and the seeder's "missing body" guard never trips.
+ */
+function writeSectionTreeDerivatives(args: {
+	readonly extra: CachedExtra;
+	readonly docDir: string;
+	readonly chapters: readonly ParsedChapter[];
+	readonly sourceUrl: string;
+	readonly faaDir: string;
+}): SectionTreeWriteResult {
+	const { extra, docDir, chapters, sourceUrl, faaDir } = args;
+	const rows: ExtrasSectionRow[] = [];
+	let chaptersWritten = 0;
+	let sectionsWritten = 0;
+	const display = FRIENDLY_DISPLAY[extra.slug];
+	if (display === undefined) {
+		throw new Error(`handbooks-extras: no FRIENDLY_DISPLAY for slug "${extra.slug}"`);
+	}
+	const shortCode = display.short;
+
+	for (let chIdx = 0; chIdx < chapters.length; chIdx++) {
+		const chapter = chapters[chIdx];
+		if (chapter === undefined) continue;
+		const chapterOrdinal = chIdx + 1;
+		const chapterCode = chapterOrdinal.toString();
+		const chapterDirName = `${padOrdinal2(chapterOrdinal)}-${chapter.slug}`;
+		const chapterDir = join(docDir, chapterDirName);
+		ensureDir(chapterDir);
+
+		// Chapter overview body. Includes a frontmatter block matching the AVWX
+		// section frontmatter shape so any tooling that reads frontmatter (or a
+		// future schema validator) sees consistent fields. Per-chapter source_url
+		// is the FAA whole-doc PDF (mtn-tips has no per-chapter PDFs).
+		const chapterFrontmatter = renderFrontmatter({
+			handbook: extra.slug,
+			edition: faaDir,
+			chapterNumber: chapterOrdinal,
+			sectionTitle: chapter.title,
+			faaPages: '',
+			sourceUrl,
+		});
+		const overviewBody =
+			chapter.overview.length > 0 ? chapter.overview : `# ${chapter.title}\n\n_(no chapter overview)_\n`;
+		const chapterFile = `00-${chapter.slug}.md`;
+		const chapterFilePath = join(chapterDir, chapterFile);
+		const chapterFileContent = `${chapterFrontmatter}# ${chapter.title}\n\n${overviewBody}\n`;
+		writeIfChanged(chapterFilePath, chapterFileContent);
+		chaptersWritten += 1;
+		rows.push({
+			level: 'chapter',
+			code: chapterCode,
+			ordinal: chapterOrdinal,
+			parent_code: null,
+			title: chapter.title,
+			faa_page_start: null,
+			faa_page_end: null,
+			source_locator: `${shortCode} Ch.${chapterCode}`,
+			body_path: `handbooks/${extra.slug}/${faaDir}/${chapterDirName}/${chapterFile}`,
+			content_hash: sha256(chapterFileContent),
+			has_figures: false,
+			has_tables: false,
+		});
+
+		for (let secIdx = 0; secIdx < chapter.sections.length; secIdx++) {
+			const section = chapter.sections[secIdx];
+			if (section === undefined) continue;
+			const sectionOrdinal = secIdx + 1;
+			const sectionCode = `${chapterCode}.${sectionOrdinal}`;
+			const sectionFile = `${padOrdinal2(sectionOrdinal)}-${section.slug}.md`;
+			const sectionFilePath = join(chapterDir, sectionFile);
+			const sectionFrontmatter = renderFrontmatter({
+				handbook: extra.slug,
+				edition: faaDir,
+				chapterNumber: chapterOrdinal,
+				sectionNumber: sectionOrdinal,
+				sectionTitle: section.title,
+				faaPages: '',
+				sourceUrl,
+			});
+			const sectionBody = section.body.length > 0 ? section.body : `_(no section body)_`;
+			const sectionFileContent = `${sectionFrontmatter}# ${section.title}\n\n${sectionBody}\n`;
+			writeIfChanged(sectionFilePath, sectionFileContent);
+			sectionsWritten += 1;
+			rows.push({
+				level: 'section',
+				code: sectionCode,
+				ordinal: sectionOrdinal,
+				parent_code: chapterCode,
+				title: section.title,
+				faa_page_start: null,
+				faa_page_end: null,
+				source_locator: `${shortCode} Ch.${sectionCode}`,
+				body_path: `handbooks/${extra.slug}/${faaDir}/${chapterDirName}/${sectionFile}`,
+				content_hash: sha256(sectionFileContent),
+				has_figures: false,
+				has_tables: false,
+			});
+		}
+	}
+
+	return { manifestSections: rows, chaptersWritten, sectionsWritten };
+}
+
+/**
+ * Render YAML frontmatter for a per-section markdown file. Mirrors the
+ * shape AVWX/PHAK/AFH section files carry, validated by
+ * `handbookSectionFrontmatterSchema` in `libs/bc/study/src/manifest-validation.ts`.
+ */
+function renderFrontmatter(args: {
+	readonly handbook: string;
+	readonly edition: string;
+	readonly chapterNumber: number;
+	readonly sectionNumber?: number;
+	readonly sectionTitle: string;
+	readonly faaPages: string;
+	readonly sourceUrl: string;
+}): string {
+	const lines: string[] = ['---'];
+	lines.push(`handbook: ${args.handbook}`);
+	lines.push(`edition: ${args.edition}`);
+	lines.push(`chapter_number: ${args.chapterNumber}`);
+	if (args.sectionNumber !== undefined) {
+		lines.push(`section_number: ${args.sectionNumber}`);
+	}
+	// section_title may carry colons / quotes; quote with single quotes and
+	// escape internal apostrophes by doubling per YAML 1.2.
+	const titleEscaped = args.sectionTitle.replace(/'/g, "''");
+	lines.push(`section_title: '${titleEscaped}'`);
+	lines.push(`faa_pages: '${args.faaPages}'`);
+	lines.push(`source_url: ${args.sourceUrl}`);
+	lines.push('---');
+	lines.push('');
+	return `${lines.join('\n')}\n`;
+}
+
 function buildSourceEntry(args: { extra: CachedExtra; title: string; publishedDate: Date }): SourceEntry {
 	const { extra, title, publishedDate } = args;
 	const display = FRIENDLY_DISPLAY[extra.slug];
@@ -308,34 +467,92 @@ export async function runHandbooksExtrasIngest(args: IngestArgs): Promise<Ingest
 				extra.bodyOverridePath !== null
 					? readFileSync(extra.bodyOverridePath, 'utf-8')
 					: doc.pages.map((p) => p.text).join('\n\n');
-			const bodySha = sha256(documentBody);
 
 			const docDir = join(args.derivativeRoot, extra.slug, extra.faaDir);
 			ensureDir(docDir);
-			const bodyFilename = `${extra.slug}-${extra.faaDir}.md`;
-			const bodyPath = join(docDir, bodyFilename);
-			writeIfChanged(bodyPath, documentBody);
+			const wholeDocBodyFilename = `${extra.slug}-${extra.faaDir}.md`;
+			const wholeDocBodyPath = join(docDir, wholeDocBodyFilename);
 
-			const manifest: ExtrasManifestFile = {
-				document_slug: extra.slug,
-				edition: extra.editionSlug,
-				kind: 'whole-doc',
-				title,
-				publisher: 'FAA',
-				source_url: extra.sourceUrl,
-				source_checksum: extra.sourceSha256,
-				fetched_at: extra.fetchedAt,
-				sections: [],
-				body_path: `handbooks/${extra.slug}/${extra.faaDir}/${bodyFilename}`,
-				body_sha256: bodySha,
-				page_count: doc.pageCount,
-				doc_id: extra.docId,
-				faa_edition: extra.edition,
-				subjects: extra.subjects,
-				primary_cert: extra.primaryCert,
-			};
+			// Decide whether the override is structured (H2 chapters) and
+			// should produce a section-tree manifest, or whether the doc
+			// stays whole-doc. Any non-override extra (no body_override) and
+			// any override that lacks `## ` headings falls through to the
+			// existing whole-doc branch unchanged.
+			const overrideTree =
+				extra.bodyOverridePath !== null ? parseOverrideToSectionTree(documentBody) : { kind: 'flat' as const };
+
 			const manifestPath = join(docDir, 'manifest.json');
-			writeIfChanged(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
+
+			if (overrideTree.kind === 'section-tree') {
+				// Section-tree branch -- write per-chapter dirs + per-section
+				// files, emit a `kind: 'handbook'` manifest validated by
+				// `sectionTreeManifestSchema` downstream.
+				const written = writeSectionTreeDerivatives({
+					extra,
+					docDir,
+					chapters: overrideTree.chapters,
+					sourceUrl: extra.sourceUrl,
+					faaDir: extra.faaDir,
+				});
+
+				// Clean up any stale whole-doc body file from a prior run that
+				// produced `kind: 'whole-doc'`. Otherwise the old single-body
+				// markdown would sit alongside the new per-chapter tree and
+				// confuse the reader (and the smoke test).
+				if (existsSync(wholeDocBodyPath)) {
+					rmSync(wholeDocBodyPath, { force: true });
+				}
+
+				const manifest: ExtrasSectionTreeManifestFile = {
+					document_slug: extra.slug,
+					edition: extra.editionSlug,
+					kind: 'handbook',
+					title,
+					publisher: 'FAA',
+					source_url: extra.sourceUrl,
+					source_checksum: extra.sourceSha256,
+					fetched_at: extra.fetchedAt,
+					sections: written.manifestSections,
+					figures: [],
+					warnings: [],
+					subjects: extra.subjects,
+					primary_cert: extra.primaryCert,
+					extraction: {
+						section_strategy: {
+							kind: 'override-md',
+							config: {},
+						},
+					},
+					page_count: doc.pageCount,
+					doc_id: extra.docId,
+					faa_edition: extra.edition,
+				};
+				writeIfChanged(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
+			} else {
+				// Whole-doc branch (existing behaviour).
+				writeIfChanged(wholeDocBodyPath, documentBody);
+				const bodySha = sha256(documentBody);
+
+				const manifest: ExtrasManifestFile = {
+					document_slug: extra.slug,
+					edition: extra.editionSlug,
+					kind: 'whole-doc',
+					title,
+					publisher: 'FAA',
+					source_url: extra.sourceUrl,
+					source_checksum: extra.sourceSha256,
+					fetched_at: extra.fetchedAt,
+					sections: [],
+					body_path: `handbooks/${extra.slug}/${extra.faaDir}/${wholeDocBodyFilename}`,
+					body_sha256: bodySha,
+					page_count: doc.pageCount,
+					doc_id: extra.docId,
+					faa_edition: extra.edition,
+					subjects: extra.subjects,
+					primary_cert: extra.primaryCert,
+				};
+				writeIfChanged(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
+			}
 
 			const entry = buildSourceEntry({ extra, title, publishedDate });
 			const existing = sourcesPatch[entry.id];
