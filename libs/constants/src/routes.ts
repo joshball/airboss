@@ -487,6 +487,18 @@ export const ROUTES = {
 	/** ACS task reader. */
 	FLIGHTBAG_ACS_TASK: (doc: string, area: string, task: string) =>
 		`/acs/${encodeURIComponent(doc)}/area/${encodeURIComponent(area)}/task/${encodeURIComponent(task)}` as const,
+	/**
+	 * NTSB administrative law judge ruling reader (WP-NTSB-ALJ). Whole-ruling
+	 * landing for a single case number; deep links into named opinion sections
+	 * are added when the per-ruling extractor lands. Until the flightbag has a
+	 * dedicated ALJ ruling page, the URI bridge falls back to `FLIGHTBAG_HOME`
+	 * via `urlForReference()`; this constant is reserved so callers can switch
+	 * to the canonical path in one place when the page exists.
+	 */
+	FLIGHTBAG_NTSB_ALJ: (caseNumber: string) => `/ntsb-alj/${encodeURIComponent(caseNumber)}` as const,
+	/** Named opinion section reader inside an ALJ ruling. */
+	FLIGHTBAG_NTSB_ALJ_SECTION: (caseNumber: string, section: string) =>
+		`/ntsb-alj/${encodeURIComponent(caseNumber)}/${encodeURIComponent(section)}` as const,
 } as const;
 
 /**

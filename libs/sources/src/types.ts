@@ -219,6 +219,8 @@ export type ParsedLocator = {
 	readonly tcds?: ParsedTcdsLocator;
 	/** Aviation Safety Reporting System payload populated by Phase 10's `parseAsrsLocator`. */
 	readonly asrs?: ParsedAsrsLocator;
+	/** NTSB administrative law judge ruling payload populated by `parseNtsbAljLocator`. */
+	readonly ntsbAlj?: ParsedNtsbAljLocator;
 };
 
 /**
@@ -654,6 +656,40 @@ export interface ParsedTcdsLocator {
 export interface ParsedAsrsLocator {
 	/** ACN as written, 7 digits (e.g. `'1234567'`). */
 	readonly acn: string;
+}
+
+/**
+ * Structured NTSB administrative law judge (ALJ) ruling locator surfaced by
+ * `parseNtsbAljLocator` in `libs/sources/src/ntsb-alj/locator.ts`. Source of
+ * truth: WP-NTSB-ALJ spec at `docs/work-packages/wp-ntsb-alj/spec.md` and
+ * `docs/work-packages/library-completeness/spec.md` §4.A.
+ *
+ * Locator shape:
+ *
+ *   <case-number>                             whole ruling, e.g. ea-5567, wd-1234, se-19045
+ *   <case-number>/<section>                   named opinion section
+ *
+ * Case-number format: `<prefix>-<digits>` where prefix is one of `ea`
+ * (Enforcement Appeals -- Board orders), `se` (Safety / Enforcement docket),
+ * `wd` (Withdrawal), or `ia` (Informal action). Stored lowercase in the
+ * locator; canonical FAA presentations uppercase the prefix (`EA-5567`).
+ *
+ * Section is one of `findings-of-fact`, `conclusions-of-law`, `order`,
+ * `discussion`, or `final` (default). Names are kebab-case lowercase.
+ *
+ * NTSB ALJ rulings are immutable post-publication; no `?at=` pin is required
+ * (the validator's row-3 pin-required check has a per-corpus exception list
+ * that includes `ntsb-alj`).
+ */
+export interface ParsedNtsbAljLocator {
+	/** Case number as written in the locator (lowercase, e.g. `'ea-5567'`). */
+	readonly caseNumber: string;
+	/** Prefix code (`'ea'`, `'se'`, `'wd'`, `'ia'`). */
+	readonly prefix: string;
+	/** Sequence digits (e.g. `'5567'`). */
+	readonly sequence: string;
+	/** Section name (e.g. `'findings-of-fact'`); omitted means "whole ruling" (= final). */
+	readonly section?: string;
 }
 
 export interface LocatorError {

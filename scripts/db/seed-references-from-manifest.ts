@@ -30,10 +30,18 @@
  *                              publication (depth 0) -> areas (depth 1) ->
  *                              tasks (depth 2) -> elements (depth 3).
  *                              Deepest tree shipped to date.
+ *   - `kind: 'ntsb-alj'`   -> NTSB-ALJ ruling adapter (WP-NTSB-ALJ). Produces
+ *                              ONE reference row per ruling plus a 1- or
+ *                              2-level tree: document (depth 0) optionally
+ *                              with five locked opinion-section children at
+ *                              depth 1 (Findings of Fact / Conclusions of
+ *                              Law / Order / Discussion / Final). Sections
+ *                              array empty = whole-doc; non-empty = section-
+ *                              tree.
  *
- * Today this script walks `handbooks/`, `aim/`, `ac/`, `regulations/`, and `acs/`.
- * Future corpus WPs extend `CORPUS_DIRS` and add a discriminator member on
- * `manifestSchema` (via the discriminated union at
+ * Today this script walks `handbooks/`, `aim/`, `ac/`, `regulations/`, `acs/`,
+ * and `ntsb-alj/`. Future corpus WPs extend `CORPUS_DIRS` and add a
+ * discriminator member on `manifestSchema` (via the discriminated union at
  * `libs/bc/study/src/manifest-validation.ts`).
  *
  * Idempotent: a section whose content_hash matches the DB row is a no-op
@@ -63,6 +71,7 @@ import { seedAcManifest } from '../../libs/bc/study/src/seeders/ac';
 import { seedAcsManifest } from '../../libs/bc/study/src/seeders/acs';
 import { seedAimManifest } from '../../libs/bc/study/src/seeders/aim';
 import { seedCfrManifest } from '../../libs/bc/study/src/seeders/cfr';
+import { seedNtsbAljManifest } from '../../libs/bc/study/src/seeders/ntsb-alj';
 import { seedSectionTreeManifest } from '../../libs/bc/study/src/seeders/section-tree';
 import { emptySummary, type SeedContext, type SeedSummary } from '../../libs/bc/study/src/seeders/types';
 import { seedWholeDocManifest } from '../../libs/bc/study/src/seeders/whole-doc';
@@ -75,7 +84,7 @@ const REPO_ROOT = resolve(HERE, '..', '..');
  * relative to the repo root; the seeder enumerates `<dir>/<doc>/<edition>/
  * manifest.json` under it. Add new corpora here as their WPs land.
  */
-const CORPUS_DIRS = ['handbooks', 'aim', 'ac', 'regulations', 'acs'] as const;
+const CORPUS_DIRS = ['handbooks', 'aim', 'ac', 'regulations', 'acs', 'ntsb-alj'] as const;
 
 /**
  * Corpora where the single-doc layout (`<corpus>/<child>/manifest.json`)
@@ -217,6 +226,8 @@ async function dispatchManifest(manifestPath: string, context: SeedContext, summ
 			return seedCfrManifest(manifest, { manifestAbsPath: manifestPath }, context, summary);
 		case 'acs':
 			return [await seedAcsManifest(manifest, context, summary)];
+		case 'ntsb-alj':
+			return [await seedNtsbAljManifest(manifest, context, summary)];
 	}
 }
 
