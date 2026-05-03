@@ -14,9 +14,11 @@ Where each item from [spec.md §6 (Recommended sequence)](spec.md#6-recommended-
 
 ## Headline
 
-**31 references readable in-app today.** That's PHAK + AFH + AVWX + AIM + 11 CFR parts + 7 whole-doc handbooks + 9 ACs. The in-app-readable list grew by 9 ACs after WP-AC shipped (#480, 2026-05-02); the 2026-05-03 session added 12 more (WP-CFR shipped 11; rename WP touched AMT-G/P naming). The references cleanup sweep enriched 4 of the 9 readable AC cards with curated metadata + retired 2 dupe handbook rows + retired the AIM `current` orphan.
+**36 references readable in-app today** (post 2026-05-03 session): PHAK + AFH + AVWX + AIM + 11 CFR parts + 5 whole-doc handbooks (RMH, AIH, IFH, IPH, mtn-tips — AMT-G/P removed in #505) + 9 ACs + 5 ACS publications. The references cleanup sweep enriched 4 of the 9 readable AC cards with curated metadata + retired 2 dupe handbook rows + retired the AIM `current` orphan.
 
-**~28 references catalogued but NOT readable.** Cards exist on `/library` (showing "external link"); no `reference_section` rows seeded.
+The 5 whole-doc handbooks are scheduled for promotion to section-tree shape on 2026-05-03 via 5 parallel agent dispatches; once landed, every readable reference is a section-tree.
+
+**~14 link-only cards.** 12 AC link-only + 2 ACS link-only. Need full pipeline (download + extract + section-tree seed). Plus ~11 umbrella cards (NTSB archive, POH, AOPA, etc.) intentionally link-only.
 
 **Manifest-vs-card gap is bigger than I described in [stage-status.md](../../ingestion-pipeline/stage-status.md).** The earlier snapshot reported "9 manifests, 17 AC cards" as if the gap was just adapter wiring. The real gap has three flavors:
 
@@ -29,17 +31,38 @@ Where each item from [spec.md §6 (Recommended sequence)](spec.md#6-recommended-
 | # | WP | Status | What's done | What's blocking |
 | - | -- | ------ | ------------ | --------------- |
 | 1 | **WP-SUB** (substrate) | ✅ Shipped 2026-05-01 (#393 + #396) | `reference_section` substrate, two-shape seeder dispatch, `getReadableReferenceIds()` content-based, primary_cert column preserved | — |
-| 2 | **WP-MTN** (Mountain Flying pamphlet) | ✅ Shipped 2026-05-03 | Hand-cleaned override at `scripts/sources/config/handbooks-extras-overrides/faa-mtn-tips.md` via the `body_override` mechanism (#489); seeded as whole-doc | — |
+| 2 | **WP-MTN** (Mountain Flying pamphlet) | ✅ Shipped 2026-05-03 (whole-doc); section-tree promotion in flight | Hand-cleaned override at `scripts/sources/config/handbooks-extras-overrides/faa-mtn-tips.md` via the `body_override` mechanism (#489); seeded as whole-doc. Section-tree promotion (parse override into chapter/section manifest) dispatched 2026-05-03. | — |
 | 3 | **WP-AIM** | ✅ Shipped (pre-session) | 744 entries (10 chapters + 38 sections + 396 paragraphs + 297 glossary terms + 3 appendices) seeded as section-tree | — |
 | 4 | **WP-CFR-V** (CFR seed) | ✅ Shipped 2026-05-03 (#491) | 825 sections across 11 references; `kind: 'cfr'` schema + `seedCfrManifest` adapter + dispatcher case + `kind: 'cfr'` backfilled on 3 manifests | — |
 | 5 | **WP-AC-V** (AC visibility) | ✅ Shipped 2026-05-02 (#480), reconciliation followup ✅ shipped via references cleanup sweep | All 9 on-disk AC manifests seed as readable references via `kind: 'ac'` schema + `seedAcManifest` adapter + dispatcher case + `seed-mapping.ts` registry (9 entries). YAML phase now enriches all 9 (4 missing rows added in cleanup sweep: `ac-25-7`, `ac-61-65`, `ac-91-21-1`, `ac-120-71`). | The 12 cards with NO manifest still need WP-AC-FULL (download + extract). |
-| 6 | **WP-ACS-V** (ACS visibility) | 🟡 Partial — gap still open | 5 of the 7 ACS cards have on-disk manifests. Schema + adapter NOT yet built. | Need `kind: 'acs'` schema (deepest tree of any corpus: publication → area → task → element), `seedAcsManifest` adapter, dispatcher case. PLUS: 2 cards lack manifests (`cfii-airplane-pts-9e`, `faa-g-acs-2-companion-guide`). PLUS: ACS slug edition mapping (gap 2 from broad survey) needs reconciliation. |
+| 6 | **WP-ACS-V** (ACS visibility) | ✅ Shipped 2026-05-03 (#501) | 5 ACS publications seeded as section-tree (publication → area → task → element). 1,910 sections total. PPL/IR/CPL/CFI/ATP all readable in-app. CFI has empty `elements: []` because FAA didn't carry K/R/S codes. Slug-mapping fixed (`<rating>-airplane-<edition>` → `<rating>-airplane-acs-<edition>`). | The 2 link-only ACS cards (`cfii-airplane-pts-9e` PTS, `faa-g-acs-2-companion-guide`) stay link-only; need their own pipelines. |
 | 7 | **WP-CC** (Chief Counsel) | ❌ Not started | Has umbrella card via `course/references/other-publications.yaml` | New corpus pipeline: source/extract/register. ADR 019 already provisions the URI. |
 | 8 | **WP-NTSB-ALJ** | ❌ Not started | Has umbrella card via `course/references/ntsb.yaml` | New corpus pipeline. NTSB has its own data model (accident reports, recommendations, factual reports). |
 | 9 | **WP-SAFO + WP-INFO** | ❌ Not started | No cards yet | New corpus pipeline (DRS-first per spec §4.C/4.D ratification). |
 | 10 | **WP-AC-FULL** | ❌ Not started | Depends on WP-AC-V landing first | Expand AC config from 17 → ~50 curated-relevance ACs. Content-only WP. |
 | 11 | **WP-O8900-V5** | ❌ Deferred | — | Trigger to revisit per spec: "we ship CFI training content that benefits from Vol 5." |
 | 12 | **WP-SAFETY-BRIEF** | ❌ Deferred | — | Per spec §5 ratification (low priority). |
+
+## In-flight 2026-05-03 (parallel agent dispatch)
+
+7 background agents dispatched at 2026-05-03 ~18:50 UTC. See [docs/work-packages/whole-doc-promotion/sequence.md](../whole-doc-promotion/sequence.md) for tracking.
+
+| WP | Effect |
+|----|--------|
+| WP-MTN section-tree promotion | Mountain-flying becomes section-tree (parse existing override) |
+| WP-RMH section-tree promotion | Risk Management Handbook becomes section-tree (bookmark extraction) |
+| WP-AIH section-tree promotion | Aviation Instructor's Handbook becomes section-tree (Class A2 chapter PDFs) |
+| WP-IPH section-tree promotion | Instrument Procedures Handbook becomes section-tree (chapter PDFs + sidecar TOC) |
+| WP-IFH section-tree promotion | Instrument Flying Handbook becomes section-tree (TOC-file parser) |
+| Cleanup sweep | AC YAML reconciliation + dupe-row delete + PCG decision + AIM `current` orphan delete |
+| Flightbag scaffold | `apps/flightbag/` + `libs/library/` + `urlForReference()` helper + `ROUTES.FLIGHTBAG_*` constants |
+
+After all 7 land:
+
+- All readable references are section-tree (whole-doc retired)
+- `handbooks-extras` corpus retires (zero entries)
+- `apps/flightbag/` scaffolded as canonical reader
+- Citation chips ready to migrate from study `/library/...` to `flightbag/...` URLs
 
 ## AC gap detail (the manifest-vs-card mismatch)
 
