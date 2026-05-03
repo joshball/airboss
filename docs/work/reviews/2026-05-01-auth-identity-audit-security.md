@@ -4,7 +4,7 @@ category: security
 date: 2026-05-01
 branch: main
 status: unread
-review_status: pending
+review_status: done
 counts:
   critical: 1
   major: 5
@@ -12,6 +12,36 @@ counts:
   nit: 4
   total: 17
 ---
+
+## Status as of 2026-05-04
+
+Walked every finding against current main. 14 of 17 closed; 3 carried as design items with concrete triggers.
+
+| Severity | Finding                                              | Verdict                                                                                       |
+| -------- | ---------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| CRITICAL | Public sign-up enabled on private product            | CLOSED -- `libs/auth/src/server.ts:155` `disableSignUp: true` (PR #423)                       |
+| MAJOR    | Login and logout not audited                         | CLOSED -- `libs/auth/src/audit-hooks.ts` + `libs/audit/src/auth-events.ts` (PR #439)          |
+| MAJOR    | Banned users keep working up to 5 min               | CLOSED -- documented trade-off; cookie-cache stays at 5 min, ban guard runs after hydrate     |
+| MAJOR    | XFF / proxy-trust validation missing                | STILL OPEN -- design item, see below                                                          |
+| MAJOR    | Password reset / forget-password timing oracle       | STILL OPEN -- design item, see below                                                          |
+| MAJOR    | Hangar login renders dev password                    | CLOSED -- hangar/login/+page.svelte aligned with study (PR #469)                              |
+| MINOR    | Cookie names not `__Host-` prefixed                  | CLOSED -- comment in `libs/constants/src/auth.ts:22-25` documents cross-subdomain trade-off   |
+| MINOR    | Email logged as PII at info level on dev fallback    | CLOSED -- `redactEmail()` in `libs/auth/src/email/transport.ts:28-35`                         |
+| MINOR    | redirectTo filter does not normalize Unicode/encoded | CLOSED -- `libs/auth/src/redirect.ts` parses against placeholder origin + char allowlist      |
+| MINOR    | Sign-out forwards user-supplied Cookie header        | STILL OPEN -- design item, see below                                                          |
+| MINOR    | forwardAuthCookies re-encodes already-encoded values | CLOSED -- `libs/auth/src/cookies.test.ts:48` pins encoded round-trip                          |
+| MINOR    | bauthSession.token unindexed in declaration          | CLOSED -- `bauth_session_user_idx` added in schema.ts:56                                      |
+| MINOR    | audit_log.target_type CHECK constraint brittleness   | CLOSED -- `AUDIT_TARGETS_RETIRED` keeps historic values + comment block (audit.ts:89-98)      |
+| NIT      | Cookies.delete on logout uses path:'/' only          | CLOSED -- comment pinning the assumption in cookies.ts:152-156                                |
+| NIT      | HSTS preload directive may strand domain change      | CLOSED -- documented in hooks; HSTS preload is a deliberate one-way commitment                |
+| NIT      | requestId accepts arbitrary 64-char ASCII            | CLOSED -- helper renamed `acceptOrGenerateRequestId` + comment "correlation-only"             |
+| NIT      | Hooks degrade-on-DB silently null user               | CLOSED -- study/hangar log via `log.error('session lookup failed', ...)`; sim/avionics also do |
+
+### Carried-forward design items
+
+- **XFF / proxy-trust validation**: today no proxy fronts adapter-node; `getClientAddress()` returns the socket peer. Trigger to land: when a CDN / load balancer is configured in the deploy. Add `AIRBOSS_TRUSTED_PROXY` env-var gating + boot-time self-check at that point.
+- **Password-reset timing oracle**: `sendResetPassword` callback fires synchronously on the request thread, leaking SMTP latency. Trigger: when the dev fallback flips to a real outbound transport in production (`RESEND_API_KEY` set + the `requireEmailVerification` gate flipped). Add fixed-minimum delay or fire-and-forget dispatch then.
+- **Sign-out forwards user-supplied Cookie header**: today SvelteKit/Bun's `Headers` constructor sanitises CR/LF, so header injection is closed. Trigger: when the logout flow ever bypasses `Headers` (e.g. raw `Buffer` write). Pin a trust-boundary comment in both files when refactoring.
 
 ## Summary
 
