@@ -22,6 +22,11 @@ import {
 	HANDBOOK_SUGGEST_TOTAL_SECONDS,
 	ROUTES,
 } from '../../libs/constants/src';
+import { drizzle } from 'drizzle-orm/postgres-js';
+import { and, eq } from 'drizzle-orm';
+import postgres from 'postgres';
+import { reference } from '../../libs/bc/study/src/schema';
+import { seedKnowledgeNodeCitation } from './fixtures/fresh-user';
 
 // PHAK is the v1 ship handbook. Chapter 12 (Weather Theory) §9 (Atmospheric
 // Stability) is the canonical readable section: ~2.5KB body, no figures, no
@@ -431,11 +436,51 @@ test.describe('handbook reader: citing-nodes panel', () => {
 		await expect(page.locator('article.section-body')).toBeVisible();
 	});
 
-	// Phase 14 wired the resolver, but no knowledge node carries a structured
-	// handbook citation in the seeded dataset today. Once a fixture node
-	// adds `{ kind: 'handbook', reference_id, locator: { chapter: 12,
-	// section: 9 } }`, drop the skip and assert the round-trip click. The
-	// deferred work is tracked on
-	// docs/work-packages/handbook-ingestion-and-reader/tasks.md Phase 16.
-	test.skip('citing-node link round-trip (deferred -- no fixture node yet)', () => {});
+	// Round-trip click test for the citing-nodes panel. Previously deferred via
+	// `test.skip(...)` because no seeded knowledge node carried a structured
+	// handbook citation pointing at PHAK §12.9. The fixture below seeds one
+	// for the duration of this test, asserts the panel surfaces it, clicks
+	// through, and confirms the knowledge route resolves.
+	test('citing-node link round-trip lands on the knowledge page', async ({ page }) => {
+		// Resolve the seeded PHAK reference id directly via Drizzle so the
+		// fixture node's structured citation matches what the page renders.
+		const url = process.env.DATABASE_URL ?? 'postgresql://airboss:airboss@localhost:5435/airboss';
+		const client = postgres(url, { max: 1 });
+		let referenceId: string;
+		try {
+			const db = drizzle(client);
+			const rows = await db
+				.select({ id: reference.id })
+				.from(reference)
+				.where(and(eq(reference.documentSlug, PHAK_DOC), eq(reference.edition, PHAK_EDITION)))
+				.limit(1);
+			if (!rows[0]) throw new Error(`no reference row for ${PHAK_DOC}@${PHAK_EDITION}`);
+			referenceId = rows[0].id;
+		} finally {
+			await client.end();
+		}
+
+		const seeded = await seedKnowledgeNodeCitation({
+			referenceId,
+			chapter: Number(PHAK_CHAPTER_12),
+			section: Number(PHAK_SECTION_9),
+			title: 'E2E citing-node fixture',
+			domain: 'weather',
+		});
+		try {
+			await page.goto(ROUTES.LIBRARY_HANDBOOK_SECTION(PHAK_DOC, PHAK_CHAPTER_12, PHAK_SECTION_9));
+
+			// The aside surfaces the seeded node's title.
+			const panel = page.getByRole('complementary', { name: /knowledge nodes that cite this section/i });
+			await expect(panel).toBeVisible();
+			const link = panel.getByRole('link', { name: new RegExp(seeded.fixture.nodeTitle, 'i') });
+			await expect(link).toBeVisible();
+
+			// Click + assert URL.
+			await Promise.all([page.waitForURL(`**${ROUTES.KNOWLEDGE_SLUG(seeded.fixture.nodeId)}`), link.click()]);
+			await expect(page.getByRole('heading', { level: 1, name: seeded.fixture.nodeTitle })).toBeVisible();
+		} finally {
+			await seeded.teardown();
+		}
+	});
 });
