@@ -28,10 +28,26 @@ const overflowing = $derived(remaining < 0);
 		name="notesMd"
 		rows="5"
 		bind:value
+		maxlength={HANDBOOK_NOTES_MAX_LENGTH}
+		aria-invalid={overflowing}
+		aria-describedby="handbook-notes-counter"
 		placeholder="Anything you want to remember about this section."
 	></textarea>
 	<div class="footer">
-		<span class="counter" class:overflow={overflowing}>
+		<!--
+			The counter doubles as the aria-describedby target so SR users hear
+			"N characters remaining" alongside the textarea name. `aria-live`
+			announces overflow without re-announcing every keystroke. `maxlength`
+			gives us a hard browser-level guard so the user can't physically
+			exceed the limit.
+		-->
+		<span
+			id="handbook-notes-counter"
+			class="counter"
+			class:overflow={overflowing}
+			aria-live="polite"
+			aria-atomic="true"
+		>
 			{remaining} characters remaining
 		</span>
 		<button type="submit" disabled={overflowing}>Save notes</button>

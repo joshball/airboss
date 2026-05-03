@@ -131,9 +131,9 @@ let activeTab = $state('one');
 
 	<section>
 		<h2>FormField</h2>
-		<FormField label="Email" help="We'll never share it." required for="ff-email">
-			{#snippet control({ describedBy, invalid })}
-				<input id="ff-email" type="email" aria-describedby={describedBy} aria-invalid={invalid} />
+		<FormField label="Email" help="We'll never share it." required>
+			{#snippet control({ id, describedBy, invalid })}
+				<input {id} type="email" aria-describedby={describedBy} aria-invalid={invalid} />
 			{/snippet}
 		</FormField>
 	</section>

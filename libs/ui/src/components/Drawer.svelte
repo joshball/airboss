@@ -33,6 +33,8 @@ let {
 	size = 'md',
 	ariaLabel,
 	ariaLabelledby,
+	closeButton = true,
+	closeButtonLabel = 'Close',
 	onClose,
 	header,
 	body,
@@ -44,6 +46,15 @@ let {
 	size?: DrawerSize;
 	ariaLabel?: string;
 	ariaLabelledby?: string;
+	/**
+	 * Show a built-in close button in the panel's top-right. Defaults to
+	 * `true`. Touch users (full-width drawer on mobile, no scrim to click)
+	 * and AT users without keyboard ESC need a visible affordance. Set
+	 * `false` if the caller's `header` snippet already includes a close
+	 * affordance.
+	 */
+	closeButton?: boolean;
+	closeButtonLabel?: string;
 	onClose?: () => void;
 	header?: Snippet;
 	body?: Snippet;
@@ -109,8 +120,21 @@ $effect(() => {
 			aria-labelledby={ariaLabelledby}
 			tabindex="-1"
 		>
-			{#if header}
-				<div class="header">{@render header()}</div>
+			{#if header || closeButton}
+				<div class="header">
+					<div class="header-content">{#if header}{@render header()}{/if}</div>
+					{#if closeButton}
+						<button
+							type="button"
+							class="close"
+							aria-label={closeButtonLabel}
+							onclick={close}
+							data-testid="drawer-close"
+						>
+							<span aria-hidden="true">&times;</span>
+						</button>
+					{/if}
+				</div>
 			{/if}
 			<div class="body">
 				{#if body}{@render body()}{:else if children}{@render children()}{/if}
@@ -183,6 +207,35 @@ $effect(() => {
 	.header {
 		border-bottom: 1px solid var(--edge-subtle);
 		font-weight: var(--font-weight-semibold);
+		display: flex;
+		align-items: center;
+		gap: var(--space-sm);
+	}
+
+	.header-content {
+		flex: 1 1 auto;
+		min-width: 0;
+	}
+
+	.close {
+		flex: 0 0 auto;
+		background: transparent;
+		border: none;
+		font-size: var(--font-size-xl);
+		line-height: 1;
+		color: var(--ink-muted);
+		cursor: pointer;
+		padding: var(--space-2xs) var(--space-xs);
+		border-radius: var(--radius-sm);
+	}
+
+	.close:hover {
+		color: var(--ink-body);
+	}
+
+	.close:focus-visible {
+		outline: 2px solid var(--focus-ring);
+		outline-offset: 2px;
 	}
 
 	.body {

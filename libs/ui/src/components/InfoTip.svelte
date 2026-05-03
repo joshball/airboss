@@ -367,16 +367,21 @@ $effect(() => {
 		color: var(--ink-muted);
 	}
 
+	/*
+	 * Always-on underline so the "Learn more" link stays recognisable as
+	 * a link to colorblind readers (WCAG 1.4.1).
+	 */
 	.learn-more {
 		display: inline-block;
 		margin-top: var(--space-xs);
 		color: var(--action-default);
-		text-decoration: none;
+		text-decoration: underline;
+		text-underline-offset: var(--underline-offset-2xs);
 		font-weight: var(--font-weight-medium);
 	}
 
 	.learn-more:hover {
-		text-decoration: underline;
+		text-decoration-thickness: 2px;
 	}
 
 	.learn-more:focus-visible {

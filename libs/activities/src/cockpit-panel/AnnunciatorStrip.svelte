@@ -20,12 +20,18 @@ let { display }: Props = $props();
 const state = $derived(display === null ? null : annunciatorState(display, C172_CONFIG));
 </script>
 
+<!--
+	Lamps are status indicators, not buttons. Drop `aria-pressed` (which is
+	only valid on role=button) and rely on the wrapping role="status"
+	(which is a polite live region) plus the on/off class swap to convey
+	state changes to AT.
+-->
 <div class="strip" role="status" aria-label="System annunciators">
-	<span class={state?.lowVoltage ? 'lamp on' : 'lamp'} aria-pressed={!!state?.lowVoltage}>LOW VOLTS</span>
-	<span class={state?.lowFuel ? 'lamp on' : 'lamp'} aria-pressed={!!state?.lowFuel}>LOW FUEL</span>
-	<span class={state?.oilPress ? 'lamp on flash' : 'lamp'} aria-pressed={!!state?.oilPress}>OIL PRESS</span>
-	<span class={state?.oilTemp ? 'lamp on flash' : 'lamp'} aria-pressed={!!state?.oilTemp}>OIL TEMP</span>
-	<span class={state?.vacuumLow ? 'lamp on' : 'lamp'} aria-pressed={!!state?.vacuumLow}>VAC LOW</span>
+	<span class={state?.lowVoltage ? 'lamp on' : 'lamp'}>LOW VOLTS</span>
+	<span class={state?.lowFuel ? 'lamp on' : 'lamp'}>LOW FUEL</span>
+	<span class={state?.oilPress ? 'lamp on flash' : 'lamp'}>OIL PRESS</span>
+	<span class={state?.oilTemp ? 'lamp on flash' : 'lamp'}>OIL TEMP</span>
+	<span class={state?.vacuumLow ? 'lamp on' : 'lamp'}>VAC LOW</span>
 </div>
 
 <style>
@@ -53,9 +59,16 @@ const state = $derived(display === null ? null : annunciatorState(display, C172_
 		color: var(--sim-instrument-face);
 		border-color: var(--sim-arc-yellow);
 	}
-	.lamp.flash {
-		/* lint-disable-token-enforcement: cockpit annunciator cadence -- 800ms/2-step flash is a learned visual convention; deterministic regardless of motion tokens */
-		animation: lamp-flash 0.8s steps(2, end) infinite;
+	/*
+	 * The 0.8s/2-step flash is a learned cockpit visual convention. Honor
+	 * `prefers-reduced-motion` by suppressing the animation while keeping
+	 * the lit colour; the warning is still conveyed by colour + label.
+	 */
+	@media (prefers-reduced-motion: no-preference) {
+		.lamp.flash {
+			/* lint-disable-token-enforcement: cockpit annunciator cadence -- 800ms/2-step flash is a learned visual convention; deterministic regardless of motion tokens */
+			animation: lamp-flash 0.8s steps(2, end) infinite;
+		}
 	}
 
 	@keyframes lamp-flash {

@@ -63,8 +63,8 @@ const ticks = $derived(
 const display = $derived(formatter ? formatter(safeValue) : safeValue.toFixed(0));
 </script>
 
-<div class="cluster-gauge" aria-label={`${label} ${display} ${units}`}>
-	<svg viewBox="0 0 200 200" role="img">
+<div class="cluster-gauge">
+	<svg viewBox="0 0 200 200" role="img" aria-label={`${label} ${display} ${units}`}>
 		<circle cx="100" cy="100" r="96" class="instrument-face" stroke-width="2" />
 		<path d={greenArc} class="arc-green" stroke-width="6" fill="none" />
 		{#if redlineAngle !== null}

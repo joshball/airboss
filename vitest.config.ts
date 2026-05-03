@@ -22,6 +22,9 @@ const aliases = {
 	// other component without needing to enumerate them here.
 	'@ab/ui/components/Drawer.svelte': resolve('./libs/ui/src/components/Drawer.svelte'),
 	'@ab/ui/components': resolve('./libs/ui/src/components'),
+	'@ab/ui/lib/focus-trap': resolve('./libs/ui/src/lib/focus-trap.ts'),
+	'@ab/ui/lib/info-tip-resolver': resolve('./libs/ui/src/lib/info-tip-resolver.ts'),
+	'@ab/ui/lib': resolve('./libs/ui/src/lib'),
 	'@ab/ui': resolve('./libs/ui/src/index.ts'),
 	'@ab/utils': resolve('./libs/utils/src/index.ts'),
 	'@ab/bc-study': resolve('./libs/bc/study/src/index.ts'),
@@ -36,6 +39,12 @@ const aliases = {
 	'@ab/aviation/ui': resolve('./libs/aviation/src/ui'),
 	'@ab/aviation': resolve('./libs/aviation/src/index.ts'),
 	'@ab/help': resolve('./libs/help/src/index.ts'),
+	'@ab/activities/crosswind-component/CrosswindComponent.svelte': resolve(
+		'./libs/activities/src/crosswind-component/CrosswindComponent.svelte',
+	),
+	'@ab/activities/pfd': resolve('./libs/activities/src/pfd'),
+	'@ab/activities/cockpit-panel': resolve('./libs/activities/src/cockpit-panel'),
+	'@ab/activities/crosswind-component': resolve('./libs/activities/src/crosswind-component'),
 	'@ab/activities': resolve('./libs/activities/src/index.ts'),
 	'@ab/hangar-jobs/schema': resolve('./libs/hangar-jobs/src/schema.ts'),
 	'@ab/hangar-jobs': resolve('./libs/hangar-jobs/src/index.ts'),

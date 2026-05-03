@@ -64,8 +64,17 @@ const readerHref = $derived(isReadable ? ROUTES.LIBRARY_HANDBOOK(documentSlug) :
 				{/each}
 			</ul>
 		{/if}
-		<div class="progress" aria-label="Reading progress">
-			<div class="bar">
+		<div class="progress">
+			<div
+				class="bar"
+				role="progressbar"
+				aria-valuenow={percentRead}
+				aria-valuemin="0"
+				aria-valuemax="100"
+				aria-valuetext={progress
+					? `${progress.readSections} of ${progress.totalSections} sections read`
+					: 'Reading progress'}
+			>
 				<div class="fill" style="width: {percentRead}%" aria-hidden="true"></div>
 			</div>
 			<div class="counts">

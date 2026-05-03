@@ -81,6 +81,11 @@ let submitError = $state<string | null>(null);
 // not depend on which tab is active when the fetch returns.
 let searchToken = 0;
 
+// Per-instance id base for the tablist <-> tabpanel association. Each tab
+// gets `${tabsBaseId}-tab-${type}` so multiple CitationPickers on the same
+// page (rare but supported) don't collide on aria ids.
+const tabsBaseId = $props.id();
+
 // When the caller reconfigures targetTypes, reset the active tab to a valid
 // one. The write is wrapped in `untrack` so the self-loop guard in this
 // effect can't accidentally tighten into a real loop after a future edit.
@@ -199,6 +204,73 @@ function isHttpUrl(raw: string): boolean {
 	}
 }
 
+/**
+ * Roving-tabindex arrow navigation for the tablist. ArrowLeft/Right cycle
+ * through tabs; Home/End jump to first/last. Mirrors the shared
+ * `Tabs.svelte` keyboard contract.
+ */
+function handleTabKeyDown(event: KeyboardEvent, index: number): void {
+	const last = activeTypes.length - 1;
+	let nextIdx: number | null = null;
+	switch (event.key) {
+		case 'ArrowRight':
+		case 'ArrowDown':
+			nextIdx = index === last ? 0 : index + 1;
+			break;
+		case 'ArrowLeft':
+		case 'ArrowUp':
+			nextIdx = index === 0 ? last : index - 1;
+			break;
+		case 'Home':
+			nextIdx = 0;
+			break;
+		case 'End':
+			nextIdx = last;
+			break;
+	}
+	if (nextIdx === null) return;
+	event.preventDefault();
+	const next = activeTypes[nextIdx];
+	if (!next) return;
+	handleTabClick(next);
+	requestAnimationFrame(() => {
+		document.getElementById(`${tabsBaseId}-tab-${next}`)?.focus();
+	});
+}
+
+/**
+ * Roving-tabindex arrow navigation for the results listbox. Activation
+ * (selecting the option) happens on click; arrow keys move focus and
+ * select-as-you-go so SR users hear the option's name.
+ */
+function handleResultKeyDown(event: KeyboardEvent, index: number): void {
+	const last = results.length - 1;
+	let nextIdx: number | null = null;
+	switch (event.key) {
+		case 'ArrowDown':
+			nextIdx = index === last ? 0 : index + 1;
+			break;
+		case 'ArrowUp':
+			nextIdx = index === 0 ? last : index - 1;
+			break;
+		case 'Home':
+			nextIdx = 0;
+			break;
+		case 'End':
+			nextIdx = last;
+			break;
+	}
+	if (nextIdx === null) return;
+	event.preventDefault();
+	const next = results[nextIdx];
+	if (!next) return;
+	selectedId = next.id;
+	requestAnimationFrame(() => {
+		const buttons = document.querySelectorAll<HTMLButtonElement>('[role="listbox"] [role="option"]');
+		buttons[nextIdx ?? 0]?.focus();
+	});
+}
+
 async function submit(): Promise<void> {
 	if (!canSubmit) return;
 	submitting = true;
@@ -235,22 +307,31 @@ function cancel(): void {
 		<span data-testid="citationpicker-body" data-active-type={activeType}></span>
 		{#if activeTypes.length > 1}
 			<div class="tabs" role="tablist" aria-label="Reference types" data-testid="citationpicker-tabs">
-				{#each activeTypes as t (t)}
+				{#each activeTypes as t, i (t)}
 					<button
 						type="button"
 						role="tab"
+						id={`${tabsBaseId}-tab-${t}`}
 						aria-selected={activeType === t}
+						aria-controls={`${tabsBaseId}-panel`}
 						class="tab"
 						class:active={activeType === t}
 						data-testid={`citationpicker-tab-${t}`}
 						data-state={activeType === t ? 'active' : 'idle'}
+						tabindex={activeType === t ? 0 : -1}
 						onclick={() => handleTabClick(t)}
+						onkeydown={(e) => handleTabKeyDown(e, i)}
 					>
 						{tabLabel(t)}
 					</button>
 				{/each}
 			</div>
 		{/if}
+		<div
+			id={`${tabsBaseId}-panel`}
+			role={activeTypes.length > 1 ? 'tabpanel' : undefined}
+			aria-labelledby={activeTypes.length > 1 ? `${tabsBaseId}-tab-${activeType}` : undefined}
+		>
 
 		{#if activeType === CITATION_TARGET_TYPES.EXTERNAL_REF}
 			<div class="external">
@@ -294,23 +375,28 @@ function cancel(): void {
 							: `No ${tabLabel(activeType).toLowerCase()} matches "${query}".`}
 					</div>
 				{:else}
-					<ul class="list">
-						{#each results as r (r.id)}
-							<li>
-								<button
-									type="button"
-									role="option"
-									aria-selected={selectedId === r.id}
-									class="row"
-									class:selected={selectedId === r.id}
-									onclick={() => (selectedId = r.id)}
-								>
-									<span class="row-label">{r.label}</span>
-									<span class="row-detail">{r.detail}</span>
-								</button>
-							</li>
-						{/each}
-					</ul>
+					<!--
+						Render `role="option"` buttons directly inside the listbox; the
+						previous `<ul><li><button>` shape inserted listitem semantics
+						that conflicted with the listbox role. Roving tabindex keeps a
+						single tab stop so users can Tab past the result list to reach
+						Confirm without traversing every row.
+					-->
+					{#each results as r, i (r.id)}
+						<button
+							type="button"
+							role="option"
+							aria-selected={selectedId === r.id}
+							class="row"
+							class:selected={selectedId === r.id}
+							tabindex={selectedId === r.id || (selectedId === null && i === 0) ? 0 : -1}
+							onclick={() => (selectedId = r.id)}
+							onkeydown={(e) => handleResultKeyDown(e, i)}
+						>
+							<span class="row-label">{r.label}</span>
+							<span class="row-detail">{r.detail}</span>
+						</button>
+					{/each}
 				{/if}
 			</div>
 		{/if}
@@ -333,6 +419,7 @@ function cancel(): void {
 		{#if submitError}
 			<div class="submit-error" role="alert">{submitError}</div>
 		{/if}
+		</div>
 	{/snippet}
 
 	{#snippet footer()}
@@ -437,12 +524,6 @@ function cancel(): void {
 
 	.error-state {
 		color: var(--action-hazard-active);
-	}
-
-	.list {
-		margin: 0;
-		padding: 0;
-		list-style: none;
 	}
 
 	.row {

@@ -11,6 +11,7 @@ counts:
   minor: 11
   nit: 5
   total: 39
+closed_out: 2026-05-04
 ---
 
 ## Summary
@@ -316,3 +317,50 @@ The Crosswind activity has a critical contrast bug: the OVER DEMO badge sets `co
 - WCAG: 1.3.1 Info and Relationships
 - Problem: the progress bar is two divs (`.bar > .fill`); `aria-label="Reading progress"` is on the wrapper but no `role="progressbar"`, no `aria-valuenow`/`aria-valuemax`. The visible text counts compensate.
 - Fix: add `role="progressbar" aria-valuenow={percentRead} aria-valuemin="0" aria-valuemax="100" aria-valuetext="{readSections} of {totalSections} sections read"` to the bar div. Removes the need for the outer aria-label.
+
+## Status as of 2026-05-04
+
+| # | Severity | Finding | Verdict |
+|---|----------|---------|---------|
+| 1 | Critical | Crosswind OVER DEMO badge zero-contrast | CLOSED -- color now `--action-hazard-ink` on `--action-hazard` background. |
+| 2 | Critical | HelpSearchPalette input focus indicator suppressed | CLOSED in this audit -- replaced `outline: none` with `box-shadow: 0 0 0 2px var(--focus-ring)`. |
+| 3 | Critical | HelpSearchPalette no focus trap | CLOSED in this audit -- `createFocusTrap` allocated on open, released on close, keydown routed through `trap.handleKeyDown`. |
+| 4 | Critical | Card-link primitives suppress focus indicator | CLOSED -- `BrowseListItem`, `HandbookCard`, `HandbookSectionListItem`, `LibraryCard` all ship `outline: 2px solid var(--focus-ring)` on `:focus-visible`. |
+| 5 | Critical | HandbookReadProgressControl segmented radios non-focusable | CLOSED in this audit -- dropped `pointer-events: none`, applied sr-only clip pattern to keep input visually hidden but focusable, added `:focus-within` outline on the segment wrapper. |
+| 6 | Critical | SVG instruments expose no accessible name | CLOSED -- all five PFD instruments and seven cockpit-panel instruments now carry `aria-label` on the `<svg>` itself; ClusterGauge fixed in this audit (label moved off wrapping div onto svg). FuelGauge uses divs not SVG so wrapper-div label is correct. |
+| 7 | Major | AnnunciatorStrip ignores `prefers-reduced-motion` | CLOSED in this audit -- `lamp-flash` keyframes wrapped in `@media (prefers-reduced-motion: no-preference)`. |
+| 8 | Major | AnnunciatorStrip uses `aria-pressed` on non-button spans | CLOSED in this audit -- dropped `aria-pressed`; relies on `role="status"` live region + on/off class for state changes. |
+| 9 | Major | Crosswind decomposition vectors color-only | CLOSED in this audit -- tailwind line shows `stroke-dasharray: 8 4`, over-demo crosswind shows `stroke-dasharray: 4 4`. Color remains as redundant cue. |
+| 10 | Major | HelpCard variant border-color only | CLOSED in this audit -- visible eyebrow ("Tip"/"Warning"/"Danger"/etc.) above title plus `aria-label={variantLabel}` on the aside. |
+| 11 | Major | ConfidenceSlider no roving tabindex | CLOSED in correctness pass -- arrow-key + Home/End roving handler added, tabindex follows selection. |
+| 12 | Major | JumpToCardPopover button-roled options | CLOSED -- `tabindex={index === currentIndex ? 0 : -1}` already implements roving, kept native `<button>` for click activation. |
+| 13 | Major | CitationPicker results listbox uses ul/li wrappers | CLOSED in this audit -- dropped `<ul><li>`, render `<button role="option">` directly inside the listbox with roving tabindex + `handleResultKeyDown` arrow nav. |
+| 14 | Major | CitationPicker tablist missing aria-controls / roving | CLOSED in this audit -- added `aria-controls` linking each tab to a `role="tabpanel"` wrapper, roving `tabindex` synced to `activeType`, `handleTabKeyDown` arrow/Home/End navigation. |
+| 15 | Major | Drawer no built-in close button | CLOSED in this audit -- new `closeButton` prop (default `true`, opt-out for callers with their own affordance) renders a `&times;` button in the header with `aria-label`. |
+| 16 | Major | SnoozeReasonPopover textarea missing required + aria | CLOSED in this audit -- `required={requiresComment}`, `aria-required`, `aria-invalid={submitError}`, `aria-describedby={errorId}`; per-instance error id via `$props.id()`. |
+| 17 | Major | HandbookSectionNotes counter silent + missing maxlength | CLOSED in this audit -- `maxlength={HANDBOOK_NOTES_MAX_LENGTH}`, `aria-invalid`, `aria-describedby`, counter wrapped in `aria-live="polite" aria-atomic="true"`. |
+| 18 | Major | FormField does not propagate id to caller's control | CLOSED in this audit -- snippet payload now `{id, describedBy, invalid}`; label `for={idBase}`. Primitive demo updated. |
+| 19 | Major | Color-only links in markdown / chips / cited-by / InfoTip | CLOSED in this audit -- all four primitives ship always-on underline (`border-bottom: 1px solid currentColor` for markdown, `text-decoration: underline` for the chip/cited-by/learn-more variants). Hover thickens rather than introducing a new affordance. |
+| 20 | Major | Banner role assignment misses warning urgency | CLOSED in this audit -- `tone === 'danger' \|\| tone === 'warning'` -> `role="alert"`. |
+| 21 | Major | Banner dismiss "x" character | CLOSED -- now uses U+00D7 multiplication sign. |
+| 22 | Major | Tab list contrast (action-default on action-default-wash) | CLOSED -- `libs/themes/__tests__/contrast.test.ts` covers the action role pair; theme generators clamp accent saturation to keep 4.5:1 on every shipped theme. |
+| 23 | Minor | Pager status not in live region | CLOSED -- `aria-live="polite"` on the page-number span. |
+| 24 | Minor | SharePopover Copy button uses aria-live on the button | CLOSED -- separate `<span class="copy-status" role="status" aria-live="polite">` mirrors the result. |
+| 25 | Minor | SharePopover dialog title not associated via aria-labelledby | CLOSED -- Dialog passed `ariaLabelledby="sharepopover-title"`. |
+| 26 | Minor | Table wrapper not focusable when scrollable | CLOSED -- `Table.svelte` and `DataTable.svelte` set `tabindex="0"` on the scroll container. |
+| 27 | Minor | ConfirmDialog typed-gate input uses :focus | CLOSED -- now `:focus-visible`. |
+| 28 | Minor | ConfirmDialog typed-gate has no aria-describedby | CLOSED -- `typedHintId` linked via `aria-describedby` on input + Confirm button. |
+| 29 | Minor | RadioGroup duplicate accessible name | CLOSED -- single source of truth comment in component documents the legend-vs-aria-label fallback. |
+| 30 | Minor | Divider could use semantic `<hr>` | CLOSED -- horizontal renders native `<hr>`; vertical keeps `<div role="separator">`. |
+| 31 | Minor | FilterChips wrapper missing landmark | CLOSED -- now `<nav aria-label="Active filters">`. |
+| 32 | Minor | PfdInputs sliders / reset rely on UA focus default | CLOSED -- explicit `:focus-visible { outline: 2px solid var(--focus-ring) }` on `input[type='range']` and `.reset`. |
+| 33 | Minor | BrowseViewControls selects rely on UA focus default | CLOSED -- explicit `:focus-visible` on `.view-control select`. |
+| 34 | Minor | CitationChips remove button missing focus-visible | CLOSED -- `.citation-remove:focus-visible` outline. |
+| 35 | Minor | HelpSearch trigger lacks aria-expanded | CLOSED -- `aria-haspopup="dialog"`, `aria-expanded={open}`, `aria-controls`. |
+| 36 | Nit | StatTile tone color-only | DROPPED -- documented expectation in JSDoc; callers supplement via the sub-line text. Boundary case per WCAG 1.4.1. |
+| 37 | Nit | PanelShell error contrast pair | CLOSED -- contrast harness covers `--action-hazard` x `--action-hazard-wash` pair via the theme contract tests. |
+| 38 | Nit | KbdHint min-height/min-width | DROPPED -- not interactive, no target-size requirement. |
+| 39 | Nit | Spinner has no `role="progressbar"` | DROPPED -- `role="status"` is sufficient for indeterminate progress; documented. |
+| 40 | Nit | HandbookCard / LibraryCard progress bar lacks role="progressbar" | CLOSED in this audit -- both now ship `role="progressbar"`, `aria-valuenow`, `aria-valuemin`, `aria-valuemax`, `aria-valuetext` ("N of M sections read"). |
+
+40 of 40 closed (37 fixed, 3 dropped as boundary/intentional). All critical and major findings resolved.

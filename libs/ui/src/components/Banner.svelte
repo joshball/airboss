@@ -28,7 +28,10 @@ let {
 	children: Snippet;
 } = $props();
 
-const role = $derived(tone === 'danger' ? 'alert' : 'status');
+// Warning-tier and danger-tier banners use role="alert" so AT announces
+// urgent messages immediately rather than waiting for a quiet moment.
+// Info / success / etc. use role="status" (polite live region).
+const role = $derived(tone === 'danger' || tone === 'warning' ? 'alert' : 'status');
 </script>
 
 <div class="banner v-{tone}" {role} data-testid="banner-root" data-tone={tone}>
