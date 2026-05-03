@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "fetched_at": "2026-05-03T21:41:34.862Z",
+  "entries": [
+    {
+      "bulletin_id": "23001",
+      "title": "Use of Aircraft Approach Category During Instrument Approach Operations",
+      "publication_date": "2023-01-09",
+      "manifest_path": "info/23001/manifest.json"
+    },
+    {
+      "bulletin_id": "23006",
+      "title": "Special Airworthiness Information Bulletins (SAIB) AIR 21-19R1 Incorrect Breakaway Pin Installations",
+      "publication_date": "2023-05-02",
+      "manifest_path": "info/23006/manifest.json"
+    },
+    {
+      "bulletin_id": "24001",
+      "title": "National Weather Service (NWS) Real-Time Mesoscale Analysis (RTMA)",
+      "publication_date": "2024-01-03",
+      "manifest_path": "info/24001/manifest.json"
+    },
+    {
+      "bulletin_id": "25001",
+      "title": "Work Flexibility for Lactating Flightcrew Member(s)/Crewmember(s) Onboard Aircraft",
+      "publication_date": "2025-01-16",
+      "manifest_path": "info/25001/manifest.json"
+    }
+  ]
+}

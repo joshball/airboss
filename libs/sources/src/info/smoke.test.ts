@@ -24,7 +24,7 @@ afterEach(() => {
 });
 
 describe('phase-10 info validator smoke', () => {
-	it('validates a lesson citing airboss-ref:info/21010 with zero ERRORs', async () => {
+	it('validates a lesson citing airboss-ref:info/23001 with zero ERRORs', async () => {
 		const seedReport = await seedInfoFromManifest();
 		expect(seedReport.entriesRegistered).toBeGreaterThan(0);
 
@@ -36,7 +36,7 @@ week: 1
 section_order: "01"
 ---
 
-A reference: [@cite](airboss-ref:info/21010).
+A reference: [@cite](airboss-ref:info/23001).
 `;
 		writeFileSync(join(lessonsDir, 'info-smoke.md'), lessonContent, 'utf-8');
 

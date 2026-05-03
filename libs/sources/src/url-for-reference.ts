@@ -16,9 +16,11 @@ import { parseAcLocator } from './ac/locator.ts';
 import { parseAcsLocator } from './acs/locator.ts';
 import { parseAimLocator } from './aim/locator.ts';
 import { parseHandbooksLocator } from './handbooks/locator.ts';
+import { parseInfoLocator } from './info/locator.ts';
 import { parseNtsbAljLocator } from './ntsb-alj/locator.ts';
 import { isParseError, parseIdentifier } from './parser.ts';
 import { parseRegsLocator } from './regs/locator.ts';
+import { parseSafoLocator } from './safo/locator.ts';
 import type { SourceId } from './types.ts';
 
 /**
@@ -60,6 +62,10 @@ export function urlForReference(uri: SourceId): string {
 			return urlForAcs(parsed.locator);
 		case 'ntsb-alj':
 			return urlForNtsbAlj(parsed.locator);
+		case 'safo':
+			return urlForSafo(parsed.locator);
+		case 'info':
+			return urlForInfo(parsed.locator);
 		default:
 			return ROUTES.FLIGHTBAG_HOME;
 	}
@@ -148,4 +154,20 @@ function urlForNtsbAlj(locator: string): string {
 		return ROUTES.FLIGHTBAG_NTSB_ALJ_SECTION(ntsbAlj.caseNumber, ntsbAlj.section);
 	}
 	return ROUTES.FLIGHTBAG_NTSB_ALJ(ntsbAlj.caseNumber);
+}
+
+function urlForSafo(locator: string): string {
+	const result = parseSafoLocator(locator);
+	if (result.kind === 'error') return ROUTES.FLIGHTBAG_HOME;
+	const safo = result.safo;
+	if (safo === undefined) return ROUTES.FLIGHTBAG_HOME;
+	return ROUTES.FLIGHTBAG_SAFO(safo.safoId);
+}
+
+function urlForInfo(locator: string): string {
+	const result = parseInfoLocator(locator);
+	if (result.kind === 'error') return ROUTES.FLIGHTBAG_HOME;
+	const info = result.info;
+	if (info === undefined) return ROUTES.FLIGHTBAG_HOME;
+	return ROUTES.FLIGHTBAG_INFO(info.infoId);
 }

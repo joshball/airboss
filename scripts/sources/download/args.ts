@@ -8,9 +8,9 @@
 
 import { SOURCE_DOWNLOAD_CONCURRENCY, SOURCE_DOWNLOAD_CONCURRENCY_MAX } from '@ab/constants';
 
-export type Corpus = 'regs' | 'aim' | 'ac' | 'acs' | 'handbooks';
+export type Corpus = 'regs' | 'aim' | 'ac' | 'acs' | 'handbooks' | 'safo' | 'info';
 
-export const ALL_CORPORA: readonly Corpus[] = ['regs', 'aim', 'ac', 'acs', 'handbooks'] as const;
+export const ALL_CORPORA: readonly Corpus[] = ['regs', 'aim', 'ac', 'acs', 'handbooks', 'safo', 'info'] as const;
 
 export interface CliArgs {
 	readonly corpora: ReadonlySet<Corpus>;
@@ -148,7 +148,7 @@ Usage:
   bun run sources download [flags]
 
 Flags:
-  --corpus=<list>              Comma-separated subset (regs,aim,ac,acs,handbooks)
+  --corpus=<list>              Comma-separated subset (regs,aim,ac,acs,handbooks,safo,info)
   --dry-run                    Plan only, no network calls
   --verify                     HEAD-only audit, no downloads (exits 1 if any URL fails)
   --force-refresh              Ignore existing cache, re-download
@@ -170,6 +170,8 @@ Layout (per ADR 021):
   <root>/ac/<doc-id>.pdf                            (one per AC, flat)
   <root>/acs/<doc-id>.pdf                           (one per ACS, flat)
   <root>/aim/<edition>.pdf                          (one per AIM edition)
+  <root>/safo/<doc-id>.pdf                          (one per SAFO bulletin, flat)
+  <root>/info/<doc-id>.pdf                          (one per InFO bulletin, flat)
   <root>/regulations/cfr-<title>/<edition>.xml      (full title)
   <root>/regulations/cfr-<title>/<edition>-parts-<filter>.xml
   <root>/<flat-corpus>/manifest.json                (per-corpus index)

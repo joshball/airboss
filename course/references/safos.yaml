@@ -1,0 +1,69 @@
+# FAA Safety Alerts for Operators (SAFOs) referenced by airboss content.
+#
+# SAFOs are short FAA bulletins (1-3 pages) addressing immediate safety
+# concerns. Each SAFO has a stable 5-digit `<YY><sequence>` id that doubles as
+# its slug suffix; SAFOs are immutable post-publication so the edition string
+# is identical to the publication tag (`SAFO 23001`).
+#
+# URLs: live FAA URLs work for some years (notably 2017-2018, 2023-2025) but
+# not for 2019-2022 where the FAA's CMS rotated paths. Entries omit `url:`
+# when the canonical URL is unstable; the flightbag reader links to the
+# in-app body in that case (the source PDF SHA stays in the on-disk
+# manifest for audit).
+#
+# Slug shape: `safo-<NNNNN>` (lowercase, kebab-case). Edition: `SAFO <NNNNN>`.
+
+references:
+  - slug: safo-23001
+    kind: safo
+    edition: SAFO 23001
+    title: 'Potential Damage to Nose Landing Gear by Improper Towing Procedures (MHIRJ CRJ Series)'
+    publisher: FAA
+    url: https://www.faa.gov/sites/faa.gov/files/SAFO23001.pdf
+    subjects: [maintenance, procedures]
+    primary_cert: null
+
+  - slug: safo-23002
+    kind: safo
+    edition: SAFO 23002
+    title: Aviation Safety Call to Action
+    publisher: FAA
+    url: https://www.faa.gov/sites/faa.gov/files/SAFO23002.pdf
+    subjects: [human-factors, training-ops]
+    primary_cert: null
+
+  - slug: safo-23003
+    kind: safo
+    edition: SAFO 23003
+    title: Carriage of Battery Powered Mobility Aids on Aircraft
+    publisher: FAA
+    url: https://www.faa.gov/sites/faa.gov/files/SAFO23003.pdf
+    subjects: [procedures, emergencies]
+    primary_cert: null
+
+  - slug: safo-23004
+    kind: safo
+    edition: SAFO 23004
+    title: 'Erroneous Maximum Takeoff Weight Calculations from Boeing PET'
+    publisher: FAA
+    url: https://www.faa.gov/sites/faa.gov/files/SAFO23004.pdf
+    subjects: [performance, weight-balance]
+    primary_cert: null
+
+  - slug: safo-24002
+    kind: safo
+    edition: SAFO 24002
+    title: 'Recognizing and Mitigating GPS / GNSS Disruptions'
+    publisher: FAA
+    url: https://www.faa.gov/sites/faa.gov/files/SAFO24002.pdf
+    subjects: [navigation, procedures]
+    primary_cert: null
+
+  - slug: safo-25001
+    kind: safo
+    edition: SAFO 25001
+    title: Risks Associated with Visual Approaches
+    publisher: FAA
+    url: https://www.faa.gov/sites/faa.gov/files/SAFO25001.pdf
+    subjects: [procedures, human-factors]
+    primary_cert: null

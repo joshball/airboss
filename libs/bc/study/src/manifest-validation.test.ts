@@ -17,8 +17,10 @@ import {
 	cfrManifestSchema,
 	cfrSectionsFileSchema,
 	handbookManifestErrataEntrySchema,
+	infoManifestSchema,
 	manifestSchema,
 	ntsbAljManifestSchema,
+	safoManifestSchema,
 	sectionTreeManifestSchema,
 	wholeDocManifestSchema,
 } from './manifest-validation';
@@ -888,6 +890,150 @@ describe('on-disk manifest fixtures (CFR)', () => {
 				? null
 				: result.error.issues.map((i) => `${i.path.join('.')}: ${i.code}: ${i.message}`).join('\n');
 			expect(issuesSummary, `sections.json regulations/cfr-${title}/${editionDate}\n${issuesSummary ?? ''}`).toBeNull();
+		});
+	}
+});
+
+const VALID_SAFO = {
+	kind: 'safo',
+	corpus: 'safo',
+	bulletin_id: '23001',
+	title: 'Potential Damage to Nose Landing Gear by Improper Towing Procedures',
+	publisher: 'FAA',
+	publication_date: '2023-01-03',
+	audience: null,
+	source_url: 'https://www.faa.gov/sites/faa.gov/files/SAFO23001.pdf',
+	source_sha256: 'a'.repeat(64),
+	fetched_at: '2026-05-03T00:00:00.000+00:00',
+	page_count: 2,
+	body_path: 'safo/23001/safo-23001.md',
+	body_sha256: 'b'.repeat(64),
+	sections: [
+		{
+			code: 'subject',
+			ordinal: 0,
+			title: 'Subject',
+			source_locator: 'SAFO 23001 -- Subject',
+			body_path: 'safo/23001/sections/00-subject.md',
+			content_hash: 'c'.repeat(64),
+		},
+	],
+} as const;
+
+const VALID_INFO = {
+	kind: 'info',
+	corpus: 'info',
+	bulletin_id: '23006',
+	title: 'Special Airworthiness Information Bulletins',
+	publisher: 'FAA',
+	publication_date: '2023-05-02',
+	audience: null,
+	source_url: 'https://www.faa.gov/sites/faa.gov/files/InFO23006.pdf',
+	source_sha256: 'a'.repeat(64),
+	fetched_at: '2026-05-03T00:00:00.000+00:00',
+	page_count: 1,
+	body_path: 'info/23006/info-23006.md',
+	body_sha256: 'b'.repeat(64),
+	sections: [],
+} as const;
+
+describe('manifestSchema (SAFO + InFO bulletin shapes)', () => {
+	it('accepts a valid SAFO manifest', () => {
+		const result = manifestSchema.safeParse(VALID_SAFO);
+		expect(result.success).toBe(true);
+		if (result.success) {
+			expect(result.data.kind).toBe('safo');
+		}
+	});
+
+	it('accepts a valid InFO manifest', () => {
+		const result = manifestSchema.safeParse(VALID_INFO);
+		expect(result.success).toBe(true);
+		if (result.success) {
+			expect(result.data.kind).toBe('info');
+		}
+	});
+
+	it('accepts a SAFO manifest with empty sections (whole-bulletin mode)', () => {
+		const result = safoManifestSchema.safeParse({ ...VALID_SAFO, sections: [] });
+		expect(result.success).toBe(true);
+	});
+
+	it('rejects a SAFO manifest with a malformed bulletin id (non-5-digit)', () => {
+		const result = safoManifestSchema.safeParse({ ...VALID_SAFO, bulletin_id: '2300' });
+		expect(result.success).toBe(false);
+	});
+
+	it('rejects a SAFO manifest with a malformed bulletin id (alphabetic)', () => {
+		const result = safoManifestSchema.safeParse({ ...VALID_SAFO, bulletin_id: 'abcde' });
+		expect(result.success).toBe(false);
+	});
+
+	it('rejects a SAFO manifest with malformed body_sha256', () => {
+		const result = safoManifestSchema.safeParse({ ...VALID_SAFO, body_sha256: 'not-hex' });
+		expect(result.success).toBe(false);
+	});
+
+	it('rejects a SAFO manifest where corpus does not match kind', () => {
+		const result = safoManifestSchema.safeParse({ ...VALID_SAFO, corpus: 'info' });
+		expect(result.success).toBe(false);
+	});
+
+	it('rejects a SAFO manifest with a section code containing uppercase', () => {
+		const broken = {
+			...VALID_SAFO,
+			sections: [{ ...VALID_SAFO.sections[0], code: 'Subject' }],
+		};
+		const result = safoManifestSchema.safeParse(broken);
+		expect(result.success).toBe(false);
+	});
+
+	it('rejects an InFO manifest where bulletin_id is missing', () => {
+		const { bulletin_id: _drop, ...rest } = VALID_INFO;
+		const result = infoManifestSchema.safeParse(rest);
+		expect(result.success).toBe(false);
+	});
+
+	it('rejects an InFO manifest where kind is "safo"', () => {
+		const result = infoManifestSchema.safeParse({ ...VALID_INFO, kind: 'safo' });
+		expect(result.success).toBe(false);
+	});
+});
+
+describe('on-disk manifest fixtures (SAFO)', () => {
+	const SAFO_FIXTURES = ['23001', '23002', '23003', '23004', '24002', '25001'] as const;
+	for (const id of SAFO_FIXTURES) {
+		it(`parses cleanly: safo/${id}`, () => {
+			const path = resolve(REPO_ROOT, 'safo', id, 'manifest.json');
+			const raw = JSON.parse(readFileSync(path, 'utf-8'));
+			const result = manifestSchema.safeParse(raw);
+			const issuesSummary = result.success
+				? null
+				: result.error.issues.map((i) => `${i.path.join('.')}: ${i.code}: ${i.message}`).join('\n');
+			expect(issuesSummary, `Manifest safo/${id}\n${issuesSummary ?? ''}`).toBeNull();
+			if (result.success && result.data.kind === 'safo') {
+				expect(result.data.bulletin_id).toBe(id);
+				expect(result.data.sections.length).toBeGreaterThan(0);
+			}
+		});
+	}
+});
+
+describe('on-disk manifest fixtures (InFO)', () => {
+	const INFO_FIXTURES = ['23001', '23006', '24001', '25001'] as const;
+	for (const id of INFO_FIXTURES) {
+		it(`parses cleanly: info/${id}`, () => {
+			const path = resolve(REPO_ROOT, 'info', id, 'manifest.json');
+			const raw = JSON.parse(readFileSync(path, 'utf-8'));
+			const result = manifestSchema.safeParse(raw);
+			const issuesSummary = result.success
+				? null
+				: result.error.issues.map((i) => `${i.path.join('.')}: ${i.code}: ${i.message}`).join('\n');
+			expect(issuesSummary, `Manifest info/${id}\n${issuesSummary ?? ''}`).toBeNull();
+			if (result.success && result.data.kind === 'info') {
+				expect(result.data.bulletin_id).toBe(id);
+				expect(result.data.sections.length).toBeGreaterThan(0);
+			}
 		});
 	}
 });

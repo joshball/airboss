@@ -51,6 +51,8 @@ const aliases = {
 	'@ab/sources/aim': resolve('./libs/sources/src/aim/index.ts'),
 	'@ab/sources/ac': resolve('./libs/sources/src/ac/index.ts'),
 	'@ab/sources/acs': resolve('./libs/sources/src/acs/index.ts'),
+	'@ab/sources/safo': resolve('./libs/sources/src/safo/index.ts'),
+	'@ab/sources/info': resolve('./libs/sources/src/info/index.ts'),
 	'@ab/sources': resolve('./libs/sources/src/index.ts'),
 };
 

@@ -79,6 +79,14 @@ export function loadAcsConfig(): FlatCorpusConfig {
 	return loadAndValidate('acs.yaml', FlatCorpusSchema);
 }
 
+export function loadSafoConfig(): FlatCorpusConfig {
+	return loadAndValidate('safo.yaml', FlatCorpusSchema);
+}
+
+export function loadInfoConfig(): FlatCorpusConfig {
+	return loadAndValidate('info.yaml', FlatCorpusSchema);
+}
+
 export function loadHandbooksExtrasConfig(): FlatCorpusConfig {
 	return loadAndValidate('handbooks-extras.yaml', FlatCorpusSchema);
 }

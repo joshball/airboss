@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "kind": "info",
+  "corpus": "info",
+  "bulletin_id": "25001",
+  "title": "Work Flexibility for Lactating Flightcrew Member(s)/Crewmember(s) Onboard Aircraft",
+  "publisher": "FAA",
+  "publication_date": "2025-01-16",
+  "audience": null,
+  "source_url": "https://www.faa.gov/sites/faa.gov/files/InFO25001.pdf",
+  "source_sha256": "520df4567d56dbf9fd4b5353ee5296b93061d656f1e0b6b7278a1e853c0234e4",
+  "fetched_at": "2026-05-03T21:41:34.862Z",
+  "page_count": 4,
+  "body_path": "info/25001/info-25001.md",
+  "body_sha256": "495295732cfdb0d68991331899d1d4c7b09711b833dc6d8e116ddcfad366331e",
+  "sections": [
+    {
+      "code": "subject",
+      "ordinal": 0,
+      "title": "Subject",
+      "source_locator": "InFO 25001 -- Subject",
+      "body_path": "info/25001/sections/00-subject.md",
+      "content_hash": "74edefd12339081d542e4403a7ce821625cb92b3714f9c0e0eda577bea26b276"
+    },
+    {
+      "code": "purpose",
+      "ordinal": 1,
+      "title": "Purpose",
+      "source_locator": "InFO 25001 -- Purpose",
+      "body_path": "info/25001/sections/01-purpose.md",
+      "content_hash": "de76060801402da30dc9b5960140edf63311964ffacedcf4af533fd895ac9b02"
+    },
+    {
+      "code": "background",
+      "ordinal": 2,
+      "title": "Background",
+      "source_locator": "InFO 25001 -- Background",
+      "body_path": "info/25001/sections/02-background.md",
+      "content_hash": "b885d4d53b0af86d5ead4af040e916371aaea486863ed36318cfb4518ededb9d"
+    },
+    {
+      "code": "discussion",
+      "ordinal": 3,
+      "title": "Discussion",
+      "source_locator": "InFO 25001 -- Discussion",
+      "body_path": "info/25001/sections/03-discussion.md",
+      "content_hash": "eacfb030f480bea17922850e546dfc652686790c5b742557593d8aa6ee626653"
+    },
+    {
+      "code": "recommended-action",
+      "ordinal": 4,
+      "title": "Recommended Action",
+      "source_locator": "InFO 25001 -- Recommended Action",
+      "body_path": "info/25001/sections/04-recommended-action.md",
+      "content_hash": "cffebd81054591a951739c6855f5686ff891cbce4bda05335067be1985a184d7"
+    },
+    {
+      "code": "contact",
+      "ordinal": 5,
+      "title": "Contact",
+      "source_locator": "InFO 25001 -- Contact",
+      "body_path": "info/25001/sections/05-contact.md",
+      "content_hash": "edd269b5484c03a8724fb415434a25b1be6f43372b64e35bf0d9a8635055aaf5"
+    }
+  ]
+}

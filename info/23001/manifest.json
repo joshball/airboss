@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "kind": "info",
+  "corpus": "info",
+  "bulletin_id": "23001",
+  "title": "Use of Aircraft Approach Category During Instrument Approach Operations",
+  "publisher": "FAA",
+  "publication_date": "2023-01-09",
+  "audience": null,
+  "source_url": "https://www.faa.gov/sites/faa.gov/files/InFO23001.pdf",
+  "source_sha256": "01d3ea2ec2ed1721378f417365683b8cc6f04c1c1dcd1d71476c29764b1db3b9",
+  "fetched_at": "2026-05-03T21:41:34.862Z",
+  "page_count": 2,
+  "body_path": "info/23001/info-23001.md",
+  "body_sha256": "05974667fd313f3c2c7cfd922ad386eef9def0aabcd06e3fc40abd0be932004c",
+  "sections": [
+    {
+      "code": "subject",
+      "ordinal": 0,
+      "title": "Subject",
+      "source_locator": "InFO 23001 -- Subject",
+      "body_path": "info/23001/sections/00-subject.md",
+      "content_hash": "96561db01e6608f0c62f52fc9fa8900efb8a9d95155ddd135e28633923e057bc"
+    },
+    {
+      "code": "purpose",
+      "ordinal": 1,
+      "title": "Purpose",
+      "source_locator": "InFO 23001 -- Purpose",
+      "body_path": "info/23001/sections/01-purpose.md",
+      "content_hash": "eac102c8bec39004d80ba737bf9934b91fa4b05cad61464775f65dba6d045e8a"
+    },
+    {
+      "code": "background",
+      "ordinal": 2,
+      "title": "Background",
+      "source_locator": "InFO 23001 -- Background",
+      "body_path": "info/23001/sections/02-background.md",
+      "content_hash": "803abbbe1dafdf01e266c62bb9ec52446b55643da5352e9f67f56b71b436e5a9"
+    },
+    {
+      "code": "discussion",
+      "ordinal": 3,
+      "title": "Discussion",
+      "source_locator": "InFO 23001 -- Discussion",
+      "body_path": "info/23001/sections/03-discussion.md",
+      "content_hash": "801756bd83186c56328eb01cfb57315059118a96f288b0c769552d7d32f947db"
+    },
+    {
+      "code": "recommended-action",
+      "ordinal": 4,
+      "title": "Recommended Action",
+      "source_locator": "InFO 23001 -- Recommended Action",
+      "body_path": "info/23001/sections/04-recommended-action.md",
+      "content_hash": "f577e74031462822197ed7fd7c6a159693d84890d8ae76f059385fd83a65f126"
+    },
+    {
+      "code": "contact",
+      "ordinal": 5,
+      "title": "Contact",
+      "source_locator": "InFO 23001 -- Contact",
+      "body_path": "info/23001/sections/05-contact.md",
+      "content_hash": "e2fd197cc157cd1933ef17ebe6d6d20899b8eec3667b440babea507dc01df6c1"
+    }
+  ]
+}

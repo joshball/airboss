@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "kind": "safo",
+  "corpus": "safo",
+  "bulletin_id": "24002",
+  "title": "Recognizing and Mitigating Global Positioning System (GPS) / Global Navigation Satellite System (GNSS) Disruptions",
+  "publisher": "FAA",
+  "publication_date": "2024-01-25",
+  "audience": null,
+  "source_url": "https://www.faa.gov/sites/faa.gov/files/SAFO24002.pdf",
+  "source_sha256": "f1fe1a12210109d8c8459dae172bcc0e17659cc748b27fe9001e8baceb71704f",
+  "fetched_at": "2026-05-03T21:41:34.860Z",
+  "page_count": 2,
+  "body_path": "safo/24002/safo-24002.md",
+  "body_sha256": "001b9f44e74af291257eba33ab6f145619f5393972c7fe2ee8123bbf8ae414fa",
+  "sections": [
+    {
+      "code": "subject",
+      "ordinal": 0,
+      "title": "Subject",
+      "source_locator": "SAFO 24002 -- Subject",
+      "body_path": "safo/24002/sections/00-subject.md",
+      "content_hash": "d2c7273c5b5a9ff9553cfe90b20cb2e0b3242c0a8ac25e7e1916cbca75ba1327"
+    },
+    {
+      "code": "purpose",
+      "ordinal": 1,
+      "title": "Purpose",
+      "source_locator": "SAFO 24002 -- Purpose",
+      "body_path": "safo/24002/sections/01-purpose.md",
+      "content_hash": "d631689cd3fd4f6f4671e174efa428f6c4421cea5618fca6666a06e9d762b13e"
+    },
+    {
+      "code": "background",
+      "ordinal": 2,
+      "title": "Background",
+      "source_locator": "SAFO 24002 -- Background",
+      "body_path": "safo/24002/sections/02-background.md",
+      "content_hash": "96e721c3c9fd624a6a3fcc8fd6828ba3bac292b2c8a91d446de0c139fbb10574"
+    },
+    {
+      "code": "discussion",
+      "ordinal": 3,
+      "title": "Discussion",
+      "source_locator": "SAFO 24002 -- Discussion",
+      "body_path": "safo/24002/sections/03-discussion.md",
+      "content_hash": "b13f19898a93dd7039180d8702bb77b7f0831ad6e0488ad24fe155d3a0a4ead8"
+    },
+    {
+      "code": "recommended-action",
+      "ordinal": 4,
+      "title": "Recommended Action",
+      "source_locator": "SAFO 24002 -- Recommended Action",
+      "body_path": "safo/24002/sections/04-recommended-action.md",
+      "content_hash": "20250567c74b82f492fedd2f29f84765fc8bbc377f85f56692c2a23d9ebe5343"
+    },
+    {
+      "code": "contact",
+      "ordinal": 5,
+      "title": "Contact",
+      "source_locator": "SAFO 24002 -- Contact",
+      "body_path": "safo/24002/sections/05-contact.md",
+      "content_hash": "1b2ca06de55ed1390811a317b78ac817b1301b1267e8896f841c2d02dc5c98e2"
+    }
+  ]
+}

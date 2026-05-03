@@ -3,7 +3,7 @@ title: 'Spec: WP-SAFO-INFO -- pipelines for FAA Safety Alerts For Operators + In
 product: study
 feature: wp-safo-info
 type: spec
-status: draft
+status: shipped
 review_status: pending
 ---
 

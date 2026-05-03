@@ -1422,6 +1422,18 @@ export const REFERENCE_KINDS = {
 	PCG: 'pcg',
 	NTSB: 'ntsb',
 	POH: 'poh',
+	/**
+	 * Safety Alert for Operators (FAA SAFO). Short bulletin; one row per SAFO.
+	 * Locator: 5-digit `<YY><sequence>` id (e.g. `23001`). Section-tree-shaped
+	 * (depth 0 single document row when no internal headings; deeper when the
+	 * bulletin carries Discussion / Recommended Action / Background headings).
+	 */
+	SAFO: 'safo',
+	/**
+	 * Information for Operators (FAA InFO). Short bulletin sibling to SAFO;
+	 * same shape, different FAA program. Locator and structure mirror SAFO.
+	 */
+	INFO: 'info',
 	OTHER: 'other',
 } as const;
 
@@ -1439,6 +1451,8 @@ export const REFERENCE_KIND_LABELS: Record<ReferenceKind, string> = {
 	[REFERENCE_KINDS.PCG]: 'Pilot/Controller Glossary',
 	[REFERENCE_KINDS.NTSB]: 'NTSB',
 	[REFERENCE_KINDS.POH]: 'POH',
+	[REFERENCE_KINDS.SAFO]: 'Safety Alert for Operators',
+	[REFERENCE_KINDS.INFO]: 'Information for Operators',
 	[REFERENCE_KINDS.OTHER]: 'Other',
 };
 
@@ -1499,6 +1513,10 @@ export const CITATION_URL_TEMPLATES = {
 	PCG_INDEX: 'https://www.faa.gov/air_traffic/publications/atpubs/pcg_html/',
 	/** NTSB accident database search landing. */
 	NTSB_INDEX: 'https://www.ntsb.gov/Pages/AviationQueryV2.aspx',
+	/** FAA Safety Alerts for Operators (SAFO) landing page. */
+	SAFO_INDEX: 'https://www.faa.gov/other_visit/aviation_industry/airline_operators/airline_safety/safo',
+	/** FAA Information for Operators (InFO) landing page. */
+	INFO_INDEX: 'https://www.faa.gov/other_visit/aviation_industry/airline_operators/airline_safety/info',
 	/** FAA aviation handbook index landing for handbooks not yet ingested in-app. */
 	HANDBOOK_INDEX: 'https://www.faa.gov/regulations_policies/handbooks_manuals/aviation',
 } as const;
@@ -1560,6 +1578,10 @@ export function externalUrlForReference(
 			return fallbackUrl ?? CITATION_URL_TEMPLATES.PCG_INDEX;
 		case REFERENCE_KINDS.NTSB:
 			return fallbackUrl ?? CITATION_URL_TEMPLATES.NTSB_INDEX;
+		case REFERENCE_KINDS.SAFO:
+			return fallbackUrl ?? CITATION_URL_TEMPLATES.SAFO_INDEX;
+		case REFERENCE_KINDS.INFO:
+			return fallbackUrl ?? CITATION_URL_TEMPLATES.INFO_INDEX;
 		case REFERENCE_KINDS.POH:
 			// POH is per-aircraft. The umbrella row has no public landing.
 			return fallbackUrl;
@@ -1684,6 +1706,13 @@ export const REFERENCE_SECTION_LEVELS = {
 	 * for citation interop.
 	 */
 	ELEMENT: 'element',
+	/**
+	 * SAFO / InFO bulletin body (WP-SAFO-INFO). One row per SAFO or InFO at
+	 * depth 0, level `'bulletin'`, code `'1'`. Distinct from `'document'` so
+	 * the renderer can dispatch bulletin-specific chrome (publication number,
+	 * audience badge) without confusing a SAFO/InFO with a whole-doc handbook.
+	 */
+	BULLETIN: 'bulletin',
 } as const;
 
 export type ReferenceSectionLevel = (typeof REFERENCE_SECTION_LEVELS)[keyof typeof REFERENCE_SECTION_LEVELS];
@@ -1707,6 +1736,7 @@ export const REFERENCE_SECTION_LEVEL_LABELS: Record<ReferenceSectionLevel, strin
 	[REFERENCE_SECTION_LEVELS.AREA]: 'Area',
 	[REFERENCE_SECTION_LEVELS.TASK]: 'Task',
 	[REFERENCE_SECTION_LEVELS.ELEMENT]: 'Element',
+	[REFERENCE_SECTION_LEVELS.BULLETIN]: 'Bulletin',
 };
 
 /**

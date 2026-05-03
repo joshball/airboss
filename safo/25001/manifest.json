@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "kind": "safo",
+  "corpus": "safo",
+  "bulletin_id": "25001",
+  "title": "Risks Associated with Visual Approaches",
+  "publisher": "FAA",
+  "publication_date": "2025-04-02",
+  "audience": null,
+  "source_url": "https://www.faa.gov/sites/faa.gov/files/SAFO25001.pdf",
+  "source_sha256": "3d0819fc59b367276f96531e6119681eb61dd967491e18780ed93f83165908bb",
+  "fetched_at": "2026-05-03T21:41:34.860Z",
+  "page_count": 3,
+  "body_path": "safo/25001/safo-25001.md",
+  "body_sha256": "9d2f5decef7e957a0c3120033de3e4b4c9df47317a6d3d1952c72a0ca974b58d",
+  "sections": [
+    {
+      "code": "subject",
+      "ordinal": 0,
+      "title": "Subject",
+      "source_locator": "SAFO 25001 -- Subject",
+      "body_path": "safo/25001/sections/00-subject.md",
+      "content_hash": "17c1199fe67db9e7f551c299a7739a64d4bc1d98e5424bf15cfa3637b0a47fde"
+    },
+    {
+      "code": "purpose",
+      "ordinal": 1,
+      "title": "Purpose",
+      "source_locator": "SAFO 25001 -- Purpose",
+      "body_path": "safo/25001/sections/01-purpose.md",
+      "content_hash": "941aef73851016b9daa65f305489026dae392f0a4f9cd482b14a4105dc6214d4"
+    },
+    {
+      "code": "background",
+      "ordinal": 2,
+      "title": "Background",
+      "source_locator": "SAFO 25001 -- Background",
+      "body_path": "safo/25001/sections/02-background.md",
+      "content_hash": "3de6fee633e75f9546f10522a33ee07601db085281c9b1ca5ed273fa46f09cc8"
+    },
+    {
+      "code": "discussion",
+      "ordinal": 3,
+      "title": "Discussion",
+      "source_locator": "SAFO 25001 -- Discussion",
+      "body_path": "safo/25001/sections/03-discussion.md",
+      "content_hash": "a7448d737b5a1d38f14b9362d41816e29c79a8eb7a6e8157aca4ff3eb71d347a"
+    },
+    {
+      "code": "recommended-action",
+      "ordinal": 4,
+      "title": "Recommended Action",
+      "source_locator": "SAFO 25001 -- Recommended Action",
+      "body_path": "safo/25001/sections/04-recommended-action.md",
+      "content_hash": "3e973607dda0efca3010b064f2508aaa7b89dc31cd0468d9b15040175cdf94e8"
+    },
+    {
+      "code": "contact",
+      "ordinal": 5,
+      "title": "Contact",
+      "source_locator": "SAFO 25001 -- Contact",
+      "body_path": "safo/25001/sections/05-contact.md",
+      "content_hash": "80be4a248b20bab3eb85402cf78c5028f8d560962eee7afae5146f489620d307"
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "fetched_at": "2026-05-03T21:41:34.860Z",
+  "entries": [
+    {
+      "bulletin_id": "23001",
+      "title": "Potential Damage to Nose Landing Gear (NLG) by Improper Towing Procedures of the Mitsubishi Heavy Industries Regional Jet (MHIRJ) (formerly Bombardier) CL-600-2B19, CL-600-2C10 and CL-600-2D24 Airplanes",
+      "publication_date": "2023-01-03",
+      "manifest_path": "safo/23001/manifest.json"
+    },
+    {
+      "bulletin_id": "23002",
+      "title": "Aviation Safety Call to Action",
+      "publication_date": "2023-03-22",
+      "manifest_path": "safo/23002/manifest.json"
+    },
+    {
+      "bulletin_id": "23003",
+      "title": "Carriage of Battery Powered Mobility Aids (BPMA) on aircraft",
+      "publication_date": "2023-04-19",
+      "manifest_path": "safo/23003/manifest.json"
+    },
+    {
+      "bulletin_id": "23004",
+      "title": "Boeing Multi Operator Message (MOM); MOM-MOM-23-0179-01B and Erroneous Maximum Takeoff Weight (MTOW) Calculation from Boeing Performance Engineer's Tool (PET) Reporters",
+      "publication_date": "2023-07-28",
+      "manifest_path": "safo/23004/manifest.json"
+    },
+    {
+      "bulletin_id": "24002",
+      "title": "Recognizing and Mitigating Global Positioning System (GPS) / Global Navigation Satellite System (GNSS) Disruptions",
+      "publication_date": "2024-01-25",
+      "manifest_path": "safo/24002/manifest.json"
+    },
+    {
+      "bulletin_id": "25001",
+      "title": "Risks Associated with Visual Approaches",
+      "publication_date": "2025-04-02",
+      "manifest_path": "safo/25001/manifest.json"
+    }
+  ]
+}

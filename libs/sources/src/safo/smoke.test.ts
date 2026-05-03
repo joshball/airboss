@@ -24,7 +24,7 @@ afterEach(() => {
 });
 
 describe('phase-10 safo validator smoke', () => {
-	it('validates a lesson citing airboss-ref:safo/21002 with zero ERRORs', async () => {
+	it('validates a lesson citing airboss-ref:safo/23001 with zero ERRORs', async () => {
 		const seedReport = await seedSafoFromManifest();
 		expect(seedReport.entriesRegistered).toBeGreaterThan(0);
 
@@ -36,7 +36,7 @@ week: 1
 section_order: "01"
 ---
 
-A reference: [@cite](airboss-ref:safo/21002).
+A reference: [@cite](airboss-ref:safo/23001).
 `;
 		writeFileSync(join(lessonsDir, 'safo-smoke.md'), lessonContent, 'utf-8');
 

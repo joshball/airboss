@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "kind": "safo",
+  "corpus": "safo",
+  "bulletin_id": "23004",
+  "title": "Boeing Multi Operator Message (MOM); MOM-MOM-23-0179-01B and Erroneous Maximum Takeoff Weight (MTOW) Calculation from Boeing Performance Engineer's Tool (PET) Reporters",
+  "publisher": "FAA",
+  "publication_date": "2023-07-28",
+  "audience": null,
+  "source_url": "https://www.faa.gov/sites/faa.gov/files/SAFO23004.pdf",
+  "source_sha256": "a668f52b0a4bed7cf1ec034d94dccc20f940cde6ecff16dffd1dca0d8e0006a1",
+  "fetched_at": "2026-05-03T21:41:34.860Z",
+  "page_count": 1,
+  "body_path": "safo/23004/safo-23004.md",
+  "body_sha256": "4fcc2ab6086fda260c5338259efdc562245c6406788b8bebaae655028bc25c8f",
+  "sections": [
+    {
+      "code": "subject",
+      "ordinal": 0,
+      "title": "Subject",
+      "source_locator": "SAFO 23004 -- Subject",
+      "body_path": "safo/23004/sections/00-subject.md",
+      "content_hash": "38cb9eda734ae79849c922cc18bea753561c9ab7273037cd0157bbe76601cc75"
+    },
+    {
+      "code": "purpose",
+      "ordinal": 1,
+      "title": "Purpose",
+      "source_locator": "SAFO 23004 -- Purpose",
+      "body_path": "safo/23004/sections/01-purpose.md",
+      "content_hash": "b4a996d3adb87f9de99b4b995effd93d5bf07db74b7ca1e71e101b4042356202"
+    },
+    {
+      "code": "background",
+      "ordinal": 2,
+      "title": "Background",
+      "source_locator": "SAFO 23004 -- Background",
+      "body_path": "safo/23004/sections/02-background.md",
+      "content_hash": "9f109c317f8f628424908f237ec19f22de3820d41ae54bfe966dee4210238b4d"
+    },
+    {
+      "code": "discussion",
+      "ordinal": 3,
+      "title": "Discussion",
+      "source_locator": "SAFO 23004 -- Discussion",
+      "body_path": "safo/23004/sections/03-discussion.md",
+      "content_hash": "6a99c3e179072549271f989687dda11f8d410e29d14f159baedb127eaa02e91d"
+    },
+    {
+      "code": "recommended-action",
+      "ordinal": 4,
+      "title": "Recommended Action",
+      "source_locator": "SAFO 23004 -- Recommended Action",
+      "body_path": "safo/23004/sections/04-recommended-action.md",
+      "content_hash": "92b8dd5f4d74c49cf408cb834fb8db33c4fbe31c0d51fd7b52c8a679fdfaac72"
+    },
+    {
+      "code": "contact",
+      "ordinal": 5,
+      "title": "Contact",
+      "source_locator": "SAFO 23004 -- Contact",
+      "body_path": "safo/23004/sections/05-contact.md",
+      "content_hash": "fe77193dd2fb0fd933071d99dd91ea86344bca11d5edd2e785c56e876709b532"
+    }
+  ]
+}

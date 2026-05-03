@@ -1,0 +1,51 @@
+# Safety Alerts for Operators (SAFO) URL inventory.
+#
+# Single source of truth for the per-SAFO download list. The TS loader at
+# `scripts/sources/config/loader.ts` reads this file at runtime; the
+# downloader emits one DownloadPlan per entry.
+#
+# When the FAA rotates a SAFO URL or publishes a new one, edit this file
+# (no code change required) and re-run `bun run sources verify-urls`.
+#
+# Schema (mirrors `ac.yaml`):
+#   base_url:  prefix common to every entry's URL (informational only;
+#              entries carry their full URL explicitly so a one-off oddly-
+#              named filename doesn't have to encode the prefix).
+#   entries:   list of `{ doc_id, edition, url, filename }`.
+#     doc_id:  lowercase `safo-<NNNNN>` where NNNNN is the SAFO id.
+#     edition: 4-digit year string (informational; SAFOs are immutable).
+#     url:     canonical absolute https URL.
+#     filename: publisher-side filename (used for cache filename + manifest).
+#
+# Initial corpus: a hand-curated set of recent, high-relevance SAFOs whose
+# URLs are stable. Years 2019-2022 mostly use CMS-managed URLs that don't
+# compose stably from the SAFO number; those will land via a follow-up WP
+# that expands the inventory after the pipeline is proven.
+
+base_url: https://www.faa.gov/sites/faa.gov/files
+
+entries:
+  - doc_id: safo-23001
+    edition: '2023'
+    url: https://www.faa.gov/sites/faa.gov/files/SAFO23001.pdf
+    filename: SAFO23001.pdf
+  - doc_id: safo-23002
+    edition: '2023'
+    url: https://www.faa.gov/sites/faa.gov/files/SAFO23002.pdf
+    filename: SAFO23002.pdf
+  - doc_id: safo-23003
+    edition: '2023'
+    url: https://www.faa.gov/sites/faa.gov/files/SAFO23003.pdf
+    filename: SAFO23003.pdf
+  - doc_id: safo-23004
+    edition: '2023'
+    url: https://www.faa.gov/sites/faa.gov/files/SAFO23004.pdf
+    filename: SAFO23004.pdf
+  - doc_id: safo-24002
+    edition: '2024'
+    url: https://www.faa.gov/sites/faa.gov/files/SAFO24002.pdf
+    filename: SAFO24002.pdf
+  - doc_id: safo-25001
+    edition: '2025'
+    url: https://www.faa.gov/sites/faa.gov/files/SAFO25001.pdf
+    filename: SAFO25001.pdf

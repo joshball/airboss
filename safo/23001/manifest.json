@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "kind": "safo",
+  "corpus": "safo",
+  "bulletin_id": "23001",
+  "title": "Potential Damage to Nose Landing Gear (NLG) by Improper Towing Procedures of the Mitsubishi Heavy Industries Regional Jet (MHIRJ) (formerly Bombardier) CL-600-2B19, CL-600-2C10 and CL-600-2D24 Airplanes",
+  "publisher": "FAA",
+  "publication_date": "2023-01-03",
+  "audience": null,
+  "source_url": "https://www.faa.gov/sites/faa.gov/files/SAFO23001.pdf",
+  "source_sha256": "9662207592d5160ad5eb53f825e83d1f94d7be6a5487efc3846e6d120a759d64",
+  "fetched_at": "2026-05-03T21:41:34.860Z",
+  "page_count": 2,
+  "body_path": "safo/23001/safo-23001.md",
+  "body_sha256": "c0984a841ff1330ab1d2c7a5e6d7550638170d6618b91867d8dec562a7efeae1",
+  "sections": [
+    {
+      "code": "subject",
+      "ordinal": 0,
+      "title": "Subject",
+      "source_locator": "SAFO 23001 -- Subject",
+      "body_path": "safo/23001/sections/00-subject.md",
+      "content_hash": "77d6eacae398e56e4d5686cfca29c044d7b687abb7dd04c9da01ad07707bd98b"
+    },
+    {
+      "code": "purpose",
+      "ordinal": 1,
+      "title": "Purpose",
+      "source_locator": "SAFO 23001 -- Purpose",
+      "body_path": "safo/23001/sections/01-purpose.md",
+      "content_hash": "8d20caa980d5d81cea636aad0ef19caa437f3cdcb4a38389d98241476474176e"
+    },
+    {
+      "code": "background",
+      "ordinal": 2,
+      "title": "Background",
+      "source_locator": "SAFO 23001 -- Background",
+      "body_path": "safo/23001/sections/02-background.md",
+      "content_hash": "1e482f9fa62050c625e07097631e8136064c5a40de6dfeace1e2c4f3b7e1511d"
+    },
+    {
+      "code": "discussion",
+      "ordinal": 3,
+      "title": "Discussion",
+      "source_locator": "SAFO 23001 -- Discussion",
+      "body_path": "safo/23001/sections/03-discussion.md",
+      "content_hash": "ba3dab3afdf3a02b5e829ace340cf5e21da112b01ab6fbd5789aa7000a1452e3"
+    },
+    {
+      "code": "recommended-action",
+      "ordinal": 4,
+      "title": "Recommended Action",
+      "source_locator": "SAFO 23001 -- Recommended Action",
+      "body_path": "safo/23001/sections/04-recommended-action.md",
+      "content_hash": "9dccb1e158f25b57a77edd9aa34a9ba42de14dee339176f06e9b2a64b218a256"
+    },
+    {
+      "code": "contact",
+      "ordinal": 5,
+      "title": "Contact",
+      "source_locator": "SAFO 23001 -- Contact",
+      "body_path": "safo/23001/sections/05-contact.md",
+      "content_hash": "fe77193dd2fb0fd933071d99dd91ea86344bca11d5edd2e785c56e876709b532"
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "kind": "info",
+  "corpus": "info",
+  "bulletin_id": "23006",
+  "title": "Special Airworthiness Information Bulletins (SAIB) AIR 21-19R1 Incorrect Breakaway Pin Installations",
+  "publisher": "FAA",
+  "publication_date": "2023-05-02",
+  "audience": null,
+  "source_url": "https://www.faa.gov/sites/faa.gov/files/InFO23006.pdf",
+  "source_sha256": "bc3c123433b2f1c84d26b8cdffceefaa80646bdf2274c3510fd34bcb77cf8fac",
+  "fetched_at": "2026-05-03T21:41:34.862Z",
+  "page_count": 1,
+  "body_path": "info/23006/info-23006.md",
+  "body_sha256": "de32402c9a43878eac6c40524a9055e55f05c9ecc6cb46fe33ee6c8cdcc8db12",
+  "sections": [
+    {
+      "code": "subject",
+      "ordinal": 0,
+      "title": "Subject",
+      "source_locator": "InFO 23006 -- Subject",
+      "body_path": "info/23006/sections/00-subject.md",
+      "content_hash": "c3bfdaac2e093a00a16a1d09c7611691f97443a39681d44c72709e320adb8246"
+    },
+    {
+      "code": "purpose",
+      "ordinal": 1,
+      "title": "Purpose",
+      "source_locator": "InFO 23006 -- Purpose",
+      "body_path": "info/23006/sections/01-purpose.md",
+      "content_hash": "5fc8794b0999e2a9dac7ea78695c0c923ba6e57c83d3dce9f30e0d5fc8d3e577"
+    },
+    {
+      "code": "background",
+      "ordinal": 2,
+      "title": "Background",
+      "source_locator": "InFO 23006 -- Background",
+      "body_path": "info/23006/sections/02-background.md",
+      "content_hash": "d1a761533e004cc934c594cd4d6f63d26116fa30508a5284c1893e8d66b438e2"
+    },
+    {
+      "code": "discussion",
+      "ordinal": 3,
+      "title": "Discussion",
+      "source_locator": "InFO 23006 -- Discussion",
+      "body_path": "info/23006/sections/03-discussion.md",
+      "content_hash": "4c15742a15cd21b9fd16d591c2482de91b98e7d293ceade391ad96de48fc2393"
+    },
+    {
+      "code": "recommended-action",
+      "ordinal": 4,
+      "title": "Recommended Action",
+      "source_locator": "InFO 23006 -- Recommended Action",
+      "body_path": "info/23006/sections/04-recommended-action.md",
+      "content_hash": "ed37f3486f8526ded31ec85807d4f8a747bcfd8c1d794327b2690253196a4607"
+    },
+    {
+      "code": "contact",
+      "ordinal": 5,
+      "title": "Contact",
+      "source_locator": "InFO 23006 -- Contact",
+      "body_path": "info/23006/sections/05-contact.md",
+      "content_hash": "f5417d744594c944aa3c2d44020c69838225ffcd8f585fe12250827f930d1871"
+    }
+  ]
+}

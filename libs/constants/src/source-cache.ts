@@ -64,6 +64,10 @@ export const SOURCE_CACHE = {
 	HANDBOOKS: 'handbooks',
 	/** eCFR regulations XML cache subdir: `<root>/regulations/`. */
 	REGS: 'regulations',
+	/** Safety Alerts for Operators (SAFO) cache subdir: `<root>/safo/`. */
+	SAFO: 'safo',
+	/** Information for Operators (InFO) cache subdir: `<root>/info/`. */
+	INFO: 'info',
 } as const;
 
 /**
@@ -71,7 +75,7 @@ export const SOURCE_CACHE = {
  * keys; callers that need to discriminate "is this a corpus subdir or one of
  * the metadata fields (`ENV_VAR`, etc.)?" can pin to this type.
  */
-export type SourceCacheSubdir = (typeof SOURCE_CACHE)['AC' | 'ACS' | 'AIM' | 'HANDBOOKS' | 'REGS'];
+export type SourceCacheSubdir = (typeof SOURCE_CACHE)['AC' | 'ACS' | 'AIM' | 'HANDBOOKS' | 'REGS' | 'SAFO' | 'INFO'];
 
 type NodeFs = { existsSync: (p: string) => boolean; mkdirSync: (p: string, opts: { recursive: boolean }) => void };
 type NodeOs = { homedir: () => string };

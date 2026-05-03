@@ -1,0 +1,37 @@
+# Information for Operators (InFO) URL inventory.
+#
+# Sibling to `safo.yaml`. InFOs and SAFOs share an identical pipeline shape;
+# the only difference is the FAA program (InFO is informational, SAFO is a
+# safety alert) and the URL space.
+#
+# Schema (mirrors `safo.yaml` / `ac.yaml`):
+#   base_url:  prefix common to every entry's URL (informational only).
+#   entries:   list of `{ doc_id, edition, url, filename }`.
+#     doc_id:  lowercase `info-<NNNNN>` where NNNNN is the InFO id.
+#     edition: 4-digit year string (informational; InFOs are immutable).
+#     url:     canonical absolute https URL.
+#     filename: publisher-side filename (used for cache filename + manifest).
+#
+# Initial corpus: a hand-curated set of recent, high-relevance InFOs. Older
+# InFOs (2019-2022) mostly use CMS-managed URLs that don't compose stably;
+# expansion will land via a follow-up WP.
+
+base_url: https://www.faa.gov/sites/faa.gov/files
+
+entries:
+  - doc_id: info-23001
+    edition: '2023'
+    url: https://www.faa.gov/sites/faa.gov/files/InFO23001.pdf
+    filename: InFO23001.pdf
+  - doc_id: info-23006
+    edition: '2023'
+    url: https://www.faa.gov/sites/faa.gov/files/InFO23006.pdf
+    filename: InFO23006.pdf
+  - doc_id: info-24001
+    edition: '2024'
+    url: https://www.faa.gov/sites/faa.gov/files/InFO24001.pdf
+    filename: InFO24001.pdf
+  - doc_id: info-25001
+    edition: '2025'
+    url: https://www.faa.gov/sites/faa.gov/files/InFO25001.pdf
+    filename: InFO25001.pdf

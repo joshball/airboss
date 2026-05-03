@@ -10,3 +10,5 @@
 
 handbooks/**/*.pdf filter=lfs diff=lfs merge=lfs -text
 regulations/cfr-*/**/*.xml filter=lfs diff=lfs merge=lfs -text
+safo/**/*.pdf filter=lfs diff=lfs merge=lfs -text
+info/**/*.pdf filter=lfs diff=lfs merge=lfs -text
