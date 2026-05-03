@@ -1,7 +1,7 @@
 /**
  * Unit tests for the `handbooks-extras` ingest pipeline.
  *
- * The smoke path uses the live developer cache (the 6 cached PDFs); the
+ * The smoke path uses the live developer cache (the 4 cached PDFs); the
  * unit tests here use a self-contained fake cache so the suite runs on any
  * machine that has poppler installed. Both layers are necessary -- the
  * fake-cache tests cover error / skip paths the live cache never exercises.
@@ -127,7 +127,7 @@ describe('DOC_ID_TO_FRIENDLY', () => {
 	it('covers every doc_id in the canonical YAML', () => {
 		// Authoritative list per scripts/sources/config/handbooks-extras.yaml. If
 		// this drifts, ingest.test.ts fails before the live YAML can mismatch.
-		const expected = ['faa-h-8083-2', 'faa-h-8083-9', 'faa-h-8083-15', 'faa-h-8083-16'];
+		const expected = ['faa-h-8083-2', 'faa-h-8083-9', 'faa-h-8083-16'];
 		for (const docId of expected) {
 			expect(DOC_ID_TO_FRIENDLY[docId]).toBeDefined();
 		}
@@ -367,17 +367,17 @@ describe('runHandbooksExtrasIngest -- live cache (smoke)', () => {
 	const haveLiveCache = existsSync(join(liveCache, 'handbooks', 'faa-h-8083-2', 'faa-h-8083-2.pdf'));
 
 	(haveLiveCache ? it : it.skip)(
-		'ingests all 5 active cached handbooks against the live YAML',
+		'ingests all 4 active cached handbooks against the live YAML',
 		async () => {
 			// Use the live YAML so this also validates that the YAML and
 			// DOC_ID_TO_FRIENDLY agree.
 			_setHandbooksExtrasYamlPath(null);
 			const report = await runHandbooksExtrasIngest({ cacheRoot: liveCache, derivativeRoot: tempDerivative });
-			expect(report.ingested).toBe(5);
+			expect(report.ingested).toBe(4);
 			expect(report.skipped).toBe(0);
 			expect(report.promotionBatchId).not.toBeNull();
 			// Each derivative has a manifest + body
-			for (const slug of ['risk-management', 'aviation-instructor', 'ifh', 'iph', 'tips-mountain-flying']) {
+			for (const slug of ['risk-management', 'aviation-instructor', 'iph', 'tips-mountain-flying']) {
 				const dir = join(tempDerivative, slug);
 				expect(existsSync(dir)).toBe(true);
 			}
@@ -401,7 +401,7 @@ describe('runHandbooksExtrasIngest -- live cache (smoke)', () => {
 
 			const second = await runHandbooksExtrasIngest({ cacheRoot: liveCache, derivativeRoot: tempDerivative });
 			expect(second.ingested).toBe(0);
-			expect(second.alreadyAccepted).toBe(5);
+			expect(second.alreadyAccepted).toBe(4);
 			expect(second.promotionBatchId).toBeNull();
 
 			const afterBytes = trackedPaths.map((p) => readFileSync(p, 'utf-8'));
@@ -438,8 +438,8 @@ describe('runHandbooksExtrasIngest -- live cache (smoke)', () => {
 			expect(mtnBody).toContain('# Tips on Mountain Flying');
 		},
 		// The smoke test runs the full extract pipeline twice (initial + the
-		// idempotency re-check), so 5 entries means 10 PDF extractions. Each
-		// takes ~30-60s; observed total is 300-400s on a warm cache. Budget
+		// idempotency re-check), so 4 entries means 8 PDF extractions. Each
+		// takes ~30-60s; observed total is 240-320s on a warm cache. Budget
 		// 600s to keep CI green even on cold-cache + slower-machine runs.
 		600000,
 	);

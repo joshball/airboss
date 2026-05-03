@@ -48,12 +48,8 @@ entries:
     filename: aviation_instructors_handbook.pdf
     subjects: [training-ops, human-factors]
     primary_cert: cfi
-  - doc_id: faa-h-8083-15
-    edition: '15B'
-    url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/FAA-H-8083-15B.pdf
-    filename: FAA-H-8083-15B.pdf
-    subjects: [procedures, navigation, flight-instruments]
-    primary_cert: instrument
+  # IFH (faa-h-8083-15) was promoted to section-tree by WP-IFH-SECTION-TREE
+  # and now lives at scripts/sources/config/handbooks/ifh.yaml.
   - doc_id: faa-h-8083-16
     edition: '16B'
     url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/instrument_procedures_handbook/FAA-H-8083-16B.pdf

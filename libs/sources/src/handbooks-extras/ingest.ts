@@ -75,7 +75,6 @@ export const DOC_ID_TO_FRIENDLY: Readonly<
 > = {
 	'faa-h-8083-2': { slug: 'risk-management', editionSlug: '8083-2A', faaDir: 'FAA-H-8083-2A' },
 	'faa-h-8083-9': { slug: 'aviation-instructor', editionSlug: '8083-9', faaDir: 'FAA-H-8083-9' },
-	'faa-h-8083-15': { slug: 'ifh', editionSlug: '8083-15B', faaDir: 'FAA-H-8083-15B' },
 	'faa-h-8083-16': { slug: 'iph', editionSlug: '8083-16B', faaDir: 'FAA-H-8083-16B' },
 	// Non-H-numbered FAA pamphlet. Synthetic doc_id since FAA never assigned
 	// a Handbook number to Tips on Mountain Flying.
@@ -92,7 +91,6 @@ export const DOC_ID_TO_FRIENDLY: Readonly<
 const FRIENDLY_DISPLAY: Readonly<Record<string, { readonly short: string; readonly formal: string }>> = {
 	'risk-management': { short: 'RMH', formal: 'Risk Management Handbook' },
 	'aviation-instructor': { short: 'AIH', formal: "Aviation Instructor's Handbook" },
-	ifh: { short: 'IFH', formal: 'Instrument Flying Handbook' },
 	iph: { short: 'IPH', formal: 'Instrument Procedures Handbook' },
 	'tips-mountain-flying': { short: 'MTN', formal: 'Tips on Mountain Flying' },
 };
