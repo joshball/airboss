@@ -14,7 +14,7 @@ Where each item from [spec.md §6 (Recommended sequence)](spec.md#6-recommended-
 
 ## Headline
 
-**31 references readable in-app today.** That's PHAK + AFH + AVWX + AIM + 11 CFR parts + 7 whole-doc handbooks + 9 ACs. The in-app-readable list grew by 9 ACs after WP-AC shipped (#480, 2026-05-02); the 2026-05-03 session added 12 more (WP-CFR shipped 11; rename WP touched AMT-G/P naming).
+**31 references readable in-app today.** That's PHAK + AFH + AVWX + AIM + 11 CFR parts + 7 whole-doc handbooks + 9 ACs. The in-app-readable list grew by 9 ACs after WP-AC shipped (#480, 2026-05-02); the 2026-05-03 session added 12 more (WP-CFR shipped 11; rename WP touched AMT-G/P naming). The references cleanup sweep enriched 4 of the 9 readable AC cards with curated metadata + retired 2 dupe handbook rows + retired the AIM `current` orphan.
 
 **~28 references catalogued but NOT readable.** Cards exist on `/library` (showing "external link"); no `reference_section` rows seeded.
 
@@ -32,7 +32,7 @@ Where each item from [spec.md §6 (Recommended sequence)](spec.md#6-recommended-
 | 2 | **WP-MTN** (Mountain Flying pamphlet) | ✅ Shipped 2026-05-03 | Hand-cleaned override at `scripts/sources/config/handbooks-extras-overrides/faa-mtn-tips.md` via the `body_override` mechanism (#489); seeded as whole-doc | — |
 | 3 | **WP-AIM** | ✅ Shipped (pre-session) | 744 entries (10 chapters + 38 sections + 396 paragraphs + 297 glossary terms + 3 appendices) seeded as section-tree | — |
 | 4 | **WP-CFR-V** (CFR seed) | ✅ Shipped 2026-05-03 (#491) | 825 sections across 11 references; `kind: 'cfr'` schema + `seedCfrManifest` adapter + dispatcher case + `kind: 'cfr'` backfilled on 3 manifests | — |
-| 5 | **WP-AC-V** (AC visibility) | ✅ Shipped 2026-05-02 (#480) | All 9 on-disk AC manifests seed as readable references via `kind: 'ac'` schema + `seedAcManifest` adapter + dispatcher case + `seed-mapping.ts` registry (9 entries). Manifest phase upserts the reference rows for all 9 manifests; the YAML phase enriches the 5 that match an existing YAML row. | The 4 manifests with no YAML row (`25-7`, `61-65`, `91-21-1`, `120-71`) seed as readable cards but with empty subjects + null primary_cert until YAML reconciliation lands. The 12 cards with NO manifest still need WP-AC-FULL (download + extract). |
+| 5 | **WP-AC-V** (AC visibility) | ✅ Shipped 2026-05-02 (#480), reconciliation followup ✅ shipped via references cleanup sweep | All 9 on-disk AC manifests seed as readable references via `kind: 'ac'` schema + `seedAcManifest` adapter + dispatcher case + `seed-mapping.ts` registry (9 entries). YAML phase now enriches all 9 (4 missing rows added in cleanup sweep: `ac-25-7`, `ac-61-65`, `ac-91-21-1`, `ac-120-71`). | The 12 cards with NO manifest still need WP-AC-FULL (download + extract). |
 | 6 | **WP-ACS-V** (ACS visibility) | 🟡 Partial — gap still open | 5 of the 7 ACS cards have on-disk manifests. Schema + adapter NOT yet built. | Need `kind: 'acs'` schema (deepest tree of any corpus: publication → area → task → element), `seedAcsManifest` adapter, dispatcher case. PLUS: 2 cards lack manifests (`cfii-airplane-pts-9e`, `faa-g-acs-2-companion-guide`). PLUS: ACS slug edition mapping (gap 2 from broad survey) needs reconciliation. |
 | 7 | **WP-CC** (Chief Counsel) | ❌ Not started | Has umbrella card via `course/references/other-publications.yaml` | New corpus pipeline: source/extract/register. ADR 019 already provisions the URI. |
 | 8 | **WP-NTSB-ALJ** | ❌ Not started | Has umbrella card via `course/references/ntsb.yaml` | New corpus pipeline. NTSB has its own data model (accident reports, recommendations, factual reports). |
@@ -64,18 +64,18 @@ Where each item from [spec.md §6 (Recommended sequence)](spec.md#6-recommended-
 
 These need to be added to `scripts/sources/config/ac.yaml` first, then `bun run sources download && bun run sources register ac` produces manifests, THEN the seed adapter can wire them into `reference_section`.
 
-### 4 manifests with NO YAML row (seeded readable, but missing curated metadata)
+### 4 manifests with NO YAML row -- RESOLVED in references cleanup sweep
 
-These all seed as readable references via the manifest phase (`seedAcManifest` upserts on `(document_slug, edition)`), but the YAML phase has no row to enrich them with subjects + `primary_cert`. They appear on `/library` with empty subjects.
+All four manifests now have authored YAML rows in `course/references/advisory-circulars.yaml` so the library page renders them with subjects + primary_cert:
 
-| Manifest | DB slug / edition | Status |
-| -------- | ----------------- | ------ |
-| ac/120-71/b | `ac-120-71` / `AC 120-71B` | SOPs and Pilot Monitoring Duties. Pilot-relevant; missing from YAML, should be added. |
-| ac/25-7/d   | `ac-25-7` / `AC 25-7D`     | Flight Test Guide for Certification of Transport Category Airplanes. NOT pilot-facing (engineering doc); probably should NOT have a card. |
-| ac/61-65/j  | `ac-61-65` / `AC 61-65J`   | Certification: Pilots and Flight and Ground Instructors. Major pilot-facing AC; missing from YAML, MUST be added. |
-| ac/91-21-1/d | `ac-91-21-1` / `AC 91.21-1D` | Use of Portable Electronic Devices Aboard Aircraft. Pilot-relevant; missing from YAML, should be added. |
+| Manifest | DB slug / edition | YAML row added |
+| -------- | ----------------- | -------------- |
+| ac/120-71/b | `ac-120-71` / `AC 120-71B` | subjects: procedures, human-factors, training-ops |
+| ac/25-7/d   | `ac-25-7` / `AC 25-7D`     | subjects: aerodynamics, performance (engineering doc, kept per "anything downloaded gets a card") |
+| ac/61-65/j  | `ac-61-65` / `AC 61-65J`   | subjects: certification, regulations, training-ops; primary_cert: cfi |
+| ac/91-21-1/d | `ac-91-21-1` / `AC 91.21-1D` | subjects: regulations, procedures, aircraft-systems |
 
-Of these four, three should get YAML cards (`120-71`, `61-65`, `91-21-1`); one should either get a non-pilot-facing card or be removed from cache (`25-7` is a Part 25 transport-category cert doc, not pilot-facing). Tracked as the AC YAML reconciliation in the "Sequencing" section below.
+After the cleanup sweep: 21 AC YAML rows (was 17). All 9 on-disk manifests are now enriched.
 
 ## ACS gap detail
 
@@ -106,20 +106,17 @@ The CFR YAML lists 11 cards: 14 CFR Parts 1, 14, 23, 61, 68, 71, 73, 91, 135, 14
 
 ## Other corpora — pipeline status
 
-### `aim-pcg.yaml` (Pilot/Controller Glossary)
+### `aim-pcg.yaml` (Pilot/Controller Glossary) -- RESOLVED in references cleanup sweep
 
-1 card. The glossary entries are already inside the AIM manifest (`kind: 'glossary'`, 297 entries seeded as part of WP-AIM). The PCG umbrella card is currently a redundant link-only row. Decision needed:
+1 card. Resolved as a citation-fallback umbrella (option (a) variant). The glossary entries already inside the AIM manifest (`kind: 'glossary'`, 297 entries seeded as part of WP-AIM) are the authoritative target. The umbrella row stays so the migrator's hardcoded `(pcg, current)` resolver routes legacy bare-PCG citations to an authored row instead of upserting a synthetic. Same pattern as `generic-acs`/`generic-pts` in `other-publications.yaml`.
 
-- (a) Delete the PCG card from YAML; let AIM glossary entries be the authoritative target.
-- (b) Make PCG its own corpus per ADR 019 §1.2 (it has a separate URL and TOC structure).
+Retire trigger: every legacy PCG citation re-pointed at a specific AIM glossary paragraph reference, AND the migrator's PCG resolver removed.
 
-Spec §6 lists this implicitly under WP-AIM (which is shipped). Worth resolving as cleanup.
+### `handbooks-noningested.yaml` (1 card: `afh-3B`) -- partially RESOLVED in references cleanup sweep
 
-### `handbooks-noningested.yaml` (3 cards: `aih`, `faa-h-8083-2`, `afh-3B`)
+Was 3 cards. The two dupes (`aih`/`FAA-H-8083-9B`, `faa-h-8083-2`/`FAA-H-8083-2A`) were retired in the cleanup sweep -- the migrator's AIH and RMH patterns now point at the canonical handbooks-extras `(slug, edition)` pairs (`aviation-instructor`/`8083-9`, `risk-management`/`8083-2A`), so legacy citations resolve to the authored row instead of upserting synthetics.
 
-Per spec §6 "Smells worth fixing along the way" #1: this YAML is mostly redundant after WP-SUB. Three of its rows have handbooks-extras equivalents at different `(slug, edition)` pairs (the dupe-row bugs captured in IDEAS.md). The fourth (`afh` at `FAA-H-8083-3B`) is the prior AFH edition kept for citation resolution.
-
-**Resolution path** (deferred per spec): retire `migrate-references-to-structured.ts` bridge → delete redundant YAML rows → cross-update knowledge nodes' `source` strings.
+**Remaining row:** `afh` at `FAA-H-8083-3B`. Prior AFH edition kept for citation resolution; retiring it requires a content audit that re-points every node's `source` string from 3B to 3C. Low priority; tracked as deferred.
 
 ### `ntsb.yaml` (1 umbrella)
 
@@ -152,17 +149,12 @@ Per spec §6 ratified order, with current detail and per-task estimate of comple
    - Pattern is novel (deepest tree), reference is WP-CFR (#491) for the section-tree dispatcher pattern
    - Adds 5 readable references; remaining 2 cards stay link-only
    - Scope: bigger than AC because of the 4-level tree + slug mapping
-2. **PCG decision** — delete YAML row OR promote to its own corpus. Small.
+2. **PCG decision** — ✅ shipped via references cleanup sweep (kept as citation-fallback umbrella).
 3. **WP-AC-FULL** (download + extract the 12 link-only AC cards)
    - Tasks: add 12 entries to `scripts/sources/config/ac.yaml` + `bun run sources download` (operator action) + extract + register + content-only adds
-   - Adds 12 readable references; total AC readable will be 21 (17 YAML + 4 manifest-only)
-4. **AC YAML reconciliation** (orthogonal to WP-AC-FULL):
-   - Add `ac-120-71`, `ac-61-65`, and `ac-91-21-1` cards to YAML (manifests already shipped via #480)
-   - Decide on `ac-25-7` (Part 25 cert doc, probably remove from cache or tag as engineering-only)
-5. **`study.reference` dupe-row sweep** (per IDEAS.md entry):
-   - Delete `aim`/`current` orphan, `aih`/`9B` dupe, `faa-h-8083-2`/`2A` dupe
-   - Decide on `afh`/`3B` (intentional supersede chain, or delete)
-   - Pattern matches PR #461
+   - Adds 12 readable references; total AC readable will be 21 (all from YAML, 9 already manifest-backed)
+4. **AC YAML reconciliation** — ✅ shipped via references cleanup sweep (4 rows added: `ac-25-7`, `ac-61-65`, `ac-91-21-1`, `ac-120-71`).
+5. **`study.reference` dupe-row sweep** — ✅ shipped via references cleanup sweep (orphan + dupes resolved; `afh`/`3B` deferred behind content audit).
 
 After the above PRs land: roughly **40+ readable references** out of ~49 catalogued. Remaining link-only: NTSB umbrella, POH umbrella, `other-publications.yaml` umbrellas (intentional).
 
