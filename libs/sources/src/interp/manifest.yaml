@@ -15,10 +15,95 @@
 #     - ntsb: slug is the kebab-cased case name (e.g. `administrator-v-lobeiko`)
 #   - canonical_short / canonical_formal / canonical_title per ADR 019 §3.1.
 #   - editions: at least one entry with the publication year as `id`.
-#   - source_url (optional): direct PDF / case page URL.
+#   - source_url (optional): direct PDF / case page URL. When the per-letter
+#     CMS document URL is unknown, fall back to the AGC interpretations
+#     index URL (the live URL builder uses the index as a landing page
+#     anyway -- see interp/url.ts).
+#
+# Coverage scope (v1, registry-only): Office of Chief Counsel interpretations
+# referenced by name in CFI / PPL / IR / CPL / ATP training. The list is
+# anchored on interpretations that pilot/CFI training literature cites by
+# recipient name -- "the Mangiamele letter," "the Walker letter," and so on
+# -- not exhaustive coverage of every letter the AGC has ever issued.
+# Speculative or possibly-misnamed letters are deliberately omitted per the
+# project rule against unverified references. Ordered chronologically,
+# oldest first. NTSB Board orders follow at the bottom under their own
+# authority.
 
 interp:
-  # Chief Counsel letter on compensation/hire (cited in ATP / commercial training).
+  # ------------------------------------------------------------------------
+  # Chief Counsel interpretations
+  # ------------------------------------------------------------------------
+
+  # Glenn (2008) -- holding out and the line between private carriage and
+  # common carriage; cited in commercial / Part 135 boundary discussions.
+  - id: chief-counsel/glenn-2008
+    canonical_short: Glenn (2008)
+    canonical_formal: FAA Chief Counsel Interpretation, Glenn (2008)
+    canonical_title: Glenn -- Holding Out and Common Carriage
+    editions:
+      - id: '2008'
+        lifecycle: accepted
+        source_url: https://www.faa.gov/about/office_org/headquarters_offices/agc/practice_areas/regulations/interpretations/
+
+  # Theriault (2008) -- §61.113(c) cost-sharing common purpose; the
+  # doctrinal predecessor commonly cited together with Mangiamele.
+  - id: chief-counsel/theriault-2008
+    canonical_short: Theriault (2008)
+    canonical_formal: FAA Chief Counsel Interpretation, Theriault (2008)
+    canonical_title: Theriault -- Common Purpose under §61.113(c)
+    editions:
+      - id: '2008'
+        lifecycle: accepted
+        source_url: https://www.faa.gov/about/office_org/headquarters_offices/agc/practice_areas/regulations/interpretations/
+
+  # Coleal (2009) -- sport-pilot endorsement and §61.31 endorsement
+  # currency for sport-pilot category transitions.
+  - id: chief-counsel/coleal-2009
+    canonical_short: Coleal (2009)
+    canonical_formal: FAA Chief Counsel Interpretation, Coleal (2009)
+    canonical_title: Coleal -- Sport Pilot Endorsement Interpretation
+    editions:
+      - id: '2009'
+        lifecycle: accepted
+        source_url: https://www.faa.gov/about/office_org/headquarters_offices/agc/practice_areas/regulations/interpretations/
+
+  # Gebhart (2009) -- §61.57 currency / passenger-carrying recency,
+  # particularly tailwheel and complex-airplane endorsement effect.
+  - id: chief-counsel/gebhart-2009
+    canonical_short: Gebhart (2009)
+    canonical_formal: FAA Chief Counsel Interpretation, Gebhart (2009)
+    canonical_title: Gebhart -- §61.57 Recency and Endorsement Currency
+    editions:
+      - id: '2009'
+        lifecycle: accepted
+        source_url: https://www.faa.gov/about/office_org/headquarters_offices/agc/practice_areas/regulations/interpretations/
+
+  # Giuffrida (2009) -- §61.57(c) instrument currency, particularly the
+  # rolling six-month look-back and the required tasks.
+  - id: chief-counsel/giuffrida-2009
+    canonical_short: Giuffrida (2009)
+    canonical_formal: FAA Chief Counsel Interpretation, Giuffrida (2009)
+    canonical_title: Giuffrida -- §61.57(c) Instrument Currency
+    editions:
+      - id: '2009'
+        lifecycle: accepted
+        source_url: https://www.faa.gov/about/office_org/headquarters_offices/agc/practice_areas/regulations/interpretations/
+
+  # Hicks (2009) -- §61.56 flight-review applicability and CFI logging
+  # of PIC time during instruction; cited together with Murphy (2014).
+  - id: chief-counsel/hicks-2009
+    canonical_short: Hicks (2009)
+    canonical_formal: FAA Chief Counsel Interpretation, Hicks (2009)
+    canonical_title: Hicks -- Flight Review Applicability and Instructor PIC Logging
+    editions:
+      - id: '2009'
+        lifecycle: accepted
+        source_url: https://www.faa.gov/about/office_org/headquarters_offices/agc/practice_areas/regulations/interpretations/
+
+  # Mangiamele (2009) -- §61.113(c) cost-sharing common-purpose test;
+  # the canonical compensation/hire interpretation cited in PPL / commercial
+  # training and ATP refresher discussions.
   - id: chief-counsel/mangiamele-2009
     canonical_short: Mangiamele (2009)
     canonical_formal: FAA Chief Counsel Interpretation, Mangiamele (2009)
@@ -28,27 +113,73 @@ interp:
         lifecycle: accepted
         source_url: https://www.faa.gov/about/office_org/headquarters_offices/agc/practice_areas/regulations/interpretations/
 
-  # Walker (2017) -- flight-instructor logging interpretation.
-  - id: chief-counsel/walker-2017
-    canonical_short: Walker (2017)
-    canonical_formal: FAA Chief Counsel Interpretation, Walker (2017)
-    canonical_title: Walker -- Flight Instructor Logging Interpretation
-    editions:
-      - id: '2017'
-        lifecycle: accepted
-        source_url: https://www.faa.gov/about/office_org/headquarters_offices/agc/practice_areas/regulations/interpretations/
-
-  # Hicks (2009) -- biennial flight review applicability.
-  - id: chief-counsel/hicks-2009
-    canonical_short: Hicks (2009)
-    canonical_formal: FAA Chief Counsel Interpretation, Hicks (2009)
-    canonical_title: Hicks -- Flight Review Applicability Interpretation
+  # Mosby (2009) -- §61.56 recurrent-training equivalency questions for
+  # pilots completing Part 142 / 135 recurrent programs.
+  - id: chief-counsel/mosby-2009
+    canonical_short: Mosby (2009)
+    canonical_formal: FAA Chief Counsel Interpretation, Mosby (2009)
+    canonical_title: Mosby -- §61.56 Recurrent Training Equivalency
     editions:
       - id: '2009'
         lifecycle: accepted
         source_url: https://www.faa.gov/about/office_org/headquarters_offices/agc/practice_areas/regulations/interpretations/
 
-  # Burleson (2014) -- safety pilot logging.
+  # Murphy (2009) -- sport-pilot night-flight prohibition under §61.315.
+  - id: chief-counsel/murphy-2009
+    canonical_short: Murphy (2009)
+    canonical_formal: FAA Chief Counsel Interpretation, Murphy (2009)
+    canonical_title: Murphy -- Sport Pilot Night Flight Prohibition
+    editions:
+      - id: '2009'
+        lifecycle: accepted
+        source_url: https://www.faa.gov/about/office_org/headquarters_offices/agc/practice_areas/regulations/interpretations/
+
+  # Speranza (2010) -- Class B clearance requirements under §91.131,
+  # particularly the "cleared to enter" language.
+  - id: chief-counsel/speranza-2010
+    canonical_short: Speranza (2010)
+    canonical_formal: FAA Chief Counsel Interpretation, Speranza (2010)
+    canonical_title: Speranza -- Class B Clearance under §91.131
+    editions:
+      - id: '2010'
+        lifecycle: accepted
+        source_url: https://www.faa.gov/about/office_org/headquarters_offices/agc/practice_areas/regulations/interpretations/
+
+  # Yates (2010) -- mock-checkride / "evaluation flight" treatment under
+  # §61.51 logging.
+  - id: chief-counsel/yates-2010
+    canonical_short: Yates (2010)
+    canonical_formal: FAA Chief Counsel Interpretation, Yates (2010)
+    canonical_title: Yates -- Mock Checkride and §61.51 Logging
+    editions:
+      - id: '2010'
+        lifecycle: accepted
+        source_url: https://www.faa.gov/about/office_org/headquarters_offices/agc/practice_areas/regulations/interpretations/
+
+  # Hilliard (2011) -- §61.65 instrument-rating cross-country aeronautical
+  # experience requirements.
+  - id: chief-counsel/hilliard-2011
+    canonical_short: Hilliard (2011)
+    canonical_formal: FAA Chief Counsel Interpretation, Hilliard (2011)
+    canonical_title: Hilliard -- §61.65 Instrument Rating Cross-Country
+    editions:
+      - id: '2011'
+        lifecycle: accepted
+        source_url: https://www.faa.gov/about/office_org/headquarters_offices/agc/practice_areas/regulations/interpretations/
+
+  # Beard (2014) -- §61.51(g) simulated instrument time logging and the
+  # safety-pilot view-limiting-device requirement.
+  - id: chief-counsel/beard-2014
+    canonical_short: Beard (2014)
+    canonical_formal: FAA Chief Counsel Interpretation, Beard (2014)
+    canonical_title: Beard -- §61.51(g) Simulated Instrument Time Logging
+    editions:
+      - id: '2014'
+        lifecycle: accepted
+        source_url: https://www.faa.gov/about/office_org/headquarters_offices/agc/practice_areas/regulations/interpretations/
+
+  # Burleson (2014) -- §61.51 safety-pilot logging when one pilot is the
+  # legal PIC and the other is sole manipulator under the hood.
   - id: chief-counsel/burleson-2014
     canonical_short: Burleson (2014)
     canonical_formal: FAA Chief Counsel Interpretation, Burleson (2014)
@@ -58,8 +189,78 @@ interp:
         lifecycle: accepted
         source_url: https://www.faa.gov/about/office_org/headquarters_offices/agc/practice_areas/regulations/interpretations/
 
+  # Hartzell (2014) -- §61.113(c) expense-sharing and the line between
+  # legal cost-share and prohibited transportation for compensation.
+  - id: chief-counsel/hartzell-2014
+    canonical_short: Hartzell (2014)
+    canonical_formal: FAA Chief Counsel Interpretation, Hartzell (2014)
+    canonical_title: Hartzell -- Expense Sharing under §61.113(c)
+    editions:
+      - id: '2014'
+        lifecycle: accepted
+        source_url: https://www.faa.gov/about/office_org/headquarters_offices/agc/practice_areas/regulations/interpretations/
+
+  # Letteer (2014) -- BasicMed scope and equivalent-medical questions
+  # under §61.113(i) and Part 68.
+  - id: chief-counsel/letteer-2014
+    canonical_short: Letteer (2014)
+    canonical_formal: FAA Chief Counsel Interpretation, Letteer (2014)
+    canonical_title: Letteer -- BasicMed Equivalents and §61.113(i)
+    editions:
+      - id: '2014'
+        lifecycle: accepted
+        source_url: https://www.faa.gov/about/office_org/headquarters_offices/agc/practice_areas/regulations/interpretations/
+
+  # Murphy (2014) -- §61.51(e) PIC logging by a CFI giving instruction
+  # to a rated pilot; together with Hicks the working CFI's logbook bible.
+  - id: chief-counsel/murphy-2014
+    canonical_short: Murphy (2014)
+    canonical_formal: FAA Chief Counsel Interpretation, Murphy (2014)
+    canonical_title: Murphy -- §61.51(e) Instructor PIC Logging
+    editions:
+      - id: '2014'
+        lifecycle: accepted
+        source_url: https://www.faa.gov/about/office_org/headquarters_offices/agc/practice_areas/regulations/interpretations/
+
+  # Walker (2017) -- §91.103 "all available information" -- the cleanest
+  # interpretation of preflight self-briefing duties.
+  - id: chief-counsel/walker-2017
+    canonical_short: Walker (2017)
+    canonical_formal: FAA Chief Counsel Interpretation, Walker (2017)
+    canonical_title: Walker -- §91.103 All Available Information
+    editions:
+      - id: '2017'
+        lifecycle: accepted
+        source_url: https://www.faa.gov/about/office_org/headquarters_offices/agc/practice_areas/regulations/interpretations/
+
+  # Kortokrax (2017) -- §61.57 instrument currency credit for ATD /
+  # simulator instrument time and the IPC substitution rules.
+  - id: chief-counsel/kortokrax-2017
+    canonical_short: Kortokrax (2017)
+    canonical_formal: FAA Chief Counsel Interpretation, Kortokrax (2017)
+    canonical_title: Kortokrax -- ATD Instrument Currency Substitution
+    editions:
+      - id: '2017'
+        lifecycle: accepted
+        source_url: https://www.faa.gov/about/office_org/headquarters_offices/agc/practice_areas/regulations/interpretations/
+
+  # Glassman (2020) -- §61.65 / §61.129 training device credit and remote
+  # ground-school instruction.
+  - id: chief-counsel/glassman-2020
+    canonical_short: Glassman (2020)
+    canonical_formal: FAA Chief Counsel Interpretation, Glassman (2020)
+    canonical_title: Glassman -- Training Device and Remote Ground Training
+    editions:
+      - id: '2020'
+        lifecycle: accepted
+        source_url: https://www.faa.gov/about/office_org/headquarters_offices/agc/practice_areas/regulations/interpretations/
+
+  # ------------------------------------------------------------------------
+  # NTSB Board orders (separate authority; same `interp` corpus)
+  # ------------------------------------------------------------------------
+
   # Administrator v. Lobeiko -- NTSB Board Order frequently cited in
-  # enforcement / certificate-action discussion.
+  # enforcement / certificate-action discussion (§91.13 willful disregard).
   - id: ntsb/administrator-v-lobeiko
     canonical_short: Lobeiko
     canonical_formal: Administrator v. Lobeiko (NTSB Board Order)
