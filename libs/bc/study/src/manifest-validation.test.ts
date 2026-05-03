@@ -13,6 +13,8 @@ import { describe, expect, it } from 'vitest';
 import {
 	acManifestSchema,
 	aimManifestSchema,
+	cfrManifestSchema,
+	cfrSectionsFileSchema,
 	handbookManifestErrataEntrySchema,
 	manifestSchema,
 	sectionTreeManifestSchema,
@@ -118,6 +120,37 @@ const VALID_WHOLE_DOC = {
 	page_count: 80,
 	doc_id: 'faa-h-8083-2',
 	faa_edition: '2A',
+} as const;
+
+const VALID_CFR = {
+	kind: 'cfr',
+	schemaVersion: 1,
+	title: '14',
+	editionSlug: '2026',
+	editionDate: '2026-04-22',
+	sourceUrl: 'file:///cache/regulations/cfr-14/2026-04-22.xml',
+	sourceSha256: 'a'.repeat(64),
+	fetchedAt: '2026-04-30T22:31:18.124Z',
+	partCount: 226,
+	subpartCount: 664,
+	sectionCount: 6328,
+} as const;
+
+const VALID_CFR_SECTIONS_FILE = {
+	schemaVersion: 1,
+	edition: '2026',
+	sectionsByPart: {
+		'91': [
+			{
+				id: 'airboss-ref:regs/cfr-14/91/103',
+				canonical_short: '§91.103',
+				canonical_title: 'Preflight action',
+				last_amended_date: '2024-08-01',
+				body_path: '91/91-103.md',
+				body_sha256: 'c'.repeat(64),
+			},
+		],
+	},
 } as const;
 
 describe('manifestSchema (discriminated union on kind)', () => {
@@ -233,6 +266,69 @@ describe('manifestSchema (discriminated union on kind)', () => {
 	it("rejects an AC manifest missing 'body_path'", () => {
 		const { body_path: _drop, ...withoutBody } = VALID_AC;
 		const result = acManifestSchema.safeParse(withoutBody);
+		expect(result.success).toBe(false);
+	});
+
+	it('accepts a valid CFR manifest', () => {
+		const result = manifestSchema.safeParse(VALID_CFR);
+		expect(result.success).toBe(true);
+		if (result.success) {
+			expect(result.data.kind).toBe('cfr');
+		}
+	});
+
+	it("rejects a CFR manifest with a title other than '14' or '49'", () => {
+		const result = cfrManifestSchema.safeParse({ ...VALID_CFR, title: '15' });
+		expect(result.success).toBe(false);
+	});
+
+	it("rejects a CFR manifest missing 'partCount'", () => {
+		const { partCount: _drop, ...withoutPartCount } = VALID_CFR;
+		const result = cfrManifestSchema.safeParse(withoutPartCount);
+		expect(result.success).toBe(false);
+	});
+
+	it('rejects a CFR manifest with a malformed editionDate', () => {
+		const result = cfrManifestSchema.safeParse({ ...VALID_CFR, editionDate: '04/22/2026' });
+		expect(result.success).toBe(false);
+	});
+});
+
+describe('cfrSectionsFileSchema', () => {
+	it('accepts a valid sections.json shape', () => {
+		const result = cfrSectionsFileSchema.safeParse(VALID_CFR_SECTIONS_FILE);
+		expect(result.success).toBe(true);
+	});
+
+	it('rejects a sections file with malformed body_sha256', () => {
+		const broken = {
+			...VALID_CFR_SECTIONS_FILE,
+			sectionsByPart: {
+				'91': [{ ...VALID_CFR_SECTIONS_FILE.sectionsByPart['91'][0], body_sha256: 'short' }],
+			},
+		};
+		const result = cfrSectionsFileSchema.safeParse(broken);
+		expect(result.success).toBe(false);
+	});
+
+	it('rejects a sections file missing canonical_short on an entry', () => {
+		const { canonical_short: _drop, ...partial } = VALID_CFR_SECTIONS_FILE.sectionsByPart['91'][0];
+		const broken = {
+			...VALID_CFR_SECTIONS_FILE,
+			sectionsByPart: { '91': [partial] },
+		};
+		const result = cfrSectionsFileSchema.safeParse(broken);
+		expect(result.success).toBe(false);
+	});
+
+	it('rejects a sections file with non-airboss-ref id prefix', () => {
+		const broken = {
+			...VALID_CFR_SECTIONS_FILE,
+			sectionsByPart: {
+				'91': [{ ...VALID_CFR_SECTIONS_FILE.sectionsByPart['91'][0], id: 'cfr/14/91/103' }],
+			},
+		};
+		const result = cfrSectionsFileSchema.safeParse(broken);
 		expect(result.success).toBe(false);
 	});
 });
@@ -402,6 +498,39 @@ describe('on-disk manifest fixtures (AC)', () => {
 			if (result.success) {
 				expect(result.data.kind).toBe('ac');
 			}
+		});
+	}
+});
+
+describe('on-disk manifest fixtures (CFR)', () => {
+	const CFR_FIXTURES = [
+		{ title: '14', editionDate: '2026-04-22', expectedSections: 6328 },
+		{ title: '49', editionDate: '2026-04-24', expectedSections: 22 },
+	] as const;
+
+	for (const { title, editionDate, expectedSections } of CFR_FIXTURES) {
+		it(`parses cleanly: regulations/cfr-${title}/${editionDate}`, () => {
+			const path = resolve(REPO_ROOT, 'regulations', `cfr-${title}`, editionDate, 'manifest.json');
+			const raw = JSON.parse(readFileSync(path, 'utf-8'));
+			const result = manifestSchema.safeParse(raw);
+			const issuesSummary = result.success
+				? null
+				: result.error.issues.map((i) => `${i.path.join('.')}: ${i.code}: ${i.message}`).join('\n');
+			expect(issuesSummary, `Manifest regulations/cfr-${title}/${editionDate}\n${issuesSummary ?? ''}`).toBeNull();
+			if (result.success && result.data.kind === 'cfr') {
+				expect(result.data.title).toBe(title);
+				expect(result.data.sectionCount).toBe(expectedSections);
+			}
+		});
+
+		it(`parses cleanly: regulations/cfr-${title}/${editionDate}/sections.json`, () => {
+			const path = resolve(REPO_ROOT, 'regulations', `cfr-${title}`, editionDate, 'sections.json');
+			const raw = JSON.parse(readFileSync(path, 'utf-8'));
+			const result = cfrSectionsFileSchema.safeParse(raw);
+			const issuesSummary = result.success
+				? null
+				: result.error.issues.map((i) => `${i.path.join('.')}: ${i.code}: ${i.message}`).join('\n');
+			expect(issuesSummary, `sections.json regulations/cfr-${title}/${editionDate}\n${issuesSummary ?? ''}`).toBeNull();
 		});
 	}
 });
