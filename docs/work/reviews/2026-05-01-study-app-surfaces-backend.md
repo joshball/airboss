@@ -12,6 +12,31 @@ status: unread
 review_status: done
 ---
 
+## Status as of 2026-05-04
+
+Re-greped main against every finding. 9 of 18 closed; 9 still-open with the N+1 cluster the dominant remainder.
+
+| Severity | Finding | Verdict | Evidence |
+| -------- | ------- | ------- | -------- |
+| CRITICAL | GET load creates `memory_review_session` rows -- prefetcher can mint sessions | STILL OPEN | `apps/study/src/routes/(app)/memory/review/+page.server.ts:101-129` still calls `startReviewSession` from `load`. Next: route the no-resumable + no-deck branches through a "Start fresh" form action; load returns either prompt or "ready" payload only |
+| MAJOR    | N+1 mastery fan-out on `/credentials` | STILL OPEN | `apps/study/src/routes/(app)/credentials/+page.server.ts:28-34` -- still per-row `getCredentialMastery`. Next: add `getCredentialMasteryMap(userId, credentialIds)` to `@ab/bc-study` |
+| MAJOR    | N+1 syllabi fan-out on `/goals/[id]` (sequential `for...of await`) | STILL OPEN | `apps/study/src/routes/(app)/goals/[id]/+page.server.ts:76-88` still has `for (const cred of credentials) { ... await getCredentialSyllabi(...) }`. Next: at minimum wrap in `Promise.all`; better, add `listPrimarySyllabiByCredential(credIds)` |
+| MAJOR    | N+1 prereq title resolution on `/goals/[id]` | STILL OPEN | per-row `getCredentialById` still in place. Next: add `getCredentialsByIds(ids)` BC helper |
+| MAJOR    | N+1 progress fan-out on `/lens/handbook` | STILL OPEN | `apps/study/src/routes/(app)/lens/handbook/+page.server.ts:17-22` still has per-handbook `getHandbookProgress`. Next: add `getHandbookProgressMap(userId, refIds)` |
+| MAJOR    | N+1 citation reverse-lookup on `/lens/handbook/[doc]/[chapter]` | STILL OPEN | `apps/study/src/routes/(app)/lens/handbook/[doc]/[chapter]/+page.server.ts:62-75` still per-section `getNodesCitingSection`. Next: add `getNodesCitingSectionsBatch({ referenceId, chapter, sections })` |
+| MAJOR    | Redundant DB fetch on regulations leaf reader | STILL OPEN | `apps/study/src/routes/(app)/library/regulations/[kind]/[group]/[section]/+page.server.ts` still re-fetches `getReferenceById(ref.id)` after the BC view returns. Next: widen `getRegulationsView(view: 'section')` payload to include `supersededById`; drop the extra fetch |
+| MINOR    | Magic-string `'active'` status filter in `/plans` load | CLOSED | `apps/study/src/routes/(app)/plans/+page.server.ts:9` -- `p.status !== PLAN_STATUSES.ACTIVE` |
+| MINOR    | recentReviews limit `10` hardcoded | CLOSED | `apps/study/src/routes/(app)/memory/[id]/+page.server.ts:56` -- `MEMORY_CARD_RECENT_REVIEWS_LIMIT` constant |
+| MINOR    | getRecentAttemptsForScenario limit `5` hardcoded | CLOSED | `apps/study/src/routes/(app)/reps/[id]/+page.server.ts:53` -- `REPS_DETAIL_RECENT_ATTEMPTS_LIMIT` constant |
+| MINOR    | Sequential awaits in knowledge node loader | STILL OPEN | `apps/study/src/routes/(app)/knowledge/[slug]/+page.server.ts:69-115` -- still serial. Next: wrap independent reads in Promise.all (`getNodesByIds`, `getNodeMastery`, `getCitedBy + resolveCitationSources`, `listReferences`) |
+| MINOR    | Sequential awaits in knowledge learn loader | STILL OPEN | `apps/study/src/routes/(app)/knowledge/[slug]/learn/+page.server.ts:41-55` -- `getNodeView` then `getNodeProgress` still serial. Next: parallelize the two reads |
+| MINOR    | Sequential awaits in handbook chapter loader | STILL OPEN | `apps/study/src/routes/(app)/library/handbook/[slug]/[chapter]/+page.server.ts:43-51` still serial. Next: two-phase parallel after `getHandbookChapter` resolves |
+| MINOR    | Per-action ref/chapter re-fetch on handbook chapter actions | STILL OPEN | each action still calls `getReferenceByDocument + getHandbookChapter`. Next: hidden form input with `chapterId`, or add `setReadStatusByCode(userId, refSlug, chapterCode, status)` BC helper |
+| MINOR    | Full-table `listReferences()` scans on library landing pages | STILL OPEN | `apps/study/src/routes/(app)/library/+page.server.ts:84-87` and `aircraft/[slug]` still call `listReferences()` then filter. Next: add `listReferencesByKind(kind)` BC helper; update aircraft loader to use existing `getReferenceByDocument(slug)` |
+| MINOR    | Memory-dashboard sequential awaits | STILL OPEN | `apps/study/src/routes/(app)/memory/+page.server.ts:22-29` keeps `await abandonStaleSessions` before the parallel reads. Next: parallelize and accept at-most-one-render staleness OR document the sequencing intent inline |
+| NIT      | Logout redirects with 302 instead of 303 | STILL OPEN | `apps/study/src/routes/(app)/logout/+page.server.ts:11` still 302. One-line fix |
+| NIT      | dev/references reads fixtures synchronously each request | STILL OPEN | `apps/study/src/routes/(dev)/references/+page.server.ts:154-156` still does `readFileSync` per-request; dev-only |
+
 ## Summary
 
 Reviewed all 50+ server files in scope under `apps/study/src/routes/**` and `apps/study/src/lib/**`. The hooks layer, auth integration, and BC delegation are uniformly strong: every protected route runs `requireAuth(event)`, mutations route through BC functions (no raw DB in routes), validation lives in Zod schemas exported from `@ab/bc-study`, error mapping is consistent (typed BC errors -> 400/404/409, unknown -> log + 500), and form actions follow the PRG pattern with `redirect(303, ...)`. Logging is structured with `requestId` + `userId` and the better-auth integration in `hooks.server.ts` correctly degrades to `null` user on DB failure so unauthenticated routes still load.

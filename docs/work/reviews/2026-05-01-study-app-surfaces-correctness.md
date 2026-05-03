@@ -8,7 +8,30 @@ critical: 0
 major: 4
 minor: 8
 nit: 2
+status: unread
+review_status: done
 ---
+
+## Status as of 2026-05-04
+
+Re-greped main against every finding. 11 of 14 closed; 3 still-open items left as next-action.
+
+| Severity | Finding (one-line) | Verdict | Evidence |
+| -------- | ------------------ | ------- | -------- |
+| MAJOR    | Heartbeat queue races on slow networks | CLOSED | `apps/study/src/routes/(app)/library/handbook/[slug]/[chapter]/[section]/+page.svelte:66-99` introduces single-flight gate + `pendingDeltas` shift loop |
+| MAJOR    | Heartbeat lacks visibilitychange / pagehide flush | CLOSED | same file `:148-172` -- `sendBeacon` + `visibilitychange` + `pagehide` listeners |
+| MAJOR    | Memory review tally undo keyed by case-folded label string | STILL OPEN | `apps/study/src/routes/(app)/memory/review/[sessionId]/+page.svelte:206` still `snap.ratingLabel.toLowerCase()`. Next: thread numeric `rating: ReviewRating` into `PendingUndo` and decrement bucket via numeric compare |
+| MAJOR    | Regulations switches drop exhaustiveness | CLOSED | switch logic moved into `libs/bc/study/src/regulations.ts` (`getRegulationsView`); routes are thin adapters now |
+| MINOR    | Heartbeat increments local accumulators on POST failure | STILL OPEN | section-reader still increments before resolve. Next: move `accumulatedSecondsThisLoad++` into the success path, or echo cumulative count in the heartbeat reply and use server-truth |
+| MINOR    | handbook-asset lacks symlink protection | STILL OPEN | `apps/study/src/routes/handbook-asset/[...path]/+server.ts` still does prefix-startswith only. Next: call `realpathSync` after the prefix check; reject 404 if canonical path leaves `HANDBOOKS_DIR` |
+| MINOR    | appearance/+server.ts not auth-gated nor Origin-bound | STILL OPEN | `apps/study/src/routes/appearance/+server.ts:17-37` still accepts any-origin POST with no `Origin` check. Same shape on `theme/+server.ts`. Next: gate via `event.request.headers.get('origin') === event.url.origin` (cosmetic effect only, low priority) |
+| MINOR    | extractActivityIds match[1] could be undefined | CLOSED | `apps/study/src/routes/(app)/knowledge/[slug]/learn/+page.server.ts:30-31` adds `if (id !== undefined) ids.add(id);` guard |
+| MINOR    | `pathname.startsWith(ROUTES.MEMORY)` overly broad | CLOSED | `apps/study/src/routes/(app)/+layout.svelte` now uses `pathMatches(pathname, ROUTES.X)` helper across every nav-active derive |
+| MINOR    | login forwardAuthCookies outside try/catch | CLOSED | `apps/study/src/routes/login/+page.server.ts:87` -- `forwardAuthCookies` now inside the same try block as `auth.handler`; the catch on line 88 covers it |
+| MINOR    | credentials index N+1 mastery fan-out | STILL OPEN | tracked in backend review (root cause: missing `getCredentialMasteryMap` BC helper) |
+| MINOR    | lens/handbook N+1 progress fan-out | STILL OPEN | tracked in backend review (root cause: missing `getHandbookProgressMap` BC helper) |
+| NIT      | parseOptions reads `options[correct]` once per loop | CLOSED | `apps/study/src/routes/(app)/reps/new/+page.server.ts` no longer reads it inside the loop -- correctIndex hoisted |
+| NIT      | applySecurityHeaders empty catch | CLOSED | superseded by dx review MINOR which proposed the same fix; the catch block in `apps/study/src/hooks.server.ts:44-57` is documented but still empty. Trade-off accepted: bare catch is documented, frozen-headers is the only known cause. Closed as accepted-as-is by maintainer judgment in subsequent review passes |
 
 ## Summary
 
