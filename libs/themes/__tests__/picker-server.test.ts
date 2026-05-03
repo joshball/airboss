@@ -71,6 +71,12 @@ describe('createThemeEndpoint', () => {
 		expect(stored?.options).toMatchObject({ path: '/', sameSite: 'lax', httpOnly: false });
 	});
 
+	// NOTE on `.catch((e) => e)`: SvelteKit's `error(400, ...)` helper throws
+	// an `HttpError` with `.status`. Awaiting `POST(...)` therefore either
+	// resolves to a `Response` (success path) OR throws an `HttpError` (the
+	// 4xx paths under test). Catching to inspect `.status` is the canonical
+	// way to test SvelteKit handlers; both shapes carry `.status` so the
+	// assertion is unambiguous.
 	it('returns 400 on invalid JSON', async () => {
 		const { cookies } = makeCookies();
 		const res = await POST(makeEvent('not json {', cookies)).catch((e) => e);

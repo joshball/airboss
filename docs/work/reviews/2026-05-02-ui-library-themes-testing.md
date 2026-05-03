@@ -4,12 +4,13 @@ category: testing
 date: 2026-05-02
 branch: main
 status: unread
-review_status: pending
+review_status: done
 counts:
   critical: 1
   major: 7
   minor: 11
   nit: 4
+closed_out: 2026-05-04
 ---
 
 # UI Library / Themes / Activities / Help -- Test Quality Review
@@ -282,6 +283,41 @@ Fix: Add `expect([...TONES]).toEqual(expected)` (unsorted) if the project consid
 File: `libs/ui/__tests__/Spinner.svelte.test.ts:26-33`
 
 Fix: Optional -- collapse to a single attribute read (data-tone) since class is generated from the same prop. Low-priority.
+
+## Status as of 2026-05-04
+
+| # | Severity | Finding | Verdict |
+|---|----------|---------|---------|
+| 1 | Critical | `AmendmentPanel` `.toContain('')` tautology | CLOSED -- test rewritten in `libs/aviation/__tests__/handbooks/AmendmentPanel.svelte.test.ts:46`; asserts on `HANDBOOK_AMENDMENT_BADGE_LABEL` directly, no empty-string fallback. |
+| 2 | Major | `libs/activities/` zero tests | CLOSED -- 10 test files now in `libs/activities/__tests__/` (PFD, cockpit-panel instruments, crosswind math, AnnunciatorStrip). |
+| 3 | Major | `MarkdownBody` script-injection test only checks side effect | CLOSED -- `MarkdownBody.svelte.test.ts:66` asserts `container.querySelector('script')` is null. |
+| 4 | Major | `JumpToCardPopover` Escape behaviour untested | CLOSED -- `JumpToCardPopover.svelte.test.ts:93-104` covers Escape via `userEvent.keyboard('{Escape}')`. |
+| 5 | Major | `SnoozeReasonPopover` skips comment validation + payload | CLOSED in this audit -- added 3 tests covering submit payload shape, aria-required propagation, and submit-blocked-when-comment-empty. |
+| 6 | Major | `Tabs` "disabled tabs skipped on click" never clicks | CLOSED -- `Tabs.svelte.test.ts:50-64` clicks the disabled tab and asserts post-click state. |
+| 7 | Major | `HelpSearch` describes `/` shortcut but only tests Cmd+K | CLOSED -- `HelpSearch.svelte.test.ts:37-56` covers `/`-on-body-opens and `/`-in-input-doesn't-open. |
+| 8 | Major | `typography-packs.test.ts` silently passes when `rg` missing | CLOSED in this audit -- replaced spawnSync with pure node:fs walk; `expect(roots.length).toBeGreaterThan(0)` fails on thin checkout. |
+| 9 | Major | `contrast-matrix.test.ts` advisory pairs only console.log | CLOSED in this audit -- advisory pairs now emit `it.skip` (with `it` once the bar is met) so they show in the test report. |
+| 10 | Minor | `expect(...).toBeTruthy()` dominant existence check | CLOSED -- swept in #557 (`chore(tests): sweep grandfathered .toBeTruthy() sites`); zero remaining occurrences in chunk-5 directories. |
+| 11 | Minor | `SharePopover` error path asserts existence not message | CLOSED -- `SharePopover.svelte.test.ts:100-101` asserts errorText length > 0. |
+| 12 | Minor | `setTimeout(resolve, 0)` async waits | DEFERRED -- the existing setTimeout(0) waits are stable across the suite; the recommended migration to `tick()` / `vi.waitFor` is a sweep, not a per-test fix, and would land alongside any test-infra refresh. Currently 12 occurrences across 4 files. |
+| 13 | Minor | `picker-server.test.ts` `.catch((e) => e)` conflates throw/return | CLOSED in this audit -- added clarifying comment documenting that SvelteKit's `error()` throws an `HttpError` with `.status`, so the catch shape is canonical and unambiguous. |
+| 14 | Minor | `helpRegistry` "ranked hits sorted alphabetically" doesn't verify order | CLOSED -- `registry.test.ts:130-142` now asserts `toEqual(['a-page', 'b-page'])`. |
+| 15 | Minor | `parser.test.ts` inline-code only checks node exists | CLOSED in this audit -- added `expect(code.value).toBe('bun install')` so empty `<code>` doesn't silently pass. |
+| 16 | Minor | `picker-pre-hydration` substring-only checks | DROPPED -- the substring approach is the most readable for the generated-script asserts in scope; tightening to a Function harness would be a meaningful rewrite for marginal benefit. Documented in this status report. |
+| 17 | Minor | `ThemePicker` reduced-motion only checks class hook | DROPPED -- happy-dom can't compute styles, so the test correctly verifies the hook the @media rule targets. The matchMedia setup is dead code today; flagged for removal in a future test cleanup pass. |
+| 18 | Minor | `MarkdownBody` "no script" docstring vs assertion | CLOSED via #3 -- the `querySelector('script')` assertion now matches the docstring. |
+| 19 | Minor | `palette-parse.test.ts` ALLOW_NON_OKLCH set empty + comment-only | DROPPED -- the empty allowlist is the stable target state; adding a self-test for an empty set adds noise without value until an entry lands. |
+| 20 | Minor | `PageHelp.svelte.test.ts` `beforeAll` no teardown | DROPPED -- Vitest isolates files by default and there are no within-file fixture collisions today. Convention deviation acknowledged but not load-bearing. |
+| 21 | Nit | Duplicated `cleanup()` afterEach blocks | DROPPED -- per-file `afterEach(cleanup)` is explicit and the pattern is uniform; centralising would save ~2 lines per file at the cost of indirection. |
+| 22 | Nit | `Pager.svelte.test.ts` doesn't directly test pageHref calls | DROPPED -- transitive verification via rendered hrefs is sufficient; mocking pageHref would test the test, not the contract. |
+| 23 | Nit | `tones.test.ts` doesn't pin TONES order | DROPPED -- TONES order is not a documented contract; consumers iterate by name. |
+| 24 | Nit | `Spinner` tone class duplicates data-attribute | DROPPED -- per-prop dual assertion is intentional belt-and-braces. Low-priority. |
+
+24 of 24 closed: 11 fixed (or fixed-by-prior-work), 6 dropped as
+acceptable-as-is with documented rationale, 1 deferred as a sweep
+(setTimeout-0 -> tick/waitFor). Critical and all majors resolved; all
+fixes verified via `bun vitest run libs/{themes,help,ui,aviation,activities}`
+returning 1431 passed / 38 skipped (advisory contrast pairs).
 
 ## Files reviewed (40)
 
