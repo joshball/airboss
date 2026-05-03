@@ -173,7 +173,7 @@ ACS already self-describing: `acs/<doc>/area-<NN>/task-<L>.md`. No `index.md` or
 | AIM appendix         | `appendix-<N>.md`                               | unchanged (already self-naming, file-not-dir scope)        |
 | AIM glossary term    | `glossary/<term-slug>.md`                       | unchanged                                                  |
 | whole-doc body       | `<doc>/<edition>/document.md`                   | `<doc>/<edition>/<slug>-<edition>.md` (Option B; see §3.4) |
-| AC body              | `ac/<doc>/<rev>/document.md`                    | `ac/<doc>/<rev>/<doc>-<rev>.md` (same Option B rule)       |
+| AC body              | `ac/<doc>/<rev>/document.md`                    | `ac/<doc>/<rev>/ac-<doc>-<rev>.md` (corpus-prefixed; see §3.4 for the disambiguation rationale) |
 | `figures/`, `tables/`| `<edition>/figures/`, `<edition>/tables/`       | unchanged (corpus-level dirs, not inside chapter dirs)     |
 | Debug artifacts      | `<chapter-dir>/_*.txt`, `_*.json`               | unchanged (move with chapter dir, names preserved)         |
 
@@ -225,7 +225,15 @@ Five options were considered in the initial spike. **Per user decision (open que
 | D | `<edition>.md` (`FAA-H-8083-2A.md`) | rejected: looks like a PDF filename |
 | E | `body.md` | rejected: still generic |
 
-Why B wins: maximally self-describing. A `grep -r 'risk-management-FAA-H-8083-2A'` returns the canonical body file with one query. The redundancy with parent-dir (slug appears twice in the path) is minor compared to the search and IDE-tab benefit. Same rule applies to AC: `ac/61-65/j/61-65-j.md`.
+Why B wins: maximally self-describing. A `grep -r 'risk-management-FAA-H-8083-2A'` returns the canonical body file with one query. The redundancy with parent-dir (slug appears twice in the path) is minor compared to the search and IDE-tab benefit.
+
+**AC variant: corpus-prefixed.** AC doc numbers contain hyphens (`91-21-1`, `00-6`, `61-65`). Applying Option B verbatim produces `91-21-1-b.md`, where the filename alone cannot tell you whether `b` is the revision of doc `91-21-1` or a continuation of the doc number. The fix: prefix the corpus tag, producing `ac-91-21-1-b.md`. This:
+
+- Matches the URI convention already used in `airboss-ref:ac/<doc>/<rev>/...` citations.
+- Keeps the kebab-case separator consistent with the rest of the codebase (no `_` mixed in).
+- Costs 3 characters of filename length, well under any practical cap.
+
+The asymmetry with whole-doc handbooks (no `<corpus>-` prefix there) is intentional: handbook slugs (`risk-management`, `tips-mountain-flying`) do not contain hyphen-delimited segments that could be mistaken for the edition. The disambiguation is only needed where the doc identifier itself is hyphen-segmented.
 
 ### 3.5 Edge cases addressed
 
@@ -258,18 +266,34 @@ Why B wins: maximally self-describing. A `grep -r 'risk-management-FAA-H-8083-2A
 
 - **AMT inclusion despite ingestion deferral:** AMT-G and AMT-P `document.md` files exist on disk today. Per user decision (open question 8): include in the rename. Deferral is about ingestion priority (whether the content drives study cards), not file naming. Keeping deferred docs in worse shape than active ones would be artificial. The YAML-level deferral (commenting out the AMT entries in `handbooks-extras.yaml` so download does not re-fetch) is unaffected by the rename.
 
+  **AMT pipeline clarification:** AMT-G and AMT-P go through `libs/sources/src/handbooks-extras/ingest.ts` (the TS whole-doc pipeline), not the Python chapter-aware pipeline. When the emitter at `handbooks-extras/ingest.ts:294,307` is updated to write `<slug>-<edition>.md`, a future un-deferral that re-fetches the AMT PDFs and re-runs ingest will produce filenames matching what the migration script already put on disk. No orphan creation possible. The Python pipeline updates (`tools/handbook-ingest/ingest/normalize.py`, `apply_errata.py`) do not affect AMT.
+
 - **`figures/` and `tables/` at corpus level:** stay where they are. The migration script's "move every file in the chapter dir to the new chapter dir" rule does not affect them because they are not inside chapter dirs.
 
 ### 3.6 Spike artifacts
 
-- `spike-results/before/phak-ch02/`: 65 entries, the full PHAK chapter 02 directory.
-- `spike-results/after/phak-ch02/02-aeronautical-decision-making/`: same 65 entries, `index.md` -> `00-aeronautical-decision-making.md`.
-- `spike-results/before/afh-ch02/`: 34 entries, the full AFH chapter 02 directory (with errata pair).
-- `spike-results/after/afh-ch02/02-ground-operations/`: same 34 entries, `index.md` -> `00-ground-operations.md`.
-- `spike-results/before/aim-ch07-sec1/`: 32 entries, the full AIM chapter-7/section-1 directory.
-- `spike-results/after/aim-ch07-sec1/07-safety-of-flight/01-meteorology/`: same 32 entries, `index.md` -> `00-meteorology.md`, paragraphs renumbered with title slugs.
+Layout:
 
-Each sample has a `_diff.md` next to its before/after pair listing every rename.
+```text
+spike-results/
+  before/
+    phak-ch02/      original PHAK chapter 02 files
+    afh-ch02/       original AFH chapter 02 files
+    aim-ch07-sec1/  original AIM chapter-7/section-1 files
+  after/
+    phak-ch02/02-aeronautical-decision-making/   renamed PHAK chapter 02
+    afh-ch02/02-ground-operations/               renamed AFH chapter 02
+    aim-ch07-sec1/07-safety-of-flight/01-meteorology/   renamed AIM section
+  phak-ch02/_diff.md       per-sample rename manifest
+  afh-ch02/_diff.md
+  aim-ch07-sec1/_diff.md
+```
+
+The `_diff.md` for each sample lives at `spike-results/<sample>/_diff.md` (a sibling of the `before/<sample>` and `after/<sample>` content trees, NOT inside them). Counts:
+
+- PHAK ch02: 65 entries (61 markdown + 4 debug artifacts). `index.md` -> `00-aeronautical-decision-making.md`.
+- AFH ch02: 34 entries including errata pair. `index.md` -> `00-ground-operations.md`.
+- AIM ch7/sec1: 32 entries. `index.md` -> `00-meteorology.md`. Paragraphs renumbered with title slugs.
 
 ## 4. Code-side audit
 
@@ -295,6 +319,8 @@ The audit was run against `libs/`, `scripts/`, `apps/`, `tools/handbook-ingest/`
 | `libs/sources/src/regs/resolver.ts:180` | flagged | Dead-code reference to `regs/cfr-<title>/<edition>/<part>/index.md`. CFR not in scope; flag for cleanup in future regs WP. |
 | `libs/sources/src/regs/derivative-writer.ts:137` | flagged | Same dead-code regs `index.md`. Flag for cleanup in future regs WP. |
 | `libs/sources/src/diff/body-hasher.ts:101` | flagged | Hashes regs body via `<edition>/<part>/index.md`. Dead path. Flag. |
+| `libs/sources/src/bootstrap.ts:85` | flagged | Comment about regs `<part>/index.md`. Dead-path doc. Update or remove in the regs cleanup follow-up WP. |
+| `libs/sources/src/bootstrap.ts:222` | flagged | Comment about regs `<part>/index.md` title synthesis. Same follow-up. |
 | `libs/bc/study/src/manifest-validation.ts:93` | trivial | Comment: `NULL on a chapter-level index.md`. |
 | `tools/handbook-ingest/ingest/normalize.py:182` | logic | Python pipeline writes `<chapter>/index.md`. Must change to `<chapter-dir>/00-<slug>.md` and pass title in. |
 | `tools/handbook-ingest/ingest/apply_errata.py:430` | logic | Special-cases `if md_path.name == "index.md"`. Update to the structural-prefix-plus-semantic-slug check defined in §3.5. |
@@ -334,7 +360,9 @@ The `chapter-N` / `section-N` strings exist in `apps/study/src/lib/help/content/
 
 ### 4.4 Test-file hits (logic-equivalent updates)
 
-These test files have hardcoded paths that match the on-disk filenames. They must be updated to match the new convention to keep the suite passing.
+Two categories of test impact: hardcoded path strings inside `*.test.ts` files (4.4.1), and committed test-fixture content trees that mirror the production layout (4.4.2). Both must be updated to match the new convention to keep the suite passing.
+
+#### 4.4.1 Test code with hardcoded paths
 
 | File:Line | Category | Notes |
 | --- | --- | --- |
@@ -344,7 +372,25 @@ These test files have hardcoded paths that match the on-disk filenames. They mus
 | `libs/sources/src/handbooks-extras/ingest.test.ts:359` | logic | Asserts `body_path` ends with `document.md`. |
 | `libs/sources/src/ac/ingest.test.ts` | logic | AC tests that assert on `document.md` paths. Audit to find specific lines once spec is being written. |
 | `libs/bc/study/src/manifest-validation.test.ts:44,68,75,82,116` | logic | Test fixtures with hardcoded `body_path` strings. |
-| `scripts/db/seed-references-from-manifest.test.ts:200,220,268-270,294,301,308,370,390` | logic | Multiple hardcoded `body_path` and write-file paths. |
+| `scripts/db/seed-references-from-manifest.test.ts:200,220,268-270,294,301,308,370,390` | logic | Multiple hardcoded `body_path` and write-file paths. (The test creates its own throwaway tree, independent of real fixtures.) |
+
+#### 4.4.2 Committed test-fixture content trees
+
+These are real markdown files and manifests committed under `tests/fixtures/` that the e2e suite loads. They mirror the production layout and must be migrated alongside the production rename, with their internal manifests rewritten in lockstep. Otherwise the new CI assertion (§5.5 step 7) will fire on these fixture manifests the moment it lands.
+
+| Fixture path | Category | Notes |
+| --- | --- | --- |
+| `tests/fixtures/handbooks/phak-fixture/phak/FAA-H-8083-25C/01/index.md` | logic | Chapter overview file. Renames to `01-<chapter-slug>/00-<chapter-slug>.md` per §3.1. |
+| `tests/fixtures/handbooks/phak-fixture/phak/FAA-H-8083-25C/manifest.json` | logic | 4 `body_path` strings include `01/index.md` and section paths. Rewrite all per §5.1. |
+| `tests/fixtures/aim/aim-fixture/aim/2026-09/chapter-5/index.md` | logic | AIM chapter overview. Renames to `05-<chapter-slug>/00-<chapter-slug>.md`. |
+| `tests/fixtures/aim/aim-fixture/aim/2026-09/chapter-5/section-1/index.md` | logic | AIM section overview. Renames to `05-<chapter-slug>/01-<section-slug>/00-<section-slug>.md`. |
+| `tests/fixtures/aim/aim-fixture/aim/2026-09/chapter-5/section-1/paragraph-7.md` | logic | Renames to `<NN>-<paragraph-slug>.md`. |
+| `tests/fixtures/aim/aim-fixture/aim/2026-09/chapter-5/section-1/paragraph-8.md` | logic | Same. |
+| `tests/fixtures/aim/aim-fixture/aim/2026-09/manifest.json` | logic | 4 fixture `body_path` strings. Rewrite per §5.2. |
+
+The fixtures use synthetic chapter/section titles, so the slugs in the renamed paths come from the fixture's own manifest titles, not from the production AIM corpus. The migration script must operate uniformly on production and fixture trees (driven by manifests), so this falls out of the existing rename plan as long as the script is pointed at both `handbooks/`, `aim/`, `ac/`, AND `tests/fixtures/`.
+
+**Sequencing note:** the fixture rename and the CI assertion (§5.5 step 7) MUST land in the same commit, otherwise the assertion will fire on still-old-shape fixture manifests. See §5.5 step 7 for the explicit ordering rule.
 
 ### 4.5 Documentation hits
 
@@ -442,11 +488,64 @@ Beyond "the script runs and reports success," the WP needs a concrete verificati
    - Byte-diff.
    - Same for one AC doc.
 7. **CI assertion** added to `libs/bc/study/src/manifest-validation.ts`: every `body_path` must NOT match `/(?:^|/)(index|document)\.md$`. Rejects any future regression.
+
+   **Sequencing rule:** this assertion lands in the same single squash-merge commit as the file moves and fixture migration (§4.4.2). It MUST NOT land first; if it lands before fixture manifests are rewritten, the fixture validation fires and blocks the merge. The migration script is responsible for moving production AND fixture trees in one pass.
+
 8. **CI assertion** added to detect AIM glossary slug collisions: every glossary file's slug must be unique within `aim/<edition>/glossary/`. Rejects future content that would collide under the 48-char truncation rule.
 
 The Python pipeline being paste-to-Claude (per `docs/ingestion-pipeline/section-extraction-prompt-strategy.md`) means step 4 may require a fresh-session prompt run for the toc strategy. Either strategy must produce the new shape. The acceptance criterion is byte-equality, not "the script ran."
 
-### 5.6 Mechanical vs human-review
+### 5.6 Atomic commit, not multi-commit migration
+
+The migration is **one squash-merge commit**. All of:
+
+- File moves (production + fixtures)
+- Manifest `body_path` rewrites
+- Emitter code changes (Python + TS, three pipelines)
+- Test fixture content updates
+- Test code path-string updates
+- CI assertions
+- Doc updates
+
+land together. There is no valid intermediate state where filesystem and emitters disagree. The implementation may use multiple commits on the feature branch for review readability, but the merge is a squash so `git bisect` and reverts see one atomic boundary.
+
+This matters because:
+
+- Mid-PR commits could leave a state where `bun run sources extract` writes old-shape paths to a new-shape filesystem, or vice versa.
+- A revert of a partial commit would corrupt the corpus.
+- The CI assertion (§5.5 step 7) must not fire during the migration; it lands in the same atomic boundary as the fixture rewrites.
+
+### 5.7 Mid-run failure recovery (within the migration script)
+
+The migration script itself runs as a single process; mid-script failure must be handled cleanly:
+
+1. **Plan phase (no writes):** Build a `Map<oldPath, newPath>` for every move, including all `mv` operations and every manifest rewrite as a queued JSON patch. Validate the plan before any FS write:
+   - Every old path exists.
+   - No new path already exists (if any does, abort with the specific path; this is the half-migrated detection).
+   - Every old path appears exactly once as a source.
+   - Every new path appears exactly once as a destination.
+2. **Execute phase:** Apply moves in dependency order (deeper paths first to avoid moving a parent before its children), then write manifests last. Write a `<repo>/.rename-progress.json` checkpoint after every successful phase so a crashed run can resume.
+3. **Atomic FS sweep:** Use `git mv` for everything (preserves history) within the working tree, all in one Node process. No subprocess per move.
+4. **Post-execute validation:** Re-walk the filesystem, assert every `body_path` in every manifest exists on disk, assert no `index.md` or `document.md` remains in scope, assert no `.errata.md` is stranded.
+5. **Cleanup:** Delete `.rename-progress.json`. Delete the migration script itself in the same commit (per ADR-021 precedent of script-and-delete).
+
+The "skip if new path exists, fail if both old + new exist" rule from earlier drafts is replaced by this two-phase approach, because the partial-state detection happens in the plan phase before any moves, not at each move.
+
+### 5.8 Directory move strategy
+
+Step 2 of §5.1 says "for every other file under `<NN>/`: mv to the new chapter dir." In practice this is a directory rename, not a per-file mv:
+
+```bash
+git mv handbooks/phak/FAA-H-8083-25C/01 handbooks/phak/FAA-H-8083-25C/01-introduction-to-flying
+git mv handbooks/phak/FAA-H-8083-25C/01-introduction-to-flying/index.md \
+       handbooks/phak/FAA-H-8083-25C/01-introduction-to-flying/00-introduction-to-flying.md
+```
+
+`git mv` on a directory recursively renames every file inside, including `figures/`, `tables/`, `_*.txt`/`_*.json` debug files, errata pairs. No glob necessary; directory move is the natural atomic unit.
+
+The earlier mitigation about "all files in the chapter dir" (§6.1) is satisfied: a `git mv <dir>` moves all contents (files AND nested directories) regardless of pattern. If a future ingest puts `figures/` inside a chapter dir (none today), it moves with the parent.
+
+### 5.9 Mechanical vs human-review
 
 - **Mechanical:** every file `mv`, every manifest `body_path` rewrite, every test fixture update, every comment update. Driven by the migration script + a small codemod for tests.
 - **Human review:** the spike's before/after artifacts (already produced); the validation procedure outputs (steps 4-6 byte diffs); the CI assertion patches.
