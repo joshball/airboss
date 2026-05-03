@@ -12,6 +12,32 @@ counts:
   nit: 3
 ---
 
+## Status as of 2026-05-04
+
+Walked every finding against current main. 12 of 14 closed; 2 carried (small operational items).
+
+| Severity | Finding                                                  | Verdict                                                                                    |
+| -------- | -------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| MAJOR    | rate-limit suite never asserts per-IP isolation          | CLOSED -- rate-limit.test.ts:220 isolates ISOLATION_IP_A vs ISOLATION_IP_B                 |
+| MAJOR    | rate-limit window-expiry path not covered                | CLOSED -- rate-limit.test.ts:255 mutates `lastRequest` past window, asserts reset          |
+| MAJOR    | sign-in success path never asserted                      | CLOSED -- rate-limit.test.ts:302 asserts 200 + bauth_session row + counter advance         |
+| MAJOR    | No tests for magic-link / password-reset / verify        | CLOSED -- libs/auth/src/verification-flows.test.ts (427 lines) covers happy/expired/reused |
+| MAJOR    | cookies.ts and logout.ts ship with zero unit tests       | CLOSED -- libs/auth/src/cookies.test.ts (141), logout.test.ts (264)                        |
+| MAJOR    | requireVerifiedEmail has no coverage                     | CLOSED -- helper deleted (dx-side decision); reintroduce with tests when first call site lands |
+| MINOR    | queries.test.ts uses live DB but never pins absolute count | CLOSED -- accepted; tests use `>=` deltas to coexist with peer suites                    |
+| MINOR    | log.test.ts never asserts before/after JSONB round-trip  | STILL OPEN -- design item; carried below                                                   |
+| MINOR    | auditRecent filter ambiguity untested                    | CLOSED -- log.test.ts:146 pins targetType+targetId precedence                              |
+| MINOR    | e2e auth never asserts CSRF / SameSite enforcement       | STILL OPEN -- design item; carried below                                                   |
+| MINOR    | rate-limit FK ordering on midway failure                 | CLOSED -- rate-limit.test.ts:160 sweeps stale rows on `like('%@airboss.test')`             |
+| NIT      | expectRedirect / expectForbidden swallow type info       | CLOSED -- accepted; helpers are local to auth.test.ts and the cast is contained            |
+| NIT      | audit timestamp ordering test relies on 5ms sleep        | CLOSED -- comment in log.test.ts:127 explains the clock-resolution gap                     |
+| NIT      | e2e login tests duplicate "find learner account" lookup  | CLOSED -- accepted; lookup is two lines and tests are independent                          |
+
+### Carried-forward design items
+
+- **before/after JSONB round-trip**: log.test.ts asserts the order/count contract but doesn't pin the snapshot shape. Trigger: first BC that writes non-trivial `before`/`after` payloads via `auditWrite`. Add a deep-equal round-trip case there.
+- **e2e CSRF / SameSite assertion**: today no e2e test reads `context.cookies()` to pin `sameSite === 'Strict'`. Trigger: first time the cookie attribute set changes (sameSite relax, magic-link landing, OAuth). Add the cookie-attribute pin alongside whatever flow forces the change.
+
 ## Summary
 
 Reviewed test quality across `libs/auth/src/*.test.ts` (auth.test.ts, queries.test.ts, rate-limit.test.ts), `libs/audit/src/log.test.ts`, and the login/logout e2e (`tests/e2e/unauthed/auth.spec.ts`, `tests/e2e/dashboard.spec.ts:48`).
