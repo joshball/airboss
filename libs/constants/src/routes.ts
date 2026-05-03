@@ -478,6 +478,14 @@ export const ROUTES = {
 		`/handbook/${encodeURIComponent(slug)}/${encodeURIComponent(edition)}/${encodeURIComponent(chapter)}/${encodeURIComponent(section)}` as const,
 	/** Handbook asset stream (figures, tables). Mirror of `HANDBOOK_ASSET` for flightbag. */
 	FLIGHTBAG_HANDBOOK_ASSET: (path: string) => `/handbook-asset/${path}` as const,
+	/**
+	 * Streams the canonical source PDF for a reference from the developer-local
+	 * cache (per ADR 018). The `path` segment is rooted at the cache root and
+	 * includes the per-corpus subdirectory (`handbooks/...`, `ac/...`, etc.).
+	 * Returns 404 when the cache doesn't have the file -- a fresh dev box has
+	 * to download the PDF first.
+	 */
+	FLIGHTBAG_SOURCE_PDF: (path: string) => `/source-pdf/${path}` as const,
 	/** AIM publication landing. */
 	FLIGHTBAG_AIM: '/aim',
 	/** AIM chapter index. */

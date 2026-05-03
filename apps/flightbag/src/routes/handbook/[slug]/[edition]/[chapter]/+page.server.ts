@@ -9,8 +9,9 @@
 
 import { parseHandbookChapter, parseHandbookSlug } from '@ab/aviation';
 import { getHandbookChapter, getReferenceByDocument, listChapterSections, listFiguresForSection } from '@ab/bc-study';
-import { ROUTES } from '@ab/constants';
+import { type ReferenceKind, ROUTES } from '@ab/constants';
 import { error } from '@sveltejs/kit';
+import { buildSourceLinks } from '../../../../../lib/source-links';
 import { shortHandbookEdition } from '../../../../reader-url';
 import type { PageServerLoad } from './$types';
 
@@ -34,8 +35,16 @@ export const load: PageServerLoad = async ({ params }) => {
 	const sections = await listChapterSections(chapter.id);
 	const figures = sections.length === 0 ? await listFiguresForSection(chapter.id) : [];
 
+	const sourceLinks = buildSourceLinks({
+		kind: ref.kind as ReferenceKind,
+		documentSlug: ref.documentSlug,
+		edition: ref.edition,
+		url: ref.url,
+	});
+
 	return {
 		uri: `airboss-ref:handbooks/${ref.documentSlug}/${shortEdition}/${chapterCode}`,
+		sourceLinks,
 		reference: {
 			id: ref.id,
 			documentSlug: ref.documentSlug,

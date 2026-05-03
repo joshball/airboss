@@ -1,5 +1,6 @@
 <script lang="ts">
 import { ROUTES } from '@ab/constants';
+import SourceLinks from '@ab/library/SourceLinks.svelte';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
@@ -15,6 +16,12 @@ let { data }: { data: PageData } = $props();
 	<a href={data.links.chapterHref}>Chapter {data.section.code.split('-')[0]}</a> &raquo;
 	<span>§{data.section.code}</span>
 </nav>
+
+<SourceLinks
+	localPdfHref={data.sourceLinks.localPdfHref}
+	onlineUrl={data.sourceLinks.onlineUrl}
+	localPdfMissing={data.sourceLinks.localPdfMissing}
+/>
 
 <header class="page-header">
 	<h1>§{data.section.code} -- {data.section.title}</h1>

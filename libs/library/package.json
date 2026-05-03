@@ -9,7 +9,8 @@
 			"default": "./src/index.ts"
 		},
 		"./RenderedSection.svelte": "./src/RenderedSection.svelte",
-		"./CitationChip.svelte": "./src/CitationChip.svelte"
+		"./CitationChip.svelte": "./src/CitationChip.svelte",
+		"./SourceLinks.svelte": "./src/SourceLinks.svelte"
 	},
 	"dependencies": {
 		"@ab/constants": "workspace:*",

@@ -42,6 +42,7 @@ const aliases = {
 	'@ab/hangar-sync': resolve('./libs/hangar-sync/src/index.ts'),
 	'@ab/library/RenderedSection.svelte': resolve('./libs/library/src/RenderedSection.svelte'),
 	'@ab/library/CitationChip.svelte': resolve('./libs/library/src/CitationChip.svelte'),
+	'@ab/library/SourceLinks.svelte': resolve('./libs/library/src/SourceLinks.svelte'),
 	'@ab/library': resolve('./libs/library/src/index.ts'),
 	'@ab/sources/registry/__test_helpers__': resolve('./libs/sources/src/registry/__test_helpers__.ts'),
 	'@ab/sources/registry': resolve('./libs/sources/src/registry/index.ts'),

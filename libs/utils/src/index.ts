@@ -31,7 +31,19 @@ export {
 	generateSyllabusNodeLinkId,
 } from './ids';
 export { createLogger, type Logger } from './logger';
-export { escapeHtml, extractImageUrls, normalizeHandbookAssetPath, renderMarkdown } from './markdown';
+export {
+	dedupeFirstHeading,
+	escapeHtml,
+	extractImageUrls,
+	type FrontmatterEntry,
+	findFigureReferences,
+	injectFigureRefs,
+	normalizeHandbookAssetPath,
+	type ParsedFrontmatter,
+	parseFrontmatter,
+	renderMarkdown,
+	stripFrontmatter,
+} from './markdown';
 export { narrow } from './narrow';
 export {
 	type OutboundUrlError,

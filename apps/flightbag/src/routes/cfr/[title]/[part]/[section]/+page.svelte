@@ -1,6 +1,7 @@
 <script lang="ts">
 import { ROUTES } from '@ab/constants';
 import RenderedSection from '@ab/library/RenderedSection.svelte';
+import SourceLinks from '@ab/library/SourceLinks.svelte';
 import type { PageData } from './$types';
 
 let { data }: { data: PageData } = $props();
@@ -23,6 +24,11 @@ let { data }: { data: PageData } = $props();
 				<a href={data.reference.partHref}>{data.reference.title}</a> &raquo;
 				<span>§{data.raw.part}.{data.raw.section}</span>
 			</nav>
+			<SourceLinks
+				localPdfHref={data.sourceLinks.localPdfHref}
+				onlineUrl={data.sourceLinks.onlineUrl}
+				localPdfMissing={data.sourceLinks.localPdfMissing}
+			/>
 		{/snippet}
 	</RenderedSection>
 {:else}
@@ -31,6 +37,11 @@ let { data }: { data: PageData } = $props();
 		<a href={data.reference.partHref}>{data.reference.title}</a> &raquo;
 		<span>§{data.raw.part}.{data.raw.section}</span>
 	</nav>
+	<SourceLinks
+		localPdfHref={data.sourceLinks.localPdfHref}
+		onlineUrl={data.sourceLinks.onlineUrl}
+		localPdfMissing={data.sourceLinks.localPdfMissing}
+	/>
 	<header class="page-header">
 		<h1>{data.raw.title} CFR §{data.raw.part}.{data.raw.section}</h1>
 	</header>
