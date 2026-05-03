@@ -73,6 +73,35 @@ const structuredCitationCommonShape = {
 const DOCUMENT_SLUG_REGEX = /^[a-z0-9][a-z0-9-]{1,30}[a-z0-9]$/;
 
 /**
+ * Reject any path-bearing manifest field that ends in `/index.md` or
+ * `/document.md` (the legacy generic filenames retired by the
+ * `rename-generic-content-files` WP). Every body / section / errata-note
+ * path must carry a self-describing filename (e.g. `00-<chapter-slug>.md`,
+ * `<doc-slug>-<edition>.md`, `ac-<doc>-<rev>.md`).
+ *
+ * Carve-out: paths under `regulations/` are exempt because the CFR
+ * derivative writer still emits `<part>/index.md` for part overviews.
+ * That cleanup is tracked as the separate `regs-derivative-cleanup` WP
+ * (see `docs/work-packages/rename-generic-content-files/analysis.md` §2.7).
+ */
+const GENERIC_BODY_FILENAME_RE = /(?:^|\/)(?:index|document)\.md$/;
+const REGS_PATH_PREFIX = 'regulations/';
+
+const selfDescribingPath = z
+	.string()
+	.min(1)
+	.refine(
+		(value) => {
+			if (value.startsWith(REGS_PATH_PREFIX)) return true;
+			return !GENERIC_BODY_FILENAME_RE.test(value);
+		},
+		{
+			message:
+				"path must not end in '/index.md' or '/document.md' (use a self-describing filename per the rename-generic-content-files WP)",
+		},
+	);
+
+/**
  * Section code shape for the **section-tree handbook** corpus
  * (PHAK / AFH / AVWX / future sectioned handbooks). Dotted decimal up to
  * three levels: "12", "12.3", "12.3.2". Other corpora carry their own
@@ -143,7 +172,7 @@ export const handbookManifestSectionSchema = z.object({
 	faa_page_end: z.string().min(1).nullable(),
 	source_locator: z.string().min(1),
 	/** Repo-relative path to the per-section markdown file. */
-	body_path: z.string().min(1),
+	body_path: selfDescribingPath,
 	/** SHA-256 hex digest of the markdown file. */
 	content_hash: z.string().regex(/^[0-9a-f]{64}$/i),
 	has_figures: z.boolean(),
@@ -190,14 +219,14 @@ export type HandbookManifestWarning = z.infer<typeof handbookManifestWarningSche
  */
 export const handbookManifestErrataSectionPatchedSchema = z.object({
 	section_code: z.string().min(1),
-	section_path: z.string().min(1),
+	section_path: selfDescribingPath,
 	chapter: z.string().min(1),
 	target_page: z.string().min(1),
 	patch_kind: z.string().min(1),
 	section_anchor: z.string().min(1),
 	new_heading: z.string().min(1).nullable(),
 	content_hash: z.string().regex(/^[0-9a-f]{64}$/i),
-	errata_note_path: z.string().min(1),
+	errata_note_path: selfDescribingPath,
 });
 export type HandbookManifestErrataSectionPatched = z.infer<typeof handbookManifestErrataSectionPatchedSchema>;
 
@@ -352,7 +381,7 @@ export const wholeDocManifestSchema = z.object({
 	...manifestCommonFields,
 	...manifestSubjectsOptional,
 	/** Repo-relative path to the document body markdown. */
-	body_path: z.string().min(1),
+	body_path: selfDescribingPath,
 	/** SHA-256 hex digest of the body markdown file. */
 	body_sha256: z.string().regex(/^[0-9a-f]{64}$/i),
 	/** Source PDF page count (informational; surfaces in the reader). */
@@ -389,7 +418,7 @@ export const aimManifestEntrySchema = z.object({
 	code: z.string().min(1),
 	title: z.string().min(1),
 	/** Repo-relative path to the per-entry markdown body. */
-	body_path: z.string().min(1),
+	body_path: selfDescribingPath,
 	/** SHA-256 hex digest of the markdown file. */
 	content_hash: z.string().regex(/^[0-9a-f]{64}$/i),
 });
@@ -473,7 +502,7 @@ export const acManifestSchema = z.object({
 	source_sha256: z.string().regex(/^[0-9a-f]{64}$/i),
 	fetched_at: z.string().datetime({ offset: true }),
 	page_count: z.number().int().positive(),
-	body_path: z.string().min(1),
+	body_path: selfDescribingPath,
 	body_sha256: z.string().regex(/^[0-9a-f]{64}$/i),
 	sections: z.array(z.unknown()).default([]),
 	changes: z.array(z.unknown()).default([]),

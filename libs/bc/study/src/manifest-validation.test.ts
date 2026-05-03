@@ -237,6 +237,51 @@ describe('manifestSchema (discriminated union on kind)', () => {
 	});
 });
 
+describe('selfDescribingPath enforcement (rename-generic-content-files)', () => {
+	it("rejects a section-tree body_path ending in '/index.md'", () => {
+		const broken = {
+			...VALID_SECTION_TREE,
+			sections: [{ ...VALID_SECTION_TREE.sections[0], body_path: 'handbooks/phak/FAA-H-8083-25C/01/index.md' }],
+		};
+		const result = sectionTreeManifestSchema.safeParse(broken);
+		expect(result.success).toBe(false);
+	});
+
+	it("rejects a whole-doc body_path ending in '/document.md'", () => {
+		const broken = { ...VALID_WHOLE_DOC, body_path: 'handbooks/risk-management/FAA-H-8083-2A/document.md' };
+		const result = wholeDocManifestSchema.safeParse(broken);
+		expect(result.success).toBe(false);
+	});
+
+	it("rejects an AIM entry body_path ending in '/index.md'", () => {
+		const broken = {
+			...VALID_AIM,
+			entries: [{ ...VALID_AIM.entries[0], body_path: 'aim/2026-04/chapter-1/index.md' }],
+		};
+		const result = aimManifestSchema.safeParse(broken);
+		expect(result.success).toBe(false);
+	});
+
+	it("rejects an AC body_path ending in '/document.md'", () => {
+		const broken = { ...VALID_AC, body_path: 'ac/61-98/d/document.md' };
+		const result = acManifestSchema.safeParse(broken);
+		expect(result.success).toBe(false);
+	});
+
+	it("carves out paths under 'regulations/' (regs cleanup is a follow-up WP)", () => {
+		// Regs writer still emits `<part>/index.md` for part overviews; the
+		// CI assertion must not block this until the regs-derivative-cleanup
+		// WP lands. The carve-out is filename-pattern-based; we exercise it
+		// via the section-tree schema which has the strictest body_path.
+		const allowed = {
+			...VALID_SECTION_TREE,
+			sections: [{ ...VALID_SECTION_TREE.sections[0], body_path: 'regulations/cfr-14/2026/91/index.md' }],
+		};
+		const result = sectionTreeManifestSchema.safeParse(allowed);
+		expect(result.success).toBe(true);
+	});
+});
+
 describe('handbookManifestErrataEntrySchema', () => {
 	const VALID_ERRATA = {
 		id: 'mosaic',
@@ -249,14 +294,15 @@ describe('handbookManifestErrataEntrySchema', () => {
 		sections_patched: [
 			{
 				section_code: '1.4',
-				section_path: 'handbooks/phak/FAA-H-8083-25C/01/04-aircraft-classifications.md',
+				section_path: 'handbooks/phak/FAA-H-8083-25C/01-introduction-to-flying/04-aircraft-classifications.md',
 				chapter: '01',
 				target_page: '1-15',
 				patch_kind: 'replace_paragraph',
 				section_anchor: 'Aircraft Classifications and Ultralight Vehicles',
 				new_heading: null,
 				content_hash: 'c'.repeat(64),
-				errata_note_path: 'handbooks/phak/FAA-H-8083-25C/01/04-aircraft-classifications.errata.md',
+				errata_note_path:
+					'handbooks/phak/FAA-H-8083-25C/01-introduction-to-flying/04-aircraft-classifications.errata.md',
 			},
 		],
 	} as const;
