@@ -660,7 +660,7 @@ describe('seedReferencesFromManifest', () => {
 		expect(second.sectionsChanged).toBe(0);
 	});
 
-	it('CFR manifest throws when a referenced body file is missing', async () => {
+	it('CFR manifest skips a Part whose body files are not yet registered (fresh dev box)', async () => {
 		const partKey = `97-${SUITE_TOKEN.replace(/[a-f]/g, '').slice(0, 4) || '1'}`;
 		const documentSlug = `14cfr${partKey}`;
 		const edition = 'current';
@@ -721,7 +721,95 @@ describe('seedReferencesFromManifest', () => {
 			}),
 		);
 
-		await expect(seedReferencesFromManifest({ documentSlug: dirSlug })).rejects.toThrow(/missing body file/);
+		// Body files are gitignored per ADR 018; on a fresh dev box `bun run
+		// sources register cfr` hasn't run yet. The seeder should skip the Part
+		// (not crash the whole seed) so other phases like cards / abby can finish.
+		const summary = await seedReferencesFromManifest({ documentSlug: dirSlug });
+		expect(summary.editionsProcessed).toBe(0);
+		expect(summary.sectionsTouched).toBe(0);
+		// Reference row stays in place (the YAML phase already authored it); just
+		// no sections attached.
+		const sections = await db
+			.select()
+			.from(referenceSection)
+			.where(eq(referenceSection.referenceId, `ref_test_missing_${SUITE_TOKEN}`));
+		expect(sections).toHaveLength(0);
+	});
+
+	it('CFR manifest throws when SOME (but not all) body files are missing -- partial extraction is a bug', async () => {
+		const partKey = `98-${SUITE_TOKEN.replace(/[a-f]/g, '').slice(0, 4) || '1'}`;
+		const documentSlug = `14cfr${partKey}`;
+		const edition = 'current';
+		const dirSlug = `test-${SUITE_TOKEN}-cfr-partial`;
+		const editionDate = '2026-04-22';
+
+		await db.insert(reference).values({
+			id: `ref_test_partial_${SUITE_TOKEN}`,
+			kind: 'cfr',
+			documentSlug,
+			edition,
+			title: `14 CFR Part ${partKey} -- Test partial`,
+			publisher: 'FAA',
+			url: `https://www.ecfr.gov/current/title-14/part-${partKey}`,
+			subjects: ['regulations'],
+			primaryCert: null,
+			sectionSchema: { levels: [] },
+			metadata: {},
+		});
+		fixtures.push({ slug: documentSlug, corpusDir: HANDBOOKS_DIR });
+		fixtures.push({ slug: dirSlug, corpusDir: REGS_DIR });
+
+		const editionDir = join(REGS_DIR, dirSlug, editionDate);
+		mkdirSync(editionDir, { recursive: true });
+		writeFileSync(
+			join(editionDir, 'manifest.json'),
+			JSON.stringify({
+				schemaVersion: 1,
+				kind: 'cfr',
+				title: '14',
+				editionSlug: '2026',
+				editionDate,
+				sourceUrl: 'file:///test.xml',
+				sourceSha256: 'a'.repeat(64),
+				fetchedAt: '2026-04-30T22:31:18.124Z',
+				partCount: 1,
+				subpartCount: 0,
+				sectionCount: 2,
+			}),
+		);
+		writeFileSync(
+			join(editionDir, 'sections.json'),
+			JSON.stringify({
+				schemaVersion: 1,
+				edition: '2026',
+				sectionsByPart: {
+					[partKey]: [
+						{
+							id: `airboss-ref:regs/cfr-14/${partKey}/1`,
+							canonical_short: `§${partKey}.1`,
+							canonical_title: 'Present',
+							last_amended_date: '2024-01-01',
+							body_path: `${partKey}/${partKey}-1.md`,
+							body_sha256: 'e'.repeat(64),
+						},
+						{
+							id: `airboss-ref:regs/cfr-14/${partKey}/2`,
+							canonical_short: `§${partKey}.2`,
+							canonical_title: 'Missing',
+							last_amended_date: '2024-01-01',
+							body_path: `${partKey}/${partKey}-2.md`,
+							body_sha256: 'e'.repeat(64),
+						},
+					],
+				},
+			}),
+		);
+		// Write only ONE of the two body files. This simulates a partial extraction
+		// bug, not a fresh dev box.
+		mkdirSync(join(editionDir, partKey), { recursive: true });
+		writeFileSync(join(editionDir, partKey, `${partKey}-1.md`), '# Present\n');
+
+		await expect(seedReferencesFromManifest({ documentSlug: dirSlug })).rejects.toThrow(/Partial extraction is a bug/);
 	});
 
 	it('CFR rolling-edition: dispatcher seeds only the latest snapshot when multiple editions are on disk', async () => {

@@ -156,16 +156,34 @@ export async function seedCfrManifest(
 			a.canonical_short.localeCompare(b.canonical_short, 'en', { numeric: true }),
 		);
 
+		// Probe body-file existence up front. Body markdown is gitignored per ADR
+		// 018 (developer-local cache derivative); on a fresh dev box it won't
+		// exist until `bun run sources register cfr` runs. Distinguish two cases:
+		//   - all files missing -> skip this Part with one progress line; the
+		//     end-of-run banner tells the user which register command to run.
+		//   - some files missing -> a real registration gap (partial extraction
+		//     bug); fail loudly so it gets investigated.
+		const missingBodyPaths = sortedSections.filter((entry) => !existsSync(resolve(editionDir, entry.body_path)));
+		if (missingBodyPaths.length === sortedSections.length && sortedSections.length > 0) {
+			context.onProgress?.(
+				`  skip ${documentSlug}: body files not yet registered ` +
+					`(run \`bun run sources register cfr --title=${manifest.title} ` +
+					`--edition=${manifest.editionDate}\` to materialize)`,
+			);
+			continue;
+		}
+		if (missingBodyPaths.length > 0) {
+			throw new Error(
+				`CFR seed: ${missingBodyPaths.length} of ${sortedSections.length} body files missing for ${documentSlug} ` +
+					`(first: ${missingBodyPaths[0]?.body_path}). Partial extraction is a bug -- run ` +
+					`\`bun run sources register cfr --title=${manifest.title} ` +
+					`--edition=${manifest.editionDate}\` to re-extract.`,
+			);
+		}
+
 		let ordinal = 0;
 		for (const entry of sortedSections) {
 			const bodyAbsPath = resolve(editionDir, entry.body_path);
-			if (!existsSync(bodyAbsPath)) {
-				throw new Error(
-					`CFR seed: missing body file for ${documentSlug} ${entry.canonical_short}: ` +
-						`${entry.body_path} (resolved: ${bodyAbsPath}). Run \`bun run sources register cfr ` +
-						`--title=${manifest.title} --edition=${manifest.editionDate}\` to produce the inline derivative tree.`,
-				);
-			}
 			const contentMd = await readFile(bodyAbsPath, 'utf-8');
 
 			const { changed } = await upsertReferenceSection({
