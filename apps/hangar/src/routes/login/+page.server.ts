@@ -52,11 +52,16 @@ export const actions: Actions = {
 				const data = (await authResponse.json().catch(() => null)) as { message?: string } | null;
 				// Server-side log so on-call can distinguish "wrong password" from
 				// "banned" / "verification required" / "validation error" without
-				// leaking the difference to the client.
-				log.warn('login non-ok response', {
-					requestId: locals.requestId,
-					metadata: { status: authResponse.status, betterAuthMessage: data?.message ?? null },
-				});
+				// leaking the difference to the client. 5xx is upgraded to error
+				// because it points at a server fault (better-auth threw, DB
+				// flapped); 4xx stays at warn so on-call doesn't drown in
+				// invalid-credential noise.
+				const meta = { status: authResponse.status, betterAuthMessage: data?.message ?? null };
+				if (authResponse.status >= 500) {
+					log.error('login server-error response', { requestId: locals.requestId, metadata: meta });
+				} else {
+					log.warn('login non-ok response', { requestId: locals.requestId, metadata: meta });
+				}
 				if (authResponse.status === 429) {
 					return fail(429, {
 						error: 'Too many sign-in attempts. Please wait a moment and try again.',

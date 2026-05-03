@@ -4,13 +4,38 @@ category: correctness
 date: 2026-05-01
 branch: main
 status: unread
-review_status: pending
+review_status: done
 counts:
   critical: 1
   major: 4
   minor: 5
   nit: 3
 ---
+
+## Status as of 2026-05-04
+
+Walked every finding against current main. 11 of 13 closed; 2 carried forward as design items with concrete triggers.
+
+| Severity | Finding                                            | Verdict                                                                            |
+| -------- | -------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| CRITICAL | forwardAuthCookies clobbers cookie-cache TTL       | CLOSED -- `libs/auth/src/cookies.ts:83-107` parses per-cookie Max-Age/Expires      |
+| MAJOR    | auditRecent ignores targetType when targetId set   | CLOSED -- `libs/audit/src/log.ts:62-66` ANDs both filters; test at log.test.ts:146 |
+| MAJOR    | sim hooks have no banned-user guard                | STILL OPEN -- design item, see below                                               |
+| MAJOR    | clearSessionCookies cookie-clear substring detect  | CLOSED -- `libs/auth/src/cookies.ts:147` uses parsed Max-Age                       |
+| MAJOR    | clearSessionCookies clears only 2 cookie names     | STILL OPEN -- design item, see below                                               |
+| MINOR    | hooks cast role to Role without validating         | CLOSED -- `parseRole()` in `libs/auth/src/auth.ts:45-48` + mapBetterAuthSession    |
+| MINOR    | banned-user TTL drift via cookie cache             | CLOSED -- documented trade-off; cookie-cache stays at 5 min (server.ts:87-90)      |
+| MINOR    | Number() coercion on count is no-op                | CLOSED -- `libs/auth/src/queries.ts:25-26`, `libs/audit/src/log.ts:78-79`          |
+| MINOR    | forwardAuthCookies silently drops empty headers    | CLOSED -- `decodeCookieValue` warns on malformed cookies (cookies.ts:60-69)        |
+| MINOR    | login fail() reflects email on 401                 | CLOSED -- 401 returns blank email in both apps                                     |
+| NIT      | requireAuth uses 302; login action uses 303        | CLOSED -- `libs/auth/src/auth.ts:97` uses 303 (auth.test.ts:53)                    |
+| NIT      | AuthSession.expiresAt typed but unused             | CLOSED -- field removed from `AuthSession` (libs/auth/src/auth.ts:13-16)           |
+| NIT      | rateLimitEnabled default chain awkward             | CLOSED -- option retained for tests, defaults to true                              |
+
+### Carried-forward design items
+
+- **sim/avionics banned guard + security headers**: lifting the banned 403 + `applySecurityHeaders` into a shared `@ab/auth` helper is the right move (also flagged by architecture/backend reviewers). Trigger: when sim or avionics adds its first authenticated write endpoint (today both are read-only after session hydration). The cross-subdomain session cookie still flows there, so the gap is real but bounded by current write surface.
+- **Cookie-clear list breadth**: better-auth's admin / magic-link plugins emit additional cookies that `clearSessionCookies` doesn't enumerate. Walk-by-prefix is robust but requires reading `cookies.getAll()`. Trigger: when the admin or magic-link plugin emits a non-session cookie in production. Neither does today.
 
 ## Summary
 

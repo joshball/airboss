@@ -8,11 +8,56 @@ critical: 4
 major: 35
 minor: 50
 nit: 30
+review_status: done
 ---
 
 # 10x Review -- Chunk 3: auth, identity, audit
 
 10 reviewers, all complete. **The security-critical chunk** -- 4 criticals.
+
+## Final close-out as of 2026-05-04
+
+All 10 per-category files walked heading-by-heading against current main. **97 of 119 findings closed; 22 carried forward as design items with concrete triggers.** All 4 critical findings closed. Every remaining open item is a deferred design question with a documented trigger (typically "first authenticated write endpoint on sim/avionics", "first BC consumer of `auditColumns`", or "first proxy-fronted deploy").
+
+| Category     | Closed | Open | Total | Per-category file                                                            |
+| ------------ | -----: | ---: | ----: | ---------------------------------------------------------------------------- |
+| correctness  |     11 |    2 |    13 | [correctness review](2026-05-01-auth-identity-audit-correctness.md)          |
+| security     |     14 |    3 |    17 | [security review](2026-05-01-auth-identity-audit-security.md)                |
+| perf         |      9 |    2 |    11 | [perf review](2026-05-01-auth-identity-audit-perf.md)                        |
+| architecture |      6 |    2 |     8 | [architecture review](2026-05-01-auth-identity-audit-architecture.md)        |
+| a11y         |     11 |    0 |    11 | [a11y review](2026-05-01-auth-identity-audit-a11y.md)                        |
+| patterns     |      4 |    4 |     8 | [patterns review](2026-05-01-auth-identity-audit-patterns.md)                |
+| testing      |     12 |    2 |    14 | [testing review](2026-05-01-auth-identity-audit-testing.md)                  |
+| dx           |     13 |    1 |    14 | [dx review](2026-05-01-auth-identity-audit-dx.md)                            |
+| schema       |      9 |    2 |    11 | [schema review](2026-05-01-auth-identity-audit-schema.md)                    |
+| backend      |      9 |    3 |    12 | [backend review](2026-05-01-auth-identity-audit-backend.md)                  |
+| **TOTAL**    | **98** | **21** | **119** |                                                                          |
+
+By severity:
+
+- **CRITICAL: 4 of 4 closed** (public sign-up disabled; `forwardAuthCookies` Max-Age fix; `bauth_session.user_id` + `expires_at` indexes).
+- **MAJOR: 28 of 35 closed.** 7 carried -- all collapse onto one of three triggers (sim/avionics auth surface, proxy-fronted deploy, plugin-cookie churn).
+- **MINOR: 39 of 50 closed.** 11 carried -- mix of cosmetic logger / DB mechanical / deferred design.
+- **NIT: 27 of 30 closed.** 3 carried -- accepted-as-is or rolled into convergent design items.
+
+### Convergent open clusters
+
+The 21 carried items collapse into a small number of design questions:
+
+- **sim/avionics auth surface gap** (correctness MAJOR + perf MINOR + backend MAJOR x2): banned guard + security headers missing on both apps. Trigger: first authenticated write endpoint on either surface forces the shared `@ab/auth/sveltekit` extraction. The cross-subdomain cookie still flows, so the gap is real but bounded by current write surface.
+- **Proxy-trust validation** (security MAJOR x2): no proxy fronts adapter-node today. Trigger: when CDN / load balancer is configured. Add `AIRBOSS_TRUSTED_PROXY` env-var + boot self-check then.
+- **Plugin-cookie churn** (correctness MAJOR + dx MAJOR): `clearSessionCookies` + `SESSION_COOKIE_NAMES` only enumerate session cookies. Trigger: admin/magic-link plugin emits a non-session cookie in production.
+- **`auditColumns` placement / shape** (architecture MINOR + schema NIT): dormant -- helper has no live call sites. Trigger: first BC adopts it.
+- **Operational polish** (testing MINOR x2 + dx MINOR + perf MINOR + patterns x4): logger pretty-mode metadata layout, `auditWrite` provenance discriminator, e2e CSRF/SameSite pin, before/after JSONB round-trip, etc. Each has its own concrete trigger documented in the per-category file.
+
+### Mechanical fixes landed in this close-out pass (2026-05-04)
+
+The audit found four carried items trivial enough to close inline rather than defer:
+
+- **Login 5xx-vs-4xx branching** (dx MINOR): `apps/{study,hangar}/src/routes/login/+page.server.ts` now upgrades 5xx responses from `log.warn` to `log.error('login server-error response', ...)` so on-call distinguishes server faults from invalid-credential noise.
+- **Logout 5xx body-snippet logging** (correctness/dx implicit): `apps/{study,hangar}/src/routes/(app|)/logout/+page.server.ts` now reads a 256-char prefix of the response body when better-auth 5xxs and includes it in `metadata.bodySnippet`. Bounded so log lines stay small; better-auth never includes user PII in sign-out error bodies.
+- **Login user-enumeration message** (security/backend MINOR): study/login no longer falls back to `data?.message` on 401/400; both apps now return uniform `'Invalid email or password'` so better-auth's "user not found" vs "invalid password" distinction never leaks.
+- **Hangar logout redirect status** (consistency): `apps/hangar/src/routes/logout/+page.server.ts` `load()` now uses 303 (matches study + login flows).
 
 ## Summary table
 

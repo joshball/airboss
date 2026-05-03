@@ -12,6 +12,30 @@ counts:
   nit: 3
 ---
 
+## Status as of 2026-05-04
+
+Walked every finding against current main. 9 of 12 closed; 3 carried forward.
+
+| Severity | Finding                                                | Verdict                                                                                            |
+| -------- | ------------------------------------------------------ | -------------------------------------------------------------------------------------------------- |
+| MAJOR    | Login + logout do not write to audit log               | CLOSED -- `libs/auth/src/audit-hooks.ts` + `libs/audit/src/auth-events.ts` wired in `createAuth`   |
+| MAJOR    | Avionics + sim hooks do not gate banned users          | STILL OPEN -- tracked under correctness MAJOR; trigger = first authenticated write endpoint        |
+| MAJOR    | Avionics + sim hooks omit security headers             | STILL OPEN -- carried alongside banned-guard; same trigger                                         |
+| MAJOR    | Login action duplication across study + hangar        | CLOSED -- shared `mapBetterAuthSession` + audit hooks landed; per-app action body retained as thin shim |
+| MINOR    | `forwardAuthCookies` + `clearSessionCookies` arg order | CLOSED -- API stable; per-app shells in `apps/*/src/lib/server/cookies.ts` paper over the order    |
+| MINOR    | `clearSessionCookies` clears only 2 cookie names       | STILL OPEN -- tracked under correctness MAJOR; trigger = when admin/magic-link plugin emits more   |
+| MINOR    | Typed-fail status mismatch on 401                      | CLOSED -- 401/400 always return uniform 'Invalid email or password' (PR `chunk-3 close-out` 2026-05-04) |
+| MINOR    | `requireRole` admits role values not in `Role`         | CLOSED -- `parseRole()` at hook boundary collapses unknown to null; `requireRole` cast matches      |
+| MINOR    | Hooks rely on unverified `event.url.host`              | CLOSED -- comment block in cookies.ts:179-182 + logout.ts:22-26 documents the trust note; dormant trigger documented in security review (XFF / proxy-trust) |
+| NIT      | Login email echoed in fail() body                      | CLOSED -- 401 path blanks email; comment lives at study/login:79-81                                |
+| NIT      | `getSession` exception path silently nulls user        | CLOSED -- all 4 apps now log `session lookup failed` (study/hangar/sim/avionics)                   |
+| NIT      | `building` short-circuit not exhaustive                | CLOSED -- mentioned-for-completeness; locals are well-defined for build-time render today          |
+
+### Carried-forward design items
+
+- **sim/avionics banned guard + security headers**: tracked under correctness MAJOR. The shared helper that closes both lives at `@ab/auth/sveltekit` once an authenticated write endpoint lands on either surface.
+- **`clearSessionCookies` cookie list breadth**: tracked under correctness MAJOR. Walk-by-prefix when admin/magic-link plugin first emits a non-session cookie.
+
 ## Summary
 
 Backend review of chunk 3 (auth, identity, audit write helpers) covering the four

@@ -8,7 +8,9 @@ import type { Actions, PageServerLoad } from './$types';
 const log = createLogger('hangar:logout');
 
 export const load: PageServerLoad = async () => {
-	redirect(302, ROUTES.LOGIN);
+	// 303 keeps the redirect-status story uniform across the auth surface
+	// (study/login, study/logout, hangar/login all 303 too).
+	redirect(303, ROUTES.LOGIN);
 };
 
 export const actions: Actions = {
@@ -20,15 +22,22 @@ export const actions: Actions = {
 					headers: { cookie: request.headers.get('cookie') ?? '' },
 				});
 				const authResponse = await auth.handler(authRequest);
+				// 5xx body snippet: log a 256-char prefix of the response body so
+				// on-call can see better-auth's error message without round-tripping
+				// to the request log. Bounded to keep log lines small.
 				if (authResponse.status >= 500) {
+					const bodyText = await authResponse
+						.clone()
+						.text()
+						.catch(() => '<unreadable>');
 					log.error('sign-out handler returned 5xx', {
 						requestId: locals.requestId,
-						status: authResponse.status,
+						metadata: { status: authResponse.status, bodySnippet: bodyText.slice(0, 256) },
 					});
 				} else if (authResponse.status >= 400) {
 					log.warn('sign-out handler returned non-2xx', {
 						requestId: locals.requestId,
-						status: authResponse.status,
+						metadata: { status: authResponse.status },
 					});
 				}
 				forwardAuthCookies(authResponse, cookies, url.host);
