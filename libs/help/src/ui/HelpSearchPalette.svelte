@@ -151,6 +151,7 @@ function backdropKeydown(event: KeyboardEvent): void {
 		data-testid="helpsearchpalette-backdrop"
 	>
 		<div
+			id="helpsearch-palette"
 			class="palette"
 			role="dialog"
 			aria-modal="true"

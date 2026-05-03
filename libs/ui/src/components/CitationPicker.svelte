@@ -42,6 +42,7 @@ interface SearchResult {
  * single-column without a JSON side-table just for URLs.
  */
 
+import { untrack } from 'svelte';
 import Button from './Button.svelte';
 import Dialog from './Dialog.svelte';
 
@@ -80,10 +81,14 @@ let submitError = $state<string | null>(null);
 // not depend on which tab is active when the fetch returns.
 let searchToken = 0;
 
-// When the caller reconfigures targetTypes, reset the active tab to a valid one.
+// When the caller reconfigures targetTypes, reset the active tab to a valid
+// one. The write is wrapped in `untrack` so the self-loop guard in this
+// effect can't accidentally tighten into a real loop after a future edit.
 $effect(() => {
 	if (!activeTypes.includes(activeType)) {
-		activeType = activeTypes[0];
+		untrack(() => {
+			activeType = activeTypes[0];
+		});
 	}
 });
 

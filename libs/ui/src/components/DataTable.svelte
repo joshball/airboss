@@ -85,7 +85,14 @@ function sortIndicator(column: DataTableColumn<T>): string {
 }
 </script>
 
-<div class="wrap" data-testid="datatable-root" data-state={sortedRows.length === 0 ? 'empty' : 'idle'}>
+<div
+	class="wrap"
+	role="region"
+	tabindex="0"
+	aria-label={ariaLabel ?? 'Data table'}
+	data-testid="datatable-root"
+	data-state={sortedRows.length === 0 ? 'empty' : 'idle'}
+>
 	<table aria-label={ariaLabel} data-testid="datatable-table">
 		<thead data-testid="datatable-head">
 			<tr>
@@ -146,6 +153,11 @@ function sortIndicator(column: DataTableColumn<T>): string {
 		border: 1px solid var(--edge-default);
 		border-radius: var(--radius-md);
 		background: var(--surface-panel);
+	}
+
+	.wrap:focus-visible {
+		outline: 2px solid var(--focus-ring);
+		outline-offset: 2px;
 	}
 
 	table {

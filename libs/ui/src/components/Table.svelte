@@ -20,7 +20,13 @@ let {
 } = $props();
 </script>
 
-<div class="wrap" class:sticky={stickyHeader}>
+<div
+	class="wrap"
+	class:sticky={stickyHeader}
+	role="region"
+	tabindex="0"
+	aria-label={ariaLabel ?? 'Table'}
+>
 	<table aria-label={ariaLabel}>
 		{@render children()}
 	</table>
@@ -30,6 +36,11 @@ let {
 	.wrap {
 		width: 100%;
 		overflow: auto;
+	}
+
+	.wrap:focus-visible {
+		outline: 2px solid var(--focus-ring);
+		outline-offset: 2px;
 	}
 
 	table {

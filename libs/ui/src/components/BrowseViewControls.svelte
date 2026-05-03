@@ -92,7 +92,12 @@ let {
 		padding: var(--space-2xs) var(--space-sm);
 		border: 1px solid var(--edge-strong);
 		border-radius: var(--radius-sm);
-		background: var(--ink-inverse);
+		background: var(--surface-raised);
 		color: var(--ink-body);
+	}
+
+	.view-control select:focus-visible {
+		outline: 2px solid var(--focus-ring);
+		outline-offset: 2px;
 	}
 </style>

@@ -34,7 +34,7 @@ let {
 </script>
 
 {#if chips.length > 0}
-	<div class="chip-row" aria-label={ariaLabel} data-testid="filterchips-root">
+	<nav class="chip-row" aria-label={ariaLabel} data-testid="filterchips-root">
 		<span class="chip-label" data-testid="filterchips-heading">{heading}</span>
 		{#each chips as chip (chip.key)}
 			<a
@@ -49,7 +49,7 @@ let {
 			</a>
 		{/each}
 		<a class="chip-clear" href={clearHref} data-testid="filterchips-clear">{clearLabel}</a>
-	</div>
+	</nav>
 {/if}
 
 <style>
@@ -85,13 +85,18 @@ let {
 	}
 
 	.chip:hover {
-		background: var(--action-default-wash);
-		border-color: var(--action-default-edge);
+		background: var(--action-default-edge);
+		border-color: var(--action-default);
+		color: var(--action-default-active);
+	}
+
+	.chip:hover .chip-x {
+		opacity: 1;
 	}
 
 	.chip:focus-visible {
-		outline: none;
-		box-shadow: 0 0 0 3px var(--focus-ring);
+		outline: 2px solid var(--focus-ring);
+		outline-offset: 2px;
 	}
 
 	.chip-name {
@@ -107,6 +112,8 @@ let {
 		color: var(--action-default);
 		font-size: var(--type-reading-body-size);
 		line-height: 1;
+		opacity: 0.65;
+		transition: opacity var(--motion-fast);
 	}
 
 	.chip-clear {
