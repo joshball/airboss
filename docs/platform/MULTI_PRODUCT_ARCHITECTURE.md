@@ -74,6 +74,7 @@ airboss/
     audio/              NTSB stories, daily decision, ATC comms, memory audio
     reflect/            Journals, heatmaps, currency tracking, decision diary
     firc/               FIRC course (migrated from airboss-firc -- see below)
+    flightbag/          Canonical FAA references reader -- handbooks, AIM, CFR, AC, ACS deep-link surface
     hangar/             Content authoring + admin
     runway/             Public site
   libs/
@@ -84,6 +85,7 @@ airboss/
     audit/              Action logging, content version history
     engine/             Scenario tick engine, scoring (migrated from airboss-firc)
     learning/           Spaced rep algorithm (FSRS-5), progress, streaks
+    library/            Reference rendering primitives (RenderedSection, CitationChip)
     spatial/            Airport/airspace/terrain data layer
     audio/              TTS, audio generation utils
     themes/             Design tokens, theme definitions

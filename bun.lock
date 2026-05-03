@@ -48,6 +48,18 @@
         "@ab/utils": "workspace:*",
       },
     },
+    "apps/flightbag": {
+      "name": "@ab/flightbag",
+      "dependencies": {
+        "@ab/constants": "workspace:*",
+        "@ab/db": "workspace:*",
+        "@ab/library": "workspace:*",
+        "@ab/sources": "workspace:*",
+        "@ab/themes": "workspace:*",
+        "@ab/ui": "workspace:*",
+        "@ab/utils": "workspace:*",
+      },
+    },
     "apps/hangar": {
       "name": "@ab/hangar",
       "dependencies": {
@@ -211,6 +223,15 @@
         "@ab/utils": "workspace:*",
       },
     },
+    "libs/library": {
+      "name": "@ab/library",
+      "version": "0.0.1",
+      "dependencies": {
+        "@ab/constants": "workspace:*",
+        "@ab/sources": "workspace:*",
+        "@ab/ui": "workspace:*",
+      },
+    },
     "libs/sources": {
       "name": "@ab/sources",
       "dependencies": {
@@ -269,6 +290,8 @@
 
     "@ab/db": ["@ab/db@workspace:libs/db"],
 
+    "@ab/flightbag": ["@ab/flightbag@workspace:apps/flightbag"],
+
     "@ab/hangar": ["@ab/hangar@workspace:apps/hangar"],
 
     "@ab/hangar-jobs": ["@ab/hangar-jobs@workspace:libs/hangar-jobs"],
@@ -276,6 +299,8 @@
     "@ab/hangar-sync": ["@ab/hangar-sync@workspace:libs/hangar-sync"],
 
     "@ab/help": ["@ab/help@workspace:libs/help"],
+
+    "@ab/library": ["@ab/library@workspace:libs/library"],
 
     "@ab/sim": ["@ab/sim@workspace:apps/sim"],
 
