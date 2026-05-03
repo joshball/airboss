@@ -26,10 +26,10 @@ All dispatched 2026-05-03 ~18:50 UTC. See [whole-doc-promotion/sequence.md](../w
 | WP | Effect | Strategy | Status |
 |----|--------|----------|--------|
 | WP-IFH | Instrument Flying Handbook → section-tree | TOC-file parser (no embedded TOC) | ✅ #525 (2026-05-03) |
-| WP-MTN section-tree | Mountain Flying → section-tree | parse existing override markdown | 🟡 in flight |
+| WP-MTN section-tree | Mountain Flying → section-tree | parse existing override markdown | ✅ #527 (2026-05-03) |
+| WP-IPH | Instrument Procedures Handbook → section-tree | Class A2 chapter PDFs + sidecar TOC PDF | ✅ #532 (2026-05-03) |
 | WP-RMH | Risk Management Handbook → section-tree | bookmark extraction (rich embedded TOC) | 🟡 in flight |
 | WP-AIH | Aviation Instructor's Handbook → section-tree | Class A2 chapter PDFs + bookmark | 🟡 in flight |
-| WP-IPH | Instrument Procedures Handbook → section-tree | Class A2 chapter PDFs + sidecar TOC PDF | 🟡 in flight |
 
 ### Wave 3 — Flightbag scaffold (✅ shipped)
 
