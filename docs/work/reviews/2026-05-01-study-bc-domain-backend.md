@@ -4,13 +4,86 @@ category: backend
 date: 2026-05-01
 branch: main
 status: unread
-review_status: pending
+review_status: done
 counts:
   critical: 1
   major: 4
   minor: 6
   nit: 4
 ---
+
+## Status as of 2026-05-04
+
+| Severity | Count | Closed | Open |
+| -------- | ----: | -----: | ---: |
+| critical |     1 |      0 |    1 |
+| major    |     4 |      3 |    1 |
+| minor    |     6 |      2 |    4 |
+| nit      |     4 |      0 |    4 |
+
+### CRITICAL: `applyCertGoalsToPrimaryGoal` non-transactional -- STILL OPEN
+
+Closed partially: the per-cert serial walk is now batched (`PR #481`, `libs/bc/study/src/goals.ts:542-639`). Reads are batched (`inArray(credential.slug, slugs)` + `inArray(credentialSyllabus.credentialId, ids)`); upserts run via `Promise.all(...addGoalSyllabus)`. **Open:** the targeting patch update + N upserts still run on raw `db`, not inside a `db.transaction`. The function-level docstring claims "idempotent on re-run" so partial failure is recoverable by re-invoking, which softens the original criticality. Trigger: when WP-engine-goal-cutover ships its end-to-end tests, wrap targeting patch + upsert phase in `db.transaction(async tx => { ... })` and thread `tx` through `addGoalSyllabus`.
+
+### MAJOR: `renameSavedDeck` / `deleteSavedDeck` read-then-write -- STILL OPEN
+
+`libs/bc/study/src/saved-decks.ts:73-107, 123-155` still pre-read + branch + INSERT/UPDATE outside a transaction. Concurrent double-clicks can race on the partial UNIQUE `(user_id, deck_hash)`. Trigger: roll into a "saved-decks atomicity" cleanup pass; replace both functions with a single `insert().onConflictDoUpdate({ target: [savedDeck.userId, savedDeck.deckHash], set: {...} }).returning()`.
+
+### MAJOR: `recordItemResult` mislabeled `SessionNotFoundError` -- CLOSED
+
+PR #437 (`libs/bc/study/src/sessions.ts:850-940`). `assertReviewForUser` now throws a typed `ReviewNotFoundError(reviewId, userId)` instead of `SessionNotFoundError`. New regression test at `sessions.test.ts:351-369` confirms the disambiguation. Closed.
+
+### MAJOR: `createPlan` regex -> SQLSTATE -- CLOSED
+
+`libs/bc/study/src/plans.ts:181`. The race-guard is now `(err as { code?: string }).code === '23505'`. Comment cross-references `citations/citations.ts:292`. Closed.
+
+### MAJOR: `getCredentialIdsCoveredBy` BFS-while loop -- CLOSED
+
+PR #479 (`libs/bc/study/src/credentials.ts:144-165`). Replaced with a single `WITH RECURSIVE covered(id) AS (...)` Drizzle `sql` template. One round-trip; `UNION` (not `UNION ALL`) handles cycle defense. Closed.
+
+### MINOR: `snooze.ts` magic `'new'` + raw quoted column -- CLOSED
+
+`libs/bc/study/src/snooze.ts:389,413`. `lte(cardState.dueAt, now)` replaces the raw `sql` template that quoted the column literal; `eq(cardState.state, CARD_STATES.NEW)` replaces the magic string. Closed.
+
+### MINOR: `submitFeedback` whitespace-comment behavior -- STILL OPEN
+
+`libs/bc/study/src/feedback.ts:50` still trims silently to `null`. No JSDoc note added. Trigger: roll into next feedback-related WP; either document the trim-to-null contract on `submitFeedback` or preserve the original non-empty-after-trim string.
+
+### MINOR: `citations/search.ts` reimplements `escapeLike` -- CLOSED
+
+`libs/bc/study/src/citations/search.ts:12,29`. Imports `escapeLikePattern` from `@ab/db` and uses it inside `buildTermPattern`. Closed.
+
+### MINOR: `goals.ts` bare `Error('createGoal failed')` etc. -- STILL OPEN
+
+`libs/bc/study/src/goals.ts:267,272,352,408`, `credentials.ts:478`, `syllabi.ts:502,534` still throw `new Error('upsertX failed')`. No shared `UpsertReturnedNoRowError` introduced. Same pattern as DX MINOR. Trigger: bundle into a "BC error class hygiene" sweep; introduce one shared `UpsertReturnedNoRowError(entity, id)` in the BC and replace all 7 sites.
+
+### MINOR: `createCitation` defence-in-depth pre-read -- STILL OPEN
+
+`libs/bc/study/src/citations/citations.ts:275-300` still relies solely on the SQLSTATE 23505 catch. No pre-read added. Trigger: only matters if the project ever changes Postgres drivers or wraps errors. Defer until a driver swap is on the table.
+
+### MINOR: `getNextScenarios` correlated `${userId}` -- STILL OPEN
+
+`libs/bc/study/src/scenarios.ts:531-539`. Comment + style unchanged. The pattern is safe (Drizzle `${...}` interpolations are parameters), but the surrounding code still mixes `eq(...)` with raw `sql\`...\``. No clarifying comment block added. Trigger: nit-class -- bundle into the next scenarios refactor pass.
+
+### NIT: `engine.ts` `as unknown as EngineXCandidate` casts -- STILL OPEN
+
+`libs/bc/study/src/engine.ts` discriminator pattern unchanged. Trigger: discriminated union refactor as part of the next engine-targeting expansion.
+
+### NIT: `sessions.ts:getStreakDays` UTC-day cursor -- STILL OPEN
+
+`libs/bc/study/src/sessions.ts:1106-1124` cursor reconstruction unchanged. Trigger: roll into a streaks/dashboard polish pass; either pull out a `priorDayKey` helper or add a one-line invariant comment.
+
+### NIT: `references.ts:setNotes` first-write `status='unread'` -- STILL OPEN
+
+`libs/bc/study/src/references.ts:705-730` behavior unchanged. Trigger: roll into the next references read-state refactor; add JSDoc noting the by-design behavior.
+
+### NIT: `validateCredentialDag` non-cycle payload -- STILL OPEN
+
+`libs/bc/study/src/credentials.ts:558-565` fallback returns unsorted ids in `CredentialPrereqCycleError`. Trigger: split into `CredentialPrereqUnresolvedNodesError` when a real seed authoring task surfaces the case in the wild.
+
+### Final verdict
+
+3 of 4 majors closed (#437, #479, plus createPlan SQLSTATE inline; the sole open major is `saved-decks` atomicity). Critical is partially closed (batching landed; transaction wrap still pending). 2 of 6 minors closed (snooze magic strings, escapeLike). 4 nits remain as low-priority follow-ups with concrete triggers. `review_status` flipped to `done`; `status` user-controlled.
 
 ## Summary
 

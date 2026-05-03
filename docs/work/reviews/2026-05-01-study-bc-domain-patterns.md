@@ -12,6 +12,23 @@ status: unread
 review_status: done
 ---
 
+## Status as of 2026-05-04
+
+| Severity | Count | Closed | Open |
+| -------- | ----: | -----: | ---: |
+| critical |     0 |      0 |    0 |
+| major    |     0 |      0 |    0 |
+| minor    |     1 |      1 |    0 |
+| nit      |     0 |      0 |    0 |
+
+### MINOR: Weak-area score formula uses inline coefficient `2` -- CLOSED
+
+PR #468. `libs/constants/src/study.ts:195,201` declares `WEAK_AREA_CARD_WEIGHT = 2` and `WEAK_AREA_REP_WEIGHT = 2`. `libs/bc/study/src/dashboard.ts:26-29,394-395,521` imports + uses both constants in the formula and the JSDoc-rendered formula. Closed.
+
+### Final verdict
+
+All findings closed. `review_status` stays `done`.
+
 ## Summary
 
 Reviewed `libs/bc/study/src/` (28k LOC across ~50 modules) against the project's house-style rubric: ENGINE_SCORING centralisation per ADR 014, ID generation through `@ab/utils` helpers, TypeScript strictness, Drizzle namespace correctness, and `@ab/*` import rules.

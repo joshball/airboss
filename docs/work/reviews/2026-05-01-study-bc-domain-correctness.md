@@ -12,6 +12,71 @@ status: unread
 review_status: done
 ---
 
+## Status as of 2026-05-04
+
+| Severity | Count | Closed | Open |
+| -------- | ----: | -----: | ---: |
+| critical |     0 |      0 |    0 |
+| major    |     4 |      3 |    1 |
+| minor    |     6 |      1 |    5 |
+| nit      |     2 |      0 |    2 |
+
+### MAJOR: `recordItemResult` upsert vs documented contract -- CLOSED
+
+PR #437. `libs/bc/study/src/sessions.ts:933-963` now uses a pure `db.update(sessionItemResult).set(...).where(...).returning()` with explicit zero-row check that throws `SessionSlotNotFoundError`. Audit emit + tx wrap added. Regression test at `sessions.test.ts:311-336` ("throws SessionSlotNotFoundError when the slot row was never inserted -- no ghost row created") confirms. Closed.
+
+### MAJOR: `updateCard` mutates card + cardSnooze outside transaction -- STILL OPEN
+
+`libs/bc/study/src/cards.ts:168-225` still runs both writes on raw `db`. Trigger: roll into next cards-feedback WP; wrap in `db.transaction(async tx => { ... })` and thread `tx` through both updates.
+
+### MAJOR: `skipSessionSlot` inherits `recordItemResult` upsert bug -- CLOSED
+
+The root-cause `recordItemResult` rewrite (PR #437) propagates to `skipSessionSlot` via the same call. `libs/bc/study/src/sessions.ts:1010-1095` calls the rewritten function inside its outer transaction; ghost-slot path is gone. Closed.
+
+### MAJOR: `getRepDashboard` docstring vs SQL inversion -- CLOSED
+
+`libs/bc/study/src/scenarios.ts:776-781` docstring now reads "both `scenarioCount` and `unattemptedCount` count only `status = ACTIVE` rows. Archiving a scenario removes it from both totals." Matches the SQL. Closed.
+
+### MINOR: `submitAttemptSchema.chosenOptionId` 50-char cap -- CLOSED
+
+`libs/bc/study/src/validation.ts:175` raised to `max(150)`. Comfortably covers `30-char scenario id + 50-char option id + separator`. Closed.
+
+### MINOR: `getCitationsForSyllabusNode` legacy filter divergence -- STILL OPEN
+
+`libs/bc/study/src/syllabi.ts:216-227` still returns `row?.citations ?? []` without `isStructuredCitation` filter. No comment confirming syllabus_node.citations was never legacy. Trigger: roll into a citations-shape audit pass; either add the filter for defense in depth or document the divergence on the JSDoc.
+
+### MINOR: `createGoal` primary-clear sweeps every goal -- CLOSED
+
+`libs/bc/study/src/goals.ts:262-267` clear is now narrowed via `and(eq(goal.userId, params.userId), eq(goal.isPrimary, true))`. Mirrors `setPrimaryGoal`. Closed.
+
+### MINOR: `applyCertGoalsToPrimaryGoal` non-transactional -- STILL OPEN (mirrors backend CRITICAL)
+
+Same finding as backend's CRITICAL. Per-cert reads are batched (#481) but multi-write phase still runs outside `db.transaction`. Trigger documented in backend audit; closing here as a duplicate symptom.
+
+### MINOR: `getReviewedCardIdsInSession` ownership predicate -- STILL OPEN
+
+`libs/bc/study/src/review-sessions.ts:338-348` still scopes by `(userId, reviewSessionId)` only; no join to `memoryReviewSession` row. Trigger: roll into review-sessions hardening pass; load the session row first.
+
+### MINOR: `getRepAccuracy` / `getDomainAccuracy` / `getRepStats` clamp -- STILL OPEN
+
+`libs/bc/study/src/scenarios.ts:645-728` accuracy aggregates still return `correct / attempted` without `Math.max(0, Math.min(1, ...))`. Schema CHECK keeps the input safe today. Trigger: only matters if the schema CHECK on `is_correct boolean` is ever loosened.
+
+### MINOR: `recordPhaseVisited` / `recordPhaseCompleted` validate input -- STILL OPEN
+
+`libs/bc/study/src/knowledge.ts:1224-1311` still accept arbitrary nodeId / phaseId strings (mirrored in security MINOR). Trigger: roll into the next knowledge-graph hardening WP; pre-validate against `knowledge_node` and the phase constants vocabulary.
+
+### NIT: `getStreakDays` cursor advancement -- STILL OPEN
+
+`libs/bc/study/src/sessions.ts:1063-1126` loop unchanged. Trigger: streaks polish pass.
+
+### NIT: `aggregateSimNodePressure` clamp loop iteration -- STILL OPEN
+
+`libs/bc/study/src/sim-bias.ts:60-63` still uses a second pass over the Map. Trigger: sim-bias polish pass; fold the clamp into the contribution loop.
+
+### Final verdict
+
+3 of 4 majors closed (`recordItemResult` rewrite + `skipSessionSlot` inheritance + docstring fix). 1 of 6 minors closed (cap raise) plus a second (`createGoal` primary-clear). 5 minors + 2 nits remain as concrete-trigger follow-ups. `review_status` stays `done`.
+
 ## Summary
 
 Reviewed `libs/bc/study/src/` end to end (cards, reviews, scenarios, sessions, engine, plans, goals, knowledge, mastery, lenses, calibration, library-by-cert, dashboard, stats, snooze, syllabi, credentials, review-sessions, sim-bias, engine-targeting, srs, validation). The engine + scoring layer is well-grounded against ENGINE_SCORING (ADR 014); the dual-gate mastery and FSRS wrappers are clean. The findings cluster around three themes: (1) write-path atomicity gaps where multi-step mutations skip transactions, (2) a `recordItemResult` UPSERT whose comment promises an error path the implementation never takes, and (3) defensive narrowing inconsistencies (legacy citation filter applied on knowledge nodes but not syllabus nodes; scenario chosenOptionId schema cap that can reject legitimate composite ids).

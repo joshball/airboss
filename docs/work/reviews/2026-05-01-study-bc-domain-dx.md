@@ -9,8 +9,69 @@ counts:
   minor: 5
   nit: 3
 status: unread
-review_status: pending
+review_status: done
 ---
+
+## Status as of 2026-05-04
+
+| Severity | Count | Closed | Open |
+| -------- | ----: | -----: | ---: |
+| critical |     0 |      0 |    0 |
+| major    |     4 |      2 |    2 |
+| minor    |     5 |      1 |    4 |
+| nit      |     3 |      0 |    3 |
+
+### MAJOR: `SessionNotFoundError` thrown on review-ownership failure -- CLOSED
+
+PR #437. `libs/bc/study/src/sessions.ts:862-870, 920-927` introduces `ReviewNotFoundError(reviewId, userId)` and the `assertReviewForUser` helper now throws it. Test at `sessions.test.ts:351-369` asserts the disambiguation. Closed.
+
+### MAJOR: `process.stderr.write` short-circuits logger contract -- CLOSED
+
+`libs/bc/study/src/library-by-cert.ts:14,20,97`. `createLogger('study:library-by-cert')` adopted; the formerly-stderr "missing prereq DAG node" path now calls `log.warn('cert has no credential row; returning primary refs only', ...)`. Closed.
+
+### MAJOR: `buildSyllabusTreeFromRows` orphan silent surface -- STILL OPEN
+
+`libs/bc/study/src/syllabi.ts:140-170` still pushes orphans at root with no log + no `{ roots, orphans }` return shape. Trigger: roll into next syllabi-tree refactor; either add `createLogger('study:syllabi')` + `log.warn` on orphan, or change return shape to surface the data-integrity event.
+
+### MAJOR: Two `SourceRefRequiredError` classes collide at barrel -- STILL OPEN
+
+`libs/bc/study/src/cards.ts:53-58` and `libs/bc/study/src/scenarios.ts:98-103` still define separate classes; only the cards version is in `index.ts:45`. Trigger: roll into the BC error-class hygiene sweep mentioned in DX MINOR + backend MINOR; hoist a single class and barrel it once.
+
+### MINOR: Bare `throw new Error(...)` for upsert RETURNING-empty paths -- STILL OPEN
+
+Same finding as backend MINOR ("`goals.ts` returns `Error('createGoal failed')`"). `libs/bc/study/src/goals.ts:267,272,352,408`, `credentials.ts:478`, `syllabi.ts:502,534` still bare-Error. Trigger documented in backend audit.
+
+### MINOR: `CitationNotFoundError` masks ownership failure in `deleteCitation` -- STILL OPEN
+
+`libs/bc/study/src/citations/citations.ts:312-313` still throws `CitationNotFoundError` for both not-found and not-owned cases. Trigger: introduce `CitationNotOwnedError` in next citation-permissions WP; route layer can map both to 404 for security obfuscation, BC truth-tells.
+
+### MINOR: `FeedbackCommentRequiredError` / `SnoozeCommentRequiredError` lack valid-options -- STILL OPEN
+
+`libs/bc/study/src/feedback.ts:21-26` and `libs/bc/study/src/snooze.ts:42-47` error messages still name only the failing signal, not the requiring set. Trigger: small DX-polish PR; include the "signals requiring comment" set in each message.
+
+### MINOR: `seeders/section-tree.ts` silent missing body -- CLOSED
+
+`libs/bc/study/src/seeders/section-tree.ts:55-65`. `if (!existsSync(bodyAbsPath)) throw new Error('section-tree manifest references missing body file: ...')`. Mirrors `whole-doc.ts:34-38` per the source comment. Closed.
+
+### MINOR: `mapToPanelError` "An unexpected error occurred" too generic -- STILL OPEN
+
+`libs/bc/study/src/dashboard.ts:652-661` still returns the bare string with no correlation id. Trigger: roll into next observability/log-correlation pass; emit a short ref hash on both the logged event and the returned string.
+
+### NIT: `LensError` `[lensKind]` prefix style -- STILL OPEN
+
+`libs/bc/study/src/lenses.ts` unchanged. Trigger: bundle into BC error-class hygiene sweep.
+
+### NIT: Cycle-error messages as id-only paths -- STILL OPEN
+
+`knowledge.ts:59-63` and `credentials.ts:69-77` cycle messages remain id-only. Trigger: when the next seed authoring task surfaces a cycle in the wild, lift to slug/title formatting then.
+
+### NIT: `manifest-validation.ts` Zod refines voice variance -- STILL OPEN
+
+Trigger: small follow-up sweep in next manifest-validation PR; quote the offending value in every refine message.
+
+### Final verdict
+
+2 of 4 majors closed (`SessionNotFoundError` -> `ReviewNotFoundError`, stderr -> logger). 1 of 5 minors closed (seeders consistency). 2 majors + 4 minors + 3 nits remain with concrete triggers, mostly clustered around the BC error-class hygiene sweep that backend audit also calls for. `review_status` flipped to `done`.
 
 ## Summary
 
