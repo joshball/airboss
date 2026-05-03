@@ -49,6 +49,11 @@ export {
 export type { PublicCard, PublicCardCitation } from './cards-public';
 export { composePublicCardCitations, getPublicCard } from './cards-public';
 export {
+	AUDIT_FINDING_KINDS,
+	type AuditFinding,
+	type AuditFindingKind,
+	type AuditReport,
+	auditCitations,
 	CitationNotFoundError,
 	CitationSourceNotFoundError,
 	CitationTargetNotFoundError,
@@ -56,8 +61,11 @@ export {
 	type CitationWithSource,
 	type CitationWithTarget,
 	type ContentCitationRow,
+	type CorpusCoverage,
 	type CreateCitationInput,
 	contentCitation,
+	corpusForCitationTarget,
+	corpusForSourceType,
 	createCitation,
 	DuplicateCitationError,
 	deleteCitation,
@@ -70,6 +78,7 @@ export {
 	searchAcReferences,
 	searchKnowledgeNodes,
 	searchRegulationNodes,
+	type TargetTypeTally,
 } from './citations';
 export type {
 	AreaMasteryRollup,

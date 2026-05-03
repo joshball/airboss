@@ -4,6 +4,15 @@
 // docs/work-packages/bc-citations-coupling/.
 
 export {
+	AUDIT_FINDING_KINDS,
+	type AuditFinding,
+	type AuditFindingKind,
+	type AuditReport,
+	auditCitations,
+	type CorpusCoverage,
+	type TargetTypeTally,
+} from './audit';
+export {
 	CitationNotFoundError,
 	CitationSourceNotFoundError,
 	CitationTargetNotFoundError,
@@ -19,5 +28,6 @@ export {
 	resolveCitationSources,
 	resolveCitationTargets,
 } from './citations';
+export { corpusForCitationTarget, corpusForSourceType } from './corpus';
 export { type ContentCitationRow, contentCitation, type NewContentCitationRow } from './schema';
 export { type RegulationSearchResult, searchAcReferences, searchKnowledgeNodes, searchRegulationNodes } from './search';
