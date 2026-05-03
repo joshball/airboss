@@ -1,5 +1,9 @@
 # WP-IPH -- Promote Instrument Procedures Handbook to section-tree
 
+**Status:** shipped (PR pending)
+**Date:** 2026-05-02
+**Branch:** `feat/wp-iph-section-tree`
+
 ## Overview
 
 Promote the Instrument Procedures Handbook (IPH, FAA-H-8083-16B) from the
