@@ -26,6 +26,7 @@ const DEV_URLS: Record<string, string> = {
 	sim: `https://${HOSTS.SIM}`,
 	hangar: `https://${HOSTS.HANGAR}`,
 	avionics: `https://${HOSTS.AVIONICS}`,
+	flightbag: `https://${HOSTS.FLIGHTBAG}`,
 };
 
 const REPO_ROOT = resolve(import.meta.dir, '..');
@@ -228,6 +229,7 @@ function printHelp(): void {
 	console.log('  bun run dev sim          Spawn only the sim app');
 	console.log('  bun run dev hangar       Spawn only the hangar app');
 	console.log('  bun run dev avionics     Spawn only the avionics app');
+	console.log('  bun run dev flightbag    Spawn only the flightbag app');
 }
 
 /**

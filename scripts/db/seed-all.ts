@@ -7,12 +7,19 @@
  *   1. users      -- better-auth rows for DEV_ACCOUNTS (scripts/db/seed-dev-users.ts)
  *   2. knowledge  -- knowledge_node + knowledge_edge from course/knowledge/**\/node.md
  *                    (scripts/build-knowledge-index.ts, full build)
- *   3. handbooks  -- reference + reference_section + reference_figure rows
+ *   3. references -- authored reference rows (ACS / PTS / companion guide /
+ *                    CFR titles) from course/references/*.yaml. Runs BEFORE
+ *                    handbooks because the CFR manifest seeder looks up
+ *                    `study.reference` rows by slug and skips Parts that
+ *                    don't yet have a row (49cfr830, 49cfr1552 used to get
+ *                    lost on first-time seed when this phase ran after
+ *                    handbooks).
+ *   4. handbooks  -- reference + reference_section + reference_figure rows
  *                    from the committed handbooks/ tree (both section-tree
- *                    and whole-doc manifest shapes; post-WP-SUB)
+ *                    and whole-doc manifest shapes; post-WP-SUB) plus per-Part
+ *                    section laydown for CFR titles, attaching to the rows
+ *                    that the references phase just authored.
  *                    (scripts/db/seed-references-from-manifest.ts :: seedReferencesFromManifest)
- *   4. references -- non-handbook reference rows (ACS / PTS / companion
- *                    guide) from course/references/*.yaml. Cert-syllabus WP.
  *   5. credentials -- credential / credential_prereq / credential_syllabus
  *                    rows from course/credentials/*.yaml. Cert-syllabus WP.
  *   5a. reference-corpus-seed -- manifest-driven registry seeding for the
@@ -87,8 +94,8 @@ type Phase =
 const PHASES: readonly Phase[] = [
 	'users',
 	'knowledge',
-	'handbooks',
 	'references',
+	'handbooks',
 	'credentials',
 	'syllabi',
 	'credential-syllabi',
