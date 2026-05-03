@@ -3,7 +3,34 @@ title: 'Phase 2 Performance Review: spaced-memory-items'
 date: 2026-04-19
 phase: 2
 category: perf
+review_status: done
 ---
+
+## Status as of 2026-05-04 -- Closed wholesale, area rewritten
+
+This review predates the post-pivot study-app evolution. The spaced-memory-items branch
+shipped through five per-phase fix commits (`966da01b` Phase 0, `e97d7598` Phase 1,
+`705d7414` Phase 2, `5dcb6845` Phase 3, `8b5c337b` Final), then was rolled into main
+and substantially extended by:
+
+- Post-merge sprint2 fixes (`56b44681`, PR #165) closing follow-up review items.
+- The token-discipline wave (`d8111b79`, PR #68) that swept hex/spacing/radii drift.
+- Magic-strings sweeps (`cd24fc5d` PR #117 + `51677fca` PR #312) that introduced
+  the constants the older reviews were asking for (`SESSION_ITEM_KINDS`, `REVIEW_PHASES`,
+  `MS_PER_DAY`, `TOAST_DISMISS_MS`, etc.).
+- The 2026-04-27 12-axis full-codebase re-audit and its consolidated fixer (PR #269,
+  `9cdbd2de`) that re-walked the same surfaces with 12 reviewers.
+- The 2026-05 six-chunk review program (auth/identity, sources/content-pipeline,
+  study-app-surfaces, study-bc-domain, hangar-cluster, ui-library-themes) that re-audited
+  every line of the post-pivot codebase, with the minor/nit sweep landed in PR #466
+  (`7861487f`).
+
+Every finding from this review has either been fixed by the chain above, is now tracked
+under a 2026-05 chunk review (which has its own `review_status`), or applies to code
+that no longer exists in its reviewed shape. Closing in bulk rather than re-walking
+heading-by-heading; the 2026-05 program is the live source of truth for the same
+surfaces.
+
 
 # Phase 2 Performance Review
 

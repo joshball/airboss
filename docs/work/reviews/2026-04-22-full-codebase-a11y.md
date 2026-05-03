@@ -8,7 +8,35 @@ critical: 1
 major: 8
 minor: 9
 nit: 4
+review_status: done
 ---
+
+## Status as of 2026-05-04 -- Closed wholesale, superseded by 2026-04-27 + 2026-05
+
+This 2026-04-22 review predates the 2026-04-27 12-axis full-codebase re-audit (which
+covered the same scope with finer granularity) and the 2026-05 six-chunk review program
+(which split the repo into auth/identity, sources/content-pipeline, study-app-surfaces,
+study-bc-domain, hangar-cluster, ui-library-themes and re-audited every chunk).
+
+Closure chain for the findings in this file:
+
+- 2026-04-27 12-axis review files (`docs/work/reviews/2026-04-27-full-codebase-*.md`)
+  re-walked the same code paths and produced an actionable fix plan
+  (`docs/work/reviews/2026-04-27-fix-plan.md`).
+- PR #269 (`9cdbd2de`) landed the criticals + 60+ point fixes from that fix plan.
+- The 2026-05 chunk reviews (`docs/work/reviews/2026-05-01-*` + `2026-05-02-*`)
+  re-reviewed the same surfaces post-fix; their minor/nit sweep landed in PR #466
+  (`7861487f`).
+- Token-discipline + magic-strings sweeps (PRs #68 `d8111b79`, #117 `cd24fc5d`,
+  #312 `51677fca`) addressed the patterns / hex / breakpoint / spacing items.
+
+Spot-check verified on current main: the canonical findings cited above (em-dash in
+session UI, `var(--ab-color-*, #hex)` fallbacks in apps/sim, magic-string `kind`/`phase`
+comparisons in engine.ts and memory/review, `as Record<string, string>` casts in
+apps/study/memory, `#94a3b8` hint colour, missing `@ab/bc-sim` alias, missing
+`libs/activities` package.json) are all closed. Closing in bulk; the 2026-05 chunk
+reviews are the live source of truth for these surfaces.
+
 
 ## Summary
 

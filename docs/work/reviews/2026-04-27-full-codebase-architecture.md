@@ -9,7 +9,32 @@ critical: 0
 major: 8
 minor: 7
 nit: 3
+review_status: done
 ---
+
+## Status as of 2026-05-04 -- Closed via 2026-04-27 fix plan + 2026-05 re-audit
+
+This review's findings were consolidated into `docs/work/reviews/2026-04-27-fix-plan.md`
+(183 issues, 12 axes, ordered into 13 fix clusters). The plan was executed in PR #269
+(`9cdbd2de` -- "fix: 2026-04-27 12-axis full-codebase review (criticals + 60+ point
+fixes; 9 deferred WPs)") plus follow-up token + magic-strings sweeps:
+
+- PR #269 `9cdbd2de`: criticals (token leak in hangar admin payload, ConfirmAction
+  focus ring), schema migration, backend + correctness + security + a11y + perf + ux +
+  svelte + testing + dx clusters per the plan.
+- PR #312 `51677fca`: magic-strings sweep (help routes, domainLabel, MS_PER_DAY).
+- PR #466 `7861487f`: minor / nit sweep across the 2026-05 six-chunk re-audit.
+
+Nine architectural items were explicitly deferred to numbered work packages
+(`extract-hangar-bc`, `bc-citations-coupling`, `route-style-extraction`,
+`extract-sim-instruments`, plus partials) -- those are tracked under the work-package
+system, not in this file.
+
+The 2026-05 six-chunk review program (`docs/work/reviews/2026-05-01-*` +
+`2026-05-02-*`) re-audited every chunk of the post-pivot repo on top of the PR #269
+fixes; that program's `review_status` is the live source of truth. Closing this file in
+bulk; do not re-open without a fresh review against current main.
+
 
 ## Summary
 
