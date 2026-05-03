@@ -456,6 +456,37 @@ export const ROUTES = {
 	HANGAR_API_AUDIT_ACTORS: '/api/audit-actors',
 	/** Form-action id for the sync-all-pending button. */
 	HANGAR_SYNC_ACTION: '?/syncAll',
+
+	// Flightbag (apps/flightbag) -- public reference reader. Served from its
+	// own host (flightbag.airboss.test), so these paths are relative to that
+	// origin. Public (no auth gate). Owns the canonical URL space for FAA
+	// reference content; other apps (study/sim/hangar/avionics) link into
+	// flightbag via `urlForReference()` from `@ab/sources`. See
+	// `docs/platform/REFERENCES.md` ("Current architecture") for the
+	// scope split between flightbag (reader), libs/library/ (rendering
+	// primitives), libs/constants/ (URL templates), and libs/sources/
+	// (URI <-> URL bridge).
+	FLIGHTBAG_HOME: '/',
+	/** Handbook landing -- whole-doc index. */
+	FLIGHTBAG_HANDBOOK: (slug: string, edition: string) =>
+		`/handbook/${encodeURIComponent(slug)}/${encodeURIComponent(edition)}` as const,
+	/** Handbook chapter index. */
+	FLIGHTBAG_HANDBOOK_CHAPTER: (slug: string, edition: string, chapter: string) =>
+		`/handbook/${encodeURIComponent(slug)}/${encodeURIComponent(edition)}/${encodeURIComponent(chapter)}` as const,
+	/** Handbook section reader (leaf). */
+	FLIGHTBAG_HANDBOOK_SECTION: (slug: string, edition: string, chapter: string, section: string) =>
+		`/handbook/${encodeURIComponent(slug)}/${encodeURIComponent(edition)}/${encodeURIComponent(chapter)}/${encodeURIComponent(section)}` as const,
+	/** AIM paragraph reader (leaf). */
+	FLIGHTBAG_AIM_PARAGRAPH: (chapter: string, section: string, paragraph: string) =>
+		`/aim/${encodeURIComponent(chapter)}/${encodeURIComponent(section)}/${encodeURIComponent(paragraph)}` as const,
+	/** CFR section reader (leaf). */
+	FLIGHTBAG_CFR_SECTION: (title: string, part: string, section: string) =>
+		`/cfr/${encodeURIComponent(title)}/${encodeURIComponent(part)}/${encodeURIComponent(section)}` as const,
+	/** Advisory Circular reader (whole-doc until promoted). */
+	FLIGHTBAG_AC: (doc: string, rev: string) => `/ac/${encodeURIComponent(doc)}/${encodeURIComponent(rev)}` as const,
+	/** ACS task reader. */
+	FLIGHTBAG_ACS_TASK: (doc: string, area: string, task: string) =>
+		`/acs/${encodeURIComponent(doc)}/area/${encodeURIComponent(area)}/task/${encodeURIComponent(task)}` as const,
 } as const;
 
 /**
