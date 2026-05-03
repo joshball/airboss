@@ -283,6 +283,7 @@ def test_dry_run_with_prompt_strategy_is_hard_error(tmp_path: Path, monkeypatch)
         "publisher: FAA\n"
         "kind: handbook\n"
         "source_url: https://example.invalid/test.pdf\n"
+        "subjects: [weather]\n"
         "section_strategy: toc\n",
         encoding="utf-8",
     )

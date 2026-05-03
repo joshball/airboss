@@ -20,6 +20,10 @@
 # When current URLs surface, add the entries back here. The verifier
 # (`bun run sources verify-urls`) catches stale URLs at HEAD time, so this
 # YAML stays a deterministic source-of-truth.
+#
+# Promoted to section-tree (no longer in this YAML; live at
+# `scripts/sources/config/handbooks/<slug>.yaml`):
+#   - faa-h-8083-2 Risk Management Handbook (WP-RMH, 2026-05)
 
 base_url: https://www.faa.gov/sites/faa.gov/files
 
@@ -36,12 +40,10 @@ base_url: https://www.faa.gov/sites/faa.gov/files
 # register run.
 
 entries:
-  - doc_id: faa-h-8083-2
-    edition: '2A'
-    url: https://www.faa.gov/sites/faa.gov/files/2022-06/risk_management_handbook_2A.pdf
-    filename: risk_management_handbook_2A.pdf
-    subjects: [human-factors]
-    primary_cert: private
+  # `faa-h-8083-2` (Risk Management Handbook) was promoted to the
+  # chapter-aware `handbooks/risk-management.yaml` config on 2026-05
+  # (WP-RMH). The chapter-aware path handles fetch + extract + register;
+  # the row no longer belongs in handbooks-extras.
   # `faa-h-8083-9` (Aviation Instructor's Handbook) was promoted to the
   # chapter-aware `handbooks/aviation-instructor.yaml` config on
   # 2026-05-03 (WP-AIH). The chapter-aware path handles fetch + extract

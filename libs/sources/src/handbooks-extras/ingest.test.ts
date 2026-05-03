@@ -127,11 +127,11 @@ describe('DOC_ID_TO_FRIENDLY', () => {
 	it('covers every doc_id in the canonical YAML', () => {
 		// Authoritative list per scripts/sources/config/handbooks-extras.yaml. If
 		// this drifts, ingest.test.ts fails before the live YAML can mismatch.
-		// AIH (faa-h-8083-9), IFH (faa-h-8083-15), and IPH (faa-h-8083-16) were
-		// all migrated to the chapter-aware Class A2 pipeline on 2026-05-03
-		// (WP-AIH / WP-IFH-SECTION-TREE / WP-IPH-section-tree); they are
-		// intentionally not in this list.
-		const expected = ['faa-h-8083-2'];
+		// AIH (faa-h-8083-9), IFH (faa-h-8083-15), IPH (faa-h-8083-16), and RMH
+		// (faa-h-8083-2) were all migrated to the chapter-aware Class A2 pipeline
+		// in 2026-05 (WP-AIH / WP-IFH / WP-IPH / WP-RMH). They are intentionally
+		// not in this list. Only the synthetic-doc-id mtn-tips pamphlet remains.
+		const expected = ['faa-mtn-tips'];
 		for (const docId of expected) {
 			expect(DOC_ID_TO_FRIENDLY[docId]).toBeDefined();
 		}
@@ -142,7 +142,7 @@ describe('runHandbooksExtrasIngest -- empty cache', () => {
 	it('walks a cache with no matching downloads and reports zero ingestion gracefully', async () => {
 		// One YAML entry but no cached PDF -- the typical state on a machine
 		// that hasn't run `sources download --include-handbooks-extras` yet.
-		writeYaml([{ doc_id: 'faa-h-8083-2', edition: '2A', filename: 'risk_management_handbook_2A.pdf' }]);
+		writeYaml([{ doc_id: 'faa-mtn-tips', edition: null, filename: 'aviation_instructors_handbook.pdf' }]);
 		const report = await runHandbooksExtrasIngest({ cacheRoot: tempCache, derivativeRoot: tempDerivative });
 		expect(report.ingested).toBe(0);
 		expect(report.skipped).toBe(1);
@@ -154,13 +154,13 @@ describe('runHandbooksExtrasIngest -- empty cache', () => {
 	});
 
 	it('reports skip with reason when YAML lists a doc not in cache', async () => {
-		writeYaml([{ doc_id: 'faa-h-8083-2', edition: '2A', filename: 'risk_management_handbook_2A.pdf' }]);
+		writeYaml([{ doc_id: 'faa-mtn-tips', edition: null, filename: 'aviation_instructors_handbook.pdf' }]);
 		const report = await runHandbooksExtrasIngest({ cacheRoot: tempCache, derivativeRoot: tempDerivative });
 		expect(report.ingested).toBe(0);
 		expect(report.skipped).toBe(1);
 		expect(report.skipReasons.length).toBe(1);
 		const reason = report.skipReasons[0] ?? '';
-		expect(reason).toContain('faa-h-8083-2');
+		expect(reason).toContain('faa-mtn-tips');
 		expect(reason).toContain('PDF not cached');
 	});
 
@@ -175,24 +175,24 @@ describe('runHandbooksExtrasIngest -- empty cache', () => {
 	});
 
 	it('reports skip when cache manifest is missing', async () => {
-		writeYaml([{ doc_id: 'faa-h-8083-2', edition: '2A', filename: 'rmh.pdf' }]);
+		writeYaml([{ doc_id: 'faa-mtn-tips', edition: '2A', filename: 'rmh.pdf' }]);
 		// Create the dir + PDF but no manifest.json
-		mkdirSync(join(tempCache, 'handbooks', 'faa-h-8083-2'), { recursive: true });
-		writeFileSync(join(tempCache, 'handbooks', 'faa-h-8083-2', 'faa-h-8083-2.pdf'), 'fake', 'utf-8');
+		mkdirSync(join(tempCache, 'handbooks', 'faa-mtn-tips'), { recursive: true });
+		writeFileSync(join(tempCache, 'handbooks', 'faa-mtn-tips', 'faa-mtn-tips.pdf'), 'fake', 'utf-8');
 		const report = await runHandbooksExtrasIngest({ cacheRoot: tempCache, derivativeRoot: tempDerivative });
 		expect(report.skipped).toBe(1);
 		expect(report.skipReasons[0] ?? '').toContain('cache manifest not found');
 	});
 
 	it('reports skip when extraction fails (non-PDF bytes)', async () => {
-		writeYaml([{ doc_id: 'faa-h-8083-2', edition: '2A', filename: 'rmh.pdf' }]);
-		writeCacheManifest('faa-h-8083-2', '2A');
+		writeYaml([{ doc_id: 'faa-mtn-tips', edition: '2A', filename: 'rmh.pdf' }]);
+		writeCacheManifest('faa-mtn-tips', '2A');
 		// Write a non-PDF as the "PDF" so extractPdf fails downstream.
-		writeFileSync(join(tempCache, 'handbooks', 'faa-h-8083-2', 'faa-h-8083-2.pdf'), 'not a pdf', 'utf-8');
+		writeFileSync(join(tempCache, 'handbooks', 'faa-mtn-tips', 'faa-mtn-tips.pdf'), 'not a pdf', 'utf-8');
 		const report = await runHandbooksExtrasIngest({ cacheRoot: tempCache, derivativeRoot: tempDerivative });
 		expect(report.ingested).toBe(0);
 		expect(report.skipped).toBeGreaterThanOrEqual(1);
-		expect(report.skipReasons.some((r) => r.includes('faa-h-8083-2'))).toBe(true);
+		expect(report.skipReasons.some((r) => r.includes('faa-mtn-tips'))).toBe(true);
 	});
 });
 
@@ -202,7 +202,7 @@ describe('loadHandbooksExtrasYaml -- subjects + primary_cert validation', () => 
 			[
 				`base_url: https://example.invalid`,
 				`entries:`,
-				`  - doc_id: faa-h-8083-2`,
+				`  - doc_id: faa-mtn-tips`,
 				`    edition: '2A'`,
 				`    url: https://example.invalid/rmh.pdf`,
 				`    filename: rmh.pdf`,
@@ -214,14 +214,14 @@ describe('loadHandbooksExtrasYaml -- subjects + primary_cert validation', () => 
 	});
 
 	it('rejects subjects with 0 entries', () => {
-		writeYaml([{ doc_id: 'faa-h-8083-2', edition: '2A', filename: 'rmh.pdf', subjects: [] }]);
+		writeYaml([{ doc_id: 'faa-mtn-tips', edition: '2A', filename: 'rmh.pdf', subjects: [] }]);
 		expect(() => loadHandbooksExtrasYaml()).toThrow(/invalid subjects/i);
 	});
 
 	it('rejects subjects with 4+ entries', () => {
 		writeYaml([
 			{
-				doc_id: 'faa-h-8083-2',
+				doc_id: 'faa-mtn-tips',
 				edition: '2A',
 				filename: 'rmh.pdf',
 				subjects: ['weather', 'navigation', 'procedures', 'performance'],
@@ -231,7 +231,7 @@ describe('loadHandbooksExtrasYaml -- subjects + primary_cert validation', () => 
 	});
 
 	it('rejects an unknown subject value', () => {
-		writeYaml([{ doc_id: 'faa-h-8083-2', edition: '2A', filename: 'rmh.pdf', subjects: ['made-up-topic'] }]);
+		writeYaml([{ doc_id: 'faa-mtn-tips', edition: '2A', filename: 'rmh.pdf', subjects: ['made-up-topic'] }]);
 		expect(() => loadHandbooksExtrasYaml()).toThrow(/invalid subjects/i);
 	});
 
@@ -240,7 +240,7 @@ describe('loadHandbooksExtrasYaml -- subjects + primary_cert validation', () => 
 			[
 				`base_url: https://example.invalid`,
 				`entries:`,
-				`  - doc_id: faa-h-8083-2`,
+				`  - doc_id: faa-mtn-tips`,
 				`    edition: '2A'`,
 				`    url: https://example.invalid/rmh.pdf`,
 				`    filename: rmh.pdf`,
@@ -254,7 +254,7 @@ describe('loadHandbooksExtrasYaml -- subjects + primary_cert validation', () => 
 	it('rejects an unknown primary_cert value', () => {
 		writeYaml([
 			{
-				doc_id: 'faa-h-8083-2',
+				doc_id: 'faa-mtn-tips',
 				edition: '2A',
 				filename: 'rmh.pdf',
 				subjects: ['human-factors'],
@@ -267,7 +267,7 @@ describe('loadHandbooksExtrasYaml -- subjects + primary_cert validation', () => 
 	it('accepts null primary_cert (cert-agnostic)', () => {
 		writeYaml([
 			{
-				doc_id: 'faa-h-8083-2',
+				doc_id: 'faa-mtn-tips',
 				edition: '2A',
 				filename: 'rmh.pdf',
 				subjects: ['human-factors'],
@@ -283,7 +283,7 @@ describe('loadHandbooksExtrasYaml -- subjects + primary_cert validation', () => 
 	it('accepts a typed primary_cert', () => {
 		writeYaml([
 			{
-				doc_id: 'faa-h-8083-2',
+				doc_id: 'faa-mtn-tips',
 				edition: '2A',
 				filename: 'rmh.pdf',
 				subjects: ['human-factors'],
@@ -318,7 +318,7 @@ describe('loadHandbooksExtrasYaml -- body_override validation', () => {
 	it('treats absent body_override as undefined', () => {
 		writeYaml([
 			{
-				doc_id: 'faa-h-8083-2',
+				doc_id: 'faa-mtn-tips',
 				edition: '2A',
 				filename: 'rmh.pdf',
 				subjects: ['human-factors'],
@@ -368,27 +368,26 @@ describe('loadHandbooksExtrasYaml -- body_override validation', () => {
 
 describe('runHandbooksExtrasIngest -- live cache (smoke)', () => {
 	const liveCache = resolveCacheRoot({ ensureExists: false });
-	const haveLiveCache = existsSync(join(liveCache, 'handbooks', 'faa-h-8083-2', 'faa-h-8083-2.pdf'));
+	const haveLiveCache = existsSync(join(liveCache, 'handbooks', 'faa-mtn-tips', 'faa-mtn-tips.pdf'));
 
 	(haveLiveCache ? it : it.skip)(
-		'ingests all 3 active cached handbooks against the live YAML',
+		'ingests the 1 active cached handbook against the live YAML',
 		async () => {
 			// Use the live YAML so this also validates that the YAML and
 			// DOC_ID_TO_FRIENDLY agree.
 			//
-			// IFH (faa-h-8083-15) and IPH (faa-h-8083-16) were migrated to
-			// the chapter-aware Class A2 pipeline per WP-IFH-SECTION-TREE
-			// and WP-IPH-section-tree (2026-05-03); neither is in the
-			// handbooks-extras whole-doc-only set anymore.
+			// AIH (faa-h-8083-9), IFH (faa-h-8083-15), IPH (faa-h-8083-16)
+			// and RMH (faa-h-8083-2) were all migrated to the chapter-aware
+			// Class A2 pipeline in 2026-05 (WP-AIH / WP-IFH / WP-IPH /
+			// WP-RMH). Only the mtn-tips pamphlet (the body_override
+			// section-tree case) remains under handbooks-extras.
 			_setHandbooksExtrasYamlPath(null);
 			const report = await runHandbooksExtrasIngest({ cacheRoot: liveCache, derivativeRoot: tempDerivative });
-			expect(report.ingested).toBe(3);
+			expect(report.ingested).toBe(1);
 			expect(report.skipped).toBe(0);
 			expect(report.promotionBatchId).not.toBeNull();
-			// Each derivative has a manifest + body. AIH/IFH/IPH all promoted
-			// to the chapter-aware path on 2026-05-03 (WP-AIH/WP-IFH/WP-IPH);
-			// only RMH and mtn-tips remain in this ingest path.
-			for (const slug of ['risk-management', 'tips-mountain-flying']) {
+			// Each derivative has a manifest + body.
+			for (const slug of ['tips-mountain-flying']) {
 				const dir = join(tempDerivative, slug);
 				expect(existsSync(dir)).toBe(true);
 			}
@@ -400,8 +399,7 @@ describe('runHandbooksExtrasIngest -- live cache (smoke)', () => {
 			// derivative outputs + the corpus index.
 			const trackedPaths = [
 				join(tempDerivative, 'handbooks-extras-index.json'),
-				join(tempDerivative, 'risk-management', 'FAA-H-8083-2A', 'manifest.json'),
-				join(tempDerivative, 'risk-management', 'FAA-H-8083-2A', 'risk-management-FAA-H-8083-2A.md'),
+				join(tempDerivative, 'tips-mountain-flying', 'MTN-2003', 'manifest.json'),
 			];
 			const past = new Date(Date.now() - 5000);
 			for (const p of trackedPaths) {
@@ -412,22 +410,13 @@ describe('runHandbooksExtrasIngest -- live cache (smoke)', () => {
 
 			const second = await runHandbooksExtrasIngest({ cacheRoot: liveCache, derivativeRoot: tempDerivative });
 			expect(second.ingested).toBe(0);
-			expect(second.alreadyAccepted).toBe(3);
+			expect(second.alreadyAccepted).toBe(1);
 			expect(second.promotionBatchId).toBeNull();
 
 			const afterBytes = trackedPaths.map((p) => readFileSync(p, 'utf-8'));
 			const afterMtimes = trackedPaths.map((p) => statSync(p).mtimeMs);
 			expect(afterBytes).toEqual(beforeBytes);
 			expect(afterMtimes).toEqual(beforeMtimes);
-
-			// Manifest carries the whole-doc body_path that the resolver short-circuits on.
-			const rmhManifestPath = join(tempDerivative, 'risk-management', 'FAA-H-8083-2A', 'manifest.json');
-			const rmhManifest = JSON.parse(readFileSync(rmhManifestPath, 'utf-8')) as Record<string, unknown>;
-			expect(rmhManifest.body_path).toBe('handbooks/risk-management/FAA-H-8083-2A/risk-management-FAA-H-8083-2A.md');
-			expect(rmhManifest.sections).toEqual([]);
-			// Subjects + primary_cert flow through from the YAML row (WP-EXTRAS-YAML).
-			expect(rmhManifest.subjects).toEqual(['human-factors']);
-			expect(rmhManifest.primary_cert).toBe('private');
 
 			// mtn-tips has been promoted to section-tree (WP-MTN-section-tree).
 			// Its body_override carries `## ` chapter headings; the ingest

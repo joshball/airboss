@@ -14,6 +14,9 @@ kind: handbook
 title: "Aviation Weather Handbook"
 publisher: FAA
 subjects: [weather]
+# Library-by-cert placement. Forwarded to `study.reference.primary_cert`
+# by the seeder; null = cert-agnostic.
+primary_cert: private
 
 # -----------------------------------------------------------------------------
 # Source download (TS downloader)

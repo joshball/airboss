@@ -46,8 +46,21 @@ class OutlineError(RuntimeError):
 _LEVEL_NAMES = ("chapter", "section", "subsection")
 
 
-def parse_outline(pdf_path: Path, *, doc_total_pages: int | None = None) -> list[OutlineNode]:
-    """Read the PDF outline and produce a flat list of nodes (tree-ordered)."""
+def parse_outline(
+    pdf_path: Path,
+    *,
+    doc_total_pages: int | None = None,
+    chapter_filter: str | None = None,
+) -> list[OutlineNode]:
+    """Read the PDF outline and produce a flat list of nodes (tree-ordered).
+
+    When ``chapter_filter`` is set (a regex string), L1 entries whose title
+    does not match are dropped along with their L2/L3 descendants -- before
+    the chapter counter ticks. This lets handbooks whose bookmark tree
+    intermixes front-matter / back-matter L1 entries (Preface, Glossary,
+    etc.) ship clean chapter ordinals that match the printed numbering.
+    See ``HandbookConfig.bookmark_chapter_filter`` and the WP-RMH spec.
+    """
     with fitz.open(pdf_path) as doc:
         toc = doc.get_toc()
         page_count = doc.page_count
@@ -63,6 +76,14 @@ def parse_outline(pdf_path: Path, *, doc_total_pages: int | None = None) -> list
 
     if doc_total_pages is None:
         doc_total_pages = page_count
+
+    if chapter_filter is not None:
+        toc = _apply_chapter_filter(toc, chapter_filter)
+        if not toc:
+            raise OutlineError(
+                f"PDF outline empty after applying bookmark_chapter_filter "
+                f"{chapter_filter!r} to {pdf_path}; no L1 bookmark titles matched."
+            )
 
     # First pass: emit a flat list with assigned levels + dot-codes.
     flat: list[OutlineNode] = []
@@ -137,6 +158,33 @@ def parse_outline(pdf_path: Path, *, doc_total_pages: int | None = None) -> list
         if last_chapter.page_end < last_chapter.page_start:
             last_chapter.page_end = last_chapter.page_start
     return flat
+
+
+def _apply_chapter_filter(
+    toc: list[tuple[int, str, int]], pattern: str
+) -> list[tuple[int, str, int]]:
+    """Filter the raw TOC to L1 entries matching ``pattern`` plus their descendants.
+
+    Walks the flat list in order. Each L1 entry decides whether the next
+    run of L2/L3 entries (until the next L1) is kept. The clean-title
+    helper would strip leading dotted codes, but at this point we want to
+    match the raw title verbatim because the user is typically writing a
+    pattern that anchors on the publisher's literal text ("^Chapter \\d+").
+
+    The chapter counter in :func:`parse_outline` re-ticks across the
+    surviving entries, so chapter codes match the printed numbering.
+    """
+    compiled = re.compile(pattern)
+    out: list[tuple[int, str, int]] = []
+    keep_descendants = False
+    for depth, title, page in toc:
+        if depth == 1:
+            keep_descendants = bool(compiled.match(title.strip()))
+            if keep_descendants:
+                out.append((depth, title, page))
+        elif keep_descendants:
+            out.append((depth, title, page))
+    return out
 
 
 def _find_last_chapter_last_page(
@@ -326,11 +374,21 @@ _NORMALISE_WS = re.compile(r"\s+")
 # is already stored separately on the node; carrying it inside `title`
 # duplicates it on every chip, breadcrumb, and page heading.
 _BOOKMARK_CODE_PREFIX = re.compile(r"^\d+(?:\.\d+)*\s+")
+# Strip a leading "Chapter N: " or "Appendix X: " prefix from a bookmark
+# title, e.g. "Chapter 1:  Introduction to Risk Management" -> "Introduction
+# to Risk Management" or "Appendix A: Risk Management Training" -> "Risk
+# Management Training". RMH and AIH typeset their L1 bookmarks this way
+# (AvWX uses the dotted-code form handled by _BOOKMARK_CODE_PREFIX).
+_CHAPTER_PREFIX = re.compile(
+    r"^(?:Chapter\s+\d+|Appendix\s+[A-Z])\s*[:—–-]\s*",
+    re.IGNORECASE,
+)
 
 
 def _clean_title(title: str) -> str:
     cleaned = _NORMALISE_WS.sub(" ", title).strip()
     cleaned = _BOOKMARK_CODE_PREFIX.sub("", cleaned, count=1)
+    cleaned = _CHAPTER_PREFIX.sub("", cleaned, count=1)
     return cleaned
 
 

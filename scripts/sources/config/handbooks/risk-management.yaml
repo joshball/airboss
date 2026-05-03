@@ -1,0 +1,111 @@
+# Risk Management Handbook (RMH)
+#
+# Source: https://www.faa.gov/sites/faa.gov/files/2022-06/risk_management_handbook_2A.pdf
+# Edition: FAA-H-8083-2A (June 2022)
+#
+# Errata: none published on the FAA index as of 2026-05-02. The 2A
+# edition was released in June 2022 and has had no follow-up addendum.
+# Tracked for the future `--apply-errata` flow per ADR 020.
+
+document_slug: risk-management
+edition: FAA-H-8083-2A
+kind: handbook
+title: "Risk Management Handbook"
+publisher: FAA
+subjects: [human-factors]
+primary_cert: private
+
+# -----------------------------------------------------------------------------
+# Source download (TS downloader)
+# -----------------------------------------------------------------------------
+
+# Whole-doc PDF only -- RMH is Class C (no per-chapter PDFs published).
+whole_doc:
+  url: https://www.faa.gov/sites/faa.gov/files/2022-06/risk_management_handbook_2A.pdf
+  filename: FAA-H-8083-2A.pdf
+
+# No `chapter_pdfs` key -- publisher offers no chapter assets.
+
+# URL-substring patterns the downloader skips even if the publisher serves
+# them. Default empty; documented for future use.
+excluded_assets: []
+
+# Legacy field used by the Python ingest tool when whole_doc is absent.
+source_url: https://www.faa.gov/sites/faa.gov/files/2022-06/risk_management_handbook_2A.pdf
+expected_pages: 80
+# RMH 2A body pages typeset the printed `<chap>-<page>` reference in the
+# bottom-right corner. Front matter (cover, preface, intro, major
+# enhancements, TOC) sits at PDF pp.1-9 and lacks FAA pagination. The
+# bookmark-driven outline pins each chapter to its starting PDF page, so
+# page_offset is not load-bearing here.
+page_offset: 0
+
+# RMH 2A ships clean PDF bookmarks (166 entries; depths 1-4). Levels
+# deeper than 3 (subsubsection) are dropped by parse_outline since the
+# schema caps at chapter / section / subsection. The filter below drops
+# front-matter / back-matter L1 entries (Preface, Introduction, Major
+# Enhancements, Appendix Introduction, Glossary, Index) so chapter
+# ordinals match the printed Chapter 1..8 + Appendix A..D numbering.
+outline_strategy: bookmark
+bookmark_chapter_filter: '^(Chapter \d+|Appendix [A-Z])\b'
+outline_overrides: []
+title_overrides: {}
+figure_prefix_pattern: 'Figure (\d+)-(\d+)\.'
+table_prefix_pattern: 'Table (\d+)-(\d+)\.'
+
+# -----------------------------------------------------------------------------
+# Section-tree extraction
+# -----------------------------------------------------------------------------
+
+# RMH's PDF bookmarks already carry section + subsection structure. The
+# bookmark-driven outline produces the section tree directly; the TOC
+# parser is unused. Pinned to `toc` for symmetry with the other handbooks
+# (the upstream `outline_strategy: bookmark` already produced the section
+# rows). See docs/ingestion-pipeline/section-extraction-prompt-strategy.md
+# for the prompt / compare strategies.
+section_strategy: toc
+
+# RMH's printed TOC spans pp.6-9. Used only when section_strategy=toc.
+toc:
+  page_start: 6
+  page_end: 9
+  pattern: right_column
+
+heading_style:
+  body_font_size: 10.0
+  heading_min_size_ratio: 1.10
+  heading_color_hex: '#000000'
+  heading_match_threshold: 0.85
+  verify_in_body: false
+
+# Per-chapter input cap for the plaintext sidecar the prompt strategy
+# emits. RMH chapters are short (the longest, Ch.3 Identifying Hazards,
+# clocks ~22 KB plaintext), but the cap is sized to the AvWX baseline
+# (150K, longest chapter * 1.2 rounded up to next 25K) so future
+# editions or appendix expansions stay covered. Re-measure with
+# tools/handbook-ingest/measure_chapter_sizes.py if the layout changes.
+prompt:
+  chapter_text_max_chars: 150000
+
+# RMH chapter cover pages typeset a "Chapter N: Title" banner that bleeds
+# into the chapter overview body. Same shape as PHAK / AFH / AVWX; the
+# strip recognizes the colon form via the broadened regex.
+chapter_cover_strip:
+  enabled: true
+  max_lines: 6
+
+page_label_walk_back: 5
+chapter_overrides: {}
+
+# Declarative errata list. Each entry is one FAA-published amendment to
+# this edition. RMH 2A (June 2022) has no published errata as of
+# 2026-05-02; the empty list is a deliberate placeholder so the field is
+# uniform across handbooks and discovery scans report "none found"
+# rather than "field missing". See ADR 020.
+errata: []
+
+# Discovery dismissal stop-list. Each entry silences a candidate that
+# `bun run sources discover-errata` would otherwise re-flag every week.
+# Schema: at least one of `url` or `sha256`; optional `reason` is a
+# free-form audit note.
+dismissed_errata: []

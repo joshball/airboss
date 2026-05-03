@@ -110,17 +110,17 @@ const VALID_AC = {
 
 const VALID_WHOLE_DOC = {
 	kind: 'whole-doc',
-	document_slug: 'risk-management',
-	edition: '8083-2A',
-	title: 'Risk Management Handbook',
+	document_slug: 'aviation-instructor',
+	edition: '8083-9',
+	title: "Aviation Instructor's Handbook",
 	publisher: 'FAA',
-	source_url: 'https://www.faa.gov/risk-mgmt.pdf',
+	source_url: 'https://www.faa.gov/aih.pdf',
 	fetched_at: '2026-04-26T00:00:00.000+00:00',
-	body_path: 'handbooks/risk-management/FAA-H-8083-2A/risk-management-FAA-H-8083-2A.md',
+	body_path: 'handbooks/aviation-instructor/FAA-H-8083-9/aviation-instructor-FAA-H-8083-9.md',
 	body_sha256: 'b'.repeat(64),
-	page_count: 80,
-	doc_id: 'faa-h-8083-2',
-	faa_edition: '2A',
+	page_count: 228,
+	doc_id: 'faa-h-8083-9',
+	faa_edition: '9',
 } as const;
 
 const VALID_ACS = {
@@ -469,7 +469,7 @@ describe('selfDescribingPath enforcement (rename-generic-content-files)', () => 
 	});
 
 	it("rejects a whole-doc body_path ending in '/document.md'", () => {
-		const broken = { ...VALID_WHOLE_DOC, body_path: 'handbooks/risk-management/FAA-H-8083-2A/document.md' };
+		const broken = { ...VALID_WHOLE_DOC, body_path: 'handbooks/aviation-instructor/FAA-H-8083-9/document.md' };
 		const result = wholeDocManifestSchema.safeParse(broken);
 		expect(result.success).toBe(false);
 	});
@@ -606,9 +606,9 @@ describe('on-disk manifest fixtures (every shipped handbook)', () => {
 		{ slug: 'phak', edition: 'FAA-H-8083-25C', kind: 'handbook' },
 		{ slug: 'afh', edition: 'FAA-H-8083-3C', kind: 'handbook' },
 		{ slug: 'avwx', edition: 'FAA-H-8083-28B', kind: 'handbook' },
-		{ slug: 'iph', edition: 'FAA-H-8083-16B', kind: 'whole-doc' },
-		{ slug: 'ifh', edition: 'FAA-H-8083-15B', kind: 'whole-doc' },
-		{ slug: 'risk-management', edition: 'FAA-H-8083-2A', kind: 'whole-doc' },
+		{ slug: 'iph', edition: 'FAA-H-8083-16B', kind: 'handbook' },
+		{ slug: 'ifh', edition: 'FAA-H-8083-15B', kind: 'handbook' },
+		{ slug: 'risk-management', edition: 'FAA-H-8083-2A', kind: 'handbook' },
 		{ slug: 'aviation-instructor', edition: 'FAA-H-8083-9', kind: 'handbook' },
 	] as const;
 

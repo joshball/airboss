@@ -76,12 +76,11 @@ const CORPUS = 'handbooks';
 export const DOC_ID_TO_FRIENDLY: Readonly<
 	Record<string, { readonly slug: string; readonly editionSlug: string; readonly faaDir: string }>
 > = {
-	'faa-h-8083-2': { slug: 'risk-management', editionSlug: '8083-2A', faaDir: 'FAA-H-8083-2A' },
-	// AIH (faa-h-8083-9), IFH (faa-h-8083-15), and IPH (faa-h-8083-16) all
-	// migrated to the chapter-aware Class A2 pipeline at
-	// `scripts/sources/config/handbooks/{aviation-instructor,ifh,iph}.yaml`
-	// (per WP-AIH / WP-IFH-SECTION-TREE / WP-IPH-section-tree, all 2026-05-03).
-	// They are no longer ingested via this whole-doc-only path.
+	// RMH (faa-h-8083-2), AIH (faa-h-8083-9), IFH (faa-h-8083-15), and IPH
+	// (faa-h-8083-16) all migrated to the chapter-aware Class A2 pipeline at
+	// `scripts/sources/config/handbooks/{risk-management,aviation-instructor,ifh,iph}.yaml`
+	// (per WP-RMH / WP-AIH / WP-IFH-SECTION-TREE / WP-IPH-section-tree, all
+	// 2026-05). They are no longer ingested via this whole-doc-only path.
 	// Non-H-numbered FAA pamphlet. Synthetic doc_id since FAA never assigned
 	// a Handbook number to Tips on Mountain Flying.
 	'faa-mtn-tips': { slug: 'tips-mountain-flying', editionSlug: 'mtn-2003', faaDir: 'MTN-2003' },
@@ -95,9 +94,8 @@ export const DOC_ID_TO_FRIENDLY: Readonly<
  * rather than a runtime null deref.
  */
 const FRIENDLY_DISPLAY: Readonly<Record<string, { readonly short: string; readonly formal: string }>> = {
-	'risk-management': { short: 'RMH', formal: 'Risk Management Handbook' },
-	// AIH, IFH, and IPH all migrated to the chapter-aware Class A2 pipeline
-	// (WP-AIH / WP-IFH-SECTION-TREE / WP-IPH-section-tree, all 2026-05-03).
+	// RMH, AIH, IFH, and IPH all migrated to the chapter-aware Class A2 pipeline
+	// (WP-RMH / WP-AIH / WP-IFH-SECTION-TREE / WP-IPH-section-tree, all 2026-05).
 	// Their display strings live in `DOC_DISPLAY` at `libs/sources/src/handbooks/ingest.ts`.
 	'tips-mountain-flying': { short: 'MTN', formal: 'Tips on Mountain Flying' },
 };

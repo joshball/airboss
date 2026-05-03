@@ -333,7 +333,13 @@ def _phase_outline(config: HandbookConfig, pdf_path: Path) -> list[OutlineNode]:
         elif config.outline_strategy == OUTLINE_STRATEGY_TOC_FILE_SIDECAR:
             flat_outline = _phase_outline_from_toc_file(config, pdf_path)
         else:
-            flat_outline = parse_outline(pdf_path)
+            if config.bookmark_chapter_filter is not None:
+                click.echo(
+                    f"  bookmark_chapter_filter: {config.bookmark_chapter_filter!r}"
+                )
+            flat_outline = parse_outline(
+                pdf_path, chapter_filter=config.bookmark_chapter_filter
+            )
     except OutlineError as exc:
         click.echo(f"error: {exc}", err=True)
         raise SystemExit(2) from exc
