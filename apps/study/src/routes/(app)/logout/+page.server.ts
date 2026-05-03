@@ -26,15 +26,26 @@ export const actions: Actions = {
 				// leaves a stolen-cookie attacker on a still-valid backing session.
 				// The local cookie clear in `finally` is defence in depth, not a
 				// substitute for the server-side invalidation succeeding.
+				//
+				// 5xx body snippet: log a 256-char prefix of the response body so
+				// on-call can see better-auth's error message (typically a JSON
+				// `{ message }`) without round-tripping to the request log. The
+				// snippet is bounded to keep log lines small and avoid leaking a
+				// large stack trace; better-auth never includes user PII in
+				// sign-out error bodies.
 				if (authResponse.status >= 500) {
+					const bodyText = await authResponse
+						.clone()
+						.text()
+						.catch(() => '<unreadable>');
 					log.error('sign-out handler returned 5xx', {
 						requestId: locals.requestId,
-						status: authResponse.status,
+						metadata: { status: authResponse.status, bodySnippet: bodyText.slice(0, 256) },
 					});
 				} else if (authResponse.status >= 400) {
 					log.warn('sign-out handler returned non-2xx', {
 						requestId: locals.requestId,
-						status: authResponse.status,
+						metadata: { status: authResponse.status },
 					});
 				}
 				forwardAuthCookies(authResponse, cookies, url.host);
