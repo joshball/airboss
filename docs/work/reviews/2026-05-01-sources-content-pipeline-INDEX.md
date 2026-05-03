@@ -40,88 +40,50 @@ Stack detected: SvelteKit + Svelte 5 + Bun + TypeScript + Drizzle/PostgreSQL + V
 - [schema](2026-05-01-sources-content-pipeline-schema.md)
 - [backend](2026-05-01-sources-content-pipeline-backend.md)
 
-## Highest-priority findings (cross-reviewer convergence)
+## Status as of 2026-05-03 (audited against `12120dec`)
 
-These are issues that more than one reviewer flagged independently, or single-reviewer findings that block correctness today.
+The original punch list (above table) is closed except for two perf items. Each verdict below was re-grepped against the working tree on `origin/main@12120dec`.
 
-### Critical — silent partial-success / data integrity
+### Closed criticals (8 of 10)
 
-1. **AIM source-PDF ingest path is silently broken.** correctness#1: `libs/sources/src/aim/source-ingest.ts` reads `entries[]` from `aim/manifest.json`, but ADR 021/022 + the downloader use `primary` + `sections[]` + `appendices[]` — no `entries[]`. `bun run sources register aim` emits "missing entries[] array" and skips everything.
-2. **AC live-URL builder produces wrong URL for dot-style doc numbers.** correctness#2: `91-21.1D` → `AC_91-21.1D.pdf` while FAA serves `AC_91.21-1D.pdf`. Confirmed against `scripts/sources/config/ac.yaml:62`.
-3. **AC/ACS/AIM `runIngestCli` always return 0 even when extraction errors land in `skipReasons`.** backend#1: silent partial advance.
-4. **No SHA verification in register paths against the downloader-recorded checksum.** backend#2: cache poisoning advances state silently.
-5. **Lifecycle promotion is non-atomic with SOURCES/EDITIONS table mutations.** backend#3: ADR 019 §2.4 atomicity violated when `recordPromotion` rejects mid-batch.
-6. **Chapter PDFs download serially, not in parallel.** perf#1: ADR 022's wall-clock-parity claim is unrealized — `for (const plan of corpusPlans) { await executePlan(...) }` in `scripts/sources/download/run.ts:88-91` and `execute.ts:24`.
-7. **Two-hop scrape resolves chapter URLs serially and pays the cost on every plan-build.** perf#2: 1+chapterCount sequential GETs per handbook, not cached in the manifest.
-8. **Partial-download state recovery has no operator-facing log.** dx#1: a chapter PDF failing mid-run leaves no failed-plan list and no resume hint.
-9. **`handbookManifestSchema` Zod silently strips `schema_version` and `errata[]`.** schema#1: every shipped manifest carries those fields; malformed errata entries pass the gate.
-10. **3 Python tests in `tools/handbook-ingest/tests/test_config_loader_chapters.py` write `bogus*.yaml` into the production canonical config dir.** testing#1: an interrupted run, `pytest -x --pdb` quit, or `pytest -n auto` race poisons the real downloader.
+1. **C1 -- AIM source-PDF ingest reads `primary` + `sections[]` + `appendices[]`.** `libs/sources/src/aim/source-ingest.ts:81,106-118,158-193` (#401).
+2. **C2 -- AC live-URL builder swaps dash/dot for dot-style doc numbers.** `libs/sources/src/ac/url.ts:41` (`replace(/^(\d+)-(\d+)\.(\d+)$/, '$1.$2-$3')`); pinned in `libs/sources/src/ac/url.test.ts:17-22,49-52,62` (#401).
+3. **C3 -- `runIngestCli` returns non-zero on hard skips.** `classifySkipReasons` + soft/hard split in `libs/sources/src/ac/ingest.ts:509,517-523` (HARD_SKIPS exit when `hard.length > 0`); shared in `libs/sources/src/shared/exit-codes.ts`; covered by `libs/sources/src/ac/ingest-cli.test.ts` (#407).
+4. **C4 -- SHA verification on register against the downloader-recorded checksum.** `verifyCachedSha` in `libs/sources/src/shared/sha-verify.ts:49`, called from `libs/sources/src/ac/ingest.ts:308` and `libs/sources/src/acs/ingest.ts:634`; tests at `libs/sources/src/shared/sha-verify.test.ts:28-43` (#407).
+5. **C5 -- Lifecycle promotion is atomic.** `recordPromotion` opens a Drizzle transaction at `libs/sources/src/registry/lifecycle.ts:140` (and `recordDePromotion` at `:190`); ADR 019 §2.4 mid-batch reject now rolls back at the DB level (#454, #458).
+6. **C8 -- Operator-facing partial-download log.** `printFailedPlansSummary` in `scripts/sources/download/run.ts:105,146-160` lists every failed plan with the partial-log path and re-run hint; surfaced again on next run via `surfacePreviousPartialLog` at `:126-134` (#407).
+7. **C9 -- Manifest readers validate `schema_version`.** `libs/sources/src/handbooks-extras/derivative-reader.ts:203` (rejects manifests missing `schema_version`); same gate at `libs/sources/src/ac/derivative-reader.ts:112` and `libs/sources/src/acs/derivative-reader.ts:122`. Errata handling lives in `tools/handbook-ingest/ingest/config_loader.py:435-490` with strict shape validation (#407).
+8. **C10 -- Python tests use `tmp_path` + `monkeypatch`.** `tools/handbook-ingest/tests/test_config_loader_chapters.py:67,80-82` writes bogus YAML into a per-test `tmp_path` after `monkeypatch.setattr(config_loader_module, 'config_dir', lambda: tmp_path)`; canonical config dir is never touched (#407).
 
-### Major — convergent cross-reviewer themes
+### Closed major clusters (10 of 10)
 
-These are root-cause clusters where multiple reviewers landed on the same architectural seam. Per CLAUDE.md, fix the root once, not N times.
+A. **Pre-ADR-018 parallel pipeline retired.** `data/sources/` is gone (#413). The legacy `SOURCES` registry / `getSource` / `getSourcesByType` / `isSourceDownloaded` were removed from `@ab/aviation/sources` (#429); see `libs/aviation/src/sources/index.ts:7-9` ("legacy seed catalog ... moved to `@ab/bc-hangar`"). What remains in `libs/aviation/src/sources/` is the binary-visual + extraction infrastructure introduced by PR #113 (`download.ts`, `meta.ts`, `thumbnail.ts`, `sectional/`, `cfr/extract.ts`) with four live consumers (`libs/bc/hangar/src/upload-handler.ts:48`, `libs/bc/hangar/src/source-fetch.ts:37`, `libs/bc/hangar/src/edition-stub.test.ts:15`, `scripts/references/extract.ts:30`). ADR-018-compliant.
 
-**A. Pre-ADR-018 parallel pipeline still alive at `data/sources/` + `libs/aviation/src/sources/registry.ts` + `scripts/references/extract.ts`.**
+B. **Cache-root resolution consolidated.** `SOURCE_CACHE` const block is at `libs/constants/src/source-cache.ts:35-74` (browser-safe, lazy `node:*` per #471/#477); `defaultCacheRoot` and `resolveCacheRoot` live there; `AIRBOSS_HANDBOOK_CACHE`, `AIRBOSS_QUIET`, `GH_TOKEN` are registered in `libs/constants/src/env.ts:23,28,33` (#402, #482).
 
-- architecture#1 (major): direct ADR 018 violation; hangar BC actively writes there.
-- architecture#4 (major): 15 inline `data/sources/` string literals violate no-magic-strings.
-- patterns#4 (major): `scripts/README.sources.md:155` still tells operators to edit retired `AC_TARGETS`/`ACS_TARGETS`/`HANDBOOKS_EXTRAS_TARGETS`/`AIM_PDF_URL` constants in `plans.ts`.
-- schema partial: legacy `SOURCES` export from `@ab/aviation/sources` overlaps with ADR 019 `@ab/sources/registry`.
-- Decision needed: retirement WP, or ADR amendment carving out the binary-visual tier. **No undecided-future-work allowed** (CLAUDE.md).
+C. **ADR 019 "open corpus" satisfied.** `ENUMERATED_CORPORA` is now a registry-driven iterable view: `libs/sources/src/registry/corpus-resolver.ts:97-103` reads `RESOLVERS.size`/`RESOLVERS.keys()` at iteration time. Adding a corpus is one `registerCorpusResolver(...)` call. Already noted closed by #474 (in this index, 2026-05-02).
 
-**B. `defaultCacheRoot()` / `AIRBOSS_HANDBOOK_CACHE` resolution duplicated 5+ ways.**
+D. **Atomic writes via `.part`+rename across all source/derivative writers.** `writeAtomic` in `libs/sources/src/regs/cache.ts:147,162-168`; `.part`+rename in `scripts/sources/download/http.ts:151-173` and `scripts/sources/download/html-fetch.ts:94-116`; `writeIfChanged` covers derivative manifests and bodies. Python paths use atomic write per the cluster-E hardening pass (#403).
 
-- patterns#1 (major): cache-root path duplicated across 5 ingest modules + `scripts/lib/cache.ts`.
-- patterns#2 (major): `AIRBOSS_HANDBOOK_CACHE`, `AIRBOSS_QUIET`, `GH_TOKEN` missing from central `ENV_VARS` registry.
-- architecture minor: 5-way duplication of `defaultCacheRoot()` across regs/ac/acs/handbooks-extras/aim.
-- correctness minor: 4 of those helpers don't expand `~` in `AIRBOSS_HANDBOOK_CACHE`.
-- Fix once: one `SOURCE_CACHE` const block + one `resolveCacheRoot()` helper + register the env vars.
+E. **HTTP fetch hardened on both TS and Python sides.** TS: `MAX_DOWNLOAD_BYTES` cap, redirect-host allowlist, `AbortController` timeout in `scripts/sources/download/http.ts:14,26,77,122,152,201-244` and `html-fetch.ts:56,95,142`; `libs/sources/src/regs/cache.ts:131` enforces the body cap on eCFR fetch. Python: `tools/handbook-ingest/ingest/fetch.py:16-17` documents 60s timeout, max-redirects=5, host allowlist, with sha256 verification at `:114-117`; `apply_errata.py:281-302` notes "cluster-E hardened" and verifies sha256 on every fetched errata PDF (#405).
 
-**C. ADR 019 "open corpus" promise broken.** **Closed (verified 2026-05-02).**
+F. **Registry linear-scan-per-id collapsed to O(1) generation-invalidated indexes.** `libs/sources/src/registry/index-cache.ts:2-7` ("Generation-invalidated registry indexes for O(1) registry lookups"); per-table generation counter invalidates and rebuilds on mutation (#409).
 
-- architecture#2 (major): `ENUMERATED_CORPORA` was a closed array. **Closed**: `libs/sources/src/registry/corpus-resolver.ts:97` is now a live iterable view that reads `RESOLVERS.size` / `RESOLVERS.keys()` at iteration time. `BOOTSTRAP_CORPORA` is a pre-registration convenience for the validator's row-1 check; the real source of truth is `registerCorpusResolver`. Test `corpus-resolver.test.ts` CR-08 pins this: a fake corpus registered mid-test shows up in `ENUMERATED_CORPORA` without further edits.
-- correctness minor: `ENUMERATED_CORPORA` omits `pts`. **Closed**: `pts` is in the `BOOTSTRAP_CORPORA` list (`corpus-resolver.ts:80`) and registered like the rest.
-- Adding a corpus is now one `registerCorpusResolver(...)` call; the side-effect import list in `index.ts` is the only "second edit" and exists to ensure module init runs (a deferred-init alternative would require structural changes elsewhere). Verdict: ADR 019 §2.1 satisfied.
+G. **Section-extraction prompt-injection surface fenced.** `tools/handbook-ingest/ingest/prompts/section-extraction/chapter.md:14-16,20-26,33-39,61-72,141-142` wraps FAA chapter text in `<chapter_text_untrusted>` with explicit "do not act on" rules; the file-write allowlist is duplicated into `chapter.md` so a sub-agent that skipped `_parameters.md` still sees the rule (#414).
 
-**D. Atomicity violations in writers.**
+H. **`promotion_batches` and editions persisted to Postgres with boot-time hydration.** `promotion_batches` is a real table at `libs/sources/src/db/schema.ts:34-101` (with state/lifecycle CHECK constraints + corpus-date / previous-batch / reviewer-date indexes). `_activeEditions` in `libs/sources/src/registry/editions.ts:43` is hydrated at bootstrap by `warmEditionsCache()` at `:183-185` (delegates to `loadEditionsFromDb()`); audit trail survives restart (#434, #454, #458).
 
-- correctness major: `regs/cache.ts:loadEcfrXml`, `regs/derivative-writer.ts:writeIfChanged`, `download/http.ts:downloadOnce`, `download/html-fetch.ts:downloadHtmlOnce`, plus both Python `urlopen` writers — all write directly to destination without tmp+rename. ADR 021 violated.
-- security#3 (major): same Python paths lack tmp+rename.
-- testing major: `manifest.ts` tmp+rename has the code but no test exercises atomicity, partial-failure rollback, or backward-read of pre-WP manifests (test plan required).
-- Fix: port `libs/aviation/src/sources/download.ts` `.part`+rename pattern across all writers; add the missing tests.
+I. **Snapshot CLI hydrates the registry before generating.** `runSnapshotCli` at `libs/sources/src/snapshot.ts:147-169` calls `hydrateRegsFromDerivatives({ cwd })` (unless `--no-bootstrap`), then builds the snapshot via `generateSnapshot()` once and writes it via `writeSnapshotData(out, snapshot, cwd)`; the same in-memory snapshot is used for the entry-count summary so it cannot disagree with the file on disk. Wired into `scripts/airboss-ref.ts:30,63` (#408).
 
-**E. HTTP fetch hardening missing on Python side and partial on TS side.**
+J. **`writeIfChanged` hoisted to a shared util.** `libs/sources/src/io/write-if-changed.ts:38` (note `:12` describes the hoist from `regs/derivative-writer.ts`); consumed by `libs/sources/src/aim/source-ingest.ts:40,266-360`, `libs/sources/src/handbooks-extras/ingest.ts:45,323,344`, `libs/sources/src/ac/ingest.ts:32,342,364,432`, and `libs/sources/src/regs/derivative-writer.ts:15,107,113,136,147,160,183`. Tests at `libs/sources/src/io/write-if-changed.test.ts` (#414).
 
-- security#2 (major): Python `urllib.request.urlopen` paths in `tools/handbook-ingest/ingest/fetch.py:62-69` and `apply_errata.py:272-280` lack timeout, redirect cap, body-size cap, content-type check, SHA-against-YAML-pin verification.
-- security#3 (major): TS `followRedirectsHead` doesn't enforce same-host/scheme on redirect hops (MITM cache rewrite).
-- security#4 (major): no body-size cap on any download path; `regs/cache.ts:110` buffers via `await response.text()`.
-- backend major: Python `fetch_pdf` no timeout/retry/cap/SHA; TS `downloadFile` (libs/aviation) loads full body to memory, no streaming, no `MAX_UPLOAD_BYTES`.
-- backend major: `fetchEcfrTitles` no timeout/retry, hangs entire run.
-- correctness major: Python `urlopen` paths don't validate HTTPS scheme.
-- Fix: port the TS hardening pattern to Python; add a 250 MB body ceiling and a hostname allowlist (derived from YAML).
+### Still open (2 of 141)
 
-**F. Registry linear-scan-per-id + N+1 at render time.**
+- **C6 -- Chapter PDFs download serially, not in parallel.** Verified `for (const plan of corpusPlans) { await executePlan(plan, ...) }` at `scripts/sources/download/run.ts:95-97`. ADR 022's wall-clock-parity claim remains unrealized; per-corpus + per-plan throughput is operator wall time today. **Trigger:** revisit on the next handbook-ingest cycle (when an operator pulls a fresh handbook edition and notices the run is dominated by serial GETs); cap concurrency to a small N to respect the FAA documentLibrary host allowlist + body-size cap. Documentation-only close-out for chunk 4; no fix in this PR.
 
-- perf major: `getCurrentEdition` (regs + handbooks resolvers), `getChildren`, `findEntriesByCanonicalShort` all `Object.keys(getSources())` per call. `batchResolve` invokes `getCurrentEdition` per-id.
-- schema major: `findEntriesByCanonicalShort` is O(n) without a real index.
-- Fix once: generation-counter-invalidated index map at module-load, rebuilt on registry mutation.
+- **C7 -- Two-hop scrape resolves chapter URLs on every plan-build, not cached between runs.** Verified: a `resolveChapterUrls` test seam exists at `scripts/sources/download/plans.ts:98,307-312` (so unit tests can stub the live FAA), but the resolved URLs are not persisted to `manifest.json` between operator runs -- every `bun sources download handbooks` pays 1+chapterCount sequential GETs. **Trigger:** ride along with C6; once parallelization lands, also cache the resolved URLs in the per-handbook manifest with a freshness-gated re-scrape (mirror the existing 7-day errata-discovery gate at `run.ts:112-114`). Documentation-only close-out for chunk 4; no fix in this PR.
 
-**G. Section-extraction prompt-injection surface unfenced.**
-
-- security#1 (major): `tools/handbook-ingest/ingest/prompts/section-extraction/chapter.md` feeds FAA-served chapter text to a sub-agent without untrusted-data fencing. PDF-borne instruction injection is the threat. Also: file-write allowlist lives only in `parameters.md`; duplicate it into `chapter.md` so a sub-agent that ignores parameters still sees the rule.
-
-**H. Promotion batches and editions in-memory only.**
-
-- schema#3 (major): `promotion_batches` (ADR 019 §2.4) and `EDITIONS` (ADR 019 §2.1) are in-memory `Map`s with no Postgres persistence and no scheduled migration WP. Audit trail wiped on every restart.
-
-**I. Snapshot CLI ships empty data.**
-
-- backend major: `runSnapshotCli` never hydrates — non-TS consumers get an empty snapshot. Fix: have `writeSnapshotSync` return the built snapshot, or call `generateSnapshot()` once and pass to a new `writeSnapshotData(path, data)` helper.
-
-**J. Unconditional file rewrites break "byte-equal idempotent regen" claim.**
-
-- perf major: `writeAimDerivatives` and handbooks-extras `runHandbooksExtrasIngest` rewrite every `.md` and `manifest.json` on every run.
-- Fix: hoist `writeIfChanged` from `regs/derivative-writer.ts:187` into a shared util.
+Both deferrals are concrete (next-handbook-ingest trigger), not "consider later" (CLAUDE.md "No undecided future work"). The fix scope is one work package because both items share the chapter-download code path; a follow-up `wp-handbook-download-parallelism` is the natural carrier.
 
 ### Strengths confirmed across reviewers
 
@@ -146,6 +108,4 @@ If that drift lands, it needs a real `ALTER TABLE ... RENAME` migration plus a c
 
 ## Next step
 
-Per CLAUDE.md "ALWAYS FIX EVERYTHING from a review unless explicitly told not to" + the prompt's instruction "do NOT auto-fix — present the punch list and await my call on `/ball-review-fix`": this review is paused at the punch-list stage by explicit request.
-
-When you're ready: `/ball-review-fix` (or `/rfix`) reads these 9 review files, consolidates convergent findings (the A-J clusters above are the natural groupings), executes every fix, and verifies `bun run check` + relevant tests pass.
+Closed. 8 of 10 criticals + 10 of 10 major clusters landed across PRs #401, #402, #403, #405, #407, #408, #409, #413, #414, #429, #434, #454, #458, #471, #474, #477, #482. The two remaining items (C6, C7) are deferred to a `wp-handbook-download-parallelism` work package with a "next handbook ingest cycle" trigger; both are perf-only and not user-visible until an operator re-pulls a chapter-aware handbook.
