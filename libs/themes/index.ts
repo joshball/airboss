@@ -12,6 +12,15 @@
  *
  *   // Path-aware resolver:
  *   import { resolveThemeForPath } from '@ab/themes';
+ *
+ * SIDE EFFECT: importing this barrel registers every shipped theme
+ * (`airboss-default`, `study/sectional`, `study/flightdeck`, `sim/glass`).
+ * That is intentional -- the registry is the source of truth for
+ * `listThemes()`, `getTheme()`, and the path-aware resolver, and we want
+ * a single canonical "what themes exist" answer regardless of which
+ * surface imports the barrel. Apps that only need a subset can import
+ * the individual bundle file by path; the registry then populates only
+ * with what was loaded.
  */
 
 export type {

@@ -49,6 +49,11 @@ const STATUS_LABELS: Record<JumpCardStatus, string> = {
 	current: 'Current',
 };
 
+// Memoize the index ladder so it only rebuilds when `totalCards` actually
+// changes -- previously this was inlined into the `{#each}` and reallocated
+// on every parent re-render even when no row data had moved.
+const indices = $derived(Array.from({ length: totalCards }, (_, i) => i));
+
 function close(): void {
 	open = false;
 	onClose?.();
@@ -127,7 +132,7 @@ $effect(() => {
 			data-testid="jumptocardpopover-list"
 			onkeydown={handleListKeyDown}
 		>
-			{#each Array.from({ length: totalCards }, (_, i) => i) as index (index)}
+			{#each indices as index (index)}
 				{@const status = index === currentIndex ? 'current' : (statuses[index] ?? 'pending')}
 				<button
 					type="button"

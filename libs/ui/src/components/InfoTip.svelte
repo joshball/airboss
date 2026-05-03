@@ -112,6 +112,21 @@ function measureFlip(): void {
 	flipX = rect.right > window.innerWidth - margin;
 }
 
+// rAF-throttle resize/scroll-driven `measureFlip`. Without the throttle,
+// fast scrolling with a pinned tooltip would call `getBoundingClientRect`
+// (a layout-forcing read) plus the two `window.inner*` reads on every
+// scroll event. Coalescing into one measurement per animation frame gives
+// the same visual result with one layout per frame instead of N.
+let measurePending = false;
+function scheduleMeasureFlip(): void {
+	if (measurePending) return;
+	measurePending = true;
+	requestAnimationFrame(() => {
+		measurePending = false;
+		measureFlip();
+	});
+}
+
 /**
  * Hover-to-open is gated to true hover devices. On touch (`pointer: coarse`)
  * `pointerenter` fires on tap, so without the guard a tap would hover-open
@@ -174,12 +189,12 @@ function handleDocumentPointerDown(event: PointerEvent): void {
 $effect(() => {
 	if (!open || !pinned) return;
 	document.addEventListener('pointerdown', handleDocumentPointerDown, true);
-	window.addEventListener('resize', measureFlip);
-	window.addEventListener('scroll', measureFlip, { passive: true });
+	window.addEventListener('resize', scheduleMeasureFlip);
+	window.addEventListener('scroll', scheduleMeasureFlip, { passive: true });
 	return () => {
 		document.removeEventListener('pointerdown', handleDocumentPointerDown, true);
-		window.removeEventListener('resize', measureFlip);
-		window.removeEventListener('scroll', measureFlip);
+		window.removeEventListener('resize', scheduleMeasureFlip);
+		window.removeEventListener('scroll', scheduleMeasureFlip);
 	};
 });
 
@@ -230,8 +245,14 @@ $effect(() => {
 		onpointerenter={handlePointerEnter}
 		onpointerleave={handlePointerLeave}
 		onfocus={() => void show(false)}
-		onblur={() => {
-			if (!pinned) hide();
+		onblur={(event) => {
+			// Don't close when focus moves into the popover (e.g. tabbing
+			// to "Learn more"). Only hide when relatedTarget is outside
+			// both the trigger and the popover.
+			if (pinned) return;
+			const next = event.relatedTarget as Node | null;
+			if (next && popoverEl?.contains(next)) return;
+			hide();
 		}}
 	>
 		<span aria-hidden="true">?</span>
@@ -346,16 +367,21 @@ $effect(() => {
 		color: var(--ink-muted);
 	}
 
+	/*
+	 * Always-on underline so the "Learn more" link stays recognisable as
+	 * a link to colorblind readers (WCAG 1.4.1).
+	 */
 	.learn-more {
 		display: inline-block;
 		margin-top: var(--space-xs);
 		color: var(--action-default);
-		text-decoration: none;
+		text-decoration: underline;
+		text-underline-offset: var(--underline-offset-2xs);
 		font-weight: var(--font-weight-medium);
 	}
 
 	.learn-more:hover {
-		text-decoration: underline;
+		text-decoration-thickness: 2px;
 	}
 
 	.learn-more:focus-visible {

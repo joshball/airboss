@@ -18,6 +18,15 @@ import type { Snippet } from 'svelte';
 
 type Variant = 'tip' | 'warn' | 'danger' | 'howto' | 'note' | 'example';
 
+const VARIANT_LABELS: Record<Variant, string> = {
+	tip: 'Tip',
+	warn: 'Warning',
+	danger: 'Danger',
+	howto: 'How-to',
+	note: 'Note',
+	example: 'Example',
+};
+
 let {
 	title,
 	variant = 'tip',
@@ -27,9 +36,18 @@ let {
 	variant?: Variant;
 	children: Snippet;
 } = $props();
+
+const variantLabel = $derived(VARIANT_LABELS[variant]);
 </script>
 
-<aside class="card {variant}" role="note" data-testid="helpcard-root" data-variant={variant}>
+<!--
+	The visible eyebrow + the aria-label make the card variant accessible
+	to colorblind sighted users (who couldn't distinguish warn from danger
+	by border colour alone) and to screen-reader users (who previously got
+	only `role="note"` with no variant cue).
+-->
+<aside class="card {variant}" role="note" aria-label={variantLabel} data-testid="helpcard-root" data-variant={variant}>
+	<span class="eyebrow" data-testid="helpcard-eyebrow">{variantLabel}</span>
 	{#if title}
 		<header data-testid="helpcard-title">{title}</header>
 	{/if}
@@ -72,6 +90,16 @@ let {
 	.card.example {
 		border-left-color: var(--action-default);
 		background: var(--surface-raised);
+	}
+
+	.eyebrow {
+		display: block;
+		font-size: var(--font-size-xs);
+		font-weight: var(--font-weight-semibold);
+		text-transform: uppercase;
+		letter-spacing: var(--letter-spacing-caps);
+		color: var(--ink-muted);
+		margin-bottom: var(--space-2xs);
 	}
 
 	header {

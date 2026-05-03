@@ -95,10 +95,15 @@ export const DEFAULT_PFD_BINDINGS: PfdInputBindings = [
 		key: PFD_INPUT_KEYS.HEADING,
 		label: 'Heading',
 		unitLabel: 'deg',
+		// Heading is treated internally as the half-open interval [0, 360);
+		// `HeadingIndicator` displays 0 as "360" for the conventional north
+		// label. Keeping `max: 359` and `default: 0` matches the wrap math
+		// used in `updateTarget` and avoids the inconsistency where a
+		// slider-style input bound to this binding would clamp 360 to 359.
 		min: 0,
 		max: 359,
 		step: 1,
-		default: 360,
+		default: 0,
 		decKeys: ['q', 'Q'],
 		incKeys: ['e', 'E'],
 		keyStep: 10,
@@ -125,7 +130,7 @@ export const DEFAULT_PFD_VALUES: PfdValues = {
 	bankDeg: 0,
 	airspeedKnots: 100,
 	altitudeFeet: 3_000,
-	headingDeg: 360,
+	headingDeg: 0,
 	verticalSpeedFpm: 0,
 };
 
@@ -363,7 +368,11 @@ export function attachPfdTickLoop(state: PfdTickState): () => void {
  */
 export function applyPfdKeyboardEvent(event: KeyboardEvent, bindings: PfdInputBindings, state: PfdTickState): boolean {
 	for (const binding of bindings) {
-		if (event.shiftKey !== binding.requiresShift) continue;
+		// `requiresShift: true` means "the binding label shows Shift+X" and we
+		// require event.shiftKey. `requiresShift: false` accepts either shift
+		// state because event.key already encodes whether shift was held; this
+		// keeps `=` (non-shift) and `+` (shift) both valid for airspeed.
+		if (binding.requiresShift && !event.shiftKey) continue;
 		if (binding.decKeys.includes(event.key)) {
 			updateTarget(state, binding.key, -binding.keyStep, binding);
 			return true;

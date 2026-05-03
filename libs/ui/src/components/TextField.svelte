@@ -60,7 +60,10 @@ let {
 	inputmode?: 'text' | 'numeric' | 'decimal' | 'email' | 'tel' | 'url' | 'search';
 } = $props();
 
-const autoId = $derived(id ?? (name ? `tf-${name}` : `tf-${label.replace(/\s+/g, '-').toLowerCase()}`));
+// Per-instance id fallback: `$props.id()` guarantees uniqueness even when
+// two TextFields on the same page share a label.
+const instanceId = $props.id();
+const autoId = $derived(id ?? (name ? `tf-${name}` : `tf-${instanceId}`));
 const hintId = $derived(hint ? `${autoId}-hint` : undefined);
 const errorId = $derived(error ? `${autoId}-error` : undefined);
 const describedBy = $derived([hintId, errorId].filter(Boolean).join(' ') || undefined);

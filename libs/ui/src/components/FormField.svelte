@@ -23,7 +23,15 @@ let {
 	error?: string;
 	required?: boolean;
 	for?: string;
-	control: Snippet<[{ describedBy: string | undefined; invalid: boolean }]>;
+	/**
+	 * The caller's control snippet receives `id`, `describedBy`, and
+	 * `invalid`. **Spread `id` onto the rendered input/select/textarea**
+	 * so the wrapping `<label for={id}>` actually associates with it.
+	 * Previously `id` was computed internally but never exposed, leading
+	 * to silent broken label/control associations when callers forgot to
+	 * pass `for`.
+	 */
+	control: Snippet<[{ id: string; describedBy: string | undefined; invalid: boolean }]>;
 } = $props();
 
 const idBase = $derived(forId ?? `ff-${label.replace(/\s+/g, '-').toLowerCase()}`);
@@ -34,7 +42,7 @@ const invalid = $derived(Boolean(error));
 </script>
 
 <div class="form-field">
-	<label class="label" for={forId}>
+	<label class="label" for={idBase}>
 		<span>
 			{label}
 			{#if required}
@@ -43,7 +51,7 @@ const invalid = $derived(Boolean(error));
 		</span>
 	</label>
 	<div class="control">
-		{@render control({ describedBy, invalid })}
+		{@render control({ id: idBase, describedBy, invalid })}
 	</div>
 	{#if help && !error}
 		<span id={helpId} class="help">{help}</span>

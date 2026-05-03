@@ -24,13 +24,13 @@ import type { LayoutData } from './$types';
 
 let { data, children }: { data: LayoutData; children: Snippet } = $props();
 
+// `$derived` over (optimistic-user-override | server-data) so theme picks
+// flip immediately while the cookie catches up. Replaces the previous
+// `$effect` mirror anti-pattern.
+let themeOverride = $state<ThemeId | null>(null);
 const appearancePref = $derived(data.appearance);
-let themePref = $state<ThemePreference>(DEFAULT_THEME_PREFERENCE);
+const themePref = $derived<ThemePreference>(themeOverride ?? data.theme ?? DEFAULT_THEME_PREFERENCE);
 let systemAppearance = $state<AppearanceMode>(DEFAULT_APPEARANCE);
-
-$effect(() => {
-	themePref = data.theme;
-});
 
 $effect(() => {
 	if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') return;
@@ -69,7 +69,9 @@ const themePickerLocked = $derived(themePref != null && selection.theme !== them
 
 async function setTheme(value: ThemeId) {
 	if (value === themePref) return;
-	themePref = value;
+	// Optimistic override: derived `themePref` flips immediately so the
+	// picker UI reflects the new pick without waiting for the round-trip.
+	themeOverride = value;
 	try {
 		await fetch(ROUTES.THEME, {
 			method: 'POST',

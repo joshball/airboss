@@ -523,8 +523,16 @@ function tickEnd(angleDeg: number): { x: number; y: number } {
 		stroke: var(--signal-success);
 	}
 
+	/*
+	 * Non-color signal for tailwind: dashed stroke. Colorblind users (esp.
+	 * deuteranopia/protanopia) cannot reliably distinguish the success vs
+	 * caution colour pair from the diagram alone; the dash pattern is a
+	 * redundant cue. The text readout panel still says "Tailwind" so the
+	 * information is conveyed three ways: color, dash, and text.
+	 */
 	.headwind-line.tailwind {
 		stroke: var(--action-caution);
+		stroke-dasharray: 8 4;
 	}
 
 	.headwind-arrowhead {
@@ -535,8 +543,14 @@ function tickEnd(angleDeg: number): { x: number; y: number } {
 		stroke: var(--accent-reference);
 	}
 
+	/*
+	 * Non-color signal for over-demo crosswind: dashed stroke. Same
+	 * rationale as the tailwind dash above. The "OVER DEMO" badge and
+	 * the readout text still convey the warning to all users.
+	 */
 	.crosswind-line.over {
 		stroke: var(--action-hazard);
+		stroke-dasharray: 4 4;
 	}
 
 	.crosswind-arrowhead {

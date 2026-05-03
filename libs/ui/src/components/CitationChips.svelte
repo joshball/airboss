@@ -101,13 +101,19 @@ let { items, editable = false, removeAction, removeLabel = 'Remove citation' }: 
 		font-weight: 500;
 	}
 
+	/*
+	 * Always-on underline so colorblind users can recognise links
+	 * (WCAG 1.4.1). Hover thickens the underline rather than introducing
+	 * a new affordance.
+	 */
 	.citation-label:is(a) {
 		color: var(--action-default-active);
-		text-decoration: none;
+		text-decoration: underline;
+		text-underline-offset: var(--underline-offset-2xs);
 	}
 
 	.citation-label:is(a):hover {
-		text-decoration: underline;
+		text-decoration-thickness: 2px;
 	}
 
 	.citation-context {

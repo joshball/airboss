@@ -85,3 +85,50 @@ describe('SnoozeReasonPopover -- close', () => {
 		expect(onClose).toHaveBeenCalledTimes(1);
 	});
 });
+
+describe('SnoozeReasonPopover -- submit payload + comment validation', () => {
+	it('submits the selected reason and the typed comment to onSubmit', async () => {
+		const onSubmit = vi.fn();
+		render(SnoozeReasonPopover, { open: true, onSubmit });
+		const textarea = screen.getByTestId('snoozereasonpopover-comment-input') as HTMLTextAreaElement;
+		textarea.value = 'My comment';
+		textarea.dispatchEvent(new Event('input', { bubbles: true }));
+		(screen.getByTestId('snoozereasonpopover-submit') as HTMLButtonElement).click();
+		await new Promise((resolve) => setTimeout(resolve, 0));
+		expect(onSubmit).toHaveBeenCalledTimes(1);
+		const payload = onSubmit.mock.calls[0]?.[0];
+		expect(payload).toMatchObject({ comment: 'My comment' });
+		expect(typeof payload.reason).toBe('string');
+	});
+
+	it('marks textarea aria-required when the selected reason needs a comment', () => {
+		render(SnoozeReasonPopover, {
+			open: true,
+			initialReason: SNOOZE_REASONS.BAD_QUESTION,
+			onSubmit: vi.fn(),
+		});
+		const textarea = screen.getByTestId('snoozereasonpopover-comment-input') as HTMLTextAreaElement;
+		// BAD_QUESTION is one of the reasons that requires a comment (the
+		// component derives `requiresComment` from the selected reason). The
+		// aria-required reflects that to AT.
+		expect(textarea.getAttribute('aria-required')).toBe('true');
+		expect(textarea.required).toBe(true);
+	});
+
+	it('blocks submit when comment is required but empty', async () => {
+		const onSubmit = vi.fn();
+		render(SnoozeReasonPopover, {
+			open: true,
+			initialReason: SNOOZE_REASONS.BAD_QUESTION,
+			onSubmit,
+		});
+		(screen.getByTestId('snoozereasonpopover-submit') as HTMLButtonElement).click();
+		await new Promise((resolve) => setTimeout(resolve, 0));
+		// onSubmit must not fire. Native form validation also blocks via the
+		// `required={requiresComment}` attribute, so the inline error path
+		// only appears for non-native bypasses (Enter from elsewhere); the
+		// guarantee asserted here is the absence of submission, not the
+		// specific message path.
+		expect(onSubmit).not.toHaveBeenCalled();
+	});
+});

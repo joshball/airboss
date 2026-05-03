@@ -59,9 +59,13 @@ const diffOps = $derived(
 function formatPublishedDate(iso: string): string {
 	// `YYYY-MM-DD` -> a stable, locale-neutral display. Avoid Intl
 	// because handbook data is FAA-published in en-US and the
-	// renderer must match across timezones.
-	const [year, month, day] = iso.split('-');
-	if (!year || !month || !day) return iso;
+	// renderer must match across timezones. Reject any input that
+	// isn't strict YYYY-MM-DD (e.g. a full ISO timestamp leaking from
+	// the BC) by returning the raw string instead of constructing a
+	// half-broken "Apr NaN, 2026" output.
+	const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso);
+	if (!match) return iso;
+	const [, year, month, day] = match;
 	const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 	const monthName = months[Number(month) - 1] ?? month;
 	return `${monthName} ${Number(day)}, ${year}`;

@@ -140,6 +140,10 @@ describe('inline parser', () => {
 		const nodes = parseInline('use `bun install`');
 		const code = nodes.find((n) => n.kind === 'code');
 		expect(code).toBeDefined();
+		// Pin the inner text so an empty <code> block doesn't silently pass.
+		if (code?.kind === 'code') {
+			expect(code.value).toBe('bun install');
+		}
 	});
 
 	it('parses external links with source inference', () => {

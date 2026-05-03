@@ -157,15 +157,25 @@ for (const theme of themes) {
 					);
 				}
 			}
+			// Advisory pairs are tracked via `it.skip` so they appear in the
+			// test report (with a "todo" marker) rather than only via
+			// console.log. Each entry is intentionally skipped until the
+			// underlying token math reaches the advisory bar; promote to `it`
+			// once the pair lands at the target ratio.
 			for (const pair of ADVISORY_PAIRS) {
 				const fg = resolved[pair.fg];
 				const bg = resolved[pair.bg];
 				const ratio = contrastRatio(fg, bg);
-				if (ratio < pair.min) {
-					// biome-ignore lint/suspicious/noConsole: advisory-only edge-visibility log
-					console.log(
-						`[edge-advisory] ${theme.id}/${appearance} ${pair.fg} on ${pair.bg} = ${ratio.toFixed(2)} (< ${pair.min})`,
-					);
+				const label = `[advisory] ${pair.fg} on ${pair.bg} >= ${pair.min} (${pair.description}): ${ratio.toFixed(2)}`;
+				if (ratio >= pair.min) {
+					// Advisory bar already met -- pin it.
+					it(label, () => {
+						expect(ratio).toBeGreaterThanOrEqual(pair.min);
+					});
+				} else {
+					it.skip(label, () => {
+						expect(ratio).toBeGreaterThanOrEqual(pair.min);
+					});
 				}
 			}
 		});

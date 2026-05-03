@@ -212,16 +212,21 @@ function resolveWikilink(pageId: string): { href: string; resolved: boolean } {
 		font-size: var(--font-size-sm);
 	}
 
+	/*
+	 * Always-on underline (via border-bottom) so colorblind readers can
+	 * distinguish links from body text without relying on the
+	 * `--action-default` colour cue alone (WCAG 1.4.1).
+	 */
 	.md-body :global(.md-link) {
 		color: var(--action-default);
 		text-decoration: none;
-		border-bottom: 1px solid transparent;
+		border-bottom: 1px solid currentColor;
 		transition: border-color var(--motion-normal);
 	}
 
 	.md-body :global(.md-link:hover),
 	.md-body :global(.md-link:focus-visible) {
-		border-bottom-color: currentColor;
+		border-bottom-color: var(--action-default-hover);
 	}
 
 	.md-body :global(.md-link:focus-visible) {

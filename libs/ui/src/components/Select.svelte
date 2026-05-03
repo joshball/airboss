@@ -46,7 +46,12 @@ let {
 	children?: Snippet;
 } = $props();
 
-const autoId = $derived(id ?? (name ? `sel-${name}` : `sel-${label.replace(/\s+/g, '-').toLowerCase()}`));
+// Per-instance id fallback: `$props.id()` guarantees uniqueness even when
+// two Selects on the same page share a label (e.g. two "Status" filter
+// selects). Previously the label-derived id collided silently and clicking
+// one label focused the wrong control.
+const instanceId = $props.id();
+const autoId = $derived(id ?? (name ? `sel-${name}` : `sel-${instanceId}`));
 const hintId = $derived(hint ? `${autoId}-hint` : undefined);
 const errorId = $derived(error ? `${autoId}-error` : undefined);
 const describedBy = $derived([hintId, errorId].filter(Boolean).join(' ') || undefined);
