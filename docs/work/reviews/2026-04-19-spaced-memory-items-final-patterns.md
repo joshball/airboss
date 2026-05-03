@@ -11,6 +11,32 @@ prompt: "Final PATTERNS review of the entire spaced-memory-items feature on bran
 context: Final pattern-compliance pass across Phases 0-4 of the spaced-memory-items feature. Focuses on CLAUDE.md rules: no any, no !, ROUTES, constants, @ab/ aliases, Drizzle, Svelte 5, prefixed ULIDs, bun-only, no AI attribution, no TODOs, no stubs, Biome, text formatting, Markdown, updateCard whitelist, auth magic-string consolidation, ENV_VARS, session todo.
 ---
 
+## Status as of 2026-05-04 -- Closed wholesale, area rewritten
+
+This review predates the post-pivot study-app evolution. The spaced-memory-items branch
+shipped through five per-phase fix commits (`966da01b` Phase 0, `e97d7598` Phase 1,
+`705d7414` Phase 2, `5dcb6845` Phase 3, `8b5c337b` Final), then was rolled into main
+and substantially extended by:
+
+- Post-merge sprint2 fixes (`56b44681`, PR #165) closing follow-up review items.
+- The token-discipline wave (`d8111b79`, PR #68) that swept hex/spacing/radii drift.
+- Magic-strings sweeps (`cd24fc5d` PR #117 + `51677fca` PR #312) that introduced
+  the constants the older reviews were asking for (`SESSION_ITEM_KINDS`, `REVIEW_PHASES`,
+  `MS_PER_DAY`, `TOAST_DISMISS_MS`, etc.).
+- The 2026-04-27 12-axis full-codebase re-audit and its consolidated fixer (PR #269,
+  `9cdbd2de`) that re-walked the same surfaces with 12 reviewers.
+- The 2026-05 six-chunk review program (auth/identity, sources/content-pipeline,
+  study-app-surfaces, study-bc-domain, hangar-cluster, ui-library-themes) that re-audited
+  every line of the post-pivot codebase, with the minor/nit sweep landed in PR #466
+  (`7861487f`).
+
+Every finding from this review has either been fixed by the chain above, is now tracked
+under a 2026-05 chunk review (which has its own `review_status`), or applies to code
+that no longer exists in its reviewed shape. Closing in bulk rather than re-walking
+heading-by-heading; the 2026-05 program is the live source of truth for the same
+surfaces.
+
+
 # Spaced Memory Items -- Final Patterns Review
 
 Scope: `git diff docs/initial-migration..HEAD` -- 83 files, +9,785 / -69 lines across Phase 0 (foundation port), Phase 1 (constants + schema + FSRS wrapper), Phase 2 (cards/reviews/stats BC), Phase 3 (card management UI), and Phase 4 (dashboard + review flow), with one post-phase fix commit per phase.

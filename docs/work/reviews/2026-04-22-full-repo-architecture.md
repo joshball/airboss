@@ -12,6 +12,33 @@ status: unread
 review_status: done
 ---
 
+## Status as of 2026-05-04 -- Closed wholesale, superseded by 2026-04-27 + 2026-05
+
+This 2026-04-22 review predates the 2026-04-27 12-axis full-codebase re-audit (which
+covered the same scope with finer granularity) and the 2026-05 six-chunk review program
+(which split the repo into auth/identity, sources/content-pipeline, study-app-surfaces,
+study-bc-domain, hangar-cluster, ui-library-themes and re-audited every chunk).
+
+Closure chain for the findings in this file:
+
+- 2026-04-27 12-axis review files (`docs/work/reviews/2026-04-27-full-codebase-*.md`)
+  re-walked the same code paths and produced an actionable fix plan
+  (`docs/work/reviews/2026-04-27-fix-plan.md`).
+- PR #269 (`9cdbd2de`) landed the criticals + 60+ point fixes from that fix plan.
+- The 2026-05 chunk reviews (`docs/work/reviews/2026-05-01-*` + `2026-05-02-*`)
+  re-reviewed the same surfaces post-fix; their minor/nit sweep landed in PR #466
+  (`7861487f`).
+- Token-discipline + magic-strings sweeps (PRs #68 `d8111b79`, #117 `cd24fc5d`,
+  #312 `51677fca`) addressed the patterns / hex / breakpoint / spacing items.
+
+Spot-check verified on current main: the canonical findings cited above (em-dash in
+session UI, `var(--ab-color-*, #hex)` fallbacks in apps/sim, magic-string `kind`/`phase`
+comparisons in engine.ts and memory/review, `as Record<string, string>` casts in
+apps/study/memory, `#94a3b8` hint colour, missing `@ab/bc-sim` alias, missing
+`libs/activities` package.json) are all closed. Closing in bulk; the 2026-05 chunk
+reviews are the live source of truth for these surfaces.
+
+
 ## Summary
 
 The overall layering (`constants -> types -> bc -> apps`) holds cleanly at the lib level: no cross-BC imports, no lib-to-app dependencies, `@ab/*` aliases used consistently across lib boundaries, and `bc-sim` is pure (safe for client bundles). The failures are concentrated at the app/routes layer: ~18 study routes each redefine the same visual primitives (`.btn`, `.banner`, `.error`, `.field`, `.card`) as inline CSS; formatter/narrowing helpers are duplicated 8-20 times across routes while the official versions sit in `@ab/utils` and `@ab/constants`; two browse routes import Drizzle table objects and hand-build queries in the route server, bypassing the BC; and the sim route carries ~280 lines of visual CSS with ~30 raw hex values. These are the exact patterns that will multiply when a second surface app (`spatial`, `avionics`, `reflect`, `hangar`) lands.
