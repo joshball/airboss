@@ -194,19 +194,21 @@ apps/
   study/          SvelteKit -- quiz, reps, spaced rep, calibration (active)
   sim/            SvelteKit -- decision-rep micro-scenarios + flight sim (scaffolded)
   hangar/         SvelteKit -- content authoring, source ingest, admin (scaffolded)
+  flightbag/      SvelteKit -- canonical FAA references reader; deep-linkable from any app (scaffold in flight 2026-05-03)
 libs/
   auth/           Identity, sessions, permissions
   audit/          Cross-cutting audit log (audit_log schema)
   aviation/       Aviation reference registry, sources, glossary
   activities/     Domain-coupled visual components (Crosswind, ...)
   help/           Help library + page-help drawer subsystem
-  sources/        Source render pipeline, regs/handbook resolvers
+  library/        Reference rendering primitives (RenderedSection, CitationChip) for the flightbag app + citation surfaces (scaffold in flight 2026-05-03)
+  sources/        Source render pipeline, regs/handbook resolvers; urlForReference() helper
   bc/
     study/        Spaced rep, cards, reviews, scenarios, calibration, content citations
     sim/          Sim BC -- physics, scenarios, replay, grading, persistence
   hangar-jobs/    Generic job queue infra used by the hangar app
   hangar-sync/    TOML mirror sync engine (DB <-> seed files)
-  constants/      Enums, routes, ports, config
+  constants/      Enums, routes, ports, config (incl. ROUTES.FLIGHTBAG_*)
   db/             Shared Drizzle connection (PostgreSQL)
   themes/         Design tokens, theme definitions
   types/          Shared types, Zod schemas
