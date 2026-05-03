@@ -1,0 +1,76 @@
+/**
+ * `/ac/[doc]/[rev]/[chapter]/[section]` -- AC section reader.
+ *
+ * Resolves the section row by `(referenceId, code)` where the AC code shape
+ * is `<chapter>.<section>`. Renders the section body with a sticky sibling
+ * TOC.
+ */
+
+import { getHandbookSection, listReferences } from '@ab/bc-study';
+import { REFERENCE_KINDS, ROUTES } from '@ab/constants';
+import { error } from '@sveltejs/kit';
+import type { PageServerLoad } from './$types';
+
+const DOC_SHAPE = /^[a-z0-9.-]+$/i;
+const REV_SHAPE = /^[a-z]$/i;
+const CHAPTER_SHAPE = /^[a-z0-9]+$/i;
+const SECTION_SHAPE = /^[a-z0-9]+(?:\.[a-z0-9]+)?$/i;
+
+export const load: PageServerLoad = async ({ params }) => {
+	if (!DOC_SHAPE.test(params.doc)) throw error(404, 'Invalid AC doc number.');
+	if (!REV_SHAPE.test(params.rev)) throw error(404, 'Invalid AC revision letter.');
+	if (!CHAPTER_SHAPE.test(params.chapter)) throw error(404, 'Invalid AC chapter.');
+	if (!SECTION_SHAPE.test(params.section)) throw error(404, 'Invalid AC section.');
+
+	const documentSlug = `ac-${params.doc.toLowerCase()}`;
+	const targetRev = params.rev.toUpperCase();
+
+	const allRefs = await listReferences({}, undefined);
+	const ref = allRefs.find(
+		(r) => r.kind === REFERENCE_KINDS.AC && r.documentSlug === documentSlug && r.edition.endsWith(targetRev),
+	);
+	if (!ref) throw error(404, `AC ${params.doc}${targetRev} not found.`);
+
+	const view = await getHandbookSection(ref.id, params.chapter, params.section).catch(() => null);
+	if (!view) throw error(404, `Section ${params.chapter}.${params.section} not found in ${ref.title}.`);
+
+	return {
+		uri: `airboss-ref:ac/${params.doc}/${params.rev}/section-${params.chapter}`,
+		reference: {
+			id: ref.id,
+			edition: ref.edition,
+			title: ref.title,
+			acHref: ROUTES.FLIGHTBAG_AC(params.doc, params.rev),
+			chapterHref: ROUTES.FLIGHTBAG_AC_CHAPTER(params.doc, params.rev, params.chapter),
+		},
+		chapter: {
+			id: view.chapter.id,
+			code: view.chapter.code,
+			title: view.chapter.title,
+		},
+		section: {
+			id: view.section.id,
+			code: view.section.code,
+			title: view.section.title,
+			contentMd: view.section.contentMd,
+			sourceLocator: view.section.sourceLocator,
+		},
+		figures: view.figures.map((f) => ({
+			id: f.id,
+			ordinal: f.ordinal,
+			caption: f.caption,
+			assetPath: f.assetPath,
+			width: f.width,
+			height: f.height,
+		})),
+		siblings: view.siblings.map((s) => {
+			const trail = s.code.split('.').slice(1).join('.');
+			return {
+				id: s.id,
+				code: s.code,
+				title: s.title,
+				href: ROUTES.FLIGHTBAG_AC_SECTION(params.doc, params.rev, params.chapter, trail),
+			};
+		}),
+	};
+};

@@ -13,16 +13,22 @@ let { data }: { data: PageData } = $props();
 {#if data.sections.length > 0}
 	<nav aria-label="Breadcrumb" class="crumbs">
 		<a href={ROUTES.FLIGHTBAG_HOME}>Flightbag</a> &raquo;
-		<a href={data.reference.handbookHref}>{data.reference.title}</a> &raquo;
+		<a href={data.reference.acHref}>{data.reference.title}</a> &raquo;
 		<span>Chapter {data.chapter.code}</span>
 	</nav>
 
 	<header class="page-header">
 		<h1>Chapter {data.chapter.code}: {data.chapter.title}</h1>
-		{#if data.chapter.sourceLocator}
-			<p class="locator">{data.chapter.sourceLocator}</p>
-		{/if}
 	</header>
+
+	{#if data.chapter.contentMd}
+		<RenderedSection
+			title=""
+			id={data.uri}
+			body={data.chapter.contentMd}
+			locator={data.chapter.sourceLocator}
+		/>
+	{/if}
 
 	<section aria-label="Sections">
 		<h2>Sections</h2>
@@ -42,13 +48,12 @@ let { data }: { data: PageData } = $props();
 		title={`Chapter ${data.chapter.code}: ${data.chapter.title}`}
 		id={data.uri}
 		body={data.chapter.contentMd}
-		figures={data.figures}
 		locator={data.chapter.sourceLocator}
 	>
 		{#snippet breadcrumb()}
 			<nav aria-label="Breadcrumb" class="crumbs">
 				<a href={ROUTES.FLIGHTBAG_HOME}>Flightbag</a> &raquo;
-				<a href={data.reference.handbookHref}>{data.reference.title}</a> &raquo;
+				<a href={data.reference.acHref}>{data.reference.title}</a> &raquo;
 				<span>Chapter {data.chapter.code}</span>
 			</nav>
 		{/snippet}
@@ -56,40 +61,26 @@ let { data }: { data: PageData } = $props();
 {/if}
 
 <style>
-	.crumbs {
+	:global(.crumbs) {
 		color: var(--ink-muted);
-		margin-bottom: var(--space-sm);
 		font-size: var(--font-size-sm);
 	}
-	.crumbs a {
+	:global(.crumbs a) {
 		color: inherit;
 	}
-
-	.page-header {
-		margin-bottom: var(--space-lg);
-	}
 	.page-header h1 {
-		margin: 0 0 var(--space-xs);
-		font-size: var(--font-size-2xl);
-		font-weight: var(--font-weight-bold);
+		margin: 0 0 var(--space-md);
 	}
-	.locator {
-		margin: 0;
-		color: var(--ink-muted);
-		font-family: var(--font-family-mono);
-	}
-
 	.sections {
 		list-style: none;
 		padding: 0;
-		margin: var(--space-sm) 0 0 0;
+		margin: var(--space-sm) 0 0;
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-2xs);
 	}
 	.sections a {
 		display: flex;
-		align-items: baseline;
 		gap: var(--space-sm);
 		padding: var(--space-sm) var(--space-md);
 		border-radius: var(--radius-md);
@@ -106,8 +97,5 @@ let { data }: { data: PageData } = $props();
 		font-family: var(--font-family-mono);
 		color: var(--ink-muted);
 		min-width: 4rem;
-	}
-	.section-title {
-		flex: 1;
 	}
 </style>

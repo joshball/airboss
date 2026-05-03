@@ -7,41 +7,37 @@ let { data }: { data: PageData } = $props();
 </script>
 
 <svelte:head>
-	<title>AIM ¶{data.paragraph.code} -- {data.paragraph.title}</title>
+	<title>{data.section.title} -- {data.reference.title}</title>
 </svelte:head>
 
 <div class="reader">
 	<div class="primary">
 		<RenderedSection
-			title={`¶${data.paragraph.code} -- ${data.paragraph.title}`}
+			title={`§${data.section.code} -- ${data.section.title}`}
 			id={data.uri}
-			body={data.paragraph.contentMd}
-			locator={data.paragraph.sourceLocator}
+			body={data.section.contentMd}
+			figures={data.figures}
+			locator={data.section.sourceLocator}
 		>
 			{#snippet breadcrumb()}
 				<nav aria-label="Breadcrumb" class="crumbs">
 					<a href={ROUTES.FLIGHTBAG_HOME}>Flightbag</a> &raquo;
-					<a href={data.links.aimHref}>{data.reference.title}</a> &raquo;
-					<a href={data.links.chapterHref}>Chapter {data.paragraph.code.split('-')[0]}</a> &raquo;
-					{#if data.section}
-						<a href={data.links.sectionHref}>§{data.section.code}</a> &raquo;
-					{/if}
-					<span>¶{data.paragraph.code}</span>
+					<a href={data.reference.acHref}>{data.reference.title}</a> &raquo;
+					<a href={data.reference.chapterHref}>Chapter {data.chapter.code}</a> &raquo;
+					<span>§{data.section.code}</span>
 				</nav>
 			{/snippet}
 		</RenderedSection>
 	</div>
 
 	{#if data.siblings.length > 1}
-		<aside class="toc" aria-label="Paragraphs in this section">
-			{#if data.section}
-				<h3>§{data.section.code} -- {data.section.title}</h3>
-			{/if}
+		<aside class="toc" aria-label="Sections in this chapter">
+			<h3>Chapter {data.chapter.code}: {data.chapter.title}</h3>
 			<ol>
 				{#each data.siblings as sib (sib.id)}
-					<li class:active={sib.id === data.paragraph.id}>
+					<li class:active={sib.id === data.section.id}>
 						<a href={sib.href}>
-							<span class="sib-code">¶{sib.code}</span>
+							<span class="sib-code">§{sib.code}</span>
 							<span class="sib-title">{sib.title}</span>
 						</a>
 					</li>
@@ -59,10 +55,9 @@ let { data }: { data: PageData } = $props();
 	:global(.crumbs a) {
 		color: inherit;
 	}
-
 	.reader {
 		display: grid;
-		grid-template-columns: 1fr 18rem;
+		grid-template-columns: 1fr 16rem;
 		gap: var(--space-lg);
 		align-items: start;
 	}
@@ -71,7 +66,6 @@ let { data }: { data: PageData } = $props();
 			grid-template-columns: 1fr;
 		}
 	}
-
 	.toc {
 		position: sticky;
 		top: var(--space-md);

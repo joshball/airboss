@@ -476,14 +476,34 @@ export const ROUTES = {
 	/** Handbook section reader (leaf). */
 	FLIGHTBAG_HANDBOOK_SECTION: (slug: string, edition: string, chapter: string, section: string) =>
 		`/handbook/${encodeURIComponent(slug)}/${encodeURIComponent(edition)}/${encodeURIComponent(chapter)}/${encodeURIComponent(section)}` as const,
+	/** Handbook asset stream (figures, tables). Mirror of `HANDBOOK_ASSET` for flightbag. */
+	FLIGHTBAG_HANDBOOK_ASSET: (path: string) => `/handbook-asset/${path}` as const,
+	/** AIM publication landing. */
+	FLIGHTBAG_AIM: '/aim',
+	/** AIM chapter index. */
+	FLIGHTBAG_AIM_CHAPTER: (chapter: string) => `/aim/${encodeURIComponent(chapter)}` as const,
+	/** AIM section index (paragraphs under one section). */
+	FLIGHTBAG_AIM_SECTION: (chapter: string, section: string) =>
+		`/aim/${encodeURIComponent(chapter)}/${encodeURIComponent(section)}` as const,
 	/** AIM paragraph reader (leaf). */
 	FLIGHTBAG_AIM_PARAGRAPH: (chapter: string, section: string, paragraph: string) =>
 		`/aim/${encodeURIComponent(chapter)}/${encodeURIComponent(section)}/${encodeURIComponent(paragraph)}` as const,
+	/** CFR Part landing -- TOC for one Part (or umbrella card when sections aren't ingested). */
+	FLIGHTBAG_CFR_PART: (title: string, part: string) =>
+		`/cfr/${encodeURIComponent(title)}/${encodeURIComponent(part)}` as const,
 	/** CFR section reader (leaf). */
 	FLIGHTBAG_CFR_SECTION: (title: string, part: string, section: string) =>
 		`/cfr/${encodeURIComponent(title)}/${encodeURIComponent(part)}/${encodeURIComponent(section)}` as const,
-	/** Advisory Circular reader (whole-doc until promoted). */
+	/** Advisory Circular landing -- TOC for the AC. */
 	FLIGHTBAG_AC: (doc: string, rev: string) => `/ac/${encodeURIComponent(doc)}/${encodeURIComponent(rev)}` as const,
+	/** Advisory Circular chapter index. */
+	FLIGHTBAG_AC_CHAPTER: (doc: string, rev: string, chapter: string) =>
+		`/ac/${encodeURIComponent(doc)}/${encodeURIComponent(rev)}/${encodeURIComponent(chapter)}` as const,
+	/** Advisory Circular section reader (leaf). */
+	FLIGHTBAG_AC_SECTION: (doc: string, rev: string, chapter: string, section: string) =>
+		`/ac/${encodeURIComponent(doc)}/${encodeURIComponent(rev)}/${encodeURIComponent(chapter)}/${encodeURIComponent(section)}` as const,
+	/** ACS publication landing. */
+	FLIGHTBAG_ACS: (doc: string) => `/acs/${encodeURIComponent(doc)}` as const,
 	/** ACS task reader. */
 	FLIGHTBAG_ACS_TASK: (doc: string, area: string, task: string) =>
 		`/acs/${encodeURIComponent(doc)}/area/${encodeURIComponent(area)}/task/${encodeURIComponent(task)}` as const,

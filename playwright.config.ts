@@ -2,6 +2,7 @@ import { defineConfig, devices } from '@playwright/test';
 import { PORTS } from './libs/constants/src/ports';
 
 const baseURL = process.env.PLAYWRIGHT_BASE_URL ?? `http://localhost:${PORTS.STUDY}`;
+const flightbagBaseURL = process.env.PLAYWRIGHT_FLIGHTBAG_BASE_URL ?? `http://localhost:${PORTS.FLIGHTBAG}`;
 
 export default defineConfig({
 	testDir: './tests/e2e',
@@ -32,18 +33,38 @@ export default defineConfig({
 				storageState: 'tests/e2e/.auth/learner.json',
 			},
 			dependencies: ['setup'],
-			testIgnore: /unauthed\/.*/,
+			testIgnore: /unauthed\/.*|flightbag\/.*/,
 		},
 		{
 			name: 'chromium-unauthed',
 			use: devices['Desktop Chrome'],
 			testMatch: /unauthed\/.*\.spec\.ts/,
 		},
+		{
+			// Flightbag is a public reader served from its own host on its own
+			// port -- no auth, no shared dev server. The webServer entry below
+			// boots `apps/flightbag` independently so this project can drive
+			// real navigation against the rendered flightbag UI.
+			name: 'flightbag',
+			use: {
+				...devices['Desktop Chrome'],
+				baseURL: flightbagBaseURL,
+			},
+			testMatch: /flightbag\/.*\.spec\.ts/,
+		},
 	],
-	webServer: {
-		command: 'bun run dev',
-		url: baseURL,
-		reuseExistingServer: true,
-		timeout: 60_000,
-	},
+	webServer: [
+		{
+			command: 'bun run dev',
+			url: baseURL,
+			reuseExistingServer: true,
+			timeout: 60_000,
+		},
+		{
+			command: 'cd apps/flightbag && bun run dev',
+			url: flightbagBaseURL,
+			reuseExistingServer: true,
+			timeout: 60_000,
+		},
+	],
 });

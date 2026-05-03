@@ -6,7 +6,7 @@ let { data }: { data: PageData } = $props();
 </script>
 
 <svelte:head>
-	<title>{data.reference.title}</title>
+	<title>{data.reference.title} -- Flightbag</title>
 </svelte:head>
 
 <nav aria-label="Breadcrumb" class="crumbs">
@@ -21,36 +21,19 @@ let { data }: { data: PageData } = $props();
 	</p>
 </header>
 
-{#if data.chapters.length === 0}
-	<section class="callout">
-		<h2>Read on faa.gov</h2>
-		<p>
-			This advisory circular's per-chapter content isn't ingested into the flightbag reader yet. The FAA's AC
-			index is the authoritative source.
-		</p>
-		{#if data.reference.externalUrl}
-			<p>
-				<a class="external-link" href={data.reference.externalUrl} target="_blank" rel="noopener noreferrer">
-					Open on faa.gov &rarr;
+<section aria-label="AIM chapters">
+	<h2>Chapters</h2>
+	<ol class="chapters">
+		{#each data.chapters as chapter (chapter.id)}
+			<li>
+				<a href={chapter.href}>
+					<span class="chapter-code">Chapter {chapter.code}</span>
+					<span class="chapter-title">{chapter.title}</span>
 				</a>
-			</p>
-		{/if}
-	</section>
-{:else}
-	<section aria-label="Chapters">
-		<h2>Contents</h2>
-		<ol class="chapters">
-			{#each data.chapters as chapter (chapter.id)}
-				<li>
-					<a href={chapter.href}>
-						<span class="chapter-code">Ch {chapter.code}</span>
-						<span class="chapter-title">{chapter.title}</span>
-					</a>
-				</li>
-			{/each}
-		</ol>
-	</section>
-{/if}
+			</li>
+		{/each}
+	</ol>
+</section>
 
 <style>
 	.crumbs {
@@ -99,30 +82,10 @@ let { data }: { data: PageData } = $props();
 	.chapter-code {
 		font-family: var(--font-family-mono);
 		color: var(--ink-muted);
-		min-width: 4rem;
+		min-width: 6rem;
 	}
-	.callout {
-		padding: var(--space-md);
-		border-radius: var(--radius-md);
-		background: var(--surface-sunken);
-		max-width: 72ch;
-	}
-	.callout h2 {
-		margin: 0 0 var(--space-xs);
-	}
-	.callout p {
-		margin: 0 0 var(--space-sm);
-	}
-	.callout p:last-child {
-		margin-bottom: 0;
-	}
-	.external-link {
-		display: inline-block;
-		padding: var(--space-xs) var(--space-md);
-		border-radius: var(--radius-sm);
-		background: var(--action-default);
-		color: var(--action-default-ink, var(--ink-strong));
-		text-decoration: none;
+	.chapter-title {
+		flex: 1;
 		font-weight: var(--font-weight-medium);
 	}
 </style>
