@@ -24,7 +24,7 @@ Phased implementation. One commit per phase.
   - Input: full override markdown string
   - Output: `{ title: string; chapters: ParsedChapter[] }` where `ParsedChapter` carries `slug`, `title`, `body` (overview prose), `sections: ParsedSection[]`. `ParsedSection` carries `slug`, `title`, `body`.
   - Slug shape: lowercase ASCII, hyphen-separated, derived from heading text (lowercased, punctuation stripped, whitespace -> hyphen, collapsed).
-  - Reject `#### ` and deeper headings (parser strict-mode error).
+  - Reject `####` and deeper headings (parser strict-mode error).
   - Reject duplicate chapter slugs within the doc; reject duplicate section slugs within a chapter.
   - Pure function; no IO.
 - [ ] Unit tests for the parser in `libs/sources/src/handbooks-extras/section-tree-parser.test.ts`:
@@ -32,15 +32,15 @@ Phased implementation. One commit per phase.
   - Heading hierarchy: `#`, `##`, `###`, with body prose between.
   - Empty chapter (heading + no body) is allowed.
   - Chapter with no sections (only overview body) is allowed.
-  - Reject H4 (`#### `) heading.
+  - Reject H4 (`####`) heading.
   - Reject duplicate chapter slug.
   - Reject zero `#` heading (no document title).
-  - Reject zero `## ` headings (parser says "not a section-tree, fall back").
+  - Reject zero `##` headings (parser says "not a section-tree, fall back").
 
 ## Phase 2 -- Extend `handbooks-extras` ingest with section-tree branch
 
 - [ ] In `libs/sources/src/handbooks-extras/ingest.ts`:
-  - When `bodyOverridePath !== null`, parse the override. If `parseOverrideToSectionTree` reports "no section structure" (zero `## ` headings), fall through to existing whole-doc behaviour.
+  - When `bodyOverridePath !== null`, parse the override. If `parseOverrideToSectionTree` reports "no section structure" (zero `##` headings), fall through to existing whole-doc behaviour.
   - Otherwise:
     - Build `manifest.sections[]` (chapter rows + section rows).
     - Slugify each chapter / section heading. Chapter dir: `<NN>-<chapter-slug>`. Chapter overview file: `00-<chapter-slug>.md`. Section file: `<NN>-<section-slug>.md`.
@@ -53,7 +53,7 @@ Phased implementation. One commit per phase.
   - Fixture with a structured override emits `kind: 'handbook'` manifest with non-empty `sections[]`.
   - Per-chapter + per-section markdown files exist on disk.
   - Idempotent (re-run produces byte-equal output).
-  - Fixture with a flat override (no `## `) emits `kind: 'whole-doc'` manifest unchanged.
+  - Fixture with a flat override (no `##`) emits `kind: 'whole-doc'` manifest unchanged.
   - Stale single-body file is cleaned up when promoting from whole-doc to section-tree.
 
 ## Phase 3 -- Re-ingest mtn-tips and commit derivatives

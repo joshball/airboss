@@ -21,7 +21,7 @@ Three layers: parser units, ingest integration, end-to-end manifest+seed.
 | Body prose between H2 and first H3 ends up in chapter overview | Chapter `body` includes prose, sections start fresh        |
 | Body prose after last H3 in a chapter belongs to that section | Section `body` includes trailing prose                       |
 | Chapter with no H3 sections                         | `sections: []`, all prose in chapter `body`                       |
-| H4 (`#### `) encountered                            | Throws / returns error -- parser is strict                        |
+| H4 (`####`) encountered                            | Throws / returns error -- parser is strict                        |
 | Zero H1                                             | Returns parser error "no document title"                          |
 | Zero H2                                             | Returns sentinel "not a section-tree, fall back"                  |
 | Duplicate chapter slug                              | Throws / returns error                                            |
@@ -41,7 +41,7 @@ Fixtures use the existing `tempCache` + `tempDerivative` + `tempYaml` helpers.
 | `body_path` on each section row is repo-relative starting with `handbooks/`      | Matches the existing PHAK/AVWX shape                                              |
 | `content_hash` is the SHA-256 of the per-section file                            | Recomputable from the file content                                                |
 | Idempotent: running ingest twice produces byte-equal manifest + body files       | Second run leaves files unchanged                                                 |
-| Override without `## ` headings falls through to whole-doc                        | Manifest is `kind: 'whole-doc'` with empty `sections[]` (existing behaviour)      |
+| Override without `##` headings falls through to whole-doc                        | Manifest is `kind: 'whole-doc'` with empty `sections[]` (existing behaviour)      |
 | No `body_override` -> existing whole-doc behaviour                                | Unchanged (existing test continues to pass)                                       |
 | Stale whole-doc body file removed when promoting                                  | Old `<slug>-<faaDir>.md` is gone after promotion run                              |
 | Subjects / primary_cert flow from YAML row into manifest                          | Match the fixture YAML                                                            |

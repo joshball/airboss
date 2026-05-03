@@ -10,7 +10,7 @@ The single canonical list of every FAA reference document airboss ingests, with 
 
 **Readable in-app today:** 36 references (40 with the references cleanup sweep — 4 AC YAML rows added so subjects + primary_cert render)
 **Total tracked:** ~50 references across all corpora
-**Target shape:** every reference is a section-tree (whole-doc retired, with one possible exception: mountain-flying)
+**Target shape:** every reference is a section-tree (whole-doc retired)
 
 ## Stage definitions (short version)
 
@@ -34,13 +34,13 @@ For the longer pipeline writeup see [docs/ingestion-pipeline/pipeline.md](../ing
 
 ### Whole-doc handbooks → promote to section-tree
 
-| FAA number | Common name | Abbrev | Stage | Target | Notes |
-|------------|-------------|--------|-------|--------|-------|
-| FAA-H-8083-2A | Risk Management Handbook | RMH | ⚠️ readable, whole-doc | section-tree | TOC extracted at `RiskMgmtHdbk-TOC.md`; 8 chapters; promotion WP pending |
-| FAA-H-8083-9 | Aviation Instructor's Handbook | AIH | ⚠️ readable, whole-doc | section-tree | Per-chapter PDFs published by FAA; promotion WP pending |
-| FAA-H-8083-15B | Instrument Flying Handbook | IFH | ✅ readable, section-tree | -- | Promoted via WP-IFH-SECTION-TREE; toc-file-sidecar strategy parses `docs/work-packages/whole-doc-promotion/source-tocs/ifh.md`; 11 chapters / 587 sections; chapters 6 / 7 model the printed-TOC Section I (analog) / Section II (electronic flight display) split as two L1 sections per chapter; 3 FAA amendment PDFs queued for follow-up under ADR 020 errata flow |
-| FAA-H-8083-16B | Instrument Procedures Handbook | IPH | ⚠️ readable, whole-doc | section-tree | Per-chapter PDFs + standalone TOC PDF published; promotion WP pending |
-| FAA-P-8740-60 | Tips on Mountain Flying | MTN | ⚠️ readable, whole-doc | section-tree (or stay whole-doc) | 16-page pamphlet with `body_override` to a hand-curated markdown; the override already has `## Chapter` headings — could be parsed into section-tree without re-extracting |
+| FAA number     | Common name                    | Abbrev | Stage                     | Target       | Notes                                                                                                                                                                                                                                                                                                                                                                                |
+| -------------- | ------------------------------ | ------ | ------------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| FAA-H-8083-2A  | Risk Management Handbook       | RMH    | ⚠️ readable, whole-doc    | section-tree | TOC extracted at `RiskMgmtHdbk-TOC.md`; 8 chapters; promotion WP pending                                                                                                                                                                                                                                                                                                             |
+| FAA-H-8083-9   | Aviation Instructor's Handbook | AIH    | ⚠️ readable, whole-doc    | section-tree | Per-chapter PDFs published by FAA; promotion WP pending                                                                                                                                                                                                                                                                                                                              |
+| FAA-H-8083-15B | Instrument Flying Handbook     | IFH    | ✅ readable, section-tree | --           | Promoted via WP-IFH-SECTION-TREE; toc-file-sidecar strategy parses `docs/work-packages/whole-doc-promotion/source-tocs/ifh.md`; 11 chapters / 587 sections; chapters 6 / 7 model the printed-TOC Section I (analog) / Section II (electronic flight display) split as two L1 sections per chapter; 3 FAA amendment PDFs queued for follow-up under ADR 020 errata flow                |
+| FAA-H-8083-16B | Instrument Procedures Handbook | IPH    | ⚠️ readable, whole-doc    | section-tree | Per-chapter PDFs + standalone TOC PDF published; promotion WP pending                                                                                                                                                                                                                                                                                                                |
+| FAA-P-8740-60  | Tips on Mountain Flying        | MTN    | ✅ readable, section-tree | (unchanged) | 12 chapters / 36 sections promoted from `body_override` markdown via the `handbooks-extras` ingest's section-tree branch (WP-MTN-section-tree, 2026-05-03)                                                                                                                                                                                                                          |
 
 **Removed from corpus 2026-05-03**: AMT-General (FAA-H-8083-30B) and AMT-Powerplant (FAA-H-8083-32B). Maintenance technician handbooks; not pilot-training relevant.
 
@@ -167,7 +167,7 @@ This is the sequenced path to "everything readable as section-tree" excluding ne
 | 1 | AMT-G/P removal | ✅ shipped (#505) | -2 corpus entries |
 | 2 | Cleanup sweep | ✅ shipped | Reconciled 4 AC YAML rows (`ac-25-7`, `ac-61-65`, `ac-91-21-1`, `ac-120-71`); retired `aih`/`faa-h-8083-2` dupes from `handbooks-noningested.yaml` + re-pointed migrator; reframed PCG umbrella as citation-fallback; pinned AIM migrator to canonical edition + orphan cleanup script |
 | 3 | RMH section-tree promotion | ❌ not started | RMH chapter-tree from `RiskMgmtHdbk-TOC.md` |
-| 4 | mtn-flying section-tree promotion (from override) | ❌ not started | Parse the existing `body_override` markdown into a section-tree manifest |
+| 4 | mtn-flying section-tree promotion (from override) | ✅ shipped (WP-MTN-section-tree) | 12 chapters / 36 sections; markdown-to-manifest parser added to handbooks-extras ingest |
 | 5 | AIH section-tree promotion (chapter-PDF download + extract) | ❌ not started | Per-chapter PDFs available from FAA |
 | 6 | IFH section-tree promotion | ✅ shipped (WP-IFH-SECTION-TREE) | TOC parsed via new `toc-file-sidecar` strategy; 11 chapters / 587 sections; Section I/II quirk modeled as two L1 sections per chapter |
 | 7 | IPH section-tree promotion | ❌ not started | Per-chapter PDFs + standalone TOC PDF available |
