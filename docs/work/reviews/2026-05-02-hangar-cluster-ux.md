@@ -9,7 +9,7 @@ counts:
   minor: 11
   nit: 6
 status: unread
-review_status: pending
+review_status: done
 ---
 
 ## Summary
@@ -301,3 +301,38 @@ Problem: the codebase uses `--` as a visual separator inside prose (e.g. "User e
 Expected: drop the `--` separator pattern from rendered prose strings.
 
 Fix: scan for `--` in template-literal strings and `<p>` bodies; rewrite. (E.g. "{data.entries.length} file{...} -- {data.dir}" -> "{data.entries.length} file{...} in {data.dir}".)
+
+## Status as of 2026-05-04
+
+| Finding | Verdict | Closure |
+| ------- | ------- | ------- |
+| CRITICAL: Archive Delete on /sources/[id]/files no confirmation | CLOSED | PR #433 -- ConfirmDialog with `dangerLevel="danger"` |
+| CRITICAL: soft-delete on /glossary/[id] + /glossary/sources/[id] no confirmation | CLOSED | PR #433 -- ConfirmDialog wired on both routes |
+| MAJOR: /sources/[id] action row no feedback | CLOSED | PR #467 wave -- success Banner with job link from action return |
+| MAJOR: /sources Rescan/Revalidate/Build silent | CLOSED | PR #467 wave -- enhance + Banner + `invalidateAll()` poll while flow-related job runs |
+| MAJOR: /sources/[id]/upload no progress | CLOSED | PR #548 -- enhance with submitting state + loading button |
+| MAJOR: diff page huge diffs not virtualised | CLOSED | PR #548 -- wrap toggle + line-cap + hunk index |
+| MAJOR: "Commit this diff" disabled state unexplained | CLOSED | PR #548 -- title attribute + render-only-when-applicable |
+| MAJOR: "Commit this diff" destructive but unconfirmed | CLOSED | PR #433 -- ConfirmDialog with line counts in body |
+| MAJOR: Job page Cancel no confirm | CLOSED | PR #433 -- ConfirmDialog at `jobs/[id]/+page.svelte:257` |
+| MAJOR: action row mobile collapse | CLOSED | PR #548 -- grouped action chips + responsive collapse |
+| MINOR: home stat tile "Open ->" affordance | CLOSED | PR #548 -- removed text affordance, ::after chevron |
+| MINOR: layout chevron literal "v" | CLOSED | PR #548 -- replaced with U+2304/U+2303 |
+| MINOR: "Oldest source" misleading label | CLOSED | PR #548 -- relabelled "Oldest cached download" + sub-line sourceId |
+| MINOR: breadcrumb pattern inconsistency | CLOSED | PR #464 -- `Breadcrumbs` from `@ab/ui` everywhere |
+| MINOR: /sources status tiles unlinked | CLOSED | PR #548 -- linked to filtered lists |
+| MINOR: filter-bar empty-state copy | CLOSED | PR #548 -- `activeFiltersSummary` derived value passed to EmptyState |
+| MINOR: redundant "Open" chip on Sources rows | CLOSED | PR #548 -- removed |
+| MINOR: `--` placeholder strings | CLOSED | PR #548 -- `EmptyValue` component + `formatEmpty` helper, applied globally |
+| MINOR: jobs filter URL state without reload | CLOSED | PR #467 wave -- `goto(url, { replaceState: true })` |
+| MINOR: "Sync all pending" no progress feedback | CLOSED | PR #467 wave -- success Banner with "queued N" + Jobs link |
+| MINOR: save-conflict no diff option | CLOSED | PR #548 -- "Copy my changes" affordance in conflict Banner |
+| MINOR: PageHeader subtitle vs subtitleSnippet | CLOSED | PR #467 wave -- back-link removed from subtitleSnippet, breadcrumbs handle navigation |
+| NIT: trailing-dots loading labels | CLOSED | PR #548 -- standardised on no-trailing-dots ("Queueing", "Cancelling") |
+| NIT: progress cell "0" misleading | CLOSED | PR #548 -- "starting" muted span when both step + total undefined |
+| NIT: log line grid fixed widths | CLOSED | PR #548 -- minmax columns |
+| NIT: home Users tile "coming soon" | CLOSED | PR #467 wave -- linked to /users |
+| NIT: /users banner "coming soon" | CLOSED | PR #467 wave -- copy updated |
+| NIT: `--` prose separator | CLOSED | PR #548 -- swept template-literal strings |
+
+Total: 28 closed / 0 open. `review_status` flipped to `done`.

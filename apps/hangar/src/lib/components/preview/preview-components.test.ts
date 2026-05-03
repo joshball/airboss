@@ -271,8 +271,8 @@ describe('CsvPreview.svelte', () => {
 	});
 });
 
-describe('MarkdownPreview.svelte', () => {
-	const source = read('./MarkdownPreview.svelte');
+describe('MarkdownFilePreview.svelte', () => {
+	const source = read('./MarkdownFilePreview.svelte');
 	const style = extractStyle(source);
 	const template = extractTemplate(source);
 
@@ -324,7 +324,9 @@ describe('files route dispatcher', () => {
 		expect(dispatcher).toContain("import ZipPreview from '$lib/components/preview/ZipPreview.svelte'");
 		expect(dispatcher).toContain("import PdfPreview from '$lib/components/preview/PdfPreview.svelte'");
 		expect(dispatcher).toContain("import CsvPreview from '$lib/components/preview/CsvPreview.svelte'");
-		expect(dispatcher).toContain("import MarkdownPreview from '$lib/components/preview/MarkdownPreview.svelte'");
+		expect(dispatcher).toContain(
+			"import MarkdownFilePreview from '$lib/components/preview/MarkdownFilePreview.svelte'",
+		);
 	});
 
 	it('dispatches on PREVIEW_KINDS for every preview kind', () => {
@@ -341,7 +343,7 @@ describe('files route dispatcher', () => {
 		expect(dispatcher).toContain('edition={data.source.edition}');
 	});
 
-	it('forwards parsed markdown nodes to the MarkdownPreview', () => {
+	it('forwards parsed markdown nodes to the MarkdownFilePreview', () => {
 		expect(dispatcher).toContain('nodes={file.markdownNodes}');
 	});
 });

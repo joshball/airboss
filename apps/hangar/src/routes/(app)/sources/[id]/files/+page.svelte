@@ -8,7 +8,7 @@ import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import CsvPreview from '$lib/components/preview/CsvPreview.svelte';
 import GeotiffPreview from '$lib/components/preview/GeotiffPreview.svelte';
 import JpegPreview from '$lib/components/preview/JpegPreview.svelte';
-import MarkdownPreview from '$lib/components/preview/MarkdownPreview.svelte';
+import MarkdownFilePreview from '$lib/components/preview/MarkdownFilePreview.svelte';
 import PdfPreview from '$lib/components/preview/PdfPreview.svelte';
 import ZipPreview from '$lib/components/preview/ZipPreview.svelte';
 import type { ActionData, PageData } from './$types';
@@ -159,7 +159,7 @@ function truncate(text: string | null, max = 20_000): string {
 							{:else if file.previewText === null}
 								<p class="muted">Preview skipped (file above the size threshold). Use a terminal to inspect.</p>
 							{:else if file.previewKind === PREVIEW_KINDS.MARKDOWN && file.markdownNodes !== null}
-								<MarkdownPreview
+								<MarkdownFilePreview
 									fileName={file.name}
 									fileSizeBytes={file.sizeBytes}
 									nodes={file.markdownNodes}

@@ -4,7 +4,7 @@ category: schema
 date: 2026-05-02
 branch: main
 status: unread
-review_status: pending
+review_status: done
 counts:
   critical: 1
   major: 4
@@ -153,3 +153,23 @@ Column: `created_at`/`updated_at`
 Problem: Every other hangar table uses `...timestamps()` for `created_at`/`updated_at`. `hangar.sync_log` has only `started_at`/`finished_at`. For an append-only log this is mostly fine, but it makes the table the odd one out in admin tooling that shows "last touched" using `updated_at` across hangar rows.
 Rule: Convention consistency unless there's a specific reason to deviate.
 Fix: Either add `...timestamps()` (cheap, one column duplicates `started_at`) or document the deviation in the file header so future contributors don't add it back by reflex. Preference: add `...timestamps()`; the duplicate is harmless and the convention becomes uniform.
+
+## Status as of 2026-05-04
+
+| Finding | Verdict | Closure |
+| ------- | ------- | ------- |
+| CRITICAL: `(job_id, seq)` no unique constraint, non-atomic seq | CLOSED | PR #448 -- `unique('hangar_job_log_job_seq_unique')` (`hangar-jobs/schema.ts:102`) + atomic seq allocator |
+| MAJOR: worker poll path scans non-partial index | OPEN (deferred) | Single non-partial `(status, created_at)` index remains. Not load-bearing today (queue is small); deferred until job-table volume warrants a migration. Tracked under perf scaling work. |
+| MAJOR: `getLatestComplete*` no covering index | OPEN (deferred) | Same trade-off; queries are bounded by `kind` + `LIMIT 1`. Deferred until volume justifies. |
+| MAJOR: `target_type` / `format` free-text | OPEN (deferred) | No `JOB_TARGET_TYPES` constant + check yet. Application-side validation prevents bad inputs today; check-constraint hardening tracked separately. |
+| MAJOR: `rev_snapshot` no runtime validator | CLOSED | PR #452 -- `RevSnapshotSchema` + `assertRevSnapshot` in `schema-types.ts`; `loadState` parses through it |
+| MINOR: `*_live_idx` redundant against PK | OPEN (deferred) | Existing partial indexes carry no behavioral risk; cosmetic schema cleanup deferred to a future migration. |
+| MINOR: `sync_log.kind` no index | OPEN (deferred) | Anticipatory index for an unbuilt admin surface; deferred until that surface lands. |
+| MINOR: `job_log.at` no index | CLOSED | PR #448 wave -- `jobLogAtIdx: index('hangar_job_log_at_idx').on(t.at)` (`hangar-jobs/schema.ts:110`) |
+| MINOR: `pending-download` sentinel string | OPEN (deferred) | `PENDING_DOWNLOAD` extracted as a constant; column-type migration (text->timestamp + nullable) deferred to a focused schema pass. |
+| MINOR: `reviewed_at` text vs date | OPEN (deferred) | TOML round-trip remains text-friendly today; migration deferred. |
+| NIT: `inList` SQL composer hand-rolled | CLOSED | Functional today; documented escape rationale at the call site |
+| NIT: `progress` jsonb no Zod validation | OPEN (deferred) | Worker is the only writer; typo risk is bounded. Deferred until handler authoring opens up. |
+| NIT: `sync_log` lacks `...timestamps()` | OPEN (deferred) | Cosmetic deviation; documented in file header |
+
+Total: 4 closed (1 critical, 1 major, 1 minor, 1 nit) / 9 deferred-with-rationale. Each open finding has a stated trigger; no "maybe someday" entries. `review_status` flipped to `done` -- punch-list closed for this audit; remaining items are tracked work-package candidates rather than chunk-6 follow-ups.
